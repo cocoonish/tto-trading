@@ -1,0 +1,44 @@
+---
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  updatedDate?: Date;
+  tags?: string[];
+  durum?: 'aktif' | 'taslak' | 'arsiv';
+  kaynak?: string;
+  guncelleme?: string;
+  tur: 'proje' | 'arastirma';
+}
+
+const { title, description, pubDate, updatedDate, tags = [], durum, kaynak, guncelleme, tur } =
+  Astro.props;
+
+const tarih = (d: Date) =>
+  new Intl.DateTimeFormat('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' }).format(d);
+---
+
+<Base title={title} description={description}>
+  <article>
+    <header class="makale-baslik yuksel">
+      <p class="kicker etiket">
+        {tur === 'proje' ? 'Proje' : 'Araştırma'}
+        {tags.length > 0 && ` · ${tags.join(' · ')}`}
+      </p>
+      <h1>{title}</h1>
+      <p class="ozet">{description}</p>
+      <div class="makale-meta">
+        <span><b>Yayın</b> {tarih(pubDate)}</span>
+        {updatedDate && <span><b>Güncelleme</b> {tarih(updatedDate)}</span>}
+        {guncelleme && <span><b>Veri</b> {guncelleme}</span>}
+        {kaynak && <span><b>Kaynak</b> {kaynak}</span>}
+        {durum === 'taslak' && <span class="rozet rozet--taslak">Hazırlanıyor</span>}
+      </div>
+    </header>
+    <div class="prose yuksel" style="--d: 120ms">
+      <slot />
+    </div>
+  </article>
+</Base>

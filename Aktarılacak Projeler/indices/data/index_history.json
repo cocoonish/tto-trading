@@ -1,0 +1,260 @@
+[
+  {
+    "timestamp": "2026-04-12T20:19:14.277183+00:00",
+    "indices": {
+      "EURUSD": {
+        "value": 0.0325,
+        "category": "Neutral"
+      },
+      "XAUUSD": {
+        "value": 0.0402,
+        "category": "Neutral"
+      },
+      "SPX": {
+        "value": 0.0772,
+        "category": "Neutral"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-04-12T20:20:27.545115+00:00",
+    "indices": {
+      "EURUSD": {
+        "value": 0.0325,
+        "category": "Neutral"
+      },
+      "XAUUSD": {
+        "value": 0.0402,
+        "category": "Neutral"
+      },
+      "SPX": {
+        "value": 0.0772,
+        "category": "Neutral"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-04-13T05:32:41.648772+00:00",
+    "indices": {
+      "EURUSD": {
+        "value": -0.4001,
+        "category": "Bearish"
+      },
+      "USDJPY": {
+        "value": 0.308,
+        "category": "Bullish"
+      },
+      "USDCHF": {
+        "value": -0.3636,
+        "category": "Bearish"
+      },
+      "XAUUSD": {
+        "value": 0.2559,
+        "category": "Bullish"
+      },
+      "XAGUSD": {
+        "value": 0.2372,
+        "category": "Bullish"
+      },
+      "SPX": {
+        "value": -0.3484,
+        "category": "Bearish"
+      },
+      "UST2Y": {
+        "value": -0.5089,
+        "category": "Extremely Bearish"
+      },
+      "UST10Y": {
+        "value": 0.1712,
+        "category": "Bullish"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-04-13T08:04:35.406868+00:00",
+    "indices": {
+      "EURUSD": {
+        "value": -0.086,
+        "category": "Neutral"
+      },
+      "USDJPY": {
+        "value": 0.1404,
+        "category": "Bullish"
+      },
+      "USDCHF": {
+        "value": 0.2524,
+        "category": "Bullish"
+      },
+      "GBPUSD": {
+        "value": -0.1311,
+        "category": "Bearish"
+      },
+      "AUDUSD": {
+        "value": -0.2456,
+        "category": "Bearish"
+      },
+      "NZDUSD": {
+        "value": 0.2244,
+        "category": "Bullish"
+      },
+      "USDCAD": {
+        "value": -0.6785,
+        "category": "Extremely Bearish"
+      },
+      "USDNOK": {
+        "value": -0.0114,
+        "category": "Neutral"
+      },
+      "USDSEK": {
+        "value": -0.3732,
+        "category": "Bearish"
+      },
+      "XAUUSD": {
+        "value": 0.3034,
+        "category": "Bullish"
+      },
+      "XAGUSD": {
+        "value": -0.3661,
+        "category": "Bearish"
+      },
+      "SPX": {
+        "value": 0.0743,
+        "category": "Neutral"
+      },
+      "UST2Y": {
+        "value": -1.0,
+        "category": "Extremely Bearish"
+      },
+      "UST10Y": {
+        "value": -0.6803,
+        "category": "Extremely Bearish"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-04-13T08:05:19.867180+00:00",
+    "indices": {
+      "EURUSD": {
+        "value": -0.086,
+        "category": "Neutral"
+      },
+      "USDJPY": {
+        "value": 0.1404,
+        "category": "Bullish"
+      },
+      "USDCHF": {
+        "value": 0.2524,
+        "category": "Bullish"
+      },
+      "GBPUSD": {
+        "value": -0.1311,
+        "category": "Bearish"
+      },
+      "AUDUSD": {
+        "value": -0.2456,
+        "category": "Bearish"
+      },
+      "NZDUSD": {
+        "value": 0.2244,
+        "category": "Bullish"
+      },
+      "USDCAD": {
+        "value": -0.6785,
+        "category": "Extremely Bearish"
+      },
+      "USDNOK": {
+        "value": -0.0114,
+        "category": "Neutral"
+      },
+      "USDSEK": {
+        "value": -0.3732,
+        "category": "Bearish"
+      },
+      "XAUUSD": {
+        "value": 0.3034,
+        "category": "Bullish"
+      },
+      "XAGUSD": {
+        "value": -0.3661,
+        "category": "Bearish"
+      },
+      "SPX": {
+        "value": 0.0743,
+        "category": "Neutral"
+      },
+      "UST2Y": {
+        "value": -1.0,
+        "category": "Extremely Bearish"
+      },
+      "UST10Y": {
+        "value": -0.6803,
+        "category": "Extremely Bearish"
+      }
+    }
+  },
+  {
+    "timestamp": "2026-05-04T19:55:55.656308+00:00",
+    "indices": {
+      "EURUSD": {
+        "value": 0.0057,
+        "category": "Neutral"
+      },
+      "USDJPY": {
+        "value": -0.1132,
+        "category": "Bearish"
+      },
+      "USDCHF": {
+        "value": -0.967,
+        "category": "Extremely Bearish"
+      },
+      "GBPUSD": {
+        "value": 0.0419,
+        "category": "Neutral"
+      },
+      "AUDUSD": {
+        "value": 0.1893,
+        "category": "Bullish"
+      },
+      "NZDUSD": {
+        "value": -0.4351,
+        "category": "Bearish"
+      },
+      "USDCAD": {
+        "value": 0.001,
+        "category": "Neutral"
+      },
+      "USDNOK": {
+        "value": -0.5993,
+        "category": "Extremely Bearish"
+      },
+      "USDSEK": {
+        "value": -0.7954,
+        "category": "Extremely Bearish"
+      },
+      "XAUUSD": {
+        "value": 0.1753,
+        "category": "Bullish"
+      },
+      "XAGUSD": {
+        "value": 0.1517,
+        "category": "Bullish"
+      },
+      "SPX": {
+        "value": -0.2339,
+        "category": "Bearish"
+      },
+      "UST2Y": {
+        "value": 0.0137,
+        "category": "Neutral"
+      },
+      "UST10Y": {
+        "value": 0.0351,
+        "category": "Neutral"
+      },
+      "BIST100": {
+        "value": -0.6474,
+        "category": "Extremely Bearish"
+      }
+    }
+  }
+]

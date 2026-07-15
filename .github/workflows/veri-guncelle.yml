@@ -1,0 +1,40 @@
+# ŞABLON — repo GitHub'a bağlanınca aktifleşir.
+# Python hatlarını zamanlanmış olarak çalıştırır, üretilen HTML'leri
+# site/public/ altına kopyalar ve commit'ler; push deploy'u tetikler.
+#
+# Not: EVDS anahtarı gibi gizli değerler repo Settings → Secrets altında
+# tanımlanmalı (ör. EVDS_API_KEY).
+
+name: Veri güncelle
+
+on:
+  schedule:
+    - cron: '0 6 * * 5' # her Cuma 06:00 UTC (09:00 İstanbul)
+  workflow_dispatch: {} # elle tetikleme
+
+jobs:
+  guncelle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # ── Örnek: TCMB Net Rezerv ─────────────────────────────
+      # - name: Rezerv grafiğini yeniden üret
+      #   run: |
+      #     pip install -r "Aktarılacak Projeler/TCMBNetRezerv/requirements.txt"
+      #     python "Aktarılacak Projeler/TCMBNetRezerv/net_rezerv.py"
+      #     python "Aktarılacak Projeler/TCMBNetRezerv/grafik.py"
+      #     cp "Aktarılacak Projeler/TCMBNetRezerv/tcmb_rezerv_grafik.html" \
+      #        site/public/projeler/tcmb-net-rezerv/grafik.html
+
+      - name: Değişiklikleri commit'le
+        run: |
+          git config user.name "veri-bot"
+          git config user.email "actions@github.com"
+          git add site/public/projeler/
+          git diff --cached --quiet || git commit -m "veri: zamanlanmış grafik güncellemesi"
+          git push

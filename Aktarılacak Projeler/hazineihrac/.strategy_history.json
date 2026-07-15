@@ -1,0 +1,86 @@
+{
+  "Mart 2026": {
+    "target": 170.5,
+    "source": "Mart – Mayıs 2026 İç Borçlanma Stratejisi",
+    "history": [
+      {
+        "target": 170.5,
+        "source": "Mart – Mayıs 2026 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Nisan 2026": {
+    "target": 250.1,
+    "source": "Nisan – Haziran 2026 İç Borçlanma Stratejisi",
+    "history": [
+      {
+        "target": 248.9,
+        "source": "Mart – Mayıs 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 250.1,
+        "source": "Nisan – Haziran 2026 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Mayıs 2026": {
+    "target": 161.7,
+    "source": "Mayıs – Temmuz 2026 İç Borçlanma Stratejisi",
+    "history": [
+      {
+        "target": 133.9,
+        "source": "Mart – Mayıs 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 132.1,
+        "source": "Nisan – Haziran 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 161.7,
+        "source": "Mayıs – Temmuz 2026 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Haziran 2026": {
+    "target": 303.8,
+    "source": "Haziran – Ağustos 2026 İç Borçlanma Stratejisi",
+    "history": [
+      {
+        "target": 412.1,
+        "source": "Nisan – Haziran 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 391.9,
+        "source": "Mayıs – Temmuz 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 303.8,
+        "source": "Haziran – Ağustos 2026 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Temmuz 2026": {
+    "target": 308.7,
+    "source": "Haziran – Ağustos 2026 İç Borçlanma Stratejisi",
+    "history": [
+      {
+        "target": 309.7,
+        "source": "Mayıs – Temmuz 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 308.7,
+        "source": "Haziran – Ağustos 2026 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ağustos 2026": {
+    "target": 355.8,
+    "source": "Haziran – Ağustos 2026 İç Borçlanma Stratejisi",
+    "history": [
+      {
+        "target": 355.8,
+        "source": "Haziran – Ağustos 2026 İç Borçlanma Stratejisi"
+      }
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Conda / virtualenv
+.conda/
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# Editör / yerel ayarlar
+.claude/settings.local.json
+
+# Çalışma yedeği (oturum içi)
+.backup_before_refresh/
+~$*
+
+# main.py'nin yeniden ürettiği büyük çıktılar — her çalıştırmada byte değişir
+# (Plotly rastgele div-id / Excel zaman damgası). Veriler CSV'lerde tutulur.
+vade_analizi.html
+hedef_gerceklesme.html
+hazine_ihale_verileri.xlsx

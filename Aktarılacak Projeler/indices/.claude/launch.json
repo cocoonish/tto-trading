@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Sentiment Dashboard",
+      "runtimeExecutable": "streamlit",
+      "runtimeArgs": ["run", "dashboard.py", "--server.headless", "true", "--server.port", "8501"],
+      "port": 8501
+    },
+    {
+      "name": "Pipeline CLI (with optimization)",
+      "runtimeExecutable": "python",
+      "runtimeArgs": ["run.py", "--optimize"],
+      "port": 0
+    }
+  ]
+}

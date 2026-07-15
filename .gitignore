@@ -1,0 +1,27 @@
+# macOS
+.DS_Store
+
+# Node / Astro
+node_modules/
+dist/
+.astro/
+
+# Python
+__pycache__/
+*.pyc
+.conda/
+.ipynb_checkpoints/
+.backup_before_refresh/
+
+# Loglar ve yerel önbellekler
+*.log
+
+# hazineihrac'ın kendi git geçmişi (devre dışı bırakıldı, silinmedi)
+Aktarılacak Projeler/hazineihrac/.git.disabled/
+
+# Büyük, yeniden üretilebilir veri önbellekleri
+Aktarılacak Projeler/indices/data/gdelt_cache.json
+Aktarılacak Projeler/indices/data/news_cache.json
+
+# Yerel Claude ayarları
+**/.claude/settings.local.json

@@ -1,0 +1,1872 @@
+# main.py
+"""
+Türkiye Hazinesi İhale Verileri Scraper ve Analiz Aracı
+------------------------------------------------------
+Bu script, hazineihrac.ipynb içeriğinden modüler ve parametrik olarak dönüştürülmüştür.
+Kullanıcı dostu, kolay değiştirilebilir ve geliştirilebilir bir yapı sunar.
+
+Performans İyileştirmeleri:
+- Selenium YERİNE WordPress REST API (/portal/v2/posts) ile doğrudan veri çekme
+  (tarayıcı/ChromeDriver gerekmez, ~10-50x daha hızlı ve daha kararlı)
+- aiohttp ile gerçek paralel (eşzamanlı) PDF indirme
+- ThreadPoolExecutor ile paralel PDF parse
+- İnkremental tarama + URL cache mekanizması
+"""
+
+# =====================
+# GEREKLİ KÜTÜPHANELER (tüm import'lar en üstte)
+# =====================
+import json
+import html
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+import re
+import time
+import os
+from urllib.parse import urljoin
+import PyPDF2
+import io
+from typing import List, Dict, Optional, Tuple
+import logging
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import asyncio
+import aiohttp
+
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+
+# =====================
+# PARAMETRELER (KOLAY DEĞİŞTİRİLEBİLİR)
+# =====================
+MAX_PAGES = 200                     # Taranacak maksimum API sayfa sayısı (üst sınır)
+ANALYZE_STRATEGY = True             # İç Borçlanma Stratejisi analizi yapılsın mı?
+EXCEL_OUTPUT = "hazine_ihale_verileri.xlsx"
+CSV_OUTPUT = "hazine_ihale_verileri.csv"
+COMPARISON_CSV = "hazine_hedef_gerceklesme.csv"
+WADE_CSV = "hazine_vade_analizi.csv"
+HTML_OUTPUT = "vade_analizi.html"
+FORCE_ALL_FETCH = False             # True ise, tüm veriler zorla çekilir (break yapılmaz)
+HEDEF_GERCEKLESME_HTML = "hedef_gerceklesme.html"
+PLANNED_CSV = "hazine_planlanan_ihaleler.csv"   # Önümüzdeki planlı ihraçlar + tahminler
+PLANNED_CALENDAR_CACHE = ".planned_calendar.json"  # Strateji takvimi cache (tekrar indirmemek için)
+BACKTEST_CSV = "hazine_tahmin_dogrulama.csv"    # Geçmiş ihalelerde tahmin vs gerçek (backtest)
+MAX_RETRIES = 3                     # API/PDF isteği başarısız olursa maksimum deneme
+
+# Performans parametreleri
+MAX_WORKERS = 8                     # Paralel PDF indirme/parse için maksimum eşzamanlılık
+API_PER_PAGE = 20                   # API'den sayfa başına çekilecek duyuru sayısı
+HTTP_TIMEOUT = 30                   # API istekleri için timeout (saniye)
+PDF_TIMEOUT = 120                   # PDF indirme timeout (saniye)
+USE_ASYNC = True                    # Async (paralel) PDF indirme kullan (daha hızlı)
+
+
+# =====================
+# LOGGING AYARLARI
+# =====================
+logging.basicConfig(
+    level=logging.INFO, 
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+
+def normalize_month_name(month: str) -> str:
+    """
+    Türkçe ay isimlerini normalize eder (çeşitli yazım/harf varyasyonlarını düzeltir)
+    """
+    mapping = {
+        "Ocak": "Ocak", "Subat": "Şubat", "Şubat": "Şubat", "Mart": "Mart", "Nisan": "Nisan",
+        "Mayis": "Mayıs", "Mayıs": "Mayıs", "Haziran": "Haziran", "Temmuz": "Temmuz",
+        "Agustos": "Ağustos", "Ağustos": "Ağustos", "Eylul": "Eylül", "Eylül": "Eylül",
+        "Ekim": "Ekim", "Kasim": "Kasım", "Kasım": "Kasım", "Aralik": "Aralık", "Aralık": "Aralık"
+    }
+    
+    def fold_tr(s: str) -> str:
+        """Türkçe karakterleri ASCII'ye dönüştür"""
+        s = str(s).replace("İ", "i").replace("ı", "i").replace("\u0307", "")
+        return (s.strip().lower()
+                .replace("ı", "i").replace("ş", "s").replace("ğ", "g")
+                .replace("ü", "u").replace("ö", "o").replace("ç", "c"))
+    
+    m_fold = fold_tr(str(month))
+    for k, v in mapping.items():
+        if m_fold.startswith(fold_tr(k)[:3]):
+            return v
+    
+    # Uymadıysa baş harfi büyük geri dön
+    try:
+        return str(month).strip().title()
+    except Exception:
+        return str(month)
+
+
+MONTH_ORDER = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
+               "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
+
+
+def generate_quarter_months(first_month_raw: str, last_month_raw: str) -> List[str]:
+    """
+    Çeyreklik strateji dökümanındaki ilk ve son ay isimlerinden
+    aradaki tüm ayları üretir.
+    Örn: ("Ocak", "Mart") -> ["Ocak", "Şubat", "Mart"]
+         ("Kasım", "Ocak") -> ["Kasım", "Aralık", "Ocak"]
+    """
+    first_norm = normalize_month_name(first_month_raw)
+    last_norm = normalize_month_name(last_month_raw)
+    try:
+        start_idx = MONTH_ORDER.index(first_norm)
+        end_idx = MONTH_ORDER.index(last_norm)
+        if end_idx < start_idx:
+            end_idx += 12
+        return [MONTH_ORDER[i % 12] for i in range(start_idx, end_idx + 1)]
+    except ValueError as e:
+        logger.warning(f"Ay sırası oluşturulamadı ({first_month_raw}-{last_month_raw}): {e}")
+        return [first_norm]
+
+
+# =====================
+# PLANLI İHRAÇ TAKVİMİ AYRIŞTIRMA (Strateji PDF'i içindeki ihraç takvimi)
+# =====================
+# Strateji raporlarındaki ihraç takvimi satır biçimi:
+#   <İhaleTarihi> <ValörTarihi> <İtfaTarihi> <Senet Tanımı> <Vade terimi> <Yöntem>
+# Örn: "7.07.2026 8.07.2026 16.04.2031 Sabit Kuponlu Devlet Tahvili 5Yıl /1743 Gün İhale / Yeniden ihraç"
+ISSUANCE_ROW_RE = re.compile(
+    r'(\d{1,2}\.\d{1,2}\.\d{4})\s+(\d{1,2}\.\d{1,2}\.\d{4})\s+(\d{1,2}\.\d{1,2}\.\d{4})\s+'
+    r'(.+?)\s+(\d+\s*(?:Yıl|Ay)\s*/\s*[\d.]+\s*Gün)\s+'
+    r'(İhale\s*/\s*(?:Yeniden|İlk)\s*ihra[cç]|Doğrudan\s*Satış)',
+    re.IGNORECASE
+)
+
+
+def _normalize_date_str(d: str) -> str:
+    """'7.07.2026' -> '07.07.2026' (gün/ay iki haneli)."""
+    try:
+        p = d.split('.')
+        return f"{int(p[0]):02d}.{int(p[1]):02d}.{p[2]}"
+    except Exception:
+        return d
+
+
+def parse_issuance_calendar(full_text: str) -> List[Dict]:
+    """Strateji PDF metninden ihraç takvimini (planlı ihraçlar) ayrıştırır.
+
+    Returns: her biri {ihale_tarihi, valor_tarihi, itfa_tarihi, senet_tanimi,
+    vade_terimi, yontem} olan satır listesi. Mükerrer satırlar atılır.
+    """
+    rows = []
+    seen = set()
+    for m in ISSUANCE_ROW_RE.finditer(full_text):
+        ihale = _normalize_date_str(m.group(1).strip())
+        valor = _normalize_date_str(m.group(2).strip())
+        itfa = _normalize_date_str(m.group(3).strip())
+        senet = re.sub(r'\s+', ' ', m.group(4).strip())
+        terim = re.sub(r'\s+', ' ', m.group(5).strip())
+        yontem = re.sub(r'\s+', ' ', m.group(6).strip())
+        key = (ihale, itfa, senet)
+        if key in seen:
+            continue
+        seen.add(key)
+        rows.append({
+            'ihale_tarihi': ihale,
+            'valor_tarihi': valor,
+            'itfa_tarihi': itfa,
+            'senet_tanimi': senet,
+            'vade_terimi': terim,
+            'yontem': yontem,
+        })
+    return rows
+
+
+# =====================
+# ASYNC PDF İNDİRME (PERFORMANS İÇİN)
+# =====================
+async def download_pdf_async(session: aiohttp.ClientSession, url: str) -> Optional[bytes]:
+    """
+    PDF'i async olarak indirir - daha hızlı paralel indirme için
+    """
+    try:
+        async with session.get(url, timeout=aiohttp.ClientTimeout(total=PDF_TIMEOUT)) as response:
+            if response.status == 200:
+                return await response.read()
+            else:
+                logger.warning(f"PDF indirme hatası: {url} - Status: {response.status}")
+                return None
+    except Exception as e:
+        logger.error(f"Async PDF indirme hatası: {url} - {str(e)}")
+        return None
+
+
+async def download_multiple_pdfs_async(urls: List[str], concurrency: int = MAX_WORKERS) -> Dict[str, bytes]:
+    """
+    Birden fazla PDF'i GERÇEKTEN eşzamanlı (paralel) olarak indirir.
+
+    NOT: Önceki sürüm coroutine'leri tek tek await ettiği için aslında sıralı
+    çalışıyordu. Burada asyncio.gather + Semaphore ile gerçek paralellik sağlanır;
+    Semaphore sunucuyu aşırı yüklememek için eşzamanlı bağlantı sayısını sınırlar.
+    """
+    results: Dict[str, bytes] = {}
+    sem = asyncio.Semaphore(concurrency)
+
+    async with aiohttp.ClientSession(
+        headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+    ) as session:
+        async def _fetch(url: str):
+            async with sem:
+                content = await download_pdf_async(session, url)
+            if content:
+                results[url] = content
+
+        await asyncio.gather(*(_fetch(url) for url in urls))
+
+    return results
+
+
+# =====================
+# SCRAPER SINIFI
+# =====================
+class TreasuryAuctionScraper:
+    """
+    Türkiye Hazinesi ihale sonuçlarını çeken ve analiz eden ana sınıf
+    """
+    
+    def __init__(self, max_pages: int = 50, analyze_strategy: bool = True):
+        """
+        Args:
+            max_pages: Taranacak maksimum API sayfa sayısı (üst sınır)
+            analyze_strategy: İç Borçlanma Stratejisi analizi yapılsın mı
+        """
+        self.base_url = "https://www.hmb.gov.tr"
+        # WordPress REST API uç noktası — React arayüzünün veri kaynağı.
+        # Duyuru başlığı, tarihi ve PDF linki doğrudan JSON içinde gelir;
+        # tarayıcı (Selenium/ChromeDriver) gerektirmez.
+        self.api_url = "https://www.hmb.gov.tr/portal/v2/posts"
+        self.category_slug = "kamu-finansmani"
+        self.max_pages = max_pages
+        self.analyze_strategy = analyze_strategy
+        # En güncel strateji raporunun PDF URL'si (ihraç takvimi/tahmin için)
+        self.newest_strategy_url = None
+
+        # HTTP Session (connection pooling için)
+        self.session = requests.Session()
+        self.session.headers.update({
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        })
+
+        # İşlenmiş URL cache (inkremental tarama için)
+        self.url_cache_file = ".processed_urls.json"
+        self.processed_urls = self._load_url_cache()
+
+        # Strateji tarihsel cache (çeyrekler arası birikim)
+        self.strategy_cache_file = ".strategy_history.json"
+        self.strategy_history = self._load_strategy_history()
+        
+        # Çekilecek alanlar
+        self.fields = [
+            'ISIN', 'Senet Tanımı', 'İhale Tarihi', 'Valör Tarihi', 'İtfa Tarihi', 'Vade (Yıl)',
+            'ROT Toplam(Teklif)', 'ROT Toplam(Gerçekleşme)',
+            'ROT Kamu(Teklif)', 'ROT Kamu(Gerçekleşme)',
+            'ROT Piyasa Yapıcılar(Teklif)', 'ROT Piyasa Yapıcılar(Gerçekleşme)',
+            'ROT Piyasa Yapıcılar Kabul Oranı (%)',
+            'İhale(Teklif)', 'İhale(Gerçekleşme)',
+            'İhale Kabul Oranı (%)',
+            'Toplam(Teklif)', 'Toplam(Gerçekleşme)',
+            'Ortalama Yıllık Basit(Teklif)', 'Ortalama Yıllık Basit(Gerçekleşme)',
+            'Ortalama Yıllık Bileşik(Teklif)', 'Ortalama Yıllık Bileşik(Gerçekleşme)',
+            'En Düşük Yıllık Bileşik(Teklif)', 'En Düşük Yıllık Bileşik(Gerçekleşme)',
+            'En Yüksek Yıllık Bileşik(Teklif)', 'En Yüksek Yıllık Bileşik(Gerçekleşme)',
+            'Ortalama Fiyat(Teklif)', 'Ortalama Fiyat(Gerçekleşme)',
+            'En Düşük Fiyat(Teklif)', 'En Düşük Fiyat(Gerçekleşme)',
+            'En Yüksek Fiyat(Teklif)', 'En Yüksek Fiyat(Gerçekleşme)'
+        ]
+        
+        # İngilizce-Türkçe ay mapping'i
+        self.en_to_tr_months = {
+            'January': 'Ocak', 'February': 'Şubat', 'March': 'Mart', 'April': 'Nisan',
+            'May': 'Mayıs', 'June': 'Haziran', 'July': 'Temmuz', 'August': 'Ağustos',
+            'September': 'Eylül', 'October': 'Ekim', 'November': 'Kasım', 'December': 'Aralık'
+        }
+
+    def _load_url_cache(self) -> set:
+        """İşlenmiş URL'leri cache dosyasından yükler"""
+        try:
+            if os.path.exists(self.url_cache_file):
+                with open(self.url_cache_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    logger.info(f"URL cache'den {len(data)} URL yüklendi")
+                    return set(data)
+        except Exception as e:
+            logger.warning(f"URL cache okunamadı: {e}")
+        return set()
+
+    def _save_url_cache(self):
+        """İşlenmiş URL'leri cache dosyasına kaydeder.
+
+        set sıralaması çalıştırmalar arası değiştiğinden, gereksiz diff/churn
+        oluşmaması için sıralı (deterministik) yazılır.
+        """
+        try:
+            with open(self.url_cache_file, 'w', encoding='utf-8') as f:
+                json.dump(sorted(self.processed_urls), f, ensure_ascii=False, indent=2)
+            logger.info(f"URL cache'e {len(self.processed_urls)} URL kaydedildi")
+        except Exception as e:
+            logger.warning(f"URL cache kaydedilemedi: {e}")
+
+    def _load_strategy_history(self) -> dict:
+        """Strateji tarihsel verisini cache'den yükler.
+        Format: {"Ocak 2026": {"target": 327.7, "source": "...", "history": [...]}, ...}
+        Her ay için tüm strateji raporlarındaki hedefler history listesinde saklanır.
+        """
+        try:
+            if os.path.exists(self.strategy_cache_file):
+                with open(self.strategy_cache_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    # Eski format migration: history alanı yoksa ekle
+                    for month_key, info in data.items():
+                        if isinstance(info, dict) and "history" not in info:
+                            info["history"] = [{"target": info.get("target", 0), "source": info.get("source", "")}]
+                        elif not isinstance(info, dict):
+                            data[month_key] = {"target": float(info), "source": "", "history": [{"target": float(info), "source": ""}]}
+                    logger.info(f"Strateji cache'den {len(data)} ay yüklendi")
+                    return data
+        except Exception as e:
+            logger.warning(f"Strateji cache okunamadı: {e}")
+        return {}
+
+    def _save_strategy_history(self):
+        """Strateji tarihsel verisini cache'e kaydeder"""
+        try:
+            with open(self.strategy_cache_file, 'w', encoding='utf-8') as f:
+                json.dump(self.strategy_history, f, ensure_ascii=False, indent=2)
+            logger.info(f"Strateji cache'e {len(self.strategy_history)} ay kaydedildi")
+        except Exception as e:
+            logger.warning(f"Strateji cache kaydedilemedi: {e}")
+
+    def _update_strategy_history(self, strategy_data: Dict[str, float], source_title: str):
+        """Yeni strateji verisini tarihsel cache'e ekler.
+        Her ay için tüm strateji raporlarındaki hedefler history listesinde birikir.
+        target/source alanları en son raporu gösterir.
+        """
+        for month_key, target in strategy_data.items():
+            if month_key not in self.strategy_history:
+                self.strategy_history[month_key] = {
+                    "target": target,
+                    "source": source_title,
+                    "history": [{"target": target, "source": source_title}],
+                }
+            else:
+                entry = self.strategy_history[month_key]
+                # Aynı source'dan gelen veriyi tekrarlama
+                existing_sources = [h["source"] for h in entry.get("history", [])]
+                if source_title not in existing_sources:
+                    entry.setdefault("history", []).append({"target": target, "source": source_title})
+                else:
+                    # Aynı source varsa güncelle
+                    for h in entry["history"]:
+                        if h["source"] == source_title:
+                            h["target"] = target
+                            break
+                # En son raporu güncelle
+                entry["target"] = target
+                entry["source"] = source_title
+        self._save_strategy_history()
+
+    @staticmethod
+    def _tr_to_en_month(text: str) -> str:
+        """Türkçe ay isimlerini İngilizce'ye çevirir.
+
+        pandas to_datetime '%B' formatı locale'den bağımsız olarak İngilizce ay
+        isimleri bekler; bu yüzden tarih parse etmeden önce daima çeviri yaparız.
+        """
+        months_tr = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran',
+                     'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık']
+        months_en = ['January', 'February', 'March', 'April', 'May', 'June',
+                     'July', 'August', 'September', 'October', 'November', 'December']
+        for tr, en in zip(months_tr, months_en):
+            text = text.replace(tr, en)
+        return text
+
+    def _extract_pdf_url_from_content(self, content_html: str) -> Optional[str]:
+        """Duyuru içeriğinden (WP REST API 'content.rendered') PDF linkini çıkarır.
+
+        Önce "tıklayınız" bağlantısını, bulunamazsa ilk .pdf bağlantısını döndürür.
+        """
+        if not content_html:
+            return None
+        soup = BeautifulSoup(content_html, 'html.parser')
+
+        # 1) "tıklayınız" bağlantısı
+        for link in soup.find_all('a', href=True):
+            link_text = link.get_text().strip().lower()
+            href = link['href']
+            if ('tıklayınız' in link_text or 'tiklayiniz' in link_text) and href:
+                return href if href.startswith('http') else urljoin(self.base_url, href)
+
+        # 2) Herhangi bir .pdf bağlantısı
+        for link in soup.find_all('a', href=True):
+            href = link['href']
+            if '.pdf' in href.lower():
+                return href if href.startswith('http') else urljoin(self.base_url, href)
+
+        return None
+
+    def get_auction_announcement_urls(self) -> Tuple[List[Tuple[str, str]], List[Tuple[str, str, str]]]:
+        """
+        WordPress REST API üzerinden ihale sonucu ve strateji duyurularını toplar.
+
+        Selenium GEREKMEZ — başlık, tarih ve PDF linki doğrudan JSON içeriğinde gelir.
+
+        Returns:
+            Tuple:
+              - auction_items: List[(announcement_url, pdf_url)]  (ihale sonucu duyuruları)
+              - strategy_pdfs: List[(pdf_url, baslik, ay_bilgi)]  (strateji raporları)
+        """
+        # Mevcut Excel'den en son ihale tarihini al (inkremental erken durma için)
+        latest_excel_date = None
+        if not FORCE_ALL_FETCH and os.path.exists(EXCEL_OUTPUT):
+            try:
+                existing_df = pd.read_excel(EXCEL_OUTPUT, sheet_name='İhale Verileri')
+                if 'İhale Tarihi' in existing_df.columns:
+                    dates = pd.to_datetime(existing_df['İhale Tarihi'], format='%d.%m.%Y', errors='coerce')
+                    if not dates.dropna().empty:
+                        latest_excel_date = dates.max()
+                        logger.info(f"Excel'deki en yeni ihale tarihi: {latest_excel_date.strftime('%d.%m.%Y')}")
+            except Exception as e:
+                logger.warning(f"Mevcut Excel okunamadı: {str(e)}")
+
+        auction_items: List[Tuple[str, str]] = []
+        seen_announcements = set()
+        strategy_pdfs: List[Tuple[str, str, str]] = []
+        strategy_titles_seen = set()
+
+        # Erken durma: ardışık "tamamı eski" sayfa sayacı
+        consecutive_old_auction_pages = 0
+        OLD_AUCTION_PAGE_THRESHOLD = 3
+
+        # İhale SONUCU başlık desenleri (planlanan değil, gerçekleşen ihaleler)
+        result_pattern1 = r'Tarihinde\s+Gerçekleştirilen\s+İhalelerin\s+Sonuçlarına\s+İlişkin\s+Basın\s+Duyurusu'
+        result_pattern2 = r'Tarihinde\s+Gerçekleştirilen\s+İhalenin\s+Sonuçlarına\s+İlişkin\s+Basın\s+Duyurusu'
+
+        for page in range(1, self.max_pages + 1):
+            if consecutive_old_auction_pages >= OLD_AUCTION_PAGE_THRESHOLD:
+                logger.info(f"{OLD_AUCTION_PAGE_THRESHOLD} ardışık sayfada tüm ihaleler mevcut veriden eski. Tarama durduruluyor.")
+                break
+
+            # API'den sayfayı çek (gerektiğinde yeniden dene)
+            posts = None
+            for attempt in range(MAX_RETRIES):
+                try:
+                    resp = self.session.get(
+                        self.api_url,
+                        params={'category_name': self.category_slug, 'page': page, 'per_page': API_PER_PAGE},
+                        timeout=HTTP_TIMEOUT,
+                    )
+                    # WP API, son sayfadan sonrası için 400 döndürür
+                    if resp.status_code == 400:
+                        logger.info(f"Sayfa {page}: API'de daha fazla içerik yok (HTTP 400).")
+                        posts = []
+                        break
+                    resp.raise_for_status()
+                    posts = resp.json()
+                    break
+                except Exception as e:
+                    logger.warning(f"API sayfa {page} hatası (deneme {attempt + 1}/{MAX_RETRIES}): {e}")
+                    if attempt < MAX_RETRIES - 1:
+                        time.sleep(1)
+
+            if not posts:
+                if posts is None:
+                    logger.error(f"Sayfa {page} alınamadı, tarama durduruluyor.")
+                break
+
+            logger.info(f"Sayfa {page}: {len(posts)} duyuru alındı")
+            page_has_any_auction = False
+            page_has_new_auction = False
+
+            for post in posts:
+                title = html.unescape((post.get('title') or {}).get('rendered', '') or '').strip()
+                content = (post.get('content') or {}).get('rendered', '') or ''
+                slug = post.get('slug', '') or ''
+
+                # --- Strateji raporu mu? ---
+                title_fold = (title.lower()
+                              .replace('İ', 'i').replace('ı', 'i')
+                              .replace('ç', 'c').replace('ö', 'o').replace('ş', 's')
+                              .replace('ğ', 'g').replace('ü', 'u'))
+                title_fold = ''.join(ch for ch in title_fold if ch != '̇')
+                if 'borclanma stratejisi' in title_fold:
+                    if title not in strategy_titles_seen:
+                        strategy_titles_seen.add(title)
+                        pdf_url = self._extract_pdf_url_from_content(content)
+                        ay_match = re.search(r'(\w+\s*[-–]\s*\w+\s+\d{4})', title)
+                        ay_bilgi = ay_match.group(1) if ay_match else title
+                        if pdf_url:
+                            strategy_pdfs.append((pdf_url, title, ay_bilgi))
+                            logger.info(f"✓ Strateji PDF bulundu: {title}")
+                        else:
+                            logger.warning(f"Strateji duyurusunda PDF bulunamadı: {title}")
+                    continue
+
+                # --- İhale sonucu duyurusu mu? ---
+                is_result = (re.search(result_pattern1, title, re.IGNORECASE) or
+                             re.search(result_pattern2, title, re.IGNORECASE))
+                if not is_result:
+                    continue
+
+                page_has_any_auction = True
+
+                # Kanonik duyuru URL'si (mevcut URL cache ile uyumlu)
+                announcement_url = f"{self.base_url}/duyuru/{slug}" if slug else (post.get('link') or '')
+
+                # İhale tarihini başlıktan parse et
+                parsed_date = None
+                tarih_match = re.search(r'(\d{1,2}\s+\w+\s+\d{4})', title)
+                if tarih_match:
+                    tarih_str_en = self._tr_to_en_month(tarih_match.group(1))
+                    parsed_date = pd.to_datetime(tarih_str_en, format='%d %B %Y', errors='coerce')
+
+                # Erken durma değerlendirmesi
+                if not FORCE_ALL_FETCH and latest_excel_date is not None and parsed_date is not None and parsed_date >= latest_excel_date:
+                    page_has_new_auction = True
+                elif latest_excel_date is None:
+                    page_has_new_auction = True
+
+                pdf_url = self._extract_pdf_url_from_content(content)
+                if not pdf_url:
+                    logger.warning(f"İhale sonucu duyurusunda PDF bulunamadı: {title}")
+                    continue
+
+                if announcement_url not in seen_announcements:
+                    seen_announcements.add(announcement_url)
+                    auction_items.append((announcement_url, pdf_url))
+                    logger.info(f"✓ İhale sonucu duyurusu: {title}")
+
+            # Ardışık eski sayfa sayacını güncelle
+            if not FORCE_ALL_FETCH and latest_excel_date is not None:
+                if page_has_any_auction and not page_has_new_auction:
+                    consecutive_old_auction_pages += 1
+                    logger.info(f"Sayfadaki tüm ihaleler mevcut veriden eski (ardışık: {consecutive_old_auction_pages}/{OLD_AUCTION_PAGE_THRESHOLD})")
+                else:
+                    consecutive_old_auction_pages = 0
+
+        logger.info(f"Toplam {len(auction_items)} ihale sonucu duyurusu, {len(strategy_pdfs)} strateji PDF bulundu")
+        return auction_items, strategy_pdfs
+
+    def extract_data_from_pdf_sync(self, pdf_url: str) -> List[Dict]:
+        """PDF'den veri çıkarır (senkron versiyon)"""
+        try:
+            logger.info(f"PDF indiriliyor: {pdf_url}")
+            response = self.session.get(pdf_url, timeout=PDF_TIMEOUT)
+            response.raise_for_status()
+            return self._parse_pdf_content(response.content)
+        except Exception as e:
+            logger.error(f"PDF işlenirken hata: {str(e)}")
+            return []
+
+    def _parse_pdf_content(self, pdf_content: bytes) -> List[Dict]:
+        """PDF içeriğini parse eder"""
+        try:
+            pdf_file = io.BytesIO(pdf_content)
+            pdf_reader = PyPDF2.PdfReader(pdf_file)
+            all_auction_data = []
+            
+            for page_num, page in enumerate(pdf_reader.pages):
+                page_text = page.extract_text()
+                logger.info(f"Sayfa {page_num + 1} işleniyor...")
+                page_auctions = self._parse_auction_data(page_text)
+                all_auction_data.extend(page_auctions)
+            
+            logger.info(f"✓ PDF'den toplam {len(all_auction_data)} ihale verisi çıkarıldı")
+            return all_auction_data
+        except Exception as e:
+            logger.error(f"PDF parse hatası: {str(e)}")
+            return []
+
+    def _parse_auction_data(self, text: str) -> List[Dict]:
+        """Metin içinden ihale verilerini parse eder"""
+        auction_data = []
+        try:
+            isin_pattern = r'(TR[A-Z0-9]{10})'
+            isin_matches = list(re.finditer(isin_pattern, text))
+            
+            for i, match in enumerate(isin_matches):
+                current_auction = {field: '' for field in self.fields}
+                isin = match.group(1)
+                current_auction['ISIN'] = isin
+                
+                start_pos = match.start()
+                end_pos = isin_matches[i + 1].start() if i < len(isin_matches) - 1 else len(text)
+                block_text = text[start_pos:end_pos]
+                
+                self._extract_auction_details(block_text, current_auction)
+                
+                if current_auction['ISIN']:
+                    auction_data.append(current_auction)
+                    logger.info(f"✓ İhale verisi çıkarıldı: {current_auction['ISIN']} - {current_auction['Senet Tanımı']}")
+                    
+        except Exception as e:
+            logger.error(f"Veri ayrıştırırken hata: {str(e)}")
+        
+        return auction_data
+
+    def _extract_auction_details(self, block_text: str, auction_data: Dict):
+        """Blok metinden ihale detaylarını çıkarır"""
+        patterns = {
+            'Senet Tanımı': r'Senet Tanımı\s*:\s*(.+?)(?:Ortalama|$)',
+            'İhale Tarihi': r'İhale Tarihi\s*:\s*(\d{2}\.\d{2}\.\d{4})',
+            'Valör Tarihi': r'(?:İhraç|Valör)\s*\(?Valör\)?\s*Tarihi\s*:\s*(\d{2}\.\d{2}\.\d{4})',
+            'İtfa Tarihi': r'(?:Vade|İtfa)\s*Tarihi\s*:\s*(\d{2}\.\d{2}\.\d{4})'
+        }
+        
+        for field, pattern in patterns.items():
+            match = re.search(pattern, block_text, re.IGNORECASE | re.DOTALL)
+            if match:
+                value = match.group(1).strip().replace('\n', ' ')
+                if field == 'Senet Tanımı':
+                    value = re.sub(r'(Ortalama|En Düşük|En Yüksek).*', '', value).strip()
+                auction_data[field] = value
+        
+        # Vade hesaplama
+        if auction_data.get('Valör Tarihi') and auction_data.get('İtfa Tarihi'):
+            try:
+                valor_date = pd.to_datetime(auction_data['Valör Tarihi'], format='%d.%m.%Y')
+                maturity_date = pd.to_datetime(auction_data['İtfa Tarihi'], format='%d.%m.%Y')
+                days_diff = (maturity_date - valor_date).days
+                auction_data['Vade (Yıl)'] = round(days_diff / 365.25, 2)
+            except:
+                auction_data['Vade (Yıl)'] = ''
+        
+        self._extract_numeric_values(block_text, auction_data)
+
+    def _extract_numeric_values(self, block_text: str, auction_data: Dict):
+        """Blok metinden sayısal değerleri çıkarır"""
+        miktar_section = re.search(
+            r'Miktar \(Net, Milyon TL\)(.*?)(?:Faiz Oranları|Fiyatlar|İhraç Sonrası|$)', 
+            block_text, re.DOTALL | re.IGNORECASE
+        )
+        
+        if miktar_section:
+            miktar_text = miktar_section.group(1)
+            
+            # ROT değerleri
+            rot_match = re.search(r'ROT\s*:\s*([\d.,-]+)\s+([\d.,-]+)', miktar_text)
+            if rot_match:
+                auction_data['ROT Toplam(Teklif)'] = rot_match.group(1).replace('.', '').replace(',', '.')
+                auction_data['ROT Toplam(Gerçekleşme)'] = rot_match.group(2).replace('.', '').replace(',', '.')
+            
+            # ROT Kamu değerleri
+            rot_kamu_match = re.search(r'Kamu Kurumları\s*:\s*([\d.,-]+)\s+([\d.,-]+)', miktar_text)
+            if rot_kamu_match:
+                auction_data['ROT Kamu(Teklif)'] = rot_kamu_match.group(1).replace('.', '').replace(',', '.')
+                auction_data['ROT Kamu(Gerçekleşme)'] = rot_kamu_match.group(2).replace('.', '').replace(',', '.')
+            
+            # ROT Piyasa Yapıcılar
+            rot_piyasa_pattern = r'(?:ROT.*?)?Piyasa Yapıcılar\s*:\s*([\d.,-]+)\s+([\d.,-]+)'
+            rot_piyasa_matches = re.findall(rot_piyasa_pattern, miktar_text)
+            if rot_piyasa_matches:
+                auction_data['ROT Piyasa Yapıcılar(Teklif)'] = rot_piyasa_matches[0][0].replace('.', '').replace(',', '.')
+                auction_data['ROT Piyasa Yapıcılar(Gerçekleşme)'] = rot_piyasa_matches[0][1].replace('.', '').replace(',', '.')
+                try:
+                    teklif = float(auction_data['ROT Piyasa Yapıcılar(Teklif)'])
+                    gerceklesme = float(auction_data['ROT Piyasa Yapıcılar(Gerçekleşme)'])
+                    if teklif > 0:
+                        auction_data['ROT Piyasa Yapıcılar Kabul Oranı (%)'] = round((gerceklesme / teklif) * 100, 1)
+                except:
+                    pass
+            
+            # İhale değerleri
+            ihale_match = re.search(r'İhale\s*:\s*([\d.,-]+)\s+([\d.,-]+)', miktar_text)
+            if ihale_match:
+                auction_data['İhale(Teklif)'] = ihale_match.group(1).replace('.', '').replace(',', '.')
+                auction_data['İhale(Gerçekleşme)'] = ihale_match.group(2).replace('.', '').replace(',', '.')
+                try:
+                    teklif = float(auction_data['İhale(Teklif)'])
+                    gerceklesme = float(auction_data['İhale(Gerçekleşme)'])
+                    if teklif > 0:
+                        auction_data['İhale Kabul Oranı (%)'] = round((gerceklesme / teklif) * 100, 1)
+                except:
+                    pass
+            
+            # Toplam değerleri
+            toplam_match = re.search(r'Toplam\s*:\s*([\d.,-]+)\s+([\d.,-]+)', miktar_text)
+            if toplam_match:
+                auction_data['Toplam(Teklif)'] = toplam_match.group(1).replace('.', '').replace(',', '.')
+                auction_data['Toplam(Gerçekleşme)'] = toplam_match.group(2).replace('.', '').replace(',', '.')
+        
+        # Faiz oranları
+        faiz_patterns = {
+            'Ortalama Yıllık Basit': r'Ortalama Yıllık Basit\s*:\s*([\d.,-]+)\s+([\d.,-]+)',
+            'Ortalama Yıllık Bileşik': r'Ortalama Yıllık Bileşik\s*:\s*([\d.,-]+)\s+([\d.,-]+)',
+            'En Düşük Yıllık Bileşik': r'En Düşük Yıllık Bileşik\s*:\s*([\d.,-]+)\s+([\d.,-]+)',
+            'En Yüksek Yıllık Bileşik': r'En Yüksek Yıllık Bileşik\s*:\s*([\d.,-]+)\s+([\d.,-]+)'
+        }
+        
+        for field_base, pattern in faiz_patterns.items():
+            match = re.search(pattern, block_text, re.IGNORECASE)
+            if match:
+                auction_data[f'{field_base}(Teklif)'] = match.group(1).replace(',', '.')
+                auction_data[f'{field_base}(Gerçekleşme)'] = match.group(2).replace(',', '.')
+        
+        # Fiyatlar
+        fiyat_patterns = {
+            'Ortalama Fiyat': r'Ortalama Fiyat\s*:\s*([\d.,-]+)\s+([\d.,-]+)',
+            'En Yüksek Fiyat': r'En Yüksek Fiyat\s*:\s*([\d.,-]+)\s+([\d.,-]+)',
+            'En Düşük Fiyat': r'En Düşük Fiyat\s*:\s*([\d.,-]+)\s+([\d.,-]+)'
+        }
+        
+        for field_base, pattern in fiyat_patterns.items():
+            match = re.search(pattern, block_text, re.IGNORECASE)
+            if match:
+                auction_data[f'{field_base}(Teklif)'] = match.group(1).replace('.', '').replace(',', '.')
+                auction_data[f'{field_base}(Gerçekleşme)'] = match.group(2).replace('.', '').replace(',', '.')
+
+    def extract_strategy_data(self, pdf_url: str) -> Dict[str, float]:
+        """
+        Strateji PDF'inden hedef verilerini çıkarır.
+        Çeyreklik PDF'den 3 ayın tamamının verilerini alır.
+        """
+        try:
+            logger.info(f"Strateji PDF'i indiriliyor: {pdf_url}")
+            response = self.session.get(pdf_url, timeout=PDF_TIMEOUT)
+            response.raise_for_status()
+
+            pdf_file = io.BytesIO(response.content)
+            pdf_reader = PyPDF2.PdfReader(pdf_file)
+
+            full_text = ""
+            for page in pdf_reader.pages:
+                full_text += page.extract_text() + "\n"
+
+            # Dönem başlığından ilk ay, son ay ve yılı bul.
+            # İki biçimi de destekle:
+            #   "Haziran – Ağustos 2026"        (yıl yalnızca sonda)
+            #   "Aralık 2025 – Şubat 2026"      (yıl geçişli çeyrek; ilk ayda da yıl)
+            title_pattern = r'([A-Za-zçğıöşüÇĞİÖŞÜ]+)\s*(?:\d{4}\s*)?[-–]\s*([A-Za-zçğıöşüÇĞİÖŞÜ]+)\s+(\d{4})'
+            title_match = re.search(title_pattern, full_text, re.IGNORECASE)
+
+            if title_match:
+                first_month_raw = title_match.group(1).strip()
+                last_month_raw = title_match.group(2).strip()
+                first_month = normalize_month_name(first_month_raw)
+                last_month = normalize_month_name(last_month_raw)
+                year = int(title_match.group(3))
+                months = generate_quarter_months(first_month_raw, last_month_raw)
+                logger.info(f"Dönem ayları: {months} {year}")
+            else:
+                logger.error(f"Dönem başlığı bulunamadı! PDF: {pdf_url}")
+                return {}
+
+            # Tabloyu satır satır işle
+            lines = full_text.splitlines()
+            piyasa_line = None
+            kamu_line = None
+            toplam_line = None
+
+            for line in lines:
+                if "Piyasadan İhale Yoluyla İç Borçlanma" in line:
+                    piyasa_line = line
+                if "Kamuya Satışlar" in line:
+                    kamu_line = line
+                if re.search(r"^Toplam\s", line) or "Toplam İç Borçlanma" in line:
+                    toplam_line = line
+
+            if piyasa_line and kamu_line:
+                piyasa_vals = re.findall(r"([\d]+[.,][\d]+)", piyasa_line)
+                kamu_vals = re.findall(r"([\d]+[.,][\d]+)", kamu_line)
+
+                logger.info(f"Piyasa değerleri ({len(piyasa_vals)} adet): {piyasa_vals}")
+                logger.info(f"Kamu değerleri ({len(kamu_vals)} adet): {kamu_vals}")
+
+                results = {}
+                # Yıl geçişini yönet: başlıktaki yıl son aya ait
+                # Eğer çeyrek yıl geçişi içeriyorsa (ör: Kasım-Ocak),
+                # son aydan önceki aylar bir önceki yıla ait
+                last_month_idx = MONTH_ORDER.index(last_month)
+
+                for i, month in enumerate(months):
+                    if i < len(piyasa_vals) and i < len(kamu_vals):
+                        try:
+                            piyasa = float(piyasa_vals[i].replace('.', '').replace(',', '.'))
+                            kamu = float(kamu_vals[i].replace('.', '').replace(',', '.'))
+                            toplam = piyasa + kamu
+
+                            # Yıl hesapla: son ay yılı belli, önceki aylar yıl geçişinde year-1
+                            month_idx = MONTH_ORDER.index(month)
+                            if month_idx > last_month_idx:
+                                # Bu ay, son aydan sonra geliyor -> bir önceki yıl
+                                actual_year = year - 1
+                            else:
+                                actual_year = year
+
+                            key = f"{month} {actual_year}"
+                            results[key] = toplam
+                            logger.info(f"  {key}: Piyasa={piyasa}, Kamu={kamu}, Toplam={toplam} milyar TL")
+                        except Exception as e:
+                            logger.error(f"Ay {month} için değer parse hatası: {e}")
+
+                # Toplam satırı ile çapraz kontrol
+                if toplam_line and results:
+                    toplam_vals = re.findall(r"([\d]+[.,][\d]+)", toplam_line)
+                    if toplam_vals:
+                        try:
+                            # Toplam satırındaki ilk değer genelde çeyrek toplamı
+                            reported_total = float(toplam_vals[0].replace('.', '').replace(',', '.'))
+                            calculated_total = sum(results.values())
+                            diff_pct = abs(reported_total - calculated_total) / reported_total * 100 if reported_total > 0 else 0
+                            if diff_pct > 5:
+                                logger.warning(f"Toplam uyumsuzluk! Rapor: {reported_total}, Hesaplanan: {calculated_total} (fark: %{diff_pct:.1f})")
+                        except Exception:
+                            pass
+
+                if results:
+                    return results
+
+            logger.error(f"Tablo satırları bulunamadı! PDF: {pdf_url}")
+            return {}
+            
+        except Exception as e:
+            logger.error(f"Strateji PDF'si işlenirken hata: {str(e)}")
+            return {}
+
+    def _process_pdf_batch_parallel(self, pdf_urls: List[str]) -> List[Dict]:
+        """
+        PDF'leri paralel olarak işler (ThreadPoolExecutor ile)
+        
+        Bu metot, performans için kritik - birden fazla PDF'i aynı anda indirir ve parse eder
+        """
+        all_auction_data = []
+        
+        if USE_ASYNC:
+            # Async versiyon (en hızlı)
+            logger.info(f"Async olarak {len(pdf_urls)} PDF indiriliyor...")
+            try:
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                pdf_contents = loop.run_until_complete(download_multiple_pdfs_async(pdf_urls))
+                loop.close()
+                
+                # Parse işlemini paralel yap
+                with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+                    futures = {
+                        executor.submit(self._parse_pdf_content, content): url 
+                        for url, content in pdf_contents.items()
+                    }
+                    
+                    for future in as_completed(futures):
+                        url = futures[future]
+                        try:
+                            result = future.result()
+                            all_auction_data.extend(result)
+                            logger.info(f"✓ {url} işlendi: {len(result)} ihale")
+                        except Exception as e:
+                            logger.error(f"PDF parse hatası ({url}): {str(e)}")
+                            
+            except Exception as e:
+                logger.error(f"Async indirme hatası: {str(e)}")
+                # Fallback: senkron işleme
+                for url in pdf_urls:
+                    all_auction_data.extend(self.extract_data_from_pdf_sync(url))
+        else:
+            # Thread pool versiyon
+            logger.info(f"ThreadPool ile {len(pdf_urls)} PDF işleniyor...")
+            with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+                futures = {executor.submit(self.extract_data_from_pdf_sync, url): url for url in pdf_urls}
+                
+                for future in as_completed(futures):
+                    url = futures[future]
+                    try:
+                        result = future.result()
+                        all_auction_data.extend(result)
+                        logger.info(f"✓ {url} işlendi: {len(result)} ihale")
+                    except Exception as e:
+                        logger.error(f"PDF işleme hatası ({url}): {str(e)}")
+        
+        return all_auction_data
+
+    def analyze_borrowing_performance(self, auction_df: pd.DataFrame, strategy_data: Dict[str, float]) -> pd.DataFrame:
+        """Borçlanma performansını analiz eder"""
+        if not strategy_data or auction_df.empty:
+            return pd.DataFrame()
+        
+        if 'İhale Tarihi' not in auction_df.columns:
+            logger.error("DataFrame'de 'İhale Tarihi' sütunu bulunamadı.")
+            return pd.DataFrame()
+        
+        monthly_realized = {}
+        df_filtered = auction_df.dropna(subset=['İhale Tarihi', 'Toplam(Gerçekleşme)'])
+        
+        for _, row in df_filtered.iterrows():
+            try:
+                date_obj = pd.to_datetime(row['İhale Tarihi'], format='%d.%m.%Y')
+                en_month = date_obj.strftime('%B')
+                tr_month = self.en_to_tr_months.get(en_month, en_month)
+                year = date_obj.year
+                key = f"{tr_month} {year}"
+                
+                realized_str = str(row['Toplam(Gerçekleşme)']).replace(',', '').replace(' ', '')
+                total_realized = float(realized_str) if realized_str.replace('.', '').isdigit() else 0
+                
+                if tr_month and total_realized > 0:
+                    monthly_realized[key] = monthly_realized.get(key, 0) + total_realized
+            except Exception as e:
+                logger.debug(f"Tarih parse hatası: {row.get('İhale Tarihi')} - {str(e)}")
+        
+        logger.info(f"Bulunan aylar: {list(monthly_realized.keys())}")
+        logger.info(f"Strateji ayları: {list(strategy_data.keys())}")
+        
+        comparison_data = []
+        for month_label, target in strategy_data.items():
+            if re.match(r"^[A-Za-zçğıöşüÇĞİÖŞÜ]+ \d{4}$", month_label):
+                parts = month_label.split()
+                key = f"{normalize_month_name(parts[0])} {parts[1]}"
+            else:
+                key = normalize_month_name(month_label)
+                for k in monthly_realized.keys():
+                    if k.startswith(normalize_month_name(month_label)):
+                        key = k
+                        break
+            
+            realized = monthly_realized.get(key, 0) / 1000
+            
+            comparison_data.append({
+                'Ay-Yıl': key,
+                'Hedef Borçlanma (Milyar TL)': target,
+                'Gerçekleşen Borçlanma (Milyar TL)': round(realized, 2),
+                'Fark (Milyar TL)': round(realized - target, 2),
+                'Gerçekleşme Oranı (%)': round((realized / target * 100) if target > 0 else 0, 1)
+            })
+        
+        if not comparison_data:
+            logger.warning("Karşılaştırma verisi oluşturulamadı.")
+            return pd.DataFrame()
+        
+        comparison_df = pd.DataFrame(comparison_data)
+        
+        logger.info("\n" + "="*60)
+        logger.info("BORÇLANMA HEDEFLERİ ANALİZİ")
+        logger.info("="*60)
+        for _, row in comparison_df.iterrows():
+            status = "✓" if row['Fark (Milyar TL)'] >= 0 else "✗"
+            logger.info(f"{status} {row['Ay-Yıl']}: Hedef {row['Hedef Borçlanma (Milyar TL)']} Milyar TL, "
+                        f"Gerçekleşen {row['Gerçekleşen Borçlanma (Milyar TL)']} Milyar TL "
+                        f"(Fark: {row['Fark (Milyar TL)']} Milyar TL, %{row['Gerçekleşme Oranı (%)']})")
+        
+        return comparison_df
+
+    # =====================
+    # PLANLI İHRAÇLAR + TAHMİN
+    # =====================
+    def fetch_issuance_calendar(self, pdf_url: str) -> List[Dict]:
+        """Strateji PDF'inden ihraç takvimini indirip ayrıştırır."""
+        try:
+            logger.info(f"İhraç takvimi için strateji PDF'i indiriliyor: {pdf_url}")
+            response = self.session.get(pdf_url, timeout=PDF_TIMEOUT)
+            response.raise_for_status()
+            reader = PyPDF2.PdfReader(io.BytesIO(response.content))
+            full_text = "".join((page.extract_text() or "") + "\n" for page in reader.pages)
+            calendar = parse_issuance_calendar(full_text)
+            logger.info(f"✓ İhraç takviminden {len(calendar)} planlı ihraç ayrıştırıldı")
+            return calendar
+        except Exception as e:
+            logger.error(f"İhraç takvimi ayrıştırılamadı: {e}")
+            return []
+
+    def _load_planned_calendar_cache(self) -> dict:
+        """Planlı takvim cache'ini yükler: {'source': url, 'items': [...]}."""
+        try:
+            if os.path.exists(PLANNED_CALENDAR_CACHE):
+                with open(PLANNED_CALENDAR_CACHE, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+        except Exception as e:
+            logger.warning(f"Planlı takvim cache okunamadı: {e}")
+        return {}
+
+    def _save_planned_calendar_cache(self, source: str, items: List[Dict]):
+        try:
+            with open(PLANNED_CALENDAR_CACHE, 'w', encoding='utf-8') as f:
+                json.dump({'source': source, 'items': items}, f, ensure_ascii=False, indent=2)
+        except Exception as e:
+            logger.warning(f"Planlı takvim cache kaydedilemedi: {e}")
+
+    @staticmethod
+    def _recent_realization_rate(comparison_df: Optional[pd.DataFrame],
+                                 n_months: int = 12, default: float = 0.85) -> float:
+        """Son n tamamlanmış aydaki toplam gerçekleşen / toplam hedef oranı.
+
+        Strateji hedefi planı temsil eder; Hazine genelde planın altında
+        gerçekleştirir. Bu oran, ileriye dönük tahmindeki sistematik fazla-tahmini
+        düzeltmek için kullanılır (hedef × oran).
+        """
+        if comparison_df is None or comparison_df.empty or 'Ay-Yıl' not in comparison_df.columns:
+            return default
+        tr = {'Ocak': 1, 'Şubat': 2, 'Mart': 3, 'Nisan': 4, 'Mayıs': 5, 'Haziran': 6,
+              'Temmuz': 7, 'Ağustos': 8, 'Eylül': 9, 'Ekim': 10, 'Kasım': 11, 'Aralık': 12}
+        c = comparison_df.copy()
+        c['_real'] = pd.to_numeric(c['Gerçekleşen Borçlanma (Milyar TL)'], errors='coerce')
+        c['_tgt'] = pd.to_numeric(c['Hedef Borçlanma (Milyar TL)'], errors='coerce')
+
+        def keyf(s):
+            p = str(s).split()
+            return (int(p[1]), tr.get(p[0], 0)) if len(p) == 2 and p[1].isdigit() else (0, 0)
+
+        c['_k'] = c['Ay-Yıl'].map(keyf)
+        # Yalnızca tamamlanmış aylar (gerçekleşen > 0), en yeni n ay
+        c = c[(c['_real'] > 0) & (c['_tgt'] > 0)].sort_values('_k').tail(n_months)
+        if c.empty or c['_tgt'].sum() <= 0:
+            return default
+        rate = float(c['_real'].sum() / c['_tgt'].sum())
+        return max(0.4, min(1.5, rate))  # makul sınırlar
+
+    def build_planned_issuances(self, df: pd.DataFrame, newest_strategy_url: Optional[str],
+                                comparison_df: Optional[pd.DataFrame] = None) -> pd.DataFrame:
+        """Önümüzdeki planlı ihraçları derler ve geçmiş veriye dayalı tahmin üretir.
+
+        Takvim, en güncel strateji raporundan gelir; rapor değişmediyse cache'ten
+        okunur (yeniden indirilmez). Tahminler her çalıştırmada güncel geçmiş
+        veriye göre yeniden hesaplanır.
+
+        Tahmin mantığı:
+          1) Her ihale için geçmiş kıyaslardan ham gerçekleşme + bid-to-cover + faiz.
+          2) Bir ayın ihale tahminleri, o ayın strateji hedefiyle (piyasa+kamu) TUTARLI
+             olacak şekilde ölçeklenir (ayın kalan hedefi = hedef - o ay gerçekleşen).
+          3) Teklif (bid) tutarı = tahmini gerçekleşme × tahmini bid-to-cover.
+        """
+        # 1) Takvimi al (cache uyumluysa indirme yapma)
+        cache = self._load_planned_calendar_cache()
+        calendar = cache.get('items', [])
+        if newest_strategy_url and cache.get('source') != newest_strategy_url:
+            fetched = self.fetch_issuance_calendar(newest_strategy_url)
+            if fetched:
+                calendar = fetched
+                self._save_planned_calendar_cache(newest_strategy_url, calendar)
+        elif calendar:
+            logger.info(f"İhraç takvimi cache'ten okundu ({len(calendar)} kayıt, yeniden indirilmedi)")
+
+        if not calendar:
+            logger.info("Planlı ihraç takvimi bulunamadı.")
+            return pd.DataFrame()
+
+        # 2) Geçmiş veriyi hazırla
+        hist = df.copy()
+        for col in ['Ortalama Yıllık Bileşik(Gerçekleşme)', 'Toplam(Gerçekleşme)',
+                    'Toplam(Teklif)', 'Vade (Yıl)', 'İhale Kabul Oranı (%)']:
+            if col in hist.columns:
+                hist[col] = pd.to_numeric(hist[col], errors='coerce')
+        hist['_d'] = pd.to_datetime(hist['İhale Tarihi'], format='%d.%m.%Y', errors='coerce')
+        latest_done = hist['_d'].max()
+
+        # Ay anahtarı yardımcı: tarih -> "Temmuz 2026"
+        def month_key(d):
+            if pd.isna(d):
+                return ''
+            return f"{self.en_to_tr_months.get(d.strftime('%B'), d.strftime('%B'))} {d.year}"
+
+        # O aya kadar zaten gerçekleşen tutar (kısmi aylarda hedeften düşmek için)
+        hist['_ay'] = hist['_d'].map(month_key)
+        realized_by_month = hist.groupby('_ay')['Toplam(Gerçekleşme)'].sum().to_dict()
+
+        # Aylık strateji hedefleri (Milyar TL) — karşılaştırma tablosundan
+        targets = {}
+        if comparison_df is not None and not comparison_df.empty and 'Ay-Yıl' in comparison_df.columns:
+            for _, r in comparison_df.iterrows():
+                try:
+                    targets[str(r['Ay-Yıl']).strip()] = float(r['Hedef Borçlanma (Milyar TL)'])
+                except (ValueError, TypeError, KeyError):
+                    pass
+
+        # Geçmiş gerçekleşme oranı (hedef × oran ile fazla-tahmini düzelt — Seçenek 2)
+        realization_rate = self._recent_realization_rate(comparison_df)
+        logger.info(f"Gerçekleşme oranı varsayımı (son ~12 ay): %{realization_rate * 100:.1f} "
+                    f"(tahminler strateji hedefi × bu orana ölçeklenir)")
+
+        rows = []
+        for item in calendar:
+            ihale_d = pd.to_datetime(item['ihale_tarihi'], format='%d.%m.%Y', errors='coerce')
+            if pd.isna(ihale_d) or (pd.notna(latest_done) and ihale_d <= latest_done):
+                continue  # geçmiş/gerçekleşmiş olanları atla
+
+            # Türkçe İ.lower() birleşik nokta (U+0307) ürettiğinden onu temizle
+            yontem_fold = item['yontem'].lower().replace('̇', '').replace('ı', 'i')
+            is_auction = 'ihale' in yontem_fold
+            yeniden = 'yeniden' in yontem_fold
+
+            forecast = self._forecast_one_issuance(item, hist, is_auction, yeniden)
+            rows.append({
+                'İhale Tarihi': item['ihale_tarihi'],
+                'Senet Tanımı': item['senet_tanimi'],
+                'Vade Terimi': item['vade_terimi'],
+                'İtfa Tarihi': item['itfa_tarihi'],
+                'Yöntem': item['yontem'],
+                **forecast,
+            })
+
+        planned_df = pd.DataFrame(rows)
+        if planned_df.empty:
+            return planned_df
+
+        planned_df['_d'] = pd.to_datetime(planned_df['İhale Tarihi'], format='%d.%m.%Y', errors='coerce')
+        planned_df['_ay'] = planned_df['_d'].map(month_key)
+        raw_col = 'Geçmiş Ort. Gerçekleşme (Milyon TL)'
+
+        # 3) Strateji-tutarlı ölçekleme (hedef × gerçekleşme oranı) + teklif hesabı
+        planned_df['Aylık Strateji Hedefi (Milyar TL)'] = planned_df['_ay'].map(
+            lambda a: round(targets[a], 1) if a in targets else None)
+        planned_df['Gerçekleşme Oranı Varsayımı (%)'] = round(realization_rate * 100, 1)
+        planned_df['Tahmini Gerçekleşme (Milyon TL)'] = planned_df[raw_col]
+
+        for ay, grp in planned_df.groupby('_ay'):
+            if ay not in targets:
+                continue
+            auc = grp[grp[raw_col].notna()]
+            raw_sum = float(auc[raw_col].sum())
+            # Ayın beklenen toplamı = hedef × gerçekleşme oranı; kalanı = beklenen - gerçekleşen
+            expected = targets[ay] * 1000 * realization_rate
+            remaining = expected - float(realized_by_month.get(ay, 0))
+            if raw_sum > 0 and remaining > 0:
+                scale = remaining / raw_sum
+                planned_df.loc[auc.index, 'Tahmini Gerçekleşme (Milyon TL)'] = (
+                    planned_df.loc[auc.index, raw_col] * scale).round(0)
+
+        def _teklif(r):
+            g, b = r['Tahmini Gerçekleşme (Milyon TL)'], r['Tahmini Bid-to-Cover']
+            return round(float(g) * float(b), 0) if pd.notna(g) and pd.notna(b) else None
+        planned_df['Tahmini Teklif (Milyon TL)'] = planned_df.apply(_teklif, axis=1)
+
+        # 4) Sırala + sütun düzeni
+        planned_df = planned_df.sort_values('_d').drop(columns=['_d', '_ay']).reset_index(drop=True)
+        col_order = [
+            'İhale Tarihi', 'Senet Tanımı', 'Vade Terimi', 'İtfa Tarihi', 'Yöntem',
+            'Aylık Strateji Hedefi (Milyar TL)', 'Gerçekleşme Oranı Varsayımı (%)',
+            'Tahmini Gerçekleşme (Milyon TL)', 'Tahmini Bid-to-Cover', 'Tahmini Teklif (Milyon TL)',
+            'Geçmiş Ort. Gerçekleşme (Milyon TL)',
+            'Kıyas Bazı', 'Kıyas İhale Sayısı', 'Son İhale Tarihi',
+        ]
+        planned_df = planned_df[[c for c in col_order if c in planned_df.columns]]
+        logger.info(f"✓ {len(planned_df)} planlı ihraç + tahmin derlendi (strateji-tutarlı + bid-to-cover)")
+        return planned_df
+
+    def _forecast_one_issuance(self, item: Dict, hist: pd.DataFrame,
+                               is_auction: bool, yeniden: bool) -> Dict:
+        """Tek bir planlı ihraç için geçmişe dayalı ham tahmin üretir.
+
+        - Yeniden ihraç: aynı tahvil (İtfa Tarihi eşleşmesi) geçmişinden.
+        - İlk ihraç: aynı senet tipi + benzer vadeli son ihalelerden.
+        - Doğrudan satış (kira sertifikası/altın/USD): ihale verisi yok → tahmin yok.
+
+        NOT: Buradaki tutar 'geçmiş ortalama'dır; strateji hedefine ölçekleme
+        ve teklif (bid) hesabı ay düzeyinde build_planned_issuances'ta yapılır.
+        Bid-to-Cover = Toplam(Teklif) / Toplam(Gerçekleşme) (son ihalelerin ort.).
+        Faiz tahmini yapılmaz: faiz piyasa koşullarına bağlı oynak bir değişken
+        ve canlı piyasa verisine erişim yok.
+        """
+        empty = {
+            'Geçmiş Ort. Gerçekleşme (Milyon TL)': None,
+            'Tahmini Bid-to-Cover': None,
+            'Kıyas Bazı': '',
+            'Kıyas İhale Sayısı': 0,
+            'Son İhale Tarihi': '',
+        }
+        if not is_auction:
+            empty['Kıyas Bazı'] = 'Doğrudan satış — ihale tahmini yok'
+            return empty
+
+        ym = re.match(r'(\d+)\s*Yıl', item['vade_terimi'])
+        mm = re.match(r'(\d+)\s*Ay', item['vade_terimi'])
+        target_years = float(ym.group(1)) if ym else (float(mm.group(1)) / 12 if mm else None)
+
+        res = self._forecast_from_comparables(item['senet_tanimi'], item['itfa_tarihi'],
+                                              target_years, hist)
+        if res is None:
+            empty['Kıyas Bazı'] = 'Kıyas verisi yok'
+            return empty
+        return {
+            'Geçmiş Ort. Gerçekleşme (Milyon TL)': res['raw_amt'],
+            'Tahmini Bid-to-Cover': res['btc'],
+            'Kıyas Bazı': res['basis'],
+            'Kıyas İhale Sayısı': res['n'],
+            'Son İhale Tarihi': res['last_date'],
+        }
+
+    @staticmethod
+    def _forecast_from_comparables(senet_tanimi: str, itfa_tarihi: str,
+                                   target_years: Optional[float], hist: pd.DataFrame) -> Optional[Dict]:
+        """Geçmiş kıyas ihalelerden ham gerçekleşme + bid-to-cover üretir.
+
+        Önce aynı tahvil (İtfa Tarihi eşleşmesi = yeniden ihraç), yoksa aynı tip +
+        benzer vadeli son ihaleler. Hem ileriye dönük tahmin hem backtest bunu kullanır.
+        hist: sayısal Toplam(Gerçekleşme)/Toplam(Teklif)/Vade (Yıl) ve '_d' sütunlarını içermeli.
+        """
+        amt_col = 'Toplam(Gerçekleşme)'
+        bid_col = 'Toplam(Teklif)'
+        comparables = hist[hist['İtfa Tarihi'] == itfa_tarihi] if itfa_tarihi else hist.iloc[0:0]
+        basis = 'Aynı tahvil (itfa eşleşmesi)'
+        if comparables.empty:
+            cand = hist[hist['Senet Tanımı'] == senet_tanimi]
+            if target_years is not None and 'Vade (Yıl)' in cand.columns:
+                near = cand[(cand['Vade (Yıl)'] - target_years).abs() <= 1.0]
+                cand = near if not near.empty else cand
+            comparables = cand
+            basis = 'Aynı tip + benzer vade'
+
+        comparables = comparables.dropna(subset=[amt_col]).sort_values('_d')
+        if comparables.empty:
+            return None
+
+        recent = comparables.tail(3)
+        raw_amt = round(float(recent[amt_col].mean()), 0)
+        btc = None
+        if bid_col in comparables.columns:
+            rr = recent[[bid_col, amt_col]].copy()
+            rr[bid_col] = pd.to_numeric(rr[bid_col], errors='coerce')
+            rr = rr.dropna()
+            rr = rr[rr[amt_col] > 0]
+            if not rr.empty:
+                btc = round(float((rr[bid_col] / rr[amt_col]).mean()), 2)
+        return {'raw_amt': raw_amt, 'btc': btc, 'basis': basis,
+                'n': int(len(comparables)), 'last_date': str(comparables.iloc[-1]['İhale Tarihi'])}
+
+    def backtest_forecasts(self, df: pd.DataFrame, comparison_df: Optional[pd.DataFrame] = None) -> pd.DataFrame:
+        """Geçmiş ihaleleri 'o tarihten önceki veriyle' tahmin edip gerçeğe kıyaslar.
+
+        Her ihale için, yalnızca o ihale tarihinden ÖNCEKİ ihalelerle (look-ahead yok)
+        ileriye dönük yöntemin aynısı uygulanır:
+          - Ham gerçekleşme (kıyasların son 3 ortalaması) + bid-to-cover
+          - Aylık strateji hedefine ölçeklenmiş gerçekleşme (canlı yöntemle aynı)
+          - Teklif = gerçekleşme × bid-to-cover
+        Çıktı: tahmin vs gerçek + sapma yüzdeleri (Milyon TL).
+        """
+        hist = df.copy()
+        for col in ['Toplam(Gerçekleşme)', 'Toplam(Teklif)', 'Vade (Yıl)']:
+            if col in hist.columns:
+                hist[col] = pd.to_numeric(hist[col], errors='coerce')
+        hist['_d'] = pd.to_datetime(hist['İhale Tarihi'], format='%d.%m.%Y', errors='coerce')
+        hist = hist.dropna(subset=['_d', 'Toplam(Gerçekleşme)'])
+        hist = hist[hist['Toplam(Gerçekleşme)'] > 0].sort_values('_d').reset_index(drop=True)
+
+        def month_key(d):
+            return f"{self.en_to_tr_months.get(d.strftime('%B'), d.strftime('%B'))} {d.year}"
+
+        targets = {}
+        if comparison_df is not None and not comparison_df.empty and 'Ay-Yıl' in comparison_df.columns:
+            for _, r in comparison_df.iterrows():
+                try:
+                    targets[str(r['Ay-Yıl']).strip()] = float(r['Hedef Borçlanma (Milyar TL)'])
+                except (ValueError, TypeError, KeyError):
+                    pass
+
+        rows = []
+        for _, r in hist.iterrows():
+            prior = hist[hist['_d'] < r['_d']]
+            if prior.empty:
+                continue
+            res = self._forecast_from_comparables(r['Senet Tanımı'], r['İtfa Tarihi'],
+                                                  r.get('Vade (Yıl)'), prior)
+            if res is None:
+                continue
+            actual_amt = float(r['Toplam(Gerçekleşme)'])
+            actual_bid = pd.to_numeric(r.get('Toplam(Teklif)'), errors='coerce')
+            actual_btc = (actual_bid / actual_amt) if (pd.notna(actual_bid) and actual_amt > 0) else None
+            rows.append({
+                'İhale Tarihi': r['İhale Tarihi'],
+                'Senet Tanımı': r['Senet Tanımı'],
+                '_ay': month_key(r['_d']),
+                'Gerçek Gerçekleşme (Milyon TL)': round(actual_amt, 0),
+                'Tahmin-Ham (Milyon TL)': res['raw_amt'],
+                'Gerçek Bid-to-Cover': round(actual_btc, 2) if actual_btc is not None else None,
+                'Tahmin Bid-to-Cover': res['btc'],
+                'Gerçek Teklif (Milyon TL)': round(float(actual_bid), 0) if pd.notna(actual_bid) else None,
+                'Kıyas Bazı': res['basis'],
+            })
+
+        bt = pd.DataFrame(rows)
+        if bt.empty:
+            return bt
+
+        # Strateji-tutarlı tahmin: ayın ham tahminlerini o ayın hedefine ölçekle
+        bt['Tahmin-Strateji (Milyon TL)'] = bt['Tahmin-Ham (Milyon TL)']
+        for ay, grp in bt.groupby('_ay'):
+            if ay in targets and grp['Tahmin-Ham (Milyon TL)'].sum() > 0:
+                scale = targets[ay] * 1000 / grp['Tahmin-Ham (Milyon TL)'].sum()
+                bt.loc[grp.index, 'Tahmin-Strateji (Milyon TL)'] = (grp['Tahmin-Ham (Milyon TL)'] * scale).round(0)
+
+        # Düzeltilmiş tahmin (Seçenek 2): strateji × geçmiş gerçekleşme oranı
+        realization_rate = self._recent_realization_rate(comparison_df)
+        bt['Tahmin-Düzeltilmiş (Milyon TL)'] = (bt['Tahmin-Strateji (Milyon TL)'] * realization_rate).round(0)
+
+        # Teklif, ileriye dönük yöntemle aynı: düzeltilmiş gerçekleşme × bid-to-cover
+        bt['Tahmin Teklif (Milyon TL)'] = (bt['Tahmin-Düzeltilmiş (Milyon TL)'] * bt['Tahmin Bid-to-Cover']).round(0)
+
+        # Sapma yüzdeleri
+        def pct(f, a):
+            return round((f - a) / a * 100, 1) if (pd.notna(f) and pd.notna(a) and a != 0) else None
+        bt['Tutar Sapma % (düzeltilmiş)'] = bt.apply(lambda x: pct(x['Tahmin-Düzeltilmiş (Milyon TL)'], x['Gerçek Gerçekleşme (Milyon TL)']), axis=1)
+        bt['Tutar Sapma % (strateji)'] = bt.apply(lambda x: pct(x['Tahmin-Strateji (Milyon TL)'], x['Gerçek Gerçekleşme (Milyon TL)']), axis=1)
+        bt['Tutar Sapma % (ham)'] = bt.apply(lambda x: pct(x['Tahmin-Ham (Milyon TL)'], x['Gerçek Gerçekleşme (Milyon TL)']), axis=1)
+        bt['B2C Sapma %'] = bt.apply(lambda x: pct(x['Tahmin Bid-to-Cover'], x['Gerçek Bid-to-Cover']), axis=1)
+        bt['Teklif Sapma %'] = bt.apply(lambda x: pct(x['Tahmin Teklif (Milyon TL)'], x['Gerçek Teklif (Milyon TL)']), axis=1)
+
+        bt = bt.drop(columns=['_ay'])
+        logger.info(f"✓ Backtest: {len(bt)} geçmiş ihale tahmin edilip gerçekle kıyaslandı")
+        return bt
+
+    @staticmethod
+    def _drop_invalid_date_rows(df: pd.DataFrame) -> pd.DataFrame:
+        """İhale Tarihi'si geçersiz/boş olan satırları atar.
+
+        Geçerli her ihale sonucunun bir ihale tarihi vardır; tarihsiz satırlar
+        PDF parse artığıdır (ör. metin içinde ISIN'e benzeyen bir referans).
+        """
+        if df.empty or 'İhale Tarihi' not in df.columns:
+            return df
+        valid = pd.to_datetime(df['İhale Tarihi'], format='%d.%m.%Y', errors='coerce').notna()
+        dropped = int((~valid).sum())
+        if dropped:
+            logger.info(f"Geçersiz tarihli {dropped} satır temizlendi (parse artığı)")
+        return df[valid].reset_index(drop=True)
+
+    def scrape_all_auctions(self) -> Tuple[pd.DataFrame, pd.DataFrame]:
+        """
+        Tüm ihale verilerini çeker ve analiz eder.
+
+        İnkremental mod (FORCE_ALL_FETCH=False):
+        - Mevcut Excel verisiyle birleştirir
+        - Daha önce işlenmiş URL'leri atlar
+        - ISIN bazlı dedup yapar
+        """
+        existing_isins = set()
+        existing_df = None
+        if not FORCE_ALL_FETCH and os.path.exists(EXCEL_OUTPUT):
+            try:
+                existing_df = pd.read_excel(EXCEL_OUTPUT, sheet_name='İhale Verileri')
+                if 'ISIN' in existing_df.columns:
+                    existing_isins = set(existing_df['ISIN'].dropna().astype(str).unique())
+                    logger.info(f"Mevcut Excel'den {len(existing_isins)} ISIN, {len(existing_df)} satır okundu.")
+            except Exception as e:
+                logger.warning(f"Mevcut Excel okunamadı: {str(e)}")
+
+        all_auction_data = []
+        comparison_df = pd.DataFrame()
+
+        try:
+            logger.info("İhale verisi çekme işlemi başlatılıyor...")
+            start_time = time.time()
+
+            # Duyuruları ve PDF linklerini API'den topla
+            # auction_items: List[(announcement_url, pdf_url)]
+            auction_items, strategy_pdfs = self.get_auction_announcement_urls()
+
+            # En güncel strateji raporu (API en yeniden eskiye sıralı döner)
+            if strategy_pdfs:
+                self.newest_strategy_url = strategy_pdfs[0][0]
+
+            if not auction_items:
+                logger.warning("Hiç ihale sonucu duyurusu bulunamadı!")
+                if existing_df is not None and not existing_df.empty:
+                    logger.info("Mevcut veriler kullanılacak.")
+                    return existing_df, pd.DataFrame()
+                return pd.DataFrame(columns=self.fields), pd.DataFrame()
+
+            # Cache'deki URL'leri filtrele (inkremental mod)
+            if not FORCE_ALL_FETCH and self.processed_urls:
+                new_items = [item for item in auction_items if item[0] not in self.processed_urls]
+                skipped = len(auction_items) - len(new_items)
+                if skipped > 0:
+                    logger.info(f"URL cache'den {skipped} duyuru atlandı, {len(new_items)} yeni duyuru işlenecek")
+                auction_items = new_items
+
+            logger.info(f"İşlenecek: {len(auction_items)} duyuru, {len(strategy_pdfs)} strateji PDF")
+
+            # Strateji PDF'lerini işle ve tarihsel cache'e ekle.
+            # API en yeniden eskiye sıralı döner; en eskiden başlayıp en yeniye
+            # doğru işleyerek (a) çakışan aylarda en güncel hedefin kazanmasını,
+            # (b) strateji_history geçmişinin kronolojik sırada birikmesini sağlarız.
+            # Daha önce işlenmiş strateji PDF'lerini TEKRAR İNDİRMEYİZ — verileri
+            # zaten strateji_history'de kalıcı; yalnızca yeni raporlar indirilir.
+            strategy_data = {}
+            strategy_skipped = 0
+            for pdf_url, baslik, ay_bilgi in reversed(strategy_pdfs):
+                if not FORCE_ALL_FETCH and pdf_url in self.processed_urls:
+                    strategy_skipped += 1
+                    continue
+                logger.info(f"Strateji PDF işleniyor: {baslik}")
+                strat = self.extract_strategy_data(pdf_url)
+                if strat:
+                    strategy_data.update(strat)
+                    self._update_strategy_history(strat, baslik)
+                    self.processed_urls.add(pdf_url)
+            if strategy_skipped:
+                logger.info(f"{strategy_skipped} strateji PDF zaten işlenmiş, indirilmedi (cache)")
+
+            # Tarihsel strateji verisini de birleştir (cache'deki tüm aylar)
+            for month_key, info in self.strategy_history.items():
+                if month_key not in strategy_data:
+                    strategy_data[month_key] = info["target"]
+
+            # Mevcut hedef/gerçekleşme CSV'sindeki tarihsel hedefleri koru.
+            # (Geçmiş yıllara ait hedefler yalnızca bu çıktı dosyasında bulunabilir;
+            #  strateji cache'i boşsa bile geçmiş veriyi kaybetmemek için seed ediyoruz.)
+            if not FORCE_ALL_FETCH and os.path.exists(COMPARISON_CSV):
+                try:
+                    old_comp = pd.read_csv(COMPARISON_CSV, encoding='utf-8-sig')
+                    seeded = 0
+                    for _, row in old_comp.iterrows():
+                        ay_yil = str(row.get('Ay-Yıl', '')).strip()
+                        if not ay_yil or ay_yil.lower() == 'nan':
+                            continue
+                        parts = ay_yil.split()
+                        key = f"{normalize_month_name(parts[0])} {parts[1]}" if len(parts) == 2 else ay_yil
+                        if key not in strategy_data:
+                            try:
+                                strategy_data[key] = float(row['Hedef Borçlanma (Milyar TL)'])
+                                seeded += 1
+                            except (ValueError, TypeError, KeyError):
+                                continue
+                    if seeded:
+                        logger.info(f"Mevcut hedef CSV'sinden {seeded} tarihsel hedef korundu")
+                except Exception as e:
+                    logger.warning(f"Mevcut hedef CSV okunamadı: {e}")
+
+            logger.info(f"Toplam strateji verisi: {len(strategy_data)} ay (yeni + tarihsel)")
+
+            # PDF linkleri zaten API içeriğinden geldi — doğrudan topla
+            # (artık duyuru başına ayrı sayfa ziyareti / Selenium gerekmiyor)
+            pdf_urls_to_process = []
+            for announcement_url, pdf_url in auction_items:
+                pdf_urls_to_process.append(pdf_url)
+                self.processed_urls.add(announcement_url)
+
+            # PDF'leri paralel olarak işle
+            if pdf_urls_to_process:
+                logger.info(f"\n{'='*60}")
+                logger.info(f"PARALEL PDF İŞLEME BAŞLIYOR: {len(pdf_urls_to_process)} PDF")
+                logger.info(f"{'='*60}")
+
+                all_auction_data = self._process_pdf_batch_parallel(pdf_urls_to_process)
+
+                # ISIN+Tarih kontrolü (mevcut verilerle çakışmayı önle)
+                # NOT: Sadece ISIN kontrolü yanlış, çünkü aynı ISIN farklı tarihlerde tekrar ihraç edilebilir (ROT)
+                if not FORCE_ALL_FETCH and existing_df is not None and not existing_df.empty:
+                    existing_keys = set(
+                        zip(existing_df['ISIN'].astype(str), existing_df['İhale Tarihi'].astype(str))
+                    )
+                    before_count = len(all_auction_data)
+                    all_auction_data = [
+                        d for d in all_auction_data
+                        if (str(d.get('ISIN', '')), str(d.get('İhale Tarihi', ''))) not in existing_keys
+                    ]
+                    skipped = before_count - len(all_auction_data)
+                    if skipped > 0:
+                        logger.info(f"ISIN+Tarih dedup: {skipped} mevcut kayıt atlandı")
+
+            # URL cache'i kaydet
+            self._save_url_cache()
+
+            elapsed = time.time() - start_time
+            logger.info(f"\nToplam süre: {elapsed:.1f} saniye")
+
+        except Exception as e:
+            logger.error(f"Ana işlem sırasında hata: {str(e)}")
+
+        # Yeni veriyi mevcut veriyle birleştir
+        if all_auction_data:
+            new_df = pd.DataFrame(all_auction_data)
+
+            # Sayısal sütunları dönüştür
+            numeric_columns = [col for col in new_df.columns if any(x in col for x in ['Teklif', 'Gerçekleşme', 'Fiyat', 'Oranı', 'Vade'])]
+            for col in numeric_columns:
+                new_df[col] = pd.to_numeric(new_df[col], errors='coerce')
+
+            # Mevcut veriyle birleştir
+            if existing_df is not None and not existing_df.empty:
+                df = pd.concat([existing_df, new_df], ignore_index=True)
+                df = df.drop_duplicates(subset=['ISIN', 'İhale Tarihi'], keep='last')
+                # Tarihe göre sırala
+                df['_sort'] = pd.to_datetime(df['İhale Tarihi'], format='%d.%m.%Y', errors='coerce')
+                df = df.sort_values('_sort', ascending=False).drop('_sort', axis=1).reset_index(drop=True)
+                logger.info(f"\n{'='*60}")
+                logger.info(f"✓ BAŞARIYLA TAMAMLANDI!")
+                logger.info(f"✓ {len(new_df)} yeni + {len(existing_df)} mevcut = {len(df)} toplam ihale verisi")
+                logger.info(f"{'='*60}")
+            else:
+                df = new_df
+                logger.info(f"\n{'='*60}")
+                logger.info(f"✓ BAŞARIYLA TAMAMLANDI!")
+                logger.info(f"✓ Toplam {len(df)} ihale verisi çekildi")
+                logger.info(f"{'='*60}")
+
+            # Geçersiz tarihli parse artıklarını temizle
+            df = self._drop_invalid_date_rows(df)
+
+            if strategy_data and self.analyze_strategy:
+                logger.info(f"Strateji verisi mevcut: {len(strategy_data)} ay")
+                comparison_df = self.analyze_borrowing_performance(df, strategy_data)
+
+            return df, comparison_df
+
+        elif existing_df is not None and not existing_df.empty:
+            logger.info("Yeni veri yok, mevcut veriler korunuyor.")
+            df = self._drop_invalid_date_rows(existing_df)
+            if strategy_data and self.analyze_strategy:
+                comparison_df = self.analyze_borrowing_performance(df, strategy_data)
+            return df, comparison_df
+        else:
+            logger.error("✗ HİÇ VERİ BULUNAMADI!")
+            return pd.DataFrame(columns=self.fields), pd.DataFrame()
+
+    def calculate_weighted_average_maturity(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Ağırlıklı ortalama vade hesaplar"""
+        if df.empty or 'İhale Tarihi' not in df.columns:
+            return pd.DataFrame()
+        
+        df_copy = df.copy()
+        df_copy['İhale Tarihi'] = pd.to_datetime(df_copy['İhale Tarihi'], format='%d.%m.%Y', errors='coerce')
+        df_copy.dropna(subset=['İhale Tarihi', 'Vade (Yıl)', 'Toplam(Gerçekleşme)'], inplace=True)
+        
+        if df_copy.empty:
+            return pd.DataFrame()
+        
+        df_copy['Yıl-Ay'] = df_copy['İhale Tarihi'].dt.to_period('M')
+        
+        monthly_wam = []
+        for period in df_copy['Yıl-Ay'].unique():
+            if pd.notna(period):
+                month_data = df_copy[df_copy['Yıl-Ay'] == period]
+                total_realized = month_data['Toplam(Gerçekleşme)'].sum()
+                
+                if total_realized > 0:
+                    weighted_sum = (month_data['Vade (Yıl)'] * month_data['Toplam(Gerçekleşme)']).sum()
+                    wam = weighted_sum / total_realized
+                    
+                    monthly_wam.append({
+                        'Dönem': period,
+                        'Tarih': period.to_timestamp(),
+                        'Ağırlıklı Ortalama Vade (Yıl)': round(wam, 2),
+                        'Toplam İhraç (Milyon TL)': round(total_realized, 2),
+                        'İhale Sayısı': len(month_data)
+                    })
+        
+        if not monthly_wam:
+            return pd.DataFrame()
+        
+        wam_df = pd.DataFrame(monthly_wam).sort_values('Tarih')
+        
+        # 3 Aylık Ağırlıklı Ortalama Vade
+        weighted_3mo = []
+        for i in range(len(wam_df)):
+            sub = wam_df.iloc[max(0, i-2):i+1]
+            total_ihrac = sub['Toplam İhraç (Milyon TL)'].sum()
+            if total_ihrac > 0:
+                weighted_avg = (sub['Ağırlıklı Ortalama Vade (Yıl)'] * sub['Toplam İhraç (Milyon TL)']).sum() / total_ihrac
+                weighted_3mo.append(round(weighted_avg, 2))
+            else:
+                weighted_3mo.append(None)
+        
+        wam_df['3 Aylık Ağırlıklı Ortalama Vade'] = weighted_3mo
+        return wam_df
+
+    def create_maturity_charts(self, wam_df: pd.DataFrame, output_file: str = "vade_analizi.html"):
+        """Vade analizi grafiklerini oluşturur"""
+        if wam_df.empty:
+            logger.warning("Vade verisi bulunamadı, grafik oluşturulamadı")
+            return
+        
+        fig = make_subplots(
+            rows=2, cols=1,
+            subplot_titles=('Aylık Ağırlıklı Ortalama Vade ve İhraç Miktarı', '3 Aylık Hareketli Ortalama Vade Trendi'),
+            vertical_spacing=0.15,
+            specs=[[{"secondary_y": True}], [{"secondary_y": False}]]
+        )
+        
+        fig.add_trace(
+            go.Scatter(
+                x=wam_df['Tarih'], y=wam_df['Ağırlıklı Ortalama Vade (Yıl)'],
+                mode='lines+markers', name='Aylık Vade (Yıl)',
+                line=dict(color='#1f77b4', width=2), marker=dict(size=8),
+                hovertemplate='<b>%{x|%B %Y}</b><br>Ağırlıklı Vade: %{y:.2f} yıl<extra></extra>'
+            ),
+            row=1, col=1, secondary_y=False
+        )
+        
+        fig.add_trace(
+            go.Bar(
+                x=wam_df['Tarih'], y=wam_df['Toplam İhraç (Milyon TL)'],
+                name='İhraç Miktarı (Milyon TL)', yaxis='y2',
+                marker_color='lightgray', opacity=0.5,
+                hovertemplate='<b>%{x|%B %Y}</b><br>İhraç: %{y:,.0f} Milyon TL<extra></extra>'
+            ),
+            row=1, col=1, secondary_y=True
+        )
+        
+        fig.add_trace(
+            go.Scatter(
+                x=wam_df['Tarih'], y=wam_df['3 Aylık Ağırlıklı Ortalama Vade'],
+                mode='lines+markers', name='3 Aylık Ağırlıklı Ortalama',
+                line=dict(color='#ff7f0e', width=3, dash='dash'), marker=dict(size=6),
+                hovertemplate='<b>%{x|%B %Y}</b><br>3 Aylık Ağırlıklı Ort: %{y:.2f} yıl<extra></extra>'
+            ),
+            row=2, col=1
+        )
+        
+        fig.update_layout(
+            title={'text': 'Türkiye Hazinesi - Borçlanma Vade Analizi', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20}},
+            height=800, showlegend=True, hovermode='x unified', template='plotly_white',
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+        )
+        
+        fig.update_yaxes(title_text="Vade (Yıl)", row=1, col=1, secondary_y=False)
+        fig.update_yaxes(title_text="İhraç Miktarı (Milyon TL)", row=1, col=1, secondary_y=True, showgrid=False)
+        fig.update_yaxes(title_text="Vade (Yıl)", row=2, col=1)
+        fig.update_xaxes(title_text="", row=1, col=1)
+        fig.update_xaxes(title_text="Tarih", row=2, col=1)
+        
+        fig.write_html(output_file)
+        logger.info(f"✓ Vade analizi grafikleri {output_file} dosyasına kaydedildi")
+        
+        # Özet log
+        logger.info("\n" + "="*60)
+        logger.info("VADE ANALİZİ ÖZETİ")
+        logger.info("="*60)
+        logger.info(f"Ortalama Vade: {wam_df['Ağırlıklı Ortalama Vade (Yıl)'].mean():.2f} yıl")
+        logger.info(f"En Kısa Vade: {wam_df['Ağırlıklı Ortalama Vade (Yıl)'].min():.2f} yıl")
+        logger.info(f"En Uzun Vade: {wam_df['Ağırlıklı Ortalama Vade (Yıl)'].max():.2f} yıl")
+        if not wam_df.empty:
+            logger.info(f"Son 3 Ay Ağırlıklı Ortalaması: {wam_df['3 Aylık Ağırlıklı Ortalama Vade'].iloc[-1]:.2f} yıl")
+        
+        return fig
+
+    def create_borrowing_performance_chart(self, comparison_df: pd.DataFrame, output_file: str = "hedef_gerceklesme.html"):
+        """Hedef vs gerçekleşme grafiği oluşturur"""
+        if comparison_df is None or comparison_df.empty:
+            logger.warning("Hedef/gerçekleşme verisi yok, grafik oluşturulamadı")
+            return
+        
+        def parse_ay_yil(s):
+            ay_mapping = {
+                'Ocak': 1, 'Şubat': 2, 'Mart': 3, 'Nisan': 4, 'Mayıs': 5, 'Haziran': 6,
+                'Temmuz': 7, 'Ağustos': 8, 'Eylül': 9, 'Ekim': 10, 'Kasım': 11, 'Aralık': 12,
+                'Hazi̇ran': 6, 'Mayis': 5, 'Ni̇san': 4, 'Eki̇m': 10
+            }
+            m = re.match(r"([A-Za-zçğıöşüÇĞİÖŞÜ]+) (\d{4})", s)
+            if m:
+                ay, yil = m.group(1), int(m.group(2))
+                ay_num = ay_mapping.get(ay, 1)
+                return pd.Timestamp(year=yil, month=ay_num, day=1)
+            return pd.Timestamp.min
+        
+        comparison_df = comparison_df.copy()
+        comparison_df['Sıra'] = comparison_df['Ay-Yıl'].apply(parse_ay_yil)
+        comparison_df = comparison_df.sort_values('Sıra').drop('Sıra', axis=1)
+        
+        fig = go.Figure()
+        
+        fig.add_trace(go.Bar(
+            x=comparison_df['Ay-Yıl'],
+            y=comparison_df['Hedef Borçlanma (Milyar TL)'],
+            name='Hedef Borçlanma',
+            marker_color='#1f77b4',
+            text=comparison_df['Hedef Borçlanma (Milyar TL)'],
+            textposition='auto',
+            hovertemplate='Hedef: %{y:.1f} Milyar TL<br>Ay: %{x}'
+        ))
+        
+        fig.add_trace(go.Bar(
+            x=comparison_df['Ay-Yıl'],
+            y=comparison_df['Gerçekleşen Borçlanma (Milyar TL)'],
+            name='Gerçekleşen Borçlanma',
+            marker_color='#ff7f0e',
+            text=comparison_df['Gerçekleşen Borçlanma (Milyar TL)'],
+            textposition='auto',
+            hovertemplate='Gerçekleşen: %{y:.1f} Milyar TL<br>Ay: %{x}'
+        ))
+        
+        fig.add_trace(go.Scatter(
+            x=comparison_df['Ay-Yıl'],
+            y=comparison_df['Gerçekleşme Oranı (%)'],
+            name='Gerçekleşme Oranı (%)',
+            mode='lines+markers',
+            yaxis='y2',
+            line=dict(color='green', width=3, dash='dash'),
+            marker=dict(size=8),
+            hovertemplate='Oran: %{y:.1f}%<br>Ay: %{x}'
+        ))
+        
+        fig.update_layout(
+            title={'text': 'Hazine Borçlanma Hedefi vs Gerçekleşme', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20}},
+            barmode='group',
+            xaxis=dict(title='Ay'),
+            yaxis=dict(title='Borçlanma (Milyar TL)'),
+            yaxis2=dict(title='Gerçekleşme Oranı (%)', overlaying='y', side='right', showgrid=False, range=[0, 120]),
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+            template='plotly_white',
+            height=600
+        )
+        
+        fig.write_html(output_file)
+        logger.info(f"✓ Hedef/gerçekleşme grafiği {output_file} dosyasına kaydedildi")
+        return fig
+
+    def save_to_excel(self, df: pd.DataFrame, comparison_df: Optional[pd.DataFrame], wam_df: Optional[pd.DataFrame], filename: str = "hazine_ihale_verileri.xlsx"):
+        """Verileri Excel dosyasına kaydeder"""
+        try:
+            with pd.ExcelWriter(filename, engine='openpyxl') as writer:
+                if df is not None and not df.empty:
+                    df.to_excel(writer, index=False, sheet_name='İhale Verileri')
+                    worksheet = writer.sheets['İhale Verileri']
+                    for idx, col in enumerate(df.columns):
+                        max_len = max(df[col].astype(str).map(len).max(), len(str(col))) + 2
+                        worksheet.column_dimensions[worksheet.cell(1, idx + 1).column_letter].width = min(max_len, 50)
+                
+                if comparison_df is not None and not comparison_df.empty:
+                    comparison_df.to_excel(writer, index=False, sheet_name='Hedef vs Gerçekleşme')
+                    worksheet = writer.sheets['Hedef vs Gerçekleşme']
+                    for idx, col in enumerate(comparison_df.columns):
+                        max_len = max(comparison_df[col].astype(str).map(len).max(), len(str(col))) + 2
+                        worksheet.column_dimensions[worksheet.cell(1, idx + 1).column_letter].width = min(max_len, 40)
+                
+                if wam_df is not None and not wam_df.empty:
+                    wam_df.to_excel(writer, index=False, sheet_name='Vade Analizi')
+                    worksheet = writer.sheets['Vade Analizi']
+                    for idx, col in enumerate(wam_df.columns):
+                        max_len = max(wam_df[col].astype(str).map(len).max(), len(str(col))) + 2
+                        worksheet.column_dimensions[worksheet.cell(1, idx + 1).column_letter].width = min(max_len, 40)
+            
+            logger.info(f"✓ Veriler başarıyla {filename} dosyasına kaydedildi.")
+        except Exception as e:
+            logger.error(f"Excel dosyası kaydedilirken hata: {str(e)}")
+
+
+# =====================
+# ANA İŞ AKIŞI
+# =====================
+def main():
+    """Ana fonksiyon - Tüm iş akışını yönetir"""
+    try:
+        print(f"\n{'='*60}")
+        print("TÜRKIYE HAZİNESİ İHALE VERİLERİ SCRAPER")
+        print(f"{'='*60}")
+        print(f"Performans ayarları:")
+        print(f"  - Veri kaynağı: WordPress REST API (Selenium kullanılmıyor)")
+        print(f"  - Paralel indirme/parse: {MAX_WORKERS}")
+        print(f"  - Async PDF indirme: {'Aktif' if USE_ASYNC else 'Pasif'}")
+        print(f"{'='*60}\n")
+
+        # Scraper'ı başlat
+        scraper = TreasuryAuctionScraper(
+            max_pages=MAX_PAGES,
+            analyze_strategy=ANALYZE_STRATEGY
+        )
+        
+        # Tüm ihale verilerini çek ve analiz et
+        df, comparison_df = scraper.scrape_all_auctions()
+        
+        if not df.empty:
+            print(f"\n{'='*60}")
+            print(f"✓ BAŞARILI! Toplam {len(df)} ihale verisi çekildi")
+            print(f"{'='*60}")
+            
+            # Özet bilgileri göster
+            print("\nÇekilen ISIN kodları:")
+            unique_isins = df.groupby('ISIN').agg({
+                'Senet Tanımı': 'first',
+                'İhale Tarihi': 'count'
+            }).reset_index()
+            unique_isins.columns = ['ISIN', 'Senet Tanımı', 'İhale Sayısı']
+            for idx, row in unique_isins.iterrows():
+                print(f"{idx + 1}. {row['ISIN']} - {row['Senet Tanımı']} ({row['İhale Sayısı']} ihale)")
+            
+            # Hedef vs Gerçekleşme tablosu
+            if not comparison_df.empty:
+                print(f"\n{'='*60}")
+                print("HEDEF VS GERÇEKLEŞME ANALİZİ")
+                print(f"{'='*60}")
+                print(comparison_df.to_string(index=False))
+                
+                last_row = comparison_df.iloc[-1]
+                remaining = last_row['Hedef Borçlanma (Milyar TL)'] - last_row['Gerçekleşen Borçlanma (Milyar TL)']
+                if remaining > 0:
+                    print(f"\n⚠ {last_row['Ay-Yıl']} ayı için kalan borçlanma hedefi: {round(remaining, 2)} Milyar TL")
+            
+            # Ağırlıklı ortalama vade analizi
+            print(f"\n{'='*60}")
+            print("AĞIRLIKLI ORTALAMA VADE ANALİZİ")
+            print(f"{'='*60}")
+            wam_df = scraper.calculate_weighted_average_maturity(df)
+            
+            if not wam_df.empty:
+                print(wam_df[['Dönem', 'Ağırlıklı Ortalama Vade (Yıl)', '3 Aylık Ağırlıklı Ortalama Vade', 'Toplam İhraç (Milyon TL)']].to_string(index=False))
+                scraper.create_maturity_charts(wam_df, output_file=HTML_OUTPUT)
+                print(f"\n✓ Vade analizi grafikleri '{HTML_OUTPUT}' dosyasına kaydedildi")
+            else:
+                print("Vade analizi için yeterli veri bulunamadı")
+            
+            # Hedef/gerçekleşme grafiği
+            scraper.create_borrowing_performance_chart(comparison_df, output_file=HEDEF_GERCEKLESME_HTML)
+            print(f"\n✓ Hedef/gerçekleşme grafiği '{HEDEF_GERCEKLESME_HTML}' dosyasına kaydedildi")
+            
+            # Önümüzdeki planlı ihraçlar + tahminler (strateji-tutarlı + bid-to-cover)
+            planned_df = scraper.build_planned_issuances(df, scraper.newest_strategy_url, comparison_df)
+            if not planned_df.empty:
+                print(f"\n{'='*60}")
+                print("ÖNÜMÜZDEKİ PLANLI İHRAÇLAR + TAHMİNLER")
+                print(f"{'='*60}")
+                show_cols = ['İhale Tarihi', 'Senet Tanımı', 'Yöntem',
+                             'Tahmini Bid-to-Cover', 'Tahmini Gerçekleşme (Milyon TL)',
+                             'Tahmini Teklif (Milyon TL)']
+                print(planned_df[show_cols].to_string(index=False))
+
+            # Excel ve CSV'ye kaydet
+            scraper.save_to_excel(df, comparison_df, wam_df, filename=EXCEL_OUTPUT)
+            df.to_csv(CSV_OUTPUT, index=False, encoding='utf-8-sig')
+
+            if not comparison_df.empty:
+                comparison_df.to_csv(COMPARISON_CSV, index=False, encoding='utf-8-sig')
+            if not wam_df.empty:
+                wam_df.to_csv(WADE_CSV, index=False, encoding='utf-8-sig')
+            if not planned_df.empty:
+                planned_df.to_csv(PLANNED_CSV, index=False, encoding='utf-8-sig')
+
+            # Backtest: geçmiş ihalelerde tahmin vs gerçek (yöntemin isabeti)
+            backtest_df = scraper.backtest_forecasts(df, comparison_df)
+            if not backtest_df.empty:
+                backtest_df.to_csv(BACKTEST_CSV, index=False, encoding='utf-8-sig')
+                import numpy as _np
+                def _mape(col_f, col_a):
+                    m = backtest_df[col_a].notna() & backtest_df[col_f].notna() & (backtest_df[col_a] != 0)
+                    return float(_np.abs((backtest_df.loc[m, col_f] - backtest_df.loc[m, col_a]) / backtest_df.loc[m, col_a]).mean() * 100) if m.any() else float('nan')
+                print(f"\n{'='*60}")
+                print("TAHMİN DOĞRULAMA (BACKTEST) — geçmiş ihalelerde sapma")
+                print(f"{'='*60}")
+                print(f"  Backtest edilen ihale: {len(backtest_df)}")
+                print(f"  Tutar MAPE (düzeltilmiş — Seçenek 2): %{_mape('Tahmin-Düzeltilmiş (Milyon TL)','Gerçek Gerçekleşme (Milyon TL)'):.1f}")
+                print(f"  Tutar MAPE (ham):                     %{_mape('Tahmin-Ham (Milyon TL)','Gerçek Gerçekleşme (Milyon TL)'):.1f}")
+                print(f"  Tutar MAPE (saf strateji):            %{_mape('Tahmin-Strateji (Milyon TL)','Gerçek Gerçekleşme (Milyon TL)'):.1f}")
+                print(f"  Bid-to-Cover MAPE:                    %{_mape('Tahmin Bid-to-Cover','Gerçek Bid-to-Cover'):.1f}")
+
+            print(f"\n✓ Veriler kaydedildi:")
+            print(f"  - {EXCEL_OUTPUT}")
+            print(f"  - {CSV_OUTPUT}")
+            if not comparison_df.empty:
+                print(f"  - {COMPARISON_CSV}")
+            if not wam_df.empty:
+                print(f"  - {WADE_CSV}")
+                print(f"  - {HTML_OUTPUT} (interaktif grafikler)")
+            if not planned_df.empty:
+                print(f"  - {PLANNED_CSV} ({len(planned_df)} planlı ihraç + tahmin)")
+            if not backtest_df.empty:
+                print(f"  - {BACKTEST_CSV} ({len(backtest_df)} geçmiş ihale backtest)")
+        else:
+            print(f"\n{'='*60}")
+            print(f"✗ HİÇ VERİ ÇEKİLEMEDİ!")
+            print(f"{'='*60}")
+            
+    except Exception as e:
+        print(f"\n{'='*60}")
+        print(f"✗ HATA: {str(e)}")
+        print(f"{'='*60}")
+        import traceback
+        traceback.print_exc()
+
+
+if __name__ == "__main__":
+    main()

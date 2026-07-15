@@ -1,0 +1,29 @@
+---
+title: 'FX Haber-Duyarlılık Endeksi'
+description: 'G10 pariteleri için haber akışından duyarlılık skoru üreten, rejim tespiti ve korelasyon optimizasyonu içeren deneysel endeks.'
+pubDate: 2026-07-15
+tags: ['fx', 'sentiment', 'nlp']
+durum: 'taslak'
+kaynak: 'GDELT + piyasa verisi'
+guncelleme: 'günlük (planlanan)'
+---
+
+Fiyat, haberden önce mi hareket eder, sonra mı? Bu deneysel proje, majör pariteler
+(EUR/USD, USD/JPY, USD/CHF…) için haber akışını tarayıp **duyarlılık skorları** üretir ve
+bunları fiyat/hacim verisiyle birleştirerek bileşik bir endeks kurar.
+
+## Bileşenler
+
+- **Haber toplayıcı** — GDELT ve haber aramaları üzerinden parite bazlı sorgularla akış toplar.
+- **Duyarlılık analizi** — başlık ve özet metinleri skorlanır, parite bazında toplanır.
+- **Rejim dedektörü** — volatilite ve trend rejimlerini sınıflandırır; endeksin ağırlıkları
+  rejime göre değişir.
+- **Korelasyon optimizasyonu** — endeks ağırlıkları, gecikmeli getiri korelasyonunu
+  maksimize edecek şekilde geriye dönük optimize edilir.
+
+<div class="not">
+  <span class="etiket">Yol haritası</span>
+  Endeks geçmişi ve canlı gösterge paneli siteye henüz aktarılmadı. Python hattı çalışır
+  durumda; çıktı formatı web'e uygun hale getirildiğinde bu sayfada günlük güncellenen
+  bir grafik yayınlanacak.
+</div>

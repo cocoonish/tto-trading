@@ -1,0 +1,55 @@
+---
+title: 'IRS Bootstrapping & Asset Swap Spread'
+description: 'TLREF swap eğrisinden iskonto faktörlerinin bootstrap ile çıkarılması ve tahvillerin swap eğrisine göre değerlemesi: ASW spread hesabı.'
+pubDate: 2026-07-15
+tags: ['faiz', 'swap', 'tahvil']
+durum: 'taslak'
+kaynak: 'Piyasa swap kotasyonları'
+---
+
+import TahvilHesaplayici from '../../components/TahvilHesaplayici.astro';
+
+Bir tahvilin "ucuzluğunu" ölçmenin en temiz yollarından biri onu devlet eğrisine değil,
+**swap eğrisine** göre fiyatlamaktır. Bu çalışma iki adımı birleştiriyor: par swap
+kotasyonlarından sıfır kuponlu iskonto eğrisinin **bootstrap** ile çıkarılması ve bu
+eğriyle tahvilin **asset swap spread**'inin (ASW) hesaplanması.
+
+## 1 — Eğri bootstrap'i
+
+Par swap oranı $S_n$, sabit bacağın bugünkü değerini değişken bacağa eşitleyen orandır.
+İskonto faktörleri $D(t_i)$ bilinen ilk $n-1$ nokta üzerinden, $n$'inci iskonto faktörü
+kapalı formda çözülür:
+
+$$
+D(t_n) = \frac{1 - S_n \sum_{i=1}^{n-1} \tau_i \, D(t_i)}{1 + S_n \, \tau_n}
+$$
+
+Burada $\tau_i$ dönem uzunluğu (yıl kesri). Kısa uçtan uzun uca sırayla ilerlendiğinde
+tüm eğri kotasyonlardan türetilmiş olur; ara vadeler log-lineer interpolasyonla doldurulur.
+
+## 2 — Asset swap spread
+
+Par-par asset swap yapısında yatırımcı tahvili 100'den alır, kuponları sabit bacak olarak
+öder ve karşılığında $\text{TLREF} + a$ alır. Spread $a$, paketin bugünkü değerini
+sıfırlayan değerdir:
+
+$$
+a = \frac{P_{\text{swap eğrisi}} - P_{\text{piyasa}}}{\sum_{i} \tau_i \, D(t_i)} \cdot \frac{1}{100}
+$$
+
+Sezgisi basit: tahvil, swap eğrisiyle fiyatlanan "teorik" değerinden ne kadar ucuzsa,
+ASW o kadar pozitif — yatırımcı swap'a göre o kadar fazla taşıma kazanır.
+
+## Deneyin: fiyat–getiri ilişkisi
+
+ASW hesabının yapı taşı, nakit akımlarının iskontolanmasıdır. Aşağıdaki araçla kupon,
+getiri ve vadeyi değiştirerek fiyatın ve durasyonun nasıl tepki verdiğini görebilirsiniz:
+
+<TahvilHesaplayici />
+
+<div class="not">
+  <span class="etiket">Yol haritası</span>
+  Hesaplamaların tamamı şu an Excel modellerinde (IRS_Bootstrapping, ASW_Calculator).
+  Sıradaki adım: bootstrap algoritmasını bu sayfada çalışan interaktif bir eğri aracına
+  dönüştürmek ve örnek bir TLREF eğrisiyle adım adım ASW hesabı yayınlamak.
+</div>

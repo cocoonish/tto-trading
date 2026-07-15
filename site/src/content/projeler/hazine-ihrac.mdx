@@ -1,0 +1,39 @@
+---
+title: 'Hazine İhraç Takvimi & İhale Analizi'
+description: 'Hazine''nin iç borçlanma ihalelerinin otomatik derlenmesi: hedef–gerçekleşme, vade dağılımı ve gelecek ihraç takvimi.'
+pubDate: 2026-07-15
+tags: ['hazine', 'tahvil', 'ihale']
+durum: 'aktif'
+kaynak: 'T.C. Hazine ve Maliye Bakanlığı'
+guncelleme: 'ihale dönemlerinde (aylık)'
+---
+
+import GrafikEmbed from '../../components/GrafikEmbed.astro';
+
+Hazine'nin aylık iç borçlanma stratejisi ile fiilen gerçekleşen ihraçlar arasındaki fark,
+TL faiz piyasası için başlı başına bir sinyaldir. Bu proje Hazine sitesindeki ihale
+sonuçlarını ve planlanan ihraç takvimini otomatik toplar (WordPress REST API üzerinden,
+tarayıcı gerektirmeden), PDF'leri paralel indirip ayrıştırır ve hedef–gerçekleşme ile
+vade analizini üretir.
+
+<GrafikEmbed
+  src="/projeler/hazine-ihrac/hedef_gerceklesme.html"
+  baslik="Aylık ihraç hedefi ve gerçekleşme (milyar TL)"
+  no="01"
+  yukseklik={560}
+/>
+
+<GrafikEmbed
+  src="/projeler/hazine-ihrac/vade_analizi.html"
+  baslik="İhraçların vade dağılımı ve ortalama vade"
+  no="02"
+  yukseklik={560}
+/>
+
+## Veri hattı
+
+1. İhale duyuruları ve sonuç PDF'leri inkremental olarak taranır (işlenmiş URL'ler
+   önbelleğe alınır, yalnızca yeni dokümanlar indirilir).
+2. PDF'lerden ihraç tutarı, vade, kupon ve talep bilgisi ayrıştırılır.
+3. Aylık strateji dokümanındaki hedeflerle gerçekleşme karşılaştırılır;
+   tahmin–doğrulama tablosu tutulur.

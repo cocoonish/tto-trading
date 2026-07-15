@@ -1,0 +1,42 @@
+---
+title: 'TCMB Net Rezerv Takibi'
+description: 'Merkez Bankası net ve swap hariç net uluslararası rezervlerinin haftalık resmi veriyle uyumlu, günlük tahminli takibi.'
+pubDate: 2026-07-15
+tags: ['tcmb', 'rezerv', 'fx']
+durum: 'aktif'
+kaynak: 'TCMB EVDS + IRFCL'
+guncelleme: 'haftalık (Cuma) + günlük tahmin'
+---
+
+import GrafikEmbed from '../../components/GrafikEmbed.astro';
+
+Türkiye tartışmalarının değişmez sorusu: *Merkez Bankası'nın gerçekte ne kadar rezervi var?*
+Bu proje, Bloomberg / piyasa uzlaşısıyla uyumlu şekilde **net rezerv** ve **swap hariç net
+rezerv** serilerini otomatik hesaplar; resmi haftalık verinin arasını analitik bilanço
+üzerinden günlük tahminle doldurur.
+
+<GrafikEmbed
+  src="/projeler/tcmb-net-rezerv/grafik.html"
+  baslik="TCMB net ve swap hariç net rezervler (milyar USD)"
+  no="01"
+  yukseklik={560}
+/>
+
+## Metodoloji
+
+- **Net Rezerv (USD)** = Stand-By cari "2A Net Uluslararası Rezervler" (TP.AB.N06, bin TL)
+  ÷ USD/TRY Cuma kapanışı (TP.DK.USD.A.YTL).
+- **Swap Hariç Net Rezerv** = Net Rezerv + II.2 (forward/future net pozisyon) + II.3 (diğer);
+  bu iki kalem haftalık IRFCL PDF'inden ayrıştırılır.
+- **Günlük tahmin**: son Cuma değerine analitik bilanço deltası
+  (Δ(TP.AB.A02 − TP.AB.A17)) eklenir, günün kuruna bölünür. Cuma günleri tahmin,
+  resmi haftalık değere eşitlenir.
+
+Doğrulama (24.04.2026): brüt 171,05 / net 54,23 / swap hariç 36,39 milyar USD —
+Bloomberg ekranındaki 171,1 / 54,2 / 36,4 değerleriyle birebir uyumlu.
+
+<div class="not">
+  <span class="etiket">Not</span>
+  Bu sayfadaki grafik, Python hattının son çalıştırmasında üretilen çıktıdır. Otomatik
+  güncelleme zamanlaması kurulduğunda her hafta kendiliğinden yenilenecek.
+</div>

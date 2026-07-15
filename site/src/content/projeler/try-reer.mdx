@@ -1,0 +1,39 @@
+---
+title: 'TL Reel Efektif Döviz Kuru'
+description: 'TÜFE ve Yi-ÜFE bazlı REDK serilerinin ağırlıklı bileşimi ve uzun dönem ortalamadan sapma analiziyle TL''nin ne kadar ucuz ya da pahalı olduğu.'
+pubDate: 2026-07-15
+tags: ['redk', 'try', 'enflasyon']
+durum: 'aktif'
+kaynak: 'TCMB REDK (TÜFE & Yi-ÜFE)'
+guncelleme: 'aylık'
+---
+
+import GrafikEmbed from '../../components/GrafikEmbed.astro';
+
+TL "ucuz mu, pahalı mı?" sorusuna tek bir REDK serisiyle bakmak yanıltıcı olabilir:
+TÜFE bazlı seri hizmet enflasyonunu, Yi-ÜFE bazlı seri ise ticarete konu malları daha iyi
+yansıtır. Bu proje iki seriyi **%70 TÜFE + %30 Yi-ÜFE** ağırlığıyla birleştirir ve
+10 yıllık hareketli ortalamadan yüzde sapmayı izler.
+
+<GrafikEmbed
+  src="/projeler/try-reer/reer_analysis.html"
+  baslik="Ağırlıklı REDK ve 10 yıllık ortalamadan sapma"
+  no="01"
+  yukseklik={620}
+/>
+
+## Metodoloji
+
+- TCMB'nin TÜFE ve Yi-ÜFE bazlı reel efektif kur endeksleri aylık frekansta alınır.
+- Bileşik endeks: $REDK_t = 0{,}70 \cdot REDK^{TÜFE}_t + 0{,}30 \cdot REDK^{ÜFE}_t$
+- Değerleme sinyali, endeksin 120 aylık (10 yıl) ve 60 aylık (5 yıl) hareketli
+  ortalamalarından yüzde sapması olarak tanımlanır.
+- Ek modül, USD/TRY ile REDK sapması arasındaki regresyonu 3 ay / 5 yıl / 10 yıl
+  ufuklarında ayrı ayrı tahmin eder.
+
+<div class="not">
+  <span class="etiket">Not</span>
+  Ağırlıklar parametriktir; kaynak koddaki tek satırlık değişiklikle farklı bileşimler
+  denenebilir. İleride bu sayfaya ağırlıkları okurun değiştirebildiği bir hesap aracı
+  eklenmesi planlanıyor.
+</div>

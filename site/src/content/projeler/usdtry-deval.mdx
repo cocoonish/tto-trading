@@ -1,0 +1,31 @@
+---
+title: 'USD/TRY Devalüasyon Hızı'
+description: 'Kurun haftalık ve aylık trend kanalları: TL''deki değer kaybının yıllıklandırılmış hızı ve rejim değişimleri.'
+pubDate: 2026-07-15
+tags: ['usdtry', 'fx', 'trend']
+durum: 'aktif'
+kaynak: 'Piyasa verisi (yfinance)'
+guncelleme: 'haftalık'
+---
+
+import GrafikEmbed from '../../components/GrafikEmbed.astro';
+
+"Kur yine koptu mu, yoksa olağan seyrinde mi?" Bu proje USD/TRY'nin günlük kapanışlarından
+haftalık ve aylık trend kanalları çıkarır; TL'deki değer kaybının **yıllıklandırılmış
+hızını** hesaplayıp dönemler arasında karşılaştırır. Kontrollü seyir dönemlerinde eğim
+neredeyse sabittir — kanaldan sapmalar rejim değişikliği sinyali olarak okunabilir.
+
+<GrafikEmbed
+  src="/projeler/usdtry-deval/usdtry_deval.html"
+  baslik="USD/TRY ve devalüasyon trend kanalı"
+  no="01"
+  yukseklik={560}
+/>
+
+## Metodoloji
+
+- Günlük kapanışlar üzerinden log-getiri alınır; trend, seçilen pencere içinde doğrusal
+  regresyonla tahmin edilir.
+- Eğim katsayısı yıllıklandırılarak "devalüasyon hızı (%/yıl)" olarak raporlanır.
+- Haftalık ve aylık frekansta ayrı kanallar üretilir; kanal genişliği artıkların
+  standart sapmasından türetilir.
