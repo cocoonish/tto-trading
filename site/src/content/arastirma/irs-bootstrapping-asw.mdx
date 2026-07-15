@@ -38,21 +38,49 @@ $DF(0)=1$. TRY OIS piyasasının gün sayım tabanı **ACT/365**'tir.
 Aynı DF üç farklı "faiz" olarak ifade edilebilir; hangi enstrümanın hangisiyle kote
 edildiğini bilmek bu piyasada hayatta kalma becerisidir:
 
+**Basit (simple)** — para piyasası ve OIS kotasyonlarının dili. Faiz hiç bileşiklenmez:
+
 $$
-\begin{aligned}
-\text{Basit:}\quad & DF = \frac{1}{1 + R_s\cdot d/365}
-&& \text{para piyasası ve OIS kotasyonları}\\[4pt]
-\text{Günlük bileşik:}\quad & DF = \left(1+\frac{R_g}{365}\right)^{-d}
-&& \text{TLREF'in kendi tanımı; } R_g = 365\left(DF^{-1/d}-1\right)\\[4pt]
-\text{Sürekli:}\quad & DF = e^{-R_c\, T}
-&& \text{model içi temsil; } R_c = -\ln(DF)/T
-\end{aligned}
+DF = \frac{1}{1 + R_s\cdot d/365}
+\qquad\Longleftrightarrow\qquad
+R_s = \left(\frac{1}{DF}-1\right)\cdot\frac{365}{d}
+$$
+
+**Günlük bileşik** — TLREF'in kendi tanımı; faiz her iş günü anaparaya eklenir:
+
+$$
+DF = \left(1+\frac{R_g}{365}\right)^{-d}
+\qquad\Longleftrightarrow\qquad
+R_g = 365\left(DF^{-1/d}-1\right)
+$$
+
+**Sürekli** — model içi temsil; log-linear interpolasyonun arkasındaki dil:
+
+$$
+DF = e^{-R_c\, T}
+\qquad\Longleftrightarrow\qquad
+R_c = -\frac{\ln DF}{T}
 $$
 
 **Pratik.** $DF(1Y)=0{,}7223$ olsun: basit %38,45 · günlük bileşik %32,55 · sürekli
 %32,51. Üçü aynı DF — Celsius/Fahrenheit gibi. Kritik uygulama kuralı (SONEXCEL
 konvansiyonu): **görüntü ve kotasyon her yerde basit faiz**, TLREF path'i günlük
 bileşik, grid interpolasyonu sürekli faiz (log-linear DF) üzerinden yürür.
+
+### Sürekli faiz nereden çıkar? Bileşikleme limiti
+
+Yıllık %38 ile 1 TL'yi $n$ eşit aralıkta bileşikleyin:
+
+| $n$ | 1 (yıllık) | 4 (3 aylık) | 12 (aylık) | 365 (günlük) | $n\to\infty$ |
+| --- | --- | --- | --- | --- | --- |
+| $(1+R/n)^n$ | 1,380 | 1,4047 | 1,4108 | 1,4140 | $e^{0{,}38}=1{,}4143$ |
+
+Sıklık sonsuza giderken sınır $\lim_{n\to\infty}(1+R/n)^n = e^R$ — Euler sabiti finansa
+buradan girer. Günlük bileşik (n=365) sürekliye zaten çok yakındır; TLREF'in günlük
+yapısıyla sürekli temsilin arasındaki fark anaparada ~5 bps'dir. Diferansiyel okuma:
+büyüme hızı anlık bakiyeyle orantılıysa ( $dP/dt = R\,P$ ) çözüm $P(t)=P(0)\,e^{Rt}$'dir —
+bakteri, radyoaktif bozunma ve faiz aynı denklemi paylaşır. Sürekli faiz gerçekte
+uygulanmaz; formülleri basitleştiren matematik aracıdır.
 
 ## Bölüm 2 — No-arbitrage ve forward oran
 
@@ -70,10 +98,20 @@ F[T_1,T_2] = 365\left[\left(\frac{DF(T_1)}{DF(T_2)}\right)^{\frac{1}{d_2-d_1}}-1
 $$
 
 Basit versiyon $F=\left(\frac{DF(T_1)}{DF(T_2)}-1\right)\frac{365}{d_2-d_1}$ kısa
-vadede (< 1 ay) iyi bir yaklaşımdır; süre uzadıkça bileşikten ayrışır. Aşağıdaki
-Araç 02'nin B bloğu iki konvansiyonu yan yana gösterir — 42 günlük tipik bir PPK
-dönemi için fark onlarca bps'ye çıkabilir. Rapora forward yazarken konvansiyon
-belirtmemek, sayı kadar büyük bir hatadır.
+vadede (< 1 ay) iyi bir yaklaşımdır; süre uzadıkça bileşikten ayrışır.
+
+**Pratik.** $DF(T_1)=0{,}9485$, $DF(T_2)=0{,}9070$, aradaki gün 42 (tipik bir PPK
+dönemi):
+
+$$
+F_{bileşik} = 365\left[\left(\frac{0{,}9485}{0{,}9070}\right)^{1/42}-1\right] = \%38{,}88,
+\qquad
+F_{basit} = 0{,}04576\times\frac{365}{42} = \%39{,}76
+$$
+
+Aynı DF çifti, **88 bps** farklı iki sayı. Aşağıdaki Araç 02'nin B bloğu iki
+konvansiyonu her girdi için yan yana gösterir. Rapora forward yazarken konvansiyon
+belirtmemek, sayının kendisi kadar büyük bir hatadır.
 
 ## Bölüm 3 — Piyasa girdileri: 18 pillar, T+1 spot, tatil takvimi
 
@@ -86,7 +124,12 @@ Eğri 18 canlı kotasyondan kurulur (TLREF Meetings, Section 1):
 
 Konvansiyonlar: spot başlangıç **T+1 iş günü** — 24.04.2026 Cuma için 27.04 Pazartesi
 (`WORKDAY(val, 1, tatiller)`; 68 TR resmî tatili tabloda tutulur). Kupon tarihleri
-`WORKDAY(EDATE(spot, 3i)−1, 1, tatiller)` ile üretilir. 24.04.2026 kotasyonları
+`WORKDAY(EDATE(spot, 3i)−1, 1, tatiller)` ile üretilir.
+
+Kısa uçtaki dört para piyasası pillar'ı (1W %40,10 · 2W %40,33 · 1M %40,67 ve 2M)
+bootstrap'a girmez — DF'leri tek satırda çıkar ve esas rollerini Bölüm 7'de, toplantı
+eğrisinin kısa ucunu çivilerken oynarlar. Bootstrap'ın girdisi 14 par pillar'dır
+(3M'den itibaren hepsi kuponlu par swap olarak modellenir). 24.04.2026 kotasyonları
 (IRS Curve girişleri, %):
 
 | 3M | 6M | 9M | 1Y | 18M | 2Y | 3Y | 4Y | 5Y | 6Y | 7Y | 8Y | 9Y | 10Y |
@@ -237,6 +280,14 @@ Kısa ucu 200 bps indirin: "erken gevşeme" senaryosunun yalnız kısa DF'leri d
 annuity kanalıyla bütün eğriyi nasıl oynattığını izleyin. **Bu araca girdiğiniz
 kotasyonlar aşağıdaki forward, swaption ve ASW araçlarının eğrisidir.**
 
+Tablo iki zero konvansiyonu gösterir ve ikisinin okunuşu farklıdır. **Basit zero**
+TL kotasyon dilidir: 3M satırında par kotasyonun tam kendisini görürsünüz — tek
+ödemeli enstrümanın par oranı zaten kendi zero'sudur; vade uzadıkça basit zero hızla
+büyür (10Y'de %100'ü aşar), çünkü bileşiklenmeyen faiz uzun ufukta anlamını yitirir —
+uzun vadelerin par swap olarak kote edilmesinin sebebi budur. **Sürekli zero** ise
+Excel grid'inin gösterdiği içsel temsildir; eğri karşılaştırmalarında ve
+interpolasyonda o kullanılır.
+
 <EgriBootstrap />
 
 ## Bölüm 7 — TCMB toplantı eğrisi: piyasadan implied patikaya
@@ -247,8 +298,14 @@ tarihte sıçramalı. TLREF Meetings sayfası bu merdiveni dokuz adımda kurar:
 
 1. **Pillar DF'leri** — 1W-2M basit formülle, 3M+ IRS Curve bootstrap'ından.
 2. **Toplantı DF'leri** ($DF_{mkt}$) — her toplantının effective tarihi
-   (`WORKDAY(toplantı, 1, tatiller)`: karar açıklanır, yeni faiz ertesi iş günü işler;
-   örnek: 11.06.2026 toplantısı → 12.06 effective, 49. gün) için zero-rate linear interp.
+   (`WORKDAY(toplantı, 1, tatiller)`: karar açıklanır, yeni faiz ertesi iş günü işler)
+   için zero-rate linear interp. İlk üç satırın gerçek değerleri:
+
+| # | Toplantı | Effective | Gün | Statü |
+| --- | --- | --- | --- | --- |
+| 1 | 11.06.2026 (Per) | 12.06.2026 (Cum) | 49 | Announced |
+| 2 | 23.07.2026 (Per) | 24.07.2026 (Cum) | 91 | Announced |
+| 3 | 10.09.2026 (Per) | 11.09.2026 (Cum) | 140 | Announced |
 3. **Dönem oranı** — ardışık toplantılar arası bileşik forward:
    $N_k = 365\left[\left(DF_{k-1}/DF_k\right)^{1/gün}-1\right]$.
 4. **Piyasa sıçraması** — $G_k = N_{k+1} - N_k$: k'ıncı toplantıda *fiyatlanmış* değişim.

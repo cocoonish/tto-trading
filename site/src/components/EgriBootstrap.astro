@@ -24,6 +24,10 @@
   </p>
 
   <div class="girdi-izgara" id="eb-girdiler"></div>
+  <div class="hesapla-satir">
+    <button class="hesapla-btn" id="eb-hesapla" type="button">Hesapla ↻</button>
+    <span class="canli-not">Kotasyon yazarken de canlı güncellenir; buton tam yeniden hesap yapar.</span>
+  </div>
 
   <svg id="eb-grafik" viewBox="0 0 660 300" role="img" aria-label="Par ve sıfır kuponlu eğri"></svg>
   <div class="gosterge etiket">
@@ -35,7 +39,7 @@
     <table id="eb-tablo">
       <thead>
         <tr>
-          <th>Tenor</th><th>Par %</th><th>DF</th><th>Zero % (sürekli)</th><th>Zero % (yıllık)</th><th>Kontrol (bps)</th>
+          <th>Tenor</th><th>Par %</th><th>DF</th><th>Zero % (basit)</th><th>Zero % (sürekli)</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -43,10 +47,12 @@
   </div>
 
   <p class="hesap-dip">
-    "Kontrol": bootstrap edilen DF'lerden geri hesaplanan par oranın girdiyle farkı —
-    Excel'deki Verification bölümünün karşılığı, ~0 olmalı. Grid ideal çeyreklerle
-    (τ=0.25, ACT/365) çalışır; Excel'in gerçek takvim tarihli Trade Ideas hesaplarından
-    birkaç bps sapma normaldir. Tüm hesap tarayıcınızda çalışır.
+    Zero oranlar TL kotasyon konvansiyonuyla <b>basit</b> ((1/DF − 1)/T) ve model içi
+    temsil olan <b>sürekli</b> (−ln DF / T) olarak verilir. 3M tek ödemeli olduğundan
+    basit zero, par kotasyonun kendisidir; vade uzadıkça basit zero hızla büyür — uzun
+    vadelerin neden par swap olarak kote edildiğinin sayısal kanıtı. Grid ideal
+    çeyreklerle (τ=0.25, ACT/365) çalışır; Excel'in gerçek takvimli hesaplarından
+    birkaç bps sapma normaldir.
   </p>
 </div>
 
@@ -143,14 +149,11 @@
     let satirlar = '';
     pillars.forEach(([T, R], i) => {
       const df = grid.get(key(T))!;
+      const zeroBasit = ((1 / df - 1) / T) * 100;
       const zeroSurekli = (-Math.log(df) / T) * 100;
-      const zeroYillik = (Math.pow(1 / df, 1 / T) - 1) * 100;
-      let s = 0;
-      for (let t = TAU; t <= T + 1e-9; t += TAU) s += grid.get(key(t))!;
-      const fark = ((1 - df) / (TAU * s) - R) * 10000;
       satirlar += `<tr>
         <td>${VARSAYILAN[i][0]}</td><td>${tr(R * 100)}</td><td>${df.toFixed(6)}</td>
-        <td>${tr(zeroSurekli)}</td><td>${tr(zeroYillik)}</td><td>${tr(fark, 2)}</td></tr>`;
+        <td>${tr(zeroBasit)}</td><td>${tr(zeroSurekli)}</td></tr>`;
     });
     tabloGovde.innerHTML = satirlar;
 
@@ -183,6 +186,16 @@
   }
 
   girdiKap.addEventListener('input', ciz);
+  const btn = document.getElementById('eb-hesapla')!;
+  btn.addEventListener('click', () => {
+    ciz();
+    btn.classList.add('tamam');
+    btn.textContent = 'Hesaplandı ✓';
+    setTimeout(() => {
+      btn.classList.remove('tamam');
+      btn.textContent = 'Hesapla ↻';
+    }, 900);
+  });
   ciz();
 </script>
 

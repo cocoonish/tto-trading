@@ -57,6 +57,11 @@
     </div>
   </div>
 
+  <div class="hesapla-satir">
+    <button class="hesapla-btn" id="fw-hesapla" type="button">Hesapla ↻</button>
+    <span class="canli-not">Girdiler ve eğri değişince canlı güncellenir.</span>
+  </div>
+
   <p class="hesap-dip">
     Eğri kaynağı: yukarıdaki bootstrap aracı — kotasyonları orada değiştirin, burası anında
     güncellenir. DV01 = A_fwd × 1bp × nominal. İdeal çeyreklik grid kullanıldığından
@@ -109,6 +114,16 @@
     el.addEventListener('input', hesapla)
   );
   document.addEventListener('egri-guncellendi', hesapla);
+  const fwBtn = document.getElementById('fw-hesapla')!;
+  fwBtn.addEventListener('click', () => {
+    hesapla();
+    fwBtn.classList.add('tamam');
+    fwBtn.textContent = 'Hesaplandı ✓';
+    setTimeout(() => {
+      fwBtn.classList.remove('tamam');
+      fwBtn.textContent = 'Hesapla ↻';
+    }, 900);
+  });
   hesapla();
 </script>
 

@@ -58,6 +58,11 @@
     <output class="ara-deger" id="sw-iv">—</output>
   </div>
 
+  <div class="hesapla-satir">
+    <button class="hesapla-btn" id="sw-hesapla" type="button">Hesapla ↻</button>
+    <span class="canli-not">Girdiler ve eğri değişince canlı güncellenir.</span>
+  </div>
+
   <p class="hesap-dip">
     Black: d₁ = [ln(F/K)+σ²T/2]/(σ√T); Payer = A·[F·N(d₁) − K·N(d₂)].
     Bachelier: σ_N ≈ σ_Black × F; Payer = A·[(F−K)·N(d) + σ_N√T·n(d)].
@@ -153,6 +158,16 @@
     el.addEventListener('input', hesapla)
   );
   document.addEventListener('egri-guncellendi', hesapla);
+  const swBtn = document.getElementById('sw-hesapla')!;
+  swBtn.addEventListener('click', () => {
+    hesapla();
+    swBtn.classList.add('tamam');
+    swBtn.textContent = 'Hesaplandı ✓';
+    setTimeout(() => {
+      swBtn.classList.remove('tamam');
+      swBtn.textContent = 'Hesapla ↻';
+    }, 900);
+  });
   hesapla();
 </script>
 

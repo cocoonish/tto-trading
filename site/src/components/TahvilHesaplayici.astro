@@ -50,6 +50,11 @@
       </div>
     </div>
   </div>
+  <div class="hesapla-satir">
+    <button class="hesapla-btn" id="th-hesapla" type="button">Hesapla ↻</button>
+    <span class="canli-not">Girdiler değişince canlı güncellenir.</span>
+  </div>
+
   <p class="hesap-dip">
     Fiyat = kupon akımlarının ve anaparanın bileşik iskontolu bugünkü değeri.
     Tüm hesap tarayıcınızda çalışır; veri gönderilmez.
@@ -91,6 +96,16 @@
   document
     .querySelectorAll('#tahvil-hesap input, #tahvil-hesap select')
     .forEach((el) => el.addEventListener('input', hesapla));
+  const thBtn = document.getElementById('th-hesapla')!;
+  thBtn.addEventListener('click', () => {
+    hesapla();
+    thBtn.classList.add('tamam');
+    thBtn.textContent = 'Hesaplandı ✓';
+    setTimeout(() => {
+      thBtn.classList.remove('tamam');
+      thBtn.textContent = 'Hesapla ↻';
+    }, 900);
+  });
   hesapla();
 </script>
 

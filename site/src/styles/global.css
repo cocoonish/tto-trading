@@ -514,6 +514,55 @@ a:hover {
   font-size: 1rem;
   font-weight: 600;
 }
+.hesapla-btn {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper);
+  background: var(--claret);
+  border: 1px solid var(--claret-dark);
+  border-radius: 2px;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.05s ease;
+}
+.hesapla-btn:hover {
+  background: var(--claret-dark);
+}
+.hesapla-btn:active {
+  transform: translateY(1px);
+}
+.hesapla-btn.tamam {
+  background: var(--teal);
+  border-color: var(--teal);
+}
+.hesapla-satir {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.5rem 1rem 0.9rem;
+}
+.hesapla-satir .canli-not {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--ink-50);
+}
+
+/* KaTeX blokları: çerçeveli, taşmaya dayanıklı */
+.prose .katex-display {
+  background: var(--paper-2);
+  border: 1px solid var(--ink-15);
+  border-left: 3px solid var(--claret);
+  padding: 0.9rem 1.1rem;
+  margin: 1.6em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.prose .katex {
+  font-size: 1.05em;
+}
 
 /* ── Duyarlılık ────────────────────────────────────────────── */
 @media (max-width: 640px) {

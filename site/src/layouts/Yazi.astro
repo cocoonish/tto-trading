@@ -37,8 +37,75 @@ const tarih = (d: Date) =>
         {durum === 'taslak' && <span class="rozet rozet--taslak">Hazırlanıyor</span>}
       </div>
     </header>
+    <nav class="icindekiler yuksel" id="icindekiler" hidden aria-label="İçindekiler">
+      <span class="etiket ic-baslik">İçindekiler</span>
+      <ol id="icindekiler-liste"></ol>
+    </nav>
     <div class="prose yuksel" style="--d: 120ms">
       <slot />
     </div>
   </article>
 </Base>
+
+<script>
+  // h2 başlıklardan içindekiler kur (4+ bölüm varsa)
+  const basliklar = [...document.querySelectorAll('.prose h2')] as HTMLElement[];
+  if (basliklar.length >= 4) {
+    const nav = document.getElementById('icindekiler')!;
+    const liste = document.getElementById('icindekiler-liste')!;
+    basliklar.forEach((h, i) => {
+      if (!h.id) h.id = 'bolum-' + (i + 1);
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = '#' + h.id;
+      a.textContent = h.textContent;
+      li.appendChild(a);
+      liste.appendChild(li);
+    });
+    nav.hidden = false;
+  }
+</script>
+
+<style>
+  .icindekiler {
+    max-width: var(--olcu);
+    margin: 2rem auto 0;
+    border: 1px solid var(--ink-30);
+    background: var(--paper-2);
+    padding: 1rem 1.3rem 1.1rem;
+  }
+  .ic-baslik {
+    color: var(--claret);
+    display: block;
+    margin-bottom: 0.6rem;
+  }
+  .icindekiler ol {
+    margin: 0;
+    padding-left: 1.3rem;
+    columns: 2;
+    column-gap: 2.5rem;
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+  .icindekiler li {
+    margin: 0.22rem 0;
+    break-inside: avoid;
+  }
+  .icindekiler li::marker {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--claret);
+  }
+  .icindekiler a {
+    text-decoration: none;
+    color: var(--ink-70);
+  }
+  .icindekiler a:hover {
+    color: var(--claret);
+  }
+  @media (max-width: 640px) {
+    .icindekiler ol {
+      columns: 1;
+    }
+  }
+</style>
