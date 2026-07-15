@@ -1,7 +1,8 @@
 ---
 title: 'TCMB Net Rezerv Takibi'
-description: 'Merkez Bankası net ve swap hariç net uluslararası rezervlerinin haftalık resmi veriyle uyumlu, günlük tahminli takibi.'
+description: 'Merkez Bankası net ve swap hariç net uluslararası rezervlerinin haftalık resmi veriyle uyumlu, analitik bilanço üzerinden günlük tahminli takibi.'
 pubDate: 2026-07-15
+updatedDate: 2026-07-15
 tags: ['tcmb', 'rezerv', 'fx']
 durum: 'aktif'
 kaynak: 'TCMB EVDS + IRFCL'
@@ -10,33 +11,72 @@ guncelleme: 'haftalık (Cuma) + günlük tahmin'
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
 
-Türkiye tartışmalarının değişmez sorusu: *Merkez Bankası'nın gerçekte ne kadar rezervi var?*
-Bu proje, Bloomberg / piyasa uzlaşısıyla uyumlu şekilde **net rezerv** ve **swap hariç net
-rezerv** serilerini otomatik hesaplar; resmi haftalık verinin arasını analitik bilanço
-üzerinden günlük tahminle doldurur.
+Türkiye tartışmalarının değişmez sorusu: *Merkez Bankası'nın gerçekte ne kadar rezervi
+var?* Resmî haftalık veri Cuma'dan Cuma'ya gelir; piyasa ise her gün pozisyon taşır.
+Bu proje, Bloomberg/piyasa uzlaşısıyla uyumlu **net rezerv** ve **swap hariç net
+rezerv** serilerini otomatik hesaplar ve resmi verinin arasını analitik bilançodan
+türetilen günlük tahminle doldurur.
 
 <GrafikEmbed
   src="/projeler/tcmb-net-rezerv/grafik.html"
-  baslik="TCMB net ve swap hariç net rezervler (milyar USD)"
+  baslik="Swap hariç net rezerv — günlük tahmin, resmi Cuma değerleri ve günlük değişim"
   no="01"
-  yukseklik={560}
+  yukseklik={620}
 />
 
-## Metodoloji
+## Şekil 01 nasıl hesaplanıyor?
 
-- **Net Rezerv (USD)** = Stand-By cari "2A Net Uluslararası Rezervler" (TP.AB.N06, bin TL)
-  ÷ USD/TRY Cuma kapanışı (TP.DK.USD.A.YTL).
-- **Swap Hariç Net Rezerv** = Net Rezerv + II.2 (forward/future net pozisyon) + II.3 (diğer);
-  bu iki kalem haftalık IRFCL PDF'inden ayrıştırılır.
-- **Günlük tahmin**: son Cuma değerine analitik bilanço deltası
-  (Δ(TP.AB.A02 − TP.AB.A17)) eklenir, günün kuruna bölünür. Cuma günleri tahmin,
-  resmi haftalık değere eşitlenir.
+Grafikte üç katman var; her biri ayrı bir hesap hattından gelir:
 
-Doğrulama (24.04.2026): brüt 171,05 / net 54,23 / swap hariç 36,39 milyar USD —
-Bloomberg ekranındaki 171,1 / 54,2 / 36,4 değerleriyle birebir uyumlu.
+**1 — Koyu çizgi: günlük swap hariç net rezerv tahmini.** Temel formül:
 
-<div class="not">
-  <span class="etiket">Not</span>
-  Bu sayfadaki grafik, Python hattının son çalıştırmasında üretilen çıktıdır. Otomatik
-  güncelleme zamanlaması kurulduğunda her hafta kendiliğinden yenilenecek.
-</div>
+$$
+\text{Net Rezerv}(T) = \frac{\text{N06}_{son\,Cuma} + \Delta\text{Analitik}(son\,Cuma \to T)}{\text{USDTRY}(T)}
+$$
+
+$\Delta\text{Analitik} = \Delta(\text{TP.AB.A02} - \text{TP.AB.A17})$ — analitik
+bilançonun "dış varlıklar − döviz yükümlülükleri" farkının TL değişimi. Mantık: haftalık
+resmi kalem (Stand-By 2A) yalnız Cuma açıklanır; ama analitik bilanço her iş günü gelir
+ve rezerv hareketinin TL karşılığını taşır. Son Cuma'nın resmi TL değerine bu delta
+eklenir, günün kuruna bölünür. Cuma günleri delta sıfırlanır — tahmin, resmi değere
+**tam oturur** (grafikte çizginin elmaslardan geçmesi bu tasarımın sonucu).
+
+**2 — Yeşil elmaslar: resmi haftalık değerler.** EVDS serileriyle:
+
+| Kalem | EVDS kodu |
+| --- | --- |
+| Net uluslararası rezerv (2A, bin TL) | TP.AB.N06 |
+| Brüt döviz rezervi / yükümlülüğü | TP.AB.N07 / N08 |
+| Bankaların döviz mevduatı · IMF · diğer | TP.AB.N09 · N10 · N11 |
+| Analitik bilanço: dış varlık / döviz yük. | TP.AB.A02 / A17 |
+| USD/TRY alış | TP.DK.USD.A.YTL |
+
+$$
+\text{Net Rezerv (USD)} = \frac{\text{TP.AB.N06} \times 1000}{\text{USDTRY}_{Cuma}},
+\qquad
+\text{Swap Hariç} = \text{Net Rezerv} + \text{II.2} + \text{II.3}
+$$
+
+II.2 ("yurt içi para karşılığı forward/future net pozisyon", negatif) ve II.3 ("diğer")
+kalemleri EVDS'te yoktur — TCMB'nin haftalık **IRFCL** PDF'inden (Uluslararası Rezervler
+ve Döviz Likiditesi tablosu) `pdfplumber` ile ayrıştırılır. Günlük tahminde bu swap
+kalemi kısa vadede sabit varsayılır: yabancı banka swap stoku haftadan haftaya yavaş döner.
+
+**3 — Açık yeşil çubuklar (sağ eksen): günlük değişim.** Tahmin serisinin birinci
+farkı — rezerv akımının hangi günlerde yoğunlaştığını gösterir; seçim/şok dönemlerinde
+tek günde ±5 milyar USD'ye ulaşan hareketler burada görünür.
+
+## Doğrulama
+
+24.04.2026 kapanışıyla üçlü karşılaştırma: brüt **171,05** / net **54,23** / swap hariç
+**36,39** milyar USD — Bloomberg ekranı sırasıyla 171,1 / 54,2 / 36,4. Üç seri de
+piyasa uzlaşısıyla bire bir.
+
+## Sınırlar ve yorum notları
+
+- Günlük seri bir **tahmindir**: kur değerlemesi ve altın fiyat etkisi analitik delta
+  içinde örtük taşınır; ayrıştırılmaz. Cuma'ya dönüşte hata otomatik kapanır.
+- Swap kalemi hafta içinde sabit varsayıldığından, TCMB'nin hafta ortası agresif swap
+  açtığı/kapadığı günlerde tahmin resmi rakamdan sapabilir — sapmanın kendisi sinyaldir.
+- Seri "2A tanımı"dır; farklı kaynakların "net rezerv" başlığı farklı kalemler
+  içerebilir. Karşılaştırmadan önce tanımı eşitleyin.

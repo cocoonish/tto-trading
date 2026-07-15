@@ -1,362 +1,542 @@
 ---
-title: 'Ders: TL Faiz Eğrisi Kurmak — IRS Bootstrapping & ASW'
-description: 'İskonto faktöründen Newton-Raphson bootstrap''a, TCMB toplantı fiyatlamasından Bloomberg ASW eşleşmesine: TL swap eğrisinin sıfırdan, hem teorik hem sayısal inşası.'
+title: 'Ders: TL Faiz Eğrisi — Bootstrap, TCMB Fiyatlaması, Swaption ve ASW'
+description: 'SONEXCEL modelinin tam dökümü: par denkleminden Newton-Raphson polinomuna, toplantı bazlı eğriden MPC implied''a, forward matrisinden Black/Bachelier swaption fiyatlamasına ve ASW''ye — teori + gerçek kotasyonlarla sayısal hesap.'
 pubDate: 2026-07-15
-tags: ['faiz', 'swap', 'tahvil', 'ders']
+updatedDate: 2026-07-15
+tags: ['faiz', 'swap', 'swaption', 'tahvil', 'ders']
 durum: 'aktif'
-kaynak: 'Bloomberg TYSO kotasyonları (06.05.2026)'
+kaynak: 'Bloomberg TYSO (BDP mid), 24.04.2026'
 ---
 
 import EgriBootstrap from '../../components/EgriBootstrap.astro';
+import ForwardMpcHesaplayici from '../../components/ForwardMpcHesaplayici.astro';
+import SwaptionHesaplayici from '../../components/SwaptionHesaplayici.astro';
 import AswHesaplayici from '../../components/AswHesaplayici.astro';
 import TahvilHesaplayici from '../../components/TahvilHesaplayici.astro';
 
-Bir tahvilin "ucuz" olduğunu söylemek için önce *neye göre* sorusunu cevaplamak gerekir.
-Bu dersin cevabı: **swap eğrisine göre**. Ders boyunca TL OIS (TLREF) eğrisini piyasa
-kotasyonlarından sıfırdan kuracağız, ara vadeleri dolduracağız, TCMB toplantılarının eğriye
-nasıl işlendiğini göreceğiz ve sonunda gerçek bir Hazine tahvilinin
-(TRT051033T12) asset swap spread'ini Bloomberg ekranıyla birebir eşleşecek şekilde
-hesaplayacağız. Her adım iki katmanlı: önce **teori** (formülün türetimi), sonra
-**pratik** (gerçek kotasyonlarla sayısal hesap). Ara sıra duraksayıp hesabı sayfanın
-içindeki araçlarla kendiniz de yapabilirsiniz.
+TL faiz masasının bütün soruları tek bir nesneden türer: **iskonto eğrisi**. "PPK
+haziranda kaç bps indirir diye fiyatlanıyor?", "1Y×1Y forward nerede?", "şu tahvil
+swap'a göre ucuz mu?", "payer swaption kaça?" — dördünün de cevabı aynı eğriden okunur.
+Bu ders, o eğriyi Bloomberg kotasyonlarından sıfırdan kurar ve dört uygulamayı da
+tek tek fiyatlar. Kaynak, `IRS Bootstrapping_SONEXCEL` çalışma kitabıdır: dört sayfası
+(IRS Curve, TLREF Meetings, Daily TLREF Path, Swaption Pricer) buradaki dört ana perdeye
+karşılık gelir. Hiçbir bölüm atlanmadı; her formül önce türetilir, sonra gerçek
+kotasyonla hesaplanır. Sayfadaki dört araç birbirine bağlıdır: bootstrap aracına
+girdiğiniz kotasyonlar forward, swaption ve ASW araçlarına otomatik akar.
 
-> Veri: 06.05.2026 tarihli Bloomberg anlık görüntüsü — TYSO serisi 18 pillar kotasyonu.
-> Metodoloji örneklerinin bir kısmı 24.04.2026 görüntüsünden gelir; hangi görüntü
-> kullanılıyorsa metinde belirtilmiştir.
+> Veri: 24.04.2026 (Cuma) değerleme günü, TYSO serisi BDP mid kotasyonları. Excel'de bu
+> girdiler canlıdır (`BDP` formülü); burada o günün anlık görüntüsü kullanılır.
+> Son bölümdeki ASW örneği 06.05.2026 tarihli `ASW_Calculator` görüntüsünden gelir ve
+> metinde ayrıca işaretlenir.
 
-## Bölüm 1 — İskonto faktörü: hesabın atomu
+## Bölüm 1 — Temel yapı taşı: iskonto faktörü ve üç konvansiyon
 
-Eğri kurmanın tek yapı taşı **iskonto faktörü**dür (discount factor, DF).
-Tanım: $DF(T)$, $T$ tarihindeki 1 TL'nin bugünkü değeridir. Eşdeğer okuma: bugün
-$DF(T)$ TL yatırırsanız $T$ günü tam 1 TL alırsınız. Faiz pozitifken $DF$ her zaman
-$(0,1)$ aralığındadır, vade uzadıkça küçülür ve $DF(0)=1$.
+$DF(T)$: bugün $T$ tarihindeki 1 TL'nin bugünkü değeri. Eşdeğer okuma: bugün $DF(T)$
+TL yatırın, $T$ günü tam 1 TL alın. Faiz pozitifken $0 < DF < 1$, vade uzadıkça küçülür,
+$DF(0)=1$. TRY OIS piyasasının gün sayım tabanı **ACT/365**'tir.
 
-Aynı DF'yi üç farklı "faiz" olarak ifade edebiliriz — termometredeki
-Celsius/Fahrenheit gibi, aynı gerçeklik, farklı ölçek:
+Aynı DF üç farklı "faiz" olarak ifade edilebilir; hangi enstrümanın hangisiyle kote
+edildiğini bilmek bu piyasada hayatta kalma becerisidir:
 
 $$
 \begin{aligned}
-\text{Basit (simple):}\quad & DF = \frac{1}{1 + R_{s}\cdot T/365} \\[4pt]
-\text{Günlük bileşik:}\quad & DF = \left(1 + \frac{R_{g}}{365}\right)^{-T} \\[4pt]
-\text{Sürekli:}\quad & DF = e^{-R_{c}\cdot T/365}
+\text{Basit:}\quad & DF = \frac{1}{1 + R_s\cdot d/365}
+&& \text{para piyasası ve OIS kotasyonları}\\[4pt]
+\text{Günlük bileşik:}\quad & DF = \left(1+\frac{R_g}{365}\right)^{-d}
+&& \text{TLREF'in kendi tanımı; } R_g = 365\left(DF^{-1/d}-1\right)\\[4pt]
+\text{Sürekli:}\quad & DF = e^{-R_c\, T}
+&& \text{model içi temsil; } R_c = -\ln(DF)/T
 \end{aligned}
 $$
 
-**Pratik.** $DF(1Y) = 0{,}7223$ olsun ($T=365$). Üç konvansiyonda karşılığı:
+**Pratik.** $DF(1Y)=0{,}7223$ olsun: basit %38,45 · günlük bileşik %32,55 · sürekli
+%32,51. Üçü aynı DF — Celsius/Fahrenheit gibi. Kritik uygulama kuralı (SONEXCEL
+konvansiyonu): **görüntü ve kotasyon her yerde basit faiz**, TLREF path'i günlük
+bileşik, grid interpolasyonu sürekli faiz (log-linear DF) üzerinden yürür.
 
-| Konvansiyon | Formülden | Sonuç |
+## Bölüm 2 — No-arbitrage ve forward oran
+
+İki yatırım yolu aynı tarihte aynı sonucu vermelidir:
+
+- **Yol 1:** bugünden $T_2$'ye doğrudan yatır → $1/DF(T_2)$.
+- **Yol 2:** önce $T_1$'e yatır, $T_1$'de bugünden kilitlenmiş forward oranla devam et.
+
+TLREF günlük bileşik olduğundan SONEXCEL'in **birincil** forward formülü bileşiktir:
+
+$$
+DF(T_2) = DF(T_1)\cdot\left(1+\frac{F}{365}\right)^{-(d_2-d_1)}
+\;\Rightarrow\;
+F[T_1,T_2] = 365\left[\left(\frac{DF(T_1)}{DF(T_2)}\right)^{\frac{1}{d_2-d_1}}-1\right]
+$$
+
+Basit versiyon $F=\left(\frac{DF(T_1)}{DF(T_2)}-1\right)\frac{365}{d_2-d_1}$ kısa
+vadede (< 1 ay) iyi bir yaklaşımdır; süre uzadıkça bileşikten ayrışır. Aşağıdaki
+Araç 02'nin B bloğu iki konvansiyonu yan yana gösterir — 42 günlük tipik bir PPK
+dönemi için fark onlarca bps'ye çıkabilir. Rapora forward yazarken konvansiyon
+belirtmemek, sayı kadar büyük bir hatadır.
+
+## Bölüm 3 — Piyasa girdileri: 18 pillar, T+1 spot, tatil takvimi
+
+Eğri 18 canlı kotasyondan kurulur (TLREF Meetings, Section 1):
+
+| Blok | Tenor | Ticker | Yapı | DF |
+| --- | --- | --- | --- | --- |
+| Para piyasası | 1W, 2W, 1M, 2M | TYSO1Z…TYSOB | kuponsuz bullet | $DF = 1/(1+R\,d/365)$ — doğrudan |
+| Swap | 3M – 10Y | TYSOC…TYSO10 | 3 ayda bir kuponlu OIS | bootstrap gerekir |
+
+Konvansiyonlar: spot başlangıç **T+1 iş günü** — 24.04.2026 Cuma için 27.04 Pazartesi
+(`WORKDAY(val, 1, tatiller)`; 68 TR resmî tatili tabloda tutulur). Kupon tarihleri
+`WORKDAY(EDATE(spot, 3i)−1, 1, tatiller)` ile üretilir. 24.04.2026 kotasyonları
+(IRS Curve girişleri, %):
+
+| 3M | 6M | 9M | 1Y | 18M | 2Y | 3Y | 4Y | 5Y | 6Y | 7Y | 8Y | 9Y | 10Y |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 41,85 | 41,20 | 40,23 | 39,46 | 38,25 | 37,34 | 35,92 | 34,64 | 33,51 | 32,68 | 31,915 | 31,33 | 30,80 | 30,23 |
+
+Eğri ters (kısa uç yüksek): piyasa agresif indirim patikası fiyatlıyor. Ne kadarını,
+Bölüm 8'de sayıya döküyoruz.
+
+## Bölüm 4 — Bootstrap: par denkleminden Newton polinomuna
+
+### 4.1 Par denklemi ve teleskop özdeşliği
+
+Par IRS'te $R$, sabit bacağın PV'sini değişken bacağa eşitler:
+
+$$
+R\,\tau \sum_{i=1}^{N} DF_i = 1 - DF_N,
+\qquad \tau = 0{,}25 \text{ (çeyreklik)}, \; DF_i = DF(i\tau)
+$$
+
+Sağ tarafın sadeliği teoremdir. Değişken bacağın her kuponunu forward oranla yazın:
+
+$$
+PV_{float} = \sum_i \tau_i F_i\, DF_i
+= \sum_i\left(DF_{i-1}-DF_i\right)
+= DF_0 - DF_N = 1 - DF_N
+$$
+
+$F_i = \frac{1}{\tau_i}\left(\frac{DF_{i-1}}{DF_i}-1\right)$ konunca $\tau$'lar
+sadeleşir, toplam zincirleme iptal olur (**teleskop**). Sonuç: değişken bacağın değeri
+kupon tarihlerinden bağımsızdır — yalnız ilk ve son DF'ye bağlıdır.
+
+$DF_N$'i çekersek: $(1+R\tau)DF_N + R\tau\sum_{i<N}DF_i = 1$. Kritik soru şu:
+$\sum_{i<N}DF_i$ içinde **henüz bilinmeyen** interpolasyon noktası var mı? Cevaba göre
+üç rejim doğar; SONEXCEL bunları $K$ parametresiyle (iki pillar arasındaki 3M adım
+sayısı) sınıflandırır.
+
+### 4.2 K=1: kapalı form (3M, 6M, 9M, 1Y)
+
+Ardışık pillar'lar arasında tek adım varsa aradaki her kupon zaten bilinen bölgededir:
+
+$$
+DF_N = \frac{1 - R\,\tau\, S_{prev}}{1 + R\,\tau},
+\qquad S_{prev} = \sum_{i=1}^{N-1} DF_i
+$$
+
+**Pratik.** 3M: $DF = 1/(1+0{,}4185\times0{,}25) = 0{,}905285$.
+6M: $S_{prev}=0{,}905285$ →
+$DF = \frac{1-0{,}4120\times0{,}25\times0{,}905285}{1+0{,}4120\times0{,}25} = 0{,}822081$.
+Zincir 9M'de 0,750762, 1Y'de **0,687692** verir. Newton'a gerek yok — dört pillar dört
+satırda biter.
+
+### 4.3 K=2: ikinci derece kapalı form (18M, 2Y)
+
+1Y→18M segmentinde ara nokta var: 15M. Log-linear (geometrik) interpolasyonla
+$DF(15M) = \sqrt{DF(1Y)\cdot DF(18M)}$ — yani bilinmeyene bağlı. Par denklemine koyup
+$y=\sqrt{DF_N}$ dönüşümü yapınca **ikinci derece denklem** çıkar:
+
+$$
+(1+R\tau)\,y^2 + R\tau\sqrt{a}\; y + \left(R\tau S_{prev} - 1\right) = 0,
+\qquad a = DF_{prev}
+$$
+
+**Pratik — 18M pillar.** $R=38{,}25\%$, $a = DF(1Y) = 0{,}687692$,
+$S_{prev} = 3{,}165820$ (3M+6M+9M+1Y toplamı). Katsayılar:
+
+$$
+c_2 = 1{,}095625,\quad c_1 = 0{,}079299,\quad c_0 = -0{,}697268
+$$
+
+Diskriminant formülü $y = \frac{-c_1+\sqrt{c_1^2-4c_2c_0}}{2c_2} = 0{,}7623855$ →
+$DF(18M) = y^2 = \mathbf{0{,}581232}$. SONEXCEL bu değeri hem kapalı formla hem
+Newton'la hesaplayıp farkın $10^{-10}$ mertebesinde (makine hassasiyeti) olduğunu
+gösterir — çift yöntem, doğrulama içindir.
+
+### 4.4 K≥2: birleşik Newton-Raphson polinomu (3Y ve ötesi)
+
+K=3, 4, 5 için kübik/kuartik radikaller pratik değildir. Genel çözüm: $u = DF_N^{1/K}$
+dönüşümüyle interpolasyon noktaları $u$'nun kuvvetleri olur,
+$DF(prev+j) = a^{(K-j)/K}\, u^{\,j}$, ve par denklemi bir **polinoma** dönüşür:
+
+$$
+g(u) = (1+R\tau)\,u^K + \sum_{j=1}^{K-1} R\tau\, a^{\frac{K-j}{K}}\, u^{\,j} + \left(R\tau S_{prev}-1\right) = 0
+$$
+
+Newton iterasyonu $u_{n+1} = u_n - g(u_n)/g'(u_n)$, başlangıç tahmini
+$u_0 = a^{1/K}$ (ardışık pillar DF'leri yakın olduğundan mantıklı). Tipik yakınsama:
+K=2'de 1-2, K=4'te 3-4 iterasyon; model güvenlik payıyla 10 tur döner.
+
+**Pratik — 3Y pillar (K=4, kuartik).** $R=35{,}92\%$, $a=DF(2Y)=0{,}494925$,
+$S_{prev}=5{,}410547$:
+
+$$
+g(u) = 1{,}0898\,u^4 + 0{,}075320\,u^3 + 0{,}063175\,u^2 + 0{,}052988\,u - 0{,}514133
+$$
+
+| İter | $u_n$ | $g(u_n)$ |
 | --- | --- | --- |
-| Basit | $(1/0{,}7223 - 1)$ | %38,45 |
-| Günlük bileşik | $365\,(0{,}7223^{-1/365} - 1)$ | %32,55 |
-| Sürekli | $-\ln(0{,}7223)$ | %32,51 |
+| 0 | 0,838755 ( $=a^{1/4}$ ) | 0,158570 |
+| 1 | 0,783889 | 0,014001 |
+| 2 | 0,778033 | 0,000145 |
+| 3 | 0,777971 | 1,6×10⁻⁸ |
+| 4 | 0,777971 | 0 |
 
-Üçü de aynı DF. TL piyasasında kotasyon standardı **basit faizdir**; TLREF'in kendi
-yapısı **günlük bileşiktir** (her iş günü faiz anaparaya eklenir); **sürekli** faiz ise
-model içi kolaylıktır — birazdan göreceğimiz log-linear interpolasyonun arkasında o vardır.
+$DF(3Y) = u^4 = \mathbf{0{,}366313}$. Aynı şablonla 10Y'ye kadar:
+$DF(5Y)=0{,}222876$, $DF(7Y)=0{,}147225$, $DF(10Y)=\mathbf{0{,}090716}$.
 
-Sürekli faizin nereden çıktığını görmek için bileşikleme sıklığını artırın: yıllık %38 ile
-1 TL, yıllık bileşikte 1,380'e, üç aylıkta 1,4047'ye, günlükte 1,4140'a, limitte
-$e^{0{,}38}=1{,}4143$'e büyür. Sıklık sonsuza giderken sınır $e^R$ — Euler sabiti
-finansa buradan girer.
+### 4.5 Neden tek tip Newton? (Murex/Bloomberg pratiği)
 
-## Bölüm 2 — No-arbitrage ve forward faiz
+1. **Evrensellik** — K değişse de aynı çözücü çalışır; yeni pillar eklemek kod değiştirmez.
+2. **Sadelik** — üretim sistemleri (Murex, Bloomberg ICVS, Calypso) tek jenerik Newton
+   kullanır; her K için ayrı radikal formülü bakım kâbusudur.
+3. **Sayısal sağlamlık** — kapalı form $b^2-4ac<0$'da çöker; yüksek oran/uzun vadede
+   kuartik radikallerin hassasiyeti iterasyondan kötü olabilir.
+4. **Pedagojik paralellik** — her pillar aynı üç adım: polinom kur, tahmin ver, itere et.
+5. **Doğrulama** — K=2'de kapalı form yan yana tutulur; fark ~$10^{-10}$ olmalı.
 
-Eğrinin bütün iç tutarlılığı tek prensipten türer: **aynı sonuca giden iki yatırım yolu
-aynı getiriyi vermelidir**, yoksa risksiz kâr (arbitraj) vardır.
+### 4.6 Öz-tutarlılık: eğri girdiyi geri üretiyor mu?
 
-Bugünden $T_2$'ye 1 TL'yi iki yolla taşıyabilirim: (i) doğrudan $T_2$ vadeli yatırım —
-sonuç $1/DF(T_2)$; (ii) önce $T_1$'e yatırıp, $T_1$'de *bugünden anlaşılmış* forward
-oran $F$ ile $T_2$'ye devam — sonuç $\frac{1}{DF(T_1)}\left(1 + F\cdot\frac{T_2-T_1}{365}\right)$.
-İkisini eşitleyip $F$'i çekersek:
+Kurulan grid'den her pillar için par oran geri hesaplanır:
+$R_{implied} = \frac{1-DF_N}{\tau\sum_{i\le N} DF_i}$. SONEXCEL'de tüm farklar
+$10^{-12}$ bps mertebesindedir. İkinci, daha güçlü test TLREF Meetings Section 3'te:
+toplantı patikasından üretilen DF'ler, girdi OIS DF'leriyle karşılaştırılır — senaryo
+kapalıyken (User Jump = 0) "Diff DF" ~0 olmalıdır. Bu iki test, "eğriyi kurdum"
+iddiasının kanıtıdır; 0-5 bps üstü sapma modelde hata demektir.
 
-$$
-F[T_1,T_2] = \left(\frac{DF(T_1)}{DF(T_2)} - 1\right)\cdot\frac{365}{T_2-T_1}
-$$
+## Bölüm 5 — Interpolasyon: iki farklı iş, iki farklı yöntem
 
-**Pratik.** $DF(T_1)=0{,}9485$, $DF(T_2)=0{,}9070$, aradaki gün 42:
+Model bilinçli olarak **iki** interpolasyon kullanır ve gerekçeleri farklıdır:
 
-$$
-F = \left(\frac{0{,}9485}{0{,}9070}-1\right)\cdot\frac{365}{42} = 0{,}04576 \times 8{,}6905 = \%39{,}76
-$$
+**Grid içi (bootstrap ve rastgele T):** log-linear DF —
+$DF(t) = DF_1^{\,1-w}\, DF_2^{\,w}$, $w = \frac{t-t_1}{t_2-t_1}$. Pillar arasında
+forward oran sabit kalır, eğri pürüzsüzdür; sürekli zero oranın doğrusal
+interpolasyonuna denktir. Rastgele vade için (IRS Curve Section 4):
+$T=3{,}4$ yıl (örnekteki tahvil vadesi) → $DF = 0{,}329486$, sürekli zero %32,65.
 
-Aynı DF çifti günlük bileşik konvansiyonla %38,88 verir — **88 bps fark**. Forward
-oran raporlarken konvansiyon belirtmemek, sayının kendisi kadar büyük hata üretebilir.
+**Toplantı DF'leri için:** zero-rate linear — pillar zero oranları gün ekseninde
+doğrusal bağlanır, sonra DF'ye çevrilir. Neden log-linear değil? Log-linear, aralık
+içinde forward'ı sabitler; TCMB toplantısı aralığın ortasındaysa sıçrama pillar'a
+yapışır ve **yapay spike** üretir. Zero-rate linear, oranı güne göre yumuşak dağıtır,
+toplantı sıçramaları doğal yerine oturur ve pillar noktalarında yine tam eşleşme korunur.
 
-## Bölüm 3 — Bootstrap: kotasyondan eğriye
+## Bölüm 6 — Deneyin: eğriyi kurun
 
-TL OIS eğrisi 18 pillar kotasyonundan kurulur ve pillar'lar iki farklı türdendir:
-
-| Tür | Tenor | Enstrüman | DF nasıl bulunur? |
-| --- | --- | --- | --- |
-| Para piyasası | 1W – 9M | Kuponsuz, tek ödeme (TYSO1Z…TYSOI) | Doğrudan formül |
-| Swap | 1Y – 10Y | Üç ayda bir kuponlu OIS (TYSO1…TYSO10) | Bootstrap gerekir |
-
-### 3.1 Para piyasası ayağı: doğrudan çözüm
-
-Kuponsuz enstrümanda bugün yatırılan para vade sonunda tek seferde geri döner;
-basit faiz tanımı DF'yi anında verir:
-
-$$
-DF(T) = \frac{1}{1 + R\cdot T/365}
-$$
-
-**Pratik — 3M pillar (TYSOC).** Kotasyon %42,09, vade 92 gün:
-
-$$
-DF(92) = \frac{1}{1 + 0{,}4209 \times 92/365} = \frac{1}{1{,}10610} = 0{,}904086
-$$
-
-Okunuşu: 92 gün sonraki 1 TL bugün 90,41 kuruş eder. 1W'dan 9M'e yedi pillar'ın
-tamamı bu tek satırlık formülle biter — iterasyon yok.
-
-### 3.2 Swap ayağı: par denklemi ve teleskop
-
-1Y ve ötesi kotasyonlar üç ayda bir kupon ödeyen OIS swap'larıdır: sabit bacak $R$
-öder, değişken bacak TLREF'in dönem içi bileşiğini öder. **Par** swap, iki bacağın
-bugünkü değerinin eşit olduğu (net PV = 0) swap'tır:
-
-$$
-\underbrace{R \sum_{i=1}^{n} \tau_i\, DF(t_i)}_{\text{sabit bacak PV}} \;=\; \underbrace{1 - DF(T)}_{\text{değişken bacak PV}}
-$$
-
-Sol taraftaki $\sum \tau_i DF(t_i)$ toplamına **annuity** denir ($\tau_i$ = dönem uzunluğu,
-gün/365). Sağ tarafın bu kadar sade olması bir tesadüf değil, bir teoremdir —
-**teleskop özdeşliği**. Değişken bacağın her kuponu forward oranla yazılıp toplanırsa:
-
-$$
-PV_{float} = \sum_i \tau_i F_i\, DF(t_i)
-= \sum_i \left(DF(t_{i-1}) - DF(t_i)\right)
-= DF(t_0) - DF(t_n) = 1 - DF(T)
-$$
-
-$F_i = \frac{1}{\tau_i}\left(\frac{DF(t_{i-1})}{DF(t_i)}-1\right)$ yerine konduğunda
-$\tau$'lar sadeleşir ve toplam zincirleme iptal olur ("teleskop" adı buradan).
-Sonuç dikkat çekicidir: değişken bacağın değeri kupon tarihlerinden bağımsızdır,
-yalnızca ilk ve son DF'ye bağlıdır.
-
-**Pratik — 1Y pillar'ın kapalı form çözümü** (24.04.2026 görüntüsü, TYSO1 = %39,58).
-Dört kupon var: 91, 182, 274 ve 365. gün. İlk üçünün DF'si para piyasasından
-biliniyor (0,9046 · 0,8290 · 0,7668); tek bilinmeyen $DF(365)$. Par denklemini açalım:
-
-$$
-0{,}3958 \times \left(\Sigma_{bilinen} + \tau_4\, DF\right) = 1 - DF,
-\qquad \Sigma_{bilinen} = 0{,}6253
-$$
-
-$DF$'yi çekersek:
-
-$$
-DF(1Y) = \frac{1 - R\,\Sigma_{bilinen}}{1 + R\,\tau_4}
-= \frac{1 - 0{,}3958 \times 0{,}6253}{1 + 0{,}3958 \times 0{,}2493}
-= \frac{0{,}7525}{1{,}0987} = 0{,}6849
-$$
-
-Tek bilinmeyenli doğrusal denklem — çünkü 1Y'nin tüm ara kuponları zaten bilinen
-bölgeye düşüyordu.
-
-### 3.3 18M ve ötesi: Newton-Raphson
-
-18M pillar'da iş değişir: 15M kuponu, *bilinen* 1Y ile *henüz bilinmeyen* 18M
-arasına düşer. Ara noktanın DF'si bilinmeyene bağlı, bilinmeyen de ara noktaya —
-kapalı form yok. Çözüm, sayısal kök bulma:
-
-1. $DF(18M)$ için bir ilk tahmin yap.
-2. Ara kuponların DF'sini bu tahminle interpolasyondan hesapla (log-linear, Bölüm 4).
-3. Par denklemi kalıntısını yaz: $f(DF) = R\sum\tau_i DF(t_i) - \left(1-DF\right)$.
-4. Newton adımı: $DF \leftarrow DF - f(DF)/f'(DF)$, türev sayısal.
-5. $|f| < 10^{-14}$ olana dek tekrarla — tipik olarak 3-4 iterasyon yeter.
-
-2Y'den 10Y'ye tüm pillar'lar aynı şemayla, kısa vadeden uzuna sırayla çözülür; her
-pillar çözüldükçe "bilinen bölge" genişler. Doğrulama olarak her pillar'da eğriden
-geri hesaplanan par oran, girdi kotasyona 0,0 bps farkla eşleşmelidir
-(öz-tutarlılık testi — aşağıdaki araçta "Kontrol" sütunu).
-
-## Bölüm 4 — Ara vadeler: interpolasyon
-
-Tahvil kuponları pillar tarihlerine denk gelmez; ara DF'ler gerekir. Üç aday var:
-
-- **Linear DF** — DF'leri doğruyla bağla. Basit ama kötü: pillar noktalarında forward
-  oranlarda kırılma (kink) üretir, üretim ortamında kullanılmaz.
-- **Log-linear DF** — $\ln DF$'yi doğruyla bağla. Pillar arasında forward oran sabit
-  kalır, eğri pürüzsüzdür; Bloomberg/Murex standardıdır. Matematiksel olarak sürekli
-  zero oranın doğrusal interpolasyonuna denktir.
-- **Zero rate linear** — basit zero oranları doğruyla bağla, sonra DF'ye çevir. TL
-  kotasyon konvansiyonuyla (basit faiz) tutarlı olduğu için trader ekranlarında yaygındır.
-
-$$
-\ln DF(t) = \ln DF(t_1) + \bigl(\ln DF(t_2) - \ln DF(t_1)\bigr)\cdot\frac{t-t_1}{t_2-t_1}
-$$
-
-**Pratik — DF(152).** Tahvilin ilk kuponu 152. güne düşüyor; köşeler 3M (92 gün,
-DF 0,904086) ve 6M (184 gün, DF 0,827610):
-
-$$
-\ln DF(152) = -0{,}10080 + (-0{,}18925 + 0{,}10080)\cdot\frac{60}{92} = -0{,}15848
-\;\Rightarrow\; DF(152) = e^{-0{,}15848} = 0{,}85345
-$$
-
-## Bölüm 5 — Deneyin: eğriyi kendiniz kurun
-
-Aşağıdaki araç, bu dersin Excel modelindeki bootstrap'ın birebir portudur (çeyreklik
-grid, log-linear interpolasyon, Newton-Raphson). Varsayılan girdilerle Excel'in ürettiği
-DF'leri makine hassasiyetinde ($10^{-15}$) yeniden üretir. Kotasyonları değiştirin:
-örneğin kısa ucu 200 bps indirip "erken gevşeme" senaryosunun eğrinin tamamını nasıl
-şekillendirdiğini izleyin.
+Aşağıdaki araç SONEXCEL bootstrap'ının portudur; varsayılan kotasyonlarla Excel'in
+DF'lerini $10^{-15}$ hassasiyetle üretir (18M 0,581232 · 2Y 0,494925 · 10Y 0,090716).
+Kısa ucu 200 bps indirin: "erken gevşeme" senaryosunun yalnız kısa DF'leri değil,
+annuity kanalıyla bütün eğriyi nasıl oynattığını izleyin. **Bu araca girdiğiniz
+kotasyonlar aşağıdaki forward, swaption ve ASW araçlarının eğrisidir.**
 
 <EgriBootstrap />
 
-## Bölüm 6 — TCMB toplantıları: eğrinin gerçek iskeleti
+## Bölüm 7 — TCMB toplantı eğrisi: piyasadan implied patikaya
 
-Pürüzsüz interpolasyon estetik bir varsayımdır; gerçekte TLREF politika faizini izler ve
-politika faizi yalnızca **PPK toplantılarında** değişir. Yani kısa ucun doğru modeli
-"toplantılar arasında düz, toplantı gününde sıçrayan" bir merdivendir. Model bunu şöyle kurar:
+Pürüzsüz eğri bir soyutlamadır; gerçekte TLREF, PPK toplantıdan toplantıya değişen
+politika faizini izler. Doğru model bir merdivendir: toplantılar arasında düz, effective
+tarihte sıçramalı. TLREF Meetings sayfası bu merdiveni dokuz adımda kurar:
 
-1. Her toplantının *effective date*'i bulunur: karar açıklanır, yeni faiz **ertesi iş
-   günü** uygulanır — `WORKDAY(toplantı, 1, TR tatilleri)`.
-2. Her effective date için eğriden $DF$ okunur, ardışık iki toplantı arasındaki
-   **dönem faizi** forward formülüyle çıkarılır.
-3. Ardışık dönem faizlerinin farkı, o toplantıda **fiyatlanmış faiz değişimini** verir
-   (market-implied jump). Kullanıcı isterse kendi senaryosunu (örn. "haziranda −100 bps")
-   bu sıçramanın *yerine* koyar ve eğri senaryoya göre yeniden üretilir.
+1. **Pillar DF'leri** — 1W-2M basit formülle, 3M+ IRS Curve bootstrap'ından.
+2. **Toplantı DF'leri** ($DF_{mkt}$) — her toplantının effective tarihi
+   (`WORKDAY(toplantı, 1, tatiller)`: karar açıklanır, yeni faiz ertesi iş günü işler;
+   örnek: 11.06.2026 toplantısı → 12.06 effective, 49. gün) için zero-rate linear interp.
+3. **Dönem oranı** — ardışık toplantılar arası bileşik forward:
+   $N_k = 365\left[\left(DF_{k-1}/DF_k\right)^{1/gün}-1\right]$.
+4. **Piyasa sıçraması** — $G_k = N_{k+1} - N_k$: k'ıncı toplantıda *fiyatlanmış* değişim.
+5. **Kullanıcı sıçraması** — senaryo girdisi (bps).
+6. **Etkin sıçrama** — $I_k = \text{IF}(U_k = 0,\; G_k,\; U_k)$: kullanıcı değeri piyasayı
+   **değiştirir, üstüne eklenmez**. ("Gerçekten 0 bps" senaryosu için 0,01 gir.)
+7. **Rate After zinciri** — ilk gelecek toplantıdan itibaren $J_{k+1} = J_k + I_{k+1}$.
+8. **Senaryo DF'leri** — rate-after patikasından günlük bileşikle,
+   $L_{k+1} = L_k / (1+J_k/365)^{\Delta gün}$, piyasa DF'sine çıpalı.
+9. **Öz-tutarlılık** — Section 3: patika DF'leri girdi OIS DF'lerini geri üretmeli.
 
-Piyasanın "k. toplantıda hangi faiz fiyatlanmış?" sorusunun cevabı — **MPC implied** —
-iki toplantı arası forward'dan başka bir şey değildir:
+### MPC implied: "bu toplantıda ne fiyatlanmış?"
 
-$$
-MPC_k = \left(\frac{DF(\text{eff}_k)}{DF(\text{mtg}_{k+1})} - 1\right)\cdot\frac{365}{\text{gün}}
-$$
-
-**Pratik.** Effective 12.06.2026 ($DF=0{,}9485$), sonraki toplantı 23.07.2026
-($DF=0{,}9070$), 41 gün:
-
-$$
-MPC_1 = 0{,}04576 \times \frac{365}{41} = \%40{,}74
-$$
-
-Piyasa, ilk toplantı sonrası dönem için ortalama %40,74 TLREF fiyatlıyor demektir.
-Aynı iskelet **forward başlangıçlı swap**ları da fiyatlar; tek değişiklik par denkleminin
-sağ tarafıdır: $1 - DF(T)$ yerine $DF(T_1) - DF(T_2)$ yazılır,
+$MPC_k$, k'ıncı toplantının effective tarihinden bir sonrakinin effective tarihine kadar
+TLREF'in bileşik seviyesidir:
 
 $$
-R_{fwd}(T_1,T_2) = \frac{DF(T_1) - DF(T_2)}{\sum_{t_i \in (T_1,T_2]} \tau_i\, DF(t_i)}
+MPC_k = 365\left[\left(\frac{DF(\text{eff}_k)}{DF(\text{eff}_{k+1})}\right)^{1/gün}-1\right]
 $$
 
-— örneğin 24.04.2026 eğrisinde 1Y×1Y forward %36,18 çıkar: bugünkü 1Y %38,26'nın
-yaklaşık 200 bps altı, yani piyasa bir yıl içinde belirgin faiz indirimi fiyatlıyor.
+24.04.2026 eğrisinden ilk sekiz dönemin piyasa fiyatlaması:
 
-## Bölüm 7 — Tahvil tarafı: kupon, işlemiş faiz, kirli fiyat
+| MPC1 | MPC2 | MPC3 | MPC4 | MPC5 | MPC6 | MPC7 | MPC8 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| %40,84 | %39,65 | %38,64 | %37,42 | %36,22 | %36,79 | %35,82 | %35,24 |
 
-Sıra eğriyle karşılaştıracağımız enstrümanda. Ders boyu örneğimiz:
+Merdiven monoton inmiyor: MPC6'daki yukarı kıpırdanma, interpolasyon artığı ile yıl
+sonu dönemecinin bileşimidir — implied patika okurken bu tür tek-dönemlik kırılmaları
+seviye değil, gürültü olarak ele almak gerekir. Etiketler dinamiktir: bugün geçince
+MPC1 silinir, sıradaki toplantı MPC1 olur. Senaryo/piyasa ayrımı her koloncla taşınır:
+$MPC_{scen}$ Daily Path CumDF'lerinden (kullanıcı sıçramaları dahil), $MPC_{mkt}$
+salt pillar eğrisinden.
 
-| Alan | Değer |
-| --- | --- |
-| ISIN | TRT051033T12 |
-| Vade | 05.10.2033 |
-| Kupon | %26,20 yıllık — 6 ayda bir 13,10 |
-| Temiz fiyat | 82,700 |
-| YTM (bileşik) | %32,20 |
-| Değerleme günü | 06.05.2026 · son kupon 14.04.2026 |
+## Bölüm 8 — Daily TLREF Path ve fiyatlamanın motoru
 
-Ekranda gördüğünüz fiyat **temiz fiyattır**; ödenen para ise işlemiş faizi içeren
-**kirli fiyat**:
-
-$$
-AI = \frac{C}{m}\cdot\frac{\text{son kupondan geçen gün}}{\text{kupon periyodu}}
-= 13{,}10 \times \frac{22}{182{,}5} = 1{,}5792
-$$
+Daily TLREF Path sayfası 10 yılın **her günü** için (3652 satır) o gün geçerli TLREF'i
+ve kümülatif DF'yi tutar:
 
 $$
-DP = 82{,}700 + 1{,}5792 = 84{,}2792
+\text{Accrual}_n = 1+\frac{r_n}{365},
+\qquad
+CumDF_n = \frac{CumDF_{n-1}}{\text{Accrual}_n}
 $$
 
-YTM, kirli fiyatı nakit akışlarına eşitleyen bileşik orandır:
+$r_n$ = o günün ait olduğu toplantı döneminin "Rate After" değeri (senaryo dahil).
+Bütün kuponlu fiyatlamalar DF'yi buradan `VLOOKUP` ile okur — "TLREF'i elle gün gün
+yürütmek" işleminin otomatiği. Üçüncü tutarlılık kontrolü de buradadır: günlük patika
+DF'si ↔ toplantı tablosu DF'si ↔ OIS pillar DF'si üçü uyuşmalıdır.
+
+### Par swap, gerçek takvimle
+
+Trade Ideas bölümü par oranı ideal grid'le değil **gerçek kupon takvimiyle** hesaplar:
+kupon tarihleri `WORKDAY(EDATE(spot,3i)−1, 1, tatiller)`, $\tau_i$ gerçek gün/365
+(94 gün → 0,2575 değil 0,2493 gibi), DF'ler Daily Path'ten:
 
 $$
-DP = \sum_{i=1}^{15} \frac{C_i}{(1+y)^{t_i}}, \qquad C_{15} = 13{,}10 + 100
+R = \frac{DF(spot) - DF(T)}{\sum_i \tau_i\, DF(t_i)}
 $$
 
-15 nakit akışı var (14 kupon + vadede kupon-anapara). Aynı akışlar OIS DF'leriyle
-iskonto edilirse tahvilin *swap eğrisine göre teorik değeri* çıkar: bu örnekte
-$PV_{OIS} = 83{,}48$ — kirli fiyat 84,28'in altında. Fiyat–getiri–durasyon mekaniğini
-hatırlamak isterseniz:
+**Pratik — 1Y:** bitiş 27.04.2027, $DF_{end}=0{,}685766$, annuity $=0{,}789327$ →
+$R = \%39{,}39$; Bloomberg girdisi %39,46 ile fark ~1 bps — takvim ve interpolasyon
+artığı. Bu tablo scen/mkt sütunlarıyla çiftlidir: senaryo girince spread sütunu
+"benim patikam piyasadan kaç bps farklı fiyatlıyor" sorusunu tenor tenor yanıtlar.
+
+### Forward matris ve DV01
+
+Forward swap $T_1$'de başlar, $T_2$'de biter; par denkleminin tek değişen yeri sağ taraftır:
+
+$$
+R_{fwd}(T_1,T_2) = \frac{DF(T_1)-DF(T_2)}{A_{fwd}},
+\qquad A_{fwd} = \sum_{t_i\in(T_1,T_2]} \tau_i DF(t_i)
+$$
+
+Teleskop özdeşliği pratik bir kısayol verir: $A_{fwd} = A(T_2)-A(T_1)$ ve
+
+$$
+R_{fwd} = \frac{R_{T_2}A(T_2) - R_{T_1}A(T_1)}{A(T_2)-A(T_1)}
+$$
+
+— forward, ayrı cashflow modellemeden iki spot par orandan türetilebilir.
+24.04.2026 piyasa matrisi (mkt; DV01 = 1 mn TL nominal başına TL/bp):
+
+| Trade | R_mkt | DV01 | | Trade | R_mkt | DV01 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1M×1M | %40,51 | 7,1 | | 1Y×2Y | %32,90 | 97,4 |
+| 3M×3M | %40,08 | 20,7 | | 2Y×1Y | %31,06 | 41,3 |
+| 3M×6M | %38,92 | 39,5 | | 2Y×2Y | %29,54 | 72,2 |
+| 6M×6M | %37,42 | 35,8 | | 2Y×3Y | %28,15 | 96,4 |
+| 6M×1Y | %36,31 | 66,1 | | 3Y×5Y | %23,61 | 103,3 |
+| 1Y×1Y | %34,25 | 56,1 | | 5Y×5Y | %19,20 | 68,7 |
+| 1Y×4Y | %30,39 | 152,5 | | 1Y×9Y | %26,92 | 221,2 |
+
+Okuma: spot 1Y %39,46 iken 1Y×1Y %34,25 — piyasa bir yılda ~520 bps'lik gevşeme sonrası
+ortam fiyatlıyor; 5Y×5Y %19,20 uzun vadeli "normalleşme" çıpası. DV01 sütunu pozisyon
+boyutlandırmanın ilk sorusudur: 1Y×9Y'de 1 mn nominal, bp başına 221 TL oynar.
+
+### Eğri spread'leri
+
+Aynı eğriden strateji masasının baktığı makaslar (mkt, bps):
+3M/6M **−89** · 6M/1Y **−164** · 1Y/2Y **−214** · 2Y/5Y **−380** · 2Y/10Y **−706** ·
+5Y/10Y **−327** · 1Y/5Y **−593** · 1Y/10Y **−920**. Bin bps'ye yaklaşan 1Y/10Y
+inversiyonu, TL eğrisinin dikliğini tek sayıda özetler; senaryo sütunu, kendi PPK
+patikanızın bu makasları kaç bps oynatacağını gösterir.
+
+## Bölüm 9 — Deneyin: forward ve MPC
+
+<ForwardMpcHesaplayici />
+
+## Bölüm 10 — Swaption: eğrinin üstüne volatilite katmanı
+
+Swaption Pricer sayfası eğriyi opsiyon dünyasına bağlar. Örnek trade: **1Y expiry ×
+2Y tenor payer, K = %35, nominal 10 mn TL, Black vol %25.**
+
+### 10.1 Dayanak: forward swap oranı
+
+$$
+F = \frac{DF(T_{exp}) - DF(T_{mat})}{A},
+\qquad A = \sum \tau_i DF(t_i) \;\; (T_{exp} < t_i \le T_{mat})
+$$
+
+Örnekte $A = 0{,}9723$, $DF_{exp}-DF_{mat} = 0{,}3203$ → $F = \%32{,}94$.
+Strike %35'in altında: payer için OTM ($K-F = +206$ bps).
+
+### 10.2 Black modeli (TL piyasa konvansiyonu)
+
+$$
+d_1 = \frac{\ln(F/K) + \sigma^2 T/2}{\sigma\sqrt{T}},\quad d_2 = d_1 - \sigma\sqrt{T}
+$$
+
+$$
+\text{Payer} = A\left[F\,N(d_1) - K\,N(d_2)\right],
+\qquad
+\text{Receiver} = A\left[K\,N(-d_2) - F\,N(-d_1)\right]
+$$
+
+**Pratik:** $d_1 = -0{,}118$, $d_2 = -0{,}368$, $N(d_1)=0{,}4530$, $N(d_2)=0{,}3564$ →
+prim $= 0{,}023786$ (decimal) $= \mathbf{237.864\ TL}$.
+
+### 10.3 Bachelier modeli (normal, karşılaştırma)
+
+$$
+d = \frac{F-K}{\sigma_N\sqrt{T}},\qquad
+\text{Payer} = A\left[(F-K)N(d) + \sigma_N\sqrt{T}\,n(d)\right],
+\qquad \sigma_N \approx \sigma_{Black}\times F
+$$
+
+Örnekte $\sigma_N = 0{,}0823$, $d = -0{,}2505$ → prim **229.110 TL**; Black'ten
+~8.750 TL düşük. Fark model geometrisidir: strike forward'ın üzerindeyken (OTM payer)
+log-normalin kalın sağ kuyruğu Black'e daha yüksek prim yazdırır. ATM özel durumunda
+pratik kısayol: $C_{ATM} \approx A\,\sigma_N\sqrt{T/2\pi}$. TL masalarında standart
+Black'tir; Bachelier düşük/negatif faiz piyasalarının aracıdır.
+
+<div class="not">
+  <span class="etiket">Model denetim notu</span>
+  Çalışma kitabının kayıtlı görüntüsünde Bachelier fiyatı 249.139 TL görünür; ancak bu
+  değer, pdf hücresinin ( $n(d)$ ) bayat bir yeniden-hesap kalıntısıyla üretilmiştir —
+  $d=-0{,}2505$ için formülün kendisi $n(d)=0{,}3866$ verir (kayıtlı hücrede 0,4117
+  duruyor; normal yoğunluğun maksimumu zaten 0,3989'dur). Canlı BDP formüllü dosyalar
+  kaydedilirken bu tür kısmi hesap kalıntıları oluşabilir; buradaki tüm sayılar formülün
+  kendisinden yeniden hesaplanmıştır. Excel'i açıp F9 ile tam yeniden hesap yapınca
+  aynı değerlere döner.
+</div>
+
+### 10.4 Greeks
+
+| Greek | Formül | Örnek değer | Okunuşu |
+| --- | --- | --- | --- |
+| Delta | $A\,N(d_1)$ | 0,4405 → 440 TL/bp | forward 1 bp → prim değişimi |
+| Gamma | $A\,n(d_1)/(F\sigma\sqrt{T})$ | 4,68 | delta'nın F'e duyarlılığı, ATM'de maks |
+| Vega | $A\,F\sqrt{T}\,n(d_1)\times0{,}01$ | 12.687 TL / %1σ | long opsiyon = long vol |
+| Theta | $-A F\sigma n(d_1)/(2\sqrt{T})/365$ | −434 TL/gün | beklemenin günlük maliyeti |
+| Vanna | $-n(d_1)\,d_2/\sigma \cdot A$ | 0,567 | skew duyarlılığı |
+| Volga | $\text{Vega}\; d_1 d_2/\sigma$ | 0,0220 | vol-of-vol dışbükeyliği |
+
+### 10.5 Implied vol: fiyattan σ'ya
+
+Piyasa primi gözlenir, vol geri çözülür — yine Newton-Raphson, bu kez vega türev olarak:
+
+$$
+\sigma_{n+1} = \sigma_n - \frac{P(\sigma_n) - P_{mkt}}{\text{Vega}(\sigma_n)}
+$$
+
+**Pratik:** $P_{mkt}=0{,}015$, $\sigma_0=0{,}25$ → 0,1817 → 0,1802 → 0,18009:
+üç adımda **%18,01**. Bootstrap'taki çözücüyle aynı iskelet — bir kez öğren, her yerde kullan.
+
+### 10.6 P&L takibi ve Greek atribüsyonu
+
+Pozisyon MTM'i parçalara ayrılır:
+$\Delta P\&L \approx \text{Delta}\cdot\Delta F + \text{Vega}\cdot\Delta\sigma + \text{Theta}\cdot\Delta t + \text{artık}$.
+Modeldeki örnek öğreticidir: giriş $F_0=\%35{,}8$, güncel $F=\%32{,}94$ (−286 bps),
+MTM +87.864 TL; ama delta katkısı **−126.107**, theta **−13.218**, artık **+227.189 TL**.
+Ders: bu büyüklükte harekette birinci derece Greek ayrışması çöker — gamma/vanna
+katkısı artığa düşer. Kural: artık MTM'in %5'ini aşıyorsa tam yeniden değerleme yap.
+
+### 10.7 Vol grid ve smile yaklaşımı
+
+Tek ATM vol yetmezse basit parabolik yaklaşım:
+$\sigma(K) = \sigma_{ATM} + \alpha\left(K/F-1\right) + \beta\left(K/F-1\right)^2$
+(örnek: $\alpha=-0{,}5$, $\beta=2$). Üretimde bu eğri SABR parametrelerinden gelir;
+buradaki grid, strike başına fiyat/delta okumak için yeterli bir ilk yaklaşımdır.
+Not: üretim fiyatlamasında annuity **CSA** (teminat para birimi) DF'leriyle iskonto
+edilir; model bunu açıkça "scenario DF kullanıyorum" diye işaretler.
+
+### Deneyin
+
+<SwaptionHesaplayici />
+
+## Bölüm 11 — Uygulama: tahvil tarafı ve ASW
+
+> Bu bölümün sayısal örneği 06.05.2026 tarihli `ASW_Calculator` görüntüsünden gelir
+> (24.04 eğrisiyle karıştırmayın — YTM ile eğri aynı güne ait olmalıdır).
+
+### 11.1 Kupon, işlemiş faiz, kirli fiyat
+
+Örnek: **TRT051033T12** — vade 05.10.2033, kupon %26,20 (6 ayda bir 13,10),
+temiz fiyat 82,700, YTM %32,20, değerleme 06.05.2026 (son kupon 14.04.2026, 22 gün önce).
+
+$$
+AI = \frac{C}{m}\cdot\frac{\text{geçen gün}}{\text{periyot}} = 13{,}10\times\frac{22}{182{,}5} = 1{,}5792,
+\qquad DP = 82{,}700 + 1{,}5792 = 84{,}2792
+$$
+
+YTM, kirli fiyatı 15 nakit akışına (14 kupon + vadede kupon+anapara) eşitleyen bileşik
+orandır: $DP = \sum_i C_i/(1+y)^{t_i}$. Aynı akışlar OIS DF'leriyle iskonto edilirse
+tahvilin eğriye göre teorik değeri çıkar: $PV_{OIS} = 83{,}48$ — kirli fiyatın altında.
+Fiyat-getiri-durasyon sezgisi için:
 
 <TahvilHesaplayici />
 
-## Bölüm 8 — ASW: tahvil swap'a göre ucuz mu?
+### 11.2 Asset swap yapısı
 
-### 8.1 Yapı
+Tahvili al, kuponlarını swap'ın sabit bacağına devret, karşılığında **TLREF + ASW** al:
+sentetik FRN. Kupon riski swap'a gider; kalan tek şey tahvilin eğriye göre ucuzluğudur.
+ASW > 0 → ucuz, < 0 → pahalı, ≈ 0 → adil.
 
-Asset swap, tahvili bir faiz swap'ıyla paketleyip sentetik bir değişken faizli senede
-(FRN) çevirir: yatırımcı tahvili alır, kuponlarını bankaya devreder (sabit bacak),
-karşılığında **TLREF + ASW** alır. Böylece kupon riski swap'a devredilir; geriye kalan
-tek şey, tahvilin eğriye göre ucuzluğunun sabit prim olarak ödenmesidir:
+### 11.3 Bloomberg'in TR metriği ve hesap
 
-- **ASW > 0** → tahvil OIS eğrisine göre ucuz (yatırımcı prim alıyor)
-- **ASW < 0** → pahalı
-- **ASW ≈ 0** → adil fiyatlı
-
-### 8.2 Bloomberg'in TR metodu
-
-TR Hazine tahvilleri için Bloomberg terminali klasik par-ASW formülü yerine daha
-yalın bir metrik gösterir:
+TR Hazine tahvilleri için terminal, klasik par-ASW yerine yalın metriği gösterir:
 
 $$
-ASW = y_{tahvil} - R_{par}^{OIS}(T_{tahvil})
+ASW = y_{tahvil} - R^{OIS}_{par}(T_{tahvil})
 $$
 
-yani tahvil YTM'i ile, tahvilin vade gününe **lineer interpolasyonla** bulunan OIS par
-swap oranının farkı. Adımlar: vadeye kalan günü hesapla → çevreleyen iki pillar'ı bul →
-par oranı interpolasyonla çıkar → YTM'den düş.
-
-**Pratik — TRT051033T12.** Vadeye kalan: 2709 gün. Çevreleyen pillar'lar
-7Y (2557 gün, %32,12) ve 8Y (2924 gün, %31,57):
+vade gününe **lineer interpolasyonla** bulunan par oran düşülür. 06.05.2026:
+vadeye 2709 gün; bracket 7Y (2557g, %32,12) – 8Y (2924g, %31,57):
 
 $$
-R_{par}(2709) = 32{,}12 + (31{,}57 - 32{,}12)\times\frac{2709-2557}{2924-2557} = \%31{,}892
+R_{par}(2709) = 32{,}12 - 0{,}55\times\frac{152}{367} = \%31{,}892
+\;\Rightarrow\;
+ASW = 32{,}20 - 31{,}892 = \mathbf{+30{,}8\ bps}
 $$
 
-$$
-ASW = 32{,}20 - 31{,}892 = \%0{,}308 = +30{,}8 \text{ bps}
-$$
-
-Bloomberg ekranı aynı gün **+30 bps** gösteriyordu — 0,8 bps sapmayla eşleşme.
-Okunuşu: tahvil, swap eğrisinin ima ettiği adil getirinin ~31 bps üzerinde getiri
-sunuyor; Hazine kredi/likidite primi için makul, hafif ucuz bölge.
-
-### 8.3 Neden par oran, zero oran değil?
-
-Aynı eğriden üç farklı "vade oranı" okunabilir ve TR gibi dik eğrilerde sonuçlar
-dramatik biçimde ayrışır:
+Bloomberg aynı gün +30 bps gösteriyordu. Metrik seçimi sonucu dramatik değiştirir —
+dik eğride üç "vade oranı" ayrışır:
 
 | Metrik | Sonuç |
 | --- | --- |
-| YTM − OIS **par** (lineer interp) | **+30,8 bps** ← BBG ile uyumlu |
-| YTM − OIS **zero** (yıllık bileşik) | +122,0 bps |
+| YTM − OIS **par** (lineer interp) | **+30,8 bps** ← BBG |
+| YTM − OIS zero (yıllık bileşik) | +122,0 bps |
 | YTM − OIS zero (sürekli) | +92,7 bps |
 
-Par oran doğru kıyas terimidir çünkü tahvil de swap da *kuponlu* enstrümandır — ikisinin
-getirisi aynı yapının fiyatıdır. Zero oran tek nakit akışının fiyatıdır; kuponlu tahvil
-YTM'iyle karşılaştırmak elmayla armut kıyasıdır. Eğri düzken fark kaybolur; TR'de
-kaybolmaz.
+Par doğru kıyastır: tahvil de swap da kuponludur; zero oran tek nakit akışının
+fiyatıdır. Klasik par-par ASW $a = \frac{PV_{OIS}-DP}{100\cdot A_{OIS}}$ ise ayrı bir
+sözleşme yapısının (upfront'lu paket) adil spread'idir — aşağıdaki araç üçünü de
+aynı eğriden hesaplar.
 
-### 8.4 Deneyin
+### Deneyin
 
 <AswHesaplayici />
 
-## Bölüm 9 — Pratik notlar: şeytan detayda
+## Bölüm 12 — Pratik notlar: şeytan detayda
 
-- **Day count:** TL piyasası her yerde ACT/365 kullanır (artık yılda bile). ACT/360
-  (USD para piyasası) veya 30/360 (bond piyasaları) TL'de asla kullanılmaz.
-- **İş günü:** Modified following — hesaplanan tarih tatile denk gelirse sonraki iş
-  günü; ay değişecekse önceki iş günü. 70 TR resmî tatiliyle `WORKDAY`.
-- **Spot:** TL OIS T+1 başlar; tüm kupon tarihleri spot'tan `EDATE` + `WORKDAY` ile üretilir.
-- **Öz-tutarlılık:** Kurulan eğriden pillar par oranları geri hesaplanıp girdiyle
-  karşılaştırılır; senaryo kapalıyken fark 0–5 bps bandını aşıyorsa modelde hata vardır.
+- **Day count:** her yerde ACT/365 (artık yılda da). ACT/360 veya 30/360 TL'de kullanılmaz.
+- **İş günü:** `WORKDAY` + 68 TR tatili; kupon üretimi `WORKDAY(EDATE(spot,3i)−1, 1, tatiller)`.
+- **Spot:** T+1 — Cuma değerlemede Pazartesi başlar; effective tarihler de aynı mantıkla kayar.
+- **User Jump:** REPLACEMENT'tır, additive değil; "0 bps" senaryosu için 0,01 gir.
+- **Konvansiyon disiplini:** forward'ı bileşik mi basit mi verdiğini her zaman yaz;
+  42 günde bile fark onlarca bps.
+- **Üç katmanlı doğrulama:** (i) implied par = girdi par; (ii) toplantı patikası DF'leri =
+  OIS DF'leri; (iii) Daily Path = toplantı tablosu. Üçü de ~0 değilse yayına çıkma.
+- **Döngüsel referans yok:** Newton blokları açık iterasyon satırlarıyla kurulur —
+  Excel'de circular reference kapatılmadan tekrarlanabilirlik olmaz.
 
 ---
 
-Bu ders, `Research/IRS Bootstrapping & ASW Hesaplama` klasöründeki iki Excel modelinin
-(IRS_Bootstrapping_7, ASW_Calculator) metodoloji dokümanlarından derlenmiştir; sayfadaki
-araçlar aynı modellerin JavaScript portudur ve Excel çıktılarıyla doğrulanmıştır.
-Sonraki adım: eğriyi her sabah güncel kotasyonlarla otomatik kurup MPC implied
-tablosunu canlı yayınlamak.
+Bu ders `Research/IRS Bootstrapping & ASW Hesaplama` klasöründeki
+`IRS Bootstrapping_SONEXCEL` (IRS Curve · TLREF Meetings · Daily TLREF Path ·
+Swaption Pricer) ve `ASW_Calculator` modellerinin tam dökümüdür; sayfadaki dört araç
+aynı modellerin JavaScript portudur ve Excel çıktılarıyla makine hassasiyetinde
+doğrulanmıştır. Sıradaki adım: kotasyonları her sabah otomatik çekip eğriyi, MPC
+tablosunu ve forward matrisini canlı yayınlamak.

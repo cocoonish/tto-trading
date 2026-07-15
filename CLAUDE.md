@@ -26,6 +26,22 @@ TTO Trading/
 - `npm run dev` — geliştirme sunucusu
 - `npm run build` — üretim derlemesi (`dist/`)
 
+## İçerik kuralları (kullanıcının koyduğu standart — her içerikte geçerli)
+
+1. **Hiçbir şey atlanmaz.** Bir Excel/Python modeli siteye aktarılırken içindeki her
+   metodoloji bölümü, her formül, her sayısal örnek derse taşınır. Özet geçmek yok.
+2. **Ders formatı.** Her konu önce teori (türetim, KaTeX), sonra pratik (gerçek
+   verilerle adım adım sayısal hesap) olarak anlatılır. Hedef kitle: profesyonel
+   trader — jargon açıklanır ama seviye düşürülmez.
+3. **Her grafiğin hesabı anlatılır.** Proje sayfalarında her şekil için "bu seri
+   nasıl hesaplanıyor" bölümü olur: veri kaynağı, formül, dönüşümler, varsayımlar.
+4. **Hesap araçları birbirine bağlanır.** Aynı sayfadaki araçlar ortak durumu paylaşır
+   (ör. bootstrap eğrisi → ASW/forward araçlarına akar; `window` üzerinden custom
+   event ile: `egri-guncellendi`).
+5. **Grafik ev stili.** Python'dan gelen Plotly HTML'leri siteye kopyalanınca
+   `site/tools/plotly_stil.py` ile ev stiline geçirilir (başlık solda, lejant altta,
+   responsive, beyaz zemin). Bu adım grafik güncelleme akışının parçasıdır.
+
 ## İçerik ekleme akışı
 
 1. **Yeni araştırma**: `site/src/content/arastirma/<slug>.mdx` oluştur.

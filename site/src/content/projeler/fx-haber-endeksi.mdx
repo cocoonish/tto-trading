@@ -1,29 +1,83 @@
 ---
 title: 'FX Haber-Duyarlılık Endeksi'
-description: 'G10 pariteleri için haber akışından duyarlılık skoru üreten, rejim tespiti ve korelasyon optimizasyonu içeren deneysel endeks.'
+description: 'G10 pariteleri için FinBERT ile skorlanan haber akışından duyarlılık endeksi: zaman-azalımlı ağırlıklar, rejim tespiti ve getiri korelasyonuna göre optimize edilen parametreler.'
 pubDate: 2026-07-15
+updatedDate: 2026-07-15
 tags: ['fx', 'sentiment', 'nlp']
-durum: 'taslak'
-kaynak: 'GDELT + piyasa verisi'
-guncelleme: 'günlük (planlanan)'
+durum: 'aktif'
+kaynak: 'GDELT + Google News RSS + piyasa verisi'
+guncelleme: 'günlük (pipeline doğrulandı: 15.07.2026)'
 ---
 
-Fiyat, haberden önce mi hareket eder, sonra mı? Bu deneysel proje, majör pariteler
-(EUR/USD, USD/JPY, USD/CHF…) için haber akışını tarayıp **duyarlılık skorları** üretir ve
-bunları fiyat/hacim verisiyle birleştirerek bileşik bir endeks kurar.
+Fiyat haberden önce mi hareket eder, sonra mı? Bu proje soruyu ölçülebilir hale
+getirir: dokuz majör parite (EUR/USD, USD/JPY, USD/CHF, GBP/USD, AUD/USD, NZD/USD,
+USD/CAD, USD/NOK, USD/SEK) için haber akışını toplar, finans-özel bir dil modeliyle
+skorlar ve parite başına tek bir **duyarlılık endeksi** üretir. Pipeline 15.07.2026'da
+uçtan uca yeniden koşturulup doğrulandı; endeks değerleri ve 15 enstrümanlık fiyat
+paneli (FX + altın/gümüş + S&P 500 + UST 2Y/10Y + BIST 100) güncel üretiliyor.
 
-## Bileşenler
+## Endeks nasıl hesaplanıyor?
 
-- **Haber toplayıcı** — GDELT ve haber aramaları üzerinden parite bazlı sorgularla akış toplar.
-- **Duyarlılık analizi** — başlık ve özet metinleri skorlanır, parite bazında toplanır.
-- **Rejim dedektörü** — volatilite ve trend rejimlerini sınıflandırır; endeksin ağırlıkları
-  rejime göre değişir.
-- **Korelasyon optimizasyonu** — endeks ağırlıkları, gecikmeli getiri korelasyonunu
-  maksimize edecek şekilde geriye dönük optimize edilir.
+**1 — Haber toplama.** İki kaynak, iki rol: GDELT arşivi 52 haftalık geçmişi kurar
+(parite başına özel sorgu setleri, ör. "euro dollar exchange rate outlook"); Google
+News RSS gerçek zamanlı akışı besler. Tüm makaleler önbelleğe yazılır — yeniden
+çalıştırma yalnız yeni haberleri işler.
+
+**2 — Duyarlılık skoru.** Başlıklar **FinBERT** (finans metinlerinde eğitilmiş BERT)
+ile skorlanır: pozitif/negatif/nötr olasılıklarından $[-1, +1]$ aralığında tek skor.
+Model yüklenemezse sözlük tabanlı VADER'a düşülür (fallback). Skorlar makale düzeyinde
+saklanır — endeks formülü değişse bile geçmiş yeniden skorlanmaz.
+
+**3 — Ağırlıklandırma.** Her makalenin ağırlığı iki bileşenin çarpımı:
+
+$$
+w_i = \underbrace{e^{-\lambda\, \text{yaş}_i}}_{\text{zaman azalımı}} \times
+\underbrace{w^{kaynak}_i}_{\text{kaynak güveni}},
+\qquad \lambda = \frac{\ln 2}{\text{yarı ömür (gün)}}
+$$
+
+Varsayılan yarı ömür 2 gün: dünkü haber bugünkünün yarısı kadar konuşur. Kaynak
+ağırlıkları kalibre edilmiştir (Google 1,0 · Finviz 0,9 · Reddit 0,7).
+
+**4 — Toplulaştırma.** Dört alternatif fonksiyon uygulanabilir; parite başına hangisinin
+kullanılacağını optimizasyon seçer:
+
+| Yöntem | Formül / fikir |
+| --- | --- |
+| weighted_mean | $\sum w_i s_i / \sum w_i$ — temel çizgi |
+| bull_bear_ratio | $(W^+ - W^-)/(W^+ + W^-)$ — yön saymacası, şiddeti yok sayar |
+| intensity_ratio | pozitif ve negatif **yoğunluklarının** oranı — şiddet duyarlı |
+| directional_strength | yalnız güçlü sinyalli makalelerin ortalaması — gürültü filtresi |
+
+Üzerine opsiyonel katmanlar: skor dönüşümü (raw/tanh/sign), nötr bant filtresi,
+momentum terimi (son dönem skor değişimi) ve hacim normalizasyonu.
+
+**5 — Parametre optimizasyonu.** Haftalık grid search: her parite için
+(toplulaştırma yöntemi × yarı ömür × dönüşüm × gecikme × nötr filtre × momentum
+ağırlığı) kombinasyonları taranır, endeksin **5 günlük ileri getiriyle** korelasyonu
+maksimize eden set seçilir ve `optimized_params.json`'a yazılır. Endeks böylece her
+paritenin kendi haber-fiyat dinamiğine uyarlanır — EUR/USD'de weighted_mean, USD/NOK'ta
+intensity_ratio kazanabilir.
+
+**6 — Rejim dedektörü.** Tüm paritelerin skor matrisi üzerinden üç sinyal:
+risk-on/risk-off **sepet spread'i** (yüksek beta FX vs güvenli liman), skorlar arası
+**ortalama korelasyon** (tema konsantrasyonu) ve **PCA birinci bileşeni** (ortak
+duyarlılık faktörü). Sınıflandırılan rejim, endeks ağırlıklarının bağlamını belirler.
+
+**7 — Çıktı.** Parite başına değer + kategori etiketi (Extremely Bearish → Extremely
+Bullish). Örnek (04.05.2026 koşusu): USD/CHF −0,967 "Extremely Bearish", AUD/USD +0,189
+"Bullish", EUR/USD +0,006 "Neutral". Geçmiş, `index_history.json`'da birikir.
+
+## Doğrulama ve mevcut durum
+
+- 15.07.2026 koşusu: haber çekimi, FinBERT skorlama, endeks üretimi ve 15 enstrümanlık
+  fiyat paneli uçtan uca çalıştı (EUR/USD 1,1484 · altın 4.078 · BIST 14.080).
+- İnteraktif panel şu an Streamlit'te (`dashboard.py`): günlük duyarlılık vs 5 günlük
+  getiri saçılımları, endeks zaman serileri ve rejim göstergeleri.
 
 <div class="not">
   <span class="etiket">Yol haritası</span>
-  Endeks geçmişi ve canlı gösterge paneli siteye henüz aktarılmadı. Python hattı çalışır
-  durumda; çıktı formatı web'e uygun hale getirildiğinde bu sayfada günlük güncellenen
-  bir grafik yayınlanacak.
+  Streamlit paneli statik siteye taşınacak: pipeline her koşuda endeks zaman serisini
+  Plotly HTML'e yazacak ve bu sayfada günlük güncellenen grafik yayınlanacak. O zamana
+  kadar endeks değerleri JSON çıktısından takip ediliyor.
 </div>

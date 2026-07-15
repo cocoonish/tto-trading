@@ -1,31 +1,69 @@
 ---
 title: 'USD/TRY Devalüasyon Hızı'
-description: 'Kurun haftalık ve aylık trend kanalları: TL''deki değer kaybının yıllıklandırılmış hızı ve rejim değişimleri.'
+description: 'TL değer kaybının yıllıklandırılmış hızı: 1 hafta / 1 ay / 3 ay pencereli bileşik deval oranları, haftalık-aylık regresyon kanalları ve faizle karşılaştırma.'
 pubDate: 2026-07-15
+updatedDate: 2026-07-15
 tags: ['usdtry', 'fx', 'trend']
 durum: 'aktif'
-kaynak: 'Piyasa verisi (yfinance)'
+kaynak: 'Piyasa verisi (yfinance) + TCMB EVDS'
 guncelleme: 'haftalık'
 ---
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
 
-"Kur yine koptu mu, yoksa olağan seyrinde mi?" Bu proje USD/TRY'nin günlük kapanışlarından
-haftalık ve aylık trend kanalları çıkarır; TL'deki değer kaybının **yıllıklandırılmış
-hızını** hesaplayıp dönemler arasında karşılaştırır. Kontrollü seyir dönemlerinde eğim
-neredeyse sabittir — kanaldan sapmalar rejim değişikliği sinyali olarak okunabilir.
+"Kur koptu mu, olağan seyrinde mi?" Bu sorunun doğru birimi seviye değil **hızdır**:
+TL'nin yıllıklandırılmış değer kaybı, carry pozisyonunun kâr-zarar denklemindeki
+karşı bacaktır. Deval hızı faizin altındaysa carry kazandırır; üstüne çıktığı anlar
+rejim değişikliği sinyalidir.
 
 <GrafikEmbed
   src="/projeler/usdtry-deval/usdtry_deval.html"
-  baslik="USD/TRY ve devalüasyon trend kanalı"
+  baslik="USD/TRY yıllıklandırılmış devalüasyon hızı ve faiz oranları"
   no="01"
-  yukseklik={560}
+  yukseklik={600}
 />
 
-## Metodoloji
+## Şekil 01 nasıl hesaplanıyor?
 
-- Günlük kapanışlar üzerinden log-getiri alınır; trend, seçilen pencere içinde doğrusal
-  regresyonla tahmin edilir.
-- Eğim katsayısı yıllıklandırılarak "devalüasyon hızı (%/yıl)" olarak raporlanır.
-- Haftalık ve aylık frekansta ayrı kanallar üretilir; kanal genişliği artıkların
-  standart sapmasından türetilir.
+**Deval oranları (sol eksen).** Günlük kapanışlardan üç pencereyle bileşik
+yıllıklandırma (iş günü konvansiyonu, 252):
+
+$$
+\text{Deval}^{(n)}_t = \left[\left(\frac{P_t}{P_{t-n}}\right)^{252/n} - 1\right]\times100,
+\qquad n \in \{5,\ 21,\ 63\} \text{ iş günü}
+$$
+
+1 haftalık seri gürültülü ama erken uyarıcıdır; 3 aylık seri rejimin kendisini gösterir.
+Aşırı uçlar görselleştirme için [−50, +150] bandına kırpılır (hesap kırpılmaz, yalnız
+eksen); 2023 ortası gibi tek haftada +%150'yi aşan epizotlar etikette ayrıca raporlanır.
+
+**Faiz katmanı (sağ eksen).** EVDS'ten politika faizi ve mevduat/TLREF serileri aynı
+eksene çizilir. Okuma kuralı: deval eğrisi faiz çizgisinin altında kaldıkça TL carry
+pozitif; kesişimler pozisyon çevirme noktalarıdır.
+
+**Trend kanalı.** Seçilen dönem için log-fiyata doğrusal regresyon uygulanır; eğim
+yıllıklandırılıp "kanal hızı (%/yıl)" olarak raporlanır, kanal genişliği artıkların
+standart sapmasından türetilir. Kontrollü seyir dönemlerinde artıklar dar bantta kalır —
+banttan çıkış, kanal hızının kendisinden daha erken bir sinyaldir.
+
+## Haftalık ve aylık kanal grafikleri
+
+Aynı hattın iki kardeş çıktısı daha var (bir sonraki güncellemede siteye eklenecek):
+
+- **Haftalık trendler** — her takvim haftasının içinde günlük kapanışlara ayrı doğrusal
+  regresyon (`np.polyfit(gün, fiyat, 1)`) uygulanır; haftanın trend doğrusu ve haftalık
+  ortalama etiketiyle çizilir. Haftadan haftaya eğim değişimi, müdahale/akış
+  dönemlerini gün hassasiyetinde yakalar.
+- **Aylık trendler** — aynı yöntem ay pencereleriyle; ay içi eğim ile aylar arası
+  sıçramalar (ay sonu fixing etkileri) ayrışır.
+
+Tek gözlemli ya da varyanssız pencereler (tatil haftaları) regresyondan düşülür
+(`std=0` koruması) — aksi halde eğim tanımsızdır.
+
+## Yorum notları
+
+- 252 iş günü konvansiyonu faizle karşılaştırma içindir; takvim günü (365) tabanlı
+  yıllıklandırma aynı seriyi ~%3-4 farklı gösterir. Karşılaştırdığınız faizin
+  konvansiyonuyla eşleştirin.
+- Deval hızı seviyeden türetildiği için fixing saatine duyarlıdır; seri kapanış
+  fiyatıyla kuruludur, gün içi uçlar görünmez.

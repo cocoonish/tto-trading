@@ -1,7 +1,8 @@
 ---
 title: 'Hazine İhraç Takvimi & İhale Analizi'
-description: 'Hazine''nin iç borçlanma ihalelerinin otomatik derlenmesi: hedef–gerçekleşme, vade dağılımı ve gelecek ihraç takvimi.'
+description: 'Hazine iç borçlanma ihalelerinin otomatik derlenmesi: PDF''lerden veri çıkarımı, hedef–gerçekleşme, vade analizi ve gerçekleşme oranıyla düzeltilmiş ihraç tahmini.'
 pubDate: 2026-07-15
+updatedDate: 2026-07-15
 tags: ['hazine', 'tahvil', 'ihale']
 durum: 'aktif'
 kaynak: 'T.C. Hazine ve Maliye Bakanlığı'
@@ -10,11 +11,24 @@ guncelleme: 'ihale dönemlerinde (aylık)'
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
 
-Hazine'nin aylık iç borçlanma stratejisi ile fiilen gerçekleşen ihraçlar arasındaki fark,
-TL faiz piyasası için başlı başına bir sinyaldir. Bu proje Hazine sitesindeki ihale
-sonuçlarını ve planlanan ihraç takvimini otomatik toplar (WordPress REST API üzerinden,
-tarayıcı gerektirmeden), PDF'leri paralel indirip ayrıştırır ve hedef–gerçekleşme ile
-vade analizini üretir.
+Hazine'nin aylık iç borçlanma stratejisi ile fiilen gerçekleşen ihraçlar arasındaki
+fark, TL faiz piyasası için başlı başına bir sinyaldir: hedefin üzerinde borçlanma arz
+baskısı, altında borçlanma rahatlama demektir. Bu proje ihale sonuçlarını ve planlanan
+takvimi otomatik toplar, karşılaştırır ve ileriye dönük ihraç tutarı tahmini üretir.
+
+## Veri hattı: duyurudan tabloya
+
+1. **Kaynak tarama** — Hazine sitesinin WordPress REST API'si (`/portal/v2/posts`)
+   doğrudan sorgulanır: Selenium/tarayıcı yok, ~10-50× hızlı ve kararlı. İhale sonuç
+   duyuruları ve aylık strateji dokümanları ayrıştırılır.
+2. **İnkremental indirme** — işlenmiş URL'ler önbelleğe yazılır
+   (`.processed_urls.json`); her çalışmada yalnız yeni duyurular işlenir. PDF'ler
+   `aiohttp` ile eşzamanlı indirilir, `ThreadPoolExecutor` ile paralel parse edilir.
+3. **PDF ayrıştırma** — sonuç PDF'lerinden senet tanımı, ihale/valör/itfa tarihleri,
+   net-brüt satış, toplam teklif, fiyat/faiz alanları düzenli ifadelerle çıkarılır;
+   Türkçe ay adları ve karakter katlama (`fold_tr`) normalize edilir.
+4. **Strateji hedefleri** — aylık strateji PDF'inden hedef borçlanma tutarları çekilir
+   ve sürümlenerek saklanır (`.strategy_history.json`): revizyonlar kaybolmaz.
 
 <GrafikEmbed
   src="/projeler/hazine-ihrac/hedef_gerceklesme.html"
@@ -23,17 +37,58 @@ vade analizini üretir.
   yukseklik={560}
 />
 
+## Şekil 01 nasıl hesaplanıyor?
+
+İhale kayıtları ay bazında toplanır (net satış, ihale tarihine göre gruplanır) ve
+strateji dokümanındaki hedefle eşlenir:
+
+$$
+\text{Gerçekleşme Oranı}_{ay} = \frac{\sum \text{Net Satış}_{ay}}{\text{Hedef}_{ay}}
+$$
+
+Çubuklar hedef/gerçekleşme çiftini, işaretler oranı gösterir. Ay eşleme, duyuru
+başlığındaki "Ay-Yıl" alanından yapılır; kısmen tamamlanmış içinde bulunulan ay ayrı
+işaretlenir (hedefin tamamı henüz gerçekleşmemiş olabilir).
+
 <GrafikEmbed
   src="/projeler/hazine-ihrac/vade_analizi.html"
-  baslik="İhraçların vade dağılımı ve ortalama vade"
+  baslik="İhraçların vade dağılımı ve ağırlıklı ortalama vade"
   no="02"
   yukseklik={560}
 />
 
-## Veri hattı
+## Şekil 02 nasıl hesaplanıyor?
 
-1. İhale duyuruları ve sonuç PDF'leri inkremental olarak taranır (işlenmiş URL'ler
-   önbelleğe alınır, yalnızca yeni dokümanlar indirilir).
-2. PDF'lerden ihraç tutarı, vade, kupon ve talep bilgisi ayrıştırılır.
-3. Aylık strateji dokümanındaki hedeflerle gerçekleşme karşılaştırılır;
-   tahmin–doğrulama tablosu tutulur.
+Her senedin vadesi $\text{itfa} - \text{valör}$ gün farkından yıl cinsine çevrilir;
+ihraçlar vade kovalarına ayrılır (≤1Y bono, 1-3Y, 3-5Y, 5Y+ ve TÜFE'ye endeksli/değişken
+ayrımı senet tanımından). Ağırlıklı ortalama vade, net satış tutarı ağırlığıyla:
+
+$$
+\overline{V}_{ay} = \frac{\sum_i \text{NetSatış}_i \times V_i}{\sum_i \text{NetSatış}_i}
+$$
+
+Uzayan ortalama vade Hazine'nin uzun uçtan borçlanabildiğini (talep gücü), kısalan
+vade ise piyasanın duration almak istemediğini gösterir.
+
+## Tahmin modülü: sıradaki ihraçlarda ne beklemeli?
+
+Planlanan takvimdeki her ihraç için beklenen tutar iki katmanla üretilir:
+
+1. **Strateji-tutarlı ölçekleme** — ayın hedefi, son *n* tamamlanmış ayın toplam
+   gerçekleşme oranıyla düzeltilir: $\text{Beklenen}_{ay} = \text{Hedef}_{ay}\times
+   \text{oran}$; ayın kalanı = beklenen − o ay şimdiye kadar gerçekleşen. Böylece
+   "hedefi hep %10 aşıyor" örüntüsü tahmine işler.
+2. **Benzer senet dağılımı** — kalan tutar, aynı aydaki ihraçlara geçmiş benzer
+   senetlerin (tanım + vade eşleşmesi) tarihsel paylarıyla dağıtılır; toplam teklif,
+   geçmiş teklif/satış oranından türetilir.
+
+Modül kendi kendini test eder: `backtest_forecasts`, geçmiş her ay için "o gün elde
+olan bilgiyle" tahmin üretip gerçekleşmeyle karşılaştırır ve hata istatistiklerini
+`hazine_tahmin_dogrulama.csv`'ye yazar — tahmine güvenmeden önce bakılacak ilk tablo.
+
+## Yorum notları
+
+- Net satış ≠ brüt satış: geri alımlar ve değişimler netleştirmede fark yaratır;
+  seriler net üzerinden kuruludur.
+- Strateji hedefleri revize edilebilir; sürüm geçmişi tutulduğundan "o ay hangi hedef
+  geçerliydi" sorusu geriye dönük doğru cevaplanır.

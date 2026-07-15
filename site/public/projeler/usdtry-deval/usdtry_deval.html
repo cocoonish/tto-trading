@@ -37,4 +37,49 @@
 </div>
 
 <p class="footer">USDTRY: TP.DK.USD.A.YTL · TLREF: TP.BISTTLREF.ORAN · Kredi: TP.KTF101 · Mevduat: TP.TRYTAS.MT01-04</p>
-</div></body></html>
+</div>
+<!-- tto-ev-stili -->
+<style>
+  html, body { margin: 0; padding: 0; height: 100%; background: #ffffff; }
+  .plotly-graph-div { width: 100% !important; height: 100vh !important; }
+</style>
+<script>
+(function () {
+  function uygula() {
+    var gd = document.querySelector('.plotly-graph-div');
+    if (!gd || !window.Plotly || !gd.layout) { setTimeout(uygula, 120); return; }
+    var mevcut = gd.layout.title && gd.layout.title.text ? gd.layout.title.text : null;
+    Plotly.relayout(gd, {
+      autosize: true,
+      'font.family': "-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif",
+      'font.size': 12.5,
+      'font.color': '#211b12',
+      paper_bgcolor: '#ffffff',
+      plot_bgcolor: '#ffffff',
+      'title.x': 0.01,
+      'title.xanchor': 'left',
+      'title.font.size': 15,
+      'title.font.color': '#211b12',
+      // lejant her zaman grafiğin ALTINDA — başlıkla çakışma imkânsız
+      'legend.orientation': 'h',
+      'legend.yanchor': 'top',
+      'legend.y': -0.07,
+      'legend.xanchor': 'left',
+      'legend.x': 0,
+      'legend.font.size': 11,
+      'legend.bgcolor': 'rgba(255,255,255,0)',
+      'margin.t': mevcut ? 92 : 36,
+      'margin.r': 64,
+      'margin.b': 88,
+      'margin.l': 64,
+      hovermode: 'x unified'
+    });
+    window.addEventListener('resize', function () { Plotly.Plots.resize(gd); });
+    Plotly.Plots.resize(gd);
+  }
+  if (document.readyState === 'complete') uygula();
+  else window.addEventListener('load', uygula);
+})();
+</script>
+
+</body></html>

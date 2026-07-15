@@ -407,6 +407,114 @@ a:hover {
   margin-bottom: 0.3rem;
 }
 
+/* ── Hesap araçları (ortak iskelet) ────────────────────────── */
+.hesap {
+  margin: 2.2em 0;
+  border: 1px solid var(--ink);
+  background: var(--paper-2);
+}
+.hesap-ust {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  padding: 0.55rem 1rem;
+  background: var(--ink);
+  color: var(--paper);
+}
+.hesap-ust .etiket {
+  color: var(--gold);
+}
+.hesap-ad {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.95rem;
+}
+.hesap-yonerge {
+  margin: 0;
+  padding: 0.7rem 1rem 0.2rem;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--ink-70);
+}
+.hesap label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.hesap label .etiket {
+  color: var(--ink-50);
+  font-size: 0.58rem;
+}
+.hesap input,
+.hesap select {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--ink-30);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--ink);
+  width: 100%;
+  box-sizing: border-box;
+}
+.hesap input:focus,
+.hesap select:focus {
+  outline: 2px solid var(--claret);
+  outline-offset: -1px;
+}
+.hesap-dip {
+  margin: 0;
+  padding: 0.6rem 1rem;
+  border-top: 1px solid var(--ink-15);
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--ink-50);
+}
+.hesap table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+.hesap thead th {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: right;
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding: 0.4rem 0.6rem 0.4rem 0;
+}
+.hesap thead th:first-child {
+  text-align: left;
+}
+.hesap tbody td {
+  font-family: var(--font-mono);
+  text-align: right;
+  border-bottom: 1px solid var(--ink-15);
+  padding: 0.32rem 0.6rem 0.32rem 0;
+}
+.hesap tbody td:first-child {
+  text-align: left;
+  color: var(--claret);
+  font-weight: 500;
+}
+.hesap .sonuc-buyuk {
+  font-family: var(--font-display);
+  font-variation-settings: 'opsz' 60;
+  font-size: 1.9rem;
+  font-weight: 580;
+  color: var(--claret);
+  font-variant-numeric: tabular-nums;
+}
+.hesap .ara-deger {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
 /* ── Duyarlılık ────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .kayit-izgara {

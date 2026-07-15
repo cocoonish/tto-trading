@@ -1,22 +1,26 @@
 ---
 /**
- * İnteraktif TL OIS eğri bootstrap aracı.
- * IRS_Bootstrapping_7.xlsx'teki modelin birebir portu:
- * çeyreklik grid, log-linear DF interpolasyonu, Newton-Raphson çözüm.
- * Varsayılan girdilerle Excel'deki DF'leri 1e-15 hassasiyetle üretir
- * (doğrulama: DF(1Y)=0.694205, DF(10Y)=0.096649).
+ * İnteraktif TL OIS eğri bootstrap aracı — "IRS Bootstrapping_SONEXCEL"
+ * çalışma kitabının birebir portu: çeyreklik grid, log-linear DF
+ * interpolasyonu, Newton-Raphson (u = DF^(1/K) polinomu) çözüm.
+ * Varsayılan girdilerle Excel'in DF'lerini 1e-15 hassasiyetle üretir
+ * (doğrulama: DF(18M)=0.581232, DF(2Y)=0.494925, DF(10Y)=0.090716).
+ *
+ * Kurduğu eğriyi sayfadaki diğer araçlara yayınlar:
+ *   window.tloisEgri = { tau, pillars, df(t) }  +  'egri-guncellendi' olayı.
  */
 ---
 
 <div class="hesap" id="egri-boot">
   <div class="hesap-ust">
-    <span class="etiket">Hesap Aracı</span>
+    <span class="etiket">Hesap Aracı · 01</span>
     <span class="hesap-ad">TL OIS Eğrisi — Newton-Raphson Bootstrap</span>
   </div>
 
-  <p class="yonerge">
-    Par swap kotasyonlarını değiştirin; eğri anında yeniden bootstrap edilir.
-    Varsayılanlar 06.05.2026 Bloomberg anlık görüntüsüdür.
+  <p class="hesap-yonerge">
+    Par swap kotasyonlarını değiştirin; eğri anında yeniden bootstrap edilir ve sayfadaki
+    <em>tüm diğer araçlar</em> (forward/MPC, swaption, ASW) bu eğriyi kullanır.
+    Varsayılanlar 24.04.2026 Bloomberg (TYSO, mid) anlık görüntüsüdür.
   </p>
 
   <div class="girdi-izgara" id="eb-girdiler"></div>
@@ -24,14 +28,14 @@
   <svg id="eb-grafik" viewBox="0 0 660 300" role="img" aria-label="Par ve sıfır kuponlu eğri"></svg>
   <div class="gosterge etiket">
     <span class="g-par">● Par swap (girdi)</span>
-    <span class="g-zero">— Sıfır kupon (yıllık bileşik, bootstrap)</span>
+    <span class="g-zero">— Sıfır kupon (sürekli, bootstrap)</span>
   </div>
 
   <div class="tablo-kab">
     <table id="eb-tablo">
       <thead>
         <tr>
-          <th>Tenor</th><th>Par %</th><th>DF</th><th>Zero % (yıllık)</th><th>Kontrol (bps)</th>
+          <th>Tenor</th><th>Par %</th><th>DF</th><th>Zero % (sürekli)</th><th>Zero % (yıllık)</th><th>Kontrol (bps)</th>
         </tr>
       </thead>
       <tbody></tbody>
@@ -39,57 +43,52 @@
   </div>
 
   <p class="hesap-dip">
-    Kontrol sütunu, bootstrap edilen DF'lerden geri hesaplanan par oranın girdiyle farkıdır —
-    sıfıra yakın olmalıdır (öz-tutarlılık testi). Tüm hesap tarayıcınızda çalışır.
+    "Kontrol": bootstrap edilen DF'lerden geri hesaplanan par oranın girdiyle farkı —
+    Excel'deki Verification bölümünün karşılığı, ~0 olmalı. Grid ideal çeyreklerle
+    (τ=0.25, ACT/365) çalışır; Excel'in gerçek takvim tarihli Trade Ideas hesaplarından
+    birkaç bps sapma normaldir. Tüm hesap tarayıcınızda çalışır.
   </p>
 </div>
 
 <script>
   const TAU = 0.25;
+  // SONEXCEL, val date 24.04.2026 — TLREF Meetings F13:F26 (BDP mid)
   const VARSAYILAN: Array<[string, number, number]> = [
-    ['3M', 0.25, 40.83], ['6M', 0.5, 39.92], ['9M', 0.75, 39.04], ['1Y', 1, 38.4],
-    ['18M', 1.5, 37.33], ['2Y', 2, 36.2], ['3Y', 3, 34.95], ['4Y', 4, 33.51],
-    ['5Y', 5, 32.4], ['6Y', 6, 31.55], ['7Y', 7, 30.7], ['8Y', 8, 29.95],
-    ['9Y', 9, 29.45], ['10Y', 10, 29.05],
+    ['3M', 0.25, 41.85], ['6M', 0.5, 41.2], ['9M', 0.75, 40.23], ['1Y', 1, 39.46],
+    ['18M', 1.5, 38.25], ['2Y', 2, 37.34], ['3Y', 3, 35.92], ['4Y', 4, 34.64],
+    ['5Y', 5, 33.51], ['6Y', 6, 32.68], ['7Y', 7, 31.915], ['8Y', 8, 31.33],
+    ['9Y', 9, 30.8], ['10Y', 10, 30.23],
   ];
+  const key = (t: number) => Math.round(t * 4);
 
   function bootstrap(pillars: Array<[number, number]>) {
-    const grid = new Map<number, number>(); // t (çeyrek anahtarı) -> DF
-    const key = (t: number) => Math.round(t * 4);
-    let prevPillar: number | null = null;
-
+    const grid = new Map<number, number>();
+    let prev: number | null = null;
     for (const [T, R] of pillars) {
       const n = Math.round(T / TAU);
       const kuponlar: number[] = [];
       for (let i = 1; i <= n; i++) kuponlar.push(i * TAU);
-      const p1 = prevPillar;
-
+      const p1 = prev;
       const toplam = (dfT: number) => {
         let s = 0;
         for (const t of kuponlar) {
           if (grid.has(key(t))) s += grid.get(key(t))!;
           else if (Math.abs(t - T) < 1e-9) s += dfT;
           else {
-            // log-linear DF interp: son bilinen pillar ile T arası
-            const d1 = grid.get(key(p1!))!;
             const w = (t - p1!) / (T - p1!);
-            s += Math.pow(d1, 1 - w) * Math.pow(dfT, w);
+            s += Math.pow(grid.get(key(p1!))!, 1 - w) * Math.pow(dfT, w);
           }
         }
         return s;
       };
       const f = (dfT: number) => R * TAU * toplam(dfT) - (1 - dfT);
-
-      // Newton-Raphson
       let df = p1 !== null ? grid.get(key(p1))! * 0.9 : 1 / (1 + R * TAU);
       for (let i = 0; i < 100; i++) {
         const eps = 1e-8;
-        const turev = (f(df + eps) - f(df)) / eps;
-        const adim = f(df) / turev;
+        const adim = f(df) / ((f(df + eps) - f(df)) / eps);
         df -= adim;
         if (Math.abs(adim) < 1e-14) break;
       }
-
       for (const t of kuponlar) {
         if (!grid.has(key(t))) {
           if (Math.abs(t - T) < 1e-9) grid.set(key(t), df);
@@ -99,7 +98,7 @@
           }
         }
       }
-      prevPillar = T;
+      prev = T;
     }
     return grid;
   }
@@ -111,7 +110,6 @@
   const tr = (x: number, b = 2) =>
     x.toLocaleString('tr-TR', { minimumFractionDigits: b, maximumFractionDigits: b });
 
-  // girdi alanlarını üret
   girdiKap.innerHTML = VARSAYILAN.map(
     ([ad, , r], i) => `
     <label><span class="etiket">${ad}</span>
@@ -126,52 +124,61 @@
 
     const pillars = VARSAYILAN.map(([, T], i) => [T, oranlar[i] / 100] as [number, number]);
     const grid = bootstrap(pillars);
-    const key = (t: number) => Math.round(t * 4);
 
-    // tablo + kontrol (implied par vs girdi)
+    // ── eğriyi sayfaya yayınla ─────────────────────────────
+    const dfFn = (t: number): number => {
+      if (t <= 0) return 1;
+      const tMax = pillars[pillars.length - 1][0];
+      if (t >= tMax) return grid.get(key(tMax))!;
+      if (t <= TAU) return Math.pow(grid.get(key(TAU))!, t / TAU);
+      const k = Math.floor(t / TAU);
+      const t1 = k * TAU, t2 = (k + 1) * TAU;
+      const w = (t - t1) / (t2 - t1);
+      return Math.pow(grid.get(key(t1))!, 1 - w) * Math.pow(grid.get(key(t2))!, w);
+    };
+    (window as any).tloisEgri = { tau: TAU, pillars, df: dfFn };
+    document.dispatchEvent(new CustomEvent('egri-guncellendi'));
+
+    // ── tablo ──────────────────────────────────────────────
     let satirlar = '';
     pillars.forEach(([T, R], i) => {
       const df = grid.get(key(T))!;
+      const zeroSurekli = (-Math.log(df) / T) * 100;
       const zeroYillik = (Math.pow(1 / df, 1 / T) - 1) * 100;
       let s = 0;
       for (let t = TAU; t <= T + 1e-9; t += TAU) s += grid.get(key(t))!;
-      const impliedPar = (1 - df) / (TAU * s);
-      const fark = (impliedPar - R) * 10000;
+      const fark = ((1 - df) / (TAU * s) - R) * 10000;
       satirlar += `<tr>
         <td>${VARSAYILAN[i][0]}</td><td>${tr(R * 100)}</td><td>${df.toFixed(6)}</td>
-        <td>${tr(zeroYillik)}</td><td>${tr(fark, 2)}</td></tr>`;
+        <td>${tr(zeroSurekli)}</td><td>${tr(zeroYillik)}</td><td>${tr(fark, 2)}</td></tr>`;
     });
     tabloGovde.innerHTML = satirlar;
 
-    // grafik
+    // ── grafik ─────────────────────────────────────────────
     const W = 660, H = 300, mL = 46, mR = 12, mT = 12, mB = 30;
-    const zeros = pillars.map(([T]) => (Math.pow(1 / grid.get(key(T))!, 1 / T) - 1) * 100);
+    const zeros = pillars.map(([T]) => (-Math.log(grid.get(key(T))!) / T) * 100);
     const hepsi = [...oranlar, ...zeros];
     const yMin = Math.floor(Math.min(...hepsi) / 5) * 5 - 2;
     const yMax = Math.ceil(Math.max(...hepsi) / 5) * 5 + 2;
-    const x = (t: number) => mL + ((t - 0) / 10) * (W - mL - mR);
+    const x = (t: number) => mL + (t / 10) * (W - mL - mR);
     const y = (r: number) => mT + (1 - (r - yMin) / (yMax - yMin)) * (H - mT - mB);
 
     let eksen = '';
-    for (let g = yMin + 2; g <= yMax; g += 5) {
-      eksen += `<line x1="${mL}" y1="${y(g)}" x2="${W - mR}" y2="${y(g)}" class="izgara"/>
-        <text x="${mL - 6}" y="${y(g) + 3}" class="ek-y">${g}</text>`;
+    for (let g2 = yMin + 2; g2 <= yMax; g2 += 5) {
+      eksen += `<line x1="${mL}" y1="${y(g2)}" x2="${W - mR}" y2="${y(g2)}" class="izgara"/>
+        <text x="${mL - 6}" y="${y(g2) + 3}" class="ek-y">${g2}</text>`;
     }
-    for (const t of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) {
+    for (const t of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
       eksen += `<text x="${x(t)}" y="${H - 10}" class="ek-x">${t}Y</text>`;
-    }
 
-    // zero eğrisi: tüm çeyrek grid noktalarından (yıllık bileşik)
     let yol = '';
     for (let t = TAU; t <= 10 + 1e-9; t += TAU) {
-      const df = grid.get(key(t))!;
-      const z = (Math.pow(1 / df, 1 / t) - 1) * 100;
+      const z = (-Math.log(grid.get(key(t))!) / t) * 100;
       yol += (yol ? 'L' : 'M') + x(t).toFixed(1) + ',' + y(z).toFixed(1);
     }
     const noktalar = pillars
       .map(([T], i) => `<circle cx="${x(T)}" cy="${y(oranlar[i])}" r="3.5" class="par-nokta"/>`)
       .join('');
-
     svg.innerHTML = `${eksen}<path d="${yol}" class="zero-yol"/>${noktalar}`;
   }
 
@@ -180,63 +187,15 @@
 </script>
 
 <style>
-  .hesap {
-    margin: 2.2em 0;
-    border: 1px solid var(--ink);
-    background: var(--paper-2);
-  }
-  .hesap-ust {
-    display: flex;
-    align-items: baseline;
-    gap: 0.9rem;
-    padding: 0.55rem 1rem;
-    background: var(--ink);
-    color: var(--paper);
-  }
-  .hesap-ust .etiket {
-    color: var(--gold);
-  }
-  .hesap-ad {
-    font-family: var(--font-body);
-    font-style: italic;
-    font-size: 0.95rem;
-  }
-  .yonerge {
-    margin: 0;
-    padding: 0.7rem 1rem 0.2rem;
-    font-size: 0.9rem;
-    font-style: italic;
-    color: var(--ink-70);
-  }
   .girdi-izgara {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 0.5rem;
     padding: 0.8rem 1rem;
   }
-  .girdi-izgara :global(label) {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-  .girdi-izgara :global(.etiket) {
-    color: var(--ink-50);
-    font-size: 0.58rem;
-  }
   .girdi-izgara :global(input) {
-    font-family: var(--font-mono);
     font-size: 0.82rem;
     padding: 0.3rem 0.35rem;
-    border: 1px solid var(--ink-30);
-    border-radius: 2px;
-    background: var(--paper);
-    color: var(--ink);
-    width: 100%;
-    box-sizing: border-box;
-  }
-  .girdi-izgara :global(input:focus) {
-    outline: 2px solid var(--claret);
-    outline-offset: -1px;
   }
   svg {
     display: block;
@@ -284,45 +243,6 @@
   .tablo-kab {
     overflow-x: auto;
     padding: 0 1rem;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.82rem;
-    font-variant-numeric: tabular-nums;
-  }
-  thead th {
-    font-family: var(--font-mono);
-    font-size: 0.62rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    text-align: right;
-    border-top: 1px solid var(--ink);
-    border-bottom: 1px solid var(--ink);
-    padding: 0.4rem 0.6rem 0.4rem 0;
-  }
-  thead th:first-child {
-    text-align: left;
-  }
-  table :global(td) {
-    font-family: var(--font-mono);
-    text-align: right;
-    border-bottom: 1px solid var(--ink-15);
-    padding: 0.32rem 0.6rem 0.32rem 0;
-  }
-  table :global(td:first-child) {
-    text-align: left;
-    color: var(--claret);
-    font-weight: 500;
-  }
-  .hesap-dip {
-    margin: 0;
-    padding: 0.6rem 1rem;
-    border-top: 1px solid var(--ink-15);
-    font-size: 0.82rem;
-    font-style: italic;
-    color: var(--ink-50);
   }
   @media (max-width: 640px) {
     .girdi-izgara {

@@ -1,7 +1,8 @@
 ---
 title: 'TL Reel Efektif Döviz Kuru'
-description: 'TÜFE ve Yi-ÜFE bazlı REDK serilerinin ağırlıklı bileşimi ve uzun dönem ortalamadan sapma analiziyle TL''nin ne kadar ucuz ya da pahalı olduğu.'
+description: 'TÜFE ve Yi-ÜFE bazlı REDK''nin %70/%30 bileşimi, 10 ve 5 yıllık ortalamadan sapma ve USD/TRY regresyonlarıyla TL değerleme çerçevesi.'
 pubDate: 2026-07-15
+updatedDate: 2026-07-15
 tags: ['redk', 'try', 'enflasyon']
 durum: 'aktif'
 kaynak: 'TCMB REDK (TÜFE & Yi-ÜFE)'
@@ -10,30 +11,71 @@ guncelleme: 'aylık'
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
 
-TL "ucuz mu, pahalı mı?" sorusuna tek bir REDK serisiyle bakmak yanıltıcı olabilir:
-TÜFE bazlı seri hizmet enflasyonunu, Yi-ÜFE bazlı seri ise ticarete konu malları daha iyi
-yansıtır. Bu proje iki seriyi **%70 TÜFE + %30 Yi-ÜFE** ağırlığıyla birleştirir ve
-10 yıllık hareketli ortalamadan yüzde sapmayı izler.
+TL "ucuz mu, pahalı mı?" sorusuna tek bir REDK serisiyle bakmak yanıltıcıdır: TÜFE bazlı
+seri hizmet enflasyonunu, Yi-ÜFE bazlı seri ticarete konu malları temsil eder ve ikisi
+son yıllarda ciddi ayrışmıştır. Bu proje iki seriyi ağırlıklandırır, uzun dönem
+ortalamadan sapmayı ölçer ve sapmanın USD/TRY üzerindeki öngörü gücünü regresyonla test eder.
 
 <GrafikEmbed
   src="/projeler/try-reer/reer_analysis.html"
-  baslik="Ağırlıklı REDK ve 10 yıllık ortalamadan sapma"
+  baslik="Kompozit REDK, hareketli ortalamalar ve sapma panelleri"
   no="01"
-  yukseklik={620}
+  yukseklik={760}
 />
 
-## Metodoloji
+## Şekil 01 nasıl hesaplanıyor?
 
-- TCMB'nin TÜFE ve Yi-ÜFE bazlı reel efektif kur endeksleri aylık frekansta alınır.
-- Bileşik endeks: $REDK_t = 0{,}70 \cdot REDK^{\text{TÜFE}}_t + 0{,}30 \cdot REDK^{\text{Yi-ÜFE}}_t$
-- Değerleme sinyali, endeksin 120 aylık (10 yıl) ve 60 aylık (5 yıl) hareketli
-  ortalamalarından yüzde sapması olarak tanımlanır.
-- Ek modül, USD/TRY ile REDK sapması arasındaki regresyonu 3 ay / 5 yıl / 10 yıl
-  ufuklarında ayrı ayrı tahmin eder.
+Beş panelin tamamı aynı veri hattından türetilir:
 
-<div class="not">
-  <span class="etiket">Not</span>
-  Ağırlıklar parametriktir; kaynak koddaki tek satırlık değişiklikle farklı bileşimler
-  denenebilir. İleride bu sayfaya ağırlıkları okurun değiştirebildiği bir hesap aracı
-  eklenmesi planlanıyor.
-</div>
+**Veri.** TCMB'nin iki resmi REDK serisi Excel'den okunur: "TÜFE Bazlı REDK" ve
+"Yi-ÜFE Bazlı REDK" sütunları; tarih sütunu ayıklanır, iki seri ay bazında iç
+birleştirmeyle hizalanır (yalnız ikisinin de bulunduğu aylar kalır).
+
+**Panel 1 — Kompozit REDK ve ortalamalar.**
+
+$$
+REDK_t = 0{,}70\cdot REDK^{\text{TÜFE}}_t + 0{,}30\cdot REDK^{\text{Yi-ÜFE}}_t
+$$
+
+Ağırlıklar parametriktir (kaynakta `CPI_WEIGHT`, `PPI_WEIGHT`). Üzerine iki hareketli
+ortalama çizilir: 120 ay (10Y, kesikli) ve 60 ay (5Y, noktalı); `min_periods` pencere
+uzunluğuna eşittir — serinin ilk 10 yılı bilinçli olarak boş bırakılır, kısmi pencere
+ortalaması gösterilmez.
+
+**Panel 2-3 — Kompozit sapmalar.**
+
+$$
+\text{Sapma}^{10Y}_t = \frac{REDK_t - MA^{120}_t}{MA^{120}_t}\times100,
+\qquad
+\text{Sapma}^{5Y}_t = \frac{REDK_t - MA^{60}_t}{MA^{60}_t}\times100
+$$
+
+Sıfır çizgisi "tarihsel normal"dir; negatif bölge TL'nin kendi geçmişine göre ucuz
+kaldığı dönemleri işaretler.
+
+**Panel 4-5 — Saf PPI ve saf CPI sapmaları.** Aynı 10Y sapma hesabı, %100 Yi-ÜFE ve
+%100 TÜFE serilerine ayrı ayrı uygulanır. İki panelin ayrıştığı dönemler (ör. iç
+enflasyonun kur artışını aştığı 2022-24), "hangi REDK'ye göre ucuz?" sorusunun neden
+önemli olduğunu gösterir.
+
+## Regresyon modülü: sapma USD/TRY'yi öngörüyor mu?
+
+İkinci script (`usdtry_reer_analysis`) sapma serisini USD/TRY ile birleştirir ve
+üç ufukta test eder (3 ay / 5 yıl / 10 yıl pencereler):
+
+- **Değişim regresyonu:** REDK sapmasındaki değişim ile sonraki 6 ve 12 aylık USD/TRY
+  yüzde değişimi arasında `scipy.stats.linregress` — eğim, kesişim, $R^2$, p-değeri
+  ve artık standart hatası (RSE) tablo olarak raporlanır.
+- **Sapma bantları:** sapma aralıklarına göre (ör. −15/−10, −10/−5, …) sonraki dönem
+  kur getirilerinin dağılımı — doğrusal olmayan ilişkiyi görünür kılar.
+
+Çıktılar ayrı HTML dosyalarındadır (3M/5Y/10Y versiyonları); siteye bir sonraki veri
+güncellemesinde eklenecekler.
+
+## Yorum notları
+
+- REDK endeksi 100'ün "adil değer" olduğu anlamına gelmez; sapma metriği bu yüzden
+  seviye yerine **kendi tarihsel ortalamasına göre** tanımlanır.
+- %70/%30 bileşimi bir modelleme tercihi: hizmet ağırlıklı sepetin uzun dönem
+  taşınabilirliği ile ticarete konu rekabetçilik arasında orta yol. Ağırlığı değiştirip
+  sonucun ne kadar oynadığına bakmak, analizin sağlamlık testidir.
