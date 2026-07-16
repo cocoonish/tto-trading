@@ -1,69 +1,90 @@
 ---
 title: 'USD/TRY Devalüasyon Hızı'
-description: 'TL değer kaybının yıllıklandırılmış hızı: 1 hafta / 1 ay / 3 ay pencereli bileşik deval oranları, haftalık-aylık regresyon kanalları ve faizle karşılaştırma.'
+description: 'TL değer kaybının ACT/365 yıllıklandırılmış hızı: 1 hafta / 1 ay / 3 ay pencereli bileşik deval oranları, faiz katmanı ve haftalık-aylık regresyon kanalları.'
 pubDate: 2026-07-15
-updatedDate: 2026-07-15
+updatedDate: 2026-07-16
 tags: ['usdtry', 'fx', 'trend']
 durum: 'aktif'
-kaynak: 'Piyasa verisi (yfinance) + TCMB EVDS'
+kaynak: 'TCMB EVDS (kur + faiz serileri)'
 guncelleme: 'haftalık'
 ---
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
 
 "Kur koptu mu, olağan seyrinde mi?" Bu sorunun doğru birimi seviye değil **hızdır**:
-TL'nin yıllıklandırılmış değer kaybı, carry pozisyonunun kâr-zarar denklemindeki
-karşı bacaktır. Deval hızı faizin altındaysa carry kazandırır; üstüne çıktığı anlar
-rejim değişikliği sinyalidir.
+TL'nin yıllıklandırılmış değer kaybı, carry pozisyonunun kâr-zarar denklemindeki karşı
+bacaktır. Deval hızı faizin altındaysa carry kazandırır; üstüne çıktığı anlar rejim
+değişikliği sinyalidir. Seri EVDS'ten günlük beslenir; son okuma (16.07.2026, kur
+46,93): 1 hafta **+%18,9** · 1 ay **+%21,3** · 3 ay **+%22,6** — üçü de politika
+faizinin belirgin altında, carry hâlâ pozitif bölgede.
 
 <GrafikEmbed
   src="/projeler/usdtry-deval/usdtry_deval.html"
-  baslik="USD/TRY yıllıklandırılmış devalüasyon hızı ve faiz oranları"
+  baslik="Yıllıklandırılmış devalüasyon hızı (ACT/365) ve faiz katmanı — son 1 yıl"
   no="01"
   yukseklik={600}
 />
 
 ## Şekil 01 nasıl hesaplanıyor?
 
-**Deval oranları (sol eksen).** Günlük kapanışlardan üç pencereyle bileşik
-yıllıklandırma (iş günü konvansiyonu, 252):
+**Deval oranları (sol eksen).** EVDS günlük USD/TRY alış kuru (TP.DK.USD.A.YTL)
+üzerinden üç pencereyle bileşik yıllıklandırma. Faizle aynı gün-sayım tabanını
+kullanırız — **ACT/365, gerçek takvim günü farkıyla**:
 
 $$
-\text{Deval}^{(n)}_t = \left[\left(\frac{P_t}{P_{t-n}}\right)^{252/n} - 1\right]\times100,
-\qquad n \in \{5,\ 21,\ 63\} \text{ iş günü}
+\text{Deval}^{(n)}_t = \left[\left(\frac{P_t}{P_{t-n}}\right)^{365/\Delta d} - 1\right]\times100
 $$
 
+$n$ pencere kaydırması (5 / 21 / 63 iş günü ≈ 1 hafta / 1 ay / 3 ay), $\Delta d$ ise
+iki gözlem tarihinin **gerçek takvim günü farkı** (ör. 5 iş günü ≈ 7 takvim günü,
+21 iş günü ≈ 29-31 gün — sabit üs kullanılmaz, her gözlem çifti kendi $\Delta d$'siyle
+yıllıklanır). Böylece sonuç, ACT/365 kote edilen TL faizleriyle **doğrudan
+karşılaştırılabilir**: aynı ölçekte iki eğri, carry'nin işaretini verir.
 1 haftalık seri gürültülü ama erken uyarıcıdır; 3 aylık seri rejimin kendisini gösterir.
-Aşırı uçlar görselleştirme için [−50, +150] bandına kırpılır (hesap kırpılmaz, yalnız
-eksen); 2023 ortası gibi tek haftada +%150'yi aşan epizotlar etikette ayrıca raporlanır.
+Aşırı uçlar yalnız eksende [−50, +150] bandına kırpılır; hesap kırpılmaz.
 
-**Faiz katmanı (sağ eksen).** EVDS'ten politika faizi ve mevduat/TLREF serileri aynı
-eksene çizilir. Okuma kuralı: deval eğrisi faiz çizgisinin altında kaldıkça TL carry
+**Faiz katmanı (sağ eksen).** EVDS'ten TLREF, kredi ve mevduat faizi serileri aynı
+grafiğe çizilir. Okuma kuralı: deval eğrisi faiz çizgisinin altında kaldıkça TL carry
 pozitif; kesişimler pozisyon çevirme noktalarıdır.
 
-**Trend kanalı.** Seçilen dönem için log-fiyata doğrusal regresyon uygulanır; eğim
-yıllıklandırılıp "kanal hızı (%/yıl)" olarak raporlanır, kanal genişliği artıkların
-standart sapmasından türetilir. Kontrollü seyir dönemlerinde artıklar dar bantta kalır —
-banttan çıkış, kanal hızının kendisinden daha erken bir sinyaldir.
+<GrafikEmbed
+  src="/projeler/usdtry-deval/usdtry_weekly.html"
+  baslik="Haftalık regresyon trendleri — yılbaşından bugüne, hafta hafta"
+  no="02"
+  yukseklik={560}
+/>
 
-## Haftalık ve aylık kanal grafikleri
+## Şekil 02 nasıl hesaplanıyor?
 
-Aynı hattın iki kardeş çıktısı daha var (bir sonraki güncellemede siteye eklenecek):
+Her takvim haftasının içindeki günlük kapanışlara ayrı bir **doğrusal regresyon**
+uygulanır: `polyfit(gün, kur, 1)` — haftanın trend doğrusu ve haftalık ortalama
+etiketiyle çizilir (2026'da 29 hafta segmenti; son hafta ortalaması %20,6 deval
+hızına denk geliyor). Tek gözlemli ya da varyanssız pencereler (tatil haftaları)
+regresyondan düşülür; aksi hâlde eğim tanımsızdır. Haftadan haftaya eğim değişimi,
+müdahale/akış dönemlerini gün hassasiyetinde yakalar: kontrollü seyirde eğimler
+neredeyse paraleldir, kopuş haftaları açıyla kendini belli eder.
 
-- **Haftalık trendler** — her takvim haftasının içinde günlük kapanışlara ayrı doğrusal
-  regresyon (`np.polyfit(gün, fiyat, 1)`) uygulanır; haftanın trend doğrusu ve haftalık
-  ortalama etiketiyle çizilir. Haftadan haftaya eğim değişimi, müdahale/akış
-  dönemlerini gün hassasiyetinde yakalar.
-- **Aylık trendler** — aynı yöntem ay pencereleriyle; ay içi eğim ile aylar arası
-  sıçramalar (ay sonu fixing etkileri) ayrışır.
+<GrafikEmbed
+  src="/projeler/usdtry-deval/usdtry_monthly.html"
+  baslik="Aylık regresyon trendleri — ay içi eğim ve ay ortalamaları"
+  no="03"
+  yukseklik={560}
+/>
 
-Tek gözlemli ya da varyanssız pencereler (tatil haftaları) regresyondan düşülür
-(`std=0` koruması) — aksi halde eğim tanımsızdır.
+## Şekil 03 nasıl hesaplanıyor?
+
+Aynı yöntem ay pencereleriyle: her ayın günlük kapanışlarına doğrusal regresyon,
+etikette ayın ortalama yıllıklandırılmış deval hızı (Haziran 2026: %23,4 · Temmuz
+2026: %22,4). Ay içi eğim ile aylar arası sıçramalar (ay sonu fixing etkileri)
+burada ayrışır — haftalık grafiğin gürültüsü ile 3 aylık serinin ataleti arasında
+orta vadeli bir okuma katmanı sağlar.
 
 ## Yorum notları
 
-- 252 iş günü konvansiyonu faizle karşılaştırma içindir; takvim günü (365) tabanlı
-  yıllıklandırma aynı seriyi ~%3-4 farklı gösterir. Karşılaştırdığınız faizin
-  konvansiyonuyla eşleştirin.
-- Deval hızı seviyeden türetildiği için fixing saatine duyarlıdır; seri kapanış
-  fiyatıyla kuruludur, gün içi uçlar görünmez.
+- **Konvansiyon:** Yıllıklandırma ACT/365 ve takvim günü tabanlıdır — TL faizleriyle
+  (ACT/365) aynı ölçek. İş günü (252) tabanlı yıllıklandırma aynı seriyi ~%3-4 farklı
+  gösterir ve faizle karşılaştırmayı bozar; bu projede kullanılmaz.
+- Deval hızı seviyeden türetildiği için fixing saatine duyarlıdır; seri gün sonu
+  kapanışla kuruludur, gün içi uçlar görünmez.
+- EVDS faiz serilerinden biri yayında gecikirse grafik o katmanı uyarıyla atlar;
+  deval üretimi durmaz (hattın dayanıklılık tasarımı).

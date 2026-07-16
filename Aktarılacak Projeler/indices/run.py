@@ -126,6 +126,16 @@ def main():
             ret = info["return_1d"] * 100 if info["return_1d"] else 0
             print(f"  {name}: {info['price']:.4f} ({ret:+.2f}%)")
 
+    # Step 6: Static web output (Plotly HTML for the site)
+    try:
+        import web_cikti
+        yollar = web_cikti.uret()
+        print("\nWeb ciktisi yenilendi:")
+        for yol in yollar:
+            print(f"  {yol}")
+    except Exception as exc:  # web ciktisi hatasi pipeline'i durdurmasin
+        print(f"\nUYARI: web ciktisi uretilemedi: {exc}")
+
     print("\nDone. Run 'streamlit run dashboard.py' for the interactive dashboard.")
 
 

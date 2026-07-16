@@ -1,3 +1,4 @@
+import os
 import requests
 import pandas as pd
 import numpy as np
@@ -5,6 +6,9 @@ from urllib.parse import urlencode
 from datetime import date
 import plotly.graph_objects as go
 import plotly.colors as pc
+
+# Çıktılar script'in kendi klasörüne yazılır (taşınmaya dayanıklı)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # --- Tarih parametreleri (otomatik: bugün) ---
 today = date.today()
@@ -39,8 +43,20 @@ print(f"  {len(usdtry)} kayit, {usdtry.index[0].date()} - {usdtry.index[-1].date
 usdtry_full = usdtry.asfreq("D").interpolate(method="time")
 business = usdtry_full[usdtry_full.index.dayofweek < 5]
 
+
+def deval_act365(s: pd.Series, n: int) -> pd.Series:
+    """Yıllıklandırılmış devalüasyon, ACT/365 takvim günü tabanı.
+
+    Pencere n GÖZLEM (iş günü) geriye gider; üs, iki gözlem tarihinin GERÇEK
+    takvim günü farkı Δd üzerinden: oran = (P_t / P_{t-n}) ** (365 / Δd) - 1.
+    """
+    ratio = s / s.shift(n)
+    delta_d = pd.Series(s.index, index=s.index).diff(n).dt.days.astype(float)
+    return (ratio ** (365.0 / delta_d) - 1) * 100
+
+
 w_d = 5
-deval_1w = ((business / business.shift(w_d)) ** (252 / w_d) - 1) * 100
+deval_1w = deval_act365(business, w_d)
 
 d1w = deval_1w[(deval_1w.index >= display_start) & (deval_1w.index <= display_end)].dropna()
 
@@ -50,10 +66,10 @@ fig = go.Figure()
 
 fig.add_trace(go.Scatter(
     x=d1w.index, y=d1w.values,
-    name="USDTRY 1H Annualized Devalüasyon",
+    name="USDTRY 1H Devalüasyon — yıllıklandırılmış (ACT/365)",
     line=dict(color="#94a3b8", width=1.4),
     opacity=0.55,
-    hovertemplate="<b>%{x|%d %b %Y}</b><br>1H Ann.: %{y:.2f}%<extra></extra>",
+    hovertemplate="<b>%{x|%d %b %Y}</b><br>1H (ACT/365): %{y:.2f}%<extra></extra>",
 ))
 
 weekly_groups = d1w.groupby(pd.Grouper(freq="W-SUN"))
@@ -94,7 +110,7 @@ for week_end, week_data in weekly_groups:
     if mid_idx < len(week_data):
         mid_date = week_data.index[mid_idx]
         fig.add_annotation(
-            x=mid_date, y=avg,
+            x=mid_date.to_pydatetime(), y=avg,
             text=f"<b>%{avg:.1f}</b>",
             showarrow=False,
             bgcolor="rgba(255,255,255,0.95)",
@@ -136,7 +152,7 @@ fig.update_xaxes(
 )
 
 fig.update_yaxes(
-    title_text="<b>1 Haftalık Annualized Devalüasyon (%)</b>",
+    title_text="<b>1 Haftalık Devalüasyon (%, yıllıklandırılmış ACT/365)</b>",
     showgrid=True, gridcolor="rgba(15,23,42,0.08)",
     minor=dict(showgrid=True, gridcolor="rgba(15,23,42,0.03)",
                ticks="outside", ticklen=3),
@@ -151,12 +167,12 @@ fig.update_yaxes(
 
 fig.update_layout(
     title=dict(
-        text="<b>USDTRY 1 Haftalık Annualized Devalüasyon — YTD Haftalık Trend & Ortalama</b>"
+        text="<b>USDTRY 1H Devalüasyon, yıllıklandırılmış (ACT/365) — YTD Haftalık Trend</b>"
              f"<br><sub>YTD: {display_start.strftime('%d.%m.%Y')} – {display_end.strftime('%d.%m.%Y')} · "
              f"Toplam {len(weekly_summary)} haftalık segment · "
              "Her haftaya ait linear regression trendi · Etiket üstünde haftalık avg</sub>",
         font=dict(size=16, color="#0f172a"),
-        x=0.5, xanchor="center", y=0.97,
+        x=0.02, xanchor="left", y=0.97,
     ),
     paper_bgcolor="#ffffff",
     plot_bgcolor="#fafbfc",
@@ -184,11 +200,14 @@ for label, avg, slope_w, _, _ in weekly_summary:
 
 print(f"\nToplam {len(weekly_summary)} haftalık segment")
 
-output_png = "/Users/tunatanozmen/Documents/aktif projeler/USDTRYDeval/usdtry_weekly_trends.png"
-fig.write_image(output_png, width=1800, height=850, scale=2)
-print(f"\nPNG kaydedildi: {output_png}")
-
-output_html = "/Users/tunatanozmen/Documents/aktif projeler/USDTRYDeval/usdtry_weekly_trends.html"
+output_html = os.path.join(BASE_DIR, "usdtry_weekly_trends.html")
 fig.write_html(output_html, include_plotlyjs="cdn",
                config={"responsive": True, "displaylogo": False})
-print(f"HTML kaydedildi: {output_html}")
+print(f"\nHTML kaydedildi: {output_html}")
+
+try:
+    output_png = os.path.join(BASE_DIR, "usdtry_weekly_trends.png")
+    fig.write_image(output_png, width=1800, height=850, scale=2)
+    print(f"PNG kaydedildi: {output_png}")
+except Exception as e:
+    print(f"PNG yazma hatasi (HTML etkilenmez): {e}")

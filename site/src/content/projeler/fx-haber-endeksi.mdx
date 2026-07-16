@@ -6,15 +6,49 @@ updatedDate: 2026-07-15
 tags: ['fx', 'sentiment', 'nlp']
 durum: 'aktif'
 kaynak: 'GDELT + Google News RSS + piyasa verisi'
-guncelleme: 'günlük (pipeline doğrulandı: 15.07.2026)'
+guncelleme: 'günlük — her koşuda grafikler otomatik yenilenir'
 ---
+
+import GrafikEmbed from '../../components/GrafikEmbed.astro';
 
 Fiyat haberden önce mi hareket eder, sonra mı? Bu proje soruyu ölçülebilir hale
 getirir: dokuz majör parite (EUR/USD, USD/JPY, USD/CHF, GBP/USD, AUD/USD, NZD/USD,
-USD/CAD, USD/NOK, USD/SEK) için haber akışını toplar, finans-özel bir dil modeliyle
-skorlar ve parite başına tek bir **duyarlılık endeksi** üretir. Pipeline 15.07.2026'da
-uçtan uca yeniden koşturulup doğrulandı; endeks değerleri ve 15 enstrümanlık fiyat
-paneli (FX + altın/gümüş + S&P 500 + UST 2Y/10Y + BIST 100) güncel üretiliyor.
+USD/CAD, USD/NOK, USD/SEK) ve altı ek enstrüman (altın, gümüş, S&P 500, UST 2Y/10Y,
+BIST 100) için haber akışını toplar, finans-özel bir dil modeliyle skorlar ve varlık
+başına tek bir **duyarlılık endeksi** üretir. Pipeline artık her koşuda aşağıdaki
+grafikleri de kendisi üretir — Streamlit paneli statik siteye taşındı.
+
+<GrafikEmbed
+  src="/projeler/fx-haber-endeksi/endeks_son.html"
+  baslik="Son okuma: varlık bazında duyarlılık endeksi ve kategoriler"
+  no="01"
+  yukseklik={560}
+/>
+
+## Şekil 01 nasıl hesaplanıyor?
+
+Son pipeline koşusunun (15.07.2026) endeks değerleri, değere göre sıralı yatay bar:
+pozitifler yeşil-teal (boğa), negatifler bordo (ayı); bar ucundaki etiket kategori
+eşiklerinden gelir — |değer| ≥ 0,3 Bullish/Bearish, ≥ 0,7 Extremely. Son okumada
+uçlar: altın **+0,29** (Bullish) ve NZD/USD +0,15 bir yanda; USD/NOK **−0,86** ve
+BIST 100 −0,74 (Extremely Bearish) diğer yanda. Değerin kendisi, aşağıda anlatılan
+ağırlıklı toplulaştırmanın $[-1,+1]$ aralığındaki çıktısıdır.
+
+<GrafikEmbed
+  src="/projeler/fx-haber-endeksi/endeks_tarihce.html"
+  baslik="Endeks tarihçesi: koşudan koşuya duyarlılık patikası"
+  no="02"
+  yukseklik={560}
+/>
+
+## Şekil 02 nasıl hesaplanıyor?
+
+Her pipeline koşusu `index_history.json`'a bir anlık görüntü ekler; grafik bu
+görüntüleri varlık başına çizgiye çevirir (şu an 7 koşu: 12.04 → 15.07.2026, seri
+günlük koşuyla sıklaşacak). Soluk yatay bantlar kategori eşikleridir (±0,3 / ±0,7);
+sıfır çizgisi nötr duyarlılıktır. Okuma: çizginin bant değiştirmesi, o varlıkta haber
+tonunun rejim değiştirdiği anlamına gelir — değerin gün içi seviyesinden çok bant
+geçişleri sinyaldir.
 
 ## Endeks nasıl hesaplanıyor?
 
@@ -72,12 +106,13 @@ Bullish). Örnek (04.05.2026 koşusu): USD/CHF −0,967 "Extremely Bearish", AUD
 
 - 15.07.2026 koşusu: haber çekimi, FinBERT skorlama, endeks üretimi ve 15 enstrümanlık
   fiyat paneli uçtan uca çalıştı (EUR/USD 1,1484 · altın 4.078 · BIST 14.080).
-- İnteraktif panel şu an Streamlit'te (`dashboard.py`): günlük duyarlılık vs 5 günlük
-  getiri saçılımları, endeks zaman serileri ve rejim göstergeleri.
+- **Web çıktısı pipeline'a bağlandı (16.07.2026):** `run.py` artık her koşunun sonunda
+  yukarıdaki iki grafiği yeniden üretir (`web_cikti.py`; hata pipeline'ı durdurmaz).
+  Dosyalar `site/public/projeler/fx-haber-endeksi/` altına kopyalanıp push edilince
+  sayfa kendiliğinden güncellenir — Streamlit paneline artık yayın için ihtiyaç yok.
 
 <div class="not">
   <span class="etiket">Yol haritası</span>
-  Streamlit paneli statik siteye taşınacak: pipeline her koşuda endeks zaman serisini
-  Plotly HTML'e yazacak ve bu sayfada günlük güncellenen grafik yayınlanacak. O zamana
-  kadar endeks değerleri JSON çıktısından takip ediliyor.
+  Sıradaki katman: duyarlılık-getiri saçılımları (endeks vs 5 günlük ileri getiri) ve
+  rejim göstergesinin (sepet spread + PCA) tarihçesinin de web çıktısına eklenmesi.
 </div>

@@ -74,17 +74,56 @@ vade ise piyasanın duration almak istemediğini gösterir.
 
 Planlanan takvimdeki her ihraç için beklenen tutar iki katmanla üretilir:
 
-1. **Strateji-tutarlı ölçekleme** — ayın hedefi, son *n* tamamlanmış ayın toplam
+1. **Strateji-tutarlı ölçekleme** — ayın hedefi, son tamamlanmış ayların toplam
    gerçekleşme oranıyla düzeltilir: $\text{Beklenen}_{ay} = \text{Hedef}_{ay}\times
-   \text{oran}$; ayın kalanı = beklenen − o ay şimdiye kadar gerçekleşen. Böylece
-   "hedefi hep %10 aşıyor" örüntüsü tahmine işler.
+   \text{oran}$; ayın kalanı = beklenen − o ay şimdiye kadar gerçekleşen. Mevcut
+   çevrimde bu oran **%77,9** — Hazine son aylarda hedefin ~beşte dördünü ihraç ediyor
+   ve model bunu tahmine işliyor.
 2. **Benzer senet dağılımı** — kalan tutar, aynı aydaki ihraçlara geçmiş benzer
    senetlerin (tanım + vade eşleşmesi) tarihsel paylarıyla dağıtılır; toplam teklif,
    geçmiş teklif/satış oranından türetilir.
 
-Modül kendi kendini test eder: `backtest_forecasts`, geçmiş her ay için "o gün elde
-olan bilgiyle" tahmin üretip gerçekleşmeyle karşılaştırır ve hata istatistiklerini
-`hazine_tahmin_dogrulama.csv`'ye yazar — tahmine güvenmeden önce bakılacak ilk tablo.
+<GrafikEmbed
+  src="/projeler/hazine-ihrac/planlanan_ihraclar.html"
+  baslik="Planlı ihraç takvimi ve ihale başına beklenen net satış"
+  no="03"
+  yukseklik={600}
+/>
+
+## Şekil 03 nasıl hesaplanıyor?
+
+Mevcut takvimde (02.07 – 20.08.2026) **19 planlı ihraç** var: 11 ihale (model tahmin
+üretir) + 8 doğrudan satış (altın/dolar senetleri, kira sertifikaları — ihale
+mekanizması olmadığından tahmin üretilmez, grafikte ayrı işaretlenir). İhale başına
+beklenen net satış, yukarıdaki iki katmanın çıktısıdır; toplam beklenen ihale hacmi
+**517,8 milyar TL**. Aylık panel, beklenen toplamı strateji hedefiyle karşılaştırır:
+Temmuz 240,6 vs hedef 308,7 · Ağustos 277,3 vs 355,8 milyar TL — beklenenin hedefin
+altında kalması yapısaldır, çünkü doğrudan satışlar ihale tahminine dahil değildir.
+
+<GrafikEmbed
+  src="/projeler/hazine-ihrac/tahmin_dogrulama.html"
+  baslik="Backtest: ihale bazında tahmin vs gerçekleşen (n=431)"
+  no="04"
+  yukseklik={600}
+/>
+
+## Şekil 04 nasıl hesaplanıyor?
+
+Modül kendi kendini test eder: `backtest_forecasts`, Mart 2020'den bu yana her ihale
+için "o gün elde olan bilgiyle" tahmin üretip gerçekleşmeyle karşılaştırır
+(`hazine_tahmin_dogrulama.csv`). Saçılımda her nokta bir ihale; $y=x$ doğrusu
+mükemmel tahmindir. Metrikler dürüst okunmalı:
+
+- Tüm dönem (n=431): MAE **11,5 milyar TL**; ortalama MAPE %236 görünür ama bu,
+  2020-21'in gerçekçi olmayan strateji hedeflerinin (hedef 313 milyar / gerçekleşme
+  8 milyar gibi aylar) artefaktıdır — **medyan sapma %47**.
+- Son 12 ay (n=67): MAE 15,9 milyar TL, MAPE **%66,6** — güncel rejimde modelin
+  gerçek kalibrasyonu budur.
+- Model kıyası: ham (saf tarihsel) model %66,9, salt strateji modeli %306,5 —
+  düzeltilmiş modelin iki katmanı birlikte kullanması boşuna değil.
+
+Tahmine pozisyon bağlamadan önce bakılacak ilk tablo budur: model arz *yönünü* ve ay
+içi dağılımı iyi yakalar, ihale başına tutarda ±%50 bandı normaldir.
 
 ## Yorum notları
 

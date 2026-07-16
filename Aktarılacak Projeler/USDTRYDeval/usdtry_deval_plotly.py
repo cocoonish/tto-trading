@@ -1,3 +1,4 @@
+import os
 import requests
 import pandas as pd
 import numpy as np
@@ -6,6 +7,9 @@ from datetime import date
 import plotly.graph_objects as go
 import plotly.io as pio
 from plotly.subplots import make_subplots
+
+# Çıktılar script'in kendi klasörüne yazılır (taşınmaya dayanıklı)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # --- Tarih parametreleri (her çalıştırmada bugüne kadar güncellenir) ---
 today = date.today()
@@ -52,25 +56,48 @@ def fetch_evds(series_code: str, start: str, end: str) -> pd.Series:
     return df.set_index("Tarih")[col].rename(series_code)
 
 
+def fetch_evds_opt(series_code: str, start: str, end: str):
+    """Faiz katmanı için opsiyonel çekim: EVDS hata verirse None döner, grafik deval'siz kalmaz."""
+    try:
+        return fetch_evds(series_code, start, end)
+    except Exception as e:
+        print(f"  UYARI: {series_code} cekilemedi ({type(e).__name__}: {e}); bu seri grafikten cikarildi.")
+        return None
+
+
 print(f"Veri aralığı: {fetch_start} – {fetch_end} (bugün: {today})")
 print("EVDS'den veriler cekiliyor...")
 usdtry = fetch_evds("TP.DK.USD.A.YTL", fetch_start, fetch_end)
-tlref = fetch_evds("TP.BISTTLREF.ORAN", fetch_start, fetch_end)
-kredi = fetch_evds("TP.KTF101", fetch_start, fetch_end)
-mev_1m = fetch_evds("TP.TRYTAS.MT01", fetch_start, fetch_end)
-mev_3m = fetch_evds("TP.TRYTAS.MT02", fetch_start, fetch_end)
-mev_6m = fetch_evds("TP.TRYTAS.MT03", fetch_start, fetch_end)
-mev_12m = fetch_evds("TP.TRYTAS.MT04", fetch_start, fetch_end)
-print(f"  USD/TRY: {len(usdtry)}, TLREF: {len(tlref)}, Kredi: {len(kredi)}, "
-      f"Mevduat: {len(mev_1m)}/{len(mev_3m)}/{len(mev_6m)}/{len(mev_12m)}")
+tlref = fetch_evds_opt("TP.BISTTLREF.ORAN", fetch_start, fetch_end)
+kredi = fetch_evds_opt("TP.KTF101", fetch_start, fetch_end)
+mev_1m = fetch_evds_opt("TP.TRYTAS.MT01", fetch_start, fetch_end)
+mev_3m = fetch_evds_opt("TP.TRYTAS.MT02", fetch_start, fetch_end)
+mev_6m = fetch_evds_opt("TP.TRYTAS.MT03", fetch_start, fetch_end)
+mev_12m = fetch_evds_opt("TP.TRYTAS.MT04", fetch_start, fetch_end)
+print(f"  USD/TRY: {len(usdtry)}, TLREF: {0 if tlref is None else len(tlref)}, "
+      f"Kredi: {0 if kredi is None else len(kredi)}")
 
 usdtry_full = usdtry.asfreq("D").interpolate(method="time")
 business = usdtry_full[usdtry_full.index.dayofweek < 5]
 
+
+def deval_act365(s: pd.Series, n: int) -> pd.Series:
+    """Yıllıklandırılmış devalüasyon, ACT/365 takvim günü tabanı.
+
+    Pencere n GÖZLEM (iş günü) geriye gider; üs ise iki gözlem tarihinin
+    GERÇEK takvim günü farkı Δd üzerinden hesaplanır:
+        oran = (P_t / P_{t-n}) ** (365 / Δd) - 1
+    Sabit 252/n (iş günü) üssü kullanılmaz.
+    """
+    ratio = s / s.shift(n)
+    delta_d = pd.Series(s.index, index=s.index).diff(n).dt.days.astype(float)
+    return (ratio ** (365.0 / delta_d) - 1) * 100
+
+
 w_d, m_d, q_d = 5, 21, 63
-deval_1w = ((business / business.shift(w_d)) ** (252 / w_d) - 1) * 100
-deval_1m = ((business / business.shift(m_d)) ** (252 / m_d) - 1) * 100
-deval_3m = ((business / business.shift(q_d)) ** (252 / q_d) - 1) * 100
+deval_1w = deval_act365(business, w_d)
+deval_1m = deval_act365(business, m_d)
+deval_3m = deval_act365(business, q_d)
 
 C = {
     "deval_1w": "#eab308",
@@ -120,25 +147,22 @@ def build_figure(title: str, start: pd.Timestamp, clip_high: float):
     d3m = filt(deval_3m, start).clip(lower=-50, upper=clip_high)
 
     fig.add_trace(go.Scatter(
-        x=d1w.index, y=d1w.values, name="Devalüasyon 1H (Ann.)",
+        x=d1w.index, y=d1w.values, name="Deval 1H",
         line=dict(color=C["deval_1w"], width=1.2, dash="dot"),
         opacity=0.7,
-        legendgroup="d1w",
-        hovertemplate="<b>%{x|%d %b %Y}</b><br>1H Ann.: %{y:.1f}%<extra></extra>",
+        hovertemplate="<b>%{x|%d %b %Y}</b><br>1H (ACT/365): %{y:.1f}%<extra></extra>",
     ))
 
     fig.add_trace(go.Scatter(
-        x=d1m.index, y=d1m.values, name="Devalüasyon 1A (Ann.)",
+        x=d1m.index, y=d1m.values, name="Deval 1A",
         line=dict(color=C["deval_1m"], width=2.2),
-        legendgroup="d1m",
-        hovertemplate="<b>%{x|%d %b %Y}</b><br>1A Ann.: %{y:.1f}%<extra></extra>",
+        hovertemplate="<b>%{x|%d %b %Y}</b><br>1A (ACT/365): %{y:.1f}%<extra></extra>",
     ))
 
     fig.add_trace(go.Scatter(
-        x=d3m.index, y=d3m.values, name="Devalüasyon 3A (Ann.)",
+        x=d3m.index, y=d3m.values, name="Deval 3A",
         line=dict(color=C["deval_3m"], width=3),
-        legendgroup="d3m",
-        hovertemplate="<b>%{x|%d %b %Y}</b><br>3A Ann.: %{y:.1f}%<extra></extra>",
+        hovertemplate="<b>%{x|%d %b %Y}</b><br>3A (ACT/365): %{y:.1f}%<extra></extra>",
     ))
 
     for series, name, color, group in [
@@ -154,24 +178,25 @@ def build_figure(title: str, start: pd.Timestamp, clip_high: float):
             name=f"{name} ({slope * 30:+.1f}%/ay)",
             line=dict(color=color, width=1.8, dash="longdash"),
             opacity=0.85,
-            legendgroup=group,
             hovertemplate=f"<b>%{{x|%d %b %Y}}</b><br>{name}: %{{y:.2f}}%<extra></extra>",
         ))
 
-    tl = filt(tlref, start)
-    fig.add_trace(go.Scatter(
-        x=tl.index, y=tl.values, name="TLREF",
-        line=dict(color=C["tlref"], width=3.2),
-        hovertemplate="<b>%{x|%d %b %Y}</b><br>TLREF: %{y:.2f}%<extra></extra>",
-    ))
+    if tlref is not None:
+        tl = filt(tlref, start)
+        fig.add_trace(go.Scatter(
+            x=tl.index, y=tl.values, name="TLREF",
+            line=dict(color=C["tlref"], width=3.2),
+            hovertemplate="<b>%{x|%d %b %Y}</b><br>TLREF: %{y:.2f}%<extra></extra>",
+        ))
 
     buf = pd.Timedelta(days=14)
-    kr = filt(kredi, start - buf)
-    fig.add_trace(go.Scatter(
-        x=kr.index, y=kr.values, name="İhtiyaç Kredisi",
-        line=dict(color=C["kredi"], width=2),
-        hovertemplate="<b>%{x|%d %b %Y}</b><br>Kredi: %{y:.2f}%<extra></extra>",
-    ))
+    if kredi is not None:
+        kr = filt(kredi, start - buf)
+        fig.add_trace(go.Scatter(
+            x=kr.index, y=kr.values, name="İht. Kredisi",
+            line=dict(color=C["kredi"], width=2),
+            hovertemplate="<b>%{x|%d %b %Y}</b><br>Kredi: %{y:.2f}%<extra></extra>",
+        ))
 
     for series, name, key, dash in [
         (mev_1m, "Mevduat 1 Ay", "mev_1m", "solid"),
@@ -179,6 +204,8 @@ def build_figure(title: str, start: pd.Timestamp, clip_high: float):
         (mev_6m, "Mevduat 6 Ay", "mev_6m", "solid"),
         (mev_12m, "Mevduat 12 Ay", "mev_12m", "solid"),
     ]:
+        if series is None:
+            continue
         s = filt(series, start - buf)
         fig.add_trace(go.Scatter(
             x=s.index, y=s.values, name=name,
@@ -196,7 +223,7 @@ def build_figure(title: str, start: pd.Timestamp, clip_high: float):
                       layer="below")
         fig.add_trace(go.Scatter(
             x=[None], y=[None],
-            name="📍 İmamoğlu Tutuklanması (19.03.2025)",
+            showlegend=False, name="📍 İmamoğlu Tutuklanması (19.03.2025)",
             line=dict(color=C["imamoglu"], width=2.5, dash="dash"),
             mode="lines",
         ))
@@ -209,7 +236,7 @@ def build_figure(title: str, start: pd.Timestamp, clip_high: float):
                       layer="below")
         fig.add_trace(go.Scatter(
             x=[None], y=[None],
-            name="📍 İran-ABD Savaşı (28.02.2026)",
+            showlegend=False, name="📍 İran-ABD Savaşı (28.02.2026)",
             line=dict(color=C["iran"], width=2.5, dash="dash"),
             mode="lines",
         ))
@@ -236,7 +263,7 @@ def build_figure(title: str, start: pd.Timestamp, clip_high: float):
     )
 
     fig.update_yaxes(
-        title_text="<b>Oran (% Annualized)</b>",
+        title_text="<b>Oran (% yıllıklandırılmış, ACT/365)</b>",
         showgrid=True, gridcolor=C["grid_major"], gridwidth=1,
         minor=dict(showgrid=True, gridcolor=C["grid_minor"], gridwidth=0.5,
                    ticks="outside", ticklen=3),
@@ -264,10 +291,9 @@ def build_figure(title: str, start: pd.Timestamp, clip_high: float):
             yanchor="top", y=-0.20,
             xanchor="center", x=0.5,
             bgcolor="rgba(255,255,255,0.98)",
-            bordercolor="#cbd5e1",
-            borderwidth=1,
+            borderwidth=0,
             font=dict(size=11, color=C["text"]),
-            itemwidth=70,
+            itemwidth=30,
             traceorder="normal",
         ),
         margin=dict(l=80, r=80, t=55, b=170),
@@ -292,17 +318,15 @@ def build_segmented_trend_figure():
     d1m = deval_1m[(deval_1m.index >= seg_start) & (deval_1m.index <= seg_end)].clip(lower=-50, upper=200)
 
     fig.add_trace(go.Scatter(
-        x=d1w.index, y=d1w.values, name="Devalüasyon 1H (Ann.)",
+        x=d1w.index, y=d1w.values, name="Deval 1H",
         line=dict(color=C["deval_1w"], width=1.0, dash="dot"),
         opacity=0.45,
-        legendgroup="d1w_data",
         hovertemplate="<b>%{x|%d %b %Y}</b><br>1H: %{y:.1f}%<extra></extra>",
     ))
     fig.add_trace(go.Scatter(
-        x=d1m.index, y=d1m.values, name="Devalüasyon 1A (Ann.)",
+        x=d1m.index, y=d1m.values, name="Deval 1A",
         line=dict(color=C["deval_1m"], width=1.4),
         opacity=0.55,
-        legendgroup="d1m_data",
         hovertemplate="<b>%{x|%d %b %Y}</b><br>1A: %{y:.1f}%<extra></extra>",
     ))
 
@@ -332,7 +356,6 @@ def build_segmented_trend_figure():
                 x=idx, y=trend,
                 name=label_with_slope,
                 line=dict(color=color, width=3 if series_name == "1A" else 2.2, dash=dash),
-                legendgroup=group,
                 hovertemplate=f"<b>%{{x|%d %b %Y}}</b><br>{label_with_slope}<br>%{{y:.2f}}%<extra></extra>",
             ))
 
@@ -348,13 +371,13 @@ def build_segmented_trend_figure():
                   layer="below")
     fig.add_trace(go.Scatter(
         x=[None], y=[None],
-        name="📍 İmamoğlu (19.03.2025)",
+        showlegend=False, name="📍 İmamoğlu (19.03.2025)",
         line=dict(color=C["imamoglu"], width=2.5, dash="dash"),
         mode="lines",
     ))
     fig.add_trace(go.Scatter(
         x=[None], y=[None],
-        name="📍 İran-ABD Savaşı (28.02.2026)",
+        showlegend=False, name="📍 İran-ABD Savaşı (28.02.2026)",
         line=dict(color=C["iran"], width=2.5, dash="dash"),
         mode="lines",
     ))
@@ -378,7 +401,7 @@ def build_segmented_trend_figure():
     )
 
     fig.update_yaxes(
-        title_text="<b>Devalüasyon (% Annualized)</b>",
+        title_text="<b>Devalüasyon (% yıllıklandırılmış, ACT/365)</b>",
         showgrid=True, gridcolor=C["grid_major"], gridwidth=1,
         minor=dict(showgrid=True, gridcolor=C["grid_minor"], gridwidth=0.5,
                    ticks="outside", ticklen=3),
@@ -407,10 +430,9 @@ def build_segmented_trend_figure():
             yanchor="top", y=-0.20,
             xanchor="center", x=0.5,
             bgcolor="rgba(255,255,255,0.98)",
-            bordercolor="#cbd5e1",
-            borderwidth=1,
+            borderwidth=0,
             font=dict(size=11, color=C["text"]),
-            itemwidth=70,
+            itemwidth=30,
         ),
         margin=dict(l=80, r=80, t=70, b=180),
         height=560,
@@ -421,43 +443,26 @@ def build_segmented_trend_figure():
 
 fig_seg = build_segmented_trend_figure()
 
-html_parts = [
-    """<!DOCTYPE html>
-<html lang="tr">
-<head>
-<meta charset="UTF-8">
-<title>USDTRY Devalüasyon & Faiz Analizi</title>
-<style>
-  body { background: #f1f5f9; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
-         margin: 0; padding: 30px 20px; color: #1e293b; }
-  .container { max-width: 1500px; margin: 0 auto; }
-  h1 { text-align: center; font-size: 24px; margin: 0 0 8px 0; color: #0f172a; font-weight: 700; }
-  .subtitle { text-align: center; color: #64748b; font-size: 13px; margin-bottom: 30px; }
-  .fig-wrap { background: #ffffff; border-radius: 10px; padding: 16px;
-              margin-bottom: 24px; box-shadow: 0 2px 8px rgba(15,23,42,0.06); }
-  .footer { text-align: center; color: #94a3b8; font-size: 12px; margin-top: 20px; }
-</style>
-</head>
-<body>
-<div class="container">
-<h1>USDTRY Annualized Devalüasyon vs TLREF & Mevduat/Kredi Faizleri</h1>
-<p class="subtitle">Sol eksen: Devalüasyon (annualized %) · Sağ eksen: Faiz oranları (%) · Kaynak: TCMB EVDS API</p>
-"""]
+# Her figür ayrı, standart tek-figure HTML çıktısı (özel sarmalayıcı yok).
+# usdtry_deval.html = ana figür (Son 1 Yıl) → site/public/projeler/usdtry-deval/ altına kopyalanır.
+FIG_OUTPUTS = [
+    (fig_1y, "usdtry_deval.html"),
+    (fig_3m, "usdtry_deval_3m.html"),
+    (fig_6m, "usdtry_deval_6m.html"),
+    (fig_seg, "usdtry_deval_seg.html"),
+]
+for fig, fname in FIG_OUTPUTS:
+    path = os.path.join(BASE_DIR, fname)
+    fig.write_html(path, include_plotlyjs="cdn",
+                   config={"responsive": True, "displaylogo": False})
+    print(f"HTML kaydedildi: {path}")
 
-for fig in (fig_3m, fig_6m, fig_1y, fig_seg):
-    html_parts.append('<div class="fig-wrap">')
-    html_parts.append(pio.to_html(fig, full_html=False, include_plotlyjs="cdn",
-                                  config={"responsive": True, "displaylogo": False}))
-    html_parts.append('</div>')
-
-html_parts.append("""
-<p class="footer">USDTRY: TP.DK.USD.A.YTL · TLREF: TP.BISTTLREF.ORAN · Kredi: TP.KTF101 · Mevduat: TP.TRYTAS.MT01-04</p>
-</div></body></html>""")
-
-output_html = "/Users/tunatanozmen/Documents/aktif projeler/USDTRYDeval/usdtry_deval_plotly.html"
-with open(output_html, "w", encoding="utf-8") as f:
-    f.write("\n".join(html_parts))
-print(f"\nHTML kaydedildi: {output_html}")
+# Son değer özeti (log/rapor için)
+last_dt = deval_3m.dropna().index[-1]
+print(f"\nSon gözlem ({last_dt.date()}): "
+      f"1H {deval_1w.dropna().iloc[-1]:+.2f}% · "
+      f"1A {deval_1m.dropna().iloc[-1]:+.2f}% · "
+      f"3A {deval_3m.dropna().iloc[-1]:+.2f}%  (yıllıklandırılmış, ACT/365)")
 
 try:
     from PIL import Image
@@ -479,7 +484,7 @@ try:
         combined.paste(im, ((max_w - im.width) // 2, y))
         y += im.height + 20
 
-    output_png = "/Users/tunatanozmen/Documents/aktif projeler/USDTRYDeval/usdtry_deval_plotly.png"
+    output_png = os.path.join(BASE_DIR, "usdtry_deval_plotly.png")
     combined.save(output_png)
     print(f"Birlestirilmis PNG: {output_png}")
 except Exception as e:
