@@ -37,22 +37,35 @@
     </div>
 
     <div class="blok">
-      <p class="blok-baslik etiket">B · Gün bazlı forward (MPC tarzı)</p>
-      <div class="girdiler">
-        <label><span class="etiket">Başlangıç (gün)</span>
-          <input type="number" id="fw-g1" value="49" step="1" min="0" /></label>
-        <label><span class="etiket">Bitiş (gün)</span>
-          <input type="number" id="fw-g2" value="91" step="1" min="1" /></label>
+      <p class="blok-baslik etiket">B · İki tarih arası: zero &amp; forward (MPC tarzı)</p>
+      <div class="girdiler girdiler-tarih">
+        <label><span class="etiket">Değerleme tarihi</span>
+          <input type="date" id="fw-val" value="2026-04-24" /></label>
+        <label><span class="etiket">Tarih 1 (T₁)</span>
+          <input type="date" id="fw-d1" value="2026-06-12" /></label>
+        <label><span class="etiket">Tarih 2 (T₂)</span>
+          <input type="date" id="fw-d2" value="2026-07-24" /></label>
+      </div>
+      <div class="tarih-tablo">
+        <table>
+          <thead>
+            <tr><th></th><th>Gün</th><th>DF</th><th>Zero % (basit)</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>T₁</td><td id="fw-gun1">—</td><td id="fw-tdf1">—</td><td id="fw-z1">—</td></tr>
+            <tr><td>T₂</td><td id="fw-gun2">—</td><td id="fw-tdf2">—</td><td id="fw-z2">—</td></tr>
+          </tbody>
+        </table>
       </div>
       <div class="ciktilar">
-        <div><span class="etiket">Compound (TLREF konv.)</span><output class="ara-deger" id="fw-cmp">—</output></div>
-        <div><span class="etiket">Simple (kotasyon konv.)</span><output class="ara-deger" id="fw-smp">—</output></div>
+        <div><span class="etiket">Forward — compound (TLREF konv.)</span><output class="ara-deger" id="fw-cmp">—</output></div>
+        <div><span class="etiket">Forward — simple</span><output class="ara-deger" id="fw-smp">—</output></div>
         <div><span class="etiket">Fark</span><output class="ara-deger" id="fw-fark">—</output></div>
       </div>
       <p class="mini-not">
         İki PPK toplantısının effective tarihlerini girerseniz sonuç, o dönem için
-        piyasada fiyatlanan TLREF seviyesidir (MPC implied). Varsayılan: 12.06 → 24.07
-        dönemi (49. ve 91. günler).
+        piyasada fiyatlanan TLREF seviyesidir (MPC implied). Varsayılan: 12.06.2026 →
+        24.07.2026 dönemi. Değerleme tarihi, eğri anlık görüntüsünün günüdür.
       </p>
     </div>
   </div>
@@ -97,16 +110,31 @@
       yaz('fw-oran', 'T₂ > T₁ olmalı');
     }
 
-    // B — gün bazlı forward (compound & simple)
-    const g1 = oku('fw-g1'), g2 = oku('fw-g2');
-    if (g2 > g1) {
+    // B — iki tarih arası zero & forward (compound & simple)
+    const tarih = (id: string) =>
+      new Date((document.getElementById(id) as HTMLInputElement).value + 'T00:00:00');
+    const val = tarih('fw-val'), ta1 = tarih('fw-d1'), ta2 = tarih('fw-d2');
+    const gunFark = (a: Date, b: Date) => Math.round((b.getTime() - a.getTime()) / 86400000);
+    const g1 = gunFark(val, ta1), g2 = gunFark(val, ta2);
+    if (g1 > 0 && g2 > g1) {
       const d1 = df(g1 / 365), d2 = df(g2 / 365);
+      yaz('fw-gun1', String(g1));
+      yaz('fw-gun2', String(g2));
+      yaz('fw-tdf1', d1.toFixed(6));
+      yaz('fw-tdf2', d2.toFixed(6));
+      // zero (basit, ACT/365): tarihin kendisine kadar geçerli oran
+      yaz('fw-z1', tr(((1 / d1 - 1) * 365 / g1) * 100));
+      yaz('fw-z2', tr(((1 / d2 - 1) * 365 / g2) * 100));
       const gun = g2 - g1;
       const cmp = 365 * (Math.pow(d1 / d2, 1 / gun) - 1);
       const smp = ((d1 / d2 - 1) * 365) / gun;
       yaz('fw-cmp', '%' + tr(cmp * 100));
       yaz('fw-smp', '%' + tr(smp * 100));
       yaz('fw-fark', tr((smp - cmp) * 10000, 1) + ' bps');
+    } else {
+      yaz('fw-cmp', 'T₂ > T₁ > değerleme olmalı');
+      yaz('fw-smp', '—');
+      yaz('fw-fark', '—');
     }
   }
 
@@ -147,8 +175,14 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 0.7rem;
   }
-  .blok + .blok .girdiler {
-    grid-template-columns: 1fr 1fr;
+  .girdiler-tarih {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .tarih-tablo {
+    margin-top: 0.8rem;
+  }
+  .tarih-tablo table {
+    font-size: 0.8rem;
   }
   .ciktilar {
     display: flex;

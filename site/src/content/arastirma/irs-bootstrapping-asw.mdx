@@ -137,7 +137,7 @@ eğrisinin kısa ucunu çivilerken oynarlar. Bootstrap'ın girdisi 14 par pillar
 | 41,85 | 41,20 | 40,23 | 39,46 | 38,25 | 37,34 | 35,92 | 34,64 | 33,51 | 32,68 | 31,915 | 31,33 | 30,80 | 30,23 |
 
 Eğri ters (kısa uç yüksek): piyasa agresif indirim patikası fiyatlıyor. Ne kadarını,
-Bölüm 8'de sayıya döküyoruz.
+Bölüm 9'da sayıya döküyoruz.
 
 ## Bölüm 4 — Bootstrap: par denkleminden Newton polinomuna
 
@@ -339,7 +339,7 @@ MPC1 silinir, sıradaki toplantı MPC1 olur. Senaryo/piyasa ayrımı her koloncl
 $MPC_{scen}$ Daily Path CumDF'lerinden (kullanıcı sıçramaları dahil), $MPC_{mkt}$
 salt pillar eğrisinden.
 
-## Bölüm 8 — Daily TLREF Path ve fiyatlamanın motoru
+## Bölüm 8 — Daily TLREF Path: fiyatlamanın motoru
 
 Daily TLREF Path sayfası 10 yılın **her günü** için (3652 satır) o gün geçerli TLREF'i
 ve kümülatif DF'yi tutar:
@@ -355,7 +355,9 @@ Bütün kuponlu fiyatlamalar DF'yi buradan `VLOOKUP` ile okur — "TLREF'i elle 
 yürütmek" işleminin otomatiği. Üçüncü tutarlılık kontrolü de buradadır: günlük patika
 DF'si ↔ toplantı tablosu DF'si ↔ OIS pillar DF'si üçü uyuşmalıdır.
 
-### Par swap, gerçek takvimle
+## Bölüm 9 — Par swap, forward swap ve eğri spread'leri
+
+### 9.1 Par swap, gerçek takvimle
 
 Trade Ideas bölümü par oranı ideal grid'le değil **gerçek kupon takvimiyle** hesaplar:
 kupon tarihleri `WORKDAY(EDATE(spot,3i)−1, 1, tatiller)`, $\tau_i$ gerçek gün/365
@@ -370,7 +372,7 @@ $R = \%39{,}39$; Bloomberg girdisi %39,46 ile fark ~1 bps — takvim ve interpol
 artığı. Bu tablo scen/mkt sütunlarıyla çiftlidir: senaryo girince spread sütunu
 "benim patikam piyasadan kaç bps farklı fiyatlıyor" sorusunu tenor tenor yanıtlar.
 
-### Forward matris ve DV01
+### 9.2 Forward starting swap: matris ve DV01
 
 Forward swap $T_1$'de başlar, $T_2$'de biter; par denkleminin tek değişen yeri sağ taraftır:
 
@@ -402,7 +404,39 @@ Okuma: spot 1Y %39,46 iken 1Y×1Y %34,25 — piyasa bir yılda ~520 bps'lik gev�
 ortam fiyatlıyor; 5Y×5Y %19,20 uzun vadeli "normalleşme" çıpası. DV01 sütunu pozisyon
 boyutlandırmanın ilk sorusudur: 1Y×9Y'de 1 mn nominal, bp başına 221 TL oynar.
 
-### Eğri spread'leri
+### 9.3 İki tarih arasındaki zero ve forward oran
+
+Masada en sık yapılan mikro-hesap: eğriden **herhangi iki takvim tarihi** arasındaki
+oranı okumak. Üç adımdır ve tamamı Bölüm 2 ile Bölüm 5'in birleşimidir:
+
+1. Her tarihin gün sayısını al: $d_i = \text{tarih}_i - \text{değerleme}$.
+2. Her tarih için DF'yi grid'den log-linear interp ile çek (Bölüm 5).
+   Tarihin kendi **zero oranı** basit konvansiyonla buradan çıkar:
+   $R_s(d) = \left(\frac{1}{DF}-1\right)\frac{365}{d}$.
+3. İki tarih arasındaki **forward** — TLREF konvansiyonunda bileşik:
+
+$$
+F[d_1,d_2] = 365\left[\left(\frac{DF(d_1)}{DF(d_2)}\right)^{\frac{1}{d_2-d_1}}-1\right]
+$$
+
+**Pratik — 12.06.2026 → 24.07.2026** (val 24.04.2026; iki PPK effective tarihi,
+49. ve 91. günler). Varsayılan eğriden:
+
+| | Gün | DF | Zero % (basit) |
+| --- | --- | --- | --- |
+| 12.06.2026 | 49 | 0,947969 | 40,88 |
+| 24.07.2026 | 91 | 0,905531 | 41,84 |
+
+$$
+F = 365\left[\left(\frac{0{,}947969}{0{,}905531}\right)^{1/42}-1\right] = \%39{,}82
+\qquad (F_{basit} = \%40{,}73)
+$$
+
+Bu, MPC1 implied'ın ta kendisidir: piyasa, ilk toplantı sonrası dönem için ortalama
+~%39,8 TLREF fiyatlıyor — mevcut politika faizinin altında, yani ilk toplantıya indirim
+fiyatlanmış. Aynı hesabı aşağıdaki aracın B bloğunda herhangi iki tarihle yapabilirsiniz.
+
+### 9.4 Eğri spread'leri
 
 Aynı eğriden strateji masasının baktığı makaslar (mkt, bps):
 3M/6M **−89** · 6M/1Y **−164** · 1Y/2Y **−214** · 2Y/5Y **−380** · 2Y/10Y **−706** ·
@@ -410,16 +444,16 @@ Aynı eğriden strateji masasının baktığı makaslar (mkt, bps):
 inversiyonu, TL eğrisinin dikliğini tek sayıda özetler; senaryo sütunu, kendi PPK
 patikanızın bu makasları kaç bps oynatacağını gösterir.
 
-## Bölüm 9 — Deneyin: forward ve MPC
+## Bölüm 10 — Deneyin: forward, MPC ve iki tarih arası oran
 
 <ForwardMpcHesaplayici />
 
-## Bölüm 10 — Swaption: eğrinin üstüne volatilite katmanı
+## Bölüm 11 — Swaption: eğrinin üstüne volatilite katmanı
 
 Swaption Pricer sayfası eğriyi opsiyon dünyasına bağlar. Örnek trade: **1Y expiry ×
 2Y tenor payer, K = %35, nominal 10 mn TL, Black vol %25.**
 
-### 10.1 Dayanak: forward swap oranı
+### 11.1 Dayanak: forward swap oranı
 
 $$
 F = \frac{DF(T_{exp}) - DF(T_{mat})}{A},
@@ -429,7 +463,7 @@ $$
 Örnekte $A = 0{,}9723$, $DF_{exp}-DF_{mat} = 0{,}3203$ → $F = \%32{,}94$.
 Strike %35'in altında: payer için OTM ($K-F = +206$ bps).
 
-### 10.2 Black modeli (TL piyasa konvansiyonu)
+### 11.2 Black modeli (TL piyasa konvansiyonu)
 
 $$
 d_1 = \frac{\ln(F/K) + \sigma^2 T/2}{\sigma\sqrt{T}},\quad d_2 = d_1 - \sigma\sqrt{T}
@@ -444,7 +478,7 @@ $$
 **Pratik:** $d_1 = -0{,}118$, $d_2 = -0{,}368$, $N(d_1)=0{,}4530$, $N(d_2)=0{,}3564$ →
 prim $= 0{,}023786$ (decimal) $= \mathbf{237.864\ TL}$.
 
-### 10.3 Bachelier modeli (normal, karşılaştırma)
+### 11.3 Bachelier modeli (normal, karşılaştırma)
 
 $$
 d = \frac{F-K}{\sigma_N\sqrt{T}},\qquad
@@ -469,7 +503,7 @@ Black'tir; Bachelier düşük/negatif faiz piyasalarının aracıdır.
   aynı değerlere döner.
 </div>
 
-### 10.4 Greeks
+### 11.4 Greeks
 
 | Greek | Formül | Örnek değer | Okunuşu |
 | --- | --- | --- | --- |
@@ -480,7 +514,7 @@ Black'tir; Bachelier düşük/negatif faiz piyasalarının aracıdır.
 | Vanna | $-n(d_1)\,d_2/\sigma \cdot A$ | 0,567 | skew duyarlılığı |
 | Volga | $\text{Vega}\; d_1 d_2/\sigma$ | 0,0220 | vol-of-vol dışbükeyliği |
 
-### 10.5 Implied vol: fiyattan σ'ya
+### 11.5 Implied vol: fiyattan σ'ya
 
 Piyasa primi gözlenir, vol geri çözülür — yine Newton-Raphson, bu kez vega türev olarak:
 
@@ -491,7 +525,7 @@ $$
 **Pratik:** $P_{mkt}=0{,}015$, $\sigma_0=0{,}25$ → 0,1817 → 0,1802 → 0,18009:
 üç adımda **%18,01**. Bootstrap'taki çözücüyle aynı iskelet — bir kez öğren, her yerde kullan.
 
-### 10.6 P&L takibi ve Greek atribüsyonu
+### 11.6 P&L takibi ve Greek atribüsyonu
 
 Pozisyon MTM'i parçalara ayrılır:
 $\Delta P\&L \approx \text{Delta}\cdot\Delta F + \text{Vega}\cdot\Delta\sigma + \text{Theta}\cdot\Delta t + \text{artık}$.
@@ -500,7 +534,7 @@ MTM +87.864 TL; ama delta katkısı **−126.107**, theta **−13.218**, artık 
 Ders: bu büyüklükte harekette birinci derece Greek ayrışması çöker — gamma/vanna
 katkısı artığa düşer. Kural: artık MTM'in %5'ini aşıyorsa tam yeniden değerleme yap.
 
-### 10.7 Vol grid ve smile yaklaşımı
+### 11.7 Vol grid ve smile yaklaşımı
 
 Tek ATM vol yetmezse basit parabolik yaklaşım:
 $\sigma(K) = \sigma_{ATM} + \alpha\left(K/F-1\right) + \beta\left(K/F-1\right)^2$
@@ -513,12 +547,12 @@ edilir; model bunu açıkça "scenario DF kullanıyorum" diye işaretler.
 
 <SwaptionHesaplayici />
 
-## Bölüm 11 — Uygulama: tahvil tarafı ve ASW
+## Bölüm 12 — Uygulama: tahvil tarafı ve ASW
 
 > Bu bölümün sayısal örneği 06.05.2026 tarihli `ASW_Calculator` görüntüsünden gelir
 > (24.04 eğrisiyle karıştırmayın — YTM ile eğri aynı güne ait olmalıdır).
 
-### 11.1 Kupon, işlemiş faiz, kirli fiyat
+### 12.1 Kupon, işlemiş faiz, kirli fiyat
 
 Örnek: **TRT051033T12** — vade 05.10.2033, kupon %26,20 (6 ayda bir 13,10),
 temiz fiyat 82,700, YTM %32,20, değerleme 06.05.2026 (son kupon 14.04.2026, 22 gün önce).
@@ -535,13 +569,13 @@ Fiyat-getiri-durasyon sezgisi için:
 
 <TahvilHesaplayici />
 
-### 11.2 Asset swap yapısı
+### 12.2 Asset swap yapısı
 
 Tahvili al, kuponlarını swap'ın sabit bacağına devret, karşılığında **TLREF + ASW** al:
 sentetik FRN. Kupon riski swap'a gider; kalan tek şey tahvilin eğriye göre ucuzluğudur.
 ASW > 0 → ucuz, < 0 → pahalı, ≈ 0 → adil.
 
-### 11.3 Bloomberg'in TR metriği ve hesap
+### 12.3 Bloomberg'in TR metriği ve hesap
 
 TR Hazine tahvilleri için terminal, klasik par-ASW yerine yalın metriği gösterir:
 
@@ -576,7 +610,7 @@ aynı eğriden hesaplar.
 
 <AswHesaplayici />
 
-## Bölüm 12 — Pratik notlar: şeytan detayda
+## Bölüm 13 — Pratik notlar: şeytan detayda
 
 - **Day count:** her yerde ACT/365 (artık yılda da). ACT/360 veya 30/360 TL'de kullanılmaz.
 - **İş günü:** `WORKDAY` + 68 TR tatili; kupon üretimi `WORKDAY(EDATE(spot,3i)−1, 1, tatiller)`.
