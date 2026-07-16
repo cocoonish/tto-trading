@@ -36,6 +36,7 @@ CLARET = "#8e1f2f"    # negatif / bearish
 INK = "#1a1a1a"
 GRID = "#e8e4dc"
 GRI = "#90a4ae"
+GOLD = "#9a7327"   # vurgu (ev stili)
 
 # Kategori esikleri (config.SENTIMENT_THRESHOLDS ile ayni: +-0.3 / +-0.7)
 ESIK_1 = 0.3
@@ -773,6 +774,184 @@ def ciz_fiyat_endeks(cikti_yolu, seriler=None):
     return cikti_yolu
 
 
+def ciz_rejim_tarihce(seriler, cikti_yolu):
+    """Rejim bilesenlerinin TARIHCESI: sepet spread'i (+ rejim bantlari),
+    yon-birlestirilmis ortalama korelasyon ve PC1 faktor serisi — 3 panel."""
+    from plotly.subplots import make_subplots
+    import regime_detector
+
+    sonuc = regime_detector.compute_regime(seriler)
+    spread = sonuc["basket_spread_series"].dropna()
+    kor = sonuc["avg_corr_series"].dropna()
+    pc1 = sonuc["pc1_series"].dropna()
+
+    fig = make_subplots(
+        rows=3, cols=1, shared_xaxes=True, vertical_spacing=0.07,
+        subplot_titles=("Risk-Off sepet spread'i (20g, yön-birleştirilmiş)",
+                        "Ortalama çapraz duyarlılık korelasyonu (20g, yön-birleştirilmiş)",
+                        "PC1 — piyasa geneli duyarlılık faktörü (60g)"))
+
+    t = config.REGIME_THRESHOLDS
+    fig.add_trace(go.Scatter(x=spread.index, y=spread.values, mode="lines",
+                             name="Sepet spread", line=dict(color=INK, width=1.8),
+                             hovertemplate="%{x|%d.%m.%Y}<br>spread: %{y:+.3f}<extra></extra>"),
+                  row=1, col=1)
+    fig.add_hline(y=t["risk_off"], line_dash="dot", line_color=CLARET,
+                  annotation_text="Risk-Off eşiği", annotation_font_size=10, row=1, col=1)
+    fig.add_hline(y=t["risk_on"], line_dash="dot", line_color=TEAL,
+                  annotation_text="Risk-On eşiği", annotation_font_size=10, row=1, col=1)
+    fig.add_hrect(y0=t["risk_off"], y1=max(float(spread.max()), t["risk_off"]) + 0.05,
+                  fillcolor=CLARET, opacity=0.06, line_width=0, row=1, col=1)
+    fig.add_hrect(y0=min(float(spread.min()), t["risk_on"]) - 0.05, y1=t["risk_on"],
+                  fillcolor=TEAL, opacity=0.06, line_width=0, row=1, col=1)
+
+    fig.add_trace(go.Scatter(x=kor.index, y=kor.values, mode="lines",
+                             name="Ort. korelasyon", line=dict(color=GOLD, width=1.8),
+                             hovertemplate="%{x|%d.%m.%Y}<br>ort. korelasyon: %{y:+.3f}<extra></extra>"),
+                  row=2, col=1)
+    fig.add_hline(y=0, line_color=GRID, row=2, col=1)
+
+    fig.add_trace(go.Scatter(x=pc1.index, y=pc1.values, mode="lines",
+                             name="PC1 skoru", line=dict(color=TEAL, width=1.8),
+                             hovertemplate="%{x|%d.%m.%Y}<br>PC1: %{y:+.3f}<extra></extra>"),
+                  row=3, col=1)
+    fig.add_hline(y=0, line_color=GRID, row=3, col=1)
+
+    _ortak_stil(fig, "Rejim bileşenlerinin tarihçesi")
+    fig.update_layout(height=760, showlegend=False,
+                      margin=dict(l=60, r=30, t=70, b=50))
+    fig.write_html(cikti_yolu, include_plotlyjs="cdn")
+    return cikti_yolu
+
+
+def ciz_korelasyon_matrisi(seriler, cikti_yolu):
+    """Capraz duyarlilik korelasyon isi haritasi (son 20 gun,
+    yon-birlestirilmis matris; terslenen varliklar * ile isaretli)."""
+    import regime_detector
+
+    sonuc = regime_detector.compute_regime(seriler)
+    hm = sonuc["heatmap"]
+    etiket = [(_gorunen_ad(k) + (" *" if k in config.PC1_INVERT_ASSETS else ""))
+              for k in hm.columns]
+
+    fig = go.Figure(go.Heatmap(
+        z=hm.values.round(2), x=etiket, y=etiket,
+        colorscale=[[0, CLARET], [0.5, "#ffffff"], [1, TEAL]],
+        zmin=-1, zmax=1, text=hm.values.round(2), texttemplate="%{text}",
+        textfont=dict(size=9), colorbar=dict(title="r"),
+        hovertemplate="%{y} × %{x}: %{z:+.2f}<extra></extra>"))
+    _ortak_stil(fig, "Çapraz duyarlılık korelasyonları — son 20 gün")
+    fig.update_layout(height=640, margin=dict(l=110, r=40, t=70, b=110))
+    fig.add_annotation(x=0, y=-0.22, xref="paper", yref="paper", showarrow=False,
+                       xanchor="left", font=dict(size=11, color=GRI),
+                       text="* USD-bazlı parite terslenmiştir (ortak makro yön: USD zayıf = pozitif)")
+    fig.write_html(cikti_yolu, include_plotlyjs="cdn")
+    return cikti_yolu
+
+
+def ciz_yuvarlanan_korelasyon(seriler, cikti_yolu):
+    """Varlik basina YUVARLANAN 20 gunluk korelasyon: gunluk duyarlilik
+    vs izleyen 5 is gunu getirisi — sinyal gucunun zamana yayilimi."""
+    import pandas as pd
+    import yfinance as yf
+
+    fig = go.Figure()
+    varliklar = []
+    for anahtar, seri in seriler.items():
+        ticker = config.ASSETS[anahtar]["ticker"]
+        try:
+            bas = (seri.index.min() - pd.Timedelta(days=5)).strftime("%Y-%m-%d")
+            son = (seri.index.max() + pd.Timedelta(days=15)).strftime("%Y-%m-%d")
+            fdf = yf.download(ticker, start=bas, end=son, auto_adjust=True, progress=False)
+        except Exception:
+            continue
+        if fdf is None or fdf.empty:
+            continue
+        if isinstance(fdf.columns, pd.MultiIndex):
+            fdf.columns = fdf.columns.get_level_values(0)
+        kapanis = fdf["Close"].ffill()
+        ileri5 = kapanis.shift(-5) / kapanis - 1.0
+        birlesik = pd.DataFrame({"duy": seri}).join(ileri5.rename("get"), how="inner").dropna()
+        if len(birlesik) < 40:
+            continue
+        yuv = birlesik["duy"].rolling(20).corr(birlesik["get"]).dropna()
+        gorunur = len(varliklar) == 0
+        fig.add_trace(go.Scatter(
+            x=yuv.index, y=yuv.values, mode="lines",
+            name=_gorunen_ad(anahtar), line=dict(color=TEAL, width=1.8),
+            hovertemplate="%{x|%d.%m.%Y}<br>20g korelasyon: %{y:+.3f}<extra></extra>",
+            visible=gorunur))
+        varliklar.append(anahtar)
+
+    if not varliklar:
+        raise ValueError("Yuvarlanan korelasyon icin veri yok")
+
+    dugmeler = []
+    for i, anahtar in enumerate(varliklar):
+        gorunurluk = [False] * len(varliklar)
+        gorunurluk[i] = True
+        dugmeler.append(dict(label=_gorunen_ad(anahtar), method="update",
+                             args=[{"visible": gorunurluk}]))
+
+    _ortak_stil(fig, "Yuvarlanan duyarlılık-getiri korelasyonu (20 gün)")
+    fig.update_layout(
+        height=480,
+        updatemenus=[dict(buttons=dugmeler, direction="down",
+                          x=0.99, xanchor="right", y=1.14, yanchor="top",
+                          bgcolor="#ffffff", bordercolor=GRID,
+                          font=dict(size=12, color=INK))],
+        margin=dict(l=60, r=30, t=70, b=50), showlegend=False)
+    fig.add_hline(y=0, line_color=INK, line_width=0.8, opacity=0.35)
+    fig.update_yaxes(title_text="Pearson r (20 günlük pencere)", range=[-1, 1])
+    fig.write_html(cikti_yolu, include_plotlyjs="cdn")
+    return cikti_yolu
+
+
+def ciz_son_mansetler(cikti_yolu, adet=40):
+    """Son manşetler tablosu: varlık, başlık, FinBERT skoru, kaynak, tarih."""
+    import sentiment_analyzer
+
+    satirlar = []
+    for anahtar in config.ASSETS:
+        makaleler = sentiment_analyzer.load_scores(anahtar) or []
+        for m in makaleler:
+            if "score" not in m:
+                continue
+            satirlar.append({
+                "varlik": _gorunen_ad(anahtar),
+                "baslik": (m.get("title") or "")[:110],
+                "skor": float(m["score"]),
+                "kaynak": m.get("source", ""),
+                "tarih": (m.get("published") or "")[:16].replace("T", " "),
+            })
+    if not satirlar:
+        raise ValueError("Skorlanmis manset bulunamadi")
+    satirlar.sort(key=lambda r: r["tarih"], reverse=True)
+    satirlar = satirlar[:adet]
+
+    renkler = [TEAL if r["skor"] > 0.05 else (CLARET if r["skor"] < -0.05 else GRI)
+               for r in satirlar]
+    fig = go.Figure(go.Table(
+        columnwidth=[16, 60, 10, 14],
+        header=dict(values=["<b>Varlık</b>", "<b>Başlık</b>", "<b>Skor</b>", "<b>Tarih</b>"],
+                    fill_color=INK, font=dict(color="#f5f0e6", size=12), align="left",
+                    height=30),
+        cells=dict(
+            values=[[r["varlik"] for r in satirlar],
+                    [r["baslik"] for r in satirlar],
+                    [f"{r['skor']:+.3f}" for r in satirlar],
+                    [r["tarih"] for r in satirlar]],
+            align="left", height=26,
+            fill_color="#ffffff",
+            font=dict(size=11.5, color=[[INK] * len(satirlar), [INK] * len(satirlar),
+                                        renkler, [GRI] * len(satirlar)]))))
+    _ortak_stil(fig, f"Son {len(satirlar)} manşet ve FinBERT skorları")
+    fig.update_layout(height=30 + 30 + 26 * len(satirlar) + 90,
+                      margin=dict(l=20, r=20, t=60, b=20))
+    fig.write_html(cikti_yolu, include_plotlyjs="cdn")
+    return cikti_yolu
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # Uretim akisi
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -819,6 +998,20 @@ def uret(cikti_dizini=None, rejim=None):
             os.path.join(hedef, "fiyat_endeks.html"), seriler=matris))
     except Exception as exc:
         print(f"UYARI: fiyat_endeks.html uretilemedi: {exc}")
+
+    if matris:
+        for ad, fn in [("rejim_tarihce.html", ciz_rejim_tarihce),
+                       ("korelasyon_matrisi.html", ciz_korelasyon_matrisi),
+                       ("yuvarlanan_korelasyon.html", ciz_yuvarlanan_korelasyon)]:
+            try:
+                yollar.append(fn(matris, os.path.join(hedef, ad)))
+            except Exception as exc:
+                print(f"UYARI: {ad} uretilemedi: {exc}")
+
+    try:
+        yollar.append(ciz_son_mansetler(os.path.join(hedef, "son_mansetler.html")))
+    except Exception as exc:
+        print(f"UYARI: son_mansetler.html uretilemedi: {exc}")
 
     try:
         yol, _ = ciz_duyarlilik_getiri(os.path.join(hedef, "duyarlilik_getiri.html"))

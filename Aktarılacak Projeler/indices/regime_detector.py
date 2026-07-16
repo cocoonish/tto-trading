@@ -33,6 +33,11 @@ def compute_basket_spread(
     Risk-Off spread = avg(safe haven sentiments) - avg(risk asset sentiments).
     Positive = risk-off (safe havens bullish, risk assets bearish).
     Negative = risk-on (risk assets bullish).
+
+    NOT: sentiment_df YON-BIRLESTIRILMIS matris olmalidir (unify_direction=True).
+    Guvenli liman sepetindeki USDJPY/USDCHF paritelerinde ham seri USD yonunu
+    olcer; yen/frank gucu (klasik risk-off) ancak terslenmis seriyle dogru
+    isarete oturur. Ham matrisle bu iki bacak spread'i tersine kirletir.
     """
     if window is None:
         window = config.REGIME_WINDOW
@@ -66,7 +71,13 @@ def compute_average_correlation(
     sentiment_df: pd.DataFrame,
     window: int = None,
 ) -> pd.Series:
-    """Average pairwise correlation (kept for heatmap display)."""
+    """Average pairwise correlation.
+
+    NOT: sentiment_df YON-BIRLESTIRILMIS matris olmalidir. Ham matriste
+    USD-bazli paritelerin makro yonu ters oldugundan pozitif/negatif
+    korelasyonlar birbirini goturur ve ortalama yapisal olarak ~0 cikar —
+    tema konsantrasyonu gorunmez olur. (16.07.2026 duzeltmesi)
+    """
     if window is None:
         window = config.REGIME_WINDOW
     n_assets = len(sentiment_df.columns)
@@ -126,29 +137,31 @@ def compute_regime(
     if window is None:
         window = config.REGIME_WINDOW
 
-    # Raw matrix for basket spread and correlation heatmap
+    # YON-BIRLESTIRILMIS matris (USDXXX terslenir): spread, korelasyon ve PCA
+    # ucu de bu matrisi kullanir. Gerekce: USDJPY bullish = yen zayif; guvenli
+    # liman okumasi ve capraz korelasyon ancak ortak makro yonde anlamlidir.
+    # (16.07.2026 duzeltmesi — onceden spread ve korelasyon ham matristeydi)
     sent_df = build_sentiment_matrix(all_sentiment_series, unify_direction=False)
-    # Unified direction matrix for PC1 (USDXXX inverted so positive = risk-on)
     sent_df_unified = build_sentiment_matrix(all_sentiment_series, unify_direction=True)
 
-    # Basket spread (primary regime signal) — uses raw directions
-    basket_spread = compute_basket_spread(sent_df, window)
+    # Basket spread (primary regime signal) — unified directions
+    basket_spread = compute_basket_spread(sent_df_unified, window)
 
-    # Average correlation (for heatmap display)
-    avg_corr_series = compute_average_correlation(sent_df, window)
+    # Average correlation — unified directions
+    avg_corr_series = compute_average_correlation(sent_df_unified, window)
 
-    # PCA — uses unified direction (USDXXX inverted)
+    # PCA — unified direction (USDXXX inverted)
     pc1_series = compute_pca_sentiment(sent_df_unified)
 
     # Current regime
     current_spread = float(basket_spread.iloc[-1]) if len(basket_spread) > 0 else 0.0
     current_regime = classify_regime(current_spread)
 
-    # Heatmap
-    if len(sent_df) >= window:
-        heatmap = sent_df.iloc[-window:].corr()
+    # Heatmap — yon-birlestirilmis (USDXXX etiketlerinde terslendigi belirtilmeli)
+    if len(sent_df_unified) >= window:
+        heatmap = sent_df_unified.iloc[-window:].corr()
     else:
-        heatmap = sent_df.corr()
+        heatmap = sent_df_unified.corr()
 
     # Regime history from basket spread
     regime_history = basket_spread.apply(classify_regime) if len(basket_spread) > 0 else pd.Series(dtype=str)

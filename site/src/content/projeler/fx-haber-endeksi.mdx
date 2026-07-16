@@ -1,8 +1,8 @@
 ---
 title: 'FX Haber-Duyarlılık Endeksi'
-description: 'G10 pariteleri için FinBERT ile skorlanan haber akışından duyarlılık endeksi: zaman-azalımlı ağırlıklar, rejim tespiti ve getiri korelasyonuna göre optimize edilen parametreler.'
+description: 'FinBERT ile skorlanan haber akışından 15 varlıklık duyarlılık endeksi: kullanım kılavuzu, rejim dedektörü, fiyat karşılaştırması, korelasyon analizi ve manşet akışı.'
 pubDate: 2026-07-15
-updatedDate: 2026-07-15
+updatedDate: 2026-07-16
 tags: ['fx', 'sentiment', 'nlp']
 durum: 'aktif'
 kaynak: 'GDELT + Google News RSS + piyasa verisi'
@@ -11,12 +11,43 @@ guncelleme: 'günlük — her koşuda grafikler otomatik yenilenir'
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
 
-Fiyat haberden önce mi hareket eder, sonra mı? Bu proje soruyu ölçülebilir hale
-getirir: dokuz majör parite (EUR/USD, USD/JPY, USD/CHF, GBP/USD, AUD/USD, NZD/USD,
-USD/CAD, USD/NOK, USD/SEK) ve altı ek enstrüman (altın, gümüş, S&P 500, UST 2Y/10Y,
-BIST 100) için haber akışını toplar, finans-özel bir dil modeliyle skorlar ve varlık
-başına tek bir **duyarlılık endeksi** üretir. Pipeline artık her koşuda aşağıdaki
-grafikleri de kendisi üretir — Streamlit paneli statik siteye taşındı.
+Fiyat haberden önce mi hareket eder, sonra mı? Bu proje soruyu ölçülebilir hale getirir:
+dokuz majör parite ve altı ek enstrüman (altın, gümüş, S&P 500, UST 2Y/10Y, BIST 100)
+için haber akışını toplar, finans-özel bir dil modeliyle skorlar ve varlık başına tek
+bir **duyarlılık endeksi** üretir. Bu sayfa, projenin Streamlit panelindeki *bütün*
+katmanları içerir ve her birinin nasıl okunacağını anlatır.
+
+## Bu sayfa nasıl kullanılır? (iş akışı)
+
+Endeks tek başına bir al-sat sinyali değildir; katmanlar belirli bir sırayla okunur:
+
+1. **Hava durumuyla başla** — Şekil 06-07 (rejim): akış Risk-On mu, Risk-Off mu?
+   Rejim, tekil sinyallerin bağlamıdır: Risk-Off'ta riskli parite alım sinyali iskonto edilir.
+2. **Son okumaya bak** — Şekil 01: hangi varlıkta ton aşırı? ±0,7'yi aşan değerler
+   (Aşırı Alıcı/Satıcı) ya güçlü momentum ya doygunluk demektir; tek gün değil,
+   Şekil 02'deki bant geçişleriyle birlikte değerlendirilir.
+3. **Fiyatla hizala** — Şekil 03: duyarlılık kümesi fiyat kırılımından önce mi
+   geliyordu? Varlık bazında bu görsel teyit, sinyale güvenin ilk filtresidir.
+4. **İstatistiksel güveni ölç** — Şekil 04 (saçılım) o varlıkta ilişkinin genel gücünü,
+   Şekil 05 (yuvarlanan korelasyon) ilişkinin *şu sıralar* çalışıp çalışmadığını verir.
+   Korelasyonun rejimle birlikte kaybolduğu dönemler normaldir — pozisyon boyutu buna göre.
+5. **Manşetleri doğrula** — Şekil 10: skoru süren gerçek başlıklar ne diyor? Tek
+   kaynaklı/klikbait kümeleri elle ayıklamanın yeri burasıdır.
+
+## Sözlük: bu projede ne nedir?
+
+| Terim | Tanım | Nasıl okunur |
+| --- | --- | --- |
+| Makale skoru | Tek başlığın FinBERT çıktısı, $[-1,+1]$ | +0,8 = güçlü olumlu ton; tahvillerde ("faiz inecek" = fiyat pozitif) alımda terslenmiş |
+| Endeks değeri | Varlığın ağırlıklı toplulaştırılmış skoru | −0,3/+0,3 arası gürültü bandı |
+| Kategori | Eşiklenmiş etiket: ±0,3 Alıcı/Satıcı, ±0,7 Aşırı | seviye değil *bant geçişi* sinyaldir |
+| Yön birleştirme | USD-bazlı paritelerin (USDJPY, USDCHF…) terslenmesi | çapraz-varlık hesapların ortak makro yönü (USD zayıf = pozitif) |
+| Sepet spread'i | güv. liman − risk sepeti ort. duyarlılığı (20g) | > +0,15 Risk-Off · < −0,10 Risk-On |
+| Ort. korelasyon | tüm varlık çiftlerinin 20g duyarlılık korelasyon ort. | yüksek = tek tema piyasayı ele geçirmiş |
+| PC1 | duyarlılık matrisinin birinci temel bileşeni | ortak faktörün gücü/yönü |
+| Optimizasyon korelasyonu | endeks ↔ 5g ileri getiri ilişkisinin in-sample gücü | model karnesi; canlı performans değil |
+
+## Şekil 01 — Son okuma
 
 <GrafikEmbed
   src="/projeler/fx-haber-endeksi/endeks_son.html"
@@ -25,14 +56,11 @@ grafikleri de kendisi üretir — Streamlit paneli statik siteye taşındı.
   yukseklik={560}
 />
 
-## Şekil 01 nasıl hesaplanıyor?
+Son pipeline koşusunun endeks değerleri, sıralı yatay bar: pozitifler teal, negatifler
+bordo; etiket kategori eşiklerinden. Son okumada uçlar: altın **+0,29** (Alıcı) bir
+yanda, USD/NOK **−0,86** ve BIST 100 −0,74 (Aşırı Satıcı) diğer yanda.
 
-Son pipeline koşusunun (15.07.2026) endeks değerleri, değere göre sıralı yatay bar:
-pozitifler yeşil-teal (alıcı), negatifler bordo (satıcı); bar ucundaki etiket kategori
-eşiklerinden gelir — |değer| ≥ 0,3 Alıcı/Satıcı, ≥ 0,7 Aşırı. Son okumada uçlar:
-altın **+0,29** (Alıcı) ve NZD/USD +0,15 bir yanda; USD/NOK **−0,86** ve BIST 100
-−0,74 (Aşırı Satıcı) diğer yanda. Değerin kendisi, aşağıda anlatılan ağırlıklı
-toplulaştırmanın $[-1,+1]$ aralığındaki çıktısıdır.
+## Şekil 02 — Endeks tarihçesi
 
 <GrafikEmbed
   src="/projeler/fx-haber-endeksi/endeks_tarihce.html"
@@ -41,28 +69,21 @@ toplulaştırmanın $[-1,+1]$ aralığındaki çıktısıdır.
   yukseklik={560}
 />
 
-## Şekil 02 nasıl hesaplanıyor?
-
-Her pipeline koşusu `index_history.json`'a bir anlık görüntü ekler; grafik bu
-görüntüleri varlık başına çizgiye çevirir (şu an 7 koşu: 12.04 → 15.07.2026, seri
-günlük koşuyla sıklaşacak). Soluk yatay bantlar kategori eşikleridir (±0,3 / ±0,7);
-sıfır çizgisi nötr duyarlılıktır. Okuma: çizginin bant değiştirmesi, o varlıkta haber
-tonunun rejim değiştirdiği anlamına gelir — değerin gün içi seviyesinden çok bant
-geçişleri sinyaldir.
+Her koşu `index_history.json`'a bir anlık görüntü ekler; çizgiler varlık başına endeks
+patikası, soluk bantlar kategori eşikleri. Değerin seviyesinden çok **bant geçişleri**
+izlenir: çizginin ±0,3'ü kesmesi, o varlıkta haber tonunun rejim değiştirdiği andır.
 
 ## Endeks nasıl hesaplanıyor?
 
-**1 — Haber toplama.** İki kaynak, iki rol: GDELT arşivi 52 haftalık geçmişi kurar
-(parite başına özel sorgu setleri, ör. "euro dollar exchange rate outlook"); Google
-News RSS gerçek zamanlı akışı besler. Tüm makaleler önbelleğe yazılır — yeniden
-çalıştırma yalnız yeni haberleri işler.
+**1 — Haber toplama.** GDELT arşivi 52 haftalık geçmişi kurar (varlık başına özel
+sorgu setleri); Google News RSS gerçek zamanlı akışı besler. Tüm makaleler önbelleğe
+yazılır — yeniden çalıştırma yalnız yeni haberleri işler.
 
-**2 — Duyarlılık skoru.** Başlıklar **FinBERT** (finans metinlerinde eğitilmiş BERT)
-ile skorlanır: pozitif/negatif/nötr olasılıklarından $[-1, +1]$ aralığında tek skor.
-Model yüklenemezse sözlük tabanlı VADER'a düşülür (fallback). Skorlar makale düzeyinde
-saklanır — endeks formülü değişse bile geçmiş yeniden skorlanmaz.
+**2 — Duyarlılık skoru.** Başlıklar **FinBERT** ile skorlanır; model yüklenemezse
+VADER'a düşülür. Skorlar makale düzeyinde saklanır. Tahvil varlıklarında skor alım
+noktasında terslenir (`invert_sentiment`): "getiri düşecek" haberi fiyat için pozitiftir.
 
-**3 — Ağırlıklandırma.** Her makalenin ağırlığı iki bileşenin çarpımı:
+**3 — Ağırlıklandırma.**
 
 $$
 w_i = \underbrace{e^{-\lambda\, \text{yaş}_i}}_{\text{zaman azalımı}} \times
@@ -70,39 +91,29 @@ w_i = \underbrace{e^{-\lambda\, \text{yaş}_i}}_{\text{zaman azalımı}} \times
 \qquad \lambda = \frac{\ln 2}{\text{yarı ömür (gün)}}
 $$
 
-Varsayılan yarı ömür 2 gün: dünkü haber bugünkünün yarısı kadar konuşur. Kaynak
-ağırlıkları kalibre edilmiştir (Google 1,0 · Finviz 0,9 · Reddit 0,7).
+Varsayılan yarı ömür 2 gün; kaynak ağırlıkları kalibreli (Google 1,0 · Finviz 0,9 ·
+Reddit 0,7).
 
-**4 — Toplulaştırma.** Dört alternatif fonksiyon uygulanabilir; parite başına hangisinin
-kullanılacağını optimizasyon seçer:
+**4 — Toplulaştırma.** Dört alternatif; varlık başına hangisinin kullanılacağını
+optimizasyon seçer:
 
 | Yöntem | Formül / fikir |
 | --- | --- |
 | weighted_mean | $\sum w_i s_i / \sum w_i$ — temel çizgi |
-| bull_bear_ratio | $(W^+ - W^-)/(W^+ + W^-)$ — yön saymacası, şiddeti yok sayar |
-| intensity_ratio | pozitif ve negatif **yoğunluklarının** oranı — şiddet duyarlı |
-| directional_strength | yalnız güçlü sinyalli makalelerin ortalaması — gürültü filtresi |
+| bull_bear_ratio | $(W^+ - W^-)/(W^+ + W^-)$ — yön saymacası |
+| intensity_ratio | pozitif/negatif **yoğunluk** oranı — şiddet duyarlı |
+| directional_strength | yalnız güçlü sinyalli makaleler — gürültü filtresi |
 
-Üzerine opsiyonel katmanlar: skor dönüşümü (raw/tanh/sign), nötr bant filtresi,
-momentum terimi (son dönem skor değişimi) ve hacim normalizasyonu.
+Opsiyonel katmanlar: skor dönüşümü (raw/tanh/sign), nötr bant filtresi, momentum,
+hacim normalizasyonu.
 
-**5 — Parametre optimizasyonu.** Haftalık grid search: her parite için
-(toplulaştırma yöntemi × yarı ömür × dönüşüm × gecikme × nötr filtre × momentum
-ağırlığı) kombinasyonları taranır, endeksin **5 günlük ileri getiriyle** korelasyonu
-maksimize eden set seçilir ve `optimized_params.json`'a yazılır. Endeks böylece her
-paritenin kendi haber-fiyat dinamiğine uyarlanır — EUR/USD'de weighted_mean, USD/NOK'ta
-intensity_ratio kazanabilir.
+**5 — Parametre optimizasyonu.** Grid search: kombinasyonlar taranır, endeksin 5 günlük
+ileri getiriyle korelasyonunu maksimize eden set `optimized_params.json`'a yazılır.
 
-**6 — Rejim dedektörü.** Tüm paritelerin skor matrisi üzerinden üç sinyal:
-risk-on/risk-off **sepet spread'i** (yüksek beta FX vs güvenli liman), skorlar arası
-**ortalama korelasyon** (tema konsantrasyonu) ve **PCA birinci bileşeni** (ortak
-duyarlılık faktörü). Sınıflandırılan rejim, endeks ağırlıklarının bağlamını belirler.
+**6 — Günlük seri ve rejim.** Rejim/korelasyon analizleri için makalelerden **günlük**
+seri kurulur: 7 günlük pencere, zaman ağırlığı, z-skor normalizasyonu + EMA yumuşatma.
 
-**7 — Çıktı.** Parite başına değer + kategori etiketi (Extremely Bearish → Extremely
-Bullish). Örnek (04.05.2026 koşusu): USD/CHF −0,967 "Extremely Bearish", AUD/USD +0,189
-"Bullish", EUR/USD +0,006 "Neutral". Geçmiş, `index_history.json`'da birikir.
-
-## Fiyat ve endeks yan yana: haber tonu fiyata işliyor mu?
+## Şekil 03 — Fiyat ve endeks yan yana
 
 <GrafikEmbed
   src="/projeler/fx-haber-endeksi/fiyat_endeks.html"
@@ -111,18 +122,12 @@ Bullish). Örnek (04.05.2026 koşusu): USD/CHF −0,967 "Extremely Bearish", AUD
   yukseklik={580}
 />
 
-### Şekil 03 nasıl hesaplanıyor?
+Sol eksende günlük kapanış, sağ eksende $[-1,+1]$ günlük duyarlılık (teal/bordo bar).
+Bar kümelerinin renk değiştirdiği bölgelerle fiyat kırılımlarını hizalayın —
+duyarlılığın öncülük ettiği epizotlar çıplak gözle seçilir; istatistiksel özet Şekil
+04-05'tedir.
 
-Dashboard'daki karşılaştırma panelinin web hali: sol eksende varlığın **günlük kapanış
-fiyatı** (çizgi), sağ eksende $[-1,+1]$ aralığında **günlük duyarlılık endeksi** —
-pozitif günler teal, negatif günler bordo bar. Günlük seri, 7 günlük haber
-penceresinin zaman-ağırlıklı skorundan z-skor normalizasyonu + EMA yumuşatmayla
-üretilir (rejim dedektörünün girdisiyle aynı seri). Okuma pratiği: bar kümelerinin
-renk değiştirdiği bölgelerle fiyat kırılımlarını hizalayın — duyarlılığın fiyata
-öncülük ettiği epizotlar (ve etmediği dönemler) çıplak gözle seçilir; ilişkinin
-istatistiksel özeti bir sonraki şekildedir.
-
-## Sinyalin kanıtı: duyarlılık gerçekten getiriyi öncülüyor mu?
+## Şekil 04 — Duyarlılık → getiri saçılımı
 
 <GrafikEmbed
   src="/projeler/fx-haber-endeksi/duyarlilik_getiri.html"
@@ -131,72 +136,116 @@ istatistiksel özeti bir sonraki şekildedir.
   yukseklik={620}
 />
 
-### Şekil 04 nasıl hesaplanıyor?
+Her nokta bir hafta: x = bakış-ileri içermeyen haftalık endeks, y = izleyen 5 iş günü
+getirisi; OLS trend + Pearson $r/p/n$ kutusu. Örnek: EUR/USD $r=+0{,}19$ ($n=55$,
+$p=0{,}16$). Dürüst yorum: ham haftalık seride ilişki pozitif ama zayıf — endeks
+filtre katmanıdır, tek başına kural değil.
 
-Her nokta bir hafta: x ekseni, o haftanın **bakış-ileri içermeyen** duyarlılık endeksi
-(geçmiş haber önbelleğindeki FinBERT-skorlu makalelerden, varlığın optimize
-parametreleriyle hafta sonu itibarıyla kurulur); y ekseni hafta kapanışından sonraki
-**5 iş günü getirisi**. Kırmızı doğru OLS trendi, kutu Pearson $r$ / $p$ / $n$'i verir;
-sağ üstteki menüden varlık seçilir. Örnek okumalar: EUR/USD $r=+0{,}19$ ($n=55$ hafta,
-$p=0{,}16$), gümüş $r=+0{,}19$. Dürüst yorum: haftalık ham seride ilişki pozitif ama
-istatistiksel olarak zayıf — sinyal tek başına al-sat kuralı değil, filtre katmanıdır.
-
-## Rejim dedektörü: haber akışının hava durumu
+## Şekil 05 — Yuvarlanan korelasyon: sinyal ŞU ANDA çalışıyor mu?
 
 <GrafikEmbed
-  src="/projeler/fx-haber-endeksi/rejim.html"
-  baslik="Rejim bileşenleri: sepet spread'i, ortalama korelasyon, PCA ortak faktörü"
+  src="/projeler/fx-haber-endeksi/yuvarlanan_korelasyon.html"
+  baslik="20 günlük yuvarlanan duyarlılık-getiri korelasyonu — varlık seçmeli"
   no="05"
   yukseklik={520}
 />
 
-### Şekil 05 nasıl hesaplanıyor?
+Şekil 04 ilişkinin *ortalamasını* verir; bu şekil **zamana yayılımını**: günlük
+duyarlılık ile 5 günlük ileri getirinin 20 günlük pencerede yuvarlanan Pearson
+korelasyonu. Sıfır çizgisi etrafında salınım normaldir — sinyalin "açık" olduğu
+dönemleri (kalıcı pozitif bölge) pozisyon büyüklüğüne çevirmek, sabit boyut kullanmaktan
+iyidir. Korelasyonun çöktüğü dönemler çoğunlukla rejim değişimiyle çakışır (Şekil 07
+ile yan yana okuyun).
 
-Üç bileşen, 15 varlığın günlük duyarlılık serilerinden (z-skor + EMA yumuşatma) türetilir:
-
-- **Sepet spread'i** — güvenli liman sepetinin (altın, JPY, CHF, UST) ortalama
-  duyarlılığı − risk sepetinin (AUD, NZD, hisse) ortalaması, 20 günlük yuvarlanan.
-  Eşikler: > +0,15 Risk-Off · < −0,10 Risk-On · arası Geçiş.
-- **Ortalama korelasyon** — varlık çiftlerinin 20 günlük duyarlılık korelasyonlarının
-  ortalaması; yükselmesi tek bir temanın tüm akışı ele geçirdiğini gösterir.
-- **PCA birinci bileşeni** — son 60 günün duyarlılık matrisinde ortak faktörün
-  açıkladığı varyans payı.
-
-Güncel okuma: **Risk-On** — spread −0,30, ortalama korelasyon +0,00, PC1 payı %35,5.
-Pipeline artık her koşuda rejimi `index_history`'ye de yazıyor; birkaç hafta içinde
-rejim *tarihçesi* çizilebilir hale gelecek.
-
-## Optimizasyonun karnesi
+## Şekil 06-08 — Rejim dedektörü
 
 <GrafikEmbed
-  src="/projeler/fx-haber-endeksi/optimizasyon.html"
-  baslik="Varlık başına optimize edilmiş duyarlılık-getiri korelasyonu"
+  src="/projeler/fx-haber-endeksi/rejim.html"
+  baslik="Rejim bileşenleri: güncel okuma"
   no="06"
   yukseklik={520}
 />
 
-### Şekil 06 nasıl hesaplanıyor?
+<GrafikEmbed
+  src="/projeler/fx-haber-endeksi/rejim_tarihce.html"
+  baslik="Rejim bileşenlerinin tarihçesi: spread, ortalama korelasyon, PC1"
+  no="07"
+  yukseklik={800}
+/>
 
-384 kombinasyonluk grid search'ün (Bölüm 5'teki parametre uzayı) varlık başına
-ulaştığı korelasyon: günlük duyarlılık ile 5 günlük ileri getirinin 20 günlük yuvarlanan
-korelasyonunun ortalaması. Hover, kazanan parametre setini gösterir. Güncel liderler:
-GBP/USD **+0,56**, altın **+0,44**, S&P 500 **+0,39**. Dikkat: bu değerler *in-sample*
-ve günlük seri üzerindendir — Şekil 04'ün ham haftalık korelasyonlarıyla yöntemsel
-olarak farklıdır; ikisinin arasındaki uçurum, parametre seçiminin ne kadar iş yaptığının
-(ve aşırı-uyum riskinin) ölçüsüdür.
+<GrafikEmbed
+  src="/projeler/fx-haber-endeksi/korelasyon_matrisi.html"
+  baslik="Çapraz duyarlılık korelasyon matrisi — son 20 gün, yön-birleştirilmiş"
+  no="08"
+  yukseklik={680}
+/>
 
-## Doğrulama ve mevcut durum
+### Nasıl hesaplanıyor ve nasıl okunur?
 
-- 15.07.2026 koşusu: haber çekimi, FinBERT skorlama, endeks üretimi ve 15 enstrümanlık
-  fiyat paneli uçtan uca çalıştı (EUR/USD 1,1484 · altın 4.078 · BIST 14.080).
-- **Web çıktısı pipeline'a bağlandı (16.07.2026):** `run.py` artık her koşunun sonunda
-  yukarıdaki iki grafiği yeniden üretir (`web_cikti.py`; hata pipeline'ı durdurmaz).
-  Dosyalar `site/public/projeler/fx-haber-endeksi/` altına kopyalanıp push edilince
-  sayfa kendiliğinden güncellenir — Streamlit paneline artık yayın için ihtiyaç yok.
+Üç bileşen, 15 varlığın günlük duyarlılık serilerinden türetilir ve üçü de
+**yön-birleştirilmiş** matris üzerinde çalışır (USD-bazlı pariteler terslenir; ortak
+makro yön: USD zayıflığı = pozitif):
+
+- **Sepet spread'i** — güvenli liman sepeti (altın, gümüş, UST 2Y/10Y, yen, frank) ile
+  risk sepeti (S&P 500, AUD, NZD) ortalama duyarlılık farkı, 20 günlük yuvarlanan.
+  Yen ve frank bacakları terslenmiş seriyle girer: klasik risk-off "yen güçlenir"
+  demektir, "USDJPY yükselir" değil.
+- **Ortalama korelasyon** — tüm varlık çiftlerinin 20 günlük korelasyon ortalaması.
+  Yüksek değer tema konsantrasyonudur: tek hikâye (ör. Fed) bütün akışı sürüyor demektir
+  ve çeşitlendirme yanılsamasına karşı uyarıdır.
+- **PC1** — 60 günlük penceredeki ortak faktör; işaretli skoru genel tonun yönünü,
+  açıklanan varyans payı gücünü verir.
+
+Isı haritası (Şekil 08) aynı matrisin çift-çift halidir: hangi varlıkların haber tonu
+birlikte hareket ediyor? Yıldızlı etiketler terslenen pariteleri işaretler.
 
 <div class="not">
-  <span class="etiket">Not</span>
-  Rejim ve saçılım grafikleri, geçmiş haber önbelleğinin kapsadığı döneme kadar
-  günceldir (şu an 03.05.2026); `run.py --fetch-history` koşulunca aynı akışla yenilenir.
-  Streamlit dashboard'ının tüm katmanları artık statik sitede.
+  <span class="etiket">Model denetim notu — yön düzeltmesi (16.07.2026)</span>
+  Bu sayfanın önceki sürümünde ortalama korelasyon ~0 görünüyordu; bu bir piyasa
+  gerçeği değil, kod hatasıydı: ortalama korelasyon ve sepet spread'i HAM seriler
+  üzerinde hesaplanıyordu. USD-bazlı paritelerin makro yönü ters olduğundan pozitif
+  ve negatif korelasyonlar birbirini götürüyor, spread'in yen/frank bacakları da ters
+  işaretle giriyordu (yön birleştirme yalnız PCA'da vardı). Düzeltmeyle üç bileşen de
+  aynı yön-birleştirilmiş matrisi kullanıyor; ortalama korelasyon artık tema
+  konsantrasyonunu gerçekten ölçüyor ve Şekil 09'daki (farklı türde) duyarlılık-getiri
+  korelasyonlarıyla karışmıyor: buradaki, varlıkların <em>birbiriyle</em>; oradaki,
+  endeksin <em>gelecek getiriyle</em> korelasyonudur.
 </div>
+
+## Şekil 09 — Optimizasyonun karnesi
+
+<GrafikEmbed
+  src="/projeler/fx-haber-endeksi/optimizasyon.html"
+  baslik="Varlık başına optimize edilmiş duyarlılık-getiri korelasyonu"
+  no="09"
+  yukseklik={520}
+/>
+
+Grid search'ün varlık başına ulaştığı korelasyon (günlük seri, 20g yuvarlanan ort.,
+5g getiri ufku): GBP/USD **+0,56**, altın **+0,44**, S&P 500 **+0,39** liderler;
+hover kazanan parametreleri gösterir. Bu değerler *in-sample*'dır — canlı performans
+beklentisi değil, hangi varlıkta haber-fiyat bağının güçlü olduğunun sıralamasıdır.
+
+## Şekil 10 — Manşet akışı: skorların arkasındaki haberler
+
+<GrafikEmbed
+  src="/projeler/fx-haber-endeksi/son_mansetler.html"
+  baslik="Son manşetler ve FinBERT skorları"
+  no="10"
+  yukseklik={760}
+/>
+
+Endeksi süren ham malzeme: son skorlanmış başlıklar, varlık ve skoruyla (teal pozitif,
+bordo negatif). Kullanımı: aşırı bir endeks değeri gördüğünüzde buradan hangi haber
+kümesinin sürdüğüne bakın — tek kaynaklı tekrar zinciri mi, geniş tabanlı akış mı?
+
+## Sınırlar ve dürüst kullanım
+
+- Endeks **haber tonunu** ölçer, pozisyonlanmayı veya akışı değil; fiyatla ilişkisi
+  varlıktan varlığa ve dönemden döneme değişir (Şekil 05).
+- Optimizasyon in-sample'dır; aşırı-uyum riski Şekil 04'ün ham korelasyonlarıyla
+  kıyaslanarak izlenir.
+- Rejim/korelasyon/saçılım grafikleri geçmiş haber önbelleğinin kapsadığı döneme kadar
+  günceldir; `run.py --fetch-history` koşulunca aynı akışla yenilenir.
+- Pipeline her koşuda bu sayfadaki tüm grafikleri yeniden üretir ve rejimi
+  `index_history`'ye yazar — rejim tarihçesi zamanla koşu-bazlı seriye de dönüşecek.
