@@ -1,0 +1,144 @@
+---
+title: 'Ders: DİBS YTM Hesabı — Temiz Fiyattan Kote Getiriye'
+description: 'Kirli/temiz fiyat, işlemiş faiz, kesirli ilk dönem (w) ve dönem dönem iskonto: piyasa konvansiyonuyla YTM çözümü — gerçek DİBS örneği, ilk-kupon-öncesi kâğıt ve düzensiz kuponlu genel durum, XIRR köprüsüyle.'
+pubDate: 2026-07-17
+tags: ['tahvil', 'ytm', 'dibs', 'ders']
+durum: 'aktif'
+kaynak: 'YTM_hesaplayici.xlsx (üç konvansiyon sayfası)'
+---
+
+import YtmHesaplayici from '../../components/YtmHesaplayici.astro';
+
+Ekranda "temiz fiyat 96,80" gördüğünüz kâğıdın getirisi kaçtır? Bu basit sorunun
+cevabı üç konvansiyon kararından geçer: işlemiş faiz nasıl sayılır, kesirli ilk dönem
+üsse nasıl girer, "yıllık getiri" hangi bileşiklemeyle kote edilir. Bu ders üçünü de
+gerçek bir DİBS üzerinde uçtan uca çözer; ilk kuponu henüz ödenmemiş kâğıt ve düzensiz
+kupon takvimli (ÖST tipi) genel durumu da aynı çerçeveye bağlar.
+
+## Bölüm 1 — Kirli fiyat, işlemiş faiz ve w
+
+Piyasa **temiz fiyat** kote eder; ödenen para **kirli fiyattır**:
+
+$$
+AI = \frac{C}{2}\cdot\frac{\text{geçen gün}}{\text{dönem günü}},
+\qquad
+DP = P_{temiz} + AI
+$$
+
+"Geçen gün" önceki kupondan (ya da ilk kupon henüz ödenmemişse **ihraçtan**) valöre;
+"dönem günü" önceki kupondan ilk kupona. Aynı iki tarihten bir de iskonto üssünün
+kesirli başlangıcı çıkar:
+
+$$
+w = \frac{\text{ilk kupona kalan gün}}{\text{dönem günü}}
+\qquad\Rightarrow\qquad
+\text{üs}_i = (i-1) + w
+$$
+
+DİBS konvansiyonu **dönem dönem iskontodur**: her nakit akışı, 6 aylık dönemsel getiri
+$r = y_{kote}/2$ ile $(1+r)^{(i-1)+w}$'ye bölünür. Takvim günleri yalnız $w$'nin ve
+işlemiş faizin içinde yaşar; dönemler eşit sayılır. Bu, birazdan göreceğimiz ACT/365
+(XIRR) yaklaşımından farklı ve *kote* edilen getirinin tanımıdır.
+
+## Bölüm 2 — Gerçek örnek: 02.10.2030 vadeli, %33,90 kuponlu DİBS
+
+Girdiler (10.07.2026 valör): temiz fiyat **96,80**, yıllık kupon %33,90 → 6 aylık
+kupon 16,95. Takvim vadeden geriye 6'şar ay kurulur: kuponlar her 02.04 / 02.10;
+önceki kupon **02.04.2026**, ilk kupon 02.10.2026, kalan akış **9** (8 kupon + vadede
+kupon+anapara).
+
+$$
+\text{dönem} = 183,\;\; \text{geçen} = 99
+\;\Rightarrow\;
+AI = 16{,}95\times\frac{99}{183} = 9{,}1697,
+\quad DP = 105{,}9697
+$$
+
+$$
+w = \frac{183-99}{183} = 0{,}459016
+$$
+
+Deneme getirisiyle ($y=\%35{,}34$, $r=\%17{,}67$) iskonto tablosunun uçları:
+
+| Sıra | Tarih | Akış | Üs $(i-1)+w$ | İskonto | BD |
+| --- | --- | --- | --- | --- | --- |
+| 1 | 02.10.2026 | 16,95 | 0,4590 | 0,92803 | 15,7302 |
+| 2 | 02.04.2027 | 16,95 | 1,4590 | 0,78867 | 13,3680 |
+| … | … | … | … | … | … |
+| 9 | 02.10.2030 | 116,95 | 8,4590 | 0,25249 | 29,5282 |
+
+Toplam bugünkü değer = **model kirli fiyat = 105,7808**. Piyasa kirlisi 105,9697'ydi:
+fark −0,1889 → deneme getirisi fazla yüksek. Excel'de bu noktada Hedef Ara çalışır
+(hücre: fark, hedef: 0, değişen: kote getiri); matematiksel karşılığı Newton-Raphson'dır
+ve aşağıdaki araç aynı çözümü anında verir:
+
+$$
+y_{kote}^{*} = \%35{,}2491
+\qquad (r = \%17{,}6245)
+$$
+
+## Bölüm 3 — Getiri dönüşümleri: aynı fiyat, dört sayı
+
+Aynı kâğıt, aynı fiyat — raporlama konvansiyonuna göre dört farklı "getiri":
+
+| Konvansiyon | Tanım | Değer |
+| --- | --- | --- |
+| Kote (6A bileşik ×2) | çözülen $y$ | **%35,2491** |
+| Dönemsel (6 aylık) | $y/2$ | %17,6245 |
+| Yıllık bileşik | $(1+y/2)^2-1$ | %38,3553 |
+| ACT/365 yıllık (XIRR) | takvim günü üssüyle çözüm | %38,3190 |
+
+Son satır köprüdür: Excel'in `XIRR`'i her akışı $(1+Y)^{gün/365}$ ile iskonto eder —
+dönemleri eşit saymaz, gerçek takvimi kullanır. İki yıllık bileşik değerin farkı
+(38,3553 vs 38,3190) tam olarak "eşit dönem varsayımı ile gerçek takvim arasındaki"
+farktır: dönemler 181-184 gün arasında oynadığından küçük ama sıfır değildir.
+XIRR'den kote karşılığına dönüş: $2(\sqrt{1+Y}-1) = \%35{,}2182$ — kote %35,2491'in
+hemen yanına düşer ama üstüne oturmaz; hangi sayıyı raporladığınızı her zaman söyleyin.
+
+## Bölüm 4 — İlk kuponu henüz ödenmemiş kâğıt
+
+Yeni ihraçta önceki kupon yoktur; işlemiş faiz **ihraç tarihinden** birikir. Formüller
+birebir aynıdır, yalnız referans tarih değişir. Örnek: 15.05.2026 ihraçlı, 15.05.2031
+vadeli, %32 kuponlu kâğıt, 10.07.2026 valörde temiz 93,10:
+
+$$
+AI = 16\times\frac{56}{184} = 4{,}8696,\quad DP = 97{,}9696,\quad w = 0{,}695652
+$$
+
+10 akışlık tablo aynı kalıpla kurulur; %35 deneme getirisi model kirlisini 97,8227'ye
+getirir (fark −0,1469), çözüm biraz altındadır. Aşağıdaki araçta vadeyi 15.05.2031,
+valörü 10.07.2026, kuponu 32, temizi 93,10 yapın — takvim geriye kurulunca referans
+kendiliğinden ihraç tarihine (15.05.2026) oturur ve çözüm ekrana gelir.
+
+## Bölüm 5 — Düzensiz kupon takvimi: genel çözüm
+
+Kupon tarihleri düzenli 6 ay değilse (ÖST'lerde tipik: 30-60-40-90-181 günlük
+dönemler), iki genelleme birden gerekir:
+
+1. **Kupon tutarı gün-oransaldır**: $CF_i = N\cdot c\cdot\frac{\text{dönem günü}_i}{365}$
+   (son akışa anapara eklenir). 30 günlük döneme 100×%38×30/365 = 3,1233 öder.
+2. **Üs takvim günüdür**: $\text{üs}_i = \text{valörden gün}_i/365$, iskonto
+   $(1+y)^{üs}$ ile **yıllık bileşik** getiri üzerinden.
+
+Bu konvansiyon XIRR ile *tanımsal olarak* aynıdır — doğrulaması da budur. Örnek
+(faiz başlangıcı 20.06.2026, %38, temiz 104,50, 5 akış):
+$AI = 100\times0{,}38\times20/365 = 2{,}0822$, kirli 106,5822; %36 deneme model kirlisini 106,9140'a getirir
+(fark +0,3318 → getiri daha yüksek çözülür); XIRR aynı akışlarla %36,4683 verir ve
+kote karşılığı $2(\sqrt{1{,}3647}-1)=\%33{,}24$'tür. İşlemiş faiz burada da gün/365
+ile sayılır — düzenli DİBS'in "dönem payı" mantığından farkına dikkat.
+
+## Deneyin
+
+<YtmHesaplayici />
+
+## Pratik notlar
+
+- **Hedef Ara = Newton.** Excel'in Hedef Ara'sı tek bilinmeyenli kök bulmadır; araç
+  aynı işi türevle yapar ve 3-4 iterasyonda yakınsar. Bootstrap dersindeki çözücüyle
+  aynı iskelet — bir kez öğren, her yerde kullan.
+- **Valör T+0 varsayıldı.** BIST kesin hesapta valör kayarsa tüm gün sayıları
+  kayar; araçta valörü işlem gününe göre girin.
+- **Kısa/uzun ilk kupon** standart 6 aydan saparsa Bölüm 5'in gün/365 yaklaşımına
+  geçilir — dönem-payı formülü yalnız düzenli takvimde anlamlıdır.
+- Kote getiri karşılaştırırken karşı tarafın hangi satırı (Bölüm 3 tablosu)
+  kullandığını teyit edin; %38,36 ile %35,25 aynı kâğıttır.
