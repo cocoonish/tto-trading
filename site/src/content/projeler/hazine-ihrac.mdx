@@ -1,8 +1,8 @@
 ---
 title: 'Hazine İhraç Takvimi & İhale Analizi'
-description: 'Hazine iç borçlanma ihalelerinin otomatik derlenmesi: PDF''lerden veri çıkarımı, hedef–gerçekleşme, vade analizi ve gerçekleşme oranıyla düzeltilmiş ihraç tahmini.'
+description: 'Hazine iç borçlanma ihalelerinin otomatik derlenmesi ve tahmini: PDF veri hattı, hedef–gerçekleşme, vade analizi, 21 ihraçlık canlı takvim ve 433 ihalelik backtest — kullanım kılavuzuyla.'
 pubDate: 2026-07-15
-updatedDate: 2026-07-15
+updatedDate: 2026-07-16
 tags: ['hazine', 'tahvil', 'ihale']
 durum: 'aktif'
 kaynak: 'T.C. Hazine ve Maliye Bakanlığı'
@@ -14,21 +14,44 @@ import GrafikEmbed from '../../components/GrafikEmbed.astro';
 Hazine'nin aylık iç borçlanma stratejisi ile fiilen gerçekleşen ihraçlar arasındaki
 fark, TL faiz piyasası için başlı başına bir sinyaldir: hedefin üzerinde borçlanma arz
 baskısı, altında borçlanma rahatlama demektir. Bu proje ihale sonuçlarını ve planlanan
-takvimi otomatik toplar, karşılaştırır ve ileriye dönük ihraç tutarı tahmini üretir.
+takvimi otomatik toplar, karşılaştırır ve **ihale başına** tutar/teklif tahmini üretir.
+Veri son olarak 16.07.2026'da tazelendi: takvim 15 Eylül 2026'ya kadar uzuyor.
+
+## Bu sayfa nasıl kullanılır? (iş akışı)
+
+1. **Takvimle başla** — Şekil 03: önümüzdeki hafta hangi senetler, ne büyüklükte
+   geliyor? DV01 taşıyan pozisyonlar için arz günleri risk günleridir.
+2. **Bağlamı kur** — Şekil 01: Hazine son aylarda hedefinin ne kadarını gerçekleştirdi?
+   Gerçekleşme oranı, takvimdeki tahminlerin ölçeğidir.
+3. **Duration talebini oku** — Şekil 02: ortalama vade uzuyor mu? Uzayan vade piyasanın
+   duration hazmı, kısalan vade temkin işaretidir.
+4. **Tahmine güven kalibre et** — Şekil 04: modelin geçmiş isabeti; ihale başına ±%50
+   bandı normaldir, sinyal tutarın kendisinden çok *dağılım ve yön*dedir.
+
+## Sözlük: bu projede ne nedir?
+
+| Terim | Tanım | Neden önemli |
+| --- | --- | --- |
+| İhale / Doğrudan satış | İhale: fiyat teklifle oluşur; doğrudan satış (kira sertifikası, altın/dolar senedi): fiyat idari | tahmin modeli yalnız ihaleleri kapsar |
+| Net satış | brüt satış − geri alım/değişim | tüm seriler net üzerinedir |
+| Bid-to-cover | toplam teklif / satış | talep gücü; düşüşü zayıf ihale sinyali |
+| Strateji hedefi | aylık borçlanma programındaki tutar | revizyonlar sürümlenerek saklanır |
+| Gerçekleşme oranı | gerçekleşen / hedef (son ayların ortalaması) | tahminlerin ölçekleme katsayısı |
+| WAM | net satış ağırlıklı ortalama vade | Hazine'nin uzatabilme gücü |
+| ROT | rekabetçi olmayan teklif (ihale öncesi) | kamu bankası talebinin izi |
 
 ## Veri hattı: duyurudan tabloya
 
 1. **Kaynak tarama** — Hazine sitesinin WordPress REST API'si (`/portal/v2/posts`)
-   doğrudan sorgulanır: Selenium/tarayıcı yok, ~10-50× hızlı ve kararlı. İhale sonuç
-   duyuruları ve aylık strateji dokümanları ayrıştırılır.
-2. **İnkremental indirme** — işlenmiş URL'ler önbelleğe yazılır
-   (`.processed_urls.json`); her çalışmada yalnız yeni duyurular işlenir. PDF'ler
-   `aiohttp` ile eşzamanlı indirilir, `ThreadPoolExecutor` ile paralel parse edilir.
-3. **PDF ayrıştırma** — sonuç PDF'lerinden senet tanımı, ihale/valör/itfa tarihleri,
-   net-brüt satış, toplam teklif, fiyat/faiz alanları düzenli ifadelerle çıkarılır;
-   Türkçe ay adları ve karakter katlama (`fold_tr`) normalize edilir.
-4. **Strateji hedefleri** — aylık strateji PDF'inden hedef borçlanma tutarları çekilir
-   ve sürümlenerek saklanır (`.strategy_history.json`): revizyonlar kaybolmaz.
+   doğrudan sorgulanır: tarayıcı yok, ~10-50× hızlı. İhale sonuç duyuruları ve aylık
+   strateji dokümanları ayrıştırılır.
+2. **İnkremental indirme** — işlenmiş URL'ler önbelleğe yazılır; her koşuda yalnız
+   yeni duyurular işlenir. PDF'ler `aiohttp` ile eşzamanlı iner, paralel parse edilir.
+3. **PDF ayrıştırma** — senet tanımı, ihale/valör/itfa tarihleri, net-brüt satış,
+   toplam teklif, fiyat/faiz alanları düzenli ifadelerle çıkarılır; Türkçe ay adları
+   ve karakter varyantları normalize edilir.
+4. **Strateji hedefleri** — aylık strateji PDF'inden hedefler çekilir ve sürümlenir:
+   "o ay hangi hedef geçerliydi" geriye dönük doğru cevaplanır.
 
 <GrafikEmbed
   src="/projeler/hazine-ihrac/hedef_gerceklesme.html"
@@ -37,18 +60,13 @@ takvimi otomatik toplar, karşılaştırır ve ileriye dönük ihraç tutarı ta
   yukseklik={560}
 />
 
-## Şekil 01 nasıl hesaplanıyor?
+## Şekil 01 nasıl hesaplanıyor ve nasıl okunur?
 
-İhale kayıtları ay bazında toplanır (net satış, ihale tarihine göre gruplanır) ve
-strateji dokümanındaki hedefle eşlenir:
-
-$$
-\text{Gerçekleşme Oranı}_{ay} = \frac{\sum \text{Net Satış}_{ay}}{\text{Hedef}_{ay}}
-$$
-
-Çubuklar hedef/gerçekleşme çiftini, işaretler oranı gösterir. Ay eşleme, duyuru
-başlığındaki "Ay-Yıl" alanından yapılır; kısmen tamamlanmış içinde bulunulan ay ayrı
-işaretlenir (hedefin tamamı henüz gerçekleşmemiş olabilir).
+İhale kayıtları ay bazında toplanır (net satış), strateji hedefiyle eşlenir:
+$\text{Oran}_{ay} = \sum\text{NetSatış}/\text{Hedef}$. İçinde bulunulan ay kısmi
+olduğundan ayrı değerlendirilir. Okuma: oranın kalıcı olarak 1'in altında seyri
+(mevcut rejimde ~%78) Hazine'nin programı yumuşak uyguladığını; 1'in üstüne sıçrayan
+aylar ek finansman ihtiyacını gösterir — swap spread'leri ve ASW için doğrudan girdi.
 
 <GrafikEmbed
   src="/projeler/hazine-ihrac/vade_analizi.html"
@@ -57,77 +75,76 @@ işaretlenir (hedefin tamamı henüz gerçekleşmemiş olabilir).
   yukseklik={560}
 />
 
-## Şekil 02 nasıl hesaplanıyor?
+## Şekil 02 nasıl hesaplanıyor ve nasıl okunur?
 
-Her senedin vadesi $\text{itfa} - \text{valör}$ gün farkından yıl cinsine çevrilir;
-ihraçlar vade kovalarına ayrılır (≤1Y bono, 1-3Y, 3-5Y, 5Y+ ve TÜFE'ye endeksli/değişken
-ayrımı senet tanımından). Ağırlıklı ortalama vade, net satış tutarı ağırlığıyla:
+Her senedin vadesi itfa−valör farkından; ihraçlar vade kovalarına ayrılır (bono ≤1Y,
+1-3Y, 3-5Y, 5Y+; TÜFE/TLREF endeksli ayrı). Ağırlıklı ortalama vade:
 
 $$
 \overline{V}_{ay} = \frac{\sum_i \text{NetSatış}_i \times V_i}{\sum_i \text{NetSatış}_i}
 $$
 
-Uzayan ortalama vade Hazine'nin uzun uçtan borçlanabildiğini (talep gücü), kısalan
-vade ise piyasanın duration almak istemediğini gösterir.
+Okuma: WAM'ın uzadığı dönemler piyasanın duration aldığı, sabit kuponlu payının
+arttığı dönemlerdir; kısalan WAM + artan TLREF-endeksli payı, sabit faiz talebinin
+çekildiğinin işaretidir — eğri dikleşmesi beklentisiyle tutarlı pozisyon sinyali.
 
 ## Tahmin modülü: sıradaki ihraçlarda ne beklemeli?
 
 Planlanan takvimdeki her ihraç için beklenen tutar iki katmanla üretilir:
 
-1. **Strateji-tutarlı ölçekleme** — ayın hedefi, son tamamlanmış ayların toplam
-   gerçekleşme oranıyla düzeltilir: $\text{Beklenen}_{ay} = \text{Hedef}_{ay}\times
-   \text{oran}$; ayın kalanı = beklenen − o ay şimdiye kadar gerçekleşen. Mevcut
-   çevrimde bu oran **%77,9** — Hazine son aylarda hedefin ~beşte dördünü ihraç ediyor
-   ve model bunu tahmine işliyor.
-2. **Benzer senet dağılımı** — kalan tutar, aynı aydaki ihraçlara geçmiş benzer
-   senetlerin (tanım + vade eşleşmesi) tarihsel paylarıyla dağıtılır; toplam teklif,
-   geçmiş teklif/satış oranından türetilir.
+1. **Strateji-tutarlı ölçekleme** — ayın hedefi, son ayların gerçekleşme oranıyla
+   düzeltilir; ayın kalanı ihalelere dağıtılır.
+2. **Benzer senet dağılımı** — kalan tutar, aynı aydaki ihalelere geçmiş benzer
+   senetlerin (tanım + vade eşleşmesi) paylarıyla dağıtılır; beklenen teklif,
+   geçmiş bid-to-cover'dan türetilir.
 
 <GrafikEmbed
   src="/projeler/hazine-ihrac/planlanan_ihraclar.html"
-  baslik="Planlı ihraç takvimi ve ihale başına beklenen net satış"
+  baslik="Planlı ihraç takvimi ve ihale başına beklenen net satış (21.07 – 15.09.2026)"
   no="03"
   yukseklik={600}
 />
 
-## Şekil 03 nasıl hesaplanıyor?
+## Şekil 03 nasıl hesaplanıyor ve nasıl okunur?
 
-Mevcut takvimde (02.07 – 20.08.2026) **19 planlı ihraç** var: 11 ihale (model tahmin
-üretir) + 8 doğrudan satış (altın/dolar senetleri, kira sertifikaları — ihale
-mekanizması olmadığından tahmin üretilmez, grafikte ayrı işaretlenir). İhale başına
-beklenen net satış, yukarıdaki iki katmanın çıktısıdır; toplam beklenen ihale hacmi
-**517,8 milyar TL**. Aylık panel, beklenen toplamı strateji hedefiyle karşılaştırır:
-Temmuz 240,6 vs hedef 308,7 · Ağustos 277,3 vs 355,8 milyar TL — beklenenin hedefin
-altında kalması yapısaldır, çünkü doğrudan satışlar ihale tahminine dahil değildir.
+Güncel takvimde (21.07 – 15.09.2026) **21 planlı ihraç** var: 14 ihale (tahminli) +
+7 doğrudan satış (tahmin üretilmez, ayrı işaretli). Toplam beklenen ihale hacmi
+**581,8 milyar TL**. Aylık karşılaştırma: Ağustos beklenen 325,9 vs hedef 417,0 ·
+Eylül 229,9 vs 294,2 milyar TL (Temmuz'un kalanı 26,0). Beklenenin hedefin altında
+kalması yapısaldır: doğrudan satışlar ihale tahminine girmez. Hover'da senet tanımı,
+vade, beklenen bid-to-cover ve kıyas bazı (kaç geçmiş ihaleden türetildiği) görünür —
+tek ihaleye pozisyon bağlamadan önce kıyas ihale sayısına bakın: n küçükse tahmin zayıftır.
 
 <GrafikEmbed
   src="/projeler/hazine-ihrac/tahmin_dogrulama.html"
-  baslik="Backtest: ihale bazında tahmin vs gerçekleşen (n=431)"
+  baslik="Backtest: ihale bazında tahmin vs gerçekleşen (n=433, Mar 2020 – Tem 2026)"
   no="04"
   yukseklik={600}
 />
 
-## Şekil 04 nasıl hesaplanıyor?
+## Şekil 04 nasıl hesaplanıyor ve nasıl okunur?
 
-Modül kendi kendini test eder: `backtest_forecasts`, Mart 2020'den bu yana her ihale
-için "o gün elde olan bilgiyle" tahmin üretip gerçekleşmeyle karşılaştırır
-(`hazine_tahmin_dogrulama.csv`). Saçılımda her nokta bir ihale; $y=x$ doğrusu
-mükemmel tahmindir. Metrikler dürüst okunmalı:
+`backtest_forecasts`, her geçmiş ihale için "o gün elde olan bilgiyle" tahmin üretip
+gerçekleşmeyle karşılaştırır. Saçılımda her nokta bir ihale; $y=x$ mükemmel tahmin.
+Metrikler dürüst okunmalı:
 
-- Tüm dönem (n=431): MAE **11,5 milyar TL**; ortalama MAPE %236 görünür ama bu,
-  2020-21'in gerçekçi olmayan strateji hedeflerinin (hedef 313 milyar / gerçekleşme
-  8 milyar gibi aylar) artefaktıdır — **medyan sapma %47**.
-- Son 12 ay (n=67): MAE 15,9 milyar TL, MAPE **%66,6** — güncel rejimde modelin
-  gerçek kalibrasyonu budur.
-- Model kıyası: ham (saf tarihsel) model %66,9, salt strateji modeli %306,5 —
-  düzeltilmiş modelin iki katmanı birlikte kullanması boşuna değil.
+- **Tüm dönem (n=433):** MAE 11,5 milyar TL; ortalama MAPE %236 görünür ama bu
+  2020-21'in gerçekçi olmayan hedeflerinin artefaktıdır — **medyan sapma %47**.
+- **Son 12 ay (n=65):** MAE 14,7 milyar TL, MAPE **%54,8** — güncel rejimde modelin
+  gerçek kalibrasyonu.
+- **Bid-to-cover tahmini** çok daha isabetli: MAPE **%25,7** — talep, tutardan daha
+  öngörülebilir.
+- Model kıyası: ham (saf tarihsel) %66,7 · salt strateji %305,4 · düzeltilmiş model
+  medyanda ikisinden iyi — iki katmanın birlikte kullanılmasının gerekçesi.
 
-Tahmine pozisyon bağlamadan önce bakılacak ilk tablo budur: model arz *yönünü* ve ay
-içi dağılımı iyi yakalar, ihale başına tutarda ±%50 bandı normaldir.
+Kullanım kuralı: model arz *yönünü* ve ay içi dağılımı iyi yakalar; ihale başına
+tutarda ±%50 bandı normaldir. Tahmin, DV01 bütçesi planlamak içindir — nokta atışı
+tutar beklemek için değil.
 
-## Yorum notları
+## Sınırlar
 
-- Net satış ≠ brüt satış: geri alımlar ve değişimler netleştirmede fark yaratır;
-  seriler net üzerinden kuruludur.
-- Strateji hedefleri revize edilebilir; sürüm geçmişi tutulduğundan "o ay hangi hedef
-  geçerliydi" sorusu geriye dönük doğru cevaplanır.
+- Doğrudan satışlar (kira sertifikası, altın/dolar senetleri) tahmin dışıdır; aylık
+  toplam karşılaştırmasında bu fark açıkça görünür.
+- Strateji hedefleri revize edilebilir; seriler revizyon tarihçesine göre kuruludur.
+- PDF formatı değişirse ayrıştırıcı kırılabilir — hat, hatalı parse'ı sessizce
+  geçmek yerine loglar; grafiklerdeki son veri tarihi her zaman kontrol edilmelidir.
