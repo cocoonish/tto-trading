@@ -102,16 +102,36 @@ duyarlılık faktörü). Sınıflandırılan rejim, endeks ağırlıklarının b
 Bullish). Örnek (04.05.2026 koşusu): USD/CHF −0,967 "Extremely Bearish", AUD/USD +0,189
 "Bullish", EUR/USD +0,006 "Neutral". Geçmiş, `index_history.json`'da birikir.
 
+## Fiyat ve endeks yan yana: haber tonu fiyata işliyor mu?
+
+<GrafikEmbed
+  src="/projeler/fx-haber-endeksi/fiyat_endeks.html"
+  baslik="Fiyat (çizgi) ve günlük duyarlılık endeksi (bar) — varlık seçmeli"
+  no="03"
+  yukseklik={580}
+/>
+
+### Şekil 03 nasıl hesaplanıyor?
+
+Dashboard'daki karşılaştırma panelinin web hali: sol eksende varlığın **günlük kapanış
+fiyatı** (çizgi), sağ eksende $[-1,+1]$ aralığında **günlük duyarlılık endeksi** —
+pozitif günler teal, negatif günler bordo bar. Günlük seri, 7 günlük haber
+penceresinin zaman-ağırlıklı skorundan z-skor normalizasyonu + EMA yumuşatmayla
+üretilir (rejim dedektörünün girdisiyle aynı seri). Okuma pratiği: bar kümelerinin
+renk değiştirdiği bölgelerle fiyat kırılımlarını hizalayın — duyarlılığın fiyata
+öncülük ettiği epizotlar (ve etmediği dönemler) çıplak gözle seçilir; ilişkinin
+istatistiksel özeti bir sonraki şekildedir.
+
 ## Sinyalin kanıtı: duyarlılık gerçekten getiriyi öncülüyor mu?
 
 <GrafikEmbed
   src="/projeler/fx-haber-endeksi/duyarlilik_getiri.html"
   baslik="Haftalık duyarlılık vs izleyen 5 iş günü getirisi — varlık seçmeli saçılım"
-  no="03"
+  no="04"
   yukseklik={620}
 />
 
-### Şekil 03 nasıl hesaplanıyor?
+### Şekil 04 nasıl hesaplanıyor?
 
 Her nokta bir hafta: x ekseni, o haftanın **bakış-ileri içermeyen** duyarlılık endeksi
 (geçmiş haber önbelleğindeki FinBERT-skorlu makalelerden, varlığın optimize
@@ -126,11 +146,11 @@ istatistiksel olarak zayıf — sinyal tek başına al-sat kuralı değil, filtr
 <GrafikEmbed
   src="/projeler/fx-haber-endeksi/rejim.html"
   baslik="Rejim bileşenleri: sepet spread'i, ortalama korelasyon, PCA ortak faktörü"
-  no="04"
+  no="05"
   yukseklik={520}
 />
 
-### Şekil 04 nasıl hesaplanıyor?
+### Şekil 05 nasıl hesaplanıyor?
 
 Üç bileşen, 15 varlığın günlük duyarlılık serilerinden (z-skor + EMA yumuşatma) türetilir:
 
@@ -151,17 +171,17 @@ rejim *tarihçesi* çizilebilir hale gelecek.
 <GrafikEmbed
   src="/projeler/fx-haber-endeksi/optimizasyon.html"
   baslik="Varlık başına optimize edilmiş duyarlılık-getiri korelasyonu"
-  no="05"
+  no="06"
   yukseklik={520}
 />
 
-### Şekil 05 nasıl hesaplanıyor?
+### Şekil 06 nasıl hesaplanıyor?
 
 384 kombinasyonluk grid search'ün (Bölüm 5'teki parametre uzayı) varlık başına
 ulaştığı korelasyon: günlük duyarlılık ile 5 günlük ileri getirinin 20 günlük yuvarlanan
 korelasyonunun ortalaması. Hover, kazanan parametre setini gösterir. Güncel liderler:
 GBP/USD **+0,56**, altın **+0,44**, S&P 500 **+0,39**. Dikkat: bu değerler *in-sample*
-ve günlük seri üzerindendir — Şekil 03'ün ham haftalık korelasyonlarıyla yöntemsel
+ve günlük seri üzerindendir — Şekil 04'ün ham haftalık korelasyonlarıyla yöntemsel
 olarak farklıdır; ikisinin arasındaki uçurum, parametre seçiminin ne kadar iş yaptığının
 (ve aşırı-uyum riskinin) ölçüsüdür.
 

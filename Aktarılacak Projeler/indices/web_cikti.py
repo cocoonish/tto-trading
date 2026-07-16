@@ -683,6 +683,96 @@ def ciz_duyarlilik_getiri(cikti_yolu):
     return cikti_yolu, kor_ozet
 
 
+def ciz_fiyat_endeks(cikti_yolu, seriler=None):
+    """Varlik basina 'fiyat + gunluk duyarlilik' cift eksenli grafik.
+
+    Dashboard'daki 'Price vs Daily Sentiment' panelinin web karsiligi:
+    sol eksende gunluk kapanis fiyati (cizgi), sag eksende [-1,1] araliginda
+    gunluk duyarlilik endeksi (isarete gore renkli bar). Varlik dropdown ile
+    secilir. seriler verilmezse duyarlilik_matrisi() ile hesaplanir (agir).
+    """
+    import pandas as pd
+    import yfinance as yf
+    from plotly.subplots import make_subplots
+
+    if seriler is None:
+        seriler = duyarlilik_matrisi()
+    if not seriler:
+        raise ValueError("Gunluk duyarlilik matrisi bos (gdelt onbellegi?)")
+
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+    varliklar = []
+    atlananlar = []
+
+    for anahtar, seri in seriler.items():
+        ad = _gorunen_ad(anahtar)
+        ticker = config.ASSETS[anahtar]["ticker"]
+        try:
+            bas = (seri.index.min() - pd.Timedelta(days=5)).strftime("%Y-%m-%d")
+            son = (seri.index.max() + pd.Timedelta(days=5)).strftime("%Y-%m-%d")
+            fdf = yf.download(ticker, start=bas, end=son, auto_adjust=True, progress=False)
+        except Exception as exc:
+            print(f"  UYARI: {anahtar} fiyati cekilemedi ({exc}); atlandi")
+            atlananlar.append(anahtar)
+            continue
+        if fdf is None or fdf.empty:
+            atlananlar.append(anahtar)
+            continue
+        if isinstance(fdf.columns, pd.MultiIndex):
+            fdf.columns = fdf.columns.get_level_values(0)
+        kapanis = fdf["Close"].ffill()
+
+        gorunur = len(varliklar) == 0
+        fig.add_trace(go.Scatter(
+            x=kapanis.index, y=kapanis.values, mode="lines",
+            name=f"{ad} fiyat", line=dict(color=INK, width=1.8),
+            hovertemplate="%{x|%d.%m.%Y}<br>fiyat: %{y:.4f}<extra></extra>",
+            visible=gorunur,
+        ), secondary_y=False)
+        renkler = [TEAL if v >= 0 else CLARET for v in seri.values]
+        fig.add_trace(go.Bar(
+            x=seri.index, y=seri.values,
+            name="Günlük duyarlılık", marker_color=renkler, opacity=0.55,
+            hovertemplate="%{x|%d.%m.%Y}<br>duyarlılık: %{y:+.3f}<extra></extra>",
+            visible=gorunur,
+        ), secondary_y=True)
+        varliklar.append(anahtar)
+
+    if not varliklar:
+        raise ValueError("Hicbir varlik icin fiyat verisi cekilemedi")
+
+    dugmeler = []
+    for i, anahtar in enumerate(varliklar):
+        gorunurluk = [False] * (2 * len(varliklar))
+        gorunurluk[2 * i] = gorunurluk[2 * i + 1] = True
+        dugmeler.append(dict(
+            label=_gorunen_ad(anahtar), method="update",
+            args=[{"visible": gorunurluk}],
+        ))
+
+    _ortak_stil(fig, "Fiyat vs günlük haber duyarlılığı")
+    fig.update_layout(
+        height=520,
+        updatemenus=[dict(
+            buttons=dugmeler, direction="down",
+            x=0.99, xanchor="right", y=1.12, yanchor="top",
+            bgcolor="#ffffff", bordercolor=GRID,
+            font=dict(size=12, color=INK),
+        )],
+        margin=dict(l=60, r=60, t=70, b=70),
+        bargap=0.15,
+    )
+    fig.update_yaxes(title_text="Fiyat (günlük kapanış)", secondary_y=False)
+    fig.update_yaxes(title_text="Duyarlılık endeksi", range=[-1, 1],
+                     secondary_y=True, showgrid=False, zeroline=True,
+                     zerolinecolor=GRID)
+
+    fig.write_html(cikti_yolu, include_plotlyjs="cdn")
+    if atlananlar:
+        print(f"  Not: fiyat verisi olmayan varliklar atlandi: {', '.join(atlananlar)}")
+    return cikti_yolu
+
+
 # ═══════════════════════════════════════════════════════════════════════════════
 # Uretim akisi
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -710,11 +800,25 @@ def uret(cikti_dizini=None, rejim=None):
     except Exception as exc:
         print(f"UYARI: optimizasyon.html uretilemedi: {exc}")
 
+    # gunluk duyarlilik matrisi agir — bir kez hesapla, rejim ve
+    # fiyat+endeks grafigi paylassin
+    matris = None
     try:
-        ozet = rejim if rejim else rejim_ozeti()
+        matris = duyarlilik_matrisi()
+    except Exception as exc:
+        print(f"UYARI: gunluk duyarlilik matrisi kurulamadi: {exc}")
+
+    try:
+        ozet = rejim if rejim else rejim_ozeti(seriler=matris)
         yollar.append(ciz_rejim(ozet, os.path.join(hedef, "rejim.html")))
     except Exception as exc:
         print(f"UYARI: rejim.html uretilemedi: {exc}")
+
+    try:
+        yollar.append(ciz_fiyat_endeks(
+            os.path.join(hedef, "fiyat_endeks.html"), seriler=matris))
+    except Exception as exc:
+        print(f"UYARI: fiyat_endeks.html uretilemedi: {exc}")
 
     try:
         yol, _ = ciz_duyarlilik_getiri(os.path.join(hedef, "duyarlilik_getiri.html"))
