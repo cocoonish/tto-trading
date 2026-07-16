@@ -84,10 +84,32 @@ EV_STILI = """
 """
 
 
+def cdnlestir(metin: str) -> tuple[str, bool]:
+    """Gömülü plotly.js bloğunu (>1MB script) sürümü korunmuş CDN etiketiyle değiştirir."""
+    en_buyuk = None
+    for m in re.finditer(r"<script[^>]*>", metin):
+        kapanis = metin.find("</script>", m.end())
+        if kapanis < 0:
+            continue
+        if kapanis - m.end() > 1_000_000 and "Plotly" in metin[m.end():m.end() + 200_000]:
+            en_buyuk = (m.start(), kapanis + len("</script>"))
+            break
+    if not en_buyuk:
+        return metin, False
+    govde = metin[en_buyuk[0]:en_buyuk[1]]
+    # plotly.js'in KENDİ sürümü banner'dadır ("plotly.js vX.Y.Z");
+    # version:"..." deseni Python paket sürümünü yakalayabilir — kullanma.
+    surum_m = re.search(r"plotly\.js v(\d+\.\d+\.\d+)", govde)
+    surum = surum_m.group(1) if surum_m else "3.3.0"
+    etiket = f'<script src="https://cdn.plot.ly/plotly-{surum}.min.js" charset="utf-8"></script>'
+    return metin[:en_buyuk[0]] + etiket + metin[en_buyuk[1]:], True
+
+
 def isle(yol: Path) -> str:
     metin = yol.read_text(encoding="utf-8", errors="ignore")
     if "plotly" not in metin.lower():
         return "atlandı (plotly değil)"
+    metin, kucultuldu = cdnlestir(metin)
     yeni_mi = ISARET not in metin
     # eski enjeksiyon bloğunu sök (işaretten bloğun son </script>'ine kadar)
     if not yeni_mi:
@@ -99,7 +121,8 @@ def isle(yol: Path) -> str:
     else:
         metin += EV_STILI
     yol.write_text(metin, encoding="utf-8")
-    return "stillendi" if yeni_mi else "güncellendi (v3)"
+    ek = " + cdn'e küçültüldü" if kucultuldu else ""
+    return ("stillendi" if yeni_mi else "güncellendi (v3)") + ek
 
 
 def main():

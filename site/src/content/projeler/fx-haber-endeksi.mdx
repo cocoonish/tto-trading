@@ -28,11 +28,11 @@ grafikleri de kendisi üretir — Streamlit paneli statik siteye taşındı.
 ## Şekil 01 nasıl hesaplanıyor?
 
 Son pipeline koşusunun (15.07.2026) endeks değerleri, değere göre sıralı yatay bar:
-pozitifler yeşil-teal (boğa), negatifler bordo (ayı); bar ucundaki etiket kategori
-eşiklerinden gelir — |değer| ≥ 0,3 Bullish/Bearish, ≥ 0,7 Extremely. Son okumada
-uçlar: altın **+0,29** (Bullish) ve NZD/USD +0,15 bir yanda; USD/NOK **−0,86** ve
-BIST 100 −0,74 (Extremely Bearish) diğer yanda. Değerin kendisi, aşağıda anlatılan
-ağırlıklı toplulaştırmanın $[-1,+1]$ aralığındaki çıktısıdır.
+pozitifler yeşil-teal (alıcı), negatifler bordo (satıcı); bar ucundaki etiket kategori
+eşiklerinden gelir — |değer| ≥ 0,3 Alıcı/Satıcı, ≥ 0,7 Aşırı. Son okumada uçlar:
+altın **+0,29** (Alıcı) ve NZD/USD +0,15 bir yanda; USD/NOK **−0,86** ve BIST 100
+−0,74 (Aşırı Satıcı) diğer yanda. Değerin kendisi, aşağıda anlatılan ağırlıklı
+toplulaştırmanın $[-1,+1]$ aralığındaki çıktısıdır.
 
 <GrafikEmbed
   src="/projeler/fx-haber-endeksi/endeks_tarihce.html"
@@ -102,6 +102,69 @@ duyarlılık faktörü). Sınıflandırılan rejim, endeks ağırlıklarının b
 Bullish). Örnek (04.05.2026 koşusu): USD/CHF −0,967 "Extremely Bearish", AUD/USD +0,189
 "Bullish", EUR/USD +0,006 "Neutral". Geçmiş, `index_history.json`'da birikir.
 
+## Sinyalin kanıtı: duyarlılık gerçekten getiriyi öncülüyor mu?
+
+<GrafikEmbed
+  src="/projeler/fx-haber-endeksi/duyarlilik_getiri.html"
+  baslik="Haftalık duyarlılık vs izleyen 5 iş günü getirisi — varlık seçmeli saçılım"
+  no="03"
+  yukseklik={620}
+/>
+
+### Şekil 03 nasıl hesaplanıyor?
+
+Her nokta bir hafta: x ekseni, o haftanın **bakış-ileri içermeyen** duyarlılık endeksi
+(geçmiş haber önbelleğindeki FinBERT-skorlu makalelerden, varlığın optimize
+parametreleriyle hafta sonu itibarıyla kurulur); y ekseni hafta kapanışından sonraki
+**5 iş günü getirisi**. Kırmızı doğru OLS trendi, kutu Pearson $r$ / $p$ / $n$'i verir;
+sağ üstteki menüden varlık seçilir. Örnek okumalar: EUR/USD $r=+0{,}19$ ($n=55$ hafta,
+$p=0{,}16$), gümüş $r=+0{,}19$. Dürüst yorum: haftalık ham seride ilişki pozitif ama
+istatistiksel olarak zayıf — sinyal tek başına al-sat kuralı değil, filtre katmanıdır.
+
+## Rejim dedektörü: haber akışının hava durumu
+
+<GrafikEmbed
+  src="/projeler/fx-haber-endeksi/rejim.html"
+  baslik="Rejim bileşenleri: sepet spread'i, ortalama korelasyon, PCA ortak faktörü"
+  no="04"
+  yukseklik={520}
+/>
+
+### Şekil 04 nasıl hesaplanıyor?
+
+Üç bileşen, 15 varlığın günlük duyarlılık serilerinden (z-skor + EMA yumuşatma) türetilir:
+
+- **Sepet spread'i** — güvenli liman sepetinin (altın, JPY, CHF, UST) ortalama
+  duyarlılığı − risk sepetinin (AUD, NZD, hisse) ortalaması, 20 günlük yuvarlanan.
+  Eşikler: > +0,15 Risk-Off · < −0,10 Risk-On · arası Geçiş.
+- **Ortalama korelasyon** — varlık çiftlerinin 20 günlük duyarlılık korelasyonlarının
+  ortalaması; yükselmesi tek bir temanın tüm akışı ele geçirdiğini gösterir.
+- **PCA birinci bileşeni** — son 60 günün duyarlılık matrisinde ortak faktörün
+  açıkladığı varyans payı.
+
+Güncel okuma: **Risk-On** — spread −0,30, ortalama korelasyon +0,00, PC1 payı %35,5.
+Pipeline artık her koşuda rejimi `index_history`'ye de yazıyor; birkaç hafta içinde
+rejim *tarihçesi* çizilebilir hale gelecek.
+
+## Optimizasyonun karnesi
+
+<GrafikEmbed
+  src="/projeler/fx-haber-endeksi/optimizasyon.html"
+  baslik="Varlık başına optimize edilmiş duyarlılık-getiri korelasyonu"
+  no="05"
+  yukseklik={520}
+/>
+
+### Şekil 05 nasıl hesaplanıyor?
+
+384 kombinasyonluk grid search'ün (Bölüm 5'teki parametre uzayı) varlık başına
+ulaştığı korelasyon: günlük duyarlılık ile 5 günlük ileri getirinin 20 günlük yuvarlanan
+korelasyonunun ortalaması. Hover, kazanan parametre setini gösterir. Güncel liderler:
+GBP/USD **+0,56**, altın **+0,44**, S&P 500 **+0,39**. Dikkat: bu değerler *in-sample*
+ve günlük seri üzerindendir — Şekil 03'ün ham haftalık korelasyonlarıyla yöntemsel
+olarak farklıdır; ikisinin arasındaki uçurum, parametre seçiminin ne kadar iş yaptığının
+(ve aşırı-uyum riskinin) ölçüsüdür.
+
 ## Doğrulama ve mevcut durum
 
 - 15.07.2026 koşusu: haber çekimi, FinBERT skorlama, endeks üretimi ve 15 enstrümanlık
@@ -112,7 +175,8 @@ Bullish). Örnek (04.05.2026 koşusu): USD/CHF −0,967 "Extremely Bearish", AUD
   sayfa kendiliğinden güncellenir — Streamlit paneline artık yayın için ihtiyaç yok.
 
 <div class="not">
-  <span class="etiket">Yol haritası</span>
-  Sıradaki katman: duyarlılık-getiri saçılımları (endeks vs 5 günlük ileri getiri) ve
-  rejim göstergesinin (sepet spread + PCA) tarihçesinin de web çıktısına eklenmesi.
+  <span class="etiket">Not</span>
+  Rejim ve saçılım grafikleri, geçmiş haber önbelleğinin kapsadığı döneme kadar
+  günceldir (şu an 03.05.2026); `run.py --fetch-history` koşulunca aynı akışla yenilenir.
+  Streamlit dashboard'ının tüm katmanları artık statik sitede.
 </div>

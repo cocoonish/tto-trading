@@ -5,6 +5,8 @@ Türkiye Reel Efektif Döviz Kuru Analizi
 - Plotly ile interaktif görselleştirme
 """
 
+import os
+
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -13,9 +15,12 @@ from plotly.subplots import make_subplots
 # PARAMETRİK DEĞİŞKENLER (Kolay değiştirilebilir)
 # ============================================
 
+# Tüm yollar script klasörüne göre — hangi dizinden çalıştırılırsa çalıştırılsın bulunur
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+
 # Dosya yolları
-CPI_FILE = "TUFE.xlsx"  # CPI bazlı REDK dosyası
-PPI_FILE = "Yi-UFE.xlsx"  # PPI bazlı REDK dosyası
+CPI_FILE = os.path.join(SCRIPT_DIR, "TUFE.xlsx")  # CPI bazlı REDK dosyası
+PPI_FILE = os.path.join(SCRIPT_DIR, "Yi-UFE.xlsx")  # PPI bazlı REDK dosyası
 
 # Ağırlıklar (toplam 1.0 olmalı)
 PPI_WEIGHT = 0.30  # PPI (Yi-ÜFE) ağırlığı
@@ -26,7 +31,7 @@ MA_WINDOW_10Y = 120  # 10 yıllık hareketli ortalama
 MA_WINDOW_5Y = 60    # 5 yıllık hareketli ortalama
 
 # Çıktı dosyası
-OUTPUT_HTML = "reer_analysis.html"
+OUTPUT_HTML = os.path.join(SCRIPT_DIR, "reer_analysis.html")
 
 # ============================================
 # VERİ YÜKLEME VE İŞLEME
@@ -358,21 +363,21 @@ def main():
     print(f"\n🎨 Grafik oluşturuluyor...")
     fig = create_plot(df)
     
-    # HTML olarak kaydet
-    fig.write_html(OUTPUT_HTML)
+    # HTML olarak kaydet (plotly.js CDN'den — dosya ~4.6MB yerine ~100KB olur)
+    fig.write_html(OUTPUT_HTML, include_plotlyjs='cdn')
     print(f"   ✅ Grafik '{OUTPUT_HTML}' olarak kaydedildi")
-    
-    # Grafiği tarayıcıda aç
-    try:
-        import webbrowser
-        import os
-        webbrowser.open('file://' + os.path.realpath(OUTPUT_HTML))
-        print(f"   🌐 Grafik tarayıcıda açılıyor...")
-    except Exception as e:
-        print(f"   ⚠️ Tarayıcı açılamadı: {e}")
-    
+
+    # Grafiği tarayıcıda aç (TTO_TARAYICI_ACMA=1 ile bastırılabilir; otomasyon için)
+    if not os.environ.get("TTO_TARAYICI_ACMA"):
+        try:
+            import webbrowser
+            webbrowser.open('file://' + os.path.realpath(OUTPUT_HTML))
+            print(f"   🌐 Grafik tarayıcıda açılıyor...")
+        except Exception as e:
+            print(f"   ⚠️ Tarayıcı açılamadı: {e}")
+
     # İsteğe bağlı: Hesaplanmış veriyi CSV olarak kaydet
-    output_csv = "reer_analysis_data.csv"
+    output_csv = os.path.join(SCRIPT_DIR, "reer_analysis_data.csv")
     df.to_csv(output_csv, index=False)
     print(f"   ✅ Veri '{output_csv}' olarak kaydedildi")
     

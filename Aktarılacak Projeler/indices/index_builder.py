@@ -390,7 +390,10 @@ def build_all_indices(params: dict = None) -> dict:
 
 # ── History Persistence ────────────────────────────────────────────────────────
 
-def save_index_snapshot(indices: dict):
+def save_index_snapshot(indices: dict, regime: dict = None):
+    """Append snapshot to index history. Optional `regime` dict
+    (label / basket_spread / avg_correlation / pc1_share / as_of) is stored
+    alongside so a regime time series can be charted later."""
     os.makedirs(config.DATA_DIR, exist_ok=True)
     history = []
     if os.path.exists(config.INDEX_HISTORY):
@@ -401,6 +404,8 @@ def save_index_snapshot(indices: dict):
         "indices": {k: {"value": v["value"], "category": v["category"]}
                     for k, v in indices.items()},
     }
+    if regime:
+        snapshot["regime"] = regime
     history.append(snapshot)
     with open(config.INDEX_HISTORY, "w") as f:
         json.dump(history, f, indent=2)

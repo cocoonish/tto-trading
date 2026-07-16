@@ -1,9 +1,12 @@
-# ŞABLON — repo GitHub'a bağlanınca aktifleşir.
-# Python hatlarını zamanlanmış olarak çalıştırır, üretilen HTML'leri
-# site/public/ altına kopyalar ve commit'ler; push deploy'u tetikler.
+# Zamanlanmış veri güncelleme: Python hatları koşar, üretilen grafikler
+# site/public altına kopyalanır, ev stili uygulanır ve commit'lenir.
+# Vercel/Pages push'u gördüğünde site kendiliğinden yeniden yayınlanır.
 #
-# Not: EVDS anahtarı gibi gizli değerler repo Settings → Secrets altında
-# tanımlanmalı (ör. EVDS_API_KEY).
+# Adımlar continue-on-error ile bağımsızdır: bir kaynağın (ör. IRFCL PDF
+# formatı) bozulması diğer güncellemeleri engellemez.
+# Ağır hatlar (FinBERT'li FX pipeline'ı, Hazine scraper'ı) bilinçli olarak
+# cron dışıdır — yerelde koşulur, çıktıları commit'lenir; buradaki adımlar
+# yalnız depodaki güncel veriden grafik tazeler.
 
 name: Veri güncelle
 
@@ -11,6 +14,9 @@ on:
   schedule:
     - cron: '0 6 * * 5' # her Cuma 06:00 UTC (09:00 İstanbul)
   workflow_dispatch: {} # elle tetikleme
+
+permissions:
+  contents: write
 
 jobs:
   guncelle:
@@ -22,14 +28,44 @@ jobs:
         with:
           python-version: '3.11'
 
-      # ── Örnek: TCMB Net Rezerv ─────────────────────────────
-      # - name: Rezerv grafiğini yeniden üret
-      #   run: |
-      #     pip install -r "Aktarılacak Projeler/TCMBNetRezerv/requirements.txt"
-      #     python "Aktarılacak Projeler/TCMBNetRezerv/net_rezerv.py"
-      #     python "Aktarılacak Projeler/TCMBNetRezerv/grafik.py"
-      #     cp "Aktarılacak Projeler/TCMBNetRezerv/tcmb_rezerv_grafik.html" \
-      #        site/public/projeler/tcmb-net-rezerv/grafik.html
+      - name: Bağımlılıklar
+        run: pip install pandas numpy plotly requests pdfplumber tcmb yfinance
+
+      - name: TCMB net rezerv (EVDS + IRFCL → grafik)
+        continue-on-error: true
+        working-directory: Aktarılacak Projeler/TCMBNetRezerv
+        run: |
+          python net_rezerv.py
+          python grafik.py
+          cp tcmb_rezerv_grafik.html "../../site/public/projeler/tcmb-net-rezerv/grafik.html"
+
+      - name: USDTRY devalüasyon (ACT/365, üç grafik)
+        continue-on-error: true
+        working-directory: Aktarılacak Projeler/USDTRYDeval
+        run: |
+          python usdtry_deval_plotly.py
+          python usdtry_weekly_trends.py
+          python usdtry_monthly_trends.py
+          cp usdtry_deval.html          "../../site/public/projeler/usdtry-deval/usdtry_deval.html"
+          cp usdtry_weekly_trends.html  "../../site/public/projeler/usdtry-deval/usdtry_weekly.html"
+          cp usdtry_monthly_trends.html "../../site/public/projeler/usdtry-deval/usdtry_monthly.html"
+
+      - name: FX endeksi web grafikleri (depodaki veriden)
+        continue-on-error: true
+        working-directory: Aktarılacak Projeler/indices
+        run: |
+          python web_cikti.py
+          cp cikti/*.html "../../site/public/projeler/fx-haber-endeksi/"
+
+      - name: Hazine tahmin grafikleri (depodaki CSV'lerden)
+        continue-on-error: true
+        working-directory: Aktarılacak Projeler/hazineihrac
+        run: |
+          python web_cikti_tahmin.py
+          cp planlanan_ihraclar.html tahmin_dogrulama.html "../../site/public/projeler/hazine-ihrac/" || true
+
+      - name: Ev stilini uygula
+        run: python3 site/tools/plotly_stil.py --hepsi
 
       - name: Değişiklikleri commit'le
         run: |

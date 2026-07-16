@@ -60,17 +60,57 @@ enflasyonun kur artışını aştığı 2022-24), "hangi REDK'ye göre ucuz?" so
 
 ## Regresyon modülü: sapma USD/TRY'yi öngörüyor mu?
 
-İkinci script (`usdtry_reer_analysis`) sapma serisini USD/TRY ile birleştirir ve
-üç ufukta test eder (3 ay / 5 yıl / 10 yıl pencereler):
+İkinci script (`usdtry_reer_analysis`) sapma serisini USD/TRY ile birleştirir
+(2005-01'den bu yana 253 aylık gözlem; kur, aylık ortalama kapanış) ve ilişkiyi iki
+açıdan test eder:
 
-- **Değişim regresyonu:** REDK sapmasındaki değişim ile sonraki 6 ve 12 aylık USD/TRY
-  yüzde değişimi arasında `scipy.stats.linregress` — eğim, kesişim, $R^2$, p-değeri
-  ve artık standart hatası (RSE) tablo olarak raporlanır.
-- **Sapma bantları:** sapma aralıklarına göre (ör. −15/−10, −10/−5, …) sonraki dönem
-  kur getirilerinin dağılımı — doğrusal olmayan ilişkiyi görünür kılar.
+<GrafikEmbed
+  src="/projeler/try-reer/redk_usdtry_analiz_10y.html"
+  baslik="10Y sapma – USD/TRY ilişki panosu: ileri dönük getiriler, saçılımlar, bant istatistiği"
+  no="02"
+  yukseklik={900}
+/>
 
-Çıktılar ayrı HTML dosyalarındadır (3M/5Y/10Y versiyonları); siteye bir sonraki veri
-güncellemesinde eklenecekler.
+### Şekil 02 nasıl hesaplanıyor?
+
+Pano dört katmandır: (i) USDTRY ile 10Y sapma çift eksende; (ii) 1/3/6/12 ay **ileri
+dönük** kur değişimleri $USDTRY_{t+k}/USDTRY_t - 1$; (iii) sapma-vs-sonraki-dönem
+saçılımları OLS doğrularıyla; (iv) sapma bandına göre 12 ay sonraki ortalama kur
+değişimi. Ana sonuçlar ($n=229$, tümü $p<0{,}01$):
+
+| Ufuk | 1M | 3M | 6M | 12M |
+| --- | --- | --- | --- | --- |
+| Korelasyon $r$ | −0,19 | −0,22 | −0,35 | **−0,50** |
+
+İlişki ufuk uzadıkça güçlenir — değerleme sinyalinin doğası. Bant istatistiği aynı
+şeyi doğrusal olmayan haliyle söyler: sapma **< −20%** iken (TL aşırı ucuz) sonraki
+12 ayda kur ortalama **+%40,2** yükselmiş ($n=57$ ay); sapma +10/+20% bandındayken
+yalnız +%5,6. Uç pozitif bantta (+20% üzeri, $n=15$) ortalamanın tekrar +%14'e
+sıçraması, aşırı değerlenmenin düzeltme riskini taşıdığının işaretidir.
+
+<GrafikEmbed
+  src="/projeler/try-reer/redk_degisim_regresyon.html"
+  baslik="Eşzamanlı değişim regresyonu: Δsapma vs USD/TRY değişimi (1M/3M/6M)"
+  no="03"
+  yukseklik={560}
+/>
+
+### Şekil 03 nasıl hesaplanıyor?
+
+Bu kez ileri dönük değil **eşzamanlı** ilişki: aynı penceredeki sapma değişimi
+(puan, `diff(k)`) ile kur yüzde değişimi (`pct_change(k)`) arasında OLS; üç pencere
+yan yana, kutularda $R^2$/$r$/eğim/artık hatası, son ay kırmızı yıldızla işaretli.
+1 aylık pencerede $R^2 = 0{,}59$, eğim **−1,17**: sapma 1 puan artarsa kur aynı ay
+~%1,2 düşer — bu öngörü değil, reel kurun tanımından gelen mekanik ilişkidir
+(enflasyon farkı bir ayda az değişir, sapmayı nominal kur oynatır). Şekil 02'nin
+ileri dönük zayıf-ama-anlamlı korelasyonlarıyla bu mekanik $R^2$'yi karıştırmamak,
+REDK analizinin en sık yapılan hatasından kaçınmaktır.
+
+## Güncel okuma (Mart 2026 verisiyle)
+
+Kompozit REDK **103,8** · 10Y sapma **+5,3%** (nötr bölge) · 5Y sapma +14,1% ·
+%100 Yi-ÜFE sapması +12,0% vs %100 TÜFE +2,7% — iki endeksin ayrışması sürüyor:
+ticarete konu mallar tarafında TL belirgin pahalı, TÜFE bazında henüz nötr.
 
 ## Yorum notları
 

@@ -355,6 +355,19 @@ Bütün kuponlu fiyatlamalar DF'yi buradan `VLOOKUP` ile okur — "TLREF'i elle 
 yürütmek" işleminin otomatiği. Üçüncü tutarlılık kontrolü de buradadır: günlük patika
 DF'si ↔ toplantı tablosu DF'si ↔ OIS pillar DF'si üçü uyuşmalıdır.
 
+**Pratik — üç satırlık el hesabı.** TLREF üç gün boyunca %40 olsun
+($r/365 = 0{,}0010959$, günlük accrual $= 1{,}0010959$):
+
+| Gün | Uygulanan TLREF | Accrual | CumDF |
+| --- | --- | --- | --- |
+| 1 | %40,00 | 1,0010959 | $1/1{,}0010959 = 0{,}998905$ |
+| 2 | %40,00 | 1,0010959 | $0{,}998905/1{,}0010959 = 0{,}997812$ |
+| 3 | %40,00 | 1,0010959 | $0{,}997812/1{,}0010959 = 0{,}996721$ |
+
+Geri çevrim tutarlılığı: $365\left[(1/0{,}996721)^{1/3}-1\right] = \%40{,}00$ —
+tabloda 3652 satır boyunca dönen işlem, bu üç satırın aynısıdır; toplantı
+tarihlerinde yalnız uygulanan oran değişir.
+
 ## Bölüm 9 — Par swap, forward swap ve eğri spread'leri
 
 ### 9.1 Par swap, gerçek takvimle
@@ -538,7 +551,20 @@ katkısı artığa düşer. Kural: artık MTM'in %5'ini aşıyorsa tam yeniden d
 
 Tek ATM vol yetmezse basit parabolik yaklaşım:
 $\sigma(K) = \sigma_{ATM} + \alpha\left(K/F-1\right) + \beta\left(K/F-1\right)^2$
-(örnek: $\alpha=-0{,}5$, $\beta=2$). Üretimde bu eğri SABR parametrelerinden gelir;
+(örnek: $\alpha=-0{,}5$, $\beta=2$). Modelin grid'i, $F=\%32{,}94$ etrafında ±500 bps:
+
+| Strike K | K/F | σ(K) | Payer prim (decimal) |
+| --- | --- | --- | --- |
+| %27,94 | 0,848 | %37,2 | 0,0721 |
+| %29,94 | 0,909 | %31,2 | 0,0542 |
+| %31,94 | 0,970 | %26,7 | 0,0386 |
+| %32,94 (ATM) | 1,000 | %25,0 | 0,0319 |
+| %33,94 | 1,030 | %23,7 | 0,0260 |
+| %35,94 | 1,091 | %22,1 | 0,0171 |
+| %37,94 | 1,152 | %22,0 | 0,0119 |
+
+Skew'in şekli tanıdıktır: düşük strike'lara (receiver kanadı) doğru vol yükselir —
+faiz düşüş senaryolarına koruma talebi. Üretimde bu eğri SABR parametrelerinden gelir;
 buradaki grid, strike başına fiyat/delta okumak için yeterli bir ilk yaklaşımdır.
 Not: üretim fiyatlamasında annuity **CSA** (teminat para birimi) DF'leriyle iskonto
 edilir; model bunu açıkça "scenario DF kullanıyorum" diye işaretler.

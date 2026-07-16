@@ -80,7 +80,21 @@ def main():
         idx = index_builder.build_index(all_articles[asset_key], params)
         indices[asset_key] = idx
 
-    index_builder.save_index_snapshot(indices)
+    # Rejim ozeti: her kosuda index_history kaydina eklenir (rejim tarihcesi
+    # ileride cizilebilsin). Agir hesap (gunluk duyarlilik matrisi) —
+    # basarisiz olursa snapshot rejimsiz kaydedilir, pipeline durmaz.
+    rejim_bilgi = None
+    try:
+        import web_cikti
+        rejim_bilgi = web_cikti.rejim_ozeti()
+        print(f"\n  Rejim: {rejim_bilgi['label']} "
+              f"(spread {rejim_bilgi['basket_spread']:+.3f}, "
+              f"ort. korelasyon {rejim_bilgi['avg_correlation']:+.3f}, "
+              f"PC1 payi {rejim_bilgi['pc1_share']:.1%})")
+    except Exception as exc:
+        print(f"\n  UYARI: rejim hesaplanamadi: {exc}")
+
+    index_builder.save_index_snapshot(indices, regime=rejim_bilgi)
 
     if args.output == "json":
         print(json.dumps(indices, indent=2, default=str))
@@ -126,10 +140,13 @@ def main():
             ret = info["return_1d"] * 100 if info["return_1d"] else 0
             print(f"  {name}: {info['price']:.4f} ({ret:+.2f}%)")
 
-    # Step 6: Static web output (Plotly HTML for the site)
+    # Step 6: Static web output (Plotly HTML for the site).
+    # Rejim ozeti yukarida hesaplandiysa yeniden hesaplanmaz; agir adimlar
+    # (rejim matrisi, yfinance sacilimi) web_cikti icinde try/except ile
+    # opsiyoneldir — hata pipeline'i durdurmaz.
     try:
         import web_cikti
-        yollar = web_cikti.uret()
+        yollar = web_cikti.uret(rejim=rejim_bilgi)
         print("\nWeb ciktisi yenilendi:")
         for yol in yollar:
             print(f"  {yol}")

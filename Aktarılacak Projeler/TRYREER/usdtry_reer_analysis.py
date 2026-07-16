@@ -6,9 +6,11 @@ USDTRY ve Reel Efektif Döviz Kuru Sapması İlişkisi Analizi
 - Öngörü gücü analizi (lead-lag)
 """
 
+import os
+import sys
+
 import pandas as pd
 import numpy as np
-import yfinance as yf
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from scipy import stats
@@ -17,6 +19,10 @@ from datetime import datetime, timedelta
 # ============================================
 # PARAMETRİK DEĞİŞKENLER
 # ============================================
+
+# Tüm yollar script klasörüne göre — hangi dizinden çalıştırılırsa çalıştırılsın bulunur
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, SCRIPT_DIR)
 
 # main.py'den ağırlıkları import et
 from main import PPI_WEIGHT, CPI_WEIGHT, CPI_FILE, PPI_FILE
@@ -28,8 +34,12 @@ MA_WINDOW_5Y = 60
 # Analiz pencereleri (ay) - sapma sonrası USDTRY değişimi
 FORWARD_WINDOWS = [1, 3, 6, 12]  # 1, 3, 6, 12 ay sonraki değişim
 
+# Yerel USDTRY önbelleği (önceki çalıştırmanın çıktısı) — önce buradan okunur,
+# yoksa/eksikse yfinance'e düşülür
+USDTRY_LOCAL_CSV = os.path.join(SCRIPT_DIR, "usdtry_reer_data.csv")
+
 # Çıktı dosyası
-OUTPUT_HTML = "usdtry_reer_analysis.html"
+OUTPUT_HTML = os.path.join(SCRIPT_DIR, "usdtry_reer_analysis.html")
 
 # ============================================
 # VERİ YÜKLEME
@@ -81,22 +91,53 @@ def load_reer_data():
     return df
 
 
-def fetch_usdtry():
-    """Yahoo Finance'ten USDTRY verisi çek"""
+def load_usdtry_local():
+    """Yerel usdtry_reer_data.csv'den aylık USDTRY serisini oku.
+
+    Dosya önceki çalıştırmanın birleştirilmiş çıktısıdır; USDTRY sütunu zaten
+    aylık ortalama olarak kayıtlıdır. Dosya yoksa/sütunlar eksikse None döner.
+    """
+    if not os.path.exists(USDTRY_LOCAL_CSV):
+        return None
+    try:
+        df = pd.read_csv(USDTRY_LOCAL_CSV)
+        if not {'Dönem', 'USDTRY'}.issubset(df.columns):
+            return None
+        df['Dönem'] = pd.to_datetime(df['Dönem'], errors='coerce')
+        for col in ['High', 'Low']:
+            if col not in df.columns:
+                df[col] = np.nan
+        df = df[['Dönem', 'USDTRY', 'High', 'Low']].dropna(subset=['Dönem', 'USDTRY'])
+        df = df.sort_values('Dönem').reset_index(drop=True)
+        if df.empty:
+            return None
+        return df
+    except Exception as e:
+        print(f"   ⚠️ Yerel CSV okunamadı ({e}) — yfinance'e geçiliyor")
+        return None
+
+
+def fetch_usdtry_yfinance():
+    """Yahoo Finance'ten USDTRY verisi çek (aylık ortalamaya indirgenir)"""
+    import yfinance as yf
+
     print("📥 Yahoo Finance'ten USDTRY verisi çekiliyor...")
-    
+
     # Geniş tarih aralığı
     ticker = yf.Ticker("TRY=X")
     df = ticker.history(period="max")
-    
+
     if df.empty:
         # Alternatif ticker dene
         ticker = yf.Ticker("USDTRY=X")
         df = ticker.history(period="max")
-    
+
+    if df.empty:
+        raise RuntimeError("yfinance boş veri döndürdü (TRY=X ve USDTRY=X)")
+
     df = df.reset_index()
     df['Date'] = pd.to_datetime(df['Date']).dt.tz_localize(None)
-    
+
     # Aylık ortalamalara dönüştür (REDK aylık)
     df['YearMonth'] = df['Date'].dt.to_period('M')
     monthly = df.groupby('YearMonth').agg({
@@ -105,14 +146,41 @@ def fetch_usdtry():
         'Low': 'min',
         'Volume': 'sum'
     }).reset_index()
-    
+
     monthly['Dönem'] = monthly['YearMonth'].dt.to_timestamp()
     monthly = monthly.rename(columns={'Close': 'USDTRY'})
     monthly = monthly[['Dönem', 'USDTRY', 'High', 'Low']]
-    
+
     print(f"   ✅ {len(monthly)} aylık veri çekildi ({monthly['Dönem'].min().strftime('%Y-%m')} - {monthly['Dönem'].max().strftime('%Y-%m')})")
-    
+
     return monthly
+
+
+def fetch_usdtry(reer_last_date=None):
+    """USDTRY verisini getir: önce yerel CSV, yoksa/eksikse yfinance.
+
+    reer_last_date verilirse yerel serinin REDK verisinin sonunu kapsayıp
+    kapsamadığı kontrol edilir; kapsamıyorsa yfinance denenir, o da
+    başarısız olursa eldeki yerel seriyle devam edilir.
+    """
+    local = load_usdtry_local()
+
+    if local is not None:
+        yeterli = reer_last_date is None or local['Dönem'].max() >= reer_last_date
+        if yeterli:
+            print(f"📥 USDTRY yerel CSV'den okundu: {len(local)} ay "
+                  f"({local['Dönem'].min().strftime('%Y-%m')} - {local['Dönem'].max().strftime('%Y-%m')})")
+            return local
+        print(f"   ℹ️ Yerel USDTRY serisi {local['Dönem'].max().strftime('%Y-%m')}'de bitiyor, "
+              f"REDK {reer_last_date.strftime('%Y-%m')}'e kadar gidiyor — yfinance deneniyor")
+
+    try:
+        return fetch_usdtry_yfinance()
+    except Exception as e:
+        if local is not None:
+            print(f"   ⚠️ yfinance başarısız ({e}) — yerel CSV ile devam ediliyor")
+            return local
+        raise RuntimeError(f"USDTRY verisi alınamadı: yerel CSV yok, yfinance hatası: {e}")
 
 
 def merge_data(df_reer, df_usdtry):
@@ -633,8 +701,8 @@ def main():
     df_reer = load_reer_data()
     print(f"   ✅ REDK: {len(df_reer)} satır ({df_reer['Dönem'].min().strftime('%Y-%m')} - {df_reer['Dönem'].max().strftime('%Y-%m')})")
     
-    # USDTRY verisi çek
-    df_usdtry = fetch_usdtry()
+    # USDTRY verisi getir (önce yerel CSV, yoksa/eksikse yfinance)
+    df_usdtry = fetch_usdtry(reer_last_date=df_reer['Dönem'].max())
     
     # Birleştir
     print("\n🔗 Veriler birleştiriliyor...")
@@ -662,9 +730,9 @@ def main():
         print(f"\n🎨 {ma_type} Grafikler oluşturuluyor...")
         fig = create_analysis_plot(df, corr_df, band_df, ma_type)
         
-        # Kaydet
-        output_html = f"usdtry_reer_analysis_{ma_type.lower()}.html"
-        fig.write_html(output_html)
+        # Kaydet (plotly.js CDN'den — dosya ~4.6MB yerine ~100KB olur)
+        output_html = os.path.join(SCRIPT_DIR, f"usdtry_reer_analysis_{ma_type.lower()}.html")
+        fig.write_html(output_html, include_plotlyjs='cdn')
         print(f"   ✅ Ana grafik '{output_html}' olarak kaydedildi")
         
         # Eşzamanlı değişim regresyon grafikleri (1M, 3M, 6M)
@@ -693,29 +761,29 @@ def main():
             last_usd = df_reg[f'USDTRY_Change_{period}M'].dropna().iloc[-1]
             print(f"   {period}M: Sapma Δ = {last_dev:+.2f} puan, USDTRY Δ = {last_usd:+.1f}%")
         
-        # Kaydet
-        regression_html = f"usdtry_regression_{ma_type.lower()}.html"
-        fig_regression.write_html(regression_html)
+        # Kaydet (plotly.js CDN'den — dosya ~4.6MB yerine ~100KB olur)
+        regression_html = os.path.join(SCRIPT_DIR, f"usdtry_regression_{ma_type.lower()}.html")
+        fig_regression.write_html(regression_html, include_plotlyjs='cdn')
         print(f"   ✅ Regresyon grafiği '{regression_html}' olarak kaydedildi")
-    
-    # Tarayıcıda aç (sadece 10Y ve 5Y dosyalarını)
-    try:
-        import webbrowser
-        import os
-        for ma in ['10y', '5y']:
-            webbrowser.open('file://' + os.path.realpath(f'usdtry_reer_analysis_{ma}.html'))
-            webbrowser.open('file://' + os.path.realpath(f'usdtry_regression_{ma}.html'))
-        print("   🌐 Tüm grafikler tarayıcıda açılıyor...")
-    except Exception as e:
-        print(f"   ⚠️ Tarayıcı açılamadı: {e}")
-    
+
+    # Tarayıcıda aç (TTO_TARAYICI_ACMA=1 ile bastırılabilir; otomasyon için)
+    if not os.environ.get("TTO_TARAYICI_ACMA"):
+        try:
+            import webbrowser
+            for ma in ['10y', '5y']:
+                webbrowser.open('file://' + os.path.join(SCRIPT_DIR, f'usdtry_reer_analysis_{ma}.html'))
+                webbrowser.open('file://' + os.path.join(SCRIPT_DIR, f'usdtry_regression_{ma}.html'))
+            print("   🌐 Tüm grafikler tarayıcıda açılıyor...")
+        except Exception as e:
+            print(f"   ⚠️ Tarayıcı açılamadı: {e}")
+
     # Veriyi kaydet
-    output_csv = "usdtry_reer_data.csv"
+    output_csv = os.path.join(SCRIPT_DIR, "usdtry_reer_data.csv")
     df.to_csv(output_csv, index=False)
     print(f"   ✅ Veri '{output_csv}' olarak kaydedildi")
-    
+
     # Korelasyon tablosunu kaydet
-    corr_df.to_csv("correlation_analysis.csv", index=False)
+    corr_df.to_csv(os.path.join(SCRIPT_DIR, "correlation_analysis.csv"), index=False)
     print(f"   ✅ Korelasyon analizi 'correlation_analysis.csv' olarak kaydedildi")
     
     return df, corr_df, band_df, fig
