@@ -288,21 +288,26 @@ def analyze_deviation_bands(df, ma_type='10Y'):
     return pd.DataFrame(results)
 
 
-def create_change_regression_plot(df, ma_type='10Y'):
-    """Eşzamanlı sapma değişimi vs USDTRY değişimi regresyon grafikleri (1M, 3M, 6M)"""
+def create_change_regression_plot(df, ma_type='10Y', periods=(1, 3, 6)):
+    """Eşzamanlı sapma değişimi vs USDTRY değişimi regresyon grafikleri.
+
+    periods: incelenecek değişim pencereleri (ay). Varsayılan (1, 3, 6) üç
+    panelli grafik üretir; tek eleman verilirse (ör. [3]) tek panelli odak
+    grafik üretilir — usdtry_regression_3m.html bu yolla üretilir.
+    """
     dev_col = f'Deviation_{ma_type}'
     df_plot = df.dropna(subset=[dev_col, 'USDTRY']).copy()
-    
+
     # Farklı pencereler için eşzamanlı değişimler hesapla
-    periods = [1, 3, 6]
+    periods = list(periods)
     for p in periods:
         df_plot[f'Deviation_Change_{p}M'] = df_plot[dev_col].diff(p)
         df_plot[f'USDTRY_Change_{p}M'] = df_plot['USDTRY'].pct_change(p) * 100
-    
-    # 3 subplot'lu grafik
+
+    # Pencere başına bir subplot
     fig = make_subplots(
-        rows=1, cols=3,
-        subplot_titles=['1 Aylık Değişim', '3 Aylık Değişim', '6 Aylık Değişim'],
+        rows=1, cols=len(periods),
+        subplot_titles=[f'{p} Aylık Değişim' for p in periods],
         horizontal_spacing=0.08
     )
     
@@ -395,12 +400,18 @@ def create_change_regression_plot(df, ma_type='10Y'):
             row=1, col=i+1
         )
     
+    # Başlık: tek pencereli odak grafikte pencereyi belirt
+    if len(periods) == 1:
+        baslik = f"<b>Eşzamanlı {periods[0]} Aylık Değişim: REDK Sapması ({ma_type}) vs USDTRY</b>"
+    else:
+        baslik = f"<b>Eşzamanlı Değişimler: REDK Sapması ({ma_type}) vs USDTRY</b>"
+
     # Layout - yatay olarak büyütülmüş
     fig.update_layout(
         height=550,
-        width=1500,  # Yatay büyütme
+        width=max(750, 500 * len(periods)),  # Panel sayısına göre genişlik
         title=dict(
-            text=f"<b>Eşzamanlı Değişimler: REDK Sapması ({ma_type}) vs USDTRY</b>",
+            text=baslik,
             x=0.5, y=0.98,
             font=dict(size=20)
         ),
@@ -765,6 +776,19 @@ def main():
         regression_html = os.path.join(SCRIPT_DIR, f"usdtry_regression_{ma_type.lower()}.html")
         fig_regression.write_html(regression_html, include_plotlyjs='cdn')
         print(f"   ✅ Regresyon grafiği '{regression_html}' olarak kaydedildi")
+
+        # 3M odak grafiği: 10Y sapma temelli, yalnız 3 aylık değişim penceresi.
+        # (usdtry_regression_3m.html'in güncel karşılığı — eski dosya repo öncesi
+        # dönemden kalan 10Y temelli üç panelli grafikti, artık tek panelli
+        # 3M odak grafiği olarak yeniden üretiliyor.)
+        if ma_type == '10Y':
+            print(f"\n📈 3M odaklı regresyon grafiği oluşturuluyor (10Y sapma temelli)...")
+            fig_reg_3m, _, reg_stats_3m = create_change_regression_plot(df, ma_type, periods=[3])
+            regression_3m_html = os.path.join(SCRIPT_DIR, "usdtry_regression_3m.html")
+            fig_reg_3m.write_html(regression_3m_html, include_plotlyjs='cdn')
+            s3 = reg_stats_3m[0]
+            print(f"   3M: R²={s3['r2']:.4f}, r={s3['corr']:.4f}, eğim={s3['slope']:.3f}, σ={s3['rse']:.2f}%, N={s3['n']}")
+            print(f"   ✅ 3M regresyon grafiği '{regression_3m_html}' olarak kaydedildi")
 
     # Tarayıcıda aç (TTO_TARAYICI_ACMA=1 ile bastırılabilir; otomasyon için)
     if not os.environ.get("TTO_TARAYICI_ACMA"):

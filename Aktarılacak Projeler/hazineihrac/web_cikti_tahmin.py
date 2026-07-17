@@ -1,22 +1,37 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Hazine ihraç TAHMİN sistemi — web çıktıları (İNTERNETSİZ, yalnız CSV okur).
+"""Hazine ihraç sistemi — web çıktıları (yalnız CSV/JSON okur; tek istisna:
+ihrac_usd için yfinance'ten USD/TRY kuru çekilir, erişilemezse o grafik atlanır).
 
 Girdi (aynı klasörde):
+  - hazine_ihale_verileri.csv     : ihale bazında tam veri (faiz, fiyat, teklif…)
+  - hazine_vade_analizi.csv       : aylık ağırlıklı ortalama vade
+  - hazine_hedef_gerceklesme.csv  : aylık hedef vs gerçekleşen borçlanma
+  - .strategy_history.json        : strateji dokümanı bazında hedef revizyonları
   - hazine_planlanan_ihaleler.csv : planlanan takvim + tahmin kolonları
   - hazine_tahmin_dogrulama.csv   : backtest (tahmin vs gerçekleşen, ihale bazında)
 
-Çıktı (aynı klasöre):
-  - planlanan_ihraclar.html : ihale tarihi bazında beklenen net satış (stacked bar)
-                              + aylık toplam beklenen vs strateji hedefi (2. panel)
+Çıktı (aynı klasöre) — dashboard.py'deki panellerin statik web karşılıkları:
+  - planlanan_ihraclar.html : ihale bazında beklenen net satış + aylık hedef kıyası
   - tahmin_dogrulama.html   : tahmin vs gerçekleşen scatter + y=x + MAE/MAPE
+  - ihrac_hacmi.html        : aylık ihraç hacmi senet türü kırılımı + tür payları
+  - ihrac_usd.html          : aylık ihraç hacmi (milyar USD) + USD/TRY kuru
+  - ihrac_tempo.html        : çeyreklik ihraç trendi + aylık ihale sayısı
+  - faiz_gelisimi.html      : bileşik faiz gelişimi + teklif vs kesilen faiz
+  - talep_analizi.html      : bid-to-cover serisi + ihale kabul oranı
+  - fiyat_araligi.html      : son 50 ihalede fiyat bandı (min–ort–maks)
+  - vade_dagilimi.html      : vade heatmap (yıl×ay) + çeyrek bazında dağılım
+  - strateji_revizyon.html  : ay bazında strateji hedef revizyonları + kümülatif
+  - tahmin_aylik.html       : backtest aylık toplam — gerçek vs üç tahmin modeli
 
 Site standardı: include_plotlyjs='cdn', beyaz zemin, lejant altta yatay,
-başlık solda, Türkçe etiketler.
+başlık solda, Türkçe etiketler, legendgroup kullanılmaz.
 """
 
+import json
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
@@ -38,7 +53,11 @@ TIP_RENK = {
     "TLREF'e Endeksli Devlet Tahvili": TEAL,
     "Değişken Faizli Devlet Tahvili": SLATE,
     "TÜFE'ye Endeksli Devlet Tahvili": CLARET_KOYU,
+    "Kuponsuz Devlet Tahvili": GRI,
 }
+
+# Reel getirili seri — nominal maliyet ortalamasına katılmaz
+REEL_TIPLER = {"TÜFE'ye Endeksli Devlet Tahvili"}
 
 AYLAR = {
     1: "Ocak", 2: "Şubat", 3: "Mart", 4: "Nisan", 5: "Mayıs", 6: "Haziran",
@@ -281,8 +300,585 @@ def tahmin_dogrulama() -> dict:
     }
 
 
+# ================================================================
+# ORTAK VERİ YÜKLEYİCİ
+# ================================================================
+def ihale_verisi() -> pd.DataFrame:
+    """Ana ihale CSV'sini yükler ve türetilmiş kolonları ekler."""
+    df = pd.read_csv(KOK / "hazine_ihale_verileri.csv", encoding="utf-8-sig")
+    df["tarih"] = pd.to_datetime(df["İhale Tarihi"], format="%d.%m.%Y",
+                                 errors="coerce")
+    df = df.dropna(subset=["tarih"]).sort_values("tarih").reset_index(drop=True)
+    df["ay"] = df["tarih"].dt.to_period("M")
+    df["ceyrek"] = df["tarih"].dt.to_period("Q").astype(str)
+    df["b2c"] = np.where(df["Toplam(Gerçekleşme)"] > 0,
+                         df["Toplam(Teklif)"] / df["Toplam(Gerçekleşme)"],
+                         np.nan)
+    return df
+
+
+def _panel_baslik_stili(fig: go.Figure) -> None:
+    """make_subplots panel başlıklarını ev stiline çeker."""
+    for a in fig.layout.annotations:
+        a.font = dict(size=13, color=INK)
+
+
+TR_AY_SIRA = {
+    "Ocak": 1, "Şubat": 2, "Mart": 3, "Nisan": 4, "Mayıs": 5, "Haziran": 6,
+    "Temmuz": 7, "Ağustos": 8, "Eylül": 9, "Ekim": 10, "Kasım": 11, "Aralık": 12,
+}
+
+
+def _ay_yil_sirala(s: str) -> tuple:
+    """'Haziran 2026' → (2026, 6)."""
+    parca = str(s).split()
+    if len(parca) == 2 and parca[0] in TR_AY_SIRA:
+        try:
+            return (int(parca[1]), TR_AY_SIRA[parca[0]])
+        except ValueError:
+            pass
+    return (0, 0)
+
+
+# ================================================================
+# 3) AYLIK İHRAÇ HACMİ — SENET TÜRÜ KIRILIMI + PAY
+# ================================================================
+def ihrac_hacmi() -> dict:
+    df = ihale_verisi()
+    aylik = (df.groupby(["ay", "Senet Tanımı"])["Toplam(Gerçekleşme)"]
+             .sum().unstack(fill_value=0.0) / 1000.0)  # milyar TL
+    pay = aylik.div(aylik.sum(axis=1), axis=0) * 100
+    x = aylik.index.to_timestamp()
+    sira = aylik.sum().sort_values(ascending=False).index
+    toplam_pay = aylik.sum() / aylik.values.sum() * 100
+
+    fig = make_subplots(
+        rows=2, cols=1, row_heights=[0.6, 0.4], shared_xaxes=True,
+        vertical_spacing=0.16,
+        subplot_titles=("Aylık ihraç hacmi — senet türü kırılımı (milyar TL)",
+                        "Senet türlerinin aylık pay dağılımı (%)"),
+    )
+    for tip in sira:
+        renk = TIP_RENK.get(tip, GRI)
+        fig.add_trace(go.Bar(
+            x=x, y=aylik[tip].round(2),
+            name=f"{tip} (dönem payı %{tr(float(toplam_pay[tip]))})",
+            marker_color=renk,
+            hovertemplate=f"{tip}: %{{y:.1f}} milyar TL<extra></extra>",
+        ), row=1, col=1)
+        fig.add_trace(go.Bar(
+            x=x, y=pay[tip].round(1), marker_color=renk, showlegend=False,
+            hovertemplate=f"{tip}: %{{y:.1f}}%<extra></extra>",
+        ), row=2, col=1)
+
+    fig.update_layout(barmode="relative")
+    ortak_stil(fig, "Hazine ihraçları — aylık hacim ve senet türü kırılımı")
+    _panel_baslik_stili(fig)
+    fig.update_yaxes(title_text="Milyar TL", row=1, col=1)
+    fig.update_yaxes(title_text="Pay (%)", range=[0, 100], row=2, col=1)
+
+    fig.write_html(KOK / "ihrac_hacmi.html", include_plotlyjs="cdn")
+    return {
+        "ihale_adet": len(df),
+        "donem": (df["tarih"].min().strftime("%d.%m.%Y"),
+                  df["tarih"].max().strftime("%d.%m.%Y")),
+        "toplam_mlr": float(aylik.values.sum()),
+        "tip_pay": {t: round(float(v), 1) for t, v in toplam_pay.items()},
+    }
+
+
+# ================================================================
+# 4) AYLIK İHRAÇ HACMİ USD + USD/TRY KURU
+# ================================================================
+def ihrac_usd() -> dict | None:
+    try:
+        import yfinance as yf
+        h = yf.Ticker("USDTRY=X").history(period="max", interval="1d")
+        if h.empty:
+            raise RuntimeError("boş kur serisi")
+        kur = h["Close"].resample("ME").last()
+        kurlar = {pd.Timestamp(t).strftime("%Y-%m"): float(v)
+                  for t, v in kur.items() if pd.notna(v)}
+    except Exception as e:  # internetsiz koşuda grafik atlanır
+        print(f"  ! ihrac_usd atlandı (USD/TRY kuru alınamadı: {e})")
+        return None
+
+    df = ihale_verisi()
+    aylik = df.groupby("ay")["Toplam(Gerçekleşme)"].sum().reset_index()
+    aylik["anahtar"] = aylik["ay"].astype(str)
+    aylik["kur"] = aylik["anahtar"].map(kurlar)
+    aylik = aylik.dropna(subset=["kur"])
+    aylik["usd_mlr"] = aylik["Toplam(Gerçekleşme)"] / aylik["kur"] / 1000.0
+    x = aylik["ay"].dt.to_timestamp()
+
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+    fig.add_trace(go.Bar(
+        x=x, y=aylik["usd_mlr"].round(2), name="Aylık ihraç (milyar USD)",
+        marker_color=TEAL, opacity=0.85,
+        hovertemplate="İhraç: %{y:.2f} milyar USD<extra></extra>",
+    ), secondary_y=False)
+    fig.add_trace(go.Scatter(
+        x=x, y=aylik["kur"].round(2), name="USD/TRY (ay sonu)",
+        mode="lines", line=dict(color=CLARET, width=2),
+        hovertemplate="USD/TRY: %{y:.2f}<extra></extra>",
+    ), secondary_y=True)
+
+    ortak_stil(fig, "Aylık ihraç hacmi dolar bazında ve USD/TRY kuru")
+    fig.update_yaxes(title_text="Milyar USD", secondary_y=False)
+    fig.update_yaxes(title_text="USD/TRY", secondary_y=True, showgrid=False)
+
+    fig.write_html(KOK / "ihrac_usd.html", include_plotlyjs="cdn")
+    return {
+        "ay_adet": len(aylik),
+        "toplam_usd_mlr": float(aylik["usd_mlr"].sum()),
+        "son_ay_usd_mlr": float(aylik["usd_mlr"].iloc[-1]),
+        "son_kur": float(aylik["kur"].iloc[-1]),
+    }
+
+
+# ================================================================
+# 5) İHRAÇ TEMPOSU — ÇEYREKLİK TREND + AYLIK İHALE SAYISI
+# ================================================================
+def ihrac_tempo() -> dict:
+    df = ihale_verisi()
+    ceyrek = (df.groupby("ceyrek")["Toplam(Gerçekleşme)"].sum() / 1000.0
+              ).reset_index(name="mlr")
+    sayi = df.groupby("ay").size().reset_index(name="adet")
+    x_ay = sayi["ay"].dt.to_timestamp()
+
+    fig = make_subplots(
+        rows=2, cols=1, row_heights=[0.55, 0.45], vertical_spacing=0.18,
+        subplot_titles=("Çeyreklik toplam ihraç (milyar TL)",
+                        "Aylık ihale sayısı"),
+    )
+    fig.add_trace(go.Scatter(
+        x=ceyrek["ceyrek"], y=ceyrek["mlr"].round(1),
+        name="Çeyreklik ihraç", mode="lines+markers",
+        line=dict(color=CLARET, width=2.5), marker=dict(size=6),
+        fill="tozeroy", fillcolor="rgba(142,31,47,0.08)",
+        hovertemplate="%{x}: %{y:.1f} milyar TL<extra></extra>",
+    ), row=1, col=1)
+    fig.add_trace(go.Bar(
+        x=x_ay, y=sayi["adet"], name="Aylık ihale sayısı",
+        marker_color=SLATE,
+        hovertemplate="İhale sayısı: %{y}<extra></extra>",
+    ), row=2, col=1)
+
+    ortak_stil(fig, "İhraç temposu — çeyreklik hacim ve ihale sıklığı")
+    _panel_baslik_stili(fig)
+    fig.update_yaxes(title_text="Milyar TL", row=1, col=1)
+    fig.update_yaxes(title_text="Adet", row=2, col=1)
+    fig.update_xaxes(tickangle=-45, row=1, col=1)
+
+    fig.write_html(KOK / "ihrac_tempo.html", include_plotlyjs="cdn")
+    return {
+        "ceyrek_adet": len(ceyrek),
+        "son_ceyrek": (ceyrek["ceyrek"].iloc[-1], float(ceyrek["mlr"].iloc[-1])),
+        "aylik_ort_ihale": float(sayi["adet"].mean()),
+    }
+
+
+# ================================================================
+# 6) FAİZ GELİŞİMİ — BİLEŞİK FAİZ + TEKLİF vs KESİLEN
+# ================================================================
+def faiz_gelisimi() -> dict:
+    df = ihale_verisi()
+    gcol = "Ortalama Yıllık Bileşik(Gerçekleşme)"
+    tcol = "Ortalama Yıllık Bileşik(Teklif)"
+
+    # nominal (sabit getirili) ihraçların hacim ağırlıklı aylık ortalama maliyeti
+    nom = df[~df["Senet Tanımı"].isin(REEL_TIPLER)].dropna(subset=[gcol])
+    agirlikli = (nom.assign(carpim=nom[gcol] * nom["Toplam(Gerçekleşme)"])
+                 .groupby("ay")
+                 .agg(pay=("carpim", "sum"), hacim=("Toplam(Gerçekleşme)", "sum")))
+    agirlikli["maliyet"] = agirlikli["pay"] / agirlikli["hacim"]
+
+    fig = make_subplots(
+        rows=2, cols=1, row_heights=[0.58, 0.42], vertical_spacing=0.16,
+        subplot_titles=(
+            "İhale bazında bileşik faiz (%) — TÜFE'ye endeksliler reel getiri",
+            "Teklif edilen vs kesilen ortalama bileşik faiz (%)",
+        ),
+    )
+
+    sira = df["Senet Tanımı"].value_counts().index
+    for tip in sira:
+        sub = df[df["Senet Tanımı"] == tip].dropna(subset=[gcol])
+        renk = TIP_RENK.get(tip, GRI)
+        fig.add_trace(go.Scatter(
+            x=sub["tarih"], y=sub[gcol], name=tip, mode="markers",
+            marker=dict(size=5, color=renk, opacity=0.6),
+            hovertemplate=(f"{tip}<br>%{{x|%d.%m.%Y}} · "
+                           "Bileşik: %{y:.2f}%<extra></extra>"),
+        ), row=1, col=1)
+        sub2 = sub.dropna(subset=[tcol])
+        fig.add_trace(go.Scatter(
+            x=sub2[tcol], y=sub2[gcol], mode="markers", showlegend=False,
+            marker=dict(size=5, color=renk, opacity=0.55),
+            customdata=sub2["tarih"].dt.strftime("%d.%m.%Y"),
+            hovertemplate=(f"{tip}<br>%{{customdata}}<br>"
+                           "Teklif: %{x:.2f}% · Kesilen: %{y:.2f}%"
+                           "<extra></extra>"),
+        ), row=2, col=1)
+
+    fig.add_trace(go.Scatter(
+        x=agirlikli.index.to_timestamp(), y=agirlikli["maliyet"].round(2),
+        name="Aylık ağırlıklı ort. maliyet (nominal ihraçlar)",
+        mode="lines", line=dict(color=INK, width=2.5),
+        hovertemplate="Ağırlıklı ort. maliyet: %{y:.2f}%<extra></extra>",
+    ), row=1, col=1)
+
+    ust = float(max(df[tcol].max(), df[gcol].max())) * 1.03
+    fig.add_trace(go.Scatter(
+        x=[0, ust], y=[0, ust], mode="lines", name="y = x (teklif = kesilen)",
+        line=dict(color=GRI, width=1.5, dash="dash"), hoverinfo="skip",
+    ), row=2, col=1)
+
+    ortak_stil(fig, "Borçlanma maliyeti — bileşik faiz gelişimi",
+               hovermode="closest")
+    _panel_baslik_stili(fig)
+    fig.update_yaxes(title_text="Bileşik faiz (%)", row=1, col=1)
+    fig.update_xaxes(title_text="Teklif ortalama bileşik (%)", row=2, col=1)
+    fig.update_yaxes(title_text="Kesilen ortalama bileşik (%)", row=2, col=1)
+
+    fig.write_html(KOK / "faiz_gelisimi.html", include_plotlyjs="cdn")
+    son = agirlikli.dropna(subset=["maliyet"])
+    return {
+        "son_ay": str(son.index[-1]),
+        "son_ay_maliyet": float(son["maliyet"].iloc[-1]),
+        "zirve_maliyet": float(son["maliyet"].max()),
+        "zirve_ay": str(son["maliyet"].idxmax()),
+    }
+
+
+# ================================================================
+# 7) TALEP ANALİZİ — BID-TO-COVER + KABUL ORANI
+# ================================================================
+def talep_analizi() -> dict:
+    df = ihale_verisi()
+    aylik_b2c = (df.groupby("ay")
+                 .agg(teklif=("Toplam(Teklif)", "sum"),
+                      gercek=("Toplam(Gerçekleşme)", "sum")))
+    aylik_b2c["b2c"] = np.where(aylik_b2c["gercek"] > 0,
+                                aylik_b2c["teklif"] / aylik_b2c["gercek"],
+                                np.nan)
+    kabul = df.groupby("ay")["İhale Kabul Oranı (%)"].mean()
+
+    fig = make_subplots(
+        rows=2, cols=1, row_heights=[0.58, 0.42], vertical_spacing=0.16,
+        subplot_titles=(
+            "Bid-to-cover: toplam teklif / net satış (ihale bazında)",
+            "İhale kabul oranı (%) — kesilen / teklif edilen tutar",
+        ),
+    )
+
+    sira = df["Senet Tanımı"].value_counts().index
+    for tip in sira:
+        sub = df[df["Senet Tanımı"] == tip].dropna(subset=["b2c"])
+        fig.add_trace(go.Scatter(
+            x=sub["tarih"], y=sub["b2c"].round(2), name=tip, mode="markers",
+            marker=dict(size=5, color=TIP_RENK.get(tip, GRI), opacity=0.55),
+            hovertemplate=(f"{tip}<br>%{{x|%d.%m.%Y}} · "
+                           "B/C: %{y:.2f}x<extra></extra>"),
+        ), row=1, col=1)
+
+    fig.add_trace(go.Scatter(
+        x=aylik_b2c.index.to_timestamp(), y=aylik_b2c["b2c"].round(2),
+        name="Aylık toplam B/C (Σteklif / Σsatış)",
+        mode="lines", line=dict(color=INK, width=2.5),
+        hovertemplate="Aylık B/C: %{y:.2f}x<extra></extra>",
+    ), row=1, col=1)
+    fig.add_hline(y=1.0, line_dash="dash", line_color=CLARET, line_width=1.2,
+                  row=1, col=1,
+                  annotation_text="1,0x — teklif = satış", annotation_font_size=11,
+                  annotation_font_color=CLARET)
+
+    fig.add_trace(go.Scatter(
+        x=df["tarih"], y=df["İhale Kabul Oranı (%)"], mode="markers",
+        showlegend=False, marker=dict(size=4, color=GRI, opacity=0.4),
+        hovertemplate="Kabul: %{y:.1f}%<extra></extra>",
+    ), row=2, col=1)
+    fig.add_trace(go.Scatter(
+        x=kabul.index.to_timestamp(), y=kabul.round(1),
+        name="Aylık ortalama kabul oranı",
+        mode="lines", line=dict(color=SLATE, width=2.5),
+        hovertemplate="Aylık ort. kabul: %{y:.1f}%<extra></extra>",
+    ), row=2, col=1)
+
+    ortak_stil(fig, "İhale talebi — bid-to-cover ve kabul oranı",
+               hovermode="closest")
+    _panel_baslik_stili(fig)
+    fig.update_yaxes(title_text="Bid-to-cover (x)", row=1, col=1)
+    fig.update_yaxes(title_text="Kabul oranı (%)", row=2, col=1)
+
+    fig.write_html(KOK / "talep_analizi.html", include_plotlyjs="cdn")
+    son12 = aylik_b2c.tail(12)
+    return {
+        "b2c_son_ay": float(aylik_b2c["b2c"].iloc[-1]),
+        "b2c_son12_ort": float(son12["b2c"].mean()),
+        "kabul_son_ay": float(kabul.iloc[-1]),
+        "kabul_tum_ort": float(df["İhale Kabul Oranı (%)"].mean()),
+    }
+
+
+# ================================================================
+# 8) FİYAT ARALIĞI — SON 50 İHALE
+# ================================================================
+def fiyat_araligi() -> dict:
+    df = ihale_verisi().dropna(subset=[
+        "Ortalama Fiyat(Gerçekleşme)", "En Düşük Fiyat(Gerçekleşme)",
+        "En Yüksek Fiyat(Gerçekleşme)"]).tail(50).reset_index(drop=True)
+    # aynı güne düşen ihaleler ayrışsın diye sıra ekseni + tarih etiketi
+    etiket = (df["tarih"].dt.strftime("%d.%m.%Y") + " · "
+              + df["Senet Tanımı"].str.replace(" Devlet Tahvili", "", regex=False))
+    custom = list(zip(df["ISIN"], df["Senet Tanımı"],
+                      df["tarih"].dt.strftime("%d.%m.%Y")))
+
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=list(range(len(df))), y=df["En Yüksek Fiyat(Gerçekleşme)"],
+        mode="lines", line=dict(width=0), showlegend=False, hoverinfo="skip",
+    ))
+    fig.add_trace(go.Scatter(
+        x=list(range(len(df))), y=df["En Düşük Fiyat(Gerçekleşme)"],
+        name="Min–maks fiyat bandı", mode="lines", line=dict(width=0),
+        fill="tonexty", fillcolor="rgba(63,85,115,0.18)", hoverinfo="skip",
+    ))
+    fig.add_trace(go.Scatter(
+        x=list(range(len(df))), y=df["Ortalama Fiyat(Gerçekleşme)"],
+        name="Ortalama kesim fiyatı", mode="lines+markers",
+        line=dict(color=CLARET, width=2), marker=dict(size=4),
+        customdata=custom,
+        hovertemplate=("<b>%{customdata[1]}</b> · %{customdata[2]}<br>"
+                       "ISIN: %{customdata[0]}<br>"
+                       "Ortalama fiyat: %{y:.3f}<extra></extra>"),
+    ))
+    fig.update_xaxes(tickmode="array",
+                     tickvals=list(range(0, len(df), 5)),
+                     ticktext=[etiket[i] for i in range(0, len(df), 5)],
+                     tickangle=-40)
+    ortak_stil(fig, "Kesim fiyatı aralığı — son 50 ihale", hovermode="x")
+    fig.update_yaxes(title_text="Fiyat (100 üzerinden)")
+
+    fig.write_html(KOK / "fiyat_araligi.html", include_plotlyjs="cdn")
+    return {"n": len(df),
+            "donem": (df["tarih"].iloc[0].strftime("%d.%m.%Y"),
+                      df["tarih"].iloc[-1].strftime("%d.%m.%Y"))}
+
+
+# ================================================================
+# 9) VADE DAĞILIMI — HEATMAP + ÇEYREK BAZINDA KUTU GRAFİĞİ
+# ================================================================
+def vade_dagilimi() -> dict:
+    df = ihale_verisi()
+    pivot = (df.assign(yil=df["tarih"].dt.year, ayno=df["tarih"].dt.month)
+             .groupby(["yil", "ayno"])["Vade (Yıl)"].mean().unstack())
+    ay_kisa = ["Oca", "Şub", "Mar", "Nis", "May", "Haz",
+               "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"]
+
+    fig = make_subplots(
+        rows=2, cols=1, row_heights=[0.42, 0.58], vertical_spacing=0.16,
+        subplot_titles=("Ortalama ihraç vadesi — yıl × ay (yıl cinsinden)",
+                        "Çeyrek bazında vade dağılımı — senet türüne göre"),
+    )
+    fig.add_trace(go.Heatmap(
+        z=pivot.values.round(2),
+        x=[ay_kisa[int(c) - 1] for c in pivot.columns],
+        y=[str(y) for y in pivot.index],
+        colorscale=[[0.0, "#f5f0e6"], [0.55, GOLD], [1.0, CLARET]],
+        colorbar=dict(title=dict(text="Vade (yıl)", font=dict(size=11)),
+                      len=0.32, y=0.86, thickness=12),
+        hoverongaps=False,
+        hovertemplate="%{y} %{x}: ort. %{z:.2f} yıl<extra></extra>",
+    ), row=1, col=1)
+
+    sira = df["Senet Tanımı"].value_counts().index
+    for tip in sira:
+        sub = df[df["Senet Tanımı"] == tip]
+        fig.add_trace(go.Box(
+            x=sub["ceyrek"], y=sub["Vade (Yıl)"], name=tip,
+            marker_color=TIP_RENK.get(tip, GRI),
+            line=dict(width=1.2), marker=dict(size=3), boxpoints=False,
+        ), row=2, col=1)
+
+    fig.update_layout(boxmode="group")
+    ortak_stil(fig, "İhraçların vade dağılımı — ısı haritası ve çeyreklik kutu grafiği",
+               hovermode="closest")
+    _panel_baslik_stili(fig)
+    fig.update_yaxes(title_text="Vade (yıl)", row=2, col=1)
+    fig.update_xaxes(tickangle=-45, row=2, col=1)
+
+    fig.write_html(KOK / "vade_dagilimi.html", include_plotlyjs="cdn")
+    return {"yil_adet": len(pivot.index),
+            "ort_vade": float(df["Vade (Yıl)"].mean())}
+
+
+# ================================================================
+# 10) STRATEJİ REVİZYONLARI + KÜMÜLATİF GERÇEKLEŞME
+# ================================================================
+def strateji_revizyon() -> dict:
+    hist = json.loads((KOK / ".strategy_history.json").read_text(encoding="utf-8"))
+    hedef = pd.read_csv(KOK / "hazine_hedef_gerceklesme.csv", encoding="utf-8-sig")
+    hedef = hedef.dropna(subset=["Ay-Yıl"])
+    hedef = hedef[hedef["Ay-Yıl"].str.strip() != ""].copy()
+    hedef["sira"] = hedef["Ay-Yıl"].map(_ay_yil_sirala)
+    hedef = hedef.sort_values("sira").reset_index(drop=True)
+    gercek_map = dict(zip(hedef["Ay-Yıl"],
+                          hedef["Gerçekleşen Borçlanma (Milyar TL)"]))
+
+    aylar = sorted(hist.keys(), key=_ay_yil_sirala)
+    listeler = {}
+    for ayk in aylar:
+        v = hist[ayk]
+        hl = v.get("history") if isinstance(v, dict) else None
+        if not hl:
+            hl = [{"target": v.get("target", v) if isinstance(v, dict) else v,
+                   "source": v.get("source", "") if isinstance(v, dict) else ""}]
+        listeler[ayk] = hl
+    max_rev = max(len(v) for v in listeler.values())
+
+    OFSET_RENK = {0: CLARET, 1: SLATE, 2: "rgba(154,115,39,0.55)"}
+    OFSET_AD = {0: "Son strateji öngörüsü", 1: "Bir önceki strateji",
+                2: "İki önceki strateji"}
+
+    fig = make_subplots(
+        rows=2, cols=1, row_heights=[0.55, 0.45], vertical_spacing=0.18,
+        subplot_titles=(
+            "Aylık hedefin strateji dokümanları arasındaki revizyonu (milyar TL)",
+            "Kümülatif hedef vs gerçekleşen borçlanma (milyar TL)",
+        ),
+    )
+
+    # --- üst panel: revizyon bar'ları (en eski → en yeni doküman) ---
+    for ofset in range(max_rev - 1, -1, -1):
+        xs, ys, docs = [], [], []
+        for ayk in aylar:
+            hl = listeler[ayk]
+            idx = len(hl) - 1 - ofset
+            if idx < 0:
+                continue
+            xs.append(ayk)
+            ys.append(round(float(hl[idx]["target"]), 1))
+            docs.append(hl[idx].get("source", "—"))
+        if not xs:
+            continue
+        fig.add_trace(go.Bar(
+            x=xs, y=ys, name=OFSET_AD.get(ofset, f"{ofset} strateji önce"),
+            marker_color=OFSET_RENK.get(ofset, GRI),
+            customdata=docs,
+            hovertemplate="%{customdata}<br>Hedef: %{y:.1f} milyar TL<extra></extra>",
+        ), row=1, col=1)
+
+    ger_x = [a for a in aylar if float(gercek_map.get(a, 0) or 0) > 0]
+    fig.add_trace(go.Bar(
+        x=ger_x, y=[round(float(gercek_map[a]), 1) for a in ger_x],
+        name="Gerçekleşen", marker=dict(color="rgba(33,27,18,0.0)",
+                                        line=dict(color=INK, width=2)),
+        hovertemplate="Gerçekleşen: %{y:.1f} milyar TL<extra></extra>",
+    ), row=1, col=1)
+
+    # --- alt panel: kümülatif hedef vs gerçekleşen ---
+    kum = hedef.copy()
+    kum["kum_hedef"] = kum["Hedef Borçlanma (Milyar TL)"].cumsum()
+    kum["kum_gercek"] = kum["Gerçekleşen Borçlanma (Milyar TL)"].cumsum()
+    # gelecekteki (henüz sıfır gerçekleşmeli) aylarda gerçekleşen çizgisi kesilir
+    son_dolu = kum[kum["Gerçekleşen Borçlanma (Milyar TL)"] > 0].index.max()
+    kum.loc[kum.index > son_dolu, "kum_gercek"] = np.nan
+
+    fig.add_trace(go.Scatter(
+        x=kum["Ay-Yıl"], y=kum["kum_hedef"].round(1), name="Kümülatif hedef",
+        mode="lines", line=dict(color=GOLD, width=2),
+        fill="tozeroy", fillcolor="rgba(154,115,39,0.10)",
+        hovertemplate="Kümülatif hedef: %{y:.0f} milyar TL<extra></extra>",
+    ), row=2, col=1)
+    fig.add_trace(go.Scatter(
+        x=kum["Ay-Yıl"], y=kum["kum_gercek"].round(1), name="Kümülatif gerçekleşen",
+        mode="lines", line=dict(color=CLARET, width=2.5),
+        fill="tozeroy", fillcolor="rgba(142,31,47,0.10)",
+        hovertemplate="Kümülatif gerçekleşen: %{y:.0f} milyar TL<extra></extra>",
+    ), row=2, col=1)
+
+    fig.update_layout(barmode="group")
+    ortak_stil(fig, "Strateji hedefleri — revizyon tarihçesi ve kümülatif gerçekleşme")
+    _panel_baslik_stili(fig)
+    fig.update_yaxes(title_text="Milyar TL", row=1, col=1)
+    fig.update_yaxes(title_text="Milyar TL", row=2, col=1)
+    fig.update_xaxes(tickangle=-45, row=2, col=1)
+
+    fig.write_html(KOK / "strateji_revizyon.html", include_plotlyjs="cdn")
+
+    toplam_hedef = float(hedef["Hedef Borçlanma (Milyar TL)"].sum())
+    toplam_gercek = float(hedef["Gerçekleşen Borçlanma (Milyar TL)"].sum())
+    return {
+        "revizyonlu_ay": len(aylar),
+        "toplam_hedef_mlr": toplam_hedef,
+        "toplam_gercek_mlr": toplam_gercek,
+        "gerceklesme_orani": toplam_gercek / toplam_hedef * 100,
+    }
+
+
+# ================================================================
+# 11) BACKTEST — AYLIK TOPLAM: GERÇEK vs ÜÇ TAHMİN MODELİ
+# ================================================================
+def tahmin_aylik() -> dict:
+    df = pd.read_csv(KOK / "hazine_tahmin_dogrulama.csv", encoding="utf-8-sig")
+    df["tarih"] = pd.to_datetime(df["İhale Tarihi"], format="%d.%m.%Y")
+    df["ay"] = df["tarih"].dt.to_period("M")
+    aylik = (df.groupby("ay")
+             .agg(g=("Gerçek Gerçekleşme (Milyon TL)", "sum"),
+                  ham=("Tahmin-Ham (Milyon TL)", "sum"),
+                  duz=("Tahmin-Düzeltilmiş (Milyon TL)", "sum"),
+                  strj=("Tahmin-Strateji (Milyon TL)", "sum")) / 1000.0)
+    x = aylik.index.to_timestamp()
+
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        x=x, y=aylik["g"].round(1), name="Gerçekleşen (aylık toplam)",
+        marker_color="rgba(33,27,18,0.35)",
+        hovertemplate="Gerçek: %{y:.1f} milyar TL<extra></extra>",
+    ))
+    fig.add_trace(go.Scatter(
+        x=x, y=aylik["duz"].round(1), name="Tahmin — düzeltilmiş model",
+        mode="lines", line=dict(color=CLARET, width=2.5),
+        hovertemplate="Düzeltilmiş: %{y:.1f} milyar TL<extra></extra>",
+    ))
+    fig.add_trace(go.Scatter(
+        x=x, y=aylik["ham"].round(1), name="Tahmin — ham geçmiş ortalaması",
+        mode="lines", line=dict(color=TEAL, width=1.8),
+        hovertemplate="Ham: %{y:.1f} milyar TL<extra></extra>",
+    ))
+    fig.add_trace(go.Scatter(
+        x=x, y=aylik["strj"].round(1), name="Tahmin — saf strateji hedefi",
+        mode="lines", line=dict(color=GOLD, width=1.8, dash="dash"),
+        hovertemplate="Strateji: %{y:.1f} milyar TL<extra></extra>",
+    ))
+
+    ortak_stil(fig, "Backtest aylık toplamlar — gerçek vs üç tahmin modeli")
+    fig.update_yaxes(title_text="Milyar TL")
+
+    fig.write_html(KOK / "tahmin_aylik.html", include_plotlyjs="cdn")
+
+    hata = {}
+    for k, ad in [("ham", "ham"), ("duz", "duzeltilmis"), ("strj", "strateji")]:
+        m = aylik["g"] > 0
+        hata[ad] = float(((aylik.loc[m, k] - aylik.loc[m, "g"]).abs()
+                          / aylik.loc[m, "g"]).mean() * 100)
+    return {"ay_adet": len(aylik), "aylik_mape": hata}
+
+
 if __name__ == "__main__":
-    p = planlanan_ihraclar()
-    d = tahmin_dogrulama()
-    print("planlanan_ihraclar.html  ->", p)
-    print("tahmin_dogrulama.html    ->", d)
+    ciktilar = {
+        "planlanan_ihraclar.html": planlanan_ihraclar(),
+        "tahmin_dogrulama.html": tahmin_dogrulama(),
+        "ihrac_hacmi.html": ihrac_hacmi(),
+        "ihrac_usd.html": ihrac_usd(),
+        "ihrac_tempo.html": ihrac_tempo(),
+        "faiz_gelisimi.html": faiz_gelisimi(),
+        "talep_analizi.html": talep_analizi(),
+        "fiyat_araligi.html": fiyat_araligi(),
+        "vade_dagilimi.html": vade_dagilimi(),
+        "strateji_revizyon.html": strateji_revizyon(),
+        "tahmin_aylik.html": tahmin_aylik(),
+    }
+    for ad, bilgi in ciktilar.items():
+        print(f"{ad:28s} -> {bilgi}")

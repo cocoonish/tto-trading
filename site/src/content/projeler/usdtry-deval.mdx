@@ -2,7 +2,7 @@
 title: 'USD/TRY Devalüasyon Hızı'
 description: 'TL değer kaybının ACT/365 yıllıklandırılmış hızı: 1 hafta / 1 ay / 3 ay pencereli bileşik deval oranları, faiz katmanı ve haftalık-aylık regresyon kanalları.'
 pubDate: 2026-07-15
-updatedDate: 2026-07-16
+updatedDate: 2026-07-17
 tags: ['usdtry', 'fx', 'trend']
 durum: 'aktif'
 kaynak: 'TCMB EVDS (kur + faiz serileri)'
@@ -14,9 +14,10 @@ import GrafikEmbed from '../../components/GrafikEmbed.astro';
 "Kur koptu mu, olağan seyrinde mi?" Bu sorunun doğru birimi seviye değil **hızdır**:
 TL'nin yıllıklandırılmış değer kaybı, carry pozisyonunun kâr-zarar denklemindeki karşı
 bacaktır. Deval hızı faizin altındaysa carry kazandırır; üstüne çıktığı anlar rejim
-değişikliği sinyalidir. Seri EVDS'ten günlük beslenir; son okuma (16.07.2026, kur
-46,93): 1 hafta **+%18,9** · 1 ay **+%21,3** · 3 ay **+%22,6** — üçü de politika
-faizinin belirgin altında, carry hâlâ pozitif bölgede.
+değişikliği sinyalidir. Seri EVDS'ten günlük beslenir; son okuma (17.07.2026, kur
+46,97): 1 hafta **+%22,4** · 1 ay **+%22,0** · 3 ay **+%22,0** — üçü de politika
+faizinin belirgin altında, carry hâlâ pozitif bölgede; üç pencerenin yakınsaması
+rejimin oturduğunu gösterir.
 
 <GrafikEmbed
   src="/projeler/usdtry-deval/usdtry_deval.html"
@@ -47,19 +48,63 @@ Aşırı uçlar yalnız eksende [−50, +150] bandına kırpılır; hesap kırp�
 grafiğe çizilir. Okuma kuralı: deval eğrisi faiz çizgisinin altında kaldıkça TL carry
 pozitif; kesişimler pozisyon çevirme noktalarıdır.
 
+## Pencere varyantları: 3 ay ve 6 ay
+
 <GrafikEmbed
-  src="/projeler/usdtry-deval/usdtry_weekly.html"
-  baslik="Haftalık regresyon trendleri — yılbaşından bugüne, hafta hafta"
+  src="/projeler/usdtry-deval/usdtry_deval_3m.html"
+  baslik="Son 3 ay — aynı katmanlar, yakın plan"
   no="02"
   yukseklik={560}
 />
 
-## Şekil 02 nasıl hesaplanıyor?
+<GrafikEmbed
+  src="/projeler/usdtry-deval/usdtry_deval_6m.html"
+  baslik="Son 6 ay — aynı katmanlar, orta plan"
+  no="03"
+  yukseklik={560}
+/>
+
+Aynı hesap, farklı zoom: 3 aylık pencere (eksen kırpması %60) gün gün akışı, 6 aylık
+pencere (%80) çeyreklik eğilimi gösterir. Uzun grafikte kaybolan kısa yaşamlı
+sıçramalar — tek haftalık müdahale epizotları — 3 aylık pencerede çıplak görünür.
+
+## Olay-bölmeli trend kanalları
+
+<GrafikEmbed
+  src="/projeler/usdtry-deval/usdtry_deval_seg.html"
+  baslik="Segment kanalları: Pre-İmamoğlu / İmamoğlu→Savaş / Savaş sonrası"
+  no="04"
+  yukseklik={600}
+/>
+
+## Şekil 04 nasıl hesaplanıyor?
+
+Deval serisi iki büyük olayla üç rejime bölünür ve her dönemde **ayrı** doğrusal
+regresyon kanalı kurulur; lejant eğimleri %/ay cinsinden verir (1A serisi):
+
+| Dönem | Aralık | Eğim (1A, %/ay) | Okuma |
+| --- | --- | --- | --- |
+| Pre-İmamoğlu | 06.2024 – 19.03.2025 | +0,6 | yatay/kontrollü seyir |
+| İmamoğlu → Savaş | 19.03.2025 – 28.02.2026 | −2,6 | şok sonrası soğuma trendi |
+| Savaş sonrası | 28.02.2026 – bugün | **+2,4** | yeniden hızlanma |
+
+Tek regresyonun "ortalama" eğimi bu üç rejimi ezip yok eder — kanal analizi ancak
+kırılma tarihleri açıkça modele verilirse anlamlıdır. Güncel rejimin pozitif eğimi
+(+2,4 %/ay), deval hızının yılbaşı diplerinden (Aralık 2025 ort. %12,5) kademeli
+yükselişinin devam ettiğini söylüyor.
+
+<GrafikEmbed
+  src="/projeler/usdtry-deval/usdtry_weekly.html"
+  baslik="Haftalık regresyon trendleri — yılbaşından bugüne, hafta hafta"
+  no="05"
+  yukseklik={560}
+/>
+
+## Şekil 05 nasıl hesaplanıyor?
 
 Her takvim haftasının içindeki günlük kapanışlara ayrı bir **doğrusal regresyon**
 uygulanır: `polyfit(gün, kur, 1)` — haftanın trend doğrusu ve haftalık ortalama
-etiketiyle çizilir (2026'da 29 hafta segmenti; son hafta ortalaması %20,6 deval
-hızına denk geliyor). Tek gözlemli ya da varyanssız pencereler (tatil haftaları)
+etiketiyle çizilir (2026'da 29 hafta segmenti; son tam hafta ort. %20,97, eğim −0,7 %/hafta; en sert hafta 01.06.2026: ort. %25,2). Tek gözlemli ya da varyanssız pencereler (tatil haftaları)
 regresyondan düşülür; aksi hâlde eğim tanımsızdır. Haftadan haftaya eğim değişimi,
 müdahale/akış dönemlerini gün hassasiyetinde yakalar: kontrollü seyirde eğimler
 neredeyse paraleldir, kopuş haftaları açıyla kendini belli eder.
@@ -67,15 +112,15 @@ neredeyse paraleldir, kopuş haftaları açıyla kendini belli eder.
 <GrafikEmbed
   src="/projeler/usdtry-deval/usdtry_monthly.html"
   baslik="Aylık regresyon trendleri — ay içi eğim ve ay ortalamaları"
-  no="03"
+  no="06"
   yukseklik={560}
 />
 
-## Şekil 03 nasıl hesaplanıyor?
+## Şekil 06 nasıl hesaplanıyor?
 
 Aynı yöntem ay pencereleriyle: her ayın günlük kapanışlarına doğrusal regresyon,
-etikette ayın ortalama yıllıklandırılmış deval hızı (Haziran 2026: %23,4 · Temmuz
-2026: %22,4). Ay içi eğim ile aylar arası sıçramalar (ay sonu fixing etkileri)
+etikette ayın ortalama yıllıklandırılmış deval hızı (Haziran 2026: %23,4 · Temmuz 2026: %22,4;
+zirve Nisan 2025 %40,8, dip Aralık 2025 %12,5). Ay içi eğim ile aylar arası sıçramalar (ay sonu fixing etkileri)
 burada ayrışır — haftalık grafiğin gürültüsü ile 3 aylık serinin ataleti arasında
 orta vadeli bir okuma katmanı sağlar.
 

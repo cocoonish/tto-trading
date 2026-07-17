@@ -1620,7 +1620,7 @@ class TreasuryAuctionScraper:
         fig.update_xaxes(title_text="", row=1, col=1)
         fig.update_xaxes(title_text="Tarih", row=2, col=1)
         
-        fig.write_html(output_file)
+        fig.write_html(output_file, include_plotlyjs='cdn')
         logger.info(f"✓ Vade analizi grafikleri {output_file} dosyasına kaydedildi")
         
         # Özet log
@@ -1702,7 +1702,7 @@ class TreasuryAuctionScraper:
             height=600
         )
         
-        fig.write_html(output_file)
+        fig.write_html(output_file, include_plotlyjs='cdn')
         logger.info(f"✓ Hedef/gerçekleşme grafiği {output_file} dosyasına kaydedildi")
         return fig
 

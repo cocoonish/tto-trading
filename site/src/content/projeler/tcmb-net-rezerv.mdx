@@ -2,7 +2,7 @@
 title: 'TCMB Net Rezerv Takibi'
 description: 'Merkez Bankası net ve swap hariç net uluslararası rezervlerinin haftalık resmi veriyle uyumlu, analitik bilanço üzerinden günlük tahminli takibi.'
 pubDate: 2026-07-15
-updatedDate: 2026-07-15
+updatedDate: 2026-07-17
 tags: ['tcmb', 'rezerv', 'fx']
 durum: 'aktif'
 kaynak: 'TCMB EVDS + IRFCL'
@@ -66,11 +66,23 @@ kalemi kısa vadede sabit varsayılır: yabancı banka swap stoku haftadan hafta
 farkı — rezerv akımının hangi günlerde yoğunlaştığını gösterir; seçim/şok dönemlerinde
 tek günde ±5 milyar USD'ye ulaşan hareketler burada görünür.
 
+## Güncel okuma (10-14.07.2026 verisiyle)
+
+Haftalık resmi (10.07 Cuma): brüt döviz rezervi **163,7** · net rezerv **56,3** ·
+IRFCL'den II.2 = −16,58, II.3 = +2,84 → **swap hariç net 42,5 milyar USD**. Günlük
+tahminin son noktası (14.07): net 55,3 · swap hariç 41,5. Son 20 iş gününün öne çıkan
+hareketleri: 02.07 **+8,2** · 18.06 −4,7 · 10.07 −3,9 milyar USD — akımın hangi güne
+yığıldığı, müdahale/akış okuması için serinin kendisi kadar bilgilendiricidir.
+
 ## Doğrulama
 
 24.04.2026 kapanışıyla üçlü karşılaştırma: brüt **171,05** / net **54,23** / swap hariç
 **36,39** milyar USD — Bloomberg ekranı sırasıyla 171,1 / 54,2 / 36,4. Üç seri de
-piyasa uzlaşısıyla bire bir.
+piyasa uzlaşısıyla bire bir. İki kalibrasyon notu: (i) brüt kalem sonradan EVDS
+revizyonuyla 171,49'a güncellendi — resmi seriler geriye dönük oynar; (ii) `--validate`
+bugün koşulursa swap hariç kalem 40,49 verir, çünkü tasarım gereği *en güncel*
+IRFCL'in II.2+II.3'ünü geçmişe sabitler; 36,39, o haftanın kendi IRFCL'iyle hesaplanmış
+değerdir. Fark bir hata değil, "swap stoku sabit" varsayımının iki ucudur.
 
 ## Sınırlar ve yorum notları
 

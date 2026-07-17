@@ -6,11 +6,16 @@ yalnizca duyarlilik-getiri sacilimi fiyat icin yfinance'e baglanir (basarisiz
 olursa atlanir). Site standardi: include_plotlyjs='cdn', beyaz zemin, lejant
 altta, baslik solda.
 
-  cikti/endeks_tarihce.html     — her parite icin endeks tarihcesi (cizgi)
-  cikti/endeks_son.html         — son snapshot, degere gore sirali yatay bar
-  cikti/optimizasyon.html       — varlik basina optimizasyon korelasyonu (bar)
-  cikti/rejim.html              — rejim dedektoru: spread / korelasyon / PC1
-  cikti/duyarlilik_getiri.html  — haftalik duyarlilik vs 5 gunluk ileri getiri
+  cikti/endeks_tarihce.html         — her parite icin endeks tarihcesi (cizgi)
+  cikti/endeks_son.html             — son snapshot, sirali yatay bar (+makale sayisi hover)
+  cikti/optimizasyon.html           — varlik basina optimizasyon korelasyonu (bar)
+  cikti/rejim.html                  — rejim dedektoru: spread / korelasyon / PC1
+  cikti/rejim_tarihce.html          — rejim bilesenlerinin tarihcesi (3 panel)
+  cikti/korelasyon_matrisi.html     — capraz duyarlilik korelasyon isi haritasi
+  cikti/yuvarlanan_korelasyon.html  — 20g yuvarlanan korelasyon, 1g VE 5g ufuk
+  cikti/fiyat_endeks.html           — fiyat + gunluk duyarlilik (cift eksen)
+  cikti/son_mansetler.html          — son mansetler + FinBERT skor tablosu
+  cikti/duyarlilik_getiri.html      — haftalik duyarlilik vs 5 gunluk ileri getiri
 
 Kullanim:  python3 web_cikti.py
 """
@@ -110,6 +115,25 @@ def _ortak_stil(fig, baslik):
 def yukle_tarihce():
     with open(HISTORY_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+def _makale_sayilari():
+    """Varlik basina skorlanmis makale sayisi: data/sentiment_scores.json.
+
+    Son okuma (endeks_son) hover'inda gosterilir — dashboard Overview
+    sekmesindeki 'N articles (real-time)' bilgisinin web karsiligi.
+    Dosya yoksa bos dict doner (hover'da makale satiri atlanir).
+    """
+    try:
+        with open(config.SENTIMENT_SCORES, "r", encoding="utf-8") as f:
+            veri = json.load(f)
+    except Exception:
+        return {}
+    sayilar = {}
+    for anahtar, kayit in veri.items():
+        makaleler = kayit.get("articles", []) if isinstance(kayit, dict) else []
+        sayilar[anahtar] = sum(1 for m in makaleler if "score" in m)
+    return sayilar
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -317,16 +341,21 @@ def ciz_tarihce(tarihce, cikti_yolu):
 
 
 def ciz_son_snapshot(tarihce, cikti_yolu):
-    """Son snapshot: degere gore sirali yatay bar + kategori etiketi."""
+    """Son snapshot: degere gore sirali yatay bar + kategori etiketi.
+    Hover'da varligin okumaya giren skorlanmis makale sayisi da gosterilir
+    (data/sentiment_scores.json; dashboard Overview'daki makale sayaci)."""
     son = tarihce[-1]
     ts = son.get("timestamp", "")
     kayitlar = sorted(son.get("indices", {}).items(),
                       key=lambda kv: kv[1].get("value", 0))
+    makale_sayisi = _makale_sayilari()
 
     adlar = [_gorunen_ad(k) for k, _ in kayitlar]
     degerler = [v.get("value", 0) for _, v in kayitlar]
     kategoriler = [KATEGORI_TR.get(v.get("category", ""), v.get("category", ""))
                    for _, v in kayitlar]
+    makaleler = [(f"{makale_sayisi[k]} makale" if makale_sayisi.get(k) else "")
+                 for k, _ in kayitlar]
     renkler = [TEAL if d >= 0 else CLARET for d in degerler]
     etiketler = [f"{d:+.2f}  {k}" for d, k in zip(degerler, kategoriler)]
     # Etiket kirpilmasi duzeltmesi: asiri (uzun) barlarda etiket bar ICINE
@@ -344,8 +373,9 @@ def ciz_son_snapshot(tarihce, cikti_yolu):
         insidetextfont=dict(color="#ffffff"),
         insidetextanchor="middle",
         cliponaxis=False,  # etiket eksen sinirina tasarsa kirpilmasin
-        customdata=kategoriler,
-        hovertemplate="%{y}: %{x:+.4f} (%{customdata})<extra></extra>",
+        customdata=list(zip(kategoriler, makaleler)),
+        hovertemplate=("%{y}: %{x:+.4f} (%{customdata[0]})"
+                       "<br>%{customdata[1]}<extra></extra>"),
         showlegend=False,
     ))
 
@@ -850,13 +880,23 @@ def ciz_korelasyon_matrisi(seriler, cikti_yolu):
 
 
 def ciz_yuvarlanan_korelasyon(seriler, cikti_yolu):
-    """Varlik basina YUVARLANAN 20 gunluk korelasyon: gunluk duyarlilik
-    vs izleyen 5 is gunu getirisi — sinyal gucunun zamana yayilimi."""
+    """Varlik basina YUVARLANAN 20 gunluk korelasyon — IKI getiri ufku:
+    gunluk duyarlilik vs izleyen 1 is gunu VE izleyen 5 is gunu getirisi.
+
+    Dashboard Correlation sekmesindeki 1g/5g tablolarinin ve 1g-vs-5g
+    karsilastirmasinin web karsiligi: her varlikta iki cizgi (1g altin,
+    5g petrol yesili), varlik secimi dropdown ile. Dondurulen ikinci deger
+    {varlik: {"1g": ort, "5g": ort}} — 20g yuvarlanan korelasyon ortalamalari.
+    """
     import pandas as pd
     import yfinance as yf
 
+    UFUKLAR = [(1, "1 günlük ileri getiri", GOLD, "dot"),
+               (5, "5 günlük ileri getiri", TEAL, "solid")]
+
     fig = go.Figure()
     varliklar = []
+    ort_ozet = {}
     for anahtar, seri in seriler.items():
         ticker = config.ASSETS[anahtar]["ticker"]
         try:
@@ -870,41 +910,55 @@ def ciz_yuvarlanan_korelasyon(seriler, cikti_yolu):
         if isinstance(fdf.columns, pd.MultiIndex):
             fdf.columns = fdf.columns.get_level_values(0)
         kapanis = fdf["Close"].ffill()
-        ileri5 = kapanis.shift(-5) / kapanis - 1.0
-        birlesik = pd.DataFrame({"duy": seri}).join(ileri5.rename("get"), how="inner").dropna()
-        if len(birlesik) < 40:
-            continue
-        yuv = birlesik["duy"].rolling(20).corr(birlesik["get"]).dropna()
+
+        yuvlar = {}
+        for gun, _, _, _ in UFUKLAR:
+            ileri = kapanis.shift(-gun) / kapanis - 1.0
+            birlesik = (pd.DataFrame({"duy": seri})
+                        .join(ileri.rename("get"), how="inner").dropna())
+            if len(birlesik) < 40:
+                continue
+            yuvlar[gun] = birlesik["duy"].rolling(20).corr(birlesik["get"]).dropna()
+        if len(yuvlar) < len(UFUKLAR):
+            continue  # iki ufuk da kurulamayan varlik atlanir
+
         gorunur = len(varliklar) == 0
-        fig.add_trace(go.Scatter(
-            x=yuv.index, y=yuv.values, mode="lines",
-            name=_gorunen_ad(anahtar), line=dict(color=TEAL, width=1.8),
-            hovertemplate="%{x|%d.%m.%Y}<br>20g korelasyon: %{y:+.3f}<extra></extra>",
-            visible=gorunur))
+        for gun, ad, renk, cizgi in UFUKLAR:
+            yuv = yuvlar[gun]
+            fig.add_trace(go.Scatter(
+                x=yuv.index, y=yuv.values, mode="lines",
+                name=ad, line=dict(color=renk, width=1.8, dash=cizgi),
+                hovertemplate=("%{x|%d.%m.%Y}<br>20g korelasyon (" + f"{gun}g"
+                               + "): %{y:+.3f}<extra></extra>"),
+                visible=gorunur))
+        ort_ozet[anahtar] = {f"{gun}g": round(float(yuvlar[gun].mean()), 4)
+                             for gun, _, _, _ in UFUKLAR}
         varliklar.append(anahtar)
 
     if not varliklar:
         raise ValueError("Yuvarlanan korelasyon icin veri yok")
 
+    n_ufuk = len(UFUKLAR)
     dugmeler = []
     for i, anahtar in enumerate(varliklar):
-        gorunurluk = [False] * len(varliklar)
-        gorunurluk[i] = True
+        gorunurluk = [False] * (n_ufuk * len(varliklar))
+        for j in range(n_ufuk):
+            gorunurluk[n_ufuk * i + j] = True
         dugmeler.append(dict(label=_gorunen_ad(anahtar), method="update",
                              args=[{"visible": gorunurluk}]))
 
-    _ortak_stil(fig, "Yuvarlanan duyarlılık-getiri korelasyonu (20 gün)")
+    _ortak_stil(fig, "Yuvarlanan duyarlılık-getiri korelasyonu (20 gün) — 1g ve 5g ufuk")
     fig.update_layout(
         height=480,
         updatemenus=[dict(buttons=dugmeler, direction="down",
                           x=0.99, xanchor="right", y=1.14, yanchor="top",
                           bgcolor="#ffffff", bordercolor=GRID,
                           font=dict(size=12, color=INK))],
-        margin=dict(l=60, r=30, t=70, b=50), showlegend=False)
+        margin=dict(l=60, r=30, t=70, b=80), showlegend=True)
     fig.add_hline(y=0, line_color=INK, line_width=0.8, opacity=0.35)
     fig.update_yaxes(title_text="Pearson r (20 günlük pencere)", range=[-1, 1])
     fig.write_html(cikti_yolu, include_plotlyjs="cdn")
-    return cikti_yolu
+    return cikti_yolu, ort_ozet
 
 
 def ciz_son_mansetler(cikti_yolu, adet=40):
@@ -989,6 +1043,10 @@ def uret(cikti_dizini=None, rejim=None):
 
     try:
         ozet = rejim if rejim else rejim_ozeti(seriler=matris)
+        print(f"  Rejim ozeti: {ozet['label']} | spread {ozet['basket_spread']:+.4f}"
+              f" | ort. korelasyon {ozet['avg_correlation']:+.4f}"
+              f" | PC1 payi {ozet['pc1_share']:.1%}"
+              f" | {ozet.get('n_assets', '?')} varlik | veri sonu {ozet.get('as_of', '?')}")
         yollar.append(ciz_rejim(ozet, os.path.join(hedef, "rejim.html")))
     except Exception as exc:
         print(f"UYARI: rejim.html uretilemedi: {exc}")
@@ -1001,12 +1059,20 @@ def uret(cikti_dizini=None, rejim=None):
 
     if matris:
         for ad, fn in [("rejim_tarihce.html", ciz_rejim_tarihce),
-                       ("korelasyon_matrisi.html", ciz_korelasyon_matrisi),
-                       ("yuvarlanan_korelasyon.html", ciz_yuvarlanan_korelasyon)]:
+                       ("korelasyon_matrisi.html", ciz_korelasyon_matrisi)]:
             try:
                 yollar.append(fn(matris, os.path.join(hedef, ad)))
             except Exception as exc:
                 print(f"UYARI: {ad} uretilemedi: {exc}")
+        try:
+            yol, ort_ozet = ciz_yuvarlanan_korelasyon(
+                matris, os.path.join(hedef, "yuvarlanan_korelasyon.html"))
+            yollar.append(yol)
+            print("  Yuvarlanan korelasyon ortalamalari (20g pencere ort.):")
+            for anahtar, degerler in sorted(ort_ozet.items()):
+                print(f"    {anahtar:<8} 1g {degerler['1g']:+.4f} | 5g {degerler['5g']:+.4f}")
+        except Exception as exc:
+            print(f"UYARI: yuvarlanan_korelasyon.html uretilemedi: {exc}")
 
     try:
         yollar.append(ciz_son_mansetler(os.path.join(hedef, "son_mansetler.html")))
@@ -1014,8 +1080,11 @@ def uret(cikti_dizini=None, rejim=None):
         print(f"UYARI: son_mansetler.html uretilemedi: {exc}")
 
     try:
-        yol, _ = ciz_duyarlilik_getiri(os.path.join(hedef, "duyarlilik_getiri.html"))
+        yol, kor_ozet = ciz_duyarlilik_getiri(os.path.join(hedef, "duyarlilik_getiri.html"))
         yollar.append(yol)
+        print("  Haftalik duyarlilik → 5g ileri getiri (Pearson r, n hafta):")
+        for anahtar, (r, n) in sorted(kor_ozet.items()):
+            print(f"    {anahtar:<8} r {r:+.4f} (n={n})")
     except Exception as exc:
         print(f"UYARI: duyarlilik_getiri.html uretilemedi: {exc}")
 

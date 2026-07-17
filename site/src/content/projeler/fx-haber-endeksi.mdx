@@ -2,7 +2,7 @@
 title: 'FX Haber-Duyarlılık Endeksi'
 description: 'FinBERT ile skorlanan haber akışından 15 varlıklık duyarlılık endeksi: kullanım kılavuzu, rejim dedektörü, fiyat karşılaştırması, korelasyon analizi ve manşet akışı.'
 pubDate: 2026-07-15
-updatedDate: 2026-07-16
+updatedDate: 2026-07-17
 tags: ['fx', 'sentiment', 'nlp']
 durum: 'aktif'
 kaynak: 'GDELT + Google News RSS + piyasa verisi'
@@ -150,12 +150,15 @@ filtre katmanıdır, tek başına kural değil.
   yukseklik={520}
 />
 
-Şekil 04 ilişkinin *ortalamasını* verir; bu şekil **zamana yayılımını**: günlük
-duyarlılık ile 5 günlük ileri getirinin 20 günlük pencerede yuvarlanan Pearson
-korelasyonu. Sıfır çizgisi etrafında salınım normaldir — sinyalin "açık" olduğu
-dönemleri (kalıcı pozitif bölge) pozisyon büyüklüğüne çevirmek, sabit boyut kullanmaktan
-iyidir. Korelasyonun çöktüğü dönemler çoğunlukla rejim değişimiyle çakışır (Şekil 07
-ile yan yana okuyun).
+Şekil 04 ilişkinin *ortalamasını* verir; bu şekil **zamana yayılımını** — ve artık
+iki ufku birden: her varlıkta **1 günlük** (altın rengi, noktalı) ve **5 günlük**
+(petrol yeşili, düz) ileri getiriyle 20 günlük yuvarlanan Pearson korelasyonu.
+Dashboard'daki 1g-vs-5g karşılaştırma tablosunun grafik hâlidir. Genel örüntü:
+1g ortalamaları sıfıra yapışıktır, 5g ufku hem daha güçlü hem daha oynaktır —
+haber tonu ertesi günü değil, haftayı fiyatlar; tek istisna USD/CAD (1g +0,11 vs
+5g −0,08). Sıfır etrafında salınım normaldir; sinyalin "açık" olduğu dönemleri
+pozisyon büyüklüğüne çevirmek, sabit boyut kullanmaktan iyidir. Korelasyonun çöktüğü
+dönemler çoğunlukla rejim değişimiyle çakışır (Şekil 07 ile yan yana okuyun).
 
 ## Şekil 06-08 — Rejim dedektörü
 

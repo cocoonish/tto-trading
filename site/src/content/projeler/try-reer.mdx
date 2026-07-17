@@ -2,7 +2,7 @@
 title: 'TL Reel Efektif Döviz Kuru'
 description: 'TÜFE ve Yi-ÜFE bazlı REDK''nin %70/%30 bileşimi, 10 ve 5 yıllık ortalamadan sapma ve USD/TRY regresyonlarıyla TL değerleme çerçevesi.'
 pubDate: 2026-07-15
-updatedDate: 2026-07-15
+updatedDate: 2026-07-17
 tags: ['redk', 'try', 'enflasyon']
 durum: 'aktif'
 kaynak: 'TCMB REDK (TÜFE & Yi-ÜFE)'
@@ -105,6 +105,52 @@ yan yana, kutularda $R^2$/$r$/eğim/artık hatası, son ay kırmızı yıldızla
 (enflasyon farkı bir ayda az değişir, sapmayı nominal kur oynatır). Şekil 02'nin
 ileri dönük zayıf-ama-anlamlı korelasyonlarıyla bu mekanik $R^2$'yi karıştırmamak,
 REDK analizinin en sık yapılan hatasından kaçınmaktır.
+
+## Ufuk karşılaştırması: 5Y sapma ve 3M odak
+
+<GrafikEmbed
+  src="/projeler/try-reer/redk_usdtry_analiz_5y.html"
+  baslik="5Y sapma – USD/TRY ilişki panosu (10Y panonun kardeşi)"
+  no="04"
+  yukseklik={900}
+/>
+
+<GrafikEmbed
+  src="/projeler/try-reer/redk_degisim_regresyon_5y.html"
+  baslik="Eşzamanlı değişim regresyonu — 5Y sapma (1M/3M/6M)"
+  no="05"
+  yukseklik={560}
+/>
+
+<GrafikEmbed
+  src="/projeler/try-reer/redk_degisim_regresyon_3m.html"
+  baslik="3M odak: Δsapma(3A) vs USD/TRY değişimi — tek panel"
+  no="06"
+  yukseklik={560}
+/>
+
+### Şekil 04-06 nasıl okunur? (ufuk seçiminin dersi)
+
+Aynı analiz 5 yıllık ortalama sapmasıyla tekrarlanınca tablo değişir — ve bu değişim
+başlı başına metodolojik derstir:
+
+| İleri dönük $r$ | 1M | 3M | 6M | 12M |
+| --- | --- | --- | --- | --- |
+| **10Y sapma** | −0,19 | −0,22 | −0,35 | **−0,50** |
+| **5Y sapma** | −0,10† | −0,08† | −0,18 | −0,30 |
+
+† istatistiksel olarak anlamsız. **Öngörü gücü uzun çıpada yaşar**: 5Y ortalama,
+son yılların rejimini içine aldığından "normal"i sapmanın peşinden sürükler ve
+sinyali zayıflatır; 10Y çıpa daha yavaş, bu yüzden daha bilgilendiricidir. Buna
+karşılık *eşzamanlı* mekanik ilişki ufuğa neredeyse duyarsızdır (1M R²: 0,59 vs
+0,60; eğim −1,17 vs −1,15) — çünkü o ilişki tanımdan gelir, çıpadan değil.
+3M odak paneli (Şekil 06) bu mekaniğin çeyreklik versiyonunu tek panelde verir:
+$R^2=0{,}46$, eğim −1,21, $\sigma=\pm6{,}9\%$ — "REDK sapması çeyrekte 5 puan
+düzeldi" haberinin kur diline çevirisi ortalama −%6 demektir, ±%7 bantla.
+
+5Y bant istatistiği de aynı hikâyeyi anlatır: en ucuz bant (< −20%) 5Y'de yalnız
+12 gözlem içerir (10Y'de 57) ve getirisi daha düşüktür (+25,5% vs +40,2%) —
+kısa çıpa uç bölgeleri erken "normalleştirir".
 
 ## Güncel okuma (Mart 2026 verisiyle)
 

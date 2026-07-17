@@ -151,6 +151,15 @@ def load_data():
 
 df_main, df_vade, df_hedef, strategy_history, df_planned, df_backtest = load_data()
 
+# Planlanan ihraçlar sekmesindeki açıklamada kullanılan gerçekleşme oranı metni.
+# (Önceden tanımsızdı → sekme açılınca NameError veriyordu.)
+if (not df_planned.empty
+        and 'Gerçekleşme Oranı Varsayımı (%)' in df_planned.columns
+        and df_planned['Gerçekleşme Oranı Varsayımı (%)'].notna().any()):
+    _rate_txt = f"{df_planned['Gerçekleşme Oranı Varsayımı (%)'].dropna().iloc[0]:.0f}"
+else:
+    _rate_txt = "?"
+
 
 # ============================================================
 # YARDIMCI FONKSİYONLAR
