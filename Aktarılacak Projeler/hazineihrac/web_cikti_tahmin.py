@@ -443,6 +443,9 @@ def ihrac_tempo() -> dict:
     df = ihale_verisi()
     ceyrek = (df.groupby("ceyrek")["Toplam(Gerçekleşme)"].sum() / 1000.0
               ).reset_index(name="mlr")
+    # kategori ekseni yerine tarih ekseni: 27 çeyrek etiketi basılmaz,
+    # Plotly otomatik yıl tikleri atar; çeyrek adı hover'da (customdata)
+    ceyrek["t"] = pd.PeriodIndex(ceyrek["ceyrek"], freq="Q").to_timestamp()
     sayi = df.groupby("ay").size().reset_index(name="adet")
     x_ay = sayi["ay"].dt.to_timestamp()
 
@@ -452,11 +455,12 @@ def ihrac_tempo() -> dict:
                         "Aylık ihale sayısı"),
     )
     fig.add_trace(go.Scatter(
-        x=ceyrek["ceyrek"], y=ceyrek["mlr"].round(1),
+        x=ceyrek["t"], y=ceyrek["mlr"].round(1),
         name="Çeyreklik ihraç", mode="lines+markers",
         line=dict(color=CLARET, width=2.5), marker=dict(size=6),
         fill="tozeroy", fillcolor="rgba(142,31,47,0.08)",
-        hovertemplate="%{x}: %{y:.1f} milyar TL<extra></extra>",
+        customdata=ceyrek["ceyrek"],
+        hovertemplate="%{customdata}: %{y:.1f} milyar TL<extra></extra>",
     ), row=1, col=1)
     fig.add_trace(go.Bar(
         x=x_ay, y=sayi["adet"], name="Aylık ihale sayısı",
@@ -468,7 +472,6 @@ def ihrac_tempo() -> dict:
     _panel_baslik_stili(fig)
     fig.update_yaxes(title_text="Milyar TL", row=1, col=1)
     fig.update_yaxes(title_text="Adet", row=2, col=1)
-    fig.update_xaxes(tickangle=-45, row=1, col=1)
 
     fig.write_html(KOK / "ihrac_tempo.html", include_plotlyjs="cdn")
     return {
@@ -706,7 +709,9 @@ def vade_dagilimi() -> dict:
                hovermode="closest")
     _panel_baslik_stili(fig)
     fig.update_yaxes(title_text="Vade (yıl)", row=2, col=1)
-    fig.update_xaxes(tickangle=-45, row=2, col=1)
+    # kutu grafiği kategorik çeyrek ekseni ister; 27 kategoride her etiketi
+    # basmak yerine tik seyrelt (okunabilirlik kuralı: nticks 12-16)
+    fig.update_xaxes(nticks=14, tickangle=-40, row=2, col=1)
 
     fig.write_html(KOK / "vade_dagilimi.html", include_plotlyjs="cdn")
     return {"yil_adet": len(pivot.index),
@@ -784,18 +789,24 @@ def strateji_revizyon() -> dict:
     # gelecekteki (henüz sıfır gerçekleşmeli) aylarda gerçekleşen çizgisi kesilir
     son_dolu = kum[kum["Gerçekleşen Borçlanma (Milyar TL)"] > 0].index.max()
     kum.loc[kum.index > son_dolu, "kum_gercek"] = np.nan
+    # 79 aylık seride kategori etiketi basılmaz — tarih ekseni, ay adı hover'da
+    kum["t"] = kum["sira"].map(
+        lambda s: pd.Timestamp(year=s[0], month=s[1], day=1)
+        if s != (0, 0) else pd.NaT)
 
     fig.add_trace(go.Scatter(
-        x=kum["Ay-Yıl"], y=kum["kum_hedef"].round(1), name="Kümülatif hedef",
+        x=kum["t"], y=kum["kum_hedef"].round(1), name="Kümülatif hedef",
         mode="lines", line=dict(color=GOLD, width=2),
         fill="tozeroy", fillcolor="rgba(154,115,39,0.10)",
-        hovertemplate="Kümülatif hedef: %{y:.0f} milyar TL<extra></extra>",
+        customdata=kum["Ay-Yıl"],
+        hovertemplate="%{customdata} · Kümülatif hedef: %{y:.0f} milyar TL<extra></extra>",
     ), row=2, col=1)
     fig.add_trace(go.Scatter(
-        x=kum["Ay-Yıl"], y=kum["kum_gercek"].round(1), name="Kümülatif gerçekleşen",
+        x=kum["t"], y=kum["kum_gercek"].round(1), name="Kümülatif gerçekleşen",
         mode="lines", line=dict(color=CLARET, width=2.5),
         fill="tozeroy", fillcolor="rgba(142,31,47,0.10)",
-        hovertemplate="Kümülatif gerçekleşen: %{y:.0f} milyar TL<extra></extra>",
+        customdata=kum["Ay-Yıl"],
+        hovertemplate="%{customdata} · Kümülatif gerçekleşen: %{y:.0f} milyar TL<extra></extra>",
     ), row=2, col=1)
 
     fig.update_layout(barmode="group")
@@ -803,7 +814,6 @@ def strateji_revizyon() -> dict:
     _panel_baslik_stili(fig)
     fig.update_yaxes(title_text="Milyar TL", row=1, col=1)
     fig.update_yaxes(title_text="Milyar TL", row=2, col=1)
-    fig.update_xaxes(tickangle=-45, row=2, col=1)
 
     fig.write_html(KOK / "strateji_revizyon.html", include_plotlyjs="cdn")
 

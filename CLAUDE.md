@@ -38,7 +38,12 @@ TTO Trading/
 4. **Hesap araçları birbirine bağlanır.** Aynı sayfadaki araçlar ortak durumu paylaşır
    (ör. bootstrap eğrisi → ASW/forward araçlarına akar; `window` üzerinden custom
    event ile: `egri-guncellendi`).
-5. **Grafik ev stili.** Python'dan gelen Plotly HTML'leri siteye kopyalanınca
+5. **Sayfa metnindeki güncel sayılar dinamiktir.** Her proje pipeline'ı bir
+   `ozet_uret.py` ile `ozet.json` üretir (→ `site/public/projeler/<slug>/`);
+   MDX'te oynak sayılar `<Deger proje anahtar>statik yedek</Deger>` ile yazılır —
+   JSON güncellenince sayfa metni MDX'e dokunmadan tazelenir. Tarihsel/metodolojik
+   sabitler (doğrulama örnekleri, bant istatistikleri) statik kalır.
+6. **Grafik ev stili.** Python'dan gelen Plotly HTML'leri siteye kopyalanınca
    `site/tools/plotly_stil.py` ile ev stiline geçirilir (başlık solda, lejant altta,
    responsive, beyaz zemin). Bu adım grafik güncelleme akışının parçasıdır.
 

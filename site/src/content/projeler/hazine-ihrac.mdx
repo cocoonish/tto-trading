@@ -10,11 +10,12 @@ guncelleme: 'ihale dönemlerinde (aylık)'
 ---
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
+import Deger from '../../components/Deger.astro';
 
 Hazine'nin aylık iç borçlanma stratejisi ile fiilen gerçekleşen ihraçlar arasındaki
 fark, TL faiz piyasası için başlı başına bir sinyaldir. Bu proje ihale sonuçlarını ve
-planlanan takvimi otomatik toplar ve **Şubat 2020'den bu yana 439 ihaleyi** (toplam
-6.858 milyar TL ≈ 249 milyar USD) analiz panosuna döker: hacim, tür kırılımı, maliyet,
+planlanan takvimi otomatik toplar ve **Şubat 2020'den bu yana <Deger proje="hazine-ihrac" anahtar="n_ihale" ondalik={0}>439</Deger> ihaleyi** (toplam
+<Deger proje="hazine-ihrac" anahtar="toplam_mlr" ondalik={1}>6.858,2</Deger> milyar TL) analiz panosuna döker: hacim, tür kırılımı, maliyet,
 talep, vade, strateji revizyonları, ileriye dönük tahmin ve backtest.
 
 ## Bu sayfa nasıl kullanılır? (iş akışı)
@@ -60,7 +61,7 @@ talep, vade, strateji revizyonları, ileriye dönük tahmin ve backtest.
 />
 
 **Şekil 01.** İhale kayıtları ay bazında toplanır, strateji hedefiyle eşlenir.
-77 gerçekleşmeli ayda ortalama gerçekleşme **%85,7**. Oranın kalıcı 1 altı seyri
+<Deger proje="hazine-ihrac" anahtar="n_ay" ondalik={0}>77</Deger> gerçekleşmeli ayda ortalama gerçekleşme **%<Deger proje="hazine-ihrac" anahtar="gerceklesme_ort" ondalik={1}>85,7</Deger>**. Oranın kalıcı 1 altı seyri
 programın yumuşak uygulandığını, 1 üstü sıçramalar ek finansman ihtiyacını gösterir.
 
 <GrafikEmbed
@@ -124,7 +125,7 @@ Tempo, takvim yoğunluğunun DV01 bütçesine çevrildiği yerdir: aynı hacmin 
 
 **Şekil 06.** Üst panel: ihale bazında bileşik faiz (tür renkli) + **hacim ağırlıklı
 aylık ortalama maliyet** çizgisi (TÜFE'ye endeksliler reel getiri kote ettiğinden
-ortalamaya dahil edilmez). Zirve Mayıs 2025 **%52,1**; Temmuz 2026 **%43,9**. Alt
+ortalamaya dahil edilmez). Zirve Mayıs 2025 **%52,1**; son ay **%<Deger proje="hazine-ihrac" anahtar="maliyet_son" ondalik={1}>43,9</Deger>**. Alt
 panel: ihale öncesi/sonrası faiz karşılaştırması, $y=x$ referanslı.
 
 <GrafikEmbed
@@ -135,9 +136,9 @@ panel: ihale öncesi/sonrası faiz karşılaştırması, $y=x$ referanslı.
 />
 
 **Şekil 07.** Üst: ihale bazında B/C + aylık toplam B/C (Σteklif/Σsatış, 1,0x
-referanslı) — Temmuz 2026 **1,87x**, son 12 ay ortalaması 2,16x; 2'nin altına
-yerleşme talep yorgunluğudur. Alt: kabul oranı (satış/teklif) — son ay ort. %59,
-tüm dönem %47: Hazine talebin yarısını kesiyor; oranın yükselmesi "ne gelirse alındı"
+referanslı) — son ay **<Deger proje="hazine-ihrac" anahtar="b2c_son" ondalik={2}>1,87</Deger>x**, son 12 ay ortalaması <Deger proje="hazine-ihrac" anahtar="b2c_12ay" ondalik={2}>2,16</Deger>x; 2'nin altına
+yerleşme talep yorgunluğudur. Alt: kabul oranı (satış/teklif) — son ay %<Deger proje="hazine-ihrac" anahtar="kabul_son" ondalik={1}>53,6</Deger>,
+tüm dönem %<Deger proje="hazine-ihrac" anahtar="kabul_tum" ondalik={1}>48,6</Deger>: Hazine talebin yarısını kesiyor; oranın yükselmesi "ne gelirse alındı"
 demektir ve maliyet tavizinin habercisidir.
 
 <GrafikEmbed
@@ -160,7 +161,7 @@ fiyat keşfinin zorlaştığı, marjinal alıcının uzaklaştığı ihaleler. H
 />
 
 **Şekil 09.** WAM: $\overline{V}_{ay} = \sum \text{NetSatış}_i V_i / \sum \text{NetSatış}_i$ —
-Temmuz 2026'da **4,13 yıl** (3 aylık ağırlıklı ort. 3,29). Uzayan WAM piyasanın
+son ayda **<Deger proje="hazine-ihrac" anahtar="wam_son" ondalik={2}>4,13</Deger> yıl** (3 aylık ağırlıklı ort. <Deger proje="hazine-ihrac" anahtar="wam_3ay" ondalik={2}>3,29</Deger>). Uzayan WAM piyasanın
 duration hazmı, kısalan WAM temkin işaretidir.
 
 <GrafikEmbed
@@ -187,8 +188,8 @@ dağılımı** (tanım+vade eşleşmeli tarihsel paylar; beklenen teklif geçmi�
   yukseklik={600}
 />
 
-**Şekil 11.** Takvimde **21 planlı ihraç**: 14 ihale (tahminli) + 7 doğrudan satış.
-Beklenen ihale toplamı **581,8 milyar TL** (Ağustos 325,9 vs hedef 417,0 · Eylül
+**Şekil 11.** Takvimde **<Deger proje="hazine-ihrac" anahtar="plan_adet" ondalik={0}>21</Deger> planlı ihraç**: <Deger proje="hazine-ihrac" anahtar="plan_ihale_adet" ondalik={0}>14</Deger> ihale (tahminli) + doğrudan satışlar.
+Beklenen ihale toplamı **<Deger proje="hazine-ihrac" anahtar="plan_toplam_mlr" ondalik={1}>581,8</Deger> milyar TL** (Ağustos 325,9 vs hedef 417,0 · Eylül
 229,9 vs 294,2). Hover'daki "kıyas ihale sayısına" bakın: n küçükse tahmin zayıftır.
 
 <GrafikEmbed
@@ -199,8 +200,8 @@ Beklenen ihale toplamı **581,8 milyar TL** (Ağustos 325,9 vs hedef 417,0 · Ey
 />
 
 **Şekil 12.** İhale bazında "o gün elde olan bilgiyle" tahmin vs gerçekleşen; $y=x$
-mükemmel tahmin. Tüm dönem MAE 11,5 mlr, **medyan sapma %47**; son 12 ay MAPE %54,8.
-Bid-to-cover tahmini çok daha isabetli: **MAPE %25,7** — talep, tutardan öngörülebilir.
+mükemmel tahmin. Tüm dönem (n=<Deger proje="hazine-ihrac" anahtar="backtest_n" ondalik={0}>433</Deger>) **medyan sapma %<Deger proje="hazine-ihrac" anahtar="medyan_sapma" ondalik={1}>47,0</Deger>**; son 12 ay MAPE %<Deger proje="hazine-ihrac" anahtar="son12_mape" ondalik={1}>56,0</Deger>.
+Bid-to-cover tahmini çok daha isabetli: **MAPE %<Deger proje="hazine-ihrac" anahtar="b2c_mape" ondalik={1}>25,7</Deger>** — talep, tutardan öngörülebilir.
 
 <GrafikEmbed
   src="/projeler/hazine-ihrac/tahmin_aylik.html"
@@ -209,7 +210,7 @@ Bid-to-cover tahmini çok daha isabetli: **MAPE %25,7** — talep, tutardan öng
   yukseklik={560}
 />
 
-**Şekil 13.** Aynı backtest ay toplamında: **ham model aylık MAPE %25,7** — ihale
+**Şekil 13.** Aynı backtest ay toplamında: **ham model aylık MAPE %<Deger proje="hazine-ihrac" anahtar="aylik_ham_mape" ondalik={1}>25,7</Deger>** — ihale
 bazındaki %67'ye karşı. Ders: model tekil ihaleyi ±%50 bandında bilir ama *ayın
 toplam arzını* dörtte bir hatayla yakalar; DV01 bütçesi ay bazında planlanmalıdır.
 (Düzeltilmiş/strateji modellerin aylık MAPE'sindeki şişkinlik 2020-21 hedef artefaktıdır.)
@@ -219,4 +220,4 @@ toplam arzını* dörtte bir hatayla yakalar; DV01 bütçesi ay bazında planlan
 - Doğrudan satışlar tahmin dışıdır; aylık hedef karşılaştırmasında bu fark yapısaldır.
 - Ağırlıklı maliyet çizgisi TÜFE'ye endekslileri (reel kote) içermez.
 - PDF formatı değişirse ayrıştırıcı loglayarak durur; grafiklerdeki son veri tarihi
-  her zaman kontrol edilmelidir (bu sürüm: 07.07.2026 ihalesine kadar).
+  her zaman kontrol edilmelidir (son ihale verisi: <Deger proje="hazine-ihrac" anahtar="_tarih" ondalik={1}>07.07.2026</Deger>).

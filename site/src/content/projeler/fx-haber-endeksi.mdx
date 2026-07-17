@@ -10,6 +10,7 @@ guncelleme: 'günlük — her koşuda grafikler otomatik yenilenir'
 ---
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
+import Deger from '../../components/Deger.astro';
 
 Fiyat haberden önce mi hareket eder, sonra mı? Bu proje soruyu ölçülebilir hale getirir:
 dokuz majör parite ve altı ek enstrüman (altın, gümüş, S&P 500, UST 2Y/10Y, BIST 100)
@@ -58,7 +59,7 @@ Endeks tek başına bir al-sat sinyali değildir; katmanlar belirli bir sırayla
 
 Son pipeline koşusunun endeks değerleri, sıralı yatay bar: pozitifler teal, negatifler
 bordo; etiket kategori eşiklerinden. Son okumada uçlar: altın **+0,29** (Alıcı) bir
-yanda, USD/NOK **−0,86** ve BIST 100 −0,74 (Aşırı Satıcı) diğer yanda.
+yanda, USD/NOK **−0,86** ve BIST 100 −0,74 (Aşırı Satıcı) diğer yanda. Hover her varlığın **skorlu makale sayısını** da gösterir (toplam <Deger proje="fx-haber-endeksi" anahtar="makale_toplam" ondalik={0}>3.433</Deger>) — az makaleli varlığın endeksi daha gürültülüdür, kategoriyi buna göre iskonto edin.
 
 ## Şekil 02 — Endeks tarihçesi
 
@@ -198,6 +199,8 @@ makro yön: USD zayıflığı = pozitif):
   ve çeşitlendirme yanılsamasına karşı uyarıdır.
 - **PC1** — 60 günlük penceredeki ortak faktör; işaretli skoru genel tonun yönünü,
   açıklanan varyans payı gücünü verir.
+
+Güncel okuma: **<Deger proje="fx-haber-endeksi" anahtar="rejim" ondalik={1}>Risk-On</Deger>** — sepet spread'i <Deger proje="fx-haber-endeksi" anahtar="spread" ondalik={3}>−0,485</Deger> · ortalama korelasyon <Deger proje="fx-haber-endeksi" anahtar="ort_korelasyon" ondalik={3}>+0,044</Deger> · PC1 payı <Deger proje="fx-haber-endeksi" anahtar="pc1" ondalik={3}>0,355</Deger> (veri: <Deger proje="fx-haber-endeksi" anahtar="_tarih" ondalik={1}>15.07.2026</Deger>).
 
 Isı haritası (Şekil 08) aynı matrisin çift-çift halidir: hangi varlıkların haber tonu
 birlikte hareket ediyor? Yıldızlı etiketler terslenen pariteleri işaretler.

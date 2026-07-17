@@ -1,7 +1,11 @@
 """TCMB Net Rezerv günlük grafiği (Plotly).
 
+Varsayılan olarak gunluk.csv + haftalik_rezerv.csv'den (çevrimdışı) koşar;
+EVDS/PDF'ten taze veri çekmek için --online verin.
+
 Kullanım:
-  python grafik.py                          # 2026 başından bugüne
+  python grafik.py                          # CSV'lerden (çevrimdışı)
+  python grafik.py --online                 # EVDS + IRFCL PDF'ten çek
   python grafik.py --start 01-04-2026       # belirli aralık
   python grafik.py --output rezerv.html     # kayıt yolu
   python grafik.py --no-open                # tarayıcıda açma
@@ -20,13 +24,12 @@ from plotly.subplots import make_subplots
 
 pd_notna = pd.notna
 
-from net_rezerv import (
-    calculate_daily_net_reserves,
-    calculate_weekly_net_reserves,
-    fetch_evds,
-    fetch_latest_weekly_pdf,
-    parse_weekly_pdf,
-)
+# Ev paleti (site/src/styles/global.css ile uyumlu)
+TEAL = "#1d5c5c"      # birincil seri
+BORDO = "#8e1f2f"     # ikincil / negatif
+ALTIN = "#9a7327"     # vurgu
+TEAL_RGBA = "rgba(29,92,92,0.7)"
+BORDO_RGBA = "rgba(142,31,47,0.7)"
 
 
 def build_figure(daily, weekly, title: str) -> go.Figure:
@@ -42,22 +45,21 @@ def build_figure(daily, weekly, title: str) -> go.Figure:
     delta_text = [f"{v:+.2f}" if pd_notna(v) else "" for v in delta_round]
 
     bar_colors = [
-        "rgba(46,204,113,0.85)" if (v is not None and v >= 0)
-        else "rgba(231,76,60,0.85)"
+        TEAL_RGBA if (v is not None and v >= 0) else BORDO_RGBA
         for v in delta_round.fillna(0)
     ]
 
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
-    # Sol eksen — Swap Hariç Net Rezerv (çizgi)
+    # Sol eksen — Swap Hariç Net Rezerv (çizgi; yüzlerce günlük noktada
+    # marker basmak çizgiyi kalınlaştırıp okunmaz yapıyor → sadece çizgi)
     fig.add_trace(
         go.Scatter(
             x=daily.index,
             y=sh_round,
-            mode="lines+markers",
+            mode="lines",
             name="Swap Hariç Net Rezerv",
-            line=dict(color="#2c3e50", width=2.6),
-            marker=dict(size=5),
+            line=dict(color=TEAL, width=2),
             hovertemplate="Swap Hariç: <b>%{y:.2f}</b> mlr USD<extra></extra>",
         ),
         secondary_y=False,
@@ -75,19 +77,21 @@ def build_figure(daily, weekly, title: str) -> go.Figure:
                 y=weekly_in_range["sh_resmi"],
                 mode="markers",
                 name="Resmi (Cuma)",
-                marker=dict(color="#27ae60", size=11, symbol="diamond",
-                            line=dict(color="white", width=1.5)),
+                marker=dict(color=ALTIN, size=8, symbol="diamond",
+                            line=dict(color="white", width=1)),
                 hovertemplate="Resmi: <b>%{y:.2f}</b> mlr USD<extra></extra>",
             ),
             secondary_y=False,
         )
 
-    # Sağ eksen — günlük değişim (bar). text + texttemplate
+    # Sağ eksen — günlük değişim (bar). Metin etiketi basılmaz (kalabalık);
+    # değer hover'da %{text} ile gösterilir.
     fig.add_trace(
         go.Bar(
             x=daily.index,
             y=delta_round,
             text=delta_text,
+            textposition="none",
             name="Günlük Değişim",
             marker_color=bar_colors,
             opacity=0.6,
@@ -97,14 +101,14 @@ def build_figure(daily, weekly, title: str) -> go.Figure:
     )
 
     fig.update_layout(
-        title=dict(text=title, x=0.5, xanchor="center",
-                   font=dict(size=20)),
+        title=dict(text=title, x=0.01, xanchor="left",
+                   font=dict(size=16)),
         template="plotly_white",
         hovermode="x unified",
-        legend=dict(orientation="h", yanchor="bottom", y=1.02,
-                    xanchor="right", x=1),
+        legend=dict(orientation="h", yanchor="top", y=-0.12,
+                    xanchor="left", x=0),
         bargap=0.15,
-        margin=dict(l=70, r=70, t=90, b=60),
+        margin=dict(l=70, r=70, t=90, b=90),
         height=620,
     )
     # Sıfır çizgileri her iki eksende aynı yatay seviyede olacak şekilde
@@ -134,27 +138,59 @@ def build_figure(daily, weekly, title: str) -> go.Figure:
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--start", default="01-01-2026")
-    ap.add_argument("--end", default=dt.date.today().strftime("%d-%m-%Y"))
+    ap.add_argument("--start", default=None,
+                    help="gg-aa-yyyy; çevrimdışı modda verilmezse tüm CSV")
+    ap.add_argument("--end", default=None)
     ap.add_argument("--output", default="tcmb_rezerv_grafik.html")
+    ap.add_argument("--online", action="store_true",
+                    help="EVDS + IRFCL PDF'ten taze veri çek "
+                         "(varsayılan: gunluk.csv/haftalik_rezerv.csv)")
+    ap.add_argument("--csv-daily", default="gunluk.csv")
+    ap.add_argument("--csv-weekly", default="haftalik_rezerv.csv")
     ap.add_argument("--no-open", action="store_true",
                     help="dosyayı tarayıcıda açma")
     args = ap.parse_args()
 
-    raw = fetch_evds(args.start, args.end)
-    weekly = calculate_weekly_net_reserves(raw)
+    burasi = Path(__file__).resolve().parent
+    csv_d = (burasi / args.csv_daily)
+    csv_w = (burasi / args.csv_weekly)
 
-    pdf_bytes, ymd = fetch_latest_weekly_pdf()
-    swap_pdf = parse_weekly_pdf(pdf_bytes)
-    ii2 = (swap_pdf.get("II_2_acik_M", 0)
-           + swap_pdf.get("II_2_fazla_M", 0)) / 1000.0
-    ii3 = swap_pdf.get("II_3_toplam_M", 0) / 1000.0
-    sh_anchor = {d: r["net_rezerv_usd"] + ii2 + ii3
-                 for d, r in weekly.iterrows()}
+    if not args.online and csv_d.exists() and csv_w.exists():
+        # --- Çevrimdışı: net_rezerv.py'nin yazdığı CSV'lerden ---
+        daily = pd.read_csv(csv_d, index_col=0, parse_dates=True)
+        weekly = pd.read_csv(csv_w, index_col=0, parse_dates=True)
+        if args.start:
+            daily = daily.loc[dt.datetime.strptime(args.start, "%d-%m-%Y"):]
+        if args.end:
+            daily = daily.loc[:dt.datetime.strptime(args.end, "%d-%m-%Y")]
+        anchor_cumalar = weekly.index[weekly.index <= daily.index[-1]]
+        pdf_d = (f"{anchor_cumalar[-1]:%d.%m.%Y}" if len(anchor_cumalar)
+                 else "-")
+    else:
+        # --- Çevrimiçi: EVDS + IRFCL PDF ---
+        from net_rezerv import (
+            calculate_daily_net_reserves,
+            calculate_weekly_net_reserves,
+            fetch_evds,
+            fetch_latest_weekly_pdf,
+            parse_weekly_pdf,
+        )
+        start = args.start or "01-01-2026"
+        end = args.end or dt.date.today().strftime("%d-%m-%Y")
+        raw = fetch_evds(start, end)
+        weekly = calculate_weekly_net_reserves(raw)
 
-    daily = calculate_daily_net_reserves(raw, sh_anchor)
+        pdf_bytes, ymd = fetch_latest_weekly_pdf()
+        swap_pdf = parse_weekly_pdf(pdf_bytes)
+        ii2 = (swap_pdf.get("II_2_acik_M", 0)
+               + swap_pdf.get("II_2_fazla_M", 0)) / 1000.0
+        ii3 = swap_pdf.get("II_3_toplam_M", 0) / 1000.0
+        sh_anchor = {d: r["net_rezerv_usd"] + ii2 + ii3
+                     for d, r in weekly.iterrows()}
 
-    pdf_d = f"{ymd[6:8]}.{ymd[4:6]}.{ymd[:4]}"
+        daily = calculate_daily_net_reserves(raw, sh_anchor)
+        pdf_d = f"{ymd[6:8]}.{ymd[4:6]}.{ymd[:4]}"
+
     last = daily.iloc[-1]
     title = (
         f"TCMB Swap Hariç Net Uluslararası Rezerv — Günlük"

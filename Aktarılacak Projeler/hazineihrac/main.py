@@ -1566,60 +1566,80 @@ class TreasuryAuctionScraper:
         return wam_df
 
     def create_maturity_charts(self, wam_df: pd.DataFrame, output_file: str = "vade_analizi.html"):
-        """Vade analizi grafiklerini oluşturur"""
+        """Vade analizi grafiklerini oluşturur.
+
+        Ev stili: tarih ekseni (otomatik yıl tikleri), ev paleti
+        (teal #1d5c5c ana seri, bordo #8e1f2f ikincil seri, gri bar),
+        2px düz çizgiler, lejant grafiğin altında yatay.
+        """
         if wam_df.empty:
             logger.warning("Vade verisi bulunamadı, grafik oluşturulamadı")
             return
-        
+
+        wam_df = wam_df.copy()
+        wam_df['Tarih'] = pd.to_datetime(wam_df['Tarih'])
+        wam_df = wam_df.sort_values('Tarih')
+
         fig = make_subplots(
             rows=2, cols=1,
-            subplot_titles=('Aylık Ağırlıklı Ortalama Vade ve İhraç Miktarı', '3 Aylık Hareketli Ortalama Vade Trendi'),
-            vertical_spacing=0.15,
+            subplot_titles=('Aylık ağırlıklı ortalama vade ve ihraç miktarı',
+                            '3 aylık hareketli ağırlıklı ortalama vade'),
+            vertical_spacing=0.16,
             specs=[[{"secondary_y": True}], [{"secondary_y": False}]]
         )
-        
-        fig.add_trace(
-            go.Scatter(
-                x=wam_df['Tarih'], y=wam_df['Ağırlıklı Ortalama Vade (Yıl)'],
-                mode='lines+markers', name='Aylık Vade (Yıl)',
-                line=dict(color='#1f77b4', width=2), marker=dict(size=8),
-                hovertemplate='<b>%{x|%B %Y}</b><br>Ağırlıklı Vade: %{y:.2f} yıl<extra></extra>'
-            ),
-            row=1, col=1, secondary_y=False
-        )
-        
+
+        # bar önce çizilir ki teal çizgi üstte kalsın
         fig.add_trace(
             go.Bar(
                 x=wam_df['Tarih'], y=wam_df['Toplam İhraç (Milyon TL)'],
-                name='İhraç Miktarı (Milyon TL)', yaxis='y2',
-                marker_color='lightgray', opacity=0.5,
-                hovertemplate='<b>%{x|%B %Y}</b><br>İhraç: %{y:,.0f} Milyon TL<extra></extra>'
+                name='İhraç miktarı (milyon TL, sağ eksen)',
+                marker_color='rgba(144,164,174,0.45)',
+                hovertemplate='İhraç: %{y:,.0f} milyon TL<extra></extra>'
             ),
             row=1, col=1, secondary_y=True
         )
-        
+
+        fig.add_trace(
+            go.Scatter(
+                x=wam_df['Tarih'], y=wam_df['Ağırlıklı Ortalama Vade (Yıl)'],
+                mode='lines', name='Aylık ağırlıklı vade (yıl)',
+                line=dict(color='#1d5c5c', width=2),
+                hovertemplate='Ağırlıklı vade: %{y:.2f} yıl<extra></extra>'
+            ),
+            row=1, col=1, secondary_y=False
+        )
+
         fig.add_trace(
             go.Scatter(
                 x=wam_df['Tarih'], y=wam_df['3 Aylık Ağırlıklı Ortalama Vade'],
-                mode='lines+markers', name='3 Aylık Ağırlıklı Ortalama',
-                line=dict(color='#ff7f0e', width=3, dash='dash'), marker=dict(size=6),
-                hovertemplate='<b>%{x|%B %Y}</b><br>3 Aylık Ağırlıklı Ort: %{y:.2f} yıl<extra></extra>'
+                mode='lines', name='3 aylık ağırlıklı ortalama (yıl)',
+                line=dict(color='#8e1f2f', width=2),
+                hovertemplate='3 aylık ort.: %{y:.2f} yıl<extra></extra>'
             ),
             row=2, col=1
         )
-        
+
         fig.update_layout(
-            title={'text': 'Türkiye Hazinesi - Borçlanma Vade Analizi', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20}},
-            height=800, showlegend=True, hovermode='x unified', template='plotly_white',
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1)
+            title=dict(text='Türkiye Hazinesi — borçlanma vade analizi',
+                       x=0.02, xanchor='left',
+                       font=dict(size=16, color='#211b12')),
+            height=760, showlegend=True, hovermode='x unified',
+            paper_bgcolor='#ffffff', plot_bgcolor='#ffffff',
+            font=dict(color='#211b12', size=12.5),
+            legend=dict(orientation='h', yanchor='top', y=-0.1,
+                        xanchor='left', x=0),
+            margin=dict(t=72, r=64, b=96, l=64),
         )
-        
-        fig.update_yaxes(title_text="Vade (Yıl)", row=1, col=1, secondary_y=False)
-        fig.update_yaxes(title_text="İhraç Miktarı (Milyon TL)", row=1, col=1, secondary_y=True, showgrid=False)
-        fig.update_yaxes(title_text="Vade (Yıl)", row=2, col=1)
-        fig.update_xaxes(title_text="", row=1, col=1)
-        fig.update_xaxes(title_text="Tarih", row=2, col=1)
-        
+        for a in fig.layout.annotations:
+            a.font = dict(size=13, color='#211b12')
+
+        fig.update_yaxes(title_text="Vade (yıl)", row=1, col=1, secondary_y=False)
+        fig.update_yaxes(title_text="Milyon TL", row=1, col=1, secondary_y=True, showgrid=False)
+        fig.update_yaxes(title_text="Vade (yıl)", row=2, col=1)
+        fig.update_xaxes(hoverformat='%m.%Y',
+                         gridcolor='#efe9dc', linecolor='#d8cfba')
+        fig.update_yaxes(gridcolor='#efe9dc', linecolor='#d8cfba')
+
         fig.write_html(output_file, include_plotlyjs='cdn')
         logger.info(f"✓ Vade analizi grafikleri {output_file} dosyasına kaydedildi")
         
@@ -1636,72 +1656,107 @@ class TreasuryAuctionScraper:
         return fig
 
     def create_borrowing_performance_chart(self, comparison_df: pd.DataFrame, output_file: str = "hedef_gerceklesme.html"):
-        """Hedef vs gerçekleşme grafiği oluşturur"""
+        """Hedef vs gerçekleşme grafiğini oluşturur.
+
+        Ev stili tasarım (79 aylık seri için okunabilirlik):
+        - Tarih ekseni: kategori etiketi basılmaz, Plotly otomatik yıl tikleri atar.
+        - Hedef = ince gri (#90a4ae) konturlu içi boş bar, gerçekleşen = teal
+          (#1d5c5c) dolu bar; overlay — 79 dönemde iki dolu barı yan yana
+          sıkıştırmak okunmuyor.
+        - Oran = bordo (#8e1f2f) 2px düz çizgi, sağ eksen [0,150] dtick 25.
+          %150'yi aşan oranlar 150'de üçgenle işaretlenir; hover gerçek değeri
+          gösterir (customdata). Gelecek (gerçekleşmesi 0) aylarda çizgi kesilir.
+        - Bar üstü metin etiketi yok (hover yeterli); lejant altta yatay.
+        """
         if comparison_df is None or comparison_df.empty:
             logger.warning("Hedef/gerçekleşme verisi yok, grafik oluşturulamadı")
             return
-        
+
         def parse_ay_yil(s):
             ay_mapping = {
                 'Ocak': 1, 'Şubat': 2, 'Mart': 3, 'Nisan': 4, 'Mayıs': 5, 'Haziran': 6,
                 'Temmuz': 7, 'Ağustos': 8, 'Eylül': 9, 'Ekim': 10, 'Kasım': 11, 'Aralık': 12,
                 'Hazi̇ran': 6, 'Mayis': 5, 'Ni̇san': 4, 'Eki̇m': 10
             }
-            m = re.match(r"([A-Za-zçğıöşüÇĞİÖŞÜ]+) (\d{4})", s)
+            m = re.match(r"([A-Za-zçğıöşüÇĞİÖŞÜ]+) (\d{4})", str(s))
             if m:
                 ay, yil = m.group(1), int(m.group(2))
                 ay_num = ay_mapping.get(ay, 1)
                 return pd.Timestamp(year=yil, month=ay_num, day=1)
             return pd.Timestamp.min
-        
-        comparison_df = comparison_df.copy()
-        comparison_df['Sıra'] = comparison_df['Ay-Yıl'].apply(parse_ay_yil)
-        comparison_df = comparison_df.sort_values('Sıra').drop('Sıra', axis=1)
-        
+
+        df = comparison_df.copy()
+        df['Tarih'] = df['Ay-Yıl'].apply(parse_ay_yil)
+        df = df.sort_values('Tarih').reset_index(drop=True)
+
+        hedef = pd.to_numeric(df['Hedef Borçlanma (Milyar TL)'], errors='coerce')
+        gercek = pd.to_numeric(df['Gerçekleşen Borçlanma (Milyar TL)'], errors='coerce')
+        oran = pd.to_numeric(df['Gerçekleşme Oranı (%)'], errors='coerce')
+        oran = oran.where(gercek > 0)          # gelecek aylarda çizgide boşluk
+        oran_cizim = oran.clip(upper=150)      # aşanlar 150'de; gerçek değer hover'da
+
+        AY_MS = 86_400_000 * 30  # tarih ekseninde bar genişliği (ms cinsinden ~1 ay)
+
         fig = go.Figure()
-        
+
         fig.add_trace(go.Bar(
-            x=comparison_df['Ay-Yıl'],
-            y=comparison_df['Hedef Borçlanma (Milyar TL)'],
-            name='Hedef Borçlanma',
-            marker_color='#1f77b4',
-            text=comparison_df['Hedef Borçlanma (Milyar TL)'],
-            textposition='auto',
-            hovertemplate='Hedef: %{y:.1f} Milyar TL<br>Ay: %{x}'
+            x=df['Tarih'], y=hedef.round(1),
+            name='Hedef borçlanma',
+            width=AY_MS * 0.78,
+            marker=dict(color='rgba(0,0,0,0)',
+                        line=dict(color='#90a4ae', width=1.3)),
+            hovertemplate='Hedef: %{y:.1f} milyar TL<extra></extra>'
         ))
-        
+
         fig.add_trace(go.Bar(
-            x=comparison_df['Ay-Yıl'],
-            y=comparison_df['Gerçekleşen Borçlanma (Milyar TL)'],
-            name='Gerçekleşen Borçlanma',
-            marker_color='#ff7f0e',
-            text=comparison_df['Gerçekleşen Borçlanma (Milyar TL)'],
-            textposition='auto',
-            hovertemplate='Gerçekleşen: %{y:.1f} Milyar TL<br>Ay: %{x}'
+            x=df['Tarih'], y=gercek.round(1),
+            name='Gerçekleşen borçlanma',
+            width=AY_MS * 0.5,
+            marker_color='#1d5c5c',
+            hovertemplate='Gerçekleşen: %{y:.1f} milyar TL<extra></extra>'
         ))
-        
+
         fig.add_trace(go.Scatter(
-            x=comparison_df['Ay-Yıl'],
-            y=comparison_df['Gerçekleşme Oranı (%)'],
-            name='Gerçekleşme Oranı (%)',
-            mode='lines+markers',
-            yaxis='y2',
-            line=dict(color='green', width=3, dash='dash'),
-            marker=dict(size=8),
-            hovertemplate='Oran: %{y:.1f}%<br>Ay: %{x}'
+            x=df['Tarih'], y=oran_cizim.round(1),
+            name='Gerçekleşme oranı (%, sağ eksen)',
+            mode='lines', yaxis='y2',
+            line=dict(color='#8e1f2f', width=2),
+            customdata=oran.round(1),
+            hovertemplate='Oran: %{customdata:.1f}%<extra></extra>'
         ))
-        
+
+        askin = oran > 150
+        if askin.any():
+            fig.add_trace(go.Scatter(
+                x=df.loc[askin, 'Tarih'], y=[150] * int(askin.sum()),
+                yaxis='y2', mode='markers',
+                name='Oran > %150 (gerçek değer hover\'da)',
+                marker=dict(symbol='triangle-up', size=8, color='#8e1f2f'),
+                customdata=oran[askin].round(1),
+                hovertemplate='Oran: %{customdata:.1f}% (eksende 150\'de kırpıldı)<extra></extra>'
+            ))
+
         fig.update_layout(
-            title={'text': 'Hazine Borçlanma Hedefi vs Gerçekleşme', 'x': 0.5, 'xanchor': 'center', 'font': {'size': 20}},
-            barmode='group',
-            xaxis=dict(title='Ay'),
-            yaxis=dict(title='Borçlanma (Milyar TL)'),
-            yaxis2=dict(title='Gerçekleşme Oranı (%)', overlaying='y', side='right', showgrid=False, range=[0, 120]),
-            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
-            template='plotly_white',
-            height=600
+            title=dict(text='Hazine borçlanma hedefi vs gerçekleşme',
+                       x=0.02, xanchor='left',
+                       font=dict(size=16, color='#211b12')),
+            barmode='overlay',
+            height=560,
+            paper_bgcolor='#ffffff', plot_bgcolor='#ffffff',
+            font=dict(color='#211b12', size=12.5),
+            hovermode='x unified',
+            xaxis=dict(type='date', hoverformat='%m.%Y',
+                       gridcolor='#efe9dc', linecolor='#d8cfba'),
+            yaxis=dict(title='Borçlanma (milyar TL)',
+                       gridcolor='#efe9dc', linecolor='#d8cfba'),
+            yaxis2=dict(title='Gerçekleşme oranı (%)', overlaying='y',
+                        side='right', showgrid=False,
+                        range=[0, 150], dtick=25),
+            legend=dict(orientation='h', yanchor='top', y=-0.12,
+                        xanchor='left', x=0),
+            margin=dict(t=72, r=64, b=96, l=64),
         )
-        
+
         fig.write_html(output_file, include_plotlyjs='cdn')
         logger.info(f"✓ Hedef/gerçekleşme grafiği {output_file} dosyasına kaydedildi")
         return fig

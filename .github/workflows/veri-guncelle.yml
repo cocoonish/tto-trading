@@ -38,6 +38,7 @@ jobs:
           python net_rezerv.py
           python grafik.py
           cp tcmb_rezerv_grafik.html "../../site/public/projeler/tcmb-net-rezerv/grafik.html"
+          python ozet_uret.py && cp ozet.json "../../site/public/projeler/tcmb-net-rezerv/"
 
       - name: USDTRY devalüasyon (ACT/365, üç grafik)
         continue-on-error: true
@@ -49,6 +50,7 @@ jobs:
           cp usdtry_deval.html          "../../site/public/projeler/usdtry-deval/usdtry_deval.html"
           cp usdtry_weekly_trends.html  "../../site/public/projeler/usdtry-deval/usdtry_weekly.html"
           cp usdtry_monthly_trends.html "../../site/public/projeler/usdtry-deval/usdtry_monthly.html"
+          python ozet_uret.py && cp ozet.json "../../site/public/projeler/usdtry-deval/"
 
       - name: FX endeksi web grafikleri (depodaki veriden)
         continue-on-error: true
@@ -56,6 +58,7 @@ jobs:
         run: |
           python web_cikti.py
           cp cikti/*.html "../../site/public/projeler/fx-haber-endeksi/"
+          python ozet_uret.py && cp ozet.json "../../site/public/projeler/fx-haber-endeksi/"
 
       - name: Hazine tahmin grafikleri (depodaki CSV'lerden)
         continue-on-error: true
@@ -63,6 +66,7 @@ jobs:
         run: |
           python web_cikti_tahmin.py
           cp planlanan_ihraclar.html tahmin_dogrulama.html "../../site/public/projeler/hazine-ihrac/" || true
+          python ozet_uret.py && cp ozet.json "../../site/public/projeler/hazine-ihrac/"
 
       - name: Ev stilini uygula
         run: python3 site/tools/plotly_stil.py --hepsi

@@ -10,6 +10,7 @@ guncelleme: 'aylık'
 ---
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
+import Deger from '../../components/Deger.astro';
 
 TL "ucuz mu, pahalı mı?" sorusuna tek bir REDK serisiyle bakmak yanıltıcıdır: TÜFE bazlı
 seri hizmet enflasyonunu, Yi-ÜFE bazlı seri ticarete konu malları temsil eder ve ikisi
@@ -152,10 +153,10 @@ düzeldi" haberinin kur diline çevirisi ortalama −%6 demektir, ±%7 bantla.
 12 gözlem içerir (10Y'de 57) ve getirisi daha düşüktür (+25,5% vs +40,2%) —
 kısa çıpa uç bölgeleri erken "normalleştirir".
 
-## Güncel okuma (Mart 2026 verisiyle)
+## Güncel okuma (<Deger proje="try-reer" anahtar="donem" ondalik={1}>Mart 2026</Deger> verisiyle)
 
-Kompozit REDK **103,8** · 10Y sapma **+5,3%** (nötr bölge) · 5Y sapma +14,1% ·
-%100 Yi-ÜFE sapması +12,0% vs %100 TÜFE +2,7% — iki endeksin ayrışması sürüyor:
+Kompozit REDK **<Deger proje="try-reer" anahtar="redk" ondalik={1}>103,8</Deger>** · 10Y sapma **+<Deger proje="try-reer" anahtar="sapma10" ondalik={1}>5,3</Deger>%** (nötr bölge) · 5Y sapma +<Deger proje="try-reer" anahtar="sapma5" ondalik={1}>14,1</Deger>% ·
+%100 Yi-ÜFE sapması +<Deger proje="try-reer" anahtar="ppi10" ondalik={1}>12,0</Deger>% vs %100 TÜFE +<Deger proje="try-reer" anahtar="cpi10" ondalik={1}>2,7</Deger>% — iki endeksin ayrışması sürüyor:
 ticarete konu mallar tarafında TL belirgin pahalı, TÜFE bazında henüz nötr.
 
 ## Yorum notları

@@ -33,6 +33,16 @@ MA_WINDOW_5Y = 60    # 5 yıllık hareketli ortalama
 # Çıktı dosyası
 OUTPUT_HTML = os.path.join(SCRIPT_DIR, "reer_analysis.html")
 
+# Ev paleti (site/src/styles/global.css ile uyumlu)
+TEAL = "#1d5c5c"       # birincil seri
+BORDO = "#8e1f2f"      # ikincil / pozitif sapma (pahalı TL)
+ALTIN = "#9a7327"      # vurgu
+MUREKKEP = "#211b12"   # nötr çizgi
+BORDO_KENAR = "rgba(142, 31, 47, 0.8)"
+BORDO_DOLGU = "rgba(142, 31, 47, 0.3)"
+TEAL_KENAR = "rgba(29, 92, 92, 0.8)"
+TEAL_DOLGU = "rgba(29, 92, 92, 0.3)"
+
 # ============================================
 # VERİ YÜKLEME VE İŞLEME
 # ============================================
@@ -99,8 +109,8 @@ def create_plot(df):
     fig = make_subplots(
         rows=5, cols=1,
         shared_xaxes=True,
-        vertical_spacing=0.04,
-        row_heights=[0.25, 0.19, 0.19, 0.19, 0.19],
+        vertical_spacing=0.05,
+        row_heights=[0.24, 0.19, 0.19, 0.19, 0.19],
         subplot_titles=(
             f'Türkiye Reel Efektif Döviz Kuru ({PPI_WEIGHT*100:.0f}% PPI + {CPI_WEIGHT*100:.0f}% CPI)',
             'Kompozit REDK - 10Y MA\'dan % Sapma',
@@ -116,7 +126,7 @@ def create_plot(df):
             x=df_plot['Dönem'],
             y=df_plot['Composite_REER'],
             name='Kompozit REDK',
-            line=dict(color='#1f77b4', width=2),
+            line=dict(color=TEAL, width=2),
             hovertemplate='<b>Tarih:</b> %{x|%Y-%m}<br><b>REDK:</b> %{y:.2f}<extra></extra>'
         ),
         row=1, col=1
@@ -127,7 +137,7 @@ def create_plot(df):
             x=df_plot['Dönem'],
             y=df_plot['MA_10Y'],
             name='10Y MA',
-            line=dict(color='#ff7f0e', width=2, dash='dash'),
+            line=dict(color=BORDO, width=1.5),
             hovertemplate='<b>Tarih:</b> %{x|%Y-%m}<br><b>10Y MA:</b> %{y:.2f}<extra></extra>'
         ),
         row=1, col=1
@@ -138,7 +148,7 @@ def create_plot(df):
             x=df_plot['Dönem'],
             y=df_plot['MA_5Y'],
             name='5Y MA',
-            line=dict(color='#2ca02c', width=2, dash='dot'),
+            line=dict(color=ALTIN, width=1.5),
             hovertemplate='<b>Tarih:</b> %{x|%Y-%m}<br><b>5Y MA:</b> %{y:.2f}<extra></extra>'
         ),
         row=1, col=1
@@ -150,8 +160,8 @@ def create_plot(df):
             x=df_plot['Dönem'],
             y=df_plot['Deviation_10Y_Pct'].clip(lower=0),
             fill='tozeroy',
-            line=dict(color='rgba(255, 0, 0, 0.8)', width=0.5),
-            fillcolor='rgba(255, 0, 0, 0.3)',
+            line=dict(color=BORDO_KENAR, width=0.5),
+            fillcolor=BORDO_DOLGU,
             hoverinfo='skip',
             showlegend=False
         ),
@@ -162,8 +172,8 @@ def create_plot(df):
             x=df_plot['Dönem'],
             y=df_plot['Deviation_10Y_Pct'].clip(upper=0),
             fill='tozeroy',
-            line=dict(color='rgba(0, 128, 0, 0.8)', width=0.5),
-            fillcolor='rgba(0, 128, 0, 0.3)',
+            line=dict(color=TEAL_KENAR, width=0.5),
+            fillcolor=TEAL_DOLGU,
             hoverinfo='skip',
             showlegend=False
         ),
@@ -174,7 +184,7 @@ def create_plot(df):
             x=df_plot['Dönem'],
             y=df_plot['Deviation_10Y_Pct'],
             name='Kompozit 10Y Sapma',
-            line=dict(color='#d62728', width=2),
+            line=dict(color=MUREKKEP, width=1.5),
             hovertemplate='<b>Tarih:</b> %{x|%Y-%m}<br><b>Kompozit 10Y:</b> %{y:.2f}%<extra></extra>'
         ),
         row=2, col=1
@@ -186,8 +196,8 @@ def create_plot(df):
             x=df_plot['Dönem'],
             y=df_plot['Deviation_5Y_Pct'].clip(lower=0),
             fill='tozeroy',
-            line=dict(color='rgba(255, 127, 14, 0.8)', width=0.5),
-            fillcolor='rgba(255, 127, 14, 0.3)',
+            line=dict(color=BORDO_KENAR, width=0.5),
+            fillcolor=BORDO_DOLGU,
             hoverinfo='skip',
             showlegend=False
         ),
@@ -198,8 +208,8 @@ def create_plot(df):
             x=df_plot['Dönem'],
             y=df_plot['Deviation_5Y_Pct'].clip(upper=0),
             fill='tozeroy',
-            line=dict(color='rgba(31, 119, 180, 0.8)', width=0.5),
-            fillcolor='rgba(31, 119, 180, 0.3)',
+            line=dict(color=TEAL_KENAR, width=0.5),
+            fillcolor=TEAL_DOLGU,
             hoverinfo='skip',
             showlegend=False
         ),
@@ -210,7 +220,7 @@ def create_plot(df):
             x=df_plot['Dönem'],
             y=df_plot['Deviation_5Y_Pct'],
             name='Kompozit 5Y Sapma',
-            line=dict(color='#9467bd', width=2),
+            line=dict(color=MUREKKEP, width=1.5),
             hovertemplate='<b>Tarih:</b> %{x|%Y-%m}<br><b>Kompozit 5Y:</b> %{y:.2f}%<extra></extra>'
         ),
         row=3, col=1
@@ -222,8 +232,8 @@ def create_plot(df):
             x=df_plot['Dönem'],
             y=df_plot['PPI_Deviation_10Y_Pct'].clip(lower=0),
             fill='tozeroy',
-            line=dict(color='rgba(148, 103, 189, 0.8)', width=0.5),
-            fillcolor='rgba(148, 103, 189, 0.3)',
+            line=dict(color=BORDO_KENAR, width=0.5),
+            fillcolor=BORDO_DOLGU,
             hoverinfo='skip',
             showlegend=False
         ),
@@ -234,8 +244,8 @@ def create_plot(df):
             x=df_plot['Dönem'],
             y=df_plot['PPI_Deviation_10Y_Pct'].clip(upper=0),
             fill='tozeroy',
-            line=dict(color='rgba(44, 160, 44, 0.8)', width=0.5),
-            fillcolor='rgba(44, 160, 44, 0.3)',
+            line=dict(color=TEAL_KENAR, width=0.5),
+            fillcolor=TEAL_DOLGU,
             hoverinfo='skip',
             showlegend=False
         ),
@@ -246,7 +256,7 @@ def create_plot(df):
             x=df_plot['Dönem'],
             y=df_plot['PPI_Deviation_10Y_Pct'],
             name='PPI 10Y Sapma',
-            line=dict(color='#8c564b', width=2),
+            line=dict(color=MUREKKEP, width=1.5),
             hovertemplate='<b>Tarih:</b> %{x|%Y-%m}<br><b>PPI 10Y:</b> %{y:.2f}%<extra></extra>'
         ),
         row=4, col=1
@@ -258,8 +268,8 @@ def create_plot(df):
             x=df_plot['Dönem'],
             y=df_plot['CPI_Deviation_10Y_Pct'].clip(lower=0),
             fill='tozeroy',
-            line=dict(color='rgba(227, 119, 194, 0.8)', width=0.5),
-            fillcolor='rgba(227, 119, 194, 0.3)',
+            line=dict(color=BORDO_KENAR, width=0.5),
+            fillcolor=BORDO_DOLGU,
             hoverinfo='skip',
             showlegend=False
         ),
@@ -270,8 +280,8 @@ def create_plot(df):
             x=df_plot['Dönem'],
             y=df_plot['CPI_Deviation_10Y_Pct'].clip(upper=0),
             fill='tozeroy',
-            line=dict(color='rgba(127, 127, 127, 0.8)', width=0.5),
-            fillcolor='rgba(127, 127, 127, 0.3)',
+            line=dict(color=TEAL_KENAR, width=0.5),
+            fillcolor=TEAL_DOLGU,
             hoverinfo='skip',
             showlegend=False
         ),
@@ -282,7 +292,7 @@ def create_plot(df):
             x=df_plot['Dönem'],
             y=df_plot['CPI_Deviation_10Y_Pct'],
             name='CPI 10Y Sapma',
-            line=dict(color='#e377c2', width=2),
+            line=dict(color=MUREKKEP, width=1.5),
             hovertemplate='<b>Tarih:</b> %{x|%Y-%m}<br><b>CPI 10Y:</b> %{y:.2f}%<extra></extra>'
         ),
         row=5, col=1
@@ -290,7 +300,7 @@ def create_plot(df):
     
     # Sıfır çizgileri
     for row in [2, 3, 4, 5]:
-        fig.add_hline(y=0, line_dash="solid", line_color="black", line_width=1, row=row, col=1)
+        fig.add_hline(y=0, line_dash="solid", line_color="#90a4ae", line_width=1, row=row, col=1)
     
     # Son değerler
     last_date = df_plot['Dönem'].iloc[-1]
@@ -307,15 +317,17 @@ def create_plot(df):
             text=f"<b>Türkiye REDK Analizi ({last_date.strftime('%Y-%m')})</b><br>" +
                  f"<sup>Kompozit: 10Y={last_deviation_10y:+.1f}%, 5Y={last_deviation_5y:+.1f}% | " +
                  f"PPI: {last_ppi_dev:+.1f}% | CPI: {last_cpi_dev:+.1f}%</sup>",
-            x=0.5,
-            font=dict(size=18)
+            x=0.01,
+            xanchor="left",
+            font=dict(size=16)
         ),
+        # Lejant altta — üstte tutulursa ana başlık ve ilk panel başlığıyla çakışıyor
         legend=dict(
             orientation="h",
-            yanchor="bottom",
-            y=1.01,
-            xanchor="center",
-            x=0.5
+            yanchor="top",
+            y=-0.04,
+            xanchor="left",
+            x=0
         ),
         hovermode='x unified',
         template='plotly_white'
