@@ -1,0 +1,195 @@
+---
+title: 'Ders: Asset Swap Trade — Nakit Akışı, MTM, Muhasebe ve P&L'
+description: 'ASW işleminin taşınması: sabit kuponu swap ile değişkene çevirme, DV01 eşli hedge, süreç-içi MTM, muhasebe kayıtları (FVTPL), P&L ayrıştırması, giriş/çıkış zamanlaması ve riskler — TRT160431T35 örneğiyle, interaktif hesaplayıcıyla.'
+pubDate: 2026-07-18
+tags: ['faiz', 'swap', 'tahvil', 'asw', 'ders']
+durum: 'aktif'
+kaynak: 'ASW Trade rehberi + Excel modeli (TRT160431T35 örneği)'
+---
+
+import AswTradeHesaplayici from '../../components/AswTradeHesaplayici.astro';
+
+Bu ders, **ASW'nin nasıl fiyatlandığını** anlatan "IRS Bootstrapping & ASW" dersinin devamıdır. Orada asset swap spread'in **nereden geldiğini** (eğri bootstrap, DF'ler, par swap oranı, spread'in NPV'si) türettik. Burada ise aynı işlemin **nasıl taşındığını** ele alıyoruz: nakit akışları, süreç-içi gerçeğe uygun değerleme (MTM), muhasebe kayıtları, P&L'in nasıl yazıldığı, giriş/çıkış zamanlaması ve riskler. Fiyatlama detaylarını (DF'lerin interpolasyonu, spread'in bootstrap'tan çözülmesi) tekrar etmiyoruz; gerektiğinde diğer derse atıf yapıyoruz.
+
+Boydan boya tek bir örnek işlemi izleyeceğiz:
+
+<div class="not"><span class="etiket">Örnek işlem</span> **TRT160431T35** (DİBS — Devlet İç Borçlanma Senedi), %16,63 yarı yıllık kupon, vade 16.04.2031. Nominal **100.000.000 TL**, valör 20.07.2026. Kirli fiyat **102,5823** (yani 102.582.300 TL), tahvilin iç verimi (YTM) **%35,72**. Hedge bacağı: **3 aylık TLREF OIS/IRS**, par swap oranı **%33,363**. Asset swap spread **+91,4 bp**. Bu sayılar dersin sonuna kadar sabittir.</div>
+
+## 1. İşlemin Yapısı
+
+İşlem, swap eğrisine göre ucuz duran bir DİBS'i alıp faiz riskini 3 aylık TLREF IRS ile hedge ederek, tahvilin swap'a göre yaklaşık **91,4 bp**'lik ucuzluğunu (asset swap spread) sentetik bir floater — yani değişken faizli bir kağıt — olarak taşımaktır. Sezgi şu: sabit kuponlu tahvili tek başına aldığınızda faiz yönüne (duration'a) açık kalırsınız; TCMB faizi artırırsa tahvil değer kaybeder. IRS ile sabit kuponu değişkene çevirerek bu yön riskini söker, geriye yalnızca tahvilin *göreli* ucuzluğunu (spread) bırakırsınız. İki bileşen:
+
+- **Varlık:** TRT160431T35, %16,63 yarı yıllık kupon, vade 16.04.2031. Kirli 102,5823'ten 100mn nominal alınır (102.582.300 TL). Tahvilin iç verimi %35,72.
+- **Hedge/dönüşüm bacağı:** 3 aylık TLREF OIS/IRS — sabit öde / 3M TLREF al. DV01 eşlemesi için swap nominali yaklaşık 93,1mn (hedge oranı 0,931). DV01 (dollar value of 1 basis point) bir enstrümanın değerinin 1 baz puanlık faiz hareketine karşı ne kadar değiştiğidir; iki bacağın DV01'ini eşitlemek "faiz yönünü nötrle" demenin sayısal karşılığıdır.
+
+### 1.1 3 Aylık IRS oranının DF'lerden bulunması
+
+Yarı yıllık iskonto faktörleri (DF — discount factor, gelecekteki 1 TL'nin bugünkü değeri) log-lineer interpolasyonla çeyreklik düğümlere taşınır; çeyreklik par swap oranı standart kimlikle çözülür:
+
+$$S = \frac{1 - DF_N}{\sum_i \tau_i \cdot DF_i} = \frac{1 - 0{,}237}{2{,}2870} = \%33{,}363$$
+
+Pay olan $1 - DF_N$ swap'ın değişken bacağının PV'sinin (par floater'ın) 1 birim nominal başına değeridir; payda $\sum_i \tau_i \cdot DF_i$ ise sabit bacağın çeyreklik annüitesidir (burada 2,2870). Par swap oranı, ikisini eşitleyen orandır — yani başlangıç değeri sıfır olan swap'ın sabit oranı.
+
+Bu oran (**%33,363**) tahvilin kupon oranına (%33,26) çok yakın, iç veriminin (%35,72) belirgin altındadır — tahvilin swap eğrisine göre iskontolu (ucuz) durduğunu doğrudan gösterir. Sezgi: eğer tahvili sabit oranlı swap oranıyla iskontolasaydık fiyat ~par civarında çıkardı; oysa piyasa tahvili daha yüksek bir iç verimle (%35,72) iskontoluyor, demek ki swap eğrisinin *üzerinde* bir getiri talep ediyor. Bu fazlalık asset swap spread'dir.
+
+<div class="not"><span class="etiket">Fiyatlama ayrı derste</span> DF'lerin interpolasyonu ve spread'in bootstrap eğrisinden çözümü "IRS Bootstrapping & ASW" dersinde adım adım türetildi. Burada oranı veri kabul edip işlemin taşınmasına odaklanıyoruz. DF'ler değişirse oran otomatik güncellenir; canlı hesap sistemdeki 'Swap Oranı' bölümündedir.</div>
+
+### 1.2 Risk ve DV01 hedge
+
+| Kalem | Değer |
+|---|---|
+| Tahvil DV01 (+1bp) | 21.286 TL |
+| Swap DV01 (eşli nominal, +1bp) | 21.286 TL |
+| Net faiz DV01 (hedge sonrası) | ≈ 0 |
+| Spread DV01 (≈ tahvil DV01) | 21.286 TL |
+| ASW değeri (spread'in PV'si) | 2.089.170 TL |
+| Yıllık net carry (~ASW) | 913.503 TL |
+
+Swap nominali tahvilin DV01'ini nötrleyecek şekilde ölçeklenince paralel faiz hareketi P&L'e girmez; geriye yalnızca **spread DV01** kalır — yani tahvilin swap'a göre zenginleşip ucuzlamasına duyarlılık. Trade'in asıl motoru budur.
+
+<div class="not"><span class="etiket">Neden paralel faiz P&L'e girmez</span> Tahvil ve swap DV01'i +1bp için ikisi de 21.286 TL. Eğri **paralel** 1bp yukarı kayarsa tahvil 21.286 TL kaybeder, ama sabit öde/değişken al swap tam bu kadar kazanır (sabit ödeyen için faiz artışı lehtedir). İki etki birbirini götürür; net faiz DV01 ≈ 0. Geriye kalan tek duyarlılık, tahvil getirisi ile swap oranının *arasındaki farkın* (spread'in) değişmesidir. Bu yüzden hedge sonrası pozisyon bir "faiz view'ı" değil, bir "göreli değer (spread) view'ı"dır.</div>
+
+Aşağıdaki araç bu işlemin canlı modelidir: eğri DF'lerini, tahvil girdilerini ve
+MTM senaryosunu değiştirin — par oran, ASW spread'i, DV01 eşli hedge, carry ve
+süreç-içi P&L anında yeniden hesaplanır. Dersteki tüm sayılar bu araçla üretilebilir.
+
+<AswTradeHesaplayici />
+
+## 2. Nakit Akışları
+
+Asset swap'ın mantığı, tahvilin sabit kuponunu swap'ın sabit bacağıyla götürüp geriye değişken bırakmaktır:
+
+- **Tahvil kuponu (alınan):** yarı yıllık +16.630.000 TL.
+- **Swap sabit bacak (ödenen):** yarı yıllık −16.630.000 TL — tahvil kuponunu birebir götürür, net sabit = 0.
+- **Swap değişken bacak (alınan):** çeyreklik 3M TLREF + 91,4 bp. Tahvil artık sentetik floater.
+- **Fonlama (repo, ödenen):** yaklaşık TLREF. Repo, tahvili teminat verip nakit borçlanma; maliyeti kabaca gecelik/kısa vadeli TLREF'e yakın seyreder. Net taşıma = değişken tahsilat − repo ≈ **+91,4 bp/yıl**.
+
+Sezgi: paketi net akış olarak okursanız, tahvilin sabit kuponu ile swap'ın sabit ödemesi tam eşleştiği için sabit taraf kaybolur. Elinizde "değişken al (TLREF+91,4bp) − repo öde (~TLREF)" kalır; bu farkın kalıcı adı asset swap spread'idir ve pozisyon açık durdukça birikir.
+
+<div class="not"><span class="etiket">Değişken bacağın PV ayrıştırması — çerçevenin iç tutarlılığı</span> Çeyreklik değişken bacağın PV'si <strong>78,39mn TL</strong> iki parçaya ayrışır: <strong>76,30mn</strong> (saf TLREF = par floater = $N \times (1 - DF_N)$) + <strong>2,09mn</strong> (ASW parçası). ASW parçasının PV'si (2.089.170 TL) tam olarak modeldeki NPV pickup'a eşittir — yani 'spread'in bugünkü değeri' ile 'değişken bacaktaki fazla marjın PV'si' aynı şeydir. Neden telescope? Saf TLREF alan bir floater her fixing'de eğrinin ima ettiği forward'ı ödediği için PV'si $N \times (1 - DF_N)$ formülüne çöker (ara terimler birbirini götürür — "teleskop toplamı"). Üstüne binen sabit +91,4 bp marj ise ayrı bir annüitedir ve PV'si tam olarak ASW değerini verir. İlk çeyrek forward TLREF %40,7 (eğri tersine, yani kısa vade uzun vadeden yüksek — TCMB indirimi fiyatlı); ilk çeyrek değişken kupon ≈ 10,49mn TL.</div>
+
+Tüm akış üç bacak (tahvil / swap sabit / swap değişken) ve net paket olarak izlenir.
+
+## 3. Süreç İçinde MTM
+
+Pozisyon her değerleme gününde **iki ayrı enstrüman** olarak gerçeğe uygun değerle işaretlenir (MTM — mark-to-market): tahvil piyasa fiyatından, swap ise cari eğriden. P&L iki bileşene ayrışır:
+
+- **Taşıma (carry):** günlük yaklaşık 2.503 TL (yıllık ~913bin), ASW marjının tahakkuku. Pozisyon açık durdukça birikir. Bu, zamanın kendisinden gelen "beklerken kazanılan" parçadır.
+- **Spread MTM:** ASW daralır/genişlerse $-\text{TahvilDV01} \times \Delta\text{spread}$. ASW 1bp daralınca yaklaşık +21.286 TL. Paralel faiz hareketi hedge'lidir, P&L'e girmez.
+
+Sezgi: carry parçası neredeyse deterministiktir (spread sabit kalsa bile birikir); spread MTM parçası ise piyasanın tahvili swap'a göre yeniden fiyatlamasıyla dalgalanır. Uzun ASW pozisyonunda spread'in **daralması** (tahvilin swap'a yakınsaması) lehinizedir.
+
+### 3.1 Örnek MTM patikası (DV01-lineer)
+
+Senaryo: TCMB gevşemesiyle faizler paralel düşer ve tahvil swap'a göre zenginleşir (ASW 91,4 → 76 bp). Canlı patika:
+
+| Mark | Δfaiz (bp) | ASW (bp) | Spread P&L | Kümül. carry | TOPLAM P&L |
+|---|---|---|---|---|---|
+| t0 (giriş) | 0 | 91,4 | 0 | 0 | 0 |
+| +3 ay | −80 | 86,0 | +114.943 | +230.253 | +345.196 |
+| +6 ay | −150 | 82,0 | +200.086 | +460.506 | +660.592 |
+| +9 ay | −180 | 79,0 | +263.943 | +690.759 | +954.702 |
+| +12 ay | −220 | 76,0 | +327.800 | +913.503 | +1.241.303 |
+
+Faizler 220 bp düşmesine rağmen outright yön P&L'e girmiyor (tahvil kazancı swap zararıyla götürülüyor); toplam kâr yalnızca daralan spread'in MTM'i (+328bin) ile biriken carry'den (+914bin) geliyor. **Gün-1 P&L ≈ 0** — tahvil piyasadan, swap par'dan girildi.
+
+<div class="not"><span class="etiket">Neden gün-1 P&L ≈ 0</span> Tahvili piyasa fiyatından (adil değerinden) aldınız, dolayısıyla giriş anında ne kâr ne zarar var. Swap'ı da <strong>par oranından</strong> kurdunuz; par swap'ın tanımı gereği başlangıç değeri sıfırdır. İki enstrümanın da gün-1 değeri sıfır olduğu için paketin de gün-1 P&L'i sıfırdır. ASW'nin 2,09mn TL'lik değeri anında realize olan bir kâr değil, açığa çıkması zamana yayılmış (carry olarak tahakkuk edecek veya spread daralırsa öne çekilecek) bir değerdir.</div>
+
+<div class="not"><span class="etiket">Gerçek MTM ile lineer yaklaşım farkı</span> Yukarıdaki değerler DV01-lineerdir (masa-içi hızlı tahmin). Gerçek MTM eğriyi yeniden fiyatlar ve konveksiteyi içerir; 200 bp gibi büyük hareketlerde tahvilin pozitif konveksitesi lehinize küçük bir ek katkı verir. Neden lehinize? Tahvilin fiyat-getiri eğrisi dışbükeydir: getiri düşerken fiyat DV01'in öngördüğünden biraz <em>daha fazla</em> kazanır, yükselirken biraz <em>daha az</em> kaybeder; swap bacağının konveksitesi bunu tam örtmediği için net artık pozitiftir. Resmi P&L için sistemin tam yeniden değerlemesini esas alın; bu tablo yön ve mertebe içindir.</div>
+
+## 4. Muhasebe Kayıtları
+
+Ticari portföyde tahvil **FVTPL** (fair value through profit or loss — gerçeğe uygun değer farkı kâr/zarara yansıtılan), swap ise türev varlık/yükümlülük olarak izlenir; her ikisinin MTM'i doğrudan P&L'e yansır. Aşağıdaki kayıtlar modeldeki tam rakamlarla birebirdir.
+
+### 4.1 İşlem günü (t0)
+
+| Hesap | Borç | Alacak | Açıklama |
+|---|---|---|---|
+| Menkul kıymet – DİBS (temiz) | 94.450.000 | | Temiz fiyat (kirli − işlemiş faiz) |
+| İşlemiş faiz alacağı | 8.132.300 | | Kupon tahakkuku |
+| Nakit / Takas | | 102.582.300 | Kirli bedel ödenir |
+| Nakit / Takas (repo girişi) | 102.582.300 | | Repo ile nakit girer |
+| Repo yükümlülüğü | | 102.582.300 | Tahvil teminat, nakit borç |
+| Türev (IRS) — par swap | memo | GUD = 0 | Başlangıç gerçeğe uygun değeri sıfır |
+
+Swap par oranından kurulduğu için başlangıç gerçeğe uygun değeri (GUD) sıfırdır; nominal bilanço-dışı memo olarak izlenir. Tahvil repo ile fonlanır — yani alım bedeli öz kaynaktan değil, tahvili teminat gösterip alınan repo nakdinden karşılanır (self-funded).
+
+### 4.2 Kupon / periyot
+
+| Hesap | Borç | Alacak | Açıklama |
+|---|---|---|---|
+| Nakit (tahvil kuponu) | 16.630.000 | | Yarı yıllık kupon tahsilatı |
+| Faiz geliri – DİBS | | 16.630.000 | Tahvil kupon geliri |
+| Faiz gideri – swap sabit bacak | 16.630.000 | | Swap sabit ödeme |
+| Nakit (sabit ödeme) | | 16.630.000 | Sabit bacak nakit çıkışı |
+| Nakit (swap değişken tahsilat) | TLREF+ASW | | Değişken bacak tahsilatı |
+| Faiz geliri – swap değişken | | TLREF+ASW | Değişken bacak geliri |
+| Faiz gideri – repo | ~TLREF | | Repo fonlama maliyeti |
+| Nakit (repo faizi) | | ~TLREF | Repo faiz ödemesi |
+
+Tahvil kuponu ile swap sabit bacağı nakit olarak birbirini götürür (net sabit ≈ 0). Geriye net faiz geliri olarak değişken tahsilat eksi repo maliyeti = **ASW marjı** kalır. Yani muhasebe, ekonomik hikayeyi birebir yansıtır: paketin kalıcı geliri spread'dir.
+
+### 4.3 Değerleme günü (dönem sonu MTM)
+
+| Hesap | Borç | Alacak | Açıklama |
+|---|---|---|---|
+| Menkul kıymet – DİBS (değerleme farkı) | 2.426.574 | | Tahvil değer artışı |
+| Gerçeğe uygun değer geliri (P&L) | | 2.426.574 | Tahvilden GUD geliri |
+| Gerçeğe uygun değer gideri (P&L) | 2.128.574 | | Swap MTM zararı |
+| Türev yükümlülüğü (IRS) | | 2.128.574 | Swap yükümlülüğe döner |
+
+Net değerleme etkisi = 2.426.574 − 2.128.574 = **+298.000 TL** → saf spread P&L; faiz bacağı hedge tarafından nötrlenmiştir. Tahvil değerlemede kazanmış, swap ise (sabit öde bacağı) zarar yazmış görünür; ikisi büyük ölçüde birbirini götürür, net kalan yalnızca spread hareketidir.
+
+<div class="not"><span class="etiket">Sınıflama neden önemli</span> FVTPL yerine <strong>makul değer riskinden korunma muhasebesi</strong> (fair value hedge) uygulanırsa, tahvilin hedge'lenen riske isabet eden değer değişimi ile swap'ın MTM'i aynı dönemde P&L'e alınıp büyük ölçüde birbirini götürür; etki yine net spread + carry'dir, ama oynaklık daha düşük raporlanır. <strong>AFS/FVOCI</strong> sınıflamasında (satılmaya hazır / gerçeğe uygun değer farkı diğer kapsamlı gelire yansıtılan) tahvil değer farkı özkaynağa (diğer kapsamlı gelir) giderken swap MTM P&L'de kalır ve <strong>muhasebe uyumsuzluğu</strong> (accounting mismatch) doğar — bir bacak özkaynakta, diğeri P&L'de dalgalanır. Bu yüzden asset swap paketleri tipik olarak ticari portföyde/FVTPL veya hedge muhasebesiyle taşınır.</div>
+
+### 4.4 Unwind / vade
+
+Kapanışta tahvil satış bedeliyle menkul kıymet ve birikmiş değerleme farkları ters kayıtla kapanır, swap sonlandırma değeri nakit takas edilir, repo geri ödenir. Kümülatif realize P&L = biriken carry + spread MTM (patikaya göre; +12 ay senaryosunda ≈ **+1.241.303 TL**).
+
+## 5. P&L Nasıl Yazılır — Özet
+
+- **Gün-1:** ≈ 0. Tahvil piyasadan, swap par'dan girildiği için upfront kâr yoktur. ASW'nin 2,09mn TL'lik değeri bir peşin kâr değil, **gelecekteki carry'nin bugünkü değeridir**. Bu ayrım kritik: değeri gün-1'de kasaya yazamazsınız; ya zamanla carry olarak tahakkuk eder ya da spread erken daralırsa MTM olarak öne çekilir.
+- **Süreç boyunca:** her gün yaklaşık 2.503 TL carry tahakkuku + ASW hareketinden spread MTM (±21.286 TL/bp). Faiz yönü hedge'li.
+- **Kapanışta:** biriken carry + o ana kadarki spread MTM realize olur. Vadeye tutulursa spread MTM sıfıra yakınsar (pull-to-par — tahvil vade yaklaştıkça par'a çekilir, spread kaybolur) ve toplam ≈ biriken ASW carry'si olur.
+
+## 6. ASW Trade'i Ne Zaman Yapılmalı
+
+### 6.1 Giriş (uzun ASW: tahvil al + sabit öde swap)
+
+- **ASW tarihsel bandının üstünde** / komşu kağıtlara göre geniş — tahvil ucuz. Daralma beklentisi + pozitif carry birlikte gelir.
+- **Tetikleyici katalizör:** TCMB gevşeme patikası, yabancı girişi/endeks dahiliyeti, ihale arzının azalması, likidite rahatlaması. Bunlar tahvili swap'a yakınsatır (ASW daralır).
+- **Carry avantajı:** uzun ASW yaklaşık 91 bp pozitif taşır; daralma gecikse de beklemek maliyetsizdir. Zamanlama toleransı yüksektir — carry siz beklerken sizi öder.
+
+### 6.2 Çıkış / ters (kısa ASW)
+
+- **ASW hedefe daraldığında** kâr realize edilir; carry artık yeterince ödemiyorsa pozisyon kapatılır.
+- **Genişleme beklentisi** (arz şoku, likidite sıkışması, dışsal risk-off, BDDK/fonlama maliyeti artışı) varsa kısa ASW'ye geçilir — ama bu **negatif carry** öder; genişlemenin hızlı ve büyük gelmesi şarttır. Türkiye'de govie-swap spread'i (devlet tahvili ile swap arasındaki fark) yapısal olarak pozitif ve dalgalı olduğundan kısa ASW zamanlaması pahalı bir bahistir.
+
+<div class="not"><span class="etiket">Pratik karar kuralı</span> Uzun ASW'yi 'geniş + pozitif carry + daralma katalizörü' üçlüsü hizalandığında kur; carry seni beklerken koruduğu için sabırlı olabilirsin. Kısa ASW'yi ancak net ve yakın bir genişleme tetikleyicisi varken, negatif carry'yi aşacağından emin olduğunda kur.</div>
+
+## 7. Riskler
+
+- **Repo/fonlama bazı:** net carry TLREF fonlaması varsayar; repo TLREF+baz ise carry = 91 bp − baz. En büyük gerçek aşındırıcı — spread'i taşırken en çok gözlenecek kalem.
+- **Bacak/fixing uyumsuzluğu:** swap değişkeni 3M TLREF, tahvil kuponu yarı yıllık; frekans ve fixing farkları küçük artık risk bırakır.
+- **Konveksite:** DV01 eşlense de tahvil-swap konveksitesi tam örtüşmez; büyük hareketlerde artık P&L. Bucket-DV01 hedge (eğrinin farklı vade dilimlerinde ayrı ayrı DV01 eşleme) tek-nokta hedge'ten güvenlidir.
+- **Onshore/offshore:** hedge offshore kurulursa TRY basis sızar. Onshore TLREF IRS + onshore repo tutarlı kalır.
+- **Likidite:** az işlem gören DİBS'te giriş-çıkış maliyeti spread'i yiyebilir. Swap OTC (tezgah üstü); VİOP sınırlı hedge.
+- **Muhasebe uyumsuzluğu:** yanlış sınıflama (AFS tahvil + P&L swap) oynaklık yaratır; FVTPL veya fair-value hedge tercih edilir.
+
+## Ek — Kilit Rakamlar
+
+| Kalem | Değer |
+|---|---|
+| Nominal | 100.000.000 TL |
+| Tahvil kirli fiyat / değer | 102,5823 / 102.582.300 TL |
+| Tahvil YTM | %35,72 |
+| 3 Aylık IRS par oranı (DF'lerden) | %33,363 |
+| Quarterly annüite (Στ·DF) | 2,2870 |
+| ASW spread | +91,4 bp |
+| ASW değeri (spread PV) | 2.089.170 TL |
+| Tahvil = Swap DV01 (eşli) | 21.286 TL/bp |
+| Swap nominal (DV01 eşli) | 93.073.280 TL |
+| Yıllık net carry | 913.503 TL |
+| Günlük carry | 2.503 TL |
+
+Rakamlar modelin DF'leri ve TRT160431T35 örneğiyle türetilmiştir; illüstratiftir. Canlı fiyatlama için güncel TLREF/OIS eğrisini kullanın. Hesap detayları eşlik eden modeldedir (Özet · Swap Oranı · Nakit Akışları · MTM & P&L · Muhasebe).
