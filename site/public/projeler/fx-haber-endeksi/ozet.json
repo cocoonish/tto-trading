@@ -1,10 +1,10 @@
 {
- "_tarih": "2026-07-22 18:25 UTC",
- "snapshot_sayisi": 8,
+ "_tarih": "2026-07-22 19:26 UTC",
+ "snapshot_sayisi": 4,
  "varlik_sayisi": 15,
- "makale_toplam": 3460,
- "rejim": "Risk-On",
- "spread": -0.4852,
- "ort_korelasyon": 0.0439,
- "pc1": 0.3546
+ "makale_toplam": 3459,
+ "rejim": "Transitioning",
+ "spread": -0.0088,
+ "ort_korelasyon": 0.0636,
+ "pc1": 0.2411
 }

@@ -1,137 +1,5 @@
 [
   {
-    "timestamp": "2026-04-12T20:19:14.277183+00:00",
-    "indices": {
-      "EURUSD": {
-        "value": 0.0325,
-        "category": "Neutral"
-      },
-      "XAUUSD": {
-        "value": 0.0402,
-        "category": "Neutral"
-      },
-      "SPX": {
-        "value": 0.0772,
-        "category": "Neutral"
-      }
-    }
-  },
-  {
-    "timestamp": "2026-04-12T20:20:27.545115+00:00",
-    "indices": {
-      "EURUSD": {
-        "value": 0.0325,
-        "category": "Neutral"
-      },
-      "XAUUSD": {
-        "value": 0.0402,
-        "category": "Neutral"
-      },
-      "SPX": {
-        "value": 0.0772,
-        "category": "Neutral"
-      }
-    }
-  },
-  {
-    "timestamp": "2026-04-13T05:32:41.648772+00:00",
-    "indices": {
-      "EURUSD": {
-        "value": -0.4001,
-        "category": "Bearish"
-      },
-      "USDJPY": {
-        "value": 0.308,
-        "category": "Bullish"
-      },
-      "USDCHF": {
-        "value": -0.3636,
-        "category": "Bearish"
-      },
-      "XAUUSD": {
-        "value": 0.2559,
-        "category": "Bullish"
-      },
-      "XAGUSD": {
-        "value": 0.2372,
-        "category": "Bullish"
-      },
-      "SPX": {
-        "value": -0.3484,
-        "category": "Bearish"
-      },
-      "UST2Y": {
-        "value": -0.5089,
-        "category": "Extremely Bearish"
-      },
-      "UST10Y": {
-        "value": 0.1712,
-        "category": "Bullish"
-      }
-    }
-  },
-  {
-    "timestamp": "2026-04-13T08:04:35.406868+00:00",
-    "indices": {
-      "EURUSD": {
-        "value": -0.086,
-        "category": "Neutral"
-      },
-      "USDJPY": {
-        "value": 0.1404,
-        "category": "Bullish"
-      },
-      "USDCHF": {
-        "value": 0.2524,
-        "category": "Bullish"
-      },
-      "GBPUSD": {
-        "value": -0.1311,
-        "category": "Bearish"
-      },
-      "AUDUSD": {
-        "value": -0.2456,
-        "category": "Bearish"
-      },
-      "NZDUSD": {
-        "value": 0.2244,
-        "category": "Bullish"
-      },
-      "USDCAD": {
-        "value": -0.6785,
-        "category": "Extremely Bearish"
-      },
-      "USDNOK": {
-        "value": -0.0114,
-        "category": "Neutral"
-      },
-      "USDSEK": {
-        "value": -0.3732,
-        "category": "Bearish"
-      },
-      "XAUUSD": {
-        "value": 0.3034,
-        "category": "Bullish"
-      },
-      "XAGUSD": {
-        "value": -0.3661,
-        "category": "Bearish"
-      },
-      "SPX": {
-        "value": 0.0743,
-        "category": "Neutral"
-      },
-      "UST2Y": {
-        "value": -1.0,
-        "category": "Extremely Bearish"
-      },
-      "UST10Y": {
-        "value": -0.6803,
-        "category": "Extremely Bearish"
-      }
-    }
-  },
-  {
     "timestamp": "2026-04-13T08:05:19.867180+00:00",
     "indices": {
       "EURUSD": {
@@ -323,75 +191,75 @@
     }
   },
   {
-    "timestamp": "2026-07-22T18:25:32.839502+00:00",
+    "timestamp": "2026-07-22T19:26:22.614391+00:00",
     "indices": {
       "EURUSD": {
-        "value": -0.2978,
+        "value": -0.222,
         "category": "Bearish"
       },
       "USDJPY": {
-        "value": 0.2461,
+        "value": 0.1724,
         "category": "Bullish"
       },
       "USDCHF": {
-        "value": -0.3849,
+        "value": -0.4744,
         "category": "Bearish"
       },
       "GBPUSD": {
-        "value": -0.1069,
+        "value": -0.2551,
         "category": "Bearish"
       },
       "AUDUSD": {
-        "value": 0.0466,
+        "value": 0.0398,
         "category": "Neutral"
       },
       "NZDUSD": {
-        "value": -0.5887,
-        "category": "Extremely Bearish"
-      },
-      "USDCAD": {
-        "value": -0.2121,
+        "value": -0.2421,
         "category": "Bearish"
       },
+      "USDCAD": {
+        "value": 0.0366,
+        "category": "Neutral"
+      },
       "USDNOK": {
-        "value": 0.7597,
+        "value": 1.0,
         "category": "Extremely Bullish"
       },
       "USDSEK": {
-        "value": 0.2313,
-        "category": "Bullish"
+        "value": 0.5207,
+        "category": "Extremely Bullish"
       },
       "XAUUSD": {
-        "value": 0.4497,
+        "value": 0.285,
         "category": "Bullish"
       },
       "XAGUSD": {
-        "value": 0.411,
+        "value": 0.4044,
         "category": "Bullish"
       },
       "SPX": {
-        "value": -0.4585,
+        "value": -0.2259,
         "category": "Bearish"
       },
       "UST2Y": {
-        "value": -0.1607,
+        "value": -0.2459,
         "category": "Bearish"
       },
       "UST10Y": {
-        "value": 0.0431,
-        "category": "Neutral"
+        "value": 0.6629,
+        "category": "Extremely Bullish"
       },
       "BIST100": {
-        "value": 0.3339,
+        "value": 0.273,
         "category": "Bullish"
       }
     },
     "regime": {
-      "label": "Risk-On",
-      "basket_spread": -0.4852,
-      "avg_correlation": 0.0439,
-      "pc1_share": 0.3546,
-      "as_of": "2026-05-03",
+      "label": "Transitioning",
+      "basket_spread": -0.0088,
+      "avg_correlation": 0.0636,
+      "pc1_share": 0.2411,
+      "as_of": "2026-07-19",
       "n_assets": 15
     }
   }

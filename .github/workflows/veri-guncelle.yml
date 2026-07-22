@@ -29,7 +29,7 @@ jobs:
           python-version: '3.11'
 
       - name: Bağımlılıklar
-        run: pip install pandas numpy plotly requests pdfplumber tcmb yfinance
+        run: pip install pandas numpy scipy plotly requests pdfplumber tcmb yfinance openpyxl
 
       - name: TCMB net rezerv (EVDS + IRFCL → grafik)
         continue-on-error: true
@@ -40,7 +40,7 @@ jobs:
           cp tcmb_rezerv_grafik.html "../../site/public/projeler/tcmb-net-rezerv/grafik.html"
           python ozet_uret.py && cp ozet.json "../../site/public/projeler/tcmb-net-rezerv/"
 
-      - name: USDTRY devalüasyon (ACT/365, üç grafik)
+      - name: USDTRY devalüasyon (ACT/365, altı grafik — MDX'in gömdüğü tümü)
         continue-on-error: true
         working-directory: Aktarılacak Projeler/USDTRYDeval
         run: |
@@ -48,6 +48,9 @@ jobs:
           python usdtry_weekly_trends.py
           python usdtry_monthly_trends.py
           cp usdtry_deval.html          "../../site/public/projeler/usdtry-deval/usdtry_deval.html"
+          cp usdtry_deval_3m.html       "../../site/public/projeler/usdtry-deval/usdtry_deval_3m.html"
+          cp usdtry_deval_6m.html       "../../site/public/projeler/usdtry-deval/usdtry_deval_6m.html"
+          cp usdtry_deval_seg.html      "../../site/public/projeler/usdtry-deval/usdtry_deval_seg.html"
           cp usdtry_weekly_trends.html  "../../site/public/projeler/usdtry-deval/usdtry_weekly.html"
           cp usdtry_monthly_trends.html "../../site/public/projeler/usdtry-deval/usdtry_monthly.html"
           python ozet_uret.py && cp ozet.json "../../site/public/projeler/usdtry-deval/"
@@ -59,6 +62,24 @@ jobs:
           python web_cikti.py
           cp cikti/*.html "../../site/public/projeler/fx-haber-endeksi/"
           python ozet_uret.py && cp ozet.json "../../site/public/projeler/fx-haber-endeksi/"
+
+      - name: TRY REER (EVDS → REDK sapma & regresyon panelleri)
+        continue-on-error: true
+        working-directory: Aktarılacak Projeler/TRYREER
+        env:
+          # Anahtar depo secret'ından gelir; kodda gömülü varsayılan kullanılmaz.
+          TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
+        run: |
+          python main.py
+          python usdtry_reer_analysis.py
+          H="../../site/public/projeler/try-reer"
+          cp reer_analysis.html            "$H/reer_analysis.html"
+          cp usdtry_regression_10y.html    "$H/redk_degisim_regresyon.html"
+          cp usdtry_regression_5y.html     "$H/redk_degisim_regresyon_5y.html"
+          cp usdtry_regression_3m.html     "$H/redk_degisim_regresyon_3m.html"
+          cp usdtry_reer_analysis_10y.html "$H/redk_usdtry_analiz_10y.html"
+          cp usdtry_reer_analysis_5y.html  "$H/redk_usdtry_analiz_5y.html"
+          python ozet_uret.py && cp ozet.json "$H/"
 
       - name: Hazine tahmin grafikleri (depodaki CSV'lerden)
         continue-on-error: true

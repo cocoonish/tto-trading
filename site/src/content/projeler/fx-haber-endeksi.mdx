@@ -58,8 +58,8 @@ Endeks tek başına bir al-sat sinyali değildir; katmanlar belirli bir sırayla
 />
 
 Son pipeline koşusunun endeks değerleri, sıralı yatay bar: pozitifler teal, negatifler
-bordo; etiket kategori eşiklerinden. Son okumada uçlar: USD/NOK **+0,76** (Aşırı Alıcı) ve altın **+0,45** bir
-yanda, NZD/USD **−0,59** ve S&P 500 −0,46 diğer yanda. Hover her varlığın **skorlu makale sayısını** da gösterir (toplam <Deger proje="fx-haber-endeksi" anahtar="makale_toplam" ondalik={0}>3.460</Deger>) — az makaleli varlığın endeksi daha gürültülüdür, kategoriyi buna göre iskonto edin.
+bordo; etiket kategori eşiklerinden. Son okumada uçlar: USD/NOK **+1,00** (Aşırı Alıcı) ve ABD 10Y **+0,66** bir
+yanda, USD/CHF **−0,47** ve GBP/USD −0,26 diğer yanda. Hover her varlığın **skorlu makale sayısını** da gösterir (toplam <Deger proje="fx-haber-endeksi" anahtar="makale_toplam" ondalik={0}>3.459</Deger>) — az makaleli varlığın endeksi daha gürültülüdür, kategoriyi buna göre iskonto edin.
 
 ## Şekil 02 — Endeks tarihçesi
 
@@ -138,8 +138,7 @@ duyarlılığın öncülük ettiği epizotlar çıplak gözle seçilir; istatist
 />
 
 Her nokta bir hafta: x = bakış-ileri içermeyen haftalık endeks, y = izleyen 5 iş günü
-getirisi; OLS trend + Pearson $r/p/n$ kutusu. Örnek: EUR/USD $r=+0{,}19$ ($n=55$,
-$p=0{,}16$). Dürüst yorum: ham haftalık seride ilişki pozitif ama zayıf — endeks
+getirisi; OLS trend + Pearson $r/p/n$ kutusu. Örnek: EUR/USD $r=+0{,}18$ ($n=66$). Dürüst yorum: ham haftalık seride ilişki pozitif ama zayıf — endeks
 filtre katmanıdır, tek başına kural değil.
 
 ## Şekil 05 — Yuvarlanan korelasyon: sinyal ŞU ANDA çalışıyor mu?
@@ -156,8 +155,8 @@ iki ufku birden: her varlıkta **1 günlük** (altın rengi, noktalı) ve **5 g�
 (petrol yeşili, düz) ileri getiriyle 20 günlük yuvarlanan Pearson korelasyonu.
 Dashboard'daki 1g-vs-5g karşılaştırma tablosunun grafik hâlidir. Genel örüntü:
 1g ortalamaları sıfıra yapışıktır, 5g ufku hem daha güçlü hem daha oynaktır —
-haber tonu ertesi günü değil, haftayı fiyatlar; tek istisna USD/CAD (1g +0,11 vs
-5g −0,08). Sıfır etrafında salınım normaldir; sinyalin "açık" olduğu dönemleri
+haber tonu ertesi günü değil, haftayı fiyatlar; tek istisna USD/CAD (1g +0,09 vs
+5g −0,07). Sıfır etrafında salınım normaldir; sinyalin "açık" olduğu dönemleri
 pozisyon büyüklüğüne çevirmek, sabit boyut kullanmaktan iyidir. Korelasyonun çöktüğü
 dönemler çoğunlukla rejim değişimiyle çakışır (Şekil 07 ile yan yana okuyun).
 
@@ -200,7 +199,7 @@ makro yön: USD zayıflığı = pozitif):
 - **PC1** — 60 günlük penceredeki ortak faktör; işaretli skoru genel tonun yönünü,
   açıklanan varyans payı gücünü verir.
 
-Güncel okuma: **<Deger proje="fx-haber-endeksi" anahtar="rejim" ondalik={1}>Risk-On</Deger>** — sepet spread'i <Deger proje="fx-haber-endeksi" anahtar="spread" ondalik={3}>−0,485</Deger> · ortalama korelasyon <Deger proje="fx-haber-endeksi" anahtar="ort_korelasyon" ondalik={3}>0,044</Deger> · PC1 payı <Deger proje="fx-haber-endeksi" anahtar="pc1" ondalik={3}>0,355</Deger> (veri: <Deger proje="fx-haber-endeksi" anahtar="_tarih" ondalik={1}>2026-07-22 18:25 UTC</Deger>).
+Güncel okuma: **<Deger proje="fx-haber-endeksi" anahtar="rejim" ondalik={1}>Transitioning</Deger>** — sepet spread'i <Deger proje="fx-haber-endeksi" anahtar="spread" ondalik={3}>−0,009</Deger> · ortalama korelasyon <Deger proje="fx-haber-endeksi" anahtar="ort_korelasyon" ondalik={3}>0,064</Deger> · PC1 payı <Deger proje="fx-haber-endeksi" anahtar="pc1" ondalik={3}>0,241</Deger> (veri: <Deger proje="fx-haber-endeksi" anahtar="_tarih" ondalik={1}>2026-07-22 19:26 UTC</Deger>).
 
 Isı haritası (Şekil 08) aynı matrisin çift-çift halidir: hangi varlıkların haber tonu
 birlikte hareket ediyor? Yıldızlı etiketler terslenen pariteleri işaretler.
@@ -228,9 +227,15 @@ birlikte hareket ediyor? Yıldızlı etiketler terslenen pariteleri işaretler.
 />
 
 Grid search'ün varlık başına ulaştığı korelasyon (günlük seri, 20g yuvarlanan ort.,
-5g getiri ufku): GBP/USD **+0,56**, altın **+0,44**, S&P 500 **+0,39** liderler;
+5g getiri ufku): BIST 100 **+0,54**, GBP/USD **+0,53**, gümüş **+0,43** liderler;
 hover kazanan parametreleri gösterir. Bu değerler *in-sample*'dır — canlı performans
 beklentisi değil, hangi varlıkta haber-fiyat bağının güçlü olduğunun sıralamasıdır.
+Grid search 22.07.2026'da taze 52 haftalık önbellekle yeniden koştu: 15 varlığın
+**14'ü 5 günlük ufku** seçti (tek istisna USD/SEK), yani "haber tonu haftayı fiyatlar"
+bulgusu parametre seçimine de yansıyor. Önceki kalibrasyon 13.04.2026 tarihliydi ve
+daha kısa bir veri penceresine oturuyordu; sıralama o turda GBP/USD-altın-S&P
+şeklindeydi. Sıralamanın kalibrasyondan kalibrasyona bu kadar oynaması, in-sample
+korelasyon sıralamasına ne kadar güvenilmesi gerektiğinin kendi ölçüsüdür.
 
 ## Şekil 10 — Manşet akışı: skorların arkasındaki haberler
 
@@ -253,10 +258,16 @@ kümesinin sürdüğüne bakın — tek kaynaklı tekrar zinciri mi, geniş taba
   kıyaslanarak izlenir.
 - **İki farklı veri ufku var, karıştırmayın.** Endeks seviyesi (Şekil 01) ve manşetler
   her koşuda tazelenir; rejim/korelasyon/saçılım panelleri ise 52 haftalık *geçmiş haber
-  önbelleğinden* hesaplanır ve bu önbellek **03.05.2026**'da bitiyor. Yani bugünkü
-  rejim etiketi güncel manşetlerle değil, o tarihe kadarki korelasyon yapısıyla
-  kurulmuştur. Önbelleği ileri taşımak için `run.py --fetch-history` koşulur.
+  önbelleğinden* hesaplanır. Önbellek 22.07.2026'da yenilendi ve artık **19.07.2026**'ya
+  kadar dolu — ama kendiliğinden ilerlemez: `run.py --fetch-history` koşulmadığı sürece
+  o tarihte donar ve rejim etiketi eskimiş bir korelasyon yapısını yansıtmaya başlar.
+  Sayfadaki "veri sonu" damgasını her zaman kontrol edin.
 - Rejim tarihçesi (Şekil 08) yeni birikmeye başladı: pipeline her koşuda rejimi
-  `index_history`'ye yazıyor, ama şu an elde yalnız <Deger proje="fx-haber-endeksi" anahtar="snapshot_sayisi" ondalik={0}>8</Deger> koşu var.
+  `index_history`'ye yazıyor, ama şu an elde yalnız <Deger proje="fx-haber-endeksi" anahtar="snapshot_sayisi" ondalik={0}>4</Deger> koşu var.
   Bu seri istatistiksel olarak yorumlanabilir hale gelene dek (birkaç düzine koşu)
   panele *trend* diye bakmayın; tek tek noktalar olarak okuyun.
+- **Endeks tarihçesi parametre rejimi karıştırır.** Her snapshot, o gün geçerli olan
+  optimize parametrelerle kurulmuştur; 13.04 ve 22.07 kalibrasyonları farklıdır.
+  Dolayısıyla Şekil 02'deki seviye farkları kısmen haber tonundan, kısmen parametre
+  değişiminden gelir. Kalibrasyonlar arası karşılaştırmayı kategori/bant düzeyinde
+  yapın, ondalık düzeyinde değil.
