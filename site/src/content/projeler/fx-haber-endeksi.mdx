@@ -2,7 +2,7 @@
 title: 'FX Haber-Duyarlılık Endeksi'
 description: 'FinBERT ile skorlanan haber akışından 15 varlıklık duyarlılık endeksi: kullanım kılavuzu, rejim dedektörü, fiyat karşılaştırması, korelasyon analizi ve manşet akışı.'
 pubDate: 2026-07-15
-updatedDate: 2026-07-17
+updatedDate: 2026-07-22
 tags: ['fx', 'sentiment', 'nlp']
 durum: 'aktif'
 kaynak: 'GDELT + Google News RSS + piyasa verisi'
@@ -58,8 +58,8 @@ Endeks tek başına bir al-sat sinyali değildir; katmanlar belirli bir sırayla
 />
 
 Son pipeline koşusunun endeks değerleri, sıralı yatay bar: pozitifler teal, negatifler
-bordo; etiket kategori eşiklerinden. Son okumada uçlar: altın **+0,29** (Alıcı) bir
-yanda, USD/NOK **−0,86** ve BIST 100 −0,74 (Aşırı Satıcı) diğer yanda. Hover her varlığın **skorlu makale sayısını** da gösterir (toplam <Deger proje="fx-haber-endeksi" anahtar="makale_toplam" ondalik={0}>3.433</Deger>) — az makaleli varlığın endeksi daha gürültülüdür, kategoriyi buna göre iskonto edin.
+bordo; etiket kategori eşiklerinden. Son okumada uçlar: USD/NOK **+0,76** (Aşırı Alıcı) ve altın **+0,45** bir
+yanda, NZD/USD **−0,59** ve S&P 500 −0,46 diğer yanda. Hover her varlığın **skorlu makale sayısını** da gösterir (toplam <Deger proje="fx-haber-endeksi" anahtar="makale_toplam" ondalik={0}>3.460</Deger>) — az makaleli varlığın endeksi daha gürültülüdür, kategoriyi buna göre iskonto edin.
 
 ## Şekil 02 — Endeks tarihçesi
 
@@ -200,7 +200,7 @@ makro yön: USD zayıflığı = pozitif):
 - **PC1** — 60 günlük penceredeki ortak faktör; işaretli skoru genel tonun yönünü,
   açıklanan varyans payı gücünü verir.
 
-Güncel okuma: **<Deger proje="fx-haber-endeksi" anahtar="rejim" ondalik={1}>Risk-On</Deger>** — sepet spread'i <Deger proje="fx-haber-endeksi" anahtar="spread" ondalik={3}>−0,485</Deger> · ortalama korelasyon <Deger proje="fx-haber-endeksi" anahtar="ort_korelasyon" ondalik={3}>+0,044</Deger> · PC1 payı <Deger proje="fx-haber-endeksi" anahtar="pc1" ondalik={3}>0,355</Deger> (veri: <Deger proje="fx-haber-endeksi" anahtar="_tarih" ondalik={1}>15.07.2026</Deger>).
+Güncel okuma: **<Deger proje="fx-haber-endeksi" anahtar="rejim" ondalik={1}>Risk-On</Deger>** — sepet spread'i <Deger proje="fx-haber-endeksi" anahtar="spread" ondalik={3}>−0,485</Deger> · ortalama korelasyon <Deger proje="fx-haber-endeksi" anahtar="ort_korelasyon" ondalik={3}>0,044</Deger> · PC1 payı <Deger proje="fx-haber-endeksi" anahtar="pc1" ondalik={3}>0,355</Deger> (veri: <Deger proje="fx-haber-endeksi" anahtar="_tarih" ondalik={1}>2026-07-22 18:25 UTC</Deger>).
 
 Isı haritası (Şekil 08) aynı matrisin çift-çift halidir: hangi varlıkların haber tonu
 birlikte hareket ediyor? Yıldızlı etiketler terslenen pariteleri işaretler.
@@ -251,7 +251,12 @@ kümesinin sürdüğüne bakın — tek kaynaklı tekrar zinciri mi, geniş taba
   varlıktan varlığa ve dönemden döneme değişir (Şekil 05).
 - Optimizasyon in-sample'dır; aşırı-uyum riski Şekil 04'ün ham korelasyonlarıyla
   kıyaslanarak izlenir.
-- Rejim/korelasyon/saçılım grafikleri geçmiş haber önbelleğinin kapsadığı döneme kadar
-  günceldir; `run.py --fetch-history` koşulunca aynı akışla yenilenir.
-- Pipeline her koşuda bu sayfadaki tüm grafikleri yeniden üretir ve rejimi
-  `index_history`'ye yazar — rejim tarihçesi zamanla koşu-bazlı seriye de dönüşecek.
+- **İki farklı veri ufku var, karıştırmayın.** Endeks seviyesi (Şekil 01) ve manşetler
+  her koşuda tazelenir; rejim/korelasyon/saçılım panelleri ise 52 haftalık *geçmiş haber
+  önbelleğinden* hesaplanır ve bu önbellek **03.05.2026**'da bitiyor. Yani bugünkü
+  rejim etiketi güncel manşetlerle değil, o tarihe kadarki korelasyon yapısıyla
+  kurulmuştur. Önbelleği ileri taşımak için `run.py --fetch-history` koşulur.
+- Rejim tarihçesi (Şekil 08) yeni birikmeye başladı: pipeline her koşuda rejimi
+  `index_history`'ye yazıyor, ama şu an elde yalnız <Deger proje="fx-haber-endeksi" anahtar="snapshot_sayisi" ondalik={0}>8</Deger> koşu var.
+  Bu seri istatistiksel olarak yorumlanabilir hale gelene dek (birkaç düzine koşu)
+  panele *trend* diye bakmayın; tek tek noktalar olarak okuyun.

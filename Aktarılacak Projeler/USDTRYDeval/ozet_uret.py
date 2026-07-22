@@ -16,9 +16,14 @@ df["Tarih"] = pd.to_datetime(df["Tarih"], format="%d-%m-%Y")
 col = "TP_DK_USD_A_YTL"
 df[col] = pd.to_numeric(df[col], errors="coerce")
 s = df.dropna(subset=[col]).set_index("Tarih")[col].sort_index()
+# Grafik scriptleriyle AYNI taban: gunluk interpolasyon + hafta ici gunler.
+# Ham gozlem uzerinden n-adim geri gitmek resmi tatillerde pencereyi kaydirir
+# (or. 15 Temmuz) ve sayfa metnini grafiklerle celiskiye dusurur.
+biz = s.asfreq("D").interpolate(method="time")
+biz = biz[biz.index.dayofweek < 5]
 def deval(n):
-    p0, p1 = s.iloc[-1 - n], s.iloc[-1]
-    d = (s.index[-1] - s.index[-1 - n]).days
+    p0, p1 = biz.iloc[-1 - n], biz.iloc[-1]
+    d = (biz.index[-1] - biz.index[-1 - n]).days
     return round(((p1 / p0) ** (365 / d) - 1) * 100, 1)
 ozet = {"_tarih": s.index[-1].strftime("%d.%m.%Y"), "kur": round(float(s.iloc[-1]), 2),
         "d1h": deval(5), "d1a": deval(21), "d3a": deval(63)}

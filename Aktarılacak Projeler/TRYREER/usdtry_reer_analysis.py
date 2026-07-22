@@ -24,8 +24,9 @@ from datetime import datetime, timedelta
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, SCRIPT_DIR)
 
-# main.py'den ağırlıkları import et
-from main import PPI_WEIGHT, CPI_WEIGHT, CPI_FILE, PPI_FILE
+# main.py'den ağırlıkları ve ortak veri yükleyiciyi import et
+# (load_data: önce TCMB EVDS, hata olursa TUFE.xlsx / Yi-UFE.xlsx yedeği)
+from main import PPI_WEIGHT, CPI_WEIGHT, CPI_FILE, PPI_FILE, load_data
 
 # Hareketli ortalama pencereleri (ay)
 MA_WINDOW_10Y = 120
@@ -46,27 +47,9 @@ OUTPUT_HTML = os.path.join(SCRIPT_DIR, "usdtry_reer_analysis.html")
 # ============================================
 
 def load_reer_data():
-    """REDK verilerini yükle"""
-    # CPI verisi
-    df_cpi = pd.read_excel(CPI_FILE)
-    df_cpi = df_cpi.dropna(subset=['Dönem'])
-    df_cpi['Dönem'] = pd.to_datetime(df_cpi['Dönem'], errors='coerce')
-    df_cpi = df_cpi.dropna(subset=['Dönem'])
-    cpi_col = [col for col in df_cpi.columns if 'TÜFE  Bazlı' in col][0]
-    df_cpi = df_cpi[['Dönem', cpi_col]].rename(columns={cpi_col: 'CPI_REER'})
-    
-    # PPI verisi
-    df_ppi = pd.read_excel(PPI_FILE)
-    df_ppi = df_ppi.dropna(subset=['Dönem'])
-    df_ppi['Dönem'] = pd.to_datetime(df_ppi['Dönem'], errors='coerce')
-    df_ppi = df_ppi.dropna(subset=['Dönem'])
-    ppi_col = [col for col in df_ppi.columns if 'Yi-ÜFE' in col][0]
-    df_ppi = df_ppi[['Dönem', ppi_col]].rename(columns={ppi_col: 'PPI_REER'})
-    
-    # Birleştir
-    df = pd.merge(df_cpi, df_ppi, on='Dönem', how='inner')
-    df = df.sort_values('Dönem').reset_index(drop=True)
-    
+    """REDK verilerini yükle (main.load_data → EVDS, yedeği Excel)"""
+    df = load_data()
+
     # Kompozit REDK
     df['Composite_REER'] = (PPI_WEIGHT * df['PPI_REER']) + (CPI_WEIGHT * df['CPI_REER'])
     

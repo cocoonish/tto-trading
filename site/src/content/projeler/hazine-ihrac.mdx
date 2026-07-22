@@ -1,8 +1,8 @@
 ---
 title: 'Hazine İhraç Takvimi & İhale Analizi'
-description: 'Hazine iç borçlanmasının tam panosu: 439 ihalelik veri seti üzerinde hacim/tür/maliyet/talep/vade analizi, strateji revizyon takibi, 21 ihraçlık canlı takvim ve 433 ihalelik backtest — 13 grafik, kullanım kılavuzuyla.'
+description: 'Hazine iç borçlanmasının tam panosu: 441 ihalelik veri seti üzerinde hacim/tür/maliyet/talep/vade analizi, strateji revizyon takibi, 16 ihraçlık canlı takvim ve 435 ihalelik backtest — 13 grafik, kullanım kılavuzuyla.'
 pubDate: 2026-07-15
-updatedDate: 2026-07-17
+updatedDate: 2026-07-22
 tags: ['hazine', 'tahvil', 'ihale']
 durum: 'aktif'
 kaynak: 'T.C. Hazine ve Maliye Bakanlığı'
@@ -14,8 +14,8 @@ import Deger from '../../components/Deger.astro';
 
 Hazine'nin aylık iç borçlanma stratejisi ile fiilen gerçekleşen ihraçlar arasındaki
 fark, TL faiz piyasası için başlı başına bir sinyaldir. Bu proje ihale sonuçlarını ve
-planlanan takvimi otomatik toplar ve **Şubat 2020'den bu yana <Deger proje="hazine-ihrac" anahtar="n_ihale" ondalik={0}>439</Deger> ihaleyi** (toplam
-<Deger proje="hazine-ihrac" anahtar="toplam_mlr" ondalik={1}>6.858,2</Deger> milyar TL) analiz panosuna döker: hacim, tür kırılımı, maliyet,
+planlanan takvimi otomatik toplar ve **Şubat 2020'den bu yana <Deger proje="hazine-ihrac" anahtar="n_ihale" ondalik={0}>441</Deger> ihaleyi** (toplam
+<Deger proje="hazine-ihrac" anahtar="toplam_mlr" ondalik={1}>6.953,5</Deger> milyar TL) analiz panosuna döker: hacim, tür kırılımı, maliyet,
 talep, vade, strateji revizyonları, ileriye dönük tahmin ve backtest.
 
 ## Bu sayfa nasıl kullanılır? (iş akışı)
@@ -61,7 +61,7 @@ talep, vade, strateji revizyonları, ileriye dönük tahmin ve backtest.
 />
 
 **Şekil 01.** İhale kayıtları ay bazında toplanır, strateji hedefiyle eşlenir.
-<Deger proje="hazine-ihrac" anahtar="n_ay" ondalik={0}>77</Deger> gerçekleşmeli ayda ortalama gerçekleşme **%<Deger proje="hazine-ihrac" anahtar="gerceklesme_ort" ondalik={1}>85,7</Deger>**. Oranın kalıcı 1 altı seyri
+<Deger proje="hazine-ihrac" anahtar="n_ay" ondalik={0}>77</Deger> gerçekleşmeli ayda ortalama gerçekleşme **%<Deger proje="hazine-ihrac" anahtar="gerceklesme_ort" ondalik={1}>86,1</Deger>**. Oranın kalıcı 1 altı seyri
 programın yumuşak uygulandığını, 1 üstü sıçramalar ek finansman ihtiyacını gösterir.
 
 <GrafikEmbed
@@ -125,7 +125,7 @@ Tempo, takvim yoğunluğunun DV01 bütçesine çevrildiği yerdir: aynı hacmin 
 
 **Şekil 06.** Üst panel: ihale bazında bileşik faiz (tür renkli) + **hacim ağırlıklı
 aylık ortalama maliyet** çizgisi (TÜFE'ye endeksliler reel getiri kote ettiğinden
-ortalamaya dahil edilmez). Zirve Mayıs 2025 **%52,1**; son ay **%<Deger proje="hazine-ihrac" anahtar="maliyet_son" ondalik={1}>43,9</Deger>**. Alt
+ortalamaya dahil edilmez). Zirve Mayıs 2025 **%52,1**; son ay **%<Deger proje="hazine-ihrac" anahtar="maliyet_son" ondalik={1}>43,1</Deger>**. Alt
 panel: ihale öncesi/sonrası faiz karşılaştırması, $y=x$ referanslı.
 
 <GrafikEmbed
@@ -136,9 +136,9 @@ panel: ihale öncesi/sonrası faiz karşılaştırması, $y=x$ referanslı.
 />
 
 **Şekil 07.** Üst: ihale bazında B/C + aylık toplam B/C (Σteklif/Σsatış, 1,0x
-referanslı) — son ay **<Deger proje="hazine-ihrac" anahtar="b2c_son" ondalik={2}>1,87</Deger>x**, son 12 ay ortalaması <Deger proje="hazine-ihrac" anahtar="b2c_12ay" ondalik={2}>2,16</Deger>x; 2'nin altına
-yerleşme talep yorgunluğudur. Alt: kabul oranı (satış/teklif) — son ay %<Deger proje="hazine-ihrac" anahtar="kabul_son" ondalik={1}>53,6</Deger>,
-tüm dönem %<Deger proje="hazine-ihrac" anahtar="kabul_tum" ondalik={1}>48,6</Deger>: Hazine talebin yarısını kesiyor; oranın yükselmesi "ne gelirse alındı"
+referanslı) — son ay **<Deger proje="hazine-ihrac" anahtar="b2c_son" ondalik={2}>1,80</Deger>x**, son 12 ay ortalaması <Deger proje="hazine-ihrac" anahtar="b2c_12ay" ondalik={2}>2,16</Deger>x; 2'nin altına
+yerleşme talep yorgunluğudur. Alt: kabul oranı (satış/teklif) — son ay %<Deger proje="hazine-ihrac" anahtar="kabul_son" ondalik={1}>55,5</Deger>,
+tüm dönem %<Deger proje="hazine-ihrac" anahtar="kabul_tum" ondalik={1}>48,7</Deger>: Hazine talebin yarısını kesiyor; oranın yükselmesi "ne gelirse alındı"
 demektir ve maliyet tavizinin habercisidir.
 
 <GrafikEmbed
@@ -161,8 +161,11 @@ fiyat keşfinin zorlaştığı, marjinal alıcının uzaklaştığı ihaleler. H
 />
 
 **Şekil 09.** WAM: $\overline{V}_{ay} = \sum \text{NetSatış}_i V_i / \sum \text{NetSatış}_i$ —
-son ayda **<Deger proje="hazine-ihrac" anahtar="wam_son" ondalik={2}>4,13</Deger> yıl** (3 aylık ağırlıklı ort. <Deger proje="hazine-ihrac" anahtar="wam_3ay" ondalik={2}>3,29</Deger>). Uzayan WAM piyasanın
-duration hazmı, kısalan WAM temkin işaretidir.
+son ayda **<Deger proje="hazine-ihrac" anahtar="wam_son" ondalik={2}>3,07</Deger> yıl** (3 aylık ağırlıklı ort. <Deger proje="hazine-ihrac" anahtar="wam_3ay" ondalik={2}>2,99</Deger>). Uzayan WAM piyasanın
+duration hazmı, kısalan WAM temkin işaretidir. Temmuz koşusunda WAM 4,13'ten 3,07
+yıla indi; kırılım tek bir ihaleden değil, uzun sabit kuponlu ihraç payının düşüp
+TLREF endeksli/kısa bono payının artmasından geliyor — WAM'ı düşüren şeyin **kompozisyon**
+olduğunu doğrulamak için Şekil 10'daki tür bazında kutu grafiğine bakın.
 
 <GrafikEmbed
   src="/projeler/hazine-ihrac/vade_dagilimi.html"
@@ -183,25 +186,25 @@ dağılımı** (tanım+vade eşleşmeli tarihsel paylar; beklenen teklif geçmi�
 
 <GrafikEmbed
   src="/projeler/hazine-ihrac/planlanan_ihraclar.html"
-  baslik="Planlı ihraç takvimi ve ihale başına beklenen net satış (21.07 – 15.09.2026)"
+  baslik="Planlı ihraç takvimi ve ihale başına beklenen net satış (10.08 – 15.09.2026)"
   no="11"
   yukseklik={600}
 />
 
-**Şekil 11.** Takvimde **<Deger proje="hazine-ihrac" anahtar="plan_adet" ondalik={0}>21</Deger> planlı ihraç**: <Deger proje="hazine-ihrac" anahtar="plan_ihale_adet" ondalik={0}>14</Deger> ihale (tahminli) + doğrudan satışlar.
-Beklenen ihale toplamı **<Deger proje="hazine-ihrac" anahtar="plan_toplam_mlr" ondalik={1}>581,8</Deger> milyar TL** (Ağustos 325,9 vs hedef 417,0 · Eylül
-229,9 vs 294,2). Hover'daki "kıyas ihale sayısına" bakın: n küçükse tahmin zayıftır.
+**Şekil 11.** Takvimde **<Deger proje="hazine-ihrac" anahtar="plan_adet" ondalik={0}>16</Deger> planlı ihraç**: <Deger proje="hazine-ihrac" anahtar="plan_ihale_adet" ondalik={0}>12</Deger> ihale (tahminli) + doğrudan satışlar.
+Beklenen ihale toplamı **<Deger proje="hazine-ihrac" anahtar="plan_toplam_mlr" ondalik={1}>578,6</Deger> milyar TL** (Ağustos 339,3 vs hedef 417,0 · Eylül
+239,4 vs 294,2). Hover'daki "kıyas ihale sayısına" bakın: n küçükse tahmin zayıftır.
 
 <GrafikEmbed
   src="/projeler/hazine-ihrac/tahmin_dogrulama.html"
-  baslik="Backtest: ihale bazında tahmin vs gerçekleşen (n=433)"
+  baslik="Backtest: ihale bazında tahmin vs gerçekleşen (n=435)"
   no="12"
   yukseklik={600}
 />
 
 **Şekil 12.** İhale bazında "o gün elde olan bilgiyle" tahmin vs gerçekleşen; $y=x$
-mükemmel tahmin. Tüm dönem (n=<Deger proje="hazine-ihrac" anahtar="backtest_n" ondalik={0}>433</Deger>) **medyan sapma %<Deger proje="hazine-ihrac" anahtar="medyan_sapma" ondalik={1}>47,0</Deger>**; son 12 ay MAPE %<Deger proje="hazine-ihrac" anahtar="son12_mape" ondalik={1}>56,0</Deger>.
-Bid-to-cover tahmini çok daha isabetli: **MAPE %<Deger proje="hazine-ihrac" anahtar="b2c_mape" ondalik={1}>25,7</Deger>** — talep, tutardan öngörülebilir.
+mükemmel tahmin. Tüm dönem (n=<Deger proje="hazine-ihrac" anahtar="backtest_n" ondalik={0}>435</Deger>) **medyan sapma %<Deger proje="hazine-ihrac" anahtar="medyan_sapma" ondalik={1}>47,0</Deger>**; son 12 ay MAPE %<Deger proje="hazine-ihrac" anahtar="son12_mape" ondalik={1}>52,0</Deger>.
+Bid-to-cover tahmini çok daha isabetli: **MAPE %<Deger proje="hazine-ihrac" anahtar="b2c_mape" ondalik={1}>25,6</Deger>** — talep, tutardan öngörülebilir.
 
 <GrafikEmbed
   src="/projeler/hazine-ihrac/tahmin_aylik.html"
@@ -210,7 +213,7 @@ Bid-to-cover tahmini çok daha isabetli: **MAPE %<Deger proje="hazine-ihrac" ana
   yukseklik={560}
 />
 
-**Şekil 13.** Aynı backtest ay toplamında: **ham model aylık MAPE %<Deger proje="hazine-ihrac" anahtar="aylik_ham_mape" ondalik={1}>25,7</Deger>** — ihale
+**Şekil 13.** Aynı backtest ay toplamında: **ham model aylık MAPE %<Deger proje="hazine-ihrac" anahtar="aylik_ham_mape" ondalik={1}>25,5</Deger>** — ihale
 bazındaki %67'ye karşı. Ders: model tekil ihaleyi ±%50 bandında bilir ama *ayın
 toplam arzını* dörtte bir hatayla yakalar; DV01 bütçesi ay bazında planlanmalıdır.
 (Düzeltilmiş/strateji modellerin aylık MAPE'sindeki şişkinlik 2020-21 hedef artefaktıdır.)
@@ -220,4 +223,4 @@ toplam arzını* dörtte bir hatayla yakalar; DV01 bütçesi ay bazında planlan
 - Doğrudan satışlar tahmin dışıdır; aylık hedef karşılaştırmasında bu fark yapısaldır.
 - Ağırlıklı maliyet çizgisi TÜFE'ye endekslileri (reel kote) içermez.
 - PDF formatı değişirse ayrıştırıcı loglayarak durur; grafiklerdeki son veri tarihi
-  her zaman kontrol edilmelidir (son ihale verisi: <Deger proje="hazine-ihrac" anahtar="_tarih" ondalik={1}>07.07.2026</Deger>).
+  her zaman kontrol edilmelidir (son ihale verisi: <Deger proje="hazine-ihrac" anahtar="_tarih" ondalik={1}>21.07.2026</Deger>).

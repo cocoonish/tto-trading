@@ -2,7 +2,7 @@
 title: 'USD/TRY Devalüasyon Hızı'
 description: 'TL değer kaybının ACT/365 yıllıklandırılmış hızı: 1 hafta / 1 ay / 3 ay pencereli bileşik deval oranları, faiz katmanı ve haftalık-aylık regresyon kanalları.'
 pubDate: 2026-07-15
-updatedDate: 2026-07-17
+updatedDate: 2026-07-22
 tags: ['usdtry', 'fx', 'trend']
 durum: 'aktif'
 kaynak: 'TCMB EVDS (kur + faiz serileri)'
@@ -15,8 +15,8 @@ import Deger from '../../components/Deger.astro';
 "Kur koptu mu, olağan seyrinde mi?" Bu sorunun doğru birimi seviye değil **hızdır**:
 TL'nin yıllıklandırılmış değer kaybı, carry pozisyonunun kâr-zarar denklemindeki karşı
 bacaktır. Deval hızı faizin altındaysa carry kazandırır; üstüne çıktığı anlar rejim
-değişikliği sinyalidir. Seri EVDS'ten günlük beslenir; son okuma (<Deger proje="usdtry-deval" anahtar="_tarih" ondalik={1}>17.07.2026</Deger>, kur
-<Deger proje="usdtry-deval" anahtar="kur" ondalik={2}>46,97</Deger>): 1 hafta **+%<Deger proje="usdtry-deval" anahtar="d1h" ondalik={1}>21,2</Deger>** · 1 ay **+%<Deger proje="usdtry-deval" anahtar="d1a" ondalik={1}>21,8</Deger>** · 3 ay **+%<Deger proje="usdtry-deval" anahtar="d3a" ondalik={1}>22,2</Deger>** — üçü de politika
+değişikliği sinyalidir. Seri EVDS'ten günlük beslenir; son okuma (<Deger proje="usdtry-deval" anahtar="_tarih" ondalik={1}>22.07.2026</Deger>, kur
+<Deger proje="usdtry-deval" anahtar="kur" ondalik={2}>47,11</Deger>): 1 hafta **+%<Deger proje="usdtry-deval" anahtar="d1h" ondalik={1}>24,1</Deger>** · 1 ay **+%<Deger proje="usdtry-deval" anahtar="d1a" ondalik={1}>22,0</Deger>** · 3 ay **+%<Deger proje="usdtry-deval" anahtar="d3a" ondalik={1}>22,8</Deger>** — üçü de politika
 faizinin belirgin altında, carry hâlâ pozitif bölgede; üç pencerenin yakınsaması
 rejimin oturduğunu gösterir.
 

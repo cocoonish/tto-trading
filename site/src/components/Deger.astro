@@ -27,10 +27,13 @@ const { proje, anahtar, ondalik = 1 } = Astro.props;
 
   const bicimle = (v: unknown, ondalik: number) => {
     if (typeof v === 'number')
-      return v.toLocaleString('tr-TR', {
-        minimumFractionDigits: ondalik,
-        maximumFractionDigits: ondalik,
-      });
+      // Intl tr-TR ASCII tire üretir; sayfa tipografisi eksi işareti (U+2212) kullanır.
+      return v
+        .toLocaleString('tr-TR', {
+          minimumFractionDigits: ondalik,
+          maximumFractionDigits: ondalik,
+        })
+        .replace('-', '−');
     return String(v);
   };
 
