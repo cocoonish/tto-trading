@@ -6,19 +6,21 @@ from urllib.parse import urlencode
 from datetime import date
 import plotly.graph_objects as go
 import plotly.colors as pc
+from evds_ortak import evds_anahtari, EVDS_ILERI_GUN, EVDS_BASE
 
 # Çıktılar script'in kendi klasörüne yazılır (taşınmaya dayanıklı)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # --- Tarih parametreleri (otomatik: bugün) ---
 today = date.today()
-display_end = pd.Timestamp(today)
-fetch_end = today.strftime("%d-%m-%Y")
+# EVDS sorgu bitişi bilerek birkaç gün ileri alınır: TCMB, ertesi iş gününün gösterge
+# kurunu bugün öğleden sonra yayımlar. endDate=bugün olduğunda o kur sistematik olarak
+# dışarıda kalır. Gelecek tarih için EVDS boş döner — ileri almak zararsızdır.
+fetch_end = (pd.Timestamp(today) + pd.Timedelta(days=EVDS_ILERI_GUN)).strftime("%d-%m-%Y")
 display_start = pd.Timestamp(today.replace(month=1, day=1))  # YTD başlangıç
 fetch_start = (display_start - pd.Timedelta(days=60)).strftime("%d-%m-%Y")  # deval hesabı için buffer
 
-EVDS_KEY = "5ILfFTTp8n"
-EVDS_BASE = "https://evds3.tcmb.gov.tr/igmevdsms-dis"
+EVDS_KEY = evds_anahtari()
 
 
 def fetch_evds(series_code: str, start: str, end: str) -> pd.Series:
@@ -39,6 +41,10 @@ print(f"Veri aralığı: {fetch_start} – {fetch_end} (bugün: {today})")
 print("EVDS'den USD/TRY cekiliyor...")
 usdtry = fetch_evds("TP.DK.USD.A.YTL", fetch_start, fetch_end)
 print(f"  {len(usdtry)} kayit, {usdtry.index[0].date()} - {usdtry.index[-1].date()}")
+
+# Grafik penceresi bugünle değil VERİYLE biter; erken yayımlanan ertesi iş günü kuru
+# da son haftanın regresyonuna girsin.
+display_end = max(pd.Timestamp(usdtry.index[-1]), pd.Timestamp(today))
 
 usdtry_full = usdtry.asfreq("D").interpolate(method="time")
 business = usdtry_full[usdtry_full.index.dayofweek < 5]

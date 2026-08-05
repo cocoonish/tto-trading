@@ -1,8 +1,8 @@
 ---
 title: 'Hazine İhraç Takvimi & İhale Analizi'
-description: 'Hazine iç borçlanmasının tam panosu: 441 ihalelik veri seti üzerinde hacim/tür/maliyet/talep/vade analizi, strateji revizyon takibi, 16 ihraçlık canlı takvim ve 435 ihalelik backtest — 13 grafik, kullanım kılavuzuyla.'
+description: 'Hazine iç borçlanmasının tam panosu: 441 ihalelik veri seti üzerinde hacim/tür/maliyet/talep/vade analizi, strateji revizyon takibi, 22 ihraçlık canlı takvim ve 435 ihalelik backtest — 13 grafik, kullanım kılavuzuyla.'
 pubDate: 2026-07-15
-updatedDate: 2026-07-22
+updatedDate: 2026-08-05
 tags: ['hazine', 'tahvil', 'ihale']
 durum: 'aktif'
 kaynak: 'T.C. Hazine ve Maliye Bakanlığı'
@@ -61,8 +61,22 @@ talep, vade, strateji revizyonları, ileriye dönük tahmin ve backtest.
 />
 
 **Şekil 01.** İhale kayıtları ay bazında toplanır, strateji hedefiyle eşlenir.
-<Deger proje="hazine-ihrac" anahtar="n_ay" ondalik={0}>77</Deger> gerçekleşmeli ayda ortalama gerçekleşme **%<Deger proje="hazine-ihrac" anahtar="gerceklesme_ort" ondalik={1}>86,1</Deger>**. Oranın kalıcı 1 altı seyri
+<Deger proje="hazine-ihrac" anahtar="n_ay" ondalik={0}>78</Deger> gerçekleşmeli ayda ortalama gerçekleşme **%<Deger proje="hazine-ihrac" anahtar="gerceklesme_ort" ondalik={1}>96,8</Deger>**. Oranın kalıcı 1 altı seyri
 programın yumuşak uygulandığını, 1 üstü sıçramalar ek finansman ihtiyacını gösterir.
+
+<div class="not">
+  <span class="etiket">Model denetim notu — strateji hedefi ayrıştırıcısı (05.08.2026)</span>
+  Bu ortalama önceki sürümde <strong>%86,1</strong> yazıyordu; aradaki fark yeni veriden
+  değil, bir <em>ayrıştırıcı hatasının</em> düzeltilmesinden geliyor. Strateji PDF'lerindeki
+  sayılar koşulsuz olarak "Türkçe binlik ayracı" varsayımıyla okunuyordu
+  (<code>float(v.replace('.','').replace(',','.'))</code>); nokta ondalıklı yazılmış bir
+  değer bu yüzden <strong>10 kat şişiyordu</strong> — "25.4" → 254,0. Hata 2020-21
+  dönemindeki 8 ayı bozmuştu ve şişmiş hedefler ortalama gerçekleşmeyi aşağı çekiyordu.
+  Ayrıştırıcı biçim-duyarlı hale getirildi, bozuk kayıtlar sürüm damgasıyla geçersizleştirildi
+  ve hedeflerin <code>strategy_data</code>'ya girdiği <em>her</em> yola (PDF, CSV geri
+  tohumlama, önbellek) makullik kontrolü kondu — hatanın kendini geri tohumlayarak
+  yeniden üretmesi böylece kapatıldı.
+</div>
 
 <GrafikEmbed
   src="/projeler/hazine-ihrac/strateji_revizyon.html"
@@ -186,14 +200,14 @@ dağılımı** (tanım+vade eşleşmeli tarihsel paylar; beklenen teklif geçmi�
 
 <GrafikEmbed
   src="/projeler/hazine-ihrac/planlanan_ihraclar.html"
-  baslik="Planlı ihraç takvimi ve ihale başına beklenen net satış (10.08 – 15.09.2026)"
+  baslik="Planlı ihraç takvimi ve ihale başına beklenen net satış (10.08 – 13.10.2026)"
   no="11"
   yukseklik={600}
 />
 
-**Şekil 11.** Takvimde **<Deger proje="hazine-ihrac" anahtar="plan_adet" ondalik={0}>16</Deger> planlı ihraç**: <Deger proje="hazine-ihrac" anahtar="plan_ihale_adet" ondalik={0}>12</Deger> ihale (tahminli) + doğrudan satışlar.
-Beklenen ihale toplamı **<Deger proje="hazine-ihrac" anahtar="plan_toplam_mlr" ondalik={1}>578,6</Deger> milyar TL** (Ağustos 339,3 vs hedef 417,0 · Eylül
-239,4 vs 294,2). Hover'daki "kıyas ihale sayısına" bakın: n küçükse tahmin zayıftır.
+**Şekil 11.** Takvimde **<Deger proje="hazine-ihrac" anahtar="plan_adet" ondalik={0}>22</Deger> planlı ihraç**: <Deger proje="hazine-ihrac" anahtar="plan_ihale_adet" ondalik={0}>15</Deger> ihale (tahminli) + doğrudan satışlar.
+Beklenen ihale toplamı **<Deger proje="hazine-ihrac" anahtar="plan_toplam_mlr" ondalik={1}>758,7</Deger> milyar TL** (Ağustos 329,9 vs hedef 371,7 · Eylül
+220,1 vs 247,9 · Ekim 208,7 vs 235,1). Hover'daki "kıyas ihale sayısına" bakın: n küçükse tahmin zayıftır.
 
 <GrafikEmbed
   src="/projeler/hazine-ihrac/tahmin_dogrulama.html"
@@ -203,7 +217,7 @@ Beklenen ihale toplamı **<Deger proje="hazine-ihrac" anahtar="plan_toplam_mlr" 
 />
 
 **Şekil 12.** İhale bazında "o gün elde olan bilgiyle" tahmin vs gerçekleşen; $y=x$
-mükemmel tahmin. Tüm dönem (n=<Deger proje="hazine-ihrac" anahtar="backtest_n" ondalik={0}>435</Deger>) **medyan sapma %<Deger proje="hazine-ihrac" anahtar="medyan_sapma" ondalik={1}>47,0</Deger>**; son 12 ay MAPE %<Deger proje="hazine-ihrac" anahtar="son12_mape" ondalik={1}>52,0</Deger>.
+mükemmel tahmin. Tüm dönem (n=<Deger proje="hazine-ihrac" anahtar="backtest_n" ondalik={0}>435</Deger>) **medyan sapma %<Deger proje="hazine-ihrac" anahtar="medyan_sapma" ondalik={1}>37,6</Deger>**; son 12 ay MAPE %<Deger proje="hazine-ihrac" anahtar="son12_mape" ondalik={1}>52,0</Deger>.
 Bid-to-cover tahmini çok daha isabetli: **MAPE %<Deger proje="hazine-ihrac" anahtar="b2c_mape" ondalik={1}>25,6</Deger>** — talep, tutardan öngörülebilir.
 
 <GrafikEmbed

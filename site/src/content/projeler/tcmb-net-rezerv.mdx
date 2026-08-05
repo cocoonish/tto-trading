@@ -2,7 +2,7 @@
 title: 'TCMB Net Rezerv Takibi'
 description: 'Merkez Bankası net ve swap hariç net uluslararası rezervlerinin haftalık resmi veriyle uyumlu, analitik bilanço üzerinden günlük tahminli takibi.'
 pubDate: 2026-07-15
-updatedDate: 2026-07-22
+updatedDate: 2026-08-05
 tags: ['tcmb', 'rezerv', 'fx']
 durum: 'aktif'
 kaynak: 'TCMB EVDS + IRFCL'
@@ -59,9 +59,36 @@ $$
 $$
 
 II.2 ("yurt içi para karşılığı forward/future net pozisyon", negatif) ve II.3 ("diğer")
-kalemleri EVDS'te yoktur — TCMB'nin haftalık **IRFCL** PDF'inden (Uluslararası Rezervler
-ve Döviz Likiditesi tablosu) `pdfplumber` ile ayrıştırılır. Günlük tahminde bu swap
-kalemi kısa vadede sabit varsayılır: yabancı banka swap stoku haftadan haftaya yavaş döner.
+kalemleri **tarihe göre değişen gerçek bir seridir** ve üç kaynaktan kurulur:
+
+1. **EVDS aylık IRFCL serileri** — `TP.DOVVARNC.K14` (II.2 toplam) ve `TP.DOVVARNC.K23`
+   (II.3 toplam), 2000-08'den bugüne, ay sonu. Serinin tarihsel omurgası budur.
+   Ay sonu tarihlerinde haftalık PDF ile **milyon USD hassasiyetinde birebir** aynı
+   (`irfcl_arsiv.py --dogrula` bunu ölçer).
+2. **Ay içi haftalık gözlemler** — `irfcl_gozlem.csv`; her koşuda canlı IRFCL PDF'inden
+   bir nokta eklenir, geçmiş ara haftalar arşiv enstantanelerinden toplanmıştır.
+3. **İki gerçek gözlem arası** zamana göre ara değerle doldurulur. İlk gözlemden önce ve
+   son gözlemden 3 haftadan fazla sonra seri **NaN bırakılır** — uydurulmaz.
+
+<div class="not">
+  <span class="etiket">Model denetim notu — swap serisi (05.08.2026)</span>
+  Bu sayfanın önceki sürümünde swap hariç net rezervin <em>tarihsel</em> seyri hatalıydı:
+  II.2+II.3 yalnız <strong>en son</strong> IRFCL PDF'inden okunuyor ve o tek sabit
+  2023'e kadar tüm geçmişe uygulanıyordu. Ölçüm: 682 satırın tamamında (swap hariç −
+  net) farkının standart sapması 1,3·10⁻¹⁴, yani seri boyunca tek bir değer. Düzeltmeden
+  sonra aynı fark 892 ayrı değer alıyor ve <strong>−82,0 ile −6,4 milyar USD</strong>
+  arasında geziyor. Büyüklük önemsiz değil: swap pozisyonu 2023'te ortalama −68,0 mlr
+  iken 2025-26'da −15,4 mlr'ye indi (swap defterinin kapanışı), dolayısıyla eski grafik
+  2023 seviyelerini yaklaşık <strong>54 milyar dolar</strong> yanlış gösteriyordu.
+  Sayfanın eski "Doğrulama" bölümü bu davranışı bir <em>tasarım tercihi</em> olarak
+  açıklıyordu; öyle değildi, hataydı.
+</div>
+
+**2b — Noktalar: gerçek IRFCL gözlemleri.** Koyu çizginin üzerindeki işaretçiler,
+swap kaleminin *gerçekten yayımlandığı* tarihleri gösterir (şu an 28 nokta). Aralardaki
+seyir ara değerdir. Bir hareketin gerçek mi yoksa interpolasyon mu olduğunu anlamak için
+her zaman en yakın işaretçiye bakın: iki nokta arasındaki düz eğim veri değil,
+varsayımdır.
 
 **3 — Açık yeşil çubuklar (sağ eksen): günlük değişim.** Tahmin serisinin birinci
 farkı — rezerv akımının hangi günlerde yoğunlaştığını gösterir; seçim/şok dönemlerinde
@@ -69,27 +96,39 @@ tek günde ±5 milyar USD'ye ulaşan hareketler burada görünür.
 
 ## Güncel okuma
 
-Haftalık resmi (<Deger proje="tcmb-net-rezerv" anahtar="h_tarih" ondalik={1}>10.07.2026</Deger> Cuma): brüt döviz rezervi **<Deger proje="tcmb-net-rezerv" anahtar="h_brut" ondalik={1}>163,7</Deger>** · net rezerv **<Deger proje="tcmb-net-rezerv" anahtar="h_net" ondalik={1}>56,3</Deger>** →
-**swap hariç net <Deger proje="tcmb-net-rezerv" anahtar="h_swap_haric" ondalik={1}>42,5</Deger> milyar USD**. Günlük
-tahminin son noktası (<Deger proje="tcmb-net-rezerv" anahtar="g_tarih" ondalik={1}>21.07.2026</Deger>): net <Deger proje="tcmb-net-rezerv" anahtar="g_net" ondalik={1}>59,6</Deger> · swap hariç <Deger proje="tcmb-net-rezerv" anahtar="g_swap_haric" ondalik={1}>45,9</Deger>. Son 20 iş gününün öne çıkan
-hareketleri: 02.07 **+8,2** · 25.06 −4,1 · 10.07 −3,9 milyar USD — akımın hangi güne
+Haftalık resmi (<Deger proje="tcmb-net-rezerv" anahtar="h_tarih" ondalik={1}>24.07.2026</Deger> Cuma): brüt döviz rezervi **<Deger proje="tcmb-net-rezerv" anahtar="h_brut" ondalik={1}>163,0</Deger>** · net rezerv **<Deger proje="tcmb-net-rezerv" anahtar="h_net" ondalik={1}>51,1</Deger>** →
+**swap hariç net <Deger proje="tcmb-net-rezerv" anahtar="h_swap_haric" ondalik={1}>38,3</Deger> milyar USD**. Günlük
+tahminin son noktası (<Deger proje="tcmb-net-rezerv" anahtar="g_tarih" ondalik={1}>03.08.2026</Deger>): net <Deger proje="tcmb-net-rezerv" anahtar="g_net" ondalik={1}>52,5</Deger> · swap hariç <Deger proje="tcmb-net-rezerv" anahtar="g_swap_haric" ondalik={1}>39,7</Deger>. Son 20 iş gününün öne çıkan
+hareketleri: 24.07 **−6,5** · 17.07 −5,9 · 10.07 −3,9 milyar USD — akımın hangi güne
 yığıldığı, müdahale/akış okuması için serinin kendisi kadar bilgilendiricidir.
 
 ## Doğrulama
 
 24.04.2026 kapanışıyla üçlü karşılaştırma: brüt **171,05** / net **54,23** / swap hariç
 **36,39** milyar USD — Bloomberg ekranı sırasıyla 171,1 / 54,2 / 36,4. Üç seri de
-piyasa uzlaşısıyla bire bir. İki kalibrasyon notu: (i) brüt kalem sonradan EVDS
-revizyonuyla 171,49'a güncellendi — resmi seriler geriye dönük oynar; (ii) `--validate`
-bugün koşulursa swap hariç kalem 40,49 verir, çünkü tasarım gereği *en güncel*
-IRFCL'in II.2+II.3'ünü geçmişe sabitler; 36,39, o haftanın kendi IRFCL'iyle hesaplanmış
-değerdir. Fark bir hata değil, "swap stoku sabit" varsayımının iki ucudur.
+piyasa uzlaşısıyla bire bir. Kalibrasyon notu: brüt kalem sonradan EVDS revizyonuyla
+171,49'a güncellendi — resmi seriler geriye dönük oynar, bu normaldir.
+
+Swap hariç kalemin bu doğrulamayı geçmesi artık *tanım gereği* beklenir: 24.04.2026
+için kullanılan II.2+II.3, o tarihin kendi IRFCL gözlemidir. Düzeltmeden önce aynı
+koşu 40,49 veriyordu (bugünkü swap pozisyonu geçmişe uygulandığı için); şimdi 36,39'a
+oturuyor. Seriyi kendiniz denetlemek için: `python net_rezerv.py --swap-dogrula`
+ara değer hatasını ölçer, `python irfcl_arsiv.py --dogrula` ay sonu gözlemleri EVDS
+aylık serisiyle karşılaştırır.
 
 ## Sınırlar ve yorum notları
 
 - Günlük seri bir **tahmindir**: kur değerlemesi ve altın fiyat etkisi analitik delta
   içinde örtük taşınır; ayrıştırılmaz. Cuma'ya dönüşte hata otomatik kapanır.
-- Swap kalemi hafta içinde sabit varsayıldığından, TCMB'nin hafta ortası agresif swap
-  açtığı/kapadığı günlerde tahmin resmi rakamdan sapabilir — sapmanın kendisi sinyaldir.
+- Swap kalemi artık sabit değil ama **her gün gözlemlenmiş de değil**: gerçek gözlemler
+  (aylık EVDS + toplanabilen haftalık IRFCL noktaları) arasında zamana göre ara değer
+  kullanılır. TCMB'nin iki gözlem arasında agresif swap açtığı/kapadığı günlerde ara
+  değer gerçeği ıskalar — sapmanın kendisi sinyaldir. Son gözlemden 3 haftadan fazla
+  ileride seri bilinçli olarak **boş bırakılır**; grafiğin sağ ucundaki kesilme
+  "veri yok" demektir, sıfır değil.
 - Seri "2A tanımı"dır; farklı kaynakların "net rezerv" başlığı farklı kalemler
   içerebilir. Karşılaştırmadan önce tanımı eşitleyin.
+- **2023'ün negatif değerleri doğrudur.** Swap hariç net rezerv 2023 başında −43 milyar
+  USD civarındaydı: TCMB'nin swap defteri o dönemde −68 mlr ortalamayla rezervin
+  kendisinden büyüktü. Grafiğin sol ucundaki eksi bölge bir ölçek/işaret hatası değil,
+  dönemin gerçeğidir — ve serinin düzeltilmeden önce gizlediği şey tam olarak buydu.

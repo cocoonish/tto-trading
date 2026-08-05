@@ -43,9 +43,12 @@ GRID = "#e8e4dc"
 GRI = "#90a4ae"
 GOLD = "#9a7327"   # vurgu (ev stili)
 
-# Kategori esikleri (config.SENTIMENT_THRESHOLDS ile ayni: +-0.3 / +-0.7)
-ESIK_1 = 0.3
-ESIK_2 = 0.7
+# Kategori esikleri TEK KAYNAKTAN gelir: config.SENTIMENT_THRESHOLDS.
+# Buradaki bantlar grafigin gorsel katmani, etiketler ise
+# sentiment_analyzer.get_sentiment_label() ciktisi; ikisi ayni sayilardan
+# turemezse grafik "notr" gorunen bir noktayi "Asiri Satici" diye etiketler.
+ESIK_1 = config.SENTIMENT_THRESHOLDS["bullish"]            # Alici/Satici siniri
+ESIK_2 = config.SENTIMENT_THRESHOLDS["extremely_bullish"]  # Asiri siniri
 
 # 15 parite icin ayirt edilebilir cizgi paleti
 CIZGI_RENKLERI = [

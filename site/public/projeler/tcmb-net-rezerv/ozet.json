@@ -1,11 +1,14 @@
 {
- "_tarih": "21.07.2026",
- "g_tarih": "21.07.2026",
- "g_net": 59.6,
- "g_swap_haric": 45.9,
- "g_kur": 47.09,
- "h_tarih": "10.07.2026",
- "h_brut": 163.7,
- "h_net": 56.3,
- "h_swap_haric": 42.5
+ "_tarih": "03.08.2026",
+ "g_tarih": "03.08.2026",
+ "g_net": 52.5,
+ "g_swap_haric_tarih": "03.08.2026",
+ "g_swap_haric": 39.7,
+ "g_kur": 47.35,
+ "h_tarih": "24.07.2026",
+ "h_brut": 163.0,
+ "h_net": 51.1,
+ "h_swap_haric": 38.3,
+ "swap_duzeltme": -12.8,
+ "irfcl_tarih": "24.07.2026"
 }

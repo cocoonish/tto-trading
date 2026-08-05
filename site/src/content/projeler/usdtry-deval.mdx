@@ -2,7 +2,7 @@
 title: 'USD/TRY Devalüasyon Hızı'
 description: 'TL değer kaybının ACT/365 yıllıklandırılmış hızı: 1 hafta / 1 ay / 3 ay pencereli bileşik deval oranları, faiz katmanı ve haftalık-aylık regresyon kanalları.'
 pubDate: 2026-07-15
-updatedDate: 2026-07-22
+updatedDate: 2026-08-05
 tags: ['usdtry', 'fx', 'trend']
 durum: 'aktif'
 kaynak: 'TCMB EVDS (kur + faiz serileri)'
@@ -15,8 +15,8 @@ import Deger from '../../components/Deger.astro';
 "Kur koptu mu, olağan seyrinde mi?" Bu sorunun doğru birimi seviye değil **hızdır**:
 TL'nin yıllıklandırılmış değer kaybı, carry pozisyonunun kâr-zarar denklemindeki karşı
 bacaktır. Deval hızı faizin altındaysa carry kazandırır; üstüne çıktığı anlar rejim
-değişikliği sinyalidir. Seri EVDS'ten günlük beslenir; son okuma (<Deger proje="usdtry-deval" anahtar="_tarih" ondalik={1}>22.07.2026</Deger>, kur
-<Deger proje="usdtry-deval" anahtar="kur" ondalik={2}>47,11</Deger>): 1 hafta **+%<Deger proje="usdtry-deval" anahtar="d1h" ondalik={1}>24,1</Deger>** · 1 ay **+%<Deger proje="usdtry-deval" anahtar="d1a" ondalik={1}>22,0</Deger>** · 3 ay **+%<Deger proje="usdtry-deval" anahtar="d3a" ondalik={1}>22,8</Deger>** — üçü de politika
+değişikliği sinyalidir. Seri EVDS'ten günlük beslenir; son okuma (<Deger proje="usdtry-deval" anahtar="_tarih" ondalik={1}>05.08.2026</Deger>, kur
+<Deger proje="usdtry-deval" anahtar="kur" ondalik={2}>47,47</Deger>): 1 hafta **+%<Deger proje="usdtry-deval" anahtar="d1h" ondalik={1}>21,8</Deger>** · 1 ay **+%<Deger proje="usdtry-deval" anahtar="d1a" ondalik={1}>21,6</Deger>** · 3 ay **+%<Deger proje="usdtry-deval" anahtar="d3a" ondalik={1}>22,7</Deger>** — üçü de politika
 faizinin belirgin altında, carry hâlâ pozitif bölgede; üç pencerenin yakınsaması
 rejimin oturduğunu gösterir.
 
@@ -127,6 +127,12 @@ orta vadeli bir okuma katmanı sağlar.
 
 ## Yorum notları
 
+- **Değer tarihi:** TCMB, ertesi iş gününün gösterge kurunu bugün öğleden sonra
+  yayımlar. Hat bu erken yayımlanan kuru bilinçli olarak alır (EVDS sorgusu birkaç gün
+  ileri biter), bu yüzden "son okuma" tarihi içinde bulunduğunuz günden bir iş günü
+  ileride olabilir — bu bir hata değil, kurun **değer tarihidir**. Grafikler ve
+  `ozet.json` aynı pencereyi kullanır; sayfa metnindeki sayı ile grafiğin son noktası
+  tanımı gereği aynı gözlemdir.
 - **Konvansiyon:** Yıllıklandırma ACT/365 ve takvim günü tabanlıdır — TL faizleriyle
   (ACT/365) aynı ölçek. İş günü (252) tabanlı yıllıklandırma aynı seriyi ~%3-4 farklı
   gösterir ve faizle karşılaştırmayı bozar; bu projede kullanılmaz.

@@ -61,6 +61,30 @@ HTTP_TIMEOUT = 30                   # API istekleri için timeout (saniye)
 PDF_TIMEOUT = 120                   # PDF indirme timeout (saniye)
 USE_ASYNC = True                    # Async (paralel) PDF indirme kullan (daha hızlı)
 
+# Strateji PDF taraması (ihale erken-durmasından BAĞIMSIZ).
+# İhale sonuçları için erken durma doğrudur (yeni ihale yoksa geriye gitmenin
+# anlamı yok), fakat aynı break strateji PDF'i toplamayı da kesiyordu; bu yüzden
+# revizyon tarihçesi yalnızca son birkaç aydan başlıyordu. Strateji taraması
+# artık kendi (sınırlı) bütçesiyle devam eder.
+STRATEGY_SCAN_MAX_PAGES = 90        # Strateji taramasının gidebileceği azami sayfa
+STRATEGY_HISTORY_START = "2019-12"  # Bu aydan eski duyurulara inildiğinde dur
+                                    # (ihale verisi Şubat 2020'de başlıyor; daha
+                                    #  eski strateji raporları .docx, PDF değil)
+STRATEGY_STALE_PAGE_THRESHOLD = 3   # Ardışık bu kadar sayfada yeni strateji PDF'i
+                                    # yoksa taramayı bitir (sıcak cache'te hızlı çıkış)
+
+# Strateji hedefi makullik kontrolü
+STRATEGY_PARSER_VERSION = 2         # Sayı ayrıştırıcı sürümü — eski sürümle üretilmiş
+                                    # cache kayıtları yüklenirken atılır ve yeniden çekilir
+STRATEGY_TARGET_MIN = 0.5           # Aylık hedef alt sınırı (milyar TL)
+STRATEGY_TARGET_MAX = 5000.0        # Aylık hedef üst sınırı (milyar TL)
+STRATEGY_REVISION_MAX_RATIO = 4.0   # Aynı ay için raporlar arası azami revizyon katsayısı
+# CSV'den geri tohumlama filtresi: gerçekleşme oranı bu bandın dışındaysa
+# tarihsel hedef bozuk kabul edilir (2020-21 biçim hatasında oranlar %2,7–%9,0'a
+# düşmüştü; gerçek verideki en düşük makul oran %31,5, en yüksek %223,2).
+SEED_MIN_REALIZATION_PCT = 15.0
+SEED_MAX_REALIZATION_PCT = 500.0
+
 
 # =====================
 # LOGGING AYARLARI
@@ -124,6 +148,49 @@ def generate_quarter_months(first_month_raw: str, last_month_raw: str) -> List[s
     except ValueError as e:
         logger.warning(f"Ay sırası oluşturulamadı ({first_month_raw}-{last_month_raw}): {e}")
         return [first_norm]
+
+
+# =====================
+# BİÇİM-DUYARLI SAYI AYRIŞTIRMA (strateji PDF'leri)
+# =====================
+# HMB strateji PDF'lerinin bir bölümü Türkçe biçim ("256,8"), bir bölümü ise
+# nokta ondalıklı biçim ("24.4") kullanıyor. Koşulsuz
+# `float(v.replace('.', '').replace(',', '.'))` ikinci grupta değeri 10 KAT
+# şişiriyordu (24.4 -> 244). Hata sessizdi: toplam satırı çapraz kontrolü de aynı
+# ölçek kaymasını yaşadığı için oran tutuyor ve uyarı üretmiyordu.
+# Çözüm: sayı sözcüğünü tek başına değil, bulunduğu tablo bağlamıyla birlikte
+# değerlendirip ondalık ayracını bir kez tespit etmek.
+
+# "24.4", "256,8", "1.234,5", "1,234.5" — en az bir ayraç içeren sayı sözcüğü
+NUMBER_TOKEN_RE = re.compile(r"\d+(?:[.,]\d+)+")
+
+
+def detect_decimal_separator(text: str) -> str:
+    """Metin bloğundaki sayıların ondalık ayracını ('.' veya ',') tespit eder.
+
+    Kural sırası:
+      1) Bloktaki herhangi bir sayıda virgül varsa -> ondalık ',' (nokta binlik).
+         Türkçe belgede virgül daima ondalıktır; "1.234,5" bu dalda çözülür.
+      2) Yalnızca nokta varsa ve TÜM nokta gruplarının uzunluğu tam 3 ise ->
+         nokta binlik ayracıdır ("1.234 5.678"), ondalık kısım yoktur.
+      3) Aksi halde -> ondalık '.' ("24.4 37.7 30.0").
+    """
+    tokens = NUMBER_TOKEN_RE.findall(text)
+    if not tokens:
+        return ","                       # varsayılan: Türkçe biçim
+    if any("," in t for t in tokens):
+        return ","
+    # Sadece nokta var: son grubun uzunluğu ayracın rolünü belli eder
+    son_gruplar = [t.split(".")[-1] for t in tokens]
+    if all(len(g) == 3 for g in son_gruplar):
+        return ","                       # nokta = binlik ayracı, ondalık yok
+    return "."
+
+
+def parse_localized_number(token: str, decimal_sep: str) -> float:
+    """Tespit edilen ayraçla sayı sözcüğünü float'a çevirir (binliği atar)."""
+    thousands_sep = "." if decimal_sep == "," else ","
+    return float(token.replace(thousands_sep, "").replace(decimal_sep, "."))
 
 
 # =====================
@@ -288,14 +355,37 @@ class TreasuryAuctionScraper:
             'September': 'Eylül', 'October': 'Ekim', 'November': 'Kasım', 'December': 'Aralık'
         }
 
+    @staticmethod
+    def _is_junk_cache_url(url: str) -> bool:
+        """URL cache'ine sızmış çöp kayıtları tanır.
+
+        Kaynak: WordPress'te çöp kutusuna atılan duyurular hâlâ API'de
+        görünebiliyor ve slug'ları "__trashed" ekiyle geliyor
+        (ör. .../duyuru/__trashed-2__trashed). Bu kayıtlar gerçek bir duyuruya
+        karşılık gelmez; cache'te durup her çalıştırmada taşınırlar.
+        """
+        u = str(url).strip()
+        if not u.startswith("http"):
+            return True
+        if "__trashed" in u:
+            return True
+        if u.rstrip("/").endswith("/duyuru"):          # slug'ı boş kalmış kayıt
+            return True
+        return False
+
     def _load_url_cache(self) -> set:
-        """İşlenmiş URL'leri cache dosyasından yükler"""
+        """İşlenmiş URL'leri cache dosyasından yükler (çöp kayıtları ayıklayarak)"""
         try:
             if os.path.exists(self.url_cache_file):
                 with open(self.url_cache_file, 'r', encoding='utf-8') as f:
                     data = json.load(f)
-                    logger.info(f"URL cache'den {len(data)} URL yüklendi")
-                    return set(data)
+                    temiz = {u for u in data if not self._is_junk_cache_url(u)}
+                    atilan = len(set(data)) - len(temiz)
+                    if atilan:
+                        logger.warning(f"URL cache'inden {atilan} çöp kayıt temizlendi: "
+                                       f"{sorted(set(data) - temiz)}")
+                    logger.info(f"URL cache'den {len(temiz)} URL yüklendi")
+                    return temiz
         except Exception as e:
             logger.warning(f"URL cache okunamadı: {e}")
         return set()
@@ -315,8 +405,14 @@ class TreasuryAuctionScraper:
 
     def _load_strategy_history(self) -> dict:
         """Strateji tarihsel verisini cache'den yükler.
-        Format: {"Ocak 2026": {"target": 327.7, "source": "...", "history": [...]}, ...}
+        Format: {"Ocak 2026": {"target": 327.7, "source": "...", "parser": 2, "history": [...]}, ...}
         Her ay için tüm strateji raporlarındaki hedefler history listesinde saklanır.
+
+        `parser` alanı, kaydı üreten sayı ayrıştırıcısının sürümüdür. Sürüm eskiyse
+        kayıt DÜŞÜRÜLÜR ve ilgili strateji PDF'i URL cache'inden çıkarılır; böylece
+        biçim hatasıyla üretilmiş tarihsel değerler kendini yeniden üretemez.
+        (`_meta` gibi ay-dışı bir anahtar EKLEMİYORUZ: web_cikti_tahmin.py bu
+        dosyanın tüm anahtarlarını "Ay Yıl" olarak sıralıyor.)
         """
         try:
             if os.path.exists(self.strategy_cache_file):
@@ -328,11 +424,40 @@ class TreasuryAuctionScraper:
                             info["history"] = [{"target": info.get("target", 0), "source": info.get("source", "")}]
                         elif not isinstance(info, dict):
                             data[month_key] = {"target": float(info), "source": "", "history": [{"target": float(info), "source": ""}]}
+
+                    # Ayrıştırıcı sürümü eski olan kayıtları at
+                    eski = [k for k, v in data.items()
+                            if int(v.get("parser", 1)) < STRATEGY_PARSER_VERSION]
+                    if eski:
+                        logger.warning(
+                            f"Strateji cache: {len(eski)} ay eski ayrıştırıcı sürümüyle "
+                            f"üretilmiş (v<{STRATEGY_PARSER_VERSION}), düşürülüyor: {sorted(eski)}"
+                        )
+                        for k in eski:
+                            data.pop(k, None)
+                        self._invalidate_strategy_urls()
                     logger.info(f"Strateji cache'den {len(data)} ay yüklendi")
                     return data
         except Exception as e:
             logger.warning(f"Strateji cache okunamadı: {e}")
         return {}
+
+    def _invalidate_strategy_urls(self):
+        """Strateji PDF URL'lerini işlenmiş-cache'inden düşürür.
+
+        Ayrıştırıcı sürümü değiştiğinde strateji PDF'lerinin YENİDEN indirilip
+        yeniden ayrıştırılması gerekir; aksi halde `processed_urls` onları
+        atlar ve düzeltilmiş ayrıştırıcı hiç çalışmaz.
+        """
+        # Not: eski dosya adlarında Türkçe karakter var
+        # ("...İç-Borçlanma-Stratejisi.pdf"), bu yüzden diyakritiksiz ortak
+        # parça olan "stratejisi" üzerinden eşleşiyoruz.
+        strateji_urls = {u for u in self.processed_urls
+                         if "stratejisi" in str(u).lower()}
+        if strateji_urls:
+            self.processed_urls -= strateji_urls
+            logger.warning(f"{len(strateji_urls)} strateji PDF URL'si cache'den düşürüldü "
+                           f"(yeniden ayrıştırılacak)")
 
     def _save_strategy_history(self):
         """Strateji tarihsel verisini cache'e kaydeder"""
@@ -347,16 +472,32 @@ class TreasuryAuctionScraper:
         """Yeni strateji verisini tarihsel cache'e ekler.
         Her ay için tüm strateji raporlarındaki hedefler history listesinde birikir.
         target/source alanları en son raporu gösterir.
+
+        Makullik kontrolü — revizyon sürekliliği: Hazine aynı ayın hedefini
+        çeyrekten çeyreğe revize eder, ama revizyonlar ölçek değiştirmez
+        (gözlemlenen en büyük revizyon ~1,4x). Aynı ay için önceki rapora göre
+        STRATEGY_REVISION_MAX_RATIO katından fazla sapma, ayrıştırma kaynaklı
+        ölçek hatasının imzasıdır — dikkat çekmek için WARNING basılır.
         """
         for month_key, target in strategy_data.items():
             if month_key not in self.strategy_history:
                 self.strategy_history[month_key] = {
                     "target": target,
                     "source": source_title,
+                    "parser": STRATEGY_PARSER_VERSION,
                     "history": [{"target": target, "source": source_title}],
                 }
             else:
                 entry = self.strategy_history[month_key]
+                onceki = entry.get("target")
+                if isinstance(onceki, (int, float)) and onceki > 0 and target > 0:
+                    oran = max(target / onceki, onceki / target)
+                    if oran > STRATEGY_REVISION_MAX_RATIO:
+                        logger.warning(
+                            f"Şüpheli revizyon: {month_key} hedefi {onceki} -> {target} "
+                            f"({oran:.1f}x, eşik {STRATEGY_REVISION_MAX_RATIO}x). "
+                            f"Kaynak: {source_title}. Sayı biçimi ayrıştırmasını kontrol edin."
+                        )
                 # Aynı source'dan gelen veriyi tekrarlama
                 existing_sources = [h["source"] for h in entry.get("history", [])]
                 if source_title not in existing_sources:
@@ -370,6 +511,7 @@ class TreasuryAuctionScraper:
                 # En son raporu güncelle
                 entry["target"] = target
                 entry["source"] = source_title
+                entry["parser"] = STRATEGY_PARSER_VERSION
         self._save_strategy_history()
 
     @staticmethod
@@ -444,13 +586,28 @@ class TreasuryAuctionScraper:
         consecutive_old_auction_pages = 0
         OLD_AUCTION_PAGE_THRESHOLD = 3
 
+        # İhale taraması bittikten sonra strateji taraması KENDİ bütçesiyle devam eder.
+        # (Eskiden tek bir break ikisini birden kesiyordu; bu yüzden revizyon
+        #  tarihçesi yalnızca son birkaç aydan başlıyordu.)
+        auction_scan_done = False
+        consecutive_pages_without_new_strategy = 0
+        strategy_scan_limit = max(self.max_pages, STRATEGY_SCAN_MAX_PAGES)
+
         # İhale SONUCU başlık desenleri (planlanan değil, gerçekleşen ihaleler)
         result_pattern1 = r'Tarihinde\s+Gerçekleştirilen\s+İhalelerin\s+Sonuçlarına\s+İlişkin\s+Basın\s+Duyurusu'
         result_pattern2 = r'Tarihinde\s+Gerçekleştirilen\s+İhalenin\s+Sonuçlarına\s+İlişkin\s+Basın\s+Duyurusu'
 
-        for page in range(1, self.max_pages + 1):
-            if consecutive_old_auction_pages >= OLD_AUCTION_PAGE_THRESHOLD:
-                logger.info(f"{OLD_AUCTION_PAGE_THRESHOLD} ardışık sayfada tüm ihaleler mevcut veriden eski. Tarama durduruluyor.")
+        for page in range(1, strategy_scan_limit + 1):
+            if not auction_scan_done and consecutive_old_auction_pages >= OLD_AUCTION_PAGE_THRESHOLD:
+                logger.info(f"{OLD_AUCTION_PAGE_THRESHOLD} ardışık sayfada tüm ihaleler mevcut veriden eski. "
+                            f"İhale taraması durduruldu; strateji taraması sürüyor.")
+                auction_scan_done = True
+            if not auction_scan_done and page > self.max_pages:
+                logger.info(f"İhale taraması sayfa üst sınırına ({self.max_pages}) ulaştı.")
+                auction_scan_done = True
+            if auction_scan_done and consecutive_pages_without_new_strategy >= STRATEGY_STALE_PAGE_THRESHOLD:
+                logger.info(f"{STRATEGY_STALE_PAGE_THRESHOLD} ardışık sayfada yeni strateji PDF'i yok. "
+                            f"Strateji taraması da durduruluyor.")
                 break
 
             # API'den sayfayı çek (gerektiğinde yeniden dene)
@@ -483,11 +640,16 @@ class TreasuryAuctionScraper:
             logger.info(f"Sayfa {page}: {len(posts)} duyuru alındı")
             page_has_any_auction = False
             page_has_new_auction = False
+            page_has_new_strategy = False
+            page_oldest_date = ""
 
             for post in posts:
                 title = html.unescape((post.get('title') or {}).get('rendered', '') or '').strip()
                 content = (post.get('content') or {}).get('rendered', '') or ''
                 slug = post.get('slug', '') or ''
+                post_date = str(post.get('date') or '')
+                if post_date and (not page_oldest_date or post_date < page_oldest_date):
+                    page_oldest_date = post_date
 
                 # --- Strateji raporu mu? ---
                 title_fold = (title.lower()
@@ -501,11 +663,17 @@ class TreasuryAuctionScraper:
                         pdf_url = self._extract_pdf_url_from_content(content)
                         ay_match = re.search(r'(\w+\s*[-–]\s*\w+\s+\d{4})', title)
                         ay_bilgi = ay_match.group(1) if ay_match else title
-                        if pdf_url:
-                            strategy_pdfs.append((pdf_url, title, ay_bilgi))
-                            logger.info(f"✓ Strateji PDF bulundu: {title}")
-                        else:
+                        if not pdf_url:
                             logger.warning(f"Strateji duyurusunda PDF bulunamadı: {title}")
+                        elif not pdf_url.lower().endswith('.pdf'):
+                            # 2019 ve öncesi raporlar .docx olarak yayımlanmış;
+                            # PyPDF2 okuyamaz, her çalıştırmada boşuna indirilir.
+                            logger.info(f"Strateji eki PDF değil, atlanıyor: {title} ({pdf_url})")
+                        else:
+                            strategy_pdfs.append((pdf_url, title, ay_bilgi))
+                            if pdf_url not in self.processed_urls:
+                                page_has_new_strategy = True
+                            logger.info(f"✓ Strateji PDF bulundu: {title}")
                     continue
 
                 # --- İhale sonucu duyurusu mu? ---
@@ -514,10 +682,23 @@ class TreasuryAuctionScraper:
                 if not is_result:
                     continue
 
+                # İhale taraması bittiyse sayfaların geri kalanı yalnızca
+                # strateji PDF'i için taranır; ihale duyurusu toplanmaz.
+                if auction_scan_done:
+                    continue
+
                 page_has_any_auction = True
 
-                # Kanonik duyuru URL'si (mevcut URL cache ile uyumlu)
-                announcement_url = f"{self.base_url}/duyuru/{slug}" if slug else (post.get('link') or '')
+                # Kanonik duyuru URL'si (mevcut URL cache ile uyumlu).
+                # WordPress çöp kutusuna atılıp geri alınan duyuruların slug'ı
+                # "__trashed" ekiyle bozuluyor; kalıcı kimlik değil, bu yüzden
+                # sabit olan duyuru id'sini anahtar yapıyoruz.
+                if slug and '__trashed' not in slug:
+                    announcement_url = f"{self.base_url}/duyuru/{slug}"
+                elif post.get('id'):
+                    announcement_url = f"{self.base_url}/duyuru/?p={post['id']}"
+                else:
+                    announcement_url = post.get('link') or ''
 
                 # İhale tarihini başlıktan parse et
                 parsed_date = None
@@ -549,6 +730,16 @@ class TreasuryAuctionScraper:
                     logger.info(f"Sayfadaki tüm ihaleler mevcut veriden eski (ardışık: {consecutive_old_auction_pages}/{OLD_AUCTION_PAGE_THRESHOLD})")
                 else:
                     consecutive_old_auction_pages = 0
+
+            # Strateji taraması sayaçları ve tarih sınırı (sonsuza kadar tarama yok)
+            if page_has_new_strategy:
+                consecutive_pages_without_new_strategy = 0
+            elif auction_scan_done:
+                consecutive_pages_without_new_strategy += 1
+            if page_oldest_date and page_oldest_date[:7] < STRATEGY_HISTORY_START:
+                logger.info(f"Sayfa {page}: duyurular {STRATEGY_HISTORY_START} tarihinden eskiye indi "
+                            f"(en eski: {page_oldest_date[:10]}). Tarama durduruluyor.")
+                break
 
         logger.info(f"Toplam {len(auction_items)} ihale sonucu duyurusu, {len(strategy_pdfs)} strateji PDF bulundu")
         return auction_items, strategy_pdfs
@@ -761,6 +952,8 @@ class TreasuryAuctionScraper:
             lines = full_text.splitlines()
             piyasa_line = None
             kamu_line = None
+            dogrudan_line = None
+            ic_borclanma_line = None
             toplam_line = None
 
             for line in lines:
@@ -768,12 +961,29 @@ class TreasuryAuctionScraper:
                     piyasa_line = line
                 if "Kamuya Satışlar" in line:
                     kamu_line = line
+                if "Doğrudan Satışlar" in line:
+                    dogrudan_line = line
+                # "   İç Borçlanma 25.4 40.4 31.2" — finansman programının ara toplamı.
+                # "Piyasadan İhale Yoluyla İç Borçlanma" satırıyla karışmaması için
+                # satır başına sabitliyoruz.
+                if re.match(r"\s*İç Borçlanma\s", line):
+                    ic_borclanma_line = line
                 if re.search(r"^Toplam\s", line) or "Toplam İç Borçlanma" in line:
                     toplam_line = line
 
             if piyasa_line and kamu_line:
-                piyasa_vals = re.findall(r"([\d]+[.,][\d]+)", piyasa_line)
-                kamu_vals = re.findall(r"([\d]+[.,][\d]+)", kamu_line)
+                # Ondalık ayracını TEK SATIRDAN DEĞİL, tablo bağlamından tespit et:
+                # "Kamuya Satışlar 1.000 2.000 3.000" gibi bir satır tek başına
+                # binlik ayraçlı görünür; finansman programı satırlarının tamamı
+                # ise aynı biçimdedir, birlikte bakınca biçim kesinleşir.
+                tablo_baglam = "\n".join(
+                    x for x in (piyasa_line, kamu_line, dogrudan_line, ic_borclanma_line) if x
+                )
+                decimal_sep = detect_decimal_separator(tablo_baglam)
+                logger.info(f"Sayı biçimi tespiti: ondalık ayraç '{decimal_sep}'")
+
+                piyasa_vals = NUMBER_TOKEN_RE.findall(piyasa_line)
+                kamu_vals = NUMBER_TOKEN_RE.findall(kamu_line)
 
                 logger.info(f"Piyasa değerleri ({len(piyasa_vals)} adet): {piyasa_vals}")
                 logger.info(f"Kamu değerleri ({len(kamu_vals)} adet): {kamu_vals}")
@@ -787,8 +997,8 @@ class TreasuryAuctionScraper:
                 for i, month in enumerate(months):
                     if i < len(piyasa_vals) and i < len(kamu_vals):
                         try:
-                            piyasa = float(piyasa_vals[i].replace('.', '').replace(',', '.'))
-                            kamu = float(kamu_vals[i].replace('.', '').replace(',', '.'))
+                            piyasa = parse_localized_number(piyasa_vals[i], decimal_sep)
+                            kamu = parse_localized_number(kamu_vals[i], decimal_sep)
                             toplam = piyasa + kamu
 
                             # Yıl hesapla: son ay yılı belli, önceki aylar yıl geçişinde year-1
@@ -800,18 +1010,59 @@ class TreasuryAuctionScraper:
                                 actual_year = year
 
                             key = f"{month} {actual_year}"
+
+                            # Makullik bandı: bant dışı değer ayrıştırma hatasıdır,
+                            # sessizce kaydetmek yerine düşür.
+                            if not (STRATEGY_TARGET_MIN <= toplam <= STRATEGY_TARGET_MAX):
+                                logger.error(
+                                    f"  {key}: {toplam} milyar TL makul bant dışında "
+                                    f"[{STRATEGY_TARGET_MIN}, {STRATEGY_TARGET_MAX}] — atlandı"
+                                )
+                                continue
+
                             results[key] = toplam
                             logger.info(f"  {key}: Piyasa={piyasa}, Kamu={kamu}, Toplam={toplam} milyar TL")
                         except Exception as e:
                             logger.error(f"Ay {month} için değer parse hatası: {e}")
 
+                # Makullik kontrolü — satırlar arası ölçek tutarlılığı.
+                # Hedefimiz (Piyasadan İhale + Kamuya Satışlar), tablodaki
+                # "İç Borçlanma" ara toplamının bir ALT KÜMESİDİR: aradaki fark
+                # "Doğrudan Satışlar" kalemidir (altın/döviz cinsi ihraçlar; ihale
+                # değil, bu yüzden hedefe katılmaz). Bu yüzden EŞİTLİK değil, ORAN
+                # aranır: oran 0'a veya 1'e yakın olmalı; 10 kat sapma iki satırın
+                # farklı biçimde ayrıştırıldığının işaretidir.
+                # NOT: satırların TAMAMI aynı yönde kaysaydı oran korunur; ölçek
+                # hatasına karşı asıl koruma biçim tespiti + revizyon süreklilik
+                # kontrolüdür (bkz. _update_strategy_history).
+                if ic_borclanma_line and results:
+                    ic_vals = NUMBER_TOKEN_RE.findall(ic_borclanma_line)
+                    for i in range(min(len(ic_vals), len(piyasa_vals), len(kamu_vals))):
+                        try:
+                            ihale_bazli = (parse_localized_number(piyasa_vals[i], decimal_sep)
+                                           + parse_localized_number(kamu_vals[i], decimal_sep))
+                            ic_toplam = parse_localized_number(ic_vals[i], decimal_sep)
+                            if ic_toplam <= 0:
+                                continue
+                            oran = ihale_bazli / ic_toplam
+                            if not (0.15 <= oran <= 1.05):
+                                logger.warning(
+                                    f"İhale bazlı borçlanma / İç Borçlanma oranı makul değil "
+                                    f"(sütun {i + 1}): {round(ihale_bazli, 2)} / {ic_toplam} "
+                                    f"= {oran:.2f} — satırlar farklı sayı biçiminde "
+                                    f"ayrıştırılmış olabilir"
+                                )
+                        except Exception:
+                            pass
+
                 # Toplam satırı ile çapraz kontrol
                 if toplam_line and results:
-                    toplam_vals = re.findall(r"([\d]+[.,][\d]+)", toplam_line)
+                    toplam_vals = NUMBER_TOKEN_RE.findall(toplam_line)
                     if toplam_vals:
                         try:
                             # Toplam satırındaki ilk değer genelde çeyrek toplamı
-                            reported_total = float(toplam_vals[0].replace('.', '').replace(',', '.'))
+                            reported_total = parse_localized_number(
+                                toplam_vals[0], detect_decimal_separator(toplam_line))
                             calculated_total = sum(results.values())
                             diff_pct = abs(reported_total - calculated_total) / reported_total * 100 if reported_total > 0 else 0
                             if diff_pct > 5:
@@ -914,8 +1165,22 @@ class TreasuryAuctionScraper:
         
         logger.info(f"Bulunan aylar: {list(monthly_realized.keys())}")
         logger.info(f"Strateji ayları: {list(strategy_data.keys())}")
-        
+
+        # İhale veri setinin başladığı ay. Strateji raporları ihale verisinden
+        # daha geriye gidebiliyor; o aylar için "gerçekleşen = 0" yazmak veri
+        # yokluğunu "Hazine hiç borçlanmadı" gibi gösterir. Kapsam dışı ayları
+        # karşılaştırmaya hiç almıyoruz.
+        ilk_ihale_ay = None
+        try:
+            ihale_tarihleri = pd.to_datetime(
+                df_filtered['İhale Tarihi'], format='%d.%m.%Y', errors='coerce').dropna()
+            if not ihale_tarihleri.empty:
+                ilk_ihale_ay = ihale_tarihleri.min().to_period('M')
+        except Exception as e:
+            logger.debug(f"İlk ihale ayı hesaplanamadı: {e}")
+
         comparison_data = []
+        kapsam_disi = []
         for month_label, target in strategy_data.items():
             if re.match(r"^[A-Za-zçğıöşüÇĞİÖŞÜ]+ \d{4}$", month_label):
                 parts = month_label.split()
@@ -926,9 +1191,19 @@ class TreasuryAuctionScraper:
                     if k.startswith(normalize_month_name(month_label)):
                         key = k
                         break
-            
+
+            # Kapsam kontrolü: ihale verisinin başlangıcından önceki aylar atlanır
+            if ilk_ihale_ay is not None and key not in monthly_realized:
+                try:
+                    p = pd.Period(self._tr_to_en_month(key), freq='M')
+                    if p < ilk_ihale_ay:
+                        kapsam_disi.append(key)
+                        continue
+                except Exception:
+                    pass
+
             realized = monthly_realized.get(key, 0) / 1000
-            
+
             comparison_data.append({
                 'Ay-Yıl': key,
                 'Hedef Borçlanma (Milyar TL)': target,
@@ -937,10 +1212,14 @@ class TreasuryAuctionScraper:
                 'Gerçekleşme Oranı (%)': round((realized / target * 100) if target > 0 else 0, 1)
             })
         
+        if kapsam_disi:
+            logger.info(f"İhale verisi kapsamı dışındaki {len(kapsam_disi)} ay karşılaştırmaya "
+                        f"alınmadı (ilk ihale ayı: {ilk_ihale_ay}): {sorted(kapsam_disi)}")
+
         if not comparison_data:
             logger.warning("Karşılaştırma verisi oluşturulamadı.")
             return pd.DataFrame()
-        
+
         comparison_df = pd.DataFrame(comparison_data)
         
         logger.info("\n" + "="*60)
@@ -1398,18 +1677,49 @@ class TreasuryAuctionScraper:
             if strategy_skipped:
                 logger.info(f"{strategy_skipped} strateji PDF zaten işlenmiş, indirilmedi (cache)")
 
-            # Tarihsel strateji verisini de birleştir (cache'deki tüm aylar)
+            # Tarihsel strateji verisini de birleştir (cache'deki tüm aylar).
+            #
+            # DİKKAT — bu yol CSV geri tohumlamasından ÖNCE ve BASKIN çalışır
+            # (aşağıdaki seed `if key not in strategy_data` ile korunuyor). Burası
+            # filtresiz kalırsa cache'e bir kez yazılmış bozuk bir hedef, CSV
+            # yolundaki makullik filtresini TAMAMEN atlar. Bu yüzden aynı bant
+            # kontrolü burada da uygulanır — filtre tek bir yolda değil, hedefin
+            # strategy_data'ya girdiği HER yolda olmalı.
+            history_rejected = []
             for month_key, info in self.strategy_history.items():
-                if month_key not in strategy_data:
-                    strategy_data[month_key] = info["target"]
+                if month_key in strategy_data:
+                    continue
+                hedef = info.get("target")
+                try:
+                    hedef = float(hedef)
+                except (TypeError, ValueError):
+                    history_rejected.append(f"{month_key}=? (sayı değil)")
+                    continue
+                if not (STRATEGY_TARGET_MIN <= hedef <= STRATEGY_TARGET_MAX):
+                    history_rejected.append(f"{month_key}={hedef} (bant dışı)")
+                    continue
+                strategy_data[month_key] = hedef
+            if history_rejected:
+                logger.warning(
+                    f"Strateji cache'inden {len(history_rejected)} ay reddedildi — "
+                    f"makul olmayan hedef: {history_rejected}"
+                )
 
             # Mevcut hedef/gerçekleşme CSV'sindeki tarihsel hedefleri koru.
             # (Geçmiş yıllara ait hedefler yalnızca bu çıktı dosyasında bulunabilir;
             #  strateji cache'i boşsa bile geçmiş veriyi kaybetmemek için seed ediyoruz.)
+            #
+            # DİKKAT — bu yol bir geri besleme döngüsüdür: CSV'yi bu hat üretir ve
+            # aynı hat bir sonraki çalıştırmada CSV'den geri okur. Ayrıştırıcı
+            # hatasıyla yazılmış bir değer, ayrıştırıcı düzeltilse bile buradan
+            # geri tohumlanıp kendini yeniden üretir. Bu yüzden geri tohumlamayı
+            # makullik filtresinden geçiriyoruz: gerçekleşme oranı bandın dışında
+            # kalan satırların hedefi bozuk kabul edilir ve seed EDİLMEZ.
             if not FORCE_ALL_FETCH and os.path.exists(COMPARISON_CSV):
                 try:
                     old_comp = pd.read_csv(COMPARISON_CSV, encoding='utf-8-sig')
                     seeded = 0
+                    rejected = []
                     for _, row in old_comp.iterrows():
                         ay_yil = str(row.get('Ay-Yıl', '')).strip()
                         if not ay_yil or ay_yil.lower() == 'nan':
@@ -1418,12 +1728,30 @@ class TreasuryAuctionScraper:
                         key = f"{normalize_month_name(parts[0])} {parts[1]}" if len(parts) == 2 else ay_yil
                         if key not in strategy_data:
                             try:
-                                strategy_data[key] = float(row['Hedef Borçlanma (Milyar TL)'])
-                                seeded += 1
+                                hedef = float(row['Hedef Borçlanma (Milyar TL)'])
                             except (ValueError, TypeError, KeyError):
                                 continue
+                            if not (STRATEGY_TARGET_MIN <= hedef <= STRATEGY_TARGET_MAX):
+                                rejected.append(f"{key}={hedef} (bant dışı)")
+                                continue
+                            # Gerçekleşme oranı çapraz kontrolü: gerçekleşen 0 ise
+                            # (gelecek ay) kontrol uygulanmaz.
+                            gercek = pd.to_numeric(
+                                row.get('Gerçekleşen Borçlanma (Milyar TL)'), errors='coerce')
+                            if pd.notna(gercek) and gercek > 0 and hedef > 0:
+                                oran = gercek / hedef * 100
+                                if not (SEED_MIN_REALIZATION_PCT <= oran <= SEED_MAX_REALIZATION_PCT):
+                                    rejected.append(f"{key}={hedef} (gerçekleşme %{oran:.1f})")
+                                    continue
+                            strategy_data[key] = hedef
+                            seeded += 1
                     if seeded:
                         logger.info(f"Mevcut hedef CSV'sinden {seeded} tarihsel hedef korundu")
+                    if rejected:
+                        logger.warning(
+                            f"CSV'den geri tohumlama reddedildi ({len(rejected)} ay) — "
+                            f"makul olmayan tarihsel hedef: {rejected}"
+                        )
                 except Exception as e:
                     logger.warning(f"Mevcut hedef CSV okunamadı: {e}")
 

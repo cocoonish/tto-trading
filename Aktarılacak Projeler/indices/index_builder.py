@@ -395,6 +395,15 @@ def save_index_snapshot(indices: dict, regime: dict = None):
     (label / basket_spread / avg_correlation / pc1_share / as_of) is stored
     alongside so a regime time series can be charted later."""
     os.makedirs(config.DATA_DIR, exist_ok=True)
+
+    # Kismi kosu (or. run.py --asset EURUSD) tarihceye YAZILMAZ. Boyle bir
+    # snapshot 15 varlikli seriyle ayni eksende sahte tarihce uretir; ustelik
+    # asagidaki gun-basina-tek kurali yuzunden o gunun tam kaydini ezerdi.
+    kapsam = len(indices)
+    if kapsam < len(config.ASSETS):
+        print(f"  Tarihceye yazilmadi: kismi kosu ({kapsam}/{len(config.ASSETS)} varlik).")
+        return
+
     history = []
     if os.path.exists(config.INDEX_HISTORY):
         with open(config.INDEX_HISTORY, "r") as f:
@@ -406,7 +415,16 @@ def save_index_snapshot(indices: dict, regime: dict = None):
     }
     if regime:
         snapshot["regime"] = regime
+
+    # Gun basina TEK snapshot. Ayni gun icindeki ikinci kosu bagimsiz bir gozlem
+    # degil, ayni gunun yeniden hesabidir (or. parametreler yenilendikten sonra
+    # tekrar kosmak); ucunu birden cizmek rejim tarihcesini carpitir. Ayni gune
+    # ait onceki kayit varsa uzerine yazilir.
+    gun = snapshot["timestamp"][:10]
+    history = [s for s in history if s.get("timestamp", "")[:10] != gun]
     history.append(snapshot)
+    history.sort(key=lambda s: s.get("timestamp", ""))
+
     with open(config.INDEX_HISTORY, "w") as f:
         json.dump(history, f, indent=2)
 

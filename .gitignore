@@ -25,3 +25,8 @@ Aktarılacak Projeler/indices/data/news_cache.json
 
 # Yerel Claude ayarları
 **/.claude/settings.local.json
+
+# API anahtarları — yerel dosyada durur, ASLA commit edilmez
+# (CI'da TTO_EVDS_KEY ortam değişkeni / depo secret'ı kullanılır)
+.evds_key
+**/.evds_key

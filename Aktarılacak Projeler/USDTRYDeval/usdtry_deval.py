@@ -1,15 +1,47 @@
-import yfinance as yf
+"""USDTRY yıllıklandırılmış devalüasyon (ACT/365) + TCMB fonlama maliyeti — statik PNG.
+
+Bu script hattın DİĞER üç scriptiyle (usdtry_deval_plotly / _weekly_trends /
+_monthly_trends) AYNI VERİ TABANINI kullanır:
+  · Kaynak     : EVDS TP.DK.USD.A.YTL (TCMB gösterge alış kuru) — yfinance DEĞİL
+  · Ön işleme  : günlük interpolasyon + hafta içi süzme
+  · Yıllıklandırma: ACT/365, gerçek takvim günü farkı (sabit 252/n üssü KULLANILMAZ)
+  · Çıktı      : script'in kendi klasörü (taşınmaya dayanıklı)
+
+Neden duruyor: TCMB FONLAMA MALİYETİ (AOFM, TP.APIFON4) katmanı yalnız bu grafikte var.
+Yayımlanan Şekil 01 faiz katmanını TLREF / kredi / mevduat serilerinden kurar; TCMB'nin
+kendi fonlama maliyeti orada yok. Carry için asıl büyüklük budur: taşıma maliyetini
+fiilen AOFM belirler, ilan edilen politika faizi değil (koridor tavanından fonlamada
+ikisi ayrışır).
+
+Çıktı siteye KOPYALANMAZ; yerel/ofline referans karesidir. Bu yüzden koyu matplotlib
+teması korunmuştur — ev stili (beyaz zemin, Plotly) yayımlanan figürler için geçerlidir.
+"""
+import os
+import requests
 import pandas as pd
+import numpy as np
+import matplotlib
+matplotlib.use("Agg")  # toplu/başsız çalıştırma: plt.show() beklemesin
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
-import numpy as np
-from datetime import datetime, timedelta, date
+from urllib.parse import urlencode
+from datetime import date
+from evds_ortak import evds_anahtari, gizle_anahtar, EVDS_ILERI_GUN, EVDS_BASE
+
+# Çıktılar script'in kendi klasörüne yazılır (taşınmaya dayanıklı)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # --- Tarih parametreleri (otomatik: bugün) ---
 today = date.today()
-end_date = datetime.combine(today, datetime.min.time()) + timedelta(days=1)  # yfinance end exclusive
-fetch_start = datetime(2024, 10, 1)
-display_start = datetime(2025, 3, 1)
+# EVDS sorgu bitişi bilerek birkaç gün ileri alınır: TCMB, ertesi iş gününün gösterge
+# kurunu bugün öğleden sonra yayımlar. endDate=bugün olduğunda o kur sistematik olarak
+# dışarıda kalır. Gelecek tarih için EVDS boş döner — ileri almak zararsızdır.
+fetch_end = (pd.Timestamp(today) + pd.Timedelta(days=EVDS_ILERI_GUN)).strftime("%d-%m-%Y")
+fetch_start = "01-10-2024"  # EVDS geçmiş veri başlangıcı (63 günlük pencereye buffer)
+display_start = pd.Timestamp("2025-03-01")  # grafik sabit başlangıç (İmamoğlu dönemi)
+
+EVDS_KEY = evds_anahtari()
+
 plt.rcParams['figure.facecolor'] = '#1a1a2e'
 plt.rcParams['axes.facecolor'] = '#16213e'
 plt.rcParams['text.color'] = '#e0e0e0'
@@ -18,51 +50,92 @@ plt.rcParams['xtick.color'] = '#e0e0e0'
 plt.rcParams['ytick.color'] = '#e0e0e0'
 plt.rcParams['font.family'] = 'DejaVu Sans'
 
-print(f"Veri aralığı: {fetch_start.date()} – {today} (bugün)")
-print("USDTRY verisi indiriliyor...")
-usdtry = yf.download("USDTRY=X", start=fetch_start, end=end_date, progress=False)
-usdtry = usdtry['Close'].dropna()
-if isinstance(usdtry, pd.DataFrame):
-    usdtry = usdtry.squeeze()
-usdtry.index = usdtry.index.tz_localize(None)
 
-print(f"Veri aralığı: {usdtry.index[0].date()} - {usdtry.index[-1].date()}")
-print(f"Toplam gün: {len(usdtry)}")
+def fetch_evds(series_code: str, start: str, end: str) -> pd.Series:
+    params = {"series": series_code, "startDate": start, "endDate": end, "type": "json"}
+    url = f"{EVDS_BASE}/{urlencode(params)}"
+    r = requests.get(url, headers={"key": EVDS_KEY}, timeout=30)
+    r.raise_for_status()
+    items = r.json().get("items", [])
+    if not items:
+        raise RuntimeError(f"EVDS no data for {series_code}")
+    df = pd.DataFrame(items)
+    df["Tarih"] = pd.to_datetime(df["Tarih"].astype(str), format="%d-%m-%Y")
+    col = series_code.replace(".", "_")
+    df[col] = pd.to_numeric(df[col], errors="coerce")
+    df = df.dropna(subset=[col]).sort_values("Tarih")
+    return df.set_index("Tarih")[col].rename(series_code)
+
+
+print(f"Veri aralığı: {fetch_start} – {fetch_end} (bugün: {today})")
+print("EVDS'den USD/TRY cekiliyor...")
+usdtry = fetch_evds("TP.DK.USD.A.YTL", fetch_start, fetch_end)
+print(f"  {len(usdtry)} kayit, {usdtry.index[0].date()} - {usdtry.index[-1].date()}")
+
+# Grafik penceresi bugünle değil VERİYLE biter; erken yayımlanan ertesi iş günü kuru
+# da eksene girsin.
+display_end = max(pd.Timestamp(usdtry.index[-1]), pd.Timestamp(today))
+
+usdtry_full = usdtry.asfreq("D").interpolate(method="time")
+business = usdtry_full[usdtry_full.index.dayofweek < 5]
+
+
+def deval_act365(s: pd.Series, n: int) -> pd.Series:
+    """Yıllıklandırılmış devalüasyon, ACT/365 takvim günü tabanı.
+
+    Pencere n GÖZLEM (iş günü) geriye gider; üs, iki gözlem tarihinin GERÇEK
+    takvim günü farkı Δd üzerinden: oran = (P_t / P_{t-n}) ** (365 / Δd) - 1.
+    Sabit 252/n (iş günü) üssü kullanılmaz — TL faizleri ACT/365 kote edilir.
+    """
+    ratio = s / s.shift(n)
+    delta_d = pd.Series(s.index, index=s.index).diff(n).dt.days.astype(float)
+    return (ratio ** (365.0 / delta_d) - 1) * 100
+
 
 week_days = 5
 month_days = 21
 quarter_days = 63
 
-deval_1w = ((usdtry / usdtry.shift(week_days)) ** (252 / week_days) - 1) * 100
-deval_1m = ((usdtry / usdtry.shift(month_days)) ** (252 / month_days) - 1) * 100
-deval_3m = ((usdtry / usdtry.shift(quarter_days)) ** (252 / quarter_days) - 1) * 100
+deval_1w = deval_act365(business, week_days)
+deval_1m = deval_act365(business, month_days)
+deval_3m = deval_act365(business, quarter_days)
 
-tcmb_changes = [
-    ("2024-03-22", 50.0),
-    ("2024-12-26", 47.5),
-    ("2025-01-23", 45.0),
-    ("2025-03-06", 42.5),
-    ("2025-04-17", 46.0),
-    ("2025-07-24", 43.0),
-    ("2025-09-11", 40.5),
-    ("2025-10-23", 39.5),
-    ("2025-12-11", 38.0),
-    ("2026-01-22", 37.0),
-]
+# TCMB fonlama maliyeti — EVDS'ten CANLI çekilir (TP.APIFON4, Ağırlıklı Ortalama
+# Fonlama Maliyeti).
+#
+# Neden elle tutulan PPK listesi değil: burada önceden 1 haftalık repo faizi elle
+# yazılıyordu ve liste 22.01.2026'da (%37,0) bitmişti. TCMB'nin kendi verisine göre
+# fonlama maliyeti 03.03.2026'da %39,35 → %40,00'a çıkmıştı; yani grafik beş ay
+# boyunca 300 bp yanlış bir seviye çiziyordu. Elle bakımlı seri, hattın geri
+# kalanı canlıyken sessizce bayatlar — bu yüzden bu katman da EVDS'e bağlandı.
+#
+# AOFM ≠ ilan edilen politika faizi: TCMB koridorun tavanından fonladığında AOFM
+# politika faizinin üstüne çıkar. Carry karşılaştırması için AOFM zaten daha
+# doğru büyüklüktür (taşıma maliyetini fiilen bu belirler), ama etiket bunu
+# açıkça söylemeli — grafikte "Politika Faizi" değil "AOFM" yazar.
+POLITIKA_SERI = "TP.APIFON4"
+policy_rate = None
+try:
+    _aofm = fetch_evds(POLITIKA_SERI, fetch_start, fetch_end)
+    if _aofm is not None and len(_aofm):
+        policy_rate = _aofm.reindex(business.index).ffill()
+except Exception as _e:
+    print(f"UYARI: {POLITIKA_SERI} çekilemedi: "
+          f"{type(_e).__name__}: {gizle_anahtar(str(_e))}")
 
-policy_rate = pd.Series(dtype=float)
-all_dates = usdtry.index
-for date_str, rate in tcmb_changes:
-    dt = pd.Timestamp(date_str)
-    policy_rate[dt] = rate
+if policy_rate is None or policy_rate.dropna().empty:
+    # Sessizce eski/boş seriyle devam etmek, tam da giderilen hatanın kendisi olur.
+    raise RuntimeError(
+        f"{POLITIKA_SERI} (fonlama maliyeti) çekilemedi — faiz katmanı olmadan "
+        "grafik üretilmiyor. Bayat/eksik faizle yayın yapmaktansa durmak doğrudur."
+    )
 
-policy_rate = policy_rate.reindex(all_dates, method='ffill')
-policy_rate = policy_rate.ffill()
+all_dates = business.index
 
 imamoglu_date = pd.Timestamp("2025-03-19")
 iran_war_date = pd.Timestamp("2026-02-28")
 
-mask = usdtry.index >= display_start
+mask = (business.index >= display_start) & (business.index <= display_end)
 
 fig, ax1 = plt.subplots(figsize=(18, 9))
 
@@ -74,13 +147,13 @@ ax1.plot(deval_1w_clip.index, deval_1w_clip, color='#00d2ff', linewidth=1.0, alp
 ax1.plot(deval_1m_clip.index, deval_1m_clip, color='#ff6b6b', linewidth=1.8, alpha=0.85, label='1 Aylik Annualized Deval.')
 ax1.plot(deval_3m_clip.index, deval_3m_clip, color='#ffd93d', linewidth=2.2, alpha=0.9, label='3 Aylik Annualized Deval.')
 
-ax1.set_ylabel('Annualized Devaluasyon (%)', fontsize=13, fontweight='bold')
+ax1.set_ylabel('Annualized Devaluasyon (%, ACT/365)', fontsize=13, fontweight='bold')
 ax1.set_xlabel('')
 
 ax2 = ax1.twinx()
 ax2.step(policy_rate[mask].index, policy_rate[mask], color='#6bff6b', linewidth=2.5,
-         linestyle='-', alpha=0.85, label='TCMB Politika Faizi (%)', where='post')
-ax2.set_ylabel('Politika Faizi (%)', fontsize=13, fontweight='bold', color='#6bff6b')
+         linestyle='-', alpha=0.85, label='TCMB Ağırlıklı Ort. Fonlama Maliyeti (%)', where='post')
+ax2.set_ylabel('AOFM (%)', fontsize=13, fontweight='bold', color='#6bff6b')
 ax2.tick_params(axis='y', labelcolor='#6bff6b')
 
 ax1.set_ylim(-50, 155)
@@ -103,7 +176,7 @@ if imamoglu_date >= display_start:
                 arrowprops=dict(arrowstyle='->', color='#ff4757', lw=1.5),
                 bbox=dict(boxstyle='round,pad=0.4', facecolor='#1a1a2e', edgecolor='#ff4757', alpha=0.95))
 
-if iran_war_date <= end_date:
+if iran_war_date <= display_end:
     ax1.axvline(x=iran_war_date, color='#ffa502', linestyle='-', linewidth=2.5, alpha=0.85)
     ax1.annotate('Iran-ABD Savasi Baslangici\n28 Subat 2026',
                 xy=(iran_war_date, 148),
@@ -128,17 +201,23 @@ ax1.xaxis.set_major_formatter(mdates.DateFormatter('%b\n%Y'))
 plt.setp(ax1.xaxis.get_majorticklabels(), fontsize=9)
 
 ax1.grid(True, alpha=0.15, color='#ffffff')
-ax1.set_title(f'USDTRY Annualized Devaluasyon & TCMB Politika Faizi\n'
-              f'({display_start.strftime("%b %Y")} - {today.strftime("%b %Y")})',
+ax1.set_title(f'USDTRY Annualized Devaluasyon (ACT/365) & TCMB Politika Faizi\n'
+              f'({display_start.strftime("%b %Y")} - {display_end.strftime("%b %Y")})',
              fontsize=15, fontweight='bold', pad=15, color='#ffffff')
 
-ax1.text(0.01, 0.02, 'Kaynak: Yahoo Finance, TCMB  |  Deval. >%150 veya <-%50 kliplendi',
+ax1.text(0.01, 0.02, 'Kaynak: TCMB EVDS (TP.DK.USD.A.YTL), TCMB PPK  |  Deval. >%150 veya <-%50 kliplendi',
          transform=ax1.transAxes, fontsize=8, color='#888', ha='left', va='bottom')
 
 fig.tight_layout()
 
-output_path = "/Users/tunatanozmen/Documents/aktif projeler/USDTRYDeval/usdtry_deval_chart.png"
+output_path = os.path.join(BASE_DIR, "usdtry_deval_chart.png")
 fig.savefig(output_path, dpi=150, bbox_inches='tight', facecolor=fig.get_facecolor())
 print(f"\nGrafik kaydedildi: {output_path}")
 
-plt.show()
+# Son değer özeti (log/rapor için) — plotly scripti ile birebir aynı olmalı
+last_dt = deval_3m.dropna().index[-1]
+print(f"Son gözlem ({last_dt.date()}): "
+      f"1H {deval_1w.dropna().iloc[-1]:+.2f}% · "
+      f"1A {deval_1m.dropna().iloc[-1]:+.2f}% · "
+      f"3A {deval_3m.dropna().iloc[-1]:+.2f}%  (yıllıklandırılmış, ACT/365)  "
+      f"| AOFM: %{policy_rate.iloc[-1]:.1f}")

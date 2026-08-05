@@ -1,3 +1,16 @@
+"""UYARI — BU SCRIPT MAKULLIK FILTRESI UYGULAMAZ.
+
+hazine_hedef_gerceklesme.csv'den hedefleri okuyup aynı dosyaya geri yazar; yani
+main.py'deki geri besleme döngüsünün filtresiz bir kopyasıdır. Bozuk (ör. ondalık
+ayırıcı hatasıyla 10 kat şişmiş) bir tarihsel hedef CSV'de duruyorsa bu script onu
+AYNEN diriltir ve main.py'deki STRATEGY_TARGET_MIN/MAX + gerçekleşme oranı
+kontrollerini atlar.
+
+Pipeline'ın parçası DEĞİLDİR (main.py, web_cikti_tahmin.py ve GitHub Actions
+iş akışı bu dosyayı çağırmaz). Yalnızca bilinçli, elle yapılan onarım için
+kullanın ve koştuktan sonra CSV'yi gözle doğrulayın.
+"""
+
 import pandas as pd
 from typing import Dict
 

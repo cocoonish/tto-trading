@@ -1,9 +1,15 @@
 {
- "_tarih": "03.2026",
- "donem": "Mart 2026",
- "redk": 103.8,
- "sapma10": 5.3,
- "sapma5": 14.1,
- "ppi10": 12.0,
- "cpi10": 2.7
+ "_tarih": "07.2026",
+ "donem": "Temmuz 2026",
+ "redk": 104.6,
+ "sapma10": 7.3,
+ "sapma5": 14.0,
+ "ppi10": 11.9,
+ "cpi10": 5.5,
+ "kaynak": "evds",
+ "kaynak_etiket": "TCMB EVDS",
+ "son_gozlem": "2026-07",
+ "gecikme_ay": 1,
+ "tazelik": "güncel",
+ "cekim": "2026-08-05 07:41"
 }

@@ -7,26 +7,27 @@ from datetime import date
 import plotly.graph_objects as go
 import plotly.io as pio
 from plotly.subplots import make_subplots
+from evds_ortak import evds_anahtari, EVDS_ILERI_GUN, EVDS_BASE
 
 # Çıktılar script'in kendi klasörüne yazılır (taşınmaya dayanıklı)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # --- Tarih parametreleri (her çalıştırmada bugüne kadar güncellenir) ---
 today = date.today()
-display_end = pd.Timestamp(today)
-fetch_end = today.strftime("%d-%m-%Y")
+# EVDS sorgu bitişi bilerek birkaç gün ileri alınır: TCMB, ertesi iş gününün gösterge
+# kurunu bugün öğleden sonra yayımlar. endDate=bugün olduğunda o kur sistematik olarak
+# dışarıda kalır (tazelik kaybı). Gelecek tarih için EVDS zaten veri döndürmez —
+# ileri almak zararsızdır, yalnız yayımlanmış olanı alır.
+fetch_end = (pd.Timestamp(today) + pd.Timedelta(days=EVDS_ILERI_GUN)).strftime("%d-%m-%Y")
 fetch_start = "01-02-2024"  # EVDS geçmiş veri başlangıcı
 range_1y_start = pd.Timestamp("2025-03-01")  # 1Y grafik sabit başlangıç
-range_3m_start = display_end - pd.Timedelta(days=90)
-range_6m_start = display_end - pd.Timedelta(days=180)
 
 
 def fmt_range(start: pd.Timestamp, end: pd.Timestamp) -> str:
     """Grafik başlıkları için tarih aralığı metni."""
     return f"{start.strftime('%d %b %Y')} – {end.strftime('%d %b %Y')}"
 
-EVDS_KEY = "5ILfFTTp8n"
-EVDS_BASE = "https://evds3.tcmb.gov.tr/igmevdsms-dis"
+EVDS_KEY = evds_anahtari()
 
 
 def fetch_evds(series_code: str, start: str, end: str) -> pd.Series:
@@ -76,6 +77,13 @@ mev_6m = fetch_evds_opt("TP.TRYTAS.MT03", fetch_start, fetch_end)
 mev_12m = fetch_evds_opt("TP.TRYTAS.MT04", fetch_start, fetch_end)
 print(f"  USD/TRY: {len(usdtry)}, TLREF: {0 if tlref is None else len(tlref)}, "
       f"Kredi: {0 if kredi is None else len(kredi)}")
+
+# Grafik penceresi bugünle değil VERİYLE biter: EVDS ertesi iş gününün kurunu önceden
+# yayımladığında o gözlem de eksene girsin (aksi hâlde filt() onu geri kırpardı).
+display_end = max(pd.Timestamp(usdtry.index[-1]), pd.Timestamp(today))
+range_3m_start = display_end - pd.Timedelta(days=90)
+range_6m_start = display_end - pd.Timedelta(days=180)
+print(f"  Son gözlem tarihi: {usdtry.index[-1].date()} (grafik sonu: {display_end.date()})")
 
 usdtry_full = usdtry.asfreq("D").interpolate(method="time")
 business = usdtry_full[usdtry_full.index.dayofweek < 5]

@@ -4,11 +4,17 @@ import json, os, re
 from urllib.parse import urlencode
 import pandas as pd, requests
 BASE = os.path.dirname(os.path.abspath(__file__))
-kaynak = open(os.path.join(BASE, "usdtry_deval_plotly.py")).read()
-KEY = re.search(r'EVDS_KEY\s*=\s*"([^"]+)"', kaynak).group(1)
-EVDS = "https://evds3.tcmb.gov.tr/igmevdsms-dis"
+# Anahtar ve pencere ORTAK modulden; daha once anahtar baska bir scriptten
+# regex'le okunuyordu (o dosya degisince sessizce kirilirdi) ve ileri-gun
+# sabiti burada ayrica gomuluydu.
+from evds_ortak import evds_anahtari, EVDS_ILERI_GUN, EVDS_BASE as EVDS
+KEY = evds_anahtari()
 bas = (pd.Timestamp.today() - pd.Timedelta(days=160)).strftime("%d-%m-%Y")
-son = pd.Timestamp.today().strftime("%d-%m-%Y")
+# Sorgu bitisi bilerek ileri: TCMB ertesi is gununun gosterge kurunu bugun yayimlar,
+# endDate=bugun o kuru sistematik olarak disarida birakirdi. EVDS gelecek tarih icin
+# bos doner. Grafik scriptleriyle AYNI pencere (EVDS_ILERI_GUN=5) — ozet.json ile
+# grafikler ayni son gozleme dayansin.
+son = (pd.Timestamp.today() + pd.Timedelta(days=EVDS_ILERI_GUN)).strftime("%d-%m-%Y")
 p = {"series": "TP.DK.USD.A.YTL", "startDate": bas, "endDate": son, "type": "json"}
 r = requests.get(f"{EVDS}/{urlencode(p)}", headers={"key": KEY}, timeout=30)
 df = pd.DataFrame(r.json()["items"])

@@ -1,12 +1,15 @@
 """
 Türkiye Reel Efektif Döviz Kuru Analizi
-- %70 PPI (Yi-ÜFE) + %30 CPI (TÜFE) bazlı ağırlıklı REDK
+- %30 PPI (Yi-ÜFE) + %70 CPI (TÜFE) bazlı ağırlıklı REDK
+  (ağırlıklar aşağıdaki PPI_WEIGHT / CPI_WEIGHT ile parametrik)
 - 10 yıllık hareketli ortalamadan % sapma hesaplama
 - Plotly ile interaktif görselleştirme
 """
 
+import json
 import os
-from datetime import date
+import sys
+from datetime import date, datetime
 from urllib.parse import urlencode
 
 import pandas as pd
@@ -33,14 +36,72 @@ PPI_FILE = os.path.join(SCRIPT_DIR, "Yi-UFE.xlsx")  # PPI bazlı REDK dosyası
 #   bie_rkufey  → TP.RK.U01.Y "Yİ-ÜFE Bazlı Reel Efektif Döviz Kuru (2025=100)"
 # Her ikisi de 01-1994'ten itibaren aylık. Elle indirilen TUFE.xlsx / Yi-UFE.xlsx
 # ile aynı serilerdir (2026-02 için fark 0,01 puan); Excel yolu yedek olarak durur.
-EVDS_KEY = os.environ.get("TTO_EVDS_KEY", "5ILfFTTp8n")
 EVDS_BASE = "https://evds3.tcmb.gov.tr/igmevdsms-dis"
 EVDS_CPI_SERIES = "TP.RK.T1.Y"    # TÜFE bazlı REDK
 EVDS_PPI_SERIES = "TP.RK.U01.Y"   # Yİ-ÜFE bazlı REDK
 EVDS_START = "01-01-1994"
 
+# EVDS anahtarı KAYNAĞA GÖMÜLMEZ. Sırayla iki yerden okunur:
+#   1) TTO_EVDS_KEY ortam değişkeni (CI: depo secret'ı)
+#   2) proje klasöründeki .evds_key dosyası (yerel; .gitignore'da)
+# İkisi de yoksa EVDS yolu hiç denenmez ve ekrana açık bir uyarı basılır.
+EVDS_KEY_FILE = os.path.join(SCRIPT_DIR, ".evds_key")
+
+
+def _evds_anahtari_oku():
+    """EVDS anahtarını ortam değişkeninden ya da yerel .evds_key dosyasından oku.
+
+    Dönüş: (anahtar, nereden) — anahtar yoksa (None, None).
+    """
+    anahtar = (os.environ.get("TTO_EVDS_KEY") or "").strip()
+    if anahtar:
+        return anahtar, "ortam değişkeni TTO_EVDS_KEY"
+    # Okuma korumalı: bu fonksiyon MODÜL IMPORT'unda çalışıyor. Dosya okunamazsa
+    # (izin, dizin olması, bozuk kodlama) korumasız open() import'u düşürür ve
+    # `from main import load_data` yapan usdtry_reer_analysis.py'yi de yanında
+    # götürür — hâlbuki anahtar yoksa Excel yedeğiyle devam edebilmeliyiz.
+    if os.path.exists(EVDS_KEY_FILE):
+        try:
+            with open(EVDS_KEY_FILE, encoding="utf-8") as f:
+                anahtar = f.read().strip()
+        except OSError as e:
+            print(f"   ⚠ {EVDS_KEY_FILE} okunamadı ({type(e).__name__}); "
+                  f"anahtarsız devam ediliyor.", file=sys.stderr)
+            return None, None
+        if anahtar:
+            return anahtar, EVDS_KEY_FILE
+    return None, None
+
+
+EVDS_KEY, EVDS_KEY_KAYNAGI = _evds_anahtari_oku()
+
+
+def _gizle_anahtar(metin: str) -> str:
+    """Hata mesajlarındaki ham anahtarı maskele.
+
+    requests, bozuk bir başlık değerinde (ör. anahtarda satır sonu) istisna
+    metnine başlığın HAM içeriğini gömer; o metin log'a basılınca anahtar
+    stderr'e sızar. Anahtarı basmadan önce her zaman buradan geçir.
+    """
+    if EVDS_KEY and len(EVDS_KEY) >= 4:
+        return metin.replace(EVDS_KEY, f"{EVDS_KEY[:2]}***{EVDS_KEY[-2:]}")
+    return metin
+
 # Veri kaynağı seçimi: "evds" (varsayılan) | "excel"
 VERI_KAYNAGI = os.environ.get("TTO_REDK_KAYNAK", "evds").strip().lower()
+
+# ============================================
+# TAZELİK DENETİMİ
+# ============================================
+# TCMB REDK'yi ay kapanışını izleyen ayın ilk günlerinde yayımlar; yani normalde
+# son gözlem "içinde bulunulan ay − 1"dir. Bu eşikten FAZLA geride kalan seri
+# "bayat" sayılır — Excel yedeği elle indirildiği için tipik olarak aylarca geridir.
+TAZELIK_ESIGI_AY = 2
+# Bayat veriyle bilerek çıktı üretmek için: TTO_BAYAT_VERI_IZIN=1
+BAYAT_VERI_IZIN = os.environ.get("TTO_BAYAT_VERI_IZIN", "").strip() == "1"
+
+# Kaynak damgası (ozet_uret.py buradan okur)
+KAYNAK_DAMGASI_JSON = os.path.join(SCRIPT_DIR, "kaynak_damgasi.json")
 
 # Ağırlıklar (toplam 1.0 olmalı)
 PPI_WEIGHT = 0.30  # PPI (Yi-ÜFE) ağırlığı
@@ -67,6 +128,40 @@ TEAL_DOLGU = "rgba(29, 92, 92, 0.3)"
 # VERİ YÜKLEME VE İŞLEME
 # ============================================
 
+def _uyar(baslik, satirlar=()):
+    """Görünür uyarı bloğu — stdout'a değil stderr'e; log akışında kaybolmasın."""
+    print("", file=sys.stderr)
+    print("!" * 78, file=sys.stderr)
+    print(f"!! {baslik}", file=sys.stderr)
+    for s in satirlar:
+        print(f"!! {s}", file=sys.stderr)
+    print("!" * 78, file=sys.stderr)
+    print("", file=sys.stderr, flush=True)
+
+
+def _ay_basina_normalize(seri):
+    """Tarih serisini ayın ilk gününe çek.
+
+    Excel dosyalarında ay başı OLMAYAN hücreler var (TUFE/Yi-ÜFE satır 230 =
+    2013-03-02; Yi-ÜFE satır 235 = 2013-08-02). Birleştirme datetime eşitliği
+    aradığı için normalize edilmezse o aylar sessizce düşer.
+    """
+    return pd.to_datetime(seri).dt.to_period("M").dt.to_timestamp()
+
+
+def _gecikme_ay(son_gozlem, bugun=None):
+    """Son gözlemin bugüne göre kaç ay geride kaldığı (ay farkı)."""
+    bugun = bugun or date.today()
+    return (bugun.year - son_gozlem.year) * 12 + (bugun.month - son_gozlem.month)
+
+
+def _takvim_bosluklari(donem):
+    """Aylık seride eksik takvim aylarını döndür: ['2013-08', ...]"""
+    idx = pd.PeriodIndex(pd.to_datetime(donem).dt.to_period("M"))
+    tam = pd.period_range(idx.min(), idx.max(), freq="M")
+    return [str(p) for p in tam.difference(idx)]
+
+
 def fetch_evds_series(series_code, start=EVDS_START, end=None):
     """EVDS'ten tek bir aylık seriyi çek → pd.Series (index: ay başı Timestamp).
 
@@ -74,6 +169,12 @@ def fetch_evds_series(series_code, start=EVDS_START, end=None):
     aylık seriler 'YYYY-M' formatında Tarih döndürdüğü için ay başına çevrilir.
     """
     import requests  # yalnız EVDS yolunda gerekli — Excel yolu bağımsız kalsın
+
+    if not EVDS_KEY:
+        raise RuntimeError(
+            "EVDS anahtarı yok: TTO_EVDS_KEY ortam değişkenini tanımlayın ya da "
+            f"anahtarı '{EVDS_KEY_FILE}' dosyasına yazın."
+        )
 
     if end is None:
         end = date.today().strftime("%d-%m-%Y")
@@ -136,11 +237,83 @@ def load_data_excel():
     df_ppi = df_ppi.dropna(subset=['Dönem'])  # Geçersiz tarihleri temizle
     ppi_col = [col for col in df_ppi.columns if 'Yi-ÜFE' in col][0]
     df_ppi = df_ppi[['Dönem', ppi_col]].rename(columns={ppi_col: 'PPI_REER'})
-    
+
+    # Ay başına normalize ET, SONRA birleştir. Excel'de kaymış hücreler var
+    # (2013-03-02, Yi-ÜFE'de ayrıca 2013-08-02); ham datetime'la iç birleştirme
+    # yapılırsa 2013-08 sessizce düşüyordu (387 yerine 386 satır).
+    df_cpi['Dönem'] = _ay_basina_normalize(df_cpi['Dönem'])
+    df_ppi['Dönem'] = _ay_basina_normalize(df_ppi['Dönem'])
+
+    # Normalizasyon aynı aya iki satır düşürürse (olmamalı) görünür uyar, sonuncuyu tut
+    for ad, d in (('TÜFE', df_cpi), ('Yi-ÜFE', df_ppi)):
+        yinelenen = d['Dönem'][d['Dönem'].duplicated()].dt.strftime('%Y-%m').tolist()
+        if yinelenen:
+            _uyar(f"Excel ({ad}): aynı ay için birden fazla satır",
+                  [f"yinelenen aylar: {', '.join(yinelenen)} — sonuncusu kullanılıyor"])
+    df_cpi = df_cpi.drop_duplicates(subset='Dönem', keep='last')
+    df_ppi = df_ppi.drop_duplicates(subset='Dönem', keep='last')
+
+    # Yalnız bir dosyada bulunan aylar iç birleştirmede düşer — sessiz kalmasın
+    tek_tarafli = sorted(set(df_cpi['Dönem']).symmetric_difference(set(df_ppi['Dönem'])))
+    if tek_tarafli:
+        _uyar("Excel: iki seride ORTAK OLMAYAN aylar iç birleştirmede düştü",
+              [f"{len(tek_tarafli)} ay: " +
+               ", ".join(t.strftime('%Y-%m') for t in tek_tarafli[:12])])
+
     # Birleştir
     df = pd.merge(df_cpi, df_ppi, on='Dönem', how='inner')
     df = df.sort_values('Dönem').reset_index(drop=True)
 
+    return df
+
+
+def _kaynak_damgala(df, kaynak):
+    """Kullanılan kaynağı, son gözlemi ve tazeliği df.attrs'a yaz; bozukluğu görünür kıl.
+
+    df.attrs anahtarları: kaynak (evds|excel), son_gozlem (YYYY-MM), gecikme_ay,
+    bayat, eksik_aylar, cekim_zamani. CSV damgası ve ozet.json buradan beslenir —
+    yayına giden sayının hangi kaynaktan geldiği artık ayırt edilebilir.
+    """
+    son = pd.to_datetime(df['Dönem']).max()
+    gecikme = _gecikme_ay(son.date())
+    eksik = _takvim_bosluklari(df['Dönem'])
+    bayat = gecikme > TAZELIK_ESIGI_AY
+
+    df.attrs.update({
+        "kaynak": kaynak,
+        "kaynak_etiket": "TCMB EVDS" if kaynak == "evds" else "yerel Excel (yedek)",
+        "son_gozlem": son.strftime("%Y-%m"),
+        "gecikme_ay": int(gecikme),
+        "bayat": bool(bayat),
+        "eksik_aylar": eksik,
+        "cekim_zamani": datetime.now().strftime("%Y-%m-%d %H:%M"),
+    })
+
+    # Takvim sürekliliği: rolling KONUMSAL olduğu için boşluk pencereleri kaydırır
+    if eksik:
+        _uyar("Aylık seride TAKVİM BOŞLUĞU var — hareketli ortalamalar kayar",
+              [f"eksik ay ({len(eksik)}): " + ", ".join(eksik[:12]) +
+               (" …" if len(eksik) > 12 else ""),
+               "rolling(window=120) konumsaldır: 120 satır 120 takvim ayını kapsamıyor."])
+
+    if bayat:
+        satirlar = [
+            f"kaynak={kaynak} · son gözlem={son:%Y-%m} · bugüne göre {gecikme} ay geride "
+            f"(eşik: {TAZELIK_ESIGI_AY} ay)",
+            "Bu veriden üretilen grafik ve ozet.json YAYINA GİTMEMELİ.",
+        ]
+        if BAYAT_VERI_IZIN:
+            _uyar("BAYAT VERİ — TTO_BAYAT_VERI_IZIN=1 ile bilerek devam ediliyor", satirlar)
+        else:
+            _uyar("BAYAT VERİ — ÇIKTI ÜRETİLMİYOR", satirlar + [
+                "Bilerek devam etmek için: TTO_BAYAT_VERI_IZIN=1 python main.py"])
+            raise RuntimeError(
+                f"Bayat REDK verisi: kaynak={kaynak}, son gözlem={son:%Y-%m}, "
+                f"{gecikme} ay geride (eşik {TAZELIK_ESIGI_AY})"
+            )
+
+    print(f"   🏷️ kaynak={kaynak} · son gözlem={son:%Y-%m} · gecikme={gecikme} ay "
+          f"· eksik ay={len(eksik)}")
     return df
 
 
@@ -149,19 +322,43 @@ def load_data():
 
     TTO_REDK_KAYNAK=excel ile doğrudan Excel yoluna zorlanabilir.
     Dönen sütunlar: Dönem, CPI_REER, PPI_REER.
+    Kullanılan kaynak ve son gözlem df.attrs'a yazılır (bkz. _kaynak_damgala);
+    Excel'e düşüş ve bayat veri artık SESSİZ değil — stderr'e uyarı basar,
+    veri eşikten eskiyse istisna atar.
     """
+    df = None
     if VERI_KAYNAGI != "excel":
-        try:
-            df = load_data_evds()
-            print(f"   📡 Kaynak: TCMB EVDS ({EVDS_CPI_SERIES} + {EVDS_PPI_SERIES})")
-            return df
-        except Exception as e:
-            print(f"   ⚠️ EVDS'ten çekilemedi ({type(e).__name__}: {e}) — Excel yedeğine düşülüyor")
+        if not EVDS_KEY:
+            _uyar("EVDS ANAHTARI YOK — EVDS yolu hiç denenmedi, Excel yedeğine düşülüyor",
+                  ["Anahtarı şu iki yerden birine koyun:",
+                   "  1) ortam değişkeni:  export TTO_EVDS_KEY=<anahtar>",
+                   f"  2) yerel dosya:      {EVDS_KEY_FILE}  (.gitignore'da, commit edilmez)",
+                   "Excel yedeği elle indirilir; EVDS kadar taze DEĞİLDİR."])
+        else:
+            # SADECE ÇEKİM korumalı. Tazelik/damga denetimi bilinçli olarak
+            # try'ın DIŞINDA: içeride olsaydı "EVDS'e erişildi ama seri bayat"
+            # durumunda atılan RuntimeError bu except tarafından yutulur ve
+            # tam da giderilmek istenen SESSİZ Excel düşüşüne dönüşürdü.
+            try:
+                df = load_data_evds()
+            except Exception as e:
+                _uyar("EVDS'TEN ÇEKİLEMEDİ — YEREL EXCEL YEDEĞİNE DÜŞÜLÜYOR",
+                      [f"{type(e).__name__}: {_gizle_anahtar(str(e))}",
+                       f"anahtar kaynağı: {EVDS_KEY_KAYNAGI}",
+                       "Excel dosyaları elle indirilir; EVDS kadar taze DEĞİLDİR."])
+                df = None
+            if df is not None:
+                print(f"   📡 Kaynak: TCMB EVDS ({EVDS_CPI_SERIES} + {EVDS_PPI_SERIES})"
+                      f" · anahtar: {EVDS_KEY_KAYNAGI}")
+                # Bayatsa burada patlar ve Excel'e DÜŞMEZ — çekim başarılıydı,
+                # sorun verinin kendisinde; sessizce başka kaynağa kaymak yanlış.
+                return _kaynak_damgala(df, "evds")
     else:
         print("   📄 Kaynak: Excel (TTO_REDK_KAYNAK=excel)")
+
     df = load_data_excel()
     print(f"   📄 Kaynak: yerel Excel ({os.path.basename(CPI_FILE)}, {os.path.basename(PPI_FILE)})")
-    return df
+    return _kaynak_damgala(df, "excel")
 
 
 def calculate_composite_reer(df):
@@ -399,14 +596,21 @@ def create_plot(df):
     last_ppi_dev = df_plot['PPI_Deviation_10Y_Pct'].iloc[-1]
     last_cpi_dev = df_plot['CPI_Deviation_10Y_Pct'].iloc[-1]
     last_reer = df_plot['Composite_REER'].iloc[-1]
-    
+
+    # Kaynak uyarısı yalnız EVDS DIŞI ya da bayat veride başlığa eklenir —
+    # normal (EVDS, taze) grafiğin görünümü değişmesin
+    kaynak_notu = ""
+    if df.attrs.get("kaynak") not in (None, "evds") or df.attrs.get("bayat"):
+        kaynak_notu = (f" | ⚠ kaynak: {df.attrs.get('kaynak_etiket', 'bilinmiyor')}"
+                       f", son gözlem {df.attrs.get('son_gozlem', '?')}")
+
     # Layout ayarları
     fig.update_layout(
         height=1200,
         title=dict(
             text=f"<b>Türkiye REDK Analizi ({last_date.strftime('%Y-%m')})</b><br>" +
                  f"<sup>Kompozit: 10Y={last_deviation_10y:+.1f}%, 5Y={last_deviation_5y:+.1f}% | " +
-                 f"PPI: {last_ppi_dev:+.1f}% | CPI: {last_cpi_dev:+.1f}%</sup>",
+                 f"PPI: {last_ppi_dev:+.1f}% | CPI: {last_cpi_dev:+.1f}%{kaynak_notu}</sup>",
             x=0.01,
             xanchor="left",
             font=dict(size=16)
@@ -478,11 +682,18 @@ def main():
         except Exception as e:
             print(f"   ⚠️ Tarayıcı açılamadı: {e}")
 
-    # İsteğe bağlı: Hesaplanmış veriyi CSV olarak kaydet
+    # İsteğe bağlı: Hesaplanmış veriyi CSV olarak kaydet — kaynak damgasıyla birlikte
     output_csv = os.path.join(SCRIPT_DIR, "reer_analysis_data.csv")
-    df.to_csv(output_csv, index=False)
-    print(f"   ✅ Veri '{output_csv}' olarak kaydedildi")
-    
+    df_out = df.copy()
+    df_out["Kaynak"] = df.attrs.get("kaynak", "bilinmiyor")
+    df_out.to_csv(output_csv, index=False)
+    print(f"   ✅ Veri '{output_csv}' olarak kaydedildi (Kaynak={df_out['Kaynak'].iloc[-1]})")
+
+    # Damganın tamamı ayrı JSON'da: ozet_uret.py buradan okuyup ozet.json'a taşır
+    with open(KAYNAK_DAMGASI_JSON, "w", encoding="utf-8") as f:
+        json.dump(df.attrs, f, ensure_ascii=False, indent=1)
+    print(f"   ✅ Kaynak damgası '{KAYNAK_DAMGASI_JSON}' olarak kaydedildi")
+
     return df, fig
 
 

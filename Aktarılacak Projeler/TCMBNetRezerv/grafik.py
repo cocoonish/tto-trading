@@ -52,7 +52,9 @@ def build_figure(daily, weekly, title: str) -> go.Figure:
     fig = make_subplots(specs=[[{"secondary_y": True}]])
 
     # Sol eksen — Swap Hariç Net Rezerv (çizgi; yüzlerce günlük noktada
-    # marker basmak çizgiyi kalınlaştırıp okunmaz yapıyor → sadece çizgi)
+    # marker basmak çizgiyi kalınlaştırıp okunmaz yapıyor → sadece çizgi).
+    # connectgaps=False: swap düzeltmesinin gerçek verisi olmayan aralıklar
+    # (ilk IRFCL gözleminden önce / son gözlemden çok sonra) boş kalır.
     fig.add_trace(
         go.Scatter(
             x=daily.index,
@@ -60,26 +62,31 @@ def build_figure(daily, weekly, title: str) -> go.Figure:
             mode="lines",
             name="Swap Hariç Net Rezerv",
             line=dict(color=TEAL, width=2),
+            connectgaps=False,
             hovertemplate="Swap Hariç: <b>%{y:.2f}</b> mlr USD<extra></extra>",
         ),
         secondary_y=False,
     )
 
-    # Cuma anchor noktaları (resmi haftalık değer)
-    weekly_in_range = weekly.loc[weekly.index.isin(daily.index)].copy()
-    weekly_in_range["sh_resmi"] = (
-        sh_round.reindex(weekly_in_range.index)
-    )
-    if len(weekly_in_range):
+    # IRFCL gözlem noktaları: swap düzeltmesinin (II.2+II.3) YAYIMLANMIŞ
+    # olduğu tarihler. Aradaki günlerde düzeltme iki gözlem arasında ara
+    # değerle taşınıyor — okuyucu gerçek/ara değer ayrımını görsün diye
+    # işaretleniyor.
+    if "swap_gozlem" in daily.columns:
+        gozlem_idx = daily.index[daily["swap_gozlem"].astype(bool)]
+    else:
+        gozlem_idx = daily.index[[]]
+    if len(gozlem_idx):
         fig.add_trace(
             go.Scatter(
-                x=weekly_in_range.index,
-                y=weekly_in_range["sh_resmi"],
+                x=gozlem_idx,
+                y=sh_round.reindex(gozlem_idx),
                 mode="markers",
-                name="Resmi (Cuma)",
+                name="IRFCL gözlemi (swap verisi yayımlandı)",
                 marker=dict(color=ALTIN, size=8, symbol="diamond",
                             line=dict(color="white", width=1)),
-                hovertemplate="Resmi: <b>%{y:.2f}</b> mlr USD<extra></extra>",
+                hovertemplate="IRFCL gözlemi: <b>%{y:.2f}</b> mlr USD"
+                              "<extra></extra>",
             ),
             secondary_y=False,
         )
@@ -163,9 +170,12 @@ def main():
             daily = daily.loc[dt.datetime.strptime(args.start, "%d-%m-%Y"):]
         if args.end:
             daily = daily.loc[:dt.datetime.strptime(args.end, "%d-%m-%Y")]
-        anchor_cumalar = weekly.index[weekly.index <= daily.index[-1]]
-        pdf_d = (f"{anchor_cumalar[-1]:%d.%m.%Y}" if len(anchor_cumalar)
-                 else "-")
+        # Son gerçek IRFCL gözlemi (swap düzeltmesinin en taze yayımlandığı gün)
+        if "swap_gozlem" in daily.columns:
+            gzm = daily.index[daily["swap_gozlem"].astype(bool)]
+        else:
+            gzm = daily.index[[]]
+        pdf_d = f"{gzm[-1]:%d.%m.%Y}" if len(gzm) else "-"
     else:
         # --- Çevrimiçi: EVDS + IRFCL PDF ---
         from net_rezerv import (
@@ -173,30 +183,37 @@ def main():
             calculate_weekly_net_reserves,
             fetch_evds,
             fetch_latest_weekly_pdf,
+            gozlem_arsivine_ekle,
             parse_weekly_pdf,
+            swap_duzeltme_serisi,
+            swap_gozlem_maskesi,
+            swap_gozlemleri,
         )
         start = args.start or "01-01-2026"
         end = args.end or dt.date.today().strftime("%d-%m-%Y")
         raw = fetch_evds(start, end)
-        weekly = calculate_weekly_net_reserves(raw)
 
-        pdf_bytes, ymd = fetch_latest_weekly_pdf()
-        swap_pdf = parse_weekly_pdf(pdf_bytes)
-        ii2 = (swap_pdf.get("II_2_acik_M", 0)
-               + swap_pdf.get("II_2_fazla_M", 0)) / 1000.0
-        ii3 = swap_pdf.get("II_3_toplam_M", 0) / 1000.0
-        sh_anchor = {d: r["net_rezerv_usd"] + ii2 + ii3
-                     for d, r in weekly.iterrows()}
+        swap_pdf = parse_weekly_pdf(fetch_latest_weekly_pdf())
+        gozlem_arsivine_ekle(swap_pdf)
 
-        daily = calculate_daily_net_reserves(raw, sh_anchor)
-        pdf_d = f"{ymd[6:8]}.{ymd[4:6]}.{ymd[:4]}"
+        # Swap düzeltmesi: EVDS aylık IRFCL + haftalık gözlem arşivi + canlı PDF
+        gozlem = swap_gozlemleri(start, end, swap_pdf)
+        swap_duz = swap_duzeltme_serisi(gozlem, raw.index)
+        swap_gzm = swap_gozlem_maskesi(gozlem, raw.index)
 
-    last = daily.iloc[-1]
+        weekly = calculate_weekly_net_reserves(raw, swap_duz)
+        daily = calculate_daily_net_reserves(raw, swap_duz, swap_gzm)
+        pdf_d = f"{swap_pdf['tarih']:%d.%m.%Y}" if "tarih" in swap_pdf else "-"
+
+    # Başlıktaki "son" değer: swap hariç serinin son GEÇERLİ noktası (seri
+    # son IRFCL gözleminden 3 hafta sonra NaN'a düştüğü için sona bakmak yetmez)
+    gecerli = daily["swap_haric_net_rezerv_usd"].dropna()
+    last = daily.loc[gecerli.index[-1]] if len(gecerli) else daily.iloc[-1]
     title = (
         f"TCMB Swap Hariç Net Uluslararası Rezerv — Günlük"
         f"<br><sup>Son: {last.name:%d %b %Y} | "
         f"Swap Hariç: {last['swap_haric_net_rezerv_usd']:.2f} mlr$ | "
-        f"IRFCL anchor: {pdf_d}</sup>"
+        f"son IRFCL gözlemi: {pdf_d}</sup>"
     )
 
     fig = build_figure(daily, weekly, title)

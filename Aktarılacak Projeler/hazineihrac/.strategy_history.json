@@ -1,8 +1,1430 @@
 {
+  "Aralık 2019": {
+    "target": 10.2,
+    "source": "Aralık 2019 – Şubat 2020 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 10.2,
+        "source": "Aralık 2019 – Şubat 2020 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ocak 2020": {
+    "target": 14.0,
+    "source": "Ocak – Mart 2020 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 24.400000000000002,
+        "source": "Aralık 2019 – Şubat 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 14.0,
+        "source": "Ocak – Mart 2020 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Şubat 2020": {
+    "target": 18.9,
+    "source": "Şubat – Nisan 2020 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 23.9,
+        "source": "Aralık 2019 – Şubat 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 26.9,
+        "source": "Ocak – Mart 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 18.9,
+        "source": "Şubat – Nisan 2020 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Mart 2020": {
+    "target": 18.5,
+    "source": "Mart – Mayıs 2020 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 28.299999999999997,
+        "source": "Ocak – Mart 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 20.5,
+        "source": "Şubat – Nisan 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 18.5,
+        "source": "Mart – Mayıs 2020 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Nisan 2020": {
+    "target": 28.6,
+    "source": "Nisan – Haziran 2020 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 22.3,
+        "source": "Şubat – Nisan 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 20.0,
+        "source": "Mart – Mayıs 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 28.6,
+        "source": "Nisan – Haziran 2020 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Mayıs 2020": {
+    "target": 38.9,
+    "source": "Mayıs – Temmuz 2020 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 19.3,
+        "source": "Mart – Mayıs 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 28.7,
+        "source": "Nisan – Haziran 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 38.9,
+        "source": "Mayıs – Temmuz 2020 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Haziran 2020": {
+    "target": 27.099999999999998,
+    "source": "Haziran – Ağustos 2020 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 22.0,
+        "source": "Nisan – Haziran 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 20.7,
+        "source": "Mayıs – Temmuz 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 27.099999999999998,
+        "source": "Haziran – Ağustos 2020 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Temmuz 2020": {
+    "target": 26.1,
+    "source": "Temmuz -Eylül 2020 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 27.1,
+        "source": "Mayıs – Temmuz 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 25.6,
+        "source": "Haziran – Ağustos 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 26.1,
+        "source": "Temmuz -Eylül 2020 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ağustos 2020": {
+    "target": 17.8,
+    "source": "Ağustos – Ekim 2020 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 26.6,
+        "source": "Haziran – Ağustos 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 26.8,
+        "source": "Temmuz -Eylül 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 17.8,
+        "source": "Ağustos – Ekim 2020 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Eylül 2020": {
+    "target": 8.9,
+    "source": "Eylül – Kasım 2020 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 27.900000000000002,
+        "source": "Temmuz -Eylül 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 21.400000000000002,
+        "source": "Ağustos – Ekim 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 8.9,
+        "source": "Eylül – Kasım 2020 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ekim 2020": {
+    "target": 20.0,
+    "source": "Ekim – Aralık 2020 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 33.0,
+        "source": "Ağustos – Ekim 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 22.0,
+        "source": "Eylül – Kasım 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 20.0,
+        "source": "Ekim – Aralık 2020 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Kasım 2020": {
+    "target": 10.0,
+    "source": "Kasım 2020 – Ocak 2021 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 12.6,
+        "source": "Eylül – Kasım 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 13.5,
+        "source": "Ekim – Aralık 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 10.0,
+        "source": "Kasım 2020 – Ocak 2021 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Aralık 2020": {
+    "target": 9.3,
+    "source": "Aralık 2020 – Şubat 2021 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 12.0,
+        "source": "Ekim – Aralık 2020 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 10.0,
+        "source": "Kasım 2020 – Ocak 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 9.3,
+        "source": "Aralık 2020 – Şubat 2021 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ocak 2021": {
+    "target": 25.4,
+    "source": "Ocak – Mart 2021 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 40.0,
+        "source": "Kasım 2020 – Ocak 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 36.9,
+        "source": "Aralık 2020 – Şubat 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 25.4,
+        "source": "Ocak – Mart 2021 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Şubat 2021": {
+    "target": 29.400000000000002,
+    "source": "Şubat – Nisan 2021 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 45.2,
+        "source": "Aralık 2020 – Şubat 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 38.800000000000004,
+        "source": "Ocak – Mart 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 29.400000000000002,
+        "source": "Şubat – Nisan 2021 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Mart 2021": {
+    "target": 24.8,
+    "source": "Mart – Mayıs 2021 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 31.3,
+        "source": "Ocak – Mart 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 31.3,
+        "source": "Şubat – Nisan 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 24.8,
+        "source": "Mart – Mayıs 2021 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Nisan 2021": {
+    "target": 24.6,
+    "source": "Nisan – Haziran 2021 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 40.1,
+        "source": "Şubat – Nisan 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 40.5,
+        "source": "Mart – Mayıs 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 24.6,
+        "source": "Nisan – Haziran 2021 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Mayıs 2021": {
+    "target": 20.599999999999998,
+    "source": "Mayıs – Temmuz 2021 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 54.0,
+        "source": "Mart – Mayıs 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 54.0,
+        "source": "Nisan – Haziran 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 20.599999999999998,
+        "source": "Mayıs – Temmuz 2021 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Haziran 2021": {
+    "target": 21.2,
+    "source": "Haziran – Ağustos 2021 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 41.8,
+        "source": "Nisan – Haziran 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 32.1,
+        "source": "Mayıs – Temmuz 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 21.2,
+        "source": "Haziran – Ağustos 2021 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Temmuz 2021": {
+    "target": 30.200000000000003,
+    "source": "Temmuz – Eylül 2021 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 51.0,
+        "source": "Mayıs – Temmuz 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 51.0,
+        "source": "Haziran – Ağustos 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 30.200000000000003,
+        "source": "Temmuz – Eylül 2021 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ağustos 2021": {
+    "target": 15.0,
+    "source": "Ağustos – Ekim 2021 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 14.9,
+        "source": "Haziran – Ağustos 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 15.0,
+        "source": "Temmuz – Eylül 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 15.0,
+        "source": "Ağustos – Ekim 2021 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Eylül 2021": {
+    "target": 38.0,
+    "source": "Eylül – Kasım 2021 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 43.7,
+        "source": "Temmuz – Eylül 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 42.699999999999996,
+        "source": "Ağustos – Ekim 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 38.0,
+        "source": "Eylül – Kasım 2021 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ekim 2021": {
+    "target": 33.0,
+    "source": "Ekim – Aralık 2021 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 52.1,
+        "source": "Ağustos – Ekim 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 46.1,
+        "source": "Eylül – Kasım 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 33.0,
+        "source": "Ekim – Aralık 2021 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Kasım 2021": {
+    "target": 15.1,
+    "source": "Kasım 2021 – Ocak 2022 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 20.1,
+        "source": "Eylül – Kasım 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 22.1,
+        "source": "Ekim – Aralık 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 15.1,
+        "source": "Kasım 2021 – Ocak 2022 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Aralık 2021": {
+    "target": 8.2,
+    "source": "Aralık 2021 – Şubat 2022 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 19.8,
+        "source": "Ekim – Aralık 2021 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 12.8,
+        "source": "Kasım 2021 – Ocak 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 8.2,
+        "source": "Aralık 2021 – Şubat 2022 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ocak 2022": {
+    "target": 26.1,
+    "source": "Ocak – Mart 2022 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 43.3,
+        "source": "Kasım 2021 – Ocak 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 42.9,
+        "source": "Aralık 2021 – Şubat 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 26.1,
+        "source": "Ocak – Mart 2022 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Şubat 2022": {
+    "target": 46.099999999999994,
+    "source": "Şubat – Nisan 2022 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 46.6,
+        "source": "Aralık 2021 – Şubat 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 46.6,
+        "source": "Ocak – Mart 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 46.099999999999994,
+        "source": "Şubat – Nisan 2022 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Mart 2022": {
+    "target": 31.200000000000003,
+    "source": "Mart – Mayıs 2022 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 31.5,
+        "source": "Ocak – Mart 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 31.200000000000003,
+        "source": "Şubat – Nisan 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 31.200000000000003,
+        "source": "Mart – Mayıs 2022 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Nisan 2022": {
+    "target": 24.0,
+    "source": "Nisan – Haziran 2022 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 27.0,
+        "source": "Şubat – Nisan 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 27.0,
+        "source": "Mart – Mayıs 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 24.0,
+        "source": "Nisan – Haziran 2022 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Mayıs 2022": {
+    "target": 40.5,
+    "source": "Mayıs – Temmuz 2022 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 55.5,
+        "source": "Mart – Mayıs 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 55.5,
+        "source": "Nisan – Haziran 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 40.5,
+        "source": "Mayıs – Temmuz 2022 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Haziran 2022": {
+    "target": 28.0,
+    "source": "Haziran – Ağustos 2022 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 28.0,
+        "source": "Nisan – Haziran 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 28.0,
+        "source": "Mayıs – Temmuz 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 28.0,
+        "source": "Haziran – Ağustos 2022 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Temmuz 2022": {
+    "target": 23.9,
+    "source": "Temmuz – Eylül 2022 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 18.9,
+        "source": "Mayıs – Temmuz 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 19.0,
+        "source": "Haziran – Ağustos 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 23.9,
+        "source": "Temmuz – Eylül 2022 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ağustos 2022": {
+    "target": 39.0,
+    "source": "Ağustos – Ekim 2022 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 41.9,
+        "source": "Haziran – Ağustos 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 41.9,
+        "source": "Temmuz – Eylül 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 39.0,
+        "source": "Ağustos – Ekim 2022 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Eylül 2022": {
+    "target": 47.0,
+    "source": "Eylül – Kasım 2022 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 39.5,
+        "source": "Temmuz – Eylül 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 40.0,
+        "source": "Ağustos – Ekim 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 47.0,
+        "source": "Eylül – Kasım 2022 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ekim 2022": {
+    "target": 56.900000000000006,
+    "source": "Ekim – Aralık 2022 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 38.8,
+        "source": "Ağustos – Ekim 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 47.6,
+        "source": "Eylül – Kasım 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 56.900000000000006,
+        "source": "Ekim – Aralık 2022 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Kasım 2022": {
+    "target": 53.5,
+    "source": "Kasım 2022 – Ocak 2023 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 30.5,
+        "source": "Eylül – Kasım 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 31.099999999999998,
+        "source": "Ekim – Aralık 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 53.5,
+        "source": "Kasım 2022 – Ocak 2023 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Aralık 2022": {
+    "target": 45.0,
+    "source": "Aralık 2022 – Şubat 2023 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 24.2,
+        "source": "Ekim – Aralık 2022 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 49.400000000000006,
+        "source": "Kasım 2022 – Ocak 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 45.0,
+        "source": "Aralık 2022 – Şubat 2023 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ocak 2023": {
+    "target": 52.4,
+    "source": "Ocak – Mart 2023 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 64.2,
+        "source": "Kasım 2022 – Ocak 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 61.699999999999996,
+        "source": "Aralık 2022 – Şubat 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 52.4,
+        "source": "Ocak – Mart 2023 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Şubat 2023": {
+    "target": 52.0,
+    "source": "Şubat – Nisan 2023 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 36.5,
+        "source": "Aralık 2022 – Şubat 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 36.4,
+        "source": "Ocak – Mart 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 52.0,
+        "source": "Şubat – Nisan 2023 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Mart 2023": {
+    "target": 57.5,
+    "source": "Mart – Mayıs 2023 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 47.5,
+        "source": "Ocak – Mart 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 47.5,
+        "source": "Şubat – Nisan 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 57.5,
+        "source": "Mart – Mayıs 2023 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Nisan 2023": {
+    "target": 30.0,
+    "source": "Nisan – Haziran 2023 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 35.0,
+        "source": "Şubat – Nisan 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 35.0,
+        "source": "Mart – Mayıs 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 30.0,
+        "source": "Nisan – Haziran 2023 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Mayıs 2023": {
+    "target": 50.0,
+    "source": "Mayıs – Temmuz 2023 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 85.0,
+        "source": "Mart – Mayıs 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 85.0,
+        "source": "Nisan – Haziran 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 50.0,
+        "source": "Mayıs – Temmuz 2023 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Haziran 2023": {
+    "target": 48.0,
+    "source": "Haziran – Ağustos 2023 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 64.0,
+        "source": "Nisan – Haziran 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 64.0,
+        "source": "Mayıs – Temmuz 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 48.0,
+        "source": "Haziran – Ağustos 2023 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Temmuz 2023": {
+    "target": 34.0,
+    "source": "Temmuz – Eylül 2023 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 80.0,
+        "source": "Mayıs – Temmuz 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 80.0,
+        "source": "Haziran – Ağustos 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 34.0,
+        "source": "Temmuz – Eylül 2023 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ağustos 2023": {
+    "target": 80.0,
+    "source": "Ağustos – Ekim 2023 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 85.0,
+        "source": "Haziran – Ağustos 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 96.0,
+        "source": "Temmuz – Eylül 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 80.0,
+        "source": "Ağustos – Ekim 2023 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Eylül 2023": {
+    "target": 107.0,
+    "source": "Eylül – Kasım 2023 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 80.0,
+        "source": "Temmuz – Eylül 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 80.0,
+        "source": "Ağustos – Ekim 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 107.0,
+        "source": "Eylül – Kasım 2023 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ekim 2023": {
+    "target": 65.5,
+    "source": "Ekim – Aralık 2023 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 68.0,
+        "source": "Ağustos – Ekim 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 68.0,
+        "source": "Eylül – Kasım 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 65.5,
+        "source": "Ekim – Aralık 2023 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Kasım 2023": {
+    "target": 76.5,
+    "source": "Kasım 2023 – Ocak 2024 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 78.0,
+        "source": "Eylül – Kasım 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 78.0,
+        "source": "Ekim – Aralık 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 76.5,
+        "source": "Kasım 2023 – Ocak 2024 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Aralık 2023": {
+    "target": 43.0,
+    "source": "Aralık 2023 – Şubat 2024 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 40.0,
+        "source": "Ekim – Aralık 2023 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 40.0,
+        "source": "Kasım 2023 – Ocak 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 43.0,
+        "source": "Aralık 2023 – Şubat 2024 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ocak 2024": {
+    "target": 119.0,
+    "source": "Ocak – Mart 2024 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 116.2,
+        "source": "Kasım 2023 – Ocak 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 116.0,
+        "source": "Aralık 2023 – Şubat 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 119.0,
+        "source": "Ocak – Mart 2024 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Şubat 2024": {
+    "target": 91.5,
+    "source": "Şubat – Nisan 2024 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 260.8,
+        "source": "Aralık 2023 – Şubat 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 247.2,
+        "source": "Ocak – Mart 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 91.5,
+        "source": "Şubat – Nisan 2024 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Mart 2024": {
+    "target": 89.1,
+    "source": "Mart – Mayıs 2024 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 127.8,
+        "source": "Ocak – Mart 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 128.4,
+        "source": "Şubat – Nisan 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 89.1,
+        "source": "Mart – Mayıs 2024 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Nisan 2024": {
+    "target": 125.9,
+    "source": "Nisan – Haziran 2024 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 154.5,
+        "source": "Şubat – Nisan 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 164.8,
+        "source": "Mart – Mayıs 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 125.9,
+        "source": "Nisan – Haziran 2024 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Mayıs 2024": {
+    "target": 160.0,
+    "source": "Mayıs – Temmuz 2024 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 205.4,
+        "source": "Mart – Mayıs 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 204.4,
+        "source": "Nisan – Haziran 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 160.0,
+        "source": "Mayıs – Temmuz 2024 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Haziran 2024": {
+    "target": 202.6,
+    "source": "Haziran – Ağustos 2024 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 207.7,
+        "source": "Nisan – Haziran 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 218.2,
+        "source": "Mayıs – Temmuz 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 202.6,
+        "source": "Haziran – Ağustos 2024 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Temmuz 2024": {
+    "target": 143.4,
+    "source": "Temmuz – Eylül 2024 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 173.6,
+        "source": "Mayıs – Temmuz 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 193.6,
+        "source": "Haziran – Ağustos 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 143.4,
+        "source": "Temmuz – Eylül 2024 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ağustos 2024": {
+    "target": 148.0,
+    "source": "Ağustos – Ekim 2024 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 177.2,
+        "source": "Haziran – Ağustos 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 165.0,
+        "source": "Temmuz – Eylül 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 148.0,
+        "source": "Ağustos – Ekim 2024 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Eylül 2024": {
+    "target": 174.0,
+    "source": "Eylül – Kasım 2024 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 182.1,
+        "source": "Temmuz – Eylül 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 180.0,
+        "source": "Ağustos – Ekim 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 174.0,
+        "source": "Eylül – Kasım 2024 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ekim 2024": {
+    "target": 176.3,
+    "source": "Ekim – Aralık 2024 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 197.7,
+        "source": "Ağustos – Ekim 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 199.5,
+        "source": "Eylül – Kasım 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 176.3,
+        "source": "Ekim – Aralık 2024 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Kasım 2024": {
+    "target": 177.6,
+    "source": "Kasım 2024 – Ocak 2025 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 163.0,
+        "source": "Eylül – Kasım 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 175.0,
+        "source": "Ekim – Aralık 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 177.6,
+        "source": "Kasım 2024 – Ocak 2025 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Aralık 2024": {
+    "target": 126.8,
+    "source": "Aralık 2024 – Şubat 2025 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 110.0,
+        "source": "Ekim – Aralık 2024 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 120.0,
+        "source": "Kasım 2024 – Ocak 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 126.8,
+        "source": "Aralık 2024 – Şubat 2025 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ocak 2025": {
+    "target": 201.5,
+    "source": "Ocak – Mart 2025 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 272.6,
+        "source": "Kasım 2024 – Ocak 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 280.8,
+        "source": "Aralık 2024 – Şubat 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 201.5,
+        "source": "Ocak – Mart 2025 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Şubat 2025": {
+    "target": 175.9,
+    "source": "Şubat – Nisan 2025 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 151.7,
+        "source": "Aralık 2024 – Şubat 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 162.2,
+        "source": "Ocak – Mart 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 175.9,
+        "source": "Şubat – Nisan 2025 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Mart 2025": {
+    "target": 201.2,
+    "source": "Mart – Mayıs 2025 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 156.3,
+        "source": "Ocak – Mart 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 179.5,
+        "source": "Şubat – Nisan 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 201.2,
+        "source": "Mart – Mayıs 2025 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Nisan 2025": {
+    "target": 301.1,
+    "source": "Nisan – Haziran 2025 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 351.90000000000003,
+        "source": "Şubat – Nisan 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 328.5,
+        "source": "Mart – Mayıs 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 301.1,
+        "source": "Nisan – Haziran 2025 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Mayıs 2025": {
+    "target": 105.1,
+    "source": "Mayıs – Temmuz 2025 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 174.89999999999998,
+        "source": "Mart – Mayıs 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 174.89999999999998,
+        "source": "Nisan – Haziran 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 105.1,
+        "source": "Mayıs – Temmuz 2025 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Haziran 2025": {
+    "target": 265.0,
+    "source": "Haziran – Ağustos 2025 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 280.5,
+        "source": "Nisan – Haziran 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 260.5,
+        "source": "Mayıs – Temmuz 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 265.0,
+        "source": "Haziran – Ağustos 2025 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Temmuz 2025": {
+    "target": 195.9,
+    "source": "Temmuz – Eylül 2025 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 343.70000000000005,
+        "source": "Mayıs – Temmuz 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 338.0,
+        "source": "Haziran – Ağustos 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 195.9,
+        "source": "Temmuz – Eylül 2025 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ağustos 2025": {
+    "target": 250.8,
+    "source": "Ağustos – Ekim 2025 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 396.0,
+        "source": "Haziran – Ağustos 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 384.5,
+        "source": "Temmuz – Eylül 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 250.8,
+        "source": "Ağustos – Ekim 2025 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Eylül 2025": {
+    "target": 321.0,
+    "source": "Eylül – Kasım 2025 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 282.4,
+        "source": "Temmuz – Eylül 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 317.0,
+        "source": "Ağustos – Ekim 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 321.0,
+        "source": "Eylül – Kasım 2025 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ekim 2025": {
+    "target": 255.1,
+    "source": "Ekim – Aralık 2025 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 338.7,
+        "source": "Ağustos – Ekim 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 325.7,
+        "source": "Eylül – Kasım 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 255.1,
+        "source": "Ekim – Aralık 2025 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Kasım 2025": {
+    "target": 68.3,
+    "source": "Kasım 2025 – Ocak 2026 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 111.5,
+        "source": "Eylül – Kasım 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 107.6,
+        "source": "Ekim – Aralık 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 68.3,
+        "source": "Kasım 2025 – Ocak 2026 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Aralık 2025": {
+    "target": 109.2,
+    "source": "Aralık 2025 – Şubat 2026 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 120.8,
+        "source": "Ekim – Aralık 2025 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 126.1,
+        "source": "Kasım 2025 – Ocak 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 109.2,
+        "source": "Aralık 2025 – Şubat 2026 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ocak 2026": {
+    "target": 327.7,
+    "source": "Ocak – Mart 2026 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 559.0,
+        "source": "Kasım 2025 – Ocak 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 522.6,
+        "source": "Aralık 2025 – Şubat 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 327.7,
+        "source": "Ocak – Mart 2026 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Şubat 2026": {
+    "target": 225.3,
+    "source": "Şubat – Nisan 2026 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 563.0,
+        "source": "Aralık 2025 – Şubat 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 227.9,
+        "source": "Ocak – Mart 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 225.3,
+        "source": "Şubat – Nisan 2026 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
   "Mart 2026": {
     "target": 170.5,
     "source": "Mart – Mayıs 2026 İç Borçlanma Stratejisi",
+    "parser": 2,
     "history": [
+      {
+        "target": 179.20000000000002,
+        "source": "Ocak – Mart 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 151.9,
+        "source": "Şubat – Nisan 2026 İç Borçlanma Stratejisi"
+      },
       {
         "target": 170.5,
         "source": "Mart – Mayıs 2026 İç Borçlanma Stratejisi"
@@ -12,7 +1434,12 @@
   "Nisan 2026": {
     "target": 250.1,
     "source": "Nisan – Haziran 2026 İç Borçlanma Stratejisi",
+    "parser": 2,
     "history": [
+      {
+        "target": 228.6,
+        "source": "Şubat – Nisan 2026 İç Borçlanma Stratejisi"
+      },
       {
         "target": 248.9,
         "source": "Mart – Mayıs 2026 İç Borçlanma Stratejisi"
@@ -26,6 +1453,7 @@
   "Mayıs 2026": {
     "target": 161.7,
     "source": "Mayıs – Temmuz 2026 İç Borçlanma Stratejisi",
+    "parser": 2,
     "history": [
       {
         "target": 133.9,
@@ -44,6 +1472,7 @@
   "Haziran 2026": {
     "target": 303.8,
     "source": "Haziran – Ağustos 2026 İç Borçlanma Stratejisi",
+    "parser": 2,
     "history": [
       {
         "target": 412.1,
@@ -62,6 +1491,7 @@
   "Temmuz 2026": {
     "target": 276.8,
     "source": "Temmuz – Eylül 2026 İç Borçlanma Stratejisi",
+    "parser": 2,
     "history": [
       {
         "target": 309.7,
@@ -78,8 +1508,9 @@
     ]
   },
   "Ağustos 2026": {
-    "target": 417.0,
-    "source": "Temmuz – Eylül 2026 İç Borçlanma Stratejisi",
+    "target": 371.7,
+    "source": "Ağustos – Ekim 2026 İç Borçlanma Stratejisi",
+    "parser": 2,
     "history": [
       {
         "target": 355.8,
@@ -88,16 +1519,36 @@
       {
         "target": 417.0,
         "source": "Temmuz – Eylül 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 371.7,
+        "source": "Ağustos – Ekim 2026 İç Borçlanma Stratejisi"
       }
     ]
   },
   "Eylül 2026": {
-    "target": 294.2,
-    "source": "Temmuz – Eylül 2026 İç Borçlanma Stratejisi",
+    "target": 247.9,
+    "source": "Ağustos – Ekim 2026 İç Borçlanma Stratejisi",
+    "parser": 2,
     "history": [
       {
         "target": 294.2,
         "source": "Temmuz – Eylül 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 247.9,
+        "source": "Ağustos – Ekim 2026 İç Borçlanma Stratejisi"
+      }
+    ]
+  },
+  "Ekim 2026": {
+    "target": 235.1,
+    "source": "Ağustos – Ekim 2026 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 235.1,
+        "source": "Ağustos – Ekim 2026 İç Borçlanma Stratejisi"
       }
     ]
   }
