@@ -23,9 +23,13 @@ def create_cumulative_charts(df: pd.DataFrame, output_dir: str = "charts",
         theme: Plotly tema
         currency_unit: Para birimi etiketi
     """
-    # İlk değişim noktasından sonrasını al
-    df_plot = df[df['Toplam_Cumulative'] != 0].copy()
-    
+    # Tüm gözlemler çizilir. (Eskiden Toplam_Cumulative != 0 filtresi vardı;
+    # EVDS'in seri başlamadan önce döndürdüğü boş satırlar sıfırla doldurulduğu
+    # için gerekiyordu. O satırlar artık fetcher'da atılıyor — filtre bugün
+    # yalnızca kümülatifin tesadüfen tam sıfırdan geçtiği gerçek bir haftayı
+    # grafikten düşürme riski taşırdı.)
+    df_plot = df.copy()
+
     if df_plot.empty:
         print("   ⚠️  Kümülatif veri bulunamadı")
         return
@@ -83,10 +87,8 @@ def create_cumulative_charts(df: pd.DataFrame, output_dir: str = "charts",
     y2_min = df_plot['Toplam_Cumulative'].min()
     y2_max = df_plot['Toplam_Cumulative'].max()
     
-    # Y ekseni için grid aralığını hesapla (daha fazla grid çizgisi için)
     y1_range = y1_max - y1_min
-    y1_dtick = y1_range / 20  # 20 major grid çizgisi için
-    
+
     # X ekseni için tarih aralığını hesapla
     date_range = (df_plot['Tarih'].max() - df_plot['Tarih'].min()).days
     # Daha fazla tarih gösterimi için tick sayısını artır
@@ -105,29 +107,30 @@ def create_cumulative_charts(df: pd.DataFrame, output_dir: str = "charts",
         showspikes=True
     )
     
-    # Primary axis (DIBS ve Hisse) - daha fazla grid çizgisi
+    # Primary axis (DIBS ve Hisse)
+    # dtick=aralık/20 VERİLMEZ: sabit bölme, ölçeğe göre "28.12k / 26.46k" gibi
+    # yuvarlak olmayan etiketler üretiyordu. nticks ile yoğunluk korunur, tik
+    # değerlerini Plotly yuvarlak sayılardan seçer.
     fig.update_yaxes(
         title_text=f"DIBS ve Hisse ({currency_unit})",
         secondary_y=False,
         showgrid=True,
         gridwidth=1,
         gridcolor='rgba(128, 128, 128, 0.3)',
-        dtick=y1_dtick,  # Major grid aralığı
-        # Daha fazla grid için range'i biraz genişlet
+        nticks=14,
+        # Uçların ızgaraya yapışmaması için range'i biraz genişlet
         range=[y1_min - y1_range * 0.05, y1_max + y1_range * 0.05]
     )
     
-    # Secondary axis (Toplam) - Primary ile aynı grid çizgileri için
-    # Secondary axis'in grid'ini kapat, primary'deki grid görünsün
-    # Ancak değerleri primary ile uyumlu hale getir
+    # Secondary axis (Toplam) — ızgarası kapalı; primary'nin ızgarası görünsün
+    # (iki ayrı ızgaranın üst üste binmesi grafiği okunmaz yapıyordu).
     y2_range = y2_max - y2_min
-    y2_dtick = y2_range / 20  # Aynı sayıda grid çizgisi
-    
+
     fig.update_yaxes(
         title_text=f"Toplam ({currency_unit})",
         secondary_y=True,
-        showgrid=False,  # Secondary axis grid'ini kapat (primary'deki görünsün)
-        dtick=y2_dtick,
+        showgrid=False,
+        nticks=14,  # primary ile aynı yoğunluk (gerekçe: yukarıdaki not)
         range=[y2_min - y2_range * 0.05, y2_max + y2_range * 0.05]
     )
     
@@ -265,31 +268,21 @@ def create_ytd_charts(df: pd.DataFrame, output_dir: str = "charts",
             for year, month_weeks in month_starts_by_year.items():
                 for month, week in month_weeks.items():
                     month_week_lists[month].append(week)
-            
+
             # Her ay için ortalama hafta numarasını hesapla ve dikey çizgi ekle
             # Tüm aylar için çizgi ekle (veri olmasa bile)
             for month in range(1, 13):
                 if month_week_lists[month]:
-                    # Tüm yıllardan hafta numaralarını al
+                    # Hafta numaraları artık "yılın kaçıncı Cuma'sı" (1..53);
+                    # yıl sınırında 53'e sıçrayan ISO numarası olmadığı için
+                    # eskiden burada duran "53 ise 1 yap" düzeltmesi kaldırıldı.
+                    # Ocak'ta 53 görülmesi mümkün değil; ortalama doğrudan alınır.
                     weeks = month_week_lists[month]
-                    # ISO hafta numaraları 53'e kadar çıkabilir, bunları düzelt
-                    # Eğer hafta 53 ise, muhtemelen yılın ilk haftası (1. hafta olmalı)
-                    normalized_weeks = []
-                    for w in weeks:
-                        if w >= 53:
-                            normalized_weeks.append(1)  # Yılın ilk haftası
-                        else:
-                            normalized_weeks.append(w)
-                    
-                    avg_week = sum(normalized_weeks) / len(normalized_weeks)
-                    week_num = round(avg_week)
-                    
-                    # Hafta numarasını 1-52 aralığında tut
-                    if week_num < 1:
-                        week_num = 1
-                    elif week_num > 52:
-                        week_num = 52
-                    
+                    week_num = round(sum(weeks) / len(weeks))
+
+                    # Hafta numarasını geçerli aralıkta tut
+                    week_num = max(1, min(53, week_num))
+
                     # Dikey çizgi ekle (ay başlangıcı)
                     fig.add_shape(
                         type="line",
@@ -354,8 +347,7 @@ def create_ytd_charts(df: pd.DataFrame, output_dir: str = "charts",
         y_min = df[column_name].min()
         y_max = df[column_name].max()
         y_range = y_max - y_min
-        y_dtick = y_range / 30  # 30 major grid çizgisi (daha sık)
-        
+
         # Layout ayarları
         fig.update_layout(
             title={
@@ -393,11 +385,13 @@ def create_ytd_charts(df: pd.DataFrame, output_dir: str = "charts",
             )
         )
         
+        # dtick=aralık/30 VERİLMEZ: yuvarlak olmayan tik etiketleri üretiyordu
+        # ("17.167k / 16.421k"). nticks yoğunluğu korur, değerleri Plotly yuvarlar.
         fig.update_yaxes(
             showgrid=True,
             gridwidth=1,
             gridcolor='rgba(128, 128, 128, 0.3)',
-            dtick=y_dtick,  # Major grid aralığı
+            nticks=14,
             minor=dict(
                 showgrid=True,
                 gridwidth=0.5,

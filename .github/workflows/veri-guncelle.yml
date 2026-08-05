@@ -81,6 +81,21 @@ jobs:
           cp usdtry_reer_analysis_5y.html  "$H/redk_usdtry_analiz_5y.html"
           python ozet_uret.py && cp ozet.json "$H/"
 
+      - name: Yabancı pozisyonu (EVDS → kümülatif & YTD akım grafikleri)
+        continue-on-error: true
+        working-directory: Aktarılacak Projeler/ForeignHoldings
+        env:
+          # Anahtar depo secret'ından gelir; kodda gömülü varsayılan kullanılmaz.
+          TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
+        run: |
+          python main.py
+          H="../../site/public/projeler/yabanci-pozisyon"
+          cp charts/cumulative_chart.html "$H/kumulatif.html"
+          cp charts/ytd_dibs.html         "$H/ytd_dibs.html"
+          cp charts/ytd_hisse.html        "$H/ytd_hisse.html"
+          cp charts/ytd_toplam.html       "$H/ytd_toplam.html"
+          python ozet_uret.py && cp ozet.json "$H/"
+
       - name: Hazine tahmin grafikleri (depodaki CSV'lerden)
         continue-on-error: true
         working-directory: Aktarılacak Projeler/hazineihrac

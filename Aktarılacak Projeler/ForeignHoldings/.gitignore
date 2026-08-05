@@ -12,6 +12,10 @@ ENV/
 # Environment variables
 .env
 
+# EVDS anahtarı — yerelde burada durur, ASLA commit edilmez
+# (CI'da TTO_EVDS_KEY ortam değişkeni / depo secret'ı kullanılır)
+.evds_key
+
 # Output
 charts/
 *.html
