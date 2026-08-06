@@ -5,6 +5,17 @@
  * Slot içeriği statik yedektir (JSON yüklenemezse veya derleme anında görünür);
  * sayfa açılınca /projeler/<proje>/ozet.json çekilir ve tüm değerler güncellenir.
  * Böylece sayfa metnindeki sayılar, veri güncellendikçe MDX'e dokunmadan tazelenir.
+ *
+ * BİÇİM UYARISI — aşağıdaki script ve style blokları bilerek span'ın kapanış
+ * etiketine YAPIŞIK yazıldı; araya boş satır KOYMAYIN. Astro bu blokları şablondan
+ * söküp hoist eder, ama aralarındaki satır sonları çıktıda boşluk metni olarak kalır
+ * ve span'ın hemen ardına iki boşluk basılırdı. Değerin peşine yapışması gereken
+ * noktalama bu yüzden ayrık görünüyordu: "%7,3" yerine "7,3 %", "1,80x" yerine
+ * "1,80 x", "307'ye" yerine "307 'ye", "(21.07.2026)." yerine "(21.07.2026 ).".
+ *
+ * (Bu açıklamada script/style sözcükleri bilerek açılı ayraçsız yazıldı: frontmatter
+ * yorumunda geçen gerçek bir etiket, Astro'nun tarayıcısını yanıltıp `astro dev`i
+ * "Unterminated regular expression" ile düşürüyor — derleme geçse bile.)
  */
 interface Props {
   proje: string;
@@ -18,9 +29,7 @@ const { proje, anahtar, ondalik = 1 } = Astro.props;
   class="canli-deger"
   data-proje={proje}
   data-anahtar={anahtar}
-  data-ondalik={ondalik}><slot>…</slot></span>
-
-<script>
+  data-ondalik={ondalik}><slot>…</slot></span><script>
   // Sayfa başına tek sefer: span'ları projeye göre grupla, ozet.json'ları çek, doldur.
   const alanlar = [...document.querySelectorAll('span.canli-deger')] as HTMLElement[];
   const projeler = [...new Set(alanlar.map((a) => a.dataset.proje!))];
@@ -55,9 +64,7 @@ const { proje, anahtar, ondalik = 1 } = Astro.props;
       /* statik yedek metin kalır */
     }
   });
-</script>
-
-<style>
+</script><style>
   .canli-deger {
     font-variant-numeric: tabular-nums;
     border-bottom: 1px dotted var(--ink-30);

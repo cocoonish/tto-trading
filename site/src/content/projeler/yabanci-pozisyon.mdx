@@ -24,7 +24,7 @@ tarihinde başlıyor; şu an <Deger proje="yabanci-pozisyon" anahtar="hafta_sayi
 haftalık gözlem var ve son gözlem
 <Deger proje="yabanci-pozisyon" anahtar="son_hafta" ondalik={0}>24.07.2026</Deger>
 (bugüne göre <Deger proje="yabanci-pozisyon" anahtar="gecikme_gun" ondalik={0}>12</Deger>
-gün gecikme; tazelik denetimi <Deger proje="yabanci-pozisyon" anahtar="tazelik" ondalik={0}>güncel</Deger> diyor).
+gün gecikme, durum: <Deger proje="yabanci-pozisyon" anahtar="tazelik" ondalik={0}>güncel</Deger>).
 
 ## Veri: TCMB Haftalık Menkul Kıymet İstatistikleri
 
@@ -131,7 +131,7 @@ yürütenler yerleşiktir. İki sonucu sezgiye aykırıdır ve akım okurken ön
 ### Şekil 01 nasıl hesaplanıyor?
 
 **Veri.** `TP.MKNETHAR.M7` ve `TP.MKNETHAR.M8`, EVDS'ten tek istekle,
-<Deger proje="yabanci-pozisyon" anahtar="baslangic" ondalik={0}>11.09.2020</Deger> tarihinden
+<Deger proje="yabanci-pozisyon" anahtar="baslangic" ondalik={0}>11.09.2020</Deger>'den
 bugüne çekilir. Sorgu bitişi bilerek 10 gün ileri alınır: EVDS gelecek tarihli bitiş
 için yalnız yayımlanmış satırları döner, böylece Perşembe yayımının düştüğü gün
 sınırda kaçırılmaz.
@@ -171,7 +171,7 @@ eksende de ızgara 20 aralığa bölünür, ikincil eksenin ızgarası kapatıl�
 (kümülatif toplam 2023 Haziran'ında **−5,9 milyar USD** dibine iner); 2023 ortasından
 itibaren politika dönüşüyle DİBS'te sert giriş; ve 2026 Şubat'ından bu yana
 düzeltme — kümülatif toplam
-<Deger proje="yabanci-pozisyon" anahtar="kum_zirve_tarih" ondalik={0}>13.02.2026</Deger> haftasında
+<Deger proje="yabanci-pozisyon" anahtar="kum_zirve_tarih" ondalik={0}>13.02.2026</Deger>'de
 <Deger proje="yabanci-pozisyon" anahtar="kum_zirve" ondalik={0}>25.403</Deger>
 milyon USD zirvesini gördükten sonra
 <Deger proje="yabanci-pozisyon" anahtar="kum_zirveden" ondalik={0}>−4.122</Deger>
@@ -257,9 +257,9 @@ varsayın, kesin ay sınırı olarak okumayın.
 
 **Kısmi yıllar.** 2020 çizgisi 37. haftada başlar; seri o hafta başladığı için
 öncesinde veri yoktur. Çizginin Ocak-Eylül arasında **hiç olmaması**, "akım sıfırdı"
-değil "veri yok" demektir. Aynı şekilde 2026 çizgisi, yılın
-<Deger proje="yabanci-pozisyon" anahtar="hafta_no" ondalik={0}>30</Deger> numaralı
-haftasında — son gözlemde — biter.
+değil "veri yok" demektir. Aynı şekilde 2026 çizgisi
+<Deger proje="yabanci-pozisyon" anahtar="hafta_no" ondalik={0}>30</Deger>. haftada,
+yani son gözlemde biter.
 
 **Ne anlatıyor.** Şekil 02'de 2024 çizgisi diğer bütün yılların üstünde ayrı bir
 kulvarda durur: o yıl DİBS'e **+16.088** milyon USD net giriş oldu ve bunun **%97'si
@@ -282,7 +282,7 @@ bir seridir.
   düz-sıfır çizgiler basılıyor ve haftalık istatistikler (ortalama, standart sapma,
   pozitif hafta oranı) bu sahte sıfırlarla seyreliyordu. Boş satırlar artık çekim
   aşamasında atılıyor; gözlem sayısı 1.000'den gerçek değeri olan
-  <Deger proje="yabanci-pozisyon" anahtar="hafta_sayisi" ondalik={0}>307</Deger> gözleme indi.
+  <Deger proje="yabanci-pozisyon" anahtar="hafta_sayisi" ondalik={0}>307</Deger>'ye indi.
   <strong>(2) ISO hafta numarası.</strong> YTD ekseni ISO 8601 hafta numarasını
   kullanıyordu; 01.01.2021 Cuma'sının ISO numarası 2020'ye ait 53 olduğu için 2021
   çizgisi grafiğin sağ ucundan başlıyor, yılın tamamı bir hafta kayıyordu. Eksen
@@ -298,13 +298,13 @@ toplam **+<Deger proje="yabanci-pozisyon" anahtar="toplam_hafta" ondalik={0}>845
 
 **Son 4 hafta:** DİBS +<Deger proje="yabanci-pozisyon" anahtar="dibs_4h" ondalik={0}>2.800</Deger> ·
 hisse +<Deger proje="yabanci-pozisyon" anahtar="hisse_4h" ondalik={0}>121</Deger> ·
-toplam **+<Deger proje="yabanci-pozisyon" anahtar="toplam_4h" ondalik={0}>2.921</Deger>** oldu.
+toplam **+<Deger proje="yabanci-pozisyon" anahtar="toplam_4h" ondalik={0}>2.921</Deger>**.
 **Son 13 hafta:** DİBS +<Deger proje="yabanci-pozisyon" anahtar="dibs_13h" ondalik={0}>3.170</Deger> ·
 hisse <Deger proje="yabanci-pozisyon" anahtar="hisse_13h" ondalik={0}>−867</Deger> ·
 toplam +<Deger proje="yabanci-pozisyon" anahtar="toplam_13h" ondalik={0}>2.303</Deger> — çeyreklik
 pencerede hisseden çıkış sürerken DİBS girişi onu fazlasıyla telafi ediyor.
 
-**Yılbaşından bugüne (yılın <Deger proje="yabanci-pozisyon" anahtar="hafta_no" ondalik={0}>30</Deger> numaralı haftası):**
+**Yılbaşından bugüne (<Deger proje="yabanci-pozisyon" anahtar="hafta_no" ondalik={0}>30</Deger>. hafta):**
 DİBS +<Deger proje="yabanci-pozisyon" anahtar="dibs_ytd" ondalik={0}>2.026</Deger> ·
 hisse +<Deger proje="yabanci-pozisyon" anahtar="hisse_ytd" ondalik={0}>1.586</Deger> ·
 toplam **+<Deger proje="yabanci-pozisyon" anahtar="toplam_ytd" ondalik={0}>3.612</Deger>** milyon USD.

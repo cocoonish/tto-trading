@@ -21,6 +21,14 @@ permissions:
 jobs:
   guncelle:
     runs-on: ubuntu-latest
+    # EVDS anahtarı İŞ DÜZEYİNDE tanımlanır, adım bazında DEĞİL. Dört hat da
+    # (TCMBNetRezerv, USDTRYDeval, TRYREER, ForeignHoldings) anahtarı
+    # TTO_EVDS_KEY ortam değişkeninden okur; adım bazında verildiğinde env'i
+    # unutulan adımlar anahtarsız koşar ve continue-on-error yüzünden İŞ YEŞİL
+    # KALIRKEN sessizce hiçbir şey üretmez. (Daha önce tam olarak bu oldu:
+    # TCMB net rezerv ve USDTRY adımlarında env bloğu yoktu.)
+    env:
+      TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -66,9 +74,6 @@ jobs:
       - name: TRY REER (EVDS → REDK sapma & regresyon panelleri)
         continue-on-error: true
         working-directory: Aktarılacak Projeler/TRYREER
-        env:
-          # Anahtar depo secret'ından gelir; kodda gömülü varsayılan kullanılmaz.
-          TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
         run: |
           python main.py
           python usdtry_reer_analysis.py
@@ -84,9 +89,6 @@ jobs:
       - name: Yabancı pozisyonu (EVDS → kümülatif & YTD akım grafikleri)
         continue-on-error: true
         working-directory: Aktarılacak Projeler/ForeignHoldings
-        env:
-          # Anahtar depo secret'ından gelir; kodda gömülü varsayılan kullanılmaz.
-          TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
         run: |
           python main.py
           H="../../site/public/projeler/yabanci-pozisyon"
