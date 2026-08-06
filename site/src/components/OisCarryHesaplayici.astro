@@ -27,7 +27,8 @@
 
   <p class="hesap-yonerge">
     Ters eğride "taşımayı kim ödüyor?" sorusunun sayısal cevabı. Eğri noktalarını
-    değiştirebilirsiniz; annuity çeyreklik ödemeli, ACT/365 basit iskontoyla kurulur.
+    değiştirebilirsiniz; annuity seçili kupon sıklığıyla, ACT/365 basit iskontoyla kurulur
+    (masa standardı <b>3 aylık</b>).
     Varsayılanlar dersteki temsili eğri ve §2.3 vakasıdır.
   </p>
 
@@ -52,6 +53,12 @@
       <input type="number" id="oc-h" value="92" step="1" min="1" /></label>
     <label><span class="etiket">Beklenen ort. TLREF (%)</span>
       <input type="number" id="oc-tlref" value="39.95" step="0.05" /></label>
+    <label><span class="etiket">Kupon sıklığı</span>
+      <select id="oc-frek">
+        <option value="4" selected>3 aylık (çeyreklik) — masa standardı</option>
+        <option value="2">6 aylık</option>
+        <option value="1">Yıllık (bazı offshore kotasyonları)</option>
+      </select></label>
   </div>
 
   <div class="orta">
@@ -59,6 +66,12 @@
     <div><span class="etiket">A(T−h)</span><output class="ara-deger" id="oc-ath">—</output></div>
     <div><span class="etiket">DV01</span><output class="ara-deger" id="oc-dv01">—</output></div>
     <div><span class="etiket">T−h kotasyonu (eğriden)</span><output class="ara-deger" id="oc-sth">—</output></div>
+  </div>
+
+  <div class="takvim">
+    <span class="etiket blok-baslik">Kupon takvimi — her iki bacak da bu tarihlerde öder</span>
+    <p class="takvim-satir" id="oc-takvim">—</p>
+    <p class="mini-not" id="oc-frek-not">—</p>
   </div>
 
   <div class="tablo-kab">
@@ -142,15 +155,18 @@
   // "t <= T" döngüsü kurulursa T=0,7479 (1y'nin 92 gün rolldown'u) gibi kesirli
   // vadelerde SON KUPON SESSİZCE DÜŞER: annuity 0,63 yerine 0,44 çıkar ve
   // rolldown üçte bir eksik hesaplanır.
-  function annuite(T: number, oran: (t: number) => number) {
-    if (T <= 0) return 0;
-    const adim = 0.25;
+  function takvim(T: number, frek: number) {
+    if (T <= 0) return [];
+    const adim = 1 / frek;
     const odeme: number[] = [];
     for (let x = adim; x < T - adim / 2; x += adim) odeme.push(Number(x.toFixed(6)));
     odeme.push(T);
+    return odeme;
+  }
 
+  function annuite(T: number, oran: (t: number) => number, frek = 4) {
     let A = 0, onc = 0;
-    for (const t of odeme) {
+    for (const t of takvim(T, frek)) {
       const z = oran(t) / 100;
       A += (1 / (1 + z * t)) * (t - onc);
       onc = t;
@@ -171,9 +187,13 @@
     const rec = (document.getElementById('oc-yon') as HTMLSelectElement).value === 'rec';
     if (!(N > 0 && T > 0 && h > 0)) return;
 
-    const Th = Math.max(T - h / 365, 0.25);
-    const A_T = annuite(T, oran);
-    const A_Th = annuite(Th, oran);
+    const frek = parseInt((document.getElementById('oc-frek') as HTMLSelectElement).value);
+    // Kalan vade ufka göre kısalır; TABAN kupon sıklığına BAĞLI DEĞİLDİR.
+    // (1/frek tabanı konulursa yıllık ödemede T=1y, h=92g için Th 0,75 yerine
+    //  1,0'a kırpılır ve rolldown sahte biçimde sıfırlanırdı.)
+    const Th = Math.max(T - h / 365, 1 / 365);
+    const A_T = annuite(T, oran, frek);
+    const A_Th = annuite(Th, oran, frek);
     const S_Th = oran(Th);
     const dv01 = A_T * N * 1e-4;
 
@@ -191,6 +211,29 @@
     yaz('oc-ath', tr(A_Th, 4));
     yaz('oc-dv01', tr(dv01, 0) + ' TL/bp');
     yaz('oc-sth', '%' + tr(S_Th));
+
+    // --- Kupon takvimi: konvansiyonu görünür kıl ---
+    const od = takvim(T, frek);
+    const ay = (t: number) => Math.round(t * 12);
+    const gosterilecek = od.length <= 10 ? od : [...od.slice(0, 4), NaN, ...od.slice(-2)];
+    yaz('oc-takvim',
+      `${od.length} kupon · ` +
+      gosterilecek.map((t) => (isNaN(t) ? '…' : `${ay(t)}a`)).join(' · ') +
+      `  (son periyot ${tr((od[od.length - 1] - (od[od.length - 2] ?? 0)) * 12, 1)} ay)`);
+
+    // Aynı eğride diğer sıklıkların par oranı — §1.2'deki uyarının sayısı
+    const dfT = 1 / (1 + (oran(T) / 100) * T);
+    const parOran = (f: number) => ((1 - dfT) / annuite(T, oran, f)) * 100;
+    const p4 = parOran(4), pf = parOran(frek), p1 = parOran(1);
+    const frekAd: Record<number, string> = { 4: 'çeyreklik', 2: '6 aylık', 1: 'yıllık' };
+    (document.getElementById('oc-frek-not') as HTMLElement).innerHTML =
+      `Aynı iskonto eğrisinde ${tr(T, 2)}y par oranı: <b>çeyreklik %${tr(p4)}</b> · ` +
+      `6 aylık %${tr(parOran(2))} · <b>yıllık %${tr(p1)}</b> — ` +
+      `çeyreklik ile yıllık arasında <b>${tr((p1 - p4) * 100, 0)} bp</b>. ` +
+      (frek === 4
+        ? 'Masa standardı çeyrekliktir; karşı taraf yıllık kote ediyorsa aynı ekonomiyi farklı sayıyla söylüyordur — teyitleşmeden fiyat kıyaslama (§1.2).'
+        : `Seçili konvansiyon <b>${frekAd[frek]}</b>: bu kotasyon çeyrekliğe göre ` +
+          `${tr((pf - p4) * 100, 0)} bp yüksektir, ekonomisi aynıdır.`);
 
     const mn = (x: number) => tr(x / 1e6, 1);
     const satir = (ad: string, f: string, v: number, not: string) =>
@@ -228,7 +271,7 @@
         `pozisyondur; riski, taşımayı "bedava" sanıp boyutu şişirmektir.`;
     }
 
-    (window as any).tryOisEgri = { noktalar, oran, annuite: (T2: number) => annuite(T2, oran) };
+    (window as any).tryOisEgri = { noktalar, oran, frek, annuite: (T2: number) => annuite(T2, oran, frek) };
     document.dispatchEvent(new CustomEvent('tryois-egri-guncellendi'));
   }
 
@@ -246,6 +289,15 @@
 </script>
 
 <style>
+  .takvim {
+    padding: 0.2rem 1rem 0.7rem;
+  }
+  .takvim-satir {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--ink-70);
+  }
   .egri-kap {
     padding: 0.9rem 1rem 0.2rem;
     border-bottom: 1px solid var(--ink-15);

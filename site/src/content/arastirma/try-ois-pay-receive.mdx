@@ -98,6 +98,39 @@ düşüktür). Teyitleşmeden fiyat karşılaştırma. (ii) Compounding ACT/365 
 yıl ve uzun hafta sonu etkileri fixing bacağında birikir; kısa vadeli işlemlerde gün
 sayımını risk sisteminin ürettiğiyle bire bir kontrol et.
 
+**Bu farkın hesabı.** İki bacak da 3 ayda bir ödediği için annuity dört kupondan kurulur;
+kupon sıklığı değişince *aynı iskonto eğrisinde* par oran değişir — ekonomi aynı, sayı
+farklı:
+
+$$
+S_N^{(f)} = \frac{1 - df_N}{A_N^{(f)}},
+\qquad
+A_N^{(f)} = \sum_{i} df(t_i)\,\tau_i,
+\qquad t_i = \frac{i}{f}
+$$
+
+Pay ($1 - df_N$) sıklıktan bağımsızdır; değişen yalnızca paydadır. Sıklık arttıkça
+annuity büyür, dolayısıyla par oran **düşer**. Temsili eğride:
+
+| Vade | Çeyreklik (masa std.) | 6 aylık | Yıllık | Çeyreklik − Yıllık |
+| --- | --- | --- | --- | --- |
+| 1y | %31,79 | %32,96 | %35,25 | **−346 bp** |
+| 2y | %25,55 | %26,45 | %27,78 | −223 bp |
+| 3y | %21,82 | %22,54 | %23,44 | −162 bp |
+| 5y | %17,98 | %18,50 | %19,09 | −111 bp |
+| 10y | %14,08 | %14,42 | %14,77 | −69 bp |
+
+<div class="not">
+  <span class="etiket">Denetim notu — farkın büyüklüğü vadeye bağlı</span>
+  Kaynak metin farkı "~130−140 bp" olarak veriyor; temsili eğri üzerinde yeniden
+  hesaplandığında bu büyüklük <b>3−4 yıl civarında</b> geçerli. Kısa uçta fark çok daha
+  büyük (1y'de ~346 bp), uzun uçta daha küçük (10y'de ~69 bp) — çünkü fark, iskonto
+  faktörünün dönem içindeki eğriliğinden doğar ve seviye yükseldikçe, vade kısaldıkça
+  büyür. Pratik sonuç değişmiyor, aksine kuvvetleniyor: <b>kısa uçta yıllık kotasyonla
+  çeyreklik kotasyonu karşılaştırmak, 3 yüzde puanı yanılmak demektir.</b> Aşağıdaki
+  araçta kupon sıklığını değiştirerek kendi eğrinizde ölçebilirsiniz.
+</div>
+
 ### 1.3 Piyasa mikroyapısı ve likidite haritası
 
 Onshore likidite bankalar arası broker ekranlarında döner; ağırlık kısa uçtadır. Offshore
