@@ -160,10 +160,28 @@ def fetch_usdtry(reer_last_date=None):
     try:
         return fetch_usdtry_yfinance()
     except Exception as e:
-        if local is not None:
-            print(f"   ⚠️ yfinance başarısız ({e}) — yerel CSV ile devam ediliyor")
+        if local is None:
+            raise RuntimeError(f"USDTRY verisi alınamadı: yerel CSV yok, yfinance hatası: {e}")
+
+        # Buraya ancak yerel serinin REDK'den KISA olduğu bilinerek gelinir
+        # (yukarıdaki `yeterli` dalı zaten yeterliyse dönerdi). Yani bu, bilinen
+        # bir bayatlıkla devam etmektir — stdout'a bir satır yazıp exit 0 vermek
+        # sayfayı sessizce eksik veriyle yayına sokar. main.py'deki kurala uyulur:
+        # bilerek devam etmek için açık izin gerekir.
+        son = local['Dönem'].max().strftime('%Y-%m')
+        hedef = reer_last_date.strftime('%Y-%m') if reer_last_date is not None else "?"
+        mesaj = (f"USDTRY yfinance'ten çekilemedi ve yerel CSV KISA: "
+                 f"son {son}, REDK {hedef}'e kadar gidiyor. "
+                 f"yfinance hatası: {type(e).__name__}: {e}")
+        if os.environ.get("TTO_BAYAT_VERI_IZIN", "").strip() == "1":
+            print("!" * 78)
+            print(f"!! {mesaj}")
+            print("!! TTO_BAYAT_VERI_IZIN=1 verildiği için EKSİK seriyle devam ediliyor.")
+            print("!" * 78)
             return local
-        raise RuntimeError(f"USDTRY verisi alınamadı: yerel CSV yok, yfinance hatası: {e}")
+        raise RuntimeError(
+            mesaj + "\nBilerek devam etmek için: TTO_BAYAT_VERI_IZIN=1 python usdtry_reer_analysis.py"
+        )
 
 
 def merge_data(df_reer, df_usdtry):
