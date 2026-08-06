@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <title>Yönlendiriliyor...</title>
+  <script>
+    // Yönlendirme süresi (saniye)
+    let time = 5;
+    let countdown;
+
+    function stopwatch() {
+      const timeSpan = document.getElementById("time");
+      timeSpan.textContent = time;
+
+      countdown = setInterval(() => {
+        time--;
+        timeSpan.textContent = time;
+
+        if (time <= 0) {
+          clearInterval(countdown);
+          // Şu anki URL adresi (parametresiz sadeleştirilmiş versiyon)
+          const currentUrl = window.location.href;
+          // Yönlendirme işlemi
+          window.location.href = currentUrl;
+        }
+      }, 1000);
+    }
+  </script>
+</head>
+
+<body onload="stopwatch()">
+  <span id="time"></span> saniye sonra tekrar dosya indirebilirsiniz. Lütfen bekleyiniz...
+</body>
+</html>
+
+<script>
+setTimeout(() => {
+    window.close();
+}, 5000);
+</script>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    text-align:center;
+    margin-top:50px;
+}
+#message{
+    display:none;
+    color:#d00;
+    margin-top:20px;
+}

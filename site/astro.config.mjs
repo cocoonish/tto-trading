@@ -12,6 +12,10 @@ export default defineConfig({
   integrations: [mdx(), sitemap()],
   markdown: {
     remarkPlugins: [remarkMath],
-    rehypePlugins: [rehypeKatex],
+    // strict: false — KaTeX, \text{} içindeki Türkçe aksanlı harfleri
+    // ("gövde", "bütçe", "çıkış") varsayılan 'warn' kipinde şikâyet eder ama
+    // doğru render eder. Türkçe bir sitede bu uyarı her derlemede onlarca satır
+    // gürültü üretip GERÇEK KaTeX hatalarını görünmez kılıyordu.
+    rehypePlugins: [[rehypeKatex, { strict: false }]],
   },
 });

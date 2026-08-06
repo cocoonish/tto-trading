@@ -1,0 +1,24 @@
+ 
+Göstergeler
+Zaman
+Düzey
+Rapor
+   Düzey   
+Türkiye
+İBBS2 (26 Bölge)
+    
+ Düzey
+	
+		
+ 
+	
+Seçilen Düzeyler
+	
+	
+Türkiye
+
+
+   Geri  Rapor Oluştur
+ 
+ Yardım  
+Seçilen gösterge adedi: 40   X   Seçilen düzey adedi: 1   X   Seçilen zaman adedi: 208   çarpımının sonucu 50000'i geçemez!

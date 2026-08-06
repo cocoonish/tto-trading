@@ -1,0 +1,1160 @@
+<!doctype html>
+<html lang="tr">
+<body>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EN 24/17 Replikasyonu — Yiyecek Hizmetleri Fiyat/Maliyet</title>
+<style>
+:root{--murekkep:#1a1a1a;--gri:#52514e;--acik:#e8e7e2;--zemin:#fcfcfb;--vurgu:#2a78d6;
+--turuncu:#eb6834;--yesil:#1baf7a;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--zemin);color:var(--murekkep);
+font:15px/1.65 -apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}
+.kap{max-width:1060px;margin:0 auto;padding:24px 28px 80px}
+header{border-bottom:3px solid var(--murekkep);padding:26px 0 18px;margin-bottom:8px}
+header .ust{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gri)}
+h1{font-size:29px;line-height:1.25;margin:10px 0 6px}
+header .alt{color:var(--gri);font-size:14px}
+nav{position:sticky;top:0;background:var(--zemin);border-bottom:1px solid var(--acik);
+padding:9px 0;margin:0 0 26px;z-index:5;font-size:13.5px}
+nav a{color:var(--vurgu);text-decoration:none;margin-right:16px;white-space:nowrap}
+nav a:hover{text-decoration:underline}
+h2{font-size:21px;margin:44px 0 12px;padding-top:10px;border-top:1px solid var(--acik)}
+h3{font-size:16.5px;margin:26px 0 8px}
+p{margin:9px 0}
+.kutu{background:#f4f3ef;border-left:4px solid var(--vurgu);padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0}
+.kutu.uyari{border-left-color:var(--turuncu)}
+.tbl{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
+.tbl th{background:#efeee9;text-align:left;padding:7px 9px;border-bottom:2px solid var(--murekkep);font-weight:600}
+.tbl td{padding:6px 9px;border-bottom:1px solid var(--acik);vertical-align:top}
+.tbl tr:hover td{background:#f6f5f1}
+.tbl.kucuk{font-size:12px}
+.sarici{overflow-x:auto}
+figure{margin:22px 0;text-align:center}
+figure img{max-width:100%;height:auto;border:1px solid var(--acik);border-radius:8px}
+figcaption{font-size:13px;color:var(--gri);margin-top:7px;text-align:left}
+.izgara{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:860px){.izgara{grid-template-columns:1fr}}
+.rozet{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 9px;border-radius:999px;margin-right:6px}
+.rozet.g{background:#e2f3ec;color:#0d6b4a}.rozet.p{background:#fdeae2;color:#a03a12}
+.formul{background:#f4f3ef;padding:10px 16px;border-radius:8px;font-family:ui-monospace,Menlo,monospace;font-size:13px;overflow-x:auto}
+footer{margin-top:56px;padding-top:14px;border-top:1px solid var(--acik);color:var(--gri);font-size:12.5px}
+ol li{margin:6px 0}
+.ozet-kart{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:18px 0}
+@media(max-width:860px){.ozet-kart{grid-template-columns:repeat(2,1fr)}}
+.kart{border:1px solid var(--acik);border-radius:10px;padding:12px 14px;background:#fff}
+.kart .k{font-size:12px;color:var(--gri)}
+.kart .v{font-size:23px;font-weight:700;margin-top:2px}
+.kart .d{font-size:11.5px;color:var(--gri)}
+
+.ich{position:relative;margin:20px 0;border:1px solid var(--acik);border-radius:10px;padding:10px 8px 4px;background:#fff}
+.ich svg{width:100%;height:auto;display:block}
+.ich .tip{display:none;position:absolute;z-index:20;pointer-events:none;background:#1a1a1a;color:#fff;
+padding:7px 10px;border-radius:7px;font-size:12px;line-height:1.5;box-shadow:0 3px 12px rgba(0,0,0,.25);max-width:260px}
+.ich .tip span{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px}
+.ich .tip b{font-weight:700}
+.lejant{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12.5px;color:#1a1a1a;padding:2px 6px 8px}
+.lejant i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+figcaption{font-size:13px;color:#52514e;margin:6px 6px 8px;text-align:left}
+</style>
+<div class="kap">
+<header>
+<div class="ust">Replikasyon ve Güncelleme · TCMB Ekonomi Notu 2024-17</div>
+<h1>Yiyecek Hizmetleri Sektöründe Fiyat/Maliyet Gelişmeleri</h1>
+<div class="alt">Atabek Demirhan &amp; Bahça (26 Aralık 2024) çalışmasının kamuya açık veriyle replikasyonu ve
+<b>Temmuz 2026</b>'ya güncellenmesi · Üretim: 06.08.2026 21:43 · Tümü <code>src/run_all.py</code> ile yeniden üretilebilir</div>
+</header>
+<nav>
+<a href="#ozet">Özet</a><a href="#yontem">Yöntem</a><a href="#veri">Veri &amp; proxy</a>
+<a href="#kirilma">Baz değişimi</a><a href="#dogrulama">Replikasyon doğrulaması</a>
+<a href="#grafikler">Grafikler 1-14</a><a href="#duyarlilik">Duyarlılık</a><a href="#degerlendirme">Değerlendirme</a>
+</nav>
+
+<section id="ozet">
+<div class="ozet-kart">
+<div class="kart"><div class="k">Ev yemekleri (2013 Oca=1)</div><div class="v">1,27</div><div class="d">Tem-24: 1,27 · not hedefi 1,30 · plato</div></div>
+<div class="kart"><div class="k">Kırmızı et ağırlıklı</div><div class="v">1,26</div><div class="d">Tem-24: 1,20 · uzun dönem ort. 1,08</div></div>
+<div class="kart"><div class="k">Tavuk eti ağırlıklı</div><div class="v">1,51</div><div class="d">Tem-24: 1,41 · uzun dönem ort. 1,10</div></div>
+<div class="kart"><div class="k">Fast-food</div><div class="v">2,19</div><div class="d">Tem-24: 2,08 · <b>açılma sürüyor</b></div></div>
+</div>
+<div class="kutu"><b>Tek cümlelik sonuç:</b> 2023'te başlayan fiyat/maliyet kırılması Temmuz 2026 itibarıyla
+<b>tersine dönmedi</b>; oranlar uzun dönem ortalamalarının 1,2–1,7 katında <b>yüksek bir platoya</b> oturdu,
+fast-food'da açılma devam ediyor. Bulgular 18 duyarlılık senaryosunda dayanıklı.</div>
+</section>
+
+<section id="yontem">
+<h2>1. Yöntem — notun dört aşaması</h2>
+<p>Kurgu EN 24/17 ile birebir: <b>(i)</b> sektörün maliyet yapısı sabit ağırlıklarla temsil edilir,
+<b>(ii)</b> her yemek için standart tarif paylarıyla gıda maliyet endeksi kurulur, <b>(iii)</b> gıda dışı
+kalemler tek göstergelere bağlanır, <b>(iv)</b> konsept maliyeti ağırlıklı ortalamayla hesaplanıp konsept
+fiyat endeksine oranlanır (2013 Ocak=1).</p>
+<div class="formul">Maliyet<sub>k</sub>(t) = 0,21·Ücret(t) + 0,49·Gıda<sub>k</sub>(t) + 0,05·Enerji(t) + 0,10·Kira(t) + 0,15·Diğer(t)&nbsp;&nbsp;&nbsp;[her bileşen 2013 Oca=100]<br>
+Oran<sub>k</sub>(t) = Fiyat<sub>k</sub>(t) / Maliyet<sub>k</sub>(t),&nbsp; 2013 Oca=1&nbsp;&nbsp;·&nbsp;&nbsp;Diğer = ort(TÜFE, Yİ-ÜFE)&nbsp;·&nbsp;Ücret = brüt asgari ücret&nbsp;·&nbsp;Enerji = TÜFE-045&nbsp;·&nbsp;Kira = TÜFE-04110</div>
+<h3>1.1 Maliyet ağırlık setleri</h3>
+<div class="sarici"><table class="dataframe tbl">
+  <thead>
+    <tr style="text-align: left;">
+      <th></th>
+      <th>İşgücü</th>
+      <th>Gıda</th>
+      <th>Enerji</th>
+      <th>Kira</th>
+      <th>Diğer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Nihai (not, Tablo 4)</th>
+      <td>0,21</td>
+      <td>0,49</td>
+      <td>0,05</td>
+      <td>0,10</td>
+      <td>0,15</td>
+    </tr>
+    <tr>
+      <th>BİST-KAP</th>
+      <td>0,23</td>
+      <td>0,49</td>
+      <td>0,05</td>
+      <td>0,08</td>
+      <td>0,16</td>
+    </tr>
+    <tr>
+      <th>TCMB-RESİM</th>
+      <td>0,20</td>
+      <td>0,49</td>
+      <td>0,05</td>
+      <td>0,13</td>
+      <td>0,14</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3>1.2 Tarifler ve TÜİK maddesi eşlemeleri (notun eki, birebir)</h3>
+<div class="sarici"><table class="dataframe tbl kucuk">
+  <thead>
+    <tr style="text-align: left;">
+      <th>Yemek</th>
+      <th>Gıda maliyeti payları (%) → eşlenen TÜİK maddeleri</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Mercimek çorbası</td>
+      <td>Mercimek &lt;b&gt;40&lt;/b&gt;; Tereyağı &lt;b&gt;30&lt;/b&gt;; Kuru Soğan + Havuç + Patates (eşit böl.) &lt;b&gt;20&lt;/b&gt;; Baharat + Tuz (eşit böl.) &lt;b&gt;10&lt;/b&gt;</td>
+    </tr>
+    <tr>
+      <td>Pirinç pilavı</td>
+      <td>Pirinç &lt;b&gt;58&lt;/b&gt;; Tereyağı + Ayçiçek Yağı (eşit böl.) &lt;b&gt;39&lt;/b&gt;; Tuz &lt;b&gt;3&lt;/b&gt;</td>
+    </tr>
+    <tr>
+      <td>Etsiz kuru fasulye</td>
+      <td>Kuru Fasulye &lt;b&gt;40&lt;/b&gt;; Kuru Soğan + Sivri Biber + Domates (eşit böl.) &lt;b&gt;30&lt;/b&gt;; Baharat &lt;b&gt;15&lt;/b&gt;; Tereyağı + Ayçiçek Yağı (eşit böl.) &lt;b&gt;14&lt;/b&gt;; Salça &lt;b&gt;1&lt;/b&gt;</td>
+    </tr>
+    <tr>
+      <td>Hamburger</td>
+      <td>Dana Eti &lt;b&gt;65&lt;/b&gt;; Ekmek &lt;b&gt;20&lt;/b&gt;; Marul + Domates + Kuru Soğan (eşit böl.) &lt;b&gt;10&lt;/b&gt;; Ketçap + Mayonez + Turşu (eşit böl.) &lt;b&gt;5&lt;/b&gt;</td>
+    </tr>
+    <tr>
+      <td>Pizza</td>
+      <td>Kaşar Peyniri &lt;b&gt;50&lt;/b&gt;; Sucuk + Salam (eşit böl.) &lt;b&gt;20&lt;/b&gt;; Buğday Unu &lt;b&gt;10&lt;/b&gt;; Domates + Sivri Biber (eşit böl.) &lt;b&gt;10&lt;/b&gt;; Ayçiçek Yağı &lt;b&gt;5&lt;/b&gt;; Baharat &lt;b&gt;3&lt;/b&gt;; Salça &lt;b&gt;2&lt;/b&gt;</td>
+    </tr>
+    <tr>
+      <td>Çiğ köfte</td>
+      <td>Baharat &lt;b&gt;60&lt;/b&gt;; Bulgur &lt;b&gt;15&lt;/b&gt;; Kuru Soğan + Domates + Marul (eşit böl.) &lt;b&gt;18&lt;/b&gt;; Salça &lt;b&gt;4&lt;/b&gt;; Ayçiçek Yağı &lt;b&gt;3&lt;/b&gt;</td>
+    </tr>
+    <tr>
+      <td>Kıymalı pide</td>
+      <td>Dana Eti &lt;b&gt;65&lt;/b&gt;; Kuru Soğan + Domates + Sivri Biber (eşit böl.) &lt;b&gt;15&lt;/b&gt;; Baharat &lt;b&gt;10&lt;/b&gt;; Buğday Unu &lt;b&gt;5&lt;/b&gt;; Tereyağı &lt;b&gt;3&lt;/b&gt;; Yumurta &lt;b&gt;2&lt;/b&gt;</td>
+    </tr>
+    <tr>
+      <td>Lahmacun</td>
+      <td>Dana Eti &lt;b&gt;80&lt;/b&gt;; Kuru Soğan + Domates + Maydanoz (eşit böl.) &lt;b&gt;11&lt;/b&gt;; Buğday Unu &lt;b&gt;4&lt;/b&gt;; Baharat &lt;b&gt;4&lt;/b&gt;; Ayçiçek Yağı &lt;b&gt;1&lt;/b&gt;</td>
+    </tr>
+    <tr>
+      <td>İskender</td>
+      <td>Dana Eti &lt;b&gt;85&lt;/b&gt;; Yoğurt &lt;b&gt;4&lt;/b&gt;; Tereyağı &lt;b&gt;4&lt;/b&gt;; Baharat &lt;b&gt;4&lt;/b&gt;; Buğday Unu &lt;b&gt;3&lt;/b&gt;</td>
+    </tr>
+    <tr>
+      <td>Adana kebap</td>
+      <td>Dana Eti &lt;b&gt;85&lt;/b&gt;; Baharat &lt;b&gt;5&lt;/b&gt;; Tereyağı + Ayçiçek Yağı (eşit böl.) &lt;b&gt;5&lt;/b&gt;; Buğday Unu &lt;b&gt;3&lt;/b&gt;; Kuru Soğan + Domates (eşit böl.) &lt;b&gt;2&lt;/b&gt;</td>
+    </tr>
+    <tr>
+      <td>Et döner</td>
+      <td>Dana Eti &lt;b&gt;92&lt;/b&gt;; Ekmek &lt;b&gt;2&lt;/b&gt;; Tereyağı + Ayçiçek Yağı (eşit böl.) &lt;b&gt;2&lt;/b&gt;; Baharat &lt;b&gt;2&lt;/b&gt;; Kuru Soğan + Domates (eşit böl.) &lt;b&gt;1&lt;/b&gt;; Yoğurt &lt;b&gt;1&lt;/b&gt;</td>
+    </tr>
+    <tr>
+      <td>Tavuk şiş</td>
+      <td>Tavuk Eti &lt;b&gt;77&lt;/b&gt;; Baharat &lt;b&gt;12&lt;/b&gt;; Kuru Soğan + Domates (eşit böl.) &lt;b&gt;4&lt;/b&gt;; Tereyağı + Ayçiçek Yağı (eşit böl.) &lt;b&gt;4&lt;/b&gt;; Yoğurt &lt;b&gt;3&lt;/b&gt;</td>
+    </tr>
+    <tr>
+      <td>Tavuk döner</td>
+      <td>Tavuk Eti &lt;b&gt;92&lt;/b&gt;; Ekmek &lt;b&gt;2&lt;/b&gt;; Tereyağı + Ayçiçek Yağı (eşit böl.) &lt;b&gt;2&lt;/b&gt;; Baharat &lt;b&gt;2&lt;/b&gt;; Kuru Soğan + Domates (eşit böl.) &lt;b&gt;1&lt;/b&gt;</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3>1.3 Konsept tanımları</h3>
+<div class="sarici"><table class="dataframe tbl kucuk">
+  <thead>
+    <tr style="text-align: left;">
+      <th>Konsept</th>
+      <th>Yemekler (maliyet tarafı, eşit ağırlık)</th>
+      <th>Fiyat tarafı TÜİK maddeleri</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Kırmızı et ağırlıklı</td>
+      <td>Adana kebap, İskender, kıymalı pide, lahmacun, et döner</td>
+      <td>1110103 Kebaplar, 1110104 Pideler, 1110106 Ekmekarası (Döner)</td>
+    </tr>
+    <tr>
+      <td>Tavuk eti ağırlıklı</td>
+      <td>tavuk şiş, tavuk döner</td>
+      <td>1110103 Kebaplar, 1110106 Ekmekarası (Döner)</td>
+    </tr>
+    <tr>
+      <td>Ev yemekleri</td>
+      <td>mercimek çorbası, pirinç pilavı, etsiz kuru fasulye</td>
+      <td>1110101 Çorbalar, 1110102 Hazır Yemekler</td>
+    </tr>
+    <tr>
+      <td>Fast-food</td>
+      <td>hamburger, pizza, çiğ köfte</td>
+      <td>1110105 Çiğ köfte (Köfteler), 1110108 Burgerler, 1110110 Pizza</td>
+    </tr>
+  </tbody>
+</table></div>
+<p class="kutu uyari"><b>Fiyat tarafı kısıtı:</b> 1110103 (kebaplar) ve 1110106 (döner) maddeleri hem kırmızı et
+hem tavuk konseptine girer; TÜİK yapısında tür ayrımı yoktur. Not, TCMB'nin kendi mikro fiyat tabanıyla ürün
+düzeyinde ayrıştırmıştı. Replikasyonda prompt'taki (a) seçeneği uygulanır: iki konsept ortak fiyat endeksi
+kullanır, <b>fark yalnızca maliyet tarafından gelir</b>. (b) seçeneği — çevrimiçi menü fiyatlarıyla ayrıştırma —
+geriye dönük kamu verisi bulunmadığından uygulanamamıştır.</p>
+</section>
+
+<section id="veri">
+<h2>2. Veri kaynakları ve proxy etiketleri</h2>
+<table class="tbl"><tr><th>Kaynak</th><th>İçerik</th><th>Dönem</th><th>Durum</th></tr>
+<tr><td>TCMB EVDS3 API</td><td>TÜFE (2025=100, COICOP-2018, 5'li düzey, <b>2005'e geri taşınmış</b>); TÜFE (2003=100 arşiv); Yİ-ÜFE; Yeni Kiracı Kira Endeksi</td><td>2005/01–2026/07</td><td><span class="rozet g">GERÇEK</span></td></tr>
+<tr><td>TÜİK MEDAS</td><td>Tüketici Madde Fiyatları (2003=100): 8 yemek hizmeti + 32 gıda girdisi maddesi</td><td>2005/01–<b>2022/04</b></td><td><span class="rozet g">GERÇEK</span> yayın Nisan 2022'de durdu</td></tr>
+<tr><td>TÜİK MEDAS</td><td>Tarım-ÜFE (2020=100): sığır-besi 01.42, kümes 01.47, koyun-keçi 01.45</td><td>2020/01–2026/06</td><td><span class="rozet g">GERÇEK</span> tür kaması girdisi</td></tr>
+<tr><td>TÜİK Veri Portalı</td><td>Hizmet ciro endeksi (2015=100, arşiv); TÜFE ağırlık tabloları</td><td>2009–2023</td><td><span class="rozet g">GERÇEK</span></td></tr>
+<tr><td>Resmî Gazete / AÜTK</td><td>Brüt asgari ücret (2024'te ara zam yok; 2025: 26.005,50; 2026: 33.030 TL)</td><td>2013–2026</td><td><span class="rozet g">GERÇEK</span></td></tr>
+</table>
+<h3>2.1 Üç proxy katmanı</h3>
+<ol>
+<li><span class="rozet p">PROXY 1</span> TÜİK madde <i>endeksi</i> kamuya açık değildir; madde <i>ortalama fiyatı</i>
+rölatifi (2013 Oca=100) endeks yerine kullanılır.</li>
+<li><span class="rozet p">PROXY 2</span> Nisan 2022 sonrası her madde, eşlendiği COICOP-2018 5'li grup endeksinin
+aylık değişimleriyle uzatılır (ör. pirinç→01111, kaşar→01145, çorbalar→11111 tam sunum, pizza→11112 sınırlı sunum).
+Dana ve tavuk eti için ilaveten <b>Tarım-ÜFE tür kaması</b> uygulanır: m/m(dana) = m/m(01122-Et) ×
+[sığır görece değişimi / karma sepet], karma = 0,65 sığır + 0,30 kümes + 0,05 koyun. Kama kapatılırsa
+tavuk/kırmızı sıralaması bozulur (duyarlılık tablosunda görülebilir).</li>
+<li><span class="rozet p">PROXY 3</span> Kira için baz gösterge TÜFE-kiradır (04110); işyeri kirası (notta Perakende
+Ödeme Sistemi mikro verisi) kamuya kapalıdır. Alternatifler duyarlılıkta: %25 konut tavanı düzeltmesi (TBK md.344
+işyeri kuralı: TÜFE 12 aylık ort.) ve TCMB Yeni Kiracı Kira Endeksi.</li>
+</ol>
+<h3>2.2 Madde bazında gerçek veri sonu ve uzatma kaynağı</h3>
+<div class="sarici"><table class="dataframe tbl kucuk">
+  <thead>
+    <tr style="text-align: left;">
+      <th>Kod</th>
+      <th>Madde</th>
+      <th>Gerçek veri sonu</th>
+      <th>Uzatma kaynağı (sonrası)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1110101</td>
+      <td>Çorbalar</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.11111</td>
+    </tr>
+    <tr>
+      <td>1110102</td>
+      <td>Hazır Yemekler</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.11111</td>
+    </tr>
+    <tr>
+      <td>1110103</td>
+      <td>Kebaplar</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.11111</td>
+    </tr>
+    <tr>
+      <td>1110104</td>
+      <td>Pideler</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.11111</td>
+    </tr>
+    <tr>
+      <td>1110105</td>
+      <td>Çiğ köfte (Köfteler)</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.11112</td>
+    </tr>
+    <tr>
+      <td>1110106</td>
+      <td>Ekmekarası (Döner)</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.11112</td>
+    </tr>
+    <tr>
+      <td>1110108</td>
+      <td>Burgerler</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.11112</td>
+    </tr>
+    <tr>
+      <td>1110110</td>
+      <td>Pizza</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.11112</td>
+    </tr>
+    <tr>
+      <td>0111101</td>
+      <td>Pirinç</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01111</td>
+    </tr>
+    <tr>
+      <td>0111209</td>
+      <td>Bulgur</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01111</td>
+    </tr>
+    <tr>
+      <td>0111201</td>
+      <td>Buğday Unu</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01112</td>
+    </tr>
+    <tr>
+      <td>0111301</td>
+      <td>Ekmek</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01113</td>
+    </tr>
+    <tr>
+      <td>0112201</td>
+      <td>Dana Eti</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01122 + Tarım-ÜFE sığır kaması</td>
+    </tr>
+    <tr>
+      <td>0112501</td>
+      <td>Tavuk Eti</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01122 + Tarım-ÜFE kümes kaması</td>
+    </tr>
+    <tr>
+      <td>0112701</td>
+      <td>Sucuk</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01123</td>
+    </tr>
+    <tr>
+      <td>0112703</td>
+      <td>Salam</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01123</td>
+    </tr>
+    <tr>
+      <td>0114101</td>
+      <td>Süt</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01141</td>
+    </tr>
+    <tr>
+      <td>0114301</td>
+      <td>Yoğurt</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01146</td>
+    </tr>
+    <tr>
+      <td>0114401</td>
+      <td>Beyaz Peynir</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01145</td>
+    </tr>
+    <tr>
+      <td>0114402</td>
+      <td>Kaşar Peyniri</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01145</td>
+    </tr>
+    <tr>
+      <td>0114501</td>
+      <td>Yumurta</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01148</td>
+    </tr>
+    <tr>
+      <td>0115101</td>
+      <td>Tereyağı</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01152</td>
+    </tr>
+    <tr>
+      <td>0115302</td>
+      <td>Ayçiçek Yağı</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01151</td>
+    </tr>
+    <tr>
+      <td>0115301</td>
+      <td>Zeytinyağı</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01151</td>
+    </tr>
+    <tr>
+      <td>0117122</td>
+      <td>Domates</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01172</td>
+    </tr>
+    <tr>
+      <td>0117117</td>
+      <td>Sivri Biber</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01172</td>
+    </tr>
+    <tr>
+      <td>0117146</td>
+      <td>Kuru Soğan</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01174</td>
+    </tr>
+    <tr>
+      <td>0117130</td>
+      <td>Havuç</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01174</td>
+    </tr>
+    <tr>
+      <td>0117152</td>
+      <td>Marul</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01171</td>
+    </tr>
+    <tr>
+      <td>0117201</td>
+      <td>Patates</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01175</td>
+    </tr>
+    <tr>
+      <td>0117153</td>
+      <td>Maydanoz</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01171</td>
+    </tr>
+    <tr>
+      <td>0116130</td>
+      <td>Limon</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01162</td>
+    </tr>
+    <tr>
+      <td>0117401</td>
+      <td>Kuru Fasulye</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01176</td>
+    </tr>
+    <tr>
+      <td>0117403</td>
+      <td>Mercimek</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01176</td>
+    </tr>
+    <tr>
+      <td>0117505</td>
+      <td>Salça</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01179</td>
+    </tr>
+    <tr>
+      <td>0117504</td>
+      <td>Turşu</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01179</td>
+    </tr>
+    <tr>
+      <td>0119001</td>
+      <td>Baharat</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01194</td>
+    </tr>
+    <tr>
+      <td>0119002</td>
+      <td>Tuz</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01193</td>
+    </tr>
+    <tr>
+      <td>0119008</td>
+      <td>Ketçap</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01193</td>
+    </tr>
+    <tr>
+      <td>0119009</td>
+      <td>Mayonez</td>
+      <td>2022-04</td>
+      <td>TP.TUKFIY2025.01193</td>
+    </tr>
+  </tbody>
+</table></div>
+</section>
+
+<section id="kirilma">
+<h2>3. 2026 baz değişimi (2025=100) — kırılma testi</h2>
+<p>TÜİK, Ocak 2026'da TÜFE'yi 2025=100 bazına ve COICOP-2018 sınıflamasına geçirdi; seri 5'li düzeyde 2005'e
+geri taşındı. Geri taşınmış seri ile 2003=100 arşiv serisinin aylık değişimleri 2005-2025 dönemde karşılaştırıldı:</p>
+<div class="kutu"><b>Sonuç:</b> fark ortalaması 0,000 puan, mutlak ortalama 0,000, en büyük fark 0,0065 puan
+(2005-02); korelasyon 1,000. Ocak 2026 zinciri de tutarlı (eski seri %4,837 / yeni %4,84). Yani geri taşıma
+<b>birebir yeniden ölçekleme</b>dir; metodolojik değişiklikler Ocak 2026 sonrası hesaplamaya ilişkindir ve
+zincirleme düzeltmesi gerekmez. Alt seriler (gıda, kira, enerji, yemek hizmetleri) için de mutlak ortalama fark
+≤0,003 puandır.</div>
+</section>
+
+<section id="dogrulama">
+<h2>4. Replikasyon doğrulaması — orijinal vs replikasyon vs güncel</h2>
+<div class="sarici"><table class="dataframe tbl">
+  <thead>
+    <tr style="text-align: left;">
+      <th>Metrik</th>
+      <th>Konsept</th>
+      <th>Orijinal (EN 24/17)</th>
+      <th>Replikasyon</th>
+      <th>Sapma</th>
+      <th>Güncel (Tem 2026)</th>
+      <th>Sapma gerekçesi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>maliyet_kat_ara19_tem24</td>
+      <td>kirmizi_et</td>
+      <td>8,10</td>
+      <td>7,86</td>
+      <td>-0,24</td>
+      <td>13,45</td>
+      <td>Dana eti Nis-2022'ye kadar gerçek; sonrası 01122+Tarım-ÜFE sığır kaması proxy'si. Ayrıca 'diğer' kalemi ve baharat sepeti bileşim farkları.</td>
+    </tr>
+    <tr>
+      <td>maliyet_kat_ara19_tem24</td>
+      <td>ev_yemekleri</td>
+      <td>6,60</td>
+      <td>6,34</td>
+      <td>-0,26</td>
+      <td>11,16</td>
+      <td>Uyum yüksek.</td>
+    </tr>
+    <tr>
+      <td>oran_tem24</td>
+      <td>ev_yemekleri</td>
+      <td>1,30</td>
+      <td>1,27</td>
+      <td>-0,03</td>
+      <td>1,27</td>
+      <td>Uyum yüksek; kalan fark splice dönemindeki agregat fiyat uzatmasından.</td>
+    </tr>
+    <tr>
+      <td>oran_tem24</td>
+      <td>kirmizi_et</td>
+      <td>1,54</td>
+      <td>1,20</td>
+      <td>-0,34</td>
+      <td>1,26</td>
+      <td>Fiyat tarafı: TÜİK'te kebap/pide/döner maddeleri kırmızı et–tavuk ayrımı içermez (TCMB kendi mikro verisiyle ayrıştırmış); ayrıca Nis-2022 sonrası madde fiyatı yayımı durduğu için fiyatlar 11111/11112 agregatlarıyla uzatıldı — kebap özelindeki fiyat sıçraması agregata törpülenir.</td>
+    </tr>
+    <tr>
+      <td>oran_tem24</td>
+      <td>tavuk</td>
+      <td>1,79</td>
+      <td>1,41</td>
+      <td>-0,38</td>
+      <td>1,51</td>
+      <td>Aynı fiyat tarafı kısıtı; tavuk maliyeti Tarım-ÜFE kaması ile ayrıştırıldı fakat fiyat tarafı kırmızı et ile ortak madde setinden gelir.</td>
+    </tr>
+    <tr>
+      <td>oran_tem24</td>
+      <td>fast_food</td>
+      <td>2,08</td>
+      <td>2,08</td>
+      <td>-0,00</td>
+      <td>2,19</td>
+      <td>Birebir uyum.</td>
+    </tr>
+    <tr>
+      <td>uzun_donem_ort</td>
+      <td>ev_yemekleri</td>
+      <td>0,94</td>
+      <td>0,98</td>
+      <td>0,04</td>
+      <td>0,98</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>uzun_donem_ort</td>
+      <td>kirmizi_et</td>
+      <td>1,05</td>
+      <td>1,08</td>
+      <td>0,03</td>
+      <td>1,08</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>uzun_donem_ort</td>
+      <td>tavuk</td>
+      <td>1,09</td>
+      <td>1,10</td>
+      <td>0,01</td>
+      <td>1,10</td>
+      <td>—</td>
+    </tr>
+    <tr>
+      <td>uzun_donem_ort</td>
+      <td>fast_food</td>
+      <td>1,17</td>
+      <td>1,29</td>
+      <td>0,12</td>
+      <td>1,29</td>
+      <td>1110105 maddesi 2022 sepetinde 'Köfteler' (2024 sepetinde çiğ köfte); ortalama fiyat rölatifleri ile TCMB ürün endeksi arasındaki kompozisyon farkı.</td>
+    </tr>
+    <tr>
+      <td>ev_2022_dip</td>
+      <td>ev_yemekleri</td>
+      <td>0,77</td>
+      <td>0,92</td>
+      <td>0,15</td>
+      <td>1,27</td>
+      <td>Dip, madde fiyatı yayınının durduğu Nis-2022 SONRASINDA gerçekleşti; uzatma agregat 11111 ile yapıldığından konsepte özgü fiyat frenlemesi kısmen gözlenemiyor.</td>
+    </tr>
+  </tbody>
+</table></div>
+<p><b>Okuma:</b> ev yemekleri ve fast-food hedefleri tutturuldu; uzun dönem ortalamaları dört konseptte ±0,12
+bandında. Kırmızı et ve tavukta Temmuz 2024 oranları, fiyat tarafındaki yapısal kısıt (PROXY 3 + tür ayrımsız
+madde yapısı) nedeniyle notun altında kalır; nitel sıralama ve kırılma deseni korunur.</p>
+</section>
+
+<section id="grafikler">
+<h2>5. Grafikler (Temmuz 2026'ya uzatılmış)</h2>
+<p><b>Grafikler etkileşimlidir:</b> imleci çizgilerin üzerinde gezdirince ay-yıl ve seri değerleri görünür; barlarda kutunun üzerine gelin. Noktalı dikey çizgi (Nisan 2022): madde fiyatı yayınının sonu — sonrası proxy uzatma. Oran grafikleri kâr marjı <i>seviyesi</i> değildir; 2013 Ocak'a göre göreli seviyedir.</p>
+<figure class="ich" id="g1" data-id="g1" data-tur="bar"><figcaption><b>Grafik 1.</b> Hizmet ciro endeksleri (yıllık % değişim) — 2020 vs 2021-2022</figcaption><div class="lejant"><span><i style="background:#2a78d6"></i>2020</span><span><i style="background:#eb6834"></i>2021-2022 ort.</span></div><svg viewBox="0 0 720 400" role="img"><line x1="56" y1="366.0" x2="704" y2="366.0" stroke="#e8e7e2"/><text x="49" y="369.5" text-anchor="end" font-size="10.5" fill="#52514e">%0,0</text><line x1="56" y1="190.0" x2="704" y2="190.0" stroke="#e8e7e2"/><text x="49" y="193.5" text-anchor="end" font-size="10.5" fill="#52514e">%50,0</text><line x1="56" y1="14.0" x2="704" y2="14.0" stroke="#e8e7e2"/><text x="49" y="17.5" text-anchor="end" font-size="10.5" fill="#52514e">%100,0</text><rect x="71.1" y="356.1" width="36.9" height="9.9" rx="3" fill="#2a78d6" data-tip="<b>Ulaştırma ve
+depolama</b><div><span style='background:#2a78d6'></span>2020: <b>%2,8</b></div>"/><text x="89.6" y="352.1" text-anchor="middle" font-size="9.5" fill="#1a1a1a">%2,8</text><rect x="110.0" y="-58.2" width="36.9" height="424.2" rx="3" fill="#eb6834" data-tip="<b>Ulaştırma ve
+depolama</b><div><span style='background:#eb6834'></span>2021-2022 ort.: <b>%120,5</b></div>"/><text x="128.4" y="-62.2" text-anchor="middle" font-size="9.5" fill="#1a1a1a">%120,5</text><text x="110.0" y="380" text-anchor="middle" font-size="10" fill="#52514e">Ulaştırma ve</text><text x="110.0" y="391" text-anchor="middle" font-size="10" fill="#52514e">depolama</text><rect x="179.1" y="366.0" width="36.9" height="86.9" rx="3" fill="#2a78d6" data-tip="<b>Konaklama ve
+yiyecek hizm.</b><div><span style='background:#2a78d6'></span>2020: <b>-%24,7</b></div>"/><text x="197.6" y="463.9" text-anchor="middle" font-size="9.5" fill="#1a1a1a">-%24,7</text><rect x="218.0" y="-47.6" width="36.9" height="413.6" rx="3" fill="#eb6834" data-tip="<b>Konaklama ve
+yiyecek hizm.</b><div><span style='background:#eb6834'></span>2021-2022 ort.: <b>%117,5</b></div>"/><text x="236.4" y="-51.6" text-anchor="middle" font-size="9.5" fill="#1a1a1a">%117,5</text><text x="218.0" y="380" text-anchor="middle" font-size="10" fill="#52514e">Konaklama ve</text><text x="218.0" y="391" text-anchor="middle" font-size="10" fill="#52514e">yiyecek hizm.</text><rect x="287.1" y="290.0" width="36.9" height="76.0" rx="3" fill="#2a78d6" data-tip="<b>Bilgi ve
+iletişim</b><div><span style='background:#2a78d6'></span>2020: <b>%21,6</b></div>"/><text x="305.6" y="286.0" text-anchor="middle" font-size="9.5" fill="#1a1a1a">%21,6</text><rect x="326.0" y="167.8" width="36.9" height="198.2" rx="3" fill="#eb6834" data-tip="<b>Bilgi ve
+iletişim</b><div><span style='background:#eb6834'></span>2021-2022 ort.: <b>%56,3</b></div>"/><text x="344.4" y="163.8" text-anchor="middle" font-size="9.5" fill="#1a1a1a">%56,3</text><text x="326.0" y="380" text-anchor="middle" font-size="10" fill="#52514e">Bilgi ve</text><text x="326.0" y="391" text-anchor="middle" font-size="10" fill="#52514e">iletişim</text><rect x="395.1" y="312.9" width="36.9" height="53.1" rx="3" fill="#2a78d6" data-tip="<b>Gayrimenkul</b><div><span style='background:#2a78d6'></span>2020: <b>%15,1</b></div>"/><text x="413.6" y="308.9" text-anchor="middle" font-size="9.5" fill="#1a1a1a">%15,1</text><rect x="434.0" y="-52.2" width="36.9" height="418.2" rx="3" fill="#eb6834" data-tip="<b>Gayrimenkul</b><div><span style='background:#eb6834'></span>2021-2022 ort.: <b>%118,8</b></div>"/><text x="452.4" y="-56.2" text-anchor="middle" font-size="9.5" fill="#1a1a1a">%118,8</text><text x="434.0" y="380" text-anchor="middle" font-size="10" fill="#52514e">Gayrimenkul</text><rect x="503.1" y="298.4" width="36.9" height="67.6" rx="3" fill="#2a78d6" data-tip="<b>Mesleki, bilimsel
+ve teknik</b><div><span style='background:#2a78d6'></span>2020: <b>%19,2</b></div>"/><text x="521.6" y="294.4" text-anchor="middle" font-size="9.5" fill="#1a1a1a">%19,2</text><rect x="542.0" y="112.2" width="36.9" height="253.8" rx="3" fill="#eb6834" data-tip="<b>Mesleki, bilimsel
+ve teknik</b><div><span style='background:#eb6834'></span>2021-2022 ort.: <b>%72,1</b></div>"/><text x="560.4" y="108.2" text-anchor="middle" font-size="9.5" fill="#1a1a1a">%72,1</text><text x="542.0" y="380" text-anchor="middle" font-size="10" fill="#52514e">Mesleki, bilimsel</text><text x="542.0" y="391" text-anchor="middle" font-size="10" fill="#52514e">ve teknik</text><rect x="611.1" y="366.0" width="36.9" height="61.6" rx="3" fill="#2a78d6" data-tip="<b>İdari ve destek
+hizmetleri</b><div><span style='background:#2a78d6'></span>2020: <b>-%17,5</b></div>"/><text x="629.6" y="438.6" text-anchor="middle" font-size="9.5" fill="#1a1a1a">-%17,5</text><rect x="650.0" y="34.4" width="36.9" height="331.6" rx="3" fill="#eb6834" data-tip="<b>İdari ve destek
+hizmetleri</b><div><span style='background:#eb6834'></span>2021-2022 ort.: <b>%94,2</b></div>"/><text x="668.4" y="30.4" text-anchor="middle" font-size="9.5" fill="#1a1a1a">%94,2</text><text x="650.0" y="380" text-anchor="middle" font-size="10" fill="#52514e">İdari ve destek</text><text x="650.0" y="391" text-anchor="middle" font-size="10" fill="#52514e">hizmetleri</text><line x1="56" y1="366" x2="704" y2="366" stroke="#b9b8b2"/></svg><div class="tip"></div></figure>
+<div class="izgara"><figure class="ich" id="g2" data-id="g2" data-tur="cizgi"><figcaption><b>Grafik 2.</b> TÜFE fiyat endeksleri (2019 Aralık=100)</figcaption><div class="lejant"><span><i style="background:#2a78d6"></i>Gıda ve Yemek Hariç TÜFE</span><span><i style="background:#eb6834"></i>Gıda ve Alkolsüz İçecekler</span><span><i style="background:#1baf7a"></i>Yemek Hizmetleri</span></div><svg viewBox="0 0 720 400" role="img"><line x1="56" y1="366.0" x2="704" y2="366.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="369.5" text-anchor="end" font-size="10.5" fill="#52514e">500</text><line x1="56" y1="14.0" x2="704" y2="14.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="17.5" text-anchor="end" font-size="10.5" fill="#52514e">1.000</text><line x1="64.2" y1="366" x2="64.2" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="64.2" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2020</text><line x1="162.63" y1="366" x2="162.63" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="162.63" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2021</text><line x1="261.06" y1="366" x2="261.06" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="261.06" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2022</text><line x1="359.49" y1="366" x2="359.49" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="359.49" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2023</text><line x1="457.92" y1="366" x2="457.92" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="457.92" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2024</text><line x1="556.35" y1="366" x2="556.35" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="556.35" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2025</text><line x1="654.78" y1="366" x2="654.78" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="654.78" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2026</text><line x1="56" y1="366" x2="704" y2="366" stroke="#b9b8b2" stroke-width="1"/><path d="M56.0,647.6 L64.2,647.41 L72.41,647.67 L80.61,647.63 L88.81,647.36 L97.01,646.04 L105.22,644.74 L113.42,643.91 L121.62,643.09 L129.82,642.27 L138.03,640.76 L146.23,639.38 L154.43,638.67 L162.63,637.58 L170.84,637.38 L179.04,636.63 L187.24,635.38 L195.44,634.47 L203.65,632.63 L211.85,631.45 L220.05,631.23 L228.25,629.95 L236.46,627.66 L244.66,624.68 L252.86,612.61 L261.06,600.57 L269.27,596.51 L277.47,589.64 L285.67,583.28 L293.87,578.87 L302.08,570.5 L310.28,567.46 L318.48,565.19 L326.68,559.8 L334.89,554.99 L343.09,552.11 L351.29,550.85 L359.49,540.82 L367.7,538.3 L375.9,535.62 L384.1,532.75 L392.3,534.48 L400.51,526.64 L408.71,507.61 L416.91,487.62 L425.11,475.28 L433.32,466.91 L441.52,458.1 L449.72,452.4 L457.92,434.86 L466.13,426.33 L474.33,417.7 L482.53,408.24 L490.73,396.62 L498.94,391.96 L507.14,379.75 L515.34,366.7 L523.54,355.23 L531.75,346.29 L539.95,341.45 L548.15,338.16 L556.35,318.07 L564.56,310.78 L572.76,304.46 L580.96,290.77 L589.16,280.75 L597.37,272.3 L605.57,259.87 L613.77,252.14 L621.97,238.79 L630.18,227.63 L638.38,220.84 L646.58,218.94 L654.78,199.19 L662.99,191.67 L671.19,181.17 L679.39,157.1 L687.59,142.61 L695.8,135.79 L704.0,124.89" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/><text x="701.0" y="117.89" text-anchor="end" font-size="10.5" font-weight="700" fill="#2a78d6" stroke="#fff" stroke-width="3" paint-order="stroke">842</text><path d="M56.0,647.6 L64.2,644.33 L72.41,642.61 L80.61,641.14 L88.81,639.2 L97.01,639.01 L105.22,640.27 L113.42,641.27 L121.62,641.33 L129.82,640.82 L138.03,638.49 L146.23,635.18 L154.43,633.09 L162.63,630.98 L170.84,628.74 L179.04,627.73 L187.24,625.81 L195.44,625.54 L203.65,624.73 L211.85,622.15 L220.05,619.1 L228.25,618.61 L236.46,616.7 L244.66,612.73 L252.86,595.89 L261.06,582.59 L269.27,571.19 L277.47,564.25 L285.67,543.68 L293.87,540.83 L302.08,537.13 L310.28,531.43 L318.48,529.83 L326.68,526.12 L334.89,516.36 L343.09,504.77 L351.29,500.81 L359.49,486.44 L367.7,469.41 L375.9,459.87 L384.1,449.68 L392.3,447.78 L400.51,439.61 L408.71,418.15 L416.91,392.73 L425.11,381.95 L433.32,371.18 L441.52,361.56 L449.72,344.41 L457.92,325.02 L466.13,292.6 L474.33,278.12 L482.53,265.89 L490.73,258.24 L498.94,250.08 L507.14,241.5 L515.34,246.74 L523.54,235.03 L531.75,214.14 L539.95,188.42 L548.15,181.58 L556.35,160.9 L564.56,143.23 L572.76,114.86 L580.96,102.73 L589.16,107.11 L597.37,108.75 L605.57,108.29 L613.77,89.89 L621.97,60.87 L630.18,38.45 L638.38,43.12 L646.58,29.7 L654.78,-15.67 L662.99,-66.22 L671.19,-80.3 L679.39,-109.83 L687.59,-105.83 L695.8,-107.2 L704.0,-120.53" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/><text x="701.0" y="-127.53" text-anchor="end" font-size="10.5" font-weight="700" fill="#eb6834" stroke="#fff" stroke-width="3" paint-order="stroke">1.191</text><path d="M56.0,647.6 L64.2,646.64 L72.41,645.98 L80.61,645.19 L88.81,645.07 L97.01,644.92 L105.22,642.64 L113.42,641.81 L121.62,640.7 L129.82,640.05 L138.03,639.45 L146.23,638.38 L154.43,637.84 L162.63,636.56 L170.84,635.41 L179.04,633.2 L187.24,632.06 L195.44,631.16 L203.65,627.94 L211.85,625.61 L220.05,623.58 L228.25,621.66 L236.46,619.71 L244.66,615.54 L252.86,605.13 L261.06,595.48 L269.27,589.39 L277.47,581.35 L285.67,571.1 L293.87,563.53 L302.08,555.87 L310.28,551.83 L318.48,546.35 L326.68,541.79 L334.89,536.8 L343.09,530.55 L351.29,524.93 L359.49,499.98 L367.7,490.22 L375.9,480.46 L384.1,469.74 L392.3,452.39 L400.51,442.41 L408.71,410.55 L416.91,387.95 L425.11,374.29 L433.32,360.08 L441.52,349.61 L449.72,337.92 L457.92,289.71 L466.13,264.68 L474.33,245.67 L482.53,223.05 L490.73,195.63 L498.94,180.35 L507.14,163.29 L515.34,152.7 L523.54,142.06 L531.75,131.71 L539.95,124.62 L548.15,115.56 L556.35,75.62 L564.56,54.08 L572.76,38.28 L580.96,14.82 L589.16,3.43 L597.37,-9.54 L605.57,-24.71 L613.77,-38.79 L621.97,-53.55 L630.18,-66.58 L638.38,-77.18 L646.58,-91.19 L654.78,-142.38 L662.99,-170.58 L671.19,-187.65 L679.39,-218.35 L687.59,-231.54 L695.8,-247.51 L704.0,-263.26" fill="none" stroke="#1baf7a" stroke-width="2" stroke-linejoin="round"/><text x="701.0" y="-270.26" text-anchor="end" font-size="10.5" font-weight="700" fill="#1baf7a" stroke="#fff" stroke-width="3" paint-order="stroke">1.394</text><g class="ch" style="display:none"><line x1="0" y1="14" x2="0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="3,3"/><circle r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/><circle r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/><circle r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/></g><rect class="yakala" x="56" y="14" width="648" height="352" fill="transparent"/></svg><div class="tip"></div></figure><figure class="ich" id="g3" data-id="g3" data-tur="cizgi"><figcaption><b>Grafik 3.</b> TÜFE fiyat endeksleri (aylık % değişim)</figcaption><div class="lejant"><span><i style="background:#2a78d6"></i>Gıda ve Yemek Hariç TÜFE</span><span><i style="background:#eb6834"></i>Gıda ve Alkolsüz İçecekler</span><span><i style="background:#1baf7a"></i>Yemek Hizmetleri</span></div><svg viewBox="0 0 720 400" role="img"><line x1="56" y1="366.0" x2="704" y2="366.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="369.5" text-anchor="end" font-size="10.5" fill="#52514e">%0,0</text><line x1="56" y1="248.67" x2="704" y2="248.67" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="252.17" text-anchor="end" font-size="10.5" fill="#52514e">%5,0</text><line x1="56" y1="131.33" x2="704" y2="131.33" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="134.83" text-anchor="end" font-size="10.5" fill="#52514e">%10,0</text><line x1="56" y1="14.0" x2="704" y2="14.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="17.5" text-anchor="end" font-size="10.5" fill="#52514e">%15,0</text><line x1="64.2" y1="366" x2="64.2" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="64.2" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2020</text><line x1="162.63" y1="366" x2="162.63" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="162.63" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2021</text><line x1="261.06" y1="366" x2="261.06" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="261.06" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2022</text><line x1="359.49" y1="366" x2="359.49" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="359.49" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2023</text><line x1="457.92" y1="366" x2="457.92" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="457.92" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2024</text><line x1="556.35" y1="366" x2="556.35" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="556.35" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2025</text><line x1="654.78" y1="366" x2="654.78" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="654.78" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2026</text><line x1="56" y1="366" x2="704" y2="366" stroke="#b9b8b2" stroke-width="1"/><path d="M56.0,365.14 L64.2,359.76 L72.41,374.5 L80.61,364.62 L88.81,356.99 L97.01,322.33 L105.22,323.61 L113.42,339.31 L121.62,340.03 L129.82,340.36 L138.03,319.3 L146.23,323.91 L154.43,345.0 L162.63,333.48 L170.84,360.39 L179.04,344.16 L187.24,329.96 L195.44,340.13 L203.65,314.22 L211.85,333.69 L220.05,359.98 L228.25,331.31 L236.46,305.0 L244.66,288.53 L252.86,62.57 L261.06,97.96 L269.27,284.89 L277.47,233.11 L285.67,249.86 L293.87,289.16 L302.08,224.89 L310.28,317.62 L318.48,330.52 L326.68,283.28 L334.89,294.69 L343.09,324.51 L351.29,348.13 L359.49,225.18 L367.7,332.72 L375.9,330.88 L384.1,329.07 L392.3,388.02 L400.51,265.65 L408.71,132.69 L416.91,143.07 L425.11,240.23 L433.32,285.1 L441.52,283.65 L449.72,314.58 L457.92,210.96 L466.13,295.36 L474.33,296.52 L482.53,292.07 L490.73,278.01 L498.94,331.97 L507.14,278.11 L515.34,275.49 L523.54,289.36 L531.75,308.16 L539.95,335.47 L548.15,345.44 L556.35,241.88 L564.56,323.27 L572.76,329.56 L580.96,288.32 L589.16,310.93 L597.37,320.68 L605.57,300.53 L613.77,326.4 L621.97,298.77 L630.18,311.37 L638.38,333.51 L646.58,357.02 L654.78,273.14 L662.99,332.0 L671.19,319.19 L679.39,260.76 L687.59,305.39 L695.8,338.18 L704.0,322.07" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/><path d="M56.0,297.3 L64.2,256.85 L72.41,311.34 L80.61,320.19 L88.81,306.74 L97.01,360.34 L105.22,403.63 L113.42,396.06 L121.62,367.88 L129.82,350.53 L138.03,294.92 L146.23,268.45 L154.43,306.69 L162.63,307.73 L170.84,305.6 L179.04,339.53 L187.24,316.08 L195.44,359.17 L203.65,345.44 L211.85,300.89 L220.05,291.33 L228.25,354.37 L236.46,320.86 L244.66,274.04 L252.86,-9.22 L261.06,110.27 L269.27,168.58 L277.47,255.04 L285.67,51.98 L293.87,327.63 L302.08,316.97 L310.28,292.04 L318.48,345.96 L326.68,319.73 L334.89,246.55 L343.09,231.13 L351.29,322.46 L359.49,210.71 L367.7,193.39 L375.9,275.95 L384.1,273.39 L392.3,349.34 L400.51,295.06 L408.71,185.12 L416.91,167.1 L425.11,288.19 L433.32,290.84 L441.52,300.87 L449.72,253.1 L457.92,244.22 L466.13,172.4 L474.33,286.13 L482.53,300.73 L490.73,326.32 L498.94,324.35 L507.14,322.95 L515.34,391.8 L523.54,307.69 L531.75,264.5 L539.95,246.23 L548.15,335.69 L556.35,275.51 L564.56,291.6 L572.76,250.15 L580.96,318.81 L589.16,382.69 L597.37,372.31 L605.57,364.24 L613.77,295.18 L621.97,257.55 L630.18,285.95 L638.38,382.12 L646.58,319.35 L654.78,211.32 L662.99,204.3 L671.19,323.87 L679.39,279.19 L687.59,377.35 L695.8,362.08 L704.0,328.1" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/><path d="M56.0,354.21 L64.2,334.02 L72.41,344.35 L80.61,340.3 L88.81,362.08 L97.01,361.12 L105.22,292.76 L113.42,340.13 L121.62,331.74 L129.82,346.51 L138.03,347.84 L146.23,334.0 L154.43,350.07 L162.63,328.6 L170.84,332.81 L179.04,303.28 L187.24,334.4 L195.44,341.53 L203.65,278.84 L211.85,305.22 L220.05,314.45 L228.25,318.48 L236.46,318.28 L244.66,266.55 L252.86,127.52 L261.06,165.35 L269.27,249.42 L277.47,219.36 L285.67,189.99 L293.87,245.03 L302.08,249.62 L310.28,307.5 L318.48,288.66 L326.68,303.68 L334.89,299.53 L343.09,285.06 L351.29,295.65 L359.49,62.66 L367.7,260.94 L375.9,265.46 L384.1,260.14 L392.3,201.95 L400.51,277.87 L408.71,94.69 L416.91,193.53 L425.11,268.88 L433.32,268.97 L441.52,297.38 L449.72,291.53 L457.92,68.33 L466.13,228.85 L474.33,267.61 L482.53,253.61 L490.73,236.0 L498.94,297.34 L507.14,291.54 L515.34,321.19 L523.54,321.82 L531.75,323.84 L539.95,337.64 L548.15,330.16 L556.35,210.41 L564.56,287.33 L572.76,310.14 L580.96,284.99 L589.16,327.99 L597.37,323.39 L605.57,317.07 L613.77,321.54 L621.97,320.21 L630.18,326.39 L638.38,334.28 L646.58,324.66 L654.78,217.55 L662.99,289.07 L671.19,320.92 L679.39,286.46 L687.59,332.95 L695.8,326.53 L704.0,327.72" fill="none" stroke="#1baf7a" stroke-width="2" stroke-linejoin="round"/><g class="ch" style="display:none"><line x1="0" y1="14" x2="0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="3,3"/><circle r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/><circle r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/><circle r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/></g><rect class="yakala" x="56" y="14" width="648" height="352" fill="transparent"/></svg><div class="tip"></div></figure><figure class="ich" id="g4" data-id="g4" data-tur="cizgi"><figcaption><b>Grafik 4.</b> TÜFE fiyat endeksleri (yıllık % değişim)</figcaption><div class="lejant"><span><i style="background:#2a78d6"></i>Gıda ve Yemek Hariç TÜFE</span><span><i style="background:#eb6834"></i>Gıda ve Alkolsüz İçecekler</span><span><i style="background:#1baf7a"></i>Yemek Hizmetleri</span></div><svg viewBox="0 0 720 400" role="img"><line x1="56" y1="366.0" x2="704" y2="366.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="369.5" text-anchor="end" font-size="10.5" fill="#52514e">%25,0</text><line x1="56" y1="248.67" x2="704" y2="248.67" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="252.17" text-anchor="end" font-size="10.5" fill="#52514e">%50,0</text><line x1="56" y1="131.33" x2="704" y2="131.33" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="134.83" text-anchor="end" font-size="10.5" fill="#52514e">%75,0</text><line x1="56" y1="14.0" x2="704" y2="14.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="17.5" text-anchor="end" font-size="10.5" fill="#52514e">%100,0</text><line x1="64.2" y1="366" x2="64.2" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="64.2" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2020</text><line x1="162.63" y1="366" x2="162.63" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="162.63" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2021</text><line x1="261.06" y1="366" x2="261.06" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="261.06" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2022</text><line x1="359.49" y1="366" x2="359.49" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="359.49" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2023</text><line x1="457.92" y1="366" x2="457.92" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="457.92" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2024</text><line x1="556.35" y1="366" x2="556.35" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="556.35" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2025</text><line x1="654.78" y1="366" x2="654.78" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="654.78" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2026</text><line x1="56" y1="366" x2="704" y2="366" stroke="#b9b8b2" stroke-width="1"/><path d="M56.0,427.44 L64.2,422.17 L72.41,423.18 L80.61,426.0 L88.81,433.68 L97.01,432.28 L105.22,424.77 L113.42,430.12 L121.62,431.76 L129.82,433.97 L138.03,435.28 L146.23,428.33 L154.43,423.83 L162.63,417.93 L170.84,414.7 L179.04,410.01 L187.24,403.78 L195.44,407.87 L203.65,405.73 L211.85,404.43 L220.05,409.04 L228.25,406.97 L236.46,403.71 L244.66,395.58 L252.86,329.13 L261.06,267.4 L269.27,245.41 L277.47,212.25 L285.67,187.36 L293.87,170.91 L302.08,141.79 L310.28,136.32 L318.48,126.1 L326.68,109.42 L334.89,105.81 L343.09,118.38 L351.29,208.28 L359.49,244.5 L367.7,258.45 L375.9,285.83 L384.1,307.27 L392.3,333.6 L400.51,343.75 L408.71,296.73 L416.91,245.11 L425.11,232.58 L433.32,229.72 L441.52,217.35 L449.72,206.92 L457.92,202.66 L466.13,190.88 L474.33,179.89 L482.53,167.9 L490.73,130.76 L498.94,153.03 L507.14,198.1 L515.34,236.99 L523.54,251.21 L531.75,257.87 L539.95,272.69 L548.15,281.45 L556.35,289.74 L564.56,297.4 L572.76,306.36 L580.96,305.36 L589.16,314.11 L597.37,311.08 L605.57,316.99 L613.77,330.27 L621.97,332.69 L630.18,333.51 L638.38,333.0 L646.58,336.03 L654.78,343.83 L662.99,346.06 L671.19,343.42 L679.39,336.49 L687.59,335.07 L695.8,339.59 L704.0,345.06" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/><text x="701.0" y="338.06" text-anchor="end" font-size="10.5" font-weight="700" fill="#2a78d6" stroke="#fff" stroke-width="3" paint-order="stroke">%29,5</text><path d="M56.0,432.23 L64.2,440.93 L72.41,433.69 L80.61,436.15 L88.81,430.4 L97.01,422.91 L105.22,422.67 L113.42,423.6 L121.62,419.91 L129.82,413.18 L138.03,405.86 L146.23,384.38 L154.43,386.59 L162.63,398.32 L170.84,396.99 L179.04,401.48 L187.24,403.63 L195.44,403.35 L203.65,389.51 L211.85,366.38 L220.05,347.24 L228.25,348.22 L236.46,354.71 L244.66,356.07 L252.86,277.74 L261.06,222.33 L269.27,180.76 L277.47,153.27 L285.67,65.18 L293.87,53.29 L302.08,42.47 L310.28,39.13 L318.48,59.74 L326.68,46.62 L334.89,18.47 L343.09,2.03 L351.29,117.87 L359.49,150.09 L367.7,157.92 L375.9,164.69 L384.1,230.26 L392.3,236.83 L400.51,230.29 L408.71,198.38 L416.91,141.37 L425.11,130.68 L433.32,145.44 L441.52,168.13 L449.72,145.36 L457.92,156.17 L466.13,149.54 L474.33,152.89 L482.53,161.85 L490.73,154.15 L498.94,163.82 L507.14,206.84 L515.34,272.68 L523.54,278.15 L531.75,270.81 L539.95,255.37 L548.15,278.78 L556.35,287.32 L564.56,318.54 L572.76,309.14 L580.96,313.96 L589.16,329.05 L597.37,341.57 L605.57,352.13 L613.77,327.13 L621.97,314.09 L630.18,319.68 L638.38,354.56 L646.58,350.45 L654.78,334.59 L662.99,312.3 L671.19,331.47 L679.39,321.19 L687.59,319.74 L695.8,316.97 L704.0,307.19" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/><text x="701.0" y="300.19" text-anchor="end" font-size="10.5" font-weight="700" fill="#eb6834" stroke="#fff" stroke-width="3" paint-order="stroke">%37,5</text><path d="M56.0,422.78 L64.2,421.1 L72.41,421.41 L80.61,419.12 L88.81,423.26 L97.01,430.81 L105.22,426.48 L113.42,428.16 L121.62,424.01 L129.82,424.98 L138.03,424.84 L146.23,419.2 L154.43,418.26 L162.63,417.04 L170.84,414.43 L179.04,406.03 L187.24,399.59 L195.44,394.99 L203.65,391.78 L211.85,383.53 L220.05,379.39 L228.25,372.6 L236.46,365.35 L244.66,348.7 L252.86,291.81 L261.06,246.56 L269.27,221.82 L277.47,196.36 L285.67,150.44 L293.87,117.79 L302.08,107.76 L310.28,108.57 L318.48,99.49 L326.68,94.22 L334.89,87.49 L343.09,94.04 L351.29,149.88 L359.49,117.52 L367.7,121.42 L375.9,136.79 L384.1,159.48 L392.3,145.63 L400.51,154.89 L408.71,84.3 L416.91,50.22 L425.11,37.18 L433.32,25.59 L441.52,30.29 L449.72,28.72 L457.92,30.7 L466.13,18.63 L474.33,19.46 L482.53,16.97 L490.73,29.66 L498.94,37.04 L507.14,105.89 L515.34,148.8 L523.54,166.22 L531.75,183.88 L539.95,196.69 L548.15,208.75 L556.35,248.72 L564.56,265.3 L572.76,277.25 L580.96,285.87 L589.16,310.64 L597.37,317.57 L605.57,324.26 L613.77,324.36 L621.97,323.93 L630.18,324.6 L638.38,323.71 L646.58,322.26 L654.78,324.06 L662.99,324.51 L671.19,327.33 L679.39,327.71 L687.59,329.01 L695.8,329.83 L704.0,332.59" fill="none" stroke="#1baf7a" stroke-width="2" stroke-linejoin="round"/><text x="701.0" y="325.59" text-anchor="end" font-size="10.5" font-weight="700" fill="#1baf7a" stroke="#fff" stroke-width="3" paint-order="stroke">%32,1</text><g class="ch" style="display:none"><line x1="0" y1="14" x2="0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="3,3"/><circle r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/><circle r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/><circle r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/></g><rect class="yakala" x="56" y="14" width="648" height="352" fill="transparent"/></svg><div class="tip"></div></figure></div>
+<h3>Konsept maliyet endeksleri (Grafik 5-8)</h3>
+<div class="izgara"><figure class="ich" id="g5" data-id="g5" data-tur="cizgi"><figcaption><b>Grafik 5.</b> Maliyet endeksi — Kırmızı et ağırlıklı (2013 Ocak=100)</figcaption><svg viewBox="0 0 720 400" role="img"><line x1="56" y1="366.0" x2="704" y2="366.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="369.5" text-anchor="end" font-size="10.5" fill="#52514e">0</text><line x1="56" y1="190.0" x2="704" y2="190.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="193.5" text-anchor="end" font-size="10.5" fill="#52514e">1.000</text><line x1="56" y1="14.0" x2="704" y2="14.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="17.5" text-anchor="end" font-size="10.5" fill="#52514e">2.000</text><line x1="56.0" y1="366" x2="56.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="56.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2013</text><line x1="152.0" y1="366" x2="152.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="152.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2015</text><line x1="248.0" y1="366" x2="248.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="248.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2017</text><line x1="344.0" y1="366" x2="344.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="344.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2019</text><line x1="440.0" y1="366" x2="440.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="440.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2021</text><line x1="536.0" y1="366" x2="536.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="536.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2023</text><line x1="632.0" y1="366" x2="632.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="632.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2025</text><line x1="56" y1="366" x2="704" y2="366" stroke="#b9b8b2" stroke-width="1"/><line x1="504.0" y1="14" x2="504.0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="2,4" opacity=".7"/><text x="508.0" y="24" font-size="9" fill="#52514e">proxy →</text><path d="M56.0,348.4 L60.0,348.43 L64.0,348.33 L68.0,348.34 L72.0,348.4 L76.0,348.3 L80.0,347.97 L84.0,347.88 L88.0,347.65 L92.0,347.51 L96.0,347.43 L100.0,347.33 L104.0,346.95 L108.0,346.85 L112.0,346.73 L116.0,346.53 L120.0,346.6 L124.0,346.3 L128.0,345.72 L132.0,345.54 L136.0,345.2 L140.0,345.03 L144.0,344.98 L148.0,344.88 L152.0,344.27 L156.0,343.79 L160.0,343.43 L164.0,343.21 L168.0,343.08 L172.0,342.87 L176.0,342.16 L180.0,341.91 L184.0,341.82 L188.0,341.59 L192.0,341.54 L196.0,341.52 L200.0,339.72 L204.0,339.83 L208.0,340.1 L212.0,340.09 L216.0,340.15 L220.0,340.03 L224.0,339.7 L228.0,339.63 L232.0,339.54 L236.0,339.41 L240.0,339.36 L244.0,339.21 L248.0,338.16 L252.0,338.12 L256.0,337.97 L260.0,337.62 L264.0,337.31 L268.0,336.96 L272.0,336.77 L276.0,336.89 L280.0,336.83 L284.0,336.93 L288.0,337.04 L292.0,337.02 L296.0,336.21 L300.0,336.15 L304.0,335.68 L308.0,335.18 L312.0,334.78 L316.0,334.15 L320.0,334.11 L324.0,333.95 L328.0,332.71 L332.0,332.28 L336.0,332.55 L340.0,332.52 L344.0,331.48 L348.0,331.55 L352.0,331.06 L356.0,329.62 L360.0,329.4 L364.0,329.38 L368.0,329.22 L372.0,329.37 L376.0,329.3 L380.0,329.26 L384.0,329.35 L388.0,329.15 L392.0,327.22 L396.0,326.79 L400.0,325.95 L404.0,324.97 L408.0,324.93 L412.0,325.11 L416.0,325.07 L420.0,325.06 L424.0,325.05 L428.0,324.77 L432.0,324.37 L436.0,324.2 L440.0,321.13 L444.0,320.37 L448.0,319.84 L452.0,319.0 L456.0,318.24 L460.0,316.57 L464.0,315.8 L468.0,315.52 L472.0,315.2 L476.0,314.37 L480.0,312.5 L484.0,306.59 L488.0,298.49 L492.0,295.49 L496.0,290.79 L500.0,283.94 L504.0,280.15 L508.0,277.5 L512.0,273.25 L516.0,274.44 L520.0,273.41 L524.0,270.64 L528.0,269.95 L532.0,268.2 L536.0,245.17 L540.0,238.93 L544.0,230.1 L548.0,220.2 L552.0,216.85 L556.0,211.64 L560.0,192.17 L564.0,189.01 L568.0,184.47 L572.0,177.73 L576.0,174.19 L580.0,168.79 L584.0,134.21 L588.0,120.25 L592.0,100.59 L596.0,84.1 L600.0,76.36 L604.0,76.75 L608.0,76.3 L612.0,78.8 L616.0,77.81 L620.0,75.47 L624.0,76.12 L628.0,74.59 L632.0,47.15 L636.0,40.84 L640.0,32.03 L644.0,23.0 L648.0,16.76 L652.0,12.12 L656.0,11.39 L660.0,6.67 L664.0,-0.11 L668.0,-9.39 L672.0,-10.14 L676.0,-22.02 L680.0,-76.0 L684.0,-92.18 L688.0,-110.83 L692.0,-131.08 L696.0,-126.16 L700.0,-128.17 L704.0,-129.43" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/><text x="701.0" y="-136.43" text-anchor="end" font-size="10.5" font-weight="700" fill="#eb6834" stroke="#fff" stroke-width="3" paint-order="stroke">2.815</text><g class="ch" style="display:none"><line x1="0" y1="14" x2="0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="3,3"/><circle r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/></g><rect class="yakala" x="56" y="14" width="648" height="352" fill="transparent"/></svg><div class="tip"></div></figure><figure class="ich" id="g6" data-id="g6" data-tur="cizgi"><figcaption><b>Grafik 6.</b> Maliyet endeksi — Tavuk eti ağırlıklı (2013 Ocak=100)</figcaption><svg viewBox="0 0 720 400" role="img"><line x1="56" y1="366.0" x2="704" y2="366.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="369.5" text-anchor="end" font-size="10.5" fill="#52514e">0</text><line x1="56" y1="190.0" x2="704" y2="190.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="193.5" text-anchor="end" font-size="10.5" fill="#52514e">1.000</text><line x1="56" y1="14.0" x2="704" y2="14.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="17.5" text-anchor="end" font-size="10.5" fill="#52514e">2.000</text><line x1="56.0" y1="366" x2="56.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="56.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2013</text><line x1="152.0" y1="366" x2="152.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="152.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2015</text><line x1="248.0" y1="366" x2="248.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="248.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2017</text><line x1="344.0" y1="366" x2="344.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="344.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2019</text><line x1="440.0" y1="366" x2="440.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="440.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2021</text><line x1="536.0" y1="366" x2="536.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="536.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2023</text><line x1="632.0" y1="366" x2="632.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="632.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2025</text><line x1="56" y1="366" x2="704" y2="366" stroke="#b9b8b2" stroke-width="1"/><line x1="504.0" y1="14" x2="504.0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="2,4" opacity=".7"/><text x="508.0" y="24" font-size="9" fill="#52514e">proxy →</text><path d="M56.0,348.4 L60.0,347.75 L64.0,347.2 L68.0,346.9 L72.0,347.27 L76.0,347.91 L80.0,347.57 L84.0,347.23 L88.0,347.71 L92.0,348.18 L96.0,348.14 L100.0,347.8 L104.0,346.72 L108.0,346.22 L112.0,345.92 L116.0,345.99 L120.0,346.47 L124.0,346.57 L128.0,345.88 L132.0,345.75 L136.0,345.99 L140.0,346.19 L144.0,346.47 L148.0,346.57 L152.0,345.93 L156.0,345.6 L160.0,345.56 L164.0,345.31 L168.0,345.07 L172.0,345.51 L176.0,344.39 L180.0,344.31 L184.0,344.6 L188.0,344.86 L192.0,345.2 L196.0,345.09 L200.0,342.87 L204.0,342.8 L208.0,342.61 L212.0,342.23 L216.0,342.03 L220.0,341.87 L224.0,341.71 L228.0,342.03 L232.0,342.73 L236.0,342.8 L240.0,342.15 L244.0,341.55 L248.0,340.51 L252.0,340.54 L256.0,340.12 L260.0,339.49 L264.0,339.1 L268.0,338.52 L272.0,338.29 L276.0,338.94 L280.0,339.75 L284.0,340.07 L288.0,339.81 L292.0,339.83 L296.0,338.78 L300.0,338.46 L304.0,338.25 L308.0,337.77 L312.0,337.12 L316.0,335.82 L320.0,335.72 L324.0,335.46 L328.0,333.95 L332.0,333.08 L336.0,333.45 L340.0,333.55 L344.0,331.7 L348.0,331.61 L352.0,331.29 L356.0,329.41 L360.0,327.29 L364.0,326.56 L368.0,327.65 L372.0,329.92 L376.0,331.21 L380.0,331.24 L384.0,330.84 L388.0,330.2 L392.0,328.15 L396.0,328.25 L400.0,327.35 L404.0,326.81 L408.0,325.89 L412.0,326.18 L416.0,326.73 L420.0,327.33 L424.0,327.76 L428.0,327.19 L432.0,324.26 L436.0,323.21 L440.0,319.97 L444.0,318.65 L448.0,316.57 L452.0,315.55 L456.0,315.01 L460.0,314.01 L464.0,312.95 L468.0,312.72 L472.0,312.86 L476.0,311.97 L480.0,308.5 L484.0,300.0 L488.0,289.82 L492.0,289.29 L496.0,283.32 L500.0,270.9 L504.0,273.32 L508.0,275.3 L512.0,263.72 L516.0,260.84 L520.0,255.41 L524.0,250.24 L528.0,246.5 L532.0,244.19 L536.0,224.29 L540.0,219.51 L544.0,213.05 L548.0,208.62 L552.0,216.85 L556.0,214.12 L560.0,194.35 L564.0,185.04 L568.0,178.39 L572.0,170.36 L576.0,163.36 L580.0,151.23 L584.0,119.0 L588.0,113.42 L592.0,106.96 L596.0,111.43 L600.0,119.72 L604.0,127.45 L608.0,117.83 L612.0,112.8 L616.0,95.52 L620.0,93.8 L624.0,66.45 L628.0,58.86 L632.0,22.6 L636.0,11.39 L640.0,-8.46 L644.0,-12.23 L648.0,9.38 L652.0,20.76 L656.0,15.84 L660.0,5.21 L664.0,-19.31 L668.0,-23.41 L672.0,-12.88 L676.0,-15.31 L680.0,-43.03 L684.0,-55.86 L688.0,-52.44 L692.0,-50.51 L696.0,-59.58 L700.0,-50.73 L704.0,-52.17" fill="none" stroke="#eda100" stroke-width="2" stroke-linejoin="round"/><text x="701.0" y="-59.17" text-anchor="end" font-size="10.5" font-weight="700" fill="#eda100" stroke="#fff" stroke-width="3" paint-order="stroke">2.376</text><g class="ch" style="display:none"><line x1="0" y1="14" x2="0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="3,3"/><circle r="4.5" fill="#eda100" stroke="#fcfcfb" stroke-width="2"/></g><rect class="yakala" x="56" y="14" width="648" height="352" fill="transparent"/></svg><div class="tip"></div></figure><figure class="ich" id="g7" data-id="g7" data-tur="cizgi"><figcaption><b>Grafik 7.</b> Maliyet endeksi — Ev yemekleri (2013 Ocak=100)</figcaption><svg viewBox="0 0 720 400" role="img"><line x1="56" y1="366.0" x2="704" y2="366.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="369.5" text-anchor="end" font-size="10.5" fill="#52514e">0</text><line x1="56" y1="190.0" x2="704" y2="190.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="193.5" text-anchor="end" font-size="10.5" fill="#52514e">1.000</text><line x1="56" y1="14.0" x2="704" y2="14.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="17.5" text-anchor="end" font-size="10.5" fill="#52514e">2.000</text><line x1="56.0" y1="366" x2="56.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="56.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2013</text><line x1="152.0" y1="366" x2="152.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="152.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2015</text><line x1="248.0" y1="366" x2="248.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="248.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2017</text><line x1="344.0" y1="366" x2="344.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="344.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2019</text><line x1="440.0" y1="366" x2="440.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="440.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2021</text><line x1="536.0" y1="366" x2="536.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="536.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2023</text><line x1="632.0" y1="366" x2="632.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="632.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2025</text><line x1="56" y1="366" x2="704" y2="366" stroke="#b9b8b2" stroke-width="1"/><line x1="504.0" y1="14" x2="504.0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="2,4" opacity=".7"/><text x="508.0" y="24" font-size="9" fill="#52514e">proxy →</text><path d="M56.0,348.4 L60.0,348.28 L64.0,348.02 L68.0,348.26 L72.0,348.53 L76.0,348.3 L80.0,347.98 L84.0,348.04 L88.0,347.94 L92.0,347.44 L96.0,347.21 L100.0,346.55 L104.0,345.33 L108.0,345.07 L112.0,344.71 L116.0,344.72 L120.0,344.97 L124.0,344.94 L128.0,344.57 L132.0,344.5 L136.0,344.55 L140.0,344.08 L144.0,343.98 L148.0,343.93 L152.0,343.31 L156.0,342.92 L160.0,342.55 L164.0,343.3 L168.0,343.88 L172.0,344.22 L176.0,343.85 L180.0,343.82 L184.0,343.74 L188.0,342.61 L192.0,342.4 L196.0,342.13 L200.0,339.99 L204.0,339.74 L208.0,339.8 L212.0,341.67 L216.0,342.25 L220.0,342.31 L224.0,341.99 L228.0,342.1 L232.0,342.01 L236.0,340.45 L240.0,340.35 L244.0,339.88 L248.0,338.42 L252.0,337.96 L256.0,337.51 L260.0,337.43 L264.0,337.64 L268.0,337.85 L272.0,337.69 L276.0,337.67 L280.0,337.53 L284.0,337.1 L288.0,336.59 L292.0,336.27 L296.0,335.59 L300.0,335.41 L304.0,335.2 L308.0,335.14 L312.0,334.72 L316.0,332.98 L320.0,333.08 L324.0,333.33 L328.0,331.93 L332.0,330.89 L336.0,330.15 L340.0,329.86 L344.0,328.37 L348.0,328.3 L352.0,327.73 L356.0,326.8 L360.0,328.02 L364.0,328.07 L368.0,328.0 L372.0,328.37 L376.0,328.43 L380.0,328.31 L384.0,328.22 L388.0,327.26 L392.0,324.92 L396.0,324.59 L400.0,323.78 L404.0,322.44 L408.0,322.57 L412.0,322.27 L416.0,322.53 L420.0,322.59 L424.0,322.18 L428.0,321.13 L432.0,319.79 L436.0,318.87 L440.0,315.79 L444.0,315.4 L448.0,315.17 L452.0,314.63 L456.0,314.53 L460.0,313.91 L464.0,312.91 L468.0,312.34 L472.0,311.62 L476.0,310.24 L480.0,308.31 L484.0,302.44 L488.0,292.13 L492.0,289.16 L496.0,288.05 L500.0,281.89 L504.0,280.4 L508.0,277.25 L512.0,267.98 L516.0,266.53 L520.0,264.34 L524.0,260.43 L528.0,254.89 L532.0,252.91 L536.0,235.98 L540.0,232.05 L544.0,230.89 L548.0,230.67 L552.0,231.07 L556.0,228.34 L560.0,210.26 L564.0,203.35 L568.0,199.6 L572.0,193.7 L576.0,185.19 L580.0,179.94 L584.0,147.03 L588.0,135.41 L592.0,133.0 L596.0,130.06 L600.0,125.62 L604.0,124.62 L608.0,120.25 L612.0,117.46 L616.0,113.98 L620.0,108.28 L624.0,102.71 L628.0,99.5 L632.0,70.86 L636.0,64.18 L640.0,58.88 L644.0,56.23 L648.0,54.77 L652.0,53.1 L656.0,48.91 L660.0,44.36 L664.0,36.39 L668.0,27.93 L672.0,23.03 L676.0,19.07 L680.0,-18.52 L684.0,-34.48 L688.0,-38.29 L692.0,-48.15 L696.0,-53.05 L700.0,-57.45 L704.0,-66.51" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/><text x="701.0" y="-73.51" text-anchor="end" font-size="10.5" font-weight="700" fill="#2a78d6" stroke="#fff" stroke-width="3" paint-order="stroke">2.457</text><g class="ch" style="display:none"><line x1="0" y1="14" x2="0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="3,3"/><circle r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/></g><rect class="yakala" x="56" y="14" width="648" height="352" fill="transparent"/></svg><div class="tip"></div></figure><figure class="ich" id="g8" data-id="g8" data-tur="cizgi"><figcaption><b>Grafik 8.</b> Maliyet endeksi — Fast-food (2013 Ocak=100)</figcaption><svg viewBox="0 0 720 400" role="img"><line x1="56" y1="366.0" x2="704" y2="366.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="369.5" text-anchor="end" font-size="10.5" fill="#52514e">0</text><line x1="56" y1="190.0" x2="704" y2="190.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="193.5" text-anchor="end" font-size="10.5" fill="#52514e">1.000</text><line x1="56" y1="14.0" x2="704" y2="14.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="17.5" text-anchor="end" font-size="10.5" fill="#52514e">2.000</text><line x1="56.0" y1="366" x2="56.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="56.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2013</text><line x1="152.0" y1="366" x2="152.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="152.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2015</text><line x1="248.0" y1="366" x2="248.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="248.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2017</text><line x1="344.0" y1="366" x2="344.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="344.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2019</text><line x1="440.0" y1="366" x2="440.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="440.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2021</text><line x1="536.0" y1="366" x2="536.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="536.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2023</text><line x1="632.0" y1="366" x2="632.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="632.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2025</text><line x1="56" y1="366" x2="704" y2="366" stroke="#b9b8b2" stroke-width="1"/><line x1="504.0" y1="14" x2="504.0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="2,4" opacity=".7"/><text x="508.0" y="24" font-size="9" fill="#52514e">proxy →</text><path d="M56.0,348.4 L60.0,348.34 L64.0,348.08 L68.0,348.39 L72.0,348.64 L76.0,348.55 L80.0,348.34 L84.0,348.3 L88.0,348.18 L92.0,347.86 L96.0,347.83 L100.0,347.74 L104.0,347.12 L108.0,347.13 L112.0,346.92 L116.0,346.88 L120.0,347.13 L124.0,347.08 L128.0,346.7 L132.0,346.52 L136.0,346.32 L140.0,345.92 L144.0,345.88 L148.0,345.87 L152.0,345.02 L156.0,344.79 L160.0,344.55 L164.0,344.32 L168.0,344.61 L172.0,344.86 L176.0,344.44 L180.0,344.37 L184.0,344.21 L188.0,344.07 L192.0,343.78 L196.0,343.59 L200.0,341.55 L204.0,341.57 L208.0,341.63 L212.0,341.86 L216.0,342.18 L220.0,342.22 L224.0,341.85 L228.0,341.93 L232.0,341.84 L236.0,341.54 L240.0,341.45 L244.0,341.13 L248.0,339.58 L252.0,339.49 L256.0,339.31 L260.0,339.2 L264.0,339.44 L268.0,339.74 L272.0,339.46 L276.0,339.44 L280.0,339.27 L284.0,338.76 L288.0,338.33 L292.0,338.09 L296.0,337.14 L300.0,336.9 L304.0,336.68 L308.0,336.64 L312.0,336.66 L316.0,335.83 L320.0,335.58 L324.0,335.43 L328.0,333.77 L332.0,332.62 L336.0,332.54 L340.0,332.53 L344.0,330.66 L348.0,330.65 L352.0,330.21 L356.0,329.77 L360.0,330.93 L364.0,331.02 L368.0,330.69 L372.0,330.81 L376.0,330.54 L380.0,329.99 L384.0,329.78 L388.0,329.07 L392.0,326.82 L396.0,326.65 L400.0,326.32 L404.0,326.03 L408.0,326.41 L412.0,326.5 L416.0,326.61 L420.0,326.47 L424.0,326.04 L428.0,325.37 L432.0,324.32 L436.0,323.78 L440.0,320.91 L444.0,320.25 L448.0,319.7 L452.0,318.89 L456.0,319.23 L460.0,318.73 L464.0,318.01 L468.0,316.86 L472.0,316.04 L476.0,314.67 L480.0,312.89 L484.0,307.26 L488.0,297.06 L492.0,293.71 L496.0,292.55 L500.0,286.14 L504.0,286.69 L508.0,284.88 L512.0,277.2 L516.0,275.94 L520.0,272.85 L524.0,266.78 L528.0,263.14 L532.0,262.85 L536.0,245.8 L540.0,240.87 L544.0,240.04 L548.0,239.09 L552.0,240.18 L556.0,236.79 L560.0,216.95 L564.0,208.62 L568.0,203.92 L572.0,198.37 L576.0,193.74 L580.0,188.14 L584.0,156.5 L588.0,146.53 L592.0,144.22 L596.0,143.39 L600.0,139.59 L604.0,136.57 L608.0,130.66 L612.0,126.44 L616.0,121.27 L620.0,114.62 L624.0,106.51 L628.0,104.42 L632.0,74.98 L636.0,73.48 L640.0,67.46 L644.0,66.47 L648.0,65.84 L652.0,65.15 L656.0,59.81 L660.0,53.98 L664.0,45.27 L668.0,35.0 L672.0,36.32 L676.0,33.65 L680.0,-9.44 L684.0,-26.79 L688.0,-32.11 L692.0,-42.05 L696.0,-43.45 L700.0,-41.32 L704.0,-45.63" fill="none" stroke="#1baf7a" stroke-width="2" stroke-linejoin="round"/><text x="701.0" y="-52.63" text-anchor="end" font-size="10.5" font-weight="700" fill="#1baf7a" stroke="#fff" stroke-width="3" paint-order="stroke">2.339</text><g class="ch" style="display:none"><line x1="0" y1="14" x2="0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="3,3"/><circle r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/></g><rect class="yakala" x="56" y="14" width="648" height="352" fill="transparent"/></svg><div class="tip"></div></figure></div>
+<h3>Fiyat/maliyet oranları (Grafik 9-12)</h3>
+<div class="izgara"><figure class="ich" id="g9" data-id="g9" data-tur="cizgi"><figcaption><b>Grafik 9.</b> Fiyat/maliyet oranı — Ev yemekleri (2013 Ocak=1)</figcaption><svg viewBox="0 0 720 400" role="img"><line x1="56" y1="366.0" x2="704" y2="366.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="369.5" text-anchor="end" font-size="10.5" fill="#52514e">0,90</text><line x1="56" y1="278.0" x2="704" y2="278.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="281.5" text-anchor="end" font-size="10.5" fill="#52514e">1,00</text><line x1="56" y1="190.0" x2="704" y2="190.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="193.5" text-anchor="end" font-size="10.5" fill="#52514e">1,10</text><line x1="56" y1="102.0" x2="704" y2="102.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="105.5" text-anchor="end" font-size="10.5" fill="#52514e">1,20</text><line x1="56" y1="14.0" x2="704" y2="14.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="17.5" text-anchor="end" font-size="10.5" fill="#52514e">1,30</text><line x1="56.0" y1="366" x2="56.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="56.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2013</text><line x1="152.0" y1="366" x2="152.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="152.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2015</text><line x1="248.0" y1="366" x2="248.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="248.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2017</text><line x1="344.0" y1="366" x2="344.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="344.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2019</text><line x1="440.0" y1="366" x2="440.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="440.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2021</text><line x1="536.0" y1="366" x2="536.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="536.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2023</text><line x1="632.0" y1="366" x2="632.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="632.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2025</text><line x1="56" y1="366" x2="704" y2="366" stroke="#b9b8b2" stroke-width="1"/><line x1="504.0" y1="14" x2="504.0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="2,4" opacity=".7"/><text x="508.0" y="24" font-size="9" fill="#52514e">proxy →</text><line x1="56" y1="294.84" x2="704" y2="294.84" stroke="#52514e" stroke-width="1.4" stroke-dasharray="6,4"/><text x="62" y="289.84" font-size="10" fill="#52514e">2013-2022 ort. (0,98)</text><path d="M56.0,278.0 L60.0,280.73 L64.0,294.2 L68.0,274.5 L72.0,255.4 L76.0,259.92 L80.0,269.22 L84.0,259.96 L88.0,253.68 L92.0,272.65 L96.0,279.31 L100.0,304.94 L104.0,339.24 L108.0,341.39 L112.0,347.83 L116.0,342.95 L120.0,325.31 L124.0,318.37 L128.0,319.68 L132.0,311.15 L136.0,298.92 L140.0,315.93 L144.0,313.83 L148.0,309.56 L152.0,323.14 L156.0,329.54 L160.0,331.38 L164.0,293.66 L168.0,261.27 L172.0,237.08 L176.0,243.07 L180.0,223.57 L184.0,221.33 L188.0,257.82 L192.0,260.42 L196.0,265.02 L200.0,332.49 L204.0,335.18 L208.0,327.59 L212.0,259.17 L216.0,234.7 L220.0,229.9 L224.0,228.68 L228.0,215.28 L232.0,207.89 L236.0,259.17 L240.0,258.46 L244.0,271.61 L248.0,310.29 L252.0,317.01 L256.0,320.71 L260.0,314.76 L264.0,296.67 L268.0,277.8 L272.0,270.14 L276.0,266.08 L280.0,267.72 L284.0,278.93 L288.0,290.95 L292.0,297.95 L296.0,304.46 L300.0,304.78 L304.0,305.28 L308.0,299.23 L312.0,295.51 L316.0,322.9 L320.0,299.72 L324.0,283.6 L328.0,287.02 L332.0,302.51 L336.0,314.02 L340.0,318.61 L344.0,344.3 L348.0,339.38 L352.0,346.43 L356.0,357.68 L360.0,315.55 L364.0,298.81 L368.0,290.75 L372.0,278.03 L376.0,267.95 L380.0,263.79 L384.0,261.44 L388.0,280.35 L392.0,308.46 L396.0,306.48 L400.0,304.98 L404.0,329.12 L408.0,324.78 L412.0,307.2 L416.0,293.19 L420.0,278.44 L424.0,280.91 L428.0,290.75 L432.0,305.36 L436.0,316.7 L440.0,354.58 L444.0,351.04 L448.0,328.86 L452.0,324.99 L456.0,321.78 L460.0,300.93 L464.0,299.01 L468.0,284.21 L472.0,272.32 L476.0,279.96 L480.0,268.97 L484.0,282.28 L488.0,348.35 L492.0,341.28 L496.0,294.31 L500.0,294.46 L504.0,265.0 L508.0,256.62 L512.0,321.35 L516.0,308.46 L520.0,306.49 L524.0,314.67 L528.0,328.99 L532.0,319.86 L536.0,332.73 L540.0,322.0 L544.0,293.04 L548.0,254.56 L552.0,184.48 L556.0,168.69 L560.0,181.49 L564.0,155.0 L568.0,137.69 L572.0,132.23 L576.0,149.94 L580.0,148.32 L584.0,193.12 L588.0,189.51 L592.0,156.41 L596.0,120.25 L600.0,78.78 L604.0,55.53 L608.0,42.26 L612.0,34.36 L616.0,29.27 L620.0,33.37 L624.0,43.69 L628.0,41.13 L632.0,81.9 L636.0,71.66 L640.0,63.72 L644.0,33.94 L648.0,21.91 L652.0,7.7 L656.0,-1.6 L660.0,-7.2 L664.0,0.08 L668.0,10.74 L672.0,12.11 L676.0,8.25 L680.0,52.81 L684.0,62.12 L688.0,52.98 L692.0,42.66 L696.0,39.35 L700.0,30.97 L704.0,36.06" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/><text x="701.0" y="29.060000000000002" text-anchor="end" font-size="10.5" font-weight="700" fill="#2a78d6" stroke="#fff" stroke-width="3" paint-order="stroke">1,27</text><g class="ch" style="display:none"><line x1="0" y1="14" x2="0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="3,3"/><circle r="4.5" fill="#2a78d6" stroke="#fcfcfb" stroke-width="2"/></g><rect class="yakala" x="56" y="14" width="648" height="352" fill="transparent"/></svg><div class="tip"></div></figure><figure class="ich" id="g10" data-id="g10" data-tur="cizgi"><figcaption><b>Grafik 10.</b> Fiyat/maliyet oranı — Kırmızı et ağırlıklı (2013 Ocak=1)</figcaption><svg viewBox="0 0 720 400" role="img"><line x1="56" y1="366.0" x2="704" y2="366.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="369.5" text-anchor="end" font-size="10.5" fill="#52514e">1,00</text><line x1="56" y1="248.67" x2="704" y2="248.67" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="252.17" text-anchor="end" font-size="10.5" fill="#52514e">1,10</text><line x1="56" y1="131.33" x2="704" y2="131.33" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="134.83" text-anchor="end" font-size="10.5" fill="#52514e">1,20</text><line x1="56" y1="14.0" x2="704" y2="14.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="17.5" text-anchor="end" font-size="10.5" fill="#52514e">1,30</text><line x1="56.0" y1="366" x2="56.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="56.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2013</text><line x1="152.0" y1="366" x2="152.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="152.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2015</text><line x1="248.0" y1="366" x2="248.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="248.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2017</text><line x1="344.0" y1="366" x2="344.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="344.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2019</text><line x1="440.0" y1="366" x2="440.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="440.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2021</text><line x1="536.0" y1="366" x2="536.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="536.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2023</text><line x1="632.0" y1="366" x2="632.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="632.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2025</text><line x1="56" y1="366" x2="704" y2="366" stroke="#b9b8b2" stroke-width="1"/><line x1="504.0" y1="14" x2="504.0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="2,4" opacity=".7"/><text x="508.0" y="24" font-size="9" fill="#52514e">proxy →</text><line x1="56" y1="271.74" x2="704" y2="271.74" stroke="#52514e" stroke-width="1.4" stroke-dasharray="6,4"/><text x="62" y="266.74" font-size="10" fill="#52514e">2013-2022 ort. (1,08)</text><path d="M56.0,366.0 L60.0,357.85 L64.0,356.33 L68.0,344.54 L72.0,329.03 L76.0,329.14 L80.0,341.4 L84.0,335.6 L88.0,333.87 L92.0,331.25 L96.0,328.21 L100.0,328.62 L104.0,349.64 L108.0,339.23 L112.0,333.43 L116.0,334.83 L120.0,318.37 L124.0,324.3 L128.0,343.09 L132.0,329.04 L136.0,332.4 L140.0,334.52 L144.0,330.29 L148.0,329.75 L152.0,356.81 L156.0,369.91 L160.0,370.16 L164.0,361.45 L168.0,351.79 L172.0,347.97 L176.0,364.07 L180.0,346.88 L184.0,341.75 L188.0,338.53 L192.0,338.32 L196.0,336.31 L200.0,370.07 L204.0,353.18 L208.0,330.64 L212.0,324.67 L216.0,314.0 L220.0,309.21 L224.0,305.33 L228.0,300.4 L232.0,296.73 L236.0,294.64 L240.0,292.61 L244.0,295.45 L248.0,329.63 L252.0,323.46 L256.0,320.6 L260.0,322.39 L264.0,319.71 L268.0,314.19 L272.0,292.54 L276.0,274.73 L280.0,268.73 L284.0,251.12 L288.0,240.65 L292.0,233.95 L296.0,268.29 L300.0,261.85 L304.0,271.49 L308.0,277.79 L312.0,270.31 L316.0,269.84 L320.0,245.17 L324.0,234.38 L328.0,229.19 L332.0,222.74 L336.0,205.27 L340.0,203.43 L344.0,234.33 L348.0,221.36 L352.0,229.05 L356.0,263.12 L360.0,240.58 L364.0,209.18 L368.0,200.48 L372.0,191.86 L376.0,185.95 L380.0,186.6 L384.0,182.13 L388.0,186.67 L392.0,244.95 L396.0,248.52 L400.0,257.81 L404.0,285.51 L408.0,283.9 L412.0,232.53 L416.0,216.93 L420.0,201.53 L424.0,189.46 L428.0,192.29 L432.0,190.42 L436.0,186.53 L440.0,267.1 L444.0,268.34 L448.0,247.84 L452.0,251.01 L456.0,257.9 L460.0,247.03 L464.0,231.64 L468.0,201.38 L472.0,183.05 L476.0,181.13 L480.0,166.72 L484.0,172.2 L488.0,248.03 L492.0,235.89 L496.0,222.37 L500.0,221.59 L504.0,216.06 L508.0,187.62 L512.0,217.62 L516.0,152.72 L520.0,128.32 L524.0,130.63 L528.0,92.93 L532.0,74.6 L536.0,204.31 L540.0,211.4 L544.0,245.51 L548.0,280.48 L552.0,228.97 L556.0,224.45 L560.0,238.25 L564.0,166.39 L568.0,144.3 L572.0,138.11 L576.0,126.9 L580.0,120.39 L584.0,176.59 L588.0,177.28 L592.0,228.66 L596.0,247.61 L600.0,217.03 L604.0,172.46 L608.0,129.61 L612.0,89.48 L616.0,66.98 L620.0,53.79 L624.0,32.65 L628.0,16.73 L632.0,56.44 L636.0,34.88 L640.0,41.33 L644.0,32.53 L648.0,34.51 L652.0,26.95 L656.0,-0.37 L660.0,-8.53 L664.0,-11.05 L668.0,0.78 L672.0,-17.24 L676.0,0.07 L680.0,92.54 L684.0,98.45 L688.0,122.11 L692.0,129.16 L696.0,99.02 L700.0,83.24 L704.0,58.92" fill="none" stroke="#eb6834" stroke-width="2" stroke-linejoin="round"/><text x="701.0" y="51.92" text-anchor="end" font-size="10.5" font-weight="700" fill="#eb6834" stroke="#fff" stroke-width="3" paint-order="stroke">1,26</text><g class="ch" style="display:none"><line x1="0" y1="14" x2="0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="3,3"/><circle r="4.5" fill="#eb6834" stroke="#fcfcfb" stroke-width="2"/></g><rect class="yakala" x="56" y="14" width="648" height="352" fill="transparent"/></svg><div class="tip"></div></figure><figure class="ich" id="g11" data-id="g11" data-tur="cizgi"><figcaption><b>Grafik 11.</b> Fiyat/maliyet oranı — Tavuk eti ağırlıklı (2013 Ocak=1)</figcaption><svg viewBox="0 0 720 400" role="img"><line x1="56" y1="366.0" x2="704" y2="366.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="369.5" text-anchor="end" font-size="10.5" fill="#52514e">1,00</text><line x1="56" y1="190.0" x2="704" y2="190.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="193.5" text-anchor="end" font-size="10.5" fill="#52514e">1,20</text><line x1="56" y1="14.0" x2="704" y2="14.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="17.5" text-anchor="end" font-size="10.5" fill="#52514e">1,40</text><line x1="56.0" y1="366" x2="56.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="56.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2013</text><line x1="152.0" y1="366" x2="152.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="152.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2015</text><line x1="248.0" y1="366" x2="248.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="248.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2017</text><line x1="344.0" y1="366" x2="344.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="344.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2019</text><line x1="440.0" y1="366" x2="440.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="440.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2021</text><line x1="536.0" y1="366" x2="536.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="536.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2023</text><line x1="632.0" y1="366" x2="632.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="632.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2025</text><line x1="56" y1="366" x2="704" y2="366" stroke="#b9b8b2" stroke-width="1"/><line x1="504.0" y1="14" x2="504.0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="2,4" opacity=".7"/><text x="508.0" y="24" font-size="9" fill="#52514e">proxy →</text><line x1="56" y1="280.63" x2="704" y2="280.63" stroke="#52514e" stroke-width="1.4" stroke-dasharray="6,4"/><text x="62" y="275.63" font-size="10" fill="#52514e">2013-2022 ort. (1,10)</text><path d="M56.0,366.0 L60.0,393.4 L64.0,413.25 L68.0,419.05 L72.0,395.24 L76.0,359.77 L80.0,369.29 L84.0,376.43 L88.0,341.2 L92.0,308.93 L96.0,304.04 L100.0,318.25 L104.0,371.15 L108.0,381.41 L112.0,385.48 L116.0,375.0 L120.0,343.47 L124.0,329.09 L128.0,348.5 L132.0,333.94 L136.0,309.22 L140.0,292.12 L144.0,271.5 L148.0,261.98 L152.0,287.45 L156.0,291.57 L160.0,276.68 L164.0,273.03 L168.0,270.43 L172.0,236.99 L176.0,273.35 L180.0,251.86 L184.0,231.05 L188.0,210.02 L192.0,191.26 L196.0,194.32 L200.0,251.34 L204.0,244.63 L208.0,244.71 L212.0,256.25 L216.0,258.45 L220.0,257.33 L224.0,245.82 L228.0,223.87 L232.0,187.06 L236.0,177.18 L240.0,202.63 L244.0,224.77 L248.0,259.71 L252.0,250.53 L256.0,259.46 L260.0,272.02 L264.0,275.36 L268.0,281.31 L272.0,264.81 L276.0,229.5 L280.0,190.73 L284.0,167.12 L288.0,172.69 L292.0,164.66 L296.0,209.63 L300.0,213.8 L304.0,213.1 L308.0,218.46 L312.0,224.06 L316.0,246.26 L320.0,229.85 L324.0,223.86 L328.0,226.52 L332.0,234.96 L336.0,218.73 L340.0,213.72 L344.0,266.75 L348.0,262.19 L352.0,264.25 L356.0,303.13 L360.0,334.21 L364.0,326.47 L368.0,290.36 L372.0,229.19 L376.0,184.73 L380.0,186.46 L384.0,198.71 L388.0,216.64 L392.0,268.91 L396.0,257.27 L400.0,266.18 L404.0,276.87 L408.0,298.16 L412.0,254.33 L416.0,228.57 L420.0,203.34 L424.0,185.92 L428.0,196.95 L432.0,259.23 L436.0,275.28 L440.0,328.28 L444.0,341.14 L448.0,354.38 L452.0,359.55 L456.0,358.16 L460.0,334.87 L464.0,329.19 L468.0,305.0 L472.0,282.44 L476.0,281.38 L480.0,296.26 L484.0,321.7 L488.0,387.63 L492.0,345.73 L496.0,346.29 L500.0,390.22 L504.0,324.19 L508.0,251.15 L512.0,342.16 L516.0,333.31 L520.0,351.01 L524.0,366.92 L528.0,365.44 L532.0,354.36 L536.0,385.13 L540.0,373.92 L544.0,376.34 L548.0,364.73 L552.0,260.17 L556.0,239.78 L560.0,254.85 L564.0,235.11 L568.0,229.19 L572.0,229.84 L576.0,240.66 L580.0,265.18 L584.0,281.56 L588.0,245.33 L592.0,234.72 L596.0,170.06 L600.0,80.49 L604.0,-0.05 L608.0,7.23 L612.0,7.39 L616.0,64.27 L620.0,52.62 L624.0,148.72 L628.0,158.08 L632.0,209.77 L636.0,206.7 L640.0,240.58 L644.0,219.13 L648.0,137.82 L652.0,79.97 L656.0,74.01 L660.0,87.64 L664.0,137.88 L668.0,129.65 L672.0,82.62 L676.0,63.79 L680.0,63.2 L684.0,62.24 L688.0,21.08 L692.0,-32.46 L696.0,-17.17 L700.0,-61.58 L704.0,-83.81" fill="none" stroke="#eda100" stroke-width="2" stroke-linejoin="round"/><text x="701.0" y="-90.81" text-anchor="end" font-size="10.5" font-weight="700" fill="#eda100" stroke="#fff" stroke-width="3" paint-order="stroke">1,51</text><g class="ch" style="display:none"><line x1="0" y1="14" x2="0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="3,3"/><circle r="4.5" fill="#eda100" stroke="#fcfcfb" stroke-width="2"/></g><rect class="yakala" x="56" y="14" width="648" height="352" fill="transparent"/></svg><div class="tip"></div></figure><figure class="ich" id="g12" data-id="g12" data-tur="cizgi"><figcaption><b>Grafik 12.</b> Fiyat/maliyet oranı — Fast-food (2013 Ocak=1)</figcaption><svg viewBox="0 0 720 400" role="img"><line x1="56" y1="366.0" x2="704" y2="366.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="369.5" text-anchor="end" font-size="10.5" fill="#52514e">1,00</text><line x1="56" y1="190.0" x2="704" y2="190.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="193.5" text-anchor="end" font-size="10.5" fill="#52514e">1,50</text><line x1="56" y1="14.0" x2="704" y2="14.0" stroke="#e8e7e2" stroke-width="1"/><text x="49" y="17.5" text-anchor="end" font-size="10.5" fill="#52514e">2,00</text><line x1="56.0" y1="366" x2="56.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="56.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2013</text><line x1="152.0" y1="366" x2="152.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="152.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2015</text><line x1="248.0" y1="366" x2="248.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="248.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2017</text><line x1="344.0" y1="366" x2="344.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="344.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2019</text><line x1="440.0" y1="366" x2="440.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="440.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2021</text><line x1="536.0" y1="366" x2="536.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="536.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2023</text><line x1="632.0" y1="366" x2="632.0" y2="370" stroke="#b9b8b2" stroke-width="1"/><text x="632.0" y="382" text-anchor="middle" font-size="10.5" fill="#52514e">2025</text><line x1="56" y1="366" x2="704" y2="366" stroke="#b9b8b2" stroke-width="1"/><line x1="504.0" y1="14" x2="504.0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="2,4" opacity=".7"/><text x="508.0" y="24" font-size="9" fill="#52514e">proxy →</text><line x1="56" y1="263.82" x2="704" y2="263.82" stroke="#52514e" stroke-width="1.4" stroke-dasharray="6,4"/><text x="62" y="258.82" font-size="10" fill="#52514e">2013-2022 ort. (1,29)</text><path d="M56.0,366.0 L60.0,363.91 L64.0,365.01 L68.0,355.84 L72.0,348.0 L76.0,348.31 L80.0,351.06 L84.0,349.15 L88.0,345.74 L92.0,349.36 L96.0,345.45 L100.0,343.89 L104.0,348.06 L108.0,339.14 L112.0,339.49 L116.0,335.32 L120.0,325.65 L124.0,322.81 L128.0,327.63 L132.0,325.8 L136.0,323.89 L140.0,326.5 L144.0,324.93 L148.0,321.19 L152.0,331.26 L156.0,329.26 L160.0,329.9 L164.0,326.71 L168.0,315.43 L172.0,305.04 L176.0,306.05 L180.0,296.91 L184.0,295.59 L188.0,295.15 L192.0,294.07 L196.0,291.34 L200.0,318.64 L204.0,312.49 L208.0,308.86 L212.0,303.19 L216.0,292.91 L220.0,286.95 L224.0,284.13 L228.0,277.82 L232.0,277.23 L236.0,280.83 L240.0,277.37 L244.0,281.17 L248.0,300.47 L252.0,298.18 L256.0,297.3 L260.0,292.21 L264.0,286.73 L268.0,277.28 L272.0,275.48 L276.0,270.7 L280.0,270.59 L284.0,275.15 L288.0,277.46 L292.0,276.57 L296.0,303.13 L300.0,301.28 L304.0,301.6 L308.0,298.5 L312.0,292.21 L316.0,297.35 L320.0,291.0 L324.0,286.72 L328.0,288.77 L332.0,292.15 L336.0,279.92 L340.0,277.01 L344.0,272.71 L348.0,264.92 L352.0,265.81 L356.0,267.9 L360.0,245.94 L364.0,228.83 L368.0,223.12 L372.0,217.78 L376.0,216.33 L380.0,221.13 L384.0,221.35 L388.0,227.72 L392.0,234.68 L396.0,232.02 L400.0,230.84 L404.0,234.4 L408.0,228.62 L412.0,214.66 L416.0,205.12 L420.0,195.4 L424.0,195.09 L428.0,200.48 L432.0,205.94 L436.0,206.25 L440.0,231.75 L444.0,228.18 L448.0,222.02 L452.0,219.8 L456.0,203.05 L460.0,182.64 L464.0,171.73 L468.0,168.21 L472.0,163.33 L476.0,163.64 L480.0,159.35 L484.0,165.31 L488.0,175.76 L492.0,170.9 L496.0,147.98 L500.0,148.51 L504.0,117.48 L508.0,92.64 L512.0,133.04 L516.0,115.17 L520.0,113.46 L524.0,134.61 L528.0,136.38 L532.0,117.74 L536.0,143.4 L540.0,138.3 L544.0,119.53 L548.0,100.52 L552.0,65.52 L556.0,56.1 L560.0,81.07 L564.0,67.94 L568.0,58.6 L572.0,52.92 L576.0,58.56 L580.0,55.69 L584.0,78.96 L588.0,68.64 L592.0,56.8 L596.0,31.41 L600.0,17.58 L604.0,-3.99 L608.0,-12.47 L612.0,-15.1 L616.0,-13.74 L620.0,-4.32 L624.0,10.21 L628.0,2.88 L632.0,34.72 L636.0,11.89 L640.0,13.36 L644.0,-3.66 L648.0,-16.14 L652.0,-28.55 L656.0,-28.34 L660.0,-27.32 L664.0,-24.88 L668.0,-16.17 L672.0,-29.8 L676.0,-45.83 L680.0,-12.42 L684.0,-2.31 L688.0,-16.7 L692.0,-29.76 L696.0,-30.96 L700.0,-42.22 L704.0,-52.16" fill="none" stroke="#1baf7a" stroke-width="2" stroke-linejoin="round"/><text x="701.0" y="-59.16" text-anchor="end" font-size="10.5" font-weight="700" fill="#1baf7a" stroke="#fff" stroke-width="3" paint-order="stroke">2,19</text><g class="ch" style="display:none"><line x1="0" y1="14" x2="0" y2="366" stroke="#52514e" stroke-width="1" stroke-dasharray="3,3"/><circle r="4.5" fill="#1baf7a" stroke="#fcfcfb" stroke-width="2"/></g><rect class="yakala" x="56" y="14" width="648" height="352" fill="transparent"/></svg><div class="tip"></div></figure></div>
+<h3>Karşılaştırma (Grafik 13-14; üçüncü sütun: Temmuz 2026)</h3>
+<div class="izgara"><figure class="ich" id="g13" data-id="g13" data-tur="bar"><figcaption><b>Grafik 13.</b> Fiyat/maliyet oranları: uzun dönem ort. vs Temmuz 2024 vs Temmuz 2026</figcaption><div class="lejant"><span><i style="background:#2a78d6"></i>2013-2022 ort.</span><span><i style="background:#eb6834"></i>Temmuz 2024</span><span><i style="background:#1baf7a"></i>Temmuz 2026</span></div><svg viewBox="0 0 720 400" role="img"><line x1="56" y1="366.0" x2="704" y2="366.0" stroke="#e8e7e2"/><text x="49" y="369.5" text-anchor="end" font-size="10.5" fill="#52514e">0,00</text><line x1="56" y1="278.0" x2="704" y2="278.0" stroke="#e8e7e2"/><text x="49" y="281.5" text-anchor="end" font-size="10.5" fill="#52514e">0,50</text><line x1="56" y1="190.0" x2="704" y2="190.0" stroke="#e8e7e2"/><text x="49" y="193.5" text-anchor="end" font-size="10.5" fill="#52514e">1,00</text><line x1="56" y1="102.0" x2="704" y2="102.0" stroke="#e8e7e2"/><text x="49" y="105.5" text-anchor="end" font-size="10.5" fill="#52514e">1,50</text><line x1="56" y1="14.0" x2="704" y2="14.0" stroke="#e8e7e2"/><text x="49" y="17.5" text-anchor="end" font-size="10.5" fill="#52514e">2,00</text><rect x="74.1" y="193.5" width="29.1" height="172.5" rx="3" fill="#2a78d6" data-tip="<b>Ev yemekleri</b><div><span style='background:#2a78d6'></span>2013-2022 ort.: <b>0,98</b></div>"/><text x="88.7" y="189.5" text-anchor="middle" font-size="9.5" fill="#1a1a1a">0,98</text><rect x="105.2" y="142.5" width="29.1" height="223.5" rx="3" fill="#eb6834" data-tip="<b>Ev yemekleri</b><div><span style='background:#eb6834'></span>Temmuz 2024: <b>1,27</b></div>"/><text x="119.8" y="138.5" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,27</text><rect x="136.4" y="142.5" width="29.1" height="223.5" rx="3" fill="#1baf7a" data-tip="<b>Ev yemekleri</b><div><span style='background:#1baf7a'></span>Temmuz 2026: <b>1,27</b></div>"/><text x="150.9" y="138.5" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,27</text><text x="120.8" y="380" text-anchor="middle" font-size="10" fill="#52514e">Ev yemekleri</text><rect x="203.7" y="175.9" width="29.1" height="190.1" rx="3" fill="#2a78d6" data-tip="<b>Kırmızı et ağırlıklı</b><div><span style='background:#2a78d6'></span>2013-2022 ort.: <b>1,08</b></div>"/><text x="218.3" y="171.9" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,08</text><rect x="234.8" y="154.8" width="29.1" height="211.2" rx="3" fill="#eb6834" data-tip="<b>Kırmızı et ağırlıklı</b><div><span style='background:#eb6834'></span>Temmuz 2024: <b>1,20</b></div>"/><text x="249.4" y="150.8" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,20</text><rect x="266.0" y="144.2" width="29.1" height="221.8" rx="3" fill="#1baf7a" data-tip="<b>Kırmızı et ağırlıklı</b><div><span style='background:#1baf7a'></span>Temmuz 2026: <b>1,26</b></div>"/><text x="280.5" y="140.2" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,26</text><text x="250.4" y="380" text-anchor="middle" font-size="10" fill="#52514e">Kırmızı et</text><text x="250.4" y="391" text-anchor="middle" font-size="10" fill="#52514e">ağırlıklı</text><rect x="333.3" y="172.4" width="29.1" height="193.6" rx="3" fill="#2a78d6" data-tip="<b>Tavuk eti ağırlıklı</b><div><span style='background:#2a78d6'></span>2013-2022 ort.: <b>1,10</b></div>"/><text x="347.9" y="168.4" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,10</text><rect x="364.4" y="117.8" width="29.1" height="248.2" rx="3" fill="#eb6834" data-tip="<b>Tavuk eti ağırlıklı</b><div><span style='background:#eb6834'></span>Temmuz 2024: <b>1,41</b></div>"/><text x="379.0" y="113.8" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,41</text><rect x="395.6" y="100.2" width="29.1" height="265.8" rx="3" fill="#1baf7a" data-tip="<b>Tavuk eti ağırlıklı</b><div><span style='background:#1baf7a'></span>Temmuz 2026: <b>1,51</b></div>"/><text x="410.1" y="96.2" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,51</text><text x="380.0" y="380" text-anchor="middle" font-size="10" fill="#52514e">Tavuk eti</text><text x="380.0" y="391" text-anchor="middle" font-size="10" fill="#52514e">ağırlıklı</text><rect x="462.9" y="139.0" width="29.1" height="227.0" rx="3" fill="#2a78d6" data-tip="<b>Fast-food</b><div><span style='background:#2a78d6'></span>2013-2022 ort.: <b>1,29</b></div>"/><text x="477.5" y="135.0" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,29</text><rect x="494.0" y="-0.1" width="29.1" height="366.1" rx="3" fill="#eb6834" data-tip="<b>Fast-food</b><div><span style='background:#eb6834'></span>Temmuz 2024: <b>2,08</b></div>"/><text x="508.6" y="-4.1" text-anchor="middle" font-size="9.5" fill="#1a1a1a">2,08</text><rect x="525.2" y="-19.4" width="29.1" height="385.4" rx="3" fill="#1baf7a" data-tip="<b>Fast-food</b><div><span style='background:#1baf7a'></span>Temmuz 2026: <b>2,19</b></div>"/><text x="539.7" y="-23.4" text-anchor="middle" font-size="9.5" fill="#1a1a1a">2,19</text><text x="509.6" y="380" text-anchor="middle" font-size="10" fill="#52514e">Fast-food</text><rect x="592.5" y="170.6" width="29.1" height="195.4" rx="3" fill="#2a78d6" data-tip="<b>Tüm konseptler (ort.)</b><div><span style='background:#2a78d6'></span>2013-2022 ort.: <b>1,11</b></div>"/><text x="607.1" y="166.6" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,11</text><rect x="623.6" y="103.8" width="29.1" height="262.2" rx="3" fill="#eb6834" data-tip="<b>Tüm konseptler (ort.)</b><div><span style='background:#eb6834'></span>Temmuz 2024: <b>1,49</b></div>"/><text x="638.2" y="99.8" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,49</text><rect x="654.8" y="91.4" width="29.1" height="274.6" rx="3" fill="#1baf7a" data-tip="<b>Tüm konseptler (ort.)</b><div><span style='background:#1baf7a'></span>Temmuz 2026: <b>1,56</b></div>"/><text x="669.3" y="87.4" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,56</text><text x="639.2" y="380" text-anchor="middle" font-size="10" fill="#52514e">Tüm konseptler (ort.)</text><line x1="56" y1="366" x2="704" y2="366" stroke="#b9b8b2"/></svg><div class="tip"></div></figure><figure class="ich" id="g14" data-id="g14" data-tur="bar"><figcaption><b>Grafik 14.</b> Fiyat/maliyet oranları, Ev yemekleri=1 normalize</figcaption><div class="lejant"><span><i style="background:#2a78d6"></i>2013-2022 ort.</span><span><i style="background:#eb6834"></i>Temmuz 2024</span><span><i style="background:#1baf7a"></i>Temmuz 2026</span></div><svg viewBox="0 0 720 400" role="img"><line x1="56" y1="366.0" x2="704" y2="366.0" stroke="#e8e7e2"/><text x="49" y="369.5" text-anchor="end" font-size="10.5" fill="#52514e">0,00</text><line x1="56" y1="248.67" x2="704" y2="248.67" stroke="#e8e7e2"/><text x="49" y="252.17" text-anchor="end" font-size="10.5" fill="#52514e">0,50</text><line x1="56" y1="131.33" x2="704" y2="131.33" stroke="#e8e7e2"/><text x="49" y="134.83" text-anchor="end" font-size="10.5" fill="#52514e">1,00</text><line x1="56" y1="14.0" x2="704" y2="14.0" stroke="#e8e7e2"/><text x="49" y="17.5" text-anchor="end" font-size="10.5" fill="#52514e">1,50</text><rect x="78.7" y="131.3" width="36.9" height="234.7" rx="3" fill="#2a78d6" data-tip="<b>Ev yemekleri</b><div><span style='background:#2a78d6'></span>2013-2022 ort.: <b>1,00</b></div>"/><text x="97.1" y="127.3" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,00</text><rect x="117.6" y="131.3" width="36.9" height="234.7" rx="3" fill="#eb6834" data-tip="<b>Ev yemekleri</b><div><span style='background:#eb6834'></span>Temmuz 2024: <b>1,00</b></div>"/><text x="136.0" y="127.3" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,00</text><rect x="156.4" y="131.3" width="36.9" height="234.7" rx="3" fill="#1baf7a" data-tip="<b>Ev yemekleri</b><div><span style='background:#1baf7a'></span>Temmuz 2026: <b>1,00</b></div>"/><text x="174.9" y="127.3" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,00</text><text x="137.0" y="380" text-anchor="middle" font-size="10" fill="#52514e">Ev yemekleri</text><rect x="240.7" y="107.9" width="36.9" height="258.1" rx="3" fill="#2a78d6" data-tip="<b>Kırmızı et ağırlıklı</b><div><span style='background:#2a78d6'></span>2013-2022 ort.: <b>1,10</b></div>"/><text x="259.1" y="103.9" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,10</text><rect x="279.6" y="143.1" width="36.9" height="222.9" rx="3" fill="#eb6834" data-tip="<b>Kırmızı et ağırlıklı</b><div><span style='background:#eb6834'></span>Temmuz 2024: <b>0,95</b></div>"/><text x="298.0" y="139.1" text-anchor="middle" font-size="9.5" fill="#1a1a1a">0,95</text><rect x="318.4" y="133.7" width="36.9" height="232.3" rx="3" fill="#1baf7a" data-tip="<b>Kırmızı et ağırlıklı</b><div><span style='background:#1baf7a'></span>Temmuz 2026: <b>0,99</b></div>"/><text x="336.9" y="129.7" text-anchor="middle" font-size="9.5" fill="#1a1a1a">0,99</text><text x="299.0" y="380" text-anchor="middle" font-size="10" fill="#52514e">Kırmızı et</text><text x="299.0" y="391" text-anchor="middle" font-size="10" fill="#52514e">ağırlıklı</text><rect x="402.7" y="103.2" width="36.9" height="262.8" rx="3" fill="#2a78d6" data-tip="<b>Tavuk eti ağırlıklı</b><div><span style='background:#2a78d6'></span>2013-2022 ort.: <b>1,12</b></div>"/><text x="421.1" y="99.2" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,12</text><rect x="441.6" y="105.5" width="36.9" height="260.5" rx="3" fill="#eb6834" data-tip="<b>Tavuk eti ağırlıklı</b><div><span style='background:#eb6834'></span>Temmuz 2024: <b>1,11</b></div>"/><text x="460.0" y="101.5" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,11</text><rect x="480.4" y="86.8" width="36.9" height="279.2" rx="3" fill="#1baf7a" data-tip="<b>Tavuk eti ağırlıklı</b><div><span style='background:#1baf7a'></span>Temmuz 2026: <b>1,19</b></div>"/><text x="498.9" y="82.8" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,19</text><text x="461.0" y="380" text-anchor="middle" font-size="10" fill="#52514e">Tavuk eti</text><text x="461.0" y="391" text-anchor="middle" font-size="10" fill="#52514e">ağırlıklı</text><rect x="564.7" y="56.2" width="36.9" height="309.8" rx="3" fill="#2a78d6" data-tip="<b>Fast-food</b><div><span style='background:#2a78d6'></span>2013-2022 ort.: <b>1,32</b></div>"/><text x="583.1" y="52.2" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,32</text><rect x="603.6" y="-18.9" width="36.9" height="384.9" rx="3" fill="#eb6834" data-tip="<b>Fast-food</b><div><span style='background:#eb6834'></span>Temmuz 2024: <b>1,64</b></div>"/><text x="622.0" y="-22.9" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,64</text><rect x="642.4" y="-37.6" width="36.9" height="403.6" rx="3" fill="#1baf7a" data-tip="<b>Fast-food</b><div><span style='background:#1baf7a'></span>Temmuz 2026: <b>1,72</b></div>"/><text x="660.9" y="-41.6" text-anchor="middle" font-size="9.5" fill="#1a1a1a">1,72</text><text x="623.0" y="380" text-anchor="middle" font-size="10" fill="#52514e">Fast-food</text><line x1="56" y1="131.33" x2="704" y2="131.33" stroke="#52514e" stroke-width="1" stroke-dasharray="6,4"/><line x1="56" y1="366" x2="704" y2="366" stroke="#b9b8b2"/></svg><div class="tip"></div></figure></div>
+</section>
+
+<section id="duyarlilik">
+<h2>6. Duyarlılık analizi</h2>
+<p>3 ağırlık seti × 3 kira göstergesi × tür kaması (açık/kapalı) = 18 koşu. Ana bulgular her koşuda korunur:
+oranlar uzun dönem ortalamasının belirgin üzerinde, fast-food en açık makas, Tem-2026 ≥ Tem-2024.</p>
+<div class="sarici"><table class="dataframe tbl kucuk">
+  <thead>
+    <tr style="text-align: left;">
+      <th>Ağırlık</th>
+      <th>Kira gösterge</th>
+      <th>Tür kaması</th>
+      <th>oran24_kirmizi_et</th>
+      <th>oran26_kirmizi_et</th>
+      <th>uzun_kirmizi_et</th>
+      <th>oran24_tavuk</th>
+      <th>oran26_tavuk</th>
+      <th>uzun_tavuk</th>
+      <th>oran24_ev_yemekleri</th>
+      <th>oran26_ev_yemekleri</th>
+      <th>uzun_ev_yemekleri</th>
+      <th>oran24_fast_food</th>
+      <th>oran26_fast_food</th>
+      <th>uzun_fast_food</th>
+      <th>kat_kirmizi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>nihai</td>
+      <td>tufe</td>
+      <td>True</td>
+      <td>1,20</td>
+      <td>1,26</td>
+      <td>1,08</td>
+      <td>1,41</td>
+      <td>1,51</td>
+      <td>1,10</td>
+      <td>1,27</td>
+      <td>1,27</td>
+      <td>0,98</td>
+      <td>2,08</td>
+      <td>2,19</td>
+      <td>1,29</td>
+      <td>7,86</td>
+    </tr>
+    <tr>
+      <td>nihai</td>
+      <td>tufe</td>
+      <td>False</td>
+      <td>1,29</td>
+      <td>1,36</td>
+      <td>1,08</td>
+      <td>1,10</td>
+      <td>1,18</td>
+      <td>1,10</td>
+      <td>1,27</td>
+      <td>1,27</td>
+      <td>0,98</td>
+      <td>2,08</td>
+      <td>2,19</td>
+      <td>1,29</td>
+      <td>7,30</td>
+    </tr>
+    <tr>
+      <td>nihai</td>
+      <td>tavan25</td>
+      <td>True</td>
+      <td>1,23</td>
+      <td>1,30</td>
+      <td>1,08</td>
+      <td>1,44</td>
+      <td>1,57</td>
+      <td>1,10</td>
+      <td>1,30</td>
+      <td>1,33</td>
+      <td>0,98</td>
+      <td>2,13</td>
+      <td>2,28</td>
+      <td>1,29</td>
+      <td>7,69</td>
+    </tr>
+    <tr>
+      <td>nihai</td>
+      <td>tavan25</td>
+      <td>False</td>
+      <td>1,33</td>
+      <td>1,41</td>
+      <td>1,08</td>
+      <td>1,12</td>
+      <td>1,21</td>
+      <td>1,10</td>
+      <td>1,30</td>
+      <td>1,33</td>
+      <td>0,98</td>
+      <td>2,13</td>
+      <td>2,28</td>
+      <td>1,29</td>
+      <td>7,13</td>
+    </tr>
+    <tr>
+      <td>nihai</td>
+      <td>ykke</td>
+      <td>True</td>
+      <td>1,13</td>
+      <td>1,20</td>
+      <td>1,07</td>
+      <td>1,31</td>
+      <td>1,43</td>
+      <td>1,09</td>
+      <td>1,18</td>
+      <td>1,21</td>
+      <td>0,97</td>
+      <td>1,92</td>
+      <td>2,07</td>
+      <td>1,28</td>
+      <td>8,38</td>
+    </tr>
+    <tr>
+      <td>nihai</td>
+      <td>ykke</td>
+      <td>False</td>
+      <td>1,21</td>
+      <td>1,29</td>
+      <td>1,07</td>
+      <td>1,03</td>
+      <td>1,12</td>
+      <td>1,09</td>
+      <td>1,18</td>
+      <td>1,21</td>
+      <td>0,97</td>
+      <td>1,92</td>
+      <td>2,07</td>
+      <td>1,28</td>
+      <td>7,82</td>
+    </tr>
+    <tr>
+      <td>bist</td>
+      <td>tufe</td>
+      <td>True</td>
+      <td>1,19</td>
+      <td>1,26</td>
+      <td>1,07</td>
+      <td>1,39</td>
+      <td>1,50</td>
+      <td>1,09</td>
+      <td>1,25</td>
+      <td>1,27</td>
+      <td>0,98</td>
+      <td>2,04</td>
+      <td>2,18</td>
+      <td>1,28</td>
+      <td>7,88</td>
+    </tr>
+    <tr>
+      <td>bist</td>
+      <td>tufe</td>
+      <td>False</td>
+      <td>1,28</td>
+      <td>1,36</td>
+      <td>1,07</td>
+      <td>1,09</td>
+      <td>1,17</td>
+      <td>1,09</td>
+      <td>1,25</td>
+      <td>1,27</td>
+      <td>0,98</td>
+      <td>2,04</td>
+      <td>2,18</td>
+      <td>1,28</td>
+      <td>7,33</td>
+    </tr>
+    <tr>
+      <td>bist</td>
+      <td>tavan25</td>
+      <td>True</td>
+      <td>1,21</td>
+      <td>1,29</td>
+      <td>1,07</td>
+      <td>1,42</td>
+      <td>1,55</td>
+      <td>1,09</td>
+      <td>1,28</td>
+      <td>1,31</td>
+      <td>0,98</td>
+      <td>2,09</td>
+      <td>2,25</td>
+      <td>1,28</td>
+      <td>7,75</td>
+    </tr>
+    <tr>
+      <td>bist</td>
+      <td>tavan25</td>
+      <td>False</td>
+      <td>1,30</td>
+      <td>1,39</td>
+      <td>1,07</td>
+      <td>1,10</td>
+      <td>1,20</td>
+      <td>1,09</td>
+      <td>1,28</td>
+      <td>1,31</td>
+      <td>0,98</td>
+      <td>2,09</td>
+      <td>2,25</td>
+      <td>1,28</td>
+      <td>7,19</td>
+    </tr>
+    <tr>
+      <td>bist</td>
+      <td>ykke</td>
+      <td>True</td>
+      <td>1,13</td>
+      <td>1,21</td>
+      <td>1,07</td>
+      <td>1,31</td>
+      <td>1,44</td>
+      <td>1,08</td>
+      <td>1,18</td>
+      <td>1,22</td>
+      <td>0,97</td>
+      <td>1,92</td>
+      <td>2,08</td>
+      <td>1,27</td>
+      <td>8,29</td>
+    </tr>
+    <tr>
+      <td>bist</td>
+      <td>ykke</td>
+      <td>False</td>
+      <td>1,21</td>
+      <td>1,30</td>
+      <td>1,07</td>
+      <td>1,04</td>
+      <td>1,13</td>
+      <td>1,08</td>
+      <td>1,18</td>
+      <td>1,22</td>
+      <td>0,97</td>
+      <td>1,92</td>
+      <td>2,08</td>
+      <td>1,27</td>
+      <td>7,74</td>
+    </tr>
+    <tr>
+      <td>resim</td>
+      <td>tufe</td>
+      <td>True</td>
+      <td>1,22</td>
+      <td>1,26</td>
+      <td>1,09</td>
+      <td>1,43</td>
+      <td>1,51</td>
+      <td>1,10</td>
+      <td>1,28</td>
+      <td>1,28</td>
+      <td>0,99</td>
+      <td>2,10</td>
+      <td>2,19</td>
+      <td>1,30</td>
+      <td>7,83</td>
+    </tr>
+    <tr>
+      <td>resim</td>
+      <td>tufe</td>
+      <td>False</td>
+      <td>1,31</td>
+      <td>1,36</td>
+      <td>1,09</td>
+      <td>1,11</td>
+      <td>1,18</td>
+      <td>1,10</td>
+      <td>1,28</td>
+      <td>1,28</td>
+      <td>0,99</td>
+      <td>2,10</td>
+      <td>2,19</td>
+      <td>1,30</td>
+      <td>7,26</td>
+    </tr>
+    <tr>
+      <td>resim</td>
+      <td>tavan25</td>
+      <td>True</td>
+      <td>1,25</td>
+      <td>1,32</td>
+      <td>1,09</td>
+      <td>1,47</td>
+      <td>1,59</td>
+      <td>1,10</td>
+      <td>1,33</td>
+      <td>1,34</td>
+      <td>0,99</td>
+      <td>2,18</td>
+      <td>2,30</td>
+      <td>1,30</td>
+      <td>7,60</td>
+    </tr>
+    <tr>
+      <td>resim</td>
+      <td>tavan25</td>
+      <td>False</td>
+      <td>1,35</td>
+      <td>1,43</td>
+      <td>1,09</td>
+      <td>1,14</td>
+      <td>1,23</td>
+      <td>1,10</td>
+      <td>1,33</td>
+      <td>1,34</td>
+      <td>0,99</td>
+      <td>2,18</td>
+      <td>2,30</td>
+      <td>1,30</td>
+      <td>7,04</td>
+    </tr>
+    <tr>
+      <td>resim</td>
+      <td>ykke</td>
+      <td>True</td>
+      <td>1,12</td>
+      <td>1,19</td>
+      <td>1,08</td>
+      <td>1,30</td>
+      <td>1,41</td>
+      <td>1,09</td>
+      <td>1,17</td>
+      <td>1,19</td>
+      <td>0,98</td>
+      <td>1,90</td>
+      <td>2,03</td>
+      <td>1,28</td>
+      <td>8,50</td>
+    </tr>
+    <tr>
+      <td>resim</td>
+      <td>ykke</td>
+      <td>False</td>
+      <td>1,20</td>
+      <td>1,28</td>
+      <td>1,08</td>
+      <td>1,03</td>
+      <td>1,11</td>
+      <td>1,09</td>
+      <td>1,17</td>
+      <td>1,19</td>
+      <td>0,98</td>
+      <td>1,90</td>
+      <td>2,03</td>
+      <td>1,28</td>
+      <td>7,94</td>
+    </tr>
+  </tbody>
+</table></div>
+<h3>6.1 Maliyet artışında kalem katkıları (Tem-2024 → Tem-2026, yüzde puan)</h3>
+<div class="sarici"><table class="dataframe tbl">
+  <thead>
+    <tr style="text-align: left;">
+      <th>Konsept</th>
+      <th>iscilik</th>
+      <th>gida</th>
+      <th>enerji</th>
+      <th>kira</th>
+      <th>diger</th>
+      <th>TOPLAM</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>kirmizi_et</td>
+      <td>17,00</td>
+      <td>33,10</td>
+      <td>2,40</td>
+      <td>10,10</td>
+      <td>8,40</td>
+      <td>71,00</td>
+    </tr>
+    <tr>
+      <td>tavuk</td>
+      <td>19,80</td>
+      <td>24,20</td>
+      <td>2,80</td>
+      <td>11,80</td>
+      <td>9,80</td>
+      <td>68,50</td>
+    </tr>
+    <tr>
+      <td>ev_yemekleri</td>
+      <td>20,00</td>
+      <td>31,30</td>
+      <td>2,80</td>
+      <td>12,00</td>
+      <td>9,90</td>
+      <td>76,00</td>
+    </tr>
+    <tr>
+      <td>fast_food</td>
+      <td>20,90</td>
+      <td>28,20</td>
+      <td>2,90</td>
+      <td>12,50</td>
+      <td>10,40</td>
+      <td>74,90</td>
+    </tr>
+  </tbody>
+</table></div>
+</section>
+
+<section id="degerlendirme">
+<h2>7. Değerlendirme notu</h2>
+<h2>Yiyecek Hizmetleri Sektörü Fiyatlama Gelişmeleri: Replikasyon ve Güncelleme</h2>
+<p><strong>TCMB Ekonomi Notu 24/17&#x27;nin (Atabek Demirhan ve Bahça, 2024) kamuya açık veriyle replikasyonu ve Temmuz 2026&#x27;ya güncellenmesi — Sonuç ve Değerlendirme</strong></p>
+<p><em>Veri kesimi: Temmuz 2026 TÜFE (3 Ağustos 2026). Tüm oranlar 2013 Ocak=1; kâr marjı seviyesi değil, 2013 Ocak&#x27;a göre göreli seviye.</em></p>
+<h3>Replikasyon</h3>
+<p>Notun dört aşamalı kurgusu (maliyet ağırlıkları %21 işgücü / %49 gıda / %5 enerji / %10 kira / %15 diğer; 13 tarifin gramaj payları; asgari ücret, TÜFE-kira, TÜFE-enerji, TÜFE-Yİ-ÜFE ortalaması) birebir kuruldu. TÜİK madde endeksleri kamuya kapalı olduğundan madde düzeyi, MEDAS ortalama madde fiyatları (2005/01–2022/04) ile temsil edildi; Nisan 2022&#x27;de yayın durduğu için sonrası COICOP-2018 5&#x27;li grup endeksleriyle, dana/tavuk ayrımı ise Tarım-ÜFE (sığır-besi 01.42 / kümes 01.47) görece dinamiğiyle uzatıldı. <strong>Ev yemekleri (1,27 ≈ 1,30) ve fast-food (2,08 = 2,08) Temmuz 2024 hedeflerini tutturdu; uzun dönem ortalamaları dört konseptte de ±0,12 bandında.</strong> Kırmızı et (1,20 vs 1,54) ve tavukta (1,41 vs 1,79) açık, fiyat tarafındaki yapısal kısıttan: TÜİK&#x27;te kebap/pide/döner maddeleri tür ayrımı içermez ve 2022 sonrası fiyatlar agregat (11111/11112) ile uzatılınca ürün-özel fiyat sıçramaları törpülenir. Buna rağmen notun nitel sıralaması (fast-food &gt; tavuk &gt; ev; kırmızı ette maliyet baskısı nedeniyle dar makas) her duyarlılık senaryosunda korunuyor. Maliyet katları (Ara-2019→Tem-2024): kırmızı et 7,9 (not: 8,1; YKKE kira senaryosunda 8,4), ev yemekleri 6,3 (not: 6,6). 2026 TÜFE baz değişimi (2025=100) sorun yaratmadı: geri taşınmış seri eski serinin birebir yeniden ölçeklemesi (aylık fark ≤0,007 puan; Ocak 2026 zinciri tutarlı).</p>
+<h3>2024 sonrası: makas kapanmadı, yüksek platoya oturdu</h3>
+<ol>
+<li><strong>Kırılma tersine dönmedi.</strong> Fiyat/maliyet oranları Temmuz 2024–Temmuz 2026 arasında: ev yemekleri 1,27→1,27 (tam plato), kırmızı et 1,20→1,26, tavuk 1,41→1,51, fast-food 2,08→2,19. Oranlar uzun dönem ortalamalarının hâlâ 1,2–1,7 katı üzerinde. Fast-food&#x27;da açılma <strong>devam ediyor</strong>; diğerlerinde kademeli düzeltme sinyali yok, seviye korunuyor.</li>
+<li><strong>Maliyet tarafı iki yılda %68–76 arttı</strong> (konsepte göre; kaba gıda-proxy&#x27;li hesap %81 verirken tarif bazlı gıda, özellikle tavukta daha düşük artış gösteriyor). Katkılar (Tem-24→Tem-26, puan): gıda 24–33, <strong>işgücü 17–21</strong>, <strong>kira 10–12,5</strong>, diğer 8–10, enerji ~3.</li>
+<li><strong>Asgari ücret kanalı belirgin rahatlama sağladı:</strong> 2025 zammı (%30) 2024 sonu enflasyonunun (%44,4) 14 puan altında; 2026 zammı (%27) 2025 sonu enflasyona (%30,9) yakın. Ücretler enflasyona endekslenseydi işgücü katkısı iki yılda ~8-10 puan daha yüksek olurdu; fiyat/maliyet platosunun bir bölümü bu reel ücret erozyonunun marj üzerindeki &quot;rahatlatıcı&quot; etkisiyle uyumlu.</li>
+<li><strong>Kira kalemi küçük ağırlığına rağmen en hızlı kalem:</strong> iki yılda +%160 (katkı ~11 puan). Kira enflasyonu %78,9&#x27;dan %45,3&#x27;e geriledi; son üç ayın yıllıklandırılmış temposu ~%35. Bu, önümüzdeki 12 ayda kira katkısını ~7,9 puandan ~3,5-4,5 puana indirir — maliyet enflasyonundaki dezenflasyonun ana kaynaklarından biri.</li>
+<li><strong>Konseptler arası ayrışma (Grafik 14) daralmadı:</strong> fast-food/ev oranı uzun dönemde 1,32 iken Tem-2024&#x27;te 1,64, Tem-2026&#x27;da 1,72. Kırmızı et/ev 0,95→0,99 ile ev yemeklerine yakınsadı — kırmızı et enflasyonunun (girdi maliyeti) yüksek seyri bu konseptte makası dar tutmaya devam ediyor.</li>
+<li><strong>Lokanta-oteller yıllık enflasyonunun manşetle eşitlenmesi (%31,7 ≈ %31,8) kısmen kompozisyon etkisi:</strong> yemek hizmetleri %32,1 ile manşetin hâlâ (0,3 puan) üzerinde; konaklama %27,2 ile belirgin altında ve grubu aşağı çekiyor. Yine de yemek hizmetleri–manşet farkının 2024&#x27;teki ~10 puandan 0,3 puana inmesi, <strong>akım</strong> fiyatlamada güçlü bir normalleşme sinyali; ancak fiyat/maliyet <strong>seviyesindeki</strong> birikmiş açıklık yerinde duruyor.</li>
+</ol>
+<h3>Yapısal seviye kayması mı, kademeli düzeltme mi?</h3>
+<p>İki yıllık platonun ardından ayrımı üç gösterge yapacak: (i) <em>yemek hizmetleri enflasyonu − konsept maliyet enflasyonu</em> farkının işareti (kalıcı negatife dönmeden oran gerilemez; bugün ~0); (ii) kira ve ücret dezenflasyonunun 2027&#x27;de maliyet enflasyonunu ~%20&#x27;nin altına çekmesine fiyatlamanın eşlik edip etmediği; (iii) talep göstergeleri (kartla yeme-içme harcaması, hizmet ciro) ile fiyat duyarlılığının canlanması. Mevcut veri, &quot;genele yaygın enflasyon döneminde yükselen marjların, dezenflasyon başladıktan sonra da nominal katılık göstererek yeni bir yapısal seviyede kaldığı&quot; yorumunu destekliyor; kademeli düzeltmeye dair ilk zayıf işaret yalnızca kırmızı et konseptinde (maliyet baskısı kaynaklı) görülüyor.</p>
+<hr>
+<p><em>Yöntem uyarıları: (1) Oranlar kâr marjı seviyesi değildir. (2) Nisan 2022 sonrası madde düzeyi ve tür ayrımı proxy&#x27;dir (5&#x27;li grup + Tarım-ÜFE kaması); duyarlılık tablosunda üç ağırlık seti × üç kira göstergesi × kama açık/kapalı 18 senaryoda ana bulgular (plato, fast-food açıklığı, sıralama) dayanıklıdır. (3) Kira için TÜFE-kira yerine Yeni Kiracı Kira Endeksi kullanılırsa maliyetler yükselir, oranlar ~0,1 aşağı iner; işyeri kirasını TÜFE-kirasından hızlı artmış sayan bu senaryo notun Perakende Ödeme Sistemi verisine muhtemelen daha yakındır.</em></p>
+</section>
+
+<footer>
+Kaynaklar: TÜİK (MEDAS, Veri Portalı), TCMB EVDS, Resmî Gazete/Asgari Ücret Tespit Komisyonu; orijinal çalışma:
+Atabek Demirhan, A. ve M. Bahça (2024), "Son Dönem Yiyecek Hizmetleri Sektörü Fiyatlama Gelişmeleri",
+TCMB Ekonomi Notları 2024-17. · Bu rapor <code>src/html_rapor.py</code> tarafından üretilmiştir; tüm hesaplama
+zinciri <code>src/run_all.py</code> ile yeniden koşturulabilir. · Üretim: 06.08.2026 21:43
+</footer>
+</div>
+
+<script>
+(function(){
+const VERI = {"g1":{"tur":"bar"},"g2":{"tur":"cizgi","x0":56,"dx":8.2025,"n":80,"px":[56.0,64.2,72.41,80.61,88.81,97.01,105.22,113.42,121.62,129.82,138.03,146.23,154.43,162.63,170.84,179.04,187.24,195.44,203.65,211.85,220.05,228.25,236.46,244.66,252.86,261.06,269.27,277.47,285.67,293.87,302.08,310.28,318.48,326.68,334.89,343.09,351.29,359.49,367.7,375.9,384.1,392.3,400.51,408.71,416.91,425.11,433.32,441.52,449.72,457.92,466.13,474.33,482.53,490.73,498.94,507.14,515.34,523.54,531.75,539.95,548.15,556.35,564.56,572.76,580.96,589.16,597.37,605.57,613.77,621.97,630.18,638.38,646.58,654.78,662.99,671.19,679.39,687.59,695.8,704.0],"tarih":["Ara 2019","Oca 2020","Şub 2020","Mar 2020","Nis 2020","May 2020","Haz 2020","Tem 2020","Ağu 2020","Eyl 2020","Eki 2020","Kas 2020","Ara 2020","Oca 2021","Şub 2021","Mar 2021","Nis 2021","May 2021","Haz 2021","Tem 2021","Ağu 2021","Eyl 2021","Eki 2021","Kas 2021","Ara 2021","Oca 2022","Şub 2022","Mar 2022","Nis 2022","May 2022","Haz 2022","Tem 2022","Ağu 2022","Eyl 2022","Eki 2022","Kas 2022","Ara 2022","Oca 2023","Şub 2023","Mar 2023","Nis 2023","May 2023","Haz 2023","Tem 2023","Ağu 2023","Eyl 2023","Eki 2023","Kas 2023","Ara 2023","Oca 2024","Şub 2024","Mar 2024","Nis 2024","May 2024","Haz 2024","Tem 2024","Ağu 2024","Eyl 2024","Eki 2024","Kas 2024","Ara 2024","Oca 2025","Şub 2025","Mar 2025","Nis 2025","May 2025","Haz 2025","Tem 2025","Ağu 2025","Eyl 2025","Eki 2025","Kas 2025","Ara 2025","Oca 2026","Şub 2026","Mar 2026","Nis 2026","May 2026","Haz 2026","Tem 2026"],"fmt":"endeks","series":[{"ad":"Gıda ve Yemek Hariç TÜFE","renk":"#2a78d6","py":[647.6,647.41,647.67,647.63,647.36,646.04,644.74,643.91,643.09,642.27,640.76,639.38,638.67,637.58,637.38,636.63,635.38,634.47,632.63,631.45,631.23,629.95,627.66,624.68,612.61,600.57,596.51,589.64,583.28,578.87,570.5,567.46,565.19,559.8,554.99,552.11,550.85,540.82,538.3,535.62,532.75,534.48,526.64,507.61,487.62,475.28,466.91,458.1,452.4,434.86,426.33,417.7,408.24,396.62,391.96,379.75,366.7,355.23,346.29,341.45,338.16,318.07,310.78,304.46,290.77,280.75,272.3,259.87,252.14,238.79,227.63,220.84,218.94,199.19,191.67,181.17,157.1,142.61,135.79,124.89],"vals":[100.0,100.266,99.903,99.962,100.345,102.213,104.059,105.242,106.407,107.57,109.711,111.679,112.678,114.239,114.513,115.579,117.353,118.647,121.265,122.935,123.25,125.072,128.323,132.56,149.7,166.799,172.564,182.337,191.361,197.627,209.511,213.83,217.063,224.715,231.543,235.637,237.432,251.68,255.249,259.069,263.146,260.676,271.823,298.848,327.237,344.776,356.661,369.177,377.267,402.193,414.299,426.566,440.004,456.503,463.124,480.469,499.0,515.297,527.997,534.866,539.552,568.089,578.433,587.415,606.86,621.101,633.095,650.758,661.739,680.697,696.544,706.189,708.892,736.945,747.622,762.536,796.733,817.312,827.001,842.481]},{"ad":"Gıda ve Alkolsüz İçecekler","renk":"#eb6834","py":[647.6,644.33,642.61,641.14,639.2,639.01,640.27,641.27,641.33,640.82,638.49,635.18,633.09,630.98,628.74,627.73,625.81,625.54,624.73,622.15,619.1,618.61,616.7,612.73,595.89,582.59,571.19,564.25,543.68,540.83,537.13,531.43,529.83,526.12,516.36,504.77,500.81,486.44,469.41,459.87,449.68,447.78,439.61,418.15,392.73,381.95,371.18,361.56,344.41,325.02,292.6,278.12,265.89,258.24,250.08,241.5,246.74,235.03,214.14,188.42,181.58,160.9,143.23,114.86,102.73,107.11,108.75,108.29,89.89,60.87,38.45,43.12,29.7,-15.67,-66.22,-80.3,-109.83,-105.83,-107.2,-120.53],"vals":[100.0,104.651,107.089,109.18,111.937,112.207,110.408,108.994,108.906,109.624,112.945,117.64,120.613,123.609,126.79,128.22,130.948,131.329,132.479,136.155,140.487,141.183,143.899,149.538,173.448,192.349,208.531,218.392,247.616,251.664,256.923,265.02,267.283,272.553,286.426,302.888,308.508,328.923,353.116,366.666,381.136,383.842,395.446,425.927,462.028,477.348,492.637,506.31,530.668,558.206,604.259,624.824,642.205,653.063,664.655,676.848,669.405,686.038,715.71,752.237,761.955,791.338,816.428,856.732,873.96,867.743,865.41,866.059,892.197,933.429,965.27,958.638,977.695,1042.138,1113.949,1133.945,1175.894,1170.206,1172.161,1191.091]},{"ad":"Yemek Hizmetleri","renk":"#1baf7a","py":[647.6,646.64,645.98,645.19,645.07,644.92,642.64,641.81,640.7,640.05,639.45,638.38,637.84,636.56,635.41,633.2,632.06,631.16,627.94,625.61,623.58,621.66,619.71,615.54,605.13,595.48,589.39,581.35,571.1,563.53,555.87,551.83,546.35,541.79,536.8,530.55,524.93,499.98,490.22,480.46,469.74,452.39,442.41,410.55,387.95,374.29,360.08,349.61,337.92,289.71,264.68,245.67,223.05,195.63,180.35,163.29,152.7,142.06,131.71,124.62,115.56,75.62,54.08,38.28,14.82,3.43,-9.54,-24.71,-38.79,-53.55,-66.58,-77.18,-91.19,-142.38,-170.58,-187.65,-218.35,-231.54,-247.51,-263.26],"vals":[100.0,101.363,102.298,103.418,103.591,103.806,107.046,108.226,109.806,110.718,111.575,113.097,113.865,115.679,117.316,120.451,122.074,123.347,127.928,131.241,134.124,136.84,139.623,145.54,160.331,174.04,182.685,194.101,208.66,219.416,230.298,236.039,243.817,250.292,257.382,266.259,274.242,309.692,323.557,337.42,352.641,377.293,391.463,436.722,468.819,488.222,508.41,523.276,539.882,608.365,643.92,670.917,703.049,741.998,763.706,787.939,802.985,818.102,832.8,842.864,855.736,912.473,943.063,965.51,998.84,1015.016,1033.445,1054.992,1074.98,1095.955,1114.456,1129.52,1149.417,1222.126,1262.191,1286.438,1330.041,1348.772,1371.458,1393.832]}]},"g3":{"tur":"cizgi","x0":56,"dx":8.2025,"n":80,"px":[56.0,64.2,72.41,80.61,88.81,97.01,105.22,113.42,121.62,129.82,138.03,146.23,154.43,162.63,170.84,179.04,187.24,195.44,203.65,211.85,220.05,228.25,236.46,244.66,252.86,261.06,269.27,277.47,285.67,293.87,302.08,310.28,318.48,326.68,334.89,343.09,351.29,359.49,367.7,375.9,384.1,392.3,400.51,408.71,416.91,425.11,433.32,441.52,449.72,457.92,466.13,474.33,482.53,490.73,498.94,507.14,515.34,523.54,531.75,539.95,548.15,556.35,564.56,572.76,580.96,589.16,597.37,605.57,613.77,621.97,630.18,638.38,646.58,654.78,662.99,671.19,679.39,687.59,695.8,704.0],"tarih":["Ara 2019","Oca 2020","Şub 2020","Mar 2020","Nis 2020","May 2020","Haz 2020","Tem 2020","Ağu 2020","Eyl 2020","Eki 2020","Kas 2020","Ara 2020","Oca 2021","Şub 2021","Mar 2021","Nis 2021","May 2021","Haz 2021","Tem 2021","Ağu 2021","Eyl 2021","Eki 2021","Kas 2021","Ara 2021","Oca 2022","Şub 2022","Mar 2022","Nis 2022","May 2022","Haz 2022","Tem 2022","Ağu 2022","Eyl 2022","Eki 2022","Kas 2022","Ara 2022","Oca 2023","Şub 2023","Mar 2023","Nis 2023","May 2023","Haz 2023","Tem 2023","Ağu 2023","Eyl 2023","Eki 2023","Kas 2023","Ara 2023","Oca 2024","Şub 2024","Mar 2024","Nis 2024","May 2024","Haz 2024","Tem 2024","Ağu 2024","Eyl 2024","Eki 2024","Kas 2024","Ara 2024","Oca 2025","Şub 2025","Mar 2025","Nis 2025","May 2025","Haz 2025","Tem 2025","Ağu 2025","Eyl 2025","Eki 2025","Kas 2025","Ara 2025","Oca 2026","Şub 2026","Mar 2026","Nis 2026","May 2026","Haz 2026","Tem 2026"],"fmt":"yuzde","series":[{"ad":"Gıda ve Yemek Hariç TÜFE","renk":"#2a78d6","py":[365.14,359.76,374.5,364.62,356.99,322.33,323.61,339.31,340.03,340.36,319.3,323.91,345.0,333.48,360.39,344.16,329.96,340.13,314.22,333.69,359.98,331.31,305.0,288.53,62.57,97.96,284.89,233.11,249.86,289.16,224.89,317.62,330.52,283.28,294.69,324.51,348.13,225.18,332.72,330.88,329.07,388.02,265.65,132.69,143.07,240.23,285.1,283.65,314.58,210.96,295.36,296.52,292.07,278.01,331.97,278.11,275.49,289.36,308.16,335.47,345.44,241.88,323.27,329.56,288.32,310.93,320.68,300.53,326.4,298.77,311.37,333.51,357.02,273.14,332.0,319.19,260.76,305.39,338.18,322.07],"vals":[0.037,0.266,-0.362,0.059,0.384,1.861,1.806,1.137,1.107,1.093,1.99,1.794,0.895,1.386,0.239,0.931,1.536,1.102,2.206,1.377,0.257,1.478,2.599,3.301,12.93,11.422,3.456,5.663,4.949,3.275,6.013,2.062,1.512,3.525,3.039,1.768,0.762,6.001,1.418,1.496,1.574,-0.938,4.276,9.942,9.5,5.36,3.447,3.509,2.191,6.607,3.01,2.961,3.15,3.75,1.45,3.745,3.857,3.266,2.465,1.301,0.876,5.289,1.821,1.553,3.31,2.347,1.931,2.79,1.687,2.865,2.328,1.385,0.383,3.957,1.449,1.995,4.485,2.583,1.185,1.872]},{"ad":"Gıda ve Alkolsüz İçecekler","renk":"#eb6834","py":[297.3,256.85,311.34,320.19,306.74,360.34,403.63,396.06,367.88,350.53,294.92,268.45,306.69,307.73,305.6,339.53,316.08,359.17,345.44,300.89,291.33,354.37,320.86,274.04,-9.22,110.27,168.58,255.04,51.98,327.63,316.97,292.04,345.96,319.73,246.55,231.13,322.46,210.71,193.39,275.95,273.39,349.34,295.06,185.12,167.1,288.19,290.84,300.87,253.1,244.22,172.4,286.13,300.73,326.32,324.35,322.95,391.8,307.69,264.5,246.23,335.69,275.51,291.6,250.15,318.81,382.69,372.31,364.24,295.18,257.55,285.95,382.12,319.35,211.32,204.3,323.87,279.19,377.35,362.08,328.1],"vals":[2.928,4.651,2.329,1.952,2.525,0.241,-1.603,-1.281,-0.08,0.659,3.029,4.157,2.528,2.483,2.574,1.128,2.127,0.291,0.876,2.774,3.182,0.496,1.923,3.919,15.989,10.898,8.413,4.728,13.381,1.635,2.089,3.152,0.854,1.972,5.09,5.747,1.855,6.617,7.355,3.837,3.946,0.71,3.023,7.708,8.476,3.316,3.203,2.775,4.811,5.189,8.25,3.403,2.782,1.691,1.775,1.834,-1.1,2.485,4.325,5.104,1.292,3.856,3.171,4.937,2.011,-0.711,-0.269,0.075,3.018,4.621,3.411,-0.687,1.988,6.591,6.891,1.795,3.699,-0.484,0.167,1.615]},{"ad":"Yemek Hizmetleri","renk":"#1baf7a","py":[354.21,334.02,344.35,340.3,362.08,361.12,292.76,340.13,331.74,346.51,347.84,334.0,350.07,328.6,332.81,303.28,334.4,341.53,278.84,305.22,314.45,318.48,318.28,266.55,127.52,165.35,249.42,219.36,189.99,245.03,249.62,307.5,288.66,303.68,299.53,285.06,295.65,62.66,260.94,265.46,260.14,201.95,277.87,94.69,193.53,268.88,268.97,297.38,291.53,68.33,228.85,267.61,253.61,236.0,297.34,291.54,321.19,321.82,323.84,337.64,330.16,210.41,287.33,310.14,284.99,327.99,323.39,317.07,321.54,320.21,326.39,334.28,324.66,217.55,289.07,320.92,286.46,332.95,326.53,327.72],"vals":[0.502,1.363,0.922,1.095,0.167,0.208,3.121,1.102,1.46,0.831,0.774,1.364,0.679,1.594,1.414,2.673,1.347,1.043,3.714,2.59,2.197,2.025,2.034,4.238,10.163,8.55,4.968,6.249,7.5,5.155,4.959,2.493,3.296,2.656,2.833,3.449,2.998,12.927,4.477,4.285,4.511,6.991,3.756,11.562,7.349,4.139,4.135,2.924,3.173,12.685,5.844,4.193,4.789,5.54,2.926,3.173,1.91,1.883,1.797,1.209,1.527,6.63,3.352,2.38,3.452,1.62,1.816,2.085,1.895,1.951,1.688,1.352,1.762,6.326,3.278,1.921,3.389,1.408,1.682,1.631]}]},"g4":{"tur":"cizgi","x0":56,"dx":8.2025,"n":80,"px":[56.0,64.2,72.41,80.61,88.81,97.01,105.22,113.42,121.62,129.82,138.03,146.23,154.43,162.63,170.84,179.04,187.24,195.44,203.65,211.85,220.05,228.25,236.46,244.66,252.86,261.06,269.27,277.47,285.67,293.87,302.08,310.28,318.48,326.68,334.89,343.09,351.29,359.49,367.7,375.9,384.1,392.3,400.51,408.71,416.91,425.11,433.32,441.52,449.72,457.92,466.13,474.33,482.53,490.73,498.94,507.14,515.34,523.54,531.75,539.95,548.15,556.35,564.56,572.76,580.96,589.16,597.37,605.57,613.77,621.97,630.18,638.38,646.58,654.78,662.99,671.19,679.39,687.59,695.8,704.0],"tarih":["Ara 2019","Oca 2020","Şub 2020","Mar 2020","Nis 2020","May 2020","Haz 2020","Tem 2020","Ağu 2020","Eyl 2020","Eki 2020","Kas 2020","Ara 2020","Oca 2021","Şub 2021","Mar 2021","Nis 2021","May 2021","Haz 2021","Tem 2021","Ağu 2021","Eyl 2021","Eki 2021","Kas 2021","Ara 2021","Oca 2022","Şub 2022","Mar 2022","Nis 2022","May 2022","Haz 2022","Tem 2022","Ağu 2022","Eyl 2022","Eki 2022","Kas 2022","Ara 2022","Oca 2023","Şub 2023","Mar 2023","Nis 2023","May 2023","Haz 2023","Tem 2023","Ağu 2023","Eyl 2023","Eki 2023","Kas 2023","Ara 2023","Oca 2024","Şub 2024","Mar 2024","Nis 2024","May 2024","Haz 2024","Tem 2024","Ağu 2024","Eyl 2024","Eki 2024","Kas 2024","Ara 2024","Oca 2025","Şub 2025","Mar 2025","Nis 2025","May 2025","Haz 2025","Tem 2025","Ağu 2025","Eyl 2025","Eki 2025","Kas 2025","Ara 2025","Oca 2026","Şub 2026","Mar 2026","Nis 2026","May 2026","Haz 2026","Tem 2026"],"fmt":"yuzde","series":[{"ad":"Gıda ve Yemek Hariç TÜFE","renk":"#2a78d6","py":[427.44,422.17,423.18,426.0,433.68,432.28,424.77,430.12,431.76,433.97,435.28,428.33,423.83,417.93,414.7,410.01,403.78,407.87,405.73,404.43,409.04,406.97,403.71,395.58,329.13,267.4,245.41,212.25,187.36,170.91,141.79,136.32,126.1,109.42,105.81,118.38,208.28,244.5,258.45,285.83,307.27,333.6,343.75,296.73,245.11,232.58,229.72,217.35,206.92,202.66,190.88,179.89,167.9,130.76,153.03,198.1,236.99,251.21,257.87,272.69,281.45,289.74,297.4,306.36,305.36,314.11,311.08,316.99,330.27,332.69,333.51,333.0,336.03,343.83,346.06,343.42,336.49,335.07,339.59,345.06],"vals":[11.91,13.032,12.817,12.216,10.581,10.877,12.478,11.337,10.989,10.518,10.239,11.72,12.678,13.936,14.624,15.623,16.949,16.078,16.535,16.811,15.829,16.271,16.965,18.698,32.857,46.008,50.694,57.76,63.063,66.567,72.771,73.938,76.116,79.668,80.437,77.759,58.605,50.888,47.915,42.083,37.513,31.903,29.742,39.76,50.757,53.428,54.036,56.672,58.895,59.803,62.312,64.654,67.209,75.123,70.377,60.774,52.489,49.459,48.039,44.881,43.016,41.248,39.617,37.708,37.921,36.056,36.701,35.442,32.613,32.098,31.922,32.031,31.385,29.723,29.249,29.812,31.288,31.591,30.628,29.461]},{"ad":"Gıda ve Alkolsüz İçecekler","renk":"#eb6834","py":[432.23,440.93,433.69,436.15,430.4,422.91,422.67,423.6,419.91,413.18,405.86,384.38,386.59,398.32,396.99,401.48,403.63,403.35,389.51,366.38,347.24,348.22,354.71,356.07,277.74,222.33,180.76,153.27,65.18,53.29,42.47,39.13,59.74,46.62,18.47,2.03,117.87,150.09,157.92,164.69,230.26,236.83,230.29,198.38,141.37,130.68,145.44,168.13,145.36,156.17,149.54,152.89,161.85,154.15,163.82,206.84,272.68,278.15,270.81,255.37,278.78,287.32,318.54,309.14,313.96,329.05,341.57,352.13,327.13,314.09,319.68,354.56,350.45,334.59,312.3,331.47,321.19,319.74,316.97,307.19],"vals":[10.888,9.035,10.577,10.053,11.279,12.874,12.926,12.728,13.513,14.948,16.506,21.084,20.613,18.114,18.397,17.439,16.983,17.041,19.991,24.92,28.998,28.788,27.406,27.115,43.805,55.612,64.47,70.325,89.095,91.629,93.935,94.646,90.255,93.05,99.047,102.549,77.868,71.003,69.335,67.894,53.922,52.521,53.916,60.715,72.861,75.139,71.994,67.161,72.011,69.707,71.122,70.407,68.497,70.138,68.077,58.912,44.884,43.719,45.281,48.573,43.584,41.764,35.112,37.116,36.087,32.873,30.205,27.955,33.282,36.061,34.869,27.438,28.314,31.693,36.442,32.357,34.548,34.856,35.446,37.53]},{"ad":"Yemek Hizmetleri","renk":"#1baf7a","py":[422.78,421.1,421.41,419.12,423.26,430.81,426.48,428.16,424.01,424.98,424.84,419.2,418.26,417.04,414.43,406.03,399.59,394.99,391.78,383.53,379.39,372.6,365.35,348.7,291.81,246.56,221.82,196.36,150.44,117.79,107.76,108.57,99.49,94.22,87.49,94.04,149.88,117.52,121.42,136.79,159.48,145.63,154.89,84.3,50.22,37.18,25.59,30.29,28.72,30.7,18.63,19.46,16.97,29.66,37.04,105.89,148.8,166.22,183.88,196.69,208.75,248.72,265.3,277.25,285.87,310.64,317.57,324.26,324.36,323.93,324.6,323.71,322.26,324.06,324.51,327.33,327.71,329.01,329.83,332.59],"vals":[12.902,13.261,13.194,13.682,12.8,11.191,12.113,11.755,12.639,12.432,12.464,13.665,13.865,14.124,14.681,16.471,17.842,18.824,19.507,21.266,22.146,23.593,25.138,28.686,40.808,50.45,55.721,61.145,70.929,77.886,80.022,79.851,81.785,82.908,84.341,82.946,71.047,77.943,77.112,73.837,69.003,71.953,69.981,85.022,92.283,95.061,97.531,96.529,96.864,96.442,99.013,98.838,99.367,96.663,95.09,80.421,71.278,67.568,63.805,61.074,58.504,49.988,46.457,43.909,42.073,36.795,35.32,33.893,33.873,33.963,33.82,34.01,34.319,33.936,33.839,33.239,33.159,32.882,32.707,32.118]}]},"g5":{"tur":"cizgi","x0":56,"dx":4.0,"n":163,"px":[56.0,60.0,64.0,68.0,72.0,76.0,80.0,84.0,88.0,92.0,96.0,100.0,104.0,108.0,112.0,116.0,120.0,124.0,128.0,132.0,136.0,140.0,144.0,148.0,152.0,156.0,160.0,164.0,168.0,172.0,176.0,180.0,184.0,188.0,192.0,196.0,200.0,204.0,208.0,212.0,216.0,220.0,224.0,228.0,232.0,236.0,240.0,244.0,248.0,252.0,256.0,260.0,264.0,268.0,272.0,276.0,280.0,284.0,288.0,292.0,296.0,300.0,304.0,308.0,312.0,316.0,320.0,324.0,328.0,332.0,336.0,340.0,344.0,348.0,352.0,356.0,360.0,364.0,368.0,372.0,376.0,380.0,384.0,388.0,392.0,396.0,400.0,404.0,408.0,412.0,416.0,420.0,424.0,428.0,432.0,436.0,440.0,444.0,448.0,452.0,456.0,460.0,464.0,468.0,472.0,476.0,480.0,484.0,488.0,492.0,496.0,500.0,504.0,508.0,512.0,516.0,520.0,524.0,528.0,532.0,536.0,540.0,544.0,548.0,552.0,556.0,560.0,564.0,568.0,572.0,576.0,580.0,584.0,588.0,592.0,596.0,600.0,604.0,608.0,612.0,616.0,620.0,624.0,628.0,632.0,636.0,640.0,644.0,648.0,652.0,656.0,660.0,664.0,668.0,672.0,676.0,680.0,684.0,688.0,692.0,696.0,700.0,704.0],"tarih":["Oca 2013","Şub 2013","Mar 2013","Nis 2013","May 2013","Haz 2013","Tem 2013","Ağu 2013","Eyl 2013","Eki 2013","Kas 2013","Ara 2013","Oca 2014","Şub 2014","Mar 2014","Nis 2014","May 2014","Haz 2014","Tem 2014","Ağu 2014","Eyl 2014","Eki 2014","Kas 2014","Ara 2014","Oca 2015","Şub 2015","Mar 2015","Nis 2015","May 2015","Haz 2015","Tem 2015","Ağu 2015","Eyl 2015","Eki 2015","Kas 2015","Ara 2015","Oca 2016","Şub 2016","Mar 2016","Nis 2016","May 2016","Haz 2016","Tem 2016","Ağu 2016","Eyl 2016","Eki 2016","Kas 2016","Ara 2016","Oca 2017","Şub 2017","Mar 2017","Nis 2017","May 2017","Haz 2017","Tem 2017","Ağu 2017","Eyl 2017","Eki 2017","Kas 2017","Ara 2017","Oca 2018","Şub 2018","Mar 2018","Nis 2018","May 2018","Haz 2018","Tem 2018","Ağu 2018","Eyl 2018","Eki 2018","Kas 2018","Ara 2018","Oca 2019","Şub 2019","Mar 2019","Nis 2019","May 2019","Haz 2019","Tem 2019","Ağu 2019","Eyl 2019","Eki 2019","Kas 2019","Ara 2019","Oca 2020","Şub 2020","Mar 2020","Nis 2020","May 2020","Haz 2020","Tem 2020","Ağu 2020","Eyl 2020","Eki 2020","Kas 2020","Ara 2020","Oca 2021","Şub 2021","Mar 2021","Nis 2021","May 2021","Haz 2021","Tem 2021","Ağu 2021","Eyl 2021","Eki 2021","Kas 2021","Ara 2021","Oca 2022","Şub 2022","Mar 2022","Nis 2022","May 2022","Haz 2022","Tem 2022","Ağu 2022","Eyl 2022","Eki 2022","Kas 2022","Ara 2022","Oca 2023","Şub 2023","Mar 2023","Nis 2023","May 2023","Haz 2023","Tem 2023","Ağu 2023","Eyl 2023","Eki 2023","Kas 2023","Ara 2023","Oca 2024","Şub 2024","Mar 2024","Nis 2024","May 2024","Haz 2024","Tem 2024","Ağu 2024","Eyl 2024","Eki 2024","Kas 2024","Ara 2024","Oca 2025","Şub 2025","Mar 2025","Nis 2025","May 2025","Haz 2025","Tem 2025","Ağu 2025","Eyl 2025","Eki 2025","Kas 2025","Ara 2025","Oca 2026","Şub 2026","Mar 2026","Nis 2026","May 2026","Haz 2026","Tem 2026"],"fmt":"endeks","series":[{"ad":"Maliyet endeksi","renk":"#eb6834","py":[348.4,348.43,348.33,348.34,348.4,348.3,347.97,347.88,347.65,347.51,347.43,347.33,346.95,346.85,346.73,346.53,346.6,346.3,345.72,345.54,345.2,345.03,344.98,344.88,344.27,343.79,343.43,343.21,343.08,342.87,342.16,341.91,341.82,341.59,341.54,341.52,339.72,339.83,340.1,340.09,340.15,340.03,339.7,339.63,339.54,339.41,339.36,339.21,338.16,338.12,337.97,337.62,337.31,336.96,336.77,336.89,336.83,336.93,337.04,337.02,336.21,336.15,335.68,335.18,334.78,334.15,334.11,333.95,332.71,332.28,332.55,332.52,331.48,331.55,331.06,329.62,329.4,329.38,329.22,329.37,329.3,329.26,329.35,329.15,327.22,326.79,325.95,324.97,324.93,325.11,325.07,325.06,325.05,324.77,324.37,324.2,321.13,320.37,319.84,319.0,318.24,316.57,315.8,315.52,315.2,314.37,312.5,306.59,298.49,295.49,290.79,283.94,280.15,277.5,273.25,274.44,273.41,270.64,269.95,268.2,245.17,238.93,230.1,220.2,216.85,211.64,192.17,189.01,184.47,177.73,174.19,168.79,134.21,120.25,100.59,84.1,76.36,76.75,76.3,78.8,77.81,75.47,76.12,74.59,47.15,40.84,32.03,23.0,16.76,12.12,11.39,6.67,-0.11,-9.39,-10.14,-22.02,-76.0,-92.18,-110.83,-131.08,-126.16,-128.17,-129.43],"vals":[100.0,99.801,100.382,100.342,100.02,100.59,102.455,102.93,104.255,105.075,105.509,106.089,108.216,108.787,109.491,110.609,110.222,111.946,115.25,116.261,118.157,119.158,119.449,119.996,123.452,126.168,128.246,129.469,130.217,131.411,135.469,136.899,137.412,138.667,138.955,139.105,149.302,148.681,147.151,147.196,146.855,147.536,149.436,149.857,150.357,151.095,151.359,152.229,158.183,158.386,159.282,161.27,163.035,165.024,166.093,165.424,165.756,165.158,164.554,164.643,169.253,169.62,172.247,175.137,177.365,180.959,181.175,182.112,189.148,191.604,190.052,190.208,196.154,195.735,198.523,206.699,207.961,208.074,208.997,208.107,208.535,208.743,208.228,209.359,220.334,222.797,227.58,233.147,233.326,232.305,232.567,232.627,232.654,234.242,236.519,237.495,254.957,259.29,262.27,267.034,271.348,280.868,285.209,286.831,288.624,293.347,303.957,337.56,383.581,400.644,427.346,466.261,487.809,502.858,526.989,520.25,526.06,541.797,545.76,555.695,686.553,721.999,772.166,828.409,847.418,877.03,987.691,1005.646,1031.421,1069.739,1089.805,1120.52,1316.994,1396.301,1508.02,1601.699,1645.703,1643.468,1646.016,1631.831,1637.425,1650.721,1647.027,1655.76,1811.664,1847.495,1897.549,1948.861,1984.326,2010.702,2014.817,2041.629,2080.197,2132.904,2137.141,2204.673,2511.367,2603.307,2709.235,2824.325,2796.38,2807.772,2814.948]}]},"g6":{"tur":"cizgi","x0":56,"dx":4.0,"n":163,"px":[56.0,60.0,64.0,68.0,72.0,76.0,80.0,84.0,88.0,92.0,96.0,100.0,104.0,108.0,112.0,116.0,120.0,124.0,128.0,132.0,136.0,140.0,144.0,148.0,152.0,156.0,160.0,164.0,168.0,172.0,176.0,180.0,184.0,188.0,192.0,196.0,200.0,204.0,208.0,212.0,216.0,220.0,224.0,228.0,232.0,236.0,240.0,244.0,248.0,252.0,256.0,260.0,264.0,268.0,272.0,276.0,280.0,284.0,288.0,292.0,296.0,300.0,304.0,308.0,312.0,316.0,320.0,324.0,328.0,332.0,336.0,340.0,344.0,348.0,352.0,356.0,360.0,364.0,368.0,372.0,376.0,380.0,384.0,388.0,392.0,396.0,400.0,404.0,408.0,412.0,416.0,420.0,424.0,428.0,432.0,436.0,440.0,444.0,448.0,452.0,456.0,460.0,464.0,468.0,472.0,476.0,480.0,484.0,488.0,492.0,496.0,500.0,504.0,508.0,512.0,516.0,520.0,524.0,528.0,532.0,536.0,540.0,544.0,548.0,552.0,556.0,560.0,564.0,568.0,572.0,576.0,580.0,584.0,588.0,592.0,596.0,600.0,604.0,608.0,612.0,616.0,620.0,624.0,628.0,632.0,636.0,640.0,644.0,648.0,652.0,656.0,660.0,664.0,668.0,672.0,676.0,680.0,684.0,688.0,692.0,696.0,700.0,704.0],"tarih":["Oca 2013","Şub 2013","Mar 2013","Nis 2013","May 2013","Haz 2013","Tem 2013","Ağu 2013","Eyl 2013","Eki 2013","Kas 2013","Ara 2013","Oca 2014","Şub 2014","Mar 2014","Nis 2014","May 2014","Haz 2014","Tem 2014","Ağu 2014","Eyl 2014","Eki 2014","Kas 2014","Ara 2014","Oca 2015","Şub 2015","Mar 2015","Nis 2015","May 2015","Haz 2015","Tem 2015","Ağu 2015","Eyl 2015","Eki 2015","Kas 2015","Ara 2015","Oca 2016","Şub 2016","Mar 2016","Nis 2016","May 2016","Haz 2016","Tem 2016","Ağu 2016","Eyl 2016","Eki 2016","Kas 2016","Ara 2016","Oca 2017","Şub 2017","Mar 2017","Nis 2017","May 2017","Haz 2017","Tem 2017","Ağu 2017","Eyl 2017","Eki 2017","Kas 2017","Ara 2017","Oca 2018","Şub 2018","Mar 2018","Nis 2018","May 2018","Haz 2018","Tem 2018","Ağu 2018","Eyl 2018","Eki 2018","Kas 2018","Ara 2018","Oca 2019","Şub 2019","Mar 2019","Nis 2019","May 2019","Haz 2019","Tem 2019","Ağu 2019","Eyl 2019","Eki 2019","Kas 2019","Ara 2019","Oca 2020","Şub 2020","Mar 2020","Nis 2020","May 2020","Haz 2020","Tem 2020","Ağu 2020","Eyl 2020","Eki 2020","Kas 2020","Ara 2020","Oca 2021","Şub 2021","Mar 2021","Nis 2021","May 2021","Haz 2021","Tem 2021","Ağu 2021","Eyl 2021","Eki 2021","Kas 2021","Ara 2021","Oca 2022","Şub 2022","Mar 2022","Nis 2022","May 2022","Haz 2022","Tem 2022","Ağu 2022","Eyl 2022","Eki 2022","Kas 2022","Ara 2022","Oca 2023","Şub 2023","Mar 2023","Nis 2023","May 2023","Haz 2023","Tem 2023","Ağu 2023","Eyl 2023","Eki 2023","Kas 2023","Ara 2023","Oca 2024","Şub 2024","Mar 2024","Nis 2024","May 2024","Haz 2024","Tem 2024","Ağu 2024","Eyl 2024","Eki 2024","Kas 2024","Ara 2024","Oca 2025","Şub 2025","Mar 2025","Nis 2025","May 2025","Haz 2025","Tem 2025","Ağu 2025","Eyl 2025","Eki 2025","Kas 2025","Ara 2025","Oca 2026","Şub 2026","Mar 2026","Nis 2026","May 2026","Haz 2026","Tem 2026"],"fmt":"endeks","series":[{"ad":"Maliyet endeksi","renk":"#eda100","py":[348.4,347.75,347.2,346.9,347.27,347.91,347.57,347.23,347.71,348.18,348.14,347.8,346.72,346.22,345.92,345.99,346.47,346.57,345.88,345.75,345.99,346.19,346.47,346.57,345.93,345.6,345.56,345.31,345.07,345.51,344.39,344.31,344.6,344.86,345.2,345.09,342.87,342.8,342.61,342.23,342.03,341.87,341.71,342.03,342.73,342.8,342.15,341.55,340.51,340.54,340.12,339.49,339.1,338.52,338.29,338.94,339.75,340.07,339.81,339.83,338.78,338.46,338.25,337.77,337.12,335.82,335.72,335.46,333.95,333.08,333.45,333.55,331.7,331.61,331.29,329.41,327.29,326.56,327.65,329.92,331.21,331.24,330.84,330.2,328.15,328.25,327.35,326.81,325.89,326.18,326.73,327.33,327.76,327.19,324.26,323.21,319.97,318.65,316.57,315.55,315.01,314.01,312.95,312.72,312.86,311.97,308.5,300.0,289.82,289.29,283.32,270.9,273.32,275.3,263.72,260.84,255.41,250.24,246.5,244.19,224.29,219.51,213.05,208.62,216.85,214.12,194.35,185.04,178.39,170.36,163.36,151.23,119.0,113.42,106.96,111.43,119.72,127.45,117.83,112.8,95.52,93.8,66.45,58.86,22.6,11.39,-8.46,-12.23,9.38,20.76,15.84,5.21,-19.31,-23.41,-12.88,-15.31,-43.03,-55.86,-52.44,-50.51,-59.58,-50.73,-52.17],"vals":[100.0,103.69,106.808,108.521,106.441,102.806,104.734,106.627,103.921,101.231,101.458,103.435,109.553,112.396,114.067,113.681,110.968,110.411,114.294,115.07,113.717,112.533,110.983,110.373,114.044,115.923,116.129,117.555,118.894,116.44,122.794,123.266,121.611,120.104,118.172,118.831,131.408,131.835,132.871,135.08,136.189,137.126,137.998,136.167,132.234,131.808,135.51,138.934,144.817,144.682,147.071,150.651,152.846,156.137,157.468,153.778,149.15,147.323,148.799,148.703,154.67,156.474,157.677,160.383,164.101,171.495,172.074,173.501,182.079,187.058,184.948,184.369,194.87,195.398,197.198,207.901,219.923,224.105,217.92,204.989,197.698,197.528,199.756,203.412,215.076,214.511,219.6,222.672,227.877,226.27,223.133,219.701,217.248,220.503,237.164,243.115,261.525,269.024,280.831,286.64,289.708,295.384,301.432,302.727,301.929,306.988,326.696,375.016,432.866,435.845,469.791,540.327,526.563,515.336,581.146,597.522,628.35,657.727,678.989,692.114,805.149,832.311,869.056,894.216,847.428,862.971,975.266,1028.198,1065.975,1111.592,1151.365,1220.301,1403.42,1435.107,1471.845,1446.426,1399.327,1355.422,1410.077,1438.649,1536.832,1546.618,1701.977,1745.124,1951.131,2014.84,2127.627,2149.007,2026.27,1961.585,1989.519,2049.968,2189.233,2212.583,2152.702,2166.507,2324.047,2396.95,2377.495,2366.55,2418.093,2367.783,2375.963]}]},"g7":{"tur":"cizgi","x0":56,"dx":4.0,"n":163,"px":[56.0,60.0,64.0,68.0,72.0,76.0,80.0,84.0,88.0,92.0,96.0,100.0,104.0,108.0,112.0,116.0,120.0,124.0,128.0,132.0,136.0,140.0,144.0,148.0,152.0,156.0,160.0,164.0,168.0,172.0,176.0,180.0,184.0,188.0,192.0,196.0,200.0,204.0,208.0,212.0,216.0,220.0,224.0,228.0,232.0,236.0,240.0,244.0,248.0,252.0,256.0,260.0,264.0,268.0,272.0,276.0,280.0,284.0,288.0,292.0,296.0,300.0,304.0,308.0,312.0,316.0,320.0,324.0,328.0,332.0,336.0,340.0,344.0,348.0,352.0,356.0,360.0,364.0,368.0,372.0,376.0,380.0,384.0,388.0,392.0,396.0,400.0,404.0,408.0,412.0,416.0,420.0,424.0,428.0,432.0,436.0,440.0,444.0,448.0,452.0,456.0,460.0,464.0,468.0,472.0,476.0,480.0,484.0,488.0,492.0,496.0,500.0,504.0,508.0,512.0,516.0,520.0,524.0,528.0,532.0,536.0,540.0,544.0,548.0,552.0,556.0,560.0,564.0,568.0,572.0,576.0,580.0,584.0,588.0,592.0,596.0,600.0,604.0,608.0,612.0,616.0,620.0,624.0,628.0,632.0,636.0,640.0,644.0,648.0,652.0,656.0,660.0,664.0,668.0,672.0,676.0,680.0,684.0,688.0,692.0,696.0,700.0,704.0],"tarih":["Oca 2013","Şub 2013","Mar 2013","Nis 2013","May 2013","Haz 2013","Tem 2013","Ağu 2013","Eyl 2013","Eki 2013","Kas 2013","Ara 2013","Oca 2014","Şub 2014","Mar 2014","Nis 2014","May 2014","Haz 2014","Tem 2014","Ağu 2014","Eyl 2014","Eki 2014","Kas 2014","Ara 2014","Oca 2015","Şub 2015","Mar 2015","Nis 2015","May 2015","Haz 2015","Tem 2015","Ağu 2015","Eyl 2015","Eki 2015","Kas 2015","Ara 2015","Oca 2016","Şub 2016","Mar 2016","Nis 2016","May 2016","Haz 2016","Tem 2016","Ağu 2016","Eyl 2016","Eki 2016","Kas 2016","Ara 2016","Oca 2017","Şub 2017","Mar 2017","Nis 2017","May 2017","Haz 2017","Tem 2017","Ağu 2017","Eyl 2017","Eki 2017","Kas 2017","Ara 2017","Oca 2018","Şub 2018","Mar 2018","Nis 2018","May 2018","Haz 2018","Tem 2018","Ağu 2018","Eyl 2018","Eki 2018","Kas 2018","Ara 2018","Oca 2019","Şub 2019","Mar 2019","Nis 2019","May 2019","Haz 2019","Tem 2019","Ağu 2019","Eyl 2019","Eki 2019","Kas 2019","Ara 2019","Oca 2020","Şub 2020","Mar 2020","Nis 2020","May 2020","Haz 2020","Tem 2020","Ağu 2020","Eyl 2020","Eki 2020","Kas 2020","Ara 2020","Oca 2021","Şub 2021","Mar 2021","Nis 2021","May 2021","Haz 2021","Tem 2021","Ağu 2021","Eyl 2021","Eki 2021","Kas 2021","Ara 2021","Oca 2022","Şub 2022","Mar 2022","Nis 2022","May 2022","Haz 2022","Tem 2022","Ağu 2022","Eyl 2022","Eki 2022","Kas 2022","Ara 2022","Oca 2023","Şub 2023","Mar 2023","Nis 2023","May 2023","Haz 2023","Tem 2023","Ağu 2023","Eyl 2023","Eki 2023","Kas 2023","Ara 2023","Oca 2024","Şub 2024","Mar 2024","Nis 2024","May 2024","Haz 2024","Tem 2024","Ağu 2024","Eyl 2024","Eki 2024","Kas 2024","Ara 2024","Oca 2025","Şub 2025","Mar 2025","Nis 2025","May 2025","Haz 2025","Tem 2025","Ağu 2025","Eyl 2025","Eki 2025","Kas 2025","Ara 2025","Oca 2026","Şub 2026","Mar 2026","Nis 2026","May 2026","Haz 2026","Tem 2026"],"fmt":"endeks","series":[{"ad":"Maliyet endeksi","renk":"#2a78d6","py":[348.4,348.28,348.02,348.26,348.53,348.3,347.98,348.04,347.94,347.44,347.21,346.55,345.33,345.07,344.71,344.72,344.97,344.94,344.57,344.5,344.55,344.08,343.98,343.93,343.31,342.92,342.55,343.3,343.88,344.22,343.85,343.82,343.74,342.61,342.4,342.13,339.99,339.74,339.8,341.67,342.25,342.31,341.99,342.1,342.01,340.45,340.35,339.88,338.42,337.96,337.51,337.43,337.64,337.85,337.69,337.67,337.53,337.1,336.59,336.27,335.59,335.41,335.2,335.14,334.72,332.98,333.08,333.33,331.93,330.89,330.15,329.86,328.37,328.3,327.73,326.8,328.02,328.07,328.0,328.37,328.43,328.31,328.22,327.26,324.92,324.59,323.78,322.44,322.57,322.27,322.53,322.59,322.18,321.13,319.79,318.87,315.79,315.4,315.17,314.63,314.53,313.91,312.91,312.34,311.62,310.24,308.31,302.44,292.13,289.16,288.05,281.89,280.4,277.25,267.98,266.53,264.34,260.43,254.89,252.91,235.98,232.05,230.89,230.67,231.07,228.34,210.26,203.35,199.6,193.7,185.19,179.94,147.03,135.41,133.0,130.06,125.62,124.62,120.25,117.46,113.98,108.28,102.71,99.5,70.86,64.18,58.88,56.23,54.77,53.1,48.91,44.36,36.39,27.93,23.03,19.07,-18.52,-34.48,-38.29,-48.15,-53.05,-57.45,-66.51],"vals":[100.0,100.703,102.171,100.821,99.279,100.588,102.414,102.022,102.623,105.439,106.755,110.504,117.427,118.895,120.968,120.923,119.493,119.633,121.785,122.168,121.855,124.566,125.109,125.377,128.939,131.133,133.23,128.991,125.676,123.77,125.833,126.035,126.486,132.874,134.119,135.605,147.806,149.214,148.866,138.227,134.933,134.626,136.437,135.822,136.322,145.154,145.759,148.4,156.714,159.322,161.856,162.345,161.126,159.923,160.863,160.983,161.774,164.185,167.129,168.942,172.805,173.79,175.015,175.368,177.717,187.596,187.061,185.603,193.562,199.511,203.684,205.328,213.797,214.217,217.443,222.751,215.768,215.529,215.937,213.826,213.465,214.138,214.678,220.141,233.4,235.311,239.872,247.491,246.755,248.442,246.993,246.625,248.995,254.946,262.552,267.811,285.294,287.508,288.83,291.9,292.441,295.965,301.642,304.884,308.984,316.826,327.783,361.135,419.744,436.564,442.896,477.917,486.368,504.264,556.922,565.193,577.629,599.803,631.33,642.534,738.741,761.091,767.669,768.948,766.671,782.137,884.869,924.122,945.454,978.985,1027.338,1057.176,1244.139,1310.184,1323.867,1340.576,1365.772,1371.472,1396.288,1412.14,1431.959,1464.337,1495.959,1514.221,1676.934,1714.9,1745.001,1760.045,1768.377,1777.814,1801.649,1827.475,1872.812,1920.835,1948.716,1971.172,2184.773,2275.475,2297.076,2353.139,2380.958,2405.975,2457.446]}]},"g8":{"tur":"cizgi","x0":56,"dx":4.0,"n":163,"px":[56.0,60.0,64.0,68.0,72.0,76.0,80.0,84.0,88.0,92.0,96.0,100.0,104.0,108.0,112.0,116.0,120.0,124.0,128.0,132.0,136.0,140.0,144.0,148.0,152.0,156.0,160.0,164.0,168.0,172.0,176.0,180.0,184.0,188.0,192.0,196.0,200.0,204.0,208.0,212.0,216.0,220.0,224.0,228.0,232.0,236.0,240.0,244.0,248.0,252.0,256.0,260.0,264.0,268.0,272.0,276.0,280.0,284.0,288.0,292.0,296.0,300.0,304.0,308.0,312.0,316.0,320.0,324.0,328.0,332.0,336.0,340.0,344.0,348.0,352.0,356.0,360.0,364.0,368.0,372.0,376.0,380.0,384.0,388.0,392.0,396.0,400.0,404.0,408.0,412.0,416.0,420.0,424.0,428.0,432.0,436.0,440.0,444.0,448.0,452.0,456.0,460.0,464.0,468.0,472.0,476.0,480.0,484.0,488.0,492.0,496.0,500.0,504.0,508.0,512.0,516.0,520.0,524.0,528.0,532.0,536.0,540.0,544.0,548.0,552.0,556.0,560.0,564.0,568.0,572.0,576.0,580.0,584.0,588.0,592.0,596.0,600.0,604.0,608.0,612.0,616.0,620.0,624.0,628.0,632.0,636.0,640.0,644.0,648.0,652.0,656.0,660.0,664.0,668.0,672.0,676.0,680.0,684.0,688.0,692.0,696.0,700.0,704.0],"tarih":["Oca 2013","Şub 2013","Mar 2013","Nis 2013","May 2013","Haz 2013","Tem 2013","Ağu 2013","Eyl 2013","Eki 2013","Kas 2013","Ara 2013","Oca 2014","Şub 2014","Mar 2014","Nis 2014","May 2014","Haz 2014","Tem 2014","Ağu 2014","Eyl 2014","Eki 2014","Kas 2014","Ara 2014","Oca 2015","Şub 2015","Mar 2015","Nis 2015","May 2015","Haz 2015","Tem 2015","Ağu 2015","Eyl 2015","Eki 2015","Kas 2015","Ara 2015","Oca 2016","Şub 2016","Mar 2016","Nis 2016","May 2016","Haz 2016","Tem 2016","Ağu 2016","Eyl 2016","Eki 2016","Kas 2016","Ara 2016","Oca 2017","Şub 2017","Mar 2017","Nis 2017","May 2017","Haz 2017","Tem 2017","Ağu 2017","Eyl 2017","Eki 2017","Kas 2017","Ara 2017","Oca 2018","Şub 2018","Mar 2018","Nis 2018","May 2018","Haz 2018","Tem 2018","Ağu 2018","Eyl 2018","Eki 2018","Kas 2018","Ara 2018","Oca 2019","Şub 2019","Mar 2019","Nis 2019","May 2019","Haz 2019","Tem 2019","Ağu 2019","Eyl 2019","Eki 2019","Kas 2019","Ara 2019","Oca 2020","Şub 2020","Mar 2020","Nis 2020","May 2020","Haz 2020","Tem 2020","Ağu 2020","Eyl 2020","Eki 2020","Kas 2020","Ara 2020","Oca 2021","Şub 2021","Mar 2021","Nis 2021","May 2021","Haz 2021","Tem 2021","Ağu 2021","Eyl 2021","Eki 2021","Kas 2021","Ara 2021","Oca 2022","Şub 2022","Mar 2022","Nis 2022","May 2022","Haz 2022","Tem 2022","Ağu 2022","Eyl 2022","Eki 2022","Kas 2022","Ara 2022","Oca 2023","Şub 2023","Mar 2023","Nis 2023","May 2023","Haz 2023","Tem 2023","Ağu 2023","Eyl 2023","Eki 2023","Kas 2023","Ara 2023","Oca 2024","Şub 2024","Mar 2024","Nis 2024","May 2024","Haz 2024","Tem 2024","Ağu 2024","Eyl 2024","Eki 2024","Kas 2024","Ara 2024","Oca 2025","Şub 2025","Mar 2025","Nis 2025","May 2025","Haz 2025","Tem 2025","Ağu 2025","Eyl 2025","Eki 2025","Kas 2025","Ara 2025","Oca 2026","Şub 2026","Mar 2026","Nis 2026","May 2026","Haz 2026","Tem 2026"],"fmt":"endeks","series":[{"ad":"Maliyet endeksi","renk":"#1baf7a","py":[348.4,348.34,348.08,348.39,348.64,348.55,348.34,348.3,348.18,347.86,347.83,347.74,347.12,347.13,346.92,346.88,347.13,347.08,346.7,346.52,346.32,345.92,345.88,345.87,345.02,344.79,344.55,344.32,344.61,344.86,344.44,344.37,344.21,344.07,343.78,343.59,341.55,341.57,341.63,341.86,342.18,342.22,341.85,341.93,341.84,341.54,341.45,341.13,339.58,339.49,339.31,339.2,339.44,339.74,339.46,339.44,339.27,338.76,338.33,338.09,337.14,336.9,336.68,336.64,336.66,335.83,335.58,335.43,333.77,332.62,332.54,332.53,330.66,330.65,330.21,329.77,330.93,331.02,330.69,330.81,330.54,329.99,329.78,329.07,326.82,326.65,326.32,326.03,326.41,326.5,326.61,326.47,326.04,325.37,324.32,323.78,320.91,320.25,319.7,318.89,319.23,318.73,318.01,316.86,316.04,314.67,312.89,307.26,297.06,293.71,292.55,286.14,286.69,284.88,277.2,275.94,272.85,266.78,263.14,262.85,245.8,240.87,240.04,239.09,240.18,236.79,216.95,208.62,203.92,198.37,193.74,188.14,156.5,146.53,144.22,143.39,139.59,136.57,130.66,126.44,121.27,114.62,106.51,104.42,74.98,73.48,67.46,66.47,65.84,65.15,59.81,53.98,45.27,35.0,36.32,33.65,-9.44,-26.79,-32.11,-42.05,-43.45,-41.32,-45.63],"vals":[100.0,100.35,101.813,100.077,98.658,99.139,100.333,100.569,101.244,103.091,103.228,103.75,107.291,107.203,108.398,108.627,107.241,107.519,109.642,110.697,111.827,114.072,114.331,114.382,119.186,120.537,121.876,123.176,121.512,120.104,122.512,122.894,123.779,124.631,126.273,127.356,138.905,138.816,138.474,137.173,135.36,135.114,137.188,136.761,137.287,139.001,139.484,141.29,150.114,150.603,151.67,152.264,150.909,149.18,150.768,150.934,151.884,154.754,157.238,158.585,163.966,165.335,166.599,166.799,166.692,171.406,172.835,173.711,183.122,189.638,190.12,190.185,200.821,200.856,203.359,205.841,199.277,198.731,200.632,199.958,201.491,204.613,205.808,209.803,222.613,223.557,225.438,227.114,224.934,224.44,223.804,224.626,227.064,230.855,236.793,239.866,256.185,259.94,263.07,267.69,265.739,268.563,272.693,279.204,283.858,291.647,301.744,333.751,391.711,410.741,417.313,453.736,450.647,460.885,504.56,511.725,529.259,563.756,584.417,586.06,682.937,710.989,715.684,721.106,714.861,734.163,846.888,894.177,920.918,952.439,978.735,1010.587,1190.343,1246.996,1260.112,1264.844,1286.403,1303.599,1337.164,1361.124,1390.527,1428.295,1474.353,1486.225,1653.517,1662.028,1696.235,1701.88,1705.441,1709.395,1739.708,1772.82,1822.322,1880.699,1873.203,1888.351,2133.193,2231.76,2262.016,2318.438,2326.408,2314.312,2338.781]}]},"g9":{"tur":"cizgi","x0":56,"dx":4.0,"n":163,"px":[56.0,60.0,64.0,68.0,72.0,76.0,80.0,84.0,88.0,92.0,96.0,100.0,104.0,108.0,112.0,116.0,120.0,124.0,128.0,132.0,136.0,140.0,144.0,148.0,152.0,156.0,160.0,164.0,168.0,172.0,176.0,180.0,184.0,188.0,192.0,196.0,200.0,204.0,208.0,212.0,216.0,220.0,224.0,228.0,232.0,236.0,240.0,244.0,248.0,252.0,256.0,260.0,264.0,268.0,272.0,276.0,280.0,284.0,288.0,292.0,296.0,300.0,304.0,308.0,312.0,316.0,320.0,324.0,328.0,332.0,336.0,340.0,344.0,348.0,352.0,356.0,360.0,364.0,368.0,372.0,376.0,380.0,384.0,388.0,392.0,396.0,400.0,404.0,408.0,412.0,416.0,420.0,424.0,428.0,432.0,436.0,440.0,444.0,448.0,452.0,456.0,460.0,464.0,468.0,472.0,476.0,480.0,484.0,488.0,492.0,496.0,500.0,504.0,508.0,512.0,516.0,520.0,524.0,528.0,532.0,536.0,540.0,544.0,548.0,552.0,556.0,560.0,564.0,568.0,572.0,576.0,580.0,584.0,588.0,592.0,596.0,600.0,604.0,608.0,612.0,616.0,620.0,624.0,628.0,632.0,636.0,640.0,644.0,648.0,652.0,656.0,660.0,664.0,668.0,672.0,676.0,680.0,684.0,688.0,692.0,696.0,700.0,704.0],"tarih":["Oca 2013","Şub 2013","Mar 2013","Nis 2013","May 2013","Haz 2013","Tem 2013","Ağu 2013","Eyl 2013","Eki 2013","Kas 2013","Ara 2013","Oca 2014","Şub 2014","Mar 2014","Nis 2014","May 2014","Haz 2014","Tem 2014","Ağu 2014","Eyl 2014","Eki 2014","Kas 2014","Ara 2014","Oca 2015","Şub 2015","Mar 2015","Nis 2015","May 2015","Haz 2015","Tem 2015","Ağu 2015","Eyl 2015","Eki 2015","Kas 2015","Ara 2015","Oca 2016","Şub 2016","Mar 2016","Nis 2016","May 2016","Haz 2016","Tem 2016","Ağu 2016","Eyl 2016","Eki 2016","Kas 2016","Ara 2016","Oca 2017","Şub 2017","Mar 2017","Nis 2017","May 2017","Haz 2017","Tem 2017","Ağu 2017","Eyl 2017","Eki 2017","Kas 2017","Ara 2017","Oca 2018","Şub 2018","Mar 2018","Nis 2018","May 2018","Haz 2018","Tem 2018","Ağu 2018","Eyl 2018","Eki 2018","Kas 2018","Ara 2018","Oca 2019","Şub 2019","Mar 2019","Nis 2019","May 2019","Haz 2019","Tem 2019","Ağu 2019","Eyl 2019","Eki 2019","Kas 2019","Ara 2019","Oca 2020","Şub 2020","Mar 2020","Nis 2020","May 2020","Haz 2020","Tem 2020","Ağu 2020","Eyl 2020","Eki 2020","Kas 2020","Ara 2020","Oca 2021","Şub 2021","Mar 2021","Nis 2021","May 2021","Haz 2021","Tem 2021","Ağu 2021","Eyl 2021","Eki 2021","Kas 2021","Ara 2021","Oca 2022","Şub 2022","Mar 2022","Nis 2022","May 2022","Haz 2022","Tem 2022","Ağu 2022","Eyl 2022","Eki 2022","Kas 2022","Ara 2022","Oca 2023","Şub 2023","Mar 2023","Nis 2023","May 2023","Haz 2023","Tem 2023","Ağu 2023","Eyl 2023","Eki 2023","Kas 2023","Ara 2023","Oca 2024","Şub 2024","Mar 2024","Nis 2024","May 2024","Haz 2024","Tem 2024","Ağu 2024","Eyl 2024","Eki 2024","Kas 2024","Ara 2024","Oca 2025","Şub 2025","Mar 2025","Nis 2025","May 2025","Haz 2025","Tem 2025","Ağu 2025","Eyl 2025","Eki 2025","Kas 2025","Ara 2025","Oca 2026","Şub 2026","Mar 2026","Nis 2026","May 2026","Haz 2026","Tem 2026"],"fmt":"oran","series":[{"ad":"Fiyat/Maliyet","renk":"#2a78d6","py":[278.0,280.73,294.2,274.5,255.4,259.92,269.22,259.96,253.68,272.65,279.31,304.94,339.24,341.39,347.83,342.95,325.31,318.37,319.68,311.15,298.92,315.93,313.83,309.56,323.14,329.54,331.38,293.66,261.27,237.08,243.07,223.57,221.33,257.82,260.42,265.02,332.49,335.18,327.59,259.17,234.7,229.9,228.68,215.28,207.89,259.17,258.46,271.61,310.29,317.01,320.71,314.76,296.67,277.8,270.14,266.08,267.72,278.93,290.95,297.95,304.46,304.78,305.28,299.23,295.51,322.9,299.72,283.6,287.02,302.51,314.02,318.61,344.3,339.38,346.43,357.68,315.55,298.81,290.75,278.03,267.95,263.79,261.44,280.35,308.46,306.48,304.98,329.12,324.78,307.2,293.19,278.44,280.91,290.75,305.36,316.7,354.58,351.04,328.86,324.99,321.78,300.93,299.01,284.21,272.32,279.96,268.97,282.28,348.35,341.28,294.31,294.46,265.0,256.62,321.35,308.46,306.49,314.67,328.99,319.86,332.73,322.0,293.04,254.56,184.48,168.69,181.49,155.0,137.69,132.23,149.94,148.32,193.12,189.51,156.41,120.25,78.78,55.53,42.26,34.36,29.27,33.37,43.69,41.13,81.9,71.66,63.72,33.94,21.91,7.7,-1.6,-7.2,0.08,10.74,12.11,8.25,52.81,62.12,52.98,42.66,39.35,30.97,36.06],"vals":[1.0,0.997,0.982,1.004,1.026,1.021,1.01,1.021,1.028,1.006,0.999,0.969,0.93,0.928,0.921,0.926,0.946,0.954,0.953,0.962,0.976,0.957,0.959,0.964,0.949,0.941,0.939,0.982,1.019,1.047,1.04,1.062,1.064,1.023,1.02,1.015,0.938,0.935,0.944,1.021,1.049,1.055,1.056,1.071,1.08,1.021,1.022,1.007,0.963,0.956,0.951,0.958,0.979,1.0,1.009,1.014,1.012,0.999,0.985,0.977,0.97,0.97,0.969,0.976,0.98,0.949,0.975,0.994,0.99,0.972,0.959,0.954,0.925,0.93,0.922,0.909,0.957,0.976,0.986,1.0,1.011,1.016,1.019,0.997,0.965,0.968,0.969,0.942,0.947,0.967,0.983,0.999,0.997,0.986,0.969,0.956,0.913,0.917,0.942,0.947,0.95,0.974,0.976,0.993,1.006,0.998,1.01,0.995,0.92,0.928,0.981,0.981,1.015,1.024,0.951,0.965,0.968,0.958,0.942,0.952,0.938,0.95,0.983,1.027,1.106,1.124,1.11,1.14,1.159,1.166,1.146,1.147,1.096,1.101,1.138,1.179,1.226,1.253,1.268,1.277,1.283,1.278,1.266,1.269,1.223,1.234,1.244,1.277,1.291,1.307,1.318,1.324,1.316,1.304,1.302,1.307,1.256,1.245,1.256,1.267,1.271,1.281,1.275]}]},"g10":{"tur":"cizgi","x0":56,"dx":4.0,"n":163,"px":[56.0,60.0,64.0,68.0,72.0,76.0,80.0,84.0,88.0,92.0,96.0,100.0,104.0,108.0,112.0,116.0,120.0,124.0,128.0,132.0,136.0,140.0,144.0,148.0,152.0,156.0,160.0,164.0,168.0,172.0,176.0,180.0,184.0,188.0,192.0,196.0,200.0,204.0,208.0,212.0,216.0,220.0,224.0,228.0,232.0,236.0,240.0,244.0,248.0,252.0,256.0,260.0,264.0,268.0,272.0,276.0,280.0,284.0,288.0,292.0,296.0,300.0,304.0,308.0,312.0,316.0,320.0,324.0,328.0,332.0,336.0,340.0,344.0,348.0,352.0,356.0,360.0,364.0,368.0,372.0,376.0,380.0,384.0,388.0,392.0,396.0,400.0,404.0,408.0,412.0,416.0,420.0,424.0,428.0,432.0,436.0,440.0,444.0,448.0,452.0,456.0,460.0,464.0,468.0,472.0,476.0,480.0,484.0,488.0,492.0,496.0,500.0,504.0,508.0,512.0,516.0,520.0,524.0,528.0,532.0,536.0,540.0,544.0,548.0,552.0,556.0,560.0,564.0,568.0,572.0,576.0,580.0,584.0,588.0,592.0,596.0,600.0,604.0,608.0,612.0,616.0,620.0,624.0,628.0,632.0,636.0,640.0,644.0,648.0,652.0,656.0,660.0,664.0,668.0,672.0,676.0,680.0,684.0,688.0,692.0,696.0,700.0,704.0],"tarih":["Oca 2013","Şub 2013","Mar 2013","Nis 2013","May 2013","Haz 2013","Tem 2013","Ağu 2013","Eyl 2013","Eki 2013","Kas 2013","Ara 2013","Oca 2014","Şub 2014","Mar 2014","Nis 2014","May 2014","Haz 2014","Tem 2014","Ağu 2014","Eyl 2014","Eki 2014","Kas 2014","Ara 2014","Oca 2015","Şub 2015","Mar 2015","Nis 2015","May 2015","Haz 2015","Tem 2015","Ağu 2015","Eyl 2015","Eki 2015","Kas 2015","Ara 2015","Oca 2016","Şub 2016","Mar 2016","Nis 2016","May 2016","Haz 2016","Tem 2016","Ağu 2016","Eyl 2016","Eki 2016","Kas 2016","Ara 2016","Oca 2017","Şub 2017","Mar 2017","Nis 2017","May 2017","Haz 2017","Tem 2017","Ağu 2017","Eyl 2017","Eki 2017","Kas 2017","Ara 2017","Oca 2018","Şub 2018","Mar 2018","Nis 2018","May 2018","Haz 2018","Tem 2018","Ağu 2018","Eyl 2018","Eki 2018","Kas 2018","Ara 2018","Oca 2019","Şub 2019","Mar 2019","Nis 2019","May 2019","Haz 2019","Tem 2019","Ağu 2019","Eyl 2019","Eki 2019","Kas 2019","Ara 2019","Oca 2020","Şub 2020","Mar 2020","Nis 2020","May 2020","Haz 2020","Tem 2020","Ağu 2020","Eyl 2020","Eki 2020","Kas 2020","Ara 2020","Oca 2021","Şub 2021","Mar 2021","Nis 2021","May 2021","Haz 2021","Tem 2021","Ağu 2021","Eyl 2021","Eki 2021","Kas 2021","Ara 2021","Oca 2022","Şub 2022","Mar 2022","Nis 2022","May 2022","Haz 2022","Tem 2022","Ağu 2022","Eyl 2022","Eki 2022","Kas 2022","Ara 2022","Oca 2023","Şub 2023","Mar 2023","Nis 2023","May 2023","Haz 2023","Tem 2023","Ağu 2023","Eyl 2023","Eki 2023","Kas 2023","Ara 2023","Oca 2024","Şub 2024","Mar 2024","Nis 2024","May 2024","Haz 2024","Tem 2024","Ağu 2024","Eyl 2024","Eki 2024","Kas 2024","Ara 2024","Oca 2025","Şub 2025","Mar 2025","Nis 2025","May 2025","Haz 2025","Tem 2025","Ağu 2025","Eyl 2025","Eki 2025","Kas 2025","Ara 2025","Oca 2026","Şub 2026","Mar 2026","Nis 2026","May 2026","Haz 2026","Tem 2026"],"fmt":"oran","series":[{"ad":"Fiyat/Maliyet","renk":"#eb6834","py":[366.0,357.85,356.33,344.54,329.03,329.14,341.4,335.6,333.87,331.25,328.21,328.62,349.64,339.23,333.43,334.83,318.37,324.3,343.09,329.04,332.4,334.52,330.29,329.75,356.81,369.91,370.16,361.45,351.79,347.97,364.07,346.88,341.75,338.53,338.32,336.31,370.07,353.18,330.64,324.67,314.0,309.21,305.33,300.4,296.73,294.64,292.61,295.45,329.63,323.46,320.6,322.39,319.71,314.19,292.54,274.73,268.73,251.12,240.65,233.95,268.29,261.85,271.49,277.79,270.31,269.84,245.17,234.38,229.19,222.74,205.27,203.43,234.33,221.36,229.05,263.12,240.58,209.18,200.48,191.86,185.95,186.6,182.13,186.67,244.95,248.52,257.81,285.51,283.9,232.53,216.93,201.53,189.46,192.29,190.42,186.53,267.1,268.34,247.84,251.01,257.9,247.03,231.64,201.38,183.05,181.13,166.72,172.2,248.03,235.89,222.37,221.59,216.06,187.62,217.62,152.72,128.32,130.63,92.93,74.6,204.31,211.4,245.51,280.48,228.97,224.45,238.25,166.39,144.3,138.11,126.9,120.39,176.59,177.28,228.66,247.61,217.03,172.46,129.61,89.48,66.98,53.79,32.65,16.73,56.44,34.88,41.33,32.53,34.51,26.95,-0.37,-8.53,-11.05,0.78,-17.24,0.07,92.54,98.45,122.11,129.16,99.02,83.24,58.92],"vals":[1.0,1.007,1.008,1.018,1.032,1.031,1.021,1.026,1.027,1.03,1.032,1.032,1.014,1.023,1.028,1.027,1.041,1.036,1.02,1.031,1.029,1.027,1.03,1.031,1.008,0.997,0.996,1.004,1.012,1.015,1.002,1.016,1.021,1.023,1.024,1.025,0.997,1.011,1.03,1.035,1.044,1.048,1.052,1.056,1.059,1.061,1.063,1.06,1.031,1.036,1.039,1.037,1.039,1.044,1.063,1.078,1.083,1.098,1.107,1.113,1.083,1.089,1.081,1.075,1.082,1.082,1.103,1.112,1.117,1.122,1.137,1.139,1.112,1.123,1.117,1.088,1.107,1.134,1.141,1.148,1.153,1.153,1.157,1.153,1.103,1.1,1.092,1.069,1.07,1.114,1.127,1.14,1.15,1.148,1.15,1.153,1.084,1.083,1.101,1.098,1.092,1.101,1.115,1.14,1.156,1.158,1.17,1.165,1.101,1.111,1.122,1.123,1.128,1.152,1.126,1.182,1.203,1.201,1.233,1.248,1.138,1.132,1.103,1.073,1.117,1.121,1.109,1.17,1.189,1.194,1.204,1.209,1.161,1.161,1.117,1.101,1.127,1.165,1.201,1.236,1.255,1.266,1.284,1.298,1.264,1.282,1.277,1.284,1.283,1.289,1.312,1.319,1.321,1.311,1.327,1.312,1.233,1.228,1.208,1.202,1.228,1.241,1.262]}]},"g11":{"tur":"cizgi","x0":56,"dx":4.0,"n":163,"px":[56.0,60.0,64.0,68.0,72.0,76.0,80.0,84.0,88.0,92.0,96.0,100.0,104.0,108.0,112.0,116.0,120.0,124.0,128.0,132.0,136.0,140.0,144.0,148.0,152.0,156.0,160.0,164.0,168.0,172.0,176.0,180.0,184.0,188.0,192.0,196.0,200.0,204.0,208.0,212.0,216.0,220.0,224.0,228.0,232.0,236.0,240.0,244.0,248.0,252.0,256.0,260.0,264.0,268.0,272.0,276.0,280.0,284.0,288.0,292.0,296.0,300.0,304.0,308.0,312.0,316.0,320.0,324.0,328.0,332.0,336.0,340.0,344.0,348.0,352.0,356.0,360.0,364.0,368.0,372.0,376.0,380.0,384.0,388.0,392.0,396.0,400.0,404.0,408.0,412.0,416.0,420.0,424.0,428.0,432.0,436.0,440.0,444.0,448.0,452.0,456.0,460.0,464.0,468.0,472.0,476.0,480.0,484.0,488.0,492.0,496.0,500.0,504.0,508.0,512.0,516.0,520.0,524.0,528.0,532.0,536.0,540.0,544.0,548.0,552.0,556.0,560.0,564.0,568.0,572.0,576.0,580.0,584.0,588.0,592.0,596.0,600.0,604.0,608.0,612.0,616.0,620.0,624.0,628.0,632.0,636.0,640.0,644.0,648.0,652.0,656.0,660.0,664.0,668.0,672.0,676.0,680.0,684.0,688.0,692.0,696.0,700.0,704.0],"tarih":["Oca 2013","Şub 2013","Mar 2013","Nis 2013","May 2013","Haz 2013","Tem 2013","Ağu 2013","Eyl 2013","Eki 2013","Kas 2013","Ara 2013","Oca 2014","Şub 2014","Mar 2014","Nis 2014","May 2014","Haz 2014","Tem 2014","Ağu 2014","Eyl 2014","Eki 2014","Kas 2014","Ara 2014","Oca 2015","Şub 2015","Mar 2015","Nis 2015","May 2015","Haz 2015","Tem 2015","Ağu 2015","Eyl 2015","Eki 2015","Kas 2015","Ara 2015","Oca 2016","Şub 2016","Mar 2016","Nis 2016","May 2016","Haz 2016","Tem 2016","Ağu 2016","Eyl 2016","Eki 2016","Kas 2016","Ara 2016","Oca 2017","Şub 2017","Mar 2017","Nis 2017","May 2017","Haz 2017","Tem 2017","Ağu 2017","Eyl 2017","Eki 2017","Kas 2017","Ara 2017","Oca 2018","Şub 2018","Mar 2018","Nis 2018","May 2018","Haz 2018","Tem 2018","Ağu 2018","Eyl 2018","Eki 2018","Kas 2018","Ara 2018","Oca 2019","Şub 2019","Mar 2019","Nis 2019","May 2019","Haz 2019","Tem 2019","Ağu 2019","Eyl 2019","Eki 2019","Kas 2019","Ara 2019","Oca 2020","Şub 2020","Mar 2020","Nis 2020","May 2020","Haz 2020","Tem 2020","Ağu 2020","Eyl 2020","Eki 2020","Kas 2020","Ara 2020","Oca 2021","Şub 2021","Mar 2021","Nis 2021","May 2021","Haz 2021","Tem 2021","Ağu 2021","Eyl 2021","Eki 2021","Kas 2021","Ara 2021","Oca 2022","Şub 2022","Mar 2022","Nis 2022","May 2022","Haz 2022","Tem 2022","Ağu 2022","Eyl 2022","Eki 2022","Kas 2022","Ara 2022","Oca 2023","Şub 2023","Mar 2023","Nis 2023","May 2023","Haz 2023","Tem 2023","Ağu 2023","Eyl 2023","Eki 2023","Kas 2023","Ara 2023","Oca 2024","Şub 2024","Mar 2024","Nis 2024","May 2024","Haz 2024","Tem 2024","Ağu 2024","Eyl 2024","Eki 2024","Kas 2024","Ara 2024","Oca 2025","Şub 2025","Mar 2025","Nis 2025","May 2025","Haz 2025","Tem 2025","Ağu 2025","Eyl 2025","Eki 2025","Kas 2025","Ara 2025","Oca 2026","Şub 2026","Mar 2026","Nis 2026","May 2026","Haz 2026","Tem 2026"],"fmt":"oran","series":[{"ad":"Fiyat/Maliyet","renk":"#eda100","py":[366.0,393.4,413.25,419.05,395.24,359.77,369.29,376.43,341.2,308.93,304.04,318.25,371.15,381.41,385.48,375.0,343.47,329.09,348.5,333.94,309.22,292.12,271.5,261.98,287.45,291.57,276.68,273.03,270.43,236.99,273.35,251.86,231.05,210.02,191.26,194.32,251.34,244.63,244.71,256.25,258.45,257.33,245.82,223.87,187.06,177.18,202.63,224.77,259.71,250.53,259.46,272.02,275.36,281.31,264.81,229.5,190.73,167.12,172.69,164.66,209.63,213.8,213.1,218.46,224.06,246.26,229.85,223.86,226.52,234.96,218.73,213.72,266.75,262.19,264.25,303.13,334.21,326.47,290.36,229.19,184.73,186.46,198.71,216.64,268.91,257.27,266.18,276.87,298.16,254.33,228.57,203.34,185.92,196.95,259.23,275.28,328.28,341.14,354.38,359.55,358.16,334.87,329.19,305.0,282.44,281.38,296.26,321.7,387.63,345.73,346.29,390.22,324.19,251.15,342.16,333.31,351.01,366.92,365.44,354.36,385.13,373.92,376.34,364.73,260.17,239.78,254.85,235.11,229.19,229.84,240.66,265.18,281.56,245.33,234.72,170.06,80.49,-0.05,7.23,7.39,64.27,52.62,148.72,158.08,209.77,206.7,240.58,219.13,137.82,79.97,74.01,87.64,137.88,129.65,82.62,63.79,63.2,62.24,21.08,-32.46,-17.17,-61.58,-83.81],"vals":[1.0,0.969,0.946,0.94,0.967,1.007,0.996,0.988,1.028,1.065,1.07,1.054,0.994,0.982,0.978,0.99,1.026,1.042,1.02,1.036,1.065,1.084,1.107,1.118,1.089,1.085,1.102,1.106,1.109,1.147,1.105,1.13,1.153,1.177,1.199,1.195,1.13,1.138,1.138,1.125,1.122,1.123,1.137,1.162,1.203,1.215,1.186,1.16,1.121,1.131,1.121,1.107,1.103,1.096,1.115,1.155,1.199,1.226,1.22,1.229,1.178,1.173,1.174,1.168,1.161,1.136,1.155,1.162,1.159,1.149,1.167,1.173,1.113,1.118,1.116,1.071,1.036,1.045,1.086,1.155,1.206,1.204,1.19,1.17,1.11,1.124,1.113,1.101,1.077,1.127,1.156,1.185,1.205,1.192,1.121,1.103,1.043,1.028,1.013,1.007,1.009,1.035,1.042,1.069,1.095,1.096,1.079,1.05,0.975,1.023,1.022,0.972,1.048,1.131,1.027,1.037,1.017,0.999,1.001,1.013,0.978,0.991,0.988,1.001,1.12,1.143,1.126,1.149,1.155,1.155,1.142,1.115,1.096,1.137,1.149,1.223,1.324,1.416,1.408,1.408,1.343,1.356,1.247,1.236,1.178,1.181,1.143,1.167,1.259,1.325,1.332,1.316,1.259,1.269,1.322,1.343,1.344,1.345,1.392,1.453,1.435,1.486,1.511]}]},"g12":{"tur":"cizgi","x0":56,"dx":4.0,"n":163,"px":[56.0,60.0,64.0,68.0,72.0,76.0,80.0,84.0,88.0,92.0,96.0,100.0,104.0,108.0,112.0,116.0,120.0,124.0,128.0,132.0,136.0,140.0,144.0,148.0,152.0,156.0,160.0,164.0,168.0,172.0,176.0,180.0,184.0,188.0,192.0,196.0,200.0,204.0,208.0,212.0,216.0,220.0,224.0,228.0,232.0,236.0,240.0,244.0,248.0,252.0,256.0,260.0,264.0,268.0,272.0,276.0,280.0,284.0,288.0,292.0,296.0,300.0,304.0,308.0,312.0,316.0,320.0,324.0,328.0,332.0,336.0,340.0,344.0,348.0,352.0,356.0,360.0,364.0,368.0,372.0,376.0,380.0,384.0,388.0,392.0,396.0,400.0,404.0,408.0,412.0,416.0,420.0,424.0,428.0,432.0,436.0,440.0,444.0,448.0,452.0,456.0,460.0,464.0,468.0,472.0,476.0,480.0,484.0,488.0,492.0,496.0,500.0,504.0,508.0,512.0,516.0,520.0,524.0,528.0,532.0,536.0,540.0,544.0,548.0,552.0,556.0,560.0,564.0,568.0,572.0,576.0,580.0,584.0,588.0,592.0,596.0,600.0,604.0,608.0,612.0,616.0,620.0,624.0,628.0,632.0,636.0,640.0,644.0,648.0,652.0,656.0,660.0,664.0,668.0,672.0,676.0,680.0,684.0,688.0,692.0,696.0,700.0,704.0],"tarih":["Oca 2013","Şub 2013","Mar 2013","Nis 2013","May 2013","Haz 2013","Tem 2013","Ağu 2013","Eyl 2013","Eki 2013","Kas 2013","Ara 2013","Oca 2014","Şub 2014","Mar 2014","Nis 2014","May 2014","Haz 2014","Tem 2014","Ağu 2014","Eyl 2014","Eki 2014","Kas 2014","Ara 2014","Oca 2015","Şub 2015","Mar 2015","Nis 2015","May 2015","Haz 2015","Tem 2015","Ağu 2015","Eyl 2015","Eki 2015","Kas 2015","Ara 2015","Oca 2016","Şub 2016","Mar 2016","Nis 2016","May 2016","Haz 2016","Tem 2016","Ağu 2016","Eyl 2016","Eki 2016","Kas 2016","Ara 2016","Oca 2017","Şub 2017","Mar 2017","Nis 2017","May 2017","Haz 2017","Tem 2017","Ağu 2017","Eyl 2017","Eki 2017","Kas 2017","Ara 2017","Oca 2018","Şub 2018","Mar 2018","Nis 2018","May 2018","Haz 2018","Tem 2018","Ağu 2018","Eyl 2018","Eki 2018","Kas 2018","Ara 2018","Oca 2019","Şub 2019","Mar 2019","Nis 2019","May 2019","Haz 2019","Tem 2019","Ağu 2019","Eyl 2019","Eki 2019","Kas 2019","Ara 2019","Oca 2020","Şub 2020","Mar 2020","Nis 2020","May 2020","Haz 2020","Tem 2020","Ağu 2020","Eyl 2020","Eki 2020","Kas 2020","Ara 2020","Oca 2021","Şub 2021","Mar 2021","Nis 2021","May 2021","Haz 2021","Tem 2021","Ağu 2021","Eyl 2021","Eki 2021","Kas 2021","Ara 2021","Oca 2022","Şub 2022","Mar 2022","Nis 2022","May 2022","Haz 2022","Tem 2022","Ağu 2022","Eyl 2022","Eki 2022","Kas 2022","Ara 2022","Oca 2023","Şub 2023","Mar 2023","Nis 2023","May 2023","Haz 2023","Tem 2023","Ağu 2023","Eyl 2023","Eki 2023","Kas 2023","Ara 2023","Oca 2024","Şub 2024","Mar 2024","Nis 2024","May 2024","Haz 2024","Tem 2024","Ağu 2024","Eyl 2024","Eki 2024","Kas 2024","Ara 2024","Oca 2025","Şub 2025","Mar 2025","Nis 2025","May 2025","Haz 2025","Tem 2025","Ağu 2025","Eyl 2025","Eki 2025","Kas 2025","Ara 2025","Oca 2026","Şub 2026","Mar 2026","Nis 2026","May 2026","Haz 2026","Tem 2026"],"fmt":"oran","series":[{"ad":"Fiyat/Maliyet","renk":"#1baf7a","py":[366.0,363.91,365.01,355.84,348.0,348.31,351.06,349.15,345.74,349.36,345.45,343.89,348.06,339.14,339.49,335.32,325.65,322.81,327.63,325.8,323.89,326.5,324.93,321.19,331.26,329.26,329.9,326.71,315.43,305.04,306.05,296.91,295.59,295.15,294.07,291.34,318.64,312.49,308.86,303.19,292.91,286.95,284.13,277.82,277.23,280.83,277.37,281.17,300.47,298.18,297.3,292.21,286.73,277.28,275.48,270.7,270.59,275.15,277.46,276.57,303.13,301.28,301.6,298.5,292.21,297.35,291.0,286.72,288.77,292.15,279.92,277.01,272.71,264.92,265.81,267.9,245.94,228.83,223.12,217.78,216.33,221.13,221.35,227.72,234.68,232.02,230.84,234.4,228.62,214.66,205.12,195.4,195.09,200.48,205.94,206.25,231.75,228.18,222.02,219.8,203.05,182.64,171.73,168.21,163.33,163.64,159.35,165.31,175.76,170.9,147.98,148.51,117.48,92.64,133.04,115.17,113.46,134.61,136.38,117.74,143.4,138.3,119.53,100.52,65.52,56.1,81.07,67.94,58.6,52.92,58.56,55.69,78.96,68.64,56.8,31.41,17.58,-3.99,-12.47,-15.1,-13.74,-4.32,10.21,2.88,34.72,11.89,13.36,-3.66,-16.14,-28.55,-28.34,-27.32,-24.88,-16.17,-29.8,-45.83,-12.42,-2.31,-16.7,-29.76,-30.96,-42.22,-52.16],"vals":[1.0,1.006,1.003,1.029,1.051,1.05,1.042,1.048,1.058,1.047,1.058,1.063,1.051,1.076,1.075,1.087,1.115,1.123,1.109,1.114,1.12,1.112,1.117,1.127,1.099,1.104,1.103,1.112,1.144,1.173,1.17,1.196,1.2,1.201,1.204,1.212,1.135,1.152,1.162,1.178,1.208,1.225,1.233,1.251,1.252,1.242,1.252,1.241,1.186,1.193,1.195,1.21,1.225,1.252,1.257,1.271,1.271,1.258,1.252,1.254,1.179,1.184,1.183,1.192,1.21,1.195,1.213,1.225,1.219,1.21,1.245,1.253,1.265,1.287,1.285,1.279,1.341,1.39,1.406,1.421,1.425,1.412,1.411,1.393,1.373,1.381,1.384,1.374,1.39,1.43,1.457,1.485,1.486,1.47,1.455,1.454,1.381,1.392,1.409,1.415,1.463,1.521,1.552,1.562,1.576,1.575,1.587,1.57,1.54,1.554,1.619,1.618,1.706,1.777,1.662,1.713,1.717,1.657,1.652,1.705,1.632,1.647,1.7,1.754,1.854,1.88,1.809,1.847,1.873,1.889,1.873,1.882,1.815,1.845,1.878,1.951,1.99,2.051,2.075,2.083,2.079,2.052,2.011,2.032,1.941,2.006,2.002,2.05,2.086,2.121,2.12,2.117,2.11,2.086,2.124,2.17,2.075,2.046,2.087,2.124,2.128,2.16,2.188]}]},"g13":{"tur":"bar"},"g14":{"tur":"bar"}};
+const fmtla = (v, f) => {
+  if (v === null || v === undefined) return "—";
+  let s;
+  if (f === "oran") s = v.toFixed(2);
+  else if (f === "yuzde") s = (v < 0 ? "-%" : "%") + Math.abs(v).toFixed(1);
+  else if (f === "endeks") s = Math.round(v).toLocaleString("tr-TR");
+  else s = v.toFixed(1);
+  return String(s).replace(".", ",");
+};
+document.querySelectorAll(".ich").forEach(fig => {
+  const d = VERI[fig.dataset.id];
+  const svg = fig.querySelector("svg");
+  const tip = fig.querySelector(".tip");
+  const konum = ev => {
+    const fr = fig.getBoundingClientRect();
+    let tx = ev.clientX - fr.left + 16, ty = ev.clientY - fr.top - 12;
+    if (tx + tip.offsetWidth > fr.width - 6) tx = ev.clientX - fr.left - tip.offsetWidth - 16;
+    if (ty < 0) ty = 4;
+    tip.style.left = tx + "px"; tip.style.top = ty + "px";
+  };
+  if (fig.dataset.tur === "cizgi" && d) {
+    const ch = svg.querySelector(".ch");
+    const cizgi = ch.querySelector("line");
+    const daireler = ch.querySelectorAll("circle");
+    const alan = svg.querySelector(".yakala");
+    alan.addEventListener("mousemove", ev => {
+      const pt = new DOMPoint(ev.clientX, ev.clientY).matrixTransform(svg.getScreenCTM().inverse());
+      let i = Math.round((pt.x - d.x0) / d.dx);
+      i = Math.max(0, Math.min(d.n - 1, i));
+      ch.style.display = "";
+      cizgi.setAttribute("x1", d.px[i]); cizgi.setAttribute("x2", d.px[i]);
+      let ic = "<b>" + d.tarih[i] + "</b>";
+      d.series.forEach((s, k) => {
+        const c = daireler[k];
+        if (s.py[i] === null) { c.style.display = "none"; }
+        else { c.style.display = ""; c.setAttribute("cx", d.px[i]); c.setAttribute("cy", s.py[i]); }
+        ic += "<div><span style='background:" + s.renk + "'></span>" + s.ad + ": <b>" + fmtla(s.vals[i], d.fmt) + "</b></div>";
+      });
+      tip.innerHTML = ic; tip.style.display = "block"; konum(ev);
+    });
+    alan.addEventListener("mouseleave", () => { tip.style.display = "none"; ch.style.display = "none"; });
+  } else if (fig.dataset.tur === "bar") {
+    svg.querySelectorAll("rect[data-tip]").forEach(r => {
+      r.addEventListener("mousemove", ev => {
+        tip.innerHTML = r.dataset.tip; tip.style.display = "block"; konum(ev);
+        r.setAttribute("opacity", "0.85");
+      });
+      r.addEventListener("mouseleave", () => { tip.style.display = "none"; r.removeAttribute("opacity"); });
+    });
+  }
+});
+})();
+</script>
+
+</body>
+</html>

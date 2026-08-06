@@ -1,0 +1,772 @@
+
+===== SAYFA 1 =====
+Ekonomi Notları
+Son Dönem Yiyecek Hizmetleri Sektörü Fiyatlama Gelişmeleri
+Aslıhan Atabek Demirhan, Muhammed Bahça
+Sayı: 2024 - 17 I 26 Aralık 2024
+Özet
+Covid-19 salgını dönemindeki kısıtlamalar ve tüketici davranışlarındaki değişikliklerden en çok
+etkilenen sektörlerin başında gelen yiyecek hizmetleri sektöründe pandemi sonrası dönemde
+toparlanma ile birlikte yüksek fiyat artışları dikkat çekmektedir. Ana girdisi gıda ürünleri olan emek
+yoğun yiyecek hizmetleri sektörünün fiyat dinamiklerinde asgari ücret ve gıda fiyatlarındaki
+gelişmeler büyük önem arz etmektedir. Bu çerçevede, yiyecek hizmet fiyatlarının gıda ve alkolsüz
+içecekler grubu fiyat artışlarıyla benzerlik göstermesi ve ücret artış dönemlerinde ivmelenmesi
+beklenen bir durumdur. Ancak, son dönemde yiyecek hizmet fiyatlarında gözlenen artışların gıda,
+akaryakıt ve ücret gibi temel maliyet kalemlerindeki artışlarla da açıklanamadığı kamuoyunda sıklıkla
+tartışılmaktadır. Bu çalışmada, özellikle son dönem gelişmelerine odaklanılarak yiyecek hizmetleri
+fiyatlama davranış dinamikleri incelenmektedir. Yiyecek hizmetleri altında yer alan ürünler için gıda,
+personel ve kira gibi temel giderlerin dahil edildiği temsili maliyet endeksleri oluşturulmuştur.
+Oluşturulan maliyet endeksleri sektör fiyat eğilimleri ile karşılaştırılmalı olarak incelenmiştir. Elde
+edilen bulgular, özellikle 2023 yılı sonrasında yiyecek hizmet fiyatlarının maliyet kalemlerinin
+üzerinde artışlar göstermeye başladığını ima etmektedir. Alt gruplar itibarıyla yapılan analizler ürün
+gruplarına göre fiyatlama davranışlarında farklılaşmaya işaret etmektedir. Kebap ve döner gibi
+girdisinin önemli bir kısmı görece yüksek enflasyon sergileyen kırmızı et içeren ürünlerde satış fiyatı
+ile maliyet arasındaki farklılaşma daha sınırlı olurken, göreceli daha düşük maliyetli tavuk eti ağırlıklı
+ve fast-food yemek hizmetlerinde fiyat-maliyet makasının zaman içerisinde belirgin bir şekilde
+açıldığı dikkat çekmektedir.
+Abstract
+The food and beverage service sector which is one of the most affected sectors from the restrictions
+and consumer behavioral changes during the Covid-19 pandemic, has been displaying noteworthy
+price increases with the recovery in demand for the post-pandemic period. Due to its labor-
+intensive nature, the food and beverage services sector pricing dynamics is expected to have co-
+movement with the food prices and the minimum wage developments. However, the recent
+acceleration in food and beverage service prices which cannot be explained solely by the rises in
+basic cost items such as food, fuel, and wages is often publicly debated. In this study, by focusing on
+the recent developments, we examine the pricing behavior dynamics of food and beverage services
+sector. Within this context, representative cost indices that cooperates main cost components such
+as for food, labor and rent are constructed and price/cost ratios according to different concepts are
+compared. The findings of the analysis indicate that, as of 2023, food and beverage services prices
+have begun to show increases above the cost items. Detailed analyses point to differentiation in
+pricing behavior according to concepts. It is noteworthy that price-cost differentiation is more
+limited for the products such as kebab and doner kebab in which a significant portion of the input is
+red meat with relatively high inflation. On the other hand, it is observed continuous widening
+between the price and cost margin for the products with relatively lower costs such as chicken meat
+products and fast-food catering services.
+Ekonomi Notları, TCMB bünyesinde Türkiye ekonomisi ve para politikası üzerine yapılan çalışmaların sonuçlarını kamuoyuyla
+paylaşmak ve ekonomik gelişmelere dair tartışmalara zamanlı bir katkıda bulunmak amacıyla hazırlanan bir yayındır. Burada
+sunulan görüşler tamamıyla yazarlara aittir ve doğrudan TCMB’nin ya da çalışanlarının görüşlerini temsil etmeyebilir. Metnin
+tamamının başka bir yerde yayımlanabilmesi için TCMB’den yazılı izin alınması gerekmektedir.
+
+===== SAYFA 2 =====
+Sayı: 2024 - 17 | 26 Aralık 2024
+1. Giriş
+Covid-19 pandemisinin etkili olduğu 2020 yılında, kısıtlamalardan, kapanmalardan ve tüketici
+davranışlarındaki değişikliklerden en çok etkilenen sektörlerin başında yiyecek hizmetleri sektörü
+gelmiştir. Nitekim, Türkiye İstatistik Kurumu (TÜİK) Ciro Endeks verilerine göre 2020 yılında
+konaklama ve yiyecek hizmeti faaliyetleri hariç hizmet sektörü ciro endeksi yüzde 5 oranı ile sınırlı
+artış gösterirken, aynı dönemde konaklama ve yiyecek-içecek hizmet faaliyetleri cirosu yüzde 25
+oranında gerilemiştir. 2021 yılı sonrası dönemde ise önlemlerin ve kısıtların ortadan kalkması ile
+sektörün hızlı bir toparlanma sürecine girdiği görülmektedir (Grafik 1).
+Grafik 1: Hizmet Ciro Endeksleri (Yıllık Grafik 2: TÜFE Fiyat Endeksleri (2019
+Değişim, %) Aralık=100)
+Gıda ve Yemek Hariç TÜFE
+Gıda ve Alkolsüz İçecekler
+2020 2021-2022 (Ortalama, sol eksen)
+Yemek Hizmetleri
+30% 850
+120%
+110% 20%
+100% 700
+10%
+90%
+80% 0% 550
+70% -10%
+60% 400
+-20%
+50%
+40% -30%
+250
+a m a lk a n o K k e c e y iy e v e v ir a d İ k e ts e d e v a m r ıtş a lU a m a lo p e d lu k n e m ir y a G r e lte y ila a f le s m ilib ,ik e ls
+e M
+.la a f k in k e t
+e v
+e v ig liB m iş ite li 9 1 .2
+1
+0 2 .5
+0
+0 2 .0
+1
+1 2 .3
+0
+1 2 .8
+0
+2 2 .1
+0
+2 2 .6
+0
+2 2 .1
+1
+3 2 .4
+0
+3 2 .9
+0
+4 2 .2
+0
+4 2 .7
+0
+100
+Kaynak: TÜİK. Kaynak: TÜİK.
+2021 yılı sonrası dönemde toparlanma ile birlikte yemek hizmetlerinde yüksek fiyat artışları da
+dikkat çekmektedir. Pandemi sonrası fiyat endeksleri arasındaki ayrışma ilk olarak gıda ve alkolsüz
+içecekler grubunda görülürken, 2023 yılı ikinci yarısı itibarıyla yemek hizmetleri fiyat endeksinin
+gerek gıda ve alkolsüz içecekler gerekse gıda ve yemek hizmetleri hariç TÜFE’yi geride bıraktığı
+görülmektedir (Grafik 2). Eldemir ve Yürek (2023) çevrimiçi yemek siparişi platformundan alınan
+restoran-ürün düzeyindeki mikro fiyat verilerini kullanarak yaptıkları çalışmada, salgın sonrası
+dönemde sektöre olan yoğun talebin enflasyon beklentileri ile birikmiş maliyetlerdeki gelişmelerin
+fiyatlara daha hızlı yansıtılmasını sağladığını belirtmektedir.
+1
+
+===== SAYFA 3 =====
+Sayı: 2024 - 17 | 26 Aralık 2024
+Grafik 3: TÜFE Fiyat Endeksleri (Aylık % Değişim) Grafik 4: TÜFE Fiyat Endeksleri (Yıllık % Değişim)
+Gıda ve Yemek Hariç TÜFE Gıda ve Yemek Hariç TÜFE
+Gıda ve Alkolsüz İçecekler Gıda ve Alkolsüz İçecekler
+Yemek Hizmetleri Yemek Hizmetleri
+20 150
+15
+100
+10
+5
+50
+0
+-5 0
+9 0 0 1 1 2 2 2 3 3 4 4 9 0 0 1 1 2 2 2 3 3 4 4
+1 2 2 2 2 2 2 2 2 2 2 2 1 2 2 2 2 2 2 2 2 2 2 2
+.2 .5 .0 .3 .8 .1 .6 .1 .4 .9 .2 .7 .2 .5 .0 .3 .8 .1 .6 .1 .4 .9 .2 .7
+1 0 1 0 0 0 0 1 0 0 0 0 1 0 1 0 0 0 0 1 0 0 0 0
+Kaynak: TÜİK. Kaynak: TÜİK.
+En önemli girdisi gıda ürünleri olan yiyecek hizmetleri sektörü aynı zamanda emek yoğun bir yapıya
+sahiptir. Bu nedenle, sektör fiyatlarının gıda ve alkolsüz içecekler grubu fiyat artışlarıyla benzerlik
+göstermesi ve ücret artış dönemlerinde ivmelenmesi beklenen bir durumdur (Grafik 3). Ancak 2023
+yılı sonrası dönemde yiyecek sektörü fiyatlarında beklenin üzerinde gözlenen artışlar ve farklılaşma
+“Sektör fiyatlama davranışında genelin üzerinde bir bozulma mı var?” sorusunu gündeme
+getirmektedir (Grafik 4). Türkiye için Özmen (2016), 2006-2014 döneminde yemek hizmetlerinin alt
+grubu olan içecek hizmetleri sektörünün kâr marjlarının belirleyicilerini analiz etmiştir.1 Analiz
+sonuçları kâr marjlarının zaman içerisinde arttığı ve firmaların fiyat belirlemede artan pazar gücüne
+sahip olduğuna işaret ederken; asgari ücret, çıktı açığı, gıda ve enerji fiyatları, döviz kuru ve
+ekonomik belirsizlik gibi göstergelerin kâr marjlarını önemli ölçüde etkilediğini göstermektedir.
+Genele yaygın fiyat artışlarının görüldüğü dönemlerde, artan belirsizlikle birlikte, işletmelerin satın
+alma güçlerini ve makul kâr seviyelerini koruma içgüdüleri fiyatlama davranışlarında bozulmalara ve
+fiyat katılıklarına neden olabilmektedir. Merkez bankaları için enflasyon beklentilerinin çıpalanması
+ve dezenflasyonun tesisi için fiyatlama davranışlarındaki bozulmaların kontrol altına alınması önem
+arz etmektedir. Bu çerçevede, bu çalışmanın amacı, son dönem yiyecek hizmet fiyatlarında gözlenen
+artışların ne kadarının gıda, ücret ve kira gibi temel maliyet kalemlerindeki artışlarla açıklanabildiğine
+odaklanarak sektörün fiyatlama davranış dinamiklerini incelemektir. Bu doğrultuda, öncelikle
+lokanta hizmetleri sektörünün maliyet yapısı incelenmiş, daha sonra lokanta hizmetleri altında yer
+alan muhtemel ürün grupları için maliyet endeksleri oluşturulmuştur. Lokanta hizmetleri altında yer
+alan farklı konseptlerin fiyat/maliyet oranları karşılaştırılarak son dönemde sektörün fiyatlama
+davranışlarında bir farklılaşma olup olmadığı analiz edilmiştir. Elde edilen sonuçlar, 2023 yılı
+itibarıyla yiyecek hizmetleri sektöründe gözlenen fiyat artışlarının maliyet gelişmelerinin ima ettiğinin
+üzerinde olduğunu göstermektedir. Alt gruplar itibarıyla yapılan analizler konseptlere göre fiyatlama
+davranışlarında farklılaşma olduğunu göstermektedir. Ağırlıklı olarak yüksek enflasyona sahip kırmızı
+et içeren ürünlerde fiyat-maliyet arasındaki farklılaşmanın sınırlı olduğu, göreceli olarak daha düşük
+maliyetli olan tavuk eti ağırlıklı ve fast-food yemek hizmetlerinde ise zaman içerisinde fiyat maliyet
+makasının açıldığı dikkat çekmektedir.
+1 Döpper vd. (2022) ve Atalay vd. (2023) çalışmaları ABD için yiyecek sektörü fiyatlama davranışlarını kâr marjlarının değişimi
+çerçevesinde incelemiştir. Döpper vd. (2022) çalışması kâr marjlarının 2006-2019 döneminde yaklaşık yüzde 30 oranında
+arttığı ve tüketicilerin zaman içerisinde daha düşük fiyat hassasiyetine sahip olma eğiliminde olduğu bulgularına ulaşılmıştır.
+Aynı dönemi kapsayan Atalay vd. (2023) çalışması ise kâr marjlarının ürün bazında farklılaştığı ancak genel olarak yükseliş
+eğilimi gösterdiği, ayrıca kâr marjlarındaki değişimde firmaların marjinal maliyetleri ile hanehalkı fiyat duyarlılığının itici güç
+olduğu sonucu elde edilmiştir.
+2
+
+===== SAYFA 4 =====
+Sayı: 2024 - 17 | 26 Aralık 2024
+2. Veri ve Yöntem
+Yiyecek hizmetleri sektörü fiyatlama davranışlarını incelemeyi amaçlayan bu çalışmada TÜİK-Tüketici
+Fiyat Endeksi Haber Bülteni çerçevesinde yayımlanan madde sepeti listesinde yer alan ürünlere
+odaklanılmıştır (Tablo 1). TÜFE madde sepetinde lokanta hizmetleri alt grubunda kebap, pide, çorba,
+sıcak yemekler ile pizza, burger, döner gibi fast-food ürünlerden oluşan farklı yemek konseptleri ve
+alkolsüz içecekler yer almaktadır.
+Tablo 1. Tüketici Fiyat Endeksi Madde Sepeti - Yemek Hizmetleri (2024)
+No Kod Madde Adı
+11 Lokanta
+357 1110101 Çorbalar
+358 1110102 Sıcak Yemekler (Pilav, Kuru Fasulye)
+k
+i
+r
+e
+359 1110103 Kebaplar
+e l 360 1110104 Pideler
+c t e
+e m
+y 361 1110105 Çiğ Köfte
+i Y z i
+H
+362 1110106 Ekmekarası Yiyecekler (Döner)
+363 1110108 Burgerler
+364 1110110 Pizzalar
+i
+r 367 1110201 Sıcak İçecekler (Servis edilen)
+k e
+l
+e t
+c e 368 1110202 Soğuk İçecekler (Servis edilen)
+e m
+ç
+İ z i 369 1110204 Ayran (Servis edilen)
+H
+Kaynak: TÜİK (2024).
+Son dönemde yüksek fiyat artışlarının izlendiği yiyecek hizmetleri sektörünün fiyatlama davranışı
+dinamiklerini ortaya koyabilmek amacıyla, listede yer alan yiyecek gruplarının (No. 357-364)
+maliyetleri ve fiyatları karşılaştırmalı olarak incelenmiştir.
+Maliyet endekslerinin hesaplanma aşamalarına dair özet bilgi Tablo 2’de verilmektedir. İlk aşamada,
+yiyecek hizmetleri sektöründe faaliyet gösteren firmaların temel maliyet kalemleri ve bunların
+toplam maliyet içerisindeki ağırlıkları Kamuyu Aydınlatma Platformu (KAP) bildirimleri ve saha
+gözlemlerinden derlenen bilgiler ışığında oluşturulmuştur. Maliyet endeksi oluşturulurken; gıda girdi
+maliyeti, personel, enerji, kira ve diğer giderler olmak üzere beş ana maliyet kalemi dikkate
+alınmıştır. Çalışmada söz konusu maliyet kalemlerinin fiyat endekslerinin ağırlıklı ortalaması, ürünün
+toplam maliyet endeksine dair bir gösterge olarak kullanılmıştır.
+3
+
+===== SAYFA 5 =====
+Sayı: 2024 - 17 | 26 Aralık 2024
+Tablo 2. Maliyet Endekslerinin Hesaplanma Yöntemi
+1. Aşama 2. Aşama 3. Aşama 4. Aşama
+Maliyet Endeksleri
+Yemek tarifleri ile 2. aşamadan elde edilen
+TÜFE sepetindeki endekslerle ilk madde ve
+yiyecek hizmetlerinin malzeme giderlerinin
+maliyetlerinin oluşturulması
+hesaplanması ve
+ağırlıklandırılarak
+yiyecek konseptlerinin
+oluşturulması
+KAP bildirimleri ve saha
+Asgari ücret kullanılarak
+gözlemlerinden yiyecek İlgili konseptlere
+personel giderlerinin
+hizmetleri sektöründe ilişkin yemek
+oluşturulması
+faaliyet gösteren hizmetlerinin toplam
+firmaların maliyet TÜFE elektrik, gaz ve diğer maliyet endeksinin
+ağırlıklarının elde yakıtlar endeksi ile enerji oluşturulması
+edilmesi giderlerinin oluşturulması
+Perakende Ödeme Sistemi
+iş yeri kira ödemeleri ve
+TÜFE kira endeksi ile kira
+giderlerinin oluşturulması
+ÜFE ve TÜFE ortalaması ile
+diğer maliyetlerin
+oluşturulması
+Fiyat Endeksleri*
+TCMB bünyesindeki
+veri tabanı
+kullanılarak
+konseptlere ilişkin
+yiyecek hizmetleri
+tüketici fiyat
+endekslerinin
+oluşturulması*
+* Çalışmada kullanılan veriler, tüketici fiyatları dinamiklerine ilişkin proje kapsamında uzun yıllardır TCMB bünyesinde çevirim
+içi platformlar ve sahadan toplanan fiyat verilerine dayanmaktadır. Fiyatları toplanan mal ve hizmetler, resmi TÜFE'nin
+uygulama ve kapsamına (tanımına) uygun olarak seçilmektedir. Aynı ürünün fiyatı düzenli olarak takip edilmekte ve uzunca
+bir süre mevcut olmaması durumunda ürün yakın bir ürünle ikame edilmekte ve gerekli düzeltmeler yapılmaktadır.
+2.1. Maliyet Kalemlerinin Dağılımını Belirleme
+Yemek hizmetleri sektörü maliyetleri temel olarak; gıda malzemeleri, işgücü, kira, enerji (elektrik, su,
+gaz) ile ekipman, amortisman ve ambalaj gibi diğer maliyetlerden oluşmaktadır. Sektörün maliyet
+yapısını ortaya koyabilmek amacıyla Borsa İstanbul (BİST) KAP bildirimleri ile TCMB bünyesinde yer
+alan Reel Sektöre İktisadi Mercek (RESİM) kapsamındaki firma görüşmelerine dayalı çalışmalardan
+4
+
+===== SAYFA 6 =====
+Sayı: 2024 - 17 | 26 Aralık 2024
+faydalanılmıştır.2 BİST kapsamında yiyecek ve içecek hizmetleri sektöründeki şirketlerin3 fiyat tespit
+raporlarında yer alan satışların maliyeti tabloları kullanılarak yukarıda bahsi geçen beş ana maliyet
+kaleminin ortalama payları belirlenmiştir.
+Tablo 3. KAP Fiyat Tespit Raporlarından Elde Edilen Yeme-İçme Sektörü Maliyet Yapısı (2023*, %)
+Satışların Maliyetleri A Firması B Firması C Firması D Firması Ortalama
+İlk Madde ve Malzeme (Gıda) 33 54 48 61 49
+İşgücü 34 23 21 12 23
+Elektrik, su vb. 4 6 4 7 5
+Kira 8 2 12 8 8
+Diğer** 21 16 14 12 16
+* 2023 yılına ilişkin maliyet yapısı, firmaların tahmin rakamlarına göre hesaplanmıştır.
+**Diğer masraflar, amortisman ve itfa payları, ortak alan ve diğer giderleri ifade etmektedir.
+KAP bildirimlerinden elde edilen sonuçlara göre; toplam maliyetler içerisinde gıda ortalama yüzde
+49, işgücü yüzde 23, kira ve enerji maliyetleri ise sırasıyla yüzde 8 ve yüzde 5 paya sahiptir.
+Amortisman ve itfa payları ile diğer giderleri içeren maliyetlerin ise toplam maliyetler içerisinde
+payının ortalamada yüzde 16 olduğu görülmektedir (Tablo 3). TCMB-RESİM kapsamında yiyecek
+sektör temsilcileri ile yapılan firma görüşmelerinden elde edilen saha bilgileri de sektörün maliyet
+yapısına ilişkin benzer bulgular sunmaktadır. Saha gözlemlerine göre yiyecek sektöründe toplam
+maliyetler içerisinde gıda, işgücü, enerji ve kira maliyetlerinin ortalama payları sırasıyla yüzde 49, 20,
+5 ve 13 olarak belirlenmiştir.
+Tablo 4. Maliyet Endeksi Oluşturulurken Kullanılan Ağırlıklar (%)
+İşgücü Hammadde Enerji Kira Diğer
+RESİM-Saha Gözlemi 20 49 5 13 14
+BİST-KAP Bildirimleri 23 49 5 8 16
+Ortalama 21 49 5 10 15
+Borsaya kotalı büyük firmalara dair KAP bildirimlerinden ve orta ölçekli firmaları da içeren saha
+gözlemlerinden elde edilen bilgiler ışığında, ortalamada yiyecek hizmetleri sektöründe faaliyet
+gösteren bir işletmenin toplam maliyetinin yüzde 21’ini işgücü, yüzde 49'unu hammadde, yüzde 5’ini
+enerji, yüzde 10’unu kira ve yüzde 15’ini de diğer maliyetlerin oluşturduğu varsayılmıştır (Tablo 4). 4
+Bir sonraki aşamada bu ortalama ağırlıklar kullanılarak yiyecek hizmetleri grubu altında yer alan
+ürünler için gıda, işgücü, kira, enerji ve diğer gider gibi genel maliyet kalemlerinin dikkate alındığı
+temsili maliyet endeksleri oluşturulmuştur.
+2 RESİM’in temel amacı; farklı sektörlerdeki firmalarla görüşmeler yaparak dönemsel üretim, yurt içi ve yurt dışı satış, yatırım,
+istihdam, kredi koşulları, maliyet ve fiyat gelişmelerine ilişkin zamanlı bilgi edinmek, iktisadi faaliyeti yakından takip etmek ve
+TCMB ile reel sektör temsilcileri arasındaki iletişimi geliştirmek olarak belirlenmiştir. Yarı yapılandırılmış sohbet şeklinde
+gerçekleştirilen görüşmeler sonucunda elde edilen bulgular, para politikası kararları için nitelikli ve zamanlı bir bilgi kaynağı
+oluşturmaktadır. Görüşmeler sektörel, bölgesel ve ölçek düzeyinde toplam iktisadi faaliyet içindeki ağırlıkları dikkate alınarak
+oluşturulan örneklem çerçevesinde imalat sanayi, ticaret ve hizmet sektörlerindeki firmalar ile gerçekleştirilmektedir.
+3 Farklı firma kimlikleri için temsili harfler kullanılmıştır.
+4 Fiyat tespit raporları ve saha gözlemlerine ilave olarak Turizm Restoran Yatırımcıları ve Gastronomi İşletmeleri Derneği’nin
+verilerine göre, kira gideri yüzde 10 ile yüzde 20, hammadde gideri yüzde 25 ile yüzde 40, personel gideri yüzde 20 ile yüzde
+25, genel gider yüzdesi ise yüzde 3 ile yüzde 5 arasında değişmektedir. Aynı verilere göre Türkiye’de yiyecek-içecek
+sektöründeki işletmeler genelde yüzde 70 ile yüzde 85 oranında bir maliyet ve yüzde 15 ile yüzde 30 arasında değişen
+kârlılıkla çalışmaktadır. Söz konusu maliyet yapıları büyük ölçüde orta ve büyük ölçekli firmaları kapsamaktadır. Bu nedenle
+maliyet ağırlıklarının küçük ölçekli firmalarda farklılaşabileceği göz önünde bulundurulmalıdır.
+5
+
+===== SAYFA 7 =====
+Sayı: 2024 - 17 | 26 Aralık 2024
+2.2. İlk Madde ve Malzeme (Gıda) Maliyet Endeksi: Hesaplama Örneği
+Gıda maliyet endeksi, ürünü oluşturan temel girdilerin fiyatlarının ağırlıklı ortalaması şeklinde
+hesaplanmaktadır. Çorba, sıcak yemek, kebap, fast-food gibi farklı konseptlere sahip ürünlerin
+malzemeleri ve dolayısı ile girdi maliyetleri önemli farklılıklar gösterebilmektedir. Bu farklılıkları göz
+önüne alabilmek amacıyla, farklı konseptler altında yer alan olası ürünlere ait standart tarifler
+kullanılarak, ürünleri oluşturan malzemeler ve bu malzemelerin toplam maliyet içerisindeki payları
+hesaplanmıştır. Tablo 5’te internette “lokanta usulü etsiz kuru fasulye tarifi” anahtar kelimeleri
+kullanılarak yapılan taramada birinci sırada en çok ziyaret edilen sayfalar arasında yer alan
+“nefisyemekler.com” adresinden alınan tarif ve bu tarife göre hesaplanmış gıda girdi maliyet dağılımı
+örnek olarak yer almaktadır. Tarifte yer alan ürünlerin gramajı, karşılık gelen birim fiyatla çarpılarak
+birim maliyetler hesaplanmıştır.5 Tüm ürünlerin birim maliyetleri toplanarak etsiz kuru fasulyenin
+yapımı için toplam gıda girdi maliyeti belirlenmiştir. Daha sonra girdi grubu için toplam maliyet
+içerisindeki paylar hesaplanmıştır. Örnek olarak tabloda verilen hesaplamalara göre; etsiz kuru
+fasulyenin toplam gıda girdi maliyetinin yüzde 40’ını kuru fasulye, yüzde 30’unu sebze, yüzde 15’ini
+baharat, yüzde 14’ünü yağ ve yüzde 1’ini salça maliyeti oluşturmaktadır.
+Tablo 5. Tarife Göre Gıda Maliyeti Hesaplama- Etsiz Kuru Fasulye Örneği
+(3) (5)
+(4)
+(2) Birim Toplam Gıda
+Ürün Birim Maliyet
+Gramaj Fiyat Maliyeti
+(Gramaj*Birim Fiyat)
+(Kg/Litre) İçerisindeki Payı
+1 büyük soğan 150gr 𝑃 𝑠𝑜ğ𝑎𝑛 0,15x𝑃 𝑠𝑜ğ𝑎𝑛
+Sebze
+2 adet sivri biber 120gr 𝑃 0,12x𝑃
+𝑠𝑖𝑣𝑟𝑖 𝑏𝑖𝑏𝑒𝑟 𝑠𝑖𝑣𝑟𝑖 𝑏𝑖𝑏𝑒𝑟
+%30
+3 orta boy domates 330gr 𝑃 0,33x𝑃
+𝑑𝑜𝑚𝑎𝑡𝑒𝑠 𝑑𝑜𝑚𝑎𝑡𝑒𝑠
+Salça
+1 yemek kaşığı domates salçası 16gr 𝑃 𝑠𝑎𝑙ç𝑎 0,016x𝑃 𝑠𝑎𝑙ç𝑎
+%1
+2 yemek kaşığı tereyağı, 2 yemek 30 gr 𝑃 𝑡𝑒𝑟𝑒𝑦𝑎ğ𝚤 0,06x𝑃 𝑦𝑎ğ Yağ
+kaşığı sıvı yağ 30 ml. 𝑃 𝑠𝚤𝑣𝚤 𝑦𝑎ğ %14
+Kuru Fasulye
+1 su bardağı fasulye 260gr 𝑃 𝑘𝑢𝑟𝑢 𝑓𝑎𝑠𝑢𝑙𝑦𝑒 0,26x𝑃 𝑘𝑢𝑟𝑢 𝑓𝑎𝑠𝑢𝑙𝑦𝑒
+%40
+Baharat
+Kimyon, tuz, karabiber, pul biber 40gr 𝑃 0,04*𝑃
+𝑏𝑎ℎ𝑎𝑟𝑎𝑡 𝑏𝑎ℎ𝑎𝑟𝑎𝑡
+%15
+Toplam Maliyet
+Kaynak: https://www.nefisyemektarifleri.com.
+5 Birim fiyatlar TCMB bünyesinde yer alan veri tabanından elde edilmiştir. Tüketici fiyatları dinamiklerine ilişkin proje
+kapsamında uzun yıllardır TCMB bünyesinde çevirim içi platformlar ve sahadan toplanan fiyat verilerine dayanmaktadır.
+Fiyatları toplanan mal ve hizmetler, resmi TÜFE'nin uygulama ve kapsamına (tanımına) uygun olarak seçilmektedir. Aynı
+ürünün fiyatı düzenli olarak takip edilmekte ve uzunca bir süre mevcut olmaması durumunda ürün yakın bir ürünle ikame
+edilmekte ve gerekli düzeltmeler yapılmaktadır.
+6
+
+===== SAYFA 8 =====
+Sayı: 2024 - 17 | 26 Aralık 2024
+Bir sonraki aşamada, tariften yola çıkarak hesaplanan paylar kullanılarak kuru fasulye yemeği için
+gıda maliyet endeksi, ilgili kalemlerin fiyatlarının ağırlıklı ortalaması olarak elde edilmiştir.6 Etsiz kuru
+fasulye örneğinde olduğu gibi, Tablo 1’de verilen yemek hizmetleri altında yer alan ürün grupları için
+internette en çok ziyaretçi sayısına sahip yemek tarifleri kullanılarak gıda ürün maliyet endeksleri
+hesaplanmıştır.7
+2.3.Gıda Dışı Maliyet Endeksleri
+Yiyecek hizmetleri sektöründe gıda dışı maliyet kalemlerinin ise personel, enerji, kira ve diğer
+maliyetler olmak üzere dört ana başlıkta yer aldığı görülmektedir. Personel maliyeti için asgari ücret;
+enerji için TÜFE-elektrik, gaz ve diğer yakıtlar endeksi; kira için TÜFE-kiracı tarafından ödenen gerçek
+kira ile Perakende Ödeme Sistemi verileri gösterge olarak dikkate alınmıştır.8 Amortisman ve itfa
+payları ile temizlik, ambalaj malzemeleri, sigorta ve sosyal güvenlik primleri, bakım ve onarım
+giderleri, mutfak ekipmanları, mobilya ve dekorasyon, pazarlama ve reklam maliyetleri gibi diğer
+giderler kalemi için ise Yİ-ÜFE ile TÜFE ortalaması kullanılmıştır. Gıda ve gıda dışı maliyet kalemlerinin
+Tablo 4’te verilen ağırlıklar kullanılarak hesaplanan ağırlıklı ortalaması ilgili yiyecek hizmetinin
+maliyetini temsil eden bir gösterge olarak önerilmektedir.
+3. Yiyecek Hizmetleri Sektörü Ürün Grubu Bazında Maliyet
+Endeksleri
+TÜİK tarafından yiyecek hizmetleri altında yer alan ürünler; (i) kırmızı et ağırlıklı kebap, pide ve döner,
+(ii) tavuk eti ağırlıklı kebap ve döner, (iii) ev yemekleri ile (iv) fast-food olmak üzere dört yemek
+konsepti altında derlenmiştir. Hesaplanan endeksler maliyet yapısının gerek zaman içerisinde
+gerekse konsepte göre değişiklik gösterdiğini ortaya koymaktadır (Grafik 5-8).
+Grafik 5: Kırmızı Et Ağırlıklı Kebap, Pide ve Grafik 6: Tavuk Eti Ağırlıklı Kebap ve Döner
+Döner Maliyet Endeksi* (2013 Ocak=100) Maliyet Endeksi* (2013 Ocak=100)
+2000 1800
+1800 1600
+1600 1400
+1400
+1200
+1200
+1000
+1000
+800
+800
+600
+600
+400 400
+200 200
+0 0
+334455667788990011223344 334455667788990011223344
+111111111111112222222222 111111111111112222222222
+.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7 .1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7
+000000000000000000000000 000000000000000000000000
+Kaynak: Yazarların hesaplamaları. Kaynak: Yazarların hesaplamaları.
+* Kırmızı et ağırlıklı (1110103) kebap, (1110104) pide ve * Tavuk eti ağırlıklı (1110103) kebap ve (1110106) döner;
+(1110106) döner; Adana ve İskender kebaplarla, kıymalı tavuk şiş ve tavuk döneri kapsamaktadır.
+pide, lahmacun ve et döneri kapsamaktadır.
+6 Ürün gruplarının tariflere göre maliyet endeksi hesaplanırken TÜİK tarafından açıklanan 5 haneli fiyat endeksleri
+kullanılmıştır. 5 haneli fiyat endeksinde bulunmayan bazı ürün fiyatları için TCMB bünyesinde yer alan veri tabanından
+faydalanılmıştır.
+7 Tariflere dayanarak gıda maliyet endeksi oluşturulan ürün grupları, ürün içerikleri ve kullanılan ağırlıkların özetlendiği
+tablolar ekte verilmiştir.
+8 Enflasyonun göreceli düşük olduğu dönemlerde konut ve işyeri kira artışları benzer seyretmektedir. Bu nedenle kira maliyet
+endeksi oluşturulurken temel olarak TÜFE-Kiracı tarafından ödenen gerçek kira verisi gösterge olarak kullanılmıştır. Ancak,
+Haziran 2022-Haziran 2024 döneminde Türk Borçlar Kanunu'na eklenen geçici madde ile konut kiralarına getirilen yüzde 25
+oranındaki zam sınırı ile işyeri ve konut kira artış oranlarında farklılaşma olduğu bilinmektedir. Bu farklılaşmayı dikkate almak
+amacıyla işyeri kira endeksi hesaplamalarında Nisan 2020 tarihinden itibaren verisi olan Perakende Ödeme Sistemi mikro
+verileri kapsamında yer alan “İşyeri Kira” ödemeleri kullanılmıştır.
+7
+
+===== SAYFA 9 =====
+Sayı: 2024 - 17 | 26 Aralık 2024
+Grafik 7: Ev Yemekleri Maliyet Endeksi* Grafik 8: Fast-Food Maliyet Endeksi*
+(2013 Ocak=100) (2013 Ocak=100)
+1800 1800
+1600 1600
+1400 1400
+1200 1200
+1000 1000
+800 800
+600 600
+400 400
+200 200
+0 0
+3 1 .1
+0
+3 1 .7
+0
+4 1 .1
+0
+4 1 .7
+0
+5 1 .1
+0
+5 1 .7
+0
+6 1 .1
+0
+6 1 .7
+0
+7 1 .1
+0
+7 1 .7
+0
+8 1 .1
+0
+8 1 .7
+0
+9 1 .1
+0
+9 1 .7
+0
+0 2 .1
+0
+0 2 .7
+0
+1 2 .1
+0
+1 2 .7
+0
+2 2 .1
+0
+2 2 .7
+0
+3 2 .1
+0
+3 2 .7
+0
+4 2 .1
+0
+4 2 .7
+0
+3 1 .1
+0
+3 1 .7
+0
+4 1 .1
+0
+4 1 .7
+0
+5 1 .1
+0
+5 1 .7
+0
+6 1 .1
+0
+6 1 .7
+0
+7 1 .1
+0
+7 1 .7
+0
+8 1 .1
+0
+8 1 .7
+0
+9 1 .1
+0
+9 1 .7
+0
+0 2 .1
+0
+0 2 .7
+0
+1 2 .1
+0
+1 2 .7
+0
+2 2 .1
+0
+2 2 .7
+0
+3 2 .1
+0
+3 2 .7
+0
+4 2 .1
+0
+4 2 .7
+0
+Kaynak: Yazarların hesaplamaları. Kaynak: Yazarların hesaplamaları.
+* Ev yemekleri; (1110101) çorbalar ve (1110102) sıcak * Fast-food grubu; (1110108) burgerler, (1110110)
+yemekler (pilav, kuru fasulye) ürünlerini kapsamaktadır. pizzalar ve (1110105) çiğ köfteyi kapsamaktadır.
+Pandemi öncesi dönem olan Aralık 2019’da 219 seviyesinde olan kırmızı et ağırlıklı ürünler maliyet
+endeksi Temmuz 2024’te 8,1 kat yükselerek 1767 seviyesine ulaşmış ve en çok artış gösteren grup
+olmuştur (Grafik 5). Aralık 2019’dan Temmuz 2024’e kadar daha sınırlı artış gösteren ev yemekleri
+maliyet endeksindeki artış ise 6,6 kattır (Grafik 7).
+Sektörde gözlenen maliyet artışlarının fiyatlara ve dolayısı ile kâr marjlarına yansımasını görebilmek
+ve son dönemde fiyatlama dinamiklerine etkisini ortaya koyabilmek amacıyla fiyatların hesaplanan
+maliyet endekslerine oranı incelenmiştir. Dört farklı konsept için, Ocak 2013 değeri 1 olacak şekilde
+endeks haline getirilen fiyat/maliyet oranları aşağıdaki grafiklerde sunulmuştur (Grafik 9-12).
+Grafiklerde verilen fiyat/maliyet endekslerinin kâr marjı seviyesini göstermediği; baz olarak alınan
+Ocak 2013 tarihindeki kâr marjına göre göreceli seviyesini temsil ettiği önemle vurgulanmalıdır.
+Grafik 9: Kırmızı Et Ağırlıklı Yemek Hizmetleri Grafik 10: Tavuk Eti Ağırlıklı Yemek Hizmetleri
+Fiyat/Maliyet Oranı* (2013 Ocak=1) Fiyat/Maliyet Oranı* (2013 Ocak=1)
+Kırmızı Et Ağırlıklı Tavuk Eti Ağırlıklı
+Uzun Dönemli Ortalama (2013-2022) Uzun Dönemli Ortalama (2013-2022)
+1,7 1,9
+1,7
+1,5
+1,5
+1,3
+1,3
+1,1
+1,1
+0,9
+0,9
+0,7 0,7
+334455667788990011223344 334455667788990011223344
+111111111111112222222222 111111111111112222222222
+.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7 .1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7
+000000000000000000000000 000000000000000000000000
+Kaynak: Yazarların hesaplamaları. Kaynak: Yazarların hesaplamaları.
+* Kırmızı et ağırlıklı yemek hizmetleri Adana kebap, kıymalı * Tavuk et ağırlıklı yemek hizmetleri tavuk şiş ve tavuk
+pide, lahmacun ve et döneri kapsamaktadır. İlgili ürünlere döneri kapsamaktadır. İlgili ürünlere ilişkin tüketici hizmet
+ilişkin tüketici hizmet fiyatları için TCMB bünyesinde yer fiyatları için TCMB bünyesinde yer alan veri tabanı
+alan veri tabanı kullanılmıştır. kullanılmıştır.
+8
+
+===== SAYFA 10 =====
+Sayı: 2024 - 17 | 26 Aralık 2024
+Grafik 11: Ev Yemekleri Hizmetleri Grafik 12: Fast-food Yemek Hizmetleri
+Fiyat/Maliyet Oranı* (2013 Ocak=1) Fiyat/Maliyet Oranı* (2013 Ocak=1)
+Ev Yemekleri Fast-Food
+Uzun Dönemli Ortalama (2013-2022) Uzun Dönemli Ortalama (2013-2022)
+1,5 2,2
+1,9
+1,3
+1,6
+1,1
+1,3
+0,9
+1,0
+0,7 0,7
+334455667788990011223344 334455667788990011223344
+111111111111112222222222 111111111111112222222222
+.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7 .1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7.1.7
+000000000000000000000000 000000000000000000000000
+Kaynak: Yazarların hesaplamaları. Kaynak: Yazarların hesaplamaları.
+* Ev yemekleri hizmetleri çorba ve sıcak yemekleri * Fast-food yemek hizmetleri burgerler, pizzalar ve çiğ
+kapsamaktadır. İlgili ürünlere ilişkin tüketici hizmet fiyatları köfteyi kapsamaktadır. İlgili ürünlere ilişkin tüketici hizmet
+için TCMB bünyesinde yer alan veri tabanı kullanılmıştır. fiyatları için TCMB bünyesinde yer alan veri tabanı
+kullanılmıştır.
+Fiyat/maliyet endeksleri tüm konseptler için 2013-2022 yılları arasında belli bir ortalamanın etrafında
+salınırken, 2023 yılı itibarıyla belirgin bir artış eğilimi sergilemiştir. Son dönemde endekslerde
+gözlenen artış eğilimi, maliyetlerdeki artışların tüketici fiyatlarına yansımasının uzun dönemli
+ortalamanın üzerinde olduğunu ve zaman içerisinde fiyat-maliyet makasının artarak açılmaya devam
+ettiğini ima etmektedir.
+Daha belirgin maliyet artışları gözlenen et ağırlıklı yiyecek hizmetlerindeki fiyat/maliyet endekslerinin
+2023 yılına kadar uzun dönem ortalamasının etrafında görece yatay seyrettiği gözlenmektedir.
+Kırmızı et ağırlıklı yemek hizmetleri grubunda fiyat/maliyet endeksi 2023 yılından itibaren keskin bir
+artış göstermiş olup, Temmuz 2024 tarihinde uzun dönemli ortalamanın (1,05) oldukça üzerine
+çıkarak 1,54 seviyesine ulaşmıştır (Grafik 9). Tavuk eti ağırlıklı yemek hizmetlerinde daha belirgin bir
+artış olduğu, 1,09 olan uzun dönem fiyat/maliyet endeksi ortalamasına karşın, son ayda endeksin
+1,79 seviyesine yükseldiği görülmektedir (Grafik 10).
+Maliyet artışının göreli olarak daha sınırlı olduğu ev yemekleri ve fast-food konseptlerinde de
+fiyat/maliyet oranlarında belirgin artış eğilimi izlenmektedir. Ev yemekleri konseptli hizmetlerin
+2013-2022 dönemi fiyat/maliyet endeks ortalaması 0,94, iken Temmuz 2024’te bu oran 1,30
+seviyesine yükselmiştir. Ev yemekleri hizmetlerine ilişkin endeks 2022 yılında maliyet artışlarının ilk
+etapta hemen tüketiciye yansıtılmadığını, fiyat/maliyet endeksinin uzun dönemli ortalamanın altına
+(0,77 seviyesine kadar) gerilediğini göstermektedir. 2024 yılında ise ev yemekleri hizmetleri fiyat
+artışlarının maliyet artışlarının tarihsel olarak oldukça üzerine çıkarak 1,30 seviyesine ulaştığı dikkat
+çekmektedir (Grafik 11). Fast-food grubunda yer alan hamburger, pizza ve çiğ köfte gibi yiyecek
+hizmetleri için hesaplanan fiyat/maliyet endeksinin pandemi sonrası dönemde artış eğilimine girdiği;
+2023 yılı ile birlikte bu eğilimin ivme kazandığı gözlenmektedir (Grafik 12). 2013-2022 dönemi
+fiyat/maliyet ortalaması 1,17 iken, Temmuz 2024’te endeks 2,08 gibi oldukça yüksek bir seviyeye
+yükselmiştir.
+9
+
+===== SAYFA 11 =====
+Sayı: 2024 - 17 | 26 Aralık 2024
+Grafik 13: Fiyat/Maliyet Oranı* (2013 Ocak=1) Grafik 14: Fiyat/Maliyet Oranı* (Ev Yemekleri
+Hizmetleri=1)
+Uzun Dönemli Ortalama (2013-2022)
+Uzun Dönemli Ortalama (2013-2022)
+Temmuz 2024
+Uzun Dönemli Tüm Konseptler Ortalama (2013-2022) Temmuz 2024
+2,1
+1,7
+1,8 1,6
+1,5 1,5
+1,2 1,4
+0,9 1,3
+0,6 1,2
+0,3 1,1
+0,0 1,0
+Ev Yemekleri Kırmızı Et Tavuk Eti Fast-Food Ev Yemekleri Kırmızı Et Tavuk Eti Fast-Food
+Ağırlıklı Ağırlıklı Ağırlıklı Ağırlıklı
+Kaynak: Yazarların hesaplamaları.
+* Ev yemekleri hizmetleri çorba ve sıcak yemekleri, kırmızı et ağırlıklı yemek hizmetleri Adana kebap, kıymalı pide, lahmacun
+ve et döneri, tavuk et ağırlıklı yemek hizmetleri tavuk şiş ve tavuk döneri, fast-food yemek hizmetleri burgerler, pizzalar ve
+çiğ köfteyi kapsamaktadır. İlgili ürünlere ilişkin tüketici hizmet fiyatları için TCMB bünyesinde yer alan veri tabanı
+kullanılmıştır.
+Genel olarak uzun dönemli ortalama etrafında dalgalan fiyat/maliyet endekslerinin 2023 yılı itibarıyla
+belirgin bir artış eğilimi göstermesi sektörde maliyet artışlarının üzerinde fiyatlama yapıldığını ve
+sektör fiyatlama davranışlarında son yıllarda önemli bir bozulma olduğunu ima etmektedir. Ayrıca,
+analizler fiyatlama davranışlarındaki bozulmanın yemek konseptlerine göre farklılık gösterdiğine
+işaret etmektedir (Grafik 13). Geçmiş dönemlerde farklı konseptler arası fiyat/maliyet farkının göreli
+olarak daha sınırlığı olduğu, zaman içerisinde bu makasın oldukça açıldığı gözlenmektedir. Temmuz
+2024’e gelindiğinde fast-food ve tavuk eti ağırlıklı yemek hizmetlerinde fiyat/maliyet farklılaşmasının
+ev yemekleri ve kırmızı et ağırlıklı yemek hizmetlerindeki farklılaşmadan çok daha belirgin olduğu
+görülmektedir (Grafik 14).
+Sonuç ve Değerlendirme
+Farklı konseptler için gıda, personel, kira, enerji ve genel gider gibi temel maliyet kalemlerindeki
+gelişmeler dikkate alınarak hesaplanan fiyat/maliyet endekslerinin son dönemde tarihsel
+ortalamanın üzerindeki seyri, yiyecek hizmetleri sektöründe fiyatlama davranışlarının bozulmuş
+olabileceğini ima etmektedir.9 Alt gruplar itibarıyla yapılan analizler, konseptlere göre fiyat maliyet
+makasındaki farklılaşmaları ön plana çıkarmaktadır. Kebap ve döner gibi girdisinin önemli bir
+kısmının görece yüksek enflasyona sahip kırmızı et içeren ürünlerde satış fiyatı ile maliyet arasındaki
+farklılaşmanın daha sınırlı olduğu, görece daha düşük maliyetli tavuk eti ve fast-food yemek
+hizmetlerinde ise makasın daha açık olduğu dikkat çekmektedir.
+Genele yaygın fiyat artış eğilimi ile birlikte artan maliyetler işletmelerin makul bir oranda kâr elde
+etmesinin önünde önemli bir engel olurken, işletmelerin kâr seviyelerini koruma istekleri özellikle
+artan belirsizlikle birlikte fiyatlama davranışlarında bozulmalara ve dolayısıyla hizmet enflasyonunda
+gözlenen katılıklara katkı yapabilmektedir. Çalışmadan elde edilen bulgular, son dönemde yiyecek
+hizmetleri sektöründe gözlenen fiyat artışlarında maliyet artışlarına ek olarak fiyatlama
+davranışlarındaki bozulmanın bir etken olabileceği görüşünü destekler niteliktedir.
+9 Fiyat/maliyet oranlarının tarihsel ortalamalar üzerindeki seyrinin tek nedeninin fiyatlama davranışlarındaki bozulmalar
+olmayabileceği göz önünde bulundurulmalıdır.
+10
+
+===== SAYFA 12 =====
+Sayı: 2024 - 17 | 26 Aralık 2024
+Kaynakça
+Atalay, E., Frost E., Soensen, A.T., Sullivan, C.J. & Zhu, W. (2023). “Scalable Demand and Markups”,
+NBER Working Paper Series No: 31230.
+Döpper, H., MacKay, A., Miller, N.H. & Stiebale J. (2022). “Rising Markups and the Role of Consumer
+Preferences”, Harvard Business School Working Paper No:22-025.
+https://www.nefisyemektarifleri.com.
+Eldemir, C. & Yürek, S. (2023). “Impact of Easing Restrictions on Restaurant Inflation: Normalization
+Processes in Türkiye during COVID-19”, TCMB Çalışma Tebliği No. 23/03.
+Özmen, M. U. (2016). “In Pursuit of Understanding Markups in Restaurant Services Prices”, TCMB
+Çalışma Tebliği No. 16/02.
+TÜİK (2024). Tüketici Fiyat Endeksi Haber Bülteni, İstatistiksel Tablolar- Ana gruplar itibarıyla madde
+sepeti listesi. Erişim adresi: https://data.tuik.gov.tr/Bulten/Index?p=Tuketici-Fiyat-Endeksi-Mayis-
+2024-53615.
+11
+
+===== SAYFA 13 =====
+Sayı: 2024 - 17 | 26 Aralık 2024
+Ek: Tarifler ve Gıda Girdi Maliyet Ağırlıkları
+Mercimek Çorbası Pirinç Pilavı
+Ürün Gıda Maliyeti İçerisindeki Payı Ürün Gıda Maliyeti İçerisindeki Payı
+Mercimek %40 Pirinç %58
+Tereyağı %30 Yağ %39
+Sebze %20 Su %2
+Baharat-diğer %10 Tuz %1
+Kaynak: https://www.nefisyemektarifleri.com/ Kaynak: https://www.nefisyemektarifleri.com/
+Hamburger Pizza
+Ürün Gıda Maliyeti İçerisindeki Payı Ürün Gıda Maliyeti İçerisindeki Payı
+Dana Kıyma %65 Peynir %50
+Ekmek %20 Şarküteri %20
+Un %10
+Marul
+Sebze %10
+Domates %10
+Yağ %5
+Soğan
+Baharat %3
+Ketçap, Mayonez,
+%5
+Turşu Salça %2
+Kaynak: https://www.nefisyemektarifleri.com/ Kaynak: https://www.nefisyemektarifleri.com/
+Çiğ Köfte Kıymalı Pide
+Ürün Gıda Maliyeti İçerisindeki Payı Ürün Gıda Maliyeti İçerisindeki Payı
+Baharat %60 Dana Eti %65
+Bulgur %15 Sebze %15
+Sebze %18 Baharat %10
+Un %5
+Salça %4
+Tereyağı %3
+Yağ %3
+Yumurta %2
+Kaynak: https://www.nefisyemektarifleri.com/ K aynak: https://www.nefisyemektarifleri.com/
+Lahmacun İskender
+Ürün Gıda Maliyeti İçerisindeki Payı Ürün Gıda Maliyeti İçerisindeki Payı
+Dana Eti %80 Dana Eti %85
+Sebze %11 Süt-Yoğurt %4
+Un %4 Yağ %4
+Baharat %4 Baharat %4
+Yağ %1 Un %3
+Kaynak: https://www.nefisyemektarifleri.com/ Kaynak: https://www.nefisyemektarifleri.com/
+12
+
+===== SAYFA 14 =====
+Sayı: 2024 - 17 | 26 Aralık 2024
+Adana Kebap Et Döner
+Ürün Gıda Maliyeti İçerisindeki Payı Ürün Gıda Maliyeti İçerisindeki Payı
+Dana Eti %85 Dana Eti %92
+Ekmek %2
+Baharat %5
+Yağ %2
+Yağ %5
+Baharat %2
+Sebze %2
+Sebze %1
+Un %3 Yoğurt %1
+Kaynak: https://www.nefisyemektarifleri.com/ K aynak: https://www.nefisyemektarifleri.com/
+Tavuk Şiş Tavuk Döner
+Ürün Gıda Maliyeti İçerisindeki Payı Ürün Gıda Maliyeti İçerisindeki Payı
+Tavuk Eti %77 Tavuk Eti %92
+Baharat %12 Ekmek %2
+Sebze %4 Yağ %2
+Yağ %4 Baharat %2
+Yoğurt %3 Sebze %1
+Kaynak: https://www.nefisyemektarifleri.com/ Kaynak: https://www.nefisyemektarifleri.com/
+13
