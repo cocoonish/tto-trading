@@ -211,7 +211,22 @@ def load_data_evds():
     """TCMB EVDS API'sinden TÜFE ve Yi-ÜFE bazlı REDK serilerini çek."""
     cpi = fetch_evds_series(EVDS_CPI_SERIES)
     ppi = fetch_evds_series(EVDS_PPI_SERIES)
-    df = pd.DataFrame({"CPI_REER": cpi, "PPI_REER": ppi}).dropna()
+    ham = pd.DataFrame({"CPI_REER": cpi, "PPI_REER": ppi})
+
+    # TEK TARAFLI AY UYARISI — Excel yolunda kapatılan açık BİRİNCİL yolda da vardı.
+    # Bir seri yayımlanıp diğeri gecikirse dropna() o ayı SESSİZCE düşürür; kompozit
+    # seri delinir ve konumsal rolling(120) pencereleri kayar. Düşürmeye devam
+    # ediyoruz (tek bacakla kompozit hesaplanamaz) ama artık görünür.
+    tek_tarafli = ham[ham.isna().any(axis=1) & ham.notna().any(axis=1)]
+    if len(tek_tarafli):
+        aylar = [d.strftime("%Y-%m") for d in tek_tarafli.index[:12]]
+        _uyar(f"TEK TARAFLI AY: {len(tek_tarafli)} ayda iki REDK serisinden yalnız biri var",
+              [f"düşürülen aylar: {', '.join(aylar)}"
+               + (" …" if len(tek_tarafli) > 12 else ""),
+               "TCMB serilerden birini geç yayımlamış olabilir; bir sonraki koşuda kapanır.",
+               "Kapanmıyorsa seri kodlarını kontrol edin."])
+
+    df = ham.dropna()
     df = df.rename_axis("Dönem").reset_index().sort_values("Dönem").reset_index(drop=True)
     if df.empty:
         raise RuntimeError("EVDS'ten ortak tarihli REDK verisi gelmedi")

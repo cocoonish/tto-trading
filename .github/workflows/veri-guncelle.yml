@@ -21,6 +21,11 @@ permissions:
 jobs:
   guncelle:
     runs-on: ubuntu-latest
+    # Anahtar İŞ düzeyinde: EVDS'e giden her adım (TCMB, USDTRY, REER) buna
+    # ihtiyaç duyar. Anahtarlar kaynak koda gömülü değildir; yerelde .evds_key,
+    # CI'da bu secret kullanılır.
+    env:
+      TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
     steps:
       - uses: actions/checkout@v4
 
@@ -31,7 +36,22 @@ jobs:
       - name: Bağımlılıklar
         run: pip install pandas numpy scipy plotly requests pdfplumber tcmb yfinance openpyxl
 
+      # Secret eksikse ÖNDEN ve GÜRÜLTÜLÜ düş. Aksi halde EVDS'e giden üç adım
+      # tek tek RuntimeError verir, continue-on-error onları yutar ve iş akışı
+      # hiçbir şey üretmeden YEŞİL biter — tam da giderilmeye çalışılan
+      # "sessiz bayatlama" davranışı.
+      - name: EVDS anahtarı tanımlı mı
+        run: |
+          if [ -z "${TTO_EVDS_KEY}" ]; then
+            echo "::error::TTO_EVDS_KEY deposu secret'ı tanımlı değil. EVDS'e giden"
+            echo "::error::adımlar (TCMB, USDTRY, REER) veri çekemez. Settings >"
+            echo "::error::Secrets and variables > Actions altında tanımlayın."
+            exit 1
+          fi
+          echo "EVDS anahtarı tanımlı (${#TTO_EVDS_KEY} karakter)."
+
       - name: TCMB net rezerv (EVDS + IRFCL → grafik)
+        id: tcmb
         continue-on-error: true
         working-directory: Aktarılacak Projeler/TCMBNetRezerv
         run: |
@@ -41,6 +61,7 @@ jobs:
           python ozet_uret.py && cp ozet.json "../../site/public/projeler/tcmb-net-rezerv/"
 
       - name: USDTRY devalüasyon (ACT/365, altı grafik — MDX'in gömdüğü tümü)
+        id: usdtry
         continue-on-error: true
         working-directory: Aktarılacak Projeler/USDTRYDeval
         run: |
@@ -56,6 +77,7 @@ jobs:
           python ozet_uret.py && cp ozet.json "../../site/public/projeler/usdtry-deval/"
 
       - name: FX endeksi web grafikleri (depodaki veriden)
+        id: fx
         continue-on-error: true
         working-directory: Aktarılacak Projeler/indices
         run: |
@@ -64,11 +86,9 @@ jobs:
           python ozet_uret.py && cp ozet.json "../../site/public/projeler/fx-haber-endeksi/"
 
       - name: TRY REER (EVDS → REDK sapma & regresyon panelleri)
+        id: reer
         continue-on-error: true
         working-directory: Aktarılacak Projeler/TRYREER
-        env:
-          # Anahtar depo secret'ından gelir; kodda gömülü varsayılan kullanılmaz.
-          TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
         run: |
           python main.py
           python usdtry_reer_analysis.py
@@ -82,12 +102,22 @@ jobs:
           python ozet_uret.py && cp ozet.json "$H/"
 
       - name: Hazine tahmin grafikleri (depodaki CSV'lerden)
+        id: hazine
         continue-on-error: true
         working-directory: Aktarılacak Projeler/hazineihrac
         run: |
           python web_cikti_tahmin.py
-          cp planlanan_ihraclar.html tahmin_dogrulama.html "../../site/public/projeler/hazine-ihrac/" || true
-          python ozet_uret.py && cp ozet.json "../../site/public/projeler/hazine-ihrac/"
+          # web_cikti_tahmin.py sayfanın gömdüğü 13 şekilden 11'ini üretir; daha
+          # önce yalnız 2'si kopyalanıyordu ve kalan 9'u cron'da boşuna bayatlıyordu.
+          # (hedef_gerceklesme + vade_analizi main.py'den gelir; scraper bilinçli
+          #  olarak cron dışıdır, onlar yerel koşuda tazelenir.)
+          H="../../site/public/projeler/hazine-ihrac"
+          for f in planlanan_ihraclar tahmin_dogrulama tahmin_aylik strateji_revizyon \
+                   faiz_gelisimi fiyat_araligi ihrac_hacmi ihrac_tempo ihrac_usd \
+                   talep_analizi vade_dagilimi; do
+            cp "$f.html" "$H/$f.html"
+          done
+          python ozet_uret.py && cp ozet.json "$H/"
 
       - name: Ev stilini uygula
         run: python3 site/tools/plotly_stil.py --hepsi
@@ -99,3 +129,31 @@ jobs:
           git add site/public/projeler/
           git diff --cached --quiet || git commit -m "veri: zamanlanmış grafik güncellemesi"
           git push
+
+      # Commit'ten SONRA çalışır: başarılı hatların çıktısı yayına gitsin, ama
+      # düşen bir hat varsa iş KIRMIZI bitsin. continue-on-error tek bir kaynağın
+      # bozulmasının diğerlerini engellemesini önler; sessizce başarısız olmasını
+      # değil. "Yeşil ama hiçbir şey üretmedi" bu projede kabul edilen bir sonuç
+      # değil — sayfa bayat veriyi taze gibi gösterir.
+      - name: Hat durumu (sessiz başarısızlığa karşı)
+        run: |
+          # Ilişkisel dizi (declare -A) KULLANILMAZ: bash 3.x'te yok, bu adım
+          # yerelde de sınanabilsin.
+          durumlar="TCMB:${{ steps.tcmb.outcome }}
+          USDTRY:${{ steps.usdtry.outcome }}
+          FX:${{ steps.fx.outcome }}
+          REER:${{ steps.reer.outcome }}
+          Hazine:${{ steps.hazine.outcome }}"
+          hata=0
+          echo "### Veri hattı durumu" >> "$GITHUB_STEP_SUMMARY"
+          for satir in $durumlar; do
+            ad="${satir%%:*}"; sonuc="${satir#*:}"
+            if [ "$sonuc" = "success" ]; then
+              echo "- ✅ $ad" >> "$GITHUB_STEP_SUMMARY"
+            else
+              echo "- ❌ $ad ($sonuc)" >> "$GITHUB_STEP_SUMMARY"
+              echo "::error::$ad hattı başarısız ($sonuc) — bu projenin sayfası bayat kalacak."
+              hata=1
+            fi
+          done
+          exit $hata

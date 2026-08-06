@@ -425,9 +425,17 @@ class TreasuryAuctionScraper:
                         elif not isinstance(info, dict):
                             data[month_key] = {"target": float(info), "source": "", "history": [{"target": float(info), "source": ""}]}
 
-                    # Ayrıştırıcı sürümü eski olan kayıtları at
+                    # Ayrıştırıcı sürümü eski olan kayıtları at.
+                    # Sürüm okuması KAYIT BAZINDA korunur: tek bir bozuk kayıt
+                    # (parser: null, beklenmedik tip) dıştaki geniş except'e
+                    # düşerse 80+ aylık geçmişin TAMAMI sessizce kaybolurdu.
+                    def _surum(v):
+                        try:
+                            return int(v.get("parser", 1))
+                        except (AttributeError, TypeError, ValueError):
+                            return 0  # okunamayan sürüm = en eski, düşürülür
                     eski = [k for k, v in data.items()
-                            if int(v.get("parser", 1)) < STRATEGY_PARSER_VERSION]
+                            if _surum(v) < STRATEGY_PARSER_VERSION]
                     if eski:
                         logger.warning(
                             f"Strateji cache: {len(eski)} ay eski ayrıştırıcı sürümüyle "
