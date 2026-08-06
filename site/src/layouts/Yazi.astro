@@ -53,6 +53,14 @@ const tarih = (d: Date) =>
   if (basliklar.length >= 4) {
     const nav = document.getElementById('icindekiler')!;
     const liste = document.getElementById('icindekiler-liste')!;
+
+    // Başlıkların KENDİSİ numaralıysa (ör. "3. Kısa uç: …") listenin otomatik
+    // sayacı ikinci bir numara basar ve "3. 3. Kısa uç" çıkar. Bu durumda
+    // sayacı kapat — bölüm numarası metnin parçasıdır ve ders içi çapraz
+    // referanslar (3.4, §2.3) ona dayanır, kaldırılamaz.
+    const numarali = basliklar.filter((h) => /^\d+(\.\d+)*\.?\s/.test(h.textContent || ''));
+    if (numarali.length >= basliklar.length / 2) liste.classList.add('kendi-numarali');
+
     basliklar.forEach((h, i) => {
       if (!h.id) h.id = 'bolum-' + (i + 1);
       const li = document.createElement('li');
@@ -73,6 +81,12 @@ const tarih = (d: Date) =>
     border: 1px solid var(--ink-30);
     background: var(--paper-2);
     padding: 1rem 1.3rem 1.1rem;
+  }
+  /* Başlıkları zaten numaralı olan yazılarda listenin sayacı kapatılır
+     (bkz. yukarıdaki 'kendi-numarali' mantığı) — aksi halde çift numara. */
+  #icindekiler-liste.kendi-numarali {
+    list-style: none;
+    padding-left: 0;
   }
   .ic-baslik {
     color: var(--claret);

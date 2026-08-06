@@ -215,7 +215,7 @@
     const taraf = rec ? 'Receiver' : 'Payer';
     if (toplam < 0) {
       el.innerHTML =
-        `<b>${taraf} negatif taşıyor.</b> Pozisyon başabaşa gelmesi için ${Math.abs(T - Th).toFixed(2)} yıl ` +
+        `<b>${taraf} negatif taşıyor.</b> Pozisyon başabaşa gelmesi için ${tr(Math.abs(T - Th), 2)} yıl ` +
         `sonunda ${tr(Th, 2)}y kotasyonunun <b>%${tr(basabas)}</b>'e gitmesi gerekiyor — ` +
         `bugünkü ${tr(Th, 2)}y seviyesinden <b>${tr(Math.abs(fark), 0)} bp</b> ` +
         `${fark < 0 ? 'aşağı' : 'yukarı'}. Yani bu bir "fiyatlanandan daha ${fark < 0 ? 'derin/hızlı' : 'sığ/yavaş'} ` +
