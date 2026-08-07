@@ -148,7 +148,11 @@ KONSEPT_ETIKET = {
 
 
 def yeniden_bazla(s, baz=BAZ, deger=100.0):
-    return s / s.loc[baz] * deger
+    """2013 Ocak=deger. Seri 2013 Ocak'ta yoksa (sepete sonradan giren maddeler:
+    ör. pizza 1110110, turşu 0117504) İLK GEÇERLİ gözlemi baz alır — aksi hâlde
+    NaN'a bölme tüm seriyi NaN yapar ve konsept ortalamalarından sessizce düşer."""
+    b = s.loc[baz] if (baz in s.index and pd.notna(s.loc[baz])) else s.loc[s.first_valid_index()]
+    return s / b * deger
 
 
 def _tur_kamasi(idx):
@@ -226,13 +230,28 @@ def _pay_cozumle(tarif):
 
 
 def yemek_gida_endeksleri(madde_df):
-    """Her yemek için tarif paylı gıda maliyet endeksi (2013-01=100)."""
+    """Her yemek için tarif paylı gıda maliyet endeksi (2013-01=100).
+    Bir bileşen o ay için eksikse (sepete geç giren maddeler, ör. turşu 2021+)
+    kalan bileşenlerin payları yeniden normalize edilir."""
     out = {}
     for yemek, tarif in TARIFLER.items():
         paylar = _pay_cozumle(tarif)
-        seri = sum(madde_df[k] * w for k, w in paylar.items())
+        alt = madde_df[list(paylar)]
+        w = pd.Series(paylar)
+        pay_toplam = alt.notna().mul(w, axis=1).sum(axis=1)
+        seri = alt.mul(w, axis=1).sum(axis=1, skipna=True) / pay_toplam
         out[yemek] = yeniden_bazla(seri)
     return pd.DataFrame(out)
+
+
+def zincirli_ortalama(df):
+    """Kolonların aylık değişim ORTALAMASIYLA zincirlenmiş endeks (ilk ay=100).
+    Sepete sonradan giren seri, girdiği ayı izleyen aydan itibaren bileşime
+    süreksizlik yaratmadan katılır (farklı bazlı endekslerin aritmetik
+    ortalamasındaki seviye çarpıklığını önler)."""
+    buyume = df.pct_change(fill_method=None).mean(axis=1)
+    endeks = (1 + buyume.fillna(0)).cumprod()
+    return endeks / endeks.iloc[0] * 100
 
 
 def konsept_gida(yemek_df):
@@ -310,9 +329,12 @@ def konsept_maliyet(gida_df, bilesen_df, agirlik="nihai"):
 
 
 def konsept_fiyat(madde_df):
+    """Konsept fiyat endeksi: madde endekslerinin ZİNCİRLİ ortalaması.
+    (Pizza 1110110 sepete 2016'da girer; zincirleme, farklı bazlı serilerin
+    aritmetik ortalamasındaki süreksizliği önler.)"""
     out = {}
     for konsept, tanim in KONSEPTLER.items():
-        out[konsept] = yeniden_bazla(madde_df[tanim["fiyat_maddeleri"]].mean(axis=1))
+        out[konsept] = zincirli_ortalama(madde_df[tanim["fiyat_maddeleri"]])
     return pd.DataFrame(out)
 
 
@@ -324,6 +346,26 @@ def oranlar(fiyat_df, maliyet_df):
 def uzun_donem_ort(oran_df):
     pencere = oran_df.loc[UZUN_DONEM[0]:UZUN_DONEM[1]]
     return pencere.mean()
+
+
+def ima_edilen_marj(oran_df, cipalar=(0.15, 0.225, 0.30)):
+    """İma edilen kâr marjı DÜZEYİ (deneysel, senaryolu türetim).
+
+    Fiyat/maliyet oranı tek başına marj seviyesi vermez; bir ÇIPA varsayımı gerekir.
+    Çıpa: sektör derneği (TURYİD, notun 7 no'lu dipnotu) işletmelerin tipik olarak
+    %70-85 maliyet / %15-30 kârlılıkla çalıştığını bildirir. Bu bandın 2013-2022
+    "normal" dönem ortalamasında geçerli olduğu varsayılırsa:
+
+        marj(t) = 1 - (1 - m0) / r(t),   r(t) = Oran(t) / Oran_2013-2022_ort
+        (marj = (satış - maliyet) / satış; m0 = çıpa marjı)
+
+    Mekanik türetimdir: kalite, kompozisyon ve verimlilik değişimlerini de "marj"
+    sayar; sonuçlar bant olarak ve uyarı notuyla raporlanmalıdır.
+    Dönen: {m0: DataFrame} (marj, satışın oranı olarak).
+    """
+    uzun = uzun_donem_ort(oran_df)
+    r = oran_df.div(uzun, axis=1)
+    return {m0: 1 - (1 - m0) / r for m0 in cipalar}
 
 
 def hepsi(bitis="2026-07-01", agirlik="nihai", kira_senaryo="tufe", tur_duzeltme=True):

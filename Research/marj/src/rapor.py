@@ -56,6 +56,16 @@ def excel_yaz(dosya=None):
         kars.to_excel(w, "Karsilastirma", index=False)
         duy.to_excel(w, "Duyarlilik", index=False)
         katki.to_excel(w, "Katki_Tem24_Tem26")
+        marj = endeks.ima_edilen_marj(sonuc["oran"])
+        (marj[0.225] * 100).to_excel(w, "Ima_marj_%22.5_merkez")
+        bant = pd.concat({f"cipa_%{int(m0*1000)/10}": (df * 100).loc[["2024-07-01", "2026-07-01"]]
+                          for m0, df in marj.items()}, axis=0)
+        bant.round(1).to_excel(w, "Ima_marj_bant")
+        import marj_seviye
+        ms = marj_seviye.hesapla(sonuc)
+        (ms["fc"] * 100).round(1).to_excel(w, "FoodCost_orani_%")
+        ms["tl_gida"].round(2).to_excel(w, "FoodCost_TL_gida")
+        ms["p_net"].round(2).to_excel(w, "FoodCost_TL_netfiyat")
     print(f"Excel yazıldı: {dosya}")
     return dosya
 

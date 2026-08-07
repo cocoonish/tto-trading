@@ -39,19 +39,19 @@ def _guzel_adim(kaba):
 
 
 def _y_olcek(vmin, vmax):
+    """Ölçek sınırı = %7 paylı GERÇEK veri aralığı; tikler bu aralığın İÇİNDE kalır.
+    (Önceki sürüm tick uçlarını sınır sayıyordu ve veriyi taşırıyordu.)"""
     if vmin == vmax:
         vmin, vmax = vmin - 1, vmax + 1
-    pay = (vmax - vmin) * 0.06
+    pay = (vmax - vmin) * 0.07
     vmin -= pay; vmax += pay
-    adim = _guzel_adim((vmax - vmin) / 5)
-    t0 = math.floor(vmin / adim) * adim
+    adim = _guzel_adim((vmax - vmin) / 5.5)
+    t = math.ceil(vmin / adim) * adim
     tikler = []
-    t = t0
     while t <= vmax + 1e-9:
-        if t >= vmin - 1e-9:
-            tikler.append(round(t, 10))
+        tikler.append(round(t, 10))
         t += adim
-    return tikler[0], tikler[-1], tikler
+    return vmin, vmax, tikler
 
 
 def _tarih_tr(ts):

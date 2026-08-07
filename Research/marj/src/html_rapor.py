@@ -7,7 +7,7 @@ doğrudan kod ve output/*.csv'den gelir (tek doğruluk kaynağı).
 import base64, datetime, html, pathlib, re
 import pandas as pd
 
-import veri, endeks
+import veri, endeks, marj_seviye
 import grafikler as gf
 import svg_grafik as sg
 
@@ -30,6 +30,8 @@ GRAFIK_BASLIK = {
     12: "Fiyat/maliyet oranı — Fast-food (2013 Ocak=1)",
     13: "Fiyat/maliyet oranları: uzun dönem ort. vs Temmuz 2024 vs Temmuz 2026",
     14: "Fiyat/maliyet oranları, Ev yemekleri=1 normalize",
+    15: "İma edilen kâr marjı düzeyi — merkez senaryo (2013-2022 ort. marjı %22,5 varsayımı)",
+    16: "Food-cost oranı: porsiyon gıda maliyeti / KDV'siz satış fiyatı (çıpasız, gramaj varsayımlı)",
 }
 
 
@@ -219,6 +221,55 @@ def main():
                           fmt="oran", taban_cizgi=1.0, baslik=bas(14))
     ekle(14, h14, v14)
 
+    # G15 — ima edilen kâr marjı düzeyi (merkez senaryo)
+    marj = endeks.ima_edilen_marj(o)
+    merkez = marj[0.225] * 100
+    h15, v15 = sg.cizgi_svg("g15", merkez.index,
+                            [{"ad": endeks.KONSEPT_ETIKET[k], "renk": gf.RENK[k],
+                              "vals": list(merkez[k].values)} for k in konseptler],
+                            fmt="yuzde", splice_ts=splice,
+                            ref=(22.5, "çıpa: %22,5 (2013-2022 ort.)"), baslik=bas(15))
+    ekle(15, h15, v15)
+
+    # Kâr marjı bant tablosu
+    def yz(x):
+        return ("%" + f"{x*100:.1f}").replace(".", ",")
+    marj_satirlar = []
+    for k in konseptler:
+        marj_satirlar.append({
+            "Konsept": endeks.KONSEPT_ETIKET[k],
+            "Tem-2024 (çıpa %22,5)": yz(float(marj[0.225].loc["2024-07-01", k])),
+            "Tem-2026 (çıpa %15)": yz(float(marj[0.15].loc["2026-07-01", k])),
+            "Tem-2026 (çıpa %22,5)": yz(float(marj[0.225].loc["2026-07-01", k])),
+            "Tem-2026 (çıpa %30)": yz(float(marj[0.30].loc["2026-07-01", k])),
+        })
+    marj_tablo = tablo(pd.DataFrame(marj_satirlar))
+
+    # G16 — maliyetten türetilen food-cost oranları (aşağıdan yukarı)
+    ms = marj_seviye.hesapla(sonuc)
+    fc = ms["fc"] * 100
+    FC_RENK = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#4a3aa7"]
+    h16, v16 = sg.cizgi_svg("g16", fc.index,
+                            [{"ad": y, "renk": FC_RENK[i], "vals": list(fc[y].values)}
+                             for i, y in enumerate(fc.columns)],
+                            fmt="yuzde", splice_ts=splice, uc_etiket=False, baslik=bas(16))
+    ekle(16, h16, v16)
+    fc_tablo = tablo(marj_seviye.ozet_tablo(ms))
+
+    # Dinamik özet kartları ve tek cümlelik sonuç
+    def tr2(x):
+        return f"{x:.2f}".replace(".", ",")
+    kart_tanim = [("ev_yemekleri", "Ev yemekleri (2013 Oca=1)"), ("kirmizi_et", "Kırmızı et ağırlıklı"),
+                  ("tavuk", "Tavuk eti ağırlıklı"), ("fast_food", "Fast-food")]
+    okartlar = []
+    for k, ad in kart_tanim:
+        v26, v24, u = float(t26[k]), float(t24[k]), float(uzun[k])
+        okartlar.append(f'<div class="kart"><div class="k">{ad}</div><div class="v">{tr2(v26)}</div>'
+                        f'<div class="d">Tem-24: {tr2(v24)} · uzun dönem ort. {tr2(u)}</div></div>')
+    okartlar = "".join(okartlar)
+    katsayi = (t26[konseptler] / uzun[konseptler])
+    kat_aralik = f"{tr2(float(katsayi.min()))}–{tr2(float(katsayi.max()))}"
+
     kars = kars.rename(columns={"metrik": "Metrik", "konsept": "Konsept", "orijinal": "Orijinal (EN 24/17)",
                                 "replikasyon": "Replikasyon", "sapma": "Sapma", "guncel_2026_07": "Güncel (Tem 2026)",
                                 "gerekce": "Sapma gerekçesi"})
@@ -288,19 +339,15 @@ ol li{margin:6px 0}
 <nav>
 <a href="#ozet">Özet</a><a href="#yontem">Yöntem</a><a href="#veri">Veri &amp; proxy</a>
 <a href="#kirilma">Baz değişimi</a><a href="#dogrulama">Replikasyon doğrulaması</a>
-<a href="#grafikler">Grafikler 1-14</a><a href="#duyarlilik">Duyarlılık</a><a href="#degerlendirme">Değerlendirme</a>
+<a href="#grafikler">Grafikler 1-14</a><a href="#duyarlilik">Duyarlılık</a><a href="#marj">Kâr marjı düzeyi</a><a href="#degerlendirme">Değerlendirme</a>
 </nav>
 
 <section id="ozet">
-<div class="ozet-kart">
-<div class="kart"><div class="k">Ev yemekleri (2013 Oca=1)</div><div class="v">1,27</div><div class="d">Tem-24: 1,27 · not hedefi 1,30 · plato</div></div>
-<div class="kart"><div class="k">Kırmızı et ağırlıklı</div><div class="v">1,26</div><div class="d">Tem-24: 1,20 · uzun dönem ort. 1,08</div></div>
-<div class="kart"><div class="k">Tavuk eti ağırlıklı</div><div class="v">1,51</div><div class="d">Tem-24: 1,41 · uzun dönem ort. 1,10</div></div>
-<div class="kart"><div class="k">Fast-food</div><div class="v">2,19</div><div class="d">Tem-24: 2,08 · <b>açılma sürüyor</b></div></div>
-</div>
+<div class="ozet-kart">{okartlar}</div>
 <div class="kutu"><b>Tek cümlelik sonuç:</b> 2023'te başlayan fiyat/maliyet kırılması Temmuz 2026 itibarıyla
-<b>tersine dönmedi</b>; oranlar uzun dönem ortalamalarının 1,2–1,7 katında <b>yüksek bir platoya</b> oturdu,
-fast-food'da açılma devam ediyor. Bulgular 18 duyarlılık senaryosunda dayanıklı.</div>
+<b>tersine dönmedi</b>; oranlar uzun dönem ortalamalarının {kat_aralik} katında <b>yüksek bir platoya</b> oturdu,
+fast-food'da açılma devam ediyor. Bulgular 18 duyarlılık senaryosunda dayanıklı; maliyetten türetilen
+food-cost oranları da (Bölüm 7.2) aynı yönü gösteriyor.</div>
 </section>
 
 <section id="yontem">
@@ -391,8 +438,49 @@ oranlar uzun dönem ortalamasının belirgin üzerinde, fast-food en açık maka
 <div class="sarici">{katki_tablo}</div>
 </section>
 
+<section id="marj">
+<h2>7. Genel kâr marjı düzeyi — senaryolu türetim</h2>
+<p>Fiyat/maliyet oranı 2013 Ocak'a göre <i>göreli</i> seviyedir; genel kâr marjı <i>düzeyi</i> ancak bir çıpa
+varsayımıyla türetilebilir. Çıpa olarak notun 7 no'lu dipnotundaki sektör derneği (TURYİD) bandı kullanılır:
+işletmeler tipik olarak %70-85 maliyet, <b>%15-30 kârlılıkla</b> çalışır. Bu bandın 2013-2022 "normal" dönem
+ortalamasında geçerli olduğu varsayılır:</p>
+<div class="formul">marj(t) = 1 − (1 − m₀) · R̄ / R(t)&nbsp;&nbsp;&nbsp;
+[marj = (satış − maliyet) / satış; m₀ = çıpa marjı; R̄ = 2013-2022 ortalama oran]</div>
+{grafik_html[14]}
+<h3>7.1 İma edilen marj bandı (satış kârlılığı)</h3>
+<div class="sarici">{marj_tablo}</div>
+<div class="kutu uyari"><b>Uyarılar:</b> (1) Bu <i>mekanik</i> bir türetimdir — kalite, ürün kompozisyonu ve
+verimlilik değişimlerini de "marj" sayar ve fiyat tarafındaki proxy kısıtlarını taşır. (2) Çıpa dönem
+ortalamasına bağlıdır; m₀ seçimi düzeyi kaydırır, <b>yönü ve konseptler arası sıralamayı değiştirmez</b>.
+(3) Kavram brüt satış kârlılığıdır (vergi/finansman öncesi). Gerçekleşen marjlarla doğrulama için KAP'taki
+halka açık yeme-içme şirketlerinin brüt marjları ve TÜİK Yıllık Sanayi-Hizmet İstatistikleri (NACE I-56)
+brüt işletme artığı / ciro oranı izlenebilir.</div>
+
+<h3>7.2 Maliyetten (aşağıdan yukarı) türetim: food-cost oranları — çıpasız</h3>
+<p>Marj düzeyi çıpa olmadan da kısmen veriden çıkarılabilir: MEDAS fiyatları TL düzeyinde olduğundan
+(dana eti TL/kg, kebap TL/porsiyon…), <b>porsiyon gramajı</b> varsayımıyla her yemeğin gıda maliyeti TL
+olarak kurulur ve KDV'den arındırılmış satış fiyatına oranlanır (yiyecek-içecek KDV'si %8, Tem-2023'ten
+itibaren %10). Bu, restoran endüstrisinin standart <b>food-cost oranıdır</b> ve çıpa marjı gerektirmez;
+tek varsayım gramajdır (tabloda ±%25 duyarlılık verilir).</p>
+<div class="formul">food-cost(t) = Σ gramaj_i × birim fiyat_i(t) / [menü fiyatı(t) / (1+KDV)]&nbsp;&nbsp;·&nbsp;&nbsp;
+m49(t) = 1 − (gıda maliyeti / 0,49) / net fiyat</div>
+{grafik_html[15]}
+<div class="sarici">{fc_tablo}</div>
+<p><b>Okuma:</b> Food-cost oranı tüm yemeklerde 2013-2022 ortalamasının altına inmiştir — fiyatların malzeme
+maliyetinden hızlı arttığının, yani marj genişlemesinin <i>çıpasız</i> kanıtı. En küçük düşüş Adana kebapta
+(%38→%37: kırmızı et maliyet baskısı makası dar tutuyor), en büyükler ev yemekleri kalemlerinde (çorba
+%19→%14, fasulye %17→%10, pilav %13→%8) ve pizzada (%31→%22).</p>
+<div class="kutu uyari"><b>Tam marj neden çıpasız çıkarılamıyor (teşhis/kimlik sorunu):</b> gözlenen veri
+(fiyatlar) gramaj × maliyet-yapısı payı × marj üçlüsünü ayrı ayrı belirlemez; ikisi verilmeden üçüncüsü
+hesaplanamaz. Tablodaki m49 sütunu bunu gösterir: gıda payını her yemekte %49 saymak menü ORTALAMASINI
+yemek düzeyine taşımaktır ve uçlarda kırılır — çorba/pilavda %64-88 gibi aşırı, et-yoğun kalemlerde
+%6-48 gibi geniş bantlar üretir. Gerçekte gıda payı yemeğe göre değişir (çorbada düşük, dönerde yüksek);
+bu yüzden <b>düzey</b> için 7.1'deki konsept-çıpalı yaklaşım, <b>yön</b> için buradaki çıpasız food-cost
+oranı birbirini tamamlar.</div>
+</section>
+
 <section id="degerlendirme">
-<h2>7. Değerlendirme notu</h2>
+<h2>8. Değerlendirme notu</h2>
 {notu}
 </section>
 

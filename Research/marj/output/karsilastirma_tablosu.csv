@@ -4,9 +4,9 @@ maliyet_kat_ara19_tem24,ev_yemekleri,6.6,6.34,-0.26,11.16,Uyum yüksek.
 oran_tem24,ev_yemekleri,1.3,1.27,-0.03,1.27,Uyum yüksek; kalan fark splice dönemindeki agregat fiyat uzatmasından.
 oran_tem24,kirmizi_et,1.54,1.2,-0.34,1.26,Fiyat tarafı: TÜİK'te kebap/pide/döner maddeleri kırmızı et–tavuk ayrımı içermez (TCMB kendi mikro verisiyle ayrıştırmış); ayrıca Nis-2022 sonrası madde fiyatı yayımı durduğu için fiyatlar 11111/11112 agregatlarıyla uzatıldı — kebap özelindeki fiyat sıçraması agregata törpülenir.
 oran_tem24,tavuk,1.79,1.41,-0.38,1.51,Aynı fiyat tarafı kısıtı; tavuk maliyeti Tarım-ÜFE kaması ile ayrıştırıldı fakat fiyat tarafı kırmızı et ile ortak madde setinden gelir.
-oran_tem24,fast_food,2.08,2.08,-0.0,2.19,Birebir uyum.
-uzun_donem_ort,ev_yemekleri,0.94,0.98,0.04,0.98,—
+oran_tem24,fast_food,2.08,1.58,-0.5,1.68,Pizza (1110110) sepete 2016'da girer; zincirli ortalama ile bileşime dahildir. TCMB'nin ürün düzeyi pizza/burger fiyatları TÜİK madde ortalamasından daha hızlı artmış görünüyor; ayrıca Nis-2022 sonrası 11112 agregat uzatması ürün-özel sıçramaları törpüler.
+uzun_donem_ort,ev_yemekleri,0.94,0.97,0.03,0.97,—
 uzun_donem_ort,kirmizi_et,1.05,1.08,0.03,1.08,—
 uzun_donem_ort,tavuk,1.09,1.1,0.01,1.1,—
-uzun_donem_ort,fast_food,1.17,1.29,0.12,1.29,1110105 maddesi 2022 sepetinde 'Köfteler' (2024 sepetinde çiğ köfte); ortalama fiyat rölatifleri ile TCMB ürün endeksi arasındaki kompozisyon farkı.
+uzun_donem_ort,fast_food,1.17,1.17,-0.0,1.17,1110105 maddesi 2022 sepetinde 'Köfteler' (2024 sepetinde çiğ köfte); ortalama fiyat rölatifleri ile TCMB ürün endeksi arasındaki kompozisyon farkı.
 ev_2022_dip,ev_yemekleri,0.77,0.92,0.15,1.27,"Dip, madde fiyatı yayınının durduğu Nis-2022 SONRASINDA gerçekleşti; uzatma agregat 11111 ile yapıldığından konsepte özgü fiyat frenlemesi kısmen gözlenemiyor."

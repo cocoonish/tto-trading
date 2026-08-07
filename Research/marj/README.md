@@ -47,5 +47,6 @@ dosyaları mevcutsa Playwright'a gerek kalmaz).
 ## Ana bulgular (Temmuz 2026)
 
 Fiyat/maliyet oranları (2013 Ocak=1): ev yemekleri **1,27** (Tem-24: 1,27), kırmızı et **1,26** (1,20),
-tavuk **1,51** (1,41), fast-food **2,19** (2,08). 2023'te açılan makas **kapanmadı; yüksek platoya oturdu**,
-fast-food'da açılma sürüyor. Ayrıntı: `output/degerlendirme_notu.md`.
+tavuk **1,51** (1,41), fast-food **1,68** (1,58; uzun dönem ort. 1,17 = notla birebir). 2023'te açılan makas
+**kapanmadı; yüksek platoya oturdu**, fast-food'da açılma sürüyor. Kâr marjı düzeyi iki yoldan raporlanır:
+çıpalı senaryo (TURYİD bandı) ve çıpasız food-cost oranları (`src/marj_seviye.py`). Ayrıntı: `output/degerlendirme_notu.md`.

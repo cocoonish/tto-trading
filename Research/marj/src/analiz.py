@@ -83,7 +83,7 @@ GEREKCELER = {
     "oran_tem24|tavuk": ("Aynı fiyat tarafı kısıtı; tavuk maliyeti Tarım-ÜFE kaması ile ayrıştırıldı fakat "
                          "fiyat tarafı kırmızı et ile ortak madde setinden gelir."),
     "oran_tem24|ev_yemekleri": "Uyum yüksek; kalan fark splice dönemindeki agregat fiyat uzatmasından.",
-    "oran_tem24|fast_food": "Birebir uyum.",
+    "oran_tem24|fast_food": ("Pizza (1110110) sepete 2016'da girer; zincirli ortalama ile bileşime dahildir. ""TCMB'nin ürün düzeyi pizza/burger fiyatları TÜİK madde ortalamasından daha hızlı artmış görünüyor; ""ayrıca Nis-2022 sonrası 11112 agregat uzatması ürün-özel sıçramaları törpüler."),
     "uzun_donem_ort|fast_food": ("1110105 maddesi 2022 sepetinde 'Köfteler' (2024 sepetinde çiğ köfte); "
                                  "ortalama fiyat rölatifleri ile TCMB ürün endeksi arasındaki kompozisyon farkı."),
     "ev_2022_dip|ev_yemekleri": ("Dip, madde fiyatı yayınının durduğu Nis-2022 SONRASINDA gerçekleşti; "

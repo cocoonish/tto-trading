@@ -158,7 +158,8 @@ jobs:
           FX:${{ steps.fx.outcome }}
           REER:${{ steps.reer.outcome }}
           Yabanci:${{ steps.yabanci.outcome }}
-          Hazine:${{ steps.hazine.outcome }}"
+          Hazine:${{ steps.hazine.outcome }}
+          Marj:${{ steps.marj.outcome }}"
           hata=0
           echo "### Veri hattı durumu" >> "$GITHUB_STEP_SUMMARY"
           for satir in $durumlar; do
