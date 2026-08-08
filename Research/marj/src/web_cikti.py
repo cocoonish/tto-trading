@@ -170,5 +170,107 @@ def uret():
     return yollar
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Aşağıdaki dört grafik, matplotlib setindeki Grafik 1-4 ve 14'ün karşılığıdır.
+# İlk sürümde atlanmışlardı; sayfadaki üç iddia (talep göstergeleri, "lokanta-
+# oteller manşetle eşitlendi", konseptler arası ayrışma) doğrudan bunlara dayanır.
+# Kaynak fonksiyonlar grafikler.py'de: hizmet_ciro_oku(), gida_yemek_haric_tufe().
+# ─────────────────────────────────────────────────────────────────────────────
+
+def _tufe_serileri():
+    """Grafik 2-4'ün üç serisi: gıda+yemek hariç TÜFE, gıda, yemek hizmetleri."""
+    import grafikler, veri
+    evds = veri.tum_evds()
+    return {
+        "Gıda ve yemek hariç TÜFE": grafikler.gida_yemek_haric_tufe(evds),
+        "Gıda ve alkolsüz içecekler": evds["gida_alkolsuz"],
+        "Yemek hizmetleri": evds["yemek_111"],
+    }
+
+
+def uret_ek():
+    """Grafik 1-4 ve 14'ün Plotly karşılıkları."""
+    yollar = []
+    RENK = [TEAL, CLARET, GOLD]
+
+    # --- Hizmet ciro endeksi (PNG 01) ---
+    try:
+        import grafikler
+        import numpy as np
+        ciro = grafikler.hizmet_ciro_oku()
+        # Veri ZATEN yillik ortalama (indeks = yil); resample YAPILMAZ.
+        yillik = ciro.pct_change() * 100
+        yillik.index = [int(y) for y in yillik.index]
+        sut = [c for c in yillik.columns if str(c).split(" ")[0] in list("HIJLMN")][:6]
+        etk = {c: str(c).split(" - ")[-1][:22] for c in sut}
+        fig = go.Figure()
+        fig.add_trace(go.Bar(x=[etk[c] for c in sut], y=yillik.loc[2020, sut],
+                             name="2020", marker_color=TEAL))
+        fig.add_trace(go.Bar(x=[etk[c] for c in sut], y=yillik.loc[[2021, 2022], sut].mean(),
+                             name="2021–2022 ort.", marker_color=CLARET))
+        fig.update_layout(barmode="group")
+        _duzen(fig, "Hizmet ciro endeksleri — yıllık % değişim", "%",
+               "TÜİK Ticaret ve Hizmet Ciro Endeksleri (2015=100). Cari fiyatlarla, arındırılmamış endekslerin yıllık ortalamalarından.")
+        yollar.append(_yaz(fig, "hizmet_ciro.html"))
+    except Exception as exc:
+        print(f"  UYARI: hizmet ciro grafigi atlandi: {exc}")
+
+    # --- TÜFE üçlüsü: endeks / aylık / yıllık (PNG 02-04) ---
+    try:
+        ser = _tufe_serileri()
+        baz = pd.Timestamp("2019-12-01")
+
+        fig = go.Figure()
+        for (ad, s), r in zip(ser.items(), RENK):
+            sb = (s / s.loc[baz] * 100).loc["2019-12-01":]
+            fig.add_trace(go.Scatter(x=sb.index, y=sb.values, name=ad, line=dict(color=r, width=2)))
+        _duzen(fig, "TÜFE fiyat endeksleri (2019 Aralık = 100)", "endeks",
+               "Gıda ve yemek hariç TÜFE, yıllık resmî ağırlıklarla zincirlenerek hesaplanmıştır.")
+        yollar.append(_yaz(fig, "tufe_endeks.html"))
+
+        fig = go.Figure()
+        for (ad, s), r in zip(ser.items(), RENK):
+            mm = (s.pct_change(fill_method=None) * 100).loc["2019-12-01":]
+            fig.add_trace(go.Scatter(x=mm.index, y=mm.values, name=ad, line=dict(color=r, width=1.6)))
+        _duzen(fig, "TÜFE fiyat endeksleri — aylık % değişim", "%")
+        yollar.append(_yaz(fig, "tufe_aylik.html"))
+
+        fig = go.Figure()
+        for (ad, s), r in zip(ser.items(), RENK):
+            yy = (s.pct_change(12, fill_method=None) * 100).loc["2019-12-01":]
+            fig.add_trace(go.Scatter(x=yy.index, y=yy.values, name=ad, line=dict(color=r, width=2)))
+        _duzen(fig, "TÜFE fiyat endeksleri — yıllık % değişim", "%",
+               "Yemek hizmetleri ile manşet arasındaki farkın kapanması, akım fiyatlamada normalleşme sinyalidir.")
+        yollar.append(_yaz(fig, "tufe_yillik.html"))
+    except Exception as exc:
+        print(f"  UYARI: TUFE grafikleri atlandi: {exc}")
+
+    # --- Normalize oranlar, ev yemekleri = 1 (PNG 14) ---
+    try:
+        oran = _oku("Fiyat_maliyet_orani")
+        uzun = oran.loc["2013-01-01":"2022-12-31"].mean()
+        t24 = oran.loc["2024-07-01"]
+        t26 = oran.dropna(how="all").iloc[-1]
+        ks = [k for k in ["ev_yemekleri", "kirmizi_et", "tavuk", "fast_food"] if k in oran.columns]
+        etk = [KONSEPT_AD[k] for k in ks]
+        fig = go.Figure()
+        for ad, seri, renk in [("2013–2022 ort.", uzun, TEAL), ("Temmuz 2024", t24, CLARET),
+                               ("Temmuz 2026", t26, GOLD)]:
+            n = seri[ks] / seri["ev_yemekleri"]
+            fig.add_trace(go.Bar(x=etk, y=n.values, name=ad, marker_color=renk,
+                                 text=[f"{v:.2f}" for v in n.values], textposition="outside"))
+        fig.update_layout(barmode="group")
+        fig.add_hline(y=1.0, line=dict(color=INK, width=1, dash="dash"))
+        _duzen(fig, "Fiyat/maliyet oranları — ev yemekleri = 1", "oran",
+               "Konseptler arası ayrışma: 1'in üstü, o konseptin ev yemeklerinden daha çok açıldığını gösterir.")
+        yollar.append(_yaz(fig, "oran_normalize.html"))
+    except Exception as exc:
+        print(f"  UYARI: normalize oran grafigi atlandi: {exc}")
+
+    return yollar
+
+
 if __name__ == "__main__":
-    uret()
+    y = uret()
+    y += uret_ek()
+    print(f"\nTOPLAM {len(y)} grafik.")
