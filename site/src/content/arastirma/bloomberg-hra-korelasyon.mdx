@@ -26,8 +26,9 @@ HRA'nın yapmadıkları da en az yaptıkları kadar önemlidir — çünkü pane
 
 ### 1.2 Model
 
-$$Y_t = \beta \, X_t + \alpha + \varepsilon_t$$
-
+$$
+Y_t = \beta \, X_t + \alpha + \varepsilon_t
+$$
 Reg On = Percent seçiliyken $Y_t$ ve $X_t$, seçilen frekanstaki yüzde fiyat değişimleridir (temsili örnekte haftalık yüzde değişim). $\beta$ eğim, $\alpha$ kesişim (intercept), $\varepsilon$ ise modelin açıklayamadığı artıktır (residual). Panelde gördüğünüz her istatistik bu üç bileşenden birini ölçer: $\beta$ ve $\alpha$ katsayıları; R, $R^2$ ve SEE ilişkinin gücünü; standart hatalar, t-Test ve Significance katsayıların güvenilirliğini; Last T-Value / P-Value / Spread / Ratio ise son gözlemin konumunu.
 
 ### 1.3 Y ve X seçimi — sıralama neden önemli
@@ -36,8 +37,9 @@ Temsili örnekte Y = XLBNK (BIST Liquid Banks Index), X = TURKGB 26.2 10/05/2033
 
 OLS asimetriktir, çünkü yalnızca dikey — yani Y ekseni yönündeki — hataları en küçükler; eksenleri değiştirdiğinizde en küçüklenen hata da değişir. Bu yüzden Y ile X'i yer değiştirirseniz yeni beta, eski betanın tersi ÇIKMAZ. İki yöndeki betaların çarpımı her zaman $R^2$'ye eşittir:
 
-$$\beta_{Y|X} \times \beta_{X|Y} = R^2$$
-
+$$
+\beta_{Y|X} \times \beta_{X|Y} = R^2
+$$
 Örnekte $\beta_{Y|X} = 1.514$ ve $R^2 \approx 0.389$ olduğundan, ters regresyon $\beta_{X|Y} = 0.389 / 1.514 \approx 0.257$ verir — $1/1.514 = 0.66$ değil. $R^2 = 1$ olmadıkça iki yön simetrik değildir. Yanlış yönde kurulmuş bir HRA'dan alınan beta ile hedge boyutlandırmak, pozisyonu ciddi şekilde yanlış ölçeklendirir.
 
 ### 1.4 HRA parametreleri tek tek
@@ -81,16 +83,18 @@ Bu bölümden itibaren her parametre aynı şablonla işleniyor: tanım ve form�
 
 #### Tanım ve formül
 
-$$\beta = \frac{\operatorname{Cov}(X, Y)}{\operatorname{Var}(X)} = \rho \cdot \frac{\sigma_Y}{\sigma_X}$$
-
+$$
+\beta = \frac{\operatorname{Cov}(X, Y)}{\operatorname{Var}(X)} = \rho \cdot \frac{\sigma_Y}{\sigma_X}
+$$
 $\beta$, X'teki %1'lik harekete Y'nin verdiği ortalama tepkidir. İkinci eşitlik kritik sezgiyi verir: **beta = korelasyon çarpı volatilite oranı.** Yani yüksek beta iki farklı kaynaktan gelebilir — güçlü ilişki ($\rho$) veya Y'nin X'ten çok daha oynak olması ($\sigma_Y/\sigma_X$). Aynı betaya hem sıkı ilişkili sakin bir çiftte hem de gevşek ilişkili ama Y'si çok oynak bir çiftte rastlayabilirsiniz; ikisinin hedge kalitesi bambaşkadır. Bu yüzden beta asla R ve $R^2$'den bağımsız okunmaz.
 
 #### Örnekteki değerin okunması
 
 $\beta = 1.514$: TURKGB 2033'ün fiyatı bir haftada %1 yükseldiğinde XLBNK ortalama %1.514 yükselir (ve tersi). Birim vurgusu önemli: X, tahvilin **fiyat yüzdesidir**, faizin baz puanı değildir. Faiz diline çevirmek için durasyon köprüsü gerekir:
 
-$$\Delta P_{\%} \approx -D_{mod} \cdot \Delta y \qquad \Rightarrow \qquad \Delta \mathrm{XLBNK}_{\%} \approx -\beta \cdot D_{mod} \cdot \Delta y$$
-
+$$
+\Delta P_{\%} \approx -D_{mod} \cdot \Delta y \qquad \Rightarrow \qquad \Delta \mathrm{XLBNK}_{\%} \approx -\beta \cdot D_{mod} \cdot \Delta y
+$$
 Örnek: 2033 tahvilinin modifiye durasyonu yaklaşık 2.4 varsayılırsa (gerçek değeri YAS/DES'ten teyit edin), 100 bp faiz indirimi tahvili yaklaşık +%2.4 yukarı taşır; XLBNK için ima $1.514 \times 2.4 \approx 3.6$, yani yaklaşık +%3.6. Masada betayı bu dile çevirip konuşmak çok daha kullanışlıdır.
 
 #### Değer aralıkları — düşük/yüksek ne anlama gelir
@@ -109,8 +113,9 @@ $$\Delta P_{\%} \approx -D_{mod} \cdot \Delta y \qquad \Rightarrow \qquad \Delta
 
 $\beta$'nın kendisi için "iyi/kötü" eşiği yoktur — beta bir ölçümdür, hedef değildir. Değerlendirilecek olan üç şeydir: (1) anlamlılık (t-Test büyüklüğü, Bölüm 4.3), (2) hassasiyet ($SE(\beta)/\beta$ oranı, Bölüm 4.1) ve (3) istikrar (farklı pencerelerde aynı bölgede kalıp kalmadığı, Bölüm 8.3). Temsili örnekte %95 güven aralığı:
 
-$$\beta \pm 1.96 \times SE(\beta) = 1.514 \pm 1.96 \times 0.188 \Rightarrow [1.15,\ 1.88]$$
-
+$$
+\beta \pm 1.96 \times SE(\beta) = 1.514 \pm 1.96 \times 0.188 \Rightarrow [1.15,\ 1.88]
+$$
 Yani "gerçek" beta 1.2 de olabilir, 1.8 de. Hedge boyutlandırırken bu aralığın tamamını akılda tutmak gerekir — nokta tahmine körü körüne bağlanmak yanlış güven verir.
 
 <div class="not"><span class="etiket">Tuzak</span> Beta simetrik bir ortalamadır: tahvilin yükseldiği VE düştüğü haftaların karışımı. Kriz haftalarında gerçekleşen beta çok daha yüksek olabilir — stres dönemlerinde tüm varlıkları aynı ortak faktör sürüklediği için korelasyonlar 1'e yakınsar. Asimetriden şüpheleniyorsanız Beta +/- kutusunu işaretleyip düşüş-betasını ayrıca ölçün.</div>
@@ -119,8 +124,9 @@ Yani "gerçek" beta 1.2 de olabilir, 1.8 de. Hedge boyutlandırırken bu aralı�
 
 #### Tanım ve formül
 
-$$\beta_{adj} = 0.67 \times \beta_{raw} + 0.33 \times 1.0$$
-
+$$
+\beta_{adj} = 0.67 \times \beta_{raw} + 0.33 \times 1.0
+$$
 Blume (1971) düzeltmesi: betaların zaman içinde 1'e döndüğü (mean reversion) ampirik bulgusuna dayanarak, ileriye dönük tahmin için ham betayı 1'e doğru çeker. Sezgisi şudur: örneklemde uç çıkan betalar kısmen örneklem şansıyla abartılmıştır; geleceğe taşırken 1'e çekmek bu abartıyı törpüler. Temsili örnekte: $0.67 \times 1.514 + 0.33 = 1.344$ (panelde 1.3 olarak kırpılmış görünür).
 
 #### Hangisini kullanmalı
@@ -138,8 +144,9 @@ $\alpha$, X'in hareketi sıfır olduğunda Y'nin ortalama getirisidir; regresyon
 
 #### Önce anlamlılık: alpha gerçek mi?
 
-$$t(\alpha) = \frac{\alpha}{SE(\alpha)} = \frac{0.408}{0.46} \approx 0.89$$
-
+$$
+t(\alpha) = \frac{\alpha}{SE(\alpha)} = \frac{0.408}{0.46} \approx 0.89
+$$
 $\lvert t \rvert < 2$ olduğundan bu alpha istatistiksel olarak sıfırdan ayırt edilemiyor. %23.6'lık yıllık sürüklenme bir nokta tahminidir ama etrafındaki belirsizlik devasadır: haftalık standart hata 0.46 iken yıllık güven aralığı kabaca -%20 ile +%80 arasına yayılır. Bu alpha üzerine strateji kurulmaz.
 
 #### Değer aralıkları ve kullanım amaçları
@@ -184,8 +191,9 @@ Belirlilik katsayısı: Y'nin varyansının X tarafından açıklanan payı. Tem
 
 Minimum varyans hedge'i (hedge oranı = $\beta$) uygulandığında **varyans azaltımı tam olarak $R^2$'dir.** Ama varyans karesel bir büyüklüktür; kayıp ve marj dilinde konuşan risk yönetimi içinse volatilite (standart sapma) esastır — ve karekök yüzünden volatilite azaltımı hep çok daha mütevazı çıkar:
 
-$$\frac{\text{Kalan vol}}{\text{Orijinal vol}} = \sqrt{1 - R^2} \qquad \Rightarrow \qquad \text{Vol azaltımı} = 1 - \sqrt{1 - R^2}$$
-
+$$
+\frac{\text{Kalan vol}}{\text{Orijinal vol}} = \sqrt{1 - R^2} \qquad \Rightarrow \qquad \text{Vol azaltımı} = 1 - \sqrt{1 - R^2}
+$$
 | $R^2$ | Varyans azaltımı | Volatilite azaltımı | Yorum |
 |---|---|---|---|
 | 0.10 | %10 | %5 | Hedge kâğıt üzerinde var, pratikte yok. |
@@ -211,8 +219,9 @@ $$\frac{\text{Kalan vol}}{\text{Orijinal vol}} = \sqrt{1 - R^2} \qquad \Rightarr
 
 #### Tanım
 
-$$SEE = \sigma_\varepsilon = \sigma_Y \cdot \sqrt{1 - R^2}$$
-
+$$
+SEE = \sigma_\varepsilon = \sigma_Y \cdot \sqrt{1 - R^2}
+$$
 Artıkların ($\varepsilon$) standart sapması: regresyonun açıklayamadığı kısmın tipik büyüklüğü. Birimi Y ile aynıdır — temsili örnekte haftalık %4.6. Bu sayı, beta hedge'ini kusursuz uyguladığınızda dahi kalacak riskin ta kendisidir:
 
 - **$1\sigma$ bandı:** hedge'li pozisyon tipik bir haftada yaklaşık 4.6 yüzde puan aşağı–yukarı oynar.
@@ -240,8 +249,9 @@ Bölüm 2–3 "ilişki ne söylüyor" sorusunu yanıtladı; bu bölüm "söyledi
 
 #### Tanım
 
-$$SE(\beta) = \frac{SEE}{\sigma_X \cdot \sqrt{N - 1}}$$
-
+$$
+SE(\beta) = \frac{SEE}{\sigma_X \cdot \sqrt{N - 1}}
+$$
 Beta tahmininin standart hatası: aynı ilişkiden farklı bir 103 haftalık örneklem çekseydiniz betanın tipik olarak ne kadar farklı çıkacağı. Formül üç kaldıracı gösterir: artık gürültüsü (SEE) küçüldükçe beta daha temiz ölçülür; X'in oynaklığı ($\sigma_X$) arttıkça doğrunun eğimi daha geniş bir X yelpazesine oturur ve daha iyi belirlenir; gözlem sayısı (N) arttıkça örneklem şansının payı küçülür.
 
 #### Nasıl okunur — iki pratik dönüşüm
@@ -271,8 +281,9 @@ Aynı mantığın alpha'ya uygulanmışı: kesişim tahmininin standart hatası.
 
 #### Tanım
 
-$$t = \frac{\beta}{SE(\beta)} = \frac{1.514}{0.188} \approx 8.0$$
-
+$$
+t = \frac{\beta}{SE(\beta)} = \frac{1.514}{0.188} \approx 8.0
+$$
 Sıfır hipotezi $H_0: \beta = 0$ ("ilişki yok") testinin istatistiği. Betanın, kendi ölçüm hatasının kaç katı olduğunu söyler. $\lvert t \rvert$ büyüdükçe "bu beta tesadüf" açıklaması imkansızlaşır.
 
 #### Değer aralıkları
@@ -289,8 +300,9 @@ Sıfır hipotezi $H_0: \beta = 0$ ("ilişki yok") testinin istatistiği. Betanı
 
 t-Test "ilişki var mı" sorusuna cevap verir, "ilişki güçlü mü" sorusuna değil. Üç büyüklüğün cebirsel bağı bunu netleştirir:
 
-$$t = \frac{R \cdot \sqrt{N - 2}}{\sqrt{1 - R^2}}$$
-
+$$
+t = \frac{R \cdot \sqrt{N - 2}}{\sqrt{1 - R^2}}
+$$
 $N = 103$'te $R = 0.20$ (yani $R^2 = 0.04$ — hareketin sadece %4'ü!) bile $t \approx 2.05$ verir: panel "anlamlı" der, ama bu ilişkiyle hedge kurmak anlamsızdır. 5 yıllık günlük veride ($N \approx 1250$) $R = 0.06$ dahi anlamlı çıkar. Bu yüzden karar hiçbir zaman tek istatistikle verilmez: t-Test varlığı, $R^2$ gücü, $SE(\beta)$ hassasiyeti ölçer — üçü birlikte okunur (Bölüm 6'daki kontrol listesi).
 
 Temsili örnekte $t = 8.02$ ve $R^2 = 0.39$ kombinasyonunun doğru okuması: "banka endeksi ile tahvil arasında kesin olarak var olan, ama endeks hareketinin ancak %39'unu açıklayan orta güçte bir ilişki."
@@ -343,8 +355,9 @@ Buraya kadarki istatistikler örneklemin TAMAMINI özetliyordu. Bu dördü ise y
 
 #### Tanım
 
-$$\text{Last T-Value} = \frac{\text{son artık}}{SEE} = \frac{Y_{son} - (\beta \cdot X_{son} + \alpha)}{SEE}$$
-
+$$
+\text{Last T-Value} = \frac{\text{son artık}}{SEE} = \frac{Y_{son} - (\beta \cdot X_{son} + \alpha)}{SEE}
+$$
 Son gözlemin regresyon doğrusundan kaç standart sapma (SEE cinsinden) uzakta olduğu — saçılım grafiğindeki kırmızı yıldızın doğruya dik mesafesinin standardize hâli. Kısaltma olarak LTV kullanacağız. Temsili örnekte $-0.47$: son hafta XLBNK, tahvilin ima ettiği seviyenin $0.47 \times 4.6 \approx 2.2$ puan, yani yaklaşık %2.2 altında kapanmış.
 
 #### İşaret yorumu
@@ -604,8 +617,9 @@ Bu bölüm, HRA'nın hedge dışındaki ikinci büyük kullanımını işler: re
 
 ### 10.1 Tek dönemlik ima: formül ve temsili örnek
 
-$$\Delta Y_{\text{ima}} = \beta \cdot \Delta X + \alpha \qquad \text{gap} = \Delta Y_{\text{gerçek}} - \Delta Y_{\text{ima}} \qquad \text{gap}(\sigma) = \frac{\text{gap}}{\mathrm{SEE}}$$
-
+$$
+\Delta Y_{\text{ima}} = \beta \cdot \Delta X + \alpha \qquad \text{gap} = \Delta Y_{\text{gerçek}} - \Delta Y_{\text{ima}} \qquad \text{gap}(\sigma) = \frac{\text{gap}}{\mathrm{SEE}}
+$$
 Örnek: TURKGB 2033 bir haftada +%2 yükseldi. İma edilen banka hareketi: $1.514 \times 2 + 0.408 = +3.44$ yani +%3.44. XLBNK gerçekte +%1.0 yaptıysa gap $= 1.0 - 3.44 = -2.44$ puan; sigma cinsinden $-2.44 / 4.6 = -0.53\sigma$. Üç adımın üçü de zorunludur — özellikle üçüncüsü: **gap'i puanla değil sigma ile konuşun.** "Banka 2.4 puan geride" cümlesi dramatik durur; "$-0.5\sigma$, haftaların üçte birinde görülen sapma" cümlesi gerçeği söyler.
 
 Alpha'yı dahil etmeli mi? Tek haftalık imada $\alpha = 0.408$ küçüktür ve $t(\alpha) = 0.89$ ile zaten anlamsızdır; dahil edip etmemek sonucu değiştirmez (3.44 vs 3.03). Kümülatif ufuklarda ise bu karar kritikleşir — kural 10.7'de.
@@ -618,8 +632,9 @@ Regresyon, X verildiğinde Y için tek bir sayı değil bir **dağılım** söyl
 
 #### Beta belirsizliğinin bant üzerindeki etkisi
 
-$$\text{Bant}(1\sigma) \approx \sqrt{\mathrm{SEE}^2 + (\mathrm{SE}(\beta)\cdot\Delta X)^2 + \mathrm{SE}(\alpha)^2}$$
-
+$$
+\text{Bant}(1\sigma) \approx \sqrt{\mathrm{SEE}^2 + (\mathrm{SE}(\beta)\cdot\Delta X)^2 + \mathrm{SE}(\alpha)^2}
+$$
 $\beta$'nın kendisi de ±0.188 hatayla ölçüldüğü için, büyük $\lvert\Delta X\rvert$ senaryolarında bant ek genişler — ama kareler toplamıyla girdiğinden etki sanılandan küçüktür: $\Delta X$ = %2'de bant 4.6 → 4.6; %5'te 4.7; %10'da 5.0; örneklem ucundaki %13.7'de 5.3. Ders: bu çiftte belirsizliğin ezici kaynağı her zaman SEE'dir (yani $R^2$'nin düşüklüğü), betanın ölçüm hatası değil.
 
 <div class="not">
@@ -707,8 +722,9 @@ Panelle bağ: Bölüm 5.3–5.4'teki Last Spread/Last Ratio bu yüzden bu çiftt
 
 Kümülatif okumalar masaların en sevdiği ve istatistiğin en acımasız olduğu yerdir. $k$ haftalık ufukta:
 
-$$\Delta Y_{\text{ima}}^{\text{kum}} \approx \beta \cdot \Delta X_{\text{kum}} + k \cdot \alpha \qquad\qquad \sigma_{\text{kum}} = \sqrt{k}\cdot \mathrm{SEE}$$
-
+$$
+\Delta Y_{\text{ima}}^{\text{kum}} \approx \beta \cdot \Delta X_{\text{kum}} + k \cdot \alpha \qquad\qquad \sigma_{\text{kum}} = \sqrt{k}\cdot \mathrm{SEE}
+$$
 - **Bant $\sqrt{k}$ ile büyür:** 4 haftada ±9.2, 8 haftada ±13.0, 12 haftada ±15.9 puan ($1\sigma$). Kümülatif gap'ler puan olarak büyük **görünür** ama cetvel de aynı hızla uzar — sigma'ya çevirmeden söylenen her kümülatif "geride kaldı" cümlesi boştur.
 - **Alpha kararı:** $k\cdot\alpha$ terimi kümülatifte ciddileşir (12 haftada $12\times 0.408 \approx 4.9$ puan). Ama bu örnekte $t(\alpha) = 0.89 < 2$: alpha sıfırdan ayırt edilemiyor. Kural: $t(\alpha) < 2$ ise kümülatif imada $\alpha = 0$ alın (ya da $\alpha$'lı/$\alpha$'sız iki senaryoyu birden gösterin). Anlamsız alpha'yı kümülatife koymak, veriye drift uydurmaktır.
 - **Doğru görsel:** kümülatif artık (cumulative gap) grafiği + $\sqrt{k}$ ile büyüyen **koni** bandı. Yaygın hata: koninin yerine sabit $\pm 2\sigma$ yatay çizgisi çizmek — ufuk uzadıkça her seri o çizgiyi "aşar" ve sahte sinyal üretir. Alternatif: her noktada gap'i $\sqrt{k}$'ye bölüp normalize edin (10.11 ve 10.13'te hazır), o zaman yatay ±2 çizgisi doğru olur.
@@ -758,8 +774,9 @@ Beşte dördü "dönüş" diyorsa convergence pozisyonu (makasın kapanmasına o
 
 #### P&L kimliği
 
-$$\text{Haftalık P\&L (TL)} = V_Y\cdot\Delta Y\% - V_X\cdot\Delta X\% = V_Y\cdot(\Delta Y\% - \beta\cdot\Delta X\%) = V_Y\cdot\frac{\alpha+\varepsilon}{100}$$
-
+$$
+\text{Haftalık P\&L (TL)} = V_Y\cdot\Delta Y\% - V_X\cdot\Delta X\% = V_Y\cdot(\Delta Y\% - \beta\cdot\Delta X\%) = V_Y\cdot\frac{\alpha+\varepsilon}{100}
+$$
 $V_Y$ = 100 mn TL long XLBNK + $V_X$ = 151.4 mn TL short TURKGB 2033 kurulumunda pozisyonun haftalık P&L'i **tam olarak artık serisidir**: beklenen $\alpha$ bacağı ≈ +0.41 mn/hafta ($t(\alpha) < 2$ — üzerine plan yapılmaz), oynaklık = SEE × $V_Y$ = ±4.6 mn/hafta. Pratik sonuç: 10.11'deki kümülatif gap grafiği, $V_Y/100$ ile ölçeklenmiş hâliyle pozisyonunuzun P&L eğrisinin kendisidir — **monitör ile pozisyon aynı grafiktir.**
 
 - **Convergence kazancı:** $-2\sigma$'dan girip 0'da kapanan bir açık $+2\times 4.6 = 9.2$ puan → 100 mn'lik Y bacağında ≈ +9.2 mn TL realize eder.
@@ -769,8 +786,9 @@ $V_Y$ = 100 mn TL long XLBNK + $V_X$ = 151.4 mn TL short TURKGB 2033 kurulumunda
 
 Half-life, sapmanın yarısının kapanması için beklenen süredir. Kaba hesap: $\lvert z\rvert = 2$'de girip 0.5'te çıkan pozisyonun beklenen kazancı $1.5\cdot\mathrm{SEE}$ puandır; taşınma süresi ≈ 2 half-life ($h$); bu ufuktaki artık oynaklığı ≈ $\mathrm{SEE}\cdot\sqrt{2h}$. Oran:
 
-$$\frac{\text{Reward}}{\text{Risk}} \approx \frac{1.5\cdot\mathrm{SEE}}{\mathrm{SEE}\cdot\sqrt{2h}} = \frac{1.5}{\sqrt{2h}} \quad\text{— SEE sadeleşir!}$$
-
+$$
+\frac{\text{Reward}}{\text{Risk}} \approx \frac{1.5\cdot\mathrm{SEE}}{\mathrm{SEE}\cdot\sqrt{2h}} = \frac{1.5}{\sqrt{2h}} \quad\text{— SEE sadeleşir!}
+$$
 | Half-life (hafta) | Reward/Risk | Yorum |
 |---|---|---|
 | 1 | ≈ 1.06 | Ancak başabaş — sinyal frekansı yüksekse portföy düzeyinde çalışır. |
@@ -784,8 +802,9 @@ $$\frac{\text{Reward}}{\text{Risk}} \approx \frac{1.5\cdot\mathrm{SEE}}{\mathrm{
 
 HRA gap'in büyüklüğünü söyler, **ömrünü söylemez**. Oysa 10.10'un gösterdiği gibi pozisyon ekonomisinin tek belirleyicisi ömürdür. Kapanma hızı, kümülatif gap serisine AR(1) uydurularak tahmin edilir:
 
-$$\Delta z(t) = c + \varphi\cdot z(t-1) + u(t) \qquad\qquad \text{Half-life} = \frac{-\ln 2}{\ln(1+\varphi)} \quad (\varphi < 0 \text{ ise})$$
-
+$$
+\Delta z(t) = c + \varphi\cdot z(t-1) + u(t) \qquad\qquad \text{Half-life} = \frac{-\ln 2}{\ln(1+\varphi)} \quad (\varphi < 0 \text{ ise})
+$$
 Bölüm 9.2'deki koda eklenecek monitör bloğu — ima/gerçekleşen serisi, büyüyen koni bandı, normalize $z$ ve half-life birlikte:
 
 ```python
