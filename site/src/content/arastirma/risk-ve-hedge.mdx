@@ -14,7 +14,7 @@ import ForwardDv01Hesaplayici from '../../components/ForwardDv01Hesaplayici.astr
 
 Aynı forward işlemi için elle hesaplanan TRY DV01'i **72.500 TL/bp**, sürekli faizle **114.400 TL/bp**, kurumsal risk sisteminin raporunda ise **yaklaşık 110.000 TL/bp** çıkıyor. Üç sayı, tek işlem. Hangisi doğru? Bu dersin tamamı bu tek sorunun cevabını kurar ve cevap tek bir kelimededir: **konvansiyon**.
 
-Ders, sitedeki "USDTRY Forward DV01 — Dual-Curve Faiz Riski" dersinin yanında durur: orada forward DV01'inin $DF^2$ mekaniği, işlem faizi ile eğri faizi ayrımı, bump-and-reprice ve carry / P&L variance ayrıntılı biçimde türetilmişti — burada onlar tekrar edilmez, gerektiğinde atıf yapılır. Eğri bootstrap ve asset swap tarafı için "IRS Bootstrapping & ASW" ve "Asset Swap Trade" dersleri temeli kurar. Bu dersin kendi katkısı üç halkayı birbirine bağlamaktır: **konvansiyon ile DV01 arasındaki mekanik bağ**, **sistem çıktısının mutabakatı** ve **hedge nominalinin doğru boyutlanması**.
+Ders iki katmanı tek yerde toplar. **2. bölüm** outright USDTRY forward'ın risk anatomisini kurar: iki bacaklı nakit akışı, $DF^2$'nin kesir türevinden doğuşu, işlem faizi ile eğri faizi ayrımı, bump-and-reprice ve carry / P&L ayrıştırması. **3. bölümden itibaren** aynı vaka üzerinden konvansiyon meselesine geçilir ve hedge nominaline kadar gidilir. Eğri bootstrap tarafı için [Faiz Teorisi ve Eğri İnşası](/arastirma/faiz-egrisi-ve-konvansiyonlar/), asset swap tarafı için [Trade Pratiği](/arastirma/trade-pratigi/) temeli kurar. Bu dersin kendi katkısı üç halkayı birbirine bağlamaktır: **konvansiyon ile DV01 arasındaki mekanik bağ**, **sistem çıktısının mutabakatı** ve **hedge nominalinin doğru boyutlanması**.
 
 ### Bu ders hakkında
 
@@ -188,7 +188,7 @@ $$
 $$
 \text{Yıllık:} \quad \frac{\partial DF}{\partial z} = -\frac{t}{1+z}\,DF \;\;\Rightarrow\;\; DV01 = N \, \frac{t}{1+z} \, DF \times 10^{-4}
 $$
-Simple durumdaki $DF^2$'nin nereden geldiği kesir türevinin imzasıdır: $DF = 1/(1+zt)$ ve $d(1/f)/dz = -f'/f^2$; $f' = t$ olduğundan sonuç $-t/(1+zt)^2 = -t\,DF^2$. (Bu terimin ayrıntılı sezgisi "USDTRY Forward DV01" dersinde işlenmişti.) Kilit oran, sürekli ile simple bump'ın karşılaştırmasıdır:
+Simple durumdaki $DF^2$'nin nereden geldiği kesir türevinin imzasıdır: $DF = 1/(1+zt)$ ve $d(1/f)/dz = -f'/f^2$; $f' = t$ olduğundan sonuç $-t/(1+zt)^2 = -t\,DF^2$. (Bu terimin ayrıntılı sezgisi bu dersin 2. bölümünde işlenmişti.) Kilit oran, sürekli ile simple bump'ın karşılaştırmasıdır:
 
 $$
 \frac{DV01_{cont}}{DV01_{simple}} = \frac{1}{DF} = 1 + z_{simple}\,t

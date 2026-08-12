@@ -28,7 +28,7 @@ pay/receive kararının anatomisinden spread/fly kataloglarına.
 
 ### Bölüm A — Asset swap trade
 
-Bu ders, **ASW'nin nasıl fiyatlandığını** anlatan "IRS Bootstrapping & ASW" dersinin devamıdır. Orada asset swap spread'in **nereden geldiğini** (eğri bootstrap, DF'ler, par swap oranı, spread'in NPV'si) türettik. Burada ise aynı işlemin **nasıl taşındığını** ele alıyoruz: nakit akışları, süreç-içi gerçeğe uygun değerleme (MTM), muhasebe kayıtları, P&L'in nasıl yazıldığı, giriş/çıkış zamanlaması ve riskler. Fiyatlama detaylarını (DF'lerin interpolasyonu, spread'in bootstrap'tan çözülmesi) tekrar etmiyoruz; gerektiğinde diğer derse atıf yapıyoruz.
+Bu bölüm, **ASW'nin nasıl fiyatlandığını** anlatan [Enstrüman Fiyatlama](/arastirma/enstruman-fiyatlama/) dersinin devamıdır. Orada asset swap spread'in **nereden geldiği** (par swap oranı, spread'in NPV'si) türetilir; eğrinin kendisi ise [Faiz Teorisi ve Eğri İnşası](/arastirma/faiz-egrisi-ve-konvansiyonlar/) dersinde kurulur. Burada ise aynı işlemin **nasıl taşındığını** ele alıyoruz: nakit akışları, süreç-içi gerçeğe uygun değerleme (MTM), muhasebe kayıtları, P&L'in nasıl yazıldığı, giriş/çıkış zamanlaması ve riskler. Fiyatlama detaylarını (DF'lerin interpolasyonu, spread'in bootstrap'tan çözülmesi) tekrar etmiyoruz; gerektiğinde diğer derse atıf yapıyoruz.
 
 Boydan boya tek bir örnek işlemi izleyeceğiz:
 
@@ -52,7 +52,7 @@ Pay olan $1 - DF_N$ swap'ın değişken bacağının PV'sinin (par floater'ın) 
 
 Bu oran (**%33,363**) tahvilin kupon oranına (%33,26) çok yakın, iç veriminin (%35,72) belirgin altındadır — tahvilin swap eğrisine göre iskontolu (ucuz) durduğunu doğrudan gösterir. Sezgi: eğer tahvili sabit oranlı swap oranıyla iskontolasaydık fiyat ~par civarında çıkardı; oysa piyasa tahvili daha yüksek bir iç verimle (%35,72) iskontoluyor, demek ki swap eğrisinin *üzerinde* bir getiri talep ediyor. Bu fazlalık asset swap spread'dir.
 
-<div class="not"><span class="etiket">Fiyatlama ayrı derste</span> DF'lerin interpolasyonu ve spread'in bootstrap eğrisinden çözümü "IRS Bootstrapping & ASW" dersinde adım adım türetildi. Burada oranı veri kabul edip işlemin taşınmasına odaklanıyoruz. DF'ler değişirse oran otomatik güncellenir; canlı hesap sistemdeki 'Swap Oranı' bölümündedir.</div>
+<div class="not"><span class="etiket">Fiyatlama ayrı derste</span> DF'lerin interpolasyonu <a href="/arastirma/faiz-egrisi-ve-konvansiyonlar/">Faiz Teorisi ve Eğri İnşası</a>, spread'in par swap oranından çözümü ise <a href="/arastirma/enstruman-fiyatlama/">Enstrüman Fiyatlama</a> dersinde adım adım türetildi. Burada oranı veri kabul edip işlemin taşınmasına odaklanıyoruz. DF'ler değişirse oran otomatik güncellenir; canlı hesap sistemdeki 'Swap Oranı' bölümündedir.</div>
 
 #### 1.2 Risk ve DV01 hedge
 
@@ -547,7 +547,7 @@ kalanını metin okunduktan sonra tamamla.
 <div class="not">
   <span class="etiket">Bağlantılı araç</span>
   Aynı merdiven çözümünü canlı bir bootstrap eğrisi üzerinde yapan araç
-  <a href="/arastirma/faiz-egrisi-ve-konvansiyonlar/">IRS Bootstrapping &amp; ASW</a> dersindeki
+  <a href="/arastirma/enstruman-fiyatlama/">Enstrüman Fiyatlama</a> dersindeki
   <em>Forward &amp; MPC Hesaplayıcısı</em>'dır: eğriyi bootstrap'ler, toplantı
   tarihlerine göre ima edilen adımları çıkarır. Buradaki aritmetik onun elle yapılmış
   hâlidir.
@@ -893,8 +893,8 @@ karar swap spreadinin (DİBS − OIS) seviyesine bakılarak verilir.
   mirası + HTM defterleri) güçlü olduğu dönemlerde DİBS, OIS'in altında getiriyle işlem
   görebilir; talebin çekildiği veya arzın yoğunlaştığı dönemlerde tersine döner. 5y'de
   receive/pay kararını <strong>her zaman aynı vadedeki DİBS'e karşı</strong> fiyatla —
-  bazen doğru işlem swap değil ASW'dir. Kurulum ve P&amp;L mekaniği için:
-  <a href="/arastirma/trade-pratigi/">Asset Swap Trade</a>.
+  bazen doğru işlem swap değil ASW'dir. Kurulum ve P&amp;L mekaniği bu dersin
+  <a href="#a1-i̇şlemin-yapısı">Bölüm A</a>'sındadır.
 </div>
 
 #### 4.3 6y ve 7y: kimin vadesi?
