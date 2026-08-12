@@ -45,8 +45,12 @@ def _duzen(fig, baslik, y_baslik, alt_not=""):
     fig.update_xaxes(gridcolor=GRID, zeroline=False, automargin=True)
     fig.update_yaxes(gridcolor=GRID, zeroline=False, automargin=True)
     if alt_not:
-        fig.add_annotation(text=alt_not, xref="paper", yref="paper", x=0, y=-0.28,
-                           showarrow=False, xanchor="left",
+        # <br> iceren notlar iki satir: alt bosluk ve konum ona gore
+        satir = alt_not.count("<br>") + 1
+        fig.update_layout(margin=dict(l=60, r=20, t=52, b=80 + 16 * (satir - 1)))
+        fig.add_annotation(text=alt_not, xref="paper", yref="paper", x=0,
+                           y=-0.28 - 0.05 * (satir - 1),
+                           showarrow=False, xanchor="left", align="left",
                            font=dict(size=10, color="#6b6b6b"))
     return fig
 
@@ -270,7 +274,66 @@ def uret_ek():
     return yollar
 
 
+def uret_konsept_oranlari():
+    """PNG 09-12: her konsept icin AYRI oran grafigi.
+
+    Birlesik grafikte (oran_konseptler.html) olmayan uc katman burada var:
+      · konsepte ozgu 2013-2022 ortalama cizgisi, degeri etiketli
+      · Nisan 2022 splice isareti (fiyat tarafi proxy'ye gectigi an)
+      · Tem-2024 ve Tem-2026 noktalarinin isaretlenip etiketlenmesi
+    """
+    import endeks as _e
+    ETIKET = {"kirmizi_et": "Kırmızı et ağırlıklı", "tavuk": "Tavuk eti ağırlıklı",
+              "ev_yemekleri": "Ev yemekleri", "fast_food": "Fast-food"}
+    RENK = {"ev_yemekleri": TEAL, "kirmizi_et": CLARET, "tavuk": GOLD, "fast_food": "#2f4b7c"}
+    SPLICE = pd.Timestamp("2022-04-01")
+
+    oran = _oku("Fiyat_maliyet_orani")
+    uzun = oran.loc["2013-01-01":"2022-12-31"].mean()
+    yollar = []
+
+    for k in ["ev_yemekleri", "kirmizi_et", "tavuk", "fast_food"]:
+        if k not in oran.columns:
+            print(f"  UYARI: {k} sutunu yok, atlandi"); continue
+        srs = oran[k].dropna()
+        renk = RENK[k]
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(x=srs.index, y=srs.values, name="Fiyat / maliyet",
+                                 line=dict(color=renk, width=2.4)))
+        # uzun donem ortalama
+        ort = float(uzun[k])
+        fig.add_hline(y=ort, line=dict(color="#90a4ae", width=1.4, dash="dash"),
+                      annotation_text=f"2013–2022 ort. {ort:.2f}".replace(".", ","),
+                      annotation_position="bottom right",
+                      annotation_font=dict(size=11, color="#6b6b6b"))
+        # splice isareti
+        # add_vline'in annotation'i datetime ekseninde pandas ile catisiyor
+        # (Timestamp + int); cizgi ile etiket AYRI eklenir.
+        fig.add_shape(type="line", x0=SPLICE, x1=SPLICE, y0=0, y1=1, yref="paper",
+                      line=dict(color="#90a4ae", width=1, dash="dot"))
+        fig.add_annotation(x=SPLICE, y=1.02, yref="paper", showarrow=False,
+                           text="Nis 2022: fiyat tarafı proxy'ye geçer",
+                           xanchor="left", font=dict(size=10, color="#6b6b6b"))
+        # iki kilit nokta
+        for t in ["2024-07-01", "2026-07-01"]:
+            ts = pd.Timestamp(t)
+            if ts not in srs.index: continue
+            v = float(srs.loc[ts])
+            fig.add_trace(go.Scatter(x=[ts], y=[v], mode="markers+text",
+                                     marker=dict(color=renk, size=9),
+                                     text=[f"{v:.2f}".replace(".", ",")],
+                                     textposition="top center",
+                                     textfont=dict(color=renk, size=12),
+                                     showlegend=False, hoverinfo="skip"))
+        _duzen(fig, f"Fiyat / maliyet oranı — {ETIKET[k]} (2013 Ocak = 1)", "oran",
+               "Oran kâr marjı SEVİYESİNİ göstermez; 2013 Ocak'a göre göreli seviyedir.<br>"
+               "Nis 2022 sonrası fiyat tarafı 11111/11112 endeksleriyle uzatılmış proxy'dir.")
+        yollar.append(_yaz(fig, f"oran_{k}.html"))
+    return yollar
+
+
 if __name__ == "__main__":
     y = uret()
     y += uret_ek()
+    y += uret_konsept_oranlari()
     print(f"\nTOPLAM {len(y)} grafik.")

@@ -1,6 +1,6 @@
 ---
 title: 'Yiyecek Hizmetleri: Fiyat/Maliyet Marjı'
-description: 'TCMB Ekonomi Notu 24/17''nin kamuya açık veriyle replikasyonu ve Temmuz 2026''ya güncellenmesi: 13 tarif, beş maliyet kalemi, dört konsept — 13 grafik, 18 senaryoluk duyarlılık ve proxy dökümüyle.'
+description: 'TCMB Ekonomi Notu 24/17''nin kamuya açık veriyle replikasyonu ve Temmuz 2026''ya güncellenmesi: 13 tarif, beş maliyet kalemi, dört konsept — 17 grafik, 18 senaryoluk duyarlılık ve proxy dökümüyle.'
 pubDate: 2026-08-07
 updatedDate: 2026-08-07
 tags: ['enflasyon', 'tüfe', 'marj', 'replikasyon']
@@ -109,7 +109,7 @@ maliyeti, tariflerin ağırlıklı ortalamasıdır.
 **4 — Fiyat tarafı.** Yemek hizmeti maddelerinin fiyat endeksi. Fiyat/maliyet oranı, iki
 endeksin 2013 Ocak = 100 tabanındaki oranıdır.
 
-## Şekil 04-05 — Fiyat/maliyet oranı ve konseptler arası ayrışma
+## Şekil 04-09 — Fiyat/maliyet oranı: birleşik, normalize ve konsept konsept
 
 <GrafikEmbed
   src="/projeler/yiyecek-hizmetleri-marj/oran_konseptler.html"
@@ -145,16 +145,63 @@ Okuma: fast-food/ev oranı uzun dönemde 1,21 iken Tem-2024'te 1,25, Tem-2026'da
 ayrışma daralmadı, genişledi. Kırmızı et/ev ise 0,95→0,99 ile ev yemeklerine yakınsadı;
 kırmızı et enflasyonunun (girdi maliyeti) yüksek seyri bu konseptte makası dar tutuyor.
 
-## Şekil 06-08 — Endeksler ve bileşenler
+### Konsept konsept: her birinin kendi hikâyesi
+
+Birleşik grafik dört seriyi yan yana koyar; aşağıdaki dört panel her konsepti **kendi
+uzun dönem ortalamasına karşı** gösterir. Üç ek katman taşırlar: konsepte özgü 2013–2022
+ortalama çizgisi (değeri etiketli), **Nisan 2022 splice işareti** — fiyat tarafının
+proxy'ye geçtiği an — ve Temmuz 2024 ile Temmuz 2026 noktalarının işaretlenmesi. Makasın
+ne zaman açıldığını ve kapanıp kapanmadığını konsept bazında burada okursunuz.
+
+<GrafikEmbed
+  src="/projeler/yiyecek-hizmetleri-marj/oran_ev_yemekleri.html"
+  baslik="Fiyat/maliyet oranı — ev yemekleri"
+  no="06"
+  yukseklik={460}
+/>
+
+<GrafikEmbed
+  src="/projeler/yiyecek-hizmetleri-marj/oran_kirmizi_et.html"
+  baslik="Fiyat/maliyet oranı — kırmızı et ağırlıklı"
+  no="07"
+  yukseklik={460}
+/>
+
+<GrafikEmbed
+  src="/projeler/yiyecek-hizmetleri-marj/oran_tavuk.html"
+  baslik="Fiyat/maliyet oranı — tavuk eti ağırlıklı"
+  no="08"
+  yukseklik={460}
+/>
+
+<GrafikEmbed
+  src="/projeler/yiyecek-hizmetleri-marj/oran_fast_food.html"
+  baslik="Fiyat/maliyet oranı — fast-food"
+  no="09"
+  yukseklik={460}
+/>
+
+**Dört panel nasıl hesaplanıyor.** Seri Şekil 04'ün aynısıdır ($R_t = (P_t/P_0)/(C_t/C_0)$);
+farkı sunumdadır. Kesikli yatay çizgi o konseptin **2013–2022 ortalamasıdır** — makasın
+"normal" seviyesi. Noktalı dikey çizgi **Nisan 2022**'dir: TÜİK madde fiyatı yayınının
+durduğu, fiyat tarafının 5'li grup endeksleriyle uzatılmaya başlandığı tarih (PROXY 2).
+Bu çizginin **sağındaki** hareket, solundakinden daha zayıf kanıttır — ürün-özel fiyat
+sıçramaları agregatta törpülenir.
+
+Panellerin birlikte söylediği: ev yemeklerinde makas 2023'te açıldı ve **tam plato**
+(1,27 → 1,27); kırmızı ette maliyet baskısı makası dar tuttu; tavukta ve fast-food'da
+açılma sürüyor — fast-food ortalamasının 1,4 katı üzerinde.
+
+## Şekil 10-12 — Endeksler ve bileşenler
 
 <GrafikEmbed
   src="/projeler/yiyecek-hizmetleri-marj/maliyet_endeksleri.html"
   baslik="Konsept maliyet endeksleri (2013 Ocak = 100, log ölçek)"
-  no="06"
+  no="10"
   yukseklik={520}
 />
 
-**Şekil 06 nasıl hesaplanıyor.** Konsept maliyeti beş kalemin ağırlıklı geometrik
+**Şekil 10 nasıl hesaplanıyor.** Konsept maliyeti beş kalemin ağırlıklı geometrik
 bileşimidir:
 
 $$
@@ -169,35 +216,35 @@ dönemi okunamaz hale getirir.
 <GrafikEmbed
   src="/projeler/yiyecek-hizmetleri-marj/fiyat_endeksleri.html"
   baslik="Konsept fiyat endeksleri (2013 Ocak = 100, log ölçek)"
-  no="07"
+  no="11"
   yukseklik={520}
 />
 
-**Şekil 07 nasıl hesaplanıyor.** Yemek hizmeti maddelerinin fiyat endeksi. Nisan 2022'ye
+**Şekil 11 nasıl hesaplanıyor.** Yemek hizmeti maddelerinin fiyat endeksi. Nisan 2022'ye
 kadar MEDAS ortalama madde fiyatlarının rölatifi; sonrası COICOP-2018 5'li grup
 endeksleriyle eklemlenir (aşağıdaki PROXY 2).
 
 <GrafikEmbed
   src="/projeler/yiyecek-hizmetleri-marj/maliyet_bilesenleri.html"
   baslik="Maliyet bileşenleri: işgücü, gıda, enerji, kira, diğer"
-  no="08"
+  no="12"
   yukseklik={520}
 />
 
-**Şekil 08 nasıl hesaplanıyor.** Beş kalemin ham endeksleri, ağırlıklandırılmadan.
+**Şekil 12 nasıl hesaplanıyor.** Beş kalemin ham endeksleri, ağırlıklandırılmadan.
 Kalemler arası hız farkı burada görünür: **kira**, %10'luk küçük ağırlığına rağmen iki
 yılda +%160 ile en hızlı artan kalemdir.
 
-## Şekil 09 — Maliyet artışının kalem katkıları
+## Şekil 13 — Maliyet artışının kalem katkıları
 
 <GrafikEmbed
   src="/projeler/yiyecek-hizmetleri-marj/katki_ayristirma.html"
   baslik="Maliyet artışının kalem katkıları, Temmuz 2024 → Temmuz 2026"
-  no="09"
+  no="13"
   yukseklik={520}
 />
 
-**Şekil 09 nasıl hesaplanıyor.** Kalem $j$'nin iki yıllık katkısı, ağırlığı çarpı kendi
+**Şekil 13 nasıl hesaplanıyor.** Kalem $j$'nin iki yıllık katkısı, ağırlığı çarpı kendi
 artışıdır:
 
 $$
@@ -215,16 +262,16 @@ yakın. Ücretler enflasyona endekslenseydi işgücü katkısı iki yılda ~8–
 olurdu — fiyat/maliyet platosunun bir bölümü bu **reel ücret erozyonunun** marj üzerindeki
 rahatlatıcı etkisiyle uyumlu.
 
-## Şekil 10 — Food-cost oranı: çıpasız doğrulama
+## Şekil 14 — Food-cost oranı: çıpasız doğrulama
 
 <GrafikEmbed
   src="/projeler/yiyecek-hizmetleri-marj/food_cost.html"
   baslik="Food-cost oranı — porsiyon gramajıyla, çıpa varsayımı olmadan"
-  no="10"
+  no="14"
   yukseklik={540}
 />
 
-**Şekil 10 nasıl hesaplanıyor.** Bu, oranların **çıpasız** karşılığıdır: tarifin porsiyon
+**Şekil 14 nasıl hesaplanıyor.** Bu, oranların **çıpasız** karşılığıdır: tarifin porsiyon
 gramajından gıda maliyeti TL olarak hesaplanır ve satış fiyatına bölünür:
 
 $$
@@ -237,16 +284,16 @@ ortalamasının altında (çorba %19→%14, fasulye %17→%10, pizza %31→%22).
 Adana kebapta (%38→%37)** — kırmızı et maliyet baskısının makası dar tuttuğunun maliyet
 tarafı kanıtı.
 
-## Şekil 11 — İma edilen kârlılık: senaryolu türetim
+## Şekil 15 — İma edilen kârlılık: senaryolu türetim
 
 <GrafikEmbed
   src="/projeler/yiyecek-hizmetleri-marj/ima_marj.html"
   baslik="İma edilen satış kârlılığı — merkez senaryo (m₀ = %22,5)"
-  no="11"
+  no="15"
   yukseklik={520}
 />
 
-**Şekil 11 nasıl hesaplanıyor.** Oranlar tek başına marj *seviyesi* vermez; seviye ancak
+**Şekil 15 nasıl hesaplanıyor.** Oranlar tek başına marj *seviyesi* vermez; seviye ancak
 bir çıpa varsayımıyla türetilebilir. Notun kendi dipnotundaki sektör derneği (TURYİD)
 bandı — işletmeler tipik olarak %70–85 maliyet, **%15–30 kârlılıkla** çalışır — 2013–2022
 "normal" dönem ortalamasına çıpalanır:
@@ -271,16 +318,16 @@ yön okuması için **merkez senaryo** esas alınmalıdır. Gerçekleşen marjla
 için KAP'taki halka açık yeme-içme şirketlerinin brüt marjları ve TÜİK Yıllık
 Sanayi-Hizmet İstatistikleri'ndeki (NACE I-56) brüt işletme artığı/ciro oranı izlenebilir.
 
-## Şekil 12 — Duyarlılık: bulgu varsayımlara dayanıklı mı?
+## Şekil 16 — Duyarlılık: bulgu varsayımlara dayanıklı mı?
 
 <GrafikEmbed
   src="/projeler/yiyecek-hizmetleri-marj/duyarlilik.html"
   baslik="18 senaryoda Temmuz 2026 fiyat/maliyet oranı"
-  no="12"
+  no="16"
   yukseklik={520}
 />
 
-**Şekil 12 nasıl hesaplanıyor.**
+**Şekil 16 nasıl hesaplanıyor.**
 <Deger proje="yiyecek-hizmetleri-marj" anahtar="senaryo_adet" ondalik={0}>18</Deger>
 koşu = **3 ağırlık seti × 3 kira göstergesi × tür kaması açık/kapalı**. Kutu genişliği
 bulgunun varsayımlara duyarlılığını gösterir: dar kutu = sonuç sağlam.
@@ -369,11 +416,11 @@ yeniden ölçeklemesi (aylık fark ≤0,007 puan); Ocak 2026 zinciri tutarlı.
 <GrafikEmbed
   src="/projeler/yiyecek-hizmetleri-marj/hizmet_ciro.html"
   baslik="Hizmet ciro endeksleri — yıllık % değişim"
-  no="13"
+  no="17"
   yukseklik={470}
 />
 
-**Şekil 13 nasıl hesaplanıyor.** TÜİK Ticaret ve Hizmet Ciro Endeksleri (2015=100), NACE
+**Şekil 17 nasıl hesaplanıyor.** TÜİK Ticaret ve Hizmet Ciro Endeksleri (2015=100), NACE
 bölümleri bazında. Aylık arındırılmamış endekslerin **yıllık ortalaması** alınır, sonra
 yıldan yıla yüzde değişim hesaplanır. Cari fiyatlarla olduğu için reel talebi değil
 **nominal ciroyu** ölçer: fiyat artışı ile hacim artışını ayırmaz. Bu yüzden tek başına
@@ -388,7 +435,7 @@ konseptinde (maliyet baskısı kaynaklı) görülüyor.
 ## Sınırlar ve yorum notları
 
 - **Oranlar kâr marjı seviyesi değildir** (sayfanın başındaki uyarı). Seviye okuması için
-  Şekil 11'in bandı kullanılır.
+  Şekil 15'in bandı kullanılır.
 - **Nisan 2022 sonrası madde düzeyi ve tür ayrımı proxy'dir.** Duyarlılık tablosunda üç
   ağırlık seti × üç kira göstergesi × kama açık/kapalı 18 senaryoda ana bulgular
   dayanıklıdır.
