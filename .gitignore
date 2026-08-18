@@ -30,3 +30,7 @@ Aktarılacak Projeler/indices/data/news_cache.json
 # (CI'da TTO_EVDS_KEY ortam değişkeni / depo secret'ı kullanılır)
 .evds_key
 **/.evds_key
+
+# Proje basina sanal ortamlar (bat/*/kur.bat olusturur)
+.venv/
+**/.venv/

@@ -1,0 +1,12 @@
+# Yiyecek hizmetleri marjı — TCMB EN 24/17 replikasyonu
+# MEDAS hasadı için Playwright gerekir; data/raw/medas_*.xls mevcutsa atlanır
+# (kurulum: python -m playwright install chromium)
+pandas>=2.0.0
+numpy>=1.24.0
+requests>=2.31.0
+matplotlib>=3.7.0
+plotly>=5.18.0
+openpyxl>=3.1.0
+xlrd>=2.0.0
+pdfplumber>=0.10.0
+playwright>=1.40.0
