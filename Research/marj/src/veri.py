@@ -13,6 +13,8 @@ Kaynaklar:
 
 Her indirme data/cache altına yazılır ve output/log/veri.log'a kaynak+zaman damgası düşülür.
 """
+import os
+import pathlib
 import io, json, time, pathlib, datetime
 import pandas as pd
 import requests
@@ -25,7 +27,26 @@ for p in (CACHE, RAW, LOGD):
     p.mkdir(parents=True, exist_ok=True)
 
 EVDS_BASE = "https://evds3.tcmb.gov.tr/igmevdsms-dis/"
-EVDS_KEY = "5ILfFTTp8n"  # kullanıcı anahtarı
+# EVDS anahtarı kaynak koda GÖMÜLMEZ. Sırayla: TTO_EVDS_KEY ortam değişkeni →
+# proje kökündeki .evds_key dosyası (.gitignore'da). İkisi de yoksa açık hata.
+def _evds_anahtari() -> str:
+    a = (os.environ.get("TTO_EVDS_KEY") or "").strip()
+    if a:
+        return a
+    yol = pathlib.Path(__file__).resolve().parent.parent / ".evds_key"
+    if yol.exists():
+        try:
+            a = yol.read_text(encoding="utf-8").strip()
+        except OSError:
+            a = ""
+        if a:
+            return a
+    raise RuntimeError(
+        "EVDS anahtarı bulunamadı: export TTO_EVDS_KEY=<anahtar> ya da "
+        f"{yol} dosyasına yazın (.gitignore'da)."
+    )
+
+EVDS_KEY = _evds_anahtari()
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36")
 
