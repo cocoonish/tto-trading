@@ -1,14 +1,14 @@
 {
- "_tarih": "03.08.2026",
- "g_tarih": "03.08.2026",
- "g_net": 52.5,
- "g_swap_haric_tarih": "03.08.2026",
- "g_swap_haric": 39.7,
- "g_kur": 47.35,
- "h_tarih": "24.07.2026",
- "h_brut": 163.0,
- "h_net": 51.1,
- "h_swap_haric": 38.3,
- "swap_duzeltme": -12.8,
- "irfcl_tarih": "24.07.2026"
+ "_tarih": "17.08.2026",
+ "g_tarih": "17.08.2026",
+ "g_net": 70.5,
+ "g_swap_haric_tarih": "17.08.2026",
+ "g_swap_haric": 58.1,
+ "g_kur": 47.72,
+ "h_tarih": "07.08.2026",
+ "h_brut": 178.8,
+ "h_net": 63.0,
+ "h_swap_haric": 50.6,
+ "swap_duzeltme": -12.4,
+ "irfcl_tarih": "07.08.2026"
 }

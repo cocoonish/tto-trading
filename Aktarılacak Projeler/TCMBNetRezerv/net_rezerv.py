@@ -586,10 +586,18 @@ def main():
     ap.add_argument("--daily-start", default="01-01-2023",
                     help="günlük seri başlangıcı (gg-aa-yyyy); haftalık seriyi "
                          "kırpmaz")
-    ap.add_argument("--csv", default=None,
-                    help="haftalık seri CSV yolu")
-    ap.add_argument("--daily-csv", default=None,
-                    help="günlük seri CSV yolu")
+    # CSV yolları VARSAYILAN olarak proje klasöründeki dosyalar. Eskiden None'dı ve
+    # yalnız açıkça verilirse yazılıyordu; cron/bat/guncelle.py hepsi parametresiz
+    # çağırdığı için hat hesabı yapıp DOSYAYA YAZMIYORDU — grafik.py ve ozet_uret.py
+    # eski CSV'yi okuyor, sayfa 3 hafta 03.08'de kaldı ve "✓" görünüyordu.
+    # Yazmamak istenirse --no-csv.
+    _burasi = os.path.dirname(os.path.abspath(__file__))
+    ap.add_argument("--csv", default=os.path.join(_burasi, "haftalik_rezerv.csv"),
+                    help="haftalık seri CSV yolu (varsayılan: proje klasörü)")
+    ap.add_argument("--daily-csv", default=os.path.join(_burasi, "gunluk.csv"),
+                    help="günlük seri CSV yolu (varsayılan: proje klasörü)")
+    ap.add_argument("--no-csv", action="store_true",
+                    help="CSV yazma (yalnız ekrana bas)")
     ap.add_argument("--daily-window", type=int, default=20,
                     help="özette gösterilecek son iş günü sayısı")
     ap.add_argument("--validate", action="store_true",
@@ -648,12 +656,11 @@ def main():
                 print(f"  S.Har. -> hesap: {sh:.2f} | resmi: {ref['swap_haric']}"
                       f"  (swap düzeltmesi: {row['swap_duzeltme_usd']:+.2f})")
 
-    if args.csv:
+    if not args.no_csv:
         weekly.to_csv(args.csv)
-        print(f"\nCSV kaydedildi: {args.csv}")
-    if args.daily_csv:
         daily.to_csv(args.daily_csv)
-        print(f"Günlük CSV kaydedildi: {args.daily_csv}")
+        print(f"\nCSV kaydedildi: {args.csv}")
+        print(f"Günlük CSV kaydedildi: {args.daily_csv}  (son: {daily.index[-1]:%d.%m.%Y})")
 
 
 if __name__ == "__main__":

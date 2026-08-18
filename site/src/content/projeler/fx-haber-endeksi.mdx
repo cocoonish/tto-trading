@@ -2,7 +2,7 @@
 title: 'FX Haber-Duyarlılık Endeksi'
 description: 'FinBERT ile skorlanan haber akışından 15 varlıklık duyarlılık endeksi: kullanım kılavuzu, rejim dedektörü, fiyat karşılaştırması, korelasyon analizi ve manşet akışı.'
 pubDate: 2026-07-15
-updatedDate: 2026-08-05
+updatedDate: 2026-08-18
 tags: ['fx', 'sentiment', 'nlp']
 durum: 'aktif'
 kaynak: 'GDELT + Google News RSS + piyasa verisi'
@@ -58,14 +58,14 @@ Endeks tek başına bir al-sat sinyali değildir; katmanlar belirli bir sırayla
 />
 
 Son pipeline koşusunun endeks değerleri, sıralı yatay bar: pozitifler teal, negatifler
-bordo; etiket kategori eşiklerinden. Son okumada uçlar: USD/CHF **+0,52** (Aşırı Alıcı) ve altın **+0,20** bir
-yanda, USD/SEK **−0,66** (Aşırı Satıcı) ve GBP/USD −0,32 diğer yanda.
-Hover her varlığın **skorlu makale sayısını** da gösterir (toplam <Deger proje="fx-haber-endeksi" anahtar="makale_toplam" ondalik={0}>3.462</Deger>) — az makaleli
-varlığın endeksi daha gürültülüdür, kategoriyi buna göre iskonto edin. USD/SEK bu
-turda tam da bunun örneği: **−0,66 ile "Aşırı Satıcı" görünüyor ama arkasında yalnız
-5 skorlu makale var**, yani tek bir olumsuz başlık endeksi uca taşımaya yetmiş. Aynı
-tabloda 200+ makaleli bir varlığın ±0,2'si, USD/SEK'in −0,66'sından daha güvenilir
-bir sinyaldir.
+bordo; etiket kategori eşiklerinden. Son okumada uçlar: ABD 2Y **+0,46** (Alıcı) ve
+ABD 10Y +0,20 bir yanda, USD/CHF **−0,64** (Aşırı Satıcı) ve BIST 100 −0,37 diğer yanda.
+Hover her varlığın **skorlu makale sayısını** da gösterir (toplam <Deger proje="fx-haber-endeksi" anahtar="makale_toplam" ondalik={0}>3.449</Deger>) — az makaleli
+varlığın endeksi daha gürültülüdür, kategoriyi buna göre iskonto edin. USD/CHF bu
+turda tam da bunun örneği: **−0,64 ile "Aşırı Satıcı" görünüyor ama arkasında yalnız
+5 skorlu makale var** — iki hafta önce aynı parite +0,52 ile Aşırı Alıcı'ydı, yine 5
+makaleyle. 116 bp'lik bu ters dönüş piyasa değil örneklem gürültüsüdür; az makaleli
+varlıklarda kategori etiketi değil makale sayısı okunur.
 
 ## Şekil 02 — Endeks tarihçesi
 
@@ -205,7 +205,7 @@ makro yön: USD zayıflığı = pozitif):
 - **PC1** — 60 günlük penceredeki ortak faktör; işaretli skoru genel tonun yönünü,
   açıklanan varyans payı gücünü verir.
 
-Güncel okuma: **<Deger proje="fx-haber-endeksi" anahtar="rejim" ondalik={1}>Transitioning</Deger>** — sepet spread'i <Deger proje="fx-haber-endeksi" anahtar="spread" ondalik={3}>−0,037</Deger> · ortalama korelasyon <Deger proje="fx-haber-endeksi" anahtar="ort_korelasyon" ondalik={3}>0,049</Deger> · PC1 payı <Deger proje="fx-haber-endeksi" anahtar="pc1" ondalik={3}>0,272</Deger> (veri: <Deger proje="fx-haber-endeksi" anahtar="_tarih" ondalik={1}>2026-08-04 20:05 UTC</Deger>).
+Güncel okuma: **<Deger proje="fx-haber-endeksi" anahtar="rejim" ondalik={1}>Transitioning</Deger>** — sepet spread'i <Deger proje="fx-haber-endeksi" anahtar="spread" ondalik={3}>−0,040</Deger> · ortalama korelasyon <Deger proje="fx-haber-endeksi" anahtar="ort_korelasyon" ondalik={3}>−0,025</Deger> · PC1 payı <Deger proje="fx-haber-endeksi" anahtar="pc1" ondalik={3}>0,274</Deger> (veri: <Deger proje="fx-haber-endeksi" anahtar="_tarih" ondalik={1}>2026-08-18 18:54 UTC</Deger>).
 
 Isı haritası (Şekil 08) aynı matrisin çift-çift halidir: hangi varlıkların haber tonu
 birlikte hareket ediyor? Yıldızlı etiketler terslenen pariteleri işaretler.
@@ -288,7 +288,7 @@ kümesinin sürdüğüne bakın — tek kaynaklı tekrar zinciri mi, geniş taba
   yeniden kalibrasyon yapılmadı; kalibrasyon, veri penceresi anlamlı ölçüde
   kaydığında yenilenir.
 - Rejim tarihçesi (Şekil 08) yeni birikmeye başladı: pipeline her koşuda rejimi
-  `index_history`'ye yazıyor, ama şu an elde yalnız <Deger proje="fx-haber-endeksi" anahtar="snapshot_sayisi" ondalik={0}>5</Deger> koşu var.
+  `index_history`'ye yazıyor, ama şu an elde yalnız <Deger proje="fx-haber-endeksi" anahtar="snapshot_sayisi" ondalik={0}>6</Deger> koşu var.
   Bu seri istatistiksel olarak yorumlanabilir hale gelene dek (birkaç düzine koşu)
   panele *trend* diye bakmayın; tek tek noktalar olarak okuyun.
 - **Endeks tarihçesi parametre rejimi karıştırır.** Her snapshot, o gün geçerli olan

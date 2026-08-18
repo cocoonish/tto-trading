@@ -44,6 +44,7 @@ class Hat:
     tam: list[str]                 # ağır hat (boşsa hafif ile aynı)
     kopya: dict[str, str]          # kaynak (klasöre göreli) → hedef dosya adı
     not_: str = ""
+    tarih_anahtari: str = "_tarih" # ozet.json'da veri tarihini taşıyan alan (tazelik denetimi)
 
     def adimlar(self, tam: bool) -> list[str]:
         return (self.tam or self.hafif) if tam else self.hafif
@@ -53,7 +54,7 @@ P = Path("Aktarılacak Projeler")
 HATLAR: list[Hat] = [
     Hat("tcmb", "TCMB Net Rezerv", P / "TCMBNetRezerv", "tcmb-net-rezerv",
         ["net_rezerv.py", "grafik.py", "ozet_uret.py"], [],
-        {"tcmb_rezerv_grafik.html": "grafik.html"}),
+        {"tcmb_rezerv_grafik.html": "grafik.html"}, tarih_anahtari="g_tarih"),
     Hat("usdtry", "USDTRY Devalüasyon", P / "USDTRYDeval", "usdtry-deval",
         ["usdtry_deval_plotly.py", "usdtry_weekly_trends.py", "usdtry_monthly_trends.py", "ozet_uret.py"], [],
         {"usdtry_deval.html": "usdtry_deval.html", "usdtry_deval_3m.html": "usdtry_deval_3m.html",
@@ -101,9 +102,20 @@ def anahtar_uyar():
     print(_renk("  [UYARI] EVDS anahtarı yok (TTO_EVDS_KEY / .evds_key) — EVDS'e giden hatlar düşer.", 33))
 
 
+def _ozet_tarih(h: Hat) -> str | None:
+    """Sitedeki ozet.json'daki veri tarihi — koşu öncesi/sonrası kıyas için."""
+    import json
+    y = SITE / h.slug / "ozet.json"
+    try:
+        return str(json.load(open(y, encoding="utf-8")).get(h.tarih_anahtari))
+    except Exception:
+        return None
+
+
 def kos(h: Hat, tam: bool) -> tuple[bool, str, float]:
     d = KOK / h.klasor
     t0 = time.time()
+    eski_tarih = _ozet_tarih(h)
     for i, adim in enumerate(h.adimlar(tam), 1):
         print(f"    [{i}] {adim}")
         r = subprocess.run([PY, *adim.split()], cwd=d)
@@ -126,7 +138,15 @@ def kos(h: Hat, tam: bool) -> tuple[bool, str, float]:
     oz = d / "ozet.json"
     if oz.exists() and "output/ozet.json" not in h.kopya:
         shutil.copy2(oz, hedef / "ozet.json"); n += 1
-    return True, f"{n} dosya siteye kopyalandı", time.time() - t0
+
+    # TAZELİK DENETİMİ — "koştu ve kopyaladı" yetmez, veri tarihi ilerlemiş mi?
+    # Aynıysa hata DEĞİL (kaynak yeni veri yayımlamamış olabilir: REER aylık, TCMB
+    # haftalık) ama görünür uyarı: TCMB'de net_rezerv.py CSV yazmadığı için hat
+    # 3 hafta "✓" göründü, veri 03.08'de kaldı. Bu satır o hatayı yakalar.
+    yeni_tarih = _ozet_tarih(h)
+    if yeni_tarih and yeni_tarih == eski_tarih:
+        return True, f"{n} dosya kopyalandı — {_renk('veri tarihi DEĞİŞMEDİ: ' + yeni_tarih, 33)}", time.time() - t0
+    return True, f"{n} dosya kopyalandı · veri {eski_tarih or '?'} → {yeni_tarih}", time.time() - t0
 
 
 def ev_stili():
