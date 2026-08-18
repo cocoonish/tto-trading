@@ -77,8 +77,9 @@ def hesapla(sonuc=None):
 
 
 def ozet_tablo(h):
-    """Yemek bazında özet: FC uzun ort./Tem-24/Tem-26 + m49 Tem-26 (gramaj ±%25 bandı)."""
+    """Yemek bazında özet: FC uzun ort. / iki yıl önce / güncel ay + m49 güncel (gramaj ±%25 bandı)."""
     fc, m49 = h["fc"], h["m49"]
+    SON, ONCE = veri.son_ay(), veri.once_ay()
     satirlar = []
     for yemek in fc.columns:
         f = fc[yemek]
@@ -90,9 +91,9 @@ def ozet_tablo(h):
         satirlar.append({
             "Yemek": yemek,
             "FC 2013-2022 ort.": yz(float(f.loc["2013-01-01":"2022-12-01"].mean())),
-            "FC Tem-2024": yz(float(f.loc["2024-07-01"])),
-            "FC Tem-2026": yz(float(f.loc["2026-07-01"])),
-            "m49 Tem-2026 (gramaj ±%25)": f"{yz(float(m_yuk.loc['2026-07-01']))} … {yz(float(m_dus.loc['2026-07-01']))}",
+            f"FC {veri.ad_kisa(ONCE)}": yz(float(f.loc[ONCE])),
+            f"FC {veri.ad_kisa(SON)}": yz(float(f.loc[SON])),
+            f"m49 {veri.ad_kisa(SON)} (gramaj ±%25)": f"{yz(float(m_yuk.loc[SON]))} … {yz(float(m_dus.loc[SON]))}",
         })
     return pd.DataFrame(satirlar)
 

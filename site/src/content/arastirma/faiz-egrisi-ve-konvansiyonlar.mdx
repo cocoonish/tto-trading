@@ -398,8 +398,8 @@ Vakamızda 01.11.2027 muhtemelen iki pillar arasına düşer. Log-lineer ile "ze
 
 ## 6. Deneyin: eğriyi kurun
 
-Aşağıdaki araç SONEXCEL bootstrap'ının portudur; varsayılan kotasyonlarla Excel'in
-DF'lerini $10^{-15}$ hassasiyetle üretir (18M 0,581232 · 2Y 0,494925 · 10Y 0,090716).
+Aşağıdaki araç kaynak bootstrap modelinin portudur; varsayılan kotasyonlarla kaynak
+modelin DF'lerini $10^{-15}$ hassasiyetle üretir (18M 0,581232 · 2Y 0,494925 · 10Y 0,090716).
 Kısa ucu 200 bps indirin: "erken gevşeme" senaryosunun yalnız kısa DF'leri değil,
 annuity kanalıyla bütün eğriyi nasıl oynattığını izleyin. **Bu araca girdiğiniz
 kotasyonlar aşağıdaki forward, swaption ve ASW araçlarının eğrisidir.**
@@ -409,7 +409,7 @@ TL kotasyon dilidir: 3M satırında par kotasyonun tam kendisini görürsünüz 
 ödemeli enstrümanın par oranı zaten kendi zero'sudur; vade uzadıkça basit zero hızla
 büyür (10Y'de %100'ü aşar), çünkü bileşiklenmeyen faiz uzun ufukta anlamını yitirir —
 uzun vadelerin par swap olarak kote edilmesinin sebebi budur. **Sürekli zero** ise
-Excel grid'inin gösterdiği içsel temsildir; eğri karşılaştırmalarında ve
+modelin içsel temsilidir; eğri karşılaştırmalarında ve
 interpolasyonda o kullanılır.
 
 <EgriBootstrap />
@@ -533,13 +533,12 @@ Bu iki eğri arasındaki spread, forward'ı OIS ile hedge ettiğinizde ortaya ç
 - **Üç katmanlı doğrulama:** (i) implied par = girdi par; (ii) toplantı patikası DF'leri =
   OIS DF'leri; (iii) Daily Path = toplantı tablosu. Üçü de ~0 değilse yayına çıkma.
 - **Döngüsel referans yok:** Newton blokları açık iterasyon satırlarıyla kurulur —
-  Excel'de circular reference kapatılmadan tekrarlanabilirlik olmaz.
+  hesap tablosunda döngüsel referans kapatılmadan tekrarlanabilirlik olmaz.
 
 ---
 
-Bu ders `Research/IRS Bootstrapping & ASW Hesaplama` klasöründeki
-`IRS Bootstrapping_SONEXCEL` (IRS Curve · TLREF Meetings · Daily TLREF Path ·
-Swaption Pricer) ve `ASW_Calculator` modellerinin tam dökümüdür; sayfadaki dört araç
-aynı modellerin JavaScript portudur ve Excel çıktılarıyla makine hassasiyetinde
+Bu ders dört kaynak modelin (IRS eğrisi · TLREF toplantı patikası · günlük TLREF
+patikası · swaption fiyatlayıcı) ve ASW hesaplayıcının tam dökümüdür; sayfadaki dört
+araç aynı modellerin JavaScript portudur ve kaynak çıktılarla makine hassasiyetinde
 doğrulanmıştır. Sıradaki adım: kotasyonları her sabah otomatik çekip eğriyi, MPC
 tablosunu ve forward matrisini canlı yayınlamak.

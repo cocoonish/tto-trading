@@ -35,7 +35,7 @@ jobs:
           python-version: '3.11'
 
       - name: Bağımlılıklar
-        run: pip install pandas numpy scipy plotly requests pdfplumber tcmb yfinance openpyxl
+        run: pip install pandas numpy scipy plotly requests pdfplumber tcmb yfinance openpyxl xlrd matplotlib
 
       # Secret eksikse ÖNDEN ve GÜRÜLTÜLÜ düş. Aksi halde EVDS'e giden üç adım
       # tek tek RuntimeError verir, continue-on-error onları yutar ve iş akışı
@@ -133,6 +133,22 @@ jobs:
             cp "$f.html" "$H/$f.html"
           done
           python ozet_uret.py && cp ozet.json "$H/"
+
+      # Marj hattı: EVDS'ten TÜFE/Yi-ÜFE (24 saat TTL'li önbellek), MEDAS ham dosyaları
+      # depodadır (Playwright hasadı CI'da yok — hasat_dene başarısız olursa eski ham
+      # dosyayla devam eder ve uyarı basar). Analiz dönemi veri.son_ay() ile TÜFE'nin
+      # bulunduğu son aya kendiliğinden ilerler; sabit "2026-07" kalmadı.
+      - name: Yiyecek hizmetleri marjı (EVDS TÜFE → 17 grafik + ozet)
+        id: marj
+        continue-on-error: true
+        working-directory: Research/marj
+        run: |
+          python src/run_all.py
+          python src/web_cikti.py
+          python src/ozet_uret.py
+          H="../../site/public/projeler/yiyecek-hizmetleri-marj"
+          cp output/web/*.html "$H/"
+          cp output/ozet.json "$H/"
 
       - name: Ev stilini uygula
         run: python3 site/tools/plotly_stil.py --hepsi

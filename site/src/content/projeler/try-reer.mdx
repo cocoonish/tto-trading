@@ -2,7 +2,7 @@
 title: 'TL Reel Efektif Döviz Kuru'
 description: 'TÜFE ve Yi-ÜFE bazlı REDK''nin %70/%30 bileşimi, 10 ve 5 yıllık ortalamadan sapma ve USD/TRY regresyonlarıyla TL değerleme çerçevesi.'
 pubDate: 2026-07-15
-updatedDate: 2026-08-05
+updatedDate: 2026-08-18
 tags: ['redk', 'try', 'enflasyon']
 durum: 'aktif'
 kaynak: 'TCMB REDK (TÜFE & Yi-ÜFE)'
@@ -33,14 +33,14 @@ Beş panelin tamamı aynı veri hattından türetilir:
 son gözlem <Deger proje="try-reer" anahtar="son_gozlem" ondalik={1}>2026-07</Deger>
 (bugüne göre <Deger proje="try-reer" anahtar="gecikme_ay" ondalik={0}>1</Deger> ay gecikme,
 durum: <Deger proje="try-reer" anahtar="tazelik" ondalik={1}>güncel</Deger>). Bu üç alan
-`ozet.json`'dan canlı okunur: hat Excel yedeğine düşerse ya da seri bayatlarsa burada
+`ozet.json`'dan canlı okunur: hat yerel yedeğe düşerse ya da seri bayatlarsa burada
 görünür — daha önce böyle bir düşüş sessizdi ve sayfa aylarca eski veriyi taze gibi
 gösterebilirdi.
 
 **Veri.** TCMB'nin iki resmi REDK serisi doğrudan EVDS API'sinden çekilir:
 `TP.RK.T1.Y` (TÜFE Bazlı REDK) ve `TP.RK.U01.Y` (Yi-ÜFE Bazlı REDK). API erişimi
-yoksa hat, aynı iki seriyi taşıyan yerel Excel dosyalarına düşer (`TUFE.xlsx` /
-`Yi-UFE.xlsx`) — böylece anahtarsız bir makinede de koşar. Her iki yolda da tarih
+yoksa hat, aynı iki serinin yerel yedek kopyalarına düşer — böylece anahtarsız bir
+makinede de koşar. Her iki yolda da tarih
 sütunu ayıklanır, iki seri ay bazında iç birleştirmeyle hizalanır (yalnız ikisinin
 de bulunduğu aylar kalır).
 

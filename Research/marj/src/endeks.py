@@ -178,12 +178,13 @@ def _tur_kamasi(idx):
     return out
 
 
-def madde_endeksleri(bitis="2026-07-01", tur_duzeltme=True):
+def madde_endeksleri(bitis=None, tur_duzeltme=True):
     """MEDAS ortalama fiyatlarından madde fiyat endeksleri (2013-01=100); 2022/05+
     5'li grup endeksleriyle uzatılır. tur_duzeltme=True ise dana/tavuk uzatmasına
     Tarım-ÜFE tür-kaması uygulanır. Dönen: (df, kaynak_etiketi_df)."""
     fiyatlar = veri.medas_madde_fiyatlari()
     evds = veri.tum_evds()
+    bitis = bitis or veri.son_ay(evds)
     idx = pd.date_range("2013-01-01", bitis, freq="MS")
     kama = _tur_kamasi(idx) if tur_duzeltme else None
     endeksler, etiketler = {}, {}
@@ -261,7 +262,7 @@ def konsept_gida(yemek_df):
     return pd.DataFrame(out)
 
 
-def maliyet_bilesenleri(bitis="2026-07-01", kira_senaryo="tufe"):
+def maliyet_bilesenleri(bitis=None, kira_senaryo="tufe"):
     """İşgücü, enerji, kira, diğer bileşen endeksleri (2013-01=100).
 
     kira_senaryo:
@@ -273,6 +274,7 @@ def maliyet_bilesenleri(bitis="2026-07-01", kira_senaryo="tufe"):
                     2018 öncesi TÜFE kira; piyasa kirası duyarlılığı.
     """
     evds = veri.tum_evds()
+    bitis = bitis or veri.son_ay(evds)
     idx = pd.date_range("2013-01-01", bitis, freq="MS")
     ucret = veri.asgari_ucret_serisi(bitis[:7]).reindex(idx)
     enerji = evds["enerji_045"].reindex(idx)
@@ -368,8 +370,10 @@ def ima_edilen_marj(oran_df, cipalar=(0.15, 0.225, 0.30)):
     return {m0: 1 - (1 - m0) / r for m0 in cipalar}
 
 
-def hepsi(bitis="2026-07-01", agirlik="nihai", kira_senaryo="tufe", tur_duzeltme=True):
-    """Uçtan uca: tüm ara ve nihai tabloları döndürür."""
+def hepsi(bitis=None, agirlik="nihai", kira_senaryo="tufe", tur_duzeltme=True):
+    """Uçtan uca: tüm ara ve nihai tabloları döndürür. bitis verilmezse
+    veri.son_ay() (TÜFE'nin bulunduğu son ay)."""
+    bitis = bitis or veri.son_ay()
     madde_df, meta = madde_endeksleri(bitis, tur_duzeltme)
     yemek_df = yemek_gida_endeksleri(madde_df)
     gida_df = konsept_gida(yemek_df)
@@ -386,11 +390,12 @@ if __name__ == "__main__":
     m, o = r["maliyet"], r["oran"]
     pd.set_option("display.width", 160)
     print("=== MALİYET ENDEKSLERİ (2013 Ocak=100) ===")
-    for t in ["2019-12-01", "2024-07-01", "2026-07-01"]:
+    SON, ONCE = veri.son_ay(), veri.once_ay()
+    for t in ["2019-12-01", "2024-07-01", SON]:
         print(t[:7], m.loc[t].round(0).to_dict())
     print("\nAralık 2019 → Temmuz 2024 kat:", (m.loc["2024-07-01"] / m.loc["2019-12-01"]).round(2).to_dict())
     print("\n=== FİYAT/MALİYET ORANLARI (2013 Ocak=1) ===")
-    for t in ["2024-07-01", "2025-07-01", "2026-07-01"]:
+    for t in [ONCE, veri.once_ay(ay=12), SON]:
         print(t[:7], r["oran"].loc[t].round(2).to_dict())
     print("\nUzun dönem ort. (2013-2022):", uzun_donem_ort(o).round(2).to_dict())
     print("\nEv yemekleri 2022 dip:", round(float(o.loc["2022-01-01":"2022-12-01", "ev_yemekleri"].min()), 2))

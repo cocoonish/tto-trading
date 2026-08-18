@@ -84,10 +84,12 @@ n_weeks = sum(1 for _, g in weekly_groups if len(g) >= 2)
 palette = pc.sample_colorscale("turbo", [i / max(n_weeks - 1, 1) for i in range(n_weeks)])
 
 weekly_summary = []
+week_len = {}   # hafta başlangıcı → gözlem sayısı ("son TAM hafta" seçimi için)
 ci = 0
 for week_end, week_data in weekly_groups:
     if len(week_data) < 2:
         continue
+    week_len[week_data.index[0]] = len(week_data)
     avg = week_data.mean()
     x_days = (week_data.index - week_data.index[0]).days.values.astype(float)
     if x_days.std() == 0:
@@ -205,6 +207,25 @@ for label, avg, slope_w, _, _ in weekly_summary:
     print(f"{label:<18}{avg:>12.2f}{slope_w:>16.2f}")
 
 print(f"\nToplam {len(weekly_summary)} haftalık segment")
+
+# Sayfa metni için özet (ozet_uret.py birleştirir): segment sayısı, son TAM hafta
+# (5 gözlemli) ortalaması/eğimi, en yüksek ortalamalı hafta. Elle yazılmaz.
+import json as _json
+_hepsi = [(l, a, sw, ws) for (l, a, sw, _, ws) in weekly_summary]
+# "Son tam hafta": 5 iş günü gözlemi olan son hafta (içinde bulunulan yarım hafta
+# ortalaması ve eğimi yanıltır)
+_tam = [t for t in _hepsi if week_len.get(t[3], 0) >= 5] or _hepsi
+_son = _tam[-1]
+_zirve = max(_hepsi, key=lambda t: t[1])
+_json.dump({
+    "hafta_segment": len(weekly_summary),
+    "hafta_yil": int(_son[3].year),
+    "hafta_son_bas": _son[3].strftime("%d.%m.%Y"),
+    "hafta_son_ort": round(float(_son[1]), 2),
+    "hafta_son_egim": round(float(_son[2]), 1),
+    "hafta_zirve_bas": _zirve[3].strftime("%d.%m.%Y"),
+    "hafta_zirve_ort": round(float(_zirve[1]), 1),
+}, open(os.path.join(BASE_DIR, "istatistik_hafta.json"), "w"), ensure_ascii=False, indent=1)
 
 output_html = os.path.join(BASE_DIR, "usdtry_weekly_trends.html")
 fig.write_html(output_html, include_plotlyjs="cdn",

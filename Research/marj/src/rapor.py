@@ -20,9 +20,19 @@ def excel_yaz(dosya=None):
     au = veri.asgari_ucret_serisi()
     kars = analiz.karsilastirma_tablosu(sonuc)
     katki = analiz.katki_ayristirma()
+    # Duyarlılık ızgarası (18 koşu) pahalı; önbellekten okunur AMA yalnız güncel
+    # aya aitse. Eskiden dosya varsa körlemesine okunuyordu → veri ilerlese de 18
+    # senaryo eski ayda kalırdı (sessiz bayatlama). donem_son sütunu yoksa ya da
+    # farklıysa yeniden hesaplanır.
+    duy = None
     try:
         duy = pd.read_csv(CIKTI / "duyarlilik.csv")
+        if "donem_son" not in duy.columns or str(duy["donem_son"].iloc[0]) != veri.son_ay()[:7]:
+            print(f"duyarlilik.csv bayat/eski biçim → yeniden hesaplanıyor ({veri.son_ay()[:7]})")
+            duy = None
     except FileNotFoundError:
+        pass
+    if duy is None:
         duy = analiz.duyarlilik()
 
     meta = pd.DataFrame([
@@ -55,10 +65,10 @@ def excel_yaz(dosya=None):
         sonuc["oran"].to_excel(w, "Fiyat_maliyet_orani")
         kars.to_excel(w, "Karsilastirma", index=False)
         duy.to_excel(w, "Duyarlilik", index=False)
-        katki.to_excel(w, "Katki_Tem24_Tem26")
+        katki.to_excel(w, "Katki_2y")  # iki yıl önce → güncel ay (veri.once_ay → son_ay)
         marj = endeks.ima_edilen_marj(sonuc["oran"])
         (marj[0.225] * 100).to_excel(w, "Ima_marj_%22.5_merkez")
-        bant = pd.concat({f"cipa_%{int(m0*1000)/10}": (df * 100).loc[["2024-07-01", "2026-07-01"]]
+        bant = pd.concat({f"cipa_%{int(m0*1000)/10}": (df * 100).loc[[veri.once_ay(), veri.son_ay()]]
                           for m0, df in marj.items()}, axis=0)
         bant.round(1).to_excel(w, "Ima_marj_bant")
         import marj_seviye

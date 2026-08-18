@@ -99,24 +99,27 @@ def karsilastirma_tablosu(sonuc=None):
     if sonuc is None:
         sonuc = endeks.hepsi()
     m, o = sonuc["maliyet"], sonuc["oran"]
+    # Replikasyon çıpaları (Ara-2019, Tem-2024) notun kendi tarihleridir — SABİT.
+    # "Güncel" sütunu ise analizin son ayıdır — dinamik.
+    SON = veri.son_ay()
     kat = m.loc["2024-07-01"] / m.loc["2019-12-01"]
     uzun = endeks.uzun_donem_ort(o)
     satirlar = []
     for (metrik, konsept), hedef in HEDEFLER.items():
         if metrik == "maliyet_kat_ara19_tem24":
-            rep = float(kat[konsept]); guncel = float(m.loc["2026-07-01", konsept] / m.loc["2019-12-01", konsept])
+            rep = float(kat[konsept]); guncel = float(m.loc[SON, konsept] / m.loc["2019-12-01", konsept])
         elif metrik == "oran_tem24":
-            rep = float(o.loc["2024-07-01", konsept]); guncel = float(o.loc["2026-07-01", konsept])
+            rep = float(o.loc["2024-07-01", konsept]); guncel = float(o.loc[SON, konsept])
         elif metrik == "uzun_donem_ort":
             rep = float(uzun[konsept]); guncel = rep
         elif metrik == "ev_2022_dip":
             rep = float(o.loc["2022-01-01":"2022-12-01", "ev_yemekleri"].min())
-            guncel = float(o.loc["2026-07-01", "ev_yemekleri"])
+            guncel = float(o.loc[SON, "ev_yemekleri"])
         sapma = rep - hedef
         satirlar.append({
             "metrik": metrik, "konsept": konsept, "orijinal": hedef,
             "replikasyon": round(rep, 2), "sapma": round(sapma, 2),
-            "guncel_2026_07": round(guncel, 2),
+            "guncel": round(guncel, 2), "guncel_donem": SON[:7],
             "gerekce": GEREKCELER.get(f"{metrik}|{konsept}", "—"),
         })
     df = pd.DataFrame(satirlar)
@@ -128,16 +131,19 @@ def karsilastirma_tablosu(sonuc=None):
 def duyarlilik():
     """Ağırlık seti x kira senaryosu x tür-düzeltme ızgarası; kritik metrikler."""
     satirlar = []
+    SON, ONCE = veri.son_ay(), veri.once_ay()
     for agirlik in ["nihai", "bist", "resim"]:
         for kira in ["tufe", "tavan25", "ykke"]:
             for tur in [True, False]:
                 r = endeks.hepsi(agirlik=agirlik, kira_senaryo=kira, tur_duzeltme=tur)
                 o, m = r["oran"], r["maliyet"]
                 uzun = endeks.uzun_donem_ort(o)
-                satir = {"agirlik": agirlik, "kira": kira, "tur_kamasi": tur}
+                satir = {"agirlik": agirlik, "kira": kira, "tur_kamasi": tur,
+                         "donem_once": ONCE[:7], "donem_son": SON[:7]}
                 for k in endeks.KONSEPTLER:
-                    satir[f"oran24_{k}"] = round(float(o.loc["2024-07-01", k]), 2)
-                    satir[f"oran26_{k}"] = round(float(o.loc["2026-07-01", k]), 2)
+                    # oran_once = iki yıl önce, oran_son = güncel ay (eski adlar oran24/oran26)
+                    satir[f"oran_once_{k}"] = round(float(o.loc[ONCE, k]), 2)
+                    satir[f"oran_son_{k}"] = round(float(o.loc[SON, k]), 2)
                     satir[f"uzun_{k}"] = round(float(uzun[k]), 2)
                 satir["kat_kirmizi"] = round(float(m.loc["2024-07-01", "kirmizi_et"] / m.loc["2019-12-01", "kirmizi_et"]), 2)
                 satirlar.append(satir)
@@ -147,8 +153,10 @@ def duyarlilik():
 
 
 # ------------------------------------------------------------------ 4. Katkı ayrıştırması
-def katki_ayristirma(bas="2024-07-01", son="2026-07-01", agirlik="nihai"):
-    """Kalem bazında maliyet artışı katkıları (aritmetik, yüzde puan)."""
+def katki_ayristirma(bas=None, son=None, agirlik="nihai"):
+    """Kalem bazında maliyet artışı katkıları (aritmetik, yüzde puan).
+    bas/son verilmezse: güncel ay ve iki yıl öncesi (veri.son_ay / once_ay)."""
+    son = son or veri.son_ay(); bas = bas or veri.once_ay(son)
     r = endeks.hepsi(agirlik=agirlik)
     w = endeks.AGIRLIKLAR[agirlik]
     b, g = r["bilesen"], r["gida"]

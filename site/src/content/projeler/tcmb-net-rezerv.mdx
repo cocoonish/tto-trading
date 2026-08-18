@@ -35,12 +35,45 @@ $$
 \text{Net Rezerv}(T) = \frac{\text{N06}_{son\,Cuma} + \Delta\text{Analitik}(son\,Cuma \to T)}{\text{USDTRY}(T)}
 $$
 
-$\Delta\text{Analitik} = \Delta(\text{TP.AB.A02} - \text{TP.AB.A17})$ — analitik
-bilançonun "dış varlıklar − döviz yükümlülükleri" farkının TL değişimi. Mantık: haftalık
-resmi kalem (Stand-By 2A) yalnız Cuma açıklanır; ama analitik bilanço her iş günü gelir
-ve rezerv hareketinin TL karşılığını taşır. Son Cuma'nın resmi TL değerine bu delta
-eklenir, günün kuruna bölünür. Cuma günleri delta sıfırlanır — tahmin, resmi değere
+$\Delta\text{Analitik} = \Delta(\text{TP.AB.A02} - \text{TP.AB.A14})$ — analitik
+bilançonun **"Dış Varlıklar − Bankaların Döviz Mevduatı"** farkının TL değişimi. Mantık:
+haftalık resmi kalem (Stand-By 2A) yalnız Cuma açıklanır; ama analitik bilanço her iş
+günü gelir ve rezerv hareketinin TL karşılığını taşır. Son Cuma'nın resmi TL değerine bu
+delta eklenir, günün kuruna bölünür. Cuma günleri delta sıfırlanır — tahmin, resmi değere
 **tam oturur** (grafikte çizginin elmaslardan geçmesi bu tasarımın sonucu).
+
+Neden tam bu iki kalem? Net rezerv $= \text{N07} - \text{N08}$, ve N08'in içinde hafta
+içinde gerçekten oynayan bacak bankaların döviz mevduatıdır (N09; IMF ve "diğer" hafta
+içinde neredeyse sabittir). Analitik bilançoda aynı kalem A14 olarak **her iş günü**
+yayımlanır ve Cuma günleri N09 ile bin TL hassasiyetinde aynıdır (07.08.2026: ikisi de
+4.799.989 bin TL). Dış Varlıklar (A02) da brüt rezervin (N07) günlük izidir — aralarında
+yaklaşık 2–3 milyar USD'lik, hafta içinde sabit sayılabilecek rezerv-dışı varlık farkı
+vardır; delta alındığında bu fark düşer. Böylece $\Delta(\text{A02}-\text{A14})$,
+$\Delta\text{N06}$'nın günlük en yakın izleyicisi olur.
+
+<div class="not">
+  <span class="etiket">Model denetim notu — günlük tahmin (18.08.2026)</span>
+  Bu sayfanın önceki sürümünde delta <strong>A02 − A17</strong> ile alınıyordu ve A17
+  "döviz yükümlülükleri" diye adlandırılmıştı. Analitik bilançoda <strong>A17 Emisyon</strong>'dur
+  (A16 Rezerv Para = A17 Emisyon + A18 Bankalar Mevduatı + A21 Fon + A22 Banka Dışı Kesim
+  eşitliği bunu gösterir); döviz yükümlülüğü değildir. İki sonuç doğuyordu: emisyonun
+  günlük dalgalanması sinyale karışıyor, bankaların TCMB'deki döviz mevduatındaki hareket
+  ise hiç görülmüyordu. Brüt rezervin artıp netin sabit kaldığı haftalarda günlük tahmin
+  Perşembe'yi 4–5 milyar USD yukarıda bitirip Cuma resmi değere "çakılıyordu" (03–07.08.2026
+  haftası: brüt +13,9, resmi net +8,8, eski tahmin +14,0). Geri-test — her resmi Cuma için
+  ΔN06 ile Δproxy farkı, 1.283 hafta (2002–2026), milyar USD:
+  <table>
+    <thead><tr><th>Proxy</th><th>RMSE</th><th>MAE</th><th>2026 RMSE</th><th>2026 maks</th></tr></thead>
+    <tbody>
+      <tr><td>A02 − A14 (yeni)</td><td><strong>0,57</strong></td><td>0,24</td><td><strong>0,31</strong></td><td>0,71</td></tr>
+      <tr><td>A02 (yalnız dış varlık)</td><td>2,20</td><td>1,24</td><td>3,13</td><td>8,24</td></tr>
+      <tr><td>A02 − A17 (eski)</td><td>2,36</td><td>1,43</td><td>3,28</td><td>8,28</td></tr>
+    </tbody>
+  </table>
+  Tabloyu her koşuda yeniden üreten komut: <code>python net_rezerv.py --gunluk-dogrula</code>.
+  Cuma değerleri (resmi seri) bu değişiklikten etkilenmez; yalnız hafta içi tahmin yolu
+  değişti.
+</div>
 
 **2 — Yeşil elmaslar: resmi haftalık değerler.** EVDS serileriyle:
 
@@ -49,7 +82,7 @@ eklenir, günün kuruna bölünür. Cuma günleri delta sıfırlanır — tahmin
 | Net uluslararası rezerv (2A, bin TL) | TP.AB.N06 |
 | Brüt döviz rezervi / yükümlülüğü | TP.AB.N07 / N08 |
 | Bankaların döviz mevduatı · IMF · diğer | TP.AB.N09 · N10 · N11 |
-| Analitik bilanço: dış varlık / döviz yük. | TP.AB.A02 / A17 |
+| Analitik bilanço: dış varlıklar / bankaların döviz mevduatı | TP.AB.A02 / A14 |
 | USD/TRY alış | TP.DK.USD.A.YTL |
 
 $$
@@ -85,7 +118,7 @@ kalemleri **tarihe göre değişen gerçek bir seridir** ve üç kaynaktan kurul
 </div>
 
 **2b — Noktalar: gerçek IRFCL gözlemleri.** Koyu çizginin üzerindeki işaretçiler,
-swap kaleminin *gerçekten yayımlandığı* tarihleri gösterir (şu an 28 nokta). Aralardaki
+swap kaleminin *gerçekten yayımlandığı* tarihleri gösterir (şu an <Deger proje="tcmb-net-rezerv" anahtar="irfcl_nokta" ondalik={0}>30</Deger> nokta). Aralardaki
 seyir ara değerdir. Bir hareketin gerçek mi yoksa interpolasyon mu olduğunu anlamak için
 her zaman en yakın işaretçiye bakın: iki nokta arasındaki düz eğim veri değil,
 varsayımdır.
@@ -98,8 +131,8 @@ tek günde ±5 milyar USD'ye ulaşan hareketler burada görünür.
 
 Haftalık resmi (<Deger proje="tcmb-net-rezerv" anahtar="h_tarih" ondalik={1}>07.08.2026</Deger> Cuma): brüt döviz rezervi **<Deger proje="tcmb-net-rezerv" anahtar="h_brut" ondalik={1}>178,8</Deger>** · net rezerv **<Deger proje="tcmb-net-rezerv" anahtar="h_net" ondalik={1}>63,0</Deger>** →
 **swap hariç net <Deger proje="tcmb-net-rezerv" anahtar="h_swap_haric" ondalik={1}>50,6</Deger> milyar USD**. Günlük
-tahminin son noktası (<Deger proje="tcmb-net-rezerv" anahtar="g_tarih" ondalik={1}>17.08.2026</Deger>): net <Deger proje="tcmb-net-rezerv" anahtar="g_net" ondalik={1}>70,5</Deger> · swap hariç <Deger proje="tcmb-net-rezerv" anahtar="g_swap_haric" ondalik={1}>58,1</Deger>. Son 20 iş gününün öne çıkan
-hareketleri: 24.07 **−6,3** · 05.08 +5,8 · 07.08 −5,0 milyar USD — akımın hangi güne
+tahminin son noktası (<Deger proje="tcmb-net-rezerv" anahtar="g_tarih" ondalik={1}>17.08.2026</Deger>): net <Deger proje="tcmb-net-rezerv" anahtar="g_net" ondalik={1}>67,6</Deger> · swap hariç <Deger proje="tcmb-net-rezerv" anahtar="g_swap_haric" ondalik={1}>55,2</Deger>. Son <Deger proje="tcmb-net-rezerv" anahtar="pencere_gun" ondalik={0}>20</Deger> iş gününün mutlak
+değerce en büyük üç günlük hareketi: <Deger proje="tcmb-net-rezerv" anahtar="u1_tarih">05.08</Deger> **<Deger proje="tcmb-net-rezerv" anahtar="u1_delta" ondalik={1} isaret={true}>+4,2</Deger>** · <Deger proje="tcmb-net-rezerv" anahtar="u2_tarih">06.08</Deger> <Deger proje="tcmb-net-rezerv" anahtar="u2_delta" ondalik={1} isaret={true}>+3,9</Deger> · <Deger proje="tcmb-net-rezerv" anahtar="u3_tarih">11.08</Deger> <Deger proje="tcmb-net-rezerv" anahtar="u3_delta" ondalik={1} isaret={true}>+3,6</Deger> milyar USD — akımın hangi güne
 yığıldığı, müdahale/akış okuması için serinin kendisi kadar bilgilendiricidir.
 
 ## Doğrulama
@@ -119,7 +152,9 @@ aylık serisiyle karşılaştırır.
 ## Sınırlar ve yorum notları
 
 - Günlük seri bir **tahmindir**: kur değerlemesi ve altın fiyat etkisi analitik delta
-  içinde örtük taşınır; ayrıştırılmaz. Cuma'ya dönüşte hata otomatik kapanır.
+  içinde örtük taşınır; ayrıştırılmaz. IMF ve "diğer" yükümlülükler hafta içinde sabit
+  varsayılır (geri-testte haftalık hata RMSE'si 0,3–0,6 milyar USD; yukarıdaki not).
+  Cuma'ya dönüşte hata otomatik kapanır.
 - Swap kalemi artık sabit değil ama **her gün gözlemlenmiş de değil**: gerçek gözlemler
   (aylık EVDS + toplanabilen haftalık IRFCL noktaları) arasında zamana göre ara değer
   kullanılır. TCMB'nin iki gözlem arasında agresif swap açtığı/kapadığı günlerde ara

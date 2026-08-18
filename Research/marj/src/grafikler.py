@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-TCMB EN 24/17 replikasyonu — Grafik 1-14 (orijinal format, Temmuz 2026'ya uzatılmış).
+TCMB EN 24/17 replikasyonu — Grafik 1-14 (orijinal format, güncel aya uzatılmış; veri.son_ay).
 
 Bazlar grafik başlıklarında açık: 2013 Ocak=100 / 2013 Ocak=1 / 2019 Aralık=100.
 Nisan 2022 sonrası madde düzeyi verinin proxy (5'li grup uzatması) olduğu dönem,
@@ -164,7 +164,7 @@ def grafik_2_4():
     # G2: endeks 2019 Aralık = 100
     fig, ax = plt.subplots(figsize=(7.2, 4.2))
     for (ad, s), r in zip(seriler.items(), renkler):
-        sb = (s / s.loc[baz] * 100).loc["2019-12-01":"2026-07-01"]
+        sb = (s / s.loc[baz] * 100).loc["2019-12-01":veri.son_ay()]
         ax.plot(sb.index, sb.values, color=r, lw=2, label=ad)
         ax.annotate(f"{sb.iloc[-1]:.0f}", (sb.index[-1], sb.iloc[-1]), xytext=(4, 0),
                     textcoords="offset points", color=r, fontsize=8, fontweight="bold")
@@ -177,7 +177,7 @@ def grafik_2_4():
     # G3: aylık %
     fig, ax = plt.subplots(figsize=(7.2, 4.2))
     for (ad, s), r in zip(seriler.items(), renkler):
-        mm = (s.pct_change(fill_method=None) * 100).loc["2019-12-01":"2026-07-01"]
+        mm = (s.pct_change(fill_method=None) * 100).loc["2019-12-01":veri.son_ay()]
         ax.plot(mm.index, mm.values, color=r, lw=1.6, label=ad)
     ax.set_title("Grafik 3: TÜFE Fiyat Endeksleri (Aylık % Değişim)")
     ax.legend(frameon=False, loc="upper right", fontsize=8)
@@ -187,7 +187,7 @@ def grafik_2_4():
     # G4: yıllık %
     fig, ax = plt.subplots(figsize=(7.2, 4.2))
     for (ad, s), r in zip(seriler.items(), renkler):
-        yy = (s.pct_change(12, fill_method=None) * 100).loc["2019-12-01":"2026-07-01"]
+        yy = (s.pct_change(12, fill_method=None) * 100).loc["2019-12-01":veri.son_ay()]
         ax.plot(yy.index, yy.values, color=r, lw=2, label=ad)
         ax.annotate(f"%{yy.iloc[-1]:.0f}", (yy.index[-1], yy.iloc[-1]), xytext=(4, 0),
                     textcoords="offset points", color=r, fontsize=8, fontweight="bold")
@@ -207,7 +207,7 @@ def grafik_5_8(sonuc):
         s = m[konsept]
         ax.plot(s.index, s.values, color=RENK[konsept], lw=2.2)
         _splice_cizgi(ax); _yil_ekseni(ax)
-        for t, va in [("2019-12-01", "bottom"), ("2024-07-01", "bottom"), ("2026-07-01", "bottom")]:
+        for t, va in [("2019-12-01", "bottom"), ("2024-07-01", "bottom"), (veri.son_ay(), "bottom")]:
             ax.annotate(f"{s.loc[t]:.0f}", (pd.Timestamp(t), s.loc[t]), xytext=(0, 6),
                         textcoords="offset points", ha="center", fontsize=8.5, fontweight="bold",
                         color=RENK[konsept])
@@ -230,7 +230,7 @@ def grafik_9_12(sonuc):
         ax.axhline(uzun[konsept], color=GRI, lw=1.4, ls="--",
                    label=f"2013-2022 ort. ({uzun[konsept]:.2f})")
         _splice_cizgi(ax); _yil_ekseni(ax)
-        for t in ["2024-07-01", "2026-07-01"]:
+        for t in [veri.once_ay(), veri.son_ay()]:
             ax.annotate(f"{s.loc[t]:.2f}", (pd.Timestamp(t), s.loc[t]), xytext=(0, 6),
                         textcoords="offset points", ha="center", fontsize=8.5,
                         fontweight="bold", color=RENK[konsept])
@@ -247,7 +247,8 @@ def grafik_9_12(sonuc):
 def grafik_13_14(sonuc):
     o = sonuc["oran"]
     uzun = endeks.uzun_donem_ort(o)
-    t24 = o.loc["2024-07-01"]; t26 = o.loc["2026-07-01"]
+    SON, ONCE = veri.son_ay(), veri.once_ay()
+    t24 = o.loc[ONCE]; t26 = o.loc[SON]
     konseptler = ["ev_yemekleri", "kirmizi_et", "tavuk", "fast_food"]
     etiketler = [endeks.KONSEPT_ETIKET[k].replace(" ağırlıklı", "\nağırlıklı") for k in konseptler]
     x = np.arange(len(konseptler) + 1); w = 0.26
@@ -257,8 +258,8 @@ def grafik_13_14(sonuc):
     a = list(t24[konseptler].values) + [t24[konseptler].mean()]
     b = list(t26[konseptler].values) + [t26[konseptler].mean()]
     ax.bar(x - w, u, w, label="2013-2022 ort.", color="#2a78d6")
-    ax.bar(x,      a, w, label="Temmuz 2024", color="#eb6834")
-    ax.bar(x + w,  b, w, label="Temmuz 2026", color="#1baf7a")
+    ax.bar(x,      a, w, label=veri.ad_uzun(ONCE), color="#eb6834")
+    ax.bar(x + w,  b, w, label=veri.ad_uzun(SON), color="#1baf7a")
     for xi, (vu, va, vb) in zip(x, zip(u, a, b)):
         ax.text(xi - w, vu + 0.03, f"{vu:.2f}", ha="center", fontsize=7.5)
         ax.text(xi,     va + 0.03, f"{va:.2f}", ha="center", fontsize=7.5)
@@ -274,8 +275,8 @@ def grafik_13_14(sonuc):
     nb = t26[konseptler] / t26["ev_yemekleri"]
     x = np.arange(len(konseptler))
     ax.bar(x - w, nu.values, w, label="2013-2022 ort.", color="#2a78d6")
-    ax.bar(x,     na.values, w, label="Temmuz 2024", color="#eb6834")
-    ax.bar(x + w, nb.values, w, label="Temmuz 2026", color="#1baf7a")
+    ax.bar(x,     na.values, w, label=veri.ad_uzun(ONCE), color="#eb6834")
+    ax.bar(x + w, nb.values, w, label=veri.ad_uzun(SON), color="#1baf7a")
     for xi, (vu, va, vb) in zip(x, zip(nu.values, na.values, nb.values)):
         ax.text(xi - w, vu + 0.02, f"{vu:.2f}", ha="center", fontsize=7.5)
         ax.text(xi,     va + 0.02, f"{va:.2f}", ha="center", fontsize=7.5)

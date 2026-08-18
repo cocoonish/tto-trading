@@ -21,28 +21,33 @@ interface Props {
   proje: string;
   anahtar: string;
   ondalik?: number;
+  /** true ise pozitif sayının önüne "+" konur (günlük değişim gibi işaretli büyüklükler) */
+  isaret?: boolean;
 }
-const { proje, anahtar, ondalik = 1 } = Astro.props;
+const { proje, anahtar, ondalik = 1, isaret = false } = Astro.props;
 ---
 
 <span
   class="canli-deger"
   data-proje={proje}
   data-anahtar={anahtar}
-  data-ondalik={ondalik}><slot>…</slot></span><script>
+  data-ondalik={ondalik}
+  data-isaret={isaret ? '1' : undefined}><slot>…</slot></span><script>
   // Sayfa başına tek sefer: span'ları projeye göre grupla, ozet.json'ları çek, doldur.
   const alanlar = [...document.querySelectorAll('span.canli-deger')] as HTMLElement[];
   const projeler = [...new Set(alanlar.map((a) => a.dataset.proje!))];
 
-  const bicimle = (v: unknown, ondalik: number) => {
-    if (typeof v === 'number')
+  const bicimle = (v: unknown, ondalik: number, isaret: boolean) => {
+    if (typeof v === 'number') {
       // Intl tr-TR ASCII tire üretir; sayfa tipografisi eksi işareti (U+2212) kullanır.
-      return v
+      const m = v
         .toLocaleString('tr-TR', {
           minimumFractionDigits: ondalik,
           maximumFractionDigits: ondalik,
         })
         .replace('-', '−');
+      return isaret && v > 0 ? '+' + m : m;
+    }
     return String(v);
   };
 
@@ -56,7 +61,7 @@ const { proje, anahtar, ondalik = 1 } = Astro.props;
         .forEach((a) => {
           const v = ozet[a.dataset.anahtar!];
           if (v === undefined || v === null) return;
-          a.textContent = bicimle(v, parseInt(a.dataset.ondalik || '1'));
+          a.textContent = bicimle(v, parseInt(a.dataset.ondalik || '1'), a.dataset.isaret === '1');
           if (ozet._tarih) a.title = `canlı değer · veri: ${ozet._tarih}`;
           a.classList.add('yuklendi');
         });

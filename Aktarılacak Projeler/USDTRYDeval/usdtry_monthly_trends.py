@@ -207,6 +207,25 @@ print("-" * 40)
 for label, avg, slope_m, _, _ in monthly_summary:
     print(f"{label:<12}{avg:>12.2f}{slope_m:>16.2f}")
 
+# Sayfa metni için özet (ozet_uret.py birleştirir): son iki TAM ay (içinde
+# bulunulan ay hariç — eksik ay ortalaması yanıltır), zirve ve dip ay. Elle yazılmaz.
+import json as _json
+_AY = {1:"Ocak",2:"Şubat",3:"Mart",4:"Nisan",5:"Mayıs",6:"Haziran",7:"Temmuz",
+       8:"Ağustos",9:"Eylül",10:"Ekim",11:"Kasım",12:"Aralık"}
+_bugun = pd.Timestamp.today()
+_tam = [(ms, a, sm) for (_, a, sm, _, ms) in monthly_summary
+        if not (ms.year == _bugun.year and ms.month == _bugun.month)]
+_ist = {}
+if len(_tam) >= 2:
+    for ad, (ms, a, sm) in zip(("ay_onceki", "ay_son"), _tam[-2:]):
+        _ist[f"{ad}_ad"] = f"{_AY[ms.month]} {ms.year}"
+        _ist[f"{ad}_ort"] = round(float(a), 1)
+        _ist[f"{ad}_egim"] = round(float(sm), 1)
+    _z = max(_tam, key=lambda t: t[1]); _d = min(_tam, key=lambda t: t[1])
+    _ist["ay_zirve_ad"] = f"{_AY[_z[0].month]} {_z[0].year}"; _ist["ay_zirve_ort"] = round(float(_z[1]), 1)
+    _ist["ay_dip_ad"] = f"{_AY[_d[0].month]} {_d[0].year}"; _ist["ay_dip_ort"] = round(float(_d[1]), 1)
+_json.dump(_ist, open(os.path.join(BASE_DIR, "istatistik_ay.json"), "w"), ensure_ascii=False, indent=1)
+
 output_html = os.path.join(BASE_DIR, "usdtry_monthly_trends.html")
 fig.write_html(output_html, include_plotlyjs="cdn",
                config={"responsive": True, "displaylogo": False})

@@ -58,14 +58,16 @@ Endeks tek başına bir al-sat sinyali değildir; katmanlar belirli bir sırayla
 />
 
 Son pipeline koşusunun endeks değerleri, sıralı yatay bar: pozitifler teal, negatifler
-bordo; etiket kategori eşiklerinden. Son okumada uçlar: ABD 2Y **+0,46** (Alıcı) ve
-ABD 10Y +0,20 bir yanda, USD/CHF **−0,64** (Aşırı Satıcı) ve BIST 100 −0,37 diğer yanda.
-Hover her varlığın **skorlu makale sayısını** da gösterir (toplam <Deger proje="fx-haber-endeksi" anahtar="makale_toplam" ondalik={0}>3.449</Deger>) — az makaleli
-varlığın endeksi daha gürültülüdür, kategoriyi buna göre iskonto edin. USD/CHF bu
-turda tam da bunun örneği: **−0,64 ile "Aşırı Satıcı" görünüyor ama arkasında yalnız
-5 skorlu makale var** — iki hafta önce aynı parite +0,52 ile Aşırı Alıcı'ydı, yine 5
-makaleyle. 116 bp'lik bu ters dönüş piyasa değil örneklem gürültüsüdür; az makaleli
-varlıklarda kategori etiketi değil makale sayısı okunur.
+bordo; etiket kategori eşiklerinden. Son okumada uçlar: <Deger proje="fx-haber-endeksi" anahtar="ust1_ad" ondalik={1}>ABD 2Y</Deger> **<Deger proje="fx-haber-endeksi" anahtar="ust1_deger" ondalik={2} isaret={true}>+0,46</Deger>** (<Deger proje="fx-haber-endeksi" anahtar="ust1_kat" ondalik={1}>Alıcı</Deger>) ve
+<Deger proje="fx-haber-endeksi" anahtar="ust2_ad" ondalik={1}>ABD 10Y</Deger> <Deger proje="fx-haber-endeksi" anahtar="ust2_deger" ondalik={2} isaret={true}>+0,20</Deger> bir yanda, <Deger proje="fx-haber-endeksi" anahtar="alt1_ad" ondalik={1}>USD/CHF</Deger> **<Deger proje="fx-haber-endeksi" anahtar="alt1_deger" ondalik={2} isaret={true}>−0,64</Deger>** (<Deger proje="fx-haber-endeksi" anahtar="alt1_kat" ondalik={1}>Aşırı Satıcı</Deger>) ve <Deger proje="fx-haber-endeksi" anahtar="alt2_ad" ondalik={1}>BIST 100</Deger> <Deger proje="fx-haber-endeksi" anahtar="alt2_deger" ondalik={2} isaret={true}>−0,37</Deger> diğer yanda.
+Hover her varlığın **skorlu makale sayısını** da gösterir (toplam <Deger proje="fx-haber-endeksi" anahtar="makale_toplam" ondalik={0}>3.449</Deger>; en az
+kapsanan varlık <Deger proje="fx-haber-endeksi" anahtar="az_ad" ondalik={1}>USD/SEK</Deger> ile <Deger proje="fx-haber-endeksi" anahtar="az_makale" ondalik={0}>133</Deger> makale) — az makaleli varlığın endeksi
+daha gürültülüdür, kategoriyi buna göre iskonto edin. Koşudan koşuya ters dönüşler de
+olağandır: en düşük okumadaki <Deger proje="fx-haber-endeksi" anahtar="alt1_ad" ondalik={1}>USD/CHF</Deger> bir önceki snapshot'ta (<Deger proje="fx-haber-endeksi" anahtar="alt1_onceki_tarih" ondalik={1}>04.08.2026</Deger>)
+<Deger proje="fx-haber-endeksi" anahtar="alt1_onceki_deger" ondalik={2} isaret={true}>+0,52</Deger> idi — <Deger proje="fx-haber-endeksi" anahtar="alt1_donus_bp" ondalik={0}>116</Deger> bp'lik dönüş. Bu büyüklükte bir sıçrama iki
+koşu arasında haber akışının gerçekten döndüğü anlamına gelebilir; ama makale sayısı
+düşükse ya da tek kaynak ağırlıklıysa örneklem gürültüsüdür. Kategori etiketi tek
+başına okunmaz; makale sayısı ve tarihçe (Şekil 02) ile birlikte okunur.
 
 ## Şekil 02 — Endeks tarihçesi
 
@@ -246,11 +248,11 @@ birlikte hareket ediyor? Yıldızlı etiketler terslenen pariteleri işaretler.
 />
 
 Grid search'ün varlık başına ulaştığı korelasyon (günlük seri, 20g yuvarlanan ort.,
-5g getiri ufku): BIST 100 **+0,54**, GBP/USD **+0,53**, gümüş **+0,43** liderler;
+5g getiri ufku): <Deger proje="fx-haber-endeksi" anahtar="opt1_ad" ondalik={1}>BIST 100</Deger> **<Deger proje="fx-haber-endeksi" anahtar="opt1_kor" ondalik={2} isaret={true}>+0,54</Deger>**, <Deger proje="fx-haber-endeksi" anahtar="opt2_ad" ondalik={1}>GBP/USD</Deger> **<Deger proje="fx-haber-endeksi" anahtar="opt2_kor" ondalik={2} isaret={true}>+0,53</Deger>**, <Deger proje="fx-haber-endeksi" anahtar="opt3_ad" ondalik={1}>gümüş</Deger> **<Deger proje="fx-haber-endeksi" anahtar="opt3_kor" ondalik={2} isaret={true}>+0,43</Deger>** liderler;
 hover kazanan parametreleri gösterir. Bu değerler *in-sample*'dır — canlı performans
 beklentisi değil, hangi varlıkta haber-fiyat bağının güçlü olduğunun sıralamasıdır.
-Grid search **22.07.2026** kalibrasyonundan geliyor: 15 varlığın
-**14'ü 5 günlük ufku** seçti (tek istisna USD/SEK), yani "haber tonu haftayı fiyatlar"
+Grid search **<Deger proje="fx-haber-endeksi" anahtar="opt_kalibrasyon" ondalik={1}>22.07.2026</Deger>** kalibrasyonundan geliyor: <Deger proje="fx-haber-endeksi" anahtar="opt_varlik" ondalik={0}>15</Deger> varlığın
+**<Deger proje="fx-haber-endeksi" anahtar="opt_5g" ondalik={0}>14</Deger>'ü 5 günlük ufku** seçti (istisna: <Deger proje="fx-haber-endeksi" anahtar="opt_istisna" ondalik={1}>USD/SEK</Deger>), yani "haber tonu haftayı fiyatlar"
 bulgusu parametre seçimine de yansıyor. Önceki kalibrasyon 13.04.2026 tarihliydi ve
 daha kısa bir veri penceresine oturuyordu; sıralama o turda GBP/USD-altın-S&P
 şeklindeydi. Sıralamanın kalibrasyondan kalibrasyona bu kadar oynaması, in-sample
@@ -277,12 +279,12 @@ kümesinin sürdüğüne bakın — tek kaynaklı tekrar zinciri mi, geniş taba
   kıyaslanarak izlenir.
 - **İki farklı veri ufku var, karıştırmayın.** Endeks seviyesi (Şekil 01) ve manşetler
   her koşuda tazelenir; rejim/korelasyon/saçılım panelleri ise 52 haftalık *geçmiş haber
-  önbelleğinden* hesaplanır. Önbellek 04.08.2026'da yenilendi ve artık **02.08.2026**'ya
-  kadar dolu — ama kendiliğinden ilerlemez: `run.py --fetch-history` koşulmadığı sürece
-  o tarihte donar ve rejim etiketi eskimiş bir korelasyon yapısını yansıtmaya başlar.
-  Sayfadaki "veri sonu" damgasını her zaman kontrol edin.
-- **Kalibrasyon tarihi ile veri tarihi ayrıdır.** Endeksler 22.07.2026 kalibrasyonunun
-  parametreleriyle kuruluyor, veri ise 02.08.2026'ya kadar. Bu bilinçli: parametreler
+  önbelleğinden* hesaplanır. Önbelleğin şu anki ucu **<Deger proje="fx-haber-endeksi" anahtar="veri_sonu" ondalik={1}>16.08.2026</Deger>** — bu damga
+  `web_cikti.py`'nin rejim özetinden okunur ve kendiliğinden ilerlemez: `run.py --fetch-history`
+  koşulmadığı sürece o tarihte donar ve rejim etiketi eskimiş bir korelasyon yapısını
+  yansıtmaya başlar. Şekil 06'nın başlığındaki "veri sonu" damgasıyla karşılaştırın.
+- **Kalibrasyon tarihi ile veri tarihi ayrıdır.** Endeksler <Deger proje="fx-haber-endeksi" anahtar="opt_kalibrasyon" ondalik={1}>22.07.2026</Deger> kalibrasyonunun
+  parametreleriyle kuruluyor, veri ise <Deger proje="fx-haber-endeksi" anahtar="veri_sonu" ondalik={1}>16.08.2026</Deger>'ya kadar. Bu bilinçli: parametreler
   her veri tazelemesinde yeniden aranırsa tarihçedeki her nokta farklı bir modelden
   gelir ve seri kendi içinde kıyaslanamaz hale gelir. Önbellek %5 büyüdüğü için
   yeniden kalibrasyon yapılmadı; kalibrasyon, veri penceresi anlamlı ölçüde

@@ -349,6 +349,11 @@ def build_segmented_trend_figure():
         ("Post-Savaş", iran_war, seg_end + pd.Timedelta(days=1)),
     ]
 
+    # Sayfa metnindeki rejim tablosu bu eğimlerden okunur (ozet.json'a akar);
+    # elle yazılmaz. Anahtarlar: seg_pre / seg_orta / seg_son (_egim, _bas, _son).
+    seg_ist = {}
+    seg_anahtar = {"Pre-İmamoğlu": "seg_pre", "İmamoğlu→Savaş": "seg_orta",
+                   "Post-Savaş": "seg_son"}
     for label, sg_start, sg_end in segments:
         color = seg_colors[label]
         for series, series_name, dash, group in [
@@ -359,6 +364,11 @@ def build_segmented_trend_figure():
             idx, trend, slope = linear_trend(seg)
             if trend is None:
                 continue
+            if series_name == "1A":
+                k = seg_anahtar[label]
+                seg_ist[f"{k}_egim"] = round(float(slope * 30), 1)
+                seg_ist[f"{k}_bas"] = seg.index[0].strftime("%d.%m.%Y")
+                seg_ist[f"{k}_son"] = seg.index[-1].strftime("%d.%m.%Y")
             label_with_slope = f"{series_name} | {label} ({slope*30:+.1f}%/ay)"
             fig.add_trace(go.Scatter(
                 x=idx, y=trend,
@@ -446,6 +456,7 @@ def build_segmented_trend_figure():
         height=560,
         autosize=True,
     )
+    build_segmented_trend_figure.seg_ist = seg_ist
     return fig
 
 
@@ -467,6 +478,15 @@ for fig, fname in FIG_OUTPUTS:
 
 # Son değer özeti (log/rapor için)
 last_dt = deval_3m.dropna().index[-1]
+# Rejim eğimleri sayfa metni için (ozet_uret.py birleştirir)
+try:
+    import json as _json
+    _json.dump(build_segmented_trend_figure.seg_ist,
+               open(os.path.join(BASE_DIR, "istatistik_seg.json"), "w"),
+               ensure_ascii=False, indent=1)
+except Exception as _e:
+    print(f"istatistik_seg.json yazılamadı: {_e}")
+
 print(f"\nSon gözlem ({last_dt.date()}): "
       f"1H {deval_1w.dropna().iloc[-1]:+.2f}% · "
       f"1A {deval_1m.dropna().iloc[-1]:+.2f}% · "

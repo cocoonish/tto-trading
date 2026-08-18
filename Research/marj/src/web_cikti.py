@@ -13,6 +13,28 @@ import os
 import pandas as pd
 import plotly.graph_objects as go
 
+# Dönem etiketleri: 'güncel ay' ve 'iki yıl önce' VERİDEN okunur (seriler.xlsx'in
+# son dolu ayı), sabit yazılmaz. veri.py'deki tanımla aynı; burada yinelenmesinin
+# nedeni web_cikti'nin internetsiz/bağımsız koşabilmesi.
+_AY_TR = {1: "Ocak", 2: "Şubat", 3: "Mart", 4: "Nisan", 5: "Mayıs", 6: "Haziran",
+          7: "Temmuz", 8: "Ağustos", 9: "Eylül", 10: "Ekim", 11: "Kasım", 12: "Aralık"}
+_AY_KISA = {1: "Oca", 2: "Şub", 3: "Mar", 4: "Nis", 5: "May", 6: "Haz",
+            7: "Tem", 8: "Ağu", 9: "Eyl", 10: "Eki", 11: "Kas", 12: "Ara"}
+
+
+def _ad_uzun(t):
+    t = pd.Timestamp(t); return f"{_AY_TR[t.month]} {t.year}"
+
+
+def _ad_kisa(t):
+    t = pd.Timestamp(t); return f"{_AY_KISA[t.month]}-{t.year}"
+
+
+def _donem(df):
+    """(son, once): df'in son dolu ayı ve 24 ay öncesi (Timestamp)."""
+    son = df.dropna(how="all").index[-1]
+    return son, son - pd.DateOffset(months=24)
+
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 XLSX = os.path.join(BASE, "output", "seriler.xlsx")
 CIKTI = os.path.join(BASE, "output", "web")
@@ -121,8 +143,9 @@ def uret():
     fig.update_yaxes(type="log")
     yollar.append(_yaz(fig, "maliyet_bilesenleri.html"))
 
-    # --- 05: Katkı ayrıştırması (Tem-24 → Tem-26) yığılı bar ---
+    # --- 05: Katkı ayrıştırması (iki yıl önce → güncel ay) yığılı bar ---
     kat = pd.read_csv(os.path.join(BASE, "output", "katki_ayristirma.csv"), index_col=0)
+    _son, _once = _donem(_oku("Fiyat_maliyet_orani"))
     kalemler = [c for c in kat.columns if c.upper() != "TOPLAM"]
     fig = go.Figure()
     for i, c in enumerate(kalemler):
@@ -130,7 +153,7 @@ def uret():
                              y=kat[c], name=str(c).capitalize(),
                              marker_color=PALET[i % len(PALET)]))
     fig.update_layout(barmode="stack")
-    _duzen(fig, "Maliyet artışının kalem katkıları, Tem-2024 → Tem-2026", "puan",
+    _duzen(fig, f"Maliyet artışının kalem katkıları, {_ad_kisa(_once)} → {_ad_kisa(_son)}", "puan",
            "Toplam sütun yüksekliği iki yıllık maliyet artışıdır (%).")
     yollar.append(_yaz(fig, "katki_ayristirma.html"))
 
@@ -162,11 +185,11 @@ def uret():
     duy = pd.read_csv(os.path.join(BASE, "output", "duyarlilik.csv"))
     fig = go.Figure()
     for i, k in enumerate(["ev_yemekleri", "kirmizi_et", "tavuk", "fast_food"]):
-        kol = f"oran26_{k}"
+        kol = f"oran_son_{k}"
         if kol in duy.columns:
             fig.add_trace(go.Box(y=duy[kol], name=KONSEPT_AD[k],
                                  marker_color=PALET[i], boxpoints="all", jitter=0.4))
-    _duzen(fig, "Duyarlılık: 18 senaryoda Temmuz 2026 fiyat/maliyet oranı", "oran",
+    _duzen(fig, f"Duyarlılık: {len(duy)} senaryoda {_ad_uzun(_son)} fiyat/maliyet oranı", "oran",
            "3 ağırlık seti × 3 kira göstergesi × tür kaması açık/kapalı. Dar kutu = bulgunun varsayımlara dayanıklı olduğu.")
     yollar.append(_yaz(fig, "duyarlilik.html"))
 
@@ -253,13 +276,14 @@ def uret_ek():
     try:
         oran = _oku("Fiyat_maliyet_orani")
         uzun = oran.loc["2013-01-01":"2022-12-31"].mean()
-        t24 = oran.loc["2024-07-01"]
-        t26 = oran.dropna(how="all").iloc[-1]
+        _son, _once = _donem(oran)
+        t24 = oran.loc[_once]
+        t26 = oran.loc[_son]
         ks = [k for k in ["ev_yemekleri", "kirmizi_et", "tavuk", "fast_food"] if k in oran.columns]
         etk = [KONSEPT_AD[k] for k in ks]
         fig = go.Figure()
-        for ad, seri, renk in [("2013–2022 ort.", uzun, TEAL), ("Temmuz 2024", t24, CLARET),
-                               ("Temmuz 2026", t26, GOLD)]:
+        for ad, seri, renk in [("2013–2022 ort.", uzun, TEAL), (_ad_uzun(_once), t24, CLARET),
+                               (_ad_uzun(_son), t26, GOLD)]:
             n = seri[ks] / seri["ev_yemekleri"]
             fig.add_trace(go.Bar(x=etk, y=n.values, name=ad, marker_color=renk,
                                  text=[f"{v:.2f}" for v in n.values], textposition="outside"))
@@ -280,7 +304,7 @@ def uret_konsept_oranlari():
     Birlesik grafikte (oran_konseptler.html) olmayan uc katman burada var:
       · konsepte ozgu 2013-2022 ortalama cizgisi, degeri etiketli
       · Nisan 2022 splice isareti (fiyat tarafi proxy'ye gectigi an)
-      · Tem-2024 ve Tem-2026 noktalarinin isaretlenip etiketlenmesi
+      · iki yil once ve guncel ay noktalarinin isaretlenip etiketlenmesi
     """
     import endeks as _e
     ETIKET = {"kirmizi_et": "Kırmızı et ağırlıklı", "tavuk": "Tavuk eti ağırlıklı",
@@ -314,9 +338,8 @@ def uret_konsept_oranlari():
         fig.add_annotation(x=SPLICE, y=1.02, yref="paper", showarrow=False,
                            text="Nis 2022: fiyat tarafı proxy'ye geçer",
                            xanchor="left", font=dict(size=10, color="#6b6b6b"))
-        # iki kilit nokta
-        for t in ["2024-07-01", "2026-07-01"]:
-            ts = pd.Timestamp(t)
+        # iki kilit nokta: iki yıl önce ve güncel ay
+        for ts in _donem(oran)[::-1]:
             if ts not in srs.index: continue
             v = float(srs.loc[ts])
             fig.add_trace(go.Scatter(x=[ts], y=[v], mode="markers+text",

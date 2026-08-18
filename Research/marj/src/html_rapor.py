@@ -28,7 +28,7 @@ GRAFIK_BASLIK = {
     10: "Fiyat/maliyet oranı — Kırmızı et ağırlıklı (2013 Ocak=1)",
     11: "Fiyat/maliyet oranı — Tavuk eti ağırlıklı (2013 Ocak=1)",
     12: "Fiyat/maliyet oranı — Fast-food (2013 Ocak=1)",
-    13: "Fiyat/maliyet oranları: uzun dönem ort. vs Temmuz 2024 vs Temmuz 2026",
+    13: "Fiyat/maliyet oranları: uzun dönem ort. vs iki yıl önce vs güncel ay",
     14: "Fiyat/maliyet oranları, Ev yemekleri=1 normalize",
     15: "İma edilen kâr marjı düzeyi — merkez senaryo (2013-2022 ort. marjı %22,5 varsayımı)",
     16: "Food-cost oranı: porsiyon gıda maliyeti / KDV'siz satış fiyatı (çıpasız, gramaj varsayımlı)",
@@ -164,7 +164,7 @@ def main():
             ("Gıda ve Alkolsüz İçecekler", evds["gida_alkolsuz"], "#eb6834"),
             ("Yemek Hizmetleri", evds["yemek_111"], "#1baf7a")]
     baz19 = pd.Timestamp("2019-12-01")
-    dilim = slice("2019-12-01", "2026-07-01")
+    dilim = slice("2019-12-01", veri.son_ay())
     tarih24 = exc.loc[dilim].index
     h2, v2 = sg.cizgi_svg("g2", tarih24,
                           [{"ad": ad, "renk": r, "vals": list((s / s.loc[baz19] * 100).loc[dilim].values)}
@@ -201,22 +201,23 @@ def main():
     # G13-G14 — karşılaştırma barları
     konseptler = ["ev_yemekleri", "kirmizi_et", "tavuk", "fast_food"]
     kat_etiket = [endeks.KONSEPT_ETIKET[k] for k in konseptler]
-    t24, t26 = o.loc["2024-07-01"], o.loc["2026-07-01"]
+    SON, ONCE = veri.son_ay(), veri.once_ay()
+    t24, t26 = o.loc[ONCE], o.loc[SON]
     h13, v13 = sg.bar_svg("g13", kat_etiket + ["Tüm konseptler (ort.)"],
                           [{"ad": "2013-2022 ort.", "renk": "#2a78d6",
                             "vals": [round(float(uzun[k]), 2) for k in konseptler] + [round(float(uzun[konseptler].mean()), 2)]},
-                           {"ad": "Temmuz 2024", "renk": "#eb6834",
+                           {"ad": veri.ad_uzun(ONCE), "renk": "#eb6834",
                             "vals": [round(float(t24[k]), 2) for k in konseptler] + [round(float(t24[konseptler].mean()), 2)]},
-                           {"ad": "Temmuz 2026", "renk": "#1baf7a",
+                           {"ad": veri.ad_uzun(SON), "renk": "#1baf7a",
                             "vals": [round(float(t26[k]), 2) for k in konseptler] + [round(float(t26[konseptler].mean()), 2)]}],
                           fmt="oran", baslik=bas(13))
     ekle(13, h13, v13)
     h14, v14 = sg.bar_svg("g14", kat_etiket,
                           [{"ad": "2013-2022 ort.", "renk": "#2a78d6",
                             "vals": [round(float(uzun[k] / uzun["ev_yemekleri"]), 2) for k in konseptler]},
-                           {"ad": "Temmuz 2024", "renk": "#eb6834",
+                           {"ad": veri.ad_uzun(ONCE), "renk": "#eb6834",
                             "vals": [round(float(t24[k] / t24["ev_yemekleri"]), 2) for k in konseptler]},
-                           {"ad": "Temmuz 2026", "renk": "#1baf7a",
+                           {"ad": veri.ad_uzun(SON), "renk": "#1baf7a",
                             "vals": [round(float(t26[k] / t26["ev_yemekleri"]), 2) for k in konseptler]}],
                           fmt="oran", taban_cizgi=1.0, baslik=bas(14))
     ekle(14, h14, v14)
@@ -238,10 +239,10 @@ def main():
     for k in konseptler:
         marj_satirlar.append({
             "Konsept": endeks.KONSEPT_ETIKET[k],
-            "Tem-2024 (çıpa %22,5)": yz(float(marj[0.225].loc["2024-07-01", k])),
-            "Tem-2026 (çıpa %15)": yz(float(marj[0.15].loc["2026-07-01", k])),
-            "Tem-2026 (çıpa %22,5)": yz(float(marj[0.225].loc["2026-07-01", k])),
-            "Tem-2026 (çıpa %30)": yz(float(marj[0.30].loc["2026-07-01", k])),
+            f"{veri.ad_kisa(veri.once_ay())} (çıpa %22,5)": yz(float(marj[0.225].loc[veri.once_ay(), k])),
+            f"{veri.ad_kisa(veri.son_ay())} (çıpa %15)": yz(float(marj[0.15].loc[veri.son_ay(), k])),
+            f"{veri.ad_kisa(veri.son_ay())} (çıpa %22,5)": yz(float(marj[0.225].loc[veri.son_ay(), k])),
+            f"{veri.ad_kisa(veri.son_ay())} (çıpa %30)": yz(float(marj[0.30].loc[veri.son_ay(), k])),
         })
     marj_tablo = tablo(pd.DataFrame(marj_satirlar))
 
@@ -265,13 +266,13 @@ def main():
     for k, ad in kart_tanim:
         v26, v24, u = float(t26[k]), float(t24[k]), float(uzun[k])
         okartlar.append(f'<div class="kart"><div class="k">{ad}</div><div class="v">{tr2(v26)}</div>'
-                        f'<div class="d">Tem-24: {tr2(v24)} · uzun dönem ort. {tr2(u)}</div></div>')
+                        f'<div class="d">{veri.ad_kisa2(ONCE)}: {tr2(v24)} · uzun dönem ort. {tr2(u)}</div></div>')
     okartlar = "".join(okartlar)
     katsayi = (t26[konseptler] / uzun[konseptler])
     kat_aralik = f"{tr2(float(katsayi.min()))}–{tr2(float(katsayi.max()))}"
 
     kars = kars.rename(columns={"metrik": "Metrik", "konsept": "Konsept", "orijinal": "Orijinal (EN 24/17)",
-                                "replikasyon": "Replikasyon", "sapma": "Sapma", "guncel_2026_07": "Güncel (Tem 2026)",
+                                "replikasyon": "Replikasyon", "sapma": "Sapma", "guncel": f"Güncel ({veri.ad_kisa2(veri.son_ay())})", "guncel_donem": "Dönem",
                                 "gerekce": "Sapma gerekçesi"})
     duy_g = duy.rename(columns={"agirlik": "Ağırlık", "kira": "Kira gösterge", "tur_kamasi": "Tür kaması"})
     meta_tablo = tablo(meta.rename(columns={"kod": "Kod", "ad": "Madde",
@@ -334,7 +335,7 @@ ol li{margin:6px 0}
 <div class="ust">Replikasyon ve Güncelleme · TCMB Ekonomi Notu 2024-17</div>
 <h1>Yiyecek Hizmetleri Sektöründe Fiyat/Maliyet Gelişmeleri</h1>
 <div class="alt">Atabek Demirhan &amp; Bahça (26 Aralık 2024) çalışmasının kamuya açık veriyle replikasyonu ve
-<b>Temmuz 2026</b>'ya güncellenmesi · Üretim: {üretim} · Tümü <code>src/run_all.py</code> ile yeniden üretilebilir</div>
+<b>{veri.ad_uzun(veri.son_ay())}</b>'ya güncellenmesi · Üretim: {üretim} · Tümü <code>src/run_all.py</code> ile yeniden üretilebilir</div>
 </header>
 <nav>
 <a href="#ozet">Özet</a><a href="#yontem">Yöntem</a><a href="#veri">Veri &amp; proxy</a>
@@ -344,7 +345,7 @@ ol li{margin:6px 0}
 
 <section id="ozet">
 <div class="ozet-kart">{okartlar}</div>
-<div class="kutu"><b>Tek cümlelik sonuç:</b> 2023'te başlayan fiyat/maliyet kırılması Temmuz 2026 itibarıyla
+<div class="kutu"><b>Tek cümlelik sonuç:</b> 2023'te başlayan fiyat/maliyet kırılması {veri.ad_uzun(veri.son_ay())} itibarıyla
 <b>tersine dönmedi</b>; oranlar uzun dönem ortalamalarının {kat_aralik} katında <b>yüksek bir platoya</b> oturdu,
 fast-food'da açılma devam ediyor. Bulgular 18 duyarlılık senaryosunda dayanıklı; maliyetten türetilen
 food-cost oranları da (Bölüm 7.2) aynı yönü gösteriyor.</div>
@@ -417,7 +418,7 @@ madde yapısı) nedeniyle notun altında kalır; nitel sıralama ve kırılma de
 </section>
 
 <section id="grafikler">
-<h2>5. Grafikler (Temmuz 2026'ya uzatılmış)</h2>
+<h2>5. Grafikler ({veri.ad_uzun(veri.son_ay())}'ya uzatılmış)</h2>
 <p><b>Grafikler etkileşimlidir:</b> imleci çizgilerin üzerinde gezdirince ay-yıl ve seri değerleri görünür; barlarda kutunun üzerine gelin. Noktalı dikey çizgi (Nisan 2022): madde fiyatı yayınının sonu — sonrası proxy uzatma. Oran grafikleri kâr marjı <i>seviyesi</i> değildir; 2013 Ocak'a göre göreli seviyedir.</p>
 {grafik_html[0]}
 <div class="izgara">{''.join(grafik_html[1:4])}</div>
@@ -425,7 +426,7 @@ madde yapısı) nedeniyle notun altında kalır; nitel sıralama ve kırılma de
 <div class="izgara">{''.join(grafik_html[4:8])}</div>
 <h3>Fiyat/maliyet oranları (Grafik 9-12)</h3>
 <div class="izgara">{''.join(grafik_html[8:12])}</div>
-<h3>Karşılaştırma (Grafik 13-14; üçüncü sütun: Temmuz 2026)</h3>
+<h3>Karşılaştırma (Grafik 13-14; üçüncü sütun: {veri.ad_uzun(veri.son_ay())})</h3>
 <div class="izgara">{''.join(grafik_html[12:14])}</div>
 </section>
 

@@ -58,18 +58,47 @@ def log(msg):
 
 
 # ----------------------------------------------------------------------------- EVDS
-def evds_cek(kod, start="01-01-2005", end="01-12-2026", yenile=False):
-    """Tek EVDS serisini aylık frekansta çeker; cache'e yazar. Dönen: DatetimeIndex'li Series."""
+# Önbellek tazelik sınırı (saat). Eskiden dosya varsa SÜRESİZ okunuyordu ve hiçbir
+# çağıran yenile=True vermiyordu → EVDS verisi ilk indirildiği günde donmuştu; hat her
+# ay "koşuyor", grafik üretiyor ama yeni TÜFE'yi hiç görmüyordu (sessiz bayatlama).
+CACHE_TTL_SAAT = 24
+
+
+def _cache_taze(cpath):
+    if not cpath.exists():
+        return False
+    yas_saat = (datetime.datetime.now().timestamp() - cpath.stat().st_mtime) / 3600
+    return yas_saat < CACHE_TTL_SAAT
+
+
+def evds_cek(kod, start="01-01-2005", end=None, yenile=False):
+    """Tek EVDS serisini aylık frekansta çeker; cache'e yazar. Dönen: DatetimeIndex'li Series.
+
+    Önbellek 24 saatten tazeyse okunur; değilse EVDS'e gidilir. Ağ hatasında eski
+    önbelleğe düşülür (UYARI ile) — çevrimdışı koşu çalışır ama sessiz kalmaz.
+    end verilmezse bugün+1 ay (eskiden '01-12-2026' sabitti: Aralık 2026'dan sonra
+    hiçbir yeni gözlem gelmezdi)."""
     guvenli = kod.replace(".", "_")
     cpath = CACHE / f"evds_{guvenli}.csv"
-    if cpath.exists() and not yenile:
+    if cpath.exists() and (_cache_taze(cpath) and not yenile):
         s = pd.read_csv(cpath, index_col=0, parse_dates=True).iloc[:, 0]
         s.name = kod
         return s
+    if end is None:
+        end = (pd.Timestamp.today() + pd.DateOffset(months=1)).strftime("01-%m-%Y")
     url = f"{EVDS_BASE}series={kod}&startDate={start}&endDate={end}&type=json"
-    r = requests.get(url, headers={"key": EVDS_KEY, "User-Agent": UA}, timeout=60)
-    r.raise_for_status()
-    items = r.json().get("items", [])
+    try:
+        r = requests.get(url, headers={"key": EVDS_KEY, "User-Agent": UA}, timeout=60)
+        r.raise_for_status()
+        items = r.json().get("items", [])
+    except Exception as e:
+        if cpath.exists():
+            log(f"UYARI: EVDS erişilemedi ({kod}: {e}); ESKİ önbellek kullanılıyor "
+                f"(dosya {cpath.name}, {(datetime.datetime.now().timestamp() - cpath.stat().st_mtime) / 86400:.0f} gün)")
+            s = pd.read_csv(cpath, index_col=0, parse_dates=True).iloc[:, 0]
+            s.name = kod
+            return s
+        raise
     if not items:
         raise RuntimeError(f"EVDS boş döndü: {kod}")
     df = pd.DataFrame(items)
@@ -165,10 +194,11 @@ AY_KOLONLARI = ["01-Ocak","02-Şubat","03-Mart","04-Nisan","05-Mayıs","06-Hazir
 def medas_madde_fiyatlari():
     """MEDAS pivot xls dosyasını düzenli panele çevirir: DataFrame[tarih x madde_kodu] (TL)."""
     cpath = CACHE / "medas_madde_fiyatlari_panel.csv"
-    if cpath.exists():
+    xls = RAW / "medas_madde_fiyatlari.xls"
+    # Panel önbelleği yalnız ham xls'ten YENİYSE geçerli (yeni hasat → panel yeniden kurulur)
+    if cpath.exists() and (not xls.exists() or cpath.stat().st_mtime >= xls.stat().st_mtime):
         df = pd.read_csv(cpath, index_col=0, parse_dates=True)
         return df
-    xls = RAW / "medas_madde_fiyatlari.xls"
     ham = pd.read_excel(xls, header=None)
     # Başlık satırlarını bul: ay adları 2. satırda (index 1?) — dinamik ara
     ay_satiri = None
@@ -213,10 +243,11 @@ def medas_tarim_ufe():
     """Tarım ÜFE (2020=100) tür bazlı endeks paneli: DataFrame[tarih x kod].
     Kodlar: '01.42' besi sığırı, '01.47' kümes hayvanları+yumurta, '01.45' koyun-keçi, ..."""
     cpath = CACHE / "medas_tarim_ufe_panel.csv"
-    if cpath.exists():
+    xls = RAW / "medas_tarim_ufe.xls"
+    if cpath.exists() and (not xls.exists() or cpath.stat().st_mtime >= xls.stat().st_mtime):
         return pd.read_csv(cpath, index_col=0, parse_dates=True)
     import re
-    ham = pd.read_excel(RAW / "medas_tarim_ufe.xls", header=None)
+    ham = pd.read_excel(xls, header=None)
     ay_satiri = None
     for i in range(6):
         if any("Ocak" in str(v) for v in ham.iloc[i].tolist()):
@@ -283,8 +314,65 @@ ASGARI_UCRET_BRUT = [
     ("2026-01", 33030.00),
 ]
 
-def asgari_ucret_serisi(bitis="2026-07"):
-    """Brüt asgari ücreti aylık seriye açar (basamak fonksiyonu)."""
+# ----------------------------------------------------------------------------- Analiz dönemi (TEK KAYNAK)
+# "Güncel ay" ve "iki yıl önce" HİÇBİR modülde sabit yazılmaz; buradan okunur.
+# Eskiden '2026-07-01' ~40 yerde gömülüydü: Ağustos TÜFE geldiğinde hat koşar,
+# grafikleri yeniden üretir ama Temmuz'da kalır ve sayfa bayat veriyi taze gibi
+# gösterirdi (TCMB hattında yaşanan "sessiz bayatlama"nın aynısı).
+AYLAR_TR = {1: "Ocak", 2: "Şubat", 3: "Mart", 4: "Nisan", 5: "Mayıs", 6: "Haziran",
+            7: "Temmuz", 8: "Ağustos", 9: "Eylül", 10: "Ekim", 11: "Kasım", 12: "Aralık"}
+AYLAR_KISA = {1: "Oca", 2: "Şub", 3: "Mar", 4: "Nis", 5: "May", 6: "Haz",
+              7: "Tem", 8: "Ağu", 9: "Eyl", 10: "Eki", 11: "Kas", 12: "Ara"}
+# TÜFE ile birlikte yayımlanmayan (gecikmeli) seriler: son ay tespitinde sayılmaz.
+_GECIKMELI = {"ykke"}
+_SON_AY_ONBELLEK = {}
+
+
+def son_ay(evds=None):
+    """Analizin 'güncel' ayı: TÜFE tabanlı serilerin TAMAMININ bulunduğu son ay
+    ('YYYY-MM-01'). Arşiv (2003=100) ve YKKE gibi bilinçli gecikmeli seriler
+    sayılmaz. Bir kez hesaplanıp önbelleğe alınır (aynı koşuda tüm modüller aynı
+    dönemi görsün)."""
+    if "son" in _SON_AY_ONBELLEK:
+        return _SON_AY_ONBELLEK["son"]
+    df = evds if evds is not None else tum_evds()
+    kolonlar = [c for c in df.columns if c not in _GECIKMELI and not c.startswith("eski_")]
+    tam = df[kolonlar].dropna(how="any")
+    if tam.empty:
+        raise RuntimeError("son_ay: TÜFE serileri boş — EVDS çekimi başarısız olmuş olabilir")
+    _SON_AY_ONBELLEK["son"] = tam.index[-1].strftime("%Y-%m-01")
+    return _SON_AY_ONBELLEK["son"]
+
+
+def once_ay(son=None, ay=24):
+    """Kıyas ayı: güncel aydan `ay` ay önce (varsayılan iki yıl) — 'YYYY-MM-01'."""
+    son = son or son_ay()
+    return (pd.Timestamp(son) - pd.DateOffset(months=ay)).strftime("%Y-%m-01")
+
+
+def ad_uzun(t):
+    """'2026-07-01' → 'Temmuz 2026'"""
+    t = pd.Timestamp(t); return f"{AYLAR_TR[t.month]} {t.year}"
+
+
+def ad_kisa(t):
+    """'2026-07-01' → 'Tem-2026'"""
+    t = pd.Timestamp(t); return f"{AYLAR_KISA[t.month]}-{t.year}"
+
+
+def ad_kisa2(t):
+    """'2026-07-01' → 'Tem-26'"""
+    t = pd.Timestamp(t); return f"{AYLAR_KISA[t.month]}-{str(t.year)[2:]}"
+
+
+def asgari_ucret_serisi(bitis=None):
+    """Brüt asgari ücreti aylık seriye açar (basamak fonksiyonu). bitis: 'YYYY-MM';
+    verilmezse analizin güncel ayı. Tablodaki son yıldan sonraki aylar için son
+    tutar taşınır ve UYARI basılır — yeni yıl zammı ASGARI_UCRET_BRUT'a eklenmeli."""
+    bitis = bitis or son_ay()[:7]
+    son_yil = max(int(d[:4]) for d, _ in ASGARI_UCRET_BRUT)
+    if int(bitis[:4]) > son_yil:
+        log(f"UYARI: asgari ücret tablosu {son_yil} ile bitiyor; {bitis} için son tutar taşınıyor")
     idx = pd.date_range("2013-01-01", pd.Timestamp(bitis + "-01"), freq="MS")
     s = pd.Series(index=idx, dtype=float, name="asgari_ucret_brut")
     for donem, tutar in ASGARI_UCRET_BRUT:

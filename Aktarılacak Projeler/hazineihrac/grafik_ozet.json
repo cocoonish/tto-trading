@@ -1,0 +1,102 @@
+{
+ "planlanan_ihraclar.html": {
+  "ihale_adet": 8,
+  "dogrudan_adet": 6,
+  "toplam_beklenen_mlr": 420.07,
+  "aylik": [
+   [
+    "Eylül 2026",
+    215.601,
+    247.9
+   ],
+   [
+    "Ekim 2026",
+    204.469,
+    235.1
+   ]
+  ],
+  "donem": [
+   "07.09.2026",
+   "13.10.2026"
+  ]
+ },
+ "tahmin_dogrulama.html": {
+  "n": 442,
+  "mae_mlr": 7.152961538461537,
+  "mape": 60.75882352941177,
+  "mape_medyan": 38.1,
+  "son12ay_n": 65,
+  "son12ay_mae_mlr": 15.842061538461541,
+  "son12ay_mape": 53.30153846153848,
+  "mape_ham": 66.60452488687783,
+  "mape_strateji": 70.39072398190045,
+  "donem": "Mar 2020 – Ağu 2026"
+ },
+ "ihrac_hacmi.html": {
+  "ihale_adet": 448,
+  "donem": [
+   "11.02.2020",
+   "18.08.2026"
+  ],
+  "toplam_mlr": 7301.983,
+  "tip_pay": {
+   "Değişken Faizli Devlet Tahvili": 6.8,
+   "Hazine Bonosu": 9.7,
+   "Kuponsuz Devlet Tahvili": 1.6,
+   "Sabit Kuponlu Devlet Tahvili": 48.1,
+   "TLREF'e Endeksli Devlet Tahvili": 24.5,
+   "TÜFE'ye Endeksli Devlet Tahvili": 9.4
+  }
+ },
+ "ihrac_usd.html": {
+  "ay_adet": 79,
+  "toplam_usd_mlr": 258.1269363853828,
+  "son_ay_usd_mlr": 7.281110285496109,
+  "son_kur": 47.857398986816406
+ },
+ "ihrac_tempo.html": {
+  "ceyrek_adet": 27,
+  "son_ceyrek": [
+   "2026Q3",
+   634.089
+  ],
+  "aylik_ort_ihale": 5.670886075949367
+ },
+ "faiz_gelisimi.html": {
+  "son_ay": "2026-08",
+  "son_ay_maliyet": 41.040033420496165,
+  "zirve_maliyet": 52.134928298484404,
+  "zirve_ay": "2025-05"
+ },
+ "talep_analizi.html": {
+  "b2c_son_ay": 2.157684636466689,
+  "b2c_son12_ort": 2.1172128110708215,
+  "kabul_son_ay": 40.1,
+  "kabul_tum_ort": 47.112723214285715
+ },
+ "fiyat_araligi.html": {
+  "n": 50,
+  "donem": [
+   "11.11.2025",
+   "18.08.2026"
+  ]
+ },
+ "vade_dagilimi.html": {
+  "yil_adet": 7,
+  "ort_vade": 4.567091722595078
+ },
+ "strateji_revizyon.html": {
+  "revizyonlu_ay": 83,
+  "toplam_hedef_mlr": 8421.6,
+  "toplam_gercek_mlr": 7302.0,
+  "gerceklesme_orani": 86.70561413508122
+ },
+ "tahmin_aylik.html": {
+  "ay_adet": 78,
+  "aylik_mape": {
+   "ham": 25.275291072430523,
+   "duzeltilmis": 23.493688725343645,
+   "strateji": 27.4375213190517
+  }
+ }
+}

@@ -27,7 +27,23 @@ Günlük tahmin (Cuma anchor + analitik bilanço delta):
 
   Net Rezerv (T)      = (TP.AB.N06_son_Cuma + ΔAnalitik_TL(son_Cuma→T))
                         / TP.DK.USD.A.YTL(T)
-                        ΔAnalitik = Δ(TP.AB.A02 - TP.AB.A17)
+                        ΔAnalitik = Δ(TP.AB.A02 - TP.AB.A14)
+                        A02 = Dış Varlıklar, A14 = Bankaların Döviz Mevduatı
+                        (analitik bilanço, iş günü)
+
+  Neden A14: Stand-By net rezervin (N06 = N07 - N08) yükümlülük tarafında
+  ağırlık bankaların döviz mevduatıdır (N09; IMF ve "diğer" hafta içinde
+  neredeyse sabit). Analitik bilançoda aynı kalem A14 olarak HER İŞ GÜNÜ
+  gelir; Cuma günleri N09 ile bin TL hassasiyetinde aynıdır (07.08.2026:
+  ikisi de 4.799.989). Eskiden A17 çıkarılıyordu — A17 EMİSYON'dur, döviz
+  yükümlülüğü değil (A16 Rezerv Para = A17 + A18 + A21 + A22 eşitliği bunu
+  gösterir). Emisyon dalgalanması sinyale karışıyor, banka mevduatındaki
+  hareket ise hiç görülmüyordu: brüt artıp net sabit kaldığında günlük tahmin
+  haftayı 4-5 milyar USD yukarıda bitirip Cuma resmi değere "çakılıyordu".
+  Geri-test (Cuma→Cuma ΔN06 - Δproxy, 187 hafta, 2023-2026):
+    A02-A17 (eski)  RMSE 2,98  |  2026: 3,28, maks 8,3 milyar USD
+    A02-A14 (yeni)  RMSE 0,80  |  2026: 0,31, maks 0,7 milyar USD
+  `python net_rezerv.py --gunluk-dogrula` bu tabloyu her koşuda yeniden üretir.
 
 Cuma günlerinde günlük tahmin = haftalık resmi değer (ΔAnalitik = 0).
 
@@ -42,6 +58,7 @@ Kullanım:
   python net_rezerv.py --start 01-01-2025 --csv tarih_serisi.csv
   python net_rezerv.py --daily-only --start 01-04-2026  # sadece günlük seri
   python net_rezerv.py --swap-dogrula  # swap düzeltmesi ara değer hata ölçümü
+  python net_rezerv.py --gunluk-dogrula # günlük proxy geri-testi (A02-A14 vs eski)
 """
 
 from __future__ import annotations
@@ -92,8 +109,11 @@ SERIES = {
     "imf_TL":                     "TP.AB.N10",
     "diger_yukumluluk_TL":        "TP.AB.N11",
     # Analitik bilanço (iş günü) — günlük delta için
-    "dis_varliklar_TL":           "TP.AB.A02",
-    "doviz_yukumluluk_TL":        "TP.AB.A17",
+    "dis_varliklar_TL":           "TP.AB.A02",   # A. Dış Varlıklar
+    "bankalar_doviz_mev_gunluk_TL": "TP.AB.A14", # İç yük. > döviz mevduatı > Bankalar
+    # A17 = Emisyon (Rezerv Para bileşeni). Eskiden yanlışlıkla "döviz
+    # yükümlülüğü" diye buradaydı; günlük tahmin hatasının ana kaynağıydı.
+    "emisyon_TL":                 "TP.AB.A17",
     # USD/TRY alış (günlük)
     "usdtry":                     "TP.DK.USD.A.YTL",
 }
@@ -291,6 +311,7 @@ def calculate_daily_net_reserves(
     """Cuma anchor + analitik bilanço delta ile günlük net rezerv tahmini.
 
     Net Rezerv (T) = (N06_son_Cuma_TL + ΔAnalitik_TL(son_Cuma→T)) / USDTRY(T)
+    ΔAnalitik = Δ(A02 Dış Varlıklar − A14 Bankaların Döviz Mevduatı)
 
     Cuma günlerinde delta = 0 ⇒ resmi haftalık değerle eşleşir.
 
@@ -302,9 +323,13 @@ def calculate_daily_net_reserves(
         Swap Hariç Net Rezerv (T) = Net Rezerv (T) + swap_duzeltme(T).
         Düzeltmenin NaN olduğu tarihlerde swap hariç seri de NaN kalır.
     """
-    out = df[["dis_varliklar_TL", "doviz_yukumluluk_TL", "usdtry"]].copy()
+    out = df[["dis_varliklar_TL", "bankalar_doviz_mev_gunluk_TL",
+              "usdtry"]].copy()
+    # Dış Varlıklar - Bankaların Döviz Mevduatı (A02 - A14). N06'nın hafta
+    # içinde gerçekten oynayan iki bacağı bunlar; IMF ve "diğer" yükümlülük
+    # hafta içinde sabit kabul edilir (bkz. modül açıklaması + --gunluk-dogrula).
     out["analitik_net_TL"] = (
-        out["dis_varliklar_TL"] - out["doviz_yukumluluk_TL"]
+        out["dis_varliklar_TL"] - out["bankalar_doviz_mev_gunluk_TL"]
     )
 
     # Cuma anchor: TP.AB.N06 (TL) ve aynı Cumadaki analitik net (TL)
@@ -507,6 +532,36 @@ def latest_summary(weekly: pd.DataFrame, swap_pdf: dict | None,
     return "\n".join(lines)
 
 
+def gunluk_dogrulama_raporu(raw: pd.DataFrame) -> str:
+    """Günlük tahminin çekirdeği olan Δproxy'nin Cuma→Cuma geri-testi.
+
+    Her resmi Cuma F için: hata = [N06(F) − N06(F−7)] − Δproxy(F−7→F), USD'ye
+    F kuru ile çevrilir. Aday proxy'ler yan yana basılır ki seçim gerekçesi
+    (A02−A14) her koşuda veriyle yeniden görülsün. Elle ayar yok: yalnız EVDS.
+    """
+    adaylar = {
+        "A02-A14 (kullanılan)": raw["dis_varliklar_TL"]
+                                - raw["bankalar_doviz_mev_gunluk_TL"],
+        "A02      (yalnız dış varlık)": raw["dis_varliklar_TL"],
+        "A02-A17 (eski; A17=emisyon)": raw["dis_varliklar_TL"] - raw["emisyon_TL"],
+    }
+    cuma = raw[raw["net_uluslararasi_rezerv_TL"].notna()]
+    usd = raw["usdtry"].ffill().reindex(cuma.index)
+    dN = cuma["net_uluslararasi_rezerv_TL"].diff()
+    satirlar = ["=== Günlük tahmin geri-testi (Cuma→Cuma, milyar USD) ==="]
+    for ad, p in adaylar.items():
+        dP = p.ffill().reindex(cuma.index).diff()
+        e = ((dN - dP) * 1000.0 / usd / 1e9).dropna()
+        e26 = e[e.index.year == e.index.year.max()]
+        satirlar.append(
+            f"  {ad:<30} n={len(e):>3}  RMSE {float((e**2).mean())**0.5:5.2f}  "
+            f"MAE {e.abs().mean():5.2f}  maks {e.abs().max():5.2f}   | "
+            f"{e.index.year.max()}: RMSE {float((e26**2).mean())**0.5:5.2f}  "
+            f"maks {e26.abs().max():5.2f}"
+        )
+    return "\n".join(satirlar)
+
+
 def swap_dogrulama_raporu(gozlem: pd.DataFrame) -> str:
     """Ay içi haftalık gözlemlerle ara değer / basamak hatasını ölçer.
 
@@ -609,6 +664,9 @@ def main():
     ap.add_argument("--swap-dogrula", action="store_true",
                     help="ay içi gerçek IRFCL gözlemleriyle ara değer/basamak "
                          "yönteminin hatasını ölç")
+    ap.add_argument("--gunluk-dogrula", action="store_true",
+                    help="günlük tahmin proxy'sinin (A02-A14) Cuma→Cuma "
+                         "geri-testi; eski A02-A17 ile yan yana")
     args = ap.parse_args()
 
     raw = fetch_evds(args.start, args.end)
@@ -639,6 +697,8 @@ def main():
 
     if args.swap_dogrula:
         print(swap_dogrulama_raporu(gozlem))
+    if args.gunluk_dogrula:
+        print(gunluk_dogrulama_raporu(raw))
 
     if args.validate:
         ref = {"brut": 171.1, "net": 54.2, "swap_haric": 36.4}

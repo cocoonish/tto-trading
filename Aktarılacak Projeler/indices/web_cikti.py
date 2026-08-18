@@ -1051,6 +1051,10 @@ def uret(cikti_dizini=None, rejim=None):
               f" | PC1 payi {ozet['pc1_share']:.1%}"
               f" | {ozet.get('n_assets', '?')} varlik | veri sonu {ozet.get('as_of', '?')}")
         yollar.append(ciz_rejim(ozet, os.path.join(hedef, "rejim.html")))
+        # Sayfa metnindeki "veri sonu" damgası buradan okunur (ozet_uret.py
+        # birleştirir) — elle yazılmaz; önbellek ilerlemezse sayfada da ilerlemez.
+        with open(os.path.join(hedef, "rejim_ozet.json"), "w", encoding="utf-8") as f:
+            json.dump(ozet, f, ensure_ascii=False, indent=1)
     except Exception as exc:
         print(f"UYARI: rejim.html uretilemedi: {exc}")
 

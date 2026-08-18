@@ -12,8 +12,24 @@ gsh = g.dropna(subset=["swap_haric_net_rezerv_usd"]).iloc[-1]
 hsh = h.dropna(subset=["swap_haric_net_rezerv_usd"]).iloc[-1]
 # Swap düzeltmesinin (II.2+II.3) en son YAYIMLANDIĞI gün
 gozlem = g[g["swap_gozlem"].astype(str).str.lower().isin(["true", "1"])]
+# Son 20 iş gününde mutlak değerce en büyük üç günlük hareket (net rezerv, mlr USD).
+# Sayfadaki "öne çıkan hareketler" cümlesi bu üç çiftten okunur — elle yazılmaz.
+PENCERE = 20
+son = g.dropna(subset=["net_rezerv_usd"]).tail(PENCERE + 1).copy()
+son["d"] = son["net_rezerv_usd"].diff()
+uclar = son.dropna(subset=["d"]).reindex(
+    son.dropna(subset=["d"])["d"].abs().sort_values(ascending=False).index
+).head(3).sort_values("Tarih")
+uc_alanlar = {}
+for i, (_, r) in enumerate(uclar.iterrows(), start=1):
+    uc_alanlar[f"u{i}_tarih"] = r["Tarih"].strftime("%d.%m")
+    uc_alanlar[f"u{i}_delta"] = round(float(r["d"]), 1)
 ozet = {
     "_tarih": gs["Tarih"].strftime("%d.%m.%Y"),
+    "pencere_gun": PENCERE,
+    **uc_alanlar,
+    # Grafikteki gerçek IRFCL gözlem işaretçisi sayısı (günlük seri penceresinde)
+    "irfcl_nokta": int(len(gozlem)),
     "g_tarih": gs["Tarih"].strftime("%d.%m.%Y"),
     "g_net": round(float(gs["net_rezerv_usd"]), 1),
     "g_swap_haric_tarih": gsh["Tarih"].strftime("%d.%m.%Y"),

@@ -33,5 +33,15 @@ def deval(n):
     return round(((p1 / p0) ** (365 / d) - 1) * 100, 1)
 ozet = {"_tarih": s.index[-1].strftime("%d.%m.%Y"), "kur": round(float(s.iloc[-1]), 2),
         "d1h": deval(5), "d1a": deval(21), "d3a": deval(63)}
+# Grafik scriptlerinin yazdığı istatistik sidecar'ları (rejim eğimleri, haftalık ve
+# aylık segment özetleri) sayfa metnine akar. Bunlar grafiklerle AYNI koşudan gelir;
+# eksikse (script koşmadıysa) o anahtarlar düşer, sayfadaki statik yedek görünür.
+for ad in ("istatistik_seg.json", "istatistik_hafta.json", "istatistik_ay.json"):
+    yol = os.path.join(BASE, ad)
+    if os.path.exists(yol):
+        try:
+            ozet.update(json.load(open(yol, encoding="utf-8")))
+        except Exception as e:
+            print(f"{ad} okunamadı: {e}")
 json.dump(ozet, open(os.path.join(BASE, "ozet.json"), "w"), ensure_ascii=False, indent=1)
 print(json.dumps(ozet, ensure_ascii=False))
