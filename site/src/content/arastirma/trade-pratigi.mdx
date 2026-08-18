@@ -216,6 +216,22 @@ Rakamlar modelin DF'leri ve TRT160431T35 örneğiyle türetilmiştir; illüstrat
 
 ### Bölüm B — TRY OIS: TLREF swaplarında pay/receive kararı
 
+<div class="not">
+  <span class="etiket">Tarih çıpası — bu bölümdeki her "Eylül", "Ekim", "Aralık" neyi kastediyor</span>
+  Bölüm <b>5 Ağustos 2026</b>'da yazıldı. Metinde geçen ay adları o günkü <b>PPK
+  takviminin kalan toplantılarıdır</b>; başka bir yılın aynı ayı değil:
+  <table><thead><tr><th>Metindeki ad</th><th>Toplantı</th><th>Tarih</th></tr></thead>
+  <tbody>
+  <tr><td>"Eylül"</td><td>kalan 1. toplantı</td><td><b>10 Eylül 2026</b></td></tr>
+  <tr><td>"Ekim"</td><td>kalan 2. toplantı</td><td><b>22 Ekim 2026</b></td></tr>
+  <tr><td>"Aralık"</td><td>kalan 3. toplantı</td><td><b>10 Aralık 2026</b></td></tr>
+  <tr><td>"Ocak", "Mart"</td><td>2027'nin ilk ikisi</td><td><b>21 Ocak · 18 Mart 2027</b></td></tr>
+  </tbody></table>
+  Eğri seviyeleri, "−125 bp Eylül adımı" gibi fiyatlamalar ve tüm vakalar bu fotoğrafa
+  aittir. Bölüm daha sonra okunuyorsa: rakamlar tarih belgesidir, <em>gramer</em>
+  (2.1, 5.0, 6.0) rejimden bağımsızdır ve geçerliliğini korur.
+</div>
+
 taşımanın bir tarafa sistematik olarak maaş ödemesi — bu üçü birleşince, doğru görüşün
 yanlış enstrümanla ifade edilmesi para kaybettirir. Bu ders o kararı baştan sona kurar:
 zemin (TLREF nasıl oluşur), anatomi (P&L'in üç motoru), vade vade gerekçeler, spread ve fly
@@ -507,27 +523,27 @@ ayrılmalıdır — aksi hâlde hangi görüşün çalıştığı hiç öğrenil
 #### 2.2 Ön uç strip'inden PPK patikası çıkarmak
 
 Kısa uç kotasyonları, toplantı tarihleri arasında TLREF'in sabit kaldığı bir **merdiven**
-varsayımıyla toplantı başına adımlara çözülür. Bugünden (5 Ağustos) bakınca kalan 2026
-toplantıları 10 Eylül, 22 Ekim ve 10 Aralık; 2027 ilanlı takvimde 21 Ocak ve 18 Mart var.
+varsayımıyla toplantı başına adımlara çözülür. Bugünden (5 Ağustos 2026) bakınca kalan 2026
+toplantıları 10 Eylül, 22 Ekim ve 10 Aralık 2026; 2027 ilanlı takvimde 21 Ocak ve 18 Mart var.
 Karar günü ilan edilen oranın ertesi iş günü fonlamaya yansıdığını varsayalım.
 
-**2m kotasyonu** (61 gün; yalnız 10 Eylül'ü kapsar):
+**2m kotasyonu** (61 gün; yalnız 10 Eylül 2026'yı kapsar):
 
 $$
 39{,}95\cdot\frac{36}{61} + (39{,}95+\Delta_1)\cdot\frac{25}{61} = 39{,}45
 \quad\Rightarrow\quad \Delta_1 \approx -122\ \text{bp}\ (\sim-125)
 $$
 
-**3m kotasyonu** (92 gün; 10 Eylül + 22 Ekim):
+**3m kotasyonu** (92 gün; 10 Eylül + 22 Ekim 2026):
 
 $$
 39{,}95 + \frac{56}{92}\Delta_1 + \frac{14}{92}\Delta_2 = 38{,}95,
 \qquad \Delta_1 = -125 \;\Rightarrow\; \Delta_2 \approx -155\ \text{bp}\ (\sim-150)
 $$
 
-**6m kotasyonu** aynı yöntemle Aralık adımını verir: $\Delta_3 \approx -150$ bp.
+**6m kotasyonu** aynı yöntemle Aralık 2026 adımını verir: $\Delta_3 \approx -150$ bp.
 
-Bu merdivenin en önemli kelimesi **"efektif"**tir. $\Delta_1 = -125$, tek başına "Eylül'de
+Bu merdivenin en önemli kelimesi **"efektif"**tir. $\Delta_1 = -125$, tek başına "Eylül 2026'da
 125 bp politika indirimi" demek değildir; politika adımı ile fonlama normalizasyonunun
 (tavandan politika faizine iniş, ~295 bp'lik ayrı bir rezervuar) olasılık ağırlıklı
 toplamıdır. Aynı −125, "kesin −100 indirim + kısmi normalizasyon" da olabilir, "%50
@@ -538,7 +554,7 @@ iki bileşenli düşün.
 
 İkinci katman **olasılık okumasıdır**: strip'teki −125, "kesin −125" ile "%50 ihtimalle
 −250, %50 ihtimalle 0" arasında ayrım yapamaz; ikisi aynı ortalamayı verir ama karar günü
-P&L dağılımları bambaşkadır. Piyasa iki kampa bölündüğünde (bugünkü Eylül fiyatlaması buna
+P&L dağılımları bambaşkadır. Piyasa iki kampa bölündüğünde (bugünkü Eylül 2026 fiyatlaması buna
 yakındır) switch pozisyonları yazı-tura karakterine bürünür: beklenen değer küçük,
 gerçekleşme büyük. Bu yüzden toplantı işlemlerinde boyut, ortalama görüşe değil
 **dağılımın şekline** göre seçilir; kamplaşma keskinse pozisyonu karar öncesi yarıla,
@@ -680,8 +696,8 @@ Kısa ucun grameri döngünün fazına göre değişmez; değişen, işaretler v
 
 | Vade | Ne fiyatlar (bugün) | Pay gerekçeleri | Receive gerekçeleri |
 | --- | --- | --- | --- |
-| **3m** | 10 Eylül + 22 Ekim; ~−200 bp efektif gevşeme. Fixing bacağının yarısından fazlası bugünkü %39,95'ten kilitli | Eylül'de pas / şahin metin; enerji-kur kaynaklı enflasyon sürprizi; fonlama sıkısının uzaması; TLREF'e endeksli kısa borçlanma maliyetinin kilitlenmesi | Eylül'de −250'ye varan güvercin dönüş + fonlama normalizasyonunun hemen başlaması; TL'de hızlı değerlenme/dezenflasyon sürprizi |
-| **6m** | Aralık dahil üç toplantı + normalizasyonun ilk yarısı; ~−425 bp | "İndirimler gelir ama fiyatlanandan yavaş" — pozitif taşımanın en verimli olduğu nokta; yıl sonu likidite sıkışığına karşı koruma | Döngünün Ekim-Aralık'ta hızlanacağı görüşü; koridor üst bandının indirilmesi/fonlamanın politikaya çekilmesi beklentisi |
+| **3m** | 10 Eylül + 22 Ekim 2026; ~−200 bp efektif gevşeme. Fixing bacağının yarısından fazlası bugünkü %39,95'ten kilitli | Eylül 2026'da pas / şahin metin; enerji-kur kaynaklı enflasyon sürprizi; fonlama sıkısının uzaması; TLREF'e endeksli kısa borçlanma maliyetinin kilitlenmesi | Eylül 2026'da −250'ye varan güvercin dönüş + fonlama normalizasyonunun hemen başlaması; TL'de hızlı değerlenme/dezenflasyon sürprizi |
+| **6m** | Aralık 2026 dahil üç toplantı + normalizasyonun ilk yarısı; ~−425 bp | "İndirimler gelir ama fiyatlanandan yavaş" — pozitif taşımanın en verimli olduğu nokta; yıl sonu likidite sıkışığına karşı koruma | Döngünün Ekim-Aralık 2026'da hızlanacağı görüşü; koridor üst bandının indirilmesi/fonlamanın politikaya çekilmesi beklentisi |
 | **1y** | Beş toplantı + normalizasyonun büyük kısmı; 12 ay ort. TLREF ~%35,25 | ALM: sabit faizli kredi/DİBS defterinin ilk yıl faiz riskine karşı çekirdek hedge'i; "kalıcı katılık" makro görüşü | Dezenflasyon temasının en likit outright ifadesi; DİBS almadan duration; offshore'un standart giriş noktası |
 
 #### 3m — fixing enstrümanı
@@ -778,8 +794,8 @@ zamanlamasını** izole eder.
 
 | Senaryo (toplam 12 aylık gevşeme ~sabit) | Kotasyonlar nereye | Fly |
 | --- | --- | --- |
-| **Front-load:** Eylül'de −300, sonrası yavaş | 3m −105, 6m −121, 1y −58 | +80 → ~0: **short fly** kazanır |
-| **Erteleme:** Eylül-Ekim pas, Aralık'tan itibaren −250'ler | 3m +100, 6m +149, 1y +95 | +80 → ~+183: **long fly** kazanır |
+| **Front-load:** Eylül 2026'da −300, sonrası yavaş | 3m −105, 6m −121, 1y −58 | +80 → ~0: **short fly** kazanır |
+| **Erteleme:** Eylül-Ekim 2026 pas, Aralık 2026'dan itibaren −250'ler | 3m +100, 6m +149, 1y +95 | +80 → ~+183: **long fly** kazanır |
 | Fiyatlanan patika aynen gelir | Strip forward'a oturur | Değişim ~0; iki taraf da işlem maliyetini öder |
 
 Yani **long 3m6m1y**, "TCMB oyalayacak ama döngü derinliği kaybolmayacak" cümlesinin;
@@ -1016,7 +1032,7 @@ likiditesi** — stres gününde bir bacak dönmez, yapı istemeden outright'a b
 
 | Görüş cümlesi | Doğru yapı |
 | --- | --- |
-| "Eylül'de pas geçerler" | 1m−2m switch'i (pay 2m / rec 1m) |
+| "Eylül 2026'da pas geçerler" | 1m−2m switch'i (pay 2m / rec 1m) |
 | "Başlarlarsa arka arkaya gelir" | 3m6m flattener (pay 3m / rec 6m) |
 | "İlk adımlar gelir, devamı fiyatlandığı kadar gelmez" | 6m1y steepener (rec 6m / pay 1y) |
 | "Döngü kesintisiz sonuna kadar gider" | 1y2y flattener (pay 1y / rec 2y) |
@@ -1028,8 +1044,8 @@ likiditesi** — stres gününde bir bacak dönmez, yapı istemeden outright'a b
 #### 5.1 PPK switch'leri (1m/2m/3m strip)
 
 Tek toplantıyı izole etmenin en temiz yolu ardışık kısa vadelerin DV01-nötr farkıdır:
-**1m−2m switch'i yalnız 10 Eylül'ü**, **2m−3m yalnız 22 Ekim'i** taşır. Bölüm 2'deki
-çözümle bugün Eylül'de ~−125, Ekim'de ~−150 bp efektif adım fiyatlı. "Eylül'de pas" görüşü
+**1m−2m switch'i yalnız 10 Eylül 2026'yı**, **2m−3m yalnız 22 Ekim 2026'yı** taşır. Bölüm 2'deki
+çözümle bugün Eylül 2026'da ~−125, Ekim 2026'da ~−150 bp efektif adım fiyatlı. "Eylül'de pas" görüşü
 = pay 2m / receive 1m; güvercin sürpriz görüşü tersi. Tuzaklar: (i) adım, **politika +
 kompozisyon** karışımıdır — PPK pas geçip fonlamayı gevşetirse "haklıyken" kaybedersin;
 (ii) 1m bacağı saf fixing enstrümanıdır, vergi haftası/ZK sıçramaları switch'e gürültü
@@ -1040,7 +1056,7 @@ dikkat.
 
 | Yapı (temsili) | Ne fiyatlar | Yön → görüş | Tuzak |
 | --- | --- | --- | --- |
-| **3m6m: −145** | Ekim-Aralık toplantılarının Eylül'e göre hızı | Flattener (3m pay/6m rec): "başlarlarsa arka arkaya gelir". Steepener: "ilk adım var, devamı belirsiz" | 3m bacağının yarısı bugünkü fixingten kilitli; spread aslında 6m görüşü |
+| **3m6m: −145** | Ekim-Aralık 2026 toplantılarının Eylül'e göre hızı | Flattener (3m pay/6m rec): "başlarlarsa arka arkaya gelir". Steepener: "ilk adım var, devamı belirsiz" | 3m bacağının yarısı bugünkü fixingten kilitli; spread aslında 6m görüşü |
 | **6m9m: −130** | 2027 başındaki (Ocak) adımların yoğunluğu | Flattener: döngü 2027'ye sarkar ama derinleşir. Steepener: yıl sonunda iş biter | 9m kotasyonu 6m ve 1y'den interpole gelebilir; broker'da gerçek 9m iste |
 | **6m1y: −225** | İkinci altı ayın ilk altı aya göre patikası — ön ucun ana eğim işlemi | Flattener: "normalizasyon tamamlanır, plato aşağıda". Steepener: "ilk indirimler gelir, sonrası fiyatlandığı kadar gelmez" | En kalabalık RV işlemi; pozisyonlanma tek yöne yığıldığında PPK günü air-pocket yapar |
 | **9m1y: −95** | Döngünün son çeyreğinin fiyatı | Mikro yapı; genelde 6m1y'nin bacak ayarı için kullanılır | Dar aralık, geniş kotasyon — tek başına nadiren değer |
@@ -1191,8 +1207,8 @@ korunduğu sürece vardır. Aşağıdaki katalog, bu gramerin vadelere uygulanm�
 
 | Yapı (temsili) | Ne fiyatlar | Long fly kazanır eğer | Tuzak |
 | --- | --- | --- | --- |
-| **1m3m6m: +50** | Eylül adımının Ekim-Aralık bloğuna oranı | İlk toplantılar pas geçilir ama yıl sonu bloğu fiyatta kalırsa | 1m kanadı saf fixing; vergi/ZK sıçraması fly'ı taşır |
-| **3m6m9m: −15** | Ekim-Aralık yoğunluğu vs uçlar | Orta blok (Eki-Ara) fiyatlanandan az teslim ederse | Gerçek 9m kotasyonu şart; interpolasyonla girme |
+| **1m3m6m: +50** | Eylül 2026 adımının Ekim-Aralık bloğuna oranı | İlk toplantılar pas geçilir ama yıl sonu bloğu fiyatta kalırsa | 1m kanadı saf fixing; vergi/ZK sıçraması fly'ı taşır |
+| **3m6m9m: −15** | Ekim-Aralık 2026 yoğunluğu vs uçlar | Orta blok (Eki-Ara) fiyatlanandan az teslim ederse | Gerçek 9m kotasyonu şart; interpolasyonla girme |
 | **6m9m1y: −35** | 2026 kapanışı ile 2027 açılışı arasındaki geçiş | Gevşeme 2027 başına ötelenirse (9m ucuzlar) | Üç bacak da PPK strip'ine bağlı; sürpriz metinde korelasyon 1'e gider |
 
 #### 6.2 Geçiş fly'ları: bükümün kendisi
@@ -1295,7 +1311,7 @@ sıralaması) veya zorunlu (likidite kaybı, limit, karşı taraf). Kurallar:
 
 #### 7.2 Vaka 1 — PPK öncesi taşıma işlemi: 6m pay
 
-**Görüş (5 Ağustos):** enflasyon katılığı ve enerji riskiyle TCMB Eylül'de pas geçer, Ekim
+**Görüş (5 Ağustos):** enflasyon katılığı ve enerji riskiyle TCMB Eylül 2026'da pas geçer, Ekim
 şüpheli; strip'teki ~−425 bp/6m fazla iyimser. **İşlem:** 500 mn 6m pay @ %37,50
 (DV01 ≈ 23.000 TL/bp).
 
@@ -1304,7 +1320,7 @@ sıralaması) veya zorunlu (likidite kaybı, limit, karşı taraf). Kurallar:
 | Fixing carry: $(39{,}95 - 37{,}50)\times 92/365$ | **+3,1** | Hiç indirim gelmezse; her −125'lik adım gerçekleştikçe azalır |
 | Rolldown: 6m→3m $(38{,}95 - 37{,}50)\times A(3m)$ | **+1,7** | Eğri sabit varsayımı |
 | Eğri-sabit toplam | **+4,8** | Beklerken maaş |
-| Stres: Eylül'de −250 güvercin sürpriz | ≈ **−3,5** | 6m ~−120/−150 bp reprice × DV01; carry kısmen tamponlar |
+| Stres: Eylül 2026'da −250 güvercin sürpriz | ≈ **−3,5** | 6m ~−120/−150 bp reprice × DV01; carry kısmen tamponlar |
 
 **Yönetim:** stop 6m %36,60 (≈ −90 bp, −2,1 mn); hedef %38,40 (+0,9 × DV01 ≈ +2,1 mn) +
 tahakkuk eden taşıma. PPK metni faize dokunmadan fonlamayı gevşetirse (fixing 39,95'ten
@@ -1313,7 +1329,7 @@ kâr motoru MTM değil taşıma, o yüzden çıkış disiplini fixing patikasın
 
 #### 7.3 Vaka 2 — Dezenflasyon teması: outright mı, steepener mı?
 
-**Görüş:** döngü Eylül-Ekim'de yeniden başlar ve piyasanın fiyatladığından hızlı
+**Görüş:** döngü Eylül-Ekim 2026'da yeniden başlar ve piyasanın fiyatladığından hızlı
 derinleşir. İki ifade: **(A)** 200 mn 2y receive @ 30,40; **(B)** 2s5s bull steepener:
 200 mn 2y receive + 97 mn 5y pay (DV01 eşit, ~29.400 TL/bp).
 
@@ -1348,7 +1364,7 @@ bırakır.
 
 #### 7.5 Vaka 4 (mini) — PPK günü switch'i
 
-10 Eylül sabahı, karar öncesi: "pas" görüşüyle pay 2m 400 mn / receive 1m 795 mn
+10 Eylül 2026 sabahı, karar öncesi: "pas" görüşüyle pay 2m 400 mn / receive 1m 795 mn
 (DV01 ≈ 6.500 TL/bp eşit). Pas + şahin metin gelirse Eylül-sonrası ilk toplantıya kadar
 olan fiyatlama söner, switch ~+40−60 bp kazandırır; −125 aynen gelirse kayıp benzer
 büyüklükte. Bu işlem türünde boyut, kanaatin gücüyle değil **karar sonrası ilk yarım saatte
@@ -1565,7 +1581,7 @@ Taşıma işaretleri temsili eğriye göredir; eğri değiştikçe kart yenileni
 
 | Yapı | Tek cümle görüş | Taşıma | Ana tuzak |
 | --- | --- | --- | --- |
-| 3m pay | "Eylül-Ekim'de fiyatlanan gelmez" | + | Fonlama gevşemesi sürprizi |
+| 3m pay | "Eylül-Ekim 2026'da fiyatlanan gelmez" | + | Fonlama gevşemesi sürprizi |
 | 6m pay | "İndirimler fiyatlanandan yavaş" | + | Güvercin metin + koridor indirimi |
 | 1y receive | "Döngü fiyatlanandan derin" | − | Taşıma erimesi; oyalama |
 | 2y receive | "Kalıcı dezenflasyon teması" | − | Bear flattener stresi |

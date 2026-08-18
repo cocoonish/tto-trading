@@ -121,6 +121,7 @@ jobs:
         working-directory: Aktarılacak Projeler/hazineihrac
         run: |
           python web_cikti_tahmin.py
+          python tablo_uret.py && cp tablolar.json "../../site/public/projeler/hazine-ihrac/"
           # web_cikti_tahmin.py sayfanın gömdüğü 13 şekilden 11'ini üretir; daha
           # önce yalnız 2'si kopyalanıyordu ve kalan 9'u cron'da boşuna bayatlıyordu.
           # (hedef_gerceklesme + vade_analizi main.py'den gelir; scraper bilinçli

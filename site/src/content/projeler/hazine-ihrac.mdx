@@ -11,6 +11,7 @@ guncelleme: 'ihale dönemlerinde (aylık)'
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
 import Deger from '../../components/Deger.astro';
+import VeriTablosu from '../../components/VeriTablosu.astro';
 
 Hazine'nin aylık iç borçlanma stratejisi ile fiilen gerçekleşen ihraçlar arasındaki
 fark, TL faiz piyasası için başlı başına bir sinyaldir. Bu proje ihale sonuçlarını ve
@@ -231,6 +232,55 @@ Bid-to-cover tahmini çok daha isabetli: **MAPE %<Deger proje="hazine-ihrac" ana
 bazındaki %67'ye karşı. Ders: model tekil ihaleyi ±%50 bandında bilir ama *ayın
 toplam arzını* dörtte bir hatayla yakalar; DV01 bütçesi ay bazında planlanmalıdır.
 (Düzeltilmiş/strateji modellerin aylık MAPE'sindeki şişkinlik 2020-21 hedef artefaktıdır.)
+
+## Ham veri: Excel'in tamamı, tablo olarak
+
+Yukarıdaki grafiklerin arkasındaki veri seti burada, **hiçbir sütun eksiltilmeden**.
+Sütun başlığına tıklayınca sıralanır, arama kutusu tüm sütunlarda süzer, "Sütun grupları"
+ile Excel'in 32 sütunu grup grup açılır; **CSV indir** o anki süzgeç ve sıralamayla,
+yalnız açık sütunları indirir (Türkçe Excel için `;` ayraçlı, BOM'lu). Tablolar cron'un
+her koşusunda `tablo_uret.py` ile yeniden üretilir — grafiklerle aynı anda tazelenir.
+
+<VeriTablosu proje="hazine-ihrac" tablo="ihaleler"
+  baslik="İhale verileri — 441 ihale, 32 sütun (Excel 'İhale Verileri' sekmesi)"
+  varsayilan={['ISIN','Senet Tanımı','İhale Tarihi','İtfa Tarihi','Vade (Yıl)','Toplam(Teklif)','Toplam(Gerçekleşme)','Ortalama Yıllık Bileşik(Gerçekleşme)']}
+  gruplar={{
+    'ROT': ['ROT Toplam(Teklif)','ROT Toplam(Gerçekleşme)','ROT Kamu(Teklif)','ROT Kamu(Gerçekleşme)','ROT Piyasa Yapıcılar(Teklif)','ROT Piyasa Yapıcılar(Gerçekleşme)','ROT Piyasa Yapıcılar Kabul Oranı (%)'],
+    'İhale': ['İhale(Teklif)','İhale(Gerçekleşme)','İhale Kabul Oranı (%)','Toplam(Teklif)','Toplam(Gerçekleşme)'],
+    'Faiz (basit)': ['Ortalama Yıllık Basit(Teklif)','Ortalama Yıllık Basit(Gerçekleşme)'],
+    'Faiz (bileşik)': ['Ortalama Yıllık Bileşik(Teklif)','Ortalama Yıllık Bileşik(Gerçekleşme)','En Düşük Yıllık Bileşik(Teklif)','En Düşük Yıllık Bileşik(Gerçekleşme)','En Yüksek Yıllık Bileşik(Teklif)','En Yüksek Yıllık Bileşik(Gerçekleşme)'],
+    'Fiyat': ['Ortalama Fiyat(Teklif)','Ortalama Fiyat(Gerçekleşme)','En Düşük Fiyat(Teklif)','En Düşük Fiyat(Gerçekleşme)','En Yüksek Fiyat(Teklif)','En Yüksek Fiyat(Gerçekleşme)'],
+    'Tarihler': ['İhale Tarihi','Valör Tarihi','İtfa Tarihi','Vade (Yıl)'],
+  }}
+/>
+
+<VeriTablosu proje="hazine-ihrac" tablo="planli"
+  baslik="Planlı ihraç takvimi ve tahminler (14 sütun)"
+  varsayilan={['İhale Tarihi','Senet Tanımı','Vade Terimi','Yöntem','Aylık Strateji Hedefi (Milyar TL)','Tahmini Gerçekleşme (Milyon TL)','Tahmini Bid-to-Cover','Kıyas İhale Sayısı']}
+  gruplar={{ 'Tahmin ayrıntısı': ['Gerçekleşme Oranı Varsayımı (%)','Tahmini Teklif (Milyon TL)','Geçmiş Ort. Gerçekleşme (Milyon TL)','Kıyas Bazı','Son İhale Tarihi','İtfa Tarihi'] }}
+  sayfa={25}
+/>
+
+<VeriTablosu proje="hazine-ihrac" tablo="hedef"
+  baslik="Aylık hedef vs gerçekleşme (Excel 'Hedef vs Gerçekleşme' sekmesi)"
+  sayfa={20}
+/>
+
+<VeriTablosu proje="hazine-ihrac" tablo="vade"
+  baslik="Ay bazında ağırlıklı ortalama vade (Excel 'Vade Analizi' sekmesi)"
+  sayfa={20}
+/>
+
+<VeriTablosu proje="hazine-ihrac" tablo="backtest"
+  baslik="Backtest — ihale bazında tahmin vs gerçekleşen (16 sütun)"
+  varsayilan={['İhale Tarihi','Senet Tanımı','Gerçek Gerçekleşme (Milyon TL)','Tahmin-Düzeltilmiş (Milyon TL)','Tutar Sapma % (düzeltilmiş)','Gerçek Bid-to-Cover','Tahmin Bid-to-Cover']}
+  gruplar={{
+    'Üç tahmin': ['Tahmin-Ham (Milyon TL)','Tahmin-Strateji (Milyon TL)','Tahmin-Düzeltilmiş (Milyon TL)','Tutar Sapma % (ham)','Tutar Sapma % (strateji)','Tutar Sapma % (düzeltilmiş)'],
+    'Talep': ['Gerçek Bid-to-Cover','Tahmin Bid-to-Cover','B2C Sapma %','Gerçek Teklif (Milyon TL)','Tahmin Teklif (Milyon TL)','Teklif Sapma %'],
+    'Kıyas': ['Kıyas Bazı'],
+  }}
+  sayfa={25}
+/>
 
 ## Sınırlar
 
