@@ -50,9 +50,22 @@ echo ANAHTARINIZ> .evds_key
 Bat'lar sırayla `TTO_EVDS_KEY` ortam değişkeni → `<proje>\.evds_key` → kök `.evds_key`
 arar. Kökteki tek dosya bütün projelere yeter.
 
-## 5. Bir projeyi kur ve çalıştır
+## 5. Kurulum ve ilk koşu
 
-`bat\<proje>\` klasörüne gidin, sırayla çift tıklayın:
+İki yol var; ikisi de aynı şeyi yapar.
+
+**A) Kökten, hepsi bir arada (önerilen).** Repo kökündeki iki bat:
+
+```
+guncelle.bat --kur --hepsi     REM her projeye .venv + bagimliliklar (ilk sefer: uzun)
+guncelle.bat                   REM menu: hangi hatlar, hafif/tam, commit?
+panel.bat                      REM menu: hangi canli pano (dashboard)?
+```
+
+`guncelle.bat --kur` yalnız seçilenleri de kurar: `guncelle.bat --kur tcmb hazine`.
+Kurulum yapılmamış bir hat koşturulursa hata mesajı hangi komutu çalıştıracağınızı yazar.
+
+**B) Proje proje.** `bat\<proje>\` klasörüne gidip sırayla çift tıklayın:
 
 1. **`kur.bat`** — sanal ortam + bağımlılıklar (ilk seferde birkaç dakika)
 2. **`calistir.bat`** — hattı koşturur
@@ -61,6 +74,23 @@ arar. Kökteki tek dosya bütün projelere yeter.
 Sonraki günlerde: **`guncelle.bat`** (pull) → `calistir.bat` → `push.bat`.
 
 **İlk deneme için `bat\tcmb-net-rezerv\`** — en basit ve en hızlı hat.
+
+## 5b. Canlı panolar (dashboard)
+
+İki projenin interaktif panosu var. Panolar **veri üretmez**, üretilmiş veriyi okur —
+önce ilgili hattı koşturun.
+
+| Komut | Pano | Adres |
+|---|---|---|
+| `panel.bat hazine` | Hazine İhraç (Dash) — ihaleler, tahminler, filtreler | http://127.0.0.1:8050 |
+| `panel.bat fx` | FX Haber Endeksi (Streamlit) — endeks, manşetler, rejim | http://localhost:8501 |
+| `panel.bat site` | Sitenin kendisi (Astro dev) | http://localhost:4321 |
+
+`bat\hazine-ihrac\panel.bat` ve `bat\fx-haber-endeksi\panel.bat` da aynı işi yapar.
+Port meşgulse: `panel.bat hazine --port 8060`. Kapatmak: pencerede **Ctrl+C**.
+Pano açılmadan önce gerekli paket ve veri dosyaları denetlenir; eksikse hangi komutu
+çalıştıracağınız yazılır (ör. `guncelle.bat --kur hazine` ya da `guncelle.bat hazine --tam`).
+macOS/Linux'ta: `python3 panel.py hazine`.
 
 ## 6. Proje başına özel notlar
 
@@ -87,15 +117,24 @@ Node.js (nodejs.org, LTS) kurun, sonra:
 ```
 cd site
 npm install
-npm run dev
 ```
 
-Tarayıcıda `http://localhost:4321`. Bat'lar siteyi **build etmez**; site GitHub'a push
+Sonrasında `panel.bat site` (ya da `cd site && npm run dev`) —
+tarayıcıda `http://localhost:4321`. Bat'lar siteyi **build etmez**; site GitHub'a push
 edilince yayına giren tarafta derlenir. Yerelde bakmak istemiyorsanız bu adımı atlayın.
 
 ## Windows dışı (macOS/Linux)
 
 Bat'lar çalışmaz ama mantık aynıdır; her komut proje klasöründe:
+
+```
+python3 guncelle.py --kur --hepsi     # kurulum (her projeye .venv + requirements)
+python3 guncelle.py                   # menu; ya da: python3 guncelle.py tcmb hazine --tam
+python3 guncelle.py --hepsi --commit  # koştur + commit + push
+python3 panel.py hazine               # canli pano (fx / site de var)
+```
+
+Elle yapmak isterseniz her komut proje klasöründe:
 
 ```
 python3 -m venv .venv && .venv/bin/pip install -r requirements.txt   # kur
@@ -111,7 +150,14 @@ git add "<proje klasörü>" site/public/projeler/<slug> && git commit && git pus
 
 - **`git push` "rejected"** → önce `guncelle.bat` (pull), sonra tekrar push. Cron botu
   (veri-bot) Cuma sabahları commit atar; siz de o gün push ederseniz çakışır.
-- **`[HATA] Sanal ortam yok`** → o projenin `kur.bat`'ı çalıştırılmamış.
+- **`[HATA] Sanal ortam yok`** → o projenin `kur.bat`'ı (ya da `guncelle.bat --kur <hat>`)
+  çalıştırılmamış.
+- **`ModuleNotFoundError` / `adım 1 düştü`** → aynı sebep: `guncelle.bat --kur <hat>`.
+  `guncelle.py` proje klasöründeki `.venv`'i kendiliğinden kullanır; venv yoksa sistem
+  python'una düşer ve paketler orada olmayabilir.
+- **Pano açılmıyor, "eksik paket" diyor** → `guncelle.bat --kur hazine` (ya da `fx`).
+- **Pano açılıyor ama veri eski** → panolar veri üretmez: `guncelle.bat hazine --tam`.
+- **Port meşgul** → `panel.bat hazine --port 8060`.
 - **`[UYARI] EVDS anahtari bulunamadi`** → adım 4 eksik.
 - **`[DURDU] gomulu anahtar`** → bir dosyaya `KEY = "..."` biçiminde anahtar yazılmış;
   push kasıtlı olarak reddedildi. Anahtarı `.evds_key`'e taşıyın.

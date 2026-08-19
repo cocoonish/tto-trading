@@ -9,6 +9,9 @@ Kullanım:
   python guncelle.py --hepsi --tam      # ağır adımlar dahil (FX GDELT+FinBERT, Hazine scraper)
   python guncelle.py --hepsi --commit   # bitince siteye kopyalanan çıktıları commit'le + push
   python guncelle.py --liste            # hatları göster, hiçbir şey koşturma
+  python guncelle.py --kur tcmb hazine  # seçilen hatların .venv'ini kur/yenile (requirements)
+  python guncelle.py --kur --hepsi      # hepsini kur — yeni bilgisayarda İLK adım
+  python guncelle.py --panel hazine     # hattın canlı panelini aç (Dash/Streamlit), Ctrl+C ile kapat
 
 Kip:
   hafif  = cron'un yaptığı: depodaki veriden grafik + ozet.json (dakikalar)
@@ -20,8 +23,11 @@ Sözleşme:
   · Diğer hatlar etkilenmez; sonda özet tablo ve çıkış kodu (biri düştüyse 1).
   · Kopyalama tablosu HATLAR içinde — cron (.github/workflows/veri-guncelle.yml) ile aynı
     kaynak→hedef eşlemesi. Yeni çıktı eklerken ikisini birden güncelle.
-  · EVDS anahtarı: TTO_EVDS_KEY ortam değişkeni → kök .evds_key. Hatlar kendi içinde de
-    aynı sırayla arar; burada yalnız erken uyarı verilir.
+  · Yorumlayıcı: her hat, klasöründe .venv varsa ONUN python'uyla koşar (bat/kur.bat ya da
+    --kur bunu kurar); yoksa guncelle.py'yi çalıştıran python. Eskiden hep ikincisiydi → bat
+    ile venv kurulan Windows'ta sistem python'u tcmb/pdfplumber'ı bulamıyor, ilk hat düşüyordu.
+  · EVDS anahtarı: TTO_EVDS_KEY ortam değişkeni → kök .evds_key → <proje>/.evds_key. Hatlar
+    kendi içinde de aynı sırayla arar; burada yalnız erken uyarı verilir.
   · Ev stili (site/tools/plotly_stil.py) her koşunun sonunda TEK KEZ uygulanır.
 """
 from __future__ import annotations
@@ -32,6 +38,44 @@ from pathlib import Path
 KOK = Path(__file__).resolve().parent
 SITE = KOK / "site" / "public" / "projeler"
 PY = sys.executable
+# Windows'ta yönlendirilmiş/çağrılmış çıktıda cp1254 "→ ✓ Δ" karakterlerinde düşmesin
+for _akis in (sys.stdout, sys.stderr):
+    try:
+        _akis.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+_COCUK_ENV = {**os.environ, "PYTHONIOENCODING": "utf-8", "PYTHONUTF8": "1"}
+
+
+def hat_python(h: "Hat") -> str:
+    """Hattın yorumlayıcısı: klasöründe .venv varsa onun python'u, yoksa bu python."""
+    d = KOK / h.klasor
+    for aday in (d / ".venv" / "Scripts" / "python.exe", d / ".venv" / "bin" / "python"):
+        if aday.exists():
+            return str(aday)
+    return PY
+
+
+def kur(h: "Hat") -> bool:
+    """bat/<proje>/kur.bat'ın eşleniği: .venv oluştur + requirements.txt yükle."""
+    d = KOK / h.klasor
+    venv = d / ".venv"
+    vpy = venv / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
+    if not vpy.exists():
+        print(f"    [1/2] sanal ortam oluşturuluyor: {venv}")
+        if subprocess.run([PY, "-m", "venv", str(venv)]).returncode != 0:
+            print(_renk("    ✗ venv oluşturulamadı", 31)); return False
+    else:
+        print("    [1/2] sanal ortam mevcut")
+    req = d / "requirements.txt"
+    if not req.exists():
+        print(_renk("    [UYARI] requirements.txt yok, bağımlılık yüklenmedi", 33)); return True
+    print("    [2/2] bağımlılıklar yükleniyor (requirements.txt)")
+    subprocess.run([str(vpy), "-m", "pip", "install", "--upgrade", "pip", "-q"], env=_COCUK_ENV)
+    r = subprocess.run([str(vpy), "-m", "pip", "install", "-r", str(req)], env=_COCUK_ENV)
+    if r.returncode != 0:
+        print(_renk("    ✗ pip install başarısız", 31)); return False
+    print(_renk("    ✓ kurulum tamam", 32)); return True
 
 
 @dataclass
@@ -45,6 +89,7 @@ class Hat:
     kopya: dict[str, str]          # kaynak (klasöre göreli) → hedef dosya adı
     not_: str = ""
     tarih_anahtari: str = "_tarih" # ozet.json'da veri tarihini taşıyan alan (tazelik denetimi)
+    panel: list[str] = field(default_factory=list)  # canlı panel komutu (python'dan sonraki argümanlar)
 
     def adimlar(self, tam: bool) -> list[str]:
         return (self.tam or self.hafif) if tam else self.hafif
@@ -76,12 +121,14 @@ HATLAR: list[Hat] = [
          "strateji_revizyon", "faiz_gelisimi", "fiyat_araligi", "ihrac_hacmi", "ihrac_tempo", "ihrac_usd",
          "talep_analizi", "vade_dagilimi", "hedef_gerceklesme", "vade_analizi"]}
         | {"tablolar.json": "tablolar.json"},
-        "tam kip: Hazine sitesini tarar (scraper), ilk koşu 10-20 dk"),
+        "tam kip: Hazine sitesini tarar (scraper), ilk koşu 10-20 dk",
+        panel=["dashboard.py"]),            # Dash → http://127.0.0.1:8050
     Hat("fx", "FX Haber Endeksi", P / "indices", "fx-haber-endeksi",
         ["web_cikti.py", "ozet_uret.py"],
         ["run.py --fetch-history", "ozet_uret.py"],
         {"cikti/*.html": "*"},
-        "tam kip: GDELT + FinBERT — ilk koşu saatler, sonrası dakikalar"),
+        "tam kip: GDELT + FinBERT — ilk koşu saatler, sonrası dakikalar",
+        panel=["-m", "streamlit", "run", "dashboard.py"]),  # Streamlit → http://localhost:8501
     Hat("marj", "Yiyecek Hizmetleri Marjı", Path("Research/marj"), "yiyecek-hizmetleri-marj",
         ["src/web_cikti.py", "src/ozet_uret.py"],
         ["src/run_all.py", "src/web_cikti.py", "src/ozet_uret.py"],
@@ -95,11 +142,17 @@ def _renk(m, k):  # k: 32 yeşil, 31 kırmızı, 33 sarı, 36 camgöbeği
     return f"\033[{k}m{m}\033[0m" if sys.stdout.isatty() else m
 
 
-def anahtar_uyar():
+EVDS_HATLAR = {"tcmb", "usdtry", "reer", "yabanci", "marj"}
+
+
+def anahtar_uyar(secilen: list["Hat"]):
     if os.environ.get("TTO_EVDS_KEY"): return
     if (KOK / ".evds_key").exists():
-        os.environ["TTO_EVDS_KEY"] = (KOK / ".evds_key").read_text().strip(); return
-    print(_renk("  [UYARI] EVDS anahtarı yok (TTO_EVDS_KEY / .evds_key) — EVDS'e giden hatlar düşer.", 33))
+        os.environ["TTO_EVDS_KEY"] = (KOK / ".evds_key").read_text(encoding="utf-8").strip(); return
+    eksik = [h.ad for h in secilen if h.ad in EVDS_HATLAR and not (KOK / h.klasor / ".evds_key").exists()]
+    if eksik:
+        print(_renk(f"  [UYARI] EVDS anahtarı yok: {', '.join(eksik)} hatları düşecek. "
+                    "Çözüm: kök klasöre .evds_key dosyası (tek satır anahtar) ya da TTO_EVDS_KEY ortam değişkeni.", 33))
 
 
 def _ozet_tarih(h: Hat) -> str | None:
@@ -116,11 +169,17 @@ def kos(h: Hat, tam: bool) -> tuple[bool, str, float]:
     d = KOK / h.klasor
     t0 = time.time()
     eski_tarih = _ozet_tarih(h)
+    py = hat_python(h)
+    if py != PY:
+        print(f"    (yorumlayıcı: {Path(py).relative_to(KOK) if py.startswith(str(KOK)) else py})")
     for i, adim in enumerate(h.adimlar(tam), 1):
         print(f"    [{i}] {adim}")
-        r = subprocess.run([PY, *adim.split()], cwd=d)
+        r = subprocess.run([py, *adim.split()], cwd=d, env=_COCUK_ENV)
         if r.returncode != 0:
-            return False, f"adım {i} düştü: {adim}", time.time() - t0
+            ipucu = ""
+            if py == PY and not (d / ".venv").exists():
+                ipucu = f" — bağımlılık eksikse: python guncelle.py --kur {h.ad}  (ya da bat\\{h.slug}\\kur.bat)"
+            return False, f"adım {i} düştü: {adim}{ipucu}", time.time() - t0
     # siteye kopyala
     hedef = SITE / h.slug
     hedef.mkdir(parents=True, exist_ok=True)
@@ -147,6 +206,20 @@ def kos(h: Hat, tam: bool) -> tuple[bool, str, float]:
     if yeni_tarih and yeni_tarih == eski_tarih:
         return True, f"{n} dosya kopyalandı — {_renk('veri tarihi DEĞİŞMEDİ: ' + yeni_tarih, 33)}", time.time() - t0
     return True, f"{n} dosya kopyalandı · veri {eski_tarih or '?'} → {yeni_tarih}", time.time() - t0
+
+
+def panel(h: Hat) -> int:
+    """Hattın canlı panelini (Dash/Streamlit) aç; Ctrl+C kapatır."""
+    if not h.panel:
+        print(f"  {h.baslik} için panel tanımlı değil (paneli olanlar: "
+              f"{', '.join(x.ad for x in HATLAR if x.panel)})"); return 2
+    d = KOK / h.klasor
+    py = hat_python(h)
+    print(f"\n▶ {h.baslik} — panel: {' '.join(h.panel)}  (durdurmak için Ctrl+C)")
+    try:
+        return subprocess.run([py, *h.panel], cwd=d, env=_COCUK_ENV).returncode
+    except KeyboardInterrupt:
+        print("\n  panel kapatıldı"); return 0
 
 
 def ev_stili():
@@ -180,6 +253,7 @@ def menu() -> tuple[list[Hat], bool, bool]:
     for i, h in enumerate(HATLAR, 1):
         print(f"  {i}. {h.ad:8s} {h.baslik:26s} {_renk(h.not_, 36) if h.not_ else ''}")
     print("  0. hepsi")
+    print("  (kurulum: --kur · canlı panel: --panel hazine|fx · yardım: --help)")
     sec = input("\nHangileri? (numara/ad, virgülle; boş = hepsi): ").strip()
     if not sec or sec == "0":
         secilen = list(HATLAR)
@@ -201,6 +275,8 @@ def main():
     ap.add_argument("--tam", action="store_true", help="ağır adımlar dahil")
     ap.add_argument("--commit", action="store_true", help="bitince commit + push")
     ap.add_argument("--liste", action="store_true")
+    ap.add_argument("--kur", action="store_true", help="seçilen hatların .venv + requirements kurulumu (hat koşturmaz)")
+    ap.add_argument("--panel", action="store_true", help="seçilen tek hattın canlı panelini aç (hazine: Dash, fx: Streamlit)")
     a = ap.parse_args()
 
     if a.liste:
@@ -218,7 +294,19 @@ def main():
         secilen, tam, cm = menu()
     if not secilen: print("hat seçilmedi"); return 2
 
-    anahtar_uyar()
+    if a.kur:
+        print(f"\n{'═'*64}\n  KURULUM · {len(secilen)} hat\n{'═'*64}")
+        hata = 0
+        for h in secilen:
+            print(f"\n▶ {h.baslik}  ({h.klasor})")
+            if not kur(h): hata += 1
+        return 1 if hata else 0
+    if a.panel:
+        if len(secilen) != 1:
+            print("panel için tek hat seçin, ör: python guncelle.py --panel hazine"); return 2
+        return panel(secilen[0])
+
+    anahtar_uyar(secilen)
     print(f"\n{'═'*64}\n  {len(secilen)} hat · kip: {'TAM' if tam else 'hafif'} · commit: {'evet' if cm else 'hayır'}\n{'═'*64}")
     sonuc = []
     for h in secilen:

@@ -1,7 +1,12 @@
 # Proje bat'ları (Windows)
 
 Her proje için dört bat: **kur → çalıştır → push**, ara sıra **güncelle**.
-Hepsi `_ortak/ortak.bat`'a delege eder — bir düzeltme yedi yere değil bir yere gider.
+Panosu olan iki projede beşinci bat: **panel** (canlı dashboard).
+Hepsi `_ortak/ortak.bat`'a (panel: kökteki `panel.py`'ye) delege eder — bir düzeltme
+yedi yere değil bir yere gider.
+
+Kök klasörde ayrıca iki sarmalayıcı var, hepsini tek yerden yönetmek için:
+`guncelle.bat` (tüm hatlar, kurulum `--kur` dahil) ve `panel.bat` (paneller).
 
 | Klasör | Proje | Kaynak |
 |---|---|---|
@@ -22,9 +27,30 @@ Hepsi `_ortak/ortak.bat`'a delege eder — bir düzeltme yedi yere değil bir ye
 - **`calistir.bat`** — hattı **baştan sona** koşturur (yerel TAM hat; cron'daki hafif "depodaki
   veriden grafik" adımı değil). Örn. FX'te `run.py --fetch-history` (GDELT + FinBERT), Hazine'de
   scraper dahil. Adımlar sırayla; **biri düşerse zincir durur** — yarım çıktı üretilmez.
+- **`panel.bat`** *(yalnız `hazine-ihrac` ve `fx-haber-endeksi`)* — canlı panoyu açar
+  (Hazine: Dash → `http://127.0.0.1:8050`, FX: Streamlit → `http://localhost:8501`).
+  Kökteki `panel.py`'ye delege eder; **açmadan önce** paket (dash/streamlit) ve panonun
+  okuduğu CSV/JSON var mı denetler, eksikse ne yapılacağını yazar. Pano veri ÜRETMEZ,
+  üretilmiş veriyi okur — önce `calistir.bat`.
 - **`push.bat`** — yalnız o projenin klasörünü + `site/public/projeler/<slug>` çıktısını commit'ler
   ve GitHub'a gönderir. **Commit öncesi gömülü kimlik bilgisi taraması** yapar
   (`*KEY/TOKEN/SECRET/PASSWORD = "..."`) — bulursa stage'i geri alıp durur.
+
+## Kök sarmalayıcılar (tüm projeler)
+
+| Komut | İş |
+|---|---|
+| `guncelle.bat` | menü: hangi hatlar, hafif/tam, commit? |
+| `guncelle.bat --hepsi --tam` | 7 hattın tamamı, ağır adımlar dahil |
+| `guncelle.bat --kur --hepsi` | her projeye `.venv` + `requirements.txt` (yeni bilgisayarda İLK adım) |
+| `guncelle.bat --kur tcmb fx` | yalnız seçilenleri kur |
+| `panel.bat` | menü: hangi pano? |
+| `panel.bat hazine` / `panel.bat fx` / `panel.bat site` | panoyu/siteyi aç (Ctrl+C kapatır) |
+| `panel.bat hazine --port 8060` | portu değiştir |
+
+`guncelle.py` her hattı, proje klasöründe `.venv` varsa **onun** python'uyla koşturur;
+yoksa sistem python'uyla. (Eskiden hep sistem python'uydu: `kur.bat` ile venv kurulmuş
+Windows'ta `tcmb`/`pdfplumber` bulunamıyor, ilk hat düşüyordu.)
 
 ## EVDS anahtarı
 
