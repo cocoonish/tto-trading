@@ -1,0 +1,954 @@
+---
+title: 'Harmonik Patternler: Fibonacci Oranları, XABCD Kataloğu, PRZ ve İşlem Yönetimi'
+description: 'Gartley''den Carney''ye harmonik işlem çerçevesinin tamamı: Fibonacci oranlarının türetimi, retracement/extension/projeksiyon çizimi, Gartley–Bat–Alt Bat–Butterfly–Crab–Deep Crab–Shark–5-0–Cypher–AB=CD–Three Drives kataloğu, PRZ inşası ve teyidi, giriş/stop/hedef/R:R, adım adım pozisyon yönetimi, canlı tanıma karar ağacı, SMC köprüsü ve dürüst kanıt tartışması — 32 grafik üstünde.'
+pubDate: 2026-08-19
+updatedDate: 2026-08-19
+tags: ['harmonik', 'fibonacci', 'gartley', 'bat', 'butterfly', 'crab', 'prz', 'fiyat-aksiyonu', 'ders', 'teknik-analiz']
+durum: 'aktif'
+kaynak: 'Scott M. Carney (harmonictrader.com pattern sayfaları, Harmonic Trading Vol. 1–2), H.M. Gartley Profits in the Stock Market (1935), Larry Pesavento Fibonacci Ratios with Pattern Recognition (1997), Thomas Bulkowski thepatternsite.com istatistikleri, Tsinaslanidis–Guijarro–Voukelatos (2022, ESWA), Bhattacharya–Kumar (2006), CXO Advisory, StockCharts ChartSchool, LuxAlgo, Trendoscope ve TradingView (reees) tarayıcı dokümanları, Liberated Stock Trader / QuantifiedStrategies backtest notları; sentetik ve yfinance (XU100, BTC-USD, GC=F, EURUSD) verisiyle üretilmiş 32 grafik.'
+---
+
+import GrafikEmbed from '../../components/GrafikEmbed.astro';
+
+Harmonik pattern'ler, teknik analizin en "geometrik" ailesidir: beş pivotun (X, A, B, C, D) birbirine Fibonacci oranlarıyla bağlandığı, tamamlanma noktasının **önceden** hesaplanabildiği yapılar. Bu özellik onları diğer formasyonlardan ayırır — omuz-baş-omuzda boynu kırılmadan bir şey bilemezsiniz; harmonikte ise C oluştuğu anda D'nin *nerede* olması gerektiği bellidir. Bu ders o çerçeveyi eksiksiz öğretir: her oranın nereden geldiğini, her pattern'in kesin tanımını, PRZ'nin nasıl inşa edildiğini, girişten çıkışa pozisyonun nasıl taşındığını ve — en önemlisi — ekranda oluşurken nasıl tanınacağını, 32 grafik üstünde.
+
+<div class="not">
+  <span class="etiket">Ders neyi vaat ediyor, neyi etmiyor</span>
+  Vaat: Fibonacci oranlarının matematiksel türetimi; retracement / extension / projection ayrımının kesin tanımı ve çizimi; Gartley, Bat, Alternate Bat, Butterfly, Crab, Deep Crab, Shark, 5-0, Cypher, AB=CD (ve alternatifleri), Three Drives, Nen Star, White/Black Swan için oran tabloları ve ayırt edici kurallar (bu üçü grafiksiz — gerekçesi 4.11'de); PRZ inşası, T-bar, Type I / Type II dönüş, dört giriş türü, pattern bazında stop, T1/T2/T3 hedefleri, R:R, kısmi kâr, BE, 0.382 trailer ve yapısal trailing; başarısızlık tanımı ve uyarı işaretleri; swing tespiti, aday pattern karar ağacı, tarayıcı mantığı ve repaint tuzağı; çoklu zaman dilimi ve SMC/likidite köprüsü; sayısal örnekler; kontrol listeleri; sözlük ve sabitler tablosu. Vaat <strong>etmediği</strong>: kazanma oranı. Bölüm 12'de göreceksiniz — Fibonacci seviyelerinin <em>kendisi</em> için akademik edge kanıtı yoktur; PRZ'de "ilk tepki" gözlemi geniş örneklemde tekrarlanır ama trend dönüşü değildir; edge — varsa — önceden tanımlı R:R, küçük stop ve yakınsama disiplininden gelir ve <em>sizin</em> ölçmeniz gerekir.
+</div>
+
+**Terminoloji notu.** İngilizce terimlerin yerleşik Türkçe karşılığı olmadığında İngilizcesi korunmuş, ilk geçtiğinde açıklanmıştır. "Carney" = Scott M. Carney (harmonictrader.com ve *Harmonic Trading* ciltleri; Bat, Crab, Shark, 5-0 ve PRZ'nin sahibi; 0.886 ve 1.13 oranlarını da sahiplenir — Jim Kane (Kane Trading, 886retracement.com) bağımsız olarak aynı iddiada bulunur, sahiplik tartışmalıdır); "Bulkowski" = Thomas Bulkowski (thepatternsite.com; pattern istatistikleri); "Pesavento" = Larry Pesavento (Gartley'ye Fibonacci oranlarını yerleştiren isim — 1997; harmonictrader.com aynı adımı Carney'nin 1998 tarihli *The Harmonic Trader*'ına bağlar, atıf tartışmalıdır). Bullish (boğa) pattern'ler "M" harfi gibi görünür (X dip, A tepe, B dip, C tepe, D dip); bearish (ayı) pattern "W"dir — tüm yönler ters. Ders boyunca bullish yön yazılır; bearish için tüm yönleri aynalayın.
+
+## Bölüm 1 — Fibonacci matematiği: her sayı nereden geliyor?
+
+Harmonik ticaretin dili sayılardır: 0.382, 0.618, 0.786, 0.886, 1.13, 1.27, 1.618, 2.24, 2.618, 3.14, 3.618. Bu sayıları ezberlemek yerine **türetebilmek**, iki nedenle önemlidir: (i) hangi oranın hangi oranın karekökü/tersi olduğunu bilirseniz pattern tablolarını hatırlamak kolaylaşır; (ii) hangi sayının Fibonacci'den *gelmediğini* bilirseniz "doğal düzen" retoriğine karşı bağışıklık kazanırsınız.
+
+### 1.1 Fibonacci dizisi ve altın oran
+
+Fibonacci dizisi $F_n = F_{n-1} + F_{n-2}$, $F_1 = F_2 = 1$ ile tanımlanır: 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, … Ardışık terimlerin oranı **altın orana** yakınsar:
+
+$$
+\lim_{n\to\infty}\frac{F_{n+1}}{F_n} = \varphi = \frac{1+\sqrt5}{2} \approx 1.6180339887
+$$
+
+Altın oran, $\varphi^2 = \varphi + 1$ denkleminin pozitif köküdür. Bu tek denklemden dersin "çekirdeği" olan üç eşitlik çıkar:
+
+$$
+\frac{1}{\varphi} = \varphi - 1 = 0.618\ldots,\qquad \frac{1}{\varphi^2} = 1-\frac{1}{\varphi} = 0.382\ldots,\qquad \varphi^2 = \varphi+1 = 2.618\ldots
+$$
+
+Neden önemli? Çünkü 0.618 ile 0.382 birbirinin **tümleyeni**dir ($0.618 + 0.382 = 1$), 0.618 ile 1.618 birbirinin **tersi**dir, 0.382 ile 2.618 birbirinin tersidir. Yani bir retracement seviyesi biliyorsanız karşılığındaki projeksiyon seviyesini hesaplayabilirsiniz; tablo ezberi yerine iki işlem yeter.
+
+### 1.2 Harmonik oranların türetimi: kare, karekök, ters
+
+Carney'nin sınıflaması: harmonik oranlar Fibonacci dizisinden **kare alma, karekök alma ve ters çevirme** ile türetilir. Üç katman vardır. (StockCharts ChartSchool *farklı* gruplar: birincil 0.382 / 0.618 / 0.786 / 1.0 / 1.27 / 2.0 / 2.62 / 3.62 / 4.62, ikincil 0.236 / 0.886 / 1.13 / 2.236 / 3.14 / 4.236 — sınıflama yazara göre değişir; sayılar aynıdır.)
+
+**Birincil oranlar:** 0.618 (birincil retracement) ve 1.618 (birincil projeksiyon).
+
+**Birincil türetilmiş oranlar** (yalnız dört tane — 0.618'in kökleri ve tersleri):
+
+| Oran | Türetim | Değer |
+|---|---|---|
+| 0.786 | $\sqrt{0.618}$ | 0.7862 |
+| 0.886 | $\sqrt{0.786} = 0.618^{1/4}$ | 0.8866 |
+| 1.13 | $1/0.886 = 1.618^{1/4}$ | 1.1278 |
+| 1.27 | $\sqrt{1.618} = 1/0.786$ | 1.2720 |
+
+**Tamamlayıcı türetilmiş oranlar** (Carney'nin üçüncü katmanı):
+
+| Oran | Türetim | Değer |
+|---|---|---|
+| 0.382 | $1/\varphi^2 = 1 - 0.618$ | 0.3820 |
+| 0.50 | 1/2 (Fibonacci dışı; Gartley'nin orijinal 1/2'si ve 5-0 pattern'inin çekirdeği) | 0.5000 |
+| 0.707 | $\sqrt{0.5}$ (Fibonacci dışı) | 0.7071 |
+| 1.414 | $\sqrt2$ (Fibonacci dışı; 2.0'ın karekökü) | 1.4142 |
+| 2.0 | 2 (Fibonacci dışı) | 2.0000 |
+| 2.24 | $\sqrt5$ (Fibonacci dışı; 5, $\varphi$'nin tanımındaki köktür) | 2.2361 |
+| 2.618 | $\varphi^2 = 1/0.382$ | 2.6180 |
+| 3.14 | $\pi$ (Fibonacci dışı) | 3.1416 |
+| 3.618 | $\varphi^2 + 1$; pratikte $2.618 + 1$ | 3.6180 |
+
+Türetim zinciri tek satırda — ezberlemeniz gereken tek şey budur:
+
+$$
+0.382 \xrightarrow{\ \sqrt{}\ } 0.618 \xrightarrow{\ \sqrt{}\ } 0.786 \xrightarrow{\ \sqrt{}\ } 0.886 \qquad\text{ve tersleri}\qquad 2.618 \leftarrow 1.618 \leftarrow 1.272 \leftarrow 1.128
+$$
+
+<div class="not">
+  <span class="etiket">Dürüstlük notu</span>
+  0.5, 0.707, 1.414, 2.0, 2.24 ve 3.14 sayıları Fibonacci dizisinden <em>gelmez</em>. 0.5 basitçe yarıdır; 1.414 ve 0.707 ikinin karekökü ve tersidir; 2.24 beşin kareköküdür; 3.14 pi sayısıdır. Carney bunları "harmonik oranlar" ailesine sonradan katmıştır — matematiksel meşruiyet iddiası değil, ampirik gözlem iddiasıdır ("bu seviyelerde de tepki görüyorum"). Derste bu ayrımı saklamıyoruz; Şekil 01'in sağ panelindeki gri satır tam olarak budur.
+</div>
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/01_fib_turetim.html" baslik="Fibonacci'den harmonik oranlara: her sayı nereden geliyor?" no="01" yukseklik={540} />
+
+**Şekil 01 nasıl okunur.** Sol panel ardışık $F_{n+1}/F_n$ oranlarını gösterir: 1/1 = 1, 2/1 = 2, 3/2 = 1.5, 5/3 = 1.667, 8/5 = 1.6, 13/8 = 1.625 … noktalar $\varphi = 1.618034$ çizgisinin etrafında giderek daralan salınımla yakınsar; on terimden sonra fark binde birin altındadır. Sağ panel 16 harmonik oranı dört satırda sınıflar: **Birincil** (0.618, 1.618), **Karekök zinciri** (0.786, 0.886, 1.128, 1.272 — oklarla √ zinciri), **Kare-tümleyen** (0.236, 0.382, 2.618, 3.618) ve **Fibonacci DIŞI** (0.5, 0.707, 1.414, 2.0, 2.236, 3.14). Her elmasın üstünde türetimi yazılıdır ($\sqrt{0.618}$, $1/\varphi^2$, $\varphi^2+1$ …). Altta gri satırın notu: "Fibonacci'den gelmez — Carney'nin ampirik eklemeleri." Bu dört satır dersin kendi *pedagojik* gruplamasıdır (türetim yoluna göre); Carney'nin 1.2'deki üçlü sınıflamasıyla birebir örtüşmez — örneğin 2.618 Carney'de "tamamlayıcı", burada "kare-tümleyen" satırındadır. Grafiğe bakarken şunu fark edin: pattern kataloğundaki *belirleyici* D oranlarının tamamı (0.786, 0.886, 1.13, 1.27, 1.618) karekök zincirindedir; Fibonacci-dışı sayılar yalnızca BC projeksiyonlarında ve ikincil rollerde görünür.
+
+### 1.3 Retracement, extension, projection: üç ölçüm, tek araç
+
+Üç ölçüm de aynı Fibonacci aracıyla yapılır; fark **hangi bacağın uzunluğu, hangi noktadan ölçülüyor** sorusundadır. XA bacağının uzunluğu $|XA| = |P_A - P_X|$ olsun.
+
+**1) Retracement (geri çekilme):** XA bacağının *içine* doğru düzeltme. B noktası için oran
+
+$$
+r_B = \frac{|A - B|}{|A - X|}
+$$
+
+Bullish XA'da (X dip, A tepe) seviye $B = A - r\cdot|XA|$; aralık $0 < r < 1$ (0.382, 0.5, 0.618, 0.786, 0.886). Araç iki noktadan çekilir: X'e tıkla, A'ya sürükle; çizgiler A'dan aşağıya doğru sıralanır.
+
+**2) Extension (uzatma — XA'nın ötesi):** Aynı XA bacağının başlangıcı X'in **ötesine** geçen ölçüm; sayısal olarak $r > 1$ olan retracement. D noktası için
+
+$$
+r_D = \frac{|A - D|}{|A - X|}
+$$
+
+Alt Bat'ta 1.13, Butterfly'da 1.27, Crab'de 1.618. Grafikte aynı iki noktadan (X→A) çekilen fib aracının 1.13 / 1.27 / 1.618 çizgileridir; bullish yapıda X'in *altında* çıkarlar.
+
+**3) Projection (projeksiyon):** Bir bacağın uzunluğunun **başka bir noktadan** ileri taşınması. BC projeksiyonu:
+
+$$
+D = C \pm k\cdot|BC|,\qquad k\in\{1.27,\ 1.618,\ 2.0,\ 2.24,\ 2.618,\ 3.14,\ 3.618\}
+$$
+
+Üç noktalı çizim: B'den C'ye ölçülüp C'den ileri atılır (TradingView'da "trend-based fib extension": B'ye tıkla, C'ye tıkla, tekrar C'ye tıkla). AB=CD de bir projeksiyondur: $|CD| = k\cdot|AB|$, $k\in\{1.0,\ 1.27,\ 1.618\}$, C'den başlar.
+
+Kısa hafıza kuralı: **retracement 2 nokta, içeri; extension 2 nokta, dışarı; projection 3 nokta (ölç–taşı).**
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/02_fib_retracement.html" baslik="Fibonacci retracement: XA bacağının içine düzeltme" no="02" yukseklik={560} />
+
+**Şekil 02 nasıl okunur.** Tek bir XA impulsu ve ardından gelen B düzeltmesi. Fib aracı X dibinden A tepesine çekilmiş; 0.382 / 0.5 / 0.618 / 0.786 / 0.886 çizgileri hem oran hem fiyat etiketiyle A'nın altına sıralanmış. B'nin tam 0.618 çizgisine değişi yeşil daireyle vurgulu; formül kutusu $r = |A-B| / |A-X|$ hesabını gösterir. Nereye bakılır: B'nin *hangi* çizgide durduğu, pattern'in kimliğini belirler (Bölüm 4) — 0.618'de duran bu B bir Gartley (veya Crab) adayıdır. Neden bu çizgiler? 0.382 sığ, 0.5 orta, 0.618 "birincil", 0.786 derin, 0.886 "son savunma" düzeltmesidir; her biri farklı bir pattern'in B'sini tanımlar.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/03_fib_extension.html" baslik="Fibonacci extension: aynı XA aracında 1'in ötesi" no="03" yukseklik={580} />
+
+**Şekil 03 nasıl okunur.** Aynı XA aracı; bu kez X'in *altında* 1.13 (Alt Bat), 1.272 (Butterfly) ve 1.618 (Crab) çizgileri farklı renklerde ve pattern adlarıyla; X'in *üstünde* 0.786 (Gartley) ve 0.886 (Bat) çizgileri. X'in hemen altındaki altın bant "stop havuzu"dur — X'i referans alan işlemcilerin stop'larının yığıldığı bölge. Nereye bakılır: D'nin X'e göre konumu, pattern'i iki aileye ayırır. **Retracement pattern'leri** (Gartley 0.786, Bat 0.886) X'i geçmez; **extension pattern'leri** (Alt Bat 1.13, Butterfly 1.27, Crab 1.618) X'i geçer, yani stop havuzunu süpürür. Bu ayrım Bölüm 6'daki stop kuralının ve Bölüm 10'daki SMC köprüsünün temelidir.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/04_fib_projeksiyon_abcd.html" baslik="Projeksiyon: BC bacağı C'den ileri atılır; AB ölçüsü C'den kopyalanır" no="04" yukseklik={620} />
+
+**Şekil 04 nasıl okunur.** X-A-B-C çizili; C'den aşağıya doğru 1.272 / 1.618 / 2.0 / 2.24 / 2.618 / 3.14 / 3.618 BC çizgileri fiyat etiketiyle. Yanında A→B ölçüsünün C'den kopyası oklarla: CD = 1.0·AB, 1.272·AB, 1.618·AB. Alt kutuda hafıza kuralı: "retracement 2 nokta içeri · extension 2 nokta dışarı · projection 3 nokta". Nereye bakılır: BC projeksiyon çizgileri birbirinden *uzaklaşarak* aşağı iner — 1.272 ile 3.618 arasında büyük mesafe vardır. Bu, Bölüm 3'te göreceğiniz kritik noktayı önceden gösterir: **BC oranını hangi seçtiğiniz PRZ'yi belirler.** AB=CD kopyası ise bağımsız bir üçüncü ölçüdür; PRZ üç ölçünün *yakınsadığı* yerdir.
+
+### 1.4 AB=CD: en küçük harmonik yapı
+
+AB=CD, dört noktalı en basit harmonik yapıdır ve tüm XABCD pattern'lerinin içinde gömülü olarak yaşar (A-B-C-D bacakları). Kural seti (Gartley/Pesavento, Carney):
+
+- C, AB'nin **0.618–0.786** retracement'ıdır (0.382–0.886 kabul edilir).
+- CD, BC'nin **1.27–1.618** projeksiyonudur.
+- **Eşit AB=CD:** $|CD| = |AB|$. **Alternatif AB=CD:** $|CD| = 1.27\cdot|AB|$ veya $1.618\cdot|AB|$ (uzatılmış).
+- **Reciprocal (karşılıklı) AB=CD:** 5-0 pattern'inde kullanılan, trend içinde daha kısa ama eşit uzunlukta karşı hareket (Bölüm 4.8).
+- **Zaman simetrisi:** ideal $t_{CD} \approx t_{AB}$ (bar sayısı). Pesavento/Gilmore'a göre bacakların hem fiyat hem zaman oranı Fibonacci'ye yakın olur (0.618, 1.0, 1.618). Uygulamacı kuralı: $t_{CD}/t_{AB} \in [0.618,\ 1.618]$ kabul; CD'nin AB'den 2.618 kat uzun sürmesi ya da 0.382'den kısa olması yapıyı zayıflatır — bu kural **spekülatiftir**, istatistiksel doğrulaması yoktur.
+
+Neden C'nin derinliği BC katsayısını belirler? Çünkü $|BC| = r_C\cdot|AB|$: C, AB'nin ne kadar **büyük** kısmını geri alırsa BC bacağı o kadar **uzundur** ve aynı D'ye ulaşmak için BC'nin daha **küçük** katı yeter; C sığsa BC kısadır, daha büyük kat gerekir. Carney'nin *reciprocal* (karşılıklı) tablosu tam olarak budur: **C = 0.382 → 2.24–2.618 BC (Gartley'de 1.618); 0.50 → 2.0; 0.618 → 1.618; 0.786 → 1.27; 0.886 → 1.13.** Sayısal kontrol (Bölüm 3.3'ün Gartley'si, B = 0.618): C = 0.786 AB ise CD/BC = 0.654/0.486 ≈ 1.35 (1.27'ye yakın); C = 0.382 olsaydı aynı D için CD/BC ≈ 1.71 (1.618'e yakın). Bu, AB=CD ile BC projeksiyonunun aynı noktada *neden* buluştuğunu açıklar: ikisi aynı geometrinin iki farklı ölçümüdür — katsayıyı C'nin derinliğine göre seçerseniz çakışırlar, yanlış seçerseniz PRZ gevşer (Bölüm 3.3, adım 3–4).
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/05_abcd_varyantlar.html" baslik="AB=CD ve alternatifleri: eşit, 1.272 ve 1.618" no="05" yukseklik={540} />
+
+**Şekil 05 nasıl okunur.** Üç panel: solda CD = AB (C = 0.618 AB), ortada CD = 1.272·AB, sağda CD = 1.618·AB. Her panelde CD'nin BC'nin kaç katı olduğu, D seviyesi, T1/T2 hedefleri (0.382 / 0.618 CD retracement) ve mavi ölçü çizgileriyle zaman simetrisi (AB: n bar, CD: n bar, $t_{CD}/t_{AB}$) işaretli. Nereye bakılır: soldan sağa CD uzadıkça D aşağı iner ve T1/T2 de onunla birlikte kayar; zaman oranı üç panelde de 0.618–1.618 bandındadır. Uygulama: bir XABCD pattern'inde AB=CD hesabını yaparken hangi katsayının (1.0 / 1.27 / 1.618) *diğer* PRZ sayılarıyla çakıştığına bakılır — çakışan alınır.
+
+## Bölüm 2 — Tarihçe ve mantık: Gartley'den Carney'ye, ve neden çalışsın?
+
+### 2.1 Üç kuşak
+
+**H.M. Gartley (1935).** *Profits in the Stock Market* kitabının 221–222. sayfalarında, bugün "Gartley 222" denen yapıyı tarif etti: bir trend hareketi, ardından iki bacaklı bir düzeltme ve düzeltmenin bitiminde trend yönünde giriş. Gartley **Fibonacci kullanmıyordu** — düzeltme derinliğini 1/3 ve 2/3 ile tanımlıyordu ve yapının "30 yılda 10'da 7 kârlı" olduğunu söylüyordu. Bu iddia kendi kitabındandır; yöntem ve örneklem yoktur.
+
+**Larry Pesavento (1997).** *Fibonacci Ratios with Pattern Recognition* ile Gartley yapısına Fibonacci oranlarını yerleştirdi (B = 0.618, D = 0.786 — Carney de 1998'de aynı adımı kendine atfeder; öncelik tartışmalıdır) ve "40 yıl deneyimle %70 iddiasını doğruladığını" söyledi — yayımlanmış test yoktur. Bryce Gilmore ile birlikte Butterfly yapısını tanımladı; zaman-fiyat simetrisi vurgusu ondan gelir.
+
+**Scott M. Carney (1998–2011).** *Harmonic Trading* ciltleriyle çerçeveyi sistemleştirdi: 0.886 ve 1.13 oranlarını literatüre soktu (Jim Kane bağımsız olarak aynı sahipliği iddia eder); Bat (2001), Crab (2001), Deep Crab, Alternate Bat (2003), 5-0 (2007), Shark (2011) pattern'lerini tanımladı; **PRZ** (Potential Reversal Zone) kavramını, T-bar'ı, Type I / Type II dönüş ayrımını ve 0.382 trailer'ı getirdi. Carney sayısal başarı oranı yayımlamaz; iddiası niteldir: "PRZ ilk testte genellikle bir tepki verir."
+
+Cypher (Darren Oglesbee), Nen Star, White/Black Swan ise topluluk tanımlarıdır — pencereler kaynağa göre değişir.
+
+### 2.2 Neden çalışsın? Dürüst sınıflama
+
+Ders boyunca üç etiket kullanacağız: **(i) ölçülebilir** mikroyapı argümanları, **(ii) makul** psikoloji/refleksivite argümanları, **(iii) spekülatif** "doğa düzeni" argümanları.
+
+**Yakınsama (confluence) argümanı — kısmen ölçülebilir.** Tek bir Fibonacci seviyesinin destek olma olasılığı, Tsinaslanidis vd. (2022)'ye göre rastgele bir seviyeden **istatistiksel olarak farklı değildir**. PRZ mantığı ise şudur: farklı bacaklardan bağımsız hesaplanan üç seviye aynı bölgeye düşüyorsa, bu bölge (a) daha çok katılımcının bakabileceği bir referans, (b) daha çok bekleyen emrin (limit alım/satım, stop) yığılabileceği bir alan olur. Bu argüman **emir yığılması** (order clustering) literatürüyle uyumludur ama Fibonacci'ye özgü değildir: yuvarlak sayılar, önceki pivotlar, VWAP bantları da aynı işi görür. Dersin ana tezi budur: **PRZ çalışıyorsa, Fibonacci'den değil yakınsamadan çalışıyor olabilir.**
+
+**Emir akışı / kurumsal davranış argümanı — spekülatif ama makul.** Kurumsal masalar büyük pozisyonu ölçekli girer; ilk impulsun 0.618–0.786'sına düzeltme, "birinci giriş dalgasının ortalama maliyet bölgesi"ne yakındır → savunma emirleri. Bu, "B noktasında niye 0.618" sorusuna psikolojik değil maliyet-temelli bir cevaptır; ampirik kanıtı yoktur. Extension pattern'lerinde (Butterfly 1.27, Crab 1.618) D, X'in ötesindedir — X'in altında biriken **stop'ların temizlendiği** (stop hunt / liquidity sweep) bölge. SMC dilindeki "sweep of external liquidity" ile Crab'in D'si aynı olayı tarif eder. Cypher'ın C'sinin A'yı geçmesi ve Shark/5-0'ın "başarısız impuls dalgası" tanımı ise **tuzak kırılım** (failed breakout) mantığıdır: kırılım alıcıları tuzağa düşer, geri dönüş bunların stop'larıyla beslenir.
+
+**Refleksivite / kendini gerçekleştiren kehanet — makul.** Fibonacci araçları tüm platformlarda standarttır (TradingView, MT4/5, Bloomberg). Yeterli katılımcı aynı seviyeye bakıyorsa, seviye kısa vadede tepki üretir. Bu tepki genellikle **küçük ve kısa ömürlüdür** — Bulkowski'nin verisi de bunu söyler: D'de dönüş %90+, ancak fiyat A'ya (tam geri dönüş) yalnızca %33–58 oranında ulaşır. Yani "tepki var, trend dönüşü şüpheli."
+
+**"Doğanın düzeni" argümanı — spekülatif.** Carney'nin kitap alt başlığı *Natural Order of the Financial Markets*'tır. Fibonacci'nin bitki dizilimi ve deniz kabuğuyla ilişkisi doğrudur; fiyat serilerine transferi kanıtlanmamıştır. Akademik çalışmalar (Tsinaslanidis vd. 2022; Bhattacharya–Kumar 2006) altın-oran seviyelerinde özel bir davranış bulamamıştır.
+
+**Ölçüm avantajı — gerçek ve önemli.** Harmonik pattern'lerin en savunulabilir faydası tahmin gücü değil, **disiplin**dir: giriş bölgesi (PRZ), geçersizlik noktası (X veya PRZ ötesi) ve hedef (A/C bacakları, 0.382/0.618 AD) *önceden* tanımlıdır → risk/ödül a priori hesaplanır. Rastgele bir seviyede bile önceden tanımlı R:R ve küçük stop pozitif beklenti üretebilir. Dersin çerçevesi: **harmonikler bir tahmin aracı değil, bir risk çerçeveleme aracıdır.**
+
+<div class="not">
+  <span class="etiket">Neden bunu başta söylüyoruz</span>
+  Çünkü kataloğa girince oranların kesinliği (0.886, 1.13, 2.24…) bir bilimsellik hissi yaratır. O his yanıltıcıdır: oranlar kesindir ama oranların <em>fiyatı döndürdüğü</em> iddiası kesin değildir. Katalog bir dil öğretir; dilin gramerini bilmek şart, ama gramer bilmek şiirin iyi olduğunu kanıtlamaz.
+</div>
+
+## Bölüm 3 — Yapı taşları: XABCD, PRZ, tolerans ve hiyerarşi
+
+### 3.1 XABCD çerçevesi ve terimler
+
+- **X, A, B, C, D:** beş pivot. **XA** = impuls bacağı; **AB**, **BC** = düzeltme / karşı hareket; **CD** = tamamlanış bacağı. Bullish pattern'de X dip, A tepe, B dip, C tepe, D dip ("M"); bearish "W".
+- **PRZ (Potential Reversal Zone — potansiyel dönüş bölgesi):** D noktasının etrafında, birbirinden bağımsız en az iki-üç Fibonacci hesabının (XA retracement/extension, BC projeksiyonu, AB=CD tamamlanışı) yakınsadığı fiyat **bandı**. Carney'nin çekirdek katkısı; tek bir çizgi değil bir bölgedir.
+- **Terminal Price Bar (T-bar — uç fiyat çubuğu):** PRZ'deki *tüm* sayıları test eden ilk mum; PRZ'de "en aşırı" fiyata değen bar. Yönetim T-bar'ın etrafında kurulur (Bölüm 5–6).
+- **Reciprocal AB=CD:** 5-0'ın çekirdeği (Bölüm 4.8). **Alternate AB=CD:** CD = 1.27·AB veya 1.618·AB.
+- **Failed / extended pattern:** PRZ'yi ihlal eden yapı; başka bir pattern'e "evrilebilir" (Bat → Alt Bat, Butterfly 1.27 → 1.618, Gartley → Bat).
+
+### 3.2 PRZ'nin formülasyonu
+
+Bullish pattern'de (X dip, A tepe):
+
+$$
+D_{XA} = A - r_{XA}\,(A - X), \qquad D_{BC} = C - r_{BC}\,(C - B), \qquad D_{AB=CD} = C - k\,(A - B)
+$$
+
+burada $r_{XA}$ pattern'in belirleyici oranı (Gartley 0.786, Bat 0.886, Alt Bat 1.13, Butterfly 1.27, Crab/Deep Crab 1.618; Cypher 0.786 XC; Shark 0.886–1.13 XC), $r_{BC}$ BC projeksiyon oranı (1.272 / 1.618 / 2.0 / 2.24 / 2.618 / 3.14 / 3.618 — pattern'e ve C'nin AB içindeki derinliğine göre), $k \in \{1.0, 1.27, 1.618\}$ AB=CD katsayısıdır. Dördüncü bileşen varsa **yapısal seviye** (önceki swing, HTF destek/direnç). PRZ:
+
+$$
+\text{PRZ} = \left[\min(D_i),\ \max(D_i)\right]
+$$
+
+**Genişlik kuralı.** PRZ'nin genişliği XA'nın yüzde birkaçı düzeyinde "sıkı" ise pattern kalitelidir; sayılar birbirinden XA'nın %5–10'undan fazla ayrılıyorsa PRZ "gevşek" sayılır ve stop mesafesi anlamsızlaşır. Bu eşik Carney'nin metninde sayısal olarak yer almaz; uygulamacı kuralıdır. Ders kararı: **PRZ genişliği XA'nın %3'ünün altındaysa "sıkı", %8'ini geçerse "geniş"** etiketi; %5–8 arası kabul sınırı.
+
+### 3.3 Sayısal örnek: bir Gartley'nin PRZ'si adım adım
+
+Varsayımsal bullish Gartley, USD/TRY benzeri ölçekte: **X = 40.00, A = 42.00** → $|XA| = 2.00$.
+
+1. **B (0.618 XA):** $B = 42.00 - 0.618\times2.00 = 40.764$. Gözlenen B = 40.77 → sapma 0.003 (tolerans içinde).
+2. **C (0.786 AB):** $|AB| = 42.00-40.77 = 1.23$; $C = 40.77 + 0.786\times1.23 = 41.737$. Gözlenen C = 41.74.
+3. **D adayları:**
+   - 0.786 XA: $42.00 - 0.786\times2.00 = 40.428$
+   - 1.618 BC — **bilerek yanlış katsayı**: C = 0.786 AB olduğu için reciprocal tablo (Bölüm 1.4) 1.27'yi önerir; 1.618'i deneyip yanlış seçimin PRZ'yi nasıl gevşettiğini görelim: $|BC| = 0.97$; $D = 41.74 - 1.618\times0.97 = 40.171$
+   - AB=CD (eşit): $D = 41.74 - 1.23 = 40.51$
+4. **PRZ (ilk deneme):** min 40.17 – max 40.51 → genişlik 0.34 = XA'nın **%17'si** → "geniş" — katsayı hatasının bedeli budur. Doğru katsayı: 1.27 BC ile $41.74 - 1.27\times0.97 = 40.508$ → AB=CD (40.51) ile neredeyse üst üste; 0.786 XA (40.43) 8 kuruş altta. **Yakınsama bandı 40.43–40.51 → XA'nın %4'ü → "sıkı" PRZ.** Ders notu: **BC projeksiyonu seçimi (1.27 vs 1.618) PRZ'yi belirler; katsayı C'nin derinliğine göre seçilir ve iki hesabın çakıştığı yer esas alınır.**
+5. **Stop:** X = 40.00'ın altı, 39.95 → risk = 40.47 (PRZ ortası) − 39.95 = 0.52.
+6. **Hedefler:** AD = 42.00 − 40.47 = 1.53; T1 = 40.47 + 0.382×1.53 = 41.05; T2 = 40.47 + 0.618×1.53 = 41.42; T3 = C = 41.74. R:R: T1 = 0.58/0.52 ≈ 1.1; T2 ≈ 1.8; T3 ≈ 2.4.
+
+Aynı XA üzerinde **Bat** olsaydı: B = 42.00 − 0.50×2 = 41.00; D = 42.00 − 0.886×2 = 40.228; stop 39.95 → risk 0.28 — Gartley'nin yaklaşık yarısı. Carney'nin "Bat daha küçük stop ister" iddiasının sayısal karşılığı budur.
+
+İkinci örnek, EUR/USD ölçeğinde: **X = 1.0850, A = 1.1050** → XA = 200 pip. B = 0.50 XA → 1.0950 (Bat adayı). C = 0.618 AB → 1.0950 + 0.618×0.0100 = 1.1012. D adayları: 0.886 XA → 1.1050 − 0.886×0.0200 = **1.0873**; 2.0 BC → 1.1012 − 2.0×0.0062 = **1.0888**; 1.27 AB=CD → 1.1012 − 1.27×0.0100 = **1.0885**. PRZ = 1.0873–1.0888 → 15 pip = XA'nın %7.5'i → kabul sınırında. Stop X − 0.75 ATR: ATR 12 pip ise 1.0850 − 0.0009 = 1.0841. Giriş 1.0880 (PRZ ortası) → risk 39 pip. T1 = 1.0880 + 0.382×(1.1050 − 1.0880) = 1.0945 → R:R 1.7; T2 = 1.0985 → R:R 2.7; T3 = A = 1.1050 → 4.4.
+
+### 3.4 Tolerans / hassasiyet bantları
+
+Carney'nin yazılı kuralı yalnızca "rakamların birbirine yakınsaması"dır; yüzdelik tolerans yayımlanmamıştır. Pratikte üç kaynak:
+
+- **Bulkowski:** XAD 0.886 için ±3 puan (0.856–0.916) toleransıyla tarama yapmıştır.
+- **TradingView "Harmonic Pattern Detection" göstergesi (reees):** "Allowed fib ratio error %" ve "leg asymmetry %" kullanıcı girdisidir; yazar toleransı arttıkça başarı oranının şişeceğini not eder. Trendoscope varsayılanı %8 (aralık 0–20). %5 tolerans: ideal 0.618 → kabul $[0.587,\ 0.649]$.
+- **Topluluk konsensüsü:** B için ±0.03–0.05; D için PRZ genişliğinin kendisi. LuxAlgo: "her sınır bir girdidir; birini seç ve tutarlı uygula."
+
+Ders önerisi (statik sabit değil, karar): **B toleransı ±0.03**; belirleyici D sayısı için tolerans daha dar (%3), B için daha geniş (%8–10) kabul edilebilir; PRZ = min–max(XA seviyesi, BC projeksiyonu, AB=CD). Manuel çizimde altın kural: **B noktası pattern'i sınıflandırır, D noktası fiyatlar.**
+
+### 3.5 Pattern hiyerarşisi (dönüş derinliği)
+
+Carney'ye göre D'nin X'e göre konumu, beklenen dönüşün türünü belirler:
+
+- **Retracement pattern'leri** (D, X'i geçmez): Gartley (0.786), Bat (0.886). Daha sık, daha sığ dönüş; ilk hedef genelde C ile A arası.
+- **Extension pattern'leri** (D, X'i geçer): Alt Bat (1.13), Butterfly (1.27), Crab / Deep Crab (1.618). Daha nadir; Carney'ye göre "en keskin" dönüşleri Crab verir; Butterfly "all-time high/low" seviyelerinde en güçlüdür.
+- **Yapı dışı** (0-X-A-B-C): Shark, 5-0 — trendin *ilk* geri çekilmesini yakalar; Shark sert ama kısa süreli tepki, 5-0 daha uzun soluklu.
+
+Bulkowski'nin verisi (bull piyasa, 2020 güncellemesi) bu hiyerarşiyi kısmen destekler: en iyi sıralama Bat (1/5), Butterfly (2/5), Crab (3/5), AB=CD (4/5), Gartley (5/5).
+
+## Bölüm 4 — Katalog: her pattern'in kesin tanımı
+
+Aşağıdaki oranlar Carney'nin harmonictrader.com sayfaları ile *Harmonic Trading* ciltlerinden; Cypher için Oglesbee/topluluk kaynakları; Nen Star ve Swan'lar için LuxAlgo/topluluk pencereleri. Bullish yönler yazılmıştır; bearish için tüm yönleri ters çevirin. "≈" bandı yoksa Carney'nin ideal değeri esastır. Her alt bölümde aynı sıra: oran tablosu → ayırt edici nokta → grafik → PRZ inşası → geçersizlik → tipik hedefler.
+
+Şablon grafiklerin (Şekil 06–14) ortak dili: mumlar üstünde XABCD zikzağı, her bacağın ortasında oran etiketi (B = … XA, C = … AB, D = … XA + BC oranı + AB=CD katı), turuncu **PRZ kutusu** içinde 2–3 seviye çizgisi (oran → fiyat), kırmızı kesikli **geçersizlik** çizgisi ve altta pattern notu. Sol panel bullish (M), sağ panel bearish (W).
+
+### 4.1 Gartley
+
+| Bacak | Oran |
+|---|---|
+| B (XA retracement) | **0.618** (kritik — B'nin kimliği budur) |
+| C (AB retracement) | 0.382–0.886 |
+| D: BC projeksiyonu | 1.618 (C = 0.382 ise) … 1.27 (C = 0.786 ise) … 1.13–1.27 (C = 0.886 ise) — C derinleştikçe katsayı küçülür |
+| D: XA retracement | **0.786** (X aşılmaz) |
+| AB=CD | Eşit (1.0) |
+| Kaynak | Gartley 1935 (s. 222); oranlar Pesavento/Carney 1998 |
+
+**Ayırt edici nokta:** B tam 0.618'de durur ve D 0.786 XA'da tamamlanır — yani hem B hem D "birincil" oranlardadır ve X asla aşılmaz. Neden 0.786? Çünkü $0.786 = \sqrt{0.618}$: B'nin 0.618'de durduğu bir yapıda D'nin bir "kök" seviye derinde tamamlanması, geometrik olarak XA'nın içinde kalan en derin düzeltmedir. Psikolojik anlatı: trend yönünde derin bir düzeltme; düzeltmede satanlar ve kaçıranlar D'de trend yönüne geri girer.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/06_gartley.html" baslik="Gartley: bullish (M) ve bearish (W) — B = 0.618, D = 0.786 XA, X aşılmaz" no="06" yukseklik={580} />
+
+**Şekil 06 nasıl okunur.** Solda bullish: X dip, A tepe, B tam 0.618 XA'da, C 0.786 AB'de, D 0.786 XA'da. PRZ kutusu üç sayıdan oluşur: 0.786 XA + 1.272 BC + AB=CD×1.0 — üçü birbirine çok yakın, PRZ dar. Kırmızı kesikli çizgi X'tedir: fiyat X'in altında kapanırsa yapı geçersizdir. Sağda aynı yapının aynası. Nereye bakılır: PRZ'nin X'e olan mesafesi — X'e stop koyulursa 0.786 → 1.0 arası XA'nın %21.4'ü: Bat'in (%11.4) yaklaşık iki katı, ama Butterfly/Crab'in geçersizlik mesafesinin (1.27 → 1.618: %34.6; 1.618 → 2.0: %38.2) yarısı; katalogda üçüncü en dar. 0.886 XA'ya konan dar stop seçeneği mesafeyi %10'a indirir (Bölüm 6.3). Bu yüzden R:R Bat'in gerisinde kalır ama extension pattern'lerinin önündedir (Bölüm 6, Şekil 20).
+
+**PRZ inşası:** $D_{XA} = A - 0.786\,(A-X)$; $D_{BC} = C - 1.27\,(C-B)$ (C derinse, 0.786) veya $1.618$ (C sığsa, 0.382–0.5); $D_{AB=CD} = C - (A-B)$. Bölüm 3.3'teki sayısal örnek tam olarak budur. **Geçersizlik:** fiyat 0.886 XA'yı geçerse yapı Bat'e evrilir; X'i geçerse tamamen geçersiz. **Hedefler:** T1 = 0.382 AD, T2 = 0.618 AD, T3 = A; ara: B ve C. Bulkowski (bull piyasa, "mükemmel" pattern'ler): D'de dönüş %90, break-even başarısızlık %14, A'ya ulaşma %45 — beş pattern arasında **en zayıf** sıra (5/5).
+
+### 4.2 Bat
+
+| Bacak | Oran |
+|---|---|
+| B | 0.382 veya **0.50** (0.618'den küçük) |
+| C | 0.382–0.886 |
+| D: BC projeksiyonu | min 1.618, ideal 1.618–2.0, max 2.618 (**1.27 ve altı = Gartley'dir**) |
+| D: XA retracement | **0.886** |
+| AB=CD | 1.27 tipik (eşit AB=CD minimum) |
+| Kaynak | Carney 2001 |
+
+**Ayırt edici nokta:** B sığdır (0.382–0.50), D ise derindir (0.886) — Gartley'nin tersi. Neden 0.886? $0.886 = 0.618^{1/4}$: X'e "son savunma" mesafesi. B sığ olduğu için BC bacağı uzun, dolayısıyla BC projeksiyonu büyük (≥ 1.618) çıkar; **BC projeksiyonu 1.27 veya altındaysa Bat geçersizdir, yapı Gartley'dir** — Carney'nin kendi ifadesi. Bat'in en önemli işlem özelliği: D 0.886'da, geçersizlik 1.0'da → stop mesafesi XA'nın yalnızca %11.4'ü — **kataloğun en dar stoplu pattern'i.**
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/07_bat.html" baslik="Bat: bullish ve bearish — B = 0.50, D = 0.886 XA; PRZ X'e çok yakın, stop en dar" no="07" yukseklik={580} />
+
+**Şekil 07 nasıl okunur.** B = 0.50 XA, C = 0.50 AB, D = 0.886 XA. PRZ = 0.886 XA + 2.618 BC + AB=CD×1.27; kutu X'e çok yakın — grafikte görsel olarak "küçük stop" bu yakınlıktır. Geçersizlik yine X'tedir. Nereye bakılır: PRZ'nin X'e mesafesi ile PRZ'den A'ya mesafeyi karşılaştırın; T2 (0.618 AD) için R:R'nin neden katalogdaki en yüksek değer olduğu görünür (Şekil 20'nin kurgusunda 2.6; Şekil 18'deki gibi giriş PRZ ortasında ve stop X'e yapışıksa ~3:1). Şekil 20'de dört pattern'in aynı XA üzerinde stop karşılaştırması var.
+
+**PRZ inşası:** $D_{XA} = A - 0.886\,(A-X)$; $D_{BC} = C - r\,(C-B)$, $r \in [1.618, 2.618]$; $D_{AB=CD} = C - 1.27\,(A-B)$. **Geçersizlik:** 1.0 XA (X noktası) — fiyat X'in ötesinde kapanırsa 1.13 XA'ya bakılır (Alt Bat'e evrilme, 4.3). **Hedefler:** T1 0.382 AD, T2 0.618 AD, T3 A. Bulkowski: D'de dönüş %91, BE başarısızlık %10, A'ya ulaşma %58 — **en iyi sıra (1/5)**.
+
+### 4.3 Alternate Bat
+
+| Bacak | Oran |
+|---|---|
+| B | **≤ 0.382** |
+| C | 0.382–0.886 |
+| D: BC projeksiyonu | **min 2.0**, 2.0–3.618 |
+| D: XA extension | **1.13** (X'i geçer) |
+| AB=CD | 1.618 |
+| Kaynak | Carney 2003 |
+
+**Ayırt edici nokta:** Bat'in "kırılmış" hâli. B çok sığ (≤ 0.382), 0.886 XA tutmaz, fiyat X'i geçer ve 1.13 XA'da tamamlanır. Neden 1.13? $1.13 = 1/0.886 = 1.618^{1/4}$ — 0.886'nın X'e göre aynadaki karşılığı. Carney bunu Bat'ten "whipsaw'dan kaçınmak için" ayırdı: B ≤ 0.382 gördüğünüzde 0.886'ya güvenmeyin, 1.13'ü de PRZ adayı olarak çizin. **X'in ötesine geçen bu tamamlanış, X altındaki stop havuzunun süpürülmesidir** — SMC köprüsünün ilk örneği.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/08_alt_bat.html" baslik="Alternate Bat: Bat'in 0.886'sı kırılınca 1.13 XA'ya uzayan yapı" no="08" yukseklik={580} />
+
+**Şekil 08 nasıl okunur.** Sol panel B = 0.382 ile Bat kurgusu: 0.886 PRZ'si test ediliyor ama tutmuyor ("PRZ tuttu mu? Hayır → X'e sarkıyor"). Sağ panel aynı X-A-B-C: D = 1.13 XA'da tamamlanıyor; X ihlali altın çizgiyle, kırılan 0.886 gri "kırıldı" etiketiyle; geçersizlik çizgisi artık X'te değil **1.272 XA**'da. Alt not Carney'nin whipsaw gerekçesi. Nereye bakılır: iki panel arasındaki tek fark D'nin nerede tamamlandığıdır — B ≤ 0.382 gördüğünüz anda *iki* PRZ çizip (0.886 ve 1.13) hangisinin tuttuğuna göre hareket etmelisiniz (Bölüm 9, Şekil 25).
+
+**PRZ inşası:** $D_{XA} = A - 1.13\,(A-X)$; $D_{BC} = C - r\,(C-B)$, $r \in [2.0, 3.618]$; $D_{AB=CD} = C - 1.618\,(A-B)$. **Geçersizlik:** 1.272 XA. **Hedefler:** standart üçlü; X'in geri kazanılması (fiyatın X'in üstüne kapanması) ilk teyittir.
+
+### 4.4 Butterfly
+
+| Bacak | Oran |
+|---|---|
+| B | **0.786** (zorunlu) |
+| C | 0.382–0.886 |
+| D: BC projeksiyonu | 1.618 tipik; 2.0, 2.24, 2.618 aşırı |
+| D: XA extension | **1.27** (ideal) veya 1.618 (uzatılmış) |
+| AB=CD | Eşit minimum; 1.27 alternatif; 1.27'yi nadiren aşar |
+| Kaynak | Gilmore/Pesavento; oranlar Carney 1998 |
+
+**Ayırt edici nokta:** B derindir (0.786) ve D X'in *ötesinde*dir (1.27). Neden 1.27? $1.27 = \sqrt{1.618} = 1/0.786$ — B'nin 0.786'sının aynası. B'nin derinliği ile D'nin uzantısı birlikte okunur: derin B, XA'nın zayıfladığını, uzayan D ise X altındaki stop'ların süpürüldüğünü söyler. Carney: Butterfly "all-time high/low" seviyelerinde, yani X'in tarihi bir uç olduğu yerde en güçlüdür — çünkü orada süpürülecek en fazla stop vardır. Psikolojik anlatı (Butterfly ve Crab için ortak): X'in ötesine taşan yeni uç bir **breakout tuzağı**dır — kırılım yönünde girenler yanlış tarafta kalır, kapatmaları dönüşü besler. Gartley/Bat'teki "düzeltmede satanlar D'de geri girer" anlatısı gibi bu da *açıklayıcı* bir anlatıdır, *öngörücü* değil.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/09_butterfly.html" baslik="Butterfly: bullish ve bearish — B = 0.786, D = 1.27 XA (X'in ötesi); geçersizlik 1.618 XA" no="09" yukseklik={580} />
+
+**Şekil 09 nasıl okunur.** B = 0.786 XA, C = 0.618 AB, D = 1.272 XA — X'in altında. PRZ = 1.272 XA + 2.0 BC + AB=CD×1.27, üçü çakışık. Geçersizlik çizgisi **1.618 XA**'da: X *değil*. Nereye bakılır: X seviyesi bu grafikte bir stop referansı değil, süpürülen bir seviyedir; X'e stop koyan Butterfly işlemcisi daha D oluşmadan stop olur (Bölüm 11, hata 5). PRZ'nin X'in altındaki konumu ile 1.618 geçersizlik çizgisi arasındaki mesafe stop mesafenizdir.
+
+**PRZ inşası:** $D_{XA} = A - 1.27\,(A-X)$; $D_{BC} = C - 1.618\,(C-B)$ (2.0–2.618 aşırı); $D_{AB=CD} = C - 1.27\,(A-B)$. **Geçersizlik:** 1.618 XA (1.27 tutmazsa yapı 1.618 Butterfly'a evrilebilir; 1.618'i de geçerse geçersiz). **Hedefler:** standart üçlü; büyük dönüşlerde 1.27–1.618 AD veya StockCharts'ın "D + 0.618–0.786 XA" ve "D + 1.27–1.618 XA" bantları. Bulkowski: D'de dönüş %91, BE başarısızlık %11, A'ya ulaşma %39; sıra 2/5.
+
+### 4.5 Crab
+
+| Bacak | Oran |
+|---|---|
+| B | 0.382–0.618 (0.618 veya daha az) |
+| C | 0.382–0.886 |
+| D: BC projeksiyonu | **2.618, 3.14, 3.618** |
+| D: XA extension | **1.618** (tanımlayıcı) |
+| AB=CD | 1.27 veya 1.618 (uzatılmış zorunlu) |
+| Kaynak | Carney 2001 |
+
+**Ayırt edici nokta:** D, XA'nın 1.618 uzantısında — X'in çok ötesinde. B sığ-orta (0.382–0.618); dolayısıyla BC uzun, projeksiyon çok büyük (2.618–3.618). Neden 1.618? Birincil projeksiyon oranı; XA'nın "altın" uzantısı. Carney'ye göre en keskin dönüşleri Crab verir — çünkü D'ye kadar olan CD bacağı aşırı uzamıştır (ortalamaya dönüş, RSI uyumsuzluğu tipiktir). Bedeli: geçersizlik 2.0 XA'da, yani stop mesafesi geniş; pozisyon küçültülür.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/10_crab.html" baslik="Crab: bullish ve bearish — B = 0.618, D = 1.618 XA; PRZ = 1.618 XA + 3.618 BC" no="10" yukseklik={580} />
+
+**Şekil 10 nasıl okunur.** B = 0.618, D = 1.618 XA; PRZ = 1.618 XA + 3.618 BC — iki sayı tam çakışık, PRZ sıkı. Geçersizlik **2.0 XA**. Nereye bakılır: CD bacağının uzunluğunu AB ve BC ile kıyaslayın — CD, yapının en uzun bacağıdır; bu "uzamış bacak" görüntüsü Crab'in canlıdaki imzasıdır. X ile PRZ arasındaki mesafe (0.618 XA) süpürülen bölgedir.
+
+**PRZ inşası:** $D_{XA} = A - 1.618\,(A-X)$; $D_{BC} = C - r\,(C-B)$, $r \in \{2.618, 3.14, 3.618\}$; $D_{AB=CD} = C - 1.27\,(A-B)$ veya $1.618$. **Geçersizlik:** 2.0 XA / 2.24 XA. **Hedefler:** standart; Crab'de 0.382 AD bile fiyat olarak büyüktür. Bulkowski: D'de dönüş %92, BE başarısızlık %7 (en düşük), A'ya ulaşma %33 (en düşük) — yani **tepki en güvenilir, tam dönüş en nadir**; sıra 3/5.
+
+### 4.6 Deep Crab
+
+| Bacak | Oran |
+|---|---|
+| B | **0.886** |
+| C | 0.382–0.886 |
+| D: BC projeksiyonu | 2.24, 2.618, 3.14, 3.618 |
+| D: XA extension | **1.618** |
+| AB=CD | 1.27 tipik |
+| Kaynak | Carney 2001 |
+
+**Ayırt edici nokta:** Crab ile aynı D (1.618) ama B çok derin (0.886). Yani hem B (neredeyse X'e dönüş) hem X ihlal edilir — Carney'nin deyişiyle "sert" hareket. B = 0.886 gördüğünüzde Butterfly (B 0.786) ile karıştırmayın: Deep Crab'in D'si 1.27'de değil 1.618'de gelir.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/11_crab_deep_crab.html" baslik="Crab ve Deep Crab yan yana: aynı 1.618 XA, farklı B" no="11" yukseklik={580} />
+
+**Şekil 11 nasıl okunur.** Sol panel Crab (B 0.618; PRZ 3.14/3.618 BC ile), sağ panel Deep Crab (B 0.886; PRZ 2.24/2.618 BC + 1.27 AB=CD ile). Deep Crab'de iki ok: "B ihlali" (B'nin 0.886'ya, X'in dibine kadar sarkması) ve "X ihlali" (D'nin X'in altına inmesi). Nereye bakılır: iki panelde D aynı seviyededir; farkı B'nin derinliği ve buna bağlı BC bacağının uzunluğu yaratır — şablonda Crab'in BC'si XA'nın 0.382'si (B 0.618, C 0.618 AB), Deep Crab'inki 0.443'ü (B 0.886, C 0.50 AB): Deep Crab'de BC daha **uzun** olduğu için aynı 1.618 XA'ya 2.24–2.618 katsayısı yeter, Crab'de BC daha **kısa** olduğu için 3.14–3.618 gerekir. Bölüm 1.4'ün kuralı: BC uzadıkça katsayı küçülür; "hangi BC katsayısı" sorusunun cevabı bacağın uzunluğunda, yani *C'nin (ve B'nin) derinliğinde*dir.
+
+**PRZ inşası / geçersizlik / hedefler:** Crab ile aynı; geçersizlik 2.0 XA.
+
+### 4.7 Shark (0-X-A-B-C)
+
+| Bacak | Oran |
+|---|---|
+| B | XA'nın **1.13–1.618** uzantısı (**X'i geçer** — önceki aynı yönlü uç aşılır) |
+| C | AB'nin **1.618–2.24** uzantısı ve 0X'in **0.886–1.13**'ü |
+| PRZ | 0.886–1.13 · 0X |
+| Kaynak | Carney 2011 |
+
+**Ayırt edici nokta:** Klasik M/W çerçevesinin *dışında*. Etiketler 0-X-A-B-C'dir; B, **X'i geçer** (AB = 1.13–1.618·XA ⇒ B, X'in ötesinde) — klasik XABCD etiketinde C'nin A'yı geçmesine denk gelen bu ihlal, Shark'ta tanımın kendisidir. (B'nin A'nın ters yönündeki bir sonraki pivot olması zaten trivialdir; tanımı taşıyan şey B'nin *X'i* aşmasıdır.) C hem 0X'in 0.886–1.13'ü hem AB'nin 1.618–2.24'üdür; işlem C'de yapılır. Mantık: "başarısız impuls dalgası" / tuzak kırılım — B'de A'yı geçen kırılım alıcıları, C'ye kadar süren sert karşı hareketle tuzağa düşer. Carney'ye göre Shark sert ama kısa süreli tepki verir; **5-0'ın öncülüdür**.
+
+### 4.8 5-0 (0-X-A-B-C-D)
+
+| Bacak | Oran |
+|---|---|
+| 0X / XA | Kaynak (harmonictrader.com 5-0) 0X ve XA için oran vermez; "1.618'i aşmamalı" kuralı AB'nin XA uzantısı içindir |
+| AB | XA'nın 1.13–1.618 uzantısı |
+| BC | AB'nin **1.618–2.24** uzantısı |
+| D | BC'nin **0.50** retracement'ı |
+| AB=CD | **Reciprocal AB=CD** (CD = AB, karşı yönde) |
+| Kaynak | Carney 2007 (Vol. 2) |
+
+**Ayırt edici nokta:** Shark'ın devamı. Shark'ın C'sinden sonra fiyat BC'nin tam **yarısına** (0.50) geri gelir ve bu nokta aynı zamanda C'den AB uzunluğunun kopyasıdır (reciprocal AB=CD). İşlem yönü C→D bacağına *karşıdır*, hedef 0.382 CD ve ötesi. 0.50 Fibonacci-dışıdır; 5-0 bunun ana kullanım yeridir. Neden çalışsın: Shark'ın sert tepkisi (C) trendin ilk geri çekilmesidir; 5-0'ın D'si bu geri çekilmenin yarısında yeniden dengeye gelinen noktadır — daha uzun soluklu bir tepki beklenir.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/12_shark_5_0.html" baslik="Shark ve 5-0: klasik XABCD dışındaki iki yapı" no="12" yukseklik={600} />
+
+**Şekil 12 nasıl okunur.** Sol panel Shark: 0-X-A-B-C etiketleri; B = 1.13 XA uzantısı, **X'in üstüne çıkmış** ("klasik etikette C'nin A'yı geçmesine denk ihlal — Shark'ta tanım" notu; altın çizgi X: X'i geçen B = tuzak kırılım); C = 2.00 AB uzantısı ve 1.065·0X; PRZ kutusu 0.886–1.13·0X bandı, içinde 1.618 / 2.24 AB çizgileri; stop 1.13·0X'in ötesinde. Sağ panel aynı yapının devamı: C'den sonra D = 0.50 BC = reciprocal AB=CD (C + AB uzunluğu, ok ile) → 5-0 tamamlanışı; işlem yönü C→D bacağına karşı; hedef 0.382 CD. Nereye bakılır: sol panelde B'nin X'i geçtiği yer — klasik pattern arayan göz burada "geçersiz" der ve Shark'ı kaçırır (Bölüm 11, hata 9). Sağda D'nin hem 0.50 BC hem reciprocal AB=CD ile çakışması, 5-0'ın PRZ'sidir.
+
+### 4.9 Cypher
+
+| Bacak | Oran |
+|---|---|
+| B | 0.382–0.618 XA |
+| C | XA'nın **1.272–1.414** uzantısı (**A'yı geçer**) |
+| D | **XC**'nin 0.786 retracement'ı |
+| Kaynak | Darren Oglesbee (topluluk) |
+
+**Ayırt edici nokta:** Cypher'ı diğerlerinden ayıran tek yapısal özellik: **C, A'yı geçer** ve D, XA'dan değil **XC**'den ölçülür. Klasik pattern'de C'nin A'yı geçmesi yapıyı iptal eder; Cypher'da tanımdır. Mantık: A'nın kırılması "tuzak kırılım"dır — kırılım alıcıları C'de tuzağa düşer, D'ye kadar süren karşı hareket bunların stop'larıyla beslenir; 0.786 XC ise bu geniş XC hareketinin derin ama X'i aşmayan düzeltmesidir. En yaygın hata: D'yi XA'dan ölçmek (Bölüm 11, hata 8).
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/13_cypher.html" baslik="Cypher: C, A'yı geçer; D, XA'dan değil XC'den ölçülür" no="13" yukseklik={600} />
+
+**Şekil 13 nasıl okunur.** B = 0.50 XA; C = 1.272 XA — A'nın *üstünde* ("tuzak kırılım" notu). Fib aracı bu kez X→**C** çekilmiş: 0.382 / 0.5 / 0.618 / 0.786 XC çizgileri; D = 0.786 XC PRZ. Gri çizgi "0.786 XA — YANLIŞ referans": aynı 0.786'yı XA'dan ölçerseniz PRZ farklı yerde çıkar. Stop X, T1/T2 = 0.382 / 0.618 CD. Nereye bakılır: C'nin A'nın üstünde olması ilk sinyaldir — bunu gördüğünüz anda XA aracını bırakıp XC aracını çekin.
+
+**Geçersizlik:** X. **Hedefler:** 0.382 / 0.618 CD.
+
+### 4.10 Three Drives (üç sürüş)
+
+| Öğe | Oran |
+|---|---|
+| Düzeltmeler (A, B) | 0.618 (0.786 kabul) |
+| Drive 2 | 1.27 (veya 1.13 / 1.618) · düzeltme A |
+| Drive 3 | 1.27 · düzeltme B |
+| Simetri | Bacaklar zaman ve fiyatta benzer |
+| Kaynak | Prechter → Pesavento/Carney |
+
+**Ayırt edici nokta:** XABCD değil, üç ardışık simetrik "sürüş" (drive) ve iki düzeltme. Her drive bir öncekinden 1.27 (nadiren 1.13/1.618) uzantısıyla ileri gider; düzeltmeler 0.618. **Zaman simetrisi** burada tanımın parçasıdır: drive'lar arası bar sayıları benzer olmalıdır. Mantık: momentum tükenmesi — üçüncü sürüş genellikle en zayıf momentumla gelir (uyumsuzluk).
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/14_three_drives.html" baslik="Three Drives: üç simetrik sürüş, 0.618 düzeltmeler, 1.27 projeksiyonlar" no="14" yukseklik={580} />
+
+**Şekil 14 nasıl okunur.** Drive 1 → düzeltme A (0.618) → drive 2 (1.272·düzeltme A) → düzeltme B (0.618) → drive 3 (1.272·düzeltme B). 1.272 ve 1.618 projeksiyon çizgileri, PRZ, drive1→2 / drive2→3 bar sayıları (zaman simetrisi ölçüleri), stop drive 3'ün altı, hedefler 0.618·son bacak ve düzeltme A tepesi. Nereye bakılır: iki drive arası bar sayısının benzerliği — sayılar çok orantısızsa (biri 8, diğeri 30 bar) yapı zayıftır (Bölüm 11, hata 7).
+
+### 4.11 Nen Star, White Swan, Black Swan (topluluk tanımları)
+
+| Pattern | B | C | D: BC | D: XA |
+|---|---|---|---|---|
+| Nen Star | 0.382–0.786 | AB'nin 1.13–1.414 uzantısı | 1.272–2.0 | **1.272** |
+| White Swan (bullish) | 0.382–0.724 | AB'nin 2.0–4.237 uzantısı | BC'nin 0.5–0.886 ret. | 0.236–0.886 |
+| Black Swan (bearish) | 1.382–2.618 (B, X'i geçer) | 0.236–0.5 | 1.128–2.0 | 1.128–2.618 |
+
+Bu üçü için grafik üretilmedi çünkü tanımları kaynağa göre değişir (LuxAlgo Exotic Harmonics, ontrd). Nen Star, Cypher benzeri (C A'yı geçer) ama D 1.272 XA'da; Swan'lar çok geniş pencereli, "topluluk tanımı, kaynağa göre değişir" uyarısıyla anılmalıdır. Pratik öneri: bunları katalog bilgisi olarak bilin, tarayıcıda görünce Carney ailesindeki en yakın yapıya çevirip onun kurallarıyla işleyin.
+
+### 4.12 Ayrım kuralları — Carney'nin kendi ifadeleriyle
+
+- **Gartley vs Bat: B noktası.** B = 0.618 → Gartley (D = 0.786); B ≤ 0.50 → Bat (D = 0.886). BC projeksiyonu 1.27 veya altı ise Bat *geçersiz*, Gartley'dir.
+- **Bat vs Alt Bat:** B ≤ 0.382 ve fiyat 0.886'yı kırıyorsa 1.13'e bak. Whipsaw'dan kaçınmak için ayrılmıştır.
+- **Butterfly vs Crab: D noktası ve B.** B = 0.786 & D = 1.27 → Butterfly; B ≤ 0.618 & D = 1.618 → Crab.
+- **Crab vs Deep Crab:** B = 0.886 → Deep Crab (D yine 1.618; hem B hem X ihlal edilir).
+- **Cypher:** C, A'yı geçer; D XC'den ölçülür.
+- **Shark / 5-0:** klasik M/W dışında; B (Shark) X'i geçer; C hem 0X'in 0.886–1.13'ü hem AB'nin 1.618–2.24'üdür.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/15_hiyerarsi_ayrim.html" baslik="Tek bakışta hiyerarşi: aynı XA üzerinde tüm B ve D seviyeleri" no="15" yukseklik={640} />
+
+**Şekil 15 nasıl okunur.** Tek bir XA impulsu. Solda mavi bant "B nerede durdu?": 0.382 (Bat / Alt Bat), 0.5 (Bat), 0.618 (Gartley / Crab), 0.786 (Butterfly), 0.886 (Deep Crab). Sağda turuncu/bordo bant "D nerede tamamlanır?": 0.786 (Gartley), 0.886 (Bat), 1.13 (Alt Bat), 1.272 (Butterfly), 1.618 (Crab / Deep Crab). X'in altında likidite bandı; köşede Carney'nin ayrım kuralları kutusu. Nereye bakılır: bu grafik dersin **canlı tanıma haritası**dır — B'nin durduğu çizgiden sağdaki D adaylarına ok çekin: 0.618 B'den *iki* ok çıkar (Gartley 0.786, Crab 1.618) ve aralarında BC projeksiyonu karar verir; 0.382 B'den de iki ok (Bat 0.886, Alt Bat 1.13). Bölüm 9'daki karar ağacı bu grafiğin metne dökülmüş hâlidir.
+
+<div class="not">
+  <span class="etiket">Pratik not — "B sınıflandırır, D fiyatlar"</span>
+  Canlıda en çok zaman kazandıran alışkanlık: B oluştuğu anda Şekil 15'e bakıp aday listesini <em>ikiye</em> indirmek. Sonra C oluşunca BC projeksiyonuyla birini seçmek. D'yi beklemeye başladığınızda artık "hangi pattern" sorusu bitmiş, yalnızca "PRZ tutacak mı" sorusu kalmış olmalı.
+</div>
+
+## Bölüm 5 — PRZ inşası ve teyit: T-bar, dönüş mumu, RSI, Type I / Type II
+
+### 5.1 PRZ'yi adım adım kurmak
+
+Bölüm 3.2'deki formülü grafik üstünde uygulayalım. Sıra her zaman aynıdır: önce belirleyici XA sayısı (tek çizgi), sonra BC projeksiyonu (ikinci çizgi), sonra AB=CD (üçüncü çizgi); en düşük ile en yüksek arasına kutu.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/16_prz_insa.html" baslik="PRZ inşası adım adım (Gartley): 0.786 XA → + 1.272 BC → + AB=CD" no="16" yukseklik={580} />
+
+**Şekil 16 nasıl okunur.** Üç panel, aynı Gartley. ① Yalnız 0.786 XA çizgisi (104.28). ② + 1.272 BC (105.00; B→C mavi okla ölçülüp C'den aşağı atılmış). ③ + AB=CD×1.0 (104.99; A→B altın okla ölçülüp C'den kopyalanmış) → PRZ kutusu 104.28–105.00, "genişlik XA'nın %3.6'sı → sıkı"; D'nin PRZ'yi test edişi görünür. Alt not: PRZ = [min, max]; **1.618 BC seçilseydi çizgi çok aşağıda kalır, PRZ gevşerdi → BC oranı seçimi PRZ'yi belirler.** Nereye bakılır: 1.272 BC ile AB=CD'nin neredeyse aynı fiyatta (105.00 / 104.99) buluşması — Bölüm 1.4'te açıklanan geometri: ikisi aynı şeyin iki ölçümüdür. 0.786 XA ise bağımsız üçüncü sayıdır; üçü 0.7 puana sığıyorsa PRZ kalitelidir.
+
+### 5.2 Terminal Price Bar (T-bar)
+
+**Tanım (Carney).** PRZ'deki **tüm** sayıları test eden ilk mum. İdeal dönüşte fiyat T-bar'da PRZ'nin tamamını (en uzak sayı dahil) süpürür ve aynı ya da izleyen mumda geri döner. Kurallar:
+
+- T-bar'ın PRZ'nin en uzak sayısını *aşan* uç noktası (bullish için low), **stop referansı** olur: stop = T-bar ucu − tampon.
+- T-bar'ın PRZ'yi *kapanışıyla* aşması (bullish'te PRZ'nin altında kapanış) **uyarı işaretidir** (Bölüm 8).
+- T-bar'ın boyu, önceki 10–20 mumun ATR'sinin belirgin katıysa (uygulamacı eşiği: **> 2 ATR**) "aşırı fiyat aralığı" uyarısıdır.
+
+Neden T-bar'ı beklemeliyiz? Çünkü PRZ bir *bölge*dir; fiyat ilk sayıya değip dönebilir (o zaman limit emriniz dolmaz) veya son sayıyı da geçip dönebilir (o zaman erken giren stop olur). T-bar, bölgenin tamamının test edildiği ve satıcının tükendiği ilk kanıttır.
+
+### 5.3 Teyit araçları
+
+Modern uygulamada "D'ye geldi diye girme" konsensüsü vardır. Teyit üç sınıftandır; en az biri, tercihen ikisi:
+
+1. **Dönüş mumu:** T-bar'ın kendisi veya izleyen mum — pin bar (uzun karşı fitil, PRZ içinde kapanış), engulfing (yutan mum), tweezer (ikiz dip/tepe).
+2. **Momentum uyumsuzluğu:** CD bacağı boyunca fiyat yeni dip yaparken RSI(14) / stokastik daha yüksek dip yapar. Neden anlamlı? Uzun CD bacağı (özellikle 1.618–2.618 BC projeksiyonu) sonrası momentum tükenmesi; "aşırı uzamış bacak sonrası ölçülü geri çekilme" ampirik olarak en iyi belgelenmiş etkidir — bu da 0.382 AD hedefinin neden sık tutup 0.618 AD'nin daha az tuttuğunu açıklar.
+3. **Yapı kırılımı (LTF):** CD bacağının son lower high'ının (LH) yukarı kırılması — SMC dilinde CHoCH; ya da BC'yi kesen iç trend çizgisinin kırılımı. Bölüm 10.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/17_prz_teyit_rsi.html" baslik="PRZ'de teyit: T-bar, dönüş mumu ve RSI uyumsuzluğu (bullish Bat)" no="17" yukseklik={700} />
+
+**Şekil 17 nasıl okunur.** Üst panel: CD bacağı sert bir ilk dip yapıyor, sonra dalgalı ve yavaşlayan bir yeni dip; D barı **T-bar** — PRZ'nin tümünü test eden uzun alt fitil, kapanış PRZ içinde. Ertesi bar yükseliş engulfing (**teyit ①**); giriş engulfing kapanışında; stop T-bar dibi − 0.5·ATR; X geçersizlik çizgisi. Alt panel RSI(14): fiyat daha düşük dip yapmış (101.66, önceki dip 103.18) ama RSI daha yüksek dip yapmış (26 > 22) → **uyumsuzluk (teyit ②)**. Alt not karar ağacıdır (Bölüm 9.3). Nereye bakılır: RSI'ın iki dibi arasındaki eğim ile fiyatın iki dibi arasındaki eğimin ters yönlü olması. Bu iki teyit birlikte oluştuğunda giriş "teyitli piyasa girişi"dir (Bölüm 6.2).
+
+### 5.4 Reaction vs Reversal; Type I ve Type II
+
+Carney'nin ayrımı (Vol. 2):
+
+- **Reaction (tepki):** PRZ'nin ilk testinde ölçülü bir geri çekilme — genellikle AD bacağının 0.382'sine kadar. Çoğu pattern en azından bunu üretir.
+- **Reversal (dönüş):** Trendin PRZ'den kalıcı olarak yön değiştirmesi; hedef 0.618 AD ve ötesi (C, A).
+- **Type I Reversal:** PRZ'nin **ilk testinde** hızlı tepki; fiyat T-bar'dan doğrudan uzaklaşır. İlk tepki genellikle 0.382 AD'ye ulaşır; sonra fiyat çoğunlukla PRZ'yi **yeniden test etmeye** döner.
+- **Type II Reversal:** İlk tepkiden sonra PRZ'nin **ikincil retest**'i; retest tutarsa gerçek büyük dönüş buradan başlar. Carney: "çoğu durum ilk testte REACTION, ikinci testte daha büyük REVERSAL üretir."
+
+**Operasyonel sonuç:** Type I'de pozisyonun bir kısmı ilk hedefte kapatılıp stop BE'ye alınmazsa retest sırasında kâr buharlaşır. Type II retest "ikinci giriş" fırsatıdır — daha dar stop, daha iyi R:R.
+
+**Neden Type II daha güçlü?** İlk testte PRZ'yi savunan pasif emirler kısmen tükenir; fiyat geri çekilir (reaction). İkinci teste gelirken hacim düşükse ve önceki uç kırılmıyorsa (higher low), arz/talep dengesi görünür şekilde değişmiştir — **yapı teyidi** oluşur. SMC'deki "sweep → CHoCH → retest OB" akışının harmonik dilindeki karşılığı budur.
+
+Şekil 21 (Bölüm 7) bu iki senaryoyu yan yana gösterir.
+
+## Bölüm 6 — Giriş, stop, hedef ve R:R
+
+### 6.1 İşlemin anatomisi tek grafikte
+
+Önce bütünü görelim: bir Bat tamamlanmış, PRZ test edilmiş; giriş, stop ve üç hedef aynı grafikte. Sonraki alt bölümler bu grafiğin her parçasını (giriş türü, stop kuralı, hedef formülü, R:R) ayrı ayrı açar.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/18_giris_stop_hedef.html" baslik="Giriş / stop / hedef kutuları (Bat): T1 = 0.382 AD, T2 = 0.618 AD, T3 = A ve R:R'ler" no="18" yukseklik={640} />
+
+**Şekil 18 nasıl okunur.** Giriş PRZ ortasında; SL = X − tampon (kırmızı risk kutusu); T1 = D + 0.382·(A − D) (yeşil kutu, R:R 1.9); T2 = 0.618 AD (R:R 3.2); T3 = A (R:R 5.3); ara hedefler B ve C çizgileri; AD bacağı ölçü okuyla; sayısal kutu ve Bulkowski'nin hedefe ulaşma yüzdeleri. Nereye bakılır: T3'ün R:R'si en cazip ama ulaşma olasılığı en düşük (%58 Bat için — kataloğun en iyisi). Beklenen değer hesabında hedef olasılıkları R:R'yi çarpar; bu yüzden T1'de kısmi kâr almadan T3'ü beklemek, kâğıt üstünde en yüksek R:R'yi gerçekte en düşük beklentiye çevirir.
+
+### 6.2 Dört giriş türü
+
+| Tür | Tanım | Ne zaman |
+|---|---|---|
+| **Limit (blind) giriş** | PRZ içinde, çoğunlukla belirleyici XA sayısında ya da PRZ'nin orta noktasında bekleyen limit emir | Sadece sıkı PRZ + HTF konfluens + trend yönünde; Carney'nin erken uygulaması |
+| **Teyitli piyasa girişi** | T-bar oluştuktan sonra: PRZ'de dönüş mumu (pin bar / engulfing / tweezer) kapanınca ya da LTF'de yapı kırılımı (CHoCH) sonrası | **Varsayılan yöntem**; çoğu modern kaynak "D'ye geldi diye girme" der |
+| **Ölçekli giriş** | Pozisyonun %30–50'si PRZ'nin ilk sayısında limit, kalan %50–70'i teyit sonrası (veya PRZ'nin uzak sayısında) | PRZ geniş ise; ortalama giriş PRZ ortasına yakın olur |
+| **Type II retest girişi** | İlk tepkiden sonra PRZ'ye ikinci dokunuşta, retest mumunun kapanışıyla | En sıkı stop, en yüksek R:R |
+
+Carney'nin ifadesi: "onay tercih edilir; oran tek başına tetik değildir."
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/19_giris_turleri.html" baslik="Dört giriş türü aynı PRZ üzerinde: limit, teyitli, ölçekli, Type II retest" no="19" yukseklik={660} />
+
+**Şekil 19 nasıl okunur.** Aynı Bat PRZ'sinde dört işaretçi: ① limit — PRZ ortasında mavi üçgen; ② teyitli piyasa girişi — engulfing kapanışında (103.08); ③ ölçekli — %40 PRZ'nin ilk sayısında + %60 teyitte, ortalama giriş çizgisi; ④ Type II retest girişi — higher low'da mor üçgen. Ortak stop: T-bar dibi − 0.5·ATR. Kural kutusu dört türün ne zaman kullanılacağını özetler. Nereye bakılır: dört girişin fiyat farkı küçüktür (PRZ zaten dar); asıl fark **doluş olasılığı ile stop olma olasılığı arasındaki takas**tır — limit en iyi fiyatı verir ama fiyat PRZ'ye değmeden dönerse dolmaz ve PRZ delinirse ilk stop olan odur; teyitli giriş birkaç puan pahalıdır ama T-bar'ın arkasında durur.
+
+### 6.3 Stop yerleşimi: pattern'e göre geçersizlik
+
+| Pattern | Geçersizleşme mantığı | Stop referansı |
+|---|---|---|
+| Gartley (D = 0.786 XA) | 0.886 XA'yı geçerse Bat'e evrilir; X'i geçerse tamamen geçersiz | X'in ötesi ya da 0.886 XA'nın ötesi (dar) |
+| Bat (D = 0.886 XA) | 1.0 XA (X noktası) | X'in ötesi + tampon (**en dar stoplu pattern**) |
+| Alt Bat (D = 1.13 XA) | 1.272 XA | 1.272 XA'nın ötesi |
+| Butterfly (D = 1.27 XA) | 1.618 XA | 1.618 XA'nın ötesi (X'e stop **yanlış**) |
+| Crab (D = 1.618 XA) | 2.0 XA / 2.24 XA | 2.0 XA'nın ötesi |
+| Deep Crab (D = 1.618 XA, B = 0.886) | 2.0 XA | 2.0 XA'nın ötesi |
+| Cypher (D = 0.786 XC) | X | X'in ötesi |
+| Shark (C = 0.886–1.13 · 0X) | 1.13 · 0X'in ötesi | 1.13 · 0X + tampon |
+| RSI BAMM 1.13 uzantısı | 1.618 uzantısı | 1.618'in ötesi (ikincil kaynak: Brainscape flashcard — birincil Carney metniyle doğrulanmadı) |
+| RSI BAMM 1.618 uzantısı | 2.0 uzantısı | 2.0'nin ötesi (aynı ikincil kaynak) |
+
+**ATR tamponu:** stop = geçersizlik seviyesi ± $m\cdot ATR_{14}$, $m \in [0.5,\ 1.0]$. Rayner Teo'nun genel S/R önerisi 2 ATR'dir (stop avcılığına karşı); harmonik için 2 ATR çoğu zaman R:R'yi bozar, bu yüzden 0.5–1 ATR yaygın uygulamadır. Alternatif: T-bar ucunun ötesi. Birleşik kural: **geçersizlik + tampon ile T-bar ucu + tampon'dan hangisi daha uzaksa o** — stop asla PRZ'nin içinde olamaz (T-bar süpürür).
+
+<div class="not">
+  <span class="etiket">BAMM nedir?</span>
+  <em>Bat Action Magnet Move</em> — Carney'nin, B noktası 0.50 XA'yı geçmeden oluşan yapılarda fiyatın 0.886 XA'ya "mıknatıs gibi" çekildiği gözlemi; RSI BAMM ise aynı fikrin RSI aşırı bölge (70/30/50 eşikleri) tetikleriyle birleştirilmiş sürümüdür ve 1.13 / 1.618 uzantı hedefleriyle çalışır. Stop kuralları tabloda (yalnız ikincil kaynaktan — flashcard; birincil metinle doğrulanamadı); ayrıntısı bu dersin kapsamı dışında, ama tablodaki satırların nereden geldiğini bilmeniz gerekir.
+</div>
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/20_stop_yerlesimi.html" baslik="Stop yerleşimi pattern'e göre: Gartley / Bat / Butterfly / Crab, aynı XA üzerinde" no="20" yukseklik={840} />
+
+**Şekil 20 nasıl okunur.** 2×2 panel; her panelde geçersizlik çizgisi (Gartley X = 1.0 XA, Bat 1.0 XA, Butterfly 1.618 XA, Crab 2.0 XA), 0.75·ATR tamponlu stop, giriş (PRZ üst kenarı + 0.03 XA), T1 (yeşil kutu) – stop (kırmızı kutu) R:R'si ve T2 R:R'si. Gartley panelinde gri noktalı çizgi 0.886 XA: "dar stop seçeneği" (Bat'e evrilme sınırı). Butterfly ve Crab panellerinde gri çizgi "X — burada stop YANLIŞ". Alt kutuda dört pattern'in giriş/stop/risk/R:R sayıları, aynı XA = 20 birim üzerinde: **Gartley risk 6.1 (X stopu; 0.886'ya çekilirse 3.9) / T1 0.9 / T2 1.5 · Bat risk 4.0 / T1 1.6 / T2 2.6 · Butterfly risk 9.3 / T1 1.0 / T2 1.6 · Crab risk 10.9 / T1 1.1 / T2 1.8.** Nereye bakılır: **X'e stopla Bat'in kırmızı kutusu en küçük, Crab'inki en büyük;** Gartley ancak dar 0.886 stopuyla Bat'e yaklaşır. Aynı hedef mantığıyla Bat'in T2 R:R'si (2.6) Crab'inkinin (1.8) yaklaşık 1.4 katıdır; Butterfly'da T1 ancak 1:1'dir. Crab'in avantajı R:R değil, D'nin aşırı uzamış bacağın sonunda gelmesidir (tepki güvenilirliği %92, Bulkowski). "3:1" bu kurguda görünmez — ona Şekil 18'deki gibi giriş PRZ ortasında ve stop X'e yapışıkken (T2'de 3.2) ya da Type II retest girişiyle ulaşılır. Sonuç: Crab/Butterfly'da pozisyon küçültülür; Bat/Gartley'de T2 için 2–3:1 bandı stop yerleşimine bağlıdır.
+
+### 6.4 Hedefler
+
+- **İlk kâr hedefi (IPO — Initial Profit Objective):** AD bacağının 0.382 retracement'ı.
+- **İkinci hedef:** 0.618 AD.
+- **Yapısal hedefler:** B seviyesi, C seviyesi, A seviyesi (Carney'nin üçlü sistemi: B → C → A).
+- **Uzantı hedefleri:** Butterfly/Crab gibi büyük dönüşlerde 1.27 / 1.618 AD ya da StockCharts'ın "D + 0.618–0.786 XA" ve "D + 1.27–1.618 XA" bantları.
+
+$$
+T_1 = D + 0.382\,(A - D), \qquad T_2 = D + 0.618\,(A - D), \qquad T_3 = A
+$$
+
+(bullish; bearish için işaretler ters). Bulkowski verisi hedef sıralamasını haklı çıkarır: fiyat B'ye %48–98 (Gartley %98, Bat %86, Butterfly %79, Crab %48 — Crab'de D, X'in çok ötesinde olduğu için B uzaktır), C'ye %36–64 (Bat %64, Gartley %59, Butterfly %49, Crab %36), A'ya %33–58 oranında ulaşır — yani T1 sıkça, T3 azınlıkta gelir; kısmi kâr kademeleri buna göre kurulur.
+
+### 6.5 R:R hesabı
+
+$$
+R{:}R = \frac{T_1 - E}{E - S}
+$$
+
+$E$ giriş, $S$ stop. Kabul eşiği (uygulamacı): $T_1$ için ≥ 1:1, $T_2$ için ≥ 2:1; toplam beklenen ≥ 1.5:1. Bat/Gartley'de stop dar olduğundan T2'de 2–3:1 bandı ulaşılabilirdir (3:1 için giriş PRZ ortasında ve stop geçersizliğe yapışık olmalı — Şekil 18 vs Şekil 20); Crab/Butterfly'da 2.0 XA'ya kadar stop uzun olduğundan pozisyon küçültülür. **Pozisyon büyüklüğü:** risk hesap büyüklüğünün %0.5–1'i; büyüklük = risk tutarı / (E − S).
+
+### 6.6 Sayısal örnek: bullish Bat, XA = 100 birim
+
+X = 100, A = 200, B = 150 (0.5 XA), C = 190 (0.8 AB). D adayları: 0.886 XA → 111.4; 1.618 BC → 125.3; 1.27 AB=CD → 126.5. PRZ ≈ 111–127 → XA'nın %15'i → **gevşek**. Yeniden bak: 2.0 BC → 190 − 2.0×40 = 110; yalnız 0.886 XA (111.4) ve 2.0 BC (110) kümesi alınırsa PRZ 110–112 → sıkı. Giriş 112; stop X − 1 ATR (ATR = 2) = 98 → risk 14. T1 = 112 + 0.382·(200 − 112) = 145.6 → R:R 2.4:1; T2 = 112 + 0.618·88 = 166.4 → 3.9:1. Öğrenciye ödev: Bulkowski'nin Bat oranlarıyla (B'ye %86, C'ye %64, A'ya %58) beklenen değeri hesaplayın; sonra aynı hesabı stop 96'ya (2 ATR) çekerek tekrarlayın ve R:R'nin ne kadar bozulduğunu görün.
+
+## Bölüm 7 — Pozisyon yönetimi adım adım
+
+### 7.1 Kural seti (Carney "Trade Management" + uygulamacı)
+
+1. **T1'e (0.382 AD) ulaşınca** pozisyonun **1/3–1/2**'si kapatılır, stop **BE**'ye (girişe) çekilir.
+2. **T2'de (0.618 AD)** ikinci dilim (%25–33).
+3. **Kalan için %38.2 Trailer (Carney):** dönüş noktasından (D) ulaşılan ekstreme kadar olan hareketin 0.382 retracement'ı stop olur; her yeni ekstremde yeniden hesaplanır:
+
+$$
+S_{trail} = H_{max} - 0.382\,(H_{max} - D)
+$$
+
+4. **Yapısal (harmonic) trailing:** LTF'de her yeni HL (bullish) oluştukça stop bir önceki HL'nin altına taşınır. 0.382 trailer ile yapısal trailer'dan **daha yakın olan kullanılmaz — daha uzak olan kullanılır** (erken sarsılmayı önlemek için; uygulamacı tercihi).
+5. **Zaman stopu:** T1'e **1.5 × pattern süresi** (X'ten D'ye geçen bar sayısı) içinde ulaşılmadıysa pozisyon küçültülür/kapatılır (TradingView reees aracının "timed out" varsayılanı). Uygulamacı kuralı: PRZ'de AB bacağı süresi kadar yatay kalıp dönüş üretmeyen yapı zayıftır.
+6. **Type I sonrası retest:** BE stop tutmuşsa retest'te ikinci giriş; T1'e ulaşmadan PRZ'ye dönen fiyat, pozisyonun geri kalanında stopun daraltılmasını gerektirir.
+
+Neden T1'de kısmi kâr zorunlu? Çünkü Bölüm 5.4: çoğu dönüş Type I ile başlar ve fiyat PRZ'ye geri döner. Kısmi kâr + BE, retest'te pozisyonu "bedava" hâle getirir; retest tutarsa ikinci girişle büyütülür, tutmazsa maliyetsiz çıkılır.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/21_type1_type2.html" baslik="Type I (reaction) ve Type II (reversal): aynı Bat, iki farklı devam" no="21" yukseklik={600} />
+
+**Şekil 21 nasıl okunur.** Sol panel Type I: PRZ'ye tek dokunuş → ~0.382 AD'ye tepki → PRZ'ye geri dönüş; BE stop çizgisi ve not: "kısmi kâr alınmadıysa buharlaşır". Sağ panel aynı yapı, Type II: retest higher low yapıyor (102.81 > 102.28) → ikinci giriş (mor üçgen), stop retest dibinin altı → 0.618 AD ve A'ya uzanış. Nereye bakılır: sağ panelde retest dibinin ilk dibin *üstünde* kalması — bu higher low, Type II'nin tanımıdır ve ikinci girişin stop'unu ilk girişinkinden dar yapar (daha iyi R:R). Sol panelde ise BE'ye çekilmiş stop'un fiyatın geri dönüşünde pozisyonu maliyetsiz kapattığı görülür.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/22_pozisyon_yonetimi.html" baslik="Pozisyon yönetimi adım adım: kısmi kâr, BE ve iki trailing yöntemi" no="22" yukseklik={660} />
+
+**Şekil 22 nasıl okunur.** Girişten itibaren zaman çizelgesi: T1'de %40 kapat + stop → BE (kırmızı merdivenin ilk basamağı); T2'de %30 kapat; kalan %30 için iki trailer birlikte çizili — **0.382 trailer** (kırmızı kesikli merdiven: $H_{max} - 0.382\,(H_{max} - D)$, her yeni tepede yeniden hesaplanır) ve **yapısal trailer** (mavi noktalı: son HL'nin altı); not: "daha UZAK olanı kullan". Üstte %100 / %60 / %30 pozisyon şeridi; kural seti ve zaman stopu notu. Nereye bakılır: iki merdivenin bazen yer değiştirdiği yerler — bir hızlı yükseliş sonrası 0.382 trailer yapısal trailer'ın üstüne çıkar; kural gereği o anda yapısal (daha uzak) kullanılır, böylece tek bir sert geri çekilme pozisyonu erken kapatmaz.
+
+### 7.2 Birleşik kural seti — tek sayfada
+
+1. **Giriş:** teyitli varsayılan; ölçekli (%40 limit PRZ ilk sayısı + %60 teyit) opsiyonel; Type II retest'te ek giriş.
+2. **Stop:** pattern geçersizleşme seviyesi + 0.5–1 ATR, ya da T-bar ucu + tampon — hangisi daha *uzaksa* (stop PRZ içinde olamaz).
+3. **Pozisyon büyüklüğü:** risk %0.5–1 hesap; büyüklük = risk / (E − S).
+4. **T1 = 0.382 AD:** %33–50 kapat, stop → BE.
+5. **T2 = 0.618 AD:** %25–33 kapat.
+6. **Kalan:** 0.382 trailer veya yapısal trailing (LTF HL/LH); hedef A veya uzantı.
+7. **Geçersizleşme:** PRZ dışı kapanış + geri kapanmama → çık, ters yön için retest bekle.
+8. **Zaman stopu:** T1'e 1.5 × pattern süresi içinde ulaşılmadıysa pozisyonu küçült/kapat.
+9. **Type I sonrası retest:** BE stop tutmuşsa ikinci giriş.
+
+## Bölüm 8 — Başarısızlık ve geçersizleşme
+
+### 8.1 Başarısızlık tanımı ve rol değişimi
+
+**Tanım (harmonicpattern.com):** (i) PRZ'nin ötesinde *kararlı kapanış* **+** (ii) izleyen mumda PRZ içine *geri kapanmama*. İkisi birlikte gerçekleşene dek pattern "yaralı ama canlı"dır; stop yenmiş olabilir ama yapı geçersiz sayılmaz — bu yüzden stop, PRZ'nin ötesindeki *kapanışa* değil geçersizlik seviyesine göre konur. Geçersizleşen pattern'de **PRZ rol değiştirir** (destek → direnç); PRZ'nin en az üçte birine retest beklenip **ters yön** işlemi aranır.
+
+**İkinci kriter (Carney / uygulamacı — kapanış şartsız):** D'den sonra fiyat PRZ'ye geri dönüp **T-bar'ın ucunu** (bullish'te dibini) kırarsa yapı geçersizdir — ertesi mumun kapanışını beklemeye gerek yoktur; T-bar'ın PRZ'deki en aşırı fiyatı zaten "savunulan" seviyeydi. Type II retest'in **higher low** şartı tam da budur: retest dibi T-bar dibinin *üstünde* kalmalıdır (Şekil 21 sağ panel: 102.81 > 102.28); altına inen retest "başarısız retest"tir ve pattern'i bitirir. İki kriter birbirini tamamlar: birincisi (kapanış + geri kapanmama) ilk testte, ikincisi (T-bar ucu) retest'te uygulanır.
+
+**Evrilme kontrolü:** PRZ delindiğinde önce "başka pattern'e evriliyor mu?" sorusu: Bat → Alt Bat (1.13 XA), Butterfly 1.27 → 1.618, Gartley → Bat (0.886). Evrilmiyorsa geçersiz.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/23_basarisiz_pattern.html" baslik="Başarısız pattern (Bat): PRZ delinmesi, geçersizleşme ve rol değişimi" no="23" yukseklik={620} />
+
+**Şekil 23 nasıl okunur.** ① Mum PRZ'nin altında kapanıyor (tail close — uyarı); ② ertesi mum PRZ içine geri kapanmıyor → geçersiz, stop çalışır; ③ PRZ **direnç** olarak retest ediliyor → ters yön (short) girişi, stop PRZ'nin üstü. 1.13 XA çizgisi "Bat → Alt Bat evrilme kontrolü": fiyat 1.13'te tutsaydı yapı Alt Bat olarak yaşamaya devam ederdi. Nereye bakılır: ① ile ② arasındaki tek mumluk bekleme — Bölüm 9'daki karar ağacının "ertesi mumu bekle" dalı budur; ② gerçekleşmeden pattern'i ölü ilan etmek, sweep senaryosunu (X altına fitil, geri kapanış — en güçlü teyit) kaçırmak demektir.
+
+### 8.2 Uyarı işaretleri (Carney'nin üç işareti + uygulamacı eklemesi)
+
+Carney'nin listesi üç maddedir:
+
+1. **Fiyat boşluğu (gap)** PRZ'ye doğru veya PRZ içinden.
+2. **Tail close:** mumun PRZ'yi geçip **kapanışının** PRZ dışında kalması (bullish'te PRZ'nin altında kapanış).
+3. **Aşırı fiyat aralığı:** T-bar'ın olağandışı uzunluğu (> 2 ATR).
+
+Uygulamacı eklemesi (Carney'ye ait değil, ikincil kaynaklardan):
+
+4. **PRZ'de kapanış olmaması:** fiyatın PRZ'ye değip hiç kapanış vermeden yol alması.
+
+Neden bunlar uyarı? Dördü de aynı şeyi söyler: PRZ'yi savunan pasif emir yok ya da yetersiz. Gap ve dev mum, karşı yönde agresif akış demektir; kapanışsız geçiş, PRZ'nin hiç "görülmediği" anlamına gelir.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/24_uyari_isaretleri.html" baslik="PRZ'de uyarı işaretleri: gap ile giriş, dev T-bar, kapanışsız geçiş" no="24" yukseklik={540} />
+
+**Şekil 24 nasıl okunur.** Üç panel: (a) PRZ'ye **gap** ile giriş — önceki kapanış ile açılış arasında boşluk; (b) **3.6·ATR** boyunda dev T-bar (eşik > 2 ATR); (c) fiyatın PRZ'ye değip içinde kapanış vermeden geçişi. Alt notta Carney'nin üç uyarı işareti + uygulamacı eklemesi (kapanışsız geçiş). Nereye bakılır: üç durumda da teyitsiz giriş yapılmaz; ölçekli girişin limit dilimi bile küçük tutulur ya da iptal edilir. (b)'de özellikle: dev T-bar dönüş mumu gibi görünebilir — ama boyu, satıcının tükendiğini değil, agresif olduğunu söyler.
+
+
+## Bölüm 9 — Canlı tanıma: ekranda ne görünce ne aramalıyım?
+
+Buraya kadar tamamlanmış pattern'lere baktık. Gerçek iş, pattern *oluşurken* tanımaktır. Bu bölüm dört parçadan oluşur: swing tespiti, aday pattern haritası, PRZ'ye ulaşıldığında karar ağacı ve tarayıcı/araç mantığı.
+
+### 9.1 Swing tespiti — X'i doğru seçmek
+
+- **Fraktal (Williams) tanımı:** swing high = ortadaki mumun high'ı, sağındaki ve solundaki $n$ mumdan yüksek ($n = 2$ klasik). Harmonik için $n = 3$–5 (LTF), 5–10 (HTF) önerilir.
+- **Zigzag:** minimum sapma (%) ya da minimum bar sayısı (Trendoscope varsayılanı zigzag uzunluğu 8, derinlik 100 pivot). Kural: kullanılan zaman diliminde ATR'nin 3–5 katı sapma, yapıyı gürültüden ayırır.
+- **Yanlış X kontrolü:** X, XA'dan önceki hareketin *belirgin* ucu olmalı; XA bacağı öncesinde en az 3–5 swing'i kapsayan bir yön değişimi. X'i "pattern çıksın diye" seçmek en yaygın hatadır (Rayner Teo). Ölçüt: XA son 3–5 salınımdan büyük, tek yönlü, en az N bar (H1'de ≥ 8–10 bar öneri). Belirgin bir XA yoksa harmonik aramayın.
+
+Neden pivot ayarı bu kadar kritik? Çünkü aynı fiyat serisinde $n$ küçüldükçe pivot sayısı artar, XABCD kombinasyonu sayısı katlanır ve "bir şeyler eşleşir" — pattern sayısı artar, kalite düşer. Şekil 26 (Bölüm 9.5) bunu gerçek veride gösterir.
+
+### 9.2 Aday pattern haritası — hangi noktalar oluştukça ne beklenir
+
+1. **X ve A belirlendi** → henüz hiçbir şey; sadece XA fib retracement'ini (0.382 / 0.5 / 0.618 / 0.786 / 0.886) ve XA uzantılarını (1.13 / 1.27 / 1.618) çiz.
+2. **B oluştu** (AB düzeltmesi bitti, fiyat A yönüne döndü):
+   - B ≈ 0.382–0.50 XA → **Bat** (D = 0.886 XA), **Alt Bat** (B = 0.382, D = 1.13 XA), **Crab** (D = 1.618 XA) adayı.
+   - B ≈ 0.618 XA → **Gartley** (D = 0.786 XA) adayı; B 0.618'in biraz *altında* (sığ tarafında) kalırsa **Crab** (B ≤ 0.618) da adaydır; 0.618'i *aşan* (daha derin) B, Gartley ve Crab bandından çıkar, Butterfly'ın 0.786'sına yaklaşır. Ayrım BC projeksiyonuyla: BC 1.27–1.618 → Gartley; ≥ 2.618 → Crab.
+   - B ≈ 0.786 XA → **Butterfly** (D = 1.27–1.618 XA).
+   - B ≈ 0.886 XA → **Deep Crab** (D = 1.618 XA).
+   - B, XA'nın 1.13–1.618 uzantısı (X'i aşan "B") → **Shark** (5-0 öncüsü) adayı; klasik XABCD değil.
+   - B 0.382–0.618 ama C, A'yı 1.272–1.414 aşıyor → **Cypher**.
+3. **C oluştu:** C, AB'nin 0.382–0.886 retracement'ı olmalı (Gartley/Bat/Butterfly/Crab). C, A'yı aşıyorsa Gartley/Bat/Butterfly geçersiz → Cypher/Shark'a bak. C, B'nin altına indiyse pattern iptal.
+4. **PRZ önceden çizilir:** XA belirleyici oranı + BC projeksiyonları + AB=CD; kesişimin en yoğun olduğu bant işaretlenir. Üçü XA'nın ≤ %5'i içindeyse izleme listesine al. **Alarm** kur (TradingView: PRZ üst kenarına "crossing down" alarmı; pratikte PRZ üst kenarı + 1 ATR).
+5. **CD bacağı gelişirken izle:** momentum azalıyor mu (küçülen mumlar, RSI/stokastik uyumsuzluk), zaman AB'ye benzer mi ($t_{CD}/t_{AB}$), hacim CD'nin sonuna doğru düşüp T-bar'da sıçrıyor mu.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/25_olusum_asamali.html" baslik="Canlı tanıma: pattern oluşurken ne çizilir? X-A → B → C" no="25" yukseklik={580} />
+
+**Şekil 25 nasıl okunur.** Üç aşama, aynı grafik. ① X-A oluştu: yalnız retracement (0.382–0.886) ve uzantı (1.13 / 1.27 / 1.618) çizgileri — hiçbir pattern adı yok. ② B = 0.50 XA oluştu: aday D bantları belirdi — Bat 0.886 (turuncu), Alt Bat 1.13 (mavi), Crab 1.618 (bordo); Gartley ve Butterfly **elendi** (B 0.618 veya 0.786 değil). ③ C = 0.50 AB oluştu: PRZ önceden çizili, alarm çizgisi PRZ üst kenarı + 1 ATR, yedek 1.13 bandı hâlâ duruyor; "CD gelişirken izle" notu. Nereye bakılır: her aşamada ekrandaki çizgi *sayısının azalması* — iyi canlı tanıma, her yeni pivotta aday listesini daraltmaktır, genişletmek değil. ③'te CD henüz gelmemişken PRZ'nin çizilmiş ve alarmın kurulmuş olması, harmonik çerçevenin diğer formasyonlara karşı tek gerçek avantajıdır.
+
+### 9.3 Karar ağacı — PRZ'ye ulaşıldığında
+
+```
+Fiyat PRZ'ye girdi mi?
+├─ Hayır → bekle; PRZ'ye 1 ATR kala LTF'ye in.
+└─ Evet
+   ├─ Gap ile mi girdi / dev mumla mı? → uyarı; teyit olmadan girme.
+   ├─ T-bar PRZ'nin tümünü test etti mi?
+   │  ├─ Evet, kapanış PRZ içinde → teyit ara:
+   │  │   ├─ Dönüş mumu (pin/engulfing/tweezer) VEYA LTF CHoCH VEYA RSI uyumsuzluğu
+   │  │   │     → GİRİŞ (teyitli), stop T-bar ucu ± tampon
+   │  │   └─ Yok → limit girişi olan pozisyonu küçük tut; teyit bekle
+   │  └─ Kapanış PRZ dışında → ertesi mumu bekle
+   │      ├─ PRZ içine geri kapanış → hâlâ geçerli (sweep senaryosu, güçlü teyit)
+   │      └─ Geri kapanmadı → GEÇERSİZ; ters yön için PRZ retesti bekle
+   └─ Fiyat PRZ'nin sadece ilk sayısına değip döndü → Type I; küçük pozisyon
+      veya bekle, retest (Type II) için hazır ol
+         ├─ Retest higher low (T-bar ucunun üstünde) → Type II giriş
+         └─ Retest T-bar ucunu kırdı → GEÇERSİZ (8.1 ikinci kriter), kapanış bekleme
+```
+
+Bu ağaç Şekil 17'nin alt notunda, Şekil 23'te (geçersiz dal) ve Şekil 21'de (Type I / II dalı) grafik olarak görünür.
+
+### 9.4 Kontrol listesi — girişten önce hepsi "evet" olmalı
+
+- [ ] X belirgin uç, XA bacağı yapısal (yön değişimi), tek yönlü.
+- [ ] B toleransta (±0.03) ve pattern'i **tek anlamlı** sınıflandırıyor.
+- [ ] C, AB'nin 0.382–0.886'sı, A'yı aşmıyor (Cypher/Shark hariç).
+- [ ] BC projeksiyonu pattern'e uygun (Bat için ≥ 1.618!).
+- [ ] AB=CD (eşit veya 1.27/1.618) PRZ ile çakışıyor.
+- [ ] PRZ ≥ 2 bağımsız sayı içeriyor, genişlik XA'nın ≤ %5–8'i.
+- [ ] Zaman: $t_{CD}/t_{AB} \in [0.618,\ 1.618]$.
+- [ ] Geçersizlik noktası belirli (X veya PRZ ötesi); R:R T1 ≥ 1:1, T2 ≥ 2:1.
+- [ ] HTF bağlamı uygun (trend yönü veya HTF sınır) — ya da bilinçli "reaction trade".
+- [ ] T-bar oluştu, uyarı işareti yok.
+- [ ] Teyit: dönüş mumu / LTF CHoCH / momentum uyumsuzluğu (en az 1, tercihen 2).
+- [ ] Yüksek etkili haber 30 dk içinde değil.
+
+### 9.5 Araçlar ve tarayıcı mantığı
+
+- **TradingView XABCD aracı:** 5 tıklama (X→D); mumların high/low'una yapışır; B/C/D oranları otomatik yazılır; ayarlardan "AB=CD" ve "0.382/0.618 hedef" katmanı açılabilir.
+- **Fib retracement:** özel seviyeler 0.886, 1.13, 1.27, 1.618, 2.0, 2.24, 2.618, 3.14, 3.618 eklenir; "reverse" ile uzantılar aynı araçtan.
+- **Trend-based fib extension:** BC projeksiyonu için (B→C→C).
+- **AB=CD ölçümü:** A→B mesafesi ölçü aracıyla, C'den aşağı kopyalanmış paralel çizgi.
+- **Tarayıcılar (Trendoscope, PatternsHunters, TRN, reees):** mantık = zigzag pivotları + oran toleransı eşleştirme; C oluştuğunda projeksiyon çizerler. Hataları: (i) zigzag ileriye bakar — son pivot teyit edilene kadar pattern **repaint** eder; (ii) tolerans %8+ ile "her yerde pattern"; (iii) yanlış X (küçük pivotlar); (iv) HTF bağlamı ve teyit yok. **Kural: tarayıcıyı aday listesi olarak kullan, manuel doğrula; "confirmed bars only" / repaint kapalı ayarı.**
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/26_zigzag_hassasiyet_gercek.html" baslik="Gerçek veri — GC=F (altın vadeli), 1h, 2025-10-06 → 2025-11-03: pivot n = 5 / 8 / 20 aynı seriyi nasıl okur?" no="26" yukseklik={920} />
+
+**Şekil 26 nasıl okunur.** Aynı 451 barlık saatlik altın penceresi, üç panelde üç zigzag: n = 5 (47 pivot), n = 8 (28 pivot), n = 20 (12 pivot) — sayılar grafiğin panel notlarından; script yeniden koşarsa RAPOR çıktısından tekrar okunur. Yalnız n = 8'de bir eşleşme (bullish Butterfly, turuncu zikzak) çıkıyor; n = 5 ve n = 20'de sıfır. Başlık altındaki uyarı: parametre hassasiyeti ve repaint. Nereye bakılır: n = 5 panelinde zikzağın her küçük salınımı pivot sayması — burada X adayı çok, hepsi zayıf; n = 20 panelinde ise XA bacağı bile tek parça olarak görünmüyor. Ders çıkarımı: pivot ayarı bir "doğru" değeri olan parametre değil, *seçtiğiniz ve sabit tuttuğunuz* bir karardır; değiştirdiğinizde bulduğunuz pattern'ler değişir. Sonuçları karşılaştırırken n'i sabit tutmayan bir backtest anlamsızdır.
+
+Bu dersteki gerçek-veri grafikleri (Şekil 26 ve 29–32) tam olarak bu tarayıcı mantığıyla üretildi: fraktal pivot $n$ → ardışık 5 pivot → oran bantları (Gartley B 0.588–0.648 / D 0.75–0.82 / BC 1.13–1.70; Bat B 0.36–0.52 / D 0.85–0.92 / BC 1.6–2.7; Butterfly B 0.75–0.82 / D 1.22–1.66 / BC 1.6–2.7 (geçersizlik 1.618); Crab B 0.36–0.65 / D 1.55–1.70 / BC 2.5–3.7; Alt Bat B 0.30–0.40 / D 1.10–1.16; C 0.382–0.886 ve C A'yı aşmaz). Bulguları Bölüm 12.1'de.
+
+## Bölüm 10 — Çoklu zaman dilimi ve bağlam: trend, SMC ve likidite
+
+### 10.1 Üç katmanlı akış
+
+1. **HTF (D1 / H4):** trend yönü ve büyük XA. Harmonik pattern'in D'si HTF destek/direnç–OB–demand ile çakışıyorsa "A sınıfı". Trend yönünde pattern (yükselen trendde bullish Bat/Gartley düzeltmesi) öncelikli; karşı-trend pattern (Butterfly/Crab tepe) yalnızca HTF sınır bölgesinde ve yalnızca **reaction hedefiyle**.
+2. **İşlem TF'si (H1 / H4):** pattern'in kendisi burada okunur; PRZ ve hedefler burada belirlenir.
+3. **LTF (M15 / M5):** yalnızca *giriş zamanlaması* — T-bar, dönüş mumu, LTF'de kendi AB=CD'si veya küçük pattern, son LH/HL kırılımı, hacim. LTF'de pattern aranmaz; LTF gürültüsü PRZ'yi geçersiz kılmaz.
+
+Kaynakların ortak TF önerisi: forex 1H–4H, kripto 4H–D1, hisse D1 (gap riski). Fraktal ilişki: HTF'de bir Bat'in PRZ'si içinde LTF'de küçük bir bullish AB=CD ya da Gartley tamamlanır ve LTF CHoCH (son LH kırılımı) girişi verir. Şekil 27 bunu iki panelde gösterir.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/27_mtf_fraktal.html" baslik="Çoklu zaman dilimi (fraktal): H4 Bat PRZ'si içinde M15 AB=CD tamamlanışı ve CHoCH girişi" no="27" yukseklik={920} />
+
+**Şekil 27 nasıl okunur.** Üst panel H4: bullish Bat (B 0.50, C 0.50 AB), PRZ önceden çizili (0.886 XA + 2.618 BC + AB=CD×1.27 → 101.91–102.28), mavi noktalı-kesikli çizgi **alarm** = PRZ üst kenarı + 1 ATR(H4) → 103.69: fiyat buraya değince LTF'ye inilir; kırmızı kesikli X geçersizliği; mavi kutu alt panelin kapsadığı 6 H4 barını (D−2 … D+3) işaretler. Alt panel M15, **aynı fiyat ölçeği**: H4'te tek bir T-bar olan D mumunun içinde küçük bir bullish **a-b-c-d** yapısı — c = 0.618 ab, cd = 1.272 ab (alternate AB=CD), 1.618 bc ≈ PRZ üst kenarı — H4 PRZ'sinin *içinde* tamamlanıyor; sonra fiyat son LH'yi (c) yukarı kapanışla kırıyor = **CHoCH**, yeşil üçgen giriş (teyitli piyasa girişi; alternatif: retest'te ikinci giriş); stop PRZ altı − 0.5 ATR(M15) (kural: stop PRZ'nin içinde olamaz — LTF ucu PRZ içindeyse PRZ altına çekilir); T1 (H4'ün 0.382 AD'si) panelin üstünde kaldığı için sayı olarak yazılı, R:R T1 ≈ 2.4. Nereye bakılır: iki panelin *iş bölümü* — üst panel "nereyi" (PRZ), alt panel "ne zaman" (LTF yapı + CHoCH) sorusuna cevap verir; H4'te "PRZ'de bir mum" görünen şey M15'te sayılabilir bir yapıdır. Kural: LTF'de pattern *aranmaz*, HTF PRZ'sinin içindeki LTF yapısı yalnız zamanlama içindir; LTF gürültüsü PRZ'yi geçersiz kılmaz. Şekil 28 aynı fikrin SMC diliyle (sweep → OB/FVG → CHoCH) anlatımıdır.
+
+### 10.2 SMC köprüsü — aynı olayın iki dili
+
+Bu dersin ana tezini (Bölüm 2.2) burada grafiğe döküyoruz. Bat'in 0.886 XA'sı ve Gartley'nin 0.786 XA'sı, X'in hemen üstündeki stop havuzuna *yaklaşan ama geçmeyen* seviyelerdir; Butterfly/Crab'in 1.27–1.618 XA'sı ise **X'i süpüren** seviyelerdir. Yani **Butterfly/Crab D noktası ≈ X'in likidite süpürmesi (liquidity sweep of X)** — X'in altındaki stop'ların ve breakout satıcılarının tetiklenmesi kurumsal alıcıya karşı taraf sağlar, sonra dönüş. Bu, D'de "sweep + geri dönüş mumu" (T-bar fitili) neden en güçlü teyit olduğunu açıklar. Uyarı: bu açıklama SMC literatürünün emir akışı anlatısıdır; kurumsal emir akışı verisi olmadan **kısmen spekülatif** kalır.
+
+Sözlük eşlemesi:
+
+| Harmonik dili | SMC dili |
+|---|---|
+| Extension pattern D'si (1.13 / 1.27 / 1.618 XA) | External liquidity sweep (X'in altındaki SSL) |
+| T-bar (fitil PRZ'yi süpürür, kapanış içeride) | Sweep mumu / rejection |
+| D mumu | Bullish order block (OB) |
+| CD bacağının son LH'sinin kırılması (iç trend çizgisi kırılımı) | CHoCH |
+| Type II retest | OB / FVG retesti |
+| PRZ | Demand zone + fib konfluensi |
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/28_smc_koprusu.html" baslik="SMC köprüsü: Butterfly D = likidite süpürmesi; OB, FVG, CHoCH ile giriş zamanlaması" no="28" yukseklik={640} />
+
+**Şekil 28 nasıl okunur.** X eski bir dip (altın çizgi) ve altında stop havuzu bandı. D barı X'in altına fitil atıyor (**SWEEP**, altın ok) = T-bar; D mumu = bullish **order block** (mavi kutu); D+1 tepesi ile D+3 dibi arasındaki boşluk **FVG** (mor kutu); CD bacağının son LH'sinin kırılımı = **CHoCH**; retest'te FVG doluyor ve fiyat OB'nin üst kenarına dokunuyor = **giriş** (mavi üçgen; "SMC dili = Type II retest harmonik dili"); stop sweep dibinin altı; T1/T2. Nereye bakılır: giriş noktası, harmonik gözle "Type II retest girişi", SMC gözle "CHoCH sonrası OB/FVG retesti"dir — aynı mum. İki çerçeveyi bilen işlemci iki teyidi tek seferde okur; ayrıntı için [SMC dersine](/arastirma/smc-teknik-analiz/) bakın.
+
+<div class="not">
+  <span class="etiket">Pratik not — bağlam kuralı</span>
+  HTF trend yönündeki retracement pattern'i (Bat/Gartley) "trend devamı" işlemidir; hedef A'ya kadar makul. HTF'ye <em>karşı</em> extension pattern'i (Crab/Butterfly) ise "uç süpürme tepkisi"dir; temerrüt varsayımı reaction (T1, en fazla T2), trend dönüşü değil. Bu ayrımı yapmayan işlemci Crab tepesinde A'yı bekleyip T1'de aldığı kârı geri verir (Bölüm 11, hata 6).
+</div>
+
+## Bölüm 11 — Tipik hatalar ve tuzaklar
+
+1. **Zorlama pattern:** X'i pattern çıksın diye seçmek; toleransı %5→%10 açınca her yerde pattern görülür — TradingView göstergesi bile bunu uyarır. Bulkowski: "gerçek grafikte pattern çentikli, ideal diyagram gibi değil."
+2. **D'ye geldi diye girmek** (teyitsiz, T-bar'sız).
+3. **Stopu PRZ'nin içine koymak** — T-bar süpürür.
+4. **B noktasını yanlış okuyup Gartley/Bat karıştırmak** (0.618 vs 0.5) → 0.786'ya giriş, 0.886'ya kadar stop yeme; yanlış D ve stop.
+5. **PRZ'yi tek çizgi sanmak** → limit tam 0.786'ya, fiyat 0.80'e değip dönünce boş kalmak veya 0.83'te durup stop yemek.
+6. **Extension pattern'ini X'te stop'la işlemek** (Butterfly/Crab'de X zaten aşılır) ve **HTF'ye karşı Crab'de trend dönüşü beklemek** — reaction hedefiyle yetinilmeli; HTF sınırı yokken trend karşısında Butterfly/Crab tepesi satmak.
+7. **Zaman simetrisini yok saymak:** AB=CD ve Three Drives'ta bacak süreleri çok orantısızsa yapı zayıf.
+8. **Cypher'ı XA'dan ölçmek** (XC olmalı).
+9. **Shark/5-0'ı Bat gibi okumak** (B'nin X'i geçmesi tanımın kendisidir, ihlal değil).
+10. **Düşük TF gürültüsü:** 1–5 dk'da zigzag her salınımı pivot sayar; pattern sayısı artar, kalite düşer.
+11. **İlk tepkide (Type I) kısmi kâr almamak;** retest'te BE'ye stop olmak. Ve tersi: **Type II retest'i "pattern başarısız" sanıp kaçırmak.**
+12. **Tarayıcı repaint'ini gerçek sinyal sanmak;** repaint'li geçmişte "başarı oranı" hesaplamak.
+13. **Haber saatlerinde PRZ testi** (spread/gap).
+14. **Kanıt yanılgısı:** "%70–80 başarı" rakamları çoğunlukla satıcı kaynaklı; akademik seviyeye tekabül etmiyor.
+
+## Bölüm 12 — Kanıt ve eleştiri: gerçekten edge var mı?
+
+### 12.1 Gerçek veri denemeleri — bu ders için yapılan tarama
+
+Bölüm 9.5'teki tarayıcı mantığı yfinance verisine uygulandı: EURUSD=X, GC=F, BTC-USD, XU100.IS, USDTRY=X (2 yıl günlük: 495–730 bar) ve EURUSD=X, BTC-USD, GC=F (730 gün saatlik: 13.7–17.5 bin bar). Sayılar scriptteki `tarama_ozeti()` çıktısından (RAPOR; `_veri/tarama_ozeti.txt`), $n$ = 5 / 6 / 8 / 10 / 12 ile — yeniden koşulunca aynı yerden okunur. Bulgular:
+
+- **Günlük veride 5 enstrümanda ($n$ = 5 / 6 / 8 / 10 / 12) toplam yalnız 1 eşleşme** (XU100 Bat). Günlük TF + ~%5–8 toleransla katalog pattern'leri **nadirdir**; USDTRY, EURUSD, GC=F, BTC-USD günlükte hiç aday vermedi. Bu, "zorlama pattern" ve tolerans tartışmasının sayısal karşılığıdır: katı kurallarla pattern az çıkar; çok pattern gören tarayıcı gevşek kuralla çalışıyordur.
+- **Saatlik veride** aday sayıları (EURUSD / BTC / GC=F): $n$ = 5 → 8 / 7 / 7; $n$ = 6 → 5 / 4 / 8; $n$ = 8 → 4 / 4 / 3; $n$ = 10 → 5 / 1 / 3; $n$ = 12 → 5 / 2 / 2 — pivot ayarı aday sayısını 2–4 kat değiştiriyor ve bulunan pattern türlerini de değiştiriyor (ör. GC=F'de $n$ = 10–12'de Alt Bat çıkarken $n$ = 5–8'de çıkmıyor; Şekil 26).
+- Seçilen 4 gerçek örnekten 3'ünde T2'ye ulaşıldı (birinde ardından stop seviyesi test edildi), 1'inde stop önce çalıştı. **Hepsi tek örnektir — kanıt değil.**
+- Gerçek grafiklerin PRZ'si gerçekleşen oranla değil pattern'in **ideal** sayılarıyla (0.786 / 0.886 / 1.272 XA + en yakın standart BC ve AB=CD katı) çizildi; sapmalar bacak etiketlerinde görünür. Bu mekanik seçim PRZ genişliğini de belirler: dört örnekte XA'nın %5.6 / %8.6 / %17.1 / %12.9'u — dersin kendi eşiğine (> %8 geniş) göre **ikisi işlem öncesi elenirdi** (Şekil 31'de uzak bir AB=CD sayısı, Şekil 32'de küçük XA yüzünden); grafikler bunu saklamaz.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/29_gercek_xu100_gunluk.html" baslik="Gerçek veri — BIST 100 (XU100.IS), 1d, 2026-05-22 → 2026-08-14: tarayıcının bulduğu bullish Bat" no="29" yukseklik={640} />
+
+**Şekil 29 nasıl okunur.** X 2026-05-22, D 2026-07-30. Bacak oranları: B 0.442 · C 0.708 · D 0.865 XA · 2.35 BC — Bat bantlarının içinde (B 0.36–0.52, D 0.85–0.92, BC 1.6–2.7). PRZ 0.886 XA + 2.24 BC + AB=CD×1.62 ile çizilmiş, genişlik XA'nın %5.6'sı (kabul sınırı); geçersizlik 1.0 XA, stop −0.75 ATR. T1 ve T2 ulaşıldı — ancak pencere kısa, D'den sonra yalnız 10 bar mevcut (notta belirtili). Nereye bakılır: D'nin ideal 0.886'nın biraz üstünde (0.865) durması — gerçek veride "tam sayı" beklemeyin, PRZ bandının içi yeter. Ve şunu unutmayın: 5 enstrüman × 5 pivot ayarı taramasında günlükte çıkan **tek** aday budur.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/30_gercek_btcusd_saatlik.html" baslik="Gerçek veri — BTC-USD, 1h, 2026-06-26 → 2026-07-01: bullish Bat" no="30" yukseklik={640} />
+
+**Şekil 30 nasıl okunur.** B 0.502 · C 0.644 · D 0.878 XA · 2.16 BC — kitap gibi bir Bat. PRZ genişliği XA'nın %8.6'sı (geniş etiketinin sınırında). T1 ve T2 ulaşıldı; **sonrasında fiyat stop seviyesini de test etti**. Nereye bakılır: T2 sonrası geri dönüş — kısmi kâr alınmamış ve stop BE'ye çekilmemiş olsaydı, T2'ye kadar gitmiş bir işlem stop'la kapanırdı. Şekil 21 ve 22'nin gerçek karşılığı budur; Bölüm 7'nin kuralları kâğıt üstü değildir.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/31_gercek_altin_saatlik.html" baslik="Gerçek veri — GC=F, 1h, 2025-10-22 → 2025-10-30: bullish Butterfly — stop önce çalıştı" no="31" yukseklik={640} />
+
+**Şekil 31 nasıl okunur.** B 0.791 · C 0.866 · D 1.268 XA · 1.70 BC — Butterfly bantlarında. Ama PRZ'ye bakın: 1.272 XA (3.985) ile 1.618 BC (3.994) 9 puan içinde çakışıyor, üçüncü sayı AB=CD×1.62 (3.969) ise uzakta — kutu genişliği **XA'nın %17.1'i**, dört gerçek örneğin **en genişi** ve dersin kuralına (> %8) göre "geniş". Sonuç: **stop önce çalıştı**, T1/T2 ulaşılmadı. Dürüstçe etiketli başarısız örnek — ve sürpriz değil: Bölüm 9.4 kontrol listesindeki PRZ maddesi bu işleme daha başta "hayır" derdi; ya elenmeli ya yalnız çakışan iki sayı (1.272 XA + 1.618 BC) PRZ sayılıp AB=CD kopyası dışarıda bırakılmalıydı (Bölüm 3.3'teki "çakışan alınır" kuralı). Nereye bakılır: gevşek PRZ'de stop mesafesi anlamsızlaşır — burada X'in ötesindeki 1.618 XA geçersizliğine kadar olan mesafe zaten büyüktü. Genel ders: sıkı PRZ bile dönüşü garanti etmez, yalnızca *kaybı* küçültür; gevşek PRZ ise ikisini de vermez. Harmoniklerin faydası buradadır — kazanma olasılığında değil, kaybın büyüklüğünde. Ayrıca X'in geçildiği yer: bir Butterfly'da X'e stop koyan işlemci daha D oluşmadan çıkmıştı; 1.618 XA'ya stop koyan ise D'den sonraki devamla çıktı — iki farklı zamanda ama ikisi de kaybetti. Pattern başarısız olduğunda stop kuralı sizi ancak *ne kadar* kaybedeceğinizden kurtarır.
+
+<GrafikEmbed src="/arastirma/harmonik-patternler/32_gercek_eurusd_saatlik.html" baslik="Gerçek veri — EUR/USD, 1h, 2025-07-08 → 2025-07-14: bearish Gartley" no="32" yukseklik={640} />
+
+**Şekil 32 nasıl okunur.** Tek bearish gerçek örnek — yapı "W". B 0.609 · C 0.834 · D 0.813 XA · 1.40 BC — Gartley bantlarında (B 0.588–0.648, D 0.75–0.82, BC 1.13–1.70). PRZ 0.786 XA (1.1750) + 1.272 BC (1.1747) + AB=CD×1.27 (1.1757) ile: üç sayı 10 pip içinde — mutlak olarak sıkı — ama XA yalnız ~78 pip olduğu için genişlik XA'nın %12.9'u ve dersin eşiğine göre yine "geniş" (Şekil 31'den farklı bir neden: burada uzak bir sayı yok, XA küçük; küçük XA'da göreli eşik sertleşir ve stop mesafesi de pip olarak dar kalır — kuralın küçük yapılarda mutlak/göreli ikilemi). Buna rağmen T1 ve T2 ulaşıldı — tek örnek, sonuç lehte diye kural gevşetilmez. Nereye bakılır: D'nin 0.813'te, yani 0.786'nın *ötesinde* ama 0.886'nın berisinde durması — Gartley'nin "0.886'yı geçerse Bat'e evrilir" bandında kalmış; ayrıca C'nin derinliği (0.834 AB) BC bacağını uzatıp projeksiyon katsayısını 1.40'a çekmiş — Bölüm 1.4'ün "C derinleştikçe BC katsayısı küçülür, 0.786–0.886 için 1.13–1.27" kuralının gerçek verideki karşılığı.
+
+### 12.2 Savunucu iddialar
+
+- Gartley (1935): 30 yıl boyunca 10'da 7 kârlı. Kaynak: kendi kitabı; yöntem/örneklem yok. Ayrıca Gartley Fibonacci kullanmıyordu (1/3, 2/3).
+- Pesavento: 40 yıl deneyimle %70 iddiasını "doğruladığını" söyler; yayınlanmış test yok.
+- Carney: Bat/Crab için "yüksek hassasiyet, küçük stop"; sayısal başarı oranı yayımlamaz; PRZ "ilk testte genellikle bir tepki verir" (nitel iddia). CXO Advisory'nin *Vol. 2* incelemesi: Carney "iddia eder ama işlem ya da portföy düzeyinde istatistiksel/ekonomik anlamlılığı ölçmez"; seçici örnekleme, data snooping ve teyit yanlılığına açık.
+- Ticari siteler: %65–80 aralığı (fxtribune, visionfactory), "%68 forex başarı", "3000+ pattern'de %85" — kaynak/örneklem verilmez; **kaynağı belirsiz sayı**. Quantum Algo (kendi kaydı, 140 işlem, %75) ve SMC topluluğu backtestleri (%50–65, sıkı konfluensle) — bağımsız değil.
+
+### 12.3 Bağımsız / yarı bağımsız test
+
+- **Bulkowski (thepatternsite):** Bull piyasa, "mükemmel" pattern'ler, örneklem 259 (Bat) – 2.649 (bearish AB=CD). D'de dönüş: Bat %91, Butterfly %91, Crab %92, Gartley %90; break-even başarısızlık %7–14; ortalama yükseliş %36–44. Ancak: (a) yalnızca "D'de dönüş" ölçülür, edge/R:R ölçülmez; (b) örneklem pattern *başarıyla tamamlanmış* olanlardan (hayatta kalma yanlılığı riski); (c) A'ya ulaşma %33–58 — tam geri dönüş azınlık; (d) **bearish AB=CD'de D'de dönüş yalnızca %32.**
+- **Liberated Stock Trader** (TrendSpider/TradingView, Nasdaq-100, 23 yıl, D1): Bullish Gartley hedefe %60 ulaşım, ortalama +%4.46/işlem; Gartley genelde %36–60 aralığı, intraday'de kaçınılmalı; Butterfly ortalama +%2.99/işlem, sadece D1'de ve boğa yönünde; **ayı Butterfly ve ayı Crab güvenilmez**; sıralama Shark > Cypher > Butterfly > Gartley > Bat > Crab. Forex majörlerde Crab EUR/USD +%0.59 ortalama (marjinal), Butterfly %45 kazanma / +%0.29 → forex'te zayıf.
+- **QuantifiedStrategies:** Gartley, Bat, Cypher, Butterfly, Crab için "anlamlı backtest yapılamadı" — kurallar yeterince objektif değil, pivot tanımı öznel, zigzag ileriye bakar; klasik pattern'lerin trader için "çıkmaz sokak" olabileceği sonucu.
+- **Tsinaslanidis, Guijarro & Voukelatos (2022, ESWA 187):** Üç hisse piyasasında (Dow, Nasdaq, DAX hisseleri) otomatik Fibonacci bölge tanıma; lojistik regresyonda Fibonacci bölgelerinde sıçrama olasılığı Fibonacci-dışı bölgelerden **istatistiksel olarak ayırt edilemez**; Fibonacci tabanlı kural al-tut'un altında getiri; zonu genişlettikçe sıçrama olasılığı artıyor — bu, kullanıcının "her zaman bir şey tutar" izlenimini açıklar, kârlılık anlamına gelmez. Harmonik pattern'lerin temel taşı olan "fiyat bu seviyelerde döner" tezine doğrudan olumsuz kanıt.
+- **Bhattacharya & Kumar (2006, Annals of Economics and Finance):** Fibonacci tabanlı yöntemlerin (harmonik dahil) teorik gerekçesini tartışır ve piyasa verisiyle test eder; sonuçlar retracement seviyelerinin sistematik öngörü gücünü desteklemez (özetler ihtiyatlı; tam metne erişilemedi).
+- **Presto Research (kripto, 5 dk, 0.618 sapması):** Çapraz kesit sinyal olarak Sharpe 3.2 raporlar ama istatistiksel anlamlılık testi yok, tek asset'te Sharpe 0.04–0.36 → seviye değil, sepet/mean-reversion etkisi.
+- **TradingView "reees" göstergesi:** başarı oranı tolerans ve zaman sınırına aşırı duyarlı — kendi başına parametre hassasiyeti kanıtı (Şekil 26 ile aynı ders).
+
+### 12.4 Dürüst sentez
+
+1. Fibonacci seviyelerinin *kendisi* için akademik edge kanıtı yoktur.
+2. Ölçülebilir olan tek şey Type I "reaction": uzamış bacak sonrası ölçülü geri çekilme; 0.382 AD sık tutar. Bu, harmonik pattern'e özgü değil, **ortalamaya dönüş** etkisidir — ve trend dönüşü değildir.
+3. Pattern türleri arasındaki fark, muhtemelen stop mesafesi (Bat en dar) ve bağlamla (Butterfly/Crab = uç süpürme) açıklanır; oranların kendisinin özel bir gücü kanıtlanmamıştır.
+4. Edge, varsa, **seçim ve yönetimden** gelir: HTF bağlamı, teyit, kısmi kâr, BE, önceden tanımlı R:R + küçük stop + yakınsama disiplini. Blind limit + geniş tolerans backtestlerde kaybediyor.
+5. Her başarı oranı, tolerans / repaint / hayatta kalma yanlılığı sorularıyla birlikte okunmalı. Backtest'lerin çoğu öznel; kendi kurallarınızla (sabit pivot $n$, sabit tolerans, teyit tanımı) yeniden ölçmeden edge varsaymayın.
+
+## Özet tablo — tüm sayısal sabitler
+
+| Sabit | Değer | Türetim / kullanım / statü |
+|---|---|---|
+| φ | 1.618034 | $(1+\sqrt5)/2$ |
+| 0.236 | $1/\varphi^3$ | ikincil retracement |
+| 0.382 | $1/\varphi^2$ | Bat/Alt Bat B, Cypher B alt sınır, T1 |
+| 0.50 | 1/2 (Fibonacci dışı) | Bat B, 5-0 D (BC), Gartley orijinal |
+| 0.618 | $1/\varphi$ | Gartley B, Crab B üst, AB=CD C |
+| 0.707 | $\sqrt{0.5}$ | Bulkowski ABC listesi |
+| 0.786 | $\sqrt{0.618}$ | Gartley D, Butterfly B, Cypher D (XC) |
+| 0.886 | $0.618^{1/4}$ | Bat D, Deep Crab B, Shark C alt (sahiplik: Carney / Kane, tartışmalı) |
+| 1.13 | $1.618^{1/4} = 1/0.886$ | Alt Bat D, Shark B alt / C üst, 5-0 AB alt |
+| 1.272 | $\sqrt{1.618}$ | Butterfly D, Nen Star D, Gartley BC, AB=CD alt. |
+| 1.414 | $\sqrt2$ (Fibonacci dışı) | Cypher C üst |
+| 1.618 | φ | Crab/Deep Crab D, Bat BC min, 5-0 BC min |
+| 2.0 | 2 (Fibonacci dışı) | Alt Bat BC min, Butterfly BC |
+| 2.24 | $\sqrt5$ (Fibonacci dışı) | 5-0 BC max, Shark C max, Deep Crab BC |
+| 2.618 | $\varphi^2$ | Crab BC, Bat BC max |
+| 3.14 | π (Fibonacci dışı) | Crab BC |
+| 3.618 | $\varphi^2+1$ | Crab / Alt Bat BC max |
+| Belirleyici D | Gartley 0.786 / Bat 0.886 / Alt Bat 1.13 / Butterfly 1.27–1.618 / Crab & Deep Crab 1.618 XA; Cypher 0.786 XC; Shark 0.886–1.13 · 0X | Carney (yerleşik) |
+| B sınıflandırma | 0.382–0.5 Bat; 0.618 Gartley; ≤ 0.618 Crab; 0.786 Butterfly; 0.886 Deep Crab | Carney |
+| C aralığı | 0.382–0.886 AB | Carney |
+| Geçersizleşme | Gartley 0.886 XA (veya X) / Bat 1.0 XA / Alt Bat 1.272 XA / Butterfly 1.618 XA / Crab 2.0 XA / Cypher X / Shark 1.13 · 0X | Yerleşik |
+| RSI BAMM stop | 1.13 → 1.618 ötesi; 1.618 → 2.0 ötesi | ikincil kaynak (Brainscape flashcard), birincil metinle doğrulanmadı |
+| B toleransı | ±0.03 (öneri); tarayıcı %5 dar, %8 Trendoscope varsayılan, 0–20 aralık | Bulkowski D için ±0.03 |
+| PRZ genişliği | ≤ %3 sıkı, %5–8 kabul, > %8 geniş (XA'nın yüzdesi) | Uygulamacı (spekülatif) |
+| ATR tamponu | 0.5–1.0 ATR14 (Rayner: 2 ATR) | Uygulamacı |
+| Aşırı T-bar | > 2 ATR | Uygulamacı |
+| Hedefler | T1 0.382 AD, T2 0.618 AD, T3 A; ara B, C; uzantı D + 0.618–0.786 XA, D + 1.27–1.618 XA | Carney / StockCharts |
+| Kısmi kâr | T1'de %33–50, T2'de %25–33 | Uygulamacı |
+| Trailer | 0.382 × (ekstrem − D); yapısal trailer ile daha uzak olan | Carney / uygulamacı |
+| R:R eşiği | T1 ≥ 1:1, T2 ≥ 2:1, toplam ≥ 1.5:1 | Uygulamacı |
+| Risk/işlem | %0.5–1 (kaynaklar 1–2) | Uygulamacı |
+| Zaman simetrisi | $t_{CD}/t_{AB} \in [0.618,\ 1.618]$ | Pesavento / uygulamacı (spekülatif) |
+| Zaman aşımı | 1.5 × pattern uzunluğu | reees aracı varsayılanı |
+| Pivot n (fraktal) | LTF 3–5, HTF 5–10; Trendoscope zigzag 8 bar, derinlik 100 | Uygulamacı / doküman |
+| RSI BAMM eşikleri | 70 / 30 / 50 | sr-analyst |
+| Başarısızlık | PRZ dışı kapanış + ertesi mum geri kapanmama; ters işlem için PRZ'nin ≥ 1/3 retesti | harmonicpattern.com |
+| Önerilen TF | Forex 1H–4H, kripto 4H–D1, hisse D1 | Çoklu kaynak |
+| Bulkowski D'de dönüş | Bat %91, Butterfly %91, Crab %92, Gartley %90, bearish AB=CD %32 | bull piyasa, "mükemmel" pattern |
+| Bulkowski BE başarısızlık | Bat %10, Butterfly %11, Crab %7, Gartley %14 | |
+| Bulkowski A'ya ulaşma | Bat %58, Butterfly %39, Crab %33, Gartley %45 | |
+| Bulkowski hedefe ulaşma | B'ye %48–98 (Gartley 98, Bat 86, Butterfly 79, Crab 48), C'ye %36–64 (Bat 64, Gartley 59, Butterfly 49, Crab 36), A'ya %33–58 | thepatternsite, 2020 güncellemesi |
+| Gartley 1935 iddiası | 7/10 | kaynaksız |
+| Liberated Stock Trader | Bullish Gartley Nasdaq-100 D1 %60 hedef, +%4.46/işlem; Butterfly +%2.99 (D1, boğa); forex Crab +%0.59, Butterfly %45 / +%0.29 | Yarı bağımsız |
+| Tsinaslanidis 2022 | Fibonacci bölgesi sıçrama olasılığı ≈ diğer bölgeler (anlamsız) | 3 hisse piyasası |
+| Bu ders taraması | Günlük 5 enstrüman × 5 pivot → 1 eşleşme; saatlik n = 8 → 3–4 aday/enstrüman (n = 5 → 7–8, n = 12 → 2–5) | yfinance, `tarama_ozeti()`, Şekil 26 ve 29–32 |
+
+## Sözlük
+
+- **XABCD:** beş pivotlu harmonik yapı; XA impuls, AB/BC düzeltme, CD tamamlanış.
+- **Retracement / extension / projection:** aynı bacağın içine düzeltme (2 nokta) / ötesine uzantı (2 nokta) / bir bacağın başka noktadan taşınması (3 nokta).
+- **PRZ (Potential Reversal Zone):** D etrafında bağımsız Fibonacci hesaplarının yakınsadığı fiyat bandı.
+- **T-bar (Terminal Price Bar):** PRZ'nin tüm sayılarını test eden ilk mum; stop referansı.
+- **Type I / Type II Reversal:** PRZ'nin ilk testinde tepki / ikinci testinde (retest, higher low) büyük dönüş.
+- **Reaction / Reversal:** ölçülü geri çekilme (≈ 0.382 AD) / kalıcı yön değişimi (0.618 AD ve ötesi).
+- **AB=CD, alternate AB=CD, reciprocal AB=CD:** eşit bacaklar / CD = 1.27–1.618·AB / 5-0'daki karşı yönlü eşit bacak.
+- **Belirleyici oran:** pattern'in kimliğini veren XA (veya XC) sayısı.
+- **Geçersizlik seviyesi:** aşılınca pattern'in bittiği fiyat (X, 0.886 XA, 1.618 XA, 2.0 XA …). İki geçersizlik kriteri: (i) PRZ dışı kapanış + geri kapanmama; (ii) retest'te T-bar ucunun kırılması (kapanış şartsız).
+- **Evrilme:** PRZ delinince yapının başka bir pattern'e dönüşmesi (Bat → Alt Bat).
+- **BAMM / RSI BAMM:** Bat Action Magnet Move; 0.886'ya "mıknatıs" hareketi ve RSI tetikli sürümü.
+- **IPO (Initial Profit Objective):** ilk kâr hedefi, 0.382 AD.
+- **0.382 trailer:** $H_{max} - 0.382\,(H_{max}-D)$ takip stopu.
+- **Yapısal trailer:** LTF'de son HL/LH'nin ötesine taşınan stop.
+- **Zaman simetrisi:** $t_{CD}/t_{AB}$ oranı; ideal 0.618–1.618.
+- **Tail close:** PRZ dışında kapanış; uyarı işareti.
+- **Repaint:** zigzag tabanlı tarayıcının son pivot teyit edilene kadar geçmişi yeniden çizmesi.
+- **Fraktal pivot (n):** sağında ve solunda n mumdan yüksek/alçak olan swing.
+- **Sweep / OB / FVG / CHoCH:** SMC terimleri — likidite süpürmesi / order block / fair value gap / karakter değişimi (bkz. SMC dersi).
+- **HTF / LTF:** yüksek / düşük zaman dilimi.
+
+## Kaynaklar
+
+**Carney (birincil):**
+1. Gartley: https://harmonictrader.com/harmonic-patterns/gartley-pattern/
+2. Bat: https://harmonictrader.com/harmonic-patterns/bat-pattern/
+3. Alternate Bat: https://harmonictrader.com/harmonic-patterns/alternate-bat-pattern/
+4. Butterfly: https://harmonictrader.com/harmonic-patterns/butterfly-pattern/
+5. Crab / Deep Crab: https://harmonictrader.com/harmonic-patterns/crab-pattern/ , https://harmonictrader.com/harmonic-patterns/deep-crab-pattern/
+6. Shark: https://harmonictrader.com/harmonic-patterns/shark-pattern/
+7. 5-0: https://harmonictrader.com/harmonic-patterns/5-0/
+8. Three Drives / AB=CD: https://harmonictrader.com/harmonic-patterns/three-drives-pattern/ , https://harmonictrader.com/harmonic-patterns/abcd-pattern/
+9. Pattern kökeni (PRZ, 0.886, %38.2 trailer): https://harmonictrader.com/harmonicpatternorigin/
+10. *Harmonic Trading Vol. 2* (2010) örnek bölüm: https://harmonictrader.com/wp-content/uploads/2020/04/htvol2.pdf
+11. *Harmonic Trading Vol. 1* — Ch. 10, PRZ'de fiyat hareketi (O'Reilly): https://www.oreilly.com/library/view/harmonic-trading-volume/9780131384934/ch11.html
+12. *Turning Patterns into Profits* — Ch. 5 BAMM, Ch. 6 RSI BAMM: https://www.oreilly.com/library/view/turning-patterns-into/9780133068665/book2_ch07.html
+
+**Tarihçe ve diğer tanımlar:**
+13. Traders Log — Gartley tarihçesi (1935, s. 221–222, 7/10, 1/3–2/3, Pesavento): https://www.traderslog.com/gartley-pattern
+14. Trading Book Collector — Gartley kitabı ve pattern eleştirisi: https://tradingbookcollector.wordpress.com/2020/08/18/a-book-introduction-to-hm-gartleys-profits-in-the-stock-market-and-a-critique-of-the-gartley-pattern/
+15. Pesavento, *Fibonacci Ratios with Pattern Recognition* (1997): https://www.amazon.com/Fibonacci-Ratios-Pattern-Recognition-Pesavento/dp/0934380368
+16. StockCharts ChartSchool — Harmonic Patterns (oran türetimi, hedef bantları): https://chartschool.stockcharts.com/table-of-contents/trading-strategies-and-models/trading-strategies/harmonic-patterns
+17. LuxAlgo — Cypher: https://www.luxalgo.com/library/concept/cypher/ ; Exotic Harmonics (Nen Star, Swan'lar): https://www.luxalgo.com/library/indicator/exotic-harmonics/
+18. Kerkez / InvestMacro — Carney pattern'leri ve trade management: https://www.investmacro.com/forex/2017/11/harmonic-trading-patterns-from-scott-m-carney-explained-in-detail-2/ , https://www.investmacro.com/forex/2016/12/harmonic-trading-patterns-from-scott-m-carney-explained-in-detail/
+19. ontrd — White/Black Swan: https://ontrd.com/2025/04/07/white-swan-black-swan-harmonic-patterns/
+20. MQL5 — Three Drives oranları: https://www.mql5.com/en/blogs/post/45661
+21. Chartreaderpro — harmonik oran listesi: http://chartreaderpro.com/harmonic-pattern-ratios/
+22. IC Markets — AB=CD, IPO 0.382/0.618, %38.2 trailer, T-bar stop: https://ic.com/blog/what-is-an-abcd-pattern/
+23. harmonicpattern.com — When a pattern fails: https://harmonicpattern.com/blog/when-pattern-fails/
+24. Rayner Teo — 5 problems with harmonic trading: https://www.tradingwithrayner.com/the-5-problems-with-harmonic-trading/
+25. STP Trading — Best way to trade harmonic patterns: https://www.stptrading.io/blog/the-best-way-to-trade-harmonic-patterns/
+26. Quantum Algo — Harmonic Patterns Complete Guide (SMC konfluens): https://www.quantum-algo.com/blog/guides/harmonic-patterns-complete-trading-guide/
+27. Alchemy Markets — Liquidity sweep: https://alchemymarkets.com/education/strategies/liquidity-sweep/
+28. TradingView RozaniGhani — BAMM Theory: https://www.tradingview.com/script/rCpE42CX-Bat-Action-Magnet-Move-BAMM-Theory-Educational-Source-Code/ ; Brainscape BAMM flashcards: https://www.brainscape.com/flashcards/bat-action-magnet-move-5842925/packs/8548413 ; SR-Analyst RSI BAMM: https://www.sr-analyst.com/HarmonicMT4/rsi-bamm.html
+29. TradingView XABCD aracı kullanımı: https://www.youtube.com/watch?v=23g6KDVMy6Y
+
+**Tarayıcılar ve araç dokümanları:**
+30. TradingView — Harmonic Pattern Detection, Prediction and Backtesting Tool (reees): https://www.tradingview.com/script/lJsQI2Vx-Harmonic-Pattern-Detection-Prediction-and-Backtesting-Tool/
+31. Trendoscope docs — Harmonic Pattern Extreme / UltimateX: https://docs.trendoscope.com/harmonic-pattern-extreme/ ; https://docs.trendoscope.com/auto-harmonic-pattern-ultimatex/
+32. Algotrading-Investment — repaint uyarısı: https://algotrading-investment.com/2019/03/15/harmonic-pattern-success-rate/
+
+**Kanıt ve eleştiri:**
+33. Bulkowski — Gartley: https://thepatternsite.com/GartleyBull.html ; Bat: https://thepatternsite.com/BatBull.html ; Butterfly: https://thepatternsite.com/ButterflyBull.html ; Crab: https://thepatternsite.com/CrabBull.html ; AB=CD: https://thepatternsite.com/ABCDBull.html , https://thepatternsite.com/ABCDBear.html
+34. Tsinaslanidis, Guijarro, Voukelatos (2022), *Expert Systems with Applications* 187, 115893: https://www.sciencedirect.com/science/article/abs/pii/S0957417421012495 (özet: https://www.semanticscholar.org/paper/ec68210f17f0a8433016b81b1b89f5710b5ecbcb)
+35. Bhattacharya & Kumar (2006) — Efficacy of Fibonacci Sequences: https://ideas.repec.org/a/cuf/journl/y2006v7i1p185-196.html
+36. CXO Advisory — A Few Notes on Harmonic Trading Vol. 2: https://www.cxoadvisory.com/technical-trading/a-few-notes-on-harmonic-trading-volume-two/
+37. QuantifiedStrategies — Gartley / Bat / Cypher backtest notları: https://www.quantifiedstrategies.com/gartley-pattern-trading-strategy/ , https://www.quantifiedstrategies.com/harmonic-bat-pattern-strategy/ , https://www.quantifiedstrategies.com/cypher-pattern-trading-strategy/
+38. Liberated Stock Trader — Gartley / Butterfly / Crab / best patterns testleri: https://www.liberatedstocktrader.com/gartley-pattern/ ; https://www.liberatedstocktrader.com/harmonic-butterfly-pattern-trading/ ; https://www.liberatedstocktrader.com/crab-pattern/ ; https://www.liberatedstocktrader.com/best-harmonic-trading-patterns/
+39. Presto Research — Fibonacci retracement stat-arb: https://www.prestolabs.io/research/technical-analysis-in-statistical-arbitrage-i-fibonacci-retracement
+40. Fxtribune — pattern doğruluk oranı derlemesi (uyarı: pazarlama): https://fxtribune.com/harmonic-patterns-and-their-accuracy-rates-unlock-trading-secrets
+
+Grafikler: `site/tools/ders_grafik/harmonik_grafikler.py` (sentetik seriler sabit seed'li; gerçek veri yfinance önbelleği, XU100.IS 1d, BTC-USD 1h, GC=F 1h, EURUSD=X 1h; Bölüm 12.1'deki tarama sayıları aynı scriptin `tarama_ozeti()` fonksiyonundan — günlük EURUSD=X / GC=F / BTC-USD / USDTRY=X dahil, çıktı `_veri/tarama_ozeti.txt`).

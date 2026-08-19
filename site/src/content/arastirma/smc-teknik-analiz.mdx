@@ -1,0 +1,1030 @@
+---
+title: 'Smart Money Concepts (SMC): Piyasa Yapısı, Likidite, Order Block ve FVG ile İşlem'
+description: 'ICT/SMC çerçevesinin tamamı tek derste: swing yapısı, BOS/CHoCH/MSS, dealing range ve OTE, likidite havuzları ve sweep, order block, FVG ve akrabaları, kill zone ve Power of Three, adım adım giriş modelleri, stop/hedef/pozisyon yönetimi, canlı karar ağacı ve dürüst kanıt tartışması — 28 grafik üstünde.'
+pubDate: 2026-08-19
+updatedDate: 2026-08-19
+tags: ['smc', 'ict', 'fiyat-aksiyonu', 'likidite', 'order-block', 'fvg', 'ders', 'teknik-analiz']
+durum: 'aktif'
+kaynak: 'ICT (Inner Circle Trader) öğretisinin metne dökülmüş birincil türevleri (innercircletrader.net, ictkillzone.com, LuxAlgo Library, TradingFinder), Connors & Raschke Street Smarts (1995), Osler (2003, 2005) NY Fed çalışmaları, MPM Research / edgeful / IndicatorEdge backtest derlemeleri; sentetik ve yfinance (EURUSD, GC=F, BTC-USD) verisiyle üretilmiş 28 grafik.'
+---
+
+import GrafikEmbed from '../../components/GrafikEmbed.astro';
+
+"Smart Money Concepts" — akıllı para kavramları — son on yılın en çok konuşulan, en çok satılan ve en az ölçülen teknik analiz çerçevesi. Bu ders onu **bir dil olarak** eksiksiz öğretir, **bir sistem olarak** ise dürüstçe tartar. Amaç: ekranda ne görünce ne arayacağınızı, hangi kuralın hangi sırayla işlediğini, girişten çıkışa pozisyonu nasıl taşıyacağınızı grafik üstünde bilmek; ve bunu yaparken "kanıtlı", "makul" ve "spekülatif" olanı birbirinden ayırabilmek.
+
+<div class="not">
+  <span class="etiket">Ders neyi vaat ediyor, neyi etmiyor</span>
+  Vaat: SMC/ICT külliyatındaki <em>her</em> kavramın kesin tanımı ve kuralı (swing, BOS, CHoCH, MSS, dealing range, premium/discount, OTE, BSL/SSL, EQH/EQL, sweep, inducement, trendline likiditesi, draw on liquidity, displacement, OB, breaker, mitigation block, propulsion block, rejection block, FVG/BISI/SIBI/CE, IFVG, BPR, volume imbalance, Power of Three, Judas, kill zone'lar, Silver Bullet, 2022 modeli, Unicorn, market maker modelleri), her kuralın arkasındaki <em>neden</em>, 28 grafik üstünde adım adım okuma, canlı karar ağacı, kontrol listeleri, stop/hedef/pozisyon yönetimi ve sayısal sabitler tablosu (28 grafik). Vaat <strong>etmediği</strong>: kazanma oranı. Bölüm 12'de göreceğiniz gibi, bu çerçevenin bir <em>sistem</em> olarak maliyet sonrası edge'i bağımsız testlerde gösterilememiştir; edge — varsa — uygulayıcının seçiciliğinden ve yönetiminden gelir ve <em>sizin</em> ölçmeniz gerekir.
+</div>
+
+**Terminoloji notu.** "ICT" (Inner Circle Trader — Michael J. Huddleston'ın 2010'lardan itibaren video ve mentorluk yoluyla yaydığı öğreti) özgün kaynağı; "SMC" ise topluluğun bu öğretiyi sadeleştirip yeniden etiketlediği türev çerçeveyi ifade eder. İkisi aynı kavramlara bazen farklı ad verir (ICT "MSS" der, SMC "CHoCH" der; ICT "PD array" der, SMC "kutu" der). Ders boyunca hangi terimin hangi kampa ait olduğunu belirtiyor, çelişki varsa iki sürümü de yazıyoruz. İngilizce terimlerin yerleşik Türkçe karşılığı olmadığında İngilizcesi korunmuş, ilk geçtiğinde açıklanmıştır.
+
+**Nasıl okumalı.** Ders üç katmanlıdır: önce *mantık* (Bölüm 1), sonra *kavramlar* (Bölüm 2–5, her biri grafik üstünde), sonra *uygulama* (Bölüm 6–9: giriş, yönetim, canlı akış, çoklu zaman dilimi). Bölüm 10–12 araç ayarları, tuzaklar ve kanıt tartışmasıdır. Sonda tüm sayısal sabitler tek tabloda ve bir sözlük vardır. Grafiklerin 25'i sentetiktir (kavramı tek başına, gürültüsüz göstermek için tohumlu üretim); son üçü gerçek veridir (EURUSD, altın, BTC) ve "mekanik kurallar gerçek grafikte neye benzer" sorusuna cevap verir.
+
+---
+
+## Bölüm 1 — Arkasındaki mantık: kurumsal emir akışı, likidite avı ve eski akrabalar
+
+SMC'nin bütün kavramları tek bir cümleye indirgenebilir: **fiyat, likiditeden likiditeye gider.** Bunun ne demek olduğunu, hangi kısmının ölçülmüş bir gerçek, hangi kısmının anlatı olduğunu baştan ayıralım; çünkü kavramları kabul ederken hangi ağırlıkla kabul edeceğinizi bu belirler.
+
+### 1.1 Stoplar gerçekten kümelenir (kanıtlı)
+
+Herhangi bir belirgin tepenin *üstünde* iki şey birikir: short pozisyonların stop emirleri (buy-stop) ve "kırılım" bekleyen alıcıların buy-stop girişleri. Herhangi bir belirgin dibin *altında* ise long'ların sell-stop'ları ve breakdown satıcıları. Bu, sezgi değil ölçümdür: Osler (2003, *Journal of Finance*; NY Fed Staff Report 125) RBS'in emir defterindeki 9.655 emri (~55 milyar USD) inceledi ve stop-loss ile take-profit emirlerinin yuvarlak sayılarda kümelendiğini gösterdi — tüm emirlerin yaklaşık %10'u "00" ile biten seviyelerde; **stop-buy'lar yuvarlak sayının hemen üstünde, stop-sell'ler hemen altında** (Osler'in örneği: 1,6600 için stop-buy 1,6605, stop-sell 1,6595 — yani ~5 pip öte), TP'ler tam yuvarlak sayıda. Osler (2005, *J. Int. Money & Finance*; NY Fed SR 150) devamında fiyatın bir stop kümesine ulaştığında hareketin **hızlandığını** (15 dakikalık ufukta p&lt;0,001), TP kümesine ulaştığında ise **döndüğünü** buldu. Yuvarlak sayı etkisi hisse senetlerinde de aynı: Harris (1991), Bhattacharya-Holden-Jacobsen (2012, *Management Science*: 100 milyondan fazla işlemde yuvarlak sayı etrafında al-sat dengesizliği — "left-digit" etkisinin işlem verisindeki izi), Bourghelle-Cellier (Euronext limit emir kümelenmesi fiyat bariyeri yaratır).
+
+SMC diline çevirisi: "likidite havuzu" = stop kümesi; "sweep" (süpürme) = stop kaskadı; "likiditede dönüş" = Osler'in TP kümesinde gözlediği dönme eğilimi. Bu ayak **sağlamdır**.
+
+### 1.2 Neden süpürmeden sonra dönüş olsun? (kısmen kanıtlı)
+
+Büyük bir alıcı, büyük pozisyonu fiyatı kaçırmadan kurmak için karşısında yoğun *satış* akışı ister. En yoğun satış akışı, diplerin altındaki sell-stop'ların tetiklendiği andır: stoplar piyasa emrine dönüşür, anlık arz fazlası oluşur, büyük katılımcı bunu pasif emirle emer. Dikkat edin: bu açıklama "smart money bilinçli olarak av yapıyor" varsayımını **gerektirmez** — sadece kaskadın anlık likidite yarattığını ve orada büyük katılımcıların pasif alım yaptığını söyler; blok icra teorisiyle uyumludur. Kısa vadeli aşırı hareketlerin kısmen dönmesi de genel bir olgudur (Nagel 2012 "Evaporating Liquidity", likidite sağlayıcı getirileri literatürü); sweep sonrası dönüş bunun özel halidir.
+
+**Spekülatif kısım** ise ICT'nin çerçeve hikâyesidir: merkezî bir algoritma — ICT buna **IPDA** (Interbank Price Delivery Algorithm) der — fiyatı bilinçli olarak likiditeye taşır, retail'i tuzağa düşürür, "verimsiz teslim edilen fiyatı" (FVG) geri gelip dengeler. Bunun hiçbir kısmı doğrulanmamıştır; kurumsal icra çoğunlukla VWAP/TWAP, dark pool ve algoritmik parçalama ile yapılır ve mum formasyonu okumaz. Ders boyunca IPDA anlatısını **mekanizma değil, hafıza kancası** olarak anacağız.
+
+### 1.3 Neden yapı (BOS/MSS) çalışsın?
+
+Bir swing seviyesinin *gövde kapanışıyla* geçilmesi, Auction Market Theory (AMT) diliyle "kabul"dür (acceptance): değer alanı taşınmıştır. Fitille geçilip geri dönülmesi ise "ret" (rejection). ICT'nin MSS için istediği "displacement" (yer değiştirme: büyük gövdeli, hızlı, boşluk bırakan hareket), kırılımın emir akışı dengesizliğiyle desteklendiğini görsel olarak arar; işaretli emir dengesizliğinin fiyatı hareket ettirdiği ölçülmüştür (Chordia-Roll-Subrahmanyam 2002). Momentum literatürü (Jegadeesh-Titman) trend devamı için makul zemin verir. **Ancak** "gövde kapanışlı kırılımdan sonra devam olasılığı şu kadar" gibi ölçülmüş bir istatistik ICT külliyatında yoktur.
+
+### 1.4 Neden zaman önemli?
+
+Gün içi hacim ve volatilitenin "U" şekli ile Londra–New York örtüşmesindeki zirve, finans literatürünün en çok tekrarlanan bulgularındandır (Wood-McInish-Ord 1985; Harris 1986; Andersen-Bollerslev 1997/98; Ito-Hashimoto 2006). "Hareket kill zone'da olur" doğrudur. Ama yüksek volatilite tek başına edge değildir; "07:00–10:00'da alınan sinyal daha kârlı" iddiası doğrulanmamıştır.
+
+### 1.5 Neden retail stopunu oraya koyar? (en sağlam psikolojik ayak)
+
+Ders kitapları stopu "son swing dibinin altına" koymayı öğretir; görünür swing'ler, eşit tepeler ve trend çizgileri herkesin gördüğü referans noktalarıdır (Kahneman-Tversky çıpalama; yuvarlak sayı left-digit etkisi). Dolayısıyla stoplar tahmin edilebilir yerlerde toplanır. SMC'nin size verdiği ilk pratik fayda tam budur: **stopunuzu kalabalığın koyduğu yere koymamak.**
+
+### 1.6 Wyckoff ve Auction Market Theory bağı — aynı olgunun üç adı
+
+| Wyckoff (1930'lar) | Connors & Raschke (1995) | ICT/SMC (2010'lar) | Ne oluyor |
+|---|---|---|---|
+| Spring | Turtle Soup (dip) | SSL sweep | Dibin altına sarkma, geri alım |
+| Upthrust / UTAD | Turtle Soup (tepe) | BSL sweep | Tepenin üstüne sarkma, geri satım |
+| Sign of Strength (SOS) | — | Bullish MSS / displacement | Gövdeli, hızlı kırılım |
+| Last Point of Support (LPS) | — | OTE / OB'ye geri çekilme | Kırılım sonrası pullback |
+| Composite Man | — | Smart money | Büyük katılımcı |
+
+AMT (Steidlmayer) tarafında: değer alanı ↔ dealing range; değer alanı ortası ↔ equilibrium; "poor high/low" (tamamlanmamış ihale) ↔ EQH/EQL; "excess" (fitil) ↔ rejection. Kavramsal aile aynıdır; SMC yeni terminolojiyle aynı gözlemleri paketler. Bunu bilmek iki şey kazandırır: (i) SMC'nin "kurumsal sır" olmadığını görürsünüz, (ii) 90 yıllık literatürdeki eleştirileri de devralırsınız.
+
+---
+
+## Bölüm 2 — Piyasa yapısı: swing, BOS, CHoCH/MSS, dealing range, premium/discount ve OTE
+
+Yapı, SMC'nin iskeletidir. Likidite nerede, blok nerede, giriş nerede — hepsi önce "hangi swing"e bağlıdır. Bu bölümde her tanımı önce kural olarak, sonra grafik üstünde veriyoruz.
+
+### 2.1 Swing high / swing low — 3-mum fraktal
+
+- **Swing high** (ICT: STH, Short-Term High): üç ardışık mumdan ortadakinin *high*'ı hem solundaki hem sağındaki mumun high'ından **kesin olarak yüksekse**, ortadaki mumun high'ı bir swing high'dır.
+- **Swing low** (STL): ortadaki mumun *low*'u iki komşusundan **kesin olarak düşük**.
+- Eşitlik durumunda (sağdaki mumun high'ı ortadakine eşit) çoğu ICT/SMC uygulaması bunu swing saymaz; bazı göstergeler kabul eder. Bu derste **kesin büyüklük** kuralını benimseyin ve eşit tepeleri "equal highs" (likidite) olarak ayrıca ele alın (Bölüm 3).
+- Bu, Bill Williams'ın 5-mumlu "fractal" tanımının 3-muma sadeleştirilmiş halidir. Gürültülü grafiklerde 5-mum (ortadaki mumun her iki yanında 2'şer mum) kullanılabilir; scriptte $k$ parametresi ile "2k+1 mum" olarak genelleştirilmiştir ($k=1$: 3-mum, $k=2$: 5-mum, $k=3$: 7-mum).
+- **Onay gecikmesi:** Bir swing high ancak sağdaki mum *kapanınca* onaylanır. Yani 3-mum kuralında en az 1, 5-mum kuralında en az 2 mum gecikmeyle bilinir. Canlıda bu gecikme yapı okumasının doğal parçasıdır; "sonradan görünen" etiketlerin sebebi budur (Bölüm 11'deki hindsight uyarısı).
+
+**Neden 3 mum?** Çünkü en küçük anlamlı "yerel ekstrem" tanımıdır: bir mumun her iki komşusundan da yüksek olması, o anda alıcının satıcıya en az bir kez yenildiği ve geri çekilmenin başladığı en erken kanıttır. Daha büyük $k$ gürültüyü azaltır ama gecikmeyi artırır — swing tespiti daima bu takasla yaşar.
+
+### 2.2 ICT yapı hiyerarşisi: STH → ITH → LTH
+
+- **Intermediate-Term High (ITH):** iki yanında *daha alçak* birer STH bulunan STH — "swing high'ların swing high'ı".
+- **Long-Term High (LTH):** iki yanında daha alçak birer ITH bulunan ITH; genelde daha yüksek zaman diliminde (HTF) bir PD array (Bölüm 4) ile çakışır.
+- Diplerde simetrik: STL / ITL / LTL.
+
+Bu hiyerarşi neden önemli? Çünkü MSS'in (2.6) *hangi* tepe/dibi kırması gerektiği bu kademeye bağlıdır: geçerli MSS "governing swing"i, yani düzeltmenin asıldığı ITH/ITL'yi kırar; bir STH/STL'nin kırılışı çoğunlukla **inducement** (yem, Bölüm 3.5) sayılır.
+
+### 2.3 Swing (external) yapı ile internal yapı; strong/weak high
+
+- **Swing / external / major structure:** grafikteki en büyük bacakları tanımlayan swing'ler; kırılması gerçek alım/satım baskısı ister.
+- **Internal / minor structure:** bir major bacağın *içindeki* düzeltme dalgalarının swing'leri. Internal yapı, external yapının içinde ters yönde olabilir (günlükte düşüş + 15 dakikada yükseliş).
+- **Fractal:** tekil mum bazlı 3-mum swing'ler; sadece erken uyarı.
+
+Kırılım geçerlilik kuralı (SMC/edgeflo özeti):
+
+| Yapı katmanı | Geçerli kırılım | Güven | Fitil ne demek |
+|---|---|---|---|
+| Swing / major | Gövde kapanışı zorunlu | Yüksek | Likidite süpürmesi (sweep) |
+| Internal | Gövde kapanışı zorunlu | Orta | Sweep / inducement |
+| Fractal | Fitil yeterli | Düşük / erken uyarı | — |
+| Likidite süpürmesi (turtle soup) | Fitil ötesine geçip gövde geride kapanış | Kurulumun kendisi | — |
+
+**Kısa formül: yapı için gövde, likidite için fitil.**
+
+**Strong high / weak high (SMC türevi):** Bir tepe, ardından *daha düşük bir dip* (LL) oluşturursa "strong high"dır (kırılması yapıyı değiştirir); ardından LL gelmediyse "weak high" (kırılması beklenir; likidite hedefidir). Simetrik olarak strong low = ardından HH gelmiş dip.
+
+### 2.4 HH / HL / LH / LL ve trend tanımı
+
+- **Yükseliş yapısı:** ardışık Higher High (HH) + Higher Low (HL).
+- **Düşüş yapısı:** ardışık Lower High (LH) + Lower Low (LL).
+- Trend, en son *onaylı* swing dizisiyle tanımlanır. Yükselişte **korunan dip** (protected low) = son HH'yi üreten bacağın başladığı HL. Bu dip gövdeyle kırılırsa yapı değişir.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/01_swing_yapi_hh_hl.html" baslik="Swing high/low tespiti ve HH/HL/LH/LL yapısı; korunan dibin gövdeyle kırılması" no="01" yukseklik={560} />
+
+**Şekil 01 nasıl okunur.** Sentetik seri önce yükseliş, sonra düşüş yapısı çiziyor. Sol üstteki kutu 3-mum kuralını gösteriyor: ortadaki mumun high'ı iki komşusundan kesin yüksek → swing high. Ana grafikte üçgen işaretleri swing'ler, etiketleri HH/HL/LH/LL — her etiket bir öncekiyle karşılaştırılarak konur. Daireyle işaretlenen nokta **ITH**: iki yanında daha alçak STH'ler var. Gri işaretler gürültü için 5-mum ($k=2$) sürümünü gösteriyor: daha az swing, daha geç onay. Yatay çizgi **korunan dip**; sağda bir mum bu çizginin altında *gövdeyle* kapanınca yapı düşüşe döner ve etiketler LH/LL'ye geçer. Nereye bakılır: (i) etiketlerin hangi swing'e göre verildiği, (ii) korunan dibin *fitille* değil *gövdeyle* kırıldığı an.
+
+### 2.5 BOS — Break of Structure
+
+- **Tanım:** Fiyatın mevcut trend *yönünde* bir önceki swing ekstremini **gövde kapanışıyla** aşması. Yükselişte önceki HH üstünde kapanış = bullish BOS; düşüşte önceki LL altında kapanış = bearish BOS.
+- **Rol:** Devam onayı. Tek başına giriş sinyali değildir; yeni dealing range'i (2.7) tanımlar ve yeni "korunan swing"i belirler.
+- **Kural:** Fitil aşması BOS değildir; fitil = sweep olarak okunur.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/02_bos_govde_kapanisi.html" baslik="BOS: yapı kırılımı gövde kapanışıyla sayılır — aynı seviyede fitil aşımı sweep'tir" no="02" yukseklik={560} />
+
+**Şekil 02 nasıl okunur.** İki BOS var: her ikisinde de mum gövdesi önceki HH'nin *üstünde* kapanıyor (düz çizgi kırılan seviyeden kırılım mumunun kapanışına uzatılmış, "BOS" etiketi). Aynı seviyelerden birinde bir de fitil aşımı var: fitil HH'nin üstüne çıkıyor ama gövde geride kapanıyor — bu **BOS değil, sweep**. "Yapı için gövde, likidite için fitil" kuralı tek grafikte. Hangi kural işledi: gövde kapanışı = kabul; fitil = ret.
+
+### 2.6 CHoCH ve MSS — trend aleyhine kırılım
+
+- **CHoCH (Change of Character, SMC terimi):** trend *aleyhine* ilk yapı ihlali — genelde son korunan minör swing'in kırılması. "İlk uyarı"; tek başına işlem gerekçesi değil.
+- **MSS (Market Structure Shift, ICT terimi):** ICT'nin trend aleyhine kırılım için **dört zorunlu koşulu** (ictkillzone derlemesi; ICT 2022 mentorluk anlatımının özeti):
+  1. **Governing tier:** Kırılan swing, düzeltmenin asıldığı ITH/ITL olmalı (iki yanı daha küçük swing'lerle çevrili).
+  2. **Displacement:** Kırılım bacağı büyük gövdeli mumlar, aralık genişlemesi ve hız göstermeli; bacakta bir **FVG** (Bölüm 4) bırakılması "altın standart" kanıt. Sürünerek geçme geçersiz.
+  3. **Gövde kapanışı:** Mum swing'in ötesinde *kapanmalı*; fitil = stop raid. "İstisnası yok."
+  4. **Hikâye:** Kırılımdan önce anlamlı bir likidite havuzunun süpürülmüş olması, mümkünse kill zone içinde oluşması ve tamamlanmamış bir "draw on liquidity"e işaret etmesi.
+- **Pratik ayrım (bu derste):** CHoCH = ilk trend-aleyhine kırılım (uyarı); MSS = sweep sonrası displacement'lı, governing swing'i kıran kırılım (işlem gerekçesi). SMC topluluğu ikisini eşanlamlı kullanır; ICT'de MSS "sweep + displacement + gövde kapanışı" paketidir.
+
+**Neden dört koşul?** Her biri bir sahte sinyal sınıfını eler: governing tier "STH kırılımı = inducement" tuzağını; displacement "sürünerek geçen, emir akışı olmayan kırılımı"; gövde kapanışı "stop raid'i"; hikâye ise "likidite alınmadan yön değiştirmez" gözlemini kodlar. Dördü birden aynı anda ender olur — MSS'in seyrek olması özelliktir, kusur değil.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/03_choch_mss.html" baslik="CHoCH ve MSS: BSL sweep → displacement → governing swing kırılımı; bacaktaki SIBI FVG" no="03" yukseklik={560} />
+
+**Şekil 03 nasıl okunur.** Yükseliş yapısında ITH'nin üstündeki BSL (buy-side liquidity) daireyle işaretli sweep'le süpürülüyor: fitil ITH'nin üstüne çıkıyor, gövde altında kapanıyor. Ardından üç büyük kırmızı mum — **displacement** (her birinde gövde/aralık ≥ %80). İlk mum minör dibin (STL ≈103,60) belirgin altında, 103,45'te kapanıyor: bu **CHoCH** (uyarı çizgisi). İkinci mum ITL'nin (≈102,93) *hâlâ üstünde* kapanıyor (103,05) — MSS henüz yok; üçüncü mum ITL'nin altında 102,15'te kapanıyor: bu **MSS** (dört koşulun dördü de sağlandı: governing swing, displacement, gövde kapanışı, öncesinde sweep). Displacement bacağındaki mor kutu **SIBI FVG** (MSS mumuna en yakın olan); fiyat sonra bu FVG'nin CE'sine dönüp devam ediyor — giriş bölgesi tam burasıdır (Bölüm 6). Üç displacement mumunun kapladığı gri noktalı dikey aralık **liquidity void** (Bölüm 3.4): tek yönlü, az işlemli, içinde FVG'ler barındıran boşluk — IRL. Nereye bakılır: sweep dairesi → displacement mumlarının gövde büyüklüğü → hangi dip kırıldığında hangi etiket kondu (STL → CHoCH, ITL → MSS; ikisi farklı mumda) → FVG'ye dönüş.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/04_internal_vs_swing.html" baslik="Swing (external) yapı ile internal yapı: internal CHoCH düzeltmeyi bitirir, swing BOS trendi onaylar" no="04" yukseklik={560} />
+
+**Şekil 04 nasıl okunur.** Büyük harf HL/HH swing yapısı; bir swing HL'in *içindeki* düzeltme, gri bantta küçük harf lh/ll internal yapısıyla gösterilmiş. Düzeltme kendi içinde düşüş trendidir; internal yapının bir lh'sinin gövdeyle yukarı kırılması **internal CHoCH**: "düzeltme bitti" sinyali. Sonra swing HH'nin gövdeyle kırılması **swing BOS**: trend onayı. Kalın çizgi swing korunan dip. Kural: internal CHoCH bir *düzeltmenin* sonu, swing BOS bir *trendin* devamıdır; ikisini aynı harfle etiketlemek en yaygın yapı hatasıdır.
+
+### 2.7 Dealing range — işlem aralığı
+
+- **Tanım:** En son geçerli swing low ile swing high arasındaki aralık; ICT'de "current dealing range". Hangi swing'ler? En son **external** swing çifti — yükselişte en son sweep edilen dip → BOS'u yapan tepe.
+- **Alt bölgeler:** Equilibrium (EQ) = aralığın %50'si; EQ üstü **premium** (pahalı), altı **discount** (ucuz).
+- **Kural:** Yükseliş beklentisinde sadece discount'tan alınır; düşüş beklentisinde sadece premium'dan satılır.
+
+$$
+EQ = L + 0{,}5\,(H - L)
+$$
+
+Yükseliş için ideal alım bölgesi $[L,\ EQ)$; düşüş için ideal satış bölgesi $(EQ,\ H]$.
+
+- **ERL / IRL:** External Range Liquidity = dealing range dışındaki stoplar (H üstü, L altı). Internal Range Liquidity = aralık içindeki FVG/OB gibi dengesizlikler. **Alternasyon kuralı (ICT):** fiyat ERL → IRL → ERL diye salınır: dış likiditeyi aldıktan sonra içeride bir IRL'ye (FVG) döner, sonra karşı ERL'ye gider. Hedef seçiminin omurgası budur (Bölüm 7).
+
+**Neden %50?** Sihirli değil, geometrik: aralığın ortası, "bu bacağın alıcısı ile satıcısı arasında kim daha fazla ödedi" sorusunun tarafsız cevabıdır. AMT'nin değer alanı ortasıyla akrabadır. Discount'tan almak, stopu daha yakına (L'nin altına) koyup hedefi (H ve ötesi) daha uzağa almayı sağlar; premium/discount kuralının asıl işlevi **R:R geometrisidir**.
+
+### 2.8 OTE — Optimal Trade Entry ve ICT fib ayarları
+
+- **Fib seviyeleri (ICT):** 0, 0.5 (EQ), 0.62, 0.705 (OTE merkezi), 0.79, 1.0; hedefler için negatif uzantılar −0.27, −0.62, −1.0, −2.0, −2.5, −4.0 (innercircletrader.net "ICT Fibonacci Settings"). 0.236 ve 0.382 kaldırılır.
+- **OTE bölgesi:** $[0{,}62,\ 0{,}79]$; "sweet spot" 0.705. Türevlerde 0.618–0.786; ICT'nin özgün rakamları 0.62 / 0.705 / 0.79.
+- **Nereden nereye çizilir:**
+  - Bullish: **swing low'dan swing high'a** (0 = high, 1 = low; retracement aşağı doğru ölçülür).
+  - Bearish: **swing high'dan swing low'a**.
+  - Bacak: en son *geçerli itki* — sweep sonrası displacement ile MSS yapan bacak. Rastgele tepe-dip değil.
+  - Anchor: ICT özgün öğretisinde ve çoğu türevde **fitilden fitile**; bazı türevler broker fitil farkları gerekçesiyle gövdeden gövdeye önerir. Ders için: **birincil = fitil-fitil**; ikincil kontrol = gövde-gövde; iki bölgenin kesişimi en güçlü OTE.
+- **Stop:** 1.0'ın (swing ekstremi) hemen ötesi; ICT rehberlerinde FX'te 10–20 pip, endekslerde 5–10 tik, altında 50–100 sent tampon örnek verilir — sabit değil, spread/volatiliteye göre ayarlanır.
+- **Hedef basamakları:** −0.27 (kısa iç hedef), −0.62 (ölçülü hareket / trail noktası), −1.0 (bacak simetrisi), −2.0/−2.5/−4.0 (güçlü trend/haber). Adlandırma: −1.0/−2.0/−2.5/−4.0 için ICT "standard deviation" (manipülasyon bacağının katları) der; −0.27 ve −0.62 ise OTE aracının hedef seviyeleridir, std dev olarak anılmaz.
+
+**Sayısal örnek — EURUSD, bullish.** Sweep dibi 1,0850 (fib 1.0), displacement/MSS tepesi 1,0910 (fib 0). Bacak $R = 1{,}0910 - 1{,}0850 = 0{,}0060$ (60 pip). Seviye formülü:
+
+$$
+P(f) = H - f \cdot (H - L)
+$$
+
+| Fib | Hesap | Fiyat | Anlamı |
+|---|---|---|---|
+| 0.5 | 1,0910 − 0,5·60 pip | 1,0880 | EQ — üstü premium, altı discount |
+| 0.62 | 1,0910 − 37,2 pip | 1,08728 | OTE üst kenarı |
+| 0.705 | 1,0910 − 42,3 pip | 1,08677 | OTE sweet spot — limit emir |
+| 0.79 | 1,0910 − 47,4 pip | 1,08626 | OTE alt kenarı |
+| 1.0 | — | 1,0850 | Sweep dibi; SL bunun altına (ör. 1,0840, 10 pip tampon) |
+| −0.27 | 1,0910 + 16,2 pip | 1,09262 | T1 |
+| −0.62 | 1,0910 + 37,2 pip | 1,09472 | T2 |
+| −1.0 | 1,0910 + 60 pip | 1,0970 | Bacak simetrisi |
+
+Giriş 1,08677, SL 1,0840 → risk 27,7 pip. T1'e 58,5 pip → 2,1R; T2'ye 79,5 pip → 2,9R. Görüyorsunuz: OTE'nin işi *derin geri çekilme + yakın stop* geometrisidir; oranın kendisinde bir sihir aramayın (Bölüm 12).
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/05_dealing_range_premium_discount_ote.html" baslik="Dealing range, premium/discount, equilibrium ve ICT fib/OTE: sweep low (1.0) → displacement high (0)" no="05" yukseklik={560} />
+
+**Şekil 05 nasıl okunur.** Fib, sweep dibinin *fitilinden* (1.0) displacement tepesine (0) çekilmiş; her seviyede oran ve fiyat etiketi var. Kırmızı gölge premium yarısı, yeşil gölge discount yarısı, ortada EQ (0.5). Gölgeli bant **OTE** (0.62–0.79), kalın çizgi 0.705. Fiyat OTE'ye geri çekilip dönüyor ve −0.27'ye (T1) gidiyor. Nereye bakılır: (i) fib'in yönü — bullish'te aşağıdan yukarıya, (ii) 1.0'ın fitil ucunda olduğu, (iii) OTE'nin discount'un *içinde* kaldığı (0.62–0.79 zaten 0.5'in altındadır — bu tesadüf değil, kuralların tutarlılığıdır).
+
+<div class="not">
+  <span class="etiket">Pratik not — fib'i ters çizmek</span>
+  Bearish kurulumda da alışkanlıkla aşağıdan yukarıya çekerseniz OTE bandı fiyatın <em>üstüne</em> değil altına düşer ve premium'da satmak yerine discount'ta satmış olursunuz. Kural: fib daima <em>sweep ekstreminden</em> (1.0) <em>MSS ekstremine</em> (0) çekilir; bullish'te low→high, bearish'te high→low. TradingView'da aracı sürüklerken 1.0'ın sweep fitilinde olduğunu her seferinde kontrol edin.
+</div>
+
+---
+
+## Bölüm 3 — Likidite: havuzlar, süpürme, inducement, trend çizgisi ve "draw on liquidity"
+
+Yapı iskeletse likidite kastır. Fiyatın *nereye* gideceğine dair SMC'nin tek cevabı vardır: bir sonraki likidite havuzuna.
+
+### 3.1 BSL / SSL ve nerede bulunur
+
+- **Buy-side liquidity (BSL):** tepelerin *üstünde* biriken bekleyen alım emirleri — short'ların buy-stop'ları + breakout alıcılarının buy-stop girişleri. Konumlar: önceki gün/hafta/ay yüksekleri (PDH/PWH/PMH), swing high'lar, equal highs, trend çizgisi üstleri, yuvarlak sayılar.
+- **Sell-side liquidity (SSL):** diplerin *altında* biriken sell-stop'lar (long'ların stopları + breakdown satıcıları). Konumlar simetrik (PDL/PWL/PML, swing low'lar, equal lows).
+- **Grey pool (ICT):** henüz süpürülmemiş EQH/EQL — DOL olarak kullanılır, tek başına sinyal değildir.
+
+### 3.2 Equal highs / equal lows
+
+- **Tanım:** iki veya daha fazla swing'in yaklaşık aynı seviyede olması ("relative equal"). ICT/SMC sayısal tolerans vermez; pratikte "görsel olarak eşit".
+- **Operasyonel tolerans (bu dersin önerisi, ICT kaynağı değil):** seviye farkı ≤ ilgili zaman diliminin ATR(14)'ünün %10–15'i.
+- **Kritik okuma:** EQH çift/üçlü tepe *değil*, **direnç değil**, likidite hedefidir — mıknatıs. Klasik teknik analizin "üçlü tepe = sat" refleksi SMC'de tam tersine çevrilir: üç tepe aynı seviyedeyse üstünde biriken stop kümesi büyümüştür ve fiyat oraya *çekilir*.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/06_equal_highs_lows_likidite.html" baslik="Equal highs/lows: BSL/SSL havuzları, PDH/PDL, EQH sweep'i ve draw on liquidity" no="06" yukseklik={560} />
+
+**Şekil 06 nasıl okunur.** Üç eşit tepe (EQH) ve iki eşit dip (EQL) tolerans bandıyla birlikte çizilmiş; PDH/PDL çizgileri ayrı etiketle. EQH sonunda süpürülüyor: fitil bandın ötesine geçiyor, gövde içeride kapanıyor (✕ işareti). Sağdaki ok **DOL** (draw on liquidity): süpürülen havuzdan karşı havuza. Mesaj: "EQH direnç değil, mıknatıs" — üç tepeyi görünce short açan trader süpürmede stop olur; SMC trader'ı süpürmeyi bekleyip *sonrasında* MSS arar.
+
+### 3.3 Sweep / stop hunt / raid / purge / turtle soup
+
+- **Tanım:** fiyatın bir likidite seviyesini *fitille* aşıp, o mumun ya da hemen sonraki birkaç mumun **gövdesinin seviyenin gerisinde kapanması**. Fitil aşımı + gövde geri dönüşü = sweep; gövde ötesinde kapanış + devam = **liquidity run** (kırılım/genişleme).
+- **Turtle Soup (özgün kural, Connors & Raschke, *Street Smarts* 1995):** bugün yeni 20-günlük dip yapılır; önceki 20-günlük dip en az 4 seans önce olmalı; giriş önceki dibin **üstüne** buy-stop ile (kırılım başarısız olunca tetiklenir); stop yeni ekstremin altına. ICT bunu zaman-dilimsiz "eski dip/tepenin süpürülüp geri alınması"na genelleştirmiştir.
+- **Canlı ayrım ancak mum kapanışıyla yapılır.** Bitmiş grafikte her sweep "açık"tır; canlıda fitil seviyeyi geçtiği anda sweep mi run mı bilinmez. Bu yüzden karar ağacında (Bölüm 8) "mum kapanışını bekle" adımı vardır.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/07_sweep_vs_liquidity_run.html" baslik="Sweep mi liquidity run mı? Aynı PDL seviyesinde iki farklı kapanış" no="07" yukseklik={560} />
+
+**Şekil 07 nasıl okunur.** İki panel, aynı PDL seviyesi. Sol panelde fitil PDL'nin altına iniyor, gövde üstünde kapanıyor → **sweep**; sonrasında MSS gelirse bu turtle soup girişidir. Sağ panelde gövde PDL'nin *altında* kapanıyor ve büyük kırmızı mumlarla devam ediyor → **liquidity run**; karşı işlem yok, DOL bir sonraki havuza (aşağı) kayar. İki panelin ilk mumları neredeyse aynı görünüyor — fark kapanıştadır. Nereye bakılır: kırılım mumunun *kapanışı* seviyenin hangi tarafında.
+
+### 3.4 Liquidity void ve draw on liquidity
+
+- **Liquidity void:** fiyatın çok hızlı geçtiği, az işlem gören bölge (uzun tek yönlü mumlar); FVG'nin çok mumlu/büyük hali. Fiyatın "yeniden dengelemek" için geri dönmesi beklenen bölge (IRL). Çizimi: tek yönlü uzun mumların kapladığı dikey aralık yarı saydam dikdörtgenle, içindeki FVG'ler ayrıca ince kutuyla — Şekil 03'teki displacement bacağında gri noktalı dikey aralık budur.
+- **Draw on Liquidity (DOL):** fiyatın bir sonraki gitmek "istediği" en yakın anlamlı likidite havuzu (ERL: PDH/PDL, PWH/PWL, EQH/EQL) veya dengesizlik (IRL: FVG). **Bias = DOL'un yönü.** Günün ilk sorusu "fiyat yukarı mı aşağı mı" değil, "en yakın süpürülmemiş havuz nerede"dir.
+
+### 3.5 Inducement (IDM)
+
+- **Tanım:** gerçek POI'den (point of interest — order block/FVG) *önce* duran, retail'in erken girmesini/stop koymasını sağlayan minör swing (çoğunlukla ilk pullback'in STH/STL'i).
+- **SMC kuralı:** "geçerli swing, IDM alındıktan sonra oluşur"; POI'ye giriş için önce IDM'nin süpürülmesi aranır.
+- **Neden:** İlk pullback dibinin altı, kırılımı gören ve "geri çekilmede aldım" diyen herkesin stopudur. O havuz alınmadan POI'ye dönüş nadiren gerçekleşir; alınınca POI'ye dokunuşun "yakıtı" hazır olur.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/08_inducement.html" baslik="Inducement (IDM): ilk pullback dibi süpürülür, sonra fiyat asıl POI'ye (OB) dokunup döner" no="08" yukseklik={560} />
+
+**Şekil 08 nasıl okunur.** Sweep + displacement ile oluşmuş bullish OB (mavi kutu) asıl POI. Displacement sonrası ilk pullback'in dibi **IDM** olarak kesikli kısa çizgiyle işaretli — retail long'ların stopu ve "erken giriş" yeri. Fiyat önce IDM'yi süpürüyor (✕), sonra OB'ye dokunup dönüyor. Kural: IDM'de girmiş olsaydınız stop olurdunuz; IDM alındıktan *sonra* POI dokunuşu, geçerli girişin ön koşuludur.
+
+### 3.6 Trendline liquidity
+
+- **Tanım:** en az **3 temaslı**, görünür (H4/günlük) bir trend çizgisi boyunca dizilen stoplar/emirler; diyagonal likidite havuzu (LuxAlgo Library).
+- **Sweep:** çizgiyi delip hızla geri kazanma. Kırılım değil.
+- **Neden:** Herkesin çizdiği trend çizgisi herkesin stopudur; çizginin hemen altı SSL bandıdır. Trend çizgisi kırılımını satan trader, sweep'in yakıtıdır.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/09_trendline_liquidity.html" baslik="Trendline liquidity: 3+ temaslı çizginin altına fitil, gövde çizgi üstünde — kırılım değil sweep" no="09" yukseklik={560} />
+
+**Şekil 09 nasıl okunur.** Üç temaslı yükselen trend çizgisi; altında diyagonal SSL gölgesi. Daireyle işaretli mumda fitil çizginin altına iniyor, gövde çizginin üstünde kapanıyor → **sweep**, ardından yükseliş. Kırılım tuzağına düşen satıcıların stopları yükselişi besliyor. Nereye bakılır: çizgi altındaki *fitil* ile *gövde kapanışı* arasındaki fark; temas sayısı (3+ değilse kalabalık yoktur, dolayısıyla havuz da yoktur).
+
+<div class="not">
+  <span class="etiket">Neden bunlar "kanıtlı" ayakta</span>
+  Bölüm 3'ün tamamı, Bölüm 1.1'deki stop kümelenmesi ve kaskad bulgularının (Osler 2003/2005) grafik diline çevirisidir. Havuzun <em>varlığı</em> ölçülmüştür; havuzun süpürülmesinden sonra <em>her zaman</em> dönüş olacağı ölçülmemiştir. Bu yüzden sweep tek başına giriş değil, "onay ara" tetiğidir.
+</div>
+
+---
+
+## Bölüm 4 — Bloklar: displacement, FVG ve akrabaları, order block, breaker, mitigation block
+
+ICT bu bloklara topluca **PD array** (Premium/Discount array) der: discount'ta bullish array'ler (OB, FVG, breaker, MB, RB, BPR), premium'da bearish array'ler aranır. Hepsinin ön koşulu displacement'tır; oradan başlıyoruz.
+
+### 4.1 Displacement — yer değiştirme
+
+**Tanım.** Bir yönde, çok az geri çekilmeyle, ardışık büyük gövdeli mumlarla gerçekleşen ve arkasında en az bir **imbalance/FVG** bırakan hareket. Literatürdeki somut eşikler:
+
+| Kriter | Eşik | Kaynak |
+|---|---|---|
+| Mum gövdesi / toplam aralık | ≥ %60 (fitil ≤ %25) | backtrex, ictkillzone |
+| Mum boyu / önceki konsolidasyon mumlarının ortalaması | ≥ 1,5× | ictkillzone |
+| Orta mumun gövdesi / ATR(14) | > 1,5× ATR (FVG geçerliliği için mekanik filtre) | fxnx |
+| Zorunlu yan ürün | En az bir FVG bırakması | tüm kaynaklar |
+| Yapısal sonuç | Bir swing high/low'u gövde kapanışıyla kırması (MSS/BOS) | ICT 2022 modeli |
+
+**Kural:** Displacement olmayan bir OB "geçerli OB" sayılmaz; FVG bırakmayan bir kırılım "MSS" sayılmaz. Bu, aşağıdaki tüm kavramların ön koşuludur.
+
+**Neden gövde/aralık?** Büyük gövde + küçük fitil, mum boyunca tek tarafın (alıcı veya satıcı) baskın olduğunu ve karşı tarafın direnmediğini gösterir — emir dengesizliğinin görsel izi. Uzun fitilli büyük mum ise "gitti ama geri geldi" demektir; displacement değildir.
+
+### 4.2 Fair Value Gap (FVG) — BISI / SIBI, CE, sınıflandırma
+
+- **Tanım:** üç ardışık mumdan oluşan kalıp; **1. mumun fitil ucu ile 3. mumun fitil ucu arasında örtüşme olmayan** boşluk. Orta mum (M2) displacement mumudur.
+  - **Bullish FVG** (ICT adı **BISI**: Buy-side Imbalance, Sell-side Inefficiency): $\text{high}(M_1) < \text{low}(M_3)$ → boşluk $[\text{high}(M_1),\ \text{low}(M_3)]$.
+  - **Bearish FVG** (**SIBI**: Sell-side Imbalance, Buy-side Inefficiency): $\text{low}(M_1) > \text{high}(M_3)$ → boşluk $[\text{high}(M_3),\ \text{low}(M_1)]$.
+- **Consequent Encroachment (CE):** FVG'nin %50 orta noktası. ICT: "fiyat çoğunlukla CE'ye kadar girer ve tepki verir"; CE'nin gövdeyle aşılması FVG'nin zayıfladığının işareti, karşı kenarın gövdeyle geçilmesi = FVG dolmuş/başarısız.
+
+$$
+CE = \frac{\text{high}(M_1) + \text{low}(M_3)}{2} \quad (\text{bullish})
+$$
+
+- **Sınıflandırma:** *fresh* (dokunulmamış), *partially filled* (CE'ye kadar), *fully filled* (karşı kenar fitille görüldü), *inverted* (karşı kenar gövdeyle kapatıldı → IFVG).
+- **Volume Imbalance (VI):** ardışık iki mumun **gövdeleri** arasında boşluk (fitiller örtüşebilir). Gerçek fiyat boşluğu yoktur, gövde boşluğu vardır; daha zayıf ama daha sık.
+- **Opening / true gap:** fitiller de örtüşmüyorsa (piyasa kapalıyken oluşan boşluk); ICT'de likidite hedefi olarak listelenir.
+
+**Neden FVG'ye geri gelinsin?** Mikroyapı açıklaması: hızlı harekette pasif emirler çekilir, fiyat "havada" ilerler; piyasa yapıcıların envanter dengelemesi ve mean-reversion algoritmaları boşluğun bir kısmının geri görülmesine yol açar. Ama "gap'ler her zaman dolar" **yanlıştır**: edgeful'un YM verisinde aynı seans içinde bullish FVG'lerin %60,7'si, bearish'lerin %63,2'si gövdeyle dolmuyor (Bölüm 12). FVG'yi "geri gelinmesi kesin bölge" değil, "geri gelinirse tepki beklenen bölge" olarak okuyun.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/10_fvg_bisi_sibi_ce.html" baslik="FVG: BISI ve SIBI, CE çizgisi, displacement eşikleri ve kısmi dolum" no="10" yukseklik={560} />
+
+**Şekil 10 nasıl okunur.** İki panel: solda BISI (bullish), sağda SIBI (bearish). M1/M2/M3 etiketli üçlü; kutu kenarları high(M1) ve low(M3) fiyat etiketiyle. M2 için "gövde/ATR" ve "gövde/aralık yüzdesi" yazılmış — displacement eşiklerini (≥ %60, > 1,5×ATR) sağlıyor mu diye bakın. Kesikli çizgi CE. Fiyat CE'ye kadar girip tepki veriyor: FVG *fresh*'ten *partially filled*'a geçiyor. Nereye bakılır: (i) M1 ve M3 fitillerinin gerçekten örtüşmediği, (ii) M2'nin displacement eşiğini karşıladığı, (iii) tepkinin CE'de geldiği.
+
+### 4.3 Inversion FVG (IFVG)
+
+- **Tanım:** fiyat bir FVG'nin **tamamından gövde kapanışıyla** geçtiğinde FVG'nin rolü tersine döner: bullish FVG kırılırsa **bearish IFVG** (direnç), bearish FVG kırılırsa **bullish IFVG** (destek).
+- **Kural:** (i) FVG'nin karşı kenarını **gövde** geçmeli (fitil yetmez), (ii) tercihen o kırılım bir sweep/MSS ile birlikte olmalı, (iii) giriş IFVG'ye ilk retest'te.
+- **Neden:** FVG'de bekleyen limit alımlar gövdeyle geçildiğinde tuzağa düşmüştür; geri dönüşte o pozisyonların çıkış satışı (ve breakout satıcılarının eklemesi) direnç yaratır. Klasik "destek kırılınca dirence döner" fikrinin blok sürümü.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/11_inversion_fvg.html" baslik="Inversion FVG: bullish FVG gövdeyle geçilir, kutu bearish IFVG'ye döner, ilk retest'te short" no="11" yukseklik={560} />
+
+**Şekil 11 nasıl okunur.** Bullish FVG önce CE'de tutuyor (kısmi dolum, tepki). Sonra bir mum FVG'nin tamamını *gövdeyle* geçiyor → kutu kırmızıya dönüyor: bearish IFVG. İlk retest'te fitil eski FVG'nin içine giriyor, gövde altında kapanıyor → short girişi; SL IFVG'nin üstü. Nereye bakılır: kırılım mumunun *kapanışının* FVG'nin alt kenarının altında olduğu — fitil sarkması IFVG üretmez.
+
+### 4.4 Order Block (OB) — anatomi ve 5 kriter
+
+**Kesin tanım (ICT):** güçlü bir displacement hareketinden **hemen önceki son zıt renkli mum** (bullish OB için son *bearish/kırmızı* mum, bearish OB için son *bullish/yeşil* mum). Bazı öğreticiler ardışık birkaç zıt renkli mumu tek blok alır; ICT'nin orijinal tarifi tek mumdur, LuxAlgo gibi indikatörler de "impulsif yapı kırılımından önceki son zıt renkli mum"u kullanır.
+
+**Geçerli OB için kriterler** (ictkillzone / dailypriceaction / TradingFinder konsensüsü + ICT'ye özgü beşinci):
+
+1. **Likidite süpürmesi:** bullish OB'den önce belirgin bir low'un altına (SSL), bearish OB'den önce belirgin bir high'ın üstüne (BSL) sarkma olmalı. "Sweep yoksa OB yoktur."
+2. **Displacement + imbalance:** OB'den çıkan hareket 4.1 eşiklerini karşılamalı ve en az bir FVG bırakmalı; ideali OB'nin hemen üstünde/altında FVG olması (OB+FVG confluence).
+3. **Yapı kırılımı:** OB'nin ait olduğu bacak bir BOS veya CHoCH üretmeli (dailypriceaction Kural 1: "OB, BOS/CHoCH ile aynı fiyat bacağında oluşmalı").
+4. **Mitigate edilmemiş (fresh):** fiyat OB'ye henüz dönmemiş olmalı. Katı okul (dailypriceaction): "fitil dokunuşu bile edge'i bozar"; yumuşak okul (ictkillzone): "fitil dokunabilir, gövde kapanışı bölgeyi geçmediği sürece OB canlıdır."
+5. **Premium/Discount uyumu (ICT):** bullish OB yalnızca dealing range'in %50 altında, bearish OB yalnızca %50 üstünde geçerli.
+
+**OB'nin bölgesi:** mumun **gövdesi** (open–close) esas bölge; fitil stop için referans. Bazı öğreticiler fitil dahil çizer; ICT'nin "mean threshold" mantığı gövdeyle çalışır.
+
+**Mean Threshold (MT):** OB gövdesinin %50'si. Fiyat OB'ye döndüğünde genellikle en fazla MT'ye kadar girer; **MT'nin ötesine gövde kapanışı** OB'nin zayıfladığının ilk sinyali. Giriş için iki nokta: (i) OB'nin **açılış fiyatı** (bullish OB'de kırmızı mumun open'ı = bloğun üst sınırı; en muhafazakâr, en erken dolum), (ii) **MT** (daha iyi R:R, daha düşük dolum olasılığı).
+
+**Mitigation:** fiyatın OB'ye dönerek "orada bekleyen emirleri karşılaması" (ICT jargonu). Kademeler: *tap/touch* (fitil değdi), *MT mitigation* (%50'ye kadar girdi), *full mitigation* (gövde OB'nin karşı sınırını kapattı → OB bitti; artık breaker adayı).
+
+**Kaynak iddiası (ictkillzone, metodoloji açıklanmamış):** ilk testte hedef-1'e ulaşma %74, ikinci testte %58, üçüncü ve sonrasında %41 → "iki kez test edilmiş OB'yi grafikten sil, taze bölge önceliklidir." Sayıyı değil, *sırayı* alın: taze bölge, kullanılmış bölgeden daha güvenilirdir — bu, kalabalıklaşma mantığıyla da uyumludur.
+
+**Neden OB çalışsın (ve neden "kurumsal emir bloğu" olması gerekmez)?** OB, teknik olarak **displacement'tan önceki son karşı hareketin gövdesidir** — yani klasik "son pullback / destek-direnç" fikri. Kırılımı kaçıranların "ikinci şans" limit emirleri, kırılım tuzağına düşenlerin çıkış emirleri ve trend takipçilerinin ekleme emirleri burada toplanır → kendini gerçekleştiren destek. Bu açıklama "kurum OB mumunda emir bıraktı" iddiasından çok daha savunulabilirdir ve kalabalıklaşma riskini de içinde taşır (Bölüm 12).
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/12_order_block_anatomisi.html" baslik="Order block anatomisi: SSL sweep, displacement + FVG, MSS, fresh OB'ye ilk dönüş, discount kontrolü" no="12" yukseklik={560} />
+
+**Şekil 12 nasıl okunur.** Beş numaralı kriter sırayla: ① fitil eski dibin altına — SSL sweep; ② büyük yeşil mumlar + FVG — displacement; FVG kutusu OB mumunun *hemen üstündeki* boşluktur (M1 = OB mumu; OB+FVG confluence) ve geri çekilme boyunca alt kenarı gövdeyle geçilmez — yani 4.3'e göre inversion yok, FVG geçerli kalır; ③ LH'nin gövdeyle kırılması — MSS; ④ fiyatın fresh OB'ye ilk dönüşü — fitil MT'ye kadar iniyor (OB open limiti dolar), gövde OB'nin hemen üstünde, FVG'nin içinde kapanıyor; ⑤ EQ çizgisi — retest *anında* bilinen aralıktan (sweep low → displacement high; sonraki tepe hesaba katılmaz, hindsight yok) hesaplanmış, OB discount'ta. Mavi kutu OB gövdesi (open–close), kesikli çizgi MT, "OB open" 1. giriş noktası, "fitil low" SL referansı. Nereye bakılır: OB mumu displacement'tan *hemen önceki son kırmızı* mum mu; dönüşte gövde MT'yi geçmiş mi (geçmedi — fitil MT'ye değdi, gövde üstte kaldı).
+
+### 4.5 Breaker Block (BB)
+
+- **Tanım:** başarısız OB. Bullish bir OB gövde kapanışıyla aşağı kırılırsa o blok **bearish breaker** olur (yukarıdan test edilince direnç); bearish OB yukarı kırılırsa **bullish breaker** (destek).
+- **Kritik ek koşul (ICT):** kırılmadan önce fiyat bir **likidite süpürmesi** yapmış olmalı (yeni high/low). Sıra: sweep → geri dönüş → OB'nin karşı tarafa gövdeyle kırılması → retest.
+- **Bullish breaker dizisi:** Low → High → **Lower Low (sweep)** → Higher High (displacement, önceki High'ı gövdeyle kırar). Yaygın pratikte breaker olarak alınan mum, **LL'yi yapan düşüşten önceki son yükseliş mumu**, yani "başarısız bearish OB"dir. Kaynaklar arasında en tutarlı ifade: "bearish OB'yi yukarı gövdeyle kıran ve sweep içeren hareket, o OB'yi bullish breaker'a çevirir."
+- **Bearish breaker:** High → Low → **Higher High (sweep)** → Lower Low. Başarısız bullish OB → direnç.
+- **Breaker vs Mitigation Block ayrımı (innercircletrader.net):** *"Aynı seviye, zıt işlem fikri."* Breaker'da OB **kırılmıştır** ve yön **ters döner**; mitigation block'ta OB **tutmuştur** ve yön aynı kalır.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/13_breaker_block.html" baslik="Bullish breaker: L → H → LL (sweep) → HH; başarısız bearish OB destek olur" no="13" yukseklik={560} />
+
+**Şekil 13 nasıl okunur.** Dizi etiketlenmiş: L → H → LL (L'nin altına sweep) → HH (H'nin üstünde gövde kapanışı). Kesikli kutu başarısız bearish OB; HH kırılımından sonra turuncu **bullish breaker**'a dönüyor ve retest'te destek veriyor. Sweep'in zorunlu koşul olduğu vurgulu: LL, L'nin altına sarkmasaydı (yani likidite alınmasaydı) bu bir breaker değil, Bölüm 4.6'daki ICT-orijinal mitigation block olurdu.
+
+### 4.6 Mitigation Block (MB) — iki tanım
+
+- **Versiyon 1 (yaygın):** orijinal hareket tamamlandıktan sonra fiyatın **kırmadan** geri döndüğü eski OB; retest orijinal yönde **devam** için destek/direnç. Üç ardışık koşul: (1) HTF'de geçerli OB, (2) OB'den trend yönünde net displacement, (3) uzamadan sonra bölgeye geri çekilme. **Zorunlu:** geri çekilme OB'nin uç fiyatını gövde kapanışıyla geçmez — geçerse breaker'dır.
+- **Versiyon 2 (ICT-orijinal):** "**yeni low/high yapamamış** (likidite süpürmemiş) başarısız swing"in ürettiği blok — breaker'dan farkı sweep'in olmamasıdır. Yani "sweep'siz breaker": H → L → **LH** (H süpürülmedi) → L gövdeyle kırıldı; LH bacağının son yeşil mumu MB, retest'te direnç.
+- İki tanım da dolaşımdadır; hangisini kullandığınızı günlüğünüze yazın. V2'de bloğun *hangi* mumdan alınacağı da kaynaklar arasında farklı çizilir: kimi ICT şeması MB mumunu LH bacağının son yeşil mumunda, kimi süpürülemeyen orijinal H'nin son yeşil mumunda gösterir; iki mum aynı fiyat bandındaysa fark yoktur, değilse LH bacağınınki daha yakın (ve daha sık test edilen) bölgedir — Şekil 14(b) bu sürümü çizer.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/14_mitigation_block.html" baslik="Mitigation block: V1 (tutan OB'nin devam retest'i) ve V2 (ICT-orijinal, sweep'siz kırılım) yan yana" no="14" yukseklik={560} />
+
+**Şekil 14 nasıl okunur.** Sol panel V1: bullish OB tutuyor, fiyat retest'te fitille giriyor ama gövde OB low'unu geçmiyor → devam; geçseydi breaker olurdu. Sağ panel V2: H → L → LH (H süpürülmedi, sweep yok) → L gövdeyle kırıldı; LH bacağının son yeşil mumu MB, retest'te direnç. İki panelin farkı: V1'de yön aynı kalır ve blok *tutmuştur*; V2'de yön dönmüştür ama *sweep yoktur* — o yüzden breaker denmez.
+
+<div class="not">
+  <span class="etiket">Pratik not — bloklar arası öncelik</span>
+  Aynı bölgede OB, FVG ve breaker üst üste geldiğinde hangisine emir koyacaksınız? Kural: <strong>kesişim</strong>. OB'nin MT'si ile FVG'nin CE'si aynı bantta ise oraya; ikisi de OTE bandının içindeyse "üçlü confluence". Tek bir bloğun kenarına emir koymak yerine kesişimin ortasına koymak, hem dolum olasılığını hem de stop mesafesini dengeler. PD array ailesinin geri kalanı (rejection block, propulsion block, volume imbalance, BPR) ve öznel güç sıralaması Bölüm 10'da, Şekil 24 üstünde.
+</div>
+
+---
+
+## Bölüm 5 — Zaman: seanslar, kill zone'lar, Power of Three ve günlük/haftalık profil
+
+SMC'de "nerede" kadar "ne zaman" da sorulur. Bu bölüm ICT'nin zaman çerçevesini NY saati, UTC ve **Türkiye saati (TSİ)** ile birlikte verir.
+
+### 5.1 Saat dönüşümü
+
+ICT'nin özgün saatleri New York yerel saatiyledir. NY = UTC−4 (yaz: Mart 2. Pazar – Kasım 1. Pazar), UTC−5 (kış). **TSİ = UTC+3 (sabit).** Dolayısıyla:
+
+$$
+\text{TSİ} = \text{NY} + 7\ (\text{yaz}) \quad / \quad \text{NY} + 8\ (\text{kış})
+$$
+
+Yaz/kış geçişlerinde ABD ile Türkiye arasındaki fark bir saat kayar; TradingView'da grafik saat dilimini "New York" seçmek karışıklığı önler.
+
+### 5.2 Kill zone'lar ve seans pencereleri
+
+| Pencere | NY saati | UTC (yaz/kış) | TSİ (yaz/kış) | Kullanım |
+|---|---|---|---|---|
+| Asya KZ | 20:00–00:00 (bazı kaynaklar 19:00–22:00 / 20:00–22:00) | 00:00–04:00 / 01:00–05:00 | 03:00–07:00 / 04:00–08:00 | Dar aralık, JPY/AUD/NZD; günün Judas'ının hazırlığı |
+| Londra KZ | 02:00–05:00 | 06:00–09:00 / 07:00–10:00 | 09:00–12:00 / 10:00–13:00 | 24 saatin en yüksek olasılıklı yön hareketi; günün H/L'si sıkça burada |
+| NY AM KZ | 07:00–10:00 (ICT özgün); türevlerde 08:30–11:00 | 11:00–14:00 / 12:00–15:00 | 14:00–17:00 / 15:00–18:00 | Endeksler/USD majörleri; 08:30 veri, 09:30 NYSE açılış |
+| Londra kapanış KZ | 10:00–12:00 | 14:00–16:00 / 15:00–17:00 | 17:00–19:00 / 18:00–20:00 | Günlük aralığa geri çekilme, ters işlemler |
+| NY öğle | 12:00–13:30 (bazı kaynaklar 12:00–14:00) | 16:00–17:30 / 17:00–18:30 | 19:00–20:30 / 20:00–21:30 | **Kaçınılır** |
+| NY PM | 13:30–16:00 | 17:30–20:00 / 18:30–21:00 | 20:30–23:00 / 21:30–00:00 | Endeks devam/tersi |
+| Silver Bullet Londra | 03:00–04:00 | 07:00–08:00 / 08:00–09:00 | 10:00–11:00 / 11:00–12:00 | 1 saatlik FVG modeli |
+| Silver Bullet NY AM | 10:00–11:00 | 14:00–15:00 / 15:00–16:00 | 17:00–18:00 / 18:00–19:00 | " |
+| Silver Bullet NY PM | 14:00–15:00 | 18:00–19:00 / 19:00–20:00 | 21:00–22:00 / 22:00–23:00 | " |
+| Makro — Londra (ICT özgün) | 02:33–03:00, 04:03–04:30 | 06:33–07:00, 08:03–08:30 / 07:33–08:00, 09:03–09:30 | 09:33–10:00, 11:03–11:30 / 10:33–11:00, 12:03–12:30 | 20–30 dakikalık "algoritma likidite arar" pencereleri |
+| Makro — NY AM (ICT özgün) | 08:50–09:10, 09:50–10:10, 10:50–11:10 | 12:50–13:10, 13:50–14:10, 14:50–15:10 / +1 saat kış | 15:50–16:10, 16:50–17:10, 17:50–18:10 / +1 saat kış | " |
+| Makro — öğle ve PM (ICT özgün) | 11:50–12:10, 13:10–13:40, 15:15–15:45 | 15:50–16:10, 17:10–17:40, 19:15–19:45 / +1 saat kış | 18:50–19:10, 20:10–20:40, 22:15–22:45 / +1 saat kış | 15:15–15:45 = MOC öncesi "last hour macro" |
+| Makro — türev kaynaklarda ek | 14:50–15:10 | 18:50–19:10 / 19:50–20:10 | 21:50–22:10 / 22:50–23:10 | ICT'nin özgün listesinde yok; bazı türev derlemeler ekler |
+| Günlük açılış (true day open) | 00:00 | 04:00 / 05:00 | 07:00 / 08:00 | PO3 referansı |
+| 08:30 / 09:30 | veri / NYSE açılışı | 12:30 / 13:30 (yaz) | 15:30 / 16:30 (yaz) | Judas için sık zaman |
+
+Kaynaklar arasında ±1 saat farklar vardır (özellikle Asya ve NY AM). Bu derste "ICT özgün" sütunu esastır; farklılık tabloda belirtilmiştir.
+
+**Neden bu saatler?** Bölüm 1.4: Londra açılışı, NY açılışı, Londra fix/kapanış ve NY PM makro/MOC akışı gerçek volatilite ve hacim yoğunlaşmalarıdır. Doğru ifade "kurumsal algoritma o saatte çalışır" değil, "o saatlerde emir akışı yüksek, dolayısıyla displacement olasılığı yüksek"tir. Öğle saatinin kaçınılması da aynı sebeple: akış düşük, sweep'ler onaysız kalır.
+
+### 5.3 Power of Three (PO3) / AMD ve Judas swing
+
+- **AMD = Accumulation → Manipulation → Distribution.** Bir dönem (gün, hafta, seans) açılış civarında dar aralıkta birikir (A), açılışın *yanlış* tarafına stop toplayan sahte hareket yapar (M — **Judas swing**), sonra gerçek yönde genişleyip dönemi aralığın karşı ucunda kapatır (D).
+- **Referans:** günlük için ICT "true day open" = **00:00 New York**; haftalık için Pazartesi açılışı; seans için seans açılışı.
+- **Bullish PO3 günü:** açılış dibe yakın, açılışın altına fitil (Judas), kapanış tepeye yakın. Bearish simetrik.
+- **Kural:** PO3 sadece net bir günlük/haftalık bias ile çalışır; bias'a göre Judas'ın yönü tahmin edilir (bullish bias → sabah düşüş = Judas, alım fırsatı).
+- **Judas swing (giriş modeli olarak, Bölüm 6.8):** seans açılışının (Londra 02:00–05:00 veya NY) ilk 1–2 saatinde bias'a ters yönde 00:00 open'ın karşı tarafına gidiş ve orada likidite alımı; sonra gerçek yön.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/15_power_of_three_amd.html" baslik="Power of Three (AMD) ve Judas swing — bullish gün: Asya birikimi, açılış altına Judas, NY genişlemesi" no="15" yukseklik={560} />
+
+**Şekil 15 nasıl okunur.** 24 saatlik seri, 00:00 NY açılış çizgisi yatay. Kutu **A** (Asya birikimi, dar aralık); kırmızı ok **M** — Judas: Londra kill zone'unun içinde (03:00–04:00 NY) açılışın altına inip SSL süpürüyor; yeşil ok **D** — genişleme, günün high'ı NY AM kill zone'unda, kapanış tepeye yakın. Londra ve NY AM kill zone bantları dikey gölgeli. Sağda günün *tek mumu*: open dibe yakın, alt fitil = Judas, kapanış tepede — bullish PO3 mumunun ta kendisi. Nereye bakılır: Judas'ın open'ın *hangi tarafına* gittiği (bullish bias'ta altına), süpürdüğü havuz, ve genişlemenin hangi kill zone'da başladığı.
+
+### 5.4 Günlük ve haftalık profil
+
+- **Günlük profil (ICT):** Asya birikimi → Londra Judas/manipülasyon → Londra'da günün H veya L'si → NY AM devam/tersi → Londra kapanışında geri çekilme → NY PM. Günlük H/L'nin en sık Londra veya NY AM'de oluştuğu varsayımı.
+- **Haftalık profiller (ICT, 12 profil):** referans Pazartesi açılışı (haftalık PO3'ün "open"ı) ve önceki hafta H/L (DOL). Genel kural: haftalık ekstrem genelde Pzt–Salı; Salı–Perşembe azami genişleme; Cuma çoğunlukla geri çekilme veya stop avı. On iki profil, gün ve beklenti:
+
+| # | Profil | Haftalık ekstrem hangi gün | Ne beklenir |
+|---|---|---|---|
+| 1 | Classic Tuesday **Low** (bullish) | Salı | Pzt açılışın altına manipülasyon; Salı dibi HTF discount / PD array'e dokunur; Salı–Per genişleme yukarı, önceki hafta high (DOL) alınır |
+| 2 | Classic Tuesday **High** (bearish) | Salı | Aynası: Pzt yukarı manipülasyon, Salı tepesi HTF premium'da, Salı–Per düşüş |
+| 3 | Wednesday **Low** (bullish) | Çarşamba | Pzt–Salı geniş düzeltme; dip Çar (çoğunlukla Londra/NY KZ), Çar–Cuma genişleme; "geç Salı" varyantı |
+| 4 | Wednesday **High** (bearish) | Çarşamba | Aynası |
+| 5 | Consolidation Thursday **Bullish** Reversal | Perşembe | Pzt–Çar dar aralık; Per NY açılışı civarında aralık altına stop-run, sonra dönüş ve yukarı genişleme (Per–Cuma) |
+| 6 | Consolidation Thursday **Bearish** Reversal | Perşembe | Aynası: aralık üstüne stop-run, düşüş |
+| 7 | Consolidation Midweek **Rally** | Çar (dip) → Cuma | Pzt–Çar range, Çar–Cuma tek yönlü yükseliş; range'in altı önce süpürülür |
+| 8 | Consolidation Midweek **Decline** | Çar (tepe) → Cuma | Aynası |
+| 9 | Seek & Destroy **Bullish** Friday | Cuma | Pzt–Per yatay, haftalık ekstrem oluşmaz; Cuma önce aralık altını sonra üstünü süpürür (kapanış yukarı eğilimli) |
+| 10 | Seek & Destroy **Bearish** Friday | Cuma | Aynası (kapanış aşağı eğilimli) — Şekil 16b(b) |
+| 11 | Neutral / low-probability | — | Faiz kararı, NFP haftası vb.: dar aralık, iki yönlü sweep; işlem beklentisi düşürülür |
+| 12 | Neutral / low-probability (varyant) | — | Yön yok, hafta ortasında geri dönüşlü genişlemeler; "yokum" haftası |
+
+Profil listesi innercircletrader.net "Weekly Range Profiles" ve türev derlemelerine (arongroups, tradingfinder) dayanır; kaynaklar 9–12 numaralı profillerin adlandırmasında ve neutral sürümlerin sayısında farklılaşır. Aşağıdaki şekil ilk ve en sık anılan profili (Classic Tuesday Low) ve Cuma varyantını çizer.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/16b_haftalik_profil.html" baslik="Haftalık profil (günlük mumlar): (a) Classic Tuesday Low — Pzt açılış çizgisi, Salı dibinin HTF discount kutusuna dokunuşu, Salı–Perşembe genişleme oku, PWH = DOL; (b) Seek & Destroy Friday — Pzt–Per aralığı, Cuma iki yönlü sweep" no="16b" yukseklik={560} />
+
+**Şekil 16b nasıl okunur.** Sol panel bullish haftanın beş günlük mumu. Kesikli yatay çizgi **Pazartesi açılışı** (haftalık PO3 referansı): Pazartesi mumu açılışın *altına* iniyor (haftanın Judas'ı). Salı mumunun uzun alt fitili yeşil **HTF discount / PD array** kutusuna (günlükte bir FVG/OB) dokunup dönüyor — daire; **haftalık low Salı'da**. Yeşil ok Salı dibinden Perşembe tepesine **haftalık genişlemeyi** gösteriyor; Perşembe fitili sarı **PWH** çizgisini (önceki hafta high = DOL) süpürüyor, Cuma geri çekilme. Sağ panel Seek & Destroy: Pazartesi–Perşembe gri aralık kutusunda sıkışma, haftalık ekstrem oluşmuyor; Cuma mumu önce aralığın üstünü (BSL) sonra altını (SSL) süpürüp aralığın *içinde* kapanıyor — iki taraf da stop oldu. Nereye bakılır: (i) haftanın ekstremi hangi güne düştü (Pzt–Salı ise profil 1–2, Çar ise 3–4, Per ise 5–6, hiçbiri değilse 9–10 adayı); (ii) Salı/Çar dibinin bir HTF PD array'e dokunup dokunmadığı; (iii) genişlemenin Salı–Perşembe bandında olup olmadığı.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/16_kill_zones_gunluk_profil.html" baslik="Kill zone'lar ve günlük profil (15 dk): Asya / Londra / NY AM / Londra kapanış / öğle / NY PM, Silver Bullet şeritleri, eksen NY + TSİ" no="16" yukseklik={560} />
+
+**Şekil 16 nasıl okunur.** 20:00'den ertesi gün 16:00 NY'a 80 adet 15 dakikalık mum. Gölgeli bantlar Asya, Londra, NY AM (07–10 ICT özgün), Londra kapanış, NY öğle (kaçın), NY PM; koyu ince şeritler Silver Bullet saatleri (03–04, 10–11, 14–15). Dikey çizgiler 00:00 true day open, 08:30 (veri), 09:30 (NYSE açılış). Eksen etiketleri hem NY hem TSİ (yaz +7). Bu günde low Londra'da (Judas), high NY AM'de — günlük profilin ders kitabı örneği. Nereye bakılır: günün ekstremlerinin hangi banda düştüğü; öğle bandında hareketin sönmesi.
+
+<div class="not">
+  <span class="etiket">Uyarı — profiller olasılık değil şablon</span>
+  ICT'nin günlük/haftalık profilleri "sık görülen dizilimler"dir; hangi gün hangi profilin çıkacağını önceden söyleyen ölçülmüş bir kural yoktur (AMD'nin her gün tekrarlanan öngörülebilir bir dizi olduğu test edilmemiştir — Bölüm 12). Kullanım şekli: profil <em>bekleyeceğiniz</em> hareketi değil, <em>tanıyacağınız</em> hareketi anlatır. Judas'ı önceden alamazsınız; olduktan sonra MSS ile onaylarsınız.
+</div>
+
+---
+
+## Bölüm 6 — Giriş modelleri: adım adım, grafik üstünde
+
+Buraya kadar öğrendiğiniz her parça tek bir dizide birleşir: **HTF bias → likidite haritası → sweep → displacement + MSS → PD array (FVG/OB) ∩ OTE'ye geri çekilme → giriş.** Bu bölüm o diziyi tek bir işlemin üç katmanı üstünde (Şekil 17–19), ardından ICT'nin adlandırılmış modelleriyle (2022 modeli, Silver Bullet, Unicorn, Judas, MMBM/MMSM) anlatır.
+
+### 6.1 Klasik model — Aşama 1: HTF bias, dealing range, premium/discount, DOL (H4)
+
+Ne yapıyoruz: H4'te (veya günlükte) son external swing çiftini bulup dealing range çiziyoruz; son kırılımın BOS mu MSS mi olduğuna göre bias veriyoruz; fiyatın premium'da mı discount'ta mı olduğunu okuyoruz; en yakın süpürülmemiş havuzu DOL olarak işaretliyoruz; discount içinde bir HTF PD array (displacement FVG'si) varsa "LTF girişi buradan aranacak" diyoruz.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/17_giris_modeli_1_htf_bias.html" baslik="Giriş modeli aşama 1 (H4): BOS → bullish bias, dealing range ≈100–110 (fitil uçları), discount, DOL yukarıda, H4 FVG discount içinde" no="17" yukseklik={560} />
+
+**Şekil 17 nasıl okunur.** H4'te önceki HH gövde kapanışıyla kırılmış → **BOS**, bias bullish. Dealing range ≈100–110 — fitil uçlarıyla L≈99,9 / H≈110,3, dolayısıyla grafikte EQ 105,1 yazar (≈105); premium/discount gölgeleri. Fiyat discount'ta. Yukarıda süpürülmemiş BSL var → **DOL** oku oraya. H4 displacement FVG'si (PD array) discount içinde — bu, LTF'de aranacak giriş bölgesinin HTF adresidir. Çıktı: "Bugün alıcıyım, discount'tan, hedef yukarıdaki BSL." Bu aşamada emir yok.
+
+### 6.2 Aşama 2: sweep → displacement → MSS (15m)
+
+Ne yapıyoruz: 15m'de HTF FVG'nin yakınındaki likidite havuzunu (EQL, Asya low, PDL) izliyoruz. Fitil havuzun altına iniyor, gövde içeride kapanıyor → **sweep**. Sonraki 1–3 mumda ters yönde displacement (gövde ≥ %60, ≥ 1,5× ortalama, FVG bıraktı) var mı? Var. Displacement en yakın *governing* 15m swing high'ı — düzeltmenin asıldığı ITH'yi (Şekil 18'de ≈103,35–103,39; iki yanında daha alçak STH'ler var) — gövde kapanışıyla kırdı mı → **MSS** (2.6 ve 8.3 adım 5 ile aynı tanım; bir STH'nin kırılışı MSS değil inducement'tır). Bacakta FVG ve OB işaretliyoruz.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/18_giris_modeli_2_sweep_mss.html" baslik="Giriş modeli aşama 2 (15m): EQL sweep (fitil 102,00 / gövde 102,30) → 3 mumluk displacement → 15m governing swing high (ITH) ≈103,39 (fitil) gövdeyle kırıldı (MSS); FVG ve OB kutuları" no="18" yukseklik={560} />
+
+**Şekil 18 nasıl okunur.** Aynı işlemin 15m katmanı. ① Daire: fitil EQL/Asya low'un altına 102,00'a iniyor, gövde 102,30'da kapanıyor — sweep. Üç mumluk displacement. ③ 15m governing swing high (ITH; bacak hedefi 103,35, fitil ucu ≈103,39 — MSS çizgisi fitilden çekilir) gövdeyle kırıldı — MSS. ② Mor kutu FVG 102,44–102,70; mavi kutu OB 102,30–102,66 (sweep mumu = displacement öncesi son kırmızı mum). Henüz giriş yok — çünkü fiyat bölgeye *dönmedi*. MSS mumunun kapanışında piyasa emriyle girmek "kovalama"dır: stop uzak, R:R kötü.
+
+### 6.3 Aşama 3: OTE ∩ FVG'ye limit, SL, TP1/TP2, R:R (5m katmanı — grafik 15m serisiyle)
+
+Not: Şekil 19 (ve Şekil 23'ün sağ paneli) anlatım kolaylığı için Şekil 18 ile *aynı* 15m serisini kullanır; canlıda bu adımı 5m/1m'de yaparsınız — bölge, fib ve seviyeler aynıdır, yalnızca mum sayısı artar ve dolum/onay daha ince görülür.
+
+Ne yapıyoruz: fib'i sweep dibinden (1.0) MSS tepesine (0) çekiyoruz; OTE bandını FVG/OB ile kesiştiriyoruz; limit emri kesişimin ortasına; SL sweep fitilinin altına + tampon; TP1 = −0.27 (veya ilk iç likidite), TP2 = −0.62 (veya karşı ERL/DOL).
+
+**Sayısal örnek (grafiktekiyle aynı).** Sweep dibi $L = 102{,}00$, MSS tepesi $H = 103{,}55$, bacak 1,55.
+
+| Öğe | Hesap | Değer |
+|---|---|---|
+| 0.62 | 103,55 − 0,62·1,55 | 102,589 |
+| 0.705 | 103,55 − 0,705·1,55 | 102,457 |
+| 0.79 | 103,55 − 0,79·1,55 | 102,326 |
+| FVG CE | (102,44 + 102,70)/2 | 102,57 |
+| **Giriş** | FVG CE ∩ OTE (102,57 bandın içinde) | **102,57** |
+| **SL** | sweep fitili 102,00 − 0,10 tampon | **101,90** → 1R = 0,67 |
+| TP1 | −0.27: 103,55 + 0,27·1,55 | 103,97 → (103,97−102,57)/0,67 = **2,1R** |
+| TP2 | −0.62: 103,55 + 0,62·1,55 = 104,51 ≈ BSL | **2,9R** |
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/19_giris_modeli_3_giris_sl_tp.html" baslik="Giriş modeli aşama 3 (5m katmanı; grafik 15m serisi): fib 102,00 (1.0) → 103,55 (0), OTE bandı, limit 102,57 = FVG CE ∩ OTE, SL 101,90, TP1 103,97 (2,1R), TP2 104,51 (2,9R)" no="19" yukseklik={560} />
+
+**Şekil 19 nasıl okunur.** Fib seviyeleri fiyat etiketli; OTE bandı gölgeli; giriş oku 102,57'de (FVG CE ile OTE kesişimi). Kırmızı kutu risk (giriş → SL 101,90), yeşil kutular TP1 ve TP2 kârı; kutuların içinde R katsayıları. TP1'de %50 kapatılıp SL BE'ye çekiliyor (Bölüm 7). Nereye bakılır: SL'in *sweep fitilinin* altında olduğu (OB'nin gövdesinin değil), TP2'nin bir fib seviyesi ile bir likidite havuzunun (BSL) *çakıştığı* yer olduğu — iki sistem aynı yeri gösteriyorsa hedef oradadır.
+
+### 6.4 Klasik modelin üç giriş biçimi
+
+- **Model 1 (OTE limit):** MSS bacağının OTE'sine (öncelik 0.705; bölge 0.62–0.79) limit emir; FVG/OB ile kesişiyorsa oraya. Fiyat OTE'ye gelmezse işlem yok.
+- **Model 2 (FVG CE):** displacement bacağındaki ilk FVG'nin CE'sine limit; Silver Bullet'ta FVG'nin %50'si standarttır.
+- **Model 3 (Turtle soup klasik):** sweep mumunun ardından, süpürülen seviyenin **geri alınmasında** stop-emirle giriş (Raschke: önceki dip üstüne buy-stop). En erken giriş, en geniş stop.
+- **Onaylı giriş (alternatif):** bölgeye dokunuşta 1m'de mini MSS/CISD (change in state of delivery — 1m'de son aşağı-kapanış mumlarının open'ının yukarı geçilmesi) beklenip piyasa emri. Dolum kesinliği artar, R:R biraz düşer.
+
+### 6.5 ICT 2022 modeli (10 adım, innercircletrader.net)
+
+1. Günlük/4H bias.
+2. **00:00–03:00 NY** aralığının high/low'unu işaretle.
+3. 03:00'ten önce pozisyon alma.
+4. Aralığın high/low'unun bias'a **ters** yönde süpürülmesini bekle (Judas).
+5. 5/3/1 dakikada MSS.
+6. Displacement FVG bırakmalı.
+7. PD array (FVG / OB / IFVG / breaker) işaretle.
+8. Premium/discount doğrula.
+9. Retrace'i bekle, kovalama.
+10. PD array dokunuşunda giriş; **SL süpürülen ucun ötesinde**; TP süpürülen aralığın karşı ucu veya ötesi; **minimum 1:3**.
+
+Ekler: Londra süpürdüyse NY'da Londra low'dan önceki high'a fib çek, OTE'de 1m MSS ile devam girişi; Londra yatay geçtiyse 00:00–08:00 aralığıyla aynı dizi 08:00–09:30'da uygulanır. Şekil 17–19 aslında bu modelin bir uygulamasıdır.
+
+### 6.6 Silver Bullet
+
+- Pencereler (NY): **03:00–04:00**, **10:00–11:00**, **14:00–15:00** (TSİ yaz: 10–11, 17–18, 21–22).
+- Pencereden **önce** 15m'de likidite haritası (PDH/PDL, seans H/L, EQH/EQL).
+- Pencere **içinde**: sweep/manipülasyon → 1–5m'de displacement FVG (**FVG pencere içinde oluşmalı**) → FVG'nin **%50'sine** limit (veya ilk dokunuş) → SL FVG'yi yaratan üçlünün ucunun ötesi (bearish'te M1 high'ı, + tampon; muhafazakâr seçenek: sweep mumunun ucu — R:R düşer, fitil toleransı artar) → hedef bir sonraki likidite havuzu (~1:3; endekste "20–30 puan/pip" tipik ifade). Aynı seans içinde kapat/trail et.
+- Kaynak iddiası: %55–65 kazanma oranı 1:3'te (doğrulanmamış).
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/20_silver_bullet.html" baslik="Silver Bullet (NY AM 10–11), 5 dk, bearish: pencere içinde BSL sweep → SIBI FVG + MSS → limit FVG %50, SL FVG üçlüsünün ucu (M1 high) + tampon, hedef seans low ≈ 3,6R (muhafazakâr SL = sweep ucu → 2,4R)" no="20" yukseklik={560} />
+
+**Şekil 20 nasıl okunur.** Pencere öncesi BSL haritası çizili. ① Sweep pencere *içinde*: fitil 100,97'ye, gövde altında. ② Displacement + SIBI FVG pencere içinde + MSS. ③ Limit FVG'nin %50'sinde (100,39); SL FVG'yi yaratan üçlünün ucu — M1 high 100,75 + 0,05 tampon = 100,80, 1R = 0,41 (kural: sweep mumu FVG üçlüsünün parçası değildir). Noktalı ikinci çizgi **muhafazakâr alternatif**: sweep ucu 100,97 + tampon = 101,02 → 1R = 0,63. ④ Hedef sonraki likidite: seans low 98,90 → 3,6R (muhafazakâr SL ile 2,4R). Aynı giriş, aynı hedef; SL seçimi R:R'yi 1,5 kat değiştiriyor — bu yüzden 7.1'deki SL tablosunda iki seçenek de yazılıdır. Eksen NY + TSİ. Nereye bakılır: FVG'nin pencere sınırları *içinde* oluştuğu — pencere dışında oluşan FVG bu modelde sayılmaz.
+
+### 6.7 Unicorn (Breaker + FVG örtüşmesi)
+
+- Bullish: L → H → LL → HH dizisi; breaker (4.5) ile displacement FVG'si **örtüşmeli**.
+- Giriş örtüşme bölgesine dönüşte (tercihen 5m ve altı); SL FVG'yi oluşturan mumun 10–20 pip altı (LuxAlgo) veya breaker'ın altı; hedef bir sonraki likidite / EQH; taban R:R 1:2.
+- Geçersizleşme: bölgenin gövdeyle karşı tarafa kapatılması.
+- **Neden güçlü sayılır:** iki bağımsız kanıt (başarısız OB'nin tersine dönmesi + boşluk) aynı bantta; kaynakların öznel sıralamasında BPR ile birlikte en üstte (Bölüm 10).
+
+### 6.8 Judas swing girişi
+
+- Seans açılışının ilk 1–2 saatinde bias'a **ters** yönde 00:00 open'ın karşı tarafına gidiş ve orada likidite alımı; sonra gerçek yön.
+- Giriş = Judas ucundan sonra MSS → FVG/OTE (fib: Judas ucu 1.0 → MSS high 0). Bias bullish ise Judas **open'ın altına** iner (discount'ta al).
+- Şekil 15'teki M oku Judas'ın kendisidir; Şekil 16'da Londra'daki günlük low aynı şeydir.
+
+### 6.9 Market Maker Buy/Sell Model (MMBM / MMSM)
+
+Beş aşama: **orijinal konsolidasyon** → fiyat koşusu (buy model'de düşüş; her bacakta LTF konsolidasyonlar bırakır) → **smart money reversal** (HTF PD array'de sweep + MSS) → yükseliş bacağı: yoldaki eski konsolidasyonların/OB'lerin **ayna** gibi yeniden ziyareti (bunlar hedef ve ekleme yerleridir) → **tamamlanma**: orijinal konsolidasyona/likiditeye dönüş. Buy model = "düşüşten sonra önceki yüksek konsolidasyona geri dönüş". Kural: girişler reversal sonrası her yeniden-akümülasyon bölgesinde OB/FVG retest'i; hedef sıradaki eski konsolidasyon; nihai hedef orijinal konsolidasyon. Bu model, klasik modelin **çok bacaklı, hedef-zincirli** halidir; ekleme kuralları Bölüm 7.6'da.
+
+---
+
+## Bölüm 7 — Risk ve pozisyon yönetimi: stop, hedef, boyut, kısmi/BE/trailing, geçersizleşme
+
+### 7.1 Stop yerleşimi
+
+| Model | SL yeri | Not |
+|---|---|---|
+| OB girişi | OB'nin **fitil** ucunun birkaç tik/pip ötesi (gövde değil) | "1 pip ötesi" en sık tetiklenen hata; tampon şart |
+| FVG girişi | FVG'yi yaratan mumun (M2 veya M1) uç fitili ötesi; muhafazakâr: sweep ucunun ötesi | Silver Bullet: FVG mumunun ucu |
+| OTE / 2022 modeli | **Sweep fitilinin ötesi** + tampon | Yapısal geçersizleşme noktası |
+| Unicorn | Breaker'ın altı / FVG mumunun 10–20 pip altı | |
+| Rejection block | Fitil ucunun hemen ötesi | En dar stop |
+| Tampon | Spread + ~0,25–1,0 × ATR(14) (fxnx: 1,0×ATR; OTE öğreticileri 1×ATR); ICT rehber örnekleri FX 10–20 pip, endeks 5–10 tik, altın 50–100 sent | Enstrümana göre kalibre |
+
+Kurallar: **SL yapıdan türetilir; pozisyon büyüklüğü SL'den türetilir** ("size is derived from the structure, not the other way around"). Stop OTE hesabında 1.0'ın ötesindedir; 1.0 gövdeyle kırılırsa fikir geçersizdir. **Asla stopu geriye (riski büyütecek yönde) taşımayın.**
+
+### 7.2 Hedef seçimi
+
+Öncelik sırası: (1) **karşı likidite** — süpürülen aralığın karşı ucu, EQH/EQL, PDH/PDL, seans H/L; (2) **HTF PD array** — HTF FVG/OB'nin yakın kenarı; (3) **dış likidite (ERL)** — dealing range dışı havuz; (4) fib uzantıları −0.27 (T1), −0.62 (T2), −1.0, −2.0/−2.5, −4.0. İki sistem çakışıyorsa (ör. −1.0 ≈ PDH) hedef oradadır. **İç/dış alternasyonu:** fiyat ERL'den IRL'ye, IRL'den ERL'ye salınır → hedef "diğeri"dir.
+
+### 7.3 R:R ve pozisyon büyüklüğü
+
+$$
+R{:}R = \frac{TP - \text{Giriş}}{\text{Giriş} - SL}
+$$
+
+Minimum 1:2 (ictkillzone), tercihen ≥ 1:3 (2022 modeli, Silver Bullet).
+
+$$
+\text{Kontrat / Lot} = \frac{\text{Hesap} \times \text{Risk\%}}{\text{SL mesafesi (puan/pip)} \times \text{puan/pip başına değer}}
+$$
+
+**Örnek (ictkillzone):** 25.000 USD hesap, %1 risk = 250 USD; NQ'da 25 puan SL, 20 USD/puan → $250 / (25 \times 20) = 0{,}5$ kontrat → tam kontrat yerine 5 MNQ (2 USD/puan). **EURUSD örneği (Bölüm 2.8):** 10.000 USD hesap, %0,5 risk = 50 USD; SL 27,7 pip; standart lotta pip ≈ 10 USD → $50/(27{,}7 \times 10) = 0{,}18$ lot ≈ 18 mikro lot.
+
+**Risk çerçevesi:** işlem başına %0,5–1 standart, mutlak üst sınır %2 (yalnızca en yüksek kalite kurulum), prop hesaplarda %0,5 (norm %0,25–1). Günlük kayıp limiti %3–5; **art arda iki tam stop → gün biter**. Aynı anda açık toplam risk ≤ %5 (LuxAlgo). Günde en fazla 2–3 kurulum.
+
+**Beklenti örneği:** %40 kazanç × 3R − %60 × 1R = **+0,6R/işlem** (ictkillzone "≈0,8R" der; kendi hesabımız 0,6R — kaynağın rakamı muhtemelen farklı varsayımla). Bu sayılar örnek varsayımdır, ölçülmüş performans değil.
+
+### 7.4 Kısmi kâr, break-even ve trailing
+
+- **Kısmi kâr (yaygın ICT şablonu):** T1'de (yakın IRL / −0.27) %50 kapat, kalan %50'nin SL'ini **BE'ye** çek; T2 (ERL / −0.62 veya karşı likidite) tam kapat. Bazıları 3 parça (33/33/33: T1, T2, runner) veya **50/25/25** (T1'de %50, T2'de %25, kalan %25 runner structure trailing ile — Şekil 21'de kullanılan şablon). Kaynak iddiası (ictkillzone): yapıya göre yönetilen işlemlerde T1'e ulaşma %74, elle "erken oynanan"larda %39 (doğrulanmamış).
+- **BE'ye alma — ne zaman erken?** Kural: **T1'den önce BE yok** (yalnızca yapısal sebep varsa: yeni bir LTF swing low oluşmuşsa SL o low'un altına çekilebilir). ICT rehber kuralı: "BE at first internal pool; then trail." Erken BE, dağıtım bacağındaki normal geri çekilmelerde işlemden atılmaya yol açar; ICT çevresinde en çok bildirilen hata. İstisna: haber öncesi, seans sonu.
+- **Trailing:** (i) **structure trailing:** her onaylı yeni higher low'un (5m/15m, yeni BOS gövde kapanışıyla) altına, fitille alınmamak için tampon; (ii) **FVG trailing:** hareket yeni FVG'ler bıraktıkça SL en son FVG'nin altına (FVG'nin gövdeyle kapanması = çık); (iii) **OB trailing:** yeni oluşan bullish OB'lerin altına. **Trailing'i T1'den önce agresif başlatma.**
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/21_pozisyon_yonetimi.html" baslik="Pozisyon yönetimi adım adım: SL₀ → TP1'de %50 + BE → yeni HL'ler ve BOS'larla stop merdiveni → TP2'de %25 → runner trailing'de çıkar (≈ +2,5R)" no="21" yukseklik={560} />
+
+**Şekil 21 nasıl okunur.** Giriş 102,57'den itibaren stop merdiveni: SL₀ 101,90 → TP1'de %50 kapatılıyor, SL₁ = BE → HL1 oluşup yeni BOS gövdeyle geldikten sonra SL₂ HL1'in altına → TP2'de %25 kapatılıyor, SL₃ HL2 altı → SL₄ HL3 altı → kalan %25 (runner) trailing stop'ta çıkıyor. HL1/2/3 ve BOS etiketleri işaretli. Toplam ≈ +2,5R. Kural notu grafikte: "T1'den önce BE yok." Nereye bakılır: her stop yükseltmesinin *bir yapısal olaya* (yeni HL + BOS) bağlı olduğu, keyfî olmadığı.
+
+### 7.5 Geçersizleşme — SL'den önce çıkmak
+
+"Trade geçersizleşti" sinyalleri: (1) giriş FVG'si/OB'si **gövdeyle** karşı tarafa kapatıldı (IFVG/breaker'a döndü); (2) LTF'de **ters yönde MSS** + displacement; (3) fiyat bölgeye döndükten sonra beklenen pencere içinde (15–30 dk) hareket üretmedi ve pencere kapanıyor (zaman stopu); (4) HTF'de CHoCH; (5) 1.0 (sweep ekstremi) gövdeyle kırıldı; (6) DOL alındı ve ters sweep başladı. **Kural:** yapısal geçersizleşme görülüyorsa SL'in tetiklenmesini *bekleme*, kapat. ICT kuralı: "geçerli bir MSS başarısız olduysa yeniden girme — HTF okuma yanlıştı."
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/22_gecersizlesme_kaybeden_trade.html" baslik="Geçersizleşme — kaybeden işlem: giriş FVG'si gövdeyle kapatıldı (IFVG, ≈ −0,4R'de çık), ters MSS, SL −1R; yeniden girme yok" no="22" yukseklik={560} />
+
+**Şekil 22 nasıl okunur.** Şekil 19 ile aynı kurulum (giriş 102,57 FVG CE, SL 101,90) — bu kez çalışmıyor. Uyarı 1: giriş FVG'si gövdeyle kapatılıyor → IFVG; kural, SL beklemeden ≈ −0,4R'de kapatmayı söyler. Uyarı 2: LTF minör dip gövdeyle kırılıyor = ters MSS. Beklerseniz SL −1R'de tetiklenir. Sonrası: yeniden girme yok, günlük kayıp limiti sayacı bir artar. Nereye bakılır: iki uyarının SL'den *önce* geldiği — disiplinli çıkış −0,4R ile −1R arasındaki farkı yıl boyunca biriktirir.
+
+### 7.6 Ekleme (pyramiding)
+
+Yalnızca: (a) ilk pozisyon en az +1R'de ve SL en az BE'de; (b) yeni bir onaylı OB/FVG retest'i (aynı yönde; MMXM'deki yeniden-akümülasyon); (c) toplam risk yeni ekleme dahil başlangıç riskini geçmez (ekleme boyutu ≤ ilk pozisyonun %50'si — editoryal öneri); (d) tüm pozisyonun SL'i son yapısal seviyeye çekildi. Ters yönde "ortalama düşürme" **yasak**.
+
+<div class="not">
+  <span class="etiket">Neden yönetim, girişten önemli</span>
+  Bölüm 12'deki backtest'lerin ortak bulgusu: giriş sinyalinin isabeti (%50–56) tek başına maliyeti karşılamaz. Pozitif beklenti — varsa — kısmi kârın, yapısal trailing'in ve erken geçersizleşme çıkışının R-dağılımını sağa çekmesinden gelir. Şekil 21 ile 22'nin toplamı (+2,5R, −0,4R) bunun tek örneğidir; günlüğünüzde yüz örneğe ulaşınca kendi dağılımınızı görürsünüz.
+</div>
+
+---
+
+## Bölüm 8 — Canlı akış: bir işlem gününü izlemek, karar ağacı ve kontrol listeleri
+
+Bu bölüm dersin "ekranda ne görünce ne aramalıyım" cevabıdır. Önce günün ritmi, sonra kill zone içindeki karar ağacı, sonra giriş öncesi listeler.
+
+### 8.1 Seans öncesi hazırlık (10 dakika)
+
+1. **Günlük/H4:** son external swing çifti → dealing range çiz, EQ hesapla. Fiyat premium'da mı discount'ta mı?
+2. **HTF yapı:** son kırılım BOS mu MSS mi? → bias (bullish / bearish / nötr).
+3. **DOL:** en yakın süpürülmemiş ERL (PDH/PDL, PWH/PWL, EQH/EQL) hangi yönde? Bias ile uyumluysa "A sınıfı gün"; değilse bekle.
+4. **Zaman:** hangi kill zone'a giriliyor; haber (08:30 vb.) var mı?
+5. **LTF:** kill zone'a girmeden önce hangi minör likiditenin (Asya H/L, IDM) süpürülmesi beklenir?
+6. **Harita:** 1H/15m'de PDH/PDL, önceki seans H/L, EQH/EQL, 00:00 open, Asya aralığı, HTF FVG/OB — yatay çizgiler listesi.
+
+### 8.2 Bir işlem gününün dakika dakika izlenmesi (NY saati; TSİ yaz = +7)
+
+| NY | TSİ (yaz) | Ne yapıyorsun | Ne arıyorsun |
+|---|---|---|---|
+| Önceki akşam / 00:00 | 07:00 | Günlük ve 4H'da dealing range; premium/discount; DOL; 00:00 open çizgisi | Bias ve hedef havuz |
+| 20:00–00:00 (Asya) | 03:00–07:00 | Asya aralığının H/L'sini işaretle | Judas için yem seviyeleri |
+| 02:00–05:00 (Londra KZ) | 09:00–12:00 | Bias bullish ise Asya low / PDL altına **Judas** bekle | Sweep → displacement → 5m MSS → FVG retest = Londra girişi. Sweep olmadıysa not: "NY'da sweep beklenir" |
+| 08:30 haber / 09:30 açılış | 15:30 / 16:30 | Volatilite başlar; ilk 15–30 dk opening range / Judas | Fiyatı kovalama |
+| 10:00–11:00 (NY AM SB) | 17:00–18:00 | En yüksek olasılıklı pencere | Sweep → MSS → 1–5m FVG; %50'sine limit; SL FVG mumu ucu; hedef karşı likidite; ≈ 1:3 |
+| 10:00–12:00 (Londra kapanış KZ; 10–11 SB ile örtüşür, tabloda 11–12 kalan kısmı) | 17:00–19:00 | Ters harekete dikkat | Açık pozisyonda kısmi kâr / BE değerlendirmesi |
+| 12:00–14:00 (öğle) | 19:00–21:00 | Yeni giriş yok | — |
+| 14:00–15:00 (NY PM SB) | 21:00–22:00 | Öğleden sonra trendi ya sürer ya öğle aralığının süpürülmesiyle döner | Aynı setup |
+| 15:00–16:00 | 22:00–23:00 | MOC akışı | Yeni pozisyon açma; açıkları kapat/trail et |
+
+### 8.3 Karar ağacı — kill zone içinde
+
+1. Fiyat bir likidite seviyesine (PDH/PDL, EQH/EQL, Asya H/L, IDM) geldi mi? → **Hayır:** bekle, pre-position yok. **Evet:** 2.
+2. Fitil seviyeyi aştı, gövde geride kapandı mı? → **Hayır, gövde ötede kapandı ve devam ediyor:** liquidity run — yön o tarafa; DOL'u güncelle, karşı işlem yok. **Evet (sweep):** 3.
+3. Sweep bias ile uyumlu mu (bullish bias'ta SSL sweep'i arıyoruz)? → **Hayır:** sadece izle; kill zone'da counter-bias sweep Judas olabilir, bias'ı sorgula ama işlem açma. **Evet:** 4.
+4. Sweep'ten sonraki 1–3 mumda ters yönde displacement (gövde ≥ %60, ≥ 1,5× ortalama, FVG bıraktı) var mı? → **Hayır:** sweep "hâlâ manipülasyon devam ediyor" olabilir; yeni low'ları bekle. **Evet:** 5.
+5. LTF'de displacement, governing swing'i (ITH/ITL) gövde kapanışıyla kırdı mı (MSS)? → **Hayır:** bekle; sweep tek başına giriş değil. **Evet:** 6.
+6. Kırılım bacağında FVG/OB işaretle; premium/discount kontrolü (bullish girişte bölge, sweep low → MSS high aralığının %50 altında olmalı). Discount'ta değilse bekle, retrace derinleşsin.
+7. MSS bacağını fib ile ölç (sweep ucu 1.0 → MSS ucu 0). Fiyat OTE'ye (0.62–0.79) veya bacaktaki FVG/OB'ye döndü mü? → **Dönmeden gitti:** işlem kaçtı; kovalama yok. **Evet:** 8.
+8. Zaman kontrolü: kill zone / Silver Bullet / makro penceresi içinde miyiz? Değilsek beklenti düşür (bazı öğreticiler doğrudan "işlem yok" filtresi yapar).
+9. **Giriş:** limit OTE 0.705 / FVG CE / OB open-MT (kesişim). Stop sweep ucu ötesi + tampon. Hedef −0.27 / −0.62 / karşı ERL.
+
+### 8.4 Giriş öncesi kontrol listesi (≤ 30 saniye)
+
+| # | Soru | Evet/Hayır |
+|---|---|---|
+| 1 | HTF bias net (BOS dizisi veya HTF MSS) ve LTF sinyali aynı yönde mi? | |
+| 2 | Fiyat HTF dealing range'in bias lehine tarafında (bullish → discount)? | |
+| 3 | Anlamlı bir likidite havuzu **süpürüldü** (fitil ötede, gövde içeride) — hangi havuz, adını yaz? | |
+| 4 | Displacement FVG bıraktı mı? | |
+| 5 | LTF'de gövde kapanışlı **MSS** (governing swing kırıldı)? | |
+| 6 | Bölge discount/premium'da ve OTE ile örtüşüyor mu? | |
+| 7 | Bölge fresh mi (ilk test)? | |
+| 8 | Kill zone / makro penceresi içinde mi? | |
+| 9 | SL yapısal (sweep ucunun ötesi) ve R:R ≥ 1:2 (tercihen 1:3)? | |
+| 10 | DOL yolu temiz (giriş ile hedef arasında büyük karşı likidite yok)? | |
+| 11 | 15 dk içinde yüksek etkili haber var mı? | |
+| 12 | Günlük kayıp limitine yakın mıyım? | |
+
+ICT kaynaklarında dolaşan iki liste (8 maddelik "yapı-likidite" listesi ile 10 maddelik "blok-zaman" listesi) burada birleştirilmiştir. Eşik (editoryal öneri, ICT'nin resmî kuralı değil): 1–10 arasındaki maddelerden **yedi veya daha azı "evet" ise işlem yok**; 11 "evet" veya 12 "evet" ise işlem yok.
+
+### 8.5 "Ne görünce ne aramalıyım" — birleşik tablo
+
+| Ekranda gördüğün | Ne anlama gelir | Sonra ne ararsın | Yapma |
+|---|---|---|---|
+| Fitil PDL'nin altına, gövde üstte kapanıyor | SSL sweep (olası turtle soup) | 1–3 mumda displacement + FVG + LTF bullish MSS | Sweep'i görür görmez alma |
+| Gövde PDL'nin altında kapanıyor + büyük kırmızı mumlar | Liquidity run / bearish displacement | Aşağıdaki sonraki ERL; short için pullback | Karşı işlem |
+| Üç tepe aynı seviyede | EQH = BSL mıknatısı | Sweep bekle | Direnç sanıp short'lama |
+| Büyük yeşil mum, FVG bıraktı, önceki high'ı kapattı | MSS/displacement | Discount'a retrace, FVG/OB retest | Mumun tepesinden girme |
+| Yükseliş MSS'i ama bacakta FVG yok, küçük mumlar | Zayıf MSS, muhtemel inducement | Bekle; ITH mi STH mi kırıldı kontrol | MSS sayma |
+| Fiyat EQ üstünde ve bias bullish | Premium'da alım yok | Discount'a dönüş bekle | Premium'da alma |
+| Asya dar range, Londra açılışında açılışın altına hızlı düşüş | Judas swing (bullish bias'ta) | Asya L / SSL sweep + 5m MSS | Judas'ı short'lama |
+| Fiyat FVG'nin CE'sinde durdu, küçük gövdeli mumlar | Kısmi dolum → devam | 1m'de mini MSS / rejection | CE altına gövde kapanışına rağmen tutunma |
+| FVG'nin tamamı gövdeyle geçildi | IFVG oldu | Ters yönde retest | Aynı yönde ısrar |
+| OB gövdeyle kırıldı ve öncesinde sweep vardı | Breaker | Retest + LTF onay ters yönde | "OB tutar" diye ekleme |
+| Aynı bantta zıt iki FVG | BPR | Sonraki FVG yönünde retest | — |
+| Fiyat OTE'yi geçip 1.0'ı gövdeyle kırdı | Kurulum geçersiz | Yeni dealing range; bias sorgula | Stop bekleme |
+| Trend çizgisi 3+ temas, herkes çiziyor | Trendline liquidity | Kırılım değil sweep senaryosu | Kırılımı satma |
+| İlk pullback tepesi kırıldı ama POI'ye gelmedi | IDM alındı | POI'ye dokunuş + LTF onay | IDM'de giriş |
+| Kırılım FVG bırakmadan, küçük gövdelerle | Zayıf kırılım | Bekle | MSS sayma |
+| Setup 12:00–14:00 NY arasında | Düşük olasılık | Pencere bekle | Standart risk kullanma |
+
+### 8.6 Çoklu zaman dilimi ritmi (kaç dakikada bir bakılır)
+
+- **Günlük/H4:** bias, DOL, premium/discount — günde 1–2 kez.
+- **H1/15m:** dealing range, sweep tespiti, kill zone — seans içinde 15 dakikada bir.
+- **5m/1m:** MSS, FVG, OTE, giriş — *sadece sweep gerçekleştikten sonra* izlenir. Kural: **"LTF'ye ancak HTF olay olduysa in."**
+
+---
+
+## Bölüm 9 — Çoklu zaman dilimi: HTF bias → orta harita → LTF tetik
+
+| Katman | Zaman dilimi | Görev | Çıktı |
+|---|---|---|---|
+| Bias | Günlük + H4 | Dealing range, premium/discount, HTF PD array; **draw on liquidity** | "Bugün alıcıyım / satıcıyım / yokum" |
+| Harita | H1 + 15m | PDH/PDL, önceki seans H/L, EQH/EQL, 00:00 open, Asya aralığı, HTF FVG/OB; sweep tespiti; kill zone | Yatay çizgiler listesi |
+| Tetik | 5m / 3m / 1m | Sweep → MSS + displacement → FVG/OB → retest | Giriş, SL, TP |
+
+İki iç kural: (i) **LTF sinyali HTF bias ile aynı yönde değilse yok sayılır**; bias yoksa "yokum". (ii) "Swing tier'ı yapı grafiğinde (5–15m), kırılım kalitesi icra grafiğinde (1–5m) derecelendirilir" (ictkillzone) — ikisini aynı grafikte yapmak ya sahte sinyal ya geç giriş üretir.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/23_mtf_panel.html" baslik="Çoklu zaman dilimi paneli: H4 (dealing range/discount/DOL) → 15m (sweep + MSS + FVG/OB) → 5m (OTE bandı, giriş, SL, TP1/TP2)" no="23" yukseklik={600} />
+
+**Şekil 23 nasıl okunur.** Aynı işlemin (Şekil 17–19) üç katmanı yan yana. Sol: H4 dealing range, discount gölgesi, DOL oku. Orta: 15m sweep dairesi, MSS çizgisi, FVG/OB kutuları. Sağ: 5m OTE bandı, giriş oku, SL, TP1/TP2 kutuları. Panelin mesajı grafik başlığının altındaki notta: "LTF'ye ancak HTF olay olduysa inilir." Nereye bakılır: soldan sağa okuyun — her katman bir sonrakinin *ön koşulunu* üretiyor; sağdan sola okuyan (1m'de güzel FVG bulup H4'e bakan) trader, ters bias'ta işlem açar.
+
+---
+
+## Bölüm 10 — Araçlar ve ayarlar: PD array ailesinin geri kalanı, fib ayarları, indikatörler ve tuzakları
+
+### 10.1 Rejection block, propulsion block, volume imbalance, BPR
+
+- **Rejection Block (RB):** swing ucunda **uzun fitilli** mumun oluşturduğu blok. Bearish RB: swing high mumunun **gövde üstü → fitil ucu** aralığı; bullish RB: swing low mumunun **gövde altı → fitil ucu**. Genellikle bir sweep'ten sonra oluşur (fitil = süpürme). OB gövdeyle, RB **fitil boşluğuyla** çalışır. Giriş fitil bölgesinde, stop fitil ucunun hemen ötesinde (en dar stop); **fitil ucunun ötesine gövde kabulü** bloğu bitirir ve rolü tersine çevirir.
+- **Propulsion Block (PB):** bir OB'ye **dokunup** (fitille veya sığ gövdeyle) oradan **hemen** ters yönde güçlü hareket başlatan **tek mum**. PB, orijinal OB'nin "onaylanmış çocuğu"dur; genellikle daha küçüktür ve fiyat ona ikinci kez döndüğünde OB'den daha hassas giriş verir. Bölge = o mumun gövdesi. Stop PB'nin ötesinde, tercihen orijinal OB'nin ötesinde. Alternatif kullanım (grandalgo): FVG'yi yaratan orta mumun open–close gövdesi — ikincil.
+- **Volume Imbalance (VI):** ardışık iki mumun gövdeleri arasında boşluk, fitiller örtüşür; kapanış-açılış boşluğu olarak çizilir. En zayıf, en sık.
+- **Balanced Price Range (BPR):** bir bullish FVG ile bir bearish FVG'nin **örtüştüğü** fiyat bandı — piyasa aynı bölgeyi iki yönde de hızla geçmiştir. Yön: **sonra oluşan** FVG'nin yönü (önce bearish, sonra bullish FVG → bullish BPR, destek). Giriş BPR'nin örtüşme kenarında veya CE'sinde; BPR'nin gövdeyle karşı tarafa geçilmesi = geçersiz. Kaynaklara göre "en güçlü PD array" (ICTProTools, grandalgo, innercircletrader.net).
+
+**Öznel güç sıralaması** (ICT'nin çeşitli anlatımlarından derlenmiş, sayısal temeli yok): BPR ≈ Breaker+FVG (Unicorn) > FVG (özellikle displacement FVG'si) ≈ OB+FVG > OB > IFVG > MB > RB > VI.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/24_pd_array_ailesi_rb_pb_vi_bpr.html" baslik="PD array ailesinin geri kalanı (2×2): rejection block, propulsion block, volume imbalance, balanced price range" no="24" yukseklik={760} />
+
+**Şekil 24 nasıl okunur.** (a) Rejection block: swing high mumunun gövde üstü → fitil ucu bölgesi kutulanmış; retest'te short. (b) Propulsion block: OB'yi fitille test edip itki başlatan mumun gövdesi mor kutu; fiyat ikinci dönüşte PB'den giriş veriyor. (c) Volume imbalance: gövdeler arası boşluk, fitiller örtüşüyor — ince gri kutu. (d) BPR: önce bearish, sonra bullish FVG'nin örtüşmesi koyu mor + CE; retest'te long. Alt başlıkta öznel güç sıralaması. Nereye bakılır: her panelde bloğun *hangi mum parçasıyla* (gövde mi fitil mi, tek mum mu iki FVG mi) tanımlandığı.
+
+### 10.2 TradingView fib ayarları
+
+- Araç: Fib Retracement. Görünür seviyeler **0, 0.5, 0.62, 0.705, 0.79, 1** ve uzantı **−0.27, −0.62** (bazıları −0.5/−1/−2 ekler; bazıları 0.618 yazar — fark ihmal edilebilir). 0.236 ve 0.382 kaldırılır.
+- Anchor (bullish): sweep **low** (1.0) → MSS/displacement **high** (0). Araç aşağıdan yukarıya çekilir; OTE bandı fiyatın altında kalır.
+- Görsel: 0.5 düz çizgi; 0.62–0.79 gölgeli bant; 0.705 kalın kesikli; 1.0 "SL referansı"; −0.27 "T1", −0.62 "T2". FVG/OB kutusunun OTE bandıyla örtüşmesi = confluence, örtüşen alanı vurgulayın.
+- Long/Short Position aracı ile R:R kutusu çizin (Şekil 19'daki kutular).
+
+### 10.3 İndikatörler ve tuzakları
+
+LuxAlgo SMC (TradingView'da en çok kullanılan) ve benzerleri OB'yi "yapı kırılımından önceki son zıt mum" olarak, FVG'yi üç-mum kuralıyla, swing'i sabit lookback (varsayılan swing 50 bar / internal 5 bar) ile bulur. **Değerlendirmediği şeyler:** sweep, displacement kalitesi, premium/discount bağlamı, fresh durumu, zaman penceresi (volatilite filtresi ve auto-threshold dışında). Sonuç: ekran OB/FVG'yle dolar, çoğu geçersiz; internal CHoCH etiketleri her küçük geri çekilmede "yön değişti" der. LuxAlgo'nun kendi açıklaması: "bu öğretilerin geçerliliğine dair destekleyici veri yok". **Ders önerisi:** indikatörü yalnızca **aday** üretici olarak kullanın, her adayı Bölüm 8.4 listesinden geçirin. Repaint uyarısı: swing onayı için gereken bar sayısı nedeniyle CHoCH/OB etiketleri sonradan görünür; canlıda "o an ne biliyordum" testi yapın. Bölüm 12'deki gerçek veri grafikleri (Şekil 25–27) tam da bu mekanik tespitin neye benzediğini gösterir.
+
+---
+
+## Bölüm 11 — Tipik hatalar ve tuzaklar
+
+**Yapı ve likidite hataları**
+
+1. Her kırılımı MSS saymak (STH kırılımı = inducement).
+2. Fitil kırılımını yapı kırılımı sanmak — ya da tersini: sweep'i breakout sanıp kovalamak.
+3. Sweep olmadan MSS avlamak ("hikâye" yok).
+4. Fib'i yanlış yöne/yanlış bacağa çizmek (bearish'te de low→high çizmek OTE'yi ters çevirir).
+5. Fib'i rastgele tepe-dip arasına çizmek; bacak = son itki.
+6. Premium'da almak / discount'ta satmak.
+7. EQH'yi direnç sanıp önünde short'lamak (mıknatıs, bariyer değil).
+8. Aynı grafikte hem swing tier hem kırılım kalitesini okumak (sahte sinyal / geç giriş).
+9. HTF DOL yönüne karşı LTF kurulumu ("A sınıfı" değil); bias'sız 1m işlemi en düşük olasılık.
+
+**Blok hataları**
+
+10. Her zıt renkli mumu OB sanmak; konsolidasyon içindeki OB'ler gürültüdür — sweep + displacement + yapı kırılımı olmayan OB çizilmez.
+11. Sweep'i onaysız almak; ikinci, üçüncü sweep sık görülür.
+12. Fitil/gövde karışıklığı: bölgeler gövdeyle çizilir, stop fitile göre, geçersizleşme gövde kapanışıyla ölçülür.
+13. İkinci-üçüncü test OB'ye güvenmek (kaynak iddiası %74 → %41).
+14. Overfitting fib: 0.705'e limit koyup fiyat 0.68'den dönünce "kaçırdım", 0.82'ye gidince "stop oldum" — OTE bir **bant**tır, giriş bölgeyle (OB/FVG) desteklenmeli.
+15. SMC "kutuları"na körü körüne emir koymak; indikatöre teslim olmak (10.3).
+
+**Zaman ve yönetim hataları**
+
+16. Kill zone dışında (Asya ortası, NY öğle) kurulum zorlamak; kill zone'dan *önce* pozisyon almak.
+17. Haberde (08:30) sweep'i sinyal sanmak; spread/kayma.
+18. Yaz/kış saat kaymasında TSİ hesabını yanlış yapmak.
+19. 1 pip stop — tampon yok → spike ile atılıp doğru yönü kaçırma.
+20. Erken BE / erken trailing ile iyi işlemleri fitille kapattırmak.
+21. Aşırı işlem: kaynaklar 1–2 setup/gün önerir; her pencerede işlem zorunlu değil.
+
+**Bilişsel hatalar**
+
+22. Hindsight bias: bitmiş grafikte her sweep "açık"; canlıda sweep mi run mı ancak mum kapanışıyla belli olur.
+23. Repaint / hindsight çizim: sonradan görünen etiketlere göre "işlem yapmış" olmak.
+24. Terminoloji karmaşası: SMC "CHoCH" ile ICT "MSS"i aynı sanmak.
+
+---
+
+## Bölüm 12 — Kanıt ve eleştiri: gerçekten edge var mı?
+
+Bu bölüm dersin en önemli bölümüdür; grafiklerin son üçü de burada. Önce gerçek veri üstünde mekanik tespitin neye benzediğine bakalım, sonra literatürü tartalım.
+
+### 12.1 Gerçek veri üzerinde mekanik tespit
+
+Aşağıdaki üç grafik, dersteki tanımların **mekanik** (bağlamsız) uygulamasıdır (veri pencereleri scriptte tarih olarak pinlidir — EURUSD 20 Tem–19 Ağu 2026 içinden son 260 saatlik bar, altın 19 Haz–19 Ağu içinden son 220 bar, BTC 19 Kas 2025–19 Ağu 2026 içinden son 200 gün — böylece script yeniden koşsa da grafik ve bu paragraflardaki sayılar birbirini tutar; script ayrıca `ozet.json`'a aynı sayıları yazar): swing'ler $2k+1$ mum fraktalıyla, BOS/CHoCH onaylı swing'in gövde kapanışıyla aşılmasıyla, sweep "fitil ötede + gövde içeride" kuralıyla, FVG üç-mum kuralı + ATR filtresiyle, OB "son gövde-kapanışlı kırılımın bacağındaki son zıt renkli mumun gövdesi" tanımıyla bulunmuştur. Kill zone, HTF bias, sweep-öncesi hikâye gibi *filtreler yoktur*. Yani bir indikatörün göreceği şeyi görüyorsunuz.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/25_gercek_eurusd_1h_yapi.html" baslik="Gerçek veri — EURUSD 1h, 04–18 Ağustos 2026: 7-mum swing'ler, HH/HL/LH/LL, mekanik BOS/CHoCH ve sweep tespiti" no="25" yukseklik={560} />
+
+**Şekil 25 nasıl okunur.** 260 saatlik mum (yfinance EURUSD=X; hover'da UTC zaman damgası). 7-mum ($k=3$) swing'ler HH/HL/LH/LL etiketli; düz çizgi BOS, kesikli çizgi CHoCH, daire sweep. Tespit dizisi: BOS, CHoCH×3, BOS, sweep, BOS, sweep, CHoCH×3, sweep×5. Dikkat: mekanik CHoCH sayısı fazladır — her küçük geri çekilme "yön değişti" diyor. Bu, LuxAlgo eleştirisinin (10.3) canlı örneğidir ve "indikatör aday üretir, sen listeden geçirirsin" mesajını gerekçelendirir. Nereye bakılır: hangi CHoCH'ların ardından gerçekten displacement geldiği (az), hangilerinin sürünerek geçtiği (çok).
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/26_gercek_altin_1h_fvg_ob.html" baslik="Gerçek veri — Altın (GC=F) 1h, 05–19 Ağustos 2026 (UTC): mekanik FVG (boşluk ≥ 0,5×ATR) ve OB tespiti; mor/mavi = fresh, gri = gövdeyle geçilmiş" no="26" yukseklik={560} />
+
+**Şekil 26 nasıl okunur.** 220 mum. 3-mum FVG (FVG boşluğu, yani üst−alt ≥ 0,5×ATR14): mor = fresh, gri = gövdeyle geçilmiş (inverted). OB: son 10 gövde-kapanışlı kırılımın bacağındaki son zıt renkli mumun gövdesi; mavi = fresh, gri = gövdeyle geçilmiş. BOS/CHoCH etiketleri. Görüyorsunuz: 6 FVG ve 9 OB'nin çoğu gövdeyle geçilmiş — "OB/FVG'lerin çoğu ilk testte bitmiyor / kalabalık" ve "gap'ler her zaman dolmaz" tartışmasının gerçek görseli. Grafik altındaki not: "çoğu kutu aday — sweep/kill zone filtresi yok." Nereye bakılır: fresh kalan az sayıda kutunun nerede (bir sweep'ten sonra mı, displacement bacağında mı) oluştuğu.
+
+<GrafikEmbed src="/arastirma/smc-teknik-analiz/27_gercek_btc_gunluk_eqh_dealing_range.html" baslik="Gerçek veri — BTC-USD günlük, 30 Ocak–17 Ağustos 2026: EQH/EQL (≤ 0,15×ATR14; son 4 EQH + 4 EQL), sweep ✕ ve run, son ITH/ITL'den dealing range (EQ 64.568)" no="27" yukseklik={560} />
+
+**Şekil 27 nasıl okunur.** 200 günlük mum, 5-mum swing'ler. İki swing seviyesi farkı ≤ 0,15×ATR14 ise EQH/EQL çizgisi; 25 çift bulundu, aynı seviyenin tekrarları (üçlü/dörtlü eşit tepeler) tek çizgiye indirgenip **son 4 EQH + son 4 EQL** çizildi. Sonraki 40 günde fitil ötede + gövde içeride → sweep (daire + ✕); gövde ötede → "run"; etiketsiz çizgi = 40 günde test edilmedi (havuz duruyor — DOL adayı). Bu üretimde: EQH'lerden ikisi **run** (Nisan–Mayıs'taki 78–79 bin kümesi ve Temmuz'daki 64,6 bin — gövdeyle geçilip devam), biri **sweep** (Temmuz'daki 65,5 bin — fitil ötede, gövde içeride, ✕), biri test edilmemiş; EQL'lerden biri sweep (Temmuz sonu 63,7 bin), üçü test edilmemiş. Son ITH/ITL çiftinden dealing range: ITH 66.910 / ITL 62.227 / EQ 64.568; son kapanış discount'ta — yani bu tanıma göre günlük bias için "alım tarafı" aranır (tek başına sinyal değil). Sweep ve run örnekleri aynı grafikte yan yana: eşit tepelerin bir kısmı süpürülüp dönmüş, bir kısmı gövdeyle geçilip devam etmiş; sayılar üretim penceresine aittir. Nereye bakılır: EQH'nin "direnç" değil "hedef" olduğu (78–79 bin kümesi direnç sanılıp satılsaydı run'da stop olurdu); süpürme sonrası dönüşün *her zaman* gelmediği; test edilmemiş çizgilerin "bekleyen havuz" olarak haritada tutulması.
+
+<div class="not">
+  <span class="etiket">Not — gerçek grafikler yenilenir</span>
+  Şekil 25–27'nin veri pencereleri scriptte tarih olarak pinlidir (`GERCEK_PENCERE`); script yeniden koşunca aynı pencere çekilir ve yukarıdaki sayılar (BOS/CHoCH dizisi, FVG/OB adedi, dealing range seviyeleri) geçerli kalır. Pencere bilinçli olarak ileri alınırsa `ozet.json`'daki yeni sayılarla bu üç paragraf ve başlıklar birlikte güncellenir — "grafik yenilendi, metin eskidi" durumu böyle önlenir. Sentetik 25 grafik sabit tohumla birebir aynı çıkar. Yfinance'in başarısız olduğu durumda script gerçek grafiği atlar ve raporlar; sahte "gerçek" veri üretilmez.
+</div>
+
+### 12.2 Kanıta dayalı olan
+
+- **Stop kümelenmesi ve kaskad:** Osler 2003/2005 (RBS emir defteri; 15 dk ufkunda p&lt;0,001), yuvarlak sayı etkisi (Harris 1991; Bhattacharya, Holden & Jacobsen 2012 — yuvarlak sayı etrafında al-sat dengesizliği; Bourghelle-Cellier). "Likidite havuzu var ve süpürülür" önermesi sağlamdır.
+- **Gün içi volatilite kümelenmesi:** Wood-McInish-Ord 1985, Harris 1986, Andersen-Bollerslev 1997/98, Ito-Hashimoto 2006, Clifton-Plumb (RBA RDP 2007-04). Kill zone saatlerinde hareket olur — doğru.
+- **Emir dengesizliği fiyatı hareket ettirir:** Chordia-Roll-Subrahmanyam 2002 — displacement'ın gerekçesi.
+- **Kısa vadeli dönüş / likidite sağlama primi:** Nagel 2012 ve ilgili literatür.
+- **FVG'lerin bir kısmının kısmen görülmesi:** edgeful (YM vadeli, 6 ay): bullish FVG'lerin %60,7'si, bearish'lerin %63,2'si aynı seansta gövdeyle **dolmuyor** (fitille %52,4 / %50,4 dolmuyor); 30 dk FVG'ler "sweet spot", seans başına 3–5 setup. Yorum: "gap'ler dolar" mitine karşı kanıt; FVG'yi destek/direnç olarak kullanmanın kısmi desteği — ama işlem edge'i ölçmez.
+
+### 12.3 Kanıtı olmayan / spekülatif
+
+- Kasıtlı, merkezî bir "algoritma"nın (IPDA) retail'i avladığı; "kurum OB'de emir bıraktı" iddiası — hiçbir birincil veri (emir defteri, kurumsal akış) yok.
+- AMD/PO3'ün her gün tekrarlanan öngörülebilir bir dizi olduğu (test edilmemiş).
+- Fibonacci 0.62–0.79'un özel bir güç taşıdığı (hakemli kanıt yok; işi gören derin retracement + yakın stop geometrisidir).
+- Order block'un klasik arz/talep bölgesinden farklı bir şey olduğu; PD array güç sıralaması.
+- Kaynak iddiaları: OB ilk test %74 / ikinci %58 / üçüncü %41; Silver Bullet %55–65 (1:3); yapısal yönetimde T1 %74 vs elle %39 — tanıtım siteleri (ictkillzone, innercircletrader.net) tarafından metodoloji verilmeden yazılmıştır; bu derste "iddia" olarak anıldı.
+- ICT/SMC'nin bir *sistem* olarak kârlılığı: 34 kaynaklı bir literatür taramasında hiçbir hakemli çalışma SMC/ICT'yi doğrulamıyor (IndicatorEdge).
+
+### 12.4 Backtest bulguları
+
+| Çalışma | Kapsam | Bulgu |
+|---|---|---|
+| IndicatorEdge | Sweep + MSS + FVG mekanik kural, EURUSD 1 dk, 2019–2025 (~2,5 mn bar), 54 kural varyantı | En iyi isabet %56,3; **0,5 pip maliyet sonrası 54/54 negatif beklenti** |
+| MPM Research | FVG stratejisi, ES/NQ/GC/SI, 5m/15m/1H, 7 yıl; **eşleştirilmiş rastgele seviye** karşılaştırması ve dakika verisiyle çıkış | "Tepki gerçek, maliyet sonrası edge yok." En iyi kurgu (CE'de ret mumu bekle, sonraki barda gir, SL FVG'nin uzak kenarı) başabaşın 3–6 puan üstü; 18 konfigürasyondan **yalnızca biri** (GC 1H, 3R) pozitif ≈ 6 USD/işlem, sıfırdan ayırt edilemez |
+| edgeful | YM, 6 ay | Yukarıda: FVG'lerin ~%60'ı seans içinde gövdeyle dolmuyor |
+| fxnx | Deriv sentetik VIX endeksleri, 1.000 örnek H1/M15 + 500 H1 V75 | 50 barda dolum V75 %76, V100 %74, V10/V25 %82, Boom/Crash %32; V75'te CE'de kısmi dolum+ret %48, M1 fitiline kadar %29, inversion %23; tepki olasılığı 1–30 bar %74, 31–70 bar %51, 71+ bar %32; filtreler M2 > 1,5×ATR, SL M1 fitili + 1×ATR, CE girişi R:R'yi 1:1,8'den 1:3,2'ye çıkarır. **Uyarı:** sentetik endeks, gerçek emir akışı yok, genellenemez |
+| QuantumAlgo (Medium) | "2.600 işlem", 10 enstrüman | Çoğu retail kurgu %45–55 kazanma, profit factor &lt; 1,5; metodoloji sınırlı |
+| Vestinda | OB backtest | PF 1,13, yıllık ≈ %0,3 — pratikte sıfır |
+| Çeşitli türev kaynaklar | — | Gerçekçi isabet %50–65 (topluluğun iddia ettiği %70–80 değil) |
+
+### 12.5 Yapısal eleştiriler
+
+1. **Tanımların öznelliği** → tekrarlanabilir test zor; her başarısızlık "OB geçersizdi" ile açıklanabilir (**yanlışlanamazlık**). İki bağımsız araştırmacı aynı veride farklı sinyal çıkarır (Sentient Trading Society, "Dumb Money Concepts").
+2. **Mekanizma kanıtı yok:** IPDA / kurumsal emir bloğu için birincil veri sunulmamıştır; kurumsal icra VWAP/TWAP, dark pool, algoritmik parçalamadır.
+3. **Doğrulanabilir performans yok; survivorship ve seçici örnek:** ICT'nin işlem geçmişi denetlenmiş değildir; eğitim ekosistemi (500–5.000 USD kurslar; backtrex ve Sentient derlemeleri bazı "smart money" markalarının düzenleyici uyarı listelerine girdiğini yazar — bu derste ayrıca doğrulanmadı) sonuç ölçmeden gelir elde eder; topluluklarda kazananlar konuşur, kaybedenler sessizce ayrılır.
+4. **Yeniden etiketleme:** OB ≈ arz/talep, FVG ≈ boşluk, sweep ≈ spring/upthrust/turtle soup, dealing range ≈ değer alanı.
+5. **Kalabalıklaşma / edge decay:** LuxAlgo SMC TradingView'da #1 oldu; aynı OB/FVG'de biriken limit emirler önce kendini gerçekleştirir, sonra büyük oyuncular için hedef haline gelir.
+6. **Bileşen vs sistem tartışması:** tek bileşeni (ör. FVG) izole test edip "sıfır" bulmak, bileşenlerin etkileşimini (zaman + sweep + bias + yönetim) dışlar — ama bu savunma, testin *yapılmamasını* değil, *doğru yapılmasını* gerektirir; bugüne kadar tam sistemin bağımsız, maliyet-sonrası, eşleştirilmiş-benchmark'lı testi yayınlanmamıştır.
+7. **Hindsight / confirmation bias:** bitmiş grafikte her şey görünür; kurallar esnek olduğu için her sonuç "açıklanır".
+
+### 12.6 Dürüst hüküm
+
+- Yapı + likidite çerçevesi, *piyasa okumak* için tutarlı bir dil ve **kanıtlanmış mikroyapı gerçeklerine oturan** (stop kümesi, kaskad, seans volatilitesi, kısa vadeli dönüş) bir haritadır. Asıl faydası: **stopu kalabalığın stop koyduğu yere koymamak, seviyeleri hedef/mıknatıs olarak okumak, kırılımı gövde kapanışıyla doğrulamak, işlemi zaman penceresine bağlamak, R:R'yi geometriyle (yakın stop, uzak DOL) kurmak, boyutu yapıdan türetmek.**
+- Bir *sistem* olarak, mekanik uygulandığında maliyet sonrası edge gösterilememiştir. Edge — varsa — uygulayıcının seçiciliğinden (bağlam, bias, disiplin, yönetim) gelir ve **ölçülmesi gerekir**: kendi işlem günlüğü, en az 100 işlemlik forward test (1m için; en az 30–50 minimum), maliyet dahil, R-çarpanı dağılımı, **eşleştirilmiş rastgele seviye** karşılaştırması (aynı uzaklıkta rastgele seviyeye tepki).
+- Bu derste her iddia "kanıtlı / makul / spekülatif" etiketiyle sunuldu; **sayısal başarı oranı iddiası yazılmadı**. Sizin de yazmamanızı öneririz — ölçene kadar.
+
+---
+
+## Özet tablo — tüm sayısal sabitler
+
+| Kavram | Sabit / eşik | Not / kaynak |
+|---|---|---|
+| Swing high/low | 3 mum ($k=1$); orta mum ekstremi iki komşudan kesin büyük/küçük | ICT STH/STL; 5-mum ($k=2$) Williams fractal alternatif; 7-mum ($k=3$) gerçek grafiklerde |
+| ITH/ITL | STH'nin iki yanında daha alçak STH | ICT advanced structure |
+| LTH/LTL | ITH'nin iki yanında daha alçak ITH | " |
+| BOS/MSS geçerlilik | Gövde kapanışı (swing & internal); fractal fitil yeterli | edgeflo |
+| MSS zorunlu koşullar | 4: governing tier, displacement (+FVG), gövde kapanışı, sweep hikâyesi | ictkillzone |
+| Displacement | Gövde/aralık ≥ %60 (fitil ≤ %25); mum ≥ 1,5× önceki ortalama; M2 gövdesi > 1,5×ATR(14) | backtrex / ictkillzone / fxnx |
+| Equilibrium | 0.50 dealing range | premium &gt; 0.5, discount &lt; 0.5 |
+| ICT fib retracement | 0, 0.5, 0.62, 0.705, 0.79, 1.0 | OTE = 0.62–0.79, merkez 0.705; SMC türevi 0.618–0.786 |
+| Fib hedef uzantıları | −0.27, −0.62, −1.0, −2.0, −2.5, −4.0 | "std dev" projeksiyonları |
+| Fib çizim yönü | Bullish low→high; bearish high→low; bacak = son itki; fitil-fitil birincil | ICT |
+| OB bölgesi | Gövde (open–close); fitil = stop referansı; MT = gövdenin %50'si | ICT |
+| OB kriterleri | 5: sweep, displacement+FVG, yapı kırılımı, fresh, premium/discount | konsensüs + ICT |
+| CE | FVG'nin %50'si | ICT |
+| Equal highs toleransı | ICT'de sayı yok; operasyonel öneri ≤ %10–15 ATR(14) (BTC grafiğinde 0,15×ATR) | ders önerisi |
+| Trendline liquidity | ≥ 3 temas, H4/günlük görünürlük | LuxAlgo |
+| Turtle Soup (özgün) | Yeni 20-günlük dip; önceki 20g dip ≥ 4 seans önce; giriş önceki dip üstü buy-stop; stop yeni ekstrem altı | Connors & Raschke 1995 |
+| Osler stop kümelenmesi | ~%10 emir "00" seviyesinde; stop-buy 00'ın ~5 pip üstü (1,6605), stop-sell ~5 pip altı (1,6595); kaskad 15 dk ufuk p&lt;0,001 | Osler 2003/2005 |
+| Kill zone (NY) | Asya 20:00–00:00; Londra 02:00–05:00; NY AM 07:00–10:00 (türev 08:30–11:00); Londra kapanış 10:00–12:00; NY öğle 12:00–13:30/14:00 (kaçın); NY PM 13:30–16:00 | ±1 saat kaynak farkı |
+| Silver Bullet (NY) | 03:00–04:00; 10:00–11:00; 14:00–15:00 | 1 saatlik pencere; FVG pencere içinde |
+| Makro pencereler (NY) | Londra 02:33–03:00, 04:03–04:30; NY 08:50–09:10, 09:50–10:10, 10:50–11:10, 11:50–12:10, 13:10–13:40, 15:15–15:45 (ICT özgün); 14:50–15:10 yalnızca bazı türev kaynaklarda | 20–30 dk; TSİ = +7 yaz / +8 kış |
+| Günlük açılış (PO3) | 00:00 NY; 2022 modeli aralığı 00:00–03:00 NY | true day open |
+| Saat dönüşümü | NY→UTC +4 (yaz) / +5 (kış); NY→TSİ +7 (yaz) / +8 (kış); TSİ = UTC+3 sabit | ABD DST: Mart 2. Pazar – Kasım 1. Pazar |
+| Haftalık profil | Haftalık ekstrem çoğunlukla Pzt–Salı; Salı–Per azami genişleme | ICT weekly profiles |
+| Min. R:R | 1:2 (ictkillzone), 1:3 (2022 modeli, Silver Bullet) | |
+| Risk/işlem | %0,5–1 standart; %2 mutlak üst sınır; prop %0,25–1 (tipik %0,5) | ictkillzone |
+| Toplam açık risk | ≤ %5 | LuxAlgo |
+| Günlük kayıp limiti | %3–5; art arda 2 tam stop → dur; günde 2–3 kurulum | ictkillzone |
+| SL tamponu | Spread + 0,25–1,0×ATR(14); Unicorn 10–20 pip; rehber örnekleri FX 10–20 pip, endeks 5–10 tik, altın 50–100 sent | fxnx / LuxAlgo / ICT |
+| Kısmi kâr | T1'de %50, SL→BE; T2'de kalan (veya 33/33/33; Şekil 21: 50/25/25 + runner) | ictkillzone |
+| BE zamanlaması | T1'den önce BE yok (yapısal istisna) | ictkillzone / tradingstrategyguides |
+| Ekleme (editoryal) | ≤ ilk pozisyonun %50'si; yalnızca ≥ +1R ve SL ≥ BE | — |
+| OB test başarı (kaynak iddiası) | 1. test %74, 2. %58, 3.+ %41 | ictkillzone, doğrulanmamış |
+| Silver Bullet kazanma (kaynak iddiası) | %55–65 @ 1:3 | innercircletrader.net, doğrulanmamış |
+| Yönetim (kaynak iddiası) | T1'e ulaşma yapısal %74 vs elle %39 | ictkillzone, doğrulanmamış |
+| FVG dolmama (YM, seans içi) | Gövde: bullish %60,7 / bearish %63,2; fitil: %52,4 / %50,4 | edgeful |
+| V75 CE davranışı | %48 kısmi+ret, %29 derin, %23 inversion; tepki 1–30 bar %74, 31–70 %51, 71+ %32 | fxnx (sentetik) |
+| IndicatorEdge backtest | EURUSD 1m 2019–2025, 54 varyant, en iyi isabet %56,3; 0,5 pip sonrası 54/54 negatif | IndicatorEdge |
+| MPM: pozitif konfigürasyon | 1/18 (GC 1H 3R, ≈ 6 USD/işlem); en iyi kurgu başabaşın 3–6 puan üstü | MPM Research |
+| LuxAlgo SMC lookback | Swing 50 / internal 5 bar | indikatör varsayılanı |
+| Forward test eşiği | ≥ 100 kayıtlı setup (1m); ≥ 30–50 minimum | innercircletrader.net / LuxAlgo |
+| Beklenti örneği | %40 × 3R − %60 × 1R = +0,6R | varsayımsal |
+| Kontrol listesi eşiği (editoryal) | 10 maddeden ≤ 7 evet → işlem yok | ders önerisi |
+
+---
+
+## Sözlük
+
+| Terim | Açıklama |
+|---|---|
+| AMD / PO3 | Accumulation–Manipulation–Distribution; Power of Three. Bir dönemin birikim → sahte hareket → gerçek genişleme dizisi |
+| AMT | Auction Market Theory (Steidlmayer): değer alanı, kabul/ret, excess |
+| BE | Break-even; stopun giriş fiyatına çekilmesi |
+| BISI / SIBI | Bullish / bearish FVG'nin ICT adları (Buy-side Imbalance Sell-side Inefficiency / tersi) |
+| BOS | Break of Structure; trend yönünde gövde kapanışlı swing kırılımı |
+| BPR | Balanced Price Range; zıt yönlü iki FVG'nin örtüşmesi |
+| Breaker (BB) | Sweep sonrası gövdeyle kırılmış, rolü tersine dönmüş OB |
+| BSL / SSL | Buy-side / sell-side liquidity; tepelerin üstü / diplerin altındaki stop kümeleri |
+| CE | Consequent Encroachment; FVG'nin %50'si |
+| CHoCH | Change of Character; trend aleyhine ilk yapı ihlali (uyarı) |
+| CISD | Change in State of Delivery; 1m'de son karşı-renk mum serisinin open'ının geçilmesi (onay girişi) |
+| Dealing range | Son external swing low–high aralığı; EQ ile premium/discount'a bölünür |
+| Displacement | Büyük gövdeli, hızlı, FVG bırakan itki |
+| DOL | Draw on Liquidity; fiyatın çekildiği bir sonraki havuz; bias'ın yönü |
+| EQ | Equilibrium; dealing range'in %50'si |
+| EQH / EQL | Equal highs / lows; likidite mıknatısı |
+| ERL / IRL | External / Internal Range Liquidity; aralık dışı stoplar / aralık içi FVG-OB |
+| FVG | Fair Value Gap; 3-mum boşluğu |
+| HTF / LTF | Higher / lower time frame |
+| IDM | Inducement; POI'den önce duran yem swing |
+| IFVG | Inversion FVG; gövdeyle geçilip rolü tersine dönmüş FVG |
+| IPDA | Interbank Price Delivery Algorithm; ICT'nin çerçeve anlatısındaki varsayımsal algoritma (kanıtsız) |
+| ITH / ITL, LTH / LTL, STH / STL | Intermediate / long / short-term high-low; swing hiyerarşisi |
+| Judas swing | Seans başında bias'a ters sahte hareket; PO3'ün M aşaması |
+| Kill zone | ICT'nin yüksek olasılıklı zaman pencereleri |
+| Liquidity run | Seviyenin gövdeyle geçilip devam etmesi (sweep'in tersi) |
+| Liquidity void | Tek yönlü uzun mumların hızla geçtiği, az işlemli dikey aralık; FVG'nin büyük/çok mumlu hali, IRL (Şekil 03) |
+| Grey pool | Henüz süpürülmemiş EQH/EQL havuzu; DOL olarak kullanılır, tek başına sinyal değildir |
+| Makro (macro) pencereleri | ICT'nin 20–30 dakikalık "algoritma likidite arar" saat aralıkları (Londra 02:33–03:00, 04:03–04:30; NY 08:50–09:10 … 15:15–15:45) |
+| Opening / true gap | Fitiller de örtüşmeyen gerçek fiyat boşluğu (piyasa kapalıyken oluşur); likidite hedefi |
+| Strong / weak high (low) | Ardından LL (HH) gelmiş tepe (dip) = strong, kırılması yapıyı değiştirir; gelmemişse weak, kırılması beklenir (likidite hedefi) |
+| MB | Mitigation block; tutan OB'nin devam retest'i (V1) veya sweep'siz kırılım bloğu (V2) |
+| MMBM / MMSM | Market Maker Buy / Sell Model; beş aşamalı çok bacaklı model |
+| MSS | Market Structure Shift; sweep + displacement + gövde kapanışlı governing swing kırılımı |
+| MT | Mean Threshold; OB gövdesinin %50'si |
+| OB | Order Block; displacement'tan önceki son zıt renkli mumun gövdesi |
+| OTE | Optimal Trade Entry; fib 0.62–0.79, merkez 0.705 |
+| PB | Propulsion block; OB'yi test edip itki başlatan mum |
+| PD array | Premium/Discount array; OB, FVG, breaker, MB, RB, PB, BPR, VI ailesi |
+| PDH / PDL, PWH / PWL | Previous day / week high-low |
+| POI | Point of interest; işlem aranan bölge |
+| Premium / discount | EQ üstü (pahalı) / altı (ucuz) |
+| RB | Rejection block; swing ucundaki uzun fitil bölgesi |
+| Silver Bullet | 1 saatlik pencerelerde (03–04, 10–11, 14–15 NY) FVG modeli |
+| Sweep / stop hunt / raid / purge / turtle soup | Likidite seviyesinin fitille aşılıp gövdenin geride kapanması |
+| Trendline liquidity | 3+ temaslı çizgi boyunca dizilen stoplar |
+| True day open | 00:00 NY; PO3 referansı |
+| Unicorn | Breaker + FVG örtüşmesi |
+| VI | Volume imbalance; gövdeler arası boşluk |
+
+---
+
+## Kaynaklar
+
+**Birincil / özgün öğreti ve doğrudan türevleri**
+
+1. innercircletrader.net — ICT Fibonacci Settings: https://innercircletrader.net/tutorials/ict-fibonacci-levels/
+2. innercircletrader.net — ICT Kill Zones: https://innercircletrader.net/tutorials/master-ict-kill-zones/
+3. innercircletrader.net — Power of 3: https://innercircletrader.net/tutorials/ict-power-of-3/
+4. innercircletrader.net — Liquidity in Forex: https://innercircletrader.net/tutorials/liquidity-in-forex-trading/
+5. innercircletrader.net — Advanced Market Structure STH/ITH/LTH: https://innercircletrader.net/tutorials/ict-advance-market-structure/
+6. innercircletrader.net — Weekly Range Profiles: https://innercircletrader.net/tutorials/ict-weekly-range-profiles/
+7. innercircletrader.net — Macro times: https://innercircletrader.net/tutorials/ict-macro-time-based-strategy/ ; Silver Bullet: https://innercircletrader.net/tutorials/ict-silver-bullet-strategy/
+8. innercircletrader.net — 2022 model: https://innercircletrader.net/tutorials/complete-ict-trading-strategy-2022/ ; Mitigation Block: https://innercircletrader.net/tutorials/ict-mitigation-block-explained/ ; Breaker: https://innercircletrader.net/tutorials/ict-breaker-block-trading/ ; BPR: https://innercircletrader.net/tutorials/ict-balanced-price-range-bpr/ ; Unicorn: https://innercircletrader.net/tutorials/ict-unicorn-model/ ; Judas: https://innercircletrader.net/tutorials/ict-judas-swing-complete-guide/ ; MMBM/MMSM: https://innercircletrader.net/tutorials/ict-market-maker-buy-model/ , https://innercircletrader.net/tutorials/ict-market-maker-sell-model/ ; Rejection Block: https://innercircletrader.net/tutorials/ict-rejection-block/ ; FVG ailesi: https://innercircletrader.net/tutorials/fair-value-gap-trading-strategy/
+9. ictkillzone.com — MSS: https://www.ictkillzone.com/ict-mss ; Liquidity: https://www.ictkillzone.com/ict-liquidity ; Turtle Soup: https://www.ictkillzone.com/ict-turtle-soup ; Power of Three: https://www.ictkillzone.com/ict-power-of-three ; Order Block: https://www.ictkillzone.com/ict-order-block ; Breaker vs Mitigation: https://www.ictkillzone.com/ict-breaker-vs-mitigation ; Risk Management: https://www.ictkillzone.com/ict-risk-management ; OTE: https://www.ictkillzone.com/ict-ote ; Silver Bullet: https://www.ictkillzone.com/ict-silver-bullet
+10. tradingfinder.com — Dealing range: https://tradingfinder.com/education/forex/ict-dealing-range/ ; STH/ITH/LTH: https://tradingfinder.com/education/forex/ict-advance-market-structure-sth-ith-lth-stl-itl-ltl/ ; OB+FVG: https://tradingfinder.com/education/forex/trade-continuations-using-order-blocks/ ; 2022 model: https://tradingfinder.com/education/forex/ict-mentorship-2022-model/ ; Propulsion Block: https://tradingfinder.com/education/forex/ict-propulsion-block/ ; Rejection Block: https://tradingfinder.com/education/forex/ict-rejection-block/ ; Judas: https://tradingfinder.com/education/forex/ict-judas-swing/
+11. arongroups.co — Weekly Profiles: https://arongroups.co/technical-analyze/ict-weekly-profiles/ ; BPR: https://arongroups.co/technical-analyze/balanced-price-range-in-ict/
+12. investingbrokers.com — External vs Internal Range Liquidity: https://investingbrokers.com/ict-external-and-internal-range-liquidity/
+13. edgeflo.com — BOS body vs wick: https://www.edgeflo.com/blog/break-of-structure-trading
+14. LuxAlgo Library — Trendline Liquidity: https://www.luxalgo.com/library/concept/trendline-liquidity/ ; AMD: https://www.luxalgo.com/library/concept/accumulation-manipulation-distribution/ ; Turtle Soup: https://www.luxalgo.com/library/concept/turtle-soup/ ; Rejection Block: https://www.luxalgo.com/library/concept/rejection-block/ ; Judas Swing: https://www.luxalgo.com/library/concept/judas-swing/ ; Unicorn: https://www.luxalgo.com/blog/ict-unicorn-model-strategy-how-to-use/ ; SMC indikatörü: https://www.tradingview.com/script/CnB3fSph-Smart-Money-Concepts-SMC-LuxAlgo/ ; Propulsion Block: https://www.luxalgo.com/library/indicator/ict-propulsion-block/
+15. quantum-algo.com — SMC vs ICT: https://www.quantum-algo.com/blog/smc-vs-ict-concepts/
+16. Forex Factory (TFlab) — ICT market structure: https://www.forexfactory.com/thread/1343351-ict-based-market-structure-analysis-sth-ith
+17. Connors & Raschke, *Street Smarts* (1995) — Turtle Soup; özetler: https://www.netpicks.com/turtle-soup-fading-new-20-day-high-or-lows/ ; https://tradersmastermind.com/turtle-soup-trading-strategy-rules/
+18. tradingwyckoff.com (R. Villahermosa) — Wyckoff ↔ SMC: https://tradingwyckoff.com/en/smart-money-concepts/ ; opofinance — Wyckoff and SMC: https://blog.opofinance.com/en/wyckoff-and-smc/
+19. dailypriceaction — Order Blocks 3 rules: https://dailypriceaction.com/blog/order-blocks/
+20. Trading Strategy Guides — Breaker & Mitigation: https://tradingstrategyguides.com/day-12-breaker-blocks-mitigation-blocks-explained-ict-smc-deep-dive/ ; Risk: https://tradingstrategyguides.com/day-17-risk-management-in-ict-smc-trading-position-sizing-stop-loss-drawdown/ ; OTE: https://tradingstrategyguides.com/understanding-ict-optimal-trade-entry-ote/
+21. GhostTraders — ICT Block Types: https://ghosttraders.co/ict-block-types-for-smarter-trading/
+22. grandalgo — Silver Bullet: https://grandalgo.com/blog/ict-silver-bullet-strategy ; BPR: https://grandalgo.com/blog/balanced-price-range-bpr-explained ; Propulsion: https://grandalgo.com/blog/ict-propulsion-block-explained ; Judas: https://grandalgo.com/blog/ict-judas-swing-explained
+23. FXOpen — Silver Bullet: https://fxopen.com/blog/en/what-is-the-ict-silver-bullet-strategy-and-how-does-it-work/ ; EBC: https://www.ebc.com/forex/what-is-the-ict-silver-bullet-meaning-rules-and-examples
+24. XS.com — Propulsion Block: https://www.xs.com/en/blog/propulsion-block/ ; ICTProTools — BPR: https://ictprotools.com/guides/bpr-theory/
+25. LiteFinance — Rejection Block: https://www.litefinance.org/blog/for-beginners/what-is-ict-rejection-block/
+26. TTrades — Unicorn: https://ttrades.com/the-unicorn-entry-model-explained-breaker-blocks-and-fair-value-gaps/
+27. backtrex — MMXM: https://backtrex.com/en/blog/ict-market-maker-model-mmxm ; Displacement: https://backtrex.com/en/blog/ict-displacement-candle-market-concept ; SMC Guide (eleştiri): https://backtrex.com/en/blog/what-is-smart-money-concepts-trading ; FXNX MMBM: https://fxnx.com/en/blog/ict-mmbm-master-market-maker-buy-model-intraday-gains
+28. Liquidity Hunters glossary — OTE: https://liquidityhunters.cl/en/glossary/optimal-trade-entry/
+
+**Akademik / ampirik**
+
+29. Osler, C. L. (2003) "Currency Orders and Exchange Rate Dynamics: An Explanation for the Predictive Success of Technical Analysis", *Journal of Finance*; NY Fed Staff Report 125: https://www.newyorkfed.org/medialibrary/media/research/staff_reports/sr125.pdf
+30. Osler, C. L. (2005) "Stop-Loss Orders and Price Cascades in Currency Markets", *J. Int. Money & Finance* 24(2); NY Fed SR 150: https://www.newyorkfed.org/medialibrary/media/research/staff_reports/sr150.pdf ; https://www.sciencedirect.com/science/article/abs/pii/S0261560604001147
+31. Bhattacharya, U., Holden, C. W. & Jacobsen, S. (2012) "Penny Wise, Dollar Foolish: Buy–Sell Imbalances On and Around Round Numbers", *Management Science* 58(2), 413–431.
+32. Bourghelle & Cellier — "Limit Order Clustering and Price Barriers on Financial Markets: Evidence from Euronext": https://efmaefm.org/0efmameetings/efma%20annual%20meetings/2007-Austria/papers/0286.pdf
+33. Harris, L. (1991) "Stock Price Clustering and Discreteness", *Review of Financial Studies* 4(3), 389–415; Harris, L. (1986) "A Transaction Data Study of Weekly and Intradaily Patterns in Stock Returns", *J. Financial Economics* 16(1), 99–117; Wood, R. A., McInish, T. H. & Ord, J. K. (1985) "An Investigation of Transactions Data for NYSE Stocks", *J. Finance* 40(3), 723–739; Andersen, T. G. & Bollerslev, T. (1997) "Intraday Periodicity and Volatility Persistence in Financial Markets", *J. Empirical Finance* 4(2–3), 115–158, ve (1998) "Deutsche Mark–Dollar Volatility: Intraday Activity Patterns, Macroeconomic Announcements, and Longer Run Dependencies", *J. Finance* 53(1), 219–265; Ito, T. & Hashimoto, Y. (2006) "Intraday Seasonality in Activities of the Foreign Exchange Markets: Evidence from the Electronic Broking System", *J. Japanese & International Economies* 20(4), 637–664; Chordia, T., Roll, R. & Subrahmanyam, A. (2002) "Order Imbalance, Liquidity, and Market Returns", *J. Financial Economics* 65(1), 111–130; Nagel, S. (2012) "Evaporating Liquidity", *Review of Financial Studies* 25(7), 2005–2039; Clifton, K. & Plumb, M. (2007) "Intraday Currency Market Volatility and Turnover", RBA Research Discussion Paper 2007-04. (IndicatorEdge derlemesinde anılan çalışmalar; künyeler burada tamamlandı — sayfa numaraları/ciltler için yayıncı kayıtları esas alınmalıdır.)
+
+**Eleştirel derlemeler / backtest**
+
+34. IndicatorEdge — Smart Money Research: https://indicatoredge.io/smart-money-research
+35. MPM Research — "Does the Fair Value Gap Strategy Work?": https://mpmmarkets.com/research/does-the-fair-value-gap-strategy-work
+36. edgeful — FVG best practices (YM istatistikleri): https://www.edgeful.com/blog/posts/fair-value-gap-best-practices-guide
+37. FXNX — FVG Fill Rates on Volatility Indices: https://fxnx.com/en/blog/fair-value-gap-fill-rates-volatility-indices
+38. AlgoStorm — ICT & SMC evidence-based review: https://algostorm.com/ict-smc-realistic-overview/
+39. Sentient Trading Society — "Dumb Money Concepts and Backtest Limitations": https://medium.com/@SentientTradingSociety/dumb-money-concepts-and-stat-test-limitations-110dcd4b67cf
+40. QuantumAlgo (Medium) — "I Backtested 2,600 Trades Using SMC": https://medium.com/@QuantumAlgo/i-backtested-2-600-trades-using-smart-money-concepts-heres-what-actually-works-bb3c671098c6
+41. Vestinda — Order Blocks Backtesting: https://www.vestinda.com/academy/order-blocks-backtesting-strategies-for-high-performing-trades
+42. tradeciety — Stop hunting: https://tradeciety.com/stop-hunting-in-trading-exists ; round numbers: https://tradeciety.com/the-order-clustering-effect-around-round-numbers
+
+**Zaman/saat referansları**
+
+43. opofinance — ICT killzone times: https://blog.opofinance.com/en/ict-killzone-times/ ; writofinance — sessions: https://www.writofinance.com/trading-sessions-and-kill-zones/ ; liquidityscan — algorithmic day: https://liquidityscan.io/blog/ict-trading-sessions-explained-the-algorithmic-day-hour-by-hour
+
+**Grafik üretimi**
+
+44. `site/tools/ders_grafik/smc_grafikler.py` — deterministik sentetik seriler (tohumlu) + yfinance (EURUSD=X 1h, GC=F 1h, BTC-USD 1d; tarih pencereleri `GERCEK_PENCERE` ile pinli, sayılar `ozet.json`'a yazılır); ortak tespit fonksiyonları: `swingler(k)`, `swing_etiketle`, `orta_swingler`, `fvg_bul`, `yapi_olaylari`, `atr`; çıktı `site/public/arastirma/smc-teknik-analiz/`, ev stili `plotly_stil.py`.
