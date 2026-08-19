@@ -44,6 +44,8 @@ Kök klasörde ayrıca iki sarmalayıcı var, hepsini tek yerden yönetmek için
 | `guncelle.bat --hepsi --tam` | 7 hattın tamamı, ağır adımlar dahil |
 | `guncelle.bat --kur --hepsi` | her projeye `.venv` + `requirements.txt` (yeni bilgisayarda İLK adım) |
 | `guncelle.bat --kur tcmb fx` | yalnız seçilenleri kur |
+| `site.bat` | **siteyi aç** (npm install gerekiyorsa yapar, tarayıcıyı açar) |
+| `site.bat --derle` | üretim derlemesi (`npm run build`) |
 | `panel.bat` | menü: hangi pano? |
 | `panel.bat hazine` / `panel.bat fx` / `panel.bat site` | panoyu/siteyi aç (Ctrl+C kapatır) |
 | `panel.bat hazine --port 8060` | portu değiştir |

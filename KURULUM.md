@@ -75,6 +75,24 @@ Sonraki günlerde: **`guncelle.bat`** (pull) → `calistir.bat` → `push.bat`.
 
 **İlk deneme için `bat\tcmb-net-rezerv\`** — en basit ve en hızlı hat.
 
+## 5a. Siteyi yerelde açmak (en sık kullanacağınız)
+
+Kök klasördeki **`site.bat`** — çift tıklayın. Node/npm denetler, gerekiyorsa `npm install`
+çalıştırır, geliştirme sunucusunu başlatır ve tarayıcıyı **http://localhost:4321** adresinde
+açar. Kapatmak: pencerede **Ctrl+C**.
+
+```
+site.bat                 REM siteyi ac (varsayilan port 4321)
+site.bat --port 4400     REM port mesgulse
+site.bat --derle         REM uretim derlemesi (npm run build), sunucu acmaz
+site.bat --onizle        REM derlenmis siteyi sun
+site.bat --kur           REM yalniz npm install
+```
+
+macOS/Linux: `python3 site_baslat.py` (aynı seçenekler).
+Site **veri üretmez**; grafikleri `site/public/` altından okur. Yeni veri için önce
+`guncelle.bat`.
+
 ## 5b. Canlı panolar (dashboard)
 
 İki projenin interaktif panosu var. Panolar **veri üretmez**, üretilmiş veriyi okur —
@@ -84,7 +102,7 @@ Sonraki günlerde: **`guncelle.bat`** (pull) → `calistir.bat` → `push.bat`.
 |---|---|---|
 | `panel.bat hazine` | Hazine İhraç (Dash) — ihaleler, tahminler, filtreler | http://127.0.0.1:8050 |
 | `panel.bat fx` | FX Haber Endeksi (Streamlit) — endeks, manşetler, rejim | http://localhost:8501 |
-| `panel.bat site` | Sitenin kendisi (Astro dev) | http://localhost:4321 |
+| `panel.bat site` | Sitenin kendisi (Astro dev) — `site.bat` ile aynı | http://localhost:4321 |
 
 `bat\hazine-ihrac\panel.bat` ve `bat\fx-haber-endeksi\panel.bat` da aynı işi yapar.
 Port meşgulse: `panel.bat hazine --port 8060`. Kapatmak: pencerede **Ctrl+C**.
