@@ -4,7 +4,7 @@
 
 Kullanım:
   python guncelle.py                    # etkileşimli menü: hangileri, hafif/tam, commit?
-  python guncelle.py --hepsi            # 7 hattın hepsi (hafif mod)
+  python guncelle.py --hepsi            # 8 hattın hepsi (hafif mod)
   python guncelle.py tcmb reer          # yalnız bunlar
   python guncelle.py --hepsi --tam      # ağır adımlar dahil (FX GDELT+FinBERT, Hazine scraper)
   python guncelle.py --hepsi --commit   # bitince siteye kopyalanan çıktıları commit'le + push
@@ -26,8 +26,10 @@ Sözleşme:
   · Yorumlayıcı: her hat, klasöründe .venv varsa ONUN python'uyla koşar (bat/kur.bat ya da
     --kur bunu kurar); yoksa guncelle.py'yi çalıştıran python. Eskiden hep ikincisiydi → bat
     ile venv kurulan Windows'ta sistem python'u tcmb/pdfplumber'ı bulamıyor, ilk hat düşüyordu.
-  · EVDS anahtarı: TTO_EVDS_KEY ortam değişkeni → kök .evds_key → <proje>/.evds_key. Hatlar
-    kendi içinde de aynı sırayla arar; burada yalnız erken uyarı verilir.
+  · EVDS anahtarı — GERÇEK sıra (veri.py'nin uyguladığı): TTO_EVDS_KEY ortam değişkeni →
+    <proje>/.evds_key → kök/.evds_key → kardeş Aktarılacak Projeler/TCMBNetRezerv/.evds_key.
+    Burada yalnız erken uyarı verilir; ortam değişkeni ATANMAZ (atansaydı projeye özel
+    anahtar hiç okunmaz, fiilî öncelik veri.py'nin ilan ettiği sırayla çelişirdi).
   · Ev stili (site/tools/plotly_stil.py) her koşunun sonunda TEK KEZ uygulanır.
 """
 from __future__ import annotations
@@ -144,6 +146,14 @@ HATLAR: list[Hat] = [
         {"cikti/*.html": "*"},
         "tam kip: GDELT + FinBERT — ilk koşu saatler, sonrası dakikalar",
         panel=["-m", "streamlit", "run", "dashboard.py"]),  # Streamlit → http://localhost:8501
+    Hat("enflasyon", "Enflasyon Panosu", P / "Enflasyon", "enflasyon",
+        # veri.py EVDS'ten çeker (TTL'li önbellek), metrik.py momentum/çekirdek/
+        # katkı/dağılım/baz/reel faiz hesaplarını yapar ve EVDS'in kendi y/y
+        # serisiyle ÇAPRAZ DOĞRULAR (0,05 puan eşiği aşılırsa hat DURUR),
+        # grafik.py dokuz şekil üretir. Sıra bağlayıcıdır.
+        ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
+        {"cikti/*.html": "*", "uyarilar.json": "uyarilar.json"},
+        tarih_anahtarlari=("_tarih", "faiz_gun")),
     Hat("marj", "Yiyecek Hizmetleri Marjı", Path("Research/marj"), "yiyecek-hizmetleri-marj",
         ["src/web_cikti.py", "src/ozet_uret.py"],
         ["src/run_all.py", "src/web_cikti.py", "src/ozet_uret.py"],
@@ -157,17 +167,69 @@ def _renk(m, k):  # k: 32 yeşil, 31 kırmızı, 33 sarı, 36 camgöbeği
     return f"\033[{k}m{m}\033[0m" if sys.stdout.isatty() else m
 
 
-EVDS_HATLAR = {"tcmb", "usdtry", "reer", "yabanci", "marj"}
+EVDS_HATLAR = {"tcmb", "usdtry", "reer", "yabanci", "marj", "enflasyon"}
+# Liste sütun genişliği hat adlarından türetilir — yeni bir uzun ad eklendiğinde
+# hizalama sessizce bozulmasın ("enflasyon" 9 karakter, eski sabit 8'di).
+_AD_G = max(len(h.ad) for h in HATLAR) + 1
 
 
 def anahtar_uyar(secilen: list["Hat"]):
     if os.environ.get("TTO_EVDS_KEY"): return
+    # DİKKAT: burada TTO_EVDS_KEY ATANMAZ. Atansaydı kökteki dosya <proje>/.evds_key'i
+    # ezer ve hatların ilan ettiği arama sırası sessizce tersine dönerdi.
     if (KOK / ".evds_key").exists():
-        os.environ["TTO_EVDS_KEY"] = (KOK / ".evds_key").read_text(encoding="utf-8").strip(); return
-    eksik = [h.ad for h in secilen if h.ad in EVDS_HATLAR and not (KOK / h.klasor / ".evds_key").exists()]
+        return
+    # Enflasyon hattı bilinçli olarak KENDİ .evds_key'ini tutmaz: veri.py sırayla
+    # <proje>/.evds_key → kök/.evds_key → kardeş TCMBNetRezerv/.evds_key bakar.
+    # Bu kardeş dosya varsa hat düşmez; "eksik" listesine yazmak yanlış alarmdı.
+    kardes = KOK / "Aktarılacak Projeler" / "TCMBNetRezerv" / ".evds_key"
+    KARDESE_DUSENLER = {"enflasyon"}
+    eksik = [h.ad for h in secilen
+             if h.ad in EVDS_HATLAR
+             and not (KOK / h.klasor / ".evds_key").exists()
+             and not (h.ad in KARDESE_DUSENLER and kardes.exists())]
     if eksik:
         print(_renk(f"  [UYARI] EVDS anahtarı yok: {', '.join(eksik)} hatları düşecek. "
                     "Çözüm: kök klasöre .evds_key dosyası (tek satır anahtar) ya da TTO_EVDS_KEY ortam değişkeni.", 33))
+
+
+def yukseklik_denetimi(h: "Hat") -> str | None:
+    """cikti/yukseklikler.json ↔ MDX'teki GrafikEmbed yukseklik={} uyuşuyor mu?
+
+    Grafik yüksekliği panel sayısı, alt başlık satırı ve lejant satırından
+    türetiliyor; dipnot bir satır uzayınca figür yükselir ama MDX'teki sayı elle
+    yazıldığı için sessizce ayrışır ve iframe içinde grafik kırpılır. Bu denetim
+    o ayrışmayı GÖRÜNÜR yapar.
+    """
+    import json, re
+    y = KOK / h.klasor / "cikti" / "yukseklikler.json"
+    mdx = KOK / "site" / "src" / "content" / "projeler" / f"{h.slug}.mdx"
+    if not y.exists() or not mdx.exists():
+        return None
+    try:
+        bek = json.loads(y.read_text(encoding="utf-8"))
+        met = mdx.read_text(encoding="utf-8")
+    except Exception:
+        return None
+    sapan, yok = [], []
+    for blok in re.findall(r"<GrafikEmbed[^>]*?/>", met, re.S):
+        m_src = re.search(r'src="/projeler/[^/]+/([^"]+)"', blok)
+        m_yuk = re.search(r"yukseklik=\{(\d+)\}", blok)
+        if not m_src or not m_yuk:
+            continue
+        dosya, gercek = m_src.group(1), int(m_yuk.group(1))
+        if dosya not in bek:
+            yok.append(dosya)
+        elif int(bek[dosya]) != gercek:
+            sapan.append(f"{dosya}: MDX {gercek} ≠ üretim {int(bek[dosya])}")
+    if sapan or yok:
+        p = []
+        if sapan:
+            p.append("yükseklik SAPMASI — " + "; ".join(sapan))
+        if yok:
+            p.append("MDX'te var, üretimde yok: " + ", ".join(yok))
+        return " · ".join(p)
+    return None
 
 
 def _ozet_tarih(h: Hat) -> dict[str, str] | None:
@@ -226,6 +288,10 @@ def kos(h: Hat, tam: bool) -> tuple[bool, str, float]:
     # 3 hafta "✓" göründü, veri 03.08'de kaldı. Bu satır o hatayı yakalar.
     # Anahtarlardan HERHANGİ BİRİ ilerlemediyse uyarılır: bir hattın farklı
     # frekanslı çıktılarından biri donarken diğeri ilerleyebiliyor.
+    yuk = yukseklik_denetimi(h)
+    if yuk:
+        print(_renk(f"    [UYARI] {yuk}", 33))
+
     yeni_tarih = _ozet_tarih(h)
     y, e = _tarih_ozeti(yeni_tarih), _tarih_ozeti(eski_tarih)
     if yeni_tarih and eski_tarih:
@@ -282,7 +348,7 @@ def commit_push(secilen: list[Hat]):
 def menu() -> tuple[list[Hat], bool, bool]:
     print("\nHatlar:")
     for i, h in enumerate(HATLAR, 1):
-        print(f"  {i}. {h.ad:8s} {h.baslik:26s} {_renk(h.not_, 36) if h.not_ else ''}")
+        print(f"  {i}. {h.ad:{_AD_G}s} {h.baslik:26s} {_renk(h.not_, 36) if h.not_ else ''}")
     print("  0. hepsi")
     print("  (kurulum: --kur · canlı panel: --panel hazine|fx · yardım: --help)")
     sec = input("\nHangileri? (numara/ad, virgülle; boş = hepsi): ").strip()
@@ -312,7 +378,7 @@ def main():
 
     if a.liste:
         for h in HATLAR:
-            print(f"{h.ad:8s} {h.baslik:26s} hafif: {' → '.join(h.hafif)}")
+            print(f"{h.ad:{_AD_G}s} {h.baslik:26s} hafif: {' → '.join(h.hafif)}")
             if h.tam: print(f"{'':8s} {'':26s} tam  : {' → '.join(h.tam)}   ({h.not_})")
         return 0
 

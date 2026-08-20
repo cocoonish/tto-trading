@@ -35,7 +35,7 @@ jobs:
           python-version: '3.11'
 
       - name: Bağımlılıklar
-        run: pip install pandas numpy scipy plotly requests pdfplumber tcmb yfinance openpyxl xlrd matplotlib
+        run: pip install pandas numpy scipy statsmodels plotly requests pdfplumber tcmb yfinance openpyxl xlrd matplotlib
 
       # Secret eksikse ÖNDEN ve GÜRÜLTÜLÜ düş. Aksi halde EVDS'e giden üç adım
       # tek tek RuntimeError verir, continue-on-error onları yutar ve iş akışı
@@ -145,6 +145,32 @@ jobs:
           done
           python ozet_uret.py && cp ozet.json "$H/"
 
+      # Enflasyon panosu: EVDS3'ten TÜFE ağacı + ÖKTG + beklenti anketleri + AOFM
+      # (12 saat TTL'li önbellek). metrik.py, endeksten hesapladığı 12 aylık
+      # değişimi EVDS'in kendi y/y serisiyle (formulas=3) ÇAPRAZ DOĞRULAR ve
+      # 0,05 puan eşiği aşılırsa SystemExit ile düşer — yanlış sayı yayına
+      # gitmesin. Ağırlıklar EVDS'te yayımlanmadığı için zincir-Laspeyres
+      # kimliğinden tahmin edilir; kimlik artığı eşiği aşarsa katkı grafiği
+      # üretilmez (sessizce eski ağırlıkla üretmek yasak).
+      - name: Enflasyon panosu (EVDS → 3a/6a SAAR momentum, dokuz grafik)
+        id: enflasyon
+        continue-on-error: true
+        working-directory: Aktarılacak Projeler/Enflasyon
+        run: |
+          python veri.py
+          python metrik.py
+          python grafik.py
+          # Beklenen figür kümesi denetimi: grafik.py eksikte zaten çıkış 1 verir,
+          # bu satır ikinci savunma — `cp cikti/*.html` var olan dosyaları kopyalayıp
+          # "başarılı" bitmesin (eski grafik + taze metin = sessiz bayatlama).
+          n=$(ls cikti/*.html 2>/dev/null | wc -l | tr -d " ")
+          [ "$n" -eq 9 ] || { echo "::error::Enflasyon: cikti/ içinde $n HTML var, 9 bekleniyor — kopyalama yapılmadı."; exit 1; }
+          H="../../site/public/projeler/enflasyon"
+          mkdir -p "$H"
+          cp cikti/*.html "$H/"
+          cp uyarilar.json "$H/"
+          python ozet_uret.py && cp ozet.json "$H/"
+
       # Marj hattı: EVDS'ten TÜFE/Yi-ÜFE (24 saat TTL'li önbellek), MEDAS ham dosyaları
       # depodadır (Playwright hasadı CI'da yok — hasat_dene başarısız olursa eski ham
       # dosyayla devam eder ve uyarı basar). Analiz dönemi veri.son_ay() ile TÜFE'nin
@@ -187,6 +213,7 @@ jobs:
           REER:${{ steps.reer.outcome }}
           Yabanci:${{ steps.yabanci.outcome }}
           Hazine:${{ steps.hazine.outcome }}
+          Enflasyon:${{ steps.enflasyon.outcome }}
           Marj:${{ steps.marj.outcome }}"
           hata=0
           echo "### Veri hattı durumu" >> "$GITHUB_STEP_SUMMARY"
