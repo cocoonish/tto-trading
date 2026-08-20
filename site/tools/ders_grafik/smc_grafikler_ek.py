@@ -621,10 +621,10 @@ def g35_acilis_capalari():
 
 
 # =====================================================================================
-# 36 — NWOG: anatomi (sol) ve NWOG yığını (sağ)
+# 36 — NWOG: anatomi (üst panel) ve NWOG yığını (alt panel)
 # =====================================================================================
 def g36_nwog():
-    # --- sol: Cuma 14:00 → Pazartesi 12:00, 1 saatlik
+    # --- üst panel: Cuma 14:00 → Pazartesi 12:00, 1 saatlik
     s = Seri(36, baslangic=99.86, birim=0.045)
     s.bacak(100.00, 3, gurultu=0.5, lab="Cuma 16:59 kapanış")
     s.mum(100.42, 100.52, 100.40, 100.48, "Pazar 18:00 açılış")     # boşluk
@@ -647,11 +647,13 @@ def g36_nwog():
     b = s2.df(); nb = len(b)
     nwoglar = [(4, 98.72, 98.92), (9, 99.15, 99.34), (14, 99.98, 100.16), (19, 99.70, 99.88), (24, 100.55, 100.78)]
 
-    fig = make_subplots(rows=1, cols=2, column_widths=[0.5, 0.5], horizontal_spacing=0.09,
+    # Paneller ALT ALTA: makale sütununda her panel tam genişlik alır.
+    # İki panel farklı seri/zaman kurgusu → shared_xaxes YOK, her panel kendi x ekseniyle.
+    fig = make_subplots(rows=2, cols=1, row_heights=[0.5, 0.5], vertical_spacing=0.10,
                         subplot_titles=("(a) NWOG anatomisi: Cuma 16:59 kapanış → Pazar 18:00 açılış",
                                         "(b) NWOG yığını: son 5 hafta sonu boşluğu ve CE'leri"))
     fig.add_trace(mum_izi(a, ad="1 saatlik mum"), row=1, col=1)
-    fig.add_trace(mum_izi(b, ad="günlük mum", gorunur=False), row=1, col=2)
+    fig.add_trace(mum_izi(b, ad="günlük mum", gorunur=False), row=2, col=1)
     # (a)
     fig.add_vrect(x0=i_fri + 0.5, x1=i_sun - 0.5, fillcolor=rgba(GRI, 0.16), line_width=0, layer="below", row=1, col=1)
     not_(fig, (i_fri + i_sun) / 2, 101.15, "hafta sonu:<br>işlem YOK", renk=GRI, ok=False, boyut=9, row=1, col=1)
@@ -679,28 +681,28 @@ def g36_nwog():
     # (b)
     for j, (i0, lo, hi) in enumerate(nwoglar):
         a_ = 0.10 + 0.045 * j
-        kutu(fig, i0, nb - 1, lo, hi, GRI, a=a_, cizgi=0.8, row=1, col=2)
-        yatay(fig, (lo + hi) / 2, i0, nb - 1, renk=MUREKKEP, dash="dot", w=1.0, row=1, col=2)
+        kutu(fig, i0, nb - 1, lo, hi, GRI, a=a_, cizgi=0.8, row=2, col=1)
+        yatay(fig, (lo + hi) / 2, i0, nb - 1, renk=MUREKKEP, dash="dot", w=1.0, row=2, col=1)
     for i0, lo, hi in nwoglar[-3:]:
         pass
     for i, y in ((17, 100.07), (23, 99.79), (33, 100.66)):
-        daire(fig, i, y, r_x=0.9, r_y=0.20, row=1, col=2)
-    not_(fig, 17, 100.07, "CE'ye dönüş → tepki", renk=ALTIN, ax=-55, ay=-40, row=1, col=2)
-    not_(fig, 23, 99.79, "içinden geçti (tepkisiz)", renk=ALTIN, ax=60, ay=42, row=1, col=2)
-    not_(fig, 33, 100.66, "kenarda konsolidasyon", renk=ALTIN, ax=-70, ay=-38, row=1, col=2)
+        daire(fig, i, y, r_x=0.9, r_y=0.20, row=2, col=1)
+    not_(fig, 17, 100.07, "CE'ye dönüş → tepki", renk=ALTIN, ax=-55, ay=-40, row=2, col=1)
+    not_(fig, 23, 99.79, "içinden geçti (tepkisiz)", renk=ALTIN, ax=60, ay=42, row=2, col=1)
+    not_(fig, 33, 100.66, "kenarda konsolidasyon", renk=ALTIN, ax=-70, ay=-38, row=2, col=1)
     not_(fig, nb - 1, 100.78, "en yakın ALINMAMIŞ CE<br>= birincil DOL", renk=MUREKKEP, ok=False, boyut=9,
-         xanchor="right", ay=-24, row=1, col=2)
+         xanchor="right", ay=-24, row=2, col=1)
     not_(fig, 1, 97.42, "Her boşluk çalışmaz. Doldurma oranı için ICT<br>kaynaklarında sayı YOKTUR; edgeful "
          "ölçümünde<br>bullish FVG'lerin %60,7'si aynı seansta gövdeyle<br>dolmuyor — açılış boşlukları FVG'nin özel "
-         "hâlidir.", renk=GRI, ok=False, boyut=9, xanchor="left", yanchor="bottom", row=1, col=2)
-    fig.update_yaxes(range=[97.3, 102.5], row=1, col=2)
+         "hâlidir.", renk=GRI, ok=False, boyut=9, xanchor="left", yanchor="bottom", row=2, col=1)
+    fig.update_yaxes(range=[97.3, 102.5], row=2, col=1)
     lejant(fig, "NWOG bandı (işlem görmemiş fiyat)", GRI, a=0.3)
     lejant_cizgi(fig, "CE %50 — en tepkili nokta", MUREKKEP, "dash")
     duzen(fig, "Şekil 22 — New Week Opening Gap (NWOG): anatomi ve yığın (şematik örnek)",
           "NWOG = Cuma 16:59 NY kapanışı ile Pazar 18:00 NY açılışı arası. En az 4, uygulamada 8–10 eski boşluk saklanır. "
           "SMC'nin en az öznel aracı: saat ve fiyat sabit, iki trader aynı kutuyu çizer",
-          y_baslik="fiyat (şematik birim)", x_baslik="", h=660)
-    fig.update_xaxes(title_text="gün", row=1, col=2)
+          y_baslik="fiyat (şematik birim)", x_baslik="", h=860)
+    fig.update_xaxes(title_text="gün", row=2, col=1)
     _kaydet(fig, "22_nwog_anatomi_yigin")
 
 
@@ -890,10 +892,13 @@ def g39_gercek_smt():
     ja, jb = a0 - i0, b0 - i0
     jga, jgb = ga0 - i0, gb0 - i0
 
-    fig = make_subplots(rows=2, cols=2, column_widths=[0.60, 0.40], vertical_spacing=0.17, horizontal_spacing=0.10,
+    # 2×2 ızgara ALT ALTA açıldı; satırlar anlam öbeğine göre sıralanır:
+    # üst blok = tek örnek (1 EUR/USD · 2 GBP/USD, aynı zaman ekseninde bitişik),
+    # alt blok = tüm örneklemin ölçümü (3 MFE çubukları · 4 örneklem kutusu).
+    fig = make_subplots(rows=4, cols=1, row_heights=[0.29, 0.29, 0.21, 0.21], vertical_spacing=0.06,
                         subplot_titles=(f"EUR/USD 1 saatlik — {dE.ts[0]:%d %b %Y} – {dE.ts[nE-1]:%d %b %Y}",
-                                        "24 saatlik ileri hareket (medyan, pip)",
                                         "GBP/USD 1 saatlik — aynı zaman ekseni",
+                                        "24 saatlik ileri hareket (medyan, pip)",
                                         "Örneklem (2 yıl, 1 saatlik)"))
     fig.add_trace(mum_izi(Ex, ad="EURUSD 1h", hover_ek=[f"{t:%Y-%m-%d %H:%M}" for t in dE.ts]), row=1, col=1)
     fig.add_trace(mum_izi(Gx, ad="GBPUSD 1h", hover_ek=[f"{t:%Y-%m-%d %H:%M}" for t in dE.ts]), row=2, col=1)
@@ -909,14 +914,17 @@ def g39_gercek_smt():
         not_(fig, jb_, df.l[jb_], f"<b>{et}</b><br>{df.l[jb_]:.5f} ({fark:.1f} pip)", renk=renk, ax=-70, ay=52, row=r, col=1)
         fig.add_vline(x=jb_, line=dict(color=MUREKKEP, width=1.1, dash="dash"), row=r, col=1)
     tik = list(range(0, nE, max(1, nE // 6)))
-    fig.update_xaxes(tickvals=tik, ticktext=["" for _ in tik], row=1, col=1)
+    # iki mum paneli artık bitişik ve GERÇEKTEN aynı zaman ekseninde (aynı dE
+    # indeksi); matches ile bağlanır, ama her biri kendi tarih etiketlerini taşır.
     fig.update_xaxes(tickvals=tik, ticktext=[dE.ts[i].strftime("%d %b %H:%M") for i in tik],
-                     tickfont=dict(size=9), row=2, col=1)
+                     tickfont=dict(size=9), row=1, col=1)
+    fig.update_xaxes(tickvals=tik, ticktext=[dE.ts[i].strftime("%d %b %H:%M") for i in tik],
+                     tickfont=dict(size=9), matches="x", row=2, col=1)
     fig.update_yaxes(tickformat=".4f", title_text="EUR/USD", row=1, col=1)
     fig.update_yaxes(tickformat=".4f", title_text="GBP/USD", row=2, col=1)
     not_(fig, nE - 1, Ex.h.max(), f"<b>BULLISH SMT</b> — {dE.ts[jb]:%d %b %Y %H:%M} (UTC)",
          renk=MUREKKEP, ok=False, boyut=11, xanchor="right", ay=-4, row=1, col=1)
-    # sağ üst: medyan MFE karşılaştırması
+    # row 3: medyan MFE karşılaştırması
     med = lambda v: float(np.median(v)) if len(v) else float("nan")
     gruplar = [("SMT\n(GBP dibi korudu)", [x[1] for x in smt], TEAL),
                ("teyit\n(ikisi de LL)", [x[1] for x in teyit], GRI),
@@ -925,10 +933,13 @@ def g39_gercek_smt():
                          marker_color=[rgba(g[2], 0.55) for g in gruplar],
                          marker_line=dict(color=[g[2] for g in gruplar], width=1.2),
                          text=[f"{med(g[1]):.0f} pip" for g in gruplar], textposition="outside",
-                         showlegend=False), row=1, col=2)
-    fig.update_yaxes(title_text="medyan MFE, 24 saat (pip)", row=1, col=2)
-    fig.update_xaxes(tickfont=dict(size=9), row=1, col=2)
-    # sağ alt: örneklem ve korelasyon kutusu
+                         showlegend=False), row=3, col=1)
+    # dikey dizilimde panel alçaldı; "outside" çubuk etiketleri üstteki panel
+    # başlığına girmesin diye tepeye pay bırakılır
+    fig.update_yaxes(title_text="medyan MFE, 24 saat (pip)",
+                     range=[0, max(med(g[1]) for g in gruplar) * 1.22], row=3, col=1)
+    fig.update_xaxes(tickfont=dict(size=9), row=3, col=1)
+    # row 4: örneklem ve korelasyon kutusu
     metin = (f"Ortak bar: <b>{len(m):,}</b> (1 saatlik)<br>"
              f"Dönem: {m.ts.iloc[0]:%d %b %Y} – {m.ts.iloc[-1]:%d %b %Y}<br><br>"
              f"EURUSD'de LL yapan swing dibi: <b>{len(smt)+len(teyit)}</b><br>"
@@ -943,25 +954,28 @@ def g39_gercek_smt():
              f"{med([x[1] for x in net]):.0f} pip,<br>GBPUSD medyanı {med([x[2] for x in net]):.0f} pip.<br><br>"
              f"<i>n = {len(net)} çok küçük bir örneklem; bu bir çürütme<br>değil, "
              f"'ölçmeden kullanma' ilkesinin somut hâlidir.</i>".replace(",", "."))
-    temiz_eksen(fig, row=2, col=2, x=[0, 1], y=[0, 1])
-    fig.add_annotation(x=0.02, y=0.98, xanchor="left", yanchor="top",
+    temiz_eksen(fig, row=4, col=1, x=[0, 1], y=[0, 1])
+    # tam genişlikte panelde kutu ortalanır (metin içi sola dayalı kalır)
+    fig.add_annotation(x=0.5, y=0.98, xanchor="center", yanchor="top",
                        text=metin, showarrow=False, align="left", font=dict(size=10, color=MUREKKEP),
                        bgcolor="rgba(255,255,255,0.9)", bordercolor=GRI, borderwidth=0.8, borderpad=6,
-                       row=2, col=2)
+                       row=4, col=1)
     duzen(fig, "Şekil 14 — Gerçek veri: EUR/USD ↔ GBP/USD SMT divergence ve iki yıllık ölçümü",
           "Kural: 11-mum (k=5) fraktal swing dipleri; EURUSD önceki dibini kırıp GBPUSD kırmıyorsa SMT. "
-          "Sol panellerde tek bir örnek, sağda aynı kuralın tüm örneklem üzerindeki ölçümü — "
+          "EUR/USD ve GBP/USD panellerinde tek bir örnek, diğer iki panelde aynı kuralın tüm örneklem üzerindeki ölçümü — "
           "yalnız mekanik, bağlam (bias, kill zone) yok",
-          x_baslik="", h=880)
-    fig.update_layout(margin=dict(t=118, b=120), legend=dict(y=-0.10))
+          x_baslik="", h=1380)
+    fig.update_layout(margin=dict(t=118, b=120), legend=dict(y=-0.07))
+    fig.update_xaxes(title_text="tarih (UTC; hover'da saat)", row=1, col=1)
     fig.update_xaxes(title_text="tarih (UTC; hover'da saat)", row=2, col=1)
     fig.update_yaxes(title_text="EUR/USD", row=1, col=1)
     fig.update_yaxes(title_text="GBP/USD", row=2, col=1)
-    fig.update_yaxes(title_text="medyan MFE, 24 saat (pip)", row=1, col=2)
-    fig.update_yaxes(title_text="", showticklabels=False, row=2, col=2)
-    fig.update_xaxes(title_text="", row=1, col=1)
-    fig.update_xaxes(title_text="", row=1, col=2)
-    fig.update_xaxes(title_text="", showticklabels=False, row=2, col=2)
+    fig.update_yaxes(title_text="medyan MFE, 24 saat (pip)", row=3, col=1)
+    # duzen() tüm eksenlere ızgara açar; metin kutusu paneli yeniden temizlenir
+    # (tam genişlikte panelde ızgara çizgileri kutunun arkasında görünür oluyordu)
+    fig.update_yaxes(title_text="", showticklabels=False, showgrid=False, zeroline=False, row=4, col=1)
+    fig.update_xaxes(title_text="", row=3, col=1)
+    fig.update_xaxes(title_text="", showticklabels=False, showgrid=False, zeroline=False, row=4, col=1)
     OZET.update(smt_bar=len(m), smt_donem=f"{m.ts.iloc[0]:%d %b %Y} – {m.ts.iloc[-1]:%d %b %Y}",
                 smt_ll_olay=len(smt) + len(teyit), smt_n=len(smt), smt_teyit_n=len(teyit), smt_net_n=len(net),
                 smt_med_mfe=round(med([x[1] for x in smt]), 1), smt_teyit_med_mfe=round(med([x[1] for x in teyit]), 1),
@@ -1012,33 +1026,35 @@ def g40_haftanin_gunu():
         return
     n_ort = int(np.mean([s["n"] for s in sonuc]))
     se = 100 * np.sqrt(0.2 * 0.8 / n_ort)
-    fig = make_subplots(rows=1, cols=2, horizontal_spacing=0.09,
+    # Paneller ALT ALTA (aynı gün kategorileri, ama iki ayrı ölçüm → shared_xaxes YOK,
+    # her panel kendi gün etiketlerini taşır).
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.10,
                         subplot_titles=("(a) Haftalık HIGH hangi gün oluştu? (tam haftaların %'si)",
                                         "(b) Haftalık LOW hangi gün oluştu? (tam haftaların %'si)"))
-    for c, anahtar in ((1, "hi"), (2, "lo")):
+    for r, anahtar in ((1, "hi"), (2, "lo")):
         for s in sonuc:
             fig.add_trace(go.Bar(x=gunler, y=s[anahtar], name=f"{s['ad']} (n={s['n']})",
                                  marker_color=rgba(s["renk"], 0.55),
                                  marker_line=dict(color=s["renk"], width=1.0),
-                                 legendgroup=s["ad"], showlegend=(c == 1)), row=1, col=c)
-        fig.add_hline(y=20, line=dict(color=MUREKKEP, width=1.4, dash="dash"), row=1, col=c)
+                                 legendgroup=s["ad"], showlegend=(r == 1)), row=r, col=1)
+        fig.add_hline(y=20, line=dict(color=MUREKKEP, width=1.4, dash="dash"), row=r, col=1)
         fig.add_hrect(y0=20 - 1.96 * se, y1=20 + 1.96 * se, fillcolor=rgba(GRI, 0.16), line_width=0,
-                      layer="below", row=1, col=c)
-        fig.update_yaxes(title_text="tam haftaların %'si", range=[0, 60], row=1, col=c)
-        fig.update_xaxes(tickfont=dict(size=10), row=1, col=c)
+                      layer="below", row=r, col=1)
+        fig.update_yaxes(title_text="tam haftaların %'si", range=[0, 60], row=r, col=1)
+        fig.update_xaxes(tickfont=dict(size=10), row=r, col=1)
     not_(fig, 2.0, 20 + 1.96 * se, f"şans beklentisi %20 · gri bant = %95 güven aralığı (n≈{n_ort})",
          renk=GRI, ok=False, boyut=9, ay=-11, row=1, col=1)
     not_(fig, 2.0, 56, "<b>ICT'nin 'Classic Tuesday Low' şablonu bu örneklemde YOK:</b><br>"
          "haftalık dip Salı'da en az görülen günlerden biri.<br>Ekstremler <b>Pazartesi</b> ve <b>Cuma</b>'da kümeleniyor.",
-         renk=BORDO, ok=False, boyut=10, row=1, col=2)
+         renk=BORDO, ok=False, boyut=10, row=2, col=1)
     d0 = min(s["d0"] for s in sonuc); d1 = max(s["d1"] for s in sonuc)
     duzen(fig, "Şekil 29 — Gerçek veri: haftalık ekstremler haftanın hangi gününde oluşuyor?",
           f"Günlük mumlar, {d0} – {d1}; yalnız Pzt–Cum barları ve 5 barlık tam haftalar. "
           "Haftalık high = o haftanın en yüksek fitili hangi güne düştü; low simetrik. "
           "Şablon 'tanıma aracı'dır, olasılık dağılımı değil — sayılar kendi enstrümanınızda yeniden ölçülmelidir",
-          y_baslik="", x_baslik="", h=620)
-    for c in (1, 2):
-        fig.update_yaxes(title_text="tam haftaların %'si", row=1, col=c)
+          y_baslik="", x_baslik="", h=700)
+    for r in (1, 2):
+        fig.update_yaxes(title_text="tam haftaların %'si", row=r, col=1)
     for s in sonuc:
         OZET[f"hafta_gun_{s['ad'].split()[0].replace('/', '')}"] = dict(
             n=s["n"], high=[round(x, 1) for x in s["hi"]], low=[round(x, 1) for x in s["lo"]])
@@ -1060,7 +1076,9 @@ def g41_metaorder():
     s.bacak(100.70, 8)
     df = s.df(); n = len(df)
     i_ob = int(df.index[df.lab.str.startswith("OB")][0])
-    fig = make_subplots(rows=1, cols=3, horizontal_spacing=0.065, column_widths=[0.40, 0.30, 0.30],
+    # Üç panel ALT ALTA: üçü de farklı x ekseni (mum sırası / Q/V oranı / saat)
+    # → shared_xaxes YOK, her panel kendi eksen başlığını korur.
+    fig = make_subplots(rows=3, cols=1, vertical_spacing=0.08, row_heights=[0.40, 0.30, 0.30],
                         subplot_titles=("(a) Aynı seri, iki okuma", "(b) Kare-kök yasası",
                                         "(c) Hacim eğrisi + makrolar"))
     # (a)
@@ -1090,16 +1108,16 @@ def g41_metaorder():
     Y = 0.9 * 0.55 * np.sqrt(x / 0.01)          # I = Y·σ·sqrt(Q/V), ölçek normalize
     dogru = Y[-1] / 0.10 * x
     fig.add_trace(go.Scatter(x=x, y=Y, mode="lines", line=dict(color=LACIVERT, width=3),
-                             name="ölçülen: I ∝ √(Q/V)"), row=1, col=2)
+                             name="ölçülen: I ∝ √(Q/V)"), row=2, col=1)
     fig.add_trace(go.Scatter(x=x, y=dogru, mode="lines", line=dict(color=GRI, width=2, dash="dash"),
-                             name="'büyük emir orantılı hareket ettirir' beklentisi"), row=1, col=2)
+                             name="'büyük emir orantılı hareket ettirir' beklentisi"), row=2, col=1)
     fig.add_trace(go.Scatter(x=np.r_[x, x[::-1]], y=np.r_[Y, dogru[::-1]], fill="toself",
                              fillcolor=rgba(TURUNCU, 0.13), line=dict(width=0), showlegend=False,
-                             hoverinfo="skip"), row=1, col=2)
+                             hoverinfo="skip"), row=2, col=1)
     not_(fig, 0.062, (Y[124] + dogru[124]) / 2, "büyük emir <b>orantısız</b><br>hareket ETMEZ<br>(içbükey etki)",
-         renk=TURUNCU, ok=False, boyut=10, row=1, col=2)
-    fig.update_xaxes(title_text="emir büyüklüğü Q / günlük hacim V", row=1, col=2, tickformat=".0%")
-    fig.update_yaxes(title_text="fiyat etkisi (göreli)", row=1, col=2)
+         renk=TURUNCU, ok=False, boyut=10, row=2, col=1)
+    fig.update_xaxes(title_text="emir büyüklüğü Q / günlük hacim V", row=2, col=1, tickformat=".0%")
+    fig.update_yaxes(title_text="fiyat etkisi (göreli)", row=2, col=1)
     # (c) VWAP hacim eğrisi + makrolar
     dk = np.arange(9.5 * 60, 16 * 60 + 1, 5.0)
     u = 1.0 + 2.2 * np.exp(-((dk - 585) / 32.0) ** 2) + 1.7 * np.exp(-((dk - 955) / 34.0) ** 2) \
@@ -1109,26 +1127,26 @@ def g41_metaorder():
     saat = dk / 60.0
     fig.add_trace(go.Scatter(x=saat, y=u, mode="lines", line=dict(color=LACIVERT, width=2.4),
                              fill="tozeroy", fillcolor=rgba(LACIVERT, 0.12), name="gün içi hacim eğrisi (U)"),
-                  row=1, col=3)
+                  row=3, col=1)
     for h0, h1 in ((9.833, 10.167), (10.833, 11.167), (11.833, 12.167), (13.167, 13.667), (15.25, 15.75)):
-        fig.add_vrect(x0=h0, x1=h1, fillcolor=rgba(TURUNCU, 0.22), line_width=0, layer="below", row=1, col=3)
+        fig.add_vrect(x0=h0, x1=h1, fillcolor=rgba(TURUNCU, 0.22), line_width=0, layer="below", row=3, col=1)
     not_(fig, 12.9, u.max() * 0.74, "turuncu şeritler =<br>ICT makro pencereleri<br>"
          "<b>aynı saatler —<br>farklı açıklama</b><br>(VWAP dilim sınırı,<br>fixing, MOC toplama)",
-         renk=TURUNCU, ok=False, boyut=9, row=1, col=3)
+         renk=TURUNCU, ok=False, boyut=9, row=3, col=1)
     fig.update_xaxes(title_text="saat (NY)", tickvals=[10, 11, 12, 13, 14, 15, 16],
-                     ticktext=["10", "11", "12", "13", "14", "15", "16"], row=1, col=3)
-    fig.update_yaxes(title_text="göreli hacim", row=1, col=3)
+                     ticktext=["10", "11", "12", "13", "14", "15", "16"], row=3, col=1)
+    fig.update_yaxes(title_text="göreli hacim", row=3, col=1)
     duzen(fig, "Şekil 51 — Order flow gerçeği: metaorder vs 'order block' anlatısı",
           "Ne destekliyor: stop kümelenmesi, kare-kök etki yasası, saatlik hacim yoğunlaşması. "
           "Ne çürütüyor: 'tek mum bir kurumsal emir bloğudur' ve 'merkezî bir algoritma retail'i avlar'. "
           "(b) ve (c) şematik eğrilerdir; ölçülmüş olgunun biçimini gösterir, veri değildir",
-          y_baslik="", x_baslik="", h=640)
+          y_baslik="", x_baslik="", h=1040)
     fig.update_yaxes(title_text="fiyat (şematik)", row=1, col=1)
-    fig.update_yaxes(title_text="fiyat etkisi (göreli)", row=1, col=2)
-    fig.update_yaxes(title_text="göreli hacim", row=1, col=3)
+    fig.update_yaxes(title_text="fiyat etkisi (göreli)", row=2, col=1)
+    fig.update_yaxes(title_text="göreli hacim", row=3, col=1)
     fig.update_xaxes(title_text="mum sırası", row=1, col=1)
-    fig.update_xaxes(title_text="Q / V (emir / günlük hacim)", tickformat=".0%", row=1, col=2)
-    fig.update_xaxes(title_text="saat (NY)", row=1, col=3)
+    fig.update_xaxes(title_text="Q / V (emir / günlük hacim)", tickformat=".0%", row=2, col=1)
+    fig.update_xaxes(title_text="saat (NY)", row=3, col=1)
     _kaydet(fig, "51_metaorder_vs_order_block")
 
 
@@ -1177,9 +1195,10 @@ def g42_turtle_adim_adim():
               "② Adım 2 — SWEEP:<br>fitil ötede, GÖVDE içeride kapandı",
               "③ Adım 3 — MSS +<br>displacement FVG (5 dk)",
               "④ Adım 4 — Giriş / SL / TP:<br>iki tetik, iki farklı R")
-    fig = make_subplots(rows=2, cols=2, subplot_titles=baslik, vertical_spacing=0.17, horizontal_spacing=0.08)
+    # Dört aşama ALT ALTA: aynı seri, aynı x aralığı → shared_xaxes=True (tek eksen etiketi altta)
+    fig = make_subplots(rows=4, cols=1, subplot_titles=baslik, vertical_spacing=0.06, shared_xaxes=True)
     for k, kesim in enumerate(kes):
-        r, c = k // 2 + 1, k % 2 + 1
+        r, c = k + 1, 1
         d = df.iloc[:kesim + 1].reset_index(drop=True)
         fig.add_trace(mum_izi(d, ad="5 dk mum", gorunur=(k == 0)), row=r, col=c)
         yatay(fig, PDH, 0, n - 1, renk=ALTIN, w=1.8, row=r, col=c)
@@ -1193,18 +1212,18 @@ def g42_turtle_adim_adim():
     not_(fig, n - 1, 98.66, "PDL 98.66 (DOL)", renk=GRI, ok=False, boyut=9, xanchor="right", ay=11, row=1, col=1)
     not_(fig, i_pdh, df.h[i_pdh], "seviye iki seans tuttu ✓<br>günlük bias AŞAĞI ✓", renk=MUREKKEP, ax=95, ay=55, row=1, col=1)
     # panel 2
-    daire(fig, i_sw, df.h[i_sw] - 0.10, r_x=1.2, r_y=0.10, row=1, col=2)
+    daire(fig, i_sw, df.h[i_sw] - 0.10, r_x=1.2, r_y=0.10, row=2, col=1)
     not_(fig, i_sw, df.c[i_sw], "fitil 101.24 > 101.20, gövde 100.84 < 101.20<br>"
-         "→ sweep. Gövde ÖTEDE kapansaydı: kırılım, işlem yok", renk=ALTIN, ax=-115, ay=55, row=1, col=2)
+         "→ sweep. Gövde ÖTEDE kapansaydı: kırılım, işlem yok", renk=ALTIN, ax=-115, ay=55, row=2, col=1)
     # panel 3
-    yatay(fig, ref, i_ref, i_m3 + 1, renk=BORDO, dash="dash", w=1.4, row=2, col=1)
-    not_(fig, i_ref, ref, "MSS referansı 100.58", renk=BORDO, ok=False, boyut=9, xanchor="left", ay=12, row=2, col=1)
-    kutu(fig, i_m1, i_m3 + 1, fvg_alt, fvg_ust, MOR, a=0.22, row=2, col=1)
-    yatay(fig, ce, i_m1, i_m3 + 1, renk=MOR, dash="dash", row=2, col=1)
+    yatay(fig, ref, i_ref, i_m3 + 1, renk=BORDO, dash="dash", w=1.4, row=3, col=1)
+    not_(fig, i_ref, ref, "MSS referansı 100.58", renk=BORDO, ok=False, boyut=9, xanchor="left", ay=12, row=3, col=1)
+    kutu(fig, i_m1, i_m3 + 1, fvg_alt, fvg_ust, MOR, a=0.22, row=3, col=1)
+    yatay(fig, ce, i_m1, i_m3 + 1, renk=MOR, dash="dash", row=3, col=1)
     not_(fig, i_m2, df.c[i_m2], "M2 displacement 100.58 ALTINDA kapandı → MSS<br>"
-         "FVG 100.50–100.72, CE = 100.61", renk=BORDO, ax=95, ay=48, row=2, col=1)
+         "FVG 100.50–100.72, CE = 100.61", renk=BORDO, ax=95, ay=48, row=3, col=1)
     # panel 4
-    r, c = 2, 2
+    r, c = 4, 1
     kutu(fig, i_m1, n - 1, fvg_alt, fvg_ust, MOR, a=0.18, row=r, col=c)
     for y, ad, renk, dash in ((SL, f"SL 101.26 = sweep fitilinin (101.24) 2 tik ÜSTÜ", BORDO, "solid"),
                               (girisA, "Tetik A: geri almada stop-emir 100.90 (1R = 0,36)", TURUNCU, "dash"),
@@ -1228,9 +1247,9 @@ def g42_turtle_adim_adim():
           "Tarihsel çıpa: Connors & Raschke, Street Smarts (1995) — kırılımı fade etme; ICT versiyonu aynı fikri "
           "intraday ve likidite haritasıyla yeniden yazar. Geçerlilik: seviye ≥2 seans · gövde içeride · "
           "süpürme bias'ın tersine · kill zone içinde · 5m MSS",
-          y_baslik="fiyat (şematik birim)", x_baslik="mum sırası (5 dk)", h=880)
-    for c in (1, 2):
-        fig.update_xaxes(title_text="", row=1, col=c)
+          y_baslik="fiyat (şematik birim)", x_baslik="mum sırası (5 dk)", h=1540)
+    for r in (1, 2, 3):
+        fig.update_xaxes(title_text="", row=r, col=1)
     _kaydet(fig, "33_adim_adim_turtle_soup")
 
 
@@ -1267,10 +1286,11 @@ def g43_turtle_matris():
               "Tek seanslık seviyede stop kümesi zayıf;<br>süpürülecek bir şey yok"),
              ("(4) Sweep bias YÖNÜNDE", "bias", "HAYIR — dağıtım", BORDO,
               "Bias yönünde süpürme manipülasyon değil<br>dağıtımdır — trend devam eder")]
-    fig = make_subplots(rows=2, cols=2, subplot_titles=[k[0] for k in kurgu],
-                        vertical_spacing=0.17, horizontal_spacing=0.08)
+    # Dört durum ALT ALTA: her panel AYRI bir kurgu (farklı seri) → shared_xaxes YOK
+    fig = make_subplots(rows=4, cols=1, subplot_titles=[k[0] for k in kurgu],
+                        vertical_spacing=0.06)
     for j, (ad, tip, rozet, renk, aciklama) in enumerate(kurgu):
-        r, c = j // 2 + 1, j % 2 + 1
+        r, c = j + 1, 1
         d = seri(430 + j, tip); nn = len(d)
         fig.add_trace(mum_izi(d, ad="5 dk mum", gorunur=(j == 0)), row=r, col=c)
         yatay(fig, SEV, 0, nn - 1, renk=ALTIN, w=1.8, row=r, col=c)
@@ -1286,9 +1306,9 @@ def g43_turtle_matris():
     duzen(fig, "Şekil 34 — Turtle Soup geçerlilik matrisi: aynı seviye, dört farklı sonuç (şematik örnek)",
           "Kontrol listesinden bir madde bile 'HAYIR' ise işlem yoktur. Sık hata: her fitili sweep saymak — "
           "iki şart birden gerekir: seviye en az iki seans tutmuş olmalı VE gövde içeride kapanmalı",
-          y_baslik="fiyat (şematik birim)", x_baslik="mum sırası (5 dk)", h=840)
-    for c in (1, 2):
-        fig.update_xaxes(title_text="", row=1, col=c)
+          y_baslik="fiyat (şematik birim)", x_baslik="mum sırası (5 dk)", h=1540)
+    for r in (1, 2, 3):
+        fig.update_xaxes(title_text="", row=r, col=1)
     _kaydet(fig, "34_turtle_soup_gecerlilik_matrisi")
 
 
@@ -1323,9 +1343,10 @@ def g44_ict2022():
            "② 03:00 sonrası Londra süpürmesi:<br>aralığın bias'a ters ucu alındı",
            "③ Displacement <b>FVG bırakmalı</b><br>+ MSS (5/3/1 dk)",
            "④ Giriş / SL / TP ve<br><b>minimum 1:3</b> kontrolü")
-    fig = make_subplots(rows=2, cols=2, subplot_titles=bas, vertical_spacing=0.17, horizontal_spacing=0.08)
+    # Dört aşama ALT ALTA: aynı seri, aynı x aralığı → shared_xaxes=True
+    fig = make_subplots(rows=4, cols=1, subplot_titles=bas, vertical_spacing=0.06, shared_xaxes=True)
     for k, kesim in enumerate(kes):
-        r, c = k // 2 + 1, k % 2 + 1
+        r, c = k + 1, 1
         d = df.iloc[:kesim + 1].reset_index(drop=True)
         fig.add_trace(mum_izi(d, ad="15 dk mum", gorunur=(k == 0)), row=r, col=c)
         kutu(fig, -0.5, i_ar, ar_l, ar_h, MAVI, a=0.10, cizgi=1.0, dash="dot", row=r, col=c)
@@ -1338,35 +1359,35 @@ def g44_ict2022():
     not_(fig, 1, ar_h, f"aralık {ar_l:.2f} – {ar_h:.2f}", renk=MAVI, ok=False, boyut=9, xanchor="left", ay=-10, row=1, col=1)
     not_(fig, 1, 99.70, "En sık atlanan şart: aralık KAPANMADAN ölçüm yanlıştır.<br>02:40'ta 'olgun' görünmesi kural değiştirmez.",
          renk=GRI, ok=False, boyut=9, xanchor="left", yanchor="bottom", row=1, col=1)
-    daire(fig, i_sw, df.l[i_sw] + 0.03, r_x=0.9, r_y=0.035, row=1, col=2)
-    not_(fig, i_sw, df.l[i_sw], "aralık low'u süpürüldü", renk=ALTIN, ax=70, ay=45, row=1, col=2)
+    daire(fig, i_sw, df.l[i_sw] + 0.03, r_x=0.9, r_y=0.035, row=2, col=1)
+    not_(fig, i_sw, df.l[i_sw], "aralık low'u süpürüldü", renk=ALTIN, ax=70, ay=45, row=2, col=1)
     not_(fig, 1, 99.70, "Geçersizleşme: aralığın HER İKİ ucu da süpürülürse<br>gün 2022 modeliyle okunamaz — ORG/PO3'e geçilir.",
-         renk=GRI, ok=False, boyut=9, xanchor="left", yanchor="bottom", row=1, col=2)
-    kutu(fig, i_m1, i_m3, 100.02, 100.12, MOR, a=0.22, row=2, col=1)
-    yatay(fig, 100.18, i_ar - 6, i_m3, renk=BORDO, dash="dash", w=1.4, row=2, col=1)
-    not_(fig, i_m2, df.c[i_m2], "MSS: 100,18 üstünde kapanış<br>FVG 100,02–100,12 · CE 100,07", renk=TEAL, ax=-110, ay=-46, row=2, col=1)
-    not_(fig, 1, 99.70, "FVG yoksa MODEL YOK. Güçlü mum var ama boşluk yoksa,<br>OB'ye düşmek AYRI bir modeldir.",
          renk=GRI, ok=False, boyut=9, xanchor="left", yanchor="bottom", row=2, col=1)
-    kutu(fig, i_m1, n - 1, 100.02, 100.12, MOR, a=0.16, row=2, col=2)
-    kutu(fig, i_g, n - 1, sl, giris, BORDO, a=0.14, cizgi=0, row=2, col=2)
-    kutu(fig, i_g, n - 1, giris, tp, TEAL, a=0.11, cizgi=0, row=2, col=2)
+    kutu(fig, i_m1, i_m3, 100.02, 100.12, MOR, a=0.22, row=3, col=1)
+    yatay(fig, 100.18, i_ar - 6, i_m3, renk=BORDO, dash="dash", w=1.4, row=3, col=1)
+    not_(fig, i_m2, df.c[i_m2], "MSS: 100,18 üstünde kapanış<br>FVG 100,02–100,12 · CE 100,07", renk=TEAL, ax=-110, ay=-46, row=3, col=1)
+    not_(fig, 1, 99.70, "FVG yoksa MODEL YOK. Güçlü mum var ama boşluk yoksa,<br>OB'ye düşmek AYRI bir modeldir.",
+         renk=GRI, ok=False, boyut=9, xanchor="left", yanchor="bottom", row=3, col=1)
+    kutu(fig, i_m1, n - 1, 100.02, 100.12, MOR, a=0.16, row=4, col=1)
+    kutu(fig, i_g, n - 1, sl, giris, BORDO, a=0.14, cizgi=0, row=4, col=1)
+    kutu(fig, i_g, n - 1, giris, tp, TEAL, a=0.11, cizgi=0, row=4, col=1)
     for y, ad, renk, dash in ((giris, f"giriş {giris:.2f} (FVG CE)", MUREKKEP, "dash"),
                               (sl, f"SL {sl:.2f} (sweep {df.l[i_sw]:.2f} − tampon) → 1R = {R:.2f}", BORDO, "solid"),
                               (tp, f"TP {tp:.2f} (PDH) → +{(tp-giris)/R:.1f}R ✓ ≥ 1:3", TEAL, "dot")):
-        yatay(fig, y, i_g - 2, n - 1, renk=renk, dash=dash, w=1.6 if dash == "solid" else 1.2, row=2, col=2)
-        not_(fig, i_g - 2, y, ad, renk=renk, ok=False, boyut=9, xanchor="left", ay=-10, row=2, col=2)
+        yatay(fig, y, i_g - 2, n - 1, renk=renk, dash=dash, w=1.6 if dash == "solid" else 1.2, row=4, col=1)
+        not_(fig, i_g - 2, y, ad, renk=renk, ok=False, boyut=9, xanchor="left", ay=-10, row=4, col=1)
     not_(fig, 1, 99.80, "<b>1:3 aritmetiği:</b> p* = 1/(1+R) = 1/4 = <b>%25</b> başabaş isabet.<br>"
          "%40 isabetle E = 0,40·3 − 0,60 = <b>+0,60R</b>; maliyet 0,05R ise net +0,55R.<br>"
          "Aynı model 1:1'e razı olunca 0,40 − 0,60 = <b>−0,20R</b>:<br>hedef düşürmek modeli zarar makinesine çevirir.",
-         renk=MUREKKEP, ok=False, boyut=9, xanchor="left", yanchor="bottom", row=2, col=2)
+         renk=MUREKKEP, ok=False, boyut=9, xanchor="left", yanchor="bottom", row=4, col=1)
     lejant(fig, "00:00–03:00 aralığı", MAVI, a=0.2); lejant(fig, "FVG", MOR)
     lejant_cizgi(fig, "aralık uçları (likidite)", ALTIN, "solid")
     duzen(fig, "Şekil 35 — ICT 2022 mentorship modeli adım adım: aralık → süpürme → MSS/FVG → 1:3 (şematik örnek)",
           "Takvim (NY / TSİ yaz): 00:00–03:00 ölçüm (07:00–10:00) · 03:00–05:00 Londra KZ (10:00–12:00) · "
           "09:30–11:00 NY AM (16:30–18:00) · 11:00–13:00 öğle: yeni işlem yok",
-          y_baslik="fiyat (şematik birim)", x_baslik="mum sırası (15 dk)", h=880)
-    for c in (1, 2):
-        fig.update_xaxes(title_text="", row=1, col=c)
+          y_baslik="fiyat (şematik birim)", x_baslik="mum sırası (15 dk)", h=1540)
+    for r in (1, 2, 3):
+        fig.update_xaxes(title_text="", row=r, col=1)
     _kaydet(fig, "35_adim_adim_ict2022")
 
 
@@ -1458,7 +1479,8 @@ def g46_ote_rr():
     SL = 99.90
     girisler = [(0.62, TEAL), (0.705, ALTIN), (0.79, MOR)]
     TP1, TP2 = 101.00, 101.62
-    fig = make_subplots(rows=1, cols=2, column_widths=[0.62, 0.38], horizontal_spacing=0.09,
+    # İki panel ALT ALTA: (a) mum serisi, (b) kategori çubukları → shared_xaxes YOK
+    fig = make_subplots(rows=2, cols=1, row_heights=[0.62, 0.38], vertical_spacing=0.10,
                         subplot_titles=("(a) Aynı bacak, üç giriş seviyesi ve üç ayrı risk kutusu",
                                         "(b) Aynı hedeflerin R karşılığı"))
     fig.add_trace(mum_izi(df, ad="5 dk mum"), row=1, col=1)
@@ -1488,25 +1510,25 @@ def g46_ote_rr():
     ad = [f"{x[0]:g}" for x in satir]
     fig.add_trace(go.Bar(x=ad, y=[x[3] for x in satir], name="TP1 = 101,00 (fib 0)",
                          marker_color=rgba(TEAL, 0.55), marker_line=dict(color=TEAL, width=1.0),
-                         text=[f"{x[3]:.2f}R" for x in satir], textposition="outside"), row=1, col=2)
+                         text=[f"{x[3]:.2f}R" for x in satir], textposition="outside"), row=2, col=1)
     fig.add_trace(go.Bar(x=ad, y=[x[4] for x in satir], name="TP2 = 101,62 (fib −0.62)",
                          marker_color=rgba(MOR, 0.45), marker_line=dict(color=MOR, width=1.0),
-                         text=[f"{x[4]:.2f}R" for x in satir], textposition="outside"), row=1, col=2)
-    fig.update_yaxes(title_text="R çarpanı", range=[0, 5.6], row=1, col=2)
-    fig.update_xaxes(title_text="giriş seviyesi (fib)", row=1, col=2)
+                         text=[f"{x[4]:.2f}R" for x in satir], textposition="outside"), row=2, col=1)
+    fig.update_yaxes(title_text="R çarpanı", range=[0, 5.6], row=2, col=1)
+    fig.update_xaxes(title_text="giriş seviyesi (fib)", row=2, col=1)
     orn = satir[2][3] / satir[0][3]
     not_(fig, 1.0, 5.15, f"0.62 → 0.79 girişte TP1 R'si <b>{orn:.1f}×</b> artıyor —<br>"
          "ama fiyatın oraya inmeme riski de artıyor.<br>Denge: dolum olasılığı ↔ R:R",
-         renk=MUREKKEP, ok=False, boyut=9, row=1, col=2)
+         renk=MUREKKEP, ok=False, boyut=9, row=2, col=1)
     duzen(fig, "Şekil 41 — OTE tek başına bir model: giriş seviyesi seçimi ve R:R değiş tokuşu (şematik örnek)",
           "Fib FİTİL uçlarından çekilir (gövde değil): 1.0 = sweep fitilinin dibi, 0 = displacement tepesi. "
           "OTE bir FİYAT ARALIĞIDIR, bir SEBEP değil — günlük bias, tamamlanmış süpürme, gerçek displacement+MSS "
           "ve kill zone olmadan 0.705 sadece bir sayıdır",
-          y_baslik="fiyat (şematik birim)", x_baslik="", h=680)
+          y_baslik="fiyat (şematik birim)", x_baslik="", h=780)
     fig.update_yaxes(title_text="fiyat (şematik birim)", row=1, col=1)
-    fig.update_yaxes(title_text="R çarpanı", row=1, col=2)
+    fig.update_yaxes(title_text="R çarpanı", row=2, col=1)
     fig.update_xaxes(title_text="mum sırası (5 dk)", row=1, col=1)
-    fig.update_xaxes(title_text="giriş seviyesi (fib)", row=1, col=2)
+    fig.update_xaxes(title_text="giriş seviyesi (fib)", row=2, col=1)
     _kaydet(fig, "41_ote_giris_secimi_rr")
     RAPOR.append("Şekil 46: OTE R tablosu (hesaplandı) — " + " · ".join(
         f"{x[0]:g}: giriş {x[1]:.4f}, 1R {x[2]:.4f}, TP1 {x[3]:.2f}R, TP2 {x[4]:.2f}R" for x in satir)
@@ -1540,10 +1562,11 @@ def g47_unicorn():
               "Ters çevrilmiş FVG breaker bandına düşüyor → orta-yüksek"),
              ("(4) SAHTE Unicorn:<br>örtüşme YOK", (100.06, 100.18), (100.30, 100.42), GRI, False,
               "3 tik uzaklık örtüşme değildir. Tek başına breaker VEYA tek başına FVG model değildir")]
-    fig = make_subplots(rows=2, cols=2, subplot_titles=[k[0] for k in kurgu],
-                        vertical_spacing=0.17, horizontal_spacing=0.08)
+    # Dört varyasyon ALT ALTA: her panel AYRI seri → shared_xaxes YOK
+    fig = make_subplots(rows=4, cols=1, subplot_titles=[k[0] for k in kurgu],
+                        vertical_spacing=0.06)
     for j, (ad, kutu1, kutu2, renk, gecerli, aciklama) in enumerate(kurgu):
-        r, c = j // 2 + 1, j % 2 + 1
+        r, c = j + 1, 1
         d = seri(470 + j); nn = len(d)
         fig.add_trace(mum_izi(d, ad="15 dk mum", gorunur=(j == 0)), row=r, col=c)
         i_b = int(d.index[d.lab.str.startswith("banda")][0])
@@ -1574,9 +1597,9 @@ def g47_unicorn():
           "Tarama sırası: 15m'de L→H→LL→HH dizisi bul · kırılan swing'i yaratan OB'yi breaker olarak işaretle · "
           "kırılımı yapan bacakta FVG var mı · <b>fiyat olarak örtüşüyorlar mı</b> · 5m/3m'de örtüşme bandına limit. "
           "Geçersizleşme yalnız GÖVDEYLE karşı tarafa kapanıştır; fitil geçişi değil",
-          y_baslik="fiyat (şematik birim)", x_baslik="mum sırası (15 dk)", h=840)
-    for c in (1, 2):
-        fig.update_xaxes(title_text="", row=1, col=c)
+          y_baslik="fiyat (şematik birim)", x_baslik="mum sırası (15 dk)", h=1540)
+    for r in (1, 2, 3):
+        fig.update_xaxes(title_text="", row=r, col=1)
     _kaydet(fig, "38_unicorn_varyasyonlari")
 
 
@@ -1607,7 +1630,9 @@ def g48_po3():
     i_j = idx("Judas"); i_g = idx("FVG CE"); i_hi = idx("günün high"); i_k = idx("kapanış")
     O, L, H, C = 100.00, df.l.min(), df.h.max(), df.c[n - 1]
     gunluk = pd.DataFrame(dict(o=[O], h=[H], l=[L], c=[C], lab=["bugünün günlük mumu"]))
-    fig = make_subplots(rows=1, cols=2, column_widths=[0.15, 0.85], horizontal_spacing=0.07,
+    # İki panel ALT ALTA: (a) tek günlük mum, (b) aynı günün 15 dk açılımı.
+    # x eksenleri farklı türde (indeks / zaman damgası) → shared_xaxes YOK.
+    fig = make_subplots(rows=2, cols=1, row_heights=[0.38, 0.62], vertical_spacing=0.09,
                         subplot_titles=("(a) Günlük mum", "(b) Aynı günün 15 dakikalık açılımı: accumulation → manipulation → distribution"))
     fig.add_trace(mum_izi(gunluk, ad="günlük mum", gorunur=False), row=1, col=1)
     for y, ad, renk in ((O, f"O açılış {O:.2f} (00:00 NY)", MUREKKEP), (L, f"L düşük {L:.2f}", TEAL),
@@ -1619,48 +1644,48 @@ def g48_po3():
     fig.update_xaxes(range=[-1.0, 2.4], showticklabels=False, row=1, col=1)
     fig.update_yaxes(range=[99.20, 101.15], row=1, col=1)
     # (b)
-    fig.add_trace(mum_izi(df, x=zaman, ad="15 dk mum"), row=1, col=2)
+    fig.add_trace(mum_izi(df, x=zaman, ad="15 dk mum"), row=2, col=1)
     fazlar = [("2025-07-15 20:00", "2025-07-16 02:00", "ACCUMULATION 20:00–02:00 — emir YOK", GRI, 0.10),
               ("2025-07-16 02:00", "2025-07-16 05:00", "MANIPULATION (Judas) 02:00–05:00", ALTIN, 0.16),
               ("2025-07-16 08:00", "2025-07-16 11:00", "DISTRIBUTION 08:00–11:00 — giriş burada", TEAL, 0.14),
               ("2025-07-16 13:30", "2025-07-16 16:00", "uzatma 13:30–16:00", MOR, 0.10)]
     for j, (t0, t1, ad, renk, a) in enumerate(fazlar):
         fig.add_vrect(x0=pd.Timestamp(t0), x1=pd.Timestamp(t1), fillcolor=rgba(renk, a), line_width=0,
-                      layer="below", row=1, col=2)
+                      layer="below", row=2, col=1)
         not_(fig, pd.Timestamp(t0), 101.02 - 0.055 * (j % 2), ad.replace(" — ", "<br>"), renk=renk, ok=False,
-             boyut=9, xanchor="left", yanchor="top", row=1, col=2)
+             boyut=9, xanchor="left", yanchor="top", row=2, col=1)
         lejant(fig, ad.split("—")[0].strip(), renk, a=a + 0.18)
-    yatay(fig, O, zaman[0], zaman[n - 1], renk=MUREKKEP, dash="dash", w=2.0, row=1, col=2)
+    yatay(fig, O, zaman[0], zaman[n - 1], renk=MUREKKEP, dash="dash", w=2.0, row=2, col=1)
     not_(fig, zaman[2], O, "00:00 NY açılışı = PO3'ün 'O'su · fiyat altındayken discount", renk=MUREKKEP,
-         ok=False, boyut=9, xanchor="left", ay=-10, row=1, col=2)
-    fig.add_vline(x=pd.Timestamp("2025-07-16 00:00"), line=dict(color=MUREKKEP, width=1.2, dash="dot"), row=1, col=2)
-    daire(fig, zaman[i_j], df.l[i_j] + 0.03, r_x=pd.Timedelta(minutes=40), r_y=0.03, row=1, col=2)
+         ok=False, boyut=9, xanchor="left", ay=-10, row=2, col=1)
+    fig.add_vline(x=pd.Timestamp("2025-07-16 00:00"), line=dict(color=MUREKKEP, width=1.2, dash="dot"), row=2, col=1)
+    daire(fig, zaman[i_j], df.l[i_j] + 0.03, r_x=pd.Timedelta(minutes=40), r_y=0.03, row=2, col=1)
     not_(fig, zaman[i_j], df.l[i_j], "Judas: açılışın ALTINA sarkma, havuz alındı<br>"
-         "(bias yukarıysa giriş burada ARANIR — dizi tamamlanınca)", renk=ALTIN, ax=125, ay=-58, row=1, col=2)
-    kutu(fig, zaman[idx("p1")], zaman[i_hi], 99.84, 99.94, MOR, a=0.20, row=1, col=2)
+         "(bias yukarıysa giriş burada ARANIR — dizi tamamlanınca)", renk=ALTIN, ax=125, ay=-58, row=2, col=1)
+    kutu(fig, zaman[idx("p1")], zaman[i_hi], 99.84, 99.94, MOR, a=0.20, row=2, col=1)
     giris, sl = 99.89, df.l[i_j] - 0.05
     R = giris - sl
     for y, ad, renk, dash in ((giris, f"giriş {giris:.2f} (FVG CE)", MUREKKEP, "dash"),
                               (sl, f"SL {sl:.2f} → 1R = {R:.2f}", BORDO, "solid"),
                               (100.90, f"TP = günün beklenen ekstremi / PDH 100,90 → +{(100.90-giris)/R:.1f}R", TEAL, "dot")):
-        yatay(fig, y, zaman[i_g], zaman[n - 1], renk=renk, dash=dash, w=1.6 if dash == "solid" else 1.2, row=1, col=2)
-        not_(fig, zaman[i_g], y, ad, renk=renk, ok=False, boyut=9, xanchor="left", ay=-10, row=1, col=2)
-    not_(fig, zaman[i_k], df.c[i_k], "gün ekstremine yakın kapanış → dağıtım tamamlandı", renk=TEAL, ax=-90, ay=40, row=1, col=2)
+        yatay(fig, y, zaman[i_g], zaman[n - 1], renk=renk, dash=dash, w=1.6 if dash == "solid" else 1.2, row=2, col=1)
+        not_(fig, zaman[i_g], y, ad, renk=renk, ok=False, boyut=9, xanchor="left", ay=-10, row=2, col=1)
+    not_(fig, zaman[i_k], df.c[i_k], "gün ekstremine yakın kapanış → dağıtım tamamlandı", renk=TEAL, ax=-90, ay=40, row=2, col=1)
     tv = list(pd.date_range("2025-07-15 20:00", periods=11, freq="2h"))
     fig.update_xaxes(tickvals=tv, ticktext=[f"{t:%H:%M} NY<br>{(t + pd.Timedelta(hours=7)):%H:%M} TSİ" for t in tv],
-                     tickfont=dict(size=9), row=1, col=2)
-    fig.update_yaxes(range=[99.20, 101.15], row=1, col=2)
+                     tickfont=dict(size=9), row=2, col=1)
+    fig.update_yaxes(range=[99.20, 101.15], row=2, col=1)
     not_(fig, zaman[2], 99.30, "Geçersizleşme: manipülasyon fazı HER İKİ ucu da süpürürse gün 'range günü'dür — PO3 "
          "okunmaz.<br>11:00'e kadar distribution başlamadıysa gün genelde konsolidasyondur, model kapatılır.",
-         renk=GRI, ok=False, boyut=9, xanchor="left", yanchor="bottom", row=1, col=2)
+         renk=GRI, ok=False, boyut=9, xanchor="left", yanchor="bottom", row=2, col=1)
     lejant(fig, "FVG (BISI)", MOR)
     duzen(fig, "Şekil 39 — Power of 3'ü günlük işlem planına çevirmek: günlük mumun içi (şematik örnek, boğa günü)",
           "Boğa günü geçerlilik listesi: bias yukarı mı · fiyat 00:00 açılışının ALTINA sarktı mı (Judas) · "
           "sarkma bir havuz aldı mı · sonrasında displacement+MSS geldi mi · fiyat hâlâ discount'ta mı. "
           "Beşincisi HAYIR ise giriş 'premium'da alım' olur → boyut yarıya ya da atla",
-          y_baslik="fiyat (şematik birim)", x_baslik="", h=700)
-    fig.update_xaxes(title_text="saat (NY / TSİ, ABD yaz saati)", row=1, col=2)
-    fig.update_yaxes(title_text="", row=1, col=2)
+          y_baslik="fiyat (şematik birim)", x_baslik="", h=900)
+    fig.update_xaxes(title_text="saat (NY / TSİ, ABD yaz saati)", row=2, col=1)
+    fig.update_yaxes(title_text="", row=2, col=1)
     _kaydet(fig, "39_po3_gunluk_plan")
 
 
@@ -1908,20 +1933,21 @@ def g52_senaryo_agaci():
 
     seriler = [("(a) Hedefe gitti", a(), TEAL), ("(b) TP1 sonrası BE'ye döndü", b(), ALTIN),
                ("(c) Geçersizleşti — erken çıkış", c(), BORDO)]
-    fig = make_subplots(rows=1, cols=3, subplot_titles=[x[0] for x in seriler], horizontal_spacing=0.055)
+    # Üç senaryo ALT ALTA: her panel AYRI seri → shared_xaxes YOK
+    fig = make_subplots(rows=3, cols=1, subplot_titles=[x[0] for x in seriler], vertical_spacing=0.07)
     for j, (ad, d, renk) in enumerate(seriler):
-        c_ = j + 1
+        r_ = j + 1
         nn = len(d)
-        fig.add_trace(mum_izi(d, ad="5 dk mum", gorunur=(j == 0)), row=1, col=c_)
-        kutu(fig, 0, nn - 1, FVG[0], FVG[1], MOR, a=0.18, row=1, col=c_)
-        for y, r_, dash in ((GIRIS, MUREKKEP, "dash"), (SL0, BORDO, "solid"), (T1, TEAL, "dot"), (T2, TEAL, "dot")):
-            yatay(fig, y, 0, nn - 1, renk=r_, dash=dash, w=1.6 if dash == "solid" else 1.1, row=1, col=c_)
+        fig.add_trace(mum_izi(d, ad="5 dk mum", gorunur=(j == 0)), row=r_, col=1)
+        kutu(fig, 0, nn - 1, FVG[0], FVG[1], MOR, a=0.18, row=r_, col=1)
+        for y, rk, dash in ((GIRIS, MUREKKEP, "dash"), (SL0, BORDO, "solid"), (T1, TEAL, "dot"), (T2, TEAL, "dot")):
+            yatay(fig, y, 0, nn - 1, renk=rk, dash=dash, w=1.6 if dash == "solid" else 1.1, row=r_, col=1)
         if j == 0:
             for y, t in ((GIRIS, "giriş 100,00"), (SL0, "SL₀ 99,60 (1R = 0,40)"), (T1, "TP1 100,40 (1R)"), (T2, "TP2 100,80 (2R)")):
                 not_(fig, 0.3, y, t, renk=MUREKKEP if y in (GIRIS,) else (BORDO if y == SL0 else TEAL),
-                     ok=False, boyut=9, xanchor="left", ay=-10, row=1, col=c_)
-        fig.update_yaxes(range=[99.20, 101.42], row=1, col=c_)
-        fig.update_xaxes(range=[-1, nn], row=1, col=c_)
+                     ok=False, boyut=9, xanchor="left", ay=-10, row=r_, col=1)
+        fig.update_yaxes(range=[99.20, 101.42], row=r_, col=1)
+        fig.update_xaxes(range=[-1, nn], row=r_, col=1)
     # (a) anotasyonlar
     da = seriler[0][1]; na = len(da)
     i = lambda d, p: int(d.index[d.lab.str.startswith(p)][0])
@@ -1934,25 +1960,25 @@ def g52_senaryo_agaci():
     not_(fig, 1, 99.32, f"sonuç ≈ <b>+{top:.2f}R</b>", renk=TEAL, ok=False, boyut=11, xanchor="left", row=1, col=1)
     # (b)
     db = seriler[1][1]
-    not_(fig, i(db, "TP1"), T1, "TP1 alındı: %50 kilitlendi (+0,50R)", renk=ALTIN, ax=-60, ay=-40, row=1, col=2)
+    not_(fig, i(db, "TP1"), T1, "TP1 alındı: %50 kilitlendi (+0,50R)", renk=ALTIN, ax=-60, ay=-40, row=2, col=1)
     not_(fig, i(db, "BE'de"), GIRIS, "momentum öldü; kalan %50 BE'de kapandı<br>"
-         "→ 'kazanan' değil ama <b>kayıp da değil</b>", renk=ALTIN, ax=-40, ay=48, row=1, col=2)
-    not_(fig, 1, 99.32, "sonuç = <b>+0,50R</b>", renk=ALTIN, ok=False, boyut=11, xanchor="left", row=1, col=2)
+         "→ 'kazanan' değil ama <b>kayıp da değil</b>", renk=ALTIN, ax=-40, ay=48, row=2, col=1)
+    not_(fig, 1, 99.32, "sonuç = <b>+0,50R</b>", renk=ALTIN, ok=False, boyut=11, xanchor="left", row=2, col=1)
     # (c)
     dc = seriler[2][1]
     not_(fig, i(dc, "gövde"), dc.c[i(dc, "gövde")], "FVG gövdeyle karşı tarafa<br>kapatıldı → <b>yapı bozuldu</b>",
-         renk=BORDO, ax=-40, ay=-48, row=1, col=3)
+         renk=BORDO, ax=-40, ay=-48, row=3, col=1)
     not_(fig, i(dc, "erken"), dc.c[i(dc, "erken")], "erken çık: SL'i BEKLEME<br>(−0,4R, −1,0R değil)", renk=BORDO,
-         ax=-52, ay=48, row=1, col=3)
+         ax=-52, ay=48, row=3, col=1)
     not_(fig, 1, 99.32, "sonuç ≈ <b>−0,40R</b> (SL beklenseydi −1,00R)", renk=BORDO, ok=False, boyut=11,
-         xanchor="left", row=1, col=3)
+         xanchor="left", row=3, col=1)
     lejant(fig, "FVG (giriş bölgesi)", MOR); lejant_cizgi(fig, "hedefler", TEAL, "dot")
     lejant_cizgi(fig, "SL / giriş", BORDO, "solid")
     duzen(fig, "Şekil 45 — Pozisyon sonrası senaryo ağacı: aynı giriş, üç farklı sonuç (şematik örnek)",
           "Karar kuralları aynı, sonuçlar farklı. Okunacak şey: giriş sonrası mumların GÖVDESİ nerede kapanıyor. "
           "İki ardışık gövde bölgenin dışında kapanırsa erken çık; TP1'den önce BE'ye çekme; "
           "trailing yalnız onaylı yeni HL/LH sonrası",
-          y_baslik="fiyat (şematik birim)", x_baslik="mum sırası (5 dk)", h=680)
+          y_baslik="fiyat (şematik birim)", x_baslik="mum sırası (5 dk)", h=1200)
     _kaydet(fig, "45_pozisyon_senaryo_agaci")
 
 
@@ -1980,10 +2006,11 @@ def g53_mae_mfe():
     p = [0.78, 0.61, 0.47, 0.38, 0.24, 0.11]
     bek = [pp * tt - (1 - pp) for pp, tt in zip(p, T)]
 
-    fig = make_subplots(rows=1, cols=2, column_widths=[0.55, 0.45], horizontal_spacing=0.09,
+    # İki panel ALT ALTA: (a) MAE saçılımı, (b) MFE merdiveni (çift y eksenli)
+    fig = make_subplots(rows=2, cols=1, row_heights=[0.55, 0.45], vertical_spacing=0.12,
                         subplot_titles=("(a) MAE dağılımı: kazananlar nereye kadar aleyhe gitti?",
                                         "(b) MFE merdiveni: hangi hedef ne kadar ödüyor?"),
-                        specs=[[{}, {"secondary_y": True}]])
+                        specs=[[{}], [{"secondary_y": True}]])
     fig.add_trace(go.Scatter(x=kaz_mae, y=kaz_r, mode="markers", name="kazanan işlem",
                              marker=dict(size=8, color=rgba(TEAL, 0.65), line=dict(color=TEAL, width=0.8))),
                   row=1, col=1)
@@ -2004,28 +2031,28 @@ def g53_mae_mfe():
     # (b)
     fig.add_trace(go.Bar(x=[f"{t:g}R" for t in T], y=[100 * x for x in p], name="p(MFE ≥ T)",
                          marker_color=rgba(MAVI, 0.45), marker_line=dict(color=MAVI, width=1.0),
-                         text=[f"%{100*x:.0f}" for x in p], textposition="outside"), row=1, col=2)
+                         text=[f"%{100*x:.0f}" for x in p], textposition="outside"), row=2, col=1)
     fig.add_trace(go.Scatter(x=[f"{t:g}R" for t in T], y=bek, name="'T'de tam kapat' beklentisi (R)",
                              mode="lines+markers", line=dict(color=TURUNCU, width=2.6),
-                             marker=dict(size=9, color=TURUNCU)), row=1, col=2, secondary_y=True)
+                             marker=dict(size=9, color=TURUNCU)), row=2, col=1, secondary_y=True)
     fig.add_trace(go.Scatter(x=[f"{t:g}R" for t in T], y=[0.34] * len(T), name="50/25/25 ölçekli çıkış: +0,34R",
-                             mode="lines", line=dict(color=TEAL, width=2.2, dash="dash")), row=1, col=2, secondary_y=True)
-    fig.add_hline(y=0, line=dict(color=GRI, width=1), row=1, col=2, secondary_y=True)
-    fig.update_yaxes(title_text="p(MFE ≥ T)  (%)", range=[0, 100], row=1, col=2, secondary_y=False)
-    fig.update_yaxes(title_text="işlem başına beklenti (R)", range=[-0.62, 0.62], row=1, col=2, secondary_y=True)
-    fig.update_xaxes(title_text="hedef eşiği T", row=1, col=2)
+                             mode="lines", line=dict(color=TEAL, width=2.2, dash="dash")), row=2, col=1, secondary_y=True)
+    fig.add_hline(y=0, line=dict(color=GRI, width=1), row=2, col=1, secondary_y=True)
+    fig.update_yaxes(title_text="p(MFE ≥ T)  (%)", range=[0, 100], row=2, col=1, secondary_y=False)
+    fig.update_yaxes(title_text="işlem başına beklenti (R)", range=[-0.62, 0.62], row=2, col=1, secondary_y=True)
+    fig.update_xaxes(title_text="hedef eşiği T", row=2, col=1)
     not_(fig, "2R", 88, "çıplak 3R hedefi <b>negatif</b> (−0,04R) · tek hedefin<br>en iyisi 1,0R (+0,22R) · "
-         "ölçekli çıkış ikisini de yener (+0,34R)", renk=MUREKKEP, ok=False, boyut=9, row=1, col=2,
+         "ölçekli çıkış ikisini de yener (+0,34R)", renk=MUREKKEP, ok=False, boyut=9, row=2, col=1,
          xanchor="center")
     duzen(fig, "Şekil 55 — MAE/MFE ile SL ve TP kalibrasyonu (kurgu örnek, n = 100 — kendi verinizle yeniden hesaplanır)",
           f"Bu kurgu örneklemde E[R] = +{E:.2f}R. MAE kalibrasyonunun doğru kullanımı stopu keyfî daraltmak DEĞİL, "
           "GİRİŞ yerini iyileştirmektir; kalibrasyon aynı örneklemde uygulanıp 'iyileşti' denemez (OOS %30 şart)",
-          y_baslik="", x_baslik="", h=680)
+          y_baslik="", x_baslik="", h=700)
     fig.update_yaxes(title_text="işlem sonucu (R)", row=1, col=1)
-    fig.update_yaxes(title_text="p(MFE ≥ T)  (%)", row=1, col=2, secondary_y=False)
-    fig.update_yaxes(title_text="işlem başına beklenti (R)", row=1, col=2, secondary_y=True)
+    fig.update_yaxes(title_text="p(MFE ≥ T)  (%)", row=2, col=1, secondary_y=False)
+    fig.update_yaxes(title_text="işlem başına beklenti (R)", row=2, col=1, secondary_y=True)
     fig.update_xaxes(title_text="MAE — aleyhe azami sapma (R)", row=1, col=1)
-    fig.update_xaxes(title_text="hedef eşiği T", row=1, col=2)
+    fig.update_xaxes(title_text="hedef eşiği T", row=2, col=1)
     _kaydet(fig, "55_mae_mfe_kalibrasyon")
     OZET.update(mae_M90=round(M90, 2), mae_E=round(float(E), 3))
 
@@ -2125,28 +2152,29 @@ def g55_broker_feed():
 
     A = seri(551, 1.08496)     # PDL'nin 0,4 pip altı → sweep var
     B = seri(552, 1.08502)     # PDL'ye 0,2 pip kala durdu → sweep yok
-    fig = make_subplots(rows=1, cols=2, horizontal_spacing=0.09,
+    # İki feed ALT ALTA: iki AYRI veri sağlayıcısının serisi → shared_xaxes YOK
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.10,
                         subplot_titles=("(a) Broker A feed'i:<br>fitil PDL'nin <b>0,4 pip altına</b> indi",
                                         "(b) Broker B feed'i:<br>fitil PDL'ye <b>0,2 pip kala</b> durdu"))
     for j, (d, renk, hkm, aciklama) in enumerate(
             ((A, TEAL, "SWEEP VAR → setup geçerli", "MSS bekle, FVG'ye limit — işlem açılır"),
              (B, BORDO, "SWEEP YOK → setup yok", "Aynı an, aynı enstrüman, farklı sağlayıcı — işlem açılmaz"))):
-        c = j + 1
+        r = j + 1
         nn = len(d)
-        fig.add_trace(mum_izi(d, ad="1 dk mum", gorunur=(j == 0)), row=1, col=c)
-        yatay(fig, PDL, 0, nn - 1, renk=ALTIN, w=1.8, row=1, col=c)
-        not_(fig, 0.3, PDL, f"PDL {PDL:.5f}", renk=ALTIN, ok=False, boyut=9, xanchor="left", ay=12, row=1, col=c)
+        fig.add_trace(mum_izi(d, ad="1 dk mum", gorunur=(j == 0)), row=r, col=1)
+        yatay(fig, PDL, 0, nn - 1, renk=ALTIN, w=1.8, row=r, col=1)
+        not_(fig, 0.3, PDL, f"PDL {PDL:.5f}", renk=ALTIN, ok=False, boyut=9, xanchor="left", ay=12, row=r, col=1)
         i_k = int(d.index[d.lab == "kritik mum"][0])
-        daire(fig, i_k, d.l[i_k] + 0.00002, r_x=0.9, r_y=0.000030, renk=renk, row=1, col=c)
+        daire(fig, i_k, d.l[i_k] + 0.00002, r_x=0.9, r_y=0.000030, renk=renk, row=r, col=1)
         not_(fig, i_k, d.l[i_k], f"fitil dibi {d.l[i_k]:.5f}<br>({(d.l[i_k]-PDL)*1e4:+.1f} pip)", renk=renk,
-             ax=-58, ay=52, row=1, col=c)
+             ax=-58, ay=52, row=r, col=1)
         fig.add_shape(type="rect", x0=nn - 7.6, x1=nn - 0.4, y0=1.085495, y1=1.085595,
-                      fillcolor=rgba(renk, 0.20), line=dict(color=renk, width=1.2), row=1, col=c)
-        not_(fig, nn - 4.0, 1.085545, f"<b>{hkm}</b>", renk=renk, ok=False, boyut=10, row=1, col=c)
+                      fillcolor=rgba(renk, 0.20), line=dict(color=renk, width=1.2), row=r, col=1)
+        not_(fig, nn - 4.0, 1.085545, f"<b>{hkm}</b>", renk=renk, ok=False, boyut=10, row=r, col=1)
         not_(fig, nn - 0.4, 1.085485, aciklama, renk=GRI, ok=False, boyut=9, xanchor="right", yanchor="top",
-             row=1, col=c)
-        fig.update_yaxes(range=[1.08462, 1.08572], tickformat=".5f", row=1, col=c)
-        fig.update_xaxes(range=[-1, nn], row=1, col=c)
+             row=r, col=1)
+        fig.update_yaxes(range=[1.08462, 1.08572], tickformat=".5f", row=r, col=1)
+        fig.update_xaxes(range=[-1, nn], row=r, col=1)
     not_(fig, 0.3, 1.084655,
          "<b>Kural — minimum aşım eşiği:</b> bir aşımın 'sweep' sayılması için <b>≥ 1 pip</b> ya da "
          "<b>≥ 0,3 × ATR(1 dk)</b> olmalıdır.<br>Bu eşik olmadan setup'ınız broker seçiminize bağlı olur; "
@@ -2155,10 +2183,10 @@ def g55_broker_feed():
     duzen(fig, "Şekil 53 — Aynı an, iki farklı feed: birinde sweep var, diğerinde yok (şematik örnek)",
           "Aynı senaryo iki farklı fitil uzunluğuyla. FX'te fitil uçları sağlayıcıya göre değişir; "
           "'seviyenin 0,2 pip altı/üstü' bir teknik olgu değil, bir veri kaynağı farkıdır",
-          y_baslik="", x_baslik="", h=660)
-    for c in (1, 2):
-        fig.update_yaxes(title_text="fiyat" if c == 1 else "", row=1, col=c)
-        fig.update_xaxes(title_text="mum sırası (1 dk)", row=1, col=c)
+          y_baslik="", x_baslik="", h=860)
+    for r in (1, 2):
+        fig.update_yaxes(title_text="fiyat" if r == 1 else "", row=r, col=1)
+        fig.update_xaxes(title_text="mum sırası (1 dk)", row=r, col=1)
     _kaydet(fig, "53_broker_feed_farki")
 
 

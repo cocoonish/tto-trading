@@ -270,13 +270,17 @@ def swing_isaretle(fig, df, sh, sl, et=None, x=None, ith=None, itl=None, row=Non
                                  name="ITL (orta vadeli dip)"), row=row, col=col)
 
 
-def duzen(fig, baslik: str, alt: str = "", y_baslik="fiyat (şematik birim)", x_baslik="mum sırası", h=560):
+def duzen(fig, baslik: str, alt: str = "", y_baslik="fiyat (şematik birim)", x_baslik="mum sırası", h=560,
+          legend_y=None):
+    # legend_y: lejant çizim alanının altına paper biriminde yerleşir; alt alta dizilmiş
+    # (uzun) figürlerde -0.12 sabit oranı marjı taşırdığı için dışarıdan verilir.
     fig.update_layout(
         title=dict(text=f"{baslik}<br><sup style='color:#6b6355'>{alt}</sup>" if alt else baslik,
                    x=0.01, xanchor="left", font=dict(size=15, color=MUREKKEP)),
         paper_bgcolor="#ffffff", plot_bgcolor="#ffffff",
         font=dict(family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif", size=12.5, color=MUREKKEP),
-        legend=dict(orientation="h", yanchor="top", y=-0.12, xanchor="left", x=0, font=dict(size=11)),
+        legend=dict(orientation="h", yanchor="top", y=-0.12 if legend_y is None else legend_y,
+                    xanchor="left", x=0, font=dict(size=11)),
         margin=dict(l=60, r=70, t=90, b=100), height=h, hovermode="x",
         xaxis_rangeslider_visible=False,
     )
@@ -287,21 +291,26 @@ def duzen(fig, baslik: str, alt: str = "", y_baslik="fiyat (şematik birim)", x_
 
 def _alt_baslik_kir(fig, esik=24, font=12):
     """make_subplots alt panel başlıklarını sitede (~800 px iframe) çakışmasın diye
-    kırar: 3+ sütunlu figürlerde uzun başlıklar en yakın boşluktan iki satıra bölünür
-    ve fontları küçültülür. Alt başlıklar make_subplots'un ürettiği ilk N annotation'dır
-    (yanchor='bottom', xref '... domain'); kullanıcı annotation'larına dokunulmaz."""
-    try:
-        cols = max((int(str(ax.anchor or "y").lstrip("y") or 1)) for ax in fig.select_xaxes()) if list(fig.select_xaxes()) else 1
-    except Exception:
-        cols = 1
+    düzenler: çok panelli figürlerde font 12 px'e sabitlenir, 3+ SÜTUNLU figürlerde uzun
+    başlıklar ayrıca en yakın boşluktan iki satıra bölünür. Tek sütunlu (alt alta) yerleşimde
+    panel tam genişlik olduğu için kırmaya gerek yoktur. Alt başlıklar make_subplots'un
+    ürettiği ilk N annotation'dır (yanchor='bottom', xref '... domain'); kullanıcı
+    annotation'larına dokunulmaz."""
+    # sütun sayısı = x eksen domain'lerinin farklı SOL kenar sayısı (tek sütunda 1)
+    alanlar = [tuple(ax.domain) for ax in fig.select_xaxes() if ax.domain is not None]
+    cols = len({round(d[0], 4) for d in alanlar}) if alanlar else 1
+    panel = max(len(alanlar), 1)
+    # alt panel başlıkları y eksen domain'lerinin ÜST kenarına oturur; alt alta yerleşimde
+    # bu kenarlar 1.0'ın altına iner, o yüzden "üstte mi" yerine kenar eşleşmesine bakılır
+    ust_kenarlar = {round(tuple(ax.domain)[1], 4) for ax in fig.select_yaxes() if ax.domain is not None}
     for a in fig.layout.annotations:
         xref = str(getattr(a, "xref", ""))
         if getattr(a, "yanchor", None) != "bottom" or not (xref.endswith("domain") or xref == "paper"):
             continue
-        if xref == "paper" and (getattr(a, "y", 0) or 0) < 0.97:
-            continue   # paper-referanslı ama üstte olmayan: kullanıcı notu
+        if round(getattr(a, "y", 0) or 0, 4) not in ust_kenarlar or getattr(a, "bgcolor", None):
+            continue   # panel üst kenarında değil ya da kutulu: kullanıcı notu
         t = a.text or ""
-        if cols >= 3 or len(t) > 40:
+        if panel > 1 or cols >= 3 or len(t) > 40:
             a.font = a.font or {}
             a.font.size = font
         if cols >= 3 and len(t) > esik and "<br>" not in t:
@@ -632,16 +641,17 @@ def g07_sweep_vs_run():
     b.mum(99.4, 99.45, 98.5, 98.6, "devam")
     b.bacak(98.9, 2, gurultu=0.4); b.bacak(97.6, 4)
     da, db = a.df(), b.df()
-    fig = make_subplots(rows=1, cols=2, subplot_titles=("(a) SWEEP — fitil ötede, gövde içeride → turtle soup / dönüş",
+    # okunabilirlik: paneller alt alta (tek sütun) — okuma sırası (a) üst, (b) alt
+    fig = make_subplots(rows=2, cols=1, subplot_titles=("(a) SWEEP — fitil ötede, gövde içeride → turtle soup / dönüş",
                                                         "(b) LIQUIDITY RUN — gövde ötede kapandı → kırılım / devam"),
-                        horizontal_spacing=0.06)
+                        vertical_spacing=0.09)
     fig.add_trace(mum_izi(da, ad="Mum (a)"), row=1, col=1)
-    fig.add_trace(mum_izi(db, ad="Mum (b)", gorunur=False), row=1, col=2)
-    for col, d in ((1, da), (2, db)):
+    fig.add_trace(mum_izi(db, ad="Mum (b)", gorunur=False), row=2, col=1)
+    for satir, d in ((1, da), (2, db)):
         i_pdl = int(d.index[d.lab.str.startswith("PDL")][0])
         pdl = d.l[i_pdl - 1:i_pdl + 2].min()
-        yatay(fig, pdl, i_pdl, len(d) - 1, renk=ALTIN, w=1.6, row=1, col=col)
-        not_(fig, i_pdl, pdl - 0.25, "PDL / eski dip — SSL", renk=ALTIN, ok=False, boyut=10, row=1, col=col)
+        yatay(fig, pdl, i_pdl, len(d) - 1, renk=ALTIN, w=1.6, row=satir, col=1)
+        not_(fig, i_pdl, pdl - 0.25, "PDL / eski dip — SSL", renk=ALTIN, ok=False, boyut=10, row=satir, col=1)
     i_sw = int(da.index[da.lab.str.startswith("SWEEP")][0])
     daire(fig, i_sw, da.l[i_sw] + 0.15, r_y=0.3, row=1, col=1)
     not_(fig, i_sw, da.l[i_sw], "<b>sweep</b>: stoplar tetiklendi,<br>gövde seviyenin üstünde", renk=ALTIN, ax=-70, ay=40, row=1, col=1)
@@ -649,10 +659,10 @@ def g07_sweep_vs_run():
     yatay(fig, 101.6, i_sw - 4, i_m, renk=BORDO, dash="dot", row=1, col=1)
     not_(fig, i_m, da.c[i_m], "MSS: yakın swing high gövdeyle kırıldı<br>→ turtle soup girişi (Raschke: eski dip üstüne buy-stop)", renk=TEAL, ax=-60, ay=-45, row=1, col=1)
     i_r = int(db.index[db.lab.str.startswith("RUN")][0])
-    not_(fig, i_r, db.c[i_r], "<b>run</b>: gövde 100.0 altında kapandı,<br>büyük kırmızı mumlar → karşı işlem yok,<br>DOL aşağıdaki sonraki havuza kayar", renk=BORDO, ax=110, ay=-110, row=1, col=2)
+    not_(fig, i_r, db.c[i_r], "<b>run</b>: gövde 100.0 altında kapandı,<br>büyük kırmızı mumlar → karşı işlem yok,<br>DOL aşağıdaki sonraki havuza kayar", renk=BORDO, ax=110, ay=-110, row=2, col=1)
     duzen(fig, "Şekil 10 — Aynı seviyede iki farklı sonuç: sweep mi, liquidity run mı? (şematik örnek)",
-          "Ayrım ancak mum KAPANIŞIYLA yapılır — canlıda fitil ötedeyken henüz bilinmez")
-    fig.update_xaxes(title_text="mum sırası", row=1, col=2)
+          "Ayrım ancak mum KAPANIŞIYLA yapılır — canlıda fitil ötedeyken henüz bilinmez", h=860)
+    fig.update_xaxes(title_text="mum sırası", row=2, col=1)
     kaydet(fig, "10_sweep_vs_liquidity_run")
 
 
@@ -749,32 +759,33 @@ def g10_fvg():
         s.bacak(100.8, 3); s.bacak(102.95, 3, lab="CE'ye kısmi dolum → tepki"); s.bacak(100.2, 4)
         return s.df()
     da, db = bull(101), bear(102)
-    fig = make_subplots(rows=1, cols=2, subplot_titles=("(a) Bullish FVG — BISI: high(M1) < low(M3)", "(b) Bearish FVG — SIBI: low(M1) > high(M3)"), horizontal_spacing=0.06)
+    # okunabilirlik: paneller alt alta (tek sütun)
+    fig = make_subplots(rows=2, cols=1, subplot_titles=("(a) Bullish FVG — BISI: high(M1) < low(M3)", "(b) Bearish FVG — SIBI: low(M1) > high(M3)"), vertical_spacing=0.09)
     fig.add_trace(mum_izi(da, ad="Mum (a)"), row=1, col=1)
-    fig.add_trace(mum_izi(db, ad="Mum (b)", gorunur=False), row=1, col=2)
-    for col, d, tip in ((1, da, "BISI"), (2, db, "SIBI")):
+    fig.add_trace(mum_izi(db, ad="Mum (b)", gorunur=False), row=2, col=1)
+    for satir, d, tip in ((1, da, "BISI"), (2, db, "SIBI")):
         i1 = int(d.index[d.lab.str.startswith("M1")][0])
         f = [f for f in fvg_bul(d) if f["i"] == i1][0]
         n = len(d)
-        kutu(fig, i1, n - 1, f["alt"], f["ust"], MOR, a=0.2, row=1, col=col)
+        kutu(fig, i1, n - 1, f["alt"], f["ust"], MOR, a=0.2, row=satir, col=1)
         ce = (f["alt"] + f["ust"]) / 2
-        yatay(fig, ce, i1, n - 1, renk=MOR, dash="dash", row=1, col=col)
-        not_(fig, n - 1, ce, f"CE = %50 → {ce:.2f}", renk=MOR, ok=False, boyut=10, xanchor="right", ay=-12, row=1, col=col)
+        yatay(fig, ce, i1, n - 1, renk=MOR, dash="dash", row=satir, col=1)
+        not_(fig, n - 1, ce, f"CE = %50 → {ce:.2f}", renk=MOR, ok=False, boyut=10, xanchor="right", ay=-12, row=satir, col=1)
         for k in range(3):
-            not_(fig, i1 + k, d.h[i1 + k] + 0.12 if col == 1 else d.l[i1 + k] - 0.12, f"M{k+1}", renk=GRI, ok=False, boyut=10, row=1, col=col)
+            not_(fig, i1 + k, d.h[i1 + k] + 0.12 if satir == 1 else d.l[i1 + k] - 0.12, f"M{k+1}", renk=GRI, ok=False, boyut=10, row=satir, col=1)
         a_ = atr(d, 14)[i1 + 1]
         govde = abs(d.c[i1 + 1] - d.o[i1 + 1])
         not_(fig, i1 + 1, (d.o[i1 + 1] + d.c[i1 + 1]) / 2, f"M2 gövde ≈ {govde/a_:.1f}×ATR(14)<br>gövde/aralık %{100*govde/(d.h[i1+1]-d.l[i1+1]):.0f}",
-             renk=TEAL if col == 1 else BORDO, ax=-100, ay=-20 if col == 1 else 10, row=1, col=col)
+             renk=TEAL if satir == 1 else BORDO, ax=-100, ay=-20 if satir == 1 else 10, row=satir, col=1)
         alt_ad = "high(M1)" if tip == "BISI" else "high(M3)"; ust_ad = "low(M3)" if tip == "BISI" else "low(M1)"
-        not_(fig, i1 + 3, f["alt"], f"{alt_ad} = {f['alt']:.2f}", renk=MOR, ok=False, boyut=9, xanchor="left", ay=10, row=1, col=col)
-        not_(fig, i1 + 3, f["ust"], f"{ust_ad} = {f['ust']:.2f}", renk=MOR, ok=False, boyut=9, xanchor="left", ay=-10, row=1, col=col)
+        not_(fig, i1 + 3, f["alt"], f"{alt_ad} = {f['alt']:.2f}", renk=MOR, ok=False, boyut=9, xanchor="left", ay=10, row=satir, col=1)
+        not_(fig, i1 + 3, f["ust"], f"{ust_ad} = {f['ust']:.2f}", renk=MOR, ok=False, boyut=9, xanchor="left", ay=-10, row=satir, col=1)
         i_ce = int(d.index[d.lab.str.startswith("CE")][0])
-        not_(fig, i_ce, d.l[i_ce] if col == 1 else d.h[i_ce], "kısmi dolum: CE'ye kadar girdi, tepki<br>(fresh → partially filled)", renk=MOR, ax=40, ay=40 if col == 1 else -40, row=1, col=col)
+        not_(fig, i_ce, d.l[i_ce] if satir == 1 else d.h[i_ce], "kısmi dolum: CE'ye kadar girdi, tepki<br>(fresh → partially filled)", renk=MOR, ax=40, ay=40 if satir == 1 else -40, row=satir, col=1)
     lejant(fig, "FVG (imbalance)", MOR); lejant_cizgi(fig, "CE (consequent encroachment)", MOR)
     duzen(fig, "Şekil 15 — Fair Value Gap: BISI ve SIBI, CE (%50) ve kısmi dolum (şematik örnek)",
-          "Üç mum: 1. ve 3. mumun fitilleri örtüşmez; orta mum displacement mumu (gövde ≥ %60, ≥1,5× ATR)")
-    fig.update_xaxes(title_text="mum sırası", row=1, col=2)
+          "Üç mum: 1. ve 3. mumun fitilleri örtüşmez; orta mum displacement mumu (gövde ≥ %60, ≥1,5× ATR)", h=860)
+    fig.update_xaxes(title_text="mum sırası", row=2, col=1)
     kaydet(fig, "15_fvg_bisi_sibi_ce")
 
 
@@ -912,8 +923,9 @@ def g14_mitigation():
     b.mum(104.15, 104.2, 103.0, 103.1, "d1"); b.mum(103.1, 103.15, 101.5, 101.6, "d2: L altında gövde → kırılım"); b.mum(101.6, 101.7, 100.8, 100.9, "d3")
     b.bacak(100.3, 2); b.bacak(103.5, 4); b.mum(103.5, 104.2, 103.4, 103.6, "MB retest → direnç"); b.bacak(101.5, 3); b.bacak(99.5, 4)
     da, db = a.df(), b.df()
-    fig = make_subplots(rows=1, cols=2, subplot_titles=("(a) V1 (yaygın): tutan OB'nin devam retest'i", "(b) V2 (ICT-orijinal): sweep OLMADAN kırılan bacağın son zıt mumu"), horizontal_spacing=0.06)
-    fig.add_trace(mum_izi(da, ad="Mum (a)"), row=1, col=1); fig.add_trace(mum_izi(db, ad="Mum (b)", gorunur=False), row=1, col=2)
+    # okunabilirlik: paneller alt alta (tek sütun)
+    fig = make_subplots(rows=2, cols=1, subplot_titles=("(a) V1 (yaygın): tutan OB'nin devam retest'i", "(b) V2 (ICT-orijinal): sweep OLMADAN kırılan bacağın son zıt mumu"), vertical_spacing=0.09)
+    fig.add_trace(mum_izi(da, ad="Mum (a)"), row=1, col=1); fig.add_trace(mum_izi(db, ad="Mum (b)", gorunur=False), row=2, col=1)
     # (a)
     i_ob = int(da.index[da.lab.str.startswith("OB")][0]); i_rt = int(da.index[da.lab.str.startswith("MB")][0]); n = len(da)
     kutu(fig, i_ob, n - 1, da.c[i_ob], da.o[i_ob], MAVI, a=0.24, row=1, col=1)
@@ -925,16 +937,16 @@ def g14_mitigation():
     i_H = int(db.index[db.lab == "H"][0]); i_L = int(db.index[db.lab == "L"][0]); i_LH = int(db.index[db.lab.str.startswith("LH")][0])
     i_k = int(db.index[db.lab.str.startswith("d2")][0]); i_rt = int(db.index[db.lab.str.startswith("MB retest")][0]); n = len(db)
     H = db.h[i_H - 1:i_H + 2].max(); L = db.l[i_L - 1:i_L + 2].min()
-    yatay(fig, H, i_H, i_LH + 1, renk=ALTIN, row=1, col=2); not_(fig, i_H, H + 0.25, "H — süpürülmedi", renk=ALTIN, ok=False, boyut=10, row=1, col=2)
-    yatay(fig, L, i_L, i_k + 1, renk=BORDO, dash="dash", w=1.6, row=1, col=2); not_(fig, i_L, L - 0.25, "L — kırılan dip", renk=BORDO, ok=False, boyut=10, row=1, col=2)
-    kutu(fig, i_LH, n - 1, db.o[i_LH], db.c[i_LH], MAVI, a=0.24, row=1, col=2)
-    not_(fig, i_LH, db.h[i_LH], "<b>LH</b>: yeni high yapamadı (sweep yok)<br>son yeşil mum = <b>mitigation block</b>", renk=MAVI, ax=-90, ay=-45, row=1, col=2)
-    not_(fig, i_k, db.c[i_k], "L gövdeyle kırıldı", renk=BORDO, ax=60, ay=30, row=1, col=2)
-    not_(fig, i_rt, db.h[i_rt], "MB retest → direnç, short;<br>SL MB üstü", renk=MAVI, ax=60, ay=-45, row=1, col=2)
+    yatay(fig, H, i_H, i_LH + 1, renk=ALTIN, row=2, col=1); not_(fig, i_H, H + 0.25, "H — süpürülmedi", renk=ALTIN, ok=False, boyut=10, row=2, col=1)
+    yatay(fig, L, i_L, i_k + 1, renk=BORDO, dash="dash", w=1.6, row=2, col=1); not_(fig, i_L, L - 0.25, "L — kırılan dip", renk=BORDO, ok=False, boyut=10, row=2, col=1)
+    kutu(fig, i_LH, n - 1, db.o[i_LH], db.c[i_LH], MAVI, a=0.24, row=2, col=1)
+    not_(fig, i_LH, db.h[i_LH], "<b>LH</b>: yeni high yapamadı (sweep yok)<br>son yeşil mum = <b>mitigation block</b>", renk=MAVI, ax=-90, ay=-45, row=2, col=1)
+    not_(fig, i_k, db.c[i_k], "L gövdeyle kırıldı", renk=BORDO, ax=60, ay=30, row=2, col=1)
+    not_(fig, i_rt, db.h[i_rt], "MB retest → direnç, short;<br>SL MB üstü", renk=MAVI, ax=60, ay=-45, row=2, col=1)
     lejant(fig, "OB / mitigation block", MAVI)
-    duzen(fig, "Şekil 19 — Mitigation block: iki tanım yan yana (şematik örnek)",
-          "Aynı seviye, zıt işlem fikri: breaker'da OB kırılmıştır (yön döner); mitigation'da OB tutar (yön aynı) — V2'de fark sweep'in olmamasıdır")
-    fig.update_xaxes(title_text="mum sırası", row=1, col=2)
+    duzen(fig, "Şekil 19 — Mitigation block: iki tanım alt alta (şematik örnek)",
+          "Aynı seviye, zıt işlem fikri: breaker'da OB kırılmıştır (yön döner); mitigation'da OB tutar (yön aynı) — V2'de fark sweep'in olmamasıdır", h=860)
+    fig.update_xaxes(title_text="mum sırası", row=2, col=1)
     kaydet(fig, "19_mitigation_block")
 
 
@@ -950,12 +962,13 @@ def g15_po3():
     df = s.df()
     n = len(df); assert n == 24  # 24 saat
     saat = [f"{h:02d}:00" for h in range(n)]
-    fig = make_subplots(rows=1, cols=2, column_widths=[0.86, 0.14], horizontal_spacing=0.03,
+    # okunabilirlik: saatlik mumlar üstte, günün tek mumu altta (tek sütun)
+    fig = make_subplots(rows=2, cols=1, row_heights=[0.70, 0.30], vertical_spacing=0.10,
                         subplot_titles=("saatlik mumlar (NY saati)", "günlük mum"))
     fig.add_trace(mum_izi(df, x=saat, ad="saatlik mum"), row=1, col=1)
     fig.add_trace(go.Candlestick(x=["gün"], open=[df.o[0]], high=[df.h.max()], low=[df.l.min()], close=[df.c[n - 1]],
                                  increasing_line_color=TEAL, increasing_fillcolor=TEAL, decreasing_line_color=BORDO, decreasing_fillcolor=BORDO,
-                                 name="günlük mum", showlegend=False, whiskerwidth=0.6), row=1, col=2)
+                                 name="günlük mum", showlegend=False, whiskerwidth=0.6), row=2, col=1)
     o0 = df.o[0]
     yatay(fig, o0, saat[0], saat[-1], renk=MUREKKEP, dash="dash", w=1.5, row=1, col=1)
     not_(fig, saat[-1], o0, "00:00 NY open (true day open)", renk=MUREKKEP, ok=False, boyut=10, xanchor="right", ay=12, row=1, col=1)
@@ -972,12 +985,12 @@ def g15_po3():
                   annotation_text="Londra KZ 02–05", annotation_position="top left", annotation_font=dict(size=9, color=ALTIN))
     fig.add_vrect(x0=saat[7], x1=saat[10], fillcolor=rgba(ALTIN, 0.10), line_width=0, layer="below", row=1, col=1,
                   annotation_text="NY AM KZ 07–10", annotation_position="top left", annotation_font=dict(size=9, color=ALTIN))
-    not_(fig, "gün", df.o[0], "open dibe yakın", renk=GRI, ok=False, boyut=9, xanchor="left", ax=6, row=1, col=2)
-    not_(fig, "gün", df.l.min(), "alt fitil = Judas", renk=BORDO, ok=False, boyut=9, ay=12, row=1, col=2)
-    not_(fig, "gün", df.c[n - 1], "kapanış tepeye yakın", renk=TEAL, ok=False, boyut=9, xanchor="left", ax=6, row=1, col=2)
+    not_(fig, "gün", df.o[0], "open dibe yakın", renk=GRI, ok=False, boyut=9, xanchor="left", ax=6, row=2, col=1)
+    not_(fig, "gün", df.l.min(), "alt fitil = Judas", renk=BORDO, ok=False, boyut=9, ay=12, row=2, col=1)
+    not_(fig, "gün", df.c[n - 1], "kapanış tepeye yakın", renk=TEAL, ok=False, boyut=9, xanchor="left", ax=6, row=2, col=1)
     duzen(fig, "Şekil 26 — Power of Three (AMD) ve Judas swing: bullish gün (şematik örnek)",
-          "Referans 00:00 NY açılışı; A birikim → M açılışın yanlış tarafına yem → D genişleme; sağda günün tek mumu", x_baslik="NY saati")
-    fig.update_xaxes(tickangle=-45, row=1, col=1); fig.update_xaxes(title_text="", row=1, col=2)
+          "Referans 00:00 NY açılışı; A birikim → M açılışın yanlış tarafına yem → D genişleme; altta günün tek mumu", x_baslik="NY saati", h=880)
+    fig.update_xaxes(tickangle=-45, row=1, col=1); fig.update_xaxes(title_text="", row=2, col=1)
     kaydet(fig, "26_power_of_three_amd")
 
 
@@ -1047,12 +1060,13 @@ def g27_haftalik_profil():
         l=[99.60, 99.55, 99.62, 99.58, 99.10], c=[100.10, 99.95, 100.05, 100.10, 100.02],
         lab=["Pzt: dar aralık", "Sal: dar aralık", "Çar: dar aralık", "Per: dar aralık (haftalık ekstrem hâlâ yok)",
              "Cum: önce aralık üstü BSL, sonra aralık altı SSL süpürüldü; kapanış ortada"]))
-    fig = make_subplots(rows=1, cols=2, subplot_titles=("(a) Classic Tuesday Low (bullish hafta)", "(b) Seek & Destroy Friday"),
-                        horizontal_spacing=0.08)
+    # okunabilirlik: paneller alt alta (tek sütun)
+    fig = make_subplots(rows=2, cols=1, subplot_titles=("(a) Classic Tuesday Low (bullish hafta)", "(b) Seek & Destroy Friday"),
+                        vertical_spacing=0.09)
     for an in fig.layout.annotations:
         an.font.size = 12
     fig.add_trace(mum_izi(a, ad="günlük mum"), row=1, col=1)
-    fig.add_trace(mum_izi(b, ad="günlük mum (b)", gorunur=False), row=1, col=2)
+    fig.add_trace(mum_izi(b, ad="günlük mum (b)", gorunur=False), row=2, col=1)
     # (a) haftalık açılış, HTF discount kutusu, PWH, genişleme oku
     o0 = a.o[0]
     yatay(fig, o0, 0, 4, renk=MUREKKEP, dash="dash", w=1.5, row=1, col=1)
@@ -1069,20 +1083,20 @@ def g27_haftalik_profil():
     not_(fig, 0, a.l[0] - 0.05, "Pzt: açılış altına<br>manipülasyon (Judas)", renk=BORDO, ok=False, boyut=9, yanchor="top", row=1, col=1)
     # (b) aralık kutusu, iki yönlü sweep
     rh, rl = b.h[:4].max(), b.l[:4].min()
-    kutu(fig, -0.5, 3.5, rl, rh, GRI, a=0.10, dash="dot", row=1, col=2)
-    yatay(fig, rh, 0, 4, renk=ALTIN, w=1.4, row=1, col=2); yatay(fig, rl, 0, 4, renk=ALTIN, w=1.4, row=1, col=2)
-    not_(fig, 0, rh, "Pzt–Per aralık high — BSL", renk=ALTIN, ok=False, boyut=9, xanchor="left", ay=-11, row=1, col=2)
-    not_(fig, 0, rl, "Pzt–Per aralık low — SSL", renk=ALTIN, ok=False, boyut=9, xanchor="left", ay=11, row=1, col=2)
-    daire(fig, 4, b.h[4] - 0.08, r_x=0.35, r_y=0.14, row=1, col=2); daire(fig, 4, b.l[4] + 0.08, r_x=0.35, r_y=0.14, row=1, col=2)
-    not_(fig, 4, b.h[4] + 0.05, "<b>Cuma</b>: her iki taraf süpürüldü,<br>kapanış aralığın içinde", renk=BORDO, ok=False, boyut=9, yanchor="bottom", row=1, col=2)
-    not_(fig, 1, rl - 0.35, "haftalık ekstremler Pzt–Salı'da oluşmadı,<br>Salı–Per genişleme yok → 'seek & destroy' adayı;<br>haber/faiz haftası veya sıkışma", renk=GRI, ok=False, boyut=9, xanchor="left", row=1, col=2)
+    kutu(fig, -0.5, 3.5, rl, rh, GRI, a=0.10, dash="dot", row=2, col=1)
+    yatay(fig, rh, 0, 4, renk=ALTIN, w=1.4, row=2, col=1); yatay(fig, rl, 0, 4, renk=ALTIN, w=1.4, row=2, col=1)
+    not_(fig, 0, rh, "Pzt–Per aralık high — BSL", renk=ALTIN, ok=False, boyut=9, xanchor="left", ay=-11, row=2, col=1)
+    not_(fig, 0, rl, "Pzt–Per aralık low — SSL", renk=ALTIN, ok=False, boyut=9, xanchor="left", ay=11, row=2, col=1)
+    daire(fig, 4, b.h[4] - 0.08, r_x=0.35, r_y=0.14, row=2, col=1); daire(fig, 4, b.l[4] + 0.08, r_x=0.35, r_y=0.14, row=2, col=1)
+    not_(fig, 4, b.h[4] + 0.05, "<b>Cuma</b>: her iki taraf süpürüldü,<br>kapanış aralığın içinde", renk=BORDO, ok=False, boyut=9, yanchor="bottom", row=2, col=1)
+    not_(fig, 1, rl - 0.35, "haftalık ekstremler Pzt–Salı'da oluşmadı,<br>Salı–Per genişleme yok → 'seek & destroy' adayı;<br>haber/faiz haftası veya sıkışma", renk=GRI, ok=False, boyut=9, xanchor="left", row=2, col=1)
     lejant(fig, "HTF discount / PD array", TEAL); lejant(fig, "Pzt–Per aralığı", GRI, a=0.12); lejant_cizgi(fig, "likidite (PWH / aralık H-L)", ALTIN, "solid"); lejant_cizgi(fig, "haftalık açılış", MUREKKEP)
-    fig.update_yaxes(range=[98.2, 102.6], row=1, col=1); fig.update_yaxes(range=[98.6, 101.4], row=1, col=2)
-    for c in (1, 2):
-        fig.update_xaxes(tickvals=list(range(5)), ticktext=gun, range=[-0.6, 4.6], row=1, col=c)
+    fig.update_yaxes(range=[98.2, 102.6], row=1, col=1); fig.update_yaxes(range=[98.6, 101.4], row=2, col=1)
+    for r in (1, 2):
+        fig.update_xaxes(tickvals=list(range(5)), ticktext=gun, range=[-0.6, 4.6], row=r, col=1)
     duzen(fig, "Şekil 27 — Haftalık profil: Classic Tuesday Low ve Seek & Destroy Friday (şematik örnek)",
-          "Günlük mumlar; referans Pzt açılışı ve önceki hafta H/L. Haftalık ekstrem çoğunlukla Pzt–Salı; Salı–Perşembe azami genişleme; Cuma stop avı varyantı sağda", x_baslik="gün")
-    fig.update_xaxes(title_text="gün", row=1, col=2)
+          "Günlük mumlar; referans Pzt açılışı ve önceki hafta H/L. Haftalık ekstrem çoğunlukla Pzt–Salı; Salı–Perşembe azami genişleme; Cuma stop avı varyantı altta", x_baslik="gün", h=860)
+    fig.update_xaxes(title_text="gün", row=2, col=1)
     kaydet(fig, "27_haftalik_profil")
 
 
@@ -1206,8 +1220,9 @@ def g46_mtf_panel():
     dh = _htf(); dl = _ltf(); m = _ltf_meta(dl)
     n2 = m["i_mss"] + 2
     d2 = dl.iloc[:n2].reset_index(drop=True)
-    fig = make_subplots(rows=1, cols=3, subplot_titles=("H4 — bias, dealing range, DOL", "15m — sweep + MSS, FVG/OB", "5m/1m — OTE/FVG'ye dönüş, giriş / SL / TP"), horizontal_spacing=0.05)
-    fig.add_trace(mum_izi(dh, ad="H4"), row=1, col=1); fig.add_trace(mum_izi(d2, ad="15m"), row=1, col=2); fig.add_trace(mum_izi(dl, ad="5m/1m"), row=1, col=3)
+    # okunabilirlik: üç zaman dilimi alt alta (tek sütun) — okuma sırası H4 → 15m → 5m/1m
+    fig = make_subplots(rows=3, cols=1, subplot_titles=("H4 — bias, dealing range, DOL", "15m — sweep + MSS, FVG/OB", "5m/1m — OTE/FVG'ye dönüş, giriş / SL / TP"), vertical_spacing=0.07)
+    fig.add_trace(mum_izi(dh, ad="H4"), row=1, col=1); fig.add_trace(mum_izi(d2, ad="15m"), row=2, col=1); fig.add_trace(mum_izi(dl, ad="5m/1m"), row=3, col=1)
     # H4
     nh = len(dh); i_L = int(dh.index[dh.lab.str.startswith("dealing range low")][0]); i_H = int(dh.index[dh.lab.str.startswith("dealing range high")][0])
     L, H = dh.l[i_L - 1:i_L + 2].min(), dh.h[i_H - 1:i_H + 2].max(); eq = (L + H) / 2
@@ -1216,21 +1231,22 @@ def g46_mtf_panel():
     not_(fig, nh - 1, H, "DOL: BSL", renk=ALTIN, ok=False, boyut=10, xanchor="right", ay=-12, row=1, col=1)
     not_(fig, nh - 1, dh.c[nh - 1], "discount ✓ bias bullish ✓", renk=TEAL, ax=-60, ay=40, row=1, col=1)
     # 15m
-    yatay(fig, m["eql"], m["i_eq1"], m["i_sw"] + 1, renk=ALTIN, w=1.5, row=1, col=2); daire(fig, m["i_sw"], d2.l[m["i_sw"]] + 0.08, r_y=0.12, row=1, col=2)
-    not_(fig, m["i_sw"], d2.l[m["i_sw"]], "sweep", renk=ALTIN, ax=-40, ay=35, row=1, col=2)
-    yatay(fig, m["ref"], m["i_ref"], m["i_mss"] + 1, renk=BORDO, dash="dash", row=1, col=2); not_(fig, m["i_mss"], d2.c[m["i_mss"]], "MSS", renk=TEAL, ax=-40, ay=-35, row=1, col=2)
-    f = m["fvg"]; kutu(fig, f["i"], n2 - 1, f["alt"], f["ust"], MOR, a=0.2, row=1, col=2); kutu(fig, m["i_sw"], n2 - 1, m["ob"][0], m["ob"][1], MAVI, a=0.24, row=1, col=2)
+    yatay(fig, m["eql"], m["i_eq1"], m["i_sw"] + 1, renk=ALTIN, w=1.5, row=2, col=1); daire(fig, m["i_sw"], d2.l[m["i_sw"]] + 0.08, r_y=0.12, row=2, col=1)
+    not_(fig, m["i_sw"], d2.l[m["i_sw"]], "sweep", renk=ALTIN, ax=-40, ay=35, row=2, col=1)
+    yatay(fig, m["ref"], m["i_ref"], m["i_mss"] + 1, renk=BORDO, dash="dash", row=2, col=1); not_(fig, m["i_mss"], d2.c[m["i_mss"]], "MSS", renk=TEAL, ax=-40, ay=-35, row=2, col=1)
+    f = m["fvg"]; kutu(fig, f["i"], n2 - 1, f["alt"], f["ust"], MOR, a=0.2, row=2, col=1); kutu(fig, m["i_sw"], n2 - 1, m["ob"][0], m["ob"][1], MAVI, a=0.24, row=2, col=1)
     # 5m
     nl = len(dl); giris = (f["alt"] + f["ust"]) / 2; sl = m["L"] - 0.10; r = m["H"] - m["L"]; tp1 = m["H"] + 0.27 * r; tp2 = m["H"] + 0.62 * r
-    kutu(fig, f["i"], nl - 1, f["alt"], f["ust"], MOR, a=0.2, row=1, col=3); kutu(fig, m["i_sw"], nl - 1, m["ob"][0], m["ob"][1], MAVI, a=0.22, row=1, col=3)
-    y62, y79 = m["H"] - 0.62 * r, m["H"] - 0.79 * r; kutu(fig, m["i_sw"], nl - 1, y79, y62, ALTIN, a=0.16, cizgi=0, row=1, col=3)
-    kutu(fig, m["i_g"], nl - 1, sl, giris, BORDO, a=0.2, cizgi=0, row=1, col=3); kutu(fig, m["i_g"], nl - 1, giris, tp2, TEAL, a=0.16, cizgi=0, row=1, col=3)
-    yatay(fig, tp1, m["i_g"], nl - 1, renk=TEAL, dash="dot", row=1, col=3)
-    not_(fig, m["i_g"], giris, "giriş", renk=MUREKKEP, ax=-40, ay=30, row=1, col=3); not_(fig, m["i_g"] + 1, sl, "SL", renk=BORDO, ok=False, boyut=10, xanchor="left", ay=10, row=1, col=3)
-    not_(fig, m["i_t1"], tp1, "TP1", renk=TEAL, ok=False, boyut=10, ay=-10, row=1, col=3); not_(fig, m["i_t2"], tp2, "TP2", renk=TEAL, ok=False, boyut=10, ay=-10, row=1, col=3)
+    kutu(fig, f["i"], nl - 1, f["alt"], f["ust"], MOR, a=0.2, row=3, col=1); kutu(fig, m["i_sw"], nl - 1, m["ob"][0], m["ob"][1], MAVI, a=0.22, row=3, col=1)
+    y62, y79 = m["H"] - 0.62 * r, m["H"] - 0.79 * r; kutu(fig, m["i_sw"], nl - 1, y79, y62, ALTIN, a=0.16, cizgi=0, row=3, col=1)
+    kutu(fig, m["i_g"], nl - 1, sl, giris, BORDO, a=0.2, cizgi=0, row=3, col=1); kutu(fig, m["i_g"], nl - 1, giris, tp2, TEAL, a=0.16, cizgi=0, row=3, col=1)
+    yatay(fig, tp1, m["i_g"], nl - 1, renk=TEAL, dash="dot", row=3, col=1)
+    not_(fig, m["i_g"], giris, "giriş", renk=MUREKKEP, ax=-40, ay=30, row=3, col=1); not_(fig, m["i_g"] + 1, sl, "SL", renk=BORDO, ok=False, boyut=10, xanchor="left", ay=10, row=3, col=1)
+    not_(fig, m["i_t1"], tp1, "TP1", renk=TEAL, ok=False, boyut=10, ay=-10, row=3, col=1); not_(fig, m["i_t2"], tp2, "TP2", renk=TEAL, ok=False, boyut=10, ay=-10, row=3, col=1)
     lejant(fig, "FVG", MOR); lejant(fig, "OB", MAVI); lejant(fig, "OTE", ALTIN, a=0.16); lejant(fig, "premium/discount", GRI, a=0.1)
     duzen(fig, "Şekil 46 — Çoklu zaman dilimi akışı: H4 → 15m → 5m/1m aynı işlemin üç katmanı (şematik örnek)",
-          "Kural: LTF'ye ancak HTF olay olduysa inilir; swing tier'ı yapı grafiğinde, kırılım kalitesi icra grafiğinde okunur", x_baslik="")
+          "Kural: LTF'ye ancak HTF olay olduysa inilir; swing tier'ı yapı grafiğinde, kırılım kalitesi icra grafiğinde okunur", x_baslik="",
+          h=1200, legend_y=-0.07)
     kaydet(fig, "46_mtf_panel")
 
 
@@ -1365,9 +1381,10 @@ def g22_gecersizlesme():
 # 24 — PD array ailesi: rejection block, propulsion block, volume imbalance, BPR
 # =====================================================================================
 def g24_pd_array_ailesi():
-    fig = make_subplots(rows=2, cols=2, subplot_titles=("(a) Rejection Block — fitil bölgesi", "(b) Propulsion Block — OB'yi test edip itki başlatan mum",
+    # okunabilirlik: dört panel alt alta (tek sütun) — okuma sırası (a) → (b) → (c) → (d)
+    fig = make_subplots(rows=4, cols=1, subplot_titles=("(a) Rejection Block — fitil bölgesi", "(b) Propulsion Block — OB'yi test edip itki başlatan mum",
                                                         "(c) Volume Imbalance — gövde boşluğu (fitiller örtüşür)", "(d) Balanced Price Range — zıt iki FVG'nin örtüşmesi"),
-                        horizontal_spacing=0.07, vertical_spacing=0.16)
+                        vertical_spacing=0.06)
     # (a) RB bearish
     a = Seri(241); a.bacak(102.5, 4); a.bacak(103.4, 3, gurultu=0.5); a.mum(a.son, 104.6, a.son - 0.05, 103.5, "swing high mumu: uzun üst fitil (sweep)")
     a.bacak(102.2, 3); a.bacak(103.7, 3, gurultu=0.4); a.mum(103.7, 104.3, 103.6, 103.65, "RB retest (fitil bölgesine giriş)"); a.bacak(102.0, 3); a.bacak(101.0, 3)
@@ -1381,34 +1398,35 @@ def g24_pd_array_ailesi():
     b.bacak(103.8, 2); b.bacak(101.6, 3, gurultu=0.4); b.mum(101.6, 101.65, 100.85, 101.45, "PB: OB'ye fitille dokundu, itki başladı"); b.mum(101.45, 102.7, 101.4, 102.6, "d"); b.bacak(104.0, 3)
     b.bacak(102.4, 3); b.mum(102.4, 102.45, 101.4, 101.9, "PB retest → giriş"); b.bacak(104.5, 3)
     db = b.df(); n = len(db); io = int(db.index[db.lab == "OB mumu"][0]); ip = int(db.index[db.lab.str.startswith("PB:")][0]); ir = int(db.index[db.lab.str.startswith("PB retest")][0])
-    fig.add_trace(mum_izi(db, ad="Mum", gorunur=False), row=1, col=2)
-    kutu(fig, io, n - 1, db.c[io], db.o[io], MAVI, a=0.22, row=1, col=2); not_(fig, io + 1, db.o[io], "OB", renk=MAVI, ok=False, boyut=10, xanchor="left", ay=-10, row=1, col=2)
-    kutu(fig, ip, n - 1, min(db.o[ip], db.c[ip]), max(db.o[ip], db.c[ip]), MOR, a=0.3, row=1, col=2)
-    not_(fig, ip, db.l[ip], "PB: OB'ye dokunup itki başlatan mumun gövdesi<br>(daha hassas ikinci giriş bölgesi)", renk=MOR, ax=-40, ay=45, row=1, col=2)
-    not_(fig, ir, db.l[ir], "PB retest → giriş, SL OB altı", renk=MOR, ax=50, ay=35, row=1, col=2)
+    fig.add_trace(mum_izi(db, ad="Mum", gorunur=False), row=2, col=1)
+    kutu(fig, io, n - 1, db.c[io], db.o[io], MAVI, a=0.22, row=2, col=1); not_(fig, io + 1, db.o[io], "OB", renk=MAVI, ok=False, boyut=10, xanchor="left", ay=-10, row=2, col=1)
+    kutu(fig, ip, n - 1, min(db.o[ip], db.c[ip]), max(db.o[ip], db.c[ip]), MOR, a=0.3, row=2, col=1)
+    not_(fig, ip, db.l[ip], "PB: OB'ye dokunup itki başlatan mumun gövdesi<br>(daha hassas ikinci giriş bölgesi)", renk=MOR, ax=-40, ay=45, row=2, col=1)
+    not_(fig, ir, db.l[ir], "PB retest → giriş, SL OB altı", renk=MOR, ax=50, ay=35, row=2, col=1)
     # (c) VI
     c = Seri(243); c.bacak(101.0, 5, gurultu=0.5); c.mum(c.son, 101.4, c.son - 0.1, 101.3, "M1"); c.mum(101.55, 102.6, 101.35, 102.5, "M2: open > close(M1), fitiller örtüşür"); c.bacak(103.2, 3); c.bacak(101.5, 3, lab="VI'ya dönüş"); c.bacak(103.5, 3)
     dc = c.df(); n = len(dc); i1 = int(dc.index[dc.lab == "M1"][0])
-    fig.add_trace(mum_izi(dc, ad="Mum", gorunur=False), row=2, col=1)
-    kutu(fig, i1, n - 1, dc.c[i1], dc.o[i1 + 1], GRI, a=0.3, row=2, col=1)
-    not_(fig, i1 + 1, dc.o[i1 + 1], f"VI: close(M1) {dc.c[i1]:.2f} → open(M2) {dc.o[i1+1]:.2f}<br>gövdeler arasında boşluk, fitiller örtüşür (FVG değil)", renk=GRI, ax=90, ay=-40, row=2, col=1)
+    fig.add_trace(mum_izi(dc, ad="Mum", gorunur=False), row=3, col=1)
+    kutu(fig, i1, n - 1, dc.c[i1], dc.o[i1 + 1], GRI, a=0.3, row=3, col=1)
+    not_(fig, i1 + 1, dc.o[i1 + 1], f"VI: close(M1) {dc.c[i1]:.2f} → open(M2) {dc.o[i1+1]:.2f}<br>gövdeler arasında boşluk, fitiller örtüşür (FVG değil)", renk=GRI, ax=90, ay=-40, row=3, col=1)
     # (d) BPR
     d = Seri(244); d.bacak(103.0, 4, gurultu=0.5); d.mum(d.son, 103.2, 102.85, 102.95, "b1"); d.mum(102.95, 103.0, 101.5, 101.6, "b2 bearish displacement"); d.mum(101.6, 102.2, 101.2, 101.4, "b3")
     d.bacak(100.9, 3, gurultu=0.5); d.mum(d.son, d.son + 0.05, 100.6, 100.95, "u1"); d.mum(100.95, 102.9, 100.9, 102.8, "u2 bullish displacement"); d.mum(102.8, 103.6, 102.55, 103.5, "u3"); d.bacak(104.3, 3)
     d.bacak(102.4, 3, lab="BPR retest"); d.bacak(104.8, 4)
     dd = d.df(); n = len(dd); ib = int(dd.index[dd.lab == "b1"][0]); iu = int(dd.index[dd.lab == "u1"][0])
     fb = [f for f in fvg_bul(dd) if f["i"] == ib][0]; fu = [f for f in fvg_bul(dd) if f["i"] == iu][0]
-    fig.add_trace(mum_izi(dd, ad="Mum", gorunur=False), row=2, col=2)
-    kutu(fig, ib, n - 1, fb["alt"], fb["ust"], BORDO, a=0.12, row=2, col=2); kutu(fig, iu, n - 1, fu["alt"], fu["ust"], TEAL, a=0.12, row=2, col=2)
+    fig.add_trace(mum_izi(dd, ad="Mum", gorunur=False), row=4, col=1)
+    kutu(fig, ib, n - 1, fb["alt"], fb["ust"], BORDO, a=0.12, row=4, col=1); kutu(fig, iu, n - 1, fu["alt"], fu["ust"], TEAL, a=0.12, row=4, col=1)
     alt, ust = max(fb["alt"], fu["alt"]), min(fb["ust"], fu["ust"])
-    kutu(fig, iu, n - 1, alt, ust, MOR, a=0.4, row=2, col=2); yatay(fig, (alt + ust) / 2, iu, n - 1, renk=MOR, dash="dash", row=2, col=2)
-    not_(fig, ib + 1, fb["ust"], "bearish FVG (SIBI) — önce", renk=BORDO, ok=False, boyut=9, xanchor="left", ay=-10, row=2, col=2)
-    not_(fig, iu + 1, fu["alt"], "bullish FVG (BISI) — sonra", renk=TEAL, ok=False, boyut=9, xanchor="left", ay=12, row=2, col=2)
-    not_(fig, iu + 4, (alt + ust) / 2, f"BPR = örtüşme {alt:.2f}–{ust:.2f}, yön = sonraki FVG (bullish)<br>giriş örtüşme kenarı / CE; gövdeyle karşıya geçiş = geçersiz", renk=MOR, ax=60, ay=-45, row=2, col=2)
-    ir = int(dd.index[dd.lab.str.startswith("BPR retest")][0]); not_(fig, ir, dd.l[ir], "BPR retest → long", renk=MOR, ax=40, ay=35, row=2, col=2)
+    kutu(fig, iu, n - 1, alt, ust, MOR, a=0.4, row=4, col=1); yatay(fig, (alt + ust) / 2, iu, n - 1, renk=MOR, dash="dash", row=4, col=1)
+    not_(fig, ib + 1, fb["ust"], "bearish FVG (SIBI) — önce", renk=BORDO, ok=False, boyut=9, xanchor="left", ay=-10, row=4, col=1)
+    not_(fig, iu + 1, fu["alt"], "bullish FVG (BISI) — sonra", renk=TEAL, ok=False, boyut=9, xanchor="left", ay=12, row=4, col=1)
+    not_(fig, iu + 4, (alt + ust) / 2, f"BPR = örtüşme {alt:.2f}–{ust:.2f}, yön = sonraki FVG (bullish)<br>giriş örtüşme kenarı / CE; gövdeyle karşıya geçiş = geçersiz", renk=MOR, ax=60, ay=-45, row=4, col=1)
+    ir = int(dd.index[dd.lab.str.startswith("BPR retest")][0]); not_(fig, ir, dd.l[ir], "BPR retest → long", renk=MOR, ax=40, ay=35, row=4, col=1)
     lejant(fig, "rejection block", TURUNCU); lejant(fig, "order block", MAVI); lejant(fig, "propulsion block / BPR", MOR); lejant(fig, "volume imbalance", GRI, a=0.3)
-    duzen(fig, "Şekil 47 — PD array ailesinin geri kalanı: RB, PB, VI ve BPR (şematik örnek)", "Güç sıralaması (öznel, ICT derlemesi): BPR ≈ breaker+FVG > FVG ≈ OB+FVG > OB > IFVG > MB > RB > VI", h=760, x_baslik="")
-    for r_, c_ in ((1, 1), (1, 2), (2, 1), (2, 2)):
+    duzen(fig, "Şekil 47 — PD array ailesinin geri kalanı: RB, PB, VI ve BPR (şematik örnek)", "Güç sıralaması (öznel, ICT derlemesi): BPR ≈ breaker+FVG > FVG ≈ OB+FVG > OB > IFVG > MB > RB > VI",
+          h=1540, x_baslik="", legend_y=-0.05)
+    for r_, c_ in ((1, 1), (2, 1), (3, 1), (4, 1)):
         fig.update_xaxes(rangeslider_visible=False, row=r_, col=c_)
     kaydet(fig, "47_pd_array_ailesi_rb_pb_vi_bpr")
 

@@ -129,11 +129,12 @@ def g33_asamalar():
     baslik = ("① X–A: yalnız fib çizilir", "② B = 0.50 XA: aday D bantları",
               "③ C oluştu: PRZ fiyat gelmeden hazır", "④ PRZ'ye dokunuş: kontrol listesi",
               "⑤ Tetik ve emir: giriş / SL / T1-T2-T3", "⑥ Yönetim: kısmi → BE → trailing")
-    fig = make_subplots(rows=2, cols=3, shared_yaxes=True, shared_xaxes=True,
-                        horizontal_spacing=0.025, vertical_spacing=0.09, subplot_titles=baslik)
+    # alt alta: altı aşama okuma sırasıyla tek sütunda — her panel tam genişlik
+    fig = make_subplots(rows=6, cols=1, shared_xaxes=True,
+                        vertical_spacing=0.026, subplot_titles=baslik)
     kesim = [A[0] + 3, B[0] + 4, C[0] + 3, D[0] + 3, D[0] + 12, n]
     for k, kes in enumerate(kesim):
-        row, col = 1 + k // 3, 1 + k % 3
+        row, col = 1 + k, 1
         d_ = df.iloc[:kes + 1]
         fig.add_trace(mum_iz(d_, etiketler={p[q][0]: q for q in "XABCD" if p[q][0] <= kes}),
                       row=row, col=col)
@@ -189,7 +190,8 @@ def g33_asamalar():
                   row=row, col=col, font=9)
             for t_, ad, mult in ((T1, "T1 0.382 AD", (T1 - giris) / Rr), (T2, "T2 0.618 AD", (T2 - giris) / Rr),
                                  (T3, "T3 = A", (T3 - giris) / Rr)):
-                yatay(fig, t_, D[0], n, f"{ad} {t_:.2f} → {mult:.1f}R", renk=R["yesil"], font=9)
+                yatay(fig, t_, D[0], n, f"{ad} {t_:.2f} → {mult:.1f}R", renk=R["yesil"],
+                      row=row, col=col, font=9)
             not_kutusu(fig, "Tetik: PRZ içinde <b>kapanışlı</b> dönüş mumu.<br>"
                             "Emir: %60 teyitte, %40 Type II retestte.<br>"
                             "Boyut: risk %0.5–1 / 1R mesafesi.",
@@ -201,7 +203,7 @@ def g33_asamalar():
             yatay(fig, giris, D[0] + 18, n, "SL → BE", renk=R["kirmizi"], dash="dot", w=1.2,
                   row=row, col=col, font=9)
             for t_, ad in ((T1, "T1"), (T2, "T2"), (T3, "T3 = A")):
-                yatay(fig, t_, D[0], n, ad, renk=R["yesil"], font=9)
+                yatay(fig, t_, D[0], n, ad, renk=R["yesil"], row=row, col=col, font=9)
             i1 = D[0] + 16; i2 = D[0] + 30; i3 = D[0] + 48
             ok(fig, i1, T1, "T1: %50 kapat<br>SL → BE", ax=-10, ay=-38, renk=R["yesil"], row=row, col=col, font=9)
             ok(fig, i2, T2, "T2: %25 kapat<br>SL → T1 altı", ax=-6, ay=-34, renk=R["yesil"], row=row, col=col, font=9)
@@ -211,9 +213,10 @@ def g33_asamalar():
                             "PRZ altına kapanış → çık, BE'yi bekleme.",
                        x=0.03, y=0.04, xanchor="left", yanchor="bottom", row=row, col=col, font=9.5)
         fig.update_xaxes(range=[0, n * 1.30], row=row, col=col)
-    fig.update_yaxes(title="fiyat", range=[stop - 1.2, A[1] + 2.2], row=1, col=1)
-    fig.update_yaxes(title="fiyat", row=2, col=1)
-    temel_layout(fig, "Şekil 33 — Bir pattern'in altı aşaması: X-A → B → C → PRZ → tetik → yönetim (bullish Bat, şematik örnek)", 900,
+    # yatay dizilişte y ekseni paylaşılıyordu; dikeyde her panele aynı ölçek verilir
+    for r_ in range(1, 7):
+        fig.update_yaxes(title="fiyat", range=[stop - 1.2, A[1] + 2.2], row=r_, col=1)
+    temel_layout(fig, "Şekil 33 — Bir pattern'in altı aşaması: X-A → B → C → PRZ → tetik → yönetim (bullish Bat, şematik örnek)", 2230,
                  "Aynı seri altı kez; her panelde o an ekranda olan bilgi ve o bilgiyle alınan karar. "
                  "Sayılar XA = 20 birimlik kurgudan hesaplanmıştır, oranlar gerçektir.")
     kaydet(fig, "33_asamalar_alti_panel")
@@ -237,7 +240,8 @@ IZGARA = [
 
 
 def g34_emir_izgarasi():
-    fig = make_subplots(rows=1, cols=2, column_widths=[0.56, 0.44], horizontal_spacing=0.11,
+    # alt alta: seviye haritası üstte, R:R ızgarası altta
+    fig = make_subplots(rows=2, cols=1, row_heights=[0.53, 0.47], vertical_spacing=0.07,
                         subplot_titles=("Normalize seviye haritası (X = 100, A = 200, ATR = 2, tampon 0.75 ATR = 1.5)",
                                         "Aynı kurgunun R:R'si — T1 ve T2 hedefinde"))
     adlar = [r[0] for r in IZGARA]
@@ -274,15 +278,15 @@ def g34_emir_izgarasi():
     rr2 = [(r[4] - r[1]) / (r[1] - r[2]) for r in IZGARA]
     fig.add_trace(go.Bar(y=adlar, x=rr1, orientation="h", name="T1'de R:R",
                          marker=dict(color=R["up"]), text=[f"{v:.2f}" for v in rr1],
-                         textposition="outside", textfont=dict(size=10)), row=1, col=2)
+                         textposition="outside", textfont=dict(size=10)), row=2, col=1)
     fig.add_trace(go.Bar(y=adlar, x=rr2, orientation="h", name="T2'de R:R",
                          marker=dict(color=rgba(R["up"], 0.42)), text=[f"{v:.2f}" for v in rr2],
-                         textposition="outside", textfont=dict(size=10)), row=1, col=2)
-    fig.add_vline(x=2.0, line=dict(color=R["kirmizi"], width=1.4, dash="dash"), row=1, col=2)
+                         textposition="outside", textfont=dict(size=10)), row=2, col=1)
+    fig.add_vline(x=2.0, line=dict(color=R["kirmizi"], width=1.4, dash="dash"), row=2, col=1)
     fig.add_annotation(xref="x2", yref="y2 domain", x=2.0, y=1.02, text="2R eşiği", showarrow=False,
                        xanchor="left", font=dict(size=10, color=R["kirmizi"]))
-    fig.update_xaxes(title="R:R (kâr / risk)", range=[0, 8.6], row=1, col=2)
-    fig.update_yaxes(autorange="reversed", tickfont=dict(size=9.5), row=1, col=2)
+    fig.update_xaxes(title="R:R (kâr / risk)", range=[0, 8.6], row=2, col=1)
+    fig.update_yaxes(autorange="reversed", tickfont=dict(size=9.5), row=2, col=1)
 
     not_kutusu(fig, "Okuma: aynı ATR ve aynı tampon kuralıyla <b>tek değişen stop mantığı</b>. Gartley'nin iki satırı aynı işlemdir — "
                     "yalnız stop yeri farklı, R:R iki katına çıkıyor. Butterfly ve Crab'de yapısal geçersizlik o kadar uzaktır ki "
@@ -291,7 +295,7 @@ def g34_emir_izgarasi():
                     "<b>Uyarı:</b> R:R tek başına beklenen değer değildir. Dar stop R:R'yi yükseltir ve stop yeme olasılığını da yükseltir; "
                     "iki sayı birlikte okunmadan karşılaştırma yapılamaz. Bu ızgara emir <i>planı</i> karşılaştırmasıdır, kârlılık iddiası değil.",
                x=0.5, y=-0.13, xanchor="center", yanchor="top", font=10)
-    temel_layout(fig, "Şekil 34 — Emir planı ızgarası: sekiz kurgu, tek normalize ölçek (XA = 100 birim)", 620,
+    temel_layout(fig, "Şekil 34 — Emir planı ızgarası: sekiz kurgu, tek normalize ölçek (XA = 100 birim)", 940,
                  "Giriş = ideal D (Bat'te 112 kabul girişi), hedefler T1 = 0.382 AD, T2 = 0.618 AD, T3 = A; "
                  "Cypher'da taban XA değil XC, hedefler C'ye göre", lejant=True)
     fig.update_layout(margin=dict(b=175), barmode="group", bargap=0.28)
@@ -378,7 +382,8 @@ def g36_kaybeden_senaryo():
                (31, 104.1), (38, 102.6), (44, 101.4), (50, 99.2), (56, 97.4), (62, 95.0)]
     df = mumlar(anchors, seed=361, gurultu=0.085, fitil=0.5)
     n = len(df) - 1
-    fig = make_subplots(rows=1, cols=2, column_widths=[0.60, 0.40], horizontal_spacing=0.07,
+    # alt alta: fiyat paneli üstte, karar ağacı altta
+    fig = make_subplots(rows=2, cols=1, row_heights=[0.46, 0.54], vertical_spacing=0.07,
                         subplot_titles=("Kaybeden Bat: PRZ tuttu, sonra delindi — dört çıkış noktası",
                                         "Senaryo ağacı: PRZ'de ne oldu → ne yapılır"))
     fig.add_trace(mum_iz(df), row=1, col=1)
@@ -401,31 +406,31 @@ def g36_kaybeden_senaryo():
     fig.update_xaxes(range=[0, n * 1.16], row=1, col=1)
 
     # --- karar ağacı
-    blok(fig, 5, 9.4, 9.0, 1.0, "<b>Fiyat PRZ'ye girdi</b>", R["prz"], 0.14, font=11.5, row=1, col=2)
-    blok(fig, 5, 7.9, 9.4, 1.1, "PRZ içinde <b>kapanışlı</b> dönüş mumu var mı?", R["ink"], 0.05, font=10.5, row=1, col=2)
-    blok(fig, 11.2, 7.9, 4.4, 0.9, "hayır →<br><b>işlem yok</b>", R["gri"], 0.10, font=9.5, row=1, col=2)
-    akis_ok(fig, 5, 8.85, 5, 8.5, row=1, col=2)
-    akis_ok(fig, 9.75, 7.9, 8.95, 7.9, row=1, col=2)
-    blok(fig, 5, 6.3, 9.4, 1.1, "Giriş. <b>İlk 3 mum</b>: PRZ üstünde kapanıyor mu?", R["ink"], 0.05, font=10.5, row=1, col=2)
-    akis_ok(fig, 5, 7.32, 5, 6.88, row=1, col=2)
-    blok(fig, 11.2, 6.3, 4.4, 0.9, "hayır →<br><b>tam çık</b> (−0.3R)", R["kirmizi"], 0.10, font=9.5, row=1, col=2)
-    akis_ok(fig, 9.75, 6.3, 8.95, 6.3, row=1, col=2)
-    blok(fig, 5, 4.7, 9.4, 1.1, "<b>1.0× pattern süresi</b> içinde T1'in %50'sine ulaştı mı?", R["ink"], 0.05, font=10.5, row=1, col=2)
-    akis_ok(fig, 5, 5.72, 5, 5.28, row=1, col=2)
-    blok(fig, 11.2, 4.7, 4.4, 0.9, "hayır →<br><b>zaman stopu</b>", R["lik"], 0.12, font=9.5, row=1, col=2)
-    akis_ok(fig, 9.75, 4.7, 8.95, 4.7, row=1, col=2)
-    blok(fig, 5, 3.1, 9.4, 1.1, "PRZ alt kenarı altında <b>kapanış</b> oldu mu?", R["ink"], 0.05, font=10.5, row=1, col=2)
-    akis_ok(fig, 5, 4.12, 5, 3.68, row=1, col=2)
-    blok(fig, 11.2, 3.1, 4.4, 0.9, "evet →<br><b>erken çıkış</b>", R["kirmizi"], 0.12, font=9.5, row=1, col=2)
-    akis_ok(fig, 9.75, 3.1, 8.95, 3.1, row=1, col=2)
-    blok(fig, 5, 1.5, 9.4, 1.1, "T1 → %50 kapat, SL → BE<br>T2 → %25 kapat, SL → T1 altı", R["yesil"], 0.12, font=10.5, row=1, col=2)
-    akis_ok(fig, 5, 2.52, 5, 2.08, "hepsi <b>evet</b>", renk=R["yesil"], row=1, col=2, xsh=-52)
+    blok(fig, 5, 9.4, 9.0, 1.0, "<b>Fiyat PRZ'ye girdi</b>", R["prz"], 0.14, font=11.5, row=2, col=1)
+    blok(fig, 5, 7.9, 9.4, 1.1, "PRZ içinde <b>kapanışlı</b> dönüş mumu var mı?", R["ink"], 0.05, font=10.5, row=2, col=1)
+    blok(fig, 11.2, 7.9, 4.4, 0.9, "hayır →<br><b>işlem yok</b>", R["gri"], 0.10, font=9.5, row=2, col=1)
+    akis_ok(fig, 5, 8.85, 5, 8.5, row=2, col=1)
+    akis_ok(fig, 9.75, 7.9, 8.95, 7.9, row=2, col=1)
+    blok(fig, 5, 6.3, 9.4, 1.1, "Giriş. <b>İlk 3 mum</b>: PRZ üstünde kapanıyor mu?", R["ink"], 0.05, font=10.5, row=2, col=1)
+    akis_ok(fig, 5, 7.32, 5, 6.88, row=2, col=1)
+    blok(fig, 11.2, 6.3, 4.4, 0.9, "hayır →<br><b>tam çık</b> (−0.3R)", R["kirmizi"], 0.10, font=9.5, row=2, col=1)
+    akis_ok(fig, 9.75, 6.3, 8.95, 6.3, row=2, col=1)
+    blok(fig, 5, 4.7, 9.4, 1.1, "<b>1.0× pattern süresi</b> içinde T1'in %50'sine ulaştı mı?", R["ink"], 0.05, font=10.5, row=2, col=1)
+    akis_ok(fig, 5, 5.72, 5, 5.28, row=2, col=1)
+    blok(fig, 11.2, 4.7, 4.4, 0.9, "hayır →<br><b>zaman stopu</b>", R["lik"], 0.12, font=9.5, row=2, col=1)
+    akis_ok(fig, 9.75, 4.7, 8.95, 4.7, row=2, col=1)
+    blok(fig, 5, 3.1, 9.4, 1.1, "PRZ alt kenarı altında <b>kapanış</b> oldu mu?", R["ink"], 0.05, font=10.5, row=2, col=1)
+    akis_ok(fig, 5, 4.12, 5, 3.68, row=2, col=1)
+    blok(fig, 11.2, 3.1, 4.4, 0.9, "evet →<br><b>erken çıkış</b>", R["kirmizi"], 0.12, font=9.5, row=2, col=1)
+    akis_ok(fig, 9.75, 3.1, 8.95, 3.1, row=2, col=1)
+    blok(fig, 5, 1.5, 9.4, 1.1, "T1 → %50 kapat, SL → BE<br>T2 → %25 kapat, SL → T1 altı", R["yesil"], 0.12, font=10.5, row=2, col=1)
+    akis_ok(fig, 5, 2.52, 5, 2.08, "hepsi <b>evet</b>", renk=R["yesil"], row=2, col=1, xsh=-52)
     Rr = giris - stop
     kismi, erken = 102.60, 101.50
     planA = 0.5 * (kismi - giris) / Rr + 0.5 * (erken - giris) / Rr
     planB = 0.5 * (kismi - giris) / Rr + 0.5 * (stop - giris) / Rr
     planC = -1.0
-    fig.add_annotation(xref="x2", yref="y2", x=5, y=0.42,
+    fig.add_annotation(xref="x2", yref="y2", x=5, y=0.42, xshift=10,
                        text="<b>Ders:</b> hata ①'de değil — kural işledi, işlem yine de kaybetti. Hata, ② ve ③'teki uyarıları<br>"
                             "görmezden gelip stopu beklemektir. Aynı fiyat serisi, üç farklı yönetim "
                             f"(1R = {Rr:.2f} birim):<br>"
@@ -433,15 +438,15 @@ def g36_kaybeden_senaryo():
                             f"③'te %50, kalan stopta → <b>{planB:+.2f}R</b>   ·   hiçbir şey yapmayıp stop → <b>{planC:+.2f}R</b>",
                        showarrow=False, font=dict(size=10, color=R["ink"]), align="center",
                        bgcolor="rgba(255,255,255,0.94)", bordercolor="#d8cfba", borderwidth=1, borderpad=5)
-    fig.update_xaxes(visible=False, range=[0, 14.2], row=1, col=2)
-    fig.update_yaxes(visible=False, range=[-0.4, 10.2], row=1, col=2)
+    fig.update_xaxes(visible=False, range=[0, 14.2], row=2, col=1)
+    fig.update_yaxes(visible=False, range=[-0.4, 10.2], row=2, col=1)
 
     not_kutusu(fig, "<b>Sık üç hata (bu kurguda):</b> (1) ②'deki yatay seyri 'sabır' sanmak — yatay fiyat, tezin <i>yanlışlanmasıdır</i>, teyidi değil. "
                     "(2) ③'te stopu aşağı çekip 'biraz daha yer vermek'. (3) ⑤'ten sonra aynı XA üzerinde üçüncü kez denemek: "
                     "kural, aynı XA'da en fazla iki deneme (Bat + Alt Bat).",
                x=0.5, y=-0.075, xanchor="center", yanchor="top", font=10)
-    temel_layout(fig, "Şekil 36 — Kaybeden senaryo: geçerli bir Bat neden ve nasıl kaybeder (şematik örnek)", 660,
-                 "Sol: fiyat davranışı ve beş karar anı · Sağ: aynı kararların ağaç hâli — her 'hayır' bir çıkış kapısıdır")
+    temel_layout(fig, "Şekil 36 — Kaybeden senaryo: geçerli bir Bat neden ve nasıl kaybeder (şematik örnek)", 990,
+                 "Üstte: fiyat davranışı ve beş karar anı · Altta: aynı kararların ağaç hâli — her 'hayır' bir çıkış kapısıdır")
     fig.update_layout(margin=dict(b=110))
     kaydet(fig, "36_kaybeden_senaryo_agac")
     RAPOR.append(f"36: kaybeden Bat — giriş {giris:.1f}, para stopu {stop:.1f} (1R = {Rr:.2f}), T1 {T1:.1f} hiç görülmedi; "
@@ -615,14 +620,17 @@ UYUMSUZLUK = [
 
 
 def g39_uyumsuzluk_dereceleri():
-    fig = make_subplots(rows=2, cols=3, shared_xaxes=True, row_heights=[0.60, 0.40],
-                        vertical_spacing=0.07, horizontal_spacing=0.045,
-                        subplot_titles=tuple(u["ad"] for u in UYUMSUZLUK) + ("", "", ""))
-    for col, U in enumerate(UYUMSUZLUK, start=1):
+    # alt alta: her vaka için (fiyat, RSI) çifti art arda — ①②③ okuma sırası korunur.
+    # Üç vaka üç ayrı seridir; ortak x ekseni yok, her panel kendi eksenini gösterir.
+    fig = make_subplots(rows=6, cols=1, row_heights=[0.20, 0.13333] * 3,
+                        vertical_spacing=0.026,
+                        subplot_titles=tuple(t for u in UYUMSUZLUK for t in (u["ad"], "")))
+    for k, U in enumerate(UYUMSUZLUK, start=1):
+        rf, rr = 2 * k - 1, 2 * k          # rf: fiyat paneli, rr: RSI paneli
         df = mumlar(U["anc"], seed=392, gurultu=0.08, fitil=0.45)
         r = rsi(df.Close.values); n = len(df) - 1
         c = R[U["renk"]]
-        fig.add_trace(mum_iz(df), row=1, col=col)
+        fig.add_trace(mum_iz(df), row=rf, col=1)
         noktalar = []
         for i, tur in U["m"]:
             w = 3; sl = slice(max(0, i - w), i + w + 1)
@@ -633,43 +641,45 @@ def g39_uyumsuzluk_dereceleri():
         fig.add_trace(go.Scatter(x=[j1, j2], y=[p1, p2], mode="lines+markers", showlegend=False,
                                  line=dict(color=c, width=2, dash="dash"),
                                  marker=dict(size=8, color="white", line=dict(color=c, width=2)),
-                                 hoverinfo="skip"), row=1, col=col)
+                                 hoverinfo="skip"), row=rf, col=1)
         fig.add_annotation(x=(j1 + j2) / 2, y=(p1 + p2) / 2, text=f"fiyat {p1:.2f} → {p2:.2f}",
                            showarrow=False, font=dict(size=9.5, color=c), yshift=-14 if U["m"][0][1] == "min" else 14,
-                           bgcolor="rgba(255,255,255,0.9)", row=1, col=col)
+                           bgcolor="rgba(255,255,255,0.9)", row=rf, col=1)
         fig.add_trace(go.Scatter(x=list(range(len(r))), y=r, mode="lines", showlegend=False,
-                                 line=dict(color=R["fvg"], width=1.6)), row=2, col=col)
+                                 line=dict(color=R["fvg"], width=1.6)), row=rr, col=1)
         for y_ in (30, 50, 70):
-            yatay(fig, y_, 0, n, f"{y_}" if col == 1 else "", renk=R["gri"],
-                  dash="dash" if y_ == 50 else "dot", w=1.4 if y_ == 50 else 1, row=2, col=col, font=9)
+            yatay(fig, y_, 0, n, f"{y_}", renk=R["gri"],
+                  dash="dash" if y_ == 50 else "dot", w=1.4 if y_ == 50 else 1, row=rr, col=1, font=9)
         fig.add_trace(go.Scatter(x=[j1, j2], y=[r1, r2], mode="lines+markers", showlegend=False,
                                  line=dict(color=c, width=2, dash="dash"),
                                  marker=dict(size=8, color="white", line=dict(color=c, width=2)),
-                                 hoverinfo="skip"), row=2, col=col)
+                                 hoverinfo="skip"), row=rr, col=1)
         fig.add_annotation(x=(j1 + j2) / 2, y=(r1 + r2) / 2, text=f"RSI {r1:.1f} → {r2:.1f}", showarrow=False,
-                           font=dict(size=9.5, color=c), yshift=16, bgcolor="rgba(255,255,255,0.9)", row=2, col=col)
+                           font=dict(size=9.5, color=c), yshift=16, bgcolor="rgba(255,255,255,0.9)", row=rr, col=1)
         fig.add_annotation(x=(j1 + j2) / 2, y=90, text=f"genişlik = {j2-j1} bar (kabul: 5–30)", showarrow=False,
-                           font=dict(size=9, color=R["ink"]), row=2, col=col)
+                           font=dict(size=9, color=R["ink"]), row=rr, col=1)
         not_kutusu(fig, U["okuma"] + "<br><b>Karar:</b> " + U["karar"], x=0.03, y=0.04,
-                   xanchor="left", yanchor="bottom", row=1, col=col, font=9.5, renk=c)
-        if col == 2:
-            fig.add_shape(type="rect", xref="x2 domain", yref="y2 domain", x0=-0.005, x1=1.005, y0=-0.02, y1=1.02,
+                   xanchor="left", yanchor="bottom", row=rf, col=1, font=9.5, renk=c)
+        if k == 2:
+            fig.add_shape(type="rect", xref=f"x{rf} domain", yref=f"y{rf} domain", x0=-0.005, x1=1.005, y0=-0.02, y1=1.02,
                           line=dict(color=R["kirmizi"], width=3), fillcolor="rgba(0,0,0,0)")
-            fig.add_annotation(xref="x2 domain", yref="y2 domain", x=0.5, y=0.52,
+            fig.add_annotation(xref=f"x{rf} domain", yref=f"y{rf} domain", x=0.5, y=0.52,
                                text="<b>PRZ'DE BU VARSA GİRME</b>", showarrow=False,
                                font=dict(size=17, color="rgba(185,28,28,0.42)"))
-        fig.update_yaxes(range=[0, 100], row=2, col=col)
-        fig.update_xaxes(range=[0, n], row=2, col=col)
-    fig.update_yaxes(title="fiyat", row=1, col=1)
-    fig.update_yaxes(title="RSI(14)", row=2, col=1)
+        fig.update_yaxes(range=[0, 100], row=rr, col=1)
+        fig.update_xaxes(range=[0, n], row=rf, col=1)
+        fig.update_xaxes(range=[0, n], row=rr, col=1)
+        fig.update_yaxes(title="fiyat", row=rf, col=1)
+        fig.update_yaxes(title="RSI(14)", row=rr, col=1)
+    # eksen başlıkları panel döngüsünde her fiyat/RSI paneline verildi
     not_kutusu(fig, "Teyit <b>ikili değil, üç kademelidir</b>. İşlemcilerin sık yaptığı hata, gizli uyumsuzluğu klasik sanıp ters işlem açmaktır: "
                     "ikisi de 'uyumsuzluk' diye anılır ama biri dönüşü, öteki <b>devamı</b> söyler. Ayrım tek soruyla yapılır: "
                     "<b>fiyatın uçları hangi yöne gidiyor?</b> Fiyat yeni uç yapıyorsa (LL/HH) klasik; yapmıyorsa (HL/LH) gizli.<br>"
                     "<b>Derece ölçütü (ders kararı):</b> iki uç arasındaki genişlik 5 bardan azsa gürültü, 30 bardan çoksa ilişkisiz iki olay — "
                     "her iki uçta da uyumsuzluk sayılmaz.",
                x=0.5, y=-0.075, xanchor="center", yanchor="top", font=10)
-    temel_layout(fig, "Şekil 39 — Uyumsuzluğun üç derecesi: klasik, gizli, abartılı (şematik örnek)", 780,
-                 "Üst sıra fiyat, alt sıra RSI(14); kesikli çizgiler karşılaştırılan iki ucu birleştirir")
+    temel_layout(fig, "Şekil 39 — Uyumsuzluğun üç derecesi: klasik, gizli, abartılı (şematik örnek)", 1930,
+                 "Her vakada üstte fiyat, altında RSI(14); kesikli çizgiler karşılaştırılan iki ucu birleştirir")
     fig.update_layout(margin=dict(b=118))
     kaydet(fig, "39_uyumsuzluk_dereceleri")
     RAPOR.append("39: klasik fiyat 100.00→97 / RSI 13.4→16.3 (28 bar) · gizli fiyat 112.5→110.5 / RSI 49.5→60.9 (20 bar) · "
@@ -707,12 +717,19 @@ def g40_teyit_katmanlari():
     lh_i = int(df.High.iloc[95:104].idxmax()); lh = float(df.High.iloc[lh_i])
     choch = next((i for i in range(iD, n) if df.Close.iloc[i] > lh), None)
 
-    fig = make_subplots(rows=4, cols=2, shared_xaxes=True, column_widths=[0.70, 0.30],
-                        row_heights=[0.43, 0.20, 0.18, 0.19], vertical_spacing=0.035,
-                        horizontal_spacing=0.09,
-                        specs=[[{}, {"rowspan": 4}], [{}, None], [{}, None], [{}, None]],
-                        subplot_titles=("Fiyat: bullish Bat, PRZ'de teyit katmanları", "Teyit skor kartı (§ teyit tablosu)",
-                                        "RSI(14) — klasik uyumsuzluk", "MACD histogram — işaret değişimi", "Hacim (şematik)"))
+    # alt alta: fiyat / RSI / MACD / hacim yığını (ortak x) ve en altta skor kartı
+    fig = make_subplots(rows=5, cols=1,
+                        row_heights=[0.26, 0.15, 0.135, 0.145, 0.31], vertical_spacing=0.032,
+                        subplot_titles=("Fiyat: bullish Bat, PRZ'de teyit katmanları",
+                                        "RSI(14) — klasik uyumsuzluk", "MACD histogram — işaret değişimi",
+                                        "Hacim (şematik)", "Teyit skor kartı (§ teyit tablosu)"))
+    # ilk dört panel aynı seriyi gösterir: x eksenleri eşleşir, etiket yalnız en altta
+    for r_ in (1, 2, 3):
+        fig.update_xaxes(matches="x4", showticklabels=False, row=r_, col=1)
+    # skor kartının uzun kategori etiketleri panelin İÇİNE yazılır: barlar x>0'da,
+    # x<0 bandı boş. Panele soldan girinti verilse x-domain sol kenarı ikiye çıkar
+    # ve ev stili figürü 'çok sütunlu' sayıp yatay kaydırma açardı.
+    fig.update_yaxes(ticklabelposition="inside", row=5, col=1)
     fig.add_trace(mum_iz(df), row=1, col=1)
     zigzag_iz([(24, X_), (40, A_), (52, B_), (62, C_), (iD, D_)], harfler=list("XABCD"), fig=fig, row=1, col=1, showlegend=False)
     kutu(fig, 62, n, lo, hi, R["prz"], alfa=0.18, metin=f"PRZ {lo:.2f}–{hi:.2f}", konum="top", row=1, col=1, font=10)
@@ -723,7 +740,7 @@ def g40_teyit_katmanlari():
     yatay(fig, lh, lh_i, n, "son LH", renk=R["up"], dash="dot", row=1, col=1, font=9.5)
     if choch:
         ok(fig, choch, float(df.Close.iloc[choch]), "<b>CHoCH</b>: LH kapanışla kırıldı → +10",
-           ax=44, ay=-44, renk=R["up"], row=1, col=1, font=9.5)
+           ax=-8, ay=-46, renk=R["up"], row=1, col=1, font=9.5)   # tam genişlikte sağa taşıyordu
     fig.update_yaxes(title="fiyat", row=1, col=1)
 
     fig.add_trace(go.Scatter(x=list(range(len(r))), y=r, mode="lines", showlegend=False,
@@ -762,30 +779,39 @@ def g40_teyit_katmanlari():
     alinan = [k[2] for k in TEYIT_KALEM][::-1]
     tavan = [k[1] for k in TEYIT_KALEM][::-1]
     fig.add_trace(go.Bar(y=adlar, x=[max(t, 0) for t in tavan], orientation="h", showlegend=False,
-                         marker=dict(color=rgba(R["gri"], 0.22)), hoverinfo="skip"), row=1, col=2)
+                         marker=dict(color=rgba(R["gri"], 0.22)), hoverinfo="skip"), row=5, col=1)
     fig.add_trace(go.Bar(y=adlar, x=alinan, orientation="h", showlegend=False,
                          marker=dict(color=[R["up"] if a > 0 else R["gri"] for a in alinan]),
                          text=[f"{a:+d}" if a else k[3] for a, k in zip(alinan, TEYIT_KALEM[::-1])],
-                         textposition="outside", textfont=dict(size=9.5)), row=1, col=2)
+                         textposition="outside", textfont=dict(size=9.5)), row=5, col=1)
     toplam = sum(k[2] for k in TEYIT_KALEM)
     mumkun = sum(k[1] for k in TEYIT_KALEM if k[1] > 0)
-    fig.add_annotation(xref="x2 domain", yref="y2 domain", x=0.5, y=1.14,
+    # iki kutu skor kartının dışındaydı (yan sütunun üstü/altı). Dikey yerleşimde
+    # kartın ÜSTÜNDE açılan şeride yan yana alınır: panel içindeki barları örtmez,
+    # figür alt kenarından da taşmaz.
+    d0, d1 = fig.layout.yaxis5.domain
+    kart_ust = d0 + 0.74 * (d1 - d0)
+    fig.update_yaxes(domain=[d0, kart_ust], row=5, col=1)
+    for _a in fig.layout.annotations:          # panel başlığı da kartla birlikte iner
+        if _a.text == "Teyit skor kartı (§ teyit tablosu)":
+            _a.y = kart_ust + 0.006
+    fig.add_annotation(xref="paper", yref="paper", x=0.0, y=d1, xanchor="left", yanchor="top",
                        text=f"<b>Ham teyit skoru: {toplam} / {mumkun}</b><br>"
                             f"Konfluens skorunda 'Teyit' kategorisi 20 tavanlıdır →<br>"
                             f"normalize: min(20, {toplam}) = <b>20 / 20</b>",
                        showarrow=False, font=dict(size=10.5, color=R["ink"]), align="center",
                        bgcolor="rgba(255,255,255,0.94)", bordercolor="#d8cfba", borderwidth=1, borderpad=5)
-    fig.add_annotation(xref="x2 domain", yref="y2 domain", x=0.5, y=-0.06,
+    fig.add_annotation(xref="paper", yref="paper", x=1.0, y=d1, xanchor="right",
                        text="<b>Dürüstlük notu:</b> delta / footprint verisi merkezi olmayan spot FX'te<br>"
                             "güvenilir değildir (borsa yok, konsolide hacim yok). Vadeli (GC=F, ES),<br>"
                             "kripto borsaları ve BIST için anlamlıdır. Burada 10 puan <b>alınamaz</b>,<br>"
                             "eksik sayılır — 'veri yok' ile 'teyit yok' aynı şey değildir.",
-                       showarrow=False, font=dict(size=9.5, color=R["ink"]), align="left", xanchor="center",
+                       showarrow=False, font=dict(size=9.5, color=R["ink"]), align="left",
                        yanchor="top", bgcolor="rgba(255,255,255,0.94)", bordercolor="#d8cfba", borderwidth=1, borderpad=5)
-    fig.update_xaxes(title="puan", range=[-16, 13], row=1, col=2)
-    fig.update_yaxes(tickfont=dict(size=9), row=1, col=2)
+    fig.update_xaxes(title="puan", range=[-16, 13], row=5, col=1)
+    fig.update_yaxes(tickfont=dict(size=9), row=5, col=1)
 
-    temel_layout(fig, "Şekil 40 — Teyit katmanlarının üst üste binişi ve teyit skor kartı (şematik örnek)", 880,
+    temel_layout(fig, "Şekil 40 — Teyit katmanlarının üst üste binişi ve teyit skor kartı (şematik örnek)", 1750,
                  "Aynı PRZ dört pencereden okunuyor: mum, RSI, MACD histogramı, hacim. En fazla iki momentum aracı kuralı geçerli — "
                  "üçüncüsü kaçınılmaz olarak birinciyle çelişir")
     fig.update_layout(barmode="overlay", margin=dict(b=70))
@@ -806,7 +832,8 @@ def g41_zaman_bolgeleri():
     tAB, tBC, tCD = bB - bA, bC - bB, bD - bC
     tau1, tau2 = tBC / tAB, tCD / tAB
 
-    fig = make_subplots(rows=1, cols=2, column_widths=[0.58, 0.42], horizontal_spacing=0.10,
+    # alt alta: zaman bölgeleri üstte, τ düzlemi altta
+    fig = make_subplots(rows=2, cols=1, row_heights=[0.53, 0.47], vertical_spacing=0.07,
                         subplot_titles=("Fibonacci zaman bölgeleri: X'ten itibaren 8 / 13 / 21 / 34 / 55 bar",
                                         "Bacak süre oranları (τ) düzlemi ve kabul kutusu"))
     fig.add_trace(mum_iz(df), row=1, col=1)
@@ -833,14 +860,14 @@ def g41_zaman_bolgeleri():
     fig.update_xaxes(title="bar", range=[0, bX + 62], row=1, col=1)
 
     fig.add_shape(type="rect", x0=0.382, x1=1.0, y0=0.618, y1=1.618, fillcolor=rgba(R["yesil"], 0.13),
-                  line=dict(color=R["yesil"], width=1.5), row=1, col=2)
+                  line=dict(color=R["yesil"], width=1.5), row=2, col=1)
     fig.add_annotation(x=0.69, y=1.50, text="<b>kabul kutusu</b><br>τ₁ ∈ [0.382, 1.0] · τ₂ ∈ [0.618, 1.618]",
-                       showarrow=False, font=dict(size=10, color=R["yesil"]), row=1, col=2)
-    fig.add_hline(y=1.0, line=dict(color=R["mavi"], width=1.2, dash="dash"), row=1, col=2)
+                       showarrow=False, font=dict(size=10, color=R["yesil"]), row=2, col=1)
+    fig.add_hline(y=1.0, line=dict(color=R["mavi"], width=1.2, dash="dash"), row=2, col=1)
     fig.add_annotation(x=1.92, y=1.0, text="τ₂ = 1: 'mükemmel' AB=CD (süre simetrisi)", showarrow=False,
-                       xanchor="right", yshift=9, font=dict(size=9.5, color=R["mavi"]), row=1, col=2)
+                       xanchor="right", yshift=9, font=dict(size=9.5, color=R["mavi"]), row=2, col=1)
     ornekler = [
-        (tau1, tau2, f"Sol paneldeki pattern<br>t_AB={tAB} · t_BC={tBC} · t_CD={tCD}<br>τ₁={tau1:.2f} ✓ · τ₂={tau2:.2f} ✓", R["yesil"], 62, -52),
+        (tau1, tau2, f"Üst paneldeki pattern<br>t_AB={tAB} · t_BC={tBC} · t_CD={tCD}<br>τ₁={tau1:.2f} ✓ · τ₂={tau2:.2f} ✓", R["yesil"], 62, -52),
         (13 / 8, 17 / 8, f"'Sürünen' yapı<br>t_AB=8 · t_BC=13 · t_CD=17<br>τ₁={13/8:.2f} ✗ · τ₂={17/8:.2f} ✗", R["kirmizi"], -58, -46),
         (4 / 9, 2 / 9, f"'Tek mumluk bacak'<br>t_AB=9 · t_BC=4 · t_CD=2<br>τ₂={2/9:.2f} ✗ · bacak &lt;5 bar ✗", R["lik"], 68, 44),
     ]
@@ -848,10 +875,10 @@ def g41_zaman_bolgeleri():
         fig.add_trace(go.Scatter(x=[x_], y=[y_], mode="markers", showlegend=False,
                                  marker=dict(size=14, color=c_, symbol="diamond",
                                              line=dict(color="white", width=1.4)),
-                                 hovertemplate=f"τ₁={x_:.2f}, τ₂={y_:.2f}<extra></extra>"), row=1, col=2)
-        ok(fig, x_, y_, t_, ax=ax_, ay=ay_, renk=c_, row=1, col=2, font=9.5)
-    fig.update_xaxes(title="τ₁ = t_BC / t_AB", range=[0, 2.0], row=1, col=2)
-    fig.update_yaxes(title="τ₂ = t_CD / t_AB", range=[0, 2.4], row=1, col=2)
+                                 hovertemplate=f"τ₁={x_:.2f}, τ₂={y_:.2f}<extra></extra>"), row=2, col=1)
+        ok(fig, x_, y_, t_, ax=ax_, ay=ay_, renk=c_, row=2, col=1, font=9.5)
+    fig.update_xaxes(title="τ₁ = t_BC / t_AB", range=[0, 2.0], row=2, col=1)
+    fig.update_yaxes(title="τ₂ = t_CD / t_AB", range=[0, 2.4], row=2, col=1)
 
     not_kutusu(fig, "<b>Zaman, harmonik analizin dördüncü boyutudur ve ikincil ağırlıktadır.</b> Bu dersin konfluens skorunda toplam 15 puan: "
                     "τ₂ bandda 7 · τ₁ bandda 3 · her bacak ≥5 bar 3 · Fibonacci zaman bölgesi çakışması 2.<br>"
@@ -861,8 +888,8 @@ def g41_zaman_bolgeleri():
                     "zaman ekseni için hiç <i>aranmamıştır</i>.<br>"
                     "<b>Bacak olgunluğu:</b> her bacak ≥ 5 bar; tek mumluk sıçramalardan kurulu 'pattern'ler taranmaz — ölçüm gürültüsüdür.",
                x=0.5, y=-0.115, xanchor="center", yanchor="top", font=10)
-    temel_layout(fig, "Şekil 41 — Zaman ekseni: Fibonacci zaman bölgeleri ve bacak süre oranları (şematik örnek)", 620,
-                 "Sol panelde süreler bar sayısıdır; sağ panelde aynı süreler oran düzlemine taşınır")
+    temel_layout(fig, "Şekil 41 — Zaman ekseni: Fibonacci zaman bölgeleri ve bacak süre oranları (şematik örnek)", 940,
+                 "Üst panelde süreler bar sayısıdır; alt panelde aynı süreler oran düzlemine taşınır")
     fig.update_layout(margin=dict(b=175))
     kaydet(fig, "41_zaman_bolgeleri_oranlar")
     RAPOR.append(f"41: t_XA={bA-bX}, t_AB={tAB}, t_BC={tBC}, t_CD={tCD}; τ1={tau1:.3f}, τ2={tau2:.3f}; D, X'ten {bD-bX} bar sonra (34 fib çizgisi); "
@@ -883,69 +910,74 @@ def g42_zaman_stopu():
     ortak = [(0, 104), (4, 108), (bX, X_), (bA, A_), (bB, lvl(A_, X_, 0.50)),
              (bC, lvl(A_, X_, 0.50) + 0.50 * (A_ - lvl(A_, X_, 0.50))), (bD, D_)]
 
-    sol = ortak + [(bD + 6, D_ + 1.4), (bD + 12, D_ + 0.6), (bD + 22, T1 + 0.3),
+    ust = ortak + [(bD + 6, D_ + 1.4), (bD + 12, D_ + 0.6), (bD + 22, T1 + 0.3),
                    (bD + 32, T1 - 0.9), (bD + 44, T2 + 0.4), (bD + 58, T2 + 1.6)]
-    sag = ortak + [(bD + 8, D_ + 1.9), (bD + 16, D_ + 0.5), (bD + 26, D_ + 2.1),
+    alt = ortak + [(bD + 8, D_ + 1.9), (bD + 16, D_ + 0.5), (bD + 26, D_ + 2.1),
                    (bD + 38, D_ + 0.8), (bD + limit, D_ + 1.5), (bD + limit + 14, D_ + 3.4),
                    (bD + limit + 30, T1 + 1.1)]
-    dfs = mumlar(sol, seed=421, gurultu=0.085, fitil=0.45)
-    dfg = mumlar(sag, seed=422, gurultu=0.085, fitil=0.45)
+    df_ust = mumlar(ust, seed=421, gurultu=0.085, fitil=0.45)
+    df_alt = mumlar(alt, seed=422, gurultu=0.085, fitil=0.45)
 
-    fig = make_subplots(rows=1, cols=2, shared_yaxes=True, horizontal_spacing=0.05,
+    # alt alta: iki senaryo art arda (① üstte, ② altta)
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.07,
                         subplot_titles=(f"① Zamanında çalışan işlem: T1, {limit} barlık pencerenin içinde",
                                         f"② Zaman stopu: {limit} bar doldu, fiyat hâlâ yatay"))
-    for col, (df, adi) in enumerate(((dfs, "sol"), (dfg, "sag")), start=1):
+    for row, df in enumerate((df_ust, df_alt), start=1):
         n = len(df) - 1
-        fig.add_trace(mum_iz(df), row=1, col=col)
+        fig.add_trace(mum_iz(df), row=row, col=1)
         zigzag_iz([(bX, X_), (bA, A_), (bB, lvl(A_, X_, 0.50)),
                    (bC, lvl(A_, X_, 0.50) + 0.50 * (A_ - lvl(A_, X_, 0.50))), (bD, D_)],
-                  harfler=list("XABCD"), fig=fig, row=1, col=col, showlegend=False)
-        kutu(fig, bC, n, D_ - 0.5, D_ + 1.1, R["prz"], alfa=0.16, metin="PRZ", konum="top", row=1, col=col, font=10)
-        yatay(fig, giris, bD, n, f"giriş {giris:.2f}", renk=R["ink"], w=1.5, row=1, col=col, font=9.5)
-        yatay(fig, stop, bX, n, f"SL {stop:.2f} (1R = {Rr:.2f})", renk=R["kirmizi"], w=1.5, row=1, col=col, font=9.5)
-        yatay(fig, T1, bD, n, f"T1 {T1:.2f} ({(T1-giris)/Rr:.1f}R)", renk=R["yesil"], row=1, col=col, font=9.5)
-        yatay(fig, T2, bD, n, f"T2 {T2:.2f} ({(T2-giris)/Rr:.1f}R)", renk=R["yesil"], dash="dot", row=1, col=col, font=9.5)
+                  harfler=list("XABCD"), fig=fig, row=row, col=1, showlegend=False)
+        kutu(fig, bC, n, D_ - 0.5, D_ + 1.1, R["prz"], alfa=0.16, metin="PRZ", konum="top", row=row, col=1, font=10)
+        yatay(fig, giris, bD, n, f"giriş {giris:.2f}", renk=R["ink"], w=1.5, row=row, col=1, font=9.5)
+        yatay(fig, stop, bX, n, f"SL {stop:.2f} (1R = {Rr:.2f})", renk=R["kirmizi"], w=1.5, row=row, col=1, font=9.5)
+        yatay(fig, T1, bD, n, f"T1 {T1:.2f} ({(T1-giris)/Rr:.1f}R)", renk=R["yesil"], row=row, col=1, font=9.5)
+        yatay(fig, T2, bD, n, f"T2 {T2:.2f} ({(T2-giris)/Rr:.1f}R)", renk=R["yesil"], dash="dot", row=row, col=1, font=9.5)
         yatay(fig, giris + 0.5 * (T1 - giris), bD, bD + limit, "T1'in %50'si (asimetrik uzatma eşiği)",
-              renk=R["lik"], dash="dot", w=1, row=1, col=col, font=9)
+              renk=R["lik"], dash="dot", w=1, row=row, col=1, font=9)
         for k, (b_, t_, c_) in enumerate(((bD + sure, f"1.0× süre (+{sure} bar)", R["lik"]),
                                           (bD + limit, f"1.5× süre (+{limit} bar) = zaman stopu", R["kirmizi"]))):
-            fig.add_shape(type="line", x0=b_, x1=b_, y0=97, y1=118, row=1, col=col,
+            fig.add_shape(type="line", x0=b_, x1=b_, y0=97, y1=118, row=row, col=1,
                           line=dict(color=c_, width=1.8, dash="dashdot"))
             fig.add_annotation(x=b_, y=118, text=t_, showarrow=False, yshift=10 + 12 * k, xanchor="center",
-                               font=dict(size=9, color=c_), row=1, col=col)
+                               font=dict(size=9, color=c_), row=row, col=1)
         kutu(fig, bD, bD + limit, 97, 97.9, R["mavi"], alfa=0.10,
-             metin="pattern süresi × 1.5 = izin verilen pencere", konum="bottom", row=1, col=col, font=9)
-        if col == 1:
+             metin="pattern süresi × 1.5 = izin verilen pencere", konum="bottom", row=row, col=1, font=9)
+        if row == 1:
             t1_bar = next(i for i in range(bD, n) if df.High.iloc[i] >= T1)
             ok(fig, t1_bar, T1, f"T1'e {t1_bar-bD}. barda ulaştı<br>(<b>{limit} barlık pencerenin içinde</b>)<br>"
                                 "→ %50 kapat, SL → BE, sayaç sıfırlanır",
-               ax=-16, ay=-64, renk=R["yesil"], row=1, col=col, font=9.5)
+               ax=-16, ay=-64, renk=R["yesil"], row=row, col=1, font=9.5)
             not_kutusu(fig, "<b>Tez:</b> 'PRZ'de arz/talep dengesi değişti.'<br>Denge gerçekten değiştiyse etkisi <b>hızlı</b> görünür.<br>"
                             "Bu panelde tez doğrulandı: hareket zamanında geldi.",
-                       x=0.03, y=0.05, xanchor="left", yanchor="bottom", row=1, col=col, font=9.5)
+                       x=0.03, y=0.05, xanchor="left", yanchor="bottom", row=row, col=1, font=9.5)
         else:
             cikis = float(df.Close.iloc[bD + limit])
             ok(fig, bD + limit, cikis, f"<b>Zaman stopu:</b> {limit} bar doldu, fiyat {cikis:.2f}<br>"
                                        f"= giriş {giris:.2f} · sonuç <b>{(cikis-giris)/Rr:+.2f}R</b><br>"
                                        "Stop yenmedi — ama tez de doğrulanmadı",
-               ax=-24, ay=-72, renk=R["kirmizi"], row=1, col=col, font=9.5)
+               ax=-24, ay=-72, renk=R["kirmizi"], row=row, col=1, font=9.5)
             son = float(df.Close.iloc[n])
-            kutu(fig, bD + limit, n, D_ + 0.5, son + 0.6, R["gri"], alfa=0.10, row=1, col=col)
+            kutu(fig, bD + limit, n, D_ + 0.5, son + 0.6, R["gri"], alfa=0.10, row=row, col=1)
             ok(fig, n - 4, son, f"<b>Dürüstlük notu:</b> kapattıktan sonra fiyat<br>yine de yükseldi ({son:.2f} = "
                                 f"{(son-giris)/Rr:+.2f}R kaçtı).<br>Zaman stopu bazen kâr keser; koruduğu şey<br>"
                                 "<b>ortalama</b> beklenen değerdir, tek işlem değil.",
-               ax=-30, ay=66, renk=R["gri"], row=1, col=col, font=9.5)
+               ax=-30, ay=66, renk=R["gri"], row=row, col=1, font=9.5)
             not_kutusu(fig, "<b>Asimetrik zaman stopu (ders kararı):</b><br>kâr yönünde hareket varsa (T1'in %50'sine ulaşıldı)<br>"
                             "süre 2× uzatılır; hiç hareket yoksa 1.0×'te kapatılır.<br>Bu panelde T1'in %50'sine hiç ulaşılmadı.",
-                       x=0.03, y=0.05, xanchor="left", yanchor="bottom", row=1, col=col, font=9.5)
-        fig.update_xaxes(range=[0, n], row=1, col=col)
-    fig.update_yaxes(title="fiyat", range=[96.5, 121], row=1, col=1)
+                       x=0.03, y=0.05, xanchor="left", yanchor="bottom", row=row, col=1, font=9.5)
+        # seviye etiketleri çizginin sağına yazılıyor: tam genişlikte panelde
+        # kırpılmasınlar diye pencereye sağdan pay eklenir
+        fig.update_xaxes(range=[0, n * 1.20], row=row, col=1)
+    # yatay dizilişte y paylaşılıyordu; dikeyde iki panele de aynı ölçek verilir
+    for r_ in (1, 2):
+        fig.update_yaxes(title="fiyat", range=[96.5, 121], row=r_, col=1)
     not_kutusu(fig, "<b>Neden zaman stopu?</b> Harmonik işlemin tezi bir <i>fiyat</i> iddiası değil, bir <i>denge</i> iddiasıdır: PRZ'de arz/talep değişti. "
                     "Değiştiyse etkisi hızlı görünür. Yatay kalan fiyat tezi <b>yalanlar</b>; stop yenmemiş olması tezin doğru olduğu anlamına gelmez — "
                     "yalnız henüz yanlışlanma <i>maliyetinin</i> ödenmediği anlamına gelir. Sermaye o pozisyonda kilitliyken başka setup'lara giremezsiniz; "
                     "zaman stopunun asıl koruduğu şey para değil, <b>fırsat maliyetidir</b>.",
                x=0.5, y=-0.085, xanchor="center", yanchor="top", font=10)
-    temel_layout(fig, "Şekil 42 — Zaman stopu: aynı kural, iki sonuç (şematik örnek)", 640,
+    temel_layout(fig, "Şekil 42 — Zaman stopu: aynı kural, iki sonuç (şematik örnek)", 980,
                  f"Pattern süresi = X→D {sure} bar; izin verilen pencere 1.5× = {limit} bar")
     fig.update_layout(margin=dict(b=120))
     kaydet(fig, "42_zaman_stopu_iki_senaryo")
@@ -1067,7 +1099,8 @@ def g44_konfluens():
     lo = min(k[1] for k in KUME); hi = max(k[1] for k in KUME)
     bagimsiz = [k for k in KUME if k[2]]
 
-    fig = make_subplots(rows=1, cols=2, column_widths=[0.55, 0.45], horizontal_spacing=0.09,
+    # alt alta: konfluens yığını üstte, skor kartı altta
+    fig = make_subplots(rows=2, cols=1, row_heights=[0.53, 0.47], vertical_spacing=0.07,
                         subplot_titles=("Konfluens yığını ve <b>bağımsızlık denetimi</b>",
                                         "Konfluens skor kartı — iki setup yan yana"))
     fig.add_trace(mum_iz(df), row=1, col=1)
@@ -1092,19 +1125,21 @@ def g44_konfluens():
                        bgcolor="rgba(255,255,255,0.94)", bordercolor="#d8cfba", borderwidth=1, borderpad=5,
                        row=1, col=1)
     fig.update_yaxes(title="fiyat", range=[87.0, 93.4], row=1, col=1)
-    fig.update_xaxes(range=[0, n * 1.02], row=1, col=1)
+    # ✓/✗ seviye etiketleri ve gerekçe sütunu x=n'in sağına yazılıyor (xshift 6 / 214);
+    # eskiden yan panelin üstüne taşıyorlardı — pencereyi genişletip panel içine alıyoruz
+    fig.update_xaxes(range=[0, n * 1.85], row=1, col=1)
 
     kats = [s[0] for s in SKOR][::-1]
     a = [s[1] for s in SKOR][::-1]; b = [s[2] for s in SKOR][::-1]; tav = [s[3] for s in SKOR][::-1]
     fig.add_trace(go.Bar(y=kats, x=tav, orientation="h", name="kategori tavanı", showlegend=False,
-                         marker=dict(color=rgba(R["gri"], 0.20)), hoverinfo="skip"), row=1, col=2)
+                         marker=dict(color=rgba(R["gri"], 0.20)), hoverinfo="skip"), row=2, col=1)
     fig.add_trace(go.Bar(y=kats, x=a, orientation="h", name=f"Setup A — {sum(s[1] for s in SKOR)} puan",
                          marker=dict(color=R["up"]), text=[f"{v}" for v in a], textposition="inside",
-                         textfont=dict(size=10, color="white"), width=0.34, offset=-0.36), row=1, col=2)
+                         textfont=dict(size=10, color="white"), width=0.34, offset=-0.36), row=2, col=1)
     fig.add_trace(go.Bar(y=kats, x=b, orientation="h", name=f"Setup B — {sum(s[2] for s in SKOR)} puan",
                          marker=dict(color=R["lik"]), text=[f"{v}" for v in b], textposition="inside",
-                         textfont=dict(size=10, color="white"), width=0.34, offset=0.02), row=1, col=2)
-    fig.update_xaxes(title="puan", range=[0, 50], row=1, col=2)
+                         textfont=dict(size=10, color="white"), width=0.34, offset=0.02), row=2, col=1)
+    fig.update_xaxes(title="puan", range=[0, 50], row=2, col=1)
     fig.add_annotation(xref="x2 domain", yref="y2 domain", x=0.99, y=0.30, xanchor="right", align="left",
                        text=f"<b>Setup A = {sum(s[1] for s in SKOR)}</b> → ≥75: <b>tam pozisyon</b> (%1 risk)<br>"
                             f"<b>Setup B = {sum(s[2] for s in SKOR)}</b> → 45–59: <b>yalnız kâğıt üstü takip</b><br><br>"
@@ -1121,8 +1156,8 @@ def g44_konfluens():
                     "ölçülen büyüklük <b>beklenen R</b> (kazanma oranı değil). 75+ kovası 60–74'ten iyi değilse ağırlıklar yanlıştır — ağırlıkları düzeltin, "
                     "kovaları değil.",
                x=0.5, y=-0.095, xanchor="center", yanchor="top", font=10)
-    temel_layout(fig, "Şekil 44 — Konfluens: yığını saymak değil, <b>bağımsız</b> hesapları saymak (şematik örnek)", 640,
-                 "Sol: sekiz çakışma, altısı bağımsız · Sağ: 100 puanlık skor kartının iki örnek üzerinde okunuşu", lejant=True)
+    temel_layout(fig, "Şekil 44 — Konfluens: yığını saymak değil, <b>bağımsız</b> hesapları saymak (şematik örnek)", 920,
+                 "Üstte sekiz çakışma, altısı bağımsız · altta 100 puanlık skor kartının iki örnek üzerinde okunuşu", lejant=True)
     fig.update_layout(margin=dict(b=155, r=340), barmode="overlay")
     kaydet(fig, "44_konfluens_yigini_skor")
     RAPOR.append(f"44: {len(KUME)} çakışma görünüyor, {len(bagimsiz)} bağımsız (1.272 BC ve AB=CD aynı XA'dan türüyor); "
@@ -1154,7 +1189,8 @@ def g45_smc_birlesik():
     dfA.loc[64, "Low"] = sweep_lo; dfA.loc[64, "Close"] = prz_hi - 0.1
     dfB.loc[64, "Low"] = sweep_lo + 0.3; dfB.loc[64, "Close"] = prz_lo + 0.2
 
-    fig = make_subplots(rows=1, cols=3, shared_yaxes=True, horizontal_spacing=0.028,
+    # alt alta: üç durum art arda (A → B → C)
+    fig = make_subplots(rows=3, cols=1, vertical_spacing=0.06,
                         subplot_titles=("<b>A.</b> D = sweep + OB + CHoCH → plan <b>değişir</b>",
                                         "<b>B.</b> D = sweep, ama CHoCH <b>yok</b>",
                                         "<b>C.</b> Retracement pattern, sweep yok"))
@@ -1185,50 +1221,52 @@ def g45_smc_birlesik():
                     f"R:R (sweep stopu) = <b>{(T1-gA)/rA_s:.2f}</b><br>"
                     f"risk azalması %{100*(1-rA_s/rA_k):.0f}",
                x=0.03, y=0.05, xanchor="left", yanchor="bottom", row=1, col=1, font=9.5, renk=R["up"])
-    fig.update_yaxes(title="fiyat", range=[86, 124], row=1, col=1)
-    fig.update_xaxes(range=[0, nA], row=1, col=1)
+    # yatay dizilişte y paylaşılıyordu; dikeyde üç panele de aynı ölçek verilir
+    for r_ in (1, 2, 3):
+        fig.update_yaxes(title="fiyat", range=[86, 124], row=r_, col=1)
+    fig.update_xaxes(range=[0, nA * 1.42], row=1, col=1)   # sağdaki seviye etiketleri için pay
 
     # --- B
     nB = len(dfB) - 1
-    fig.add_trace(mum_iz(dfB), row=1, col=2)
+    fig.add_trace(mum_iz(dfB), row=2, col=1)
     zigzag_iz([(13, X_), (30, A_), (40, ortak[4][1]), (48, ortak[5][1]), (64, Dbf)],
-              harfler=list("XABCD"), fig=fig, row=1, col=2, showlegend=False)
-    kutu(fig, 48, nB, prz_lo, prz_hi, R["prz"], alfa=0.18, metin="PRZ", konum="top", row=1, col=2, font=9.5)
-    yatay(fig, X_, 0, nB, "X", renk=R["lik"], dash="dash", row=1, col=2, font=9.5)
+              harfler=list("XABCD"), fig=fig, row=2, col=1, showlegend=False)
+    kutu(fig, 48, nB, prz_lo, prz_hi, R["prz"], alfa=0.18, metin="PRZ", konum="top", row=2, col=1, font=9.5)
+    yatay(fig, X_, 0, nB, "X", renk=R["lik"], dash="dash", row=2, col=1, font=9.5)
     lhB = float(dfB.High.iloc[52:62].max()); lhiB = int(dfB.High.iloc[52:62].idxmax())
-    yatay(fig, lhB, lhiB, nB, "son LH — <b>kırılmadı</b>", renk=R["kirmizi"], dash="dot", row=1, col=2, font=9)
-    ok(fig, 64, sweep_lo + 0.3, "sweep ✓", ax=-40, ay=46, renk=R["lik"], row=1, col=2, font=9)
+    yatay(fig, lhB, lhiB, nB, "son LH — <b>kırılmadı</b>", renk=R["kirmizi"], dash="dot", row=2, col=1, font=9)
+    ok(fig, 64, sweep_lo + 0.3, "sweep ✓", ax=-40, ay=46, renk=R["lik"], row=2, col=1, font=9)
     ok(fig, 78, float(dfB.High.iloc[78]), "tepki LH'yi aşamadı → <b>CHoCH yok</b><br>yapı hâlâ düşen",
-       ax=32, ay=-52, renk=R["kirmizi"], row=1, col=2, font=9)
+       ax=32, ay=-52, renk=R["kirmizi"], row=2, col=1, font=9)
     fig.add_annotation(xref="x2 domain", yref="y2 domain", x=0.5, y=0.42, text="<b>İŞLEM YOK</b>",
                        showarrow=False, font=dict(size=34, color="rgba(185,28,28,0.32)"))
     not_kutusu(fig, "<b>Sweep tek başına dönüş değildir.</b><br>Devam sweep'i olabilir: likidite alınır,<br>"
                     "trend aynı yönde sürer. Ayrımı yapan tek<br>şey CHoCH'tur — yapının kapanışla kırılması.",
-               x=0.03, y=0.05, xanchor="left", yanchor="bottom", row=1, col=2, font=9.5, renk=R["kirmizi"])
-    fig.update_xaxes(range=[0, nB], row=1, col=2)
+               x=0.03, y=0.05, xanchor="left", yanchor="bottom", row=2, col=1, font=9.5, renk=R["kirmizi"])
+    fig.update_xaxes(range=[0, nB * 1.42], row=2, col=1)
 
     # --- C
     nC = len(dfC) - 1
     gC = Dg + 0.62; slC = lvl(A_, X_, 0.886) - 0.68
     T1c = Dg + 0.382 * (A_ - Dg)
-    fig.add_trace(mum_iz(dfC), row=1, col=3)
+    fig.add_trace(mum_iz(dfC), row=3, col=1)
     zigzag_iz([(13, X_), (30, A_), (40, ancC[4][1]), (48, ancC[5][1]), (64, Dg)],
-              harfler=list("XABCD"), fig=fig, row=1, col=3, showlegend=False)
+              harfler=list("XABCD"), fig=fig, row=3, col=1, showlegend=False)
     kutu(fig, 48, nC, Dg - 0.35, Dg + 0.45, R["prz"], alfa=0.18, metin="PRZ (0.786 XA)", konum="top",
-         row=1, col=3, font=9.5)
-    yatay(fig, X_, 0, nC, "X — <b>süpürülmedi</b>", renk=R["gri"], dash="dash", row=1, col=3, font=9.5)
+         row=3, col=1, font=9.5)
+    yatay(fig, X_, 0, nC, "X — <b>süpürülmedi</b>", renk=R["gri"], dash="dash", row=3, col=1, font=9.5)
     fvg_lo, fvg_hi = float(dfC.High.iloc[66]), float(dfC.Low.iloc[68])
     if fvg_hi > fvg_lo:
         kutu(fig, 66, nC, fvg_lo, fvg_hi, R["fvg"], alfa=0.18, metin="FVG — girişi <b>iyileştirir</b>",
-             konum="bottom", row=1, col=3, font=9)
-    yatay(fig, gC, 62, nC, f"giriş {gC:.2f}", renk=R["ink"], w=1.4, row=1, col=3, font=9)
+             konum="bottom", row=3, col=1, font=9)
+    yatay(fig, gC, 62, nC, f"giriş {gC:.2f}", renk=R["ink"], w=1.4, row=3, col=1, font=9)
     yatay(fig, slC, 62, nC, f"stop 0.886 altı {slC:.2f} → 1R = {gC-slC:.2f}", renk=R["kirmizi"], w=1.6,
-          row=1, col=3, font=9)
-    yatay(fig, T1c, 62, nC, f"T1 {T1c:.2f} ({(T1c-gC)/(gC-slC):.1f}R)", renk=R["yesil"], row=1, col=3, font=9)
+          row=3, col=1, font=9)
+    yatay(fig, T1c, 62, nC, f"T1 {T1c:.2f} ({(T1c-gC)/(gC-slC):.1f}R)", renk=R["yesil"], row=3, col=1, font=9)
     not_kutusu(fig, "İç likidite / dengeleme hareketi.<br><b>Standart plan geçerlidir.</b><br>"
                     "SMC'nin tek katkısı FVG'nin giriş fiyatını<br>birkaç tik iyileştirmesidir — stop mantığı<br>değişmez.",
-               x=0.03, y=0.05, xanchor="left", yanchor="bottom", row=1, col=3, font=9.5)
-    fig.update_xaxes(range=[0, nC], row=1, col=3)
+               x=0.03, y=0.05, xanchor="left", yanchor="bottom", row=3, col=1, font=9.5)
+    fig.update_xaxes(range=[0, nC * 1.42], row=3, col=1)
 
     not_kutusu(fig, "<b>Birleşik model, tek cümle:</b> harmonik <i>nerede</i> der, SMC <i>neden ve ne zaman</i> der. Harmonik PRZ olmadan SMC girişi keyfî bir "
                     "seviyededir; SMC teyidi olmadan harmonik girişi bir orandan ibarettir. İkisi çakışmadığında bekleme maliyeti sıfırdır — "
@@ -1236,7 +1274,7 @@ def g45_smc_birlesik():
                     "<b>Uyarı (korunur):</b> 'sweep fitilinin altı = kurumsal alıcının savunduğu seviye' gerekçesi bir <i>emir akışı anlatısıdır</i>; "
                     "kurumsal emir verisi olmadan kısmen spekülatiftir. Kuralın operasyonel değeri (stop, tezin yanlışlandığı yere konur) anlatıdan bağımsız olarak geçerlidir.",
                x=0.5, y=-0.075, xanchor="center", yanchor="top", font=10)
-    temel_layout(fig, "Şekil 45 — SMC ile birleşik model: üç durum, üç plan (şematik örnek)", 700,
+    temel_layout(fig, "Şekil 45 — SMC ile birleşik model: üç durum, üç plan (şematik örnek)", 1370,
                  "Aynı harmonik geometri, farklı SMC bağlamı → farklı stop mantığı ve farklı R:R")
     fig.update_layout(margin=dict(b=118))
     kaydet(fig, "45_smc_birlesik_model")
@@ -1336,19 +1374,20 @@ def g47_repaint_gercek(no=47):
     fark = 100 * (gec[1] - kesin_D[1]) / gec[1]      # taban: geçici D — 'geçici D'nin %x altında' okuması
 
     i0 = max(0, X[0] - 30); iL = t; iRr = min(len(df) - 1, kesin_D[0] + 40)
-    fig = make_subplots(rows=1, cols=2, shared_yaxes=True, horizontal_spacing=0.035,
+    # alt alta: canlı an üstte, kesinleşmiş hâl altta (y ekseni aşağıda eşitlenir)
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.07,
                         subplot_titles=(f"① Canlıda ekranda görünen — {df.index[iL]:%Y-%m-%d %H:%M} (bar {iL})",
                                         f"② {kesin_D[0]-gi} bar sonra kesinleşen hâl — {df.index[iRr]:%Y-%m-%d %H:%M}"))
-    for col, i1 in ((1, iL), (2, iRr)):
+    for row, i1 in ((1, iL), (2, iRr)):
         d_ = df.iloc[i0:i1 + 1]; xs = list(range(i0, i1 + 1))
-        fig.add_trace(mum_iz(d_, x=xs), row=1, col=col)
-        pv = [p for p in tam if i0 <= p[0] <= (i1 - 1 - n if col == 1 else i1)]
+        fig.add_trace(mum_iz(d_, x=xs), row=row, col=1)
+        pv = [p for p in tam if i0 <= p[0] <= (i1 - 1 - n if row == 1 else i1)]
         fig.add_trace(go.Scatter(x=[p[0] for p in pv], y=[p[1] for p in pv], mode="lines",
                                  line=dict(color=R["gri"], width=1, dash="dot"),
-                                 name=f"kesinleşmiş pivotlar (n={n})", showlegend=(col == 1),
-                                 hoverinfo="skip"), row=1, col=col)
+                                 name=f"kesinleşmiş pivotlar (n={n})", showlegend=(row == 1),
+                                 hoverinfo="skip"), row=row, col=1)
         tv, tt = H._tarih_tikleri(df, i0, i1, 6)
-        fig.update_xaxes(tickvals=tv, ticktext=tt, tickfont=dict(size=9), row=1, col=col)
+        fig.update_xaxes(tickvals=tv, ticktext=tt, tickfont=dict(size=9), row=row, col=1)
     pts_g = [(X[0], X[1]), (A[0], A[1]), (B[0], B[1]), (C[0], C[1]), (gec[0], gec[1])]
     zigzag_iz(pts_g, harfler=list("XABCD"), fig=fig, row=1, col=1, showlegend=False, renk=R["prz"])
     kutu(fig, C[0], iL, gec[1] - 260, gec[1] + 260, R["prz"], alfa=0.20,
@@ -1359,19 +1398,21 @@ def g47_repaint_gercek(no=47):
                     f"D 'seviyesi' {gec[1]:,.0f}",
                x=0.03, y=0.05, xanchor="left", yanchor="bottom", row=1, col=1, font=9.5, renk=R["prz"])
     pts_k = [(X[0], X[1]), (A[0], A[1]), (B[0], B[1]), (C[0], C[1]), (kesin_D[0], kesin_D[1])]
-    zigzag_iz(pts_k, harfler=list("XABCD"), fig=fig, row=1, col=2, showlegend=False, renk=R["kirmizi"])
+    zigzag_iz(pts_k, harfler=list("XABCD"), fig=fig, row=2, col=1, showlegend=False, renk=R["kirmizi"])
     yatay(fig, gec[1], i0, iRr, f"canlıda 'D' sanılan seviye {gec[1]:,.0f}", renk=R["prz"], dash="dash",
-          w=1.6, row=1, col=2, font=9.5)
+          w=1.6, row=2, col=1, font=9.5)
     ok(fig, gi, gec[1], "bu bar <b>hiçbir zaman pivot olmadı</b>", ax=-46, ay=-58, renk=R["prz"],
-       row=1, col=2, font=9.5)
+       row=2, col=1, font=9.5)
     ok(fig, kesin_D[0], kesin_D[1], f"gerçek pivot: {kesin_D[1]:,.0f}<br>"
                                     f"geçici D'nin <b>%{abs(fark):.2f} altında</b>, {kesin_D[0]-gi} bar sonra",
-       ax=48, ay=48, renk=R["kirmizi"], row=1, col=2, font=9.5)
+       ax=48, ay=48, renk=R["kirmizi"], row=2, col=1, font=9.5)
     not_kutusu(fig, f"Aynı X-A-B-C, kesinleşmiş D ile:<br>rD = <b>{rD_k:.3f}</b> XA (hiçbir bantta değil)<br>"
                     f"rBC = {rBC_k:.3f} (band dışı)<br><b>→ pattern YOK.</b><br>"
                     "Ekranda görülen yapı hiç var olmadı;<br>onu 'gören' şey, henüz kesinleşmemiş<br>bir pivotu pivot saymaktı.",
-               x=0.03, y=0.05, xanchor="left", yanchor="bottom", row=1, col=2, font=9.5, renk=R["kirmizi"])
+               x=0.03, y=0.05, xanchor="left", yanchor="bottom", row=2, col=1, font=9.5, renk=R["kirmizi"])
     fig.update_yaxes(title="fiyat (USD)", row=1, col=1)
+    # iki panel aynı fiyatı iki anda gösteriyor: ölçek eşitlenir (eski shared_yaxes)
+    fig.update_yaxes(title="fiyat (USD)", matches="y", row=2, col=1)
     not_kutusu(fig, "<b>Repaint budur.</b> Zigzag/otomatik harmonik göstergelerin çoğu, son bacağı henüz kesinleşmemiş bir uçla çizer; "
                     "uç kaydıkça geçmişteki çizim de değişir ve ekranda hep 'işe yaramış gibi görünen' bir tarih kalır.<br>"
                     f"Bu örnekte fark akademik değil, paradır: 'PRZ'den alan bir işlemci {gec[1]:,.0f}'dan girer, fiyat {kesin_D[1]:,.0f}'a "
@@ -1379,8 +1420,8 @@ def g47_repaint_gercek(no=47):
                     "<b>Kural:</b> fraktal pivot kullan (kesinleşince <i>asla</i> değişmez), sinyali <i>n</i> bar gecikmeli kabul et, "
                     "backtest'te PnL'i D'nin <b>keşfedildiği</b> barın fiyatından hesapla.",
                x=0.5, y=-0.115, xanchor="center", yanchor="top", font=10)
-    temel_layout(fig, f"Şekil {no} — Gerçek veri — BTC-USD, 1h: repaint'in görsel kanıtı (aynı pencere, iki an)", 660,
-                 f"Fraktal pivot n={n}; sol panelde son pivot henüz kesinleşmemiş, sağ panelde kesinleşmiş. "
+    temel_layout(fig, f"Şekil {no} — Gerçek veri — BTC-USD, 1h: repaint'in görsel kanıtı (aynı pencere, iki an)", 1020,
+                 f"Fraktal pivot n={n}; üst panelde son pivot henüz kesinleşmemiş, alt panelde kesinleşmiş. "
                  f"Veri kaynağı: {kaynak} · pencere pinli", lejant=True)
     fig.update_layout(margin=dict(b=165))
     kaydet(fig, f"{no}_repaint_gercek_btc")

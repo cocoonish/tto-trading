@@ -26,7 +26,13 @@ EV_STILI = """
      çevirmek — kırpmak yerine kaydırmak. Sınır aşağıdaki script'te panel sayısına
      göre belirlenir (tek panelli grafikler etkilenmez, %100 kalır). */
   html, body { margin: 0; padding: 0; height: 100%; background: #ffffff; overflow-x: auto; }
+  /* Yükseklik: normalde iframe'i doldurur (100vh). Ama figürün TASARIM yüksekliği
+     viewport'tan büyükse (alt alta dizilmiş çok panelli grafikler, 1000-2300 px)
+     100vh onu EZİYORDU — "Tam ekran" bağlantısıyla açıldığında altı üstü sıkışık
+     bir görüntü çıkıyordu. Script aşağıda gd.layout.height'ı okuyup gerekirse
+     .tto-uzun ile sabit yüksekliğe geçiriyor; sayfa dikey kayar. */
   .plotly-graph-div { width: 100% !important; height: 100vh !important; }
+  body.tto-uzun .plotly-graph-div { height: var(--tto-yukseklik) !important; }
   body.tto-genis .plotly-graph-div { min-width: var(--tto-min-genislik, 100%); }
   .modebar { opacity: 0.25; transition: opacity .2s; }
   .modebar:hover { opacity: 1; }
@@ -49,13 +55,23 @@ EV_STILI = """
     }).length;
     if (sutun >= 4) return 1220;
     if (sutun === 3) return 1020;
-    if (panel >= 4) return 1000;  // 2x2 ızgara: panel başına ~480px, kutular sığar
-    return 0;                     // tek/çift panelli grafik: %100 genişlik yeter
+    if (sutun >= 2 && panel >= 4) return 1000;  // 2x2 ızgara: panel başına ~480px, kutular sığar
+    return 0;                     // tek sütunlu (alt alta) ya da çift panelli: %100 genişlik yeter
   }
 
   function uygula() {
     var gd = document.querySelector('.plotly-graph-div');
     if (!gd || !window.Plotly || !gd.layout) { setTimeout(uygula, 120); return; }
+    // Tasarım yüksekliği viewport'u aşıyorsa figürü ezme, sayfayı kaydır.
+    var tasarimY = (gd.layout && gd.layout.height) || 0;
+    if (tasarimY && tasarimY > window.innerHeight + 20) {
+      document.body.classList.add('tto-uzun');
+      document.body.style.setProperty('--tto-yukseklik', tasarimY + 'px');
+    }
+    // Alt başlıklı (title'da <br><sup>…) figürlerde İLK satırın panel başlığı
+    // (y≈1) başlığın altına giriyordu: üst marj iki satırlık başlık + panel
+    // başlığı için yetmiyor. Gerekirse marj büyütülür (yalnız çok satırlı
+    // subplot figürlerinde; tek panelli grafiklerde panel başlığı yoktur).
     var minG = genislikSiniri(gd);
     if (minG) {
       document.body.classList.add('tto-genis');
@@ -119,6 +135,15 @@ EV_STILI = """
         guncelle[ad + '.tickangle'] = -40;
       }
     });
+    var bas = (gd.layout.title && gd.layout.title.text) || '';
+    var ustBaslik = (gd.layout.annotations || []).some(function (a) {
+      return a.yanchor === 'bottom' && a.yref === 'paper' && a.y >= 0.98;
+    });
+    var altSatir = (bas.match(/<br>/g) || []).length;
+    var gerekenT = 92 + 26 * altSatir + (ustBaslik ? 26 : 0);
+    if (ustBaslik && altSatir && (gd.layout.margin || {}).t < gerekenT) {
+      guncelle['margin.t'] = gerekenT;
+    }
     Plotly.relayout(gd, guncelle);
     window.addEventListener('resize', function () { Plotly.Plots.resize(gd); });
     Plotly.Plots.resize(gd);
