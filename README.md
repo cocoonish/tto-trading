@@ -4,7 +4,10 @@ Türkiye makro & piyasa araştırmaları: veri hatları (Python) → statik site
 Yedi veri hattı EVDS/TÜİK/Hazine/haber kaynaklarından çekip Plotly grafikleri üretir,
 site bunları gömer; sayfa metnindeki güncel sayılar `ozet.json`'dan **canlı** okunur.
 
-> **Depo private.** Site henüz yayında değil; yerelde `site.bat` ile açılır (aşağıda).
+> **Bu depo private.** Veri hatları, `Research/` altındaki masa dokümanları ve commit
+> geçmişi burada kalır. **Yayınlanan tek şey `site/`**: ayrı bir public depoya
+> (`cocoonish/cocoonish.github.io`) kopyalanır ve GitHub Pages'te yayına girer —
+> **https://cocoonish.github.io/** · gönderim: `yayinla.bat`
 
 ---
 
@@ -34,9 +37,10 @@ Ayrıntılı anlatım: **[KURULUM.md](KURULUM.md)** · çalışma rehberi: [CLAU
 | `guncelle.bat --hepsi --tam` | yedi hattın tamamı, ağır adımlar dahil |
 | `guncelle.bat --kur <hat>` | tek hattın `.venv` + bağımlılıkları (kur.bat'ın alt kümesi) |
 | `panel.bat hazine` \| `fx` | canlı pano (Dash 8050 / Streamlit 8501) |
+| `yayinla.bat` | siteyi yayına gönder (`-m "mesaj"`, `--kuru` = deneme) |
 
 Windows dışında `.bat` yerine aynı adlı `.py`: `python3 kur.py`, `python3 site_baslat.py`,
-`python3 guncelle.py`, `python3 panel.py`.
+`python3 guncelle.py`, `python3 panel.py`, `python3 yayinla.py`.
 
 ## Klasörler
 
@@ -51,7 +55,7 @@ site/                     Astro sitesi
 Aktarılacak Projeler/     veri hatları (TCMBNetRezerv, TRYREER, hazineihrac, …)
 Research/                 ham araştırma (marj hattı burada)
 bat/                      proje başına Windows bat'ları
-kur.py · guncelle.py · panel.py · site_baslat.py   kök araçlar (her birinin .bat'ı var)
+kur.py · guncelle.py · panel.py · site_baslat.py · yayinla.py   kök araçlar (.bat'ları var)
 ```
 
 ## Veri hatları
@@ -92,6 +96,17 @@ eğrisiyle ASW hesaplayıcı (BBG terminali gerektirir, o yüzden sitede yok).
 çıktıları commit'ler. **Depo secret'ı gerekir:** Settings → Secrets and variables → Actions
 → `TTO_EVDS_KEY`. Ağır adımlar (FinBERT, Hazine scraper) bilinçli olarak cron dışıdır;
 onlar yerelde `guncelle.bat --tam` ile koşturulup push edilir.
+
+## Yayın
+
+Site iki depoda yaşar: **kaynak burada** (private), **yayın** ayrı bir public depoda
+(`cocoonish/cocoonish.github.io`). `yayinla.bat` şunu yapar: yerelde derler (CI'da
+patlamasın diye), `site/` klasörünü public depo klonuna kopyalar, gömülü kimlik bilgisi
+taraması yapar, commit'ler ve push eder. Push'u gören GitHub Actions derleyip Pages'e
+koyar (~2 dk) → https://cocoonish.github.io/
+
+Public depoya **yalnız `site/` gider**: veri hatları, `Research/`, `bat/`, `CLAUDE.md`
+ve bu deponun commit geçmişi oraya hiç kopyalanmaz.
 
 ## Güvenlik notları
 

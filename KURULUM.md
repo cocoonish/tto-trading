@@ -118,6 +118,20 @@ Pano açılmadan önce gerekli paket ve veri dosyaları denetlenir; eksikse hang
 çalıştıracağınız yazılır (ör. `guncelle.bat --kur hazine` ya da `guncelle.bat hazine --tam`).
 macOS/Linux'ta: `python3 panel.py hazine`.
 
+## 5c. Siteyi yayına göndermek
+
+Site ayrı bir **public** depoda yayınlanır (`cocoonish/cocoonish.github.io` →
+https://cocoonish.github.io/). Bu depo private kalır.
+
+```
+yayinla.bat                        REM derle -> kopyala -> commit -> push (~2 dk sonra yayinda)
+yayinla.bat -m "SMC dersi guncellendi"
+yayinla.bat --kuru                 REM ne olacagini goster, gonderme
+```
+
+İlk kullanımda public depoyu yanına klonlar (`..\TTO Trading Yayin`). Public depoya
+yalnız `site/` gider; `Research/`, veri hatları ve bu deponun geçmişi gitmez.
+
 ## 6. Proje başına özel notlar
 
 - **`fx-haber-endeksi`** — GDELT/haber önbelleği (`indices/data/*_cache.json`) repoya
