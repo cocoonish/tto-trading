@@ -169,10 +169,10 @@ def main() -> int:
     if a.liste:
         for h in hatlar:
             req = KOK / h.klasor / "requirements.txt"
-            print(f"  {h.ad:8s} {h.baslik:26s} {h.klasor}"
+            print(f"  {h.ad:9s} {h.baslik:26s} {h.klasor}"
                   f"{'' if req.exists() else '   (requirements.txt YOK)'}")
         if not a.site_yok:
-            print(f"  {'site':8s} {'Astro sitesi (npm install)':26s} site/")
+            print(f"  {'site':9s} {'Astro sitesi (npm install)':26s} site/")
         return 0
 
     print("\n▶ Ön koşullar")

@@ -206,6 +206,8 @@ ozet = {
     "p_tarih": gs["Tarih"].strftime("%d.%m.%Y"),
     "p_brut": _yuvarla(gs["brut_usd"]),
     "p_altin": _yuvarla(gs["altin_usd"]),
+    # Altının brüt rezerv içindeki payı (%): rezerv "kalitesi" tartışmasının tek sayısı.
+    "p_altin_pay": _yuvarla(100 * gs["altin_usd"] / gs["brut_usd"]),
     "p_doviz": _yuvarla(gs["doviz_usd"]),
     "p_net_dis": _yuvarla(gs["net_dis_varlik_usd"]),
     "p_swap": _yuvarla(gs["swap_toplam_usd"]),
