@@ -379,9 +379,9 @@ def g01_swing_yapi():
         yatay(fig, df.l[i], i, tepe + 6, renk=TEAL, dash="dash")
         not_(fig, tepe + 6, df.l[i], "korunan dip (protected low): son HH'yi üreten bacağın HL'i<br>→ gövdeyle kırılınca yapı düşüşe döndü",
              renk=TEAL, ok=False, boyut=10, xanchor="left")
-    duzen(fig, "Şekil 01 — Swing high/low ve HH/HL/LH/LL yapısı (şematik örnek)",
+    duzen(fig, "Şekil 02 — Swing high/low ve HH/HL/LH/LL yapısı (şematik örnek)",
           "Kutu: 3-mum kuralı. İşaretler: gürültüyü elemek için 5-mum (k=2) sürümü; ITH/ITL = iki yanında daha alçak/yüksek swing bulunan swing")
-    kaydet(fig, "01_swing_yapi_hh_hl")
+    kaydet(fig, "02_swing_yapi_hh_hl")
 
 
 # =====================================================================================
@@ -422,15 +422,15 @@ def g02_bos():
     not_(fig, i_b2, df.c[i_b2], "<b>BOS #2</b> — bu kez gövde 105.0 üstünde", renk=TEAL, ax=-60, ay=-45)
     lejant_cizgi(fig, "kırılan swing seviyesi (BOS)", TEAL, "solid")
     lejant_cizgi(fig, "likidite seviyesi (sweep)", ALTIN)
-    duzen(fig, "Şekil 02 — BOS: yapı kırılımı gövde kapanışıyla sayılır (şematik örnek)",
+    duzen(fig, "Şekil 03 — BOS: yapı kırılımı gövde kapanışıyla sayılır (şematik örnek)",
           "Aynı seviyede iki deneme: fitil aşımı = sweep (likidite), gövde kapanışı = BOS (yapı)")
-    kaydet(fig, "02_bos_govde_kapanisi")
+    kaydet(fig, "03_bos_govde_kapanisi")
 
 
 # =====================================================================================
 # 03 — CHoCH / MSS: sweep → displacement → governing swing kırılımı (+ FVG)
 # =====================================================================================
-def g03_choch_mss():
+def g04_choch_mss():
     s = Seri(3)
     s.bacak(103.0, 5); s.bacak(101.8, 3); s.bacak(104.5, 5, lab="ITH")   # ITH 104.5 civarı
     s.bacak(103.0, 3, lab="ITL (governing swing)")                       # ITL 103.0
@@ -481,15 +481,15 @@ def g03_choch_mss():
     lejant(fig, "liquidity void", GRI, a=0.12)
     lejant_cizgi(fig, "likidite (BSL)", ALTIN)
     lejant_cizgi(fig, "CHoCH (STL) / MSS (ITL) seviyesi", BORDO)
-    duzen(fig, "Şekil 03 — CHoCH ve MSS: sweep → displacement → governing swing kırılımı (şematik örnek)",
+    duzen(fig, "Şekil 04 — CHoCH ve MSS: sweep → displacement → governing swing kırılımı (şematik örnek)",
           "CHoCH = ilk trend-aleyhine kırılım (uyarı); MSS = sweep sonrası displacement'lı, FVG bırakan, ITL'yi gövdeyle kıran kırılım (işlem gerekçesi)")
-    kaydet(fig, "03_choch_mss")
+    kaydet(fig, "04_choch_mss")
 
 
 # =====================================================================================
 # 04 — Swing (external) yapı vs internal yapı
 # =====================================================================================
-def g04_internal_vs_swing():
+def g05_internal_vs_swing():
     s = Seri(4)
     s.bacak(103.0, 5); s.bacak(101.5, 3, lab="swing HL (korunan dip)"); s.bacak(106.0, 8, lab="swing HH")
     # internal düşüş yapısı (düzeltme)
@@ -523,9 +523,9 @@ def g04_internal_vs_swing():
     hh_lvl = df.h[i_hh - 1:i_hh + 2].max()
     yatay(fig, hh_lvl, i_hh, i_bos, renk=TEAL, dash="solid", w=1.6)
     not_(fig, i_bos, hh_lvl, "<b>swing BOS</b> — external yapı devam", renk=TEAL, ax=-70, ay=-40)
-    duzen(fig, "Şekil 04 — Swing (external) yapı ile internal yapı aynı grafikte (şematik örnek)",
+    duzen(fig, "Şekil 05 — Swing (external) yapı ile internal yapı aynı grafikte (şematik örnek)",
           "Büyük harf = swing yapısı; küçük harf = swing HL'in içindeki düzeltmenin iç yapısı. Internal kırılım swing'i değiştirmez.")
-    kaydet(fig, "04_internal_vs_swing")
+    kaydet(fig, "05_internal_vs_swing")
 
 
 # =====================================================================================
@@ -562,9 +562,9 @@ def g05_dealing_range_ote():
     lejant(fig, "OTE bandı (0.62–0.79)", ALTIN, a=0.16)
     lejant(fig, "premium", BORDO, a=0.1); lejant(fig, "discount", TEAL, a=0.1)
     fig.update_yaxes(range=[L - 1.2, 110.9])
-    duzen(fig, "Şekil 05 — Dealing range, premium/discount, equilibrium ve ICT fib/OTE (şematik örnek)",
+    duzen(fig, "Şekil 06 — Dealing range, premium/discount, equilibrium ve ICT fib/OTE (şematik örnek)",
           "Bullish: fib sweep low (1.0) → displacement high (0) çekilir; 0.62–0.79 = OTE; −0.27/−0.62 hedef basamakları")
-    kaydet(fig, "05_dealing_range_premium_discount_ote")
+    kaydet(fig, "06_dealing_range_premium_discount_ote")
 
 
 # =====================================================================================
@@ -607,9 +607,9 @@ def g06_eqh_eql():
                        showarrow=True, arrowhead=3, arrowwidth=2, arrowcolor=TEAL, text="")
     not_(fig, n - 1, (df.c[n - 1] + ly) / 2, "<b>DOL</b> (draw on liquidity):<br>BSL alındı → sıradaki mıknatıs EQL/SSL", renk=TEAL, ok=False, boyut=10, xanchor="right")
     lejant(fig, "eşit tepe/dip tolerans bandı", ALTIN, a=0.16)
-    duzen(fig, "Şekil 06 — Equal highs / equal lows: likidite havuzları, PDH/PDL ve DOL (şematik örnek)",
+    duzen(fig, "Şekil 09 — Equal highs / equal lows: likidite havuzları, PDH/PDL ve DOL (şematik örnek)",
           "Üç eşit tepe = BSL mıknatısı; alınınca ✕; fiyat ERL → karşı ERL'ye (DOL) salınır")
-    kaydet(fig, "06_equal_highs_lows_likidite")
+    kaydet(fig, "09_equal_highs_lows_likidite")
 
 
 # =====================================================================================
@@ -650,16 +650,16 @@ def g07_sweep_vs_run():
     not_(fig, i_m, da.c[i_m], "MSS: yakın swing high gövdeyle kırıldı<br>→ turtle soup girişi (Raschke: eski dip üstüne buy-stop)", renk=TEAL, ax=-60, ay=-45, row=1, col=1)
     i_r = int(db.index[db.lab.str.startswith("RUN")][0])
     not_(fig, i_r, db.c[i_r], "<b>run</b>: gövde 100.0 altında kapandı,<br>büyük kırmızı mumlar → karşı işlem yok,<br>DOL aşağıdaki sonraki havuza kayar", renk=BORDO, ax=110, ay=-110, row=1, col=2)
-    duzen(fig, "Şekil 07 — Aynı seviyede iki farklı sonuç: sweep mi, liquidity run mı? (şematik örnek)",
+    duzen(fig, "Şekil 10 — Aynı seviyede iki farklı sonuç: sweep mi, liquidity run mı? (şematik örnek)",
           "Ayrım ancak mum KAPANIŞIYLA yapılır — canlıda fitil ötedeyken henüz bilinmez")
     fig.update_xaxes(title_text="mum sırası", row=1, col=2)
-    kaydet(fig, "07_sweep_vs_liquidity_run")
+    kaydet(fig, "10_sweep_vs_liquidity_run")
 
 
 # =====================================================================================
 # 08 — Inducement (IDM)
 # =====================================================================================
-def g08_inducement():
+def g11_inducement():
     s = Seri(8)
     s.bacak(105.5, 3); s.bacak(103.0, 4); s.bacak(101.5, 3, gurultu=0.5)
     s.mum(101.5, 101.65, 100.7, 101.05, "OB mumu (son kırmızı) + SSL sweep")
@@ -686,9 +686,9 @@ def g08_inducement():
     not_(fig, i_g, df.l[i_g] - 1.0, "OB'ye giriş (limit)<br>SL: OB fitilinin altı", renk=TEAL, ok=False, boyut=10, yanchor="top")
     not_(fig, i_idm - 8, 106.6, "kural: geçerli swing, IDM alındıktan sonra oluşur;<br>IDM'de erken alan, POI'ye gelmeden stoplanır", renk=GRI, ok=False, boyut=10, xanchor="left")
     lejant(fig, "Order block (POI)", MAVI); lejant_cizgi(fig, "IDM seviyesi", ALTIN)
-    duzen(fig, "Şekil 08 — Inducement (IDM): POI'den önce duran yem (şematik örnek)",
+    duzen(fig, "Şekil 11 — Inducement (IDM): POI'den önce duran yem (şematik örnek)",
           "İlk pullback'in STL'i süpürülmeden POI'ye giriş aranmaz; STL kırılışı MSS değil, inducement'tır")
-    kaydet(fig, "08_inducement")
+    kaydet(fig, "11_inducement")
 
 
 # =====================================================================================
@@ -723,9 +723,9 @@ def g09_trendline():
     not_(fig, i_sw, df.l[i_sw], "<b>trendline sweep</b>: çizgi altındaki sell-stop'lar alındı,<br>gövde çizginin üstünde kapandı → kırılım değil", renk=ALTIN, ax=-120, ay=45)
     not_(fig, t[1], cizgi(t[1]) - 0.9, "diyagonal SSL: 'herkes çiziyor' → çizginin altı stop havuzu", renk=ALTIN, ok=False, boyut=10)
     lejant(fig, "trendline likiditesi (SSL bandı)", ALTIN, a=0.15)
-    duzen(fig, "Şekil 09 — Trendline liquidity: görünür trend çizgisi altındaki stop havuzu (şematik örnek)",
+    duzen(fig, "Şekil 12 — Trendline liquidity: görünür trend çizgisi altındaki stop havuzu (şematik örnek)",
           "≥3 temaslı çizgi = diyagonal likidite; senaryo 'kırılım' değil 'sweep + geri kazanım'")
-    kaydet(fig, "09_trendline_liquidity")
+    kaydet(fig, "12_trendline_liquidity")
 
 
 # =====================================================================================
@@ -772,10 +772,10 @@ def g10_fvg():
         i_ce = int(d.index[d.lab.str.startswith("CE")][0])
         not_(fig, i_ce, d.l[i_ce] if col == 1 else d.h[i_ce], "kısmi dolum: CE'ye kadar girdi, tepki<br>(fresh → partially filled)", renk=MOR, ax=40, ay=40 if col == 1 else -40, row=1, col=col)
     lejant(fig, "FVG (imbalance)", MOR); lejant_cizgi(fig, "CE (consequent encroachment)", MOR)
-    duzen(fig, "Şekil 10 — Fair Value Gap: BISI ve SIBI, CE (%50) ve kısmi dolum (şematik örnek)",
+    duzen(fig, "Şekil 15 — Fair Value Gap: BISI ve SIBI, CE (%50) ve kısmi dolum (şematik örnek)",
           "Üç mum: 1. ve 3. mumun fitilleri örtüşmez; orta mum displacement mumu (gövde ≥ %60, ≥1,5× ATR)")
     fig.update_xaxes(title_text="mum sırası", row=1, col=2)
-    kaydet(fig, "10_fvg_bisi_sibi_ce")
+    kaydet(fig, "15_fvg_bisi_sibi_ce")
 
 
 # =====================================================================================
@@ -803,9 +803,9 @@ def g11_ifvg():
     not_(fig, i_rt, df.h[i_rt], "IFVG retest: fitil eski FVG'ye girdi,<br>gövde altında kapandı → short girişi<br>SL: IFVG üst kenarının üstü", renk=BORDO, ax=70, ay=-55)
     daire(fig, i_rt, df.h[i_rt] - 0.15, r_y=0.3, renk=BORDO)
     lejant(fig, "FVG (bullish)", MOR); lejant(fig, "IFVG (bearish — rol tersine döndü)", BORDO)
-    duzen(fig, "Şekil 11 — Inversion FVG: gövdeyle geçilen FVG rol değiştirir (şematik örnek)",
+    duzen(fig, "Şekil 16 — Inversion FVG: gövdeyle geçilen FVG rol değiştirir (şematik örnek)",
           "Destek olan boşluk, gövde kapanışıyla aşılınca direnç olur; ilk retest giriş yeri")
-    kaydet(fig, "11_inversion_fvg")
+    kaydet(fig, "16_inversion_fvg")
 
 
 # =====================================================================================
@@ -858,9 +858,9 @@ def g12_order_block():
     not_(fig, i_ob + 1, eq, f"EQ {eq:.2f} (sweep low → displacement high) → OB discount'ta ✓ (⑤)", renk=GRI, ok=False, boyut=10, xanchor="left", ay=-12)
     lejant(fig, "Order block (gövde)", MAVI); lejant(fig, "FVG", MOR); lejant_cizgi(fig, "SSL", ALTIN, "solid"); lejant_cizgi(fig, "MT", MAVI)
     fig.update_xaxes(range=[-1, n + 11]); fig.update_yaxes(range=[98.9, 105.5])
-    duzen(fig, "Şekil 12 — Order block anatomisi: 5 geçerlilik kriteri tek grafikte (şematik örnek)",
+    duzen(fig, "Şekil 17 — Order block anatomisi: 5 geçerlilik kriteri tek grafikte (şematik örnek)",
           "① sweep ② displacement + FVG ③ yapı kırılımı ④ fresh (ilk test) ⑤ discount'ta; bölge = gövde, stop = fitil")
-    kaydet(fig, "12_order_block_anatomisi")
+    kaydet(fig, "17_order_block_anatomisi")
 
 
 # =====================================================================================
@@ -891,9 +891,9 @@ def g13_breaker():
     not_(fig, i_rt, df.l[i_rt], "breaker retest: destek → giriş,<br>SL breaker altı", renk=TURUNCU, ax=60, ay=45)
     not_(fig, i_L + 1, 106.4, "dizi: L → H → LL (sweep) → HH (gövde kırılımı) → retest", renk=GRI, ok=False, boyut=10, xanchor="left")
     lejant(fig, "breaker block (bullish)", TURUNCU); lejant(fig, "başarısız OB", BORDO, a=0.12)
-    duzen(fig, "Şekil 13 — Breaker block: sweep sonrası kırılan OB rol değiştirir (şematik örnek)",
-          "Breaker = kırılmış OB, yön tersine döner; mitigation block = tutmuş OB, yön aynı (Şekil 14)")
-    kaydet(fig, "13_breaker_block")
+    duzen(fig, "Şekil 18 — Breaker block: sweep sonrası kırılan OB rol değiştirir (şematik örnek)",
+          "Breaker = kırılmış OB, yön tersine döner; mitigation block = tutmuş OB, yön aynı (Şekil 19)")
+    kaydet(fig, "18_breaker_block")
 
 
 # =====================================================================================
@@ -932,10 +932,10 @@ def g14_mitigation():
     not_(fig, i_k, db.c[i_k], "L gövdeyle kırıldı", renk=BORDO, ax=60, ay=30, row=1, col=2)
     not_(fig, i_rt, db.h[i_rt], "MB retest → direnç, short;<br>SL MB üstü", renk=MAVI, ax=60, ay=-45, row=1, col=2)
     lejant(fig, "OB / mitigation block", MAVI)
-    duzen(fig, "Şekil 14 — Mitigation block: iki tanım yan yana (şematik örnek)",
+    duzen(fig, "Şekil 19 — Mitigation block: iki tanım yan yana (şematik örnek)",
           "Aynı seviye, zıt işlem fikri: breaker'da OB kırılmıştır (yön döner); mitigation'da OB tutar (yön aynı) — V2'de fark sweep'in olmamasıdır")
     fig.update_xaxes(title_text="mum sırası", row=1, col=2)
-    kaydet(fig, "14_mitigation_block")
+    kaydet(fig, "19_mitigation_block")
 
 
 # =====================================================================================
@@ -975,10 +975,10 @@ def g15_po3():
     not_(fig, "gün", df.o[0], "open dibe yakın", renk=GRI, ok=False, boyut=9, xanchor="left", ax=6, row=1, col=2)
     not_(fig, "gün", df.l.min(), "alt fitil = Judas", renk=BORDO, ok=False, boyut=9, ay=12, row=1, col=2)
     not_(fig, "gün", df.c[n - 1], "kapanış tepeye yakın", renk=TEAL, ok=False, boyut=9, xanchor="left", ax=6, row=1, col=2)
-    duzen(fig, "Şekil 15 — Power of Three (AMD) ve Judas swing: bullish gün (şematik örnek)",
+    duzen(fig, "Şekil 26 — Power of Three (AMD) ve Judas swing: bullish gün (şematik örnek)",
           "Referans 00:00 NY açılışı; A birikim → M açılışın yanlış tarafına yem → D genişleme; sağda günün tek mumu", x_baslik="NY saati")
     fig.update_xaxes(tickangle=-45, row=1, col=1); fig.update_xaxes(title_text="", row=1, col=2)
-    kaydet(fig, "15_power_of_three_amd")
+    kaydet(fig, "26_power_of_three_amd")
 
 
 # =====================================================================================
@@ -1025,15 +1025,15 @@ def g16_kill_zones():
     not_(fig, zaman[i_l], df.l[i_l], "günün low'u Londra KZ'de (Judas)", renk=ALTIN, ax=-150, ay=-110)
     not_(fig, zaman[i_h], df.h[i_h], "günün high'ı NY AM / SB penceresinde", renk=TEAL, ax=-60, ay=-40)
     fig.update_yaxes(range=[99.2, 102.6])
-    duzen(fig, "Şekil 16 — Kill zone'lar ve günlük profil: bir günün 15 dk mumları (şematik örnek)",
+    duzen(fig, "Şekil 28 — Kill zone'lar ve günlük profil: bir günün 15 dk mumları (şematik örnek)",
           "NY yerel saat (yaz: TSİ = NY + 7; kış: NY + 8). Asya birikimi → Londra Judas → NY AM genişleme → Londra kapanış geri çekilme → öğle → PM", x_baslik="saat (NY / TSİ, yaz saati)")
-    kaydet(fig, "16_kill_zones_gunluk_profil")
+    kaydet(fig, "28_kill_zones_gunluk_profil")
 
 
 # =====================================================================================
 # 16b — Haftalık profil: Classic Tuesday Low (bullish hafta) ve Seek & Destroy Friday
 # =====================================================================================
-def g16b_haftalik_profil():
+def g27_haftalik_profil():
     gun = ["Pzt", "Sal", "Çar", "Per", "Cum"]
     # (a) Classic Tuesday Low — bullish hafta
     a = pd.DataFrame(dict(
@@ -1080,10 +1080,10 @@ def g16b_haftalik_profil():
     fig.update_yaxes(range=[98.2, 102.6], row=1, col=1); fig.update_yaxes(range=[98.6, 101.4], row=1, col=2)
     for c in (1, 2):
         fig.update_xaxes(tickvals=list(range(5)), ticktext=gun, range=[-0.6, 4.6], row=1, col=c)
-    duzen(fig, "Şekil 16b — Haftalık profil: Classic Tuesday Low ve Seek & Destroy Friday (şematik örnek)",
+    duzen(fig, "Şekil 27 — Haftalık profil: Classic Tuesday Low ve Seek & Destroy Friday (şematik örnek)",
           "Günlük mumlar; referans Pzt açılışı ve önceki hafta H/L. Haftalık ekstrem çoğunlukla Pzt–Salı; Salı–Perşembe azami genişleme; Cuma stop avı varyantı sağda", x_baslik="gün")
     fig.update_xaxes(title_text="gün", row=1, col=2)
-    kaydet(fig, "16b_haftalik_profil")
+    kaydet(fig, "27_haftalik_profil")
 
 
 # =====================================================================================
@@ -1118,9 +1118,9 @@ def g17_giris_1_htf():
     if fv:
         f = fv[0]; kutu(fig, f["i"], n + 3, f["alt"], f["ust"], MOR, a=0.18); not_(fig, f["i"] + 3, f["ust"], "HTF FVG (PD array) — LTF girişi buradan aranır", renk=MOR, ok=False, boyut=10, xanchor="left", ay=-12)
     lejant(fig, "premium", BORDO, a=0.1); lejant(fig, "discount", TEAL, a=0.1); lejant(fig, "HTF FVG", MOR)
-    duzen(fig, "Şekil 17 — Giriş modeli, aşama 1 (H4): bias + dealing range + premium/discount + DOL (şematik örnek)",
+    duzen(fig, "Şekil 30 — Giriş modeli, aşama 1 (H4): bias + dealing range + premium/discount + DOL (şematik örnek)",
           "Çıktı: 'bugün alıcıyım'; fiyat discount'ta ve DOL yukarıda → LTF'de SSL sweep + MSS aranacak", x_baslik="H4 mum sırası")
-    kaydet(fig, "17_giris_modeli_1_htf_bias")
+    kaydet(fig, "30_giris_modeli_1_htf_bias")
 
 
 def _ltf():
@@ -1167,9 +1167,9 @@ def g18_giris_2_sweep_mss():
     kutu(fig, m["i_sw"], n - 1, m["ob"][0], m["ob"][1], MAVI, a=0.24); not_(fig, m["i_sw"] + 2, m["ob"][0], f"OB {m['ob'][0]:.2f}–{m['ob'][1]:.2f} (sweep mumu = son kırmızı)", renk=MAVI, ok=False, boyut=10, xanchor="left", ay=12)
     not_(fig, 2, 103.65, "kill zone içinde miyiz? ✓ (Londra / NY AM)", renk=GRI, ok=False, boyut=10, xanchor="left")
     lejant(fig, "FVG", MOR); lejant(fig, "OB", MAVI); lejant_cizgi(fig, "SSL (EQL)", ALTIN, "solid"); lejant_cizgi(fig, "MSS seviyesi", BORDO)
-    duzen(fig, "Şekil 18 — Giriş modeli, aşama 2 (15m): sweep → displacement → MSS, FVG ve OB işaretlenir (şematik örnek)",
+    duzen(fig, "Şekil 31 — Giriş modeli, aşama 2 (15m): sweep → displacement → MSS, FVG ve OB işaretlenir (şematik örnek)",
           "Henüz giriş yok: sweep tek başına giriş değildir; MSS sonrası geri çekilme beklenir", x_baslik="15m mum sırası")
-    kaydet(fig, "18_giris_modeli_2_sweep_mss")
+    kaydet(fig, "31_giris_modeli_2_sweep_mss")
 
 
 def g19_giris_3_giris_sl_tp():
@@ -1197,12 +1197,12 @@ def g19_giris_3_giris_sl_tp():
     not_(fig, m["i_mss"], H + 0.05, "MSS high = fib 0", renk=ALTIN, ok=False, boyut=9)
     lejant(fig, "FVG", MOR); lejant(fig, "OB", MAVI); lejant(fig, "OTE bandı", ALTIN, a=0.16); lejant(fig, "kâr kutusu", TEAL); lejant(fig, "risk kutusu", BORDO)
     fig.update_yaxes(range=[L - 0.35, tp2 + 0.4])
-    duzen(fig, "Şekil 19 — Giriş modeli, aşama 3: OTE ∩ FVG'ye limit, SL sweep ötesi, TP1/TP2 ve R:R kutuları (şematik örnek)",
+    duzen(fig, "Şekil 32 — Giriş modeli, aşama 3: OTE ∩ FVG'ye limit, SL sweep ötesi, TP1/TP2 ve R:R kutuları (şematik örnek)",
           "Fib: sweep low (1.0) → MSS high (0). Giriş FVG CE'sinde; SL yapıdan, pozisyon büyüklüğü SL'den türetilir", x_baslik="15m/5m mum sırası")
-    kaydet(fig, "19_giris_modeli_3_giris_sl_tp")
+    kaydet(fig, "32_giris_modeli_3_giris_sl_tp")
 
 
-def g23_mtf_panel():
+def g46_mtf_panel():
     dh = _htf(); dl = _ltf(); m = _ltf_meta(dl)
     n2 = m["i_mss"] + 2
     d2 = dl.iloc[:n2].reset_index(drop=True)
@@ -1229,15 +1229,15 @@ def g23_mtf_panel():
     not_(fig, m["i_g"], giris, "giriş", renk=MUREKKEP, ax=-40, ay=30, row=1, col=3); not_(fig, m["i_g"] + 1, sl, "SL", renk=BORDO, ok=False, boyut=10, xanchor="left", ay=10, row=1, col=3)
     not_(fig, m["i_t1"], tp1, "TP1", renk=TEAL, ok=False, boyut=10, ay=-10, row=1, col=3); not_(fig, m["i_t2"], tp2, "TP2", renk=TEAL, ok=False, boyut=10, ay=-10, row=1, col=3)
     lejant(fig, "FVG", MOR); lejant(fig, "OB", MAVI); lejant(fig, "OTE", ALTIN, a=0.16); lejant(fig, "premium/discount", GRI, a=0.1)
-    duzen(fig, "Şekil 23 — Çoklu zaman dilimi akışı: H4 → 15m → 5m/1m aynı işlemin üç katmanı (şematik örnek)",
+    duzen(fig, "Şekil 46 — Çoklu zaman dilimi akışı: H4 → 15m → 5m/1m aynı işlemin üç katmanı (şematik örnek)",
           "Kural: LTF'ye ancak HTF olay olduysa inilir; swing tier'ı yapı grafiğinde, kırılım kalitesi icra grafiğinde okunur", x_baslik="")
-    kaydet(fig, "23_mtf_panel")
+    kaydet(fig, "46_mtf_panel")
 
 
 # =====================================================================================
 # 20 — Silver Bullet (NY AM 10:00–11:00), 5 dk
 # =====================================================================================
-def g20_silver_bullet():
+def g36_silver_bullet():
     s = Seri(20, baslangic=100.2, birim=0.05)
     s.bacak(100.6, 3, gurultu=0.6); s.mum(s.son, 100.82, s.son - 0.05, 100.7, "pencere öncesi high 100.82 (BSL)")  # 09:45
     s.bacak(100.45, 3, gurultu=0.6)                                # → 10:00
@@ -1273,15 +1273,15 @@ def g20_silver_bullet():
     tv = list(pd.date_range("2025-07-16 09:30", "2025-07-16 11:30", freq="15min"))
     fig.update_xaxes(tickvals=tv, ticktext=[f"{t:%H:%M} NY<br>{(t + pd.Timedelta(hours=7)):%H:%M} TSİ" for t in tv], tickfont=dict(size=10))
     lejant(fig, "FVG (SIBI)", MOR); lejant(fig, "Silver Bullet penceresi", ALTIN, a=0.3)
-    duzen(fig, "Şekil 20 — Silver Bullet: 10:00–11:00 NY penceresinde sweep → FVG → %50 limit (şematik örnek, bearish)",
+    duzen(fig, "Şekil 36 — Silver Bullet: 10:00–11:00 NY penceresinde sweep → FVG → %50 limit (şematik örnek, bearish)",
           "Pencereden önce likidite haritası; sweep ve FVG pencere içinde; SL FVG üçlüsünün ucu + tampon (muhafazakâr: sweep ucu); hedef sonraki havuz (~1:3)", x_baslik="saat (NY / TSİ, yaz)")
-    kaydet(fig, "20_silver_bullet")
+    kaydet(fig, "36_silver_bullet")
 
 
 # =====================================================================================
 # 21 — Pozisyon yönetimi: kısmi kâr, BE, structure trailing
 # =====================================================================================
-def g21_pozisyon_yonetimi():
+def g43_pozisyon_yonetimi():
     s = Seri(21, baslangic=102.62, birim=0.06)
     giris, sl0, T1, T2 = 102.57, 101.90, 103.97, 104.51
     s.bacak(102.57, 3, gurultu=0.4, lab="giriş doldu 102.57")
@@ -1319,9 +1319,9 @@ def g21_pozisyon_yonetimi():
     not_(fig, 1, 105.6, f"toplam sonuç ≈ +{top:.1f}R (0.5×TP1 + 0.25×TP2 + 0.25×runner); trailing tamponu fitil için", renk=GRI, ok=False, boyut=10, xanchor="left")
     lejant_cizgi(fig, "stop merdiveni (structure trailing)", BORDO, "solid"); lejant_cizgi(fig, "hedefler", TEAL, "dot")
     fig.update_yaxes(range=[101.7, 105.8])
-    duzen(fig, "Şekil 21 — Pozisyon yönetimi adım adım: kısmi kâr, BE ve structure trailing (şematik örnek)",
+    duzen(fig, "Şekil 43 — Pozisyon yönetimi adım adım: kısmi kâr, BE ve structure trailing (şematik örnek)",
           "Her onaylı yeni HL (gövde kapanışlı BOS sonrası) → SL bir önceki HL'nin altına; kural: T1'den önce BE yok, erken trailing yok", x_baslik="mum sırası (girişten itibaren)")
-    kaydet(fig, "21_pozisyon_yonetimi")
+    kaydet(fig, "43_pozisyon_yonetimi")
 
 
 # =====================================================================================
@@ -1348,7 +1348,7 @@ def g22_gecersizlesme():
     kutu(fig, i_d1, i_if, f["alt"], f["ust"], MOR, a=0.2); kutu(fig, i_if, n - 1, f["alt"], f["ust"], BORDO, a=0.2)
     kutu(fig, i_g, i_sl + 1, sl, giris, BORDO, a=0.2, cizgi=0)
     yatay(fig, giris, i_g, i_sl + 1, renk=MUREKKEP, dash="solid"); yatay(fig, sl, i_g, i_sl + 1, renk=BORDO, dash="solid", w=1.6)
-    not_(fig, i_g, giris, f"giriş {giris:.2f} (FVG CE), SL {sl:.2f} — kurulum Şekil 19 ile aynı", renk=MUREKKEP, ax=-120, ay=-45)
+    not_(fig, i_g, giris, f"giriş {giris:.2f} (FVG CE), SL {sl:.2f} — kurulum Şekil 32 ile aynı", renk=MUREKKEP, ax=-120, ay=-45)
     md = df.l[i_md - 1:i_md + 2].min(); yatay(fig, md, i_md, i_ms + 1, renk=GRI, dash="dot")
     not_(fig, i_if, df.c[i_if], f"<b>uyarı 1</b>: giriş FVG'si gövdeyle kapatıldı (IFVG)<br>→ kural: SL'i bekleme, kapat (≈−{(giris-df.c[i_if])/R:.1f}R)", renk=BORDO, ax=-170, ay=95)
     not_(fig, i_ms, df.c[i_ms], f"<b>uyarı 2</b>: LTF minör dip ({md:.2f}) gövdeyle kırıldı<br>= ters yönde MSS", renk=BORDO, ax=120, ay=-70)
@@ -1356,9 +1356,9 @@ def g22_gecersizlesme():
     daire(fig, i_sw, df.l[i_sw] + 0.08, r_y=0.12); not_(fig, i_sw, df.l[i_sw], "sweep low 102.00 — SL bunun altında", renk=ALTIN, ax=-40, ay=40)
     not_(fig, n - 6, 103.55, "sonrası: fiyat düşmeye devam → 'geçerli MSS başarısız oldu' → yeniden girme yok,<br>HTF okuma sorgulanır; günlük kayıp limitine bak (2 stop → dur)", renk=GRI, ok=False, boyut=10, xanchor="right")
     lejant(fig, "giriş FVG'si", MOR); lejant(fig, "IFVG (geçersizleşme)", BORDO); lejant(fig, "risk kutusu (1R)", BORDO, a=0.2)
-    duzen(fig, "Şekil 22 — Geçersizleşme: kaybeden bir işlem ve erken çıkış sinyalleri (şematik örnek)",
+    duzen(fig, "Şekil 44 — Geçersizleşme: kaybeden bir işlem ve erken çıkış sinyalleri (şematik örnek)",
           "Aynı kurulum, ters sonuç: (1) FVG gövdeyle kapatıldı (IFVG), (2) ters MSS, (3) SL. Yapısal geçersizleşmede SL beklenmez", x_baslik="5m mum sırası")
-    kaydet(fig, "22_gecersizlesme_kaybeden_trade")
+    kaydet(fig, "44_gecersizlesme_kaybeden_trade")
 
 
 # =====================================================================================
@@ -1407,10 +1407,10 @@ def g24_pd_array_ailesi():
     not_(fig, iu + 4, (alt + ust) / 2, f"BPR = örtüşme {alt:.2f}–{ust:.2f}, yön = sonraki FVG (bullish)<br>giriş örtüşme kenarı / CE; gövdeyle karşıya geçiş = geçersiz", renk=MOR, ax=60, ay=-45, row=2, col=2)
     ir = int(dd.index[dd.lab.str.startswith("BPR retest")][0]); not_(fig, ir, dd.l[ir], "BPR retest → long", renk=MOR, ax=40, ay=35, row=2, col=2)
     lejant(fig, "rejection block", TURUNCU); lejant(fig, "order block", MAVI); lejant(fig, "propulsion block / BPR", MOR); lejant(fig, "volume imbalance", GRI, a=0.3)
-    duzen(fig, "Şekil 24 — PD array ailesinin geri kalanı: RB, PB, VI ve BPR (şematik örnek)", "Güç sıralaması (öznel, ICT derlemesi): BPR ≈ breaker+FVG > FVG ≈ OB+FVG > OB > IFVG > MB > RB > VI", h=760, x_baslik="")
+    duzen(fig, "Şekil 47 — PD array ailesinin geri kalanı: RB, PB, VI ve BPR (şematik örnek)", "Güç sıralaması (öznel, ICT derlemesi): BPR ≈ breaker+FVG > FVG ≈ OB+FVG > OB > IFVG > MB > RB > VI", h=760, x_baslik="")
     for r_, c_ in ((1, 1), (1, 2), (2, 1), (2, 2)):
         fig.update_xaxes(rangeslider_visible=False, row=r_, col=c_)
-    kaydet(fig, "24_pd_array_ailesi_rb_pb_vi_bpr")
+    kaydet(fig, "47_pd_array_ailesi_rb_pb_vi_bpr")
 
 
 # =====================================================================================
@@ -1484,11 +1484,11 @@ def gercek_1_eurusd_yapi():
     fig.add_trace(go.Scatter(x=[None], y=[None], mode="markers", marker=dict(symbol="circle-open", size=12, color=ALTIN, line_width=2), name="sweep (fitil ötede, gövde içeride)"))
     zaman_ekseni(fig, df)
     d0, d1 = df.ts[0].strftime("%d %b %Y"), df.ts[n - 1].strftime("%d %b %Y")
-    duzen(fig, f"Şekil 25 — Gerçek veri — EURUSD, 1 saatlik, {d0} – {d1}: mekanik yapı tespiti",
+    duzen(fig, f"Şekil 48 — Gerçek veri — EURUSD, 1 saatlik, {d0} – {d1}: mekanik yapı tespiti",
           "Kural: 7-mum (k=3) fraktal swing; onaylı son swing'in close ile aşılması → trend yönünde BOS / aleyhine CHoCH; fitil aşımı + gövde içeride → sweep. Yalnızca mekanik; bağlam (kill zone, HTF bias) yok",
           y_baslik="EUR/USD", x_baslik="tarih (UTC; hover'da saat)")
     fig.update_yaxes(tickformat=f".{ondalik}f")
-    kaydet(fig, "25_gercek_eurusd_1h_yapi")
+    kaydet(fig, "48_gercek_eurusd_1h_yapi")
     RAPOR.append(f"EURUSD 1h: {n} bar, {len(sh)} swing high, {len(sl)} swing low, olaylar: " + ", ".join(f"{o['tip']}" for o in olay))
     OZET.update(eurusd_bar=n, eurusd_olaylar=[o["tip"] for o in olay], eurusd_bos=sum(o["tip"] == "BOS" for o in olay),
                 eurusd_choch=sum(o["tip"] == "CHoCH" for o in olay), eurusd_sweep=sum(o["tip"] == "sweep" for o in olay), eurusd_tarih=f"{d0} – {d1}")
@@ -1539,10 +1539,10 @@ def gercek_2_gold_fvg_ob():
     lejant_cizgi(fig, "BOS", TEAL, "solid"); lejant_cizgi(fig, "CHoCH", BORDO)
     zaman_ekseni(fig, df)
     d0, d1 = df.ts[0].strftime("%d %b %Y"), df.ts[n - 1].strftime("%d %b %Y")
-    duzen(fig, f"Şekil 26 — Gerçek veri — Altın (GC=F), 1 saatlik, {d0} – {d1}: mekanik FVG ve OB tespiti",
+    duzen(fig, f"Şekil 49 — Gerçek veri — Altın (GC=F), 1 saatlik, {d0} – {d1}: mekanik FVG ve OB tespiti",
           "Kural: 3-mum FVG, boyut ≥ 0,5×ATR(14); OB = gövde-kapanışlı kırılımdan önceki son zıt renkli mumun gövdesi; kutular gövdeyle geçilince biter (inversion/mitigation). Sweep/kill zone filtresi yok — çoğu kutu 'aday'dır",
           y_baslik="USD/ons", x_baslik="tarih (UTC; hover'da saat)")
-    kaydet(fig, "26_gercek_altin_1h_fvg_ob")
+    kaydet(fig, "49_gercek_altin_1h_fvg_ob")
     RAPOR.append(f"GC=F 1h: {n} bar, {len(fvgs)} FVG (≥0.5 ATR, son 14 çizildi), {obs} OB (son 10 kırılım), olaylar: " + ", ".join(o['tip'] for o in olay))
     OZET.update(gold_bar=n, gold_fvg_toplam=len(fvgs), gold_fvg_cizilen=say, gold_ob=obs, gold_tarih=f"{d0} – {d1}")
 
@@ -1613,10 +1613,10 @@ def gercek_3_btc_eqh_dealing():
     lejant_cizgi(fig, "eşit tepe/dip (≤ 0,15 ATR)", ALTIN, "solid"); lejant(fig, "premium (son ITH/ITL aralığı)", BORDO, a=0.1); lejant(fig, "discount", TEAL, a=0.1)
     zaman_ekseni(fig, df, fmt="%d %b %y")
     d0, d1 = df.ts[0].strftime("%d %b %Y"), df.ts[n - 1].strftime("%d %b %Y")
-    duzen(fig, f"Şekil 27 — Gerçek veri — BTC-USD, günlük, {d0} – {d1}: eşit tepe/dip likiditesi ve dealing range",
+    duzen(fig, f"Şekil 50 — Gerçek veri — BTC-USD, günlük, {d0} – {d1}: eşit tepe/dip likiditesi ve dealing range",
           "Kural: 5-mum swing; iki swing seviyesi farkı ≤ 0,15×ATR(14) → EQH/EQL (aynı seviyenin tekrarları tek çizgi; son 4 EQH + 4 EQL); sonraki 40 günde fitil ötede + gövde içeride → sweep (✕), gövde ötede → run; etiketsiz = 40 günde test edilmedi. Dealing range = son ITH/ITL",
           y_baslik="USD", x_baslik="tarih")
-    kaydet(fig, "27_gercek_btc_gunluk_eqh_dealing_range")
+    kaydet(fig, "50_gercek_btc_gunluk_eqh_dealing_range")
     RAPOR.append(f"BTC-USD günlük: {n} bar, {len(esit)} eşit tepe/dip çifti ({len(esit_h)} EQH + {len(esit_l)} EQL çizildi; {say_sw} sweep, {say_run} run)")
     OZET.update(btc_bar=n, btc_esit_toplam=len(esit), btc_eqh_cizilen=len(esit_h), btc_eql_cizilen=len(esit_l), btc_sweep=say_sw, btc_run=say_run,
                 btc_tarih=f"{df.ts[0]:%d %b %Y} – {df.ts[n - 1]:%d %b %Y}")
@@ -1625,10 +1625,10 @@ def gercek_3_btc_eqh_dealing():
 # =====================================================================================
 def main():
     print("SMC grafik seti →", CIKTI)
-    for f in (g01_swing_yapi, g02_bos, g03_choch_mss, g04_internal_vs_swing, g05_dealing_range_ote, g06_eqh_eql,
-              g07_sweep_vs_run, g08_inducement, g09_trendline, g10_fvg, g11_ifvg, g12_order_block, g13_breaker,
-              g14_mitigation, g15_po3, g16_kill_zones, g16b_haftalik_profil, g17_giris_1_htf, g18_giris_2_sweep_mss, g19_giris_3_giris_sl_tp,
-              g20_silver_bullet, g21_pozisyon_yonetimi, g22_gecersizlesme, g23_mtf_panel, g24_pd_array_ailesi):
+    for f in (g01_swing_yapi, g02_bos, g04_choch_mss, g05_internal_vs_swing, g05_dealing_range_ote, g06_eqh_eql,
+              g07_sweep_vs_run, g11_inducement, g09_trendline, g10_fvg, g11_ifvg, g12_order_block, g13_breaker,
+              g14_mitigation, g15_po3, g16_kill_zones, g27_haftalik_profil, g17_giris_1_htf, g18_giris_2_sweep_mss, g19_giris_3_giris_sl_tp,
+              g36_silver_bullet, g43_pozisyon_yonetimi, g22_gecersizlesme, g46_mtf_panel, g24_pd_array_ailesi):
         f()
     if "--sentetik" not in sys.argv:
         for f in (gercek_1_eurusd_yapi, gercek_2_gold_fvg_ob, gercek_3_btc_eqh_dealing):
