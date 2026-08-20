@@ -306,10 +306,14 @@ def create_change_regression_plot(df, ma_type='10Y', periods=(1, 3, 6)):
         df_plot[f'USDTRY_Change_{p}M'] = df_plot['USDTRY'].pct_change(p) * 100
 
     # Pencere başına bir subplot
+    # Paneller ALT ALTA: makale sütununda (700-800 px) yan yana üç saçılım okunmuyordu;
+    # dikey dizilimde her panel tam genişlik alır.
     fig = make_subplots(
-        rows=1, cols=len(periods),
+        rows=len(periods), cols=1,
         subplot_titles=[f'{p} Aylık Değişim' for p in periods],
-        horizontal_spacing=0.08
+        # 0.09 yetmiyordu: her panelin x ekseni BAŞLIĞI var, bir sonraki panelin
+        # alt başlığı onun üstüne biniyordu.
+        vertical_spacing=0.13
     )
     
     colors = ['#1f77b4', '#2ca02c', '#d62728']
@@ -355,7 +359,7 @@ def create_change_regression_plot(df, ma_type='10Y', periods=(1, 3, 6)):
                 hovertemplate=f'<b>%{{text}}</b><br>Sapma Δ{period}M: %{{x:.1f}}<br>USDTRY Δ{period}M: %{{y:.1f}}%<extra></extra>',
                 showlegend=False
             ),
-            row=1, col=i+1
+            row=i + 1, col=1
         )
         
         # Regresyon çizgisi
@@ -369,12 +373,12 @@ def create_change_regression_plot(df, ma_type='10Y', periods=(1, 3, 6)):
                 name=f'{period}M: R²={r**2:.3f}' if i == 0 else None,
                 showlegend=(i == 0)
             ),
-            row=1, col=i+1
+            row=i + 1, col=1
         )
         
         # Sıfır çizgileri
-        fig.add_hline(y=0, line_dash="dash", line_color="gray", line_width=0.5, row=1, col=i+1)
-        fig.add_vline(x=0, line_dash="dash", line_color="gray", line_width=0.5, row=1, col=i+1)
+        fig.add_hline(y=0, line_dash="dash", line_color="gray", line_width=0.5, row=i + 1, col=1)
+        fig.add_vline(x=0, line_dash="dash", line_color="gray", line_width=0.5, row=i + 1, col=1)
         
         # İstatistik annotation (RSE eklendi)
         pval_str = f"{p:.2e}" if p < 0.001 else f"{p:.4f}"
@@ -398,7 +402,7 @@ def create_change_regression_plot(df, ma_type='10Y', periods=(1, 3, 6)):
                 hovertemplate=f"SON: {last_row['Dönem'].strftime('%Y-%m')}<extra></extra>",
                 showlegend=False
             ),
-            row=1, col=i+1
+            row=i + 1, col=1
         )
     
     # Başlık: tek pencereli odak grafikte pencereyi belirt
@@ -409,7 +413,7 @@ def create_change_regression_plot(df, ma_type='10Y', periods=(1, 3, 6)):
 
     # Layout - yatay olarak büyütülmüş
     fig.update_layout(
-        height=550,
+        height=1250,   # 3 panel alt alta (~350 px/panel + başlık/lejant/eksen adı)
         width=max(750, 500 * len(periods)),  # Panel sayısına göre genişlik
         title=dict(
             text=baslik,
@@ -429,8 +433,8 @@ def create_change_regression_plot(df, ma_type='10Y', periods=(1, 3, 6)):
     
     # Eksen başlıkları
     for i, period in enumerate(periods):
-        fig.update_xaxes(title_text=f"Sapma Δ{period}M (puan)", row=1, col=i+1)
-        fig.update_yaxes(title_text=f"USDTRY Δ{period}M (%)", row=1, col=i+1)
+        fig.update_xaxes(title_text=f"Sapma Δ{period}M (puan)", row=i + 1, col=1)
+        fig.update_yaxes(title_text=f"USDTRY Δ{period}M (%)", row=i + 1, col=1)
     
     return fig, df_plot, regression_stats
 
@@ -441,17 +445,20 @@ def create_analysis_plot(df, corr_df, band_df, ma_type='10Y'):
     df_plot = df.dropna(subset=[dev_col, 'USDTRY']).copy()
     
     # 4 ayrı satır grafik - secondary_y ile çift eksen (dikey büyütülmüş)
+    # TEK SÜTUN, ALT ALTA: yan yana duran iki saçılım (6M/12M) ve bar+tablo çifti
+    # makale genişliğinde okunmuyordu; altı panel dikey diziliyor.
     fig = make_subplots(
-        rows=4, cols=2,
+        rows=6, cols=1,
         specs=[
-            [{"secondary_y": True, "colspan": 2}, None],
-            [{"colspan": 2}, None],
-            [{"type": "scatter"}, {"type": "scatter"}],
-            [{"type": "bar"}, {"type": "table"}]
+            [{"secondary_y": True}],   # 1: USDTRY + sapma
+            [{}],                      # 2: sapma serisi
+            [{"type": "scatter"}],     # 3: 6M sonrası saçılım
+            [{"type": "scatter"}],     # 4: 12M sonrası saçılım
+            [{"type": "bar"}],         # 5: bant bazında ortalama değişim
+            [{"type": "table"}],       # 6: özet tablo
         ],
-        vertical_spacing=0.10,
-        horizontal_spacing=0.10,
-        row_heights=[0.24, 0.20, 0.28, 0.28]  # Scatter ve bar için daha fazla alan
+        vertical_spacing=0.075,   # eksen başlığı + alt başlık çakışmasın
+        row_heights=[0.17, 0.14, 0.17, 0.17, 0.17, 0.18],
     )
     
     # === ROW 1: USDTRY ve Sapma (iki y ekseni) ===
@@ -535,7 +542,7 @@ def create_analysis_plot(df, corr_df, band_df, ma_type='10Y'):
             hovertemplate='Sapma: %{x:.1f}%<br>12M sonra: %{y:.1f}%<extra></extra>',
             showlegend=False
         ),
-        row=3, col=2
+        row=4, col=1
     )
     
     # 12M regresyon
@@ -548,7 +555,7 @@ def create_analysis_plot(df, corr_df, band_df, ma_type='10Y'):
         fig.add_trace(
             go.Scatter(x=x_line, y=y_line, mode='lines',
                       line=dict(color='red', width=2), showlegend=False),
-            row=3, col=2
+            row=4, col=1
         )
     
     # === ROW 4: Bant analizi bar chart ===
@@ -565,7 +572,7 @@ def create_analysis_plot(df, corr_df, band_df, ma_type='10Y'):
                 textposition='outside',
                 showlegend=False
             ),
-            row=4, col=1
+            row=5, col=1
         )
     
     # Korelasyon tablosu (R² ve σ eklendi)
@@ -590,7 +597,7 @@ def create_analysis_plot(df, corr_df, band_df, ma_type='10Y'):
                 align='center', font=dict(size=10), height=25
             )
         ),
-        row=4, col=2
+        row=6, col=1
     )
     
     # Son değerler
@@ -600,7 +607,7 @@ def create_analysis_plot(df, corr_df, band_df, ma_type='10Y'):
     
     # Layout - TEMİZ (dikey olarak büyütülmüş)
     fig.update_layout(
-        height=1800,  # Daha da büyük
+        height=2300,  # 6 panel alt alta
         title=dict(
             text=f"<b>REDK Sapması ({ma_type}) ve USDTRY İlişkisi</b>",
             x=0.5, y=0.99,
@@ -650,15 +657,15 @@ def create_analysis_plot(df, corr_df, band_df, ma_type='10Y'):
     fig.update_yaxes(title_text="Sapma (%)", row=1, col=1, secondary_y=True)
     fig.update_yaxes(title_text="USDTRY Değişim (%)", row=2, col=1)
     fig.update_yaxes(title_text="6M Sonra (%)", row=3, col=1)
-    fig.update_yaxes(title_text="12M Sonra (%)", row=3, col=2)
-    fig.update_yaxes(title_text="Ort. Değişim (%)", row=4, col=1)
+    fig.update_yaxes(title_text="12M Sonra (%)", row=4, col=1)
+    fig.update_yaxes(title_text="Ort. Değişim (%)", row=5, col=1)
     
     # X ekseni başlıkları
     fig.update_xaxes(title_text="", row=1, col=1)
     fig.update_xaxes(title_text="", row=2, col=1)
     fig.update_xaxes(title_text="Sapma (%)", row=3, col=1)
-    fig.update_xaxes(title_text="Sapma (%)", row=3, col=2)
-    fig.update_xaxes(title_text="", row=4, col=1, tickangle=30)
+    fig.update_xaxes(title_text="Sapma (%)", row=4, col=1)
+    fig.update_xaxes(title_text="", row=5, col=1, tickangle=30)
     
     return fig
 

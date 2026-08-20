@@ -81,7 +81,7 @@ açıdan test eder:
   src="/projeler/try-reer/redk_usdtry_analiz_10y.html"
   baslik="10Y sapma – USD/TRY ilişki panosu: ileri dönük getiriler, saçılımlar, bant istatistiği"
   no="02"
-  yukseklik={900}
+  yukseklik={2300}
 />
 
 ### Şekil 02 nasıl hesaplanıyor?
@@ -105,14 +105,14 @@ sıçraması, aşırı değerlenmenin düzeltme riskini taşıdığının işare
   src="/projeler/try-reer/redk_degisim_regresyon.html"
   baslik="Eşzamanlı değişim regresyonu: Δsapma vs USD/TRY değişimi (1M/3M/6M)"
   no="03"
-  yukseklik={560}
+  yukseklik={1250}
 />
 
 ### Şekil 03 nasıl hesaplanıyor?
 
 Bu kez ileri dönük değil **eşzamanlı** ilişki: aynı penceredeki sapma değişimi
 (puan, `diff(k)`) ile kur yüzde değişimi (`pct_change(k)`) arasında OLS; üç pencere
-yan yana, kutularda $R^2$/$r$/eğim/artık hatası, son ay kırmızı yıldızla işaretli.
+alt alta, kutularda $R^2$/$r$/eğim/artık hatası, son ay kırmızı yıldızla işaretli.
 1 aylık pencerede $R^2 = 0{,}59$, eğim **−1,17**: sapma 1 puan artarsa kur aynı ay
 ~%1,2 düşer — bu öngörü değil, reel kurun tanımından gelen mekanik ilişkidir
 (enflasyon farkı bir ayda az değişir, sapmayı nominal kur oynatır). Şekil 02'nin
@@ -125,21 +125,21 @@ REDK analizinin en sık yapılan hatasından kaçınmaktır.
   src="/projeler/try-reer/redk_usdtry_analiz_5y.html"
   baslik="5Y sapma – USD/TRY ilişki panosu (10Y panonun kardeşi)"
   no="04"
-  yukseklik={900}
+  yukseklik={2300}
 />
 
 <GrafikEmbed
   src="/projeler/try-reer/redk_degisim_regresyon_5y.html"
   baslik="Eşzamanlı değişim regresyonu — 5Y sapma (1M/3M/6M)"
   no="05"
-  yukseklik={560}
+  yukseklik={1250}
 />
 
 <GrafikEmbed
   src="/projeler/try-reer/redk_degisim_regresyon_3m.html"
   baslik="3M odak: Δsapma(3A) vs USD/TRY değişimi — tek panel"
   no="06"
-  yukseklik={560}
+  yukseklik={1250}
 />
 
 ### Şekil 04-06 nasıl okunur? (ufuk seçiminin dersi)
