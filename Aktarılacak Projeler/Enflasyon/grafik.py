@@ -192,6 +192,13 @@ def sekil_01(M, o, damga):
                row=r, kalin=2.6, grup="s3", gizle=gizle)
         _cizgi(fig, ser(M, "tufe", "ecb3", bas), "ECB tipi 3a/3a momentum", GOLD,
                row=r, kalin=1.4, kesik="dot", grup="ecb", gizle=gizle)
+        # HAM (arındırılmamış) yıllıklandırılmışlar: model varsayımı taşımayan,
+        # yayımlanmış endeksten doğrudan çıkan karşılıklar. Arındırılmışla aradaki
+        # açıklık mevsimselliğin o ay ne kadar iş yaptığını gösterir.
+        _cizgi(fig, ser(M, "tufe", "saar3_ham", bas), "3 aylık — ham (arındırılmamış)",
+               CLARET, row=r, kalin=1.3, kesik="dash", grup="h3", gizle=gizle)
+        _cizgi(fig, ser(M, "tufe", "saar6_ham", bas), "6 aylık — ham (arındırılmamış)",
+               TEAL, row=r, kalin=1.3, kesik="dash", grup="h6", gizle=gizle)
     son = ser(M, "tufe", "saar3_sa", MOM_BAS)
     fig.add_trace(go.Scatter(
         x=son.index[-3:], y=son.values[-3:], mode="markers",
@@ -237,7 +244,9 @@ def sekil_01(M, o, damga):
          "Son 3 nokta içi boş: arındırma filtresi serinin ucunda tek taraflıdır, "
          "bu değerler sonraki koşularda revize olur",
          "Alt panelin ekseni kırpılmadı: 2022'deki sıçrama aykırı değer değil, "
-         "momentum ölçüsünün varlık sebebidir"],
+         "momentum ölçüsünün varlık sebebidir",
+         "Kesikli çizgiler HAM (arındırılmamış) yıllıklandırılmış karşılıklar — "
+         "arındırılmışla aradaki açıklık, mevsimselliğin o ay ne kadar iş yaptığıdır"],
         n_panel=2, y_baslik="yıllık %", ek_yukseklik=180)
 
 

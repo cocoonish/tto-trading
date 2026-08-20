@@ -109,15 +109,25 @@ def main() -> int:
         koy(f"{k}_12a", m.get(f"{uzun}__yillik"))
         koy(f"{k}_3a", m.get(f"{uzun}__saar3_sa"))
         koy(f"{k}_6a", m.get(f"{uzun}__saar6_sa"))
+        # HAM (arındırılmamış) yıllıklandırılmış — arındırılmışın yanında BİRİNCİ
+        # SINIF metrik olarak her seri için yayımlanır. Sebep: arındırma bir MODEL
+        # çıktısıdır (uç ayda revize olur, hizmette 4 puana kadar); ham seri ise
+        # yayımlanmış endeksten doğrudan çıkar, yeniden üretilebilir ve model
+        # varsayımı taşımaz. İkisi birlikte okunur: ayrıştıkları yer mevsimselliğin
+        # o ay ne kadar iş yaptığını söyler.
+        koy(f"{k}_3a_ham", m.get(f"{uzun}__saar3_ham"))
+        koy(f"{k}_6a_ham", m.get(f"{uzun}__saar6_ham"))
         koy(f"{k}_aylik", m.get(f"{uzun}__aylik_ham"))
         koy(f"{k}_aylik_sa", m.get(f"{uzun}__aylik_sa"))
-    # ham 3 aylık — arındırmanın bedelini gösteren karşılaştırma sayısı
-    koy("tufe_3a_ham", m.get("tufe__saar3_ham"))
-    koy("tufe_6a_ham", m.get("tufe__saar6_ham"))
-    # Enerji arındırmanın en çok iş yaptığı seri: ham karşılığı verilmezse
-    # okur −23,39'un ne kadarının fiyattan, ne kadarının filtreden geldiğini göremez.
-    koy("enerji_3a_ham", m.get("enerji__saar3_ham"))
-    koy("enerji_6a_ham", m.get("enerji__saar6_ham"))
+        # arındırmanın o serideki bedeli (puan): SA − ham
+        s3, h3 = m.get(f"{uzun}__saar3_sa"), m.get(f"{uzun}__saar3_ham")
+        if s3 is not None and h3 is not None:
+            koy(f"{k}_3a_fark", s3 - h3)
+        s6, h6 = m.get(f"{uzun}__saar6_sa"), m.get(f"{uzun}__saar6_ham")
+        if s6 is not None and h6 is not None:
+            koy(f"{k}_6a_fark", s6 - h6)
+    # (enerji_3a_ham / enerji_6a_ham artık yukarıdaki döngüden geliyor — enerji
+    #  arındırmanın en çok iş yaptığı seridir, farkı _3a_fark anahtarında görünür.)
     koy("enerji_mevsim_p", m.get("enerji_mevsim_p"), 3)
     koy("enerji_sa_ham_maks", m.get("enerji_sa_ham_maks_pp"), 2)
     koy("enerji_sa_ham_son", m.get("enerji_sa_ham_son_pp"), 2)
