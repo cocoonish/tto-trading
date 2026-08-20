@@ -17,7 +17,9 @@ cd tto-trading
 
 1. **EVDS anahtarı** — repoyla gelmez. Kökte `.evds_key` adlı dosya oluşturup içine
    yalnız anahtarı yazın (ya da `TTO_EVDS_KEY` ortam değişkeni).
-2. **Kurulum** — `guncelle.bat --kur --hepsi` (macOS/Linux: `python3 guncelle.py --kur --hepsi`)
+2. **Kurulum** — **`kur.bat`** (çift tıklama yeter). Yedi veri hattının her biri için
+   `.venv` + `requirements.txt`, site için `npm install`, marj hattı için Playwright.
+   Tekrar çalıştırmak güvenlidir. macOS/Linux: `python3 kur.py`
 3. **Siteyi aç** — `site.bat` → tarayıcı `http://localhost:4321` adresinde açılır.
 
 Ayrıntılı anlatım: **[KURULUM.md](KURULUM.md)** · çalışma rehberi: [CLAUDE.md](CLAUDE.md)
@@ -26,14 +28,15 @@ Ayrıntılı anlatım: **[KURULUM.md](KURULUM.md)** · çalışma rehberi: [CLAU
 
 | Komut | İş |
 |---|---|
+| `kur.bat` | **kurulum**: tüm bağımlılıklar (`--hat tcmb hazine`, `--site-yok`, `--liste`) |
 | `site.bat` | siteyi yerelde aç (`--port`, `--derle`, `--onizle`) |
 | `guncelle.bat` | menü: hangi hatlar güncellensin, hafif/tam, commit? |
 | `guncelle.bat --hepsi --tam` | yedi hattın tamamı, ağır adımlar dahil |
-| `guncelle.bat --kur <hat>` | o hattın `.venv` + bağımlılıkları |
+| `guncelle.bat --kur <hat>` | tek hattın `.venv` + bağımlılıkları (kur.bat'ın alt kümesi) |
 | `panel.bat hazine` \| `fx` | canlı pano (Dash 8050 / Streamlit 8501) |
 
-Windows dışında `.bat` yerine aynı adlı `.py`: `python3 site_baslat.py`, `python3 guncelle.py`,
-`python3 panel.py`.
+Windows dışında `.bat` yerine aynı adlı `.py`: `python3 kur.py`, `python3 site_baslat.py`,
+`python3 guncelle.py`, `python3 panel.py`.
 
 ## Klasörler
 
@@ -48,7 +51,7 @@ site/                     Astro sitesi
 Aktarılacak Projeler/     veri hatları (TCMBNetRezerv, TRYREER, hazineihrac, …)
 Research/                 ham araştırma (marj hattı burada)
 bat/                      proje başına Windows bat'ları
-guncelle.py · panel.py · site_baslat.py     kök araçlar
+kur.py · guncelle.py · panel.py · site_baslat.py   kök araçlar (her birinin .bat'ı var)
 ```
 
 ## Veri hatları

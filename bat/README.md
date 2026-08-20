@@ -40,9 +40,11 @@ Kök klasörde ayrıca iki sarmalayıcı var, hepsini tek yerden yönetmek için
 
 | Komut | İş |
 |---|---|
+| `kur.bat` | **kurulum**: 7 hattın `.venv` + `requirements.txt` + site `npm install` + Playwright |
+| `kur.bat --hat tcmb hazine` | yalnız seçilen hatlar · `--site-yok` · `--liste` |
 | `guncelle.bat` | menü: hangi hatlar, hafif/tam, commit? |
 | `guncelle.bat --hepsi --tam` | 7 hattın tamamı, ağır adımlar dahil |
-| `guncelle.bat --kur --hepsi` | her projeye `.venv` + `requirements.txt` (yeni bilgisayarda İLK adım) |
+| `guncelle.bat --kur --hepsi` | aynı kurulum, siteyi ve Playwright'ı atlayarak |
 | `guncelle.bat --kur tcmb fx` | yalnız seçilenleri kur |
 | `site.bat` | **siteyi aç** (npm install gerekiyorsa yapar, tarayıcıyı açar) |
 | `site.bat --derle` | üretim derlemesi (`npm run build`) |

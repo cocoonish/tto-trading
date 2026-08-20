@@ -54,16 +54,24 @@ arar. Kökteki tek dosya bütün projelere yeter.
 
 İki yol var; ikisi de aynı şeyi yapar.
 
-**A) Kökten, hepsi bir arada (önerilen).** Repo kökündeki iki bat:
+**A) Kökten, hepsi bir arada (önerilen).** Repo kökündeki bat'lar:
 
 ```
-guncelle.bat --kur --hepsi     REM her projeye .venv + bagimliliklar (ilk sefer: uzun)
+kur.bat                        REM KURULUM: 7 hattin .venv + requirements + site npm install
 guncelle.bat                   REM menu: hangi hatlar, hafif/tam, commit?
+site.bat                       REM siteyi ac (http://localhost:4321)
 panel.bat                      REM menu: hangi canli pano (dashboard)?
 ```
 
-`guncelle.bat --kur` yalnız seçilenleri de kurar: `guncelle.bat --kur tcmb hazine`.
-Kurulum yapılmamış bir hat koşturulursa hata mesajı hangi komutu çalıştıracağınızı yazar.
+`kur.bat` ne yapar: ön koşulları denetler (Python sürümü, Node/npm, EVDS anahtarı — anahtarı
+kökte ve proje klasörlerinde arar), her veri hattı için sanal ortam + `requirements.txt`,
+`site/` için `npm install`, marj hattı için Playwright Chromium (MEDAS ham dosyaları
+depoyla geldiyse atlar). Sonunda özet tablo basar; **tekrar çalıştırmak güvenlidir**
+(var olan ortam yeniden kurulmaz, bağımlılıklar tazelenir).
+
+Seçmeli kurulum: `kur.bat --hat tcmb hazine` · siteyi atla: `kur.bat --site-yok` ·
+ne kurulacağını gör: `kur.bat --liste`. Tek hat için `guncelle.bat --kur tcmb` de aynı işi
+yapar. Kurulum yapılmamış bir hat koşturulursa hata mesajı hangi komutu çalıştıracağınızı yazar.
 
 **B) Proje proje.** `bat\<proje>\` klasörüne gidip sırayla çift tıklayın:
 
@@ -117,12 +125,12 @@ macOS/Linux'ta: `python3 panel.py hazine`.
   52 haftalık geçmişi sıfırdan çeker ve FinBERT ile skorlar: 2-4 saat sürebilir.**
   Sonraki koşular yalnız yeni haftaları çeker (dakikalar). Ayrıca `kur.bat` torch +
   transformers indirir (~2 GB). Sabır isteyen tek hat bu.
-- **`yiyecek-marj`** — `kur.bat` sonrası **bir kez** şu komut (MEDAS hasadı için tarayıcı):
+- **`yiyecek-marj`** — MEDAS hasadı için Playwright Chromium gerekir; kökteki `kur.bat`
+  bunu **kendisi kurar** (yalnız `Research\marj\data\raw\medas_*.xls` yoksa; varsa atlar).
+  Elle kurmak isterseniz:
   ```
   Research\marj\.venv\Scripts\python.exe -m playwright install chromium
   ```
-  `Research\marj\data\raw\medas_*.xls` dosyaları repoyla geliyorsa hasat atlanır ve bu
-  adım gerekmez.
 - **`hazine-ihrac`** — `calistir.bat` scraper'ı da koşturur (Hazine sitesini tarar);
   ilk koşu 10-20 dakika, sonrakiler kısa (işlenen URL'ler önbelleklenir).
 - Diğer dördü (`tcmb-net-rezerv`, `usdtry-deval`, `try-reer`, `yabanci-pozisyon`) yalnız
