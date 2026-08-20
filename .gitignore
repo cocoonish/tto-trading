@@ -34,7 +34,8 @@ Aktarılacak Projeler/indices/data/news_cache.json
 # Proje basina sanal ortamlar (bat/*/kur.bat olusturur)
 .venv/
 **/.venv/
-# Özel kontrol seti (üçüncü taraf ekonomist tabloları) — depoya ve siteye girmez
+# Yerel doğrulama dosyaları — depoya ve siteye girmez
 Aktarılacak Projeler/TCMBNetRezerv/WhatsApp*/
+Aktarılacak Projeler/TCMBNetRezerv/kontrol_seti.csv
 Aktarılacak Projeler/TCMBNetRezerv/kontrol_ekonomist.csv
 Research/marj/data/cache/*.log

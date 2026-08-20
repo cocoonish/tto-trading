@@ -88,7 +88,12 @@ class Hat:
     tam: list[str]                 # ağır hat (boşsa hafif ile aynı)
     kopya: dict[str, str]          # kaynak (klasöre göreli) → hedef dosya adı
     not_: str = ""
-    tarih_anahtari: str = "_tarih" # ozet.json'da veri tarihini taşıyan alan (tazelik denetimi)
+    # ozet.json'da veri tarihini taşıyan alan(lar) — tazelik denetimi.
+    # LİSTE olmasının sebebi: bir hattın farklı frekanslı birden çok çıktısı
+    # olabiliyor ve biri ilerlerken diğeri sessizce donabiliyor (TCMB'de rezerv
+    # serisi ilerlerken altın/akım tarafı taşımaya girebilir). Tek anahtara
+    # bakmak o durumda "veri tazelendi" der.
+    tarih_anahtarlari: tuple[str, ...] = ("_tarih",)
     panel: list[str] = field(default_factory=list)  # canlı panel komutu (python'dan sonraki argümanlar)
 
     def adimlar(self, tam: bool) -> list[str]:
@@ -98,8 +103,18 @@ class Hat:
 P = Path("Aktarılacak Projeler")
 HATLAR: list[Hat] = [
     Hat("tcmb", "TCMB Net Rezerv", P / "TCMBNetRezerv", "tcmb-net-rezerv",
-        ["net_rezerv.py", "grafik.py", "ozet_uret.py"], [],
-        {"tcmb_rezerv_grafik.html": "grafik.html"}, tarih_anahtari="g_tarih"),
+        # altin_etkisi.py, net_rezerv.py'nin yazdığı gunluk.csv'den
+        # altin_etkisi.csv üretir (arındırma sisteminin bağımsız çıktısı);
+        # grafik.py altı HTML üretir. Sıra bağlayıcıdır.
+        ["net_rezerv.py", "altin_etkisi.py", "grafik.py --no-open",
+         "ozet_uret.py"], [],
+        {"tcmb_rezerv_grafik.html": "grafik.html",
+         "brut_kirilim.html": "brut_kirilim.html",
+         "altin_ayristirma.html": "altin_ayristirma.html",
+         "akim.html": "akim.html",
+         "swap.html": "swap.html",
+         "tanim_farki.html": "tanim_farki.html"},
+        tarih_anahtarlari=("g_tarih", "ak_tarih")),
     Hat("usdtry", "USDTRY Devalüasyon", P / "USDTRYDeval", "usdtry-deval",
         ["usdtry_deval_plotly.py", "usdtry_weekly_trends.py", "usdtry_monthly_trends.py", "ozet_uret.py"], [],
         {"usdtry_deval.html": "usdtry_deval.html", "usdtry_deval_3m.html": "usdtry_deval_3m.html",
@@ -155,14 +170,21 @@ def anahtar_uyar(secilen: list["Hat"]):
                     "Çözüm: kök klasöre .evds_key dosyası (tek satır anahtar) ya da TTO_EVDS_KEY ortam değişkeni.", 33))
 
 
-def _ozet_tarih(h: Hat) -> str | None:
-    """Sitedeki ozet.json'daki veri tarihi — koşu öncesi/sonrası kıyas için."""
+def _ozet_tarih(h: Hat) -> dict[str, str] | None:
+    """Sitedeki ozet.json'daki veri tarih(ler)i — koşu öncesi/sonrası kıyas."""
     import json
     y = SITE / h.slug / "ozet.json"
     try:
-        return str(json.load(open(y, encoding="utf-8")).get(h.tarih_anahtari))
+        d = json.load(open(y, encoding="utf-8"))
     except Exception:
         return None
+    return {a: str(d.get(a)) for a in h.tarih_anahtarlari}
+
+
+def _tarih_ozeti(d: dict[str, str] | None) -> str:
+    if not d:
+        return "?"
+    return " / ".join(d.values()) if len(d) > 1 else next(iter(d.values()))
 
 
 def kos(h: Hat, tam: bool) -> tuple[bool, str, float]:
@@ -202,10 +224,19 @@ def kos(h: Hat, tam: bool) -> tuple[bool, str, float]:
     # Aynıysa hata DEĞİL (kaynak yeni veri yayımlamamış olabilir: REER aylık, TCMB
     # haftalık) ama görünür uyarı: TCMB'de net_rezerv.py CSV yazmadığı için hat
     # 3 hafta "✓" göründü, veri 03.08'de kaldı. Bu satır o hatayı yakalar.
+    # Anahtarlardan HERHANGİ BİRİ ilerlemediyse uyarılır: bir hattın farklı
+    # frekanslı çıktılarından biri donarken diğeri ilerleyebiliyor.
     yeni_tarih = _ozet_tarih(h)
-    if yeni_tarih and yeni_tarih == eski_tarih:
-        return True, f"{n} dosya kopyalandı — {_renk('veri tarihi DEĞİŞMEDİ: ' + yeni_tarih, 33)}", time.time() - t0
-    return True, f"{n} dosya kopyalandı · veri {eski_tarih or '?'} → {yeni_tarih}", time.time() - t0
+    y, e = _tarih_ozeti(yeni_tarih), _tarih_ozeti(eski_tarih)
+    if yeni_tarih and eski_tarih:
+        donan = [a for a in h.tarih_anahtarlari
+                 if yeni_tarih.get(a) == eski_tarih.get(a)]
+        if donan:
+            etiket = ("hepsi" if len(donan) == len(h.tarih_anahtarlari)
+                      else ", ".join(donan))
+            return True, (f"{n} dosya kopyalandı — "
+                          + _renk(f"veri tarihi DEĞİŞMEDİ ({etiket}): {y}", 33)), time.time() - t0
+    return True, f"{n} dosya kopyalandı · veri {e} → {y}", time.time() - t0
 
 
 def panel(h: Hat) -> int:

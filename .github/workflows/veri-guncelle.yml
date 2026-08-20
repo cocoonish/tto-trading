@@ -51,15 +51,26 @@ jobs:
           fi
           echo "EVDS anahtarı tanımlı (${#TTO_EVDS_KEY} karakter)."
 
-      - name: TCMB net rezerv (EVDS + IRFCL → grafik)
+      # net_rezerv.py iki tanımı da üretir (piyasa tanımı + Stand-By 2A) ve
+      # denetim uyarılarını uyarilar.json'a yazar; altin_etkisi.py altın fiyat
+      # etkisinden arındırılmış akım tablosunu; grafik.py altı HTML'i.
+      # Sıra bağlayıcıdır: sonrakiler öncekinin CSV'sini okur.
+      - name: TCMB net rezerv (EVDS + IRFCL → altı grafik)
         id: tcmb
         continue-on-error: true
         working-directory: Aktarılacak Projeler/TCMBNetRezerv
         run: |
           python net_rezerv.py
-          python grafik.py
-          cp tcmb_rezerv_grafik.html "../../site/public/projeler/tcmb-net-rezerv/grafik.html"
-          python ozet_uret.py && cp ozet.json "../../site/public/projeler/tcmb-net-rezerv/"
+          python altin_etkisi.py
+          python grafik.py --no-open
+          hedef="../../site/public/projeler/tcmb-net-rezerv"
+          cp tcmb_rezerv_grafik.html "$hedef/grafik.html"
+          cp brut_kirilim.html       "$hedef/brut_kirilim.html"
+          cp altin_ayristirma.html   "$hedef/altin_ayristirma.html"
+          cp akim.html               "$hedef/akim.html"
+          cp swap.html               "$hedef/swap.html"
+          cp tanim_farki.html        "$hedef/tanim_farki.html"
+          python ozet_uret.py && cp ozet.json "$hedef/"
 
       - name: USDTRY devalüasyon (ACT/365, altı grafik — MDX'in gömdüğü tümü)
         id: usdtry

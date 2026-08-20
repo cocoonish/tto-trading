@@ -6,19 +6,55 @@
 
 
 
+
+
+
+
+
+
+
 <!-- tto-ev-stili -->
 <style>
-  html, body { margin: 0; padding: 0; height: 100%; background: #ffffff; }
+  /* Çok panelli figürlerde (3+ sütun) dar iframe'de sağdaki etiket kutuları
+     kırpılıyordu. Çözüm: grafiğe alt sınır genişlik verip taşmayı YATAY KAYDIRMAYA
+     çevirmek — kırpmak yerine kaydırmak. Sınır aşağıdaki script'te panel sayısına
+     göre belirlenir (tek panelli grafikler etkilenmez, %100 kalır). */
+  html, body { margin: 0; padding: 0; height: 100%; background: #ffffff; overflow-x: auto; }
   .plotly-graph-div { width: 100% !important; height: 100vh !important; }
+  body.tto-genis .plotly-graph-div { min-width: var(--tto-min-genislik, 100%); }
   .modebar { opacity: 0.25; transition: opacity .2s; }
   .modebar:hover { opacity: 1; }
   .modebar-btn--logomark, .modebar-btn[data-title="Produced with Plotly.js"] { display: none !important; }
 </style>
 <script>
 (function () {
+  function genislikSiniri(gd) {
+    // Kaç sütunlu subplot? xaxis/xaxis2/... domainlerinin sol kenarlarının sayısı.
+    var sol = {};
+    Object.keys(gd.layout).forEach(function (k) {
+      if (/^xaxis\d*$/.test(k) && gd.layout[k] && gd.layout[k].domain) {
+        sol[gd.layout[k].domain[0].toFixed(3)] = 1;
+      }
+    });
+    var sutun = Math.max(1, Object.keys(sol).length);
+    // Toplam panel sayısı: kaç ayrı x ekseni var (2x2 ızgara = 4 panel, 2 sütun).
+    var panel = Object.keys(gd.layout).filter(function (k) {
+      return /^xaxis\d*$/.test(k) && gd.layout[k] && gd.layout[k].domain;
+    }).length;
+    if (sutun >= 4) return 1220;
+    if (sutun === 3) return 1020;
+    if (panel >= 4) return 1000;  // 2x2 ızgara: panel başına ~480px, kutular sığar
+    return 0;                     // tek/çift panelli grafik: %100 genişlik yeter
+  }
+
   function uygula() {
     var gd = document.querySelector('.plotly-graph-div');
     if (!gd || !window.Plotly || !gd.layout) { setTimeout(uygula, 120); return; }
+    var minG = genislikSiniri(gd);
+    if (minG) {
+      document.body.classList.add('tto-genis');
+      document.body.style.setProperty('--tto-min-genislik', minG + 'px');
+    }
     var mevcut = gd.layout.title && gd.layout.title.text ? gd.layout.title.text : null;
     var guncelle = {
       autosize: true,
