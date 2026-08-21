@@ -20,6 +20,7 @@ python3 veri.py        # EVDS3 → data/gunluk.csv, haftalik.csv, aylik.csv
 python3 metrik.py      # → data/metrik.csv, zk.csv, haftalik_metrik.csv, uyarilar.json
 python3 grafik.py      # → cikti/NN_*.html + cikti/yukseklikler.json
 python3 ozet_uret.py   # → ozet.json
+python3 bayatlik_sinavi.py   # sessiz bayatlama kilidi (geçici kopyada koşar)
 ```
 
 Sıra **bağlayıcıdır**: sonraki adım öncekinin CSV'sini okur. Kök dizinden tek
@@ -74,6 +75,15 @@ Başlık:  key: <ANAHTAR>          ← anahtar URL'de DEĞİL
 Bin TL ile milyon TL arasındaki bin katlık fark, trilyon TL ölçeğinde gözle
 yakalanmaz. Dönüşüm **tek yerde** (`metrik.py`) yapılır.
 
+**En sinsi tuzak ZK tabanındadır**: taban iki AYRI veri grubundan beslenir ve
+grupların ölçeği farklıdır — `bie_tldthvade` bin TL, `bie_zorundth` milyon TL
+yayımlar. İkisini birim çevirmeden toplamak DTH bacağını bin kat küçültür,
+yani tabanı fiilen yalnız TL mevduata indirir ve ima edilen tesis oranını
+~%65 abartır. Bu yüzden taban EVDS'in **kendi yayımladığı toplamdan**
+(`TP.TLDTHVADE.KB18`) okunur; elde kurulan toplamla karşılaştıran bir birim
+denetimi her koşuda çalışır ve medyan ya da son gözlemde %1'i aşan sapmada
+**hat durur**.
+
 | Seri ailesi | EVDS birimi | Grafikte |
 |---|---|---|
 | `TP.APIFON*` (fonlama, sterilizasyon, net) | **milyon TL** | milyar TL |
@@ -81,7 +91,9 @@ yakalanmaz. Dönüşüm **tek yerde** (`metrik.py`) yapılır.
 | `TP.PPIBSM`, `TP.PPIGBTL` (sistem likiditesi) | **milyon TL** | milyar TL |
 | `TP.PY.P07.*` (ihale kabul tutarları) | **bin TL** | milyon TL (AOSM ağırlığı) |
 | `TP.SWAPTEKTAR.*` | **milyon USD** | milyar USD / milyar TL |
-| `TP.TLDTHVADE.*`, `TP.ZORUNDTH.KB8` (ZK tabanı) | **bin TL** | milyar TL |
+| `TP.TLDTHVADE.*` (ZK tabanı, `bie_tldthvade`) | **bin TL** | milyar TL |
+| `TP.ZORUNDTH.KB8` (ZK'ya tabi DTH, `bie_zorundth`) | **milyon TL** | milyar TL |
+| `TP.ZORUNDTH.KB7` | **milyon USD** | — |
 | `TP.PY.P0*` faizler, `TP.APIFON4`, `TP.BISTTLREF.ORAN` | **yüzde** | yüzde / puan |
 
 ---
@@ -150,6 +162,20 @@ Kalan bacak bu yüzden son 5 iş gününün tutar-ağırlıklı 1HI faiziyle de�
 Denetim, `kalan ÷ günlük 1HI tutarı` oranını hesaplar; 5 civarında olmalıdır.
 Oran 3–7 aralığının dışına çıkarsa **görünür uyarı** düşer.
 
+### TCMB kaynaklı net TL — swap İKİ YÖNLÜDÜR
+
+$$\text{net TL}_t=\underbrace{\texttt{TP.APIFON3}}_{\text{net APİ}}
++\frac{\text{swap}^{\text{alım}}_t e_t}{1000}
+-\frac{\text{swap}^{\text{satım}}_t e_t}{1000}$$
+
+Alım yönlü swapta TCMB döviz alıp TL verir; **satım yönlüsünde döviz satıp TL
+çeker**. Yalnız alım bacağını eklemek, satım stoku büyürken "TCMB'nin sağladığı
+TL" ölçüsünü sabit gösterir — ölçüm gününde satım bacağı 4,69 mia USD, yani
+~225 milyar TL'lik bir TL çekilmesidir ve tek bacaklı bir toplamda hiç
+görünmezdi. Eski (tek bacaklı) tanım `api_ve_swap_alim_mlr` anahtarında TANI
+olarak korunur; kapsam ayrıca `tcmb_tl_saglama_kapsam` metin anahtarıyla
+sayfaya taşınır — "hangi bacaklar dâhil" sorusu tahmine bırakılmaz.
+
 ### Marjinal TCMB faizi
 
 | Rejim | Marjinal fiyat |
@@ -171,7 +197,10 @@ olgudur. Bir "örtük sıkılaştırma dönemi", AOFM'nin koridor tavanını en 
 
 ### İma edilen efektif ZK oranı
 
-$$\hat r_t=\frac{\texttt{TP.AB.A19}}{\texttt{TP.TLDTHVADE.KB6}+\texttt{TP.ZORUNDTH.KB8}}$$
+$$\hat r_t=\frac{\texttt{TP.AB.A19}\ (\text{bin TL})}{\texttt{TP.TLDTHVADE.KB18}\ (\text{bin TL})}$$
+
+Payda EVDS'in **yayımladığı toplamdır**, elde kurulan bir toplam değil — iki
+bacağın birimi farklı olduğu için (bkz. *Birimler*).
 
 **ZK oranları EVDS'te yayımlanmıyor.** Bu, tebliğdeki herhangi bir tek orana
 eşit değildir: vade dilimlerine ve para cinsine göre farklı oranlar uygulanır
@@ -204,7 +233,14 @@ primi ya da PPK beklentisi besliyor olabilir.
 | `TP.APIFON1.TOP − TP.APIFON2.TOP = TP.APIFON3` | 1e-6 mn TL | 1,2e-10 (n=3.928) |
 | Günlük politika kotasyonunun ay sonu değeri ↔ EVDS'in **ayrı** yayımladığı aylık BIS serisi | 0,01 puan | **0,000 puan** (n=94 ay) |
 | TLREF ↔ BİST gecelik repo ağırlıklı ortalama faizi | 1,00 puan | ort. 0,024 · maks 0,536 (n=1.889) |
+| ZK tabanı **birim denetimi**: `KB6/1000 + KB8` ↔ `KB18/1000` | %1 (medyan **ve** son gözlem) | medyan 0,000000 (n=709) |
 | Bir figür üretilemezse (`grafik.py`) | — | siteye kopyalama yapılmaz |
+
+Birim denetiminin durdurucu ölçüsü **medyan ve son gözlemdir, maksimum
+değil**: bir birim değişikliği HER haftayı vurur (bin katlık hata ~%40 sapma
+verir), tek haftalık sapma ise iki tablonun vintaj/revizyon farkıdır
+(17.08.2018'de %5,2). Maksimuma bakan bir denetim, tarihsel bir revizyon
+yüzünden hattı durdururdu; o sapmalar ayrı bir **uyarı** olarak raporlanır.
 
 ### GÖRÜNÜR UYARI düşürenler (`uyarilar.json`)
 
@@ -224,6 +260,33 @@ primi ya da PPK beklentisi besliyor olabilir.
   Kotasyon serilerinde 0 → NaN.
 - **AOFM tabansız**: fonlama eşiğin altındayken EVDS'in AOFM basması.
 - **AOSM varsayımı zayıf**: kalan/1HI oranı 3–7 dışına çıkarsa.
+- **VERİ KATMANININ UYARILARI DEVRALINIR.** `veri.py`'nin listesi (tazelik,
+  `ESKİ ÖNBELLEK: n gün eski`, ölü seri, düşen demet) `data/veri_durum.json`'a
+  yazılır ama o dosya siteye kopyalanmaz. `metrik.py` koşum başında listeyi
+  **iki kaynaktan** devralır (`veri.uyarilar()` + `veri_durum.json`) ve kendi
+  listesine katar; `ozet_uret.py` son savunma olarak aynı dosyayı bir kez daha
+  okur. Devralınmasaydı kaynak durduğunda hat yeşil biter, tarih ilerlemez ve
+  sayfada TEK BİR görünür uyarı çıkmazdı — düzenin yasakladığı sessiz
+  bayatlamanın tam kendisi.
+- **BAYAT bayrağı** (`ozet.json` · `bayat`, `bayat_cumlesi`): yayım gecikmesi
+  aile toleransını aşarsa ya da veri katmanı bir tazelik/önbellek uyarısı
+  bastıysa `true` olur ve `uyari_metni`nin başına *BAYAT VERİ* cümlesi girer.
+  Sayfadaki koşu kutusu bu bayrakla kırmızıya döner. Eşikler tazelik
+  denetiminin kendi tablosundan okunur (`veri.tazelik_tolerans`) — iki yerde
+  ayrı eşik tutulsaydı biri güncellenir, öteki unutulurdu.
+  Sınavı: `python3 bayatlik_sinavi.py` (eskitilmiş bir KOPYADA bayrak
+  kalkmazsa çıkış 1; üretim dosyalarına dokunmaz).
+- **AOFM kompozisyon sınavı** (TANI): AOFM kalem kırılımından bağımsız olarak
+  yeniden kurulur — `(ihale×politika + kotasyon repo×koridor tavanı +
+  GLP×GLP satış) / toplam`. Son 250 iş gününde medyan sapma 0,000 puan; tüm
+  tarihçede medyan 0,445, p95 8,75 puan (uçlar GLP dönemlerinde ve kompozisyon
+  geçişlerinde). Medyan 0,05 puanı aşarsa uyarı düşer — EVDS kalem eşlemesinin
+  bozulduğunun işareti. **Kalibrasyon sabiti kullanılmaz.**
+- **AOFM bant denetimi** (TANI): AOFM, koridor tabanı ile GLP satış faizi
+  arasında olmalıdır. Tavanın üstünde 1, tabanın altında 31 iş günü ölçüldü.
+  Tabanın altı mekanik gecikmedir (AOFM bir STOK ortalamasıdır; faiz kararı
+  haftalarında eski fonlama stokta durur) ve `donemler_alti` ile ayrıca dönem
+  olarak çıkarılır. Tavanın üstü tanım gereği imkânsızdır ve uyarı düşürür.
 - **Hatlar arası tutarlılık**: rezerv hattının yerleşik swap düzeltmesi,
   `(alım yönlü − satım yönlü) / 1000` ile birebir aynı olmalı. Ölçülen fark
   909 ortak iş gününde 7,1e-15 milyar USD — iki bağımsız boru hattı aynı sayıyı
@@ -238,7 +301,7 @@ primi ya da PPK beklentisi besliyor olabilir.
 | `01_koridor_faizler.html` | 2 | **Ana grafik.** Koridor bandı, politika faizi, AOFM, AOSM, TLREF (yakın dönem) + tam tarihçe, örtük sıkılaştırma dönemleri gölgeli |
 | `02_spreadler.html` | 3 | TLREF−politika · AOFM/marjinal−politika · TLREF−AOFM (rejime göre ortalamalar) |
 | `03_net_api_kompozisyon.html` | 3 | Net APİ fonlaması (stok) · fonlama bacağı yığılı · sterilizasyon bacağı yığılı |
-| `04_swap_fonlama.html` | 2 | Swap stoku kanal kırılımı · swap ile sağlanan TL ve APİ fonlaması |
+| `04_swap_fonlama.html` | 2 | Swap stoku kanal kırılımı · swap ile SAĞLANAN ve ÇEKİLEN TL, APİ fonlaması |
 | `05_zk_likidite.html` | 4 | ZK bloke + taban · ima edilen tesis oranı · tesis dönemi adımları · serbest mevduat ve gün başı likidite |
 | `06_gecirgenlik.html` | 3 | Marjinal faiz vs kredi/mevduat faizi · aracılık marjları · yuvarlanan β |
 | `07_koridor_konumu.html` | 3 | Gecelik faizin koridordaki konumu · AOFM−tavan · koridor genişliği ve asimetri |

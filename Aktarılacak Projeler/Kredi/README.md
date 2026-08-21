@@ -126,6 +126,23 @@ ZK tabanı 13 gün gecikmeli olduğu için sepet kuru son 1–2 haftada boştur.
 USD ve EUR üzerinden (sabitsiz EKK, son 104 hafta) **tahmin edilir** ve
 `sepet_kaynak` alanında işaretlenir; kuyruk dört haftayı aşarsa uyarı düşer.
 
+**Tahminin artığı BÜYÜMEYE taşınır.** Artığı yalnız kur düzeyinde yayımlamak
+(std ~%0,09, maks ~%0,48) okuru yanıltır: haftalık oranlar 13 kez bileşiklenip
+yıllıklandığı için binde birlik bir kur artığı büyüme düzeyinde ~0,8 puana
+dönüşür. `kur_duyarlilik()` tahmin edilen haftaları ±artık_maks kaydırıp
+`g_ar_13y`'yi yeniden hesaplar ve bandı `sepet_tahmin_buyume_bandi_pp` olarak
+yazar — bu bant, ölçülmüş kur seçenekleri arasındaki yayılımdan **birkaç kat
+büyüktür** ve sayfadaki duyarlılık tablosunun bir satırıdır.
+
+**Çıpa duyarlılığı pencere DIŞINDA da ölçülür** (yıl başı, 52 hafta öncesi).
+Kritik ayrıntı: sabit çıpalı büyüme kurulurken **hem pay hem payda** aynı
+çıpa kuruyla değerlenir. Yalnız payı çıpalayıp paydayı ham bırakmak, çıpa ile
+ölçüm günü arasındaki kur hareketini büyüme oranına sahte olarak yükler ve on
+puanlarla oynayan anlamsız sayılar üretir. Doğru kurulduğunda çıpa seçiminin
+13 haftalık büyüme oranına etkisi küçüktür (`cipa_yayilim_pp` ~0,9 puan) —
+çünkü çıpa düzeyi pay ve paydada büyük ölçüde sadeleşir. Çıpa seçimi *seviye*
+serilerinde (dolarizasyon payı) belirleyicidir, *oranlarda* değil.
+
 Haftalık gözlemler Cuma itibarıyladır; kur da aynı Cuma alınır. Cuma tatilse **en
 yakın önceki** iş gününe düşülür ve gözlem `geri_tasima` diye işaretlenir. **İleri
 taşıma yapılmaz** — gelecekteki bir kurla geçmiş bir stoğu değerlemek, ölçüm
@@ -177,12 +194,33 @@ yeniden değerler:
 ilerler. Sayfada **ham ve arındırılmış birlikte** verilir; ham pay tek başına
 yayımlanmaz.
 
+**Blok tek ortak tarihe çıpalanır.** ZK tabanı 13 gün gecikmeli, sektör
+bilançosu ise aynı hafta gelir; her sütunun son dolu gözlemini bağımsız okumak
+ozet.json'da **iki farklı tarihi** tek blokta karıştırır ve "iki ham ölçünün
+farkı taban farkıdır" cümlesi bir haftalık kur/akım hareketini de içine alır.
+`metrik.py`'deki `_blok()` yardımcısı bloğu tüm sütunların dolu olduğu ortak
+tarihe hizalar, tarihi `dol_tarih` olarak yazar ve blokta birden çok son tarih
+gördüğünde **görünür uyarı** düşürür. Kural blok bazında geneldir.
+
 ### 4.6 Reel faiz
 
 **Tam Fisher**: `(1+i)/(1+π^e) − 1`. `i − π` yaklaşımı **yasaktır** — bu düzeyde
 puanlarla sapıyor. Beklenti girdisi PKA 12 aylık TÜFE beklentisi
 (`TP.PKAUO.S01.E.U`, aylık); haftalık eksene son yayımlanan değer taşınır.
 Yaklaşık tanım grafikte yalnızca **tanı** izi olarak, kesikli çizilir.
+
+Beklentinin **yaşı** ayrıca taşınır (`pka_tarih`, `pka_yas_gun`): aylık anket
+haftalık eksene ffill edildiği için, anket yayını gecikirse reel faizler
+sessizce eski beklentiyle hesaplanmaya devam ederdi. Yaş 45 günü aşarsa
+görünür uyarı düşer.
+
+**AOFM aynı eşikle geçerlilik testinden geçer.** Fonlama tabanı 5 milyar TL'nin
+altındayken (`TP.APIFON1.TOP`) AOFM "sistemin fonlama maliyeti" değildir; o
+haftalarda `aofm` NaN yapılır ve `spread_aofm` üretilmez. Eşik, *Fonlama &
+Likidite* hattındaki `AOFM_TABAN_ESIK` ile **birebir aynıdır** — iki kardeş
+sayfanın aynı gün aynı büyüklük için farklı sayı yayımlaması, yanlış bir
+sayıdan kötüdür. `ozet.json` ayrıca `aofm_gecerli`, `aofm_tarih`,
+`aofm_yas_gun` ve tam bir `aofm_cumlesi` taşır; sayfa metni o cümleye bağlıdır.
 
 ### 4.7 Yayımlamadığımız şeyler
 
@@ -208,6 +246,35 @@ Yaklaşık tanım grafikte yalnızca **tanı** izi olarak, kesikli çizilir.
 Ayrıca her koşuda kimlik denetimleri: toplam kredi = yurt içi + yurt dışı ·
 yurt içi kredi = TL + YP · M1/M2/M3 kimlikleri · A24 ↔ APIFON3 · Laspeyres Γ+Λ=ΔK ·
 arşiv/yeni örtüşme oranı.
+
+### Sessiz bayatlama
+
+`veri.py`'nin uyarıları (tazelik, `ESKİ ÖNBELLEK: n gün eski`, ölü seri)
+`metrik.py`'de devralınıp `uyarilar.json`'a yazılır; `ozet_uret.py` son savunma
+olarak `veri_durum.json`'u bir kez daha okur. Yayım gecikmesi haftalık aile
+toleransını (12 gün) aşarsa `ozet.json`'a `bayat: true` girer ve
+`uyari_metni`nin başına *BAYAT VERİ* cümlesi eklenir; sayfadaki koşu kutusu o
+bayrakla kırmızıya döner. Kilidi: `python3 bayatlik_sinavi.py` — eskitilmiş bir
+KOPYADA bayrak kalkmazsa çıkış 1 (üretim dosyalarına dokunmaz).
+
+### Taban sözlüğü
+
+Aynı `ozet.json` içinde **iki kredi ve iki mevduat tabanı** dolaşır: yurt içi
+TL+YP kırılımı (büyüme, YP payı, Laspeyres) ↔ sektör toplamı (takip oranı,
+kredi/mevduat) · ZK tabanı mevduatı (dolarizasyon) ↔ sektör toplamı mevduat
+(kredi/mevduat paydası). Tabanı adında taşıyan eşler (`kredi_yi_*`,
+`mevduat_zk_*`, `mevduat_sektor_toplam_mlr`) ve bir `taban_sozlugu` metin
+anahtarı yazılır; sayfa sözlüğü bir kez basar, böylece okur payları yanlış
+paydaya bölmez.
+
+### "Kur etkisi" iki farklı şeydir
+
+`m2_kur_etkisi_tcmb` = TCMB'nin KENDİ endekslerinin farkı (HAMM2 − ARIM2).
+`m2_kur_etkisi_biz` = bizim ham M2 ile bizim arındırılmış M2'mizin farkı.
+Kredi tarafındaki `kur_etkisi_13y` bizim tanımımızla hesaplandığı için
+karşılaştırılacak M2 sayısı **bizimkidir**; TCMB'nin sayısıyla karşılaştırmak
+iki farklı arındırma yöntemini karşılaştırmak olur (ölçülen yöntem yanlılığı
+`dog_ar_m2_yanlilik`).
 
 ## 6. Bilinen sınırlar
 
@@ -249,6 +316,7 @@ python3 veri.py            # --yenile ile önbelleği yok say
 python3 metrik.py
 python3 grafik.py
 python3 ozet_uret.py
+python3 bayatlik_sinavi.py   # sessiz bayatlama kilidi (geçici kopyada koşar)
 ```
 
 Tümü birden ve siteye kopyalama:

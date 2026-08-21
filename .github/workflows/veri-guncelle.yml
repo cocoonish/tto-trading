@@ -267,6 +267,23 @@ jobs:
       - name: Ev stilini uygula
         run: python3 site/tools/plotly_stil.py --hepsi
 
+      # Sayfa ↔ hat sözleşmesi. Beş bölüm: (1) MDX'te çağrılan her <Deger>
+      # anahtarı ozet.json'da var mı, (2) ozet.json'daki oynak bir sayı sayfada
+      # ÇIPLAK duruyor mu (CLAUDE.md kural 5), (3) MDX yukseklik={} ↔ üretimin
+      # gerçek script height'i, (4) üretim ↔ site dosya kümesi + ev stili bloğu,
+      # (5) paneller alt alta mı. Kopyalamadan SONRA koşar: bir hat düştüğünde
+      # bu adım da kırmızıya döner ve bayat sayfa fark edilmeden geçmez.
+      - name: Sayfa sınavı (Deger anahtarları · çıplak sayı · yükseklik · panel düzeni)
+        run: python3 site/tools/sayfa_sinavi.py
+
+      # Sessiz bayatlama kilidi: eskitilmiş bir KOPYADA ozet.json'un bayat
+      # bayrağını kaldırmadığı görülürse hat kırmızıya döner. Üretim dosyalarına
+      # dokunmaz (geçici dizinde çalışır).
+      - name: Bayatlık sınavı (Kredi · Fonlama)
+        run: |
+          python3 "Aktarılacak Projeler/Kredi/bayatlik_sinavi.py"
+          python3 "Aktarılacak Projeler/Fonlama/bayatlik_sinavi.py"
+
       - name: Değişiklikleri commit'le
         run: |
           git config user.name "veri-bot"
