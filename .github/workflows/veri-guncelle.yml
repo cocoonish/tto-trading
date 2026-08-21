@@ -163,9 +163,86 @@ jobs:
           # Beklenen figür kümesi denetimi: grafik.py eksikte zaten çıkış 1 verir,
           # bu satır ikinci savunma — `cp cikti/*.html` var olan dosyaları kopyalayıp
           # "başarılı" bitmesin (eski grafik + taze metin = sessiz bayatlama).
+          # Beklenen sayı ELLE yazılmaz: grafik.py her koşuda
+          # cikti/yukseklikler.json'a ürettiği figürlerin listesini yazar.
+          # Sabit sayı, bir şekil eklendiğinde cron'u yml elle güncellenene
+          # kadar kırmızıya döndürürdü.
           n=$(ls cikti/*.html 2>/dev/null | wc -l | tr -d " ")
-          [ "$n" -eq 9 ] || { echo "::error::Enflasyon: cikti/ içinde $n HTML var, 9 bekleniyor — kopyalama yapılmadı."; exit 1; }
+          b=$(python -c "import json;print(len(json.load(open('cikti/yukseklikler.json'))))")
+          [ "$n" -eq "$b" ] || { echo "::error::Enflasyon: cikti/ içinde $n HTML var, yukseklikler.json $b figür bildiriyor — kopyalama yapılmadı."; exit 1; }
           H="../../site/public/projeler/enflasyon"
+          mkdir -p "$H"
+          cp cikti/*.html "$H/"
+          cp uyarilar.json "$H/"
+          python ozet_uret.py && cp ozet.json "$H/"
+
+      # Kredi & parasal büyüklükler: EVDS3'ten dört frekansta çekim (12 saat TTL'li
+      # önbellek). metrik.py kur etkisinden arındırılmış kredi büyümesini ZİNCİRLEME
+      # kurar (önce arındır → sonra zincirle → sonra yıllıklandır; ters sıra hatayı
+      # dört katına çıkarır) ve üç bağımsız doğrulamadan geçirir: (A) seviye
+      # tablosundan hesaplanan HAM M1/M2/M3 büyümesi ↔ TCMB'nin ayrı ürünü olan ham
+      # endeks — bu bir KİMLİK sınavıdır, 2 puanı aşarsa SystemExit ile düşer;
+      # (B) arındırılmış M2 ↔ TCMB'nin ARIM2 endeksi (yöntem sınavı, eşitlik
+      # beklenmez, yanlılık raporlanır); (C) haftalık ↔ aylık kredi serisi.
+      # Kur girdisi ZK'ya tabi DTH'dan ima edilen sepettir; ZK tabanı 13 gün
+      # gecikmeli olduğu için kuyruk tahmin edilir ve İŞARETLENİR.
+      - name: Kredi & parasal büyüklükler (EVDS → arındırılmış kredi büyümesi, dokuz grafik)
+        id: kredi
+        continue-on-error: true
+        working-directory: Aktarılacak Projeler/Kredi
+        run: |
+          python veri.py
+          python metrik.py
+          python grafik.py
+          # Beklenen figür kümesi denetimi: grafik.py eksikte zaten çıkış 1 verir,
+          # bu satır ikinci savunma — `cp cikti/*.html` var olan dosyaları kopyalayıp
+          # "başarılı" bitmesin (eski grafik + taze metin = sessiz bayatlama).
+          # Beklenen sayı ELLE yazılmaz: grafik.py her koşuda
+          # cikti/yukseklikler.json'a ürettiği figürlerin listesini yazar.
+          # Sabit sayı, bir şekil eklendiğinde cron'u yml elle güncellenene
+          # kadar kırmızıya döndürürdü.
+          n=$(ls cikti/*.html 2>/dev/null | wc -l | tr -d " ")
+          b=$(python -c "import json;print(len(json.load(open('cikti/yukseklikler.json'))))")
+          [ "$n" -eq "$b" ] || { echo "::error::Kredi: cikti/ içinde $n HTML var, yukseklikler.json $b figür bildiriyor — kopyalama yapılmadı."; exit 1; }
+          H="../../site/public/projeler/kredi-parasal"
+          mkdir -p "$H"
+          cp cikti/*.html "$H/"
+          cp uyarilar.json "$H/"
+          python ozet_uret.py && cp ozet.json "$H/"
+
+      # Fonlama hattı: EVDS3'ten APİ fonlama/sterilizasyon tablosu, TCMB kotasyonları
+      # (koridor + GLP), TLREF, sterilizasyon ihalesi faiz/tutarları, analitik bilanço,
+      # sistem likiditesi, swap stokları ve ZK tabanı (12 saat TTL'li önbellek).
+      # İş günü serileri 366 günlük, haftalık seriler 900 haftalık parçalar hâlinde
+      # çekilir — EVDS tek istekte 1000 satır veriyor ve gerisini aralığın SONUNDAN
+      # geriye doldurup SESSİZCE kırpıyor.
+      # metrik.py dört BAĞIMSIZ DOĞRULAMA yapar ve biri düşerse SystemExit ile durur:
+      # (A) TP.APIFON1.TOP − TP.APIFON2.TOP = TP.APIFON3 kimliği; (B) günlük politika
+      # kotasyonunun (TP.PY.P02.1H) ay sonu değeri ↔ EVDS'in AYRI yayımladığı aylık BIS
+      # serisi TP.BISPOLFAIZ.TUR; (C) TLREF ↔ BİST gecelik repo AOF; (D) swap stokunun
+      # rezerv hattının yerleşik swap düzeltmesiyle birebir tutması.
+      # Ayrıca AOFM, fonlama tabanı 5 mlr TL'nin altına düştüğü günlerde GEÇERSİZ
+      # işaretlenir (EVDS o günlerde de bir sayı basıyor — kaynak kaynaklı sessiz
+      # bayatlama) ve ZK bloke hesabının 15.03.2024 öncesi tam sıfırları veri sayılmaz.
+      - name: TCMB fonlama & likidite (EVDS → koridor, AOFM/AOSM, sekiz grafik)
+        id: fonlama
+        continue-on-error: true
+        working-directory: Aktarılacak Projeler/Fonlama
+        run: |
+          python veri.py
+          python metrik.py
+          python grafik.py
+          # Beklenen figür kümesi denetimi: grafik.py eksikte zaten çıkış 1 verir,
+          # bu satır ikinci savunma — `cp cikti/*.html` var olan dosyaları kopyalayıp
+          # "başarılı" bitmesin (eski grafik + taze metin = sessiz bayatlama).
+          # Beklenen sayı ELLE yazılmaz: grafik.py her koşuda
+          # cikti/yukseklikler.json'a ürettiği figürlerin listesini yazar.
+          # Sabit sayı, bir şekil eklendiğinde cron'u yml elle güncellenene
+          # kadar kırmızıya döndürürdü.
+          n=$(ls cikti/*.html 2>/dev/null | wc -l | tr -d " ")
+          b=$(python -c "import json;print(len(json.load(open('cikti/yukseklikler.json'))))")
+          [ "$n" -eq "$b" ] || { echo "::error::Fonlama: cikti/ içinde $n HTML var, yukseklikler.json $b figür bildiriyor — kopyalama yapılmadı."; exit 1; }
+          H="../../site/public/projeler/fonlama-likidite"
           mkdir -p "$H"
           cp cikti/*.html "$H/"
           cp uyarilar.json "$H/"
@@ -214,6 +291,8 @@ jobs:
           Yabanci:${{ steps.yabanci.outcome }}
           Hazine:${{ steps.hazine.outcome }}
           Enflasyon:${{ steps.enflasyon.outcome }}
+          Kredi:${{ steps.kredi.outcome }}
+          Fonlama:${{ steps.fonlama.outcome }}
           Marj:${{ steps.marj.outcome }}"
           hata=0
           echo "### Veri hattı durumu" >> "$GITHUB_STEP_SUMMARY"

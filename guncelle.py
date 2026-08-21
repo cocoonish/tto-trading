@@ -154,6 +154,35 @@ HATLAR: list[Hat] = [
         ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
         {"cikti/*.html": "*", "uyarilar.json": "uyarilar.json"},
         tarih_anahtarlari=("_tarih", "faiz_gun")),
+    Hat("kredi", "Kredi & Parasal Büyüklükler", P / "Kredi", "kredi-parasal",
+        # veri.py EVDS3'ten dört frekansta çeker (haftalık para ve banka, iş günü
+        # kur/bilanço/APİ, aylık KKM ve banka türü, üç aylık BKEA) ve aile bazlı
+        # tazelik + kimlik denetimlerini yapar. metrik.py kur etkisinden
+        # arındırılmış kredi büyümesini ZİNCİRLEME kurar, Laspeyres ayrıştırmasını
+        # kimlik denetiminden geçirir ve üç bağımsız doğrulama koşturur; ham para
+        # arzı sınavı (seviye tablosu ↔ TCMB'nin kendi endeksi) tutmazsa hat DURUR.
+        # grafik.py dokuz şekil üretir. Sıra bağlayıcıdır.
+        ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
+        {"cikti/*.html": "*", "uyarilar.json": "uyarilar.json"},
+        # Üç ayrı frekans, üç ayrı donma riski: haftalık kredi ilerlerken aylık
+        # KKM/banka türü tarafı sessizce durabiliyor. Tek anahtara bakmak yetmez.
+        tarih_anahtarlari=("_tarih", "gun_tarih", "ay_tarih")),
+    Hat("fonlama", "TCMB Fonlama & Likidite", P / "Fonlama", "fonlama-likidite",
+        # veri.py EVDS3'ten çeker (12 saat TTL'li önbellek; iş günü serileri
+        # 366 günlük, haftalık seriler 900 haftalık parçalar hâlinde — EVDS
+        # 1000 satırdan sonrasını SESSİZCE kırpıyor). metrik.py AOFM'yi tabanı
+        # yokken geçersiz işaretler, AOSM'yi (bu çalışmanın türetmesi) kurar,
+        # koridor konumunu ve örtük sıkılaştırma dönemlerini çıkarır ve dört
+        # BAĞIMSIZ DOĞRULAMA yapar (net fonlama kimliği · günlük politika
+        # kotasyonu ↔ EVDS'in aylık BIS serisi · TLREF ↔ BİST gecelik repo AOF ·
+        # rezerv hattıyla swap tutarlılığı) — biri düşerse hat DURUR.
+        # grafik.py sekiz şekil üretir. Sıra bağlayıcıdır.
+        ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
+        {"cikti/*.html": "*", "uyarilar.json": "uyarilar.json"},
+        # Üç ayrı frekans var ve biri ilerlerken diğeri donabilir: APİ günlük,
+        # haftalık faiz Cuma, ZK tabanı bir hafta daha geriden. Tek anahtara
+        # bakmak "veri tazelendi" derdi.
+        tarih_anahtarlari=("_tarih", "hafta_kisa", "zk_taban_tarih")),
     Hat("marj", "Yiyecek Hizmetleri Marjı", Path("Research/marj"), "yiyecek-hizmetleri-marj",
         ["src/web_cikti.py", "src/ozet_uret.py"],
         ["src/run_all.py", "src/web_cikti.py", "src/ozet_uret.py"],
@@ -167,10 +196,14 @@ def _renk(m, k):  # k: 32 yeşil, 31 kırmızı, 33 sarı, 36 camgöbeği
     return f"\033[{k}m{m}\033[0m" if sys.stdout.isatty() else m
 
 
-EVDS_HATLAR = {"tcmb", "usdtry", "reer", "yabanci", "marj", "enflasyon"}
+EVDS_HATLAR = {"tcmb", "usdtry", "reer", "yabanci", "marj", "enflasyon",
+               "kredi", "fonlama"}
 # Liste sütun genişliği hat adlarından türetilir — yeni bir uzun ad eklendiğinde
 # hizalama sessizce bozulmasın ("enflasyon" 9 karakter, eski sabit 8'di).
 _AD_G = max(len(h.ad) for h in HATLAR) + 1
+# Başlık sütunu da hat listesinden türetilir; sabit 26 karakterdi ve
+# "Kredi & Parasal Büyüklükler" eklenince hizalama sessizce bozuluyordu.
+_BASLIK_G = max(len(h.baslik) for h in HATLAR) + 1
 
 
 def anahtar_uyar(secilen: list["Hat"]):
@@ -183,7 +216,7 @@ def anahtar_uyar(secilen: list["Hat"]):
     # <proje>/.evds_key → kök/.evds_key → kardeş TCMBNetRezerv/.evds_key bakar.
     # Bu kardeş dosya varsa hat düşmez; "eksik" listesine yazmak yanlış alarmdı.
     kardes = KOK / "Aktarılacak Projeler" / "TCMBNetRezerv" / ".evds_key"
-    KARDESE_DUSENLER = {"enflasyon"}
+    KARDESE_DUSENLER = {"enflasyon", "kredi", "fonlama"}
     eksik = [h.ad for h in secilen
              if h.ad in EVDS_HATLAR
              and not (KOK / h.klasor / ".evds_key").exists()
@@ -348,7 +381,7 @@ def commit_push(secilen: list[Hat]):
 def menu() -> tuple[list[Hat], bool, bool]:
     print("\nHatlar:")
     for i, h in enumerate(HATLAR, 1):
-        print(f"  {i}. {h.ad:{_AD_G}s} {h.baslik:26s} {_renk(h.not_, 36) if h.not_ else ''}")
+        print(f"  {i}. {h.ad:{_AD_G}s} {h.baslik:{_BASLIK_G}s} {_renk(h.not_, 36) if h.not_ else ''}")
     print("  0. hepsi")
     print("  (kurulum: --kur · canlı panel: --panel hazine|fx · yardım: --help)")
     sec = input("\nHangileri? (numara/ad, virgülle; boş = hepsi): ").strip()
@@ -378,8 +411,10 @@ def main():
 
     if a.liste:
         for h in HATLAR:
-            print(f"{h.ad:{_AD_G}s} {h.baslik:26s} hafif: {' → '.join(h.hafif)}")
-            if h.tam: print(f"{'':8s} {'':26s} tam  : {' → '.join(h.tam)}   ({h.not_})")
+            print(f"{h.ad:{_AD_G}s} {h.baslik:{_BASLIK_G}s} hafif: {' → '.join(h.hafif)}")
+            # Sütun genişliği hat listesinden TÜRETİLİR; sabit yazılırsa uzun
+            # başlıklı bir hat eklendiğinde hizalama sessizce bozulur.
+            if h.tam: print(f"{'':{_AD_G}s} {'':{_BASLIK_G}s} tam  : {' → '.join(h.tam)}   ({h.not_})")
         return 0
 
     if a.hepsi: secilen, tam, cm = list(HATLAR), a.tam, a.commit
@@ -416,7 +451,7 @@ def main():
 
     print(f"\n{'═'*64}\n  ÖZET\n{'═'*64}")
     for h, ok, mesaj, sn in sonuc:
-        print(f"  {_renk('✓', 32) if ok else _renk('✗', 31)} {h.baslik:26s} {mesaj:34s} {sn:5.0f}s")
+        print(f"  {_renk('✓', 32) if ok else _renk('✗', 31)} {h.baslik:{_BASLIK_G}s} {mesaj:34s} {sn:5.0f}s")
     dusen = [h for h, ok, _, _ in sonuc if not ok]
     if cm:
         if dusen:

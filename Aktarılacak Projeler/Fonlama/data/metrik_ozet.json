@@ -1,0 +1,345 @@
+{
+ "son_gun": "2026-08-20",
+ "esik": {
+  "aofm_taban_mn_tl": 5000.0,
+  "koridor_ustu_pay_pp": 0.05,
+  "donem_min_gun": 5,
+  "gecis_pencere_hafta": 52
+ },
+ "son_hafta": "2026-08-14",
+ "rejim": {
+  "pencere_gun": 253,
+  "net_negatif_gun": 210,
+  "net_pozitif_gun": 42,
+  "fonlama_sifir_gun": 20,
+  "aofm_gecersiz_gun": 34,
+  "aofm_gecersizken_dolu_gun": 33,
+  "taban_esik_mn_tl": 5000.0,
+  "marjinal_kaynak": {
+   "AOSM": 210,
+   "AOFM": 42,
+   "yok": 1
+  },
+  "marjinal_kaynak_tam": {
+   "AOFM": 3373,
+   "AOSM": 390,
+   "TLREF (vekil)": 163,
+   "yok": 9
+  }
+ },
+ "bayrak": {
+  "swap_alim_aktif": false,
+  "swap_satim_aktif": true,
+  "glp_aktif": false,
+  "likidite_senedi_aktif": false,
+  "ihale_fonlama_aktif": false
+ },
+ "zk": {
+  "bloke_bas": "2024-03-15",
+  "bloke_sifir_gun": 3323,
+  "adim_sayisi": 76,
+  "adim_ortalama_gun": 14.0,
+  "adim_gun_dagilimi": {
+   "14": 46,
+   "11": 7,
+   "3": 5,
+   "7": 4
+  },
+  "adim_gun_adi": {
+   "4": 62,
+   "0": 8,
+   "2": 3,
+   "3": 2,
+   "1": 1
+  },
+  "son_adimlar": [
+   {
+    "tarih": "2026-05-22",
+    "degisim_mn_tl": 8595.499000000069
+   },
+   {
+    "tarih": "2026-06-05",
+    "degisim_mn_tl": 31663.256999999983
+   },
+   {
+    "tarih": "2026-06-08",
+    "degisim_mn_tl": -13.255000000121072
+   },
+   {
+    "tarih": "2026-06-19",
+    "degisim_mn_tl": -8540.659999999916
+   },
+   {
+    "tarih": "2026-07-03",
+    "degisim_mn_tl": 34710.6939999999
+   },
+   {
+    "tarih": "2026-07-17",
+    "degisim_mn_tl": -135311.86800000002
+   },
+   {
+    "tarih": "2026-07-31",
+    "degisim_mn_tl": 11289.712000000058
+   },
+   {
+    "tarih": "2026-08-14",
+    "degisim_mn_tl": 9916.331999999937
+   }
+  ],
+  "taban_birim_bagil_medyan": 8.680612032106018e-09,
+  "taban_birim_bagil_son": 1.901726185950756e-09,
+  "taban_birim_bagil_maks": 0.05195177908646532,
+  "taban_birim_maks_tarih": "2018-08-17",
+  "taban_birim_n": 709,
+  "taban_birim_tekil_gun": 1,
+  "taban_kaynak": "TP.TLDTHVADE.KB18 (bin TL → mn TL)",
+  "taban_son_tarih": "2026-08-07",
+  "taban_son_mn_tl": 26707315.21821,
+  "ima_oran_son": 4.270868672798211,
+  "ima_oran_tarih": "2026-08-19",
+  "ima_oran_1y_once": 5.270737223460687
+ },
+ "gecirgenlik": {
+  "gecikme_taramasi": {
+   "ticari_tl": {
+    "korelasyon": {
+     "0": 0.2554,
+     "1": 0.2025,
+     "2": -0.004,
+     "3": 0.0209,
+     "4": 0.164,
+     "5": 0.0882,
+     "6": 0.034,
+     "7": 0.0379,
+     "8": 0.0539
+    },
+    "en_iyi_gecikme_hafta": 0,
+    "en_iyi_korelasyon": 0.2554,
+    "tam_beta": 0.5772,
+    "n": 710,
+    "son_beta": 0.9779,
+    "son_beta_tarih": "2026-08-14",
+    "son_r2": 0.0606
+   },
+   "mevduat_tl": {
+    "korelasyon": {
+     "0": 0.4738,
+     "1": 0.1926,
+     "2": 0.0935,
+     "3": 0.174,
+     "4": 0.2169,
+     "5": 0.1625,
+     "6": 0.1273,
+     "7": 0.0893,
+     "8": 0.1152
+    },
+    "en_iyi_gecikme_hafta": 0,
+    "en_iyi_korelasyon": 0.4738,
+    "tam_beta": 0.462,
+    "n": 710,
+    "son_beta": 0.4051,
+    "son_beta_tarih": "2026-08-14",
+    "son_r2": 0.2501
+   }
+  }
+ },
+ "donemler": [
+  {
+   "bas": "2017-01-16",
+   "son": "2017-01-24",
+   "gun": 7,
+   "aofm_ort": 9.025714285714285,
+   "aofm_maks": 9.12,
+   "koridor_ust_ort": 8.5,
+   "asim_ort_pp": 0.5257142857142855,
+   "asim_maks_pp": 0.6199999999999992,
+   "glp_ort": 10.0,
+   "politika_ort": null
+  },
+  {
+   "bas": "2017-01-26",
+   "son": "2017-08-29",
+   "gun": 150,
+   "aofm_ort": 11.486400000000001,
+   "aofm_maks": 11.99,
+   "koridor_ust_ort": 9.25,
+   "asim_ort_pp": 2.2364,
+   "asim_maks_pp": 2.74,
+   "glp_ort": 11.853333333333333,
+   "politika_ort": null
+  },
+  {
+   "bas": "2017-09-05",
+   "son": "2017-12-29",
+   "gun": 84,
+   "aofm_ort": 12.129880952380953,
+   "aofm_maks": 12.75,
+   "koridor_ust_ort": 9.25,
+   "asim_ort_pp": 2.8798809523809528,
+   "asim_maks_pp": 3.5,
+   "glp_ort": 12.31547619047619,
+   "politika_ort": null
+  },
+  {
+   "bas": "2018-01-02",
+   "son": "2018-04-20",
+   "gun": 79,
+   "aofm_ort": 12.75,
+   "aofm_maks": 12.75,
+   "koridor_ust_ort": 9.25,
+   "asim_ort_pp": 3.5,
+   "asim_maks_pp": 3.5,
+   "glp_ort": 12.75,
+   "politika_ort": null
+  },
+  {
+   "bas": "2018-04-24",
+   "son": "2018-04-30",
+   "gun": 5,
+   "aofm_ort": 13.2,
+   "aofm_maks": 13.5,
+   "koridor_ust_ort": 9.25,
+   "asim_ort_pp": 3.95,
+   "asim_maks_pp": 4.25,
+   "glp_ort": 13.2,
+   "politika_ort": null
+  },
+  {
+   "bas": "2018-05-02",
+   "son": "2018-05-31",
+   "gun": 22,
+   "aofm_ort": 14.318181818181818,
+   "aofm_maks": 16.5,
+   "koridor_ust_ort": 9.25,
+   "asim_ort_pp": 5.068181818181818,
+   "asim_maks_pp": 7.25,
+   "glp_ort": 14.318181818181818,
+   "politika_ort": null
+  },
+  {
+   "bas": "2020-08-27",
+   "son": "2020-09-23",
+   "gun": 20,
+   "aofm_ort": 10.2695,
+   "aofm_maks": 10.65,
+   "koridor_ust_ort": 9.75,
+   "asim_ort_pp": 0.5195000000000001,
+   "asim_maks_pp": 0.9000000000000004,
+   "glp_ort": 11.25,
+   "politika_ort": 8.25
+  },
+  {
+   "bas": "2020-10-12",
+   "son": "2020-11-18",
+   "gun": 27,
+   "aofm_ort": 13.385185185185186,
+   "aofm_maks": 14.8,
+   "koridor_ust_ort": 11.75,
+   "asim_ort_pp": 1.6351851851851849,
+   "asim_maks_pp": 3.0500000000000007,
+   "glp_ort": 14.305555555555555,
+   "politika_ort": 10.25
+  }
+ ],
+ "donemler_alti": [
+  {
+   "bas": "2023-06-22",
+   "son": "2023-07-04",
+   "gun": 6,
+   "aofm_ort": 11.351666666666667,
+   "aofm_min": 8.74,
+   "koridor_alt_ort": 13.5,
+   "asim_ort_pp": 2.148333333333333,
+   "asim_maks_pp": 4.76,
+   "politika_ort": 15.0
+  }
+ ],
+ "dogrulama": {
+  "net_fonlama": {
+   "kaynak": "TP.APIFON1.TOP − TP.APIFON2.TOP ↔ TP.APIFON3",
+   "n": 3928,
+   "maks_fark_mn_tl": 1.1641532182693481e-10,
+   "esik_mn_tl": 1e-06,
+   "son_biz": -902881.7,
+   "son_evds": -902881.7,
+   "gecti": true
+  },
+  "politika": {
+   "kaynak": "TP.PY.P02.1H (ay sonu) ↔ TP.BISPOLFAIZ.TUR (aylık)",
+   "n": 94,
+   "maks_fark_pp": 0.0,
+   "ort_fark_pp": 0.0,
+   "esik_pp": 0.01,
+   "evds_son_ay": "2026-06",
+   "son_biz": 37.0,
+   "son_evds": 37.0,
+   "gecti": true
+  },
+  "tlref": {
+   "kaynak": "TP.BISTTLREF.ORAN ↔ TP.AOFOBAP (BİST gecelik repo AOF)",
+   "n": 1889,
+   "maks_fark_pp": 0.5358000000000018,
+   "ort_fark_pp": 0.02409100052938056,
+   "p99_fark_pp": 0.16698399999999833,
+   "esik_pp": 1.0,
+   "son_tlref": 39.8297,
+   "son_bist": 39.83,
+   "gecti": true
+  },
+  "aosm_taban": {
+   "kaynak": "(TP.APIFON2.IHA − ONI) / günlük 1HI tutarı ≈ 5 iş günü",
+   "n": 297,
+   "medyan_kat": 5.512,
+   "negatif_kalan_gun": 0,
+   "not": "kalan bacağın tamamı haftalık depo alım ihalesi (1HI) varsayılıyor; oran 5'ten belirgin saparsa varsayım zayıflar"
+  },
+  "hatlar_arasi_swap": {
+   "kaynak": "bu hat (TP.SWAPTEKTAR alım−satım)/1000 ↔ rezerv hattı gunluk.csv · swap_yerli_usd",
+   "n": 909,
+   "maks_fark_mlr_usd": 7.105427357601002e-15,
+   "son_biz": -4.01224062,
+   "son_rezerv": -4.01224062,
+   "son_tarih": "2026-08-18",
+   "gecti": true
+  },
+  "gecelik_repo_aylik": {
+   "kaynak": "TP.API.REP.ORT.G1 (aylık, TCMB APİ repo) ↔ TP.AOFOBAP ay ort.",
+   "n": 62,
+   "maks_fark_pp": 4.580454545454543,
+   "son12_maks_pp": 2.7728571428571414,
+   "not": "iki seri AYNI ARACI ÖLÇMÜYOR (biri TCMB'nin APİ reposu, öteki BİST piyasa reposu); makullük sınavıdır, hattı durdurmaz"
+  },
+  "aofm_kompozisyon": {
+   "kaynak": "(ihale×politika + kotasyon repo×koridor tavanı + GLP×GLP satış) / toplam ↔ TP.APIFON4",
+   "n": 3851,
+   "medyan_fark_pp": 0.4450556487269388,
+   "p95_fark_pp": 8.75,
+   "maks_fark_pp": 17.77,
+   "son250_medyan_pp": 0.0,
+   "son_gun": "2026-08-06",
+   "son_fark_pp": 0.0,
+   "esik_pp": 0.05,
+   "not": "Uç sapmalar geç likidite penceresi dönemlerinde ve kompozisyon geçişlerinde yoğunlaşır; kalibrasyon sabiti KULLANILMAZ.",
+   "gecti": true
+  },
+  "aofm_bant": {
+   "kaynak": "AOFM ∈ [koridor tabanı, GLP satış (yoksa tavan)]",
+   "n": 3852,
+   "alt_ihlal_gun": 31,
+   "ust_ihlal_gun": 1,
+   "alt_ihlal_son": "2024-03-21",
+   "ust_ihlal_son": "2019-07-25",
+   "not": "AOFM bir STOK ortalamasıdır; faiz kararı haftalarında eski fonlama stokta durduğu için bandın dışına düşebilir. Tanı amaçlıdır, hattı durdurmaz.",
+   "gecti": false
+  }
+ },
+ "aosm_not": "AOSM bu çalışmanın türetmesidir; TCMB tarafından yayımlanan bir seri DEĞİLDİR.",
+ "zk_oran_not": "İma edilen ZK oranı gerçekleşmiş TESİS oranıdır; TCMB'nin tebliğle ilan ettiği oran DEĞİLDİR.",
+ "uyarilar": [
+  "ÖLÜ SERİ: 'glp_alis' son 252 iş gününün TAMAMINDA 0 — dolu görünüyor ama bilgi taşımıyor; grafikte 'yok' olarak işlenecek.",
+  "AYRI KALEM DEĞİL: ZK bloke hesabı (TP.AB.A19) 3323 iş günü boyunca tam sıfır basmış ve 15.03.2024 tarihinde doluyor. Öncesi 'ZK yoktu' değil, 'ayrı yayımlanmıyordu' demektir; sıfırlar veri sayılmadı ve ZK paneli o tarihten başlıyor.",
+  "ZK TABANI VİNTAJ: 1 haftada iki tablo (bie_tldthvade ↔ bie_zorundth) %1'den fazla ayrışıyor; en büyüğü 17.08.2018 (5.2%). Birim değil, revizyon farkıdır — taban EVDS toplamından okunduğu için hesap etkilenmez.",
+  "AOFM BANT DIŞI: 1 iş gününde AOFM, GLP satış faizinin de üstünde — tanım gereği imkânsız bir değer. Kotasyon serilerinde eksik gün olabilir.",
+  "AOFM TABANSIZ: son bir yılda 33 iş gününde fonlama 5 milyar TL eşiğinin altında olduğu hâlde EVDS bir AOFM değeri basmış. O günler geçersiz işaretlendi; grafikte kesikli, metinde 'fonlama maliyeti' cümlesi kurulmuyor."
+ ]
+}

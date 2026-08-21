@@ -3,7 +3,7 @@
 Her proje için dört bat: **kur → çalıştır → push**, ara sıra **güncelle**.
 Panosu olan iki projede beşinci bat: **panel** (canlı dashboard).
 Hepsi `_ortak/ortak.bat`'a (panel: kökteki `panel.py`'ye) delege eder — bir düzeltme
-yedi yere değil bir yere gider.
+on yere değil bir yere gider.
 
 Kök klasörde ayrıca iki sarmalayıcı var, hepsini tek yerden yönetmek için:
 `guncelle.bat` (tüm hatlar, kurulum `--kur` dahil) ve `panel.bat` (paneller).
@@ -17,6 +17,9 @@ Kök klasörde ayrıca iki sarmalayıcı var, hepsini tek yerden yönetmek için
 | `hazine-ihrac/` | Hazine İhraç | `Aktarılacak Projeler/hazineihrac` |
 | `fx-haber-endeksi/` | FX Haber Endeksi | `Aktarılacak Projeler/indices` |
 | `yiyecek-marj/` | Yiyecek Hizmetleri Marjı | `Research/marj` |
+| `enflasyon/` | Enflasyon Panosu | `Aktarılacak Projeler/Enflasyon` |
+| `kredi-parasal/` | Kredi & Parasal Büyüklükler | `Aktarılacak Projeler/Kredi` |
+| `fonlama-likidite/` | TCMB Fonlama & Likidite | `Aktarılacak Projeler/Fonlama` |
 
 ## Dört işlem
 
@@ -40,10 +43,10 @@ Kök klasörde ayrıca iki sarmalayıcı var, hepsini tek yerden yönetmek için
 
 | Komut | İş |
 |---|---|
-| `kur.bat` | **kurulum**: 7 hattın `.venv` + `requirements.txt` + site `npm install` + Playwright |
+| `kur.bat` | **kurulum**: bütün hatların `.venv` + `requirements.txt` + site `npm install` + Playwright |
 | `kur.bat --hat tcmb hazine` | yalnız seçilen hatlar · `--site-yok` · `--liste` |
 | `guncelle.bat` | menü: hangi hatlar, hafif/tam, commit? |
-| `guncelle.bat --hepsi --tam` | 7 hattın tamamı, ağır adımlar dahil |
+| `guncelle.bat --hepsi --tam` | hatların tamamı, ağır adımlar dahil |
 | `guncelle.bat --kur --hepsi` | aynı kurulum, siteyi ve Playwright'ı atlayarak |
 | `guncelle.bat --kur tcmb fx` | yalnız seçilenleri kur |
 | `site.bat` | **siteyi aç** (npm install gerekiyorsa yapar, tarayıcıyı açar) |

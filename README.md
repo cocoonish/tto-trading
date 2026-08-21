@@ -71,6 +71,9 @@ Her hattın ayrıca **tek başına çalışan** bir deposu var (yalnız o projey
 | `hazine` | Hazine İhraç Takvimi & İhale Analizi | Hazine sitesi (scraper) | [hazine-ihrac](https://github.com/cocoonish/hazine-ihrac) |
 | `fx` | FX Haber-Duyarlılık Endeksi | GDELT + RSS + FinBERT | [fx-haber-endeksi](https://github.com/cocoonish/fx-haber-endeksi) |
 | `marj` | Yiyecek Hizmetleri: Fiyat/Maliyet Marjı | EVDS + TÜİK MEDAS | [yiyecek-marj](https://github.com/cocoonish/yiyecek-marj) |
+| `enflasyon` | Enflasyon Panosu | EVDS3 TÜFE ağacı + ÖKTG + anketler | — |
+| `kredi` | Kredi ve Parasal Büyüklükler | EVDS3 haftalık para-banka + analitik bilanço | — |
+| `fonlama` | TCMB Fonlama ve Likidite | EVDS3 APİ + kotasyon + TLREF + ZK | — |
 
 Siteye girmeyen ek araç: [try-asw](https://github.com/cocoonish/try-asw) — Bloomberg TRY OIS
 eğrisiyle ASW hesaplayıcı (BBG terminali gerektirir, o yüzden sitede yok).

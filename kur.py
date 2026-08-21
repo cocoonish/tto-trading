@@ -169,10 +169,13 @@ def main() -> int:
     if a.liste:
         for h in hatlar:
             req = KOK / h.klasor / "requirements.txt"
-            print(f"  {h.ad:9s} {h.baslik:26s} {h.klasor}"
+            # Genişlikler guncelle.py'nin hat listesinden gelir (sabit 26/9
+            # yazılırsa 'Kredi & Parasal Büyüklükler' gibi uzun bir başlık
+            # eklendiğinde hizalama sessizce kayar).
+            print(f"  {h.ad:{g._AD_G}s} {h.baslik:{g._BASLIK_G}s} {h.klasor}"
                   f"{'' if req.exists() else '   (requirements.txt YOK)'}")
         if not a.site_yok:
-            print(f"  {'site':9s} {'Astro sitesi (npm install)':26s} site/")
+            print(f"  {'site':{g._AD_G}s} {'Astro sitesi (npm install)':{g._BASLIK_G}s} site/")
         return 0
 
     print("\n▶ Ön koşullar")

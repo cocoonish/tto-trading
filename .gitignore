@@ -22,6 +22,10 @@ Aktarılacak Projeler/hazineihrac/.git.disabled/
 # Büyük, yeniden üretilebilir veri önbellekleri
 Aktarılacak Projeler/indices/data/gdelt_cache.json
 Aktarılacak Projeler/indices/data/news_cache.json
+# EVDS ham yanıt önbellekleri: 12 saatlik TTL ile her koşuda tazelenir, yani her veri
+# güncellemesinde yüzlerce dosyalık gürültü diff üretirler ve hepsi yeniden üretilebilir.
+# İŞLENMİŞ CSV'ler (data/*.csv) commit'te KALIR — cron'un hafif kipi onlara dayanır.
+Aktarılacak Projeler/*/data/cache/
 
 # Yerel Claude ayarları
 **/.claude/settings.local.json
