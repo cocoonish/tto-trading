@@ -259,6 +259,7 @@ BOLGE_KALIPLARI = {
 
 # Bülten bölümleri: (id, başlık, bölge, alan) — sıra sayfadaki sıradır.
 HABER_BOLUMLERI = [
+    ("kilit", "Kilit gelişmeler", None, "kilit"),
     ("kurum", "Kurum duyuruları — Türkiye", None, "kurum"),
     ("kurum_global", "Kurum duyuruları — ABD Hazinesi ve borç yönetimi", None, "kurum_global"),
     ("tr_makro", "Türkiye — makro ve veri", "tr", "makro"),
@@ -268,6 +269,38 @@ HABER_BOLUMLERI = [
     ("global_politika", "Global — jeopolitik ve ticaret", "global", "politika"),
     ("global_piyasa", "Global — piyasa ve emtia", "global", "piyasa"),
 ]
+# ─────────────────────────── haber ÖNEM puanlaması
+# Sorun: bülten haberleri bölümlere dağıtıyor ama hepsini eşit ağırlıkta gösteriyordu.
+# ABD Hazinesi'nin geri alım büyüklüğünü ikiye katlaması ile "ECB başkanı WEF'e aday"
+# haberi yan yana, aynı puntoda duruyordu. Haftanın ana sürücüsü bu yüzden gözden kaçtı.
+#
+# Puan üç kaynaktan gelir:
+#   1. Konu ağırlığı — aşağıdaki kalıplar (piyasayı fiilen hareket ettiren olaylar).
+#   2. Kaynak itibarı — KAYNAK_PUANI (0-10) beşte bir ağırlıkla.
+#   3. Kümedeki kaynak sayısı — aynı öyküyü kaç yayın yazdı; yayılma önemin ölçüsüdür.
+# Kurum duyurusu ayrıca sabit bonus alır: birincil kaynaktır, haber değil OLAYdır.
+ONEM_KALIPLARI = [
+    # (ağırlık, kalıp) — sıra önemsiz, en yüksek eşleşen ağırlık alınır
+    (6, r"buyback|geri al[ıi]m|quarterly refunding|refinansman duyuru|debt ceiling|"
+        r"bor[çc] tavan|m[üu]dahale|intervention|emergency|ola[ğg]an[üu]st[üu] toplant|"
+        r"moratoryum|default|temerr[üu]t|devalu|peg|kur [çc]apas"),
+    (5, r"faiz karar|rate decision|rate cut|rate hike|policy decision|ppk karar|"
+        r"zorunlu kar[şs][ıi]l|makroihtiyati|sermaye kontrol|capital control|"
+        r"not indirim|downgrade|not art[ıi]r|upgrade|kredi notu"),
+    (4, r"tarife|tariff|yapt[ıi]r[ıi]m|sanction|ticaret sava|trade war|ambargo|"
+        r"ihale|auction|tahvil ihrac|bond sale|issuance|arz|supply|"
+        r"bilan[çc]o k[üu][çc]|quantitative|qt|qe|swap hatt|swap line"),
+    (3, r"t[üu]fe|cpi|enflasyon veri|inflation data|tar[ıi]m d[ıi][şs][ıi] istihdam|"
+        r"payroll|i[şs]sizlik|unemployment|gsyh|gdp|b[üu]y[üu]me veri|pmi|"
+        r"tutanak|minutes|enflasyon raporu|projeksiyon|dot plot"),
+    (2, r"opec|petrol|oil price|alt[ıi]n|gold|repo|likidite|liquidity|"
+        r"cari a[çc]|b[üu]t[çc]e a[çc]|rezerv|reserve"),
+]
+# Bu puanın üstündeki maddeler "Kilit gelişmeler" bölümüne çıkar ve ayrıntılı işlenir.
+KILIT_ESIK = 6.0
+# Kilit bölümünde gösterilecek azami madde.
+KILIT_SINIRI = 6
+
 # Bölüm başına azami madde (kurum duyuruları sınırsız).
 BOLUM_SINIRI = 10
 

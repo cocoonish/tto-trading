@@ -26,7 +26,7 @@ from ayar import (HABER_KAYNAKLARI, HABER_SINIRI, HABER_ILGILI, HABER_GURULTU,
                   TCMB_DUYURU_URL, RESMI_GAZETE_URL, RG_ILGILI,
                   ABD_HAZINE_URL, ABD_HAZINE_ILGILI,
                   ALAN_KALIPLARI, BOLGE_KALIPLARI, HABER_BOLUMLERI, BOLUM_SINIRI,
-                  KAYNAK_PUANI)
+                  KAYNAK_PUANI, ONEM_KALIPLARI, KILIT_ESIK, KILIT_SINIRI)
 
 
 @dataclass
@@ -40,6 +40,8 @@ class Haber:
     ozet: str = ""            # akıştaki açıklama metni — bültenin "ayrıntı"sı buradan gelir
     bolge: str = ""           # tr | global
     alan: str = ""            # makro | politika | piyasa | kurum
+    kaynak_sayisi: int = 1    # aynı öyküyü kaç yayın yazdı
+    onem: float = 0.0         # hesaplanan önem puanı
 
 
 def _getir(url: str, zaman_asimi=20, dogrulama: bool = True) -> str | None:
@@ -284,6 +286,7 @@ def _kumele(haberler: list[Haber], esik: float = 0.40) -> list[Haber]:
                 yeni_temsil = h
             kumeler[eslesen] = (kk | kh, yeni_temsil, n + 1)
     for _, temsil, n in kumeler:
+        temsil.kaynak_sayisi = n
         if n > 1:
             temsil.kaynak = f"{temsil.kaynak} (+{n - 1} kaynak)"
         kalanlar.append(temsil)
@@ -354,6 +357,37 @@ def abd_hazine_duyurulari(pencere_gun: int = 7) -> tuple[list[Haber], bool]:
     return out, True
 
 
+def onem_puani(h: Haber) -> float:
+    """Haberin piyasa önemi: konu ağırlığı + kaynak itibarı + yayılma.
+
+    Neden gerekli: bülten haberleri bölümlere dağıtıyor ama hepsini eşit ağırlıkta
+    gösteriyordu. Bir borç yönetimi kararı ile bir atama haberi aynı satırda
+    duruyordu; haftanın ana sürücüsü bu yüzden gözden kaçtı.
+    """
+    metin = f"{h.baslik} {h.ozet}".lower()
+    konu = 0
+    for agirlik, kalip in ONEM_KALIPLARI:
+        if re.search(kalip, metin, re.I):
+            konu = max(konu, agirlik)
+    puan = float(konu)
+    puan += _kaynak_puani(h) / 5.0                 # itibar: en fazla +2
+    puan += min(h.kaynak_sayisi - 1, 6) * 0.5      # yayılma: en fazla +3
+    if h.kurum:
+        puan += 3.0                                # birincil kaynak: haber değil olay
+    if h.ozet:
+        puan += 0.5                                # ne olduğu belli
+    return round(puan, 2)
+
+
+def kilit_gelismeler(haberler: list[Haber]) -> list[Haber]:
+    """Eşiği aşan, bültenin başında ayrıntılı işlenecek maddeler."""
+    for h in haberler:
+        h.onem = onem_puani(h)
+    aday = [h for h in haberler if h.onem >= KILIT_ESIK]
+    aday.sort(key=lambda h: (h.onem, h.zaman or ""), reverse=True)
+    return aday[:KILIT_SINIRI]
+
+
 def bolumle(haberler: list[Haber], zengin: int = 26) -> list[dict]:
     """Haberleri sayfadaki bölümlere dağıt, sonra GÖRÜNECEK olanları zenginleştir.
 
@@ -362,8 +396,12 @@ def bolumle(haberler: list[Haber], zengin: int = 26) -> list[dict]:
     maddelerin görüneceği belli oluyor, istek yalnız onlar için yapılıyor.
     """
     out, gorunen = [], []
+    kilit = kilit_gelismeler(haberler)
+    kilit_kimlik = {id(h) for h in kilit}
     for bid, baslik, bolge, alan in HABER_BOLUMLERI:
-        if alan in ("kurum", "kurum_global"):
+        if alan == "kilit":
+            secilen = kilit
+        elif alan in ("kurum", "kurum_global"):
             secilen = [h for h in haberler if h.kurum and h.alan == alan]
         else:
             aday = [h for h in haberler
