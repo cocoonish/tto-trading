@@ -3,6 +3,24 @@
  "_son_dogrulama": "2026-08-23",
  "kesin": [
   {
+   "tarih": "2026-09-04",
+   "saat": "15:30",
+   "ulke": "ABD",
+   "olay": "ABD tarım dışı istihdam (Ağustos)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi"
+  },
+  {
+   "tarih": "2026-09-09",
+   "saat": "",
+   "ulke": "ABD",
+   "onem": 1,
+   "olay": "ABD Hazinesi: uzun vadeli geri alım (buyback) operasyon büyüklüğü ikiye katlanıyor",
+   "kaynak": "home.treasury.gov, 19.08.2026 tarihli duyuru",
+   "beklenti": "operasyon başına azami 2 mlr USD → en az 4 mlr USD; 10-20 ve 20-30 yıl sektörleri",
+   "not": "4 Kasım'a kadar (refinansman çeyreği sonuna kadar) geçerli. Uzun vadeli getiri ve dolar için doğrudan arz/talep etkisi."
+  },
+  {
    "tarih": "2026-09-10",
    "saat": "14:00",
    "ulke": "TR",
@@ -12,12 +30,36 @@
    "not": "Karar 14:00; özet 17 Eylül'de."
   },
   {
+   "tarih": "2026-09-11",
+   "saat": "15:30",
+   "ulke": "ABD",
+   "olay": "ABD TÜFE (Ağustos)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi"
+  },
+  {
    "tarih": "2026-09-17",
    "saat": "",
    "ulke": "TR",
    "olay": "TCMB PPK toplantı özeti",
    "onem": 2,
    "kaynak": "TCMB 2026 Para Politikası metni, Ek 2"
+  },
+  {
+   "tarih": "2026-10-02",
+   "saat": "15:30",
+   "ulke": "ABD",
+   "olay": "ABD tarım dışı istihdam (Eylül)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi"
+  },
+  {
+   "tarih": "2026-10-14",
+   "saat": "15:30",
+   "ulke": "ABD",
+   "olay": "ABD TÜFE (Eylül)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi"
   },
   {
    "tarih": "2026-10-22",
@@ -37,6 +79,33 @@
    "kaynak": "TCMB 2026 Para Politikası metni, Ek 2"
   },
   {
+   "tarih": "2026-11-04",
+   "saat": "",
+   "ulke": "ABD",
+   "onem": 1,
+   "olay": "ABD Hazinesi üç aylık refinansman duyurusu (Quarterly Refunding)",
+   "kaynak": "home.treasury.gov",
+   "beklenti": "gelecek çeyreğin ihraç kompozisyonu ve geri alım büyüklükleri burada ilan edilir",
+   "not": "Vade primi ve uzun uç arzı için çeyreğin en önemli takvim kalemi."
+  },
+  {
+   "tarih": "2026-11-06",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "olay": "ABD tarım dışı istihdam (Ekim)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi",
+   "not": "ABD kış saatine geçti: 08:30 ET = 16:30 TSİ."
+  },
+  {
+   "tarih": "2026-11-10",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "olay": "ABD TÜFE (Ekim)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi"
+  },
+  {
    "tarih": "2026-11-12",
    "saat": "",
    "ulke": "TR",
@@ -54,6 +123,14 @@
    "kaynak": "TCMB 2026 Para Politikası metni, Ek 2"
   },
   {
+   "tarih": "2026-12-04",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "olay": "ABD tarım dışı istihdam (Kasım)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi"
+  },
+  {
    "tarih": "2026-12-10",
    "saat": "14:00",
    "ulke": "TR",
@@ -61,6 +138,14 @@
    "onem": 1,
    "kaynak": "TCMB 2026 Para Politikası metni, Ek 2",
    "not": "Karar 14:00; özet 17 Aralık'ta."
+  },
+  {
+   "tarih": "2026-12-10",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "olay": "ABD TÜFE (Kasım)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi"
   },
   {
    "tarih": "2026-12-17",
@@ -86,71 +171,6 @@
    "olay": "TCMB PPK faiz kararı",
    "onem": 1,
    "kaynak": "TCMB 2026 Para Politikası metni, Ek 2"
-  },
-  {
-   "tarih": "2026-09-04",
-   "saat": "15:30",
-   "ulke": "ABD",
-   "olay": "ABD tarım dışı istihdam (Ağustos)",
-   "onem": 1,
-   "kaynak": "bls.gov yayım takvimi"
-  },
-  {
-   "tarih": "2026-09-11",
-   "saat": "15:30",
-   "ulke": "ABD",
-   "olay": "ABD TÜFE (Ağustos)",
-   "onem": 1,
-   "kaynak": "bls.gov yayım takvimi"
-  },
-  {
-   "tarih": "2026-10-02",
-   "saat": "15:30",
-   "ulke": "ABD",
-   "olay": "ABD tarım dışı istihdam (Eylül)",
-   "onem": 1,
-   "kaynak": "bls.gov yayım takvimi"
-  },
-  {
-   "tarih": "2026-10-14",
-   "saat": "15:30",
-   "ulke": "ABD",
-   "olay": "ABD TÜFE (Eylül)",
-   "onem": 1,
-   "kaynak": "bls.gov yayım takvimi"
-  },
-  {
-   "tarih": "2026-11-06",
-   "saat": "16:30",
-   "ulke": "ABD",
-   "olay": "ABD tarım dışı istihdam (Ekim)",
-   "onem": 1,
-   "kaynak": "bls.gov yayım takvimi",
-   "not": "ABD kış saatine geçti: 08:30 ET = 16:30 TSİ."
-  },
-  {
-   "tarih": "2026-11-10",
-   "saat": "16:30",
-   "ulke": "ABD",
-   "olay": "ABD TÜFE (Ekim)",
-   "onem": 1,
-   "kaynak": "bls.gov yayım takvimi"
-  },
-  {
-   "tarih": "2026-12-04",
-   "saat": "16:30",
-   "ulke": "ABD",
-   "olay": "ABD tarım dışı istihdam (Kasım)",
-   "onem": 1,
-   "kaynak": "bls.gov yayım takvimi"
-  },
-  {
-   "tarih": "2026-12-10",
-   "saat": "16:30",
-   "ulke": "ABD",
-   "olay": "ABD TÜFE (Kasım)",
-   "onem": 1,
-   "kaynak": "bls.gov yayım takvimi"
   }
  ],
  "kural": [],
@@ -174,6 +194,11 @@
    "ne": "2027 PPK takvimi",
    "kaynak": "TCMB 2027 Para Politikası metni (18 Aralık 2026)",
    "neden": "O tarihte ilan edilecek."
+  },
+  {
+   "ne": "ABD Hazinesi geri alım (buyback) operasyon takvimi — tek tek operasyon günleri",
+   "kaynak": "treasurydirect.gov / home.treasury.gov buyback schedule",
+   "neden": "Duyuruda 'güncellenmiş geçici takvim daha sonra yayımlanacak' deniyor."
   }
  ]
 }

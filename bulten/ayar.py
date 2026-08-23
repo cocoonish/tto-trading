@@ -156,6 +156,17 @@ RG_ILGILI = (r"merkez bankas|tcmb|bddk|spk|hazine|maliye|vergi|kur\b|d[öo]viz|k
              r"banka|sermaye piyasas|zorunlu kar[şs][ıi]l|faiz|tahvil|bono|kambiyo|"
              r"finansal kiralama|sigortac|emeklilik|ihracat|ithalat|g[üu]mr[üu]k|te[şs]vik")
 
+# ABD Hazinesi basın duyuruları — borç yönetimi operasyonlarının BİRİNCİL kaynağı.
+# Bu kaynak eksikken sistem 19 Ağustos 2026'daki geri alım (buyback) büyüklüğü
+# artırımını tamamen kaçırdı; oysa o duyuru haftanın dolar ve uzun vadeli faiz
+# hareketinin ana sebebiydi. Merkez bankası odaklı aramalar bunu YAKALAYAMAZ:
+# geri alım, refinansman ve ihale takvimi para politikası değil BORÇ YÖNETİMİDİR.
+ABD_HAZINE_URL = "https://home.treasury.gov/news-data/press-releases/search/{yil}.json"
+# Piyasayı ilgilendiren duyuru başlıkları (geri kalan: yaptırım, vergi, atama…).
+ABD_HAZINE_ILGILI = (r"buyback|refunding|auction|debt|borrowing|financing|bill|note|bond|"
+                     r"yield|treasury international capital|tic data|cash balance|"
+                     r"quarterly|issuance|maturit|liquidity")
+
 TCMB_DUYURU_URL = "https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Duyurular/Basin/{yil}"
 
 HABER_KAYNAKLARI = [
@@ -215,6 +226,9 @@ HABER_KAYNAKLARI = [
      "url": "https://news.google.com/rss/search?q=(%22ekonomi+program%C4%B1%22+OR+%22orta+vadeli+program%22+OR+%22maliye+politikas%C4%B1%22+OR+%22asgari+%C3%BCcret%22+OR+vergi+d%C3%BCzenleme)+when:2d&hl=tr&gl=TR&ceid=TR:tr"},
     {"ad": "Arama — Türkiye (yabancı basın)", "bolge": "tr", "alan": "karisik", "ozet_yok": True,
      "url": "https://news.google.com/rss/search?q=(%22Turkish+lira%22+OR+CBRT+OR+%22Turkey+economy%22+OR+%22Turkey+inflation%22)+when:2d&hl=en-US&gl=US&ceid=US:en"},
+    {"ad": "Arama — ABD borç yönetimi ve tahvil arzı", "bolge": "global", "alan": "makro",
+     "ozet_yok": True,
+     "url": "https://news.google.com/rss/search?q=(%22Treasury+buyback%22+OR+%22quarterly+refunding%22+OR+%22Treasury+auction%22+OR+%22debt+ceiling%22+OR+%22bond+supply%22+OR+%22term+premium%22)+when:3d&hl=en-US&gl=US&ceid=US:en"},
     {"ad": "Arama — Fed ve ECB", "bolge": "global", "alan": "makro", "ozet_yok": True,
      "url": "https://news.google.com/rss/search?q=(%22Federal+Reserve%22+OR+ECB+OR+%22Bank+of+Japan%22)+(rates+OR+inflation+OR+policy)+when:1d&hl=en-US&gl=US&ceid=US:en"},
 ]
@@ -245,7 +259,8 @@ BOLGE_KALIPLARI = {
 
 # Bülten bölümleri: (id, başlık, bölge, alan) — sıra sayfadaki sıradır.
 HABER_BOLUMLERI = [
-    ("kurum", "Kurum duyuruları", None, "kurum"),
+    ("kurum", "Kurum duyuruları — Türkiye", None, "kurum"),
+    ("kurum_global", "Kurum duyuruları — ABD Hazinesi ve borç yönetimi", None, "kurum_global"),
     ("tr_makro", "Türkiye — makro ve veri", "tr", "makro"),
     ("tr_politika", "Türkiye — politika ve düzenleme", "tr", "politika"),
     ("tr_piyasa", "Türkiye — piyasa", "tr", "piyasa"),

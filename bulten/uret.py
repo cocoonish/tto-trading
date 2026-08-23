@@ -303,7 +303,10 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
     if haber_tara:
         try:
             import haber as haber_m
-            h, okunamayan = haber_m.tara(pencere_saat=72 if haftalik else 30)
+            # Haftalık bülten haftanın TAMAMINI tarar (168 saat): 19 Ağustos'taki ABD
+            # Hazinesi geri alım duyurusu 72 saatlik pencerenin dışında kalmış ve
+            # haftanın ana sürücüsü bültene hiç girmemişti.
+            h, okunamayan = haber_m.tara(pencere_saat=168 if haftalik else 36)
             haberler = [asdict(x) for x in h]
             bolumler = haber_m.bolumle(h)
         except Exception as e:                                  # noqa: BLE001

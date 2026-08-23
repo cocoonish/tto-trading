@@ -24,6 +24,7 @@ from email.utils import parsedate_to_datetime
 
 from ayar import (HABER_KAYNAKLARI, HABER_SINIRI, HABER_ILGILI, HABER_GURULTU,
                   TCMB_DUYURU_URL, RESMI_GAZETE_URL, RG_ILGILI,
+                  ABD_HAZINE_URL, ABD_HAZINE_ILGILI,
                   ALAN_KALIPLARI, BOLGE_KALIPLARI, HABER_BOLUMLERI, BOLUM_SINIRI,
                   KAYNAK_PUANI)
 
@@ -318,6 +319,41 @@ def _siniflandir(baslik: str, ozet: str, kaynak_bolge: str, kaynak_alan: str) ->
     return bolge, alan
 
 
+def abd_hazine_duyurulari(pencere_gun: int = 7) -> tuple[list[Haber], bool]:
+    """ABD Hazinesi basın duyuruları — borç yönetimi operasyonları.
+
+    Neden ayrı bir kaynak: geri alım (buyback) büyüklüğü, üç aylık refinansman,
+    ihale takvimi ve nakit yönetimi Hazine'nin işidir, merkez bankasının değil.
+    Fed/ECB odaklı haber aramaları bunları getirmez; genel haber akışları da
+    çoğu zaman taşımaz. Oysa uzun vadeli faizin ve doların haftalık hareketi
+    bazen tamamen buradan gelir.
+    Dönüş: (duyurular, okundu_mu).
+    """
+    yil = datetime.now().year
+    ham = _getir(ABD_HAZINE_URL.format(yil=yil), 25)
+    if not ham:
+        return [], False
+    try:
+        maddeler = json.loads(ham).get("items", [])
+    except Exception:
+        return [], False
+    sinir = (datetime.now() - timedelta(days=pencere_gun)).strftime("%Y-%m-%d")
+    out = []
+    for m in maddeler:
+        tarih = str(m.get("date", ""))[:10]
+        if tarih < sinir:
+            continue
+        baslik = (m.get("title") or "").strip()
+        if not re.search(ABD_HAZINE_ILGILI, baslik, re.I):
+            continue
+        url = m.get("url") or ""
+        if url and not url.startswith("http"):
+            url = "https://home.treasury.gov" + url
+        out.append(Haber(baslik, url, "ABD Hazinesi", "kurum", tarih, True, "",
+                         "global", "kurum_global"))
+    return out, True
+
+
 def bolumle(haberler: list[Haber], zengin: int = 26) -> list[dict]:
     """Haberleri sayfadaki bölümlere dağıt, sonra GÖRÜNECEK olanları zenginleştir.
 
@@ -327,8 +363,8 @@ def bolumle(haberler: list[Haber], zengin: int = 26) -> list[dict]:
     """
     out, gorunen = [], []
     for bid, baslik, bolge, alan in HABER_BOLUMLERI:
-        if alan == "kurum":
-            secilen = [h for h in haberler if h.kurum]
+        if alan in ("kurum", "kurum_global"):
+            secilen = [h for h in haberler if h.kurum and h.alan == alan]
         else:
             aday = [h for h in haberler
                     if not h.kurum and h.bolge == bolge and h.alan == alan]
@@ -472,6 +508,16 @@ def tara(pencere_saat: int = 30) -> tuple[list[Haber], list[str]]:
                 haberler.append(h)
     else:
         dusen.append("Resmî Gazete")
+
+    abd, abd_ok = abd_hazine_duyurulari(max(7, int(pencere_saat / 24) + 1))
+    if abd_ok:
+        for h in abd:
+            anahtar = _sadelestir(h.baslik)[:90]
+            if anahtar not in gorulen:
+                gorulen.add(anahtar)
+                haberler.append(h)
+    else:
+        dusen.append("ABD Hazinesi duyuruları")
 
     tcmb, okundu = tcmb_duyurulari()
     if okundu:
