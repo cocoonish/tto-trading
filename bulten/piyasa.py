@@ -312,12 +312,26 @@ def tr_faizleri() -> list[dict]:
     out = []
 
     def al(hat, anahtar, ad, birim="%", ondalik=2, aciklama=""):
+        """Bir büyüklüğü hattan al — KENDİ tarihi ve KENDİ geçerlilik bayrağıyla.
+
+        Neden: hattın genel veri tarihi ile tek bir alanın tarihi ayrışabiliyor.
+        Ağırlıklı ortalama fonlama maliyeti bunun canlı örneği: hat 21.08 tarihli
+        koşsa da bu alanın son GEÇERLİ günü 07.08 olabiliyor ve hat bunu
+        `<alan>_gecerli: false` ile ilan ediyor. Hattın tarihini bu alana yapıştırmak,
+        iki hafta önceki bir sayıyı bugünkü gibi göstermek olurdu.
+        """
         d = gozlem.anlik(hat) or {}
         v = d.get(anahtar)
         if v is None or isinstance(v, bool) or not isinstance(v, (int, float)):
             return
+        tarih = d.get(f"{anahtar}_tarih") or d.get("_tarih", "")
+        gecerli = d.get(f"{anahtar}_gecerli")
+        if gecerli is False:
+            aciklama = ((aciklama + " · ") if aciklama else "") + \
+                "kaynak bu değeri GÜNCEL saymıyor; gösterilen son geçerli gün"
         out.append({"ad": ad, "deger": round(float(v), ondalik), "birim": birim,
-                    "tarih": d.get("_tarih", ""), "aciklama": aciklama})
+                    "tarih": tarih, "aciklama": aciklama,
+                    "gecerli": False if gecerli is False else True})
 
     al("fonlama-likidite", "politika", "Politika faizi (1 hafta repo)")
     al("fonlama-likidite", "koridor_alt", "Koridor alt bandı")
