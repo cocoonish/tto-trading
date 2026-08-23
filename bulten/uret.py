@@ -121,8 +121,128 @@ def beklenti_iliştir(kayitlar: list) -> None:
             k.beklenti = m
 
 
+# ═══════════════════════════════════ kural tabanlı YAZI
+# Kullanıcının istediği: madde listesi değil, "piyasada ne oldu, ne bekleniyor"
+# diye okunan bir metin. Yorum katmanı (LLM) her koşuda çalışmayabilir — bulut
+# koşusunda hiç çalışmaz — o yüzden metnin bir TABANI burada, veriden üretilir.
+# Bu metin yorum İÇERMEZ: yalnız ölçülen hareketi ve takvimi cümleye çevirir.
+
+def _cumleler_birlestir(parcalar: list[str]) -> str:
+    parcalar = [p for p in parcalar if p]
+    if not parcalar:
+        return ""
+    if len(parcalar) == 1:
+        return parcalar[0] + "."
+    return "; ".join(parcalar[:-1]) + " ve " + parcalar[-1] + "."
+
+
+def piyasa_ozeti(b: dict, haftalik: bool = False) -> dict:
+    """(ne_oldu, ne_bekleniyor) — veriden türetilmiş iki paragraf."""
+    g = {x["anahtar"]: x for x in b["gostergeler"]}
+    pencere = "Geçen hafta" if haftalik else "Son veri yayımından bu yana"
+
+    # ── ne oldu
+    kur_p = []
+    if "kur" in g and g["kur"]["fark"]:
+        f = g["kur"]["fark"]
+        kur_p.append(f"USD/TRY {g['kur']['metin']} seviyesine {'yükseldi' if f > 0 else 'geriledi'}"
+                     f" ({'+' if f > 0 else '−'}{olay_m._s(abs(f), 2)})")
+    if "d1a" in g and g["d1a"]["fark"]:
+        f = g["d1a"]["fark"]
+        kur_p.append(f"kurun bir aylık yıllıklandırılmış artış hızı %{g['d1a']['metin']}"
+                     f" ({'+' if f > 0 else '−'}{olay_m._s(abs(f), 1)} puan)")
+    if "h_net" in g and g["h_net"]["fark"]:
+        f = g["h_net"]["fark"]
+        kur_p.append(f"net rezerv {olay_m._s(abs(f), 1)} milyar dolar "
+                     f"{'arttı' if f > 0 else 'azaldı'} ve {g['h_net']['metin']} milyar dolara ulaştı")
+    if "h_swap_haric" in g and g["h_swap_haric"]["fark"]:
+        f = g["h_swap_haric"]["fark"]
+        kur_p.append(f"swap hariç net rezerv {g['h_swap_haric']['metin']} milyar dolar "
+                     f"({'+' if f > 0 else '−'}{olay_m._s(abs(f), 1)})")
+
+    faiz_p = []
+    if "politika" in g:
+        faiz_p.append(f"politika faizi %{g['politika']['metin']}")
+    if "tlref" in g:
+        fark_pol = None
+        try:
+            fark_pol = float(g["tlref"]["deger"]) - float(g["politika"]["deger"])
+        except Exception:
+            pass
+        m = f"gecelik gerçekleşen faiz (TLREF) %{g['tlref']['metin']}"
+        if fark_pol is not None:
+            m += (f", politika faizinin {olay_m._s(abs(fark_pol), 2)} puan "
+                  f"{'üzerinde' if fark_pol > 0 else 'altında'}")
+        faiz_p.append(m)
+    if "aofm" in g:
+        faiz_p.append(f"ağırlıklı ortalama fonlama maliyeti %{g['aofm']['metin']}")
+
+    enf_p = []
+    if "tufe_12a" in g:
+        enf_p.append(f"yıllık TÜFE %{g['tufe_12a']['metin']}")
+    if "tufe_3a" in g and "tufe_3a_ham" in g:
+        enf_p.append(f"son üç ayın yıllıklandırılmış hızı mevsimsellikten arındırılmış "
+                     f"%{g['tufe_3a']['metin']}, ham %{g['tufe_3a_ham']['metin']}")
+
+    akim_p = []
+    if "toplam_4h" in g:
+        v = g["toplam_4h"]["deger"]
+        akim_p.append(f"yabancı yatırımcının dört haftalık net {'girişi' if v > 0 else 'çıkışı'} "
+                      f"{olay_m._s(abs(v), 0)} milyon dolar")
+    if "g_ar_13y" in g:
+        akim_p.append(f"kur etkisinden arındırılmış kredi büyümesi (13 haftalık yıllıklandırılmış) "
+                      f"%{g['g_ar_13y']['metin']}")
+
+    p1 = []
+    if kur_p:
+        p1.append(f"{pencere} kur ve rezerv tarafında: " + _cumleler_birlestir(kur_p))
+    if faiz_p:
+        p1.append("Para politikası tarafında " + _cumleler_birlestir(faiz_p))
+    if enf_p:
+        p1.append("Enflasyonda son yayımlanan veriye göre " + _cumleler_birlestir(enf_p))
+    if akim_p:
+        p1.append(_cumleler_birlestir(akim_p).capitalize())
+
+    # Öne çıkanlar listesi hemen altta zaten duruyor; metinde en fazla ikisi anılır,
+    # yoksa aynı cümleler iki kez okunur.
+    onemli = [o["metin"] for o in b["one_cikanlar"]][:2]
+    if onemli:
+        p1.append("Değişim sınırını aşanlar arasında: " + " ".join(onemli))
+
+    # ── ne bekleniyor
+    kritik = b.get("kritik_takvim") or []
+    yakin = [k for k in kritik if k["kalan_gun"] <= (7 if haftalik else 4)]
+    uzak = [k for k in kritik if k["kalan_gun"] > (7 if haftalik else 4)][:5]
+    p2 = []
+    if yakin:
+        satir = []
+        for k in yakin:
+            m = (f"{k['tr_tarih']} {k['gun']}" + (f" {k['saat']}" if k["saat"] else "")
+                 + f" — {k['olay']}")
+            if k.get("beklenti"):
+                m += f" ({k['beklenti']})"
+            satir.append(m)
+        p2.append(("Önümüzdeki hafta" if haftalik else "Önümüzdeki günlerde")
+                  + " takvimde birinci derece veri var: " + "; ".join(satir) + ".")
+    else:
+        p2.append("Önümüzdeki hafta birinci derece bir veri ya da karar yok."
+                  if haftalik else
+                  "Önümüzdeki birkaç gün içinde birinci derece bir veri ya da karar yok.")
+    if uzak:
+        p2.append("Daha ileride: " + "; ".join(
+            f"{k['tr_tarih']} {k['olay']}" + (f" ({k['beklenti']})" if k.get("beklenti") else "")
+            for k in uzak) + ".")
+
+    duyuru = b["haberler"]["kurum"]
+    if duyuru:
+        p2.append("Kurum duyurusu: " + "; ".join(h["baslik"] for h in duyuru[:4]) + ".")
+
+    return {"ne_oldu": " ".join(p1), "ne_bekleniyor": " ".join(p2)}
+
+
 def uret(tarih: date | None = None, haber_tara: bool = True,
-         takvim_ufku: int | None = None) -> dict:
+         takvim_ufku: int | None = None, tur: str = "gunluk") -> dict:
+    """tur: "gunluk" (hafta içi sabah) | "haftalik" (pazar akşamı, haftaya bakış)."""
     tarih = tarih or date.today()
     ufuk = takvim_ufku or ayar.TAKVIM_UFKU
 
@@ -151,8 +271,8 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         if icerik:
             gruplar.append({"id": gid, "baslik": gbaslik, "olaylar": icerik})
 
-    # 3) takvim — Pazartesi (ya da --haftalik) günü kapsam genişler
-    haftalik = tarih.weekday() == 0
+    # 3) takvim — haftalık bültende kapsam genişler
+    haftalik = tur == "haftalik"
     asgari = ayar.TAKVIM_HAFTALIK_ASGARI_ONEM if haftalik else ayar.TAKVIM_ASGARI_ONEM
     kayitlar = takvim_m.topla(ufuk, asgari)
     beklenti_iliştir(kayitlar)
@@ -179,7 +299,7 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         except Exception as e:                                  # noqa: BLE001
             okunamayan = [f"haber taraması düştü: {type(e).__name__}"]
 
-    return {
+    b = {
         "tarih": tarih.isoformat(),
         "gun": takvim_m.GUNLER_TR[tarih.weekday()],
         "tr_tarih": f"{tarih.day} {takvim_m.AYLAR_TR[tarih.month - 1]} {tarih.year}",
@@ -199,8 +319,16 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         },
         "yorum": None,
         "yorum_zamani": None,
-        "surum": 1,
+        "tur": tur,
+        "surum": 2,
     }
+    b["ozet"] = piyasa_ozeti(b, haftalik=haftalik)
+    return b
+
+
+def ozet_ekle(b: dict) -> dict:
+    b["ozet"] = piyasa_ozeti(b, haftalik=b.get("haftalik", False))
+    return b
 
 
 def yaz(b: dict) -> Path:

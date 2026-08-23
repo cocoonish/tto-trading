@@ -100,6 +100,26 @@ def son_gorulme(hat: str) -> tuple[str, str] | None:
     return son_v, ilk.get("t", "")
 
 
+def gun_once(hat: str, gun: int = 7) -> dict | None:
+    """En az `gun` gün önceki son anlık görüntü — haftalık kıyas için.
+
+    Günlük bülten "son veri yayımından bu yana"ya bakar; haftalık bülten ise
+    "geçen hafta bu saatte neredeydik" sorusunu sorar. İkisi farklı sorulardır:
+    haftalık seride birincisi tek bir yayımı, ikincisi tüm haftayı kapsar.
+    """
+    from datetime import datetime, timedelta
+    sinir = datetime.now() - timedelta(days=gun)
+    aday = None
+    for kayit in gecmis_oku(hat):
+        try:
+            t = datetime.fromisoformat(str(kayit.get("t", "")).replace("Z", "+00:00")).replace(tzinfo=None)
+        except Exception:
+            continue
+        if t <= sinir:
+            aday = kayit
+    return aday
+
+
 # ─────────────────────────────────────────── git'ten tarihçe kurma
 def git_bootstrap(hatlar: list[str], sessiz=False) -> dict[str, int]:
     """Depo geçmişindeki ozet.json sürümlerinden tarihçe kur.

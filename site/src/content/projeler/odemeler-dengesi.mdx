@@ -6,7 +6,7 @@ updatedDate: 2026-08-23
 tags: ['ödemeler dengesi', 'cari denge', 'dış finansman', 'bpm6', 'çevirme oranı', 'eurobond', 'rezerv', 'tcmb']
 durum: 'aktif'
 kaynak: 'TCMB EVDS3 — ödemeler dengesi analitik sunum (bie_odana6) ve ayrıntılı sunum (bie_odeayrsunum6), altın ve enerji hariç cari işlemler (bie_hariccariacik), dış borç çevirme oranları (bie_oderoll), yurt dışı borçlanma senetleri (bie_odeydiebs), haftalık dış borç ödemeleri (bie_dbafod), TÜİK GSYH ve TCMB kur serisi'
-guncelleme: 'aylık (ödemeler dengesi, ~7 hafta gecikmeli) + haftalık (dış borç ödeme takvimi, çarşamba) + üç aylık (GSYH paydası)'
+guncelleme: 'aylık (ödemeler dengesi, ~6–8 hafta gecikmeli) + haftalık (dış borç ödeme takvimi, çarşamba) + üç aylık (GSYH paydası)'
 ---
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
@@ -1120,8 +1120,11 @@ grafiğin üstüne taze bir tarih yazılmaz:
 - **Ana kimlik.** −CA = net finansman girişi + sermaye hesabı + NHN − rezerv.
 - **İşaret kimliği.** Net giriş = brüt yükümlülük − yerleşik varlık edinimi.
 - **Yığın kimliği.** Yükümlülük kalemlerinin toplamı = brüt yükümlülük oluşumu
-  (<Deger proje="odemeler-dengesi" anahtar="kopru_n" ondalik={0}>422</Deger> ayda
-  sınandı).
+  (Şekil 05'teki yığının toplamı çizgiye eşit olmalı).
+- **Sunum köprüsü.** Ayrıntılı sunumun rezerv dâhil finans hesabı = analitik
+  sunumun rezerv hariç kalemi + rezerv varlıklar;
+  <Deger proje="odemeler-dengesi" anahtar="kopru_n" ondalik={0}>422</Deger> ayda
+  sınandı.
 - **Çekirdek köprüsü.** Manşet = çekirdek + altın + enerji.
 - **Alt kalem kimliği.** CA = mal + hizmet + birincil + ikincil.
 - **Finansman ihtiyacı kimliği.** İhtiyaç = kaynak.
@@ -1158,7 +1161,7 @@ Uyarı durumu:
 Tam liste her koşuda
 [`uyarilar.json`](/projeler/odemeler-dengesi/uyarilar.json) dosyasına yazılır;
 sayfadaki canlı değerlerin kaynağı ise
-[`ozet.json`](/projeler/odemeler-dengesi/ozet.json).
+[makine okunur veri özeti](/projeler/odemeler-dengesi/ozet.json).
 
 ### Revizyon politikası
 
@@ -1168,7 +1171,7 @@ sayfadaki canlı değerlerin kaynağı ise
 </div>
 
 Bu, sayfadaki sayıların **canlı** olmasının sebebidir: metin sabit, sayı
-`ozet.json`'dan gelir. Revizyon geldiğinde cümlelerin yeniden yazılması
+veri özetinden gelir. Revizyon geldiğinde cümlelerin yeniden yazılması
 gerekmez — cümleler sayıdan bağımsız kurulmuştur.
 
 ## EVDS3 erişiminin kendi tuzakları
@@ -1178,10 +1181,15 @@ eski `evds2` servisi **kapalıdır** ve anahtar URL'de değil, istek
 **başlığında** taşınır. Üç tuzak doğrudan sessiz bayatlama üretir:
 
 1. **Yanıt yaklaşık 1000 satırda kırpılır ve aralığın SONUNDAN doldurulur.**
-   Fazlası uyarı vermeden atılır. Ödemeler dengesi 1975'te başlayan bir aylık
-   seridir; tek istekte çekilirse geri gelen veri **son 83 yıl değil, son 1000
-   ay** olur ve serinin **başı** sessizce kaybolur. Hat bu yüzden yıllık
-   parçalama yapar.
+   Fazlası uyarı vermeden atılır; kaybolan, serinin **başıdır**. Ödemeler
+   dengesinin aylık ailesi
+   <Deger proje="odemeler-dengesi" anahtar="gozlem_aylik" ondalik={0}>552</Deger>
+   gözlemle sınırın altında kaldığı için tek parça gider — ama GSYH paydasını
+   dolara çeviren **günlük kur serisi** 1990'ların ortasından bugüne binlerce iş
+   günüdür ve tek istekte çekilseydi yalnız son birkaç yılı dönerdi. Hat bu
+   yüzden günlük serileri 366 günlük, haftalık serileri 900 haftalık parçalar
+   hâlinde çeker; ayrıca dönen satır sayısı sınıra dayandığında **görünür bir
+   kırpma riski uyarısı** düşer — sessizce kabul edilmez.
 2. **Satır sınırı seri sayısına bağlı değildir.** Tek istekte altı seri çekmek
    satır sayısını değiştirmez; seriler demetler hâlinde çekilir. Bir demette
    bozuk kod varsa EVDS **bütün isteği** reddeder — o zaman seriler tek tek

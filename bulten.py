@@ -6,6 +6,7 @@
   python3 bulten.py --habersiz      # RSS taramasını atla (hızlı, ağsız)
   python3 bulten.py --guncelle      # önce hafif hatları koştur, sonra bülteni üret
   python3 bulten.py --ufuk 35       # takvim ufkunu uzat (gün)
+  python3 bulten.py --tur haftalik  # pazar akşamı "haftaya bakış" bülteni
   python3 bulten.py --gecmis-kur    # git geçmişinden anlık görüntü deposunu kur (bir kez)
 
 Çıktı: site/src/data/bulten/YYYY-MM-DD.json  → site /bulten/ sayfasında yayımlanır.
@@ -37,6 +38,9 @@ def main() -> int:
     ap.add_argument("--guncelle", action="store_true",
                     help="önce guncelle.py ile hafif hatları tazele")
     ap.add_argument("--ufuk", type=int, default=None)
+    ap.add_argument("--tur", choices=("gunluk", "haftalik"), default=None,
+                    help="haftalik = pazar akşamı 'haftaya bakış' bülteni "
+                         "(varsayılan: pazar günü haftalık, diğer günler günlük)")
     ap.add_argument("--gecmis-kur", action="store_true",
                     help="git geçmişinden anlık görüntü deposunu doldur")
     a = ap.parse_args()
@@ -55,7 +59,11 @@ def main() -> int:
             print("  [uyarı] bazı hatlar düştü; bülten mevcut veriyle üretilecek")
 
     import uret
-    b = uret.uret(haber_tara=not a.habersiz, takvim_ufku=a.ufuk)
+    from datetime import date
+    # Pazar akşamı bülteni haftalıktır; hafta içi sabah bülteni günlük. Cumartesi
+    # bülten üretilmez (kullanıcı kararı) ama elle koşulursa günlük kipte çıkar.
+    tur = a.tur or ("haftalik" if date.today().weekday() == 6 else "gunluk")
+    b = uret.uret(haber_tara=not a.habersiz, takvim_ufku=a.ufuk, tur=tur)
     print(uret.ozet_yaz(b))
     y = uret.yaz(b)
     print(f"\n  yazıldı: {y.relative_to(KOK)}")

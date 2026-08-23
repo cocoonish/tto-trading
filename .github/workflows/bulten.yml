@@ -18,7 +18,10 @@ name: Günlük bülten
 
 on:
   schedule:
-    - cron: '23 4 * * *' # her gün 04:23 UTC = 07:23 İstanbul
+    # Hafta içi sabah bülteni: 04:30 UTC = 07:30 İstanbul (Pzt–Cum).
+    - cron: '30 4 * * 1-5'
+    # Pazar akşamı "haftaya bakış": 15:00 UTC = 18:00 İstanbul.
+    - cron: '0 15 * * 0'
   workflow_dispatch: {}
 
 permissions:
@@ -66,8 +69,15 @@ jobs:
         continue-on-error: true
         run: python guncelle.py tcmb usdtry reer yabanci fonlama kredi enflasyon hazine
 
+      # Pazar koşusu haftalık bülten üretir ("geçen hafta / önümüzdeki hafta");
+      # hafta içi koşusu günlük. Cumartesi hiç koşmaz.
       - name: Bülteni üret
-        run: python bulten.py
+        run: |
+          if [ "$(date -u +%u)" = "7" ]; then
+            python bulten.py --tur haftalik
+          else
+            python bulten.py --tur gunluk
+          fi
 
       - name: Commit
         run: |
