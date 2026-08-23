@@ -1,0 +1,27 @@
+{
+ "kosum": "2026-08-23T21:06:15",
+ "son_gun": "2026-08-21",
+ "son_ay": "2026-08-01",
+ "tarihce_bas": "2013-01-01",
+ "istek_sayisi": 0,
+ "sure_sn": 8.3,
+ "evren": {
+  "toplam_kiymet": 6190,
+  "nominal_sifir_kuponlu": 860,
+  "nominal_fiyati_gelen": 860,
+  "tufex_anapara": 20,
+  "tufex_fiyati_gelen": 20,
+  "aktif_kuponlu_tahvil": 50,
+  "kupon_oran_kardesi_yok": 0,
+  "degisken_kupon_atilan": 0
+ },
+ "tufe_zinciri": {
+  "kat": 31.831245139548948,
+  "ortusme_ay": "2026-01-01"
+ },
+ "gunluk_seri": 7,
+ "aylik_seri": 16,
+ "uyarilar": [
+  "AD BİÇİMİ: bie_pydibsarsiv grubunda 13 seri adı ayrıştırılamadı (0.2%) — TCMB ad biçimini değiştirmiş olabilir; bu kıymetler evrene girmedi."
+ ]
+}

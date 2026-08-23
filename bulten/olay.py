@@ -1,0 +1,205 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""Bülten — olay motoru: eşikleri uygular, cümleyi kurar.
+
+Girdi: hatların güncel ozet.json'ları + gecmis/ deposu.
+Çıktı: olay listesi. Her olay bir cümle, bir seviye (önemli/dikkat) ve
+kanıtı (eski değer, yeni değer, fark) taşır. Yorum YOK — yorum ayrı katman.
+
+Tasarım kararı: olayın metni burada, veriyle BİRLİKTE üretilir. Yorum katmanı
+bu cümleleri yeniden yazabilir ama SAYIYI üretemez; sayı hep buradan gelir.
+Böylece bültende uydurma rakam bulunamaz.
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+
+from ayar import IZLEMLER, RITIM, GRUPLAR, Izlem
+import gozlem
+
+
+@dataclass
+class Olay:
+    grup: str
+    seviye: str            # "onemli" | "dikkat" | "bilgi"
+    baslik: str
+    metin: str
+    hat: str = ""
+    anahtar: str = ""
+    deger: float | None = None
+    onceki: float | None = None
+    fark: float | None = None
+    birim: str = ""
+    tarih: str = ""
+    onceki_tarih: str = ""
+    aciklama: str = ""
+
+
+def _s(x: float, ondalik: int = 1) -> str:
+    """Türkçe sayı biçimi: binlik ayıracı nokta, ondalık ayıracı virgül."""
+    m = f"{x:,.{ondalik}f}"          # 1,234.56
+    return m.replace(",", "|").replace(".", ",").replace("|", ".")
+
+
+def _yon(fark: float, artis: str = "arttı", azalis: str = "azaldı") -> str:
+    return artis if fark > 0 else azalis
+
+
+def _seviye(buyukluk: float, iz: Izlem) -> str | None:
+    if iz.onemli is not None and buyukluk >= iz.onemli:
+        return "onemli"
+    if iz.dikkat is not None and buyukluk >= iz.dikkat:
+        return "dikkat"
+    return None
+
+
+def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
+                tarih: str, onceki_tarih: str) -> Olay | None:
+    yeni = simdi.get(iz.anahtar)
+    if yeni is None or isinstance(yeni, bool) or not isinstance(yeni, (int, float)):
+        return None
+
+    # AKIM: değerin kendisi olaydır (haftalık net akım gibi); kıyas gerekmez.
+    if iz.tip == "akim":
+        sv = _seviye(abs(yeni), iz)
+        if not sv:
+            return None
+        yon = "giriş" if yeni > 0 else "çıkış"
+        return Olay(iz.grup, sv, iz.ad,
+                    f"{iz.ad}: {_s(abs(yeni), iz.ondalik)} {iz.birim} net {yon}.",
+                    iz.hat, iz.anahtar, yeni, None, None, iz.birim, tarih, onceki_tarih,
+                    iz.aciklama)
+
+    # SEVİYE: eşiğin aşılması olaydır (fark değil, mutlak seviye).
+    if iz.tip == "seviye":
+        sv = _seviye(abs(yeni), iz)
+        if not sv:
+            return None
+        return Olay(iz.grup, sv, iz.ad,
+                    f"{iz.ad}: {_s(yeni, iz.ondalik)} {iz.birim}.",
+                    iz.hat, iz.anahtar, yeni, None, None, iz.birim, tarih, onceki_tarih,
+                    iz.aciklama)
+
+    if once is None:
+        return None
+    eski = once.get(iz.anahtar)
+    if eski is None or isinstance(eski, bool) or not isinstance(eski, (int, float)):
+        return None
+    fark = yeni - eski
+
+    if iz.tip == "degisim":
+        if abs(fark) < 1e-12:
+            return None
+        isaret = "+" if fark > 0 else "−"
+        return Olay(iz.grup, "onemli", iz.ad,
+                    f"{iz.ad} değişti: {_s(eski, iz.ondalik)} → {_s(yeni, iz.ondalik)} "
+                    f"{iz.birim} ({isaret}{_s(abs(fark), iz.ondalik)} {iz.birim}).",
+                    iz.hat, iz.anahtar, yeni, eski, fark, iz.birim, tarih, onceki_tarih,
+                    iz.aciklama)
+
+    if iz.tip == "yuzde":
+        if eski == 0:
+            return None
+        oran = (yeni / eski - 1) * 100
+        sv = _seviye(abs(oran), iz)
+        if not sv:
+            return None
+        return Olay(iz.grup, sv, iz.ad,
+                    f"{iz.ad} %{_s(abs(oran), 2)} {_yon(oran, 'yükseldi', 'geriledi')}: "
+                    f"{_s(eski, iz.ondalik)} → {_s(yeni, iz.ondalik)}.",
+                    iz.hat, iz.anahtar, yeni, eski, oran, "%", tarih, onceki_tarih,
+                    iz.aciklama)
+
+    # delta (varsayılan)
+    sv = _seviye(abs(fark), iz)
+    if not sv:
+        return None
+    return Olay(iz.grup, sv, iz.ad,
+                f"{iz.ad} {_s(abs(fark), iz.ondalik)} {iz.birim} {_yon(fark)}: "
+                f"{_s(eski, iz.ondalik)} → {_s(yeni, iz.ondalik)} {iz.birim}.",
+                iz.hat, iz.anahtar, yeni, eski, fark, iz.birim, tarih, onceki_tarih,
+                iz.aciklama)
+
+
+def _yas_saat(zaman_metni: str) -> float | None:
+    try:
+        t = datetime.fromisoformat(zaman_metni.replace("Z", "+00:00")).replace(tzinfo=None)
+    except Exception:
+        return None
+    return (datetime.now() - t).total_seconds() / 3600
+
+
+def yeni_veri_olaylari(hatlar: list[str], pencere_saat: float = 30.0) -> list[Olay]:
+    """Hangi hattın verisi son koşuda ilerledi? Bülten 'bugün ne yayımlandı' der."""
+    out = []
+    for hat in hatlar:
+        simdi = gozlem.anlik(hat)
+        if not simdi:
+            continue
+        v = gozlem._tarih_of(simdi)
+        onc = gozlem.onceki_surum(hat, v)
+        if onc is None:
+            continue
+        ilk = next((k for k in gozlem.gecmis_oku(hat) if k.get("v") == v), None)
+        if not ilk:
+            continue
+        yas = _yas_saat(ilk.get("t", ""))
+        if yas is not None and yas <= pencere_saat:
+            out.append(Olay("diger", "bilgi", f"{hat}: yeni veri",
+                            f"{hat}: veri sürümü ilerledi ({onc.get('v')} → {v}).",
+                            hat=hat, tarih=v, onceki_tarih=str(onc.get("v"))))
+    return out
+
+
+def gecikme_olaylari() -> list[Olay]:
+    """Bir hattın verisi beklenen ritmin ötesinde sessizse söyle.
+
+    'Sessiz bayatlama' denetiminin bültendeki karşılığı: kaynak yayımlamadıysa
+    da bunu BİLMEK gerekir, çünkü sayfadaki sayılar o sürümde donmuştur.
+    """
+    out = []
+    for hat, azami_gun in RITIM.items():
+        sg = gozlem.son_gorulme(hat)
+        if not sg:
+            continue
+        surum, ilk = sg
+        yas = _yas_saat(ilk)
+        if yas is None:
+            continue
+        gun = int(yas // 24)
+        if gun > azami_gun:
+            out.append(Olay("diger", "dikkat", f"{hat}: veri gecikti",
+                            f"{hat}: son veri sürümü {surum}; {gun} gündür yenilenmedi "
+                            f"(beklenen ritim ≤ {azami_gun} gün).",
+                            hat=hat, tarih=surum,
+                            aciklama="Kaynak yayımlamamış olabilir; sayfadaki sayılar bu "
+                                     "sürümde donmuş demektir."))
+    return out
+
+
+def topla() -> list[Olay]:
+    olaylar: list[Olay] = []
+    for hat in sorted({iz.hat for iz in IZLEMLER}):
+        simdi = gozlem.anlik(hat)
+        if not simdi:
+            continue
+        v = gozlem._tarih_of(simdi)
+        onc = gozlem.onceki_surum(hat, v)
+        once_d = onc.get("d") if onc else None
+        for iz in [i for i in IZLEMLER if i.hat == hat]:
+            o = izlem_olayi(iz, simdi, once_d, v, str(onc.get("v")) if onc else "")
+            if o:
+                olaylar.append(o)
+    olaylar += yeni_veri_olaylari(list(RITIM))
+    olaylar += gecikme_olaylari()
+    sira = {g: i for i, (g, _) in enumerate(GRUPLAR)}
+    onem = {"onemli": 0, "dikkat": 1, "bilgi": 2}
+    olaylar.sort(key=lambda o: (onem.get(o.seviye, 3), sira.get(o.grup, 99), o.baslik))
+    return olaylar
+
+
+if __name__ == "__main__":
+    for o in topla():
+        im = {"onemli": "!!", "dikkat": " ·", "bilgi": " i"}.get(o.seviye, "  ")
+        print(f" {im} [{o.grup:10s}] {o.metin}")

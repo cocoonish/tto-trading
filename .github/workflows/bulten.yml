@@ -1,0 +1,91 @@
+# Günlük bülten — kural tabanlı çekirdek, bulutta.
+#
+# Neden bulut: bülten "güne başlarken hazır" olmalı; bu, bilgisayarın açık
+# olmasına bağlı kalmamalı. Buradaki iş YORUM YAZMAZ — yalnız ölçer: hatların
+# ozet.json'larını tazeler, eşikleri uygular, takvimi ve kaynak taramasını
+# ekler, site/src/data/bulten/<tarih>.json yazar.
+#
+# Yorum katmanı ayrıdır (Mac'te zamanlanmış Claude görevi) ve aynı dosyanın
+# 'yorum' alanını doldurur; bu iş o alanı KORUR (bkz. bulten/uret.py: yaz()).
+#
+# Gereken depo secret'ları:
+#   TTO_EVDS_KEY    (zorunlu) EVDS'e giden hatlar için.
+#   TTO_YAYIN_TOKEN (isteğe bağlı) public depoya (cocoonish.github.io) yazma
+#                   yetkisi olan fine-grained PAT. Yoksa bülten yalnız bu depoya
+#                   commit'lenir; siteye Mac'teki yayinla.py ile çıkar.
+
+name: Günlük bülten
+
+on:
+  schedule:
+    - cron: '23 4 * * *' # her gün 04:23 UTC = 07:23 İstanbul
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bulten
+  cancel-in-progress: false
+
+jobs:
+  bulten:
+    runs-on: ubuntu-latest
+    env:
+      TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
+      # secrets bağlamı adım `if:` ifadelerinde okunamaz; iş düzeyinde env'e
+      # alınıp `env.YAYIN_TOKEN != ''` diye denetlenir.
+      YAYIN_TOKEN: ${{ secrets.TTO_YAYIN_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Bağımlılıklar
+        run: pip install pandas numpy scipy statsmodels plotly requests feedparser openpyxl xlrd
+
+      # Anahtar yoksa iş YEŞİL bitmesin diye değil — bülten yine üretilebilir —
+      # ama görünür uyarı düşsün: veriler depodaki son sürümde kalacak.
+      - name: EVDS anahtarı var mı
+        id: anahtar
+        run: |
+          if [ -z "${TTO_EVDS_KEY}" ]; then
+            echo "::warning::TTO_EVDS_KEY tanımlı değil — hatlar tazelenemez, bülten depodaki son veriden üretilir."
+            echo "var=hayir" >> "$GITHUB_OUTPUT"
+          else
+            echo "var=evet" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Yalnız hızlı ve EVDS'e dayanan hatlar. Ağır adımlar (--tam: FinBERT,
+      # Hazine scraper) bilinçli olarak dışarıda; onlar yerelde koşulur.
+      - name: Veri hatlarını tazele (hafif)
+        if: steps.anahtar.outputs.var == 'evet'
+        continue-on-error: true
+        run: python guncelle.py tcmb usdtry reer yabanci fonlama kredi enflasyon hazine
+
+      - name: Bülteni üret
+        run: python bulten.py
+
+      - name: Commit
+        run: |
+          git config user.name  "tto-bulten"
+          git config user.email "bot@users.noreply.github.com"
+          git add site/src/data/bulten bulten/gecmis bulten/onbellek site/public/projeler || true
+          if git diff --cached --quiet; then
+            echo "değişiklik yok"
+          else
+            git commit -m "bülten: $(date -u +%Y-%m-%d) (otomatik)"
+            git pull --rebase --autostash
+            git push
+          fi
+
+      # Public depoya yayın: yalnız token tanımlıysa. Token yoksa bülten bu
+      # depoda durur ve siteye ilk yayinla.py koşusunda çıkar.
+      - name: Siteyi yayına gönder
+        if: env.YAYIN_TOKEN != ''
+        run: |
+          git clone --depth 1 "https://x-access-token:${YAYIN_TOKEN}@github.com/cocoonish/cocoonish.github.io.git" /tmp/yayin
+          python yayinla.py --derleme-yok --klon /tmp/yayin -m "bülten: $(date -u +%Y-%m-%d)"

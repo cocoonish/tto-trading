@@ -1,0 +1,489 @@
+# -*- coding: utf-8 -*-
+"""Merkezi Yönetim Bütçesi & Borç Stoku — ozet.json üretimi.
+
+Sayfa metnindeki OYNAK her sayı buradan beslenir (CLAUDE.md kural 5):
+MDX'te `<Deger proje="butce-borc" anahtar="..." ondalik={1}>yedek</Deger>`.
+Tarihsel/metodolojik sabitler (formüller, kurum tanımları, doğrulama örnekleri)
+sayfada STATİK kalır — onlar veri tazelendikçe değişmez.
+
+Bütün değerler data/ altındaki ÜRETİLMİŞ dosyalardan okunur; elle sayı
+yazılmaz. Bir değer kaynakta yoksa anahtar ATLANIR ve stderr'e uyarı basılır —
+MDX'teki statik yedek görünür, ama sessizce yanlış bir sayı basılmaz.
+
+Koşum:  python3 ozet_uret.py   (önce veri.py → metrik.py → grafik.py)
+"""
+from __future__ import annotations
+
+import json
+import sys
+
+import pandas as pd
+
+from veri import PROJE, VERI, AY_TR, TAZELIK, ay_ad, ceyrek_ad, gun_ad
+
+O: dict = {}
+
+
+def uyar(m: str) -> None:
+    print(f"UYARI: {m}", file=sys.stderr)
+
+
+def tr_sayi(v, ondalik: int = 1) -> str:
+    """Türkçe sayı biçimi (binlik nokta, ondalık virgül, eksi U+2212).
+
+    ozet.json'daki METİN anahtarları (kapsam/uyarı cümleleri) sayfaya olduğu
+    gibi basılır; Python'un varsayılan `repr`i oraya "0.0" ve "13353.29" gibi
+    İngilizce biçimler taşırdı.
+    """
+    if v is None:
+        return "—"
+    try:
+        m = f"{float(v):,.{ondalik}f}"
+    except (TypeError, ValueError):
+        return str(v)
+    return (m.replace(",", " ").replace(".", ",").replace(" ", ".")
+             .replace("-", "−"))
+
+
+def tr_yuzde(v, ondalik: int = 1) -> str:
+    """İşaret yüzde iminin ÖNÜNE gelir: "−%8,2" ("%−8,2" değil)."""
+    if v is None:
+        return "—"
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return str(v)
+    return ("−" if f < 0 else "") + "%" + tr_sayi(abs(f), ondalik)
+
+
+def koy(anahtar: str, deger, ondalik: int | None = 2) -> None:
+    if deger is None or (isinstance(deger, float) and pd.isna(deger)):
+        uyar(f"'{anahtar}' kaynakta yok — anahtar atlandı.")
+        return
+    if ondalik is None:
+        O[anahtar] = deger
+    elif ondalik == 0:
+        O[anahtar] = int(round(float(deger)))
+    else:
+        O[anahtar] = round(float(deger), ondalik)
+
+
+def son(s: pd.Series):
+    s = pd.Series(s).dropna()
+    return (float(s.iloc[-1]), s.index[-1]) if len(s) else (None, None)
+
+
+def tr_tarih(t) -> str:
+    t = pd.Timestamp(t)
+    return f"{t.day:02d}.{t.month:02d}.{t.year}"
+
+
+def tr_ay(t) -> str:
+    """AYLIK çıpa için "06.2026". Aylık damga ay BAŞINA oturuyor; gün
+    yazılırsa ("01.06.2026") okur o güne ait bir gözlem sanır."""
+    t = pd.Timestamp(t)
+    return f"{t.month:02d}.{t.year}"
+
+
+def _seri(df: pd.DataFrame, kol: str) -> pd.Series:
+    return df[kol] if kol in df.columns else pd.Series(dtype=float)
+
+
+def main() -> int:
+    M = pd.read_csv(VERI / "aylik_metrik.csv", index_col=0, parse_dates=True)
+    C = pd.read_csv(VERI / "ceyreklik_metrik.csv", index_col=0, parse_dates=True)
+    H = pd.read_csv(VERI / "haftalik_metrik.csv", index_col=0, parse_dates=True)
+    m = json.loads((VERI / "metrik_ozet.json").read_text(encoding="utf-8"))
+    vd = json.loads((VERI / "veri_durum.json").read_text(encoding="utf-8"))
+    uy = json.loads((PROJE / "uyarilar.json").read_text(encoding="utf-8"))
+
+    s_ay = pd.Timestamp(m["son_ay"])
+    s_ceyrek = pd.Timestamp(m["son_ceyrek"])
+    s_dis = pd.Timestamp(m["son_dis_ceyrek"])
+    s_hafta = pd.Timestamp(m["son_hafta"])
+    s_gun = pd.Timestamp(m["son_gun"])
+    bugun = pd.Timestamp.today().normalize()
+
+    # ===================================================== dönem çıpaları
+    # "_tarih" hattın BAŞROL dönemidir: bütçe ayı. İkinci ve üçüncü frekanslar
+    # ayrı anahtarlarla taşınır — sayfada hangi cümlenin hangi tarihe
+    # çıpalandığı okunabilsin.
+    O["_tarih"] = tr_ay(s_ay)
+    O["_tarih2"] = tr_tarih(s_hafta)          # haftalık menkul kıymet bacağı
+    O["_tarih3"] = ceyrek_ad(s_ceyrek)        # üç aylık GSYH / finansal hesap
+    O["ay"] = ay_ad(s_ay)
+    O["ay_kisa"] = tr_ay(s_ay)
+    O["ay_ad"] = AY_TR[s_ay.month]
+    O["yil"] = int(s_ay.year)
+    O["ceyrek"] = ceyrek_ad(s_ceyrek)
+    O["dis_ceyrek"] = ceyrek_ad(s_dis)
+    O["hafta"] = gun_ad(s_hafta)
+    O["hafta_kisa"] = tr_tarih(s_hafta)
+    O["kur_gun"] = gun_ad(s_gun)
+    O["kosum_tarihi"] = tr_tarih(bugun)
+    # Yayım gecikmesi DUVAR SAATİNE göre. Verinin kendi son gününü referans
+    # almak denetimi kendi kendine referanslı yapar.
+    koy("gecikme_butce_gun", (bugun - s_ay).days, 0)
+    koy("gecikme_hafta_gun", (bugun - s_hafta).days, 0)
+    koy("gecikme_ceyrek_gun", (bugun - s_ceyrek).days, 0)
+    koy("gecikme_dis_gun", (bugun - s_dis).days, 0)
+    koy("gecikme_kur_gun", (bugun - s_gun).days, 0)
+
+    # ===================================================== bütçe: düzeyler
+    for ad, kol, ond in (
+            ("denge_12a", "denge_12a", 2), ("fdd_12a", "fdd_12a", 2),
+            ("gelir_12a", "gelir_12a", 2), ("gider_12a", "gider_12a", 2),
+            ("fdg_12a", "fdg_12a", 2), ("faiz_12a", "faiz_12a", 2),
+            ("vergi_12a", "vergi_12a", 2),
+            ("gb_denge_12a", "gb_denge_12a", 2),
+            ("denge_ay", "denge_ay", 1), ("fdd_ay", "fdd_ay", 1),
+            ("gelir_ay", "gelir_ay", 1), ("gider_ay", "gider_ay", 1),
+            ("faiz_ay", "faiz_ay", 1)):
+        v, t = son(_seri(M, kol))
+        koy(ad, v, ond)
+    O["denge_isaret"] = ("açık" if (O.get("denge_12a") or 0) < 0 else "fazla")
+    O["fdd_isaret"] = ("açık" if (O.get("fdd_12a") or 0) < 0 else "fazla")
+    koy("denge_12a_mutlak", abs(O.get("denge_12a") or 0), 2)
+    koy("fdd_12a_mutlak", abs(O.get("fdd_12a") or 0), 2)
+
+    # ===================================================== bütçe: reel
+    for ad, kol in (("reel_gelir_12a", "reel_gelir_12a"),
+                    ("reel_fdg_12a", "reel_fdg_12a"),
+                    ("reel_faiz_12a", "reel_faiz_12a"),
+                    ("reel_vergi_12a", "reel_vergi_12a")):
+        v, _ = son(_seri(M, kol))
+        koy(ad, v, 2)
+    for ad, kol in (("gelir_reel_yy", "gelir_reel_yy"),
+                    ("fdg_reel_yy", "fdg_reel_yy"),
+                    ("gider_reel_yy", "gider_reel_yy"),
+                    ("faiz_reel_yy", "faiz_reel_yy"),
+                    ("vergi_reel_yy", "vergi_reel_yy"),
+                    ("gelir_nom_yy", "gelir_nom_yy"),
+                    ("fdg_nom_yy", "fdg_nom_yy"),
+                    ("faiz_nom_yy", "faiz_nom_yy"),
+                    ("vergi_nom_yy", "vergi_nom_yy"),
+                    ("tufe_yy", "tufe_yy")):
+        v, _ = son(_seri(M, kol))
+        koy(ad, v, 1)
+    O["deflator_taban"] = m["butce"]["deflator_taban_ay"]
+    koy("deflator_taban_endeks", m["butce"].get("deflator_taban_endeks"), 2)
+    O["tufe_son_ay"] = m["butce"].get("tufe_son_ay")
+    # Fisher: aynı veriden basit çıkarmayla kaç puan farklı bir sayı çıkardı.
+    koy("fisher_basit_fark_pp",
+        m["butce"]["fisher"].get("basit_cikarma_farki_son_pp"), 2)
+    O["fisher_notu"] = m["butce"]["fisher"]["not"]
+    # Reel ile nominalin makası — sayfanın ana cümlesi bu farkın üstüne kurulur.
+    if O.get("gelir_nom_yy") is not None and O.get("gelir_reel_yy") is not None:
+        koy("gelir_makas_pp", O["gelir_nom_yy"] - O["gelir_reel_yy"], 1)
+
+    # ===================================================== kompozisyon
+    for kol in ("pay_v_gelir", "pay_v_kurumlar", "pay_v_kdv_dahil",
+                "pay_v_kdv_ithal", "pay_v_otv", "pay_v_damga", "pay_v_diger",
+                "pay_personel", "pay_sgk_primi", "pay_mal_hizmet",
+                "pay_cari_transfer", "pay_sermaye_gider",
+                "pay_sermaye_transfer", "pay_borc_verme", "pay_faiz",
+                "pay_gider_diger"):
+        v, _ = son(_seri(M, kol))
+        koy(kol, v, 1)
+    for kol in ("v_gelir", "v_kurumlar", "v_kdv_dahil", "v_kdv_ithal",
+                "v_otv", "v_damga", "personel", "sgk_primi", "mal_hizmet",
+                "cari_transfer", "sermaye_gider", "sermaye_transfer",
+                "borc_verme"):
+        v, _ = son(_seri(M, f"{kol}_reel_yy"))
+        koy(f"{kol}_reel_yy", v, 1)
+        v2, _ = son(_seri(M, f"{kol}_12a"))
+        koy(f"{kol}_12a", v2, 2)
+
+    # ===================================================== faiz yükü
+    for ad, kol, ond in (("faiz_vergi", "faiz_vergi", 1),
+                         ("faiz_gelir", "faiz_gelir", 1),
+                         ("faiz_ic_12a", "faiz_ic_12a", 2),
+                         ("faiz_dis_12a", "faiz_dis_12a", 2),
+                         ("faiz_kira_12a", "faiz_kira_12a", 2),
+                         ("faiz_iskonto_12a", "faiz_iskonto_12a", 2),
+                         ("ima_faiz_nominal", "ima_faiz_nominal", 1),
+                         ("ima_faiz_reel", "ima_faiz_reel", 1),
+                         ("ima_faiz_reel_basit", "ima_faiz_reel_basit", 1)):
+        v, _ = son(_seri(M, kol))
+        koy(ad, v, ond)
+    if O.get("faiz_ic_12a") and O.get("faiz_12a"):
+        koy("faiz_ic_pay", O["faiz_ic_12a"] / O["faiz_12a"] * 100, 1)
+        koy("faiz_dis_pay", (O.get("faiz_dis_12a") or 0) / O["faiz_12a"] * 100, 1)
+    koy("fisher_ima_faiz_fark_pp", m["stok"].get("fisher_ima_faiz_fark_son_pp"), 2)
+    O["fisher_ima_faiz_notu"] = m["stok"].get("fisher_ima_faiz_notu")
+
+    # ===================================================== borç stoku
+    for ad, kol, ond in (("ic_borc_trl", "ic_borc_trl", 2),
+                         ("dis_borc_trl", "dis_borc_trl", 2),
+                         ("toplam_borc_trl", "toplam_borc_trl", 2),
+                         ("doviz_pay", "doviz_pay", 1),
+                         ("dis_borc_musd", "dis_borc_musd", 0),
+                         ("kur_ay", "kur_ay", 4),
+                         ("ic_tahvil_trl", "ic_tahvil_trl", 2),
+                         ("ic_bono_trl", "ic_bono_trl", 2)):
+        v, _ = son(_seri(M, kol))
+        koy(ad, v, ond)
+    if O.get("dis_borc_musd"):
+        koy("dis_borc_mlrusd", O["dis_borc_musd"] / 1000, 1)
+    koy("tl_pay", 100 - (O.get("doviz_pay") or 0), 1)
+    O["stok_son_ay"] = m["stok"].get("birlesik_stok_son_ay")
+    O["doviz_payi_notu"] = m["stok"].get("doviz_payi_notu")
+
+    # ===================================================== GSYH oranları
+    for ad, kol in (("denge_gsyh", "denge_gsyh"), ("fdd_gsyh", "fdd_gsyh"),
+                    ("faiz_gsyh", "faiz_gsyh"), ("gelir_gsyh", "gelir_gsyh"),
+                    ("gider_gsyh", "gider_gsyh"), ("vergi_gsyh", "vergi_gsyh"),
+                    ("stok_gsyh", "stok_gsyh"), ("net_stok_gsyh", "net_stok_gsyh"),
+                    ("net_fin_deger_gsyh", "net_fin_deger_gsyh")):
+        v, t = son(_seri(C, kol))
+        koy(ad, v, 2)
+    v, t = son(_seri(C, "gsyh_yil_trl"))
+    koy("gsyh_yil_trl", v, 1)
+    if t is not None:
+        O["oran_ceyregi"] = ceyrek_ad(t)
+    for ad, kol in (("net_fin_deger_trl", "net_fin_deger_trl"),
+                    ("yukum_toplam_trl", "yukum_toplam_trl"),
+                    ("varlik_toplam_trl", "varlik_toplam_trl"),
+                    ("nakit_trl", "nakit_trl"),
+                    ("borc_senedi_trl", "borc_senedi_trl"),
+                    ("krediler_trl", "krediler_trl"),
+                    ("net_stok_trl", "net_stok_trl"),
+                    ("stok_ceyrek_trl", "stok_trl")):
+        v, _ = son(_seri(C, kol))
+        koy(ad, v, 2)
+    for ad, kol in (("db_toplam_mlrusd", "db_toplam_mlrusd"),
+                    ("db_my_mlrusd", "db_my_mlrusd"),
+                    ("db_my_kisa_mlrusd", "db_my_kisa_mlrusd"),
+                    ("db_my_uzun_mlrusd", "db_my_uzun_mlrusd"),
+                    ("db_ozel_mlrusd", "db_ozel_mlrusd"),
+                    ("db_tcmb_mlrusd", "db_tcmb_mlrusd")):
+        v, _ = son(_seri(C, kol))
+        koy(ad, v, 1)
+    O["oran_gecikme_notu"] = m["ceyrek"].get("oran_gecikme_notu")
+
+    # ===================================================== çevirme oranı
+    cev = m["stok"].get("cevirme") or {}
+    koy("cevirme", cev.get("son"), 0)
+    koy("cevirme_faiz", cev.get("son_faiz_dahil"), 0)
+    koy("cevirme_bant_min", cev.get("bant_5y_min"), 0)
+    koy("cevirme_bant_max", cev.get("bant_5y_max"), 0)
+    O["cevirme_notu"] = cev.get("not")
+    for ad, kol, ond in (("ic_satis_12a", "ic_satis_12a", 2),
+                         ("ic_odeme_12a", "ic_odeme_12a", 2),
+                         ("ic_borclanma_net_ay", "ic_borclanma_net_ay", 1),
+                         ("dis_borclanma_net_ay", "dis_borclanma_net_ay", 1)):
+        v, _ = son(_seri(M, kol))
+        koy(ad, v, ond)
+
+    # ===================================================== stok ayrıştırması
+    ayr = m["stok"].get("ayrıstirma") or {}
+    for ad, kol in (("ayr_d_stok", "ayr_d_stok"),
+                    ("ayr_net_borclanma", "ayr_net_borclanma"),
+                    ("ayr_kur_farki", "ayr_kur_farki"),
+                    ("ayr_artik", "ayr_artik")):
+        ort = M[["ayr_d_stok", "ayr_net_borclanma", "ayr_kur_farki",
+                 "ayr_artik"]].dropna()
+        v = float(ort[kol].iloc[-1]) if len(ort) else None
+        koy(ad, v, 2)
+        if len(ort) and ad == "ayr_d_stok":
+            O["ayr_donem"] = ay_ad(ort.index[-1])
+    koy("ayr_artik_pay", (ayr.get("artik_pay_son") or 0) * 100, 1)
+    O["ayr_notu"] = ayr.get("not")
+
+    # ===================================================== haftalık: sahiplik & vade
+    for ad, kol in (("pay_dibs_tcmb", "pay_dibs_tcmb"),
+                    ("pay_dibs_bankalar", "pay_dibs_bankalar"),
+                    ("pay_dibs_fonlar", "pay_dibs_fonlar"),
+                    ("pay_dibs_yurtdisi", "pay_dibs_yurtdisi"),
+                    ("pay_dibs_diger_yurtici", "pay_dibs_diger_yurtici"),
+                    ("pay_dibs_kv_kisa", "pay_dibs_kv_kisa"),
+                    ("pay_dibs_ov_kisa", "pay_dibs_ov_kisa"),
+                    ("pay_eb_kv_kisa", "pay_eb_kv_kisa"),
+                    ("pay_eb_yurtdisi", "pay_eb_yurtdisi"),
+                    ("pay_eb_kendi", "pay_eb_kendi"),
+                    ("pay_eb_usd", "pay_eb_usd"), ("pay_eb_eur", "pay_eb_eur"),
+                    ("pay_eb_jpy", "pay_eb_jpy")):
+        v, _ = son(_seri(H, kol))
+        koy(ad, v, 1)
+    for ad, kol, ond in (("dibs_toplam_trl", "dibs_toplam_trl", 2),
+                         ("dibs_pd_trl", "dibs_pd_trl", 2),
+                         ("eb_toplam_mlrusd", "eb_toplam_mlrusd", 1),
+                         ("eb_pd_mlrusd", "eb_pd_mlrusd", 1),
+                         ("dibs_piyasa_yazili_oran", "dibs_piyasa_yazili_oran", 3)):
+        v, _ = son(_seri(H, kol))
+        koy(ad, v, ond)
+    O["vade_notu"] = m["haftalik"].get("vade_notu")
+    O["sahiplik_notu"] = m["haftalik"].get("sahiplik_notu")
+    O["eb_toplam_notu"] = (m["haftalik"].get("eb_toplam_farki") or {}).get("not")
+
+    # ===================================================== kur duyarlılığı
+    sen = m.get("senaryo") or {}
+    koy("senaryo_kur", sen.get("kur"), 4)
+    koy("senaryo_stok_trl", sen.get("toplam_trl"), 2)
+    O["senaryo_cipa_ay"] = sen.get("cipa_ay")
+    O["senaryo_cipa_ceyrek"] = sen.get("cipa_ceyrek")
+    O["senaryo_notu"] = sen.get("not")
+    for a in ("usd", "eur", "jpy"):
+        koy(f"agirlik_{a}", (sen.get("agirlik") or {}).get(a, 0) * 100, 1)
+    # Her şok düzeyi ayrı anahtar: sayfa metni "+%10'luk bir kur şoku stoku
+    # şu kadar büyütür" cümlesini ELLE değil buradan kurar.
+    for r in sen.get("satirlar", []):
+        # Anahtar adı MDX'te ELLE yazılacak; okunur olsun:
+        #   sok_eksi10 · sok_0 · sok_arti10 …
+        yuzde = int(round(r["sok"] * 100))
+        anahtar = ("sok_0" if yuzde == 0 else
+                   f"sok_{'arti' if yuzde > 0 else 'eksi'}{abs(yuzde)}")
+        koy(f"{anahtar}_kur", r["kur"], 2)
+        koy(f"{anahtar}_stok_trl", r["stok_paralel_trl"], 2)
+        koy(f"{anahtar}_degisim", r["degisim_paralel_yuzde"], 1)
+        koy(f"{anahtar}_stok_yalniz_usd_trl", r["stok_yalniz_usd_trl"], 2)
+        if "stok_gsyh_paralel" in r:
+            koy(f"{anahtar}_stok_gsyh", r["stok_gsyh_paralel"], 1)
+    # +%10 senaryosu sayfanın ana örneğidir; okunması kolay bir ad da verilir.
+    if "sok_arti10_stok_trl" in O:
+        koy("sok10_stok_trl", O["sok_arti10_stok_trl"], 2)
+        koy("sok10_degisim", O.get("sok_arti10_degisim"), 1)
+        if O.get("sok_arti10_stok_gsyh") is not None and O.get("stok_gsyh") is not None:
+            koy("sok10_gsyh_puan", O["sok_arti10_stok_gsyh"] - O["stok_gsyh"], 2)
+
+    # ===================================================== kapsam ve doğrulama
+    koy("kapsam_farki", (m["butce"].get("kapsam_farki_24ay") or 0) * 100, 1)
+    O["kapsam_notu"] = m.get("kapsam_notu")
+    O["eksik_veri_notu"] = m.get("eksik_veri_notu")
+    d = m.get("dogrulama") or {}
+    f3 = d.get("DİBS+eurobond ↔ finansal hesaplar F.3") or {}
+    koy("f3_fark", (f3.get("son_fark") or 0) * 100, 1)
+    koy("f3_bant_min", (f3.get("son6_min") or 0) * 100, 1)
+    koy("f3_bant_max", (f3.get("son6_max") or 0) * 100, 1)
+    O["dogrulama_sayisi"] = len(d)
+    O["dogrulama_gecen"] = sum(1 for r in d.values() if r.get("gecti"))
+    O["dogrulama_cumlesi"] = (
+        f"{O['dogrulama_gecen']}/{O['dogrulama_sayisi']} bağımsız doğrulama geçti."
+        if O["dogrulama_sayisi"] else "Bu koşuda bağımsız doğrulama koşmadı.")
+
+    # Birim denetimi — sayfada "birim EVDS'ten okunur" cümlesinin kanıtı.
+    birim = vd.get("birim") or {}
+    O["birim_denetim_sayisi"] = len(birim)
+    O["birim_denetim_gecen"] = sum(1 for r in birim.values() if r.get("uyusuyor"))
+    O["birim_cumlesi"] = (
+        f"Birim, EVDS'in veri grubu kataloğundan okunur ve her koşuda kodda "
+        f"yazılıyla karşılaştırılır: {O['birim_denetim_gecen']}/"
+        f"{O['birim_denetim_sayisi']} veri grubunda uyuşuyor.")
+    kim = vd.get("kimlik") or {}
+    O["kimlik_sayisi"] = len(kim)
+    O["kimlik_gecen"] = sum(1 for r in kim.values() if r.get("gecti"))
+
+    # ===================================================== tazelik bayrağı
+    uyarilar: list[str] = list(uy.get("uyarilar") or [])
+    for u in (vd.get("uyarilar") or []):
+        if u not in uyarilar:
+            uyarilar.append(u)
+
+    # Aile bazlı bayat denetimi. Tek eşik bu hatta ANLAMSIZ: kur 2 günde,
+    # GSYH 145 günde gelir ve ikisi de normaldir.
+    aile_gecikme = {
+        "butce": (O.get("gecikme_butce_gun"), s_ay),
+        "disborc": (O.get("gecikme_dis_gun"), s_dis),
+        "menkul": (O.get("gecikme_hafta_gun"), s_hafta),
+        "ceyrek": (O.get("gecikme_ceyrek_gun"), s_ceyrek),
+        "kur": (O.get("gecikme_kur_gun"), s_gun),
+    }
+    bayat_sebep: list[str] = []
+    for aile, (gec, t) in aile_gecikme.items():
+        if gec is None:
+            continue
+        etiket, tol, negatif_muaf = TAZELIK[aile]
+        O[f"tolerans_{aile}_gun"] = tol
+        if gec < 0 and negatif_muaf:
+            continue
+        if gec > tol:
+            bayat_sebep.append(f"{etiket} {gec} gün geride (tolerans {tol} gün)")
+    izler = [u for u in uyarilar
+             if u.startswith(("TAZELİK", "ESKİ ÖNBELLEK", "BAYAT", "SERİ YOK"))]
+    if izler:
+        bayat_sebep.append(f"veri katmanı {len(izler)} tazelik/önbellek uyarısı bastı")
+    O["bayat"] = bool(bayat_sebep)
+    O["bayat_cumlesi"] = (
+        "BAYAT VERİ: " + "; ".join(bayat_sebep)
+        + ". Sayfadaki sayılar bu koşuda İLERLEMEMİŞ olabilir."
+        if bayat_sebep else
+        "Veri taze: altı yayım ailesinin de gecikmesi kendi toleransı içinde, "
+        "tazelik uyarısı yok.")
+    # Gecikmeyi ÇERÇEVELEYEN cümle de sayıdan türetilir; sayfa "bütçe verisi
+    # üç ay geriden gelir" gibi elle yazılmış bir ifadeyle çelişmesin.
+    O["gecikme_cumlesi"] = (
+        f"Bütçe gerçekleşmeleri {O.get('gecikme_butce_gun')} gün, brüt dış borç "
+        f"{O.get('gecikme_dis_gun')} gün, haftalık menkul kıymet istatistikleri "
+        f"{O.get('gecikme_hafta_gun')} gün, GSYH ve finansal hesaplar "
+        f"{O.get('gecikme_ceyrek_gun')} gün geriden geliyor.")
+
+    O["uyari_sayisi"] = len(uyarilar)
+    O["uyari_metni"] = ((O["bayat_cumlesi"] + " · " if O["bayat"] else "")
+                        + (" · ".join(uyarilar) if uyarilar
+                           else "Bu koşuda uyarı yok."))
+    O["uyari_cumlesi"] = (
+        "Bu koşuda uyarı düşmedi." if not uyarilar else
+        "Bu koşuda düşen tek uyarı budur:" if len(uyarilar) == 1 else
+        f"Bu koşuda {len(uyarilar)} uyarı düştü:")
+
+    # ===================================================== hazır cümleler
+    # Sayıyı çerçeveleyen ifadeler de SAYIDAN türetilir; "rekor" / "ilk kez"
+    # gibi elle yazılmış nitelemeler veri değişince sessizce yanlışa döner.
+    O["denge_cumlesi"] = (
+        f"12 aylık birikimli merkezi yönetim bütçesi {ay_ad(s_ay)} itibarıyla "
+        f"{tr_sayi(abs(O.get('denge_12a') or 0), 2)} trilyon TL {O['denge_isaret']} "
+        f"veriyor; faiz dışı denge {tr_sayi(abs(O.get('fdd_12a') or 0), 2)} trilyon TL "
+        f"{O['fdd_isaret']}.")
+    O["reel_cumlesi"] = (
+        f"Aynı dönemde gelir nominal olarak {tr_yuzde(O.get('gelir_nom_yy'))} artarken "
+        f"reel artış {tr_yuzde(O.get('gelir_reel_yy'))}; reel faiz dışı harcama "
+        f"{tr_yuzde(O.get('fdg_reel_yy'))}.")
+    O["stok_cumlesi"] = (
+        f"Merkezi yönetim borç stoku {O.get('stok_son_ay')} itibarıyla "
+        f"{tr_sayi(O.get('toplam_borc_trl'), 2)} trilyon TL "
+        f"(iç {tr_sayi(O.get('ic_borc_trl'), 2)} + dış {tr_sayi(O.get('dis_borc_trl'), 2)}); "
+        f"döviz payı {tr_yuzde(O.get('doviz_pay'))}. "
+        f"Stok/GSYH oranı {O.get('oran_ceyregi')} itibarıyla "
+        f"{tr_yuzde(O.get('stok_gsyh'))}.")
+    O["faiz_cumlesi"] = (
+        f"Faiz gideri 12 aylık birikimli {tr_sayi(O.get('faiz_12a'), 2)} trilyon TL; "
+        f"vergi gelirlerine oranı {tr_yuzde(O.get('faiz_vergi'))}, GSYH'ye oranı "
+        f"{tr_yuzde(O.get('faiz_gsyh'), 2)}. Toplam faiz içinde iç borç faizinin payı "
+        f"{tr_yuzde(O.get('faiz_ic_pay'))}.")
+    O["ima_faiz_cumlesi"] = (
+        f"Stok üzerinden ima edilen ortalama nominal faiz "
+        f"{tr_yuzde(O.get('ima_faiz_nominal'))}; Fisher konvansiyonuyla reel karşılığı "
+        f"{tr_yuzde(O.get('ima_faiz_reel'))}. Basit çıkarma aynı veriden "
+        f"{tr_yuzde(O.get('ima_faiz_reel_basit'))} verirdi — "
+        f"{tr_sayi(abs(O.get('fisher_ima_faiz_fark_pp') or 0), 2)} puan fark.")
+    O["cevirme_cumlesi"] = (
+        f"12 aylık iç borç çevirme oranı {tr_yuzde(O.get('cevirme'), 0)}; "
+        f"iç borç faizi paydaya eklendiğinde {tr_yuzde(O.get('cevirme_faiz'), 0)}. "
+        f"Son beş yıl bandı {tr_yuzde(O.get('cevirme_bant_min'), 0)}–"
+        f"{tr_yuzde(O.get('cevirme_bant_max'), 0)}.")
+    O["sahiplik_cumlesi"] = (
+        f"{gun_ad(s_hafta)} itibarıyla DİBS stokunda bankaların payı "
+        f"{tr_yuzde(O.get('pay_dibs_bankalar'))}, yurt dışı yerleşiklerin payı "
+        f"{tr_yuzde(O.get('pay_dibs_yurtdisi'))}, TCMB'nin payı "
+        f"{tr_yuzde(O.get('pay_dibs_tcmb'))}.")
+    O["vade_cumlesi"] = (
+        f"DİBS stokunda kalan vadesi bir yıldan kısa olanların payı "
+        f"{tr_yuzde(O.get('pay_dibs_kv_kisa'))}; eurobondda aynı oran "
+        f"{tr_yuzde(O.get('pay_eb_kv_kisa'))}. Her iki oran da PİYASA değerli "
+        f"tablolardan alınmıştır.")
+    O["kur_cumlesi"] = (
+        f"USD/TRY'de %10'luk bir değer kaybı stoku "
+        f"{tr_sayi(O.get('sok10_stok_trl'), 2)} trilyon TL'ye taşır "
+        f"({tr_yuzde(O.get('sok10_degisim'))}); stok/GSYH oranı yaklaşık "
+        f"{tr_sayi(O.get('sok10_gsyh_puan'), 1)} puan yükselir.")
+
+    yol = PROJE / "ozet.json"
+    yol.write_text(json.dumps(O, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"ozet.json yazıldı: {len(O)} anahtar · bütçe {O['ay']} "
+          f"({O['gecikme_butce_gun']} gün önce) · menkul {O['hafta']} · "
+          f"GSYH {O['ceyrek']}" + ("  ! BAYAT" if O.get("bayat") else ""))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

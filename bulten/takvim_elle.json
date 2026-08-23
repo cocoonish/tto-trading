@@ -1,0 +1,179 @@
+{
+ "_aciklama": "Makine okunur bir kaynağı olmayan takvim kayıtları. Her kayıt KAYNAĞIYLA ve doğrulanma tarihiyle durur. 'kesin' listesi resmî bir belgeden/sayfadan birebir okunmuştur; 'kural' listesi 'ayın N'i' türünden türetilir ve bültende [kural] damgasıyla görünür. Haftalık yorum koşusu bu dosyayı resmî kaynaklarla karşılaştırıp günceller (bkz. dogrulanacak).",
+ "_son_dogrulama": "2026-08-23",
+ "kesin": [
+  {
+   "tarih": "2026-09-10",
+   "saat": "14:00",
+   "ulke": "TR",
+   "olay": "TCMB PPK faiz kararı",
+   "onem": 1,
+   "kaynak": "TCMB 2026 Para Politikası metni, Ek 2",
+   "not": "Karar 14:00; özet 17 Eylül'de."
+  },
+  {
+   "tarih": "2026-09-17",
+   "saat": "",
+   "ulke": "TR",
+   "olay": "TCMB PPK toplantı özeti",
+   "onem": 2,
+   "kaynak": "TCMB 2026 Para Politikası metni, Ek 2"
+  },
+  {
+   "tarih": "2026-10-22",
+   "saat": "14:00",
+   "ulke": "TR",
+   "olay": "TCMB PPK faiz kararı",
+   "onem": 1,
+   "kaynak": "TCMB 2026 Para Politikası metni, Ek 2",
+   "not": "Karar 14:00; özet 30 Ekim'de."
+  },
+  {
+   "tarih": "2026-10-30",
+   "saat": "",
+   "ulke": "TR",
+   "olay": "TCMB PPK toplantı özeti",
+   "onem": 2,
+   "kaynak": "TCMB 2026 Para Politikası metni, Ek 2"
+  },
+  {
+   "tarih": "2026-11-12",
+   "saat": "",
+   "ulke": "TR",
+   "olay": "TCMB Enflasyon Raporu (2026-IV)",
+   "onem": 1,
+   "kaynak": "TCMB 2026 Para Politikası metni, Ek 2",
+   "not": "Yıl sonu ve gelecek yıl enflasyon tahmin patikası burada güncellenir."
+  },
+  {
+   "tarih": "2026-11-27",
+   "saat": "",
+   "ulke": "TR",
+   "olay": "TCMB Finansal İstikrar Raporu",
+   "onem": 2,
+   "kaynak": "TCMB 2026 Para Politikası metni, Ek 2"
+  },
+  {
+   "tarih": "2026-12-10",
+   "saat": "14:00",
+   "ulke": "TR",
+   "olay": "TCMB PPK faiz kararı (yılın son toplantısı)",
+   "onem": 1,
+   "kaynak": "TCMB 2026 Para Politikası metni, Ek 2",
+   "not": "Karar 14:00; özet 17 Aralık'ta."
+  },
+  {
+   "tarih": "2026-12-17",
+   "saat": "",
+   "ulke": "TR",
+   "olay": "TCMB PPK toplantı özeti",
+   "onem": 2,
+   "kaynak": "TCMB 2026 Para Politikası metni, Ek 2"
+  },
+  {
+   "tarih": "2026-12-18",
+   "saat": "",
+   "ulke": "TR",
+   "olay": "TCMB 2027 Para Politikası metni",
+   "onem": 2,
+   "kaynak": "TCMB 2026 Para Politikası metni, Ek 2 dipnotu",
+   "not": "2027 PPK takvimi bu metinle ilan edilir — bu dosya o gün güncellenmeli."
+  },
+  {
+   "tarih": "2027-01-21",
+   "saat": "14:00",
+   "ulke": "TR",
+   "olay": "TCMB PPK faiz kararı",
+   "onem": 1,
+   "kaynak": "TCMB 2026 Para Politikası metni, Ek 2"
+  },
+  {
+   "tarih": "2026-09-04",
+   "saat": "15:30",
+   "ulke": "ABD",
+   "olay": "ABD tarım dışı istihdam (Ağustos)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi"
+  },
+  {
+   "tarih": "2026-09-11",
+   "saat": "15:30",
+   "ulke": "ABD",
+   "olay": "ABD TÜFE (Ağustos)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi"
+  },
+  {
+   "tarih": "2026-10-02",
+   "saat": "15:30",
+   "ulke": "ABD",
+   "olay": "ABD tarım dışı istihdam (Eylül)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi"
+  },
+  {
+   "tarih": "2026-10-14",
+   "saat": "15:30",
+   "ulke": "ABD",
+   "olay": "ABD TÜFE (Eylül)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi"
+  },
+  {
+   "tarih": "2026-11-06",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "olay": "ABD tarım dışı istihdam (Ekim)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi",
+   "not": "ABD kış saatine geçti: 08:30 ET = 16:30 TSİ."
+  },
+  {
+   "tarih": "2026-11-10",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "olay": "ABD TÜFE (Ekim)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi"
+  },
+  {
+   "tarih": "2026-12-04",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "olay": "ABD tarım dışı istihdam (Kasım)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi"
+  },
+  {
+   "tarih": "2026-12-10",
+   "saat": "16:30",
+   "ulke": "ABD",
+   "olay": "ABD TÜFE (Kasım)",
+   "onem": 1,
+   "kaynak": "bls.gov yayım takvimi"
+  }
+ ],
+ "kural": [],
+ "dogrulanacak": [
+  {
+   "ne": "ABD çekirdek PCE yayım günleri (BEA)",
+   "kaynak": "bea.gov release schedule",
+   "neden": "Fed'in hedef ölçüsü; BEA takvimi makine okunur değil."
+  },
+  {
+   "ne": "Euro Bölgesi öncü HICP ve nihai HICP günleri",
+   "kaynak": "ec.europa.eu/eurostat release calendar",
+   "neden": "Eurostat takvimi kazımaya kapalı."
+  },
+  {
+   "ne": "TCMB Piyasa Katılımcıları Anketi yayım günleri",
+   "kaynak": "tcmb.gov.tr",
+   "neden": "Ulusal veri takviminde ayrı kalem olarak görünmüyor."
+  },
+  {
+   "ne": "2027 PPK takvimi",
+   "kaynak": "TCMB 2027 Para Politikası metni (18 Aralık 2026)",
+   "neden": "O tarihte ilan edilecek."
+  }
+ ]
+}

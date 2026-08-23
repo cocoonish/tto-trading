@@ -44,3 +44,8 @@ Aktarılacak Projeler/TCMBNetRezerv/kontrol_seti.csv
 Aktarılacak Projeler/TCMBNetRezerv/kontrol_ekonomist.csv
 Research/marj/data/cache/*.log
 gunlukler/
+
+# Telifli kaynak kitaplar ve onlardan çıkarılan düz metin: depoya GİRMEZ.
+# (145 MB'lık PDF'i git geçmişine sokmanın yanı sıra, telifli metnin public
+# yayına sızma riski de var. Ders sayfası bu kaynaklardan ÖĞRENİLİR, kopyalanmaz.)
+Research/Al Brooks/

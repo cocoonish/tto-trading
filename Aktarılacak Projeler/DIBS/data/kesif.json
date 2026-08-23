@@ -1,0 +1,4561 @@
+{
+ "kosum": "2026-08-23T20:16:52",
+ "referans_gun": "2026-08-21",
+ "veri_grubu": "bie_pydibs",
+ "veri_grubu_arsiv": "bie_pydibsarsiv",
+ "en_erken_gozlem": "2012-09-26",
+ "arsiv_kiymet": 4111,
+ "tarihce_sinamasi": {
+  "gun": "2019-06-17",
+  "nokta": 216,
+  "egri": [
+   {
+    "kod": "TP.TRT100719A19",
+    "itfa": "2019-07-10",
+    "etiket": "61T2A100719",
+    "strip": "anapara",
+    "vade_yil": 0.063,
+    "odeme": 100.0,
+    "fiyat": 98.521,
+    "getiri": 26.6762
+   },
+   {
+    "kod": "TP.TRT100719K25",
+    "itfa": "2019-07-10",
+    "etiket": "61T2K10100719",
+    "strip": "kupon",
+    "vade_yil": 0.063,
+    "odeme": 4.25,
+    "fiyat": 4.187,
+    "getiri": 26.7446
+   },
+   {
+    "kod": "TP.TRT100719K33",
+    "itfa": "2019-07-10",
+    "etiket": "61T2K8080720",
+    "strip": "kupon",
+    "vade_yil": 0.063,
+    "odeme": 4.7,
+    "fiyat": 4.63,
+    "getiri": 26.8878
+   },
+   {
+    "kod": "TP.TRT170719K10",
+    "itfa": "2019-07-17",
+    "etiket": "121T2K19150120",
+    "strip": "kupon",
+    "vade_yil": 0.0822,
+    "odeme": 5.25,
+    "fiyat": 5.151,
+    "getiri": 26.064
+   },
+   {
+    "kod": "TP.TRT170719K28",
+    "itfa": "2019-07-17",
+    "etiket": "121T2K15120122",
+    "strip": "kupon",
+    "vade_yil": 0.0822,
+    "odeme": 4.75,
+    "fiyat": 4.661,
+    "getiri": 25.8761
+   },
+   {
+    "kod": "TP.TRT240719K37",
+    "itfa": "2019-07-24",
+    "etiket": "61T2K3180123",
+    "strip": "kupon",
+    "vade_yil": 0.1014,
+    "odeme": 6.1,
+    "fiyat": 5.961,
+    "getiri": 25.532
+   },
+   {
+    "kod": "TP.TRT310719K12",
+    "itfa": "2019-07-31",
+    "etiket": "121T2K10240724",
+    "strip": "kupon",
+    "vade_yil": 0.1205,
+    "odeme": 4.5,
+    "fiyat": 4.38,
+    "getiri": 25.134
+   },
+   {
+    "kod": "TP.TRT070819K29",
+    "itfa": "2019-08-07",
+    "etiket": "61T2K9050220",
+    "strip": "kupon",
+    "vade_yil": 0.1397,
+    "odeme": 3.7,
+    "fiyat": 3.587,
+    "getiri": 24.8549
+   },
+   {
+    "kod": "TP.TRT140819K12",
+    "itfa": "2019-08-14",
+    "etiket": "24T2K2120820",
+    "strip": "kupon",
+    "vade_yil": 0.1589,
+    "odeme": 11.5,
+    "fiyat": 11.105,
+    "getiri": 24.6019
+   },
+   {
+    "kod": "TP.TRT210819K13",
+    "itfa": "2019-08-21",
+    "etiket": "61T2K7170221",
+    "strip": "kupon",
+    "vade_yil": 0.1781,
+    "odeme": 5.35,
+    "fiyat": 5.146,
+    "getiri": 24.3971
+   },
+   {
+    "kod": "TP.TRT210819K21",
+    "itfa": "2019-08-21",
+    "etiket": "121T2K7110226",
+    "strip": "kupon",
+    "vade_yil": 0.1781,
+    "odeme": 5.3,
+    "fiyat": 5.098,
+    "getiri": 24.3843
+   },
+   {
+    "kod": "TP.TRT210819K39",
+    "itfa": "2019-08-21",
+    "etiket": "61T2K4170822",
+    "strip": "kupon",
+    "vade_yil": 0.1781,
+    "odeme": 5.35,
+    "fiyat": 5.146,
+    "getiri": 24.3971
+   },
+   {
+    "kod": "TP.TRT210819K47",
+    "itfa": "2019-08-21",
+    "etiket": "121T2K4110827",
+    "strip": "kupon",
+    "vade_yil": 0.1781,
+    "odeme": 5.25,
+    "fiyat": 5.05,
+    "getiri": 24.3712
+   },
+   {
+    "kod": "TP.TRT040919K13",
+    "itfa": "2019-09-04",
+    "etiket": "61T2K5020322",
+    "strip": "kupon",
+    "vade_yil": 0.2164,
+    "odeme": 5.5,
+    "fiyat": 5.249,
+    "getiri": 24.0872
+   },
+   {
+    "kod": "TP.TRT040919K21",
+    "itfa": "2019-09-04",
+    "etiket": "121T2K5240227",
+    "strip": "kupon",
+    "vade_yil": 0.2164,
+    "odeme": 5.5,
+    "fiyat": 5.249,
+    "getiri": 24.0872
+   },
+   {
+    "kod": "TP.TRT110919K22",
+    "itfa": "2019-09-11",
+    "etiket": "121T2K13080323",
+    "strip": "kupon",
+    "vade_yil": 0.2356,
+    "odeme": 3.55,
+    "fiyat": 3.374,
+    "getiri": 24.0868
+   },
+   {
+    "kod": "TP.TRT180919K17",
+    "itfa": "2019-09-18",
+    "etiket": "121T2K14140922",
+    "strip": "kupon",
+    "vade_yil": 0.2548,
+    "odeme": 4.25,
+    "fiyat": 4.024,
+    "getiri": 23.9189
+   },
+   {
+    "kod": "TP.TRT180919K25",
+    "itfa": "2019-09-18",
+    "etiket": "121T2K9120325",
+    "strip": "kupon",
+    "vade_yil": 0.2548,
+    "odeme": 4.0,
+    "fiyat": 3.787,
+    "getiri": 23.9567
+   },
+   {
+    "kod": "TP.TRT180919K33",
+    "itfa": "2019-09-18",
+    "etiket": "121T2K3080328",
+    "strip": "kupon",
+    "vade_yil": 0.2548,
+    "odeme": 6.2,
+    "fiyat": 5.87,
+    "getiri": 23.9443
+   },
+   {
+    "kod": "TP.TRT250919K18",
+    "itfa": "2019-09-25",
+    "etiket": "121T2K11200324",
+    "strip": "kupon",
+    "vade_yil": 0.274,
+    "odeme": 5.2,
+    "fiyat": 4.904,
+    "getiri": 23.852
+   },
+   {
+    "kod": "TP.TRT250919K34",
+    "itfa": "2019-09-25",
+    "etiket": "61T2K6220921",
+    "strip": "kupon",
+    "vade_yil": 0.274,
+    "odeme": 4.6,
+    "fiyat": 4.338,
+    "getiri": 23.868
+   },
+   {
+    "kod": "TP.TRT021019K20",
+    "itfa": "2019-10-02",
+    "etiket": "121T2K12270923",
+    "strip": "kupon",
+    "vade_yil": 0.2932,
+    "odeme": 4.4,
+    "fiyat": 4.133,
+    "getiri": 23.806
+   },
+   {
+    "kod": "TP.TRT231019K33",
+    "itfa": "2019-10-23",
+    "etiket": "61T2K2181023",
+    "strip": "kupon",
+    "vade_yil": 0.3507,
+    "odeme": 10.05,
+    "fiyat": 9.329,
+    "getiri": 23.6499
+   },
+   {
+    "kod": "TP.TRT231019K41",
+    "itfa": "2019-10-23",
+    "etiket": "24T2K1210421",
+    "strip": "kupon",
+    "vade_yil": 0.3507,
+    "odeme": 10.45,
+    "fiyat": 9.7,
+    "getiri": 23.6609
+   },
+   {
+    "kod": "TP.TRT131119A10",
+    "itfa": "2019-11-13",
+    "etiket": "24T2A131119",
+    "strip": "anapara",
+    "vade_yil": 0.4082,
+    "odeme": 100.0,
+    "fiyat": 91.715,
+    "getiri": 23.5972
+   },
+   {
+    "kod": "TP.TRT131119K42",
+    "itfa": "2019-11-13",
+    "etiket": "24T2K4131119",
+    "strip": "kupon",
+    "vade_yil": 0.4082,
+    "odeme": 6.5,
+    "fiyat": 5.961,
+    "getiri": 23.6213
+   },
+   {
+    "kod": "TP.TRT181219K12",
+    "itfa": "2019-12-18",
+    "etiket": "61T2K3140623",
+    "strip": "kupon",
+    "vade_yil": 0.5041,
+    "odeme": 8.1,
+    "fiyat": 7.269,
+    "getiri": 23.9522
+   },
+   {
+    "kod": "TP.TRT080120K22",
+    "itfa": "2020-01-08",
+    "etiket": "61T2K9080720",
+    "strip": "kupon",
+    "vade_yil": 0.5616,
+    "odeme": 4.7,
+    "fiyat": 4.165,
+    "getiri": 24.0067
+   },
+   {
+    "kod": "TP.TRT150120A17",
+    "itfa": "2020-01-15",
+    "etiket": "121T2A150120",
+    "strip": "anapara",
+    "vade_yil": 0.5808,
+    "odeme": 100.0,
+    "fiyat": 88.254,
+    "getiri": 24.0021
+   },
+   {
+    "kod": "TP.TRT150120K15",
+    "itfa": "2020-01-15",
+    "etiket": "121T2K20150120",
+    "strip": "kupon",
+    "vade_yil": 0.5808,
+    "odeme": 5.25,
+    "fiyat": 4.633,
+    "getiri": 24.0175
+   },
+   {
+    "kod": "TP.TRT150120K23",
+    "itfa": "2020-01-15",
+    "etiket": "121T2K16120122",
+    "strip": "kupon",
+    "vade_yil": 0.5808,
+    "odeme": 4.75,
+    "fiyat": 4.192,
+    "getiri": 24.0054
+   },
+   {
+    "kod": "TP.TRT220120K32",
+    "itfa": "2020-01-22",
+    "etiket": "61T2K4180123",
+    "strip": "kupon",
+    "vade_yil": 0.6,
+    "odeme": 6.1,
+    "fiyat": 5.361,
+    "getiri": 24.0148
+   },
+   {
+    "kod": "TP.TRT290120K19",
+    "itfa": "2020-01-29",
+    "etiket": "121T2K11240724",
+    "strip": "kupon",
+    "vade_yil": 0.6192,
+    "odeme": 4.5,
+    "fiyat": 3.939,
+    "getiri": 23.9916
+   },
+   {
+    "kod": "TP.TRT050220A18",
+    "itfa": "2020-02-05",
+    "etiket": "61T2A050220",
+    "strip": "anapara",
+    "vade_yil": 0.6384,
+    "odeme": 100.0,
+    "fiyat": 87.16,
+    "getiri": 24.0208
+   },
+   {
+    "kod": "TP.TRT050220K24",
+    "itfa": "2020-02-05",
+    "etiket": "61T2K10050220",
+    "strip": "kupon",
+    "vade_yil": 0.6384,
+    "odeme": 3.7,
+    "fiyat": 3.225,
+    "getiri": 24.016
+   },
+   {
+    "kod": "TP.TRT120220K17",
+    "itfa": "2020-02-12",
+    "etiket": "24T2K3120820",
+    "strip": "kupon",
+    "vade_yil": 0.6575,
+    "odeme": 11.5,
+    "fiyat": 9.982,
+    "getiri": 24.0227
+   },
+   {
+    "kod": "TP.TRT190220K10",
+    "itfa": "2020-02-19",
+    "etiket": "61T2K8170221",
+    "strip": "kupon",
+    "vade_yil": 0.6767,
+    "odeme": 5.35,
+    "fiyat": 4.625,
+    "getiri": 24.0095
+   },
+   {
+    "kod": "TP.TRT190220K28",
+    "itfa": "2020-02-19",
+    "etiket": "121T2K8110226",
+    "strip": "kupon",
+    "vade_yil": 0.6767,
+    "odeme": 5.3,
+    "fiyat": 4.581,
+    "getiri": 24.0405
+   },
+   {
+    "kod": "TP.TRT190220K36",
+    "itfa": "2020-02-19",
+    "etiket": "61T2K5170822",
+    "strip": "kupon",
+    "vade_yil": 0.6767,
+    "odeme": 5.35,
+    "fiyat": 4.625,
+    "getiri": 24.0095
+   },
+   {
+    "kod": "TP.TRT190220K44",
+    "itfa": "2020-02-19",
+    "etiket": "121T2K5110827",
+    "strip": "kupon",
+    "vade_yil": 0.6767,
+    "odeme": 5.25,
+    "fiyat": 4.538,
+    "getiri": 24.0317
+   },
+   {
+    "kod": "TP.TRT040320K16",
+    "itfa": "2020-03-04",
+    "etiket": "61T2K6020322",
+    "strip": "kupon",
+    "vade_yil": 0.7151,
+    "odeme": 5.5,
+    "fiyat": 4.715,
+    "getiri": 24.0312
+   },
+   {
+    "kod": "TP.TRT040320K24",
+    "itfa": "2020-03-04",
+    "etiket": "121T2K6240227",
+    "strip": "kupon",
+    "vade_yil": 0.7151,
+    "odeme": 5.5,
+    "fiyat": 4.715,
+    "getiri": 24.0312
+   },
+   {
+    "kod": "TP.TRT110320K25",
+    "itfa": "2020-03-11",
+    "etiket": "121T2K14080323",
+    "strip": "kupon",
+    "vade_yil": 0.7342,
+    "odeme": 3.55,
+    "fiyat": 3.031,
+    "getiri": 24.0186
+   },
+   {
+    "kod": "TP.TRT180320K10",
+    "itfa": "2020-03-18",
+    "etiket": "121T2K15140922",
+    "strip": "kupon",
+    "vade_yil": 0.7534,
+    "odeme": 4.25,
+    "fiyat": 3.614,
+    "getiri": 24.0055
+   },
+   {
+    "kod": "TP.TRT180320K28",
+    "itfa": "2020-03-18",
+    "etiket": "121T2K10120325",
+    "strip": "kupon",
+    "vade_yil": 0.7534,
+    "odeme": 4.0,
+    "fiyat": 3.401,
+    "getiri": 24.0255
+   },
+   {
+    "kod": "TP.TRT180320K36",
+    "itfa": "2020-03-18",
+    "etiket": "121T2K4080328",
+    "strip": "kupon",
+    "vade_yil": 0.7534,
+    "odeme": 6.2,
+    "fiyat": 5.272,
+    "getiri": 24.0114
+   },
+   {
+    "kod": "TP.TRT250320K11",
+    "itfa": "2020-03-25",
+    "etiket": "121T2K12200324",
+    "strip": "kupon",
+    "vade_yil": 0.7726,
+    "odeme": 5.2,
+    "fiyat": 4.404,
+    "getiri": 23.9919
+   },
+   {
+    "kod": "TP.TRT250320K37",
+    "itfa": "2020-03-25",
+    "etiket": "61T2K7220921",
+    "strip": "kupon",
+    "vade_yil": 0.7726,
+    "odeme": 4.6,
+    "fiyat": 3.895,
+    "getiri": 24.0268
+   },
+   {
+    "kod": "TP.TRT010420K26",
+    "itfa": "2020-04-01",
+    "etiket": "121T2K13270923",
+    "strip": "kupon",
+    "vade_yil": 0.7918,
+    "odeme": 4.4,
+    "fiyat": 3.711,
+    "getiri": 23.9972
+   },
+   {
+    "kod": "TP.TRT220420K39",
+    "itfa": "2020-04-22",
+    "etiket": "61T2K3181023",
+    "strip": "kupon",
+    "vade_yil": 0.8493,
+    "odeme": 10.05,
+    "fiyat": 8.373,
+    "getiri": 23.98
+   },
+   {
+    "kod": "TP.TRT220420K47",
+    "itfa": "2020-04-22",
+    "etiket": "24T2K2210421",
+    "strip": "kupon",
+    "vade_yil": 0.8493,
+    "odeme": 10.45,
+    "fiyat": 8.707,
+    "getiri": 23.9675
+   },
+   {
+    "kod": "TP.TRT170620K18",
+    "itfa": "2020-06-17",
+    "etiket": "61T2K4140623",
+    "strip": "kupon",
+    "vade_yil": 1.0027,
+    "odeme": 8.1,
+    "fiyat": 6.536,
+    "getiri": 23.8564
+   },
+   {
+    "kod": "TP.TRT080720A10",
+    "itfa": "2020-07-08",
+    "etiket": "61T2A080720",
+    "strip": "anapara",
+    "vade_yil": 1.0603,
+    "odeme": 100.0,
+    "fiyat": 79.749,
+    "getiri": 23.7907
+   },
+   {
+    "kod": "TP.TRT080720K26",
+    "itfa": "2020-07-08",
+    "etiket": "61T2K10080720",
+    "strip": "kupon",
+    "vade_yil": 1.0603,
+    "odeme": 4.7,
+    "fiyat": 3.748,
+    "getiri": 23.797
+   },
+   {
+    "kod": "TP.TRT150720K19",
+    "itfa": "2020-07-15",
+    "etiket": "121T2K17120122",
+    "strip": "kupon",
+    "vade_yil": 1.0795,
+    "odeme": 4.75,
+    "fiyat": 3.773,
+    "getiri": 23.7787
+   },
+   {
+    "kod": "TP.TRT220720K36",
+    "itfa": "2020-07-22",
+    "etiket": "61T2K5180123",
+    "strip": "kupon",
+    "vade_yil": 1.0986,
+    "odeme": 6.1,
+    "fiyat": 4.827,
+    "getiri": 23.7447
+   },
+   {
+    "kod": "TP.TRT290720K13",
+    "itfa": "2020-07-29",
+    "etiket": "121T2K12240724",
+    "strip": "kupon",
+    "vade_yil": 1.1178,
+    "odeme": 4.5,
+    "fiyat": 3.547,
+    "getiri": 23.7254
+   },
+   {
+    "kod": "TP.TRT120820A13",
+    "itfa": "2020-08-12",
+    "etiket": "24T2A120820",
+    "strip": "anapara",
+    "vade_yil": 1.1562,
+    "odeme": 100.0,
+    "fiyat": 78.214,
+    "getiri": 23.6805
+   },
+   {
+    "kod": "TP.TRT120820K11",
+    "itfa": "2020-08-12",
+    "etiket": "24T2K4120820",
+    "strip": "kupon",
+    "vade_yil": 1.1562,
+    "odeme": 11.5,
+    "fiyat": 8.995,
+    "getiri": 23.6759
+   },
+   {
+    "kod": "TP.TRT190820K14",
+    "itfa": "2020-08-19",
+    "etiket": "61T2K9170221",
+    "strip": "kupon",
+    "vade_yil": 1.1753,
+    "odeme": 5.35,
+    "fiyat": 4.168,
+    "getiri": 23.6661
+   },
+   {
+    "kod": "TP.TRT190820K22",
+    "itfa": "2020-08-19",
+    "etiket": "121T2K9110226",
+    "strip": "kupon",
+    "vade_yil": 1.1753,
+    "odeme": 5.3,
+    "fiyat": 4.129,
+    "getiri": 23.6673
+   },
+   {
+    "kod": "TP.TRT190820K30",
+    "itfa": "2020-08-19",
+    "etiket": "61T2K6170822",
+    "strip": "kupon",
+    "vade_yil": 1.1753,
+    "odeme": 5.35,
+    "fiyat": 4.168,
+    "getiri": 23.6661
+   },
+   {
+    "kod": "TP.TRT190820K48",
+    "itfa": "2020-08-19",
+    "etiket": "121T2K6110827",
+    "strip": "kupon",
+    "vade_yil": 1.1753,
+    "odeme": 5.25,
+    "fiyat": 4.09,
+    "getiri": 23.6685
+   },
+   {
+    "kod": "TP.TRT020920K12",
+    "itfa": "2020-09-02",
+    "etiket": "61T2K7020322",
+    "strip": "kupon",
+    "vade_yil": 1.2137,
+    "odeme": 5.5,
+    "fiyat": 4.253,
+    "getiri": 23.5964
+   },
+   {
+    "kod": "TP.TRT020920K20",
+    "itfa": "2020-09-02",
+    "etiket": "121T2K7240227",
+    "strip": "kupon",
+    "vade_yil": 1.2137,
+    "odeme": 5.5,
+    "fiyat": 4.253,
+    "getiri": 23.5964
+   },
+   {
+    "kod": "TP.TRT090920K15",
+    "itfa": "2020-09-09",
+    "etiket": "121T2K15080323",
+    "strip": "kupon",
+    "vade_yil": 1.2329,
+    "odeme": 3.55,
+    "fiyat": 2.734,
+    "getiri": 23.5959
+   },
+   {
+    "kod": "TP.TRT160920K16",
+    "itfa": "2020-09-16",
+    "etiket": "121T2K16140922",
+    "strip": "kupon",
+    "vade_yil": 1.2521,
+    "odeme": 4.25,
+    "fiyat": 3.261,
+    "getiri": 23.5604
+   },
+   {
+    "kod": "TP.TRT160920K24",
+    "itfa": "2020-09-16",
+    "etiket": "121T2K11120325",
+    "strip": "kupon",
+    "vade_yil": 1.2521,
+    "odeme": 4.0,
+    "fiyat": 3.069,
+    "getiri": 23.5661
+   },
+   {
+    "kod": "TP.TRT160920K32",
+    "itfa": "2020-09-16",
+    "etiket": "121T2K5080328",
+    "strip": "kupon",
+    "vade_yil": 1.2521,
+    "odeme": 6.2,
+    "fiyat": 4.757,
+    "getiri": 23.5651
+   },
+   {
+    "kod": "TP.TRT230920K17",
+    "itfa": "2020-09-23",
+    "etiket": "121T2K13200324",
+    "strip": "kupon",
+    "vade_yil": 1.2712,
+    "odeme": 5.2,
+    "fiyat": 3.975,
+    "getiri": 23.5305
+   },
+   {
+    "kod": "TP.TRT230920K33",
+    "itfa": "2020-09-23",
+    "etiket": "61T2K8220921",
+    "strip": "kupon",
+    "vade_yil": 1.2712,
+    "odeme": 4.6,
+    "fiyat": 3.516,
+    "getiri": 23.54
+   },
+   {
+    "kod": "TP.TRT300920K18",
+    "itfa": "2020-09-30",
+    "etiket": "121T2K14270923",
+    "strip": "kupon",
+    "vade_yil": 1.2904,
+    "odeme": 4.4,
+    "fiyat": 3.351,
+    "getiri": 23.4978
+   },
+   {
+    "kod": "TP.TRT211020K32",
+    "itfa": "2020-10-21",
+    "etiket": "61T2K4181023",
+    "strip": "kupon",
+    "vade_yil": 1.3479,
+    "odeme": 10.05,
+    "fiyat": 7.568,
+    "getiri": 23.4205
+   },
+   {
+    "kod": "TP.TRT211020K40",
+    "itfa": "2020-10-21",
+    "etiket": "24T2K3210421",
+    "strip": "kupon",
+    "vade_yil": 1.3479,
+    "odeme": 10.45,
+    "fiyat": 7.869,
+    "getiri": 23.423
+   },
+   {
+    "kod": "TP.TRT161220K11",
+    "itfa": "2020-12-16",
+    "etiket": "61T2K5140623",
+    "strip": "kupon",
+    "vade_yil": 1.5014,
+    "odeme": 8.1,
+    "fiyat": 5.922,
+    "getiri": 23.1955
+   },
+   {
+    "kod": "TP.TRT130121K16",
+    "itfa": "2021-01-13",
+    "etiket": "121T2K18120122",
+    "strip": "kupon",
+    "vade_yil": 1.5781,
+    "odeme": 4.75,
+    "fiyat": 3.423,
+    "getiri": 23.0734
+   },
+   {
+    "kod": "TP.TRT200121K33",
+    "itfa": "2021-01-20",
+    "etiket": "61T2K6180123",
+    "strip": "kupon",
+    "vade_yil": 1.5973,
+    "odeme": 6.1,
+    "fiyat": 4.38,
+    "getiri": 23.045
+   },
+   {
+    "kod": "TP.TRT270121K10",
+    "itfa": "2021-01-27",
+    "etiket": "121T2K13240724",
+    "strip": "kupon",
+    "vade_yil": 1.6164,
+    "odeme": 4.5,
+    "fiyat": 3.219,
+    "getiri": 23.029
+   },
+   {
+    "kod": "TP.TRT170221A13",
+    "itfa": "2021-02-17",
+    "etiket": "61T2A170221",
+    "strip": "anapara",
+    "vade_yil": 1.674,
+    "odeme": 100.0,
+    "fiyat": 70.775,
+    "getiri": 22.936
+   },
+   {
+    "kod": "TP.TRT170221K11",
+    "itfa": "2021-02-17",
+    "etiket": "61T2K10170221",
+    "strip": "kupon",
+    "vade_yil": 1.674,
+    "odeme": 5.35,
+    "fiyat": 3.786,
+    "getiri": 22.9449
+   },
+   {
+    "kod": "TP.TRT170221K29",
+    "itfa": "2021-02-17",
+    "etiket": "121T2K10110226",
+    "strip": "kupon",
+    "vade_yil": 1.674,
+    "odeme": 5.3,
+    "fiyat": 3.751,
+    "getiri": 22.9374
+   },
+   {
+    "kod": "TP.TRT170221K37",
+    "itfa": "2021-02-17",
+    "etiket": "61T2K7170822",
+    "strip": "kupon",
+    "vade_yil": 1.674,
+    "odeme": 5.35,
+    "fiyat": 3.786,
+    "getiri": 22.9449
+   },
+   {
+    "kod": "TP.TRT170221K45",
+    "itfa": "2021-02-17",
+    "etiket": "121T2K7110827",
+    "strip": "kupon",
+    "vade_yil": 1.674,
+    "odeme": 5.25,
+    "fiyat": 3.716,
+    "getiri": 22.9298
+   },
+   {
+    "kod": "TP.TRT030321K16",
+    "itfa": "2021-03-03",
+    "etiket": "61T2K8020322",
+    "strip": "kupon",
+    "vade_yil": 1.7123,
+    "odeme": 5.5,
+    "fiyat": 3.865,
+    "getiri": 22.8787
+   },
+   {
+    "kod": "TP.TRT030321K24",
+    "itfa": "2021-03-03",
+    "etiket": "121T2K8240227",
+    "strip": "kupon",
+    "vade_yil": 1.7123,
+    "odeme": 5.5,
+    "fiyat": 3.865,
+    "getiri": 22.8787
+   },
+   {
+    "kod": "TP.TRT100321K17",
+    "itfa": "2021-03-10",
+    "etiket": "121T2K16080323",
+    "strip": "kupon",
+    "vade_yil": 1.7315,
+    "odeme": 3.55,
+    "fiyat": 2.486,
+    "getiri": 22.8457
+   },
+   {
+    "kod": "TP.TRT170321K10",
+    "itfa": "2021-03-17",
+    "etiket": "121T2K17140922",
+    "strip": "kupon",
+    "vade_yil": 1.7507,
+    "odeme": 4.25,
+    "fiyat": 2.966,
+    "getiri": 22.8096
+   },
+   {
+    "kod": "TP.TRT170321K28",
+    "itfa": "2021-03-17",
+    "etiket": "121T2K12120325",
+    "strip": "kupon",
+    "vade_yil": 1.7507,
+    "odeme": 4.0,
+    "fiyat": 2.791,
+    "getiri": 22.8229
+   },
+   {
+    "kod": "TP.TRT170321K36",
+    "itfa": "2021-03-17",
+    "etiket": "121T2K6080328",
+    "strip": "kupon",
+    "vade_yil": 1.7507,
+    "odeme": 6.2,
+    "fiyat": 4.326,
+    "getiri": 22.8237
+   },
+   {
+    "kod": "TP.TRT240321K11",
+    "itfa": "2021-03-24",
+    "etiket": "121T2K14200324",
+    "strip": "kupon",
+    "vade_yil": 1.7699,
+    "odeme": 5.2,
+    "fiyat": 3.616,
+    "getiri": 22.785
+   },
+   {
+    "kod": "TP.TRT240321K37",
+    "itfa": "2021-03-24",
+    "etiket": "61T2K9220921",
+    "strip": "kupon",
+    "vade_yil": 1.7699,
+    "odeme": 4.6,
+    "fiyat": 3.199,
+    "getiri": 22.78
+   },
+   {
+    "kod": "TP.TRT310321K12",
+    "itfa": "2021-03-31",
+    "etiket": "121T2K15270923",
+    "strip": "kupon",
+    "vade_yil": 1.789,
+    "odeme": 4.4,
+    "fiyat": 3.049,
+    "getiri": 22.7551
+   },
+   {
+    "kod": "TP.TRT210421A15",
+    "itfa": "2021-04-21",
+    "etiket": "24T2A210421",
+    "strip": "anapara",
+    "vade_yil": 1.8466,
+    "odeme": 100.0,
+    "fiyat": 68.571,
+    "getiri": 22.6696
+   },
+   {
+    "kod": "TP.TRT210421K39",
+    "itfa": "2021-04-21",
+    "etiket": "61T2K5181023",
+    "strip": "kupon",
+    "vade_yil": 1.8466,
+    "odeme": 10.05,
+    "fiyat": 6.891,
+    "getiri": 22.6733
+   },
+   {
+    "kod": "TP.TRT210421K47",
+    "itfa": "2021-04-21",
+    "etiket": "24T2K4210421",
+    "strip": "kupon",
+    "vade_yil": 1.8466,
+    "odeme": 10.45,
+    "fiyat": 7.166,
+    "getiri": 22.6665
+   },
+   {
+    "kod": "TP.TRT160621K18",
+    "itfa": "2021-06-16",
+    "etiket": "61T2K6140623",
+    "strip": "kupon",
+    "vade_yil": 2.0,
+    "odeme": 8.1,
+    "fiyat": 5.403,
+    "getiri": 22.4405
+   },
+   {
+    "kod": "TP.TRT140721K19",
+    "itfa": "2021-07-14",
+    "etiket": "121T2K19120122",
+    "strip": "kupon",
+    "vade_yil": 2.0767,
+    "odeme": 4.75,
+    "fiyat": 3.126,
+    "getiri": 22.3197
+   },
+   {
+    "kod": "TP.TRT210721K36",
+    "itfa": "2021-07-21",
+    "etiket": "61T2K7180123",
+    "strip": "kupon",
+    "vade_yil": 2.0959,
+    "odeme": 6.1,
+    "fiyat": 4.001,
+    "getiri": 22.2899
+   },
+   {
+    "kod": "TP.TRT280721K13",
+    "itfa": "2021-07-28",
+    "etiket": "121T2K14240724",
+    "strip": "kupon",
+    "vade_yil": 2.1151,
+    "odeme": 4.5,
+    "fiyat": 2.941,
+    "getiri": 22.274
+   },
+   {
+    "kod": "TP.TRT180821K14",
+    "itfa": "2021-08-18",
+    "etiket": "121T2K11110226",
+    "strip": "kupon",
+    "vade_yil": 2.1726,
+    "odeme": 5.3,
+    "fiyat": 3.43,
+    "getiri": 22.1755
+   },
+   {
+    "kod": "TP.TRT180821K22",
+    "itfa": "2021-08-18",
+    "etiket": "61T2K8170822",
+    "strip": "kupon",
+    "vade_yil": 2.1726,
+    "odeme": 5.35,
+    "fiyat": 3.462,
+    "getiri": 22.1813
+   },
+   {
+    "kod": "TP.TRT180821K30",
+    "itfa": "2021-08-18",
+    "etiket": "121T2K8110827",
+    "strip": "kupon",
+    "vade_yil": 2.1726,
+    "odeme": 5.25,
+    "fiyat": 3.397,
+    "getiri": 22.1861
+   },
+   {
+    "kod": "TP.TRT010921K12",
+    "itfa": "2021-09-01",
+    "etiket": "61T2K9020322",
+    "strip": "kupon",
+    "vade_yil": 2.211,
+    "odeme": 5.5,
+    "fiyat": 3.535,
+    "getiri": 22.1316
+   },
+   {
+    "kod": "TP.TRT010921K20",
+    "itfa": "2021-09-01",
+    "etiket": "121T2K9240227",
+    "strip": "kupon",
+    "vade_yil": 2.211,
+    "odeme": 5.5,
+    "fiyat": 3.535,
+    "getiri": 22.1316
+   },
+   {
+    "kod": "TP.TRT080921K15",
+    "itfa": "2021-09-08",
+    "etiket": "121T2K17080323",
+    "strip": "kupon",
+    "vade_yil": 2.2301,
+    "odeme": 3.55,
+    "fiyat": 2.274,
+    "getiri": 22.1063
+   },
+   {
+    "kod": "TP.TRT150921K16",
+    "itfa": "2021-09-15",
+    "etiket": "121T2K18140922",
+    "strip": "kupon",
+    "vade_yil": 2.2493,
+    "odeme": 4.25,
+    "fiyat": 2.714,
+    "getiri": 22.066
+   },
+   {
+    "kod": "TP.TRT150921K24",
+    "itfa": "2021-09-15",
+    "etiket": "121T2K13120325",
+    "strip": "kupon",
+    "vade_yil": 2.2493,
+    "odeme": 4.0,
+    "fiyat": 2.554,
+    "getiri": 22.0735
+   },
+   {
+    "kod": "TP.TRT150921K32",
+    "itfa": "2021-09-15",
+    "etiket": "121T2K7080328",
+    "strip": "kupon",
+    "vade_yil": 2.2493,
+    "odeme": 6.2,
+    "fiyat": 3.959,
+    "getiri": 22.0694
+   },
+   {
+    "kod": "TP.TRT220921A19",
+    "itfa": "2021-09-22",
+    "etiket": "61T2A220921",
+    "strip": "anapara",
+    "vade_yil": 2.2685,
+    "odeme": 100.0,
+    "fiyat": 63.641,
+    "getiri": 22.0441
+   },
+   {
+    "kod": "TP.TRT220921K17",
+    "itfa": "2021-09-22",
+    "etiket": "121T2K15200324",
+    "strip": "kupon",
+    "vade_yil": 2.2685,
+    "odeme": 5.2,
+    "fiyat": 3.309,
+    "getiri": 22.0495
+   },
+   {
+    "kod": "TP.TRT220921K33",
+    "itfa": "2021-09-22",
+    "etiket": "61T2K10220921",
+    "strip": "kupon",
+    "vade_yil": 2.2685,
+    "odeme": 4.6,
+    "fiyat": 2.927,
+    "getiri": 22.0531
+   },
+   {
+    "kod": "TP.TRT290921K10",
+    "itfa": "2021-09-29",
+    "etiket": "121T2K16270923",
+    "strip": "kupon",
+    "vade_yil": 2.2877,
+    "odeme": 4.4,
+    "fiyat": 2.791,
+    "getiri": 22.016
+   },
+   {
+    "kod": "TP.TRT201021K32",
+    "itfa": "2021-10-20",
+    "etiket": "61T2K6181023",
+    "strip": "kupon",
+    "vade_yil": 2.3452,
+    "odeme": 10.05,
+    "fiyat": 6.312,
+    "getiri": 21.9362
+   },
+   {
+    "kod": "TP.TRT151221K11",
+    "itfa": "2021-12-15",
+    "etiket": "61T2K7140623",
+    "strip": "kupon",
+    "vade_yil": 2.4986,
+    "odeme": 8.1,
+    "fiyat": 4.956,
+    "getiri": 21.7274
+   },
+   {
+    "kod": "TP.TRT120122A18",
+    "itfa": "2022-01-12",
+    "etiket": "121T2A120122",
+    "strip": "anapara",
+    "vade_yil": 2.5753,
+    "odeme": 100.0,
+    "fiyat": 60.395,
+    "getiri": 21.6289
+   },
+   {
+    "kod": "TP.TRT120122K16",
+    "itfa": "2022-01-12",
+    "etiket": "121T2K20120122",
+    "strip": "kupon",
+    "vade_yil": 2.5753,
+    "odeme": 4.75,
+    "fiyat": 2.869,
+    "getiri": 21.625
+   },
+   {
+    "kod": "TP.TRT190122K27",
+    "itfa": "2022-01-19",
+    "etiket": "61T2K8180123",
+    "strip": "kupon",
+    "vade_yil": 2.5945,
+    "odeme": 6.1,
+    "fiyat": 3.672,
+    "getiri": 21.607
+   },
+   {
+    "kod": "TP.TRT260122K10",
+    "itfa": "2022-01-26",
+    "etiket": "121T2K15240724",
+    "strip": "kupon",
+    "vade_yil": 2.6137,
+    "odeme": 4.5,
+    "fiyat": 2.7,
+    "getiri": 21.5848
+   },
+   {
+    "kod": "TP.TRT160222K11",
+    "itfa": "2022-02-16",
+    "etiket": "121T2K12110226",
+    "strip": "kupon",
+    "vade_yil": 2.6712,
+    "odeme": 5.3,
+    "fiyat": 3.15,
+    "getiri": 21.5044
+   },
+   {
+    "kod": "TP.TRT160222K29",
+    "itfa": "2022-02-16",
+    "etiket": "61T2K9170822",
+    "strip": "kupon",
+    "vade_yil": 2.6712,
+    "odeme": 5.35,
+    "fiyat": 3.18,
+    "getiri": 21.5004
+   },
+   {
+    "kod": "TP.TRT160222K37",
+    "itfa": "2022-02-16",
+    "etiket": "121T2K9110827",
+    "strip": "kupon",
+    "vade_yil": 2.6712,
+    "odeme": 5.25,
+    "fiyat": 3.12,
+    "getiri": 21.5086
+   },
+   {
+    "kod": "TP.TRT020322A18",
+    "itfa": "2022-03-02",
+    "etiket": "61T2A020322",
+    "strip": "anapara",
+    "vade_yil": 2.7096,
+    "odeme": 100.0,
+    "fiyat": 59.051,
+    "getiri": 21.4593
+   },
+   {
+    "kod": "TP.TRT020322K16",
+    "itfa": "2022-03-02",
+    "etiket": "61T2K10020322",
+    "strip": "kupon",
+    "vade_yil": 2.7096,
+    "odeme": 5.5,
+    "fiyat": 3.248,
+    "getiri": 21.4566
+   },
+   {
+    "kod": "TP.TRT020322K24",
+    "itfa": "2022-03-02",
+    "etiket": "121T2K10240227",
+    "strip": "kupon",
+    "vade_yil": 2.7096,
+    "odeme": 5.5,
+    "fiyat": 3.248,
+    "getiri": 21.4566
+   },
+   {
+    "kod": "TP.TRT090322K19",
+    "itfa": "2022-03-09",
+    "etiket": "121T2K18080323",
+    "strip": "kupon",
+    "vade_yil": 2.7288,
+    "odeme": 3.55,
+    "fiyat": 2.09,
+    "getiri": 21.4275
+   },
+   {
+    "kod": "TP.TRT160322K10",
+    "itfa": "2022-03-16",
+    "etiket": "121T2K19140922",
+    "strip": "kupon",
+    "vade_yil": 2.7479,
+    "odeme": 4.25,
+    "fiyat": 2.494,
+    "getiri": 21.4065
+   },
+   {
+    "kod": "TP.TRT160322K28",
+    "itfa": "2022-03-16",
+    "etiket": "121T2K14120325",
+    "strip": "kupon",
+    "vade_yil": 2.7479,
+    "odeme": 4.0,
+    "fiyat": 2.347,
+    "getiri": 21.4121
+   },
+   {
+    "kod": "TP.TRT160322K36",
+    "itfa": "2022-03-16",
+    "etiket": "121T2K8080328",
+    "strip": "kupon",
+    "vade_yil": 2.7479,
+    "odeme": 6.2,
+    "fiyat": 3.638,
+    "getiri": 21.4102
+   },
+   {
+    "kod": "TP.TRT230322K11",
+    "itfa": "2022-03-23",
+    "etiket": "121T2K16200324",
+    "strip": "kupon",
+    "vade_yil": 2.7671,
+    "odeme": 5.2,
+    "fiyat": 3.041,
+    "getiri": 21.3943
+   },
+   {
+    "kod": "TP.TRT300322K12",
+    "itfa": "2022-03-30",
+    "etiket": "121T2K17270923",
+    "strip": "kupon",
+    "vade_yil": 2.7863,
+    "odeme": 4.4,
+    "fiyat": 2.565,
+    "getiri": 21.3706
+   },
+   {
+    "kod": "TP.TRT200422K39",
+    "itfa": "2022-04-20",
+    "etiket": "61T2K7181023",
+    "strip": "kupon",
+    "vade_yil": 2.8438,
+    "odeme": 10.05,
+    "fiyat": 5.804,
+    "getiri": 21.2953
+   },
+   {
+    "kod": "TP.TRT150622K18",
+    "itfa": "2022-06-15",
+    "etiket": "61T2K8140623",
+    "strip": "kupon",
+    "vade_yil": 2.9973,
+    "odeme": 8.1,
+    "fiyat": 4.561,
+    "getiri": 21.1205
+   },
+   {
+    "kod": "TP.TRT200722K28",
+    "itfa": "2022-07-20",
+    "etiket": "61T2K9180123",
+    "strip": "kupon",
+    "vade_yil": 3.0932,
+    "odeme": 6.1,
+    "fiyat": 3.381,
+    "getiri": 21.0196
+   },
+   {
+    "kod": "TP.TRT270722K13",
+    "itfa": "2022-07-27",
+    "etiket": "121T2K16240724",
+    "strip": "kupon",
+    "vade_yil": 3.1123,
+    "odeme": 4.5,
+    "fiyat": 2.487,
+    "getiri": 20.9894
+   },
+   {
+    "kod": "TP.TRT170822A16",
+    "itfa": "2022-08-17",
+    "etiket": "61T2A170822",
+    "strip": "anapara",
+    "vade_yil": 3.1699,
+    "odeme": 100.0,
+    "fiyat": 54.745,
+    "getiri": 20.933
+   },
+   {
+    "kod": "TP.TRT170822K14",
+    "itfa": "2022-08-17",
+    "etiket": "121T2K13110226",
+    "strip": "kupon",
+    "vade_yil": 3.1699,
+    "odeme": 5.3,
+    "fiyat": 2.901,
+    "getiri": 20.9394
+   },
+   {
+    "kod": "TP.TRT170822K22",
+    "itfa": "2022-08-17",
+    "etiket": "61T2K10170822",
+    "strip": "kupon",
+    "vade_yil": 3.1699,
+    "odeme": 5.35,
+    "fiyat": 2.929,
+    "getiri": 20.9311
+   },
+   {
+    "kod": "TP.TRT170822K30",
+    "itfa": "2022-08-17",
+    "etiket": "121T2K10110827",
+    "strip": "kupon",
+    "vade_yil": 3.1699,
+    "odeme": 5.25,
+    "fiyat": 2.874,
+    "getiri": 20.9345
+   },
+   {
+    "kod": "TP.TRT310822K16",
+    "itfa": "2022-08-31",
+    "etiket": "121T2K11240227",
+    "strip": "kupon",
+    "vade_yil": 3.2082,
+    "odeme": 5.5,
+    "fiyat": 2.992,
+    "getiri": 20.8965
+   },
+   {
+    "kod": "TP.TRT070922K15",
+    "itfa": "2022-09-07",
+    "etiket": "121T2K19080323",
+    "strip": "kupon",
+    "vade_yil": 3.2274,
+    "odeme": 3.55,
+    "fiyat": 1.925,
+    "getiri": 20.8806
+   },
+   {
+    "kod": "TP.TRT140922A18",
+    "itfa": "2022-09-14",
+    "etiket": "121T2A140922",
+    "strip": "anapara",
+    "vade_yil": 3.2466,
+    "odeme": 100.0,
+    "fiyat": 54.068,
+    "getiri": 20.8534
+   },
+   {
+    "kod": "TP.TRT140922K16",
+    "itfa": "2022-09-14",
+    "etiket": "121T2K20140922",
+    "strip": "kupon",
+    "vade_yil": 3.2466,
+    "odeme": 4.25,
+    "fiyat": 2.298,
+    "getiri": 20.8516
+   },
+   {
+    "kod": "TP.TRT140922K24",
+    "itfa": "2022-09-14",
+    "etiket": "121T2K15120325",
+    "strip": "kupon",
+    "vade_yil": 3.2466,
+    "odeme": 4.0,
+    "fiyat": 2.163,
+    "getiri": 20.8486
+   },
+   {
+    "kod": "TP.TRT140922K32",
+    "itfa": "2022-09-14",
+    "etiket": "121T2K9080328",
+    "strip": "kupon",
+    "vade_yil": 3.2466,
+    "odeme": 6.2,
+    "fiyat": 3.352,
+    "getiri": 20.8558
+   },
+   {
+    "kod": "TP.TRT210922K17",
+    "itfa": "2022-09-21",
+    "etiket": "121T2K17200324",
+    "strip": "kupon",
+    "vade_yil": 3.2658,
+    "odeme": 5.2,
+    "fiyat": 2.803,
+    "getiri": 20.8315
+   },
+   {
+    "kod": "TP.TRT280922K10",
+    "itfa": "2022-09-28",
+    "etiket": "121T2K18270923",
+    "strip": "kupon",
+    "vade_yil": 3.2849,
+    "odeme": 4.4,
+    "fiyat": 2.364,
+    "getiri": 20.8187
+   },
+   {
+    "kod": "TP.TRT191022K26",
+    "itfa": "2022-10-19",
+    "etiket": "61T2K8181023",
+    "strip": "kupon",
+    "vade_yil": 3.3425,
+    "odeme": 10.05,
+    "fiyat": 5.35,
+    "getiri": 20.7589
+   },
+   {
+    "kod": "TP.TRT141222K11",
+    "itfa": "2022-12-14",
+    "etiket": "61T2K9140623",
+    "strip": "kupon",
+    "vade_yil": 3.4959,
+    "odeme": 8.1,
+    "fiyat": 4.207,
+    "getiri": 20.6104
+   },
+   {
+    "kod": "TP.TRT180123A11",
+    "itfa": "2023-01-18",
+    "etiket": "61T2A180123",
+    "strip": "anapara",
+    "vade_yil": 3.5918,
+    "odeme": 100.0,
+    "fiyat": 51.154,
+    "getiri": 20.518
+   },
+   {
+    "kod": "TP.TRT180123K27",
+    "itfa": "2023-01-18",
+    "etiket": "61T2K10180123",
+    "strip": "kupon",
+    "vade_yil": 3.5918,
+    "odeme": 6.1,
+    "fiyat": 3.12,
+    "getiri": 20.5222
+   },
+   {
+    "kod": "TP.TRT250123K10",
+    "itfa": "2023-01-25",
+    "etiket": "121T2K17240724",
+    "strip": "kupon",
+    "vade_yil": 3.611,
+    "odeme": 4.5,
+    "fiyat": 2.295,
+    "getiri": 20.4991
+   },
+   {
+    "kod": "TP.TRT150223K11",
+    "itfa": "2023-02-15",
+    "etiket": "121T2K14110226",
+    "strip": "kupon",
+    "vade_yil": 3.6685,
+    "odeme": 5.3,
+    "fiyat": 2.678,
+    "getiri": 20.452
+   },
+   {
+    "kod": "TP.TRT150223K29",
+    "itfa": "2023-02-15",
+    "etiket": "121T2K11110827",
+    "strip": "kupon",
+    "vade_yil": 3.6685,
+    "odeme": 5.25,
+    "fiyat": 2.653,
+    "getiri": 20.4487
+   },
+   {
+    "kod": "TP.TRT010323K16",
+    "itfa": "2023-03-01",
+    "etiket": "121T2K12240227",
+    "strip": "kupon",
+    "vade_yil": 3.7068,
+    "odeme": 5.5,
+    "fiyat": 2.763,
+    "getiri": 20.4083
+   },
+   {
+    "kod": "TP.TRT080323A11",
+    "itfa": "2023-03-08",
+    "etiket": "121T2A080323",
+    "strip": "anapara",
+    "vade_yil": 3.726,
+    "odeme": 100.0,
+    "fiyat": 50.076,
+    "getiri": 20.3966
+   },
+   {
+    "kod": "TP.TRT080323K19",
+    "itfa": "2023-03-08",
+    "etiket": "121T2K20080323",
+    "strip": "kupon",
+    "vade_yil": 3.726,
+    "odeme": 3.55,
+    "fiyat": 1.778,
+    "getiri": 20.3911
+   },
+   {
+    "kod": "TP.TRT150323K10",
+    "itfa": "2023-03-15",
+    "etiket": "121T2K16120325",
+    "strip": "kupon",
+    "vade_yil": 3.7452,
+    "odeme": 4.0,
+    "fiyat": 1.997,
+    "getiri": 20.3792
+   },
+   {
+    "kod": "TP.TRT150323K28",
+    "itfa": "2023-03-15",
+    "etiket": "121T2K10080328",
+    "strip": "kupon",
+    "vade_yil": 3.7452,
+    "odeme": 6.2,
+    "fiyat": 3.095,
+    "getiri": 20.3828
+   },
+   {
+    "kod": "TP.TRT220323K11",
+    "itfa": "2023-03-22",
+    "etiket": "121T2K18200324",
+    "strip": "kupon",
+    "vade_yil": 3.7644,
+    "odeme": 5.2,
+    "fiyat": 2.588,
+    "getiri": 20.3654
+   },
+   {
+    "kod": "TP.TRT290323K14",
+    "itfa": "2023-03-29",
+    "etiket": "121T2K19270923",
+    "strip": "kupon",
+    "vade_yil": 3.7836,
+    "odeme": 4.4,
+    "fiyat": 2.183,
+    "getiri": 20.3519
+   },
+   {
+    "kod": "TP.TRT190423K23",
+    "itfa": "2023-04-19",
+    "etiket": "61T2K9181023",
+    "strip": "kupon",
+    "vade_yil": 3.8411,
+    "odeme": 10.05,
+    "fiyat": 4.942,
+    "getiri": 20.2968
+   },
+   {
+    "kod": "TP.TRT140623A10",
+    "itfa": "2023-06-14",
+    "etiket": "61T2A140623",
+    "strip": "anapara",
+    "vade_yil": 3.9945,
+    "odeme": 100.0,
+    "fiyat": 48.005,
+    "getiri": 20.1677
+   },
+   {
+    "kod": "TP.TRT140623K18",
+    "itfa": "2023-06-14",
+    "etiket": "61T2K10140623",
+    "strip": "kupon",
+    "vade_yil": 3.9945,
+    "odeme": 8.1,
+    "fiyat": 3.888,
+    "getiri": 20.1708
+   },
+   {
+    "kod": "TP.TRT260723K13",
+    "itfa": "2023-07-26",
+    "etiket": "121T2K18240724",
+    "strip": "kupon",
+    "vade_yil": 4.1096,
+    "odeme": 4.5,
+    "fiyat": 2.122,
+    "getiri": 20.0716
+   },
+   {
+    "kod": "TP.TRT160823K14",
+    "itfa": "2023-08-16",
+    "etiket": "121T2K15110226",
+    "strip": "kupon",
+    "vade_yil": 4.1671,
+    "odeme": 5.3,
+    "fiyat": 2.477,
+    "getiri": 20.026
+   },
+   {
+    "kod": "TP.TRT160823K22",
+    "itfa": "2023-08-16",
+    "etiket": "121T2K12110827",
+    "strip": "kupon",
+    "vade_yil": 4.1671,
+    "odeme": 5.25,
+    "fiyat": 2.453,
+    "getiri": 20.0334
+   },
+   {
+    "kod": "TP.TRT300823K16",
+    "itfa": "2023-08-30",
+    "etiket": "121T2K13240227",
+    "strip": "kupon",
+    "vade_yil": 4.2055,
+    "odeme": 5.5,
+    "fiyat": 2.555,
+    "getiri": 19.9985
+   },
+   {
+    "kod": "TP.TRT130923K16",
+    "itfa": "2023-09-13",
+    "etiket": "121T2K17120325",
+    "strip": "kupon",
+    "vade_yil": 4.2438,
+    "odeme": 4.0,
+    "fiyat": 1.847,
+    "getiri": 19.9714
+   },
+   {
+    "kod": "TP.TRT130923K24",
+    "itfa": "2023-09-13",
+    "etiket": "121T2K11080328",
+    "strip": "kupon",
+    "vade_yil": 4.2438,
+    "odeme": 6.2,
+    "fiyat": 2.863,
+    "getiri": 19.9699
+   },
+   {
+    "kod": "TP.TRT200923K17",
+    "itfa": "2023-09-20",
+    "etiket": "121T2K19200324",
+    "strip": "kupon",
+    "vade_yil": 4.263,
+    "odeme": 5.2,
+    "fiyat": 2.394,
+    "getiri": 19.9565
+   },
+   {
+    "kod": "TP.TRT270923A12",
+    "itfa": "2023-09-27",
+    "etiket": "121T2A270923",
+    "strip": "anapara",
+    "vade_yil": 4.2822,
+    "odeme": 100.0,
+    "fiyat": 45.906,
+    "getiri": 19.9394
+   },
+   {
+    "kod": "TP.TRT270923K10",
+    "itfa": "2023-09-27",
+    "etiket": "121T2K20270923",
+    "strip": "kupon",
+    "vade_yil": 4.2822,
+    "odeme": 4.4,
+    "fiyat": 2.02,
+    "getiri": 19.9376
+   },
+   {
+    "kod": "TP.TRT181023A10",
+    "itfa": "2023-10-18",
+    "etiket": "61T2A181023",
+    "strip": "anapara",
+    "vade_yil": 4.3397,
+    "odeme": 100.0,
+    "fiyat": 45.501,
+    "getiri": 19.8953
+   },
+   {
+    "kod": "TP.TRT181023K26",
+    "itfa": "2023-10-18",
+    "etiket": "61T2K10181023",
+    "strip": "kupon",
+    "vade_yil": 4.3397,
+    "odeme": 10.05,
+    "fiyat": 4.573,
+    "getiri": 19.8944
+   },
+   {
+    "kod": "TP.TRT240124K10",
+    "itfa": "2024-01-24",
+    "etiket": "121T2K19240724",
+    "strip": "kupon",
+    "vade_yil": 4.6082,
+    "odeme": 4.5,
+    "fiyat": 1.965,
+    "getiri": 19.6985
+   },
+   {
+    "kod": "TP.TRT140224K11",
+    "itfa": "2024-02-14",
+    "etiket": "121T2K16110226",
+    "strip": "kupon",
+    "vade_yil": 4.6658,
+    "odeme": 5.3,
+    "fiyat": 2.294,
+    "getiri": 19.6595
+   },
+   {
+    "kod": "TP.TRT140224K29",
+    "itfa": "2024-02-14",
+    "etiket": "121T2K13110827",
+    "strip": "kupon",
+    "vade_yil": 4.6658,
+    "odeme": 5.25,
+    "fiyat": 2.273,
+    "getiri": 19.6523
+   },
+   {
+    "kod": "TP.TRT280224K15",
+    "itfa": "2024-02-28",
+    "etiket": "121T2K14240227",
+    "strip": "kupon",
+    "vade_yil": 4.7041,
+    "odeme": 5.5,
+    "fiyat": 2.367,
+    "getiri": 19.6298
+   },
+   {
+    "kod": "TP.TRT130324K11",
+    "itfa": "2024-03-13",
+    "etiket": "121T2K18120325",
+    "strip": "kupon",
+    "vade_yil": 4.7425,
+    "odeme": 4.0,
+    "fiyat": 1.712,
+    "getiri": 19.5953
+   },
+   {
+    "kod": "TP.TRT130324K29",
+    "itfa": "2024-03-13",
+    "etiket": "121T2K12080328",
+    "strip": "kupon",
+    "vade_yil": 4.7425,
+    "odeme": 6.2,
+    "fiyat": 2.653,
+    "getiri": 19.601
+   },
+   {
+    "kod": "TP.TRT200324A14",
+    "itfa": "2024-03-20",
+    "etiket": "121T2A200324",
+    "strip": "anapara",
+    "vade_yil": 4.7616,
+    "odeme": 100.0,
+    "fiyat": 42.669,
+    "getiri": 19.5861
+   },
+   {
+    "kod": "TP.TRT200324K12",
+    "itfa": "2024-03-20",
+    "etiket": "121T2K20200324",
+    "strip": "kupon",
+    "vade_yil": 4.7616,
+    "odeme": 5.2,
+    "fiyat": 2.219,
+    "getiri": 19.5837
+   },
+   {
+    "kod": "TP.TRT240724A16",
+    "itfa": "2024-07-24",
+    "etiket": "121T2A240724",
+    "strip": "anapara",
+    "vade_yil": 5.1068,
+    "odeme": 100.0,
+    "fiyat": 40.528,
+    "getiri": 19.3459
+   },
+   {
+    "kod": "TP.TRT240724K14",
+    "itfa": "2024-07-24",
+    "etiket": "121T2K20240724",
+    "strip": "kupon",
+    "vade_yil": 5.1068,
+    "odeme": 4.5,
+    "fiyat": 1.824,
+    "getiri": 19.3429
+   },
+   {
+    "kod": "TP.TRT140824K15",
+    "itfa": "2024-08-14",
+    "etiket": "121T2K17110226",
+    "strip": "kupon",
+    "vade_yil": 5.1644,
+    "odeme": 5.3,
+    "fiyat": 2.13,
+    "getiri": 19.3051
+   },
+   {
+    "kod": "TP.TRT140824K23",
+    "itfa": "2024-08-14",
+    "etiket": "121T2K14110827",
+    "strip": "kupon",
+    "vade_yil": 5.1644,
+    "odeme": 5.25,
+    "fiyat": 2.11,
+    "getiri": 19.3041
+   },
+   {
+    "kod": "TP.TRT280824K19",
+    "itfa": "2024-08-28",
+    "etiket": "121T2K15240227",
+    "strip": "kupon",
+    "vade_yil": 5.2027,
+    "odeme": 5.5,
+    "fiyat": 2.198,
+    "getiri": 19.2786
+   },
+   {
+    "kod": "TP.TRT110924K17",
+    "itfa": "2024-09-11",
+    "etiket": "121T2K19120325",
+    "strip": "kupon",
+    "vade_yil": 5.2411,
+    "odeme": 4.0,
+    "fiyat": 1.589,
+    "getiri": 19.261
+   },
+   {
+    "kod": "TP.TRT110924K25",
+    "itfa": "2024-09-11",
+    "etiket": "121T2K13080328",
+    "strip": "kupon",
+    "vade_yil": 5.2411,
+    "odeme": 6.2,
+    "fiyat": 2.464,
+    "getiri": 19.2513
+   },
+   {
+    "kod": "TP.TRT120225K12",
+    "itfa": "2025-02-12",
+    "etiket": "121T2K18110226",
+    "strip": "kupon",
+    "vade_yil": 5.663,
+    "odeme": 5.3,
+    "fiyat": 1.982,
+    "getiri": 18.9685
+   },
+   {
+    "kod": "TP.TRT120225K20",
+    "itfa": "2025-02-12",
+    "etiket": "121T2K15110827",
+    "strip": "kupon",
+    "vade_yil": 5.663,
+    "odeme": 5.25,
+    "fiyat": 1.963,
+    "getiri": 18.9717
+   },
+   {
+    "kod": "TP.TRT260225K16",
+    "itfa": "2025-02-26",
+    "etiket": "121T2K16240227",
+    "strip": "kupon",
+    "vade_yil": 5.7014,
+    "odeme": 5.5,
+    "fiyat": 2.045,
+    "getiri": 18.9495
+   },
+   {
+    "kod": "TP.TRT120325A13",
+    "itfa": "2025-03-12",
+    "etiket": "121T2A120325",
+    "strip": "anapara",
+    "vade_yil": 5.7397,
+    "odeme": 100.0,
+    "fiyat": 36.983,
+    "getiri": 18.9226
+   },
+   {
+    "kod": "TP.TRT120325K11",
+    "itfa": "2025-03-12",
+    "etiket": "121T2K20120325",
+    "strip": "kupon",
+    "vade_yil": 5.7397,
+    "odeme": 4.0,
+    "fiyat": 1.479,
+    "getiri": 18.9271
+   },
+   {
+    "kod": "TP.TRT120325K29",
+    "itfa": "2025-03-12",
+    "etiket": "121T2K14080328",
+    "strip": "kupon",
+    "vade_yil": 5.7397,
+    "odeme": 6.2,
+    "fiyat": 2.293,
+    "getiri": 18.9222
+   },
+   {
+    "kod": "TP.TRT130825K15",
+    "itfa": "2025-08-13",
+    "etiket": "121T2K19110226",
+    "strip": "kupon",
+    "vade_yil": 6.1616,
+    "odeme": 5.3,
+    "fiyat": 1.848,
+    "getiri": 18.6483
+   },
+   {
+    "kod": "TP.TRT130825K23",
+    "itfa": "2025-08-13",
+    "etiket": "121T2K16110827",
+    "strip": "kupon",
+    "vade_yil": 6.1616,
+    "odeme": 5.25,
+    "fiyat": 1.831,
+    "getiri": 18.6438
+   },
+   {
+    "kod": "TP.TRT270825K19",
+    "itfa": "2025-08-27",
+    "etiket": "121T2K17240227",
+    "strip": "kupon",
+    "vade_yil": 6.2,
+    "odeme": 5.5,
+    "fiyat": 1.908,
+    "getiri": 18.6202
+   },
+   {
+    "kod": "TP.TRT100925K17",
+    "itfa": "2025-09-10",
+    "etiket": "121T2K15080328",
+    "strip": "kupon",
+    "vade_yil": 6.2384,
+    "odeme": 6.2,
+    "fiyat": 2.14,
+    "getiri": 18.5917
+   },
+   {
+    "kod": "TP.TRT110226A14",
+    "itfa": "2026-02-11",
+    "etiket": "121T2A110226",
+    "strip": "anapara",
+    "vade_yil": 6.6603,
+    "odeme": 100.0,
+    "fiyat": 32.62,
+    "getiri": 18.3171
+   },
+   {
+    "kod": "TP.TRT110226K12",
+    "itfa": "2026-02-11",
+    "etiket": "121T2K20110226",
+    "strip": "kupon",
+    "vade_yil": 6.6603,
+    "odeme": 5.3,
+    "fiyat": 1.729,
+    "getiri": 18.3156
+   },
+   {
+    "kod": "TP.TRT110226K20",
+    "itfa": "2026-02-11",
+    "etiket": "121T2K17110827",
+    "strip": "kupon",
+    "vade_yil": 6.6603,
+    "odeme": 5.25,
+    "fiyat": 1.713,
+    "getiri": 18.3124
+   },
+   {
+    "kod": "TP.TRT250226K16",
+    "itfa": "2026-02-25",
+    "etiket": "121T2K18240227",
+    "strip": "kupon",
+    "vade_yil": 6.6986,
+    "odeme": 5.5,
+    "fiyat": 1.785,
+    "getiri": 18.293
+   },
+   {
+    "kod": "TP.TRT110326K11",
+    "itfa": "2026-03-11",
+    "etiket": "121T2K16080328",
+    "strip": "kupon",
+    "vade_yil": 6.737,
+    "odeme": 6.2,
+    "fiyat": 2.002,
+    "getiri": 18.2689
+   },
+   {
+    "kod": "TP.TRT120826K15",
+    "itfa": "2026-08-12",
+    "etiket": "121T2K18110827",
+    "strip": "kupon",
+    "vade_yil": 7.1589,
+    "odeme": 5.25,
+    "fiyat": 1.607,
+    "getiri": 17.9828
+   },
+   {
+    "kod": "TP.TRT260826K19",
+    "itfa": "2026-08-26",
+    "etiket": "121T2K19240227",
+    "strip": "kupon",
+    "vade_yil": 7.1973,
+    "odeme": 5.5,
+    "fiyat": 1.675,
+    "getiri": 17.962
+   },
+   {
+    "kod": "TP.TRT090926K19",
+    "itfa": "2026-09-09",
+    "etiket": "121T2K17080328",
+    "strip": "kupon",
+    "vade_yil": 7.2356,
+    "odeme": 6.2,
+    "fiyat": 1.879,
+    "getiri": 17.9382
+   },
+   {
+    "kod": "TP.TRT100227K12",
+    "itfa": "2027-02-10",
+    "etiket": "121T2K19110827",
+    "strip": "kupon",
+    "vade_yil": 7.6575,
+    "odeme": 5.25,
+    "fiyat": 1.512,
+    "getiri": 17.6517
+   },
+   {
+    "kod": "TP.TRT240227A18",
+    "itfa": "2027-02-24",
+    "etiket": "121T2A240227",
+    "strip": "anapara",
+    "vade_yil": 7.6959,
+    "odeme": 100.0,
+    "fiyat": 28.671,
+    "getiri": 17.625
+   },
+   {
+    "kod": "TP.TRT240227K16",
+    "itfa": "2027-02-24",
+    "etiket": "121T2K20240227",
+    "strip": "kupon",
+    "vade_yil": 7.6959,
+    "odeme": 5.5,
+    "fiyat": 1.577,
+    "getiri": 17.6241
+   },
+   {
+    "kod": "TP.TRT100327K11",
+    "itfa": "2027-03-10",
+    "etiket": "121T2K18080328",
+    "strip": "kupon",
+    "vade_yil": 7.7342,
+    "odeme": 6.2,
+    "fiyat": 1.77,
+    "getiri": 17.5955
+   },
+   {
+    "kod": "TP.TRT110827A17",
+    "itfa": "2027-08-11",
+    "etiket": "121T2A110827",
+    "strip": "anapara",
+    "vade_yil": 8.1562,
+    "odeme": 100.0,
+    "fiyat": 27.193,
+    "getiri": 17.3112
+   },
+   {
+    "kod": "TP.TRT110827K15",
+    "itfa": "2027-08-11",
+    "etiket": "121T2K20110827",
+    "strip": "kupon",
+    "vade_yil": 8.1562,
+    "odeme": 5.25,
+    "fiyat": 1.428,
+    "getiri": 17.3075
+   },
+   {
+    "kod": "TP.TRT080927K19",
+    "itfa": "2027-09-08",
+    "etiket": "121T2K19080328",
+    "strip": "kupon",
+    "vade_yil": 8.2329,
+    "odeme": 6.2,
+    "fiyat": 1.672,
+    "getiri": 17.2552
+   },
+   {
+    "kod": "TP.TRT080328A16",
+    "itfa": "2028-03-08",
+    "etiket": "121T2A080328",
+    "strip": "anapara",
+    "vade_yil": 8.7315,
+    "odeme": 100.0,
+    "fiyat": 25.552,
+    "getiri": 16.9139
+   },
+   {
+    "kod": "TP.TRT080328K14",
+    "itfa": "2028-03-08",
+    "etiket": "121T2K20080328",
+    "strip": "kupon",
+    "vade_yil": 8.7315,
+    "odeme": 6.2,
+    "fiyat": 1.584,
+    "getiri": 16.9158
+   }
+  ]
+ },
+ "sayim": {
+  "toplam": 2079,
+  "aktif": 974,
+  "aktif_sabit_nominal": 247,
+  "aktif_tufex": 86,
+  "aktif_sukuk": 239,
+  "aktif_bono": 20,
+  "aktif_anapara_strip": 110,
+  "aktif_kupon_strip": 601,
+  "aktif_tahvil": 263
+ },
+ "egri": [
+  {
+   "kod": "TP.TRT020926A18",
+   "itfa": "2026-09-02",
+   "etiket": "61T2A020926",
+   "strip": "anapara",
+   "vade_yil": 0.0329,
+   "odeme": 100.0,
+   "fiyat": 98.776,
+   "getiri": 45.4406
+  },
+  {
+   "kod": "TP.TRT020926K16",
+   "itfa": "2026-09-02",
+   "etiket": "61T2K10020926",
+   "strip": "kupon",
+   "vade_yil": 0.0329,
+   "odeme": 8.45,
+   "fiyat": 8.347,
+   "getiri": 45.2139
+  },
+  {
+   "kod": "TP.TRT090926K19",
+   "itfa": "2026-09-09",
+   "etiket": "121T2K17080328",
+   "strip": "kupon",
+   "vade_yil": 0.0521,
+   "odeme": 6.2,
+   "fiyat": 6.083,
+   "getiri": 44.1934
+  },
+  {
+   "kod": "TP.TRT160926K28",
+   "itfa": "2026-09-16",
+   "etiket": "61T2K8150927",
+   "strip": "kupon",
+   "vade_yil": 0.0712,
+   "odeme": 5.14,
+   "fiyat": 5.01,
+   "getiri": 43.2793
+  },
+  {
+   "kod": "TP.TRT160926K51",
+   "itfa": "2026-09-16",
+   "etiket": "61T2K4120929",
+   "strip": "kupon",
+   "vade_yil": 0.0712,
+   "odeme": 15.0,
+   "fiyat": 14.619,
+   "getiri": 43.5027
+  },
+  {
+   "kod": "TP.TRT160926K93",
+   "itfa": "2026-09-16",
+   "etiket": "121T2K2050935",
+   "strip": "kupon",
+   "vade_yil": 0.0712,
+   "odeme": 15.03,
+   "fiyat": 14.648,
+   "getiri": 43.5354
+  },
+  {
+   "kod": "TP.TRT160926KA0",
+   "itfa": "2026-09-16",
+   "etiket": "24T2K1150328",
+   "strip": "kupon",
+   "vade_yil": 0.0712,
+   "odeme": 18.4,
+   "fiyat": 17.933,
+   "getiri": 43.4623
+  },
+  {
+   "kod": "TP.TRT071026K26",
+   "itfa": "2026-10-07",
+   "etiket": "121T2K4270934",
+   "strip": "kupon",
+   "vade_yil": 0.1288,
+   "odeme": 13.85,
+   "fiyat": 13.238,
+   "getiri": 42.0449
+  },
+  {
+   "kod": "TP.TRT071026K34",
+   "itfa": "2026-10-07",
+   "etiket": "61T2K2021030",
+   "strip": "kupon",
+   "vade_yil": 0.1288,
+   "odeme": 16.95,
+   "fiyat": 16.201,
+   "getiri": 42.0461
+  },
+  {
+   "kod": "TP.TRT141026K35",
+   "itfa": "2026-10-14",
+   "etiket": "121T2K6051033",
+   "strip": "kupon",
+   "vade_yil": 0.1479,
+   "odeme": 13.1,
+   "fiyat": 12.441,
+   "getiri": 41.7476
+  },
+  {
+   "kod": "TP.TRT141026K50",
+   "itfa": "2026-10-14",
+   "etiket": "24T2K2131027",
+   "strip": "kupon",
+   "vade_yil": 0.1479,
+   "odeme": 18.39,
+   "fiyat": 17.465,
+   "getiri": 41.7412
+  },
+  {
+   "kod": "TP.TRT211026K10",
+   "itfa": "2026-10-21",
+   "etiket": "121T2K8131032",
+   "strip": "kupon",
+   "vade_yil": 0.1671,
+   "odeme": 5.2,
+   "fiyat": 4.907,
+   "getiri": 41.4851
+  },
+  {
+   "kod": "TP.TRT211026K51",
+   "itfa": "2026-10-21",
+   "etiket": "61T2K1160431",
+   "strip": "kupon",
+   "vade_yil": 0.1671,
+   "odeme": 16.63,
+   "fiyat": 15.693,
+   "getiri": 41.4832
+  },
+  {
+   "kod": "TP.TRT041126K36",
+   "itfa": "2026-11-04",
+   "etiket": "121T2K9280432",
+   "strip": "kupon",
+   "vade_yil": 0.2055,
+   "odeme": 10.75,
+   "fiyat": 10.017,
+   "getiri": 41.0147
+  },
+  {
+   "kod": "TP.TRT041126K51",
+   "itfa": "2026-11-04",
+   "etiket": "24T2K3050527",
+   "strip": "kupon",
+   "vade_yil": 0.2055,
+   "odeme": 20.5,
+   "fiyat": 19.102,
+   "getiri": 41.0214
+  },
+  {
+   "kod": "TP.TRT111126K11",
+   "itfa": "2026-11-11",
+   "etiket": "61T2K6081128",
+   "strip": "kupon",
+   "vade_yil": 0.2247,
+   "odeme": 15.54,
+   "fiyat": 14.39,
+   "getiri": 40.808
+  },
+  {
+   "kod": "TP.TRT181126K22",
+   "itfa": "2026-11-18",
+   "etiket": "121T2K12131130",
+   "strip": "kupon",
+   "vade_yil": 0.2438,
+   "odeme": 5.85,
+   "fiyat": 5.383,
+   "getiri": 40.6629
+  },
+  {
+   "kod": "TP.TRT091226K14",
+   "itfa": "2026-12-09",
+   "etiket": "61T2K9090627",
+   "strip": "kupon",
+   "vade_yil": 0.3014,
+   "odeme": 10.1,
+   "fiyat": 9.122,
+   "getiri": 40.2063
+  },
+  {
+   "kod": "TP.TRT130127K44",
+   "itfa": "2027-01-13",
+   "etiket": "24T2K3140727",
+   "strip": "kupon",
+   "vade_yil": 0.3973,
+   "odeme": 18.92,
+   "fiyat": 16.572,
+   "getiri": 39.5911
+  },
+  {
+   "kod": "TP.TRT130127K51",
+   "itfa": "2027-01-13",
+   "etiket": "61T2K3100730",
+   "strip": "kupon",
+   "vade_yil": 0.3973,
+   "odeme": 17.05,
+   "fiyat": 14.934,
+   "getiri": 39.5927
+  },
+  {
+   "kod": "TP.TRT200127K29",
+   "itfa": "2027-01-20",
+   "etiket": "61T2K7190728",
+   "strip": "kupon",
+   "vade_yil": 0.4164,
+   "odeme": 8.65,
+   "fiyat": 7.531,
+   "getiri": 39.467
+  },
+  {
+   "kod": "TP.TRT200127K45",
+   "itfa": "2027-01-20",
+   "etiket": "121T2K7130733",
+   "strip": "kupon",
+   "vade_yil": 0.4164,
+   "odeme": 8.9,
+   "fiyat": 7.748,
+   "getiri": 39.4955
+  },
+  {
+   "kod": "TP.TRT100227A14",
+   "itfa": "2027-02-10",
+   "etiket": "24T2A100227",
+   "strip": "anapara",
+   "vade_yil": 0.474,
+   "odeme": 100.0,
+   "fiyat": 85.497,
+   "getiri": 39.1784
+  },
+  {
+   "kod": "TP.TRT100227K12",
+   "itfa": "2027-02-10",
+   "etiket": "121T2K19110827",
+   "strip": "kupon",
+   "vade_yil": 0.474,
+   "odeme": 5.25,
+   "fiyat": 4.489,
+   "getiri": 39.1517
+  },
+  {
+   "kod": "TP.TRT100227K38",
+   "itfa": "2027-02-10",
+   "etiket": "24T2K4100227",
+   "strip": "kupon",
+   "vade_yil": 0.474,
+   "odeme": 16.3,
+   "fiyat": 13.936,
+   "getiri": 39.1786
+  },
+  {
+   "kod": "TP.TRT170227K23",
+   "itfa": "2027-02-17",
+   "etiket": "61T2K8160228",
+   "strip": "kupon",
+   "vade_yil": 0.4932,
+   "odeme": 4.55,
+   "fiyat": 3.867,
+   "getiri": 39.071
+  },
+  {
+   "kod": "TP.TRT240227A18",
+   "itfa": "2027-02-24",
+   "etiket": "121T2A240227",
+   "strip": "anapara",
+   "vade_yil": 0.5123,
+   "odeme": 100.0,
+   "fiyat": 84.323,
+   "getiri": 39.4902
+  },
+  {
+   "kod": "TP.TRT240227K16",
+   "itfa": "2027-02-24",
+   "etiket": "121T2K20240227",
+   "strip": "kupon",
+   "vade_yil": 0.5123,
+   "odeme": 5.5,
+   "fiyat": 4.638,
+   "getiri": 39.4764
+  },
+  {
+   "kod": "TP.TRT100327K11",
+   "itfa": "2027-03-10",
+   "etiket": "121T2K18080328",
+   "strip": "kupon",
+   "vade_yil": 0.5507,
+   "odeme": 6.2,
+   "fiyat": 5.16,
+   "getiri": 39.5742
+  },
+  {
+   "kod": "TP.TRT170327K22",
+   "itfa": "2027-03-17",
+   "etiket": "61T2K9150927",
+   "strip": "kupon",
+   "vade_yil": 0.5699,
+   "odeme": 5.14,
+   "fiyat": 4.25,
+   "getiri": 39.6053
+  },
+  {
+   "kod": "TP.TRT170327K55",
+   "itfa": "2027-03-17",
+   "etiket": "61T2K5120929",
+   "strip": "kupon",
+   "vade_yil": 0.5699,
+   "odeme": 15.0,
+   "fiyat": 12.402,
+   "getiri": 39.6196
+  },
+  {
+   "kod": "TP.TRT170327K97",
+   "itfa": "2027-03-17",
+   "etiket": "121T2K3050935",
+   "strip": "kupon",
+   "vade_yil": 0.5699,
+   "odeme": 15.03,
+   "fiyat": 12.427,
+   "getiri": 39.6157
+  },
+  {
+   "kod": "TP.TRT170327KA9",
+   "itfa": "2027-03-17",
+   "etiket": "24T2K2150328",
+   "strip": "kupon",
+   "vade_yil": 0.5699,
+   "odeme": 18.4,
+   "fiyat": 15.213,
+   "getiri": 39.6215
+  },
+  {
+   "kod": "TP.TRT070427K23",
+   "itfa": "2027-04-07",
+   "etiket": "121T2K5270934",
+   "strip": "kupon",
+   "vade_yil": 0.6274,
+   "odeme": 13.85,
+   "fiyat": 11.227,
+   "getiri": 39.7463
+  },
+  {
+   "kod": "TP.TRT070427K31",
+   "itfa": "2027-04-07",
+   "etiket": "61T2K3021030",
+   "strip": "kupon",
+   "vade_yil": 0.6274,
+   "odeme": 16.95,
+   "fiyat": 13.74,
+   "getiri": 39.7447
+  },
+  {
+   "kod": "TP.TRT140427K24",
+   "itfa": "2027-04-14",
+   "etiket": "121T2K7051033",
+   "strip": "kupon",
+   "vade_yil": 0.6466,
+   "odeme": 13.1,
+   "fiyat": 10.549,
+   "getiri": 39.7894
+  },
+  {
+   "kod": "TP.TRT140427K40",
+   "itfa": "2027-04-14",
+   "etiket": "24T2K3131027",
+   "strip": "kupon",
+   "vade_yil": 0.6466,
+   "odeme": 18.39,
+   "fiyat": 14.809,
+   "getiri": 39.7874
+  },
+  {
+   "kod": "TP.TRT210427K17",
+   "itfa": "2027-04-21",
+   "etiket": "121T2K9131032",
+   "strip": "kupon",
+   "vade_yil": 0.6658,
+   "odeme": 5.2,
+   "fiyat": 4.16,
+   "getiri": 39.8184
+  },
+  {
+   "kod": "TP.TRT210427K58",
+   "itfa": "2027-04-21",
+   "etiket": "61T2K2160431",
+   "strip": "kupon",
+   "vade_yil": 0.6658,
+   "odeme": 16.63,
+   "fiyat": 13.304,
+   "getiri": 39.8184
+  },
+  {
+   "kod": "TP.TRT050527A26",
+   "itfa": "2027-05-05",
+   "etiket": "24T2A050527",
+   "strip": "anapara",
+   "vade_yil": 0.7041,
+   "odeme": 100.0,
+   "fiyat": 78.946,
+   "getiri": 39.8992
+  },
+  {
+   "kod": "TP.TRT050527K24",
+   "itfa": "2027-05-05",
+   "etiket": "121T2K10280432",
+   "strip": "kupon",
+   "vade_yil": 0.7041,
+   "odeme": 10.75,
+   "fiyat": 8.487,
+   "getiri": 39.892
+  },
+  {
+   "kod": "TP.TRT050527K40",
+   "itfa": "2027-05-05",
+   "etiket": "24T2K4050527",
+   "strip": "kupon",
+   "vade_yil": 0.7041,
+   "odeme": 20.5,
+   "fiyat": 16.184,
+   "getiri": 39.8983
+  },
+  {
+   "kod": "TP.TRT120527K17",
+   "itfa": "2027-05-12",
+   "etiket": "61T2K7081128",
+   "strip": "kupon",
+   "vade_yil": 0.7233,
+   "odeme": 15.54,
+   "fiyat": 12.187,
+   "getiri": 39.9383
+  },
+  {
+   "kod": "TP.TRT190527K28",
+   "itfa": "2027-05-19",
+   "etiket": "121T2K13131130",
+   "strip": "kupon",
+   "vade_yil": 0.7425,
+   "odeme": 5.85,
+   "fiyat": 4.558,
+   "getiri": 39.9507
+  },
+  {
+   "kod": "TP.TRT090627A13",
+   "itfa": "2027-06-09",
+   "etiket": "61T2A090627",
+   "strip": "anapara",
+   "vade_yil": 0.8,
+   "odeme": 100.0,
+   "fiyat": 76.373,
+   "getiri": 40.0636
+  },
+  {
+   "kod": "TP.TRT090627K11",
+   "itfa": "2027-06-09",
+   "etiket": "61T2K10090627",
+   "strip": "kupon",
+   "vade_yil": 0.8,
+   "odeme": 10.1,
+   "fiyat": 7.714,
+   "getiri": 40.0561
+  },
+  {
+   "kod": "TP.TRT140727A15",
+   "itfa": "2027-07-14",
+   "etiket": "24T2A140727",
+   "strip": "anapara",
+   "vade_yil": 0.8959,
+   "odeme": 100.0,
+   "fiyat": 73.878,
+   "getiri": 40.2053
+  },
+  {
+   "kod": "TP.TRT140727K39",
+   "itfa": "2027-07-14",
+   "etiket": "24T2K4140727",
+   "strip": "kupon",
+   "vade_yil": 0.8959,
+   "odeme": 18.92,
+   "fiyat": 13.978,
+   "getiri": 40.2021
+  },
+  {
+   "kod": "TP.TRT140727K47",
+   "itfa": "2027-07-14",
+   "etiket": "61T2K4100730",
+   "strip": "kupon",
+   "vade_yil": 0.8959,
+   "odeme": 17.05,
+   "fiyat": 12.596,
+   "getiri": 40.2078
+  },
+  {
+   "kod": "TP.TRT210727K22",
+   "itfa": "2027-07-21",
+   "etiket": "61T2K8190728",
+   "strip": "kupon",
+   "vade_yil": 0.9151,
+   "odeme": 8.65,
+   "fiyat": 6.348,
+   "getiri": 40.2334
+  },
+  {
+   "kod": "TP.TRT210727K48",
+   "itfa": "2027-07-21",
+   "etiket": "121T2K8130733",
+   "strip": "kupon",
+   "vade_yil": 0.9151,
+   "odeme": 8.9,
+   "fiyat": 6.532,
+   "getiri": 40.2209
+  },
+  {
+   "kod": "TP.TRT110827A17",
+   "itfa": "2027-08-11",
+   "etiket": "121T2A110827",
+   "strip": "anapara",
+   "vade_yil": 0.9726,
+   "odeme": 100.0,
+   "fiyat": 71.939,
+   "getiri": 40.3023
+  },
+  {
+   "kod": "TP.TRT110827K15",
+   "itfa": "2027-08-11",
+   "etiket": "121T2K20110827",
+   "strip": "kupon",
+   "vade_yil": 0.9726,
+   "odeme": 5.25,
+   "fiyat": 3.777,
+   "getiri": 40.2946
+  },
+  {
+   "kod": "TP.TRT180827K26",
+   "itfa": "2027-08-18",
+   "etiket": "61T2K9160228",
+   "strip": "kupon",
+   "vade_yil": 0.9918,
+   "odeme": 4.55,
+   "fiyat": 3.252,
+   "getiri": 40.3039
+  },
+  {
+   "kod": "TP.TRT080927K19",
+   "itfa": "2027-09-08",
+   "etiket": "121T2K19080328",
+   "strip": "kupon",
+   "vade_yil": 1.0493,
+   "odeme": 6.2,
+   "fiyat": 4.343,
+   "getiri": 40.3899
+  },
+  {
+   "kod": "TP.TRT150927A12",
+   "itfa": "2027-09-15",
+   "etiket": "61T2A150927",
+   "strip": "anapara",
+   "vade_yil": 1.0685,
+   "odeme": 100.0,
+   "fiyat": 69.586,
+   "getiri": 40.4053
+  },
+  {
+   "kod": "TP.TRT150927K28",
+   "itfa": "2027-09-15",
+   "etiket": "61T2K10150927",
+   "strip": "kupon",
+   "vade_yil": 1.0685,
+   "odeme": 5.14,
+   "fiyat": 3.577,
+   "getiri": 40.395
+  },
+  {
+   "kod": "TP.TRT150927K44",
+   "itfa": "2027-09-15",
+   "etiket": "61T2K6120929",
+   "strip": "kupon",
+   "vade_yil": 1.0685,
+   "odeme": 15.0,
+   "fiyat": 10.438,
+   "getiri": 40.404
+  },
+  {
+   "kod": "TP.TRT150927K85",
+   "itfa": "2027-09-15",
+   "etiket": "121T2K4050935",
+   "strip": "kupon",
+   "vade_yil": 1.0685,
+   "odeme": 15.03,
+   "fiyat": 10.459,
+   "getiri": 40.4024
+  },
+  {
+   "kod": "TP.TRT150927K93",
+   "itfa": "2027-09-15",
+   "etiket": "24T2K3150328",
+   "strip": "kupon",
+   "vade_yil": 1.0685,
+   "odeme": 18.4,
+   "fiyat": 12.804,
+   "getiri": 40.4035
+  },
+  {
+   "kod": "TP.TRT061027K26",
+   "itfa": "2027-10-06",
+   "etiket": "121T2K6270934",
+   "strip": "kupon",
+   "vade_yil": 1.126,
+   "odeme": 13.85,
+   "fiyat": 9.447,
+   "getiri": 40.4622
+  },
+  {
+   "kod": "TP.TRT061027K34",
+   "itfa": "2027-10-06",
+   "etiket": "61T2K4021030",
+   "strip": "kupon",
+   "vade_yil": 1.126,
+   "odeme": 16.95,
+   "fiyat": 11.562,
+   "getiri": 40.4567
+  },
+  {
+   "kod": "TP.TRT131027A29",
+   "itfa": "2027-10-13",
+   "etiket": "24T2A131027",
+   "strip": "anapara",
+   "vade_yil": 1.1452,
+   "odeme": 100.0,
+   "fiyat": 67.761,
+   "getiri": 40.4719
+  },
+  {
+   "kod": "TP.TRT131027K27",
+   "itfa": "2027-10-13",
+   "etiket": "121T2K8051033",
+   "strip": "kupon",
+   "vade_yil": 1.1452,
+   "odeme": 13.1,
+   "fiyat": 8.877,
+   "getiri": 40.4676
+  },
+  {
+   "kod": "TP.TRT131027K43",
+   "itfa": "2027-10-13",
+   "etiket": "24T2K4131027",
+   "strip": "kupon",
+   "vade_yil": 1.1452,
+   "odeme": 18.39,
+   "fiyat": 12.461,
+   "getiri": 40.4743
+  },
+  {
+   "kod": "TP.TRT201027K10",
+   "itfa": "2027-10-20",
+   "etiket": "121T2K10131032",
+   "strip": "kupon",
+   "vade_yil": 1.1644,
+   "odeme": 5.2,
+   "fiyat": 3.5,
+   "getiri": 40.4954
+  },
+  {
+   "kod": "TP.TRT201027K51",
+   "itfa": "2027-10-20",
+   "etiket": "61T2K3160431",
+   "strip": "kupon",
+   "vade_yil": 1.1644,
+   "odeme": 16.63,
+   "fiyat": 11.194,
+   "getiri": 40.4875
+  },
+  {
+   "kod": "TP.TRT031127K10",
+   "itfa": "2027-11-03",
+   "etiket": "121T2K11280432",
+   "strip": "kupon",
+   "vade_yil": 1.2027,
+   "odeme": 10.75,
+   "fiyat": 7.141,
+   "getiri": 40.5089
+  },
+  {
+   "kod": "TP.TRT101127K11",
+   "itfa": "2027-11-10",
+   "etiket": "61T2K8081128",
+   "strip": "kupon",
+   "vade_yil": 1.2219,
+   "odeme": 15.54,
+   "fiyat": 10.254,
+   "getiri": 40.529
+  },
+  {
+   "kod": "TP.TRT171127K22",
+   "itfa": "2027-11-17",
+   "etiket": "121T2K14131130",
+   "strip": "kupon",
+   "vade_yil": 1.2411,
+   "odeme": 5.85,
+   "fiyat": 3.835,
+   "getiri": 40.5287
+  },
+  {
+   "kod": "TP.TRT120128K28",
+   "itfa": "2028-01-12",
+   "etiket": "61T2K5100730",
+   "strip": "kupon",
+   "vade_yil": 1.3945,
+   "odeme": 17.05,
+   "fiyat": 10.601,
+   "getiri": 40.6021
+  },
+  {
+   "kod": "TP.TRT190128K21",
+   "itfa": "2028-01-19",
+   "etiket": "61T2K9190728",
+   "strip": "kupon",
+   "vade_yil": 1.4137,
+   "odeme": 8.65,
+   "fiyat": 5.343,
+   "getiri": 40.6056
+  },
+  {
+   "kod": "TP.TRT190128K47",
+   "itfa": "2028-01-19",
+   "etiket": "121T2K9130733",
+   "strip": "kupon",
+   "vade_yil": 1.4137,
+   "odeme": 8.9,
+   "fiyat": 5.497,
+   "getiri": 40.6132
+  },
+  {
+   "kod": "TP.TRT160228A17",
+   "itfa": "2028-02-16",
+   "etiket": "61T2A160228",
+   "strip": "anapara",
+   "vade_yil": 1.4904,
+   "odeme": 100.0,
+   "fiyat": 60.166,
+   "getiri": 40.6195
+  },
+  {
+   "kod": "TP.TRT160228K23",
+   "itfa": "2028-02-16",
+   "etiket": "61T2K10160228",
+   "strip": "kupon",
+   "vade_yil": 1.4904,
+   "odeme": 4.55,
+   "fiyat": 2.738,
+   "getiri": 40.6041
+  },
+  {
+   "kod": "TP.TRT080328A16",
+   "itfa": "2028-03-08",
+   "etiket": "121T2A080328",
+   "strip": "anapara",
+   "vade_yil": 1.5479,
+   "odeme": 100.0,
+   "fiyat": 58.995,
+   "getiri": 40.6233
+  },
+  {
+   "kod": "TP.TRT080328K14",
+   "itfa": "2028-03-08",
+   "etiket": "121T2K20080328",
+   "strip": "kupon",
+   "vade_yil": 1.5479,
+   "odeme": 6.2,
+   "fiyat": 3.658,
+   "getiri": 40.6156
+  },
+  {
+   "kod": "TP.TRT150328A17",
+   "itfa": "2028-03-15",
+   "etiket": "24T2A150328",
+   "strip": "anapara",
+   "vade_yil": 1.5671,
+   "odeme": 100.0,
+   "fiyat": 58.611,
+   "getiri": 40.6226
+  },
+  {
+   "kod": "TP.TRT150328K31",
+   "itfa": "2028-03-15",
+   "etiket": "61T2K7120929",
+   "strip": "kupon",
+   "vade_yil": 1.5671,
+   "odeme": 15.0,
+   "fiyat": 8.792,
+   "getiri": 40.6191
+  },
+  {
+   "kod": "TP.TRT150328K72",
+   "itfa": "2028-03-15",
+   "etiket": "121T2K5050935",
+   "strip": "kupon",
+   "vade_yil": 1.5671,
+   "odeme": 15.03,
+   "fiyat": 8.809,
+   "getiri": 40.625
+  },
+  {
+   "kod": "TP.TRT150328K80",
+   "itfa": "2028-03-15",
+   "etiket": "24T2K4150328",
+   "strip": "kupon",
+   "vade_yil": 1.5671,
+   "odeme": 18.4,
+   "fiyat": 10.784,
+   "getiri": 40.6262
+  },
+  {
+   "kod": "TP.TRT050428K24",
+   "itfa": "2028-04-05",
+   "etiket": "121T2K7270934",
+   "strip": "kupon",
+   "vade_yil": 1.6247,
+   "odeme": 13.85,
+   "fiyat": 7.96,
+   "getiri": 40.6222
+  },
+  {
+   "kod": "TP.TRT050428K32",
+   "itfa": "2028-04-05",
+   "etiket": "61T2K5021030",
+   "strip": "kupon",
+   "vade_yil": 1.6247,
+   "odeme": 16.95,
+   "fiyat": 9.742,
+   "getiri": 40.6192
+  },
+  {
+   "kod": "TP.TRT120428K17",
+   "itfa": "2028-04-12",
+   "etiket": "121T2K9051033",
+   "strip": "kupon",
+   "vade_yil": 1.6438,
+   "odeme": 13.1,
+   "fiyat": 7.48,
+   "getiri": 40.6209
+  },
+  {
+   "kod": "TP.TRT190428K10",
+   "itfa": "2028-04-19",
+   "etiket": "121T2K11131032",
+   "strip": "kupon",
+   "vade_yil": 1.663,
+   "odeme": 5.2,
+   "fiyat": 2.95,
+   "getiri": 40.6155
+  },
+  {
+   "kod": "TP.TRT190428K44",
+   "itfa": "2028-04-19",
+   "etiket": "61T2K4160431",
+   "strip": "kupon",
+   "vade_yil": 1.663,
+   "odeme": 16.63,
+   "fiyat": 9.435,
+   "getiri": 40.6095
+  },
+  {
+   "kod": "TP.TRT030528K17",
+   "itfa": "2028-05-03",
+   "etiket": "121T2K12280432",
+   "strip": "kupon",
+   "vade_yil": 1.7014,
+   "odeme": 10.75,
+   "fiyat": 6.02,
+   "getiri": 40.6065
+  },
+  {
+   "kod": "TP.TRT100528K18",
+   "itfa": "2028-05-10",
+   "etiket": "61T2K9081128",
+   "strip": "kupon",
+   "vade_yil": 1.7205,
+   "odeme": 15.54,
+   "fiyat": 8.647,
+   "getiri": 40.5943
+  },
+  {
+   "kod": "TP.TRT170528K11",
+   "itfa": "2028-05-17",
+   "etiket": "121T2K15131130",
+   "strip": "kupon",
+   "vade_yil": 1.7397,
+   "odeme": 5.85,
+   "fiyat": 3.234,
+   "getiri": 40.5929
+  },
+  {
+   "kod": "TP.TRT120728K14",
+   "itfa": "2028-07-12",
+   "etiket": "61T2K6100730",
+   "strip": "kupon",
+   "vade_yil": 1.8932,
+   "odeme": 17.05,
+   "fiyat": 8.953,
+   "getiri": 40.5311
+  },
+  {
+   "kod": "TP.TRT190728A19",
+   "itfa": "2028-07-19",
+   "etiket": "61T2A190728",
+   "strip": "anapara",
+   "vade_yil": 1.9123,
+   "odeme": 100.0,
+   "fiyat": 52.178,
+   "getiri": 40.5181
+  },
+  {
+   "kod": "TP.TRT190728K25",
+   "itfa": "2028-07-19",
+   "etiket": "61T2K10190728",
+   "strip": "kupon",
+   "vade_yil": 1.9123,
+   "odeme": 8.65,
+   "fiyat": 4.513,
+   "getiri": 40.5245
+  },
+  {
+   "kod": "TP.TRT190728K41",
+   "itfa": "2028-07-19",
+   "etiket": "121T2K10130733",
+   "strip": "kupon",
+   "vade_yil": 1.9123,
+   "odeme": 8.9,
+   "fiyat": 4.644,
+   "getiri": 40.5156
+  },
+  {
+   "kod": "TP.TRT130928K37",
+   "itfa": "2028-09-13",
+   "etiket": "61T2K8120929",
+   "strip": "kupon",
+   "vade_yil": 2.0658,
+   "odeme": 15.0,
+   "fiyat": 7.44,
+   "getiri": 40.4147
+  },
+  {
+   "kod": "TP.TRT130928K78",
+   "itfa": "2028-09-13",
+   "etiket": "121T2K6050935",
+   "strip": "kupon",
+   "vade_yil": 2.0658,
+   "odeme": 15.03,
+   "fiyat": 7.454,
+   "getiri": 40.4228
+  },
+  {
+   "kod": "TP.TRT041028K27",
+   "itfa": "2028-10-04",
+   "etiket": "121T2K8270934",
+   "strip": "kupon",
+   "vade_yil": 2.1233,
+   "odeme": 13.85,
+   "fiyat": 6.741,
+   "getiri": 40.373
+  },
+  {
+   "kod": "TP.TRT041028K35",
+   "itfa": "2028-10-04",
+   "etiket": "61T2K6021030",
+   "strip": "kupon",
+   "vade_yil": 2.1233,
+   "odeme": 16.95,
+   "fiyat": 8.25,
+   "getiri": 40.3715
+  },
+  {
+   "kod": "TP.TRT111028K10",
+   "itfa": "2028-10-11",
+   "etiket": "121T2K10051033",
+   "strip": "kupon",
+   "vade_yil": 2.1425,
+   "odeme": 13.1,
+   "fiyat": 6.336,
+   "getiri": 40.3588
+  },
+  {
+   "kod": "TP.TRT181028K13",
+   "itfa": "2028-10-18",
+   "etiket": "121T2K12131032",
+   "strip": "kupon",
+   "vade_yil": 2.1616,
+   "odeme": 5.2,
+   "fiyat": 2.499,
+   "getiri": 40.3524
+  },
+  {
+   "kod": "TP.TRT181028K47",
+   "itfa": "2028-10-18",
+   "etiket": "61T2K5160431",
+   "strip": "kupon",
+   "vade_yil": 2.1616,
+   "odeme": 16.63,
+   "fiyat": 7.993,
+   "getiri": 40.3443
+  },
+  {
+   "kod": "TP.TRT011128K11",
+   "itfa": "2028-11-01",
+   "etiket": "121T2K13280432",
+   "strip": "kupon",
+   "vade_yil": 2.2,
+   "odeme": 10.75,
+   "fiyat": 5.103,
+   "getiri": 40.3082
+  },
+  {
+   "kod": "TP.TRT081128A16",
+   "itfa": "2028-11-08",
+   "etiket": "61T2A081128",
+   "strip": "anapara",
+   "vade_yil": 2.2192,
+   "odeme": 100.0,
+   "fiyat": 47.176,
+   "getiri": 40.2901
+  },
+  {
+   "kod": "TP.TRT081128K14",
+   "itfa": "2028-11-08",
+   "etiket": "61T2K10081128",
+   "strip": "kupon",
+   "vade_yil": 2.2192,
+   "odeme": 15.54,
+   "fiyat": 7.331,
+   "getiri": 40.2914
+  },
+  {
+   "kod": "TP.TRT151128K15",
+   "itfa": "2028-11-15",
+   "etiket": "121T2K16131130",
+   "strip": "kupon",
+   "vade_yil": 2.2384,
+   "odeme": 5.85,
+   "fiyat": 2.743,
+   "getiri": 40.2657
+  },
+  {
+   "kod": "TP.TRT100129K11",
+   "itfa": "2029-01-10",
+   "etiket": "61T2K7100730",
+   "strip": "kupon",
+   "vade_yil": 2.3918,
+   "odeme": 17.05,
+   "fiyat": 7.61,
+   "getiri": 40.1124
+  },
+  {
+   "kod": "TP.TRT170129K22",
+   "itfa": "2029-01-17",
+   "etiket": "121T2K11130733",
+   "strip": "kupon",
+   "vade_yil": 2.411,
+   "odeme": 8.9,
+   "fiyat": 3.948,
+   "getiri": 40.0942
+  },
+  {
+   "kod": "TP.TRT140329K23",
+   "itfa": "2029-03-14",
+   "etiket": "61T2K9120929",
+   "strip": "kupon",
+   "vade_yil": 2.5644,
+   "odeme": 15.0,
+   "fiyat": 6.34,
+   "getiri": 39.9087
+  },
+  {
+   "kod": "TP.TRT140329K64",
+   "itfa": "2029-03-14",
+   "etiket": "121T2K7050935",
+   "strip": "kupon",
+   "vade_yil": 2.5644,
+   "odeme": 15.03,
+   "fiyat": 6.353,
+   "getiri": 39.906
+  },
+  {
+   "kod": "TP.TRT040429K24",
+   "itfa": "2029-04-04",
+   "etiket": "121T2K9270934",
+   "strip": "kupon",
+   "vade_yil": 2.6219,
+   "odeme": 13.85,
+   "fiyat": 5.75,
+   "getiri": 39.8337
+  },
+  {
+   "kod": "TP.TRT040429K32",
+   "itfa": "2029-04-04",
+   "etiket": "61T2K7021030",
+   "strip": "kupon",
+   "vade_yil": 2.6219,
+   "odeme": 16.95,
+   "fiyat": 7.037,
+   "getiri": 39.8337
+  },
+  {
+   "kod": "TP.TRT110429K17",
+   "itfa": "2029-04-11",
+   "etiket": "121T2K11051033",
+   "strip": "kupon",
+   "vade_yil": 2.6411,
+   "odeme": 13.1,
+   "fiyat": 5.406,
+   "getiri": 39.8118
+  },
+  {
+   "kod": "TP.TRT180429K10",
+   "itfa": "2029-04-18",
+   "etiket": "121T2K13131032",
+   "strip": "kupon",
+   "vade_yil": 2.6603,
+   "odeme": 5.2,
+   "fiyat": 2.133,
+   "getiri": 39.7907
+  },
+  {
+   "kod": "TP.TRT180429K36",
+   "itfa": "2029-04-18",
+   "etiket": "61T2K6160431",
+   "strip": "kupon",
+   "vade_yil": 2.6603,
+   "odeme": 16.63,
+   "fiyat": 6.822,
+   "getiri": 39.7869
+  },
+  {
+   "kod": "TP.TRT020529K17",
+   "itfa": "2029-05-02",
+   "etiket": "121T2K14280432",
+   "strip": "kupon",
+   "vade_yil": 2.6986,
+   "odeme": 10.75,
+   "fiyat": 4.358,
+   "getiri": 39.7346
+  },
+  {
+   "kod": "TP.TRT160529K11",
+   "itfa": "2029-05-16",
+   "etiket": "121T2K17131130",
+   "strip": "kupon",
+   "vade_yil": 2.737,
+   "odeme": 5.85,
+   "fiyat": 2.344,
+   "getiri": 39.6762
+  },
+  {
+   "kod": "TP.TRT110729K14",
+   "itfa": "2029-07-11",
+   "etiket": "61T2K8100730",
+   "strip": "kupon",
+   "vade_yil": 2.8904,
+   "odeme": 17.05,
+   "fiyat": 6.519,
+   "getiri": 39.4627
+  },
+  {
+   "kod": "TP.TRT180729K25",
+   "itfa": "2029-07-18",
+   "etiket": "121T2K12130733",
+   "strip": "kupon",
+   "vade_yil": 2.9096,
+   "odeme": 8.9,
+   "fiyat": 3.383,
+   "getiri": 39.4378
+  },
+  {
+   "kod": "TP.TRT120929A13",
+   "itfa": "2029-09-12",
+   "etiket": "61T2A120929",
+   "strip": "anapara",
+   "vade_yil": 3.063,
+   "odeme": 100.0,
+   "fiyat": 36.315,
+   "getiri": 39.1942
+  },
+  {
+   "kod": "TP.TRT120929K29",
+   "itfa": "2029-09-12",
+   "etiket": "61T2K10120929",
+   "strip": "kupon",
+   "vade_yil": 3.063,
+   "odeme": 15.0,
+   "fiyat": 5.447,
+   "getiri": 39.1963
+  },
+  {
+   "kod": "TP.TRT120929K52",
+   "itfa": "2029-09-12",
+   "etiket": "121T2K8050935",
+   "strip": "kupon",
+   "vade_yil": 3.063,
+   "odeme": 15.03,
+   "fiyat": 5.458,
+   "getiri": 39.1954
+  },
+  {
+   "kod": "TP.TRT031029K27",
+   "itfa": "2029-10-03",
+   "etiket": "121T2K10270934",
+   "strip": "kupon",
+   "vade_yil": 3.1205,
+   "odeme": 13.85,
+   "fiyat": 4.945,
+   "getiri": 39.1025
+  },
+  {
+   "kod": "TP.TRT031029K35",
+   "itfa": "2029-10-03",
+   "etiket": "61T2K8021030",
+   "strip": "kupon",
+   "vade_yil": 3.1205,
+   "odeme": 16.95,
+   "fiyat": 6.052,
+   "getiri": 39.1012
+  },
+  {
+   "kod": "TP.TRT101029K10",
+   "itfa": "2029-10-10",
+   "etiket": "121T2K12051033",
+   "strip": "kupon",
+   "vade_yil": 3.1397,
+   "odeme": 13.1,
+   "fiyat": 4.651,
+   "getiri": 39.0711
+  },
+  {
+   "kod": "TP.TRT171029K13",
+   "itfa": "2029-10-17",
+   "etiket": "121T2K14131032",
+   "strip": "kupon",
+   "vade_yil": 3.1589,
+   "odeme": 5.2,
+   "fiyat": 1.836,
+   "getiri": 39.0365
+  },
+  {
+   "kod": "TP.TRT171029K39",
+   "itfa": "2029-10-17",
+   "etiket": "61T2K7160431",
+   "strip": "kupon",
+   "vade_yil": 3.1589,
+   "odeme": 16.63,
+   "fiyat": 5.871,
+   "getiri": 39.0416
+  },
+  {
+   "kod": "TP.TRT311029K15",
+   "itfa": "2029-10-31",
+   "etiket": "121T2K15280432",
+   "strip": "kupon",
+   "vade_yil": 3.1973,
+   "odeme": 10.75,
+   "fiyat": 3.753,
+   "getiri": 38.9774
+  },
+  {
+   "kod": "TP.TRT141129K15",
+   "itfa": "2029-11-14",
+   "etiket": "121T2K18131130",
+   "strip": "kupon",
+   "vade_yil": 3.2356,
+   "odeme": 5.85,
+   "fiyat": 2.02,
+   "getiri": 38.9074
+  },
+  {
+   "kod": "TP.TRT090130K11",
+   "itfa": "2030-01-09",
+   "etiket": "61T2K9100730",
+   "strip": "kupon",
+   "vade_yil": 3.389,
+   "odeme": 17.05,
+   "fiyat": 5.633,
+   "getiri": 38.6512
+  },
+  {
+   "kod": "TP.TRT160130K20",
+   "itfa": "2030-01-16",
+   "etiket": "121T2K13130733",
+   "strip": "kupon",
+   "vade_yil": 3.4082,
+   "odeme": 8.9,
+   "fiyat": 2.924,
+   "getiri": 38.6236
+  },
+  {
+   "kod": "TP.TRT130330K47",
+   "itfa": "2030-03-13",
+   "etiket": "121T2K9050935",
+   "strip": "kupon",
+   "vade_yil": 3.5616,
+   "odeme": 15.03,
+   "fiyat": 4.73,
+   "getiri": 38.3482
+  },
+  {
+   "kod": "TP.TRT030430K14",
+   "itfa": "2030-04-03",
+   "etiket": "121T2K11270934",
+   "strip": "kupon",
+   "vade_yil": 3.6192,
+   "odeme": 13.85,
+   "fiyat": 4.29,
+   "getiri": 38.2412
+  },
+  {
+   "kod": "TP.TRT030430K22",
+   "itfa": "2030-04-03",
+   "etiket": "61T2K9021030",
+   "strip": "kupon",
+   "vade_yil": 3.6192,
+   "odeme": 16.95,
+   "fiyat": 5.25,
+   "getiri": 38.2428
+  },
+  {
+   "kod": "TP.TRT100430K15",
+   "itfa": "2030-04-10",
+   "etiket": "121T2K13051033",
+   "strip": "kupon",
+   "vade_yil": 3.6384,
+   "odeme": 13.1,
+   "fiyat": 4.036,
+   "getiri": 38.2089
+  },
+  {
+   "kod": "TP.TRT170430K18",
+   "itfa": "2030-04-17",
+   "etiket": "121T2K15131032",
+   "strip": "kupon",
+   "vade_yil": 3.6575,
+   "odeme": 5.2,
+   "fiyat": 1.594,
+   "getiri": 38.1654
+  },
+  {
+   "kod": "TP.TRT170430K34",
+   "itfa": "2030-04-17",
+   "etiket": "61T2K8160431",
+   "strip": "kupon",
+   "vade_yil": 3.6575,
+   "odeme": 16.63,
+   "fiyat": 5.096,
+   "getiri": 38.1782
+  },
+  {
+   "kod": "TP.TRT010530K15",
+   "itfa": "2030-05-01",
+   "etiket": "121T2K16280432",
+   "strip": "kupon",
+   "vade_yil": 3.6959,
+   "odeme": 10.75,
+   "fiyat": 3.26,
+   "getiri": 38.1043
+  },
+  {
+   "kod": "TP.TRT150530K19",
+   "itfa": "2030-05-15",
+   "etiket": "121T2K19131130",
+   "strip": "kupon",
+   "vade_yil": 3.7342,
+   "odeme": 5.85,
+   "fiyat": 1.755,
+   "getiri": 38.0456
+  },
+  {
+   "kod": "TP.TRT100730A14",
+   "itfa": "2030-07-10",
+   "etiket": "61T2A100730",
+   "strip": "anapara",
+   "vade_yil": 3.8877,
+   "odeme": 100.0,
+   "fiyat": 28.789,
+   "getiri": 37.7525
+  },
+  {
+   "kod": "TP.TRT100730K12",
+   "itfa": "2030-07-10",
+   "etiket": "61T2K10100730",
+   "strip": "kupon",
+   "vade_yil": 3.8877,
+   "odeme": 17.05,
+   "fiyat": 4.909,
+   "getiri": 37.7491
+  },
+  {
+   "kod": "TP.TRT170730K23",
+   "itfa": "2030-07-17",
+   "etiket": "121T2K14130733",
+   "strip": "kupon",
+   "vade_yil": 3.9068,
+   "odeme": 8.9,
+   "fiyat": 2.549,
+   "getiri": 37.7184
+  },
+  {
+   "kod": "TP.TRT110930K43",
+   "itfa": "2030-09-11",
+   "etiket": "121T2K10050935",
+   "strip": "kupon",
+   "vade_yil": 4.0603,
+   "odeme": 15.03,
+   "fiyat": 4.133,
+   "getiri": 37.4335
+  },
+  {
+   "kod": "TP.TRT021030A19",
+   "itfa": "2030-10-02",
+   "etiket": "61T2A021030",
+   "strip": "anapara",
+   "vade_yil": 4.1178,
+   "odeme": 100.0,
+   "fiyat": 27.09,
+   "getiri": 37.3223
+  },
+  {
+   "kod": "TP.TRT021030K17",
+   "itfa": "2030-10-02",
+   "etiket": "121T2K12270934",
+   "strip": "kupon",
+   "vade_yil": 4.1178,
+   "odeme": 13.85,
+   "fiyat": 3.752,
+   "getiri": 37.322
+  },
+  {
+   "kod": "TP.TRT021030K25",
+   "itfa": "2030-10-02",
+   "etiket": "61T2K10021030",
+   "strip": "kupon",
+   "vade_yil": 4.1178,
+   "odeme": 16.95,
+   "fiyat": 4.592,
+   "getiri": 37.3205
+  },
+  {
+   "kod": "TP.TRT091030K10",
+   "itfa": "2030-10-09",
+   "etiket": "121T2K14051033",
+   "strip": "kupon",
+   "vade_yil": 4.137,
+   "odeme": 13.1,
+   "fiyat": 3.531,
+   "getiri": 37.2872
+  },
+  {
+   "kod": "TP.TRT161030K11",
+   "itfa": "2030-10-16",
+   "etiket": "121T2K16131032",
+   "strip": "kupon",
+   "vade_yil": 4.1562,
+   "odeme": 5.2,
+   "fiyat": 1.395,
+   "getiri": 37.2428
+  },
+  {
+   "kod": "TP.TRT161030K37",
+   "itfa": "2030-10-16",
+   "etiket": "61T2K9160431",
+   "strip": "kupon",
+   "vade_yil": 4.1562,
+   "odeme": 16.63,
+   "fiyat": 4.46,
+   "getiri": 37.2525
+  },
+  {
+   "kod": "TP.TRT301030K13",
+   "itfa": "2030-10-30",
+   "etiket": "121T2K17280432",
+   "strip": "kupon",
+   "vade_yil": 4.1945,
+   "odeme": 10.75,
+   "fiyat": 2.855,
+   "getiri": 37.175
+  },
+  {
+   "kod": "TP.TRT131130A15",
+   "itfa": "2030-11-13",
+   "etiket": "121T2A131130",
+   "strip": "anapara",
+   "vade_yil": 4.2329,
+   "odeme": 100.0,
+   "fiyat": 26.295,
+   "getiri": 37.1048
+  },
+  {
+   "kod": "TP.TRT131130K13",
+   "itfa": "2030-11-13",
+   "etiket": "121T2K20131130",
+   "strip": "kupon",
+   "vade_yil": 4.2329,
+   "odeme": 5.85,
+   "fiyat": 1.538,
+   "getiri": 37.1102
+  },
+  {
+   "kod": "TP.TRT150131K20",
+   "itfa": "2031-01-15",
+   "etiket": "121T2K15130733",
+   "strip": "kupon",
+   "vade_yil": 4.4055,
+   "odeme": 8.9,
+   "fiyat": 2.24,
+   "getiri": 36.7727
+  },
+  {
+   "kod": "TP.TRT120331K39",
+   "itfa": "2031-03-12",
+   "etiket": "121T2K11050935",
+   "strip": "kupon",
+   "vade_yil": 4.5589,
+   "odeme": 15.03,
+   "fiyat": 3.64,
+   "getiri": 36.4863
+  },
+  {
+   "kod": "TP.TRT020431K14",
+   "itfa": "2031-04-02",
+   "etiket": "121T2K13270934",
+   "strip": "kupon",
+   "vade_yil": 4.6164,
+   "odeme": 13.85,
+   "fiyat": 3.307,
+   "getiri": 36.3764
+  },
+  {
+   "kod": "TP.TRT090431K17",
+   "itfa": "2031-04-09",
+   "etiket": "121T2K15051033",
+   "strip": "kupon",
+   "vade_yil": 4.6356,
+   "odeme": 13.1,
+   "fiyat": 3.113,
+   "getiri": 36.342
+  },
+  {
+   "kod": "TP.TRT160431A28",
+   "itfa": "2031-04-16",
+   "etiket": "61T2A160431",
+   "strip": "anapara",
+   "vade_yil": 4.6548,
+   "odeme": 100.0,
+   "fiyat": 23.651,
+   "getiri": 36.3067
+  },
+  {
+   "kod": "TP.TRT160431K18",
+   "itfa": "2031-04-16",
+   "etiket": "121T2K17131032",
+   "strip": "kupon",
+   "vade_yil": 4.6548,
+   "odeme": 5.2,
+   "fiyat": 1.23,
+   "getiri": 36.3032
+  },
+  {
+   "kod": "TP.TRT160431K34",
+   "itfa": "2031-04-16",
+   "etiket": "61T2K10160431",
+   "strip": "kupon",
+   "vade_yil": 4.6548,
+   "odeme": 16.63,
+   "fiyat": 3.933,
+   "getiri": 36.3079
+  },
+  {
+   "kod": "TP.TRT300431K10",
+   "itfa": "2031-04-30",
+   "etiket": "121T2K18280432",
+   "strip": "kupon",
+   "vade_yil": 4.6932,
+   "odeme": 10.75,
+   "fiyat": 2.519,
+   "getiri": 36.2312
+  },
+  {
+   "kod": "TP.TRT160731K23",
+   "itfa": "2031-07-16",
+   "etiket": "121T2K16130733",
+   "strip": "kupon",
+   "vade_yil": 4.9041,
+   "odeme": 8.9,
+   "fiyat": 1.982,
+   "getiri": 35.8339
+  },
+  {
+   "kod": "TP.TRT100931K35",
+   "itfa": "2031-09-10",
+   "etiket": "121T2K12050935",
+   "strip": "kupon",
+   "vade_yil": 5.0575,
+   "odeme": 15.03,
+   "fiyat": 3.227,
+   "getiri": 35.5538
+  },
+  {
+   "kod": "TP.TRT011031K17",
+   "itfa": "2031-10-01",
+   "etiket": "121T2K14270934",
+   "strip": "kupon",
+   "vade_yil": 5.1151,
+   "odeme": 13.85,
+   "fiyat": 2.934,
+   "getiri": 35.4458
+  },
+  {
+   "kod": "TP.TRT081031K10",
+   "itfa": "2031-10-08",
+   "etiket": "121T2K16051033",
+   "strip": "kupon",
+   "vade_yil": 5.1342,
+   "odeme": 13.1,
+   "fiyat": 2.762,
+   "getiri": 35.4173
+  },
+  {
+   "kod": "TP.TRT151031K11",
+   "itfa": "2031-10-15",
+   "etiket": "121T2K18131032",
+   "strip": "kupon",
+   "vade_yil": 5.1534,
+   "odeme": 5.2,
+   "fiyat": 1.092,
+   "getiri": 35.3694
+  },
+  {
+   "kod": "TP.TRT291031K15",
+   "itfa": "2031-10-29",
+   "etiket": "121T2K19280432",
+   "strip": "kupon",
+   "vade_yil": 5.1918,
+   "odeme": 10.75,
+   "fiyat": 2.237,
+   "getiri": 35.3044
+  },
+  {
+   "kod": "TP.TRT140132K20",
+   "itfa": "2032-01-14",
+   "etiket": "121T2K17130733",
+   "strip": "kupon",
+   "vade_yil": 5.4027,
+   "odeme": 8.9,
+   "fiyat": 1.764,
+   "getiri": 34.9271
+  },
+  {
+   "kod": "TP.TRT100332K30",
+   "itfa": "2032-03-10",
+   "etiket": "121T2K13050935",
+   "strip": "kupon",
+   "vade_yil": 5.5562,
+   "odeme": 15.03,
+   "fiyat": 2.877,
+   "getiri": 34.6571
+  },
+  {
+   "kod": "TP.TRT310332K19",
+   "itfa": "2032-03-31",
+   "etiket": "121T2K15270934",
+   "strip": "kupon",
+   "vade_yil": 5.6137,
+   "odeme": 13.85,
+   "fiyat": 2.617,
+   "getiri": 34.5573
+  },
+  {
+   "kod": "TP.TRT070432K18",
+   "itfa": "2032-04-07",
+   "etiket": "121T2K17051033",
+   "strip": "kupon",
+   "vade_yil": 5.6329,
+   "odeme": 13.1,
+   "fiyat": 2.465,
+   "getiri": 34.5208
+  },
+  {
+   "kod": "TP.TRT140432K19",
+   "itfa": "2032-04-14",
+   "etiket": "121T2K19131032",
+   "strip": "kupon",
+   "vade_yil": 5.6521,
+   "odeme": 5.2,
+   "fiyat": 0.974,
+   "getiri": 34.4945
+  },
+  {
+   "kod": "TP.TRT280432A15",
+   "itfa": "2032-04-28",
+   "etiket": "121T2A280432",
+   "strip": "anapara",
+   "vade_yil": 5.6904,
+   "odeme": 100.0,
+   "fiyat": 18.574,
+   "getiri": 34.4245
+  },
+  {
+   "kod": "TP.TRT280432K13",
+   "itfa": "2032-04-28",
+   "etiket": "121T2K20280432",
+   "strip": "kupon",
+   "vade_yil": 5.6904,
+   "odeme": 10.75,
+   "fiyat": 1.997,
+   "getiri": 34.421
+  },
+  {
+   "kod": "TP.TRT140732K24",
+   "itfa": "2032-07-14",
+   "etiket": "121T2K18130733",
+   "strip": "kupon",
+   "vade_yil": 5.9014,
+   "odeme": 8.9,
+   "fiyat": 1.578,
+   "getiri": 34.0623
+  },
+  {
+   "kod": "TP.TRT080932K20",
+   "itfa": "2032-09-08",
+   "etiket": "121T2K14050935",
+   "strip": "kupon",
+   "vade_yil": 6.0548,
+   "odeme": 15.03,
+   "fiyat": 2.577,
+   "getiri": 33.8091
+  },
+  {
+   "kod": "TP.TRT290932K17",
+   "itfa": "2032-09-29",
+   "etiket": "121T2K16270934",
+   "strip": "kupon",
+   "vade_yil": 6.1123,
+   "odeme": 13.85,
+   "fiyat": 2.345,
+   "getiri": 33.7176
+  },
+  {
+   "kod": "TP.TRT061032K11",
+   "itfa": "2032-10-06",
+   "etiket": "121T2K18051033",
+   "strip": "kupon",
+   "vade_yil": 6.1315,
+   "odeme": 13.1,
+   "fiyat": 2.209,
+   "getiri": 33.6849
+  },
+  {
+   "kod": "TP.TRT131032A14",
+   "itfa": "2032-10-13",
+   "etiket": "121T2A131032",
+   "strip": "anapara",
+   "vade_yil": 6.1507,
+   "odeme": 100.0,
+   "fiyat": 16.79,
+   "getiri": 33.6577
+  },
+  {
+   "kod": "TP.TRT131032K12",
+   "itfa": "2032-10-13",
+   "etiket": "121T2K20131032",
+   "strip": "kupon",
+   "vade_yil": 6.1507,
+   "odeme": 5.2,
+   "fiyat": 0.873,
+   "getiri": 33.6597
+  },
+  {
+   "kod": "TP.TRT120133K21",
+   "itfa": "2033-01-12",
+   "etiket": "121T2K19130733",
+   "strip": "kupon",
+   "vade_yil": 6.4,
+   "odeme": 8.9,
+   "fiyat": 1.416,
+   "getiri": 33.2719
+  },
+  {
+   "kod": "TP.TRT090333K24",
+   "itfa": "2033-03-09",
+   "etiket": "121T2K15050935",
+   "strip": "kupon",
+   "vade_yil": 6.5534,
+   "odeme": 15.03,
+   "fiyat": 2.315,
+   "getiri": 33.0353
+  },
+  {
+   "kod": "TP.TRT300333K19",
+   "itfa": "2033-03-30",
+   "etiket": "121T2K17270934",
+   "strip": "kupon",
+   "vade_yil": 6.611,
+   "odeme": 13.85,
+   "fiyat": 2.108,
+   "getiri": 32.9445
+  },
+  {
+   "kod": "TP.TRT060433K18",
+   "itfa": "2033-04-06",
+   "etiket": "121T2K19051033",
+   "strip": "kupon",
+   "vade_yil": 6.6301,
+   "odeme": 13.1,
+   "fiyat": 1.985,
+   "getiri": 32.9242
+  },
+  {
+   "kod": "TP.TRT130733A18",
+   "itfa": "2033-07-13",
+   "etiket": "121T2A130733",
+   "strip": "anapara",
+   "vade_yil": 6.8986,
+   "odeme": 100.0,
+   "fiyat": 14.324,
+   "getiri": 32.536
+  },
+  {
+   "kod": "TP.TRT130733K16",
+   "itfa": "2033-07-13",
+   "etiket": "121T2K20130733",
+   "strip": "kupon",
+   "vade_yil": 6.8986,
+   "odeme": 8.9,
+   "fiyat": 1.275,
+   "getiri": 32.5335
+  },
+  {
+   "kod": "TP.TRT070933K20",
+   "itfa": "2033-09-07",
+   "etiket": "121T2K16050935",
+   "strip": "kupon",
+   "vade_yil": 7.0521,
+   "odeme": 15.03,
+   "fiyat": 2.085,
+   "getiri": 32.3262
+  },
+  {
+   "kod": "TP.TRT280933K17",
+   "itfa": "2033-09-28",
+   "etiket": "121T2K18270934",
+   "strip": "kupon",
+   "vade_yil": 7.1096,
+   "odeme": 13.85,
+   "fiyat": 1.898,
+   "getiri": 32.2534
+  },
+  {
+   "kod": "TP.TRT051033A13",
+   "itfa": "2033-10-05",
+   "etiket": "121T2A051033",
+   "strip": "anapara",
+   "vade_yil": 7.1288,
+   "odeme": 100.0,
+   "fiyat": 13.652,
+   "getiri": 32.2245
+  },
+  {
+   "kod": "TP.TRT051033K11",
+   "itfa": "2033-10-05",
+   "etiket": "121T2K20051033",
+   "strip": "kupon",
+   "vade_yil": 7.1288,
+   "odeme": 13.1,
+   "fiyat": 1.788,
+   "getiri": 32.2287
+  },
+  {
+   "kod": "TP.TRT080334K16",
+   "itfa": "2034-03-08",
+   "etiket": "121T2K17050935",
+   "strip": "kupon",
+   "vade_yil": 7.5507,
+   "odeme": 15.03,
+   "fiyat": 1.88,
+   "getiri": 31.6938
+  },
+  {
+   "kod": "TP.TRT290334K11",
+   "itfa": "2034-03-29",
+   "etiket": "121T2K19270934",
+   "strip": "kupon",
+   "vade_yil": 7.6082,
+   "odeme": 13.85,
+   "fiyat": 1.712,
+   "getiri": 31.6247
+  },
+  {
+   "kod": "TP.TRT060934K12",
+   "itfa": "2034-09-06",
+   "etiket": "121T2K18050935",
+   "strip": "kupon",
+   "vade_yil": 8.0493,
+   "odeme": 15.03,
+   "fiyat": 1.695,
+   "getiri": 31.1438
+  },
+  {
+   "kod": "TP.TRT270934A19",
+   "itfa": "2034-09-27",
+   "etiket": "121T2A270934",
+   "strip": "anapara",
+   "vade_yil": 8.1068,
+   "odeme": 100.0,
+   "fiyat": 11.143,
+   "getiri": 31.0855
+  },
+  {
+   "kod": "TP.TRT270934K17",
+   "itfa": "2034-09-27",
+   "etiket": "121T2K20270934",
+   "strip": "kupon",
+   "vade_yil": 8.1068,
+   "odeme": 13.85,
+   "fiyat": 1.543,
+   "getiri": 31.0887
+  },
+  {
+   "kod": "TP.TRT070335K16",
+   "itfa": "2035-03-07",
+   "etiket": "121T2K19050935",
+   "strip": "kupon",
+   "vade_yil": 8.5479,
+   "odeme": 15.03,
+   "fiyat": 1.527,
+   "getiri": 30.6719
+  },
+  {
+   "kod": "TP.TRT050935A14",
+   "itfa": "2035-09-05",
+   "etiket": "121T2A050935",
+   "strip": "anapara",
+   "vade_yil": 9.0466,
+   "odeme": 100.0,
+   "fiyat": 9.141,
+   "getiri": 30.2719
+  },
+  {
+   "kod": "TP.TRT050935K12",
+   "itfa": "2035-09-05",
+   "etiket": "121T2K20050935",
+   "strip": "kupon",
+   "vade_yil": 9.0466,
+   "odeme": 15.03,
+   "fiyat": 1.374,
+   "getiri": 30.2708
+  }
+ ],
+ "egri_tutarlilik": {
+  "cok_kaynakli_vade": 53,
+  "maks_sapma_puan": 0.2561,
+  "maks_sapma_itfa": "2026-09-16",
+  "medyan_sapma_puan": 0.0055
+ },
+ "reel_egri": [
+  {
+   "kod": "TP.TRT180827A10",
+   "ihrac": "2024-08-21",
+   "itfa": "2027-08-18",
+   "vade_yil": 0.9918,
+   "fiyat_endeksli": 162.775,
+   "endeks_orani": 1.7881,
+   "reel_getiri": 9.9374
+  },
+  {
+   "kod": "TP.TRT151227A17",
+   "ihrac": "2024-12-18",
+   "itfa": "2027-12-15",
+   "vade_yil": 1.3178,
+   "fiyat_endeksli": 146.658,
+   "endeks_orani": 1.6069,
+   "reel_getiri": 7.1799
+  },
+  {
+   "kod": "TP.TRT120128A12",
+   "ihrac": "2018-01-24",
+   "itfa": "2028-01-12",
+   "vade_yil": 1.3945,
+   "fiyat_endeksli": 1122.181,
+   "endeks_orani": 12.7286,
+   "reel_getiri": 9.4558
+  },
+  {
+   "kod": "TP.TRT280628A19",
+   "ihrac": "2018-07-11",
+   "itfa": "2028-06-28",
+   "vade_yil": 1.8548,
+   "fiyat_endeksli": 1064.411,
+   "endeks_orani": 11.9667,
+   "reel_getiri": 6.518
+  },
+  {
+   "kod": "TP.TRT190728A27",
+   "ihrac": "2023-07-26",
+   "itfa": "2028-07-19",
+   "vade_yil": 1.9123,
+   "fiyat_endeksli": 272.498,
+   "endeks_orani": 3.1706,
+   "reel_getiri": 8.2431
+  },
+  {
+   "kod": "TP.TRT181028A15",
+   "ihrac": "2023-10-25",
+   "itfa": "2028-10-18",
+   "vade_yil": 2.1616,
+   "fiyat_endeksli": 220.09,
+   "endeks_orani": 2.6032,
+   "reel_getiri": 8.0765
+  },
+  {
+   "kod": "TP.TRT140229A18",
+   "ihrac": "2024-02-21",
+   "itfa": "2029-02-14",
+   "vade_yil": 2.4877,
+   "fiyat_endeksli": 197.429,
+   "endeks_orani": 2.2374,
+   "reel_getiri": 5.157
+  },
+  {
+   "kod": "TP.TRT110429A19",
+   "ihrac": "2025-04-16",
+   "itfa": "2029-04-11",
+   "vade_yil": 2.6411,
+   "fiyat_endeksli": 125.181,
+   "endeks_orani": 1.4459,
+   "reel_getiri": 5.6105
+  },
+  {
+   "kod": "TP.TRT020529A19",
+   "ihrac": "2024-05-08",
+   "itfa": "2029-05-02",
+   "vade_yil": 2.6986,
+   "fiyat_endeksli": 169.75,
+   "endeks_orani": 1.9742,
+   "reel_getiri": 5.7543
+  },
+  {
+   "kod": "TP.TRT130629A15",
+   "ihrac": "2025-06-18",
+   "itfa": "2029-06-13",
+   "vade_yil": 2.8137,
+   "fiyat_endeksli": 119.449,
+   "endeks_orani": 1.3722,
+   "reel_getiri": 5.054
+  },
+  {
+   "kod": "TP.TRT280531A15",
+   "ihrac": "2021-06-09",
+   "itfa": "2031-05-28",
+   "vade_yil": 4.7699,
+   "fiyat_endeksli": 667.364,
+   "endeks_orani": 7.841,
+   "reel_getiri": 3.4374
+  },
+  {
+   "kod": "TP.TRT110232A16",
+   "ihrac": "2022-02-23",
+   "itfa": "2032-02-11",
+   "vade_yil": 5.4795,
+   "fiyat_endeksli": 501.49,
+   "endeks_orani": 6.1603,
+   "reel_getiri": 3.8255
+  },
+  {
+   "kod": "TP.TRT040832A19",
+   "ihrac": "2022-08-17",
+   "itfa": "2032-08-04",
+   "vade_yil": 5.9589,
+   "fiyat_endeksli": 340.194,
+   "endeks_orani": 4.3151,
+   "reel_getiri": 4.0709
+  },
+  {
+   "kod": "TP.TRT120133A15",
+   "ihrac": "2023-01-25",
+   "itfa": "2033-01-12",
+   "vade_yil": 6.4,
+   "fiyat_endeksli": 277.213,
+   "endeks_orani": 3.7208,
+   "reel_getiri": 4.7062
+  },
+  {
+   "kod": "TP.TRT070933A14",
+   "ihrac": "2023-09-20",
+   "itfa": "2033-09-07",
+   "vade_yil": 7.0521,
+   "fiyat_endeksli": 221.764,
+   "endeks_orani": 2.8778,
+   "reel_getiri": 3.7644
+  }
+ ],
+ "turetilmis": {
+  "nominal_spot": {
+   "0.25": 40.61375208333333,
+   "1": 40.31616434782609,
+   "2": 40.461767361563524,
+   "3": 39.29424432855281,
+   "5": 35.658791851368974,
+   "7": 32.397408990228016,
+   "9": 30.308279967916583
+  },
+  "tufex_reel_spot": {
+   "1": 9.868039570552147,
+   "2": 8.184492619334135,
+   "3": 4.900042030467232,
+   "5": 3.5632480975197294,
+   "7": 3.8396457905229266
+  },
+  "egim_2y10y_puan": -10.153,
+  "egim_2y5y_puan": -4.803,
+  "kelebek_1_2_5_puan": 4.949,
+  "ileri_reel_1y_fisher": 13.442,
+  "ileri_reel_1y_basit_fark": 16.626,
+  "ileri_reel_2y_fisher": 19.005,
+  "basabas_enflasyon_1y": 27.713,
+  "basabas_enflasyon_2y": 29.835,
+  "basabas_enflasyon_3y": 32.788,
+  "basabas_enflasyon_5y": 30.991,
+  "basabas_enflasyon_7y": 27.502,
+  "carry_2y_tlref_puan": 0.606,
+  "carry_2y_politika_puan": 3.462,
+  "carry_2y_aofm_puan": 0.462
+ },
+ "referans_seriler": [
+  {
+   "ad": "tlref",
+   "kod": "TP.BISTTLREF.ORAN",
+   "birim": "yüzde",
+   "frekans": "iş günü",
+   "aciklama": "BIST TLREF gecelik referans faiz — carry ayağının kısa ucu",
+   "dogrulandi": true,
+   "gozlem": 31,
+   "son_tarih": "21-08-2026",
+   "son_deger": 39.8559
+  },
+  {
+   "ad": "politika",
+   "kod": "TP.PY.P02.1H",
+   "birim": "yüzde",
+   "frekans": "iş günü",
+   "aciklama": "1 hafta vadeli repo SATIŞ kotasyonu = politika faizi (14.09.2018'den)",
+   "dogrulandi": true,
+   "gozlem": 31,
+   "son_tarih": "21-08-2026",
+   "son_deger": 37.0
+  },
+  {
+   "ad": "politika_ger",
+   "kod": "TP.PY.P06.1H",
+   "birim": "yüzde",
+   "frekans": "iş günü",
+   "aciklama": "gerçekleşen 1 haftalık repo işlem faizi — 2018 öncesi vekil",
+   "dogrulandi": true,
+   "gozlem": 0,
+   "son_tarih": "17-10-2025",
+   "son_deger": 40.5,
+   "durum": "YAYIN DURMUŞ (tarihsel seri)"
+  },
+  {
+   "ad": "aofm",
+   "kod": "TP.APIFON4",
+   "birim": "yüzde",
+   "frekans": "iş günü",
+   "aciklama": "TCMB ağırlıklı ortalama fonlama maliyeti",
+   "dogrulandi": true,
+   "gozlem": 31,
+   "son_tarih": "21-08-2026",
+   "son_deger": 40.0
+  },
+  {
+   "ad": "koridor_alt",
+   "kod": "TP.PY.P01.ON",
+   "birim": "yüzde",
+   "frekans": "iş günü",
+   "aciklama": "gecelik borçlanma",
+   "dogrulandi": true,
+   "gozlem": 31,
+   "son_tarih": "21-08-2026",
+   "son_deger": 35.5
+  },
+  {
+   "ad": "koridor_ust",
+   "kod": "TP.PY.P02.ON",
+   "birim": "yüzde",
+   "frekans": "iş günü",
+   "aciklama": "gecelik borç verme",
+   "dogrulandi": true,
+   "gozlem": 31,
+   "son_tarih": "21-08-2026",
+   "son_deger": 40.0
+  },
+  {
+   "ad": "bist_on",
+   "kod": "TP.AOFOBAP",
+   "birim": "yüzde",
+   "frekans": "iş günü",
+   "aciklama": "BİST gecelik repo AOF",
+   "dogrulandi": true,
+   "gozlem": 31,
+   "son_tarih": "21-08-2026",
+   "son_deger": 39.86
+  },
+  {
+   "ad": "pka_12a",
+   "kod": "TP.PKAUO.S01.E.U",
+   "birim": "yüzde",
+   "frekans": "aylık",
+   "aciklama": "PKA 12 ay sonrası yıllık TÜFE beklentisi (uygun ortalama) — FISHER girdisi",
+   "dogrulandi": true,
+   "gozlem": 14,
+   "son_tarih": "2026-8",
+   "son_deger": 23.69
+  },
+  {
+   "ad": "pka_12a_medyan",
+   "kod": "TP.BEK.S01.E.M",
+   "birim": "yüzde",
+   "frekans": "aylık",
+   "aciklama": "aynı sorunun medyanı",
+   "dogrulandi": true,
+   "gozlem": 14,
+   "son_tarih": "2026-8",
+   "son_deger": 23.95
+  },
+  {
+   "ad": "pka_12a_std",
+   "kod": "TP.BEK.S01.E.S",
+   "birim": "yüzde",
+   "frekans": "aylık",
+   "aciklama": "beklenti dağılımının std sapması",
+   "dogrulandi": true,
+   "gozlem": 14,
+   "son_tarih": "2026-8",
+   "son_deger": 2.69
+  },
+  {
+   "ad": "pka_12a_n",
+   "kod": "TP.BEK.S01.E.X",
+   "birim": "adet",
+   "frekans": "aylık",
+   "aciklama": "katılımcı sayısı (anket zayıflarsa uyarı)",
+   "dogrulandi": true,
+   "gozlem": 14,
+   "son_tarih": "2026-8",
+   "son_deger": 63.0
+  },
+  {
+   "ad": "pka_24a",
+   "kod": "TP.PKAUO.S01.F.U",
+   "birim": "yüzde",
+   "frekans": "aylık",
+   "aciklama": "24 ay sonrası yıllık TÜFE beklentisi",
+   "dogrulandi": true,
+   "gozlem": 14,
+   "son_tarih": "2026-8",
+   "son_deger": 18.03
+  },
+  {
+   "ad": "pka_5y",
+   "kod": "TP.PKAUO.S01.G.U",
+   "birim": "yüzde",
+   "frekans": "aylık",
+   "aciklama": "5 yıl sonrası yıllık TÜFE beklentisi",
+   "dogrulandi": true,
+   "gozlem": 14,
+   "son_tarih": "2026-8",
+   "son_deger": 11.14
+  },
+  {
+   "ad": "pka_yilsonu",
+   "kod": "TP.PKAUO.S01.D.U",
+   "birim": "yüzde",
+   "frekans": "aylık",
+   "aciklama": "cari yıl sonu yıllık TÜFE beklentisi",
+   "dogrulandi": true,
+   "gozlem": 14,
+   "son_tarih": "2026-8",
+   "son_deger": 29.43
+  },
+  {
+   "ad": "pka_faiz_12a",
+   "kod": "TP.PKAUO.S04.D.U",
+   "birim": "yüzde",
+   "frekans": "aylık",
+   "aciklama": "12 ay sonrası politika faizi beklentisi",
+   "dogrulandi": true,
+   "gozlem": 14,
+   "son_tarih": "2026-8",
+   "son_deger": 29.59
+  },
+  {
+   "ad": "pka_faiz_24a",
+   "kod": "TP.PKAUO.S04.E.U",
+   "birim": "yüzde",
+   "frekans": "aylık",
+   "aciklama": "24 ay sonrası politika faizi beklentisi",
+   "dogrulandi": true,
+   "gozlem": 14,
+   "son_tarih": "2026-8",
+   "son_deger": 21.89
+  },
+  {
+   "ad": "reel_kesim_12a",
+   "kod": "TP.ENFBEK.IYA12ENF",
+   "birim": "yüzde",
+   "frekans": "aylık",
+   "aciklama": "reel kesim 12 ay TÜFE beklentisi",
+   "dogrulandi": true,
+   "gozlem": 13,
+   "son_tarih": "2026-7",
+   "son_deger": 32.5
+  },
+  {
+   "ad": "hanehalki_12a",
+   "kod": "TP.ENFBEK.HBA12ENF",
+   "birim": "yüzde",
+   "frekans": "aylık",
+   "aciklama": "hanehalkı 12 ay TÜFE beklentisi",
+   "dogrulandi": true,
+   "gozlem": 13,
+   "son_tarih": "2026-7",
+   "son_deger": 44.94
+  },
+  {
+   "ad": "tufe",
+   "kod": "TP.TUKFIY2025.GENEL",
+   "birim": "endeks",
+   "frekans": "aylık",
+   "aciklama": "TÜFE genel endeks (2025=100) — geriye dönük reel faizin paydası",
+   "dogrulandi": true,
+   "gozlem": 13,
+   "son_tarih": "2026-7",
+   "son_deger": 132.31
+  },
+  {
+   "ad": "ic_borc_tahvil",
+   "kod": "TP.KB.A01",
+   "birim": "bin TL",
+   "frekans": "aylık",
+   "aciklama": "iç borç stoku – tahvil",
+   "dogrulandi": true,
+   "gozlem": 12,
+   "son_tarih": "2026-6",
+   "son_deger": 8825924357.0
+  },
+  {
+   "ad": "ic_borc_bono",
+   "kod": "TP.KB.A05",
+   "birim": "bin TL",
+   "frekans": "aylık",
+   "aciklama": "iç borç stoku – bono",
+   "dogrulandi": true,
+   "gozlem": 12,
+   "son_tarih": "2026-6",
+   "son_deger": 187949585.0
+  },
+  {
+   "ad": "ic_borc_toplam",
+   "kod": "TP.KB.A09",
+   "birim": "bin TL",
+   "frekans": "aylık",
+   "aciklama": "iç borç stoku – toplam",
+   "dogrulandi": true,
+   "gozlem": 12,
+   "son_tarih": "2026-6",
+   "son_deger": 9013873942.0
+  }
+ ],
+ "uyarilar": [
+  "bie_pydibsarsiv: 13 seri adı ayrıştırılamadı (TCMB ad biçimini değiştirmiş olabilir).",
+  "YAYIN DURMUŞ: politika_ger (TP.PY.P06.1H) son gözlem 17-10-2025 — kod geçerli ama seri güncel değil; yalnız tarihçede kullanılabilir."
+ ]
+}

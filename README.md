@@ -46,6 +46,7 @@ Ayrıntılı anlatım: **[KURULUM.md](KURULUM.md)** · çalışma rehberi: [CLAU
 | `guncelle.bat --kur <hat>` | tek hattın `.venv` + bağımlılıkları (kur.bat'ın alt kümesi) |
 | `panel.bat hazine` \| `fx` | canlı pano (Dash 8050 / Streamlit 8501) |
 | `yayinla.bat` | siteyi yayına gönder (`-m "mesaj"`, `--kuru` = deneme, `--denetle`) |
+| `bulten.bat` | **günlük bülten** üret (`--guncelle` = önce hatları tazele) |
 
 Windows dışında `.bat` yerine aynı adlı `.py`: `python3 kur.py`, `python3 site_baslat.py`,
 `python3 guncelle.py`, `python3 panel.py`, `python3 yayinla.py`.
@@ -107,6 +108,36 @@ eğrisiyle ASW hesaplayıcı (BBG terminali gerektirir, o yüzden sitede yok).
 çıktıları commit'ler. **Depo secret'ı gerekir:** Settings → Secrets and variables → Actions
 → `TTO_EVDS_KEY`. Ağır adımlar (FinBERT, Hazine scraper) bilinçli olarak cron dışıdır;
 onlar yerelde `guncelle.bat --tam` ile koşturulup push edilir.
+
+## Günlük bülten
+
+Her sabah otomatik derlenen makro bülteni: **https://cocoonish.github.io/bulten/**
+
+Dört katman, üçü kural tabanlı (LLM yok), biri yorum:
+
+| Katman | Ne yapar | Nerede |
+|---|---|---|
+| `bulten/olay.py` | Hatların `ozet.json`'unu bir önceki **veri sürümüyle** kıyaslar, `ayar.py`'deki eşikleri uygular, cümleyi kurar | çekirdek |
+| `bulten/takvim.py` | TÜİK Ulusal Veri Yayımlama Takvimi (TÜİK+TCMB+HMB+BDDK+SPK), Fed ve ECB takvimleri, Hazine ihale programı (kendi hattımızdan, **model beklentisiyle**), TCMB PPK/rapor tarihleri | çekirdek |
+| `bulten/haber.py` | TCMB Basın Duyuruları, Resmî Gazete, Bloomberg HT / AA / Investing / Google News; alaka süzgeci + öykü kümeleme | çekirdek |
+| yorum | "Günün okuması" — sayılar çekirdekten, cümle LLM'den | Mac'te zamanlanmış görev |
+
+Otomasyon çift bacaklı: **bulutta** `.github/workflows/bulten.yml` her sabah 07:23'te
+(İstanbul) hatları tazeler ve bülteni üretir — bilgisayar kapalıyken de bülten çıkar;
+**Mac'te** zamanlanmış Claude görevi 07:41'de üstüne yorum katmanını yazar ve yayınlar.
+Yorum alanı deterministik koşularda **korunur**, silinmez.
+
+Eşikler ve izlenen büyüklükler tek dosyada: [`bulten/ayar.py`](bulten/ayar.py) (37 izlem).
+Bir eşik ayda birkaç kez tetikleniyorsa doğru yerdedir; her gün tetikleniyorsa bülten
+okunmaz hâle gelir.
+
+**Kıyas noktası neden "önceki veri sürümü":** aynı verinin iki anlık görüntüsü arasındaki
+fark sıfırdır. Hat günde iki kez koşulursa bülten "değişiklik yok" derdi — haftalık bir
+seri için bile. Bu yüzden kıyas, `_tarih`i farklı olan en son görüntüye göre yapılır:
+"son veri yayımından bu yana ne değişti".
+
+Depo secret'ları: `TTO_EVDS_KEY` (zorunlu), `TTO_YAYIN_TOKEN` (isteğe bağlı — bulut
+doğrudan yayına gönderebilsin diye public depoya yazma yetkili PAT).
 
 ## Yayın
 

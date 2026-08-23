@@ -1,0 +1,299 @@
+{
+ "kosum": "2026-08-23 20:43",
+ "son_ay": "2026-06-01",
+ "son_ceyrek": "2026-03-31",
+ "son_dis_ceyrek": "2026-06-30",
+ "son_hafta": "2026-08-14",
+ "son_gun": "2026-08-21",
+ "birim": {
+  "bie_kbmgel": {
+   "kod_kalibi": "^TP\\.KB\\.GEL",
+   "beklenen": "bin TL",
+   "evds": "bin TL",
+   "frekans": "AYLIK",
+   "kaynak": "T.C. Hazine ve Maliye Bakanlığı",
+   "uyusuyor": true
+  },
+  "bie_kbmgid": {
+   "kod_kalibi": "^TP\\.KB\\.GID",
+   "beklenen": "bin TL",
+   "evds": "bin TL",
+   "frekans": "AYLIK",
+   "kaynak": "T.C. Hazine ve Maliye Bakanlığı",
+   "uyusuyor": true
+  },
+  "bie_kbgen": {
+   "kod_kalibi": "^TP\\.KB\\.GEN",
+   "beklenen": "bin TL",
+   "evds": "bin TL",
+   "frekans": "AYLIK",
+   "kaynak": "T.C. Hazine ve Maliye Bakanlığı",
+   "uyusuyor": true
+  },
+  "bie_kbicborc": {
+   "kod_kalibi": "^TP\\.KB\\.A\\d",
+   "beklenen": "bin TL",
+   "evds": "bin TL",
+   "frekans": "AYLIK",
+   "kaynak": "T.C. Hazine ve Maliye Bakanlığı",
+   "uyusuyor": true
+  },
+  "bie_brutdbborclu": {
+   "kod_kalibi": "^TP\\.BRUTDBORCLU\\.",
+   "beklenen": "milyon ABD doları",
+   "evds": "milyon ABD doları",
+   "frekans": "ÜÇ AYLIK",
+   "kaynak": "TCMB",
+   "uyusuyor": true
+  },
+  "bie_dibsyazdeg": {
+   "kod_kalibi": "^TP\\.DIBSYAZDEG\\.",
+   "beklenen": "milyon TL",
+   "evds": "milyon TL",
+   "frekans": "HAFTALIK(CUMA)",
+   "kaynak": "TCMB, TAKASBANK, MKK, HMB, BANKALAR, ARACI KURUMLAR",
+   "uyusuyor": true
+  },
+  "bie_dibsvade": {
+   "kod_kalibi": "^TP\\.DIBSVADE\\.",
+   "beklenen": "milyon TL",
+   "evds": "milyon TL",
+   "frekans": "HAFTALIK(CUMA)",
+   "kaynak": "TCMB, TAKASBANK, MKK, HMB, BANKALAR, ARACI KURUMLAR",
+   "uyusuyor": true
+  },
+  "bie_dibspiydeg": {
+   "kod_kalibi": "^TP\\.DIBSPIYDEG\\.",
+   "beklenen": "milyon TL",
+   "evds": "milyon TL",
+   "frekans": "HAFTALIK(CUMA)",
+   "kaynak": "TCMB, TAKASBANK, MKK, HMB, BANKALAR, ARACI KURUMLAR",
+   "uyusuyor": true
+  },
+  "bie_ebondyazdeg": {
+   "kod_kalibi": "^TP\\.EBONDYAZDEG\\.",
+   "beklenen": "milyon ABD doları",
+   "evds": "milyon ABD doları",
+   "frekans": "HAFTALIK(CUMA)",
+   "kaynak": "TCMB, TAKASBANK, HMB, BANKALAR, ARACI KURUMLAR, TİCARİ VERİ SAĞLAYICILARI",
+   "uyusuyor": true
+  },
+  "bie_ebondvade": {
+   "kod_kalibi": "^TP\\.EBONDVADE\\.",
+   "beklenen": "milyon ABD doları",
+   "evds": "milyon ABD doları",
+   "frekans": "HAFTALIK(CUMA)",
+   "kaynak": "TCMB, TAKASBANK, HMB, BANKALAR, ARACI KURUMLAR, TİCARİ VERİ SAĞLAYICILARI",
+   "uyusuyor": true
+  },
+  "bie_ebondpiydeg": {
+   "kod_kalibi": "^TP\\.EBONDPIYDEG\\.",
+   "beklenen": "milyon ABD doları",
+   "evds": "milyon ABD doları",
+   "frekans": "HAFTALIK(CUMA)",
+   "kaynak": "TCMB, TAKASBANK, HMB, BANKALAR, ARACI KURUMLAR, TİCARİ VERİ SAĞLAYICILARI",
+   "uyusuyor": true
+  },
+  "bie_finhestnks7101311": {
+   "kod_kalibi": "^TP\\.FINHESTNKS",
+   "beklenen": "bin TL",
+   "evds": "bin TL",
+   "frekans": "ÜÇ AYLIK",
+   "kaynak": "Hazine ve Maliye Bakanlığı",
+   "uyusuyor": true
+  },
+  "bie_gsyhhrccar": {
+   "kod_kalibi": "^TP\\.GSYIH20\\.",
+   "beklenen": "bin TL",
+   "evds": "bin TL",
+   "frekans": "ÜÇ AYLIK",
+   "kaynak": "TÜİK",
+   "uyusuyor": true
+  },
+  "bie_tukfiy2025": {
+   "kod_kalibi": "^TP\\.TUKFIY2025\\.",
+   "beklenen": "endeks (2025=100)",
+   "evds": "endeks (2025=100)",
+   "frekans": "AYLIK",
+   "kaynak": "TÜİK",
+   "uyusuyor": true
+  },
+  "bie_dkdovytl": {
+   "kod_kalibi": "^TP\\.DK\\.",
+   "beklenen": "Türk lirası",
+   "evds": "Türk lirası",
+   "frekans": "GÜNLÜK",
+   "kaynak": "TCMB",
+   "uyusuyor": true
+  }
+ },
+ "olcek": {
+  "bin TL → trilyon TL": 1e-09,
+  "milyon TL → trilyon TL": 1e-06,
+  "milyon ABD doları → milyar ABD doları": 0.001,
+  "milyon ABD doları → bin TL (kur ile)": 1000.0
+ },
+ "kimlik": {
+  "GID001 = GID002 + GID152": {
+   "n": 246,
+   "maks_bagil_sapma": 0.0,
+   "esik": 1e-06,
+   "maks_mutlak_sapma": 0.010000109672546387,
+   "mutlak_esik": 2.0,
+   "gecti": true,
+   "durdurucu": true,
+   "aciklama": "Gider ağacının kökü bozulmuş; kalem eşlemesi yanlış."
+  },
+  "GEN41 = GEN42 + GEN45": {
+   "n": 246,
+   "maks_bagil_sapma": 0.0,
+   "esik": 1e-06,
+   "maks_mutlak_sapma": 1.0,
+   "mutlak_esik": 2.0,
+   "gecti": true,
+   "durdurucu": true,
+   "aciklama": "Finansman tablosunun kökü bozulmuş."
+  },
+  "GEN42 = GEN43 + GEN44": {
+   "n": 246,
+   "maks_bagil_sapma": 0.0,
+   "esik": 1e-06,
+   "maks_mutlak_sapma": 1.0,
+   "mutlak_esik": 2.0,
+   "gecti": true,
+   "durdurucu": true,
+   "aciklama": "Dış borçlanma bacağı bozulmuş."
+  },
+  "GEN40 = −GEN39": {
+   "n": 246,
+   "maks_bagil_sapma": 0.0,
+   "esik": 1e-06,
+   "maks_mutlak_sapma": 0.0,
+   "mutlak_esik": 2.0,
+   "gecti": true,
+   "durdurucu": false,
+   "aciklama": "Nakit denge ↔ finansman özdeşliği tutmuyor."
+  },
+  "DİBS S.1 + S.2 = toplam": {
+   "n": 310,
+   "maks_bagil_sapma": 2.2083745504223773e-16,
+   "esik": 1e-06,
+   "maks_mutlak_sapma": 1.862645149230957e-09,
+   "mutlak_esik": 0.0,
+   "gecti": true,
+   "durdurucu": true,
+   "aciklama": "Sahiplik kırılımı toplamı tutmuyor."
+  },
+  "DİBSVADE ≡ DİBSPİYDEĞ": {
+   "n": 310,
+   "maks_fark_mn_tl": 0.03000000026077032,
+   "piyasa_yazili_oran": 1.2154077639455396,
+   "gecti": true,
+   "durdurucu": false,
+   "aciklama": "Vade tablosu PİYASA değeri; yazılı değere oranı 1.22×. Paylar kendi toplamına bölünür."
+  },
+  "Birim mertebesi: iç borç ≈ DİBS": {
+   "ic_borc_trl_tl": 9.013873942,
+   "dibs_yazili_trl_tl": 9.45296842,
+   "bagil_fark": 0.046450433185727225,
+   "esik": 0.2,
+   "gecti": true,
+   "durdurucu": true,
+   "aciklama": "bin TL/1e9 ile milyon TL/1e6 aynı mertebeyi vermeli; vermiyorsa ölçek çarpanı yanlış."
+  },
+  "Bütçe serisi AKIM": {
+   "yil": 2025,
+   "yil_ici_monoton": false,
+   "gecti": true,
+   "durdurucu": false,
+   "aciklama": "EVDS kataloğundaki 'KÜMÜLATİF' etiketi toplama yöntemidir; seri aylık gerçekleşmedir."
+  }
+ },
+ "yapisal_sifir": {
+  "ic_konsolide": {
+   "durum": "yapısal sıfır",
+   "son_tarih": "2026-06-01",
+   "son_deger": 0.0,
+   "sifir_gozlem_son24": 24
+  },
+  "ic_bono_nakit": {
+   "durum": "yapısal sıfır",
+   "son_tarih": "2026-06-01",
+   "son_deger": 0.0,
+   "sifir_gozlem_son24": 24
+  },
+  "ic_bono_nkdisi": {
+   "durum": "yapısal sıfır",
+   "son_tarih": "2026-06-01",
+   "son_deger": 0.0,
+   "sifir_gozlem_son24": 24
+  },
+  "ic_avans": {
+   "durum": "yapısal sıfır",
+   "son_tarih": "2026-06-01",
+   "son_deger": 0.0,
+   "sifir_gozlem_son24": 24
+  },
+  "tahvil_tl_odeme": {
+   "durum": "dolu",
+   "son_tarih": "2026-06-01",
+   "son_deger": 0.0,
+   "sifir_gozlem_son24": 5
+  },
+  "ozellestirme": {
+   "durum": "dolu",
+   "son_tarih": "2026-06-01",
+   "son_deger": 0.0,
+   "sifir_gozlem_son24": 23
+  },
+  "bono_dov_satis": {
+   "durum": "yapısal sıfır",
+   "son_tarih": "2026-06-01",
+   "son_deger": 0.0,
+   "sifir_gozlem_son24": 24
+  },
+  "bono_dov_odeme": {
+   "durum": "yapısal sıfır",
+   "son_tarih": "2026-06-01",
+   "son_deger": 0.0,
+   "sifir_gozlem_son24": 24
+  }
+ },
+ "gecikme": {
+  "aylik": {
+   "son": "2026-07-01",
+   "gecikme_gun": 53
+  },
+  "ceyreklik": {
+   "son": "2026-06-30",
+   "gecikme_gun": 54
+  },
+  "haftalik": {
+   "son": "2026-08-14",
+   "gecikme_gun": 9
+  },
+  "gunluk": {
+   "son": "2026-08-21",
+   "gecikme_gun": 2
+  }
+ },
+ "boyut": {
+  "aylik": [
+   283,
+   63
+  ],
+  "ceyreklik": [
+   94,
+   17
+  ],
+  "haftalik": [
+   310,
+   23
+  ],
+  "gunluk": [
+   5191,
+   2
+  ]
+ },
+ "uyarilar": []
+}
