@@ -75,10 +75,12 @@ BINTL_TRL = 1e-9      # bin TL → trilyon TL
 MNTL_TRL = 1e-6       # milyon TL → trilyon TL
 MUSD_MLRUSD = 1e-3    # milyon ABD doları → milyar ABD doları
 MUSD_BINTL = 1e3      # milyon ABD doları → bin TL, KUR İLE ÇARPILARAK
-# Mertebe kıyası (kodda yorumla belgelenmesi kuralı): 93.222 milyon USD dış
-# borç × 1e3 × 44 TL ≈ 4,1e9 bin TL = 4,1 trilyon TL. İç borç 9,0 trilyon TL.
-# Toplam ≈ 13,1 trilyon TL; 4 çeyreklik GSYH ≈ 67 trilyon TL → %19. Türkiye
-# için bilinen bant %15–35; mertebe tutuyor.
+# Mertebe kıyası (kodda yorumla belgelenmesi kuralı): döviz bacağı 95.497
+# (eurobond, S1311 düşülmüş) + 31.531 (dış kredi) = 127.028 milyon USD × 1e3
+# × 46,56 TL ≈ 5,9e9 bin TL = 5,9 trilyon TL. İç borç 9,0 trilyon TL. Toplam
+# ≈ 14,9 trilyon TL; 4 çeyreklik GSYH ≈ 67,5 trilyon TL → %21. Türkiye için
+# bilinen bant %15–35; mertebe tutuyor. BAĞIMSIZ KIYAS: finansal hesapların
+# F.3+F.4 toplamı aynı çeyrekte %23,1 — piyasa değerli olduğu için yukarıda.
 
 # --------------------------------------------------------------------------- eşikler
 # Kur duyarlılık senaryoları (USD/TRY'de oransal şok).

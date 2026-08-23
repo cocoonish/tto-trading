@@ -234,6 +234,16 @@ HABER_BOLUMLERI = [
 # Bölüm başına azami madde (kurum duyuruları sınırsız).
 BOLUM_SINIRI = 7
 
+# Haber listesi OLMAYAN, yalnız yazıdan ibaret gündem bölümleri. Bunlar piyasa
+# tablolarını ve takvimi okuyup yorumlayan bölümlerdir; kural tabanlı koşu
+# bunları boş bırakır, yorum katmanı doldurur.
+GUNDEM_YAZI_BOLUMLERI = [
+    ("faiz_fx_surucu", "Faiz ve döviz piyasasının sürücüleri"),
+    ("emtia_surucu", "Emtia ve enerji: fiyat hareketinin sebebi"),
+    ("risk_firsat", "Riskler ve fırsatlar"),
+    ("beklenti", "Yaklaşan veriler: beklentiler ve ne izlenmeli"),
+]
+
 # ─────────────────────────── alaka ve gürültü süzgeçleri
 # BAŞLIKTA bu terimlerden biri geçmelidir. Özette geçmesi yetmez: özet çoğu akışta
 # haberin ilk cümlesidir ve "ekonomi" gibi bir kelime rastgele düşebilir; başlık ise

@@ -36,6 +36,7 @@ import ayar          # noqa: E402
 import gozlem        # noqa: E402
 import olay as olay_m  # noqa: E402
 import takvim as takvim_m  # noqa: E402
+import piyasa as piyasa_m  # noqa: E402
 
 
 # Sabah bakışı panosu: (hat, anahtar, ad, birim, ondalık)
@@ -289,7 +290,14 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
                "kalan_gun": (date.fromisoformat(k.tarih) - tarih).days}
               for k in kayitlar if k.onem == 1]
 
-    # 4) haberler — bölge × alan bölümlerine ayrılmış hâlde
+    # 4) cross-asset piyasa fotoğrafı (TL faizleri + global varlıklar + türevler)
+    try:
+        piyasa = piyasa_m.topla()
+    except Exception as e:                                      # noqa: BLE001
+        piyasa = {"hata": f"{type(e).__name__}: {e}", "gruplar": [], "turetilmis": [],
+                  "tr_faizleri": [], "en_cok_hareket": {}, "eksik": [], "kaynak_yok": []}
+
+    # 5) haberler — bölge × alan bölümlerine ayrılmış hâlde
     haberler, okunamayan, bolumler = ([], [], [])
     if haber_tara:
         try:
@@ -306,6 +314,7 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         "tr_tarih": f"{tarih.day} {takvim_m.AYLAR_TR[tarih.month - 1]} {tarih.year}",
         "olusturma": datetime.now().isoformat(timespec="seconds"),
         "gostergeler": gostergeler(),
+        "piyasa": piyasa,
         "one_cikanlar": one_cikan,
         "notlar": notlar,
         "gruplar": gruplar,
@@ -323,6 +332,8 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         # başlıkları cümleye çevirerek bir TABAN koyar; yorum katmanı kaynakları
         # açıp okuyarak bu metni ZENGİNLEŞTİRİR ve yerine geçer.
         "gundem": {},
+        # Yazı-özel bölümlerin sırası ve başlıkları (haber listesi olmayanlar)
+        "gundem_yazi_bolumleri": [{"id": i, "baslik": t} for i, t in ayar.GUNDEM_YAZI_BOLUMLERI],
         "yorum": None,
         "yorum_zamani": None,
         "tur": tur,

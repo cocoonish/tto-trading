@@ -49,10 +49,10 @@ PENCERE = 12
 
 # ORAN PAYDASI EŞİĞİ (milyon USD, 12 aylık birikimli mutlak değer).
 # ÖLÇÜLDÜ (keşif): net finansman girişi paydasıyla kalite oranı 2026-03'te
-# %575'e fırlıyor; brüt yükümlülük paydasıyla 2010 sonrası bant
+# %575'e fırlıyor; yükümlülük oluşumu paydasıyla 2010 sonrası bant
 # %−1022 … %+2149; cari açık paydasıyla %−1063 … %+245. Sebep veri hatası
 # değil, paydanın sıfıra yaklaşması ve İŞARET DEĞİŞTİRMESİ. 10.000 mn USD
-# (10 milyar) eşiği, 12 aylık brüt yükümlülük oluşumunun tarihsel medyanının
+# (10 milyar) eşiği, 12 aylık yükümlülük oluşumunun tarihsel medyanının
 # yaklaşık onda biridir: bunun altındaki bir paydada oran bilgi taşımıyor
 # sayılır ve seri BOŞ bırakılır (grafikte boşluk, gerekçesi altyazıda).
 ORAN_PAYDA_ESIK = 10_000.0
@@ -231,6 +231,11 @@ def _bacak_yoklamasi(rapor: dict, M: pd.DataFrame, ad: str, kolonlar: list[str],
     değişti) toplamı kısaltır ama yukarıdaki tautolojik kimlikleri hiç
     bozmaz — orada iki taraf da aynı eksik bacağı taşıdığı için sapma yine
     sıfır çıkar. Bu yoklama tam o boşluğu kapatır.
+
+    SIFIR ORANI DA ÖLÇÜLÜR (uyarı, durdurucu değil): `fillna(0.0)` ile kurulan
+    bir bacak (ör. finansal türevler) kaynağı büsbütün düşse bile NaN
+    göstermez, sessizce sıfırlanır. Boş oranı o bacakta hep %0 kalırdı; sıfır
+    oranı ise %100'e fırlar ve gözle görülür.
     """
     d = M.loc[M.index >= pd.Timestamp(baslangic)]
     if d.empty:
@@ -238,17 +243,27 @@ def _bacak_yoklamasi(rapor: dict, M: pd.DataFrame, ad: str, kolonlar: list[str],
     kuyruk = d.iloc[-son_ay:]
     oranlar = {k: round(float(kuyruk[k].isna().mean()) * 100, 1)
                for k in kolonlar if k in kuyruk.columns}
+    sifir = {k: round(float((kuyruk[k].fillna(0.0) == 0).mean()) * 100, 1)
+             for k in kolonlar if k in kuyruk.columns}
     eksik_kolon = [k for k in kolonlar if k not in M.columns]
     bos = {k: v for k, v in oranlar.items() if v > 0}
+    olu = {k: v for k, v in sifir.items() if v >= 100.0}
     gecti = not bos and not eksik_kolon
     rapor[f"bacak yoklaması: {ad}"] = {
         "beklenen_kalem": len(kolonlar), "bulunan_kalem": len(oranlar),
         "son_ay": son_ay, "bos_oran_yuzde": oranlar,
+        "sifir_oran_yuzde": sifir, "olu_bacak": list(olu),
         "gecti": gecti, "durdurucu": True,
-        "not": ("Her bacağın son 24 aydaki BOŞ oranı ölçülür. Tautolojik "
-                "kimlikler düşen bir bacağı görmez: iki taraf da aynı eksiği "
-                "taşır ve sapma yine 0,00 çıkar."),
+        "not": ("Her bacağın son 24 aydaki BOŞ ve SIFIR oranı ölçülür. "
+                "Tautolojik kimlikler düşen bir bacağı görmez: iki taraf da "
+                "aynı eksiği taşır ve sapma yine 0,00 çıkar. fillna(0) ile "
+                "kurulan bir bacak düştüğünde boş değil SIFIR görünür — ölü "
+                "bacak listesi o durumu yakalar."),
     }
+    if olu:
+        uyar(f"ÖLÜ BACAK ({ad}): {list(olu)} son {son_ay} ayın TAMAMINDA 0 — "
+             "kalem gerçekten sıfır olabilir, ama kaynağın düşmüş olması da "
+             "aynı görüntüyü verir. Yığında görünmez.")
     if not gecti:
         m = (f"BACAK DÜŞTÜ ({ad}): "
              + (f"kolon yok {eksik_kolon}; " if eksik_kolon else "")
@@ -872,8 +887,9 @@ def dogrula(M: pd.DataFrame, a: pd.DataFrame, G: pd.DataFrame,
     _kimlik(D, "−CA = fin_giris + KA + NHN − Rezerv (aylık)", -M["cari"],
             M["fin_giris"] + M["sermaye_hesabi"] + M["nhn"] - M["rezerv_akim"],
             ESIK_KIMLIK_TOPLAM, True, dur)
-    # (2) İşaret çevirmesi tek yerde: net giriş = brüt yükümlülük − yerleşik varlık.
-    _kimlik(D, "fin_giris = brüt yükümlülük − yerleşik varlık edinimi",
+    # (2) İşaret çevirmesi tek yerde: net giriş = yükümlülük oluşumu (net)
+    #     − yerleşik varlık edinimi.
+    _kimlik(D, "fin_giris = yükümlülük oluşumu (net) − yerleşik varlık edinimi",
             M["fin_giris"], M["brut_yukumluluk"] - M["yerlesik_varlik"],
             ESIK_KIMLIK_TOPLAM, True, dur)
     # (3) Yükümlülük yığınının SUNUM kimliği — TAUTOLOJİ olarak işaretlidir.

@@ -404,7 +404,7 @@ def main() -> int:
     # Sayfa metninin ayrı ayrı andığı kimliklerin anahtarları (n ve sapma).
     kimlikler = {
         "kimlik_bop": "−CA = fin_giris + KA + NHN − Rezerv (aylık)",
-        "kimlik_isaret": "fin_giris = brüt yükümlülük − yerleşik varlık edinimi",
+        "kimlik_isaret": "fin_giris = yükümlülük oluşumu (net) − yerleşik varlık edinimi",
         "kimlik_cekirdek": "manşet CA(12a) = çekirdek + altın net + enerji net",
         "kimlik_alt_kalem": "CA(12a) = mal + hizmet + birincil + ikincil",
     }

@@ -216,6 +216,13 @@ def main() -> int:
     anlik("reel_ileri", "reel_ileri")
     anlik("reel_geriye", "reel_geriye")
     anlik("reel_ileri_2y", "reel_ileri_2y")
+    # DERS ÖLÇÜSÜ: paydaya ORTALAMA yerine PKA'nın ham 24 ay NOKTA beklentisi
+    # konsaydı reel faiz ne kadar şişerdi? Sözel "yaklaşık üç puan" yazmak
+    # yasak — fark koşuda hesaplanır.
+    if "spot_2y" in O and "pka_24a" in O and "reel_ileri_2y" in O:
+        nokta = ((1 + O["spot_2y"] / 100) / (1 + O["pka_24a"] / 100) - 1) * 100
+        koy("reel_ileri_2y_nokta", nokta, 2)
+        koy("reel_ileri_2y_sisme", nokta - O["reel_ileri_2y"], 2)
     anlik("reel_ileri_basit", "reel_ileri_basit")
     anlik("fisher_basit_fark", "fisher_basit_fark")
     anlik("reel_makas", "reel_makas")
@@ -257,6 +264,14 @@ def main() -> int:
                           ("pka_ort_5y", "pka_ort_5y"),
                           ("pka_ort_7y", "pka_ort_7y")):
         anlik(kaynak, hedef, tolerans=45)
+    # Ortalamaya çevrilmiş anket serileri de ANKET AYINA aittir (günlüğe
+    # basamak olarak yayılıyorlar); tarih alanı günlük çıpayı gösterirse
+    # okur "bu sayı 21 Ağustos'ta ölçüldü" sanır.
+    if "pka_12a" in A.columns and A["pka_12a"].notna().any():
+        _anket_ay = ay_ad(A["pka_12a"].dropna().index[-1])
+        for hedef in ("pka_ort_1y", "pka_ort_2y", "pka_ort_5y", "pka_ort_7y"):
+            if hedef in O:
+                O[hedef + "_tarih"] = _anket_ay
     if KR is not None and not KR.empty:
         koy("tufex_nokta", len(KR), 0)
         koy("tufex_vade_min", float(KR["vade_yil"].min()), 2)

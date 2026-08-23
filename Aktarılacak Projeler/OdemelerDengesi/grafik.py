@@ -645,7 +645,7 @@ def sekil_05(M, o, damga):
         "TEK YERDE yapılır.",
         "Yığın kimliktir: yabancının net yükümlülük oluşumu eksi "
         "yerleşiklerin dış varlık edinimi = net finansman girişi (sınandı, "
-        f"en büyük sapma {_sayi(o['dogrulama'].get('fin_giris = brüt yükümlülük − yerleşik varlık edinimi', {}).get('maks_fark'), 2)} mn USD).",
+        f"en büyük sapma {_sayi(o['dogrulama'].get('fin_giris = yükümlülük oluşumu (net) − yerleşik varlık edinimi', {}).get('maks_fark'), 2)} mn USD).",
         "ADLANDIRMA: BPM6'da bu kalemlerin hepsi NET yükümlülük oluşumudur "
         "(Q38'in EVDS'teki adı bile '3.6.Finansal Türevler: NET Yükümlülük "
         "Oluşumu') ve negatif olabilirler. 'Brüt' demek yalnız girişlerin "

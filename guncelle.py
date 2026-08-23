@@ -252,6 +252,38 @@ HATLAR: list[Hat] = [
         # haftalık faiz Cuma, ZK tabanı bir hafta daha geriden. Tek anahtara
         # bakmak "veri tazelendi" derdi.
         tarih_anahtarlari=("_tarih", "hafta_kisa", "zk_taban_tarih")),
+    Hat("odemeler", "Ödemeler Dengesi & Dış Finansman", P / "OdemelerDengesi",
+        "odemeler-dengesi",
+        # veri.py EVDS3'ten dört frekansta çeker (aylık ödemeler dengesi,
+        # haftalık dış borç ödeme takvimi, üç aylık GSYH, günlük kur) ve
+        # 16 kimlik denetimi koşturur. metrik.py işaret çevirmesini TEK YERDE
+        # yapar, çekirdek cari dengeyi ve brüt dış finansman ihtiyacını kurar;
+        # tautolojik olmayan denetimleri (artık bandı, mertebe kıyası, bacak
+        # yoklaması) koşturur ve biri düşerse hat DURUR. grafik.py on iki şekil
+        # üretir ve her yığılmış panelde çubuk toplamı ile toplam çizgisini
+        # KARŞILAŞTIRIR — ayrışma varsa figür yayımlanmaz. Sıra bağlayıcıdır.
+        ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
+        {"cikti/*.html": "*", "uyarilar.json": "uyarilar.json"},
+        # Dört ayrı yayım ritmi, dört ayrı donma riski: aylık ödemeler dengesi
+        # ~2 ay gecikmeli, haftalık takvim ~5 gün, GSYH ~145 gün. Tek anahtara
+        # bakmak "veri tazelendi" derdi.
+        tarih_anahtarlari=("_tarih", "_tarih2", "_tarih3")),
+    Hat("dibs", "DİBS Verim Eğrisi & Reel Faiz", P / "DIBS", "dibs-verim-egrisi",
+        # veri.py EVDS3'ten DİBS strip evrenini (güncel + arşiv) ve referans
+        # faizleri çeker; önbellek seri bazında TTL'lidir ve çekim istisnayla
+        # düşerse DOLU önbelleğe DOKUNMAZ (boş önbellek "EVDS doğruladı"
+        # imzası taşır; planın %2'sinden fazlası veri taşımıyorsa hat DURUR).
+        # metrik.py spot eğriyi bootstrapsız kurar (strip sıfır kuponludur),
+        # fonlama faizlerini eğriyle aynı konvansiyona (BİLEŞİK) çevirip
+        # taşımayı hesaplar, AOFM'yi tabanı yokken geçersiz işaretler, PKA
+        # nokta beklentilerini vadeye kadarki ORTALAMAYA çevirir ve strip
+        # toplamı özdeşliğini birim sınaması olarak koşturur — sapması varsa
+        # hat DURUR. grafik.py sekiz şekil üretir. Sıra bağlayıcıdır.
+        ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
+        {"cikti/*.html": "*", "uyarilar.json": "uyarilar.json"},
+        # İki frekans, iki donma riski: eğri ve referans faizler günlük, anket
+        # ile TÜFE aylık. Tek anahtara bakmak "veri tazelendi" derdi.
+        tarih_anahtarlari=("_tarih", "_tarih2")),
     Hat("marj", "Yiyecek Hizmetleri Marjı", Path("Research/marj"), "yiyecek-hizmetleri-marj",
         ["src/web_cikti.py", "src/ozet_uret.py"],
         ["src/run_all.py", "src/web_cikti.py", "src/ozet_uret.py"],
@@ -266,7 +298,7 @@ def _renk(m, k):  # k: 32 yeşil, 31 kırmızı, 33 sarı, 36 camgöbeği
 
 
 EVDS_HATLAR = {"tcmb", "usdtry", "reer", "yabanci", "marj", "enflasyon",
-               "kredi", "fonlama"}
+               "kredi", "fonlama", "odemeler", "dibs"}
 # Liste sütun genişliği hat adlarından türetilir — yeni bir uzun ad eklendiğinde
 # hizalama sessizce bozulmasın ("enflasyon" 9 karakter, eski sabit 8'di).
 _AD_G = max(len(h.ad) for h in HATLAR) + 1

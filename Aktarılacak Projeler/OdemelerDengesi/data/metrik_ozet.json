@@ -153,7 +153,7 @@
    "durdurucu": true,
    "tautoloji": false
   },
-  "fin_giris = brüt yükümlülük − yerleşik varlık edinimi": {
+  "fin_giris = yükümlülük oluşumu (net) − yerleşik varlık edinimi": {
    "n": 431,
    "maks_fark": 0.0,
    "maks_tarih": "1975-12-01",
@@ -199,9 +199,18 @@
     "yuk_kredi": 0.0,
     "yuk_turev": 0.0
    },
+   "sifir_oran_yuzde": {
+    "yuk_dyy": 0.0,
+    "yuk_port_hisse": 0.0,
+    "yuk_port_borc": 0.0,
+    "yuk_mevduat": 0.0,
+    "yuk_kredi": 0.0,
+    "yuk_turev": 0.0
+   },
+   "olu_bacak": [],
    "gecti": true,
    "durdurucu": true,
-   "not": "Her bacağın son 24 aydaki BOŞ oranı ölçülür. Tautolojik kimlikler düşen bir bacağı görmez: iki taraf da aynı eksiği taşır ve sapma yine 0,00 çıkar."
+   "not": "Her bacağın son 24 aydaki BOŞ ve SIFIR oranı ölçülür. Tautolojik kimlikler düşen bir bacağı görmez: iki taraf da aynı eksiği taşır ve sapma yine 0,00 çıkar. fillna(0) ile kurulan bir bacak düştüğünde boş değil SIFIR görünür — ölü bacak listesi o durumu yakalar."
   },
   "manşet CA(12a) = çekirdek + altın net + enerji net": {
    "n": 355,
@@ -265,9 +274,18 @@
     "kredi_dgr_uv_kul": 0.0,
     "kredi_gh_uv_kul": 0.0
    },
+   "sifir_oran_yuzde": {
+    "kredi_bnk_uv_ode": 0.0,
+    "kredi_dgr_uv_ode": 0.0,
+    "kredi_gh_uv_ode": 0.0,
+    "kredi_bnk_uv_kul": 0.0,
+    "kredi_dgr_uv_kul": 0.0,
+    "kredi_gh_uv_kul": 0.0
+   },
+   "olu_bacak": [],
    "gecti": true,
    "durdurucu": true,
-   "not": "Her bacağın son 24 aydaki BOŞ oranı ölçülür. Tautolojik kimlikler düşen bir bacağı görmez: iki taraf da aynı eksiği taşır ve sapma yine 0,00 çıkar."
+   "not": "Her bacağın son 24 aydaki BOŞ ve SIFIR oranı ölçülür. Tautolojik kimlikler düşen bir bacağı görmez: iki taraf da aynı eksiği taşır ve sapma yine 0,00 çıkar. fillna(0) ile kurulan bir bacak düştüğünde boş değil SIFIR görünür — ölü bacak listesi o durumu yakalar."
   },
   "mal dengesi = ihracat − ithalat": {
    "n": 431,

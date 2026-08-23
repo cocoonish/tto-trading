@@ -597,21 +597,40 @@ def main() -> int:
         d_yaz("Eurobond USD+EUR+JPY ≈ toplam", abs(pay) < 0.02,
               f"artık (diğer para birimleri) payı %{pay*100:.2f}")
 
-    # 6. MERTEBE KIYASI: merkezi yönetim borç stoku / GSYH bilinen bantta mı
+    # 6. MERTEBE KIYASI: merkezi yönetim borç stoku / GSYH bilinen bantta mı.
+    #    Stok ARAÇ (ihraç) tabanında kurulur — iç borç (A09, ihraç tabanı) ile
+    #    brüt dış borç (G4, YERLEŞİKLİK tabanı) TOPLANAMAZ: yurt dışının DİBS'i
+    #    iki kez sayılır, yurt içinin eurobondu hiç sayılmaz.
     gs = veriler["GSYH"]["gsyh_cari"].dropna()          # bin TL, üç aylık
     gsyh_yil = gs.rolling(4).sum().dropna()             # 4 çeyrek toplamı
     kur = veriler["Kur"]["usdtry"].dropna()
     dis = veriler["Dış borç stoku"]["db_merkezi_yon"].dropna()   # milyon USD
-    if len(gsyh_yil) and len(ic.dropna()) and len(dis) and len(kur):
+    eb = veriler.get("Eurobond")
+    dibs = veriler.get("DİBS yazılı değer")
+    if (len(gsyh_yil) and len(ic.dropna()) and len(dis) and len(kur)
+            and eb is not None and dibs is not None):
         t = gsyh_yil.index[-1]
-        ic_t = ic.dropna().asof(t)                       # bin TL
-        dis_t = dis.asof(t) * 1e3 * kur.asof(t)          # milyon USD → bin TL
-        toplam = ic_t + dis_t
+        e_t = kur.asof(t)
+        ic_t = ic.dropna().asof(t)                                  # bin TL
+        eb_st = eb["eb_toplam_yaz"].dropna().asof(t)                # milyon USD
+        eb_s2 = eb["eb_yurtdisi_yaz"].dropna().asof(t)
+        eb_k = eb["eb_merkezi_yon"].dropna().asof(t)
+        dibs_s2 = dibs["dibs_yurtdisi"].dropna().asof(t)            # milyon TL
+        senet_t = (eb_st - eb_k) * 1e3 * e_t                        # bin TL
+        kredi_musd = dis.asof(t) - eb_s2 - dibs_s2 / e_t
+        kredi_t = kredi_musd * 1e3 * e_t                            # bin TL
+        toplam = ic_t + senet_t + kredi_t
         pay = toplam / gsyh_yil.iloc[-1]
         d_yaz("MY borç stoku / GSYH mertebesi", 0.12 < pay < 0.45,
-              f"{t:%Y-%m}: (iç {ic_t/1e9:.1f} + dış {dis_t/1e9:.1f}) trl TL / "
+              f"{t:%Y-%m}: (iç {ic_t/1e9:.1f} + yurt dışında ihraç senet "
+              f"{senet_t/1e9:.1f} + dış kredi {kredi_t/1e9:.1f}) trl TL / "
               f"{gsyh_yil.iloc[-1]/1e9:.1f} trl TL = %{pay*100:.1f} "
               f"(Türkiye için bilinen bant %15–35)")
+        # Dış kredi ARTIĞI pozitif ve mertebede olmalı; değilse eurobond/DİBS
+        # sahiplik eşlemesi bozulmuş demektir.
+        d_yaz("Dış kredi artığı mertebesi", 2_000 < kredi_musd < 80_000,
+              f"{t:%Y-%m}: G4 {dis.asof(t):,.0f} − eurobond(S2) {eb_s2:,.0f} − "
+              f"DİBS(S2)/kur {dibs_s2/e_t:,.0f} = {kredi_musd:,.0f} mn USD")
 
     # 7. İÇ BORÇ ÇEVİRME ORANI — 12 aylık birikimli, mertebe denetimi.
     #    Hazine ihraç hattı İHALEYİ anlatır; burada STOK/FİNANSMAN tarafı var.

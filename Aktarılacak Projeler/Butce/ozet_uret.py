@@ -40,8 +40,10 @@ def koy_denetim(anahtar: str, deger, ondalik: int, sinav: str) -> None:
     Değer yoksa anahtar ATLANIR (MDX'teki statik yedek görünür) ve uyarı düşer.
     """
     if deger is None or (isinstance(deger, float) and pd.isna(deger)):
-        m = f"DOĞRULAMA KOŞMADI: {sinav} — '{anahtar}' üretilmedi."
-        uyar(m)
+        # Defter SINAV başına tutulur (anahtar başına değil): bir denetim üç
+        # anahtar üretiyorsa uyarı cümlesi üç kez tekrarlanmasın.
+        m = f"DOĞRULAMA KOŞMADI: {sinav}."
+        print(f"UYARI: {m} ('{anahtar}' üretilmedi.)", file=sys.stderr)
         if m not in EKSIK_DENETIM:
             EKSIK_DENETIM.append(m)
         return
@@ -256,6 +258,12 @@ def main() -> int:
     O["fisher_ima_faiz_notu"] = m["stok"].get("fisher_ima_faiz_notu")
 
     # ===================================================== borç stoku
+    # STOK BLOĞU TEK BİR AYA ÇIPALIDIR. Bacaklar farklı frekanslardan gelir —
+    # iç borç aylık, eurobond haftalık (bir ay ileride bitiyor), dış kredi üç
+    # aylık. Her bacağı kendi son dolu gözleminden almak, TOPLAMI TUTMAYAN bir
+    # tablo üretirdi: sayfada iç + senet + kredi ≠ toplam görünürdü.
+    _stok_s = _seri(M, "toplam_borc_trl").dropna()
+    t_stok = _stok_s.index[-1] if len(_stok_s) else None
     for ad, kol, ond in (("ic_borc_trl", "ic_borc_trl", 2),
                          ("dis_borc_trl", "dis_borc_trl", 2),
                          ("dis_senet_trl", "dis_senet_trl", 2),
@@ -273,11 +281,17 @@ def main() -> int:
                          ("eb_kendi_trl", "eb_kendi_trl", 2),
                          ("pay_ic_satis_doviz", "pay_ic_satis_doviz", 1),
                          ("pay_ic_odeme_doviz", "pay_ic_odeme_doviz", 1),
-                         ("kur_ay", "kur_ay", 4),
                          ("ic_tahvil_trl", "ic_tahvil_trl", 2),
                          ("ic_bono_trl", "ic_bono_trl", 2)):
-        v, _ = son(_seri(M, kol))
+        if t_stok is not None and kol in M.columns:
+            v = M.loc[t_stok, kol]
+        else:
+            v, _ = son(_seri(M, kol))
         koy(ad, v, ond)
+    # Kur ise BİLEREK en güncel ay sonu değeridir: sayfa bunu "stokun kuru
+    # DEĞİLDİR" uyarısında kullanıyor. Stokun değerlendiği kur senaryo
+    # bloğunda (senaryo_kur) ayrı anahtarla veriliyor.
+    koy("kur_ay", son(_seri(M, "kur_ay"))[0], 4)
     for ad, kaynak in (("dis_borc_mlrusd", "dis_borc_musd"),
                        ("dis_senet_mlrusd", "dis_senet_musd"),
                        ("dis_kredi_mlrusd", "dis_kredi_musd")):
@@ -371,7 +385,9 @@ def main() -> int:
         koy(ad, v, 2)
         if len(ort) and ad == "ayr_d_stok":
             O["ayr_donem"] = ay_ad(ort.index[-1])
-    koy("ayr_artik_pay", (ayr.get("artik_pay_son") or 0) * 100, 1)
+    _ap = ayr.get("artik_pay_son")
+    koy_denetim("ayr_artik_pay", None if _ap is None else _ap * 100, 1,
+                "stok ayrıştırması (Δstok = net borçlanma + kur farkı + artık)")
     O["ayr_notu"] = ayr.get("not")
 
     # ===================================================== haftalık: sahiplik & vade
@@ -431,18 +447,49 @@ def main() -> int:
             koy("sok10_gsyh_puan", O["sok_arti10_stok_gsyh"] - O["stok_gsyh"], 2)
 
     # ===================================================== kapsam ve doğrulama
-    koy("kapsam_farki", (m["butce"].get("kapsam_farki_24ay") or 0) * 100, 1)
+    _kf = m["butce"].get("kapsam_farki_24ay")
+    koy_denetim("kapsam_farki", None if _kf is None else _kf * 100, 1,
+                "merkezi yönetim dengesi ↔ genel bütçe dengesi kapsam farkı")
     O["kapsam_notu"] = m.get("kapsam_notu")
     O["eksik_veri_notu"] = m.get("eksik_veri_notu")
     d = m.get("dogrulama") or {}
-    f3 = d.get("DİBS+eurobond ↔ finansal hesaplar F.3") or {}
-    koy("f3_fark", (f3.get("son_fark") or 0) * 100, 1)
-    koy("f3_bant_min", (f3.get("son6_min") or 0) * 100, 1)
-    koy("f3_bant_max", (f3.get("son6_max") or 0) * 100, 1)
-    O["dogrulama_sayisi"] = len(d)
-    O["dogrulama_gecen"] = sum(1 for r in d.values() if r.get("gecti"))
+
+    def _bant(anahtar_on: str, sinav: str, ondalik: int = 1) -> None:
+        r = d.get(sinav) or {}
+        koy_denetim(f"{anahtar_on}_fark",
+                    None if r.get("son_fark") is None else r["son_fark"] * 100,
+                    ondalik, sinav)
+        koy_denetim(f"{anahtar_on}_bant_min",
+                    None if r.get("son6_min") is None else r["son6_min"] * 100,
+                    ondalik, sinav)
+        koy_denetim(f"{anahtar_on}_bant_max",
+                    None if r.get("son6_max") is None else r["son6_max"] * 100,
+                    ondalik, sinav)
+
+    _bant("f34", "Toplam stok ↔ finansal hesaplar F.3+F.4")
+    _bant("f3", "DİBS+eurobond ↔ finansal hesaplar F.3")
+    _bant("f4", "Dış kredi artığı ↔ finansal hesaplar F.4")
+    for a_ in ("f34_fark", "f3_fark", "f4_fark"):
+        if O.get(a_) is not None:
+            koy(f"{a_}_mutlak", abs(O[a_]), 1)
+
+    # PAYDA BEKLENEN DENETİM LİSTESİNDEN gelir, sözlüğün uzunluğundan DEĞİL.
+    # Sözlükten alınsaydı bir denetim hiç koşmadığında payda da küçülür
+    # (5/5 → 4/4) ve eksilme sayfada GÖRÜNMEZDİ.
+    beklenen = list(m.get("dogrulama_beklenen") or d.keys())
+    kosmayan = [ad for ad in beklenen if ad not in d]
+    for ad in kosmayan:
+        mm = f"DOĞRULAMA KOŞMADI: {ad}."
+        uyar(mm)
+        if mm not in EKSIK_DENETIM:
+            EKSIK_DENETIM.append(mm)
+    O["dogrulama_sayisi"] = len(beklenen)
+    O["dogrulama_gecen"] = sum(1 for ad in beklenen
+                               if (d.get(ad) or {}).get("gecti"))
+    O["dogrulama_kosmayan"] = len(kosmayan)
     O["dogrulama_cumlesi"] = (
         f"{O['dogrulama_gecen']}/{O['dogrulama_sayisi']} bağımsız doğrulama geçti."
+        + (f" {len(kosmayan)} denetim bu koşuda HİÇ KOŞMADI." if kosmayan else "")
         if O["dogrulama_sayisi"] else "Bu koşuda bağımsız doğrulama koşmadı.")
 
     # Birim denetimi — sayfada "birim EVDS'ten okunur" cümlesinin kanıtı.
@@ -486,6 +533,12 @@ def main() -> int:
              if u.startswith(("TAZELİK", "ESKİ ÖNBELLEK", "BAYAT", "SERİ YOK"))]
     if izler:
         bayat_sebep.append(f"veri katmanı {len(izler)} tazelik/önbellek uyarısı bastı")
+    # KOŞMAMIŞ DENETİM DE BAYATLIK SEBEBİDİR. Aksi hâlde sayfa denetimsiz
+    # kalır ama "taze" görünür; üstelik atlanan anahtarların yerine MDX'teki
+    # statik yedek basılacağı için sayı da eskiyle aynı kalır.
+    for mm in EKSIK_DENETIM:
+        uyarilar.append(mm)
+        bayat_sebep.append(mm)
     O["bayat"] = bool(bayat_sebep)
     O["bayat_cumlesi"] = (
         "BAYAT VERİ: " + "; ".join(bayat_sebep)
@@ -525,8 +578,10 @@ def main() -> int:
     O["stok_cumlesi"] = (
         f"Merkezi yönetim borç stoku {O.get('stok_son_ay')} itibarıyla "
         f"{tr_sayi(O.get('toplam_borc_trl'), 2)} trilyon TL "
-        f"(iç {tr_sayi(O.get('ic_borc_trl'), 2)} + dış {tr_sayi(O.get('dis_borc_trl'), 2)}); "
-        f"döviz payı {tr_yuzde(O.get('doviz_pay'))}. "
+        f"(iç borç {tr_sayi(O.get('ic_borc_trl'), 2)} + yurt dışında ihraç senet "
+        f"{tr_sayi(O.get('dis_senet_trl'), 2)} + dış kredi "
+        f"{tr_sayi(O.get('dis_kredi_trl'), 2)}); döviz payı en az "
+        f"{tr_yuzde(O.get('doviz_pay'))}. "
         f"Stok/GSYH oranı {O.get('oran_ceyregi')} itibarıyla "
         f"{tr_yuzde(O.get('stok_gsyh'))}.")
     O["faiz_cumlesi"] = (
@@ -556,9 +611,9 @@ def main() -> int:
         f"{tr_yuzde(O.get('pay_eb_kv_kisa'))}. Her iki oran da PİYASA değerli "
         f"tablolardan alınmıştır.")
     O["kur_cumlesi"] = (
-        f"USD/TRY'de %10'luk bir değer kaybı stoku "
+        f"USD/TRY'de %10'luk bir değer kaybı stoku EN AZ "
         f"{tr_sayi(O.get('sok10_stok_trl'), 2)} trilyon TL'ye taşır "
-        f"({tr_yuzde(O.get('sok10_degisim'))}); stok/GSYH oranı yaklaşık "
+        f"({tr_yuzde(O.get('sok10_degisim'))}); stok/GSYH oranı EN FAZLA "
         f"{tr_sayi(O.get('sok10_gsyh_puan'), 1)} puan yükselir.")
 
     yol = PROJE / "ozet.json"
