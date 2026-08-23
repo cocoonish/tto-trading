@@ -180,22 +180,51 @@ import altin_etkisi
 _ANAHTAR_DOSYA = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".evds_key")
 
 
+def _anahtar_adaylari(base_dir):
+    """Anahtar dosyası adayları — sıra tüm hatlarda AYNI (bkz. README, guncelle.py).
+
+    <proje>/.evds_key → depo kökü/.evds_key → kardeş TCMBNetRezerv/.evds_key.
+    Kök adayı olmadan, temiz bir klonda köke tek dosya koyan kullanıcının bu hattı
+    düşüyordu; hatların yarısı kökü okurken yarısı okumuyordu.
+    """
+    p = os.path.abspath(base_dir)
+    kok = os.path.dirname(os.path.dirname(p))          # …/TTO Trading
+    return [os.path.join(p, ".evds_key"),
+            os.path.join(kok, ".evds_key"),
+            os.path.join(kok, "Aktarılacak Projeler", "TCMBNetRezerv", ".evds_key")]
+
+
+def _dosyadan_anahtar(adaylar, uyar=None):
+    """İlk okunabilir ve boş olmayan adaydaki anahtar; hiçbiri yoksa ''."""
+    for yol in adaylar:
+        if not os.path.exists(yol):
+            continue
+        try:
+            with open(yol, encoding="utf-8") as f:
+                a = f.read().strip()
+        except OSError as e:
+            if uyar:
+                uyar(f"UYARI: {yol} okunamadı ({type(e).__name__}).")
+            continue
+        if a:
+            return a
+    return ""
+
+
+_ANAHTAR_ADAYLARI = _anahtar_adaylari(os.path.dirname(os.path.abspath(__file__)))
+
+
 def _evds_anahtari() -> str:
     anahtar = (os.environ.get("TTO_EVDS_KEY") or "").strip()
     if anahtar:
         return anahtar
-    if os.path.exists(_ANAHTAR_DOSYA):
-        try:
-            with open(_ANAHTAR_DOSYA, encoding="utf-8") as f:
-                anahtar = f.read().strip()
-        except OSError as e:
-            print(f"UYARI: {_ANAHTAR_DOSYA} okunamadi ({type(e).__name__}).")
-            anahtar = ""
-        if anahtar:
-            return anahtar
+    anahtar = _dosyadan_anahtar(_ANAHTAR_ADAYLARI, print)
+    if anahtar:
+        return anahtar
     raise RuntimeError(
-        "EVDS anahtari bulunamadi. export TTO_EVDS_KEY=<anahtar> ya da "
-        f"{_ANAHTAR_DOSYA} dosyasina yazin (.gitignore'da)."
+        "EVDS anahtari bulunamadi. export TTO_EVDS_KEY=<anahtar> ya da su "
+        "dosyalardan BIRINE yazin (.gitignore'da):\n"
+        + "".join(f"    {y}\n" for y in _ANAHTAR_ADAYLARI)
     )
 
 

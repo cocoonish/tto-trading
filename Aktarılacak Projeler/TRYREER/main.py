@@ -46,6 +46,12 @@ EVDS_START = "01-01-1994"
 #   2) proje klasöründeki .evds_key dosyası (yerel; .gitignore'da)
 # İkisi de yoksa EVDS yolu hiç denenmez ve ekrana açık bir uyarı basılır.
 EVDS_KEY_FILE = os.path.join(SCRIPT_DIR, ".evds_key")
+# Adaylar: proje → depo kökü → kardeş TCMBNetRezerv. Kök adayı olmadan, temiz bir
+# klonda köke tek .evds_key koyan kullanıcının bu hattı Excel yedeğine düşüyordu.
+_KOK = os.path.dirname(os.path.dirname(SCRIPT_DIR))
+EVDS_KEY_ADAYLARI = [EVDS_KEY_FILE,
+                     os.path.join(_KOK, ".evds_key"),
+                     os.path.join(_KOK, "Aktarılacak Projeler", "TCMBNetRezerv", ".evds_key")]
 
 
 def _evds_anahtari_oku():
@@ -60,16 +66,18 @@ def _evds_anahtari_oku():
     # (izin, dizin olması, bozuk kodlama) korumasız open() import'u düşürür ve
     # `from main import load_data` yapan usdtry_reer_analysis.py'yi de yanında
     # götürür — hâlbuki anahtar yoksa Excel yedeğiyle devam edebilmeliyiz.
-    if os.path.exists(EVDS_KEY_FILE):
+    for yol in EVDS_KEY_ADAYLARI:
+        if not os.path.exists(yol):
+            continue
         try:
-            with open(EVDS_KEY_FILE, encoding="utf-8") as f:
+            with open(yol, encoding="utf-8") as f:
                 anahtar = f.read().strip()
         except OSError as e:
-            print(f"   ⚠ {EVDS_KEY_FILE} okunamadı ({type(e).__name__}); "
-                  f"anahtarsız devam ediliyor.", file=sys.stderr)
-            return None, None
+            print(f"   ⚠ {yol} okunamadı ({type(e).__name__}); "
+                  f"sıradaki adaya bakılıyor.", file=sys.stderr)
+            continue
         if anahtar:
-            return anahtar, EVDS_KEY_FILE
+            return anahtar, yol
     return None, None
 
 

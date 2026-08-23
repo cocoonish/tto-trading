@@ -19,11 +19,18 @@ cd tto-trading
 ```
 
 1. **EVDS anahtarı** — repoyla gelmez. Kökte `.evds_key` adlı dosya oluşturup içine
-   yalnız anahtarı yazın (ya da `TTO_EVDS_KEY` ortam değişkeni).
+   yalnız anahtarı yazın (ya da `TTO_EVDS_KEY` ortam değişkeni). Tüm hatlar aynı sırayla
+   arar: ortam değişkeni → `<proje>/.evds_key` → kök `.evds_key` → `TCMBNetRezerv/.evds_key`;
+   köke koyulan tek dosya hepsine yeter.
 2. **Kurulum** — **`kur.bat`** (çift tıklama yeter). Yedi veri hattının her biri için
    `.venv` + `requirements.txt`, site için `npm install`, marj hattı için Playwright.
    Tekrar çalıştırmak güvenlidir. macOS/Linux: `python3 kur.py`
 3. **Siteyi aç** — `site.bat` → tarayıcı `http://localhost:4321` adresinde açılır.
+
+4. **Denetle** — `guncelle.bat --denetle` (macOS/Linux: `python3 guncelle.py --denetle`):
+   hiçbir şey koşturmadan Python/git/Node, EVDS anahtarı ve her hattın bağımlılıklarını
+   yoklar; eksik varsa tek satırlık çözümü yazar. `--duzelt` eklerseniz kendisi kurar.
+   Yayın tarafının eşleniği: `yayinla.bat --denetle` (git kimliği, uzak depo erişimi).
 
 Ayrıntılı anlatım: **[KURULUM.md](KURULUM.md)** · çalışma rehberi: [CLAUDE.md](CLAUDE.md)
 
@@ -35,9 +42,10 @@ Ayrıntılı anlatım: **[KURULUM.md](KURULUM.md)** · çalışma rehberi: [CLAU
 | `site.bat` | siteyi yerelde aç (`--port`, `--derle`, `--onizle`) |
 | `guncelle.bat` | menü: hangi hatlar güncellensin, hafif/tam, commit? |
 | `guncelle.bat --hepsi --tam` | yedi hattın tamamı, ağır adımlar dahil |
+| `guncelle.bat --denetle` | **koşmadan denetle**: eksik paket/anahtar/araç var mı (`--duzelt` = kur) |
 | `guncelle.bat --kur <hat>` | tek hattın `.venv` + bağımlılıkları (kur.bat'ın alt kümesi) |
 | `panel.bat hazine` \| `fx` | canlı pano (Dash 8050 / Streamlit 8501) |
-| `yayinla.bat` | siteyi yayına gönder (`-m "mesaj"`, `--kuru` = deneme) |
+| `yayinla.bat` | siteyi yayına gönder (`-m "mesaj"`, `--kuru` = deneme, `--denetle`) |
 
 Windows dışında `.bat` yerine aynı adlı `.py`: `python3 kur.py`, `python3 site_baslat.py`,
 `python3 guncelle.py`, `python3 panel.py`, `python3 yayinla.py`.

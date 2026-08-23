@@ -11,6 +11,7 @@ oradaki GitHub Actions iş akışı derleyip Pages'e koyar.
   python yayinla.py -m "SMC dersi güncellendi"
   python yayinla.py --derleme-yok       # yerel derlemeyi atla (CI yine derler)
   python yayinla.py --kuru              # hiçbir şey yazma/gönderme, ne olacağını göster
+  python yayinla.py --denetle           # yalnız denetle: npm, git, kimlik, uzak depo
   python yayinla.py --depo kullanici/repo --klon /yol/klon
 
 Neden kopyalama: iki depo ayrı kalsın diye. Public depoda yalnız sitenin
@@ -67,6 +68,61 @@ def npm_yolu():
     return None
 
 
+def git_var() -> bool:
+    return shutil.which("git") is not None
+
+
+def git_kimlik() -> str | None:
+    """Ad/e-posta ayarlı değilse commit sessizce düşer; sorunu ÖNCE söyle."""
+    ad = kos(["git", "config", "user.name"], sessiz=True).stdout.strip()
+    posta = kos(["git", "config", "user.email"], sessiz=True).stdout.strip()
+    if ad and posta:
+        return None
+    return ('git kimliği ayarlı değil — commit yapılamaz. Çözüm:\n'
+            '      git config --global user.name "Adınız"\n'
+            '      git config --global user.email "eposta@ornek.com"')
+
+
+def uzak_erisim(depo: str) -> str | None:
+    """Public depoya erişilebiliyor mu? (klonlama/push saatler sonra patlamasın.)"""
+    r = subprocess.run(["git", "ls-remote", "--exit-code", "-h",
+                        f"https://github.com/{depo}.git"],
+                       capture_output=True, text=True, timeout=60,
+                       env={**os.environ, "GIT_TERMINAL_PROMPT": "0"})
+    if r.returncode == 0:
+        return None
+    return (f"{depo} deposuna erişilemedi (ağ ya da yetki). "
+            f"git çıktısı: {(r.stderr or '').strip().splitlines()[-1] if r.stderr.strip() else '?'}")
+
+
+def denetle(depo: str, klon: Path) -> int:
+    """Hiçbir şey göndermeden 'yayın patlar mı?' der."""
+    print("\n▶ Ön denetim")
+    engel = []
+    npm = npm_yolu()
+    print(f"  npm        {'✓ ' + npm if npm else 'yok — yerel derleme atlanır (CI derler)'}")
+    print(f"  node_modules {'✓' if (SITE / 'node_modules').exists() else 'yok — npm install koşacak'}")
+    if not git_var():
+        print(_renk("  git        YOK", 31)); engel.append("git kurulu değil")
+    else:
+        print("  git        ✓")
+        k = git_kimlik()
+        print("  kimlik     " + ("✓" if not k else _renk("YOK", 31)))
+        if k:
+            engel.append(k)
+        try:
+            u = uzak_erisim(depo)
+        except Exception as ex:
+            u = f"{depo} denetlenemedi ({type(ex).__name__})"
+        print(f"  uzak depo  {'✓ ' + depo if not u else _renk(u, 31)}")
+        if u:
+            engel.append(u)
+    print(f"  klon       {'✓ ' + str(klon) if (klon / '.git').exists() else 'yok — klonlanacak'}")
+    for e in engel:
+        print(_renk(f"  ✗ {e}", 31))
+    return 1 if engel else 0
+
+
 def derle() -> bool:
     """Yerelde derle — CI'da patlamasın diye ÖNCE burada görelim."""
     npm = npm_yolu()
@@ -85,7 +141,14 @@ def klonu_hazirla(depo: str, klon: Path, kuru: bool) -> bool:
     if (klon / ".git").exists():
         print(f"  klon mevcut: {klon}")
         if not kuru:
-            kos(["git", "pull", "--rebase", "--autostash", "-q"], cwd=klon)
+            # Çıkış kodu ESKİDEN yok sayılıyordu: pull çakışırsa hata ancak push
+            # aşamasında, anlaşılmaz biçimde ortaya çıkıyordu.
+            r = kos(["git", "pull", "--rebase", "--autostash"], cwd=klon, sessiz=True)
+            if r.returncode != 0:
+                print(_renk("  ✗ klon güncellenemedi (git pull --rebase düştü).", 31))
+                print((r.stderr or r.stdout or "").strip()[-500:])
+                print(f"  Çözüm: klonu silip yeniden oluşturun →  rm -rf \"{klon}\"")
+                return False
         return True
     if kuru:
         print(f"  (kuru) klonlanacaktı: {depo} → {klon}")
@@ -148,11 +211,23 @@ def main() -> int:
     ap.add_argument("--klon", type=Path, default=VARSAYILAN_KLON)
     ap.add_argument("--derleme-yok", action="store_true")
     ap.add_argument("--kuru", action="store_true", help="hiçbir şey yazma/gönderme")
+    ap.add_argument("--denetle", action="store_true",
+                    help="yalnız ortamı denetle (npm, git, kimlik, uzak depo) ve çık")
     a = ap.parse_args()
 
     print(f"{'═' * 66}\n  Siteyi yayına gönder → {a.depo}\n{'═' * 66}")
     if a.kuru:
         print(_renk("  KURU KOŞU — dosya yazılmaz, push yapılmaz\n", 36))
+
+    if a.denetle:
+        return denetle(a.depo, a.klon)
+    # Gönderime başlamadan önce sessiz denetim: derleme dakikalar sürüyor,
+    # kimlik/erişim sorununu ondan SONRA öğrenmek zaman kaybı.
+    if not a.kuru and git_var():
+        k = git_kimlik()
+        if k:
+            print(_renk(f"  ✗ {k}", 31))
+            return 1
 
     if not a.derleme_yok:
         print("\n▶ Yerel derleme (CI'dakiyle aynı)")
@@ -187,10 +262,22 @@ def main() -> int:
     if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=a.klon).returncode == 0:
         print("  değişiklik yok — yayın gerekmiyor")
         return 0
-    kos(["git", "commit", "-q", "-m", a.mesaj], cwd=a.klon)
-    if kos(["git", "push"], cwd=a.klon).returncode != 0:
-        print(_renk("  ✗ push başarısız", 31))
+    r = kos(["git", "commit", "-q", "-m", a.mesaj], cwd=a.klon, sessiz=True)
+    if r.returncode != 0:
+        print(_renk("  ✗ commit düştü", 31))
+        print((r.stderr or r.stdout or "").strip()[-500:])
+        k = git_kimlik()
+        if k:
+            print(_renk(f"  {k}", 33))
         return 1
+    if kos(["git", "push"], cwd=a.klon).returncode != 0:
+        # En sık sebep: depo başka bir yerden ilerlemiş. Bir kez rebase'leyip dene.
+        print(_renk("  push reddedildi — rebase ile bir kez daha deneniyor", 33))
+        if kos(["git", "pull", "--rebase", "--autostash"], cwd=a.klon).returncode != 0 \
+                or kos(["git", "push"], cwd=a.klon).returncode != 0:
+            print(_renk("  ✗ push başarısız", 31))
+            print(f"  Elle: cd \"{a.klon}\" && git pull --rebase && git push")
+            return 1
 
     print(_renk("\n  ✓ Gönderildi. GitHub Actions derleyip yayınlıyor (~2 dk).", 32))
     print(f"    site   : {YAYIN_URL}")

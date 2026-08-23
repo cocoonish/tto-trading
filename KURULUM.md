@@ -47,8 +47,12 @@ Klasör adında Türkçe harf var (`Aktarılacak Projeler`) — sorun değil, ba
 echo ANAHTARINIZ> .evds_key
 ```
 
-Bat'lar sırayla `TTO_EVDS_KEY` ortam değişkeni → `<proje>\.evds_key` → kök `.evds_key`
-arar. Kökteki tek dosya bütün projelere yeter.
+Bütün hatlar aynı sırayla arar: `TTO_EVDS_KEY` ortam değişkeni → `<proje>\.evds_key` →
+kök `.evds_key` → `Aktarılacak Projeler\TCMBNetRezerv\.evds_key`. Kökteki tek dosya bütün
+projelere yeter. (2026-08'e kadar dört eski hat yalnız kendi klasörüne bakıyordu; temiz bir
+klonda köke dosya koyan kullanıcının o hatları düşüyordu — dördü de bu sıraya çevrildi.)
+Doğrulamak için: `guncelle.bat --denetle` → "anahtar" sütunu her hat için nereden
+okunacağını (`ortam` / `proje` / `kök` / `kardeş`) gösterir.
 
 ## 5. Kurulum ve ilk koşu
 
@@ -188,10 +192,28 @@ git add "<proje klasörü>" site/public/projeler/<slug> && git commit && git pus
 
 ## Sorun çıkarsa
 
+**Önce şunu koşturun — çoğu sorunu koşmadan söyler:**
+
+```
+guncelle.bat --denetle
+```
+
+Python/git/Node sürümleri, EVDS anahtarının her hat için nereden geleceği, her hattın
+yorumlayıcısı (`.venv` mi sistem mi) ve eksik paketleri tek tabloda çıkar; eksik varsa
+tek satırlık çözümü yazar. Kendisi kursun isterseniz: `guncelle.bat --denetle --duzelt`.
+Yayın tarafının eşleniği (git kimliği, uzak depoya erişim): `yayinla.bat --denetle`.
+
+**Hata aldıysanız kayıt dosyası var:** her koşu `gunlukler\guncelle-<tarih>.log` olarak
+yazılır (son 20 koşu saklanır, klasör `.gitignore`'da). Konsolu kapatmış olsanız da hatanın
+tam metni orada durur.
+
+
 - **`git push` "rejected"** → önce `guncelle.bat` (pull), sonra tekrar push. Cron botu
   (veri-bot) Cuma sabahları commit atar; siz de o gün push ederseniz çakışır.
 - **`[HATA] Sanal ortam yok`** → o projenin `kur.bat`'ı (ya da `guncelle.bat --kur <hat>`)
   çalıştırılmamış.
+- **`eksik paket [...] — çözüm: ... --kur <hat>`** → hat koşmadan durduruldu (traceback
+  yerine tek satır). Yazdığı komutu çalıştırın; hepsi için: `guncelle.bat --denetle --hepsi --duzelt`.
 - **`ModuleNotFoundError` / `adım 1 düştü`** → aynı sebep: `guncelle.bat --kur <hat>`.
   `guncelle.py` proje klasöründeki `.venv`'i kendiliğinden kullanır; venv yoksa sistem
   python'una düşer ve paketler orada olmayabilir.

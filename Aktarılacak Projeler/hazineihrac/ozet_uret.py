@@ -44,8 +44,11 @@ ozet = {
     "gerceklesme_ort": round(float(pd.to_numeric(gercek["Gerçekleşme Oranı (%)"], errors="coerce").mean()), 1),
     "n_ay": int(len(gercek)),
     "b2c_son": round(float(sa["Toplam(Teklif)"].sum() / sa["Toplam(Gerçekleşme)"].sum()), 2),
-    "b2c_12ay": round(float(son12.groupby("ay").apply(
-        lambda g: g["Toplam(Teklif)"].sum() / g["Toplam(Gerçekleşme)"].sum()).mean()), 2),
+    # groupby.apply YERİNE iki toplam ayrı ayrı: apply, gruplama sütununu da
+    # işleme aldığı için pandas 2.2'de FutureWarning veriyor, ileride davranışı
+    # değişecek. Sonuç birebir aynı (ay bazında teklif/gerçekleşme oranının ortalaması).
+    "b2c_12ay": round(float((son12.groupby("ay")["Toplam(Teklif)"].sum()
+                             / son12.groupby("ay")["Toplam(Gerçekleşme)"].sum()).mean()), 2),
     "kabul_son": round(float(sa["Toplam(Gerçekleşme)"].sum() / sa["Toplam(Teklif)"].sum() * 100), 1),
     "kabul_tum": round(float(ih["Toplam(Gerçekleşme)"].sum() / ih["Toplam(Teklif)"].sum() * 100), 1),
     "maliyet_son": round(agirlikli_maliyet(sa), 2),

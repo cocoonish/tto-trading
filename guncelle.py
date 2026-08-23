@@ -9,6 +9,8 @@ Kullanım:
   python guncelle.py --hepsi --tam      # ağır adımlar dahil (FX GDELT+FinBERT, Hazine scraper)
   python guncelle.py --hepsi --commit   # bitince siteye kopyalanan çıktıları commit'le + push
   python guncelle.py --liste            # hatları göster, hiçbir şey koşturma
+  python guncelle.py --denetle --hepsi  # KOŞMADAN denetle: eksik paket/anahtar/araç var mı
+  python guncelle.py --denetle --hepsi --duzelt   # bulunan eksikleri kur
   python guncelle.py --kur tcmb hazine  # seçilen hatların .venv'ini kur/yenile (requirements)
   python guncelle.py --kur --hepsi      # hepsini kur — yeni bilgisayarda İLK adım
   python guncelle.py --panel hazine     # hattın canlı panelini aç (Dash/Streamlit), Ctrl+C ile kapat
@@ -26,14 +28,18 @@ Sözleşme:
   · Yorumlayıcı: her hat, klasöründe .venv varsa ONUN python'uyla koşar (bat/kur.bat ya da
     --kur bunu kurar); yoksa guncelle.py'yi çalıştıran python. Eskiden hep ikincisiydi → bat
     ile venv kurulan Windows'ta sistem python'u tcmb/pdfplumber'ı bulamıyor, ilk hat düşüyordu.
-  · EVDS anahtarı — GERÇEK sıra (veri.py'nin uyguladığı): TTO_EVDS_KEY ortam değişkeni →
+  · EVDS anahtarı — sıra ARTIK HER HATTA AYNI: TTO_EVDS_KEY ortam değişkeni →
     <proje>/.evds_key → kök/.evds_key → kardeş Aktarılacak Projeler/TCMBNetRezerv/.evds_key.
+    (2026-08'e kadar dört eski hat yalnız kendi klasörüne bakıyordu; temiz bir klonda
+    köke tek dosya koyan kullanıcının o hatları düşüyordu — dördü de bu sıraya çevrildi.)
     Burada yalnız erken uyarı verilir; ortam değişkeni ATANMAZ (atansaydı projeye özel
-    anahtar hiç okunmaz, fiilî öncelik veri.py'nin ilan ettiği sırayla çelişirdi).
+    anahtar hiç okunmaz, fiilî öncelik hatların ilan ettiği sırayla çelişirdi).
   · Ev stili (site/tools/plotly_stil.py) her koşunun sonunda TEK KEZ uygulanır.
 """
 from __future__ import annotations
-import argparse, os, shutil, subprocess, sys, time
+import argparse, os, re, shutil, subprocess, sys, time
+from collections import deque
+from datetime import datetime
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -47,6 +53,69 @@ for _akis in (sys.stdout, sys.stderr):
     except Exception:
         pass
 _COCUK_ENV = {**os.environ, "PYTHONIOENCODING": "utf-8", "PYTHONUTF8": "1"}
+
+
+_ANSI = re.compile(r"\033\[[0-9;]*m")
+GUNLUK_KLASOR = KOK / "gunlukler"
+_GUNLUK = None          # açık dosya tanıtıcısı (yoksa None)
+
+
+class _Tee:
+    """Ekrana basılan her şeyi günlüğe de yaz (renk kodları ayıklanarak).
+
+    Neden: "bazı hatalar aldım" diyen kullanıcının elinde gösterecek bir metin
+    kalmıyordu; konsol kapanınca kanıt da gidiyordu. Artık her koşu dosyaya düşer.
+    """
+
+    def __init__(self, akis, dosya):
+        self.akis, self.dosya = akis, dosya
+
+    def write(self, m):
+        self.akis.write(m)
+        try:
+            self.dosya.write(_ANSI.sub("", m))
+        except Exception:
+            pass
+        return len(m)
+
+    def flush(self):
+        self.akis.flush()
+        try:
+            self.dosya.flush()
+        except Exception:
+            pass
+
+    def isatty(self):
+        return self.akis.isatty()
+
+
+def gunluk_ac(tut: int = 20) -> Path | None:
+    """gunlukler/guncelle-<tarih>.log aç; eskileri buda. Yazılamazsa sessizce geç."""
+    global _GUNLUK
+    try:
+        GUNLUK_KLASOR.mkdir(exist_ok=True)
+        yol = GUNLUK_KLASOR / f"guncelle-{datetime.now():%Y%m%d-%H%M%S}.log"
+        _GUNLUK = open(yol, "w", encoding="utf-8", errors="replace")
+    except OSError:
+        return None
+    sys.stdout = _Tee(sys.stdout, _GUNLUK)
+    sys.stderr = _Tee(sys.stderr, _GUNLUK)
+    eskiler = sorted(GUNLUK_KLASOR.glob("guncelle-*.log"))[:-tut]
+    for e in eskiler:
+        try:
+            e.unlink()
+        except OSError:
+            pass
+    return yol
+
+
+def gunluge_yaz(metin: str):
+    """Çocuk sürecin çıktısı: ekrana zaten gitti, dosyaya da düşsün."""
+    if _GUNLUK:
+        try:
+            _GUNLUK.write(_ANSI.sub("", metin) + "\n")
+        except Exception:
+            pass
 
 
 def hat_python(h: "Hat") -> str:
@@ -212,15 +281,10 @@ def anahtar_uyar(secilen: list["Hat"]):
     # ezer ve hatların ilan ettiği arama sırası sessizce tersine dönerdi.
     if (KOK / ".evds_key").exists():
         return
-    # Enflasyon hattı bilinçli olarak KENDİ .evds_key'ini tutmaz: veri.py sırayla
-    # <proje>/.evds_key → kök/.evds_key → kardeş TCMBNetRezerv/.evds_key bakar.
-    # Bu kardeş dosya varsa hat düşmez; "eksik" listesine yazmak yanlış alarmdı.
-    kardes = KOK / "Aktarılacak Projeler" / "TCMBNetRezerv" / ".evds_key"
-    KARDESE_DUSENLER = {"enflasyon", "kredi", "fonlama"}
-    eksik = [h.ad for h in secilen
-             if h.ad in EVDS_HATLAR
-             and not (KOK / h.klasor / ".evds_key").exists()
-             and not (h.ad in KARDESE_DUSENLER and kardes.exists())]
+    # Arama sırası artık HER hatta aynı (proje → kök → kardeş TCMBNetRezerv);
+    # tek doğru yer hat_anahtari(), burada da o kullanılır. Eskiden bu liste
+    # elle tutulan bir istisna kümesine bakıyordu ve yanlış alarm veriyordu.
+    eksik = [h.ad for h in secilen if h.ad in EVDS_HATLAR and not hat_anahtari(h)]
     if eksik:
         print(_renk(f"  [UYARI] EVDS anahtarı yok: {', '.join(eksik)} hatları düşecek. "
                     "Çözüm: kök klasöre .evds_key dosyası (tek satır anahtar) ya da TTO_EVDS_KEY ortam değişkeni.", 33))
@@ -282,6 +346,204 @@ def _tarih_ozeti(d: dict[str, str] | None) -> str:
     return " / ".join(d.values()) if len(d) > 1 else next(iter(d.values()))
 
 
+# ─────────────────────────────── ÖN DENETİM ───────────────────────────────
+# "Bende çalışıyor, sende çalışmıyor"un neredeyse tamamı tek bir eksik pakettir:
+# hattın klasöründe .venv yoksa sistem python'uyla koşulur ve o python'da örneğin
+# statsmodels yoksa ekran traceback'le dolar. Aşağısı hattı BAŞLATMADAN önce
+# yorumlayıcıyı yoklar ve tek satırlık çözümü yazar.
+
+_PAKET_KODU = (
+    "import sys\n"
+    "from importlib.metadata import distribution, PackageNotFoundError\n"
+    "for a in sys.argv[1:]:\n"
+    "    try: distribution(a)\n"
+    "    except PackageNotFoundError: print(a)\n"
+)
+# Dağıtım adı ↔ import adı ayrışması (python-dateutil→dateutil, bs4 vb.) bizi
+# ilgilendirmiyor: importlib.metadata DAĞITIM adına bakar, requirements.txt de
+# dağıtım adı yazar. İkisi aynı sözlükten konuşur.
+
+
+def _req_paketler(d: Path) -> list[str]:
+    """requirements.txt → dağıtım adları (sürüm, ekstra, koşul, yorum ayıklanmış)."""
+    req = d / "requirements.txt"
+    if not req.exists():
+        return []
+    adlar = []
+    for satir in req.read_text(encoding="utf-8").splitlines():
+        s = satir.split("#")[0].strip()
+        if not s or s.startswith("-"):        # -r include, --index-url …
+            continue
+        s = re.split(r"[<>=!~;\[ ]", s, 1)[0].strip()
+        if s:
+            adlar.append(s)
+    return adlar
+
+
+def eksik_paketler(h: "Hat") -> list[str] | None:
+    """Hattı koşacak yorumlayıcıda requirements'tan eksik olanlar.
+
+    None = denetlenemedi (yorumlayıcı çalışmadı) — bu da bir bulgudur.
+    """
+    paketler = _req_paketler(KOK / h.klasor)
+    if not paketler:
+        return []
+    try:
+        r = subprocess.run([hat_python(h), "-c", _PAKET_KODU, *paketler],
+                           capture_output=True, text=True, env=_COCUK_ENV, timeout=120)
+    except Exception:
+        return None
+    if r.returncode != 0:
+        return None
+    return [x for x in r.stdout.split() if x]
+
+
+def hat_anahtari(h: "Hat") -> str | None:
+    """Bu hattın anahtarı nereden gelecek? Sıra HER hatta aynı (2026-08 itibarıyla
+    dört eski hat da bu sıraya çevrildi): ortam → proje → kök → kardeş TCMBNetRezerv.
+    """
+    if os.environ.get("TTO_EVDS_KEY"):
+        return "ortam"
+    for etiket, yol in (("proje", KOK / h.klasor / ".evds_key"),
+                        ("kök", KOK / ".evds_key"),
+                        ("kardeş", KOK / "Aktarılacak Projeler" / "TCMBNetRezerv" / ".evds_key")):
+        try:
+            if yol.exists() and yol.read_text(encoding="utf-8").strip():
+                return etiket
+        except OSError:
+            continue
+    return None
+
+
+def anahtar_nerede() -> str | None:
+    """EVDS anahtarı nerede bulundu? Arama sırası veri.py ile aynı."""
+    if os.environ.get("TTO_EVDS_KEY"):
+        return "TTO_EVDS_KEY ortam değişkeni"
+    if (KOK / ".evds_key").exists():
+        return "kök .evds_key"
+    proje = sorted(p.parent.name for p in KOK.glob("*/*/.evds_key"))
+    if proje:
+        ek = "" if len(proje) < 4 else f" (+{len(proje) - 3})"
+        return "proje: " + ", ".join(proje[:3]) + ek
+    return None
+
+
+def _eksik_scriptler(h: "Hat", tam: bool) -> list[str]:
+    """Adım satırlarının ilk parçası bir .py ise, dosya gerçekten duruyor mu?"""
+    d = KOK / h.klasor
+    yok = []
+    for adim in h.adimlar(tam):
+        ilk = adim.split()[0]
+        if ilk.endswith(".py") and not (d / ilk).exists():
+            yok.append(ilk)
+    return yok
+
+
+def denetle(secilen: list["Hat"], tam: bool, duzelt: bool) -> int:
+    """Hiçbir şey koşturmadan 'bu makinede güncelleme + yayın patlar mı?' der."""
+    print(f"{'═' * 78}\n  ÖN DENETİM · {len(secilen)} hat · kip: "
+          f"{'TAM' if tam else 'hafif'}\n{'═' * 78}")
+
+    engel: list[str] = []          # güncellemeyi düşürecekler
+    uyari: list[str] = []          # düşürmez ama bilinmeli
+
+    print("\n▶ Ortam")
+    print(f"  Python   {sys.version.split()[0]}  ({PY})")
+    if sys.version_info < (3, 10):
+        engel.append(f"Python 3.10+ gerekir (mevcut {sys.version_info[0]}.{sys.version_info[1]})")
+    for arac, ne in (("git", "commit/push"), ("node", "site derlemesi"), ("npm", "site derlemesi")):
+        yol = shutil.which(arac + ".cmd" if os.name == "nt" and arac == "npm" else arac) or shutil.which(arac)
+        print(f"  {arac:8s} {'✓ ' + yol if yol else _renk('YOK — ' + ne + ' yapılamaz', 33)}")
+        if not yol and arac == "git":
+            uyari.append("git yok: --commit ve yayinla.py çalışmaz")
+        if not yol and arac in ("node", "npm"):
+            uyari.append(f"{arac} yok: yayinla.py yerel derlemeyi atlar")
+    nerede = anahtar_nerede()
+    print(f"  EVDS     {'✓ anahtar (' + nerede + ')' if nerede else _renk('anahtar YOK', 31)}")
+
+    print(f"\n▶ Hatlar\n  {'hat':{_AD_G}s} {'yorumlayıcı':12s} {'anahtar':8s} "
+          f"{'paket':22s} script")
+    for h in secilen:
+        d = KOK / h.klasor
+        if not d.exists():
+            print(_renk(f"  {h.ad:{_AD_G}s} klasör YOK: {h.klasor}", 31))
+            engel.append(f"{h.ad}: klasör yok ({h.klasor})")
+            continue
+        yorum = ".venv" if hat_python(h) != PY else "sistem"
+        if h.ad in EVDS_HATLAR:
+            k = hat_anahtari(h)
+            anahtar_m = k if k else _renk("YOK", 31)
+            if not k:
+                engel.append(f"{h.ad}: EVDS anahtarı yok — köke .evds_key koyun "
+                             "ya da TTO_EVDS_KEY atayın")
+        else:
+            anahtar_m = "—"
+        eksik = eksik_paketler(h)
+        yok = _eksik_scriptler(h, tam)
+        if eksik is None:
+            paket_m, kotu = _renk("yorumlayıcı çalışmadı", 31), True
+            engel.append(f"{h.ad}: yorumlayıcı çalışmıyor — python guncelle.py --kur {h.ad}")
+        elif eksik:
+            paket_m, kotu = _renk(f"EKSİK: {', '.join(eksik[:3])}"
+                                  + (f" +{len(eksik) - 3}" if len(eksik) > 3 else ""), 31), True
+            engel.append(f"{h.ad}: eksik paket ({len(eksik)}) — python guncelle.py --kur {h.ad}")
+        else:
+            paket_m, kotu = _renk("tam", 32), False
+        script_m = _renk("EKSİK: " + ", ".join(yok), 31) if yok else "✓"
+        if yok:
+            engel.append(f"{h.ad}: script yok — {', '.join(yok)}")
+        print(f"  {h.ad:{_AD_G}s} {yorum:12s} {anahtar_m:8s} {paket_m:22s} {script_m}")
+        if duzelt and (eksik or eksik is None):
+            print(f"    → kuruluyor ({h.ad})")
+            if kur(h):
+                kalan = eksik_paketler(h)
+                if not kalan:
+                    engel = [x for x in engel if not x.startswith(f"{h.ad}:")]
+                    print(_renk("    ✓ giderildi", 32))
+
+    print("\n▶ Site")
+    site = KOK / "site"
+    nm = site / "node_modules"
+    print(f"  node_modules  {'✓' if nm.exists() else _renk('yok — ilk yayında npm install koşar (dakikalar)', 33)}")
+    if not nm.exists():
+        uyari.append("site/node_modules yok: ilk yayın uzun sürer")
+    klon = KOK.parent / "TTO Trading Yayin"
+    print(f"  yayın klonu   {'✓ ' + str(klon) if (klon / '.git').exists() else 'yok — yayinla.py klonlayacak'}")
+
+    print(f"\n{'═' * 78}")
+    for u in uyari:
+        print(_renk(f"  [uyarı]  {u}", 33))
+    if engel:
+        print(_renk(f"  {len(engel)} ENGEL — güncelleme bu haliyle hata verir:", 31))
+        for e in engel:
+            print(_renk(f"    · {e}", 31))
+        print("\n  Hepsini birden gidermek için:  python guncelle.py --denetle --hepsi --duzelt")
+        return 1
+    print(_renk("  Temiz — güncelleme ve yayın hatasız koşmalı.", 32))
+    return 0
+
+
+def _adim_kos(komut: list[str], cwd: Path) -> tuple[int, list[str]]:
+    """Adımı koştur; çıktıyı ekrana AKTARIRKEN günlüğe yaz ve son 40 satırı tut.
+
+    subprocess.run(...) ile çocuğun çıktısı doğrudan terminale gidiyordu: canlı
+    görünüyordu ama hiçbir yere kaydedilmiyor, hata mesajı özete de taşınamıyordu.
+    """
+    p = subprocess.Popen(komut, cwd=str(cwd), env=_COCUK_ENV,
+                         stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                         text=True, bufsize=1, encoding="utf-8", errors="replace")
+    son: deque[str] = deque(maxlen=40)
+    for satir in p.stdout:                       # satır satır: canlılık korunur
+        satir = satir.rstrip("\n")
+        # print() değil: sys.stdout zaten Tee ise iki kez yazılırdı.
+        sys.__stdout__.write(satir + "\n")
+        sys.__stdout__.flush()
+        gunluge_yaz(satir)
+        son.append(satir)
+    p.wait()
+    return p.returncode, list(son)
+
+
 def kos(h: Hat, tam: bool) -> tuple[bool, str, float]:
     d = KOK / h.klasor
     t0 = time.time()
@@ -289,13 +551,29 @@ def kos(h: Hat, tam: bool) -> tuple[bool, str, float]:
     py = hat_python(h)
     if py != PY:
         print(f"    (yorumlayıcı: {Path(py).relative_to(KOK) if py.startswith(str(KOK)) else py})")
+    # Koşmadan önce yorumlayıcıyı yokla: eksik paket, sayfalarca traceback yerine
+    # tek satırlık çözüm olarak görünsün. (Ekstra maliyet ~0,1 sn/hat.)
+    eksik = eksik_paketler(h)
+    if eksik is None:
+        return False, (f"yorumlayıcı çalışmıyor ({py}) — çözüm: python guncelle.py "
+                       f"--kur {h.ad}"), time.time() - t0
+    if eksik:
+        nerede = ".venv" if py != PY else "sistem python'u"
+        return False, (f"eksik paket [{nerede}]: {', '.join(eksik[:4])}"
+                       + (f" +{len(eksik) - 4}" if len(eksik) > 4 else "")
+                       + f" — çözüm: python guncelle.py --kur {h.ad}"), time.time() - t0
     for i, adim in enumerate(h.adimlar(tam), 1):
         print(f"    [{i}] {adim}")
-        r = subprocess.run([py, *adim.split()], cwd=d, env=_COCUK_ENV)
-        if r.returncode != 0:
+        kod, son = _adim_kos([py, *adim.split()], d)
+        if kod != 0:
             ipucu = ""
             if py == PY and not (d / ".venv").exists():
                 ipucu = f" — bağımlılık eksikse: python guncelle.py --kur {h.ad}  (ya da bat\\{h.slug}\\kur.bat)"
+            # Hatanın SON satırı özete taşınır: kullanıcı yüzlerce satır yukarı
+            # kaydırmadan sebebi görsün ("adım 2 düştü" tek başına teşhis değil).
+            oz = next((x for x in reversed(son) if x.strip()), "")
+            if oz:
+                ipucu += f"  ⟨{oz.strip()[:110]}⟩"
             return False, f"adım {i} düştü: {adim}{ipucu}", time.time() - t0
     # siteye kopyala
     hedef = SITE / h.slug
@@ -373,9 +651,28 @@ def commit_push(secilen: list[Hat]):
     if subprocess.run(["git", "diff", "--cached", "--quiet"], cwd=KOK).returncode == 0:
         print("    değişiklik yok"); return True
     adlar = ", ".join(h.ad for h in secilen)
-    subprocess.run(["git", "commit", "-q", "-m", f"veri: {adlar} güncellendi (guncelle.py)"], cwd=KOK)
+    c = subprocess.run(["git", "commit", "-q", "-m", f"veri: {adlar} güncellendi (guncelle.py)"],
+                       cwd=KOK, capture_output=True, text=True)
+    if c.returncode != 0:
+        print(_renk("  ✗ commit düştü", 31))
+        print((c.stderr or c.stdout or "").strip()[-400:])
+        ad = subprocess.run(["git", "config", "user.name"], cwd=KOK,
+                            capture_output=True, text=True).stdout.strip()
+        posta = subprocess.run(["git", "config", "user.email"], cwd=KOK,
+                               capture_output=True, text=True).stdout.strip()
+        if not ad or not posta:
+            print(_renk('  Sebep: git kimliği ayarlı değil. Çözüm:\n'
+                        '    git config --global user.name "Adınız"\n'
+                        '    git config --global user.email "eposta@ornek.com"', 33))
+        return False
     r = subprocess.run(["git", "push"], cwd=KOK)
-    return r.returncode == 0
+    if r.returncode != 0:
+        # Eskiden bu dönüş değeri main()'de yok sayılıyordu: push düşse bile
+        # çıkış kodu 0 kalıyor, kullanıcı "gitti" sanıyordu.
+        print(_renk("  ✗ push başarısız — commit YEREL kaldı. "
+                    "Elle: git push  (ya da git pull --rebase && git push)", 31))
+        return False
+    return True
 
 
 def menu() -> tuple[list[Hat], bool, bool]:
@@ -407,7 +704,13 @@ def main():
     ap.add_argument("--liste", action="store_true")
     ap.add_argument("--kur", action="store_true", help="seçilen hatların .venv + requirements kurulumu (hat koşturmaz)")
     ap.add_argument("--panel", action="store_true", help="seçilen tek hattın canlı panelini aç (hazine: Dash, fx: Streamlit)")
+    ap.add_argument("--denetle", action="store_true",
+                    help="hiçbir şey koşturmadan ortamı denetle: python, git/node, EVDS anahtarı, "
+                         "her hattın yorumlayıcısı ve paketleri")
+    ap.add_argument("--duzelt", action="store_true",
+                    help="--denetle ile: eksik bulunan hatların kurulumunu yap")
     a = ap.parse_args()
+    gunluk = gunluk_ac()
 
     if a.liste:
         for h in HATLAR:
@@ -417,6 +720,11 @@ def main():
             if h.tam: print(f"{'':{_AD_G}s} {'':{_BASLIK_G}s} tam  : {' → '.join(h.tam)}   ({h.not_})")
         return 0
 
+    # --denetle tek başına yazıldığında menüye düşmesin: denetim zaten koşturmuyor,
+    # doğal kapsamı "hepsi".
+    if a.denetle and not a.hepsi and not a.hatlar:
+        return denetle(list(HATLAR), a.tam, a.duzelt)
+
     if a.hepsi: secilen, tam, cm = list(HATLAR), a.tam, a.commit
     elif a.hatlar:
         yanlis = [x for x in a.hatlar if x not in HAT]
@@ -425,6 +733,9 @@ def main():
     else:
         secilen, tam, cm = menu()
     if not secilen: print("hat seçilmedi"); return 2
+
+    if a.denetle:
+        return denetle(secilen, a.tam, a.duzelt)
 
     if a.kur:
         print(f"\n{'═'*64}\n  KURULUM · {len(secilen)} hat\n{'═'*64}")
@@ -437,6 +748,31 @@ def main():
         if len(secilen) != 1:
             print("panel için tek hat seçin, ör: python guncelle.py --panel hazine"); return 2
         return panel(secilen[0])
+
+    # Koşmadan önce hızlı yoklama (~0,1 sn/hat): kullanıcı on dakika bekleyip
+    # sonunda "ModuleNotFoundError" görmesin. Windows'ta bat çift tıklamayla
+    # sistem python'una düşüyor ve eksik paket en sık hata sebebi.
+    sorunlu = []
+    for h in secilen:
+        e = eksik_paketler(h)
+        if e is None or e:
+            sorunlu.append(h)
+    if sorunlu:
+        print(_renk(f"\n  [ÖN DENETİM] bağımlılık eksik: "
+                    + ", ".join(h.ad for h in sorunlu), 33))
+        cevap = ""
+        if sys.stdin.isatty():
+            try:
+                cevap = input("  Şimdi kurulsun mu? [E/h]: ").strip().lower()
+            except EOFError:
+                cevap = "h"
+        if sys.stdin.isatty() and not cevap.startswith(("h", "n")):
+            for h in sorunlu:
+                print(f"\n▶ {h.baslik} — kurulum")
+                kur(h)
+        else:
+            print("  Kurulmadan devam ediliyor: bu hatlar tek satırlık hatayla atlanacak "
+                  "(kurmak için: python guncelle.py --kur " + " ".join(h.ad for h in sorunlu) + ")")
 
     anahtar_uyar(secilen)
     print(f"\n{'═'*64}\n  {len(secilen)} hat · kip: {'TAM' if tam else 'hafif'} · commit: {'evet' if cm else 'hayır'}\n{'═'*64}")
@@ -453,10 +789,14 @@ def main():
     for h, ok, mesaj, sn in sonuc:
         print(f"  {_renk('✓', 32) if ok else _renk('✗', 31)} {h.baslik:{_BASLIK_G}s} {mesaj:34s} {sn:5.0f}s")
     dusen = [h for h, ok, _, _ in sonuc if not ok]
+    if gunluk:
+        print(f"\n  Kayıt: {gunluk.relative_to(KOK)}"
+              + (_renk("   ← hata aldıysanız bu dosyayı paylaşın", 33) if dusen else ""))
     if cm:
         if dusen:
             print(_renk(f"\n  {len(dusen)} hat düştü — commit yine de yapılıyor (başarılı çıktılar için).", 33))
-        commit_push([h for h, ok, _, _ in sonuc if ok])
+        if not commit_push([h for h, ok, _, _ in sonuc if ok]):
+            return 1
     return 1 if dusen else 0
 
 

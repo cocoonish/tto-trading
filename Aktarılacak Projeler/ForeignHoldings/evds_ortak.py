@@ -27,6 +27,40 @@ import sys
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 EVDS_KEY_FILE = os.path.join(BASE_DIR, ".evds_key")
 
+
+def _anahtar_adaylari(base_dir):
+    """Anahtar dosyası adayları — sıra tüm hatlarda AYNI (bkz. README, guncelle.py).
+
+    <proje>/.evds_key → depo kökü/.evds_key → kardeş TCMBNetRezerv/.evds_key.
+    Kök adayı olmadan, temiz bir klonda köke tek dosya koyan kullanıcının bu hattı
+    düşüyordu; hatların yarısı kökü okurken yarısı okumuyordu.
+    """
+    p = os.path.abspath(base_dir)
+    kok = os.path.dirname(os.path.dirname(p))          # …/TTO Trading
+    return [os.path.join(p, ".evds_key"),
+            os.path.join(kok, ".evds_key"),
+            os.path.join(kok, "Aktarılacak Projeler", "TCMBNetRezerv", ".evds_key")]
+
+
+def _dosyadan_anahtar(adaylar, uyar=None):
+    """İlk okunabilir ve boş olmayan adaydaki anahtar; hiçbiri yoksa ''."""
+    for yol in adaylar:
+        if not os.path.exists(yol):
+            continue
+        try:
+            with open(yol, encoding="utf-8") as f:
+                a = f.read().strip()
+        except OSError as e:
+            if uyar:
+                uyar(f"UYARI: {yol} okunamadı ({type(e).__name__}).")
+            continue
+        if a:
+            return a
+    return ""
+
+
+EVDS_KEY_ADAYLARI = _anahtar_adaylari(BASE_DIR)
+
 EVDS_BASE = "https://evds3.tcmb.gov.tr/igmevdsms-dis"
 
 # TCMB Haftalık Menkul Kıymet İstatistikleri, veri grubu bie_mknethar.
@@ -55,21 +89,16 @@ def evds_anahtari(zorunlu: bool = True) -> str:
     anahtar = (os.environ.get("TTO_EVDS_KEY") or "").strip()
     if anahtar:
         return anahtar
-    if os.path.exists(EVDS_KEY_FILE):
-        try:
-            with open(EVDS_KEY_FILE, encoding="utf-8") as f:
-                anahtar = f.read().strip()
-        except OSError as e:
-            print(f"UYARI: {EVDS_KEY_FILE} okunamadı ({type(e).__name__}).",
-                  file=sys.stderr)
-            anahtar = ""
-        if anahtar:
-            return anahtar
+    anahtar = _dosyadan_anahtar(EVDS_KEY_ADAYLARI,
+                                lambda m: print(m, file=sys.stderr))
+    if anahtar:
+        return anahtar
     if zorunlu:
         raise RuntimeError(
             "EVDS anahtarı bulunamadı. Şu iki yoldan birini kullanın:\n"
-            "  1) export TTO_EVDS_KEY=<anahtar>\n"
-            f"  2) {EVDS_KEY_FILE} dosyasına anahtarı yazın (.gitignore'da)"
+            "  1) export TTO_EVDS_KEY=<anahtar>   (Windows: set TTO_EVDS_KEY=…)\n"
+            "  2) şu dosyalardan BİRİNE anahtarı yazın (.gitignore'da):\n"
+            + "".join(f"       {y}\n" for y in EVDS_KEY_ADAYLARI)
         )
     return ""
 
