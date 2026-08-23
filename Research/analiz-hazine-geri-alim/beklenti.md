@@ -222,7 +222,10 @@ kaygıyı büyüttüğünü belirtti.
 - TARİH: 19.08.2026
 - Kaynak **[İ]**: Reuters/Investing.com, 19.08.2026 (yukarıdaki bağlantı)
 
-### 1.10 Wells Fargo — iki ayrı isim, aynı sonuç: kısa vadeli rahatlama
+### 1.10 Wells Fargo Investment Institute — iki ayrı isim, aynı sonuç: kısa vadeli rahatlama
+
+*(Wells Fargo'nun SATIŞ TARAFI faiz stratejisti Angelo Manolatos ayrı bir görüş ve sayı
+seti veriyor — bkz. §1.13. Aynı bankanın iki farklı kolu; yazıda karıştırılmamalı.)*
 
 **Bulgu.** Tony Miano (Wells Fargo Investment Institute, küresel sabit getiri analisti):
 "Getirilerdeki artışın arkasındaki ana sürücüler… yerinde duruyor"; yatırımcılar bu
@@ -236,17 +239,164 @@ nedeniyle.
   worries persist" —
   https://finance.yahoo.com/economy/policy/articles/bonds-bounce-us-buybacks-relief-040238251.html
 
-### 1.11 Goldman Sachs — doğrudan geri alım yorumu BULUNAMADI; dolaylı bir not var
+### 1.11 Goldman Sachs — doğrudan geri alım yorumu BULUNAMADI (24.08 turunda da bulunamadı)
 
-**Bulgu.** Goldman'ın geri alım kararına dair yayımlanmış doğrudan bir baz puan tahmini
-veya kalıcılık değerlendirmesi bulunamadı. Bulunabilen tek Goldman ifadesi Fed kanalına
-dair: "Başkan Warsh'ın piyasa getirilerindeki değişimlerin politika eylemine ikame
-olabileceği yönündeki imasının, volatiliteyi eğrinin uzun ucuna doğru sürüklediği" görüşü.
-- TARİH: Ağustos 2026 (kesin tarih doğrulanamadı)
+**Bulgu.** İki ayrı arama turunda da Goldman'ın bu karara dair yayımlanmış, isimli,
+doğrudan bir değerlendirmesi bulunamadı. Bulunabilen tek Goldman ifadesi Fed kanalına
+dair dolaylı bir cümle: "Başkan Warsh'ın piyasa getirilerindeki değişimlerin politika
+eylemine ikame olabileceği yönündeki iması, volatiliteyi eğrinin uzun ucuna doğru
+sürüklüyor." Tarihi doğrulanamadı.
 - Kaynak **[İİ]**: arama derlemesi; asıl Goldman notuna erişilemedi. **KULLANMA ÖNERİSİ:
-  Goldman'ı yazıda "görüş bildirmedi/erişilemedi" diye geçmek daha güvenli.**
+  Goldman'ı yazıda "kamuya açık bir görüş yayımlamadı" diye geçmek en güvenlisi. Bu
+  başlı başına bir bulgudur: en büyük satış tarafı araştırma kurumu sessiz kaldı.**
 
-### 1.12 Diğer varlık yöneticileri / piyasa isimleri
+---
+
+## 1-B. 24.08 TURUNDA EKLENEN KURUMLAR
+
+### 1.13 Wells Fargo (Angelo Marek Manolatos) — ölçeği NİCELLEŞTİREN ikinci banka; bono arzı kanalı
+
+**Bulgu (yazının en operasyonel sayısı).** Wells Fargo faiz stratejisti Angelo Manolatos,
+artış SÜRDÜRÜLÜRSE geri alımların **çeyrek başına 32 milyar dolara** çıkacağını hesapladı.
+Kritik ikinci adım: bunun finansmanı. Manolatos, 5 Kasım'a kadar **12 milyar dolar**,
+sonrasında **çeyrek başına 16 milyar dolar** EK HAZİNE BONOSU (T-bill) ihracı öngörüyor.
+Yani geri alım bedava değil — uzun uçtan çekilen kâğıdın karşılığı kısa uçta arz olarak
+geri geliyor. Bu, Forbes/Broughel'in teorik "para nereden geliyor?" sorusunun sayısal
+cevabıdır.
+
+- SAYI/TARİH: 32 mlr $/çeyrek geri alım · +12 mlr $ bono (5 Kasım'a kadar) · +16 mlr $
+  bono/çeyrek (sonrasında) · Temmuz başından beri net 551 mlr $ toplandı (25 Ağustos
+  valörleri dahil) · aylık brüt bono ihalesi 2,25 trilyon $ · 20–21.08.2026
+- Kaynak **[İ]**: Bloomberg, "Treasury's Potentially Limitless Buybacks Cloud T-Bill
+  Outlook" (Yahoo Finance sendikasyonu), 20–21.08.2026 —
+  https://finance.yahoo.com/economy/policy/articles/treasury-potentially-limitless-buybacks-cloud-175445140.html
+
+**NOT — iki hesap çelişiyor, yazıda ayrıştırın.** Barclays ~16 mlr $/çeyrek diyor,
+Wells Fargo 32 mlr $/çeyrek. Fark muhtemelen varsayımdan: Barclays yalnızca ARTIŞ payını
+(2→4 mlr $ farkı × operasyon sayısı), Wells Fargo TOPLAM geri alım hacmini sayıyor
+olabilir. Yazar iki rakamı yan yana koyarken bu ayrımı belirtmeli.
+
+### 1.14 TD Securities (Gennadiy Goldberg) — "sözlü müdahale"; asıl çare ihale küçültmek
+
+**Bulgu.** TD Securities ABD faiz stratejisi başkanı Goldberg üç ayrı ve birbirini
+tamamlayan şey söyledi:
+1. Hamle fiilen **"ABD Hazinesi'nden sözlü müdahalenin eşdeğeri"** — "Hazine henüz bir şey
+   yapmaktan çok, piyasanın burnunun dibine uyarı ateşi açıyor." Gerekçesi somut: asıl
+   alımlar birkaç hafta sonra başlıyor (9 Eylül).
+2. **"Bu, Hazine'nin uzun ucu desteklemek için atabileceği MUHTEMEL BİRÇOK ADIMIN
+   İLKİ."** — yani devamı bekleniyor.
+3. **4 KASIM İÇİN EN NET İSİMLİ BEKLENTİ:** "Daha kalıcı bir önlem, uzun uç İHALE
+   BÜYÜKLÜKLERİNİ DÜŞÜRMEK olurdu." Ayrıca geri alımın kendisi için: "Sadece birkaç
+   milyar dolar… ihale büyüklüğü azaltma planlarını anlamlı biçimde değiştirmeyecek."
+4. Piyasanın tepkisi üzerine: "Gördüğümüz şu — piyasa, Hazine'nin bu hareketlerin bir
+   kısmının altına girebileceğine ve gireceğine hâlâ biraz şüpheyle bakıyor."
+- SAYI/TARİH: 19–20.08.2026
+- Kaynak **[İ]**: Reuters, "Global yields fall after US Treasury boosts debt buybacks",
+  19–20.08.2026 —
+  https://wealthinsights.metrobank.com.ph/news/global-markets-global-yields-fall-after-us-treasury-boosts-debt-buybacks
+- Kaynak **[İ]**: Bloomberg/Yahoo T-Bill Outlook (yukarıdaki bağlantı)
+- Kaynak **[İ]**: AP (HuffPost yeniden yayımı), 20.08.2026 —
+  https://www.huffpost.com/entry/financial-markets-bond-market-scott-bessent_n_6a87c677e4b0f5925a1497ce
+
+### 1.15 Bank of America (Mark Cabana) — "sorun Hazine'de değil, Fed'de"
+
+**Bulgu.** BofA Securities ABD faiz stratejisi başkanı Cabana, uzun uç maliyetlerinin
+yüksek olmasının ana nedenini geri alım/arz değil **Fed belirsizliği** olarak koyuyor:
+"Yüksek borçlanma maliyetlerinin başlıca nedeni, Fed'in enflasyonu nasıl kontrol altına
+alacağına — ve işler plana göre gitmezse ne yapacağına — dair yüksek belirsizlik."
+Warsh'ın rehberlik vermeme tercihini doğrudan fiyat etiketiyle eleştiriyor:
+**"Warsh'ın bu kadar kararlı olduğu rehberlik yokluğunun kelimenin tam anlamıyla
+ödenecek bir bedeli var."** Sonuç cümlesi: **"Artık top Fed'in sahasında, ve top
+gerçekten Kevin Warsh'ın elinde."**
+
+Yazı için önemi: Bu, "geri alım kaç bp indirir" sorusunu reddeden bir çerçeve — Cabana'ya
+göre uzun uç primi bir ARZ primi değil, bir PARA POLİTİKASI BELİRSİZLİK primi. Öyleyse
+Hazine'nin elindeki hiçbir arz aracı onu kalıcı olarak düşüremez.
+- SAYI/TARİH: 20.08.2026
+- Kaynak **[İ]**: AP (HuffPost yeniden yayımı), 20.08.2026 (yukarıdaki bağlantı)
+
+### 1.16 PGIM — iki ayrı isim
+
+**Bulgu A — Daleep Singh** (PGIM baş küresel ekonomisti; eski NY Fed ve Hazine yetkilisi):
+Hazine'nin eyleminde getiri baskılarını **"çözecek kredibl bir strateji" yok**. Singh'in
+ağırlığı geçmişinden geliyor — hem Hazine hem NY Fed tarafında çalışmış biri.
+**Bulgu B — Greg Peters** (PGIM Fixed Income, kamu ve özel sabit getiri eş-CIO'su):
+Bloomberg TV'de karara dair değerlendirme yaptı (video; metin dökümüne erişilemedi —
+yazar kullanacaksa videoyu izlemeli).
+- TARİH: 19–20.08.2026
+- Kaynak **[İ]**: Reuters, "Treasury's upsized buybacks may complicate Fed's monetary
+  policy work", 20.08.2026 —
+  https://finance.yahoo.com/economy/policy/articles/treasurys-upsized-buybacks-may-complicate-050106824.html
+- Kaynak **[İ]**: Bloomberg video, 19.08.2026 —
+  https://www.bloomberg.com/news/videos/2026-08-19/pgim-s-greg-peters-on-bessent-s-debt-buyback-boost-video
+
+### 1.17 JPMorgan — İKİNCİ ve FARKLI bir ses: Michael Feroli (baş ABD ekonomisti)
+
+**Bulgu.** JPMorgan'ın faiz stratejisi ekibi (§1.1) kredibilite alarmı verirken, aynı
+bankanın baş ABD ekonomisti Michael Feroli çok daha sakin: **"Fed'in kısa vadeli faizleri
+kontrol etme yeteneği üzerinde herhangi bir etki görmüyorum."** Yani "mali baskınlık"
+tezine bankanın ekonomi kanadından bir itiraz var.
+
+Yazı için önemi: JPMorgan'ı tek bir görüş olarak sunmak yanlış olur. Strateji masası
+"kredibilite riski" derken, ekonomi masası "Fed'in kontrolü bozulmaz" diyor. Bu ayrım
+yazının nüansını yükseltir.
+- TARİH: 20.08.2026
+- Kaynak **[İ]**: Reuters, 20.08.2026 (yukarıdaki "complicate Fed's monetary policy" bağlantısı)
+
+### 1.18 CIBC (Jeremy Stretch) — küresel uzun uç bağlamı
+
+**Bulgu.** CIBC G10 döviz stratejisi başkanı Stretch, hamleyi küresel bir uzun uç
+satışının içine yerleştiriyor: son günlerde uzun ucun satıldığını ve Hazine'nin buna
+tepki verdiğini belirtiyor. Aynı Reuters haberindeki küresel çıpalar, bunun tek başına
+bir ABD hikâyesi OLMADIĞINI gösteriyor — yazının "Hazine ne kadarını kontrol edebilir?"
+bölümü için kritik.
+- SAYI/TARİH: Japonya 10 yıllık gösterge %3'e doğru (otuz yılın zirvesi) · Almanya uzun
+  vade 15 yılın zirvesi · Fransa uzun vade 18 yılın zirvesi · 19–20.08.2026
+- Kaynak **[İ]**: Reuters, 19–20.08.2026 (Metrobank/Euronext yeniden yayımı, yukarıda)
+
+### 1.19 Robeco (Rogier Hoogeveen, Rikkert Scholten) — Barclays'i BAĞIMSIZ DOĞRULAYAN kurum
+
+**Bulgu (metodolojik olarak en değerli teyit).** Robeco stratejistleri Barclays'ten
+tamamen ayrı bir yayında, neredeyse aynı ölçek sonucuna vardı: yıllık **~66 milyar $**
+alım, bu da **brüt 20–30 yıllık Hazine arzının ~%15'ine** denk. Barclays ~64 mlr $ / ~%15
+demişti. İki bağımsız kurum, aynı büyüklük. Artık bu "tek kaynaklı iddia" değil.
+
+Diğer bulguları:
+- **Eğri etkisinin temiz ölçümü:** 30y–2y spreadi duyuru günü **112 bp'den 102 bp'ye**,
+  yani 10 bp yassılaştı. (Bu, "kaç baz puan" sorusuna EĞRİ cinsinden verilmiş, kaynağı
+  belli tek cevaptır.)
+- **Kalıcılık:** "Aktivist bir Hazine getirileri KISA VADEDE etkileyebilir. Ancak
+  eylemleri, uzun uç Hazine getirilerinin neden yüksek olduğuna dair temel nedeni ele
+  almıyor."
+- **Mali çıpa:** 2026 açığı GSYH'nin **%6,3'ü**; borç 40 trilyon $'ı geçti = **GSYH'nin
+  %123'ü**.
+- **Fed çelişkisi:** Warsh Fed bilançosunun VADESİNİ KISALTMAYI tercih ediyor — yani Fed
+  uzun kâğıttan çıkmak isterken Hazine uzun kâğıt topluyor. İki kurum ters yönde.
+- **Pozisyonlanma (nadir bulunan somut tavsiye):** Robeco uzun vadeli devlet tahvillerinde
+  TEMKİNLİ; İngiltere gilt ve Alman tahvillerinde DİKLEŞTİRİCİ (steepener) pozisyon
+  taşıyor.
+- SAYI/TARİH: ~66 mlr $/yıl · ~%15 · 112→102 bp · %6,3 açık/GSYH · %123 borç/GSYH ·
+  ~20–21.08.2026
+- Kaynak **[B]**: Robeco, Rogier Hoogeveen & Rikkert Scholten, "US Treasury steps in as
+  long-end yields rise", Ağustos 2026 —
+  https://www.robeco.com/en-int/insights/2026/08/us-treasuries-buyback-and-impact-on-the-fed-and-markets
+
+### 1.20 Fed tarafı — Hazine'ye kurumsal cevap
+
+- **Alberto Musalem** (St. Louis Fed başkanı), Hazine'nin Fed'in işini zorlaştırıp
+  zorlaştırmadığı sorusuna: **"Hayır. Biz çok basit biçimde işgücü piyasasına ve
+  enflasyona odaklanıyoruz."** **[İ]** Fortune/Yahoo, 20.08.2026 —
+  https://finance.yahoo.com/economy/article/one-day-after-doubling-treasury-buybacks-bessent-says-hes-ready-to-boost-them-further-to-push-down-long-term-yields-181218236.html
+- **Kevin Warsh** (Fed Başkanı): fiyat istikrarı ve enflasyonu %2'ye döndürme taahhüdünü
+  yineledi; faiz patikası rehberliği vermeye direniyor; getirileri Fed'in yönlendirmesi
+  yerine PİYASANIN oluşturması gerektiğini savunuyor. **[İ]** Reuters, 20.08.2026
+- **Bessent'in Fed'e uzattığı el:** "Bilançoda herhangi bir değişiklik olursa Hazine ve
+  Fed birlikte çalışırdı" — ama ekledi: "Bunun, bu hafta açıkladığım geri alım kararıyla
+  hiçbir ilgisi yok." **[İ]** Reuters, 20.08.2026
+- SAYI: Fed bilançosu 6,8 trilyon $ · son FOMC kararı 9'a 3 oyla sabit tutma ·
+  Haziran 2026 enflasyonu %3,7
+
+### 1.21 Diğer varlık yöneticileri / piyasa isimleri (1. turdan)
 
 - **Michael Goosay** (Principal Asset Management, sabit getiri CIO'su): piyasa müdahaleleri
   uzun vadede tipik olarak başarısız olur; getiriler önceki seviyelerine döner. **[İ]**
@@ -445,6 +595,32 @@ sürdürüyor.
   (NOT: Bu Mayıs 2026 verisidir; Ağustos 2026 refinansmanında da kupon büyüklükleri sabit
   kaldı. Kasım için bu rehberliğin korunup korunmayacağı yazının açık sorusu.)
 
+### 4.2-B TD Securities (Goldberg) — 4 KASIM İÇİN BULUNAN TEK İSİMLİ, SOMUT BEKLENTİ
+
+Goldberg: **"Daha kalıcı bir önlem, uzun uç İHALE BÜYÜKLÜKLERİNİ DÜŞÜRMEK olurdu."**
+Ayrıca geri alımı küçümsüyor: "Sadece birkaç milyar dolar… ihale büyüklüğü azaltma
+planlarını anlamlı biçimde değiştirmeyecek."
+
+Bu iki cümle birlikte okunduğunda TD'nin baz senaryosu şu: 4 Kasım'da asıl haber geri
+alım tavanı değil, **uzun uç (20 ve 30 yıllık) kupon İHALE BÜYÜKLÜKLERİNDE indirim**
+olabilir. Bu, Hazine'nin Şubat 2026'dan beri sürdürdüğü "sabit tutuyoruz" rehberliğinin
+kırılması demektir — ve TBAC'in "2027 başında ARTIŞ" beklentisiyle taban tabana zıttır.
+
+**Yazı için kanca:** Piyasada 4 Kasım'a dair iki zıt beklenti var —
+(a) TBAC/birincil satıcılar: kupon ihaleleri 2027 başında ARTAR;
+(b) TD Securities: Hazine uzun uç ihalelerini KÜÇÜLTEBİLİR.
+İkisi aynı anda doğru olamaz. 4 Kasım bu ayrımı çözecek.
+- SAYI/TARİH: 19–21.08.2026
+- Kaynak **[İ]**: Reuters 19–20.08.2026; Bloomberg/Yahoo T-Bill Outlook 20–21.08.2026
+  (bağlantılar §1.14'te)
+
+### 4.2-C Wells Fargo (Manolatos) — bono arzı tarafından sayısal beklenti
+
+5 Kasım'a kadar +12 mlr $, sonrasında çeyrek başına +16 mlr $ ek bono ihracı; geri alım
+sürdürülürse çeyreklik geri alım 32 mlr $. Bu, 4 Kasım'da açıklanacak finansman
+tablosunun bono tarafına dair bulunabilen tek sayısal tahmindir. (Ayrıntı §1.13.)
+- Kaynak **[İ]**: Bloomberg/Yahoo, 20–21.08.2026 (bağlantı §1.13'te)
+
 ### 4.3 Bonoya kayış beklentisi
 Citi'den Dan Gottlander: Hazine muhtemelen daha fazla kısa vadeli borç ihracına kayacak.
 Forbes/Broughel: geri alımlar zaten bono ihracıyla finanse ediliyor. Hazine'nin kendi
@@ -480,12 +656,51 @@ ama bunu SAYIYLA öngören isimli bir tahmin bulunamadı.
 düşüşü fiyatlanmadı. Ralli 48 saatte söndü. Bu, "sinyal etkisi > akış etkisi" tezini
 (Morgan Stanley) destekliyor ama sinyalin de kalıcı olmadığını gösteriyor.
 
-### 5.2 Vade primi
-- ACM (NY Fed) 10 yıllık vade primi: 10.08.2026'da %1,33 (bir yıl önce, 11.08.2025:
-  %1,20). 2020 dibinden 2026 okumasına toplam salınım ~118 bp.
-- Kaynak **[B]**: NY Fed ACM vade primi serisi (rakamlar ikincil aktarımdan; yazar
-  https://www.newyorkfed.org/research/data_indicators/term-premia-tabs adresinden
-  doğrulamalı)
+### 5.2 Vade primi — **BİRİNCİL VERİDEN DOĞRULANDI (24.08.2026). YAZININ OMURGASI.**
+
+**⚠ DÜZELTME.** 1. turdaki "10 yıllık ACM vade primi 10.08.2026'da %1,33" ifadesi
+YANLIŞTI. NY Fed'in kendi ACM veri dosyası (ACMTermPremium.xls, "ACM Daily" sayfası)
+indirilip okundu. 10.08.2026 gerçek değeri **%0,821**. Yazıda %1,33 KULLANILMAMALI.
+
+**Neden bu bölüm kritik:** Geri alımın hedeflediği şey tam olarak vade primidir. "Kaç baz
+puan, kalıcı mı?" sorusunun cevabı getiri seviyesinde değil, BURADA okunur — çünkü getiri
+aynı gün Fed beklentisiyle de oynar, vade primi ise arz/talep priminin arıtılmış hâlidir.
+
+**NY Fed ACM 10 yıllık vade primi, gün gün (kaynak: birincil veri dosyası):**
+
+| Tarih | ACM 10y vade primi | Not |
+|---|---|---|
+| 31.07.2026 | %0,838 | ay sonu |
+| 13.08.2026 | %0,804 | |
+| 14.08.2026 | %0,853 | |
+| **17.08.2026** | **%0,895** | **2026'nın ZİRVESİ** |
+| 18.08.2026 | %0,871 | duyurudan bir gün önce |
+| **19.08.2026** | **%0,772** | **DUYURU GÜNÜ → −9,9 bp** |
+| **20.08.2026** | **%0,816** | **ertesi gün → +4,4 bp geri geldi** |
+
+**Üç sonuç (yazının tezini taşıyabilecek nitelikte):**
+1. **Etkinin büyüklüğü ≈ 10 baz puan.** Duyuru, 10 yıllık vade primini bir günde 9,9 bp
+   düşürdü. Hiçbir banka "X baz puan" tahmini yayımlamadığı için bu, elimizdeki tek
+   GERÇEKLEŞMİŞ ve birincil kaynaklı etki ölçümüdür. Robeco'nun 30y–2y'de ölçtüğü 10 bp
+   yassılaşma ile de tutarlı — iki farklı metrik, aynı büyüklük.
+2. **Etkinin ömrü ≈ 1 gün.** Ertesi gün düşüşün **%44'ü** geri alındı (4,4 / 9,9).
+3. **Duyuru zirveden geldi.** 17.08'deki %0,895 2026'nın en yükseğiydi; Hazine tam da
+   vade primi yılın zirvesindeyken müdahale etti. Yani hamle proaktif değil, REAKTİF.
+
+**Bağlam için 2026 aralığı:** ACM 10y vade primi 2026 boyunca %0,462 – %0,895 bandında
+salındı. Duyuru sonrası %0,772 hâlâ bandın üst yarısında — yani müdahale, primi tarihsel
+olarak "normal" bir yere geri getirmedi, sadece zirveden bir tık indirdi.
+
+- Kaynak **[B]**: Federal Reserve Bank of New York, ACM Term Premia veri dosyası,
+  "ACM Daily" sayfası (dosyadaki son gözlem 20.08.2026). Dosya doğrudan indirilip okundu.
+  https://www.newyorkfed.org/research/data_indicators/term-premia-tabs
+  (doğrudan dosya: https://www.newyorkfed.org/medialibrary/media/research/data_indicators/ACMTermPremium.xls)
+
+**NOT:** ACM serisi 30 yıllık vade primi YAYIMLAMIYOR (seri 10 yıla kadar). 30 yıllık için
+vade primi okuması isteniyorsa farklı bir model (ör. Kim–Wright) gerekir; bulunamadı.
+Ayrıca bir model sitesinde (convextrade.com) "ACM vade primi 2020'de −50 bp'den 2026'da
++68 bp'ye" ifadesi geçiyor — bu, yukarıdaki birincil veriyle TUTMUYOR (Ağustos 2026
+değerleri %77–89 bandında). Model sitesi kullanılmamalı.
 
 ### 5.3 Enflasyon beklentisi — müdahalenin ters ürünü
 - Başabaş enflasyon oranları duyurunun ardından eğri boyunca yükselerek iki ayın üzerinde
@@ -507,9 +722,14 @@ düşüşü fiyatlanmadı. Ralli 48 saatte söndü. Bu, "sinyal etkisi > akış 
 ### 5.5 Eğri ve hedefler
 - Mevcut eğri (22.08.2026): 2 yıllık %4,17; 2s10s +57 bp; 5s30s +85 bp.
 - Morgan Stanley: 7s30s dikleşme, hedef +100 bp (mevcut ~+71 bp) — **[İİ]**
-- Fundstrat teknik stratejisti: uzun vadeli getiriler %5,60–5,70'e kadar itebilir —
-  **[İİ]** (CNBC, 18.08.2026, https://www.cnbc.com/2026/08/18/30-year-treasury-yield-three-things-that-could-drive-it-even-higher.html
-  — stratejistin adı doğrulanamadı; isim olmadan kullanılmamalı)
+- **Fundstrat, Mark Newton** (teknik strateji başkanı) — **AD DOĞRULANDI (24.08):**
+  "Uzun vadeli getiriler %5,60–%5,70'e kadar itebilir gibi görünüyor." Bu, bulunabilen
+  TEK isimli, sayısal uzun uç hedefidir; ve geri alımın YÖNÜNE karşıdır.
+  **[İ]** CNBC, 18.08.2026 (duyurudan bir gün önce) —
+  https://www.cnbc.com/2026/08/18/30-year-treasury-yield-three-things-that-could-drive-it-even-higher.html
+- **TD Securities (Goldberg):** kalıcı çözüm = uzun uç ihale büyüklüklerini düşürmek
+  (bkz. §1.14) — 4 Kasım için bulunabilen en net isimli beklenti.
+- **Robeco:** gilt ve Bund'da diklestirici pozisyon; ABD uzun vadede temkinli (bkz. §1.19)
 - Convex modeli: 30 yıllık yıl sonu 2026 tahmini %5,12 — **[İİ]** model çıktısı, kurum
   görüşü değil; https://convextrade.com/forecast/dgs30
 
@@ -547,44 +767,93 @@ düşüşü fiyatlanmadı. Ralli 48 saatte söndü. Bu, "sinyal etkisi > akış 
 | 2027 başı | birincil satıcıların kupon artışı beklentisi | TBAC tutanakları [B] |
 | 432,3 mlr $ | Temmuz 2026 federal açığı (Mart 2021'den beri en büyük) | Benzinga/Yahoo [İ] |
 | 1,1 trilyon $+ | yıllık faiz gideri | Benzinga/Yahoo [İ] |
+| **%0,895 → %0,772 → %0,816** | **ACM 10y vade primi: 17.08 zirve → 19.08 duyuru → 20.08** | **NY Fed veri dosyası [B] — DOĞRULANDI** |
+| **−9,9 bp / +4,4 bp** | **duyurunun vade primi etkisi ve ertesi gün geri alınan %44'ü** | **NY Fed [B] — DOĞRULANDI** |
+| 112 → 102 bp | 30y–2y spreadi, duyuru günü 10 bp yassılaşma | Robeco [B] |
+| ~66 mlr $/yıl, ~%15 | Robeco'nun ölçek hesabı — Barclays'i bağımsız doğruluyor | Robeco [B] |
+| 32 mlr $/çeyrek | Wells Fargo'nun geri alım hacmi tahmini (Barclays'in ~16'sıyla çelişir) | Wells Fargo / Bloomberg [İ] |
+| +12 mlr $ / +16 mlr $ | ek bono ihracı: 5 Kasım'a kadar / sonraki çeyrekler | Wells Fargo [İ] |
+| %6,3 / %123 | 2026 açık/GSYH ve borç/GSYH | Robeco [B] |
+| 551 mlr $ | Temmuz başından beri net toplanan (25 Ağustos valörleri dahil) | Bloomberg [İ] |
+| 2,25 trilyon $ | aylık brüt bono ihalesi | Bloomberg [İ] |
+| %5,60–5,70 | Mark Newton (Fundstrat) uzun uç hedefi — AD DOĞRULANDI | CNBC 18.08.2026 [İ] |
+| 6,8 trilyon $ / 9-3 | Fed bilançosu / son FOMC oyu | Reuters [İ] |
+| %3,7 | Haziran 2026 enflasyonu | AP [İ] |
+| ~%3 / 15 yıl / 18 yıl | Japonya 10y zirve / Almanya / Fransa uzun uç zirveleri | Reuters [İ] |
 
 ---
 
 ## BULUNAMAYAN
 
-1. **Baz puan tahmini yok.** Hiçbir kurumun "geri alım uzun uç getirisini X baz puan
-   düşürür" biçiminde yayımlanmış nicel bir tahmini bulunamadı. Bulunan tek nicel banka
-   çıktısı Barclays'in ARZ oranı hesabı ve Morgan Stanley'nin DV01'i (~19,3 mn $/operasyon).
-2. **Goldman Sachs'ın geri alıma dair doğrudan görüşü bulunamadı.** Yalnızca Warsh/Fed
-   kanalına dair dolaylı bir cümle var, tarihi de doğrulanamadı.
-3. **Bank of America, TD Securities, BMO, RBC, Nomura, UBS, SocGen** — bu kurumların
-   19–22 Ağustos 2026 arasında geri alıma dair yayımlanmış, isimli görüşü bulunamadı.
-4. **4 Kasım refinansmanı için isimli, sayısal bir "refunding preview" bulunamadı.**
-   Ne kupon büyüklüğü tahmini, ne bono payı tahmini, ne de geri alım tavanı tahmini.
-   (Tipik olarak bu ön-izlemeler refinansmandan ~1 hafta önce, yani 27–29 Ekim
-   civarında yayımlanır — yazı o tarihten önce çıkacaksa bu boşluk normal.)
-5. **FT Alphaville ve Bloomberg Opinion'da bu konuya ayrılmış bir yazı bulunamadı.**
-   (Bloomberg haber tarafında en az 6 haber var, hepsi paywall'lu.)
-6. **Brookings ve PIIE'de bu duyuruya dair bir yayın bulunamadı.** Brad Setser'ın CFR
-   "Follow the Money" blogunda konuya özel bir yazısı bulunamadı; sadece Bloomberg
-   haberinde alıntılanmış bir cümlesi var.
-7. **Ağustos 2026 TBAC tutanaklarının tam metni okunamadı** — Treasury'nin
-   CombinedChargesforArchivesQ32026.pdf dosyası arama sonucunda göründü ama içeriği
-   çekilemedi. Yazar geri alımın TBAC'ten mi geldiğini bu belgeden doğrulayabilir:
+*(24.08.2026 ikinci tur sonrası güncellendi. Kapalı gedikler ✅, açık kalanlar ⬜.)*
+
+✅ **KAPANDI — Bank of America.** Mark Cabana bulundu (§1.15).
+✅ **KAPANDI — TD Securities.** Gennadiy Goldberg bulundu, üstelik 4 Kasım'a dair tek
+   isimli somut beklentiyle (§1.14, §4.2-B).
+✅ **KAPANDI — BMO.** Carol Schleif (BMO Private Wealth) bulundu (§1.21'e ek olarak Reuters'te). NOT: BMO Capital Markets'ın Hazine işlem masası başkanının "Hazine'nin
+   piyasada 'her şeyi kaplayan bir varlık' hâline gelmesi riski" uyarısı arama özetinde
+   göründü ama ADI doğrulanamadı — isimsiz kullanılmamalı.
+✅ **KAPANDI — baz puan etkisi.** Kurum tahmini olarak hâlâ yok, AMA gerçekleşmiş etki
+   birincil veriden ölçüldü: ACM 10y vade priminde −9,9 bp, ertesi gün %44'ü geri
+   alındı (§5.2). Robeco'nun 30y–2y'de 10 bp yassılaşması bunu teyit ediyor.
+✅ **KAPANDI — Fundstrat stratejistinin adı.** Mark Newton.
+✅ **KAPANDI — Barclays ölçek hesabının tek kaynaklılığı.** Robeco bağımsız olarak
+   doğruladı (~66 mlr $, ~%15).
+✅ **DÜZELTİLDİ — ACM vade primi.** Yanlış %1,33 yerine birincil veriden tam seri (§5.2).
+
+⬜ 1. **Goldman Sachs.** İki turda da bulunamadı. Yazıda "kamuya açık görüş yayımlamadı"
+   denmeli. (Bu sessizlik başlı başına yorumlanabilir bir bulgudur.)
+⬜ 2. **Morgan Stanley'nin ASIL raporu.** §1.3'teki +100 bp 7s30s hedefi ve ~19,3 mn $
+   DV01 hâlâ yalnızca bir agregatör (TechFlow Post) üzerinden. Doğrulanamadı.
+   **Kullanılacaksa mutlaka "aktarıldığına göre" kaydıyla.**
+⬜ 3. **Barclays'in kendi notu** (hem ölçek hem alıcı tabanı %73/%27) — asıl metne
+   erişilemedi; Bloomberg ve BigGo aktarımları üzerinden.
+⬜ 4. **4 Kasım için tam bir "refunding preview"** hâlâ yok. Bulunan tek isimli beklenti
+   TD/Goldberg'in ihale küçültme tezi ve Wells Fargo'nun bono sayıları. Bu tür ön
+   izlemeler tipik olarak 27–29 Ekim civarında çıkar; yazı o tarihten önce yayımlanacaksa
+   boşluk normaldir ve yazıda "henüz kimse yayımlamadı" diye yazılabilir.
+⬜ 5. **Nomura, UBS, SocGen, RBC, Natixis, Mizuho** — geri alıma dair isimli görüş yok.
+⬜ 6. **PIMCO, BlackRock, Vanguard** — bu üç büyük tahvil yöneticisinden bu duyuruya dair
+   isimli, yayımlanmış görüş bulunamadı. (PGIM bulundu, §1.16.)
+⬜ 7. **FT Alphaville, Bloomberg Opinion, Brookings, PIIE** — hiçbirinde bu duyuruya
+   ayrılmış yazı bulunamadı. Bloomberg HABER tarafında en az 6 haber var, hepsi paywall
+   (metinlerine Yahoo sendikasyonundan ulaşıldı). Brad Setser'ın CFR "Follow the Money"
+   blogunda konuya özel yazı yok.
+⬜ 8. **Ağustos 2026 TBAC tutanaklarının tam metni** okunamadı. Geri alım kararının
+   TBAC tavsiyesinden gelip gelmediği DOĞRULANMADI — yazının açık sorusu.
    https://home.treasury.gov/system/files/221/CombinedChargesforArchivesQ32026.pdf
-8. **CFTC pozisyonlanma verisi / spekülatif net pozisyonlar** duyuru haftası için
-   derlenmedi (kapsam dışıydı ama fiyatlama bölümünü güçlendirirdi).
-9. **Forward eğrisinden okunan somut fiyatlama** (ör. 5y5y forward, 1y forward 30y)
-   bulunamadı — kimse yayımlamamış.
-10. **CNBC'nin dört analiz yazısı okunamadı** (Akamai bot engeli, WebFetch 403 ve
-    tarayıcı "Access Denied"). Bunlardaki alıntılar arama motoru özetlerinden alındı ve
-    yukarıda işaretlendi. Yazar bu dördünü elle açıp doğrulamalı:
-    - https://www.cnbc.com/2026/08/20/treasury-bond-buybacks-long-term-yields.html
-    - https://www.cnbc.com/2026/08/20/bessents-efforts-in-the-treasury-market-so-far-havent-worked-heres-what-else-he-can-try.html
-    - https://www.cnbc.com/2026/08/21/bessents-bond-gambit-aimed-at-calming-markets-is-instead-stirring-inflation-worries-.html
-    - https://www.cnbc.com/2026/08/19/bessent-treasury-buybacks-yields-warsh-fed.html
-11. **Washington Post analizi paywall** —
-    https://www.washingtonpost.com/business/2026/08/20/rates-bond-market-bessent-inflation/
-    (Boston Globe'da yeniden yayımı var: https://www.bostonglobe.com/2026/08/20/nation/scott-bessent-bonds/)
-12. **Axios ve CNN yazıları erişilemedi** (403 / 451). Axios:
-    https://www.axios.com/2026/08/19/rates-treasury-borrowing-bessent
+⬜ 9. **Forward eğrisi okumaları** (5y5y forward, 1y forward 30y) — kimse yayımlamamış;
+   birincil kaynaktan da türetilmedi. §5.5'teki eğri noktaları spot.
+⬜ 10. **30 yıllık VADE PRİMİ** — ACM serisi 10 yılda bitiyor. Kim–Wright veya benzeri
+    bir 30y vade primi okuması bulunamadı. Yazıda 30 yıllık için vade primi sayısı
+    verilmemeli; sadece getiri ve eğri eğimi verilmeli.
+⬜ 11. **CFTC spekülatif net pozisyonlar** duyuru haftası için derlenmedi.
+⬜ 12. **Erişilemeyen sayfalar (bot engeli / paywall / 403):** CNBC'nin analiz yazıları
+    (Akamai "Access Denied"), Axios (boş döndü), Forbes/Broughel (403), Washington Post
+    (paywall; Boston Globe'da yeniden yayımı var), Advisor Perspectives / Western Asset
+    Management yorumu (403 — bu bir varlık yöneticisi görüşüydü, kaçırıldı),
+    Benzinga (403). Bunlardan alınan alıntılar yukarıda arama özeti kaynaklı olarak
+    işaretlendi; **yazar alıntı kullanacaksa elle açıp doğrulamalı.**
+⬜ 13. **"Bessent siyasi bir aktör… çıkarı tamamen kısa vadeli ve yaklaşan seçim etrafında
+    örgütlü"** — bu alıntı bir arama özetinde göründü ama iki ayrı kaynak denemesinde de
+    SAHİBİ bulunamadı. **İsimsiz olduğu için KULLANILMAMALI.**
+
+---
+
+## EK: YAZAR İÇİN ÜÇ KANCA ÖNERİSİ (bulgulardan çıkan)
+
+**1. "10 baz puan ve bir gün."** Yazının sayısal omurgası §5.2 olabilir: Hazine yılın
+zirvesindeki vade primine müdahale etti, 9,9 bp indirdi, ertesi gün %44'ü geri geldi.
+Bu, hiçbir bankanın yayımlamadığı ama birincil veriden okunabilen cevaptır.
+
+**2. "Küçük mü, değil mi?" tartışması artık çözülebilir.** Bir tarafta Jefferies
+(32 trilyonluk piyasada anlamsız) ve Seeking Alpha (%0,15). Diğer tarafta Barclays VE
+Robeco, bağımsız olarak: uzun uç arzının ~%15'i. İkisi de doğru — çünkü farklı paydaya
+bölüyorlar. Yazının ayrıştırması gereken şey tam olarak bu: **doğru payda hangisi?**
+Geri alım tüm piyasaya değil, 20–30 yıllık sektörün ARZINA karşı ölçülmeli.
+
+**3. "Kim geri alımı finanse ediyor?" sorusunun sayısal cevabı var.** Wells Fargo:
+çeyrek başına +16 mlr $ ek bono. Yani Hazine uzun uçtan kâğıt çekerken kısa uca kâğıt
+basıyor — Miran–Roubini'nin 2024'te Yellen'ı suçladığı ATI'nin ta kendisi (§3.4).
+Bessent'in 2024'teki sözleri ile 2026'daki eylemi yan yana konursa yazının en güçlü
+bölümü burası olur.

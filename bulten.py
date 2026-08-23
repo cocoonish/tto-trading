@@ -7,6 +7,7 @@
   python3 bulten.py --guncelle      # önce hafif hatları koştur, sonra bülteni üret
   python3 bulten.py --ufuk 35       # takvim ufkunu uzat (gün)
   python3 bulten.py --tur haftalik  # pazar akşamı "haftaya bakış" bülteni
+  python3 bulten.py --denetle       # yalnız kalite denetimi (yayın ön koşulu)
   python3 bulten.py --gecmis-kur    # git geçmişinden anlık görüntü deposunu kur (bir kez)
 
 Çıktı: site/src/data/bulten/YYYY-MM-DD.json  → site /bulten/ sayfasında yayımlanır.
@@ -41,9 +42,18 @@ def main() -> int:
     ap.add_argument("--tur", choices=("gunluk", "haftalik"), default=None,
                     help="haftalik = pazar akşamı 'haftaya bakış' bülteni "
                          "(varsayılan: pazar günü haftalık, diğer günler günlük)")
+    ap.add_argument("--denetle", nargs="?", const="bugun", default=None,
+                    metavar="TARİH",
+                    help="yalnız kalite denetimi koştur (üretim yapma); "
+                         "isteğe bağlı YYYY-AA-GG")
     ap.add_argument("--gecmis-kur", action="store_true",
                     help="git geçmişinden anlık görüntü deposunu doldur")
     a = ap.parse_args()
+
+    if a.denetle:
+        import denetim
+        sys.argv = ["denetim.py"] + ([] if a.denetle == "bugun" else [a.denetle]) + ["--ayrinti"]
+        return denetim.main()
 
     if a.gecmis_kur:
         import gozlem
@@ -67,7 +77,15 @@ def main() -> int:
     print(uret.ozet_yaz(b))
     y = uret.yaz(b)
     print(f"\n  yazıldı: {y.relative_to(KOK)}")
-    print("  siteyi görmek için: python3 site_baslat.py  →  http://localhost:4321/bulten/")
+    # Üretimden sonra kalite denetimi HER ZAMAN koşar. Kural tabanlı koşuda yazı
+    # katmanı henüz çalışmadığı için engeller beklenir; yorum katmanı yazdıktan
+    # sonra bu denetimin TEMİZ geçmesi yayının ön koşuludur.
+    print()
+    import denetim
+    kod = denetim.Denetim(b).kos()
+    print("\n  siteyi görmek için: python3 site_baslat.py  →  http://localhost:4321/bulten/")
+    if kod:
+        print("  (yazı katmanı henüz çalışmadıysa bu engeller normaldir)")
     return 0
 
 
