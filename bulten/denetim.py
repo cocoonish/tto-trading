@@ -262,8 +262,37 @@ class Denetim:
         if gecikmis:
             self.uyari.append("Veri gecikmiş hatlar: " + ", ".join(gecikmis))
 
+    def tema(self):
+        """Tema defteri bakımı yapılmış mı, yazıda temaya atıf var mı.
+
+        Defter bültenin hafızası: güncellenmezse bülten her gün sıfırdan başlar ve
+        haftalarca süren anlatıları göremez.
+        """
+        t = self.b.get("temalar") or {}
+        temalar = t.get("temalar") or []
+        if not temalar:
+            self.uyari.append("Tema defteri boş ya da okunamadı")
+            return
+        bugun = self.b.get("tarih")
+        bayat = [x["ad"] for x in temalar
+                 if x.get("durum") in ("aktif", "izlemede")
+                 and str(x.get("son_guncelleme", "")) < str(bugun)]
+        if bayat:
+            self.uyari.append("Tema defteri bugün güncellenmemiş: " + ", ".join(bayat))
+        else:
+            self._ok(f"tema defteri güncel ({len(temalar)} tema)")
+        metin = self._metin()
+        anilan = [x["ad"] for x in temalar
+                  if any(w in metin for w in _sade(x["ad"]).split() if len(w) > 4)]
+        if not anilan:
+            self.engel.append("Yazıda hiçbir temaya atıf yok — gündem olayları listeliyor "
+                              "ama piyasayı anlatmıyor olabilir. En az bir temanın adını "
+                              "kullanıp tezinin güçlenip güçlenmediğini söyle.")
+        else:
+            self._ok(f"temaya atıf: {', '.join(anilan[:3])}")
+
     def kos(self) -> int:
-        self.yazi(); self.veri(); self.atif(); self.dil(); self.tazelik()
+        self.yazi(); self.veri(); self.atif(); self.tema(); self.dil(); self.tazelik()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")
         print(f"  BÜLTEN DENETİMİ · {self.b.get('tr_tarih', self.b.get('tarih'))} "

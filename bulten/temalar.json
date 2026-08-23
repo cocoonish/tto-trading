@@ -1,0 +1,107 @@
+{
+ "_aciklama": "TEMA DEFTERİ — bültenin hafızası. Piyasada adı olan, haftalarca süren ve birden çok varlığı aynı anda hareket ettiren anlatılar burada takip edilir. Günlük bülten olayları görür ama temayı göremez: dört varlığın aynı sebeple hareket ettiğini fark etmek, her birini ayrı ayrı açıklamaktan farklı bir iştir. Bu defter o farkı kapatır. Yorum katmanı her koşuda defteri okur, durumu değişen temayı günceller ve yeni bir tema doğduysa ekler.",
+ "_son_guncelleme": "2026-08-24",
+ "temalar": [
+  {
+   "ad": "Debasement trade v2",
+   "durum": "izlemede",
+   "tez": "Mali fazlalık para biriminin değerini aşındırır; altın, gümüş ve bitcoin uzun, dolar ve uzun vadeli tahvil kısa. 2025'te ana akıma girdi (altın 4.000 doları aştı; gümüş %144, altın %65), 30 Ocak 2026'da Warsh'ın Fed başkanlığına aday gösterilmesiyle bitti (altın tek günde zirveden %13 düştü). ABD Hazinesi'nin 19 Ağustos 2026'da geri alımları ikiye katlaması, tezi maliye kanalından yeniden açtı.",
+   "varliklar": [
+    "Altın (XAU, ons)",
+    "Gümüş (XAG, ons)",
+    "Platin",
+    "Bitcoin",
+    "Dolar endeksi (DXY)",
+    "ABD 10 yıllık",
+    "ABD 30 yıllık"
+   ],
+   "dogrulayan": [
+    "Altının 52 haftalık zirveyi (5.318) aşması",
+    "Gümüş ve bitcoin'in yılbaşından bu yana artıya dönmesi",
+    "Nominal getiri yüksek kalırken REEL getirinin gerilemesi",
+    "4 Kasım refinansmanında geri alımın bir kez daha artırılması",
+    "Fed'in hedef üstü enflasyona tolerans sinyali"
+   ],
+   "curuten": [
+    "Warsh yönetimindeki Fed'in şahin duruşu teyit etmesi",
+    "9 Eylül'den itibaren geri alımın uzun uçta ölçülebilir etki üretmemesi",
+    "Bütçe açığı patikasında iyileşme"
+   ],
+   "izlenecek_gosterge": "ABD 10 yıllık REEL getirisi",
+   "son_gozlem": "23 Ağustos 2026: haftalık hareket güçlü (altın +%6,9, gümüş +%7,0, bitcoin +%19,4, dolar endeksi −%0,9) ama yıllık teyit yok — gümüş −%0,9, bitcoin −%11,7 yılbaşından bu yana. Sıçrama, rejim değil.",
+   "son_guncelleme": "2026-08-24"
+  },
+  {
+   "ad": "ABD uzun uç arz baskısı",
+   "durum": "aktif",
+   "tez": "Genişleyen bütçe açığı, yapay zekâ yatırımlarını fonlayan şirket tahvili arzı ve vade primi, ABD uzun vadeli getirilerini yukarı itiyor. Hazine buna borç yönetimi araçlarıyla (geri alım, ihraç kompozisyonu) karşılık veriyor.",
+   "varliklar": [
+    "ABD 10 yıllık",
+    "ABD 30 yıllık",
+    "ABD 2s10s",
+    "MOVE (tahvil oynaklığı)",
+    "Dolar endeksi (DXY)"
+   ],
+   "dogrulayan": [
+    "10 yıllığın 52 haftalık aralığın üst ucunda kalmaya devam etmesi",
+    "Refinansmanda kupon ihracının artırılması",
+    "Vade priminin genişlemesi"
+   ],
+   "curuten": [
+    "Açık patikasının daralması",
+    "Uzun ucun aralık ortasına dönmesi"
+   ],
+   "izlenecek_gosterge": "ABD 10 yıllığın 52 haftalık aralıktaki konumu",
+   "son_gozlem": "23 Ağustos 2026: 10 yıllık %4,74 ile aralığın %99'unda.",
+   "son_guncelleme": "2026-08-24"
+  },
+  {
+   "ad": "TCMB fonlama normalleşmesi",
+   "durum": "aktif",
+   "tez": "Politika faizi sabitken fiilî fonlama maliyeti koridorun üst ucundaydı. 1 Mart'ta ara verilen bir hafta vadeli repo ihalelerine 23 Ağustos'ta yeniden başlanması, ortalama fonlama maliyetini politika faizine doğru indirecek: faiz kararı olmadan fiilî gevşeme.",
+   "varliklar": [
+    "TLREF (gecelik gerçekleşen)",
+    "Politika faizi (1 hafta repo)",
+    "TLREF − politika farkı",
+    "DİBS 2 yıllık",
+    "USD/TRY"
+   ],
+   "dogrulayan": [
+    "TLREF ile politika faizi arasındaki makasın daralması",
+    "İhalelerde fonlanan tutarın büyümesi",
+    "DİBS kısa ucunun aşağı gelmesi"
+   ],
+   "curuten": [
+    "Makasın 2,8 puan civarında kalması",
+    "İhalelerin sembolik tutarda kalması"
+   ],
+   "izlenecek_gosterge": "TLREF − politika faizi farkı (şu an 2,86 puan)",
+   "son_gozlem": "23 Ağustos 2026: karar duyuruldu, ihaleler 1 Mart'tan beri ilk kez açılıyor.",
+   "son_guncelleme": "2026-08-24"
+  },
+  {
+   "ad": "Enerji kaynaklı enflasyon riski",
+   "durum": "aktif",
+   "tez": "ABD–İran gerilimi petrolü yukarı itiyor; rafineri marjları (özellikle distilat) olağandışı geniş. Türkiye enerji ithalatçısı: cari dengeye doğrudan, enflasyona birkaç ay gecikmeyle yazılır.",
+   "varliklar": [
+    "Brent",
+    "WTI",
+    "3:2:1 crack spread",
+    "Distilat crack (HO−WTI)",
+    "Brent−WTI farkı"
+   ],
+   "dogrulayan": [
+    "Brent'in 95 doların üzerinde kalıcılaşması",
+    "Distilat marjının geniş kalması",
+    "Cari açığın enerji kalemiyle büyümesi"
+   ],
+   "curuten": [
+    "Gerilimin yumuşaması ve Brent'in 85 doların altına dönmesi",
+    "Marjların normale dönmesi"
+   ],
+   "izlenecek_gosterge": "Brent ve distilat crack spread'i",
+   "son_gozlem": "23 Ağustos 2026: Brent 94,39 (+%6,6 haftalık), distilat crack 97,10 dolar.",
+   "son_guncelleme": "2026-08-24"
+  }
+ ]
+}

@@ -242,6 +242,47 @@ def piyasa_ozeti(b: dict, haftalik: bool = False) -> dict:
     return {"ne_oldu": " ".join(p1), "ne_bekleniyor": " ".join(p2)}
 
 
+def temalar() -> dict:
+    """Tema defteri — bültenin hafızası.
+
+    Günlük bülten olayları görür ama TEMAYI göremez: dört varlığın aynı sebeple
+    hareket ettiğini fark etmek, her birini ayrı ayrı açıklamaktan farklı bir iştir.
+    Defter bu farkı kapatır ve günler arasında süreklilik sağlar.
+    """
+    y = BURASI / "temalar.json"
+    if not y.exists():
+        return {}
+    try:
+        d = json.loads(y.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    # Her temanın izlediği varlıkların GÜNCEL hareketini iliştir: okur temayı
+    # okurken sayıyı da görsün, yazar da tezle veriyi yan yana koyabilsin.
+    piyasa_satir = {}
+    try:
+        import piyasa as piyasa_m
+        ham = piyasa_m._ham_veri()
+        for v in piyasa_m.VARLIKLAR:
+            r = piyasa_m.satir(v, ham["seri"])
+            if r:
+                piyasa_satir[r["ad"]] = r
+        for t in piyasa_m.tr_faizleri():
+            piyasa_satir.setdefault(t["ad"], {"ad": t["ad"], "son": t["deger"],
+                                              "birim": t["birim"], "d1": None, "h1": None,
+                                              "ybb": None, "degisim_birim": ""})
+        # Türev büyüklükler (eğri eğimleri, crack spread'ler) de temalara bağlanır:
+        # enerji teması rafineri marjı olmadan, arz teması eğri eğimi olmadan eksiktir.
+        for t in piyasa_m.turetilmis(ham["seri"]):
+            piyasa_satir.setdefault(t["ad"], {"ad": t["ad"], "son": t["deger"],
+                                              "birim": t["birim"], "d1": t.get("d1"),
+                                              "h1": None, "ybb": None, "degisim_birim": ""})
+    except Exception:
+        pass
+    for t in d.get("temalar", []):
+        t["olculer"] = [piyasa_satir[a] for a in t.get("varliklar", []) if a in piyasa_satir]
+    return d
+
+
 def uret(tarih: date | None = None, haber_tara: bool = True,
          takvim_ufku: int | None = None, tur: str = "gunluk") -> dict:
     """tur: "gunluk" (hafta içi sabah) | "haftalik" (pazar akşamı, haftaya bakış)."""
@@ -319,6 +360,7 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         "olusturma": datetime.now().isoformat(timespec="seconds"),
         "gostergeler": gostergeler(),
         "piyasa": piyasa,
+        "temalar": temalar(),
         "one_cikanlar": one_cikan,
         "notlar": notlar,
         "gruplar": gruplar,
