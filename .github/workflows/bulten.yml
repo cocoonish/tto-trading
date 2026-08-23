@@ -64,10 +64,13 @@ jobs:
 
       # Yalnız hızlı ve EVDS'e dayanan hatlar. Ağır adımlar (--tam: FinBERT,
       # Hazine scraper) bilinçli olarak dışarıda; onlar yerelde koşulur.
+      # DİBS bültenin TL faiz setini (eğri, taşıma, başabaş) besliyor; ödemeler ve
+      # bütçe aylık ama veri günü kaçmasın diye her koşuda denenir — ikisinin de
+      # TTL'li önbelleği var, yayım yoksa ucuz geçer.
       - name: Veri hatlarını tazele (hafif)
         if: steps.anahtar.outputs.var == 'evet'
         continue-on-error: true
-        run: python guncelle.py tcmb usdtry reer yabanci fonlama kredi enflasyon hazine
+        run: python guncelle.py tcmb usdtry reer yabanci fonlama kredi enflasyon hazine dibs odemeler butce
 
       # Pazar koşusu haftalık bülten üretir ("geçen hafta / önümüzdeki hafta");
       # hafta içi koşusu günlük. Cumartesi hiç koşmaz.
@@ -78,6 +81,13 @@ jobs:
           else
             python bulten.py --tur gunluk
           fi
+
+      # Kalite denetimi bulutta BİLGİ amaçlıdır: yazı katmanı burada çalışmadığı için
+      # engeller beklenir. Log'da görünmesi, sabahki yazarın neyi kapatması gerektiğini
+      # önceden gösterir. Yayını bu adım DURDURMAZ.
+      - name: Kalite denetimi (bilgi)
+        continue-on-error: true
+        run: python bulten.py --denetle
 
       - name: Commit
         run: |

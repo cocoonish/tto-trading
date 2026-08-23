@@ -347,7 +347,10 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
             # Haftalık bülten haftanın TAMAMINI tarar (168 saat): 19 Ağustos'taki ABD
             # Hazinesi geri alım duyurusu 72 saatlik pencerenin dışında kalmış ve
             # haftanın ana sürücüsü bültene hiç girmemişti.
-            h, okunamayan = haber_m.tara(pencere_saat=168 if haftalik else 36)
+            # Günlük pencere de 36'dan 72 saate çıkarıldı: 36 saat, cuma akşamı çıkan
+            # bir gelişmeyi pazartesi sabahı göremiyordu. Kilit gelişme puanlaması
+            # zaten eskiyi geri plana atıyor, yani geniş pencere gürültü üretmiyor.
+            h, okunamayan = haber_m.tara(pencere_saat=168 if haftalik else 72)
             haberler = [asdict(x) for x in h]
             bolumler = haber_m.bolumle(h)
         except Exception as e:                                  # noqa: BLE001

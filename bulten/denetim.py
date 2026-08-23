@@ -274,13 +274,20 @@ class Denetim:
             self.uyari.append("Tema defteri boş ya da okunamadı")
             return
         bugun = self.b.get("tarih")
-        bayat = [x["ad"] for x in temalar
-                 if x.get("durum") in ("aktif", "izlemede")
-                 and str(x.get("son_guncelleme", "")) < str(bugun)]
+        canli = [x for x in temalar if x.get("durum") in ("aktif", "izlemede")]
+        bayat = [x["ad"] for x in canli if str(x.get("son_guncelleme", "")) < str(bugun)]
         if bayat:
             self.uyari.append("Tema defteri bugün güncellenmemiş: " + ", ".join(bayat))
         else:
             self._ok(f"tema defteri güncel ({len(temalar)} tema)")
+        # Her canlı temanın BU koşudaki gelişmesi yazılmalı: tema bölümü bültenin en
+        # çok okunan yerlerinden biri ve boş bir "gelişme" alanı okura hiçbir şey vermez.
+        yazisiz = [x["ad"] for x in canli if len(_duz(x.get("gelisme", "")).split()) < 15]
+        if yazisiz:
+            self.engel.append("Tema gelişmesi yazılmamış (her canlı tema için bu koşuda "
+                              "ne değiştiği 2-4 cümleyle yazılmalı): " + ", ".join(yazisiz))
+        else:
+            self._ok(f"tema gelişmeleri yazılı ({len(canli)} canlı tema)")
         metin = self._metin()
         anilan = [x["ad"] for x in temalar
                   if any(w in metin for w in _sade(x["ad"]).split() if len(w) > 4)]

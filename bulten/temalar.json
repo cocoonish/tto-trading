@@ -29,7 +29,8 @@
    ],
    "izlenecek_gosterge": "ABD 10 yıllık REEL getirisi",
    "son_gozlem": "23 Ağustos 2026: haftalık hareket güçlü (altın +%6,9, gümüş +%7,0, bitcoin +%19,4, dolar endeksi −%0,9) ama yıllık teyit yok — gümüş −%0,9, bitcoin −%11,7 yılbaşından bu yana. Sıçrama, rejim değil.",
-   "son_guncelleme": "2026-08-24"
+   "son_guncelleme": "2026-08-24",
+   "gelisme": "<p>Tez bu hafta <strong>güçlendi ama teyit almadı.</strong> ABD Hazinesi'nin geri alım büyüklüğünü ikiye katlaması, işlemi para politikası değil <em>maliye</em> kanalından yeniden açtı: altın haftalık %6,9 ile 4.680,60 dolara, gümüş %7,0 ile 69,53'e, platin %8,3'e, bitcoin %19,4 ile 77.240 dolara çıktı; dolar endeksi %0,9 gerileyip üç ayın dibine indi.</p><p>Buna karşılık yıllık teyit yok: gümüş yılbaşından bu yana −%0,9, bitcoin −%11,7 ve ikisi de 52 haftalık aralığın ortasının altında. Altın bile ocak zirvesinin (5.318) yaklaşık %12 altında. Üç bacaklı testin ikisi tuttu (dolar zayıfladı, altın yükseldi), üçüncüsü tutmadı: duyuru günü 30 yıllık başabaş enflasyon <strong>hiç oynamadı</strong> (2,25) ve 9 baz puanlık düşüşün tamamı reel getiriden geldi.</p><p>İzlenecek gösterge — ABD 10 yıllık reel getirisi — henüz kalıcı bir düşüş göstermiyor. Değerlendirme: <strong>sıçrama, rejim değil.</strong></p>"
   },
   {
    "ad": "ABD uzun uç arz baskısı",
@@ -53,7 +54,8 @@
    ],
    "izlenecek_gosterge": "ABD 10 yıllığın 52 haftalık aralıktaki konumu",
    "son_gozlem": "23 Ağustos 2026: 10 yıllık %4,74 ile aralığın %99'unda.",
-   "son_guncelleme": "2026-08-24"
+   "son_guncelleme": "2026-08-24",
+   "gelisme": "<p>Tez <strong>yerinde duruyor ve bu hafta ölçüldü.</strong> On yıllık getiri %4,74 ile 52 haftalık aralığın <strong>%99'unda</strong>; otuz yıllık %5,28. Hazine'nin geri alım büyüklüğünü artırması bu baskının kendisine verilen cevap.</p><p>Ancak müdahalenin etkisi iki gün sürdü: duyuru günü on yıllık %4,647'ye (−5 baz puan), otuz yıllık %5,196'ya (−9 baz puan) geriledi, sonra geri alındı. Eğri eğimleri hafta sonunda 2s10s +57, 5s30s +85 baz puan. Tahvil oynaklığı (MOVE) 73 civarında kaldı — yani bu bir likidite krizi değil, arz ve vade primi yeniden fiyatlaması.</p><p>Bir sonraki ölçüm noktası 9 Eylül'de başlayacak operasyonların teklif hacmi ve kabul oranı; asıl düğüm 4 Kasım'daki refinansman duyurusu.</p>"
   },
   {
    "ad": "TCMB fonlama normalleşmesi",
@@ -77,7 +79,8 @@
    ],
    "izlenecek_gosterge": "TLREF − politika faizi farkı (şu an 2,86 puan)",
    "son_gozlem": "23 Ağustos 2026: karar duyuruldu, ihaleler 1 Mart'tan beri ilk kez açılıyor.",
-   "son_guncelleme": "2026-08-24"
+   "son_guncelleme": "2026-08-24",
+   "gelisme": "<p>Tema bu hafta <strong>doğdu.</strong> Merkez Bankası, 1 Mart'ta ara verdiği bir hafta vadeli repo ihalelerine yeniden başlıyor (23 Ağustos, 2026-35 sayılı duyuru). Politika faizi %37,00'de sabit; gecelik gerçekleşen faiz (TLREF) %39,86 ile politika faizinin <strong>2,86 puan</strong> üzerinde ve koridorun %40,00'lık üst bandına yapışmış durumda.</p><p>Mekanizma net: bir hafta vadeli repo tanım gereği politika faizinden yapılır, yani ihaleler açıldıkça fonlamanın bir kısmı %40'tan %37'ye kayar ve ortalama maliyet politika faizine doğru iner. Faiz kararı olmadan fiilî gevşeme.</p><p>İzlenecek gösterge TLREF ile politika faizi arasındaki 2,86 puanlık makas. Makasın daralma hızı, kararın sembolik mi yoksa fiilî mi olduğunu gösterecek. İlk ölçüm bu hafta içindeki ihale tutarlarıyla gelecek; Kurul kararı 10 Eylül'de ayrıca var.</p>"
   },
   {
    "ad": "Enerji kaynaklı enflasyon riski",
@@ -101,7 +104,9 @@
    ],
    "izlenecek_gosterge": "Brent ve distilat crack spread'i",
    "son_gozlem": "23 Ağustos 2026: Brent 94,39 (+%6,6 haftalık), distilat crack 97,10 dolar.",
-   "son_guncelleme": "2026-08-24"
+   "son_guncelleme": "2026-08-24",
+   "gelisme": "<p>Tez bu hafta <strong>belirgin biçimde güçlendi.</strong> ABD–İran yaptırım tırmanışı Brent'i haftalık %6,6 yükseltip 94,39 dolara, WTI'yi %5,7 ile 87,06 dolara taşıdı; Brent–WTI farkı 7,33 dolara genişledi. Yıl başından bu yana Brent %55, WTI %52 yukarıda.</p><p>Rafineri marjları tablonun en dikkat çekici tarafı: 3:2:1 crack spread varil başına 59,64 dolar, distilat marjı <strong>97,10 dolar</strong> — olağandışı geniş, motorin tarafında yapısal darlık var. Günlük bazda marjlar daraldı (3:2:1 −6,6 dolar), yani ham petrol yükselirken ürün fiyatı aynı hızla gelmedi; kısa vadede rafineriler sıkışıyor.</p><p>Türkiye kanalı iki yönlü: enerji ithalat faturası cari dengeye doğrudan, akaryakıt ve nakliye maliyeti enflasyona birkaç ay gecikmeyle yazılır. Bu haftaki hareket 11 Eylül'de gelecek temmuz ödemeler dengesi verisinde <em>görünmeyecek</em> — o veri olaydan önceki dönemi kapsıyor.</p>"
   }
- ]
+ ],
+ "_yazar_notu": "Her koşuda AKTİF ve İZLEMEDE olan her tema için 'gelisme' alanına o günün/haftanın gelişmesini yaz (2-4 cümle, rakamlı): tez bu koşuda güçlendi mi zayıfladı mı, hangi doğrulayan/çürüten işaret gerçekleşti, izlenecek gösterge nerede. 'son_gozlem' temanın SON DURUMUNU özetler; 'gelisme' ise BU KOŞUDA ne değiştiğini anlatır. İkisi farklı şeydir."
 }
