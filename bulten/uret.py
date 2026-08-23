@@ -212,7 +212,8 @@ def piyasa_ozeti(b: dict, haftalik: bool = False) -> dict:
 
     # ── ne bekleniyor
     kritik = b.get("kritik_takvim") or []
-    yakin = [k for k in kritik if k["kalan_gun"] <= (7 if haftalik else 4)]
+    # Pazar bülteninde "yakın" = yarın başlayan hafta (8 gün); hafta içi günlükte 4 gün.
+    yakin = [k for k in kritik if k["kalan_gun"] <= (8 if haftalik else 4)]
     uzak = [k for k in kritik if k["kalan_gun"] > (7 if haftalik else 4)][:5]
     p2 = []
     if yakin:

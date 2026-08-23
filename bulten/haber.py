@@ -15,6 +15,7 @@ Tasarım kararları:
 from __future__ import annotations
 
 import html
+import json
 import re
 import unicodedata
 from dataclasses import dataclass, asdict
@@ -71,9 +72,11 @@ def _zaman_coz(m: str | None) -> datetime | None:
     return None
 
 
-def _temiz(m: str, azami: int = 420) -> str:
+def _temiz(m: str, azami: int = 700) -> str:
     """Akış açıklamasındaki HTML'i at, kırp. Bülten okunabilir cümle ister."""
-    m = re.sub(r"<[^>]+>", " ", html.unescape(m or ""))
+    # İki kez kaçışlanmış metin var (&amp;#039; → &#039; → '); iki geçiş gerekiyor.
+    m = html.unescape(html.unescape(m or ""))
+    m = re.sub(r"<[^>]+>", " ", m)
     m = re.sub(r"\s+", " ", m).strip()
     # Bazı akışlar açıklamaya kaynak adını ve "devamı" bağlantısını ekliyor.
     m = re.sub(r"(Devamı|Devamını oku|Read more|Continue reading).*$", "", m, flags=re.I).strip()
@@ -315,19 +318,141 @@ def _siniflandir(baslik: str, ozet: str, kaynak_bolge: str, kaynak_alan: str) ->
     return bolge, alan
 
 
-def bolumle(haberler: list[Haber]) -> list[dict]:
-    """Haberleri sayfadaki bölümlere dağıt (Türkiye/global × makro/politika/piyasa)."""
-    out = []
+def bolumle(haberler: list[Haber], zengin: int = 26) -> list[dict]:
+    """Haberleri sayfadaki bölümlere dağıt, sonra GÖRÜNECEK olanları zenginleştir.
+
+    Sıra önemli: önce zenginleştirip sonra seçmek, kaynağından okunan özetlerin
+    bültene girmeyen maddelere harcanmasına yol açıyordu. Şimdi önce hangi
+    maddelerin görüneceği belli oluyor, istek yalnız onlar için yapılıyor.
+    """
+    out, gorunen = [], []
     for bid, baslik, bolge, alan in HABER_BOLUMLERI:
         if alan == "kurum":
             secilen = [h for h in haberler if h.kurum]
         else:
-            secilen = [h for h in haberler
-                       if not h.kurum and h.bolge == bolge and h.alan == alan][:BOLUM_SINIRI]
+            aday = [h for h in haberler
+                    if not h.kurum and h.bolge == bolge and h.alan == alan]
+            # Bölüm dolduğunda, özeti OLAN madde çıplak başlığa tercih edilir:
+            # okur için "ne olduğu" bilgisi, dakikalık tazelikten değerlidir.
+            aday.sort(key=lambda h: (bool(h.ozet), h.zaman or ""), reverse=True)
+            secilen = aday[:BOLUM_SINIRI]
         if secilen:
-            out.append({"id": bid, "baslik": baslik,
-                        "maddeler": [asdict(h) for h in secilen]})
-    return out
+            gorunen.extend(secilen)
+            out.append({"id": bid, "baslik": baslik, "secilen": secilen})
+    try:
+        zenginlestir(gorunen, azami=zengin)
+    except Exception:
+        pass
+    return [{"id": b["id"], "baslik": b["baslik"],
+             "maddeler": [asdict(h) for h in b["secilen"]]} for b in out]
+
+
+# ─────────────────────────── haberi kaynağından zenginleştir
+from pathlib import Path as _Path
+OZET_ONBELLEK = _Path(__file__).resolve().parent / "onbellek" / "haber_ozet.json"
+
+
+def _onbellek_oku() -> dict:
+    try:
+        return json.loads(OZET_ONBELLEK.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def _onbellek_yaz(d: dict):
+    try:
+        OZET_ONBELLEK.parent.mkdir(exist_ok=True)
+        # Sınırsız büyümesin: en son 500 kayıt yeter.
+        if len(d) > 500:
+            d = dict(list(d.items())[-500:])
+        OZET_ONBELLEK.write_text(json.dumps(d, ensure_ascii=False), encoding="utf-8")
+    except Exception:
+        pass
+
+
+# Sayfaların site geneli açıklamaları özet sanılıyordu: Google News her makale için
+# aynı tanıtım cümlesini, TCMB her sayfada kurum tanımını veriyor. Bunlar bilgi değil.
+KLISE = re.compile(
+    r"comprehensive up-to-date news coverage|aggregated from sources all over the world|"
+    r"merkez bankasının temel amacı|son dakika haberleri ve güncel|"
+    r"en son haberler|breaking news, latest news|çerez|cookie polic", re.I)
+
+
+def _tcmb_duyuru_govdesi(ham: str) -> str:
+    """TCMB duyuru sayfasından ASIL metni çıkar.
+
+    Sayfa şablonu: "Sayı: 2026-NN" → tarih → başlık → gövde → "Kamuoyunun bilgisine".
+    Kurum duyuruları bültenin en değerli maddesi; site geneli açıklamayla yetinmek
+    tam da bu maddede bilgi kaybı olurdu.
+    """
+    duz = re.sub(r"<script.*?</script>|<style.*?</style>", " ", ham, flags=re.S | re.I)
+    duz = re.sub(r"<[^>]+>", "\n", duz)
+    satir = [x.strip() for x in duz.split("\n") if x.strip()]
+    metin = "\n".join(satir)
+    m = re.search(r"Sayı:\s*\d{4}-\d+\n[^\n]+\n[^\n]+\n(.{60,1200}?)(?:Kamuoyunun bilgisine|İletişim)",
+                  metin, re.S)
+    return _temiz(m.group(1).replace("\n", " ")) if m else ""
+
+
+def _sayfadan_ozet(url: str) -> str:
+    """Haberin kendi sayfasından açıklama çıkar.
+
+    Sıra: og:description → meta description → ilk anlamlı paragraf. Google News
+    bağlantıları yayıncıya YÖNLENDİRME olduğu için requests'in yönlendirmeyi
+    izlemesine güvenilir; yayıncı engellerse boş döner ve bülten başlıkla yetinir.
+    """
+    # Google News bağlantıları yayıncıya JS ile yönlendiriyor ve düz istekte yalnız
+    # Google'ın kendi tanıtım metni geliyor; istek israfı, atla.
+    if "news.google.com" in url:
+        return ""
+    ham = _getir(url, 12, dogrulama="resmigazete.gov.tr" not in url)
+    if not ham:
+        return ""
+    if "tcmb.gov.tr" in url:
+        t = _tcmb_duyuru_govdesi(ham)
+        if t:
+            return t
+    for kalip in (r'<meta[^>]+property=["\']og:description["\'][^>]+content=["\']([^"\']{40,600})',
+                  r'<meta[^>]+name=["\']description["\'][^>]+content=["\']([^"\']{40,600})',
+                  r'<meta[^>]+content=["\']([^"\']{40,600})["\'][^>]+name=["\']description["\']'):
+        m = re.search(kalip, ham, re.I | re.S)
+        if m:
+            t = _temiz(m.group(1))
+            if len(t) > 40 and not KLISE.search(t):
+                return t
+    govde = re.sub(r"<(script|style|nav|header|footer)[^>]*>.*?</\1>", " ", ham, flags=re.S | re.I)
+    for m in re.finditer(r"<p[^>]*>(.{80,900}?)</p>", govde, re.S):
+        t = _temiz(m.group(1))
+        if len(t) > 80 and not KLISE.search(t) and not re.search(r"abone|subscribe|giriş yap", t, re.I):
+            return t
+    return ""
+
+
+def zenginlestir(haberler: list[Haber], azami: int = 16) -> int:
+    """Özeti olmayan en önemli haberleri kaynağından tamamla.
+
+    Neden gerekli: Google News akışları açıklama alanına başlığı tekrar yazıyor;
+    bülten o zaman "ne olduğunu" değil yalnız "ne dendiğini" gösteriyordu. Sayfayı
+    açıp ilk paragrafı almak, okura gerçek bir bilgi katıyor. Önbellekli: aynı
+    bağlantı gün içinde bir kez çekilir.
+    """
+    onbellek = _onbellek_oku()
+    n = 0
+    for h in haberler:
+        if h.ozet or not h.baglanti:
+            continue
+        if n >= azami:
+            break
+        if h.baglanti in onbellek:
+            h.ozet = onbellek[h.baglanti]
+            continue
+        t = _sayfadan_ozet(h.baglanti)
+        onbellek[h.baglanti] = t
+        n += 1
+        if t:
+            h.ozet = _ozet_ise_yarar(h.baslik, t)
+    _onbellek_yaz(onbellek)
+    return n
 
 
 def tara(pencere_saat: int = 30) -> tuple[list[Haber], list[str]]:
@@ -386,7 +511,7 @@ def tara(pencere_saat: int = 30) -> tuple[list[Haber], list[str]]:
                                   zaman.isoformat() if zaman else "",
                                   bool(k.get("yuksek_oncelik")), ozet, bolge, alan))
             n += 1
-            if n >= 30:
+            if n >= 40:
                 break
 
     # Kurum duyuruları önce (hepsi), sonra haberler — her grup içinde en yeni üstte.

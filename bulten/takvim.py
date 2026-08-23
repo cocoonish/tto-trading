@@ -337,16 +337,29 @@ def topla(ufuk_gun: int = 21, asgari_onem: int = 2) -> list[Kayit]:
 
 
 def hafta_gruplari(kayitlar: list[Kayit]) -> list[tuple[str, list[Kayit]]]:
-    """Takvimi 'bu hafta / gelecek hafta / sonraki' diye üçe ayır."""
+    """Takvimi 'bu hafta / gelecek hafta / sonraki' diye üçe ayır.
+
+    PAZAR İSTİSNASI: pazar günü içinde bulunulan hafta fiilen bitmiştir ve o günün
+    raporu zaten YARIN başlayan hafta için yazılır. Takvimi takvimsel haftaya göre
+    bölmek, pazar bülteninde "Bu hafta (0)" gibi anlamsız bir boş blok üretiyordu.
+    Bu yüzden pazar günü "bu hafta" = yarından itibaren gelecek pazara kadar.
+    """
     bugun = date.today()
-    hafta_sonu = bugun + timedelta(days=(6 - bugun.weekday()))
+    pazar_mi = bugun.weekday() == 6
+    if pazar_mi:
+        bas = bugun + timedelta(days=1)                  # yarın: pazartesi
+        hafta_sonu = bas + timedelta(days=6)             # gelecek pazar
+        basliklar = ("Önümüzdeki hafta", "Sonraki hafta", "İki hafta sonrası")
+    else:
+        hafta_sonu = bugun + timedelta(days=(6 - bugun.weekday()))
+        basliklar = ("Bu hafta", "Gelecek hafta", "Sonraki iki hafta")
     gelecek_sonu = hafta_sonu + timedelta(days=7)
     kova = {"bu": [], "gelecek": [], "sonra": []}
     for k in kayitlar:
         g = date.fromisoformat(k.tarih)
         kova["bu" if g <= hafta_sonu else "gelecek" if g <= gelecek_sonu else "sonra"].append(k)
-    return [("Bu hafta", kova["bu"]), ("Gelecek hafta", kova["gelecek"]),
-            ("Sonraki iki hafta", kova["sonra"])]
+    return [(basliklar[0], kova["bu"]), (basliklar[1], kova["gelecek"]),
+            (basliklar[2], kova["sonra"])]
 
 
 if __name__ == "__main__":

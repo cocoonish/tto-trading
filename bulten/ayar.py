@@ -159,42 +159,64 @@ RG_ILGILI = (r"merkez bankas|tcmb|bddk|spk|hazine|maliye|vergi|kur\b|d[öo]viz|k
 TCMB_DUYURU_URL = "https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Duyurular/Basin/{yil}"
 
 HABER_KAYNAKLARI = [
-    # bolge: "tr" | "global"    alan: "makro" | "politika" | "piyasa" | "karisik"
-    # Kaynağın alanı VARSAYILANDIR; başlık/özetteki anahtar kelimeler bunu ezebilir.
+    # bolge: "tr" | "global" | "karisik"    alan: "makro" | "politika" | "piyasa" | "karisik"
+    # Kaynağın alanı VARSAYILANDIR; başlık/özetteki kalıplar bunu ezebilir.
+    #
+    # Sıra bilinçli: önce DOĞRUDAN YAYINCI akışları. Onların açıklama alanı gerçek
+    # bir özet taşıyor ve bağlantıları doğrudan habere gidiyor; Google News
+    # bağlantıları ise yayıncıya JS ile yönlendirdiği için ne özet ne de gövde
+    # okunabiliyor. Google aramaları yalnız yayıncı akışlarının kapsamadığı
+    # konularda, boşluk doldurucu olarak kalır.
+
+    # ── Türkiye
     {"ad": "Anadolu Ajansı — Ekonomi", "bolge": "tr", "alan": "makro",
      "url": "https://www.aa.com.tr/tr/rss/default?cat=ekonomi"},
     {"ad": "Anadolu Ajansı — Politika", "bolge": "tr", "alan": "politika",
      "url": "https://www.aa.com.tr/tr/rss/default?cat=politika"},
-    {"ad": "Anadolu Ajansı — Dünya", "bolge": "global", "alan": "politika",
-     "url": "https://www.aa.com.tr/tr/rss/default?cat=dunya"},
     {"ad": "Bloomberg HT", "bolge": "tr", "alan": "piyasa",
      "url": "https://www.bloomberght.com/rss"},
     {"ad": "Dünya Gazetesi", "bolge": "tr", "alan": "makro",
      "url": "https://www.dunya.com/rss?dunya"},
+    {"ad": "Ekonomim", "bolge": "tr", "alan": "makro",
+     "url": "https://www.ekonomim.com/rss"},
+    {"ad": "Hürriyet Ekonomi", "bolge": "tr", "alan": "makro",
+     "url": "https://www.hurriyet.com.tr/rss/ekonomi"},
     {"ad": "Investing", "bolge": "tr", "alan": "piyasa",
      "url": "https://tr.investing.com/rss/news_285.rss"},
-    {"ad": "BBC Türkçe", "bolge": "karisik", "alan": "karisik",
-     "url": "https://feeds.bbci.co.uk/turkce/rss.xml"},
-    {"ad": "Euronews Türkçe", "bolge": "karisik", "alan": "karisik",
-     "url": "https://tr.euronews.com/rss"},
+
+    # ── Global
+    {"ad": "BBC Business", "bolge": "global", "alan": "makro",
+     "url": "https://feeds.bbci.co.uk/news/business/rss.xml"},
+    {"ad": "BBC World", "bolge": "global", "alan": "politika",
+     "url": "https://feeds.bbci.co.uk/news/world/rss.xml"},
+    {"ad": "The Guardian — Business", "bolge": "global", "alan": "makro",
+     "url": "https://www.theguardian.com/uk/business/rss"},
+    {"ad": "Al Jazeera", "bolge": "global", "alan": "politika",
+     "url": "https://www.aljazeera.com/xml/rss/all.xml"},
     {"ad": "CNBC — dünya ekonomisi", "bolge": "global", "alan": "makro",
      "url": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100727362"},
-    {"ad": "Reuters", "bolge": "global", "alan": "karisik",
-     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=when:1d+site:reuters.com&hl=en-US&gl=US&ceid=US:en"},
+    {"ad": "CNBC — piyasalar", "bolge": "global", "alan": "piyasa",
+     "url": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=20910258"},
+    {"ad": "CNBC — finans", "bolge": "global", "alan": "makro",
+     "url": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=10000664"},
+    {"ad": "MarketWatch", "bolge": "global", "alan": "piyasa",
+     "url": "https://feeds.content.dowjones.io/public/rss/mw_topstories"},
     {"ad": "Financial Times", "bolge": "global", "alan": "karisik",
-     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=when:1d+site:ft.com&hl=en-US&gl=US&ceid=US:en"},
-    {"ad": "Arama — TCMB ve faiz", "bolge": "tr", "alan": "makro",
-     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=(TCMB+OR+%22Merkez+Bankas%C4%B1%22+OR+PPK+OR+enflasyon)+when:2d&hl=tr&gl=TR&ceid=TR:tr"},
-    {"ad": "Arama — Türkiye ekonomi politikası", "bolge": "tr", "alan": "politika",
-     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=(%22ekonomi+program%C4%B1%22+OR+%22orta+vadeli+program%22+OR+%22maliye+politikas%C4%B1%22+OR+%22asgari+%C3%BCcret%22+OR+vergi+d%C3%BCzenleme)+when:2d&hl=tr&gl=TR&ceid=TR:tr"},
-    {"ad": "Arama — Türkiye (yabancı basın)", "bolge": "tr", "alan": "karisik",
-     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=(%22Turkish+lira%22+OR+CBRT+OR+%22Turkey+economy%22+OR+%22Turkey+inflation%22+OR+%22Turkish+bonds%22)+when:2d&hl=en-US&gl=US&ceid=US:en"},
-    {"ad": "Arama — Fed ve ECB", "bolge": "global", "alan": "makro",
-     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=(%22Federal+Reserve%22+OR+ECB+OR+%22Bank+of+Japan%22)+(rates+OR+inflation+OR+policy)+when:1d&hl=en-US&gl=US&ceid=US:en"},
-    {"ad": "Arama — jeopolitik ve ticaret", "bolge": "global", "alan": "politika",
-     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=(tariffs+OR+sanctions+OR+%22trade+war%22+OR+OPEC+OR+ceasefire+OR+%22peace+talks%22)+when:1d&hl=en-US&gl=US&ceid=US:en"},
-    {"ad": "Arama — emtia ve enerji", "bolge": "global", "alan": "piyasa",
-     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=(oil+prices+OR+Brent+OR+%22natural+gas%22+OR+gold+price)+when:1d&hl=en-US&gl=US&ceid=US:en"},
+     "url": "https://www.ft.com/rss/home"},
+    {"ad": "OilPrice", "bolge": "global", "alan": "piyasa",
+     "url": "https://oilprice.com/rss/main"},
+    {"ad": "Euronews Türkçe", "bolge": "karisik", "alan": "karisik",
+     "url": "https://tr.euronews.com/rss"},
+
+    # ── Hedefli aramalar (boşluk doldurucu; özet taşımazlar)
+    {"ad": "Arama — TCMB ve faiz", "bolge": "tr", "alan": "makro", "ozet_yok": True,
+     "url": "https://news.google.com/rss/search?q=(TCMB+OR+%22Merkez+Bankas%C4%B1%22+OR+PPK+OR+enflasyon)+when:2d&hl=tr&gl=TR&ceid=TR:tr"},
+    {"ad": "Arama — Türkiye ekonomi politikası", "bolge": "tr", "alan": "politika", "ozet_yok": True,
+     "url": "https://news.google.com/rss/search?q=(%22ekonomi+program%C4%B1%22+OR+%22orta+vadeli+program%22+OR+%22maliye+politikas%C4%B1%22+OR+%22asgari+%C3%BCcret%22+OR+vergi+d%C3%BCzenleme)+when:2d&hl=tr&gl=TR&ceid=TR:tr"},
+    {"ad": "Arama — Türkiye (yabancı basın)", "bolge": "tr", "alan": "karisik", "ozet_yok": True,
+     "url": "https://news.google.com/rss/search?q=(%22Turkish+lira%22+OR+CBRT+OR+%22Turkey+economy%22+OR+%22Turkey+inflation%22)+when:2d&hl=en-US&gl=US&ceid=US:en"},
+    {"ad": "Arama — Fed ve ECB", "bolge": "global", "alan": "makro", "ozet_yok": True,
+     "url": "https://news.google.com/rss/search?q=(%22Federal+Reserve%22+OR+ECB+OR+%22Bank+of+Japan%22)+(rates+OR+inflation+OR+policy)+when:1d&hl=en-US&gl=US&ceid=US:en"},
 ]
 
 # ─────────────────────────── haber sınıflandırma
@@ -232,7 +254,7 @@ HABER_BOLUMLERI = [
     ("global_piyasa", "Global — piyasa ve emtia", "global", "piyasa"),
 ]
 # Bölüm başına azami madde (kurum duyuruları sınırsız).
-BOLUM_SINIRI = 7
+BOLUM_SINIRI = 10
 
 # Haber listesi OLMAYAN, yalnız yazıdan ibaret gündem bölümleri. Bunlar piyasa
 # tablolarını ve takvimi okuyup yorumlayan bölümlerdir; kural tabanlı koşu
