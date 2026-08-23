@@ -159,32 +159,111 @@ RG_ILGILI = (r"merkez bankas|tcmb|bddk|spk|hazine|maliye|vergi|kur\b|d[öo]viz|k
 TCMB_DUYURU_URL = "https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/Duyurular/Basin/{yil}"
 
 HABER_KAYNAKLARI = [
-    {"ad": "Bloomberg HT", "url": "https://www.bloomberght.com/rss",
-     "etiket": "tr-piyasa", "yuksek_oncelik": False},
-    {"ad": "AA Ekonomi", "url": "https://www.aa.com.tr/tr/rss/default?cat=ekonomi",
-     "etiket": "tr-makro", "yuksek_oncelik": False},
-    {"ad": "Investing TR", "url": "https://tr.investing.com/rss/news_285.rss",
-     "etiket": "tr-piyasa", "yuksek_oncelik": False},
-    {"ad": "Google News — TCMB/faiz", "etiket": "tr-makro", "yuksek_oncelik": False,
-     "url": "https://news.google.com/rss/search?q=(TCMB+OR+%22Merkez+Bankas%C4%B1%22+OR+PPK)+when:2d&hl=tr&gl=TR&ceid=TR:tr"},
-    {"ad": "Google News — Türkiye piyasalar (yabancı basın)", "etiket": "yabanci-basin",
-     "yuksek_oncelik": False,
-     "url": "https://news.google.com/rss/search?q=(%22Turkish+lira%22+OR+CBRT+OR+%22Turkey+bonds%22+OR+%22Turkey+inflation%22)+when:2d&hl=en-US&gl=US&ceid=US:en"},
-    {"ad": "Google News — Fed/ECB", "etiket": "global", "yuksek_oncelik": False,
-     "url": "https://news.google.com/rss/search?q=(%22Federal+Reserve%22+OR+ECB)+(rates+OR+inflation)+when:1d&hl=en-US&gl=US&ceid=US:en"},
+    # bolge: "tr" | "global"    alan: "makro" | "politika" | "piyasa" | "karisik"
+    # Kaynağın alanı VARSAYILANDIR; başlık/özetteki anahtar kelimeler bunu ezebilir.
+    {"ad": "Anadolu Ajansı — Ekonomi", "bolge": "tr", "alan": "makro",
+     "url": "https://www.aa.com.tr/tr/rss/default?cat=ekonomi"},
+    {"ad": "Anadolu Ajansı — Politika", "bolge": "tr", "alan": "politika",
+     "url": "https://www.aa.com.tr/tr/rss/default?cat=politika"},
+    {"ad": "Anadolu Ajansı — Dünya", "bolge": "global", "alan": "politika",
+     "url": "https://www.aa.com.tr/tr/rss/default?cat=dunya"},
+    {"ad": "Bloomberg HT", "bolge": "tr", "alan": "piyasa",
+     "url": "https://www.bloomberght.com/rss"},
+    {"ad": "Dünya Gazetesi", "bolge": "tr", "alan": "makro",
+     "url": "https://www.dunya.com/rss?dunya"},
+    {"ad": "Investing", "bolge": "tr", "alan": "piyasa",
+     "url": "https://tr.investing.com/rss/news_285.rss"},
+    {"ad": "BBC Türkçe", "bolge": "karisik", "alan": "karisik",
+     "url": "https://feeds.bbci.co.uk/turkce/rss.xml"},
+    {"ad": "Euronews Türkçe", "bolge": "karisik", "alan": "karisik",
+     "url": "https://tr.euronews.com/rss"},
+    {"ad": "CNBC — dünya ekonomisi", "bolge": "global", "alan": "makro",
+     "url": "https://search.cnbc.com/rs/search/combinedcms/view.xml?partnerId=wrss01&id=100727362"},
+    {"ad": "Reuters", "bolge": "global", "alan": "karisik",
+     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=when:1d+site:reuters.com&hl=en-US&gl=US&ceid=US:en"},
+    {"ad": "Financial Times", "bolge": "global", "alan": "karisik",
+     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=when:1d+site:ft.com&hl=en-US&gl=US&ceid=US:en"},
+    {"ad": "Arama — TCMB ve faiz", "bolge": "tr", "alan": "makro",
+     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=(TCMB+OR+%22Merkez+Bankas%C4%B1%22+OR+PPK+OR+enflasyon)+when:2d&hl=tr&gl=TR&ceid=TR:tr"},
+    {"ad": "Arama — Türkiye ekonomi politikası", "bolge": "tr", "alan": "politika",
+     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=(%22ekonomi+program%C4%B1%22+OR+%22orta+vadeli+program%22+OR+%22maliye+politikas%C4%B1%22+OR+%22asgari+%C3%BCcret%22+OR+vergi+d%C3%BCzenleme)+when:2d&hl=tr&gl=TR&ceid=TR:tr"},
+    {"ad": "Arama — Türkiye (yabancı basın)", "bolge": "tr", "alan": "karisik",
+     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=(%22Turkish+lira%22+OR+CBRT+OR+%22Turkey+economy%22+OR+%22Turkey+inflation%22+OR+%22Turkish+bonds%22)+when:2d&hl=en-US&gl=US&ceid=US:en"},
+    {"ad": "Arama — Fed ve ECB", "bolge": "global", "alan": "makro",
+     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=(%22Federal+Reserve%22+OR+ECB+OR+%22Bank+of+Japan%22)+(rates+OR+inflation+OR+policy)+when:1d&hl=en-US&gl=US&ceid=US:en"},
+    {"ad": "Arama — jeopolitik ve ticaret", "bolge": "global", "alan": "politika",
+     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=(tariffs+OR+sanctions+OR+%22trade+war%22+OR+OPEC+OR+ceasefire+OR+%22peace+talks%22)+when:1d&hl=en-US&gl=US&ceid=US:en"},
+    {"ad": "Arama — emtia ve enerji", "bolge": "global", "alan": "piyasa",
+     "ozet_yok": True, "url": "https://news.google.com/rss/search?q=(oil+prices+OR+Brent+OR+%22natural+gas%22+OR+gold+price)+when:1d&hl=en-US&gl=US&ceid=US:en"},
 ]
 
-# Alaka süzgeci: başlıkta bunlardan biri geçmiyorsa haber alınmaz.
-HABER_ILGILI = (r"enflasyon|t[üu]fe|[üu]fe|faiz|tcmb|merkez bankas|kur\b|dolar|euro|rezerv|swap|"
-                r"tahvil|bono|hazine|ihale|bor[çc]lan|kredi|mevduat|bddk|spk|imf|moody|fitch|"
-                r"s&p|cds|bist|borsa|fed\b|ecb|ppk|b[üu]t[çc]e|cari a[çc]|[öo]demeler dengesi|"
-                r"istihdam|b[üu]y[üu]me|gsyh|lira|inflation|rate|bond|yield|central bank|"
-                r"treasury|deficit|reserve")
-# Gürültü süzgeci: bunlardan biri geçiyorsa alınmaz (alaka kelimesi olsa bile).
-HABER_GURULTU = (r"emekli zamm|emekli maa|ev kadın|arazi|kiraya|burç|ma[çc] [öo]zeti|"
-                 r"transfer|hava durumu|piyango|çekili[şs]|indirim kampanya|ya[şs] g[üu]n|"
-                 r"astroloji|promosyon|kredi kartı borcu yapılandır|convert \d|bybit|"
-                 r"binance|coin fiyat|how much is|gong .{0,20}çaldı|ödeme yaptı")
+# ─────────────────────────── haber sınıflandırma
+# Kaynağın varsayılan bölge/alanı yeterli değil: AA Dünya'da bir ABD enflasyon
+# haberi çıkabilir, Bloomberg HT'de bir seçim haberi. Başlık + özet metni bu
+# kalıplarla taranır ve varsayılan EZİLİR.
+ALAN_KALIPLARI = {
+    "politika": (r"se[çc]im|meclis|kabine|bakan\b|cumhurba[şs]kan|yasa|kanun|teklif|"
+                 r"diploma|savaş|sava[şs]|ate[şs]kes|yaptırım|yaptırım|tarife|g[üu]mr[üu]k vergi|"
+                 r"nato|avrupa birli[ğg]i|m[üu]zakere|zirve|anla[şs]ma|protesto|referandum|"
+                 r"koalisyon|parlamento|sanction|tariff|election|parliament|summit|ceasefire|"
+                 r"peace talk|trade war|geopolit"),
+    "makro": (r"enflasyon|b[üu]y[üu]me|istihdam|i[şs]sizlik|cari a[çc]|b[üu]t[çc]e|faiz|"
+              r"para politikas|resesyon|pmi|gsyh|t[üu]ketici g[üu]ven|sanayi [üu]retim|"
+              r"inflation|growth|employment|unemployment|deficit|rate cut|rate hike|"
+              r"monetary policy|recession|gdp|payroll"),
+    "piyasa": (r"borsa|endeks|hisse|tahvil|getiri|kur\b|dolar|euro|alt[ıi]n|petrol|brent|"
+               r"kripto|bitcoin|cds|bist|stocks|bond|yield|oil|gold|currency|equit"),
+}
+BOLGE_KALIPLARI = {
+    "tr": r"t[üu]rkiye|tcmb|merkez bankas|lira|bist|istanbul|ankara|turkish|turkey",
+    "global": (r"\bfed\b|federal reserve|ecb|avrupa merkez|[çc]in\b|china|abd\b|"
+               r"amerika|washington|brussels|japonya|japan|almanya|germany|rusya|russia|"
+               r"opec|imf|d[üu]nya bankas|world bank"),
+}
+
+# Bülten bölümleri: (id, başlık, bölge, alan) — sıra sayfadaki sıradır.
+HABER_BOLUMLERI = [
+    ("kurum", "Kurum duyuruları", None, "kurum"),
+    ("tr_makro", "Türkiye — makro ve veri", "tr", "makro"),
+    ("tr_politika", "Türkiye — politika ve düzenleme", "tr", "politika"),
+    ("tr_piyasa", "Türkiye — piyasa", "tr", "piyasa"),
+    ("global_makro", "Global — makro ve merkez bankaları", "global", "makro"),
+    ("global_politika", "Global — jeopolitik ve ticaret", "global", "politika"),
+    ("global_piyasa", "Global — piyasa ve emtia", "global", "piyasa"),
+]
+# Bölüm başına azami madde (kurum duyuruları sınırsız).
+BOLUM_SINIRI = 7
+
+# ─────────────────────────── alaka ve gürültü süzgeçleri
+# BAŞLIKTA bu terimlerden biri geçmelidir. Özette geçmesi yetmez: özet çoğu akışta
+# haberin ilk cümlesidir ve "ekonomi" gibi bir kelime rastgele düşebilir; başlık ise
+# haberin ne hakkında olduğunu söyler.
+HABER_ILGILI = (r"enflasyon|t[üu]fe|[üu]fe\b|faiz|tcmb|merkez bankas|kur\b|dolar|euro\b|"
+                r"rezerv|swap|tahvil|bono|hazine|ihale|bor[çc]lan|kredi|mevduat|bddk|spk|"
+                r"imf\b|moody|fitch|s&p|cds\b|bist|borsa|fed\b|ecb\b|ppk|b[üu]t[çc]e|"
+                r"cari a[çc]|[öo]demeler dengesi|istihdam|i[şs]sizlik|b[üu]y[üu]me|gsyh|"
+                r"resesyon|durgunluk|lira\b|asgari [üu]cret|vergi d[üu]zenle|vergi paketi|"
+                r"orta vadeli program|ekonomi program|petrol|brent|do[ğg]al gaz|alt[ıi]n fiyat|"
+                r"ons alt[ıi]n|yapt[ıi]r[ıi]m|tarife|g[üu]mr[üu]k vergi|ticaret sava|ate[şs]kes|"
+                r"se[çc]im|zirve|m[üu]zakere|"
+                r"inflation|interest rate|rate cut|rate hike|central bank|monetary polic|"
+                r"treasury|bond|yield|deficit|recession|payroll|unemployment|gdp\b|"
+                r"tariff|sanction|trade war|ceasefire|opec|oil price|gold price|"
+                r"currenc|devalu|default|downgrade|upgrade|imf\b")
+
+# Bunlardan biri geçiyorsa alınmaz — alaka terimi de geçse.
+HABER_GURULTU = r"emekli zamm|emekli maa|ev kadın|arazi sat|kiraya ver|burç|ma[çc] [öo]zeti|transfer bombas|hava durumu|piyango|çekili[şs]|indirim kampanya|astroloji|promosyon|convert [0-9]|bybit|binance|coin fiyat|how much is|gong .{0,20}çaldı|ya[şs] g[üu]n[üu]|falc|tur[şs]u|lezzet|festival|g[ıi]da denetim|taksit f[ıi]rsat|72 taksit|ka[çc] para|ne kadar oldu|^about .{0,90}reuters|quote page|stock quote|hisse [öo]nerisi|katlanabilir|iphone|nvidia earnings|burcunuz|ma[çc] sonucu|teknik direkt[öo]r|cricket|nightclub|premier lig|şampiyonlar ligi|futbol|basketbol|oyuncu kadrosu"
+
+# Kaynak itibar sıralaması: aynı öyküyü birden çok yer yazdığında bülten hangisini
+# gösterecek? Yüksek puanlı kaynak temsilci olur. Puanı olmayan kaynak 0 sayılır;
+# içerik çiftlikleri ve toplayıcılar böylece kendiliğinden geri düşer.
+KAYNAK_PUANI = {
+    "reuters": 10, "financial times": 10, "ft.com": 10, "bloomberg": 9, "wall street journal": 9,
+    "wsj": 9, "economist": 9, "cnbc": 8, "bbc": 8, "associated press": 8, "ap news": 8,
+    "anadolu ajansı": 7, "aa.com.tr": 7, "bloomberg ht": 7, "dünya": 6, "dunya": 6,
+    "investing": 5, "euronews": 5, "hürriyet": 4, "milliyet": 4, "sözcü": 4, "sozcu": 4,
+    "cumhuriyet": 4, "t24": 4, "ekonomim": 4, "patronlardunyasi": 3, "borsagundem": 3,
+}
 
 # Bültende gösterilecek azami haber sayısı (kurum duyuruları bu sınırın dışında).
 HABER_SINIRI = 12

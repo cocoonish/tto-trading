@@ -68,6 +68,14 @@ ROLL_PAYDA_ESIK = 500.0
 # DURDURUR — 1000× hatanın tam olarak yakalanacağı yer burasıdır.
 GSYH_BANT_TRN = (1.0, 2.0)
 
+# FİNANSAL TÜREVLER KALEMİNİN BAŞLANGICI (tanım kırılması).
+# Q37/Q38 bu tarihte başlıyor; öncesinde kalem YOK (sıfır değil). Yükümlülük
+# toplamının TANIMI burada değişir, bu yüzden "2010 sonrası medyan" iki farklı
+# paydanın karışımıdır ve 2014 sonrası medyan AYRICA hesaplanır. Sabit elle
+# yazılı DEĞİL sayılmasın diye her koşuda verinin kendi ilk dolu ayıyla
+# karşılaştırılır (bkz. `finans_metrikleri`), kayarsa uyarı düşer.
+TUREV_BAS = "2014-01-01"
+
 # Kimlik eşikleri (mn USD). Ödemeler dengesi tam sayıya yuvarlı yayımlanıyor;
 # eşikler MUTLAK tutulur — bağıl eşik payda sıfıra yaklaşınca patlıyor.
 ESIK_KIMLIK = 1.0
@@ -127,7 +135,14 @@ def fisher_reel(nominal_yuzde: pd.Series | float,
 
 
 def _kimlik(rapor: dict, ad: str, sol: pd.Series, sag: pd.Series, esik: float,
-            durdur: bool, dur_liste: list[str], birim: str = "mn USD") -> None:
+            durdur: bool, dur_liste: list[str], birim: str = "mn USD",
+            tautoloji: bool = False) -> None:
+    """Kimlik sınaması. `tautoloji=True` ise kayıt SINAV SAYILMAZ.
+
+    Sol taraf sağ taraftan cebirsel olarak türetiliyorsa sapma her koşuda
+    0,00'dır ve denetim hiçbir hata yakalamaz. Böyle bir kaydı "sınandı" diye
+    sunmak, olmayan bir güvence satmaktır; işaretlenir ve sayımdan düşer.
+    """
     d = pd.DataFrame({"s": sol, "r": sag}).dropna()
     if d.empty:
         uyar(f"KİMLİK: '{ad}' sınanamadı — girdi serileri kesişmiyor.")
@@ -137,13 +152,151 @@ def _kimlik(rapor: dict, ad: str, sol: pd.Series, sag: pd.Series, esik: float,
     rapor[ad] = {"n": int(len(d)), "maks_fark": float(fark.max()),
                  "maks_tarih": str(fark.idxmax().date()),
                  "son_fark": float(fark.iloc[-1]), "birim": birim,
-                 "esik": esik, "gecti": gecti, "durdurucu": bool(durdur)}
+                 "esik": esik, "gecti": gecti, "durdurucu": bool(durdur),
+                 "tautoloji": bool(tautoloji)}
+    if tautoloji:
+        rapor[ad]["not"] = (
+            "TAUTOLOJİ: sol taraf sağ taraftan türetildiği için sapma tanım "
+            "gereği sıfırdır. Bu kayıt bir SINAV DEĞİL, sunum tutarlılığının "
+            "kaydıdır; kimlik sayımına girmez ve sayfada 'sınandı' diye "
+            "gösterilmez.")
     if not gecti:
         m = (f"KİMLİK BOZUK: {ad} — en büyük sapma {fark.max():,.2f} {birim} "
              f"({fark.idxmax():%m.%Y}), eşik {esik} {birim}.")
         uyar(m)
         if durdur:
             dur_liste.append(m)
+
+
+# --- artık, bacak ve mertebe denetimleri (tautoloji OLMAYAN sınavlar) ------
+# Bu üçü, yığın ve finansman tablolarının GERÇEK denetimidir: girdileri
+# bozulduğunda sonuç değişir. Tautolojik kimlikler bozulduğunda değişmiyordu.
+
+# Diğer yatırım yükümlülüğünün artığı için üst sınır (12 aylık artık ÷ 12
+# aylık brüt ciro). ÖLÇÜLDÜ (2010+): medyan %6,2 · en büyük %27,4 (2020-01).
+# Eşik %35, yani ölçülen en büyük değerin yaklaşık %28 üstünde. Artık bu
+# bandı aşarsa bir alt kalem düşmüş ya da birimi kaymış demektir.
+ARTIK_BANT_YUZDE = 35.0
+
+# Uzun vadeli anapara (aylık ÖD) ÷ haftalık dış borç ödemesi (52 haftalık).
+# Kapsamlar farklı olduğu için eşitlik değil BANT sınanır. ÖLÇÜLDÜ
+# (2013-12…2026-06, n=151): 1,50 … 6,14, medyan 3,26. Bant 1,0–8,0.
+UV_HAFTA_BANT = (1.0, 8.0)
+
+
+def _artik_denetimi(rapor: dict, a: pd.DataFrame) -> None:
+    """Ayrıntılı sunumun alt kalemleri ile analitik sunumun toplamını kıyaslar.
+
+    Q25 (3.8 Diğer Yatırımlar: net yükümlülük oluşumu, ODANA6) ile
+    Q143 + Q157 + Q184 + Q203 (ODEAYRSUNUM6) İKİ AYRI TABLODAN gelir. Bu hat
+    ayrıntılı sunumun "3.4.4 Diğer Yükümlülükler" kalemini çekmediği için
+    eşitlik beklenmez; artık ölçülür ve bir banda oturması istenir.
+    """
+    alt = a[["ay_mevduat_yuk", "ay_kredi_yuk", "ay_ticari_kredi",
+             "ay_sdr"]].fillna(0.0).sum(axis=1)
+    artik12 = r12(a["diger_yuk"] - alt)
+    # Payda: dört ana bacağın MUTLAK değerinin 12 aylık toplamı ("brüt ciro").
+    # Net toplamı payda yapmak yanlış olurdu — net sıfıra yaklaşınca oran
+    # patlıyor (2018-09'da %333 ölçüldü, veri bozuk olmadığı hâlde).
+    ciro12 = r12(a["dyy_yuk"].abs() + a["port_yuk"].abs()
+                 + a["diger_yuk"].abs() + a["turev_yuk"].fillna(0.0).abs())
+    o = (artik12 / ciro12).abs().loc["2010-01-01":].dropna() * 100
+    if o.empty:
+        uyar("ARTIK DENETİMİ sınanamadı — Q25 alt kalemleri kesişmiyor.")
+        return
+    gecti = bool(o.max() <= ARTIK_BANT_YUZDE)
+    rapor["artık bandı: Q25 − (Q143+Q157+Q184+Q203) ÷ brüt ciro"] = {
+        "n": int(len(o)), "son_yuzde": round(float(o.iloc[-1]), 2),
+        "maks_yuzde": round(float(o.max()), 2),
+        "maks_tarih": str(o.idxmax().date()),
+        "medyan_yuzde": round(float(o.median()), 2),
+        "esik_yuzde": ARTIK_BANT_YUZDE, "gecti": gecti, "durdurucu": False,
+        "not": ("İKİ AYRI EVDS TABLOSU kıyaslanır (analitik Q25 ↔ ayrıntılı "
+                "sunumun alt kalemleri); eşitlik beklenmez çünkü '3.4.4 Diğer "
+                "Yükümlülükler' bu hatta çekilmiyor. Artık bandı aşarsa bir "
+                "alt kalem düşmüş ya da birimi kaymış demektir."),
+    }
+    if not gecti:
+        uyar(f"ARTIK BANDI AŞILDI: Q25 artığı {o.max():.1f}% "
+             f"({o.idxmax():%m.%Y}), bant {ARTIK_BANT_YUZDE}%. Ayrıntılı "
+             "sunumun bir alt kalemi düşmüş olabilir.")
+
+
+def _bacak_yoklamasi(rapor: dict, M: pd.DataFrame, ad: str, kolonlar: list[str],
+                     dur_liste: list[str], baslangic: str = "2010-01-01",
+                     son_ay: int = 24) -> None:
+    """Yığın/toplam bacaklarının hepsi son `son_ay` ayda dolu mu?
+
+    DURDURUCU. Bir bacağın sessizce NaN'a düşmesi (EVDS kalemi kaldırıldı, ad
+    değişti) toplamı kısaltır ama yukarıdaki tautolojik kimlikleri hiç
+    bozmaz — orada iki taraf da aynı eksik bacağı taşıdığı için sapma yine
+    sıfır çıkar. Bu yoklama tam o boşluğu kapatır.
+    """
+    d = M.loc[M.index >= pd.Timestamp(baslangic)]
+    if d.empty:
+        return
+    kuyruk = d.iloc[-son_ay:]
+    oranlar = {k: round(float(kuyruk[k].isna().mean()) * 100, 1)
+               for k in kolonlar if k in kuyruk.columns}
+    eksik_kolon = [k for k in kolonlar if k not in M.columns]
+    bos = {k: v for k, v in oranlar.items() if v > 0}
+    gecti = not bos and not eksik_kolon
+    rapor[f"bacak yoklaması: {ad}"] = {
+        "beklenen_kalem": len(kolonlar), "bulunan_kalem": len(oranlar),
+        "son_ay": son_ay, "bos_oran_yuzde": oranlar,
+        "gecti": gecti, "durdurucu": True,
+        "not": ("Her bacağın son 24 aydaki BOŞ oranı ölçülür. Tautolojik "
+                "kimlikler düşen bir bacağı görmez: iki taraf da aynı eksiği "
+                "taşır ve sapma yine 0,00 çıkar."),
+    }
+    if not gecti:
+        m = (f"BACAK DÜŞTÜ ({ad}): "
+             + (f"kolon yok {eksik_kolon}; " if eksik_kolon else "")
+             + (f"son {son_ay} ayda boş kalan bacaklar {bos}" if bos else "")
+             + ". Yığın eksik çizilirdi.")
+        uyar(m)
+        dur_liste.append(m)
+
+
+def _mertebe_uv_anapara(rapor: dict, M: pd.DataFrame, H: pd.DataFrame) -> None:
+    """Uzun vadeli anaparayı BAĞIMSIZ bir kaynakla mertebe olarak kıyaslar.
+
+    Aylık ödemeler dengesinden türetilen `uv_anapara12` ile TCMB'nin HAFTALIK
+    dış borç ödeme takviminin (bie_dbafod) 52 haftalık toplamı. Kapsamlar
+    farklı — haftalık seri Hazine, TCMB ve duyurulmuş diğer ödemeleri kapsar,
+    banka ve reel sektörün bütün kredi itfalarını değil — bu yüzden EŞİTLİK
+    değil ORAN BANDI sınanır. Tautolojik kimliğin göremediği "anapara bacağı
+    şişti/söndü" hatası burada yakalanır: karşı-deneyde bacaklar bozulunca
+    oran 2,21'den 9,85'e çıkıyor ve bant dışına düşüyor.
+    """
+    if H is None or H.empty or "borc_odeme_top_52h" not in H.columns:
+        uyar("MERTEBE KIYASI sınanamadı — haftalık 52 haftalık toplam yok.")
+        return
+    h52 = H["borc_odeme_top_52h"].dropna().resample("MS").last()
+    d = pd.DataFrame({"uv": M["uv_anapara12"], "h": h52}).dropna()
+    d = d[d["h"].abs() > 0]
+    if d.empty:
+        uyar("MERTEBE KIYASI sınanamadı — aylık ve haftalık kuyruklar kesişmiyor.")
+        return
+    o = d["uv"] / d["h"]
+    alt, ust = UV_HAFTA_BANT
+    gecti = bool((o.min() >= alt) and (o.max() <= ust))
+    rapor["mertebe: UV anapara(12a) ÷ haftalık dış borç ödemesi(52h)"] = {
+        "n": int(len(o)), "son_oran": round(float(o.iloc[-1]), 2),
+        "min_oran": round(float(o.min()), 2), "maks_oran": round(float(o.max()), 2),
+        "medyan_oran": round(float(o.median()), 2), "bant": list(UV_HAFTA_BANT),
+        "son_uv_anapara12_mn_usd": round(float(d["uv"].iloc[-1]), 0),
+        "son_hafta52_mn_usd": round(float(d["h"].iloc[-1]), 0),
+        "gecti": gecti, "durdurucu": False,
+        "not": ("BAĞIMSIZ KAYNAK kıyası, kimlik DEĞİL: kapsamlar farklı "
+                "(haftalık seri Hazine + TCMB + duyurulmuş diğer ödemeler). "
+                "Eşitlik beklenmez; oran bandın dışına çıkarsa anapara "
+                "bacaklarından biri şişmiş ya da düşmüştür."),
+    }
+    if not gecti:
+        uyar(f"MERTEBE BANDI AŞILDI: UV anapara ÷ haftalık 52h oranı "
+             f"{o.min():.2f}–{o.max():.2f}, bant {UV_HAFTA_BANT}. Anapara "
+             "bacaklarından biri şişmiş ya da düşmüş olabilir.")
 
 
 # ===========================================================================
@@ -285,6 +438,15 @@ def finans_metrikleri(M: pd.DataFrame, a: pd.DataFrame) -> pd.DataFrame:
     M = M.copy()
     tur_v = a["turev_varlik"].fillna(0.0)
     tur_y = a["turev_yuk"].fillna(0.0)
+    # TANIM KIRILMASI ÇIPASI SINANIR: TUREV_BAS elle yazılı bir sabit, ama
+    # verinin kendisiyle her koşuda karşılaştırılır. EVDS kalemi geriye
+    # uzatırsa (ya da başlangıcı kayarsa) 2014 sonrası medyan sessizce yanlış
+    # pencereden hesaplanırdı.
+    _tb = a["turev_yuk"].first_valid_index()
+    if _tb is not None and _tb != pd.Timestamp(TUREV_BAS):
+        uyar(f"TANIM ÇIPASI KAYDI: finansal türev kalemi {_tb:%Y-%m} ayında "
+             f"başlıyor, kodda TUREV_BAS={TUREV_BAS}. Türev tanımına göre "
+             "bölünen medyan pencereleri güncellenmeli.")
 
     # --- net giriş (rezerv HARİÇ) -----------------------------------------
     M["fin_giris"] = -a["fin_hesabi"]
@@ -295,10 +457,24 @@ def finans_metrikleri(M: pd.DataFrame, a: pd.DataFrame) -> pd.DataFrame:
     M["turev_giris"] = tur_y - tur_v
     M["diger_giris"] = a["diger_yuk"] - a["diger_varlik"]
 
-    # --- brüt bacaklar -----------------------------------------------------
-    # Brüt yükümlülük oluşumu = yabancının Türkiye'ye yönelttiği brüt akım.
-    # Yerleşiklerin dış varlık edinimi = yurt içinden dışarı çıkan akım.
+    # --- yükümlülük ve varlık bacakları ------------------------------------
+    # ADLANDIRMA UYARISI — "BRÜT" DEĞİL, NET YÜKÜMLÜLÜK OLUŞUMU.
+    # BPM6'da bu kalemlerin hepsi NET yükümlülük oluşumudur (net incurrence of
+    # liabilities): Q38'in EVDS'teki adı bile "3.6.Finansal Türevler: NET
+    # Yükümlülük Oluşumu". Negatif olabilirler ve olurlar. Kolon adı
+    # `brut_yukumluluk` tarihsel sebeple duruyor; SUNUMDA "yükümlülük oluşumu
+    # (net)" diye adlandırılır. "Brüt" demek, kalemin yalnız girişleri saydığı
+    # izlenimini verirdi — vermez.
+    #
+    # TÜREV BACAĞI PAYDAYI SAVURUYOR (ölçüldü): son 12 ayda türev yükümlülük
+    # −20,6 milyar USD; toplamı 87,3 → 66,7 milyar USD'ye indiriyor ve kalite
+    # payını %48,9 yerine %64,0 gösteriyor (15,1 puan). Üstelik kalem
+    # 2014-01'de BAŞLIYOR, yani payda 2014 öncesi türevsiz, sonrası türevli —
+    # tek bir "2010 sonrası medyan" iki farklı tanımın karışımı olurdu.
+    # Bu yüzden İKİ payda birden taşınır ve medyan 2014 SONRASI pencerede de
+    # ayrıca hesaplanır (bkz. kalite_metrikleri).
     M["brut_yukumluluk"] = (a["dyy_yuk"] + a["port_yuk"] + tur_y + a["diger_yuk"])
+    M["yukumluluk_turevsiz"] = (a["dyy_yuk"] + a["port_yuk"] + a["diger_yuk"])
     M["yerlesik_varlik"] = (a["dyy_varlik"] + a["port_varlik"] + tur_v
                             + a["diger_varlik"])
 
@@ -334,10 +510,11 @@ def finans_metrikleri(M: pd.DataFrame, a: pd.DataFrame) -> pd.DataFrame:
     M["kredi_dgr_uv_net"] = a["ay_kredi_dgr_uv"]
 
     # --- eurobond (yurt dışı borçlanma senedi) -----------------------------
-    # SEYREK SERİ UYARISI: alt kırılımlar (A112 genel hükümet, A114 diğer
-    # sektör) ihraç OLMAYAN ayda BOŞ gelir. Toplam serisi (A1) dolu olduğu
-    # için toplamlar A1/A2 üzerinden kurulur; alt kırılımlar yalnız grafikte
-    # ve yalnız kendi başlangıçlarından sonra sıfırla doldurulur.
+    # SEYREK SERİ UYARISI: hem toplam (A1/A2) hem alt kırılımlar (A112 genel
+    # hükümet, A114 diğer sektör) ihraç/itfa OLMAYAN ayda BOŞ gelir — sıfır
+    # değil, hücre yok. AYLIK seri BOŞ bırakılır (grafikte "o ay işlem yok"
+    # boşluğu doğrudur), alt kırılımlar yalnız kendi başlangıçlarından sonra
+    # sıfırla doldurulur.
     for ad, kol in (("eb_kullanim", "eb_kullanim"), ("eb_odeme", "eb_odeme"),
                     ("eb_kullanim_uv", "eb_kullanim_uv"),
                     ("eb_odeme_uv", "eb_odeme_uv")):
@@ -350,15 +527,31 @@ def finans_metrikleri(M: pd.DataFrame, a: pd.DataFrame) -> pd.DataFrame:
 
     # 12 aylık birikimli hâller
     for k in ("fin_giris", "dyy_giris", "portfoy_giris", "turev_giris",
-              "diger_giris", "brut_yukumluluk", "yerlesik_varlik", "yuk_dyy",
+              "diger_giris", "brut_yukumluluk", "yukumluluk_turevsiz",
+              "yerlesik_varlik", "yuk_dyy",
               "yuk_port_hisse", "yuk_port_borc", "yuk_port_artik",
               "yuk_mevduat", "yuk_kredi", "yuk_diger_artik", "yuk_turev",
               "ticari_kredi_net", "kredi_bnk_uv_kul", "kredi_bnk_uv_ode",
               "kredi_dgr_uv_kul", "kredi_dgr_uv_ode", "kredi_gh_uv_kul",
-              "kredi_gh_uv_ode", "kredi_bnk_kv", "kredi_dgr_kv",
-              "eb_kullanim", "eb_odeme", "eb_kullanim_uv", "eb_odeme_uv",
-              "eb_net"):
+              "kredi_gh_uv_ode", "kredi_bnk_kv", "kredi_dgr_kv"):
         M[k + "12"] = r12(M[k])
+
+    # EUROBOND 12 AYLIK TOPLAMLARI: BOŞ AY = SIFIR AKIM ------------------
+    # Bu bir hata düzeltmesidir, kozmetik değil. r12() eksik ayda NaN döndürür
+    # (min_periods=12) — doğru kural, çünkü GERÇEKTEN eksik bir ay 12 aylık
+    # toplamı sessizce küçültür. Ama eurobond serisinde boş ay eksik VERİ
+    # değil, SIFIR AKIMDIR: A21 ihraç/itfa olmayan ayda hücre üretmiyor.
+    # Ham NaN üzerinden r12 alınca 2010-01…2023-06 arasında 109 ay boş
+    # kalıyordu; aynı bacak finansman ihtiyacına `fillna(0.0)` ile giriyordu.
+    # SONUÇ (ölçüldü): Şekil 11'in yığılmış çubuğu ile kendi toplam çizgisi
+    # 2023-04'te 18,2 milyar USD ayrışıyordu — çubukta eurobond bacağı yok,
+    # çizgide vardı. İki taraf artık AYNI işlemi kullanıyor.
+    # Aylık seriler (M["eb_odeme_uv"] vb.) BİLEREK NaN kalır: bir aylık çubuk
+    # grafiğinde "o ay ihraç yoktu" ile "o ay sıfır ihraç edildi" aynı şeydir,
+    # ama boş bırakmak dürüsttür.
+    for k in ("eb_kullanim", "eb_odeme", "eb_kullanim_uv", "eb_odeme_uv",
+              "eb_net"):
+        M[k + "12"] = r12(M[k].fillna(0.0))
     return M
 
 
@@ -393,23 +586,49 @@ def kalite_metrikleri(M: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     for k in ("ozel_uv_kredi_net", "kaliteli", "sicak_para"):
         M[k + "12"] = r12(M[k])
 
-    # Payda (a): brüt yükümlülük oluşumu. Payda (b): cari açık.
+    # ÜÇ PAYDA, İKİSİ AYNI BÜYÜKLÜĞÜN İKİ TANIMI:
+    #   (a) yükümlülük oluşumu (net, TÜREVLER DÂHİL) — hattın ana paydası,
+    #   (b) aynı büyüklük TÜREVSİZ — türev bacağı 2014-01'de başlıyor ve son
+    #       12 ayda −20,6 mia USD; paydayı küçültüp oranı yukarı savuruyor,
+    #   (c) cari açık.
+    # İkisi birden yayımlanır: okur hangi tanımı okuduğunu bilmeli.
     M["cari_acik12"] = (-M["cari12"]).clip(lower=0)
     M["kalite_pay_brut"] = _oran(M["kaliteli12"], M["brut_yukumluluk12"])
+    M["kalite_pay_turevsiz"] = _oran(M["kaliteli12"], M["yukumluluk_turevsiz12"])
     M["kalite_pay_acik"] = _oran(M["kaliteli12"], M["cari_acik12"])
 
     for ad, kol, payda in (("brut", "kalite_pay_brut", "brut_yukumluluk12"),
+                           ("turevsiz", "kalite_pay_turevsiz",
+                            "yukumluluk_turevsiz12"),
                            ("acik", "kalite_pay_acik", "cari_acik12")):
         s = M[kol].dropna()
         p = M.loc[M.index >= "2010-01-01", kol]
+        # 2014 SONRASI PENCERE: türev kalemi 2014-01'de eklendiği için "brüt"
+        # paydanın TANIMI orada değişiyor. 2010 sonrası medyan iki tanımın
+        # karışımıdır; tanım kırılmasından sonraki medyan da ayrıca verilir.
+        p14 = M.loc[M.index >= TUREV_BAS, kol]
         tani[f"pay_{ad}_son"] = round(float(s.iloc[-1]), 1) if len(s) else None
         tani[f"pay_{ad}_son_donem"] = str(s.index[-1].date()) if len(s) else None
         tani[f"pay_{ad}_medyan_2010"] = (round(float(p.median()), 1)
                                          if p.notna().any() else None)
+        tani[f"pay_{ad}_medyan_2014"] = (round(float(p14.median()), 1)
+                                         if p14.notna().any() else None)
         # Eşik yüzünden BOŞ bırakılan ay sayısı: boşluk grafikte gerekçelensin.
         gecerli_payda = M[payda].notna() & (M[payda].abs() >= ORAN_PAYDA_ESIK)
         tani[f"pay_{ad}_bos_ay"] = int((M[payda].notna() & ~gecerli_payda).sum())
     tani["payda_esik_mn_usd"] = ORAN_PAYDA_ESIK
+    tani["payda_notu"] = (
+        "PAYDA BİR TANIM SEÇİMİDİR. Ana payda BPM6'nın net yükümlülük "
+        "oluşumudur ve finansal türevleri (Q38, 2014-01'den itibaren) İÇERİR; "
+        "türev bacağı negatif olabildiği için paydayı küçültür ve oranı yukarı "
+        "savurur. Türevsiz sürüm aynı koşuda ayrıca hesaplanır. Kalem "
+        "2014-01'de başladığından payda tanımı o tarihte KIRILIR; medyan hem "
+        "2010 hem 2014 sonrası pencerede verilir.")
+    for k, ad in (("brut_yukumluluk12", "payda_brut"),
+                  ("yukumluluk_turevsiz12", "payda_turevsiz"),
+                  ("yuk_turev12", "turev_bacagi")):
+        s = M[k].dropna()
+        tani[f"{ad}_12ay"] = round(float(s.iloc[-1]), 0) if len(s) else None
     for k, ad in (("kaliteli12", "kaliteli"), ("dyy_giris12", "dyy"),
                   ("ozel_uv_kredi_net12", "ozel_uv_kredi"),
                   ("sicak_para12", "sicak_para")):
@@ -526,11 +745,25 @@ def finansman_ihtiyaci(M: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     ve iki taraf birebir eşit olur. 'Rezerv' terimi negatif işaretle girer:
     rezerv ARTIŞI bir kaynak değil, kaynağın bir kısmının rezervde birikmesidir.
 
+    BU EŞİTLİK BİR DENETİM DEĞİLDİR — TAUTOLOJİDİR. `diger_net_giris` bizzat
+    `fin_giris − uv_net` diye tanımlandığı için kaynak tarafında uv_kullanim ve
+    uv_anapara sadeleşir; geriye ana ödemeler dengesi kimliği kalır. Yani iki
+    tarafın kapanması, anapara bacaklarının doğruluğu hakkında HİÇBİR ŞEY
+    söylemez (ölçüldü: bacaklar bozulup uv_anapara12 86,8 → 386,8 milyar USD
+    yapıldığında sapma yine 0,00). Anaparanın gerçek denetimi `dogrula()`
+    içindeki mertebe kıyası ve bacak yoklamasıdır.
+
     UV anapara geri ödemesi = banka + reel sektör + genel hükümet uzun vadeli
     kredi geri ödemesi + uzun vadeli tahvil (eurobond) anapara ödemesi.
     Eurobond, kredi değil PORTFÖY yükümlülüğüdür; bu yüzden brüt kullanım
-    tarafında da tahvil İHRACI (A11) ile birlikte yer alır — yalnız birini
-    almak tabloyu bir bacak kadar şişirir.
+    tarafında da tahvil İHRACI ile birlikte yer alır — yalnız birini almak
+    tabloyu bir bacak kadar şişirir.
+
+    KAPSAM UYARISI: buraya YALNIZ UZUN VADELİ eurobond bacağı girer (A11 ihraç,
+    A21 anapara). Şekil 12'nin çizdiği A1/A2 ise KISA VADEYİ DE içeren toplamdır
+    ve son 12 ayda 57,9 / 34,7 milyar USD; uzun vadeli sürüm 55,7 / 29,3. Aynı
+    etiketle iki farklı kapsamı yan yana koymak sahte bir sapma üretir, bu
+    yüzden iki sürüm de `tani`ye yazılır ve sayfada ayrı adlandırılır.
     """
     # Çerçeveyi birleştir: aşağıda çok sayıda sütun eklenecek ve pandas
     # parçalanmış blok yöneticisi için uyarı basıyor.
@@ -558,9 +791,31 @@ def finansman_ihtiyaci(M: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
         for k, ad in (("cari_acik12", "cari_acik"), ("uv_anapara12", "uv_anapara"),
                       ("uv_kullanim12", "uv_kullanim"), ("uv_net12", "uv_net"),
                       ("eb_kullanim12", "eb_kullanim"), ("eb_odeme12", "eb_odeme"),
-                      ("eb_net12", "eb_net")):
+                      ("eb_net12", "eb_net"),
+                      # UZUN VADELİ SÜRÜM: ihtiyaç tablosuna GİREN bacak budur.
+                      # A1/A2 (yukarıdaki eb_kullanim/eb_odeme) kısa vadeyi de
+                      # içerir; ikisi aynı etiketle sunulursa okur 86,8 milyar
+                      # USD'lik anaparayı 5,4 milyar USD şaşarak tutturamaz.
+                      ("eb_kullanim_uv12", "eb_kullanim_uv"),
+                      ("eb_odeme_uv12", "eb_odeme_uv"),
+                      # İhtiyaç bacaklarının kendisi: okur toplamı elle
+                      # doğrulayabilsin diye hepsi ayrı ayrı yayımlanır.
+                      ("kredi_bnk_uv_ode12", "anapara_bnk"),
+                      ("kredi_dgr_uv_ode12", "anapara_dgr"),
+                      ("kredi_gh_uv_ode12", "anapara_gh")):
             v = M[k].dropna()
             tani[f"{ad}_12ay"] = round(float(v.iloc[-1]), 0) if len(v) else None
+        tani["eurobond_kapsam_notu"] = (
+            "İki eurobond kapsamı vardır ve KARIŞTIRILMAMALIDIR: A1/A2 kısa "
+            "vadeyi DE içeren toplam (Şekil 12), A11/A21 yalnız uzun vadeli "
+            "(Şekil 11'in anapara ve brüt kullanım bacağı). Fark bir sapma "
+            "değil, kapsam farkıdır.")
+        tani["kimlik_tautoloji_notu"] = (
+            "Alt paneldeki 'ihtiyaç = kaynak' eşitliği TAUTOLOJİDİR: kaynak "
+            "tarafı ihtiyaç tarafından türetildiği için sapma tanım gereği "
+            "sıfırdır ve anapara bacaklarını sınamaz. Anaparanın bağımsız "
+            "denetimi haftalık dış borç ödeme takvimiyle yapılan mertebe "
+            "kıyasıdır (bkz. uyarilar.json).")
         # İhtiyacın cari açıktan gelen payı: "açık kadar borç çevirmek" cümlesi
         # sayfada sayıya bağlansın.
         if float(s.iloc[-1]) != 0:
@@ -601,8 +856,15 @@ def haftalik_metrikleri(h: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
 # (9) DOĞRULAMA
 # ===========================================================================
 def dogrula(M: pd.DataFrame, a: pd.DataFrame, G: pd.DataFrame,
-            gsyh_tani: dict) -> tuple[dict, list[str]]:
-    """Bağımsız doğrulama. Durdurucu olanlar yanlış sayının yayına gitmesini keser."""
+            gsyh_tani: dict, H: pd.DataFrame) -> tuple[dict, list[str]]:
+    """Bağımsız doğrulama. Durdurucu olanlar yanlış sayının yayına gitmesini keser.
+
+    TAUTOLOJİ AYRIMI BU KATMANIN OMURGASIDIR. Bir "kimlik", sol tarafı sağ
+    taraftan TÜRETİLMİŞSE hiçbir şeyi sınamaz: her koşuda 0,00 sapmayla geçer,
+    girdiler ne kadar bozuk olursa olsun. Böyle kayıtlar `tautoloji=True` ile
+    işaretlenir, DURDURUCU sayılmaz ve sayfada "sınandı" diye sunulmaz — yerine
+    bağımsız kaynağa dayanan mertebe ve bacak denetimleri konur.
+    """
     D: dict = {}
     dur: list[str] = []
 
@@ -614,12 +876,34 @@ def dogrula(M: pd.DataFrame, a: pd.DataFrame, G: pd.DataFrame,
     _kimlik(D, "fin_giris = brüt yükümlülük − yerleşik varlık edinimi",
             M["fin_giris"], M["brut_yukumluluk"] - M["yerlesik_varlik"],
             ESIK_KIMLIK_TOPLAM, True, dur)
-    # (3) Yükümlülük kırılımı toplamı brüt yükümlülüğe eşit olmalı.
-    _kimlik(D, "Σ yükümlülük kalemleri = brüt yükümlülük oluşumu",
+    # (3) Yükümlülük yığınının SUNUM kimliği — TAUTOLOJİ olarak işaretlidir.
+    # `yuk_port_artik` ve `yuk_diger_artik` ARTIK olarak tanımlı
+    # (artık = toplam − bilinen alt kalemler), bu yüzden Σ = toplam cebirsel
+    # olarak zorunludur ve hiçbir veri hatasını yakalayamaz. ÖLÇÜLDÜ:
+    # `ay_mevduat_yuk` 100× yapılıp `ay_kredi_yuk` sıfırlandığında sapma yine
+    # 0,00 çıkıyor. Kayıt, grafikteki yığının çizgiyle örtüştüğünü göstermek
+    # için tutulur; DURDURUCU DEĞİLDİR ve "sınandı" diye sunulmaz.
+    # Gerçek denetim (3b) ve (3c)'dedir.
+    _kimlik(D, "sunum: Σ yığın kutuları = yükümlülük oluşumu (tautoloji)",
             M["yuk_dyy"] + M["yuk_port_hisse"] + M["yuk_port_borc"]
             + M["yuk_port_artik"] + M["yuk_mevduat"] + M["yuk_kredi"]
             + M["yuk_diger_artik"] + M["yuk_turev"], M["brut_yukumluluk"],
-            ESIK_KIMLIK, True, dur)
+            ESIK_KIMLIK, False, dur, tautoloji=True)
+    # (3b) GERÇEK DENETİM — İKİ AYRI EVDS TABLOSU ARASINDA.
+    # Analitik sunumun Q25'i (Diğer Yatırımlar: net yükümlülük oluşumu) ile
+    # ayrıntılı sunumun alt kalemleri (Q143 mevduat + Q157 kredi + Q184 ticari
+    # kredi + Q203 SDR) karşılaştırılır. Bu bir ARTIK TANIMI DEĞİL: iki farklı
+    # tabloya ait sayılar. Eşitlik BEKLENMEZ — ayrıntılı sunumda bu hatta
+    # çekilmeyen "3.4.4 Diğer Yükümlülükler" kalemi var — ama artık BİR BANDA
+    # sığmalı. Bir alt kalem düşerse ya da birimi kayarsa artık patlar.
+    _artik_denetimi(D, a)
+    # (3c) BACAK YOKLAMASI: yığının her kutusu son 24 ayda dolu mu?
+    # Bir bacağın sessizce NaN'a düşmesi (seri adı değişti, EVDS kalemi
+    # kaldırıldı) yığını kısaltır ama yukarıdaki tautoloji bunu görmez.
+    _bacak_yoklamasi(D, M, "yığın bacakları (Şekil 05)",
+                     ["yuk_dyy", "yuk_port_hisse", "yuk_port_borc",
+                      "yuk_mevduat", "yuk_kredi", "yuk_turev"], dur,
+                     baslangic=TUREV_BAS)
     # (4) Çekirdek köprüsü (12 aylık): manşet = çekirdek + altın + enerji.
     _kimlik(D, "manşet CA(12a) = çekirdek + altın net + enerji net", M["cari12"],
             M["cekirdek12"] + M["altin_net12"] + M["enerji_net12"],
@@ -628,9 +912,30 @@ def dogrula(M: pd.DataFrame, a: pd.DataFrame, G: pd.DataFrame,
     _kimlik(D, "CA(12a) = mal + hizmet + birincil + ikincil", M["cari12"],
             M["mal_denge12"] + M["hizmet_denge12"] + M["birincil_denge12"]
             + M["ikincil_denge12"], ESIK_KIMLIK_12, True, dur)
-    # (6) Finansman ihtiyacı tablosu birebir kapanmalı.
-    _kimlik(D, "ihtiyaç(12a) = kaynak(12a)", M["ihtiyac_kimlik12"],
-            M["kaynak_kimlik12"], ESIK_KIMLIK_12, True, dur)
+    # (6) Finansman tablosunun SUNUM kimliği — TAUTOLOJİ olarak işaretlidir.
+    # `diger_net_giris = fin_giris − uv_net` ve `uv_net = uv_kullanim −
+    # uv_anapara` olduğu için kaynak tarafında uv_kullanim ve uv_anapara
+    # SADELEŞİYOR; geriye (1) numaralı kimliğin kendisi kalıyor. Yani bu
+    # denetim ihtiyaç sayısını HİÇ sınamıyor. ÖLÇÜLDÜ: eurobond bacağı
+    # silinip banka anaparası 10× yapıldığında uv_anapara12 86,8 → 386,8
+    # milyar USD'ye çıkıyor, sapma yine 0,00. Kayıt, alt panelin görsel
+    # olarak kapandığını göstermek için tutulur; DURDURUCU DEĞİLDİR.
+    # İhtiyacın gerçek denetimi (6b) ve (6c)'dedir.
+    _kimlik(D, "sunum: ihtiyaç(12a) = kaynak(12a) (tautoloji)",
+            M["ihtiyac_kimlik12"], M["kaynak_kimlik12"], ESIK_KIMLIK_12,
+            False, dur, tautoloji=True)
+    # (6b) GERÇEK MERTEBE DENETİMİ — BAĞIMSIZ KAYNAK.
+    # Uzun vadeli anapara geri ödemesi (aylık ödemeler dengesi) ile TCMB'nin
+    # HAFTALIK dış borç ödeme takviminin 52 haftalık toplamı kıyaslanır.
+    # Kapsamlar farklı (haftalık seri Hazine + TCMB + duyurulmuş diğer
+    # ödemeleri kapsar, banka/reel sektör kredi itfalarının tamamını değil) →
+    # EŞİTLİK BEKLENMEZ, ORAN bir BANTTA kalmalı.
+    _mertebe_uv_anapara(D, M, H)
+    # (6c) BACAK YOKLAMASI: ihtiyaç ve kaynak bacaklarının hepsi yerinde mi?
+    _bacak_yoklamasi(D, M, "finansman ihtiyacı bacakları (Şekil 11)",
+                     ["kredi_bnk_uv_ode", "kredi_dgr_uv_ode",
+                      "kredi_gh_uv_ode", "kredi_bnk_uv_kul",
+                      "kredi_dgr_uv_kul", "kredi_gh_uv_kul"], dur)
     # (7) Mal dengesi = ihracat − ithalat.
     _kimlik(D, "mal dengesi = ihracat − ithalat", M["mal_denge"],
             M["ihracat"] - M["ithalat"], ESIK_KIMLIK, False, dur)
@@ -720,7 +1025,7 @@ def kos() -> int:
     M, ihtiyac_tani = finansman_ihtiyaci(M)
     G, gsyh_tani = gsyh_metrikleri(M, c, g)
     H, hafta_tani = haftalik_metrikleri(h)
-    D, dur = dogrula(M, a, G, gsyh_tani)
+    D, dur = dogrula(M, a, G, gsyh_tani, H)
 
     # --- başrol büyüklükler ------------------------------------------------
     def _son(kol: str, ondalik: int = 0):
@@ -738,6 +1043,8 @@ def kos() -> int:
         "enerji_net12_mn_usd": _son("enerji_net12")[0],
         "fin_giris12_mn_usd": _son("fin_giris12")[0],
         "brut_yukumluluk12_mn_usd": _son("brut_yukumluluk12")[0],
+        "yukumluluk_turevsiz12_mn_usd": _son("yukumluluk_turevsiz12")[0],
+        "yuk_turev12_mn_usd": _son("yuk_turev12")[0],
         "yerlesik_varlik12_mn_usd": _son("yerlesik_varlik12")[0],
         "rezerv_akim12_mn_usd": _son("rezerv_akim12")[0],
         "cari_aylik_mn_usd": _son("cari")[0],
@@ -819,7 +1126,15 @@ def kos() -> int:
     (PROJE / "uyarilar.json").write_text(json.dumps(
         {"tarih": s_ay.strftime("%Y-%m-%d"),
          "kosum": pd.Timestamp.today().strftime("%Y-%m-%d"),
-         "uyarilar": list(_UYARI), "dogrulama": D},
+         "uyarilar": list(_UYARI),
+         # DENETİM SAYIMIYLA YAYIMLANAN KÜME AYNI OLMALI. Eskiden sayfa "21
+         # denetim çalıştı" diyor ama uyarilar.json yalnız bu katmanın 11
+         # kaydını taşıyordu: veri katmanının 16 kimliği hiçbir yayımlanan
+         # dosyada yoktu (veri_durum.json siteye kopyalanmıyor), buna karşılık
+         # yayımlanan 11 kaydın 6'sı sayıma girmiyordu. Okur 21'i hiçbir
+         # yoldan doğrulayamıyordu. İki katman da BURADA yayımlanır ve
+         # ozet_uret.py sayımı bu iki sözlükten yapar.
+         "dogrulama": D, "dogrulama_veri": (vd.get("kimlik") or {})},
         ensure_ascii=False, indent=1), encoding="utf-8")
 
     print(f"  yazıldı: data/metrik.csv ({M.shape[0]}x{M.shape[1]}), "

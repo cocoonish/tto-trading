@@ -222,6 +222,32 @@ def main() -> int:
     koy("kalite_pay_acik", k.get("pay_acik_son"), 1)
     koy("kalite_pay_brut_medyan", k.get("pay_brut_medyan_2010"), 1)
     koy("kalite_pay_acik_medyan", k.get("pay_acik_medyan_2010"), 1)
+    # PAYDANIN İKİ TANIMI + TANIM KIRILMASI. Ana payda finansal türevleri
+    # İÇERİR (BPM6'da hepsi NET yükümlülük oluşumudur) ve türev bacağı negatif
+    # olduğunda oranı yukarı savurur; kalem 2014-01'de başladığı için "2010
+    # sonrası medyan" iki farklı paydanın karışımıdır. İkisi de yayımlanır ki
+    # sayfa hangi tanımı okuduğunu söyleyebilsin.
+    koy("kalite_pay_turevsiz", k.get("pay_turevsiz_son"), 1)
+    koy("kalite_pay_brut_medyan_2014", k.get("pay_brut_medyan_2014"), 1)
+    koy("kalite_pay_turevsiz_medyan_2014", k.get("pay_turevsiz_medyan_2014"), 1)
+    koy("payda_brut12_mia", mia(k.get("payda_brut_12ay")), 1)
+    koy("payda_turevsiz12_mia", mia(k.get("payda_turevsiz_12ay")), 1)
+    koy("turev_bacagi12_mia", mia(k.get("turev_bacagi_12ay")), 1)
+    O["payda_notu"] = k.get("payda_notu")
+    if (k.get("pay_brut_son") is not None
+            and k.get("pay_turevsiz_son") is not None):
+        koy("kalite_pay_turev_farki",
+            abs(k["pay_brut_son"] - k["pay_turevsiz_son"]), 1)
+        O["payda_cumlesi"] = (
+            f"Kalite payının paydası BPM6'nın NET yükümlülük oluşumudur ve "
+            f"finansal türevleri içerir: türev bacağı "
+            f"{tr_sayi(O.get('turev_bacagi12_mia'), 1)} milyar USD olduğu için "
+            f"payda {tr_sayi(O.get('payda_brut12_mia'), 1)} milyar USD'ye "
+            f"iniyor ve oran %{tr_sayi(O.get('kalite_pay_brut'), 1)} çıkıyor; "
+            f"türevsiz paydayla ({tr_sayi(O.get('payda_turevsiz12_mia'), 1)} "
+            f"milyar USD) aynı oran %"
+            f"{tr_sayi(O.get('kalite_pay_turevsiz'), 1)}, yani "
+            f"{tr_sayi(O.get('kalite_pay_turev_farki'), 1)} puan aşağıda.")
     koy("kalite_bos_ay_brut", k.get("pay_brut_bos_ay"), 0)
     koy("kalite_bos_ay_acik", k.get("pay_acik_bos_ay"), 0)
     koy("payda_esik_mia", mia(k.get("payda_esik_mn_usd"), 0), 0)
@@ -278,6 +304,24 @@ def main() -> int:
     koy("nhn_yuzdelik36", n.get("nhn_yuzdelik36_son"), 1)
     koy("nhn_yuzdelik_tarihce", n.get("nhn12_yuzdelik_tam_tarihce"), 1)
     koy("nhn_std12_mia", mia(n.get("nhn_std12_son")), 2)
+    # YÖN CÜMLELERİ KODDA SEÇİLİR, MDX'E GÖMÜLMEZ. "Tarihçenin en negatif
+    # ucuna yakın" ve "o ayın kendisi olağandışı değil" hükümleri yalnız bu
+    # koşunun yüzdelik dilimlerinde doğruydu; bir sonraki ayda dilim %95'e
+    # çıksa cümle MDX'te aynı kalır ve sessizce yalan olurdu.
+    yt = n.get("nhn12_yuzdelik_tam_tarihce")
+    if yt is not None:
+        O["nhn_konum_cumlesi"] = (
+            "tarihçenin en negatif ucuna yakın" if yt <= 10 else
+            "tarihçenin negatif yarısında" if yt < 40 else
+            "tarihçenin orta bandında" if yt <= 60 else
+            "tarihçenin pozitif yarısında" if yt < 90 else
+            "tarihçenin en pozitif ucuna yakın")
+    y36 = n.get("nhn_yuzdelik36_son")
+    if y36 is not None:
+        O["nhn_ay_cumlesi"] = (
+            "o ayın kendisi olağandışı değil" if y36 <= 80 else
+            "o ay son 36 ayın üst dilimlerinde" if y36 <= 95 else
+            "o ayın kendisi de olağandışı: son 36 ayın en büyükleri arasında")
 
     # ======================================================= finansman ihtiyacı
     t = m.get("ihtiyac", {})
@@ -286,17 +330,56 @@ def main() -> int:
                             ("uv_anapara12_mia", "uv_anapara_12ay"),
                             ("uv_kullanim12_mia", "uv_kullanim_12ay"),
                             ("uv_net12_mia", "uv_net_12ay"),
+                            # A1/A2 = KISA VADE DÂHİL toplam (Şekil 12).
                             ("eb_kullanim12_mia", "eb_kullanim_12ay"),
                             ("eb_odeme12_mia", "eb_odeme_12ay"),
-                            ("eb_net12_mia", "eb_net_12ay")):
+                            ("eb_net12_mia", "eb_net_12ay"),
+                            # A11/A21 = YALNIZ uzun vadeli (Şekil 11'in
+                            # anapara ve brüt kullanım bacağı). İki kapsam
+                            # aynı etiketle sunulunca okur 86,8 milyar USD'lik
+                            # anaparayı 5,4 milyar USD şaşarak tutturamıyordu.
+                            ("eb_kullanim_uv12_mia", "eb_kullanim_uv_12ay"),
+                            ("eb_odeme_uv12_mia", "eb_odeme_uv_12ay"),
+                            # Anaparanın sektör bacakları: okur toplamı elle
+                            # doğrulayabilsin.
+                            ("anapara_bnk12_mia", "anapara_bnk_12ay"),
+                            ("anapara_dgr12_mia", "anapara_dgr_12ay"),
+                            ("anapara_gh12_mia", "anapara_gh_12ay")):
         koy(anahtar, mia(t.get(kaynak)), 1)
     koy("ihtiyacta_cari_acik_payi", t.get("ihtiyacta_cari_acik_payi_yuzde"), 1)
+    O["eurobond_kapsam_notu"] = t.get("eurobond_kapsam_notu")
+    O["ihtiyac_kimlik_notu"] = t.get("kimlik_tautoloji_notu")
     O["ihtiyac_cumlesi"] = (
         f"Brüt dış finansman ihtiyacı son 12 ayda "
         f"{tr_sayi(O.get('ihtiyac12_mia'), 1)} milyar USD: "
         f"{tr_sayi(O.get('cari_acik12_mia'), 1)} milyar USD cari açık, "
         f"{tr_sayi(O.get('uv_anapara12_mia'), 1)} milyar USD uzun vadeli "
         "anapara geri ödemesi.")
+
+    # --- KARŞILAŞTIRMA ANAHTARLARI ---------------------------------------
+    # Sayfa metnindeki "üç katından fazla", "cari açığın altında kalıyor" gibi
+    # ORANSAL hükümler MDX'e gömülüyse, sayı değişince cümle sessizce yanlış
+    # olur ve kimse fark etmez (MDX'e dokunulmaz). Karşılaştırmanın kendisi
+    # de bir sayıdır ve buradan gelir.
+    ih, ca = t.get("ihtiyac12_son"), t.get("cari_acik_12ay")
+    if ih is not None and ca:
+        koy("ihtiyac_cari_kat", ih / ca, 1)
+    fg = b.get("fin_giris12_mn_usd")
+    if fg is not None and ca:
+        koy("fin_acik_karsilama", fg / ca * 100, 1)
+        O["fin_acik_yon"] = ("altında kalıyor" if fg < ca else "üstünde")
+    # Uzun vadeli bacağın YÖNÜ: pozitifken "yeni borçlanma", negatifken
+    # "net geri ödeme". Cümle bu anahtardan kurulur, elle yazılmaz.
+    uvn = t.get("uv_net_12ay")
+    if uvn is not None:
+        O["uv_net_yon"] = ("net yeni borçlanma" if uvn > 0
+                           else "net geri ödeme" if uvn < 0 else "başa baş")
+        O["uv_net_cumlesi"] = (
+            "uzun vadeli bacak yalnız çevrilmiyor, üstüne yeni borçlanma da "
+            "yapılıyor" if uvn > 0 else
+            "uzun vadeli bacak tam çevrilemiyor: vadesi gelen anaparanın bir "
+            "kısmı yeni borçlanmayla değil kaynakla kapatılıyor" if uvn < 0
+            else "uzun vadeli bacak tam olarak çevriliyor")
 
     # ======================================================= haftalık takvim
     hf = m.get("haftalik", {})
@@ -308,36 +391,61 @@ def main() -> int:
     koy("hafta_odeme_tcmb_mn", hf.get("son_hafta_tcmb_mn_usd"), 1)
 
     # ======================================================= kimlik/doğrulama
+    # SAYIM KURALI: sayılan küme ile YAYIMLANAN küme AYNI olmalı.
+    # Eskiden sayım 5 (elle seçilmiş metrik kimliği) + 16 (veri katmanı) = 21
+    # yapıyordu, ama uyarilar.json yalnız metrik katmanının 11 kaydını
+    # taşıyordu: 16'sı hiçbir yayımlanan dosyada yoktu, 6'sı da sayıma
+    # girmiyordu. Okur 21'i doğrulayamıyordu. Artık sayım, uyarilar.json'a
+    # yazılan İKİ sözlüğün tamamı üzerinden yapılır ve TAUTOLOJİLER DÜŞÜLÜR:
+    # sol tarafı sağdan türetilen bir kayıt hiçbir şeyi sınamaz, "sınandı"
+    # diye sayılamaz (kaydı yayımlanır, sayıya girmez).
     D = m.get("dogrulama", {})
+    vk = vd.get("kimlik") or {}
+    # Sayfa metninin ayrı ayrı andığı kimliklerin anahtarları (n ve sapma).
     kimlikler = {
         "kimlik_bop": "−CA = fin_giris + KA + NHN − Rezerv (aylık)",
         "kimlik_isaret": "fin_giris = brüt yükümlülük − yerleşik varlık edinimi",
         "kimlik_cekirdek": "manşet CA(12a) = çekirdek + altın net + enerji net",
         "kimlik_alt_kalem": "CA(12a) = mal + hizmet + birincil + ikincil",
-        "kimlik_ihtiyac": "ihtiyaç(12a) = kaynak(12a)",
     }
-    gecen, toplam = 0, 0
     for anahtar, ad in kimlikler.items():
         r_ = D.get(ad) or {}
         if not r_:
+            uyar(f"'{anahtar}' doğrulama kaydı yok — sayfada boş görünecek.")
             continue
-        toplam += 1
-        gecen += 1 if r_.get("gecti") else 0
         koy(f"{anahtar}_n", r_.get("n"), 0)
         koy(f"{anahtar}_maks_sapma", r_.get("maks_fark"), 3)
         O[f"{anahtar}_gecti"] = bool(r_.get("gecti"))
-    # Veri katmanının kimlik denetimleri de sayılır (ödemeler dengesi kimliği,
-    # iki sunum köprüsü, rezerv kimliği, kredi bacakları).
-    vk = vd.get("kimlik") or {}
-    for ad, r_ in vk.items():
-        toplam += 1
-        gecen += 1 if r_.get("gecti") else 0
+    gecen = toplam = tautoloji = 0
+    for kaynak in (D, vk):
+        for ad, r_ in kaynak.items():
+            if not isinstance(r_, dict) or "gecti" not in r_:
+                continue
+            if r_.get("tautoloji"):
+                tautoloji += 1
+                continue
+            toplam += 1
+            gecen += 1 if r_.get("gecti") else 0
     O["kimlik_gecen"] = gecen
     O["kimlik_toplam"] = toplam
+    O["kimlik_tautoloji"] = tautoloji
     O["kimlik_cumlesi"] = (
-        f"Bu koşuda {toplam} kimlik sınandı, {gecen} tanesi geçti."
+        f"Bu koşuda {toplam} denetim çalıştı, {gecen} tanesi geçti"
         if gecen == toplam else
-        f"Bu koşuda {toplam} kimlik sınandı ve {toplam - gecen} tanesi DÜŞTÜ.")
+        f"Bu koşuda {toplam} denetim çalıştı ve {toplam - gecen} tanesi DÜŞTÜ")
+    O["kimlik_cumlesi"] += (
+        f"; ayrıca {tautoloji} sunum tutarlılığı kaydı tautoloji olduğu için "
+        "sayıma girmedi." if tautoloji else ".")
+    # Şekil 05 ve Şekil 11'in yığın denetimleri (tautoloji YERİNE konan
+    # gerçek sınavlar) sayfada ayrıca anılır.
+    artik = D.get("artık bandı: Q25 − (Q143+Q157+Q184+Q203) ÷ brüt ciro") or {}
+    koy("artik_son_yuzde", artik.get("son_yuzde"), 2)
+    koy("artik_maks_yuzde", artik.get("maks_yuzde"), 2)
+    koy("artik_esik_yuzde", artik.get("esik_yuzde"), 0)
+    mert = D.get("mertebe: UV anapara(12a) ÷ haftalık dış borç ödemesi(52h)") or {}
+    koy("uv_hafta_oran", mert.get("son_oran"), 2)
+    koy("uv_hafta_bant_alt", (mert.get("bant") or [None, None])[0], 1)
+    koy("uv_hafta_bant_ust", (mert.get("bant") or [None, None])[1], 1)
     kopru = vk.get("köprü: Q101(rezerv dahil) = Q13(rezerv hariç) + Q33") or {}
     koy("kopru_n", kopru.get("n"), 0)
     koy("kopru_maks_sapma", kopru.get("maks_fark"), 3)

@@ -59,6 +59,40 @@ GETIRI_ALT, GETIRI_UST = -0.20, 5.00        # −%20 … %500
 # Bir günün eğri kurmaya yetmesi için gereken en az nokta sayısı.
 GUN_MIN_NOKTA = 12
 
+# --------------------------------------------------------------------- konvansiyon
+# FONLAMA FAİZLERİ BASİT, EĞRİ BİLEŞİKTİR. TCMB/BİST gecelik ve haftalık
+# oranları BASİT yıllık yayımlar (TLREF'in ayrıca bir "TLREF Endeksi" ile
+# günlük bileşiklenmesi bunun kanıtıdır; TCMB haftalık repo ihalesinde de
+# "basit" ve "bileşik" faiz ayrı ayrı ilan edilir). Strip getirisi ise
+# y = (ödeme/fiyat)^(365/gün) − 1 ile YILLIK BİLEŞİKTİR.
+#
+# İkisini doğrudan çıkarmak taşımanın İŞARETİNİ ters çevirir: 21.08.2026'da
+# TLREF %39,86 basit → bileşik %48,94; 2 yıllık spot %40,46. Basit farkla
+# taşıma +0,61 puan (POZİTİF) görünür, konvansiyon uyumlu farkla −8,48 puan
+# (NEGATİF). Bu yüzden fonlama faizleri önce eğrinin konvansiyonuna çevrilir.
+GUN_SAYISI = 365.0          # ACT/365 — eğriyle aynı gün sayımı
+POLITIKA_VADE_GUN = 7.0     # 1 hafta repo
+
+# AOFM'nin yayımlanabilmesi için gereken en az APİ fonlaması (MİLYON TL).
+# Fonlama hattındaki AOFM_TABAN_ESIK ile AYNI sayı olmalıdır.
+AOFM_TABAN_ESIK_MN = 5_000.0
+
+# Σ strip fiyatı = kuponlu tahvil fiyatı ÖZDEŞLİĞİNİN kabul eşiği (TL, 100
+# nominal ölçeğinde). TCMB fiyatları üç haneye yuvarlanmış yayımlıyor;
+# 0,0005 yuvarlama payıdır. Aşılırsa hat DURUR.
+OZDESLIK_ESIK = 0.0005
+
+
+def gecelik_bilesik(r: pd.Series) -> pd.Series:
+    """BASİT yıllık gecelik oran → YILLIK BİLEŞİK (günlük çevrim)."""
+    return ((1 + r / 100.0 / GUN_SAYISI) ** GUN_SAYISI - 1) * 100.0
+
+
+def vadeli_bilesik(r: pd.Series, vade_gun: float) -> pd.Series:
+    """BASİT yıllık `vade_gun` vadeli oran → YILLIK BİLEŞİK."""
+    k = GUN_SAYISI / vade_gun
+    return ((1 + r / 100.0 * vade_gun / GUN_SAYISI) ** k - 1) * 100.0
+
 # Düğümler (yıl). 10 yıl BİLİNÇLİ YOK: aktif sıfır kuponlu evrenin en uzun
 # noktası ~9 yıl; "10 yıllık" düğüm çoğu gün UYDURMA olurdu.
 DUGUM = [0.25, 0.5, 1.0, 2.0, 3.0, 5.0, 7.0, 9.0]
@@ -165,7 +199,10 @@ def _getiri_matrisi(F: pd.DataFrame, K: pd.DataFrame):
     T = GUN / 365.0
     disarida = int(np.sum(np.isfinite(Y) & ((Y < GETIRI_ALT) | (Y > GETIRI_UST))))
     Y = np.where((Y >= GETIRI_ALT) & (Y <= GETIRI_UST), Y, np.nan)
-    return P.index, np.asarray(T), Y, K, disarida
+    # Ham FİYAT da döner: strip toplamı özdeşliğinin birim sınaması getiriden
+    # değil doğrudan fiyattan yapılır (getiriye çevirip geri dönmek
+    # yuvarlamayı büyütürdü).
+    return P.index, np.asarray(T), Y, K, disarida, Pv
 
 
 def _ara_deger(t: np.ndarray, y: np.ndarray, hedefler) -> np.ndarray:
@@ -244,7 +281,7 @@ def _par_getiri(t: np.ndarray, y: np.ndarray, vade: float = 2.0,
 
 def egri_paneli(F: pd.DataFrame, K: pd.DataFrame):
     """Günlük spot eğri → düğüm paneli + tanı paneli + günlük ham kesitler."""
-    tarih, T, Y, K, disarida = _getiri_matrisi(F, K)
+    tarih, T, Y, K, disarida, Pv = _getiri_matrisi(F, K)
     strip = K["strip"].to_numpy()
     n_gun, n_kod = Y.shape
     dugum_ad = [DUGUM_AD[d] for d in DUGUM]
@@ -291,7 +328,8 @@ def egri_paneli(F: pd.DataFrame, K: pd.DataFrame):
             "kod": K["kod"].to_numpy()[m][sira],
             "strip": strip[m][sira],
             "itfa": K["itfa"].to_numpy()[m][sira],
-            "vade_yil": ti, "getiri": yi * 100.0})
+            "vade_yil": ti, "getiri": yi * 100.0,
+            "fiyat": Pv[i][m][sira]})
     Ndf = pd.DataFrame(N, index=tarih, columns=dugum_ad)
     Ndf["par2y"] = par2
     Tdf = pd.DataFrame(tani, index=tarih, columns=[
@@ -409,6 +447,61 @@ def yayim_gunleri(aylik: pd.Series, tarih: pd.DatetimeIndex, yayim_gun: int,
 
 
 # ===========================================================================
+# (3b) ANKET BEKLENTİSİNİ VADEYE KADARKİ ORTALAMAYA ÇEVİRME
+# ===========================================================================
+def anket_ortalama(cipalar: dict[float, pd.Series],
+                   vadeler: list[float]) -> dict[float, pd.Series]:
+    """PKA NOKTA beklentilerinden vadeye kadarki ORTALAMA enflasyonu kurar.
+
+    Girdi `{yıl: seri}` — o YILIN tek yıllık enflasyon beklentisi
+    (1: π12, 2: π24, 5: π5y). Çıktı `{vade: seri}` — vadeye kadarki
+    GEOMETRİK ORTALAMA yıllık enflasyon:
+
+        π̄(T) = [ Π_{k=1..T} (1 + π_k) ]^(1/T) − 1
+
+    ARA YILLAR (3, 4): iki çıpa arasında log(1+π) ekseninde DOĞRUSAL ara
+    değer. Anket bu yılları sormaz; patika bir VARSAYIMDIR ve sayfada
+    metodoloji notu olarak yazılır.
+
+    SON ÇIPADAN SONRASI (6, 7): SABİT tutulur — son çıpanın oranı devam eder.
+    Trend ekstrapolasyonu yapılmaz; eğrinin kendisinde de ekstrapolasyon yasak.
+
+    Neden gerekli: başabaş enflasyon vadeye kadarki ORTALAMA'dır, PKA serisi
+    ise "X ay SONRASININ yıllık" oranıdır. İkisini doğrudan çıkarmak risk
+    primini sistematik biçimde şişirir.
+    """
+    if not cipalar:
+        return {}
+    cipa_yil = sorted(cipalar)
+    ind = cipalar[cipa_yil[0]].index
+    maks_yil = int(max(max(vadeler), max(cipa_yil)))
+    # log(1+π) ekseninde yıl yıl patika
+    L = pd.DataFrame(index=ind, columns=range(1, maks_yil + 1), dtype=float)
+    for y in cipa_yil:
+        L[int(y)] = np.log1p(cipalar[y] / 100.0)
+    for k in range(1, maks_yil + 1):
+        if k in [int(y) for y in cipa_yil]:
+            continue
+        alt = [int(y) for y in cipa_yil if y < k]
+        ust = [int(y) for y in cipa_yil if y > k]
+        if alt and ust:
+            a, b = max(alt), min(ust)
+            w = (k - a) / (b - a)
+            L[k] = L[a] * (1 - w) + L[b] * w
+        elif alt:                       # son çıpadan sonrası: SABİT
+            L[k] = L[max(alt)]
+        else:                           # ilk çıpadan öncesi: SABİT
+            L[k] = L[min(ust)]
+    out: dict[float, pd.Series] = {}
+    for v in vadeler:
+        n = int(round(v))
+        if n < 1:
+            continue
+        out[v] = (np.expm1(L[list(range(1, n + 1))].mean(axis=1)) * 100.0)
+    return out
+
+
+# ===========================================================================
 # (4) ANA BİLEŞENLER
 # ===========================================================================
 def ana_bilesenler(N: pd.DataFrame):
@@ -453,16 +546,26 @@ def ana_bilesenler(N: pd.DataFrame):
 # ===========================================================================
 def ytm_sinamasi(B: pd.DataFrame, KB: pd.DataFrame, K: pd.DataFrame,
                  kesit: pd.DataFrame, gun: pd.Timestamp) -> dict:
-    """Çıpa gününde her aktif kuponlu tahvil için:
+    """Çıpa gününde her aktif kuponlu tahvil için İÇ TUTARLILIK denetimi.
 
-      · nakit akışı = kendi strip'lerinin (itfa, ödeme) çiftleri (UYDURULMAZ),
-      · piyasa YTM'si = gözlenen temiz fiyattan bileşik iç verim,
-      · model fiyatı = aynı nakit akışının SPOT EĞRİYLE iskontosu,
-      · model YTM'si = model fiyatından bileşik iç verim.
+    BU BAĞIMSIZ BİR DOĞRULAMA DEĞİLDİR — ÖZDEŞLİKTİR. Şöyle:
 
-    İkisi arasındaki fark eğrinin gerçek fiyatları ne kadar açıkladığını
-    ölçer. Bu bir TANIDIR, hattı durdurmaz: gösterge fiyatlar tam eşzamanlı
-    değildir ve strip likiditesi tahvilinkinden farklıdır.
+      · nakit akışı = tahvilin KENDİ strip'lerinin (itfa, ödeme) çiftleri,
+      · iskonto oranı = eğrinin o vadedeki değeri, yani TAM O STRİP'İN
+        kendi getirisi: s_i = (CF_i / P_i)^(365/gün) − 1,
+      · dolayısıyla CF_i · (1 + s_i)^(−t_i) = P_i ve
+        model_fiyat = Σ P_i.
+
+    TCMB'nin yayımladığı kuponlu tahvil "Değer"i de tam olarak strip
+    fiyatlarının toplamıdır (50 tahvilin 50'sinde |fark| < 5e-13 ölçüldü).
+    Kalan mikroskobik sapma yalnız AYNI VADEDE birden çok strip bulunduğunda
+    alınan MEDYANDAN gelir.
+
+    O hâlde bu ne işe yarar? Bir BİRİM SINAMASIDIR: özdeşlik bozulursa
+    (ödeme tanımı, etiket sınıflandırması, strip↔tahvil eşlemesi ya da
+    fiyat ölçeği bozulmuşsa) buradan görünür. Sayfada "bağımsız çapraz
+    sınama" DİYE SUNULMAZ; gerçek bağımsız sınama Hazine ihale sonuçları ya
+    da BİST kesin alım-satım kapanışıyla yapılırdı, bu hatta ikisi de yok.
     """
     if B.empty or gun not in B.index or kesit.empty:
         return {}
@@ -473,6 +576,8 @@ def ytm_sinamasi(B: pd.DataFrame, KB: pd.DataFrame, K: pd.DataFrame,
     tekil = np.unique(np.round(t, 6))
     y_tekil = np.array([np.median(y[np.isclose(t, v)]) for v in tekil])
     fiyatlar = B.loc[gun]
+    fiyatlar_strip = kesit.set_index("kod")["fiyat"] if "fiyat" in kesit.columns \
+        else pd.Series(dtype=float)
     K_ind = K.dropna(subset=["anahtar"]).groupby("anahtar")
     satir = []
     for _, b in KB.iterrows():
@@ -493,24 +598,55 @@ def ytm_sinamasi(B: pd.DataFrame, KB: pd.DataFrame, K: pd.DataFrame,
             continue
         model_fiyat = float(np.sum(tutar * (1.0 + s) ** (-vade)))
         model = _bilesik_ytm(vade, tutar, model_fiyat)
+        # ÖZDEŞLİK AYAĞI: tahvilin gözlenen fiyatı, kendi strip fiyatlarının
+        # toplamı MI? (Eğriden geçmeden, doğrudan fiyat toplamı.)
+        # Bacaklardan biri kesitte yoksa (vadesi MIN_GUN'ün altına inmiş ya da
+        # getirisi makul aralığın dışında kalmış) toplam EKSİK olur; o tahvil
+        # özdeşlik denetimine ALINMAZ, "eksik bacak" diye işaretlenir.
+        bacak = [fiyatlar_strip.get(kk, np.nan) for kk in akis["kod"]]
+        ozdes_tam = bool(np.all(np.isfinite(np.asarray(bacak, dtype=float))))
+        strip_fiyat = float(np.sum(bacak)) if ozdes_tam else np.nan
         satir.append({
             "kod": b["kod"], "itfa": b["itfa"],
             "vade_yil": round(float(vade.max()), 4),
             "nakit_akisi_n": int(len(vade)),
             "piyasa_fiyat": round(float(p), 4),
             "model_fiyat": round(model_fiyat, 4),
+            "strip_toplam": round(strip_fiyat, 6) if ozdes_tam else None,
+            "ozdeslik_fark": (round(abs(strip_fiyat - float(p)), 8)
+                              if ozdes_tam else None),
             "piyasa_ytm": round(piyasa * 100.0, 4),
             "model_ytm": round(model * 100.0, 4),
             "fark_puan": round((piyasa - model) * 100.0, 4)})
     if not satir:
         return {}
     d = pd.DataFrame(satir)
+    # BİRİM SINAMASI: Σ strip fiyatı = tahvil fiyatı. Bu bir DOĞRULAMA değil,
+    # veri düzeninin özdeşliğidir; bozulursa ödeme/etiket/eşleme bozulmuştur.
+    oz = d["ozdeslik_fark"].dropna()
+    ozdes_maks = float(oz.max()) if len(oz) else float("nan")
+    ozdes_gecti = bool(len(oz) and ozdes_maks < OZDESLIK_ESIK)
+    if len(oz) and not ozdes_gecti:
+        raise SystemExit(
+            f"DUR: strip toplamı özdeşliği bozuldu — en büyük |Σ strip − "
+            f"tahvil fiyatı| {ozdes_maks:.6f} TL (eşik {OZDESLIK_ESIK}). "
+            "Ödeme tanımı, etiket sınıflandırması ya da strip↔tahvil "
+            "eşlemesi bozulmuş olabilir; siteye kopyalama YAPILMAZ.")
+    if not len(oz):
+        uyar("ÖZDEŞLİK SINANAMADI: hiçbir tahvilin bütün strip bacakları "
+             "günlük kesitte bulunamadı.")
     return {
         "n": int(len(d)),
         "gun": str(gun.date()),
         "medyan_fark_puan": round(float(d["fark_puan"].abs().median()), 4),
         "maks_fark_puan": round(float(d["fark_puan"].abs().max()), 4),
         "medyan_fiyat_fark": round(float((d["model_fiyat"] - d["piyasa_fiyat"]).abs().median()), 4),
+        # DÜRÜST ETİKET: bu bir özdeşliktir, bağımsız sınama değildir.
+        "ozdeslik": True,
+        "ozdeslik_n": int(len(oz)),
+        "ozdeslik_maks_tl": (round(ozdes_maks, 8) if len(oz) else None),
+        "ozdeslik_esik_tl": OZDESLIK_ESIK,
+        "ozdeslik_gecti": ozdes_gecti,
         "tablo": d.to_dict("records"),
     }
 
@@ -568,16 +704,49 @@ def kos() -> int:
 
     # --- referans faizler ve taşıma ---------------------------------------
     for kol in ("tlref", "politika", "aofm", "koridor_alt", "koridor_ust",
-                "bist_on", "politika_ger"):
+                "bist_on", "politika_ger", "fon_top"):
         if kol in G.columns:
             M[kol] = G[kol].reindex(tarih)
+
+    # AOFM GEÇERLİLİK KAPISI (Fonlama hattıyla AYNI eşik, tek yerde tanımlı
+    # olamıyor çünkü iki hat ayrı depolarda koşuyor — eşik ikisinde de 5
+    # milyar TL ve ozet.json'a basılıyor ki karşılaştırılabilsin).
+    # AOFM bir AĞIRLIKLI ORTALAMADIR; APİ fonlaması sıfıra inince ağırlık
+    # kalmaz ve yayımlanan sayı son değerinde DONAR (12.08–21.08.2026 boyunca
+    # 40,00 sabit). Böyle bir günün AOFM'sini "fiilî fonlama maliyeti" diye
+    # manşete koymak yanlıştır: sistemin marjinal fiyatını o gün
+    # sterilizasyon belirler.
+    M["aofm_ham"] = M["aofm"]
+    if "fon_top" in M.columns:
+        M["aofm_gecerli"] = (M["fon_top"].notna()
+                             & (M["fon_top"] >= AOFM_TABAN_ESIK_MN)
+                             & M["aofm"].notna())
+    else:
+        uyar("AOFM TABANI YOK: TP.APIFON1.TOP çekilemedi — AOFM geçerlilik "
+             "kapısı uygulanamıyor, ham seri kullanılıyor.")
+        M["aofm_gecerli"] = M["aofm"].notna()
+    M["aofm"] = M["aofm_ham"].where(M["aofm_gecerli"])
+
     # 2018 öncesinde 1 hafta repo SATIŞ kotasyonu yok; gerçekleşen haftalık
     # repo faizi VEKİL alınır (bu vekil sayfada açıkça yazılır).
-    M["politika_bilesik"] = M["politika"].fillna(M["politika_ger"])
-    M["carry_2y_tlref"] = M["n2y"] - M["tlref"]
-    M["carry_2y_politika"] = M["n2y"] - M["politika_bilesik"]
-    M["carry_2y_aofm"] = M["n2y"] - M["aofm"]
-    M["carry_3a_tlref"] = M["n3a"] - M["tlref"]
+    # AD NOTU: bu kolon iki seriyi BİRLEŞTİRİR, bileşikleştirmez — eski adı
+    # (`politika_bilesik`) tam da bu yüzden yanıltıcıydı.
+    M["politika_birlesik"] = M["politika"].fillna(M["politika_ger"])
+
+    # Konvansiyon dönüşümü: BASİT → BİLEŞİK. Taşıma YALNIZ bunlardan hesaplanır.
+    M["tlref_bilesik"] = gecelik_bilesik(M["tlref"])
+    M["aofm_bilesik"] = gecelik_bilesik(M["aofm"])
+    M["politika_bilesik_gercek"] = vadeli_bilesik(M["politika_birlesik"],
+                                                  POLITIKA_VADE_GUN)
+    M["carry_2y_tlref"] = M["n2y"] - M["tlref_bilesik"]
+    M["carry_2y_politika"] = M["n2y"] - M["politika_bilesik_gercek"]
+    M["carry_2y_aofm"] = M["n2y"] - M["aofm_bilesik"]
+    M["carry_3a_tlref"] = M["n3a"] - M["tlref_bilesik"]
+    # Basit farkı da tut: sayfada "konvansiyon farkı ne kadar" dersi buradan
+    # okunur ve ham (basit) sayı gizlenmez.
+    M["carry_2y_tlref_basit"] = M["n2y"] - M["tlref"]
+    M["carry_2y_aofm_basit"] = M["n2y"] - M["aofm"]
+    M["konvansiyon_farki_tlref"] = M["tlref_bilesik"] - M["tlref"]
 
     # --- beklenti ve enflasyon (günlüğe yayılmış) --------------------------
     pka12 = gunluge_yay(A["pka_12a"], tarih, PKA_YAYIM_GUN)
@@ -592,11 +761,35 @@ def kos() -> int:
     M["tufe_yillik"] = tufe_yillik
     M["pka_12a_n"] = gunluge_yay(A["pka_12a_n"], tarih, PKA_YAYIM_GUN)
 
+    # --- ANKET BEKLENTİSİNİN VADE YAPISI -----------------------------------
+    # PKA serileri NOKTA oranlardır, ORTALAMA değildir (EVDS meta verisinden
+    # doğrudan okundu):
+    #   TP.PKAUO.S01.E.U = "12 Ay SONRASININ Yıllık TÜFE Beklentisi"
+    #   TP.PKAUO.S01.F.U = "24 Ay SONRASININ Yıllık TÜFE Beklentisi"
+    #   TP.PKAUO.S01.G.U = "5 Yıl SONRASININ Yıllık TÜFE Beklentisi"
+    # Yani π24 İKİNCİ YILIN tek yıllık oranıdır, iki yıllık ortalama DEĞİL.
+    # Başabaş enflasyon ise tanımı gereği vadeye kadarki yıllık ORTALAMA'dır.
+    # İkisini doğrudan çıkarmak risk primini şişirir: 21.08.2026'da 2 yıllık
+    # ortalama beklenti √(1,2369·1,1803)−1 = %20,83'tür; nokta beklentiyi
+    # (%18,03) kullanmak primi 9,01 yerine 11,80 puan gösterir (%31 şişik).
+    #
+    # VARSAYIM (metodoloji notu): çıpalar arasında yıllık enflasyon patikası
+    # LOG-DOĞRUSAL ara değerle kurulur — 1. yıl π12, 2. yıl π24, 5. yıl π5y;
+    # 3. ve 4. yıl bu iki çıpa arasında log(1+π) ekseninde doğrusaldır.
+    # Patika bir VARSAYIMDIR; anket 3. ve 4. yılı sormaz.
+    ort_bek = anket_ortalama({1: pka12, 2: pka24, 5: pka5y}, REEL_DUGUM)
+    for v, seri in ort_bek.items():
+        M[f"pka_ort_{REEL_AD[v][1:]}"] = seri
+
     # --- REEL FAİZ (FISHER — bağlayıcı konvansiyon) ------------------------
     #   r = (1 + i) / (1 + π) − 1     ·  basit çıkarma (i − π) DEĞİL
     M["reel_ileri"] = ((1 + M["n1y"] / 100) / (1 + pka12 / 100) - 1) * 100.0
     M["reel_geriye"] = ((1 + M["n1y"] / 100) / (1 + tufe_yillik / 100) - 1) * 100.0
-    M["reel_ileri_2y"] = ((1 + M["n2y"] / 100) / (1 + pka24 / 100) - 1) * 100.0
+    # 2 yıllık reel faizde π olarak İKİ YILLIK ORTALAMA beklenti kullanılır;
+    # 2 yıllık nominal getiri de yıllıklandırılmış ortalamadır — iki taraf
+    # ancak böyle aynı ufku ölçer.
+    M["reel_ileri_2y"] = ((1 + M["n2y"] / 100)
+                          / (1 + M["pka_ort_2y"] / 100) - 1) * 100.0
     M["reel_ileri_basit"] = M["n1y"] - pka12           # YALNIZ ders için
     M["fisher_basit_fark"] = M["reel_ileri_basit"] - M["reel_ileri"]
     M["reel_makas"] = M["reel_ileri"] - M["reel_geriye"]
@@ -610,9 +803,14 @@ def kos() -> int:
             M[f"be_{ad[1:]}"] = (((1 + M[n_ad] / 100) / (1 + M[ad] / 100) - 1)
                                  * 100.0)
     # Enflasyon risk primi / şüphe payı: BAŞABAŞ ≠ BEKLENTİ.
-    M["prim_1y"] = M["be_1y"] - pka12
-    M["prim_2y"] = M["be_2y"] - pka24
-    M["prim_5y"] = M["be_5y"] - pka5y
+    # HER İKİ TARAF DA VADEYE KADARKİ ORTALAMADIR (yukarıdaki patika notu).
+    # prim_1y'de iki taraf zaten aynıydı (π12 ilk yılın oranı = ilk yılın
+    # ortalaması); 2, 5 ve 7 yılda ortalamaya çevirmek şart.
+    M["prim_1y"] = M["be_1y"] - M["pka_ort_1y"]
+    M["prim_2y"] = M["be_2y"] - M["pka_ort_2y"]
+    M["prim_3y"] = M["be_3y"] - M["pka_ort_3y"] if "be_3y" in M.columns else np.nan
+    M["prim_5y"] = M["be_5y"] - M["pka_ort_5y"]
+    M["prim_7y"] = M["be_7y"] - M["pka_ort_7y"] if "be_7y" in M.columns else np.nan
 
     # --- ana bileşenler ----------------------------------------------------
     PC, pca_tani = ana_bilesenler(M)
@@ -742,14 +940,70 @@ def kos() -> int:
                 "reel_ileri_basit", "fisher_basit_fark", "reel_makas",
                 "r1y", "r2y", "r3y", "r5y", "r7y",
                 "be_1y", "be_2y", "be_3y", "be_5y", "be_7y",
-                "prim_1y", "prim_2y", "prim_5y",
-                "tlref", "politika", "aofm", "koridor_alt", "koridor_ust",
+                "prim_1y", "prim_2y", "prim_3y", "prim_5y", "prim_7y",
+                "pka_ort_1y", "pka_ort_2y", "pka_ort_3y", "pka_ort_5y",
+                "pka_ort_7y",
+                "carry_2y_tlref_basit", "carry_2y_aofm_basit",
+                "tlref_bilesik", "aofm_bilesik", "politika_bilesik_gercek",
+                "politika_birlesik", "konvansiyon_farki_tlref", "fon_top",
+                "tlref", "politika", "aofm", "aofm_ham", "koridor_alt",
+                "koridor_ust",
                 "pka_12a", "pka_24a", "pka_5y", "pka_faiz_12a", "pka_faiz_24a",
                 "tufe_yillik", "pka_12a_n"):
         if kol in M.columns:
             v, t = _son(kol)
             anlik[kol] = v
             anlik[kol + "_tarih"] = t
+
+    # --- AOFM geçerlilik durumu -------------------------------------------
+    aofm_ge = M["aofm_gecerli"].reindex([s_gun]).fillna(False).iloc[0]
+    gec_seri = M.index[M["aofm_gecerli"].fillna(False)]
+    aofm_durum = {
+        "gecerli": bool(aofm_ge),
+        "esik_mn_tl": AOFM_TABAN_ESIK_MN,
+        "taban_mn_tl": (float(M.loc[s_gun, "fon_top"])
+                        if "fon_top" in M.columns
+                        and np.isfinite(M.loc[s_gun, "fon_top"]) else None),
+        "son_gecerli_gun": (str(gec_seri[-1].date()) if len(gec_seri) else None),
+        "gecersiz_gun_son1y": int((~M["aofm_gecerli"].tail(260)).sum()),
+    }
+    if not aofm_ge:
+        uyar("AOFM GEÇERSİZ: çıpa gününde APİ fonlaması "
+             f"{(aofm_durum['taban_mn_tl'] or 0) / 1000:.1f} milyar TL ile "
+             f"{AOFM_TABAN_ESIK_MN / 1000:.0f} milyar TL eşiğinin altında; "
+             "AOFM manşet taşıma ölçüsü olarak KULLANILMAZ (yerine TLREF).")
+
+    # --- başabaş vade yapısının ŞEKLİ (elle 'yukarı eğimli' yazmak yasak) ---
+    be_nokta = [(v, float(M.loc[s_gun, f"be_{REEL_AD[v][1:]}"]))
+                for v in REEL_DUGUM
+                if f"be_{REEL_AD[v][1:]}" in M.columns
+                and np.isfinite(M.loc[s_gun, f"be_{REEL_AD[v][1:]}"])]
+    basabas_sekil = None
+    if len(be_nokta) >= 3:
+        vadeler = [v for v, _ in be_nokta]
+        degerler = [x for _, x in be_nokta]
+        tepe = int(np.argmax(degerler))
+        dip = int(np.argmin(degerler))
+        if tepe == len(degerler) - 1:
+            sekil, tepe_vade = "yukarı eğimli", None
+        elif dip == len(degerler) - 1 and tepe == 0:
+            sekil, tepe_vade = "aşağı eğimli", None
+        elif 0 < tepe < len(degerler) - 1:
+            sekil, tepe_vade = "kambur", vadeler[tepe]
+        elif 0 < dip < len(degerler) - 1:
+            sekil, tepe_vade = "çukur", vadeler[dip]
+        else:
+            sekil, tepe_vade = "aşağı eğimli", None
+        basabas_sekil = {
+            "sekil": sekil, "tepe_vade": tepe_vade,
+            "vadeler": vadeler, "degerler": [round(x, 4) for x in degerler],
+            "ilk_son_fark": round(degerler[-1] - degerler[0], 4),
+        }
+
+    # --- çıpa gününde kurulamayan REEL düğümler ---------------------------
+    reel_bos = [f"{int(v)} yıl" for v in REEL_DUGUM
+                if REEL_AD[v] not in M.columns
+                or not np.isfinite(M.loc[s_gun, REEL_AD[v]])]
 
     ozet = {
         "son_gun": s_gun.strftime("%Y-%m-%d"),
@@ -767,6 +1021,16 @@ def kos() -> int:
         "anlik": anlik,
         "kapsama": kapsama,
         "kimlik": kimlik,
+        "aofm_durum": aofm_durum,
+        "basabas_sekil": basabas_sekil,
+        "reel_bos_dugumler": reel_bos,
+        "konvansiyon": {
+            "gun_sayisi": GUN_SAYISI,
+            "politika_vade_gun": POLITIKA_VADE_GUN,
+            "not": ("Fonlama faizleri (TLREF, AOFM, 1 hafta repo) BASİT yıllık "
+                    "yayımlanır; eğri getirisi YILLIK BİLEŞİKTİR. Taşıma "
+                    "hesabında fonlama faizleri önce bileşiğe çevrilir."),
+        },
         "pca": pca_tani,
         "ytm_sinamasi": ytm,
         "kiyas_gunleri": {k: str(v.date()) for k, v in kiyas.items()},
@@ -794,6 +1058,29 @@ def kos() -> int:
             "fisher": ("Reel faiz FISHER kimliğiyle hesaplanır: (1+i)/(1+π)−1. "
                        "Basit çıkarma yalnız yöntem farkını göstermek için "
                        "hesaplanmıştır."),
+            "konvansiyon": ("TAŞIMA KONVANSİYONU: TLREF, AOFM ve 1 hafta repo "
+                            "faizi BASİT yıllık yayımlanır; strip getirisi "
+                            "yıllık BİLEŞİKTİR. Karşılaştırmadan önce fonlama "
+                            "faizleri bileşiğe çevrilir — gecelik için "
+                            "(1+r/365)^365−1, 1 hafta için (1+r·7/365)^(365/7)−1. "
+                            "Çevrilmezse taşımanın İŞARETİ ters çıkabilir."),
+            "ytm_ozdeslik": ("YTM sınaması BAĞIMSIZ BİR DOĞRULAMA DEĞİL, bir "
+                             "İÇ TUTARLILIK ÖZDEŞLİĞİDİR: tahvilin nakit akışı "
+                             "kendi strip'lerinden kurulup yine o strip'lerin "
+                             "kendi getirileriyle iskonto edildiği için model "
+                             "fiyatı zorunlu olarak strip fiyatlarının "
+                             "toplamına eşittir — TCMB'nin yayımladığı tahvil "
+                             "'Değer'i de odur. Birim sınaması olarak "
+                             "değerlidir (ödeme/etiket/eşleme bozulursa "
+                             "görünür), doğrulama olarak değil."),
+            "anket_patikasi": ("PKA serileri 'X ay SONRASININ yıllık' TÜFE "
+                               "oranlarıdır, vadeye kadarki ORTALAMA değil. "
+                               "Başabaş enflasyonla karşılaştırmak için 12 ay, "
+                               "24 ay ve 5 yıl çıpaları arasında log-doğrusal "
+                               "bir yıllık enflasyon PATİKASI kurulur ve "
+                               "vadeye kadarki geometrik ortalama alınır. "
+                               "Ara yıllar (3, 4) VARSAYIMDIR; son çıpanın "
+                               "ötesi (6, 7) sabit tutulur."),
         },
         "uyarilar": list(_UYARI),
     }

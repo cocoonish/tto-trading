@@ -137,15 +137,18 @@ birikimli seriye verir ve aylık gözlemi yalnız çubuk olarak arkada tutar.
 
 Manşet cari açık son 12 aylık dilimde
 <Deger proje="odemeler-dengesi" anahtar="cari12_mia" ondalik={1}>−38,9</Deger>
-milyar USD; ama bu açığın **tamamı ve fazlası** iki kalemden geliyor. Altın ve
-enerji hariç bırakıldığında ülke
+milyar USD; ama açığın kaynağı iki kalemdir. Altın ve enerji hariç
+bırakıldığında ülke
 <Deger proje="odemeler-dengesi" anahtar="cekirdek12_mia" ondalik={1}>28,9</Deger>
-milyar USD **fazla** veriyor.
+milyar USD **<Deger proje="odemeler-dengesi" anahtar="cekirdek_yon" ondalik={0}>fazla</Deger>**
+veriyor.
 *<Deger proje="odemeler-dengesi" anahtar="cari_cumlesi" ondalik={0}>12 aylık birikimli cari açık; altın ve enerji hariç çekirdek cari denge fazla. Aradaki makas iki kalemin toplam faturasıdır.</Deger>*
 
 Finansman tarafında ise net giriş
 <Deger proje="odemeler-dengesi" anahtar="fin_giris12_mia" ondalik={1}>32,4</Deger>
-milyar USD ile cari açığın altında kalıyor; aradaki farkı net hata ve noksan
+milyar USD ile cari açığın
+%<Deger proje="odemeler-dengesi" anahtar="fin_acik_karsilama" ondalik={1}>83,3</Deger>'ünü
+karşılıyor; aradaki farkı net hata ve noksan
 (<Deger proje="odemeler-dengesi" anahtar="nhn12_mia" ondalik={1}>−20,4</Deger>
 milyar USD) ve rezerv
 (<Deger proje="odemeler-dengesi" anahtar="rezerv_yon" ondalik={0}>azaldı</Deger>)
@@ -154,7 +157,9 @@ tek cümle, kur ve CDS fiyatlamasının başladığı yerdir.
 
 Brüt dış finansman ihtiyacı ise
 <Deger proje="odemeler-dengesi" anahtar="ihtiyac12_mia" ondalik={1}>125,7</Deger>
-milyar USD — cari açığın **üç katından fazla**. İhtiyacın yalnız
+milyar USD — cari açığın
+**<Deger proje="odemeler-dengesi" anahtar="ihtiyac_cari_kat" ondalik={1}>3,2</Deger>
+katı**. İhtiyacın yalnız
 %<Deger proje="odemeler-dengesi" anahtar="ihtiyacta_cari_acik_payi" ondalik={1}>30,9</Deger>'u
 cari açıktan geliyor; kalanı vadesi gelen uzun vadeli anaparadır. "Cari açık
 kapandı, dış kırılganlık bitti" cümlesinin neden yanlış olduğu tam olarak
@@ -188,11 +193,24 @@ değildir, gelen kaynağın rezervde biriken kısmıdır.
   <span class="etiket">Bu kimlik bu hatta bir denetimdir, bir varsayım değil</span>
   Kimlik her koşuda ayın kendisinde sınanır ve sapma eşiği aşarsa hat DURUR —
   eski grafiğin üstüne taze metin yazılmaz.{' '}
-  <Deger proje="odemeler-dengesi" anahtar="kimlik_cumlesi" ondalik={0}>Bu koşuda 21 kimlik sınandı, 21 tanesi geçti.</Deger>{' '}
+  <Deger proje="odemeler-dengesi" anahtar="kimlik_cumlesi" ondalik={0}>Bu koşuda 29 denetim çalıştı, 29 tanesi geçti; ayrıca 2 sunum tutarlılığı kaydı tautoloji olduğu için sayıma girmedi.</Deger>{' '}
   Ana kimlik <Deger proje="odemeler-dengesi" anahtar="kimlik_bop_n" ondalik={0}>431</Deger>{' '}
   ayda sınandı, en büyük sapma{' '}
   <Deger proje="odemeler-dengesi" anahtar="kimlik_bop_maks_sapma" ondalik={2}>0,00</Deger>{' '}
-  milyon USD.
+  milyon USD. Sayılan denetimlerin tamamı{' '}
+  [`uyarilar.json`](/projeler/odemeler-dengesi/uyarilar.json) dosyasında,
+  kayıt kayıt yayımlanır.
+</div>
+
+<div class="not">
+  <span class="etiket">Tautoloji sayılmaz</span>
+  Bir "kimlik", sol tarafı sağ taraftan **türetilmişse** hiçbir şeyi
+  sınamaz: sapması tanım gereği sıfırdır ve girdiler ne kadar bozulursa
+  bozulsun sıfır kalır. Bu sayfada iki kayıt böyledir (Şekil 05'in yığın
+  toplamı, Şekil 11'in alt paneli); ikisi de `"tautoloji": true` diye
+  işaretlenir, denetim sayısına **girmez** ve sayfada "sınandı" diye
+  sunulmaz. Yerlerine bağımsız kaynağa dayanan ölçümler kondu — artık
+  bandı ve mertebe kıyası (aşağıda).
 </div>
 
 ### İşaret rejimi: BPM6 tuzağı
@@ -551,7 +569,7 @@ işaretiyle** taşır:
   src="/projeler/odemeler-dengesi/05_finans_hesabi_kirilim.html"
   baslik="Finans hesabının kapı kapı kırılımı, giriş işaretiyle ve rezerv hariç: 12 aylık birikimli ve aylık hâli"
   no="05"
-  yukseklik={1291}
+  yukseklik={1421}
 />
 
 ### Bu şekil nasıl hesaplanıyor?
@@ -621,7 +639,7 @@ dönebilir. (iii) Türev kaleminin 2014 öncesi yokluğu bir veri eksikliği de�
   src="/projeler/odemeler-dengesi/06_kaliteli_finansman.html"
   baslik="Kaliteli finansman (net DYY + özel sektör net uzun vadeli kredisi), sıcak para ve kalite payı — payda eşiğin altındayken oran boş bırakılır"
   no="06"
-  yukseklik={1657}
+  yukseklik={1785}
 />
 
 ### Bu şekil nasıl hesaplanıyor?
@@ -941,7 +959,7 @@ eşanlı belirlenir. (ii) 12 aylık birikimli şelale, dönem içindeki tek ayl�
   src="/projeler/odemeler-dengesi/11_finansman_ihtiyaci.html"
   baslik="Brüt dış finansman ihtiyacı (cari açık + uzun vadeli anapara) ve kimlikten birebir türetilen karşılanma bileşenleri"
   no="11"
-  yukseklik={1339}
+  yukseklik={1547}
 />
 
 ### Bu şekil nasıl hesaplanıyor?
@@ -1017,7 +1035,7 @@ değildir; vadesi gelecek borcun takvimi için TCMB'nin ayrı yayımladığı d�
   src="/projeler/odemeler-dengesi/12_eurobond_ve_odeme_takvimi.html"
   baslik="Eurobond ihracı ve anapara ödemesi (aylık ve 12 aylık) ile haftalık dış borç ödeme takvimi — sayfanın en taze verisi"
   no="12"
-  yukseklik={1503}
+  yukseklik={1607}
 />
 
 ### Bu şekil nasıl hesaplanıyor?

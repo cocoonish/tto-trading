@@ -22,7 +22,9 @@ from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
 
 from ayar import (HABER_KAYNAKLARI, HABER_SINIRI, HABER_ILGILI, HABER_GURULTU,
-                  TCMB_DUYURU_URL, RESMI_GAZETE_URL, RG_ILGILI)
+                  TCMB_DUYURU_URL, RESMI_GAZETE_URL, RG_ILGILI,
+                  ALAN_KALIPLARI, BOLGE_KALIPLARI, HABER_BOLUMLERI, BOLUM_SINIRI,
+                  KAYNAK_PUANI)
 
 
 @dataclass
@@ -30,9 +32,12 @@ class Haber:
     baslik: str
     baglanti: str
     kaynak: str
-    etiket: str
+    etiket: str = ""
     zaman: str = ""
     kurum: bool = False
+    ozet: str = ""            # akıştaki açıklama metni — bültenin "ayrıntı"sı buradan gelir
+    bolge: str = ""           # tr | global
+    alan: str = ""            # makro | politika | piyasa | kurum
 
 
 def _getir(url: str, zaman_asimi=20, dogrulama: bool = True) -> str | None:
@@ -66,8 +71,17 @@ def _zaman_coz(m: str | None) -> datetime | None:
     return None
 
 
-def _ayristir(xml_metin: str) -> list[tuple[str, str, datetime | None]]:
-    """(başlık, bağlantı, zaman) üçlüleri. feedparser varsa o, yoksa ElementTree."""
+def _temiz(m: str, azami: int = 420) -> str:
+    """Akış açıklamasındaki HTML'i at, kırp. Bülten okunabilir cümle ister."""
+    m = re.sub(r"<[^>]+>", " ", html.unescape(m or ""))
+    m = re.sub(r"\s+", " ", m).strip()
+    # Bazı akışlar açıklamaya kaynak adını ve "devamı" bağlantısını ekliyor.
+    m = re.sub(r"(Devamı|Devamını oku|Read more|Continue reading).*$", "", m, flags=re.I).strip()
+    return m[:azami].rstrip(" ,;:-") + ("…" if len(m) > azami else "")
+
+
+def _ayristir(xml_metin: str) -> list[tuple[str, str, "datetime | None", str]]:
+    """(başlık, bağlantı, zaman, özet). feedparser varsa o, yoksa ElementTree."""
     try:
         import feedparser
         d = feedparser.parse(xml_metin)
@@ -77,7 +91,8 @@ def _ayristir(xml_metin: str) -> list[tuple[str, str, datetime | None]]:
             if getattr(e, "published_parsed", None):
                 from calendar import timegm
                 t = datetime.fromtimestamp(timegm(e.published_parsed), tz=timezone.utc)
-            out.append((getattr(e, "title", ""), getattr(e, "link", ""), t))
+            ozet = getattr(e, "summary", "") or getattr(e, "description", "")
+            out.append((getattr(e, "title", ""), getattr(e, "link", ""), t, _temiz(ozet)))
         if out:
             return out
     except Exception:
@@ -97,20 +112,50 @@ def _ayristir(xml_metin: str) -> list[tuple[str, str, datetime | None]]:
                 if c.tag.split("}")[-1] in adlar:
                     return (c.text or "").strip() or (c.attrib.get("href") or "")
             return ""
-        out.append((al("title"), al("link"), _zaman_coz(al("pubDate", "updated", "published"))))
+        out.append((al("title"), al("link"), _zaman_coz(al("pubDate", "updated", "published")),
+                    _temiz(al("description", "summary", "content"))))
     return out
 
 
 def _sadelestir(b: str) -> str:
     b = unicodedata.normalize("NFKD", html.unescape(b or "")).lower()
-    return re.sub(r"[^a-z0-9ğüşiöç ]", "", b).strip()
+    b = re.sub(r"[^a-z0-9ğüşiöç ]", "", b)
+    # Boşlukları daralt: " - " iki boşluğa dönüşüyor ve "özet başlığın aynısı mı"
+    # karşılaştırmasını sessizce bozuyordu.
+    return re.sub(r"\s+", " ", b).strip()
 
 
-def _ilgili_mi(baslik: str) -> bool:
+def _ilgili_mi(baslik: str, ozet: str = "") -> bool:
+    """Alaka BAŞLIKTAN karara bağlanır; gürültü hem başlıkta hem özette aranır.
+
+    Özette alaka aramak yanlış pozitif üretiyordu: akış açıklaması haberin ilk
+    cümlesi olduğu için içinde "ekonomi" ya da "altın" rastgele geçebiliyor ve
+    turşu haberi makro bültenine düşüyordu.
+    """
     b = (baslik or "").lower()
-    if re.search(HABER_GURULTU, b, re.I):
+    if re.search(HABER_GURULTU, b + " " + (ozet or "").lower(), re.I):
         return False
     return bool(re.search(HABER_ILGILI, b, re.I))
+
+
+def _kaynak_puani(h: "Haber") -> int:
+    metin = f"{h.kaynak} {h.baslik}".lower()
+    return max((p for ad, p in KAYNAK_PUANI.items() if ad in metin), default=0)
+
+
+def _ozet_ise_yarar(baslik: str, ozet: str) -> str:
+    """Akış açıklaması başlığın tekrarıysa at.
+
+    Google News açıklamayı "başlık + gazete adı" olarak veriyor; bunu bültende
+    özet diye göstermek okura bir şey katmaz, yer kaplar.
+    """
+    if not ozet:
+        return ""
+    b = _sadelestir(baslik)
+    o = _sadelestir(ozet)
+    if not o or o.startswith(b[:60]) or b.startswith(o[:60]):
+        return ""
+    return ozet
 
 
 def tcmb_duyurulari(pencere_gun: int = 3) -> tuple[list[Haber], bool]:
@@ -149,7 +194,7 @@ def tcmb_duyurulari(pencere_gun: int = 3) -> tuple[list[Haber], bool]:
         if not link.startswith("http"):
             link = "https://www.tcmb.gov.tr" + link
         kayitlar.append(Haber(baslik, link, "TCMB Basın Duyuruları", "kurum",
-                              zaman.isoformat(), True))
+                              zaman.isoformat(), True, "", "tr", "kurum"))
     return kayitlar, True
 
 
@@ -181,7 +226,7 @@ def resmi_gazete() -> tuple[list[Haber], bool]:
         if re.search(r"Günlük Değerleri", baslik, re.I):      # her gün çıkan rutin ilan
             continue
         out.append(Haber(html.unescape(baslik), RESMI_GAZETE_URL, "Resmî Gazete",
-                         "kurum", bugun, True))
+                         "kurum", bugun, True, "", "tr", "kurum"))
     return out[:8], True
 
 
@@ -227,12 +272,62 @@ def _kumele(haberler: list[Haber], esik: float = 0.40) -> list[Haber]:
             kumeler.append((kh, h, 1))
         else:
             kk, temsil, n = kumeler[eslesen]
-            kumeler[eslesen] = (kk | kh, temsil, n + 1)
+            # Temsilci, kümedeki EN İTİBARLI kaynak olsun: aynı öyküyü Reuters de
+            # bir içerik çiftliği de yazmış olabilir; bültende Reuters görünsün.
+            # Özeti olan kayıt, özeti olmayana eşit puanda tercih edilir.
+            yeni_temsil = temsil
+            if (_kaynak_puani(h), bool(h.ozet)) > (_kaynak_puani(temsil), bool(temsil.ozet)):
+                yeni_temsil = h
+            kumeler[eslesen] = (kk | kh, yeni_temsil, n + 1)
     for _, temsil, n in kumeler:
         if n > 1:
             temsil.kaynak = f"{temsil.kaynak} (+{n - 1} kaynak)"
         kalanlar.append(temsil)
     return kalanlar
+
+
+def _siniflandir(baslik: str, ozet: str, kaynak_bolge: str, kaynak_alan: str) -> tuple[str, str]:
+    """(bölge, alan). Kaynağın varsayılanı, metindeki kalıplarla ezilebilir.
+
+    Neden ezilsin: AA Dünya akışında bir ABD enflasyon haberi çıkabiliyor, Bloomberg
+    HT'de bir seçim haberi. Kaynağa göre sabitlemek bültende yanlış bölüme düşürürdü.
+    """
+    metin = f"{baslik} {ozet}".lower()
+    alan = kaynak_alan if kaynak_alan != "karisik" else ""
+    # Alan: politika > makro > piyasa sırasıyla bakılır; politika en ayırt edici.
+    for ad in ("politika", "makro", "piyasa"):
+        if re.search(ALAN_KALIPLARI[ad], metin, re.I):
+            alan = ad
+            break
+    if not alan:
+        alan = "makro"
+    bolge = kaynak_bolge if kaynak_bolge != "karisik" else ""
+    tr = re.search(BOLGE_KALIPLARI["tr"], metin, re.I)
+    gl = re.search(BOLGE_KALIPLARI["global"], metin, re.I)
+    if tr and not gl:
+        bolge = "tr"
+    elif gl and not tr:
+        bolge = "global"
+    elif tr and gl and not bolge:
+        bolge = "tr"          # ikisi de geçiyorsa Türkiye açısı öne alınır
+    if not bolge:
+        bolge = "global"
+    return bolge, alan
+
+
+def bolumle(haberler: list[Haber]) -> list[dict]:
+    """Haberleri sayfadaki bölümlere dağıt (Türkiye/global × makro/politika/piyasa)."""
+    out = []
+    for bid, baslik, bolge, alan in HABER_BOLUMLERI:
+        if alan == "kurum":
+            secilen = [h for h in haberler if h.kurum]
+        else:
+            secilen = [h for h in haberler
+                       if not h.kurum and h.bolge == bolge and h.alan == alan][:BOLUM_SINIRI]
+        if secilen:
+            out.append({"id": bid, "baslik": baslik,
+                        "maddeler": [asdict(h) for h in secilen]})
+    return out
 
 
 def tara(pencere_saat: int = 30) -> tuple[list[Haber], list[str]]:
@@ -273,23 +368,25 @@ def tara(pencere_saat: int = 30) -> tuple[list[Haber], list[str]]:
             dusen.append(k["ad"])
             continue
         n = 0
-        for baslik, baglanti, zaman in kayitlar:
+        for baslik, baglanti, zaman, ozet in kayitlar:
             if not baslik:
                 continue
             if zaman is not None and zaman < sinir:
                 continue
-            if not k.get("yuksek_oncelik") and not _ilgili_mi(baslik):
+            ozet = "" if k.get("ozet_yok") else _ozet_ise_yarar(baslik, ozet)
+            if not k.get("yuksek_oncelik") and not _ilgili_mi(baslik, ozet):
                 continue          # gürültü: alaka süzgecinden geçmedi
             anahtar = _sadelestir(baslik)[:90]
             if not anahtar or anahtar in gorulen:
                 continue
             gorulen.add(anahtar)
+            bolge, alan = _siniflandir(baslik, ozet, k.get("bolge", ""), k.get("alan", ""))
             haberler.append(Haber(html.unescape(baslik).strip(), baglanti, k["ad"],
                                   k.get("etiket", ""),
                                   zaman.isoformat() if zaman else "",
-                                  bool(k.get("yuksek_oncelik"))))
+                                  bool(k.get("yuksek_oncelik")), ozet, bolge, alan))
             n += 1
-            if n >= 25:
+            if n >= 30:
                 break
 
     # Kurum duyuruları önce (hepsi), sonra haberler — her grup içinde en yeni üstte.
@@ -297,12 +394,18 @@ def tara(pencere_saat: int = 30) -> tuple[list[Haber], list[str]]:
     # varlık sebebini kesmek olurdu.
     kurumlar = sorted([h for h in haberler if h.kurum], key=lambda h: h.zaman or "", reverse=True)
     digerleri = _kumele(sorted([h for h in haberler if not h.kurum],
-                               key=lambda h: h.zaman or "", reverse=True))[:HABER_SINIRI]
+                               key=lambda h: h.zaman or "", reverse=True))
     return kurumlar + digerleri, dusen
 
 
 if __name__ == "__main__":
     h, dusen = tara()
+    for b in bolumle(h):
+        print(f"\n### {b['baslik']} ({len(b['maddeler'])})")
+        for m in b["maddeler"][:4]:
+            print(f"  · {m['baslik'][:96]}")
+            if m["ozet"]:
+                print(f"      {m['ozet'][:150]}")
     print(f"{len(h)} haber · {len(dusen)} kaynak okunamadı {dusen if dusen else ''}")
     for x in h[:20]:
         im = "K" if x.kurum else " "

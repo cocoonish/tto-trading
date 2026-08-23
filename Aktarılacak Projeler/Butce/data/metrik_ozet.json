@@ -41,8 +41,22 @@
  "stok": {
   "son_dis_ceyrek": "2026-06-30",
   "birlesik_stok_son_ay": "2026-06",
-  "doviz_payi_notu": "Döviz payı YALNIZ dış borç üzerinden verilir. Döviz cinsi YURT İÇİ ihraçlar iç borç stokunun içinde kalır ve EVDS'te ayrıştırılamaz: GEN52/53/54 akımlarını kümüle ederek stok tahmin etmek kur farkı revalüasyonunu yok saydığı için iç borcun yalnız ~%1,2'sini verir (gerçek pay bunun çok üstünde). O yüzden bu tahmin REDDEDİLDİ.",
-  "fisher_ima_faiz_fark_son_pp": 2.7631829508883357,
+  "birlesik_stok_ilk_ay": "2020-09",
+  "stok_bilesen": {
+   "ay": "2026-06",
+   "ic_borc_trl": 9.013873942,
+   "dis_senet_trl": 4.445861211476001,
+   "dis_kredi_trl": 1.4679481317720005,
+   "toplam_trl": 14.927683285248001,
+   "eski_tanim_trl": 13.3538334742,
+   "cift_sayilan_dibs_trl": 0.68623642,
+   "eksik_eurobond_trl": 2.2600862310480005,
+   "duzeltme_yuzde": 11.785752863316176
+  },
+  "stok_tanim_notu": "Stok ARAÇ (ihraç) tabanında kurulur: iç borç (A09, tüm sahipler) + yurt dışında ihraç senet (EBONDYAZDEG.ST − S1311) + dış krediler (G4 − EBONDYAZDEG.S2 − DIBSYAZDEG.S2 ÷ kur). İç borcu brüt dış borçla doğrudan toplamak İKİ FARKLI TABANI toplamak olurdu: yurt dışı yerleşiklerin DİBS'i iki kez sayılır, yurt içi yerleşiklerin eurobondu hiç sayılmazdı.",
+  "doviz_payi_notu": "Döviz payı ALT SINIRDIR. Pay yalnız gerçekten döviz cinsi iki bacağı içerir: yurt dışında ihraç edilen senet ve dış krediler. İç borç stokunun içindeki DÖVİZ CİNSİ yurt içi ihraçlar EVDS'te stok olarak ayrıştırılamaz — oysa küçük değiller: son 12 ayda iç borçlanma satışının döviz cinsi payı ölçülüyor ve ayrı anahtarla veriliyor. GEN53/54 akımlarını kümüle ederek stok tahmin etmek kur farkı revalüasyonunu yok saydığı için REDDEDİLDİ.",
+  "yurt_disi_payi_notu": "Yurt dışı payı, alacaklısı yurt dışında olan bacağın (brüt dış borç, TP.BRUTDBORCLU.G4) toplam stoktaki payıdır. DÖVİZ PAYI DEĞİLDİR: içinde yurt dışı yerleşiklerin elindeki TL cinsi DİBS de vardır ve o tutar kur şokunda TL cinsinden değişmez.",
+  "fisher_ima_faiz_fark_son_pp": 3.354344742518853,
   "fisher_ima_faiz_notu": "İma edilen reel faiz Fisher konvansiyonuyla hesaplanır: (1+i)/(1+π) − 1. Basit çıkarma (i − π) yüksek enflasyonda aynı veriden puanlarca farklı bir sayı üretir; bu depoda kullanılmaz.",
   "cevirme": {
    "son": 182.35218148845294,
@@ -52,8 +66,8 @@
    "not": "İç borç ÇEVİRME oranı finansman tablosundan (satış/ödeme) hesaplanır ve Hazine İhraç hattındaki İHALE bazlı karşılama oranıyla AYNI ŞEY DEĞİLDİR. 12 aylık birikimli zorunlu: itfasız aylarda payda sıfıra yaklaşır ve aylık oran patlar."
   },
   "ayrıstirma": {
-   "artik_pay_son": 0.19846924982916625,
-   "artik_pay_maks_5y": 0.7005675189131993,
+   "artik_pay_son": 0.1401034404423785,
+   "artik_pay_maks_5y": 0.3121487123526865,
    "esik": 0.6,
    "not": "ARTIK; genel bütçe (GEN41) ile merkezi yönetim stoku arasındaki kapsam farkını, dış borcun üç aylık adımlanmasını, nakit dışı ihracı ve değerleme etkilerini içerir. Toplamı kapatmak için düzeltme YAPILMAZ."
   }
@@ -61,6 +75,7 @@
  "ceyrek": {
   "son_ortak_ceyrek": "2026-03-31",
   "gsyh_son_ceyrek": "2026-03-31",
+  "db_son_ceyrek": "2026-06-30",
   "oran_gecikme_notu": "Oran metrikleri EN SON ORTAK ÇEYREKTE biter. GSYH ve finansal hesaplar akım serilerinden ~2 çeyrek geridedir; GSYH'yi ileri taşıyıp (ffill) daha yeni bir oran üretmek sessiz bayatlamadır."
  },
  "haftalik": {
@@ -78,8 +93,9 @@
   "cipa_ceyrek": "2026-03-31",
   "kur": 46.5551,
   "ic_trl": 9.013873942,
-  "dis_trl": 4.3399595322,
-  "toplam_trl": 13.3538334742,
+  "dis_trl": 5.913809343248001,
+  "toplam_trl": 14.927683285248001,
+  "doviz_pay": 39.61639077037634,
   "agirlik": {
    "usd": 0.9169589290746436,
    "eur": 0.08204261537533517,
@@ -89,77 +105,112 @@
    {
     "sok": -0.1,
     "kur": 41.89959,
-    "stok_paralel_trl": 12.91983752098,
-    "stok_yalniz_usd_trl": 12.95587700971266,
-    "degisim_paralel_yuzde": -3.249972781662237,
-    "degisim_yalniz_usd_yuzde": -2.980091561394744,
-    "stok_gsyh_paralel": 18.15909229543859,
-    "stok_gsyh_yalniz_usd": 18.208104570799406
+    "stok_paralel_trl": 14.336302350923201,
+    "stok_yalniz_usd_trl": 14.38541125703437,
+    "degisim_paralel_yuzde": -3.9616390770376313,
+    "degisim_yalniz_usd_yuzde": -3.632660325460691,
+    "stok_gsyh_paralel": 20.336554686238173,
+    "stok_gsyh_yalniz_usd": 20.40565794035806
    },
    {
     "sok": -0.05,
     "kur": 44.227345,
-    "stok_paralel_trl": 13.136835497589999,
-    "stok_yalniz_usd_trl": 13.15485524195633,
-    "degisim_paralel_yuzde": -1.6249863908311113,
-    "degisim_yalniz_usd_yuzde": -1.490045780697372,
-    "stok_gsyh_paralel": 18.45420093755179,
-    "stok_gsyh_yalniz_usd": 18.478707075232197
+    "stok_paralel_trl": 14.631992818085601,
+    "stok_yalniz_usd_trl": 14.656547271141186,
+    "degisim_paralel_yuzde": -1.9808195385188156,
+    "degisim_yalniz_usd_yuzde": -1.8163301627303383,
+    "stok_gsyh_paralel": 20.752633461173573,
+    "stok_gsyh_yalniz_usd": 20.78718508823352
    },
    {
     "sok": 0.0,
     "kur": 46.5551,
-    "stok_paralel_trl": 13.3538334742,
-    "stok_yalniz_usd_trl": 13.3538334742,
+    "stok_paralel_trl": 14.927683285248001,
+    "stok_yalniz_usd_trl": 14.927683285248001,
     "degisim_paralel_yuzde": 0.0,
     "degisim_yalniz_usd_yuzde": 0.0,
-    "stok_gsyh_paralel": 18.749309579664995,
-    "stok_gsyh_yalniz_usd": 18.749309579664995
+    "stok_gsyh_paralel": 21.168712236108973,
+    "stok_gsyh_yalniz_usd": 21.168712236108973
    },
    {
     "sok": 0.05,
     "kur": 48.882855000000006,
-    "stok_paralel_trl": 13.570831450810001,
-    "stok_yalniz_usd_trl": 13.55281170644367,
-    "degisim_paralel_yuzde": 1.6249863908311255,
-    "degisim_yalniz_usd_yuzde": 1.4900457806973577,
-    "stok_gsyh_paralel": 19.044418221778198,
-    "stok_gsyh_yalniz_usd": 19.019912084097786
+    "stok_paralel_trl": 15.223373752410401,
+    "stok_yalniz_usd_trl": 15.198819299354817,
+    "degisim_paralel_yuzde": 1.9808195385188014,
+    "degisim_yalniz_usd_yuzde": 1.8163301627303525,
+    "stok_gsyh_paralel": 21.584791011044373,
+    "stok_gsyh_yalniz_usd": 21.55023938398443
    },
    {
     "sok": 0.1,
     "kur": 51.21061000000001,
-    "stok_paralel_trl": 13.78782942742,
-    "stok_yalniz_usd_trl": 13.75178993868734,
-    "degisim_paralel_yuzde": 3.249972781662237,
-    "degisim_yalniz_usd_yuzde": 2.980091561394744,
-    "stok_gsyh_paralel": 19.3395268638914,
-    "stok_gsyh_yalniz_usd": 19.290514588530584
+    "stok_paralel_trl": 15.519064219572801,
+    "stok_yalniz_usd_trl": 15.469955313461632,
+    "degisim_paralel_yuzde": 3.9616390770376313,
+    "degisim_yalniz_usd_yuzde": 3.6326603254606766,
+    "stok_gsyh_paralel": 22.00086978597978,
+    "stok_gsyh_yalniz_usd": 21.931766531859886
    },
    {
     "sok": 0.2,
     "kur": 55.86612,
-    "stok_paralel_trl": 14.221825380639999,
-    "stok_yalniz_usd_trl": 14.149746403174682,
-    "degisim_paralel_yuzde": 6.499945563324445,
-    "degisim_yalniz_usd_yuzde": 5.960183122789502,
-    "stok_gsyh_paralel": 19.929744148117802,
-    "stok_gsyh_yalniz_usd": 19.83171959739617
+    "stok_paralel_trl": 16.1104451538976,
+    "stok_yalniz_usd_trl": 16.012227341675263,
+    "degisim_paralel_yuzde": 7.923278154075248,
+    "degisim_yalniz_usd_yuzde": 7.265320650921382,
+    "stok_gsyh_paralel": 22.83302733585058,
+    "stok_gsyh_yalniz_usd": 22.694820827610794
    },
    {
     "sok": 0.3,
     "kur": 60.52163000000001,
-    "stok_paralel_trl": 14.65582133386,
-    "stok_yalniz_usd_trl": 14.547702867662021,
-    "degisim_paralel_yuzde": 9.74991834498671,
-    "degisim_yalniz_usd_yuzde": 8.940274684184232,
-    "stok_gsyh_paralel": 20.519961432344207,
-    "stok_gsyh_yalniz_usd": 20.37292460626176
+    "stok_paralel_trl": 16.7018260882224,
+    "stok_yalniz_usd_trl": 16.554499369888894,
+    "degisim_paralel_yuzde": 11.884917231112894,
+    "degisim_yalniz_usd_yuzde": 10.897980976382058,
+    "stok_gsyh_paralel": 23.665184885721384,
+    "stok_gsyh_yalniz_usd": 23.457875123361706
    }
   ],
-  "not": "Para birimi ağırlıkları eurobond tablosundan alınıp dış borç stokunun tamamına VEKİL olarak uygulanmıştır; dış borcun kredi bacağının para kompozisyonu EVDS'te yayımlanmıyor. GSYH sabit varsayılmıştır — oran ÜST SINIR okunmalıdır."
+  "not": "Şok yalnız gerçekten döviz cinsi bacağa uygulanır: yurt dışında ihraç edilen senet + dış krediler. Para birimi ağırlıkları eurobond tablosundan alınıp bu bacağın tamamına VEKİL olarak uygulanmıştır; dış kredilerin para kompozisyonu EVDS'te yayımlanmıyor. TL TUTARI ALT SINIRDIR — iç borçtaki döviz cinsi yurt içi ihraçlar ayrıştırılamadığı için şok dışında kaldı. STOK/GSYH ORANI ise ÜST SINIRDIR — GSYH sabit varsayıldı."
  },
  "dogrulama": {
+  "Toplam stok ↔ finansal hesaplar F.3+F.4": {
+   "n": 23,
+   "son_ceyrek": "2026-03-31",
+   "elde_trl": 14.288065207048,
+   "f34_trl": 15.610225844178082,
+   "son_fark": -0.08469836697610555,
+   "son6_min": -0.1053872750066629,
+   "son6_max": -0.0758878784155812,
+   "bant": [
+    -0.25,
+    0.1
+   ],
+   "dur_bant": [
+    -0.15,
+    0.15
+   ],
+   "gecti": true,
+   "durdurucu": true,
+   "aciklama": "Aynı olgunun iki bağımsız ölçümü. Bizimki YAZILI (nominal) değerli, finansal hesaplar PİYASA değerli — özdeşlik beklenmez, bant denetlenir. Son çeyrek durdurucu eşikle ayrıca sınanır."
+  },
+  "Dış kredi artığı ↔ finansal hesaplar F.4": {
+   "n": 23,
+   "son_ceyrek": "2026-03-31",
+   "elde_trl": 1.2732065388439997,
+   "f4_trl": 1.2546054737835801,
+   "son_fark": 0.014826226609966353,
+   "son6_min": 0.014826226609966353,
+   "son6_max": 0.19577740983030334,
+   "bant": [
+    -0.5,
+    0.35
+   ],
+   "gecti": true,
+   "aciklama": "Dış kredi bacağı brüt dış borçtan senet bacaklarını düşerek ARTIK olarak türetilir; F.4 bunu bağımsız ölçer."
+  },
   "DİBS+eurobond ↔ finansal hesaplar F.3": {
    "n": 23,
    "son_ceyrek": "2026-03-31",
@@ -188,6 +239,13 @@
    "aciklama": "USD+EUR+JPY, piyasa değeri toplamını vermeli."
   }
  },
+ "dogrulama_beklenen": [
+  "Toplam stok ↔ finansal hesaplar F.3+F.4",
+  "DİBS+eurobond ↔ finansal hesaplar F.3",
+  "Dış kredi artığı ↔ finansal hesaplar F.4",
+  "Dış borç hiyerarşisi",
+  "Eurobond para birimi toplamı"
+ ],
  "kapsam_notu": "Bu hat borç STOKUNU ve BÜTÇEYİ anlatır. İhale tarafı (teklif, karşılama, kesim faizi) Hazine İhraç hattındadır; iki sayfa birbirine referans verir, sayı tekrarlanmaz.",
  "eksik_veri_notu": "Merkezi yönetim borç stokunun SABİT / DEĞİŞKEN / TÜFE'ye endeksli kırılımı ve ORTALAMA VADESİ EVDS'te YOK (675 veri grubu tarandı). Bu üç kalem sayfada uydurma vekille doldurulmaz.",
  "uyarilar": []

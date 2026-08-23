@@ -136,15 +136,51 @@ def main() -> int:
             ("f_2y3y", "forward_2y3y"),
             ("carry_2y_tlref", "carry_2y_tlref"),
             ("carry_2y_politika", "carry_2y_politika"),
-            ("carry_2y_aofm", "carry_2y_aofm"),
             ("carry_3a_tlref", "carry_3a_tlref")):
         anlik(kaynak, hedef)
+    # AOFM taşıması: geçersiz rejimde son GEÇERLİ güne ait olur, atlanmaz.
+    anlik("carry_2y_aofm", "carry_2y_aofm", tolerans=400)
 
     # --- referans faizler --------------------------------------------------
     for kaynak, hedef in (("tlref", "tlref"), ("politika", "politika"),
-                          ("aofm", "aofm"), ("koridor_alt", "koridor_alt"),
+                          ("koridor_alt", "koridor_alt"),
                           ("koridor_ust", "koridor_ust")):
         anlik(kaynak, hedef)
+    # Bileşiğe çevrilmiş karşılıklar: sayfada HAM (basit) ve BİLEŞİK yan yana
+    # gösterilir; taşıma yalnız bileşikten hesaplanır.
+    for kaynak, hedef in (("tlref_bilesik", "tlref_bilesik"),
+                          ("politika_bilesik_gercek", "politika_bilesik"),
+                          ("konvansiyon_farki_tlref", "konvansiyon_farki"),
+                          ("carry_2y_tlref_basit", "carry_2y_tlref_basit")):
+        anlik(kaynak, hedef)
+
+    # --- AOFM: GEÇERLİLİK KAPISI ------------------------------------------
+    # AOFM geçersizken seri DONAR; tolerans dar tutulursa anahtar tamamen
+    # atlanır ve sayfa statik yedeğe düşer (okur eski sayıyı canlı sanır).
+    # Bunun yerine SON GEÇERLİ gün basılır ve yanına geçersizlik notu konur.
+    ad = m.get("aofm_durum") or {}
+    O["aofm_gecerli"] = bool(ad.get("gecerli"))
+    koy("aofm_taban_esik_mlr", (ad.get("esik_mn_tl") or 0) / 1000.0, 0)
+    if ad.get("taban_mn_tl") is not None:
+        koy("aofm_taban_mlr", ad["taban_mn_tl"] / 1000.0, 1)
+    anlik("aofm", "aofm", tolerans=400)
+    anlik("aofm_bilesik", "aofm_bilesik", tolerans=400)
+    if ad.get("son_gecerli_gun"):
+        O["aofm_son_gecerli"] = tr_tarih(ad["son_gecerli_gun"])
+        koy("aofm_yas_gun", (s_gun - pd.Timestamp(ad["son_gecerli_gun"])).days, 0)
+    O["aofm_cumlesi"] = (
+        "AOFM geçerli: çıpa gününde APİ fonlaması "
+        f"{tr_sayi(O.get('aofm_taban_mlr'), 1)} milyar TL ile "
+        f"{tr_sayi(O.get('aofm_taban_esik_mlr'), 0)} milyar TL eşiğinin üstünde."
+        if O["aofm_gecerli"] else
+        "AOFM bu koşuda GEÇERSİZ: çıpa gününde APİ fonlaması "
+        f"{tr_sayi(O.get('aofm_taban_mlr'), 1)} milyar TL ile "
+        f"{tr_sayi(O.get('aofm_taban_esik_mlr'), 0)} milyar TL eşiğinin altında. "
+        "AOFM bir ağırlıklı ortalamadır; ağırlık kalmayınca yayımlanan sayı "
+        "son değerinde donar. Tablodaki AOFM son GEÇERLİ güne aittir "
+        f"({O.get('aofm_son_gecerli', '—')}, "
+        f"{tr_sayi(O.get('aofm_yas_gun'), 0)} gün önce) ve manşet taşıma "
+        "ölçüsü değildir; yerine TLREF okunur.")
 
     # --- beklenti / enflasyon (AYLIK bacak; toleransı ay ritmine göre geniş)
     for kaynak, hedef in (("pka_12a", "pka_12a"), ("pka_24a", "pka_24a"),
@@ -209,8 +245,18 @@ def main() -> int:
     O["basabas_vadeler"] = ", ".join(basabas_var) if basabas_var else "—"
     for kaynak, hedef in (("prim_1y", "risk_primi_1y"),
                           ("prim_2y", "risk_primi_2y"),
-                          ("prim_5y", "risk_primi_5y")):
+                          ("prim_3y", "risk_primi_3y"),
+                          ("prim_5y", "risk_primi_5y"),
+                          ("prim_7y", "risk_primi_7y")):
         anlik(kaynak, hedef)
+    # Anket beklentisinin VADEYE KADARKİ ORTALAMAYA çevrilmiş hâli: risk
+    # primi bunun üzerinden hesaplanır, sayfada ham nokta beklentiyle yan
+    # yana gösterilir.
+    for kaynak, hedef in (("pka_ort_1y", "pka_ort_1y"),
+                          ("pka_ort_2y", "pka_ort_2y"),
+                          ("pka_ort_5y", "pka_ort_5y"),
+                          ("pka_ort_7y", "pka_ort_7y")):
+        anlik(kaynak, hedef, tolerans=45)
     if KR is not None and not KR.empty:
         koy("tufex_nokta", len(KR), 0)
         koy("tufex_vade_min", float(KR["vade_yil"].min()), 2)
@@ -259,6 +305,26 @@ def main() -> int:
         koy(ad, ev.get(alan), 0)
     koy("getiri_araligi_disi", m.get("getiri_araligi_disi"), 0)
 
+    # --- AYRIŞTIRMA TANISI (koşuda ölçülür, elle yazılmaz) ----------------
+    at = vd.get("ayristirma_test") or {}
+    if at:
+        koy("ayristirma_seri", at.get("toplam"), 0)
+        koy("ayristirma_saf_dusen", at.get("saf_dusen"), 0)
+        koy("ayristirma_saf_yanlis", at.get("saf_yanlis"), 0)
+        koy("ayristirma_hosgoru_dusen", at.get("hosgoru_dusen"), 0)
+        bozuk = (at.get("saf_dusen") or 0) + (at.get("saf_yanlis") or 0)
+        koy("ayristirma_saf_bozuk", bozuk, 0)
+        if at.get("toplam"):
+            koy("ayristirma_saf_pay", bozuk / at["toplam"] * 100, 1)
+        O["ayristirma_cumlesi"] = (
+            f"Bu koşuda taranan {tr_sayi(at.get('toplam'), 0)} seri adının "
+            f"{tr_sayi(at.get('saf_dusen'), 0)}'ini tek biçim varsayan bir "
+            f"ayrıştırıcı hiç çözemez, {tr_sayi(at.get('saf_yanlis'), 0)}'ini "
+            "de etiketi '(Arşiv)' sanarak yanlış sınıflandırırdı — toplam "
+            f"%{tr_sayi(O.get('ayristirma_saf_pay'), 1)}. Hoşgörülü "
+            f"ayrıştırıcının çözemediği ad sayısı: "
+            f"{tr_sayi(at.get('hosgoru_dusen'), 0)}.")
+
     # --- kimlik denetimi ---------------------------------------------------
     kim = m["kimlik"]
     koy("kimlik_medyan_sapma", kim.get("medyan_son"), 4)
@@ -276,8 +342,27 @@ def main() -> int:
     if ytm:
         koy("ytm_n", ytm.get("n"), 0)
         koy("ytm_medyan_fark", ytm.get("medyan_fark_puan"), 4)
+        # 1 puan = 100 baz puan. Sayfada "baz puanın binde biri" gibi SÖZEL
+        # mertebe iddiası yazmak yasak — ölçünün kendisi basılır.
+        if ytm.get("medyan_fark_puan") is not None:
+            koy("ytm_medyan_fark_bp", ytm["medyan_fark_puan"] * 100, 2)
+        if ytm.get("maks_fark_puan") is not None:
+            koy("ytm_maks_fark_bp", ytm["maks_fark_puan"] * 100, 2)
         koy("ytm_maks_fark", ytm.get("maks_fark_puan"), 3)
         koy("ytm_medyan_fiyat_fark", ytm.get("medyan_fiyat_fark"), 3)
+        # DÜRÜST ETİKET: bu bir özdeşliktir, bağımsız doğrulama değil.
+        O["ytm_ozdeslik"] = bool(ytm.get("ozdeslik"))
+        koy("ytm_ozdeslik_n", ytm.get("ozdeslik_n"), 0)
+        koy("ytm_ozdeslik_maks_tl", ytm.get("ozdeslik_maks_tl"), 6)
+        koy("ytm_ozdeslik_esik_tl", ytm.get("ozdeslik_esik_tl"), 4)
+        O["ytm_ozdeslik_gecti"] = bool(ytm.get("ozdeslik_gecti"))
+        O["ytm_ozdeslik_cumlesi"] = (
+            f"Özdeşlik birim sınaması: {O.get('ytm_ozdeslik_n', 0)} tahvilin "
+            "hepsinde |Σ strip fiyatı − tahvil fiyatı| en çok "
+            f"{tr_sayi(O.get('ytm_ozdeslik_maks_tl'), 6)} TL "
+            f"(eşik {tr_sayi(O.get('ytm_ozdeslik_esik_tl'), 4)} TL) — GEÇTİ."
+            if O["ytm_ozdeslik_gecti"] else
+            "Özdeşlik birim sınaması BU KOŞUDA YAPILAMADI.")
         # Gösterge tahvile en yakın vadeli kıymet: sayfada "gösterge 2 yıllık"
         # cümlesi buna bağlanır.
         tablo = ytm.get("tablo") or []
@@ -339,16 +424,49 @@ def main() -> int:
                     break
                 n += 1
             koy("ters_egri_suren_gun", n, 0)
-    car = M["carry_2y_aofm"].dropna()
+    # MANŞET TAŞIMA ÖLÇÜSÜ: AOFM geçerliyse AOFM, değilse TLREF. Sayfanın
+    # kendi gerekçesi de bunu söylüyor (TLREF fiilen ödenen maliyete en yakın
+    # ölçüdür); geçersiz AOFM'yi manşete koymak okuru yanıltır.
+    manset_kol = "carry_2y_aofm" if O.get("aofm_gecerli") else "carry_2y_tlref"
+    O["carry_olcusu"] = "AOFM" if O.get("aofm_gecerli") else "TLREF"
+    koy("carry_manset", O.get(manset_kol), 2)
+    car = M[manset_kol].dropna()
     if len(car):
         koy("carry_negatif_gun", int((car < 0).sum()), 0)
         koy("carry_negatif_pay", float((car < 0).mean() * 100), 1)
+        # PENCEREYİ DE BAS: TLREF 28.12.2018'de başlıyor, AOFM 2013'te. "Şu
+        # kadar günde negatifti" cümlesi hangi pencerede ölçüldüğünü
+        # söylemezse iki ölçü arasında sessizce kayar.
+        koy("carry_tarihce_gun", int(len(car)), 0)
+        O["carry_tarihce_bas"] = tr_tarih(car.index[0])
         O["carry_pozitif_mi"] = bool(car.iloc[-1] > 0)
     O["carry_cumlesi"] = (
-        f"2 yıllık spot getiri fonlama maliyetinin {tr_sayi(abs(O.get('carry_2y_aofm', 0)), 2)} "
+        f"2 yıllık spot getiri fonlama maliyetinin ({O['carry_olcusu']}, "
+        "bileşiğe çevrilmiş) "
+        f"{tr_sayi(abs(O.get('carry_manset', 0)), 2)} "
         + ("PUAN ÜSTÜNDE — taşıma pozitif" if O.get("carry_pozitif_mi")
            else "PUAN ALTINDA — taşıma negatif, pozisyon ancak faiz inişi "
                 "beklentisiyle tutulur") + ".")
+    # Politika faizi ile fiilî maliyet arasındaki sistematik fark: iki canlı
+    # sayının arasına SABİT üçüncü bir sayı yazmak yasak (sayfa kuralı).
+    # AYNI GÜN ŞARTI: AOFM geçersiz rejimde son geçerli güne ait olduğu için
+    # iki taşıma farklı günlerden gelebilir; farkı almak o zaman "faiz
+    # makası" değil "gün farkı + faiz makası" olur.
+    if (O.get("carry_2y_politika_tarih") == O.get("carry_2y_aofm_tarih")
+            and "carry_2y_politika" in O and "carry_2y_aofm" in O):
+        koy("spread_politika_aofm",
+            O["carry_2y_politika"] - O["carry_2y_aofm"], 2)
+    if (O.get("carry_2y_politika_tarih") == O.get("carry_2y_tlref_tarih")
+            and "carry_2y_politika" in O and "carry_2y_tlref" in O):
+        koy("spread_politika_tlref",
+            O["carry_2y_politika"] - O["carry_2y_tlref"], 2)
+    # Prose içinde İŞARETSİZ okunan ("… ondan X puan aşağıda") cümleler için
+    # MUTLAK değerli anahtar: negatif sayı işaretiyle basılınca cümle çift
+    # olumsuzlamaya düşüyordu ("ondan −10,2 puan aşağıda").
+    if "egim_2y9y" in O:
+        koy("egim_2y9y_mutlak", abs(O["egim_2y9y"]), 2)
+    if "egim_2y5y" in O:
+        koy("egim_2y5y_mutlak", abs(O["egim_2y5y"]), 2)
     O["egim_cumlesi"] = (
         "Eğri TERS: 2 yıllık getiri 9 yıllıktan "
         f"{tr_sayi(abs(O.get('egim_2y9y', 0)), 2)} puan yüksek."
@@ -359,13 +477,66 @@ def main() -> int:
         f"Fisher ileri reel faiz %{tr_sayi(O.get('reel_ileri'), 2)}, geriye "
         f"dönük %{tr_sayi(O.get('reel_geriye'), 2)}; makas "
         f"{tr_sayi(O.get('reel_makas'), 2)} puan.")
-    if "risk_primi_5y" in O and "basabas_5y" in O and "pka_5y" in O:
+    if "risk_primi_5y" in O and "basabas_5y" in O and "pka_ort_5y" in O:
+        # DİKKAT: kıyas ORTALAMAYA çevrilmiş anket beklentisiyledir. PKA'nın
+        # ham 5 yıl serisi "5 YIL SONRASININ yıllık" oranıdır, beş yıllık
+        # ortalama değildir; onunla kıyaslamak primi şişirirdi.
         O["basabas_cumlesi"] = (
-            f"5 yıllık başabaş enflasyon %{tr_sayi(O['basabas_5y'], 1)}, aynı "
-            f"vadede anket beklentisi %{tr_sayi(O['pka_5y'], 1)}: "
-            f"{tr_sayi(O['risk_primi_5y'], 1)} puanlık fark risk primi, "
-            "likidite primi ve TÜFE ölçümüne güvensizliğin karışımıdır — "
-            "'piyasanın enflasyon beklentisi' DEĞİLDİR.")
+            f"5 yıllık başabaş enflasyon %{tr_sayi(O['basabas_5y'], 1)}; "
+            "anketin aynı ufka çevrilmiş karşılığı (12 ay, 24 ay ve 5 yıl "
+            "çıpalarından kurulan patikanın beş yıllık geometrik ortalaması) "
+            f"%{tr_sayi(O['pka_ort_5y'], 1)} — ham 5 yıl serisi "
+            f"(%{tr_sayi(O.get('pka_5y'), 1)}) BEŞİNCİ YILIN tek yıllık "
+            f"oranıdır, ortalama değildir. {tr_sayi(O['risk_primi_5y'], 1)} "
+            "puanlık fark risk primi, likidite primi ve TÜFE ölçümüne "
+            "güvensizliğin karışımıdır — 'piyasanın enflasyon beklentisi' "
+            "DEĞİLDİR.")
+
+    # --- başabaşın VADE YAPISININ ŞEKLİ (elle 'yukarı eğimli' yazmak yasak)
+    bs = m.get("basabas_sekil") or {}
+    if bs:
+        O["basabas_sekil"] = bs["sekil"]
+        if bs.get("tepe_vade"):
+            koy("basabas_tepe_vade", bs["tepe_vade"], 0)
+        koy("basabas_ilk_son_fark", bs.get("ilk_son_fark"), 2)
+        uc = f"{int(bs['vadeler'][-1])} yıl"
+        ilk = f"{int(bs['vadeler'][0])} yıl"
+        if bs["sekil"] == "kambur":
+            O["basabas_vade_cumlesi"] = (
+                f"Başabaş eğrisi KAMBUR: {int(bs['tepe_vade'])} yılda tepe "
+                f"yapıp geriliyor — {uc} vadeli başabaş "
+                f"({tr_sayi(bs['degerler'][-1], 2)}%) {ilk} vadeliden "
+                f"({tr_sayi(bs['degerler'][0], 2)}%) "
+                f"{tr_sayi(abs(bs['ilk_son_fark']), 2)} puan "
+                + ("DÜŞÜK" if bs["ilk_son_fark"] < 0 else "YÜKSEK") + ". "
+                "Enflasyon riskinin fiyatlanması orta vadede yoğunlaşıyor, "
+                "uzun uçta değil.")
+        elif bs["sekil"] == "yukarı eğimli":
+            O["basabas_vade_cumlesi"] = (
+                f"Başabaş eğrisi YUKARI EĞİMLİ: {uc} vadeli başabaş {ilk} "
+                f"vadeliden {tr_sayi(abs(bs['ilk_son_fark']), 2)} puan yüksek. "
+                "Nominal eğri aşağı eğimliyken bu, uzun vadede reel getirinin "
+                "nominal getiriden daha hızlı düştüğünü söyler.")
+        elif bs["sekil"] == "çukur":
+            O["basabas_vade_cumlesi"] = (
+                f"Başabaş eğrisi ÇUKUR: {int(bs['tepe_vade'])} yılda dip yapıp "
+                f"toparlıyor; {uc} ile {ilk} arasındaki fark "
+                f"{tr_sayi(bs['ilk_son_fark'], 2)} puan.")
+        else:
+            O["basabas_vade_cumlesi"] = (
+                f"Başabaş eğrisi AŞAĞI EĞİMLİ: {uc} vadeli başabaş {ilk} "
+                f"vadeliden {tr_sayi(abs(bs['ilk_son_fark']), 2)} puan düşük.")
+
+    # --- kurulamayan reel düğümler (elle 'bu koşuda 3 yıl yok' yazmak yasak)
+    bos = m.get("reel_bos_dugumler") or []
+    O["reel_bos_dugumler"] = ", ".join(bos) if bos else "yok"
+    O["reel_bos_cumlesi"] = (
+        "Bu koşuda kurulamayan reel düğüm kalmadı; bütün vadelerde başabaş "
+        "hesaplanabiliyor."
+        if not bos else
+        f"Bu koşuda {', '.join(bos)} reel düğümü — ve dolayısıyla o "
+        "vade(ler)de başabaş — kurulamadı: o vade aralığında iki komşu kıymet "
+        "arasındaki boşluk sınırı aşıyor.")
 
     # --- uyarılar ----------------------------------------------------------
     uyarilar = list(uy.get("uyarilar", []))
@@ -385,8 +556,12 @@ def main() -> int:
     if (O.get("anket_gecikme_gun") or 0) > tol_ay:
         bayat_sebep.append(f"anket bacağı {O['anket_gecikme_gun']} gün geride "
                            f"(tolerans {tol_ay} gün)")
+    # ÖNEK LİSTESİ TAM OLMALI: 'SERİ ALINAMADI', 'ÇEKİM DÜŞTÜ', 'BOŞ ÖNBELLEK'
+    # ve 'demet düştü' bu listede yokken ağ düşse bile bayrak kalkmıyordu.
     izler = [u for u in uyarilar
-             if u.startswith(("TAZELİK", "ESKİ ÖNBELLEK", "BAYAT", "SERİ YOK"))]
+             if u.startswith(("TAZELİK", "ESKİ ÖNBELLEK", "BAYAT", "SERİ YOK",
+                              "SERİ ALINAMADI", "SERİ BOŞ", "ÇEKİM DÜŞTÜ",
+                              "BOŞ ÖNBELLEK", "demet düştü"))]
     if izler:
         bayat_sebep.append(f"veri katmanı {len(izler)} tazelik/önbellek uyarısı bastı")
     O["bayat"] = bool(bayat_sebep)

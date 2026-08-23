@@ -289,13 +289,14 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
                "kalan_gun": (date.fromisoformat(k.tarih) - tarih).days}
               for k in kayitlar if k.onem == 1]
 
-    # 4) haberler
-    haberler, okunamayan = ([], [])
+    # 4) haberler — bölge × alan bölümlerine ayrılmış hâlde
+    haberler, okunamayan, bolumler = ([], [], [])
     if haber_tara:
         try:
             import haber as haber_m
-            h, okunamayan = haber_m.tara()
+            h, okunamayan = haber_m.tara(pencere_saat=72 if haftalik else 30)
             haberler = [asdict(x) for x in h]
+            bolumler = haber_m.bolumle(h)
         except Exception as e:                                  # noqa: BLE001
             okunamayan = [f"haber taraması düştü: {type(e).__name__}"]
 
@@ -313,17 +314,49 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         "kritik_takvim": kritik,
         "haftalik": haftalik,
         "haberler": {
+            "bolumler": bolumler,
             "kurum": [h for h in haberler if h.get("kurum")],
             "haber": [h for h in haberler if not h.get("kurum")],
             "okunamayan": okunamayan,
         },
+        # Gündem yazısı: bölüm bölüm ayrıntılı metin. Kural tabanlı koşu buraya
+        # başlıkları cümleye çevirerek bir TABAN koyar; yorum katmanı kaynakları
+        # açıp okuyarak bu metni ZENGİNLEŞTİRİR ve yerine geçer.
+        "gundem": {},
         "yorum": None,
         "yorum_zamani": None,
         "tur": tur,
         "surum": 2,
     }
     b["ozet"] = piyasa_ozeti(b, haftalik=haftalik)
+    b["gundem"] = gundem_tabani(b)
+    b["gundem_kaynagi"] = "otomatik"        # yorum katmanı yazınca "yazili" olur
     return b
+
+
+def gundem_tabani(b: dict) -> dict:
+    """Bölüm bölüm taban metni: başlıklar ve varsa özetleri cümleye dizilir.
+
+    Bu, yorum katmanının yerine geçmez — o katman kaynakları açıp okuyarak
+    ayrıntılı yazıyı üretir. Ama katman çalışmadığında (bulut koşusu) bülten
+    yine de "gündemde ne var" sorusunu cevaplar; boş bölüm bırakmaz.
+    """
+    out = {}
+    for bol in b.get("haberler", {}).get("bolumler", []):
+        if bol["id"] == "kurum":
+            continue
+        cumleler = []
+        for m in bol["maddeler"]:
+            c = m["baslik"].split(" - ")[0].strip().rstrip(".")
+            if m.get("ozet"):
+                c += f" — {m['ozet'].rstrip('.…')}"
+            kaynak = m.get("kaynak", "")
+            if kaynak and not kaynak.startswith("Arama"):
+                c += f" ({kaynak})"
+            cumleler.append(c + ".")
+        if cumleler:
+            out[bol["id"]] = " ".join(cumleler)
+    return out
 
 
 def ozet_ekle(b: dict) -> dict:
@@ -340,6 +373,10 @@ def yaz(b: dict) -> Path:
             eski = json.loads(y.read_text(encoding="utf-8"))
             if eski.get("yorum"):
                 b["yorum"], b["yorum_zamani"] = eski["yorum"], eski.get("yorum_zamani")
+            # Yorum katmanının yazdığı ayrıntılı gündem metni, sonraki
+            # deterministik koşularda TABAN metinle ezilmemeli.
+            if eski.get("gundem_kaynagi") == "yazili" and eski.get("gundem"):
+                b["gundem"], b["gundem_kaynagi"] = eski["gundem"], "yazili"
             # --habersiz koşusu, daha önce toplanmış haberleri SİLMEMELİ: gün içinde
             # hızlı bir yeniden üretim bülteni fakirleştirmesin.
             eski_h = (eski.get("haberler") or {})

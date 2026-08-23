@@ -112,6 +112,14 @@ TTL_CANLI_SAAT = 12       # hâlâ işlem gören kıymet / cari seri
 TTL_OLU_SAAT = 24 * 30    # vadesi dolmuş kıymet: değeri artık değişmez, ama TTL'siz DEĞİL
 TTL_LISTE_SAAT = 24       # serieList önbelleği
 
+# Boş önbellek dosyasının İMZASI. "EVDS yanıt verdi, bu pencerede gözlem yok"
+# ile "çekemedik" birbirinden yalnız bu satırla ayrılır.
+BOS_IMZA = "BOS-DOGRULANMIS"
+# Planın bu kadarından fazlası veri taşımıyorsa hat DURUR: tek tek uyarı
+# basıp devam etmek, evren süzgeci ya da EVDS erişimi bozulduğunda yarım
+# bir eğriyi "taze" diye yayımlamak demektir.
+BOS_PAY_ESIK = 0.02
+
 # Eğri tarihçesinin başlangıcı. 2013 bilinçli: PKA beklenti serileri
 # (TP.PKAUO.*) 2013-01'de başlıyor; reel faiz ayağı öncesi için kurulamıyor.
 # Daha geriye gitmek eğri panelini uzatır ama sayfadaki her reel/başabaş
@@ -212,14 +220,21 @@ def _url(kodlar: list[str], bas: pd.Timestamp, son: pd.Timestamp) -> str:
 
 
 def _demet_cek(kodlar: list[str], bas: pd.Timestamp, son: pd.Timestamp,
-               parca_gun: int, bicim: str) -> pd.DataFrame:
+               parca_gun: int, bicim: str) -> tuple[pd.DataFrame, set[str]]:
     """Bir seri demetini tarih parçaları hâlinde çeker.
 
     Demetin tamamı düşerse (bir kod geçersizse EVDS bütün isteği reddediyor)
     seriler tek tek denenir; böylece bir bozuk kod diğer 19'unu götürmez.
+
+    İKİ DEĞER DÖNER — (veri, DÜŞEN KODLAR). "Veri gelmedi" ile "veri yok"
+    ayrı şeylerdir: ağ/HTTP hatasıyla düşen bir kodun BOŞ döndüğünü varsayıp
+    dolu önbelleğini ezmek SESSİZ VERİ KAYBIDIR (bu hata bir kez yaşandı).
+    Bir kod hangi tarih parçasında olursa olsun istisnayla düştüyse adı
+    ikinci değerde döner ve çağıran onun önbelleğine DOKUNMAZ.
     """
     guvenli = [k.replace(".", "_") for k in kodlar]
     parcalar: list[pd.DataFrame] = []
+    dusen: set[str] = set()
     imlec = bas
     while imlec <= son:
         sonu = min(imlec + pd.Timedelta(days=parca_gun - 1), son)
@@ -237,6 +252,7 @@ def _demet_cek(kodlar: list[str], bas: pd.Timestamp, son: pd.Timestamp,
                     if len(d):
                         tekler.append(d)
                 except Exception as ex2:
+                    dusen.add(k)
                     uyar(f"SERİ ALINAMADI: {k} ({imlec:%m.%Y}–{sonu:%m.%Y}) — {ex2}")
                 time.sleep(0.15)
             p = pd.concat(tekler, axis=1) if tekler else pd.DataFrame()
@@ -245,10 +261,10 @@ def _demet_cek(kodlar: list[str], bas: pd.Timestamp, son: pd.Timestamp,
         imlec = sonu + pd.Timedelta(days=1)
         time.sleep(0.12)
     if not parcalar:
-        return pd.DataFrame()
+        return pd.DataFrame(), dusen
     d = pd.concat(parcalar)
     d = d[~d.index.duplicated(keep="last")].sort_index()
-    return d
+    return d, dusen
 
 
 def _cache_yolu(kod: str, bicim: str = "gun") -> pathlib.Path:
@@ -268,6 +284,22 @@ def _cache_yolu(kod: str, bicim: str = "gun") -> pathlib.Path:
 _AD = re.compile(
     r"^(?P<isin>TR[A-Z]\w+)\s*\(\s*(?P<ihrac>[\d.\-]+)\s*[/\s]\s*(?P<itfa>[\d.\-]+)\s*\)\s*"
     r"(?P<tur>.+?)\s*\((?P<etiket>[^()]*)\)\s*$")
+# TANI AYRIŞTIRICISI — yalnız ÖLÇÜM için. `_AD`'den TEK BİR ŞEYDE ayrılır:
+# tarihi yalnız NOKTA AYRAÇLI (gg.aa.yyyy) ve BOŞLUKLA ayrılmış biçimde kabul
+# eder, `(Arşiv)` ekini de soymaz. Yani "tek biçim varsayan ayrıştırıcı"nın
+# ta kendisidir. Sayfadaki "şu kadarını sessizce düşürürdü" cümlesi HER
+# KOŞUDA buradan ölçülür; elle yazılmış eski bir sayı kullanılmaz.
+_AD_SAF = re.compile(
+    r"^(?P<isin>TR[A-Z]\w+)\s*\(\s*(?P<ihrac>\d{2}\.\d{2}\.\d{4})\s+"
+    r"(?P<itfa>\d{2}\.\d{2}\.\d{4})\s*\)\s*"
+    r"(?P<tur>.+?)\s*\((?P<etiket>[^()]*)\)\s*$")
+# toplam        : taranan seri adı
+# saf_dusen     : saf ayrıştırıcının HİÇ çözemediği ad
+# saf_yanlis    : çözdüğü ama etiketi "Arşiv" okuduğu ad (sessiz yanlış sınıf)
+# hosgoru_dusen : hoşgörülü ayrıştırıcının da çözemediği ad (gerçek kayıp)
+_AYRISTIRMA_TEST = {"toplam": 0, "saf_dusen": 0, "saf_yanlis": 0,
+                    "hosgoru_dusen": 0}
+
 _ETI_SABIT = re.compile(r"^\d+T\d+(K\d+|A\d{6})?$")   # 24T2 / 61T2K8 / 121T2A080328
 _ETI_ANAPARA = re.compile(r"A\d{6}$")
 _ETI_KUPON = re.compile(r"K\d+")
@@ -310,6 +342,14 @@ def evren(dg: str, yenile: bool = False) -> dict[str, dict]:
     ayristirilamayan = 0
     for s in ham:
         ad = (s.get("SERIE_NAME") or "").strip()
+        # TANI: saf ayrıştırıcı bu adı ÇÖZEBİLİR MİYDİ? (ham ad üzerinde,
+        # `(Arşiv)` soyulmadan — saf ayrıştırıcı onu da bilmez.)
+        _AYRISTIRMA_TEST["toplam"] += 1
+        _saf = _AD_SAF.match(ad)
+        if not _saf:
+            _AYRISTIRMA_TEST["saf_dusen"] += 1
+        elif _saf.group("etiket").strip() in ("Arşiv", "Archive"):
+            _AYRISTIRMA_TEST["saf_yanlis"] += 1
         # Arşiv grubunda ad "… Deger (9B) (Arşiv)" biçiminde biter. Son parantez
         # SOYULMAZSA etiket "Arşiv" olur, sınıflandırma çöker ve tarihçenin KISA
         # UCU sessizce kaybolur (ölçüldü: 2019 eğrisi 3 yılın altında hiç nokta
@@ -318,6 +358,7 @@ def evren(dg: str, yenile: bool = False) -> dict[str, dict]:
         m = _AD.match(ad)
         if not m:
             ayristirilamayan += 1
+            _AYRISTIRMA_TEST["hosgoru_dusen"] += 1
             continue
         kod = s["SERIE_CODE"]
         taban = kod[:-5] if kod.endswith(".ORAN") else kod
@@ -408,10 +449,19 @@ def cek_fiyatlar(plan: dict[str, tuple[pd.Timestamp, pd.Timestamp]],
     """{kod: (başlangıç, bitiş)} planını çeker; geniş DataFrame döndürür.
 
     Önbellek SERİ BAZINDADIR (demet bileşimi değişince önbellek geçersizleşmesin).
-    Hiç veri dönmeyen kıymet için BOŞ önbellek dosyası yazılır — aksi hâlde o
-    kıymet her koşuda yeniden denenir ve koşum süresi sessizce şişer.
+    EVDS BAŞARIYLA yanıt verip o kıymet için hiç satır döndürmediyse BOŞ
+    önbellek dosyası yazılır — aksi hâlde o kıymet her koşuda yeniden denenir
+    ve koşum süresi sessizce şişer.
+
+    BOŞ ÖNBELLEK İMZALIDIR (`# BOS-DOGRULANMIS <iso>` başlığı). İmza olmadan
+    "gerçekten boş" ile "çekilemedi" ayırt edilemez; çekim İSTİSNAYLA düştüyse
+    var olan önbelleğe DOKUNULMAZ (aksi hâlde 13 yıllık tarihçe 22 baytlık bir
+    başlık satırıyla ezilir — bu hata bir kez yaşandı ve ikinci koşuda tek
+    uyarı bile düşmüyordu).
     """
     bugun = dt.date.today()
+    dusen_kalici: set[str] = set()
+    bos_yazilan = 0
     eksik = [k for k in plan
              if yenile or not _taze(_cache_yolu(k), _ttl(plan[k][1].date(), bugun))]
     if eksik:
@@ -426,7 +476,7 @@ def cek_fiyatlar(plan: dict[str, tuple[pd.Timestamp, pd.Timestamp]],
             grup = eksik[i:i + DEMET]
             bas = min(plan[k][0] for k in grup)
             son = max(plan[k][1] for k in grup)
-            d = _demet_cek(grup, bas, son, PARCA_GUN, "gun")
+            d, dusen = _demet_cek(grup, bas, son, PARCA_GUN, "gun")
             for k in grup:
                 g = k.replace(".", "_")
                 yol = _cache_yolu(k)
@@ -434,29 +484,58 @@ def cek_fiyatlar(plan: dict[str, tuple[pd.Timestamp, pd.Timestamp]],
                     s = d[g].dropna()
                     s.name = k
                     s.to_csv(yol)
+                elif k in dusen:
+                    # Çekim İSTİSNAYLA düştü: bu "veri yok" DEĞİL, "veri
+                    # gelmedi"dir. Var olan önbelleğe dokunulmaz.
+                    dusen_kalici.add(k)
                 else:
-                    yol.write_text(f"tarih,{k}\n", encoding="utf-8")
+                    yol.write_text(f"# {BOS_IMZA} {dt.date.today().isoformat()}\n"
+                                   f"tarih,{k}\n", encoding="utf-8")
+                    bos_yazilan += 1
             if (i // DEMET) % 10 == 9:
                 print(f"    … {i + len(grup)}/{len(eksik)} "
                       f"({_ISTEK['n']} istek)", flush=True)
     out: dict[str, pd.Series] = {}
-    bos = 0
+    bos_dogrulanmis = 0          # EVDS "bu pencerede gözlem yok" dedi
+    bos_imzasiz = 0              # dosya boş ama imzası yok → şüpheli
     for k in plan:
         yol = _cache_yolu(k)
         if not yol.exists():
             uyar(f"SERİ YOK: {k} — ne EVDS'ten geldi ne önbellekte var.")
             continue
         try:
-            s = pd.read_csv(yol, index_col=0, parse_dates=True).iloc[:, 0]
+            s = pd.read_csv(yol, index_col=0, parse_dates=True,
+                            comment="#").iloc[:, 0]
         except (ValueError, IndexError, pd.errors.EmptyDataError):
-            bos += 1
-            continue
+            s = pd.Series(dtype=float)
         if s.empty:
-            bos += 1
+            ilk = yol.read_text(encoding="utf-8")[:80]
+            if ilk.startswith(f"# {BOS_IMZA}"):
+                bos_dogrulanmis += 1
+            else:
+                bos_imzasiz += 1
             continue
         out[k] = s
-    if bos:
-        print(f"    ({bos} kıymet penceresinde hiç gözlem yok — atlandı)")
+    if bos_dogrulanmis:
+        print(f"    ({bos_dogrulanmis} kıymet penceresinde hiç gözlem yok — "
+              "EVDS doğruladı, atlandı)")
+    # BURADA `print` YETMEZ: bu satırlar uyarilar.json'a ve ozet.json'a
+    # girmezse ikinci koşuda kayıp SESSİZ kalır (dosya artık "taze" sayılır
+    # ve hiç çekim denenmez).
+    if dusen_kalici:
+        uyar(f"ÇEKİM DÜŞTÜ: {len(dusen_kalici)} kıymet EVDS'ten alınamadı; "
+             "önbelleklerine DOKUNULMADI (eski değerler kullanılıyor olabilir).")
+    if bos_imzasiz:
+        uyar(f"BOŞ ÖNBELLEK (imzasız): {bos_imzasiz} kıymetin önbellek dosyası "
+             "boş ama 'EVDS doğruladı' imzası taşımıyor — eski bir koşuda "
+             "ezilmiş olabilir; `--yenile` ile tazeleyin.")
+    toplam_bos = bos_dogrulanmis + bos_imzasiz + len(dusen_kalici)
+    if plan and toplam_bos / len(plan) > BOS_PAY_ESIK:
+        raise SystemExit(
+            f"DUR: {etiket} planındaki {len(plan)} kıymetin {toplam_bos}'i "
+            f"({toplam_bos / len(plan) * 100:.1f}%) veri taşımıyor — eşik "
+            f"%{BOS_PAY_ESIK * 100:.0f}. EVDS erişimi ya da evren süzgeci "
+            "bozulmuş olabilir; siteye kopyalama YAPILMAZ.")
     if not out:
         return pd.DataFrame()
     df = pd.DataFrame(out).sort_index()
@@ -481,7 +560,8 @@ def cek_kume(kodlar: dict[str, tuple[str, str]], bicim: str, parca_gun: int,
         for i in range(0, len(eksik), DEMET):
             grup = eksik[i:i + DEMET]
             bas = min(pd.Timestamp(kodlar[a][1]) for a in grup)
-            d = _demet_cek([ad_kod[a] for a in grup], bas, bugun, parca_gun, bicim)
+            d, _dusen = _demet_cek([ad_kod[a] for a in grup], bas, bugun,
+                                   parca_gun, bicim)
             for a in grup:
                 g = ad_kod[a].replace(".", "_")
                 if g in d.columns and d[g].notna().any():
@@ -518,6 +598,12 @@ GUNLUK: dict[str, tuple[str, str]] = {
     "politika":      ("TP.PY.P02.1H",      "2013-01-01"),  # 1 hafta repo SATIŞ kotasyonu
     "politika_ger":  ("TP.PY.P06.1H",      "2013-01-01"),  # gerçekleşen 1 haftalık repo
     "aofm":          ("TP.APIFON4",        "2013-01-01"),  # ağırlıklı ort. fonlama maliyeti
+    # AOFM'nin TABANI: APİ fonlama toplamı — MİLYON TL (yüzde DEĞİL).
+    # AOFM bir ORTALAMADIR; ağırlığı sıfıra yaklaşınca yayımlanan sayı
+    # dejenere olur (son değer donar). Fonlama hattı bu yüzden 5 milyar TL
+    # tabanı arıyor; aynı kapı burada da uygulanır, yoksa aynı gün üç sayfada
+    # üç farklı AOFM durumu görünür.
+    "fon_top":       ("TP.APIFON1.TOP",    "2013-01-01"),  # APİ fonlaması, MİLYON TL
     "koridor_alt":   ("TP.PY.P01.ON",      "2013-01-01"),  # O/N borçlanma
     "koridor_ust":   ("TP.PY.P02.ON",      "2013-01-01"),  # O/N borç verme
     "bist_on":       ("TP.AOFOBAP",        "2018-12-27"),  # BİST gecelik repo AOF
@@ -552,6 +638,10 @@ MERTEBE = {
     "tlref": ("yüzde", -10, 500), "politika": ("yüzde", -10, 500),
     "aofm": ("yüzde", -10, 500), "koridor_alt": ("yüzde", -10, 500),
     "koridor_ust": ("yüzde", -10, 500), "bist_on": ("yüzde", -10, 500),
+    # MİLYON TL: 2026'da APİ fonlaması 10^5–10^7 mertebesinde (yüz milyar–
+    # birkaç trilyon TL). Bin TL sanılsaydı 1000× büyük, milyar TL sanılsaydı
+    # 1000× küçük çıkardı; eşik ikisini de yakalar.
+    "fon_top": ("milyon TL", 0, 5e7),
     "pka_12a": ("yüzde", -10, 500), "pka_24a": ("yüzde", -10, 500),
     "pka_5y": ("yüzde", -10, 500), "pka_faiz_12a": ("yüzde", -10, 500),
     "pka_12a_n": ("adet", 1, 500),
@@ -862,6 +952,9 @@ def kos(yenile: bool = False) -> dict:
             "kat": cpi.attrs.get("zincir_kat") if not cpi.empty else None,
             "ortusme_ay": cpi.attrs.get("zincir_ay") if not cpi.empty else None,
         },
+        # AYRIŞTIRMA TANISI — sayfadaki "tek biçim varsayan bir ayrıştırıcı şu
+        # kadarını düşürürdü" cümlesi buradan okunur; elle yazılmış sayı YOK.
+        "ayristirma_test": dict(_AYRISTIRMA_TEST),
         "gunluk_seri": int(G.shape[1]), "aylik_seri": int(A.shape[1]),
         "uyarilar": list(_UYARI),
     }

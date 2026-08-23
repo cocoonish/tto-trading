@@ -468,38 +468,59 @@ def sekil_04(M, o, damga):
     fig = make_subplots(
         rows=2, cols=1, vertical_spacing=0.12,
         subplot_titles=(
-            f"a) 2 yıllık spot getiri ile gecelik fonlama faizleri "
-            f"({_yil(TAM_BAS)}–bugün)",
-            "b) Taşıma: 2 yıllık spot eksi fonlama faizi (puan)"))
+            f"a) 2 yıllık spot getiri ile fonlama faizleri — fonlama faizleri "
+            f"BİLEŞİĞE ÇEVRİLMİŞ ({_yil(TAM_BAS)}–bugün)",
+            "b) Taşıma: 2 yıllık spot eksi BİLEŞİK fonlama faizi (puan)"))
     t = _pencere(M, TAM_BAS)
-    _iz(fig, t.index, t["n2y"], "2 yıllık spot getiri", CLARET, 1, kalin=1.8)
-    _iz(fig, t.index, t["aofm"], "TCMB ağırlıklı ort. fonlama maliyeti (AOFM)",
-        TEAL, 1, kalin=1.3)
-    _iz(fig, t.index, t["politika_bilesik"], "Politika faizi (1 hafta repo)",
-        INK, 1, kalin=1.2, kes="dot")
+    _iz(fig, t.index, t["n2y"], "2 yıllık spot getiri (bileşik)", CLARET, 1,
+        kalin=1.8)
+    _iz(fig, t.index, t["aofm_bilesik"],
+        "AOFM — bileşiğe çevrilmiş", TEAL, 1, kalin=1.3)
+    _iz(fig, t.index, t["politika_bilesik_gercek"],
+        "Politika faizi (1 hafta repo) — bileşiğe çevrilmiş", INK, 1,
+        kalin=1.2, kes="dot")
     # TLREF için MOR: TEAL (#1d5c5c) ile LACİ (#2f4b7c) küçük lejant
     # kutucuğunda birbirinden ayırt edilemiyordu (ölçüldü) — AOFM ile TLREF
     # bu figürün ana karşıtlığı olduğu için iki rengin ayrışması şart.
-    _iz(fig, t.index, t["tlref"], "TLREF (piyasa gecelik)", MOR, 1, kalin=1.1)
+    _iz(fig, t.index, t["tlref_bilesik"], "TLREF — bileşiğe çevrilmiş", MOR, 1,
+        kalin=1.1)
+    # HAM (BASİT) yayımlanan değer de gizlenmez: okur TCMB/BİST ekranında
+    # gördüğü sayıyı grafikte bulamazsa grafiğe güvenmez.
+    _iz(fig, t.index, t["tlref"], "TLREF — ham (BASİT, yayımlandığı hâliyle)",
+        GRI, 1, kalin=0.9, kes="dash")
     _son_isaret(fig, t["n2y"], 1, CLARET)
     _tarih_ekseni(fig, t.index, 1)
 
-    _iz(fig, t.index, t["carry_2y_aofm"], "2 yıl − AOFM", TEAL, 2, kalin=1.5,
-        dolgu="tozeroy", dolgu_renk=TARAMA2)
-    _iz(fig, t.index, t["carry_2y_tlref"], "2 yıl − TLREF", MOR, 2, kalin=1.2)
-    _iz(fig, t.index, t["carry_3a_tlref"], "3 ay − TLREF (kısa uç)", GOLD, 2,
-        kalin=1.0, kes="dot")
+    _iz(fig, t.index, t["carry_2y_tlref"], "2 yıl − TLREF (bileşik)", MOR, 2,
+        kalin=1.5, dolgu="tozeroy", dolgu_renk=TARAMA2)
+    _iz(fig, t.index, t["carry_2y_aofm"], "2 yıl − AOFM (bileşik)", TEAL, 2,
+        kalin=1.2)
+    _iz(fig, t.index, t["carry_3a_tlref"], "3 ay − TLREF (kısa uç, bileşik)",
+        GOLD, 2, kalin=1.0, kes="dot")
+    # KONVANSİYON DERSİ: aynı taşıma BASİT farkla nereye düşerdi?
+    _iz(fig, t.index, t["carry_2y_tlref_basit"],
+        "2 yıl − TLREF, BASİT farkla (yanlış konvansiyon)", GRI, 2, kalin=0.9,
+        kes="dash")
     fig.add_hline(y=0, line=dict(color=INK, width=0.9), row=2, col=1)
-    _son_isaret(fig, t["carry_2y_aofm"], 2, TEAL, birim=" puan")
+    _son_isaret(fig, t["carry_2y_tlref"], 2, MOR, birim=" puan")
     _tarih_ekseni(fig, t.index, 2)
     fig.update_yaxes(title_text="%", row=1, col=1)
     fig.update_yaxes(title_text="puan", row=2, col=1)
 
-    neg = (t["carry_2y_aofm"] < 0).sum()
+    _c = t["carry_2y_tlref"].dropna()
+    neg = int((_c < 0).sum())
     alt = [
         f"Veri: TCMB EVDS3 · iş günü · Çıpa: {damga}. Taşıma = 2 yıllık spot "
         "getiri eksi gecelik fonlama faizi; tahvili gecelikle fonlayan bir "
         "pozisyonun eğri SABİT KALIRSA kazanacağı taşımadır.",
+        ("KONVANSİYON UYARISI: TLREF, AOFM ve 1 hafta repo faizi BASİT yıllık "
+         "yayımlanır; strip getirisi ise YILLIK BİLEŞİKTİR. Karşılaştırma için "
+         "fonlama faizleri bileşiğe çevrilmiştir — gecelik için "
+         "(1+r/365)^365−1, 1 hafta için (1+r·7/365)^(365/7)−1. Ham (basit) "
+         "TLREF ve basit farkla hesaplanan taşıma da gri kesikli çizgilerle "
+         "gösteriliyor: iki konvansiyon arasındaki fark bugün "
+         f"{_sayi(o['anlik'].get('konvansiyon_farki_tlref'), 2)} puandır ve "
+         "taşımanın İŞARETİNİ değiştirecek büyüklüktedir."),
         ("Politika faizi kotasyonu (TP.PY.P02.1H) EVDS'te 14.09.2018'de "
          "başlıyor; öncesinde bu vadede kotasyon yayımlanmıyor ve haftalık "
          "repo İHALEYLE fonlanıyordu. O dönemde fiilî politika faizi AOFM'dir "
@@ -507,8 +528,8 @@ def sekil_04(M, o, damga):
         ("TLREF 28.12.2018'de başlar. Üç faiz aynı günde farklı sayılar verir: "
          "AOFM TCMB'nin fiilen ödettiği ortalama, TLREF piyasanın teminatlı "
          "gecelik faizi, politika faizi ise kotasyondur."),
-        (f"Tarihçede {neg} iş gününde taşıma NEGATİFTİ (2 yıllık getiri "
-         f"fonlama maliyetinin altında, %{neg / max(len(t), 1) * 100:.0f}); bu "
+        (f"TLREF'in başladığı günden bu yana {len(_c)} iş gününün {neg}'inde "
+         f"taşıma NEGATİFTİ (%{neg / max(len(_c), 1) * 100:.0f}); bu "
          "dönemlerde uzun pozisyon taşımak para kaybettirir ve pozisyon ancak "
          "faiz İNMESİ beklentisiyle tutulur."),
     ]
@@ -638,16 +659,40 @@ def sekil_06(M, KR, KE, o, damga):
         x=t, y=be, mode="lines+markers", name="Başabaş enflasyon (nominal ÷ reel)",
         line=dict(color=CLARET, width=2.0), marker=dict(size=6)), row=2, col=1)
     a = o["anlik"]
-    for ad, vade, deger, renk in (("PKA 12 ay", 1.0, a.get("pka_12a"), GOLD),
-                                  ("PKA 24 ay", 2.0, a.get("pka_24a"), LACI),
-                                  ("PKA 5 yıl", 5.0, a.get("pka_5y"), MOR)):
+    # ANKET BEKLENTİSİ İKİ BİÇİMDE ÇİZİLİR.
+    # (1) ORTALAMAYA ÇEVRİLMİŞ (dolu baklava) — başabaşla AYNI ufku ölçer.
+    #     Başabaş vadeye kadarki yıllık ORTALAMA enflasyondur; PKA serileri
+    #     ise "X ay SONRASININ yıllık" NOKTA oranlarıdır. Nokta beklentiyi
+    #     başabaşın yanına koymak risk primini sistematik olarak şişirir.
+    # (2) HAM NOKTA beklenti (içi boş gri baklava) — TCMB'nin yayımladığı
+    #     sayı gizlenmez, ama farklı bir şey ölçtüğü işaretle ayrılır.
+    ort_ad = {1.0: "pka_ort_1y", 2.0: "pka_ort_2y", 5.0: "pka_ort_5y",
+              7.0: "pka_ort_7y"}
+    for ad, vade, renk in (("1 yıl", 1.0, GOLD), ("2 yıl", 2.0, LACI),
+                           ("5 yıl", 5.0, MOR), ("7 yıl", 7.0, TEAL)):
+        deger = a.get(ort_ad[vade])
         if deger is None:
             continue
         fig.add_trace(go.Scatter(
-            x=[vade], y=[deger], mode="markers+text", name=f"{ad} beklentisi",
+            x=[vade], y=[deger], mode="markers+text",
+            name=f"Anket — {ad} ORTALAMASINA çevrilmiş",
             marker=dict(color=renk, size=11, symbol="diamond"),
             text=[f" {_sayi(deger, 1)}%"], textposition="middle right",
             textfont=dict(size=10, color=renk)), row=2, col=1)
+    for i, (ad, vade, deger) in enumerate((
+            ("PKA 12 ay (ham nokta)", 1.0, a.get("pka_12a")),
+            ("PKA 24 ay (ham nokta)", 2.0, a.get("pka_24a")),
+            ("PKA 5 yıl (ham nokta)", 5.0, a.get("pka_5y")))):
+        if deger is None:
+            continue
+        fig.add_trace(go.Scatter(
+            x=[vade], y=[deger], mode="markers",
+            name="Anket — HAM nokta beklenti ('X ay sonrasının yıllık')",
+            showlegend=i == 0,
+            marker=dict(color=GRI, size=10, symbol="diamond-open",
+                        line=dict(width=1.5)),
+            hovertemplate=f"{ad}: {_sayi(deger, 2)}%<extra></extra>"),
+            row=2, col=1)
 
     # (c) başabaş zaman serisi
     p = _pencere(M, "2021-01-01")
@@ -676,11 +721,20 @@ def sekil_06(M, KR, KE, o, damga):
          "2003=100 zinciridir; TÜİK 2025 baz değişikliği sonrası zincir "
          f"katsayısı örtüşme ayından ({zin.get('ortusme_ay', '—')}) her koşuda "
          f"okunur: {_sayi(zin.get('kat'), 4)} — sabit yazılmaz."),
-        ("BAŞABAŞ ≠ BEKLENTİ. Panel (b)'de baklava işaretleri anketin söylediği, "
+        ("BAŞABAŞ ≠ BEKLENTİ. Panel (b)'de DOLU baklavalar anketin söylediği, "
          "kırmızı çizgi piyasanın fiyatladığı enflasyondur. Aradaki fark "
          "enflasyon risk primi, likidite primi ve TÜFE ölçümüne güvensizliğin "
          f"karışımıdır: 1 yılda {_sayi(a.get('prim_1y'), 1)} puan, 5 yılda "
          f"{_sayi(a.get('prim_5y'), 1)} puan."),
+        ("UFUK DÜZELTMESİ: PKA serileri 'X AY SONRASININ yıllık TÜFE' "
+         "oranlarıdır — 24 ay serisi İKİNCİ YILIN tek yıllık oranıdır, iki "
+         "yıllık ortalama DEĞİL. Başabaş ise tanımı gereği vadeye kadarki "
+         "yıllık ORTALAMA'dır. Dolu baklavalar bu yüzden 12 ay, 24 ay ve 5 "
+         "yıl çıpalarından kurulan bir yıllık enflasyon patikasının "
+         "vadeye kadarki GEOMETRİK ORTALAMASIDIR; içi boş gri baklavalar ham "
+         "nokta beklentilerdir. Ara yıllar (3, 4) log-doğrusal ara değerle "
+         "doldurulur ve son çıpanın ötesi (6, 7) sabit tutulur — patika bir "
+         "VARSAYIMDIR, anket o yılları sormaz."),
         ("Reel eğri nominal eğri kadar sık değildir: " + str(kap.get("reel_notu", ""))),
         ("Kısa uçta kıymetler arası saçılma geniştir (Şekil 08c); tek bir "
          "'reel faiz' çizgisine indirgemek yanlış kesinlik üretir. Uzun uçta "
@@ -739,10 +793,24 @@ def sekil_07(M, KE, o, damga):
         line=dict(color=CLARET, width=2.0, shape="hv"),
         marker=dict(size=7)), row=2, col=1)
     a = o["anlik"]
+    # KONVANSİYON: ima edilen patika BİLEŞİKTİR (spot getirilerden türer).
+    # Politika faizi ve PKA politika faizi beklentileri BASİT yayımlanır;
+    # yan yana koymadan önce bileşiğe çevrilir. Çevrilmezse aradaki fark
+    # "vade primi" diye okunur ama bir kısmı yalnız konvansiyon farkıdır —
+    # bugünkü sayılarda prim İŞARET DEĞİŞTİRİYOR.
+    def _hafta_bilesik(v):
+        if v is None:
+            return None
+        return ((1 + v / 100.0 * metrik.POLITIKA_VADE_GUN / metrik.GUN_SAYISI)
+                ** (metrik.GUN_SAYISI / metrik.POLITIKA_VADE_GUN) - 1) * 100.0
+
     for ad, x, deger, renk in (
-            ("Bugünkü politika faizi", 0, a.get("politika"), INK),
-            ("PKA 12 ay sonrası politika faizi", 1, a.get("pka_faiz_12a"), TEAL),
-            ("PKA 24 ay sonrası politika faizi", 2, a.get("pka_faiz_24a"), GOLD)):
+            ("Bugünkü politika faizi (bileşiğe çevrilmiş)", 0,
+             _hafta_bilesik(a.get("politika")), INK),
+            ("PKA 12 ay sonrası politika faizi (bileşiğe çevrilmiş)", 1,
+             _hafta_bilesik(a.get("pka_faiz_12a")), TEAL),
+            ("PKA 24 ay sonrası politika faizi (bileşiğe çevrilmiş)", 2,
+             _hafta_bilesik(a.get("pka_faiz_24a")), GOLD)):
         if deger is None:
             continue
         fig.add_trace(go.Scatter(
@@ -750,6 +818,20 @@ def sekil_07(M, KE, o, damga):
             marker=dict(color=renk, size=11, symbol="diamond"),
             text=[f" {_sayi(deger, 1)}%"], textposition="middle right",
             textfont=dict(size=10, color=renk)), row=2, col=1)
+    # HAM (BASİT) değerler de gösterilir: okurun TCMB ekranında gördüğü sayı.
+    for ad, x, deger in (
+            ("Politika faizi / PKA beklentisi — ham (BASİT)", 0, a.get("politika")),
+            (None, 1, a.get("pka_faiz_12a")),
+            (None, 2, a.get("pka_faiz_24a"))):
+        if deger is None:
+            continue
+        fig.add_trace(go.Scatter(
+            x=[x], y=[deger], mode="markers", name=ad or "",
+            showlegend=ad is not None,
+            marker=dict(color=GRI, size=9, symbol="diamond-open",
+                        line=dict(width=1.4)),
+            hovertemplate=f"ham (basit): {_sayi(deger, 2)}%<extra></extra>"),
+            row=2, col=1)
     fig.update_xaxes(title_text="bugünden itibaren geçen yıl", row=2, col=1,
                      tickmode="array", tickvals=list(range(0, 9)),
                      ticktext=[f"{k}–{k + 1}" for k in range(0, 9)])
@@ -768,6 +850,13 @@ def sekil_07(M, KE, o, damga):
          "vardır. Vade primi pozitifse ima edilen patika gerçek beklenen "
          "politika faizinin ÜSTÜNDE kalır — baklava işaretleriyle (PKA anketi) "
          "arasındaki fark bu primin kaba bir ölçüsüdür."),
+        ("KONVANSİYON: ima edilen patika spot getirilerden türediği için "
+         "BİLEŞİKTİR; politika faizi ve PKA politika faizi beklentileri ise "
+         "BASİT yayımlanır. Dolu baklavalar bileşiğe çevrilmiş, içi boş gri "
+         "baklavalar ham (basit) değerlerdir. Çevrilmeden kurulan bir "
+         "karşılaştırmada 'vade primi' diye okunan farkın önemli bir kısmı "
+         "yalnız konvansiyon farkıdır — bugünkü sayılarda işareti bile "
+         "değiştiriyor."),
         ("Ayrıca patika DİBS getirisinden türer, politika faizinden değil: "
          "tahvil kredi riski taşımasa da likidite ve vade riski taşır; "
          "iki büyüklüğü birebir eşitlemek yanlış olur."),
@@ -861,13 +950,20 @@ def sekil_08(M, RD, KR, o, damga):
          f"{_sayi(kim['esik_maks'], 1)} puan aşılırsa hat DURUR: o noktada "
          "sınıflandırma bozulmuş, muhtemelen değişken faizli bir kıymet nominal "
          "eğriye sızmıştır."),
-        (("Bağımsız çapraz sınama: eğri, aynı gün işlem gören "
-          f"{ytm.get('n')} kuponlu tahvilin fiyatını medyan "
-          f"{_sayi(ytm.get('medyan_fark_puan'), 3)} puan hatayla açıklıyor "
-          f"(en büyük {_sayi(ytm.get('maks_fark_puan'), 3)} puan). Tahvilin "
-          "nakit akışı uydurulmadı; kendi strip'lerinin itfa günleri ve "
-          "ödemeleri kullanıldı.") if ytm else
-         "Bağımsız YTM çapraz sınaması bu koşuda yapılamadı."),
+        (("İÇ TUTARLILIK ÖZDEŞLİĞİ (bağımsız doğrulama DEĞİL): tahvilin nakit "
+          "akışı kendi strip'lerinden kurulup yine o strip'lerin kendi "
+          "getirileriyle iskonto edildiği için model fiyatı zorunlu olarak "
+          "strip fiyatlarının toplamına eşittir — TCMB'nin yayımladığı "
+          f"kuponlu tahvil 'Değer'i de odur. {ytm.get('ozdeslik_n')} tahvilin "
+          "hepsinde |Σ strip fiyatı − tahvil fiyatı| en çok "
+          f"{ytm.get('ozdeslik_maks_tl')} TL (eşik "
+          f"{ytm.get('ozdeslik_esik_tl')} TL); aşılsaydı hat DURURDU. "
+          f"Kalan medyan YTM farkı {_sayi(ytm.get('medyan_fark_puan'), 4)} "
+          "puan yalnız aynı vadede birden çok strip bulunduğunda alınan "
+          "MEDYANDAN gelir. Bu bir BİRİM SINAMASIDIR: ödeme tanımı, etiket "
+          "sınıflandırması ya da strip↔tahvil eşlemesi bozulursa buradan "
+          "görünür; eğrinin dışarıdan doğrulandığı anlamına GELMEZ.") if ytm
+         else "Özdeşlik birim sınaması bu koşuda yapılamadı."),
         ("Sapmanın bu kadar küçük olması kısmen GÖSTERGE FİYAT olmasındandır: "
          "işlem görmemiş kıymette TCMB model fiyatı basar, dolayısıyla noktalar "
          "tam bağımsız gözlem değildir. Denetim yine de değerlidir — bozulan "

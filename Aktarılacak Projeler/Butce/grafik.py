@@ -48,6 +48,11 @@ TAM_BAS = "2007-01-01"       # 12 aylık birikimli seriler burada başlar
 AYLIK_BAS = "2019-01-01"     # aylık bar panelleri (240 ay bar okunmaz)
 CEYREK_BAS = "2004-12-31"
 HAFTA_BAS = "2020-09-11"     # menkul kıymet istatistiklerinin başlangıcı
+STOK_BAS = "2020-09-01"      # ARAÇ tabanlı bileşik stok burada başlar: eurobond
+                             # sahiplik kırılımı (yurt içi / yurt dışı) daha
+                             # geriye gitmiyor. Daha uzun ama yanlış tanımlı bir
+                             # seri çizilmez; uzun tarihli okuma alt panelde
+                             # finansal hesaplar (F.3+F.4) çizgisiyle verilir.
 FIN_BAS = "2010-12-31"       # finansal hesaplar
 
 
@@ -529,35 +534,57 @@ def sekil_06(M, o, damga):
 # ŞEKİL 07 — Borç stoku
 # ===========================================================================
 def sekil_07(M, C, o, damga, damga_c):
+    b = (o["stok"].get("stok_bilesen") or {})
     fig = make_subplots(
         rows=2, cols=1, vertical_spacing=0.12,
         subplot_titles=(
-            "a) Merkezi yönetim borç stoku: iç borç + dış borcun TL karşılığı "
-            "(trilyon TL, yığılmış)",
-            "b) Toplam stok / GSYH ve Hazine nakit varlığı düşülmüş net stok / GSYH (%)"))
-    _yigin(fig, _pen(M["ic_borc_trl"], TAM_BAS), "İç borç stoku (TP.KB.A09)", TEAL, 1)
-    _yigin(fig, _pen(M["dis_borc_trl"], TAM_BAS),
-           "Dış borç, merkezi yönetim (× USD/TRY)", CLARET, 1)
+            f"a) Merkezi yönetim borç stoku, ARAÇ tabanında ({_yil(STOK_BAS)}→, "
+            "trilyon TL, yığılmış)",
+            "b) Stok / GSYH — bileşik stok ve uzun tarihli referans olarak "
+            "finansal hesaplar (F.3+F.4) (%)"))
+    _yigin(fig, _pen(M["ic_borc_trl"], STOK_BAS),
+           "İç borç: yurt içinde ihraç, tüm sahipler (A09)", TEAL, 1)
+    _yigin(fig, _pen(M["dis_senet_trl"], STOK_BAS),
+           "Yurt dışında ihraç senet: eurobond, tüm sahipler (ST − S1311)", CLARET, 1)
+    _yigin(fig, _pen(M["dis_kredi_trl"], STOK_BAS),
+           "Dış krediler (G4 − yurt dışının senetleri)", GOLD, 1)
     _cizgi(fig, _pen(C["stok_gsyh"], CEYREK_BAS), "Brüt stok / GSYH", TEAL, 2, 2.3)
     if "net_stok_gsyh" in C.columns:
         _cizgi(fig, _pen(C["net_stok_gsyh"], CEYREK_BAS),
                "Net stok / GSYH (nakit varlık düşülmüş)", CLARET, 2, 2.0, "dash")
-    _son_nokta(fig, _pen(M["toplam_borc_trl"], TAM_BAS), 1, INK, "ay", 2, " trl")
+    if "fh_borc_gsyh" in C.columns:
+        _cizgi(fig, _pen(C["fh_borc_gsyh"], FIN_BAS),
+               "Referans: finansal hesaplar F.3+F.4 / GSYH (piyasa değerli)",
+               GRI, 2, 1.5, "dot")
+    _son_nokta(fig, _pen(M["toplam_borc_trl"], STOK_BAS), 1, INK, "ay", 2, " trl")
     _son_nokta(fig, _pen(C["stok_gsyh"], CEYREK_BAS), 2, TEAL, "ceyrek", 1, "%")
     fig.update_yaxes(title_text="trilyon TL", row=1, col=1)
     fig.update_yaxes(title_text="% GSYH", row=2, col=1)
-    _tarih_ekseni(fig, 1, _pen(M["ic_borc_trl"], TAM_BAS).index)
-    _tarih_ekseni(fig, 2, _pen(C["stok_gsyh"], CEYREK_BAS).index, "ceyrek")
+    _tarih_ekseni(fig, 1, _pen(M["ic_borc_trl"], STOK_BAS).index)
+    _tarih_ekseni(fig, 2, _pen(C["fh_borc_gsyh"] if "fh_borc_gsyh" in C.columns
+                               else C["stok_gsyh"], FIN_BAS).index, "ceyrek")
     return _duzen(fig, f"Merkezi yönetim borç stoku · veri {damga}", [
-        "Stok TÜRETİLMİŞTİR: iç borç (bin TL) + brüt dış borcun merkezi yönetim bacağı "
-        "(milyon ABD doları) × ay sonu USD/TRY. EVDS'te birleşik bir merkezi yönetim "
-        "borç stoku serisi YOK.",
-        "Dış bacak ÜÇ AYLIK yayımlanıyor ve çeyrek içinde BASAMAK olarak taşınır; son "
-        f"yayımlanan çeyreğin ({o['stok']['son_dis_ceyrek']}) ötesine uzatılmaz — birleşik "
+        "Stok ARAÇ (ihraç) tabanında TÜRETİLMİŞTİR. İç borç (A09) ihraç tabanlı, brüt dış "
+        "borç (G4) YERLEŞİKLİK tabanlıdır; ikisi doğrudan toplanamaz — yurt dışı "
+        "yerleşiklerin elindeki DİBS iki kez sayılır, yurt içi yerleşiklerin elindeki "
+        "eurobond hiç sayılmazdı.",
+        f"Bu koşuda düzeltmenin büyüklüğü: iki tabanı toplayan tanım "
+        f"{_sayi(b.get('eski_tanim_trl'), 2)} trilyon TL verirdi; çift sayılan DİBS "
+        f"{_sayi(b.get('cift_sayilan_dibs_trl'), 2)} düşülüp eksik kalan eurobond "
+        f"{_sayi(b.get('eksik_eurobond_trl'), 2)} eklendiğinde "
+        f"{_sayi(b.get('toplam_trl'), 2)} trilyon TL çıkıyor "
+        f"({_yuzde(b.get('duzeltme_yuzde'), 1)}).",
+        f"Üst panel {_yil(STOK_BAS)}'de başlar: eurobondun sahiplik kırılımı (yurt içi / "
+        "yurt dışı) haftalık menkul kıymet istatistikleriyle o tarihte başlıyor. Daha uzun "
+        "ama yanlış tanımlı bir seri çizilmedi; uzun tarihli okuma alt panelde finansal "
+        "hesaplar çizgisiyle verilir (piyasa değerli, bu yüzden sistematik olarak yukarıda).",
+        "Dış kredi bacağı üç aylıktır ve çeyrek içinde BASAMAK olarak taşınır; son "
+        f"yayımlanan çeyreğin ({o['stok']['son_dis_ceyrek']}) ötesine uzatılmaz — bileşik "
         "seri o ayda biter.",
-        f"Alt panel GSYH ile aynı çeyrekte biter ({damga_c}); üst panel aylıktır. İki panelin "
-        "farklı yerde bitmesi hata değil, yayım gecikmesidir.",
-        KAYNAK + " · bie_kbicborc, bie_brutdbborclu, bie_gsyhhrccar, bie_dkdovytl."], n_panel=2)
+        f"Alt panelde bileşik stok GSYH ile aynı çeyrekte biter ({damga_c}); üst panel "
+        "aylıktır. İki panelin farklı yerde bitmesi hata değil, yayım gecikmesidir.",
+        KAYNAK + " · bie_kbicborc, bie_ebondyazdeg, bie_dibsyazdeg, bie_brutdbborclu, "
+        "bie_finhestnks7101311, bie_gsyhhrccar, bie_dkdovytl."], n_panel=2)
 
 
 # ===========================================================================
@@ -567,32 +594,47 @@ def sekil_08(M, H, o, damga, damga_h):
     fig = make_subplots(
         rows=2, cols=1, vertical_spacing=0.12,
         subplot_titles=(
-            "a) Borç stokunun TL ve döviz bacakları (pay, %)",
+            f"a) Stokun para cinsi bacakları ({_yil(STOK_BAS)}→, pay %) — döviz payı "
+            "ALT SINIR, yurt dışı payı AYRI bir olgu",
             f"b) Eurobond stokunun para birimi kırılımı ({_yil(HAFTA_BAS)}→, "
             "piyasa değeri payları, %)"))
     tl_pay = (100 - M["doviz_pay"]).dropna()
-    _yigin(fig, _pen(tl_pay, TAM_BAS), "TL bacağı (iç borç)", TEAL, 1)
-    _yigin(fig, _pen(M["doviz_pay"], TAM_BAS), "Döviz bacağı (dış borç)", CLARET, 1)
+    _yigin(fig, _pen(tl_pay, STOK_BAS),
+           "İç borç bacağı — TL + AYRIŞTIRILAMAYAN döviz cinsi yurt içi ihraç", TEAL, 1)
+    _yigin(fig, _pen(M["doviz_pay"], STOK_BAS),
+           "Döviz cinsi bacak: yurt dışında ihraç senet + dış kredi", CLARET, 1)
+    _cizgi(fig, _pen(M["yurt_disi_pay"], STOK_BAS),
+           "Karşılaştırma: YERLEŞİKLİK payı (brüt dış borç / stok)", LACI, 1, 1.8, "dash")
+    if "pay_ic_satis_doviz" in M.columns:
+        _cizgi(fig, _pen(M["pay_ic_satis_doviz"], STOK_BAS),
+               "Kanıt: iç borçlanma SATIŞININ döviz cinsi payı (12 aylık, akım)",
+               GOLD, 1, 1.5, "dot")
     for kol, etiket, renk in (("pay_eb_usd", "ABD doları", TEAL),
                               ("pay_eb_eur", "Euro", CLARET),
                               ("pay_eb_jpy", "Japon yeni", GOLD)):
         _yigin(fig, _pen(H[kol], HAFTA_BAS), etiket, renk, 2)
-    _son_nokta(fig, _pen(M["doviz_pay"], TAM_BAS), 1, CLARET, "ay", 1, "%")
+    _son_nokta(fig, _pen(M["doviz_pay"], STOK_BAS), 1, CLARET, "ay", 1, "%")
     _son_nokta(fig, _pen(H["pay_eb_eur"], HAFTA_BAS), 2, CLARET, "gun", 1, "%")
     fig.update_yaxes(title_text="% toplam stok", row=1, col=1, range=[0, 100])
     fig.update_yaxes(title_text="% eurobond stoku", row=2, col=1, range=[0, 100])
-    _tarih_ekseni(fig, 1, _pen(M["doviz_pay"], TAM_BAS).index)
+    _tarih_ekseni(fig, 1, _pen(M["doviz_pay"], STOK_BAS).index)
     _tarih_ekseni(fig, 2, _pen(H["pay_eb_usd"], HAFTA_BAS).index)
     return _duzen(fig, f"Borç stokunun para kompozisyonu · veri {damga}", [
-        "Döviz payı YALNIZ dış borç üzerinden verilir. Döviz cinsi YURT İÇİ ihraçlar iç "
-        "borç stokunun içinde kalır ve EVDS'te ayrıştırılamaz — bu yüzden 'TL bacağı' "
-        "üst sınır, 'döviz bacağı' alt sınır okunmalıdır.",
-        "Finansman akımlarını (GEN52/53/54) kümüle ederek döviz cinsi iç stok tahmin etmek "
+        "DÖVİZ PAYI ile YURT DIŞI PAYI aynı şey değildir ve bu panel ikisini ayırır. Döviz "
+        "payı gerçekten döviz cinsi iki bacaktır (yurt dışında ihraç senet + dış kredi); "
+        "yerleşiklik payı ise alacaklısı yurt dışında olan tutardır ve içinde yurt dışı "
+        "yerleşiklerin elindeki TL cinsi DİBS de vardır.",
+        "DÖVİZ PAYI ALT SINIRDIR: iç borç stokunun içindeki DÖVİZ CİNSİ yurt içi ihraçlar "
+        "EVDS'te stok olarak ayrıştırılamıyor. Küçük değiller — noktalı çizgi, iç borçlanma "
+        "SATIŞININ döviz cinsi payını (12 aylık birikimli akım) gösterir; son gözlemde "
+        f"{_yuzde(float(M['pay_ic_satis_doviz'].dropna().iloc[-1]), 1)}.",
+        "Finansman akımlarını (GEN53/54) kümüle ederek döviz cinsi iç STOK tahmin etmek "
         "DENENDİ ve REDDEDİLDİ: kur farkı revalüasyonunu yok saydığı için iç borcun yalnız "
-        "~%1'ini veriyor.",
+        "~%1'ini veriyor. Akım payı bir kanıttır, stok tahmini değildir.",
         f"Alt panel haftalık menkul kıymet istatistiklerinden gelir (son {damga_h}) ve "
         "PİYASA değeri üzerindendir; yazılı değer toplamıyla karıştırılamaz.",
-        KAYNAK + " · bie_kbicborc, bie_brutdbborclu, bie_ebondvade."], n_panel=2)
+        KAYNAK + " · bie_kbicborc, bie_kbgen, bie_ebondyazdeg, bie_dibsyazdeg, "
+        "bie_brutdbborclu, bie_ebondvade."], n_panel=2)
 
 
 # ===========================================================================
@@ -606,7 +648,8 @@ def sekil_09(o, damga):
         rows=2, cols=1, vertical_spacing=0.12, row_heights=[0.58, 0.42],
         specs=[[{"type": "xy"}], [{"type": "table"}]],
         subplot_titles=(
-            f"a) USD/TRY şoku altında borç stoku (çıpa {s['cipa_ay']}, trilyon TL)",
+            f"a) USD/TRY şoku altında borç stoku (çıpa {s['cipa_ay']}, trilyon TL) — "
+            "şok yalnız döviz cinsi bacağa",
             "b) Senaryo tablosu"))
     kur = [r["kur"] for r in s["satirlar"]]
     fig.add_trace(go.Scatter(
@@ -651,17 +694,23 @@ def sekil_09(o, damga):
                    font=dict(size=11, color=INK, family="Georgia, serif"),
                    line_color=GRID, height=24)), row=2, col=1)
     return _duzen(fig, f"Kur duyarlılığı: borç stoku şok altında · veri {damga}", [
-        "Şok yalnız DIŞ bacağa uygulanır; iç borç stoku TL cinsidir ve kurdan doğrudan "
-        "etkilenmez.",
+        "Şok yalnız GERÇEKTEN DÖVİZ CİNSİ bacağa uygulanır: yurt dışında ihraç edilen senet "
+        f"+ dış krediler (stokun %{_sayi(s.get('doviz_pay'), 1)}'i). Brüt dış borcun "
+        "tamamına uygulanamaz — içinde yurt dışı yerleşiklerin elindeki TL cinsi DİBS de "
+        "vardır ve o tutar kur şokunda TL cinsinden DEĞİŞMEZ.",
+        "TL TUTARI SÜTUNU ALT SINIRDIR: iç borç stokunun içindeki DÖVİZ CİNSİ yurt içi "
+        "ihraçlar EVDS'te ayrıştırılamadığı için şok dışında kaldı; gerçek etki "
+        "tablodakinden BÜYÜKTÜR.",
         "PARALEL senaryoda TL bütün dövizlere karşı aynı oranda değer kaybeder. YALNIZ USD "
         "senaryosunda EUR/TRY ve JPY/TRY sabit kalır; şok dolar ağırlığı kadar geçer.",
         f"Para birimi ağırlıkları eurobond tablosundan (USD %{_sayi(s['agirlik']['usd']*100,1)} · "
         f"EUR %{_sayi(s['agirlik']['eur']*100,1)} · JPY %{_sayi(s['agirlik']['jpy']*100,1)}) alınıp "
-        "dış borcun tamamına VEKİL olarak uygulanmıştır — kredi bacağının para kompozisyonu "
-        "EVDS'te yayımlanmıyor.",
-        f"Stok/GSYH sütununun çıpası {s.get('cipa_ceyrek')} çeyreğidir ve GSYH SABİT "
-        "varsayılmıştır; oran ÜST SINIR okunmalıdır.",
-        KAYNAK + " · bie_kbicborc, bie_brutdbborclu, bie_ebondvade, bie_gsyhhrccar."],
+        "döviz bacağının tamamına VEKİL olarak uygulanmıştır — dış kredilerin para "
+        "kompozisyonu EVDS'te yayımlanmıyor.",
+        f"STOK/GSYH SÜTUNU ise ÜST SINIRDIR: çıpası {s.get('cipa_ceyrek')} çeyreğidir ve "
+        "GSYH SABİT varsayılmıştır; gerçek bir şokta nominal GSYH de büyür.",
+        KAYNAK + " · bie_kbicborc, bie_ebondyazdeg, bie_dibsyazdeg, bie_brutdbborclu, "
+        "bie_ebondvade, bie_gsyhhrccar."],
         n_panel=2, ek_yukseklik=60)
 
 

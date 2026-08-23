@@ -16,10 +16,26 @@ Ne hesaplar
    enflasyonda iki tanım 10 puandan fazla ayrışır.
 4. **Faiz yükü:** faiz/vergi geliri, faiz/GSYH, faiz giderinin iç/dış/kira
    sertifikası/iskonto ayrışması.
-5. **Borç stoku:** iç borç (bin TL) + dış borç (milyon USD × kur) → toplam;
-   döviz payı; stok/GSYH; net stok (Hazine nakit varlığı düşülmüş).
-6. **Kur duyarlılığı:** USD/TRY şoku −%10…+%30 senaryoları; paralel şok ve
-   yalnız-USD şoku ayrı ayrı (eurobondun para birimi ağırlıklarıyla).
+5. **Borç stoku ARAÇ (ihraç) TABANINDA kurulur.** İç borç (TP.KB.A09) İHRAÇ
+   tabanlıdır: yurt içinde ihraç edilmiş her senet, sahibi kim olursa olsun.
+   Brüt dış borç (TP.BRUTDBORCLU.G4) YERLEŞİKLİK tabanlıdır: alacaklısı yurt
+   dışında olan her yükümlülük. **İKİSİ TOPLANAMAZ** — yurt dışı yerleşiklerin
+   elindeki DİBS her iki tabanda da sayılır (ÇİFT SAYIM), yurt içi
+   yerleşiklerin elindeki eurobond hiçbirinde sayılmaz (EKSİK). Toplam stok bu
+   yüzden üç araç bacağından kurulur:
+       iç borç (A09, tüm sahipler)
+     + yurt dışında ihraç senet (EBONDYAZDEG.ST − S1311, tüm sahipler)
+     + dış krediler (G4 − EBONDYAZDEG.S2 − DIBSYAZDEG.S2 ÷ kur)
+   Bileşik seri, haftalık menkul kıymet istatistiklerinin başladığı 2020-09'da
+   başlar. Daha uzun ama YANLIŞ tanımlı bir seri üretilmez; uzun tarihli okuma
+   için finansal hesapların F.3+F.4 kalemi (2011-Ç3→) alt panelde referans
+   olarak çizilir.
+6. **Kur duyarlılığı:** şok yalnız GERÇEKTEN döviz cinsi bacağa (yurt dışında
+   ihraç senet + dış kredi) uygulanır. Yurt dışı yerleşiklerin elindeki TL
+   cinsi DİBS şok DIŞINDADIR — TL borçtur, kur şokunda TL değeri değişmez.
+   İç borçtaki DÖVİZ CİNSİ yurt içi ihraçlar EVDS'te stok olarak
+   ayrıştırılamadığı için de dışarıda kalır; tablo bu yüzden TL tutarında
+   ALT SINIRDIR.
 7. **DİBS sahiplik ve vade yapısı.** Vade/para tabloları PİYASA değeri
    üzerindedir; paylar HER ZAMAN kendi tablosunun toplamına bölünür.
 8. **İç borç çevirme oranı** (12 aylık birikimli; anapara ve anapara+faiz).
@@ -27,8 +43,10 @@ Ne hesaplar
 9. **Stok ayrıştırması:** Δstok = net borçlanma + kur farkı + ARTIK. Artık
    açıkça gösterilir; toplamı kapatmak için düzeltme YAPILMAZ.
 10. **Bağımsız doğrulama.** Türettiğimiz büyüklükleri EVDS'in kendi yayımladığı
-    karşılıklarıyla kıyaslar (DİBS+eurobond ↔ finansal hesaplar F.3;
-    MY dengesi ↔ GB dengesi; ayrıştırma artığı). Eşik aşılırsa uyarı düşer.
+    karşılıklarıyla kıyaslar: toplam stok ↔ finansal hesaplar F.3+F.4
+    (DURDURUCU — tanım bozulursa hat durur), DİBS+eurobond ↔ F.3, dış kredi
+    bacağı ↔ F.4, dış borç hiyerarşisi, eurobond para birimi toplamı.
+    Eşik aşılırsa uyarı düşer.
 
 ORAN METRİKLERİ AKIM SERİLERİNDEN ERKEN BİTER. GSYH ve finansal hesaplar
 145 gün gecikmeli; GSYH'yi ffill ile ileri taşıyıp daha yeni bir oran üretmek
@@ -71,6 +89,28 @@ KUR_SOKLARI = [-0.10, -0.05, 0.0, 0.05, 0.10, 0.20, 0.30]
 # çeyreklerde −%7…−%12. Bunu sıfıra zorlayan düzeltme YAPILMAZ; bant denetlenir.
 F3_BANT = (-0.20, 0.05)
 
+# TOPLAM STOK ↔ finansal hesaplar F.3+F.4. Aynı olguyu iki bağımsız kaynaktan
+# ölçer: bizimki YAZILI (nominal) değerli ve merkezi yönetim kapsamlı, finansal
+# hesaplar PİYASA değerli. Özdeşlik BEKLENMEZ.
+#   · STOK_F34_DUR — SON ortak çeyrek için DURDURUCU eşik. Bu denetim, iç borcu
+#     (ihraç tabanı) brüt dış borçla (yerleşiklik tabanı) toplayan eski tanımı
+#     ilk koşuda düşürürdü: o tanım son çeyrekte −%18,9 veriyordu, araç tabanlı
+#     doğrusu −%8,5.
+#   · STOK_F34_BANT — son 6 çeyrek için UYARI bandı. Tarihsel olarak 2022-Ç3…
+#     2023-Ç1 aralığında −%17…−%19'a kadar açıldı (TÜFE'ye endeksli kâğıtta
+#     piyasa/yazılı makası); bu yüzden tarihsel bant durdurucudan geniştir.
+STOK_F34_DUR = (-0.15, 0.15)
+STOK_F34_BANT = (-0.25, 0.10)
+
+# Dış kredi bacağı ↔ finansal hesaplar F.4 (krediler). Bacak ARTIK olarak
+# türetildiği için bu kıyas türetimin kendisini sınar: 2026-Ç1'de +%1,5.
+KREDI_F4_BANT = (-0.50, 0.35)
+
+# Dış kredi ARTIĞININ mertebe bandı (milyon ABD doları). Ölçülen 24 çeyrekte
+# 15.263–33.158. Artık NEGATİFE düşerse ya da bandı aşarsa eurobond/DİBS
+# sahiplik serilerinin eşlemesi bozulmuş demektir — DURDURUCU.
+KREDI_MUSD_BANT = (2_000.0, 80_000.0)
+
 # MY dengesi ile GB dengesi arasındaki kapsam farkı. %0 BEKLENMEZ; bu eşik
 # "kapsam farkı makul mü" sorusunu yanıtlar, özdeşlik aramaz.
 KAPSAM_ESIK = 0.35
@@ -79,6 +119,17 @@ KAPSAM_ESIK = 0.35
 # Artık; genel bütçe ↔ merkezi yönetim kapsam farkını, dış borcun üç aylık
 # adımlanmasını, nakit dışı ihracı ve değerleme etkilerini içerir.
 ARTIK_ESIK = 0.60
+
+# Hattın koşması BEKLENEN bağımsız doğrulamaları. ozet_uret.py paydayı bu
+# listeden alır; sözlüğün uzunluğundan alsaydı bir denetim hiç koşmadığında
+# payda da küçülür ve eksilme "3/3 geçti" gibi görünürdü.
+DOGRULAMA_BEKLENEN = [
+    "Toplam stok ↔ finansal hesaplar F.3+F.4",
+    "DİBS+eurobond ↔ finansal hesaplar F.3",
+    "Dış kredi artığı ↔ finansal hesaplar F.4",
+    "Dış borç hiyerarşisi",
+    "Eurobond para birimi toplamı",
+]
 
 # Çevirme oranının mertebe bandı (12 aylık birikimli). Ölçülen son 5 yıl
 # bandı %113–%593; aylık oran kullanılsaydı payda sıfıra yaklaşıp patlardı.
@@ -110,6 +161,31 @@ def _ceyrek_sonu(s: pd.Series) -> pd.Series:
     x = x.copy()
     x.index = _q(x.index)
     return x[~x.index.duplicated(keep="last")]
+
+
+def _ay_sonu(s: pd.Series, idx: pd.DatetimeIndex) -> pd.Series:
+    """HAFTALIK stok serisini AY SONU gözlemine indirir, ay BAŞI damgasına yazar.
+
+    ffill YOK. Ayın son Cuması henüz yayımlanmadıysa o ay ÜRETİLMEZ: ay içi bir
+    gözlemi "ay sonu stoku" saymak, ayın kalanındaki ihraç ve itfayı yok sayıp
+    sessiz bayatlama üretirdi. Haftalık (Cuma) seride ayın son Cuması ay sonuna
+    en çok 6 gün uzaktır; eşik 7 gün.
+    """
+    s = pd.Series(s).dropna()
+    if s.empty:
+        return pd.Series(index=idx, dtype=float)
+    ay = s.resample("ME").last()
+    tam = np.array([bool(((s.index > t - pd.Timedelta(days=7))
+                          & (s.index <= t)).any()) for t in ay.index])
+    ay = ay[tam]
+    ay.index = ay.index.to_period("M").to_timestamp()
+    return ay.reindex(idx)
+
+
+def _ceyrek_asof(s: pd.Series, q_idx: pd.DatetimeIndex) -> pd.Series:
+    """Haftalık/günlük seriden ÇEYREK SONUNA kadarki son gözlem (asof)."""
+    x = pd.Series(s).dropna()
+    return pd.Series([x.asof(q) for q in q_idx], index=q_idx, dtype=float)
 
 
 # ===========================================================================
@@ -261,7 +337,7 @@ def butce_metrikleri(a: pd.DataFrame, s_ay: pd.Timestamp) -> tuple[pd.DataFrame,
 # (2) BORÇ STOKU — iç + dış (TL karşılığı), döviz payı, ayrıştırma
 # ===========================================================================
 def stok_metrikleri(a: pd.DataFrame, c: pd.DataFrame, g: pd.DataFrame,
-                    M: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
+                    h: pd.DataFrame, M: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     tani: dict = {}
 
     # Ay sonu kuru: stok büyüklüğü ay SONU kuruyla değerlenir (ortalama kur
@@ -278,31 +354,150 @@ def stok_metrikleri(a: pd.DataFrame, c: pd.DataFrame, g: pd.DataFrame,
     # aşan aylarda ÜRETİLMEZ.
     dis = c["db_merkezi_yon"].dropna()                       # milyon USD
     son_dis_ay = dis.index[-1].to_period("M").to_timestamp()
-    dis_ay = dis.copy()
-    dis_ay.index = dis_ay.index.to_period("M").to_timestamp()
-    dis_ay = dis_ay.reindex(M.index).ffill()
-    dis_ay[M.index > son_dis_ay] = np.nan
 
+    def _basamak(q: pd.Series) -> pd.Series:
+        """Çeyreklik stoku ay içine BASAMAK olarak taşır; son çeyreği aşmaz."""
+        x = q.dropna().copy()
+        if x.empty:
+            return pd.Series(index=M.index, dtype=float)
+        x.index = x.index.to_period("M").to_timestamp()
+        x = x.reindex(M.index).ffill()
+        x[M.index > son_dis_ay] = np.nan
+        return x
+
+    dis_ay = _basamak(dis)
     M["dis_borc_musd"] = dis_ay
     # milyon USD → bin TL → trilyon TL   (1 milyon USD = 1e3 bin TL × kur)
+    # BU BACAK YERLEŞİKLİK TABANLIDIR ve toplam stoka OLDUĞU GİBİ EKLENMEZ;
+    # yalnız "brüt dış borç" bağlamında (hiyerarşi tablosu) kullanılır.
     M["dis_borc_trl"] = dis_ay * MUSD_BINTL * M["kur_ay"] * BINTL_TRL
     M["ic_borc_trl"] = a["ic_borc_toplam"] * BINTL_TRL
-    M["toplam_borc_trl"] = M["ic_borc_trl"] + M["dis_borc_trl"]
-    M["doviz_pay"] = M["dis_borc_trl"] / M["toplam_borc_trl"] * 100
+
+    # ------------------------------------------------------------------
+    # ARAÇ (İHRAÇ) TABANLI STOK — iki tabanı toplamanın hatası burada giderilir
+    # ------------------------------------------------------------------
+    # A09 İHRAÇ tabanlı (yurt içinde ihraç, TÜM sahipler), G4 YERLEŞİKLİK
+    # tabanlı (alacaklısı yurt dışında olan TÜM yükümlülükler). Toplandığında:
+    #   ÇİFT SAYIM : yurt dışı yerleşiklerin elindeki DİBS — A09'un içinde
+    #                (ihraç yurt içi) VE G4'ün içinde (alacaklı yurt dışı).
+    #   EKSİK      : yurt içi yerleşiklerin elindeki eurobond — ne A09'da
+    #                (ihraç yurt dışı) ne G4'te (alacaklı yurt içi).
+    # Kanıt aritmetiği (2026-06): 93.222 mn USD brüt dış borç = 46.950 eurobond
+    # (yurt dışı) + 14.740 DİBS (yurt dışı, kurla USD'ye çevrilmiş) + 31.532
+    # kalan = dış krediler. Kalem kalem oturuyor.
+    eb_st = _ay_sonu(h["eb_toplam_yaz"], M.index)        # milyon USD, tüm sahipler
+    eb_kendi = _ay_sonu(h["eb_merkezi_yon"], M.index)    # S1311: kendi tuttuğu
+    eb_s2_ay = _ay_sonu(h["eb_yurtdisi_yaz"], M.index)   # S.2: yurt dışının
+    dibs_s2_ay = _ay_sonu(h["dibs_yurtdisi"], M.index)   # milyon TL
+
+    # (i) Yurt dışında ihraç edilen senet: eurobond yazılı toplam eksi merkezi
+    #     yönetimin KENDİ tuttuğu tutar (S1311) — devletin kendine borcu.
+    M["dis_senet_musd"] = eb_st - eb_kendi
+    M["dis_senet_trl"] = M["dis_senet_musd"] * MUSD_BINTL * M["kur_ay"] * BINTL_TRL
+    M["eb_kendi_trl"] = eb_kendi * MUSD_BINTL * M["kur_ay"] * BINTL_TRL
+    # (ii) Yurt dışı yerleşiklerin elindeki DİBS: eski tanımda ÇİFT sayılan tutar.
+    M["dibs_yurtdisi_trl"] = dibs_s2_ay * MNTL_TRL
+    # (iii) Yurt içi yerleşiklerin elindeki eurobond: eski tanımda EKSİK olan tutar.
+    M["eb_yurtici_net_trl"] = ((eb_st - eb_s2_ay - eb_kendi)
+                               * MUSD_BINTL * M["kur_ay"] * BINTL_TRL)
+
+    # (iv) Dış krediler = brüt dış borç − yurt dışının elindeki senetler.
+    #      ÜÇ AYLIK hesaplanır (G4 üç aylık); senet bacakları çeyrek sonuna
+    #      asof ile taşınır, DİBS milyon TL olduğu için çeyrek sonu kuruyla
+    #      USD'ye çevrilir. Sonra ay içine basamak olarak taşınır.
+    kur_q = _ceyrek_asof(g["usdtry"], dis.index)
+    eb_s2_q = _ceyrek_asof(h["eb_yurtdisi_yaz"], dis.index)
+    dibs_s2_q = _ceyrek_asof(h["dibs_yurtdisi"], dis.index)
+    kredi_q = (dis - eb_s2_q - dibs_s2_q / kur_q).dropna()      # milyon USD
+    M["dis_kredi_musd"] = _basamak(kredi_q)
+    M["dis_kredi_trl"] = M["dis_kredi_musd"] * MUSD_BINTL * M["kur_ay"] * BINTL_TRL
+
+    # DURDURUCU: artık negatife düşerse ya da mertebe bandını aşarsa eurobond /
+    # DİBS sahiplik serilerinin eşlemesi bozulmuştur; yanlış stok yayına gitmez.
+    kr = M["dis_kredi_musd"].dropna()
+    if len(kr) and not (KREDI_MUSD_BANT[0] <= float(kr.iloc[-1])
+                        <= KREDI_MUSD_BANT[1]):
+        raise SystemExit(
+            f"DUR: dış kredi artığı {float(kr.iloc[-1]):,.0f} mn USD — mertebe "
+            f"bandı {KREDI_MUSD_BANT[0]:,.0f}–{KREDI_MUSD_BANT[1]:,.0f} dışında. "
+            "G4 / EBONDYAZDEG.S2 / DIBSYAZDEG.S2 eşlemesi değişmiş olabilir.")
+
+    # (v) TOPLAM — üç araç bacağı. Bileşik seri, haftalık menkul kıymet
+    #     istatistiklerinin başladığı aydan (2020-09) itibaren üretilir.
+    M["doviz_borc_trl"] = M["dis_senet_trl"] + M["dis_kredi_trl"]
+    M["toplam_borc_trl"] = M["ic_borc_trl"] + M["doviz_borc_trl"]
+    # DÖVİZ payı: gerçekten döviz cinsi olan bacakların payı → ALT SINIR
+    # (iç borçtaki döviz cinsi yurt içi ihraçlar ayrıştırılamadığı için dışarıda).
+    M["doviz_pay"] = M["doviz_borc_trl"] / M["toplam_borc_trl"] * 100
+    # YERLEŞİKLİK payı: alacaklısı yurt dışında olan bacağın payı. Bu AYRI bir
+    # olgudur ve döviz payı DEĞİLDİR — içinde yurt dışının tuttuğu TL cinsi
+    # DİBS de vardır.
+    M["yurt_disi_pay"] = M["dis_borc_trl"] / M["toplam_borc_trl"] * 100
+    # Eski (bozuk) tanımın bugünkü karşılığı — sayfada farkı göstermek için.
+    M["eski_tanim_trl"] = M["ic_borc_trl"] + M["dis_borc_trl"]
+
     # İç borç araç kırılımı (yapısal sıfırlar grafiğe girmez, toplamda kalır)
     M["ic_tahvil_trl"] = a["ic_tahvil"] * BINTL_TRL
     M["ic_bono_trl"] = a["ic_bono"] * BINTL_TRL
+
+    # Döviz cinsi YURT İÇİ ihracın büyüklüğüne dair ÖLÇÜLEN kanıt: iç borçlanma
+    # satış ve itfalarının döviz cinsi payı (12 aylık birikimli). Stok değil
+    # AKIM ölçüsüdür ve öyle etiketlenir — ama "iç borç TL cinsidir" cümlesini
+    # tek başına çürütür.
+    sat_tl = a[[k for k in ("bono_tl_satis", "tahvil_tl_satis") if k in a.columns]]
+    sat_dv = a[[k for k in ("bono_dov_satis", "tahvil_dov_satis") if k in a.columns]]
+    ode_tl = a[[k for k in ("bono_tl_odeme", "tahvil_tl_odeme") if k in a.columns]]
+    ode_dv = a[[k for k in ("bono_dov_odeme", "tahvil_dov_odeme") if k in a.columns]]
+    s_tl = sat_tl.sum(axis=1, min_count=1).rolling(12).sum()
+    s_dv = sat_dv.sum(axis=1, min_count=1).rolling(12).sum()
+    o_tl = ode_tl.sum(axis=1, min_count=1).abs().rolling(12).sum()
+    o_dv = ode_dv.sum(axis=1, min_count=1).abs().rolling(12).sum()
+    M["pay_ic_satis_doviz"] = s_dv / (s_tl + s_dv) * 100
+    M["pay_ic_odeme_doviz"] = o_dv / (o_tl + o_dv) * 100
 
     tani["son_dis_ceyrek"] = f"{dis.index[-1]:%Y-%m-%d}"
     tani["birlesik_stok_son_ay"] = (
         f"{M['toplam_borc_trl'].dropna().index[-1]:%Y-%m}"
         if M["toplam_borc_trl"].notna().any() else None)
+    tani["birlesik_stok_ilk_ay"] = (
+        f"{M['toplam_borc_trl'].dropna().index[0]:%Y-%m}"
+        if M["toplam_borc_trl"].notna().any() else None)
+    _bilesen = M[["ic_borc_trl", "dis_senet_trl", "dis_kredi_trl",
+                  "dibs_yurtdisi_trl", "eb_yurtici_net_trl",
+                  "toplam_borc_trl", "eski_tanim_trl"]].dropna()
+    if len(_bilesen):
+        r = _bilesen.iloc[-1]
+        tani["stok_bilesen"] = {
+            "ay": f"{_bilesen.index[-1]:%Y-%m}",
+            "ic_borc_trl": float(r["ic_borc_trl"]),
+            "dis_senet_trl": float(r["dis_senet_trl"]),
+            "dis_kredi_trl": float(r["dis_kredi_trl"]),
+            "toplam_trl": float(r["toplam_borc_trl"]),
+            "eski_tanim_trl": float(r["eski_tanim_trl"]),
+            "cift_sayilan_dibs_trl": float(r["dibs_yurtdisi_trl"]),
+            "eksik_eurobond_trl": float(r["eb_yurtici_net_trl"]),
+            "duzeltme_yuzde": float(r["toplam_borc_trl"] / r["eski_tanim_trl"] * 100 - 100),
+        }
+    tani["stok_tanim_notu"] = (
+        "Stok ARAÇ (ihraç) tabanında kurulur: iç borç (A09, tüm sahipler) + "
+        "yurt dışında ihraç senet (EBONDYAZDEG.ST − S1311) + dış krediler "
+        "(G4 − EBONDYAZDEG.S2 − DIBSYAZDEG.S2 ÷ kur). İç borcu brüt dış borçla "
+        "doğrudan toplamak İKİ FARKLI TABANI toplamak olurdu: yurt dışı "
+        "yerleşiklerin DİBS'i iki kez sayılır, yurt içi yerleşiklerin "
+        "eurobondu hiç sayılmazdı.")
     tani["doviz_payi_notu"] = (
-        "Döviz payı YALNIZ dış borç üzerinden verilir. Döviz cinsi YURT İÇİ "
-        "ihraçlar iç borç stokunun içinde kalır ve EVDS'te ayrıştırılamaz: "
-        "GEN52/53/54 akımlarını kümüle ederek stok tahmin etmek kur farkı "
-        "revalüasyonunu yok saydığı için iç borcun yalnız ~%1,2'sini verir "
-        "(gerçek pay bunun çok üstünde). O yüzden bu tahmin REDDEDİLDİ.")
+        "Döviz payı ALT SINIRDIR. Pay yalnız gerçekten döviz cinsi iki bacağı "
+        "içerir: yurt dışında ihraç edilen senet ve dış krediler. İç borç "
+        "stokunun içindeki DÖVİZ CİNSİ yurt içi ihraçlar EVDS'te stok olarak "
+        "ayrıştırılamaz — oysa küçük değiller: son 12 ayda iç borçlanma "
+        "satışının döviz cinsi payı ölçülüyor ve ayrı anahtarla veriliyor. "
+        "GEN53/54 akımlarını kümüle ederek stok tahmin etmek kur farkı "
+        "revalüasyonunu yok saydığı için REDDEDİLDİ.")
+    tani["yurt_disi_payi_notu"] = (
+        "Yurt dışı payı, alacaklısı yurt dışında olan bacağın (brüt dış borç, "
+        "TP.BRUTDBORCLU.G4) toplam stoktaki payıdır. DÖVİZ PAYI DEĞİLDİR: "
+        "içinde yurt dışı yerleşiklerin elindeki TL cinsi DİBS de vardır ve o "
+        "tutar kur şokunda TL cinsinden değişmez.")
 
     # --- ima edilen faiz oranı (nominal) ve FISHER REEL --------------------
     # i = 12 aylık faiz gideri / ortalama borç stoku. Ortalama, yıl içinde
@@ -358,8 +553,11 @@ def stok_metrikleri(a: pd.DataFrame, c: pd.DataFrame, g: pd.DataFrame,
     # --- stok ayrıştırması: Δstok = net borçlanma + kur farkı + ARTIK ------
     d_stok = M["toplam_borc_trl"].diff(12)
     net_borc = a["borclanma_net"].rolling(12).sum() * BINTL_TRL
-    # Kur farkı: geçen yılki DÖVİZ stoku × kurdaki değişim.
-    kur_farki = (M["dis_borc_musd"].shift(12) * MUSD_BINTL
+    # Kur farkı: geçen yılki DÖVİZ CİNSİ stok (yurt dışında ihraç senet + dış
+    # kredi, milyon USD) × kurdaki değişim. Brüt dış borç kullanılsaydı, içindeki
+    # TL cinsi DİBS'e de kur farkı yazılmış olurdu.
+    doviz_musd = M["dis_senet_musd"] + M["dis_kredi_musd"]
+    kur_farki = (doviz_musd.shift(12) * MUSD_BINTL
                  * (M["kur_ay"] - M["kur_ay"].shift(12)) * BINTL_TRL)
     M["ayr_d_stok"] = d_stok
     M["ayr_net_borclanma"] = net_borc
@@ -393,8 +591,16 @@ def ceyrek_metrikleri(c: pd.DataFrame, M: pd.DataFrame) -> tuple[pd.DataFrame, d
     # 4 çeyrek TOPLAMI: çeyreklik akım GSYH'yi yıllığa çevirir. Tek çeyreği
     # dörtle çarpmak mevsimselliği (Ç4 şişkin) orana taşırdı.
     gsyh_yil = gs.rolling(4).sum().dropna()
-    C = pd.DataFrame(index=gsyh_yil.index)
-    C["gsyh_yil_trl"] = gsyh_yil * BINTL_TRL
+    # ÇEYREK EKSENİ GSYH'YE KELEPÇELENMEZ. Brüt dış borç GSYH'den bir çeyrek
+    # önde yayımlanıyor; indeks yalnız GSYH ile sürülseydi yayımlanmış çeyrek
+    # sessizce düşerdi (koştu ama ilerlemedi). Oran metrikleri zaten GSYH'nin
+    # olmadığı çeyrekte NaN kalır — orada bir şey uydurulmuyor.
+    ek_idx = pd.DatetimeIndex([])
+    for kol in ("db_merkezi_yon", "db_toplam"):
+        if kol in c.columns:
+            ek_idx = ek_idx.union(c[kol].dropna().index)
+    C = pd.DataFrame(index=gsyh_yil.index.union(ek_idx).sort_values())
+    C["gsyh_yil_trl"] = (gsyh_yil * BINTL_TRL).reindex(C.index)
 
     for ad, kol in (("denge", "denge_12a"), ("fdd", "fdd_12a"),
                     ("faiz", "faiz_12a"), ("gelir", "gelir_12a"),
@@ -409,6 +615,13 @@ def ceyrek_metrikleri(c: pd.DataFrame, M: pd.DataFrame) -> tuple[pd.DataFrame, d
     stok_q = _ceyrek_sonu(M["toplam_borc_trl"]).reindex(C.index)
     C["stok_trl"] = stok_q
     C["stok_gsyh"] = stok_q / C["gsyh_yil_trl"] * 100
+    # Bacaklar da çeyreğe taşınır: doğrulama (kredi ↔ F.4) ve şekil 07 için.
+    for ad, kol in (("ic_borc_ceyrek_trl", "ic_borc_trl"),
+                    ("dis_senet_ceyrek_trl", "dis_senet_trl"),
+                    ("dis_kredi_ceyrek_trl", "dis_kredi_trl"),
+                    ("doviz_borc_ceyrek_trl", "doviz_borc_trl")):
+        if kol in M.columns:
+            C[ad] = _ceyrek_sonu(M[kol]).reindex(C.index)
 
     # --- net borç (finansal hesaplar) -------------------------------------
     for ad, kol in (("net_fin_deger", "fh_net_fin_deger"),
@@ -424,6 +637,14 @@ def ceyrek_metrikleri(c: pd.DataFrame, M: pd.DataFrame) -> tuple[pd.DataFrame, d
         C["net_stok_trl"] = C["stok_trl"] - C["nakit_trl"]
         C["net_stok_gsyh"] = C["net_stok_trl"] / C["gsyh_yil_trl"] * 100
         C["net_fin_deger_gsyh"] = C["net_fin_deger_trl"] / C["gsyh_yil_trl"] * 100
+    # UZUN TARİHLİ REFERANS: finansal hesapların borçlanma senetleri (F.3) +
+    # kredileri (F.4). Bizim araç tabanlı stokumuzla AYNI OLGUYU ölçer ama
+    # PİYASA değerlidir ve 2010-Ç4'e kadar geri gider; bileşik stok serisi ise
+    # haftalık menkul kıymet istatistikleriyle 2020-Ç3'te başlar. İki seri
+    # birbirinin yerine kullanılmaz; alt panelde ayrı çizilir.
+    if {"borc_senedi_trl", "krediler_trl"} <= set(C.columns):
+        C["fh_borc_trl"] = C["borc_senedi_trl"] + C["krediler_trl"]
+        C["fh_borc_gsyh"] = C["fh_borc_trl"] / C["gsyh_yil_trl"] * 100
 
     # --- dış borç bağlamı --------------------------------------------------
     for ad, kol in (("db_toplam", "db_toplam"), ("db_my", "db_merkezi_yon"),
@@ -436,6 +657,10 @@ def ceyrek_metrikleri(c: pd.DataFrame, M: pd.DataFrame) -> tuple[pd.DataFrame, d
     tani["son_ortak_ceyrek"] = (f"{son_ortak.index[-1]:%Y-%m-%d}"
                                 if len(son_ortak) else None)
     tani["gsyh_son_ceyrek"] = f"{gs.index[-1]:%Y-%m-%d}"
+    # Brüt dış borç tablosunun KENDİ çeyreği: GSYH ile aynı olmak ZORUNDA
+    # değildir ve olmadığında tablo kendi çıpasını yazar.
+    _db = C[["db_my_mlrusd"]].dropna() if "db_my_mlrusd" in C.columns else C.iloc[:0]
+    tani["db_son_ceyrek"] = f"{_db.index[-1]:%Y-%m-%d}" if len(_db) else None
     tani["oran_gecikme_notu"] = (
         "Oran metrikleri EN SON ORTAK ÇEYREKTE biter. GSYH ve finansal "
         "hesaplar akım serilerinden ~2 çeyrek geridedir; GSYH'yi ileri "
@@ -509,24 +734,35 @@ def haftalik_metrikleri(h: pd.DataFrame, g: pd.DataFrame) -> tuple[pd.DataFrame,
 def kur_senaryolari(M: pd.DataFrame, C: pd.DataFrame, H: pd.DataFrame) -> dict:
     """USD/TRY şoku altında borç stoku ve stok/GSYH.
 
+    ŞOK HANGİ BACAĞA UYGULANIR. Yalnız GERÇEKTEN döviz cinsi olan bacağa:
+    yurt dışında ihraç edilen senet (eurobond) + dış krediler. Brüt dış borcun
+    tamamına uygulanamaz, çünkü onun içinde yurt dışı yerleşiklerin elindeki
+    TL cinsi DİBS de vardır — o tutar TL borçtur ve kur şokunda TL değeri
+    DEĞİŞMEZ.
+
     İKİ SENARYO AİLESİ:
-      · PARALEL: TL bütün dövizlere karşı aynı oranda değer kaybeder. Dış
-        bacağın TL karşılığı doğrudan (1+s) ile ölçeklenir.
+      · PARALEL: TL bütün dövizlere karşı aynı oranda değer kaybeder. Döviz
+        bacağının TL karşılığı doğrudan (1+s) ile ölçeklenir.
       · YALNIZ USD: TL yalnız dolara karşı değer kaybeder; EUR/TRY ve JPY/TRY
         sabit kalır. Yalnız dolar cinsi bacak şoklanır.
-    Para birimi ağırlıkları EUROBOND tablosundan gelir (USD/EUR/JPY) ve dış
-    borç stokunun tamamına VEKİL olarak uygulanır — dış borcun kredi bacağının
-    para kompozisyonu EVDS'te ayrı yayımlanmıyor. Bu vekillik açıkça yazılır.
+    Para birimi ağırlıkları EUROBOND tablosundan gelir (USD/EUR/JPY) ve döviz
+    bacağının tamamına VEKİL olarak uygulanır — dış kredilerin para
+    kompozisyonu EVDS'te ayrı yayımlanmıyor. Bu vekillik açıkça yazılır.
 
-    GSYH SABİT VARSAYILIR (kısa vadeli, nominal). Kur şokunun GSYH deflatörüne
-    geçişi bu senaryoda modellenmez; oran bu yüzden ÜST SINIR okunmalıdır.
+    İKİ AYRI SINIR, İKİ AYRI SÜTUN:
+      · TL TUTARI bir ALT SINIRDIR: iç borç stokunun içindeki DÖVİZ CİNSİ yurt
+        içi ihraçlar EVDS'te stok olarak ayrıştırılamadığı için şok dışında
+        kaldı. Gerçek etki tablodakinden BÜYÜKTÜR.
+      · STOK/GSYH ORANI bir ÜST SINIRDIR: GSYH sabit varsayıldı; gerçek bir
+        şokta nominal GSYH de büyür, dolayısıyla oranın artışı tablodakinden
+        KÜÇÜKTÜR.
     """
-    stok = M[["ic_borc_trl", "dis_borc_trl", "toplam_borc_trl", "kur_ay"]].dropna()
+    stok = M[["ic_borc_trl", "doviz_borc_trl", "toplam_borc_trl", "kur_ay"]].dropna()
     if stok.empty:
         return {}
     t = stok.index[-1]
     ic = float(stok["ic_borc_trl"].iloc[-1])
-    dis = float(stok["dis_borc_trl"].iloc[-1])
+    dis = float(stok["doviz_borc_trl"].iloc[-1])
     kur = float(stok["kur_ay"].iloc[-1])
 
     agirlik = {"usd": float(H["pay_eb_usd"].dropna().iloc[-1]) / 100,
@@ -540,7 +776,7 @@ def kur_senaryolari(M: pd.DataFrame, C: pd.DataFrame, H: pd.DataFrame) -> dict:
     stok_q = float(ortak["stok_trl"].iloc[-1]) if q is not None else None
     gsyh_q = float(ortak["gsyh_yil_trl"].iloc[-1]) if q is not None else None
     # Çeyrek anındaki iç/dış ayrımı (şok yalnız dış bacağa uygulanır)
-    dis_q = float(_ceyrek_sonu(M["dis_borc_trl"]).reindex([q]).iloc[0]) \
+    dis_q = float(_ceyrek_sonu(M["doviz_borc_trl"]).reindex([q]).iloc[0]) \
         if q is not None else None
 
     satirlar = []
@@ -565,12 +801,17 @@ def kur_senaryolari(M: pd.DataFrame, C: pd.DataFrame, H: pd.DataFrame) -> dict:
         "cipa_ay": t.strftime("%Y-%m"),
         "cipa_ceyrek": f"{q:%Y-%m-%d}" if q is not None else None,
         "kur": kur, "ic_trl": ic, "dis_trl": dis, "toplam_trl": ic + dis,
+        "doviz_pay": dis / (ic + dis) * 100 if (ic + dis) else None,
         "agirlik": agirlik,
         "satirlar": satirlar,
-        "not": ("Para birimi ağırlıkları eurobond tablosundan alınıp dış borç "
-                "stokunun tamamına VEKİL olarak uygulanmıştır; dış borcun "
-                "kredi bacağının para kompozisyonu EVDS'te yayımlanmıyor. "
-                "GSYH sabit varsayılmıştır — oran ÜST SINIR okunmalıdır."),
+        "not": ("Şok yalnız gerçekten döviz cinsi bacağa uygulanır: yurt "
+                "dışında ihraç edilen senet + dış krediler. Para birimi "
+                "ağırlıkları eurobond tablosundan alınıp bu bacağın tamamına "
+                "VEKİL olarak uygulanmıştır; dış kredilerin para kompozisyonu "
+                "EVDS'te yayımlanmıyor. TL TUTARI ALT SINIRDIR — iç borçtaki "
+                "döviz cinsi yurt içi ihraçlar ayrıştırılamadığı için şok "
+                "dışında kaldı. STOK/GSYH ORANI ise ÜST SINIRDIR — GSYH sabit "
+                "varsayıldı."),
     }
 
 
@@ -578,9 +819,79 @@ def kur_senaryolari(M: pd.DataFrame, C: pd.DataFrame, H: pd.DataFrame) -> dict:
 # (6) BAĞIMSIZ DOĞRULAMA
 # ===========================================================================
 def dogrula(c: pd.DataFrame, h: pd.DataFrame, g: pd.DataFrame,
-            C: pd.DataFrame) -> dict:
-    """Türetilmiş büyüklükleri EVDS'in kendi yayımladıklarıyla kıyaslar."""
+            C: pd.DataFrame) -> tuple[dict, list[str]]:
+    """Türetilmiş büyüklükleri EVDS'in kendi yayımladıklarıyla kıyaslar.
+
+    Dönüş: (rapor, DURDURUCU sapmalar).
+    """
     D: dict = {}
+    dur: list[str] = []
+
+    # TOPLAM STOK ↔ finansal hesaplar F.3 (borçlanma senetleri) + F.4 (krediler).
+    # BU DENETİM DURDURUCUDUR. İç borcu (İHRAÇ tabanı) brüt dış borçla
+    # (YERLEŞİKLİK tabanı) toplayan eski tanım son ortak çeyrekte −%18,9
+    # veriyordu; araç tabanlı doğrusu −%8,5. Denetim o hatayı ilk koşuda
+    # düşürürdü.
+    if {"stok_trl", "borc_senedi_trl", "krediler_trl"} <= set(C.columns):
+        x = C[["stok_trl", "borc_senedi_trl", "krediler_trl"]].dropna()
+        if len(x):
+            f34 = x["borc_senedi_trl"] + x["krediler_trl"]
+            fark = (x["stok_trl"] / f34 - 1).dropna()
+            son6 = fark.tail(6)
+            son_f = float(fark.iloc[-1])
+            gecti = bool(all(STOK_F34_BANT[0] <= f <= STOK_F34_BANT[1]
+                             for f in son6))
+            durdu = not (STOK_F34_DUR[0] <= son_f <= STOK_F34_DUR[1])
+            D["Toplam stok ↔ finansal hesaplar F.3+F.4"] = {
+                "n": int(len(fark)), "son_ceyrek": f"{fark.index[-1]:%Y-%m-%d}",
+                "elde_trl": float(x["stok_trl"].iloc[-1]),
+                "f34_trl": float(f34.iloc[-1]), "son_fark": son_f,
+                "son6_min": float(son6.min()), "son6_max": float(son6.max()),
+                "bant": list(STOK_F34_BANT), "dur_bant": list(STOK_F34_DUR),
+                "gecti": bool(gecti and not durdu), "durdurucu": True,
+                "aciklama": ("Aynı olgunun iki bağımsız ölçümü. Bizimki YAZILI "
+                             "(nominal) değerli, finansal hesaplar PİYASA "
+                             "değerli — özdeşlik beklenmez, bant denetlenir. "
+                             "Son çeyrek durdurucu eşikle ayrıca sınanır."),
+            }
+            if not gecti:
+                uyar("DOĞRULAMA: toplam stok ile finansal hesapların F.3+F.4 "
+                     f"toplamı arasındaki fark son 6 çeyrekte bant dışına çıktı "
+                     f"({son6.min():+.1%}…{son6.max():+.1%}, bant "
+                     f"{STOK_F34_BANT[0]:+.0%}…{STOK_F34_BANT[1]:+.0%}).")
+            if durdu:
+                dur.append(
+                    f"TOPLAM STOK TANIMI: son ortak çeyrekte "
+                    f"({fark.index[-1]:%Y-%m-%d}) stok, finansal hesapların "
+                    f"F.3+F.4 toplamından {son_f:+.1%} sapıyor (durdurucu bant "
+                    f"{STOK_F34_DUR[0]:+.0%}…{STOK_F34_DUR[1]:+.0%}). Stok "
+                    "tanımı ya da kaynak seri eşlemesi bozulmuş olabilir.")
+
+    # Dış KREDİ bacağı ↔ finansal hesaplar F.4. Kredi bacağı ARTIK olarak
+    # türetilir (G4 eksi yurt dışının elindeki senetler); bu kıyas türetimin
+    # kendisini sınar. 2026-Ç1'de +%1,5 — artık gerçekten kredi bacağı.
+    if {"krediler_trl", "dis_kredi_ceyrek_trl"} <= set(C.columns):
+        x = C[["dis_kredi_ceyrek_trl", "krediler_trl"]].dropna()
+        if len(x):
+            fark = (x["dis_kredi_ceyrek_trl"] / x["krediler_trl"] - 1).dropna()
+            son6 = fark.tail(6)
+            gecti = bool(all(KREDI_F4_BANT[0] <= f <= KREDI_F4_BANT[1]
+                             for f in son6))
+            D["Dış kredi artığı ↔ finansal hesaplar F.4"] = {
+                "n": int(len(fark)), "son_ceyrek": f"{fark.index[-1]:%Y-%m-%d}",
+                "elde_trl": float(x["dis_kredi_ceyrek_trl"].iloc[-1]),
+                "f4_trl": float(x["krediler_trl"].iloc[-1]),
+                "son_fark": float(fark.iloc[-1]),
+                "son6_min": float(son6.min()), "son6_max": float(son6.max()),
+                "bant": list(KREDI_F4_BANT), "gecti": gecti,
+                "aciklama": ("Dış kredi bacağı brüt dış borçtan senet "
+                             "bacaklarını düşerek ARTIK olarak türetilir; "
+                             "F.4 bunu bağımsız ölçer."),
+            }
+            if not gecti:
+                uyar("DOĞRULAMA: dış kredi artığı ile finansal hesapların F.4 "
+                     f"kalemi arasındaki fark bant dışına çıktı "
+                     f"({son6.min():+.1%}…{son6.max():+.1%}).")
 
     # DİBS (yazılı, milyon TL) + eurobond (yazılı, milyon USD × kur) ↔ F.3.
     # ÖZDEŞ DEĞİL, BANTLI: finansal hesaplar piyasa değerli ve kapsamı biraz
@@ -646,7 +957,7 @@ def dogrula(c: pd.DataFrame, h: pd.DataFrame, g: pd.DataFrame,
             if pay >= 0.02:
                 uyar("DOĞRULAMA: eurobond para birimi kırılımı toplamı "
                      f"tutmuyor (artık payı %{pay*100:.1f}).")
-    return D
+    return D, dur
 
 
 # ===========================================================================
@@ -680,11 +991,11 @@ def kos() -> int:
             print("  ! (veri) " + u, flush=True)
 
     M, t_butce = butce_metrikleri(a, s_ay)
-    M, t_stok = stok_metrikleri(a, c, g, M)
+    M, t_stok = stok_metrikleri(a, c, g, h, M)
     C, t_ceyrek = ceyrek_metrikleri(c, M)
     H, t_hafta = haftalik_metrikleri(h, g)
     senaryo = kur_senaryolari(M, C, H)
-    D = dogrula(c, h, g, C)
+    D, dur = dogrula(c, h, g, C)
 
     M.to_csv(VERI / "aylik_metrik.csv")
     C.to_csv(VERI / "ceyreklik_metrik.csv")
@@ -703,6 +1014,7 @@ def kos() -> int:
         },
         "butce": t_butce, "stok": t_stok, "ceyrek": t_ceyrek,
         "haftalik": t_hafta, "senaryo": senaryo, "dogrulama": D,
+        "dogrulama_beklenen": list(DOGRULAMA_BEKLENEN),
         "kapsam_notu": (
             "Bu hat borç STOKUNU ve BÜTÇEYİ anlatır. İhale tarafı (teklif, "
             "karşılama, kesim faizi) Hazine İhraç hattındadır; iki sayfa "
@@ -732,6 +1044,13 @@ def kos() -> int:
         print(f"    doğrulama {'✓' if r.get('gecti') else '✗'} {ad} (n={r.get('n')})")
     if _UYARI:
         print(f"\n[{len(_UYARI)} uyarı]")
+    if dur:
+        for x in dur:
+            print("  ✗ " + x)
+        raise SystemExit(
+            "DUR: stok tanımı denetimi düştü. Yanlış tanımlı bir borç stoku "
+            "yayına gitmesin diye grafik ve özet üretilmiyor. "
+            "Ayrıntı: data/metrik_ozet.json → dogrulama.")
     return 0
 
 

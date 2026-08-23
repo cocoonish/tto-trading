@@ -66,19 +66,19 @@
   "f_2y1y_tarih": "2026-08-21",
   "f_2y3y": 32.5488,
   "f_2y3y_tarih": "2026-08-21",
-  "carry_2y_tlref": 0.6054,
+  "carry_2y_tlref": -8.4739,
   "carry_2y_tlref_tarih": "2026-08-21",
-  "carry_2y_politika": 3.4613,
+  "carry_2y_politika": -4.1231,
   "carry_2y_politika_tarih": "2026-08-21",
-  "carry_2y_aofm": 0.4613,
-  "carry_2y_aofm_tarih": "2026-08-21",
-  "carry_3a_tlref": 0.7581,
+  "carry_2y_aofm": -8.2119,
+  "carry_2y_aofm_tarih": "2026-08-07",
+  "carry_3a_tlref": -8.3212,
   "carry_3a_tlref_tarih": "2026-08-21",
   "reel_ileri": 13.4418,
   "reel_ileri_tarih": "2026-08-21",
   "reel_geriye": 6.4985,
   "reel_geriye_tarih": "2026-08-21",
-  "reel_ileri_2y": 19.0048,
+  "reel_ileri_2y": 16.2501,
   "reel_ileri_2y_tarih": "2026-08-21",
   "reel_ileri_basit": 16.6262,
   "reel_ileri_basit_tarih": "2026-08-21",
@@ -108,16 +108,48 @@
   "be_7y_tarih": "2026-08-21",
   "prim_1y": 4.0235,
   "prim_1y_tarih": "2026-08-21",
-  "prim_2y": 11.805,
+  "prim_2y": 9.0081,
   "prim_2y_tarih": "2026-08-21",
-  "prim_5y": 19.8513,
+  "prim_3y": 14.0848,
+  "prim_3y_tarih": "2026-06-12",
+  "prim_5y": 14.6826,
   "prim_5y_tarih": "2026-08-21",
+  "prim_7y": 12.6936,
+  "prim_7y_tarih": "2026-08-21",
+  "pka_ort_1y": 23.69,
+  "pka_ort_1y_tarih": "2026-08-21",
+  "pka_ort_2y": 20.8269,
+  "pka_ort_2y_tarih": "2026-08-21",
+  "pka_ort_3y": 19.0887,
+  "pka_ort_3y_tarih": "2026-08-21",
+  "pka_ort_5y": 16.3087,
+  "pka_ort_5y_tarih": "2026-08-21",
+  "pka_ort_7y": 14.8078,
+  "pka_ort_7y_tarih": "2026-08-21",
+  "carry_2y_tlref_basit": 0.6054,
+  "carry_2y_tlref_basit_tarih": "2026-08-21",
+  "carry_2y_aofm_basit": 0.9379,
+  "carry_2y_aofm_basit_tarih": "2026-08-07",
+  "tlref_bilesik": 48.9353,
+  "tlref_bilesik_tarih": "2026-08-21",
+  "aofm_bilesik": 49.1498,
+  "aofm_bilesik_tarih": "2026-08-07",
+  "politika_bilesik_gercek": 44.5844,
+  "politika_bilesik_gercek_tarih": "2026-08-21",
+  "politika_birlesik": 37.0,
+  "politika_birlesik_tarih": "2026-08-21",
+  "konvansiyon_farki_tlref": 9.0794,
+  "konvansiyon_farki_tlref_tarih": "2026-08-21",
+  "fon_top": 0.0,
+  "fon_top_tarih": "2026-08-21",
   "tlref": 39.8559,
   "tlref_tarih": "2026-08-21",
   "politika": 37.0,
   "politika_tarih": "2026-08-21",
   "aofm": 40.0,
-  "aofm_tarih": "2026-08-21",
+  "aofm_tarih": "2026-08-07",
+  "aofm_ham": 40.0,
+  "aofm_ham_tarih": "2026-08-21",
   "koridor_alt": 35.5,
   "koridor_alt_tarih": "2026-08-21",
   "koridor_ust": 40.0,
@@ -183,6 +215,38 @@
   "cok_kaynakli_vade_son": 52,
   "gecti": true
  },
+ "aofm_durum": {
+  "gecerli": false,
+  "esik_mn_tl": 5000.0,
+  "taban_mn_tl": 0.0,
+  "son_gecerli_gun": "2026-08-07",
+  "gecersiz_gun_son1y": 44
+ },
+ "basabas_sekil": {
+  "sekil": "kambur",
+  "tepe_vade": 5.0,
+  "vadeler": [
+   1.0,
+   2.0,
+   5.0,
+   7.0
+  ],
+  "degerler": [
+   27.7135,
+   29.835,
+   30.9913,
+   27.5014
+  ],
+  "ilk_son_fark": -0.2121
+ },
+ "reel_bos_dugumler": [
+  "3 yıl"
+ ],
+ "konvansiyon": {
+  "gun_sayisi": 365.0,
+  "politika_vade_gun": 7.0,
+  "not": "Fonlama faizleri (TLREF, AOFM, 1 hafta repo) BASİT yıllık yayımlanır; eğri getirisi YILLIK BİLEŞİKTİR. Taşıma hesabında fonlama faizleri önce bileşiğe çevrilir."
+ },
  "pca": {
   "aciklanan_pay": [
    0.9694,
@@ -245,6 +309,11 @@
   "medyan_fark_puan": 0.0006,
   "maks_fark_puan": 0.0067,
   "medyan_fiyat_fark": 0.0005,
+  "ozdeslik": true,
+  "ozdeslik_n": 42,
+  "ozdeslik_maks_tl": 0.0,
+  "ozdeslik_esik_tl": 0.0005,
+  "ozdeslik_gecti": true,
   "tablo": [
    {
     "kod": "TP.TRT100227T13",
@@ -253,6 +322,8 @@
     "nakit_akisi_n": 2,
     "piyasa_fiyat": 99.433,
     "model_fiyat": 99.433,
+    "strip_toplam": 99.433,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 39.1784,
     "model_ytm": 39.1784,
     "fark_puan": 0.0
@@ -264,6 +335,8 @@
     "nakit_akisi_n": 2,
     "piyasa_fiyat": 99.433,
     "model_fiyat": 99.433,
+    "strip_toplam": 99.433,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 39.1784,
     "model_ytm": 39.1784,
     "fark_puan": 0.0
@@ -275,6 +348,8 @@
     "nakit_akisi_n": 3,
     "piyasa_fiyat": 114.232,
     "model_fiyat": 114.2324,
+    "strip_toplam": 114.232,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 39.961,
     "model_ytm": 39.9601,
     "fark_puan": 0.0009
@@ -286,6 +361,8 @@
     "nakit_akisi_n": 3,
     "piyasa_fiyat": 114.232,
     "model_fiyat": 114.2324,
+    "strip_toplam": 114.232,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 39.961,
     "model_ytm": 39.9601,
     "fark_puan": 0.0009
@@ -297,6 +374,8 @@
     "nakit_akisi_n": 3,
     "piyasa_fiyat": 93.209,
     "model_fiyat": 93.2105,
+    "strip_toplam": 93.209,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.0685,
     "model_ytm": 40.0656,
     "fark_puan": 0.0029
@@ -308,6 +387,8 @@
     "nakit_akisi_n": 3,
     "piyasa_fiyat": 93.209,
     "model_fiyat": 93.2105,
+    "strip_toplam": 93.209,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.0685,
     "model_ytm": 40.0656,
     "fark_puan": 0.0029
@@ -319,6 +400,8 @@
     "nakit_akisi_n": 3,
     "piyasa_fiyat": 104.428,
     "model_fiyat": 104.4277,
+    "strip_toplam": 104.428,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.1574,
     "model_ytm": 40.1579,
     "fark_puan": -0.0005
@@ -330,6 +413,8 @@
     "nakit_akisi_n": 3,
     "piyasa_fiyat": 104.428,
     "model_fiyat": 104.4277,
+    "strip_toplam": 104.428,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.1574,
     "model_ytm": 40.1579,
     "fark_puan": -0.0005
@@ -341,6 +426,8 @@
     "nakit_akisi_n": 3,
     "piyasa_fiyat": 80.205,
     "model_fiyat": 80.2064,
+    "strip_toplam": 80.205,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.2695,
     "model_ytm": 40.2669,
     "fark_puan": 0.0026
@@ -352,6 +439,8 @@
     "nakit_akisi_n": 3,
     "piyasa_fiyat": 80.205,
     "model_fiyat": 80.2064,
+    "strip_toplam": 80.205,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.2695,
     "model_ytm": 40.2669,
     "fark_puan": 0.0026
@@ -363,6 +452,8 @@
     "nakit_akisi_n": 4,
     "piyasa_fiyat": 82.423,
     "model_fiyat": 82.423,
+    "strip_toplam": 82.423,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.3934,
     "model_ytm": 40.3934,
     "fark_puan": 0.0
@@ -374,6 +465,8 @@
     "nakit_akisi_n": 4,
     "piyasa_fiyat": 82.423,
     "model_fiyat": 82.423,
+    "strip_toplam": 82.423,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.3934,
     "model_ytm": 40.3934,
     "fark_puan": 0.0
@@ -385,6 +478,8 @@
     "nakit_akisi_n": 4,
     "piyasa_fiyat": 112.496,
     "model_fiyat": 112.4961,
+    "strip_toplam": 112.496,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.4406,
     "model_ytm": 40.4404,
     "fark_puan": 0.0002
@@ -396,6 +491,8 @@
     "nakit_akisi_n": 4,
     "piyasa_fiyat": 112.496,
     "model_fiyat": 112.4961,
+    "strip_toplam": 112.496,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.4406,
     "model_ytm": 40.4404,
     "fark_puan": 0.0002
@@ -407,6 +504,8 @@
     "nakit_akisi_n": 4,
     "piyasa_fiyat": 70.023,
     "model_fiyat": 70.0277,
+    "strip_toplam": 70.023,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.5787,
     "model_ytm": 40.572,
     "fark_puan": 0.0067
@@ -418,6 +517,8 @@
     "nakit_akisi_n": 4,
     "piyasa_fiyat": 70.023,
     "model_fiyat": 70.0277,
+    "strip_toplam": 70.023,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.5787,
     "model_ytm": 40.572,
     "fark_puan": 0.0067
@@ -429,6 +530,8 @@
     "nakit_akisi_n": 5,
     "piyasa_fiyat": 115.345,
     "model_fiyat": 115.3446,
+    "strip_toplam": 115.345,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.5619,
     "model_ytm": 40.5624,
     "fark_puan": -0.0005
@@ -440,6 +543,8 @@
     "nakit_akisi_n": 5,
     "piyasa_fiyat": 115.345,
     "model_fiyat": 115.3446,
+    "strip_toplam": 115.345,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.5619,
     "model_ytm": 40.5624,
     "fark_puan": -0.0005
@@ -451,6 +556,8 @@
     "nakit_akisi_n": 5,
     "piyasa_fiyat": 75.913,
     "model_fiyat": 75.9131,
+    "strip_toplam": 75.913,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.4841,
     "model_ytm": 40.484,
     "fark_puan": 0.0001
@@ -462,6 +569,8 @@
     "nakit_akisi_n": 5,
     "piyasa_fiyat": 75.913,
     "model_fiyat": 75.9131,
+    "strip_toplam": 75.913,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.4841,
     "model_ytm": 40.484,
     "fark_puan": 0.0001
@@ -473,6 +582,8 @@
     "nakit_akisi_n": 6,
     "piyasa_fiyat": 99.985,
     "model_fiyat": 99.9846,
+    "strip_toplam": 99.985,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.3282,
     "model_ytm": 40.3285,
     "fark_puan": -0.0004
@@ -484,6 +595,8 @@
     "nakit_akisi_n": 6,
     "piyasa_fiyat": 99.985,
     "model_fiyat": 99.9846,
+    "strip_toplam": 99.985,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 40.3282,
     "model_ytm": 40.3285,
     "fark_puan": -0.0004
@@ -495,6 +608,8 @@
     "nakit_akisi_n": 8,
     "piyasa_fiyat": 101.793,
     "model_fiyat": 101.7917,
+    "strip_toplam": 101.793,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 39.5639,
     "model_ytm": 39.5648,
     "fark_puan": -0.001
@@ -506,6 +621,8 @@
     "nakit_akisi_n": 8,
     "piyasa_fiyat": 101.793,
     "model_fiyat": 101.7917,
+    "strip_toplam": 101.793,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 39.5639,
     "model_ytm": 39.5648,
     "fark_puan": -0.001
@@ -517,6 +634,8 @@
     "nakit_akisi_n": 9,
     "piyasa_fiyat": 100.544,
     "model_fiyat": 100.5454,
+    "strip_toplam": 100.544,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 38.6921,
     "model_ytm": 38.6912,
     "fark_puan": 0.0008
@@ -528,6 +647,8 @@
     "nakit_akisi_n": 9,
     "piyasa_fiyat": 100.544,
     "model_fiyat": 100.5454,
+    "strip_toplam": 100.544,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 38.6921,
     "model_ytm": 38.6912,
     "fark_puan": 0.0008
@@ -539,6 +660,8 @@
     "nakit_akisi_n": 10,
     "piyasa_fiyat": 109.516,
     "model_fiyat": 109.5155,
+    "strip_toplam": 109.516,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 38.4583,
     "model_ytm": 38.4586,
     "fark_puan": -0.0003
@@ -550,6 +673,8 @@
     "nakit_akisi_n": 10,
     "piyasa_fiyat": 109.516,
     "model_fiyat": 109.5155,
+    "strip_toplam": 109.516,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 38.4583,
     "model_ytm": 38.4586,
     "fark_puan": -0.0003
@@ -561,6 +686,8 @@
     "nakit_akisi_n": 10,
     "piyasa_fiyat": 53.705,
     "model_fiyat": 53.7029,
+    "strip_toplam": 53.705,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 37.7684,
     "model_ytm": 37.7703,
     "fark_puan": -0.0018
@@ -572,6 +699,8 @@
     "nakit_akisi_n": 10,
     "piyasa_fiyat": 53.705,
     "model_fiyat": 53.7029,
+    "strip_toplam": 53.705,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 37.7684,
     "model_ytm": 37.7703,
     "fark_puan": -0.0018
@@ -583,6 +712,8 @@
     "nakit_akisi_n": 11,
     "piyasa_fiyat": 107.452,
     "model_fiyat": 107.4525,
+    "strip_toplam": 107.452,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 37.8784,
     "model_ytm": 37.8782,
     "fark_puan": 0.0003
@@ -594,6 +725,8 @@
     "nakit_akisi_n": 11,
     "piyasa_fiyat": 107.452,
     "model_fiyat": 107.4525,
+    "strip_toplam": 107.452,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 37.8784,
     "model_ytm": 37.8782,
     "fark_puan": 0.0003
@@ -605,6 +738,8 @@
     "nakit_akisi_n": 13,
     "piyasa_fiyat": 76.321,
     "model_fiyat": 76.3219,
+    "strip_toplam": 76.321,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 36.4796,
     "model_ytm": 36.479,
     "fark_puan": 0.0006
@@ -616,6 +751,8 @@
     "nakit_akisi_n": 13,
     "piyasa_fiyat": 76.321,
     "model_fiyat": 76.3219,
+    "strip_toplam": 76.321,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 36.4796,
     "model_ytm": 36.479,
     "fark_puan": 0.0006
@@ -627,6 +764,8 @@
     "nakit_akisi_n": 14,
     "piyasa_fiyat": 45.933,
     "model_fiyat": 45.932,
+    "strip_toplam": 45.933,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 35.2944,
     "model_ytm": 35.2952,
     "fark_puan": -0.0008
@@ -638,6 +777,8 @@
     "nakit_akisi_n": 14,
     "piyasa_fiyat": 45.933,
     "model_fiyat": 45.932,
+    "strip_toplam": 45.933,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 35.2944,
     "model_ytm": 35.2952,
     "fark_puan": -0.0008
@@ -649,6 +790,8 @@
     "nakit_akisi_n": 15,
     "piyasa_fiyat": 61.804,
     "model_fiyat": 61.805,
+    "strip_toplam": 61.804,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 35.2359,
     "model_ytm": 35.2353,
     "fark_puan": 0.0006
@@ -660,6 +803,8 @@
     "nakit_akisi_n": 15,
     "piyasa_fiyat": 61.804,
     "model_fiyat": 61.805,
+    "strip_toplam": 61.804,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 35.2359,
     "model_ytm": 35.2353,
     "fark_puan": 0.0006
@@ -671,6 +816,8 @@
     "nakit_akisi_n": 16,
     "piyasa_fiyat": 91.281,
     "model_fiyat": 91.2794,
+    "strip_toplam": 91.281,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 35.5498,
     "model_ytm": 35.5506,
     "fark_puan": -0.0008
@@ -682,6 +829,8 @@
     "nakit_akisi_n": 16,
     "piyasa_fiyat": 91.281,
     "model_fiyat": 91.2794,
+    "strip_toplam": 91.281,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 35.5498,
     "model_ytm": 35.5506,
     "fark_puan": -0.0008
@@ -693,6 +842,8 @@
     "nakit_akisi_n": 18,
     "piyasa_fiyat": 96.957,
     "model_fiyat": 96.9565,
+    "strip_toplam": 96.957,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 35.0762,
     "model_ytm": 35.0764,
     "fark_puan": -0.0002
@@ -704,6 +855,8 @@
     "nakit_akisi_n": 18,
     "piyasa_fiyat": 96.957,
     "model_fiyat": 96.9565,
+    "strip_toplam": 96.957,
+    "ozdeslik_fark": 0.0,
     "piyasa_ytm": 35.0762,
     "model_ytm": 35.0764,
     "fark_puan": -0.0002
@@ -737,7 +890,12 @@
   "gosterge_fiyat": "bie_pydibs TCMB'nin GÖSTERGE NİTELİĞİNDEKİ değerleridir; işlem görmemiş kıymette model fiyatı olabilir. Noktalar tam bağımsız gözlem değildir — eğrinin bu kadar tutarlı çıkması kısmen bunun sonucudur.",
   "basabas": "Başabaş enflasyon PİYASA BEKLENTİSİ DEĞİLDİR: içinde enflasyon risk primi, likidite primi ve TÜFE ölçümüne güvensizlik vardır.",
   "referans_endeks": "TÜFEX referans endeksi EVDS'te YOK; Hazine'nin 3 ay gecikmeli doğrusal ara değerli tanımı yeniden kurulmuştur. Zincir katsayısı örtüşme ayından HER KOŞUDA okunur, sabit yazılmaz.",
-  "fisher": "Reel faiz FISHER kimliğiyle hesaplanır: (1+i)/(1+π)−1. Basit çıkarma yalnız yöntem farkını göstermek için hesaplanmıştır."
+  "fisher": "Reel faiz FISHER kimliğiyle hesaplanır: (1+i)/(1+π)−1. Basit çıkarma yalnız yöntem farkını göstermek için hesaplanmıştır.",
+  "konvansiyon": "TAŞIMA KONVANSİYONU: TLREF, AOFM ve 1 hafta repo faizi BASİT yıllık yayımlanır; strip getirisi yıllık BİLEŞİKTİR. Karşılaştırmadan önce fonlama faizleri bileşiğe çevrilir — gecelik için (1+r/365)^365−1, 1 hafta için (1+r·7/365)^(365/7)−1. Çevrilmezse taşımanın İŞARETİ ters çıkabilir.",
+  "ytm_ozdeslik": "YTM sınaması BAĞIMSIZ BİR DOĞRULAMA DEĞİL, bir İÇ TUTARLILIK ÖZDEŞLİĞİDİR: tahvilin nakit akışı kendi strip'lerinden kurulup yine o strip'lerin kendi getirileriyle iskonto edildiği için model fiyatı zorunlu olarak strip fiyatlarının toplamına eşittir — TCMB'nin yayımladığı tahvil 'Değer'i de odur. Birim sınaması olarak değerlidir (ödeme/etiket/eşleme bozulursa görünür), doğrulama olarak değil.",
+  "anket_patikasi": "PKA serileri 'X ay SONRASININ yıllık' TÜFE oranlarıdır, vadeye kadarki ORTALAMA değil. Başabaş enflasyonla karşılaştırmak için 12 ay, 24 ay ve 5 yıl çıpaları arasında log-doğrusal bir yıllık enflasyon PATİKASI kurulur ve vadeye kadarki geometrik ortalama alınır. Ara yıllar (3, 4) VARSAYIMDIR; son çıpanın ötesi (6, 7) sabit tutulur."
  },
- "uyarilar": []
+ "uyarilar": [
+  "AOFM GEÇERSİZ: çıpa gününde APİ fonlaması 0.0 milyar TL ile 5 milyar TL eşiğinin altında; AOFM manşet taşıma ölçüsü olarak KULLANILMAZ (yerine TLREF)."
+ ]
 }

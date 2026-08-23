@@ -23,9 +23,29 @@ from veri import PROJE, VERI, AY_TR, TAZELIK, ay_ad, ceyrek_ad, gun_ad
 
 O: dict = {}
 
+# Koşmamış denetimlerin defteri. Boş bırakılırsa sayfa "%0,0 fark" basar — yani
+# hiç koşmamış bir denetim MÜKEMMEL UYUM olarak görünür (sessiz sıfır sınıfı).
+EKSIK_DENETIM: list[str] = []
+
 
 def uyar(m: str) -> None:
     print(f"UYARI: {m}", file=sys.stderr)
+
+
+def koy_denetim(anahtar: str, deger, ondalik: int, sinav: str) -> None:
+    """DENETİM çıktısı için koy(). 'or 0' kalıbı burada YASAKTIR.
+
+    Bir denetim koşmadıysa değeri 0,0'a çevirmek sayfada "%0,0 fark" yazdırır;
+    bu, okurun görebileceği EN GÜÇLÜ onay cümlesidir ve tam tersini anlatır.
+    Değer yoksa anahtar ATLANIR (MDX'teki statik yedek görünür) ve uyarı düşer.
+    """
+    if deger is None or (isinstance(deger, float) and pd.isna(deger)):
+        m = f"DOĞRULAMA KOŞMADI: {sinav} — '{anahtar}' üretilmedi."
+        uyar(m)
+        if m not in EKSIK_DENETIM:
+            EKSIK_DENETIM.append(m)
+        return
+    koy(anahtar, deger, ondalik)
 
 
 def tr_sayi(v, ondalik: int = 1) -> str:
@@ -161,13 +181,27 @@ def main() -> int:
                     ("gelir_nom_yy", "gelir_nom_yy"),
                     ("fdg_nom_yy", "fdg_nom_yy"),
                     ("faiz_nom_yy", "faiz_nom_yy"),
-                    ("vergi_nom_yy", "vergi_nom_yy"),
-                    ("tufe_yy", "tufe_yy")):
+                    ("vergi_nom_yy", "vergi_nom_yy")):
         v, _ = son(_seri(M, kol))
         koy(ad, v, 1)
+    # TÜFE VİNTAJI. `son()` en son DOLU gözlemi alır; TÜFE bütçeden bir ay
+    # ÖNDE yayımlandığı için bu, sayfanın anlattığı bütçe ayından farklı bir
+    # aya çıpalanır. Bütün reel/Fisher hesapları bütçe ayının TÜFE'sini
+    # kullandığından sayfada iki ayrı enflasyon sayısı dolaşırdı.
+    if "tufe_yy" in M.columns and s_ay in M.index:
+        koy("tufe_yy", float(M.loc[s_ay, "tufe_yy"]), 1)     # BÜTÇE ayına pinli
+    else:
+        uyar("tufe_yy bütçe ayına çıpalanamadı — anahtar atlandı.")
+    v_manset, t_manset = son(_seri(M, "tufe_yy"))            # son yayımlanan ay
+    koy("tufe_yy_manset", v_manset, 1)
     O["deflator_taban"] = m["butce"]["deflator_taban_ay"]
     koy("deflator_taban_endeks", m["butce"].get("deflator_taban_endeks"), 2)
     O["tufe_son_ay"] = m["butce"].get("tufe_son_ay")
+    # Sayfada takvim ayı ELLE yazılmasın diye TÜFE ayının Türkçe adı.
+    try:
+        O["tufe_son_ay_ad"] = AY_TR[pd.Timestamp(O["tufe_son_ay"]).month]
+    except Exception:
+        uyar("tufe_son_ay_ad üretilemedi — anahtar atlandı.")
     # Fisher: aynı veriden basit çıkarmayla kaç puan farklı bir sayı çıkardı.
     koy("fisher_basit_fark_pp",
         m["butce"]["fisher"].get("basit_cikarma_farki_son_pp"), 2)
@@ -175,6 +209,15 @@ def main() -> int:
     # Reel ile nominalin makası — sayfanın ana cümlesi bu farkın üstüne kurulur.
     if O.get("gelir_nom_yy") is not None and O.get("gelir_reel_yy") is not None:
         koy("gelir_makas_pp", O["gelir_nom_yy"] - O["gelir_reel_yy"], 1)
+    # 12 AYLIK BİRİKİMLİ SERİNİN KENDİ DEFLATÖRÜ. Manşet TÜFE (tek ayın y/y'si)
+    # bu serinin deflatörü DEĞİLDİR: 12 aylık birikimli reel seri, on iki ayrı
+    # aylık deflatörün ağırlıklı bileşimini taşır. Şekil 03 tablosunda nominal
+    # ve reel satırların yanında duran sayı bu olmalı — özdeşlikten türetilir:
+    #   (1 + nominal) / (1 + reel) − 1
+    if (O.get("gelir_nom_yy") is not None and O.get("gelir_reel_yy") is not None
+            and O["gelir_reel_yy"] != -100):
+        koy("deflator_12a_yy",
+            ((1 + O["gelir_nom_yy"] / 100) / (1 + O["gelir_reel_yy"] / 100) - 1) * 100, 1)
 
     # ===================================================== kompozisyon
     for kol in ("pay_v_gelir", "pay_v_kurumlar", "pay_v_kdv_dahil",
@@ -215,19 +258,46 @@ def main() -> int:
     # ===================================================== borç stoku
     for ad, kol, ond in (("ic_borc_trl", "ic_borc_trl", 2),
                          ("dis_borc_trl", "dis_borc_trl", 2),
+                         ("dis_senet_trl", "dis_senet_trl", 2),
+                         ("dis_kredi_trl", "dis_kredi_trl", 2),
+                         ("doviz_borc_trl", "doviz_borc_trl", 2),
                          ("toplam_borc_trl", "toplam_borc_trl", 2),
+                         ("eski_tanim_trl", "eski_tanim_trl", 2),
                          ("doviz_pay", "doviz_pay", 1),
+                         ("yurt_disi_pay", "yurt_disi_pay", 1),
                          ("dis_borc_musd", "dis_borc_musd", 0),
+                         ("dis_senet_musd", "dis_senet_musd", 0),
+                         ("dis_kredi_musd", "dis_kredi_musd", 0),
+                         ("dibs_yurtdisi_trl", "dibs_yurtdisi_trl", 2),
+                         ("eb_yurtici_net_trl", "eb_yurtici_net_trl", 2),
+                         ("eb_kendi_trl", "eb_kendi_trl", 2),
+                         ("pay_ic_satis_doviz", "pay_ic_satis_doviz", 1),
+                         ("pay_ic_odeme_doviz", "pay_ic_odeme_doviz", 1),
                          ("kur_ay", "kur_ay", 4),
                          ("ic_tahvil_trl", "ic_tahvil_trl", 2),
                          ("ic_bono_trl", "ic_bono_trl", 2)):
         v, _ = son(_seri(M, kol))
         koy(ad, v, ond)
-    if O.get("dis_borc_musd"):
-        koy("dis_borc_mlrusd", O["dis_borc_musd"] / 1000, 1)
-    koy("tl_pay", 100 - (O.get("doviz_pay") or 0), 1)
+    for ad, kaynak in (("dis_borc_mlrusd", "dis_borc_musd"),
+                       ("dis_senet_mlrusd", "dis_senet_musd"),
+                       ("dis_kredi_mlrusd", "dis_kredi_musd")):
+        if O.get(kaynak):
+            koy(ad, O[kaynak] / 1000, 1)
+    # TL bacağı = iç borç bacağı. Bu bacak SAF TL DEĞİLDİR: içinde
+    # ayrıştırılamayan döviz cinsi yurt içi ihraç da vardır — bu yüzden
+    # "TL payı" bir ÜST SINIRDIR ve sayfada öyle etiketlenir.
+    if O.get("doviz_pay") is not None:
+        koy("tl_pay", 100 - O["doviz_pay"], 1)
     O["stok_son_ay"] = m["stok"].get("birlesik_stok_son_ay")
+    O["stok_ilk_ay"] = m["stok"].get("birlesik_stok_ilk_ay")
     O["doviz_payi_notu"] = m["stok"].get("doviz_payi_notu")
+    O["yurt_disi_payi_notu"] = m["stok"].get("yurt_disi_payi_notu")
+    O["stok_tanim_notu"] = m["stok"].get("stok_tanim_notu")
+    # Tanım düzeltmesinin büyüklüğü — sayfa bunu ELLE değil buradan yazar.
+    bil = m["stok"].get("stok_bilesen") or {}
+    koy("stok_cift_sayim_trl", bil.get("cift_sayilan_dibs_trl"), 2)
+    koy("stok_eksik_eurobond_trl", bil.get("eksik_eurobond_trl"), 2)
+    koy("stok_duzeltme_yuzde", bil.get("duzeltme_yuzde"), 1)
 
     # ===================================================== GSYH oranları
     for ad, kol in (("denge_gsyh", "denge_gsyh"), ("fdd_gsyh", "fdd_gsyh"),
@@ -247,18 +317,32 @@ def main() -> int:
                     ("nakit_trl", "nakit_trl"),
                     ("borc_senedi_trl", "borc_senedi_trl"),
                     ("krediler_trl", "krediler_trl"),
-                    ("net_stok_trl", "net_stok_trl"),
-                    ("stok_ceyrek_trl", "stok_trl")):
+                    ("fh_borc_trl", "fh_borc_trl"),
+                    ("net_stok_trl", "net_stok_trl")):
         v, _ = son(_seri(C, kol))
         koy(ad, v, 2)
+    koy("fh_borc_gsyh", son(_seri(C, "fh_borc_gsyh"))[0], 2)
+    # ORAN ÇEYREĞİNE ÇIPALI stok. `son()` kullanılsaydı stok serisi GSYH'den
+    # bir çeyrek ileri gittiği için bu sayı Şekil 07'nin aylık stokuyla
+    # ÖZDEŞLEŞİR ve sayfanın "iki farklı çeyrek" açıklaması yalan olurdu.
+    if t is not None and "stok_trl" in C.columns and t in C.index:
+        koy("stok_ceyrek_trl", float(C.loc[t, "stok_trl"]), 2)
+    else:
+        koy("stok_ceyrek_trl", son(_seri(C, "stok_trl"))[0], 2)
+    # BRÜT DIŞ BORÇ TABLOSU KENDİ ÇEYREĞİNE ÇIPALIDIR. GSYH'ye kelepçelenirse
+    # yayımlanmış çeyrek sessizce düşer ve sayfada aynı seri iki farklı sayıyla
+    # geçer (yukarıda 2026-Ç2, tabloda 2026-Ç1).
     for ad, kol in (("db_toplam_mlrusd", "db_toplam_mlrusd"),
                     ("db_my_mlrusd", "db_my_mlrusd"),
                     ("db_my_kisa_mlrusd", "db_my_kisa_mlrusd"),
                     ("db_my_uzun_mlrusd", "db_my_uzun_mlrusd"),
                     ("db_ozel_mlrusd", "db_ozel_mlrusd"),
                     ("db_tcmb_mlrusd", "db_tcmb_mlrusd")):
-        v, _ = son(_seri(C, kol))
+        v, t_db = son(_seri(C, kol))
         koy(ad, v, 1)
+    _db_q = m["ceyrek"].get("db_son_ceyrek")
+    if _db_q:
+        O["db_ceyregi"] = ceyrek_ad(pd.Timestamp(_db_q))
     O["oran_gecikme_notu"] = m["ceyrek"].get("oran_gecikme_notu")
 
     # ===================================================== çevirme oranı

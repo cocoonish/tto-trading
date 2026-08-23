@@ -1,10 +1,10 @@
 {
- "kosum": "2026-08-23T21:06:15",
+ "kosum": "2026-08-23T21:59:12",
  "son_gun": "2026-08-21",
  "son_ay": "2026-08-01",
  "tarihce_bas": "2013-01-01",
  "istek_sayisi": 0,
- "sure_sn": 8.3,
+ "sure_sn": 8.2,
  "evren": {
   "toplam_kiymet": 6190,
   "nominal_sifir_kuponlu": 860,
@@ -19,7 +19,13 @@
   "kat": 31.831245139548948,
   "ortusme_ay": "2026-01-01"
  },
- "gunluk_seri": 7,
+ "ayristirma_test": {
+  "toplam": 10847,
+  "saf_dusen": 6067,
+  "saf_yanlis": 910,
+  "hosgoru_dusen": 13
+ },
+ "gunluk_seri": 8,
  "aylik_seri": 16,
  "uyarilar": [
   "AD BİÇİMİ: bie_pydibsarsiv grubunda 13 seri adı ayrıştırılamadı (0.2%) — TCMB ad biçimini değiştirmiş olabilir; bu kıymetler evrene girmedi."

@@ -243,6 +243,56 @@ def _cubuk(fig, x, y, ad, renk, satir, grup=None, goster=True, opacity=0.85):
                   row=satir, col=1)
 
 
+# ===========================================================================
+# YIĞIN DENETİMİ — bu sınıf hata YALNIZ burada yakalanır
+# ===========================================================================
+# Yığılmış çubuk + toplam çizgisi olan her panelde, çubukların toplamı çizgiye
+# eşit OLMAK ZORUNDADIR. Metrik katmanının kimlik denetimleri bunu göremez:
+# orada iki taraf da AYNI seriden türer, oysa grafikte çubuk bir kolonu,
+# çizgi başka bir kolonu okur. İkisi farklı NaN işlemi kullanıyorsa (biri ham
+# NaN, diğeri fillna(0)) yığın sessizce kısalır.
+#
+# GERÇEK OLAY (2026-08 denetimi): Şekil 11'in üst panelinde eurobond bacağı
+# `eb_odeme_uv12` (ham NaN, min_periods=12) ile çiziliyordu, toplam çizgisi
+# ise aynı bacağı `fillna(0)` ile topluyordu. 66 çubuğun 36'sı eksikti; fark
+# 2023-04'te 18,2 MİLYAR USD. Okur eksik çubuğu "o dönem eurobond ödemesi
+# yoktu" diye okuyordu. Aşağıdaki denetim tam bu sapmayı ölçer.
+#
+# PLOTLY DAVRANIŞI: NaN bir çubuk ÇİZİLMEZ, yani yığında sıfır gibi durur.
+# Denetim bu yüzden `fillna(0)` ile toplar — ekranda görünen yığın budur.
+YIGIN_ESIK_MN_USD = 1.0
+_YIGIN: list[dict] = []
+
+
+def _yigin_denetimi(ad: str, cubuklar: list[pd.Series], cizgi: pd.Series,
+                    esik: float = YIGIN_ESIK_MN_USD) -> None:
+    """Yığılmış çubukların toplamı ile toplam çizgisini KARŞILAŞTIRIR.
+
+    `cubuklar` ve `cizgi` GRAFİKTE ÇİZİLEN serilerin ta kendisi olmalıdır
+    (aynı pencere, aynı örnekleme) — yeniden hesaplanan bir kopya, aradaki
+    farkı gizler.
+    """
+    if cizgi is None or not len(cizgi) or not cubuklar:
+        return
+    # ÇUBUKLARIN indeksi esas alınır: yığılmış paneller okunabilirlik için
+    # SEYRELTİLİYOR (bkz. _ornekle), çizgi ise aylık kalıyor. Çizginin
+    # indeksine göre toplamak, örneklenmemiş ayları "çubuk sıfır" sayar ve
+    # denetimi sahte sapmayla doldururdu.
+    idx = cubuklar[0].index
+    toplam = sum(s.reindex(idx).fillna(0.0) for s in cubuklar)
+    fark = (cizgi.reindex(idx) - toplam).abs().dropna()
+    if fark.empty:
+        return
+    gecti = bool(fark.max() <= esik)
+    _YIGIN.append({"panel": ad, "n": int(len(fark)),
+                   "maks_fark": round(float(fark.max()), 3),
+                   "maks_tarih": str(fark.idxmax().date()),
+                   "esik": esik, "gecti": gecti})
+    isaret = "✓" if gecti else "✗"
+    print(f"    yığın {isaret} {ad}: n={len(fark)}, maks "
+          f"{fark.max():,.2f} mn USD ({fark.idxmax():%m.%Y})")
+
+
 def _pencere(df: pd.DataFrame, bas: str, son=None) -> pd.DataFrame:
     """Pencere sabitleri SUNUM tercihidir, ölçüm değil — ama serinin gerçek
     başlangıcının gerisine düşmemeleri gerekir; düşerlerse eksen boş bir
@@ -559,6 +609,12 @@ def sekil_05(M, o, damga):
     _finans_yigin(fig, y1, 1)
     _iz(fig, d.index, _mia(d["fin_giris12"]),
         "Net finansman girişi (yığının toplamı)", INK, 1, kalin=2.2)
+    _yigin_denetimi("05a finans hesabı kırılımı",
+                    [y1[k] for k in ("yuk_dyy", "yuk_port_hisse",
+                                     "yuk_port_borc", "yuk_port_artik",
+                                     "yuk_mevduat", "yuk_kredi",
+                                     "yuk_diger_artik", "yuk_turev")]
+                    + [-y1["yerlesik_varlik"]], d["fin_giris12"])
     _iz(fig, d.index, _mia(d["rezerv_akim12"]),
         "Rezerv değişimi (+ = rezerv artışı) — bu kırılıma DAHİL DEĞİL", GRI, 1,
         kalin=1.6, kes="dash")
@@ -587,13 +643,24 @@ def sekil_05(M, o, damga):
         "oluşumu ve POZİTİF değer sermaye ÇIKIŞI demektir. Burada okuma "
         "kolaylığı için GİRİŞ işareti kullanıldı; çevirme metrik katmanında "
         "TEK YERDE yapılır.",
-        "Yığın kimliktir: yabancının brüt yükümlülük oluşumu eksi "
+        "Yığın kimliktir: yabancının net yükümlülük oluşumu eksi "
         "yerleşiklerin dış varlık edinimi = net finansman girişi (sınandı, "
         f"en büyük sapma {_sayi(o['dogrulama'].get('fin_giris = brüt yükümlülük − yerleşik varlık edinimi', {}).get('maks_fark'), 2)} mn USD).",
-        f"Ölçülen (12 aylık, {damga}): brüt yükümlülük oluşumu "
-        f"{_sayi(_mia(b['brut_yukumluluk12_mn_usd']), 1)} mia USD, yerleşik "
-        f"varlık edinimi {_sayi(_mia(b['yerlesik_varlik12_mn_usd']), 1)} mia "
-        f"USD, net giriş {_sayi(_mia(b['fin_giris12_mn_usd']), 1)} mia USD.",
+        "ADLANDIRMA: BPM6'da bu kalemlerin hepsi NET yükümlülük oluşumudur "
+        "(Q38'in EVDS'teki adı bile '3.6.Finansal Türevler: NET Yükümlülük "
+        "Oluşumu') ve negatif olabilirler. 'Brüt' demek yalnız girişlerin "
+        "sayıldığı izlenimini verirdi — vermez.",
+        f"Ölçülen (12 aylık, {damga}): yükümlülük oluşumu (net, türevler dâhil) "
+        f"{_sayi(_mia(b['brut_yukumluluk12_mn_usd']), 1)} mia USD — türev "
+        f"bacağı {_sayi(_mia(b.get('yuk_turev12_mn_usd')), 1)} mia USD olduğu "
+        f"için türevsiz sürüm {_sayi(_mia(b.get('yukumluluk_turevsiz12_mn_usd')), 1)} "
+        f"mia USD. Yerleşik varlık edinimi "
+        f"{_sayi(_mia(b['yerlesik_varlik12_mn_usd']), 1)} mia USD, net giriş "
+        f"{_sayi(_mia(b['fin_giris12_mn_usd']), 1)} mia USD.",
+        "YIĞININ TOPLAMI ÇİZGİYE EŞİTTİR — HER KOŞUDA ÖLÇÜLÜR. Çubukların "
+        "toplamı ile toplam çizgisi arasındaki en büyük fark grafik "
+        "katmanında ayrıca sınanır (cikti/yigin_denetimi.json); ayrışma "
+        "olursa hat durur ve siteye kopyalama yapılmaz.",
         "REZERV NEDEN AYRI: analitik sunumda rezerv varlıklar finans hesabının "
         "İÇİNDE DEĞİLDİR (ayrıntılı sunumun Q101'i içerir; köprü "
         "Q101 = Q13 + Q33). İkisini aynı etiketle yan yana koymak 2026-03'te "
@@ -648,7 +715,11 @@ def sekil_06(M, o, damga):
     fig.add_hline(y=0, line=dict(color=INK, width=0.9), row=2, col=1)
 
     _iz(fig, d.index, d["kalite_pay_brut"],
-        "Kaliteli / brüt yükümlülük oluşumu", TEAL, 3, kalin=2.0)
+        "Kaliteli / yükümlülük oluşumu (net, türevler dâhil)", TEAL, 3,
+        kalin=2.0)
+    _iz(fig, d.index, d["kalite_pay_turevsiz"],
+        "Kaliteli / yükümlülük oluşumu (türevler HARİÇ)", LACI, 3, kalin=1.5,
+        kes="dot")
     _iz(fig, d.index, d["kalite_pay_acik"], "Kaliteli / cari açık", CLARET, 3,
         kalin=2.0)
     fig.add_hline(y=100, line=dict(color=GOLD, width=1.1, dash="dot"), row=3,
@@ -694,11 +765,23 @@ def sekil_06(M, o, damga):
         f"{k.get('pay_brut_bos_ay')}, cari açık paydasında "
         f"{k.get('pay_acik_bos_ay')}. Sebep veri hatası değil, paydanın sıfıra "
         "yaklaşması ve işaret değiştirmesidir.",
-        f"Son değerler: brüt yükümlülüğe oran %{_sayi(k.get('pay_brut_son'), 0)} "
-        f"({_yil(ANA_BAS)} sonrası medyan %{_sayi(k.get('pay_brut_medyan_2010'), 0)}); "
+        f"Son değerler: yükümlülük oluşumuna oran %{_sayi(k.get('pay_brut_son'), 0)} "
+        f"({_yil(TUREV_BAS)} sonrası medyan %{_sayi(k.get('pay_brut_medyan_2014'), 0)}); "
         f"cari açığı karşılama oranı %{_sayi(k.get('pay_acik_son'), 0)} "
-        f"(medyan %{_sayi(k.get('pay_acik_medyan_2010'), 0)}). Kesikli altın "
-        "çizgi %100 çizgisidir.",
+        f"({_yil(ANA_BAS)} sonrası medyan %{_sayi(k.get('pay_acik_medyan_2010'), 0)}). "
+        "Kesikli altın çizgi %100 çizgisidir.",
+        f"PAYDA TANIMI VE {_yil(TUREV_BAS)} KIRILMASI: ana payda BPM6'nın NET "
+        "yükümlülük oluşumudur ve finansal türevleri İÇERİR. Türev bacağı "
+        f"({_sayi(_mia(k.get('turev_bacagi_12ay')), 1)} mia USD, 12 aylık) "
+        "negatif olduğunda paydayı küçültür ve oranı yukarı savurur: türevsiz "
+        f"payda {_sayi(_mia(k.get('payda_turevsiz_12ay')), 1)} mia USD ile oran "
+        f"%{_sayi(k.get('pay_turevsiz_son'), 0)}, yani "
+        f"{_sayi(abs((k.get('pay_brut_son') or 0) - (k.get('pay_turevsiz_son') or 0)), 1)} "
+        "puan aşağıda (noktalı lacivert çizgi). Kalem "
+        f"{_yil(TUREV_BAS)}-01'de BAŞLADIĞI için payda tanımı orada KIRILIYOR; "
+        f"medyan bu yüzden {_yil(TUREV_BAS)} sonrası pencereden verilir "
+        f"({_yil(ANA_BAS)} sonrası medyan %"
+        f"{_sayi(k.get('pay_brut_medyan_2010'), 0)} iki tanımın karışımıdır).",
     ]
     alt += _ornek_notu(n_ornek)
     _duzen(fig, "Finansmanın kalitesi: vadeye göre ayrıştırma", alt, 3)
@@ -985,10 +1068,14 @@ def sekil_11(M, o, damga):
     _cubuk(fig, y1.index, _mia(y1["kredi_gh_uv_ode12"]),
            "Anapara — genel hükümet (UV kredi)", MOR, 1)
     _cubuk(fig, y1.index, _mia(y1["eb_odeme_uv12"]),
-           "Anapara — uzun vadeli tahvil (eurobond)", TURUNCU, 1)
+           "Anapara — uzun vadeli tahvil (eurobond, A21)", TURUNCU, 1)
     _iz(fig, d.index, _mia(d["ihtiyac12"]), "Brüt dış finansman ihtiyacı", INK,
         1, kalin=2.2)
     fig.add_hline(y=0, line=dict(color=INK, width=0.9), row=1, col=1)
+    _yigin_denetimi("11a finansman ihtiyacı",
+                    [y1[k] for k in ("cari_acik12", "kredi_bnk_uv_ode12",
+                                     "kredi_dgr_uv_ode12", "kredi_gh_uv_ode12",
+                                     "eb_odeme_uv12")], d["ihtiyac12"])
 
     _cubuk(fig, y1.index, _mia(y1["uv_kullanim12"]),
            "Uzun vadeli brüt kullanım (kredi + tahvil)", TEAL, 2)
@@ -1005,6 +1092,10 @@ def sekil_11(M, o, damga):
         "İhtiyaç (kimlik sürümü: −cari denge + anapara)", CLARET, 2, kalin=1.4,
         kes="dash")
     fig.add_hline(y=0, line=dict(color=INK, width=0.9), row=2, col=1)
+    _yigin_denetimi("11b kaynak tablosu",
+                    [y1["uv_kullanim12"], y1["diger_net_giris12"],
+                     y1["sermaye_hesabi12"], y1["nhn12"], -y1["rezerv_akim12"]],
+                    d["kaynak_kimlik12"])
 
     ih = d["ihtiyac12"].dropna()
     _son_isaret(fig, 1, ih.index[-1], _mia(ih.iloc[-1]),
@@ -1014,24 +1105,49 @@ def sekil_11(M, o, damga):
                 f"{_sayi(_mia(kk.iloc[-1]), 1)} mia USD", INK)
 
     t = o["ihtiyac"]
-    kim = o["dogrulama"].get("ihtiyaç(12a) = kaynak(12a)", {})
+    mert = o["dogrulama"].get(
+        "mertebe: UV anapara(12a) ÷ haftalık dış borç ödemesi(52h)", {})
     alt = [
         _kaynak(damga, "Anapara geri ödemeleri Q170 + Q183 + Q178 + A21 "
-                       "(uzun vadeli tahvil); brüt kullanım Q169 + Q182 + "
-                       "Q177 + A11."),
+                       "(YALNIZ uzun vadeli tahvil); brüt kullanım Q169 + "
+                       "Q182 + Q177 + A11."),
         f"Ölçülen ({damga}): brüt dış finansman ihtiyacı "
         f"{_sayi(_mia(t.get('ihtiyac12_son')), 1)} mia USD — bunun "
         f"{_sayi(_mia(t.get('cari_acik_12ay')), 1)} mia USD'si cari açık "
         f"(%{_sayi(t.get('ihtiyacta_cari_acik_payi_yuzde'), 0)}), "
         f"{_sayi(_mia(t.get('uv_anapara_12ay')), 1)} mia USD'si uzun vadeli "
-        "anapara geri ödemesi.",
-        "ALT PANEL BİR KİMLİKTİR, TAHMİN DEĞİL: ödemeler dengesi kimliğine "
-        "uzun vadeli anapara İKİ TARAFA da eklenerek türetildi, bu yüzden iki "
-        f"taraf birebir kapanır (sınandı: n={kim.get('n', '—')}, en büyük sapma "
-        f"{_sayi(kim.get('maks_fark'), 2)} mn USD).",
+        f"anapara geri ödemesi (bankalar "
+        f"{_sayi(_mia(t.get('anapara_bnk_12ay')), 1)} + reel sektör "
+        f"{_sayi(_mia(t.get('anapara_dgr_12ay')), 1)} + genel hükümet "
+        f"{_sayi(_mia(t.get('anapara_gh_12ay')), 1)} + eurobond "
+        f"{_sayi(_mia(t.get('eb_odeme_uv_12ay')), 1)} mia USD).",
+        "ALT PANEL BİR TAUTOLOJİDİR, DENETİM DEĞİL: 'diğer net finansman "
+        "girişi' bizzat (net giriş − uzun vadeli net) diye tanımlandığı için "
+        "kaynak tarafında uzun vadeli kullanım ve anapara sadeleşir ve geriye "
+        "ödemeler dengesi kimliğinin kendisi kalır. İki tarafın kapanması "
+        "anapara bacaklarının doğruluğu hakkında HİÇBİR ŞEY söylemez — "
+        "bacaklar bozulduğunda da sapma 0,00 çıkıyor (ölçüldü).",
+        "ANAPARANIN GERÇEK DENETİMİ BAĞIMSIZ BİR KAYNAKLA YAPILIR: uzun vadeli "
+        "anaparanın 12 aylık toplamı, TCMB'nin HAFTALIK dış borç ödeme "
+        f"takviminin 52 haftalık toplamına oranlanır. Ölçülen "
+        f"{_sayi(mert.get('son_oran'), 2)}; bant {mert.get('bant', '—')} "
+        f"(tarihçe {_sayi(mert.get('min_oran'), 2)}–"
+        f"{_sayi(mert.get('maks_oran'), 2)}, n={mert.get('n', '—')}). "
+        "Kapsamlar farklı olduğu için eşitlik değil MERTEBE sınanır.",
         "Eurobond neden hem ihtiyaçta hem kaynakta: tahvil bir KREDİ değil "
         "portföy yükümlülüğüdür; anapara ödemesini ihtiyaca yazıp ihracını "
         "kaynağa yazmamak tabloyu bir bacak kadar şişirirdi.",
+        "EUROBOND KAPSAMI — ŞEKİL 12'DEN FARKLI: buraya YALNIZ uzun vadeli "
+        f"bacak girer (A11 ihraç {_sayi(_mia(t.get('eb_kullanim_uv_12ay')), 1)}, "
+        f"A21 anapara {_sayi(_mia(t.get('eb_odeme_uv_12ay')), 1)} mia USD). "
+        f"Şekil 12 kısa vadeyi DE içeren A1/A2 toplamını çizer "
+        f"({_sayi(_mia(t.get('eb_kullanim_12ay')), 1)} / "
+        f"{_sayi(_mia(t.get('eb_odeme_12ay')), 1)} mia USD). Fark bir sapma "
+        "değil, kapsam farkıdır.",
+        "A21 İHRAÇ/İTFA OLMAYAN AYDA BOŞ GELİR, SIFIR SAYILDI: bu bacağın "
+        "12 aylık toplamı boş ayları sıfır kabul ederek kurulur — toplam "
+        "çizgisi de aynı işlemi kullanır, yığın bu yüzden çizgiye birebir "
+        "oturur (her koşuda ölçülür: cikti/yigin_denetimi.json).",
         "Üst paneldeki ihtiyaç tanımı cari FAZLA dönemlerinde cari kalemi "
         "sıfırlar (fazla bir ihtiyaç değildir); alt paneldeki kimlik sürümü "
         "fazlayı eksi işaretle taşır, bu yüzden iki çizgi fazla dönemlerinde "
@@ -1109,13 +1225,22 @@ def sekil_12(M, H, o, damga, damga_h):
         f"{_sayi(_mia(t.get('eb_kullanim_12ay')), 1)} mia USD, geri ödeme "
         f"{_sayi(_mia(t.get('eb_odeme_12ay')), 1)} mia USD, net "
         f"{_sayi(_mia(t.get('eb_net_12ay')), 1)} mia USD.",
+        "KAPSAM — ŞEKİL 11 İLE AYNI ETİKET, FARKLI KÜME: buradaki sayılar "
+        "A1/A2 TOPLAMIDIR, yani KISA VADE DÂHİL. Şekil 11'in anapara ve brüt "
+        "kullanım bacağına yalnız uzun vadeli sürüm (A11/A21) girer: ihraç "
+        f"{_sayi(_mia(t.get('eb_kullanim_uv_12ay')), 1)}, geri ödeme "
+        f"{_sayi(_mia(t.get('eb_odeme_uv_12ay')), 1)} mia USD. İki sayıyı "
+        "birbirinin yerine koyan okur, Şekil 11'deki anapara toplamını "
+        "tutturamaz; fark bir sapma değil KAPSAM farkıdır.",
         f"Haftalık ({damga_h}): son hafta {_sayi(hf.get('son_hafta_mn_usd'), 0)} "
         f"mn USD, son 4 hafta {_sayi(hf.get('son_4hafta_mn_usd'), 0)} mn USD, "
         f"son 52 hafta {_sayi(hf.get('son_52hafta_mn_usd'), 0)} mn USD.",
-        "SEYREK SERİ UYARISI: eurobond sektör kırılımları ihraç OLMAYAN ayda "
-        "boş gelir (sıfır değil). Grafikte o aylarda çubuk yoktur; toplam ve "
-        "net hesabı ise kırılımlardan değil toplam serilerden (A1/A2) "
-        "kurulmuştur.",
+        "SEYREK SERİ UYARISI: eurobond serileri (hem toplam hem sektör "
+        "kırılımı) ihraç/itfa OLMAYAN ayda boş gelir — sıfır değil, hücre "
+        "yok. AYLIK panelde o aylarda çubuk yoktur (boş bırakmak dürüsttür); "
+        "12 AYLIK birikimli panelde ise boş ay SIFIR AKIM sayılır, yoksa tek "
+        "bir boş ay bütün pencereyi silerdi. Toplam ve net hesabı "
+        "kırılımlardan değil toplam serilerden (A1/A2) kurulmuştur.",
     ]
     _duzen(fig, "Piyasa erişimi ve ödeme takvimi", alt, 3)
     _eksen_tr(fig, [1, 2], d.index[0], d.index[-1])
@@ -1181,7 +1306,27 @@ def kos() -> None:
     (CIKTI / "yukseklikler.json").write_text(json.dumps(
         {ad: int(fig.layout.height) for fig, ad in ciktilar if fig is not None},
         ensure_ascii=False, indent=1), encoding="utf-8")
+    # YIĞIN DENETİMİ HER KOŞUDA YAZILIR (sessiz bayatlama yasak): dosya
+    # koşuda üretilmezse eski ölçüm yerinde kalır ve "kapanıyor" der.
+    (CIKTI / "yigin_denetimi.json").write_text(json.dumps(
+        {"kosum": pd.Timestamp.today().strftime("%Y-%m-%d"),
+         "esik_mn_usd": YIGIN_ESIK_MN_USD, "paneller": _YIGIN},
+        ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"  {n}/{len(ciktilar)} grafik yazıldı → {CIKTI}")
+    # YIĞIN SAPMASI DURDURUCUDUR. Yığılmış bir çubuk kendi toplam çizgisinden
+    # ayrışıyorsa panel YANLIŞ okunur ("o dönem bu kalem yoktu" sanılır) ve
+    # bu sınıf hata metrik katmanının kimlik denetimlerine hiç görünmez.
+    bozuk = [y for y in _YIGIN if not y["gecti"]]
+    if bozuk:
+        for y in bozuk:
+            print(f"  ✗ YIĞIN AYRIŞMASI {y['panel']}: en büyük "
+                  f"{y['maks_fark']:,.2f} mn USD ({y['maks_tarih']}), eşik "
+                  f"{y['esik']} mn USD")
+        raise SystemExit(
+            f"DUR: {len(bozuk)} yığılmış panelde çubuk toplamı kendi toplam "
+            "çizgisiyle örtüşmüyor. Genellikle sebebi, aynı bacağın çubukta ve "
+            "çizgide FARKLI NaN işlemiyle üretilmesidir. Siteye kopyalama "
+            "YAPILMAZ. Ayrıntı: cikti/yigin_denetimi.json")
     # SESSİZ BAYATLAMA YASAK: bir figür üretilemezse eskisi site/public'te
     # yerinde kalır ve sayfanın geri kalanı tazelenir — grafik bayat, metin
     # taze. Bu yüzden eksikte hat DURUR ve siteye kopyalama yapılmaz.

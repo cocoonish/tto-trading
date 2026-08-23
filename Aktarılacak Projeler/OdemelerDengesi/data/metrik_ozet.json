@@ -21,6 +21,8 @@
   "enerji_net12_mn_usd": -49765.0,
   "fin_giris12_mn_usd": 32395.0,
   "brut_yukumluluk12_mn_usd": 66656.0,
+  "yukumluluk_turevsiz12_mn_usd": 87301.0,
+  "yuk_turev12_mn_usd": -20645.0,
   "yerlesik_varlik12_mn_usd": 34261.0,
   "rezerv_akim12_mn_usd": -27168.0,
   "cari_aylik_mn_usd": -4194.0,
@@ -56,12 +58,23 @@
   "pay_brut_son": 64.0,
   "pay_brut_son_donem": "2026-06-01",
   "pay_brut_medyan_2010": 33.2,
+  "pay_brut_medyan_2014": 40.5,
   "pay_brut_bos_ay": 118,
+  "pay_turevsiz_son": 48.9,
+  "pay_turevsiz_son_donem": "2026-06-01",
+  "pay_turevsiz_medyan_2010": 30.1,
+  "pay_turevsiz_medyan_2014": 36.1,
+  "pay_turevsiz_bos_ay": 125,
   "pay_acik_son": 109.7,
   "pay_acik_son_donem": "2026-06-01",
   "pay_acik_medyan_2010": 36.2,
+  "pay_acik_medyan_2014": 57.6,
   "pay_acik_bos_ay": 160,
   "payda_esik_mn_usd": 10000.0,
+  "payda_notu": "PAYDA BİR TANIM SEÇİMİDİR. Ana payda BPM6'nın net yükümlülük oluşumudur ve finansal türevleri (Q38, 2014-01'den itibaren) İÇERİR; türev bacağı negatif olabildiği için paydayı küçültür ve oranı yukarı savurur. Türevsiz sürüm aynı koşuda ayrıca hesaplanır. Kalem 2014-01'de başladığından payda tanımı o tarihte KIRILIR; medyan hem 2010 hem 2014 sonrası pencerede verilir.",
+  "payda_brut_12ay": 66656.0,
+  "payda_turevsiz_12ay": 87301.0,
+  "turev_bacagi_12ay": -20645.0,
   "kaliteli_12ay": 42674.0,
   "dyy_12ay": 312.0,
   "ozel_uv_kredi_12ay": 42362.0,
@@ -110,6 +123,13 @@
   "eb_kullanim_12ay": 57897.0,
   "eb_odeme_12ay": 34696.0,
   "eb_net_12ay": 23201.0,
+  "eb_kullanim_uv_12ay": 55733.0,
+  "eb_odeme_uv_12ay": 29316.0,
+  "anapara_bnk_12ay": 36892.0,
+  "anapara_dgr_12ay": 17845.0,
+  "anapara_gh_12ay": 2796.0,
+  "eurobond_kapsam_notu": "İki eurobond kapsamı vardır ve KARIŞTIRILMAMALIDIR: A1/A2 kısa vadeyi DE içeren toplam (Şekil 12), A11/A21 yalnız uzun vadeli (Şekil 11'in anapara ve brüt kullanım bacağı). Fark bir sapma değil, kapsam farkıdır.",
+  "kimlik_tautoloji_notu": "Alt paneldeki 'ihtiyaç = kaynak' eşitliği TAUTOLOJİDİR: kaynak tarafı ihtiyaç tarafından türetildiği için sapma tanım gereği sıfırdır ve anapara bacaklarını sınamaz. Anaparanın bağımsız denetimi haftalık dış borç ödeme takvimiyle yapılan mertebe kıyasıdır (bkz. uyarilar.json).",
   "ihtiyacta_cari_acik_payi_yuzde": 30.9
  },
  "haftalik": {
@@ -130,7 +150,8 @@
    "birim": "mn USD",
    "esik": 5.0,
    "gecti": true,
-   "durdurucu": true
+   "durdurucu": true,
+   "tautoloji": false
   },
   "fin_giris = brüt yükümlülük − yerleşik varlık edinimi": {
    "n": 431,
@@ -140,9 +161,10 @@
    "birim": "mn USD",
    "esik": 5.0,
    "gecti": true,
-   "durdurucu": true
+   "durdurucu": true,
+   "tautoloji": false
   },
-  "Σ yükümlülük kalemleri = brüt yükümlülük oluşumu": {
+  "sunum: Σ yığın kutuları = yükümlülük oluşumu (tautoloji)": {
    "n": 422,
    "maks_fark": 0.0,
    "maks_tarih": "1984-12-01",
@@ -150,7 +172,36 @@
    "birim": "mn USD",
    "esik": 1.0,
    "gecti": true,
-   "durdurucu": true
+   "durdurucu": false,
+   "tautoloji": true,
+   "not": "TAUTOLOJİ: sol taraf sağ taraftan türetildiği için sapma tanım gereği sıfırdır. Bu kayıt bir SINAV DEĞİL, sunum tutarlılığının kaydıdır; kimlik sayımına girmez ve sayfada 'sınandı' diye gösterilmez."
+  },
+  "artık bandı: Q25 − (Q143+Q157+Q184+Q203) ÷ brüt ciro": {
+   "n": 198,
+   "son_yuzde": 2.66,
+   "maks_yuzde": 27.38,
+   "maks_tarih": "2020-01-01",
+   "medyan_yuzde": 6.19,
+   "esik_yuzde": 35.0,
+   "gecti": true,
+   "durdurucu": false,
+   "not": "İKİ AYRI EVDS TABLOSU kıyaslanır (analitik Q25 ↔ ayrıntılı sunumun alt kalemleri); eşitlik beklenmez çünkü '3.4.4 Diğer Yükümlülükler' bu hatta çekilmiyor. Artık bandı aşarsa bir alt kalem düşmüş ya da birimi kaymış demektir."
+  },
+  "bacak yoklaması: yığın bacakları (Şekil 05)": {
+   "beklenen_kalem": 6,
+   "bulunan_kalem": 6,
+   "son_ay": 24,
+   "bos_oran_yuzde": {
+    "yuk_dyy": 0.0,
+    "yuk_port_hisse": 0.0,
+    "yuk_port_borc": 0.0,
+    "yuk_mevduat": 0.0,
+    "yuk_kredi": 0.0,
+    "yuk_turev": 0.0
+   },
+   "gecti": true,
+   "durdurucu": true,
+   "not": "Her bacağın son 24 aydaki BOŞ oranı ölçülür. Tautolojik kimlikler düşen bir bacağı görmez: iki taraf da aynı eksiği taşır ve sapma yine 0,00 çıkar."
   },
   "manşet CA(12a) = çekirdek + altın net + enerji net": {
    "n": 355,
@@ -160,7 +211,8 @@
    "birim": "mn USD",
    "esik": 12.0,
    "gecti": true,
-   "durdurucu": true
+   "durdurucu": true,
+   "tautoloji": false
   },
   "CA(12a) = mal + hizmet + birincil + ikincil": {
    "n": 404,
@@ -170,9 +222,10 @@
    "birim": "mn USD",
    "esik": 12.0,
    "gecti": true,
-   "durdurucu": true
+   "durdurucu": true,
+   "tautoloji": false
   },
-  "ihtiyaç(12a) = kaynak(12a)": {
+  "sunum: ihtiyaç(12a) = kaynak(12a) (tautoloji)": {
    "n": 404,
    "maks_fark": 0.0,
    "maks_tarih": "1992-11-01",
@@ -180,7 +233,41 @@
    "birim": "mn USD",
    "esik": 12.0,
    "gecti": true,
-   "durdurucu": true
+   "durdurucu": false,
+   "tautoloji": true,
+   "not": "TAUTOLOJİ: sol taraf sağ taraftan türetildiği için sapma tanım gereği sıfırdır. Bu kayıt bir SINAV DEĞİL, sunum tutarlılığının kaydıdır; kimlik sayımına girmez ve sayfada 'sınandı' diye gösterilmez."
+  },
+  "mertebe: UV anapara(12a) ÷ haftalık dış borç ödemesi(52h)": {
+   "n": 151,
+   "son_oran": 2.23,
+   "min_oran": 1.5,
+   "maks_oran": 6.14,
+   "medyan_oran": 3.26,
+   "bant": [
+    1.0,
+    8.0
+   ],
+   "son_uv_anapara12_mn_usd": 86849.0,
+   "son_hafta52_mn_usd": 38988.0,
+   "gecti": true,
+   "durdurucu": false,
+   "not": "BAĞIMSIZ KAYNAK kıyası, kimlik DEĞİL: kapsamlar farklı (haftalık seri Hazine + TCMB + duyurulmuş diğer ödemeler). Eşitlik beklenmez; oran bandın dışına çıkarsa anapara bacaklarından biri şişmiş ya da düşmüştür."
+  },
+  "bacak yoklaması: finansman ihtiyacı bacakları (Şekil 11)": {
+   "beklenen_kalem": 6,
+   "bulunan_kalem": 6,
+   "son_ay": 24,
+   "bos_oran_yuzde": {
+    "kredi_bnk_uv_ode": 0.0,
+    "kredi_dgr_uv_ode": 0.0,
+    "kredi_gh_uv_ode": 0.0,
+    "kredi_bnk_uv_kul": 0.0,
+    "kredi_dgr_uv_kul": 0.0,
+    "kredi_gh_uv_kul": 0.0
+   },
+   "gecti": true,
+   "durdurucu": true,
+   "not": "Her bacağın son 24 aydaki BOŞ oranı ölçülür. Tautolojik kimlikler düşen bir bacağı görmez: iki taraf da aynı eksiği taşır ve sapma yine 0,00 çıkar."
   },
   "mal dengesi = ihracat − ithalat": {
    "n": 431,
@@ -190,7 +277,8 @@
    "birim": "mn USD",
    "esik": 1.0,
    "gecti": true,
-   "durdurucu": false
+   "durdurucu": false,
+   "tautoloji": false
   },
   "banka UV net(12a) = kullanım − geri ödeme": {
    "n": 404,
@@ -200,7 +288,8 @@
    "birim": "mn USD",
    "esik": 12.0,
    "gecti": true,
-   "durdurucu": false
+   "durdurucu": false,
+   "tautoloji": false
   },
   "GSYH mertebe denetimi": {
    "trilyon_usd": 1.634,
