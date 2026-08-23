@@ -49,6 +49,9 @@ RITIM = {
     "yiyecek-hizmetleri-marj": 45,
     "hazine-ihrac": 12,
     "fx-haber-endeksi": 9,
+    "dibs-verim-egrisi": 6,     # iş günü (eğri günlük kurulur)
+    "odemeler-dengesi": 45,     # aylık, 6-8 hafta gecikmeli
+    "butce-borc": 45,           # aylık (bütçe ayın 15'i)
 }
 
 # Bültende grup başlıkları ve sırası
@@ -57,7 +60,8 @@ GRUPLAR = [
     ("faiz", "Faiz, fonlama ve likidite"),
     ("enflasyon", "Enflasyon"),
     ("kredi", "Kredi ve para"),
-    ("borclanma", "Hazine borçlanması"),
+    ("borclanma", "Hazine borçlanması ve borç stoku"),
+    ("dis", "Dış denge ve finansman"),
     ("akim", "Yabancı akımı"),
     ("diger", "Diğer"),
 ]
@@ -138,6 +142,49 @@ IZLEMLER: list[Izlem] = [
           400, 800, "artis", "", "akim"),
     Izlem("yabanci-pozisyon", "hisse_hafta", "Yabancı haftalık net akım (hisse)", "mn USD", 0, "akim",
           400, 800, "artis", "", "akim"),
+
+    # ─────────────────────────────── DİBS verim eğrisi
+    Izlem("dibs-verim-egrisi", "gosterge_ytm", "Gösterge tahvil bileşik getirisi", "%", 2,
+          "delta", 0.75, 1.75, "azalis",
+          "En likit DİBS'in vadeye kadar getirisi; TL faizinin manşet fiyatı.", "faiz"),
+    Izlem("dibs-verim-egrisi", "spot_2y", "DİBS 2 yıllık spot getiri", "%", 2, "delta",
+          0.75, 1.75, "azalis", "", "faiz"),
+    Izlem("dibs-verim-egrisi", "spot_9y", "DİBS 9 yıllık spot getiri", "%", 2, "delta",
+          0.75, 1.75, "azalis", "", "faiz"),
+    Izlem("dibs-verim-egrisi", "egim_2y9y", "DİBS 2y−9y eğimi", "puan", 2, "delta",
+          1.0, 2.5, "", "Negatif = ters eğri; işaret değiştirmesi rejim değişimidir.", "faiz"),
+    Izlem("dibs-verim-egrisi", "carry_2y_tlref", "2 yıllık taşıma (TLREF, bileşik)", "puan", 2,
+          "delta", 1.5, 3.0, "artis",
+          "Tahvili gecelikten fonlamanın maliyeti; negatifse pozisyon taşımak pahalıdır.", "faiz"),
+    Izlem("dibs-verim-egrisi", "basabas_2y", "2 yıllık başabaş enflasyon", "%", 2, "delta",
+          1.0, 2.5, "azalis",
+          "Nominal ile enflasyona endeksli tahvilin ima ettiği enflasyon.", "enflasyon"),
+    Izlem("dibs-verim-egrisi", "reel_egri_2y", "2 yıllık reel getiri", "%", 2, "delta",
+          1.0, 2.0, "", "", "faiz"),
+
+    # ─────────────────────────────── ödemeler dengesi ve dış finansman
+    Izlem("odemeler-dengesi", "cari12_mia", "Cari denge (12 aylık birikimli)", "mlr USD", 1,
+          "delta", 3.0, 7.0, "artis", "", "dis"),
+    Izlem("odemeler-dengesi", "cekirdek12_mia", "Çekirdek cari denge (altın ve enerji hariç)",
+          "mlr USD", 1, "delta", 3.0, 7.0, "artis",
+          "Dış dengenin yapısal kısmı; enerji ve altın dalgası dışarıda.", "dis"),
+    Izlem("odemeler-dengesi", "nhn12_mia", "Net hata noksan (12 aylık)", "mlr USD", 1,
+          "delta", 4.0, 9.0, "", "Büyümesi kaynağı belirsiz döviz girişine işaret eder.", "dis"),
+    Izlem("odemeler-dengesi", "cari_gsyh", "Cari denge / GSYH", "%", 2, "delta", 0.5, 1.0,
+          "artis", "", "dis"),
+
+    # ─────────────────────────────── bütçe ve borç stoku
+    Izlem("butce-borc", "denge_gsyh", "Bütçe dengesi / GSYH (12 aylık)", "%", 2, "delta",
+          0.4, 0.8, "artis", "", "borclanma"),
+    Izlem("butce-borc", "fdd_gsyh", "Faiz dışı denge / GSYH (12 aylık)", "%", 2, "delta",
+          0.4, 0.8, "artis", "", "borclanma"),
+    Izlem("butce-borc", "faiz_vergi", "Faiz harcaması / vergi geliri", "%", 1, "delta",
+          1.5, 3.0, "azalis",
+          "Borç servisinin vergi tabanını ne kadar yediğinin ölçüsü.", "borclanma"),
+    Izlem("butce-borc", "doviz_pay", "Borç stokunda döviz payı", "%", 1, "delta", 1.5, 3.0,
+          "azalis", "Kur şokuna duyarlılığın ölçüsü.", "borclanma"),
+    Izlem("butce-borc", "yurt_disi_pay", "Borç stokunda yurt dışı yerleşik payı", "%", 1,
+          "delta", 1.5, 3.0, "", "", "borclanma"),
 ]
 
 

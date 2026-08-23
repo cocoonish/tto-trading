@@ -1,14 +1,14 @@
 {
- "kosum": "2026-08-23",
+ "kosum": "2026-08-24",
  "son_ay": "2026-06-01",
  "son_ceyrek": "2026-03-31",
  "son_hafta": "2026-08-19",
  "son_gun": "2026-08-21",
  "gecikme_gun": {
-  "aylik": 54,
-  "ceyrek": 145,
-  "haftalik": 4,
-  "gunluk": 2
+  "aylik": 55,
+  "ceyrek": 146,
+  "haftalik": 5,
+  "gunluk": 3
  },
  "aylik_seri": 91,
  "aylik_gozlem": 552,

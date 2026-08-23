@@ -284,6 +284,22 @@ HATLAR: list[Hat] = [
         # İki frekans, iki donma riski: eğri ve referans faizler günlük, anket
         # ile TÜFE aylık. Tek anahtara bakmak "veri tazelendi" derdi.
         tarih_anahtarlari=("_tarih", "_tarih2")),
+    Hat("butce", "Bütçe & Borç Stoku", P / "Butce", "butce-borc",
+        # veri.py EVDS3'ten aylık bütçe, üç aylık dış borç ve GSYH, haftalık
+        # menkul kıymet sahipliği ve günlük kur çeker. metrik.py'nin kritik işi
+        # STOK TANIMI: iç borç (ihraç tabanlı) ile brüt dış borç (yerleşiklik
+        # tabanlı) doğrudan toplanamaz — yurt dışının tuttuğu DİBS iki kez
+        # sayılır, yerleşiklerin tuttuğu eurobond hiç sayılmaz. Stok bu yüzden
+        # ARAÇ tabanında kurulur: iç borç + yurt dışında ihraç edilen senet
+        # (devletin kendi tuttuğu düşülerek) + dış krediler. Dış kredi artığı
+        # mertebe bandının dışına çıkarsa hat DURUR: sahiplik serilerinin
+        # eşlemesi bozulmuş demektir ve yanlış stok yayına gitmemelidir.
+        # grafik.py on üç şekil üretir.
+        ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
+        {"cikti/*.html": "*", "uyarilar.json": "uyarilar.json"},
+        # Üç frekans ayrı ayrı donabiliyor: bütçe aylık, dış borç ve GSYH üç
+        # aylık, sahiplik haftalık. Tek anahtara bakmak yanıltırdı.
+        tarih_anahtarlari=("_tarih", "_tarih2", "_tarih3")),
     Hat("marj", "Yiyecek Hizmetleri Marjı", Path("Research/marj"), "yiyecek-hizmetleri-marj",
         ["src/web_cikti.py", "src/ozet_uret.py"],
         ["src/run_all.py", "src/web_cikti.py", "src/ozet_uret.py"],
@@ -298,7 +314,7 @@ def _renk(m, k):  # k: 32 yeşil, 31 kırmızı, 33 sarı, 36 camgöbeği
 
 
 EVDS_HATLAR = {"tcmb", "usdtry", "reer", "yabanci", "marj", "enflasyon",
-               "kredi", "fonlama", "odemeler", "dibs"}
+               "kredi", "fonlama", "odemeler", "dibs", "butce"}
 # Liste sütun genişliği hat adlarından türetilir — yeni bir uzun ad eklendiğinde
 # hizalama sessizce bozulmasın ("enflasyon" 9 karakter, eski sabit 8'di).
 _AD_G = max(len(h.ad) for h in HATLAR) + 1

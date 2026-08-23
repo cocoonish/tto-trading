@@ -1,7 +1,7 @@
 # TTO Trading
 
 Türkiye makro & piyasa araştırmaları: veri hatları (Python) → statik site (Astro).
-Yedi veri hattı EVDS/TÜİK/Hazine/haber kaynaklarından çekip Plotly grafikleri üretir,
+On üç veri hattı EVDS/TÜİK/Hazine/haber kaynaklarından çekip Plotly grafikleri üretir,
 site bunları gömer; sayfa metnindeki güncel sayılar `ozet.json`'dan **canlı** okunur.
 
 > **Bu depo private.** Veri hatları, `Research/` altındaki masa dokümanları ve commit
@@ -83,9 +83,19 @@ Her hattın ayrıca **tek başına çalışan** bir deposu var (yalnız o projey
 | `enflasyon` | Enflasyon Panosu | EVDS3 TÜFE ağacı + ÖKTG + anketler | — |
 | `kredi` | Kredi ve Parasal Büyüklükler | EVDS3 haftalık para-banka + analitik bilanço | — |
 | `fonlama` | TCMB Fonlama ve Likidite | EVDS3 APİ + kotasyon + TLREF + ZK | — |
+| `dibs` | DİBS Verim Eğrisi ve Reel Faiz | EVDS3 DİBS fiyat/kupon + TÜFEX + anket | — |
+| `odemeler` | Ödemeler Dengesi ve Dış Finansman | EVDS3 ödemeler dengesi + dış borç + GSYH | — |
+| `butce` | Bütçe ve Borç Stoku | EVDS3 bütçe + dış borç + menkul kıymet sahipliği | — |
 
 Siteye girmeyen ek araç: [try-asw](https://github.com/cocoonish/try-asw) — Bloomberg TRY OIS
 eğrisiyle ASW hesaplayıcı (BBG terminali gerektirir, o yüzden sitede yok).
+
+## Analiz
+
+`site/src/content/analiz/` — tek bir piyasa gelişmesini mekanizmasına, tarihsel
+emsaline ve fiyat etkisine kadar açan uzun yazılar. Bültenden farkı kapsam değil
+**derinlik**: bülten günün tamamını özetler, analiz tek olayı sonuna kadar açar.
+Sitede `/analiz/` adresinde.
 
 ## Dersler
 
