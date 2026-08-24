@@ -1,5 +1,5 @@
 {
- "zaman": "2026-08-25T05:01:27",
+ "zaman": "2026-08-24T11:18:38",
  "veri": [
   {
    "tarih": "2026-08-27",
@@ -216,18 +216,6 @@
    "beklenti": "",
    "onceki": "",
    "not_": "Kamu Haznedarlığı İstatistikleri (Kamu Haznedarlığı Yönetmeliği Kapsamındaki Kurumların Mevduat ve Menkul Kıymet İstatistikleri)"
-  },
-  {
-   "tarih": "2026-09-15",
-   "saat": "11:00",
-   "ulke": "TR",
-   "olay": "HMB: Bütçe dengesi (Ağustos 2026)",
-   "onem": 1,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "onceki": "",
-   "not_": "Merkezi Yönetim Bütçe Denge Tablosu"
   }
  ]
 }
