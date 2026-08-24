@@ -109,6 +109,7 @@ Sitede `/analiz/` adresinde.
 | Trade Pratiği | asset swap ve TRY OIS pozisyonları |
 | Opsiyon Book Yönetimi | FX vanilla, çapraz kur, egzotikler |
 | Bloomberg HRA | korelasyon ve göreli değer analizi |
+| **Al Brooks fiyat hareketi** | bar okuma, yapı, kırılım, geri çekilme, dönüşler, mıknatıslar, işlem matematiği, seans; 28 adım adım işlem — **160 bin kelime, 94 grafik** |
 | **Smart Money Concepts (SMC)** | yapı, likidite, OB/FVG, 15 setup, backtest protokolü — 57 grafik |
 | **Harmonik Patternler** | Fibonacci, XABCD kataloğu, PRZ, işlem yönetimi — 48 grafik |
 
