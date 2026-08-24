@@ -22,20 +22,74 @@
   },
   {
    "konu": "TCMB repo ihalelerinin ilk tutarları ve TLREF makası",
-   "acilis": "2026-08-24",
+   "acilis": "2026-08-23",
    "durum": "acik",
-   "soz": "Makas 2,86 puan; 2 puanın altına inerse karar fiilî, inmezse sembolik dedik. 31 Ağustos vergi takviminin ters etkisini ayırmak gerektiğini not ettik.",
+   "soz": "Haftalık bülten (23.08) 'izlenecek gösterge TLREF ile politika faizi arasındaki 2,86 puanlık makastır' dedi; günlük (24.08) ölçütü netleştirdi: 2 puanın altı fiilî, 2,8 civarı sembolik. 31 Ağustos vergi takviminin ters etkisi ayrılacak.",
    "ne_bakilacak": "İhale tutarları, TLREF, AOFM'nin %40,00'dan kayıp kaymadığı.",
    "vade": "2026-08-26",
    "sonuc": ""
   },
   {
-   "konu": "Rezerv artışında altın değerlemesi ayrıştırması",
+   "konu": "Haftalık para-banka: kredi büyümesinin yönü",
+   "acilis": "2026-08-23",
+   "durum": "acik",
+   "soz": "Kur arındırılmış 13 hafta yıllıklandırılmış kredi büyümesi %25,9; 'hızlanma sıkılaştırma ihtimalini, yavaşlama indirim alanını artırır' dedik.",
+   "ne_bakilacak": "27 Ağustos 14:30 TCMB haftalık para ve banka istatistikleri.",
+   "vade": "2026-08-27",
+   "sonuc": ""
+  },
+  {
+   "konu": "Ağırlıklı ortalama fonlama maliyeti serisi bayat",
+   "acilis": "2026-08-23",
+   "durum": "acik",
+   "soz": "AOFM'nin son geçerli ölçümü 7 Ağustos (%40,00); 'güncel sıkılığı TLREF üzerinden okuyoruz' dedik. Repo ihaleleri başlayınca gevşemenin resmî ölçüsü bu serinin %40'tan kayması olacak.",
+   "ne_bakilacak": "Serinin tazelenip tazelenmediği; tazelenince AOFM'nin seviyesi.",
+   "vade": "2026-08-27",
+   "sonuc": ""
+  },
+  {
+   "konu": "Temmuz dış ticaret — enerji faturasının ilk ölçümü",
    "acilis": "2026-08-24",
    "durum": "acik",
-   "soz": "20 Ağustos haftasındaki +5,1 mlr USD brüt artışın ne kadarının altın değerlemesi olduğu IRFCL ile netleşecek dedik.",
-   "ne_bakilacak": "10 Eylül IRFCL (Ağustos 2026) verisi.",
-   "vade": "2026-09-10",
+   "soz": "28 Ağustos'taki veri enerji faturasının cari dengeye yansımasını okumanın ilk fırsatı; ağustos tırmanışını kapsamadığını da not ettik.",
+   "ne_bakilacak": "TÜİK temmuz dış ticaret, enerji kalemi.",
+   "vade": "2026-08-28",
+   "sonuc": ""
+  },
+  {
+   "konu": "İkinci çeyrek büyümesi ve indirim patikası",
+   "acilis": "2026-08-23",
+   "durum": "acik",
+   "soz": "'Büyüme verisi faiz indirim patikasının hızına dair tartışmanın merkezinde; beklentinin üzerinde büyüme indirim beklentilerini erteler' dedik. Günlük bülten %37 faiz + %25,9 kredi büyümesinin ürettiği yavaşlamanın ölçüsü olacağını ekledi.",
+   "ne_bakilacak": "31 Ağustos 10:00 GSYH (2025 + II. çeyrek) ve temmuz işgücü; DİBS kısa ucunun tepkisi.",
+   "vade": "2026-08-31",
+   "sonuc": ""
+  },
+  {
+   "konu": "Anket ile tahvil eğrisi arasındaki uçurum hangi yönde kapanacak",
+   "acilis": "2026-08-23",
+   "durum": "acik",
+   "soz": "Anket 12 ay sonrası politika faizini %29,59 beklerken eğri iki yıl sonrası bir yıllık faizi %36,99 fiyatlıyor; 'bu fark kapanacak — hangi yönde kapandığı 3 Eylül enflasyonu ve 10 Eylül Kurul kararıyla belli olmaya başlayacak' dedik.",
+   "ne_bakilacak": "3 Eylül TÜFE sonrası forward ve anket; 10 Eylül PPK.",
+   "vade": "2026-09-03",
+   "sonuc": ""
+  },
+  {
+   "konu": "Ağustos TÜFE: modelimiz ankete karşı",
+   "acilis": "2026-08-23",
+   "durum": "acik",
+   "soz": "Baz etkisi modelimiz yıl sonu için %33,97 (momentum) / %31,75 (tekrar) veriyor; anket medyanı %29,43 — 'modelimiz anketin belirgin üzerinde' dedik. Aylık %0,41 üzeri her okuma hedefe yakınsamayı erteler.",
+   "ne_bakilacak": "3 Eylül 10:00 TÜİK ağustos TÜFE; model senaryolarından hangisi tuttu, yazıda hesabı verilecek.",
+   "vade": "2026-09-03",
+   "sonuc": ""
+  },
+  {
+   "konu": "Hazine ihale modelinin tahminleri sınanacak",
+   "acilis": "2026-08-23",
+   "durum": "acik",
+   "soz": "Model 7 Eylül bono ihalesi için 130,4 mlr TL gerçekleşme ve 2,09 teklif/karşılama; 14 Eylül için 2y sabit kuponluda 7,9 mlr / 1,68 ve 4y TLREF endekslide 24,2 mlr / 1,44 öngördü.",
+   "ne_bakilacak": "İhale sonuçları açıklandığında tahmin-gerçekleşme farkı yazıda anılacak.",
+   "vade": "2026-09-07",
    "sonuc": ""
   },
   {
@@ -48,12 +102,21 @@
    "sonuc": ""
   },
   {
-   "konu": "Temmuz dış ticaret — enerji faturasının ilk ölçümü",
+   "konu": "Geri alım rallisinin risk varlıklarındaki ayağı iki yönlü",
+   "acilis": "2026-08-23",
+   "durum": "acik",
+   "soz": "Bitcoin'in %19,4'lük haftalık yükselişini geri alım kararına bağladık ve 'geri alımın etkisi söndükçe ya da 4 Kasım refinansmanı fazla arz getirirse aynı kanal ters işler, en çok yükselenler en sert düzeltmeyi görür' dedik. 24.08: momentum durdu (bitcoin −%0,32).",
+   "ne_bakilacak": "Bitcoin/altın/platin geri alım haber akışına duyarlılığı; 9 Eylül operasyonları ve 4 Kasım refinansmanı.",
+   "vade": "2026-09-09",
+   "sonuc": ""
+  },
+  {
+   "konu": "Rezerv artışında altın değerlemesi ayrıştırması",
    "acilis": "2026-08-24",
    "durum": "acik",
-   "soz": "28 Ağustos'taki veri enerji faturasının cari dengeye yansımasını okumanın ilk fırsatı; ağustos tırmanışını kapsamadığını da not ettik.",
-   "ne_bakilacak": "TÜİK temmuz dış ticaret, enerji kalemi.",
-   "vade": "2026-08-28",
+   "soz": "20 Ağustos haftasındaki +5,1 mlr USD brüt artışın ne kadarının altın değerlemesi olduğu IRFCL ile netleşecek dedik.",
+   "ne_bakilacak": "10 Eylül IRFCL (Ağustos 2026) verisi.",
+   "vade": "2026-09-10",
    "sonuc": ""
   }
  ]
