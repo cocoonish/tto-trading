@@ -298,8 +298,44 @@ class Denetim:
         else:
             self._ok(f"temaya atıf: {', '.join(anilan[:3])}")
 
+    def izleme(self):
+        """Süreklilik: bültenin verdiği sözler takip ediliyor mu.
+
+        `bulten/izleme.json` önceki bültenlerin "şunu izleyeceğiz" dediği konuların
+        defteri. Vadesi gelmiş açık bir kayıt metinde hiç anılmamışsa bülten dizi
+        olmaktan çıkar, her gün sıfırdan başlar. Kasıtlı olarak UYARI seviyesinde:
+        yazarı kısıtlamak için değil, unutmasın diye.
+        """
+        y = BURASI / "izleme.json"
+        if not y.exists():
+            return
+        try:
+            defter = json.loads(y.read_text(encoding="utf-8"))
+        except Exception:
+            self.uyari.append("İzleme defteri (izleme.json) okunamadı")
+            return
+        bugun = str(self.b.get("tarih") or "")
+        acik = [k for k in defter.get("kayitlar", []) if k.get("durum") == "acik"]
+        vadeli = [k for k in acik if str(k.get("vade", "9999")) <= bugun]
+        if not vadeli:
+            if acik:
+                self._ok(f"izleme defteri: {len(acik)} açık kayıt, vadesi gelen yok")
+            return
+        metin = self._metin()
+        sessiz = []
+        for k in vadeli:
+            kelimeler = [w for w in _sade(k.get("konu", "")).split() if len(w) > 4]
+            if not any(w in metin for w in kelimeler):
+                sessiz.append(k["konu"])
+        if sessiz:
+            self.uyari.append("Vadesi gelen izleme kaydı metinde anılmamış (önceki "
+                              "bülten söz vermişti — hesabını ver ya da kaydı kapat): "
+                              + " · ".join(sessiz))
+        else:
+            self._ok(f"izleme defteri: vadesi gelen {len(vadeli)} kayıt metinde işlenmiş")
+
     def kos(self) -> int:
-        self.yazi(); self.veri(); self.atif(); self.tema(); self.dil(); self.tazelik()
+        self.yazi(); self.veri(); self.atif(); self.tema(); self.izleme(); self.dil(); self.tazelik()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")
         print(f"  BÜLTEN DENETİMİ · {self.b.get('tr_tarih', self.b.get('tarih'))} "

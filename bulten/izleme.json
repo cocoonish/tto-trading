@@ -1,0 +1,60 @@
+{
+ "_aciklama": "İZLEME DEFTERİ — bültenin verdiği sözlerin kaydı. Bülten 'şunu izleyeceğiz', 'yarın belli olacak', 'sebebi anlaşılmıyor' dediği an buraya bir kayıt düşülür. Her koşuda yazı katmanı önce bu defteri açar: vadesi gelen ya da gelişme olan her kayıt için bültende doğal bir yerde hesap verilir — 'dün şuna bakacağız demiştik, işte olan bu' tonunda, madde listesi olarak değil. Cevabı bulunan kayıt kapatılır (durum: kapandı + sonuç), gelişme olmayan kayıt açık kalır ve zorla anılmaz. Bu defter bülteni birbirini takip eden bir yazı dizisi yapar; yazarı kısıtlamak için değil, unutmasın diye vardır.",
+ "_son_guncelleme": "2026-08-24",
+ "kayitlar": [
+  {
+   "konu": "RBOB benzinin tek günde %10,59 düşüşünün sebebi",
+   "acilis": "2026-08-24",
+   "durum": "acik",
+   "soz": "Bülten 'sebebi elimizdeki kaynaklardan anlaşılmıyor' diye yazdı; en olası aday ağustos sonunda yaz tipi benzinden kış tipine vade geçişi ama teyitsiz.",
+   "ne_bakilacak": "Enerji haber kaynaklarında RBOB kontrat geçişi / stok verisi; marjın toparlanıp toparlanmadığı.",
+   "vade": "2026-08-25",
+   "sonuc": ""
+  },
+  {
+   "konu": "ABD'nin İran yaptırım paketi ('ekonomik D-Day') içeriği",
+   "acilis": "2026-08-24",
+   "durum": "acik",
+   "soz": "Paket bugün ABD saatiyle 14:00'te açıklanacak; ikincil yaptırım sertliği petrol→başabaş→uzun uç zincirini belirler dedik.",
+   "ne_bakilacak": "Paketin fiilî kapsamı; Brent'in 95 doları aşıp aşmadığı; İran'ın karşılığı.",
+   "vade": "2026-08-25",
+   "sonuc": ""
+  },
+  {
+   "konu": "TCMB repo ihalelerinin ilk tutarları ve TLREF makası",
+   "acilis": "2026-08-24",
+   "durum": "acik",
+   "soz": "Makas 2,86 puan; 2 puanın altına inerse karar fiilî, inmezse sembolik dedik. 31 Ağustos vergi takviminin ters etkisini ayırmak gerektiğini not ettik.",
+   "ne_bakilacak": "İhale tutarları, TLREF, AOFM'nin %40,00'dan kayıp kaymadığı.",
+   "vade": "2026-08-26",
+   "sonuc": ""
+  },
+  {
+   "konu": "Rezerv artışında altın değerlemesi ayrıştırması",
+   "acilis": "2026-08-24",
+   "durum": "acik",
+   "soz": "20 Ağustos haftasındaki +5,1 mlr USD brüt artışın ne kadarının altın değerlemesi olduğu IRFCL ile netleşecek dedik.",
+   "ne_bakilacak": "10 Eylül IRFCL (Ağustos 2026) verisi.",
+   "vade": "2026-09-10",
+   "sonuc": ""
+  },
+  {
+   "konu": "ABD Hazinesi büyütülmüş geri alım operasyonlarının ilk sonuçları",
+   "acilis": "2026-08-24",
+   "durum": "acik",
+   "soz": "9 Eylül'de başlayacak operasyonların teklif hacmi ve kabul oranı 'geri alım işe yarıyor mu' sorusunun ilk gerçek ölçümü dedik.",
+   "ne_bakilacak": "Operasyon sonuçları; 10 ve 30 yıllık getirinin tepkisi.",
+   "vade": "2026-09-09",
+   "sonuc": ""
+  },
+  {
+   "konu": "Temmuz dış ticaret — enerji faturasının ilk ölçümü",
+   "acilis": "2026-08-24",
+   "durum": "acik",
+   "soz": "28 Ağustos'taki veri enerji faturasının cari dengeye yansımasını okumanın ilk fırsatı; ağustos tırmanışını kapsamadığını da not ettik.",
+   "ne_bakilacak": "TÜİK temmuz dış ticaret, enerji kalemi.",
+   "vade": "2026-08-28",
+   "sonuc": ""
+  }
+ ]
+}
