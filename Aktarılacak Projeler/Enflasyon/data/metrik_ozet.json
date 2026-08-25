@@ -24,7 +24,7 @@
  "kosular_arasi": {
   "var": false,
   "not": "önceki koşu AYNI veriyle yapılmış (sa.csv değişmedi) — koşular arası revizyon bu koşuda ölçülemedi",
-  "onceki_kosum": "2026-08-23"
+  "onceki_kosum": "2026-08-24"
  },
  "vintage": {
   "k_maks": 6,
@@ -1211,9 +1211,9 @@
    "yil_sonu": 31.754096790624352
   }
  },
- "reel__faiz": 40.0,
+ "reel__faiz": 37.0,
  "reel__ex_post": 6.258555453102543,
- "reel__ex_ante": 13.186191284663273,
+ "reel__ex_ante": 10.760772899991933,
  "reel__egilime_gore": 7.180822388821939,
  "reel__ileri_ex_ante": 9.794120138947736,
  "reel__faiz_tarih": "2026-08-01",
@@ -1235,10 +1235,10 @@
  "bek__pka_12a_n_tarih": "2026-08-01",
  "bek__pka_faiz_12a": 29.59,
  "bek__pka_faiz_12a_tarih": "2026-08-01",
- "bek__reel_kesim_12a": 32.5,
- "bek__reel_kesim_12a_tarih": "2026-07-01",
- "bek__hanehalki_12a": 44.94,
- "bek__hanehalki_12a_tarih": "2026-07-01",
+ "bek__reel_kesim_12a": 32.8,
+ "bek__reel_kesim_12a_tarih": "2026-08-01",
+ "bek__hanehalki_12a": 45.58,
+ "bek__hanehalki_12a_tarih": "2026-08-01",
  "beklenti_isabet": {
   "h0": {
    "p36": {

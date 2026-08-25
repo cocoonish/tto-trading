@@ -1,14 +1,14 @@
 {
- "kosum": "2026-08-24",
+ "kosum": "2026-08-25",
  "son_ay": "2026-06-01",
  "son_ceyrek": "2026-03-31",
  "son_hafta": "2026-08-19",
- "son_gun": "2026-08-21",
+ "son_gun": "2026-08-25",
  "gecikme_gun": {
-  "aylik": 55,
-  "ceyrek": 146,
-  "haftalik": 5,
-  "gunluk": 3
+  "aylik": 56,
+  "ceyrek": 147,
+  "haftalik": 6,
+  "gunluk": 0
  },
  "aylik_seri": 91,
  "aylik_gozlem": 552,
@@ -17,7 +17,7 @@
  "ceyrek_seri": 1,
  "ceyrek_gozlem": 125,
  "gunluk_seri": 1,
- "gunluk_gozlem": 7986,
+ "gunluk_gozlem": 7988,
  "birim": {
   "bie_odana6": {
    "ad": "Ödemeler Dengesi-Analitik Sunum",
