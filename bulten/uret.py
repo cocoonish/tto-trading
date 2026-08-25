@@ -444,6 +444,17 @@ def yaz(b: dict) -> Path:
             if not (yeni_h.get("kurum") or yeni_h.get("haber")) and \
                     (eski_h.get("kurum") or eski_h.get("haber")):
                 b["haberler"] = eski_h
+            # Piyasa fotoğrafı BOŞ dönmüşse eskisi korunur. 2026-08-25 bulut
+            # koşusunda yfinance kurulu olmadığı için piyasa katmanı sessizce
+            # boş döndü ve o günün bülteninde 11 varlık grubu, 24 TL faiz satırı
+            # SİLİNDİ — bülten yazılı görünmeye devam ettiği için de sayfa
+            # piyasasız yayında kaldı. Eski fotoğraf, hiç fotoğraf yoktan iyidir;
+            # ne zamana ait olduğu zaten kaydın kendi damgasında yazar.
+            eski_p = (eski.get("piyasa") or {})
+            yeni_p = b.get("piyasa") or {}
+            if not (yeni_p.get("gruplar") or yeni_p.get("tr_faizleri")) and \
+                    (eski_p.get("gruplar") or eski_p.get("tr_faizleri")):
+                b["piyasa"] = eski_p
         except Exception:
             pass
     y.write_text(json.dumps(b, ensure_ascii=False, indent=1), encoding="utf-8")

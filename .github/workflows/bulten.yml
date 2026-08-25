@@ -49,7 +49,11 @@ jobs:
           cache: pip
 
       - name: Bağımlılıklar
-        run: pip install pandas numpy scipy statsmodels plotly requests feedparser openpyxl xlrd
+        # yfinance piyasa fotoğrafını (BIST, US/EU hisse, G10, XAU/XAG, petrol,
+        # crack spread) besler. 2026-08-25'te listede olmadığı için o günün
+        # bülteni 11 varlık grubunu ve 24 TL faiz satırını kaybetti.
+        run: pip install --quiet pandas numpy scipy statsmodels plotly requests
+          feedparser openpyxl xlrd yfinance urllib3
 
       # Anahtar yoksa iş YEŞİL bitmesin diye değil — bülten yine üretilebilir —
       # ama görünür uyarı düşsün: veriler depodaki son sürümde kalacak.
