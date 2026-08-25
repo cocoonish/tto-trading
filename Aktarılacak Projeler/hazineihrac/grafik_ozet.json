@@ -1,102 +1,107 @@
 {
  "planlanan_ihraclar.html": {
-  "ihale_adet": 8,
-  "dogrudan_adet": 6,
-  "toplam_beklenen_mlr": 420.07,
+  "ihale_adet": 15,
+  "dogrudan_adet": 7,
+  "toplam_beklenen_mlr": 448.17099999999994,
   "aylik": [
    [
+    "Ağustos 2026",
+    194.905,
+    371.7
+   ],
+   [
     "Eylül 2026",
-    215.601,
+    129.98899999999998,
     247.9
    ],
    [
     "Ekim 2026",
-    204.469,
+    123.277,
     235.1
    ]
   ],
   "donem": [
-   "07.09.2026",
+   "10.08.2026",
    "13.10.2026"
   ]
  },
  "tahmin_dogrulama.html": {
-  "n": 442,
-  "mae_mlr": 7.152961538461537,
-  "mape": 60.75882352941177,
-  "mape_medyan": 38.1,
-  "son12ay_n": 65,
-  "son12ay_mae_mlr": 15.842061538461541,
-  "son12ay_mape": 53.30153846153848,
-  "mape_ham": 66.60452488687783,
-  "mape_strateji": 70.39072398190045,
-  "donem": "Mar 2020 – Ağu 2026"
+  "n": 10,
+  "mae_mlr": 6.854899999999999,
+  "mape": 92.73,
+  "mape_medyan": 50.2,
+  "son12ay_n": 4,
+  "son12ay_mae_mlr": 13.286749999999998,
+  "son12ay_mape": 87.2,
+  "mape_ham": 73.04999999999998,
+  "mape_strateji": 232.95999999999998,
+  "donem": "Şub 2020 – Haz 2024"
  },
  "ihrac_hacmi.html": {
-  "ihale_adet": 448,
+  "ihale_adet": 16,
   "donem": [
-   "11.02.2020",
-   "18.08.2026"
+   "14.01.2020",
+   "04.06.2024"
   ],
-  "toplam_mlr": 7301.983,
+  "toplam_mlr": 145.93799900000002,
   "tip_pay": {
-   "Değişken Faizli Devlet Tahvili": 6.8,
-   "Hazine Bonosu": 9.7,
-   "Kuponsuz Devlet Tahvili": 1.6,
-   "Sabit Kuponlu Devlet Tahvili": 48.1,
-   "TLREF'e Endeksli Devlet Tahvili": 24.5,
-   "TÜFE'ye Endeksli Devlet Tahvili": 9.4
+   "Değişken Faizli Devlet Tahvili": 9.6,
+   "Hazine Bonosu": 0.0,
+   "Kuponsuz Devlet Tahvili": 7.0,
+   "Sabit Kuponlu Devlet Tahvili": 68.4,
+   "TLREF'e Endeksli Devlet Tahvili": 3.5,
+   "TÜFE'ye Endeksli Devlet Tahvili": 11.5
   }
  },
  "ihrac_usd.html": {
-  "ay_adet": 79,
-  "toplam_usd_mlr": 258.0984422367284,
-  "son_ay_usd_mlr": 7.252616136841665,
-  "son_kur": 48.0454216003418
+  "ay_adet": 6,
+  "toplam_usd_mlr": 9.240853687259083,
+  "son_ay_usd_mlr": 3.173243736732774,
+  "son_kur": 32.88779830932617
  },
  "ihrac_tempo.html": {
-  "ceyrek_adet": 27,
+  "ceyrek_adet": 5,
   "son_ceyrek": [
-   "2026Q3",
-   634.089
+   "2024Q2",
+   104.361
   ],
-  "aylik_ort_ihale": 5.670886075949367
+  "aylik_ort_ihale": 2.6666666666666665
  },
  "faiz_gelisimi.html": {
-  "son_ay": "2026-08",
-  "son_ay_maliyet": 41.040033420496165,
-  "zirve_maliyet": 52.134928298484404,
-  "zirve_ay": "2025-05"
+  "son_ay": "2024-06",
+  "son_ay_maliyet": 36.8235509361734,
+  "zirve_maliyet": 36.8235509361734,
+  "zirve_ay": "2024-06"
  },
  "talep_analizi.html": {
-  "b2c_son_ay": 2.157684636466689,
-  "b2c_son12_ort": 2.1172128110708215,
-  "kabul_son_ay": 40.1,
-  "kabul_tum_ort": 47.112723214285715
+  "b2c_son_ay": 2.1258707754812622,
+  "b2c_son12_ort": 1.9353505030763065,
+  "kabul_son_ay": 46.449999999999996,
+  "kabul_tum_ort": 690.7687499999998
  },
  "fiyat_araligi.html": {
-  "n": 50,
+  "n": 16,
   "donem": [
-   "11.11.2025",
-   "18.08.2026"
+   "14.01.2020",
+   "04.06.2024"
   ]
  },
  "vade_dagilimi.html": {
-  "yil_adet": 7,
-  "ort_vade": 4.567091722595078
+  "yil_adet": 3,
+  "ort_vade": 4.355625
  },
  "strateji_revizyon.html": {
   "revizyonlu_ay": 83,
-  "toplam_hedef_mlr": 8421.6,
-  "toplam_gercek_mlr": 7302.0,
-  "gerceklesme_orani": 86.70561413508122
+  "toplam_hedef_mlr": 8435.6,
+  "toplam_gercek_mlr": 145.93,
+  "gerceklesme_orani": 1.7299302954146711
  },
  "tahmin_aylik.html": {
-  "ay_adet": 78,
+  "ay_adet": 5,
   "aylik_mape": {
-   "ham": 25.275291072430523,
-   "duzeltilmis": 23.493688725343645,
-   "strateji": 27.4375213190517
+   "ham": 53.70504903578068,
+   "duzeltilmis": 63.535502967310386,
+   "strateji": 206.45415693772344
   }
  }
 }
