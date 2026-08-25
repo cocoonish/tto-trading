@@ -1,0 +1,5 @@
+# Bülten dosyalarında her sabah aynı çakışma yaşanıyordu: otomatik koşu ile
+# yazı katmanı aynı günün dosyasına dokunuyor. Sürücü yazılı sürümü seçer,
+# önbellekte iki tarafın anahtarlarını birleştirir. Bkz. bulten/birlestir.py
+site/src/data/bulten/*.json   merge=bulten
+bulten/onbellek/*.json        merge=bulten

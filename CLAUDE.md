@@ -73,3 +73,8 @@ taslak; repo GitHub'a bağlanınca aktifleştirilecek).
 - Site dili Türkçe; tasarım jetonları `site/src/styles/global.css` başında
   (`--paper`, `--ink`, `--claret`; Fraunces / Newsreader / IBM Plex Mono).
 - `astro.config.mjs` içindeki `site:` alanı gerçek domain alınınca güncellenecek.
+- Bülten dosyalarında otomatik koşu ile yazı katmanı aynı gün dosyasına dokunur;
+  bu çakışma **elle çözülmez**. `.gitattributes` + `bulten/birlestir.py` sürücüsü
+  yazılı sürümü seçer, önbellekte anahtarları birleştirir. Sürücü `.git/config`'de
+  durduğu ve depoyla taşınmadığı için `bulten.py` her koşuda kendini kurar.
+  Sürücü komutu kabuktan geçtiğinden **yollar tırnaklanmalı** (depo yolunda boşluk var).

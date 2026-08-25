@@ -50,6 +50,16 @@ def main() -> int:
                     help="git geçmişinden anlık görüntü deposunu doldur")
     a = ap.parse_args()
 
+    # Bülten dosyalarının git birleştirme sürücüsünü her koşuda yerel
+    # yapılandırmaya yaz. `.gitattributes` depoda taşınır ama sürücünün komutu
+    # .git/config'de durduğu için makine başına bir kez kurulması gerekir;
+    # burada yapmak her makinede kendiliğinden çalışmasını sağlar.
+    try:
+        import birlestir
+        birlestir.kur()
+    except Exception:
+        pass                      # sürücü kurulamazsa bülten üretimi etkilenmez
+
     if a.denetle:
         import denetim
         sys.argv = ["denetim.py"] + ([] if a.denetle == "bugun" else [a.denetle]) + ["--ayrinti"]
