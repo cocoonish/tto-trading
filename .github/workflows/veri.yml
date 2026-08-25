@@ -103,15 +103,26 @@ jobs:
       # Hazine ihaleleri AYRI: hattın hafif kipi yalnız mevcut veriden grafik
       # üretir, ihale listesini TAM kip (main.py) hmb.gov.tr'den kazır. İhale
       # günü geldiğinde tam kip koşar; diğer günlerde bu adım hiç çalışmaz.
+      #
+      # DİKKAT — 2026-08-25'te bu adım depodaki 448 ihalelik birikmiş geçmişi
+      # 16 satıra düşürdü: buluttan yapılan kazıma yerelde alınanın küçük bir
+      # altkümesini getiriyor ve hat CSV'yi eklemek yerine BAŞTAN yazıyor.
+      # guncelle.py artık veri tarihi geriye giden hattı düşmüş sayıyor; burada
+      # ayrıca diskteki hasar geri alınıyor, yoksa commit adımı onu yayardı.
       - name: Hazine ihaleleri (ihale günüyse tam kip)
         continue-on-error: true
         run: |
           GEREK=$(python -c "import sys; sys.path.insert(0,'bulten'); import tazeleme; print(' '.join(tazeleme.gerekli(['hazine'])))")
-          if [ "$GEREK" = "hazine" ]; then
-            echo "İhale günü — Hazine sitesi taranıyor (tam kip)"
-            python guncelle.py hazine --tam --sistem-kur
-          else
+          if [ "$GEREK" != "hazine" ]; then
             echo "İhale yok — Hazine hattı atlandı"
+            exit 0
+          fi
+          echo "İhale günü — Hazine sitesi taranıyor (tam kip)"
+          if python guncelle.py hazine --tam --sistem-kur; then
+            echo "Hazine hattı tazelendi"
+          else
+            echo "::warning::Hazine tam kipi düştü (büyük olasılıkla kazıma eksik veri getirdi) — diskteki değişiklikler geri alınıyor, depodaki birikmiş geçmiş korunuyor."
+            git checkout -- "Aktarılacak Projeler/hazineihrac" "site/public/projeler/hazine-ihrac" || true
           fi
 
       - name: Commit

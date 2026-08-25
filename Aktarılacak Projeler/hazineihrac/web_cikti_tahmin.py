@@ -892,15 +892,3 @@ if __name__ == "__main__":
     }
     for ad, bilgi in ciktilar.items():
         print(f"{ad:28s} -> {bilgi}")
-    # Grafik özetleri sayfa metnine akar (ozet_uret.py birleştirir): tür payları,
-    # çeyrek sayısı, aylık ihale ortalaması, plan-hedef kıyası, ihale MAPE'si.
-    # Sayfadaki bu sayılar elle yazılmaz; grafiklerle AYNI koşudan gelir.
-    import json as _json
-    def _temiz(o):
-        if isinstance(o, dict): return {str(k): _temiz(v) for k, v in o.items()}
-        if isinstance(o, (list, tuple)): return [_temiz(v) for v in o]
-        if hasattr(o, "item"): return o.item()
-        return o
-    with open(KOK / "grafik_ozet.json", "w", encoding="utf-8") as f:
-        _json.dump(_temiz({k: v for k, v in ciktilar.items() if v}), f,
-                   ensure_ascii=False, indent=1)

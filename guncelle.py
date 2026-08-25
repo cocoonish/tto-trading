@@ -388,6 +388,33 @@ def _ozet_tarih(h: Hat) -> dict[str, str] | None:
     return {a: str(d.get(a)) for a in h.tarih_anahtarlari}
 
 
+def _tarih_degeri(m: str) -> "datetime.date | None":
+    """ozet.json'daki tarih metnini kıyaslanabilir bir güne çevir.
+
+    Hatlar tarihi kendi doğal biriminde yazar: gün (18.08.2026), ay (07.2026,
+    2026-08), çeyrek (2026-Ç1) veya damga (2026-08-18 18:54 UTC). Çözülemeyen
+    biçim None döner ve kıyas yapılmaz — uydurma kıyas, kıyas yapmamaktan kötüdür.
+    """
+    import datetime as _dt
+    m = (m or "").strip()
+    if not m or m in ("None", "?"):
+        return None
+    ceyrek = re.match(r"^(\d{4})[-\s]*[ÇQq](\d)$", m)
+    if ceyrek:
+        yil, c = int(ceyrek.group(1)), int(ceyrek.group(2))
+        return _dt.date(yil, min(3 * c, 12), 1)
+    for kalip in ("%d.%m.%Y", "%Y-%m-%d", "%d/%m/%Y", "%m.%Y", "%Y-%m", "%Y"):
+        try:
+            return _dt.datetime.strptime(m[:len("2026-08-18") if "%d" in kalip else 7
+                                           if "%m" in kalip else 4], kalip).date()
+        except ValueError:
+            continue
+    try:                                   # "2026-08-18 18:54 UTC" gibi damgalar
+        return _dt.datetime.strptime(m[:10], "%Y-%m-%d").date()
+    except ValueError:
+        return None
+
+
 def _tarih_ozeti(d: dict[str, str] | None) -> str:
     if not d:
         return "?"
@@ -729,6 +756,23 @@ def kos(h: Hat, tam: bool) -> tuple[bool, str, float]:
 
     yeni_tarih = _ozet_tarih(h)
     y, e = _tarih_ozeti(yeni_tarih), _tarih_ozeti(eski_tarih)
+
+    # Veri GERİYE gidemez. 2026-08-25 bulut koşusunda Hazine hattı boş bir
+    # klasörde kazıyıp 448 ihale yerine 16 buldu ve ozet.json'u 18.08.2026'dan
+    # 04.06.2024'e çekti — koşu "başarılı" göründüğü için gerileme commit'lendi.
+    # Tarihi geri giden hat DÜŞMÜŞ sayılır: damgalanmaz, sonraki koşuda tekrar
+    # denenir ve commit adımı onu dışarıda bırakır.
+    if yeni_tarih and eski_tarih:
+        gerileyen = []
+        for a in h.tarih_anahtarlari:
+            yd, ed = _tarih_degeri(yeni_tarih.get(a, "")), _tarih_degeri(eski_tarih.get(a, ""))
+            if yd and ed and yd < ed:
+                gerileyen.append(f"{a}: {eski_tarih[a]} → {yeni_tarih[a]}")
+        if gerileyen:
+            return False, (f"VERİ GERİLEDİ — çıktı eskisinden geriye gitti "
+                           f"({'; '.join(gerileyen)}). Kaynak eksik veri döndürmüş "
+                           f"olabilir; hattın birikmiş veri dosyaları yerinde mi?"), time.time() - t0
+
     if yeni_tarih and eski_tarih:
         donan = [a for a in h.tarih_anahtarlari
                  if yeni_tarih.get(a) == eski_tarih.get(a)]

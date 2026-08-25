@@ -44,11 +44,8 @@ ozet = {
     "gerceklesme_ort": round(float(pd.to_numeric(gercek["Gerçekleşme Oranı (%)"], errors="coerce").mean()), 1),
     "n_ay": int(len(gercek)),
     "b2c_son": round(float(sa["Toplam(Teklif)"].sum() / sa["Toplam(Gerçekleşme)"].sum()), 2),
-    # groupby.apply YERİNE iki toplam ayrı ayrı: apply, gruplama sütununu da
-    # işleme aldığı için pandas 2.2'de FutureWarning veriyor, ileride davranışı
-    # değişecek. Sonuç birebir aynı (ay bazında teklif/gerçekleşme oranının ortalaması).
-    "b2c_12ay": round(float((son12.groupby("ay")["Toplam(Teklif)"].sum()
-                             / son12.groupby("ay")["Toplam(Gerçekleşme)"].sum()).mean()), 2),
+    "b2c_12ay": round(float(son12.groupby("ay").apply(
+        lambda g: g["Toplam(Teklif)"].sum() / g["Toplam(Gerçekleşme)"].sum()).mean()), 2),
     "kabul_son": round(float(sa["Toplam(Gerçekleşme)"].sum() / sa["Toplam(Teklif)"].sum() * 100), 1),
     "kabul_tum": round(float(ih["Toplam(Gerçekleşme)"].sum() / ih["Toplam(Teklif)"].sum() * 100), 1),
     "maliyet_son": round(agirlikli_maliyet(sa), 2),
@@ -65,41 +62,6 @@ ozet = {
     "b2c_mape": round(float(abs(pd.to_numeric(td["B2C Sapma %"], errors="coerce")).mean()), 1),
     "aylik_ham_mape": round(aylik_ham_mape, 1),
 }
-# --- Grafik scriptinin (web_cikti_tahmin.py) özetleri: sayfa metnindeki tür payları,
-# çeyrek/ihale temposu, plan-hedef kıyası, ihale bazlı MAPE buradan okunur ---
-try:
-    g = json.load(open(os.path.join(BASE, "grafik_ozet.json"), encoding="utf-8"))
-    TIP_ANAHTAR = {"Sabit Kuponlu Devlet Tahvili": "pay_sabit", "TLREF'e Endeksli Devlet Tahvili": "pay_tlref",
-                   "TÜFE'ye Endeksli Devlet Tahvili": "pay_tufe", "Hazine Bonosu": "pay_bono",
-                   "Değişken Faizli Devlet Tahvili": "pay_degisken", "Kuponsuz Devlet Tahvili": "pay_kuponsuz"}
-    for tip, pay in g.get("ihrac_hacmi.html", {}).get("tip_pay", {}).items():
-        anahtar = TIP_ANAHTAR.get(tip)
-        if anahtar is None:   # eşleşmeyen tür adı: kaba anahtar (sessiz düşmesin)
-            anahtar = "pay_" + "".join(ch for ch in tip.lower() if ch.isalnum())[:12]
-        ozet[anahtar] = pay
-    tempo = g.get("ihrac_tempo.html", {})
-    if tempo:
-        ozet["ceyrek_adet"] = int(tempo["ceyrek_adet"])
-        ozet["ihale_ay_ort"] = round(float(tempo["aylik_ort_ihale"]), 1)
-    usd = g.get("ihrac_usd.html", {})
-    if usd:
-        ozet["usd_son_ay_mlr"] = round(float(usd["son_ay_usd_mlr"]), 1)
-    td_g = g.get("tahmin_dogrulama.html", {})
-    if td_g:
-        ozet["ihale_ham_mape"] = round(float(td_g["mape_ham"]), 0)
-        ozet["ihale_duz_mape"] = round(float(td_g["mape"]), 0)
-    plan_g = g.get("planlanan_ihraclar.html", {})
-    for i, satir in enumerate(plan_g.get("aylik", [])[:3], start=1):
-        etiket, beklenen, hedef = satir
-        ozet[f"plan_ay{i}_ad"] = str(etiket)
-        ozet[f"plan_ay{i}_beklenen"] = round(float(beklenen), 1)
-        ozet[f"plan_ay{i}_hedef"] = round(float(hedef), 1) if hedef == hedef and hedef is not None else None
-    ozet["plan_ay_adet"] = len(plan_g.get("aylik", []))
-except FileNotFoundError:
-    print("grafik_ozet.json yok — once web_cikti_tahmin.py kosulmali")
-except Exception as e:
-    print(f"grafik_ozet.json okunamadi: {e}")
-
 yol = os.path.join(BASE, "ozet.json")
 json.dump(ozet, open(yol, "w"), ensure_ascii=False, indent=1)
 print("yazildi:", yol); print(json.dumps(ozet, ensure_ascii=False))
