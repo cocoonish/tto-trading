@@ -262,6 +262,38 @@ class Denetim:
         if gecikmis:
             self.uyari.append("Veri gecikmiş hatlar: " + ", ".join(gecikmis))
 
+    def tekrar(self):
+        """Aynı olgu bültenin birden çok yerinde yeniden ANLATILIYOR mu.
+
+        Bülten uzadıkça aynı hikâye bölümden bölüme kopyalanıyor ve okur dördüncü
+        kez aynı cümleyi okuyor. Ölçü: farklı bölümlerde birebir geçen 7 kelimelik
+        öbekler, bin kelimeye normalize edilmiş. Özet bölümlerinin (kilit, yorum)
+        diğerlerine değmesi tanımı gereği meşru; ağır ihlal ÖZET OLMAYAN iki
+        bölümün birbirini tekrar etmesidir — sayılan budur.
+        """
+        import tekrar as _t
+        r = _t.olc(self.b)
+        y = r["yogunluk"]
+        ornek = "; ".join(f"[{'+'.join(yer)}] …{s}…"
+                          for s, yer in r["agir"][:3])
+        if y > _t.YOGUNLUK_ENGEL:
+            self.engel.append(
+                f"TEKRAR fazla: bin kelimede {y} ağır tekrar (üst sınır "
+                f"{_t.YOGUNLUK_ENGEL}) — {len(r['agir'])} öbek aynen yineleniyor. "
+                f"Bir olguyu bir kez tam anlat; ikinci geçişte ya yeni bir işlem "
+                f"yap ya tek cümleyle an. Örnek: {ornek}")
+        elif y > _t.YOGUNLUK_UYARI:
+            self.uyari.append(
+                f"Tekrar yüksek: bin kelimede {y} ağır tekrar "
+                f"(hedef ≤{_t.YOGUNLUK_UYARI}). Örnek: {ornek}")
+        else:
+            self._ok(f"tekrar düşük: bin kelimede {y} ağır tekrar")
+        if len(r["sayi"]) >= _t.SAYI_ADET_ESIK:
+            en = ", ".join(f"{s} ({len(yer)} bölüm)" for s, yer in r["sayi"][:5])
+            self.uyari.append(
+                f"{len(r['sayi'])} sayı {_t.SAYI_BOLUM_ESIK}+ bölümde tekrarlanıyor — "
+                f"her tekrarda üzerine yeni bir işlem yapılmıyorsa kes: {en}")
+
     def tema(self):
         """Tema defteri bakımı yapılmış mı, yazıda temaya atıf var mı.
 
@@ -335,7 +367,8 @@ class Denetim:
             self._ok(f"izleme defteri: vadesi gelen {len(vadeli)} kayıt metinde işlenmiş")
 
     def kos(self) -> int:
-        self.yazi(); self.veri(); self.atif(); self.tema(); self.izleme(); self.dil(); self.tazelik()
+        self.yazi(); self.veri(); self.atif(); self.tekrar()
+        self.tema(); self.izleme(); self.dil(); self.tazelik()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")
         print(f"  BÜLTEN DENETİMİ · {self.b.get('tr_tarih', self.b.get('tarih'))} "
