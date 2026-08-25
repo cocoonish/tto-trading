@@ -1,0 +1,56 @@
+# Siteyi public depoya yayınla — bu depoya her içerik commit'inde.
+#
+# Neden ayrı iş akışı: yayın eskiden bülten işinin son adımıydı, dolayısıyla
+# yalnız bülten koştuğunda siteye çıkıyordu. Artık üç ayrı yerden içerik
+# geliyor: veri tazeleme (günde dört kez), bülten ölçümü (günde bir) ve yazı
+# katmanı (bulut rutini). Üçünün de sonucu siteye çıkmalı.
+
+name: Siteyi yayınla
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'bulten/**'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: yayin
+  cancel-in-progress: true
+
+jobs:
+  yayinla:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      YAYIN_TOKEN: ${{ secrets.TTO_YAYIN_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Token var mı
+        id: token
+        run: |
+          if [ -z "${YAYIN_TOKEN}" ]; then
+            echo "::warning::TTO_YAYIN_TOKEN yok — yayın atlandı."
+            echo "var=hayir" >> "$GITHUB_OUTPUT"
+          else
+            echo "var=evet" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Public depoya gönder
+        if: steps.token.outputs.var == 'evet'
+        run: |
+          # Kimlik --global olmalı: yayinla.py depo dışındaki /tmp klonunda
+          # commit atıyor ve depo içi git ayarı oraya taşınmıyor.
+          git config --global user.name  "tto-yayin"
+          git config --global user.email "bot@users.noreply.github.com"
+          git clone --depth 1 "https://x-access-token:${YAYIN_TOKEN}@github.com/cocoonish/cocoonish.github.io.git" /tmp/yayin
+          python yayinla.py --derleme-yok --klon /tmp/yayin -m "içerik: $(date -u +'%Y-%m-%d %H:%M')"

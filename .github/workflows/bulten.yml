@@ -18,10 +18,12 @@ name: Günlük bülten
 
 on:
   schedule:
-    # Hafta içi sabah bülteni: 04:30 UTC = 07:30 İstanbul (Pzt–Cum).
-    - cron: '30 4 * * 1-5'
-    # Pazar akşamı "haftaya bakış": 15:00 UTC = 18:00 İstanbul.
-    - cron: '0 15 * * 0'
+    # Hafta içi ÖLÇÜM koşusu: 04:00 UTC = 07:00 İstanbul (Pzt–Cum).
+    # Yazı katmanı (bulut rutini) 07:15'te başlar; bülten 07:30'da hazır olur.
+    - cron: '0 4 * * 1-5'
+    # Pazar "haftaya bakış" ölçümü: 14:30 UTC = 17:30 İstanbul.
+    # Yazı katmanı 17:45'te başlar; bülten 18:00'da hazır olur.
+    - cron: '30 14 * * 0'
   workflow_dispatch: {}
 
 permissions:
@@ -37,9 +39,6 @@ jobs:
     timeout-minutes: 20
     env:
       TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
-      # secrets bağlamı adım `if:` ifadelerinde okunamaz; iş düzeyinde env'e
-      # alınıp `env.YAYIN_TOKEN != ''` diye denetlenir.
-      YAYIN_TOKEN: ${{ secrets.TTO_YAYIN_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -106,11 +105,3 @@ jobs:
             git pull --rebase --autostash
             git push
           fi
-
-      # Public depoya yayın: yalnız token tanımlıysa. Token yoksa bülten bu
-      # depoda durur ve siteye ilk yayinla.py koşusunda çıkar.
-      - name: Siteyi yayına gönder
-        if: env.YAYIN_TOKEN != ''
-        run: |
-          git clone --depth 1 "https://x-access-token:${YAYIN_TOKEN}@github.com/cocoonish/cocoonish.github.io.git" /tmp/yayin
-          python yayinla.py --derleme-yok --klon /tmp/yayin -m "bülten: $(date -u +%Y-%m-%d)"
