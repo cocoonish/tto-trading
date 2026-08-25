@@ -1,0 +1,12 @@
+{
+  "aciklama": "Her veri hattının en son başarıyla tazelendiği an. tazeleme.py bunu okuyup hangi hattın koşacağına karar verir.",
+  "son_kosum": {
+    "butce": "2026-08-26T00:06:49",
+    "dibs": "2026-08-26T00:06:49",
+    "enflasyon": "2026-08-26T00:06:49",
+    "fonlama": "2026-08-26T00:06:49",
+    "kredi": "2026-08-26T00:06:49",
+    "odemeler": "2026-08-26T00:06:49",
+    "yabanci": "2026-08-26T00:06:49"
+  }
+}

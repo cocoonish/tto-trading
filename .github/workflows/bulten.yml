@@ -34,6 +34,7 @@ concurrency:
 jobs:
   bulten:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     env:
       TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
       # secrets bağlamı adım `if:` ifadelerinde okunamaz; iş düzeyinde env'e
@@ -62,15 +63,13 @@ jobs:
             echo "var=evet" >> "$GITHUB_OUTPUT"
           fi
 
-      # Yalnız hızlı ve EVDS'e dayanan hatlar. Ağır adımlar (--tam: FinBERT,
-      # Hazine scraper) bilinçli olarak dışarıda; onlar yerelde koşulur.
-      # DİBS bültenin TL faiz setini (eğri, taşıma, başabaş) besliyor; ödemeler ve
-      # bütçe aylık ama veri günü kaçmasın diye her koşuda denenir — ikisinin de
-      # TTL'li önbelleği var, yayım yoksa ucuz geçer.
-      - name: Veri hatlarını tazele (hafif)
-        if: steps.anahtar.outputs.var == 'evet'
+      # Veri tazeleme burada YAPILMAZ: ayrı bir iş akışı (veri.yml) her hattı
+      # kendi yayım takviminde tazeler ve sonuncusu bültenden 45 dk önce koşar.
+      # Eskiden bülten on bir hattı baştan çekiyordu; 2026-08-25'te bu 37 dakika
+      # sürdü ve tek bir yeni veri getirmedi. Bülten artık yalnız ÖLÇER.
+      - name: Veri tazeliği
         continue-on-error: true
-        run: python guncelle.py tcmb usdtry reer yabanci fonlama kredi enflasyon hazine dibs odemeler butce
+        run: python bulten/tazeleme.py
 
       # Pazar koşusu haftalık bülten üretir ("geçen hafta / önümüzdeki hafta");
       # hafta içi koşusu günlük. Cumartesi hiç koşmaz.
@@ -91,8 +90,10 @@ jobs:
 
       - name: Commit
         run: |
-          git config user.name  "tto-bulten"
-          git config user.email "bot@users.noreply.github.com"
+          # --global şart: yayın adımı /tmp/yayin klonunda commit atıyor ve
+          # depo içi ayar oraya taşınmıyor (2026-08-25: "empty ident name").
+          git config --global user.name  "tto-bulten"
+          git config --global user.email "bot@users.noreply.github.com"
           git add site/src/data/bulten bulten/gecmis bulten/onbellek site/public/projeler || true
           if git diff --cached --quiet; then
             echo "değişiklik yok"

@@ -412,7 +412,21 @@ _PAKET_KODU = (
 # dağıtım adı yazar. İkisi aynı sözlükten konuşur.
 
 
-def _req_paketler(d: Path) -> list[str]:
+# Yalnız TAM kipte veya canlı panelde gereken paketler. Hafif kip bunlara
+# dokunmaz; buna rağmen requirements.txt'te durdukları için ön denetim onları
+# "eksik" sayıp hattı komple atlıyordu — 2026-08-25 bulut koşusunda rezerv,
+# USDTRY, REER ve Hazine hatlarının dördü de tam bu yüzden hiç koşmadı.
+# Bulutta bunları kurmak da anlamsız: torch tek başına ~2 GB.
+AGIR_PAKET = {
+    "dash", "dash-bootstrap-components",   # hazine canlı panosu
+    "streamlit",                           # fx canlı panosu
+    "torch", "transformers", "scikit-learn",   # fx: FinBERT (yalnız --tam)
+    "praw", "ntscraper", "deep-translator", "vaderSentiment",  # fx: kaynak hasadı
+    "playwright",                          # marj: MEDAS hasadı (ham dosya varsa gereksiz)
+}
+
+
+def _req_paketler(d: Path, agir_dahil: bool = True) -> list[str]:
     """requirements.txt → dağıtım adları (sürüm, ekstra, koşul, yorum ayıklanmış)."""
     req = d / "requirements.txt"
     if not req.exists():
@@ -423,17 +437,18 @@ def _req_paketler(d: Path) -> list[str]:
         if not s or s.startswith("-"):        # -r include, --index-url …
             continue
         s = re.split(r"[<>=!~;\[ ]", s, 1)[0].strip()
-        if s:
+        if s and (agir_dahil or s not in AGIR_PAKET):
             adlar.append(s)
     return adlar
 
 
-def eksik_paketler(h: "Hat") -> list[str] | None:
+def eksik_paketler(h: "Hat", tam: bool = True) -> list[str] | None:
     """Hattı koşacak yorumlayıcıda requirements'tan eksik olanlar.
 
     None = denetlenemedi (yorumlayıcı çalışmadı) — bu da bir bulgudur.
+    Hafif kipte ağır paketler sorulmaz: o adımlar zaten koşmayacak.
     """
-    paketler = _req_paketler(KOK / h.klasor)
+    paketler = _req_paketler(KOK / h.klasor, agir_dahil=tam)
     if not paketler:
         return []
     try:
@@ -444,6 +459,67 @@ def eksik_paketler(h: "Hat") -> list[str] | None:
     if r.returncode != 0:
         return None
     return [x for x in r.stdout.split() if x]
+
+
+def tazeleme_modulu():
+    """bulten/tazeleme.py'yi yükle (yoksa/çalışmazsa None).
+
+    Paket değil, kardeş klasördeki bir betik olduğu için elle yüklenir.
+    Bulunamaması guncelle.py'yi durdurmaz: takvim bir kolaylık, zorunluluk değil.
+    """
+    if "_TAZELEME" in globals():
+        return globals()["_TAZELEME"]
+    mod = None
+    try:
+        import importlib.util as _iu
+        yol = KOK / "bulten" / "tazeleme.py"
+        if yol.exists():
+            sys.path.insert(0, str(KOK / "bulten"))
+            sp = _iu.spec_from_file_location("tazeleme", yol)
+            mod = _iu.module_from_spec(sp)
+            # exec_module'dan ÖNCE kaydedilmeli: @dataclass alanları çözerken
+            # sys.modules[cls.__module__]'e bakar, kayıtsız modülde None bulur.
+            sys.modules["tazeleme"] = mod
+            sp.loader.exec_module(mod)
+    except Exception as e:
+        print(_renk(f"  (tazeleme takvimi yüklenemedi: {e})", 33))
+        mod = None
+    globals()["_TAZELEME"] = mod
+    return mod
+
+
+def sistem_kur(secilen: list["Hat"], tam: bool) -> bool:
+    """Seçilen hatların gereksinimlerini KOŞAN yorumlayıcıya kurar.
+
+    Bulut koşucusu için: orada her hatta bir .venv kurmak hem yavaş hem gereksiz
+    (koşucu zaten tek kullanımlık). Yalnız o koşuda gerçekten koşacak hatların
+    paketleri kurulur — hafif kipte ağır paketler (torch, playwright, dash)
+    listeye girmez.
+    """
+    paketler: set[str] = set()
+    for h in secilen:
+        req = KOK / h.klasor / "requirements.txt"
+        if not req.exists():
+            continue
+        for satir in req.read_text(encoding="utf-8").splitlines():
+            x = satir.split("#")[0].strip()
+            if not x or x.startswith("-"):
+                continue
+            ad = re.split(r"[<>=!~;\[ ]", x, 1)[0].strip()
+            if ad and (tam or ad not in AGIR_PAKET):
+                paketler.add(x)
+    if not paketler:
+        print("  kurulacak paket yok")
+        return True
+    sirali = sorted(paketler)
+    print(f"  {len(sirali)} gereksinim kuruluyor: "
+          + ", ".join(re.split(r"[<>=!~;\[ ]", x, 1)[0] for x in sirali))
+    r = subprocess.run([PY, "-m", "pip", "install", "--quiet", *sirali],
+                       env=_COCUK_ENV)
+    if r.returncode:
+        print(_renk("  ✗ kurulum düştü", 31))
+        return False
+    return True
 
 
 def hat_anahtari(h: "Hat") -> str | None:
@@ -526,7 +602,7 @@ def denetle(secilen: list["Hat"], tam: bool, duzelt: bool) -> int:
                              "ya da TTO_EVDS_KEY atayın")
         else:
             anahtar_m = "—"
-        eksik = eksik_paketler(h)
+        eksik = eksik_paketler(h, tam)
         yok = _eksik_scriptler(h, tam)
         if eksik is None:
             paket_m, kotu = _renk("yorumlayıcı çalışmadı", 31), True
@@ -544,7 +620,7 @@ def denetle(secilen: list["Hat"], tam: bool, duzelt: bool) -> int:
         if duzelt and (eksik or eksik is None):
             print(f"    → kuruluyor ({h.ad})")
             if kur(h):
-                kalan = eksik_paketler(h)
+                kalan = eksik_paketler(h, tam)
                 if not kalan:
                     engel = [x for x in engel if not x.startswith(f"{h.ad}:")]
                     print(_renk("    ✓ giderildi", 32))
@@ -601,7 +677,7 @@ def kos(h: Hat, tam: bool) -> tuple[bool, str, float]:
         print(f"    (yorumlayıcı: {Path(py).relative_to(KOK) if py.startswith(str(KOK)) else py})")
     # Koşmadan önce yorumlayıcıyı yokla: eksik paket, sayfalarca traceback yerine
     # tek satırlık çözüm olarak görünsün. (Ekstra maliyet ~0,1 sn/hat.)
-    eksik = eksik_paketler(h)
+    eksik = eksik_paketler(h, tam)
     if eksik is None:
         return False, (f"yorumlayıcı çalışmıyor ({py}) — çözüm: python guncelle.py "
                        f"--kur {h.ad}"), time.time() - t0
@@ -755,6 +831,12 @@ def main():
     ap.add_argument("--denetle", action="store_true",
                     help="hiçbir şey koşturmadan ortamı denetle: python, git/node, EVDS anahtarı, "
                          "her hattın yorumlayıcısı ve paketleri")
+    ap.add_argument("--gerekli", action="store_true",
+                    help="yalnız resmî yayım takvimine göre TAZELENMESİ GEREKEN hatları koş "
+                         "(bulten/tazeleme.py); kaynağı yayımlanmamış hat atlanır")
+    ap.add_argument("--sistem-kur", action="store_true", dest="sistem_kur",
+                    help="seçilen hatların gereksinimlerini .venv kurmadan bu yorumlayıcıya kur "
+                         "(bulut koşucusu için)")
     ap.add_argument("--duzelt", action="store_true",
                     help="--denetle ile: eksik bulunan hatların kurulumunu yap")
     a = ap.parse_args()
@@ -782,6 +864,31 @@ def main():
         secilen, tam, cm = menu()
     if not secilen: print("hat seçilmedi"); return 2
 
+    # Resmî yayım takvimi süzgeci: kaynağı son tazelemeden bu yana yayımlanmamış
+    # hattı koşturmak, aynı veriyi ikinci kez indirmektir. 2026-08-25 bulut
+    # koşusunda yedi hat 37 dakika koştu ve YEDİSİ de "veri tarihi DEĞİŞMEDİ"
+    # dedi — o koşunun tamamı boşa gitti.
+    if a.gerekli:
+        _tz = tazeleme_modulu()
+        if _tz is None:
+            print(_renk("\n  --gerekli istendi ama tazeleme takvimi yüklenemedi.\n"
+                        "  Süzgeçsiz devam etmek seçilen hatların HEPSİNİ koşmak olurdu;\n"
+                        "  bu, --gerekli ile kaçınılmak istenen şeyin ta kendisi.\n"
+                        "  Takvimsiz koşmak istiyorsanız --gerekli'yi kaldırın.", 31))
+            return 3
+    if a.gerekli:
+        print(f"\n{'═'*64}\n  TAZELEME TAKVİMİ — hangi hat neden koşacak\n{'═'*64}")
+        print(_tz.rapor([h.ad for h in secilen]))
+        gerek = set(_tz.gerekli([h.ad for h in secilen]))
+        atlanan = [h for h in secilen if h.ad not in gerek]
+        secilen = [h for h in secilen if h.ad in gerek]
+        if atlanan:
+            print(f"\n  {len(atlanan)} hat atlandı (yeni yayım yok): "
+                  + " ".join(h.ad for h in atlanan))
+        if not secilen:
+            print(_renk("\n  Tazelenmesi gereken hat yok — veri zaten güncel.", 32))
+            return 0
+
     if a.denetle:
         return denetle(secilen, a.tam, a.duzelt)
 
@@ -800,9 +907,15 @@ def main():
     # Koşmadan önce hızlı yoklama (~0,1 sn/hat): kullanıcı on dakika bekleyip
     # sonunda "ModuleNotFoundError" görmesin. Windows'ta bat çift tıklamayla
     # sistem python'una düşüyor ve eksik paket en sık hata sebebi.
+    if a.sistem_kur:
+        print(f"\n▶ Gereksinimler ({'tam' if tam else 'hafif'} kip) — "
+              + " ".join(h.ad for h in secilen))
+        if not sistem_kur(secilen, tam):
+            return 1
+
     sorunlu = []
     for h in secilen:
-        e = eksik_paketler(h)
+        e = eksik_paketler(h, tam)
         if e is None or e:
             sorunlu.append(h)
     if sorunlu:
@@ -832,6 +945,17 @@ def main():
         print(_renk(f"    {'✓' if ok else '✗'} {mesaj}  [{sn:.0f}s]", 32 if ok else 31))
 
     ev_stili()
+
+    # Tazeleme damgası yalnız BAŞARILI hatlara vurulur: düşen hat bir sonraki
+    # koşuda yeniden denensin, "koştu sayıldı ama veri gelmedi" durumu oluşmasın.
+    # --gerekli verilmese de damgalanır: hat gerçekten koştuysa takvim bunu
+    # bilmeli, yoksa elle zorlanan tazeleme bir sonraki koşuda tekrar edilir.
+    _tz = tazeleme_modulu()
+    if _tz is not None:
+        basarili = [h.ad for h, ok, _, _ in sonuc if ok]
+        if basarili:
+            _tz.durum_yaz(basarili)
+            print(f"\n  Tazeleme damgası güncellendi: {' '.join(basarili)}")
 
     print(f"\n{'═'*64}\n  ÖZET\n{'═'*64}")
     for h, ok, mesaj, sn in sonuc:
