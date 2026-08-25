@@ -8,6 +8,14 @@
 name: Siteyi yayınla
 
 on:
+  # GitHub, kendi GITHUB_TOKEN'ıyla atılan push'larda yeni iş akışı TETİKLEMEZ
+  # (sonsuz döngü koruması). Veri tazeleme ve bülten işleri commit'i o token'la
+  # attığı için yalnız `push` tetikleyicisi onları kaçırırdı; bu yüzden o iki
+  # işin bitişi ayrıca dinleniyor.
+  workflow_run:
+    workflows: ["Veri tazeleme", "Günlük bülten"]
+    types: [completed]
+  # Yazı katmanı (bulut rutini) ve yereldeki push'lar için:
   push:
     branches: [main]
     paths:
