@@ -46,11 +46,20 @@ def kur(sessiz: bool = True) -> None:
         ("merge.bulten.name", "bülten: yazılı sürüm otomatiği yener"),
         ("merge.bulten.driver", komut),
         ("merge.bulten.recursive", "binary"),
+        # Üretilmiş Plotly HTML'leri: aynı veriden üretilseler bile her koşuda
+        # farklı rastgele div kimlikleri taşırlar, bu yüzden hep çakışırlar.
+        # Bulut günde dört kez veri işlediğinden bu çakışma her gün yaşanırdı.
+        # `true` komutu çalışıp hiçbir şey yapmaz: çalışma kopyasındaki sürüm
+        # kalır. Grafikler türev ürün — kaynağı hattın kendisi, bir sonraki
+        # koşuda zaten yeniden üretilirler. ozet.json bu kuralın DIŞINDA:
+        # sayfa metnindeki sayıları o besliyor, keyfî taraf seçilemez.
+        ("merge.uretilmis.name", "üretilmiş grafik: mevcut sürüm korunur"),
+        ("merge.uretilmis.driver", "true"),
     ):
         subprocess.run(["git", "config", anahtar, deger], cwd=KOK,
                        capture_output=True)
     if not sessiz:
-        print("  ✓ bülten birleştirme sürücüsü kuruldu")
+        print("  ✓ birleştirme sürücüleri kuruldu (bülten + üretilmiş grafik)")
 
 
 # ── çözüm kuralları ────────────────────────────────────────────────────────

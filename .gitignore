@@ -27,6 +27,11 @@ Aktarılacak Projeler/indices/data/news_cache.json
 # İŞLENMİŞ CSV'ler (data/*.csv) commit'te KALIR — cron'un hafif kipi onlara dayanır.
 Aktarılacak Projeler/*/data/cache/
 
+# Ulusal veri yayımlama takvimi önbelleği: 373 KB ve dört saatte bir tazeleniyor.
+# Depoya girerse günde ~1,5 MB geçmiş şişmesi yapar; tek HTTP isteğiyle yeniden
+# üretilebildiği için commit'lenmez.
+bulten/onbellek/yayim_*.json
+
 # Yerel Claude ayarları
 **/.claude/settings.local.json
 

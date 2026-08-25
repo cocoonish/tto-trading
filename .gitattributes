@@ -3,3 +3,10 @@
 # önbellekte iki tarafın anahtarlarını birleştirir. Bkz. bulten/birlestir.py
 site/src/data/bulten/*.json   merge=bulten
 bulten/onbellek/*.json        merge=bulten
+
+# Üretilmiş grafik çıktıları: her koşuda farklı div kimlikleriyle yeniden
+# yazıldıkları için içerik aynıyken bile çakışırlar. Türev ürün oldukları için
+# mevcut sürüm korunur; bir sonraki hat koşusu ikisini de tazeler.
+# (ozet.json ve tablolar.json bilinçli olarak dışarıda — onlar veri.)
+site/public/projeler/**/*.html   merge=uretilmis
+site/public/arastirma/**/*.html  merge=uretilmis
