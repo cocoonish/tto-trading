@@ -290,6 +290,16 @@ def fetch_historical_news(asset_key: str, weeks: int = 52,
 
         print(f"  [{asset_key}] Week {week_key}: {len(articles)} articles", flush=True)
 
+        # ARADA DA KAYDET. Önbellek eskiden yalnız döngü BİTİNCE yazılıyordu;
+        # 52 haftalık bir varlık yarıda kesilirse (zaman aşımı, ağ kopması)
+        # o varlığın bütün çekimi çöpe gidiyordu. İlk koşu 15 varlık × 52
+        # hafta = 780 çekim ve saatler sürüyor, yani yarıda kesilme istisna
+        # değil beklenen hâl. Onda bir kaydetme, yazma maliyetini düşük
+        # tutarken kaybı en fazla dokuz haftayla sınırlıyor.
+        if (i + 1) % 10 == 0:
+            cache[asset_key] = asset_cache
+            _save_historical_cache(cache)
+
     # Save cache
     cache[asset_key] = asset_cache
     _save_historical_cache(cache)

@@ -36,9 +36,11 @@ concurrency:
 jobs:
   fx:
     runs-on: ubuntu-latest
-    # İlk koşu (boş önbellek + 52 hafta GDELT + tüm arşivin skorlanması) uzun
-    # sürebilir; sonraki koşular artımlı olduğu için dakikalar.
-    timeout-minutes: 90
+    # İlk koşu 780 hafta-çekimi + tüm arşivin FinBERT'le skorlanması demek ve
+    # saatler sürebilir. Sonraki koşular artımlıdır (haber önbelleği taşınır,
+    # skorlama yalnız yeni makaleleri işler) — dakikalar. Sınır yüksek ama
+    # sonsuz değil: takılan bir koşu haftalarca dakika yakmasın.
+    timeout-minutes: 300
     env:
       PYTHONPATH: ${{ github.workspace }}/ortak
       # Model indirmesi ilerleme çubuğu basmasın — koşu kaydı okunur kalsın.
@@ -60,15 +62,29 @@ jobs:
           path: ~/.cache/huggingface
           key: hf-finbert-v1
 
-      # GDELT önbelleği ve skorlanmış makaleler depoda duruyor (data/), ama
-      # hattın kendi ara çıktıları için de önbellek tutulur.
-      - name: Hat önbelleği
-        uses: actions/cache@v4
+      # HABER ÖNBELLEĞİ — bu adım olmadan hat ASLA tamamlanamaz.
+      #
+      # İlk koşu 780 hafta-çekimi yapıyor (15 varlık × 52 hafta) ve saatler
+      # sürüyor. Çekilen haberler `data/gdelt_cache.json`e yazılıyor ama o
+      # dosya .gitignore'da: koşu bitse de bitmese de depoya girmiyor. Yani
+      # her koşu sıfırdan başlıyor, zaman aşımına uğruyor ve BİR SONRAKİ koşu
+      # yine sıfırdan başlıyor — hat sonsuza kadar tamamlanamaz. Hattın
+      # yalnız yerelde tazelenebilmesinin sebebi tam olarak buydu.
+      #
+      # restore/save AYRI kullanılıyor: save adımı if: always() ile koşuyor,
+      # böylece zaman aşımına uğrayan koşunun o ana kadar topladığı haberler
+      # de saklanıyor ve gelecek koşu kaldığı yerden devam ediyor.
+      # Yalnız yok sayılan iki dosya önbelleklenir; depoda İZLENEN dosyalar
+      # (sentiment_scores.json gibi) bilerek dışarıda, yoksa bayat bir kopya
+      # depodakinin üstüne binerdi.
+      - name: Haber önbelleğini geri yükle
+        uses: actions/cache/restore@v4
         with:
           path: |
-            Aktarılacak Projeler/indices/__pycache__
-          key: fx-ara-${{ github.run_id }}
-          restore-keys: fx-ara-
+            Aktarılacak Projeler/indices/data/gdelt_cache.json
+            Aktarılacak Projeler/indices/data/news_cache.json
+          key: fx-haber-${{ github.run_id }}
+          restore-keys: fx-haber-
 
       # Duman sınaması bülten katmanlarını GERÇEK depo verisiyle çağırıyor;
       # o katmanlar pandas/numpy/requests kullanıyor. Bu adım ilk kurulumda
@@ -83,6 +99,16 @@ jobs:
       - name: FX hattı — tam kip
         id: fx
         run: python guncelle.py fx --tam --sistem-kur
+
+      # Zaman aşımına uğrasa bile o ana kadar toplanan haberler saklanır.
+      - name: Haber önbelleğini sakla
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            Aktarılacak Projeler/indices/data/gdelt_cache.json
+            Aktarılacak Projeler/indices/data/news_cache.json
+          key: fx-haber-${{ github.run_id }}
 
       # if: always() — tam kip düşse bile ev stili ve commit koşar; hattın
       # kısmen ilerlemiş çıktısı çöpe gitmez (bkz. veri.yml'deki aynı ders).
