@@ -201,9 +201,46 @@ def indir(esleme: dict):
         df = pd.DataFrame(ham.get("items", ham) if isinstance(ham, dict) else ham)
     ters = {v["kod"].replace(".", "_"): k for k, v in esleme.items()}
     df = df.rename(columns=ters)
-    df["tarih"] = pd.to_datetime(df["Tarih"], format="%m-%Y", errors="coerce")
+    ham_satir = len(df)
+    if "Tarih" not in df.columns:
+        raise RuntimeError(
+            f"EVDS yanıtında 'Tarih' kolonu yok. Gelen kolonlar: {list(df.columns)}")
+
+    # TARİH BİÇİMİ SABİT DEĞİL. Kodda tek bir "%m-%Y" varsayımı vardı ve
+    # errors='coerce' ile birleşince en sinsi kusuru üretiyordu: biçim
+    # tutmayınca bütün satırlar NaT oluyor, hemen ardındaki dropna tabloyu
+    # boşaltıyor ve hat 0 SATIRLIK bir CSV yazıp BAŞARIYLA çıkıyordu.
+    # 26.08'de tam bu oldu — 400 hatası çözüldü, veri geldi, ve hat sessizce
+    # yalnız başlık satırı yazdı. Artık birkaç biçim denenip EN ÇOK satırı
+    # ayrıştıran seçiliyor; hiçbiri tutmazsa hat DURUYOR ve gördüğü örneği
+    # yazıyor. Boş tabloyla başarılı çıkmak yasak.
+    en_iyi, en_iyi_ad = None, ""
+    for ad, kw in (("%Y-%m", {"format": "%Y-%m"}),
+                   ("%m-%Y", {"format": "%m-%Y"}),
+                   ("%Y-%m-%d", {"format": "%Y-%m-%d"}),
+                   ("%d-%m-%Y", {"format": "%d-%m-%Y"}),
+                   ("serbest", {"errors": "coerce"})):
+        try:
+            aday = pd.to_datetime(df["Tarih"], errors="coerce", **{k: v for k, v in kw.items() if k == "format"})
+        except Exception:                                      # noqa: BLE001
+            continue
+        n = int(aday.notna().sum())
+        if en_iyi is None or n > int(en_iyi.notna().sum()):
+            en_iyi, en_iyi_ad = aday, ad
+        if n == ham_satir:
+            break
+    if en_iyi is None or not int(en_iyi.notna().sum()):
+        ornek = df["Tarih"].dropna().astype(str).head(5).tolist()
+        raise RuntimeError(
+            f"'Tarih' kolonu ayrıştırılamadı ({ham_satir} satır geldi, hiçbiri "
+            f"okunamadı). Gördüğüm örnekler: {ornek}. Biçim listesine eklenmeli.")
+    df["tarih"] = en_iyi
     kolonlar = ["tarih"] + [k for k in esleme if k in df.columns]
     df = df[kolonlar].dropna(subset=["tarih"]).sort_values("tarih")
+    if not len(df):
+        raise RuntimeError(f"{ham_satir} satır geldi ama tarih süzgecinden hiçbiri "
+                           f"geçmedi ({en_iyi_ad} biçimiyle).")
+    print(f"tarih biçimi: {en_iyi_ad} · {len(df)}/{ham_satir} satır okundu", flush=True)
     for k in esleme:
         if k in df.columns:
             df[k] = pd.to_numeric(df[k], errors="coerce")

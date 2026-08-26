@@ -31,6 +31,13 @@ def hesapla():
     if not y.exists():
         return None, bekliyor_ozet()
     d = pd.read_csv(y, parse_dates=["tarih"]).set_index("tarih").sort_index()
+    # BOŞ DOSYA "veri var" DEĞİLDİR. 26.08'de veri_cek.py tarih biçimini
+    # ayrıştıramayıp yalnız BAŞLIK satırından ibaret bir CSV yazdı; burası
+    # dosyanın varlığını veri sanıp `_tarih: ""` olan bir özet üretti — yani
+    # "ilk koşu bekleniyor" diyen dürüst yer tutucudan DAHA KÖTÜ bir çıktı:
+    # sayfa veri varmış gibi görünüyor ama hiçbir sayı yok.
+    if d.empty:
+        return None, bekliyor_ozet()
 
     def son(kolon, ondalik=1):
         if kolon not in d.columns:
