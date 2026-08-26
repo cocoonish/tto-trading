@@ -1,0 +1,99 @@
+# FX Haber-Duyarlılık Endeksi — HAFTALIK, TAM KİP.
+#
+# Neden ayrı bir iş akışı: bu hat günlük veri iş akışına sığmıyor ve orada
+# durması ZARARLIYDI. `veri.yml` hatları HAFİF kipte koşturur — hafif kip
+# mevcut veriden grafik çizer, GDELT haber akışını HİÇ toplamaz. Hat her
+# tetiklendiğinde koşuyor, "tazelendi" damgasını atıyor ve veri hiç
+# ilerlemiyordu; takvim de onu taze sanıp dokuz gün daha bekliyordu. Yani
+# hattın verisi 18.08'de dondu ve bu kendi kendine düzelemezdi — sessiz,
+# çünkü her koşu yeşil bitiyordu.
+#
+# Doğrusu: hattı günlük listeden çıkarmak ve GERÇEKTEN tazeleyen kipi kendi
+# ritminde koşturmak. Endeks zaten HAFTALIK (config.LOOKBACK_DAYS = 7,
+# haftalık skorlar), o yüzden haftalık koşu ölçünün kendi ritmi.
+#
+# Ağırlık: torch + transformers + FinBERT modeli (~440 MB). İki önbellek bunu
+# haftada birkaç dakikaya indiriyor: pip ve Hugging Face model deposu.
+# FinBERT skorlaması ZATEN ARTIMLI — run.py yalnız "score" alanı olmayan
+# makaleleri puanlar, yani 52 haftalık arşiv her koşuda baştan işlenmez.
+
+name: FX haber endeksi (haftalık, tam kip)
+
+on:
+  schedule:
+    # Pazar 08:37 UTC = 11:37 İstanbul. Pazar haftalık bülten ölçümü 14:03'te
+    # koşuyor; arada 5,5 saat pay var, yani endeks haftalık bültene TAZE girer.
+    - cron: '37 8 * * 0'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: fx
+  cancel-in-progress: false
+
+jobs:
+  fx:
+    runs-on: ubuntu-latest
+    # İlk koşu (boş önbellek + 52 hafta GDELT + tüm arşivin skorlanması) uzun
+    # sürebilir; sonraki koşular artımlı olduğu için dakikalar.
+    timeout-minutes: 90
+    env:
+      PYTHONPATH: ${{ github.workspace }}/ortak
+      # Model indirmesi ilerleme çubuğu basmasın — koşu kaydı okunur kalsın.
+      HF_HUB_DISABLE_PROGRESS_BARS: '1'
+      TRANSFORMERS_VERBOSITY: error
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      # FinBERT ağırlıkları (~440 MB). Önbellek olmadan her hafta yeniden
+      # inerdi; koşunun en uzun adımı bu.
+      - name: FinBERT model önbelleği
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/huggingface
+          key: hf-finbert-v1
+
+      # GDELT önbelleği ve skorlanmış makaleler depoda duruyor (data/), ama
+      # hattın kendi ara çıktıları için de önbellek tutulur.
+      - name: Hat önbelleği
+        uses: actions/cache@v4
+        with:
+          path: |
+            Aktarılacak Projeler/indices/__pycache__
+          key: fx-ara-${{ github.run_id }}
+          restore-keys: fx-ara-
+
+      - name: Duman sınaması (bülten katmanları)
+        run: python bulten/duman.py
+
+      - name: FX hattı — tam kip
+        id: fx
+        run: python guncelle.py fx --tam --sistem-kur
+
+      # if: always() — tam kip düşse bile ev stili ve commit koşar; hattın
+      # kısmen ilerlemiş çıktısı çöpe gitmez (bkz. veri.yml'deki aynı ders).
+      - name: Ev stili
+        if: always()
+        run: python site/tools/plotly_stil.py --hepsi
+
+      - name: Commit
+        if: always()
+        run: |
+          git config --global user.name  "tto-fx"
+          git config --global user.email "bot@users.noreply.github.com"
+          git add "Aktarılacak Projeler/indices" site/public/projeler/fx-haber-endeksi \
+                  bulten/tazeleme_durumu.json || true
+          if git diff --cached --quiet; then
+            echo "değişiklik yok"
+          else
+            git commit -m "fx: $(date -u +'%Y-%m-%d') haber endeksi (haftalık tam kip)"
+            git pull --rebase --autostash
+            git push
+          fi

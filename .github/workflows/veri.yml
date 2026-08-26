@@ -121,7 +121,13 @@ jobs:
         run: |
           HATLAR="${{ inputs.hatlar }}"
           if [ -z "$HATLAR" ]; then
-            HATLAR="tcmb usdtry reer yabanci fonlama kredi enflasyon dibs odemeler butce marj fx"
+            # `fx` BİLEREK YOK — ayrı iş akışında (fx.yml), haftalık TAM kipte.
+            # Burada hafif kipte koşuyordu ve hafif kip GDELT akışını hiç
+            # toplamıyor: hat her tetiklendiğinde "tazelendi" damgası atıyor,
+            # veri hiç ilerlemiyordu. Takvim onu taze sanıp dokuz gün daha
+            # bekliyor, yani veri kalıcı olarak donuyordu — üstelik her koşu
+            # yeşil bittiği için sessizce.
+            HATLAR="tcmb usdtry reer yabanci fonlama kredi enflasyon dibs odemeler butce marj"
           fi
           # "zorla" = takvimi hiç sorma. Süzgeci geçirmemek, ona "her şey
           # gerekli" dedirtmekten daha dürüst: karar defterine sahte tetik yazılmaz.
