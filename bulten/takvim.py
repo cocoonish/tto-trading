@@ -46,7 +46,12 @@ class Kayit:
     onem: int = 2         # 1 = kritik, 2 = önemli, 3 = takip
     kaynak: str = ""
     kesinlik: str = "kesin"   # kesin | kural | tahmini
-    beklenti: str = ""        # varsa: anket/model beklentisi
+    beklenti: str = ""        # varsa: anket/model beklentisi (serbest metin)
+    # Sayısal beklenti AYRI durur ve serbest metinden TÜRETİLMEZ. Metni
+    # ayrıştırmak tahmin üretir; tahminden hesaplanan bir "sürpriz" uydurma
+    # olur. Yalnız elle girilen ya da kendi modelimizden gelen sayı buraya yazılır
+    # ve sürpriz ancak bu alan doluysa hesaplanır (bkz. surpriz.py).
+    beklenti_sayi: float | None = None
     onceki: str = ""          # varsa: bir önceki gerçekleşme
     not_: str = ""
 

@@ -39,6 +39,7 @@ import takvim as takvim_m  # noqa: E402
 import piyasa as piyasa_m  # noqa: E402
 import soz as soz_m  # noqa: E402
 import grafik_veri as grafik_m  # noqa: E402
+import surpriz as surpriz_m  # noqa: E402
 
 
 # Sabah bakışı panosu: (hat, anahtar, ad, birim, ondalık, tarih alanı)
@@ -393,6 +394,10 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         # Sayfadaki satır içi SVG'lerin verisi. Plotly bültene girmez: gömülü
         # kütüphane tek grafikte 4,6 MB ve sabah notu o ağırlığı kaldırmaz.
         "grafikler": grafik_m.hazirla(),
+        # Beklenti halkasının kapanan ucu: vakti geçmiş olaylar için ne geldi,
+        # sürpriz ne kadar, piyasa ne yaptı. Takvim tek başına yalnız ileri
+        # bakıyordu; beklenti yayımlayıp gerçekleşmeyi yayımlamamak eksik kalıyordu.
+        "sonuclar": surpriz_m.gecmis_olaylar(kayitlar, piyasa, tarih),
         "takvim": takvim_bloklari,
         "kritik_takvim": kritik,
         "haftalik": haftalik,

@@ -89,6 +89,24 @@ bir hafta mı, yıl başından beri mi.
 **Tekrar.** Bin kelimede en fazla 7 ağır tekrar. Aynı cümleyi bölümden bölüme
 taşıma.
 
+**Beklenti halkası kapanıyor.** Bülten artık vakti geçmiş takvim olayları için
+"ne bekleniyordu, ne geldi" bölümü basıyor. Üç kural:
+
+- **Beklenti sütunu o gün yayımladığımız beklentidir.** `takvim_arsiv.json` her
+  koşuda görülen takvim kaydının İLK hâlini saklar ve ezmez; sonradan
+  güncellenmiş bir anketi geriye dönük yazmak, kendi çağrımızı düzeltmek olur.
+- **Sürpriz yalnız sayısal beklenti varsa hesaplanır.** Serbest metin beklenti
+  ("anket: yıl sonu %29,43 · 12 ay sonrası %23,69") sayıya ÇEVRİLMEZ; ayrıştırma
+  tahmin üretir, tahminden hesaplanan sürpriz uydurma olur. Sayısal beklentin
+  varsa takvim kaydının `beklenti_sayi` alanına yaz.
+- **Gerçekleşme hattın kendi saatinden okunur.** Yayım anı ile verinin hatta
+  düşmesi arasında saatler geçer; alanın veri tarihi olay gününden eskiyse bölüm
+  "veri henüz hatta düşmedi" der. Elimizdeki eski sayıyı yeni yayım diye sunmak
+  bu bölümün var oluş sebebine aykırıdır.
+
+Bölüm otomatik dolar; yazan tarafın işi sürprizi METİNDE yorumlamaktır — tablo
+ne olduğunu söyler, neden olduğunu söylemez.
+
 **Söz defteri artık okura açık.** `izleme.json` bültenin JSON'una giriyor ve
 sayfada "Söz defteri" bölümü olarak basılıyor: açık sözler vadeleriyle, yakın
 zamanda kapananlar sonuçlarıyla. İki sonucu var. Birincisi, bir kaydın `soz` ve

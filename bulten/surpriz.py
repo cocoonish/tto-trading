@@ -24,11 +24,15 @@ hesabını vermemektir.
 """
 from __future__ import annotations
 
+import json
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import date, datetime
+from pathlib import Path
 
 import gozlem
+
+BURASI = Path(__file__).resolve().parent
 
 # Olayın yaşı (takvim günü) → piyasa fotoğrafındaki hazır pencere ve etiketi.
 TEPKI_PENCERE = ((1, "d1", "1 gün"), (5, "h1", "1 hafta"), (21, "a1", "1 ay"))
@@ -69,6 +73,63 @@ TAKIPLER: tuple[Takip, ...] = (
     Takip(r"Bütçe dengesi|Merkezi Yönetim Bütçe", "butce-borc", "butce_ay",
           "Aylık bütçe dengesi", "mlr TL", 1),
 )
+
+
+# ── takvim arşivi ────────────────────────────────────────────────────────────
+# Takvim modülü yalnız İLERİ bakar: bugünden sonraki yayımları listeler. Geçmiş
+# olayları sonradan kaynaktan çekmek iki bakımdan yanlış olurdu. Birincisi ağ
+# bağımlılığı: kaynak düşerse geriye bakan tablo da düşer. İkincisi ve asıl
+# önemlisi, "ne bekleniyordu" sorusunun doğru cevabı O GÜN yayımladığımız
+# beklentidir — sonradan güncellenmiş bir anket değil. O yüzden her koşuda
+# gördüğümüz takvim kaydı arşive düşer ve geriye bakan tablo arşivden kurulur.
+ARSIV = BURASI / "takvim_arsiv.json"
+
+
+def arsiv_oku() -> dict:
+    if not ARSIV.exists():
+        return {}
+    try:
+        return json.loads(ARSIV.read_text(encoding="utf-8")).get("kayitlar", {})
+    except (ValueError, OSError):
+        return {}
+
+
+def _alan(k, ad, varsayilan=""):
+    return getattr(k, ad, None) if not isinstance(k, dict) else k.get(ad, varsayilan)
+
+
+def arsivle(kayitlar: list) -> int:
+    """Bu koşuda görülen takvim kayıtlarını arşive ekle. Dönüş: yeni kayıt sayısı.
+
+    Var olan kayıt EZİLMEZ: ilk görüldüğü hâli, yani o günkü beklenti korunur.
+    """
+    d = arsiv_oku()
+    yeni = 0
+    for k in kayitlar:
+        tarih = str(_alan(k, "tarih") or "")[:10]
+        olay = str(_alan(k, "olay") or "").strip()
+        if not tarih or not olay:
+            continue
+        anahtar = f"{tarih}|{olay}"
+        if anahtar in d:
+            continue
+        d[anahtar] = {"tarih": tarih, "olay": olay,
+                      "saat": _alan(k, "saat", "") or "",
+                      "ulke": _alan(k, "ulke", "") or "",
+                      "onem": _alan(k, "onem", 2),
+                      "beklenti": _alan(k, "beklenti", "") or "",
+                      "beklenti_sayi": _alan(k, "beklenti_sayi", None),
+                      "gorulme": datetime.now().date().isoformat()}
+        yeni += 1
+    if yeni:
+        ARSIV.write_text(json.dumps(
+            {"_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' "
+                          "sorusunun cevabı o gün yayımladığımız beklentidir; sonradan "
+                          "güncellenen bir anket değil. Kayıtlar ezilmez.",
+             "_son_guncelleme": datetime.now().date().isoformat(),
+             "kayitlar": dict(sorted(d.items()))},
+            ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    return yeni
 
 
 def _gun(m) -> date | None:
@@ -116,10 +177,16 @@ def _tepki(piyasa: dict, adlar: tuple[str, ...], yas: int) -> dict:
 
 def gecmis_olaylar(kayitlar: list, piyasa: dict, bugun: date | None = None,
                    geri_gun: int = 7) -> list[dict]:
-    """Son `geri_gun` içinde vakti geçmiş takvim olayları için sonuç satırı."""
+    """Son `geri_gun` içinde vakti geçmiş olaylar için sonuç satırı.
+
+    Girdi olarak bu koşunun takvimi verilir; önce arşive eklenir, sonra geriye
+    bakan liste ARŞİVDEN kurulur — bu koşunun takvimi zaten yalnız geleceği
+    içerir, geçmiş yalnız arşivde durur.
+    """
     bugun = bugun or date.today()
+    arsivle(kayitlar)
     out = []
-    for k in kayitlar:
+    for k in arsiv_oku().values():
         g = _gun(getattr(k, "tarih", None) or (k.get("tarih") if isinstance(k, dict) else None))
         if g is None or not (0 <= (bugun - g).days <= geri_gun):
             continue
@@ -161,6 +228,10 @@ def gecmis_olaylar(kayitlar: list, piyasa: dict, bugun: date | None = None,
                 tp = _tepki(piyasa, t.tepki, yas)
                 if tp:
                     satir["tepki"] = tp
-        out.append(satir)
+        # Takip edilmeyen ve beklentisi de olmayan olay bültende yer kaplamaz:
+        # "şu veri çıktı, hakkında söyleyecek bir şeyimiz yok" satırı okura bir
+        # şey vermez. Takip edilen ya da beklenti yayımlanmış olanlar kalır.
+        if satir["durum"] != "takip dışı" or beklenti:
+            out.append(satir)
     out.sort(key=lambda s: s["tarih"], reverse=True)
     return out
