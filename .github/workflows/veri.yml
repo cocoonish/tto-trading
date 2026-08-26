@@ -140,6 +140,12 @@ jobs:
           cp makas.html endeks.html nakit_tahvil.html konvansiyon.html ozet.json \
              "../../site/public/projeler/tl-tasima/"
           cd ../..
+          cd "Aktarılacak Projeler/Tufex"
+          python hesap.py
+          python grafik.py
+          cp basabas_anket.html prim_kesit.html prim_tarihce.html reel_tarihce.html \
+             mevsim.html ozet.json "../../site/public/projeler/tufex-basabas/"
+          cd ../..
           python site/tools/plotly_stil.py --hepsi >/dev/null
 
       - name: Commit
