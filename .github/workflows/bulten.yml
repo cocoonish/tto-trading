@@ -19,7 +19,9 @@ name: Günlük bülten
 on:
   schedule:
     # Hafta içi ÖLÇÜM koşusu: 03:23 UTC = 06:23 İstanbul (Pzt–Cum).
-    # Yazı katmanı (bulut rutini) 07:15'te başlar; arada 45 dakika pay var.
+    # Zincirin ortasındaki halka: veri tazeleme 05:13'te başlar (70 dk önce),
+    # yazı katmanı (bulut rutini) 07:15'te (52 dk sonra). Üç halkanın arası
+    # bilerek geniş; hiçbiri diğerinin bitişini beklemiyor, yalnız saate güveniyor.
     # Pay geniş tutuldu: GitHub'ın zamanlanmış işleri en iyi çaba esaslıdır ve
     # yoğun saatlerde 10–20 dakika gecikebilir (2026-08-26'da 04:00 koşusu hiç
     # başlamadı). Dar pay, ölçüm gecikince yazı katmanının boş dosya bulması
