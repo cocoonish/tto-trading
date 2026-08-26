@@ -11,18 +11,31 @@ Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
 
 ## Akış
 
-1. **Bülteni oku.** `site/src/data/bulten/<bugün>.json`. İçinde ölçülmüş her şey
-   var: 51 enstrümanlık piyasa fotoğrafı, TL faiz seti ve DİBS eğrisi, takvim,
-   taranmış haberler (`haberler.kurum`, `haberler.haber`), kilit gelişmeler
-   (`haberler.kilit`), izlenen temalar (`temalar`) ve hat hat değişim.
-2. **Kilit gelişmeleri araştır.** `haberler.kilit` listesindeki her maddeyi ve
-   `%1,5`'i aşan her fiyat hareketini kaynağına inerek anla. Manşete bakıp
-   sebep uydurma; hareketin gerçek sürücüsünü bul.
+1. **Bülteni oku ve damgasını not al.** `site/src/data/bulten/<bugün>.json`.
+   İçinde ölçülmüş her şey var: 51 enstrümanlık piyasa fotoğrafı, TL faiz seti
+   ve DİBS eğrisi, takvim, taranmış haberler (`haberler.kurum`,
+   `haberler.haber`), kilit gelişmeler (`haberler.kilit`), izlenen temalar
+   (`temalar`), rejim panosu (`rejim`), olağandışılık sıralaması
+   (`piyasa.en_cok_hareket.sigma`), söz defteri (`izleme`), "ne bekleniyordu,
+   ne geldi" (`sonuclar`) ve hat hat değişim. **`olusturma` alanını hemen
+   kaydet** — yamayı uygularken bu damgayı vereceksin; ölçüm sen yazarken
+   yenilenirse yama reddedilir ve metni güncel ölçüye göre gözden geçirirsin
+   (26.08.2026'da bu kaza gerçekten oldu: yazı 04:31'de yazıldı, ölçüm 05:01'de
+   yeniden kuruldu, sayfa ölçülmeyen sayıları anlattı).
+2. **Kilit gelişmeleri araştır.** `haberler.kilit` listesindeki her maddeyi,
+   `%1,5`'i aşan her fiyat hareketini VE `piyasa.en_cok_hareket.sigma`
+   listesinde **2σ'yı aşan** her hareketi kaynağına inerek anla. İki eşik
+   farklı soruları yakalar: yüzde eşiği büyük hareketi, σ eşiği olağandışı
+   hareketi. Yüzdesi küçük diye 2σ'lık bir hareketi atlama — 26.08'de günün
+   asıl haberi (kredi endekslerinin 1,6σ'lık ortak hareketi) ham listede hiç
+   görünmüyordu. Manşete bakıp sebep uydurma; hareketin gerçek sürücüsünü bul.
 3. **Yaz.** Aşağıdaki bölümleri doldur.
 4. **Denetle.** `python3 bulten/denetim.py` — çıkış kodu 0 olana kadar düzelt.
    Denetim güven değil ölçüm içindir: "atladığımız bir şey var mı" sorusunun
    cevabını o verir.
-5. **Kaydet.** Yamayı `python3 bulten/yaz.py yama.json` ile uygula.
+5. **Kaydet.** Yamayı `python3 bulten/yaz.py yama.json --damga "<okuduğun
+   olusturma>"` ile uygula. Damga tutmazsa uygulama reddedilir: bülteni yeniden
+   oku, sayıları güncel ölçüye karşı gözden geçir, yeni damgayla tekrar dene.
 6. **Yayınla.** `git add -A && git commit && git push`, sonra
    `python3 yayinla.py`.
 
@@ -65,6 +78,24 @@ Yazı bölümleri, **her biri en az 300 kelime**:
 
 ---
 
+## Haftalık bültene özgü görevler
+
+Pazar günkü "haftaya bakış" günlük akışın üstüne üç iş ekler:
+
+1. **Haftanın karnesi.** Hafta içinde kapanan TÜM izleme kayıtlarını gözden
+   geçir: notsuz kapanmış olan varsa `isabet` notunu düş ya da neden
+   ölçülemez olduğunu kayda yaz. Haftalık yorum, karnenin o haftaki dökümünü
+   bir paragrafla verir — kaç çağrı tuttu, kaçı tutmadı, en öğretici yanılgı
+   hangisiydi. Okur haftalık bültende hesap görmek ister.
+2. **Kıyas penceresi haftalıktır.** "Geçen hafta bu saatte neredeydik" sorusu
+   günlük "son yayımdan bu yana"dan farklıdır; haftalık değişim kolonlarını
+   (`h1`) ve rejim panosunun hafta içindeki yönünü kullan. Bir günlük gürültüyü
+   haftanın hikâyesi yapma.
+3. **Önümüzdeki haftanın her takvim maddesi `beklenti` bölümünde tek tek
+   işlenir** ve sayısal beklentisi olan her madde için takvim kaydının
+   `beklenti_sayi` alanının dolu olduğunu doğrula — sürpriz ölçümü ancak o
+   alanla çalışır; serbest metinden sayı türetilmez.
+
 ## Kurallar
 
 **Atıf disiplini.** `%1,5`'i aşan her hareket metinde **anılmalı** ve sebebi
@@ -79,6 +110,17 @@ Denetim bunu ölçer ve engeller.
 
 **Tavsiye dili yasak.** "Alın", "satın", "hedef fiyat", "pozisyon açın"
 yazılmaz. Site analiz yayımlar, yatırım tavsiyesi vermez.
+
+**Rejim panosunu omurga yap.** `rejim` alanı günün "neredeyiz" cevabını yedi
+satırda verir (reel faiz, taşıma makası, reel kredi, REDK sapması, eğri eğimi,
+rezerv kalitesi). Yorumun tezi bu satırların GERİLİMİNDEN kurulur: hangi ikisi
+birbiriyle çelişiyor, hangisi önce kırılır. Panoyu sayı sayı kopyalama — sayfada
+zaten duruyor; senin işin çelişkiyi cümleye çevirmek.
+
+**Söz kapatırken not düş.** Bir izleme kaydını kapatıyorsan `isabet` alanını
+doldur (tuttu | tutmadi | kismen); ölçülemeyen kayıtlar notsuz kapanabilir ama
+bunu bilinçli seç. `sonuclar` bölümünde "geldi" görünen her satırın sürprizini
+metinde yorumla — tablo ne olduğunu söyler, neden olduğunu sen söylersin.
 
 **Temalara bağla.** `temalar` defterindeki canlı temalara atıf yap: günün
 gelişmesi hangi tezi doğruladı, hangisini çürüttü.

@@ -86,6 +86,14 @@ def main() -> int:
     ap.add_argument("yama", help="yama JSON dosyası ('-' → standart girdi)")
     ap.add_argument("--tarih", default=None, help="YYYY-MM-DD (varsayılan: bugün)")
     ap.add_argument("--yazma", action="store_true", help="dosyaya yazma, ne olacağını göster")
+    # 26.08.2026 kazasının mekanik sigortası: yazı 04:31'de yazıldı, ölçüm
+    # 05:01'de yeniden kuruldu ve sayfa ölçülmeyen sayıları anlatır oldu.
+    # Yazan taraf bülteni OKUDUĞU andaki `olusturma` damgasını buraya verir;
+    # yamayı uygularken damga değişmişse ölçüm yazıdan sonra yenilenmiş
+    # demektir ve yama reddedilir — metin güncel ölçüme göre gözden geçirilir.
+    ap.add_argument("--damga", default=None,
+                    help="bülteni okuduğun andaki `olusturma` değeri; "
+                         "değişmişse yama reddedilir")
     a = ap.parse_args()
 
     ham = sys.stdin.read() if a.yama == "-" else Path(a.yama).read_text(encoding="utf-8")
@@ -112,6 +120,16 @@ def main() -> int:
         birlestir.kur()
     except Exception:
         pass                       # sürücü kurulamazsa yazma işlemi etkilenmez
+
+    if a.damga:
+        mevcut = json.loads(hedef.read_text(encoding="utf-8")).get("olusturma", "")
+        if mevcut != a.damga:
+            print(f"YAMA REDDEDİLDİ: ölçüm katmanı yazı yazılırken yenilenmiş.\n"
+                  f"  okuduğun damga : {a.damga}\n"
+                  f"  dosyadaki damga: {mevcut}\n"
+                  "Bülteni yeniden oku, metni güncel ölçüme göre gözden geçir ve "
+                  "yeni damgayla tekrar uygula.", file=sys.stderr)
+            return 3
 
     b, degisen = uygula(hedef, yama)
     if not degisen:
