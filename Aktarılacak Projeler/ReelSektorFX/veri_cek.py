@@ -103,8 +103,22 @@ def kesfet() -> dict:
     eksik = [k for k in ("varlik_toplam", "yukumluluk_toplam", "net_pozisyon")
              if k not in esleme]
     if eksik:
+        # Adları LOGA da bas. seriler.json diske yazıldı ama koşu düşerse o
+        # dosya depoya girmeyebilir; o zaman kalıbı düzeltecek olan elinde
+        # hiçbir şey olmadan kalır. 27.08 koşusunda tam bu oldu: hat
+        # "zorunlu kolonlar eşlenemedi" deyip sustu, hangi adlarla
+        # karşılaştığını kimse öğrenemedi. Log her hâlükârda kalıyor.
+        print(f"\nKEŞİF EKSİK — eşlenemeyen zorunlu kolonlar: {eksik}", flush=True)
+        print(f"Grupta {len(dokum)} seri var. Eşleşenler:", flush=True)
+        for k, v in esleme.items():
+            print(f"   ✓ {k:18s} ← {v['ad']}", flush=True)
+        print("Eşleşmeyen adlar (ilk 60):", flush=True)
+        esles = {v["kod"] for v in esleme.values()}
+        for x in [d for d in dokum if d["kod"] not in esles][:60]:
+            print(f"   · {x['ad']}", flush=True)
         raise SystemExit(f"KEŞİF EKSİK — zorunlu kolonlar eşlenemedi: {eksik}. "
-                         f"data/seriler.json'daki adlara bakıp KALIPLAR güncellenmeli.")
+                         f"Yukarıdaki adlara bakıp KALIPLAR güncellenmeli "
+                         f"(döküm ayrıca data/seriler.json'da).")
     return esleme
 
 
