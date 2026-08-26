@@ -124,6 +124,27 @@ NABIZ_AZAMI_SAAT = 30
 KARANLIK_GUN = 45
 
 
+# "<yanlış sayı> yerine <doğru sayı>" — düzeltme kalıbı. Araya birkaç sözcük
+# girebilir ("… yerine gerçek hareket …") ama cümle sınırı giremez.
+GERI_ALMA = re.compile(r"^[^.;:!?]{0,40}?\byerine\b", re.I)
+
+
+def _geri_alinan(ham: str, son: int, degerler) -> bool:
+    """Bu sayı, yerine ÖLÇÜLEN bir değerin konduğu bir düzeltmenin parçası mı."""
+    kuyruk = ham[son:son + 90]
+    m = GERI_ALMA.match(kuyruk)
+    if not m:
+        return False
+    for s2 in SAYI.finditer(kuyruk[m.end():]):
+        coz = _sayi_coz(s2.group(1))
+        if coz is None:
+            continue
+        y, basamak = coz
+        tol = 0.5 * 10 ** (-basamak)
+        return any(abs(abs(y) - abs(v)) <= tol for v in degerler)
+    return False
+
+
 def _tarihe(v) -> date | None:
     """'GG.AA.YYYY' ya da ISO kabul eder; ayrıştıramazsa None (uydurmaz)."""
     if not isinstance(v, str):
@@ -462,6 +483,14 @@ class Denetim:
             # İşaret düzyazıda RAKAMDA değil sözcükte durur: "%3,76 düşüşle"
             # ölçülen −3,76 ile aynı sayıdır. Mutlak değerle kıyaslanır.
             if any(abs(abs(x) - abs(v)) <= tol for v in degerler):
+                dogru += 1
+            elif _geri_alinan(ham, m.end(), degerler):
+                # Sayı GERİ ALINMAK için yazılmış: "yayımlanan −%11,36 yerine
+                # gerçek hareket −%1,74". Yanlış olduğu zaten söylenen bir
+                # sayıyı "kaynağını doğrula" diye bildirmek denetimi kendi
+                # düzeltmesine karşı çalıştırmak olurdu. Şart sıkı: hemen
+                # ardından "yerine" gelmeli VE onu izleyen sayı ölçülen
+                # katmanda bulunmalı — yani düzeltmenin doğrusu ölçülmüş olmalı.
                 dogru += 1
             else:
                 supheli.append((m.group(1), ham[max(0, m.start() - 55): m.end() + 40]))
