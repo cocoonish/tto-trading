@@ -108,3 +108,13 @@ gibi) notsuz kapatılabilir; denetim bunu uyarı olarak sayar, engel olarak değ
 
 **Sayıları uydurma.** Bültendeki her sayı ölçülen katmandan gelir. Ölçülmemiş
 bir sayıya ihtiyaç varsa kaynağına in; hatırlayarak yazma.
+
+Bu kural artık **ölçülüyor**. Denetim, ölçülen bir büyüklüğün adına yapışık her
+sayıyı ölçülen katmanın tamamına karşı sınar ve karşılığı olmayanları listeler.
+İşaret sözcükte taşınabilir ("%3,76 düşüşle" ile ölçülen −3,76 aynıdır),
+yuvarlama serbesttir ("%36,9" ile 36,94 aynıdır), tarih ve süreler ("24
+Ağustos", "52 haftalık") kapsam dışıdır. Liste **uyarıdır, engel değil**:
+haberden gelen meşru bir sayının (bir eşik, bir tarife tutarı, ölçmediğimiz bir
+alt endeks) ölçülen katmanda bulunmaması normaldir. Beklenen davranış listeye
+bakıp her maddenin kaynağını doğrulamaktır — kalabalıksa büyük ihtimalle bir
+şey ezberden yazılmıştır.
