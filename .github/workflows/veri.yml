@@ -70,7 +70,8 @@ jobs:
           restore-keys: veri-
 
       - name: Temel bağımlılıklar
-        run: pip install --quiet requests pandas numpy
+        # plotly: Carry/Tufex/Makroihtiyati/ReelSektorFX hatlarının grafikleri
+        run: pip install --quiet requests pandas numpy plotly
 
       - name: EVDS anahtarı
         run: |
