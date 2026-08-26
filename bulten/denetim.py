@@ -578,7 +578,9 @@ class Denetim:
         except Exception:                                      # noqa: BLE001
             return
         esikler = getattr(ayar, "KARANLIK_GUN", {})
+        bilinen_sebep = getattr(ayar, "KARANLIK_BILINEN", {})
         karanlik: list[str] = []
+        bilinen: list[str] = []
         bakilan = 0
         for hat in ayar.RITIM:
             d = gozlem.anlik(hat)
@@ -603,8 +605,19 @@ class Denetim:
                     continue
                 bakilan += 1
                 gun = (hat_t - kendi).days
-                if gun > esik:
-                    karanlik.append(f"{hat}/{alan[:-6]} ({v} — {gun}g geride)")
+                if gun <= esik:
+                    continue
+                stem = alan[:-6]
+                sebep = bilinen_sebep.get((hat, stem))
+                if sebep:
+                    bilinen.append(f"{hat}/{stem} ({gun}g — {sebep})")
+                else:
+                    karanlik.append(f"{hat}/{stem} ({v} — {gun}g geride)")
+        # Sebebi yazılmış karanlık seri uyarı değildir; her gün tekrarlanan
+        # uyarı yanındaki YENİ uyarıyı da görünmez kılar. Ama sessizce de
+        # geçilmez: geçen ölçüt olarak sebebiyle yazılır.
+        for b in sorted(bilinen):
+            self._ok(f"karanlık ama açıklanmış: {b}")
         if karanlik:
             self.uyari.append(
                 f"Hattın saati ilerlerken donmuş {len(karanlik)} seri: "
@@ -614,7 +627,7 @@ class Denetim:
                   "altında duruyor; metinde anılacaklarsa kendi tarihleriyle "
                   "anılmalı.")
         elif bakilan:
-            self._ok(f"karanlık seri yok ({bakilan} anahtar saati denetlendi)")
+            self._ok(f"açıklanmamış karanlık seri yok ({bakilan} anahtar saati denetlendi)")
 
     def nabiz(self):
         """Veri iş akışı gerçekten koştu mu — ölçüm katmanının canlılığı.

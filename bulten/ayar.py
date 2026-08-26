@@ -117,6 +117,22 @@ KARANLIK_GUN: dict[str, int] = {
 #
 # Kapsanan gerçek anahtarlar: kum_zirve, zk_enbuyuk_adim, zk_taban_birim_maks,
 # dol_cipa, kimlik_maks, en_derin_cokus, endeks_bas.
+# Karanlık olduğu BİLİNEN ve SEBEBİ YAZILMIŞ seriler.
+#
+# Neden gerekiyor: her gün tekrarlanan bir uyarı uyarı olmaktan çıkar, gürültü
+# olur ve yanındaki YENİ uyarıyı da görünmez kılar. Bir karanlık seri bir kez
+# araştırılıp sebebi sayfaya yazıldığında buraya taşınır; denetim onu artık
+# uyarı olarak değil, sebebiyle birlikte GEÇEN ölçüt olarak yazar. Listede
+# olmayan her karanlık seri uyarıdır — yani susturmak için önce anlamak gerekir.
+#   (hat, anahtar) → sebep (nerede açıklandığıyla birlikte)
+KARANLIK_BILINEN: dict[tuple[str, str], str] = {
+    ("tufex-basabas", "basabas_3y"):
+        "TÜFEX itfa boşluğu: Haz-2029'dan May-2031'e atlıyor, 3y noktası "
+        "12.06.2026'da boşluğa düştü — projeler/tufex-basabas sayfasında yazılı",
+    ("tufex-basabas", "prim_3y"): "aynı boşluk (başabaştan türüyor)",
+    ("tufex-basabas", "reel_3y"): "aynı boşluk (başabaştan türüyor)",
+}
+
 TARIHSEL_ISARET = re.compile(
     r"(^|_)(maks|min|zirve|dip|cipa|bas|baslangic|en_derin|enbuyuk|encok|"
     r"cokus|rekor|referans)(_|$)")
