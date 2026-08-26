@@ -25,6 +25,12 @@ def bekliyor_ozet() -> dict:
                          "ölçümlerle dolacak ve sayfa taslak rozetinden çıkacak."}
 
 
+# Yuvarlama payı. TCMB tabloyu milyon dolar tam sayı olarak yayımlıyor; üç
+# kalemin ayrı ayrı yuvarlanması 1 milyonluk fark üretebilir. 5 milyon, gerçek
+# bir eşleme kaymasının üreteceği farkın (milyarlar) çok altında.
+KIMLIK_ESIK_MN = 5.0
+
+
 def hesapla():
     import pandas as pd
     y = DATA / "fdvy.csv"
@@ -45,6 +51,32 @@ def hesapla():
         s = d[kolon].dropna()
         return (None, "") if s.empty else (round(float(s.iloc[-1]) / 1000, ondalik),
                                            f"{s.index[-1]:%m.%Y}")   # mn → mlr USD
+
+    # ÖZDEŞLİK SINAMASI — eşlemenin doğruluğunu VARSAYMAK yerine ÖLÇER.
+    # Kolonlar TCMB'nin seri ADINA göre eşleniyor; ad kalıbı bir gün başka bir
+    # seriyi yakalarsa hat sessizce yanlış büyüklüğü okur ve bunu hiçbir şey
+    # fark etmez. Ama tablonun kendi içinde iki muhasebe kimliği var:
+    #     A.Varlıklar − B.Yükümlülükler = C.Net Döviz Pozisyonu
+    #     D.Kısa Vadeli Varlıklar − E.Kısa Vadeli Yük. = F.Kısa Vadeli Net
+    # Eşleme doğruysa bu iki fark yuvarlama dışında SIFIR olmalı. 283 satırın
+    # tamamında maksimum sapma 1 milyon dolar (yuvarlama) ölçüldü. Kalıp kayarsa
+    # fark patlar ve hat durur — yanlış sayıyı sayfaya taşımaz.
+    kimlik = {}
+    for ad, a, b, c in (("net", "varlik_toplam", "yukumluluk_toplam", "net_pozisyon"),
+                        ("kisa_vade", "kv_varlik", "kv_yukumluluk", "kv_net")):
+        if not all(k in d.columns for k in (a, b, c)):
+            continue
+        fark = (d[a] - d[b] - d[c]).dropna()
+        if not len(fark):
+            continue
+        maks = float(fark.abs().max())
+        kimlik[ad] = {"n": int(len(fark)), "maks_fark_mn": round(maks, 3)}
+        if maks > KIMLIK_ESIK_MN:
+            raise SystemExit(
+                f"ÖZDEŞLİK BOZUK ({ad}): {a} − {b} ile {c} arasında "
+                f"{maks:,.0f} milyon dolar fark var ({len(fark)} satırda). "
+                "Kolon eşlemesi kaymış olmalı — veri_cek.py KALIPLAR ve "
+                "data/seriler.json'a bak. Yanlış kolonla sayfa üretilmez.")
 
     ozet = {}
     for k in ("varlik_toplam", "yukumluluk_toplam", "net_pozisyon",
@@ -70,6 +102,8 @@ def hesapla():
             ozet["acik_rezerv_tarih"] = rez.get("h_tarih", "")
     except (OSError, ValueError):
         pass
+    if kimlik:
+        ozet["kimlik"] = kimlik
     return d, ozet
 
 
