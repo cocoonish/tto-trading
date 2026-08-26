@@ -1688,10 +1688,30 @@
    "S&P 500"
   ],
   "kaynak_yok": [
-   "Almanya 10 yıllık (Bund) getirisi",
-   "İngiltere 10 yıllık (Gilt) ve Japonya 10 yıllık (JGB) getirisi",
-   "Türkiye 5 yıllık CDS primi",
-   "TRY çapraz kur swap bazı (cross-currency basis)"
+   {
+    "ad": "Türkiye 5 yıllık CDS primi",
+    "neden": "Türkiye risk priminin tek fiyatı. Kur, tahvil ve hisse hareketlerinin ortak sürücüsü; yokluğunda bülten TL varlıklardaki hareketin ne kadarının Türkiye'ye özgü olduğunu söyleyemiyor.",
+    "aday": "Ücretsiz ve sözleşmesi net bir uç bulunamadı. Vekil seri olarak Türkiye USD eurobond getirisinin aynı vadeli ABD hazine getirisinden farkı (spread) hesaplanabilir; bunun için eurobond fiyat serisi gerekir.",
+    "engel": "CDS kotasyonları ticari veri (ICE, S&P). Vekil eurobond serisi de ücretsiz kaynaklarda güvenilir bulunamadı."
+   },
+   {
+    "ad": "TRY çapraz kur swap bazı (cross-currency basis)",
+    "neden": "Offshore TL fonlamasının fiyatı. Onshore faizden ayrışması, yurt dışındaki TL likiditesinin sıkıştığının en erken işareti — TL taşıma pozisyonlarının çözülmesi buradan başlar.",
+    "aday": "Vekil: USD/TRY forward puanlarının ima ettiği TL faizi ile onshore TLREF farkı. Forward puanları için ücretsiz bir günlük seri gerekir.",
+    "engel": "Baz kotasyonu tezgâh üstü ve ticari. Forward puanları da ücretsiz kaynaklarda düzenli bulunmuyor."
+   },
+   {
+    "ad": "Almanya 10 yıllık (Bund) getirisi",
+    "neden": "Euro faizlerinin çıpası. ABD uzun ucu izleniyor ama Türkiye'nin dış borçlanmasının ve ticaretinin ağırlığı euro tarafında.",
+    "aday": "ECB Data Portal, euro alanı AAA devlet tahvili getiri eğrisi (data-api.ecb.europa.eu, YC serisi) — ücretsiz, anahtarsız, belgeli.",
+    "engel": "Henüz bağlanmadı; hattın kendi çekme ve önbellek yolu yazılacak (piyasa fotoğrafı yfinance üzerinden çalışıyor, bu ayrı bir uç)."
+   },
+   {
+    "ad": "İngiltere 10 yıllık (Gilt) ve Japonya 10 yıllık (JGB) getirisi",
+    "neden": "Küresel uzun uç anlatısının diğer iki ayağı; özellikle JGB, 'debasement trade' temasının doğrudan sınandığı yer.",
+    "aday": "JGB için Japonya Maliye Bakanlığı günlük getiri CSV'si (mof.go.jp, jgbcm.csv) — ücretsiz ve düzenli. Gilt için İngiltere Merkez Bankası istatistik veri tabanı.",
+    "engel": "Bund ile aynı: ayrı çekme yolu yazılmayı bekliyor."
+   }
   ]
  },
  "temalar": {
@@ -5835,5 +5855,71 @@
     }
    ]
   }
- }
+ },
+ "rejim": [
+  {
+   "ad": "Reel politika faizi (ileriye dönük)",
+   "deger": 13.31,
+   "birim": "puan",
+   "hesap": "politika faizi − anketin 12 ay sonrası enflasyon beklentisi",
+   "etiket": "sıkı",
+   "aciklama": "İleriye dönük reel faizin pozitif olması sıkı para politikasının asgari şartıdır; negatifse politika faizi beklenen enflasyonu karşılamıyor demektir.",
+   "konum": ""
+  },
+  {
+   "ad": "Reel politika faizi (geriye dönük)",
+   "deger": 5.25,
+   "birim": "puan",
+   "hesap": "politika faizi − yıllık TÜFE",
+   "etiket": "pozitif",
+   "aciklama": "Geriye dönük reel faiz gerçekleşmiş enflasyonu kullanır; ileriye dönük olandan ayrışması beklentinin gerçekleşmeden kopmasıdır.",
+   "konum": ""
+  },
+  {
+   "ad": "TL taşıma makası",
+   "deger": 15.3,
+   "birim": "puan",
+   "hesap": "politika faizi − 1 aylık yıllıklandırılmış devalüasyon hızı",
+   "etiket": "taşıma kârlı",
+   "aciklama": "Hedge'siz TL taşımanın brüt getirisi. Kur hızı faizin üstüne çıktığında taşıma zarara döner; bu makasın kapanması TL pozisyonlarının en hızlı çözüldüğü andır.",
+   "konum": ""
+  },
+  {
+   "ad": "Reel kredi büyümesi",
+   "deger": -5.9,
+   "birim": "puan",
+   "hesap": "kur arındırılmış 13 hafta yıllıklandırılmış kredi büyümesi − yıllık TÜFE",
+   "etiket": "reel daralma",
+   "aciklama": "Nominal kredi büyümesi enflasyonun altındaysa kredi stoku reel olarak küçülüyor demektir — makroihtiyati sıkılığın asıl ölçüsü.",
+   "konum": ""
+  },
+  {
+   "ad": "Reel efektif kur",
+   "deger": 104.6,
+   "birim": "endeks",
+   "hesap": "TÜFE bazlı REDK",
+   "etiket": "reel değerli",
+   "aciklama": "REDK'in uzun dönem ortalamasının üstünde olması TL'nin reel olarak değerli, yani dış dengeye baskı yapan tarafta olduğunu söyler.",
+   "konum": "on yıllık ortalamanın %+7.3 üstünde"
+  },
+  {
+   "ad": "DİBS eğri eğimi (2y−9y)",
+   "deger": -9.63,
+   "birim": "puan",
+   "hesap": "2 yıllık spot getiri − 9 yıllık spot getiri",
+   "etiket": "ters eğri",
+   "aciklama": "Kısa vadeli getirinin uzun vadeliyi aşması, piyasanın bugünkü sıkılığın kalıcı olmadığını fiyatlaması demektir.",
+   "konum": ""
+  },
+  {
+   "ad": "Rezerv kalitesi",
+   "deger": 29.5,
+   "birim": "%",
+   "hesap": "swap hariç net rezerv / brüt rezerv",
+   "etiket": "",
+   "aciklama": "Brüt rezervin ne kadarının borçlanılmamış ve swap'a bağlı olmayan kısım olduğu — rezervin miktarı değil KALİTESİ. Brüt rezervin %60.7'i altın.",
+   "konum": ""
+  }
+ ],
+ "sonuclar": []
 }

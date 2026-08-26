@@ -39,6 +39,7 @@ const bolumler = [
   b.yorum && { id: 'yorum', ad: b.haftalik ? 'Haftanın yorumu' : 'Günün yorumu' },
   b.ozet && (b.ozet.ne_oldu || b.ozet.ne_bekleniyor) &&
     { id: 'ozet', ad: b.haftalik ? 'Geçen hafta / önümüzdeki hafta' : 'Ne oldu / ne bekleniyor' },
+  b.rejim?.length > 0 && { id: 'rejim', ad: 'Rejim panosu' },
   b.one_cikanlar?.length > 0 && { id: 'one-cikanlar', ad: 'Öne çıkanlar' },
   b.sonuclar?.length > 0 && { id: 'sonuclar', ad: 'Ne bekleniyordu, ne geldi' },
   takvimVar && { id: 'takvim', ad: 'Takvim' },
@@ -114,6 +115,35 @@ const bolumler = [
     ))}
   </section>
 
+
+  {b.rejim?.length > 0 && (
+    <section class="blok rejim" id="rejim">
+      <h2>Rejim panosu</h2>
+      <p class="alt-not">
+        Gösterge şeridi seviyeyi verir; bu pano seviyelerin birlikte ne anlama
+        geldiğini. Her satır iki ölçülen büyüklüğün farkıdır ve hesabı yanında
+        yazar. Etiketler açıkça yazılmış bir eşikten gelir — okur katılmadığı yerde
+        kendi çizgisini çekebilsin diye eşik de görünür.
+      </p>
+      <ul class="rejim-liste">
+        {b.rejim.map((r: any) => (
+          <li>
+            <div class="rejim-ust">
+              <span class="rejim-ad">{r.ad}</span>
+              <span class="rejim-deger">
+                {r.deger === null ? '—' : `${r.deger > 0 && r.birim === 'puan' ? '+' : ''}${r.deger.toLocaleString('tr-TR')}`}
+                <span class="rejim-birim">{r.birim}</span>
+              </span>
+              {r.etiket && <span class="rejim-etiket">{r.etiket}</span>}
+            </div>
+            <p class="rejim-hesap">{r.hesap}</p>
+            {r.konum && <p class="rejim-konum">{r.konum}</p>}
+            {r.aciklama && <p class="rejim-aciklama">{r.aciklama}</p>}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 
   {b.one_cikanlar.length > 0 && (
     <section class="blok" id="one-cikanlar">
@@ -592,10 +622,26 @@ const bolumler = [
       )}
 
       {b.piyasa.kaynak_yok && b.piyasa.kaynak_yok.length > 0 && (
-        <p class="uyari">
-          Otomatik kaynağı olmayan, elle takip edilmesi gereken büyüklükler:
-          {' '}{b.piyasa.kaynak_yok.join('; ')}.
-        </p>
+        <div class="p-grup kapsam">
+          <h3>Kapsam dışı — bu bültenin ölçmediği büyüklükler</h3>
+          <p class="alt-not">
+            Bir fotoğrafın neyi göstermediğini söylemek, gösterdiği kadar önemlidir.
+            Aşağıdakiler izlenmeye değer ama otomatik kaynağı bağlanmamış büyüklükler;
+            bültendeki hiçbir yorum bunlara dayanmaz.
+          </p>
+          <ul class="kapsam-liste">
+            {b.piyasa.kaynak_yok.map((k: any) => (
+              typeof k === 'string' ? <li><strong>{k}</strong></li> : (
+                <li>
+                  <strong>{k.ad}</strong>
+                  {k.neden && <span class="kapsam-neden">{k.neden}</span>}
+                  {k.aday && <span class="kapsam-aday"><em>Aday kaynak.</em> {k.aday}</span>}
+                  {k.engel && <span class="kapsam-engel"><em>Engel.</em> {k.engel}</span>}
+                </li>
+              )
+            ))}
+          </ul>
+        </div>
       )}
     </section>
   )}
@@ -683,6 +729,32 @@ const bolumler = [
     color: var(--claret); border: 1px solid var(--claret); padding: 0.15rem 0.5rem;
     margin: 0 0 0.6rem;
   }
+  .kapsam .alt-not { font-size: 0.8rem; color: var(--ink-70); margin: -0.2rem 0 0.8rem; max-width: 62ch; }
+  .kapsam-liste { list-style: none; padding: 0; margin: 0; display: grid; gap: 0.85rem; }
+  .kapsam-liste li {
+    display: grid; gap: 0.15rem; padding-left: 0.9rem;
+    border-left: 2px solid #b45309;
+  }
+  .kapsam-neden, .kapsam-aday, .kapsam-engel {
+    font-size: 0.83rem; color: var(--ink-70); line-height: 1.5;
+  }
+
+  .rejim .alt-not { font-size: 0.8rem; color: var(--ink-70); margin: -0.3rem 0 1rem; max-width: 62ch; }
+  .rejim-liste { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; }
+  .rejim-liste li { padding-left: 0.9rem; border-left: 2px solid var(--ink-30); display: grid; gap: 0.1rem; }
+  .rejim-ust { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.6rem; }
+  .rejim-ad { font-weight: 600; }
+  .rejim-deger { font-family: var(--font-mono); font-size: 1.05rem; font-weight: 500; }
+  .rejim-birim { font-size: 0.62em; color: var(--ink-70); margin-left: 0.25em; }
+  .rejim-etiket {
+    font-family: var(--font-mono); font-size: 0.64rem; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--claret); border: 1px solid var(--ink-30);
+    padding: 0.02rem 0.36rem;
+  }
+  .rejim-hesap { margin: 0; font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-50); line-height: 1.45; }
+  .rejim-konum { margin: 0; font-size: 0.8rem; color: var(--ink-70); }
+  .rejim-aciklama { margin: 0.1rem 0 0; font-size: 0.83rem; color: var(--ink-70); line-height: 1.5; }
+
   .sonuclar .alt-not { font-size: 0.8rem; color: var(--ink-70); margin: -0.3rem 0 1rem; max-width: 62ch; }
   .sonuc-liste { list-style: none; padding: 0; margin: 0; display: grid; gap: 1.1rem; }
   .sonuc-liste li { padding-left: 0.9rem; border-left: 2px solid var(--ink-30); display: grid; gap: 0.18rem; }

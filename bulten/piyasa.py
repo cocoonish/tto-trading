@@ -133,11 +133,55 @@ GRUP_BASLIK = [
 
 # Kaynağı olmayan ama trader'ın bilmesi gereken büyüklükler — bülten bunları
 # "kaynak yok" diye AÇIKÇA işaretler; yorum katmanı tarayıcıyla bakıp ekleyebilir.
+# Piyasa fotoğrafının BİLİNEN boşlukları. Düz bir isim listesiydi; okur neyin
+# eksik olduğunu görüyor ama neden eksik olduğunu ve yerine neye bakması
+# gerektiğini bilmiyordu. Kapsamı olduğundan geniş göstermemek profesyonelliğin
+# şartı: bir Türkiye makro bülteninde CDS ve çapraz kur bazının yokluğu küçük
+# bir ayrıntı değil, risk priminin ve offshore TL fonlamasının hiç ölçülmemesi
+# demektir.
+#
+# `aday` alanı uygulanmayı bekleyen kaynağın TAM ucudur; `engel` neden henüz
+# bağlanmadığını söyler. Bir kaynak bağlandığında kayıt buradan silinir.
 KAYNAK_YOK = [
-    "Almanya 10 yıllık (Bund) getirisi",
-    "İngiltere 10 yıllık (Gilt) ve Japonya 10 yıllık (JGB) getirisi",
-    "Türkiye 5 yıllık CDS primi",
-    "TRY çapraz kur swap bazı (cross-currency basis)",
+    {
+        "ad": "Türkiye 5 yıllık CDS primi",
+        "neden": "Türkiye risk priminin tek fiyatı. Kur, tahvil ve hisse "
+                 "hareketlerinin ortak sürücüsü; yokluğunda bülten TL varlıklardaki "
+                 "hareketin ne kadarının Türkiye'ye özgü olduğunu söyleyemiyor.",
+        "aday": "Ücretsiz ve sözleşmesi net bir uç bulunamadı. Vekil seri olarak "
+                "Türkiye USD eurobond getirisinin aynı vadeli ABD hazine getirisinden "
+                "farkı (spread) hesaplanabilir; bunun için eurobond fiyat serisi gerekir.",
+        "engel": "CDS kotasyonları ticari veri (ICE, S&P). Vekil eurobond serisi de "
+                 "ücretsiz kaynaklarda güvenilir bulunamadı.",
+    },
+    {
+        "ad": "TRY çapraz kur swap bazı (cross-currency basis)",
+        "neden": "Offshore TL fonlamasının fiyatı. Onshore faizden ayrışması, "
+                 "yurt dışındaki TL likiditesinin sıkıştığının en erken işareti — "
+                 "TL taşıma pozisyonlarının çözülmesi buradan başlar.",
+        "aday": "Vekil: USD/TRY forward puanlarının ima ettiği TL faizi ile onshore "
+                "TLREF farkı. Forward puanları için ücretsiz bir günlük seri gerekir.",
+        "engel": "Baz kotasyonu tezgâh üstü ve ticari. Forward puanları da ücretsiz "
+                 "kaynaklarda düzenli bulunmuyor.",
+    },
+    {
+        "ad": "Almanya 10 yıllık (Bund) getirisi",
+        "neden": "Euro faizlerinin çıpası. ABD uzun ucu izleniyor ama Türkiye'nin "
+                 "dış borçlanmasının ve ticaretinin ağırlığı euro tarafında.",
+        "aday": "ECB Data Portal, euro alanı AAA devlet tahvili getiri eğrisi "
+                "(data-api.ecb.europa.eu, YC serisi) — ücretsiz, anahtarsız, belgeli.",
+        "engel": "Henüz bağlanmadı; hattın kendi çekme ve önbellek yolu yazılacak "
+                 "(piyasa fotoğrafı yfinance üzerinden çalışıyor, bu ayrı bir uç).",
+    },
+    {
+        "ad": "İngiltere 10 yıllık (Gilt) ve Japonya 10 yıllık (JGB) getirisi",
+        "neden": "Küresel uzun uç anlatısının diğer iki ayağı; özellikle JGB, "
+                 "'debasement trade' temasının doğrudan sınandığı yer.",
+        "aday": "JGB için Japonya Maliye Bakanlığı günlük getiri CSV'si "
+                "(mof.go.jp, jgbcm.csv) — ücretsiz ve düzenli. Gilt için İngiltere "
+                "Merkez Bankası istatistik veri tabanı.",
+        "engel": "Bund ile aynı: ayrı çekme yolu yazılmayı bekliyor.",
+    },
 ]
 
 

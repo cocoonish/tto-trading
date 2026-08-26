@@ -40,6 +40,7 @@ import piyasa as piyasa_m  # noqa: E402
 import soz as soz_m  # noqa: E402
 import grafik_veri as grafik_m  # noqa: E402
 import surpriz as surpriz_m  # noqa: E402
+import rejim as rejim_m  # noqa: E402
 
 
 # Sabah bakışı panosu: (hat, anahtar, ad, birim, ondalık, tarih alanı)
@@ -381,6 +382,10 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         "tr_tarih": f"{tarih.day} {takvim_m.AYLAR_TR[tarih.month - 1]} {tarih.year}",
         "olusturma": datetime.now().isoformat(timespec="seconds"),
         "gostergeler": gostergeler(),
+        # Rejim panosu: gösterge şeridi seviyeyi verir, bu pano seviyelerin
+        # BİRLİKTE ne anlama geldiğini. Her satır iki ölçülen büyüklüğün farkı
+        # ve o farkın işareti rejimi tarif ediyor.
+        "rejim": rejim_m.panosu(),
         "piyasa": piyasa,
         "temalar": temalar(),
         "one_cikanlar": one_cikan,

@@ -64,6 +64,34 @@ Python projesi HTML üretir → dosya `site/public/projeler/<slug>/` altına kop
 push ile yayına girer. Şablon: `.github/workflows/veri-guncelle.yml` (cron'lu, henüz
 taslak; repo GitHub'a bağlanınca aktifleştirilecek).
 
+## Bülten katmanları (`bulten/`)
+
+Ölçülen katman otomatik koşudan gelir, yazı katmanı ona dokunmaz (bkz.
+`bulten/YAZIM.md`). Modüller:
+
+| dosya | ne yapar |
+|---|---|
+| `uret.py` | bülteni kurar, `site/src/data/bulten/<tarih>.json` yazar |
+| `gozlem.py` | hatların `ozet.json` anlık görüntü deposu; **anahtar başına saat** |
+| `olay.py` | eşikleri uygular, olay cümlesini kurar |
+| `piyasa.py` | 51 enstrüman, TL faiz seti, türev makaslar, **σ-normalize hareket** |
+| `takvim.py` | resmî yayım takvimi; `surpriz.py` geçmişi arşivler ve sonucu ölçer |
+| `soz.py` | söz defterini (`izleme.json`) okura açar |
+| `rejim.py` | reel faiz, taşıma, reel kredi, REDK sapması, eğri, rezerv kalitesi |
+| `grafik_veri.py` | satır içi SVG grafiklerin verisi (Plotly bültene girmez) |
+| `denetim.py` | 29 ölçüt; engel varsa bülten yayına gitmez |
+| `tazeleme.py` | hangi hattın koşacağına resmî yayım takvimi karar verir |
+
+**Kurucu ilke — saat.** Bir `ozet.json` tek bir yayım ritmi taşımaz: aynı dosyada
+günlük ve haftalık seriler yan yana durur. Bir anahtarın saati, önce açıkça
+tanımlanan alan, yoksa `<anahtar>_tarih` geleneği, o da yoksa `_tarih`tir. Panodaki
+tarih, farkın kıyas noktası ve gecikme denetimi bu saatten okunur.
+
+**Kurucu ilke — uydurma yok.** Sürpriz yalnız sayısal beklenti varsa hesaplanır;
+söz karnesi yalnız notlanmış kayıtlardan oran verir; kıyas eğrisi elde ne kadar
+tarihçe varsa o kadar geriye gider ve kendi tarihiyle etiketlenir. Ölçülmemiş bir
+şeyi ölçülmüş gibi göstermektense boş bırakılır, sebebi yazılır.
+
 ## Dikkat
 
 - `hazineihrac/` içinde gömülü bir `.git` var — kök repo'ya eklerken submodule
