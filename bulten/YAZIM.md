@@ -111,11 +111,24 @@ Denetim bunu ölçer ve engeller.
 **Tavsiye dili yasak.** "Alın", "satın", "hedef fiyat", "pozisyon açın"
 yazılmaz. Site analiz yayımlar, yatırım tavsiyesi vermez.
 
-**Rejim panosunu omurga yap.** `rejim` alanı günün "neredeyiz" cevabını yedi
-satırda verir (reel faiz, taşıma makası, reel kredi, REDK sapması, eğri eğimi,
-rezerv kalitesi). Yorumun tezi bu satırların GERİLİMİNDEN kurulur: hangi ikisi
+**Rejim panosunu omurga yap.** `rejim` alanı günün "neredeyiz" cevabını dokuz
+satırda verir (reel faiz ileri/geri, taşıma makası, reel kredi, REDK sapması,
+eğri eğimi, **enflasyon risk primi**, **makroihtiyati ayrışma**, rezerv
+kalitesi). Yorumun tezi bu satırların GERİLİMİNDEN kurulur: hangi ikisi
 birbiriyle çelişiyor, hangisi önce kırılır. Panoyu sayı sayı kopyalama — sayfada
 zaten duruyor; senin işin çelişkiyi cümleye çevirmek.
+
+Panonun iki yeni satırı, geri kalanının SORAMADIĞI soruyu soruyor:
+
+- **Enflasyon risk primi (2y)** — diğer satırlar politikanın ne kadar SIKI
+  olduğunu ölçer; bu satır piyasanın o sıkılığın SONUCUNA inanıp inanmadığını.
+  İkisi aynı anda birbirine zıt olabilir ve bültenin en verimli gerilimi orada:
+  reel faiz tarihî yüksekliğinde dururken piyasa hedefin tutmayacağını
+  fiyatlıyorsa, sıkılık henüz beklentiyi çevirmemiş demektir.
+- **Makroihtiyati ayrışma** — "reel kredi büyümesi" toplamın ne yaptığını
+  söyler; bu satır sınırın İÇİNDE kalanla DIŞINA taşan arasındaki farkı. Fark
+  açıldıkça toplamdaki yavaşlama politikadan değil bileşim kaymasından geliyor
+  olabilir; freni toplam kredi büyümesinden okumak yanıltır.
 
 **Söz kapatırken not düş.** Bir izleme kaydını kapatıyorsan `isabet` alanını
 doldur (tuttu | tutmadi | kismen); ölçülemeyen kayıtlar notsuz kapanabilir ama
@@ -142,9 +155,23 @@ damganın yaşına bakıyor. İki uyarı doğrudan sana:
   çekilememiş. Hangilerinin eski kaldığını veri tarihlerinden bul ve metinde
   o hatlara dayanan hüküm kurma.
 
+Üçüncü uyarı seri düzeyinde:
+
+- *"Hattın saati ilerlerken donmuş N seri"* — bir hattın ana tarihi her gün
+  ilerlerken İÇİNDEKİ bir seri donmuş. Sayfada o değer hattın güncel tarihiyle
+  aynı başlığın altında duruyor ama ait olduğu gün çok daha eski. Böyle bir
+  sayıyı metne alacaksan **kendi tarihiyle** al ("12 Haziran'dan bu yana
+  fiyatlanmayan üç yıllık nokta"), günün kesiti gibi değil.
+
+  Bu uyarı yalnız SEBEBİ BİLİNMEYEN seriler için çıkar. Bir seriyi araştırıp
+  sebebini bulduğunda ilgili proje sayfasına yaz ve `ayar.KARANLIK_BILINEN`e
+  ekle; denetim onu bundan sonra sebebiyle birlikte geçen ölçüt olarak yazar.
+  Susturmanın tek yolu önce anlamaktır — açıklaması olmayan hiçbir donuk seri
+  listeden düşmez.
+
 Bu uyarılar engel değildir — bayat veriyle de bülten yazılır, yeter ki bayatlık
 BİLİNEREK yazılsın. 26.08'de veri hattı düştü ve aşağı akıştaki hiçbir katman
-bunu bilemiyordu; bu ölçüt o boşluğu kapatıyor.
+bunu bilemiyordu; bu ölçütler o boşluğu kapatıyor.
 
 **Beklenti halkası kapanıyor.** Bülten artık vakti geçmiş takvim olayları için
 "ne bekleniyordu, ne geldi" bölümü basıyor. Üç kural:
@@ -193,3 +220,10 @@ haberden gelen meşru bir sayının (bir eşik, bir tarife tutarı, ölçmediği
 alt endeks) ölçülen katmanda bulunmaması normaldir. Beklenen davranış listeye
 bakıp her maddenin kaynağını doğrulamaktır — kalabalıksa büyük ihtimalle bir
 şey ezberden yazılmıştır.
+
+Bir istisna var ve onu bilerek kullanabilirsin: **geri alınan sayı**. Önceki
+bir yayımın yanlış sayısını düzeltiyorsan "yayımlanan −%11,36 yerine gerçek
+hareket −%1,74" biçiminde yaz — denetim `<yanlış> yerine <doğru>` kalıbını
+tanıyor ve düzeltmenin doğrusu ölçülen katmanda bulunduğu sürece yanlış sayıyı
+uyarıya çevirmiyor. Kalıbın dışına çıkarsan (araya cümle sınırı girerse ya da
+düzeltilen değer de ölçülmemişse) uyarı geri gelir; bu kasıtlı.
