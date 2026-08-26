@@ -131,6 +131,21 @@ bir hafta mı, yıl başından beri mi.
 **Tekrar.** Bin kelimede en fazla 7 ağır tekrar. Aynı cümleyi bölümden bölüme
 taşıma.
 
+**Denetimin veri uyarılarını ciddiye al.** Denetim artık ölçüm katmanının
+CANLILIĞINI de ölçüyor: veri iş akışı her koşuda nabzını atıyor ve denetim o
+damganın yaşına bakıyor. İki uyarı doğrudan sana:
+
+- *"Veri iş akışı N saattir koşmadı"* — ölçüm katmanı bayat olabilir. Yazmadan
+  önce hatların veri tarihlerini (pano ve "hat hat değişim") gözden geçir;
+  bayat bir hattın sayısını günün haberi gibi anlatma.
+- *"Son veri koşusunun tazeleme adımı 'failure' ile bitti"* — bazı hatlar
+  çekilememiş. Hangilerinin eski kaldığını veri tarihlerinden bul ve metinde
+  o hatlara dayanan hüküm kurma.
+
+Bu uyarılar engel değildir — bayat veriyle de bülten yazılır, yeter ki bayatlık
+BİLİNEREK yazılsın. 26.08'de veri hattı düştü ve aşağı akıştaki hiçbir katman
+bunu bilemiyordu; bu ölçüt o boşluğu kapatıyor.
+
 **Beklenti halkası kapanıyor.** Bülten artık vakti geçmiş takvim olayları için
 "ne bekleniyordu, ne geldi" bölümü basıyor. Üç kural:
 

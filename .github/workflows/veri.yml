@@ -169,11 +169,34 @@ jobs:
           cd ../..
           python site/tools/plotly_stil.py --hepsi >/dev/null
 
+      # NABIZ: bu iş akışının koştuğunun kaydı. tazeleme_durumu.json yalnız
+      # BAŞARIYLA TAZELENEN hattın damgasını tutar; sakin bir günde hiçbir hat
+      # koşmaz ve o dosya "hat düştü" ile "yapacak iş yoktu" ayrımını veremez.
+      # Nabız bu ayrımı verir: koşunun kendisi ne zaman oldu, sonucu neydi.
+      # 26.08'de veri hattı düştü ve aşağı akıştaki hiçbir katman bunu bilemedi.
+      - name: Koşu nabzı
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, os, datetime as dt
+          from pathlib import Path
+          Path("bulten/kosu_nabzi.json").write_text(json.dumps({
+              "_aciklama": "Veri iş akışının son koşusu. denetim.py bunun yaşına bakar: "
+                           "veri hattı sessizce düşerse bülten ölçüm katmanının bayat "
+                           "olduğunu bilmeden yazılır.",
+              "veri_kosusu": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+              "sonuc": os.environ.get("ADIM_SONUC", "bilinmiyor"),
+              "kaynak": "veri.yml",
+          }, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+          PY
+        env:
+          ADIM_SONUC: ${{ steps.tazele.outcome || 'koşmadı' }}
+
       - name: Commit
         run: |
           git config --global user.name  "tto-veri"
           git config --global user.email "bot@users.noreply.github.com"
-          git add "Aktarılacak Projeler" Research site/public/projeler bulten/tazeleme_durumu.json bulten/onbellek || true
+          git add "Aktarılacak Projeler" Research site/public/projeler bulten/tazeleme_durumu.json bulten/kosu_nabzi.json bulten/onbellek || true
           if git diff --cached --quiet; then
             echo "veri değişmedi — commit yok"
           else

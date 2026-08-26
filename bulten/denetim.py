@@ -100,6 +100,11 @@ YAPISIK_UZAKLIK = 30
 # ikisi farklı soruları yakalar.
 OLAGANDISI_SIGMA = 2.0
 
+# Veri iş akışı hafta içi günde dört kez koşar; hafta sonu koşmaz.
+# 30 saat, pazar gecesi ile pazartesi sabahı arasını rahatça örter
+# ama gerçek bir çöküşü ertesi bültende yakalar.
+NABIZ_AZAMI_SAAT = 30
+
 # Metin ölçümün GERİSİNDE kaldığında ne olur: ölçüm katmanı yazı yazıldıktan
 # sonra yeniden kurulursa (26.08.2026 sabahı oldu — vade geçişi artefaktları
 # 05:01'de temizlendi, yazı 04:31'de yazılmıştı) sayfadaki metin artık
@@ -531,6 +536,43 @@ class Denetim:
         if gecikmis:
             self.uyari.append("Veri gecikmiş hatlar: " + ", ".join(gecikmis))
 
+    def nabiz(self):
+        """Veri iş akışı gerçekten koştu mu — ölçüm katmanının canlılığı.
+
+        `tazelik` denetimi hatların VERİ tarihine bakar ve ancak RITIM eşiği
+        (4-45 gün) aşılınca konuşur; bir iş akışı çöküşü o eşiğe varana kadar
+        görünmez. 26.08'de veri hattı düştü, dört hattın verisi hazırken
+        hiçbiri çekilmedi ve aşağı akıştaki hiçbir katman bunu bilemedi —
+        bülten bayat ölçüm üzerine yazılacaktı.
+
+        Nabız bu boşluğu kapatır: iş akışı her koşuda, başarılı olsun olmasın,
+        damgasını atar. Burada ölçülen o damganın YAŞI ve son koşunun sonucu.
+        """
+        y = BURASI / "kosu_nabzi.json"
+        if not y.exists():
+            self.uyari.append("Veri koşusu nabzı yok (bulten/kosu_nabzi.json) — "
+                              "veri iş akışının koşup koşmadığı bilinmiyor.")
+            return
+        try:
+            d = json.loads(y.read_text(encoding="utf-8"))
+            t = datetime.fromisoformat(str(d.get("veri_kosusu", "")).replace("Z", "+00:00"))
+        except Exception:                                      # noqa: BLE001
+            self.uyari.append("Veri koşusu nabzı okunamadı")
+            return
+        saat = (datetime.now(t.tzinfo) - t).total_seconds() / 3600
+        sonuc = str(d.get("sonuc", "bilinmiyor"))
+        if saat > NABIZ_AZAMI_SAAT:
+            self.uyari.append(
+                f"Veri iş akışı {saat:.0f} saattir koşmadı (son: {t:%d.%m %H:%M} UTC, "
+                f"sonuç '{sonuc}'). Ölçüm katmanı bayat olabilir — yazmadan önce "
+                "hatların veri tarihlerini gözden geçir.")
+        elif sonuc not in ("success", "bilinmiyor"):
+            self.uyari.append(
+                f"Son veri koşusunun tazeleme adımı '{sonuc}' ile bitti "
+                f"({t:%d.%m %H:%M} UTC). Bazı hatlar çekilememiş olabilir.")
+        else:
+            self._ok(f"veri koşusu nabzı taze ({saat:.0f} saat önce, '{sonuc}')")
+
     def tekrar(self):
         """Aynı olgu bültenin birden çok yerinde yeniden ANLATILIYOR mu.
 
@@ -673,7 +715,7 @@ class Denetim:
             self._ok(f"söz karnesi: kapanan {len(kapanan)} kaydın hepsi notlanmış")
 
     def kos(self) -> int:
-        self.yazi(); self.veri(); self.atif(); self.sayi(); self.tekrar()
+        self.yazi(); self.veri(); self.atif(); self.sayi(); self.nabiz(); self.tekrar()
         self.tema(); self.izleme(); self.dil(); self.tazelik()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")
