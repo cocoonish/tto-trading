@@ -100,6 +100,21 @@ YAPISIK_UZAKLIK = 30
 # ikisi farklı soruları yakalar.
 OLAGANDISI_SIGMA = 2.0
 
+# Metin ölçümün GERİSİNDE kaldığında ne olur: ölçüm katmanı yazı yazıldıktan
+# sonra yeniden kurulursa (26.08.2026 sabahı oldu — vade geçişi artefaktları
+# 05:01'de temizlendi, yazı 04:31'de yazılmıştı) sayfadaki metin artık
+# ölçmediğimiz sayıları anlatır. Tek tek bakınca her sapma "haberden gelmiş
+# olabilir" görünür; ayırt eden şey ORANDIR.
+#
+# O sabahın iki hâli üzerinde ölçüldü:
+#   yazı ölçümün gerisinde : 44 doğrulandı, 26 karşılıksız → %37
+#   yazı ölçümle tutarlı   : 101 doğrulandı,  4 karşılıksız → %4
+# Aradaki uçurum bir eşiği hak edecek kadar geniş. Oran eşiği tek başına
+# yetmez: kısa bir metinde üç sayıdan biri karşılıksız çıkabilir, o yüzden
+# asgari bir sayı da aranır.
+KARSILIKSIZ_ORAN = 0.20
+KARSILIKSIZ_ASGARI = 8
+
 # Sayının ardından bunlardan biri geliyorsa o sayı bir FİYAT değil, tarih ya da
 # süredir: "24 Ağustos itibarıyla", "52 haftalık aralık", "13 haftalık
 # yıllıklandırılmış". Ölçülen katmanda karşılığı olmaması normaldir.
@@ -429,12 +444,25 @@ class Denetim:
 
         if dogru:
             self._ok(f"sayı denetimi: {dogru} sayı ölçülen katmanla doğrulandı")
-        if supheli:
-            ornek = " · ".join(f"{s} (…{b.strip()}…)" for s, b in supheli[:4])
+        if not supheli:
+            return
+        ornek = " · ".join(f"{s} (…{b.strip()}…)" for s, b in supheli[:4])
+        kuyruk = "…" if len(supheli) > 4 else ""
+        oran = len(supheli) / max(len(supheli) + dogru, 1)
+        if len(supheli) >= KARSILIKSIZ_ASGARI and oran >= KARSILIKSIZ_ORAN:
+            # Tek tük sapma haberden gelir; metnin beşte biri ölçümle tutmuyorsa
+            # anlatılan artık bu bültenin verisi değildir.
+            self.engel.append(
+                f"METİN ÖLÇÜMLE TUTMUYOR — ölçülen bir büyüklüğün yanında geçen "
+                f"{len(supheli)} sayının ({oran:.0%}) ölçülen katmanda karşılığı yok. "
+                "Bu dağılım tek tek hatayı değil, metnin ölçüm katmanının GERİSİNDE "
+                "kaldığını gösterir: ölçüm yazıdan sonra yeniden kurulmuş olabilir. "
+                f"Bülteni güncel ölçüme göre yeniden yaz. Örnekler: {ornek}{kuyruk}")
+        else:
             self.uyari.append(
                 f"Ölçülen katmanda karşılığı olmayan {len(supheli)} sayı ölçülen bir "
                 f"büyüklüğün yanında geçiyor — kaynağını doğrula ya da ölçülen değeri "
-                f"yaz: {ornek}" + ("…" if len(supheli) > 4 else ""))
+                f"yaz: {ornek}{kuyruk}")
 
     @staticmethod
     def _yapisik(bas: int, son: int, ad_konum: list[tuple[int, int]], ham: str) -> bool:
