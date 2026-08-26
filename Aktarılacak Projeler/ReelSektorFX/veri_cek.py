@@ -28,7 +28,9 @@ BURASI = Path(__file__).resolve().parent
 DATA = BURASI / "data"
 BASE = "https://evds3.tcmb.gov.tr/igmevdsms-dis"
 GRUP = "bie_fdvy"
-UA = "Mozilla/5.0 (TTO Trading veri hattı)"
+# HTTP başlıkları latin-1 ile kodlanır: Türkçe harf koymak isteği daha
+# gönderilmeden UnicodeEncodeError ile düşürür (26.08 koşusunda oldu).
+UA = "Mozilla/5.0 (TTO Trading veri hatti)"
 
 
 def anahtar() -> str:

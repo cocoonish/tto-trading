@@ -82,7 +82,13 @@ jobs:
 
       # Takvimin kararını önce RAPORLA: log'a bakan biri hangi hattın neden
       # koştuğunu/atlandığını, hangi yayımın tetiklediğini görsün.
-      - name: Tazeleme takvimi ne diyor
+      # TANI adımı: hangi hattın neden koşacağını LOGA yazar, karar vermez.
+      # Kararı bir sonraki adım kendi içinde `--gerekli` ile yeniden alır.
+      # 26.08 koşusunda bu adım bir hatayla düştü ve `bash -e` yüzünden tazeleme
+      # ile Hazine adımları ATLANDI: dört hattın verisi hazırken hiçbiri
+      # çekilmedi. Bir raporun üretimi durdurma yetkisi olamaz.
+      - name: Tazeleme takvimi ne diyor (tanı — koşuyu durdurmaz)
+        continue-on-error: true
         run: python bulten/tazeleme.py
 
       # Hafif kip: EVDS'e giden hatlar. Hangi hattın koşacağına --gerekli karar

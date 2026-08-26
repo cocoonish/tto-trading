@@ -313,8 +313,13 @@ def olu_kaliplar(yillar: tuple[int, ...] | None = None) -> list[tuple[str, str]]
     """
     simdi = _simdi()
     yillar = yillar or tuple({simdi.year, (simdi - dt.timedelta(days=120)).year})
-    yayim = _yayimlar(yillar)
-    if not yayim:
+    # _yayimlar (kayıtlar, takvim gerçekten alındı mı) çifti döndürür. Çifti
+    # açmadan dolaşmak listenin kendisini kayıt sanar — 26.08 koşusunu düşüren
+    # hata buydu. `alindi` bayrağı ayrıca doğru soruyu sorar: takvim BOŞ mu
+    # geldi, yoksa hiç mi alınamadı. Alınamadıysa her kalıp ölü görünür ve
+    # rapor tamamen yanlış olur.
+    yayim, alindi = _yayimlar(yillar)
+    if not alindi:
         return []
     olu = []
     for t in TETIKLER:
