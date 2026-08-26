@@ -62,6 +62,14 @@ jobs:
 
       # Anahtar yoksa iş YEŞİL bitmesin diye değil — bülten yine üretilebilir —
       # ama görünür uyarı düşsün: veriler depodaki son sürümde kalacak.
+      # DUMAN SINAMASI: ağa çıkmadan, saniyeler içinde. Bu depoyu birden çok
+      # oturum aynı gün düzenliyor; aralarındaki sözleşme kayması kimsenin
+      # sınamadığı yerden vuruyor (26.08: _yayimlar tek listeden çifte döndü,
+      # aynı gün eklenen başka bir çağrı onu tek liste sandı, veri hattı düştü).
+      # Bu adım TANI DEĞİL: üretim kod yollarını sınar, düşerse koşu durmalı.
+      - name: Duman sınaması (bülten katmanları)
+        run: python bulten/duman.py
+
       - name: EVDS anahtarı var mı
         id: anahtar
         run: |
