@@ -340,7 +340,7 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
                   "tr_faizleri": [], "en_cok_hareket": {}, "eksik": [], "kaynak_yok": []}
 
     # 5) haberler — bölge × alan bölümlerine ayrılmış hâlde
-    haberler, okunamayan, bolumler = ([], [], [])
+    haberler, okunamayan, bolumler, kilit = ([], [], [], [])
     if haber_tara:
         try:
             import haber as haber_m
@@ -351,8 +351,19 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
             # bir gelişmeyi pazartesi sabahı göremiyordu. Kilit gelişme puanlaması
             # zaten eskiyi geri plana atıyor, yani geniş pencere gürültü üretmiyor.
             h, okunamayan = haber_m.tara(pencere_saat=168 if haftalik else 72)
-            haberler = [asdict(x) for x in h]
+            # SIRA BAĞLAYICI: bolumle() haberleri hem PUANLAR (onem) hem de
+            # kaynağından okuyup ZENGİNLEŞTİRİR (ozet), yani h'yi yerinde
+            # değiştirir. Dondurma işlemi önce yapılırsa kaydedilen listede her
+            # maddenin önemi 0.0 kalır ve özetler eksik olur — 2026-08-26'da
+            # 112 haberin hepsi 0.0 puanla kaydedilmişti, aralarında 12 kaynağın
+            # yazdığı "Treasury buyback" haberi de vardı.
             bolumler = haber_m.bolumle(h)
+            haberler = [asdict(x) for x in h]
+            # Kilit gelişmeler AYRI alan olarak yazılır. Eskiden yalnız
+            # bolumler içindeki "kilit" bölümünde duruyordu; bülteni okuyan
+            # yazı katmanı ve denetim aynı listeyi iki farklı yerden aramak
+            # zorunda kalıyordu.
+            kilit = [asdict(x) for x in haber_m.kilit_gelismeler(h)]
         except Exception as e:                                  # noqa: BLE001
             okunamayan = [f"haber taraması düştü: {type(e).__name__}"]
 
@@ -373,6 +384,7 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         "haftalik": haftalik,
         "haberler": {
             "bolumler": bolumler,
+            "kilit": kilit,
             "kurum": [h for h in haberler if h.get("kurum")],
             "haber": [h for h in haberler if not h.get("kurum")],
             "okunamayan": okunamayan,
