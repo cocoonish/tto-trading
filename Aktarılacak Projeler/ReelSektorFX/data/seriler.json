@@ -2,6 +2,14 @@
  "_aciklama": "bie_fdvy grubunun seri dökümü ve kolon eşlemesi. Eşleme AD kalıbıyla yapılır; TCMB adı değiştirirse eşleme düşer ve hat açık hata verir — sessiz yanlış kolon okunmaz.",
  "grup": "bie_fdvy",
  "esleme": {
+  "varlik_toplam": {
+   "kod": "TP.FDVY01",
+   "ad": "A.Varlıklar"
+  },
+  "yukumluluk_toplam": {
+   "kod": "TP.FDVY12",
+   "ad": "B.Yükümlülükler"
+  },
   "net_pozisyon": {
    "kod": "TP.FDVY37",
    "ad": "C.Net Döviz Pozisyonu"
@@ -18,13 +26,13 @@
    "kod": "TP.FDVY40",
    "ad": "F.Kısa Vadeli Net Döviz Pozisyonu"
   },
+  "mevduat": {
+   "kod": "TP.FDVY02",
+   "ad": "A.a.Mevduat"
+  },
   "ihracat_alacak": {
    "kod": "TP.FDVY10",
    "ad": "A.c.İhracat Alacakları"
-  },
-  "ithalat_borc": {
-   "kod": "TP.FDVY32",
-   "ad": "B.b.İthalat Borçları"
   },
   "yi_kredi": {
    "kod": "TP.FDVY14",
@@ -34,9 +42,9 @@
    "kod": "TP.FDVY27",
    "ad": "B.a.2.Yurt Dışından Sağlanan Krediler"
   },
-  "mevduat": {
-   "kod": "TP.FDVY02",
-   "ad": "A.a.Mevduat"
+  "ithalat_borc": {
+   "kod": "TP.FDVY32",
+   "ad": "B.b.İthalat Borçları"
   }
  },
  "tum_seriler": [
