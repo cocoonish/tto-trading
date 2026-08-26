@@ -72,7 +72,15 @@ GOSTERGELER = [
 ]
 
 
-def gostergeler() -> list[dict]:
+def gostergeler(haftalik: bool = False) -> list[dict]:
+    """Sabah panosu. Haftalıkta kıyas noktası bir HAFTA öncesidir.
+
+    Haftalık bülten "geçen hafta bu saatte neredeydik" diye sorar; sürüm kıyası
+    o soruya yanlış cevap verir, çünkü haftalık bir seri hafta içinde bir kez
+    yayımlanır ve sürüm kıyası yalnız o tek yayımı gösterir. Tarihçe yetmezse
+    sürüm kıyasına düşülür ve hangisinin kullanıldığı `kiyas` alanında yazar —
+    okur neye göre baktığını bilmeden farkı yorumlayamaz.
+    """
     out = []
     for hat, anahtar, ad, birim, ond, tarih_alani in GOSTERGELER:
         d = gozlem.anlik(hat)
@@ -82,7 +90,15 @@ def gostergeler() -> list[dict]:
         if v is None or isinstance(v, bool) or not isinstance(v, (int, float)):
             continue
         v_tarih = gozlem.anahtar_tarihi(d, anahtar, tarih_alani)
-        onc = gozlem.onceki_surum_anahtar(hat, anahtar, tarih_alani, v_tarih)
+        onc, kiyas = None, "son yayım"
+        if haftalik:
+            onc = gozlem.anahtar_hafta_once(hat, anahtar, tarih_alani)
+            if onc:
+                kiyas = "bir hafta önce"
+        if onc is None:
+            onc = gozlem.onceki_surum_anahtar(hat, anahtar, tarih_alani, v_tarih)
+            if haftalik:
+                kiyas = "son yayım (bir haftalık tarihçe yok)"
         eski = (onc or {}).get("d", {}).get(anahtar) if onc else None
         fark = (v - eski) if isinstance(eski, (int, float)) else None
         out.append({"ad": ad, "hat": hat, "anahtar": anahtar,
@@ -93,7 +109,10 @@ def gostergeler() -> list[dict]:
                     "fark": round(float(fark), ond) if fark is not None else None,
                     "fark_metin": (("+" if fark > 0 else "−") + olay_m._s(abs(fark), ond))
                                   if (fark is not None and round(abs(float(fark)), ond) > 0) else "",
-                    "veri_tarihi": v_tarih})
+                    "veri_tarihi": v_tarih,
+                    "kiyas": kiyas,
+                    "kiyas_tarihi": (gozlem.anahtar_tarihi(onc.get("d", {}), anahtar,
+                                                           tarih_alani) if onc else "")})
     return out
 
 
@@ -387,7 +406,7 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         "gun": takvim_m.GUNLER_TR[tarih.weekday()],
         "tr_tarih": f"{tarih.day} {takvim_m.AYLAR_TR[tarih.month - 1]} {tarih.year}",
         "olusturma": datetime.now().isoformat(timespec="seconds"),
-        "gostergeler": gostergeler(),
+        "gostergeler": gostergeler(haftalik),
         # Rejim panosu: gösterge şeridi seviyeyi verir, bu pano seviyelerin
         # BİRLİKTE ne anlama geldiğini. Her satır iki ölçülen büyüklüğün farkı
         # ve o farkın işareti rejimi tarif ediyor.

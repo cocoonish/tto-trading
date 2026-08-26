@@ -174,6 +174,36 @@ def alan_son_gorulme(hat: str, alan: str) -> tuple[str, str] | None:
     return son, _dizi_basi(kayitlar, son).get("t", "")
 
 
+def anahtar_hafta_once(hat: str, anahtar: str, acik: str = "",
+                       gun: int = 7) -> dict | None:
+    """Bir anahtar için HAFTALIK kıyas noktası: en az `gun` gün önceki görüntü.
+
+    Haftalık bülten "geçen hafta bu saatte neredeydik" sorar; günlük bülten
+    "son yayımdan bu yana ne değişti". İkisi farklı sorulardır ve haftalıkta
+    sürüm kıyası yanlış cevabı verir — haftalık bir seri hafta içinde bir kez
+    yayımlanır, sürüm kıyası o tek yayımı gösterir, oysa haftanın tamamı
+    sorulmuştur.
+
+    Tarihçe yetmezse None döner: uydurma kıyas yerine günlük kıyasa düşülür ve
+    bülten hangisini kullandığını yazar.
+    """
+    from datetime import datetime, timedelta
+    sinir = datetime.now() - timedelta(days=gun)
+    aday = None
+    for kayit in gecmis_oku(hat):
+        d = kayit.get("d")
+        if not isinstance(d, dict) or anahtar not in d:
+            continue
+        try:
+            t = datetime.fromisoformat(str(kayit.get("t", "")).replace("Z", "+00:00")
+                                       ).replace(tzinfo=None)
+        except (ValueError, TypeError):
+            continue
+        if t <= sinir:
+            aday = kayit
+    return aday
+
+
 def gun_once(hat: str, gun: int = 7) -> dict | None:
     """En az `gun` gün önceki son anlık görüntü — haftalık kıyas için.
 
