@@ -18,12 +18,16 @@ name: Günlük bülten
 
 on:
   schedule:
-    # Hafta içi ÖLÇÜM koşusu: 04:00 UTC = 07:00 İstanbul (Pzt–Cum).
-    # Yazı katmanı (bulut rutini) 07:15'te başlar; bülten 07:30'da hazır olur.
-    - cron: '0 4 * * 1-5'
-    # Pazar "haftaya bakış" ölçümü: 14:30 UTC = 17:30 İstanbul.
+    # Hafta içi ÖLÇÜM koşusu: 03:30 UTC = 06:30 İstanbul (Pzt–Cum).
+    # Yazı katmanı (bulut rutini) 07:15'te başlar; arada 45 dakika pay var.
+    # Pay geniş tutuldu: GitHub'ın zamanlanmış işleri en iyi çaba esaslıdır ve
+    # yoğun saatlerde 10–20 dakika gecikebilir (2026-08-26'da 04:00 koşusu hiç
+    # başlamadı). Dar pay, ölçüm gecikince yazı katmanının boş dosya bulması
+    # demek olurdu.
+    - cron: '30 3 * * 1-5'
+    # Pazar "haftaya bakış" ölçümü: 14:00 UTC = 17:00 İstanbul.
     # Yazı katmanı 17:45'te başlar; bülten 18:00'da hazır olur.
-    - cron: '30 14 * * 0'
+    - cron: '0 14 * * 0'
   workflow_dispatch: {}
 
 permissions:

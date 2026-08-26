@@ -7,7 +7,7 @@
 # son tazelemeden sonra yayımlandıysa koşar (bkz. bulten/tazeleme.py).
 #
 # Koşu saatleri, yayım saatlerinin hemen ardına konumlandırıldı:
-#   06:45 TR — gece boyunca kaçan bir şey varsa sabah bülteninden önce yakala
+#   06:00 TR — gece boyunca kaçan bir şey varsa sabah bülteninden önce yakala
 #   11:45 TR — TÜİK 10:00 bültenleri (TÜFE, Yİ-ÜFE, hizmet ÜFE) API'ye düştü
 #   16:15 TR — TCMB 14:30 (analitik bilanço, haftalık para-banka) + 15:30 (kurlar)
 #   18:30 TR — HMB 17:30 (bütçe, borç stoku) + Hazine ihale sonuçları
@@ -16,7 +16,7 @@ name: Veri tazeleme
 
 on:
   schedule:
-    - cron: '45 3 * * 1-5'    # 06:45 İstanbul
+    - cron: '0 3 * * 1-5'     # 06:00 İstanbul (bülten ölçümünden 30 dk önce)
     - cron: '45 8 * * 1-5'    # 11:45 İstanbul
     - cron: '15 13 * * 1-5'   # 16:15 İstanbul
     - cron: '30 15 * * 1-5'   # 18:30 İstanbul
