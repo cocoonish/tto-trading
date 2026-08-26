@@ -70,6 +70,13 @@ jobs:
           key: fx-ara-${{ github.run_id }}
           restore-keys: fx-ara-
 
+      # Duman sınaması bülten katmanlarını GERÇEK depo verisiyle çağırıyor;
+      # o katmanlar pandas/numpy/requests kullanıyor. Bu adım ilk kurulumda
+      # unutuldu ve sınama saniyesinde düştü — doğru davranış: sınama ağa
+      # çıkan adımı DURDURDU (bkz. "rapor durdurmaz, sınama durdurur").
+      - name: Temel bağımlılıklar
+        run: pip install --quiet requests pandas numpy plotly
+
       - name: Duman sınaması (bülten katmanları)
         run: python bulten/duman.py
 
