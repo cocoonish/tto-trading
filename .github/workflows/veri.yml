@@ -7,19 +7,21 @@
 # son tazelemeden sonra yayımlandıysa koşar (bkz. bulten/tazeleme.py).
 #
 # Koşu saatleri, yayım saatlerinin hemen ardına konumlandırıldı:
-#   06:00 TR — gece boyunca kaçan bir şey varsa sabah bülteninden önce yakala
-#   11:45 TR — TÜİK 10:00 bültenleri (TÜFE, Yİ-ÜFE, hizmet ÜFE) API'ye düştü
-#   16:15 TR — TCMB 14:30 (analitik bilanço, haftalık para-banka) + 15:30 (kurlar)
-#   18:30 TR — HMB 17:30 (bütçe, borç stoku) + Hazine ihale sonuçları
+#   06:07 TR — gece boyunca kaçan bir şey varsa sabah bülteninden önce yakala
+# Dakikalar bilinçli olarak yuvarlak DEĞİL: GitHub'ın zamanlayıcısı saat başı
+# ve yarımlarda sıkışıyor ve bu depoda 30 dk ile 2 saat arası gecikmeler görüldü.
+#   11:47 TR — TÜİK 10:00 bültenleri (TÜFE, Yİ-ÜFE, hizmet ÜFE) API'ye düştü
+#   16:17 TR — TCMB 14:30 (analitik bilanço, haftalık para-banka) + 15:30 (kurlar)
+#   18:37 TR — HMB 17:30 (bütçe, borç stoku) + Hazine ihale sonuçları
 
 name: Veri tazeleme
 
 on:
   schedule:
-    - cron: '0 3 * * 1-5'     # 06:00 İstanbul (bülten ölçümünden 30 dk önce)
-    - cron: '45 8 * * 1-5'    # 11:45 İstanbul
-    - cron: '15 13 * * 1-5'   # 16:15 İstanbul
-    - cron: '30 15 * * 1-5'   # 18:30 İstanbul
+    - cron: '7 3 * * 1-5'     # 06:07 İstanbul (bülten ölçümünden önce)
+    - cron: '47 8 * * 1-5'    # 11:47 İstanbul
+    - cron: '17 13 * * 1-5'   # 16:17 İstanbul
+    - cron: '37 15 * * 1-5'   # 18:37 İstanbul
   workflow_dispatch:
     inputs:
       zorla:
