@@ -117,6 +117,25 @@ NABIZ_AZAMI_SAAT = 30
 # Aradaki uçurum bir eşiği hak edecek kadar geniş. Oran eşiği tek başına
 # yetmez: kısa bir metinde üç sayıdan biri karşılıksız çıkabilir, o yüzden
 # asgari bir sayı da aranır.
+# Bir anahtarın kendi veri tarihi, hattın ana saatinden kaç GÜN geride kalınca
+# "karanlık" sayılır. 45 gün: aylık bir seri en kötü ~35 gün geride kalır, yani
+# meşru hiçbir yayım ritmi bu eşiğe değmez. Eşiği aşan boşluk "bu seri artık
+# beslenmiyor" demektir. (Hat başına ayarı ayar.KARANLIK_GUN geçersiz kılar.)
+KARANLIK_GUN = 45
+
+
+def _tarihe(v) -> date | None:
+    """'GG.AA.YYYY' ya da ISO kabul eder; ayrıştıramazsa None (uydurmaz)."""
+    if not isinstance(v, str):
+        return None
+    t = v.strip()
+    for kalip in ("%d.%m.%Y", "%Y-%m-%d"):
+        try:
+            return datetime.strptime(t[:10], kalip).date()
+        except ValueError:
+            continue
+    return None
+
 KARSILIKSIZ_ORAN = 0.20
 KARSILIKSIZ_ASGARI = 8
 
@@ -536,6 +555,67 @@ class Denetim:
         if gecikmis:
             self.uyari.append("Veri gecikmiş hatlar: " + ", ".join(gecikmis))
 
+    def karanlik(self):
+        """Hattın saati ilerlerken İÇİNDEKİ bir serinin donması.
+
+        `tazelik` ve `gecikme_olaylari` aynı şeyi ölçer: "bu SÜRÜME geçileli kaç
+        gün oldu". İkisi de anlık görüntü tarihçesine dayanır ve bu yüzden bir
+        şeyi hiç göremez — dosyaya GİRDİĞİ ANDA zaten eski olan değeri. Tarihçe
+        yeni başlamışsa (yeni hat, yeni anahtar) sürüm dünkü kadar tazedir;
+        oysa taşıdığı veri iki buçuk aylıktır.
+
+        Somut hâli: TÜFEX hattının 3 yıllık başabaş serisi 12.06.2026'da durdu
+        (kaynak DİBS eğrisinde o vadede fiyatlanan TÜFEX kıymeti kalmadı), ama
+        ozet.json'un ana saati her gün ilerliyor. Sayfadaki tabloda satır
+        "25.08.2026" başlığının altında duruyordu. Hiçbir katman itiraz etmedi.
+
+        Burada ölçülen tarihçe değil, DOSYANIN KENDİ İÇ TUTARLILIĞI: her
+        `<anahtar>_tarih` alanı, hattın `_tarih`inden ne kadar geride?
+        Tarihçe gerektirmediği için ilk koşuda da konuşur.
+        """
+        try:
+            import ayar, gozlem                       # noqa: E402
+        except Exception:                                      # noqa: BLE001
+            return
+        esikler = getattr(ayar, "KARANLIK_GUN", {})
+        karanlik: list[str] = []
+        bakilan = 0
+        for hat in ayar.RITIM:
+            d = gozlem.anlik(hat)
+            if not isinstance(d, dict):
+                continue
+            hat_t = _tarihe(d.get("_tarih"))
+            if hat_t is None:
+                continue
+            esik = int(esikler.get(hat, KARANLIK_GUN))
+            tarihsel = getattr(ayar, "TARIHSEL_ISARET", None)
+            for alan, v in d.items():
+                if not (alan.endswith("_tarih") and alan != "_tarih"):
+                    continue
+                # "Bu uç nokta ne zaman yaşandı" diyen alanlar tazelik saati
+                # DEĞİL: `kum_zirve_tarih` 2026 Şubat'ında donmuş olmalı, o
+                # zirvenin tarihi öyle. Ayrım adlandırmadan okunuyor
+                # (bkz. ayar.TARIHSEL_ISARET).
+                if tarihsel is not None and tarihsel.search(alan[:-6]):
+                    continue
+                kendi = _tarihe(v)
+                if kendi is None:
+                    continue
+                bakilan += 1
+                gun = (hat_t - kendi).days
+                if gun > esik:
+                    karanlik.append(f"{hat}/{alan[:-6]} ({v} — {gun}g geride)")
+        if karanlik:
+            self.uyari.append(
+                f"Hattın saati ilerlerken donmuş {len(karanlik)} seri: "
+                + " · ".join(sorted(karanlik)[:6])
+                + ("…" if len(karanlik) > 6 else "")
+                + ". Bu sayılar sayfada hattın güncel tarihiyle aynı başlığın "
+                  "altında duruyor; metinde anılacaklarsa kendi tarihleriyle "
+                  "anılmalı.")
+        elif bakilan:
+            self._ok(f"karanlık seri yok ({bakilan} anahtar saati denetlendi)")
+
     def nabiz(self):
         """Veri iş akışı gerçekten koştu mu — ölçüm katmanının canlılığı.
 
@@ -716,7 +796,7 @@ class Denetim:
 
     def kos(self) -> int:
         self.yazi(); self.veri(); self.atif(); self.sayi(); self.nabiz(); self.tekrar()
-        self.tema(); self.izleme(); self.dil(); self.tazelik()
+        self.tema(); self.izleme(); self.dil(); self.tazelik(); self.karanlik()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")
         print(f"  BÜLTEN DENETİMİ · {self.b.get('tr_tarih', self.b.get('tarih'))} "

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Bülten — rejim panosu: "neredeyiz" sorusunun altı satırlık cevabı.
+"""Bülten — rejim panosu: "neredeyiz" sorusunun dokuz satırlık cevabı.
 
 Gösterge şeridi seviye ve farkı verir: politika faizi %37,00, TÜFE %31,75.
 Eksik olan bunların BİRLİKTE ne anlama geldiğidir. Politika faizinin yüksek
@@ -61,6 +61,8 @@ def panosu() -> list[dict]:
     redk, sapma10 = _al("try-reer", "redk", "sapma10")
     egim, = [_al("dibs-verim-egrisi", "egim_2y9y")]
     brut, swap_haric, altin_pay = _al("tcmb-net-rezerv", "h_brut", "h_swap_haric", "p_altin_pay")
+    prim2y, basabas2y, anket2y = _al("tufex-basabas", "prim_2y", "basabas_2y", "anket_2y")
+    ayrisma, = [_al("makroihtiyati", "ayrisma")]
 
     s: list[Satir] = []
 
@@ -117,6 +119,36 @@ def panosu() -> list[dict]:
                      "sıkılığın kalıcı olmadığını fiyatlaması demektir.")
         s.append(Satir("DİBS eğri eğimi (2y−9y)", round(egim, 2), "puan",
                        "2 yıllık spot getiri − 9 yıllık spot getiri", e, a))
+
+    # Dezenflasyon güvenilirliği. Panonun geri kalanı politikanın NE KADAR SIKI
+    # olduğunu ölçüyor; bu satır piyasanın o sıkılığın SONUCUNA inanıp
+    # inanmadığını ölçüyor. İkisi ayrı sorular: reel faiz tarihî yüksekliğinde
+    # olabilir ve piyasa hâlâ hedefin tutmayacağını fiyatlıyor olabilir.
+    if prim2y is not None:
+        e, a = _esik(prim2y, 5, "güven zayıf", "güven yerinde",
+                     "Piyasanın anketin üstüne bindirdiği tazminat. Küçük prim "
+                     "iki tarafın aynı patikayı gördüğünü, büyük prim piyasanın "
+                     "dezenflasyona bedelsiz inanmadığını söyler. 5 puan eşiği "
+                     "takdirîdir ve buraya yazıldığı için tartışılabilir.")
+        hesap = "2 yıllık TÜFEX başabaş enflasyonu − anketin 2 yıllık beklentisi"
+        if basabas2y is not None and anket2y is not None:
+            hesap += f" ({basabas2y:.2f} − {anket2y:.2f})"
+        s.append(Satir("Enflasyon risk primi (2y)", round(prim2y, 2), "puan",
+                       hesap, e, a))
+
+    # Makroihtiyati çerçevenin ETKİNLİĞİ. Reel kredi büyümesi toplamın ne
+    # yaptığını söyler; bu satır sınırın İÇİNDE kalanla DIŞINA taşan arasındaki
+    # farkı söyler. Ayrışma büyürse sıkılık toplamda değil yalnız düzenlenen
+    # kalemlerde vardır — kredi frenine basılıyor ama araç yandan kaçıyordur.
+    if ayrisma is not None:
+        e, a = _esik(ayrisma, 15, "kaçak geniş", "çerçeve tutuyor",
+                     "Büyüme sınırına tabi kalemlerle tabi olmayanlar arasındaki "
+                     "yıllıklandırılmış büyüme farkı. Fark açıldıkça sıkılık "
+                     "toplam kredide değil yalnız düzenlenen kalemlerde kalır. "
+                     "15 puan eşiği takdirîdir.")
+        s.append(Satir("Makroihtiyati ayrışma", round(ayrisma, 1), "puan",
+                       "sınır dışı kalemlerin büyümesi − sınıra tabi kalemlerin büyümesi",
+                       e, a))
 
     if brut and swap_haric is not None:
         v = 100 * swap_haric / brut

@@ -141,9 +141,9 @@ def main() -> int:
         def _denetim():
             d = denetim.Denetim(b)
             for olcut in ("yazi", "veri", "atif", "sayi", "nabiz",
-                          "tema", "izleme", "dil", "tazelik"):
+                          "tema", "izleme", "dil", "tazelik", "karanlik"):
                 getattr(d, olcut)()
-        sina("denetim: dokuz ölçüt", _denetim)
+        sina("denetim: on ölçüt", _denetim)
 
     for ad in gecen:
         print(f"  ✓ {ad}")

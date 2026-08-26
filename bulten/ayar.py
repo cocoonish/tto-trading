@@ -18,6 +18,7 @@ okunmaz. Bir eşik ayda birkaç kez tetikleniyorsa doğru yerdedir.
 """
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass, field
 
 
@@ -61,6 +62,20 @@ RITIM = {
     "dibs-verim-egrisi": 6,     # iş günü (eğri günlük kurulur)
     "odemeler-dengesi": 45,     # aylık, 6-8 hafta gecikmeli
     "butce-borc": 45,           # aylık (bütçe ayın 15'i)
+    # Türev hatlar: kendi kaynaklarına gitmezler, başka hatların depoya yazdığı
+    # CSV'lerden hesaplanırlar ve her koşuda çalışırlar. Ritimleri besleyen
+    # hattınkidir — TÜFEX ve taşıma DİBS'ten (iş günü), makroihtiyati krediden
+    # (haftalık, Perşembe, bir hafta gecikmeli).
+    # Eklenmelerinin sebebi kayda değer: dördü de 26.08'de siteye girdi ve
+    # bültenin ölçüm katmanı onları HİÇ görmüyordu — sayfa üretiyor ama
+    # tazeliğini kimse denetlemiyordu.
+    "tl-tasima": 6,
+    "tufex-basabas": 6,
+    "makroihtiyati": 11,
+    # "reel-sektor-fx" BİLEREK yok: hat henüz ilk çekimini yapmadı ve ozet.json
+    # yer tutucu. Ritme yazmak, ölçülmemiş bir şeyi ölçülüyor gibi göstermek
+    # olurdu; hat gerçekten koşunca eklenecek (TCMB reel sektör döviz varlık ve
+    # yükümlülükleri aylık, ~2 ay gecikmeli → 75).
 }
 
 # Bir hattın ozet.json'u birden fazla SAAT taşıyabilir: aynı dosyada günlük bir
@@ -74,6 +89,37 @@ RITIM = {
 RITIM_ALAN = {
     ("tcmb-net-rezerv", "h_tarih"): (10, "haftalık resmî seri"),
 }
+
+# `karanlik` denetiminin hat başına eşiği (gün). Anahtarın KENDİ veri tarihi,
+# hattın `_tarih`inden bu kadar günden fazla geride kalırsa seri "donmuş"
+# sayılır. Öntanımlı denetim.KARANLIK_GUN (45) meşru hiçbir ritme değmez;
+# buraya yalnız o öntanımlının yanlış konuştuğu hatlar yazılır.
+KARANLIK_GUN: dict[str, int] = {
+    # Aylık seriler aylık dosyada yan yana: aylık bir kalem, yeni ay yayımlanana
+    # kadar bir öncekinin tarihinde durur. 45 gün burada dar kalır.
+    "odemeler-dengesi": 75,
+    "butce-borc": 75,
+    # Banka Kredileri Eğilim Anketi ÜÇ AYLIK ve değeri çeyreğin BAŞI ile
+    # damgalanıyor: 2. çeyrek anketi 01.04 tarihiyle durur ve ancak Temmuz
+    # ortasında yayımlanır. Meşru gecikme tek başına ~135 güne çıkar.
+    "makroihtiyati": 200,
+}
+
+# Tarih taşıyan ama TAZELİK saati OLMAYAN anahtarlar.
+#
+# Bir `<anahtar>_tarih` alanı iki bambaşka soruya cevap verebilir:
+#   "bu değer ne zamana ait?"        → tazelik saati; donması KUSURDUR
+#   "bu uç nokta ne zaman yaşandı?"  → tarihsel işaret; donması NORMALDİR
+# Veride ikisini ayıran yapısal bir iz YOK — `kum_zirve_tarih` ile
+# `basabas_3y_tarih` birebir aynı biçimde duruyor. Ayrım ADLANDIRMADAN okunuyor:
+# aşağıdaki sözcükler bir uç noktayı, çapayı ya da başlangıcı gösterir.
+# (Sınır işaretleri şart: "basabas" içindeki "bas" eşleşmemeli.)
+#
+# Kapsanan gerçek anahtarlar: kum_zirve, zk_enbuyuk_adim, zk_taban_birim_maks,
+# dol_cipa, kimlik_maks, en_derin_cokus, endeks_bas.
+TARIHSEL_ISARET = re.compile(
+    r"(^|_)(maks|min|zirve|dip|cipa|bas|baslangic|en_derin|enbuyuk|encok|"
+    r"cokus|rekor|referans)(_|$)")
 
 # Bültende grup başlıkları ve sırası
 GRUPLAR = [

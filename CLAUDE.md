@@ -77,15 +77,23 @@ taslak; repo GitHub'a bağlanınca aktifleştirilecek).
 | `piyasa.py` | 51 enstrüman, TL faiz seti, türev makaslar, **σ-normalize hareket** |
 | `takvim.py` | resmî yayım takvimi; `surpriz.py` geçmişi arşivler ve sonucu ölçer |
 | `soz.py` | söz defterini (`izleme.json`) okura açar |
-| `rejim.py` | reel faiz, taşıma, reel kredi, REDK sapması, eğri, rezerv kalitesi |
+| `rejim.py` | reel faiz, taşıma, reel kredi, REDK sapması, eğri, rezerv kalitesi, **enflasyon risk primi, makroihtiyati ayrışma** |
 | `grafik_veri.py` | satır içi SVG grafiklerin verisi (Plotly bültene girmez) |
-| `denetim.py` | 29 ölçüt; engel varsa bülten yayına gitmez |
+| `denetim.py` | 30 ölçüt; engel varsa bülten yayına gitmez. `karanlik`: hattın saati ilerlerken donan seriyi yakalar |
 | `tazeleme.py` | hangi hattın koşacağına resmî yayım takvimi karar verir |
 
 **Kurucu ilke — saat.** Bir `ozet.json` tek bir yayım ritmi taşımaz: aynı dosyada
 günlük ve haftalık seriler yan yana durur. Bir anahtarın saati, önce açıkça
 tanımlanan alan, yoksa `<anahtar>_tarih` geleneği, o da yoksa `_tarih`tir. Panodaki
 tarih, farkın kıyas noktası ve gecikme denetimi bu saatten okunur.
+
+**Kurucu ilke — emniyet kütüphanenin altına serilir.** Ağa çıkan bir hattın
+kusuru çoğu zaman hattın kendi dosyasında değildir: `tcmb` istemcisi isteği
+zaman aşımısız atıyordu ve argümanı çağrı yerinden geçirmenin YOLU YOKTU
+(kwargs sorgu dizesine gidiyor). Ortak korumalar bu yüzden `ortak/sitecustomize.py`
+içinde durur; `PYTHONPATH`e eklendiği için her hat alt süreci — kendi `.venv`iyle
+koşan da, yarın eklenecek olan da — onunla açılır. Hatların dosyalarına tek satır
+girmez.
 
 **Kurucu ilke — uydurma yok.** Sürpriz yalnız sayısal beklenti varsa hesaplanır;
 söz karnesi yalnız notlanmış kayıtlardan oran verir; kıyas eğrisi elde ne kadar
