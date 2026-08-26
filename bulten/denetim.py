@@ -352,6 +352,7 @@ class Denetim:
         except Exception:
             self.uyari.append("İzleme defteri (izleme.json) okunamadı")
             return
+        self._karne(defter)
         bugun = str(self.b.get("tarih") or "")
         acik = [k for k in defter.get("kayitlar", []) if k.get("durum") == "acik"]
         vadeli = [k for k in acik if str(k.get("vade", "9999")) <= bugun]
@@ -371,6 +372,29 @@ class Denetim:
                               + " · ".join(sessiz))
         else:
             self._ok(f"izleme defteri: vadesi gelen {len(vadeli)} kayıt metinde işlenmiş")
+
+    def _karne(self, defter: dict):
+        """Kapanan sözler NOTLANDI mı — karnenin var olma şartı.
+
+        Defter okura açıldığı andan itibaren "kaç söz tuttu" sorusu meşrudur.
+        Cevabı ancak kaydı kapatan taraf `isabet` alanını doldurursa doğar;
+        doldurmazsa sayfa "isabet oranı verilmiyor" der ve defter yarım kalır.
+        Bu yüzden notsuz kapanış uyarıdır — engel değil, çünkü bazı kayıtlar
+        (bir sorunun cevabının bulunması gibi) tuttu/tutmadı ile ölçülmez.
+        """
+        kapanan = [k for k in defter.get("kayitlar", [])
+                   if k.get("durum") == "kapandi"]
+        if not kapanan:
+            return
+        notsuz = [k["konu"] for k in kapanan
+                  if str(k.get("isabet", "")).lower() not in ("tuttu", "tutmadi", "kismen")]
+        if notsuz:
+            self.uyari.append(
+                f"Kapanan {len(notsuz)} söz notlanmamış (isabet: tuttu | tutmadi | "
+                "kismen) — karne bu yüzden isabet oranı veremiyor: "
+                + " · ".join(notsuz[:3]) + ("…" if len(notsuz) > 3 else ""))
+        else:
+            self._ok(f"söz karnesi: kapanan {len(kapanan)} kaydın hepsi notlanmış")
 
     def kos(self) -> int:
         self.yazi(); self.veri(); self.atif(); self.tekrar()

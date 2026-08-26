@@ -89,5 +89,22 @@ bir hafta mı, yıl başından beri mi.
 **Tekrar.** Bin kelimede en fazla 7 ağır tekrar. Aynı cümleyi bölümden bölüme
 taşıma.
 
+**Söz defteri artık okura açık.** `izleme.json` bültenin JSON'una giriyor ve
+sayfada "Söz defteri" bölümü olarak basılıyor: açık sözler vadeleriyle, yakın
+zamanda kapananlar sonuçlarıyla. İki sonucu var. Birincisi, bir kaydın `soz` ve
+`ne_bakilacak` alanları artık iç not değil **yayımlanan metindir** — okurun tek
+başına anlayacağı şekilde yazılır. İkincisi, bir kaydı kapatırken `isabet`
+alanı doldurulur:
+
+| değer | ne zaman |
+|---|---|
+| `tuttu` | söz verilen beklenti gerçekleşti |
+| `tutmadi` | gerçekleşmedi |
+| `kismen` | yönü tuttu, büyüklüğü ya da zamanlaması tutmadı |
+
+Alan boş bırakılırsa sayfa isabet oranını **vermez** — eksik veriyle övünmek
+hesap vermenin tersidir. Ölçülemeyen kayıtlar (bir sorunun cevabının bulunması
+gibi) notsuz kapatılabilir; denetim bunu uyarı olarak sayar, engel olarak değil.
+
 **Sayıları uydurma.** Bültendeki her sayı ölçülen katmandan gelir. Ölçülmemiş
 bir sayıya ihtiyaç varsa kaynağına in; hatırlayarak yazma.

@@ -40,6 +40,8 @@ const bolumler = [
   takvimVar && { id: 'takvim', ad: 'Takvim' },
   b.gruplar?.length > 0 && { id: 'hat-hat', ad: 'Hat hat değişim' },
   b.temalar?.temalar?.length > 0 && { id: 'temalar', ad: 'İzlenen temalar' },
+  (b.izleme?.acik?.length > 0 || b.izleme?.kapanan?.length > 0) &&
+    { id: 'soz-defteri', ad: 'Söz defteri' },
   b.haberler?.bolumler?.length > 0 && { id: 'gundem', ad: 'Gündem' },
   b.veri_gunlugu?.length > 0 && { id: 'veri-gunlugu', ad: 'Veri günlüğü' },
   b.piyasa?.gruplar?.length > 0 && { id: 'piyasa', ad: 'Piyasa fotoğrafı' },
@@ -256,6 +258,73 @@ const bolumler = [
           )}
         </div>
       ))}
+    </section>
+  )}
+
+  {(b.izleme?.acik?.length > 0 || b.izleme?.kapanan?.length > 0) && (
+    <section class="blok soz" id="soz-defteri">
+      <h2>
+        Söz defteri
+        <span class="adet">
+          {b.izleme.karne.acik} açık · {b.izleme.karne.kapandi} kapandı
+          {b.izleme.karne.vadesi_gecmis > 0 && ` · ${b.izleme.karne.vadesi_gecmis} vadesi geçti`}
+        </span>
+      </h2>
+      <p class="alt-not">
+        Bültenin verdiği sözlerin kaydı. "Şunu izleyeceğiz", "yarın belli olacak",
+        "sebebi anlaşılmıyor" dendiği an buraya bir kayıt düşer ve vadesi geldiğinde
+        hesabı verilir. Bir sabah notunun değeri, bir gün önce ne dediğinin
+        hatırlanabilmesindedir.
+        {b.izleme.karne.isabet_orani !== null && b.izleme.karne.isabet_orani !== undefined
+          ? ` Notlanan ${b.izleme.karne.notlanan} kayıtta isabet: %${b.izleme.karne.isabet_orani}.`
+          : ' Kapanan kayıtlar henüz tuttu/tutmadı diye notlanmadığı için isabet oranı verilmiyor.'}
+      </p>
+
+      {b.izleme.acik.length > 0 && (
+        <>
+          <h3>Açık sözler</h3>
+          <ul class="soz-liste">
+            {b.izleme.acik.map((k: any) => (
+              <li class:list={{ gecikti: k.gun_kalan !== null && k.gun_kalan < 0 }}>
+                <span class="soz-vade">
+                  {k.gun_kalan === null
+                    ? 'vadesiz'
+                    : k.gun_kalan < 0
+                      ? `${-k.gun_kalan} gün gecikti`
+                      : k.gun_kalan === 0
+                        ? 'bugün'
+                        : `${k.gun_kalan} gün`}
+                </span>
+                <span class="soz-govde">
+                  <strong class="soz-konu">{k.konu}</strong>
+                  {k.soz && <span class="soz-metin">{k.soz}</span>}
+                  {k.ne_bakilacak && <span class="soz-bakis">Ne bakılacak: {k.ne_bakilacak}</span>}
+                  <span class="kaynak-not">açılış {k.acilis}{k.vade ? ` · vade ${k.vade}` : ''}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
+      {b.izleme.kapanan.length > 0 && (
+        <>
+          <h3>Yakın zamanda kapananlar</h3>
+          <ul class="soz-liste kapanan">
+            {b.izleme.kapanan.map((k: any) => (
+              <li>
+                <span class="soz-vade">{k.isabet || 'kapandı'}</span>
+                <span class="soz-govde">
+                  <strong class="soz-konu">{k.konu}</strong>
+                  {k.soz && <span class="soz-metin">Ne demiştik: {k.soz}</span>}
+                  {k.sonuc && <span class="soz-sonuc">Ne oldu: {k.sonuc}</span>}
+                  <span class="kaynak-not">açılış {k.acilis}{k.vade ? ` · vade ${k.vade}` : ''}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
     </section>
   )}
 
@@ -526,6 +595,29 @@ const bolumler = [
   .k-zaman { font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-70); }
   .k-beklenti { font-size: 0.79rem; color: var(--ink-70); }
 
+
+  .soz .alt-not { font-size: 0.8rem; color: var(--ink-70); margin: -0.3rem 0 1.1rem; max-width: 62ch; }
+  .soz-liste { list-style: none; padding: 0; margin: 0 0 0.4rem; display: grid; gap: 0.9rem; }
+  .soz-liste li {
+    display: grid; grid-template-columns: 7.5rem 1fr; gap: 0.7rem;
+    padding-left: 0.9rem; border-left: 2px solid var(--ink-30);
+  }
+  .soz-liste li.gecikti { border-left-color: #b45309; }
+  .soz-liste.kapanan li { border-left-color: #0f766e; }
+  .soz-vade {
+    font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink-70);
+    text-align: right; padding-top: 0.15rem; white-space: nowrap;
+  }
+  .soz-liste li.gecikti .soz-vade { color: #b45309; }
+  .soz-liste.kapanan .soz-vade { color: #0f766e; }
+  .soz-govde { display: grid; gap: 0.2rem; }
+  .soz-konu { line-height: 1.35; }
+  .soz-metin, .soz-sonuc, .soz-bakis { font-size: 0.84rem; color: var(--ink-70); line-height: 1.5; }
+  .soz-bakis { font-style: italic; }
+  @media (max-width: 640px) {
+    .soz-liste li { grid-template-columns: 1fr; gap: 0.25rem; }
+    .soz-vade { text-align: left; }
+  }
 
   .gundem .alt-not { font-size: 0.8rem; color: var(--ink-70); margin: -0.3rem 0 1.1rem; }
   .gundem-bolum { margin: 1.5rem 0; }

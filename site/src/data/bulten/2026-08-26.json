@@ -36,9 +36,9 @@
    "birim": "mlr USD",
    "ondalik": 1,
    "metin": "67,1",
-   "fark": 0.0,
-   "fark_metin": "",
-   "veri_tarihi": "24.08.2026"
+   "fark": 4.1,
+   "fark_metin": "+4,1",
+   "veri_tarihi": "14.08.2026"
   },
   {
    "ad": "Swap hariç net rezerv",
@@ -48,9 +48,9 @@
    "birim": "mlr USD",
    "ondalik": 1,
    "metin": "54,3",
-   "fark": 0.0,
-   "fark_metin": "",
-   "veri_tarihi": "24.08.2026"
+   "fark": 3.7,
+   "fark_metin": "+3,7",
+   "veri_tarihi": "14.08.2026"
   },
   {
    "ad": "Politika faizi",
@@ -74,7 +74,7 @@
    "metin": "36,94",
    "fark": -2.92,
    "fark_metin": "−2,92",
-   "veri_tarihi": "25.08.2026"
+   "veri_tarihi": "24.08.2026"
   },
   {
    "ad": "Ağırlıklı ort. fonlama maliyeti",
@@ -84,9 +84,9 @@
    "birim": "%",
    "ondalik": 2,
    "metin": "40,00",
-   "fark": 0.0,
+   "fark": null,
    "fark_metin": "",
-   "veri_tarihi": "25.08.2026"
+   "veri_tarihi": "07.08.2026"
   },
   {
    "ad": "TÜFE (yıllık)",
@@ -5364,5 +5364,275 @@
   "ne_oldu": "Uzun vadeli ABD getirileri geriledi: on yıllık 6,5 baz puan düşüşle %4,639, otuz yıllık 5,7 baz puan düşüşle %5,174. Sürücü büyük ihtimalle geri alım programı değil, zayıf ABD verisiydi — tüketici güveni ocaktan bu yana en düşük seviyeye (89,4) indi, Richmond imalat endeksi beklentiyi ıskaladı. Petrol iki gün üst üste sert düştü: Brent %3,76 kayıpla 85,25 dolar, sebebi İran–Umman arasındaki Hürmüz koridoru görüşmeleri. Benzindeki %11,36'lık düşüş ise piyasa hareketi değil, eylül vadesinin bitip kış tipi benzine geçilmesinden kaynaklanan ölçü değişimi. Türkiye'de gecelik referans faiz %36,94'e inerek politika faizinin altına geçti; tahvili gecelikten taşımanın maliyeti 3,90 puan iyileşti ve kurun bir aylık yıllıklandırılmış artış hızı %24,5'ten %21,7'ye düştü. Altın %1,33 artışla 4.699,70 dolara çıktı, gelişen ülke hisseleri %1,72 yükseldi, Borsa İstanbul'da sınai endeks petrol düşüşünün etkisiyle %1,88 geriledi.",
   "ne_bekleniyor": "Bugün 15:30'da ABD temmuz kişisel tüketim harcamaları enflasyonu açıklanıyor; konsensüs çekirdekte aylık %0,2 ve yıllık %3,3. Yarın 14:30'da TCMB haftalık istatistikleri gelecek: ağırlıklı ortalama fonlama maliyeti serisinin %40,00'dan aşağı kayıp kaymadığı gevşemenin resmî ölçüsü olacak, kredi büyümesinin yönü de aynı yayında. 28 Ağustos'ta temmuz dış ticaret verisi ve Warsh'ın Jackson Hole konuşması var; oynaklık ölçüleri 52 haftalık aralıklarının dibine yakın olduğu için sürprizin etkisi olağandan büyük olabilir. 31 Ağustos'ta ikinci çeyrek büyümesi ve temmuz işgücü, 3 Eylül'de ağustos enflasyonu, 4 Eylül'de ABD istihdam raporu, 8 Eylül'de Kanada'nın karşı tarifelerinin yürürlüğe girmesi, 9 Eylül'de ABD Hazinesi'nin büyütülmüş geri alım operasyonlarının başlaması ve 10 Eylül'de TCMB Kurul kararı ile ECB kararı takvimin ana durakları."
  },
- "gundem_kaynagi": "yazili"
+ "gundem_kaynagi": "yazili",
+ "izleme": {
+  "acik": [
+   {
+    "konu": "Haftalık para-banka: kredi büyümesinin yönü",
+    "soz": "Kur arındırılmış 13 hafta yıllıklandırılmış kredi büyümesi %25,9; 'hızlanma sıkılaştırma ihtimalini, yavaşlama indirim alanını artırır' dedik.",
+    "ne_bakilacak": "27 Ağustos 14:30 TCMB haftalık para ve banka istatistikleri.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-23",
+    "vade": "2026-08-27",
+    "isabet": "",
+    "gun_kalan": 1,
+    "yas_gun": 3
+   },
+   {
+    "konu": "Ağırlıklı ortalama fonlama maliyeti serisi bayat",
+    "soz": "Seri 7 Ağustos'tan beri %40,00'da duruyor. 25.08 bülteni gecelik faizin %36,93'e indiğini gerçekleşen repo faizi üzerinden yazdı ve 'resmî teyit perşembe gelecek, gelmezse dünkü fiyatlama dayanaksız kalır' dedi. Serinin %40'tan kayması gevşemenin resmî ölçüsü.",
+    "ne_bakilacak": "27 Ağustos 14:30 haftalık istatistikler: fonlama maliyeti serisi tazelendi mi, %40,00'dan kaydı mı; TLREF 21 Ağustos'tan ileri geldi mi.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-23",
+    "vade": "2026-08-27",
+    "isabet": "",
+    "gun_kalan": 1,
+    "yas_gun": 3
+   },
+   {
+    "konu": "Temmuz dış ticaret — enerji faturasının ilk ölçümü",
+    "soz": "28 Ağustos'taki veri enerji faturasının cari dengeye yansımasını okumanın ilk fırsatı; ağustos tırmanışını kapsamadığını da not ettik.",
+    "ne_bakilacak": "TÜİK temmuz dış ticaret, enerji kalemi.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-24",
+    "vade": "2026-08-28",
+    "isabet": "",
+    "gun_kalan": 2,
+    "yas_gun": 2
+   },
+   {
+    "konu": "İkinci çeyrek büyümesi ve indirim patikası",
+    "soz": "'Büyüme verisi faiz indirim patikasının hızına dair tartışmanın merkezinde; beklentinin üzerinde büyüme indirim beklentilerini erteler' dedik. Günlük bülten %37 faiz + %25,9 kredi büyümesinin ürettiği yavaşlamanın ölçüsü olacağını ekledi.",
+    "ne_bakilacak": "31 Ağustos 10:00 GSYH (2025 + II. çeyrek) ve temmuz işgücü; DİBS kısa ucunun tepkisi.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-23",
+    "vade": "2026-08-31",
+    "isabet": "",
+    "gun_kalan": 5,
+    "yas_gun": 3
+   },
+   {
+    "konu": "VIX %14 konumdayken Warsh'ın Jackson Hole konuşması",
+    "soz": "Bülten 'korunma ucuz, haftanın en büyük olayı henüz yaşanmadı' dedi: VIX %4,76 sıçramasına rağmen 52 haftalık aralığın %14'ünde, MOVE %31'inde. Şahin çerçeve altın/gümüş/bitcoin'i birden vurur, tolerans sinyali tersini yapar.",
+    "ne_bakilacak": "28 Ağustos Jackson Hole konuşması; sonrasında VIX, DXY, altın ve ABD 10 yıllık reel getirisi.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-25",
+    "vade": "2026-09-01",
+    "isabet": "",
+    "gun_kalan": 6,
+    "yas_gun": 1
+   },
+   {
+    "konu": "Gecelik faizin %37 civarında kalıcılaşıp kalıcılaşmadığı",
+    "soz": "25.08: 'dünkü seviye korunursa hareket kalıcı' dedik. 26.08: seviye korundu ve resmî gecelik referans faize de geçti (%36,94, politikanın 0,06 puan altında); ihale tutarı 1 milyar liradan 2 milyar liraya çıktı, sistemin lira fazlası 1.108,6 milyar TL. 31 Ağustos vergi takviminin geçici yukarı itişi hâlâ ayrılacak.",
+    "ne_bakilacak": "Eylülün ilk haftasında gecelik faizin %37 civarında kalıp kalmadığı; ay sonu vergi çıkışının etkisi geçtikten sonraki temiz okuma.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-25",
+    "vade": "2026-09-02",
+    "isabet": "",
+    "gun_kalan": 7,
+    "yas_gun": 1
+   },
+   {
+    "konu": "Brent'in 85 dolar eşiğinde kalıcılaşması",
+    "soz": "Enerji kaynaklı enflasyon riski temasının çürütücü ölçütü 'Brent'in 85 doların altına dönmesi'ydi; Brent bu koşuda 85,25 dolara indi ve 52 haftalık aralığın %44'üne geriledi. Sürücü İran–Umman Hürmüz koridoru görüşmeleri.",
+    "ne_bakilacak": "Koridor çerçevesinin somutlaşıp somutlaşmadığı; Brent'in 85 doların altında kalıcılaşması hâlinde temanın durumu aktiften izlemeye çekilecek.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-26",
+    "vade": "2026-09-02",
+    "isabet": "",
+    "gun_kalan": 7,
+    "yas_gun": 0
+   },
+   {
+    "konu": "Anket ile tahvil eğrisi arasındaki uçurum hangi yönde kapanacak",
+    "soz": "Anket 12 ay sonrası politika faizini %29,59 bekliyor. 25.08: forward faiz tek günde 116 bp daralarak %36,99'dan %35,83'e indi — uçurum eğri tarafından kapanmaya başladı ama hâlâ 6 puanın üzerinde.",
+    "ne_bakilacak": "3 Eylül TÜFE sonrası forward ve anket; 10 Eylül PPK. Forward %35,83'ten aşağı devam ederse anketle buluşma eğri tarafından oluyor demektir.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-23",
+    "vade": "2026-09-03",
+    "isabet": "",
+    "gun_kalan": 8,
+    "yas_gun": 3
+   },
+   {
+    "konu": "Ağustos TÜFE: modelimiz ankete karşı",
+    "soz": "Baz etkisi modelimiz yıl sonu için %33,97 (momentum) / %31,75 (tekrar) veriyor; anket medyanı %29,43 — 'modelimiz anketin belirgin üzerinde' dedik. Aylık %0,41 üzeri her okuma hedefe yakınsamayı erteler.",
+    "ne_bakilacak": "3 Eylül 10:00 TÜİK ağustos TÜFE; model senaryolarından hangisi tuttu, yazıda hesabı verilecek.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-23",
+    "vade": "2026-09-03",
+    "isabet": "",
+    "gun_kalan": 8,
+    "yas_gun": 3
+   },
+   {
+    "konu": "Faiz düşerken kur hızının artması",
+    "soz": "25.08: hız tek günde %19,9'dan %24,5'e sıçramıştı ve 'kur hızı %30'un üzerine çıkarsa lira taşıma pozisyonu negatif beklenen getiriye döner' demiştik. 26.08: hız 2,8 puan gerileyerek %21,7'ye indi — sıçrama geri alındı. USD/TRY 48,111 ile 52 haftalık zirvede ama günlük artış %0,07.",
+    "ne_bakilacak": "Devalüasyon hızının %20'nin altına inip inmediği; yabancı dört haftalık net akım (1,24 mlr USD) ve 11 Eylül ödemeler dengesi.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-25",
+    "vade": "2026-09-03",
+    "isabet": "",
+    "gun_kalan": 8,
+    "yas_gun": 1
+   },
+   {
+    "konu": "Rafineri marjı ölçüsünün vade geçişinden arındırılması",
+    "soz": "26.08 bülteni benzin marjının 40,78 dolara inmesinin marj çöküşü değil kış tipi benzine geçiş olduğunu yazdı ve bu marjın bir gün öncesinin yaz tipi marjıyla kıyaslanamayacağını söyledi.",
+    "ne_bakilacak": "Eylülün ilk haftasında kış tipi benzin marjının kendi içinde nereye oturduğu; distilat marjının (89,03 dolar) geniş kalmaya devam edip etmediği.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-26",
+    "vade": "2026-09-04",
+    "isabet": "",
+    "gun_kalan": 9,
+    "yas_gun": 0
+   },
+   {
+    "konu": "Hazine ihale modelinin tahminleri sınanacak",
+    "soz": "Model 7 Eylül bono ihalesi için 130,4 mlr TL gerçekleşme ve 2,09 teklif/karşılama; 14 Eylül için 2y sabit kuponluda 7,9 mlr / 1,68 ve 4y TLREF endekslide 24,2 mlr / 1,44 öngördü.",
+    "ne_bakilacak": "İhale sonuçları açıklandığında tahmin-gerçekleşme farkı yazıda anılacak.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-23",
+    "vade": "2026-09-07",
+    "isabet": "",
+    "gun_kalan": 12,
+    "yas_gun": 3
+   },
+   {
+    "konu": "ABD Hazinesi büyütülmüş geri alım operasyonlarının ilk sonuçları",
+    "soz": "9 Eylül'de başlayacak operasyonların teklif hacmi ve kabul oranı 'geri alım işe yarıyor mu' sorusunun ilk gerçek ölçümü dedik.",
+    "ne_bakilacak": "Operasyon sonuçları; 10 ve 30 yıllık getirinin tepkisi.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-24",
+    "vade": "2026-09-09",
+    "isabet": "",
+    "gun_kalan": 14,
+    "yas_gun": 2
+   },
+   {
+    "konu": "Geri alım rallisinin risk varlıklarındaki ayağı iki yönlü",
+    "soz": "Bitcoin'in %19,4'lük haftalık yükselişini geri alım kararına bağladık ve 'geri alımın etkisi söndükçe ya da 4 Kasım refinansmanı fazla arz getirirse aynı kanal ters işler, en çok yükselenler en sert düzeltmeyi görür' dedik. 24.08: momentum durdu (bitcoin −%0,32).",
+    "ne_bakilacak": "Bitcoin/altın/platin geri alım haber akışına duyarlılığı; 9 Eylül operasyonları ve 4 Kasım refinansmanı.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-23",
+    "vade": "2026-09-09",
+    "isabet": "",
+    "gun_kalan": 14,
+    "yas_gun": 3
+   },
+   {
+    "konu": "Uzun uçtaki rahatlamanın sürücüsü: veri mi müdahale mi",
+    "soz": "26.08 bülteni dünkü uzun uç rallisini geri alım programına değil zayıf ABD verisine (tüketici güveni 89,4, Richmond imalat 4) bağladı ve on yıllığın 52 haftalık aralıktaki konumunun %95'ten %87'ye indiğini ölçtü.",
+    "ne_bakilacak": "Bugünkü kişisel tüketim enflasyonu ve 9 Eylül'de başlayacak büyütülmüş geri alım operasyonlarının teklif hacmi; iki sürücü burada ayrışacak.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-26",
+    "vade": "2026-09-09",
+    "isabet": "",
+    "gun_kalan": 14,
+    "yas_gun": 0
+   },
+   {
+    "konu": "Rezerv artışında altın değerlemesi ayrıştırması",
+    "soz": "20 Ağustos haftasındaki +5,1 mlr USD brüt artışın ne kadarının altın değerlemesi olduğu IRFCL ile netleşecek dedik.",
+    "ne_bakilacak": "10 Eylül IRFCL (Ağustos 2026) verisi.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-24",
+    "vade": "2026-09-10",
+    "isabet": "",
+    "gun_kalan": 15,
+    "yas_gun": 2
+   },
+   {
+    "konu": "Forward faizin agresif indirim fiyatlaması doğrulanacak mı",
+    "soz": "İki yıl sonrasının bir yıllık faizi tek günde 116 bp düşerek %35,83'e indi — spot iki yıllığın (71 bp) iki katı hızda. Bülten 'piyasa indirim patikasının tamamını öne çekti, 10 Eylül Kurul bu fiyatlamayı doğrulamak zorunda kalacak' ve 'en kırılgan nokta forward faizdir' dedi.",
+    "ne_bakilacak": "3 Eylül TÜFE ve 10 Eylül PPK sonrası forward faizin yönü.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-25",
+    "vade": "2026-09-10",
+    "isabet": "",
+    "gun_kalan": 15,
+    "yas_gun": 1
+   },
+   {
+    "konu": "Bankacılık endeksinde liderlik değişimi mi",
+    "soz": "24.08'de bankacılık %2,74 yükselmişti. 26.08 ölçümü: haftalık bazda bankacılık +%4,13, sınai +%2,39 — makas bir haftadır bankacılık lehine kapanıyor. Ama yılbaşından bankacılık hâlâ −%2,03 ve 52 haftalık aralığın %40'ında, sınai +%42,07 ve %95'inde. Sınai bu koşuda %1,88 düştü; sebebi kimya-petrol-plastik grubunun %4,43 kaybı, yani ham petrol düşüşü.",
+    "ne_bakilacak": "Fonlama gevşemesi kalıcı olursa yıllık makasın kapanıp kapanmadığı; sınai endeksin petrol fiyatına duyarlılığı.",
+    "sonuc": "",
+    "durum": "acik",
+    "acilis": "2026-08-25",
+    "vade": "2026-09-15",
+    "isabet": "",
+    "gun_kalan": 20,
+    "yas_gun": 1
+   }
+  ],
+  "kapanan": [
+   {
+    "konu": "RBOB benzinin tek günde %10,59 düşüşünün sebebi",
+    "soz": "24.08 bülteni 'sebebi anlaşılmıyor' dedi; 25.08 bülteni ikinci günde de aynı hükmü verdi — RBOB bir gün daha %8,78 düştü (iki günde kümülatif ~%19), benzin crack 12,1 dolar daraldı, ham petrol yerinde. En olası mekanik aday ağustos sonu yaz tipi–kış tipi kontrat geçişi, teyit yok.",
+    "ne_bakilacak": "Kontrat geçişini teyit eden bir kaynak; eylül başında yeni vade açıldığında marjın toparlanıp toparlanmadığı.",
+    "sonuc": "Cevap bulundu: hareket piyasada değil ölçüde. Eylül vadesi 31 Ağustos'ta sona eriyor ve 1 Eylül'den itibaren sözleşmenin dayanağı düşük buhar basınçlı yaz benzininden üretimi daha ucuz kış benzinine dönüyor; iki mal arasındaki ~30 sentlik yapısal fark günlük düşüş gibi ölçülüyor. CME'nin 21 Ağustos notu eylül vadesinin %2,5 artışla 3,35 dolara çıktığını, yani o gün fiilen YÜKSELDİĞİNİ söylüyor. Aritmetik de teyit ediyor: bu koşuda günlük değişim −%11,36 iken haftalık değişim −%11,42; üç gün üst üste %10 düşen bir fiyatın haftalık kaybı %11'de kalamaz. 24 ve 25 Ağustos'ta 'sebebi anlaşılmıyor' hükmü doğru ihtiyattı, ama sebep ölçüm tarafındaydı.",
+    "durum": "kapandi",
+    "acilis": "2026-08-24",
+    "vade": "2026-09-02",
+    "isabet": "",
+    "gun_kalan": 7,
+    "yas_gun": 2
+   },
+   {
+    "konu": "TCMB repo ihalelerinin ilk tutarları ve TLREF makası",
+    "soz": "Haftalık bülten (23.08) 'izlenecek gösterge TLREF ile politika faizi arasındaki 2,86 puanlık makastır' dedi; günlük (24.08) ölçütü netleştirdi: 2 puanın altı fiilî, 2,8 civarı sembolik. 31 Ağustos vergi takviminin ters etkisi ayrılacak.",
+    "ne_bakilacak": "İhale tutarları, TLREF, AOFM'nin %40,00'dan kayıp kaymadığı.",
+    "sonuc": "İlk ihale 1 milyar lira ile açıldı; gerçekleşen gecelik repo faizi %39,86'dan %36,93'e (−293 bp) indi ve politika faizinin (%37,00) altına geçti. Ölçüt 'makas 2 puanın altına inerse fiilî' idi — makas kapanmakla kalmadı işaretini çevirdi. Karar FİİLÎ. Resmî fonlama maliyeti serisinin teyidi 27 Ağustos'ta.",
+    "durum": "kapandi",
+    "acilis": "2026-08-23",
+    "vade": "2026-08-26",
+    "isabet": "",
+    "gun_kalan": 0,
+    "yas_gun": 3
+   },
+   {
+    "konu": "ABD'nin İran yaptırım paketi ('ekonomik D-Day') içeriği",
+    "soz": "Paket bugün ABD saatiyle 14:00'te açıklanacak; ikincil yaptırım sertliği petrol→başabaş→uzun uç zincirini belirler dedik.",
+    "ne_bakilacak": "Paketin fiilî kapsamı; Brent'in 95 doları aşıp aşmadığı; İran'ın karşılığı.",
+    "sonuc": "Paket 24 Ağustos'ta açıklandı: beş sektörel yaptırım tespiti (dijital varlıklar, teknoloji, altın, havacılık, denizcilik), ~60 kişi/kurum/gemi, askıya alınan genel lisanslar, Hürmüz armatörlerine yaptırım uyarısı. Ama büyük Çin bankaları hedef alınmadı; Brent 95 doları aşmadı, aksine üç haftanın en sert günlük düşüşünü yaşadı ve 92,11 dolarda kaldı.",
+    "durum": "kapandi",
+    "acilis": "2026-08-24",
+    "vade": "2026-08-25",
+    "isabet": "",
+    "gun_kalan": -1,
+    "yas_gun": 2
+   }
+  ],
+  "karne": {
+   "toplam": 21,
+   "acik": 18,
+   "kapandi": 3,
+   "vadesi_gecmis": 0,
+   "notlanan": 0,
+   "tuttu": 0,
+   "kismen": 0,
+   "tutmadi": 0,
+   "isabet_orani": null
+  },
+  "son_guncelleme": "2026-08-26"
+ }
 }

@@ -37,6 +37,7 @@ import gozlem        # noqa: E402
 import olay as olay_m  # noqa: E402
 import takvim as takvim_m  # noqa: E402
 import piyasa as piyasa_m  # noqa: E402
+import soz as soz_m  # noqa: E402
 
 
 # Sabah bakışı panosu: (hat, anahtar, ad, birim, ondalık, tarih alanı)
@@ -384,6 +385,10 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         "notlar": notlar,
         "gruplar": gruplar,
         "veri_gunlugu": gunluk,
+        # Söz defteri: bültenin verdiği sözlerin okura görünen hâli. Defter
+        # zaten tutuluyordu ama yalnız yazı katmanı ve denetim görüyordu;
+        # hesap vermenin okura ulaşmayan hâli hesap vermek sayılmaz.
+        "izleme": soz_m.ozet(tarih.isoformat()),
         "takvim": takvim_bloklari,
         "kritik_takvim": kritik,
         "haftalik": haftalik,
