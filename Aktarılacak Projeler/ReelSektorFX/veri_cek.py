@@ -63,18 +63,33 @@ def _cek(url: str, deneme: int = 3):
 
 # Kolon → seri ADI kalıbı. Kod değil AD eşlenir; adlar metaveriyle birlikte
 # data/seriler.json'a yazılır ki eşleme her koşuda denetlenebilir olsun.
+# TCMB bu tabloyu HİYERARŞİK KODLA adlandırıyor: "A.Varlıklar",
+# "B.a.1.Yurt İçinden Sağlanan Krediler", "C.Net Döviz Pozisyonu"… Kalıplar
+# bu koda demirleniyor; serbest kalıp iki nedenle yanlıştı:
+#
+#   Toplamları HİÇ bulamıyordu. "^Varlıklar$" adı "A.Varlıklar" olan seriyle
+#   eşleşmez; ön ekteki "A." yüzünden hat 27.08'de "zorunlu kolonlar
+#   eşlenemedi" deyip düştü.
+#
+#   Bulduklarını da tesadüfen doğru buluyordu. "Net Döviz Pozisyon" hem
+#   "C.Net Döviz Pozisyonu" hem "F.Kısa Vadeli Net Döviz Pozisyonu" ile
+#   eşleşiyor; doğru olanı seçmesinin tek sebebi C'nin listede önce gelmesiydi.
+#   TCMB sıralamayı değiştirse hat SESSİZCE yanlış kolonu okurdu.
+#
+# Tam eşleşme, kaymayı sessizlikten çıkarıp açık hataya çeviriyor: TCMB adı
+# değiştirirse hat durur ve sebebini yazar (dökümü de loga basar).
 KALIPLAR = {
-    "varlik_toplam": r"^Varlıklar$|^VARLIKLAR$|Varlık.*Toplam|Toplam Varlık",
-    "yukumluluk_toplam": r"^Yükümlülükler$|^YÜKÜMLÜLÜKLER$|Yükümlülük.*Toplam|Toplam Yükümlülük",
-    "net_pozisyon": r"Net Döviz Pozisyon",
-    "kv_varlik": r"Kısa Vadeli Varlık",
-    "kv_yukumluluk": r"Kısa Vadeli Yükümlülük",
-    "kv_net": r"Kısa Vadeli Net Döviz Pozisyon",
-    "ihracat_alacak": r"İhracat Alacak",
-    "ithalat_borc": r"İthalat Borç",
-    "yi_kredi": r"Yurt İçi.*Kredi|Yurt İçinden Sağlanan.*Kredi",
-    "yd_kredi": r"Yurt Dışı.*Kredi|Yurt Dışından Sağlanan.*Kredi",
-    "mevduat": r"Mevduat|DTH",
+    "varlik_toplam":     r"^A\.\s*Varlıklar$",
+    "yukumluluk_toplam": r"^B\.\s*Yükümlülükler$",
+    "net_pozisyon":      r"^C\.\s*Net Döviz Pozisyonu$",
+    "kv_varlik":         r"^D\.\s*Kısa Vadeli Varlıklar$",
+    "kv_yukumluluk":     r"^E\.\s*Kısa Vadeli Yükümlülükler$",
+    "kv_net":            r"^F\.\s*Kısa Vadeli Net Döviz Pozisyonu$",
+    "mevduat":           r"^A\.a\.\s*Mevduat$",
+    "ihracat_alacak":    r"^A\.c\.\s*İhracat Alacakları$",
+    "yi_kredi":          r"^B\.a\.1\.\s*Yurt İçinden Sağlanan Krediler$",
+    "yd_kredi":          r"^B\.a\.2\.\s*Yurt Dışından Sağlanan Krediler$",
+    "ithalat_borc":      r"^B\.b\.\s*İthalat Borçları$",
 }
 
 
