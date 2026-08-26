@@ -24,6 +24,7 @@ alanın değeri olarak açıkça null verilir.
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
 import sys
 from datetime import date
@@ -94,32 +95,26 @@ def main() -> int:
     ap.add_argument("--damga", default=None,
                     help="bülteni okuduğun andaki `olusturma` değeri; "
                          "değişmişse yama reddedilir")
-    # Damga ZORUNLU. Sebebi: yazı katmanını ateşleyen rutin metni ile depodaki
-    # rehber (YAZIM.md) ayrı yerlerde duruyor ve ayrı hızlarda değişiyor.
-    # Rehber "--damga ver" derken rutin metni damgasız bir çağrı gösterirse
-    # sigorta sessizce devre dışı kalır — ve tam o sessizlik 26.08 kazasını
-    # doğurdu. Zorunlu kılınca kayma sessiz kalmıyor: çağrı hemen düşüyor,
-    # hata ne yapılacağını söylüyor ve çağıran kendini düzeltiyor.
-    # Damgasız yazmak bilinçli bir tercih olabilir (ölçümün yenilenmediğini
-    # elle doğruladığın durumlar); o zaman açıkça istenir.
+    # Sigorta damga verilmese de çalışmalı. Sebebi mimari: yazı katmanını
+    # ateşleyen rutinin metni claude.ai hesabında durur, depodaki rehber
+    # (YAZIM.md) ise burada; ikisi ayrı hızlarda değişiyor ve bir aracı rutin
+    # metnini DEĞİŞTİREMİYOR. Rehber "--damga ver" derken rutin metni damgasız
+    # çağrı gösteriyordu — sigorta sessizce devre dışıydı ve 26.08 kazası tam
+    # oradan çıktı. Damgayı zorunlu kılmak kaymayı görünür yapar ama bu sefer
+    # de rutini düşürür; doğrusu, damga yokken sigortayı BAŞKA BİR ÖLÇÜYLE
+    # sürdürmek.
+    #
+    # O ölçü yama dosyasının değiştirilme zamanı: yazan taraf yamayı en son
+    # yazar, yani dosyanın mtime'ı "yazı bitti" anına yakındır. Bültenin
+    # `olusturma` damgası ondan SONRAYSA ölçüm yazı bittikten sonra yeniden
+    # kurulmuş demektir — damga kıyasının yakaladığı durumun ta kendisi.
+    # Zayıf tarafı: yamanın yazıldığı an, bültenin OKUNDUĞU andan sonradır,
+    # yani aradaki dar pencereyi kaçırabilir. Bu yüzden açık damga hâlâ
+    # tercih edilendir ve rehber onu ister; mtime yalnız TABANDIR.
     ap.add_argument("--damgasiz", action="store_true",
-                    help="damga sigortasını bilerek atla (ölçümün yenilenmediğini "
-                         "kendin doğruladıysan)")
+                    help="her iki sigortayı da bilerek atla (ölçümün "
+                         "yenilenmediğini kendin doğruladıysan)")
     a = ap.parse_args()
-
-    if not a.damga and not a.damgasiz:
-        print("DAMGA GEREKLİ: bülteni okuduğun andaki `olusturma` değerini "
-              "--damga ile ver.\n"
-              "  Neden: sen yazarken ölçüm katmanı yenilenmiş olabilir; damga "
-              "tutmazsa yama reddedilir ve metni güncel ölçüye göre gözden "
-              "geçirirsin.\n"
-              "  Damgayı görmek için: "
-              "python3 -c \"import json,pathlib,datetime;"
-              "print(json.loads(pathlib.Path('site/src/data/bulten/%s.json')"
-              ".read_text())['olusturma'])\"\n"
-              "  Bilerek atlamak istiyorsan --damgasiz yaz."
-              % (a.tarih or date.today().isoformat()), file=sys.stderr)
-        return 2
 
     ham = sys.stdin.read() if a.yama == "-" else Path(a.yama).read_text(encoding="utf-8")
     try:
@@ -146,8 +141,10 @@ def main() -> int:
     except Exception:
         pass                       # sürücü kurulamazsa yazma işlemi etkilenmez
 
-    if a.damga:
-        mevcut = json.loads(hedef.read_text(encoding="utf-8")).get("olusturma", "")
+    mevcut = json.loads(hedef.read_text(encoding="utf-8")).get("olusturma", "")
+    if a.damgasiz:
+        print("(damga sigortası atlandı — --damgasiz)", file=sys.stderr)
+    elif a.damga:
         if mevcut != a.damga:
             print(f"YAMA REDDEDİLDİ: ölçüm katmanı yazı yazılırken yenilenmiş.\n"
                   f"  okuduğun damga : {a.damga}\n"
@@ -155,6 +152,24 @@ def main() -> int:
                   "Bülteni yeniden oku, metni güncel ölçüme göre gözden geçir ve "
                   "yeni damgayla tekrar uygula.", file=sys.stderr)
             return 3
+    elif a.yama != "-":
+        # Damga verilmedi: yama dosyasının mtime'ıyla taban sigorta.
+        yazildi = dt.datetime.fromtimestamp(Path(a.yama).stat().st_mtime)
+        try:
+            olcum = dt.datetime.fromisoformat(mevcut)
+        except ValueError:
+            olcum = None
+        if olcum and olcum > yazildi:
+            print(f"YAMA REDDEDİLDİ: ölçüm katmanı yama yazıldıktan SONRA "
+                  f"yeniden kurulmuş.\n"
+                  f"  yama yazıldı : {yazildi:%Y-%m-%d %H:%M:%S}\n"
+                  f"  ölçüm damgası: {mevcut}\n"
+                  "Bülteni yeniden oku, metni güncel ölçüme göre gözden geçir, "
+                  "yamayı yeniden yaz ve --damga ile uygula.", file=sys.stderr)
+            return 3
+        print(f"(damga verilmedi; taban sigorta geçti — ölçüm {mevcut}, "
+              f"yama {yazildi:%H:%M:%S}. Açık damga için --damga kullan.)",
+              file=sys.stderr)
 
     b, degisen = uygula(hedef, yama)
     if not degisen:

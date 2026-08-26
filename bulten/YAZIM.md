@@ -109,10 +109,23 @@ rutin metni ise ayrı bir arayüzde durur, kimse ona bakmaz ve sessizce eskir.
 Yeni bir kural koyulacaksa **buraya** yazılır.
 
 **Mekanik sigortalar rutin metnine değil, DEPODAKİ ARAÇLARA konur.** Rutin
-metni bir aracı yanlış çağırırsa (ya da eski bir çağrıyı gösterirse) sigorta
-sessizce devre dışı kalır. `yaz.py` bu yüzden `--damga`yı zorunlu kılar: eksik
-verilirse çağrı düşer ve hata ne yapılacağını söyler. Bir kuralı "rutin metnine
-yazdım" diye tamam sayma; araç onu kendi başına dayatabiliyor mu, ona bak.
+metni bir aracı eski biçimiyle çağırırsa sigorta sessizce devre dışı kalır —
+26.08 kazası tam buradan çıktı. Ama sigortayı "eksikse düş" diye kurmak da
+yanlış olur: bu sefer de rutin, kendi metnini düzeltemediği için her sabah
+düşer. Doğrusu, sigortanın açık argüman olmadan da SÜRMESİ.
+
+`yaz.py` bunu iki kademede yapıyor:
+
+- `--damga <okuduğun olusturma>` verilirse damga karşılaştırılır. Kesin ölçü,
+  rehberin istediği budur.
+- Verilmezse yama dosyasının değiştirilme zamanı taban sigorta olur: bültenin
+  `olusturma` damgası yamadan sonraysa ölçüm yazı bittikten sonra yeniden
+  kurulmuş demektir ve yama reddedilir. Aradaki dar pencereyi (bülteni okuma
+  ile yamayı yazma arası) kaçırabilir, o yüzden taban olmaktan öteye geçmez.
+- `--damgasiz` her ikisini de bilerek atlar.
+
+Bir kuralı "rutin metnine yazdım" diye tamam sayma; araç onu kendi başına
+dayatabiliyor mu, ona bak.
 
 **Rutini bir aracı yeniden kuramaz.** Mevcut iki rutin (hafta içi 04:15 UTC,
 pazar 14:45 UTC) hesabın arayüzünden oluşturuldu; aracının onları güncelleme ya

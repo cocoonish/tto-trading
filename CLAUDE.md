@@ -100,8 +100,9 @@ rutinin metni depoda değil, claude.ai hesabının rutin ayarlarında durur ve b
 aracı onu değiştiremez (arayüzden kurulmuş rutinler agent'a kapalı; agent'ın
 kurduğu rutin ise özel depoyu klonlayamaz, çünkü yeni oturuma kaynak depo
 bağlanmaz). Bu yüzden bir kural "rutin metnine yazıldı" diye tamam sayılmaz:
-araç onu kendi başına dayatabilmelidir. `yaz.py --damga` zorunludur, denetim
-eşikleri koddadır, duman sınaması iş akışını durdurur. Rutin metni yalnız
+araç onu kendi başına dayatabilmelidir. `yaz.py`nin damga sigortası açık argüman
+verilmese de yama dosyasının zamanıyla sürer, denetim eşikleri koddadır, duman
+sınaması iş akışını durdurur. Rutin metni yalnız
 `bulten/YAZIM.md`ye işaret eder; kural rehbere yazılır.
 
 **Kurucu ilke — uydurma yok.** Sürpriz yalnız sayısal beklenti varsa hesaplanır;
