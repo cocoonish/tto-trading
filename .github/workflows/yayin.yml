@@ -21,6 +21,21 @@ on:
     paths:
       - 'site/**'
       - 'bulten/**'
+  # YAKALAMA KOŞUSU. Yukarıdaki iki tetikleyici tek bir şeye karşı savunmasız:
+  # GitHub'ın koşuya makine ATAYAMAMASI. O durumda iş hiç başlamadan
+  # "startup_failure" ile biter ("No jobs were run") ve o içerik, bir sonraki
+  # tetikleyiciye kadar siteye çıkmaz. 26.08'de iki yayın koşusu böyle düştü
+  # (aynı dosya 14:55'te ve 16:03'te sorunsuz koştu; arada bir veri koşusu da
+  # 51 dakika kuyrukta bekledi).
+  #
+  # Veri koşuları günde dört kez tetiklediği için çoğu kaçak kendiliğinden
+  # kapanıyor. Kapanmayan tek yer en önemlisi: sabah bülteni. Yazı katmanı
+  # 07:15'te başlar, ~07:35'te push eder; o push'un yayını düşerse bülten
+  # 11:47'deki veri koşusuna kadar sitede olmaz. Bu koşu o dört saatlik
+  # boşluğu kapatıyor. Değişiklik yoksa yayinla.py hiçbir şey yapmaz.
+  schedule:
+    - cron: '11 5 * * 1-5'    # 08:11 İstanbul — yazı katmanından ~1 saat sonra
+    - cron: '41 15 * * 0'     # 18:41 İstanbul — pazar haftalık yazısından sonra
   workflow_dispatch: {}
 
 permissions:
