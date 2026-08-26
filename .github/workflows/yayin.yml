@@ -12,8 +12,16 @@ on:
   # (sonsuz döngü koruması). Veri tazeleme ve bülten işleri commit'i o token'la
   # attığı için yalnız `push` tetikleyicisi onları kaçırırdı; bu yüzden o iki
   # işin bitişi ayrıca dinleniyor.
+  # FX iş akışı listeye SONRADAN eklendi ve eksikliği hemen görüldü: haftalık
+  # tam kip koşusu 26.08'de veriyi tazeleyip commit'ledi ama yayın hiç
+  # tetiklenmedi — commit GITHUB_TOKEN'la atıldığı için `push` tetikleyicisi
+  # zaten susuyor, bu liste de o iş akışını tanımıyordu. Veri üreten HER iş
+  # akışı buraya yazılmalı; yenisi eklenirken bu satır da güncellenmeli.
   workflow_run:
-    workflows: ["Veri tazeleme", "Günlük bülten"]
+    workflows:
+      - "Veri tazeleme"
+      - "Günlük bülten"
+      - "FX haber endeksi (haftalık, tam kip)"
     types: [completed]
   # Yazı katmanı (bulut rutini) ve yereldeki push'lar için.
   #
