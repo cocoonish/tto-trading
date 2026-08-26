@@ -146,6 +146,12 @@ jobs:
           cp basabas_anket.html prim_kesit.html prim_tarihce.html reel_tarihce.html \
              mevsim.html ozet.json "../../site/public/projeler/tufex-basabas/"
           cd ../..
+          cd "Aktarılacak Projeler/Makroihtiyati"
+          python hesap.py
+          python grafik.py
+          cp ayrisma.html kacak.html makas.html bkea.html ozet.json duzenlemeler.json \
+             "../../site/public/projeler/makroihtiyati/"
+          cd ../..
           python site/tools/plotly_stil.py --hepsi >/dev/null
 
       - name: Commit
