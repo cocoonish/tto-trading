@@ -101,6 +101,18 @@ def main() -> int:
         print(f"bülten yok: {hedef.name} — önce 'python3 bulten.py' koşmalı", file=sys.stderr)
         return 2
 
+    # Birleştirme sürücüsünü kur. Bülten dosyasına hem otomatik koşu hem yazı
+    # katmanı dokunuyor; sürücü .git/config'de durduğu ve depoyla taşınmadığı
+    # için her koşuda yeniden yazılmalı. Eskiden yalnız bulten.py kuruyordu,
+    # ama yazı katmanı bülten zaten üretilmişse bulten.py'yi hiç çağırmıyor —
+    # o durumda push sırasındaki çakışma çözümsüz kalıyordu.
+    try:
+        sys.path.insert(0, str(BURASI))
+        import birlestir
+        birlestir.kur()
+    except Exception:
+        pass                       # sürücü kurulamazsa yazma işlemi etkilenmez
+
     b, degisen = uygula(hedef, yama)
     if not degisen:
         print("yamada yazılacak içerik yok")
