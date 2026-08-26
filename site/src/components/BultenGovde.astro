@@ -8,6 +8,9 @@
  * sonra takvim, en sonda haber. Sabah üç saniyede bakan biri ilk iki bölümden
  * gerekli her şeyi almalı.
  */
+import EgriGrafik from './EgriGrafik.astro';
+import SigmaSerit from './SigmaSerit.astro';
+
 interface Props {
   b: any;
 }
@@ -419,6 +422,7 @@ const bolumler = [
             yüzde aynı ölçekte kıyaslanır ve yüzdesi küçük ama kendi normaline göre
             büyük hareketler görünür olur.
           </p>
+          <SigmaSerit hareketler={b.piyasa.en_cok_hareket.sigma} />
           <div class="p-kaydir">
             <table class="p-tablo">
               <thead>
@@ -446,6 +450,7 @@ const bolumler = [
       {b.piyasa.tr_faizleri && b.piyasa.tr_faizleri.length > 0 && (
         <div class="p-grup">
           <h3>Türk lirası faizleri ve DİBS eğrisi</h3>
+          {b.grafikler?.egri && <EgriGrafik egri={b.grafikler.egri} />}
           <table class="p-tablo tl">
             <tbody>
               {b.piyasa.tr_faizleri.map((t: any) => (
