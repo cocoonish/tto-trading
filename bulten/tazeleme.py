@@ -106,7 +106,7 @@ TETIK = {t.hat: t for t in TETIKLER}
 
 # ── ulusal takvimden yayımlanmış kayıtlar ────────────────────────────────────
 
-def _yayimlar(yillar: tuple[int, ...]) -> list[dict]:
+def _yayimlar(yillar: tuple[int, ...]) -> tuple[list[dict], bool]:
     """Ulusal takvimin YAYIMLANMIŞ kayıtları (adı, kurumu, yayım anı).
 
     takvim.tuik() ileriye bakar; burada geriye bakmak gerekiyor: "son
@@ -141,7 +141,11 @@ def _yayimlar(yillar: tuple[int, ...]) -> list[dict]:
         # Kaynak düşerse bayat önbellekle devam edilir; emniyet ağı zaten
         # takvimsiz kalan hattı en_gec gününde koşturur.
         cikti += [k for k in (ham or []) if isinstance(k, dict)]
-    return cikti
+    # İkinci değer: takvim GERÇEKTEN alındı mı. Boş liste ile "kaynak düştü"
+    # ayrımı şart — ayrılmazsa TÜİK ucu bir gün düştüğünde on üç hattın hepsi
+    # "yeni yayım yok" gerekçesiyle atlanır ve koşu çıkış kodu 0 ile başarılı
+    # görünür. Bulutta takvim önbelleği hiç olmadığı için bu senaryo uzak değil.
+    return cikti, bool(cikti)
 
 
 def _an(metin: str) -> dt.datetime | None:
@@ -213,7 +217,7 @@ def kararlar(hatlar: list[str] | None = None,
     hatlar = hatlar or [t.hat for t in TETIKLER]
     durum = durum_oku()
     yillar = tuple({simdi.year, (simdi - dt.timedelta(days=120)).year})
-    yayim = _yayimlar(yillar)
+    yayim, takvim_saglam = _yayimlar(yillar)
     ihaleler = _ihale_gunleri()
 
     cikti: list[Karar] = []
@@ -230,6 +234,10 @@ def kararlar(hatlar: list[str] | None = None,
         if son is None:
             cikti.append(Karar(ad, True, "hiç tazelenmemiş"))
             continue
+        if not takvim_saglam:
+            cikti.append(Karar(ad, True, "TAKVİM ALINAMADI — kör koşu "
+                                         "(yayım takvimi okunamadığı için hat koşuluyor)"))
+            continue
 
         gecen = (simdi - son).days
         if gecen >= t.en_gec:
@@ -240,6 +248,18 @@ def kararlar(hatlar: list[str] | None = None,
 
         tetikleyen: list[str] = []
         if t.kalip:
+            # Kalıp takvimde HİÇ eşleşmiyorsa (kaynak seri adını değiştirmiş
+            # olabilir) hat sessizce emniyet ağına düşer ve ayda birkaç koşuya
+            # iner — kimse fark etmez. Tarih süzgeci olmadan eşleşme sayılıp
+            # sıfırsa bu ayrı bir gerekçeyle bildirilir.
+            eslesme = sum(1 for k in yayim
+                          if (not t.kurum or k["kurum"] in t.kurum)
+                          and re.search(t.kalip, k["adi"], re.I))
+            if eslesme == 0:
+                cikti.append(Karar(ad, True,
+                                   "KALIP ÖLÜ — takvimde bu tarife uyan seri yok "
+                                   "(kaynak seri adını değiştirmiş olabilir)"))
+                continue
             for k in yayim:
                 if t.kurum and k["kurum"] not in t.kurum:
                     continue

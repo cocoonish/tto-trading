@@ -388,7 +388,7 @@ def kilit_gelismeler(haberler: list[Haber]) -> list[Haber]:
     return aday[:KILIT_SINIRI]
 
 
-def bolumle(haberler: list[Haber], zengin: int = 26) -> list[dict]:
+def bolumle(haberler: list[Haber], zengin: int = 26) -> tuple[list[dict], list[dict]]:
     """Haberleri sayfadaki bölümlere dağıt, sonra GÖRÜNECEK olanları zenginleştir.
 
     Sıra önemli: önce zenginleştirip sonra seçmek, kaynağından okunan özetlerin
@@ -417,8 +417,13 @@ def bolumle(haberler: list[Haber], zengin: int = 26) -> list[dict]:
         zenginlestir(gorunen, azami=zengin)
     except Exception:
         pass
-    return [{"id": b["id"], "baslik": b["baslik"],
-             "maddeler": [asdict(h) for h in b["secilen"]]} for b in out]
+    # Dondurma EN SONDA ve TEK yerde: kilit listesi burada üretilip döndürülür,
+    # çağıran taraf kilit_gelismeler()'i ikinci kez çağırmasın. İkinci çağrı
+    # zenginleştirmeden sonra koştuğu için FARKLI puanlar üretiyordu ve aynı
+    # JSON'da aynı haber iki ayrı önem puanıyla yazılıyordu.
+    return ([{"id": b["id"], "baslik": b["baslik"],
+              "maddeler": [asdict(h) for h in b["secilen"]]} for b in out],
+            [asdict(h) for h in kilit])
 
 
 # ─────────────────────────── haberi kaynağından zenginleştir
@@ -609,7 +614,11 @@ def tara(pencere_saat: int = 30) -> tuple[list[Haber], list[str]]:
 
 if __name__ == "__main__":
     h, dusen = tara()
-    for b in bolumle(h):
+    bolumler, kilit = bolumle(h)
+    print(f"KİLİT ({len(kilit)}):")
+    for m in kilit:
+        print(f"  {m['onem']:5.1f}  {m['baslik'][:88]}")
+    for b in bolumler:
         print(f"\n### {b['baslik']} ({len(b['maddeler'])})")
         for m in b["maddeler"][:4]:
             print(f"  · {m['baslik'][:96]}")
