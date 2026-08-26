@@ -127,6 +127,21 @@ jobs:
             git checkout -- "Aktarılacak Projeler/hazineihrac" "site/public/projeler/hazine-ihrac" || true
           fi
 
+      # Taşıma defteri kendi kaynağına gitmez: Fonlama ve DİBS'in depoya
+      # yazdığı CSV'lerden türetilir. O yüzden takvim süzgecine tabi değildir
+      # ve her koşuda çalışır — girdileri değişmediyse çıktı da değişmez ve
+      # commit adımı zaten hiçbir şey yazmaz. Saniyeler sürer.
+      - name: TL taşıma defteri (depodaki serilerden)
+        if: always()
+        run: |
+          cd "Aktarılacak Projeler/Carry"
+          python hesap.py
+          python grafik.py
+          cp makas.html endeks.html nakit_tahvil.html konvansiyon.html ozet.json \
+             "../../site/public/projeler/tl-tasima/"
+          cd ../..
+          python site/tools/plotly_stil.py --hepsi >/dev/null
+
       - name: Commit
         run: |
           git config --global user.name  "tto-veri"
