@@ -1,15 +1,15 @@
 {
  "_aciklama": "İZLEME DEFTERİ — bültenin verdiği sözlerin kaydı. Bülten 'şunu izleyeceğiz', 'yarın belli olacak', 'sebebi anlaşılmıyor' dediği an buraya bir kayıt düşülür. Her koşuda yazı katmanı önce bu defteri açar: vadesi gelen ya da gelişme olan her kayıt için bültende doğal bir yerde hesap verilir — 'dün şuna bakacağız demiştik, işte olan bu' tonunda, madde listesi olarak değil. Cevabı bulunan kayıt kapatılır (durum: kapandı + sonuç), gelişme olmayan kayıt açık kalır ve zorla anılmaz. Bu defter bülteni birbirini takip eden bir yazı dizisi yapar; yazarı kısıtlamak için değil, unutmasın diye vardır.",
- "_son_guncelleme": "2026-08-25",
+ "_son_guncelleme": "2026-08-26",
  "kayitlar": [
   {
    "konu": "RBOB benzinin tek günde %10,59 düşüşünün sebebi",
    "acilis": "2026-08-24",
-   "durum": "acik",
+   "durum": "kapandi",
    "soz": "24.08 bülteni 'sebebi anlaşılmıyor' dedi; 25.08 bülteni ikinci günde de aynı hükmü verdi — RBOB bir gün daha %8,78 düştü (iki günde kümülatif ~%19), benzin crack 12,1 dolar daraldı, ham petrol yerinde. En olası mekanik aday ağustos sonu yaz tipi–kış tipi kontrat geçişi, teyit yok.",
    "ne_bakilacak": "Kontrat geçişini teyit eden bir kaynak; eylül başında yeni vade açıldığında marjın toparlanıp toparlanmadığı.",
    "vade": "2026-09-02",
-   "sonuc": ""
+   "sonuc": "Cevap bulundu: hareket piyasada değil ölçüde. Eylül vadesi 31 Ağustos'ta sona eriyor ve 1 Eylül'den itibaren sözleşmenin dayanağı düşük buhar basınçlı yaz benzininden üretimi daha ucuz kış benzinine dönüyor; iki mal arasındaki ~30 sentlik yapısal fark günlük düşüş gibi ölçülüyor. CME'nin 21 Ağustos notu eylül vadesinin %2,5 artışla 3,35 dolara çıktığını, yani o gün fiilen YÜKSELDİĞİNİ söylüyor. Aritmetik de teyit ediyor: bu koşuda günlük değişim −%11,36 iken haftalık değişim −%11,42; üç gün üst üste %10 düşen bir fiyatın haftalık kaybı %11'de kalamaz. 24 ve 25 Ağustos'ta 'sebebi anlaşılmıyor' hükmü doğru ihtiyattı, ama sebep ölçüm tarafındaydı."
   },
   {
    "konu": "ABD'nin İran yaptırım paketi ('ekonomik D-Day') içeriği",
@@ -123,8 +123,8 @@
    "konu": "Gecelik faizin %37 civarında kalıcılaşıp kalıcılaşmadığı",
    "acilis": "2026-08-25",
    "durum": "acik",
-   "soz": "Bülten 'dünkü seviye korunursa hareket kalıcı, geri tırmanırsa bir günlük coşkuydu' dedi ve bunu bugünün birinci izleme maddesi yaptı. 31 Ağustos vergi takviminin gecelik faizi yukarı iteceğini, temiz sinyalin eylülün ilk haftasında geleceğini de not etti.",
-   "ne_bakilacak": "Günlük repo ihalesi tutarı (dün 1 mlr TL), gerçekleşen gecelik repo faizi, net fonlama pozisyonu (−840 mlr TL).",
+   "soz": "25.08: 'dünkü seviye korunursa hareket kalıcı' dedik. 26.08: seviye korundu ve resmî gecelik referans faize de geçti (%36,94, politikanın 0,06 puan altında); ihale tutarı 1 milyar liradan 2 milyar liraya çıktı, sistemin lira fazlası 1.108,6 milyar TL. 31 Ağustos vergi takviminin geçici yukarı itişi hâlâ ayrılacak.",
+   "ne_bakilacak": "Eylülün ilk haftasında gecelik faizin %37 civarında kalıp kalmadığı; ay sonu vergi çıkışının etkisi geçtikten sonraki temiz okuma.",
    "vade": "2026-09-02",
    "sonuc": ""
   },
@@ -132,8 +132,8 @@
    "konu": "Faiz düşerken kur hızının artması",
    "acilis": "2026-08-25",
    "durum": "acik",
-   "soz": "Bir aylık yıllıklandırılmış devalüasyon hızı tek günde %19,9'dan %24,5'e sıçradı, USD/TRY 48,094 ile 52 haftalık zirvede. Bülten 'kur hızı %30'un üzerine çıkarsa lira taşıma pozisyonu ilk kez negatif beklenen getiriye döner' dedi.",
-   "ne_bakilacak": "Devalüasyon hızının yönü; yabancı 4 haftalık net akım (1,24 mlr USD, önceki ölçüme göre −364 mn).",
+   "soz": "25.08: hız tek günde %19,9'dan %24,5'e sıçramıştı ve 'kur hızı %30'un üzerine çıkarsa lira taşıma pozisyonu negatif beklenen getiriye döner' demiştik. 26.08: hız 2,8 puan gerileyerek %21,7'ye indi — sıçrama geri alındı. USD/TRY 48,111 ile 52 haftalık zirvede ama günlük artış %0,07.",
+   "ne_bakilacak": "Devalüasyon hızının %20'nin altına inip inmediği; yabancı dört haftalık net akım (1,24 mlr USD) ve 11 Eylül ödemeler dengesi.",
    "vade": "2026-09-03",
    "sonuc": ""
   },
@@ -150,8 +150,8 @@
    "konu": "Bankacılık endeksinde liderlik değişimi mi",
    "acilis": "2026-08-25",
    "durum": "acik",
-   "soz": "BIST Bankacılık faiz düşüşüyle %2,74 yükseldi ama yılbaşından hâlâ −%2 ve 52 haftalık aralığın %40'ında; sınai endeks +%44,79 ve aralığın tepesinde. Bülten 'dünkü hareket bir liderlik değişiminin ilk günü olabilir ama bir günle rejim ilan edilmez' dedi.",
-   "ne_bakilacak": "Bankacılık–sınai göreli performansı; fonlama gevşemesi kalıcı olursa makasın kapanıp kapanmadığı.",
+   "soz": "24.08'de bankacılık %2,74 yükselmişti. 26.08 ölçümü: haftalık bazda bankacılık +%4,13, sınai +%2,39 — makas bir haftadır bankacılık lehine kapanıyor. Ama yılbaşından bankacılık hâlâ −%2,03 ve 52 haftalık aralığın %40'ında, sınai +%42,07 ve %95'inde. Sınai bu koşuda %1,88 düştü; sebebi kimya-petrol-plastik grubunun %4,43 kaybı, yani ham petrol düşüşü.",
+   "ne_bakilacak": "Fonlama gevşemesi kalıcı olursa yıllık makasın kapanıp kapanmadığı; sınai endeksin petrol fiyatına duyarlılığı.",
    "vade": "2026-09-15",
    "sonuc": ""
   },
@@ -162,6 +162,33 @@
    "soz": "Bülten 'korunma ucuz, haftanın en büyük olayı henüz yaşanmadı' dedi: VIX %4,76 sıçramasına rağmen 52 haftalık aralığın %14'ünde, MOVE %31'inde. Şahin çerçeve altın/gümüş/bitcoin'i birden vurur, tolerans sinyali tersini yapar.",
    "ne_bakilacak": "28 Ağustos Jackson Hole konuşması; sonrasında VIX, DXY, altın ve ABD 10 yıllık reel getirisi.",
    "vade": "2026-09-01",
+   "sonuc": ""
+  },
+  {
+   "konu": "Rafineri marjı ölçüsünün vade geçişinden arındırılması",
+   "acilis": "2026-08-26",
+   "durum": "acik",
+   "soz": "26.08 bülteni benzin marjının 40,78 dolara inmesinin marj çöküşü değil kış tipi benzine geçiş olduğunu yazdı ve bu marjın bir gün öncesinin yaz tipi marjıyla kıyaslanamayacağını söyledi.",
+   "ne_bakilacak": "Eylülün ilk haftasında kış tipi benzin marjının kendi içinde nereye oturduğu; distilat marjının (89,03 dolar) geniş kalmaya devam edip etmediği.",
+   "vade": "2026-09-04",
+   "sonuc": ""
+  },
+  {
+   "konu": "Brent'in 85 dolar eşiğinde kalıcılaşması",
+   "acilis": "2026-08-26",
+   "durum": "acik",
+   "soz": "Enerji kaynaklı enflasyon riski temasının çürütücü ölçütü 'Brent'in 85 doların altına dönmesi'ydi; Brent bu koşuda 85,25 dolara indi ve 52 haftalık aralığın %44'üne geriledi. Sürücü İran–Umman Hürmüz koridoru görüşmeleri.",
+   "ne_bakilacak": "Koridor çerçevesinin somutlaşıp somutlaşmadığı; Brent'in 85 doların altında kalıcılaşması hâlinde temanın durumu aktiften izlemeye çekilecek.",
+   "vade": "2026-09-02",
+   "sonuc": ""
+  },
+  {
+   "konu": "Uzun uçtaki rahatlamanın sürücüsü: veri mi müdahale mi",
+   "acilis": "2026-08-26",
+   "durum": "acik",
+   "soz": "26.08 bülteni dünkü uzun uç rallisini geri alım programına değil zayıf ABD verisine (tüketici güveni 89,4, Richmond imalat 4) bağladı ve on yıllığın 52 haftalık aralıktaki konumunun %95'ten %87'ye indiğini ölçtü.",
+   "ne_bakilacak": "Bugünkü kişisel tüketim enflasyonu ve 9 Eylül'de başlayacak büyütülmüş geri alım operasyonlarının teklif hacmi; iki sürücü burada ayrışacak.",
+   "vade": "2026-09-09",
    "sonuc": ""
   }
  ]
