@@ -94,7 +94,32 @@ def main() -> int:
     ap.add_argument("--damga", default=None,
                     help="bülteni okuduğun andaki `olusturma` değeri; "
                          "değişmişse yama reddedilir")
+    # Damga ZORUNLU. Sebebi: yazı katmanını ateşleyen rutin metni ile depodaki
+    # rehber (YAZIM.md) ayrı yerlerde duruyor ve ayrı hızlarda değişiyor.
+    # Rehber "--damga ver" derken rutin metni damgasız bir çağrı gösterirse
+    # sigorta sessizce devre dışı kalır — ve tam o sessizlik 26.08 kazasını
+    # doğurdu. Zorunlu kılınca kayma sessiz kalmıyor: çağrı hemen düşüyor,
+    # hata ne yapılacağını söylüyor ve çağıran kendini düzeltiyor.
+    # Damgasız yazmak bilinçli bir tercih olabilir (ölçümün yenilenmediğini
+    # elle doğruladığın durumlar); o zaman açıkça istenir.
+    ap.add_argument("--damgasiz", action="store_true",
+                    help="damga sigortasını bilerek atla (ölçümün yenilenmediğini "
+                         "kendin doğruladıysan)")
     a = ap.parse_args()
+
+    if not a.damga and not a.damgasiz:
+        print("DAMGA GEREKLİ: bülteni okuduğun andaki `olusturma` değerini "
+              "--damga ile ver.\n"
+              "  Neden: sen yazarken ölçüm katmanı yenilenmiş olabilir; damga "
+              "tutmazsa yama reddedilir ve metni güncel ölçüye göre gözden "
+              "geçirirsin.\n"
+              "  Damgayı görmek için: "
+              "python3 -c \"import json,pathlib,datetime;"
+              "print(json.loads(pathlib.Path('site/src/data/bulten/%s.json')"
+              ".read_text())['olusturma'])\"\n"
+              "  Bilerek atlamak istiyorsan --damgasiz yaz."
+              % (a.tarih or date.today().isoformat()), file=sys.stderr)
+        return 2
 
     ham = sys.stdin.read() if a.yama == "-" else Path(a.yama).read_text(encoding="utf-8")
     try:

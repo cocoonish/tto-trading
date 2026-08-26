@@ -95,6 +95,15 @@ içinde durur; `PYTHONPATH`e eklendiği için her hat alt süreci — kendi `.ve
 koşan da, yarın eklenecek olan da — onunla açılır. Hatların dosyalarına tek satır
 girmez.
 
+**Kurucu ilke — sigorta metne değil araca konur.** Yazı katmanını ateşleyen
+rutinin metni depoda değil, claude.ai hesabının rutin ayarlarında durur ve bir
+aracı onu değiştiremez (arayüzden kurulmuş rutinler agent'a kapalı; agent'ın
+kurduğu rutin ise özel depoyu klonlayamaz, çünkü yeni oturuma kaynak depo
+bağlanmaz). Bu yüzden bir kural "rutin metnine yazıldı" diye tamam sayılmaz:
+araç onu kendi başına dayatabilmelidir. `yaz.py --damga` zorunludur, denetim
+eşikleri koddadır, duman sınaması iş akışını durdurur. Rutin metni yalnız
+`bulten/YAZIM.md`ye işaret eder; kural rehbere yazılır.
+
 **Kurucu ilke — uydurma yok.** Sürpriz yalnız sayısal beklenti varsa hesaplanır;
 söz karnesi yalnız notlanmış kayıtlardan oran verir; kıyas eğrisi elde ne kadar
 tarihçe varsa o kadar geriye gider ve kendi tarihiyle etiketlenir. Ölçülmemiş bir

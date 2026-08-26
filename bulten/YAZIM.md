@@ -96,6 +96,31 @@ Pazar günkü "haftaya bakış" günlük akışın üstüne üç iş ekler:
    `beklenti_sayi` alanının dolu olduğunu doğrula — sürpriz ölçümü ancak o
    alanla çalışır; serbest metinden sayı türetilmez.
 
+## Rutin nerede duruyor — ve neden bu rehber esas
+
+Yazı katmanını her sabah bir bulut görevi (claude.ai Routine) ateşliyor. O
+görevin metni **depoda değil**, hesabın rutin ayarlarında duruyor. Bunun iki
+sonucu var ve ikisi de bu rehberin biçimini belirliyor:
+
+**Rehber esastır, rutin metni yalnız işaret.** Rutin metni "önce
+`bulten/YAZIM.md` oku, rehbere birebir uy" diyor. İkisi çelişirse rehber
+kazanır — çünkü rehber depoda, sürüm geçmişiyle ve denetimle birlikte yaşıyor;
+rutin metni ise ayrı bir arayüzde durur, kimse ona bakmaz ve sessizce eskir.
+Yeni bir kural koyulacaksa **buraya** yazılır.
+
+**Mekanik sigortalar rutin metnine değil, DEPODAKİ ARAÇLARA konur.** Rutin
+metni bir aracı yanlış çağırırsa (ya da eski bir çağrıyı gösterirse) sigorta
+sessizce devre dışı kalır. `yaz.py` bu yüzden `--damga`yı zorunlu kılar: eksik
+verilirse çağrı düşer ve hata ne yapılacağını söyler. Bir kuralı "rutin metnine
+yazdım" diye tamam sayma; araç onu kendi başına dayatabiliyor mu, ona bak.
+
+**Rutini bir aracı yeniden kuramaz.** Mevcut iki rutin (hafta içi 04:15 UTC,
+pazar 14:45 UTC) hesabın arayüzünden oluşturuldu; aracının onları güncelleme ya
+da silme yetkisi yok. Aracının kurduğu bir rutin ise depoya erişemez: yeni
+oturuma depo bağlanmadığı için özel depo klonlanamaz. Yani rutin metnini
+değiştirmenin tek yolu **claude.ai arayüzü**; oradan değiştirilecek bir şey
+yoksa yeni kural buraya yazılır ve rutin onu okuyarak öğrenir.
+
 ## Kurallar
 
 **Atıf disiplini.** `%1,5`'i aşan her hareket metinde **anılmalı** ve sebebi
