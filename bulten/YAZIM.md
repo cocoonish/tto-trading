@@ -36,8 +36,14 @@ Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
 5. **Kaydet.** Yamayı `python3 bulten/yaz.py yama.json --damga "<okuduğun
    olusturma>"` ile uygula. Damga tutmazsa uygulama reddedilir: bülteni yeniden
    oku, sayıları güncel ölçüye karşı gözden geçir, yeni damgayla tekrar dene.
-6. **Yayınla.** `git add -A && git commit && git push`, sonra
-   `python3 yayinla.py`.
+6. **Push et — YAYINLAMA.** `git add -A && git commit -m "bülten: <tarih>
+   yazı katmanı" && git pull --rebase --autostash && git push`. Push'tan sonrası
+   senin işin değil: ayrı bir iş akışı siteyi public depoya çıkarır. `yayinla.py`
+   ELLE ÇAĞRILMAZ — public depoya yazma yetkisi bulut iş akışında duruyor,
+   yazı katmanının oturumunda yok; çağırmak boşuna hataya çıkar.
+   (Bu satır eskiden "sonra `python3 yayinla.py`" diyordu ve rutinin metniyle
+   çelişiyordu. Rutin "rehbere birebir uy" dediği için çelişki rehberin
+   aleyhineydi.)
 
 ---
 
