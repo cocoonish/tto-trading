@@ -337,7 +337,30 @@ class Denetim:
             for r in grup.get("satirlar", []):
                 ekle(r.get("ad"), *(r.get(a) for a in
                                     ("son", "d1", "h1", "a1", "ybb",
-                                     "yil_yuksek", "yil_dusuk", "yil_konum")))
+                                     "yil_yuksek", "yil_dusuk", "yil_konum",
+                                     # σ da ölçülen bir sayıdır: metin "1,6
+                                     # standart sapma" yazdığında denetim onu
+                                     # ölçülen katmanda bulabilmeli.
+                                     "d1_sigma", "sigma_gun")))
+        # Rejim panosu satırları da ölçülmüş büyüklüktür: iki ölçülen sayının
+        # farkı ölçüm olmaktan çıkmaz. Havuza girmezse yazan taraf panonun kendi
+        # sayısını metne aldığında denetim onu "karşılığı yok" diye işaretlerdi.
+        for r in self.b.get("rejim", []):
+            v = r.get("deger")
+            if isinstance(v, (int, float)) and not isinstance(v, bool):
+                degerler.add(float(v))
+        for r in self.b.get("sonuclar", []):
+            for a in ("gerceklesme", "onceki", "surpriz", "beklenti_sayi"):
+                v = r.get(a)
+                if isinstance(v, (int, float)) and not isinstance(v, bool):
+                    degerler.add(float(v))
+        # Grafiklerin çizdiği eğri noktaları da ölçülmüş sayıdır — metin kıyas
+        # serisinden bir değer andığında ("21 Ağustos'ta iki yıllık %40,46'ydı")
+        # denetim onu havuzda bulabilmeli.
+        for seri in ((self.b.get("grafikler") or {}).get("egri") or {}).get("seriler", []):
+            for v in seri.get("deger", []):
+                if isinstance(v, (int, float)) and not isinstance(v, bool):
+                    degerler.add(float(v))
         # Olay cümlelerindeki seviye, önceki değer ve fark da ölçülmüş sayıdır.
         for alan in ("one_cikanlar", "notlar", "veri_gunlugu"):
             for o in self.b.get(alan, []):

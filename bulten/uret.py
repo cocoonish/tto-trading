@@ -53,6 +53,12 @@ GOSTERGELER = [
     ("usdtry-deval", "d1a", "1 aylık yıllıklandırılmış deval. hızı", "%", 1, ""),
     ("tcmb-net-rezerv", "h_net", "Net rezerv", "mlr USD", 1, "h_tarih"),
     ("tcmb-net-rezerv", "h_swap_haric", "Swap hariç net rezerv", "mlr USD", 1, "h_tarih"),
+    # Haftalık resmî seri ile GÜNLÜK tahmin panoda yan yana durur. İkisi farklı
+    # tarihlere aittir ve karıştırılmaları bültende gerçek bir hataya yol açtı:
+    # 14.08 tarihli haftalık rakam 24.08 tarihli gibi yazılmıştı. Yan yana
+    # görünmeleri karışmalarını zorlaştırıyor.
+    ("tcmb-net-rezerv", "g_net", "Net rezerv (günlük tahmin)", "mlr USD", 1, "g_tarih"),
+    ("tcmb-net-rezerv", "p_altin_pay", "Brüt rezervde altın payı", "%", 1, "p_tarih"),
     ("fonlama-likidite", "politika", "Politika faizi", "%", 2, ""),
     ("fonlama-likidite", "tlref", "TLREF", "%", 2, ""),
     ("fonlama-likidite", "aofm", "Ağırlıklı ort. fonlama maliyeti", "%", 2, ""),

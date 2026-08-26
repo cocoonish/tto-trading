@@ -40,6 +40,8 @@ const bolumler = [
   b.ozet && (b.ozet.ne_oldu || b.ozet.ne_bekleniyor) &&
     { id: 'ozet', ad: b.haftalik ? 'Geçen hafta / önümüzdeki hafta' : 'Ne oldu / ne bekleniyor' },
   b.rejim?.length > 0 && { id: 'rejim', ad: 'Rejim panosu' },
+  b.piyasa?.en_cok_hareket?.sigma?.length > 0 &&
+    { id: 'olagandisi', ad: 'Günün olağandışı hareketleri' },
   b.one_cikanlar?.length > 0 && { id: 'one-cikanlar', ad: 'Öne çıkanlar' },
   b.sonuclar?.length > 0 && { id: 'sonuclar', ad: 'Ne bekleniyordu, ne geldi' },
   takvimVar && { id: 'takvim', ad: 'Takvim' },
@@ -142,6 +144,41 @@ const bolumler = [
           </li>
         ))}
       </ul>
+    </section>
+  )}
+
+  {b.piyasa.en_cok_hareket?.sigma?.length > 0 && (
+    <section class="blok sigma-blok" id="olagandisi">
+        <h2>Günün olağandışı hareketleri</h2>
+        <p class="alt-not">
+          Hareketin büyüklüğü ile olağandışılığı ayrı şeylerdir. Aşağıdaki sıralama
+          günlük hareketi her enstrümanın kendi son yirmi günlük oynaklığına bölerek
+          kurulur: σ, o enstrüman için normal bir günün ölçüsüdür. Böylece baz puanla
+          yüzde aynı ölçekte kıyaslanır ve yüzdesi küçük ama kendi normaline göre
+          büyük hareketler görünür olur.
+        </p>
+        <SigmaSerit hareketler={b.piyasa.en_cok_hareket.sigma} />
+        <div class="p-kaydir">
+          <table class="p-tablo">
+            <thead>
+              <tr><th>enstrüman</th><th class="sag">1 gün</th><th class="sag">günlük σ</th><th class="sag">kaç σ</th></tr>
+            </thead>
+            <tbody>
+              {b.piyasa.en_cok_hareket.sigma.map((x: any) => (
+                <tr>
+                  <td class="p-ad">{x.ad}</td>
+                  <td class:list={['sag', 'p-degisim', { arti: x.deger > 0, eksi: x.deger < 0 }]}>
+                    {`${x.deger > 0 ? '+' : ''}${x.deger.toLocaleString('tr-TR')}${x.birim}`}
+                  </td>
+                  <td class="sag p-son">{x.oynaklik?.toLocaleString('tr-TR')}{x.birim}</td>
+                  <td class:list={['sag', 'p-sigma', { olagandisi: Math.abs(x.sigma) >= 2 }]}>
+                    {`${x.sigma > 0 ? '+' : ''}${x.sigma.toLocaleString('tr-TR')}σ`}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
     </section>
   )}
 
@@ -497,41 +534,6 @@ const bolumler = [
         Piyasanın kapalı olduğu günlerde “1 gün” son iki işlem gününün farkıdır; her
         satırın tarihi kendi hücresinde yazar.
       </p>
-
-      {b.piyasa.en_cok_hareket?.sigma?.length > 0 && (
-        <div class="p-grup sigma-blok">
-          <h3>Günün olağandışı hareketleri</h3>
-          <p class="alt-not">
-            Hareketin büyüklüğü ile olağandışılığı ayrı şeylerdir. Aşağıdaki sıralama
-            günlük hareketi her enstrümanın kendi son yirmi günlük oynaklığına bölerek
-            kurulur: σ, o enstrüman için normal bir günün ölçüsüdür. Böylece baz puanla
-            yüzde aynı ölçekte kıyaslanır ve yüzdesi küçük ama kendi normaline göre
-            büyük hareketler görünür olur.
-          </p>
-          <SigmaSerit hareketler={b.piyasa.en_cok_hareket.sigma} />
-          <div class="p-kaydir">
-            <table class="p-tablo">
-              <thead>
-                <tr><th>enstrüman</th><th class="sag">1 gün</th><th class="sag">günlük σ</th><th class="sag">kaç σ</th></tr>
-              </thead>
-              <tbody>
-                {b.piyasa.en_cok_hareket.sigma.map((x: any) => (
-                  <tr>
-                    <td class="p-ad">{x.ad}</td>
-                    <td class:list={['sag', 'p-degisim', { arti: x.deger > 0, eksi: x.deger < 0 }]}>
-                      {`${x.deger > 0 ? '+' : ''}${x.deger.toLocaleString('tr-TR')}${x.birim}`}
-                    </td>
-                    <td class="sag p-son">{x.oynaklik?.toLocaleString('tr-TR')}{x.birim}</td>
-                    <td class:list={['sag', 'p-sigma', { olagandisi: Math.abs(x.sigma) >= 2 }]}>
-                      {`${x.sigma > 0 ? '+' : ''}${x.sigma.toLocaleString('tr-TR')}σ`}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
 
       {b.piyasa.tr_faizleri && b.piyasa.tr_faizleri.length > 0 && (
         <div class="p-grup">
