@@ -39,35 +39,40 @@ import takvim as takvim_m  # noqa: E402
 import piyasa as piyasa_m  # noqa: E402
 
 
-# Sabah bakışı panosu: (hat, anahtar, ad, birim, ondalık)
+# Sabah bakışı panosu: (hat, anahtar, ad, birim, ondalık, tarih alanı)
+# Son alan o göstergenin KENDİ saatidir; boş bırakılırsa `<anahtar>_tarih`
+# geleneği, o da yoksa hattın ana saati (`_tarih`) kullanılır. Panodaki tarih
+# de, farkın kıyas noktası da bu saatten okunur — yoksa haftalık bir seri,
+# hattın günlük saati ilerlediği için her gün "değişmedi" görünür.
 GOSTERGELER = [
-    ("usdtry-deval", "kur", "USD/TRY", "", 2),
-    ("usdtry-deval", "d1a", "1 aylık yıllıklandırılmış deval. hızı", "%", 1),
-    ("tcmb-net-rezerv", "h_net", "Net rezerv", "mlr USD", 1),
-    ("tcmb-net-rezerv", "h_swap_haric", "Swap hariç net rezerv", "mlr USD", 1),
-    ("fonlama-likidite", "politika", "Politika faizi", "%", 2),
-    ("fonlama-likidite", "tlref", "TLREF", "%", 2),
-    ("fonlama-likidite", "aofm", "Ağırlıklı ort. fonlama maliyeti", "%", 2),
-    ("enflasyon", "tufe_12a", "TÜFE (yıllık)", "%", 2),
-    ("enflasyon", "tufe_3a", "TÜFE 3a yıllıklandırılmış (arındırılmış)", "%", 1),
-    ("enflasyon", "tufe_3a_ham", "TÜFE 3a yıllıklandırılmış (ham)", "%", 1),
-    ("kredi-parasal", "g_ar_13y", "Kredi büyümesi (13h yıl., kur arınd.)", "%", 1),
-    ("hazine-ihrac", "maliyet_son", "Son ihale maliyeti", "%", 2),
-    ("yabanci-pozisyon", "toplam_4h", "Yabancı 4 haftalık net akım", "mn USD", 0),
-    ("try-reer", "redk", "Reel efektif kur", "endeks", 1),
+    ("usdtry-deval", "kur", "USD/TRY", "", 2, ""),
+    ("usdtry-deval", "d1a", "1 aylık yıllıklandırılmış deval. hızı", "%", 1, ""),
+    ("tcmb-net-rezerv", "h_net", "Net rezerv", "mlr USD", 1, "h_tarih"),
+    ("tcmb-net-rezerv", "h_swap_haric", "Swap hariç net rezerv", "mlr USD", 1, "h_tarih"),
+    ("fonlama-likidite", "politika", "Politika faizi", "%", 2, ""),
+    ("fonlama-likidite", "tlref", "TLREF", "%", 2, ""),
+    ("fonlama-likidite", "aofm", "Ağırlıklı ort. fonlama maliyeti", "%", 2, ""),
+    ("enflasyon", "tufe_12a", "TÜFE (yıllık)", "%", 2, ""),
+    ("enflasyon", "tufe_3a", "TÜFE 3a yıllıklandırılmış (arındırılmış)", "%", 1, ""),
+    ("enflasyon", "tufe_3a_ham", "TÜFE 3a yıllıklandırılmış (ham)", "%", 1, ""),
+    ("kredi-parasal", "g_ar_13y", "Kredi büyümesi (13h yıl., kur arınd.)", "%", 1, ""),
+    ("hazine-ihrac", "maliyet_son", "Son ihale maliyeti", "%", 2, ""),
+    ("yabanci-pozisyon", "toplam_4h", "Yabancı 4 haftalık net akım", "mn USD", 0, ""),
+    ("try-reer", "redk", "Reel efektif kur", "endeks", 1, ""),
 ]
 
 
 def gostergeler() -> list[dict]:
     out = []
-    for hat, anahtar, ad, birim, ond in GOSTERGELER:
+    for hat, anahtar, ad, birim, ond, tarih_alani in GOSTERGELER:
         d = gozlem.anlik(hat)
         if not d:
             continue
         v = d.get(anahtar)
         if v is None or isinstance(v, bool) or not isinstance(v, (int, float)):
             continue
-        onc = gozlem.onceki_surum(hat, gozlem._tarih_of(d))
+        v_tarih = gozlem.anahtar_tarihi(d, anahtar, tarih_alani)
+        onc = gozlem.onceki_surum_anahtar(hat, anahtar, tarih_alani, v_tarih)
         eski = (onc or {}).get("d", {}).get(anahtar) if onc else None
         fark = (v - eski) if isinstance(eski, (int, float)) else None
         out.append({"ad": ad, "hat": hat, "anahtar": anahtar,
@@ -78,7 +83,7 @@ def gostergeler() -> list[dict]:
                     "fark": round(float(fark), ond) if fark is not None else None,
                     "fark_metin": (("+" if fark > 0 else "−") + olay_m._s(abs(fark), ond))
                                   if (fark is not None and round(abs(float(fark)), ond) > 0) else "",
-                    "veri_tarihi": gozlem._tarih_of(d)})
+                    "veri_tarihi": v_tarih})
     return out
 
 

@@ -90,14 +90,88 @@ def onceki_surum(hat: str, simdiki_tarih: str) -> dict | None:
     return None
 
 
+# ─────────────────────────────────────────── anahtar başına SAAT
+# Bir ozet.json'da tek bir yayım ritmi yoktur. tcmb-net-rezerv'in `_tarih`i
+# günlük analitik bilançodan gelir (her iş günü 14:30), ama `h_net` haftalık
+# para-banka istatistiğinden (Perşembe 14:30) gelir ve `h_tarih`te durur.
+# Hepsi `_tarih` üzerinden okunursa iki yanlış birden çıkar:
+#   · panel 14.08 tarihli bir sayıyı 24.08 etiketiyle gösterir,
+#   · kıyas noktası her iş günü ilerlediği için haftalık serinin farkı hep
+#     sıfır görünür ve gerçek hareket bir günde kaybolur.
+# Kural: bir anahtarın kendi saati, önce açıkça tanımlanan alan, yoksa
+# `<anahtar>_tarih` geleneği (projelerin ozet_uret.py'leri bunu zaten yazıyor),
+# o da yoksa hattın ana saati `_tarih`tir.
+
+def tarih_alani(d: dict, anahtar: str, acik: str = "") -> str:
+    """Bir anahtarın saatini tutan alanın ADI. "" → hattın ana saati."""
+    if acik:
+        return acik
+    aday = f"{anahtar}_tarih"
+    return aday if isinstance(d, dict) and d.get(aday) else ""
+
+
+def anahtar_tarihi(d: dict, anahtar: str, acik: str = "") -> str:
+    """Bir anahtarın kendi veri tarihi (yoksa hattın ana saatine düşer)."""
+    if not isinstance(d, dict):
+        return "?"
+    alan = tarih_alani(d, anahtar, acik)
+    if alan and d.get(alan):
+        return str(d[alan])
+    return _tarih_of(d)
+
+
+def onceki_surum_anahtar(hat: str, anahtar: str, acik: str = "",
+                         simdiki_tarih: str = "") -> dict | None:
+    """O ANAHTARIN tarihi şimdikinden FARKLI olan en son anlık görüntü.
+
+    `onceki_surum`un anahtar başına çalışan hâli: haftalık bir seri, hattın
+    günlük saati ilerlediği için "değişmedi" sayılmasın.
+    """
+    for kayit in reversed(gecmis_oku(hat)):
+        d = kayit.get("d")
+        if not isinstance(d, dict) or anahtar not in d:
+            continue
+        if anahtar_tarihi(d, anahtar, acik) != simdiki_tarih:
+            return kayit
+    return None
+
+
+def _dizi_basi(kayitlar: list[dict], deger) -> dict:
+    """Sondaki AYNI değerli kesintisiz dizinin ilk kaydı.
+
+    "İlk görülme"yi tarihçenin tamamında aramak yanlış: revizyonla eski bir
+    değere dönülürse gecikme olduğundan büyük ölçülür. Aranan, o değere en son
+    NE ZAMAN geçildiğidir.
+    """
+    ilk = kayitlar[-1]
+    for k in reversed(kayitlar):
+        if k["_deger"] != deger:
+            break
+        ilk = k
+    return ilk
+
+
 def son_gorulme(hat: str) -> tuple[str, str] | None:
-    """(veri sürümü, o sürümün ilk görüldüğü zaman) — gecikme denetimi için."""
-    kayitlar = gecmis_oku(hat)
+    """(veri sürümü, o sürüme geçilen an) — hat düzeyinde gecikme denetimi."""
+    kayitlar = [{**k, "_deger": k.get("v")} for k in gecmis_oku(hat)]
     if not kayitlar:
         return None
-    son_v = kayitlar[-1].get("v")
-    ilk = next(k for k in kayitlar if k.get("v") == son_v)
-    return son_v, ilk.get("t", "")
+    son_v = kayitlar[-1]["_deger"]
+    return son_v, _dizi_basi(kayitlar, son_v).get("t", "")
+
+
+def alan_son_gorulme(hat: str, alan: str) -> tuple[str, str] | None:
+    """(alanın değeri, o değere geçilen an) — ALAN düzeyinde gecikme denetimi.
+
+    Hattın ana saati tıkırdarken içindeki haftalık serinin donması, `_tarih`e
+    bakan bir denetim için görünmezdir; burada o alan doğrudan izlenir.
+    """
+    kayitlar = [{**k, "_deger": str(k["d"][alan])} for k in gecmis_oku(hat)
+                if isinstance(k.get("d"), dict) and k["d"].get(alan)]
+    if not kayitlar:
+        return None
+    son = kayitlar[-1]["_deger"]
+    return son, _dizi_basi(kayitlar, son).get("t", "")
 
 
 def gun_once(hat: str, gun: int = 7) -> dict | None:

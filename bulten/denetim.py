@@ -247,9 +247,15 @@ class Denetim:
             import ayar, gozlem                       # noqa: E402
         except Exception:
             return
+        # Hattın ana saati ve içindeki farklı ritimli alanlar AYRI denetlenir;
+        # yalnız ana saate bakmak, günlük bileşeni ilerleyen bir hattın haftalık
+        # bileşeni donduğunda denetimi kör bırakır.
+        saatler = [(hat, gozlem.son_gorulme(hat), azami, "")
+                   for hat, azami in ayar.RITIM.items()]
+        saatler += [(hat, gozlem.alan_son_gorulme(hat, alan), azami, ad)
+                    for (hat, alan), (azami, ad) in ayar.RITIM_ALAN.items()]
         gecikmis = []
-        for hat, azami in ayar.RITIM.items():
-            sg = gozlem.son_gorulme(hat)
+        for hat, sg, azami, ad in saatler:
             if not sg:
                 continue
             try:
@@ -258,7 +264,7 @@ class Denetim:
                 continue
             gun = (datetime.now() - t).days
             if gun > azami:
-                gecikmis.append(f"{hat} ({gun}g)")
+                gecikmis.append(f"{hat}{f' — {ad}' if ad else ''} ({gun}g)")
         if gecikmis:
             self.uyari.append("Veri gecikmiş hatlar: " + ", ".join(gecikmis))
 

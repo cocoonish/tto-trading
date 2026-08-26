@@ -15,7 +15,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
-from ayar import IZLEMLER, RITIM, GRUPLAR, Izlem
+from ayar import IZLEMLER, RITIM, RITIM_ALAN, GRUPLAR, Izlem
 import gozlem
 
 
@@ -152,29 +152,47 @@ def yeni_veri_olaylari(hatlar: list[str], pencere_saat: float = 30.0) -> list[Ol
     return out
 
 
+def _gecikme(hat: str, sg: tuple[str, str] | None, azami_gun: int,
+             ad: str = "") -> Olay | None:
+    """Bir saatin donukluk süresi ritmi aşıyorsa olay üret."""
+    if not sg:
+        return None
+    surum, ilk = sg
+    yas = _yas_saat(ilk)
+    if yas is None:
+        return None
+    gun = int(yas // 24)
+    if gun <= azami_gun:
+        return None
+    etiket = f"{hat} — {ad}" if ad else hat
+    return Olay("diger", "dikkat", f"{etiket}: veri gecikti",
+                f"{etiket}: son veri sürümü {surum}; {gun} gündür yenilenmedi "
+                f"(beklenen ritim ≤ {azami_gun} gün).",
+                hat=hat, tarih=surum,
+                aciklama="Kaynak yayımlamamış olabilir; sayfadaki sayılar bu "
+                         "sürümde donmuş demektir.")
+
+
 def gecikme_olaylari() -> list[Olay]:
     """Bir hattın verisi beklenen ritmin ötesinde sessizse söyle.
 
     'Sessiz bayatlama' denetiminin bültendeki karşılığı: kaynak yayımlamadıysa
     da bunu BİLMEK gerekir, çünkü sayfadaki sayılar o sürümde donmuştur.
+
+    İki kademe var, çünkü bir ozet.json birden fazla saat taşır: hattın ana
+    saati (`_tarih`) ve içindeki farklı ritimli alanlar. Yalnız ana saate
+    bakılırsa, günlük bileşen tıkırdarken haftalık bileşenin donması sessizce
+    geçer — bu denetimin tam da yakalaması gereken durum.
     """
     out = []
     for hat, azami_gun in RITIM.items():
-        sg = gozlem.son_gorulme(hat)
-        if not sg:
-            continue
-        surum, ilk = sg
-        yas = _yas_saat(ilk)
-        if yas is None:
-            continue
-        gun = int(yas // 24)
-        if gun > azami_gun:
-            out.append(Olay("diger", "dikkat", f"{hat}: veri gecikti",
-                            f"{hat}: son veri sürümü {surum}; {gun} gündür yenilenmedi "
-                            f"(beklenen ritim ≤ {azami_gun} gün).",
-                            hat=hat, tarih=surum,
-                            aciklama="Kaynak yayımlamamış olabilir; sayfadaki sayılar bu "
-                                     "sürümde donmuş demektir."))
+        o = _gecikme(hat, gozlem.son_gorulme(hat), azami_gun)
+        if o:
+            out.append(o)
+    for (hat, alan), (azami_gun, ad) in RITIM_ALAN.items():
+        o = _gecikme(hat, gozlem.alan_son_gorulme(hat, alan), azami_gun, ad)
+        if o:
+            out.append(o)
     return out
 
 
@@ -184,11 +202,16 @@ def topla() -> list[Olay]:
         simdi = gozlem.anlik(hat)
         if not simdi:
             continue
-        v = gozlem._tarih_of(simdi)
-        onc = gozlem.onceki_surum(hat, v)
-        once_d = onc.get("d") if onc else None
+        # Kıyas noktası İZLEM BAŞINA aranır: aynı dosyadaki günlük ve haftalık
+        # seriler farklı saatlerde ilerler; hepsini hattın ana saatiyle
+        # kıyaslamak haftalık serinin hareketini bir günde siler.
         for iz in [i for i in IZLEMLER if i.hat == hat]:
-            o = izlem_olayi(iz, simdi, once_d, v, str(onc.get("v")) if onc else "")
+            v = gozlem.anahtar_tarihi(simdi, iz.anahtar, iz.tarih_alani)
+            onc = gozlem.onceki_surum_anahtar(hat, iz.anahtar, iz.tarih_alani, v)
+            once_d = onc.get("d") if onc else None
+            onceki_v = (gozlem.anahtar_tarihi(once_d, iz.anahtar, iz.tarih_alani)
+                        if once_d else "")
+            o = izlem_olayi(iz, simdi, once_d, v, onceki_v)
             if o:
                 olaylar.append(o)
     olaylar += yeni_veri_olaylari(list(RITIM))

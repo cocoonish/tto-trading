@@ -67,9 +67,15 @@ TETIKLER: tuple[Tetik, ...] = (
           r"Gösterge Niteliğindeki Merkez Bankası Kurları", ("TCMB",), en_gec=6, gecikme_dk=30),
     Tetik("fonlama", "TCMB Analitik Bilanço (her iş günü 14:30)",
           r"TCMB Analitik Bilanço", ("TCMB",), en_gec=6, gecikme_dk=45),
-    Tetik("tcmb", "Uluslararası Rezervler ve Döviz Likiditesi + haftalık para-banka",
-          r"Uluslararası Rezervler ve Döviz Likiditesi|Haftalık Para ve Banka İstatistikleri",
-          ("TCMB",), en_gec=10),
+    # Net rezerv hattının GÜNLÜK serisi tamamen Analitik Bilanço'dan üretilir
+    # (TP.AB.A02/A11/A13/A14 — bkz. net_rezerv.py). O yayım burada tetik değilse
+    # hat yalnız haftalık yayımda koşar ve günlük seri, her iş günü 14:30'da yeni
+    # bilanço düşmesine rağmen Perşembeye kadar donuk kalır. Haftalık tetikler
+    # (IRFCL + haftalık para-banka) h_* alanlarını besler; ikisi de gerekli.
+    Tetik("tcmb", "TCMB Analitik Bilanço (günlük) + IRFCL ve haftalık para-banka",
+          r"TCMB Analitik Bilanço|Uluslararası Rezervler ve Döviz Likiditesi"
+          r"|Haftalık Para ve Banka İstatistikleri",
+          ("TCMB",), en_gec=6, gecikme_dk=45),
     Tetik("kredi", "Haftalık ve Aylık Para ve Banka İstatistikleri (Perşembe 14:30)",
           r"(Haftalık|Aylık) Para ve Banka İstatistikleri", ("TCMB",), en_gec=11),
     Tetik("yabanci", "TCMB Menkul Kıymet İstatistikleri (Perşembe)",
@@ -272,6 +278,34 @@ def gerekli(hatlar: list[str] | None = None,
     return [k.hat for k in kararlar(hatlar, simdi, zorla) if k.kossun]
 
 
+def olu_kaliplar(yillar: tuple[int, ...] | None = None) -> list[tuple[str, str]]:
+    """Takvimde HİÇBİR yayımla eşleşmeyen tetik kalıpları.
+
+    Bu dosyanın en sinsi hata biçimi budur: seri adı değişir ya da kalıp baştan
+    yanlış yazılır, hiçbir şey patlamaz, hat sessizce emniyet ağına düşer ve
+    günde bir yerine `en_gec` günde bir koşar. Kimse fark etmez — veri "biraz
+    eski" görünür, o kadar. Onun için kalıplar her koşuda takvime karşı
+    sınanır ve tutmayan varsa yüksek sesle söylenir.
+
+    Takvim hiç çekilemediyse boş liste döner: kaynağın düşmesi kalıbın ölü
+    olduğu anlamına gelmez, o durumda yanlış alarm vermek denetimi işe yaramaz
+    kılar.
+    """
+    simdi = _simdi()
+    yillar = yillar or tuple({simdi.year, (simdi - dt.timedelta(days=120)).year})
+    yayim = _yayimlar(yillar)
+    if not yayim:
+        return []
+    olu = []
+    for t in TETIKLER:
+        if not t.kalip:
+            continue
+        if not any((not t.kurum or k["kurum"] in t.kurum)
+                   and re.search(t.kalip, k["adi"], re.I) for k in yayim):
+            olu.append((t.hat, t.kalip))
+    return olu
+
+
 def rapor(hatlar: list[str] | None = None, simdi: dt.datetime | None = None) -> str:
     satir = []
     for k in kararlar(hatlar, simdi):
@@ -291,4 +325,10 @@ if __name__ == "__main__":
     print(rapor())
     kos = gerekli()
     print(f"\n{len(kos)}/{len(TETIKLER)} hat tazelenecek: {' '.join(kos) or '(yok)'}")
+    olu = olu_kaliplar()
+    if olu:
+        print("\n  ! TAKVİMDE KARŞILIĞI OLMAYAN KALIP — bu hatlar yalnız emniyet "
+              "ağıyla koşuyor:")
+        for hat, kalip in olu:
+            print(f"      {hat:10s} {kalip}")
     sys.exit(0)

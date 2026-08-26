@@ -35,12 +35,21 @@ class Izlem:
     yon_iyi: str = ""            # "artis" | "azalis" | "" (nötr)
     aciklama: str = ""           # neden izliyoruz — bültende dipnot
     grup: str = ""               # bültende hangi başlık altında toplanacak
+    # Bu anahtarın KENDİ veri tarihini tutan alan. Boş bırakılırsa önce
+    # `<anahtar>_tarih` geleneği, o da yoksa hattın ana saati (`_tarih`)
+    # kullanılır. Yalnız gelenek dışı kalan anahtarlarda doldurulur:
+    # tcmb-net-rezerv'in haftalık serisi h_net/h_brut'tur ama saati h_tarih'tir.
+    tarih_alani: str = ""
 
 
 # Hatların yayım ritmi — "veri gecikti" uyarısı için. Gün cinsinden azami sessizlik.
 RITIM = {
     "usdtry-deval": 4,          # günlük (hafta sonu boşluğu payı)
-    "tcmb-net-rezerv": 10,      # haftalık (Perşembe)
+    # Hattın ANA saati `_tarih`tir; bu hatta o saat GÜNLÜK analitik bilançodur
+    # (her iş günü 14:30, bir gün gecikmeli). Haftalık resmî seri ayrı bir
+    # saattir ve RITIM_ALAN'da denetlenir — eskiden buradaki 10 gün haftalık
+    # ritim için yazılmıştı ama günlük saatle ölçüldüğü için hiç tetiklenmiyordu.
+    "tcmb-net-rezerv": 6,       # günlük analitik bilanço (fonlama ile aynı kaynak)
     "yabanci-pozisyon": 11,     # haftalık (Cuma, 1 hafta gecikmeli)
     "fonlama-likidite": 6,      # günlük/haftalık karışık
     "kredi-parasal": 11,        # haftalık
@@ -52,6 +61,18 @@ RITIM = {
     "dibs-verim-egrisi": 6,     # iş günü (eğri günlük kurulur)
     "odemeler-dengesi": 45,     # aylık, 6-8 hafta gecikmeli
     "butce-borc": 45,           # aylık (bütçe ayın 15'i)
+}
+
+# Bir hattın ozet.json'u birden fazla SAAT taşıyabilir: aynı dosyada günlük bir
+# seri ile haftalık bir seri yan yana durur. RITIM yalnız ana saati (`_tarih`)
+# denetler; ana saat her iş günü ilerlediği için içindeki haftalık serinin
+# donması ona görünmez. Buradaki kayıtlar o alanları doğrudan izler.
+#   (hat, tarih alanı) → (azami sessizlik günü, bültende görünecek ad)
+# Ölçü "veri tarihinin yaşı" değil, "bu sürüme geçileli kaç gün oldu"dur:
+# haftalık seri Perşembe yayımlanıp ertesi koşuda görülür, yani normalde 7 gün
+# donuk kalır; 10 gün üç günlük gecikme payı bırakır.
+RITIM_ALAN = {
+    ("tcmb-net-rezerv", "h_tarih"): (10, "haftalık resmî seri"),
 }
 
 # Bültende grup başlıkları ve sırası
@@ -75,13 +96,16 @@ IZLEMLER: list[Izlem] = [
     Izlem("usdtry-deval", "d3a", "3 aylık yıllıklandırılmış devalüasyon hızı", "%", 1, "delta", 3, 6,
           "azalis", "Daha yavaş ama daha güvenilir rejim göstergesi.", "kur"),
     Izlem("tcmb-net-rezerv", "h_net", "Net rezerv (haftalık, resmî)", "mlr USD", 1, "delta", 1.5, 3.0,
-          "artis", "Analitik bilançodan piyasa tanımıyla; haftalık yayımlanır.", "kur"),
+          "artis", "Analitik bilançodan piyasa tanımıyla; haftalık yayımlanır.", "kur", "h_tarih"),
     Izlem("tcmb-net-rezerv", "h_swap_haric", "Swap hariç net rezerv", "mlr USD", 1, "delta", 1.5, 3.0,
-          "artis", "Rezervin borçlanılmamış kısmı — kalite ölçüsü.", "kur"),
-    Izlem("tcmb-net-rezerv", "h_brut", "Brüt rezerv", "mlr USD", 1, "delta", 2.5, 5.0, "artis", "", "kur"),
+          "artis", "Rezervin borçlanılmamış kısmı — kalite ölçüsü.", "kur", "h_tarih"),
+    Izlem("tcmb-net-rezerv", "h_brut", "Brüt rezerv", "mlr USD", 1, "delta", 2.5, 5.0,
+          "artis", "", "kur", "h_tarih"),
     Izlem("tcmb-net-rezerv", "g_net", "Net rezerv (günlük tahmin)", "mlr USD", 1, "delta", 2.0, 4.0,
-          "artis", "Günlük analitik bilanço vekili; haftalık resmî seriden önce hareketi gösterir.", "kur"),
-    Izlem("tcmb-net-rezerv", "p_altin", "Altın rezervi", "mlr USD", 1, "delta", 2.5, 5.0, "", "", "kur"),
+          "artis", "Günlük analitik bilanço vekili; haftalık resmî seriden önce hareketi gösterir.",
+          "kur", "g_tarih"),
+    Izlem("tcmb-net-rezerv", "p_altin", "Altın rezervi", "mlr USD", 1, "delta", 2.5, 5.0,
+          "", "", "kur", "p_tarih"),
     Izlem("try-reer", "redk", "TÜFE bazlı reel efektif kur", "endeks", 1, "delta", 2.0, 4.0, "",
           "Aylık; 100 üstü TL'nin uzun dönem ortalamasına göre değerli olduğunu gösterir.", "kur"),
 
