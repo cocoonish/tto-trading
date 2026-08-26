@@ -357,13 +357,13 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
             # maddenin önemi 0.0 kalır ve özetler eksik olur — 2026-08-26'da
             # 112 haberin hepsi 0.0 puanla kaydedilmişti, aralarında 12 kaynağın
             # yazdığı "Treasury buyback" haberi de vardı.
-            bolumler = haber_m.bolumle(h)
+            # bolumle() haberleri puanlar, kaynağından zenginleştirir ve kilit
+            # listesini de döndürür. Dondurma ONDAN SONRA ve TEK yerde yapılır:
+            # kilit_gelismeler()'i ikinci kez çağırmak zenginleştirilmiş metinle
+            # yeniden puanlıyor, üst düzey listede eski puan kalıyor ve aynı
+            # haber aynı dosyada iki ayrı önem puanıyla yazılıyordu.
+            bolumler, kilit = haber_m.bolumle(h)
             haberler = [asdict(x) for x in h]
-            # Kilit gelişmeler AYRI alan olarak yazılır. Eskiden yalnız
-            # bolumler içindeki "kilit" bölümünde duruyordu; bülteni okuyan
-            # yazı katmanı ve denetim aynı listeyi iki farklı yerden aramak
-            # zorunda kalıyordu.
-            kilit = [asdict(x) for x in haber_m.kilit_gelismeler(h)]
         except Exception as e:                                  # noqa: BLE001
             okunamayan = [f"haber taraması düştü: {type(e).__name__}"]
 
@@ -467,6 +467,16 @@ def yaz(b: dict) -> Path:
             if not (yeni_p.get("gruplar") or yeni_p.get("tr_faizleri")) and \
                     (eski_p.get("gruplar") or eski_p.get("tr_faizleri")):
                 b["piyasa"] = eski_p
+                # Tema ölçüleri de piyasa katmanından besleniyor; yalnız
+                # fotoğrafı geri yükleyip ölçüleri boş bırakmak, sayfada dolu
+                # bir piyasa tablosunun hemen altında sayısız bir tema bölümü
+                # bırakıyordu. İkisi aynı kaynaktan gelir, birlikte gelmeli.
+                eski_t = {x.get("ad"): x for x in
+                          ((eski.get("temalar") or {}).get("temalar") or [])}
+                for tema in ((b.get("temalar") or {}).get("temalar") or []):
+                    if not tema.get("olculer") and eski_t.get(tema.get("ad"), {}).get("olculer"):
+                        tema["olculer"] = eski_t[tema["ad"]]["olculer"]
+                        tema["olcu_bayat"] = True
         except Exception:
             pass
     y.write_text(json.dumps(b, ensure_ascii=False, indent=1), encoding="utf-8")

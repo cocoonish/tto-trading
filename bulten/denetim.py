@@ -307,6 +307,19 @@ class Denetim:
             return
         bugun = self.b.get("tarih")
         canli = [x for x in temalar if x.get("durum") in ("aktif", "izlemede")]
+        # Tema ölçüleri piyasa katmanından beslenir. Piyasa düşüp de fotoğraf
+        # eskisinden geri yüklendiğinde ölçüler boş kalıyordu: sayfada dolu bir
+        # piyasa tablosunun hemen altında sayısız bir tema bölümü çıkıyor, üstelik
+        # şablon boş ölçüyü sessizce gizlediği için kimse fark etmiyordu.
+        olcusuz = [x["ad"] for x in canli
+                   if x.get("varliklar") and not x.get("olculer")]
+        if olcusuz:
+            self.engel.append("Tema ölçüleri boş (izlenen varlıkları var ama sayı yok): "
+                              + ", ".join(olcusuz))
+        bayat_olcu = [x["ad"] for x in canli if x.get("olcu_bayat")]
+        if bayat_olcu:
+            self.uyari.append("Tema ölçüleri önceki fotoğraftan geri yüklendi: "
+                              + ", ".join(bayat_olcu))
         bayat = [x["ad"] for x in canli if str(x.get("son_guncelleme", "")) < str(bugun)]
         if bayat:
             self.uyari.append("Tema defteri bugün güncellenmemiş: " + ", ".join(bayat))

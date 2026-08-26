@@ -165,9 +165,160 @@ def _ham_veri(tazele: bool = False) -> dict:
             seri[k] = {"tarih": [str(x.date()) for x in s.index], "kapanis": [float(x) for x in s.values]}
         except Exception:
             continue
+    # Sıra bağlayıcı: önce devir düzeltmesi (kontrat zinciriyle eşleştirme
+    # tarihsel barlara dayanır), sonra yerleşmemiş barın düşürülmesi.
+    try:
+        seri = _roll_duzelt(seri)
+    except Exception:
+        pass                       # düzeltme yapılamazsa ham seriyle devam
+    seri = _yerlesmemis_dus(seri)
     d = {"zaman": datetime.now().isoformat(timespec="seconds"), "seri": seri}
     HAM.write_text(json.dumps(d, ensure_ascii=False), encoding="utf-8")
     return d
+
+
+# ─────────────────────────── vadeli sözleşme geçişi (roll)
+# yfinance'in "=F" serileri geri-düzeltilmiş DEĞİL: her günün kapanışı o gün ön ay
+# olan kontratın kapanışıdır ve ön ay değiştiği gün seri bir kontrattan diğerine
+# ATLAR. Kod bu atlamayı fiyat hareketi sanıyordu. 26.08.2026'da beş enerji
+# serisinin dördü aynı gün devretti ve bülten şunları yayımladı:
+#   RBOB −%11,36 (gerçek −%1,35) · kalorifer −%4,98 (−%2,52)
+#   doğal gaz +%3,18 (+%1,37)    · Brent −%3,76 (−%2,46)
+# Brent'inki en ağırı oldu: 85,25 dolar kasım kontratının fiyatıydı, ön ay 86,40
+# idi; buna rağmen bülten "Enerji teması çürütücü eşiğe (85 dolar) dayandı" dedi.
+# İzlenen bir tez, sözleşme değişimi yüzünden çürütülmüş sayıldı.
+#
+# Çözüm: kontrat zinciri çekilip her günün hangi kontrata ait olduğu eşleştirilir,
+# devir günlerinde seri ORANSAL olarak geriye dönük düzeltilir (back-adjustment).
+# Son değer olduğu gibi kalır (gerçek güncel fiyat), ondan önceki her şey son
+# kontratın birimine çevrilir — böylece d1 kadar h1, a1 ve ybb de temizlenir.
+VADELI_KOK = {"RB=F": "RB", "HO=F": "HO", "CL=F": "CL", "NG=F": "NG", "BZ=F": "BZ"}
+AY_KODU = "FGHJKMNQUVXZ"          # Ocak…Aralık, vadeli piyasa geleneği
+
+
+def _kontrat_kodlari(kok: str, bugun: str) -> list[str]:
+    """Yahoo'da HÂLÂ LİSTELİ kontratlar: bu aydan bir ay öncesi ile dört ay sonrası.
+
+    Vadesi dolmuş kontratlar Yahoo'dan siliniyor (404), o yüzden geçmişe dönük
+    tam bir zincir kurulamıyor. Uygulamada bu bir kayıp değil: düzeltilmesi
+    gereken devir HER ZAMAN en yakın olanıdır ve o kontrat hâlâ listelidir.
+    """
+    ay = int(bugun[:4]) * 12 + int(bugun[5:7]) - 1
+    return [f"{kok}{AY_KODU[m % 12]}{(m // 12) % 100:02d}.NYM"
+            for m in range(ay - 1, ay + 5)]
+
+
+# Eşleştirme SONDAN geriye doğru, eşleşme sürdüğü kadar ilerler. Sabit bir
+# pencere işe yaramıyor: 70 gün geriye bakıldığında o günlerin ön ayı çoktan
+# silinmiş oluyor, eşleşme oranı düşüyor ve sağlam bir seri bile reddediliyor.
+# Kapsam ne kadar çıkarsa `roll_kapsam_gun` onu söyler; d1/h1/a1 (1, 5, 21 gün)
+# kapsamın içindeyse temizdir, dışındaysa satır bunu bildirir.
+ROLL_AZAMI_GERI = 130
+
+
+def _roll_duzelt(seri: dict) -> dict:
+    """Vadeli serileri devir günlerinde geriye dönük oransal düzelt.
+
+    Kontrat zinciri çekilemez ya da eşleşme kurulamazsa seri OLDUĞU GİBİ
+    bırakılır ve `roll_bilinmiyor` işaretlenir — uydurma düzeltme, düzeltmemekten
+    kötüdür. Düzeltme yapılan seride `roll_kapsam_gun` alanı, geriye doğru kaç
+    günün denetlendiğini söyler: ondan eskisi (ör. yıl başından beri) hâlâ devir
+    izi taşıyor olabilir.
+    """
+    import yfinance as yf
+
+    hedef = [k for k in VADELI_KOK if k in seri]
+    if not hedef:
+        return seri
+    bugun = max(seri[k]["tarih"][-1] for k in hedef)
+    istek = sorted({kod for k in hedef for kod in _kontrat_kodlari(VADELI_KOK[k], bugun)})
+    try:
+        ham = yf.download(istek, period="6mo", interval="1d", progress=False,
+                          auto_adjust=False, group_by="ticker", threads=True)
+    except Exception:
+        for k in hedef:
+            seri[k]["roll_bilinmiyor"] = True
+        return seri
+
+    def kapanis(kod: str) -> dict[str, float]:
+        try:
+            c = ham[kod]["Close"].dropna()
+            return {str(x.date()): float(v) for x, v in zip(c.index, c.values)}
+        except Exception:
+            return {}
+
+    for k in hedef:
+        zincir = {kod: v for kod, v in
+                  ((kod, kapanis(kod)) for kod in _kontrat_kodlari(VADELI_KOK[k], bugun)) if v}
+        t, kap = seri[k]["tarih"], seri[k]["kapanis"]
+        if not zincir or len(t) < 3:
+            seri[k]["roll_bilinmiyor"] = True
+            continue
+
+        def hangi(i: int) -> str | None:
+            for kod, sk in zincir.items():
+                v = sk.get(t[i])
+                # Tolerans göreli ve gevşek: iki ayrı indirmeden gelen aynı
+                # kapanış yuvarlamada son basamakta ayrışabilir.
+                if v is not None and abs(v - kap[i]) <= abs(kap[i]) * 1e-4:
+                    return kod
+            return None
+
+        # Sondan geriye: eşleşme kesildiği yerde dur.
+        ait: dict[int, str] = {}
+        for i in range(len(t) - 1, max(-1, len(t) - 1 - ROLL_AZAMI_GERI), -1):
+            kod = hangi(i)
+            if kod is None:
+                break
+            ait[i] = kod
+        bas = min(ait) if ait else len(t)
+        if len(ait) < 2:
+            seri[k]["roll_bilinmiyor"] = True      # son günler bile eşleşmiyor
+            continue
+        duzeltilmis = list(kap)
+        devirler: list[str] = []
+        for i in range(len(t) - 1, bas, -1):
+            eski, yeni_k = ait.get(i - 1), ait.get(i)
+            if not eski or not yeni_k or eski == yeni_k:
+                continue
+            a = zincir.get(eski, {}).get(t[i - 1])
+            b = zincir.get(yeni_k, {}).get(t[i - 1])
+            if not a or not b:
+                continue
+            oran = b / a
+            for j in range(i):                     # devirden ÖNCEKİ her şey
+                duzeltilmis[j] *= oran
+            devirler.append(t[i])
+        seri[k]["kapanis_ham"] = kap
+        seri[k]["kapanis"] = duzeltilmis
+        seri[k]["devir_gunleri"] = sorted(devirler)
+        seri[k]["roll_duzeltildi"] = True
+        seri[k]["roll_kapsam_gun"] = len(ait)
+    return seri
+
+
+# ─────────────────────────── yerleşmemiş (canlı) bar
+# yf.download günün HENÜZ KAPANMAMIŞ barını da döndürür. Vadelilerde Yahoo'nun
+# canlı kotasyonu çoğu zaman en aktif kontratı izlerken tarihsel barlar ön ayı
+# izliyor; bu yüzden son bar ~%9 sapıyor ve ertesi gün sessizce düzeliyor.
+# 23–25 Ağustos bültenlerinin üçü de bu yüzden sahte düşüş yayımladı ve
+# yayımlanan sayılar sonradan değişti — ölçüm olması gereken bülten ölçüm
+# olmaktan çıkıyordu. NYMEX uzlaşması 21:30 TSİ; pay bırakıp 22:00 alıyoruz.
+UZLASMA_SAATI = 22
+
+
+def _yerlesmemis_dus(seri: dict) -> dict:
+    bugun = datetime.now().date().isoformat()
+    erken = datetime.now().hour < UZLASMA_SAATI
+    for k in list(seri):
+        s = seri[k]
+        if k in VADELI_KOK and s["tarih"] and s["tarih"][-1] == bugun and erken:
+            s["tarih"] = s["tarih"][:-1]
+            s["kapanis"] = s["kapanis"][:-1]
+            if s.get("kapanis_ham"):
+                s["kapanis_ham"] = s["kapanis_ham"][:-1]
+            s["yerlesmemis_dusuruldu"] = True
+    return seri
 
 
 def _degisim(kapanis: list[float], tarih: list[str], geri: int) -> float | None:
@@ -205,9 +356,26 @@ def satir(v: Varlik, seri: dict) -> dict | None:
         ybb = round((son - ybb_taban) * carpan, 1) if getiri else round((son / ybb_taban - 1) * 100, 2)
 
     pencere = k[-252:] if len(k) >= 252 else k
+    # Vadeli serilerde devir düzeltmesi yalnız hâlâ listeli kontratların
+    # kapsadığı kadar geriye gider; ondan eskisi hâlâ devir izi taşıyabilir.
+    # Satır bunu kendisi söylesin: okur hangi sayının temiz olduğunu bilmeli.
+    ek_not = ""
+    if v.kod in VADELI_KOK:
+        if s.get("roll_bilinmiyor"):
+            ek_not = ("vadeli seri; vade geçişi denetlenemedi — büyük hareketler "
+                      "sözleşme değişiminden kaynaklanıyor olabilir")
+        else:
+            kapsam = s.get("roll_kapsam_gun") or 0
+            uzun = [ad for ad, gun in (("aylık", 21), ("yıl başından beri", 252))
+                    if kapsam < gun]
+            if uzun:
+                ek_not = ("vadeli seri; vade geçişleri son %d günde arındırıldı, "
+                          "%s değişim yaklaşıktır" % (kapsam, " ve ".join(uzun)))
     return {
         "kod": v.kod, "ad": v.ad, "grup": v.grup, "birim": v.birim,
-        "ondalik": v.ondalik, "tip": v.tip, "not": v.not_,
+        "ondalik": v.ondalik, "tip": v.tip,
+        "not": "; ".join(x for x in (v.not_, ek_not) if x),
+        "vade_gecisi": s.get("devir_gunleri") or [],
         "son": round(son, v.ondalik), "tarih": t[-1],
         "d1": d(1), "h1": d(5), "a1": d(21), "ybb": ybb,
         "degisim_birim": "bp" if getiri else "%",
