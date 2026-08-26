@@ -94,6 +94,12 @@ _KUCUK = str.maketrans("İIŞĞÜÖÇ", "iışğüöç")
 # öbeği içinde kalan bir uzaklık olduğu için seçildi.
 YAPISIK_UZAKLIK = 30
 
+# Hareketin OLAĞANDIŞI sayılması için gereken standart sapma. 2,0σ, normal
+# dağılımda kabaca yirmi günde bir görülen bir gün demektir — anlatılmayı hak
+# eder. Sabit yüzde eşiğinin (BUYUK_HAREKET_ESIGI) yerine değil YANINA konur:
+# ikisi farklı soruları yakalar.
+OLAGANDISI_SIGMA = 2.0
+
 # Sayının ardından bunlardan biri geliyorsa o sayı bir FİYAT değil, tarih ya da
 # süredir: "24 Ağustos itibarıyla", "52 haftalık aralık", "13 haftalık
 # yıllıklandırılmış". Ölçülen katmanda karşılığı olmaması normaldir.
@@ -265,6 +271,22 @@ class Denetim:
                         "Sebebini yaz ya da 'sebebi anlaşılmıyor' de.")
                 else:
                     self._ok(f"{x['ad']} (%{x['deger']}) anılmış")
+
+        # Sabit yüzde eşiği tek başına yanlış yere baktırır: düşük oynaklıklı bir
+        # seride %1,5 devasadır, yüksek oynaklıkta gürültüdür. σ eşiği hareketi
+        # kendi normaline göre ölçer ve ham listede hiç görünmeyen ama gerçekten
+        # olağandışı olanları yakalar (kredi endekslerinin +1,6σ günü gibi).
+        for x in (hareket.get("sigma") or []):
+            z = x.get("sigma")
+            if z is None or abs(z) < OLAGANDISI_SIGMA:
+                continue
+            imza = f"{x['ad']} ({x['deger']}{x.get('birim', '')}, {z}σ)"
+            if not anilmis(x["ad"]):
+                self.uyari.append(
+                    f"OLAĞANDIŞI HAREKET ANILMAMIŞ — {imza}. Yüzdesi küçük "
+                    "olabilir ama bu enstrüman için olağandışı; sebebini yaz.")
+            else:
+                self._ok(f"{imza} anılmış")
 
         # kilit gelişmeler metinde geçiyor mu
         h = self.b.get("haberler") or {}

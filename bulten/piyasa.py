@@ -184,6 +184,40 @@ def _ybb_bas(tarih: list[str], kapanis: list[float]) -> float | None:
     return None
 
 
+# Bir hareketin BÜYÜKLÜĞÜ ile OLAĞANDIŞILIĞI ayrı şeylerdir. Benzinde %11 ile
+# tahvil oynaklığında %2,8 aynı ölçekte değildir: ilki normal bir gün, ikincisi
+# üç standart sapma olabilir. Ham yüzdeye göre sıralanan bir "en çok hareket"
+# listesi bu yüzden yazan tarafı sistematik olarak yanlış yere bakmaya iter —
+# hep aynı oynak enstrümanlar başa çıkar, gerçekten anormal olan görünmez.
+#
+# Ölçü: son OYNAKLIK_GUN günlük değişimin standart sapması, değişimle AYNI
+# birimde (fiyatta yüzde, getiride baz puan). Günlük hareket buna bölününce
+# bütün enstrümanlar tek bir ölçekte kıyaslanabilir hâle gelir.
+OYNAKLIK_GUN = 20
+OYNAKLIK_ASGARI = 10        # bu kadar gözlem yoksa σ güvenilir değil
+
+
+def _gunluk_degisimler(kapanis: list[float], getiri: bool, n: int) -> list[float]:
+    """Son n günlük değişim — d1 ile aynı birimde (fiyat: %, getiri: bp)."""
+    out = []
+    for i in range(max(1, len(kapanis) - n), len(kapanis)):
+        onceki = kapanis[i - 1]
+        if onceki == 0:
+            continue
+        out.append((kapanis[i] - onceki) * 100.0 if getiri
+                   else (kapanis[i] / onceki - 1) * 100.0)
+    return out
+
+
+def _oynaklik(kapanis: list[float], getiri: bool) -> float | None:
+    d = _gunluk_degisimler(kapanis, getiri, OYNAKLIK_GUN)
+    if len(d) < OYNAKLIK_ASGARI:
+        return None
+    ort = sum(d) / len(d)
+    var = sum((x - ort) ** 2 for x in d) / (len(d) - 1)
+    return var ** 0.5 or None
+
+
 def satir(v: Varlik, seri: dict) -> dict | None:
     s = seri.get(v.kod)
     if not s:
@@ -205,6 +239,7 @@ def satir(v: Varlik, seri: dict) -> dict | None:
         ybb = round((son - ybb_taban) * carpan, 1) if getiri else round((son / ybb_taban - 1) * 100, 2)
 
     pencere = k[-252:] if len(k) >= 252 else k
+    sigma = _oynaklik(k, getiri)
     return {
         "kod": v.kod, "ad": v.ad, "grup": v.grup, "birim": v.birim,
         "ondalik": v.ondalik, "tip": v.tip, "not": v.not_,
@@ -215,6 +250,10 @@ def satir(v: Varlik, seri: dict) -> dict | None:
         "yil_dusuk": round(min(pencere), v.ondalik),
         "yil_konum": round((son - min(pencere)) / (max(pencere) - min(pencere)) * 100, 0)
         if max(pencere) > min(pencere) else None,
+        # Günlük hareketin kaç standart sapma olduğu — enstrümanlar arası tek ölçek.
+        "sigma_gun": None if sigma is None else round(sigma, 2 if getiri else 2),
+        "d1_sigma": (None if sigma is None or d(1) is None
+                     else round(d(1) / sigma, 1)),
     }
 
 
@@ -293,16 +332,34 @@ def turetilmis(seri: dict) -> list[dict]:
 
 
 def en_cok_hareket(satirlar: list[dict], n: int = 6) -> dict:
-    """Günün ve haftanın en büyük hareketleri — yorumun nereye bakacağını söyler."""
+    """Günün ve haftanın en büyük hareketleri — yorumun nereye bakacağını söyler.
+
+    Üç ham sıralama (günlük %, haftalık %, haftalık bp) ile bir de OLAĞANDIŞILIK
+    sıralaması döner. İkisi farklı soruları cevaplar: ham liste "en çok ne
+    oynadı", σ listesi "ne olağandışı oynadı". Aynı gün ikisi bambaşka çıkabilir
+    — 26.08.2026'da MOVE ve VIX ham listede ilk altıdaydı ama −0,6σ ve −0,4σ,
+    yani sıradan bir gün; buna karşılık üç kredi endeksi +1,6σ ile ham listede
+    hiç görünmüyordu. Yazan taraf yalnız hama bakarsa hep aynı oynak
+    enstrümanları anlatır ve asıl haberi kaçırır.
+
+    σ listesi getiri enstrümanlarını DIŞLAMAZ: z-skoru birimsizdir, baz puanla
+    yüzde aynı ölçekte kıyaslanabilir. Ham listelerde bu mümkün olmadığı için
+    faizler ayrı tutulmuştu.
+    """
     def sirala(alan):
         aday = [s for s in satirlar if s.get(alan) is not None and s["tip"] != "getiri"]
         return sorted(aday, key=lambda s: abs(s[alan]), reverse=True)[:n]
     getiriler = [s for s in satirlar if s["tip"] == "getiri" and s.get("h1") is not None]
+    sigmali = [s for s in satirlar if s.get("d1_sigma") is not None]
     return {
         "gunluk": [{"ad": s["ad"], "deger": s["d1"], "birim": "%"} for s in sirala("d1")],
         "haftalik": [{"ad": s["ad"], "deger": s["h1"], "birim": "%"} for s in sirala("h1")],
         "faiz_haftalik": [{"ad": s["ad"], "deger": s["h1"], "birim": "bp"}
                           for s in sorted(getiriler, key=lambda s: abs(s["h1"]), reverse=True)[:4]],
+        "sigma": [{"ad": s["ad"], "deger": s["d1"], "birim": s["degisim_birim"],
+                   "sigma": s["d1_sigma"], "oynaklik": s["sigma_gun"]}
+                  for s in sorted(sigmali, key=lambda s: abs(s["d1_sigma"]),
+                                  reverse=True)[:n]],
     }
 
 

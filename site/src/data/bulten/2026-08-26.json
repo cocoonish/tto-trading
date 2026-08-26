@@ -197,7 +197,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 48.111,
       "yil_dusuk": 41.2475,
-      "yil_konum": 100.0
+      "yil_konum": 100.0,
+      "sigma_gun": 0.09,
+      "d1_sigma": 0.7
      },
      {
       "kod": "EURTRY=X",
@@ -216,7 +218,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 56.1606,
       "yil_dusuk": 48.1177,
-      "yil_konum": 100.0
+      "yil_konum": 100.0,
+      "sigma_gun": 0.34,
+      "d1_sigma": 0.3
      },
      {
       "kod": "GBPTRY=X",
@@ -235,7 +239,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 65.6172,
       "yil_dusuk": 54.8216,
-      "yil_konum": 100.0
+      "yil_konum": 100.0,
+      "sigma_gun": 0.31,
+      "d1_sigma": 0.2
      }
     ]
    },
@@ -260,7 +266,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 15134.0,
       "yil_dusuk": 10209.0,
-      "yil_konum": 87.0
+      "yil_konum": 87.0,
+      "sigma_gun": 1.15,
+      "d1_sigma": -0.2
      },
      {
       "kod": "XU030.IS",
@@ -279,7 +287,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 17272.0,
       "yil_dusuk": 11063.0,
-      "yil_konum": 91.0
+      "yil_konum": 91.0,
+      "sigma_gun": 1.3,
+      "d1_sigma": -0.3
      },
      {
       "kod": "XBANK.IS",
@@ -298,7 +308,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 20641.0,
       "yil_dusuk": 13194.0,
-      "yil_konum": 40.0
+      "yil_konum": 40.0,
+      "sigma_gun": 2.01,
+      "d1_sigma": -0.0
      },
      {
       "kod": "XUSIN.IS",
@@ -317,7 +329,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 20290.0,
       "yil_dusuk": 13354.0,
-      "yil_konum": 95.0
+      "yil_konum": 95.0,
+      "sigma_gun": 1.19,
+      "d1_sigma": -1.6
      },
      {
       "kod": "TUR",
@@ -336,7 +350,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 43.74,
       "yil_dusuk": 31.9,
-      "yil_konum": 71.0
+      "yil_konum": 71.0,
+      "sigma_gun": 1.23,
+      "d1_sigma": -0.3
      }
     ]
    },
@@ -361,7 +377,9 @@
       "degisim_birim": "bp",
       "yil_yuksek": 4.093,
       "yil_dusuk": 3.507,
-      "yil_konum": 34.0
+      "yil_konum": 34.0,
+      "sigma_gun": 2.65,
+      "d1_sigma": 0.1
      },
      {
       "kod": "2YY=F",
@@ -380,7 +398,9 @@
       "degisim_birim": "bp",
       "yil_yuksek": 4.288,
       "yil_dusuk": 3.376,
-      "yil_konum": 87.0
+      "yil_konum": 87.0,
+      "sigma_gun": 4.92,
+      "d1_sigma": 0.0
      },
      {
       "kod": "^FVX",
@@ -399,7 +419,9 @@
       "degisim_birim": "bp",
       "yil_yuksek": 4.461,
       "yil_dusuk": 3.512,
-      "yil_konum": 88.0
+      "yil_konum": 88.0,
+      "sigma_gun": 4.36,
+      "d1_sigma": -1.3
      },
      {
       "kod": "^TNX",
@@ -418,7 +440,9 @@
       "degisim_birim": "bp",
       "yil_yuksek": 4.745,
       "yil_dusuk": 3.953,
-      "yil_konum": 87.0
+      "yil_konum": 87.0,
+      "sigma_gun": 4.47,
+      "d1_sigma": -1.5
      },
      {
       "kod": "^TYX",
@@ -437,7 +461,9 @@
       "degisim_birim": "bp",
       "yil_yuksek": 5.309,
       "yil_dusuk": 4.539,
-      "yil_konum": 82.0
+      "yil_konum": 82.0,
+      "sigma_gun": 4.62,
+      "d1_sigma": -1.2
      },
      {
       "kod": "^MOVE",
@@ -456,7 +482,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 115.02,
       "yil_dusuk": 55.77,
-      "yil_konum": 27.0
+      "yil_konum": 27.0,
+      "sigma_gun": 4.54,
+      "d1_sigma": -0.6
      }
     ]
    },
@@ -481,7 +509,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 101.61,
       "yil_dusuk": 96.22,
-      "yil_konum": 51.0
+      "yil_konum": 51.0,
+      "sigma_gun": 0.3,
+      "d1_sigma": 0.2
      },
      {
       "kod": "EURUSD=X",
@@ -500,7 +530,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 1.2018,
       "yil_dusuk": 1.1354,
-      "yil_konum": 47.0
+      "yil_konum": 47.0,
+      "sigma_gun": 0.3,
+      "d1_sigma": -0.0
      },
      {
       "kod": "USDJPY=X",
@@ -519,7 +551,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 163.864,
       "yil_dusuk": 146.413,
-      "yil_konum": 72.0
+      "yil_konum": 72.0,
+      "sigma_gun": 0.64,
+      "d1_sigma": -0.1
      },
      {
       "kod": "GBPUSD=X",
@@ -538,7 +572,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 1.3825,
       "yil_dusuk": 1.3022,
-      "yil_konum": 76.0
+      "yil_konum": 76.0,
+      "sigma_gun": 0.28,
+      "d1_sigma": -0.1
      },
      {
       "kod": "USDCHF=X",
@@ -557,7 +593,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 0.8195,
       "yil_dusuk": 0.7632,
-      "yil_konum": 71.0
+      "yil_konum": 71.0,
+      "sigma_gun": 0.56,
+      "d1_sigma": 0.3
      },
      {
       "kod": "AUDUSD=X",
@@ -576,7 +614,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 0.7255,
       "yil_dusuk": 0.6449,
-      "yil_konum": 91.0
+      "yil_konum": 91.0,
+      "sigma_gun": 0.42,
+      "d1_sigma": 0.9
      },
      {
       "kod": "NZDUSD=X",
@@ -595,7 +635,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 0.6076,
       "yil_dusuk": 0.5592,
-      "yil_konum": 76.0
+      "yil_konum": 76.0,
+      "sigma_gun": 0.48,
+      "d1_sigma": -0.3
      },
      {
       "kod": "USDCAD=X",
@@ -614,7 +656,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 1.4235,
       "yil_dusuk": 1.3492,
-      "yil_konum": 50.0
+      "yil_konum": 50.0,
+      "sigma_gun": 0.27,
+      "d1_sigma": 0.5
      },
      {
       "kod": "USDSEK=X",
@@ -633,7 +677,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 9.7565,
       "yil_dusuk": 8.7844,
-      "yil_konum": 70.0
+      "yil_konum": 70.0,
+      "sigma_gun": 0.48,
+      "d1_sigma": -0.6
      },
      {
       "kod": "USDNOK=X",
@@ -652,7 +698,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 10.2385,
       "yil_dusuk": 9.1622,
-      "yil_konum": 16.0
+      "yil_konum": 16.0,
+      "sigma_gun": 0.39,
+      "d1_sigma": 0.9
      }
     ]
    },
@@ -677,7 +725,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 30660.6,
       "yil_dusuk": 22953.38,
-      "yil_konum": 81.0
+      "yil_konum": 81.0,
+      "sigma_gun": 1.41,
+      "d1_sigma": 0.5
      },
      {
       "kod": "^DJI",
@@ -696,7 +746,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 54349.12,
       "yil_dusuk": 45166.64,
-      "yil_konum": 92.0
+      "yil_konum": 92.0,
+      "sigma_gun": 0.9,
+      "d1_sigma": 0.3
      },
      {
       "kod": "^RUT",
@@ -715,7 +767,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 3068.42,
       "yil_dusuk": 2305.11,
-      "yil_konum": 92.0
+      "yil_konum": 92.0,
+      "sigma_gun": 1.01,
+      "d1_sigma": 0.5
      },
      {
       "kod": "^VIX",
@@ -734,7 +788,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 31.05,
       "yil_dusuk": 13.47,
-      "yil_konum": 11.0
+      "yil_konum": 11.0,
+      "sigma_gun": 6.6,
+      "d1_sigma": -0.4
      }
     ]
    },
@@ -759,7 +815,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 660.51,
       "yil_dusuk": 543.17,
-      "yil_konum": 97.0
+      "yil_konum": 97.0,
+      "sigma_gun": 0.36,
+      "d1_sigma": 1.0
      },
      {
       "kod": "^GDAXI",
@@ -778,7 +836,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 26440.31,
       "yil_dusuk": 22300.75,
-      "yil_konum": 96.0
+      "yil_konum": 96.0,
+      "sigma_gun": 0.53,
+      "d1_sigma": 1.2
      },
      {
       "kod": "^FCHI",
@@ -797,7 +857,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 8726.03,
       "yil_dusuk": 7654.25,
-      "yil_konum": 73.0
+      "yil_konum": 73.0,
+      "sigma_gun": 0.53,
+      "d1_sigma": -0.3
      },
      {
       "kod": "^FTSE",
@@ -816,7 +878,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 10910.6,
       "yil_dusuk": 9116.7,
-      "yil_konum": 99.0
+      "yil_konum": 99.0,
+      "sigma_gun": 0.29,
+      "d1_sigma": 1.0
      },
      {
       "kod": "FTSEMIB.MI",
@@ -835,7 +899,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 53717.0,
       "yil_dusuk": 41608.0,
-      "yil_konum": 92.0
+      "yil_konum": 92.0,
+      "sigma_gun": 0.62,
+      "d1_sigma": 0.5
      }
     ]
    },
@@ -860,7 +926,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 72366.34,
       "yil_dusuk": 41938.89,
-      "yil_konum": 80.0
+      "yil_konum": 80.0,
+      "sigma_gun": 1.76,
+      "d1_sigma": 0.3
      },
      {
       "kod": "^HSI",
@@ -879,7 +947,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 27968.09,
       "yil_dusuk": 22671.86,
-      "yil_konum": 57.0
+      "yil_konum": 57.0,
+      "sigma_gun": 0.9,
+      "d1_sigma": 0.8
      },
      {
       "kod": "000001.SS",
@@ -898,7 +968,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 4242.57,
       "yil_dusuk": 3764.16,
-      "yil_konum": 32.0
+      "yil_konum": 32.0,
+      "sigma_gun": 0.88,
+      "d1_sigma": 0.8
      }
     ]
    },
@@ -923,7 +995,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 5318.4,
       "yil_dusuk": 3388.6,
-      "yil_konum": 68.0
+      "yil_konum": 68.0,
+      "sigma_gun": 1.33,
+      "d1_sigma": 1.0
      },
      {
       "kod": "SI=F",
@@ -942,7 +1016,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 115.08,
       "yil_dusuk": 38.582,
-      "yil_konum": 40.0
+      "yil_konum": 40.0,
+      "sigma_gun": 2.07,
+      "d1_sigma": 0.4
      },
      {
       "kod": "PL=F",
@@ -961,7 +1037,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 2852.4,
       "yil_dusuk": 1341.4,
-      "yil_konum": 35.0
+      "yil_konum": 35.0,
+      "sigma_gun": 2.57,
+      "d1_sigma": 0.5
      },
      {
       "kod": "HG=F",
@@ -980,7 +1058,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 6.759,
       "yil_dusuk": 4.4145,
-      "yil_konum": 100.0
+      "yil_konum": 100.0,
+      "sigma_gun": 1.12,
+      "d1_sigma": 0.7
      }
     ]
    },
@@ -1005,7 +1085,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 118.35,
       "yil_dusuk": 58.92,
-      "yil_konum": 44.0
+      "yil_konum": 44.0,
+      "sigma_gun": 3.08,
+      "d1_sigma": -1.2
      },
      {
       "kod": "CL=F",
@@ -1024,7 +1106,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 112.95,
       "yil_dusuk": 55.27,
-      "yil_konum": 43.0
+      "yil_konum": 43.0,
+      "sigma_gun": 2.72,
+      "d1_sigma": -0.9
      },
      {
       "kod": "RB=F",
@@ -1043,7 +1127,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 3.7715,
       "yil_dusuk": 1.6809,
-      "yil_konum": 58.0
+      "yil_konum": 58.0,
+      "sigma_gun": 3.82,
+      "d1_sigma": -3.0
      },
      {
       "kod": "HO=F",
@@ -1062,7 +1148,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 4.6084,
       "yil_dusuk": 2.0567,
-      "yil_konum": 77.0
+      "yil_konum": 77.0,
+      "sigma_gun": 3.15,
+      "d1_sigma": -1.6
      },
      {
       "kod": "NG=F",
@@ -1081,7 +1169,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 7.46,
       "yil_dusuk": 2.523,
-      "yil_konum": 7.0
+      "yil_konum": 7.0,
+      "sigma_gun": 2.16,
+      "d1_sigma": 1.5
      }
     ]
    },
@@ -1106,7 +1196,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 81.32,
       "yil_dusuk": 78.72,
-      "yil_konum": 46.0
+      "yil_konum": 46.0,
+      "sigma_gun": 0.18,
+      "d1_sigma": 1.6
      },
      {
       "kod": "LQD",
@@ -1125,7 +1217,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 112.92,
       "yil_dusuk": 105.7,
-      "yil_konum": 16.0
+      "yil_konum": 16.0,
+      "sigma_gun": 0.39,
+      "d1_sigma": 1.6
      },
      {
       "kod": "EMB",
@@ -1144,7 +1238,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 97.74,
       "yil_dusuk": 92.95,
-      "yil_konum": 51.0
+      "yil_konum": 51.0,
+      "sigma_gun": 0.35,
+      "d1_sigma": 1.6
      },
      {
       "kod": "EEM",
@@ -1163,7 +1259,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 71.21,
       "yil_dusuk": 49.82,
-      "yil_konum": 81.0
+      "yil_konum": 81.0,
+      "sigma_gun": 1.6,
+      "d1_sigma": 1.1
      }
     ]
    },
@@ -1188,7 +1286,9 @@
       "degisim_birim": "%",
       "yil_yuksek": 96929.0,
       "yil_dusuk": 58559.0,
-      "yil_konum": 53.0
+      "yil_konum": 53.0,
+      "sigma_gun": 2.6,
+      "d1_sigma": 0.0
      }
     ]
    }
@@ -1537,6 +1637,50 @@
      "ad": "ABD 3 aylık bono",
      "deger": 0.0,
      "birim": "bp"
+    }
+   ],
+   "sigma": [
+    {
+     "ad": "RBOB benzin",
+     "deger": -11.36,
+     "birim": "%",
+     "sigma": -3.0,
+     "oynaklik": 3.82
+    },
+    {
+     "ad": "BIST Sınai",
+     "deger": -1.88,
+     "birim": "%",
+     "sigma": -1.6,
+     "oynaklik": 1.19
+    },
+    {
+     "ad": "Kalorifer yakıtı",
+     "deger": -4.98,
+     "birim": "%",
+     "sigma": -1.6,
+     "oynaklik": 3.15
+    },
+    {
+     "ad": "ABD yüksek getirili tahvil (HYG)",
+     "deger": 0.28,
+     "birim": "%",
+     "sigma": 1.6,
+     "oynaklik": 0.18
+    },
+    {
+     "ad": "ABD yatırım yapılabilir tahvil (LQD)",
+     "deger": 0.64,
+     "birim": "%",
+     "sigma": 1.6,
+     "oynaklik": 0.39
+    },
+    {
+     "ad": "GOÜ dolar tahvili (EMB)",
+     "deger": 0.56,
+     "birim": "%",
+     "sigma": 1.6,
+     "oynaklik": 0.35
     }
    ]
   },

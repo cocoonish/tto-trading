@@ -409,6 +409,40 @@ const bolumler = [
         satırın tarihi kendi hücresinde yazar.
       </p>
 
+      {b.piyasa.en_cok_hareket?.sigma?.length > 0 && (
+        <div class="p-grup sigma-blok">
+          <h3>Günün olağandışı hareketleri</h3>
+          <p class="alt-not">
+            Hareketin büyüklüğü ile olağandışılığı ayrı şeylerdir. Aşağıdaki sıralama
+            günlük hareketi her enstrümanın kendi son yirmi günlük oynaklığına bölerek
+            kurulur: σ, o enstrüman için normal bir günün ölçüsüdür. Böylece baz puanla
+            yüzde aynı ölçekte kıyaslanır ve yüzdesi küçük ama kendi normaline göre
+            büyük hareketler görünür olur.
+          </p>
+          <div class="p-kaydir">
+            <table class="p-tablo">
+              <thead>
+                <tr><th>enstrüman</th><th class="sag">1 gün</th><th class="sag">günlük σ</th><th class="sag">kaç σ</th></tr>
+              </thead>
+              <tbody>
+                {b.piyasa.en_cok_hareket.sigma.map((x: any) => (
+                  <tr>
+                    <td class="p-ad">{x.ad}</td>
+                    <td class:list={['sag', 'p-degisim', { arti: x.deger > 0, eksi: x.deger < 0 }]}>
+                      {`${x.deger > 0 ? '+' : ''}${x.deger.toLocaleString('tr-TR')}${x.birim}`}
+                    </td>
+                    <td class="sag p-son">{x.oynaklik?.toLocaleString('tr-TR')}{x.birim}</td>
+                    <td class:list={['sag', 'p-sigma', { olagandisi: Math.abs(x.sigma) >= 2 }]}>
+                      {`${x.sigma > 0 ? '+' : ''}${x.sigma.toLocaleString('tr-TR')}σ`}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
       {b.piyasa.tr_faizleri && b.piyasa.tr_faizleri.length > 0 && (
         <div class="p-grup">
           <h3>Türk lirası faizleri ve DİBS eğrisi</h3>
@@ -439,7 +473,7 @@ const bolumler = [
                 <tr>
                   <th>enstrüman</th><th class="sag">son</th><th class="sag">1 gün</th>
                   <th class="sag">1 hafta</th><th class="sag">1 ay</th><th class="sag">yılbaşından</th>
-                  <th class="sag">52h aralık</th>
+                  <th class="sag">52h aralık</th><th class="sag">1 gün σ</th>
                 </tr>
               </thead>
               <tbody>
@@ -463,6 +497,11 @@ const bolumler = [
                     ))}
                     <td class="sag p-aralik">
                       {r.yil_konum !== null && r.yil_konum !== undefined ? `%${r.yil_konum}` : '—'}
+                    </td>
+                    <td class:list={['sag', 'p-sigma', { olagandisi: Math.abs(r.d1_sigma ?? 0) >= 2 }]}>
+                      {r.d1_sigma === null || r.d1_sigma === undefined
+                        ? '—'
+                        : `${r.d1_sigma > 0 ? '+' : ''}${r.d1_sigma.toLocaleString('tr-TR')}σ`}
                     </td>
                   </tr>
                 ))}
@@ -641,6 +680,9 @@ const bolumler = [
 
 
   .piyasa .alt-not { font-size: 0.8rem; color: var(--ink-70); margin: -0.3rem 0 1.1rem; }
+  .sigma-blok .alt-not { margin: -0.2rem 0 0.7rem; max-width: 64ch; }
+  .p-sigma { font-family: var(--font-mono); font-size: 0.78rem; color: var(--ink-30); white-space: nowrap; }
+  .p-sigma.olagandisi { color: var(--claret); font-weight: 600; }
   .p-grup { margin: 1.4rem 0; }
   .p-grup h3 {
     font-size: 0.88rem; color: var(--claret); font-variant: small-caps;
