@@ -1,0 +1,228 @@
+{
+ "_aciklama": "bie_fdvy grubunun seri dökümü ve kolon eşlemesi. Eşleme AD kalıbıyla yapılır; TCMB adı değiştirirse eşleme düşer ve hat açık hata verir — sessiz yanlış kolon okunmaz.",
+ "grup": "bie_fdvy",
+ "esleme": {
+  "net_pozisyon": {
+   "kod": "TP.FDVY37",
+   "ad": "C.Net Döviz Pozisyonu"
+  },
+  "kv_varlik": {
+   "kod": "TP.FDVY38",
+   "ad": "D.Kısa Vadeli Varlıklar"
+  },
+  "kv_yukumluluk": {
+   "kod": "TP.FDVY39",
+   "ad": "E.Kısa Vadeli Yükümlülükler"
+  },
+  "kv_net": {
+   "kod": "TP.FDVY40",
+   "ad": "F.Kısa Vadeli Net Döviz Pozisyonu"
+  },
+  "ihracat_alacak": {
+   "kod": "TP.FDVY10",
+   "ad": "A.c.İhracat Alacakları"
+  },
+  "ithalat_borc": {
+   "kod": "TP.FDVY32",
+   "ad": "B.b.İthalat Borçları"
+  },
+  "yi_kredi": {
+   "kod": "TP.FDVY14",
+   "ad": "B.a.1.Yurt İçinden Sağlanan Krediler"
+  },
+  "yd_kredi": {
+   "kod": "TP.FDVY27",
+   "ad": "B.a.2.Yurt Dışından Sağlanan Krediler"
+  },
+  "mevduat": {
+   "kod": "TP.FDVY02",
+   "ad": "A.a.Mevduat"
+  }
+ },
+ "tum_seriler": [
+  {
+   "kod": "TP.FDVY01",
+   "ad": "A.Varlıklar"
+  },
+  {
+   "kod": "TP.FDVY02",
+   "ad": "A.a.Mevduat"
+  },
+  {
+   "kod": "TP.FDVY03",
+   "ad": "A.a.1.Yurt İçi Bankalar"
+  },
+  {
+   "kod": "TP.FDVY04",
+   "ad": "A.a.2.Yurt Dışı Bankalar"
+  },
+  {
+   "kod": "TP.FDVY05",
+   "ad": "A.b.Menkul Kıymetler"
+  },
+  {
+   "kod": "TP.FDVY06",
+   "ad": "A.b.1.Devlet Borçlanma Senetleri"
+  },
+  {
+   "kod": "TP.FDVY07",
+   "ad": "A.b.1.1.Yurt İçinde İhraç Edilen"
+  },
+  {
+   "kod": "TP.FDVY08",
+   "ad": "A.b.1.2.Yurt Dışında İhraç Edilen"
+  },
+  {
+   "kod": "TP.FDVY09",
+   "ad": "A.b.2.Yurt Dışındaki Portföy Yatırımları"
+  },
+  {
+   "kod": "TP.FDVY10",
+   "ad": "A.c.İhracat Alacakları"
+  },
+  {
+   "kod": "TP.FDVY11",
+   "ad": "A.d.Yurt Dışına Doğrudan Sermaye Yatırımları"
+  },
+  {
+   "kod": "TP.FDVY47",
+   "ad": "A.e.Türev Varlıklar"
+  },
+  {
+   "kod": "TP.FDVY48",
+   "ad": "A.e.1.Kısa Vadeli"
+  },
+  {
+   "kod": "TP.FDVY49",
+   "ad": "A.e.2.Uzun Vadeli"
+  },
+  {
+   "kod": "TP.FDVY12",
+   "ad": "B.Yükümlülükler"
+  },
+  {
+   "kod": "TP.FDVY13",
+   "ad": "B.a.Nakdi Krediler"
+  },
+  {
+   "kod": "TP.FDVY14",
+   "ad": "B.a.1.Yurt İçinden Sağlanan Krediler"
+  },
+  {
+   "kod": "TP.FDVY15",
+   "ad": "B.a.1.1.Bankalar"
+  },
+  {
+   "kod": "TP.FDVY16",
+   "ad": "B.a.1.1.1.Döviz Kredileri"
+  },
+  {
+   "kod": "TP.FDVY17",
+   "ad": "B.a.1.1.1.1.Kısa Vadeli"
+  },
+  {
+   "kod": "TP.FDVY18",
+   "ad": "B.a.1.1.1.2.Uzun Vadeli"
+  },
+  {
+   "kod": "TP.FDVY19",
+   "ad": "B.a.1.1.2.Dövize Endeksli Krediler"
+  },
+  {
+   "kod": "TP.FDVY20",
+   "ad": "B.a.1.1.2.1.Kısa Vadeli"
+  },
+  {
+   "kod": "TP.FDVY21",
+   "ad": "B.a.1.1.2.2.Uzun Vadeli"
+  },
+  {
+   "kod": "TP.FDVY22",
+   "ad": "B.a.1.2.Banka Dışı Finansal Kuruluşlar"
+  },
+  {
+   "kod": "TP.FDVY23",
+   "ad": "B.a.1.2.1.Faktoring Şirketleri"
+  },
+  {
+   "kod": "TP.FDVY24",
+   "ad": "B.a.1.2.2.Finansman Şirketleri"
+  },
+  {
+   "kod": "TP.FDVY25",
+   "ad": "B.a.1.2.3.Finansal Kiralama Şirketleri"
+  },
+  {
+   "kod": "TP.FDVY26",
+   "ad": "B.a.1.3.TMSF'ye Devrolunan Takipli Krediler"
+  },
+  {
+   "kod": "TP.FDVY27",
+   "ad": "B.a.2.Yurt Dışından Sağlanan Krediler"
+  },
+  {
+   "kod": "TP.FDVY28",
+   "ad": "B.a.2.1.Kısa Vadeli"
+  },
+  {
+   "kod": "TP.FDVY29",
+   "ad": "B.a.2.2.Uzun Vadeli"
+  },
+  {
+   "kod": "TP.FDVY30",
+   "ad": "B.a.2.2.1.Vadeye Kalan Sure 1 Yıldan Az"
+  },
+  {
+   "kod": "TP.FDVY31",
+   "ad": "B.a.2.2.2.Vadeye Kalan Sure 1 Yıldan Fazla"
+  },
+  {
+   "kod": "TP.FDVY32",
+   "ad": "B.b.İthalat Borçları"
+  },
+  {
+   "kod": "TP.FDVY33",
+   "ad": "B.b.1.Kısa Vadeli"
+  },
+  {
+   "kod": "TP.FDVY34",
+   "ad": "B.b.2.Uzun Vadeli"
+  },
+  {
+   "kod": "TP.FDVY35",
+   "ad": "B.b.2.1.Vadeye Kalan Süre 1 Yıldan Az"
+  },
+  {
+   "kod": "TP.FDVY36",
+   "ad": "B.b.2.2.Vadeye Kalan Süre 1 Yıldan Fazla"
+  },
+  {
+   "kod": "TP.FDVY50",
+   "ad": "B.c.Türev Yükümlülükler"
+  },
+  {
+   "kod": "TP.FDVY51",
+   "ad": "B.c.1.Kısa Vadeli"
+  },
+  {
+   "kod": "TP.FDVY52",
+   "ad": "B.c.2.Uzun Vadeli"
+  },
+  {
+   "kod": "TP.FDVY37",
+   "ad": "C.Net Döviz Pozisyonu"
+  },
+  {
+   "kod": "TP.FDVY38",
+   "ad": "D.Kısa Vadeli Varlıklar"
+  },
+  {
+   "kod": "TP.FDVY39",
+   "ad": "E.Kısa Vadeli Yükümlülükler"
+  },
+  {
+   "kod": "TP.FDVY40",
+   "ad": "F.Kısa Vadeli Net Döviz Pozisyonu"
+  }
+ ]
+}
