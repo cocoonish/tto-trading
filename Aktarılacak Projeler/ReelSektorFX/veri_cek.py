@@ -16,6 +16,7 @@ TCMBNetRezerv). Anahtar üstbilgide gider, URL'de değil.
 """
 from __future__ import annotations
 
+import datetime as dt
 import json
 import os
 import re
@@ -54,6 +55,19 @@ def _cek(url: str, deneme: int = 3):
             req = urllib.request.Request(url, headers={"key": anahtar(), "User-Agent": UA})
             with urllib.request.urlopen(req, timeout=90) as r:
                 return json.loads(r.read().decode("utf-8"))
+        except urllib.error.HTTPError as ex:
+            # 4xx İSTEĞİN KENDİSİ hakkında konuşuyor: parametre yanlış, kod
+            # tanınmıyor, tarih aralığı kabul edilmiyor. Tekrarlamak aynı
+            # cevabı üç kez almaktan başka bir şey yapmaz — ve gerçek sebebi
+            # üç kat gecikmeyle gösterir. Yalnız 429 (çok istek) bekleyip
+            # tekrar denemeye değer.
+            if 400 <= ex.code < 500 and ex.code != 429:
+                raise RuntimeError(
+                    f"EVDS isteği reddedildi (HTTP {ex.code} {ex.reason}). "
+                    f"İstek: {url}") from ex
+            son = ex
+            if i < deneme - 1:
+                time.sleep(1.5 * (i + 1))
         except Exception as ex:                                   # noqa: BLE001
             son = ex
             if i < deneme - 1:
@@ -137,14 +151,54 @@ def kesfet() -> dict:
     return esleme
 
 
+def _seri_url(kodlar: list[str]) -> str:
+    """EVDS seri sorgusu.
+
+    İki ayrıntı 400 üretiyordu ve ikisi de sessizdi:
+
+      `formulas` seri BAŞINA bir değer ister. Tek bir "0", on bir serilik
+      istekte uzunluk uyuşmazlığı demek — EVDS bunu 400 ile reddediyor.
+
+      `endDate` gerçek bir tarih olmalı. Kodda 01-12-2099 yazıyordu; "sonuna
+      kadar getir" demenin kestirme yolu gibi görünüyor ama servis yetmiş üç
+      yıl sonrasını kabul etmiyor. Bugünün tarihi aynı işi görür: seri zaten
+      nereye kadar varsa oraya kadar gelir.
+    """
+    bugun = dt.date.today().strftime("%d-%m-%Y")
+    return (f"{BASE}/series={'-'.join(kodlar)}"
+            f"&startDate=01-12-2002&endDate={bugun}"
+            f"&type=json&formulas={'-'.join('0' for _ in kodlar)}")
+
+
 def indir(esleme: dict):
     import pandas as pd
     kodlar = [v["kod"] for v in esleme.values()]
-    url = (f"{BASE}/series={('-'.join(kodlar))}&startDate=01-12-2002"
-           f"&endDate=01-12-2099&type=json&formulas=0")
-    ham = _cek(url)
-    kayitlar = ham.get("items", ham) if isinstance(ham, dict) else ham
-    df = pd.DataFrame(kayitlar)
+    try:
+        ham = _cek(_seri_url(kodlar))
+    except RuntimeError as e:
+        # Toplu istek düştü: serileri TEK TEK dene. Tek bozuk kod yüzünden on
+        # serinin hepsini kaybetmek, hattı kurtarılabilecekken taslak bırakır.
+        # Hangi kodun sorunlu olduğu da ancak böyle öğrenilir.
+        print(f"\nToplu istek düştü ({e}); seriler tek tek deneniyor.", flush=True)
+        parcalar, dusen = [], []
+        for kod in kodlar:
+            try:
+                d = _cek(_seri_url([kod]))
+                parcalar.append(pd.DataFrame(d.get("items", d) if isinstance(d, dict) else d))
+            except RuntimeError as e2:
+                dusen.append((kod, str(e2)[:120]))
+        if dusen:
+            print("Düşen seriler:", flush=True)
+            for kod, sebep in dusen:
+                print(f"   ✗ {kod}: {sebep}", flush=True)
+        if not parcalar:
+            raise
+        df = parcalar[0]
+        for x in parcalar[1:]:
+            ortak = [c for c in ("Tarih", "UNIXTIME") if c in df.columns and c in x.columns]
+            df = df.merge(x, on=ortak or "Tarih", how="outer")
+    else:
+        df = pd.DataFrame(ham.get("items", ham) if isinstance(ham, dict) else ham)
     ters = {v["kod"].replace(".", "_"): k for k, v in esleme.items()}
     df = df.rename(columns=ters)
     df["tarih"] = pd.to_datetime(df["Tarih"], format="%m-%Y", errors="coerce")
