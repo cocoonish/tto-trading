@@ -41,8 +41,16 @@ on:
   # 07:15'te başlar, ~07:35'te push eder; o push'un yayını düşerse bülten
   # 11:47'deki veri koşusuna kadar sitede olmaz. Bu koşu o dört saatlik
   # boşluğu kapatıyor. Değişiklik yoksa yayinla.py hiçbir şey yapmaz.
+  #
+  # workflow_run TETİKLEYİCİSİ HER ZAMAN ATEŞLENMİYOR. 26.08 16:22'de veri
+  # koşusu başarıyla bitip veriyi commit'ledi, ama bitişine bağlı yayın koşusu
+  # hiç oluşmadı — içerik depoda kaldı, siteye çıkmadı (aynı gün 14:55'te aynı
+  # tetikleyici düzgün çalışmıştı, yani tetikleyici GÜVENİLİR DEĞİL). Kaçan
+  # yayın bir sonraki tetikleyiciye kadar bekliyor; akşam koşusundan sonra bu
+  # ertesi sabaha kadar, sabah bülteninden sonra ise öğlene kadar sürebilir.
   schedule:
-    - cron: '11 5 * * 1-5'    # 08:11 İstanbul — yazı katmanından ~1 saat sonra
+    - cron: '11 5 * * 1-5'    # 08:11 İstanbul — sabah bülteninin yazısından sonra
+    - cron: '11 16 * * 1-5'   # 19:11 İstanbul — günün son veri koşusundan sonra
     - cron: '41 15 * * 0'     # 18:41 İstanbul — pazar haftalık yazısından sonra
   workflow_dispatch: {}
 
