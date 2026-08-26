@@ -15,12 +15,20 @@ on:
   workflow_run:
     workflows: ["Veri tazeleme", "Günlük bülten"]
     types: [completed]
-  # Yazı katmanı (bulut rutini) ve yereldeki push'lar için:
+  # Yazı katmanı (bulut rutini) ve yereldeki push'lar için.
+  #
+  # YALNIZ site/** — 'bulten/**' listeden ÇIKARILDI. yayinla.py public depoya
+  # yalnız `site/` klasörünü kopyalar; bültenin JSON'u da zaten orada duruyor
+  # (site/src/data/bulten/). `bulten/` altındaki her şey ölçüm kodu, rehber ve
+  # iç defterler — hiçbiri siteye çıkmıyor. Bu yol kalıbı yüzünden bir .py ya da
+  # .md düzenlemesi bile yayın koşusu doğuruyor, koşu hiçbir şey kopyalamadan
+  # bitiyordu. 26.08'de "No jobs were run" ile düşen iki koşudan biri tam olarak
+  # buydu: değişen tek dosya bulten/YAZIM.md idi, yani başarıyla koşsa bile
+  # yayınlayacak hiçbir şeyi yoktu. Boşuna koşu = boşuna hata bildirimi.
   push:
     branches: [main]
     paths:
       - 'site/**'
-      - 'bulten/**'
   # YAKALAMA KOŞUSU. Yukarıdaki iki tetikleyici tek bir şeye karşı savunmasız:
   # GitHub'ın koşuya makine ATAYAMAMASI. O durumda iş hiç başlamadan
   # "startup_failure" ile biter ("No jobs were run") ve o içerik, bir sonraki
