@@ -49,6 +49,12 @@ jobs:
     timeout-minutes: 50
     env:
       TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
+      # ortak/sitecustomize.py: zaman aşımısız kalan her HTTP isteğine varsayılan
+      # zaman aşımı + yeniden deneme takar. Python onu PYTHONPATH'te bulunca
+      # açılışta kendiliğinden import eder; hatların dosyalarına dokunmak gerekmez.
+      # 2026-08-27: tcmb istemcisi isteği timeout'suz atıyor (kwargs sorgu dizesine
+      # gidiyor, requests'e değil) ve EVDS hattı 21 dakika asılı kaldı.
+      PYTHONPATH: ${{ github.workspace }}/ortak
     steps:
       - uses: actions/checkout@v4
 
@@ -103,6 +109,10 @@ jobs:
       # verir; --sistem-kur yalnız o koşuda koşacak hatların paketlerini kurar.
       - name: Gereken hatları tazele
         id: tazele
+        # Takdirî sınır: normal koşuda 1–3 hat, birkaç dakika. Bunu aşan koşu bir
+        # hattın kaynağında takıldığı anlamına gelir. Adım burada kesilir, ADIMLAR
+        # DEVAM EDER (aşağısı if: always()) ve tamamlanan hatların verisi commit'lenir.
+        timeout-minutes: 25
         run: |
           HATLAR="${{ inputs.hatlar }}"
           if [ -z "$HATLAR" ]; then
@@ -126,7 +136,10 @@ jobs:
       # altkümesini getiriyor ve hat CSV'yi eklemek yerine BAŞTAN yazıyor.
       # guncelle.py artık veri tarihi geriye giden hattı düşmüş sayıyor; burada
       # ayrıca diskteki hasar geri alınıyor, yoksa commit adımı onu yayardı.
+      # if: always() — üstteki tazeleme adımı düşse (ya da 25 dk sınırına çarpsa)
+      # bile ihale günü ihale çekilir. İki hattın kaderi birbirine bağlı değil.
       - name: Hazine ihaleleri (ihale günüyse tam kip)
+        if: always()
         continue-on-error: true
         run: |
           GEREK=$(python -c "import sys; sys.path.insert(0,'bulten'); import tazeleme; print(' '.join(tazeleme.gerekli(['hazine'])))")
@@ -200,7 +213,13 @@ jobs:
         env:
           ADIM_SONUC: ${{ steps.tazele.outcome || 'koşmadı' }}
 
+      # if: always() ŞART. 2026-08-27 koşusunda dört hattın ÜÇÜ başarıyla
+      # tazelendi (USDTRY 27.08'e geçti, fonlama ve DİBS koştu) ve 37 dakikalık
+      # işin tamamı çöpe gitti: tek bir hat (tcmb) EVDS'te zaman aşımına uğradı,
+      # adım kırmızı bitti ve commit adımı hiç koşmadı. Kısmî başarı, başarısızlık
+      # değildir; tazelenen hattın verisi düşen hattın kaderini paylaşmaz.
       - name: Commit
+        if: always()
         run: |
           git config --global user.name  "tto-veri"
           git config --global user.email "bot@users.noreply.github.com"

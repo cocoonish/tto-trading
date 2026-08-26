@@ -52,7 +52,19 @@ for _akis in (sys.stdout, sys.stderr):
         _akis.reconfigure(encoding="utf-8", errors="replace")
     except Exception:
         pass
-_COCUK_ENV = {**os.environ, "PYTHONIOENCODING": "utf-8", "PYTHONUTF8": "1"}
+# Hat alt süreçleri ortak HTTP emniyetiyle açılır: ortak/sitecustomize.py
+# PYTHONPATH'te olunca Python onu açılışta kendiliğinden import eder ve
+# zaman aşımısız kalan her isteğe varsayılan zaman aşımı + yeniden deneme koyar.
+# Hat KENDİ .venv'iyle koşsa da geçerli — PYTHONPATH yorumlayıcıdan bağımsız.
+# (2026-08-27: tcmb istemcisi timeout'suz istek atıyor, EVDS 21 dk astı.)
+_ORTAK = str(KOK / "ortak")
+_COCUK_ENV = {
+    **os.environ,
+    "PYTHONIOENCODING": "utf-8",
+    "PYTHONUTF8": "1",
+    "PYTHONPATH": os.pathsep.join(
+        [_ORTAK] + ([p] if (p := os.environ.get("PYTHONPATH")) else [])),
+}
 
 
 _ANSI = re.compile(r"\033\[[0-9;]*m")

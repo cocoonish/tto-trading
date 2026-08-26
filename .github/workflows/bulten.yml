@@ -45,6 +45,10 @@ jobs:
     timeout-minutes: 20
     env:
       TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
+      # ortak/sitecustomize.py — zaman aşımısız HTTP isteğine varsayılan zaman
+      # aşımı + yeniden deneme. Burada asıl muhatap piyasa.py'nin yfinance
+      # çağrıları: takılan tek bir sembol 20 dakikalık iş bütçesini yiyebilir.
+      PYTHONPATH: ${{ github.workspace }}/ortak
     steps:
       - uses: actions/checkout@v4
 

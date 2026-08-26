@@ -86,6 +86,53 @@ def main() -> int:
             tazeleme._yayimlar = gercek
     sina("tazeleme: karar + ölü kalıp (iki takvim durumu)", _tazeleme)
 
+    # ── ortak HTTP emniyeti: zaman aşımı gerçekten takılıyor mu (ağsız)
+    # 2026-08-27: tcmb istemcisi isteği timeout'suz atıyordu; EVDS 21 dakika
+    # astı ve dört hattın üçünün tamamlanmış işi çöpe gitti. Emniyet artık
+    # ortak/sitecustomize.py'de; SINANMAYAN emniyet emniyet değildir.
+    def _http_emniyet():
+        import importlib.util
+        import requests
+        yol = BURASI.parent / "ortak" / "sitecustomize.py"
+        assert yol.exists(), f"{yol} yok"
+        asil = requests.sessions.Session.request
+        onceden = getattr(requests.sessions.Session, "_tto_emniyet", False)
+        gorulen: dict = {}
+
+        class _Yanit:                      # ağa hiç çıkılmaz
+            status_code = 200
+
+        def _kaydet(self, method, url, **kw):
+            gorulen["timeout"] = kw.get("timeout")
+            return _Yanit()
+
+        try:
+            requests.sessions.Session.request = _kaydet
+            if onceden:                    # zaten sarılıysa yeniden sarılsın
+                del requests.sessions.Session._tto_emniyet
+            spec = importlib.util.spec_from_file_location("_tto_emniyet_sinama", yol)
+            m = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(m)
+            assert getattr(requests.sessions.Session, "_tto_emniyet", False), \
+                "emniyet kurulmadı"
+            requests.get("http://sinama.gecersiz/x")
+            zaman = gorulen.get("timeout")
+            assert isinstance(zaman, tuple) and all(zaman), \
+                f"varsayılan zaman aşımı takılmadı: {zaman!r}"
+            requests.get("http://sinama.gecersiz/y", timeout=7)
+            assert gorulen.get("timeout") == 7, \
+                f"açıkça verilen zaman aşımı ezildi: {gorulen.get('timeout')!r}"
+        finally:
+            requests.sessions.Session.request = asil
+            if onceden:
+                requests.sessions.Session._tto_emniyet = True
+            else:
+                try:
+                    del requests.sessions.Session._tto_emniyet
+                except AttributeError:
+                    pass
+    sina("ortak: HTTP zaman aşımı emniyeti", _http_emniyet)
+
     # ── denetim: son bülten üzerinde bütün ölçütler
     b = son_bulten()
     if b is None:
