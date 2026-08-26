@@ -152,6 +152,14 @@ jobs:
           cp ayrisma.html kacak.html makas.html bkea.html ozet.json duzenlemeler.json \
              "../../site/public/projeler/makroihtiyati/"
           cd ../..
+          # Reel sektör FX ağa çıkar (EVDS): düşerse uyar, yer tutucularla devam.
+          cd "Aktarılacak Projeler/ReelSektorFX"
+          python veri_cek.py || echo "::warning::ReelSektorFX EVDS çekimi düştü — sayfa taslak kalır"
+          python hesap.py
+          python grafik.py
+          cp pozisyon.html bilesim.html kisa_vade.html ozet.json \
+             "../../site/public/projeler/reel-sektor-fx/"
+          cd ../..
           python site/tools/plotly_stil.py --hepsi >/dev/null
 
       - name: Commit
