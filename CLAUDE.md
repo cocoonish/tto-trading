@@ -112,11 +112,13 @@ görüntüsü aynıydı: yayın iş akışı "değişiklik yok" deyip yeşil bit
 dünkü bülteni göstermeye devam ediyordu. Nöbetçi o sessizliği kapatıyor.
 
 **Kurucu ilke — sigorta metne değil araca konur.** Yazı katmanını ateşleyen
-rutinin metni depoda değil, claude.ai hesabının rutin ayarlarında durur ve bir
-aracı onu değiştiremez (arayüzden kurulmuş rutinler agent'a kapalı; agent'ın
-kurduğu rutin ise özel depoyu klonlayamaz, çünkü yeni oturuma kaynak depo
-bağlanmaz). Bu yüzden bir kural "rutin metnine yazıldı" diye tamam sayılmaz:
-araç onu kendi başına dayatabilmelidir. `yaz.py`nin damga sigortası açık argüman
+rutinin metni depoda değil, claude.ai hesabının rutin ayarlarında durur. (Bu
+ilke bir zamanlar "bir aracı onu değiştiremez" diye yazılmıştı; 27.08.2026'da
+ölçüldü ve YANLIŞ çıktı — iki rutin de API üzerinden oluşturulmuş, listelenip
+güncellenebiliyor ve kaynak depoyu taşıyor. İlkenin kendisi yine de geçerli,
+sebebi başka: rutin metni depoyla birlikte sürümlenmez, gözden geçirilmez ve
+kimse ona bakmaz.) Bu yüzden bir kural "rutin metnine yazıldı" diye tamam
+sayılmaz: araç onu kendi başına dayatabilmelidir. `yaz.py`nin damga sigortası açık argüman
 verilmese de yama dosyasının zamanıyla sürer, denetim eşikleri koddadır, duman
 sınaması iş akışını durdurur. Rutin metni yalnız
 `bulten/YAZIM.md`ye işaret eder; kural rehbere yazılır.
@@ -135,6 +137,25 @@ dosyaların ESKİ hâlini checkout'un üzerine yazıyordu. 27.08 koşusu böylec
 sahiplendi — koşu yeşil bitti, tarihçe 7 kayıttan 6'ya düştü. Kural: izlenen
 bir dosyanın doğru sürümü depodakidir; restore'dan sonra `git checkout --`
 ile depo sürümü geri konur (izlenmeyen önbellek dosyalarına dokunmaz).
+
+**Kurucu ilke — bir ölçüm ancak KAPANMIŞ bir seansı ölçebilir.** Günün barı
+piyasa kapanmadan alınırsa "günlük değişim" dünkü seansı değil geceliği ölçer
+ve işareti dünküyle ters olabilir. 27.08.2026 sabahı 51 enstrümanın 21'i böyle
+yayımlandı; altın dünkü seansı −%0,86 kapatmışken bülten +%1,78 yazdı ve günün
+bütün anlatısı o sahte harekete kuruldu. Üç katmanlı sigorta kondu: ölçüm
+katmanı grup grup kapanış saatine göre kapanmamış barı düşürür
+(`piyasa.KAPANIS_UTC`), denetim aynı soruyu yayının SON kapısında bağımsız
+sorar ve ENGEL üretir, duman sınaması ikisini de sahte saatle çağırır. Tek
+katmanlı sigorta yetmez: bu koruma bir zamanlar vardı ama yalnız beş enerji
+vadelisini kapsıyordu ve kimse fark etmedi.
+
+**Kurucu ilke — bir düzeltme genelleştirilmeden tamamlanmaz.** Aynı sabahki
+metin enerjideki ölçü hatasını buldu, doğru teşhis etti, düzgün bir geri alma
+yazdı — ve aynı paragrafın devamında aynı hatayı taşıyan metal rakamlarını
+düzeltmeden yayımladı. Bir kusur bulunduğunda sorulacak soru "bu seriyi
+düzelttim mi" değil, "bu kusur başka nerede olabilir"dir. Denetimin
+`revizyon` ölçütü bunu artık ölçüyor: daha önce yayımladığımız bir sayı
+sonradan değiştiyse adıyla listelenir, yani kusur göze çarpmasa da görünür.
 
 ## Dikkat
 

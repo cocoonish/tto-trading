@@ -255,6 +255,41 @@ damganın yaşına bakıyor. İki uyarı doğrudan sana:
   Susturmanın tek yolu önce anlamaktır — açıklaması olmayan hiçbir donuk seri
   listeden düşmez.
 
+**Her satırın kendi bar tarihine bak.** Piyasa fotoğrafındaki her satır hangi
+GÜNÜN kapanışını taşıdığını yazar. Bugünün tarihini taşıyan bir satır, ancak o
+piyasa kapandıysa kullanılabilir; kapanmadıysa o satırın "günlük değişim"i dünkü
+seansı değil geceliği ölçer ve işareti dünküyle ters olabilir. Denetim bunu artık
+ENGEL sayıyor (`kapanmamış seansın barı`), ama engelin çıkmaması satırların hepsi
+aynı güne aittir demek değildir: bülten 26 Ağustos kapanışlarıyla 27 Ağustos'ta
+kapanmış bir Asya seansını aynı sayfada taşıyabilir. Hangi satırın hangi güne ait
+olduğunu METİNDE söyle.
+
+**Bir düzeltme yaptıysan GENELLEŞTİR.** Bu, 27.08.2026'nın asıl dersi. O sabahki
+metin enerjide bir ölçü hatası fark etti, doğru teşhis etti ve düzgün bir geri
+alma yazdı — sonra aynı paragrafın devamında, aynı hatayı taşıyan metal
+rakamlarını düzeltmeden yayımladı. Aradaki tek fark, enerjide korumanın var
+olması ve hatanın bir gün önce göze çarpmış olmasıydı. Bir ölçü kusuru
+bulduğunda soru "bu seriyi düzelttim mi" değil, **"bu kusur başka nerede
+olabilir"** olmalı: aynı kaynaktan gelen, aynı yoldan geçen bütün satırları
+gözden geçir.
+
+**Haber başlığı ölçüyü DOĞRULAMAZ.** Aynı sabah, yanlış ölçüyü destekleyen bir
+başlık bulundu ("Gold Rises…") ve teyit sayıldı; oysa o başlık iki gün önceki
+harekete aitti. Bir başlığın hangi güne ait olduğunu kontrol etmeden ölçüyle
+eşleştirme. Ölçü ile haber çelişiyorsa varsayılan, ÖLÇÜYÜ sorgulamaktır — haberi
+ölçüye uydurmak değil.
+
+**"YAYIMLANAN SAYI DEĞİŞTİ" uyarısı ciddidir.** Denetim, aynı enstrümanın aynı
+bar gününe ait günlük değişimini önceki bültenlerde yayımladığımızla karşılaştırır.
+Listelenen her sayı için ya sebebi bul (meşru revizyon) ya da metinde
+"yayımlanan X yerine gerçek hareket Y" kalıbıyla geri al. Listenin uzun olması
+tek bir ölçüm kusuruna işaret eder; tek tek değil, KAYNAĞINI ara.
+
+**"Vadeli devir düzeltmesi kurulamadı" uyarısı seviyeleri iptal eder.** O
+satırlarda gösterilen fiyat ham kontrat kapanışıdır; önceki yayımla
+kıyaslanamaz ve seviyeden türeyen rafineri marjları üzerinden yorum kurulamaz.
+Günlük yüzde değişimler etkilenmez — onları kullan, seviyeyi kullanma.
+
 Bu uyarılar engel değildir — bayat veriyle de bülten yazılır, yeter ki bayatlık
 BİLİNEREK yazılsın. 26.08'de veri hattı düştü ve aşağı akıştaki hiçbir katman
 bunu bilemiyordu; bu ölçütler o boşluğu kapatıyor.

@@ -24,7 +24,7 @@ import json
 import re
 import sys
 import unicodedata
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 BURASI = Path(__file__).resolve().parent
@@ -69,6 +69,47 @@ def _kelime(html: str) -> int:
 def _sade(m: str) -> str:
     m = unicodedata.normalize("NFKD", (m or "").lower())
     return re.sub(r"[^a-z0-9ğüşiöç ]", " ", m)
+
+
+# Kilit gelişme çapaları — İngilizce başlık, Türkçe metin.
+#
+# Bu ölçüt başlıktaki 5 harften uzun ilk altı kelimeyi Türkçe metinde arıyordu.
+# İngilizce bir başlıkta ("Gold Rises As Treasury Buyback Support Plan Weighs
+# On Dollar…") bu kelimeler Türkçe metinde ASLA bulunamaz: uyarı, konu doğru
+# düzgün işlenmiş olsa bile kapanmıyordu. Kapanamayan bir uyarı, yazarı bütün
+# uyarıları görmezden gelmeye alıştırır — denetimin kendisini işlevsizleştirir.
+#
+# Artık iki çapa aranıyor: (1) başlıktaki ÖZEL AD benzeri kelimeler — çeviride
+# aynen kalanlar (Citadel, Druckenmiller, Bessent, Warsh, BOJ); (2) haberin
+# kendi TÜRKÇE konu etiketi (`kaynak` alanı: "Arama — ABD borç yönetimi ve
+# tahvil arzı"). İkisinden biri metinde geçiyorsa ölçüt geçer. Hiç çapa
+# çıkmıyorsa uyarı da ÜRETİLMEZ; ölçemediğimiz şeyi ölçmüş gibi yapmayız.
+CAPA_DISI = {
+    "about", "after", "against", "ahead", "amid", "analysis", "another", "as",
+    "banks", "before", "billion", "bond", "bonds", "boosts", "buyback",
+    "calls", "central", "chief", "could", "data", "deal", "demand", "dollar",
+    "down", "economy", "expected", "focus", "from", "global", "gold", "growth",
+    "here", "hike", "high", "higher", "hold", "inflation", "interest",
+    "into", "investors", "lead", "leads", "less", "level", "market", "markets",
+    "may", "million", "more", "most", "new", "news", "next", "over", "plan",
+    "policy", "prediction", "price", "prices", "push", "rate", "rates",
+    "repression", "rises", "risk", "says", "sees", "shares", "should", "stock",
+    "stocks", "support", "than", "that", "these", "this", "through", "time",
+    "timely", "trade", "traders", "treasury", "under", "weighs", "what",
+    "when", "will", "with", "would", "yields", "com", "reuters", "bloomberg",
+    "cnbc", "investing", "advisory",
+}
+
+
+def _kilit_capalari(madde: dict) -> tuple[list[str], list[str]]:
+    """(özel ad çapaları, Türkçe konu çapaları) — ikisi de boş olabilir."""
+    ozel = [w for w in re.findall(r"[A-Za-zÇĞİÖŞÜçğıöşü.]{4,}", madde.get("baslik") or "")
+            if w.lower().strip(".") not in CAPA_DISI and not w.islower()]
+    kaynak = madde.get("kaynak") or ""
+    konu = kaynak.split("—", 1)[1] if "—" in kaynak else ""
+    konu = re.sub(r"\(\+?\d+\s*kaynak\)", " ", konu)
+    tkonu = [w for w in _sade(konu).split() if len(w) > 4]
+    return ozel, tkonu
 
 
 # ─────────────────────────────────────────────── sayı denetimi yardımcıları
@@ -351,11 +392,19 @@ class Denetim:
         # kilit gelişmeler metinde geçiyor mu
         h = self.b.get("haberler") or {}
         kilit = next((b for b in h.get("bolumler", []) if b.get("id") == "kilit"), None)
+        sade_metin = _sade(metin)
         for m in (kilit or {}).get("maddeler", [])[:4]:
-            kelimeler = [w for w in _sade(m["baslik"]).split() if len(w) > 5][:6]
-            if kelimeler and not any(w in metin for w in kelimeler):
-                self.uyari.append(f"Kilit gelişme metinde işlenmemiş olabilir: "
-                                  f"{m['baslik'][:70]}")
+            ozel, konu = _kilit_capalari(m)
+            if not ozel and not konu:
+                continue                       # ölçülemiyor — uyarı da üretilmez
+            if any(_sade(w) .strip() and _sade(w).strip() in sade_metin for w in ozel) \
+               or (konu and any(w in sade_metin for w in konu)):
+                self._ok(f"kilit gelişme işlenmiş: {m['baslik'][:48]}")
+                continue
+            arananlar = ", ".join(ozel[:4] + konu[:4]) or "—"
+            self.uyari.append(
+                f"Kilit gelişme metinde işlenmemiş olabilir: {m['baslik'][:64]} "
+                f"(aranan çapalar: {arananlar})")
 
     # ────────────────────────────────────────────── sayı tutarlılığı
     def _olculen_degerler(self) -> tuple[set[float], list[str]]:
@@ -583,6 +632,118 @@ class Denetim:
                 gecikmis.append(f"{hat}{f' — {ad}' if ad else ''} ({gun}g)")
         if gecikmis:
             self.uyari.append("Veri gecikmiş hatlar: " + ", ".join(gecikmis))
+
+    def yerlesmemis(self):
+        """Kapanmamış seansın barı bültende olmamalı — ENGEL.
+
+        27.08.2026'nın ilk sürümü bunu yaptı: 04:21 UTC'de koştu ve 51
+        enstrümanın 21'i o anda HENÜZ AÇIK olan günün barını taşıyordu. O barın
+        önceki kapanışa göre farkı "günlük değişim" diye yayımlandı; altında
+        işaret ters döndü (gerçek seans −%0,86 iken bülten +%1,78 yazdı) ve
+        günün bütün anlatısı o sahte harekete kuruldu.
+
+        Ölçüm katmanında koruma var (piyasa._yerlesmemis_dus) ama tek katmanlı
+        bir sigorta yeterli değil: o koruma bir zamanlar YALNIZ beş enerji
+        vadelisini kapsıyordu ve kimse fark etmedi. Bu ölçüt yayının SON
+        kapısında aynı soruyu bağımsız olarak bir daha sorar. Eşik tablosu
+        ölçüm katmanından okunur — iki yerde iki ayrı doğru olmasın.
+        """
+        try:
+            sys.path.insert(0, str(BURASI))
+            import piyasa                              # noqa: E402
+        except Exception:
+            return
+        simdi = datetime.now(timezone.utc)
+        bugun = simdi.date().isoformat()
+        acik = []
+        for g in (self.b.get("piyasa", {}).get("gruplar") or []):
+            esik = piyasa.KAPANIS_UTC.get(g.get("id", ""), piyasa.VARSAYILAN_KAPANIS)
+            if simdi.hour >= esik:
+                continue
+            for s in (g.get("satirlar") or []):
+                if s.get("tarih") == bugun:
+                    acik.append(f"{s.get('ad')} ({g.get('id')}, kapanış {esik}:00 UTC)")
+        if acik:
+            self.engel.append(
+                "KAPANMAMIŞ SEANSIN BARI bültende: " + ", ".join(acik[:8])
+                + (f" … +{len(acik) - 8}" if len(acik) > 8 else "")
+                + ". Bu satırların 'günlük değişim'i dünkü seansı değil geceliği "
+                "ölçer ve işareti ters çevirebilir. Ölçümü piyasa kapandıktan "
+                "sonra yeniden kurun.")
+        else:
+            self._ok("kapanmamış seansın barı yok")
+
+    def devir(self):
+        """Devir düzeltmesi kurulamamış vadeli seri var mı.
+
+        Kurulamadığında seri HAM kontrat kapanışıyla bırakılır (uydurma
+        düzeltme, düzeltmemekten kötüdür). Ama o hâlde SEVİYE bir önceki
+        yayımla kıyaslanabilir değildir ve seviyeden türeyen rafineri marjları
+        da öyle. Yazan taraf bunu bilmeden marj yorumu kurarsa, düzeltmenin
+        varlığını/yokluğunu piyasa hareketi diye anlatır.
+        """
+        ham = [s.get("ad") for g in (self.b.get("piyasa", {}).get("gruplar") or [])
+               for s in (g.get("satirlar") or []) if s.get("roll_bilinmiyor")]
+        if ham:
+            self.uyari.append(
+                "Vadeli devir düzeltmesi kurulamadı: " + ", ".join(ham)
+                + ". Bu satırlarda SEVİYE ham kontrat kapanışıdır — önceki yayımla "
+                "kıyaslamayın, seviyeden türeyen marjlar üzerinden yorum kurmayın. "
+                "Günlük yüzde değişimler etkilenmez.")
+        else:
+            self._ok("vadeli devir düzeltmesi kurulu")
+
+    def revizyon(self):
+        """Daha önce YAYIMLADIĞIMIZ bir sayı sonradan değişti mi.
+
+        Bir enstrümanın aynı bar gününe ait günlük değişimi iki farklı bültende
+        iki farklı değerle çıkıyorsa, ikisinden biri yanlış yayımlanmıştır.
+        27.08'de tam bu oldu ve yazan taraf bunu ENERJİDE fark edip düzeltti,
+        ama aynı kusurun metallerde de olduğunu görmedi — çünkü fark etmesi
+        gözüne çarpmasına bağlıydı, ölçülmüyordu. Artık ölçülüyor: değişen her
+        sayı adıyla listelenir, yazan taraf ya kaynağını doğrular ya da
+        "yayımlanan X yerine gerçek hareket Y" kalıbıyla geri alır.
+        """
+        try:
+            dosyalar = sorted(BULTEN.glob("*.json"))
+        except Exception:
+            return
+        bugunku = self.b.get("tarih")
+        oncekiler = [d for d in dosyalar if d.stem < str(bugunku)][-3:]
+        if not oncekiler:
+            return
+        simdi = {}
+        for g in (self.b.get("piyasa", {}).get("gruplar") or []):
+            for s in (g.get("satirlar") or []):
+                if s.get("tarih") is not None and s.get("d1") is not None:
+                    simdi[(s.get("kod"), s["tarih"])] = (s["ad"], s["d1"], s.get("degisim_birim", ""))
+        degisen = []
+        for d in reversed(oncekiler):
+            try:
+                eski_b = json.loads(d.read_text(encoding="utf-8"))
+            except Exception:
+                continue
+            for g in (eski_b.get("piyasa", {}).get("gruplar") or []):
+                for s in (g.get("satirlar") or []):
+                    anahtar = (s.get("kod"), s.get("tarih"))
+                    if anahtar not in simdi or s.get("d1") is None:
+                        continue
+                    ad, yeni_d1, birim = simdi[anahtar]
+                    if abs(float(s["d1"]) - float(yeni_d1)) <= 0.005:
+                        continue
+                    if any(x[0] == ad for x in degisen):
+                        continue
+                    degisen.append((ad, s["d1"], yeni_d1, birim, d.stem))
+        if degisen:
+            satir = ", ".join(f"{ad}: {e}{b} → {y}{b} ({g} bülteninde yayımlandı)"
+                              for ad, e, y, b, g in degisen[:6])
+            self.uyari.append(
+                f"YAYIMLANAN SAYI DEĞİŞTİ ({len(degisen)}) — {satir}"
+                + (" …" if len(degisen) > 6 else "")
+                + ". Her birinin sebebini bul; ölçü düzeltmesiyse metinde "
+                "'yayımlanan X yerine gerçek hareket Y' kalıbıyla geri al.")
+        else:
+            self._ok("daha önce yayımlanan sayı değişmemiş")
 
     def karanlik(self):
         """Hattın saati ilerlerken İÇİNDEKİ bir serinin donması.
@@ -839,6 +1000,7 @@ class Denetim:
     def kos(self) -> int:
         self.yazi(); self.veri(); self.atif(); self.sayi(); self.nabiz(); self.tekrar()
         self.tema(); self.izleme(); self.dil(); self.tazelik(); self.karanlik()
+        self.yerlesmemis(); self.revizyon(); self.devir()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")
         print(f"  BÜLTEN DENETİMİ · {self.b.get('tr_tarih', self.b.get('tarih'))} "

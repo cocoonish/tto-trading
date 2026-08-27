@@ -238,6 +238,64 @@ def main() -> int:
             _piyasa.datetime = gercek
     sina("piyasa: yerleşmemiş bar düşürülüyor", _yerlesmemis)
 
+    # DENETİMİN SON KAPISI. Ölçüm katmanındaki koruma tek başına yetmiyor: bir
+    # zamanlar yalnız beş enerji vadelisini kapsıyordu ve kimse fark etmedi.
+    # denetim.yerlesmemis aynı soruyu yayının son kapısında bağımsız sorar; bu
+    # sınama onun GERÇEKTEN engel ürettiğini doğrular.
+    def _denetim_yerlesmemis():
+        from datetime import datetime as _dt, timezone as _tz
+        import denetim as _den
+        gercek = _den.datetime
+        try:
+            class _Saat(_dt):
+                @classmethod
+                def now(cls, tz=None):
+                    return _dt(2026, 8, 27, 4, 21, tzinfo=_tz.utc)
+            _den.datetime = _Saat
+            b = {"tarih": "2026-08-27", "piyasa": {"gruplar": [
+                {"id": "metal", "satirlar": [{"ad": "Altın", "tarih": "2026-08-27", "d1": 1.78}]},
+                {"id": "asya_hisse", "satirlar": [{"ad": "Nikkei", "tarih": "2026-08-26", "d1": 0.3}]},
+            ]}}
+            d = _den.Denetim(b); d.yerlesmemis()
+            assert d.engel and "KAPANMAMIŞ" in d.engel[0], "kapanmamış bar engel üretmedi"
+
+            temiz = {"tarih": "2026-08-27", "piyasa": {"gruplar": [
+                {"id": "metal", "satirlar": [{"ad": "Altın", "tarih": "2026-08-26", "d1": -0.86}]},
+            ]}}
+            d2 = _den.Denetim(temiz); d2.yerlesmemis()
+            assert not d2.engel, "kapanmış bar boşuna engellendi"
+        finally:
+            _den.datetime = gercek
+    sina("denetim: kapanmamış bar ENGEL", _denetim_yerlesmemis)
+
+    # Kilit gelişme ölçütü KAPANABİLİR olmalı. İngilizce başlığın kelimelerini
+    # Türkçe metinde arayan eski hâli hiçbir zaman kapanmıyordu; kapanamayan
+    # uyarı, yazarı bütün uyarıları görmezden gelmeye alıştırır.
+    def _kilit_capa():
+        import denetim as _den
+        madde = {"baslik": "Gold Rises As Treasury Buyback Support Plan Weighs On Dollar",
+                 "kaynak": "Arama — ABD borç yönetimi ve tahvil arzı (+8 kaynak)"}
+        ozel, konu = _den._kilit_capalari(madde)
+        assert konu, "Türkçe konu çapası çıkarılamadı"
+        assert any(w in _den._sade("Hazine geri alımı ve tahvil arzı tartışması") for w in konu), \
+            "Türkçe konu çapası metinde bulunamadı"
+        bos = {"baslik": "Stocks up", "kaynak": ""}
+        o2, k2 = _den._kilit_capalari(bos)
+        assert not o2 and not k2, "çapasız maddeden çapa üretildi (uyarı kapanamaz olurdu)"
+    sina("denetim: kilit gelişme çapası kapanabilir", _kilit_capa)
+
+    # Devir düzeltmesi, KAPANMAMIŞ bar elindeyken koşarsa bugüne sahte bir devir
+    # yazıyor ve o devirden önceki bütün günleri yanlış oranla ölçekliyordu.
+    # Sıra artık bağlayıcı: önce bar düşer, sonra devir hesaplanır.
+    def _sira():
+        import piyasa as _piyasa
+        metin = Path(_piyasa.__file__).read_text(encoding="utf-8")
+        i_bar = metin.index("seri = _yerlesmemis_dus(seri)")
+        i_roll = metin.index("seri = _roll_duzelt(seri)")
+        assert i_bar < i_roll, ("SIRA TERS: devir düzeltmesi kapanmamış bar elindeyken "
+                                "koşuyor — bugüne sahte devir yazar")
+    sina("piyasa: bar düşürme devir düzeltmesinden ÖNCE", _sira)
+
     for ad in gecen:
         print(f"  ✓ {ad}")
     for ad, hata in dusen:

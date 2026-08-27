@@ -209,13 +209,32 @@ def _ham_veri(tazele: bool = False) -> dict:
             seri[k] = {"tarih": [str(x.date()) for x in s.index], "kapanis": [float(x) for x in s.values]}
         except Exception:
             continue
-    # Sıra bağlayıcı: önce devir düzeltmesi (kontrat zinciriyle eşleştirme
-    # tarihsel barlara dayanır), sonra yerleşmemiş barın düşürülmesi.
+    # SIRA BAĞLAYICI — ve eskiden TERSİYDİ.
+    #
+    # Önce devir düzeltmesi koşuyordu, sonra yerleşmemiş bar düşürülüyordu.
+    # Gerekçe "eşleştirme tarihsel barlara dayanır" idi; ama düzeltme, elinde
+    # KAPANMAMIŞ günün barı varken çalışıyordu ve o barın kotasyonu tarihsel
+    # barlarla aynı kontratı izlemiyor (Yahoo canlıda çoğu zaman en aktif
+    # kontratı verir, tarihte ön ayı). Sonuç: düzeltme bugüne SAHTE bir devir
+    # yazıyor ve o devirden önceki BÜTÜN günleri yanlış bir oranla ölçekliyordu.
+    #
+    # 27.08.2026'nın iki koşusu bunu ölçtü. 04:21 koşusunda Brent, benzin ve
+    # kalorifer için devir günü '2026-08-27' olarak kaydedildi — serinin son
+    # KAPALI günü 26.08 olmasına rağmen. Brent'in 26.08 kapanışı bu sahte
+    # oranla 87,84'ten 86,94'e çekildi; benzin 3,3201'den 2,9606'ya indi ve
+    # rafineri marjları (3:2:1 68,77 → 58,7) onunla birlikte kaydı. Hiçbiri
+    # piyasa hareketi değildi. Günlük yüzde değişim, oran her iki güne de
+    # uygulandığı için sağ kalıyordu; bozulan SEVİYELER ve seviyeden türeyen
+    # marjlardı — ve bülten onları dolar fiyatı diye yayımlıyordu.
+    #
+    # Doğru sıra: önce kapanmamış barı düş, SONRA devri hesapla. Böylece
+    # düzeltme yalnız kapanmış barlarla eşleştirme yapar ve bugüne devir
+    # yazamaz.
+    seri = _yerlesmemis_dus(seri)
     try:
         seri = _roll_duzelt(seri)
     except Exception:
         pass                       # düzeltme yapılamazsa ham seriyle devam
-    seri = _yerlesmemis_dus(seri)
     d = {"zaman": datetime.now().isoformat(timespec="seconds"), "seri": seri}
     HAM.write_text(json.dumps(d, ensure_ascii=False), encoding="utf-8")
     return d
@@ -496,6 +515,9 @@ def satir(v: Varlik, seri: dict) -> dict | None:
         "ondalik": v.ondalik, "tip": v.tip,
         "not": "; ".join(x for x in (v.not_, ek_not) if x),
         "vade_gecisi": s.get("devir_gunleri") or [],
+        # Devir düzeltmesi kurulamadıysa SEVİYE ham kontrat kapanışıdır ve
+        # önceki yayımla kıyaslanabilir değildir; denetim bunu uyarıya çevirir.
+        "roll_bilinmiyor": bool(s.get("roll_bilinmiyor")),
         "son": round(son, v.ondalik), "tarih": t[-1],
         "d1": d(1), "h1": d(5), "a1": d(21), "ybb": ybb,
         "degisim_birim": "bp" if getiri else "%",
