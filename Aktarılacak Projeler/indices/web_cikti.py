@@ -1085,13 +1085,21 @@ def ciz_son_mansetler(cikti_yolu, adet=40):
 # Uretim akisi
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def uret(cikti_dizini=None, rejim=None):
+def uret(cikti_dizini=None, rejim=None, yalniz_anlik=False):
     """Tum HTML ciktilarini uret; uretilen dosya yollarini dondur.
 
     Hafif ciktilar (tarihce, son okuma, optimizasyon) internetsiz ve hizlidir.
     Agir adimlar opsiyoneldir: rejim (CPU-yogun gunluk matris) ve
     duyarlilik-getiri (yfinance) hatada atlanir, pipeline durmaz.
     rejim parametresi verilirse (run.py'den) matris yeniden hesaplanmaz.
+
+    yalniz_anlik=True: YALNIZ anlik endeks grafikleri (tarihce + son okuma).
+    Bu kip GUNLUK kosu icindir. Sayfanin geri kalani — rejim, korelasyon,
+    fiyat-endeks, sacilim — GDELT haftalik arsivinden gelir ve o arsiv gun
+    icinde ILERLEMEZ; onlari her gun yeniden cizmek hem dakikalar suren gunluk
+    duyarlilik matrisini bosuna kosturur, hem de `rejim_ozet.json`i (sayfadaki
+    "veri sonu" damgasi) degismeyen bir icerikle yeniden yazar. Haftalik saat,
+    haftalik kosuda ilerler.
     """
     hedef = cikti_dizini or OUTPUT_DIR
     os.makedirs(hedef, exist_ok=True)
@@ -1102,6 +1110,8 @@ def uret(cikti_dizini=None, rejim=None):
         ciz_tarihce(tarihce, os.path.join(hedef, "endeks_tarihce.html")),
         ciz_son_snapshot(tarihce, os.path.join(hedef, "endeks_son.html")),
     ]
+    if yalniz_anlik:
+        return yollar
 
     try:
         yollar.append(ciz_optimizasyon(os.path.join(hedef, "optimizasyon.html")))
@@ -1171,7 +1181,12 @@ def uret(cikti_dizini=None, rejim=None):
 
 
 def main():
-    yollar = uret()
+    import sys
+    anlik = "--anlik" in sys.argv[1:]
+    yollar = uret(yalniz_anlik=anlik)
+    if anlik:
+        print("  (anlik kip: yalniz endeks grafikleri; GDELT tabanli paneller "
+              "haftalik kosuda tazelenir)")
     for yol in yollar:
         print(f"  Yazildi: {yol}")
 

@@ -178,8 +178,22 @@ class Hat:
     # bakmak o durumda "veri tazelendi" der.
     tarih_anahtarlari: tuple[str, ...] = ("_tarih",)
     panel: list[str] = field(default_factory=list)  # canlı panel komutu (python'dan sonraki argümanlar)
+    # GÜNLÜK kip — hafif ile tam arasında üçüncü bir basamak.
+    #
+    # Sebebi FX hattı: hafif kipi mevcut veriden grafik çiziyor, haber akışını
+    # HİÇ toplamıyordu. Günlük listede durduğu sürece her koşuda "tazelendi"
+    # damgası atıp veriyi ilerletmiyordu (bkz. 63fbf6e). Hattı listeden çıkarmak
+    # sahte tazeliği bitirdi ama günlük ilerleyebilecek yarısını da dondurdu:
+    # anlık endeks canlı haber akışından gelir ve HER GÜN ilerleyebilir; yalnız
+    # GDELT haftalık arşivi haftalık ritimdedir.
+    #
+    # Bu alan o ikisini ayırır: `gunluk` gerçekten veri toplayan ama arşive
+    # dokunmayan adımları taşır. Tanımlanmamışsa kip hafife düşer.
+    gunluk: list[str] = field(default_factory=list)
 
-    def adimlar(self, tam: bool) -> list[str]:
+    def adimlar(self, tam: bool, gunluk: bool = False) -> list[str]:
+        if gunluk and not tam:
+            return self.gunluk or self.hafif
         return (self.tam or self.hafif) if tam else self.hafif
 
 
@@ -226,6 +240,13 @@ HATLAR: list[Hat] = [
         ["run.py --fetch-history", "ozet_uret.py"],
         {"cikti/*.html": "*"},
         "tam kip: GDELT + FinBERT — ilk koşu saatler, sonrası dakikalar",
+        # Günlük kip: canlı haber akışı (Google RSS, 7 günlük pencere) çekilir,
+        # FinBERT ile puanlanır ve tarihçeye yeni bir snapshot yazılır; sonra
+        # YALNIZ anlık endeks grafikleri çizilir (`--anlik`). GDELT tabanlı
+        # paneller bilerek atlanır: o arşiv gün içinde ilerlemez, her gün
+        # yeniden çizmek dakikalar süren günlük duyarlılık matrisini boşuna
+        # koşturur ve haftalık "veri sonu" damgasını değişmeyen içerikle ezer.
+        gunluk=["run.py", "web_cikti.py --anlik", "ozet_uret.py"],
         panel=["-m", "streamlit", "run", "dashboard.py"]),  # Streamlit → http://localhost:8501
     Hat("enflasyon", "Enflasyon Panosu", P / "Enflasyon", "enflasyon",
         # veri.py EVDS'ten çeker (TTL'li önbellek), metrik.py momentum/çekirdek/
@@ -591,11 +612,11 @@ def anahtar_nerede() -> str | None:
     return None
 
 
-def _eksik_scriptler(h: "Hat", tam: bool) -> list[str]:
+def _eksik_scriptler(h: "Hat", tam: bool, gunluk: bool = False) -> list[str]:
     """Adım satırlarının ilk parçası bir .py ise, dosya gerçekten duruyor mu?"""
     d = KOK / h.klasor
     yok = []
-    for adim in h.adimlar(tam):
+    for adim in h.adimlar(tam, gunluk):
         ilk = adim.split()[0]
         if ilk.endswith(".py") and not (d / ilk).exists():
             yok.append(ilk)
@@ -707,7 +728,7 @@ def _adim_kos(komut: list[str], cwd: Path) -> tuple[int, list[str]]:
     return p.returncode, list(son)
 
 
-def kos(h: Hat, tam: bool) -> tuple[bool, str, float]:
+def kos(h: Hat, tam: bool, gunluk: bool = False) -> tuple[bool, str, float]:
     d = KOK / h.klasor
     t0 = time.time()
     eski_tarih = _ozet_tarih(h)
@@ -725,7 +746,7 @@ def kos(h: Hat, tam: bool) -> tuple[bool, str, float]:
         return False, (f"eksik paket [{nerede}]: {', '.join(eksik[:4])}"
                        + (f" +{len(eksik) - 4}" if len(eksik) > 4 else "")
                        + f" — çözüm: python guncelle.py --kur {h.ad}"), time.time() - t0
-    for i, adim in enumerate(h.adimlar(tam), 1):
+    for i, adim in enumerate(h.adimlar(tam, gunluk), 1):
         print(f"    [{i}] {adim}")
         kod, son = _adim_kos([py, *adim.split()], d)
         if kod != 0:
@@ -880,6 +901,9 @@ def main():
     ap.add_argument("hatlar", nargs="*", help="kısa adlar: " + " ".join(HAT))
     ap.add_argument("--hepsi", action="store_true")
     ap.add_argument("--tam", action="store_true", help="ağır adımlar dahil")
+    ap.add_argument("--gunluk", action="store_true",
+                    help="günlük kip: veriyi gerçekten tazeler ama ağır arşive dokunmaz "
+                         "(yalnız tanımlı hatlarda; yoksa hafife düşer)")
     ap.add_argument("--commit", action="store_true", help="bitince commit + push")
     ap.add_argument("--liste", action="store_true")
     ap.add_argument("--kur", action="store_true", help="seçilen hatların .venv + requirements kurulumu (hat koşturmaz)")
@@ -996,7 +1020,7 @@ def main():
     sonuc = []
     for h in secilen:
         print(f"\n▶ {h.baslik}  ({h.klasor})")
-        ok, mesaj, sn = kos(h, tam)
+        ok, mesaj, sn = kos(h, tam, a.gunluk)
         sonuc.append((h, ok, mesaj, sn))
         print(_renk(f"    {'✓' if ok else '✗'} {mesaj}  [{sn:.0f}s]", 32 if ok else 31))
 

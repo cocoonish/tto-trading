@@ -310,6 +310,36 @@ def main() -> int:
         assert "if not a.sakat_yaz:" in kaynak, "kapı geçersiz kılınabilir değil"
     sina("bulten.py: sakat ölçüm yazılmıyor", _sakat)
 
+    # FX GÜNLÜK KİPİ GERÇEKTEN VERİ ÇEKMELİ. Hattın hafif kipi bir zamanlar
+    # günlük listedeydi ve orada yaptığı tek iş sahte tazelik damgası atmaktı:
+    # mevcut veriden grafik çiziyor, haber akışını HİÇ toplamıyordu (63fbf6e).
+    # Günlük kip o hatayı tekrarlamamalı — adım listesinde veri çeken `run.py`
+    # BULUNMAK ZORUNDA, ve ağır arşiv bayrağı BULUNMAMALI.
+    def _fx_gunluk():
+        # guncelle.py depo KÖKÜNDE; duman.py sys.path'e bulten/ ekliyor.
+        kok = str(Path(__file__).resolve().parent.parent)
+        if kok not in sys.path:
+            sys.path.insert(0, kok)
+        import guncelle as mod
+        fx = next(h for h in mod.HATLAR if h.ad == "fx")
+
+        g = fx.adimlar(tam=False, gunluk=True)
+        assert any(a.split()[0] == "run.py" for a in g), \
+            "günlük kip veri çekmiyor — sahte tazelik damgası geri geldi"
+        assert not any("--fetch-history" in a for a in g), \
+            "günlük kip ağır GDELT arşivini çekiyor"
+        assert any(a.startswith("web_cikti.py") and "--anlik" in a for a in g), \
+            "günlük kip haftalık panelleri de yeniden çiziyor"
+
+        h = fx.adimlar(tam=False, gunluk=False)
+        assert not any(a.split()[0] == "run.py" for a in h), \
+            "hafif kip veri çeker hâle gelmiş — kipler karışmış"
+        # Günlük kipi tanımsız bir hat sessizce hafife düşmeli.
+        baska = next(x for x in mod.HATLAR if x.ad == "tcmb")
+        assert baska.adimlar(False, True) == baska.adimlar(False), \
+            "günlük kipi tanımsız hat hafife düşmüyor"
+    sina("guncelle: fx günlük kipi veri çekiyor", _fx_gunluk)
+
     for ad in gecen:
         print(f"  ✓ {ad}")
     for ad, hata in dusen:

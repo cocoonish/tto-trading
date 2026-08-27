@@ -58,7 +58,7 @@ RITIM = {
     "try-reer": 40,             # aylık
     "yiyecek-hizmetleri-marj": 45,
     "hazine-ihrac": 12,
-    "fx-haber-endeksi": 9,
+    "fx-haber-endeksi": 5,
     "dibs-verim-egrisi": 6,     # iş günü (eğri günlük kurulur)
     "odemeler-dengesi": 45,     # aylık, 6-8 hafta gecikmeli
     "butce-borc": 45,           # aylık (bütçe ayın 15'i)

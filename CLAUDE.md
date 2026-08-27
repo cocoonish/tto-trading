@@ -163,6 +163,17 @@ düzelttim mi" değil, "bu kusur başka nerede olabilir"dir. Denetimin
 `revizyon` ölçütü bunu artık ölçüyor: daha önce yayımladığımız bir sayı
 sonradan değiştiyse adıyla listelenir, yani kusur göze çarpmasa da görünür.
 
+**Kurucu ilke — bir hattın kipi, ölçüsünün ritmine göre bölünür.** FX hattı
+tek bir "tazele" düğmesi değildi: anlık endeks canlı haber akışından gelir ve
+HER GÜN ilerleyebilir, rejim/korelasyon panelleri GDELT haftalık arşivinden
+gelir ve yalnız hafta kapanınca ilerler. Hafif kip haber akışını hiç toplamadığı
+için hat günlük listede sahte tazelik damgası atıyordu; çözüm olarak haftalığa
+çekilince bu sefer günlük ilerleyebilecek yarı da donduruldu. Doğrusu üçüncü bir
+kip: `--gunluk` canlı akışı çeker, `web_cikti.py --anlik` yalnız anlık
+grafikleri çizer, GDELT tabanlı paneller ve onların "veri sonu" damgası
+haftalık koşuya bırakılır. Bir hattın çıktıları farklı ritimlerdeyse kipleri de
+o ritimlere bölünür — tek kip, en yavaş ritme mahkûm eder.
+
 ## Dikkat
 
 - `hazineihrac/` içinde gömülü bir `.git` var — kök repo'ya eklerken submodule

@@ -34,7 +34,26 @@ on:
     # Pazartesi 08:37 UTC = 11:37 İstanbul: hafta 8,6 saat önce kapandı,
     # `now - 1 hafta` onun içine düşüyor ve gecikme 7 günden 1 güne iniyor.
     - cron: '37 8 * * 1'
-  workflow_dispatch: {}
+    # GÜNLÜK KİP — hafta içi Salı-Cuma 09:07 UTC (12:07 İstanbul).
+    #
+    # Hattın iki ayrı toplaması var ve ritimleri farklı: anlık endeks canlı
+    # haber akışından (Google RSS, 7 günlük pencere) gelir ve HER GÜN
+    # ilerleyebilir; rejim/korelasyon panelleri GDELT haftalık arşivinden
+    # gelir ve yalnız hafta kapanınca ilerler. Tek bir haftalık koşu, günlük
+    # ilerleyebilecek yarıyı da haftalığa mahkûm ediyordu.
+    #
+    # Pazartesi burada YOK: o gün zaten tam kip koşuyor ve içinde canlı akış
+    # da var. Salı-Cuma günlük kip koşar (dakikalar), pazartesi tam kip
+    # (~1s45d) hem arşivi hem anlık endeksi tazeler.
+    - cron: '7 9 * * 2-5'
+  workflow_dispatch:
+    inputs:
+      tam_kip:
+        description: >-
+          Tam kip: 52 haftalık GDELT arşivini de tazele (~1 saat 45 dakika).
+          Kapalıysa yalnız canlı haber akışı çekilir ve anlık endeks ilerler.
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -106,9 +125,26 @@ jobs:
       - name: Duman sınaması (bülten katmanları)
         run: python bulten/duman.py
 
-      - name: FX hattı — tam kip
+      # Kip seçimi: pazartesi cron'u ve elle "tam kip" işaretlenen koşu ağır
+      # arşivi de tazeler; Salı-Cuma günlük kip yalnız canlı akışı çeker.
+      # `--gunluk` GDELT'e dokunmaz, `web_cikti.py --anlik` ile de yalnız
+      # anlık endeks grafiklerini çizer — haftalık paneller ve onların
+      # "veri sonu" damgası olduğu gibi kalır.
+      - name: Kip
+        id: kip
+        run: |
+          if [ "${{ inputs.tam_kip }}" = "true" ] || [ "$(date -u +%u)" = "1" ]; then
+            echo "bayrak=--tam" >> "$GITHUB_OUTPUT"
+            echo "ad=tam kip (GDELT arşivi dahil)" >> "$GITHUB_OUTPUT"
+          else
+            echo "bayrak=--gunluk" >> "$GITHUB_OUTPUT"
+            echo "ad=günlük kip (yalnız canlı haber akışı)" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Kip: $(grep '^ad=' "$GITHUB_OUTPUT" | tail -1 | cut -d= -f2-)"
+
+      - name: FX hattı — ${{ steps.kip.outputs.ad }}
         id: fx
-        run: python guncelle.py fx --tam --sistem-kur
+        run: python guncelle.py fx ${{ steps.kip.outputs.bayrak }} --sistem-kur
 
       # Zaman aşımına uğrasa bile o ana kadar toplanan haberler saklanır.
       - name: Haber önbelleğini sakla
