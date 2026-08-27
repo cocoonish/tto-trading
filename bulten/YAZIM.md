@@ -11,6 +11,24 @@ Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
 
 ## Akış
 
+0. **Dosya yoksa KENDİN ÜRETMEYE ÇALIŞMA — iş akışını tetikle.** Rutin metni
+   "dosya yoksa `python3 bulten.py --tur gunluk` ile üret" diyor; bu, yazı
+   katmanının koştuğu bulut oturumunda İŞLEMİYOR. Oturumun ağ politikası
+   piyasa ve haber uçlarını kapatıyor: yfinance, bütün RSS kaynakları ve resmî
+   yayım siteleri CONNECT aşamasında 403 dönüyor. 27.08.2026'da bu denendi ve
+   yerel üretim 0 enstrümanlık piyasa fotoğrafı, 0 haberle çıktı — denetim
+   15 engel saydı. Doğrusu, ölçümü ağı ve anahtarları olan yerde koşturmak:
+   önce veri tazeleme, sonra bülten ölçümü iş akışını elle tetikle, koşu
+   commit'ini bekle, `git pull` ile al, sonra yaz. (Yerel deneme kirlilik de
+   bırakıyor: piyasa önbelleği ve takvim arşivi boş veriyle üzerine yazılıyor;
+   commit'ten önce o dosyaları geri al.)
+
+   Bunun her sabah gerekmesi normal DEĞİL, ama nadir de değil: GitHub'ın
+   zamanlanmış iş akışları en iyi çaba esaslıdır ve bu depoda 26.08 ile
+   27.08'de ölçüm koşusu hiç başlamadı, 27.08'de veri tazeleme de atlandı.
+   Yazı katmanı zincirin son halkası olduğu için eksik halkaları fark etmesi
+   ve tamamlaması gereken taraf odur.
+
 1. **Bülteni oku ve damgasını not al.** `site/src/data/bulten/<bugün>.json`.
    İçinde ölçülmüş her şey var: 51 enstrümanlık piyasa fotoğrafı, TL faiz seti
    ve DİBS eğrisi, takvim, taranmış haberler (`haberler.kurum`,
