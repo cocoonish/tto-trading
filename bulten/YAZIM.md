@@ -188,6 +188,12 @@ Kalıcı çözüm rutin metnini claude.ai arayüzünden düzeltmektir.
 | `python3 bulten/yaz.py yama.json` (damgasız) | `--damga "<olusturma>"` ver | Araçla kapatıldı: damga verilmese de yama dosyasının zamanı ölçümle kıyaslanıyor |
 | `zincir.py` hiç geçmiyor | 0. adım zincire bakmaktır | Yalnız rehberde — rutin düzeltilene kadar boşluk |
 
+**Silip yeniden kurmak da çözüm değil.** 27.08.2026'da denendi: aracının
+kurduğu bir rutin ateşlendiğinde depoya erişemiyor (sınama koşusu 24 saniyede,
+tek bir dosyaya dokunamadan bitti). Mevcut rutinlerin taşıdığı kaynak depo
+bağlantısının `create_trigger`'da karşılığı yok. Yani düzeltme yalnız
+claude.ai arayüzünden yapılabilir.
+
 Üçüncü satır kapatılamadı: bir aracın dayatabileceği bir karşılığı yok. Zincire
 bakmayan bir koşu, eksik halkayı fark etmeden yazmaya kalkışır; o durumda da
 ilk satırdaki kapı devreye girer ve sakat ölçü yazılmaz. Yani en kötü hâlde

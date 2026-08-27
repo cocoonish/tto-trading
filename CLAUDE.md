@@ -113,11 +113,15 @@ dünkü bülteni göstermeye devam ediyordu. Nöbetçi o sessizliği kapatıyor.
 
 **Kurucu ilke — sigorta metne değil araca konur.** Yazı katmanını ateşleyen
 rutinin metni depoda değil, claude.ai hesabının rutin ayarlarında durur ve bir
-aracı onu DEĞİŞTİREMEZ. 27.08.2026'da tam olarak ölçüldü: rutinler
-listelenebiliyor ve metinleri OKUNABİLİYOR (bu sayede rehberle çeliştikleri
-yerler bulundu), ama güncelleme reddediliyor — bir aracı yalnız kendi kurduğu
-rutini değiştirebilir, arayüzden ya da API'den kurulmuş olanı değiştiremez.
-Yani rutin metnindeki bir kusur ancak İNSAN eliyle düzeltilir. Üstelik o metin
+aracı onu DEĞİŞTİREMEZ. 27.08.2026'da iki ayrı sınamayla ölçüldü.
+(1) Rutinler listelenebiliyor ve metinleri OKUNABİLİYOR — bu sayede rehberle
+çeliştikleri yerler bulundu — ama güncelleme REDDEDİLİYOR: bir aracı yalnız
+kendi kurduğu rutini değiştirebilir. (2) "Öyleyse silip yenisini kurayım" da
+işlemiyor: aracının kurduğu rutine kaynak depo BAĞLANMIYOR. Sınama rutini
+kuruldu, ateşlendi ve 24 saniyede depoya hiç dokunamadan bitti (oturum etiketi
+`routine-lineage-none`); mevcut rutinlerin taşıdığı `sources` alanının
+karşılığı `create_trigger`'da yok. Yani rutin metnindeki bir kusur ancak İNSAN
+eliyle, claude.ai arayüzünden düzeltilir. Üstelik o metin
 depoyla birlikte sürümlenmez, gözden geçirilmez ve kimse ona bakmaz. Bu yüzden
 bir kural "rutin metnine yazıldı" diye tamam sayılmaz: araç onu kendi başına
 dayatabilmelidir. `yaz.py`nin damga sigortası açık argüman
