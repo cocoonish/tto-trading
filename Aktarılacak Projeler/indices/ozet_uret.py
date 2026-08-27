@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Canli ozet — index_history.json + sentiment_scores.json'dan, internetsiz."""
+import datetime
 import json, os
 BASE = os.path.dirname(os.path.abspath(__file__))
 h = json.load(open(os.path.join(BASE, "data", "index_history.json")))
@@ -102,6 +103,77 @@ if len(sirali) >= 4:
         if len(h) >= 2 and az in h[-2].get("indices", {}):
             ozet["az_onceki_deger"] = round(h[-2]["indices"][az]["value"], 2)
             ozet["az_onceki_tarih"] = h[-2]["timestamp"][:10]
+
+# ── Günün olağandışı haber hareketleri ────────────────────────────────────────
+#
+# EŞİK DEĞİL SIRALAMA. Sabit bir eşik burada işlemiyor: gerçek tarihçeyle
+# ölçüldüğünde snapshot'tan snapshot'a 15 varlığın 9-12'si kategori değiştiriyor
+# ve |Δ| medyanı 0,256 — bant genişliği (0,30) kadar. "Kategori değişti" ya da
+# "0,3'ü aştı" diyen bir kural her gün on sahte olay üretir ve bülteni bloklardı.
+#
+# Piyasa katmanındaki kalıp doğru olan: en çok hareket edeni SIRALA. Günün en
+# büyük hareketi her zaman tanımlıdır, sayısı sabittir, uydurma eşik gerekmez.
+# Yeterli tarihçe biriktiğinde (>=OYNAKLIK_ASGARI değişim) hareket varlığın
+# KENDİ oynaklığına da bölünür — yüzde büyüklüğü ile olağandışılık ayrı şeyler.
+OYNAKLIK_ASGARI = 10       # bu kadar değişim yoksa σ hesaplanmaz, None yazılır
+HAREKET_SAYISI = 3         # bültene giren en olağandışı hareket sayısı
+MAKALE_ASGARI = 20         # bu kadar makalesi olmayan varlık gürültüdür
+
+if len(h) >= 2:
+    onceki_s, son_s = h[-2], h[-1]
+    a_ind, b_ind = onceki_s.get("indices", {}), son_s.get("indices", {})
+
+    def _degisimler(kod):
+        """Bu varlığın tarihçe boyunca snapshot-snapshot değişimleri."""
+        out = []
+        for i in range(1, len(h)):
+            x = h[i - 1].get("indices", {}).get(kod, {})
+            y = h[i].get("indices", {}).get(kod, {})
+            if x.get("value") is not None and y.get("value") is not None:
+                out.append(y["value"] - x["value"])
+        return out
+
+    def _sigma(d):
+        if len(d) < OYNAKLIK_ASGARI:
+            return None
+        ort = sum(d) / len(d)
+        var = sum((v - ort) ** 2 for v in d) / (len(d) - 1)
+        s = var ** 0.5
+        return round(s, 4) if s else None
+
+    hareketler = []
+    for kod, y in b_ind.items():
+        x = a_ind.get(kod)
+        if not x or x.get("value") is None or y.get("value") is None:
+            continue
+        fark = y["value"] - x["value"]
+        s = _sigma(_degisimler(kod))
+        hareketler.append({
+            "kod": kod,
+            "ad": AD_TR.get(kod, kod),
+            "deger": round(y["value"], 2),
+            "onceki": round(x["value"], 2),
+            "fark": round(fark, 2),
+            "sigma": s,
+            "z": round(fark / s, 1) if s else None,
+            "kat": KAT_TR.get(y.get("category", ""), y.get("category", "")),
+            "onceki_kat": KAT_TR.get(x.get("category", ""), x.get("category", "")),
+            "makale": makale.get(kod),
+        })
+    # Sıralama: σ varsa olağandışılığa, yoksa ham büyüklüğe göre.
+    hareketler.sort(key=lambda m: abs(m["z"]) if m["z"] is not None else abs(m["fark"]),
+                    reverse=True)
+    # Az makaleli varlık gürültüdür; sayfada da böyle yazıyor. Elenmiş olması
+    # SAKLANMAZ — kaç tanesinin elendiği ayrı alanda durur.
+    guvenli = [m for m in hareketler if (m["makale"] or 0) >= MAKALE_ASGARI]
+    ozet["hareket"] = guvenli[:HAREKET_SAYISI]
+    ozet["hareket_elenen"] = len(hareketler) - len(guvenli)
+    ozet["hareket_sigma_var"] = any(m["sigma"] for m in guvenli[:HAREKET_SAYISI])
+    # Kıyas noktası METİNDE gerekli: snapshot'lar arası mesafe sabit değil.
+    ozet["hareket_kiyas_tarih"] = ".".join(reversed(onceki_s["timestamp"][:10].split("-")))
+    ozet["hareket_gun"] = (
+        (datetime.date.fromisoformat(son_s["timestamp"][:10])
+         - datetime.date.fromisoformat(onceki_s["timestamp"][:10])).days)
 
 # ── Grid search (optimizasyon) özeti: liderler, kalibrasyon tarihi, ufuk dağılımı ──
 try:

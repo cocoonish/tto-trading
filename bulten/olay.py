@@ -196,6 +196,61 @@ def gecikme_olaylari() -> list[Olay]:
     return out
 
 
+def haber_endeksi_olaylari() -> list[Olay]:
+    """FX haber-duyarlılık endeksinde günün en olağandışı hareketleri.
+
+    EŞİK DEĞİL SIRALAMA. Sabit bir eşik burada işlemiyor: gerçek tarihçeyle
+    ölçüldüğünde snapshot'tan snapshot'a 15 varlığın 9-12'si kategori
+    değiştiriyor ve |Δ| medyanı bant genişliği kadar. "Kategori değişti" diyen
+    bir kural her gün on sahte olay üretirdi. Hat bu yüzden en olağandışı
+    ÜÇ hareketi kendisi sıralayıp `hareket` alanında veriyor; burada yalnız
+    cümleye çevriliyor.
+
+    Kıyas noktası cümlede AÇIKÇA yazar: snapshot'lar arası mesafe sabit değil
+    (hat günlük koşmaya yeni geçti, tarihçedeki eski aralıklar haftalarca).
+    "Endeks döndü" demek, ne kadar sürede döndüğünü söylemeden yanıltır.
+    """
+    d = gozlem.anlik("fx-haber-endeksi")
+    if not d:
+        return []
+    hareketler = d.get("hareket") or []
+    if not hareketler:
+        return []
+    gun = d.get("hareket_gun")
+    kiyas = d.get("hareket_kiyas_tarih") or "önceki okuma"
+    ne_kadar = (f"{gun} günde" if isinstance(gun, int) and gun > 0 else "önceki okumaya göre")
+    olaylar = []
+    for m in hareketler:
+        z = m.get("z")
+        olcu = (f"{z:+.1f} standart sapma" if z is not None
+                else "hattın oynaklık tarihçesi henüz σ için yetmiyor")
+        kat = ""
+        if m.get("kat") and m.get("onceki_kat") and m["kat"] != m["onceki_kat"]:
+            kat = f", {m['onceki_kat']} → {m['kat']}"
+        olaylar.append(Olay(
+            grup="haber", seviye="dikkat",
+            baslik=f"Haber tonu — {m['ad']}",
+            metin=(f"{m['ad']} haber-duyarlılık endeksi {ne_kadar} "
+                   f"{m['onceki']:+.2f}'den {m['deger']:+.2f}'ye geçti "
+                   f"({m['fark']:+.2f}{kat}; {olcu}; {m.get('makale', '?')} makale, "
+                   f"kıyas {kiyas}). Sebebini haber akışından bul."),
+            hat="fx-haber-endeksi", anahtar=m["kod"],
+            deger=m["deger"], onceki=m["onceki"], fark=m["fark"],
+            tarih=str(d.get("_tarih", ""))[:10], onceki_tarih=kiyas,
+        ))
+    elenen = d.get("hareket_elenen") or 0
+    if elenen:
+        olaylar.append(Olay(
+            grup="haber", seviye="bilgi",
+            baslik="Haber tonu — kapsamı zayıf varlıklar",
+            metin=(f"{elenen} varlık az makaleli olduğu için olağandışılık "
+                   "sıralamasına girmedi: o endekslerde tek bir haber okumayı "
+                   "savurabilir, hareketleri gürültüden ayrılamaz."),
+            hat="fx-haber-endeksi",
+        ))
+    return olaylar
+
+
 def topla() -> list[Olay]:
     olaylar: list[Olay] = []
     for hat in sorted({iz.hat for iz in IZLEMLER}):
@@ -216,6 +271,7 @@ def topla() -> list[Olay]:
                 olaylar.append(o)
     olaylar += yeni_veri_olaylari(list(RITIM))
     olaylar += gecikme_olaylari()
+    olaylar += haber_endeksi_olaylari()
     sira = {g: i for i, (g, _) in enumerate(GRUPLAR)}
     onem = {"onemli": 0, "dikkat": 1, "bilgi": 2}
     olaylar.sort(key=lambda o: (onem.get(o.seviye, 3), sira.get(o.grup, 99), o.baslik))

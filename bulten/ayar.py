@@ -146,6 +146,7 @@ GRUPLAR = [
     ("borclanma", "Hazine borçlanması ve borç stoku"),
     ("dis", "Dış denge ve finansman"),
     ("akim", "Yabancı akımı"),
+    ("haber", "Haber tonu"),
     ("diger", "Diğer"),
 ]
 

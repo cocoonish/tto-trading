@@ -255,6 +255,23 @@ bir önceki okumaya göre ne kadar döndü. **Spread'in saati ayrıdır**: o GDE
 haftalık arşivinden gelir ve hattın günlük tarihinden birkaç gün geridedir —
 panoda kendi tarihiyle yazar, o tarihle anlat.
 
+**Haber tonundaki olağandışı hareketler ANILMAK ZORUNDA.** Ölçüm katmanı FX
+haber endeksinin günün en olağandışı üç hareketini sıralayıp bülteninin "Haber
+tonu" grubuna basar; denetim bunları metinde ARAR ve bulamazsa ENGEL üretir.
+Sebebini haber akışından bul; netleşmiyorsa "sebebi netleşmedi" yaz — ama
+sessiz geçme.
+
+Üç şeye dikkat: (1) **Kıyas penceresi sabit değil.** Hat günlük koşmaya yeni
+geçti; tarihçedeki eski aralıklar haftalarca. Olay cümlesi kaç günlük dönüş
+olduğunu yazar, sen de metinde yaz — "endeks döndü" demek, ne kadar sürede
+döndüğünü söylemeden yanıltır. (2) **Sıralama eşikle yapılmıyor.** Sabit eşik
+denendi ve ölçüldü: snapshot'tan snapshot'a 15 varlığın 9-12'si kategori
+değiştiriyor, yani eşik her gün on sahte olay üretirdi. Listede olmak "büyük
+hareket" demek değil, "bugünün en büyüğü" demektir. (3) **σ henüz yok.** Hattın
+oynaklık tarihçesi standart sapma için yetene kadar sıralama ham büyüklüğe göre
+yapılır ve olay cümlesi bunu söyler; o hâlde "olağandışı" değil "en büyük" diye
+yaz.
+
 **Temalara bağla.** `temalar` defterindeki canlı temalara atıf yap: günün
 gelişmesi hangi tezi doğruladı, hangisini çürüttü.
 

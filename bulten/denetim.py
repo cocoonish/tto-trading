@@ -241,7 +241,32 @@ ANAHTAR_KELIME = {
             "Nikkei 225": ["nikkei"], "Hang Seng": ["hang seng"], "DAX": ["dax"],
             "STOXX Europe 600": ["stoxx", "avrupa hisse"], "FTSE 100": ["ftse"],
             "CAC 40": ["cac"], "FTSE MIB": ["mib", "italya"],
+            # FX haber endeksinin varlık adları (AD_TR) piyasa katmanınınkilerle
+            # AYNI ŞEY ama farklı yazılıyor: "ABD 10Y" ile "ABD 10 yıllık". Eşleştirici
+            # tam dizgi arayınca doğru yazılmış bir metin bile atıfsız görünüyordu —
+            # kapanamayan uyarının tam kardeşi. Doğal Türkçe yazımlar da kabul edilir.
+            "ABD 2Y": ["abd 2y", "iki yıllık", "2 yıllık"],
+            "ABD 10Y": ["abd 10y", "on yıllık", "10 yıllık"],
+            "EUR/USD": ["eur usd", "euro dolar"], "USD/JPY": ["usd jpy", "dolar yen"],
+            "USD/CHF": ["usd chf", "frang"], "GBP/USD": ["gbp usd", "sterlin"],
+            "AUD/USD": ["aud usd", "avustralya dolar"], "NZD/USD": ["nzd usd", "yeni zelanda"],
+            "USD/CAD": ["usd cad", "kanada dolar"],
+            "USD/NOK": ["usd nok", "norveç kron"], "USD/SEK": ["usd sek", "isveç kron"],
+            "altın": ["altın"], "gümüş": ["gümüş"],
         }
+
+
+def anilmi(ad: str, sade_metin: str) -> bool:
+    """Bir büyüklüğün adı metinde geçiyor mu — TEK eşleştirici.
+
+    İki ayrı ölçüt (piyasa atfı, haber tonu) aynı soruyu soruyor; iki ayrı
+    eşleştirici iki ayrı doğru üretirdi.
+    """
+    for k in ANAHTAR_KELIME.get(ad, [_sade(ad)]):
+        if k in sade_metin:
+            return True
+    parcalar = _sade(ad).split()
+    return bool(parcalar) and parcalar[0] in sade_metin
 
 
 class Denetim:
@@ -353,13 +378,8 @@ class Denetim:
         metin = self._metin()
         p = self.b.get("piyasa") or {}
         hareket = (p.get("en_cok_hareket") or {})
-        anahtar_kelime = ANAHTAR_KELIME
-
         def anilmis(ad: str) -> bool:
-            for k in anahtar_kelime.get(ad, [_sade(ad)]):
-                if k in metin:
-                    return True
-            return _sade(ad).split()[0] in metin
+            return anilmi(ad, metin)
 
         for kip, etiket in (("gunluk", "günün"), ("haftalik", "haftanın")):
             for x in (hareket.get(kip) or [])[:3]:
@@ -693,6 +713,42 @@ class Denetim:
         else:
             self._ok("vadeli devir düzeltmesi kurulu")
 
+    def haber_tonu(self):
+        """Haber endeksindeki olağandışı hareketler METİNDE anılmış mı — ENGEL.
+
+        Ölçüm katmanı günün en olağandışı üç hareketini sıralıyor (eşikle
+        değil sıralamayla: sabit eşik burada her gün on sahte olay üretirdi).
+        Sıralanmış bir hareket metinde hiç geçmiyorsa bülten onu ölçmüş ama
+        SÖYLEMEMİŞ olur — piyasa tarafındaki atıf disiplininin aynısı.
+
+        Sebep de yazılmalı; onu bir ölçüt dayatamaz, ama YAZIM.md dayatır ve
+        "sebebi netleşmedi" demek geçerli bir cevaptır. Burada ölçülen, hareketin
+        okura hiç görünmemesi.
+        """
+        try:
+            sys.path.insert(0, str(BURASI))
+            import gozlem                              # noqa: E402
+        except Exception:
+            return
+        d = gozlem.anlik("fx-haber-endeksi")
+        if not d:
+            return
+        hareketler = d.get("hareket") or []
+        if not hareketler:
+            self._ok("haber tonu: sıralanacak hareket yok")
+            return
+        metin = _sade(self._metin())
+        anilmayan = [m for m in hareketler if not anilmi(m.get("ad", ""), metin)]
+        if anilmayan:
+            self.engel.append(
+                "HABER TONU ANILMAMIŞ — " + ", ".join(
+                    f"{m['ad']} ({m['onceki']:+.2f} → {m['deger']:+.2f})" for m in anilmayan)
+                + ". Haber endeksinin günün en olağandışı hareketleri bunlar; "
+                "metinde anıl ve sebebini yaz. Sebep netleşmiyorsa "
+                "'sebebi netleşmedi' de — ama sessiz geçme.")
+        else:
+            self._ok(f"haber tonu: {len(hareketler)} olağandışı hareket anılmış")
+
     def revizyon(self):
         """Daha önce YAYIMLADIĞIMIZ bir sayı sonradan değişti mi.
 
@@ -1000,7 +1056,7 @@ class Denetim:
     def kos(self) -> int:
         self.yazi(); self.veri(); self.atif(); self.sayi(); self.nabiz(); self.tekrar()
         self.tema(); self.izleme(); self.dil(); self.tazelik(); self.karanlik()
-        self.yerlesmemis(); self.revizyon(); self.devir()
+        self.yerlesmemis(); self.revizyon(); self.devir(); self.haber_tonu()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")
         print(f"  BÜLTEN DENETİMİ · {self.b.get('tr_tarih', self.b.get('tarih'))} "
