@@ -189,6 +189,55 @@ def main() -> int:
             _uret.CIKTI = eski_cikti
     sina("uret.yaz: yazılmış bülten korunuyor", _koruma)
 
+    # YERLEŞMEMİŞ BAR. 27.08 bülteni 04:21 UTC'de koştu ve 51 enstrümanın 21'i
+    # o anda HENÜZ AÇIK olan günün barını taşıyordu; kapanışa göre değişimleri
+    # "günlük değişim" diye yayımlandı. Altında bu, işareti ters çevirdi:
+    # dünkü seans −%0,86 kapanmışken bülten "+%1,78" yazdı ve günün anlatısını
+    # o sahte hareketin üzerine kurdu. Koruma vardı ama yalnız beş enerji
+    # vadelisini kapsıyordu. Bu sınama korumayı SAHTE SAATLE çağırır: kusur
+    # geri konarsa (eşik tablosundan bir grup düşerse) burada düşer.
+    def _yerlesmemis():
+        from datetime import datetime as _dt, timezone as _tz
+        import piyasa as _piyasa
+
+        bugun, dun = "2026-08-27", "2026-08-26"
+        ornek = {
+            "GC=F": "metal", "EURUSD=X": "g10_fx", "BTC-USD": "kripto",
+            "^N225": "asya_hisse", "XU100.IS": "tr_hisse",
+        }
+        gercek = _piyasa.datetime
+        try:
+            class _Saat(_dt):
+                @classmethod
+                def now(cls, tz=None):
+                    return _dt(2026, 8, 27, 4, 21, tzinfo=_tz.utc)
+            _piyasa.datetime = _Saat
+            seri = {k: {"tarih": [dun, bugun], "kapanis": [100.0, 110.0]} for k in ornek}
+            _piyasa._yerlesmemis_dus(seri)
+            for k in ornek:
+                assert seri[k].get("yerlesmemis_dusuruldu"), f"{k}: bugünün barı düşmedi"
+                assert seri[k]["tarih"][-1] == dun, f"{k}: seri {dun}'da bitmeli"
+
+            # Kapanmış piyasa: aynı bar 22:00 UTC'de KULLANILMALI, yoksa
+            # koruma bir günlük gecikmeyi kalıcı hâle getirir.
+            class _Gec(_dt):
+                @classmethod
+                def now(cls, tz=None):
+                    return _dt(2026, 8, 27, 22, 30, tzinfo=_tz.utc)
+            _piyasa.datetime = _Gec
+            gec = {"GC=F": {"tarih": [dun, bugun], "kapanis": [100.0, 110.0]}}
+            _piyasa._yerlesmemis_dus(gec)
+            assert not gec["GC=F"].get("yerlesmemis_dusuruldu"), "kapanmış bar boşuna düştü"
+
+            # Tanımsız grup: bilinmeyen bir kod bugünün barına GÜVENMEMELİ.
+            _piyasa.datetime = _Saat
+            bilinmeyen = {"YOK=F": {"tarih": [dun, bugun], "kapanis": [100.0, 110.0]}}
+            _piyasa._yerlesmemis_dus(bilinmeyen)
+            assert bilinmeyen["YOK=F"].get("yerlesmemis_dusuruldu"), "tanımsız grup düşmedi"
+        finally:
+            _piyasa.datetime = gercek
+    sina("piyasa: yerleşmemiş bar düşürülüyor", _yerlesmemis)
+
     for ad in gecen:
         print(f"  ✓ {ad}")
     for ad, hata in dusen:

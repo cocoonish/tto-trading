@@ -22,7 +22,7 @@ from __future__ import annotations
 import json
 import warnings
 from dataclasses import dataclass, asdict, field
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 warnings.filterwarnings("ignore")
@@ -350,18 +350,57 @@ def _roll_duzelt(seri: dict) -> dict:
 # olmaktan çıkıyordu. NYMEX uzlaşması 21:30 TSİ; pay bırakıp 22:00 alıyoruz.
 UZLASMA_SAATI = 22
 
+# BU KORUMA YALNIZ BEŞ ENERJİ VADELİSİNİ KAPSIYORDU ve asıl sorun oradan çok
+# daha genişti. 27.08 bülteni 04:21 UTC'de koştu; 51 enstrümanın 21'i o anda
+# HENÜZ AÇIK olan günün barını taşıyordu ve o barın kapanışa göre değişimi
+# "günlük değişim" diye yayımlandı.
+#
+# Altın somut örneği: 25.08 kapanış 4.638,1 · 26.08 kapanış 4.598,2 — yani
+# dünkü seans %0,86 EKSİDE bitti. Bülten ise 26.08 kapanışını 27.08'in 04:21
+# UTC'deki canlı seviyesiyle (4.679,9) kıyaslayıp "altın +%1,78" yazdı. Ölçülen
+# şey dünkü seans değil, GECELİK hareketti; işareti de dünküyle ters.
+#
+# Kural: bir günün barı, o piyasa kapanmadan kullanılamaz. Aşağıdaki eşik,
+# grubun barının artık DEĞİŞMEYECEĞİ UTC saatidir. 7/24 işlem gören piyasalarda
+# (spot döviz, kripto) günün barı gün bitmeden kapanmaz; onlara 24 yazılır,
+# yani bugünün barı hiçbir saatte kullanılmaz. Tanımsız grup da 24 sayılır:
+# yeni bir grup eklendiğinde bu kusur sessizce geri gelmesin.
+KAPANIS_UTC = {
+    "asya_hisse": 9,             # Tokyo 06:00, Şanghay 07:00, Hong Kong 08:00 UTC
+    "tr_hisse": 16,              # BIST 15:00 UTC (18:00 TSİ)
+    "ab_hisse": 18,              # Frankfurt/Paris/Londra 15:30–16:30 UTC
+    "abd_hisse": 22,             # New York 20:00 UTC (yaz) / 21:00 (kış)
+    "faiz": 22,                  # ABD tahvil seansı
+    "kredi": 22,                 # ABD'de işlem gören kredi/GOP fonları
+    "metal": UZLASMA_SAATI,      # COMEX uzlaşması 18:30 UTC
+    "enerji": UZLASMA_SAATI,     # NYMEX uzlaşması 18:30 UTC
+    "tr_fx": 24,                 # 7/24
+    "g10_fx": 24,                # 7/24
+    "kripto": 24,                # 7/24
+}
+VARSAYILAN_KAPANIS = 24
+
 
 def _yerlesmemis_dus(seri: dict) -> dict:
-    bugun = datetime.now().date().isoformat()
-    erken = datetime.now().hour < UZLASMA_SAATI
+    """Piyasası henüz kapanmamış günün barını seriden düşür.
+
+    UTC ile çalışır: koşucu UTC'de, geliştirme makinesi değil. `datetime.now()`
+    ikisinde farklı saat verir ve koruma sessizce kayar.
+    """
+    simdi = datetime.now(timezone.utc)
+    bugun = simdi.date().isoformat()
+    gruplar = {v.kod: v.grup for v in VARLIKLAR}
     for k in list(seri):
         s = seri[k]
-        if k in VADELI_KOK and s["tarih"] and s["tarih"][-1] == bugun and erken:
-            s["tarih"] = s["tarih"][:-1]
-            s["kapanis"] = s["kapanis"][:-1]
-            if s.get("kapanis_ham"):
-                s["kapanis_ham"] = s["kapanis_ham"][:-1]
-            s["yerlesmemis_dusuruldu"] = True
+        if not s.get("tarih") or s["tarih"][-1] != bugun:
+            continue
+        if simdi.hour >= KAPANIS_UTC.get(gruplar.get(k, ""), VARSAYILAN_KAPANIS):
+            continue
+        s["tarih"] = s["tarih"][:-1]
+        s["kapanis"] = s["kapanis"][:-1]
+        if s.get("kapanis_ham"):
+            s["kapanis_ham"] = s["kapanis_ham"][:-1]
+        s["yerlesmemis_dusuruldu"] = True
     return seri
 
 
