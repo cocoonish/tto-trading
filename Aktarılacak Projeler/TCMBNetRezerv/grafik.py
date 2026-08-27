@@ -272,6 +272,37 @@ def sekil_altin_ayristirma(daily: pd.DataFrame) -> go.Figure:
         .resample("W-FRI").sum(min_count=1).dropna(how="all")
     birikim = d["net_doviz_alimi_birikimli"].resample("W-FRI").last()
 
+    # KOVA KENDİ SON GÜNÜNE ETİKETLENİR, HAFTA SONUNA DEĞİL.
+    #
+    # `resample("W-FRI")` her kovayı hafta sonu CUMA'yla adlandırır. Hafta
+    # kapanmadan koşulduğunda bu, GELECEK bir tarih demektir: 27.08.2026
+    # Perşembe günü üretilen grafik, elindeki son verinin 25.08 olmasına
+    # rağmen son barı "28 Aug 2026" diye gösteriyordu — yayımlanmamış bir
+    # günün ölçüsü gibi. Üstelik o kovada 5 değil 2 iş günü vardı ve bar,
+    # yanındaki tam haftalarla aynı genişlikte çizildiği için toplamı da
+    # kıyaslanabilir değildi.
+    #
+    # İki düzeltme: (1) etiket, kovadaki SON GERÇEK güne çekilir — gelecek
+    # tarih üretilemez; (2) kovanın kaç iş günü taşıdığı hover'a yazılır ve
+    # eksik olan "yarım hafta" diye işaretlenir. Bar silinmiyor: en taze
+    # bilgiyi atmak yerine ne olduğunu söylüyoruz (bkz. CLAUDE.md "bir ölçüm
+    # ancak KAPANMIŞ bir dönemi ölçebilir" — kapanmamışsa öyle etiketlenir).
+    kova_son = d.index.to_series().resample("W-FRI").max()
+    kova_gun = d.resample("W-FRI").size()
+    tam = int(kova_gun.iloc[:-1].max()) if len(kova_gun) > 1 else int(kova_gun.max())
+    yeni_ix, notlar = [], []
+    for k in h.index:
+        son_gun = kova_son.get(k)
+        yeni_ix.append(son_gun if pd.notna(son_gun) else k)
+        n = int(kova_gun.get(k, 0))
+        notlar.append(f"<br><i>yarım hafta · {n}/{tam} iş günü</i>" if 0 < n < tam else "")
+    h.index = pd.DatetimeIndex(yeni_ix)
+    birikim = birikim.reindex(kova_son.index)
+    birikim.index = pd.DatetimeIndex([kova_son.get(k) if pd.notna(kova_son.get(k)) else k
+                                      for k in kova_son.index])
+    birikim = birikim.dropna()
+    yarim = notlar[-1] != "" if notlar else False
+
     fig = make_subplots(specs=[[{"secondary_y": True}]])
     for kolon, ad, renk, aciklama in [
         ("net_temiz", "Net döviz alımı / satımı (altın tamamen hariç)",
@@ -286,7 +317,9 @@ def sekil_altin_ayristirma(daily: pd.DataFrame) -> go.Figure:
     ]:
         fig.add_trace(go.Bar(
             x=h.index, y=h[kolon].round(2), name=ad, marker_color=renk,
-            hovertemplate=aciklama + ": <b>%{y:+.2f}</b> mlr USD<extra></extra>",
+            customdata=notlar,
+            hovertemplate=(aciklama + ": <b>%{y:+.2f}</b> mlr USD"
+                           "%{customdata}<extra></extra>"),
         ), secondary_y=False)
 
     # Kimliğin sol tarafı: yığın bunun üstüne oturmalı.
@@ -311,7 +344,11 @@ def sekil_altin_ayristirma(daily: pd.DataFrame) -> go.Figure:
     baslik = ("Rezerv değişiminin ayrıştırılması"
               f"<br><sup>Haftalık toplam · çıpa {cipa_s} · birikimli net alım "
               f"{v:+.1f} mlr USD ({t:%d %b %Y}) · akım ARTIK olarak tanımlıdır, "
-              "kimliğin kapanması bir doğrulama değildir</sup>")
+              "kimliğin kapanması bir doğrulama değildir"
+              + ("<br>Son bar YARIM HAFTA: hafta kapanmadı, kovadaki iş günü "
+                 "sayısı hover'da yazar — yanındaki tam haftalarla toplamı "
+                 "kıyaslanamaz." if yarim else "")
+              + "</sup>")
     ev_duzeni(fig, baslik)
     fig.update_layout(barmode="relative")
     fig.update_yaxes(title_text="Haftalık katkı (milyar USD)",
