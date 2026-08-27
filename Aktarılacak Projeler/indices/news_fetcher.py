@@ -250,6 +250,38 @@ def _week_boundaries(ref_date: datetime) -> tuple[datetime, datetime]:
 # Historical News — Week by week with permanent cache
 # ═══════════════════════════════════════════════════════════════════════════════
 
+# Bir hafta kapandiktan sonra haber dizinlerinin oturmasi icin beklenen sure.
+# Bundan ONCE cekilmis bir hafta KESIN degildir: gec dizinlenen makaleler o
+# cekimde yoktur ve onbellek kalici oldugu icin bir daha da girmezler.
+OLGUNLASMA_SAATI = 48
+
+
+def _kesinlesmis(kayit: dict, hafta_sonu: datetime) -> bool:
+    """Bu haftanin onbellek kaydi nihai mi, yoksa erken mi cekilmis?
+
+    Gecmis haftalar degismez — onbellek bu yuzden kalici. Ama hafta KAPANIR
+    KAPANMAZ cekilen bir hafta gercekten gecmis degildir: haber dizinleri
+    saatler sonra makale eklemeye devam eder. Kalici onbellek o eksik hali
+    sonsuza kadar dondurur.
+
+    Kural: kapanisin uzerinden OLGUNLASMA_SAATI gectikten SONRA cekilmisse
+    nihaidir; oncesinde cekilmisse gecicidir ve bir sonraki kosuda bir kez
+    daha cekilir (ikinci cekim artik gec kaldigi icin nihai olur). Damgasi
+    olmayan eski kayitlar nihai sayilir — onlar 52 haftalik ilk doldurmadan
+    gelir ve haftalari coktan kapanmisti.
+    """
+    damga = kayit.get("fetched_at")
+    if not damga:
+        return True
+    try:
+        cekim = datetime.fromisoformat(damga)
+    except (TypeError, ValueError):
+        return True
+    if cekim.tzinfo is None:
+        cekim = cekim.replace(tzinfo=timezone.utc)
+    return (cekim - hafta_sonu) >= timedelta(hours=OLGUNLASMA_SAATI)
+
+
 def fetch_historical_news(asset_key: str, weeks: int = 52,
                           progress_cb=None) -> dict[str, list[dict]]:
     """
@@ -267,12 +299,16 @@ def fetch_historical_news(asset_key: str, weeks: int = 52,
         week_start, week_end = _week_boundaries(ref)
         week_key = week_end.strftime("%Y-%m-%d")
 
-        # Use cache if available (past weeks are immutable)
-        if week_key in asset_cache and asset_cache[week_key].get("articles"):
-            result[week_key] = asset_cache[week_key]["articles"]
-            if progress_cb:
-                progress_cb(i + 1, weeks, cached=True)
-            continue
+        # Onbellek yalnizca hafta KESINLESMISSE kullanilir (bkz. _kesinlesmis).
+        kayitli = asset_cache.get(week_key)
+        if kayitli and kayitli.get("articles"):
+            if _kesinlesmis(kayitli, week_end):
+                result[week_key] = kayitli["articles"]
+                if progress_cb:
+                    progress_cb(i + 1, weeks, cached=True)
+                continue
+            print(f"  [{asset_key}] Week {week_key}: erken çekilmiş "
+                  f"({len(kayitli['articles'])} makale), yeniden çekiliyor", flush=True)
 
         # Fetch from Google News RSS with date filter
         articles = fetch_weekly_news(asset_key, week_start, week_end)

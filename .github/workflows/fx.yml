@@ -21,9 +21,19 @@ name: FX haber endeksi (haftalık, tam kip)
 
 on:
   schedule:
-    # Pazar 08:37 UTC = 11:37 İstanbul. Pazar haftalık bülten ölçümü 14:03'te
-    # koşuyor; arada 5,5 saat pay var, yani endeks haftalık bültene TAZE girer.
-    - cron: '37 8 * * 0'
+    # PAZARTESİ, Pazar değil. Hat GDELT'i HAFTA HAFTA çekiyor ve en yeni
+    # haftayı `now - 1 hafta`nın içinde bulunduğu hafta olarak seçiyor
+    # (news_fetcher.fetch_historical_news). Hafta sınırı Pazartesi 00:00 –
+    # Pazar 23:59.
+    #
+    # Pazar sabahı koşunca `now - 1 hafta` bir önceki Pazar'a düşüyor, yani
+    # en yeni hafta O GÜN KAPANACAK hafta değil, bir öncekiydi: rejim ve
+    # korelasyon panelleri koşudan KALICI olarak 7 gün geride kalıyordu.
+    # Üstelik Pazar 08:37'de o hafta zaten kapanmamıştı (23:59'da kapanır).
+    #
+    # Pazartesi 08:37 UTC = 11:37 İstanbul: hafta 8,6 saat önce kapandı,
+    # `now - 1 hafta` onun içine düşüyor ve gecikme 7 günden 1 güne iniyor.
+    - cron: '37 8 * * 1'
   workflow_dispatch: {}
 
 permissions:
