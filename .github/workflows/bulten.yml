@@ -38,7 +38,16 @@ on:
     # Pazar "haftaya bakış" ölçümü: 14:03 UTC = 17:03 İstanbul.
     # Yazı katmanı 17:45'te başlar; bülten 18:00'da hazır olur.
     - cron: '3 14 * * 0'
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      yeniden_olc:
+        description: >-
+          Yazılmış bültenin ölçüsünü YENİDEN KUR. Normalde kapı buna izin
+          vermez: geç düşen bir ölçüm koşusu yayımlanmış metnin altındaki
+          sayıları değiştirmemelidir. Yalnız ölçümün KENDİSİ yanlış çıktığında
+          açılır — ve ardından metin güncel ölçüye göre elden geçirilmelidir.
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -103,11 +112,16 @@ jobs:
       # Pazar koşusu haftalık bülten üretir ("geçen hafta / önümüzdeki hafta");
       # hafta içi koşusu günlük. Cumartesi hiç koşmaz.
       - name: Bülteni üret
+        env:
+          YENIDEN: ${{ inputs.yeniden_olc && '--yeniden-olc' || '' }}
         run: |
+          if [ -n "$YENIDEN" ]; then
+            echo "::warning::Yazılmış bültenin ölçüsü YENİDEN KURULUYOR. Metin bu ölçüye göre gözden geçirilmeli."
+          fi
           if [ "$(date -u +%u)" = "7" ]; then
-            python bulten.py --tur haftalik
+            python bulten.py --tur haftalik $YENIDEN
           else
-            python bulten.py --tur gunluk
+            python bulten.py --tur gunluk $YENIDEN
           fi
 
       # Kalite denetimi bulutta BİLGİ amaçlıdır: yazı katmanı burada çalışmadığı için
