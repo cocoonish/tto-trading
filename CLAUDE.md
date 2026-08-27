@@ -17,7 +17,7 @@ TTO Trading/
 │   ├── TRYREER/                 # TÜFE/Yi-ÜFE ağırlıklı REDK analizi
 │   ├── hazineihrac/             # Hazine ihale scraper + analiz (kendi .git'i var!)
 │   ├── USDTRYDeval/             # USD/TRY trend kanalları
-│   └── indices/                 # FX haber-duyarlılık endeksi (henüz web çıktısı yok)
+│   └── indices/                 # FX haber-duyarlılık endeksi (üç kip: hafif/günlük/tam)
 └── Research/                    # Ham araştırma dosyaları (Excel vb.)
 ```
 
@@ -73,13 +73,13 @@ taslak; repo GitHub'a bağlanınca aktifleştirilecek).
 |---|---|
 | `uret.py` | bülteni kurar, `site/src/data/bulten/<tarih>.json` yazar |
 | `gozlem.py` | hatların `ozet.json` anlık görüntü deposu; **anahtar başına saat** |
-| `olay.py` | eşikleri uygular, olay cümlesini kurar |
+| `olay.py` | eşikleri uygular, olay cümlesini kurar; **haber tonundaki olağandışı hareketi sıralar** |
 | `piyasa.py` | 51 enstrüman, TL faiz seti, türev makaslar, **σ-normalize hareket** |
 | `takvim.py` | resmî yayım takvimi; `surpriz.py` geçmişi arşivler ve sonucu ölçer |
 | `soz.py` | söz defterini (`izleme.json`) okura açar |
 | `rejim.py` | reel faiz, taşıma, reel kredi, REDK sapması, eğri, rezerv kalitesi, **enflasyon risk primi, makroihtiyati ayrışma** |
 | `grafik_veri.py` | satır içi SVG grafiklerin verisi (Plotly bültene girmez) |
-| `denetim.py` | 30 ölçüt; engel varsa bülten yayına gitmez. `karanlik`: hattın saati ilerlerken donan seriyi yakalar |
+| `denetim.py` | 40 ölçüt; engel varsa bülten yayına gitmez. `karanlik`: donan seri · `yerlesmemis`: kapanmamış seansın barı · `revizyon`: yayımlanan sayı sonradan değişti mi · `haber_tonu`: haber endeksinin olağandışı hareketi anılmış mı |
 | `tazeleme.py` | hangi hattın koşacağına resmî yayım takvimi karar verir |
 | `zincir.py` | veri→ölçüm→yazı zincirinin durumu; eksik halkayı ve çıkış koduyla ne yapılacağını söyler |
 
