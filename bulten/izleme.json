@@ -1,6 +1,6 @@
 {
  "_aciklama": "İZLEME DEFTERİ — bültenin verdiği sözlerin kaydı. Bülten 'şunu izleyeceğiz', 'yarın belli olacak', 'sebebi anlaşılmıyor' dediği an buraya bir kayıt düşülür. Her koşuda yazı katmanı önce bu defteri açar: vadesi gelen ya da gelişme olan her kayıt için bültende doğal bir yerde hesap verilir — 'dün şuna bakacağız demiştik, işte olan bu' tonunda, madde listesi olarak değil. Cevabı bulunan kayıt kapatılır (durum: kapandı + sonuç), gelişme olmayan kayıt açık kalır ve zorla anılmaz. Bu defter bülteni birbirini takip eden bir yazı dizisi yapar; yazarı kısıtlamak için değil, unutmasın diye vardır.",
- "_son_guncelleme": "2026-08-26",
+ "_son_guncelleme": "2026-08-27",
  "kayitlar": [
   {
    "konu": "RBOB benzinin tek günde %10,59 düşüşünün sebebi",
@@ -9,7 +9,8 @@
    "soz": "24.08 bülteni 'sebebi anlaşılmıyor' dedi; 25.08 bülteni ikinci günde de aynı hükmü verdi — RBOB bir gün daha %8,78 düştü (iki günde kümülatif ~%19), benzin crack 12,1 dolar daraldı, ham petrol yerinde. En olası mekanik aday ağustos sonu yaz tipi–kış tipi kontrat geçişi, teyit yok.",
    "ne_bakilacak": "Kontrat geçişini teyit eden bir kaynak; eylül başında yeni vade açıldığında marjın toparlanıp toparlanmadığı.",
    "vade": "2026-09-02",
-   "sonuc": "Cevap bulundu ve ÖLÇÜ DÜZELTİLDİ. Hareket piyasada değil ölçüdeydi: vadeli seriler geri-düzeltilmemiş olduğu için ön ay değiştiği gün seri bir sözleşmeden diğerine atlıyor ve bu atlama fiyat hareketi sanılıyordu. Eylül vadesinin sona ermesiyle sözleşmenin dayanağı düşük buhar basınçlı yaz benzininden üretimi daha ucuz kış benzinine döndü; iki mal arasındaki yaklaşık 37 sentlik fark tabelaya tek günlük çöküş gibi girdi. Ölçüm katmanı 26 Ağustos'ta vade geçişlerini arındıracak biçimde yeniden kuruldu: aynı gün için yayımlanan −%11,36 yerine gerçek hareket −%1,74, haftalık −%1,81. 24 ve 25 Ağustos'ta 'sebebi anlaşılmıyor' hükmü doğru ihtiyattı."
+   "sonuc": "Cevap bulundu ve ÖLÇÜ DÜZELTİLDİ. Hareket piyasada değil ölçüdeydi: vadeli seriler geri-düzeltilmemiş olduğu için ön ay değiştiği gün seri bir sözleşmeden diğerine atlıyor ve bu atlama fiyat hareketi sanılıyordu. Eylül vadesinin sona ermesiyle sözleşmenin dayanağı düşük buhar basınçlı yaz benzininden üretimi daha ucuz kış benzinine döndü; iki mal arasındaki yaklaşık 37 sentlik fark tabelaya tek günlük çöküş gibi girdi. Ölçüm katmanı 26 Ağustos'ta vade geçişlerini arındıracak biçimde yeniden kuruldu: aynı gün için yayımlanan −%11,36 yerine gerçek hareket −%1,74, haftalık −%1,81. 24 ve 25 Ağustos'ta 'sebebi anlaşılmıyor' hükmü doğru ihtiyattı.",
+   "isabet": "tuttu"
   },
   {
    "konu": "ABD'nin İran yaptırım paketi ('ekonomik D-Day') içeriği",
@@ -18,7 +19,8 @@
    "soz": "Paket bugün ABD saatiyle 14:00'te açıklanacak; ikincil yaptırım sertliği petrol→başabaş→uzun uç zincirini belirler dedik.",
    "ne_bakilacak": "Paketin fiilî kapsamı; Brent'in 95 doları aşıp aşmadığı; İran'ın karşılığı.",
    "vade": "2026-08-25",
-   "sonuc": "Paket 24 Ağustos'ta açıklandı: beş sektörel yaptırım tespiti (dijital varlıklar, teknoloji, altın, havacılık, denizcilik), ~60 kişi/kurum/gemi, askıya alınan genel lisanslar, Hürmüz armatörlerine yaptırım uyarısı. Ama büyük Çin bankaları hedef alınmadı; Brent 95 doları aşmadı, aksine üç haftanın en sert günlük düşüşünü yaşadı ve 92,11 dolarda kaldı."
+   "sonuc": "Paket 24 Ağustos'ta açıklandı: beş sektörel yaptırım tespiti (dijital varlıklar, teknoloji, altın, havacılık, denizcilik), ~60 kişi/kurum/gemi, askıya alınan genel lisanslar, Hürmüz armatörlerine yaptırım uyarısı. Ama büyük Çin bankaları hedef alınmadı; Brent 95 doları aşmadı, aksine üç haftanın en sert günlük düşüşünü yaşadı ve 92,11 dolarda kaldı.",
+   "isabet": "kismen"
   },
   {
    "konu": "TCMB repo ihalelerinin ilk tutarları ve TLREF makası",
@@ -27,7 +29,8 @@
    "soz": "Haftalık bülten (23.08) 'izlenecek gösterge TLREF ile politika faizi arasındaki 2,86 puanlık makastır' dedi; günlük (24.08) ölçütü netleştirdi: 2 puanın altı fiilî, 2,8 civarı sembolik. 31 Ağustos vergi takviminin ters etkisi ayrılacak.",
    "ne_bakilacak": "İhale tutarları, TLREF, AOFM'nin %40,00'dan kayıp kaymadığı.",
    "vade": "2026-08-26",
-   "sonuc": "İlk ihale 1 milyar lira ile açıldı; gerçekleşen gecelik repo faizi %39,86'dan %36,93'e (−293 bp) indi ve politika faizinin (%37,00) altına geçti. Ölçüt 'makas 2 puanın altına inerse fiilî' idi — makas kapanmakla kalmadı işaretini çevirdi. Karar FİİLÎ. Resmî fonlama maliyeti serisinin teyidi 27 Ağustos'ta."
+   "sonuc": "İlk ihale 1 milyar lira ile açıldı; gerçekleşen gecelik repo faizi %39,86'dan %36,93'e (−293 bp) indi ve politika faizinin (%37,00) altına geçti. Ölçüt 'makas 2 puanın altına inerse fiilî' idi — makas kapanmakla kalmadı işaretini çevirdi. Karar FİİLÎ. Resmî fonlama maliyeti serisinin teyidi 27 Ağustos'ta.",
+   "isabet": "tuttu"
   },
   {
    "konu": "Haftalık para-banka: kredi büyümesinin yönü",
@@ -171,7 +174,8 @@
    "soz": "26.08 bülteni benzin marjının inişinin marj çöküşü değil kış tipi benzine geçiş olduğunu yazdı ve bu marjın bir gün öncesinin yaz tipi marjıyla kıyaslanamayacağını söyledi.",
    "ne_bakilacak": "Eylülün ilk haftasında kış tipi benzin marjının kendi seviyesi; distilat marjının 88,86 dolar civarında geniş kalmaya devam edip etmediği.",
    "vade": "2026-09-04",
-   "sonuc": "Arındırma ölçüm katmanına girdi: enerji serilerinin günlük ve haftalık değişimleri artık vade geçişinden temizleniyor, seviyeler ise yeni vadenin fiyatını taşıyor. Bu koşudaki temiz ölçüler — benzin marjı 40,66 dolar (günlük yerinde), üç–iki–bir marjı 56,72 dolar (−0,9), distilat marjı 88,86 dolar (−2,7). Kalan iş ölçüm değil kıyas: kış tipi benzin marjının kendi içinde nereye oturduğu ancak eylülün ilk haftasında birkaç seans biriktikten sonra okunabilir."
+   "sonuc": "Arındırma ölçüm katmanına girdi: enerji serilerinin günlük ve haftalık değişimleri artık vade geçişinden temizleniyor, seviyeler ise yeni vadenin fiyatını taşıyor. Bu koşudaki temiz ölçüler — benzin marjı 40,66 dolar (günlük yerinde), üç–iki–bir marjı 56,72 dolar (−0,9), distilat marjı 88,86 dolar (−2,7). Kalan iş ölçüm değil kıyas: kış tipi benzin marjının kendi içinde nereye oturduğu ancak eylülün ilk haftasında birkaç seans biriktikten sonra okunabilir.",
+   "isabet": "tuttu"
   },
   {
    "konu": "Brent'in 85 dolar eşiğinde kalıcılaşması",
