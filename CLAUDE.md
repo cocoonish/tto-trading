@@ -110,6 +110,16 @@ söz karnesi yalnız notlanmış kayıtlardan oran verir; kıyas eğrisi elde ne
 tarihçe varsa o kadar geriye gider ve kendi tarihiyle etiketlenir. Ölçülmemiş bir
 şeyi ölçülmüş gibi göstermektense boş bırakılır, sebebi yazılır.
 
+**Kurucu ilke — önbellek depoyu ezmez.** Bir koşucu önbelleği yalnız
+**izlenmeyen** ham veriyi taşır. `veri.yml` `Aktarılacak Projeler/*/data`yı
+önbelleğe alıyordu; o dizinlerde izlenen dosyalar da var ve `restore-keys`
+önek eşleşmesiyle gelen eski önbellek, başka bir iş akışının (fx) ürettiği
+dosyaların ESKİ hâlini checkout'un üzerine yazıyordu. 27.08 koşusu böylece
+26.08 Pazar tam kipinin ürettiği FX snapshot'ını sildi ve `git add` silmeyi
+sahiplendi — koşu yeşil bitti, tarihçe 7 kayıttan 6'ya düştü. Kural: izlenen
+bir dosyanın doğru sürümü depodakidir; restore'dan sonra `git checkout --`
+ile depo sürümü geri konur (izlenmeyen önbellek dosyalarına dokunmaz).
+
 ## Dikkat
 
 - `hazineihrac/` içinde gömülü bir `.git` var — kök repo'ya eklerken submodule

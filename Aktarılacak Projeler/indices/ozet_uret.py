@@ -4,20 +4,65 @@ import json, os
 BASE = os.path.dirname(os.path.abspath(__file__))
 h = json.load(open(os.path.join(BASE, "data", "index_history.json")))
 son = h[-1]
-ozet = {
-    "_tarih": son["timestamp"][:16].replace("T", " ") + " UTC",
-    "snapshot_sayisi": len(h),
-    "varlik_sayisi": len(son.get("indices", {})),
-}
+
+# ── SAAT: bu dosyada iki ayrı ölçüm ve iki ayrı saat var ────────────────────
+# Endeks değerleri (ust1/alt1… ve tarihçe) Google RSS akışından, koşu anından
+# geriye 7 günlük pencereyle kuruluyor — saatleri `veri_sonu`, yani endekse
+# giren en yeni haberin günü.
+# Rejim büyüklükleri (rejim/spread/ort_korelasyon/pc1) GDELT haftalık
+# önbelleğinden geliyor ve son TAM haftada bitiyor — saatleri `as_of`.
+# 26.08 Çarşamba koşan bir hat, rejim panelinde 23.08 Pazar'ı ölçüyordu; tek
+# bir `_tarih` ikisini de "26.08" diye gösteriyordu. Artık her anahtar kendi
+# saatini `<anahtar>_tarih` geleneğiyle taşır (bkz. CLAUDE.md "Kurucu ilke —
+# saat"); `_tarih` hattın ana saati olarak endeksin veri ucudur, koşu saati
+# ise `_kosum` altında ayrı durur.
+kosu = son["timestamp"][:16].replace("T", " ") + " UTC"
+
+
+def _veri_ucu():
+    """Son okumanın VERİ ucu: endekse giren en yeni haberin yayım zamanı.
+
+    Önce snapshot'ın kendi kaydı (index_builder bunu yazar). Eski koşular bu
+    alanı yazmıyordu; onlarda aynı büyüklük data/sentiment_scores.json'dan
+    ÖLÇÜLEBİLİR — o dosya son koşunun skorladığı makaleleri tutar, uç da o
+    makalelerin en yenisidir. İkisi de yoksa uydurmayız: koşu saatine döner
+    ve `_tarih_kaynagi` ile bunu söyleriz.
+    """
+    uc = son.get("veri_sonu")
+    if uc:
+        return str(uc), None
+    try:
+        yayim = [m["published"] for v in sk.values()
+                 for m in v.get("articles", [])
+                 if "score" in m and m.get("published")]
+        if yayim:
+            return max(yayim), None
+    except Exception:
+        pass
+    return son["timestamp"], "koşu saati (bu koşu veri ucunu kaydetmemiş)"
+
+
+ozet = {"snapshot_sayisi": len(h), "varlik_sayisi": len(son.get("indices", {}))}
+sk = {}
 try:
     sk = json.load(open(os.path.join(BASE, "data", "sentiment_scores.json")))
     ozet["makale_toplam"] = sum(len(v.get("articles", [])) for v in sk.values())
 except Exception:
     pass
+
+_uc, _kaynak = _veri_ucu()
+ozet["_tarih"] = _uc[:16].replace("T", " ") + " UTC"
+ozet["_kosum"] = kosu
+if _kaynak:
+    ozet["_tarih_kaynagi"] = _kaynak
 rej = son.get("regime")
 if rej:
     ozet.update({"rejim": rej.get("label"), "spread": rej.get("basket_spread"),
                  "ort_korelasyon": rej.get("avg_correlation"), "pc1": rej.get("pc1_share")})
+    # Rejim büyüklüklerinin KENDİ saati: haftalık önbelleğin ucu, koşu değil.
+    if rej.get("as_of"):
+        for anahtar in ("rejim", "spread", "ort_korelasyon", "pc1"):
+            ozet[f"{anahtar}_tarih"] = rej["as_of"]
 
 # ── Sayfa metnindeki uçlar ve makale sayıları: son snapshot'tan, elle yazılmaz ──
 AD_TR = {"EURUSD": "EUR/USD", "USDJPY": "USD/JPY", "USDCHF": "USD/CHF", "GBPUSD": "GBP/USD",

@@ -115,6 +115,50 @@ def _ortak_stil(fig, baslik):
     return fig
 
 
+def _snapshot_saati(kayit):
+    """Bir snapshot'in VERI saati — kosu saati degil.
+
+    Endeks degerleri kosu aninda, geriye 7 gunluk pencereyle kuruluyor; o
+    pencereye giren en yeni makalenin yayim gunu bu snapshot'in olcum ucudur
+    ve `veri_sonu` alaninda yazar. Eski kayitlarda bu alan yok (snapshot
+    kendi ucunu yazmiyordu); orada elde yalnizca kosu gunu var, onu kullaniriz
+    ve hover'da kosu zamanini acikca gosteririz — uydurulmus bir tarih degil,
+    kaydedilmemis bir tarihin en iyi yerine gecenidir.
+
+    Rejim panelinin `as_of`u BILEREK yedek olarak kullanilmaz: o baska bir
+    olcumun (GDELT haftalik onbellegi) saatidir, bu serinin degil.
+    """
+    uc = kayit.get("veri_sonu")
+    if uc:
+        return str(uc)[:10]
+    return (kayit.get("timestamp") or "")[:10]
+
+
+def _son_kosunun_veri_ucu(kayit):
+    """SON snapshot'in olculen veri ucu (ISO), yoksa None.
+
+    Snapshot kendi `veri_sonu`unu yazmiyorsa (eski kosular) ayni buyukluk
+    data/sentiment_scores.json'dan olculebilir: o dosya SON kosunun
+    skorladigi makaleleri tutar, uc da onlarin en yenisidir. Bu yuzden
+    yalnizca son snapshot icin gecerlidir — daha eski bir snapshot'a
+    uygulanirsa baska bir kosunun makalelerinden tarih uydurulmus olur.
+    """
+    uc = kayit.get("veri_sonu")
+    if uc:
+        return str(uc)
+    try:
+        with open(config.SENTIMENT_SCORES, "r", encoding="utf-8") as f:
+            sk = json.load(f)
+        yayim = [m["published"] for v in sk.values()
+                 for m in v.get("articles", [])
+                 if "score" in m and m.get("published")]
+        if yayim:
+            return max(yayim)
+    except Exception:
+        pass
+    return None
+
+
 def yukle_tarihce():
     with open(HISTORY_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
@@ -293,13 +337,25 @@ def rejim_ozeti(seriler=None):
 def ciz_tarihce(tarihce, cikti_yolu):
     """Her parite bir cizgi; y=0 referans, +-0.3/+-0.7 kategori bantlari."""
     # parite -> (x, y) serileri
+    # Eksen VERI saatinde, kosu saatinde degil. Onceden x = snapshot'in
+    # `timestamp`i idi: 26.08 Carsamba 22:44'te kosan bir olcum eksende
+    # 26.08 gorunuyor, ama ayni sayfadaki rejim/korelasyon panelleri
+    # "veri sonu 23.08" diyordu. Ayni hatta iki tarih, ikisi de dogru,
+    # hicbiri hangi saatin hangisi oldugunu soylemiyordu. Artik nokta kendi
+    # veri ucunda durur; kosu zamani hover'a yazilir.
     seriler = {}
     for kayit in tarihce:
-        ts = kayit.get("timestamp")
+        gun = _snapshot_saati(kayit)
+        kosu = (kayit.get("timestamp") or "")[:16].replace("T", " ")
+        kaydedilmis = bool(kayit.get("veri_sonu"))
         for parite, veri in kayit.get("indices", {}).items():
-            seriler.setdefault(parite, {"x": [], "y": []})
-            seriler[parite]["x"].append(ts)
+            seriler.setdefault(parite, {"x": [], "y": [], "c": []})
+            seriler[parite]["x"].append(gun)
             seriler[parite]["y"].append(veri.get("value"))
+            seriler[parite]["c"].append([
+                kosu + " UTC",
+                "veri ucu" if kaydedilmis else "veri ucu kaydedilmemis - kosu gunu",
+            ])
 
     # Eksen siniri: endeks tipik olarak [-1, 1] ama tasarsa genislet
     tum_degerler = [d for s in seriler.values() for d in s["y"] if d is not None]
@@ -313,7 +369,10 @@ def ciz_tarihce(tarihce, cikti_yolu):
             name=_gorunen_ad(parite),
             line=dict(width=1.8, color=CIZGI_RENKLERI[i % len(CIZGI_RENKLERI)]),
             marker=dict(size=4),
-            hovertemplate="%{y:+.4f}",
+            customdata=s["c"],
+            hovertemplate=("%{y:+.4f}"
+                           "<br><span style='font-size:11px'>%{customdata[1]}: "
+                           "%{x}<br>koşu: %{customdata[0]}</span>"),
         ))
 
     # Kategori bantlari: soluk yatay bolgeler
@@ -334,8 +393,14 @@ def ciz_tarihce(tarihce, cikti_yolu):
         fig.add_hline(y=esik, line_color=INK, line_width=0.5,
                       line_dash="dot", opacity=0.25)
 
-    _ortak_stil(fig, "FX haber-duyarlılık endeksi — tarihçe")
-    fig.update_layout(hovermode="x unified")
+    _ortak_stil(fig, "FX haber-duyarlılık endeksi — tarihçe"
+                "<br><span style='font-size:11.5px;color:#6b6b6b'>"
+                "Yatay eksen her koşunun VERİ ucu (endekse giren en yeni haberin "
+                "günü), koşunun saati değil. Rejim ve korelasyon panelleri ayrı "
+                "bir kaynaktan (GDELT haftalık önbelleği) gelir ve son TAM "
+                "haftada biter; o yüzden onların tarihi buradakinden birkaç gün "
+                "geride olabilir.</span>")
+    fig.update_layout(hovermode="x unified", margin=dict(l=60, r=30, t=96, b=60))
     fig.update_yaxes(title_text="Endeks değeri", range=[-sinir, sinir])
     fig.update_xaxes(title_text=None)
 
@@ -384,11 +449,18 @@ def ciz_son_snapshot(tarihce, cikti_yolu):
 
     fig.add_vline(x=0, line_color=INK, line_width=1, opacity=0.5)
 
-    tarih_kisa = ts[:16].replace("T", " ") if ts else ""
-    _ortak_stil(fig, f"FX haber-duyarlılık endeksi — son okuma ({tarih_kisa} UTC)")
+    # Baslikta ONCE veri ucu, SONRA kosu saati. Eskiden yalniz kosu saati
+    # yaziyordu ve okur onu veri tarihi saniyordu.
+    kosu = ts[:16].replace("T", " ") if ts else ""
+    uc = _son_kosunun_veri_ucu(son)
+    uc_yazi = ".".join(reversed(str(uc)[:10].split("-"))) if uc else ""
+    alt = (f"Veri ucu {uc_yazi} · koşu {kosu} UTC" if uc_yazi
+           else f"Koşu {kosu} UTC · bu koşu veri ucunu kaydetmemiş")
+    _ortak_stil(fig, "FX haber-duyarlılık endeksi — son okuma"
+                f"<br><span style='font-size:11.5px;color:#6b6b6b'>{alt}</span>")
     fig.update_layout(
         height=max(420, 34 * len(adlar) + 120),
-        margin=dict(l=90, r=140, t=60, b=40),
+        margin=dict(l=90, r=140, t=82, b=40),
     )
     # Dis etiketlere (deger + kategori) yer birakmak icin genis sinir
     sinir = max(1.0, max(abs(d) for d in degerler)) * 1.35

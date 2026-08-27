@@ -413,6 +413,27 @@ def save_index_snapshot(indices: dict, regime: dict = None):
         "indices": {k: {"value": v["value"], "category": v["category"]}
                     for k, v in indices.items()},
     }
+    # SNAPSHOT'IN KENDI SAATI. Bu dosyada iki ayri olcum yan yana duruyor ve
+    # saatleri farkli: `indices` degerleri Google RSS akisindan, kosu anindan
+    # geriye 7 gunluk pencereyle kuruluyor; `regime` ise GDELT haftalik
+    # onbelleginden geliyor ve onun ucu son TAM haftadir (Pazar). Ikisini tek
+    # bir "kosu zamani" damgasiyla anlatmak, 26.08 Carsamba kosan bir hattin
+    # rejim panelini de 26.08 gibi gostermek demek — oysa o panel 23.08'i
+    # olcuyor (bkz. CLAUDE.md "Kurucu ilke - saat").
+    #
+    # Bu yuzden snapshot kendi veri ucunu YAZAR: endekse giren en yeni
+    # makalenin yayim zamani. Olculen sey budur; kosu saati ayri alanda kalir.
+    uclar = []
+    for v in indices.values():
+        if not isinstance(v, dict):
+            continue
+        aralik = v.get("date_range") or [None, None]
+        uc = aralik[1] if len(aralik) > 1 else None
+        if uc:
+            uclar.append(uc)
+    if uclar:
+        snapshot["veri_sonu"] = max(uclar)
+
     if regime:
         snapshot["regime"] = regime
 

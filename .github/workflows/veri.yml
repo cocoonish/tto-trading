@@ -80,6 +80,36 @@ jobs:
           key: veri-${{ github.run_id }}
           restore-keys: veri-
 
+      # ÖNBELLEK DEPOYU EZMEZ.
+      #
+      # Yukarıdaki önbellek İZLENMEYEN ham veri için var (EVDS yanıtları,
+      # işlenmiş CSV'ler). Ama `Aktarılacak Projeler/*/data` altında İZLENEN
+      # dosyalar da duruyor — indices/data/index_history.json,
+      # sentiment_scores.json, optimized_params.json. `restore-keys: veri-`
+      # önek eşleşmesiyle EN SON veri koşusunun önbelleğini getiriyor; o
+      # önbellek başka bir iş akışının (fx) ürettiği dosyaları görmediği için
+      # onların ESKİ hâlini checkout'un üzerine yazıyordu.
+      #
+      # 27.08 04:18 koşusunda tam olarak bu oldu: 26.08 Pazar tam kipinin
+      # 1 saat 45 dakikada ürettiği FX snapshot'ı önbellek tarafından geri
+      # alındı, aşağıdaki `git add "Aktarılacak Projeler"` silmeyi sahiplendi
+      # ve commit etti — hattın tarihçesi 7 kayıttan 6'ya düştü, üstelik
+      # sessizce (koşu yeşil bitti).
+      #
+      # Kural: İZLENEN bir dosyanın doğru sürümü DEPODAKİdir. Önbellek yalnız
+      # izlenmeyeni taşır. `git checkout --` izlenmeyen önbellek dosyalarına
+      # dokunmaz, yalnız ezilen izlenenleri geri alır.
+      - name: Önbellek depoyu ezmesin
+        run: |
+          ezilen=$(git diff --name-only -- "Aktarılacak Projeler" Research)
+          if [ -n "$ezilen" ]; then
+            echo "::warning::Önbellek izlenen dosyaları geri aldı; depo sürümüne dönülüyor:"
+            echo "$ezilen"
+            git checkout -- "Aktarılacak Projeler" Research
+          else
+            echo "önbellek izlenen dosyaya dokunmadı"
+          fi
+
       - name: Temel bağımlılıklar
         # plotly: Carry/Tufex/Makroihtiyati/ReelSektorFX hatlarının grafikleri
         run: pip install --quiet requests pandas numpy plotly
