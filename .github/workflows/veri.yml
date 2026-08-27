@@ -55,8 +55,9 @@ concurrency:
 jobs:
   tazele:
     runs-on: ubuntu-latest
-    # Takdirî sınır: normal koşu 1–3 hat, birkaç dakika. Yarım saati aşan koşu
-    # bir hattın takıldığı anlamına gelir; sonsuza kadar dakika yakmasın.
+    # İş bütçesi. Tazeleme adımının kendi sınırı 45 dakika (aşağıda, ölçülmüş);
+    # bu sınır onun ÜSTÜNDE durur ki adım kesildiğinde commit'e kadar olan
+    # adımlar koşacak vakit bulsun (bugüne dek 13 saniye sürdüler).
     timeout-minutes: 50
     env:
       TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
@@ -150,10 +151,20 @@ jobs:
       # verir; --sistem-kur yalnız o koşuda koşacak hatların paketlerini kurar.
       - name: Gereken hatları tazele
         id: tazele
-        # Takdirî sınır: normal koşuda 1–3 hat, birkaç dakika. Bunu aşan koşu bir
-        # hattın kaynağında takıldığı anlamına gelir. Adım burada kesilir, ADIMLAR
-        # DEVAM EDER (aşağısı if: always()) ve tamamlanan hatların verisi commit'lenir.
-        timeout-minutes: 25
+        # Sınır ÖLÇÜLDÜ, takdirî değil. 25 dakika gerçek süreden düşüktü ve
+        # 27.08 12:44 zamanlanmış koşusu bunu gösterdi: dört hattın DÖRDÜ de
+        # başarıyla bitti (net rezerv 442s · yabancı 3s · fonlama 209s · kredi
+        # 844s = 1.498s ≈ 25,0 dk), özet basıldı, tazeleme damgası güncellendi —
+        # ve tam o anda sınır doldu. İş tamamdı, koşu yine de "failure" damgası
+        # bıraktı. Bedeli görünür: denetim o damgaya bakıp "bazı hatlar
+        # çekilememiş olabilir" diye YANLIŞ uyarı üretti.
+        #
+        # Sınırın işi hâlâ aynı — kaynağında takılan bir hat koşuyu sonsuza
+        # kadar yakmasın. Ama eşiğin normal işin ÜSTÜNDE olması şart, yoksa
+        # sağlıklı koşuyu arızalı gösterir. En yavaş iki hat tek başına 21,4
+        # dakika (kredi + net rezerv); 45 dakika bunun üzerine yeterli pay
+        # bırakıyor ve iş düzeyindeki 50 dakikalık sınırın altında kalıyor.
+        timeout-minutes: 45
         run: |
           HATLAR="${{ inputs.hatlar }}"
           if [ -z "$HATLAR" ]; then
