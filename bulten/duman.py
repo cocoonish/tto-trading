@@ -145,6 +145,50 @@ def main() -> int:
                 getattr(d, olcut)()
         sina("denetim: on ölçüt", _denetim)
 
+    # ── zincir raporu: yazı katmanının sabah attığı ilk adım
+    def _zincir():
+        import contextlib, io as _io
+        import zincir
+        with contextlib.redirect_stdout(_io.StringIO()):
+            kod, _ = zincir.durum()
+        assert kod in (0, 1, 2, 3), f"beklenmeyen zincir kodu: {kod}"
+    sina("zincir: durum raporu", _zincir)
+
+    # ── YAZILMIŞ BÜLTEN KORUNUYOR MU (27.08.2026 kusuru)
+    #
+    # uret.yaz() yorumu ve gündemi koruyordu ama ÖZETİ korumuyordu: ozet_ekle()
+    # her koşuda b["ozet"]'i makine özetiyle eziyor, yazı katmanının "ne oldu /
+    # ne bekleniyor" paragrafları sessizce kayboluyordu. Sayfa yine "yazılı"
+    # göründüğü için de hiçbir denetim itiraz etmiyordu. Kusur geri konarak
+    # sınandı: koruma kaldırılınca bu sınama düşüyor.
+    def _koruma():
+        import tempfile
+        import uret as _uret
+        eski_cikti = _uret.CIKTI
+        try:
+            _uret.CIKTI = Path(tempfile.mkdtemp())
+            yazili = {
+                "tarih": "2026-01-02", "gundem_kaynagi": "yazili",
+                "yorum": "<p>yazı katmanının yorumu</p>", "yorum_zamani": "2026-01-02",
+                "gundem": {"kilit": "<p>yazılı gündem</p>"},
+                "ozet": {"ne_oldu": "<p>yazılı özet</p>", "ne_bekleniyor": "<p>ileriye</p>"},
+            }
+            (_uret.CIKTI / "2026-01-02.json").write_text(
+                json.dumps(yazili, ensure_ascii=False), encoding="utf-8")
+            # Deterministik koşunun ürettiği taban: üçü de makine metni.
+            taban = {"tarih": "2026-01-02", "gundem_kaynagi": "otomatik",
+                     "yorum": "", "gundem": {"kilit": "<p>taban</p>"},
+                     "ozet": {"ne_oldu": "<p>makine özeti</p>", "ne_bekleniyor": ""}}
+            _uret.yaz(taban)
+            son = json.loads((_uret.CIKTI / "2026-01-02.json").read_text(encoding="utf-8"))
+            assert son["yorum"] == yazili["yorum"], "yorum ezildi"
+            assert son["gundem"] == yazili["gundem"], "gündem ezildi"
+            assert son["ozet"] == yazili["ozet"], "ÖZET EZİLDİ"
+            assert son["gundem_kaynagi"] == "yazili", "yayın kapısı düştü"
+        finally:
+            _uret.CIKTI = eski_cikti
+    sina("uret.yaz: yazılmış bülten korunuyor", _koruma)
+
     for ad in gecen:
         print(f"  ✓ {ad}")
     for ad, hata in dusen:

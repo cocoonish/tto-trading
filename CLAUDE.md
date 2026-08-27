@@ -81,6 +81,7 @@ taslak; repo GitHub'a bağlanınca aktifleştirilecek).
 | `grafik_veri.py` | satır içi SVG grafiklerin verisi (Plotly bültene girmez) |
 | `denetim.py` | 30 ölçüt; engel varsa bülten yayına gitmez. `karanlik`: hattın saati ilerlerken donan seriyi yakalar |
 | `tazeleme.py` | hangi hattın koşacağına resmî yayım takvimi karar verir |
+| `zincir.py` | veri→ölçüm→yazı zincirinin durumu; eksik halkayı ve çıkış koduyla ne yapılacağını söyler |
 
 **Kurucu ilke — saat.** Bir `ozet.json` tek bir yayım ritmi taşımaz: aynı dosyada
 günlük ve haftalık seriler yan yana durur. Bir anahtarın saati, önce açıkça
@@ -94,6 +95,21 @@ zaman aşımısız atıyordu ve argümanı çağrı yerinden geçirmenin YOLU YO
 içinde durur; `PYTHONPATH`e eklendiği için her hat alt süreci — kendi `.venv`iyle
 koşan da, yarın eklenecek olan da — onunla açılır. Hatların dosyalarına tek satır
 girmez.
+
+**Kurucu ilke — zinciri saat değil rutin sürükler.** Bülten üç halkalı:
+veri tazeleme → ölçüm → yazı. İlk ikisi GitHub'ın zamanlanmış tetikleyicisine
+bağlı ve o tetikleyici ölçülebilir biçimde güvenilmez — kayda geçen zamanlanmış
+koşuların TAMAMI 30–60 dk gecikmeli başladı, sabah penceresindekiler (26.08
+ölçüm, 27.08 hem veri hem ölçüm) hiç başlamadı. Zincirin gerçekten güvenilir
+halkası yazı katmanını ateşleyen bulut rutinidir. Bu yüzden yazı katmanı önce
+`bulten/zincir.py` ile duruma bakar, eksik halkayı kendi tetikler, sonra yazar.
+Üç savunma katmanı var ve üçü de depodaki araçlarda durur: yedek cron'lar
+(düşen tetikleyiciye ikinci şans), `bulten.py`nin **yazılmış bülteni ezmeme**
+kapısı (geç düşen bir ölçüm koşusu yayımlanmış metnin altındaki sayıları
+değiştiremez), ve `nobetci.yml` (hafta içi 06:37 UTC — bülten yazılmamışsa iş
+akışı DÜŞER, düşen iş akışı e-posta gönderir). Arızanın görüntüsü ile sağlığın
+görüntüsü aynıydı: yayın iş akışı "değişiklik yok" deyip yeşil bitiyor, site
+dünkü bülteni göstermeye devam ediyordu. Nöbetçi o sessizliği kapatıyor.
 
 **Kurucu ilke — sigorta metne değil araca konur.** Yazı katmanını ateşleyen
 rutinin metni depoda değil, claude.ai hesabının rutin ayarlarında durur ve bir

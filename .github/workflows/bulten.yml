@@ -29,6 +29,12 @@ on:
     # yarımlarda sıkışıyor (bu depoda 30 dk – 2 saat gecikme görüldü).
     # Ölçüm hiç koşmazsa yazı katmanı bülteni kendisi üretir, zincir kopmaz.
     - cron: '23 3 * * 1-5'
+    # YEDEK TETİKLEYİCİ — yukarıdaki 26.08 ve 27.08'de hiç başlamadı.
+    # 03:51, yazı katmanının 04:15'teki başlangıcından 24 dakika önce.
+    # İki koşu da düşerse yazı katmanı zinciri kendi tetikler (YAZIM.md,
+    # 0. adım); geç düşen bir koşunun yazıyı ezmesine karşı da bulten.py
+    # içindeki 'yazılmış bülten ezilmez' kapısı var.
+    - cron: '51 3 * * 1-5'
     # Pazar "haftaya bakış" ölçümü: 14:03 UTC = 17:03 İstanbul.
     # Yazı katmanı 17:45'te başlar; bülten 18:00'da hazır olur.
     - cron: '3 14 * * 0'

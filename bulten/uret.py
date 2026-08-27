@@ -498,6 +498,14 @@ def yaz(b: dict) -> Path:
             # deterministik koşularda TABAN metinle ezilmemeli.
             if eski.get("gundem_kaynagi") == "yazili" and eski.get("gundem"):
                 b["gundem"], b["gundem_kaynagi"] = eski["gundem"], "yazili"
+                # ÖZET DE YAZI KATMANININDIR. ozet_ekle() her koşuda
+                # b["ozet"]'i makine özetiyle EZİYORDU ve burada hiçbir
+                # koruma yoktu: yazı katmanının "ne oldu / ne bekleniyor"
+                # paragrafları sessizce kayboluyor, sayfa yine "yazılı"
+                # göründüğü için de kimse fark etmiyordu. Yorum ve gündem
+                # korunuyorsa özet de korunmalı — üçü aynı elden çıkar.
+                if eski.get("ozet"):
+                    b["ozet"] = eski["ozet"]
             # --habersiz koşusu, daha önce toplanmış haberleri SİLMEMELİ: gün içinde
             # hızlı bir yeniden üretim bülteni fakirleştirmesin.
             eski_h = (eski.get("haberler") or {})

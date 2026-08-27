@@ -1,0 +1,68 @@
+# NÖBETÇİ — bülten çıktı mı, çıkmadıysa SES ÇIKAR.
+#
+# Neden var: 27.08.2026'da bülten yayına HİÇ çıkmayacaktı ve bunu kimse
+# öğrenmeyecekti. Zincirin ilk iki halkası (veri tazeleme 02:13, ölçüm 03:23)
+# GitHub'ın zamanlayıcısına bağlı ve o gün ikisi de hiç başlamadı. Aşağı
+# akıştaki hiçbir katman bunu göremiyordu: yayın iş akışı "değişiklik yok"
+# deyip yeşil bitiyor, site dünkü bülteni göstermeye devam ediyor. Yani
+# ARIZANIN GÖRÜNTÜSÜ İLE SAĞLIĞIN GÖRÜNTÜSÜ AYNI.
+#
+# Bu iş o boşluğu kapatır. Tek işi var: sabahın sonunda bugünün bülteni
+# YAZILMIŞ mı diye bakar. Yazılmışsa sessizce geçer. Yazılmamışsa DÜŞER —
+# ve düşen bir iş akışı depo sahibine e-posta gönderir. Alarmın kendisi
+# ürün: onarım değil, haber vermek.
+#
+# Onarmıyor olması bilinçli. Eksik ölçümü buradan koşturmak zinciri bir adım
+# ilerletirdi ama bülteni YAYINA çıkarmazdı: sayfanın yayın kapısı yazılmış
+# bülten istiyor (site/src/pages/bulten/index.astro) ve yazıyı ancak yazı
+# katmanı yazabilir. Öyleyse buradan çıkması gereken şey iş değil, HABER.
+#
+# Saat seçimi kayda dayanıyor: bu depoda 02:00–04:30 UTC penceresindeki
+# zamanlanmış koşular sistematik olarak düşüyor, 06:00–16:00 arasındakiler
+# (gecikmeli de olsa) koşuyor. Nöbetçi bu yüzden 06:37'de.
+
+name: Nöbetçi (bülten çıktı mı)
+
+on:
+  schedule:
+    - cron: '37 6 * * 1-5'    # 09:37 İstanbul — sabah bülteni çoktan çıkmış olmalı
+    - cron: '31 16 * * 0'     # 19:31 İstanbul — pazar "haftaya bakış" için
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  nobet:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # zincir.py çıkış kodları: 0 ölçüm hazır ama yazı yok · 1 ölçüm eksik
+      # ya da boş · 2 bülten yazılmış (İYİ) · 3 cumartesi (İYİ).
+      # Tek koşu, tek karar: `set +e` şart, çünkü adımlar `bash -e` altında
+      # koşuyor ve sıfırdan farklı çıkış kodu yakalanmadan işi düşürürdü.
+      - name: Bülten çıktı mı
+        run: |
+          set +e
+          python bulten/zincir.py
+          kod=$?
+          set -e
+          echo
+          case "$kod" in
+            2|3)
+              echo "✓ Bülten yerinde — nöbetçi sessiz geçiyor." ;;
+            0)
+              echo "::error::BÜLTEN YAZILMAMIŞ — ölçüm hazır ama yazı katmanı koşmamış ya da push edememiş. Sayfa dünkü bülteni gösteriyor."
+              exit 1 ;;
+            1)
+              echo "::error::BÜLTEN ZİNCİRİ KOPUK — bugünün ölçümü yok ya da boş ölçüyle üretilmiş. Yukarıdaki rapor hangi iş akışının tetikleneceğini söylüyor."
+              exit 1 ;;
+            *)
+              echo "::error::Nöbetçi zincirin durumunu okuyamadı (çıkış kodu $kod)."
+              exit 1 ;;
+          esac
