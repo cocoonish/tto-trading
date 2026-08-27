@@ -1,22 +1,22 @@
 {
- "kosum": "2026-08-26",
+ "kosum": "2026-08-27",
  "son_gun": "2026-08-26",
  "son_hafta": "2026-08-14",
  "gunluk_seri": 54,
- "gunluk_gozlem": 3938,
+ "gunluk_gozlem": 3939,
  "haftalik_seri": 13,
  "haftalik_gozlem": 711,
  "aylik_seri": 3,
  "kimlik": {
   "A24/1000 = −APIFON3": {
-   "n": 3931,
+   "n": 3932,
    "n_pencere": 250,
    "maks_fark": 123523.64000000001,
    "maks_tarih": "2021-12-21",
    "pencere_maks_fark": 4030.475999999908,
-   "pencere_maks_bagil": 0.009057354778291152,
-   "pencere_olcek_medyan": 444994.8245,
-   "tam_ortalama_mutlak": 4063.1656088527084,
+   "pencere_maks_bagil": 0.008985030498942847,
+   "pencere_olcek_medyan": 448576.7745,
+   "tam_ortalama_mutlak": 4062.1322503560523,
    "son_fark": 0.0,
    "birim": "mn TL",
    "esik_bagil": 0.01,
@@ -34,7 +34,7 @@
    "gecti": true
   },
   "A16 = A17+A18+A21+A22": {
-   "n": 3931,
+   "n": 3932,
    "maks_fark": 1.4901161193847656e-08,
    "maks_bagil": 1.9838399662022157e-16,
    "maks_tarih": "2013-01-02",
@@ -44,7 +44,7 @@
    "gecti": true
   },
   "A18 = A19+A20": {
-   "n": 3931,
+   "n": 3932,
    "maks_fark": 1.0,
    "maks_bagil": 5.273360159169584e-10,
    "maks_tarih": "2024-04-22",
@@ -54,17 +54,19 @@
    "gecti": true
   },
   "A15 = A16+A24+A25": {
-   "n": 3931,
+   "n": 3932,
    "maks_fark": 3.0,
    "maks_bagil": 5.552068239804487e-08,
    "maks_tarih": "2016-03-21",
-   "son_fark": 1.0,
+   "son_fark": 0.0,
    "birim": "bin TL",
    "esik_bagil": 1e-06,
    "gecti": true
   }
  },
  "uyarilar": [
+  "TAZELİK: Haftalık kredi faizi (bie_kt100h) son gözlemi 14.08.2026 (13 gün önce, tolerans 12 gün).",
+  "TAZELİK: Haftalık mevduat faizi (bie_mt100h) son gözlemi 14.08.2026 (13 gün önce, tolerans 12 gün).",
   "ÖLÜ SERİ: 'glp_alis' son 252 iş gününün TAMAMINDA 0 — dolu görünüyor ama bilgi taşımıyor; grafikte 'yok' olarak işlenecek."
  ]
 }
