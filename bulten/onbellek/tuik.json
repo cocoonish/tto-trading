@@ -1,5 +1,5 @@
 {
- "zaman": "2026-08-26T07:59:22",
+ "zaman": "2026-08-27T04:20:11",
  "veri": [
   {
    "tarih": "2026-08-27",
@@ -10,6 +10,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": " Menkul Kıymet İstatistikleri"
   },
@@ -22,6 +23,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "Haftalık Para ve Banka İstatistikleri "
   },
@@ -34,6 +36,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "Dış Ticaret İstatistikleri"
   },
@@ -46,6 +49,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "Yıllık Gayrisafi Yurt İçi Hasıla"
   },
@@ -58,6 +62,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "Dönemsel Gayrisafi Yurt İçi Hasıla"
   },
@@ -70,6 +75,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "İşgücü İstatistikleri"
   },
@@ -82,6 +88,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "Tüketici Fiyat Endeksi (TÜFE)"
   },
@@ -94,6 +101,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "Yurt İçi Üretici Fiyat Endeksi"
   },
@@ -106,6 +114,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": " Menkul Kıymet İstatistikleri"
   },
@@ -118,6 +127,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "Haftalık Para ve Banka İstatistikleri "
   },
@@ -130,6 +140,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "Sanayi Üretim Endeksi"
   },
@@ -142,6 +153,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": " Menkul Kıymet İstatistikleri"
   },
@@ -154,6 +166,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "Haftalık Para ve Banka İstatistikleri "
   },
@@ -166,6 +179,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "Uluslararası Rezervler ve Döviz Likiditesi"
   },
@@ -178,6 +192,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "Ödemeler Dengesi İstatistikleri   "
   },
@@ -190,6 +205,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "Girişim Özelliklerine Göre Dış Ticaret İstatistikleri"
   },
@@ -202,6 +218,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "Dış Ticaret Endeksleri"
   },
@@ -214,6 +231,7 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "Kamu Haznedarlığı İstatistikleri (Kamu Haznedarlığı Yönetmeliği Kapsamındaki Kurumların Mevduat ve Menkul Kıymet İstatistikleri)"
   },
@@ -226,8 +244,35 @@
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
+   "beklenti_sayi": null,
    "onceki": "",
    "not_": "Merkezi Yönetim Bütçe Denge Tablosu"
+  },
+  {
+   "tarih": "2026-09-17",
+   "saat": "14:30",
+   "ulke": "TR",
+   "olay": "TCMB: Menkul kıymet ist. (37. Hafta 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": " Menkul Kıymet İstatistikleri"
+  },
+  {
+   "tarih": "2026-09-17",
+   "saat": "14:30",
+   "ulke": "TR",
+   "olay": "TCMB: Haftalık para-banka (37. Hafta 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "Haftalık Para ve Banka İstatistikleri "
   }
  ]
 }
