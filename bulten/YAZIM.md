@@ -11,23 +11,39 @@ Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
 
 ## Akış
 
-0. **Dosya yoksa KENDİN ÜRETMEYE ÇALIŞMA — iş akışını tetikle.** Rutin metni
-   "dosya yoksa `python3 bulten.py --tur gunluk` ile üret" diyor; bu, yazı
-   katmanının koştuğu bulut oturumunda İŞLEMİYOR. Oturumun ağ politikası
-   piyasa ve haber uçlarını kapatıyor: yfinance, bütün RSS kaynakları ve resmî
-   yayım siteleri CONNECT aşamasında 403 dönüyor. 27.08.2026'da bu denendi ve
-   yerel üretim 0 enstrümanlık piyasa fotoğrafı, 0 haberle çıktı — denetim
-   15 engel saydı. Doğrusu, ölçümü ağı ve anahtarları olan yerde koşturmak:
-   önce veri tazeleme, sonra bülten ölçümü iş akışını elle tetikle, koşu
-   commit'ini bekle, `git pull` ile al, sonra yaz. (Yerel deneme kirlilik de
-   bırakıyor: piyasa önbelleği ve takvim arşivi boş veriyle üzerine yazılıyor;
-   commit'ten önce o dosyaları geri al.)
+0. **Önce zincire bak: `python3 bulten/zincir.py`.** Tek komut, ağsız, saniye
+   sürer. Bülten üç halkalı bir zincirdir — veri tazeleme → ölçüm → yazı — ve
+   ilk iki halka GitHub'ın zamanlanmış tetikleyicisine bağlıdır. O tetikleyici
+   bu depoda ölçülebilir biçimde güvenilmez: kayda geçen zamanlanmış koşuların
+   TAMAMI 30–60 dakika gecikmeli başladı, sabah penceresindekiler ise hiç
+   başlamadı (26.08'de ölçüm, 27.08'de hem veri hem ölçüm). Araç ne eksikse
+   söyler ve çıkış koduyla ne yapacağını bildirir:
 
-   Bunun her sabah gerekmesi normal DEĞİL, ama nadir de değil: GitHub'ın
-   zamanlanmış iş akışları en iyi çaba esaslıdır ve bu depoda 26.08 ile
-   27.08'de ölçüm koşusu hiç başlamadı, 27.08'de veri tazeleme de atlandı.
-   Yazı katmanı zincirin son halkası olduğu için eksik halkaları fark etmesi
-   ve tamamlaması gereken taraf odur.
+   | kod | anlamı | yapılacak |
+   |---|---|---|
+   | 0 | ölçüm hazır, yazı bekleniyor | 1. adımdan devam et |
+   | 1 | ölçüm yok / boş ölçüyle üretilmiş / veri bayat | **iş akışlarını tetikle** (aşağı bak) |
+   | 2 | bugünün bülteni zaten yazılmış | yapacak bir şey yok |
+   | 3 | cumartesi | bülten üretilmez |
+
+   **Kod 1 ise: bülteni YEREL ÜRETMEYE ÇALIŞMA.** Rutin metni "dosya yoksa
+   `python3 bulten.py --tur gunluk` ile üret" diyor; bu, yazı katmanının koştuğu
+   bulut oturumunda İŞLEMİYOR. Oturumun ağ politikası piyasa ve haber uçlarını
+   kapatıyor — yfinance, bütün RSS kaynakları ve resmî yayım siteleri CONNECT
+   aşamasında 403 dönüyor. 27.08.2026'da denendi: 0 enstrümanlık piyasa
+   fotoğrafı, 0 haber, 15 engel. Üstelik deneme kirlilik de bırakıyor (piyasa
+   önbelleği ve takvim arşivi boş veriyle üzerine yazılıyor); commit'ten önce o
+   dosyaları geri al.
+
+   Doğrusu ölçümü ağı ve anahtarları olan yerde koşturmak. Sırayla:
+   **`veri.yml` (Veri tazeleme)** → koşunun commit'ini bekle → **`bulten.yml`
+   (Günlük bülten)** → commit'ini bekle → `git pull` → `zincir.py`yi yeniden
+   koştur. Kod 0 olunca yaz. 27.08'de böyle yapıldı ve bülten zamanında çıktı.
+
+   **Zinciri saat değil RUTİN sürükler.** Zincirin en güvenilir halkası
+   GitHub'ın zamanlayıcısı değil, seni ateşleyen bulut rutinidir — o her sabah
+   koşuyor. Zamanlanmış koşular koşarsa işini azaltır; koşmazsa eksik halkayı
+   sen tamamlarsın. Bu bir istisna değil, tasarımın kendisi.
 
 1. **Bülteni oku ve damgasını not al.** `site/src/data/bulten/<bugün>.json`.
    İçinde ölçülmüş her şey var: 51 enstrümanlık piyasa fotoğrafı, TL faiz seti

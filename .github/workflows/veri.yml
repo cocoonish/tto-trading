@@ -24,6 +24,12 @@ name: Veri tazeleme
 on:
   schedule:
     - cron: '13 2 * * 1-5'    # 05:13 İstanbul — bülten ölçümünden 70 dk önce
+    # YEDEK TETİKLEYİCİ. Yukarıdaki koşu 26.08'de de 27.08'de de HİÇ
+    # başlamadı — GitHub'ın zamanlayıcısı en iyi çaba esaslı ve bu depoda
+    # sabah penceresi sistematik olarak düşüyor. Her tetikleyici bağımsız
+    # bir şans; ikincisi ölçümden (03:23) hâlâ 42 dakika önce. Koşulacak
+    # bir hat yoksa iş 40 saniyede biter, maliyeti yok.
+    - cron: '41 2 * * 1-5'    # 05:41 İstanbul — sabah koşusu düşerse ikinci şans
     - cron: '47 8 * * 1-5'    # 11:47 İstanbul
     - cron: '17 13 * * 1-5'   # 16:17 İstanbul
     - cron: '37 15 * * 1-5'   # 18:37 İstanbul
