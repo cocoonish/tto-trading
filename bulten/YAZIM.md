@@ -45,6 +45,14 @@ Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
    koşuyor. Zamanlanmış koşular koşarsa işini azaltır; koşmazsa eksik halkayı
    sen tamamlarsın. Bu bir istisna değil, tasarımın kendisi.
 
+   **Eksik halka bulursan BİLDİR.** Depodaki nöbetçi (`nobetci.yml`) bülten
+   çıkmadığında iş akışını düşürüp e-posta gönderiyor — ama o da bir GitHub
+   cron'u, yani aynı zamanlayıcının insafında. Zamanlayıcı topluca düşerse
+   alarmı da düşer. GitHub'a hiç bağlı olmayan tek kanal senin bildirimin.
+   Bu yüzden zinciri elle tamamladığın her sabah bunu bildirimde YAZ: hangi
+   halka düştü, ne tetiklendi, bülten kaçta çıktı. Sessizce onarmak, arızayı
+   görünmez kılar — ve bu zincirin asıl kusuru zaten görünmez olmasıydı.
+
 1. **Bülteni oku ve damgasını not al.** `site/src/data/bulten/<bugün>.json`.
    İçinde ölçülmüş her şey var: 51 enstrümanlık piyasa fotoğrafı, TL faiz seti
    ve DİBS eğrisi, takvim, taranmış haberler (`haberler.kurum`,
