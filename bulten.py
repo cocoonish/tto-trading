@@ -47,6 +47,8 @@ def main() -> int:
                     metavar="TARİH",
                     help="yalnız kalite denetimi koştur (üretim yapma); "
                          "isteğe bağlı YYYY-AA-GG")
+    ap.add_argument("--sakat-yaz", action="store_true",
+                    help="piyasa fotoğrafı eksik olsa da dosyayı yaz (varsayılan: yazma)")
     ap.add_argument("--yeniden-olc", action="store_true",
                     help="yazılmış bülteni bilerek yeniden ölç (metni sonra "
                          "güncel ölçüye göre gözden geçirmek şartıyla)")
@@ -120,6 +122,31 @@ def main() -> int:
             return 0
 
     b = uret.uret(haber_tara=not a.habersiz, takvim_ufku=a.ufuk, tur=tur)
+
+    # ── SAKAT ÖLÇÜM YAZILMAZ ───────────────────────────────────────────────
+    # Yazı katmanını ateşleyen rutinin metni şunu söylüyor: "dosya yoksa
+    # `python3 bulten.py --tur gunluk` ile üret". O oturumun ağ politikası
+    # piyasa ve haber uçlarını kapatıyor; deneme 0 enstrümanlık bir piyasa
+    # fotoğrafı üretiyor ve önbelleği de boş veriyle eziyor. Rehber bunu
+    # yazıyor ama rutin metni depoda DEĞİL ve bir aracı onu düzeltemiyor —
+    # 27.08.2026'da denendi, güncelleme reddedildi. Kural yalnız metinde
+    # durduğu sürece dayatılamaz; bu yüzden kapı buraya konuldu.
+    #
+    # Eşik denetimle aynı yerden okunur: 40 enstrümanın altı zaten yayına
+    # gitmiyor. Fark şu ki bu kapı DAHA ÖNCE, dosya yazılmadan kapanıyor.
+    n_enst = sum(len(g.get("satirlar", [])) for g in b.get("piyasa", {}).get("gruplar", []))
+    import denetim as _denetim
+    if n_enst < _denetim.ASGARI_ENSTRUMAN:
+        print(f"  ÖLÇÜM SAKAT: piyasa fotoğrafı {n_enst} enstrüman "
+              f"(asgari {_denetim.ASGARI_ENSTRUMAN}). Dosya YAZILMADI.")
+        print("  Bu neredeyse her zaman ağ politikasının piyasa uçlarını")
+        print("  kapatmasından gelir. Bülteni burada üretmeye çalışmayın:")
+        print("  `veri.yml` ve `bulten.yml` iş akışlarını tetikleyip commit'lerini")
+        print("  bekleyin, sonra `git pull` yapıp `python3 bulten/zincir.py` koşturun.")
+        print("  Gerçekten eksik ölçüyle yazmak gerekiyorsa: --sakat-yaz")
+        if not a.sakat_yaz:
+            return 4
+
     print(uret.ozet_yaz(b))
     y = uret.yaz(b)
     print(f"\n  yazıldı: {y.relative_to(KOK)}")

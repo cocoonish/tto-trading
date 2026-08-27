@@ -296,6 +296,20 @@ def main() -> int:
                                 "koşuyor — bugüne sahte devir yazar")
     sina("piyasa: bar düşürme devir düzeltmesinden ÖNCE", _sira)
 
+    # SAKAT ÖLÇÜM YAZILMAZ. Rutin metni "dosya yoksa bulten.py ile üret" diyor;
+    # o oturumda ağ kapalı ve deneme 0 enstrümanlık bir fotoğraf üretiyor.
+    # Rutin metnini bir aracı düzeltemiyor (27.08'de denendi, reddedildi), o
+    # yüzden kapı koda kondu. Bu sınama kapının GERÇEKTEN kapandığını doğrular.
+    def _sakat():
+        # bulten.py depo KÖKÜNDE, bulten/ paketinde değil — yol ile okunur.
+        kaynak = (Path(__file__).resolve().parent.parent / "bulten.py").read_text(encoding="utf-8")
+        assert "ASGARI_ENSTRUMAN" in kaynak, "sakat ölçüm kapısı yok"
+        i_kapi = kaynak.index("n_enst < _denetim.ASGARI_ENSTRUMAN")
+        i_yaz = kaynak.index("y = uret.yaz(b)")
+        assert i_kapi < i_yaz, "kapı yazmadan SONRA geliyor — dosya yine de yazılır"
+        assert "if not a.sakat_yaz:" in kaynak, "kapı geçersiz kılınabilir değil"
+    sina("bulten.py: sakat ölçüm yazılmıyor", _sakat)
+
     for ad in gecen:
         print(f"  ✓ {ad}")
     for ad, hata in dusen:

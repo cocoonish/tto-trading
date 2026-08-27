@@ -175,6 +175,24 @@ düşer. Doğrusu, sigortanın açık argüman olmadan da SÜRMESİ.
 Bir kuralı "rutin metnine yazdım" diye tamam sayma; araç onu kendi başına
 dayatabiliyor mu, ona bak.
 
+### Rutin metninin rehberden SAPTIĞI yerler (27.08.2026'da ölçüldü)
+
+Rutin metinleri okunabiliyor. Okundu ve üç yerde bu rehberle çeliştikleri
+görüldü. Aracı onları düzeltemiyor (güncelleme reddediliyor), o yüzden burada
+yazılıdırlar; rutin "rehbere birebir uy" dediği için çelişkide REHBER esastır.
+Kalıcı çözüm rutin metnini claude.ai arayüzünden düzeltmektir.
+
+| rutin ne diyor | rehber ne diyor | durum |
+|---|---|---|
+| "Dosya yoksa `python3 bulten.py --tur gunluk` ile üret" | Üretme — o oturumda ağ kapalı, 0 enstrümanlık fotoğraf çıkar ve önbellek kirlenir; iş akışlarını tetikle | **Araçla kapatıldı**: `bulten.py` 40 enstrümanın altında dosyayı YAZMIYOR (çıkış 4) |
+| `python3 bulten/yaz.py yama.json` (damgasız) | `--damga "<olusturma>"` ver | Araçla kapatıldı: damga verilmese de yama dosyasının zamanı ölçümle kıyaslanıyor |
+| `zincir.py` hiç geçmiyor | 0. adım zincire bakmaktır | Yalnız rehberde — rutin düzeltilene kadar boşluk |
+
+Üçüncü satır kapatılamadı: bir aracın dayatabileceği bir karşılığı yok. Zincire
+bakmayan bir koşu, eksik halkayı fark etmeden yazmaya kalkışır; o durumda da
+ilk satırdaki kapı devreye girer ve sakat ölçü yazılmaz. Yani en kötü hâlde
+bülten çıkmaz — yanlış bülten çıkmaz.
+
 **Rutini bir aracı yeniden kuramaz.** Mevcut iki rutin (hafta içi 04:15 UTC,
 pazar 14:45 UTC) hesabın arayüzünden oluşturuldu; aracının onları güncelleme ya
 da silme yetkisi yok. Aracının kurduğu bir rutin ise depoya erişemez: yeni

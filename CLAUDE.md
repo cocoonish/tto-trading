@@ -112,13 +112,15 @@ görüntüsü aynıydı: yayın iş akışı "değişiklik yok" deyip yeşil bit
 dünkü bülteni göstermeye devam ediyordu. Nöbetçi o sessizliği kapatıyor.
 
 **Kurucu ilke — sigorta metne değil araca konur.** Yazı katmanını ateşleyen
-rutinin metni depoda değil, claude.ai hesabının rutin ayarlarında durur. (Bu
-ilke bir zamanlar "bir aracı onu değiştiremez" diye yazılmıştı; 27.08.2026'da
-ölçüldü ve YANLIŞ çıktı — iki rutin de API üzerinden oluşturulmuş, listelenip
-güncellenebiliyor ve kaynak depoyu taşıyor. İlkenin kendisi yine de geçerli,
-sebebi başka: rutin metni depoyla birlikte sürümlenmez, gözden geçirilmez ve
-kimse ona bakmaz.) Bu yüzden bir kural "rutin metnine yazıldı" diye tamam
-sayılmaz: araç onu kendi başına dayatabilmelidir. `yaz.py`nin damga sigortası açık argüman
+rutinin metni depoda değil, claude.ai hesabının rutin ayarlarında durur ve bir
+aracı onu DEĞİŞTİREMEZ. 27.08.2026'da tam olarak ölçüldü: rutinler
+listelenebiliyor ve metinleri OKUNABİLİYOR (bu sayede rehberle çeliştikleri
+yerler bulundu), ama güncelleme reddediliyor — bir aracı yalnız kendi kurduğu
+rutini değiştirebilir, arayüzden ya da API'den kurulmuş olanı değiştiremez.
+Yani rutin metnindeki bir kusur ancak İNSAN eliyle düzeltilir. Üstelik o metin
+depoyla birlikte sürümlenmez, gözden geçirilmez ve kimse ona bakmaz. Bu yüzden
+bir kural "rutin metnine yazıldı" diye tamam sayılmaz: araç onu kendi başına
+dayatabilmelidir. `yaz.py`nin damga sigortası açık argüman
 verilmese de yama dosyasının zamanıyla sürer, denetim eşikleri koddadır, duman
 sınaması iş akışını durdurur. Rutin metni yalnız
 `bulten/YAZIM.md`ye işaret eder; kural rehbere yazılır.
