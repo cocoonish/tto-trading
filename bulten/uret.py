@@ -69,6 +69,13 @@ GOSTERGELER = [
     ("hazine-ihrac", "maliyet_son", "Son ihale maliyeti", "%", 2, ""),
     ("yabanci-pozisyon", "toplam_4h", "Yabancı 4 haftalık net akım", "mn USD", 0, ""),
     ("try-reer", "redk", "Reel efektif kur", "endeks", 1, ""),
+    # FX haber-duyarlılık endeksi — sepet spread'i (güvenli liman tonu eksi
+    # risk varlığı tonu). Hattın tek TEMİZ sayısal ölçüsü budur; uçlar
+    # (`ust1_deger`, `alt1_deger`) panoya GİRMEZ, çünkü her gün başka bir
+    # varlığa aittir ve sürüm kıyası dünkü gümüşle bugünkü altını kıyaslardı.
+    # Saati kendi alanından okunur: spread GDELT haftalık arşivinden gelir ve
+    # hattın günlük `_tarih`inden birkaç gün geridedir.
+    ("fx-haber-endeksi", "spread", "FX haber endeksi — sepet spread'i", "", 3, "spread_tarih"),
 ]
 
 

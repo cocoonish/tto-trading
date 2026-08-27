@@ -42,10 +42,16 @@ on:
     # gelir ve yalnız hafta kapanınca ilerler. Tek bir haftalık koşu, günlük
     # ilerleyebilecek yarıyı da haftalığa mahkûm ediyordu.
     #
-    # Pazartesi burada YOK: o gün zaten tam kip koşuyor ve içinde canlı akış
-    # da var. Salı-Cuma günlük kip koşar (dakikalar), pazartesi tam kip
-    # (~1s45d) hem arşivi hem anlık endeksi tazeler.
-    - cron: '7 9 * * 2-5'
+    # SAAT: BÜLTENDEN ÖNCE. Bülten ölçümü 03:23 UTC'de koşuyor; endeks 09:07'de
+    # tazelenirse bültenin gördüğü okuma her zaman bir gün eskidir ve denetimin
+    # tazelik ölçütü de dünü ölçer. 01:53, ölçümden 90 dakika önce — ayrı iş
+    # akışı olduğu için gecikse bile bülteni BLOKLAMAZ, yalnız o sabah eski
+    # okumayla yazılır.
+    #
+    # Pazartesi de bu listede: o günkü tam kip 08:37'de, yani bültenden SONRA
+    # koşuyor. Pazartesi sabahı da taze okuma olsun diye günlük kip pazartesi
+    # de çalışır; 08:37'deki tam kip ardından haftalık arşivi tazeler.
+    - cron: '53 1 * * 1-5'
   workflow_dispatch:
     inputs:
       tam_kip:
@@ -130,17 +136,24 @@ jobs:
       # `--gunluk` GDELT'e dokunmaz, `web_cikti.py --anlik` ile de yalnız
       # anlık endeks grafiklerini çizer — haftalık paneller ve onların
       # "veri sonu" damgası olduğu gibi kalır.
+      # Kip, GÜN NUMARASINDAN DEĞİL hangi cron'un ateşlediğinden okunur.
+      # Pazartesi iki koşu var: 01:53 günlük (bültenden önce), 08:37 tam kip
+      # (haftalık arşiv). Gün numarasına bakan bir seçim ikisini de tam kipe
+      # çevirir ve 01:53'te 1 saat 45 dakikalık arşiv koşusu başlatırdı —
+      # bülteni bekletmez ama o sabahki taze okumayı da getirmezdi.
       - name: Kip
         id: kip
+        env:
+          TETIK: ${{ github.event.schedule }}
         run: |
-          if [ "${{ inputs.tam_kip }}" = "true" ] || [ "$(date -u +%u)" = "1" ]; then
-            echo "bayrak=--tam" >> "$GITHUB_OUTPUT"
-            echo "ad=tam kip (GDELT arşivi dahil)" >> "$GITHUB_OUTPUT"
+          if [ "${{ inputs.tam_kip }}" = "true" ] || [ "$TETIK" = "37 8 * * 1" ]; then
+            BAYRAK="--tam"; AD="tam kip (GDELT arşivi dahil)"
           else
-            echo "bayrak=--gunluk" >> "$GITHUB_OUTPUT"
-            echo "ad=günlük kip (yalnız canlı haber akışı)" >> "$GITHUB_OUTPUT"
+            BAYRAK="--gunluk"; AD="günlük kip (yalnız canlı haber akışı)"
           fi
-          echo "Kip: $(grep '^ad=' "$GITHUB_OUTPUT" | tail -1 | cut -d= -f2-)"
+          echo "bayrak=$BAYRAK" >> "$GITHUB_OUTPUT"
+          echo "ad=$AD" >> "$GITHUB_OUTPUT"
+          echo "Tetik: ${TETIK:-elle} · Kip: $AD"
 
       - name: FX hattı — ${{ steps.kip.outputs.ad }}
         id: fx

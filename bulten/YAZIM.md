@@ -245,6 +245,16 @@ doldur (tuttu | tutmadi | kismen); ölçülemeyen kayıtlar notsuz kapanabilir a
 bunu bilinçli seç. `sonuclar` bölümünde "geldi" görünen her satırın sürprizini
 metinde yorumla — tablo ne olduğunu söyler, neden olduğunu sen söylersin.
 
+**FX haber endeksi bültenden ÖNCE tazelenir — bak.** Hat hafta içi her sabah
+04:53'te koşuyor, yani ölçümden 90 dakika önce; panodaki "FX haber endeksi —
+sepet spread'i" satırı o koşudan gelir. Panoda yalnız spread var, çünkü hattın
+uçları (en alıcı / en satıcı varlık) her gün başka bir varlığa ait ve sürüm
+kıyası anlamsız olurdu. Günün haber tonunda anlatmaya değer bir şey olup
+olmadığını görmek için proje sayfasına bak: hangi varlık uçta, kaç makaleyle,
+bir önceki okumaya göre ne kadar döndü. **Spread'in saati ayrıdır**: o GDELT
+haftalık arşivinden gelir ve hattın günlük tarihinden birkaç gün geridedir —
+panoda kendi tarihiyle yazar, o tarihle anlat.
+
 **Temalara bağla.** `temalar` defterindeki canlı temalara atıf yap: günün
 gelişmesi hangi tezi doğruladı, hangisini çürüttü.
 
