@@ -340,6 +340,46 @@ def main() -> int:
             "günlük kipi tanımsız hat hafife düşmüyor"
     sina("guncelle: fx günlük kipi veri çekiyor", _fx_gunluk)
 
+    # SÜRPRİZ GELİŞ KURALI. "Geldi" kararı eskiden yalnız referans tarihine
+    # bakıyordu (veri_gun >= yayım günü) ve haftalık TCMB serilerinde bu
+    # YAPISAL olarak imkânsızdı: 27.08 Perşembe yayımı 21.08 dönemini taşır.
+    # 28.08 bülteni, gösterge panosu 14.08→21.08 İLERLEMİŞKEN aynı yayım için
+    # "veri henüz hatta düşmedi" yazdı. Kural artık sürüm saatine de bakıyor;
+    # bu sınama iki yönü de kilitler: sürüm yayımdan SONRA ilerlediyse geldi,
+    # yayımdan ÖNCE kalmışsa gelmedi (erken ilan yasak).
+    def _surpriz_gelis():
+        import datetime as _dt
+        import surpriz as _s
+        import gozlem as _g
+
+        g_anlik, g_son, g_onceki = _g.anlik, _g.son_gorulme, _g.onceki_surum_anahtar
+        s_arsivle, s_oku = _s.arsivle, _s.arsiv_oku
+        try:
+            _g.anlik = lambda hat: {"g_ar_13y": 23.7, "_tarih": "21.08.2026"}
+            _g.onceki_surum_anahtar = lambda *a, **k: {"d": {"g_ar_13y": 25.9}}
+            _s.arsivle = lambda k: None
+            _s.arsiv_oku = lambda: {"x": {
+                "tarih": "2026-08-27", "olay": "TCMB: Haftalık para-banka (34. Hafta)",
+                "beklenti": "", "beklenti_sayi": None}}
+
+            # (a) referans (21.08) < yayım (27.08) AMA sürüm 28.08'de ilerledi → GELDİ
+            _g.son_gorulme = lambda hat: ("21.08.2026", "2026-08-28T04:17:15")
+            r = _s.gecmis_olaylar([], piyasa=None, bugun=_dt.date(2026, 8, 28))
+            assert r and r[0]["durum"] == "geldi", f"sürüm ilerledi ama durum: {r[0]['durum'] if r else 'boş'}"
+            assert r[0]["gerceklesme"] == 23.7 and r[0]["onceki"] == 25.9
+
+            # (b) sürüm yayımdan ÖNCE (20.08) kalmış → GELMEDİ (erken ilan yasak)
+            _g.son_gorulme = lambda hat: ("14.08.2026", "2026-08-20T13:09:00")
+            _g.anlik = lambda hat: {"g_ar_13y": 25.9, "_tarih": "14.08.2026"}
+            r = _s.gecmis_olaylar([], piyasa=None, bugun=_dt.date(2026, 8, 28))
+            assert r and r[0]["durum"] == "veri henüz hatta düşmedi", \
+                f"bayat sürüm 'geldi' sayıldı: {r[0]['durum'] if r else 'boş'}"
+            assert r[0]["gerceklesme"] is None, "gelmemiş veri için gerçekleşme yazıldı"
+        finally:
+            _g.anlik, _g.son_gorulme, _g.onceki_surum_anahtar = g_anlik, g_son, g_onceki
+            _s.arsivle, _s.arsiv_oku = s_arsivle, s_oku
+    sina("surpriz: geliş sürüm saatinden okunuyor", _surpriz_gelis)
+
     for ad in gecen:
         print(f"  ✓ {ad}")
     for ad, hata in dusen:

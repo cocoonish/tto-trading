@@ -206,9 +206,36 @@ def gecmis_olaylar(kayitlar: list, piyasa: dict, bugun: date | None = None,
             v = d.get(t.anahtar)
             v_tarih = gozlem.anahtar_tarihi(d, t.anahtar, t.tarih_alani) if d else ""
             veri_gun = _tr_gun(v_tarih)
+            # "Geldi mi?" sorusunun İKİ meşru cevabı var ve eski kod yalnız
+            # birincisine bakıyordu:
+            #   (a) verinin REFERANS tarihi yayım gününe ulaştı (günlük seriler);
+            #   (b) anahtarın SÜRÜMÜ yayım gününde/sonrasında ilerledi.
+            # Haftalık TCMB serilerinde (a) YAPISAL olarak imkânsız: 27.08
+            # Perşembe yayımı 21.08 dönemini taşır, yani referans tarihi yayım
+            # tarihini hiçbir zaman yakalayamaz ve "geldi" durumu ölü koddu —
+            # 28.08 bülteni, gösterge panosu 14.08→21.08 İLERLEMİŞKEN aynı
+            # yayım için "veri henüz hatta düşmedi" yazdı. (b) bunu kapatır:
+            # gozlem'in sürüm saati, şimdiki referans tarihine NE ZAMAN
+            # geçildiğini tutar; geçiş yayım günü ya da sonrasıysa yayım
+            # hattımıza düşmüş demektir. Günlük anahtarlarda (b) yeni bir
+            # davranış eklemez — orada (a) zaten aynı gün doğrulanır.
+            surum_gunu = None
+            alan = gozlem.tarih_alani(d, t.anahtar, t.tarih_alani)
+            # Alan adı boşsa anahtarın saati hattın ANA saatidir (kurucu ilke —
+            # saat: açık alan → <anahtar>_tarih → _tarih). O hâlde sürüm sorusu
+            # da hat düzeyinde sorulur: son_gorulme, ana saatin şimdiki değerine
+            # ne zaman geçildiğini verir. Gözlem deposu ölçüm anlarında yazdığı
+            # için bu an gerçek gelişten SONRA olabilir — sakınca yok: geç ilan
+            # edilen bir geliş yanlış değildir, erken ilan edilen olurdu.
+            sg = (gozlem.alan_son_gorulme(t.hat, alan) if alan
+                  else gozlem.son_gorulme(t.hat))
+            if sg and sg[1]:
+                surum_gunu = _gun(str(sg[1])[:10])
+            geldi = veri_gun is not None and (
+                veri_gun >= g or (surum_gunu is not None and surum_gunu >= g))
             if v is None or not isinstance(v, (int, float)) or isinstance(v, bool):
                 satir["durum"] = "hat bu büyüklüğü üretmiyor"
-            elif veri_gun is None or veri_gun < g:
+            elif not geldi:
                 # Yayım oldu ama bizim hattımıza henüz düşmedi. Hattın elindeki
                 # eski sayıyı "gerçekleşme" diye yazmak yanlış olurdu.
                 satir["durum"] = "veri henüz hatta düşmedi"

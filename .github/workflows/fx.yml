@@ -52,6 +52,12 @@ on:
     # koşuyor. Pazartesi sabahı da taze okuma olsun diye günlük kip pazartesi
     # de çalışır; 08:37'deki tam kip ardından haftalık arşivi tazeler.
     - cron: '53 1 * * 1-5'
+    # YEDEK. 28.08.2026'da 01:53'ün İLK ateşlemesi hiç olmadı — o sabah bütün
+    # erken pencere düştü. Öğlen penceresi fiilen çalışıyor; yedek oraya.
+    # Kip seçimi cron dizgesine baktığı için bu koşu da GÜNLÜK kipte açılır.
+    # 01:53 koşmuşsa ikinci koşu artımlıdır (skorlanmış makale yeniden
+    # skorlanmaz) ve dakikalar sürer; sayfayı gün ortası tazelemiş olur.
+    - cron: '11 12 * * 1-5'   # 15:11 İstanbul — günlük kip yedeği
   workflow_dispatch:
     inputs:
       tam_kip:

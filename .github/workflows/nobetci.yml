@@ -25,8 +25,20 @@ name: Nöbetçi (bülten çıktı mı)
 
 on:
   schedule:
-    - cron: '37 6 * * 1-5'    # 09:37 İstanbul — sabah bülteni çoktan çıkmış olmalı
-    - cron: '31 16 * * 0'     # 19:31 İstanbul — pazar "haftaya bakış" için
+    - cron: '37 6 * * 1-5'
+    # YEDEK ALARMLAR. Nöbetçinin işi zamanlayıcı düştüğünde alarm vermek — ama
+    # kendisi de aynı zamanlayıcıda. 28.08.2026 sabahı ölçüldü: 06:37 nöbetçisi
+    # dahil sabah penceresinin TAMAMI (fx 01:53, veri 02:13/02:41, ölçüm
+    # 03:23/03:51, yayın 05:11) hiç ateşlenmedi; bülten yalnız yazı rutini elle
+    # tetiklediği için çıktı. Nöbetçi hiç koşmazsa düşemez de — arızanın
+    # görüntüsü yine sağlığın görüntüsüyle aynı olur. Öğlene doğru pencereler
+    # fiilen çalışıyor (27-28.08'in bütün zamanlanmış koşuları 12:44'ten sonra
+    # ateşlendi); yedekler oraya konuldu. Bülten yazılmışsa koşu saniyeler
+    # içinde yeşil biter, mükerrer alarm üretmez.
+    - cron: '7 8 * * 1-5'     # 11:07 İstanbul — birinci yedek
+    - cron: '37 10 * * 1-5'   # 13:37 İstanbul — ikinci yedek    # 09:37 İstanbul — sabah bülteni çoktan çıkmış olmalı
+    - cron: '31 16 * * 0'
+    - cron: '1 18 * * 0'      # 21:01 İstanbul — pazar yedeği     # 19:31 İstanbul — pazar "haftaya bakış" için
   workflow_dispatch: {}
 
 permissions:
