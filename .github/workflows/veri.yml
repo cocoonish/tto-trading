@@ -16,7 +16,10 @@
 # Dakikalar bilinçli olarak yuvarlak DEĞİL: GitHub'ın zamanlayıcısı saat başı
 # ve yarımlarda sıkışıyor ve bu depoda 30 dk ile 2 saat arası gecikmeler görüldü.
 #   11:47 TR — TÜİK 10:00 bültenleri (TÜFE, Yİ-ÜFE, hizmet ÜFE) API'ye düştü
-#   16:17 TR — TCMB 14:30 (analitik bilanço, haftalık para-banka) + 15:30 (kurlar)
+#   15:23 TR — TCMB 14:30 (analitik bilanço). Bilanço 14:30'da yayımlanıyor ve
+#              takvimdeki gecikme payı (gecikme_dk 45) ile ~15:15'te "hazır"
+#              sayılıyor; 16:17'yi beklemek her gün ~1 saat kaybettiriyordu.
+#   16:17 TR — TCMB 15:30 (kurlar) + 15:23 koşusu düşerse bilanço için ikinci şans
 #   18:37 TR — HMB 17:30 (bütçe, borç stoku) + Hazine ihale sonuçları
 
 name: Veri tazeleme
@@ -31,6 +34,7 @@ on:
     # bir hat yoksa iş 40 saniyede biter, maliyeti yok.
     - cron: '41 2 * * 1-5'    # 05:41 İstanbul — sabah koşusu düşerse ikinci şans
     - cron: '47 8 * * 1-5'    # 11:47 İstanbul
+    - cron: '23 12 * * 1-5'   # 15:23 İstanbul — analitik bilanço hazır olur olmaz
     - cron: '17 13 * * 1-5'   # 16:17 İstanbul
     - cron: '37 15 * * 1-5'   # 18:37 İstanbul
   workflow_dispatch:
