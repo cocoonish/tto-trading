@@ -483,70 +483,70 @@
     }
   },
   {
-    "timestamp": "2026-08-28T13:33:09.989653+00:00",
+    "timestamp": "2026-08-28T22:26:30.239499+00:00",
     "indices": {
       "EURUSD": {
-        "value": -0.4516,
+        "value": -0.2653,
         "category": "Bearish"
       },
       "USDJPY": {
-        "value": -0.1035,
-        "category": "Bearish"
+        "value": -0.0991,
+        "category": "Neutral"
       },
       "USDCHF": {
         "value": -1.0,
         "category": "Extremely Bearish"
       },
       "GBPUSD": {
-        "value": -0.5109,
-        "category": "Extremely Bearish"
+        "value": -0.3358,
+        "category": "Bearish"
       },
       "AUDUSD": {
-        "value": 0.0047,
+        "value": -0.033,
         "category": "Neutral"
       },
       "NZDUSD": {
-        "value": -0.5183,
-        "category": "Extremely Bearish"
+        "value": -0.3444,
+        "category": "Bearish"
       },
       "USDCAD": {
-        "value": -0.2359,
+        "value": -0.3666,
         "category": "Bearish"
       },
       "USDNOK": {
-        "value": -0.6026,
+        "value": -0.5737,
         "category": "Extremely Bearish"
       },
       "USDSEK": {
-        "value": -0.6033,
-        "category": "Extremely Bearish"
-      },
-      "XAUUSD": {
-        "value": -0.1095,
+        "value": -0.3545,
         "category": "Bearish"
       },
+      "XAUUSD": {
+        "value": -0.0415,
+        "category": "Neutral"
+      },
       "XAGUSD": {
-        "value": 0.1651,
-        "category": "Bullish"
+        "value": 0.0045,
+        "category": "Neutral"
       },
       "SPX": {
-        "value": 0.0489,
+        "value": -0.0707,
         "category": "Neutral"
       },
       "UST2Y": {
-        "value": 0.1976,
-        "category": "Bullish"
+        "value": 0.0435,
+        "category": "Neutral"
       },
       "UST10Y": {
-        "value": 0.3868,
-        "category": "Bullish"
+        "value": -0.065,
+        "category": "Neutral"
       },
       "BIST100": {
-        "value": -0.0584,
-        "category": "Neutral"
+        "value": 0.4556,
+        "category": "Bullish"
       }
     },
-    "veri_sonu": "2026-08-28T12:20:18+00:00",
+    "veri_sonu": "2026-08-28T20:35:11+00:00",
     "regime": {
       "label": "Transitioning",
       "basket_spread": -0.098,
