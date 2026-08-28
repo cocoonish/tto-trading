@@ -338,6 +338,18 @@ def main() -> int:
         baska = next(x for x in mod.HATLAR if x.ad == "tcmb")
         assert baska.adimlar(False, True) == baska.adimlar(False), \
             "günlük kipi tanımsız hat hafife düşmüyor"
+
+        # BAĞIMLILIK: günlük kip run.py koşturduğu için torch/transformers
+        # KURULMAK zorunda. İlk günlük koşu (28.08) hafif paket listesiyle
+        # açıldı ve 15 saniyede düştü — bu sınama o kusuru kilitler.
+        hafif = mod._req_paketler(mod.KOK / fx.klasor, agir_dahil=False)
+        assert "torch" not in hafif, "hafif liste ağır paket taşıyor"
+        import inspect
+        for fn in (mod.eksik_paketler, mod.sistem_kur):
+            assert "gunluk" in inspect.signature(fn).parameters, \
+                f"{fn.__name__} günlük kipi tanımıyor"
+            assert "tam or gunluk" in inspect.getsource(fn), \
+                f"{fn.__name__} günlük kipte ağır paketleri saymıyor"
     sina("guncelle: fx günlük kipi veri çekiyor", _fx_gunluk)
 
     # SÜRPRİZ GELİŞ KURALI. "Geldi" kararı eskiden yalnız referans tarihine

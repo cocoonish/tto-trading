@@ -502,13 +502,17 @@ def _req_paketler(d: Path, agir_dahil: bool = True) -> list[str]:
     return adlar
 
 
-def eksik_paketler(h: "Hat", tam: bool = True) -> list[str] | None:
+def eksik_paketler(h: "Hat", tam: bool = True, gunluk: bool = False) -> list[str] | None:
     """Hattı koşacak yorumlayıcıda requirements'tan eksik olanlar.
 
     None = denetlenemedi (yorumlayıcı çalışmadı) — bu da bir bulgudur.
     Hafif kipte ağır paketler sorulmaz: o adımlar zaten koşmayacak.
+    GÜNLÜK kip bağımlılıkta TAM sayılır: fx'in günlük kipi de run.py koşturur
+    ve FinBERT skorlaması çalışma anında torch/transformers ister. İlk günlük
+    koşu (28.08.2026, elle) tam bu yüzden 15 saniyede düştü: ön kontrol hafif
+    listeye baktı ve geçti, import çalışma anında patladı.
     """
-    paketler = _req_paketler(KOK / h.klasor, agir_dahil=tam)
+    paketler = _req_paketler(KOK / h.klasor, agir_dahil=tam or gunluk)
     if not paketler:
         return []
     try:
@@ -548,7 +552,7 @@ def tazeleme_modulu():
     return mod
 
 
-def sistem_kur(secilen: list["Hat"], tam: bool) -> bool:
+def sistem_kur(secilen: list["Hat"], tam: bool, gunluk: bool = False) -> bool:
     """Seçilen hatların gereksinimlerini KOŞAN yorumlayıcıya kurar.
 
     Bulut koşucusu için: orada her hatta bir .venv kurmak hem yavaş hem gereksiz
@@ -566,7 +570,8 @@ def sistem_kur(secilen: list["Hat"], tam: bool) -> bool:
             if not x or x.startswith("-"):
                 continue
             ad = re.split(r"[<>=!~;\[ ]", x, 1)[0].strip()
-            if ad and (tam or ad not in AGIR_PAKET):
+            # Günlük kip de ağır paketleri ister (bkz. eksik_paketler).
+            if ad and (tam or gunluk or ad not in AGIR_PAKET):
                 paketler.add(x)
     if not paketler:
         print("  kurulacak paket yok")
@@ -737,7 +742,7 @@ def kos(h: Hat, tam: bool, gunluk: bool = False) -> tuple[bool, str, float]:
         print(f"    (yorumlayıcı: {Path(py).relative_to(KOK) if py.startswith(str(KOK)) else py})")
     # Koşmadan önce yorumlayıcıyı yokla: eksik paket, sayfalarca traceback yerine
     # tek satırlık çözüm olarak görünsün. (Ekstra maliyet ~0,1 sn/hat.)
-    eksik = eksik_paketler(h, tam)
+    eksik = eksik_paketler(h, tam, gunluk)
     if eksik is None:
         return False, (f"yorumlayıcı çalışmıyor ({py}) — çözüm: python guncelle.py "
                        f"--kur {h.ad}"), time.time() - t0
@@ -990,12 +995,12 @@ def main():
     if a.sistem_kur:
         print(f"\n▶ Gereksinimler ({'tam' if tam else 'hafif'} kip) — "
               + " ".join(h.ad for h in secilen))
-        if not sistem_kur(secilen, tam):
+        if not sistem_kur(secilen, tam, a.gunluk):
             return 1
 
     sorunlu = []
     for h in secilen:
-        e = eksik_paketler(h, tam)
+        e = eksik_paketler(h, tam, a.gunluk)
         if e is None or e:
             sorunlu.append(h)
     if sorunlu:
