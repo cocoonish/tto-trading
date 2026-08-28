@@ -1,8 +1,8 @@
 {
  "son_ay": "2026-06-01",
  "son_ceyrek": "2026-03-31",
- "son_hafta": "2026-08-19",
- "son_gun": "2026-08-26",
+ "son_hafta": "2026-08-26",
+ "son_gun": "2026-08-28",
  "esik": {
   "oran_payda_mn_usd": 10000.0,
   "roll_payda_mn_usd": 500.0,
@@ -133,13 +133,13 @@
   "ihtiyacta_cari_acik_payi_yuzde": 30.9
  },
  "haftalik": {
-  "son_hafta": "2026-08-19",
-  "son_hafta_mn_usd": 718.3,
-  "son_4hafta_mn_usd": 1126.6,
-  "son_52hafta_mn_usd": 39276.1,
-  "son_hafta_hazine_mn_usd": 708.2,
-  "son_hafta_diger_mn_usd": 8.4,
-  "son_hafta_tcmb_mn_usd": 1.7
+  "son_hafta": "2026-08-26",
+  "son_hafta_mn_usd": 4397.2,
+  "son_4hafta_mn_usd": 5454.7,
+  "son_52hafta_mn_usd": 40877.5,
+  "son_hafta_hazine_mn_usd": 4394.9,
+  "son_hafta_diger_mn_usd": 0.2,
+  "son_hafta_tcmb_mn_usd": 2.0
  },
  "dogrulama": {
   "−CA = fin_giris + KA + NHN − Rezerv (aylık)": {
