@@ -1,63 +1,291 @@
-# GEÇİCİ — YALNIZ BU DALDA. main'deki veri.yml'e DOKUNULMADI.
+# Veri tazeleme — resmî yayım takvimine göre, bültenden BAĞIMSIZ.
 #
-# TCMB APİ portföyü analizinin genişletilmesi için analitik bilanço (günlük)
-# ve haftalık vaziyet serileri EVDS'ten çekiliyor. Bu ortamın ağ vekili
-# tcmb.gov.tr'yi engellediği için çekim, EVDS anahtarının zaten durduğu bu
-# koşucudan yapılıyor; sonuç Research/analiz-tcmb-api/data/ altına bu dala
-# commit ediliyor. İş bitince bu dosya main'deki sürümüne geri döndürülecek.
+# Neden ayrı bir iş: bülten eskiden her koştuğunda on bir hattı baştan çekiyordu.
+# 2026-08-25 koşusunda bu 37 dakika sürdü ve koşan yedi hattın YEDİSİ de "veri
+# tarihi değişmedi" dedi — çekilecek yeni veri yoktu. Artık tazeleme kararını
+# TÜİK'in Ulusal Veri Yayımlama Takvimi veriyor: bir hat, ancak beslendiği seri
+# son tazelemeden sonra yayımlandıysa koşar (bkz. bulten/tazeleme.py).
+#
+# Koşu saatleri, yayım saatlerinin hemen ardına konumlandırıldı:
+#   05:13 TR — gece boyunca kaçan bir şey varsa sabah bülteninden ÖNCE yakala.
+#              Saat 06:07'den öne çekildi: bülten ölçümü 06:23'te koşuyor ve
+#              aradaki 16 dakika bu işin bitmesine YETMİYORDU (37 dakikalık koşu
+#              görüldü). Ölçüm, tazeleme daha koşarken depoya bakıyor ve dünün
+#              verisiyle bülten kuruyordu — sessiz, çünkü iki iş de yeşil bitiyor.
+#              70 dakikalık pay, iş bütçesinin (50 dk) tamamını kapsıyor.
+# Dakikalar bilinçli olarak yuvarlak DEĞİL: GitHub'ın zamanlayıcısı saat başı
+# ve yarımlarda sıkışıyor ve bu depoda 30 dk ile 2 saat arası gecikmeler görüldü.
+#   11:47 TR — TÜİK 10:00 bültenleri (TÜFE, Yİ-ÜFE, hizmet ÜFE) API'ye düştü
+#   16:17 TR — TCMB 14:30 (analitik bilanço, haftalık para-banka) + 15:30 (kurlar)
+#   18:37 TR — HMB 17:30 (bütçe, borç stoku) + Hazine ihale sonuçları
+
 name: Veri tazeleme
 
 on:
+  schedule:
+    - cron: '13 2 * * 1-5'    # 05:13 İstanbul — bülten ölçümünden 70 dk önce
+    # YEDEK TETİKLEYİCİ. Yukarıdaki koşu 26.08'de de 27.08'de de HİÇ
+    # başlamadı — GitHub'ın zamanlayıcısı en iyi çaba esaslı ve bu depoda
+    # sabah penceresi sistematik olarak düşüyor. Her tetikleyici bağımsız
+    # bir şans; ikincisi ölçümden (03:23) hâlâ 42 dakika önce. Koşulacak
+    # bir hat yoksa iş 40 saniyede biter, maliyeti yok.
+    - cron: '41 2 * * 1-5'    # 05:41 İstanbul — sabah koşusu düşerse ikinci şans
+    - cron: '47 8 * * 1-5'    # 11:47 İstanbul
+    - cron: '17 13 * * 1-5'   # 16:17 İstanbul
+    - cron: '37 15 * * 1-5'   # 18:37 İstanbul
   workflow_dispatch:
     inputs:
       zorla:
-        description: 'Kullanılmıyor (main ile arayüz uyumu için duruyor)'
+        description: 'Takvimi dinleme, seçilen hatları koşulsuz tazele'
         type: boolean
         default: false
       hatlar:
-        description: 'Kullanılmıyor (main ile arayüz uyumu için duruyor)'
+        description: 'Hangi hatlar (boş = takvimdeki hepsi)'
         type: string
         default: ''
-
-concurrency:
-  group: veri
-  cancel-in-progress: false
 
 permissions:
   contents: write
 
+# Aynı anda iki tazeleme koşusu commit yarışına girmesin.
+concurrency:
+  group: veri
+  cancel-in-progress: false
+
 jobs:
   tazele:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # İş bütçesi. Tazeleme adımının kendi sınırı 45 dakika (aşağıda, ölçülmüş);
+    # bu sınır onun ÜSTÜNDE durur ki adım kesildiğinde commit'e kadar olan
+    # adımlar koşacak vakit bulsun (bugüne dek 13 saniye sürdüler).
+    timeout-minutes: 50
     env:
       TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
+      # ortak/sitecustomize.py: zaman aşımısız kalan her HTTP isteğine varsayılan
+      # zaman aşımı + yeniden deneme takar. Python onu PYTHONPATH'te bulunca
+      # açılışta kendiliğinden import eder; hatların dosyalarına dokunmak gerekmez.
+      # 2026-08-27: tcmb istemcisi isteği timeout'suz atıyor (kwargs sorgu dizesine
+      # gidiyor, requests'e değil) ve EVDS hattı 21 dakika asılı kaldı.
+      PYTHONPATH: ${{ github.workspace }}/ortak
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+          cache: pip
+
+      # Hatların ham veri önbellekleri (EVDS yanıtları, işlenmiş CSV'ler) depoya
+      # girmiyor. Önbelleksiz koşucuda her hat her şeyi baştan indiriyor: kredi
+      # 869 sn, DİBS 729 sn. Koşular arasında taşınınca artımlı çalışırlar.
+      - name: Veri önbelleği
+        uses: actions/cache@v4
+        with:
+          path: |
+            Aktarılacak Projeler/*/data
+            Research/marj/data
+          key: veri-${{ github.run_id }}
+          restore-keys: veri-
+
+      # ÖNBELLEK DEPOYU EZMEZ.
+      #
+      # Yukarıdaki önbellek İZLENMEYEN ham veri için var (EVDS yanıtları,
+      # işlenmiş CSV'ler). Ama `Aktarılacak Projeler/*/data` altında İZLENEN
+      # dosyalar da duruyor — indices/data/index_history.json,
+      # sentiment_scores.json, optimized_params.json. `restore-keys: veri-`
+      # önek eşleşmesiyle EN SON veri koşusunun önbelleğini getiriyor; o
+      # önbellek başka bir iş akışının (fx) ürettiği dosyaları görmediği için
+      # onların ESKİ hâlini checkout'un üzerine yazıyordu.
+      #
+      # 27.08 04:18 koşusunda tam olarak bu oldu: 26.08 Pazar tam kipinin
+      # 1 saat 45 dakikada ürettiği FX snapshot'ı önbellek tarafından geri
+      # alındı, aşağıdaki `git add "Aktarılacak Projeler"` silmeyi sahiplendi
+      # ve commit etti — hattın tarihçesi 7 kayıttan 6'ya düştü, üstelik
+      # sessizce (koşu yeşil bitti).
+      #
+      # Kural: İZLENEN bir dosyanın doğru sürümü DEPODAKİdir. Önbellek yalnız
+      # izlenmeyeni taşır. `git checkout --` izlenmeyen önbellek dosyalarına
+      # dokunmaz, yalnız ezilen izlenenleri geri alır.
+      - name: Önbellek depoyu ezmesin
+        run: |
+          ezilen=$(git diff --name-only -- "Aktarılacak Projeler" Research)
+          if [ -n "$ezilen" ]; then
+            echo "::warning::Önbellek izlenen dosyaları geri aldı; depo sürümüne dönülüyor:"
+            echo "$ezilen"
+            git checkout -- "Aktarılacak Projeler" Research
+          else
+            echo "önbellek izlenen dosyaya dokunmadı"
+          fi
+
+      - name: Temel bağımlılıklar
+        # plotly: Carry/Tufex/Makroihtiyati/ReelSektorFX hatlarının grafikleri
+        run: pip install --quiet requests pandas numpy plotly
+
+      # DUMAN SINAMASI: ağa çıkmadan, saniyeler içinde. Bu depoyu birden çok
+      # oturum aynı gün düzenliyor; aralarındaki sözleşme kayması kimsenin
+      # sınamadığı yerden vuruyor (26.08: _yayimlar tek listeden çifte döndü,
+      # aynı gün eklenen başka bir çağrı onu tek liste sandı, veri hattı düştü).
+      # Bu adım TANI DEĞİL: üretim kod yollarını sınar, düşerse koşu durmalı.
+      - name: Duman sınaması (bülten katmanları)
+        run: python bulten/duman.py
 
       - name: EVDS anahtarı
         run: |
           if [ -z "${TTO_EVDS_KEY}" ]; then
-            echo "::error::TTO_EVDS_KEY tanımlı değil."
+            echo "::error::TTO_EVDS_KEY tanımlı değil — EVDS'e giden hatlar tazelenemez."
             exit 1
           fi
 
-      - name: APİ portföyü keşfi (analitik bilanço + vaziyet)
-        run: python "Research/analiz-tcmb-api/kesif_evds.py"
+      # Takvimin kararını önce RAPORLA: log'a bakan biri hangi hattın neden
+      # koştuğunu/atlandığını, hangi yayımın tetiklediğini görsün.
+      # TANI adımı: hangi hattın neden koşacağını LOGA yazar, karar vermez.
+      # Kararı bir sonraki adım kendi içinde `--gerekli` ile yeniden alır.
+      # 26.08 koşusunda bu adım bir hatayla düştü ve `bash -e` yüzünden tazeleme
+      # ile Hazine adımları ATLANDI: dört hattın verisi hazırken hiçbiri
+      # çekilmedi. Bir raporun üretimi durdurma yetkisi olamaz.
+      - name: Tazeleme takvimi ne diyor (tanı — koşuyu durdurmaz)
+        continue-on-error: true
+        run: python bulten/tazeleme.py
 
-      - name: Commit (bu dala)
+      # Hafif kip: EVDS'e giden hatlar. Hangi hattın koşacağına --gerekli karar
+      # verir; --sistem-kur yalnız o koşuda koşacak hatların paketlerini kurar.
+      - name: Gereken hatları tazele
+        id: tazele
+        # Sınır ÖLÇÜLDÜ, takdirî değil. 25 dakika gerçek süreden düşüktü ve
+        # 27.08 12:44 zamanlanmış koşusu bunu gösterdi: dört hattın DÖRDÜ de
+        # başarıyla bitti (net rezerv 442s · yabancı 3s · fonlama 209s · kredi
+        # 844s = 1.498s ≈ 25,0 dk), özet basıldı, tazeleme damgası güncellendi —
+        # ve tam o anda sınır doldu. İş tamamdı, koşu yine de "failure" damgası
+        # bıraktı. Bedeli görünür: denetim o damgaya bakıp "bazı hatlar
+        # çekilememiş olabilir" diye YANLIŞ uyarı üretti.
+        #
+        # Sınırın işi hâlâ aynı — kaynağında takılan bir hat koşuyu sonsuza
+        # kadar yakmasın. Ama eşiğin normal işin ÜSTÜNDE olması şart, yoksa
+        # sağlıklı koşuyu arızalı gösterir. En yavaş iki hat tek başına 21,4
+        # dakika (kredi + net rezerv); 45 dakika bunun üzerine yeterli pay
+        # bırakıyor ve iş düzeyindeki 50 dakikalık sınırın altında kalıyor.
+        timeout-minutes: 45
+        run: |
+          HATLAR="${{ inputs.hatlar }}"
+          if [ -z "$HATLAR" ]; then
+            # `fx` BİLEREK YOK — ayrı iş akışında (fx.yml), haftalık TAM kipte.
+            # Burada hafif kipte koşuyordu ve hafif kip GDELT akışını hiç
+            # toplamıyor: hat her tetiklendiğinde "tazelendi" damgası atıyor,
+            # veri hiç ilerlemiyordu. Takvim onu taze sanıp dokuz gün daha
+            # bekliyor, yani veri kalıcı olarak donuyordu — üstelik her koşu
+            # yeşil bittiği için sessizce.
+            HATLAR="tcmb usdtry reer yabanci fonlama kredi enflasyon dibs odemeler butce marj"
+          fi
+          # "zorla" = takvimi hiç sorma. Süzgeci geçirmemek, ona "her şey
+          # gerekli" dedirtmekten daha dürüst: karar defterine sahte tetik yazılmaz.
+          if [ "${{ inputs.zorla }}" = "true" ]; then
+            echo "Takvim atlandı — seçilen hatlar koşulsuz tazeleniyor"
+            python guncelle.py $HATLAR --sistem-kur
+          else
+            python guncelle.py $HATLAR --gerekli --sistem-kur
+          fi
+
+      # Hazine ihaleleri AYRI: hattın hafif kipi yalnız mevcut veriden grafik
+      # üretir, ihale listesini TAM kip (main.py) hmb.gov.tr'den kazır. İhale
+      # günü geldiğinde tam kip koşar; diğer günlerde bu adım hiç çalışmaz.
+      #
+      # DİKKAT — 2026-08-25'te bu adım depodaki 448 ihalelik birikmiş geçmişi
+      # 16 satıra düşürdü: buluttan yapılan kazıma yerelde alınanın küçük bir
+      # altkümesini getiriyor ve hat CSV'yi eklemek yerine BAŞTAN yazıyor.
+      # guncelle.py artık veri tarihi geriye giden hattı düşmüş sayıyor; burada
+      # ayrıca diskteki hasar geri alınıyor, yoksa commit adımı onu yayardı.
+      # if: always() — üstteki tazeleme adımı düşse (ya da 25 dk sınırına çarpsa)
+      # bile ihale günü ihale çekilir. İki hattın kaderi birbirine bağlı değil.
+      - name: Hazine ihaleleri (ihale günüyse tam kip)
+        if: always()
+        continue-on-error: true
+        run: |
+          GEREK=$(python -c "import sys; sys.path.insert(0,'bulten'); import tazeleme; print(' '.join(tazeleme.gerekli(['hazine'])))")
+          if [ "$GEREK" != "hazine" ]; then
+            echo "İhale yok — Hazine hattı atlandı"
+            exit 0
+          fi
+          echo "İhale günü — Hazine sitesi taranıyor (tam kip)"
+          if python guncelle.py hazine --tam --sistem-kur; then
+            echo "Hazine hattı tazelendi"
+          else
+            echo "::warning::Hazine tam kipi düştü (büyük olasılıkla kazıma eksik veri getirdi) — diskteki değişiklikler geri alınıyor, depodaki birikmiş geçmiş korunuyor."
+            git checkout -- "Aktarılacak Projeler/hazineihrac" "site/public/projeler/hazine-ihrac" || true
+          fi
+
+      # Taşıma defteri kendi kaynağına gitmez: Fonlama ve DİBS'in depoya
+      # yazdığı CSV'lerden türetilir. O yüzden takvim süzgecine tabi değildir
+      # ve her koşuda çalışır — girdileri değişmediyse çıktı da değişmez ve
+      # commit adımı zaten hiçbir şey yazmaz. Saniyeler sürer.
+      - name: TL taşıma defteri (depodaki serilerden)
+        if: always()
+        run: |
+          cd "Aktarılacak Projeler/Carry"
+          python hesap.py
+          python grafik.py
+          cp makas.html endeks.html nakit_tahvil.html konvansiyon.html ozet.json \
+             "../../site/public/projeler/tl-tasima/"
+          cd ../..
+          cd "Aktarılacak Projeler/Tufex"
+          python hesap.py
+          python grafik.py
+          cp basabas_anket.html prim_kesit.html prim_tarihce.html reel_tarihce.html \
+             mevsim.html ozet.json "../../site/public/projeler/tufex-basabas/"
+          cd ../..
+          cd "Aktarılacak Projeler/Makroihtiyati"
+          python hesap.py
+          python grafik.py
+          cp ayrisma.html kacak.html makas.html bkea.html ozet.json duzenlemeler.json \
+             "../../site/public/projeler/makroihtiyati/"
+          cd ../..
+          # Reel sektör FX ağa çıkar (EVDS): düşerse uyar, yer tutucularla devam.
+          cd "Aktarılacak Projeler/ReelSektorFX"
+          python veri_cek.py || echo "::warning::ReelSektorFX EVDS çekimi düştü — sayfa taslak kalır"
+          python hesap.py
+          python grafik.py
+          cp pozisyon.html bilesim.html kisa_vade.html ozet.json \
+             "../../site/public/projeler/reel-sektor-fx/"
+          cd ../..
+          python site/tools/plotly_stil.py --hepsi >/dev/null
+
+      # NABIZ: bu iş akışının koştuğunun kaydı. tazeleme_durumu.json yalnız
+      # BAŞARIYLA TAZELENEN hattın damgasını tutar; sakin bir günde hiçbir hat
+      # koşmaz ve o dosya "hat düştü" ile "yapacak iş yoktu" ayrımını veremez.
+      # Nabız bu ayrımı verir: koşunun kendisi ne zaman oldu, sonucu neydi.
+      # 26.08'de veri hattı düştü ve aşağı akıştaki hiçbir katman bunu bilemedi.
+      - name: Koşu nabzı
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, os, datetime as dt
+          from pathlib import Path
+          Path("bulten/kosu_nabzi.json").write_text(json.dumps({
+              "_aciklama": "Veri iş akışının son koşusu. denetim.py bunun yaşına bakar: "
+                           "veri hattı sessizce düşerse bülten ölçüm katmanının bayat "
+                           "olduğunu bilmeden yazılır.",
+              "veri_kosusu": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+              "sonuc": os.environ.get("ADIM_SONUC", "bilinmiyor"),
+              "kaynak": "veri.yml",
+          }, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+          PY
+        env:
+          ADIM_SONUC: ${{ steps.tazele.outcome || 'koşmadı' }}
+
+      # if: always() ŞART. 2026-08-27 koşusunda dört hattın ÜÇÜ başarıyla
+      # tazelendi (USDTRY 27.08'e geçti, fonlama ve DİBS koştu) ve 37 dakikalık
+      # işin tamamı çöpe gitti: tek bir hat (tcmb) EVDS'te zaman aşımına uğradı,
+      # adım kırmızı bitti ve commit adımı hiç koşmadı. Kısmî başarı, başarısızlık
+      # değildir; tazelenen hattın verisi düşen hattın kaderini paylaşmaz.
+      - name: Commit
+        if: always()
         run: |
           git config --global user.name  "tto-veri"
           git config --global user.email "bot@users.noreply.github.com"
-          git add Research/analiz-tcmb-api || true
+          git add "Aktarılacak Projeler" Research site/public/projeler bulten/tazeleme_durumu.json bulten/kosu_nabzi.json bulten/onbellek || true
           if git diff --cached --quiet; then
             echo "veri değişmedi — commit yok"
           else
-            git commit -m "araştırma: TCMB APİ — analitik bilanço günlük serileri (EVDS keşfi)"
+            git commit -m "veri: $(date -u +'%Y-%m-%d %H:%M') tazeleme (otomatik)"
             git pull --rebase --autostash
             git push
           fi
