@@ -21,7 +21,7 @@ on:
     workflows:
       - "Veri tazeleme"
       - "Günlük bülten"
-      - "FX haber endeksi (haftalık, tam kip)"
+      - "FX haber endeksi"
     types: [completed]
   # Yazı katmanı (bulut rutini) ve yereldeki push'lar için.
   #

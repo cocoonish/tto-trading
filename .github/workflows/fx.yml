@@ -17,7 +17,7 @@
 # FinBERT skorlaması ZATEN ARTIMLI — run.py yalnız "score" alanı olmayan
 # makaleleri puanlar, yani 52 haftalık arşiv her koşuda baştan işlenmez.
 
-name: FX haber endeksi (haftalık, tam kip)
+name: FX haber endeksi
 
 on:
   schedule:
@@ -191,7 +191,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "değişiklik yok"
           else
-            git commit -m "fx: $(date -u +'%Y-%m-%d') haber endeksi (haftalık tam kip)"
+            git commit -m "fx: $(date -u +'%Y-%m-%d') haber endeksi (${{ steps.kip.outputs.ad }})"
             git pull --rebase --autostash
             git push
           fi
