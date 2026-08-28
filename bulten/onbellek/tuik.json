@@ -1,5 +1,5 @@
 {
- "zaman": "2026-08-27T12:27:13",
+ "zaman": "2026-08-28T04:38:29",
  "veri": [
   {
    "tarih": "2026-08-28",
@@ -240,32 +240,6 @@
    "saat": "14:30",
    "ulke": "TR",
    "olay": "TCMB: Haftalık para-banka (37. Hafta 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "Haftalık Para ve Banka İstatistikleri "
-  },
-  {
-   "tarih": "2026-08-27",
-   "saat": "14:30",
-   "ulke": "TR",
-   "olay": "TCMB: Menkul kıymet ist. (34. Hafta 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": " Menkul Kıymet İstatistikleri"
-  },
-  {
-   "tarih": "2026-08-27",
-   "saat": "14:30",
-   "ulke": "TR",
-   "olay": "TCMB: Haftalık para-banka (34. Hafta 2026)",
    "onem": 2,
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
