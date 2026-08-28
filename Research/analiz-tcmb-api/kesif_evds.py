@@ -87,13 +87,14 @@ def seri_listesi(dg: str) -> list[dict]:
     return kayit
 
 
-def seriler_gunluk(kodlar: list[str]) -> dict[str, dict[str, str]]:
+def seriler_gunluk(kodlar: list[str], bas: dt.date = BAS,
+                   son: dt.date = SON) -> dict[str, dict[str, str]]:
     """{tarih: {kod: değer}} — kodlar DEMET'lenerek tek pencerede çekilir."""
     tablo: dict[str, dict[str, str]] = {}
     for i in range(0, len(kodlar), DEMET):
         demet = kodlar[i:i + DEMET]
         u = (f"series={'-'.join(demet)}"
-             f"&startDate={BAS:%d-%m-%Y}&endDate={SON:%d-%m-%Y}&type=json")
+             f"&startDate={bas:%d-%m-%Y}&endDate={son:%d-%m-%Y}&type=json")
         items = cek(u).get("items", [])
         guvenli = [k.replace(".", "_") for k in demet]
         for satir in items:
@@ -162,19 +163,16 @@ def main() -> None:
     # Yazıdaki "bilanço oranı" nominal stok / VAZİYET toplam aktifi ile
     # hesaplanıyor; oran serisini tazelemek için payda gerekli. 12 aylık
     # büyüme de anlatıda olduğundan pencere bir yıl geriden başlar.
-    global BAS
-    eski_bas = BAS
-    BAS = dt.date(2024, 12, 1)
+    uzun_bas = dt.date(2024, 12, 1)
     toplamlar = ["TP.BL053", "TP.BL054", "TP.BL055", "TP.BL123"]
-    print(f"\n== vaziyet toplamları {BAS} → {SON} ==")
-    tablo_t = seriler_gunluk(toplamlar)
+    print(f"\n== vaziyet toplamları {uzun_bas} → {SON} ==")
+    tablo_t = seriler_gunluk(toplamlar, bas=uzun_bas)
     csv_yaz(VERI / "vaziyet_toplam.csv", tablo_t, toplamlar)
     def _sirala(t: str) -> dt.date:
         g, a, y = t.split("-")
         return dt.date(int(y), int(a), int(g))
     for t in sorted(tablo_t, key=_sirala)[-8:]:
         print(f"  {_sirala(t):%Y-%m-%d}  BL055={tablo_t[t].get('TP.BL055')}")
-    BAS = eski_bas
 
     # -- 3) Haftalık vaziyet: menkul kıymet kalemleri -------------------------
     vz = listeler.get("bie_mbblnch", [])
