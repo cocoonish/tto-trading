@@ -38,6 +38,12 @@ on:
     # Pazar "haftaya bakış" ölçümü: 14:03 UTC = 17:03 İstanbul.
     # Yazı katmanı 17:45'te başlar; bülten 18:00'da hazır olur.
     - cron: '3 14 * * 0'
+    # PAZAR YEDEĞİ. Hafta içi ölçümün iki şansı vardı (03:23 ve 03:51), pazarın
+    # TEK şansı — ve 30.08.2026'da o tek koşu hiç başlamadı; haftaya bakış
+    # ancak elle tetiklenerek çıktı. Yedeğin olmaması, haftalık bültenin
+    # tamamen yazı katmanının elle müdahalesine bağlı kalması demekti.
+    # 14:29, yazı katmanının 14:45'teki başlangıcından 16 dakika önce.
+    - cron: '29 14 * * 0'
   workflow_dispatch:
     inputs:
       yeniden_olc:

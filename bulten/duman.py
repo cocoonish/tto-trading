@@ -268,6 +268,92 @@ def main() -> int:
             _den.datetime = gercek
     sina("denetim: kapanmamış bar ENGEL", _denetim_yerlesmemis)
 
+    # HAFTALIK BÜLTENİN PENCERESİ HAFTADIR. 30.08.2026'ya kadar haftaya bakış
+    # bülteni günlük σ listesini basıyor ve sayfada "Günün olağandışı
+    # hareketleri" başlığı duruyordu. Kusur geri konarak sınanıyor: haftalık
+    # bültene günlük kipli bir liste verilirse denetim ENGEL üretmeli.
+    def _denetim_sigma_penceresi():
+        import denetim as _den
+        liste = [{"ad": "USD/CHF", "deger": 1.21, "birim": "%", "sigma": 1.4, "oynaklik": 0.85}]
+        yanlis = {"tarih": "2026-08-30", "haftalik": True,
+                  "piyasa": {"en_cok_hareket": {"sigma": liste, "sigma_kip": "gunluk"}}}
+        d = _den.Denetim(yanlis); d.olagandisilik_penceresi()
+        assert d.engel and "PENCERESİ YANLIŞ" in d.engel[0], \
+            "haftalık bültende günlük σ listesi engel üretmedi"
+
+        # Kip hiç bildirilmemişse (eski ölçüm kodu) sessiz geçilmemeli.
+        eksik = {"tarih": "2026-08-30", "haftalik": True,
+                 "piyasa": {"en_cok_hareket": {"sigma": liste}}}
+        d2 = _den.Denetim(eksik); d2.olagandisilik_penceresi()
+        assert d2.engel and "BİLDİRİLMEMİŞ" in d2.engel[0], "kip eksikken engel çıkmadı"
+
+        # Doğru kip boşuna engellenmemeli — ne haftalıkta ne günlükte.
+        for hafta, kip in ((True, "haftalik"), (False, "gunluk")):
+            ok = {"tarih": "2026-08-30", "haftalik": hafta,
+                  "piyasa": {"en_cok_hareket": {"sigma": liste, "sigma_kip": kip}}}
+            d3 = _den.Denetim(ok); d3.olagandisilik_penceresi()
+            assert not d3.engel, f"doğru kip ({kip}) boşuna engellendi"
+    sina("denetim: olağandışılık penceresi bültenin kipini izliyor", _denetim_sigma_penceresi)
+
+    # SAYFADAKİ TEMA METNİ DEFTERDEKİNDEN ESKİ OLABİLİR. Tema bölümü bültene
+    # ÖLÇÜM anında işleniyor, yazı katmanı defteri ondan SONRA güncelliyor;
+    # yani defteri düzeltmek sayfayı düzeltmiyor. İki kez yayına çıktı (28.08
+    # geri alınmış rakamlar, 30.08 "konuşma bugün" derken konuşma iki gün
+    # önce yapılmıştı). Ölçüt farkı ölçüyor; bu sınama farkı geri koyuyor.
+    def _denetim_tema_goruntusu():
+        import denetim as _den
+        defter = json.loads((BURASI / "temalar.json").read_text(encoding="utf-8"))
+        canli = [x for x in (defter.get("temalar") or [])
+                 if x.get("durum") in ("aktif", "izlemede")]
+        assert canli, "defterde canlı tema yok — sınama kurulamıyor"
+
+        taze = {"tarih": "2026-08-30", "temalar": {"temalar": defter["temalar"]}}
+        d = _den.Denetim(taze); d.tema()
+        assert not [e for e in d.engel if "TEMA GÖRÜNTÜSÜ ESKİ" in e], \
+            "defterle birebir aynı görüntü boşuna engellendi"
+
+        eski = json.loads(json.dumps(defter["temalar"]))
+        for x in eski:
+            if x.get("durum") in ("aktif", "izlemede"):
+                x["gelisme"] = "<p>Çürütücü ölçüt bugün sınanacak.</p>"
+                break
+        bayat = {"tarih": "2026-08-30", "temalar": {"temalar": eski}}
+        d2 = _den.Denetim(bayat); d2.tema()
+        assert [e for e in d2.engel if "TEMA GÖRÜNTÜSÜ ESKİ" in e], \
+            "sayfadaki eski tema metni engel üretmedi"
+    sina("denetim: eski tema görüntüsü ENGEL", _denetim_tema_goruntusu)
+
+    # HAFTALIK σ'NIN KENDİSİ. Pencereler ÖRTÜŞMEMELİ: örtüşen haftalık
+    # pencereler ardışık bağımlılık taşır, standart sapmayı küçültür ve her
+    # hareketi olağandışı gösterir. Ayrıca haftalık σ günlüğün ~√5 katı
+    # mertebesinde çıkmalı; çıkmıyorsa birim ya da pencere karışmıştır.
+    def _haftalik_sigma():
+        import piyasa as _piyasa
+        kapanis = [100.0 * (1.01 ** i) for i in range(120)]      # düzgün artan seri
+        d = _piyasa._haftalik_degisimler(kapanis, False, 20)
+        assert len(d) == 20, f"20 haftalık gözlem beklenirken {len(d)} geldi"
+        bek = (1.01 ** 5 - 1) * 100
+        assert all(abs(x - bek) < 1e-6 for x in d), "haftalık değişim beşer günlük değil"
+
+        import random
+        random.seed(7)
+        yol, v = [100.0], 100.0
+        for _ in range(400):
+            v *= 1 + random.gauss(0, 0.01)
+            yol.append(v)
+        sg = _piyasa._oynaklik(yol, False)
+        sh = _piyasa._oynaklik_hafta(yol, False)
+        assert sg and sh, "σ hesaplanamadı"
+        oran = sh / sg
+        assert 1.4 < oran < 3.4, (
+            f"haftalık σ günlüğün {oran:.2f} katı — √5≈2,24 mertebesinde olmalı; "
+            "pencere ya da birim karışmış olabilir")
+
+        # Tarihçe yetmiyorsa σ ÜRETİLMEZ; yarım veriyle sıralama kurulmaz.
+        assert _piyasa._oynaklik_hafta([100.0] * 20, False) is None, \
+            "kısa tarihçede haftalık σ üretildi"
+    sina("piyasa: haftalık σ örtüşmeyen pencerelerle kuruluyor", _haftalik_sigma)
+
     # Kilit gelişme ölçütü KAPANABİLİR olmalı. İngilizce başlığın kelimelerini
     # Türkçe metinde arayan eski hâli hiçbir zaman kapanmıyordu; kapanamayan
     # uyarı, yazarı bütün uyarıları görmezden gelmeye alıştırır.

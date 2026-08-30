@@ -37,6 +37,12 @@ on:
     - cron: '23 12 * * 1-5'   # 15:23 İstanbul — analitik bilanço hazır olur olmaz
     - cron: '17 13 * * 1-5'   # 16:17 İstanbul
     - cron: '37 15 * * 1-5'   # 18:37 İstanbul
+    # PAZAR. Bu satır 30.08.2026'ya kadar YOKTU ve haftalık zincirin ilk halkası
+    # bütün hafta sonu boyunca hiç koşmuyordu: o gün haftaya bakış ölçümü
+    # kurulduğunda son veri koşusunun üzerinden 38,7 saat geçmişti. Hafta içi
+    # zincirin altı şansı varken haftalık zincirin sıfır şansı olması, haftalık
+    # bülteni sistematik olarak bayat veriyle üretme riski demekti.
+    - cron: '19 13 * * 0'     # 16:19 İstanbul — pazar ölçümünden 44 dk önce
   workflow_dispatch:
     inputs:
       zorla:

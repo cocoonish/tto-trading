@@ -143,6 +143,17 @@ Pazar günkü "haftaya bakış" günlük akışın üstüne üç iş ekler:
    işlenir** ve sayısal beklentisi olan her madde için takvim kaydının
    `beklenti_sayi` alanının dolu olduğunu doğrula — sürpriz ölçümü ancak o
    alanla çalışır; serbest metinden sayı türetilmez.
+4. **Olağandışılık da haftalık okunur.** Bölümün adı haftaya bakışta
+   "Haftanın olağandışı hareketleri"dir ve sıralama haftalık hareketi
+   HAFTALIK oynaklığa böler. Denetim bunu ölçer ve karışmışsa ENGEL üretir.
+   Buradaki asıl bilgi çoğu zaman ham listeyle σ listesinin AYRIŞMASIDIR:
+   30.08.2026'da haftanın en büyük ham hareketi BIST Bankacılık'ın %5,98'iydi
+   ama o endeksin kendi haftalık oynaklığı %5,9 olduğu için yalnız 1,0σ —
+   yani manşet büyük, hareket sıradan. Büyük olanı olağandışı sanmak, haftanın
+   hikâyesini yanlış yere kurar.
+5. **Tema metinleri haftalık kesitle yazılır.** "Bugünkü kesitte", "bugün
+   sınanacak" gibi günlük dili haftaya bakışta kullanma; hafta içinde
+   gerçekleşmiş bir olayı "yarın olacak" diye bırakma.
 
 ## Haftalık teknik analiz (pazar, haftalık bültenden SONRA)
 
@@ -421,6 +432,26 @@ alanı doldurulur:
 Alan boş bırakılırsa sayfa isabet oranını **vermez** — eksik veriyle övünmek
 hesap vermenin tersidir. Ölçülemeyen kayıtlar (bir sorunun cevabının bulunması
 gibi) notsuz kapatılabilir; denetim bunu uyarı olarak sayar, engel olarak değil.
+
+**Defteri düzeltmek SAYFAYI düzeltmez.** Tema bölümü bültene ÖLÇÜM anında
+işlenir; yazı katmanı `temalar.json`'u ondan sonra günceller. Yani defteri
+düzeltip yazmak, sayfada eski metni bırakır. Bu iki kez yayına çıktı: 28.08.2026'da
+sayfa bir gün önce geri alınmış rakamları yeniden bastı, 30.08.2026'da haftaya
+bakış "çürütücü ölçüt bugün sınanacak — Warsh'ın Jackson Hole konuşması" dedi ve
+konuşma iki gün önce yapılmıştı. Doğru sıra: **önce defteri güncelle, sonra
+ölçümü `--yeniden-olc` ile yeniden kur, sonra yaz.** Denetim artık sayfadaki
+görüntü ile defteri karşılaştırıyor ve ayrışıyorlarsa ENGEL üretiyor.
+
+**Bir ölçünün BOŞ görünmesi, ölçülen şeyin OLMAMASI demek değildir.** Bu,
+30.08.2026'nın dersi ve pahalıya mal oldu: bülten üç hafta boyunca "gevşemenin
+resmî ölçüsü yok, ağırlıklı ortalama fonlama maliyeti donuk" yazdı. TCMB o seriyi
+her gün yayımlıyordu ve 24 Ağustos'ta 40,00'dan 37,00'ye indirmişti; değeri
+eleyen kendi geçerlilik kapımızdı (fonlama tabanı 5 mlr TL eşiğinin altında).
+Panoda bir satır "güncel değil" diyorsa **sebebini oku** — satır artık sebebi
+kendi üstünde taşıyor. Sebebi okumadan "ölçü yok" yazmak, okura yanlış bilgi
+vermektir. Fazla likidite rejiminde TCMB parasının marjinal fiyatını fonlama
+değil sterilizasyon belirler; faiz setindeki "Marjinal TCMB faizi" satırı o
+rejimde hangi ölçünün geçerli olduğunu söyler.
 
 **Sayıları uydurma.** Bültendeki her sayı ölçülen katmandan gelir. Ölçülmemiş
 bir sayıya ihtiyaç varsa kaynağına in; hatırlayarak yazma.

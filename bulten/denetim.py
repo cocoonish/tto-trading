@@ -975,6 +975,7 @@ class Denetim:
             self.uyari.append("Tema defteri bugün güncellenmemiş: " + ", ".join(bayat))
         else:
             self._ok(f"tema defteri güncel ({len(temalar)} tema)")
+        self._tema_goruntusu_taze(temalar)
         # Her canlı temanın BU koşudaki gelişmesi yazılmalı: tema bölümü bültenin en
         # çok okunan yerlerinden biri ve boş bir "gelişme" alanı okura hiçbir şey vermez.
         yazisiz = [x["ad"] for x in canli if len(_duz(x.get("gelisme", "")).split()) < 15]
@@ -992,6 +993,77 @@ class Denetim:
                               "kullanıp tezinin güçlenip güçlenmediğini söyle.")
         else:
             self._ok(f"temaya atıf: {', '.join(anilan[:3])}")
+
+    def _tema_goruntusu_taze(self, temalar: list) -> None:
+        """Sayfada duran tema metni DEFTERDEKİYLE aynı mı — ENGEL.
+
+        Tema bölümü bültene ÖLÇÜM anında işlenir; yazı katmanı defteri ondan
+        sonra günceller. Yani defteri düzeltmek sayfayı düzeltmez: ölçüm yeniden
+        kurulana kadar okur eski metni görür. Bu iki kez ısırdı ve ikisi de
+        yayına çıktı — 28.08.2026'da sayfa bir gün önce GERİ ALINMIŞ rakamları
+        yeniden bastı; 30.08.2026'da haftaya bakış bülteni "çürütücü ölçüt bugün
+        sınanacak — Warsh'ın Jackson Hole konuşması" diyordu, oysa konuşma iki
+        gün önce yapılmıştı. İkisinde de defter doğruydu, sayfa eskiydi ve
+        aradaki farkı kimse ölçmüyordu.
+
+        Ölçüt basit: bültene işlenmiş görüntü ile defterin şu anki hâli
+        karşılaştırılır. Ayrışıyorlarsa yapılacak şey bellidir — ölçümü yeniden
+        kur, sonra yaz.
+        """
+        try:
+            defter = json.loads((BURASI / "temalar.json").read_text(encoding="utf-8"))
+        except Exception:
+            self.uyari.append("Tema defteri okunamadı — sayfadaki görüntünün "
+                              "tazeliği doğrulanamıyor")
+            return
+        canli_defter = {x.get("ad"): x for x in (defter.get("temalar") or [])}
+        gomulu = {x.get("ad"): x for x in temalar}
+        ayrisan = []
+        for ad, d in canli_defter.items():
+            g = gomulu.get(ad)
+            if g is None:
+                ayrisan.append(f"{ad} (sayfada hiç yok)")
+                continue
+            for alan in ("gelisme", "son_gozlem", "durum", "izlenecek_gosterge"):
+                if str(d.get(alan, "")) != str(g.get(alan, "")):
+                    ayrisan.append(f"{ad} ({alan})")
+                    break
+        if ayrisan:
+            self.engel.append(
+                "TEMA GÖRÜNTÜSÜ ESKİ — sayfaya işlenmiş tema metni defterdekinden "
+                "farklı: " + ", ".join(ayrisan[:4]) + ". Defteri düzeltmek sayfayı "
+                "düzeltmez; ölçümü yeniden kur, sonra yaz.")
+        else:
+            self._ok("tema görüntüsü defterle aynı")
+
+    def olagandisilik_penceresi(self):
+        """Olağandışılık sıralaması bültenin kıyas penceresini izliyor mu — ENGEL.
+
+        Haftaya bakış bülteninin kıyas penceresi HAFTADIR. 30.08.2026'ya kadar
+        haftalık bülten de günlük σ listesini basıyordu ve sayfada "Günün
+        olağandışı hareketleri" başlığı duruyordu: haftalık bir bültende günün
+        hareketini sıralamak, okuru haftanın hikâyesinden uzaklaştırır. Dahası
+        haftalık hareketi günlük σ'ya bölmek ölçek hatasıdır — haftalık değişim
+        doğası gereği günlüğün ~√5 katıdır ve sıradan bir hafta bile 2σ'yı aşar.
+        """
+        p = self.b.get("piyasa") or {}
+        h = p.get("en_cok_hareket") or {}
+        if not (h.get("sigma") or []):
+            return
+        kip = h.get("sigma_kip")
+        gerekli = "haftalik" if self.b.get("haftalik") else "gunluk"
+        if kip is None:
+            self.engel.append(
+                "OLAĞANDIŞILIK PENCERESİ BİLDİRİLMEMİŞ — ölçüm katmanı σ listesini "
+                "hangi pencerede kurduğunu söylemiyor; sayfa başlığı ve sütun adları "
+                "buna bakıyor. Ölçümü güncel kodla yeniden kur.")
+        elif kip != gerekli:
+            self.engel.append(
+                f"OLAĞANDIŞILIK PENCERESİ YANLIŞ — bülten '{gerekli}' kipinde ama σ "
+                f"listesi '{kip}' penceresinde kurulmuş. Haftaya bakışta haftalık "
+                "hareket haftalık σ'ya bölünür; karıştırmak ölçek hatasıdır.")
+        else:
+            self._ok(f"olağandışılık penceresi bültenin kipini izliyor ({kip})")
 
     def izleme(self):
         """Süreklilik: bültenin verdiği sözler takip ediliyor mu.
@@ -1057,6 +1129,7 @@ class Denetim:
         self.yazi(); self.veri(); self.atif(); self.sayi(); self.nabiz(); self.tekrar()
         self.tema(); self.izleme(); self.dil(); self.tazelik(); self.karanlik()
         self.yerlesmemis(); self.revizyon(); self.devir(); self.haber_tonu()
+        self.olagandisilik_penceresi()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")
         print(f"  BÜLTEN DENETİMİ · {self.b.get('tr_tarih', self.b.get('tarih'))} "
