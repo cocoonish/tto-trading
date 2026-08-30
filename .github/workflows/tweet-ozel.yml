@@ -1,0 +1,84 @@
+# Tek seferlik özel tweet — elle tetiklenir, görselli gönderim.
+#
+# Düzenli bülten tweetlerinin (tweet.yml) dışındaki gönderiler: tema/veri
+# tweetleri, grafikli duyurular. Metin depoda bir dosyada durur (gözden
+# geçirilebilir), görseller istenirse bir grafik betiğiyle koşu içinde
+# üretilir. Kimlik ve jeton kasası tweet.yml ile ortak; dönen refresh token
+# burada da commit'lenir.
+
+name: Özel tweet
+
+on:
+  workflow_dispatch:
+    inputs:
+      metin:
+        description: 'Tweet metni dosyası (depo yolu)'
+        type: string
+        default: 'tweet/ozel/kredi-2026-08-30.txt'
+      grafik_betigi:
+        description: 'Önce koşulacak grafik betiği (boş = grafik üretme)'
+        type: string
+        default: 'tweet/grafik_kredi.py'
+      resimler:
+        description: 'Eklenecek PNGler (boşlukla ayrık depo yolları)'
+        type: string
+        default: 'tweet/ozel/cikti/kredi-buyume.png tweet/ozel/cikti/kredi-segment.png'
+      gonder:
+        description: 'Gerçekten gönder (kapalıysa kuru koşu)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tweet
+  cancel-in-progress: false
+
+jobs:
+  ozel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TW_CLIENT_ID: ${{ secrets.TW_CLIENT_ID }}
+      TW_CLIENT_SECRET: ${{ secrets.TW_CLIENT_SECRET }}
+      TW_KILIT: ${{ secrets.TW_KILIT }}
+      TW_REFRESH_TOKEN: ${{ secrets.TW_REFRESH_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Bağımlılıklar
+        run: pip install --quiet requests cryptography matplotlib pandas
+
+      - name: Duman sınaması
+        run: python tweet/duman.py
+
+      - name: Grafikler
+        if: inputs.grafik_betigi != ''
+        run: python ${{ inputs.grafik_betigi }}
+
+      - name: Gönder
+        run: |
+          RESIMLER=""
+          for r in ${{ inputs.resimler }}; do RESIMLER="$RESIMLER --resim $r"; done
+          python tweet/ozel.py --metin "${{ inputs.metin }}" $RESIMLER \
+            ${{ inputs.gonder == true && '--gonder' || '' }}
+
+      # Jeton kasası: gönderim koşusu refresh token'ı döndürür; kaybolmasın.
+      - name: Jetonu commit'le
+        if: always()
+        run: |
+          git config --global user.name  "tto-tweet"
+          git config --global user.email "bot@users.noreply.github.com"
+          git add tweet/oauth2.enc 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "jeton değişmedi"
+          else
+            git commit -m "tweet: $(date -u +'%Y-%m-%d') jeton (özel gönderim)"
+            git pull --rebase --autostash
+            git push
+          fi
