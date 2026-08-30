@@ -27,8 +27,8 @@ SITE = "https://cocoonish.github.io"
 # değil). Sınırlar teknik değil editoryal: bölüm başına kırpma + toplam tavan.
 SINIR = 275                 # eski zincir kipinin kalıntısı; _kirp varsayılanı
 TEK_TAVAN = 3800            # tek tweetin toplam üst sınırı (okunurluk)
-OZET_SINIR = 900            # ne_oldu bölümü
-BEKLENTI_SINIR = 600        # ne_bekleniyor bölümü
+YORUM_SINIR = 1700          # anlatı gövdesi (bültenin 'okuması'ndan)
+BEKLENTI_SINIR = 750        # ne_bekleniyor bölümü
 GIRIS_SINIR = 700           # teknik giriş bölümü
 
 AYLAR = ["", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz",
@@ -46,9 +46,10 @@ def _kirp(metin: str, sinir: int = SINIR) -> str:
     m = metin.strip()
     if len(m) <= sinir:
         return m
-    # son tam cümle
+    # son tam cümle (noktalı virgül CÜMLE SAYILMAZ — "yayımlanıyor;" gibi
+    # yarım bırakılmış görünen kapanışlar 30.08 taslağında görüldü)
     kes = -1
-    for isaret in (". ", "! ", "? ", "; "):
+    for isaret in (". ", "! ", "? "):
         i = m.rfind(isaret, 0, sinir)
         kes = max(kes, i + 1 if i > 0 else -1)
     if kes > sinir * 0.5:
@@ -93,16 +94,18 @@ def bulten_zinciri(b: dict) -> list[str]:
     """Günlük/haftalık bültenden TEK uzun tweet (hesap Premium).
 
     Biçim kararları (30.08 geri bildirimi): link yok, emoji yok; hareketler
-    ve pano tek satırda '·' ile — dikey liste yerine sıkı, kurumsal görünüm."""
+    ve pano tek satırda '·' ile. GÖVDE ANLATIDIR: sayı dökümü olan özet değil,
+    bültenin 'okuması' (yorum) kullanılır — hesap, piyasanın NEDEN böyle
+    hareket ettiğinin tercümanı; ne oldu / neden oldu / ne bekleniyor."""
     haftalik = bool(b.get("haftalik"))
     baslik = "Haftaya Bakış" if haftalik else "Sabah Bülteni"
     tarih = _tr_tarih(b["tarih"])
 
     oz = b.get("ozet") or {}
-    ne_oldu = _duz(oz.get("ne_oldu") or "")
-    if not ne_oldu:
-        raise SystemExit("bülten özeti boş — tweet kurulamaz")
-    bolumler = [f"{baslik} — {tarih}", _kirp(ne_oldu, OZET_SINIR)]
+    anlati = _duz(b.get("yorum") or "") or _duz(oz.get("ne_oldu") or "")
+    if not anlati:
+        raise SystemExit("bültenin okuması da özeti de boş — tweet kurulamaz")
+    bolumler = [f"{baslik} — {tarih}", _kirp(anlati, YORUM_SINIR)]
 
     em = (b.get("piyasa") or {}).get("en_cok_hareket") or {}
     kip = em.get("sigma_kip") or ("haftalik" if haftalik else "gunluk")

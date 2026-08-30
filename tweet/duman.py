@@ -32,6 +32,7 @@ def sina(ad: str, fn) -> None:
 
 SAHTE_BULTEN = {
     "tarih": "2026-08-30", "haftalik": True, "gundem_kaynagi": "yazili",
+    "yorum": "<p>Piyasa şu <strong>sebeple</strong> böyle hareket etti. " * 40 + "</p>",
     "ozet": {"ne_oldu": "<p>Uzun bir <strong>özet</strong> cümlesi. " * 30 + "</p>",
              "ne_bekleniyor": "Haftaya dört yayım var. " * 20},
     "piyasa": {"en_cok_hareket": {
@@ -73,6 +74,12 @@ def _zincirler():
         assert "📰" not in t and "📐" not in t and "•" not in t, f"{ad}: süsleme sızdı"
     assert "Haftanın öne çıkanları" in zb[0] and "Pano:" in zb[0], "bölümler eksik"
     assert "Haftaya" in zb[0], "başlık yok"
+    # Gövde ANLATI: yorum varsa o kullanılır (tercüman ilkesi), özet değil.
+    assert "sebeple böyle hareket" in zb[0], "gövde yorumdan gelmiyor"
+    assert "Uzun bir özet" not in zb[0], "yorum varken özet basıldı"
+    yorumsuz = {k: v for k, v in SAHTE_BULTEN.items() if k != "yorum"}
+    zb2 = uret.bulten_zinciri(yorumsuz)
+    assert "Uzun bir özet" in zb2[0], "yorum yokken özete düşülmedi"
     assert "sıkışma" in zt[0], "yapı bayrağı girmedi"
     assert "çift dip" in zt[0], "çift dip girmedi"
     assert "yatırım tavsiyesi değildir" in zt[0], "sorumluluk notu yok"
