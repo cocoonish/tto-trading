@@ -48,11 +48,12 @@ def _yukle(erisim: str, yol: Path) -> str:
         print(f"· v2 medya ucu 403 (media.write yok) — v1.1 ucuna düşülüyor")
         yanit = dene(MEDYA_UC_ESKI)
     if yanit.status_code == 403:
-        raise SystemExit(
-            f"medya yükleme iki uçta da 403: {yanit.text[:200]}\n"
-            "Jetonun kapsamı görsel yüklemeye yetmiyor ve konsolda media.write "
-            "seçeneği yok — tweet görselsiz gönderilebilir (--resim'siz çağır) "
-            "ya da X'in kapsam listesine media.write gelene dek beklenir.")
+        # Jeton kapsamı görsele yetmiyor ve konsol media.write sunmuyor
+        # (30.08 ölçüldü). Görsel EKLENTİDİR: yüklenemiyorsa tweet metniyle
+        # devam eder — koşuyu düşürmek metni de rehin alırdı.
+        print("::warning::görsel yüklenemedi (iki uçta 403, media.write "
+              "kapsamı yok) — tweet görselsiz gönderiliyor")
+        return None
     if yanit.status_code not in (200, 201):
         raise SystemExit(f"medya yükleme düştü (HTTP {yanit.status_code}): "
                          f"{yanit.text[:300]}")
@@ -95,7 +96,9 @@ def main() -> int:
     erisim = gonder._erisim_al(gonder.JETON_DOSYA)
     govde: dict = {"text": metin}
     if resimler:
-        govde["media"] = {"media_ids": [_yukle(erisim, r) for r in resimler]}
+        idler = [k for k in (_yukle(erisim, r) for r in resimler) if k]
+        if idler:
+            govde["media"] = {"media_ids": idler}
     yanit = requests.post(gonder.UC, json=govde, timeout=30,
                           headers={"Authorization": f"Bearer {erisim}"})
     if yanit.status_code not in (200, 201):
