@@ -49,8 +49,8 @@
    "soz": "Seri 7 Ağustos'tan beri %40,00'da duruyor. 25.08 bülteni gecelik faizin %36,93'e indiğini gerçekleşen repo faizi üzerinden yazdı ve 'resmî teyit perşembe gelecek, gelmezse dünkü fiyatlama dayanaksız kalır' dedi. Serinin %40'tan kayması gevşemenin resmî ölçüsü.",
    "ne_bakilacak": "27 Ağustos 14:30 haftalık istatistikler: fonlama maliyeti serisi tazelendi mi, %40,00'dan kaydı mı; TLREF 21 Ağustos'tan ileri geldi mi.",
    "vade": "2026-08-27",
-   "sonuc": "Beklenen teyit GELMEDİ. 27 Ağustos 14:30 haftalık istatistikleri yayımlandı, kredi ve rezerv serileri 21 Ağustos haftasına ilerledi, ama resmî ağırlıklı ortalama fonlama maliyeti serisi 7 Ağustos'taki %40,00 değerinde kaldı ve kaynak onu güncel saymıyor. 25.08 bülteni 'resmî teyit perşembe gelecek' demişti; bu çağrı tutmadı. Gevşemeyi ölçmeye gerçekleşen gecelik referans faizden devam ediyoruz (%36,85, politikanın 0,15 puan altında). Yeni kayıt sıradaki yayım için açıldı.",
-   "isabet": "tutmadi"
+   "sonuc": "DÜZELTİLDİ — 28.08'de 'tutmadı' diye notlamıştık, yanlıştı ve hata bizimdi. Söz, 'serinin %40,00'dan kayması gevşemenin resmî ölçüsüdür, teyit perşembe gelecek' diyordu. Ölçü kaydı 30.08'de yeniden okundu: TCMB'nin yayımladığı ham seri 24 Ağustos'ta — perşembeden üç gün ÖNCE — 40,00'dan 37,00'ye inmişti. Bunu göremememizin sebebi TCMB değil, kendi geçerlilik kapımızdı: fonlama tabanı 5 milyar TL eşiğinin altına düştüğü için (27.08'de 4,0 milyar TL, sterilizasyon 1.251 milyar TL) temiz seri boş bırakılıyor ve pano son geçerli günü, yani 7 Ağustos'u göstermeye devam ediyordu. Yön tuttu, büyüklüğü tutmadı: 4 milyar liralık bir tabanın ağırlıklı ortalaması bilgi taşımıyor ve zaten birebir politika faizine eşit çıkıyor. Bu rejimde marjinal fiyatı sterilizasyon belirliyor; ona bakan ölçümüz 24 Ağustos'tan beri gevşemeyi adım adım gösteriyordu (%37,29 → %37,17 → %37,10 → %37,05).",
+   "isabet": "kismen"
   },
   {
    "konu": "Temmuz dış ticaret — enerji faturasının ilk ölçümü",
@@ -200,12 +200,12 @@
    "sonuc": ""
   },
   {
-   "konu": "Resmî fonlama maliyeti serisi 3 Eylül'de tazelenecek mi",
+   "konu": "Fonlama tabanı 5 milyar TL eşiğini ne zaman geçecek",
    "acilis": "2026-08-28",
    "durum": "acik",
-   "soz": "Resmî ağırlıklı ortalama fonlama maliyeti serisi 7 Ağustos'tan beri %40,00'da donuk ve 27 Ağustos yayımı onu tazelemedi — dört haftadır gevşemenin resmî ölçüsü yok. Gerçekleşen gecelik referans faiz %36,85 ile politika faizinin 0,15 puan altında, yani fiilî gevşeme piyasada ölçülüyor ama resmî seride görünmüyor. TCMB fonlama normalleşmesi tezinin en önemli doğrulayıcı ölçütü budur.",
-   "ne_bakilacak": "3 Eylül 14:30 haftalık para ve banka istatistikleri: seri %40,00'dan kaydı mı, hangi güne ilerledi. Kaymazsa 10 Eylül Kurul kararına kadar gevşemenin tek ölçüsü gerçekleşen gecelik faiz olarak kalır.",
-   "vade": "2026-09-03",
+   "soz": "Bu kayıt bir YAYIM sorusu sanılarak açılmıştı; 30.08'de yanlış öncül üzerine kurulduğu görüldü ve yeniden çerçevelendi. TCMB ağırlıklı ortalama fonlama maliyetini her gün yayımlıyor. Panoda 7 Ağustos'tan kalma %40,00'ın durmasının sebebi, fonlama bacağının 5 milyar TL eşiğinin altında kalması ve ölçünün bilgi taşımadığı günlerin elenmesi. İhale tutarları tırmanıyor: 24 Ağustos'ta 1, 25'inde 2, 26'sında 3, 27'sinde 4 milyar TL. Eşik aşıldığı gün temiz seri kendiliğinden geri gelir — bir teyit geldiği için değil.",
+   "ne_bakilacak": "Fonlama bacağının 5 milyar TL'yi aşıp aşmadığı; aştığı gün ağırlıklı ortalama fonlama maliyetinin politika faizinden ayrışıp ayrışmadığı. O güne kadar gevşemenin ölçüsü sterilizasyon maliyeti.",
+   "vade": "2026-09-10",
    "sonuc": "",
    "isabet": ""
   },
