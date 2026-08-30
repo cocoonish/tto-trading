@@ -26,6 +26,9 @@ yalnız neyin eksik olduğunu ve hangi iş akışının tetikleneceğini söyler
     1  ölçüm eksik ya da dünden kalma → İŞ AKIŞLARINI TETİKLE, sonra yeniden bak
     2  bugünün bülteni zaten yazılmış → yapacak bir şey yok
     3  bugün hafta sonu (cumartesi) → bülten üretilmez
+    4  YALNIZ PAZAR: haftalık bülten tamam ama TEKNİK ANALİZ bekliyor —
+       ölçüm yoksa teknik.yml tetiklenir, varsa yorum yazılır (YAZIM.md,
+       "Haftalık teknik analiz"). Pazar işi teknik yayımlanmadan bitmez.
 """
 from __future__ import annotations
 
@@ -37,6 +40,7 @@ from pathlib import Path
 BURASI = Path(__file__).resolve().parent
 KOK = BURASI.parent
 BULTENLER = KOK / "site" / "src" / "data" / "bulten"
+TEKNIKLER = KOK / "site" / "src" / "data" / "teknik"
 
 # Yazı katmanının elle tetiklemesi gereken iş akışları, ZİNCİR SIRASINDA.
 # Adlar iş akışı dosyalarının adıdır; tetikleme GitHub arayüzünden ya da
@@ -84,6 +88,15 @@ def durum(bugun: dt.date | None = None) -> tuple[int, list[str]]:
             piyasa = len((b.get("piyasa") or {}).get("gruplar") or [])
             _yaz("·", f"piyasa fotoğrafı {piyasa} grup · "
                       f"gündem {len(b.get('gundem') or {})} bölüm")
+            # PAZAR: bülten bitti diye iş bitmedi — teknik analiz de pazar işi.
+            if bugun.weekday() == 6:
+                t_kod, t_yapilacak = _teknik_durum(bugun)
+                if t_kod:
+                    print()
+                    print("  HAFTALIK BÜLTEN TAMAM — TEKNİK ANALİZ BEKLİYOR:")
+                    for i, adim in enumerate(t_yapilacak, 1):
+                        print(f"    {i}. {adim}")
+                    return 4, t_yapilacak
             print()
             print("  Yapacak bir şey yok.")
             return 2, []
@@ -137,6 +150,34 @@ def durum(bugun: dt.date | None = None) -> tuple[int, list[str]]:
     print("  çalışma — yazı katmanının oturumunda piyasa ve haber uçları")
     print("  kapalıdır ve boş ölçüyle bir bülten üretilir (bkz. YAZIM.md).")
     return 1, yapilacak
+
+
+def _teknik_durum(bugun: dt.date) -> tuple[int, list[str]]:
+    """Pazar teknik analiz halkası: (0 tamam, 1 iş var), yapılacaklar.
+
+    Rutin metnine güvenilmez (bkz. CLAUDE.md, sigorta araca konur): pazar
+    rutini teknik bülteni unutamasın diye durum BURADA, rutinin her pazar
+    zaten koşturduğu araçta raporlanır. Nöbetçinin pazar koşusu aynı soruyu
+    yayının son kapısında bağımsız sorar.
+    """
+    dosya = TEKNIKLER / f"{bugun.isoformat()}.json"
+    if not dosya.exists():
+        _yaz("✗", f"TEKNİK ÖLÇÜM YOK — {dosya.name} bulunamadı.")
+        return 1, ["teknik.yml (Haftalık teknik analiz) tetiklenmeli, commit'i "
+                   "beklenip `git pull` ile alınmalı",
+                   "sonra yorum yazılmalı: YAZIM.md → 'Haftalık teknik analiz'"]
+    try:
+        t = json.loads(dosya.read_text(encoding="utf-8"))
+    except Exception:                                          # noqa: BLE001
+        _yaz("✗", "TEKNİK ÖLÇÜM OKUNAMADI — dosya bozuk.")
+        return 1, ["teknik.yml yeniden tetiklenmeli (yeniden_olc=true)"]
+    if t.get("yazili"):
+        _yaz("✓", f"Teknik analiz YAZILMIŞ (damga {t.get('olcum_zamani') or '—'}).")
+        return 0, []
+    _yaz("✗", f"Teknik ölçüm hazır (damga {t.get('olcum_zamani') or '—'}) "
+              "ama YORUM YAZILMAMIŞ.")
+    return 1, ["yorum yazılmalı: YAZIM.md → 'Haftalık teknik analiz' "
+               "(teknik/yaz.py, --damga ile)"]
 
 
 def main() -> int:

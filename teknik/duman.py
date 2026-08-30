@@ -15,9 +15,13 @@ import sys
 import tempfile
 from pathlib import Path
 
+# SIRA ÖNEMLİ: bulten/ da bir yaz.py taşıyor; teknik yolun ÖNDE olması
+# `import yaz`'ın teknik/yaz.py'yi bulmasını sağlar (zincir yalnız bültende).
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "bulten"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import olc  # noqa: E402
 import yaz  # noqa: E402
+import zincir  # noqa: E402
 
 SAYAC = {"gecti": 0, "dustu": 0}
 
@@ -233,6 +237,42 @@ def _yaz_kapisi():
             yaz.VERI = eski
 
 
+def _zincir_pazar():
+    """Pazar günü bülten yazılmışken teknik eksikse zincir 4 döndürmeli —
+    rutin 'yapacak bir şey yok' (2) görüp teknik analizi atlayamamalı."""
+    pazar = dt.date(2026, 9, 6)
+    with tempfile.TemporaryDirectory() as td:
+        eski_b, eski_t = zincir.BULTENLER, zincir.TEKNIKLER
+        try:
+            zincir.BULTENLER = Path(td) / "bulten"
+            zincir.TEKNIKLER = Path(td) / "teknik"
+            zincir.BULTENLER.mkdir()
+            zincir.TEKNIKLER.mkdir()
+            (zincir.BULTENLER / f"{pazar}.json").write_text(json.dumps(
+                {"gundem_kaynagi": "yazili", "olusturma": "x",
+                 "piyasa": {"gruplar": [1]}, "gundem": {"a": "b"}}),
+                encoding="utf-8")
+            kod, _ = zincir.durum(pazar)
+            assert kod == 4, f"teknik yokken pazar zinciri {kod} döndü, 4 değil"
+            (zincir.TEKNIKLER / f"{pazar}.json").write_text(
+                json.dumps({"yazili": False, "olcum_zamani": "x"}), encoding="utf-8")
+            kod, _ = zincir.durum(pazar)
+            assert kod == 4, f"yorum yazılmamışken pazar zinciri {kod} döndü, 4 değil"
+            (zincir.TEKNIKLER / f"{pazar}.json").write_text(
+                json.dumps({"yazili": True, "olcum_zamani": "x"}), encoding="utf-8")
+            kod, _ = zincir.durum(pazar)
+            assert kod == 2, f"her şey tamamken pazar zinciri {kod} döndü, 2 değil"
+            # hafta içi teknik sorgusu karışmamalı
+            (zincir.BULTENLER / "2026-09-07.json").write_text(json.dumps(
+                {"gundem_kaynagi": "yazili", "olusturma": "x",
+                 "piyasa": {"gruplar": [1]}, "gundem": {"a": "b"}}),
+                encoding="utf-8")
+            kod, _ = zincir.durum(dt.date(2026, 9, 7))
+            assert kod == 2, f"pazartesi zinciri {kod} döndü, 2 değil"
+        finally:
+            zincir.BULTENLER, zincir.TEKNIKLER = eski_b, eski_t
+
+
 def main() -> int:
     print("teknik duman sınaması:")
     sina("göstergeler (SMA/RSI/MACD/ATR/Bollinger)", _gostergeler)
@@ -243,6 +283,7 @@ def main() -> int:
     sina("üç dilimli ölçüm + üç grafik (sentetik seri)", _olcum_ve_grafik)
     sina("getiri kotasyon ölçeği sigortası", _getiri_olcek)
     sina("yaz.py kapısı: yabancı alan/slug/sayı/damga", _yaz_kapisi)
+    sina("zincir: pazar teknik halkası (kod 4)", _zincir_pazar)
     print(f"\n  {SAYAC['gecti']} geçti · {SAYAC['dustu']} DÜŞTÜ")
     return 1 if SAYAC["dustu"] else 0
 
