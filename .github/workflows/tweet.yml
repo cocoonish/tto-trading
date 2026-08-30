@@ -1,0 +1,80 @@
+# Tweet zinciri — yazılmış bültenleri X'e gönderir.
+#
+# İçerik yalnız YAYIMLANMIŞ katmandan gelir (yazı kapısından geçmiş bülten,
+# yorum kapısından geçmiş teknik analiz); zincir metnini tweet/uret.py kurar,
+# gönderimi tweet/gonder.py yapar. Sigortalar araçta: defter aynı içeriği iki
+# kez göndermez, bayat koruması dünkü bülteni bugünmüş gibi atmaz, TW_*
+# anahtarları yoksa koşu KURU geçer (zincir loga basılır, hiçbir şey
+# gönderilmez, iş yeşil biter) — yani bu iş akışı anahtarlar eklenmeden de
+# zararsızca çalışır.
+#
+# Tetikler: yazı katmanının push'u (bülten/teknik JSON'ları değişince) +
+# yedek cron'lar (zamanlanmış tetikleyicinin sicili gereği) + elle.
+
+name: Tweet zinciri
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/src/data/bulten/**'
+      - 'site/src/data/teknik/**'
+  schedule:
+    - cron: '35 5 * * 1-5'    # 08:35 İstanbul — sabah bülteninin yazısından sonra
+    - cron: '25 15 * * 0'     # 18:25 İstanbul — pazar haftalık + teknik sonrası
+    - cron: '25 18 * * 0'     # 21:25 İstanbul — pazar yedeği
+  workflow_dispatch:
+    inputs:
+      kuru:
+        description: 'Kuru koşu — gönderme, yalnız zinciri bas'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: tweet
+  cancel-in-progress: false
+
+jobs:
+  gonder:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TW_API_KEY: ${{ secrets.TW_API_KEY }}
+      TW_API_SECRET: ${{ secrets.TW_API_SECRET }}
+      TW_ACCESS_TOKEN: ${{ secrets.TW_ACCESS_TOKEN }}
+      TW_ACCESS_SECRET: ${{ secrets.TW_ACCESS_SECRET }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Bağımlılıklar
+        run: pip install --quiet requests requests-oauthlib
+
+      - name: Duman sınaması
+        run: python tweet/duman.py
+
+      - name: Zinciri gönder
+        run: python tweet/gonder.py ${{ github.event.inputs.kuru == 'true' && '--kuru' || '' }}
+
+      # Defter gönderimden SONRA commit'lenir: koşu gönderim ile commit
+      # arasında ölürse bir sonraki koşu aynı içeriği yeniden atabilir —
+      # X zaten birebir aynı metni reddettiği için zincirin kökü ikilenmez.
+      - name: Defteri commit'le
+        if: always()
+        run: |
+          git config --global user.name  "tto-tweet"
+          git config --global user.email "bot@users.noreply.github.com"
+          git add tweet/defter.json || true
+          if git diff --cached --quiet; then
+            echo "defter değişmedi"
+          else
+            git commit -m "tweet: $(date -u +'%Y-%m-%d') defter (otomatik)"
+            git pull --rebase --autostash
+            git push
+          fi

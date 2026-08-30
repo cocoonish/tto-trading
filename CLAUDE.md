@@ -20,6 +20,8 @@ TTO Trading/
 │   └── indices/                 # FX haber-duyarlılık endeksi (üç kip: hafif/günlük/tam)
 ├── teknik/                      # Haftalık teknik analiz bülteni (olc.py ölçer,
 │                                #   yaz.py yorum kapısı — her sayı ölçümden; pazar koşusu)
+├── tweet/                       # Bültenlerin X zincirleri (uret.py kurar, gonder.py
+│                                #   defterli/bayat-korumalı gönderir; TW_* secret'sız KURU)
 └── Research/                    # Ham araştırma dosyaları (Excel vb.)
 ```
 
