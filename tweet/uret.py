@@ -23,7 +23,13 @@ BULTENLER = KOK / "site" / "src" / "data" / "bulten"
 TEKNIKLER = KOK / "site" / "src" / "data" / "teknik"
 
 SITE = "https://cocoonish.github.io"
-SINIR = 275                 # tek tweet üst sınırı (URL'siz gövde için)
+# Hesap X Premium: 280 sınırı yok, içerik TEK tweet olarak atılır (zincir
+# değil). Sınırlar teknik değil editoryal: bölüm başına kırpma + toplam tavan.
+SINIR = 275                 # eski zincir kipinin kalıntısı; _kirp varsayılanı
+TEK_TAVAN = 3800            # tek tweetin toplam üst sınırı (okunurluk)
+OZET_SINIR = 900            # ne_oldu bölümü
+BEKLENTI_SINIR = 600        # ne_bekleniyor bölümü
+GIRIS_SINIR = 700           # teknik giriş bölümü
 
 AYLAR = ["", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz",
          "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
@@ -84,17 +90,16 @@ def _tr_tarih(iso: str) -> str:
 # ── bülten zinciri ───────────────────────────────────────────────────────────
 
 def bulten_zinciri(b: dict) -> list[str]:
-    """Günlük/haftalık bültenden 4 tweetlik zincir."""
+    """Günlük/haftalık bültenden TEK uzun tweet (hesap Premium)."""
     haftalik = bool(b.get("haftalik"))
     baslik = "Haftaya Bakış" if haftalik else "Sabah Bülteni"
     tarih = _tr_tarih(b["tarih"])
-    tweets: list[str] = []
 
     oz = b.get("ozet") or {}
     ne_oldu = _duz(oz.get("ne_oldu") or "")
     if not ne_oldu:
-        raise SystemExit("bülten özeti boş — tweet zinciri kurulamaz")
-    tweets.append(_kirp(f"📰 {baslik} · {tarih}\n\n{ne_oldu}", SINIR))
+        raise SystemExit("bülten özeti boş — tweet kurulamaz")
+    bolumler = [f"📰 {baslik} · {tarih}", _kirp(ne_oldu, OZET_SINIR)]
 
     em = (b.get("piyasa") or {}).get("en_cok_hareket") or {}
     kip = em.get("sigma_kip") or ("haftalik" if haftalik else "gunluk")
@@ -103,7 +108,7 @@ def bulten_zinciri(b: dict) -> list[str]:
         etiket = "Haftanın hareketleri" if kip == "haftalik" else "Günün hareketleri"
         satirlar = [f"• {h['ad']}: {_degisim_metni(h['deger'], h.get('birim', ''))}"
                     for h in liste[:5] if h.get("deger") is not None]
-        tweets.append(_kirp(f"{etiket}:\n" + "\n".join(satirlar), SINIR))
+        bolumler.append(f"{etiket}:\n" + "\n".join(satirlar))
 
     gost = b.get("gostergeler") or []
     satirlar = []
@@ -112,13 +117,13 @@ def bulten_zinciri(b: dict) -> list[str]:
             fark = f" ({g['fark_metin']})" if g.get("fark_metin") else ""
             satirlar.append(f"• {g['ad']}: {g['metin']}{fark}")
     if satirlar:
-        tweets.append(_kirp("Pano:\n" + "\n".join(satirlar), SINIR))
+        bolumler.append("Pano:\n" + "\n".join(satirlar))
 
     ne_bek = _duz(oz.get("ne_bekleniyor") or "")
-    kuyruk = f"\n\nBültenin tamamı grafikler ve kaynaklarla:\n{SITE}/bulten/"
-    govde = _kirp(ne_bek, SINIR - len(kuyruk)) if ne_bek else "Bültenin tamamı:"
-    tweets.append(govde + kuyruk)
-    return tweets
+    if ne_bek:
+        bolumler.append("Beklenen: " + _kirp(ne_bek, BEKLENTI_SINIR))
+    bolumler.append(f"Bültenin tamamı grafikler ve kaynaklarla:\n{SITE}/bulten/")
+    return [_kirp("\n\n".join(bolumler), TEK_TAVAN)]
 
 
 # ── teknik zinciri ───────────────────────────────────────────────────────────
@@ -144,41 +149,26 @@ def _teknik_satir(e: dict) -> str | None:
     return parca
 
 
-def _grupla(satirlar: list[str], baslik: str, sinir: int = SINIR) -> list[str]:
-    """Satırları tweetlere böler — HİÇBİR SATIR ATILMAZ, ortadan kırpılmaz.
-    İlk tweet başlığı taşır; sığmayan satır sonraki tweete taşar."""
-    tweets: list[str] = []
-    govde = baslik
-    for s in satirlar:
-        aday = (govde + "\n" + s) if govde else s
-        if len(aday) > sinir and govde and govde != baslik:
-            tweets.append(govde)
-            govde = s
-        else:
-            govde = aday
-    if govde and govde != baslik:
-        tweets.append(govde)
-    return tweets
 
 
 def teknik_zinciri(t: dict) -> list[str]:
-    """Haftalık teknik analizden zincir: kapak + enstrüman satırları + link."""
+    """Haftalık teknik analizden TEK uzun tweet (hesap Premium)."""
     tarih = _tr_tarih(t["tarih"])
     giris = _duz(t.get("giris") or "")
     if not giris:
-        raise SystemExit("teknik giriş boş — tweet zinciri kurulamaz")
-    tweets = [_kirp(f"📐 Haftalık Teknik Analiz · {tarih}\n\n{giris}", SINIR)]
+        raise SystemExit("teknik giriş boş — tweet kurulamaz")
+    bolumler = [f"📐 Haftalık Teknik Analiz · {tarih}", _kirp(giris, GIRIS_SINIR)]
 
     satirlar = [s for s in (_teknik_satir(e) for e in t.get("enstrumanlar") or [])
                 if s]
     if satirlar:
-        n = len(satirlar)
-        tweets += _grupla(satirlar, f"{n} enstrüman · 1S/4S/G üç dilimde:")
+        bolumler.append(f"{len(satirlar)} enstrüman · 1S/4S/G üç dilimde:\n"
+                        + "\n".join(satirlar))
 
-    tweets.append("Her seviyenin dokunuş sayısı, formasyonların ölçülü "
-                  "noktaları ve 17 grafik sayfada — yorum yapay zekâ, her "
-                  f"sayı ölçümden:\n{SITE}/teknik/")
-    return tweets
+    bolumler.append("Her seviyenin dokunuş sayısı, formasyonların ölçülü "
+                    "noktaları ve grafikler sayfada — yorum yapay zekâ, her "
+                    f"sayı ölçümden:\n{SITE}/teknik/")
+    return [_kirp("\n\n".join(bolumler), TEK_TAVAN)]
 
 
 # ── kaynak seçimi ────────────────────────────────────────────────────────────

@@ -58,18 +58,22 @@ SAHTE_TEKNIK = {
 
 
 def _zincirler():
+    """Premium kipi: içerik başına TEK uzun tweet; bölümler, link ve yapı
+    bayrakları içinde, HTML dışarıda, tavan aşılmıyor."""
     zb = uret.bulten_zinciri(SAHTE_BULTEN)
     zt = uret.teknik_zinciri(SAHTE_TEKNIK)
     for zincir, ad in ((zb, "bülten"), (zt, "teknik")):
-        assert 3 <= len(zincir) <= 6, f"{ad}: {len(zincir)} tweet"
-        for t in zincir:
-            assert len(t) <= 290, f"{ad}: {len(t)} karakter — sınır aşıldı"
-            assert "<" not in t and ">" not in t.replace("→", ""), \
-                f"{ad}: HTML sızdı: {t[:80]}"
-    assert "cocoonish.github.io/bulten" in zb[-1], "bülten linki yok"
-    assert "cocoonish.github.io/teknik" in zt[-1], "teknik linki yok"
-    assert "sıkışma" in zt[1], "yapı bayrağı satıra girmedi"
-    assert "çift dip 4.608" in zt[1] or "çift dip" in zt[1], "çift dip girmedi"
+        assert len(zincir) == 1, f"{ad}: {len(zincir)} tweet — tek olmalı"
+        t = zincir[0]
+        assert 200 < len(t) <= uret.TEK_TAVAN, f"{ad}: {len(t)} karakter"
+        assert "<" not in t and ">" not in t.replace("→", ""), \
+            f"{ad}: HTML sızdı: {t[:80]}"
+    assert "cocoonish.github.io/bulten" in zb[0], "bülten linki yok"
+    assert "Haftanın hareketleri" in zb[0] and "Pano:" in zb[0], "bölümler eksik"
+    assert "Beklenen:" in zb[0], "beklenti bölümü yok"
+    assert "cocoonish.github.io/teknik" in zt[0], "teknik linki yok"
+    assert "sıkışma" in zt[0], "yapı bayrağı girmedi"
+    assert "çift dip" in zt[0], "çift dip girmedi"
 
 
 def _kirpma():
