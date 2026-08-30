@@ -138,6 +138,23 @@ def _gonder_zincir(zincir: list[str], erisim: str) -> list[str]:
                 "X: 'credits depleted' — geliştirici hesabında API kredisi yok. "
                 "Konsolun faturalama/credits bölümünden bakiye yüklenmeli; "
                 "kredi gelince koşu aynı içeriği baştan dener (defter yazılmadı).")
+        if yanit.status_code == 403:
+            # TANI: jeton hiç mi geçmiyor, yoksa yalnız YAZMA mı yasak?
+            kim = requests.get("https://api.x.com/2/users/me", timeout=30,
+                               headers={"Authorization": f"Bearer {erisim}"})
+            if kim.status_code == 200:
+                kullanici = (kim.json().get("data") or {}).get("username", "?")
+                raise SystemExit(
+                    f"X 403: jeton GEÇERLİ (@{kullanici} olarak okuyabiliyor) ama "
+                    "tweet YAZAMIYOR — refresh token 'tweet.write' kapsamı olmadan "
+                    "üretilmiş. Konsolda token üretirken kapsamların tweet.write "
+                    "(+ tweet.read, users.read, offline.access) içerdiğinden emin "
+                    "olup YENİDEN üret; TW_REFRESH_TOKEN'ı güncelle ve depodan "
+                    "tweet/oauth2.enc'i sil (eski zincir geçersizleşir).")
+            raise SystemExit(
+                f"X 403 (yazma) + /users/me {kim.status_code}: {kim.text[:200]} — "
+                "jeton bu uçlara hiç yetkili değil; uygulamanın projeye bağlı ve "
+                "izinlerinin Read and Write olduğunu konsoldan doğrula.")
         if yanit.status_code not in (200, 201):
             raise SystemExit(
                 f"tweet {i + 1}/{len(zincir)} gönderilemedi "
