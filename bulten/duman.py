@@ -354,6 +354,38 @@ def main() -> int:
             "kısa tarihçede haftalık σ üretildi"
     sina("piyasa: haftalık σ örtüşmeyen pencerelerle kuruluyor", _haftalik_sigma)
 
+    # SAYFA ETİKETLERİ DE PENCEREYİ İZLEMELİ. Ölçüm katmanını haftalığa çevirmek
+    # yetmiyor: σ bloğu üç ayrı yerde basılıyor (bülten gövdesi, çubuk grafik,
+    # ana sayfa) ve üçünde de başlık/oynaklık etiketi SABİT "günlük" yazıyordu.
+    # 30.08.2026'da ölçü haftalığa geçtiğinde ana sayfa haftalık oynaklıkları
+    # "20g oynaklık" diye etiketledi — sayı doğru, etiket yalan. Bu sınama
+    # etiketin türetildiğini yapısal olarak dayatır: dosyalar kipe bakmıyorsa
+    # düşer. (Astro'yu Python'dan koşturamayız; ölçebileceğimiz şey bağın
+    # kurulu olduğu.)
+    def _sayfa_kipi():
+        kok = BURASI.parent / "site" / "src"
+        beklenen = {
+            "components/SigmaSerit.astro": ("kip", "pencereAd"),
+            "components/BultenGovde.astro": ("sigma_kip", "sigmaBaslik"),
+            "pages/index.astro": ("sigmaKip", "sigmaBaslik", "oynaklikEtiketi"),
+            "lib/anaSayfa.ts": ("sigmaKip", "sigma_kip"),
+        }
+        for yol, anahtarlar in beklenen.items():
+            f = kok / yol
+            assert f.exists(), f"{yol} bulunamadı — σ etiketi sınanamıyor"
+            metin = f.read_text(encoding="utf-8")
+            for a in anahtarlar:
+                assert a in metin, (
+                    f"{yol} içinde '{a}' yok — σ başlığı/etiketi bültenin kipinden "
+                    "türetilmiyor olabilir, sabit 'günlük' yazan sürüme dönülmüş")
+        govde = (kok / "components/BultenGovde.astro").read_text(encoding="utf-8")
+        assert "kip={b.piyasa.en_cok_hareket.sigma_kip}" in govde, \
+            "SigmaSerit'e kip geçirilmiyor — grafik başlığı sabit 'günlük' kalır"
+        ana = (kok / "pages/index.astro").read_text(encoding="utf-8")
+        assert "20g oynaklık {" not in ana and ">20g oynaklık<" not in ana, \
+            "ana sayfada oynaklık etiketi yeniden sabitlenmiş"
+    sina("sayfa: σ başlıkları bültenin kipinden türüyor", _sayfa_kipi)
+
     # Kilit gelişme ölçütü KAPANABİLİR olmalı. İngilizce başlığın kelimelerini
     # Türkçe metinde arayan eski hâli hiçbir zaman kapanmıyordu; kapanamayan
     # uyarı, yazarı bütün uyarıları görmezden gelmeye alıştırır.
