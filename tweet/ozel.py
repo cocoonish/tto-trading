@@ -24,28 +24,40 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import gonder  # noqa: E402 — _erisim_al, JETON_DOSYA, UC ortak
 
+# v2 medya ucu 'media.write' kapsamı ister; X'in yeni konsolunun kapsam
+# listesinde media.write SEÇENEĞİ YOK (30.08'de görüldü). Eski v1.1 ucu ise
+# OAuth 2.0 kullanıcı jetonunu tweet.write kapsamıyla kabul ediyor — önce v2
+# denenir, 403'te v1.1'e düşülür.
 MEDYA_UC = "https://api.x.com/2/media/upload"
+MEDYA_UC_ESKI = "https://upload.twitter.com/1.1/media/upload.json"
 
 
 def _yukle(erisim: str, yol: Path) -> str:
     import requests
-    with yol.open("rb") as f:
-        yanit = requests.post(
-            MEDYA_UC, timeout=60,
-            headers={"Authorization": f"Bearer {erisim}"},
-            files={"media": (yol.name, f, "image/png")},
-            data={"media_category": "tweet_image"})
+
+    def dene(uc: str):
+        with yol.open("rb") as f:
+            return requests.post(
+                uc, timeout=60,
+                headers={"Authorization": f"Bearer {erisim}"},
+                files={"media": (yol.name, f, "image/png")},
+                data={"media_category": "tweet_image"})
+
+    yanit = dene(MEDYA_UC)
+    if yanit.status_code == 403:
+        print(f"· v2 medya ucu 403 (media.write yok) — v1.1 ucuna düşülüyor")
+        yanit = dene(MEDYA_UC_ESKI)
     if yanit.status_code == 403:
         raise SystemExit(
-            f"medya yükleme 403: {yanit.text[:200]}\n"
-            "Refresh token büyük olasılıkla 'media.write' kapsamı olmadan "
-            "üretildi. Konsoldan kapsamlara media.write ekleyip token'ı "
-            "yeniden üret, TW_REFRESH_TOKEN'ı güncelle, tweet/oauth2.enc'i sil.")
+            f"medya yükleme iki uçta da 403: {yanit.text[:200]}\n"
+            "Jetonun kapsamı görsel yüklemeye yetmiyor ve konsolda media.write "
+            "seçeneği yok — tweet görselsiz gönderilebilir (--resim'siz çağır) "
+            "ya da X'in kapsam listesine media.write gelene dek beklenir.")
     if yanit.status_code not in (200, 201):
         raise SystemExit(f"medya yükleme düştü (HTTP {yanit.status_code}): "
                          f"{yanit.text[:300]}")
     veri = yanit.json().get("data") or yanit.json()
-    kimlik = veri.get("id") or veri.get("media_id_string")
+    kimlik = veri.get("id") or veri.get("media_id_string") or veri.get("media_id")
     if not kimlik:
         raise SystemExit(f"medya yanıtında id yok: {yanit.text[:200]}")
     print(f"· görsel yüklendi: {yol.name} → {kimlik}")
