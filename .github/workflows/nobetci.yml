@@ -78,3 +78,31 @@ jobs:
               echo "::error::Nöbetçi zincirin durumunu okuyamadı (çıkış kodu $kod)."
               exit 1 ;;
           esac
+
+      # Pazar günleri ikinci soru: HAFTALIK TEKNİK ANALİZ yazıldı mı?
+      # Teknik bülteni de rutin yazar (bkz. bulten/YAZIM.md) ve rutin metnine
+      # güvenilmez — sigorta araca konur. Ölçüm var ama yorum yoksa ya da
+      # ölçüm hiç koşmadıysa alarm; sayfa yayın kapısı gereği eski sayıyı
+      # göstermeye devam eder ve bunu başka hiçbir katman fark edemez.
+      - name: Teknik bülten çıktı mı (yalnız pazar)
+        run: |
+          if [ "$(date -u +%u)" != "7" ]; then
+            echo "hafta içi — teknik bülten pazar işi, atlandı"
+            exit 0
+          fi
+          python - <<'PY'
+          import json, sys, datetime as dt
+          from pathlib import Path
+          bugun = dt.datetime.now(dt.timezone.utc).date().isoformat()
+          yol = Path(f"site/src/data/teknik/{bugun}.json")
+          if not yol.exists():
+              print(f"::error::TEKNİK ÖLÇÜM YOK — {yol} üretilmemiş; "
+                    "'Haftalık teknik analiz' iş akışı koşmamış.")
+              sys.exit(1)
+          b = json.loads(yol.read_text(encoding="utf-8"))
+          if not b.get("yazili"):
+              print("::error::TEKNİK BÜLTEN YAZILMAMIŞ — ölçüm hazır ama yorum "
+                    "katmanı koşmamış ya da push edememiş. Sayfa eski sayıyı gösteriyor.")
+              sys.exit(1)
+          print("✓ Teknik bülten yerinde.")
+          PY

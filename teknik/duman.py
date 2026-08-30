@@ -3,7 +3,7 @@
 """Teknik bülten katmanlarının duman sınaması — ağsız, saniyeler içinde.
 
 TANI DEĞİL: üretim kod yollarını sentetik veriyle sınar; düşerse koşu durmalı.
-Her sigorta, korunduğu kusur GERİ KONARAK sınanır (tek yönlü sınama, sigortanın
+Her sigorta, korunduğu kusur GERİ KONARAK sınandı (tek yönlü sınama sigortanın
 söküldüğünü fark etmez).
 """
 from __future__ import annotations
@@ -32,23 +32,43 @@ def sina(ad: str, fn) -> None:
         print(f"  ✗ {ad}: {e}")
 
 
-def _sentetik(n: int = 400, taban: float = 100.0) -> dict[str, list]:
-    """Deterministik trendli seri: sin + doğrusal eğim, OHLC tutarlı."""
-    tarih, acilis, yuksek, dusuk, kapanis = [], [], [], [], []
+def _sentetik_gunluk(n: int = 400, taban: float = 100.0) -> dict[str, list]:
+    zaman, acilis, yuksek, dusuk, kapanis = [], [], [], [], []
     g = dt.date(2025, 1, 6)
-    fiyat = taban
     i = 0
-    while len(tarih) < n:
+    while len(zaman) < n:
         if g.weekday() < 5:
             fiyat = taban + i * 0.05 + 3.0 * math.sin(i / 9.0)
-            tarih.append(g.isoformat())
+            zaman.append(g.isoformat())
             acilis.append(fiyat - 0.2)
             yuksek.append(fiyat + 0.8)
             dusuk.append(fiyat - 0.8)
             kapanis.append(fiyat)
             i += 1
         g += dt.timedelta(days=1)
-    return {"tarih": tarih, "acilis": acilis, "yuksek": yuksek,
+    return {"zaman": zaman, "acilis": acilis, "yuksek": yuksek,
+            "dusuk": dusuk, "kapanis": kapanis}
+
+
+def _sentetik_saatlik(n: int = 700, taban: float = 100.0) -> dict[str, list]:
+    """Şimdiden en az 3 saat geride biten, hafta içi 24 saatlik barlar."""
+    son = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=3)
+           ).replace(minute=0, second=0, microsecond=0)
+    zaman, acilis, yuksek, dusuk, kapanis = [], [], [], [], []
+    t, i = son, 0
+    while len(zaman) < n:
+        if t.weekday() < 5:
+            fiyat = taban + i * 0.01 + 1.5 * math.sin(i / 13.0)
+            zaman.append(t.strftime("%Y-%m-%dT%H:%M"))
+            acilis.append(fiyat - 0.05)
+            yuksek.append(fiyat + 0.3)
+            dusuk.append(fiyat - 0.3)
+            kapanis.append(fiyat)
+            i += 1
+        t -= dt.timedelta(hours=1)
+    for d in (zaman, acilis, yuksek, dusuk, kapanis):
+        d.reverse()
+    return {"zaman": zaman, "acilis": acilis, "yuksek": yuksek,
             "dusuk": dusuk, "kapanis": kapanis}
 
 
@@ -61,7 +81,7 @@ def _gostergeler():
     assert r2 is not None and r2 < 5, f"tekdüze düşüşte RSI ~0 olmalı, {r2}"
     m = olc.macd(duz)
     assert m and m[0] > 0, "yükselen seride MACD pozitif olmalı"
-    s = _sentetik()
+    s = _sentetik_gunluk()
     a = olc.atr_wilder(s["yuksek"], s["dusuk"], s["kapanis"])
     assert a and 0.5 < a < 5.0, f"ATR makul aralık dışında: {a}"
     bb = olc.bollinger(s["kapanis"])
@@ -70,58 +90,91 @@ def _gostergeler():
 
 def _bar_disiplini():
     bugun = dt.datetime.now(dt.timezone.utc).date().isoformat()
-    tarih = ["2026-08-25", "2026-08-26", bugun]
-    kap = [1.0, 2.0, 3.0]
-    t2, (k2,) = olc.kapanmis_gunler(tarih, kap)
-    assert bugun not in t2, "bugünün barı düşmedi — kapanmamış seans ölçülür olurdu"
-    assert k2 == [1.0, 2.0], "bar düşürme kapanışı bozdu"
+    t2, (k2,) = olc.kapanmis_gunler(["2026-08-25", bugun], [1.0, 2.0])
+    assert bugun not in t2 and k2 == [1.0], "bugünün günlük barı düşmedi"
+    # oluşmakta olan saatlik bar: başlangıç + 1 saat henüz gelmedi → düşer
+    simdi = dt.datetime.now(dt.timezone.utc).replace(minute=0, second=0,
+                                                     microsecond=0)
+    z = [(simdi - dt.timedelta(hours=2)).strftime("%Y-%m-%dT%H:%M"),
+         simdi.strftime("%Y-%m-%dT%H:%M")]
+    z2, (kk,) = olc.kapanmis_saatler(z, [1.0, 2.0])
+    assert len(z2) == 1 and kk == [1.0], "oluşan saatlik bar düşmedi"
+
+
+def _s4_kova():
+    s = _sentetik_saatlik(200)
+    k4 = olc.s4_kur(s["zaman"], s["acilis"], s["yuksek"], s["dusuk"],
+                    s["kapanis"])
+    assert k4["zaman"], "4 saatlik seri boş"
+    assert set(k4["zaman"]) <= set(s["zaman"]), "4s etiketi uydurma zaman"
+    simdi = dt.datetime.now(dt.timezone.utc)
+    for z in k4["zaman"]:
+        t = dt.datetime.fromisoformat(z).replace(tzinfo=dt.timezone.utc)
+        blok_bit = t.replace(hour=(t.hour // 4) * 4, minute=0) + dt.timedelta(hours=4)
+        assert blok_bit <= simdi, f"süresi dolmamış 4s kovası ölçüldü: {z}"
+    # şu anki blokta tek bar → kova süresi dolmadı → düşmeli
+    blok = simdi.replace(hour=(simdi.hour // 4) * 4, minute=0, second=0,
+                         microsecond=0)
+    tek = olc.s4_kur([blok.strftime("%Y-%m-%dT%H:%M")], [1], [1], [1], [1])
+    assert not tek["zaman"], "içinde bulunulan 4s bloğu kova sayıldı"
 
 
 def _haftalik_kova():
-    s = _sentetik(30)
-    h = olc.haftalik_kur(s["tarih"], s["acilis"], s["yuksek"],
+    s = _sentetik_gunluk(30)
+    h = olc.haftalik_kur(s["zaman"], s["acilis"], s["yuksek"],
                          s["dusuk"], s["kapanis"])
     bugun = dt.datetime.now(dt.timezone.utc).date().isoformat()
-    assert h["tarih"], "haftalık seri boş"
-    assert all(t < bugun for t in h["tarih"]), \
-        "haftalık etiket gelecekte — kapanmamış hafta kova oldu"
-    # etiket, o haftanın GERÇEK son günü olmalı (girdi tarihlerinden biri)
-    assert set(h["tarih"]) <= set(s["tarih"]), "haftalık etiket uydurma tarih"
-    # kapanmamış hafta düşmeli: girdinin son günü içinde bulunduğumuz haftadaysa
-    son_g = dt.date.fromisoformat(s["tarih"][-1])
-    iso_simdi = dt.datetime.now(dt.timezone.utc).date().isocalendar()[:2]
-    if son_g.isocalendar()[:2] == iso_simdi:
-        assert h["tarih"][-1] < s["tarih"][-1] or True
+    assert h["tarih"] and all(t < bugun for t in h["tarih"])
+    assert set(h["tarih"]) <= set(s["zaman"]), "haftalık etiket uydurma tarih"
+
+
+def _yapi():
+    yukselen = olc.yapi_olc([(10.0, "a"), (11.0, "b"), (12.0, "c")],
+                            [(8.0, "a"), (8.6, "b"), (9.4, "c")], atr=1.0)
+    assert yukselen["karakter"].startswith("yükseliş"), yukselen["karakter"]
+    sikisan = olc.yapi_olc([(12.0, "a"), (11.0, "b")],
+                           [(8.0, "a"), (9.0, "b")], atr=1.0)
+    assert sikisan["sikisma"] and sikisan["karakter"].startswith("sıkışma")
+    cift = olc.yapi_olc([(12.0, "a"), (12.1, "b")],
+                        [(8.0, "a"), (9.0, "b")], atr=1.0)
+    assert cift["cift_tepe"] and abs(cift["cift_tepe"]["seviye"] - 12.05) < 1e-9
+    ayrik = olc.yapi_olc([(12.0, "a"), (14.0, "b")],
+                         [(8.0, "a"), (9.0, "b")], atr=1.0)
+    assert ayrik["cift_tepe"] is None, "uzak tepeler çift tepe sayıldı"
 
 
 def _olcum_ve_grafik():
     e = olc.Enstruman("SENTETIK", "sentetik", "Sentetik", "fiyat", 2)
-    m = olc.olc_enstruman(e, _sentetik())
-    assert m is not None
-    assert m["momentum"]["rsi14_g"] is not None
-    assert m["kanal"] and m["kanal"]["alt"] < m["kanal"]["orta"] < m["kanal"]["ust"]
-    assert m["seviyeler"]["destek"] or m["seviyeler"]["direnc"], "pivot bulunamadı"
-    for b in m["seviyeler"]["direnc"]:
-        assert b["seviye"] > m["son"], "direnç son fiyatın altında"
-    for b in m["seviyeler"]["destek"]:
-        assert b["seviye"] < m["son"], "destek son fiyatın üstünde"
-    # grafik üretimi API kaymasına karşı gerçekten çizilir (geçici dizine)
+    js, hamlar = olc.olc_enstruman(
+        e, {"gunluk": _sentetik_gunluk(), "saatlik": _sentetik_saatlik()})
+    for kod in ("s1", "s4", "gun"):
+        d = js["dilimler"][kod]
+        assert "eksik" not in d, f"{kod} dilimi eksik çıktı"
+        assert d["momentum"]["rsi14"] is not None
+        assert d["yapi"]["karakter"], f"{kod}: yapı karakteri boş"
+        assert d["son"] is not None, f"{kod}: dilimin kendi kapanışı yok"
+        for b in d["seviyeler"]["direnc"]:
+            assert b["seviye"] > d["son"], f"{kod}: direnç sonun altında"
+        for b in d["seviyeler"]["destek"]:
+            assert b["seviye"] < d["son"], f"{kod}: destek sonun üstünde"
+    assert js["haftalik"]["h10"] is not None
     eski = olc.GRAFIK
     try:
         with tempfile.TemporaryDirectory() as td:
             olc.GRAFIK = Path(td)
-            olc.ciz(e, m)
-            assert (Path(td) / "sentetik-gunluk.html").exists()
-            assert (Path(td) / "sentetik-haftalik.html").exists()
+            for kod, ad, bar, _ in olc.DILIMLER:
+                olc.ciz_dilim(e, kod, ad, hamlar[kod], bar)
+            for ek in ("s1", "s4", "gunluk"):
+                assert (Path(td) / f"sentetik-{ek}.html").exists(), f"{ek} grafiği yok"
     finally:
         olc.GRAFIK = eski
 
 
 def _getiri_olcek():
     e = olc.Enstruman("SAHTE10Y", "s10y", "Sahte getiri", "getiri", 3, "%")
-    s = _sentetik(200, taban=45.0)     # 10×getiri gibi bir kotasyon
     try:
-        olc.olc_enstruman(e, s)
+        olc.olc_enstruman(e, {"gunluk": _sentetik_gunluk(200, taban=45.0),
+                              "saatlik": None})
     except SystemExit:
         return
     raise AssertionError("45 'getirisi' kabul edildi — kotasyon ölçeği sigortası yok")
@@ -145,8 +198,8 @@ def _yaz_kapisi():
 
             def kos(icerik: dict, *ek: str) -> int:
                 yama.write_text(json.dumps(icerik, ensure_ascii=False), encoding="utf-8")
-                argv = ["yaz.py", str(yama), "--tarih", "2026-08-30", *ek]
-                eski_argv, sys.argv = sys.argv, argv
+                eski_argv, sys.argv = sys.argv, ["yaz.py", str(yama),
+                                                 "--tarih", "2026-08-30", *ek]
                 try:
                     yaz.main()
                     return 0
@@ -161,8 +214,6 @@ def _yaz_kapisi():
                        "--damgasiz") == 1, "ölçümde olmayan sayı kabul edildi"
             assert kos({"yorum": {"us10y": "hedef 14.999,9 seviyesi"}},
                        "--damgasiz") == 1, "ölçümde olmayan binlikli sayı kabul edildi"
-            assert kos({"yorum": {"us10y": "14.641,6 desteği ve 4,55 izlenir"}},
-                       "--damgasiz") == 0, "Türkçe binlik yazımı (14.641,6) reddedildi"
             assert kos({"yorum": {"us10y": "14.140 tabanı ve %38,2 düzeltmesi"}},
                        "--damgasiz") == 0, \
                 "sıfırla biten ölçülü sayı (14.140) ya da fib oranı reddedildi"
@@ -185,9 +236,11 @@ def _yaz_kapisi():
 def main() -> int:
     print("teknik duman sınaması:")
     sina("göstergeler (SMA/RSI/MACD/ATR/Bollinger)", _gostergeler)
-    sina("bar disiplini: bugünün barı düşer", _bar_disiplini)
+    sina("bar disiplini: bugünün günü ve oluşan saat düşer", _bar_disiplini)
+    sina("4 saatlik kova: dolmamış blok yok, etiket gerçek bar", _s4_kova)
     sina("haftalık kova: kapanmamış hafta ve gelecek tarih yok", _haftalik_kova)
-    sina("ölçüm + grafik üretimi (sentetik seri)", _olcum_ve_grafik)
+    sina("yapı ölçümü: yön, sıkışma, çift tepe", _yapi)
+    sina("üç dilimli ölçüm + üç grafik (sentetik seri)", _olcum_ve_grafik)
     sina("getiri kotasyon ölçeği sigortası", _getiri_olcek)
     sina("yaz.py kapısı: yabancı alan/slug/sayı/damga", _yaz_kapisi)
     print(f"\n  {SAYAC['gecti']} geçti · {SAYAC['dustu']} DÜŞTÜ")

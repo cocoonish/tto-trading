@@ -159,37 +159,47 @@ Pazar günkü "haftaya bakış" günlük akışın üstüne üç iş ekler:
 
 Pazar rutini haftalık bülteni bitirince ikinci bir yayını yazar: **haftalık
 teknik analiz bülteni** (sitede `/teknik/`). İş bölümü bültenle aynı: ölçüm
-deterministik (`teknik/olc.py`, pazar 15:33 TR'de koşar → altı enstrüman için
-göstergeler, pivot destek/direnç bölgeleri, regresyon kanalı, Fibonacci ve
-mum grafikleri), yorum senin.
+deterministik (`teknik/olc.py`, pazar 15:33 TR'de koşar), yorum senin. Ölçüm
+ÜÇ zaman diliminde gelir — **1 saatlik, 4 saatlik, günlük** — her dilimde
+göstergeler, pivot destek/direnç bölgeleri, regresyon kanalı ve **yapı ölçümü**
+(`dilimler.<kod>.yapi`): son salınım tepeleri/dipleri ve zamanları, tepe/dip
+yönleri, `karakter` (yükseliş/düşüş yapısı, sıkışma, genişleme), `cift_tepe` /
+`cift_dip` bayrakları.
 
 Akış:
 
 1. `site/src/data/teknik/<bugün>.json` var mı bak. Yoksa ölçüm koşusu düşmüş
-   demektir: `Haftalık teknik analiz` iş akışını tetikle
-   (`gh workflow run teknik.yml` karşılığı MCP çağrısı), bitmesini bekle,
-   depoyu tazele. Ölçümsüz teknik yorum YAZILMAZ.
-2. JSON'u ve altı enstrümanın grafiklerini oku. `olcum_zamani` değerini not et —
-   yazarken `--damga` olarak vereceksin.
+   demektir: `Haftalık teknik analiz` iş akışını tetikle, bitmesini bekle,
+   depoyu tazele. Ölçümsüz teknik yorum YAZILMAZ. (Nöbetçinin pazar koşusu
+   teknik bülteni de denetler: yazılmamışsa alarm çalar.)
+2. JSON'u ve 18 grafiği (enstrüman başına 1S/4S/G) oku. `olcum_zamani`
+   değerini not et — yazarken `--damga` olarak vereceksin.
 3. Her enstrüman için yorum yaz (`us2y`, `us10y`, `dxy`, `eurusd`, `usdchf`,
-   `xu100`; 150–250 kelime, HTML paragraflar) + bir `giris` (haftanın teknik
-   çerçevesi, makro bültenle bağ). Her yorumun iskeleti:
-   - **Trend**: fiyat/getiri SMA50–SMA200'e ve regresyon kanalına göre nerede;
-     haftalık çerçeve (h10/h40) günlükle aynı yönde mi.
-   - **Momentum**: RSI günlük+haftalık, MACD histogramın yönü; uyumsuzluk
-     varsa (fiyat yeni uç, RSI değil) SÖYLE ama ölçüsüyle.
-   - **Seviyeler**: ölçümün verdiği pivot bölgelerinden ve Fibonacci'den
-     İŞE YARAYANLARI seç, neden önemli olduklarını söyle (dokunuş sayısı,
-     son dokunuş tarihi ölçümde var).
-   - **İki yönlü senaryo + geçersizlik**: "X üstünde kalırsa … / Y altına
-     sarkarsa …" — her senaryonun geçersizlik seviyesi ölçümden.
+   `xu100`; 250–400 kelime, HTML) + bir `giris`. Yorumun İSKELETİ SABİT —
+   dört `<h4>` başlığı:
+   - **`<h4>Günlük</h4>`** — ana çerçeve: trend (SMA50/200, kanal, 52h konum,
+     haftalık h10/h40 bağlamı), momentum (RSI, MACD), günlük yapı.
+   - **`<h4>4 saatlik</h4>`** — ara çerçeve: günlük trendin İÇİNDEKİ hareket;
+     yapı karakteri, dilimin kendi seviyeleri.
+   - **`<h4>1 saatlik</h4>`** — kısa vade: son günlerin akışı, dilimin kendi
+     destek/dirençleri; buradaki sinyalin ömrünün kısa olduğu unutulmaz.
+   - **`<h4>Ortak görüş</h4>`** — dilimler AYNI yönü mü gösteriyor?
+     Hizalanma varsa söyle ("üç dilim de yükseliş yapısında"); çelişki varsa
+     hangisine neden öncelik verdiğini söyle (kural: büyük dilim çerçeveyi,
+     küçük dilim zamanlamayı verir). İki yönlü senaryo + geçersizlik seviyesi
+     BURADA kurulur ve hangi dilimin seviyesine dayandığı yazılır.
+   - **Formasyon adlandırma kuralı**: bir formasyonu ("çift tepe", "sıkışma
+     üçgeni", "yükselen kanal"…) ancak yapı ölçümü destekliyorsa adlandır —
+     `cift_tepe`/`cift_dip` bayrağı, `sikisma` bayrağı ya da tepe/dip
+     dizisinin kendisi. Adlandırdığın formasyonun dayandığı noktaları
+     (seviyeler, zamanlar — hepsi ölçümde) metne yaz; okur formasyonu
+     grafikte o noktalarla bulabilmeli. Ölçümün desteklemediği formasyon
+     anılmaz — uydurma yok.
 4. Yaz: `python3 teknik/yaz.py yama.json --damga <olcum_zamani>`. Kapı,
-   yorumda geçen ve ölçümde karşılığı olmayan her sayıyı REDDEDER — seviye
-   uydurma yok; bir seviye gerekliyse ve ölçümde yoksa önce `teknik/olc.py`'ye
-   ölçtürülür. `yazili` ancak giriş + altı yorumun tamamı dolunca `true` olur
-   ve sayfa ancak o zaman yayımlanır.
-5. Commit + push; yayını `Haftalık teknik analiz` iş akışının push'u değil,
-   senin push'un tetikler (yayin.yml push'a bağlı).
+   yorumda geçen ve ölçümde karşılığı olmayan her sayıyı REDDEDER; bir seviye
+   gerekliyse ve ölçümde yoksa önce `teknik/olc.py`'ye ölçtürülür. `yazili`
+   ancak giriş + altı yorumun tamamı dolunca `true` olur.
+5. Commit + push; yayını senin push'un tetikler (yayin.yml push'a bağlı).
 
 Kurallar bültenle ortak: uydurma yok, her sayı ölçümden, geri alma kalıbı
 burada da geçerli (geçen haftaki senaryo tutmadıysa haftaya açıkça yazılır —

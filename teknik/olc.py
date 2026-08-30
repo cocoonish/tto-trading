@@ -1,29 +1,35 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Haftalık teknik analiz bülteni — ÖLÇÜM katmanı.
+"""Haftalık teknik analiz bülteni — ÖLÇÜM katmanı (çok zaman dilimli).
 
-Altı enstrüman (ABD 2Y, ABD 10Y, DXY, EUR/USD, USD/CHF, XU100) için grafik
-tabanlı teknik analizin SAYISAL zeminini kurar: OHLC serileri, hareketli
-ortalamalar, RSI/MACD, ATR, Bollinger, 52 haftalık aralık, pivot destek/direnç
-kümeleri, regresyon kanalı ve Fibonacci düzeltme seviyeleri. Çıktı:
+Altı enstrüman (ABD 2Y, ABD 10Y, DXY, EUR/USD, USD/CHF, XU100) için teknik
+analizin SAYISAL zeminini ÜÇ zaman diliminde kurar: 1 saatlik, 4 saatlik ve
+günlük. Her dilimde aynı gösterge seti ölçülür (SMA'lar, RSI, MACD, ATR,
+Bollinger, pivot destek/direnç kümeleri, regresyon kanalı) + YAPI ölçümü:
+son salınım tepeleri/dipleri, yönleri (yükselen/alçalan/yatay), çift tepe/dip
+ve sıkışma bayrakları — formasyon adlandırması yazı katmanının işidir ama
+dayanacağı noktalar burada ölçülür. Çıktı:
 
-    site/src/data/teknik/<tarih>.json      ölçülen katman (yorum alanları boş)
-    site/public/teknik/<slug>-gunluk.html  günlük mum grafiği + RSI + MACD
-    site/public/teknik/<slug>-haftalik.html haftalık mum grafiği + RSI
+    site/src/data/teknik/<tarih>.json    ölçülen katman (yorum alanları boş)
+    site/public/teknik/<slug>-s1.html    1 saatlik mum + RSI + MACD
+    site/public/teknik/<slug>-s4.html    4 saatlik mum + RSI + MACD
+    site/public/teknik/<slug>-gunluk.html günlük mum + RSI + MACD
 
-YORUM BURADAN ÇIKMAZ. Trend okuması, seviye seçimi, senaryolar yazı katmanının
-işidir (bkz. bulten/YAZIM.md, "Haftalık teknik analiz"); yazı katmanı yalnız
-teknik/yaz.py üzerinden dokunabilir ve andığı her sayı burada ölçülmüş olmak
-zorundadır. Ölçülmemiş bir seviye yorumda kullanılamaz — uydurma yok.
+YORUM BURADAN ÇIKMAZ (bkz. bulten/YAZIM.md, "Haftalık teknik analiz"); yazı
+katmanı teknik/yaz.py kapısından geçer ve andığı her sayı burada ölçülmüş
+olmak zorundadır — uydurma yok.
 
-Bar disiplini (bkz. CLAUDE.md, "bir ölçüm ancak KAPANMIŞ bir seansı ölçebilir"):
-· Günlük seride bugünün (UTC) barı düşürülür — kapanmamış seans ölçülmez.
-· Haftalık barlar günlükten türetilir ve yalnız CUMASI GEÇMİŞ haftalar alınır;
-  etiket haftanın son GERÇEK günüdür, gelecek tarihli kova üretilemez
-  (net rezervin 27.08 "28 Aug" kovası dersi).
+Bar disiplini (CLAUDE.md: "bir ölçüm ancak KAPANMIŞ bir seansı ölçebilir"):
+· Günlükte bugünün (UTC) barı düşürülür.
+· Saatlikte kapanmamış saat düşürülür (bar başlangıcı + 1 saat > şimdi).
+· 4 saatlik barlar kapanmış 1 saatliklerden kurulur (UTC 00/04/08… çıpalı);
+  süresi dolmamış son kova düşürülür, kova etiketi içindeki son GERÇEK bar.
+· Haftalık seri (yalnız gösterge bağlamı: h10/h40, haftalık RSI) günlükten,
+  yalnız cuması geçmiş haftalardan türetilir.
 """
 from __future__ import annotations
 
+import argparse
 import json
 import math
 import warnings
@@ -38,9 +44,9 @@ KOK = BURASI.parent
 VERI = KOK / "site" / "src" / "data" / "teknik"
 GRAFIK = KOK / "site" / "public" / "teknik"
 
-GUNLUK_PENCERE = 260        # grafikte gösterilen günlük bar (≈ 1 yıl)
-KANAL_GUN = 250             # regresyon kanalı penceresi
-HAFTALIK_YIL = 5            # haftalık grafiğin derinliği
+KANAL_BAR = 250             # regresyon kanalı penceresi (her dilimde bar sayısı)
+HAFTALIK_YIL = 5            # günlük çekimin derinliği
+SAATLIK_DONEM = "6mo"       # 1 saatlik çekimin derinliği (Yahoo sınırı 730 gün)
 
 
 @dataclass(frozen=True)
@@ -48,7 +54,7 @@ class Enstruman:
     kod: str
     slug: str
     ad: str
-    tip: str                # fiyat | getiri  (getiri → değişimler baz puan)
+    tip: str                # fiyat | getiri
     ondalik: int
     birim: str = ""
 
@@ -62,6 +68,13 @@ ENSTRUMANLAR: tuple[Enstruman, ...] = (
     Enstruman("XU100.IS", "xu100", "BIST 100", "fiyat", 0, "puan"),
 )
 
+# (kod, ad, grafikte gösterilen bar, pivot kanadı)
+DILIMLER = (
+    ("s1", "1 saatlik", 420, 5),
+    ("s4", "4 saatlik", 360, 4),
+    ("gun", "günlük", 260, 3),
+)
+
 
 # ── gösterge matematiği (saf, ağsız — duman sınaması bunları çağırır) ────────
 
@@ -72,7 +85,6 @@ def sma(dizi: list[float], n: int) -> float | None:
 
 
 def rsi_wilder(kapanis: list[float], n: int = 14) -> float | None:
-    """Wilder RSI: ilk ortalama basit, sonrası üstel (alpha = 1/n)."""
     if len(kapanis) < n + 1:
         return None
     farklar = [kapanis[i] - kapanis[i - 1] for i in range(1, len(kapanis))]
@@ -83,8 +95,7 @@ def rsi_wilder(kapanis: list[float], n: int = 14) -> float | None:
         kayip = (kayip * (n - 1) + max(-f, 0.0)) / n
     if kayip == 0:
         return 100.0
-    rs = kazanc / kayip
-    return 100.0 - 100.0 / (1.0 + rs)
+    return 100.0 - 100.0 / (1.0 + kazanc / kayip)
 
 
 def _ema_seri(dizi: list[float], n: int) -> list[float]:
@@ -96,31 +107,26 @@ def _ema_seri(dizi: list[float], n: int) -> list[float]:
 
 
 def macd(kapanis: list[float]) -> tuple[float, float, float] | None:
-    """(macd, sinyal, histogram) — 12/26/9 EMA."""
     if len(kapanis) < 35:
         return None
     hat = [a - b for a, b in zip(_ema_seri(kapanis, 12), _ema_seri(kapanis, 26))]
-    sinyal = _ema_seri(hat[25:], 9)      # 26. bardan itibaren anlamlı
+    sinyal = _ema_seri(hat[25:], 9)
     return hat[-1], sinyal[-1], hat[-1] - sinyal[-1]
 
 
-def atr_wilder(yuksek: list[float], dusuk: list[float], kapanis: list[float],
-               n: int = 14) -> float | None:
+def atr_wilder(yuksek, dusuk, kapanis, n: int = 14) -> float | None:
     if len(kapanis) < n + 1:
         return None
-    tr = []
-    for i in range(1, len(kapanis)):
-        tr.append(max(yuksek[i] - dusuk[i],
-                      abs(yuksek[i] - kapanis[i - 1]),
-                      abs(dusuk[i] - kapanis[i - 1])))
+    tr = [max(yuksek[i] - dusuk[i],
+              abs(yuksek[i] - kapanis[i - 1]),
+              abs(dusuk[i] - kapanis[i - 1])) for i in range(1, len(kapanis))]
     a = sum(tr[:n]) / n
     for x in tr[n:]:
         a = (a * (n - 1) + x) / n
     return a
 
 
-def bollinger(kapanis: list[float], n: int = 20, k: float = 2.0
-              ) -> tuple[float, float, float] | None:
+def bollinger(kapanis, n: int = 20, k: float = 2.0):
     if len(kapanis) < n:
         return None
     p = kapanis[-n:]
@@ -129,45 +135,35 @@ def bollinger(kapanis: list[float], n: int = 20, k: float = 2.0
     return orta + k * ss, orta, orta - k * ss
 
 
-def pivotlar(yuksek: list[float], dusuk: list[float], tarih: list[str],
-             kanat: int = 3) -> tuple[list[tuple[float, str]], list[tuple[float, str]]]:
-    """Fraktal salınım uçları: her iki yanındaki `kanat` bardan yüksek tepe /
-    alçak dip. (seviye, tarih) listeleri döner — tepe ve dip ayrı."""
+def pivotlar(yuksek, dusuk, zaman, kanat: int = 3):
+    """Fraktal salınım uçları: iki yanındaki `kanat` bardan yüksek tepe /
+    alçak dip → (seviye, zaman) listeleri, kronolojik."""
     tepeler, dipler = [], []
     for i in range(kanat, len(yuksek) - kanat):
         if yuksek[i] == max(yuksek[i - kanat:i + kanat + 1]):
-            tepeler.append((yuksek[i], tarih[i]))
+            tepeler.append((yuksek[i], zaman[i]))
         if dusuk[i] == min(dusuk[i - kanat:i + kanat + 1]):
-            dipler.append((dusuk[i], tarih[i]))
+            dipler.append((dusuk[i], zaman[i]))
     return tepeler, dipler
 
 
-def kumele(uclar: list[tuple[float, str]], tolerans: float
-           ) -> list[dict]:
-    """Yakın salınım uçlarını bölgelere toplar. Bölge seviyesi üye ortalaması;
-    dokunuş sayısı ve son dokunuş tarihi ölçülür — 'iki kez test edilen seviye'
-    yorumu buradan gelir, tahminden değil."""
+def kumele(uclar, tolerans: float):
     if not uclar:
         return []
     sirali = sorted(uclar)
-    bolgeler: list[list[tuple[float, str]]] = [[sirali[0]]]
+    bolgeler = [[sirali[0]]]
     for s, t in sirali[1:]:
         if s - bolgeler[-1][-1][0] <= tolerans:
             bolgeler[-1].append((s, t))
         else:
             bolgeler.append([(s, t)])
-    out = []
-    for b in bolgeler:
-        out.append({"seviye": sum(x for x, _ in b) / len(b),
-                    "dokunus": len(b),
-                    "son_dokunus": max(t for _, t in b)})
-    return out
+    return [{"seviye": sum(x for x, _ in b) / len(b),
+             "dokunus": len(b),
+             "son_dokunus": max(t for _, t in b)} for b in bolgeler]
 
 
-def kanal(kapanis: list[float]) -> dict | None:
-    """Son KANAL_GUN bara doğrusal regresyon; bant ±2σ artık. Eğim yıllık
-    (%/yıl fiyatta, bp/yıl getiride değil — ham birim/yıl; okuma yazıda)."""
-    p = kapanis[-KANAL_GUN:]
+def kanal(kapanis: list[float], pencere: int = KANAL_BAR) -> dict | None:
+    p = kapanis[-pencere:]
     n = len(p)
     if n < 60:
         return None
@@ -180,18 +176,64 @@ def kanal(kapanis: list[float]) -> dict | None:
     artik = [y - (egim * x + kesen) for x, y in zip(xler, p)]
     ss = math.sqrt(sum(a * a for a in artik) / n)
     orta = egim * (n - 1) + kesen
-    ust, alt = orta + 2 * ss, orta - 2 * ss
-    konum = None if ust == alt else (p[-1] - alt) / (ust - alt)
-    return {"pencere_gun": n, "egim_gunluk": egim, "egim_yillik": egim * 252,
-            "orta": orta, "ust": ust, "alt": alt,
+    konum = None if ss == 0 else (p[-1] - (orta - 2 * ss)) / (4 * ss)
+    return {"pencere": n, "egim_bar": egim, "orta": orta,
+            "ust": orta + 2 * ss, "alt": orta - 2 * ss,
             "konum": konum, "sigma": ss}
+
+
+# ── YAPI ölçümü: formasyonların sayısal zemini ───────────────────────────────
+
+def _yon(a: float, b: float, esik: float) -> str:
+    """b, a'ya göre: yükselen / alçalan / yatay (eşik = 0,25×ATR)."""
+    if b - a > esik:
+        return "yukselen"
+    if a - b > esik:
+        return "alcalan"
+    return "yatay"
+
+
+def yapi_olc(tepeler, dipler, atr: float | None) -> dict:
+    """Son salınım uçlarından piyasa yapısı. Formasyon ADI vermez — çift
+    tepe/dip ve sıkışma gibi sayısal olarak tanımlı bayrakları ölçer, yazı
+    katmanı adlandırmayı bu noktalara dayanarak yapar."""
+    esik = (atr or 0.0) * 0.25
+    yakin = (atr or 0.0) * 0.35
+    son_t = tepeler[-3:]
+    son_d = dipler[-3:]
+    out: dict = {
+        "tepeler": [{"seviye": s, "zaman": z} for s, z in son_t],
+        "dipler": [{"seviye": s, "zaman": z} for s, z in son_d],
+        "tepe_yonu": None, "dip_yonu": None, "karakter": None,
+        "cift_tepe": None, "cift_dip": None, "sikisma": False,
+    }
+    if len(son_t) >= 2:
+        out["tepe_yonu"] = _yon(son_t[-2][0], son_t[-1][0], esik)
+        if abs(son_t[-1][0] - son_t[-2][0]) <= yakin:
+            out["cift_tepe"] = {"seviye": (son_t[-1][0] + son_t[-2][0]) / 2,
+                                "zamanlar": [son_t[-2][1], son_t[-1][1]]}
+    if len(son_d) >= 2:
+        out["dip_yonu"] = _yon(son_d[-2][0], son_d[-1][0], esik)
+        if abs(son_d[-1][0] - son_d[-2][0]) <= yakin:
+            out["cift_dip"] = {"seviye": (son_d[-1][0] + son_d[-2][0]) / 2,
+                               "zamanlar": [son_d[-2][1], son_d[-1][1]]}
+    ty, dy = out["tepe_yonu"], out["dip_yonu"]
+    if ty and dy:
+        out["karakter"] = {
+            ("yukselen", "yukselen"): "yükseliş yapısı (tepeler ve dipler yükseliyor)",
+            ("alcalan", "alcalan"): "düşüş yapısı (tepeler ve dipler alçalıyor)",
+            ("alcalan", "yukselen"): "sıkışma (alçalan tepeler, yükselen dipler)",
+            ("yukselen", "alcalan"): "genişleme (yükselen tepeler, alçalan dipler)",
+        }.get((ty, dy), f"karışık (tepeler {ty}, dipler {dy})".replace(
+            "yukselen", "yükseliyor").replace("alcalan", "alçalıyor").replace(
+            "yatay", "yatay"))
+        out["sikisma"] = (ty, dy) == ("alcalan", "yukselen")
+    return out
 
 
 # ── bar disiplini ────────────────────────────────────────────────────────────
 
-def kapanmis_gunler(tarih: list[str], *diziler: list[float]
-                    ) -> tuple[list[str], list[list[float]]]:
-    """Bugünün (UTC) barını düşürür: kapanmamış seans ölçülmez."""
+def kapanmis_gunler(tarih, *diziler):
     bugun = datetime.now(timezone.utc).date().isoformat()
     kes = len(tarih)
     while kes > 0 and tarih[kes - 1] >= bugun:
@@ -199,22 +241,34 @@ def kapanmis_gunler(tarih: list[str], *diziler: list[float]
     return tarih[:kes], [d[:kes] for d in diziler]
 
 
-def haftalik_kur(tarih: list[str], acilis, yuksek, dusuk, kapanis
-                 ) -> dict[str, list]:
-    """Günlükten haftalık bar türetir. Yalnız CUMASI GEÇMİŞ (tamamlanmış)
-    haftalar; etiket haftanın son GERÇEK günü — gelecek tarih üretilemez."""
-    bugun = datetime.now(timezone.utc).date()
-    haftalar: dict[tuple[int, int], list[int]] = {}
-    for i, t in enumerate(tarih):
-        g = date.fromisoformat(t)
-        iso = g.isocalendar()
-        haftalar.setdefault((iso[0], iso[1]), []).append(i)
-    out = {"tarih": [], "acilis": [], "yuksek": [], "dusuk": [], "kapanis": []}
-    for (yil, hafta), idx in sorted(haftalar.items()):
-        cuma = date.fromisocalendar(yil, hafta, 5)
-        if cuma >= bugun:               # hafta kapanmadı → ölçülmez
+def kapanmis_saatler(zaman, *diziler, saat: int = 1):
+    """ISO (UTC) saat damgalı barlardan kapanmamış olanı düşürür:
+    bar başlangıcı + `saat` > şimdi ise bar hâlâ oluşuyordur."""
+    simdi = datetime.now(timezone.utc)
+    kes = len(zaman)
+    while kes > 0:
+        t = datetime.fromisoformat(zaman[kes - 1]).replace(tzinfo=timezone.utc)
+        if t + timedelta(hours=saat) <= simdi:
+            break
+        kes -= 1
+    return zaman[:kes], [d[:kes] for d in diziler]
+
+
+def s4_kur(zaman, acilis, yuksek, dusuk, kapanis) -> dict[str, list]:
+    """Kapanmış 1 saatlik barlardan 4 saatlik bar (UTC 00/04/08… çıpalı).
+    Süresi dolmamış son kova düşürülür; kova etiketi içindeki son GERÇEK bar."""
+    simdi = datetime.now(timezone.utc)
+    kovalar: dict[tuple, list[int]] = {}
+    for i, z in enumerate(zaman):
+        t = datetime.fromisoformat(z)
+        kovalar.setdefault((t.date(), t.hour // 4), []).append(i)
+    out = {"zaman": [], "acilis": [], "yuksek": [], "dusuk": [], "kapanis": []}
+    for (gun, blok), idx in sorted(kovalar.items()):
+        bitis = datetime(gun.year, gun.month, gun.day, blok * 4,
+                         tzinfo=timezone.utc) + timedelta(hours=4)
+        if bitis > simdi:                # kova süresi dolmadı → ölçülmez
             continue
-        out["tarih"].append(tarih[idx[-1]])
+        out["zaman"].append(zaman[idx[-1]])
         out["acilis"].append(acilis[idx[0]])
         out["yuksek"].append(max(yuksek[i] for i in idx))
         out["dusuk"].append(min(dusuk[i] for i in idx))
@@ -222,158 +276,64 @@ def haftalik_kur(tarih: list[str], acilis, yuksek, dusuk, kapanis
     return out
 
 
+def haftalik_kur(tarih, acilis, yuksek, dusuk, kapanis) -> dict[str, list]:
+    bugun = datetime.now(timezone.utc).date()
+    haftalar: dict[tuple[int, int], list[int]] = {}
+    for i, t in enumerate(tarih):
+        iso = date.fromisoformat(t).isocalendar()
+        haftalar.setdefault((iso[0], iso[1]), []).append(i)
+    out = {"tarih": [], "kapanis": []}
+    for (yil, hafta), idx in sorted(haftalar.items()):
+        if date.fromisocalendar(yil, hafta, 5) >= bugun:
+            continue
+        out["tarih"].append(tarih[idx[-1]])
+        out["kapanis"].append(kapanis[idx[-1]])
+    return out
+
+
 # ── veri çekimi ──────────────────────────────────────────────────────────────
 
-def cek() -> dict[str, dict[str, list]]:
-    """5 yıllık günlük OHLC, enstrüman başına. Ağa yalnız burada çıkılır."""
+def cek() -> dict[str, dict]:
+    """Enstrüman başına {gunluk: OHLC(5y), saatlik: OHLC(6mo) | None}.
+    Saatlik veri kaynak tarafında eksikse dürüstçe None taşınır."""
     import pandas as pd
     import yfinance as yf
     kodlar = [e.kod for e in ENSTRUMANLAR]
-    ham = yf.download(kodlar, period=f"{HAFTALIK_YIL}y", interval="1d",
-                      progress=False, auto_adjust=False, group_by="ticker",
-                      threads=True)
-    seriler: dict[str, dict[str, list]] = {}
-    for kod in kodlar:
+
+    def coz(ham, kod, saatlik: bool):
         try:
             blok = ham[kod] if isinstance(ham.columns, pd.MultiIndex) else ham
             blok = blok.dropna(subset=["Close"])
         except Exception:
-            continue
-        if len(blok) < 60:
-            continue
-        seriler[kod] = {
-            "tarih": [str(x.date()) for x in blok.index],
-            "acilis": [float(x) for x in blok["Open"]],
-            "yuksek": [float(x) for x in blok["High"]],
-            "dusuk": [float(x) for x in blok["Low"]],
-            "kapanis": [float(x) for x in blok["Close"]],
-        }
-    return seriler
+            return None
+        if len(blok) < (120 if saatlik else 60):
+            return None
+        if saatlik:
+            idx = blok.index.tz_convert("UTC") if blok.index.tz is not None \
+                else blok.index.tz_localize("UTC")
+            zaman = [t.strftime("%Y-%m-%dT%H:%M") for t in idx]
+        else:
+            zaman = [str(x.date()) for x in blok.index]
+        return {"zaman": zaman,
+                "acilis": [float(x) for x in blok["Open"]],
+                "yuksek": [float(x) for x in blok["High"]],
+                "dusuk": [float(x) for x in blok["Low"]],
+                "kapanis": [float(x) for x in blok["Close"]]}
+
+    g = yf.download(kodlar, period=f"{HAFTALIK_YIL}y", interval="1d",
+                    progress=False, auto_adjust=False, group_by="ticker",
+                    threads=True)
+    s = yf.download(kodlar, period=SAATLIK_DONEM, interval="1h",
+                    progress=False, auto_adjust=False, group_by="ticker",
+                    threads=True)
+    return {kod: {"gunluk": coz(g, kod, False), "saatlik": coz(s, kod, True)}
+            for kod in kodlar}
 
 
-# ── enstrüman ölçümü ─────────────────────────────────────────────────────────
+# ── dilim ölçümü ─────────────────────────────────────────────────────────────
 
-def _degisim(kapanis: list[float], geri: int, getiri: bool) -> float | None:
-    if len(kapanis) <= geri:
-        return None
-    once, simdi = kapanis[-1 - geri], kapanis[-1]
-    if getiri:
-        return (simdi - once) * 100.0          # baz puan
-    return (simdi / once - 1.0) * 100.0 if once else None
-
-
-def olc_enstruman(e: Enstruman, s: dict[str, list]) -> dict | None:
-    tarih, (acilis, yuksek, dusuk, kapanis) = kapanmis_gunler(
-        s["tarih"], s["acilis"], s["yuksek"], s["dusuk"], s["kapanis"])
-    if len(kapanis) < 60:
-        return None
-    if e.tip == "getiri" and not (0.0 < kapanis[-1] < 25.0):
-        raise SystemExit(f"{e.kod}: getiri {kapanis[-1]} — kotasyon ölçeği "
-                         "beklenenden farklı, seri güvenilmez")
-    son = kapanis[-1]
-    getiri = e.tip == "getiri"
-
-    y252 = kapanis[-252:]
-    yh, yl = max(yuksek[-252:]), min(dusuk[-252:])
-    konum52 = None if yh == yl else (son - yl) / (yh - yl) * 100.0
-
-    # yılbaşından bu yana
-    ybb = None
-    for i, t in enumerate(tarih):
-        if t >= f"{tarih[-1][:4]}-01-01":
-            ybb = ((son - kapanis[i - 1]) * 100.0 if getiri else
-                   (son / kapanis[i - 1] - 1.0) * 100.0) if i > 0 else None
-            break
-
-    a = atr_wilder(yuksek, dusuk, kapanis)
-    tepe, dip = pivotlar(yuksek[-KANAL_GUN:], dusuk[-KANAL_GUN:],
-                         tarih[-KANAL_GUN:])
-    tol = (a * 0.75) if a else (yh - yl) * 0.01
-    direnc = [b for b in kumele(tepe, tol) if b["seviye"] > son]
-    destek = [b for b in kumele(dip, tol) if b["seviye"] < son]
-    direnc.sort(key=lambda b: b["seviye"])
-    destek.sort(key=lambda b: -b["seviye"])
-
-    bb = bollinger(kapanis)
-    md = macd(kapanis)
-
-    hft = haftalik_kur(tarih, acilis, yuksek, dusuk, kapanis)
-    hkap = hft["kapanis"]
-
-    fib_taban, fib_tavan = yl, yh
-    fib = {f"s{int(o*1000)}": fib_tavan - (fib_tavan - fib_taban) * o
-           for o in (0.382, 0.5, 0.618)}
-
-    kn = kanal(kapanis)
-    r = lambda x, n=e.ondalik: (None if x is None else round(x, max(n, 2)))
-    return {
-        "kod": e.kod, "slug": e.slug, "ad": e.ad, "tip": e.tip,
-        "birim": e.birim, "ondalik": e.ondalik,
-        "bar_tarihi": tarih[-1],
-        "hafta_tarihi": hft["tarih"][-1] if hft["tarih"] else None,
-        "son": r(son, e.ondalik),
-        "degisim": {           # getiri: baz puan · fiyat: yüzde
-            "g1": r(_degisim(kapanis, 1, getiri)),
-            "h1": r(_degisim(kapanis, 5, getiri)),
-            "a1": r(_degisim(kapanis, 21, getiri)),
-            "a3": r(_degisim(kapanis, 63, getiri)),
-            "ybb": r(ybb),
-        },
-        "aralik52": {"yuksek": r(yh, e.ondalik), "dusuk": r(yl, e.ondalik),
-                     "konum_pct": r(konum52)},
-        "hareketli": {"g20": r(sma(kapanis, 20), e.ondalik),
-                      "g50": r(sma(kapanis, 50), e.ondalik),
-                      "g100": r(sma(kapanis, 100), e.ondalik),
-                      "g200": r(sma(kapanis, 200), e.ondalik),
-                      "h10": r(sma(hkap, 10), e.ondalik),
-                      "h40": r(sma(hkap, 40), e.ondalik)},
-        "momentum": {"rsi14_g": r(rsi_wilder(kapanis)),
-                     "rsi14_h": r(rsi_wilder(hkap)),
-                     "macd": r(md[0], e.ondalik + 1) if md else None,
-                     "macd_sinyal": r(md[1], e.ondalik + 1) if md else None,
-                     "macd_hist": r(md[2], e.ondalik + 1) if md else None},
-        "oynaklik": {"atr14": r(a, e.ondalik),
-                     "atr14_pct": r(a / son * 100.0) if a and son else None},
-        "bant": ({"ust": r(bb[0], e.ondalik), "orta": r(bb[1], e.ondalik),
-                  "alt": r(bb[2], e.ondalik)} if bb else None),
-        "kanal": (kn and {
-            "pencere_gun": kn["pencere_gun"],
-            "egim_yillik": r(kn["egim_yillik"], e.ondalik),
-            "orta": r(kn["orta"], e.ondalik), "ust": r(kn["ust"], e.ondalik),
-            "alt": r(kn["alt"], e.ondalik),
-            "konum_pct": r(kn["konum"] * 100.0) if kn["konum"] is not None else None,
-        }) or None,
-        "seviyeler": {
-            "direnc": [{"seviye": r(b["seviye"], e.ondalik),
-                        "dokunus": b["dokunus"],
-                        "son_dokunus": b["son_dokunus"]} for b in direnc[:4]],
-            "destek": [{"seviye": r(b["seviye"], e.ondalik),
-                        "dokunus": b["dokunus"],
-                        "son_dokunus": b["son_dokunus"]} for b in destek[:4]],
-            "fib": {k: r(v, e.ondalik) for k, v in fib.items()},
-            "fib_aciklama": "52 haftalık aralığın (yüksekten alçağa) "
-                            "%38,2 / %50 / %61,8 düzeltmeleri",
-        },
-        "grafikler": {"gunluk": f"/teknik/{e.slug}-gunluk.html",
-                      "haftalik": f"/teknik/{e.slug}-haftalik.html"},
-        "yorum": None,
-        "_gunluk": {"tarih": tarih[-GUNLUK_PENCERE:],
-                    "acilis": acilis[-GUNLUK_PENCERE:],
-                    "yuksek": yuksek[-GUNLUK_PENCERE:],
-                    "dusuk": dusuk[-GUNLUK_PENCERE:],
-                    "kapanis": kapanis[-GUNLUK_PENCERE:]},
-        "_haftalik": hft,
-        "_kanal_ham": kn,
-        "_sma_serileri": {
-            "g50": _sma_seri(kapanis, 50)[-GUNLUK_PENCERE:],
-            "g200": _sma_seri(kapanis, 200)[-GUNLUK_PENCERE:],
-        },
-    }
-
-
-def _sma_seri(dizi: list[float], n: int) -> list:
-    out: list = []
-    toplam = 0.0
+def _sma_seri(dizi, n):
+    out, toplam = [], 0.0
     for i, x in enumerate(dizi):
         toplam += x
         if i >= n:
@@ -382,110 +342,240 @@ def _sma_seri(dizi: list[float], n: int) -> list:
     return out
 
 
+def olc_dilim(e: Enstruman, zaman, acilis, yuksek, dusuk, kapanis,
+              kanat: int) -> tuple[dict, dict]:
+    """Bir zaman diliminin ölçümü. (json_dilim, cizim_ham) döner."""
+    son = kapanis[-1]
+    a = atr_wilder(yuksek, dusuk, kapanis)
+    tepe, dip = pivotlar(yuksek[-KANAL_BAR:], dusuk[-KANAL_BAR:],
+                         zaman[-KANAL_BAR:], kanat)
+    tol = (a * 0.75) if a else (max(yuksek) - min(dusuk)) * 0.01
+    direnc = sorted([b for b in kumele(tepe, tol) if b["seviye"] > son],
+                    key=lambda b: b["seviye"])
+    destek = sorted([b for b in kumele(dip, tol) if b["seviye"] < son],
+                    key=lambda b: -b["seviye"])
+    bb = bollinger(kapanis)
+    md = macd(kapanis)
+    kn = kanal(kapanis)
+    yp = yapi_olc(tepe, dip, a)
+
+    r = lambda x, n=e.ondalik: (None if x is None else round(x, max(n, 2)))
+    js = {
+        "son": r(son),
+        "bar_zamani": zaman[-1],
+        "pencere": {"bar": len(kapanis), "baslangic": zaman[0]},
+        "hareketli": {f"g{n}": r(sma(kapanis, n)) for n in (20, 50, 100, 200)},
+        "momentum": {"rsi14": r(rsi_wilder(kapanis)),
+                     "macd": r(md[0], e.ondalik + 1) if md else None,
+                     "macd_sinyal": r(md[1], e.ondalik + 1) if md else None,
+                     "macd_hist": r(md[2], e.ondalik + 1) if md else None},
+        "oynaklik": {"atr14": r(a),
+                     "atr14_pct": r(a / son * 100.0) if a and son else None},
+        "bant": ({"ust": r(bb[0]), "orta": r(bb[1]), "alt": r(bb[2])}
+                 if bb else None),
+        "kanal": ({"pencere_bar": kn["pencere"],
+                   "orta": r(kn["orta"]), "ust": r(kn["ust"]),
+                   "alt": r(kn["alt"]),
+                   "konum_pct": r(kn["konum"] * 100.0)
+                   if kn["konum"] is not None else None} if kn else None),
+        "seviyeler": {
+            "direnc": [{"seviye": r(b["seviye"]), "dokunus": b["dokunus"],
+                        "son_dokunus": b["son_dokunus"]} for b in direnc[:3]],
+            "destek": [{"seviye": r(b["seviye"]), "dokunus": b["dokunus"],
+                        "son_dokunus": b["son_dokunus"]} for b in destek[:3]],
+        },
+        "yapi": {
+            "tepeler": [{"seviye": r(t["seviye"]), "zaman": t["zaman"]}
+                        for t in yp["tepeler"]],
+            "dipler": [{"seviye": r(t["seviye"]), "zaman": t["zaman"]}
+                       for t in yp["dipler"]],
+            "karakter": yp["karakter"],
+            "cift_tepe": ({"seviye": r(yp["cift_tepe"]["seviye"]),
+                           "zamanlar": yp["cift_tepe"]["zamanlar"]}
+                          if yp["cift_tepe"] else None),
+            "cift_dip": ({"seviye": r(yp["cift_dip"]["seviye"]),
+                          "zamanlar": yp["cift_dip"]["zamanlar"]}
+                         if yp["cift_dip"] else None),
+            "sikisma": yp["sikisma"],
+        },
+    }
+    ham = {"zaman": zaman, "acilis": acilis, "yuksek": yuksek,
+           "dusuk": dusuk, "kapanis": kapanis, "kanal": kn,
+           "seviyeler": js["seviyeler"]}
+    return js, ham
+
+
+def olc_enstruman(e: Enstruman, s: dict) -> tuple[dict, dict]:
+    """Üç dilimli ölçüm. (json_enstruman, {dilim: cizim_ham}) döner."""
+    g = s["gunluk"]
+    if not g:
+        raise SystemExit(f"{e.kod}: günlük seri yok — teknik bülten kurulmaz")
+    tarih, (ga, gy, gd, gk) = kapanmis_gunler(
+        g["zaman"], g["acilis"], g["yuksek"], g["dusuk"], g["kapanis"])
+    if len(gk) < 60:
+        raise SystemExit(f"{e.kod}: günlük seri çok kısa ({len(gk)} bar)")
+    if e.tip == "getiri" and not (0.0 < gk[-1] < 25.0):
+        raise SystemExit(f"{e.kod}: getiri {gk[-1]} — kotasyon ölçeği "
+                         "beklenenden farklı, seri güvenilmez")
+    son, getiri = gk[-1], e.tip == "getiri"
+
+    def deg(geri):
+        if len(gk) <= geri:
+            return None
+        once = gk[-1 - geri]
+        return (son - once) * 100.0 if getiri else \
+            ((son / once - 1.0) * 100.0 if once else None)
+
+    ybb = None
+    for i, t in enumerate(tarih):
+        if t >= f"{tarih[-1][:4]}-01-01" and i > 0:
+            once = gk[i - 1]
+            ybb = (son - once) * 100.0 if getiri else (son / once - 1.0) * 100.0
+            break
+
+    yh, yl = max(gy[-252:]), min(gd[-252:])
+    hft = haftalik_kur(tarih, ga, gy, gd, gk)
+    r = lambda x, n=e.ondalik: (None if x is None else round(x, max(n, 2)))
+
+    dilimler: dict[str, dict] = {}
+    hamlar: dict[str, dict] = {}
+    js_gun, ham_gun = olc_dilim(e, tarih, ga, gy, gd, gk, kanat=3)
+    dilimler["gun"], hamlar["gun"] = js_gun, ham_gun
+
+    st = s.get("saatlik")
+    if st:
+        z1, (a1, y1, d1, k1) = kapanmis_saatler(
+            st["zaman"], st["acilis"], st["yuksek"], st["dusuk"], st["kapanis"])
+        if len(k1) >= 120:
+            js1, ham1 = olc_dilim(e, z1, a1, y1, d1, k1, kanat=5)
+            dilimler["s1"], hamlar["s1"] = js1, ham1
+            k4 = s4_kur(z1, a1, y1, d1, k1)
+            if len(k4["kapanis"]) >= 60:
+                js4, ham4 = olc_dilim(e, k4["zaman"], k4["acilis"],
+                                      k4["yuksek"], k4["dusuk"],
+                                      k4["kapanis"], kanat=4)
+                dilimler["s4"], hamlar["s4"] = js4, ham4
+    for kod, _, _, _ in DILIMLER:
+        if kod not in dilimler:
+            dilimler[kod] = {"eksik": "kaynakta bu dilim için yeterli veri yok"}
+
+    js = {
+        "kod": e.kod, "slug": e.slug, "ad": e.ad, "tip": e.tip,
+        "birim": e.birim, "ondalik": e.ondalik,
+        "bar_tarihi": tarih[-1],
+        "son": r(son),
+        "degisim": {"g1": r(deg(1)), "h1": r(deg(5)), "a1": r(deg(21)),
+                    "a3": r(deg(63)), "ybb": r(ybb)},
+        "aralik52": {"yuksek": r(yh), "dusuk": r(yl),
+                     "konum_pct": r((son - yl) / (yh - yl) * 100.0)
+                     if yh != yl else None},
+        "fib": {**{k: r(yh - (yh - yl) * o) for k, o in
+                   (("s382", 0.382), ("s500", 0.5), ("s618", 0.618))},
+                "aciklama": "52 haftalık aralığın %38,2 / %50 / %61,8 düzeltmeleri"},
+        "haftalik": {"h10": r(sma(hft["kapanis"], 10)),
+                     "h40": r(sma(hft["kapanis"], 40)),
+                     "rsi14": r(rsi_wilder(hft["kapanis"])),
+                     "hafta_tarihi": hft["tarih"][-1] if hft["tarih"] else None},
+        "dilimler": dilimler,
+        "grafikler": {kod: f"/teknik/{e.slug}-{'gunluk' if kod == 'gun' else kod}.html"
+                      for kod, _, _, _ in DILIMLER if "eksik" not in dilimler[kod]},
+        "yorum": None,
+    }
+    return js, hamlar
+
+
 # ── grafikler ────────────────────────────────────────────────────────────────
 
-def ciz(e: Enstruman, m: dict) -> None:
+def ciz_dilim(e: Enstruman, dilim_kod: str, dilim_ad: str, ham: dict,
+              gosterim_bar: int) -> None:
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
 
-    g = m["_gunluk"]
-    rsi_seri = _rsi_seri(g["kapanis"])
-    macd_seri = _macd_seriler(g["kapanis"])
+    n = min(gosterim_bar, len(ham["kapanis"]))
+    z = ham["zaman"][-n:]
+    a, y, d, k = (ham["acilis"][-n:], ham["yuksek"][-n:],
+                  ham["dusuk"][-n:], ham["kapanis"][-n:])
+    tam_k = ham["kapanis"]
+    sma50 = _sma_seri(tam_k, 50)[-n:]
+    sma200 = _sma_seri(tam_k, 200)[-n:]
+    rsi = _rsi_seri(tam_k)[-n:]
+    mac = _macd_seriler(tam_k)
+    saatlik = dilim_kod != "gun"
 
     fig = make_subplots(rows=3, cols=1, shared_xaxes=True,
                         row_heights=[0.62, 0.19, 0.19], vertical_spacing=0.03,
                         subplot_titles=("", "RSI(14)", "MACD(12,26,9)"))
     fig.add_trace(go.Candlestick(
-        x=g["tarih"], open=g["acilis"], high=g["yuksek"],
-        low=g["dusuk"], close=g["kapanis"], name=e.ad,
+        x=z, open=a, high=y, low=d, close=k, name=e.ad,
         increasing_line_color="#2d6a4f", decreasing_line_color="#9d2235",
         showlegend=False), row=1, col=1)
-    for ad, seri, renk in (("SMA50", m["_sma_serileri"]["g50"], "#b8860b"),
-                           ("SMA200", m["_sma_serileri"]["g200"], "#365f91")):
-        fig.add_trace(go.Scatter(x=g["tarih"], y=seri, name=ad,
+    for ad_, seri, renk in (("SMA50", sma50, "#b8860b"),
+                            ("SMA200", sma200, "#365f91")):
+        fig.add_trace(go.Scatter(x=z, y=seri, name=ad_,
                                  line=dict(width=1.4, color=renk)), row=1, col=1)
-    k = m["_kanal_ham"]
-    if k:
-        n = k["pencere_gun"]
-        xs = g["tarih"][-n:]
+    kn = ham["kanal"]
+    if kn:
+        kb = min(kn["pencere"], n)
+        xs = z[-kb:]
+        taban = kn["orta"] - kn["egim_bar"] * (kn["pencere"] - 1)
         for etiket, kes in (("kanal üst", 2), ("kanal orta", 0), ("kanal alt", -2)):
-            ys = [k["egim_gunluk"] * i + (k["orta"] - k["egim_gunluk"] * (n - 1))
-                  + kes * k["sigma"] for i in range(n)]
+            bas = kn["pencere"] - kb
+            ys = [taban + kn["egim_bar"] * (bas + i) + kes * kn["sigma"]
+                  for i in range(kb)]
             fig.add_trace(go.Scatter(
-                x=xs, y=ys, name=etiket, line=dict(
-                    width=1, dash="dot" if kes else "dash", color="#8a8a8a"),
+                x=xs, y=ys, name=etiket,
+                line=dict(width=1, dash="dot" if kes else "dash",
+                          color="#8a8a8a"),
                 showlegend=(kes == 2)), row=1, col=1)
-    for yon, isaret in (("direnc", "#9d2235"), ("destek", "#2d6a4f")):
-        for b in m["seviyeler"][yon]:
+    for yon, renk in (("direnc", "#9d2235"), ("destek", "#2d6a4f")):
+        for b in ham["seviyeler"][yon]:
             fig.add_hline(y=b["seviye"], line_width=1, line_dash="dash",
-                          line_color=isaret, opacity=0.55, row=1, col=1,
+                          line_color=renk, opacity=0.55, row=1, col=1,
                           annotation_text=f"{b['seviye']} ({b['dokunus']}x)",
                           annotation_font_size=10)
-    fig.add_trace(go.Scatter(x=g["tarih"], y=rsi_seri, name="RSI",
+    fig.add_trace(go.Scatter(x=z, y=rsi, name="RSI",
                              line=dict(width=1.2, color="#5f4b8b"),
                              showlegend=False), row=2, col=1)
     for esik in (30, 70):
         fig.add_hline(y=esik, line_width=0.8, line_dash="dot",
                       line_color="#999", row=2, col=1)
-    fig.add_trace(go.Bar(x=g["tarih"], y=macd_seri["hist"], name="hist",
+    fig.add_trace(go.Bar(x=z, y=mac["hist"][-n:], name="hist",
                          marker_color="#b0b0b0", showlegend=False), row=3, col=1)
-    fig.add_trace(go.Scatter(x=g["tarih"], y=macd_seri["macd"], name="MACD",
+    fig.add_trace(go.Scatter(x=z, y=mac["macd"][-n:], name="MACD",
                              line=dict(width=1.1, color="#365f91"),
                              showlegend=False), row=3, col=1)
-    fig.add_trace(go.Scatter(x=g["tarih"], y=macd_seri["sinyal"], name="sinyal",
+    fig.add_trace(go.Scatter(x=z, y=mac["sinyal"][-n:], name="sinyal",
                              line=dict(width=1.1, color="#b8860b"),
                              showlegend=False), row=3, col=1)
-    fig.update_layout(
-        title=f"{e.ad} — günlük ({g['tarih'][0]} → {g['tarih'][-1]})",
-        xaxis_rangeslider_visible=False, height=760,
-        legend=dict(orientation="h"))
-    fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])])
+    aralik = f"{z[0]} → {z[-1]}" + (" (UTC)" if saatlik else "")
+    fig.update_layout(title=f"{e.ad} — {dilim_ad} ({aralik})",
+                      xaxis_rangeslider_visible=False, height=760,
+                      legend=dict(orientation="h"))
+    if saatlik:
+        # Kategori ekseni: seans boşlukları (gece, hafta sonu) grafikte delik
+        # açmasın. Etiket sayısı sınırlı tutulur.
+        fig.update_xaxes(type="category", nticks=8)
+    else:
+        fig.update_xaxes(rangebreaks=[dict(bounds=["sat", "mon"])])
     GRAFIK.mkdir(parents=True, exist_ok=True)
-    fig.write_html(GRAFIK / f"{e.slug}-gunluk.html",
+    ek = "gunluk" if dilim_kod == "gun" else dilim_kod
+    fig.write_html(GRAFIK / f"{e.slug}-{ek}.html",
                    include_plotlyjs="cdn", full_html=True)
 
-    h = m["_haftalik"]
-    rsi_h = _rsi_seri(h["kapanis"])
-    fig2 = make_subplots(rows=2, cols=1, shared_xaxes=True,
-                         row_heights=[0.75, 0.25], vertical_spacing=0.04,
-                         subplot_titles=("", "RSI(14) haftalık"))
-    fig2.add_trace(go.Candlestick(
-        x=h["tarih"], open=h["acilis"], high=h["yuksek"],
-        low=h["dusuk"], close=h["kapanis"], name=e.ad,
-        increasing_line_color="#2d6a4f", decreasing_line_color="#9d2235",
-        showlegend=False), row=1, col=1)
-    for ad, n, renk in (("SMA10h", 10, "#b8860b"), ("SMA40h", 40, "#365f91")):
-        fig2.add_trace(go.Scatter(x=h["tarih"], y=_sma_seri(h["kapanis"], n),
-                                  name=ad, line=dict(width=1.4, color=renk)),
-                       row=1, col=1)
-    fig2.add_trace(go.Scatter(x=h["tarih"], y=rsi_h, name="RSI",
-                              line=dict(width=1.2, color="#5f4b8b"),
-                              showlegend=False), row=2, col=1)
-    for esik in (30, 70):
-        fig2.add_hline(y=esik, line_width=0.8, line_dash="dot",
-                       line_color="#999", row=2, col=1)
-    fig2.update_layout(
-        title=f"{e.ad} — haftalık ({h['tarih'][0]} → {h['tarih'][-1]})",
-        xaxis_rangeslider_visible=False, height=620,
-        legend=dict(orientation="h"))
-    fig2.write_html(GRAFIK / f"{e.slug}-haftalik.html",
-                    include_plotlyjs="cdn", full_html=True)
 
-
-def _rsi_seri(kapanis: list[float], n: int = 14) -> list:
-    out: list = [None] * len(kapanis)
+def _rsi_seri(kapanis, n: int = 14):
+    out = [None] * len(kapanis)
     for i in range(n, len(kapanis)):
         out[i] = rsi_wilder(kapanis[:i + 1], n)
     return out
 
 
-def _macd_seriler(kapanis: list[float]) -> dict[str, list]:
+def _macd_seriler(kapanis):
     if len(kapanis) < 35:
         b = [None] * len(kapanis)
         return {"macd": b, "sinyal": b, "hist": b}
     hat = [a - b for a, b in zip(_ema_seri(kapanis, 12), _ema_seri(kapanis, 26))]
-    sinyal_kuyruk = _ema_seri(hat[25:], 9)
-    sinyal = [None] * 25 + sinyal_kuyruk
+    sinyal = [None] * 25 + _ema_seri(hat[25:], 9)
     hist = [None if s is None else m - s for m, s in zip(hat, sinyal)]
     return {"macd": hat, "sinyal": sinyal, "hist": hist}
 
@@ -497,12 +587,22 @@ AYLAR = ["", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz",
 
 
 def main() -> int:
-    seriler = cek()
-    eksik = [e.kod for e in ENSTRUMANLAR if e.kod not in seriler]
-    if eksik:
-        raise SystemExit(f"veri çekilemedi: {', '.join(eksik)} — "
-                         "eksik enstrümanla teknik bülten kurulmaz")
+    p = argparse.ArgumentParser()
+    p.add_argument("--yeniden-olc", action="store_true",
+                   help="yazılmış bülteni bilerek yeniden ölç (yorumlar sıfırlanır; "
+                        "metnin yeni ölçüye göre yeniden yazılması ŞART)")
+    arg = p.parse_args()
+
     bugun = datetime.now(timezone.utc).date()
+    hedef = VERI / f"{bugun.isoformat()}.json"
+    if hedef.exists() and not arg.yeniden_olc:
+        eski = json.loads(hedef.read_text(encoding="utf-8"))
+        if eski.get("yazili"):
+            print(f"{hedef.name} yazılmış — ölçüm onu ezmez "
+                  "(bilerek: --yeniden-olc), çıkılıyor")
+            return 0
+
+    seriler = cek()
     kayit = {
         "tarih": bugun.isoformat(),
         "tr_tarih": f"{bugun.day} {AYLAR[bugun.month]} {bugun.year}",
@@ -512,24 +612,16 @@ def main() -> int:
         "enstrumanlar": [],
     }
     for e in ENSTRUMANLAR:
-        m = olc_enstruman(e, seriler[e.kod])
-        if m is None:
-            raise SystemExit(f"{e.kod}: seri çok kısa, ölçüm kurulamadı")
-        ciz(e, m)
-        for gecici in ("_gunluk", "_haftalik", "_kanal_ham", "_sma_serileri"):
-            m.pop(gecici, None)
-        kayit["enstrumanlar"].append(m)
-        print(f"  {e.ad:26s} son={m['son']}  bar={m['bar_tarihi']}  "
-              f"RSI={m['momentum']['rsi14_g']}")
+        js, hamlar = olc_enstruman(e, seriler[e.kod])
+        for kod, ad, bar, _ in DILIMLER:
+            if kod in hamlar:
+                ciz_dilim(e, kod, ad, hamlar[kod], bar)
+        kayit["enstrumanlar"].append(js)
+        dolu = [k for k in ("s1", "s4", "gun") if "eksik" not in js["dilimler"][k]]
+        print(f"  {e.ad:26s} son={js['son']}  bar={js['bar_tarihi']}  "
+              f"dilimler={','.join(dolu)}")
     kayit["veri_ucu"] = min(m["bar_tarihi"] for m in kayit["enstrumanlar"])
     VERI.mkdir(parents=True, exist_ok=True)
-    hedef = VERI / f"{kayit['tarih']}.json"
-    # Yazılmış teknik bülten ezilmez — bülten katmanıyla aynı kapı.
-    if hedef.exists():
-        eski = json.loads(hedef.read_text(encoding="utf-8"))
-        if eski.get("yazili"):
-            print(f"{hedef.name} yazılmış — ölçüm onu ezmez, çıkılıyor")
-            return 0
     hedef.write_text(json.dumps(kayit, ensure_ascii=False, indent=1) + "\n",
                      encoding="utf-8")
     print(f"yazıldı: {hedef}")

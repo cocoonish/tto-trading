@@ -16,7 +16,12 @@ on:
   schedule:
     - cron: '33 12 * * 0'   # 15:33 İstanbul — pazar ölçümü
     - cron: '41 13 * * 0'   # 16:41 İstanbul — yedek (rutinden ~1 saat önce)
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      yeniden_olc:
+        description: 'Yazılmış bülteni bilerek yeniden ölç (yorumlar sıfırlanır)'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -45,7 +50,7 @@ jobs:
         run: python teknik/duman.py
 
       - name: Ölçüm ve grafikler
-        run: python teknik/olc.py
+        run: python teknik/olc.py ${{ github.event.inputs.yeniden_olc == 'true' && '--yeniden-olc' || '' }}
 
       - name: Ev stili
         run: python site/tools/plotly_stil.py site/public/teknik/*.html
