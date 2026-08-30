@@ -40,8 +40,13 @@ VERI = BURASI.parent / "site" / "src" / "data" / "teknik"
 def _sayilari_topla(dugum, havuz: set[str]) -> None:
     if isinstance(dugum, (int, float)) and not isinstance(dugum, bool):
         for n in range(0, 5):
-            havuz.add(f"{round(float(dugum), n):.{n}f}".rstrip("0").rstrip("."))
-            havuz.add(f"{abs(round(float(dugum), n)):.{n}f}".rstrip("0").rstrip("."))
+            for deger in (round(float(dugum), n), abs(round(float(dugum), n))):
+                s = f"{deger:.{n}f}"
+                # Sondaki sıfır yalnız ONDALIKTA kırpılır: "14140" tamsayısını
+                # rstrip("0") ile "1414"e çevirmek havuzu sessizce deliyordu.
+                if "." in s:
+                    s = s.rstrip("0").rstrip(".")
+                havuz.add(s)
     elif isinstance(dugum, dict):
         for v in dugum.values():
             _sayilari_topla(v, havuz)
@@ -50,17 +55,25 @@ def _sayilari_topla(dugum, havuz: set[str]) -> None:
             _sayilari_topla(v, havuz)
 
 
-SAYI = re.compile(r"\d+(?:[.,]\d+)?")
+SAYI = re.compile(r"\d+(?:[.,]\d+)*")
+
+
+def _normallestir(ham: str) -> str:
+    """Türkçe yazımı makine biçimine çevirir: '14.641,6' → '14641.6'.
+    Hem nokta hem virgül varsa nokta binlik ayracıdır; yalnız virgül varsa
+    ondalıktır; yalnız nokta belirsizdir (ondalık kabul edilir, binlik hâli
+    ayrıca denenir)."""
+    if "," in ham and "." in ham:
+        return ham.replace(".", "").replace(",", ".")
+    return ham.replace(",", ".")
 
 
 def dogrula_sayilar(metin: str, havuz: set[str]) -> list[str]:
-    """Ölçümde karşılığı olmayan 'fiyat gibi' sayılar. Virgül ondalık kabul
-    edilir (site dili Türkçe), nokta binlik ayracı sayılmaz — 14.576 gibi bir
-    BIST seviyesi 14576 olarak da aranır."""
+    """Ölçümde karşılığı olmayan 'fiyat gibi' sayılar."""
     sade = re.sub(r"<[^>]+>", " ", metin)
     sorunlu = []
     for ham in SAYI.findall(sade):
-        aday = ham.replace(",", ".")
+        aday = _normallestir(ham)
         duz = aday.rstrip("0").rstrip(".") if "." in aday else aday
         if "." not in aday and (len(aday) <= 3 and int(aday) <= 200):
             continue                        # eşik/pencere tamsayıları serbest
@@ -125,6 +138,10 @@ def main() -> int:
     sluglar = {e["slug"]: e for e in b["enstrumanlar"]}
     havuz: set[str] = set()
     _sayilari_topla({"enstrumanlar": b["enstrumanlar"]}, havuz)
+    # Metodoloji sabitleri: Fibonacci oran ADLARI (%38,2 gibi) ölçü değil
+    # gösterge tanımıdır — RSI'ın 70'i neyse bunlar da o. Seviyelerin kendisi
+    # (fib.s382 vb.) yine ölçümden doğrulanır.
+    havuz.update({"23.6", "38.2", "61.8", "78.6"})
 
     degisen: list[str] = []
     tum_sorunlu: dict[str, list[str]] = {}

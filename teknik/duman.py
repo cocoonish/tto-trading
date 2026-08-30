@@ -135,7 +135,9 @@ def _yaz_kapisi():
             b = {"tarih": "2026-08-30", "olcum_zamani": "2026-08-30T13:00:00+00:00",
                  "yazili": False, "giris": None,
                  "enstrumanlar": [{"slug": "us10y", "ad": "x", "son": 4.672,
-                                   "seviyeler": {"destek": [{"seviye": 4.55}]},
+                                   "seviyeler": {"destek": [{"seviye": 4.55},
+                                                            {"seviye": 14641.6},
+                                                            {"seviye": 14140.0}]},
                                    "yorum": None}]}
             hedef = Path(td) / "2026-08-30.json"
             hedef.write_text(json.dumps(b), encoding="utf-8")
@@ -157,6 +159,13 @@ def _yaz_kapisi():
             assert kos({"yorum": {"xxx": "a"}}, "--damgasiz") == 1, "bilinmeyen slug kabul edildi"
             assert kos({"yorum": {"us10y": "hedef 9,999 seviyesi"}},
                        "--damgasiz") == 1, "ölçümde olmayan sayı kabul edildi"
+            assert kos({"yorum": {"us10y": "hedef 14.999,9 seviyesi"}},
+                       "--damgasiz") == 1, "ölçümde olmayan binlikli sayı kabul edildi"
+            assert kos({"yorum": {"us10y": "14.641,6 desteği ve 4,55 izlenir"}},
+                       "--damgasiz") == 0, "Türkçe binlik yazımı (14.641,6) reddedildi"
+            assert kos({"yorum": {"us10y": "14.140 tabanı ve %38,2 düzeltmesi"}},
+                       "--damgasiz") == 0, \
+                "sıfırla biten ölçülü sayı (14.140) ya da fib oranı reddedildi"
             assert kos({"yorum": {"us10y": "x"}},
                        "--damga", "yanlis") == 1, "yanlış damga kabul edildi"
             assert kos({"yorum": {"us10y": "4,672 üstünde kaldıkça 4,55 desteği izlenir"}},
