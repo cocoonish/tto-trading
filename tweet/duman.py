@@ -45,12 +45,12 @@ SAHTE_TEKNIK = {
     "tarih": "2026-08-30", "yazili": True,
     "giris": "<p>Dolar haftayı yukarıda kapattı. " * 20 + "</p>",
     "enstrumanlar": [
-        {"ad": "BIST 100", "son": 14641.6, "tip": "fiyat",
+        {"slug": "xu100", "ad": "BIST 100", "son": 14641.6, "tip": "fiyat",
          "degisim": {"h1": 0.87},
          "dilimler": {"s1": {"yapi": {"sikisma": True}},
                       "gun": {"yapi": {}}}},
-        {"ad": "ABD 10 yıllık getiri", "son": 4.72, "tip": "getiri",
-         "degisim": {"h1": -1.8},
+        {"slug": "us10y", "ad": "ABD 10 yıllık getiri", "son": 4.72,
+         "tip": "getiri", "degisim": {"h1": -1.8},
          "dilimler": {"s1": {"yapi": {}},
                       "gun": {"yapi": {"cift_dip": {"seviye": 4.608}}}}},
     ],
@@ -68,12 +68,15 @@ def _zincirler():
         assert 200 < len(t) <= uret.TEK_TAVAN, f"{ad}: {len(t)} karakter"
         assert "<" not in t and ">" not in t.replace("→", ""), \
             f"{ad}: HTML sızdı: {t[:80]}"
-    assert "cocoonish.github.io/bulten" in zb[0], "bülten linki yok"
-    assert "Haftanın hareketleri" in zb[0] and "Pano:" in zb[0], "bölümler eksik"
-    assert "Beklenen:" in zb[0], "beklenti bölümü yok"
-    assert "cocoonish.github.io/teknik" in zt[0], "teknik linki yok"
+        # 30.08 geri bildirimi: link ve emoji YOK — geri sızarsa sınama düşer.
+        assert "http" not in t, f"{ad}: link sızdı"
+        assert "📰" not in t and "📐" not in t and "•" not in t, f"{ad}: süsleme sızdı"
+    assert "Haftanın öne çıkanları" in zb[0] and "Pano:" in zb[0], "bölümler eksik"
+    assert "Haftaya" in zb[0], "başlık yok"
     assert "sıkışma" in zt[0], "yapı bayrağı girmedi"
     assert "çift dip" in zt[0], "çift dip girmedi"
+    assert "yatırım tavsiyesi değildir" in zt[0], "sorumluluk notu yok"
+    assert "BIST 100" in zt[0] and "ABD 10Y" in zt[0], "kısa adlar kullanılmadı"
 
 
 def _kirpma():

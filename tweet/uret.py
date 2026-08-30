@@ -90,7 +90,10 @@ def _tr_tarih(iso: str) -> str:
 # ── bülten zinciri ───────────────────────────────────────────────────────────
 
 def bulten_zinciri(b: dict) -> list[str]:
-    """Günlük/haftalık bültenden TEK uzun tweet (hesap Premium)."""
+    """Günlük/haftalık bültenden TEK uzun tweet (hesap Premium).
+
+    Biçim kararları (30.08 geri bildirimi): link yok, emoji yok; hareketler
+    ve pano tek satırda '·' ile — dikey liste yerine sıkı, kurumsal görünüm."""
     haftalik = bool(b.get("haftalik"))
     baslik = "Haftaya Bakış" if haftalik else "Sabah Bülteni"
     tarih = _tr_tarih(b["tarih"])
@@ -99,75 +102,87 @@ def bulten_zinciri(b: dict) -> list[str]:
     ne_oldu = _duz(oz.get("ne_oldu") or "")
     if not ne_oldu:
         raise SystemExit("bülten özeti boş — tweet kurulamaz")
-    bolumler = [f"📰 {baslik} · {tarih}", _kirp(ne_oldu, OZET_SINIR)]
+    bolumler = [f"{baslik} — {tarih}", _kirp(ne_oldu, OZET_SINIR)]
 
     em = (b.get("piyasa") or {}).get("en_cok_hareket") or {}
     kip = em.get("sigma_kip") or ("haftalik" if haftalik else "gunluk")
     liste = em.get(kip) or []
     if liste:
-        etiket = "Haftanın hareketleri" if kip == "haftalik" else "Günün hareketleri"
-        satirlar = [f"• {h['ad']}: {_degisim_metni(h['deger'], h.get('birim', ''))}"
+        etiket = ("Haftanın öne çıkanları" if kip == "haftalik"
+                  else "Günün öne çıkanları")
+        parcalar = [f"{h['ad']} {_degisim_metni(h['deger'], h.get('birim', ''))}"
                     for h in liste[:5] if h.get("deger") is not None]
-        bolumler.append(f"{etiket}:\n" + "\n".join(satirlar))
+        bolumler.append(f"{etiket}: " + " · ".join(parcalar))
 
     gost = b.get("gostergeler") or []
-    satirlar = []
+    parcalar = []
     for g in gost[:5]:
         if g.get("metin") and g.get("ad"):
             fark = f" ({g['fark_metin']})" if g.get("fark_metin") else ""
-            satirlar.append(f"• {g['ad']}: {g['metin']}{fark}")
-    if satirlar:
-        bolumler.append("Pano:\n" + "\n".join(satirlar))
+            parcalar.append(f"{g['ad']} {g['metin']}{fark}")
+    if parcalar:
+        bolumler.append("Pano: " + " · ".join(parcalar))
 
     ne_bek = _duz(oz.get("ne_bekleniyor") or "")
     if ne_bek:
-        bolumler.append("Beklenen: " + _kirp(ne_bek, BEKLENTI_SINIR))
-    bolumler.append(f"Bültenin tamamı grafikler ve kaynaklarla:\n{SITE}/bulten/")
+        etiket = "Önümüzdeki hafta: " if haftalik else "Beklenen: "
+        # Metin zaten etiketle başlıyorsa ikilenmesin ("Önümüzdeki hafta:
+        # Önümüzdeki hafta takvimde..." — 30.08 taslağında görüldü).
+        if ne_bek.lower().startswith(etiket.split(":")[0].lower()):
+            bolumler.append(_kirp(ne_bek, BEKLENTI_SINIR))
+        else:
+            bolumler.append(etiket + _kirp(ne_bek, BEKLENTI_SINIR))
     return [_kirp("\n\n".join(bolumler), TEK_TAVAN)]
 
 
 # ── teknik zinciri ───────────────────────────────────────────────────────────
 
+KISA_AD = {"us2y": "ABD 2Y", "us10y": "ABD 10Y", "dxy": "DXY",
+           "eurusd": "EUR/USD", "usdchf": "USD/CHF", "xu100": "BIST 100"}
+
+
 def _teknik_satir(e: dict) -> str | None:
     d1 = (e.get("degisim") or {}).get("h1")
     ondalik = e.get("ondalik")
     birim = " bp" if e.get("tip") == "getiri" else "%"
-    parca = f"• {e['ad']}: {_fiyat(e.get('son'), ondalik)}"
+    ad = KISA_AD.get(e.get("slug"), e.get("ad", "?"))
+    parca = f"{ad} {_fiyat(e.get('son'), ondalik)}"
     if d1 is not None:
-        parca += f" (1h {_degisim_metni(d1, birim)})"
+        parca += f" — hafta {_degisim_metni(d1, birim)}"
     # yapı bayrağı: en bilgilendirici olanı tek kelimeyle
     gun = (e.get("dilimler") or {}).get("gun") or {}
     s1 = (e.get("dilimler") or {}).get("s1") or {}
-    for kaynak, ad in ((s1, "1s"), (gun, "günlük")):
+    for kaynak, ad_ in ((s1, "1s"), (gun, "günlük")):
         y = kaynak.get("yapi") or {}
         if y.get("sikisma"):
-            return parca + f" — {ad} sıkışma"
+            return parca + f"; {ad_} grafikte sıkışma"
         if y.get("cift_tepe"):
-            return parca + f" — {ad} çift tepe {_fiyat(y['cift_tepe']['seviye'], ondalik)}"
+            return parca + f"; {ad_} çift tepe {_fiyat(y['cift_tepe']['seviye'], ondalik)}"
         if y.get("cift_dip"):
-            return parca + f" — {ad} çift dip {_fiyat(y['cift_dip']['seviye'], ondalik)}"
+            return parca + f"; {ad_} çift dip {_fiyat(y['cift_dip']['seviye'], ondalik)}"
     return parca
 
 
 
 
 def teknik_zinciri(t: dict) -> list[str]:
-    """Haftalık teknik analizden TEK uzun tweet (hesap Premium)."""
+    """Haftalık teknik analizden TEK uzun tweet (hesap Premium).
+
+    Biçim: link yok, emoji yok; enstrüman satırları sade, kapanışta kısa
+    sorumluluk notu (analizdir, tavsiye değildir)."""
     tarih = _tr_tarih(t["tarih"])
     giris = _duz(t.get("giris") or "")
     if not giris:
         raise SystemExit("teknik giriş boş — tweet kurulamaz")
-    bolumler = [f"📐 Haftalık Teknik Analiz · {tarih}", _kirp(giris, GIRIS_SINIR)]
+    bolumler = [f"Haftalık Teknik Analiz — {tarih}", _kirp(giris, GIRIS_SINIR)]
 
     satirlar = [s for s in (_teknik_satir(e) for e in t.get("enstrumanlar") or [])
                 if s]
     if satirlar:
-        bolumler.append(f"{len(satirlar)} enstrüman · 1S/4S/G üç dilimde:\n"
+        bolumler.append("1 saatlik, 4 saatlik ve günlük grafiklerden özet:\n"
                         + "\n".join(satirlar))
 
-    bolumler.append("Her seviyenin dokunuş sayısı, formasyonların ölçülü "
-                    "noktaları ve grafikler sayfada — yorum yapay zekâ, her "
-                    f"sayı ölçümden:\n{SITE}/teknik/")
+    bolumler.append("Analizdir; yatırım tavsiyesi değildir.")
     return [_kirp("\n\n".join(bolumler), TEK_TAVAN)]
 
 
