@@ -117,6 +117,23 @@ def main() -> int:
     kaynak = (M["marjinal_kaynak"].loc[s_gun]
               if s_gun in M.index else None)
     O["marjinal_kaynak"] = str(kaynak) if kaynak is not None else "yok"
+    # AOFM geçersizse SEBEBİ de dışarı çıkar. Aşağı akıştaki katmanlar (bülten
+    # panosu) yalnız bayrağı görüp "kaynak güncel saymıyor" diye yazıyordu ve
+    # okur bunu TCMB yayımlamıyor sanıyordu. Oysa TCMB yayımlıyor; eleyen bizim
+    # taban eşiğimiz. Bayrağın yanında sebebi taşımayan bir alan, aşağıda
+    # kaçınılmaz olarak yanlış cümleye dönüşüyor.
+    if not O["aofm_gecerli"]:
+        fon = (float(M["fon_top"].loc[s_gun])
+               if s_gun in M.index and pd.notna(M["fon_top"].loc[s_gun]) else None)
+        O["aofm_gecersiz_sebep"] = (
+            "TCMB seriyi yayımlıyor (ham %s), ama fonlama tabanı %s — %s mlr TL "
+            "eşiğinin altında olduğu için ölçü bilgi taşımıyor; bu rejimde "
+            "marjinal TCMB faizi sterilizasyon tarafından belirleniyor"
+            % (("%.2f" % O["aofm_ham"]).replace(".", ",") if O["aofm_ham"] is not None
+               else "yok",
+               ("%.1f mlr TL" % (fon / 1000.0)).replace(".", ",") if fon is not None
+               else "yok",
+               ("%.0f" % (((m.get("rejim") or {}).get("taban_esik_mn_tl") or 0) / 1000.0))))
 
     # Spreadlerin ÇIPASI kendi son dolu gününden okunur: AOFM tabansız
     # günlerde NaN olduğu için AOFM'li makasların son günü politika faizinin

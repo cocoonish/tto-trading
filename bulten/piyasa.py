@@ -449,6 +449,13 @@ def _ybb_bas(tarih: list[str], kapanis: list[float]) -> float | None:
 OYNAKLIK_GUN = 20
 OYNAKLIK_ASGARI = 10        # bu kadar gözlem yoksa σ güvenilir değil
 
+# Haftalık bültenin kıyas penceresi HAFTADIR; olağandışılık da o pencerede
+# ölçülmeli. Günlük σ ile haftalık hareketi kıyaslamak ölçek hatasıdır: bir
+# haftalık değişim doğası gereği günlüğün ~√5 katıdır, günlük σ'ya bölününce
+# her şey "olağandışı" çıkar. Bu yüzden haftalık σ'nın kendi tabanı var.
+OYNAKLIK_HAFTA = 20         # kaç haftalık gözlem
+HAFTA_GUN = 5               # bir haftanın iş günü sayısı
+
 
 def _gunluk_degisimler(kapanis: list[float], getiri: bool, n: int) -> list[float]:
     """Son n günlük değişim — d1 ile aynı birimde (fiyat: %, getiri: bp)."""
@@ -466,6 +473,35 @@ def _oynaklik(kapanis: list[float], getiri: bool) -> float | None:
     d = _gunluk_degisimler(kapanis, getiri, OYNAKLIK_GUN)
     if len(d) < OYNAKLIK_ASGARI:
         return None
+    return _std(d)
+
+
+def _haftalik_degisimler(kapanis: list[float], getiri: bool, n: int) -> list[float]:
+    """Son n haftalık (5 iş günü) değişim — h1 ile aynı birimde.
+
+    Pencereler ÖRTÜŞMEZ: adımlar beşer iş günü geriye atlanarak alınır.
+    Örtüşen haftalık pencereler ardışık bağımlılık taşır ve standart sapmayı
+    olduğundan küçük gösterir; küçük σ ise her hareketi olağandışı yapardı.
+    """
+    out = []
+    i = len(kapanis) - 1
+    while i - HAFTA_GUN >= 0 and len(out) < n:
+        onceki = kapanis[i - HAFTA_GUN]
+        if onceki:
+            out.append((kapanis[i] - onceki) * 100.0 if getiri
+                       else (kapanis[i] / onceki - 1) * 100.0)
+        i -= HAFTA_GUN
+    return out
+
+
+def _oynaklik_hafta(kapanis: list[float], getiri: bool) -> float | None:
+    d = _haftalik_degisimler(kapanis, getiri, OYNAKLIK_HAFTA)
+    if len(d) < OYNAKLIK_ASGARI:
+        return None
+    return _std(d)
+
+
+def _std(d: list[float]) -> float | None:
     ort = sum(d) / len(d)
     var = sum((x - ort) ** 2 for x in d) / (len(d) - 1)
     return var ** 0.5 or None
@@ -495,6 +531,7 @@ def satir(v: Varlik, seri: dict) -> dict | None:
     # σ, main'in devir düzeltmesinden GEÇMİŞ seri üzerinden hesaplanır: ham
     # seride vade geçişi günleri oynaklığı şişirir ve z-skorunu küçültürdü.
     sigma = _oynaklik(k, getiri)
+    sigma_h = _oynaklik_hafta(k, getiri)
     # Vadeli serilerde devir düzeltmesi yalnız hâlâ listeli kontratların
     # kapsadığı kadar geriye gider; ondan eskisi hâlâ devir izi taşıyabilir.
     # Satır bunu kendisi söylesin: okur hangi sayının temiz olduğunu bilmeli.
@@ -529,6 +566,12 @@ def satir(v: Varlik, seri: dict) -> dict | None:
         "sigma_gun": None if sigma is None else round(sigma, 2 if getiri else 2),
         "d1_sigma": (None if sigma is None or d(1) is None
                      else round(d(1) / sigma, 1)),
+        # Haftalık hareketin kaç HAFTALIK standart sapma olduğu. Haftaya bakış
+        # bültenin kıyas penceresi hafta olduğu için olağandışılık orada bu
+        # ölçüden okunur; günlük σ ile haftalık hareket kıyaslanmaz.
+        "sigma_hafta": None if sigma_h is None else round(sigma_h, 2),
+        "h1_sigma": (None if sigma_h is None or d(5) is None
+                     else round(d(5) / sigma_h, 1)),
     }
 
 
@@ -606,8 +649,16 @@ def turetilmis(seri: dict) -> list[dict]:
     return out
 
 
-def en_cok_hareket(satirlar: list[dict], n: int = 6) -> dict:
+def en_cok_hareket(satirlar: list[dict], n: int = 6, haftalik: bool = False) -> dict:
     """Günün ve haftanın en büyük hareketleri — yorumun nereye bakacağını söyler.
+
+    OLAĞANDIŞILIK LİSTESİ BÜLTENİN PENCERESİNİ İZLER. Günlük bültende günlük
+    hareket günlük σ'ya, haftaya bakışta haftalık hareket HAFTALIK σ'ya bölünür.
+    Karıştırmak ölçek hatasıdır: haftalık değişim doğası gereği günlüğün ~√5
+    katıdır, günlük σ'ya bölününce sıradan bir hafta bile 2σ'yı aşar ve liste
+    "olağandışı" olmayan şeylerle dolar. `sigma_kip` hangi pencerenin
+    kullanıldığını açıkça söyler; okuyan katman (sayfa ve denetim) başlığı ve
+    aradığı hareketi ona göre seçer.
 
     Üç ham sıralama (günlük %, haftalık %, haftalık bp) ile bir de OLAĞANDIŞILIK
     sıralaması döner. İkisi farklı soruları cevaplar: ham liste "en çok ne
@@ -625,15 +676,18 @@ def en_cok_hareket(satirlar: list[dict], n: int = 6) -> dict:
         aday = [s for s in satirlar if s.get(alan) is not None and s["tip"] != "getiri"]
         return sorted(aday, key=lambda s: abs(s[alan]), reverse=True)[:n]
     getiriler = [s for s in satirlar if s["tip"] == "getiri" and s.get("h1") is not None]
-    sigmali = [s for s in satirlar if s.get("d1_sigma") is not None]
+    z_alan, dg_alan, oyn_alan = (("h1_sigma", "h1", "sigma_hafta") if haftalik
+                                 else ("d1_sigma", "d1", "sigma_gun"))
+    sigmali = [s for s in satirlar if s.get(z_alan) is not None]
     return {
         "gunluk": [{"ad": s["ad"], "deger": s["d1"], "birim": "%"} for s in sirala("d1")],
         "haftalik": [{"ad": s["ad"], "deger": s["h1"], "birim": "%"} for s in sirala("h1")],
         "faiz_haftalik": [{"ad": s["ad"], "deger": s["h1"], "birim": "bp"}
                           for s in sorted(getiriler, key=lambda s: abs(s["h1"]), reverse=True)[:4]],
-        "sigma": [{"ad": s["ad"], "deger": s["d1"], "birim": s["degisim_birim"],
-                   "sigma": s["d1_sigma"], "oynaklik": s["sigma_gun"]}
-                  for s in sorted(sigmali, key=lambda s: abs(s["d1_sigma"]),
+        "sigma_kip": "haftalik" if haftalik else "gunluk",
+        "sigma": [{"ad": s["ad"], "deger": s[dg_alan], "birim": s["degisim_birim"],
+                   "sigma": s[z_alan], "oynaklik": s[oyn_alan]}
+                  for s in sorted(sigmali, key=lambda s: abs(s[z_alan]),
                                   reverse=True)[:n]],
     }
 
@@ -659,8 +713,16 @@ def tr_faizleri() -> list[dict]:
         tarih = d.get(f"{anahtar}_tarih") or d.get("_tarih", "")
         gecerli = d.get(f"{anahtar}_gecerli")
         if gecerli is False:
+            # BU CÜMLE BİR ZAMANLAR "kaynak bu değeri GÜNCEL saymıyor" diyordu ve
+            # okur bunu "TCMB yayımlamıyor" diye anlıyordu. Yanlıştı: 30.08.2026'da
+            # ölçüldü — TCMB AOFM'yi her gün basıyor ve 24 Ağustos'ta 40,00'dan
+            # 37,00'ye indirmişti; değeri gizleyen bizim kendi geçerlilik
+            # kapımızdı (fonlama tabanı 5 mlr TL eşiğinin altında). Bir ölçünün
+            # neden gizlendiğini söylemeyen not, gizlemekten daha kötüdür.
             aciklama = ((aciklama + " · ") if aciklama else "") + \
-                "kaynak bu değeri GÜNCEL saymıyor; gösterilen son geçerli gün"
+                (d.get(f"{anahtar}_gecersiz_sebep")
+                 or "hattın geçerlilik kapısı bu günü elemiş") + \
+                "; gösterilen son geçerli gün"
         out.append({"ad": ad, "deger": round(float(v), ondalik), "birim": birim,
                     "tarih": tarih, "aciklama": aciklama,
                     "gecerli": False if gecerli is False else True})
@@ -669,6 +731,17 @@ def tr_faizleri() -> list[dict]:
     al("fonlama-likidite", "koridor_alt", "Koridor alt bandı")
     al("fonlama-likidite", "koridor_ust", "Koridor üst bandı (gecelik borç verme)")
     al("fonlama-likidite", "aofm", "Ağırlıklı ortalama fonlama maliyeti")
+    # Fazla likidite rejiminde TCMB parasının marjinal fiyatını fonlama değil
+    # STERİLİZASYON belirler; fonlama bacağı 4 mlr TL iken sterilizasyon 1.251
+    # mlr TL ise "fonlama maliyeti" rejimi anlatmaz. AOFM'nin geçerlilik kapısı
+    # kapandığında pano boş kalıyordu ve bülten üç haftadır "gevşemenin ölçüsü
+    # yok" diye yazdı — oysa ölçü hattın içinde duruyordu. AOSM bu çalışmanın
+    # TÜRETMESİDİR, TCMB serisi değildir; satır bunu kendi üstünde söylüyor.
+    al("fonlama-likidite", "aosm", "Ağırlıklı ort. sterilizasyon maliyeti",
+       aciklama="bu çalışmanın türetmesi, TCMB serisi DEĞİL; fazla likidite "
+                "rejiminde marjinal TCMB faizi")
+    al("fonlama-likidite", "marjinal", "Marjinal TCMB faizi",
+       aciklama="rejime göre fonlama ya da sterilizasyon fiyatı")
     al("fonlama-likidite", "tlref", "TLREF (gecelik gerçekleşen)")
     al("fonlama-likidite", "bist_on", "BIST gecelik repo")
     al("fonlama-likidite", "spread_tlref_politika", "TLREF − politika farkı", "puan")
@@ -704,7 +777,7 @@ def tr_faizleri() -> list[dict]:
     return out
 
 
-def topla(tazele: bool = False) -> dict:
+def topla(tazele: bool = False, haftalik: bool = False) -> dict:
     ham = _ham_veri(tazele)
     seri = ham["seri"]
     satirlar = [x for x in (satir(v, seri) for v in VARLIKLAR) if x]
@@ -719,7 +792,7 @@ def topla(tazele: bool = False) -> dict:
         "gruplar": gruplar,
         "turetilmis": turetilmis(seri),
         "tr_faizleri": tr_faizleri(),
-        "en_cok_hareket": en_cok_hareket(satirlar),
+        "en_cok_hareket": en_cok_hareket(satirlar, haftalik=haftalik),
         "eksik": eksik,
         "kaynak_yok": KAYNAK_YOK,
     }

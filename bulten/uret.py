@@ -375,7 +375,7 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
 
     # 4) cross-asset piyasa fotoğrafı (TL faizleri + global varlıklar + türevler)
     try:
-        piyasa = piyasa_m.topla()
+        piyasa = piyasa_m.topla(haftalik=haftalik)
     except Exception as e:                                      # noqa: BLE001
         piyasa = {"hata": f"{type(e).__name__}: {e}", "gruplar": [], "turetilmis": [],
                   "tr_faizleri": [], "en_cok_hareket": {}, "eksik": [], "kaynak_yok": []}
