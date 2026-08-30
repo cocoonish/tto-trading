@@ -144,6 +144,48 @@ Pazar günkü "haftaya bakış" günlük akışın üstüne üç iş ekler:
    `beklenti_sayi` alanının dolu olduğunu doğrula — sürpriz ölçümü ancak o
    alanla çalışır; serbest metinden sayı türetilmez.
 
+## Haftalık teknik analiz (pazar, haftalık bültenden SONRA)
+
+Pazar rutini haftalık bülteni bitirince ikinci bir yayını yazar: **haftalık
+teknik analiz bülteni** (sitede `/teknik/`). İş bölümü bültenle aynı: ölçüm
+deterministik (`teknik/olc.py`, pazar 15:33 TR'de koşar → altı enstrüman için
+göstergeler, pivot destek/direnç bölgeleri, regresyon kanalı, Fibonacci ve
+mum grafikleri), yorum senin.
+
+Akış:
+
+1. `site/src/data/teknik/<bugün>.json` var mı bak. Yoksa ölçüm koşusu düşmüş
+   demektir: `Haftalık teknik analiz` iş akışını tetikle
+   (`gh workflow run teknik.yml` karşılığı MCP çağrısı), bitmesini bekle,
+   depoyu tazele. Ölçümsüz teknik yorum YAZILMAZ.
+2. JSON'u ve altı enstrümanın grafiklerini oku. `olcum_zamani` değerini not et —
+   yazarken `--damga` olarak vereceksin.
+3. Her enstrüman için yorum yaz (`us2y`, `us10y`, `dxy`, `eurusd`, `usdchf`,
+   `xu100`; 150–250 kelime, HTML paragraflar) + bir `giris` (haftanın teknik
+   çerçevesi, makro bültenle bağ). Her yorumun iskeleti:
+   - **Trend**: fiyat/getiri SMA50–SMA200'e ve regresyon kanalına göre nerede;
+     haftalık çerçeve (h10/h40) günlükle aynı yönde mi.
+   - **Momentum**: RSI günlük+haftalık, MACD histogramın yönü; uyumsuzluk
+     varsa (fiyat yeni uç, RSI değil) SÖYLE ama ölçüsüyle.
+   - **Seviyeler**: ölçümün verdiği pivot bölgelerinden ve Fibonacci'den
+     İŞE YARAYANLARI seç, neden önemli olduklarını söyle (dokunuş sayısı,
+     son dokunuş tarihi ölçümde var).
+   - **İki yönlü senaryo + geçersizlik**: "X üstünde kalırsa … / Y altına
+     sarkarsa …" — her senaryonun geçersizlik seviyesi ölçümden.
+4. Yaz: `python3 teknik/yaz.py yama.json --damga <olcum_zamani>`. Kapı,
+   yorumda geçen ve ölçümde karşılığı olmayan her sayıyı REDDEDER — seviye
+   uydurma yok; bir seviye gerekliyse ve ölçümde yoksa önce `teknik/olc.py`'ye
+   ölçtürülür. `yazili` ancak giriş + altı yorumun tamamı dolunca `true` olur
+   ve sayfa ancak o zaman yayımlanır.
+5. Commit + push; yayını `Haftalık teknik analiz` iş akışının push'u değil,
+   senin push'un tetikler (yayin.yml push'a bağlı).
+
+Kurallar bültenle ortak: uydurma yok, her sayı ölçümden, geri alma kalıbı
+burada da geçerli (geçen haftaki senaryo tutmadıysa haftaya açıkça yazılır —
+"geçen hafta X demiştik, Y oldu"). Teknik yorum yatırım tavsiyesi değildir ve
+sayfa bunu söyler; metinde tavsiye dili ("alın", "satın") KULLANILMAZ —
+senaryo dili kullanılır.
+
 ## Rutin nerede duruyor — ve neden bu rehber esas
 
 Yazı katmanını her sabah bir bulut görevi (claude.ai Routine) ateşliyor. O

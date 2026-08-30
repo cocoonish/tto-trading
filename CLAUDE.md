@@ -18,6 +18,8 @@ TTO Trading/
 │   ├── hazineihrac/             # Hazine ihale scraper + analiz (kendi .git'i var!)
 │   ├── USDTRYDeval/             # USD/TRY trend kanalları
 │   └── indices/                 # FX haber-duyarlılık endeksi (üç kip: hafif/günlük/tam)
+├── teknik/                      # Haftalık teknik analiz bülteni (olc.py ölçer,
+│                                #   yaz.py yorum kapısı — her sayı ölçümden; pazar koşusu)
 └── Research/                    # Ham araştırma dosyaları (Excel vb.)
 ```
 

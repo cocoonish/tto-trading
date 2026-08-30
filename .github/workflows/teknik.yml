@@ -1,0 +1,65 @@
+# Haftalık teknik analiz — ÖLÇÜM koşusu.
+#
+# Altı enstrüman (ABD 2Y/10Y, DXY, EUR/USD, USD/CHF, XU100) için teknik
+# göstergeleri ölçer, mum grafiklerini çizer ve yorum alanları BOŞ bir bülten
+# dosyası bırakır (site yalnız yazılmış bülteni yayımlar). Yorum katmanını
+# pazar rutini yazar: bkz. bulten/YAZIM.md, "Haftalık teknik analiz".
+#
+# Pazar öğleden sonra koşar — cuma seansı kapalı, hafta tamam. Rutin (17:45 TR)
+# yazmaya oturduğunda ölçüm hazır olmalı; yedek tetikleyici aradaki boşluğu
+# kapatır. Zamanlayıcının bu depodaki sicili kötü (sabah pencereleri düşüyor,
+# 28.08'de öğle de düştü); ölçüm gelmediyse rutin bu iş akışını kendi tetikler.
+
+name: Haftalık teknik analiz
+
+on:
+  schedule:
+    - cron: '33 12 * * 0'   # 15:33 İstanbul — pazar ölçümü
+    - cron: '41 13 * * 0'   # 16:41 İstanbul — yedek (rutinden ~1 saat önce)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: teknik
+  cancel-in-progress: false
+
+jobs:
+  olc:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Bağımlılıklar
+        run: pip install --quiet yfinance pandas numpy plotly
+
+      # Üretim kod yolları sentetik veriyle sınanır; düşerse ölçüm koşmaz.
+      - name: Duman sınaması
+        run: python teknik/duman.py
+
+      - name: Ölçüm ve grafikler
+        run: python teknik/olc.py
+
+      - name: Ev stili
+        run: python site/tools/plotly_stil.py site/public/teknik/*.html
+
+      - name: Commit
+        if: always()
+        run: |
+          git config --global user.name  "tto-teknik"
+          git config --global user.email "bot@users.noreply.github.com"
+          git add site/src/data/teknik site/public/teknik || true
+          if git diff --cached --quiet; then
+            echo "değişiklik yok — commit yok"
+          else
+            git commit -m "teknik: $(date -u +'%Y-%m-%d') haftalık ölçüm (otomatik)"
+            git pull --rebase --autostash
+            git push
+          fi
