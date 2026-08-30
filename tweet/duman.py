@@ -126,12 +126,34 @@ def _gonder_sigortalari():
         assert dun not in cikti, "bayat bülten (dün) bugünkü koşuya girdi"
 
 
+def _jeton_kasasi():
+    """oauth2.enc gidiş-dönüşü: TW_KILIT ile yazılan okunur; yanlış kilitle
+    açma denemesi net hatayla düşer (sessizce bozuk jeton dönmez)."""
+    import os
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import gonder
+    with tempfile.TemporaryDirectory() as td:
+        dosya = Path(td) / "oauth2.enc"
+        os.environ["TW_KILIT"] = "sinama-parolasi-123"
+        dosya.write_bytes(gonder._kilit().encrypt(b"jeton-abc"))
+        assert gonder._refresh_oku(dosya) == "jeton-abc", "jeton gidiş-dönüşü bozuk"
+        os.environ["TW_KILIT"] = "BASKA-parola"
+        try:
+            gonder._refresh_oku(dosya)
+        except SystemExit as e:
+            assert "çözülemedi" in str(e), f"yanlış kilit mesajı belirsiz: {e}"
+        else:
+            raise AssertionError("yanlış kilit sessizce kabul edildi")
+        del os.environ["TW_KILIT"]
+
+
 def main() -> int:
     print("tweet duman sınaması:")
     sina("zincirler: uzunluk, HTML sızıntısı, link, yapı bayrağı", _zincirler)
     sina("kırpma cümle sınırında", _kirpma)
     sina("gonder: anahtarsız yeşil, defter mükerrerliği, bayat koruması",
          _gonder_sigortalari)
+    sina("jeton kasası: şifreli gidiş-dönüş, yanlış kilit düşer", _jeton_kasasi)
     print(f"\n  {SAYAC['gecti']} geçti · {SAYAC['dustu']} DÜŞTÜ")
     return 1 if SAYAC["dustu"] else 0
 

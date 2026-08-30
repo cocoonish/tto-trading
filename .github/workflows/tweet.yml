@@ -42,10 +42,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      TW_API_KEY: ${{ secrets.TW_API_KEY }}
-      TW_API_SECRET: ${{ secrets.TW_API_SECRET }}
-      TW_ACCESS_TOKEN: ${{ secrets.TW_ACCESS_TOKEN }}
-      TW_ACCESS_SECRET: ${{ secrets.TW_ACCESS_SECRET }}
+      # OAuth 2.0 kullanıcı bağlamı. Refresh token TEK KULLANIMLIK ve her
+      # koşuda döner; güncel hâli tweet/oauth2.enc'de ŞİFRELİ tutulur (anahtar
+      # TW_KILIT) ve aşağıda commit'lenir. TW_REFRESH_TOKEN yalnız İLK kurulum
+      # içindir — oauth2.enc doğduktan sonra okunmaz.
+      TW_CLIENT_ID: ${{ secrets.TW_CLIENT_ID }}
+      TW_CLIENT_SECRET: ${{ secrets.TW_CLIENT_SECRET }}
+      TW_KILIT: ${{ secrets.TW_KILIT }}
+      TW_REFRESH_TOKEN: ${{ secrets.TW_REFRESH_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -54,7 +58,7 @@ jobs:
           python-version: '3.11'
 
       - name: Bağımlılıklar
-        run: pip install --quiet requests requests-oauthlib
+        run: pip install --quiet requests cryptography
 
       - name: Duman sınaması
         run: python tweet/duman.py
@@ -62,19 +66,21 @@ jobs:
       - name: Zinciri gönder
         run: python tweet/gonder.py ${{ github.event.inputs.kuru == 'true' && '--kuru' || '' }}
 
-      # Defter gönderimden SONRA commit'lenir: koşu gönderim ile commit
-      # arasında ölürse bir sonraki koşu aynı içeriği yeniden atabilir —
-      # X zaten birebir aynı metni reddettiği için zincirin kökü ikilenmez.
-      - name: Defteri commit'le
+      # Defter VE jeton dosyası gönderimden SONRA commit'lenir. oauth2.enc'in
+      # commit'i KRİTİK: X refresh token'ı her koşuda döndürür, dönen jeton
+      # commit'lenmezse bir sonraki koşu ölü jetonla açılır ve kimlik düşer.
+      # if: always() bu yüzden — gönderim yarıda ölse bile yenilenmiş jeton
+      # depoya girmeli.
+      - name: Defter ve jetonu commit'le
         if: always()
         run: |
           git config --global user.name  "tto-tweet"
           git config --global user.email "bot@users.noreply.github.com"
-          git add tweet/defter.json || true
+          git add tweet/defter.json tweet/oauth2.enc 2>/dev/null || true
           if git diff --cached --quiet; then
-            echo "defter değişmedi"
+            echo "defter ve jeton değişmedi"
           else
-            git commit -m "tweet: $(date -u +'%Y-%m-%d') defter (otomatik)"
+            git commit -m "tweet: $(date -u +'%Y-%m-%d') defter/jeton (otomatik)"
             git pull --rebase --autostash
             git push
           fi
