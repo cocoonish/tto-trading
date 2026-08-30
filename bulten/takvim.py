@@ -304,8 +304,10 @@ def elle(ufuk_gun: int = 21) -> list[Kayit]:
             continue
         if bugun <= g <= son:
             out.append(Kayit(k["tarih"], k.get("saat", ""), k.get("ulke", "TR"), k["olay"],
-                             k.get("onem", 2), k.get("kaynak", ""), "kesin",
-                             k.get("beklenti", ""), k.get("onceki", ""), k.get("not", "")))
+                             onem=k.get("onem", 2), kaynak=k.get("kaynak", ""),
+                             kesinlik="kesin", beklenti=k.get("beklenti", ""),
+                             beklenti_sayi=k.get("beklenti_sayi"),
+                             onceki=k.get("onceki", ""), not_=k.get("not", "")))
 
     # kural: her ay ayın N'inde (hafta sonuna denk gelirse ilk iş günü)
     for k in d.get("kural", []):
@@ -320,9 +322,11 @@ def elle(ufuk_gun: int = 21) -> list[Kayit]:
                 g = _is_gunu(g)
             if bugun <= g <= son:
                 out.append(Kayit(g.isoformat(), k.get("saat", ""), k.get("ulke", "TR"),
-                                 k["olay"], k.get("onem", 2), k.get("kaynak", ""), "kural",
-                                 k.get("beklenti", ""), k.get("onceki", ""),
-                                 k.get("not", "Tarih kuralla türetildi; resmî takvimle doğrulanmalı.")))
+                                 k["olay"], onem=k.get("onem", 2), kaynak=k.get("kaynak", ""),
+                                 kesinlik="kural", beklenti=k.get("beklenti", ""),
+                                 beklenti_sayi=k.get("beklenti_sayi"),
+                                 onceki=k.get("onceki", ""),
+                                 not_=k.get("not", "Tarih kuralla türetildi; resmî takvimle doğrulanmalı.")))
     return out
 
 

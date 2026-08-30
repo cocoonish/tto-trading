@@ -1,114 +1,114 @@
 {
-  "_aciklama": "TEMA DEFTERİ — bültenin hafızası. Piyasada adı olan, haftalarca süren ve birden çok varlığı aynı anda hareket ettiren anlatılar burada takip edilir. Günlük bülten olayları görür ama temayı göremez: dört varlığın aynı sebeple hareket ettiğini fark etmek, her birini ayrı ayrı açıklamaktan farklı bir iştir. Bu defter o farkı kapatır. Yorum katmanı her koşuda defteri okur, durumu değişen temayı günceller ve yeni bir tema doğduysa ekler.",
-  "_son_guncelleme": "2026-08-28",
-  "temalar": [
-    {
-      "ad": "Debasement trade v2",
-      "durum": "izlemede",
-      "tez": "Mali fazlalık para biriminin değerini aşındırır; altın, gümüş ve bitcoin uzun, dolar ve uzun vadeli tahvil kısa. 2025'te ana akıma girdi (altın 4.000 doları aştı; gümüş %144, altın %65), 30 Ocak 2026'da Warsh'ın Fed başkanlığına aday gösterilmesiyle bitti (altın tek günde zirveden %13 düştü). ABD Hazinesi'nin 19 Ağustos 2026'da geri alımları ikiye katlaması, tezi maliye kanalından yeniden açtı.",
-      "varliklar": [
-        "Altın (XAU, ons)",
-        "Gümüş (XAG, ons)",
-        "Platin",
-        "Bitcoin",
-        "Dolar endeksi (DXY)",
-        "ABD 10 yıllık",
-        "ABD 30 yıllık"
-      ],
-      "dogrulayan": [
-        "Altının 52 haftalık zirveyi (5.318) aşması",
-        "Gümüş ve bitcoin'in yılbaşından bu yana artıya dönmesi",
-        "Nominal getiri yüksek kalırken REEL getirinin gerilemesi",
-        "4 Kasım refinansmanında geri alımın bir kez daha artırılması",
-        "Fed'in hedef üstü enflasyona tolerans sinyali"
-      ],
-      "curuten": [
-        "Warsh yönetimindeki Fed'in şahin duruşu teyit etmesi",
-        "9 Eylül'den itibaren geri alımın uzun uçta ölçülebilir etki üretmemesi",
-        "Bütçe açığı patikasında iyileşme"
-      ],
-      "izlenecek_gosterge": "ABD 10 yıllık REEL getirisi",
-      "son_gozlem": "28 Ağustos 2026: tez yatay. 27 Ağustos kapanışında gümüş +%2,12, altın +%0,25, platin +%0,52; altın/gümüş oranı 66,39 kat (−%1,2), yani hareket sanayi talebi ağırlıklı. İzlenecek gösterge ters yönde: ABD 10 yıllığı +0,8 bp ile %4,672, aralığın %90'ında. Dolar endeksi %0,01 ile yerinde. Aylık ölçekte gümüş +%19,99, altın +%14,25, platin +%16,05; yıl başından beri gümüş −%1,01, platin −%9,30, altın +%6,57. Çürütücü ölçüt (Warsh yönetimindeki Fed'in şahin duruşu teyit etmesi) bugün 17:00'de sınanıyor.",
-      "son_guncelleme": "2026-08-28",
-      "gelisme": "<p>Tez <strong>bugünkü kesitte ne güçlendi ne çürüdü.</strong> Metal yukarı gitti — gümüş %2,12 artışla 69,429 dolar, altın %0,25 artışla 4.609,7 dolar, platin %0,52 — ve altın/gümüş oranı 66,39 kata indi; ama bu hareketin sürücüsü para birimi aşınması değil sanayi talebi: gümüşün aylık kazancı %19,99, altınınki %14,25. İzlenecek göstergemiz ters yönde: ABD 10 yıllığı 0,8 baz puan yükseldi ve nominal getiri düşmedi, yani doğrulayıcı ölçüt olan 'nominal yüksek kalırken reel getirinin gerilemesi' gerçekleşmedi. Dolar endeksi %0,01 ile yerinde durduğu için hareket dolar kaynaklı da değil. Doğrulayan ölçütlerden altının 52 haftalık zirveyi (5.318) aşması hâlâ uzak: altın aralığın %62'sinde, gümüş %40'ında ve yıl başından beri %1,01 ekside. Çürütücü ölçüt bugün sınanacak — Warsh'ın Jackson Hole konuşması.</p>"
-    },
-    {
-      "ad": "ABD uzun uç arz baskısı",
-      "durum": "aktif",
-      "tez": "Genişleyen bütçe açığı, yapay zekâ yatırımlarını fonlayan şirket tahvili arzı ve vade primi, ABD uzun vadeli getirilerini yukarı itiyor. Hazine buna borç yönetimi araçlarıyla (geri alım, ihraç kompozisyonu) karşılık veriyor.",
-      "varliklar": [
-        "ABD 10 yıllık",
-        "ABD 30 yıllık",
-        "ABD 2s10s",
-        "MOVE (tahvil oynaklığı)",
-        "Dolar endeksi (DXY)"
-      ],
-      "dogrulayan": [
-        "10 yıllığın 52 haftalık aralığın üst ucunda kalmaya devam etmesi",
-        "Refinansmanda kupon ihracının artırılması",
-        "Vade priminin genişlemesi"
-      ],
-      "curuten": [
-        "Açık patikasının daralması",
-        "Uzun ucun aralık ortasına dönmesi"
-      ],
-      "izlenecek_gosterge": "ABD 10 yıllığın 52 haftalık aralıktaki konumu (bu koşuda %90)",
-      "son_gozlem": "28 Ağustos 2026: tez korundu. 10 yıllık %4,672 (aralığın %90'ı, bir gün önce %91), 30 yıllık %5,191 (%85). Günlük hareket küçük, haftalık uzun uç rahatlaması sürüyor (30 yıllık −4,6 bp). 2s10s 50 bp, 5s30s 80 bp. Cleveland Fed Başkanı Hammack faiz artırımı için 'harekete geçme zamanı' dedi, Boston Fed Başkanı Collins verileri karışık buldu. Haber tonu +0,20'den −0,43'e döndü (8 gün, 240 makale). İlk ölçüm 9 Eylül geri alım turu; bugün Warsh'ın konuşması Hazine–Fed ilişkisini tarif edebilir.",
-      "son_guncelleme": "2026-08-28",
-      "gelisme": "<p>Tez <strong>bugünkü kesitte korundu.</strong> 27 Ağustos kapanışında 10 yıllık %4,672 ile 52 haftalık aralığın %90'ında, 30 yıllık %5,191 ile %85'inde — ikisi de aralığın üst ucunda kalmaya devam ediyor, yani doğrulayan ölçüt yerinde. Günlük hareketler küçük (10 yıllık +0,8 bp, 30 yıllık +0,5 bp) ama haftalık bazda uzun uç rahatladı (30 yıllık −4,6 bp, 10 yıllık −2,4 bp). Uzun ucun eğimi 80 baz puana yataylaştı, ana eğim 50 baz puana dikleşti. Haber tarafı tezin lehine sertleşiyor: Amerikan 10 yıllığının haber tonu sekiz günde +0,20'den −0,43'e döndü; geri alımın vade primi sorununu çözmeyeceği tartışması ile iki Fed yetkilisinin faiz artırımı söylemi aynı haftaya sığdı. İlk gerçek ölçüm 9 Eylül'deki operasyonlarda.</p>"
-    },
-    {
-      "ad": "TCMB fonlama normalleşmesi",
-      "durum": "aktif",
-      "tez": "Politika faizi sabitken fiilî fonlama maliyeti koridorun üst ucundaydı. 1 Mart'ta ara verilen bir hafta vadeli repo ihalelerine 23 Ağustos'ta yeniden başlanması, ortalama fonlama maliyetini politika faizine doğru indirecek: faiz kararı olmadan fiilî gevşeme.",
-      "varliklar": [
-        "TLREF (gecelik gerçekleşen)",
-        "Politika faizi (1 hafta repo)",
-        "TLREF − politika farkı",
-        "DİBS 2 yıllık",
-        "USD/TRY"
-      ],
-      "dogrulayan": [
-        "Ağırlıklı ortalama fonlama maliyeti serisinin %40,00'dan aşağı kayması",
-        "Gerçekleşen gecelik faizin %37 civarında kalıcılaşması",
-        "İhalelerde fonlanan tutarın 1 milyar liradan büyümesi",
-        "10 Eylül Kurul kararının fiilî gevşemeyi resmîleştirmesi"
-      ],
-      "curuten": [
-        "Gecelik faizin koridorun tavanına geri tırmanması",
-        "İhalelerin sembolik tutarda kalması",
-        "Kur hızının %30'un üzerine çıkıp gevşemeyi geri aldırması"
-      ],
-      "izlenecek_gosterge": "Resmî ağırlıklı ortalama fonlama maliyetinin %40,00'dan aşağı kayması (gerçekleşen gecelik referans faiz %36,85, seri 7 Ağustos'tan beri donuk)",
-      "son_gozlem": "28 Ağustos 2026: tez miktarda güçlendi, resmî ölçüde askıda. 21 Ağustos haftası verisi: kredi büyümesi %23,7 (önceki %25,9), tüketici kredisi %30,2 (önceki %43,0), makroihtiyati ayrışma 10,3 puan, reel kredi büyümesi −8,1 puan. Gerçekleşen gecelik faiz %36,85, politikanın 0,15 puan altında. AMA resmî ağırlıklı ortalama fonlama maliyeti hâlâ 7 Ağustos'taki %40,00'da ve geçersiz sayılıyor — 27 Ağustos yayımı onu getirmedi. Üç aylık DİBS getirisi %37,36'dan %38,15'e döndü. Sıradaki teyit 3 Eylül haftalık istatistikleri, ardından 10 Eylül Kurul.",
-      "son_guncelleme": "2026-08-28",
-      "gelisme": "<p>Tez <strong>miktar tarafında güçlendi, resmî ölçüde yerinde saydı.</strong> 27 Ağustos'ta yayımlanan haftalık istatistikler (21 Ağustos haftası) frenin toplamda ısırdığını gösterdi: kur arındırılmış kredi büyümesi %25,9'dan %23,7'ye, tüketici kredisi büyümesi %43,0'ten %30,2'ye indi, makroihtiyati ayrışma 10,3 puana daraldı, reel kredi büyümesi −8,1 puana derinleşti. Buna karşılık doğrulayan ölçütlerin en önemlisi hâlâ eksik: resmî ağırlıklı ortalama fonlama maliyeti serisi 7 Ağustos'taki %40,00'da donuk ve kaynak onu güncel saymıyor — dün beklenen teyit gelmedi. Gerçekleşen gecelik referans faiz %36,85 ile politikanın 0,15 puan altında. Eğrinin kısa ucu ise kısmen geri adım attı: üç aylık getiri %37,36'dan %38,15'e, 79 baz puan yükseldi. Yeni teyit tarihi 3 Eylül 14:30.</p>"
-    },
-    {
-      "ad": "Enerji kaynaklı enflasyon riski",
-      "durum": "aktif",
-      "tez": "ABD–İran gerilimi petrolü yukarı itiyor; rafineri marjları (özellikle distilat) olağandışı geniş. Türkiye enerji ithalatçısı: cari dengeye doğrudan, enflasyona birkaç ay gecikmeyle yazılır.",
-      "varliklar": [
-        "Brent",
-        "WTI",
-        "3:2:1 crack spread",
-        "Distilat crack (HO−WTI)",
-        "Brent−WTI farkı"
-      ],
-      "dogrulayan": [
-        "Brent'in 95 doların üzerinde kalıcılaşması",
-        "Distilat marjının geniş kalması",
-        "Cari açığın enerji kalemiyle büyümesi"
-      ],
-      "curuten": [
-        "Gerilimin yumuşaması ve Brent'in 85 doların altına dönmesi",
-        "Marjların normale dönmesi"
-      ],
-      "izlenecek_gosterge": "Brent ve distilat crack spread'i",
-      "son_gozlem": "28 Ağustos 2026: tema AKTİF ve güçlendi. 27 Ağustos kapanışında Brent 89,70 dolar (günlük +%2,12, haftalık −%4,35), ABD referansı 83,53 dolar (+%1,58, haftalık −%4,90); çürütücü eşik olan 85 dolardan uzaklaşıldı. Sürücü Hürmüz'deki tanker saldırısı ve görüşmelerin tıkanması. Devir düzeltmesi bu koşuda kuruldu: üç–iki–bir marjı 71,13 dolar, benzin marjı 58,61 dolar, distilat marjı 96,18 dolar; Brent–ABD farkı 6,17 dolar. Doğal gaz +%2,29 ile 2,907 dolar ama aralığın %8'inde. Türkiye ayağı bugün 10:00'daki temmuz dış ticaret verisiyle ilk kez ölçülüyor.",
-      "son_guncelleme": "2026-08-28",
-      "gelisme": "<p>Tez <strong>güçlendi.</strong> Hürmüz'de bir tankere saldırı düzenlenmesi, İran–Amerika görüşmelerinin tıkanması ve Devrim Muhafızları'nın geçişin koşulsuz açılmayacağını yinelemesi üzerine Brent 27 Ağustos kapanışında %2,12 artışla 89,70 dolara, ABD referansı %1,58 artışla 83,53 dolara çıktı. Çürütücü ölçüt olan 85 doların altına dönüş bu koşuda uzaklaştı. Bu koşuda vadeli sözleşme devri düzeltmesi kurulabildi, dolayısıyla marj seviyeleri de kullanılabilir: üç–iki–bir marjı 71,13 dolar (+0,8), benzin marjı 58,61 dolar (+1,4), distilat marjı 96,18 dolar (−0,5). Marj bacağı geniş kalmayı sürdürüyor, yani doğrulayan ikinci ölçüt de yerinde. Haftalık ölçekte petrol hâlâ ekside (Brent −%4,35) — dünkü hareket geçen haftanın diplomasi priminin bir kısmını geri koydu, tamamını değil.</p>"
-    }
-  ],
-  "_yazar_notu": "Her koşuda AKTİF ve İZLEMEDE olan her tema için 'gelisme' alanına o günün/haftanın gelişmesini yaz (2-4 cümle, rakamlı): tez bu koşuda güçlendi mi zayıfladı mı, hangi doğrulayan/çürüten işaret gerçekleşti, izlenecek gösterge nerede. 'son_gozlem' temanın SON DURUMUNU özetler; 'gelisme' ise BU KOŞUDA ne değiştiğini anlatır. İkisi farklı şeydir."
+ "_aciklama": "TEMA DEFTERİ — bültenin hafızası. Piyasada adı olan, haftalarca süren ve birden çok varlığı aynı anda hareket ettiren anlatılar burada takip edilir. Günlük bülten olayları görür ama temayı göremez: dört varlığın aynı sebeple hareket ettiğini fark etmek, her birini ayrı ayrı açıklamaktan farklı bir iştir. Bu defter o farkı kapatır. Yorum katmanı her koşuda defteri okur, durumu değişen temayı günceller ve yeni bir tema doğduysa ekler.",
+ "_son_guncelleme": "2026-08-30",
+ "temalar": [
+  {
+   "ad": "Debasement trade v2",
+   "durum": "izlemede",
+   "tez": "Mali fazlalık para biriminin değerini aşındırır; altın, gümüş ve bitcoin uzun, dolar ve uzun vadeli tahvil kısa. 2025'te ana akıma girdi (altın 4.000 doları aştı; gümüş %144, altın %65), 30 Ocak 2026'da Warsh'ın Fed başkanlığına aday gösterilmesiyle bitti (altın tek günde zirveden %13 düştü). ABD Hazinesi'nin 19 Ağustos 2026'da geri alımları ikiye katlaması, tezi maliye kanalından yeniden açtı.",
+   "varliklar": [
+    "Altın (XAU, ons)",
+    "Gümüş (XAG, ons)",
+    "Platin",
+    "Bitcoin",
+    "Dolar endeksi (DXY)",
+    "ABD 10 yıllık",
+    "ABD 30 yıllık"
+   ],
+   "dogrulayan": [
+    "Altının 52 haftalık zirveyi (5.318) aşması",
+    "Gümüş ve bitcoin'in yılbaşından bu yana artıya dönmesi",
+    "Nominal getiri yüksek kalırken REEL getirinin gerilemesi",
+    "4 Kasım refinansmanında geri alımın bir kez daha artırılması",
+    "Fed'in hedef üstü enflasyona tolerans sinyali"
+   ],
+   "curuten": [
+    "Warsh yönetimindeki Fed'in şahin duruşu teyit etmesi",
+    "9 Eylül'den itibaren geri alımın uzun uçta ölçülebilir etki üretmemesi",
+    "Bütçe açığı patikasında iyileşme"
+   ],
+   "izlenecek_gosterge": "ABD 10 yıllık REEL getirisi",
+   "son_gozlem": "30 Ağustos 2026 (haftaya bakış): tez bu hafta ZAYIFLADI. Çürütücü ölçüt — Warsh yönetimindeki Fed'in şahin duruşu teyit etmesi — 28 Ağustos Jackson Hole konuşmasıyla gerçekleşti ve tepki doğrudan metale yazıldı: 28 Ağustos kapanışında gümüş günlük %2,37, altın %1,73 düştü; haftalık ölçekte gümüş %2,42, altın %2,04, platin %1,75 ekside ve bitcoin cuma günü %3,02 kaybetti. Doğrulayıcı ölçüt olan 'nominal getiri yüksek kalırken reel getirinin gerilemesi' de çalışmadı: dolar endeksi haftalık %0,91 yükseldi. Aylık ölçekte tez hâlâ ayakta (gümüş %15,25, platin %12,25, altın %10,48 artıda) ve maliye kanalı açık — ABD Hazinesi'nin geri alımı 9 Eylül'de ikiye katlanıyor. Yani tez ölmedi, para politikası kanadından bir hafta boyunca beslenmedi.",
+   "son_guncelleme": "2026-08-30",
+   "gelisme": "<p>Tema bu hafta <strong>çürütücü ölçütünün ilk gerçek sınavını verdi ve kaybetti.</strong> Kevin Warsh'ın ilk Jackson Hole konuşması şahin çıktı, eylül toplantısı artırım tartışmasına döndü ve değerli metal cuma öğleden sonra tasfiye edildi: gümüş günlük %2,37, altın %1,73. Haftalık ölçekte üç metal de ekside, altın/gümüş oranı 66,83 kata çıktı — yani satış sanayi talebine duyarlı uçta yoğunlaştı. Tezin maliye kanadı ise sağlam: 9 Eylül'den itibaren uzun vadeli geri alım operasyonları operasyon başına en az 4 milyar dolara çıkıyor ve 30 yıllık getiri bu hafta 7,0 baz puan geriledi. Tema izlemede kalıyor; para politikası kanadı kapalı, maliye kanadı açık.</p>"
+  },
+  {
+   "ad": "ABD uzun uç arz baskısı",
+   "durum": "aktif",
+   "tez": "Genişleyen bütçe açığı, yapay zekâ yatırımlarını fonlayan şirket tahvili arzı ve vade primi, ABD uzun vadeli getirilerini yukarı itiyor. Hazine buna borç yönetimi araçlarıyla (geri alım, ihraç kompozisyonu) karşılık veriyor.",
+   "varliklar": [
+    "ABD 10 yıllık",
+    "ABD 30 yıllık",
+    "ABD 2s10s",
+    "MOVE (tahvil oynaklığı)",
+    "Dolar endeksi (DXY)"
+   ],
+   "dogrulayan": [
+    "10 yıllığın 52 haftalık aralığın üst ucunda kalmaya devam etmesi",
+    "Refinansmanda kupon ihracının artırılması",
+    "Vade priminin genişlemesi"
+   ],
+   "curuten": [
+    "Açık patikasının daralması",
+    "Uzun ucun aralık ortasına dönmesi"
+   ],
+   "izlenecek_gosterge": "ABD 10 yıllığın 52 haftalık aralıktaki konumu (bu koşuda %90)",
+   "son_gozlem": "30 Ağustos 2026 (haftaya bakış): tez korundu ama hafta içinde uzun uç RAHATLADI. 28 Ağustos kapanışında 10 yıllık %4,72 (52 haftalık aralığın %97'sinde), 30 yıllık %5,206 (%87'sinde). Haftalık değişimler ayrışıyor: 30 yıllık 7,0 baz puan, 10 yıllık 1,8 baz puan geriledi; buna karşılık 5 yıllık 5,7 baz puan yükseldi. 5s30s eğimi 72 baz puana daraldı, 2s10s 55 baz puanda. Yani hafta boyunca sıkılaşma beklentisi kısa/orta vadeye, geri alım beklentisi uzun uca yazıldı. Haber tarafında Hazine'nin geri alımı Hazine Genel Hesabı'ndaki ~1 trilyon dolarla fonlayabileceği yazıldı; Druckenmiller'ın öncülük ettiği şüpheciler ve tahmin piyasaları müdahalenin kalıcı etkisine inanmıyor.",
+   "son_guncelleme": "2026-08-30",
+   "gelisme": "<p>Tez <strong>aktif ve bu hafta ilk kez iki yönlü kanıt üretti.</strong> Uzun uç geriledi (30 yıllık haftalık −7,0 baz puan), orta vade yükseldi (5 yıllık +5,7 baz puan) ve 5s30s eğimi 72 baz puana daraldı. Bu ayrışma temayı çürütmüyor, sürücüsünü ayrıştırıyor: uzun uçtaki rahatlama arz endişesinin azalmasından değil, Hazine'nin geri alım hamlesinden geliyor. Tahmin piyasalarındaki fiyatlama hâlâ 2026 içinde yeni zirveler öngörüyor. 9 Eylül'deki ilk büyütülmüş operasyon, müdahalenin ölçülebilir etki üretip üretmediğini gösterecek ilk kanıt olacak.</p>"
+  },
+  {
+   "ad": "TCMB fonlama normalleşmesi",
+   "durum": "aktif",
+   "tez": "Politika faizi sabitken fiilî fonlama maliyeti koridorun üst ucundaydı. 1 Mart'ta ara verilen bir hafta vadeli repo ihalelerine 23 Ağustos'ta yeniden başlanması, ortalama fonlama maliyetini politika faizine doğru indirecek: faiz kararı olmadan fiilî gevşeme.",
+   "varliklar": [
+    "TLREF (gecelik gerçekleşen)",
+    "Politika faizi (1 hafta repo)",
+    "TLREF − politika farkı",
+    "DİBS 2 yıllık",
+    "USD/TRY"
+   ],
+   "dogrulayan": [
+    "Ağırlıklı ortalama fonlama maliyeti serisinin %40,00'dan aşağı kayması",
+    "Gerçekleşen gecelik faizin %37 civarında kalıcılaşması",
+    "İhalelerde fonlanan tutarın 1 milyar liradan büyümesi",
+    "10 Eylül Kurul kararının fiilî gevşemeyi resmîleştirmesi"
+   ],
+   "curuten": [
+    "Gecelik faizin koridorun tavanına geri tırmanması",
+    "İhalelerin sembolik tutarda kalması",
+    "Kur hızının %30'un üzerine çıkıp gevşemeyi geri aldırması"
+   ],
+   "izlenecek_gosterge": "Resmî ağırlıklı ortalama fonlama maliyetinin %40,00'dan aşağı kayması (gerçekleşen gecelik referans faiz %36,85, seri 7 Ağustos'tan beri donuk)",
+   "son_gozlem": "30 Ağustos 2026 (haftaya bakış): tez bu hafta EN GÜÇLÜ kanıtını üretti. Gecelik gerçekleşen referans faiz 27 Ağustos itibarıyla %36,82 ve politika faizinin (%37,00) 0,18 puan ALTINDA; haftalık düşüş 3,04 puan. Etki eğrinin tamamına yayıldı: DİBS spot eğrisi 21 Ağustos'tan 28 Ağustos'a üç ayda %40,61'den %38,20'ye, bir yılda %40,32'den %39,88'e, iki yılda %40,46'dan %39,97'ye indi; dokuz yıllık %30,31'den %30,07'ye. Faturayı bankalar tahsil etti: BIST Bankacılık haftalık %5,98 ile fotoğrafın en büyük hareketi. İzlenecek gösterge ise HÂLÂ askıda: resmî ağırlıklı ortalama fonlama maliyeti 7 Ağustos'tan beri %40,00'da donuk ve kaynak onu güncel saymıyor. Bir sonraki şans 3 Eylül 14:30 yayımı.",
+   "son_guncelleme": "2026-08-30",
+   "gelisme": "<p>Tez <strong>miktarda doğrulandı, resmî ölçüde hâlâ askıda.</strong> Gecelik gerçekleşen faiz politika faizinin altına geçti ve etki eğrinin kısa ucunda 241 baz puanlık bir düşüşe dönüştü; dokuz yıllık nokta ise 24 baz puanla yetindi. Bu asimetri temanın sınırını da çiziyor: piyasa bunu enflasyon patikasının değişmesi değil, kısa faizin seviyesinin değişmesi olarak okuyor ve iki yıllık enflasyon risk primi 8,57 puanda duruyor. İzlenecek göstergenin — resmî fonlama maliyeti serisinin — üç haftadır tazelenmemesi temanın en zayıf halkası; 3 Eylül'de tazelenmezse gevşemenin resmî ölçüsü olmadan dördüncü haftaya giriyoruz.</p>"
+  },
+  {
+   "ad": "Enerji kaynaklı enflasyon riski",
+   "durum": "aktif",
+   "tez": "ABD–İran gerilimi petrolü yukarı itiyor; rafineri marjları (özellikle distilat) olağandışı geniş. Türkiye enerji ithalatçısı: cari dengeye doğrudan, enflasyona birkaç ay gecikmeyle yazılır.",
+   "varliklar": [
+    "Brent",
+    "WTI",
+    "3:2:1 crack spread",
+    "Distilat crack (HO−WTI)",
+    "Brent−WTI farkı"
+   ],
+   "dogrulayan": [
+    "Brent'in 95 doların üzerinde kalıcılaşması",
+    "Distilat marjının geniş kalması",
+    "Cari açığın enerji kalemiyle büyümesi"
+   ],
+   "curuten": [
+    "Gerilimin yumuşaması ve Brent'in 85 doların altına dönmesi",
+    "Marjların normale dönmesi"
+   ],
+   "izlenecek_gosterge": "Brent ve distilat crack spread'i",
+   "son_gozlem": "30 Ağustos 2026 (haftaya bakış): tema AKTİF ama ham petrol ayağı çürüdü, ürün ayağı güçlendi. 28 Ağustos kapanışında Brent 88,10 dolar (haftalık −%5,42), ABD referansı 83,40 dolar (haftalık −%4,20); sürücü İran dosyasının fiziki arz tehdidinden yaptırım çatışmasına yeniden sınıflandırılması ve Basra Körfezi ihracatının 15–16 milyon varil/gün seviyesine toparlanması. Ürün tarafı tersine döndü: RBOB benzin haftalık %3,11, doğal gaz %3,90 arttı; kalorifer yakıtı %3,13 geriledi. Marjlar geniş kaldı — 3:2:1 marjı 61,49 dolar/varil, distilat marjı 95,06 dolar, benzin marjı 44,71 dolar. Türkiye ayağı ölçüldü: temmuz dış ticaret açığı yıllık %13,6 artışla 7.343 milyon dolara çıktı ve enerji hariç bakıldığında artış belirgin biçimde yumuşuyor.",
+   "son_guncelleme": "2026-08-30",
+   "gelisme": "<p>Tema <strong>aktif kalıyor ama bacakları ayrıştı.</strong> Ham petrol haftalık %5,42 düştü ve tezin 'jeopolitik prim' ayağı zayıfladı; buna karşılık distilat marjı 95,06 dolarla tarihsel olarak geniş kaldı ve benzin marjı 44,71 dolara genişledi. Yani enerjinin enflasyona geçişi artık ham petrol fiyatından değil, rafineri marjından gelecek. Türkiye tarafında ilk sayısal kanıt geldi: temmuz dış ticaret açığındaki %13,6'lık artışın kaynağı enerji kalemi ve bu veri ağustostaki tırmanışı henüz kapsamıyor. Bir sonraki ölçüm noktası 11 Eylül'deki temmuz ödemeler dengesi.</p>"
+  }
+ ],
+ "_yazar_notu": "Her koşuda AKTİF ve İZLEMEDE olan her tema için 'gelisme' alanına o günün/haftanın gelişmesini yaz (2-4 cümle, rakamlı): tez bu koşuda güçlendi mi zayıfladı mı, hangi doğrulayan/çürüten işaret gerçekleşti, izlenecek gösterge nerede. 'son_gozlem' temanın SON DURUMUNU özetler; 'gelisme' ise BU KOŞUDA ne değiştiğini anlatır. İkisi farklı şeydir."
 }
