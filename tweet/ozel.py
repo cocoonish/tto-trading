@@ -72,6 +72,8 @@ def main() -> int:
                    help="eklenecek PNG (tekrarlanabilir, en çok 4)")
     p.add_argument("--gonder", action="store_true",
                    help="gerçekten gönder (verilmezse kuru)")
+    p.add_argument("--sil", help="önce bu id'li tweeti sil (düzeltme akışı: "
+                                 "eski gönderi kaldırılıp yenisi atılır)")
     a = p.parse_args()
 
     metin = Path(a.metin).read_text(encoding="utf-8").strip()
@@ -94,6 +96,14 @@ def main() -> int:
 
     import requests
     erisim = gonder._erisim_al(gonder.JETON_DOSYA)
+    if a.sil:
+        yanit = requests.delete(f"{gonder.UC}/{a.sil}", timeout=30,
+                                headers={"Authorization": f"Bearer {erisim}"})
+        if yanit.status_code == 200 and yanit.json().get("data", {}).get("deleted"):
+            print(f"· eski tweet silindi: {a.sil}")
+        else:
+            print(f"::warning::eski tweet silinemedi ({yanit.status_code}): "
+                  f"{yanit.text[:150]} — yenisi yine de gönderiliyor")
     govde: dict = {"text": metin}
     if resimler:
         idler = [k for k in (_yukle(erisim, r) for r in resimler) if k]

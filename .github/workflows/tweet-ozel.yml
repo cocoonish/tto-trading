@@ -27,6 +27,10 @@ on:
         description: 'Gerçekten gönder (kapalıysa kuru koşu)'
         type: boolean
         default: false
+      sil_id:
+        description: 'Önce bu id''li tweeti sil (düzeltme akışı)'
+        type: string
+        default: ''
 
 permissions:
   contents: write
@@ -65,7 +69,9 @@ jobs:
         run: |
           RESIMLER=""
           for r in ${{ inputs.resimler }}; do RESIMLER="$RESIMLER --resim $r"; done
-          python tweet/ozel.py --metin "${{ inputs.metin }}" $RESIMLER \
+          SIL=""
+          if [ -n "${{ inputs.sil_id }}" ]; then SIL="--sil ${{ inputs.sil_id }}"; fi
+          python tweet/ozel.py --metin "${{ inputs.metin }}" $RESIMLER $SIL \
             ${{ inputs.gonder == true && '--gonder' || '' }}
 
       # Jeton kasası: gönderim koşusu refresh token'ı döndürür; kaybolmasın.
