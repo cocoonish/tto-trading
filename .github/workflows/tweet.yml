@@ -76,7 +76,13 @@ jobs:
         run: |
           git config --global user.name  "tto-tweet"
           git config --global user.email "bot@users.noreply.github.com"
-          git add tweet/defter.json tweet/oauth2.enc 2>/dev/null || true
+          # AYRI AYRI: git add, listedeki TEK bir yol bile yoksa komutun
+          # TAMAMINI reddeder ve hiçbir şey sahnelenmez. 30.08'de defter.json
+          # henüz doğmamışken bu satır tekti ve yenilenmiş oauth2.enc
+          # commit'lenemedi — tek kullanımlık refresh token koşucuyla birlikte
+          # kayboldu, eldeki secret ölü kaldı.
+          git add tweet/defter.json 2>/dev/null || true
+          git add tweet/oauth2.enc  2>/dev/null || true
           if git diff --cached --quiet; then
             echo "defter ve jeton değişmedi"
           else

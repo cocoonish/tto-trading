@@ -133,6 +133,11 @@ def _gonder_zincir(zincir: list[str], erisim: str) -> list[str]:
         yanit = requests.post(
             UC, json=govde, timeout=30,
             headers={"Authorization": f"Bearer {erisim}"})
+        if yanit.status_code == 402:
+            raise SystemExit(
+                "X: 'credits depleted' — geliştirici hesabında API kredisi yok. "
+                "Konsolun faturalama/credits bölümünden bakiye yüklenmeli; "
+                "kredi gelince koşu aynı içeriği baştan dener (defter yazılmadı).")
         if yanit.status_code not in (200, 201):
             raise SystemExit(
                 f"tweet {i + 1}/{len(zincir)} gönderilemedi "
