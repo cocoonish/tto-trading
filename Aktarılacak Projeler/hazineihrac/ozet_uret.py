@@ -37,6 +37,72 @@ aylik_ham_mape = float((abs(aylik["Tahmin-Ham (Milyon TL)"] / aylik["Gerçek Ger
 pl_ihale = pl[pl["Yöntem"].astype(str).str.contains("hale", na=False)]
 plt = pd.to_numeric(pl_ihale["Tahmini Gerçekleşme (Milyon TL)"], errors="coerce")
 
+# ── SAYFANIN KULLANDIĞI AMA ÖZETTE OLMAYAN ALANLAR
+# Sayfa bu on beş anahtarı <Deger> ile çağırıyordu; ozet.json'da olmadıkları
+# için hepsi statik yedeklerinde DONMUŞTU — yani noktalı çizgiyle "canlı"
+# görünüyor ama hiç tazelenmiyorlardı. Tanımlar, sayfadaki mevcut sayıları
+# birebir üretecek şekilde seçildi (48,1 / 24,5 / 9,7 / 9,4 / 6,8 / 1,6 ·
+# 27 çeyrek · 5,7 ihale/ay · %67 ham MAPE): yani bu bir yeniden tanımlama
+# değil, elle hesaplanıp dondurulmuş bir sayının hattı kurmaktır.
+
+# (a) Senet türü payları — toplam gerçekleşmeye göre.
+_pay = (ih.groupby("Senet Tanımı")["Toplam(Gerçekleşme)"].sum()
+        / ih["Toplam(Gerçekleşme)"].sum() * 100.0)
+PAY_ADI = {
+    "pay_sabit":    "Sabit Kuponlu Devlet Tahvili",
+    "pay_tlref":    "TLREF'e Endeksli Devlet Tahvili",
+    "pay_tufe":     "TÜFE'ye Endeksli Devlet Tahvili",
+    "pay_bono":     "Hazine Bonosu",
+    "pay_degisken": "Değişken Faizli Devlet Tahvili",
+    "pay_kuponsuz": "Kuponsuz Devlet Tahvili",
+}
+paylar = {k: round(float(_pay.get(v, 0.0)), 1) for k, v in PAY_ADI.items()}
+
+# (b) Planlı takvimin AYLIK kesiti. "İlk iki ay" derken kastedilen, ihale
+# İÇEREN ilk iki ay: takvim çoğu zaman içinde bulunulan ayın yalnız doğrudan
+# satışlarıyla başlıyor ve o ayı "ilk ay" saymak sayfada boş bir satır üretir.
+pl = pl.copy()
+pl["t"] = pd.to_datetime(pl["İhale Tarihi"], dayfirst=True, errors="coerce")
+pl["ayp"] = pl["t"].dt.to_period("M")
+pl["tahmin"] = pd.to_numeric(pl["Tahmini Gerçekleşme (Milyon TL)"], errors="coerce")
+pl["hedef"] = pd.to_numeric(pl["Aylık Strateji Hedefi (Milyar TL)"], errors="coerce")
+AY_ADI = {1: "Ocak", 2: "Şubat", 3: "Mart", 4: "Nisan", 5: "Mayıs", 6: "Haziran",
+          7: "Temmuz", 8: "Ağustos", 9: "Eylül", 10: "Ekim", 11: "Kasım", 12: "Aralık"}
+plan_aylik = {}
+_ihaleli = pl[pl["tahmin"].notna()]
+for i, (ayp, g) in enumerate(sorted(_ihaleli.groupby("ayp"), key=lambda x: x[0])[:2], start=1):
+    plan_aylik[f"plan_ay{i}_ad"] = f"{AY_ADI[ayp.month]} {ayp.year}"
+    plan_aylik[f"plan_ay{i}_beklenen"] = round(float(g["tahmin"].sum()) / 1000.0, 1)
+    hedefler = g["hedef"].dropna()
+    if len(hedefler):
+        plan_aylik[f"plan_ay{i}_hedef"] = round(float(hedefler.iloc[0]), 1)
+
+# (b2) USD hacmi — grafiğin KENDİ çıktısından, ve yalnız seri SAĞLAMSA.
+# ihrac_usd grafiği USD/TRY kurunu yfinance'ten çekiyor ve o çekim şu anda
+# bozuk: elde yalnız 6 aylık kur var, son kur 32,89 (yıllar öncesinin
+# seviyesi). Bu haliyle "son ayın USD hacmi" yanlış çıkar. Sayıyı yine de
+# yazmak, donmuş bir yedeği yanlış bir canlı değerle değiştirmek olurdu —
+# ikisi de kötü, ikincisi daha kötü çünkü yanlışlığı görünmez. Bu yüzden
+# alan ancak kur serisi en az bir yılı kapsıyorsa yazılır; kapsamıyorsa
+# yazılmaz ve sayfa sınavı eksik anahtarı bağırmaya devam eder.
+usd = {}
+_go = os.path.join(BASE, "grafik_ozet.json")
+if os.path.exists(_go):
+    _g = json.load(open(_go, encoding="utf-8")).get("ihrac_usd.html") or {}
+    _ay = _g.get("ay_adet") or 0
+    if _ay >= 12 and _g.get("son_ay_usd_mlr") is not None:
+        usd["usd_son_ay_mlr"] = round(float(_g["son_ay_usd_mlr"]), 1)
+        usd["usd_ay_adet"] = int(_ay)
+    else:
+        print(f"  ! usd_son_ay_mlr YAZILMADI — kur serisi {_ay} ay "
+              f"(en az 12 gerekiyor); ihrac_usd grafiği bozuk.")
+
+# (c) Tempo ve backtest sayımları.
+ceyrek_adet = int(ih["t"].dt.to_period("Q").nunique())
+ihale_ay_ort = round(len(ih) / ih["ay"].nunique(), 1)
+ihale_ham_mape = round(float(abs(pd.to_numeric(
+    td["Tutar Sapma % (ham)"], errors="coerce")).mean()), 1)
+
 ozet = {
     "_tarih": ih["t"].max().strftime("%d.%m.%Y"),
     "n_ihale": int(len(ih)),
@@ -61,6 +127,12 @@ ozet = {
     "son12_mape": round(float(abs(pd.to_numeric(td12["Tutar Sapma % (düzeltilmiş)"], errors="coerce")).mean()), 1),
     "b2c_mape": round(float(abs(pd.to_numeric(td["B2C Sapma %"], errors="coerce")).mean()), 1),
     "aylik_ham_mape": round(aylik_ham_mape, 1),
+    "ceyrek_adet": ceyrek_adet,
+    "ihale_ay_ort": ihale_ay_ort,
+    "ihale_ham_mape": ihale_ham_mape,
+    **paylar,
+    **plan_aylik,
+    **usd,
 }
 yol = os.path.join(BASE, "ozet.json")
 json.dump(ozet, open(yol, "w"), ensure_ascii=False, indent=1)
