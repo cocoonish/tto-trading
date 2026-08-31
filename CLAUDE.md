@@ -68,6 +68,12 @@ TTO Trading/
    tarihsiz slug ikinci yazıda çakışır. Başlık kalıbı: `<GG Ay YYYY> <Konu> — <alt
    başlık>`. Kart ayrıca `pubDate`i kendisi basar (`KayitKarti`), yani tarih iki yerde
    birden görünür ve listede hangi yazının hangi güne ait olduğu okunur.
+   **Uzun analizler (~20 KB üzeri) `<div class="yonetici">` ile bir YÖNETİCİ
+   ÖZETİ ile açılır**: tek cümlelik tez, soru–cevap tablosu (gelir mi · ne zaman ·
+   ne kadar · faize etkisi · kanıtın gücü) ve `.rakamlar` şeridinde altı anahtar
+   ölçüm. Özetteki her sayı da `<Deger>` ile bağlanır — özet donarsa yazının geri
+   kalanı tazelenirken okur yanlış sonucu okur. Özet, gövdedeki bir kutuyu
+   TEKRARLAMAZ; onu soğurur.
 
 ## Grafik güncelleme akışı
 
