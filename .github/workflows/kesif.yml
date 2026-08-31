@@ -1,0 +1,45 @@
+# Keşif koşusu — bir veri kaynağının GERÇEKTEN ne sunduğunu ölçer.
+#
+# Neden ayrı iş akışı: bu oturumların ağ vekili tcmb.gov.tr ve TÜİK'i
+# kapatıyor, EVDS anahtarı da yalnız depo secret'ında duruyor. Yeni bir hat
+# kurulmadan önce seri kodlarının var olduğunu, biriminin ve frekansının ne
+# olduğunu ÖLÇMEK gerekiyor — uydurma seri kodu hatta girmesin. Bu ihtiyaç
+# depoda üçüncü kez çıktı (TCMB APİ, ödemeler dengesi, şimdi GSYH) ve her
+# seferinde veri.yml geçici olarak bozulup geri alınmıştı; kalıcı araç daha
+# temiz. Yalnız ELLE tetiklenir, hiçbir şeye commit ATMAZ — çıktı logdadır.
+
+name: Keşif (veri kaynağı ölçümü)
+
+on:
+  workflow_dispatch:
+    inputs:
+      betik:
+        description: 'Koşulacak keşif betiği (depo yolu)'
+        type: string
+        default: 'Aktarılacak Projeler/Buyume/kesif.py'
+
+permissions:
+  contents: read
+
+jobs:
+  kesif:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
+      PYTHONPATH: ortak
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Bağımlılıklar
+        run: pip install --quiet requests pandas
+      - name: Anahtar var mı
+        run: |
+          if [ -z "${TTO_EVDS_KEY}" ]; then
+            echo "::error::TTO_EVDS_KEY tanımlı değil — keşif EVDS'e çıkamaz."
+            exit 1
+          fi
+      - name: Keşif
+        run: python "${{ inputs.betik }}"
