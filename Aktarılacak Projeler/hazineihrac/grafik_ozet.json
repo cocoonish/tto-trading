@@ -2,11 +2,11 @@
  "planlanan_ihraclar.html": {
   "ihale_adet": 11,
   "dogrudan_adet": 5,
-  "toplam_beklenen_mlr": 501.3,
+  "toplam_beklenen_mlr": 501.301,
   "aylik": [
    [
     "Eylül 2026",
-    227.77700000000002,
+    227.77799999999996,
     261.9
    ],
    [
@@ -27,14 +27,14 @@
  },
  "tahmin_dogrulama.html": {
   "n": 456,
-  "mae_mlr": 6.793956140350877,
-  "mape": 58.43355263157894,
-  "mape_medyan": 37.4,
+  "mae_mlr": 6.495850877192983,
+  "mape": 56.43728070175438,
+  "mape_medyan": 35.75,
   "son12ay_n": 65,
-  "son12ay_mae_mlr": 15.842061538461538,
-  "son12ay_mape": 53.30153846153846,
-  "mape_ham": 65.33530701754385,
-  "mape_strateji": 67.58333333333333,
+  "son12ay_mae_mlr": 16.144107692307692,
+  "son12ay_mape": 52.104615384615386,
+  "mape_ham": 64.62609649122807,
+  "mape_strateji": 65.22872807017544,
   "donem": "Şub 2020 – Ağu 2026"
  },
  "ihrac_hacmi.html": {
@@ -100,9 +100,9 @@
  "tahmin_aylik.html": {
   "ay_adet": 79,
   "aylik_mape": {
-   "ham": 24.93104098469259,
-   "duzeltilmis": 20.042229433356955,
-   "strateji": 22.52465457104604
+   "ham": 25.90849041717747,
+   "duzeltilmis": 20.04231210567304,
+   "strateji": 22.524875976376777
   }
  }
 }
