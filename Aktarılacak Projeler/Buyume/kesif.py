@@ -65,21 +65,30 @@ ARANAN = re.compile(r"gayrisafi|gsyh|gsyih|hasıla|hasila|büyüme|buyume|"
 
 
 def main() -> int:
-    print("── EVDS: GSYH ailesi keşfi ", flush=True)
+    print("── EVDS: GSYH ailesi keşfi", flush=True)
     gruplar = _cek(f"{BASE}/datagroups/mode=0&type=json")
     print(f"   toplam veri grubu: {len(gruplar)}")
 
-    adaylar = []
+    # ARŞİV ve İL bazlı gruplar dışarıda: ilki donmuş (2006'da bitiyor),
+    # ikincisi yıllık ve 81 il × 5 seri ile raporu boğuyor. Aranan şey
+    # ULUSAL, ÜÇ AYLIK hesaplar.
+    ARSIV = re.compile(r"arşiv|arsiv|archive", re.I)
+    canli, arsiv = [], []
     for g in gruplar:
         ad = str(g.get("DATAGROUP_NAME") or "")
         kod = str(g.get("DATAGROUP_CODE") or "")
-        if ARANAN.search(ad) or ARANAN.search(kod):
-            adaylar.append((kod, ad, str(g.get("FREQUENCY_STR") or g.get("FREQUENCY") or ""),
-                            str(g.get("START_DATE") or ""), str(g.get("END_DATE") or "")))
-    print(f"   GSYH ile eşleşen grup: {len(adaylar)}\n")
+        if not (ARANAN.search(ad) or ARANAN.search(kod)):
+            continue
+        frek = str(g.get("FREQUENCY_STR") or g.get("FREQUENCY") or "")
+        kayit = (kod, ad, frek, str(g.get("START_DATE") or ""), str(g.get("END_DATE") or ""))
+        (arsiv if ARSIV.search(ad) else canli).append(kayit)
+
+    print(f"   eşleşen: {len(canli) + len(arsiv)}  (canlı {len(canli)} · arşiv {len(arsiv)})")
+    print("\n   ARŞİV grupları (incelenmeyecek): "
+          + ", ".join(k for k, *_ in sorted(arsiv)) + "\n")
 
     rapor: dict = {"gruplar": {}}
-    for kod, ad, frek, bas, bit in sorted(adaylar):
+    for kod, ad, frek, bas, bit in sorted(canli):
         print(f"══ {kod}  |  {ad}")
         print(f"   frekans={frek}  aralık={bas} → {bit}")
         try:
@@ -90,22 +99,28 @@ def main() -> int:
         seriler = d if isinstance(d, list) else (d.get("series") or d.get("Series") or [])
         print(f"   seri sayısı: {len(seriler)}")
         kayit = []
-        for s in seriler:
-            skod = str(s.get("SERIE_CODE") or s.get("SERIE_NAME") or "")
-            sad = str(s.get("SERIE_NAME_ENG") or s.get("SERIE_NAME") or "")
-            birim = str(s.get("BIRIMI") or s.get("UNIT") or "")
-            sbas = str(s.get("START_DATE") or "")
-            sbit = str(s.get("END_DATE") or "")
-            kayit.append({"kod": skod, "ad": sad, "birim": birim,
-                          "bas": sbas, "bit": sbit})
-            print(f"      {skod:<30} {sad[:64]:<66} [{birim}] {sbas}→{sbit}")
+        for s_ in seriler:
+            skod = str(s_.get("SERIE_CODE") or s_.get("SERIE_NAME") or "")
+            sad = str(s_.get("SERIE_NAME_ENG") or s_.get("SERIE_NAME") or "")
+            birim = str(s_.get("BIRIMI") or s_.get("UNIT") or "")
+            sbas, sbit = str(s_.get("START_DATE") or ""), str(s_.get("END_DATE") or "")
+            kayit.append({"kod": skod, "ad": sad, "birim": birim, "bas": sbas, "bit": sbit})
+            print(f"      {skod:<28} {sad[:70]:<72} [{birim}] {sbas}→{sbit}")
         rapor["gruplar"][kod] = {"ad": ad, "frekans": frek, "seriler": kayit}
         print()
 
     (PROJE / "data").mkdir(exist_ok=True)
     (PROJE / "data" / "kesif_sonuc.json").write_text(
         json.dumps(rapor, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"── yazıldı: data/kesif_sonuc.json ({len(rapor['gruplar'])} grup)")
+
+    # DİZİN EN SONA: log kuyruğu kesilse bile hangi grubun ne olduğu görünsün.
+    print("\n" + "═" * 78)
+    print("DİZİN — canlı GSYH grupları (kod · frekans · seri · aralık · ad)")
+    print("═" * 78)
+    for kod, ad, frek, bas, bit in sorted(canli):
+        n = len(rapor["gruplar"].get(kod, {}).get("seriler", []))
+        print(f"{kod:<22} {frek:<10} {n:>4} seri  {bas[:10]}→{bit[:10]}  {ad[:52]}")
+    print(f"\n── yazıldı: data/kesif_sonuc.json ({len(rapor['gruplar'])} grup)")
     return 0
 
 
