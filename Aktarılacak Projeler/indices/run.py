@@ -80,6 +80,30 @@ def main():
         idx = index_builder.build_index(all_articles[asset_key], params)
         indices[asset_key] = idx
 
+    # BOS OLCU KAPISI. _compute_index_value, pencerede tek makale yoksa
+    # (0.0, 0) dondurur ve build_index bunu "Notr" diye etiketler. Yani canli
+    # haber akisi hic makale getirmediginde on bes varligin TAMAMI tam olarak
+    # 0.0000 cikar ve snapshot bunu OLCULMUS bir okuma gibi kaydeder.
+    #
+    # 31.08.2026'da tam bu oldu: RSS toplamasi butun varliklarda bos dondu,
+    # kosu YESIL bitti, ve bultenin "Haber tonu" bolumu uc sahte olay bastı
+    # ("USD/CHF -1.00'den +0.00'ye gecti"). Hicbiri haber degildi; hepsi bos
+    # toplamanin golgesiydi. Eldeki dogru okuma bir onceki snapshot'tir —
+    # sakat bir okumayla ustune yazmak, veriyi tazelemek degil KAYBETMEKTIR.
+    #
+    # Kural: hicbir varlikta pencerede makale yoksa snapshot YAZILMAZ ve kosu
+    # duser. Bos tabloyla basarili cikmak yasak (ReelSektorFX'te ayni ders).
+    # Kismi bosluk (bir varligin susmasi) engel degil — o gercek olabilir.
+    toplam_makale = sum(idx.get("n_articles", 0) for idx in indices.values())
+    if toplam_makale == 0:
+        print("\n" + "=" * 60)
+        print("  HATA: canli haber akisi HICBIR varlikta makale dondurmedi.")
+        print("  Endeks bu durumda 15 varligin tamamini 0.0000 hesaplar; bu")
+        print("  bir olcum degil, bos toplamanin golgesidir. Snapshot")
+        print("  YAZILMADI — depodaki son gecerli okuma korundu.")
+        print("=" * 60)
+        return 4
+
     # Rejim ozeti: her kosuda index_history kaydina eklenir (rejim tarihcesi
     # ileride cizilebilsin). Agir hesap (gunluk duyarlilik matrisi) —
     # basarisiz olursa snapshot rejimsiz kaydedilir, pipeline durmaz.
@@ -157,4 +181,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main() or 0)
