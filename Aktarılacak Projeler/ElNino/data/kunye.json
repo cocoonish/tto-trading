@@ -1,0 +1,15 @@
+{
+ "oni_uc": "https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt",
+ "oni_bas": "1950-01",
+ "oni_son": "2026-06",
+ "oni_son_deger": 1.39,
+ "tufe_bas": "2005-01",
+ "tufe_son": "2026-07",
+ "seriler": {
+  "tufe": "TP.TUKFIY2025.GENEL",
+  "gida": "TP.FE25.OKTG10",
+  "islenmemis_gida": "TP.FE25.OKTG11",
+  "islenmis_gida": "TP.FE25.OKTG14"
+ },
+ "uyarilar": []
+}

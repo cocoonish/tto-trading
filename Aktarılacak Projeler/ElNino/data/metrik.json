@@ -1,0 +1,1563 @@
+{
+ "_tarih": "01.07.2026",
+ "_ay": "2026-07",
+ "oni_son": 1.39,
+ "oni_son_ay": "2026-06",
+ "capraz_tam": [
+  {
+   "gecikme": 0,
+   "korelasyon": 0.008,
+   "n": 247
+  },
+  {
+   "gecikme": 1,
+   "korelasyon": -0.038,
+   "n": 247
+  },
+  {
+   "gecikme": 2,
+   "korelasyon": -0.093,
+   "n": 247
+  },
+  {
+   "gecikme": 3,
+   "korelasyon": -0.151,
+   "n": 247
+  },
+  {
+   "gecikme": 4,
+   "korelasyon": -0.205,
+   "n": 247
+  },
+  {
+   "gecikme": 5,
+   "korelasyon": -0.252,
+   "n": 247
+  },
+  {
+   "gecikme": 6,
+   "korelasyon": -0.288,
+   "n": 247
+  },
+  {
+   "gecikme": 7,
+   "korelasyon": -0.314,
+   "n": 247
+  },
+  {
+   "gecikme": 8,
+   "korelasyon": -0.33,
+   "n": 247
+  },
+  {
+   "gecikme": 9,
+   "korelasyon": -0.339,
+   "n": 247
+  },
+  {
+   "gecikme": 10,
+   "korelasyon": -0.345,
+   "n": 247
+  },
+  {
+   "gecikme": 11,
+   "korelasyon": -0.354,
+   "n": 247
+  },
+  {
+   "gecikme": 12,
+   "korelasyon": -0.362,
+   "n": 247
+  },
+  {
+   "gecikme": 13,
+   "korelasyon": -0.364,
+   "n": 247
+  },
+  {
+   "gecikme": 14,
+   "korelasyon": -0.354,
+   "n": 247
+  },
+  {
+   "gecikme": 15,
+   "korelasyon": -0.336,
+   "n": 247
+  },
+  {
+   "gecikme": 16,
+   "korelasyon": -0.315,
+   "n": 247
+  },
+  {
+   "gecikme": 17,
+   "korelasyon": -0.293,
+   "n": 247
+  },
+  {
+   "gecikme": 18,
+   "korelasyon": -0.274,
+   "n": 247
+  },
+  {
+   "gecikme": 19,
+   "korelasyon": -0.253,
+   "n": 247
+  },
+  {
+   "gecikme": 20,
+   "korelasyon": -0.231,
+   "n": 247
+  },
+  {
+   "gecikme": 21,
+   "korelasyon": -0.206,
+   "n": 247
+  },
+  {
+   "gecikme": 22,
+   "korelasyon": -0.181,
+   "n": 247
+  },
+  {
+   "gecikme": 23,
+   "korelasyon": -0.152,
+   "n": 247
+  },
+  {
+   "gecikme": 24,
+   "korelasyon": -0.124,
+   "n": 247
+  }
+ ],
+ "capraz_tam_en_iyi_gecikme": 13,
+ "capraz_tam_en_iyi_kor": -0.364,
+ "capraz_tam_n": 247,
+ "capraz_tam_ham_en_iyi_gecikme": 15,
+ "capraz_tam_ham_en_iyi_kor": -0.251,
+ "capraz_modern": [
+  {
+   "gecikme": 0,
+   "korelasyon": 0.008,
+   "n": 247
+  },
+  {
+   "gecikme": 1,
+   "korelasyon": -0.038,
+   "n": 247
+  },
+  {
+   "gecikme": 2,
+   "korelasyon": -0.093,
+   "n": 247
+  },
+  {
+   "gecikme": 3,
+   "korelasyon": -0.151,
+   "n": 247
+  },
+  {
+   "gecikme": 4,
+   "korelasyon": -0.205,
+   "n": 247
+  },
+  {
+   "gecikme": 5,
+   "korelasyon": -0.252,
+   "n": 247
+  },
+  {
+   "gecikme": 6,
+   "korelasyon": -0.288,
+   "n": 247
+  },
+  {
+   "gecikme": 7,
+   "korelasyon": -0.314,
+   "n": 247
+  },
+  {
+   "gecikme": 8,
+   "korelasyon": -0.33,
+   "n": 247
+  },
+  {
+   "gecikme": 9,
+   "korelasyon": -0.339,
+   "n": 247
+  },
+  {
+   "gecikme": 10,
+   "korelasyon": -0.345,
+   "n": 247
+  },
+  {
+   "gecikme": 11,
+   "korelasyon": -0.354,
+   "n": 247
+  },
+  {
+   "gecikme": 12,
+   "korelasyon": -0.362,
+   "n": 247
+  },
+  {
+   "gecikme": 13,
+   "korelasyon": -0.364,
+   "n": 247
+  },
+  {
+   "gecikme": 14,
+   "korelasyon": -0.354,
+   "n": 247
+  },
+  {
+   "gecikme": 15,
+   "korelasyon": -0.336,
+   "n": 247
+  },
+  {
+   "gecikme": 16,
+   "korelasyon": -0.315,
+   "n": 247
+  },
+  {
+   "gecikme": 17,
+   "korelasyon": -0.293,
+   "n": 247
+  },
+  {
+   "gecikme": 18,
+   "korelasyon": -0.274,
+   "n": 247
+  },
+  {
+   "gecikme": 19,
+   "korelasyon": -0.253,
+   "n": 247
+  },
+  {
+   "gecikme": 20,
+   "korelasyon": -0.231,
+   "n": 247
+  },
+  {
+   "gecikme": 21,
+   "korelasyon": -0.206,
+   "n": 247
+  },
+  {
+   "gecikme": 22,
+   "korelasyon": -0.181,
+   "n": 247
+  },
+  {
+   "gecikme": 23,
+   "korelasyon": -0.152,
+   "n": 247
+  },
+  {
+   "gecikme": 24,
+   "korelasyon": -0.124,
+   "n": 247
+  }
+ ],
+ "capraz_modern_en_iyi_gecikme": 13,
+ "capraz_modern_en_iyi_kor": -0.364,
+ "capraz_modern_n": 247,
+ "capraz_modern_ham_en_iyi_gecikme": 15,
+ "capraz_modern_ham_en_iyi_kor": -0.251,
+ "epizotlar": [
+  {
+   "bas": "1982-10",
+   "zirve": "1983-01",
+   "zirve_deger": 2.14,
+   "ay": 6,
+   "suruyor": false
+  },
+  {
+   "bas": "1997-08",
+   "zirve": "1997-12",
+   "zirve_deger": 2.37,
+   "ay": 7,
+   "suruyor": false
+  },
+  {
+   "bas": "2015-08",
+   "zirve": "2015-12",
+   "zirve_deger": 2.59,
+   "ay": 8,
+   "suruyor": false
+  },
+  {
+   "bas": "2023-09",
+   "zirve": "2023-12",
+   "zirve_deger": 1.99,
+   "ay": 6,
+   "suruyor": false
+  }
+ ],
+ "epizot_sonrasi": [
+  {
+   "zirve": "2015-12",
+   "zirve_oni": 2.59,
+   "goreceli_gida_ort": -0.56,
+   "ay": 19
+  },
+  {
+   "zirve": "2023-12",
+   "zirve_oni": 1.99,
+   "goreceli_gida_ort": -1.3,
+   "ay": 19
+  }
+ ],
+ "epizot_ortalama": -0.93,
+ "kosulsuz_ortalama": 2.65,
+ "epizot_fark": -3.58,
+ "gecis_beta": 0.541,
+ "gecis_r2": 0.624,
+ "gecis_n": 258,
+ "gida_12a": 37.52,
+ "tufe_12a": 31.75,
+ "goreceli_gida_son": 5.77,
+ "hamgida_12a": 39.69,
+ "tarihce": [
+  {
+   "ay": "2006-01",
+   "oni": -0.86,
+   "goreceli_gida": -2.88
+  },
+  {
+   "ay": "2006-02",
+   "oni": -0.8,
+   "goreceli_gida": -1.49
+  },
+  {
+   "ay": "2006-03",
+   "oni": -0.63,
+   "goreceli_gida": -0.23
+  },
+  {
+   "ay": "2006-04",
+   "oni": -0.45,
+   "goreceli_gida": 0.83
+  },
+  {
+   "ay": "2006-05",
+   "oni": -0.19,
+   "goreceli_gida": 0.57
+  },
+  {
+   "ay": "2006-06",
+   "oni": -0.05,
+   "goreceli_gida": -0.9
+  },
+  {
+   "ay": "2006-07",
+   "oni": 0.12,
+   "goreceli_gida": 0.36
+  },
+  {
+   "ay": "2006-08",
+   "oni": 0.33,
+   "goreceli_gida": 0.52
+  },
+  {
+   "ay": "2006-09",
+   "oni": 0.54,
+   "goreceli_gida": 1.9
+  },
+  {
+   "ay": "2006-10",
+   "oni": 0.71,
+   "goreceli_gida": 0.83
+  },
+  {
+   "ay": "2006-11",
+   "oni": 0.88,
+   "goreceli_gida": 0.36
+  },
+  {
+   "ay": "2006-12",
+   "oni": 0.88,
+   "goreceli_gida": 1.52
+  },
+  {
+   "ay": "2007-01",
+   "oni": 0.62,
+   "goreceli_gida": 4.67
+  },
+  {
+   "ay": "2007-02",
+   "oni": 0.19,
+   "goreceli_gida": 3.54
+  },
+  {
+   "ay": "2007-03",
+   "oni": -0.12,
+   "goreceli_gida": 2.08
+  },
+  {
+   "ay": "2007-04",
+   "oni": -0.32,
+   "goreceli_gida": 2.59
+  },
+  {
+   "ay": "2007-05",
+   "oni": -0.34,
+   "goreceli_gida": 1.41
+  },
+  {
+   "ay": "2007-06",
+   "oni": -0.41,
+   "goreceli_gida": 2.93
+  },
+  {
+   "ay": "2007-07",
+   "oni": -0.49,
+   "goreceli_gida": 2.29
+  },
+  {
+   "ay": "2007-08",
+   "oni": -0.77,
+   "goreceli_gida": 5.0
+  },
+  {
+   "ay": "2007-09",
+   "oni": -1.05,
+   "goreceli_gida": 4.64
+  },
+  {
+   "ay": "2007-10",
+   "oni": -1.38,
+   "goreceli_gida": 7.01
+  },
+  {
+   "ay": "2007-11",
+   "oni": -1.57,
+   "goreceli_gida": 3.89
+  },
+  {
+   "ay": "2007-12",
+   "oni": -1.72,
+   "goreceli_gida": 3.64
+  },
+  {
+   "ay": "2008-01",
+   "oni": -1.76,
+   "goreceli_gida": 1.05
+  },
+  {
+   "ay": "2008-02",
+   "oni": -1.61,
+   "goreceli_gida": 3.83
+  },
+  {
+   "ay": "2008-03",
+   "oni": -1.37,
+   "goreceli_gida": 4.25
+  },
+  {
+   "ay": "2008-04",
+   "oni": -1.05,
+   "goreceli_gida": 3.82
+  },
+  {
+   "ay": "2008-05",
+   "oni": -0.85,
+   "goreceli_gida": 4.95
+  },
+  {
+   "ay": "2008-06",
+   "oni": -0.56,
+   "goreceli_gida": 3.35
+  },
+  {
+   "ay": "2008-07",
+   "oni": -0.33,
+   "goreceli_gida": 3.22
+  },
+  {
+   "ay": "2008-08",
+   "oni": -0.2,
+   "goreceli_gida": 1.56
+  },
+  {
+   "ay": "2008-09",
+   "oni": -0.25,
+   "goreceli_gida": -0.05
+  },
+  {
+   "ay": "2008-10",
+   "oni": -0.36,
+   "goreceli_gida": -0.38
+  },
+  {
+   "ay": "2008-11",
+   "oni": -0.57,
+   "goreceli_gida": 1.01
+  },
+  {
+   "ay": "2008-12",
+   "oni": -0.79,
+   "goreceli_gida": 1.84
+  },
+  {
+   "ay": "2009-01",
+   "oni": -0.89,
+   "goreceli_gida": 2.01
+  },
+  {
+   "ay": "2009-02",
+   "oni": -0.84,
+   "goreceli_gida": -1.57
+  },
+  {
+   "ay": "2009-03",
+   "oni": -0.63,
+   "goreceli_gida": 1.29
+  },
+  {
+   "ay": "2009-04",
+   "oni": -0.35,
+   "goreceli_gida": 1.58
+  },
+  {
+   "ay": "2009-05",
+   "oni": 0.03,
+   "goreceli_gida": 2.4
+  },
+  {
+   "ay": "2009-06",
+   "oni": 0.34,
+   "goreceli_gida": 3.95
+  },
+  {
+   "ay": "2009-07",
+   "oni": 0.5,
+   "goreceli_gida": 3.11
+  },
+  {
+   "ay": "2009-08",
+   "oni": 0.56,
+   "goreceli_gida": 1.5
+  },
+  {
+   "ay": "2009-09",
+   "oni": 0.66,
+   "goreceli_gida": 1.52
+  },
+  {
+   "ay": "2009-10",
+   "oni": 0.92,
+   "goreceli_gida": 0.74
+  },
+  {
+   "ay": "2009-11",
+   "oni": 1.31,
+   "goreceli_gida": 1.87
+  },
+  {
+   "ay": "2009-12",
+   "oni": 1.5,
+   "goreceli_gida": 2.73
+  },
+  {
+   "ay": "2010-01",
+   "oni": 1.47,
+   "goreceli_gida": 1.2
+  },
+  {
+   "ay": "2010-02",
+   "oni": 1.21,
+   "goreceli_gida": 4.72
+  },
+  {
+   "ay": "2010-03",
+   "oni": 0.88,
+   "goreceli_gida": 1.65
+  },
+  {
+   "ay": "2010-04",
+   "oni": 0.38,
+   "goreceli_gida": 1.56
+  },
+  {
+   "ay": "2010-05",
+   "oni": -0.16,
+   "goreceli_gida": -2.44
+  },
+  {
+   "ay": "2010-06",
+   "oni": -0.66,
+   "goreceli_gida": -2.75
+  },
+  {
+   "ay": "2010-07",
+   "oni": -0.98,
+   "goreceli_gida": -2.06
+  },
+  {
+   "ay": "2010-08",
+   "oni": -1.24,
+   "goreceli_gida": 2.03
+  },
+  {
+   "ay": "2010-09",
+   "oni": -1.43,
+   "goreceli_gida": 6.09
+  },
+  {
+   "ay": "2010-10",
+   "oni": -1.54,
+   "goreceli_gida": 8.46
+  },
+  {
+   "ay": "2010-11",
+   "oni": -1.57,
+   "goreceli_gida": 5.1
+  },
+  {
+   "ay": "2010-12",
+   "oni": -1.48,
+   "goreceli_gida": 0.62
+  },
+  {
+   "ay": "2011-01",
+   "oni": -1.29,
+   "goreceli_gida": 2.16
+  },
+  {
+   "ay": "2011-02",
+   "oni": -1.06,
+   "goreceli_gida": 0.38
+  },
+  {
+   "ay": "2011-03",
+   "oni": -0.85,
+   "goreceli_gida": -0.52
+  },
+  {
+   "ay": "2011-04",
+   "oni": -0.68,
+   "goreceli_gida": -1.44
+  },
+  {
+   "ay": "2011-05",
+   "oni": -0.5,
+   "goreceli_gida": 5.44
+  },
+  {
+   "ay": "2011-06",
+   "oni": -0.34,
+   "goreceli_gida": 1.89
+  },
+  {
+   "ay": "2011-07",
+   "oni": -0.37,
+   "goreceli_gida": 1.33
+  },
+  {
+   "ay": "2011-08",
+   "oni": -0.5,
+   "goreceli_gida": -0.65
+  },
+  {
+   "ay": "2011-09",
+   "oni": -0.76,
+   "goreceli_gida": -3.93
+  },
+  {
+   "ay": "2011-10",
+   "oni": -0.94,
+   "goreceli_gida": -5.9
+  },
+  {
+   "ay": "2011-11",
+   "oni": -1.02,
+   "goreceli_gida": -2.37
+  },
+  {
+   "ay": "2011-12",
+   "oni": -0.92,
+   "goreceli_gida": 1.76
+  },
+  {
+   "ay": "2012-01",
+   "oni": -0.71,
+   "goreceli_gida": 1.06
+  },
+  {
+   "ay": "2012-02",
+   "oni": -0.56,
+   "goreceli_gida": 0.74
+  },
+  {
+   "ay": "2012-03",
+   "oni": -0.44,
+   "goreceli_gida": 0.83
+  },
+  {
+   "ay": "2012-04",
+   "oni": -0.35,
+   "goreceli_gida": 0.51
+  },
+  {
+   "ay": "2012-05",
+   "oni": -0.18,
+   "goreceli_gida": -4.21
+  },
+  {
+   "ay": "2012-06",
+   "oni": 0.03,
+   "goreceli_gida": -1.48
+  },
+  {
+   "ay": "2012-07",
+   "oni": 0.28,
+   "goreceli_gida": -0.01
+  },
+  {
+   "ay": "2012-08",
+   "oni": 0.39,
+   "goreceli_gida": 0.26
+  },
+  {
+   "ay": "2012-09",
+   "oni": 0.37,
+   "goreceli_gida": 1.21
+  },
+  {
+   "ay": "2012-10",
+   "oni": 0.28,
+   "goreceli_gida": 0.07
+  },
+  {
+   "ay": "2012-11",
+   "oni": 0.13,
+   "goreceli_gida": -2.05
+  },
+  {
+   "ay": "2012-12",
+   "oni": -0.03,
+   "goreceli_gida": -2.27
+  },
+  {
+   "ay": "2013-01",
+   "oni": -0.24,
+   "goreceli_gida": -0.46
+  },
+  {
+   "ay": "2013-02",
+   "oni": -0.28,
+   "goreceli_gida": -1.43
+  },
+  {
+   "ay": "2013-03",
+   "oni": -0.23,
+   "goreceli_gida": 0.81
+  },
+  {
+   "ay": "2013-04",
+   "oni": -0.2,
+   "goreceli_gida": 0.7
+  },
+  {
+   "ay": "2013-05",
+   "oni": -0.3,
+   "goreceli_gida": 0.55
+  },
+  {
+   "ay": "2013-06",
+   "oni": -0.38,
+   "goreceli_gida": 4.58
+  },
+  {
+   "ay": "2013-07",
+   "oni": -0.45,
+   "goreceli_gida": 3.84
+  },
+  {
+   "ay": "2013-08",
+   "oni": -0.34,
+   "goreceli_gida": 2.08
+  },
+  {
+   "ay": "2013-09",
+   "oni": -0.32,
+   "goreceli_gida": 0.84
+  },
+  {
+   "ay": "2013-10",
+   "oni": -0.14,
+   "goreceli_gida": 3.42
+  },
+  {
+   "ay": "2013-11",
+   "oni": -0.12,
+   "goreceli_gida": 2.46
+  },
+  {
+   "ay": "2013-12",
+   "oni": -0.11,
+   "goreceli_gida": 2.27
+  },
+  {
+   "ay": "2014-01",
+   "oni": -0.24,
+   "goreceli_gida": 3.14
+  },
+  {
+   "ay": "2014-02",
+   "oni": -0.21,
+   "goreceli_gida": 2.16
+  },
+  {
+   "ay": "2014-03",
+   "oni": -0.02,
+   "goreceli_gida": 1.73
+  },
+  {
+   "ay": "2014-04",
+   "oni": 0.25,
+   "goreceli_gida": 3.77
+  },
+  {
+   "ay": "2014-05",
+   "oni": 0.35,
+   "goreceli_gida": 4.46
+  },
+  {
+   "ay": "2014-06",
+   "oni": 0.22,
+   "goreceli_gida": 3.31
+  },
+  {
+   "ay": "2014-07",
+   "oni": 0.07,
+   "goreceli_gida": 3.24
+  },
+  {
+   "ay": "2014-08",
+   "oni": 0.07,
+   "goreceli_gida": 4.9
+  },
+  {
+   "ay": "2014-09",
+   "oni": 0.24,
+   "goreceli_gida": 5.09
+  },
+  {
+   "ay": "2014-10",
+   "oni": 0.51,
+   "goreceli_gida": 3.6
+  },
+  {
+   "ay": "2014-11",
+   "oni": 0.7,
+   "goreceli_gida": 5.22
+  },
+  {
+   "ay": "2014-12",
+   "oni": 0.8,
+   "goreceli_gida": 4.56
+  },
+  {
+   "ay": "2015-01",
+   "oni": 0.73,
+   "goreceli_gida": 3.73
+  },
+  {
+   "ay": "2015-02",
+   "oni": 0.65,
+   "goreceli_gida": 6.16
+  },
+  {
+   "ay": "2015-03",
+   "oni": 0.72,
+   "goreceli_gida": 6.51
+  },
+  {
+   "ay": "2015-04",
+   "oni": 0.86,
+   "goreceli_gida": 6.45
+  },
+  {
+   "ay": "2015-05",
+   "oni": 1.04,
+   "goreceli_gida": 4.72
+  },
+  {
+   "ay": "2015-06",
+   "oni": 1.19,
+   "goreceli_gida": 2.07
+  },
+  {
+   "ay": "2015-07",
+   "oni": 1.44,
+   "goreceli_gida": 2.44
+  },
+  {
+   "ay": "2015-08",
+   "oni": 1.73,
+   "goreceli_gida": 2.57
+  },
+  {
+   "ay": "2015-09",
+   "oni": 2.02,
+   "goreceli_gida": 2.78
+  },
+  {
+   "ay": "2015-10",
+   "oni": 2.28,
+   "goreceli_gida": 1.11
+  },
+  {
+   "ay": "2015-11",
+   "oni": 2.45,
+   "goreceli_gida": 1.41
+  },
+  {
+   "ay": "2015-12",
+   "oni": 2.59,
+   "goreceli_gida": 2.06
+  },
+  {
+   "ay": "2016-01",
+   "oni": 2.5,
+   "goreceli_gida": 2.11
+  },
+  {
+   "ay": "2016-02",
+   "oni": 2.21,
+   "goreceli_gida": 0.05
+  },
+  {
+   "ay": "2016-03",
+   "oni": 1.69,
+   "goreceli_gida": -2.88
+  },
+  {
+   "ay": "2016-04",
+   "oni": 1.11,
+   "goreceli_gida": -5.18
+  },
+  {
+   "ay": "2016-05",
+   "oni": 0.57,
+   "goreceli_gida": -4.11
+  },
+  {
+   "ay": "2016-06",
+   "oni": 0.09,
+   "goreceli_gida": -1.0
+  },
+  {
+   "ay": "2016-07",
+   "oni": -0.19,
+   "goreceli_gida": 0.89
+  },
+  {
+   "ay": "2016-08",
+   "oni": -0.34,
+   "goreceli_gida": -1.85
+  },
+  {
+   "ay": "2016-09",
+   "oni": -0.42,
+   "goreceli_gida": -3.12
+  },
+  {
+   "ay": "2016-10",
+   "oni": -0.51,
+   "goreceli_gida": -1.96
+  },
+  {
+   "ay": "2016-11",
+   "oni": -0.49,
+   "goreceli_gida": -3.45
+  },
+  {
+   "ay": "2016-12",
+   "oni": -0.37,
+   "goreceli_gida": -2.88
+  },
+  {
+   "ay": "2017-01",
+   "oni": -0.08,
+   "goreceli_gida": -1.45
+  },
+  {
+   "ay": "2017-02",
+   "oni": 0.08,
+   "goreceli_gida": -1.41
+  },
+  {
+   "ay": "2017-03",
+   "oni": 0.27,
+   "goreceli_gida": 1.24
+  },
+  {
+   "ay": "2017-04",
+   "oni": 0.32,
+   "goreceli_gida": 3.76
+  },
+  {
+   "ay": "2017-05",
+   "oni": 0.35,
+   "goreceli_gida": 5.19
+  },
+  {
+   "ay": "2017-06",
+   "oni": 0.32,
+   "goreceli_gida": 3.44
+  },
+  {
+   "ay": "2017-07",
+   "oni": 0.14,
+   "goreceli_gida": 0.28
+  },
+  {
+   "ay": "2017-08",
+   "oni": -0.07,
+   "goreceli_gida": 1.29
+  },
+  {
+   "ay": "2017-09",
+   "oni": -0.23,
+   "goreceli_gida": 1.31
+  },
+  {
+   "ay": "2017-10",
+   "oni": -0.44,
+   "goreceli_gida": 0.84
+  },
+  {
+   "ay": "2017-11",
+   "oni": -0.61,
+   "goreceli_gida": 2.79
+  },
+  {
+   "ay": "2017-12",
+   "oni": -0.76,
+   "goreceli_gida": 1.87
+  },
+  {
+   "ay": "2018-01",
+   "oni": -0.71,
+   "goreceli_gida": -1.59
+  },
+  {
+   "ay": "2018-02",
+   "oni": -0.67,
+   "goreceli_gida": 0.01
+  },
+  {
+   "ay": "2018-03",
+   "oni": -0.55,
+   "goreceli_gida": 0.14
+  },
+  {
+   "ay": "2018-04",
+   "oni": -0.35,
+   "goreceli_gida": -2.04
+  },
+  {
+   "ay": "2018-05",
+   "oni": -0.07,
+   "goreceli_gida": -1.15
+  },
+  {
+   "ay": "2018-06",
+   "oni": 0.13,
+   "goreceli_gida": 3.5
+  },
+  {
+   "ay": "2018-07",
+   "oni": 0.2,
+   "goreceli_gida": 3.56
+  },
+  {
+   "ay": "2018-08",
+   "oni": 0.3,
+   "goreceli_gida": 1.85
+  },
+  {
+   "ay": "2018-09",
+   "oni": 0.52,
+   "goreceli_gida": 3.18
+  },
+  {
+   "ay": "2018-10",
+   "oni": 0.82,
+   "goreceli_gida": 4.02
+  },
+  {
+   "ay": "2018-11",
+   "oni": 1.04,
+   "goreceli_gida": 4.04
+  },
+  {
+   "ay": "2018-12",
+   "oni": 1.05,
+   "goreceli_gida": 4.81
+  },
+  {
+   "ay": "2019-01",
+   "oni": 0.99,
+   "goreceli_gida": 10.62
+  },
+  {
+   "ay": "2019-02",
+   "oni": 0.94,
+   "goreceli_gida": 9.58
+  },
+  {
+   "ay": "2019-03",
+   "oni": 0.87,
+   "goreceli_gida": 10.06
+  },
+  {
+   "ay": "2019-04",
+   "oni": 0.82,
+   "goreceli_gida": 12.35
+  },
+  {
+   "ay": "2019-05",
+   "oni": 0.71,
+   "goreceli_gida": 9.73
+  },
+  {
+   "ay": "2019-06",
+   "oni": 0.59,
+   "goreceli_gida": 3.48
+  },
+  {
+   "ay": "2019-07",
+   "oni": 0.38,
+   "goreceli_gida": 1.56
+  },
+  {
+   "ay": "2019-08",
+   "oni": 0.2,
+   "goreceli_gida": 2.22
+  },
+  {
+   "ay": "2019-09",
+   "oni": 0.31,
+   "goreceli_gida": 0.25
+  },
+  {
+   "ay": "2019-10",
+   "oni": 0.51,
+   "goreceli_gida": -0.7
+  },
+  {
+   "ay": "2019-11",
+   "oni": 0.72,
+   "goreceli_gida": -1.67
+  },
+  {
+   "ay": "2019-12",
+   "oni": 0.75,
+   "goreceli_gida": -0.95
+  },
+  {
+   "ay": "2020-01",
+   "oni": 0.71,
+   "goreceli_gida": -3.12
+  },
+  {
+   "ay": "2020-02",
+   "oni": 0.66,
+   "goreceli_gida": -1.79
+  },
+  {
+   "ay": "2020-03",
+   "oni": 0.57,
+   "goreceli_gida": -1.81
+  },
+  {
+   "ay": "2020-04",
+   "oni": 0.33,
+   "goreceli_gida": 0.34
+  },
+  {
+   "ay": "2020-05",
+   "oni": 0.04,
+   "goreceli_gida": 1.48
+  },
+  {
+   "ay": "2020-06",
+   "oni": -0.18,
+   "goreceli_gida": 0.3
+  },
+  {
+   "ay": "2020-07",
+   "oni": -0.29,
+   "goreceli_gida": 0.96
+  },
+  {
+   "ay": "2020-08",
+   "oni": -0.43,
+   "goreceli_gida": 1.74
+  },
+  {
+   "ay": "2020-09",
+   "oni": -0.77,
+   "goreceli_gida": 3.2
+  },
+  {
+   "ay": "2020-10",
+   "oni": -1.0,
+   "goreceli_gida": 4.62
+  },
+  {
+   "ay": "2020-11",
+   "oni": -1.11,
+   "goreceli_gida": 7.06
+  },
+  {
+   "ay": "2020-12",
+   "oni": -1.06,
+   "goreceli_gida": 6.01
+  },
+  {
+   "ay": "2021-01",
+   "oni": -0.99,
+   "goreceli_gida": 3.14
+  },
+  {
+   "ay": "2021-02",
+   "oni": -0.85,
+   "goreceli_gida": 2.79
+  },
+  {
+   "ay": "2021-03",
+   "oni": -0.74,
+   "goreceli_gida": 1.25
+  },
+  {
+   "ay": "2021-04",
+   "oni": -0.56,
+   "goreceli_gida": -0.16
+  },
+  {
+   "ay": "2021-05",
+   "oni": -0.4,
+   "goreceli_gida": 0.45
+  },
+  {
+   "ay": "2021-06",
+   "oni": -0.31,
+   "goreceli_gida": 2.47
+  },
+  {
+   "ay": "2021-07",
+   "oni": -0.35,
+   "goreceli_gida": 5.97
+  },
+  {
+   "ay": "2021-08",
+   "oni": -0.46,
+   "goreceli_gida": 9.75
+  },
+  {
+   "ay": "2021-09",
+   "oni": -0.64,
+   "goreceli_gida": 9.21
+  },
+  {
+   "ay": "2021-10",
+   "oni": -0.77,
+   "goreceli_gida": 7.52
+  },
+  {
+   "ay": "2021-11",
+   "oni": -0.91,
+   "goreceli_gida": 5.8
+  },
+  {
+   "ay": "2021-12",
+   "oni": -0.83,
+   "goreceli_gida": 7.72
+  },
+  {
+   "ay": "2022-01",
+   "oni": -0.76,
+   "goreceli_gida": 6.92
+  },
+  {
+   "ay": "2022-02",
+   "oni": -0.68,
+   "goreceli_gida": 10.03
+  },
+  {
+   "ay": "2022-03",
+   "oni": -0.77,
+   "goreceli_gida": 9.18
+  },
+  {
+   "ay": "2022-04",
+   "oni": -0.86,
+   "goreceli_gida": 19.12
+  },
+  {
+   "ay": "2022-05",
+   "oni": -0.83,
+   "goreceli_gida": 18.13
+  },
+  {
+   "ay": "2022-06",
+   "oni": -0.73,
+   "goreceli_gida": 15.32
+  },
+  {
+   "ay": "2022-07",
+   "oni": -0.7,
+   "goreceli_gida": 15.04
+  },
+  {
+   "ay": "2022-08",
+   "oni": -0.78,
+   "goreceli_gida": 10.05
+  },
+  {
+   "ay": "2022-09",
+   "oni": -0.87,
+   "goreceli_gida": 9.6
+  },
+  {
+   "ay": "2022-10",
+   "oni": -0.89,
+   "goreceli_gida": 13.53
+  },
+  {
+   "ay": "2022-11",
+   "oni": -0.82,
+   "goreceli_gida": 18.16
+  },
+  {
+   "ay": "2022-12",
+   "oni": -0.7,
+   "goreceli_gida": 13.6
+  },
+  {
+   "ay": "2023-01",
+   "oni": -0.55,
+   "goreceli_gida": 13.32
+  },
+  {
+   "ay": "2023-02",
+   "oni": -0.33,
+   "goreceli_gida": 14.15
+  },
+  {
+   "ay": "2023-03",
+   "oni": -0.11,
+   "goreceli_gida": 17.39
+  },
+  {
+   "ay": "2023-04",
+   "oni": 0.19,
+   "goreceli_gida": 10.24
+  },
+  {
+   "ay": "2023-05",
+   "oni": 0.46,
+   "goreceli_gida": 12.94
+  },
+  {
+   "ay": "2023-06",
+   "oni": 0.73,
+   "goreceli_gida": 15.7
+  },
+  {
+   "ay": "2023-07",
+   "oni": 1.0,
+   "goreceli_gida": 12.88
+  },
+  {
+   "ay": "2023-08",
+   "oni": 1.25,
+   "goreceli_gida": 13.92
+  },
+  {
+   "ay": "2023-09",
+   "oni": 1.5,
+   "goreceli_gida": 13.61
+  },
+  {
+   "ay": "2023-10",
+   "oni": 1.74,
+   "goreceli_gida": 10.64
+  },
+  {
+   "ay": "2023-11",
+   "oni": 1.9,
+   "goreceli_gida": 5.18
+  },
+  {
+   "ay": "2023-12",
+   "oni": 1.99,
+   "goreceli_gida": 7.24
+  },
+  {
+   "ay": "2024-01",
+   "oni": 1.84,
+   "goreceli_gida": 4.85
+  },
+  {
+   "ay": "2024-02",
+   "oni": 1.53,
+   "goreceli_gida": 4.05
+  },
+  {
+   "ay": "2024-03",
+   "oni": 1.18,
+   "goreceli_gida": 1.91
+  },
+  {
+   "ay": "2024-04",
+   "oni": 0.77,
+   "goreceli_gida": -1.31
+  },
+  {
+   "ay": "2024-05",
+   "oni": 0.43,
+   "goreceli_gida": -5.31
+  },
+  {
+   "ay": "2024-06",
+   "oni": 0.18,
+   "goreceli_gida": -3.52
+  },
+  {
+   "ay": "2024-07",
+   "oni": 0.06,
+   "goreceli_gida": -2.87
+  },
+  {
+   "ay": "2024-08",
+   "oni": -0.04,
+   "goreceli_gida": -7.09
+  },
+  {
+   "ay": "2024-09",
+   "oni": -0.12,
+   "goreceli_gida": -5.67
+  },
+  {
+   "ay": "2024-10",
+   "oni": -0.19,
+   "goreceli_gida": -3.3
+  },
+  {
+   "ay": "2024-11",
+   "oni": -0.29,
+   "goreceli_gida": 1.48
+  },
+  {
+   "ay": "2024-12",
+   "oni": -0.43,
+   "goreceli_gida": -0.79
+  },
+  {
+   "ay": "2025-01",
+   "oni": -0.46,
+   "goreceli_gida": -0.35
+  },
+  {
+   "ay": "2025-02",
+   "oni": -0.22,
+   "goreceli_gida": -3.94
+  },
+  {
+   "ay": "2025-03",
+   "oni": -0.08,
+   "goreceli_gida": -0.99
+  },
+  {
+   "ay": "2025-04",
+   "oni": 0.02,
+   "goreceli_gida": -1.77
+  },
+  {
+   "ay": "2025-05",
+   "oni": -0.04,
+   "goreceli_gida": -2.53
+  },
+  {
+   "ay": "2025-06",
+   "oni": -0.02,
+   "goreceli_gida": -4.84
+  },
+  {
+   "ay": "2025-07",
+   "oni": -0.11,
+   "goreceli_gida": -5.57
+  },
+  {
+   "ay": "2025-08",
+   "oni": -0.26,
+   "goreceli_gida": 0.33
+  },
+  {
+   "ay": "2025-09",
+   "oni": -0.43,
+   "goreceli_gida": 2.77
+  },
+  {
+   "ay": "2025-10",
+   "oni": -0.57,
+   "goreceli_gida": 2.0
+  },
+  {
+   "ay": "2025-11",
+   "oni": -0.61,
+   "goreceli_gida": -3.64
+  },
+  {
+   "ay": "2025-12",
+   "oni": -0.6,
+   "goreceli_gida": -2.58
+  },
+  {
+   "ay": "2026-01",
+   "oni": -0.39,
+   "goreceli_gida": 1.04
+  },
+  {
+   "ay": "2026-02",
+   "oni": -0.21,
+   "goreceli_gida": 4.91
+  },
+  {
+   "ay": "2026-03",
+   "oni": 0.11,
+   "goreceli_gida": 1.49
+  },
+  {
+   "ay": "2026-04",
+   "oni": 0.46,
+   "goreceli_gida": 2.18
+  },
+  {
+   "ay": "2026-05",
+   "oni": 0.95,
+   "goreceli_gida": 2.25
+  },
+  {
+   "ay": "2026-06",
+   "oni": 1.39,
+   "goreceli_gida": 3.33
+  },
+  {
+   "ay": "2026-07",
+   "oni": 1.39,
+   "goreceli_gida": 5.77
+  }
+ ],
+ "uyarilar": [],
+ "yontem_notu": "Çapraz korelasyon katsayıları yukarı yanlıdır: iki seri de kalıcıdır. Tez epizot çalışmasına dayanır; korelasyon yalnız gecikme profilini göstermek için verilir."
+}
