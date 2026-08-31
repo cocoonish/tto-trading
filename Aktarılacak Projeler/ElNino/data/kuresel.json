@@ -7,26 +7,29 @@
  "asgari_ay": 5,
  "ufuk": 18,
  "epizot_sayisi": 4,
- "reel_gida_son": -8.26,
- "nominal_gida_son": -4.85,
+ "emtia_bas": "1960-01",
+ "emtia_son": "2026-07",
+ "emtia_yas_ay": 0,
+ "reel_gida_son": 5.74,
+ "nominal_gida_son": 8.35,
  "kuresel": {
   "kayitlar": [
    {
     "zirve": "1983-01",
     "zirve_oni": 2.14,
-    "ortalama": 9.18,
+    "ortalama": 9.19,
     "ay": 19
    },
    {
     "zirve": "1997-12",
     "zirve_oni": 2.37,
-    "ortalama": -12.21,
+    "ortalama": -12.22,
     "ay": 19
    },
    {
     "zirve": "2015-12",
     "zirve_oni": 2.59,
-    "ortalama": -0.28,
+    "ortalama": -0.29,
     "ay": 19
    },
    {
@@ -37,161 +40,221 @@
    }
   ],
   "olculen": 4,
-  "kosulsuz": 0.11,
+  "kosulsuz": 0.12,
   "orneklem_bas": "1961-01",
-  "orneklem_son": "2025-12",
-  "epizot_ortalama": -3.2,
-  "fark": -3.31
+  "orneklem_son": "2026-07",
+  "epizot_ortalama": -3.21,
+  "fark": -3.32
  },
  "kur_olculen": 4,
- "kur_kosulsuz": 0.11,
- "kur_epizot_ortalama": -3.2,
- "kur_fark": -3.31,
+ "kur_kosulsuz": 0.12,
+ "kur_epizot_ortalama": -3.21,
+ "kur_fark": -3.32,
  "kur_orneklem_bas": "1961-01",
- "kur_orneklem_son": "2025-12",
+ "kur_orneklem_son": "2026-07",
  "kur_capraz": [
   {
    "gecikme": 0,
-   "korelasyon": -0.235,
-   "n": 779
+   "korelasyon": -0.232,
+   "n": 786
   },
   {
    "gecikme": 1,
-   "korelasyon": -0.202,
-   "n": 779
+   "korelasyon": -0.199,
+   "n": 786
   },
   {
    "gecikme": 2,
-   "korelasyon": -0.162,
-   "n": 779
+   "korelasyon": -0.161,
+   "n": 786
   },
   {
    "gecikme": 3,
-   "korelasyon": -0.117,
-   "n": 779
+   "korelasyon": -0.116,
+   "n": 786
   },
   {
    "gecikme": 4,
    "korelasyon": -0.067,
-   "n": 779
+   "n": 786
   },
   {
    "gecikme": 5,
-   "korelasyon": -0.013,
-   "n": 779
+   "korelasyon": -0.014,
+   "n": 786
   },
   {
    "gecikme": 6,
-   "korelasyon": 0.043,
-   "n": 779
+   "korelasyon": 0.042,
+   "n": 786
   },
   {
    "gecikme": 7,
-   "korelasyon": 0.097,
-   "n": 779
+   "korelasyon": 0.096,
+   "n": 786
   },
   {
    "gecikme": 8,
-   "korelasyon": 0.145,
-   "n": 779
+   "korelasyon": 0.144,
+   "n": 786
   },
   {
    "gecikme": 9,
-   "korelasyon": 0.186,
-   "n": 779
+   "korelasyon": 0.185,
+   "n": 786
   },
   {
    "gecikme": 10,
-   "korelasyon": 0.22,
-   "n": 779
+   "korelasyon": 0.219,
+   "n": 786
   },
   {
    "gecikme": 11,
-   "korelasyon": 0.249,
-   "n": 779
+   "korelasyon": 0.248,
+   "n": 786
   },
   {
    "gecikme": 12,
-   "korelasyon": 0.271,
-   "n": 779
+   "korelasyon": 0.27,
+   "n": 786
   },
   {
    "gecikme": 13,
    "korelasyon": 0.284,
-   "n": 779
+   "n": 786
   },
   {
    "gecikme": 14,
-   "korelasyon": 0.287,
-   "n": 779
+   "korelasyon": 0.286,
+   "n": 786
   },
   {
    "gecikme": 15,
    "korelasyon": 0.28,
-   "n": 779
+   "n": 786
   },
   {
    "gecikme": 16,
-   "korelasyon": 0.265,
-   "n": 779
+   "korelasyon": 0.264,
+   "n": 786
   },
   {
    "gecikme": 17,
-   "korelasyon": 0.242,
-   "n": 779
+   "korelasyon": 0.241,
+   "n": 786
   },
   {
    "gecikme": 18,
-   "korelasyon": 0.213,
-   "n": 779
+   "korelasyon": 0.212,
+   "n": 786
   },
   {
    "gecikme": 19,
    "korelasyon": 0.178,
-   "n": 779
+   "n": 786
   },
   {
    "gecikme": 20,
-   "korelasyon": 0.142,
-   "n": 779
+   "korelasyon": 0.141,
+   "n": 786
   },
   {
    "gecikme": 21,
    "korelasyon": 0.102,
-   "n": 779
+   "n": 786
   },
   {
    "gecikme": 22,
-   "korelasyon": 0.063,
-   "n": 779
+   "korelasyon": 0.061,
+   "n": 786
   },
   {
    "gecikme": 23,
-   "korelasyon": 0.024,
-   "n": 779
+   "korelasyon": 0.023,
+   "n": 786
   },
   {
    "gecikme": 24,
-   "korelasyon": -0.012,
-   "n": 779
+   "korelasyon": -0.014,
+   "n": 786
   }
  ],
  "kur_en_iyi_gecikme": 14,
- "kur_en_iyi_kor": 0.287,
- "kur_capraz_n": 779,
+ "kur_en_iyi_kor": 0.286,
+ "kur_capraz_n": 786,
  "son_epizot_zirve": "2023-12",
  "son_epizot_oni": 1.99,
  "kirilim": [
+  {
+   "ad": "kakao",
+   "baslik": "Kakao",
+   "gerekce": "Batı Afrika; ENSO Gine Körfezi yağışını değiştirir",
+   "toplu": false,
+   "olculen": 4,
+   "epizot_ortalama": 22.25,
+   "kosulsuz": 3.97,
+   "fark": 18.28,
+   "son_epizot_tepe": 155.3,
+   "bas": "1961-01"
+  },
+  {
+   "ad": "kahve",
+   "baslik": "Kahve (robusta)",
+   "gerekce": "Vietnam ve Brezilya; ENSO kuraklığına duyarlı",
+   "toplu": false,
+   "olculen": 4,
+   "epizot_ortalama": 17.69,
+   "kosulsuz": 3.91,
+   "fark": 13.78,
+   "son_epizot_tepe": 94.3,
+   "bas": "1961-01"
+  },
+  {
+   "ad": "palm",
+   "baslik": "Palm yağı",
+   "gerekce": "Endonezya + Malezya dünya arzının ~%85'i; ENSO kuraklığı doğrudan",
+   "toplu": false,
+   "olculen": 4,
+   "epizot_ortalama": 16.86,
+   "kosulsuz": 3.25,
+   "fark": 13.61,
+   "son_epizot_tepe": 46.2,
+   "bas": "1961-01"
+  },
+  {
+   "ad": "cay",
+   "baslik": "Çay",
+   "gerekce": "Hindistan, Sri Lanka, Kenya — üçü de ENSO yağış rejiminde",
+   "toplu": false,
+   "olculen": 4,
+   "epizot_ortalama": 9.17,
+   "kosulsuz": -0.7,
+   "fark": 9.87,
+   "son_epizot_tepe": 21.8,
+   "bas": "1961-01"
+  },
   {
    "ad": "emtia_icecek",
    "baslik": "İçecekler",
    "gerekce": "",
    "toplu": true,
    "olculen": 4,
-   "epizot_ortalama": 10.78,
-   "kosulsuz": 2.08,
-   "fark": 8.7,
+   "epizot_ortalama": 10.79,
+   "kosulsuz": 1.74,
+   "fark": 9.05,
    "son_epizot_tepe": 97.9,
+   "bas": "1961-01"
+  },
+  {
+   "ad": "portakal",
+   "baslik": "Portakal",
+   "gerekce": "Brezilya + Florida; ENSO bağı dolaylı",
+   "toplu": false,
+   "olculen": 4,
+   "epizot_ortalama": 8.78,
+   "kosulsuz": 2.82,
+   "fark": 5.96,
+   "son_epizot_tepe": 42.1,
    "bas": "1961-01"
   },
   {
@@ -200,9 +263,9 @@
    "gerekce": "",
    "toplu": true,
    "olculen": 4,
-   "epizot_ortalama": 0.77,
-   "kosulsuz": 1.06,
-   "fark": -0.29,
+   "epizot_ortalama": 0.76,
+   "kosulsuz": 1.13,
+   "fark": -0.36,
    "son_epizot_tepe": 0.0,
    "bas": "1961-01"
   },
@@ -213,9 +276,9 @@
    "toplu": true,
    "olculen": 4,
    "epizot_ortalama": -1.64,
-   "kosulsuz": -0.24,
-   "fark": -1.4,
-   "son_epizot_tepe": 11.8,
+   "kosulsuz": -0.31,
+   "fark": -1.33,
+   "son_epizot_tepe": 11.9,
    "bas": "1961-01"
   },
   {
@@ -224,10 +287,10 @@
    "gerekce": "",
    "toplu": true,
    "olculen": 4,
-   "epizot_ortalama": -2.29,
-   "kosulsuz": 0.1,
-   "fark": -2.4,
-   "son_epizot_tepe": 10.4,
+   "epizot_ortalama": -2.3,
+   "kosulsuz": 0.13,
+   "fark": -2.43,
+   "son_epizot_tepe": 10.3,
    "bas": "1961-01"
   },
   {
@@ -236,9 +299,9 @@
    "gerekce": "",
    "toplu": true,
    "olculen": 4,
-   "epizot_ortalama": -3.27,
-   "kosulsuz": -0.82,
-   "fark": -2.46,
+   "epizot_ortalama": -3.28,
+   "kosulsuz": -0.79,
+   "fark": -2.48,
    "son_epizot_tepe": 8.6,
    "bas": "1961-01"
   },
@@ -248,9 +311,9 @@
    "gerekce": "",
    "toplu": true,
    "olculen": 4,
-   "epizot_ortalama": -3.2,
-   "kosulsuz": 0.11,
-   "fark": -3.31,
+   "epizot_ortalama": -3.21,
+   "kosulsuz": 0.12,
+   "fark": -3.32,
    "son_epizot_tepe": 0.0,
    "bas": "1961-01"
   },
@@ -260,10 +323,58 @@
    "gerekce": "",
    "toplu": true,
    "olculen": 4,
-   "epizot_ortalama": -1.9,
-   "kosulsuz": 1.88,
-   "fark": -3.77,
+   "epizot_ortalama": -1.89,
+   "kosulsuz": 2.1,
+   "fark": -3.99,
    "son_epizot_tepe": 13.9,
+   "bas": "1961-01"
+  },
+  {
+   "ad": "misir",
+   "baslik": "Mısır",
+   "gerekce": "ABD Mısır Kuşağı ENSO'ya zayıf bağlı",
+   "toplu": false,
+   "olculen": 4,
+   "epizot_ortalama": -4.98,
+   "kosulsuz": 1.14,
+   "fark": -6.12,
+   "son_epizot_tepe": 7.0,
+   "bas": "1961-01"
+  },
+  {
+   "ad": "pirinc",
+   "baslik": "Pirinç",
+   "gerekce": "Güneydoğu Asya muson rejimi; Hindistan ihracat kısıtları",
+   "toplu": false,
+   "olculen": 4,
+   "epizot_ortalama": -5.18,
+   "kosulsuz": 2.03,
+   "fark": -7.21,
+   "son_epizot_tepe": 2.5,
+   "bas": "1961-01"
+  },
+  {
+   "ad": "soya",
+   "baslik": "Soya",
+   "gerekce": "Brezilya + Arjantin; El Niño Arjantin'e genelde YAĞIŞ getirir",
+   "toplu": false,
+   "olculen": 4,
+   "epizot_ortalama": -6.79,
+   "kosulsuz": 1.08,
+   "fark": -7.88,
+   "son_epizot_tepe": 0.0,
+   "bas": "1961-01"
+  },
+  {
+   "ad": "muz",
+   "baslik": "Muz",
+   "gerekce": "Ekvador ve Orta Amerika; El Niño'nun klasik coğrafyası",
+   "toplu": false,
+   "olculen": 4,
+   "epizot_ortalama": -7.03,
+   "kosulsuz": 1.65,
+   "fark": -8.68,
+   "son_epizot_tepe": 4.5,
    "bas": "1961-01"
   },
   {
@@ -273,8 +384,32 @@
    "toplu": true,
    "olculen": 4,
    "epizot_ortalama": -8.62,
-   "kosulsuz": 0.57,
-   "fark": -9.19,
+   "kosulsuz": 0.55,
+   "fark": -9.18,
+   "son_epizot_tepe": 0.0,
+   "bas": "1961-01"
+  },
+  {
+   "ad": "seker",
+   "baslik": "Şeker",
+   "gerekce": "Hindistan + Tayland muson; Brezilya kuraklığı",
+   "toplu": false,
+   "olculen": 4,
+   "epizot_ortalama": -3.74,
+   "kosulsuz": 8.94,
+   "fark": -12.68,
+   "son_epizot_tepe": 4.2,
+   "bas": "1961-01"
+  },
+  {
+   "ad": "bugday",
+   "baslik": "Buğday",
+   "gerekce": "Karadeniz havzası ENSO'nun dışında",
+   "toplu": false,
+   "olculen": 4,
+   "epizot_ortalama": -15.56,
+   "kosulsuz": 1.38,
+   "fark": -16.94,
    "son_epizot_tepe": 0.0,
    "bas": "1961-01"
   },
@@ -284,9 +419,9 @@
    "gerekce": "",
    "toplu": true,
    "olculen": 4,
-   "epizot_ortalama": -10.93,
-   "kosulsuz": 7.56,
-   "fark": -18.49,
+   "epizot_ortalama": -10.95,
+   "kosulsuz": 7.7,
+   "fark": -18.65,
    "son_epizot_tepe": 10.0,
    "bas": "1961-01"
   }
@@ -296,19 +431,19 @@
    {
     "zirve": "1983-01",
     "zirve_oni": 2.14,
-    "ortalama": 1.39,
+    "ortalama": 1.36,
     "ay": 19
    },
    {
     "zirve": "1997-12",
     "zirve_oni": 2.37,
-    "ortalama": 4.72,
+    "ortalama": 4.69,
     "ay": 19
    },
    {
     "zirve": "2015-12",
     "zirve_oni": 2.59,
-    "ortalama": -2.58,
+    "ortalama": -2.57,
     "ay": 19
    },
    {
@@ -319,17 +454,17 @@
    }
   ],
   "olculen": 4,
-  "kosulsuz": -1.82,
+  "kosulsuz": -2.02,
   "orneklem_bas": "1961-01",
-  "orneklem_son": "2025-12",
-  "epizot_ortalama": -1.35,
-  "fark": 0.47
+  "orneklem_son": "2026-07",
+  "epizot_ortalama": -1.36,
+  "fark": 0.66
  },
  "gor_emtia_olculen": 4,
- "gor_emtia_kosulsuz": -1.82,
- "gor_emtia_epizot_ortalama": -1.35,
- "gor_emtia_fark": 0.47,
- "gor_emtia_son": -24.03,
+ "gor_emtia_kosulsuz": -2.02,
+ "gor_emtia_epizot_ortalama": -1.36,
+ "gor_emtia_fark": 0.66,
+ "gor_emtia_son": -19.03,
  "abd": {
   "kayitlar": [
    {
@@ -375,6 +510,15 @@
  "abd_gecis_beta": 0.319,
  "abd_gecis_r2": 0.201,
  "abd_gecis_n": 796,
+ "gecis_yillik_tr_beta": 0.869,
+ "gecis_yillik_tr_r2": 0.965,
+ "gecis_yillik_tr_n": 247,
+ "gecis_yillik_abd_beta": 0.669,
+ "gecis_yillik_abd_r2": 0.594,
+ "gecis_yillik_abd_n": 786,
+ "gecis_yillik_ea_beta": 0.482,
+ "gecis_yillik_ea_r2": 0.72,
+ "gecis_yillik_ea_n": 348,
  "abd_cekirdek_beta": 0.182,
  "abd_cekirdek_r2": 0.108,
  "abd_cekirdek_gecikme": 9,
@@ -454,30 +598,30 @@
  "fed_hukum": "nedensel_degil",
  "fed_hukum_metin": "Bu sayıların ortalaması ALINMAZ. Dört pencerenin her biri El Niño'yla ilgisi olmayan bir şeyin gölgesindedir: 1983 Volcker dezenflasyonu, 1998 Asya krizi ve LTCM, 2016 faiz artırım döngüsünün ilk adımı, 2024 Kovid sonrası indirim döngüsü. Tablo, El Niño'nun politika faizini ne yaptığını DEĞİL, epizotların hangi rejimlere denk geldiğini gösterir.",
  "gecis_abd_beta": 0.093,
- "gecis_abd_r2": 0.226,
+ "gecis_abd_r2": 0.227,
  "gecis_abd_gecikme": 7,
- "gecis_abd_n": 772,
- "gecis_tr_beta": 0.093,
- "gecis_tr_r2": 0.101,
+ "gecis_abd_n": 779,
+ "gecis_tr_beta": 0.092,
+ "gecis_tr_r2": 0.099,
  "gecis_tr_gecikme": 12,
- "gecis_tr_n": 239,
+ "gecis_tr_n": 246,
  "gecis": {
   "abd": {
    "beta": 0.093,
-   "sabit": 3.853,
-   "r2": 0.226,
+   "sabit": 3.852,
+   "r2": 0.227,
    "kor": 0.476,
-   "n": 772,
+   "n": 779,
    "gecikme": 7,
    "profil": [
     {
      "gecikme": 0,
      "r2": 0.099,
-     "beta": 0.062
+     "beta": 0.061
     },
     {
      "gecikme": 1,
-     "r2": 0.132,
+     "r2": 0.133,
      "beta": 0.071
     },
     {
@@ -487,7 +631,7 @@
     },
     {
      "gecikme": 3,
-     "r2": 0.185,
+     "r2": 0.186,
      "beta": 0.084
     },
     {
@@ -497,22 +641,22 @@
     },
     {
      "gecikme": 5,
-     "r2": 0.211,
+     "r2": 0.212,
      "beta": 0.09
     },
     {
      "gecikme": 6,
-     "r2": 0.221,
+     "r2": 0.222,
      "beta": 0.092
     },
     {
      "gecikme": 7,
-     "r2": 0.226,
+     "r2": 0.227,
      "beta": 0.093
     },
     {
      "gecikme": 8,
-     "r2": 0.225,
+     "r2": 0.226,
      "beta": 0.093
     },
     {
@@ -522,7 +666,7 @@
     },
     {
      "gecikme": 10,
-     "r2": 0.199,
+     "r2": 0.2,
      "beta": 0.087
     },
     {
@@ -532,7 +676,7 @@
     },
     {
      "gecikme": 12,
-     "r2": 0.152,
+     "r2": 0.153,
      "beta": 0.076
     },
     {
@@ -547,7 +691,7 @@
     },
     {
      "gecikme": 15,
-     "r2": 0.089,
+     "r2": 0.09,
      "beta": 0.058
     },
     {
@@ -557,17 +701,17 @@
     },
     {
      "gecikme": 17,
-     "r2": 0.061,
+     "r2": 0.062,
      "beta": 0.048
     },
     {
      "gecikme": 18,
      "r2": 0.048,
-     "beta": 0.042
+     "beta": 0.043
     },
     {
      "gecikme": 19,
-     "r2": 0.036,
+     "r2": 0.037,
      "beta": 0.037
     },
     {
@@ -582,7 +726,7 @@
     },
     {
      "gecikme": 22,
-     "r2": 0.012,
+     "r2": 0.013,
      "beta": 0.022
     },
     {
@@ -593,32 +737,32 @@
     {
      "gecikme": 24,
      "r2": 0.006,
-     "beta": 0.014
+     "beta": 0.015
     }
    ]
   },
   "tr": {
-   "beta": 0.093,
-   "sabit": 2.484,
-   "r2": 0.101,
-   "kor": 0.318,
-   "n": 239,
+   "beta": 0.092,
+   "sabit": 2.521,
+   "r2": 0.099,
+   "kor": 0.314,
+   "n": 246,
    "gecikme": 12,
    "profil": [
     {
      "gecikme": 0,
      "r2": 0.0,
-     "beta": 0.003
+     "beta": 0.004
     },
     {
      "gecikme": 1,
      "r2": 0.002,
-     "beta": 0.012
+     "beta": 0.013
     },
     {
      "gecikme": 2,
      "r2": 0.002,
-     "beta": 0.013
+     "beta": 0.014
     },
     {
      "gecikme": 3,
@@ -628,7 +772,7 @@
     {
      "gecikme": 4,
      "r2": 0.003,
-     "beta": 0.017
+     "beta": 0.016
     },
     {
      "gecikme": 5,
@@ -637,98 +781,98 @@
     },
     {
      "gecikme": 6,
-     "r2": 0.011,
-     "beta": 0.03
+     "r2": 0.01,
+     "beta": 0.029
     },
     {
      "gecikme": 7,
-     "r2": 0.021,
-     "beta": 0.043
+     "r2": 0.02,
+     "beta": 0.042
     },
     {
      "gecikme": 8,
-     "r2": 0.039,
-     "beta": 0.058
+     "r2": 0.038,
+     "beta": 0.057
     },
     {
      "gecikme": 9,
-     "r2": 0.059,
-     "beta": 0.071
+     "r2": 0.057,
+     "beta": 0.07
     },
     {
      "gecikme": 10,
-     "r2": 0.081,
-     "beta": 0.083
+     "r2": 0.079,
+     "beta": 0.082
     },
     {
      "gecikme": 11,
+     "r2": 0.097,
+     "beta": 0.091
+    },
+    {
+     "gecikme": 12,
      "r2": 0.099,
      "beta": 0.092
     },
     {
-     "gecikme": 12,
-     "r2": 0.101,
-     "beta": 0.093
-    },
-    {
      "gecikme": 13,
-     "r2": 0.092,
-     "beta": 0.089
-    },
-    {
-     "gecikme": 14,
-     "r2": 0.092,
-     "beta": 0.089
-    },
-    {
-     "gecikme": 15,
-     "r2": 0.089,
+     "r2": 0.09,
      "beta": 0.087
     },
     {
+     "gecikme": 14,
+     "r2": 0.09,
+     "beta": 0.087
+    },
+    {
+     "gecikme": 15,
+     "r2": 0.088,
+     "beta": 0.086
+    },
+    {
      "gecikme": 16,
-     "r2": 0.077,
-     "beta": 0.081
+     "r2": 0.076,
+     "beta": 0.08
     },
     {
      "gecikme": 17,
-     "r2": 0.072,
-     "beta": 0.078
+     "r2": 0.07,
+     "beta": 0.077
     },
     {
      "gecikme": 18,
-     "r2": 0.065,
-     "beta": 0.075
+     "r2": 0.063,
+     "beta": 0.073
     },
     {
      "gecikme": 19,
-     "r2": 0.054,
-     "beta": 0.068
+     "r2": 0.053,
+     "beta": 0.067
     },
     {
      "gecikme": 20,
-     "r2": 0.046,
-     "beta": 0.063
+     "r2": 0.045,
+     "beta": 0.062
     },
     {
      "gecikme": 21,
-     "r2": 0.043,
-     "beta": 0.061
+     "r2": 0.041,
+     "beta": 0.059
     },
     {
      "gecikme": 22,
-     "r2": 0.035,
-     "beta": 0.055
+     "r2": 0.034,
+     "beta": 0.053
     },
     {
      "gecikme": 23,
-     "r2": 0.032,
-     "beta": 0.052
+     "r2": 0.031,
+     "beta": 0.051
     },
     {
      "gecikme": 24,
-     "r2": 0.037,
-     "beta": 0.056
+     "r2": 0.035,
+     "beta": 0.054
     }
    ]
   }
@@ -738,427 +882,427 @@
  "reel_gida_tarihce": [
   {
    "ay": "1961-01",
-   "deger": -2.13
+   "deger": -2.14
   },
   {
    "ay": "1961-02",
-   "deger": 3.04
+   "deger": 2.91
   },
   {
    "ay": "1961-03",
-   "deger": 6.35
+   "deger": 6.14
   },
   {
    "ay": "1961-04",
-   "deger": 7.73
+   "deger": 7.87
   },
   {
    "ay": "1961-05",
-   "deger": 7.24
+   "deger": 6.97
   },
   {
    "ay": "1961-06",
-   "deger": 7.23
+   "deger": 7.01
   },
   {
    "ay": "1961-07",
-   "deger": 4.84
+   "deger": 4.83
   },
   {
    "ay": "1961-08",
-   "deger": 2.14
+   "deger": 1.81
   },
   {
    "ay": "1961-09",
-   "deger": -0.93
+   "deger": -0.87
   },
   {
    "ay": "1961-10",
-   "deger": 4.69
+   "deger": 4.72
   },
   {
    "ay": "1961-11",
-   "deger": 9.9
+   "deger": 9.87
   },
   {
    "ay": "1961-12",
-   "deger": 5.25
+   "deger": 5.15
   },
   {
    "ay": "1962-01",
-   "deger": 0.85
+   "deger": 0.75
   },
   {
    "ay": "1962-02",
-   "deger": -2.73
+   "deger": -2.81
   },
   {
    "ay": "1962-03",
-   "deger": -5.65
+   "deger": -5.79
   },
   {
    "ay": "1962-04",
-   "deger": -7.4
+   "deger": -7.3
   },
   {
    "ay": "1962-05",
-   "deger": -4.68
+   "deger": -4.35
   },
   {
    "ay": "1962-06",
-   "deger": -2.84
+   "deger": -2.65
   },
   {
    "ay": "1962-07",
-   "deger": -2.12
+   "deger": -1.89
   },
   {
    "ay": "1962-08",
-   "deger": -1.49
+   "deger": -1.32
   },
   {
    "ay": "1962-09",
-   "deger": 1.19
+   "deger": 0.99
   },
   {
    "ay": "1962-10",
-   "deger": -0.82
+   "deger": -0.85
   },
   {
    "ay": "1962-11",
-   "deger": 0.38
+   "deger": 0.49
   },
   {
    "ay": "1962-12",
-   "deger": 0.28
+   "deger": 0.5
   },
   {
    "ay": "1963-01",
-   "deger": 4.84
+   "deger": 5.14
   },
   {
    "ay": "1963-02",
-   "deger": 7.04
+   "deger": 7.34
   },
   {
    "ay": "1963-03",
-   "deger": 6.37
+   "deger": 6.46
   },
   {
    "ay": "1963-04",
-   "deger": 8.69
+   "deger": 8.6
   },
   {
    "ay": "1963-05",
-   "deger": 11.79
+   "deger": 11.56
   },
   {
    "ay": "1963-06",
-   "deger": 11.96
+   "deger": 11.7
   },
   {
    "ay": "1963-07",
-   "deger": 11.94
+   "deger": 11.77
   },
   {
    "ay": "1963-08",
-   "deger": 9.01
+   "deger": 9.16
   },
   {
    "ay": "1963-09",
-   "deger": 8.96
+   "deger": 8.97
   },
   {
    "ay": "1963-10",
-   "deger": 18.17
+   "deger": 18.44
   },
   {
    "ay": "1963-11",
-   "deger": 14.46
+   "deger": 14.19
   },
   {
    "ay": "1963-12",
-   "deger": 13.89
+   "deger": 13.96
   },
   {
    "ay": "1964-01",
-   "deger": 11.91
+   "deger": 11.76
   },
   {
    "ay": "1964-02",
-   "deger": 6.54
+   "deger": 6.44
   },
   {
    "ay": "1964-03",
-   "deger": 3.81
+   "deger": 3.79
   },
   {
    "ay": "1964-04",
-   "deger": 2.94
+   "deger": 2.85
   },
   {
    "ay": "1964-05",
-   "deger": -2.61
+   "deger": -2.48
   },
   {
    "ay": "1964-06",
-   "deger": -5.44
+   "deger": -5.25
   },
   {
    "ay": "1964-07",
-   "deger": -5.58
+   "deger": -5.66
   },
   {
    "ay": "1964-08",
-   "deger": -3.34
+   "deger": -3.44
   },
   {
    "ay": "1964-09",
-   "deger": -3.18
+   "deger": -2.92
   },
   {
    "ay": "1964-10",
-   "deger": -8.53
+   "deger": -8.64
   },
   {
    "ay": "1964-11",
-   "deger": -9.44
+   "deger": -9.32
   },
   {
    "ay": "1964-12",
-   "deger": -7.47
+   "deger": -7.54
   },
   {
    "ay": "1965-01",
-   "deger": -9.14
+   "deger": -9.37
   },
   {
    "ay": "1965-02",
-   "deger": -3.92
+   "deger": -4.12
   },
   {
    "ay": "1965-03",
-   "deger": -1.97
+   "deger": -1.68
   },
   {
    "ay": "1965-04",
-   "deger": -3.24
+   "deger": -3.18
   },
   {
    "ay": "1965-05",
-   "deger": -3.12
-  },
-  {
-   "ay": "1965-06",
-   "deger": -1.31
-  },
-  {
-   "ay": "1965-07",
-   "deger": -1.01
-  },
-  {
-   "ay": "1965-08",
-   "deger": -3.47
-  },
-  {
-   "ay": "1965-09",
-   "deger": -3.01
-  },
-  {
-   "ay": "1965-10",
-   "deger": -3.85
-  },
-  {
-   "ay": "1965-11",
-   "deger": -3.45
-  },
-  {
-   "ay": "1965-12",
-   "deger": -4.42
-  },
-  {
-   "ay": "1966-01",
-   "deger": -1.05
-  },
-  {
-   "ay": "1966-02",
-   "deger": -4.32
-  },
-  {
-   "ay": "1966-03",
-   "deger": -3.97
-  },
-  {
-   "ay": "1966-04",
    "deger": -3.19
   },
   {
+   "ay": "1965-06",
+   "deger": -1.49
+  },
+  {
+   "ay": "1965-07",
+   "deger": -0.75
+  },
+  {
+   "ay": "1965-08",
+   "deger": -3.58
+  },
+  {
+   "ay": "1965-09",
+   "deger": -3.24
+  },
+  {
+   "ay": "1965-10",
+   "deger": -3.95
+  },
+  {
+   "ay": "1965-11",
+   "deger": -3.65
+  },
+  {
+   "ay": "1965-12",
+   "deger": -4.35
+  },
+  {
+   "ay": "1966-01",
+   "deger": -1.06
+  },
+  {
+   "ay": "1966-02",
+   "deger": -4.1
+  },
+  {
+   "ay": "1966-03",
+   "deger": -4.09
+  },
+  {
+   "ay": "1966-04",
+   "deger": -3.18
+  },
+  {
    "ay": "1966-05",
-   "deger": -2.91
+   "deger": -2.79
   },
   {
    "ay": "1966-06",
-   "deger": 0.43
+   "deger": 0.38
   },
   {
    "ay": "1966-07",
-   "deger": 3.59
+   "deger": 3.33
   },
   {
    "ay": "1966-08",
-   "deger": 8.89
+   "deger": 8.82
   },
   {
    "ay": "1966-09",
-   "deger": 4.38
+   "deger": 4.52
   },
   {
    "ay": "1966-10",
-   "deger": 1.32
+   "deger": 1.31
   },
   {
    "ay": "1966-11",
-   "deger": 1.03
+   "deger": 1.34
   },
   {
    "ay": "1966-12",
-   "deger": 1.54
+   "deger": 1.63
   },
   {
    "ay": "1967-01",
-   "deger": -0.61
+   "deger": -0.51
   },
   {
    "ay": "1967-02",
-   "deger": -0.27
+   "deger": -0.29
   },
   {
    "ay": "1967-03",
-   "deger": 0.0
+   "deger": 0.11
   },
   {
    "ay": "1967-04",
-   "deger": -0.66
+   "deger": -0.81
   },
   {
    "ay": "1967-05",
-   "deger": -0.22
+   "deger": -0.3
   },
   {
    "ay": "1967-06",
-   "deger": -0.79
+   "deger": -0.73
   },
   {
    "ay": "1967-07",
-   "deger": -4.4
+   "deger": -4.23
   },
   {
    "ay": "1967-08",
-   "deger": -7.5
+   "deger": -7.29
   },
   {
    "ay": "1967-09",
-   "deger": -4.33
+   "deger": -4.22
   },
   {
    "ay": "1967-10",
-   "deger": -1.33
+   "deger": -1.18
   },
   {
    "ay": "1967-11",
-   "deger": -1.45
+   "deger": -1.47
   },
   {
    "ay": "1967-12",
-   "deger": -4.68
+   "deger": -4.93
   },
   {
    "ay": "1968-01",
-   "deger": -6.68
+   "deger": -6.66
   },
   {
    "ay": "1968-02",
-   "deger": -4.64
+   "deger": -4.59
   },
   {
    "ay": "1968-03",
-   "deger": -5.48
+   "deger": -5.74
   },
   {
    "ay": "1968-04",
-   "deger": -7.52
+   "deger": -7.29
   },
   {
    "ay": "1968-05",
-   "deger": -7.57
+   "deger": -7.65
   },
   {
    "ay": "1968-06",
-   "deger": -12.13
+   "deger": -12.03
   },
   {
    "ay": "1968-07",
-   "deger": -11.97
+   "deger": -11.95
   },
   {
    "ay": "1968-08",
-   "deger": -13.58
+   "deger": -13.62
   },
   {
    "ay": "1968-09",
-   "deger": -13.84
+   "deger": -13.92
   },
   {
    "ay": "1968-10",
-   "deger": -14.43
+   "deger": -14.54
   },
   {
    "ay": "1968-11",
-   "deger": -12.92
+   "deger": -13.02
   },
   {
    "ay": "1968-12",
-   "deger": -9.11
+   "deger": -8.88
   },
   {
    "ay": "1969-01",
-   "deger": -6.94
+   "deger": -7.03
   },
   {
    "ay": "1969-02",
-   "deger": -8.71
+   "deger": -8.79
   },
   {
    "ay": "1969-03",
-   "deger": -6.36
+   "deger": -6.16
   },
   {
    "ay": "1969-04",
-   "deger": -4.69
+   "deger": -4.84
   },
   {
    "ay": "1969-05",
-   "deger": -2.56
+   "deger": -2.43
   },
   {
    "ay": "1969-06",
-   "deger": 1.15
+   "deger": 1.38
   },
   {
    "ay": "1969-07",
-   "deger": -0.2
+   "deger": -0.22
   },
   {
    "ay": "1969-08",
-   "deger": 2.31
+   "deger": 2.26
   },
   {
    "ay": "1969-09",
-   "deger": 0.73
+   "deger": 0.55
   },
   {
    "ay": "1969-10",
-   "deger": 2.91
+   "deger": 3.16
   },
   {
    "ay": "1969-11",
@@ -1166,295 +1310,295 @@
   },
   {
    "ay": "1969-12",
-   "deger": 2.52
+   "deger": 2.39
   },
   {
    "ay": "1970-01",
-   "deger": 4.3
+   "deger": 4.37
   },
   {
    "ay": "1970-02",
-   "deger": 3.9
+   "deger": 3.96
   },
   {
    "ay": "1970-03",
-   "deger": 1.5
+   "deger": 1.22
   },
   {
    "ay": "1970-04",
-   "deger": 1.93
+   "deger": 2.18
   },
   {
    "ay": "1970-05",
-   "deger": 0.77
+   "deger": 0.84
   },
   {
    "ay": "1970-06",
-   "deger": 0.51
-  },
-  {
-   "ay": "1970-07",
-   "deger": 2.05
-  },
-  {
-   "ay": "1970-08",
-   "deger": 2.05
-  },
-  {
-   "ay": "1970-09",
-   "deger": 2.6
-  },
-  {
-   "ay": "1970-10",
-   "deger": 3.89
-  },
-  {
-   "ay": "1970-11",
-   "deger": 4.44
-  },
-  {
-   "ay": "1970-12",
-   "deger": 2.19
-  },
-  {
-   "ay": "1971-01",
    "deger": 0.44
   },
   {
+   "ay": "1970-07",
+   "deger": 1.77
+  },
+  {
+   "ay": "1970-08",
+   "deger": 1.99
+  },
+  {
+   "ay": "1970-09",
+   "deger": 2.63
+  },
+  {
+   "ay": "1970-10",
+   "deger": 3.67
+  },
+  {
+   "ay": "1970-11",
+   "deger": 4.4
+  },
+  {
+   "ay": "1970-12",
+   "deger": 1.95
+  },
+  {
+   "ay": "1971-01",
+   "deger": 0.54
+  },
+  {
    "ay": "1971-02",
-   "deger": -0.25
+   "deger": -0.3
   },
   {
    "ay": "1971-03",
-   "deger": -0.47
+   "deger": -0.4
   },
   {
    "ay": "1971-04",
-   "deger": -2.12
+   "deger": -2.14
   },
   {
    "ay": "1971-05",
-   "deger": -4.01
+   "deger": -4.22
   },
   {
    "ay": "1971-06",
-   "deger": -4.29
+   "deger": -4.43
   },
   {
    "ay": "1971-07",
-   "deger": -1.13
+   "deger": -0.87
   },
   {
    "ay": "1971-08",
-   "deger": 0.9
+   "deger": 1.15
   },
   {
    "ay": "1971-09",
-   "deger": -1.1
+   "deger": -0.93
   },
   {
    "ay": "1971-10",
-   "deger": -3.88
+   "deger": -3.67
   },
   {
    "ay": "1971-11",
-   "deger": -5.46
+   "deger": -5.34
   },
   {
    "ay": "1971-12",
-   "deger": -4.37
+   "deger": -4.25
   },
   {
    "ay": "1972-01",
-   "deger": -3.91
+   "deger": -3.88
   },
   {
    "ay": "1972-02",
-   "deger": -3.69
+   "deger": -3.75
   },
   {
    "ay": "1972-03",
-   "deger": -0.06
+   "deger": -0.12
   },
   {
    "ay": "1972-04",
-   "deger": 1.41
+   "deger": 1.38
   },
   {
    "ay": "1972-05",
-   "deger": 1.59
+   "deger": 1.68
   },
   {
    "ay": "1972-06",
-   "deger": 0.51
+   "deger": 0.69
   },
   {
    "ay": "1972-07",
-   "deger": -2.62
+   "deger": -2.86
   },
   {
    "ay": "1972-08",
-   "deger": -0.79
+   "deger": -1.08
   },
   {
    "ay": "1972-09",
-   "deger": 6.65
+   "deger": 6.79
   },
   {
    "ay": "1972-10",
-   "deger": 8.11
+   "deger": 8.0
   },
   {
    "ay": "1972-11",
-   "deger": 12.78
+   "deger": 12.6
   },
   {
    "ay": "1972-12",
-   "deger": 26.68
+   "deger": 26.63
   },
   {
    "ay": "1973-01",
-   "deger": 32.88
+   "deger": 32.7
   },
   {
    "ay": "1973-02",
-   "deger": 45.2
+   "deger": 45.31
   },
   {
    "ay": "1973-03",
-   "deger": 40.85
+   "deger": 40.99
   },
   {
    "ay": "1973-04",
-   "deger": 42.01
+   "deger": 41.92
   },
   {
    "ay": "1973-05",
-   "deger": 65.51
+   "deger": 65.4
   },
   {
    "ay": "1973-06",
-   "deger": 95.61
+   "deger": 95.28
   },
   {
    "ay": "1973-07",
-   "deger": 113.59
+   "deger": 114.04
   },
   {
    "ay": "1973-08",
-   "deger": 100.88
+   "deger": 100.99
   },
   {
    "ay": "1973-09",
-   "deger": 67.07
+   "deger": 66.83
   },
   {
    "ay": "1973-10",
-   "deger": 59.95
+   "deger": 59.83
   },
   {
    "ay": "1973-11",
-   "deger": 61.66
+   "deger": 61.88
   },
   {
    "ay": "1973-12",
-   "deger": 55.13
+   "deger": 55.35
   },
   {
    "ay": "1974-01",
-   "deger": 52.6
+   "deger": 52.69
   },
   {
    "ay": "1974-02",
-   "deger": 52.47
+   "deger": 52.46
   },
   {
    "ay": "1974-03",
-   "deger": 45.6
+   "deger": 45.56
   },
   {
    "ay": "1974-04",
-   "deger": 37.0
+   "deger": 37.02
   },
   {
    "ay": "1974-05",
-   "deger": 16.89
+   "deger": 16.86
   },
   {
    "ay": "1974-06",
-   "deger": -0.99
+   "deger": -0.98
   },
   {
    "ay": "1974-07",
-   "deger": -4.28
+   "deger": -4.31
   },
   {
    "ay": "1974-08",
-   "deger": 7.92
+   "deger": 7.94
   },
   {
    "ay": "1974-09",
-   "deger": 22.68
+   "deger": 22.63
   },
   {
    "ay": "1974-10",
-   "deger": 37.82
+   "deger": 37.88
   },
   {
    "ay": "1974-11",
-   "deger": 33.79
+   "deger": 33.69
   },
   {
    "ay": "1974-12",
-   "deger": 12.34
+   "deger": 12.26
   },
   {
    "ay": "1975-01",
-   "deger": -4.08
+   "deger": -4.04
   },
   {
    "ay": "1975-02",
-   "deger": -20.03
+   "deger": -20.07
   },
   {
    "ay": "1975-03",
-   "deger": -21.88
+   "deger": -21.78
   },
   {
    "ay": "1975-04",
-   "deger": -18.93
+   "deger": -19.02
   },
   {
    "ay": "1975-05",
-   "deger": -26.0
+   "deger": -26.01
   },
   {
    "ay": "1975-06",
-   "deger": -29.63
+   "deger": -29.59
   },
   {
    "ay": "1975-07",
-   "deger": -29.6
+   "deger": -29.55
   },
   {
    "ay": "1975-08",
-   "deger": -29.92
+   "deger": -29.85
   },
   {
    "ay": "1975-09",
-   "deger": -32.85
+   "deger": -32.88
   },
   {
    "ay": "1975-10",
-   "deger": -40.75
+   "deger": -40.82
   },
   {
    "ay": "1975-11",
-   "deger": -46.44
+   "deger": -46.45
   },
   {
    "ay": "1975-12",
-   "deger": -42.57
+   "deger": -42.55
   },
   {
    "ay": "1976-01",
@@ -1462,351 +1606,351 @@
   },
   {
    "ay": "1976-02",
-   "deger": -27.57
+   "deger": -27.52
   },
   {
    "ay": "1976-03",
-   "deger": -21.32
+   "deger": -21.44
   },
   {
    "ay": "1976-04",
-   "deger": -21.68
+   "deger": -21.65
   },
   {
    "ay": "1976-05",
-   "deger": -10.73
+   "deger": -10.71
   },
   {
    "ay": "1976-06",
-   "deger": -0.33
+   "deger": -0.48
   },
   {
    "ay": "1976-07",
-   "deger": -4.09
+   "deger": -4.14
   },
   {
    "ay": "1976-08",
-   "deger": -16.85
+   "deger": -16.81
   },
   {
    "ay": "1976-09",
-   "deger": -11.7
+   "deger": -11.59
   },
   {
    "ay": "1976-10",
-   "deger": -11.26
+   "deger": -11.24
   },
   {
    "ay": "1976-11",
-   "deger": -4.81
+   "deger": -4.86
   },
   {
    "ay": "1976-12",
-   "deger": -0.54
+   "deger": -0.65
   },
   {
    "ay": "1977-01",
-   "deger": 3.19
+   "deger": 3.14
   },
   {
    "ay": "1977-02",
-   "deger": 4.22
+   "deger": 4.2
   },
   {
    "ay": "1977-03",
-   "deger": 8.81
+   "deger": 8.94
   },
   {
    "ay": "1977-04",
-   "deger": 17.64
+   "deger": 17.58
   },
   {
    "ay": "1977-05",
-   "deger": 10.72
+   "deger": 10.79
   },
   {
    "ay": "1977-06",
-   "deger": -3.12
+   "deger": -3.07
   },
   {
    "ay": "1977-07",
-   "deger": -15.85
+   "deger": -15.96
   },
   {
    "ay": "1977-08",
-   "deger": -14.81
+   "deger": -14.98
   },
   {
    "ay": "1977-09",
-   "deger": -16.92
+   "deger": -17.02
   },
   {
    "ay": "1977-10",
-   "deger": -12.9
+   "deger": -12.82
   },
   {
    "ay": "1977-11",
-   "deger": -7.06
+   "deger": -6.91
   },
   {
    "ay": "1977-12",
-   "deger": -3.84
+   "deger": -3.7
   },
   {
    "ay": "1978-01",
-   "deger": -6.9
+   "deger": -6.78
   },
   {
    "ay": "1978-02",
-   "deger": -6.12
+   "deger": -6.04
   },
   {
    "ay": "1978-03",
-   "deger": -4.82
+   "deger": -4.77
   },
   {
    "ay": "1978-04",
-   "deger": -7.42
+   "deger": -7.4
   },
   {
    "ay": "1978-05",
-   "deger": -4.84
+   "deger": -4.85
   },
   {
    "ay": "1978-06",
-   "deger": -0.55
+   "deger": -0.46
   },
   {
    "ay": "1978-07",
-   "deger": 8.1
+   "deger": 8.29
   },
   {
    "ay": "1978-08",
-   "deger": 11.31
+   "deger": 11.44
   },
   {
    "ay": "1978-09",
-   "deger": 17.19
+   "deger": 17.3
   },
   {
    "ay": "1978-10",
-   "deger": 18.66
+   "deger": 18.61
   },
   {
    "ay": "1978-11",
-   "deger": 10.69
+   "deger": 10.61
   },
   {
    "ay": "1978-12",
-   "deger": 5.36
+   "deger": 5.32
   },
   {
    "ay": "1979-01",
-   "deger": 5.5
+   "deger": 5.37
   },
   {
    "ay": "1979-02",
-   "deger": 5.52
+   "deger": 5.46
   },
   {
    "ay": "1979-03",
-   "deger": -0.85
+   "deger": -0.96
   },
   {
    "ay": "1979-04",
-   "deger": -4.68
+   "deger": -4.59
   },
   {
    "ay": "1979-05",
-   "deger": -5.0
+   "deger": -5.08
   },
   {
    "ay": "1979-06",
-   "deger": 2.52
+   "deger": 2.51
   },
   {
    "ay": "1979-07",
-   "deger": 7.22
+   "deger": 7.08
   },
   {
    "ay": "1979-08",
-   "deger": 5.43
+   "deger": 5.47
   },
   {
    "ay": "1979-09",
-   "deger": 2.41
+   "deger": 2.39
   },
   {
    "ay": "1979-10",
-   "deger": -0.39
+   "deger": -0.29
   },
   {
    "ay": "1979-11",
-   "deger": 2.63
+   "deger": 2.59
   },
   {
    "ay": "1979-12",
-   "deger": 2.73
+   "deger": 2.66
   },
   {
    "ay": "1980-01",
-   "deger": 0.36
+   "deger": 0.42
   },
   {
    "ay": "1980-02",
-   "deger": -0.12
-  },
-  {
-   "ay": "1980-03",
-   "deger": -6.58
-  },
-  {
-   "ay": "1980-04",
-   "deger": -7.78
-  },
-  {
-   "ay": "1980-05",
-   "deger": -1.8
-  },
-  {
-   "ay": "1980-06",
-   "deger": -6.73
-  },
-  {
-   "ay": "1980-07",
-   "deger": -2.22
-  },
-  {
-   "ay": "1980-08",
-   "deger": 5.26
-  },
-  {
-   "ay": "1980-09",
-   "deger": 8.01
-  },
-  {
-   "ay": "1980-10",
-   "deger": 11.98
-  },
-  {
-   "ay": "1980-11",
-   "deger": 13.01
-  },
-  {
-   "ay": "1980-12",
-   "deger": 2.45
-  },
-  {
-   "ay": "1981-01",
-   "deger": 2.68
-  },
-  {
-   "ay": "1981-02",
-   "deger": -4.15
-  },
-  {
-   "ay": "1981-03",
    "deger": -0.14
   },
   {
+   "ay": "1980-03",
+   "deger": -6.5
+  },
+  {
+   "ay": "1980-04",
+   "deger": -7.79
+  },
+  {
+   "ay": "1980-05",
+   "deger": -1.74
+  },
+  {
+   "ay": "1980-06",
+   "deger": -6.77
+  },
+  {
+   "ay": "1980-07",
+   "deger": -2.14
+  },
+  {
+   "ay": "1980-08",
+   "deger": 5.23
+  },
+  {
+   "ay": "1980-09",
+   "deger": 7.96
+  },
+  {
+   "ay": "1980-10",
+   "deger": 11.84
+  },
+  {
+   "ay": "1980-11",
+   "deger": 13.05
+  },
+  {
+   "ay": "1980-12",
+   "deger": 2.57
+  },
+  {
+   "ay": "1981-01",
+   "deger": 2.73
+  },
+  {
+   "ay": "1981-02",
+   "deger": -4.12
+  },
+  {
+   "ay": "1981-03",
+   "deger": -0.26
+  },
+  {
    "ay": "1981-04",
-   "deger": -0.59
+   "deger": -0.7
   },
   {
    "ay": "1981-05",
-   "deger": -9.08
+   "deger": -9.04
   },
   {
    "ay": "1981-06",
-   "deger": -8.79
+   "deger": -8.86
   },
   {
    "ay": "1981-07",
-   "deger": -14.28
+   "deger": -14.34
   },
   {
    "ay": "1981-08",
-   "deger": -21.61
+   "deger": -21.68
   },
   {
    "ay": "1981-09",
-   "deger": -27.21
+   "deger": -27.16
   },
   {
    "ay": "1981-10",
-   "deger": -31.02
+   "deger": -30.99
   },
   {
    "ay": "1981-11",
-   "deger": -33.6
+   "deger": -33.61
   },
   {
    "ay": "1981-12",
-   "deger": -29.0
+   "deger": -29.03
   },
   {
    "ay": "1982-01",
-   "deger": -28.23
+   "deger": -28.31
   },
   {
    "ay": "1982-02",
-   "deger": -25.98
+   "deger": -26.03
   },
   {
    "ay": "1982-03",
-   "deger": -25.97
+   "deger": -25.92
   },
   {
    "ay": "1982-04",
-   "deger": -23.72
+   "deger": -23.73
   },
   {
    "ay": "1982-05",
-   "deger": -22.14
+   "deger": -22.16
   },
   {
    "ay": "1982-06",
-   "deger": -25.38
+   "deger": -25.33
   },
   {
    "ay": "1982-07",
-   "deger": -27.03
+   "deger": -27.04
   },
   {
    "ay": "1982-08",
-   "deger": -26.28
+   "deger": -26.29
   },
   {
    "ay": "1982-09",
-   "deger": -24.73
+   "deger": -24.77
   },
   {
    "ay": "1982-10",
-   "deger": -26.48
+   "deger": -26.53
   },
   {
    "ay": "1982-11",
-   "deger": -21.36
+   "deger": -21.32
   },
   {
    "ay": "1982-12",
-   "deger": -18.15
+   "deger": -18.16
   },
   {
    "ay": "1983-01",
-   "deger": -19.08
+   "deger": -18.99
   },
   {
    "ay": "1983-02",
-   "deger": -15.62
+   "deger": -15.66
   },
   {
    "ay": "1983-03",
-   "deger": -11.79
+   "deger": -11.86
   },
   {
    "ay": "1983-04",
-   "deger": -7.76
+   "deger": -7.66
   },
   {
    "ay": "1983-05",
@@ -1814,123 +1958,123 @@
   },
   {
    "ay": "1983-06",
-   "deger": -0.96
+   "deger": -0.88
   },
   {
    "ay": "1983-07",
-   "deger": 6.05
+   "deger": 6.08
   },
   {
    "ay": "1983-08",
-   "deger": 24.87
+   "deger": 24.97
   },
   {
    "ay": "1983-09",
-   "deger": 30.9
+   "deger": 31.03
   },
   {
    "ay": "1983-10",
-   "deger": 34.76
+   "deger": 34.86
   },
   {
    "ay": "1983-11",
-   "deger": 24.36
+   "deger": 24.22
   },
   {
    "ay": "1983-12",
-   "deger": 20.52
+   "deger": 20.43
   },
   {
    "ay": "1984-01",
-   "deger": 23.51
+   "deger": 23.45
   },
   {
    "ay": "1984-02",
-   "deger": 18.51
+   "deger": 18.5
   },
   {
    "ay": "1984-03",
-   "deger": 17.73
+   "deger": 17.84
   },
   {
    "ay": "1984-04",
-   "deger": 12.27
+   "deger": 12.16
   },
   {
    "ay": "1984-05",
-   "deger": 13.5
+   "deger": 13.44
   },
   {
    "ay": "1984-06",
-   "deger": 10.11
+   "deger": 9.98
   },
   {
    "ay": "1984-07",
-   "deger": -3.29
+   "deger": -3.18
   },
   {
    "ay": "1984-08",
-   "deger": -16.23
+   "deger": -16.16
   },
   {
    "ay": "1984-09",
-   "deger": -18.92
+   "deger": -19.03
   },
   {
    "ay": "1984-10",
-   "deger": -19.37
+   "deger": -19.4
   },
   {
    "ay": "1984-11",
-   "deger": -19.33
+   "deger": -19.25
   },
   {
    "ay": "1984-12",
-   "deger": -20.47
+   "deger": -20.38
   },
   {
    "ay": "1985-01",
-   "deger": -21.09
+   "deger": -21.07
   },
   {
    "ay": "1985-02",
-   "deger": -19.72
+   "deger": -19.73
   },
   {
    "ay": "1985-03",
-   "deger": -19.81
+   "deger": -19.79
   },
   {
    "ay": "1985-04",
-   "deger": -19.75
+   "deger": -19.73
   },
   {
    "ay": "1985-05",
-   "deger": -25.97
+   "deger": -25.94
   },
   {
    "ay": "1985-06",
-   "deger": -24.47
+   "deger": -24.38
   },
   {
    "ay": "1985-07",
-   "deger": -19.8
+   "deger": -19.92
   },
   {
    "ay": "1985-08",
-   "deger": -19.96
+   "deger": -20.09
   },
   {
    "ay": "1985-09",
-   "deger": -21.06
+   "deger": -20.93
   },
   {
    "ay": "1985-10",
-   "deger": -20.69
+   "deger": -20.64
   },
   {
    "ay": "1985-11",
-   "deger": -16.58
+   "deger": -16.62
   },
   {
    "ay": "1985-12",
@@ -1938,171 +2082,171 @@
   },
   {
    "ay": "1986-01",
-   "deger": -13.59
+   "deger": -13.67
   },
   {
    "ay": "1986-02",
-   "deger": -15.89
+   "deger": -15.8
   },
   {
    "ay": "1986-03",
-   "deger": -16.06
+   "deger": -16.07
   },
   {
    "ay": "1986-04",
-   "deger": -15.66
+   "deger": -15.65
   },
   {
    "ay": "1986-05",
-   "deger": -14.81
+   "deger": -14.85
   },
   {
    "ay": "1986-06",
-   "deger": -14.84
+   "deger": -14.92
   },
   {
    "ay": "1986-07",
-   "deger": -15.08
+   "deger": -14.93
   },
   {
    "ay": "1986-08",
-   "deger": -14.68
+   "deger": -14.61
   },
   {
    "ay": "1986-09",
-   "deger": -13.52
+   "deger": -13.49
   },
   {
    "ay": "1986-10",
-   "deger": -9.64
+   "deger": -9.66
   },
   {
    "ay": "1986-11",
-   "deger": -10.35
+   "deger": -10.4
   },
   {
    "ay": "1986-12",
-   "deger": -13.38
+   "deger": -13.48
   },
   {
    "ay": "1987-01",
-   "deger": -9.23
+   "deger": -9.14
   },
   {
    "ay": "1987-02",
-   "deger": -5.8
+   "deger": -5.78
   },
   {
    "ay": "1987-03",
-   "deger": -7.55
+   "deger": -7.65
   },
   {
    "ay": "1987-04",
-   "deger": -7.08
+   "deger": -7.03
   },
   {
    "ay": "1987-05",
-   "deger": 1.73
+   "deger": 1.77
   },
   {
    "ay": "1987-06",
-   "deger": 4.0
+   "deger": 3.95
   },
   {
    "ay": "1987-07",
-   "deger": 4.94
+   "deger": 4.73
   },
   {
    "ay": "1987-08",
-   "deger": 4.21
+   "deger": 4.3
   },
   {
    "ay": "1987-09",
-   "deger": 11.03
+   "deger": 10.79
   },
   {
    "ay": "1987-10",
-   "deger": 10.04
+   "deger": 10.0
   },
   {
    "ay": "1987-11",
-   "deger": 13.57
+   "deger": 13.55
   },
   {
    "ay": "1987-12",
-   "deger": 20.52
+   "deger": 20.58
   },
   {
    "ay": "1988-01",
-   "deger": 20.82
+   "deger": 20.76
   },
   {
    "ay": "1988-02",
-   "deger": 16.78
+   "deger": 16.74
   },
   {
    "ay": "1988-03",
-   "deger": 16.68
+   "deger": 16.72
   },
   {
    "ay": "1988-04",
-   "deger": 16.52
+   "deger": 16.41
   },
   {
    "ay": "1988-05",
-   "deger": 12.86
+   "deger": 12.85
   },
   {
    "ay": "1988-06",
-   "deger": 32.35
+   "deger": 32.44
   },
   {
    "ay": "1988-07",
-   "deger": 38.63
+   "deger": 38.74
   },
   {
    "ay": "1988-08",
-   "deger": 34.15
+   "deger": 34.01
   },
   {
    "ay": "1988-09",
-   "deger": 29.12
+   "deger": 29.25
   },
   {
    "ay": "1988-10",
-   "deger": 23.97
+   "deger": 24.0
   },
   {
    "ay": "1988-11",
-   "deger": 16.7
+   "deger": 16.72
   },
   {
    "ay": "1988-12",
-   "deger": 12.61
+   "deger": 12.67
   },
   {
    "ay": "1989-01",
-   "deger": 5.11
+   "deger": 5.02
   },
   {
    "ay": "1989-02",
-   "deger": 7.32
+   "deger": 7.25
   },
   {
    "ay": "1989-03",
-   "deger": 11.63
+   "deger": 11.62
   },
   {
    "ay": "1989-04",
-   "deger": 9.51
+   "deger": 9.64
   },
   {
    "ay": "1989-05",
-   "deger": 7.17
+   "deger": 7.12
   },
   {
    "ay": "1989-06",
-   "deger": -9.68
+   "deger": -9.73
   },
   {
    "ay": "1989-07",
@@ -2110,55 +2254,55 @@
   },
   {
    "ay": "1989-08",
-   "deger": -10.95
+   "deger": -10.97
   },
   {
    "ay": "1989-09",
-   "deger": -11.79
+   "deger": -11.76
   },
   {
    "ay": "1989-10",
-   "deger": -9.24
+   "deger": -9.2
   },
   {
    "ay": "1989-11",
-   "deger": -8.77
+   "deger": -8.62
   },
   {
    "ay": "1989-12",
-   "deger": -10.84
+   "deger": -10.81
   },
   {
    "ay": "1990-01",
-   "deger": -8.5
+   "deger": -8.35
   },
   {
    "ay": "1990-02",
-   "deger": -9.43
+   "deger": -9.36
   },
   {
    "ay": "1990-03",
-   "deger": -13.6
+   "deger": -13.49
   },
   {
    "ay": "1990-04",
-   "deger": -11.95
+   "deger": -11.99
   },
   {
    "ay": "1990-05",
-   "deger": -12.56
+   "deger": -12.45
   },
   {
    "ay": "1990-06",
-   "deger": -13.21
+   "deger": -13.22
   },
   {
    "ay": "1990-07",
-   "deger": -12.27
+   "deger": -12.34
   },
   {
    "ay": "1990-08",
-   "deger": -9.7
+   "deger": -9.68
   },
   {
    "ay": "1990-09",
@@ -2166,11 +2310,11 @@
   },
   {
    "ay": "1990-10",
-   "deger": -12.43
+   "deger": -12.47
   },
   {
    "ay": "1990-11",
-   "deger": -12.94
+   "deger": -13.02
   },
   {
    "ay": "1990-12",
@@ -2178,31 +2322,31 @@
   },
   {
    "ay": "1991-01",
-   "deger": -9.69
+   "deger": -9.7
   },
   {
    "ay": "1991-02",
-   "deger": -7.0
+   "deger": -7.08
   },
   {
    "ay": "1991-03",
-   "deger": -4.73
+   "deger": -4.84
   },
   {
    "ay": "1991-04",
-   "deger": -8.05
+   "deger": -8.04
   },
   {
    "ay": "1991-05",
-   "deger": -9.75
+   "deger": -9.81
   },
   {
    "ay": "1991-06",
-   "deger": -6.81
+   "deger": -6.76
   },
   {
    "ay": "1991-07",
-   "deger": -7.08
+   "deger": -7.07
   },
   {
    "ay": "1991-08",
@@ -2210,7 +2354,7 @@
   },
   {
    "ay": "1991-09",
-   "deger": -2.52
+   "deger": -2.56
   },
   {
    "ay": "1991-10",
@@ -2218,31 +2362,31 @@
   },
   {
    "ay": "1991-11",
-   "deger": 0.27
+   "deger": 0.24
   },
   {
    "ay": "1991-12",
-   "deger": -0.54
+   "deger": -0.59
   },
   {
    "ay": "1992-01",
-   "deger": 0.56
+   "deger": 0.53
   },
   {
    "ay": "1992-02",
-   "deger": -1.79
+   "deger": -1.68
   },
   {
    "ay": "1992-03",
-   "deger": -3.56
+   "deger": -3.43
   },
   {
    "ay": "1992-04",
-   "deger": -3.65
+   "deger": -3.62
   },
   {
    "ay": "1992-05",
-   "deger": -1.01
+   "deger": -0.92
   },
   {
    "ay": "1992-06",
@@ -2250,15 +2394,15 @@
   },
   {
    "ay": "1992-07",
-   "deger": -1.4
+   "deger": -1.41
   },
   {
    "ay": "1992-08",
-   "deger": -3.38
+   "deger": -3.41
   },
   {
    "ay": "1992-09",
-   "deger": -3.9
+   "deger": -3.98
   },
   {
    "ay": "1992-10",
@@ -2266,111 +2410,111 @@
   },
   {
    "ay": "1992-11",
-   "deger": -6.85
+   "deger": -6.89
   },
   {
    "ay": "1992-12",
-   "deger": -6.92
+   "deger": -6.94
   },
   {
    "ay": "1993-01",
-   "deger": -6.9
+   "deger": -6.98
   },
   {
    "ay": "1993-02",
-   "deger": -6.86
+   "deger": -6.98
   },
   {
    "ay": "1993-03",
-   "deger": -5.51
+   "deger": -5.61
   },
   {
    "ay": "1993-04",
-   "deger": -3.68
+   "deger": -3.66
   },
   {
    "ay": "1993-05",
-   "deger": -5.12
+   "deger": -5.27
   },
   {
    "ay": "1993-06",
-   "deger": -9.21
+   "deger": -9.11
   },
   {
    "ay": "1993-07",
-   "deger": -2.14
+   "deger": -1.98
   },
   {
    "ay": "1993-08",
-   "deger": -3.33
+   "deger": -3.24
   },
   {
    "ay": "1993-09",
-   "deger": -2.26
+   "deger": -2.25
   },
   {
    "ay": "1993-10",
-   "deger": 1.89
+   "deger": 1.84
   },
   {
    "ay": "1993-11",
-   "deger": 5.81
+   "deger": 5.99
   },
   {
    "ay": "1993-12",
-   "deger": 9.67
+   "deger": 9.68
   },
   {
    "ay": "1994-01",
-   "deger": 9.23
+   "deger": 9.21
   },
   {
    "ay": "1994-02",
-   "deger": 9.25
+   "deger": 9.26
   },
   {
    "ay": "1994-03",
-   "deger": 5.21
+   "deger": 5.31
   },
   {
    "ay": "1994-04",
-   "deger": 3.95
+   "deger": 3.87
   },
   {
    "ay": "1994-05",
-   "deger": 4.37
+   "deger": 4.4
   },
   {
    "ay": "1994-06",
-   "deger": 7.06
+   "deger": 6.89
   },
   {
    "ay": "1994-07",
-   "deger": -0.0
+   "deger": -0.18
   },
   {
    "ay": "1994-08",
-   "deger": 3.71
+   "deger": 3.72
   },
   {
    "ay": "1994-09",
-   "deger": 6.94
+   "deger": 7.11
   },
   {
    "ay": "1994-10",
-   "deger": 3.71
+   "deger": 3.76
   },
   {
    "ay": "1994-11",
-   "deger": 1.7
+   "deger": 1.69
   },
   {
    "ay": "1994-12",
-   "deger": 1.75
+   "deger": 1.72
   },
   {
    "ay": "1995-01",
-   "deger": -2.84
+   "deger": -2.73
   },
   {
    "ay": "1995-02",
@@ -2378,39 +2522,39 @@
   },
   {
    "ay": "1995-03",
-   "deger": 0.97
+   "deger": 0.89
   },
   {
    "ay": "1995-04",
-   "deger": 0.75
+   "deger": 0.77
   },
   {
    "ay": "1995-05",
-   "deger": 1.96
+   "deger": 2.05
   },
   {
    "ay": "1995-06",
-   "deger": 6.62
+   "deger": 6.72
   },
   {
    "ay": "1995-07",
-   "deger": 14.32
+   "deger": 14.49
   },
   {
    "ay": "1995-08",
-   "deger": 8.98
+   "deger": 8.88
   },
   {
    "ay": "1995-09",
-   "deger": 6.52
+   "deger": 6.45
   },
   {
    "ay": "1995-10",
-   "deger": 11.94
+   "deger": 11.96
   },
   {
    "ay": "1995-11",
-   "deger": 9.9
+   "deger": 9.81
   },
   {
    "ay": "1995-12",
@@ -2418,27 +2562,27 @@
   },
   {
    "ay": "1996-01",
-   "deger": 9.58
+   "deger": 9.53
   },
   {
    "ay": "1996-02",
-   "deger": 9.23
+   "deger": 9.36
   },
   {
    "ay": "1996-03",
-   "deger": 10.13
+   "deger": 10.08
   },
   {
    "ay": "1996-04",
-   "deger": 18.19
+   "deger": 18.13
   },
   {
    "ay": "1996-05",
-   "deger": 19.22
+   "deger": 19.2
   },
   {
    "ay": "1996-06",
-   "deger": 11.74
+   "deger": 11.81
   },
   {
    "ay": "1996-07",
@@ -2446,19 +2590,19 @@
   },
   {
    "ay": "1996-08",
-   "deger": 5.05
+   "deger": 5.13
   },
   {
    "ay": "1996-09",
-   "deger": 0.31
+   "deger": 0.25
   },
   {
    "ay": "1996-10",
-   "deger": -7.55
+   "deger": -7.59
   },
   {
    "ay": "1996-11",
-   "deger": -8.77
+   "deger": -8.82
   },
   {
    "ay": "1996-12",
@@ -2466,39 +2610,39 @@
   },
   {
    "ay": "1997-01",
-   "deger": -5.85
+   "deger": -5.83
   },
   {
    "ay": "1997-02",
-   "deger": -6.35
+   "deger": -6.48
   },
   {
    "ay": "1997-03",
-   "deger": -4.28
+   "deger": -4.25
   },
   {
    "ay": "1997-04",
-   "deger": -10.24
+   "deger": -10.14
   },
   {
    "ay": "1997-05",
-   "deger": -14.77
+   "deger": -14.76
   },
   {
    "ay": "1997-06",
-   "deger": -15.53
+   "deger": -15.6
   },
   {
    "ay": "1997-07",
-   "deger": -16.13
+   "deger": -16.15
   },
   {
    "ay": "1997-08",
-   "deger": -14.82
+   "deger": -14.94
   },
   {
    "ay": "1997-09",
-   "deger": -11.28
+   "deger": -11.24
   },
   {
    "ay": "1997-10",
@@ -2506,15 +2650,15 @@
   },
   {
    "ay": "1997-11",
-   "deger": -3.77
+   "deger": -3.67
   },
   {
    "ay": "1997-12",
-   "deger": -5.79
+   "deger": -5.72
   },
   {
    "ay": "1998-01",
-   "deger": -9.56
+   "deger": -9.53
   },
   {
    "ay": "1998-02",
@@ -2522,191 +2666,191 @@
   },
   {
    "ay": "1998-03",
-   "deger": -13.7
+   "deger": -13.63
   },
   {
    "ay": "1998-04",
-   "deger": -10.69
+   "deger": -10.75
   },
   {
    "ay": "1998-05",
-   "deger": -8.16
+   "deger": -8.14
   },
   {
    "ay": "1998-06",
-   "deger": -7.89
+   "deger": -7.91
   },
   {
    "ay": "1998-07",
-   "deger": -6.81
+   "deger": -6.9
   },
   {
    "ay": "1998-08",
-   "deger": -10.93
+   "deger": -10.94
   },
   {
    "ay": "1998-09",
-   "deger": -11.5
+   "deger": -11.43
   },
   {
    "ay": "1998-10",
-   "deger": -10.9
+   "deger": -10.89
   },
   {
    "ay": "1998-11",
-   "deger": -9.65
+   "deger": -9.68
   },
   {
    "ay": "1998-12",
-   "deger": -11.07
+   "deger": -11.17
   },
   {
    "ay": "1999-01",
-   "deger": -9.88
+   "deger": -9.99
   },
   {
    "ay": "1999-02",
-   "deger": -15.3
+   "deger": -15.22
   },
   {
    "ay": "1999-03",
-   "deger": -17.16
+   "deger": -17.17
   },
   {
    "ay": "1999-04",
-   "deger": -20.37
+   "deger": -20.42
   },
   {
    "ay": "1999-05",
-   "deger": -21.39
+   "deger": -21.47
   },
   {
    "ay": "1999-06",
-   "deger": -20.37
+   "deger": -20.38
   },
   {
    "ay": "1999-07",
-   "deger": -23.36
+   "deger": -23.3
   },
   {
    "ay": "1999-08",
-   "deger": -16.4
+   "deger": -16.26
   },
   {
    "ay": "1999-09",
-   "deger": -14.38
+   "deger": -14.43
   },
   {
    "ay": "1999-10",
-   "deger": -16.15
+   "deger": -16.2
   },
   {
    "ay": "1999-11",
-   "deger": -20.06
+   "deger": -20.15
   },
   {
    "ay": "1999-12",
-   "deger": -18.41
+   "deger": -18.28
   },
   {
    "ay": "2000-01",
-   "deger": -16.07
+   "deger": -16.12
   },
   {
    "ay": "2000-02",
-   "deger": -10.03
+   "deger": -10.07
   },
   {
    "ay": "2000-03",
-   "deger": -8.38
+   "deger": -8.46
   },
   {
    "ay": "2000-04",
-   "deger": -5.07
+   "deger": -4.96
   },
   {
    "ay": "2000-05",
-   "deger": -3.59
+   "deger": -3.5
   },
   {
    "ay": "2000-06",
-   "deger": -3.92
+   "deger": -3.8
   },
   {
    "ay": "2000-07",
-   "deger": -2.55
+   "deger": -2.66
   },
   {
    "ay": "2000-08",
-   "deger": -6.02
+   "deger": -6.0
   },
   {
    "ay": "2000-09",
-   "deger": -6.46
+   "deger": -6.39
   },
   {
    "ay": "2000-10",
-   "deger": -4.84
+   "deger": -4.77
   },
   {
    "ay": "2000-11",
-   "deger": -2.22
+   "deger": -2.08
   },
   {
    "ay": "2000-12",
-   "deger": 2.46
+   "deger": 2.41
   },
   {
    "ay": "2001-01",
-   "deger": -1.27
+   "deger": -1.16
   },
   {
    "ay": "2001-02",
-   "deger": -3.04
+   "deger": -3.01
   },
   {
    "ay": "2001-03",
-   "deger": -1.97
+   "deger": -1.81
   },
   {
    "ay": "2001-04",
-   "deger": -4.8
+   "deger": -4.78
   },
   {
    "ay": "2001-05",
-   "deger": -2.79
+   "deger": -2.88
   },
   {
    "ay": "2001-06",
-   "deger": 0.71
+   "deger": 0.6
   },
   {
    "ay": "2001-07",
-   "deger": 12.88
+   "deger": 12.96
   },
   {
    "ay": "2001-08",
-   "deger": 11.73
+   "deger": 11.57
   },
   {
    "ay": "2001-09",
-   "deger": 4.53
+   "deger": 4.39
   },
   {
    "ay": "2001-10",
-   "deger": -1.27
+   "deger": -1.24
   },
   {
    "ay": "2001-11",
-   "deger": 1.43
+   "deger": 1.28
   },
   {
    "ay": "2001-12",
-   "deger": -1.74
+   "deger": -1.73
   },
   {
    "ay": "2002-01",
-   "deger": -0.7
+   "deger": -0.72
   },
   {
    "ay": "2002-02",
@@ -2714,51 +2858,51 @@
   },
   {
    "ay": "2002-03",
-   "deger": 0.85
+   "deger": 0.81
   },
   {
    "ay": "2002-04",
-   "deger": 1.24
+   "deger": 1.1
   },
   {
    "ay": "2002-05",
-   "deger": 2.37
+   "deger": 2.35
   },
   {
    "ay": "2002-06",
-   "deger": 4.76
+   "deger": 4.88
   },
   {
    "ay": "2002-07",
-   "deger": -0.52
+   "deger": -0.5
   },
   {
    "ay": "2002-08",
-   "deger": 0.97
+   "deger": 1.07
   },
   {
    "ay": "2002-09",
-   "deger": 9.86
+   "deger": 9.87
   },
   {
    "ay": "2002-10",
-   "deger": 15.44
+   "deger": 15.4
   },
   {
    "ay": "2002-11",
-   "deger": 10.5
+   "deger": 10.59
   },
   {
    "ay": "2002-12",
-   "deger": 12.43
+   "deger": 12.38
   },
   {
    "ay": "2003-01",
-   "deger": 11.24
+   "deger": 11.25
   },
   {
    "ay": "2003-02",
-   "deger": 11.54
+   "deger": 11.44
   },
   {
    "ay": "2003-03",
@@ -2766,103 +2910,103 @@
   },
   {
    "ay": "2003-04",
-   "deger": 9.43
+   "deger": 9.52
   },
   {
    "ay": "2003-05",
-   "deger": 7.26
+   "deger": 7.29
   },
   {
    "ay": "2003-06",
-   "deger": 3.35
+   "deger": 3.29
   },
   {
    "ay": "2003-07",
-   "deger": -1.75
+   "deger": -1.69
   },
   {
    "ay": "2003-08",
-   "deger": -1.04
+   "deger": -1.01
   },
   {
    "ay": "2003-09",
-   "deger": -1.49
+   "deger": -1.56
   },
   {
    "ay": "2003-10",
-   "deger": 6.24
+   "deger": 6.18
   },
   {
    "ay": "2003-11",
-   "deger": 11.64
+   "deger": 11.74
   },
   {
    "ay": "2003-12",
-   "deger": 8.81
+   "deger": 8.89
   },
   {
    "ay": "2004-01",
-   "deger": 12.6
+   "deger": 12.55
   },
   {
    "ay": "2004-02",
-   "deger": 17.78
+   "deger": 17.93
   },
   {
    "ay": "2004-03",
-   "deger": 25.04
+   "deger": 24.97
   },
   {
    "ay": "2004-04",
-   "deger": 24.46
+   "deger": 24.41
   },
   {
    "ay": "2004-05",
-   "deger": 19.08
+   "deger": 19.06
   },
   {
    "ay": "2004-06",
-   "deger": 15.15
+   "deger": 15.13
   },
   {
    "ay": "2004-07",
-   "deger": 15.09
+   "deger": 15.12
   },
   {
    "ay": "2004-08",
-   "deger": 10.58
+   "deger": 10.43
   },
   {
    "ay": "2004-09",
-   "deger": 6.79
+   "deger": 6.84
   },
   {
    "ay": "2004-10",
-   "deger": -3.19
+   "deger": -3.09
   },
   {
    "ay": "2004-11",
-   "deger": -7.62
+   "deger": -7.75
   },
   {
    "ay": "2004-12",
-   "deger": -6.42
+   "deger": -6.44
   },
   {
    "ay": "2005-01",
-   "deger": -8.79
+   "deger": -8.81
   },
   {
    "ay": "2005-02",
-   "deger": -8.84
+   "deger": -8.93
   },
   {
    "ay": "2005-03",
-   "deger": -9.33
+   "deger": -9.3
   },
   {
    "ay": "2005-04",
-   "deger": -11.53
+   "deger": -11.5
   },
   {
    "ay": "2005-05",
@@ -2870,27 +3014,27 @@
   },
   {
    "ay": "2005-06",
-   "deger": -5.26
+   "deger": -5.2
   },
   {
    "ay": "2005-07",
-   "deger": -4.02
+   "deger": -4.15
   },
   {
    "ay": "2005-08",
-   "deger": -3.69
+   "deger": -3.67
   },
   {
    "ay": "2005-09",
-   "deger": -2.67
+   "deger": -2.59
   },
   {
    "ay": "2005-10",
-   "deger": 1.36
+   "deger": 1.29
   },
   {
    "ay": "2005-11",
-   "deger": 0.86
+   "deger": 0.89
   },
   {
    "ay": "2005-12",
@@ -2898,7 +3042,7 @@
   },
   {
    "ay": "2006-01",
-   "deger": 3.72
+   "deger": 3.7
   },
   {
    "ay": "2006-02",
@@ -2906,31 +3050,31 @@
   },
   {
    "ay": "2006-03",
-   "deger": -1.89
+   "deger": -1.92
   },
   {
    "ay": "2006-04",
-   "deger": 0.45
+   "deger": 0.39
   },
   {
    "ay": "2006-05",
-   "deger": 4.33
+   "deger": 4.42
   },
   {
    "ay": "2006-06",
-   "deger": 1.12
+   "deger": 1.08
   },
   {
    "ay": "2006-07",
-   "deger": 3.73
+   "deger": 3.78
   },
   {
    "ay": "2006-08",
-   "deger": 5.08
+   "deger": 5.16
   },
   {
    "ay": "2006-09",
-   "deger": 5.01
+   "deger": 4.93
   },
   {
    "ay": "2006-10",
@@ -2938,83 +3082,83 @@
   },
   {
    "ay": "2006-11",
-   "deger": 14.75
+   "deger": 14.83
   },
   {
    "ay": "2006-12",
-   "deger": 11.66
+   "deger": 11.61
   },
   {
    "ay": "2007-01",
-   "deger": 11.25
+   "deger": 11.29
   },
   {
    "ay": "2007-02",
-   "deger": 9.95
+   "deger": 9.96
   },
   {
    "ay": "2007-03",
-   "deger": 11.17
+   "deger": 11.11
   },
   {
    "ay": "2007-04",
-   "deger": 11.74
+   "deger": 11.86
   },
   {
    "ay": "2007-05",
-   "deger": 11.32
+   "deger": 11.23
   },
   {
    "ay": "2007-06",
-   "deger": 20.71
+   "deger": 20.62
   },
   {
    "ay": "2007-07",
-   "deger": 21.72
+   "deger": 21.79
   },
   {
    "ay": "2007-08",
-   "deger": 24.78
+   "deger": 24.72
   },
   {
    "ay": "2007-09",
-   "deger": 31.04
+   "deger": 31.03
   },
   {
    "ay": "2007-10",
-   "deger": 29.25
+   "deger": 29.34
   },
   {
    "ay": "2007-11",
-   "deger": 27.12
+   "deger": 27.04
   },
   {
    "ay": "2007-12",
-   "deger": 31.62
+   "deger": 31.53
   },
   {
    "ay": "2008-01",
-   "deger": 38.53
+   "deger": 38.56
   },
   {
    "ay": "2008-02",
-   "deger": 46.93
+   "deger": 47.04
   },
   {
    "ay": "2008-03",
-   "deger": 57.59
+   "deger": 57.61
   },
   {
    "ay": "2008-04",
-   "deger": 62.68
+   "deger": 62.61
   },
   {
    "ay": "2008-05",
-   "deger": 56.78
+   "deger": 56.86
   },
   {
    "ay": "2008-06",
-   "deger": 53.18
+   "deger": 53.28
   },
   {
    "ay": "2008-07",
@@ -3022,35 +3166,35 @@
   },
   {
    "ay": "2008-08",
-   "deger": 30.09
+   "deger": 30.08
   },
   {
    "ay": "2008-09",
-   "deger": 15.82
+   "deger": 15.87
   },
   {
    "ay": "2008-10",
-   "deger": -5.21
+   "deger": -5.19
   },
   {
    "ay": "2008-11",
-   "deger": -12.28
+   "deger": -12.27
   },
   {
    "ay": "2008-12",
-   "deger": -17.72
+   "deger": -17.71
   },
   {
    "ay": "2009-01",
-   "deger": -16.57
+   "deger": -16.6
   },
   {
    "ay": "2009-02",
-   "deger": -24.62
+   "deger": -24.64
   },
   {
    "ay": "2009-03",
-   "deger": -29.3
+   "deger": -29.27
   },
   {
    "ay": "2009-04",
@@ -3062,7 +3206,7 @@
   },
   {
    "ay": "2009-06",
-   "deger": -25.04
+   "deger": -25.07
   },
   {
    "ay": "2009-07",
@@ -3074,67 +3218,67 @@
   },
   {
    "ay": "2009-09",
-   "deger": -13.81
+   "deger": -13.79
   },
   {
    "ay": "2009-10",
-   "deger": 2.81
+   "deger": 2.71
   },
   {
    "ay": "2009-11",
-   "deger": 11.36
+   "deger": 11.43
   },
   {
    "ay": "2009-12",
-   "deger": 15.49
+   "deger": 15.59
   },
   {
    "ay": "2010-01",
-   "deger": 8.24
+   "deger": 8.33
   },
   {
    "ay": "2010-02",
-   "deger": 6.46
+   "deger": 6.5
   },
   {
    "ay": "2010-03",
-   "deger": 3.68
+   "deger": 3.67
   },
   {
    "ay": "2010-04",
-   "deger": -0.97
+   "deger": -1.0
   },
   {
    "ay": "2010-05",
-   "deger": -8.28
+   "deger": -8.27
   },
   {
    "ay": "2010-06",
-   "deger": -9.02
+   "deger": -9.01
   },
   {
    "ay": "2010-07",
-   "deger": 0.54
+   "deger": 0.49
   },
   {
    "ay": "2010-08",
-   "deger": 2.66
+   "deger": 2.69
   },
   {
    "ay": "2010-09",
-   "deger": 11.89
+   "deger": 11.91
   },
   {
    "ay": "2010-10",
-   "deger": 16.62
+   "deger": 16.71
   },
   {
    "ay": "2010-11",
-   "deger": 16.45
+   "deger": 16.44
   },
   {
    "ay": "2010-12",
-   "deger": 21.47
+   "deger": 21.44
   },
   {
    "ay": "2011-01",
@@ -3146,43 +3290,43 @@
   },
   {
    "ay": "2011-03",
-   "deger": 30.03
+   "deger": 29.99
   },
   {
    "ay": "2011-04",
-   "deger": 32.23
+   "deger": 32.24
   },
   {
    "ay": "2011-05",
-   "deger": 31.7
+   "deger": 31.69
   },
   {
    "ay": "2011-06",
-   "deger": 33.62
+   "deger": 33.63
   },
   {
    "ay": "2011-07",
-   "deger": 27.53
+   "deger": 27.57
   },
   {
    "ay": "2011-08",
-   "deger": 21.81
+   "deger": 21.79
   },
   {
    "ay": "2011-09",
-   "deger": 13.41
+   "deger": 13.38
   },
   {
    "ay": "2011-10",
-   "deger": 2.4
+   "deger": 2.37
   },
   {
    "ay": "2011-11",
-   "deger": -1.45
+   "deger": -1.5
   },
   {
    "ay": "2011-12",
-   "deger": -7.94
+   "deger": -7.96
   },
   {
    "ay": "2012-01",
@@ -3190,15 +3334,15 @@
   },
   {
    "ay": "2012-02",
-   "deger": -10.45
+   "deger": -10.46
   },
   {
    "ay": "2012-03",
-   "deger": -3.44
+   "deger": -3.45
   },
   {
    "ay": "2012-04",
-   "deger": -3.78
+   "deger": -3.81
   },
   {
    "ay": "2012-05",
@@ -3206,15 +3350,15 @@
   },
   {
    "ay": "2012-06",
-   "deger": -4.34
+   "deger": -4.35
   },
   {
    "ay": "2012-07",
-   "deger": 5.08
+   "deger": 5.05
   },
   {
    "ay": "2012-08",
-   "deger": 3.72
+   "deger": 3.74
   },
   {
    "ay": "2012-09",
@@ -3222,7 +3366,7 @@
   },
   {
    "ay": "2012-10",
-   "deger": 5.79
+   "deger": 5.83
   },
   {
    "ay": "2012-11",
@@ -3230,31 +3374,31 @@
   },
   {
    "ay": "2012-12",
-   "deger": 5.83
+   "deger": 5.79
   },
   {
    "ay": "2013-01",
-   "deger": 2.92
+   "deger": 2.93
   },
   {
    "ay": "2013-02",
-   "deger": -0.55
+   "deger": -0.54
   },
   {
    "ay": "2013-03",
-   "deger": -3.48
+   "deger": -3.46
   },
   {
    "ay": "2013-04",
-   "deger": -6.45
+   "deger": -6.44
   },
   {
    "ay": "2013-05",
-   "deger": -4.49
+   "deger": -4.53
   },
   {
    "ay": "2013-06",
-   "deger": -3.67
+   "deger": -3.61
   },
   {
    "ay": "2013-07",
@@ -3262,31 +3406,31 @@
   },
   {
    "ay": "2013-08",
-   "deger": -17.92
+   "deger": -17.94
   },
   {
    "ay": "2013-09",
-   "deger": -17.18
+   "deger": -17.23
   },
   {
    "ay": "2013-10",
-   "deger": -13.78
+   "deger": -13.8
   },
   {
    "ay": "2013-11",
-   "deger": -12.92
+   "deger": -12.87
   },
   {
    "ay": "2013-12",
-   "deger": -12.86
+   "deger": -12.8
   },
   {
    "ay": "2014-01",
-   "deger": -13.51
+   "deger": -13.57
   },
   {
    "ay": "2014-02",
-   "deger": -11.33
+   "deger": -11.35
   },
   {
    "ay": "2014-03",
@@ -3294,43 +3438,43 @@
   },
   {
    "ay": "2014-04",
-   "deger": -5.38
+   "deger": -5.37
   },
   {
    "ay": "2014-05",
-   "deger": -6.01
+   "deger": -5.94
   },
   {
    "ay": "2014-06",
-   "deger": -9.16
+   "deger": -9.19
   },
   {
    "ay": "2014-07",
-   "deger": -9.44
+   "deger": -9.41
   },
   {
    "ay": "2014-08",
-   "deger": -7.46
+   "deger": -7.47
   },
   {
    "ay": "2014-09",
-   "deger": -10.21
+   "deger": -10.14
   },
   {
    "ay": "2014-10",
-   "deger": -11.05
+   "deger": -11.11
   },
   {
    "ay": "2014-11",
-   "deger": -8.49
+   "deger": -8.54
   },
   {
    "ay": "2014-12",
-   "deger": -8.87
+   "deger": -8.88
   },
   {
    "ay": "2015-01",
-   "deger": -8.72
+   "deger": -8.74
   },
   {
    "ay": "2015-02",
@@ -3338,15 +3482,15 @@
   },
   {
    "ay": "2015-03",
-   "deger": -18.74
+   "deger": -18.75
   },
   {
    "ay": "2015-04",
-   "deger": -18.4
+   "deger": -18.36
   },
   {
    "ay": "2015-05",
-   "deger": -19.94
+   "deger": -19.95
   },
   {
    "ay": "2015-06",
@@ -3354,15 +3498,15 @@
   },
   {
    "ay": "2015-07",
-   "deger": -15.06
+   "deger": -15.09
   },
   {
    "ay": "2015-08",
-   "deger": -18.58
+   "deger": -18.56
   },
   {
    "ay": "2015-09",
-   "deger": -17.3
+   "deger": -17.32
   },
   {
    "ay": "2015-10",
@@ -3370,35 +3514,35 @@
   },
   {
    "ay": "2015-11",
-   "deger": -18.5
+   "deger": -18.49
   },
   {
    "ay": "2015-12",
-   "deger": -17.31
+   "deger": -17.35
   },
   {
    "ay": "2016-01",
-   "deger": -15.61
+   "deger": -15.58
   },
   {
    "ay": "2016-02",
-   "deger": -12.0
+   "deger": -12.03
   },
   {
    "ay": "2016-03",
-   "deger": -7.91
+   "deger": -7.93
   },
   {
    "ay": "2016-04",
-   "deger": -4.36
+   "deger": -4.35
   },
   {
    "ay": "2016-05",
-   "deger": 2.07
+   "deger": 2.08
   },
   {
    "ay": "2016-06",
-   "deger": 7.85
+   "deger": 7.81
   },
   {
    "ay": "2016-07",
@@ -3406,71 +3550,71 @@
   },
   {
    "ay": "2016-08",
-   "deger": 6.98
+   "deger": 6.89
   },
   {
    "ay": "2016-09",
-   "deger": 7.65
+   "deger": 7.59
   },
   {
    "ay": "2016-10",
-   "deger": 4.37
+   "deger": 4.47
   },
   {
    "ay": "2016-11",
-   "deger": 6.66
+   "deger": 6.64
   },
   {
    "ay": "2016-12",
-   "deger": 6.53
+   "deger": 6.58
   },
   {
    "ay": "2017-01",
-   "deger": 8.15
+   "deger": 8.13
   },
   {
    "ay": "2017-02",
-   "deger": 6.53
+   "deger": 6.51
   },
   {
    "ay": "2017-03",
-   "deger": 2.86
+   "deger": 2.91
   },
   {
    "ay": "2017-04",
-   "deger": -1.09
+   "deger": -1.16
   },
   {
    "ay": "2017-05",
-   "deger": -2.53
+   "deger": -2.58
   },
   {
    "ay": "2017-06",
-   "deger": -7.01
+   "deger": -6.99
   },
   {
    "ay": "2017-07",
-   "deger": -3.43
+   "deger": -3.38
   },
   {
    "ay": "2017-08",
-   "deger": -5.17
+   "deger": -5.12
   },
   {
    "ay": "2017-09",
-   "deger": -3.61
+   "deger": -3.59
   },
   {
    "ay": "2017-10",
-   "deger": -2.83
+   "deger": -2.88
   },
   {
    "ay": "2017-11",
-   "deger": -2.95
+   "deger": -2.92
   },
   {
    "ay": "2017-12",
-   "deger": -4.33
+   "deger": -4.34
   },
   {
    "ay": "2018-01",
@@ -3478,23 +3622,23 @@
   },
   {
    "ay": "2018-02",
-   "deger": -0.91
+   "deger": -0.88
   },
   {
    "ay": "2018-03",
-   "deger": 1.57
+   "deger": 1.59
   },
   {
    "ay": "2018-04",
-   "deger": 4.87
+   "deger": 4.91
   },
   {
    "ay": "2018-05",
-   "deger": 2.54
+   "deger": 2.57
   },
   {
    "ay": "2018-06",
-   "deger": -0.82
+   "deger": -0.77
   },
   {
    "ay": "2018-07",
@@ -3502,39 +3646,39 @@
   },
   {
    "ay": "2018-08",
-   "deger": -2.4
+   "deger": -2.41
   },
   {
    "ay": "2018-09",
-   "deger": -6.16
+   "deger": -6.17
   },
   {
    "ay": "2018-10",
-   "deger": -4.91
+   "deger": -4.88
   },
   {
    "ay": "2018-11",
-   "deger": -6.94
+   "deger": -6.96
   },
   {
    "ay": "2018-12",
-   "deger": -4.24
+   "deger": -4.21
   },
   {
    "ay": "2019-01",
-   "deger": -5.52
+   "deger": -5.44
   },
   {
    "ay": "2019-02",
-   "deger": -7.3
+   "deger": -7.33
   },
   {
    "ay": "2019-03",
-   "deger": -9.98
+   "deger": -9.97
   },
   {
    "ay": "2019-04",
-   "deger": -12.29
+   "deger": -12.26
   },
   {
    "ay": "2019-05",
@@ -3542,23 +3686,23 @@
   },
   {
    "ay": "2019-06",
-   "deger": -7.22
+   "deger": -7.2
   },
   {
    "ay": "2019-07",
-   "deger": -5.18
+   "deger": -5.16
   },
   {
    "ay": "2019-08",
-   "deger": -6.17
+   "deger": -6.15
   },
   {
    "ay": "2019-09",
-   "deger": -3.31
+   "deger": -3.29
   },
   {
    "ay": "2019-10",
-   "deger": -1.82
+   "deger": -1.85
   },
   {
    "ay": "2019-11",
@@ -3566,43 +3710,43 @@
   },
   {
    "ay": "2019-12",
-   "deger": 4.68
+   "deger": 4.69
   },
   {
    "ay": "2020-01",
-   "deger": 5.32
+   "deger": 5.31
   },
   {
    "ay": "2020-02",
-   "deger": 1.15
+   "deger": 1.18
   },
   {
    "ay": "2020-03",
-   "deger": 0.58
+   "deger": 0.54
   },
   {
    "ay": "2020-04",
-   "deger": -0.72
+   "deger": -0.79
   },
   {
    "ay": "2020-05",
-   "deger": 0.4
+   "deger": 0.35
   },
   {
    "ay": "2020-06",
-   "deger": -0.35
+   "deger": -0.42
   },
   {
    "ay": "2020-07",
-   "deger": 1.7
+   "deger": 1.64
   },
   {
    "ay": "2020-08",
-   "deger": 6.26
+   "deger": 6.28
   },
   {
    "ay": "2020-09",
-   "deger": 11.47
+   "deger": 11.53
   },
   {
    "ay": "2020-10",
@@ -3610,27 +3754,27 @@
   },
   {
    "ay": "2020-11",
-   "deger": 14.33
+   "deger": 14.34
   },
   {
    "ay": "2020-12",
-   "deger": 14.9
+   "deger": 14.81
   },
   {
    "ay": "2021-01",
-   "deger": 20.84
+   "deger": 20.78
   },
   {
    "ay": "2021-02",
-   "deger": 26.74
+   "deger": 26.72
   },
   {
    "ay": "2021-03",
-   "deger": 27.64
+   "deger": 27.68
   },
   {
    "ay": "2021-04",
-   "deger": 34.37
+   "deger": 34.36
   },
   {
    "ay": "2021-05",
@@ -3638,115 +3782,115 @@
   },
   {
    "ay": "2021-06",
-   "deger": 32.55
+   "deger": 32.6
   },
   {
    "ay": "2021-07",
-   "deger": 30.1
+   "deger": 30.13
   },
   {
    "ay": "2021-08",
-   "deger": 28.1
+   "deger": 28.04
   },
   {
    "ay": "2021-09",
-   "deger": 19.97
+   "deger": 19.9
   },
   {
    "ay": "2021-10",
-   "deger": 16.18
+   "deger": 16.15
   },
   {
    "ay": "2021-11",
-   "deger": 10.68
+   "deger": 10.64
   },
   {
    "ay": "2021-12",
-   "deger": 6.97
+   "deger": 7.01
   },
   {
    "ay": "2022-01",
-   "deger": 4.1
+   "deger": 4.12
   },
   {
    "ay": "2022-02",
-   "deger": 8.55
+   "deger": 8.6
   },
   {
    "ay": "2022-03",
-   "deger": 21.44
+   "deger": 21.45
   },
   {
    "ay": "2022-04",
-   "deger": 17.84
+   "deger": 17.89
   },
   {
    "ay": "2022-05",
-   "deger": 10.44
+   "deger": 10.5
   },
   {
    "ay": "2022-06",
-   "deger": 8.07
+   "deger": 8.04
   },
   {
    "ay": "2022-07",
-   "deger": -0.01
+   "deger": -0.02
   },
   {
    "ay": "2022-08",
-   "deger": -1.2
+   "deger": -1.17
   },
   {
    "ay": "2022-09",
-   "deger": 0.82
+   "deger": 0.79
   },
   {
    "ay": "2022-10",
-   "deger": 0.6
+   "deger": 0.65
   },
   {
    "ay": "2022-11",
-   "deger": 0.0
+   "deger": 0.05
   },
   {
    "ay": "2022-12",
-   "deger": -0.99
+   "deger": -1.02
   },
   {
    "ay": "2023-01",
-   "deger": -5.05
+   "deger": -5.07
   },
   {
    "ay": "2023-02",
-   "deger": -9.52
+   "deger": -9.56
   },
   {
    "ay": "2023-03",
-   "deger": -20.06
+   "deger": -20.04
   },
   {
    "ay": "2023-04",
-   "deger": -18.37
+   "deger": -18.41
   },
   {
    "ay": "2023-05",
-   "deger": -20.33
+   "deger": -20.34
   },
   {
    "ay": "2023-06",
-   "deger": -18.15
+   "deger": -18.11
   },
   {
    "ay": "2023-07",
-   "deger": -9.47
+   "deger": -9.51
   },
   {
    "ay": "2023-08",
-   "deger": -10.73
+   "deger": -10.72
   },
   {
    "ay": "2023-09",
-   "deger": -8.56
+   "deger": -8.49
   },
   {
    "ay": "2023-10",
@@ -3754,15 +3898,15 @@
   },
   {
    "ay": "2023-11",
-   "deger": -8.94
+   "deger": -8.93
   },
   {
    "ay": "2023-12",
-   "deger": -10.36
+   "deger": -10.34
   },
   {
    "ay": "2024-01",
-   "deger": -11.69
+   "deger": -11.65
   },
   {
    "ay": "2024-02",
@@ -3770,7 +3914,7 @@
   },
   {
    "ay": "2024-03",
-   "deger": -10.9
+   "deger": -10.93
   },
   {
    "ay": "2024-04",
@@ -3778,39 +3922,39 @@
   },
   {
    "ay": "2024-05",
-   "deger": -9.87
+   "deger": -9.88
   },
   {
    "ay": "2024-06",
-   "deger": -8.79
+   "deger": -8.83
   },
   {
    "ay": "2024-07",
-   "deger": -10.7
+   "deger": -10.66
   },
   {
    "ay": "2024-08",
-   "deger": -10.82
+   "deger": -10.88
   },
   {
    "ay": "2024-09",
-   "deger": -10.01
+   "deger": -10.07
   },
   {
    "ay": "2024-10",
-   "deger": -7.48
+   "deger": -7.54
   },
   {
    "ay": "2024-11",
-   "deger": -8.59
+   "deger": -8.58
   },
   {
    "ay": "2024-12",
-   "deger": -6.82
+   "deger": -6.78
   },
   {
    "ay": "2025-01",
-   "deger": -6.17
+   "deger": -6.19
   },
   {
    "ay": "2025-02",
@@ -3818,11 +3962,11 @@
   },
   {
    "ay": "2025-03",
-   "deger": -7.95
+   "deger": -7.9
   },
   {
    "ay": "2025-04",
-   "deger": -7.55
+   "deger": -7.54
   },
   {
    "ay": "2025-05",
@@ -3830,41 +3974,57 @@
   },
   {
    "ay": "2025-06",
-   "deger": -9.69
+   "deger": -9.71
   },
   {
    "ay": "2025-07",
-   "deger": -7.81
+   "deger": -7.85
   },
   {
    "ay": "2025-08",
-   "deger": -6.74
+   "deger": -6.68
   },
   {
    "ay": "2025-09",
-   "deger": -9.34
+   "deger": -9.27
   },
   {
    "ay": "2025-11",
-   "deger": -8.78
+   "deger": -8.72
   },
   {
    "ay": "2025-12",
-   "deger": -8.26
+   "deger": -8.34
+  },
+  {
+   "ay": "2026-01",
+   "deger": -6.42
+  },
+  {
+   "ay": "2026-02",
+   "deger": -3.55
+  },
+  {
+   "ay": "2026-03",
+   "deger": -0.91
+  },
+  {
+   "ay": "2026-04",
+   "deger": 2.61
+  },
+  {
+   "ay": "2026-05",
+   "deger": 4.75
+  },
+  {
+   "ay": "2026-06",
+   "deger": 4.17
+  },
+  {
+   "ay": "2026-07",
+   "deger": 5.74
   }
  ],
- "uyarilar": [
-  "ürün serisi yok, kırılımda atlanıyor: palm",
-  "ürün serisi yok, kırılımda atlanıyor: pirinc",
-  "ürün serisi yok, kırılımda atlanıyor: seker",
-  "ürün serisi yok, kırılımda atlanıyor: kahve",
-  "ürün serisi yok, kırılımda atlanıyor: kakao",
-  "ürün serisi yok, kırılımda atlanıyor: cay",
-  "ürün serisi yok, kırılımda atlanıyor: muz",
-  "ürün serisi yok, kırılımda atlanıyor: soya",
-  "ürün serisi yok, kırılımda atlanıyor: misir",
-  "ürün serisi yok, kırılımda atlanıyor: bugday",
-  "ürün serisi yok, kırılımda atlanıyor: portakal"
- ],
+ "uyarilar": [],
  "yontem_notu": "Emtia fiyatları ABD TÜFE'siyle deflate edilir (reel). Epizot tanımı, pencere uzunluğu ve göreceli enflasyon tanımı Türkiye ölçümüyle AYNIDIR; iki taraf aynı cetvelle ölçülmezse karşılaştırma anlamsız olurdu. Fed patikası betimseldir ve ortalaması alınmaz."
 }
