@@ -61,6 +61,13 @@ TTO Trading/
    grafik gömmek için `<GrafikEmbed src="/projeler/<slug>/x.html" baslik="…" no="01" />`.
 3. **Hesap aracı**: `TahvilHesaplayici.astro` kalıbını kopyala — saf istemci tarafı
    vanilla JS, kütüphane yok.
+4. **Yeni analiz**: `site/src/content/analiz/<konu>-<YYYY-AA-GG>.mdx`. Analiz, tek bir
+   piyasa gelişmesini mekanizmasına kadar açan yazıdır (pano değil — pano `projeler/`).
+   **Dosya adı ve başlık TARİH taşır**, çünkü aynı konu tekrar tekrar analiz edilir:
+   her çeyrek bir büyüme verisi, her ay bir enflasyon, her ihale bir söküm gelir ve
+   tarihsiz slug ikinci yazıda çakışır. Başlık kalıbı: `<GG Ay YYYY> <Konu> — <alt
+   başlık>`. Kart ayrıca `pubDate`i kendisi basar (`KayitKarti`), yani tarih iki yerde
+   birden görünür ve listede hangi yazının hangi güne ait olduğu okunur.
 
 ## Grafik güncelleme akışı
 
