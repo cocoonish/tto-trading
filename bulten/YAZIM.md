@@ -399,6 +399,25 @@ Listelenen her sayı için ya sebebi bul (meşru revizyon) ya da metinde
 "yayımlanan X yerine gerçek hareket Y" kalıbıyla geri al. Listenin uzun olması
 tek bir ölçüm kusuruna işaret eder; tek tek değil, KAYNAĞINI ara.
 
+**Bir ölçüyü kendi içinde ÇAPRAZLA.** 31.08.2026'da denetimin "yayımlanan sayı değişti"
+uyarısı on iki satır listeledi ve liste tek bir sebebe çıkmadı — İKİ ayrı kusur vardı,
+ikisi de ancak ölçünün kendi içindeki tutarlılığa bakılarak ayrıldı:
+
+- **Dolar endeksi çaprazları tutuyor mu?** Endeks (DX-Y.NYB) ile `=X` çaprazları AYNI
+  günü ölçer; endeksin günlük değişimi kabaca ağırlıklı çapraz değişimlerine eşit
+  olmalıdır (EUR %57,6 · JPY %13,6 · GBP %11,9 · CAD %9,1 · SEK %4,2 · CHF %3,6; euro ve
+  sterlin ters işaretle). O sabah endeks %0,54 yükselmişken çaprazların ima ettiği hareket
+  ≈ %0,00'dı; pazar günkü ölçüde ise ≈ %0,44 ile tutarlıydı. Yani BUGÜNKÜ çapraz okumaları
+  açık seansın etkisini taşıyordu. Çaprazların günlük değişimi üzerinden hüküm kurulmadı ve
+  bunun sebebi metinde yazıldı.
+- **Günlük ve haftalık kayma AYNI büyüklükte mi?** Bir satırda `d1` ile `h1` aynı miktarda
+  kaydıysa değişen şey kıyas barı değil SON FİYATTIR. Metallerde ikisi de birebir aynı
+  kaydı (altın −1,12 puan, gümüş −1,14, bakır −1,48); yani pazar günkü kapanış eksikti,
+  bugünkü tam. Orada geri alma kalıbı kullanıldı.
+
+Kural: liste uzunsa önce "hangi satırlar aynı aileden" diye bak, sonra o ailenin İÇ
+tutarlılığını sına. Tek sebep aramak, iki kusuru birbirine karıştırmaya yol açar.
+
 **"Vadeli devir düzeltmesi kurulamadı" uyarısı seviyeleri iptal eder.** O
 satırlarda gösterilen fiyat ham kontrat kapanışıdır; önceki yayımla
 kıyaslanamaz ve seviyeden türeyen rafineri marjları üzerinden yorum kurulamaz.
