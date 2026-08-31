@@ -1,0 +1,110 @@
+{
+ "gruplar": {
+  "harcama_takvim": {
+   "evds_grup": "bie_gsyzhtaken",
+   "baslik": "Harcama yöntemi · takvim arındırılmış zincirlenmiş hacim (2009=100)",
+   "seri_sayisi": 8,
+   "son_ceyrek": "2026Q1",
+   "adlar": {
+    "TP_GSYIH40_HY_B1GQ": "Gross Domestic Product (Purchaser's Price) (Expenditure Approach, Calendar Adjusted Chained Volume Index)",
+    "TP_GSYIH40_HY_P311": "Final Consumption Expenditures of Households (Expenditure Approach, Calendar Adjusted Chained Volume Index)",
+    "TP_GSYIH40_HY_P312": "Final Consumption Expenditures of Non-Profit Institutions Serving Households (Expenditure Approach, Calendar Adjusted Chained Volume Index)",
+    "TP_GSYIH40_HY_P32": "Final Consumption Expenditures of The Government (Expenditure Approach, Calendar Adjusted Chained Volume Index)",
+    "TP_GSYIH40_HY_P51G": "Gross Fixed Capital Formation (Expenditure Approach, Calendar Adjusted Chained Volume Index)",
+    "TP_GSYIH40_HY_P6": "Exports of Goods and Services (Expenditure Approach, Calendar Adjusted Chained Volume Index)",
+    "TP_GSYIH40_HY_P7": "Imports of Goods and Services (Expenditure Approach, Calendar Adjusted Chained Volume Index)",
+    "TP_GSYIH40_HY_P52": "Changes in Inventories (Expenditure Approach, Calendar Adjusted Chained Volume Index)"
+   }
+  },
+  "harcama_mevsim_takvim": {
+   "evds_grup": "bie_gsyzhend",
+   "baslik": "Harcama yöntemi · mevsim ve takvim arındırılmış zincirlenmiş hacim",
+   "seri_sayisi": 8,
+   "son_ceyrek": "2026Q1",
+   "adlar": {
+    "TP_GSYIH30_HY_B1GQ": "Gross Domestic Product (Purchaser's Price) (Expenditure Approach, Seasonally and Calendar Adjusted Chained Volume Index)",
+    "TP_GSYIH30_HY_P311": "Final Consumption Expenditures of Households (Expenditure Approach, Seasonally and Calendar Adjusted Chained Volume Index)",
+    "TP_GSYIH30_HY_P312": "Final Consumption Expenditures of Non-Profit Institutions Serving Households (Expenditure Approach, Seasonally and Calendar Adjusted Chained Volume Index)",
+    "TP_GSYIH30_HY_P32": "Final Consumption Expenditures of The Government (Expenditure Approach, Seasonally and Calendar Adjusted Chained Volume Index)",
+    "TP_GSYIH30_HY_P51G": "Gross Fixed Capital Formation (Expenditure Approach, Seasonally and Calendar Adjusted Chained Volume Index)",
+    "TP_GSYIH30_HY_P6": "Exports of Goods and Services (Expenditure Approach, Seasonally and Calendar Adjusted Chained Volume Index)",
+    "TP_GSYIH30_HY_P7": "Imports of Goods and Services (Expenditure Approach, Seasonally and Calendar Adjusted Chained Volume Index)",
+    "TP_GSYIH30_HY_P52": "Changes in Inventories (Expenditure Approach, Seasonally and Calendar Adjusted Chained Volume Index)"
+   }
+  },
+  "harcama_cari": {
+   "evds_grup": "bie_gsyhhrccar",
+   "baslik": "Harcama yöntemi · cari fiyatlarla",
+   "seri_sayisi": 8,
+   "son_ceyrek": "2026Q1",
+   "adlar": {
+    "TP_GSYIH20_BY_B1GQ": "Gross Domestic Product (Purchaser's Price) (Expenditure Approach, Current Prices)",
+    "TP_GSYIH20_BY_P311": "Final Consumption Expenditure of Resident Households (Expenditure Approach, Current Prices)",
+    "TP_GSYIH20_BY_P312": "Final Consumption Expenditure of Npısh (Expenditure Approach, Current Prices)",
+    "TP_GSYIH20_BY_P32": "Government Final Consumption Expenditure (Expenditure Approach, Current Prices)",
+    "TP_GSYIH20_BY_P51G": "Gross Fixed Capital Formation (Expenditure Approach, Current Prices)",
+    "TP_GSYIH20_BY_P52": "Change in Stocks (Expenditure Approach, Current Prices)",
+    "TP_GSYIH20_BY_P6": "Exports of Goods and Services (Expenditure Approach, Current Prices)",
+    "TP_GSYIH20_BY_P7": "(Less) Imports of Goods and Services (Expenditure Approach, Current Prices)"
+   }
+  },
+  "uretim_zincir": {
+   "evds_grup": "bie_gsyhuretzinc",
+   "baslik": "Üretim yöntemi (A10) · zincirlenmiş hacim",
+   "seri_sayisi": 14,
+   "son_ceyrek": "2026Q1",
+   "adlar": {
+    "TP_GSYIH40_IFC_B1GQ": "Gross Domestic Product (Purchaser's Price) (By Economic Activity, Chained Volume)",
+    "TP_GSYIH40_IFC_A": "A - Agriculture, Forestry and Fishing (By Economic Activity, Chained Volume)",
+    "TP_GSYIH40_IFC_BTE": "BCDE - Industry (By Economic Activity, Chained Volume)",
+    "TP_GSYIH40_IFC_C": "C - Manufacturing (By Economic Activity, Chained Volume)",
+    "TP_GSYIH40_IFC_F": "F - Construction (By Economic Activity, Chained Volume)",
+    "TP_GSYIH40_IFC_GTI": "GHI - (By Economic Activity, Chained Volume)",
+    "TP_GSYIH40_IFC_J": "J - Information and Communication (By Economic Activity, Chained Volume)",
+    "TP_GSYIH40_IFC_K": "K - Financial and Insurance Activities (By Economic Activity, Chained Volume)",
+    "TP_GSYIH40_IFC_L": "L - Real Estate Activities (By Economic Activity, Chained Volume)",
+    "TP_GSYIH40_IFC_MN": "MN - Professional, Administrative and Support Service Activities (By Economic Activity, Chained Volume)",
+    "TP_GSYIH40_IFC_OTQ": "OPQ - Public Administration, Education, Human Health and Social Work Activities (By Economic Activity, Chained Volume)",
+    "TP_GSYIH40_IFC_RTU": "RST - Other Service Activities (By Economic Activity, Chained Volume)",
+    "TP_GSYIH40_IFC_B1G": "Sectoral Total (By Economic Activity, Chained Volume)",
+    "TP_GSYIH40_IFC_D21X31": "Taxes on the Product Less Subsidies (By Economic Activity, Chained Volume)"
+   }
+  },
+  "uretim_cari": {
+   "evds_grup": "bie_gsyhuretcar",
+   "baslik": "Üretim yöntemi (A10) · cari fiyatlarla",
+   "seri_sayisi": 14,
+   "son_ceyrek": "2026Q1",
+   "adlar": {
+    "TP_GSYIH040_IFK_B1GQ": "Gross Domestic Product (Purchaser's Price) (By Economic Activity, Chained Volume)",
+    "TP_GSYIH040_IFK_A": "A - Agriculture, Forestry and Fishing (By Economic Activity, Chained Volume)",
+    "TP_GSYIH040_IFK_BTE": "BCDE - Industry (By Economic Activity, Chained Volume)",
+    "TP_GSYIH040_IFK_C": "C - Manufacturing (By Economic Activity, Chained Volume)",
+    "TP_GSYIH040_IFK_F": "F - Construction (By Economic Activity, Chained Volume)",
+    "TP_GSYIH040_IFK_GTI": "GHI - (By Economic Activity, Chained Volume)",
+    "TP_GSYIH040_IFK_J": "J - Information and Communication (By Economic Activity, Chained Volume)",
+    "TP_GSYIH040_IFK_K": "K - Financial and Insurance Activities (By Economic Activity, Chained Volume)",
+    "TP_GSYIH040_IFK_L": "L - Real Estate Activities (By Economic Activity, Chained Volume)",
+    "TP_GSYIH040_IFK_MN": "MN - Professional, Administrative and Support Service Activities (By Economic Activity, Chained Volume)",
+    "TP_GSYIH040_IFK_OTQ": "OPQ - Public Administration, Education, Human Health and Social Work Activities (By Economic Activity, Chained Volume)",
+    "TP_GSYIH040_IFK_RTU": "RST - Other Service Activities (By Economic Activity, Chained Volume)",
+    "TP_GSYIH040_IFK_B1G": "Sectoral Total (By Economic Activity, Chained Volume)",
+    "TP_GSYIH040_IFK_D21X31": "Taxes Subsidies (By Economic Activity, Chained Volume)"
+   }
+  },
+  "hanehalki_dayaniklilik": {
+   "evds_grup": "bie_nihaitukh",
+   "baslik": "Hanehalkı tüketimi · dayanıklılık türüne göre, cari",
+   "seri_sayisi": 5,
+   "son_ceyrek": "2026Q1",
+   "adlar": {
+    "TP_GSYIH100_HY_P31HNT": "Domestic Consumption By Resident and Non-Resident Households (Household Final Consumtion, By Durability Type, Current Prices)",
+    "TP_GSYIH100_HY_P311": "Durable Goods (Household Final Consumtion, By Durability Type, Current Prices)",
+    "TP_GSYIH100_HY_P312": "Semi Durable Goods (Household Final Consumtion, By Durability Type, Current Prices)",
+    "TP_GSYIH100_HY_P313": "Non Durable Goods (Household Final Consumtion, By Durability Type, Current Prices)",
+    "TP_GSYIH100_HY_P314": "Services (Household Final Consumtion, By Durability Type, Current Prices)"
+   }
+  }
+ },
+ "uyarilar": []
+}
