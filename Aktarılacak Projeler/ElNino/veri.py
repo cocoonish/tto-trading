@@ -277,11 +277,23 @@ def _pink_sayfa(xl, sayfa: str) -> pd.DataFrame | None:
                 and v[5:].isdigit()), None)
     if ilk is None or ilk == 0:
         return None
+    # BAŞLIK İKİ KATLI OLABİLİR. 'Monthly Indices' sayfasında üst satır ana
+    # kategorileri (Energy, Non-energy, Agriculture, Food, Raw Materials…),
+    # alt satır alt kalemleri (Oils & Meals, Grains, Other Food, Timber…)
+    # taşıyor. Tek bir satırı "en çok metin taşıyan" diye seçmek 31.08.2026
+    # koşusunda ALT satırı seçti ve endekslerin yarısı adsız kaldı — hat
+    # sessizce yalnız ürün fiyatlarını getirdi. Doğrusu: her sütun için
+    # başlık satırlarını AŞAĞIDAN YUKARI tarayıp ilk dolu hücreyi almak.
     ust = df.iloc[:ilk]
-    puan = ust.apply(lambda r: sum(1 for x in r[1:]
-                                   if isinstance(x, str) and x.strip()), axis=1)
-    bas_i = int(puan.idxmax())
-    adlar = ["tarih"] + [_ad_sadelestir(x) for x in df.iloc[bas_i].tolist()[1:]]
+    adlar = ["tarih"]
+    for j in range(1, df.shape[1]):
+        ad = ""
+        for i in range(len(ust) - 1, -1, -1):
+            h = ust.iat[i, j]
+            if h is not None and str(h).strip() and str(h).strip().lower() != "nan":
+                ad = _ad_sadelestir(h)
+                break
+        adlar.append(ad or f"sutun_{j}")
     veri = df.iloc[ilk:].copy()
     veri.columns = adlar
     idx = pd.to_datetime(

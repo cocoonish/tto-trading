@@ -215,6 +215,11 @@ def main() -> int:
               f"r={en['korelasyon']}, n={en['n']}")
 
     # ── 2. ÜRÜN KIRILIMI
+    tamam = [e for e in eps if not e.get("suruyor")]
+    son_ep = tamam[-1] if tamam else None
+    if son_ep is not None:
+        S["son_epizot_zirve"] = f"{son_ep['zirve']:%Y-%m}"
+        S["son_epizot_oni"] = _r(son_ep["zirve_deger"])
     kirilim = []
     for ad, (baslik, gerekce) in {**URUNLER,
                                   **{k: (v, "") for k, v in TOPLU.items()}}.items():
@@ -226,17 +231,29 @@ def main() -> int:
         if e["olculen"] < ASGARI_EPIZOT:
             uyar(f"{ad}: ölçülebilir epizot {e['olculen']} < {ASGARI_EPIZOT}, "
                  "kırılımda hüküm yok")
+        # SON EPİZODUN kendi hikâyesi. Basında "kakao %250 arttı" gibi
+        # cümleler dolaşıyor; onları alıntılamak yerine KENDİ serimizden
+        # ölçüyoruz: son tamamlanmış epizodun zirvesinden sonraki 18 ayda
+        # nominal fiyatın zirveye çıkışı, aynı andaki seviyeye göre.
+        tepe = None
+        if son_ep is not None:
+            pen = K[ad].loc[son_ep["zirve"]:son_ep["zirve"] + pd.DateOffset(months=UFUK)]
+            pen = pen.dropna()
+            if len(pen) >= 6 and pen.iloc[0]:
+                tepe = _r((pen.max() / pen.iloc[0] - 1.0) * 100.0, 1)
         kirilim.append({"ad": ad, "baslik": baslik, "gerekce": gerekce,
                         "toplu": ad in TOPLU, "olculen": e["olculen"],
                         "epizot_ortalama": e.get("epizot_ortalama"),
                         "kosulsuz": e.get("kosulsuz"), "fark": e.get("fark"),
+                        "son_epizot_tepe": tepe,
                         "bas": e.get("orneklem_bas")})
     kirilim.sort(key=lambda d: (d["fark"] is None, -(d["fark"] or 0)))
     S["kirilim"] = kirilim
     print("   ürün kırılımı (epizot sonrası reel yıllık − koşulsuz, puan):")
     for d in kirilim:
         print(f"     {d['baslik']:<34}{str(d['fark']):>9}  "
-              f"(n_epizot {d['olculen']}, {d['bas']})")
+              f"(n_epizot {d['olculen']}, {d['bas']}, son epizot tepe "
+              f"{d['son_epizot_tepe']}%)")
 
     # ── 1b. DEFLATÖRSÜZ SAĞLAMLIK: gıda − metal
     if KONTROL in K.columns:
