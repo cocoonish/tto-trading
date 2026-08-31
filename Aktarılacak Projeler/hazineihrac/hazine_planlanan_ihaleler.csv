@@ -1,15 +1,17 @@
 ﻿İhale Tarihi,Senet Tanımı,Vade Terimi,İtfa Tarihi,Yöntem,Aylık Strateji Hedefi (Milyar TL),Gerçekleşme Oranı Varsayımı (%),Tahmini Gerçekleşme (Milyon TL),Tahmini Bid-to-Cover,Tahmini Teklif (Milyon TL),Geçmiş Ort. Gerçekleşme (Milyon TL),Kıyas Bazı,Kıyas İhale Sayısı,Son İhale Tarihi
-20.08.2026,ABD Doları Cinsi Devlet Tahvili,1Yıl /364 Gün,20.08.2027,Doğrudan Satış,371.7,87.0,,,,,Doğrudan satış — ihale tahmini yok,0,
-20.08.2026,ABD Doları Cinsi Kira Sertifikası,1Yıl /364 Gün,20.08.2027,Doğrudan Satış,371.7,87.0,,,,,Doğrudan satış — ihale tahmini yok,0,
-07.09.2026,Hazine Bonosu,8Ay /245 Gün,12.05.2027,İhale / İlk ihraç,247.9,87.0,130436.0,2.09,272611.0,69015.0,Aynı tip + benzer vade,38,11.08.2026
-08.09.2026,Kira Sertifikası,2Yıl /728 Gün,06.09.2028,Doğrudan Satış,247.9,87.0,,,,,Doğrudan satış — ihale tahmini yok,0,
-14.09.2026,Sabit Kuponlu Devlet Tahvili,2Yıl /728 Gün,13.09.2028,İhale / İlk ihraç,247.9,87.0,7858.0,1.68,13201.0,4158.0,Aynı tahvil (itfa eşleşmesi),13,19.09.2022
-14.09.2026,TLREF'e Endeksli Devlet Tahvili,4Yıl /1456 Gün,11.09.2030,İhale / İlk ihraç,247.9,87.0,24248.0,1.44,34917.0,12830.0,Aynı tahvil (itfa eşleşmesi),3,16.12.2025
-15.09.2026,Sabit Kuponlu Devlet Tahvili,5Yıl /1673 Gün,16.04.2031,İhale / Yeniden ihraç,247.9,87.0,53059.0,1.51,80119.0,28074.0,Aynı tahvil (itfa eşleşmesi),14,11.08.2026
-05.10.2026,Sabit Kuponlu Devlet Tahvili,2Yıl /707 Gün,13.09.2028,İhale / Yeniden ihraç,235.1,87.0,10615.0,1.68,17833.0,4158.0,Aynı tahvil (itfa eşleşmesi),13,19.09.2022
-06.10.2026,Altın Tahvili,2Yıl /728 Gün,04.10.2028,Doğrudan Satış,235.1,87.0,,,,,Doğrudan satış — ihale tahmini yok,0,
-06.10.2026,Altına Dayalı Kira Sertifikası,2Yıl /728 Gün,04.10.2028,Doğrudan Satış,235.1,87.0,,,,,Doğrudan satış — ihale tahmini yok,0,
-12.10.2026,TLREF'e Endeksli Devlet Tahvili,4Yıl /1428 Gün,11.09.2030,İhale / Yeniden ihraç,235.1,87.0,32754.0,1.44,47166.0,12830.0,Aynı tahvil (itfa eşleşmesi),3,16.12.2025
-12.10.2026,Sabit Kuponlu Devlet Tahvili,5Yıl /1645 Gün,16.04.2031,İhale / Yeniden ihraç,235.1,87.0,71672.0,1.51,108225.0,28074.0,Aynı tahvil (itfa eşleşmesi),14,11.08.2026
-13.10.2026,Kira Sertifikası,5Yıl /1820 Gün,08.10.2031,Doğrudan Satış,235.1,87.0,,,,,Doğrudan satış — ihale tahmini yok,0,
-13.10.2026,Sabit Kuponlu Devlet Tahvili,9Yıl /3248 Gün,05.09.2035,İhale / Yeniden ihraç,235.1,87.0,89428.0,1.85,165442.0,35029.0,Aynı tahvil (itfa eşleşmesi),4,18.08.2026
+14.09.2026,Sabit Kuponlu Devlet Tahvili,2Yıl /728 Gün,13.09.2028,İhale / İlk ihraç,261.9,87.0,16837.0,1.68,28286.0,4158.0,Aynı tahvil (itfa eşleşmesi),13,19.09.2022
+14.09.2026,TLREF'e Endeksli Devlet Tahvili,4Yıl /1456 Gün,11.09.2030,İhale / İlk ihraç,261.9,87.0,51952.0,1.44,74811.0,12830.0,Aynı tahvil (itfa eşleşmesi),3,16.12.2025
+15.09.2026,Kira Sertifikası,2Yıl /728 Gün,13.09.2028,Doğrudan Satış,261.9,87.0,,,,,Doğrudan satış — ihale tahmini yok,0,
+15.09.2026,Sabit Kuponlu Devlet Tahvili,5Yıl /1673 Gün,16.04.2031,İhale / Yeniden ihraç,261.9,87.0,113680.0,1.51,171657.0,28074.0,Aynı tahvil (itfa eşleşmesi),15,11.08.2026
+15.09.2026,Sabit Kuponlu Devlet Tahvili,8Yıl /2933 Gün,27.09.2034,İhale / Yeniden ihraç,261.9,87.0,45308.0,2.54,115082.0,11189.0,Aynı tahvil (itfa eşleşmesi),6,08.07.2025
+05.10.2026,Sabit Kuponlu Devlet Tahvili,2Yıl /707 Gün,13.09.2028,İhale / Yeniden ihraç,229.1,87.0,14728.0,1.68,24743.0,4158.0,Aynı tahvil (itfa eşleşmesi),13,19.09.2022
+06.10.2026,Altın Tahvili,2Yıl /728 Gün,04.10.2028,Doğrudan Satış,229.1,87.0,,,,,Doğrudan satış — ihale tahmini yok,0,
+06.10.2026,Altına Dayalı Kira Sertifikası,2Yıl /728 Gün,04.10.2028,Doğrudan Satış,229.1,87.0,,,,,Doğrudan satış — ihale tahmini yok,0,
+12.10.2026,TLREF'e Endeksli Devlet Tahvili,4Yıl /1428 Gün,11.09.2030,İhale / Yeniden ihraç,229.1,87.0,45446.0,1.44,65442.0,12830.0,Aynı tahvil (itfa eşleşmesi),3,16.12.2025
+12.10.2026,Sabit Kuponlu Devlet Tahvili,5Yıl /1645 Gün,16.04.2031,İhale / Yeniden ihraç,229.1,87.0,99443.0,1.51,150159.0,28074.0,Aynı tahvil (itfa eşleşmesi),15,11.08.2026
+13.10.2026,Kira Sertifikası,5Yıl /1820 Gün,08.10.2031,Doğrudan Satış,229.1,87.0,,,,,Doğrudan satış — ihale tahmini yok,0,
+13.10.2026,Sabit Kuponlu Devlet Tahvili,8Yıl /2905 Gün,27.09.2034,İhale / Yeniden ihraç,229.1,87.0,39633.0,2.54,100668.0,11189.0,Aynı tahvil (itfa eşleşmesi),6,08.07.2025
+09.11.2026,Sabit Kuponlu Devlet Tahvili,2Yıl /672 Gün,13.09.2028,İhale / Yeniden ihraç,85.4,87.0,7112.0,1.68,11948.0,4158.0,Aynı tahvil (itfa eşleşmesi),13,19.09.2022
+09.11.2026,Sabit Kuponlu Devlet Tahvili,5Yıl /1820 Gün,05.11.2031,İhale / İlk ihraç,85.4,87.0,48022.0,1.51,72513.0,28074.0,Aynı tip + benzer vade,69,11.08.2026
+10.11.2026,TLREFK'ye Endeksli Kira Sertifikası,2Yıl /728 Gün,08.11.2028,Doğrudan Satış,85.4,87.0,,,,,Doğrudan satış — ihale tahmini yok,0,
+10.11.2026,Sabit Kuponlu Devlet Tahvili,8Yıl /2877 Gün,27.09.2034,İhale / Yeniden ihraç,85.4,87.0,19139.0,2.54,48613.0,11189.0,Aynı tahvil (itfa eşleşmesi),6,08.07.2025

@@ -1,102 +1,6 @@
 {
-  "source": "https://ms.hmb.gov.tr/uploads/2026/07/Tr08-Agustos-Ekim-2026-Ic-Borclanma-Stratejisi-3bb4819136c1d61c.pdf",
+  "source": "https://ms.hmb.gov.tr/uploads/2026/08/Tr09-Eylul-Kasim-2026-Ic-Borclanma-Stratejisi-29b66b0316cfa769.pdf",
   "items": [
-    {
-      "ihale_tarihi": "10.08.2026",
-      "valor_tarihi": "12.08.2026",
-      "itfa_tarihi": "15.03.2028",
-      "senet_tanimi": "Sabit Kuponlu Devlet Tahvili",
-      "vade_terimi": "2Yıl /581 Gün",
-      "yontem": "İhale / Yeniden ihraç"
-    },
-    {
-      "ihale_tarihi": "10.08.2026",
-      "valor_tarihi": "12.08.2026",
-      "itfa_tarihi": "09.08.2028",
-      "senet_tanimi": "TLREFK'ye Endeksli Kira Sertifikası",
-      "vade_terimi": "2Yıl /728 Gün",
-      "yontem": "Doğrudan Satış"
-    },
-    {
-      "ihale_tarihi": "11.08.2026",
-      "valor_tarihi": "12.08.2026",
-      "itfa_tarihi": "10.02.2027",
-      "senet_tanimi": "Hazine Bonosu",
-      "vade_terimi": "6Ay /182 Gün",
-      "yontem": "İhale / Yeniden ihraç"
-    },
-    {
-      "ihale_tarihi": "11.08.2026",
-      "valor_tarihi": "12.08.2026",
-      "itfa_tarihi": "16.04.2031",
-      "senet_tanimi": "Sabit Kuponlu Devlet Tahvili",
-      "vade_terimi": "5Yıl /1708 Gün",
-      "yontem": "İhale / Yeniden ihraç"
-    },
-    {
-      "ihale_tarihi": "17.08.2026",
-      "valor_tarihi": "19.08.2026",
-      "itfa_tarihi": "02.01.2030",
-      "senet_tanimi": "Değişken Faizli Devlet Tahvili",
-      "vade_terimi": "3Yıl /1232 Gün",
-      "yontem": "İhale / Yeniden ihraç"
-    },
-    {
-      "ihale_tarihi": "17.08.2026",
-      "valor_tarihi": "19.08.2026",
-      "itfa_tarihi": "03.07.2030",
-      "senet_tanimi": "TLREF'e Endeksli Devlet Tahvili",
-      "vade_terimi": "4Yıl /1414 Gün",
-      "yontem": "İhale / Yeniden ihraç"
-    },
-    {
-      "ihale_tarihi": "18.08.2026",
-      "valor_tarihi": "19.08.2026",
-      "itfa_tarihi": "08.05.2030",
-      "senet_tanimi": "TÜFE'ye Endeksli Devlet Tahvili",
-      "vade_terimi": "4Yıl /1358 Gün",
-      "yontem": "İhale / Yeniden ihraç"
-    },
-    {
-      "ihale_tarihi": "18.08.2026",
-      "valor_tarihi": "19.08.2026",
-      "itfa_tarihi": "05.09.2035",
-      "senet_tanimi": "Sabit Kuponlu Devlet Tahvili",
-      "vade_terimi": "9Yıl /3304 Gün",
-      "yontem": "İhale / Yeniden ihraç"
-    },
-    {
-      "ihale_tarihi": "20.08.2026",
-      "valor_tarihi": "21.08.2026",
-      "itfa_tarihi": "20.08.2027",
-      "senet_tanimi": "ABD Doları Cinsi Devlet Tahvili",
-      "vade_terimi": "1Yıl /364 Gün",
-      "yontem": "Doğrudan Satış"
-    },
-    {
-      "ihale_tarihi": "20.08.2026",
-      "valor_tarihi": "21.08.2026",
-      "itfa_tarihi": "20.08.2027",
-      "senet_tanimi": "ABD Doları Cinsi Kira Sertifikası",
-      "vade_terimi": "1Yıl /364 Gün",
-      "yontem": "Doğrudan Satış"
-    },
-    {
-      "ihale_tarihi": "07.09.2026",
-      "valor_tarihi": "09.09.2026",
-      "itfa_tarihi": "12.05.2027",
-      "senet_tanimi": "Hazine Bonosu",
-      "vade_terimi": "8Ay /245 Gün",
-      "yontem": "İhale / İlk ihraç"
-    },
-    {
-      "ihale_tarihi": "08.09.2026",
-      "valor_tarihi": "09.09.2026",
-      "itfa_tarihi": "06.09.2028",
-      "senet_tanimi": "Kira Sertifikası",
-      "vade_terimi": "2Yıl /728 Gün",
-      "yontem": "Doğrudan Satış"
-    },
     {
       "ihale_tarihi": "14.09.2026",
       "valor_tarihi": "16.09.2026",
@@ -116,9 +20,25 @@
     {
       "ihale_tarihi": "15.09.2026",
       "valor_tarihi": "16.09.2026",
+      "itfa_tarihi": "13.09.2028",
+      "senet_tanimi": "Kira Sertifikası",
+      "vade_terimi": "2Yıl /728 Gün",
+      "yontem": "Doğrudan Satış"
+    },
+    {
+      "ihale_tarihi": "15.09.2026",
+      "valor_tarihi": "16.09.2026",
       "itfa_tarihi": "16.04.2031",
       "senet_tanimi": "Sabit Kuponlu Devlet Tahvili",
       "vade_terimi": "5Yıl /1673 Gün",
+      "yontem": "İhale / Yeniden ihraç"
+    },
+    {
+      "ihale_tarihi": "15.09.2026",
+      "valor_tarihi": "16.09.2026",
+      "itfa_tarihi": "27.09.2034",
+      "senet_tanimi": "Sabit Kuponlu Devlet Tahvili",
+      "vade_terimi": "8Yıl /2933 Gün",
       "yontem": "İhale / Yeniden ihraç"
     },
     {
@@ -172,9 +92,41 @@
     {
       "ihale_tarihi": "13.10.2026",
       "valor_tarihi": "14.10.2026",
-      "itfa_tarihi": "05.09.2035",
+      "itfa_tarihi": "27.09.2034",
       "senet_tanimi": "Sabit Kuponlu Devlet Tahvili",
-      "vade_terimi": "9Yıl /3248 Gün",
+      "vade_terimi": "8Yıl /2905 Gün",
+      "yontem": "İhale / Yeniden ihraç"
+    },
+    {
+      "ihale_tarihi": "09.11.2026",
+      "valor_tarihi": "11.11.2026",
+      "itfa_tarihi": "13.09.2028",
+      "senet_tanimi": "Sabit Kuponlu Devlet Tahvili",
+      "vade_terimi": "2Yıl /672 Gün",
+      "yontem": "İhale / Yeniden ihraç"
+    },
+    {
+      "ihale_tarihi": "09.11.2026",
+      "valor_tarihi": "11.11.2026",
+      "itfa_tarihi": "05.11.2031",
+      "senet_tanimi": "Sabit Kuponlu Devlet Tahvili",
+      "vade_terimi": "5Yıl /1820 Gün",
+      "yontem": "İhale / İlk ihraç"
+    },
+    {
+      "ihale_tarihi": "10.11.2026",
+      "valor_tarihi": "11.11.2026",
+      "itfa_tarihi": "08.11.2028",
+      "senet_tanimi": "TLREFK'ye Endeksli Kira Sertifikası",
+      "vade_terimi": "2Yıl /728 Gün",
+      "yontem": "Doğrudan Satış"
+    },
+    {
+      "ihale_tarihi": "10.11.2026",
+      "valor_tarihi": "11.11.2026",
+      "itfa_tarihi": "27.09.2034",
+      "senet_tanimi": "Sabit Kuponlu Devlet Tahvili",
+      "vade_terimi": "8Yıl /2877 Gün",
       "yontem": "İhale / Yeniden ihraç"
     }
   ]
