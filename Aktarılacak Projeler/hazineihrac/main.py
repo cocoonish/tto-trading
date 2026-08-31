@@ -1501,6 +1501,27 @@ class TreasuryAuctionScraper:
             'Kıyas Bazı', 'Kıyas İhale Sayısı', 'Son İhale Tarihi',
         ]
         planned_df = planned_df[[c for c in col_order if c in planned_df.columns]]
+
+        # KAPI — "İlk ihraç" ile "Aynı tahvil" aynı satırda DURAMAZ.
+        # İlk ihracın tanımı gereği aynı tahvilin ihale geçmişi yoktur; ikisi
+        # birlikte görünüyorsa kıyas kümesi BAŞKA bir tahvili bulmuş demektir.
+        # Bu tam olarak yaşandı: itfa tarihi tahvil kimliği sanıldı ve planlı
+        # takvimdeki beş itfa eşleşmesinin dördü çapraz eşleşti. Kusur sayfada
+        # yalnız bir okurun gözüne çarptığı için görüldü — grafiğin ipucunda
+        # "İlk ihraç" ile "Aynı tahvil (itfa eşleşmesi)" yan yana duruyordu.
+        # Denetim koda konuyor ki bir daha okurun dikkatine kalmasın.
+        _y = planned_df['Yöntem'].astype(str).str.lower().str.replace('\u0307', '', regex=False)
+        _celiski = planned_df[_y.str.contains('ilk ihra', na=False)
+                              & planned_df['Kıyas Bazı'].astype(str).str.startswith('Aynı tahvil')]
+        if not _celiski.empty:
+            ornek = '; '.join(f"{r['İhale Tarihi']} {r['Senet Tanımı']} → {r['Kıyas Bazı']}"
+                              for _, r in _celiski.head(3).iterrows())
+            raise ValueError(
+                f"KIYAS ÇELİŞKİSİ — {len(_celiski)} planlı ihraç 'İlk ihraç' olduğu halde "
+                f"'Aynı tahvil' kıyası aldı; kıyas kümesi başka bir tahvili buluyor. "
+                f"Örnek: {ornek}"
+            )
+
         logger.info(f"✓ {len(planned_df)} planlı ihraç + tahmin derlendi (strateji-tutarlı + bid-to-cover)")
         return planned_df
 
