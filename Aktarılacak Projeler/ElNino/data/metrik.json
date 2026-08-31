@@ -3,6 +3,8 @@
  "_ay": "2026-07",
  "oni_son": 1.39,
  "oni_son_ay": "2026-06",
+ "orneklem_bas": "2006-01",
+ "orneklem_son": "2026-07",
  "capraz_tam": [
   {
    "gecikme": 0,
@@ -1558,6 +1560,8 @@
    "goreceli_gida": 5.77
   }
  ],
+ "hukum": "yetersiz",
+ "hukum_metin": "Ölçülebilir epizot sayısı 2. Türkiye TÜFE alt endeksleri 2006-01 tarihinde başlıyor ve o tarihten bu yana yalnız bu kadar güçlü El Niño epizodu tamamlandı. Bu örneklemle El Niño'nun Türkiye gıda enflasyonuna YÖNÜ hakkında hüküm kurulamaz; ölçülen fark yönü ne olursa olsun kanıt sayılmaz.",
  "uyarilar": [],
  "yontem_notu": "Çapraz korelasyon katsayıları yukarı yanlıdır: iki seri de kalıcıdır. Tez epizot çalışmasına dayanır; korelasyon yalnız gecikme profilini göstermek için verilir."
 }
