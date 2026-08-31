@@ -29,6 +29,7 @@ başlık solda, Türkçe etiketler, legendgroup kullanılmaz.
 """
 
 import json
+import os
 from pathlib import Path
 
 import numpy as np
@@ -390,17 +391,82 @@ def ihrac_hacmi() -> dict:
 # ================================================================
 # 4) AYLIK İHRAÇ HACMİ USD + USD/TRY KURU
 # ================================================================
-def ihrac_usd() -> dict | None:
+def _bayat_sil(yol) -> None:
+    """Üretilemeyen bir figürün ESKİ dosyasını sil.
+
+    Bir grafik bu koşuda çizilemediyse, önceki koşudan kalan dosya sitede
+    durmaya devam eder ve üstünde tarih yazmadığı için taze görünür. Depoda
+    aynı kural El Niño küresel bloğunda da işliyor.
+    """
     try:
-        import yfinance as yf
-        h = yf.Ticker("USDTRY=X").history(period="max", interval="1d")
-        if h.empty:
-            raise RuntimeError("boş kur serisi")
-        kur = h["Close"].resample("ME").last()
-        kurlar = {pd.Timestamp(t).strftime("%Y-%m"): float(v)
-                  for t, v in kur.items() if pd.notna(v)}
-    except Exception as e:  # internetsiz koşuda grafik atlanır
-        print(f"  ! ihrac_usd atlandı (USD/TRY kuru alınamadı: {e})")
+        if os.path.exists(yol):
+            os.remove(yol)
+            print(f"  · bayat {os.path.basename(str(yol))} silindi")
+    except OSError as e:
+        print(f"  ! bayat dosya silinemedi: {e}")
+
+
+def _kur_evds() -> dict[str, float]:
+    """USD/TRY ay sonu kuru — EVDS (TP.DK.USD.A.YTL), deponun KENDİ kaynağı.
+
+    Neden yfinance birincil değil: 'USDTRY=X' bu koşuculardan yalnız altı aylık
+    ve YANLIŞ bir seri döndürüyordu (son kur 32,89 — yılların gerisi). Grafik
+    yine de çiziliyor, koşu yeşil bitiyordu; kusur ancak sayfaya bir sayı
+    bağlanmak istendiğinde görüldü. Depoda zaten anahtarlı, günlük ve 2005
+    öncesine uzanan bir USD/TRY serisi var (USDTRYDeval hattı); doğru kaynak o.
+    Anahtar arama sırası TEK KAYNAKTAN gelsin diye o hattın evds_ortak'ı
+    içe aktarılıyor — burada ikinci bir kopyası tutulmuyor.
+    """
+    import sys
+    kardes = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                          "USDTRYDeval")
+    if kardes not in sys.path:
+        sys.path.insert(0, kardes)
+    from evds_ortak import evds_anahtari, EVDS_BASE, EVDS_ILERI_GUN  # type: ignore
+    from urllib.parse import urlencode
+    import requests
+
+    bitis = (pd.Timestamp.today() + pd.Timedelta(days=EVDS_ILERI_GUN)).strftime("%d-%m-%Y")
+    params = {"series": "TP.DK.USD.A.YTL", "startDate": "01-01-2000",
+              "endDate": bitis, "type": "json"}
+    r = requests.get(f"{EVDS_BASE}/{urlencode(params)}",
+                     headers={"key": evds_anahtari()}, timeout=45)
+    r.raise_for_status()
+    items = r.json().get("items", [])
+    if not items:
+        raise RuntimeError("EVDS boş döndü")
+    d = pd.DataFrame(items)
+    d["Tarih"] = pd.to_datetime(d["Tarih"].astype(str), format="%d-%m-%Y")
+    d["v"] = pd.to_numeric(d["TP_DK_USD_A_YTL"], errors="coerce")
+    d = d.dropna(subset=["v"]).sort_values("Tarih").set_index("Tarih")["v"]
+    ay = d.resample("ME").last()
+    return {pd.Timestamp(t).strftime("%Y-%m"): float(v) for t, v in ay.items() if pd.notna(v)}
+
+
+def _kur_yfinance() -> dict[str, float]:
+    import yfinance as yf
+    h = yf.Ticker("USDTRY=X").history(period="max", interval="1d")
+    if h.empty:
+        raise RuntimeError("boş kur serisi")
+    kur = h["Close"].resample("ME").last()
+    return {pd.Timestamp(t).strftime("%Y-%m"): float(v)
+            for t, v in kur.items() if pd.notna(v)}
+
+
+def ihrac_usd() -> dict | None:
+    kurlar, kaynak = {}, ""
+    for ad, cek in (("EVDS", _kur_evds), ("yfinance", _kur_yfinance)):
+        try:
+            kurlar = cek()
+            kaynak = ad
+            print(f"  ihrac_usd: kur kaynağı {ad} — {len(kurlar)} ay, "
+                  f"son {max(kurlar)} {kurlar[max(kurlar)]:.2f}")
+            break
+        except Exception as e:
+            print(f"  ! ihrac_usd: {ad} kuru alınamadı ({type(e).__name__}: {str(e)[:80]})")
+    if not kurlar:
+        print("  ! ihrac_usd atlandı — hiçbir kur kaynağı yanıt vermedi")
+        _bayat_sil(KOK / "ihrac_usd.html")
         return None
 
     df = ihale_verisi()
@@ -408,6 +474,23 @@ def ihrac_usd() -> dict | None:
     aylik["anahtar"] = aylik["ay"].astype(str)
     aylik["kur"] = aylik["anahtar"].map(kurlar)
     aylik = aylik.dropna(subset=["kur"])
+    # KAPSAMA KAPISI. Kur serisi ihale aylarının sonuna yetişmiyorsa grafik
+    # doğru görünüp yanlış olur: son çubuk eski bir kurla dolara çevrilir.
+    # Böyle bir çıktı yayımlamaktansa çizilmez ve BAYAT DOSYA SİLİNİR —
+    # tarihini üstünde taşımayan bayat bir grafik, eksik bir grafikten kötüdür.
+    if not len(aylik):
+        print("  ! ihrac_usd atlandı — kur ile ihale ayları hiç örtüşmedi")
+        _bayat_sil(KOK / "ihrac_usd.html")
+        return None
+    son_ihale = df["ay"].max()
+    son_kur_ay = pd.Period(max(kurlar), freq="M")
+    gecikme = (son_ihale.year - son_kur_ay.year) * 12 + (son_ihale.month - son_kur_ay.month)
+    if len(aylik) < 12 or gecikme > 2:
+        print(f"  ! ihrac_usd atlandı — kur serisi yetersiz "
+              f"({len(aylik)} ay, son kur {son_kur_ay}, son ihale {son_ihale}; "
+              f"kaynak {kaynak})")
+        _bayat_sil(KOK / "ihrac_usd.html")
+        return None
     aylik["usd_mlr"] = aylik["Toplam(Gerçekleşme)"] / aylik["kur"] / 1000.0
     x = aylik["ay"].dt.to_timestamp()
 
@@ -433,6 +516,7 @@ def ihrac_usd() -> dict | None:
         "toplam_usd_mlr": float(aylik["usd_mlr"].sum()),
         "son_ay_usd_mlr": float(aylik["usd_mlr"].iloc[-1]),
         "son_kur": float(aylik["kur"].iloc[-1]),
+        "kur_kaynak": kaynak,
     }
 
 
