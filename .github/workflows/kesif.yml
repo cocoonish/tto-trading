@@ -21,6 +21,14 @@ on:
         description: 'Betiğe geçilecek argümanlar (ör. daraltılacak grup kodları)'
         type: string
         default: ''
+      # Keşif bazen bir HATTIN KENDİ betiğini koşturmak ister (ör. Hazine
+      # kazıyıcısını, düştüğü yeri kısa bir logda görmek için). O betiklerin
+      # bağımlılıkları keşfin sabit listesinde yok ve hepsini buraya yazmak
+      # her keşif koşusunu yavaşlatırdı; çağıran ne gerekiyorsa onu söyler.
+      paketler:
+        description: 'Ek pip paketleri (boşlukla ayrık)'
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -38,7 +46,7 @@ jobs:
         with:
           python-version: '3.11'
       - name: Bağımlılıklar
-        run: pip install --quiet requests pandas openpyxl
+        run: pip install --quiet requests pandas openpyxl ${{ inputs.paketler }}
       - name: Anahtar var mı
         run: |
           if [ -z "${TTO_EVDS_KEY}" ]; then
