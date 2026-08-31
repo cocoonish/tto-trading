@@ -96,13 +96,15 @@ def sekil_02(M):
                 marker_line=dict(color=INK, width=1),
                 text=[f"{M['artik']:+.2f}".replace(".", ",")],
                 textposition="outside", cliponaxis=False)
-    fig.add_hline(y=M["buyume_yillik"], line=dict(color=INK, width=1.4, dash="dot"),
-                  annotation_text=f"ölçülen büyüme %{M['buyume_yillik']:.1f}".replace(".", ","),
+    fig.add_hline(y=M["ayristirma_tabani"], line=dict(color=INK, width=1.4, dash="dot"),
+                  annotation_text=f"takvim ar. büyüme %{M['ayristirma_tabani']:.1f}".replace(".", ","),
                   annotation_position="top right",
                   annotation_font=dict(size=11, color=INK))
     _duzen(fig, f"Yıllık büyümeye katkılar — {M['_ceyrek']}",
            ["Katkı = bileşenin bir yıl önceki CARİ fiyatlı GSYH payı × bileşenin "
             "reel yıllık büyümesi. İthalat kimlikte eksi girer.",
+            "Taban TAKVİM ARINDIRILMIŞ harcama serisidir; manşet oran "
+            "arındırılmamış seriden gelir ve ikisi takvim farkı kadar ayrışır.",
             "Zincirlenmiş hacim endeksleri toplanmadığı için artık ayrı çizilir: "
             "stok değişimi ve zincirleme tutarsızlığı. Bileşenlere DAĞITILMAZ.",
             f"Ağırlık dönemi {M['agirlik_donemi']}. Kaynak: TCMB EVDS."],

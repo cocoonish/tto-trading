@@ -134,15 +134,26 @@ def main() -> int:
     print(f"   yıllık {buyume_yillik:.2f}%  ·  çeyreklik (mevsim+takvim ar.) "
           f"{buyume_ceyreklik:.2f}%")
 
-    # ── KİMLİK 1: harcama ve üretim tarafı aynı GSYH'yi vermeli
-    yil_uretim = _yillik(gsyh_uz).get(son)
-    fark = abs(float(buyume_yillik) - float(yil_uretim))
-    if fark > 0.35:
+    # ── MANŞET vs AYRIŞTIRMA TABANI. Bunlar AYNI ŞEY DEĞİL ve karıştırmak
+    # ölçü hatasıdır (ilk sürümde karıştırılmıştı):
+    #   · MANŞET yıllık büyüme ARINDIRILMAMIŞ zincirlenmiş hacimden gelir.
+    #     Üretim tarafı serisi bunu veriyor ve yayımlanan oranla örtüşüyor.
+    #   · Harcama AYRIŞTIRMASI takvim arındırılmış seriden kurulur; bileşenlerin
+    #     takvim etkisi birbirini götürmesin diye. Bu yüzden ayrıştırmanın
+    #     tabanı da o serinin KENDİ büyümesidir, manşet değil.
+    # İkisi arasındaki fark takvim arındırmasının kendisidir; kimlik değil,
+    # ölçülüp yazılan bir büyüklüktür. Aşırıysa seri seçimi bozuktur.
+    mansel = _yillik(gsyh_uz).get(son)
+    ayarlama_farki = float(buyume_yillik) - float(mansel)
+    if abs(ayarlama_farki) > 0.8:
         raise SystemExit(
-            f"KİMLİK DÜŞTÜ: harcama tarafı yıllık {buyume_yillik:.2f}% ile üretim "
-            f"tarafı {yil_uretim:.2f}% ayrışıyor ({fark:.2f} puan). Aynı GSYH'nin "
-            "iki ölçümü bu kadar ayrışamaz — hizalama ya da seri seçimi bozuk.")
-    print(f"   kimlik 1 ✓ harcama {buyume_yillik:.2f}% ≈ üretim {yil_uretim:.2f}%")
+            f"AYARLAMA FARKI AŞIRI: manşet (arındırılmamış) {mansel:.2f}% ile "
+            f"takvim arındırılmış harcama tabanı {buyume_yillik:.2f}% arasında "
+            f"{ayarlama_farki:+.2f} puan var. Takvim arındırması bu kadar "
+            "oynatmaz — seri seçimi ya da hizalama bozuk.")
+    print(f"   manşet (arındırılmamış, üretim) {mansel:.2f}%  ·  "
+          f"ayrıştırma tabanı (takvim ar., harcama) {buyume_yillik:.2f}%  ·  "
+          f"ayarlama farkı {ayarlama_farki:+.2f} puan")
 
     # ── KİMLİK 2: cari fiyatlarla sektörel toplam + vergi = GSYH
     b1g = _sutun(uret_c, "B1G")
@@ -181,6 +192,8 @@ def main() -> int:
                          "katki": _r(k), "isaret": isaret}
         bilesenler[kod] = {"ad": ad, "buyume": _r(g)}
         toplam_katki += k
+    # Artık AYRIŞTIRMA TABANINA göre: katkılar takvim arındırılmış seriden
+    # geliyor, manşetten çıkarmak takvim farkını da artığa yıkardı.
     artik = float(buyume_yillik) - toplam_katki
     print(f"   katkı toplamı {toplam_katki:.2f} · artık {artik:+.2f} puan")
     if abs(artik) > 3.0:
@@ -225,9 +238,10 @@ def main() -> int:
     cikti = {
         "_ceyrek": ceyrek,
         "_tarih": son.strftime("%d.%m.%Y"),
-        "buyume_yillik": _r(buyume_yillik),
+        "buyume_yillik": _r(mansel),                 # MANŞET (arındırılmamış)
         "buyume_ceyreklik": _r(buyume_ceyreklik),
-        "buyume_yillik_uretim": _r(yil_uretim),
+        "ayristirma_tabani": _r(buyume_yillik),      # takvim ar. harcama tarafı
+        "ayarlama_farki": _r(ayarlama_farki),
         "onceki_ceyrek": str(onceki.to_period("Q")),
         "agirlik_donemi": str(onceki.to_period("Q")),
         "katkilar": katkilar,
