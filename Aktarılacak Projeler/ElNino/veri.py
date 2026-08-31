@@ -305,6 +305,9 @@ def _pink_es(veri: pd.DataFrame, aranan: str) -> pd.Series | None:
     return veri[aday[0]] if aday else None
 
 
+_PINK_SUTUNLAR: dict[str, list[str]] = {}
+
+
 def pink_cek() -> tuple[dict[str, pd.Series], list[str]]:
     ham = None
     for uc in PINK_UCLARI:
@@ -335,6 +338,12 @@ def pink_cek() -> tuple[dict[str, pd.Series], list[str]]:
         (alinan.setdefault(ad, s) if s is not None else dusen.append(ad))
     if dusen:
         uyar(f"Pink Sheet'te bulunamayan sütun: {', '.join(dusen)}")
+        # Eşleme tutmadıysa dosyanın GERÇEK sütun adları künyeye yazılır.
+        # Aksi halde "bulunamadı" der ve neyin bulunabileceğini söylemez;
+        # düzeltmek için her seferinde yeni bir keşif koşusu gerekirdi.
+        _PINK_SUTUNLAR.clear()
+        for sayfa_ad, d in sayfalar.items():
+            _PINK_SUTUNLAR[sayfa_ad] = [str(c) for c in d.columns]
     if alinan:
         ilk = next(iter(alinan.values()))
         print(f"  Pink Sheet: {len(alinan)} seri, {ilk.dropna().index.min():%Y-%m} → "
@@ -469,6 +478,7 @@ def main() -> int:
         "kuresel_bas": f"{kur.index.min():%Y-%m}" if kur is not None else None,
         "kuresel_son": f"{kur.index.max():%Y-%m}" if kur is not None else None,
         "kuresel_dusen": kur_dusen,
+        "pink_sutunlari": _PINK_SUTUNLAR or None,
         "uyarilar": _UYARI,
     }, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"── veri yazıldı: {DATA}")
