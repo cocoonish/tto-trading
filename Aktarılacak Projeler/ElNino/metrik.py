@@ -153,6 +153,13 @@ def main() -> int:
               f"r={en['korelasyon']}, n={en['n']}"
               + (f"  ·  işlenmemiş: {enh['gecikme']} ay, r={enh['korelasyon']}" if enh else ""))
 
+    # Örneklem özdeşliği: "tam" ve "modern" aynı n'yi veriyorsa iki ayrı
+    # örneklem değildir ve öyle sunulamaz.
+    if sonuc.get("capraz_tam_n") == sonuc.get("capraz_modern_n"):
+        uyar("tam ve modern örneklem AYNI (TÜFE alt endeksleri 2006'da "
+             "başlıyor) — iki ayrı kanıt gibi okunmamalı")
+        sonuc["orneklem_ayni"] = True
+
     # ── 2. epizot çalışması (kalıcılık yanlılığından bağımsız)
     eps = epizotlar(oni, ESIK_GUCLU)
     sonuc["epizotlar"] = [{"bas": f"{e['bas']:%Y-%m}", "zirve": f"{e['zirve']:%Y-%m}",
