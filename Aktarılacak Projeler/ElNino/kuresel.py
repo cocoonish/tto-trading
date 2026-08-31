@@ -289,6 +289,28 @@ def main() -> int:
         S["abd_gecis_beta"], S["abd_gecis_r2"], S["abd_gecis_n"] = g["beta"], g["r2"], g["n"]
         print(f"   ABD geçiş katsayısı β={g['beta']} (R²={g['r2']}, n={g['n']})")
 
+    # ÜÇ EKONOMİ, TEK DENKLEM: manşet yıllık ~ gıda yıllık. Aylık geçiş
+    # katsayısı Euro Bölgesi için hesaplanamıyor (ECB serileri endeks değil,
+    # zaten yıllık % değişim). Üçünü karşılaştırabilmek için hepsinde YILLIK
+    # oran regresyonu ayrıca kurulur — farklı denklemlerle kurulan katsayıları
+    # yan yana koymak, karşılaştırma değil kılık değiştirmiş uydurma olurdu.
+    t_y = {k: _yillik(tufe[k]).dropna() for k in ("tufe", "gida") if k in tufe.columns}
+    yillik_setleri = {}
+    if "gida" in t_y and "tufe" in t_y:
+        yillik_setleri["tr"] = (t_y["gida"], t_y["tufe"])
+    if "abd_gida" in abd_y and "abd_tufe" in abd_y:
+        yillik_setleri["abd"] = (abd_y["abd_gida"], abd_y["abd_tufe"])
+    if "ea_gida_12a" in K.columns and "ea_tufe_12a" in K.columns:
+        yillik_setleri["ea"] = (K["ea_gida_12a"].dropna(), K["ea_tufe_12a"].dropna())
+    for ad, (gx, hy) in yillik_setleri.items():
+        d = _regres(gx, hy)
+        if not d:
+            continue
+        S[f"gecis_yillik_{ad}_beta"] = d["beta"]
+        S[f"gecis_yillik_{ad}_r2"] = d["r2"]
+        S[f"gecis_yillik_{ad}_n"] = d["n"]
+        print(f"   yıllık geçiş [{ad}]: β={d['beta']} (R²={d['r2']}, n={d['n']})")
+
     # şok ÇEKİRDEĞE ulaşıyor mu — iki ülke, aynı denklem
     if "abd_cekirdek" in K.columns:
         cc = _en_iyi_gecikmeli(_aylik(K["abd_gida"]), _aylik(K["abd_cekirdek"]), 12)
