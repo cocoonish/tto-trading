@@ -353,7 +353,15 @@ HATLAR: list[Hat] = [
         # yapılır. İki bağımsız ölçüt: çapraz korelasyon (kalıcılık yanlısı,
         # yalnız gecikme profili için) ve epizot çalışması (yanlılıktan geçmez,
         # tez buna dayanır). Geçiş katsayısı senaryo hesabı için ölçülür.
-        ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
+        #
+        # kuresel.py KÜRESEL KANADI ölçer ve sırası metrik.py'den SONRADIR:
+        # epizot tanımını metrik.py'den içe aktarır (iki yerde iki tanım bir gün
+        # sessizce ayrışırdı) ve Türkiye ölçümünü karşılaştırmaya alır. Türkiye
+        # örneklemi iki epizotta tıkanıyor; şokun GELDİĞİ yerin verisi 1980'de
+        # başlıyor ve orada aynı ölçüt hüküm verebiliyor. FRED düşerse bu katman
+        # hiçbir şey yazmaz, eskiyi de siler ve hat DURMAZ — Türkiye ölçümü
+        # kendi başına ayakta.
+        ["veri.py", "metrik.py", "kuresel.py", "grafik.py", "ozet_uret.py"], [],
         {"cikti/*.html": "*"},
         not_="ONI aylık, TÜFE aylık; ENSO tahminleri üç ayda bir belirginleşir."),
     Hat("marj", "Yiyecek Hizmetleri Marjı", Path("Research/marj"), "yiyecek-hizmetleri-marj",

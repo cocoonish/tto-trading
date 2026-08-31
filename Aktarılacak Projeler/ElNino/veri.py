@@ -5,9 +5,22 @@
   ONI   NOAA CPC'nin Oceanic Niño Index'i (Niño 3.4 bölgesi, üç aylık kayan
         ortalama anomalisi, °C). Üç ayrı genel uç sırayla denenir; hiçbiri
         çalışmazsa hat DURUR — boş tabloyla başarılı çıkmak yasak.
-  TÜFE  EVDS'ten manşet ve gıda alt endeksleri (ÖKTG aileleri). Kodlar
-        Enflasyon hattının kullandıklarıyla AYNI; iki hat aynı seriyi farklı
-        koddan çekerse bir gün sessizce ayrışırlar.
+  TÜFE  EVDS'ten manşet, çekirdek ve gıda alt endeksleri (ÖKTG aileleri).
+        Kodlar Enflasyon hattının kullandıklarıyla AYNI; iki hat aynı seriyi
+        farklı koddan çekerse bir gün sessizce ayrışırlar.
+  FRED  IMF birincil emtia fiyatları + ABD TÜFE/gıda/çekirdek + Fed politika
+        faizi. NEDEN GEREKLİ: Türkiye TÜFE alt endeksleri 2006'da başlıyor ve
+        o pencerede yalnız İKİ güçlü El Niño tamamlandı — yön hakkında hüküm
+        kurulamıyor. Aynı epizot tanımı 1980'de başlayan emtia serilerine
+        uygulanınca örneklem BEŞ epizoda çıkar: Türkiye'de ölçülemeyen şey
+        küresel tarafta ölçülebilir. FRED seçildi çünkü FAO'nun gıda endeksi
+        her ay adı değişen bir CSV'de duruyor (kırılgan), FRED ise tek host,
+        anahtarsız ve sabit kodlu.
+
+KÜRESEL BLOK YUMUŞAK DÜŞER. ONI ya da TÜFE gelmezse hat DURUR — onlar tezin
+gövdesi. FRED gelmezse hat durmaz ama sessiz de kalmaz: kunye.json'a
+"kuresel_durum" yazılır, uyarı listesine düşer ve ölçüm katmanı küresel
+bölümü hiç üretmez (eski değeri taşımaz).
 """
 from __future__ import annotations
 
@@ -41,7 +54,38 @@ TUFE_SERI = {
     "gida":            "TP.FE25.OKTG10",
     "islenmemis_gida": "TP.FE25.OKTG11",
     "islenmis_gida":   "TP.FE25.OKTG14",
+    # Çekirdek C. Gıda şokunun ÇEKİRDEĞE ulaşıp ulaşmadığı, bir merkez
+    # bankasının "bakma, geç" kararını veren asıl sorudur; ABD tarafında da
+    # aynı soru ölçülüyor ve ikisi karşılaştırılıyor.
+    "cekirdek_c":      "TP.FE25.OKTG04",
 }
+
+# ── FRED (anahtarsız CSV). Kodlar 31.08.2026'da kesif_kuresel.py ile ölçüldü.
+FRED_UC = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={}"
+FRED_SERI = {
+    # IMF birincil emtia fiyat endeksleri (aylık, USD, 2016=100)
+    "emtia_gida":     "PFOODINDEXM",
+    "emtia_tum":      "PALLFNFINDEXM",
+    "emtia_yakitsiz": "PNFUELINDEXM",
+    "emtia_icecek":   "PBEVEINDEXM",
+    "emtia_hammadde": "PRAWMINDEXM",
+    # ENSO'nun doğrudan vurduğu ürünler (USD/ton ya da USD/kg)
+    "bugday":  "PWHEAMTUSDM",
+    "misir":   "PMAIZMTUSDM",
+    "pirinc":  "PRICENPQUSDM",
+    "soya":    "PSOYBUSDM",
+    "palm":    "PPOILUSDM",
+    "seker":   "PSUGAISAUSDM",
+    "kahve":   "PCOFFOTMUSDM",
+    "kakao":   "PCOCOUSDM",
+    # ABD
+    "abd_tufe":      "CPIAUCSL",
+    "abd_gida":      "CPIUFDSL",
+    "abd_cekirdek":  "CPILFESL",
+    "fed_faiz":      "FEDFUNDS",
+}
+# Küresel blok bunlarsız anlamsızdır; biri bile yoksa blok üretilmez.
+FRED_ZORUNLU = ("emtia_gida", "abd_tufe", "abd_gida")
 
 # DJF → merkez ay Ocak; JFM → Şubat; … ONI üç aylık kayan ortalamadır ve
 # etiketi ORTA aya karşılık gelir. Bunu kaydırmak bütün gecikme ölçümünü
@@ -171,6 +215,47 @@ def tufe_cek() -> pd.DataFrame:
     return t
 
 
+def _fred_seri(kod: str) -> pd.Series | None:
+    metin = _metin_cek(FRED_UC.format(kod), deneme=2)
+    df = pd.read_csv(io.StringIO(metin))
+    if df.shape[1] < 2:
+        return None
+    tar = pd.to_datetime(df.iloc[:, 0], errors="coerce")
+    deg = pd.to_numeric(df.iloc[:, 1].replace(".", None), errors="coerce")
+    s = pd.Series(deg.to_numpy(), index=pd.Index(tar)).dropna()
+    # Aylık seriler ayın ilk gününe damgalıdır; yine de normalize edilir ki
+    # ONI ile birleştirme gün farkından sessizce boşa düşmesin.
+    s.index = s.index.to_period("M").to_timestamp()
+    return s[~s.index.duplicated(keep="last")].sort_index() if len(s) else None
+
+
+def fred_cek() -> tuple[pd.DataFrame | None, list[str]]:
+    """FRED bloğu. Yumuşak düşer: eksik seri uyarı üretir, hattı durdurmaz."""
+    alinan, dusen = {}, []
+    for ad, kod in FRED_SERI.items():
+        try:
+            s = _fred_seri(kod)
+        except Exception as ex:
+            dusen.append(ad)
+            uyar(f"FRED serisi düştü: {ad} ({kod}) — {ex}")
+            continue
+        if s is None or s.empty:
+            dusen.append(ad)
+            uyar(f"FRED serisi boş: {ad} ({kod})")
+            continue
+        alinan[ad] = s
+    eksik_zorunlu = [a for a in FRED_ZORUNLU if a not in alinan]
+    if eksik_zorunlu:
+        uyar(f"FRED zorunlu serileri eksik ({eksik_zorunlu}) — KÜRESEL BLOK ÜRETİLMEYECEK")
+        return None, dusen
+    df = pd.DataFrame(alinan).sort_index()
+    print(f"  FRED alındı: {df.shape[1]}/{len(FRED_SERI)} seri, {len(df)} ay, "
+          f"{df.index.min():%Y-%m} → {df.index.max():%Y-%m}")
+    if dusen:
+        print(f"  ! FRED'de alınamayan: {', '.join(dusen)}")
+    return df, dusen
+
+
 def main() -> int:
     DATA.mkdir(exist_ok=True)
     print("── El Niño hattı · veri")
@@ -178,12 +263,25 @@ def main() -> int:
     oni.to_frame("oni").to_csv(DATA / "oni.csv", encoding="utf-8")
     tufe = tufe_cek()
     tufe.to_csv(DATA / "tufe.csv", encoding="utf-8")
+    kur, kur_dusen = fred_cek()
+    kur_yol = DATA / "kuresel.csv"
+    if kur is not None:
+        kur.to_csv(kur_yol, encoding="utf-8")
+    elif kur_yol.exists():
+        # Eski dosyayı BIRAKMAK, bayat sayıyı taze gibi göstermek olurdu.
+        kur_yol.unlink()
+        uyar("kuresel.csv silindi — küresel blok bu koşuda alınamadı")
     (DATA / "kunye.json").write_text(json.dumps({
         "oni_uc": uc,
         "oni_bas": f"{oni.index.min():%Y-%m}", "oni_son": f"{oni.index.max():%Y-%m}",
         "oni_son_deger": round(float(oni.iloc[-1]), 2),
         "tufe_bas": f"{tufe.index.min():%Y-%m}", "tufe_son": f"{tufe.index.max():%Y-%m}",
-        "seriler": TUFE_SERI, "uyarilar": _UYARI,
+        "seriler": TUFE_SERI,
+        "kuresel_durum": "alindi" if kur is not None else "alinamadi",
+        "kuresel_bas": f"{kur.index.min():%Y-%m}" if kur is not None else None,
+        "kuresel_son": f"{kur.index.max():%Y-%m}" if kur is not None else None,
+        "kuresel_dusen": kur_dusen,
+        "uyarilar": _UYARI,
     }, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"── veri yazıldı: {DATA}")
     return 0
