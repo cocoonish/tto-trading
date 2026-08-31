@@ -78,6 +78,14 @@ TUFE_SERI = {
 # Pink Sheet aylık emtiayı 1960'a taşıyor (FRED 1980), BIS politika faizini
 # 1954'ten veriyor, ECB ikinci bir karşılaştırma ekonomisi (Euro Bölgesi)
 # getiriyor. Her kaynak kendi başına yumuşak düşer.
+# Dosyanın adresi her güncellemede DEĞİŞEN bir sağlama taşıyor; sabit bir
+# adres yazmak, bir gün sessizce ESKİ bir sürümü çekmek demek. 31.08.2026
+# koşusu bunu gösterdi: sabit adres 2025-12'de biten bir dosyayı getirdi ve
+# emtia serisi yedi ay geride kaldı — koşu yeşil bitti, kimse fark etmedi.
+# Bu yüzden adres önce CMO sayfasından ÇÖZÜLÜR; sabit adresler yalnız yedek.
+PINK_SAYFA = "https://www.worldbank.org/en/research/commodity-markets"
+PINK_KALIP = re.compile(
+    r"https://thedocs\.worldbank\.org/[^\"'\s>]*CMO-Historical-Data-Monthly\.xlsx")
 PINK_UCLARI = (
     "https://thedocs.worldbank.org/en/doc/18675f1d1639c7a34d463f59263ba0a2-"
     "0050012025/related/CMO-Historical-Data-Monthly.xlsx",
@@ -253,6 +261,9 @@ def tufe_cek() -> pd.DataFrame:
     return t
 
 
+AYRAC = "|"          # sütunun başlık hücrelerini birleştiren ayraç
+
+
 def _ad_sadelestir(x) -> str:
     return re.sub(r"\s+", " ", str(x)).strip().lower()
 
@@ -277,23 +288,38 @@ def _pink_sayfa(xl, sayfa: str) -> pd.DataFrame | None:
                 and v[5:].isdigit()), None)
     if ilk is None or ilk == 0:
         return None
-    # BAŞLIK İKİ KATLI OLABİLİR. 'Monthly Indices' sayfasında üst satır ana
-    # kategorileri (Energy, Non-energy, Agriculture, Food, Raw Materials…),
-    # alt satır alt kalemleri (Oils & Meals, Grains, Other Food, Timber…)
-    # taşıyor. Tek bir satırı "en çok metin taşıyan" diye seçmek 31.08.2026
-    # koşusunda ALT satırı seçti ve endekslerin yarısı adsız kaldı — hat
-    # sessizce yalnız ürün fiyatlarını getirdi. Doğrusu: her sütun için
-    # başlık satırlarını AŞAĞIDAN YUKARI tarayıp ilk dolu hücreyi almak.
+    # BAŞLIK ÇOK KATLI VE İKİ SAYFADA FARKLI. 'Monthly Indices'te üst satır ana
+    # kategorileri (Energy, Non-energy, Agriculture, Food…), alt satır alt
+    # kalemleri (Oils & Meals, Grains, Other Food…) taşıyor; 'Monthly Prices'ta
+    # ise ad üstte, BİRİM ($/mt) altta duruyor. 31.08.2026'da bu iki düzen
+    # sırayla ısırdı: önce "en çok metin taşıyan satırı seç" endeksleri adsız
+    # bıraktı, sonra "aşağıdan yukarı ilk dolu hücreyi al" ürün adlarının
+    # yerine birimleri koydu ve on bir ürün birden düştü.
+    #
+    # Doğrusu satır SEÇMEMEK: her sütunun BÜTÜN başlık hücreleri aday olarak
+    # saklanır ve eşleme adaylardan herhangi biriyle tutar. Hangi satırın ad,
+    # hangisinin birim olduğunu bilmek gerekmez — ve yarın üçüncü bir düzen
+    # gelirse de gerekmeyecek.
     ust = df.iloc[:ilk]
     adlar = ["tarih"]
     for j in range(1, df.shape[1]):
-        ad = ""
-        for i in range(len(ust) - 1, -1, -1):
+        aday = []
+        for i in range(len(ust)):
             h = ust.iat[i, j]
-            if h is not None and str(h).strip() and str(h).strip().lower() != "nan":
-                ad = _ad_sadelestir(h)
-                break
-        adlar.append(ad or f"sutun_{j}")
+            if h is None or not str(h).strip() or str(h).strip().lower() == "nan":
+                continue
+            a = _ad_sadelestir(h)
+            if a and a not in aday:
+                aday.append(a)
+        adlar.append(AYRAC.join(aday) if aday else f"sutun_{j}")
+    # Aynı adı taşıyan iki sütun olursa ikincisi sessizce ilkini ezerdi.
+    gorulen: dict[str, int] = {}
+    for j, a in enumerate(adlar):
+        if a in gorulen:
+            gorulen[a] += 1
+            adlar[j] = f"{a}{AYRAC}#{gorulen[a]}"
+        else:
+            gorulen[a] = 0
     veri = df.iloc[ilk:].copy()
     veri.columns = adlar
     idx = pd.to_datetime(
@@ -306,23 +332,53 @@ def _pink_sayfa(xl, sayfa: str) -> pd.DataFrame | None:
 
 
 def _pink_es(veri: pd.DataFrame, aranan: str) -> pd.Series | None:
-    """Sütunu tam adla, olmazsa ÖNEK eşlemesiyle bulur (adlar yıllara göre
-    'Coffee, Robusta' ↔ 'Coffee, robusta, **' gibi kuyruk alıyor)."""
+    """Sütunu ADAYLARINDAN herhangi biriyle bulur.
+
+    Sütun adı, o sütunun bütün başlık hücrelerinin AYRAC ile birleştirilmişidir
+    (ör. "cocoa|$/kg"). Önce tam eşleşme, sonra önek eşleşmesi denenir; önek,
+    'coffee, robusta' ↔ 'coffee, robusta **' gibi yıllara göre kuyruk alan
+    adlar için gerekli.
+    """
     if veri is None:
         return None
     for k in veri.columns:
-        if k == aranan:
+        if any(p == aranan for p in str(k).split(AYRAC)):
             return veri[k]
-    aday = [k for k in veri.columns if isinstance(k, str) and k.startswith(aranan)]
-    return veri[aday[0]] if aday else None
+    for k in veri.columns:
+        if any(p.startswith(aranan) for p in str(k).split(AYRAC)):
+            return veri[k]
+    return None
 
 
 _PINK_SUTUNLAR: dict[str, list[str]] = {}
 
 
+def _pink_adresleri() -> list[str]:
+    """Önce CMO sayfasından çöz, sonra sabit yedekler. Sıra önemli: taze olan
+    önce denenmeli, yoksa yedek her zaman kazanır ve dosya donar."""
+    uclar: list[str] = []
+    try:
+        req = urllib.request.Request(PINK_SAYFA, headers={"User-Agent": UA})
+        with urllib.request.urlopen(req, timeout=60) as r:
+            sayfa = r.read().decode("utf-8", "replace")
+        for m in PINK_KALIP.findall(sayfa):
+            if m not in uclar:
+                uclar.append(m)
+        if uclar:
+            print(f"  Pink Sheet adresi sayfadan çözüldü: …{uclar[0][-58:]}")
+        else:
+            uyar("CMO sayfasında Pink Sheet bağlantısı bulunamadı — yedek adresler")
+    except Exception as ex:
+        uyar(f"CMO sayfası okunamadı ({ex}) — yedek adresler")
+    for u in PINK_UCLARI:
+        if u not in uclar:
+            uclar.append(u)
+    return uclar
+
+
 def pink_cek() -> tuple[dict[str, pd.Series], list[str]]:
     ham = None
-    for uc in PINK_UCLARI:
+    for uc in _pink_adresleri():
         try:
             req = urllib.request.Request(uc, headers={"User-Agent": UA})
             with urllib.request.urlopen(req, timeout=120) as r:
@@ -356,6 +412,8 @@ def pink_cek() -> tuple[dict[str, pd.Series], list[str]]:
         _PINK_SUTUNLAR.clear()
         for sayfa_ad, d in sayfalar.items():
             _PINK_SUTUNLAR[sayfa_ad] = [str(c) for c in d.columns]
+    else:
+        _PINK_SUTUNLAR.clear()
     if alinan:
         ilk = next(iter(alinan.values()))
         print(f"  Pink Sheet: {len(alinan)} seri, {ilk.dropna().index.min():%Y-%m} → "

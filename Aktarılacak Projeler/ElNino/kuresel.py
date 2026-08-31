@@ -192,6 +192,15 @@ def main() -> int:
     abd_tufe = K["abd_tufe"].dropna()
     reel_gida = (K["emtia_gida"] / abd_tufe * 100.0).dropna()
     reel_gida_y = _yillik(reel_gida).dropna()
+    # Emtia serisinin KENDİ yaşı ayrıca yazılır: birleşik tablonun son ayı
+    # BLS'ten gelebiliyor ve emtia yedi ay geride olsa bile taze görünüyordu.
+    eg = K["emtia_gida"].dropna()
+    S["emtia_bas"] = f"{eg.index.min():%Y-%m}"
+    S["emtia_son"] = f"{eg.index.max():%Y-%m}"
+    S["emtia_yas_ay"] = int(round((K.index.max() - eg.index.max()).days / 30.44))
+    if S["emtia_yas_ay"] >= 3:
+        uyar(f"emtia serisi {S['emtia_yas_ay']} ay geride ({S['emtia_son']}) — "
+             "Pink Sheet dosyası eski sürüm olabilir")
     S["reel_gida_son"] = _r(reel_gida_y.iloc[-1])
     S["nominal_gida_son"] = _r(_yillik(K["emtia_gida"]).dropna().iloc[-1])
     ep_kur = epizot_calismasi(reel_gida_y, eps)
