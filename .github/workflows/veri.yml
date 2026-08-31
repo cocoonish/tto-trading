@@ -129,7 +129,9 @@ jobs:
 
       - name: Temel bağımlılıklar
         # plotly: Carry/Tufex/Makroihtiyati/ReelSektorFX hatlarının grafikleri
-        run: pip install --quiet requests pandas numpy plotly
+        run: pip install --quiet requests pandas numpy plotly openpyxl
+        # openpyxl: El Niño hattının küresel kanadı Dünya Bankası Pink
+        # Sheet'ini (xlsx) okuyor; onsuz kanat sessizce düşerdi.
 
       # DUMAN SINAMASI: ağa çıkmadan, saniyeler içinde. Bu depoyu birden çok
       # oturum aynı gün düzenliyor; aralarındaki sözleşme kayması kimsenin
