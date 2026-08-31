@@ -333,6 +333,17 @@ HATLAR: list[Hat] = [
         # Üç frekans ayrı ayrı donabiliyor: bütçe aylık, dış borç ve GSYH üç
         # aylık, sahiplik haftalık. Tek anahtara bakmak yanıltırdı.
         tarih_anahtarlari=("_tarih", "_tarih2", "_tarih3")),
+    Hat("buyume", "Büyüme (GSYH)", P / "Buyume", "buyume",
+        # veri.py seri kodlarını GÖMMEZ: her EVDS grubunun içeriğini serieList'ten
+        # okur, o listeyi çeker (uydurma kod giremez, TÜİK seri eklerse gelir).
+        # metrik.py katkıyı w(t−4)×g(t) ile kurar — zincirlenmiş hacim endeksleri
+        # toplanmadığı için ağırlık CARİ fiyatlı paydan gelir — ve üç kimlik
+        # koşturur: harcama tarafı GSYH'si üretim tarafıyla aynı mı, cari
+        # fiyatlarla sektörel toplam + vergi GSYH'ye eşit mi, artık makul bantta
+        # mı. Biri düşerse hat DURUR. Artık bileşenlere dağıtılmaz, ayrı yazılır.
+        ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
+        {"cikti/*.html": "*"},
+        not_="Üç aylık; TÜİK yayımı ~60 gün gecikmeli."),
     Hat("marj", "Yiyecek Hizmetleri Marjı", Path("Research/marj"), "yiyecek-hizmetleri-marj",
         ["src/web_cikti.py", "src/ozet_uret.py"],
         ["src/run_all.py", "src/web_cikti.py", "src/ozet_uret.py"],
@@ -347,7 +358,7 @@ def _renk(m, k):  # k: 32 yeşil, 31 kırmızı, 33 sarı, 36 camgöbeği
 
 
 EVDS_HATLAR = {"tcmb", "usdtry", "reer", "yabanci", "marj", "enflasyon",
-               "kredi", "fonlama", "odemeler", "dibs", "butce"}
+               "kredi", "fonlama", "odemeler", "dibs", "butce", "buyume"}
 # Liste sütun genişliği hat adlarından türetilir — yeni bir uzun ad eklendiğinde
 # hizalama sessizce bozulmasın ("enflasyon" 9 karakter, eski sabit 8'di).
 _AD_G = max(len(h.ad) for h in HATLAR) + 1

@@ -97,6 +97,11 @@ TETIKLER: tuple[Tetik, ...] = (
     # Hazine ihaleleri ulusal takvimde yok: hattın kendi ihale planından sürülür.
     Tetik("hazine", "Hazine iç borçlanma ihaleleri (kendi ihale planı)",
           en_gec=12, ihale=True),
+    # GSYH üç aylık ve TÜİK yayımı ~60 gün gecikmeli; emniyet ağı bir çeyreği
+    # aşacak kadar uzun (100 gün) çünkü takvim kaydı okunamazsa hattın bir
+    # sonraki yayıma kadar beklemesi gerekir, boşuna koşması değil.
+    Tetik("buyume", "TÜİK Dönemsel Gayrisafi Yurt İçi Hasıla (üç aylık)",
+          r"Gayrisafi Yurt İçi Hasıla", ("TÜİK",), en_gec=100, gecikme_dk=90),
     # GDELT haber akışı sürekli; resmî yayım takvimi yok, haftalık ritim yeter.
     Tetik("fx", "GDELT haber akışı (resmî takvimi yok, haftalık ritim)", en_gec=9),
 )
