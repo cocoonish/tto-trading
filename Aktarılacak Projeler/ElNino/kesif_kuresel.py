@@ -11,6 +11,7 @@ from __future__ import annotations
 import io
 import json
 import sys
+import traceback
 import urllib.request
 
 import pandas as pd
@@ -50,12 +51,14 @@ def pink() -> None:
             continue
         if sayfa.lower() not in ("monthly prices", "monthly indices"):
             continue
-        # Veri bloğu: ilk sütunu YYYYMxx kalıbına uyan ilk satır.
-        ilk = None
-        for i, v in enumerate(df.iloc[:, 0].astype(str)):
-            if len(v) == 7 and v[:4].isdigit() and v[4] == "M" and v[5:].isdigit():
-                ilk = i
-                break
+        # Veri bloğu: ilk sütunu YYYYMxx kalıbına uyan ilk satır. Hücreler
+        # str'e TEK TEK çevrilir: sütun karışık tipliyse (başlıklarda metin,
+        # gövdede sayı) Series.astype(str) tek tip varsayıyor ve float hücrede
+        # düşüyordu.
+        kol0 = [str(x).strip() for x in df.iloc[:, 0].tolist()]
+        ilk = next((i for i, v in enumerate(kol0)
+                    if len(v) == 7 and v[:4].isdigit() and v[4].upper() == "M"
+                    and v[5:].isdigit()), None)
         print(f"      ilk veri satırı: {ilk}")
         for i in range(0, min(ilk if ilk is not None else 8, 8)):
             hucre = [str(x)[:26] for x in df.iloc[i].tolist()[:14]]
@@ -130,6 +133,7 @@ def main() -> int:
             f()
         except Exception as ex:
             print(f"   !! {ad} keşfi düştü: {type(ex).__name__}: {str(ex)[:120]}")
+            traceback.print_exc()
     return 0
 
 

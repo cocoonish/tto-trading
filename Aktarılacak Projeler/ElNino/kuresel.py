@@ -49,22 +49,34 @@ DATA = PROJE / "data"
 # "beklenen" alanı, kanalın ÖNCEDEN söylediğini kaydeder; ölçüm sonra gelir ve
 # beklentiyi doğrulamak zorunda değildir.
 URUNLER = {
-    "palm":    ("Palm yağı", "Endonezya + Malezya dünya arzının ~%85'i; ENSO kuraklığı doğrudan"),
-    "pirinc":  ("Pirinç", "Güneydoğu Asya muson rejimi; Hindistan ihracat kısıtları"),
-    "seker":   ("Şeker", "Hindistan + Tayland muson; Brezilya kuraklığı"),
-    "kahve":   ("Kahve", "Vietnam (robusta) ve Brezilya; ENSO kuraklığına duyarlı"),
-    "kakao":   ("Kakao", "Batı Afrika; ENSO Gine Körfezi yağışını değiştirir"),
-    "soya":    ("Soya", "Brezilya + Arjantin; El Niño Arjantin'e genelde YAĞIŞ getirir"),
-    "misir":   ("Mısır", "ABD Mısır Kuşağı ENSO'ya zayıf bağlı"),
-    "bugday":  ("Buğday", "Karadeniz havzası ENSO'nun dışında"),
+    "palm":     ("Palm yağı", "Endonezya + Malezya dünya arzının ~%85'i; ENSO kuraklığı doğrudan"),
+    "pirinc":   ("Pirinç", "Güneydoğu Asya muson rejimi; Hindistan ihracat kısıtları"),
+    "seker":    ("Şeker", "Hindistan + Tayland muson; Brezilya kuraklığı"),
+    "kahve":    ("Kahve (robusta)", "Vietnam ve Brezilya; ENSO kuraklığına duyarlı"),
+    "kakao":    ("Kakao", "Batı Afrika; ENSO Gine Körfezi yağışını değiştirir"),
+    "cay":      ("Çay", "Hindistan, Sri Lanka, Kenya — üçü de ENSO yağış rejiminde"),
+    "muz":      ("Muz", "Ekvador ve Orta Amerika; El Niño'nun klasik coğrafyası"),
+    "soya":     ("Soya", "Brezilya + Arjantin; El Niño Arjantin'e genelde YAĞIŞ getirir"),
+    "misir":    ("Mısır", "ABD Mısır Kuşağı ENSO'ya zayıf bağlı"),
+    "bugday":   ("Buğday", "Karadeniz havzası ENSO'nun dışında"),
+    "portakal": ("Portakal", "Brezilya + Florida; ENSO bağı dolaylı"),
 }
 TOPLU = {
-    "emtia_gida":     "IMF gıda endeksi",
-    "emtia_icecek":   "IMF içecek endeksi",
-    "emtia_hammadde": "IMF tarımsal hammadde endeksi",
-    "emtia_yakitsiz": "IMF yakıt dışı emtia endeksi",
-    "emtia_tum":      "IMF tüm emtia endeksi",
+    "emtia_gida":     "Gıda endeksi",
+    "emtia_yaglar":   "Yağlar ve küspeler",
+    "emtia_tahil":    "Tahıllar",
+    "emtia_icecek":   "İçecekler",
+    "emtia_hammadde": "Tarımsal hammadde",
+    "emtia_tarim":    "Tarım (toplam)",
+    "emtia_yakitsiz": "Yakıt dışı emtia",
+    "emtia_metal":    "Metal ve mineraller",
+    "emtia_enerji":   "Enerji",
 }
+# Deflatörsüz sağlamlık: gıda − metal. İki endeks de aynı küresel talep ve
+# dolar döngüsünü taşır; ENSO metalleri arz tarafından vurmaz. Fark, ortak
+# faktör düşünce geriye kalan GIDAYA ÖZGÜ hareketi verir ve hiçbir deflatör
+# varsayımına dayanmaz.
+KONTROL = "emtia_metal"
 ASGARI_EPIZOT = 3      # bunun altında YÖN hakkında hüküm kurulmaz
 GEC_MAKS = 24
 
@@ -226,6 +238,18 @@ def main() -> int:
         print(f"     {d['baslik']:<34}{str(d['fark']):>9}  "
               f"(n_epizot {d['olculen']}, {d['bas']})")
 
+    # ── 1b. DEFLATÖRSÜZ SAĞLAMLIK: gıda − metal
+    if KONTROL in K.columns:
+        gor_emtia = (_yillik(K["emtia_gida"]) - _yillik(K[KONTROL])).dropna()
+        e = epizot_calismasi(gor_emtia, eps)
+        S["gor_emtia"] = e
+        for a in ("olculen", "kosulsuz", "epizot_ortalama", "fark"):
+            S[f"gor_emtia_{a}"] = e.get(a)
+        S["gor_emtia_son"] = _r(gor_emtia.iloc[-1])
+        print(f"   gıda−metal (deflatörsüz): epizot ort. {e.get('epizot_ortalama')} "
+              f"vs koşulsuz {e.get('kosulsuz')} → fark {e.get('fark')} "
+              f"(n_epizot {e['olculen']})")
+
     # ── 3. ABD: Türkiye ile AYNI ölçüt
     abd_y = {k: _yillik(K[k]).dropna() for k in ("abd_tufe", "abd_gida", "abd_cekirdek")
              if k in K.columns}
@@ -268,9 +292,24 @@ def main() -> int:
             print(f"   TR gıda→çekirdek: β={tc['beta']} (R²={tc['r2']}, "
                   f"gecikme {tc['gecikme']} ay, n={tc['n']})")
 
+    # ── 3b. EURO BÖLGESİ: üçüncü ölçek. ECB serileri zaten YILLIK % değişim
+    # olarak geliyor; endeksten türetilmez, olduğu gibi farkı alınır.
+    if "ea_gida_12a" in K.columns and "ea_tufe_12a" in K.columns:
+        ea_gor = (K["ea_gida_12a"] - K["ea_tufe_12a"]).dropna()
+        e = epizot_calismasi(ea_gor, eps)
+        S["ea"] = e
+        for a in ("olculen", "kosulsuz", "epizot_ortalama", "fark", "orneklem_bas"):
+            S[f"ea_{a}"] = e.get(a)
+        S["ea_goreceli_son"] = _r(ea_gor.iloc[-1])
+        S["ea_gida_son"] = _r(K["ea_gida_12a"].dropna().iloc[-1])
+        S["ea_tufe_son"] = _r(K["ea_tufe_12a"].dropna().iloc[-1])
+        print(f"   Euro Bölgesi göreceli gıda: ölçülen epizot {e['olculen']}, "
+              f"epizot ort. {e.get('epizot_ortalama')} vs koşulsuz "
+              f"{e.get('kosulsuz')} → fark {e.get('fark')}")
+
     # ── 4. FED PATİKASI — betimsel, ortalaması ALINMAZ
-    if "fed_faiz" in K.columns:
-        ff = K["fed_faiz"].dropna()
+    if "faiz_abd" in K.columns:
+        ff = K["faiz_abd"].dropna()
         yol = []
         for e in eps:
             if e.get("suruyor"):
@@ -291,6 +330,14 @@ def main() -> int:
         for d in yol:
             print(f"     {d['zirve']}  {d['faiz_zirve']:>6} → {d['faiz_18ay']:>6}  "
                   f"({d['degisim']:+})")
+        # Kıyas noktası: aynı uzunlukta RASTGELE olmayan bir pencere değil,
+        # bütün örneklemdeki 18 aylık değişimlerin ortalaması. Epizot
+        # pencerelerinin "olağandışı" olup olmadığı ancak buna karşı okunur.
+        d18 = (ff.shift(-UFUK) - ff).dropna()
+        if len(d18) > 60:
+            S["fed_kosulsuz_18ay"] = _r(d18.mean())
+            print(f"     koşulsuz 18 aylık değişim ortalaması: "
+                  f"{S['fed_kosulsuz_18ay']:+} puan (n={len(d18)})")
         S["fed_hukum"] = "nedensel_degil"
         S["fed_hukum_metin"] = (
             "Bu sayıların ortalaması ALINMAZ. Dört pencerenin her biri El Niño'yla "

@@ -266,11 +266,15 @@ def _pink_sayfa(xl, sayfa: str) -> pd.DataFrame | None:
     onun üstündeki satırlar arasından EN ÇOK metin taşıyan satır seçilir.
     """
     df = pd.read_excel(xl, sheet_name=sayfa, header=None)
-    ilk = None
-    for i, v in enumerate(df.iloc[:, 0].astype(str)):
-        if len(v) == 7 and v[:4].isdigit() and v[4] == "M" and v[5:].isdigit():
-            ilk = i
-            break
+    if df.empty:
+        return None
+    # Hücreler str'e TEK TEK çevrilir. Series.astype(str) sütunu tek tip
+    # varsayıyor ve karışık tipli sütunda (başlıklarda metin, gövdede sayı)
+    # düşüyordu — keşif koşusu bunu 'Monthly Prices' sayfasında yakaladı.
+    kol0 = [str(x).strip() for x in df.iloc[:, 0].tolist()]
+    ilk = next((i for i, v in enumerate(kol0)
+                if len(v) == 7 and v[:4].isdigit() and v[4].upper() == "M"
+                and v[5:].isdigit()), None)
     if ilk is None or ilk == 0:
         return None
     ust = df.iloc[:ilk]
@@ -280,8 +284,9 @@ def _pink_sayfa(xl, sayfa: str) -> pd.DataFrame | None:
     adlar = ["tarih"] + [_ad_sadelestir(x) for x in df.iloc[bas_i].tolist()[1:]]
     veri = df.iloc[ilk:].copy()
     veri.columns = adlar
-    idx = pd.to_datetime(veri["tarih"].astype(str).str.replace("M", "-", regex=False),
-                         format="%Y-%m", errors="coerce")
+    idx = pd.to_datetime(
+        pd.Series([str(x).strip().replace("M", "-") for x in veri["tarih"].tolist()]),
+        format="%Y-%m", errors="coerce")
     veri = veri.drop(columns=["tarih"])
     veri.index = pd.Index(idx)
     veri = veri[~veri.index.isna()]
