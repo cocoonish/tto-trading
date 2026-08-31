@@ -27,8 +27,10 @@ SITE = "https://cocoonish.github.io"
 # değil). Sınırlar teknik değil editoryal: bölüm başına kırpma + toplam tavan.
 SINIR = 275                 # eski zincir kipinin kalıntısı; _kirp varsayılanı
 TEK_TAVAN = 3800            # tek tweetin toplam üst sınırı (okunurluk)
-YORUM_SINIR = 1700          # anlatı gövdesi (bültenin 'okuması'ndan)
-BEKLENTI_SINIR = 750        # ne_bekleniyor bölümü
+YORUM_SINIR = 1200          # anlatı gövdesi (bültenin 'okuması'ndan)
+GUNDEM_PARCA = 260          # gündem bölümü başına
+GUNDEM_SINIR = 1250         # gündem bloğunun tamamı
+BEKLENTI_SINIR = 600        # ne_bekleniyor bölümü
 GIRIS_SINIR = 700           # teknik giriş bölümü
 
 AYLAR = ["", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz",
@@ -39,6 +41,63 @@ def _duz(metin: str) -> str:
     """HTML → düz metin: etiketler söker, boşluk normalleştirir."""
     m = re.sub(r"<[^>]+>", " ", metin or "")
     return re.sub(r"\s+", " ", m).strip()
+
+
+# Tweet KENDİ BAŞINA durur: siteye link verilmediği gibi oradaki bültene ATIF da
+# yapılmaz (31.08 geri bildirimi). Bültenin kendi metni site bağlamında yazılır —
+# "bu sayfadaki piyasa fotoğrafı", "bu bültenin takip ettiği", "ayrıntısı
+# jeopolitik bölümünde" gibi. Bu izi TAŞIYAN CÜMLE düşürülür; cümleyi yeniden
+# yazmak uydurma olurdu, kırpmak değil.
+SITE_IZLERI = (
+    "bu sayfa", "sayfadaki", "sayfanın", "sayfamız", "sitede", "sitemiz",
+    "bülten",                                # bültende, bu bültenin, bültenimiz
+    "fotoğraf",                              # 'piyasa fotoğrafı' sitedeki tablo
+    "bu bölüm", "bölümdeki", "bölümünde",    # bölümler arası çapraz atıf
+    "panoda", "panosunda", "panosunun",      # rejim / gösterge panosu
+    "tabloda", "tablodaki", "yukarıda", "aşağıda", "buradaki not",
+)
+
+# Cümle sınırı: nokta TEK BAŞINA yetmez. Türkçede sıra sayısı da noktayla
+# yazılır ("12. ayını doldurdu") ve binlik ayracı da noktadır; ham (?<=[.!?])\s+
+# bunları cümle sanıp "ayını doldurdu." gibi PARÇA üretiyordu. İki koşul eklendi:
+# noktadan önce rakam olmayacak, sonrasında büyük harf gelecek.
+_CUMLE = re.compile(r"(?<![0-9])(?<=[.!?])\s+(?=[A-ZÇĞİÖŞÜ\"«(])")
+
+# Bir cümle düşünce ondan SONRAKİ cümle öksüz kalabilir: "İkincisi aynı
+# dosyanın..." ya da "Hafta sonu bu soruya..." — göndergesi silinmiş bir metin
+# tweette anlamsız durur. Öncesi düşmüşse ve cümle ilk sözcüklerinde geriye
+# atıf taşıyorsa o da düşer; zincirleme sürer.
+_ANAFORA = {"bu", "bunu", "bunun", "buna", "bunlar", "bundan", "o", "onu",
+            "onun", "aynı", "ikincisi", "üçüncüsü", "böylece", "dolayısıyla",
+            "ayrıca", "oysa", "buradaki", "yani", "söz"}
+
+
+def _site_disi(metin: str) -> str:
+    """Siteye/bültene atıf yapan cümleleri ve öksüz kalan devamlarını düşürür."""
+    kalan, onceki_dustu = [], False
+    for c in _CUMLE.split(metin or ""):
+        if not c.strip():
+            continue
+        dus = any(iz in c.lower() for iz in SITE_IZLERI)
+        if not dus and onceki_dustu:
+            bas = [w.strip('"\'(),;:.') for w in c.lower().split()[:6]]
+            dus = any(w in _ANAFORA for w in bas)
+        if dus:
+            onceki_dustu = True
+            continue
+        onceki_dustu = False
+        kalan.append(c)
+    return re.sub(r"\s+", " ", " ".join(kalan)).strip()
+
+
+# Gündem katmanı bültende 12 bölüm; tweete haber değeri en yüksek beşi girer.
+GUNDEM_BOLUMLERI = (
+    ("kilit", "Kilit gelişme"),
+    ("tr_makro", "Türkiye makro"),
+    ("tr_politika", "Türkiye politika"),
+    ("global_politika", "Jeopolitik"),
+    ("global_makro", "Küresel makro"),
+)
 
 
 def _kirp(metin: str, sinir: int = SINIR) -> str:
@@ -98,14 +157,31 @@ def bulten_zinciri(b: dict) -> list[str]:
     bültenin 'okuması' (yorum) kullanılır — hesap, piyasanın NEDEN böyle
     hareket ettiğinin tercümanı; ne oldu / neden oldu / ne bekleniyor."""
     haftalik = bool(b.get("haftalik"))
-    baslik = "Haftaya Bakış" if haftalik else "Sabah Bülteni"
+    baslik = "Haftaya Bakış" if haftalik else "Sabah Notu"
     tarih = _tr_tarih(b["tarih"])
 
     oz = b.get("ozet") or {}
-    anlati = _duz(b.get("yorum") or "") or _duz(oz.get("ne_oldu") or "")
+    anlati = _site_disi(_duz(b.get("yorum") or "")) or _site_disi(_duz(oz.get("ne_oldu") or ""))
     if not anlati:
         raise SystemExit("bültenin okuması da özeti de boş — tweet kurulamaz")
     bolumler = [f"{baslik} — {tarih}", _kirp(anlati, YORUM_SINIR)]
+
+    # GÜNDEM. Bültenin en zengin katmanı tweete hiç girmiyordu (31.08 geri
+    # bildirimi: "daha çok gündem verilmeli"). Her bölümün girişi alınır —
+    # özetlenmez, kırpılır; özetlemek uydurma olurdu.
+    gundem = b.get("gundem") or {}
+    satirlar, toplam = [], 0
+    for anahtar, etiket in GUNDEM_BOLUMLERI:
+        parca = _site_disi(_duz(gundem.get(anahtar) or ""))
+        if not parca:
+            continue
+        satir = f"{etiket}: {_kirp(parca, GUNDEM_PARCA)}"
+        if toplam + len(satir) > GUNDEM_SINIR:
+            break
+        satirlar.append(satir)
+        toplam += len(satir) + 1
+    if satirlar:
+        bolumler.append("Gündem\n" + "\n".join(satirlar))
 
     em = (b.get("piyasa") or {}).get("en_cok_hareket") or {}
     kip = em.get("sigma_kip") or ("haftalik" if haftalik else "gunluk")
@@ -126,7 +202,7 @@ def bulten_zinciri(b: dict) -> list[str]:
     if parcalar:
         bolumler.append("Pano: " + " · ".join(parcalar))
 
-    ne_bek = _duz(oz.get("ne_bekleniyor") or "")
+    ne_bek = _site_disi(_duz(oz.get("ne_bekleniyor") or ""))
     if ne_bek:
         etiket = "Önümüzdeki hafta: " if haftalik else "Beklenen: "
         # Metin zaten etiketle başlıyorsa ikilenmesin ("Önümüzdeki hafta:

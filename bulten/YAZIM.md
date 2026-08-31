@@ -277,6 +277,20 @@ sürücü diye göstermek en kötü seçenek. (2026-08-17 haftasında ABD Hazine
 tahvil geri alımı USD ve faizlerdeki asıl sürücüydü ve bülten bunu tamamen
 atlamıştı; `onem_puani` ve ABD Hazine kaynağı bu yüzden eklendi.)
 
+**Metin kendi ayakları üstünde dursun.** Yazdığın `yorum` ve `gundem`
+bölümleri yalnız sitede okunmuyor: aynı metin X'e tek gönderi olarak da çıkıyor
+ve orada ne sayfa, ne tablo, ne de başka bir bölüm var. Bu yüzden sayfa
+mobilyasına atıf yapma — "bu sayfadaki piyasa fotoğrafında", "yukarıdaki pano",
+"ayrıntısı jeopolitik bölümünde", "bu bültenin takip ettiği" gibi ifadeler
+kullanma. Söylemek istediğin şeyi kendi cümlesi içinde tamamla: "fotoğrafta
+yok" yerine "51 satırın tamamı 28 Ağustos kapanışına ait", "jeopolitik
+bölümünde" yerine gelişmeyi orada bir cümleyle söyle.
+
+Sigorta araçta: `tweet/uret.py` bu izleri taşıyan CÜMLEYİ düşürür (ve
+göndergesi silindiği için öksüz kalan devamını da). Yani kural çiğnendiğinde
+tweet bozulmaz — ama SENİN cümlen kaybolur ve okur onu X'te hiç görmez.
+Metni baştan bağlamsız yazmak, cümleni kurtarmanın tek yolu.
+
 **Kod dili yasak.** Okuyucuya hiçbir şey söylemeyen geliştirici dili sayfaya
 girmez: dosya adı, alan adı, "hat koştu", "eşikler ayar.py içinde" gibi.
 Denetim bunu ölçer ve engeller.

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import re
 import subprocess
 import sys
 import tempfile
@@ -40,6 +41,18 @@ SAHTE_BULTEN = {
         "haftalik": [{"ad": "BIST Bankacılık", "deger": 5.98, "birim": "%"},
                      {"ad": "Brent", "deger": -5.42, "birim": "%"}]}},
     "gostergeler": [{"ad": "USD/TRY", "metin": "48,07", "fark_metin": "+0,19"}],
+    # Gündem katmanı TUZAKLI: kilit bölümünün ilk cümlesi siteye atıf yapıyor,
+    # ikincisi göndergesi olarak ona yaslanıyor (ikisi de düşmeli), üçüncüsü
+    # ayakta kalmalı. tr_makro ise sıra sayısı taşıyor: cümle bölücü "12."de
+    # yanılırsa "ayını doldurdu." diye PARÇA üretir.
+    "gundem": {
+        "kilit": "<p>Ayrıntısı jeopolitik bölümünde duruyor. "
+                 "Bu gelişme tam da bu yüzden önemli. "
+                 "Hazine Bakanı yeni yaptırım planını açıkladı.</p>",
+        "tr_makro": "<p>Sanayi üretimi 12. ayını doldurdu. "
+                    "Bugün 10:00'da büyüme verisi geliyor.</p>",
+        "global_politika": "<p>Hafta sonunun ağırlık merkezi Hürmüz'dü.</p>",
+    },
 }
 
 SAHTE_TEKNIK = {
@@ -84,6 +97,34 @@ def _zincirler():
     assert "çift dip" in zt[0], "çift dip girmedi"
     assert "yatırım tavsiyesi değildir" in zt[0], "sorumluluk notu yok"
     assert "BIST 100" in zt[0] and "ABD 10Y" in zt[0], "kısa adlar kullanılmadı"
+
+
+def _site_atfi_ve_gundem():
+    """31.08 geri bildirimi: tweette siteye/bültene ATIF olmayacak ve gündem
+    girecek. Sigorta araçta — kural kaybolursa bu sınama düşer."""
+    t = uret.bulten_zinciri(SAHTE_BULTEN)[0]
+
+    # (a) hiçbir site izi kalmadı
+    for iz in uret.SITE_IZLERI:
+        assert iz not in t.lower(), f"site atfı sızdı: {iz!r}"
+
+    # (b) gündem girdi ve etiketlendi
+    assert "Gündem" in t, "gündem bloğu yok"
+    assert "Kilit gelişme:" in t and "Türkiye makro:" in t, "gündem etiketi yok"
+    assert "Hazine Bakanı yeni yaptırım" in t, "temiz gündem cümlesi düştü"
+
+    # (c) atıf cümlesi VE ona yaslanan öksüz devamı düştü
+    assert "bölümünde duruyor" not in t, "atıf cümlesi düşmedi"
+    assert "tam da bu yüzden önemli" not in t, "öksüz devam düşmedi"
+
+    # (d) sıra sayısı cümle sanılmadı (parça üretilmedi)
+    assert "12. ayını doldurdu" in t, "sıra sayısında cümle bölücü yanıldı"
+    assert not re.search(r"(^|\n)[a-zçğıöşü]", t), "küçük harfle başlayan parça"
+
+    # (e) günlük başlık bülteni adıyla anmıyor
+    g = uret.bulten_zinciri({**SAHTE_BULTEN, "haftalik": False})[0]
+    assert g.startswith("Sabah Notu"), f"günlük başlık: {g[:30]!r}"
+    assert "Bülten" not in g, "başlık bülteni adıyla anıyor"
 
 
 def _kirpma():
@@ -164,6 +205,8 @@ def _jeton_kasasi():
 def main() -> int:
     print("tweet duman sınaması:")
     sina("zincirler: uzunluk, HTML sızıntısı, link, yapı bayrağı", _zincirler)
+    sina("site atfı yok · gündem girdi · öksüz cümle düştü",
+         _site_atfi_ve_gundem)
     sina("kırpma cümle sınırında", _kirpma)
     sina("gonder: anahtarsız yeşil, defter mükerrerliği, bayat koruması",
          _gonder_sigortalari)
