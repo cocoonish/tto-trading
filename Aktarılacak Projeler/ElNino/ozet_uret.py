@@ -29,6 +29,17 @@ def main() -> int:
         duz["kuresel_ay"] = G["_ay"]
         # Kırılımın tepesi ve dibi metinde adıyla anılıyor; listeyi MDX'e
         # taşımak yerine iki ucu alan olarak veriyoruz.
+        # Ürün kırılımının HER SATIRI ayrı alan olur: yazıdaki tablo böylece
+        # canlı kalır. Liste olarak bırakılsaydı MDX'e elle kopyalanacaktı ve
+        # bir sonraki koşuda sessizce eskirdi.
+        for d in (G.get("kirilim") or []):
+            for alan, deg in (("fark", d.get("fark")),
+                              ("tepe", d.get("son_epizot_tepe")),
+                              ("n", d.get("olculen")),
+                              ("kosulsuz", d.get("kosulsuz")),
+                              ("epizot", d.get("epizot_ortalama"))):
+                if deg is not None:
+                    duz[f"kir_{d['ad']}_{alan}"] = deg
         kir = [d for d in (G.get("kirilim") or [])
                if d.get("fark") is not None and not d.get("toplu")]
         if kir:
@@ -36,6 +47,17 @@ def main() -> int:
             duz["kirilim_tepe_ad"] = en["baslik"]; duz["kirilim_tepe_fark"] = en["fark"]
             duz["kirilim_dip_ad"] = dip["baslik"]; duz["kirilim_dip_fark"] = dip["fark"]
         duz["fed_olculen"] = len(G.get("fed_yol") or [])
+        # ANAHTAR BAŞINA SAAT. Emtia serisi BLS/BIS'ten aylar geride kalabilir
+        # (Pink Sheet dosyası aylık ve adresi değişiyor). Tek bir hat tarihi,
+        # donmuş bir emtia ölçümünü taze gösterirdi; emtiadan türeyen her
+        # anahtara kendi saati konur ve <Deger> gecikmeyi kendisi işaretler.
+        es = G.get("emtia_son")
+        if es:
+            damga = f"01.{es[5:7]}.{es[:4]}"
+            for k in list(duz):
+                if k.startswith(("kur_", "gor_emtia_", "gecis_abd", "gecis_tr",
+                                 "emtia_", "kirilim_", "reel_gida", "nominal_gida")):
+                    duz.setdefault(f"{k}_tarih", damga)
     else:
         print("  ! kuresel.json yok — özet yalnız Türkiye ölçümünü taşıyor")
 

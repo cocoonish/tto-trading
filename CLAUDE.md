@@ -174,6 +174,32 @@ düzelttim mi" değil, "bu kusur başka nerede olabilir"dir. Denetimin
 `revizyon` ölçütü bunu artık ölçüyor: daha önce yayımladığımız bir sayı
 sonradan değiştiyse adıyla listelenir, yani kusur göze çarpmasa da görünür.
 
+**Kurucu ilke — dış kaynak önce YOKLANIR, sonra kurulur; adresi sabitlenmez,
+çözülür.** El Niño hattının küresel kanadı FRED üzerine kurulacaktı. İlk keşif
+koşusu 29 seriyi 60 saniyelik zaman aşımıyla denedi ve 20 dakikalık iş bütçesi
+tek satır öğrenmeden doldu: FRED bu koşuculardan ERİŞİLEMİYOR (üç ucu da zaman
+aşımı), IMF SDMX'in DNS'i çözülmüyor, IMF datamapper 403 veriyor. Doğru sıra
+şudur: önce KAYNAK yoklanır (her aday 8 saniye, bir dakikada biter), sonra açık
+kapının ardındaki SERİLER ölçülür, sonra hat kurulur. Ölçüm hattı zayıflatmadı,
+güçlendirdi: açık çıkan kapılar (Dünya Bankası Pink Sheet, BLS, BIS, ECB)
+FRED'in vereceğinden fazlasını verdi — örneklem 1980 yerine 1960'ta başlıyor ve
+karşılaştırmaya iki ekonomi giriyor.
+
+İkinci yarısı daha sinsi: Pink Sheet'in adresi her güncellemede değişen bir
+sağlama taşıyor. Sabit adres yazıldığında koşu YEŞİL bitti, dosya indi,
+ayrıştırıldı — ve emtia serisi yedi ay geride kaldı. Bir dış dosyanın adresi
+sabitlenmez, yayımcının sayfasından çözülür; sabit adresler yalnız yedektir. Ve
+her serinin KENDİ yaşı ölçülüp yazılır: birleşik tablonun son ayı başka bir
+kaynaktan gelebiliyor ve donmuş seriyi taze gösteriyor.
+
+Üçüncüsü: bir dosyanın başlık düzeni sayfadan sayfaya değişebilir (Pink
+Sheet'te bir sayfada üstte kategori altta alt kalem, diğerinde üstte ad altta
+BİRİM). "En doğru başlık satırını seç" sezgisi sırayla iki tarafı da ısırdı.
+Doğrusu satır SEÇMEMEK: her sütunun bütün başlık hücreleri aday olarak saklanır,
+eşleme herhangi biriyle tutar. Ve eşleme tutmazsa dosyanın GERÇEK sütun adları
+künyeye yazılır — "bulunamadı" demek ama neyin bulunabileceğini söylememek, her
+düzeltme için ayrı bir keşif koşusu demekti.
+
 **Kurucu ilke — bir hattın kipi, ölçüsünün ritmine göre bölünür.** FX hattı
 tek bir "tazele" düğmesi değildi: anlık endeks canlı haber akışından gelir ve
 HER GÜN ilerleyebilir, rejim/korelasyon panelleri GDELT haftalık arşivinden
