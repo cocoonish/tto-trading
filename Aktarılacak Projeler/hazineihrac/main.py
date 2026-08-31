@@ -2285,6 +2285,33 @@ class TreasuryAuctionScraper:
 # =====================
 # ANA İŞ AKIŞI
 # =====================
+def _takvimi_arsivle(planned_df, scraper) -> None:
+    """Yürürlükteki takvimi sürümleyerek sakla.
+
+    Ayların HEDEF tutarı `.strategy_history.json` ile zaten sürümleniyordu;
+    TAKVİMİN KENDİSİ (hangi senet, hangi vade, hangi gün) sürümlenmiyordu. Yeni
+    doküman geldiğinde eski takvim üzerine yazılıyor ve "bu strateji neyi
+    değiştirdi" sorusu ancak git geçmişi kazınarak cevaplanabiliyordu — bir
+    ölçüm hattı git geçmişine dayanamaz.
+
+    Dosya adı yürürlükteki stratejinin kaynağından türetilir; aynı doküman için
+    yeniden yazmak zararsızdır (içerik tazelenir, sürüm sayısı artmaz).
+    """
+    try:
+        arsiv = os.path.join(os.path.dirname(os.path.abspath(__file__)), "takvim_arsiv")
+        os.makedirs(arsiv, exist_ok=True)
+        kaynaklar = [v.get("source", "") for v in (scraper.strategy_history or {}).values()
+                     if isinstance(v, dict)]
+        ad = max(set(kaynaklar), key=kaynaklar.count) if kaynaklar else "bilinmeyen"
+        ad = re.sub(r"[^0-9A-Za-zÇĞİÖŞÜçğıöşü ]+", "", ad).strip().replace(" ", "-")[:60]
+        yol = os.path.join(arsiv, f"{pd.Timestamp.today():%Y-%m-%d}_{ad or 'takvim'}.csv")
+        planned_df.to_csv(yol, index=False, encoding="utf-8-sig")
+        logger.info(f"Takvim arşivlendi: {os.path.basename(yol)}")
+    except Exception as e:
+        # Arşivleme bir KOLAYLIKTIR; başarısız olması hattı düşürmemeli.
+        logger.warning(f"Takvim arşivlenemedi: {e}")
+
+
 def main():
     """Ana fonksiyon - Tüm iş akışını yönetir"""
     try:
@@ -2385,6 +2412,7 @@ def main():
                 wam_df.to_csv(WADE_CSV, index=False, encoding='utf-8-sig')
             if not planned_df.empty:
                 planned_df.to_csv(PLANNED_CSV, index=False, encoding='utf-8-sig')
+                _takvimi_arsivle(planned_df, scraper)
 
             # Backtest: geçmiş ihalelerde tahmin vs gerçek (yöntemin isabeti)
             backtest_df = scraper.backtest_forecasts(df, comparison_df)

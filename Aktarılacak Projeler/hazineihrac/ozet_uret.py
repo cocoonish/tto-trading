@@ -161,6 +161,22 @@ plan_aylik["plan_revizyon_metin"] = " \u00b7 ".join(_rev) or "önceki doküman e
 # ikisi de kötü, ikincisi daha kötü çünkü yanlışlığı görünmez. Bu yüzden
 # alan ancak kur serisi en az bir yılı kapsıyorsa yazılır; kapsamıyorsa
 # yazılmaz ve sayfa sınavı eksik anahtarı bağırmaya devam eder.
+def _vade_proj() -> dict:
+    """vade_proj.py'nin ölçtüğü vade/maliyet/talep anahtarları.
+
+    Ayrı dosyadan okunuyor çünkü o modül karşı olgu için TAKVİM ARŞİVİNİ de
+    açıyor ve pano hattının geri kalanı bunu bilmek zorunda değil. Dosya yoksa
+    sessizce boş dönülür — ama sayfa o anahtarları çağırıyorsa sayfa sınavı
+    eksikliği bağırır; yani sessizlik denetimsiz kalmıyor.
+    """
+    yol = os.path.join(BASE, "vade_proj.json")
+    if not os.path.exists(yol):
+        print("  ! vade_proj.json yok — vade projeksiyonu anahtarları yazılmadı")
+        return {}
+    d = (json.load(open(yol, encoding="utf-8")) or {}).get("ozet") or {}
+    return {k: v for k, v in d.items() if not k.startswith("_")}
+
+
 usd = {}
 _go = os.path.join(BASE, "grafik_ozet.json")
 if os.path.exists(_go):
@@ -209,6 +225,7 @@ ozet = {
     **paylar,
     **plan_aylik,
     **usd,
+    **_vade_proj(),
 }
 yol = os.path.join(BASE, "ozet.json")
 json.dump(ozet, open(yol, "w"), ensure_ascii=False, indent=1)

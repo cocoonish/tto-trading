@@ -235,11 +235,14 @@ HATLAR: list[Hat] = [
         # gitmiyordu. HTML'ler kopyalandığı için hat çalışmış görünüyor, sayfanın
         # sayıları ise bir önceki tam kipte donuyordu. grafik_yenile.py aynı iki
         # grafiği depodaki CSV'lerden ağa çıkmadan üretir.
-        ["grafik_yenile.py", "web_cikti_tahmin.py", "tablo_uret.py", "ozet_uret.py"],
-        ["main.py", "web_cikti_tahmin.py", "tablo_uret.py", "ozet_uret.py"],
+        ["grafik_yenile.py", "web_cikti_tahmin.py", "tablo_uret.py",
+         "vade_proj.py", "ozet_uret.py"],
+        ["main.py", "web_cikti_tahmin.py", "tablo_uret.py",
+         "vade_proj.py", "ozet_uret.py"],
         {f"{f}.html": f"{f}.html" for f in ["planlanan_ihraclar", "tahmin_dogrulama", "tahmin_aylik",
          "strateji_revizyon", "faiz_gelisimi", "fiyat_araligi", "ihrac_hacmi", "ihrac_tempo", "ihrac_usd",
-         "talep_analizi", "vade_dagilimi", "hedef_gerceklesme", "vade_analizi"]}
+         "talep_analizi", "vade_dagilimi", "hedef_gerceklesme", "vade_analizi",
+         "vade_patika", "vade_kompozisyon", "vade_maliyet", "vade_talep"]}
         | {"tablolar.json": "tablolar.json"},
         "tam kip: Hazine sitesini tarar (scraper), ilk koşu 10-20 dk",
         panel=["dashboard.py"]),            # Dash → http://127.0.0.1:8050
