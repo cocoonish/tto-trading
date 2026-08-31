@@ -227,7 +227,15 @@ HATLAR: list[Hat] = [
         {"charts/cumulative_chart.html": "kumulatif.html", "charts/ytd_dibs.html": "ytd_dibs.html",
          "charts/ytd_hisse.html": "ytd_hisse.html", "charts/ytd_toplam.html": "ytd_toplam.html"}),
     Hat("hazine", "Hazine İhraç", P / "hazineihrac", "hazine-ihrac",
-        ["web_cikti_tahmin.py", "tablo_uret.py", "ozet_uret.py"],
+        # grafik_yenile.py HAFİF listede olmak ZORUNDA: hedef_gerceklesme.html ve
+        # vade_analizi.html yalnız main.py (tam kip) tarafından üretiliyor ve ikisi
+        # de .gitignore'da. Yani taze bir checkout'ta hafif kip o iki dosyayı hiç
+        # görmüyor, siteye kopyalama "çıktı yok" diye YARIDA kesiliyor ve dict
+        # sırasında onlardan SONRA gelen tablolar.json ile ozet.json siteye hiç
+        # gitmiyordu. HTML'ler kopyalandığı için hat çalışmış görünüyor, sayfanın
+        # sayıları ise bir önceki tam kipte donuyordu. grafik_yenile.py aynı iki
+        # grafiği depodaki CSV'lerden ağa çıkmadan üretir.
+        ["grafik_yenile.py", "web_cikti_tahmin.py", "tablo_uret.py", "ozet_uret.py"],
         ["main.py", "web_cikti_tahmin.py", "tablo_uret.py", "ozet_uret.py"],
         {f"{f}.html": f"{f}.html" for f in ["planlanan_ihraclar", "tahmin_dogrulama", "tahmin_aylik",
          "strateji_revizyon", "faiz_gelisimi", "fiyat_araligi", "ihrac_hacmi", "ihrac_tempo", "ihrac_usd",
