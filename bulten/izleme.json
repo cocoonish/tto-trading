@@ -1,6 +1,6 @@
 {
  "_aciklama": "İZLEME DEFTERİ — bültenin verdiği sözlerin kaydı. Bülten 'şunu izleyeceğiz', 'yarın belli olacak', 'sebebi anlaşılmıyor' dediği an buraya bir kayıt düşülür. Her koşuda yazı katmanı önce bu defteri açar: vadesi gelen ya da gelişme olan her kayıt için bültende doğal bir yerde hesap verilir — 'dün şuna bakacağız demiştik, işte olan bu' tonunda, madde listesi olarak değil. Cevabı bulunan kayıt kapatılır (durum: kapandı + sonuç), gelişme olmayan kayıt açık kalır ve zorla anılmaz. Bu defter bülteni birbirini takip eden bir yazı dizisi yapar; yazarı kısıtlamak için değil, unutmasın diye vardır.",
- "_son_guncelleme": "2026-08-30",
+ "_son_guncelleme": "2026-08-31",
  "kayitlar": [
   {
    "konu": "RBOB benzinin tek günde %10,59 düşüşünün sebebi",
@@ -69,7 +69,7 @@
    "durum": "acik",
    "soz": "'Büyüme verisi faiz indirim patikasının hızına dair tartışmanın merkezinde; beklentinin üzerinde büyüme indirim beklentilerini erteler' dedik. Günlük bülten %37 faiz + %25,9 kredi büyümesinin ürettiği yavaşlamanın ölçüsü olacağını ekledi.",
    "ne_bakilacak": "31 Ağustos 10:00 GSYH (2025 + II. çeyrek) ve temmuz işgücü; DİBS kısa ucunun tepkisi.",
-   "vade": "2026-08-31",
+   "vade": "2026-09-01",
    "sonuc": ""
   },
   {
@@ -165,11 +165,12 @@
   {
    "konu": "VIX %14 konumdayken Warsh'ın Jackson Hole konuşması",
    "acilis": "2026-08-25",
-   "durum": "acik",
+   "durum": "kapandi",
    "soz": "Bülten 'korunma ucuz, haftanın en büyük olayı henüz yaşanmadı' dedi: VIX %4,76 sıçramasına rağmen 52 haftalık aralığın %14'ünde, MOVE %31'inde. Şahin çerçeve altın/gümüş/bitcoin'i birden vurur, tolerans sinyali tersini yapar.",
    "ne_bakilacak": "28 Ağustos Jackson Hole konuşması; sonrasında VIX, DXY, altın ve ABD 10 yıllık reel getirisi.",
    "vade": "2026-09-01",
-   "sonuc": ""
+   "sonuc": "Konuşma 28 Ağustos'ta yapıldı ve sözün ana kanadı tuttu: şahin çerçeve üç varlığı da aynı gün vurdu — altın %2,85, gümüş %3,51, bitcoin %3,02 düştü (28.08 kapanışı). Dolar endeksi aynı gün %0,54 yükseldi ve bu, endeksin kendi günlük oynaklığına göre 1,9 standart sapma; ABD 3 aylık bono getirisi 5,2 baz puan artışla 3,0 standart sapmalık günün en olağandışı hareketi oldu, 5 yıllık 8,5 baz puanla 52 haftalık zirvesine çıktı. Sözün ikinci kanadı — 'korunma ucuz' — beklenmedik biçimde daha da doğrulandı: VIX yükselmedi, %0,55 GERİLEYEREK 14,43'e, 52 haftalık aralığın %5'ine indi. Yani artırım tartışması hisse korunmasını pahalılaştırmadı; fatura tamamen faiz ve metal tarafına kesildi. Bu ayrışmanın kendisi 28.08'de açılan ayrı bir kayıtta izlenmeye devam ediyor.",
+   "isabet": "tuttu"
   },
   {
    "konu": "Rafineri marjı ölçüsünün vade geçişinden arındırılması",
@@ -226,6 +227,26 @@
    "soz": "Haftalık bülten, Fed başkanının şahin çerçevesine ve eylül toplantısının yazı turaya dönmesine rağmen korunmanın ucuzlamasını haftanın en açık çelişkisi saydı: VIX haftalık %4,63 gerileyerek 14,43'e, 52 haftalık aralığın %5'ine indi; tahvil oynaklığı ölçüsü 70,97 ile aralığın %26'sında. Bu konumda 4 Eylül istihdam ve 11 Eylül enflasyon verilerinin asimetrik risk taşıdığını yazdık — yukarı yönlü bir sürprizde fiyatlanacak oynaklık çok, satılacak oynaklık az.",
    "ne_bakilacak": "4 Eylül tarım dışı istihdam ve 11 Eylül ABD enflasyonu sonrasında VIX'in 52 haftalık aralıktaki konumu ve tahvil oynaklığı ölçüsünün yönü.",
    "vade": "2026-09-14",
+   "sonuc": "",
+   "isabet": ""
+  },
+  {
+   "konu": "Hürmüz'de çatışmanın yeniden alevlenmesi ve enerji risk primi",
+   "acilis": "2026-08-31",
+   "durum": "acik",
+   "soz": "Hafta sonu ABD ile İran karşılıklı saldırılara döndü; Centcom'un İran limanlarına yönelik ablukasında 30 Ağustos itibarıyla 83 ticari gemi yön değiştirdi, üçü devre dışı bırakıldı, ikisine çıkıldı ve boğazdan geçen emtia gemisi trafiği günde beş civarına indi. Ham petrol pazartesi sabahı %2'nin üzerinde yükseldi. Bültenin piyasa fotoğrafı 28 Ağustos kapanışına ait olduğu için bu hareketi HENÜZ İÇERMİYOR: fotoğraftaki Brent 89,31 dolar cuma kapanışıdır. Diyoruz ki jeopolitik primin geri gelmesi, Türkiye'nin enflasyon patikasında anketin de bizim modelimizin de hesaba katmadığı tek dışsal değişken — temmuzda net enerji ithalatı 4,5 milyar dolarla dış ticaret açığının %61'iydi.",
+   "ne_bakilacak": "Brent'in 90 doların üstünde kaç seans kalıcılaştığı; distilat crack'inin 99,58 dolardan yukarı mı aşağı mı gittiği; boğaz trafiğinin normale dönüp dönmediği. Fiyatlamanın Türkiye tarafındaki karşılığı: 3 Eylül TÜFE'sinin ulaştırma ve konut kalemleri ile 2 yıllık başabaş enflasyon.",
+   "vade": "2026-09-03",
+   "sonuc": "",
+   "isabet": ""
+  },
+  {
+   "konu": "İki yıllık başabaş enflasyonun bir günde 43 baz puan açılması",
+   "acilis": "2026-08-31",
+   "durum": "acik",
+   "soz": "28 Ağustos'ta DİBS iki yıllık spot getirisi 39,51'den 39,97'ye, 46 baz puan yükseldi ve satışın TAMAMI enflasyon tazminatıydı: iki yıllık başabaş enflasyon 28,97'den 29,40'a çıkarken iki yıllık reel getiri 8,17'de kılını kıpırdatmadı. Aynı gün beş yıllık nokta 84 baz puan GERİLEDİ. Diyoruz ki bu, politikanın sıkılığının değil o sıkılığın sonucuna duyulan güvenin fiyatlanmasıdır ve sınavı perşembe günkü ağustos TÜFE'sidir.",
+   "ne_bakilacak": "3 Eylül 10:00 ağustos TÜFE'si sonrası iki yıllık başabaş enflasyonun yönü. Anketin 12 ay sonrası beklentisi %23,69 iken başabaşın %29,40'ta durması 8,57 puanlık bir risk primi demek; verinin ankete yakın çıkması primi daraltmalı, modelimizin momentum senaryosuna (%33,97) yakın çıkması genişletmeli.",
+   "vade": "2026-09-03",
    "sonuc": "",
    "isabet": ""
   }
