@@ -206,6 +206,31 @@ eşleme herhangi biriyle tutar. Ve eşleme tutmazsa dosyanın GERÇEK sütun adl
 künyeye yazılır — "bulunamadı" demek ama neyin bulunabileceğini söylememek, her
 düzeltme için ayrı bir keşif koşusu demekti.
 
+**Kurucu ilke — "veri geldi" ile "veri TAM geldi" aynı şey değildir.** Bir
+kaynak kırpmayı söylemez. yfinance `USDTRY=X` bu koşuculardan altı aylık ve
+seviyesi yıllar geride bir seri döndürüyordu; grafik çizildi, koşu yeşil bitti,
+dolar bazlı ihraç hacmi aylarca yanlış bir kurla bölündü. Kaynak EVDS'e
+çevrilince aynı kusur biçim değiştirip geri geldi: 2000–2026 tek istekte
+sorulunca EVDS yanıtı sessizce kırpıyor — 200 dönüyor, seri kısa geliyor. Kural:
+uzun aralık PARÇALI sorulur, gelen serinin KAPSAMI ölçülür ve kapsam çıktının
+ihtiyacına yetmiyorsa çıktı üretilmez, üstelik bayat dosyası SİLİNİR.
+
+Aynı sabahın üçüncü kusuru daha sinsiydi: `ozet_uret.py`, `grafik_ozet.json`'u
+okuyordu ve o dosyayı **yazan kimse yoktu** — depodaki sürüm elle koşulmuş bir
+günden kalmıştı. Ölü bir bağımlılık kırık olandan tehlikelidir: dosya vardır,
+okunur, hata vermez, yalnızca yaşlanır. Bir dosya okunuyorsa onu üreten adım
+hattın adım listesinde GÖRÜNMELİDİR.
+
+**Kurucu ilke — kopya sözleşmesi bir bütündür; SIRA kusuru gizler.** Hattın
+siteye kopyalanacak çıktı listesi bir sözleşmedir ve eksik bir dosya kopyalamayı
+yarıda keser. Hazine hattının iki grafiği yalnız tam kipte üretiliyor ve
+`.gitignore`'da: hafif kip onları göremeyince kopyalama tam o noktada duruyordu.
+Kusuru görünmez yapan şey sözlük sırasıydı — o dosyadan ÖNCE gelen on bir HTML
+siteye gidiyor, SONRA gelen `tablolar.json` ile `ozet.json` gitmiyordu. Yani
+grafikler tazeleniyor, sayfa metnindeki sayılar donuyordu ve ikisi de aynı yeşil
+koşunun içinde oluyordu. Bir kipin üretemediği çıktı, o kipin kopya
+sözleşmesinde bulunmamalı ya da o kip onu üretmelidir.
+
 **Kurucu ilke — bir hattın kipi, ölçüsünün ritmine göre bölünür.** FX hattı
 tek bir "tazele" düğmesi değildi: anlık endeks canlı haber akışından gelir ve
 HER GÜN ilerleyebilir, rejim/korelasyon panelleri GDELT haftalık arşivinden
