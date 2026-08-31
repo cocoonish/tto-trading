@@ -87,6 +87,15 @@ def main() -> int:
     # sonra ilgilenilen avuç dolusu gruba inmek gerekiyor ve tam döküm log
     # kuyruğuna sığmıyor.
     istenen = {g.strip() for g in (sys.argv[1] if len(sys.argv) > 1 else "").split(",") if g.strip()}
+    if istenen == {"dizin"}:
+        # Yalnız dizin: hangi grupların olduğunu görmek için ayrıntı gereksiz
+        # ve log kuyruğunu boğuyor.
+        print("\n" + "═" * 78)
+        print("DİZİN — canlı GSYH grupları")
+        print("═" * 78)
+        for kod, ad, frek, bas, bit in sorted(canli):
+            print(f"{kod:<22} {frek:<10} {bas[:10]}→{bit[:10]}  {ad[:64]}")
+        return 0
     if istenen:
         canli = [k for k in canli if k[0] in istenen]
         print(f"   ARGÜMANLA DARALTILDI → {len(canli)} grup: "
