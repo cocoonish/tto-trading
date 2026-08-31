@@ -1438,7 +1438,16 @@ class TreasuryAuctionScraper:
             # Türkçe İ.lower() birleşik nokta (U+0307) ürettiğinden onu temizle
             yontem_fold = item['yontem'].lower().replace('̇', '').replace('ı', 'i')
             is_auction = 'ihale' in yontem_fold
-            yeniden = 'yeniden' in yontem_fold
+            # ÜÇ DEĞERLİ: Hazine takvimde ihracın ilk mi yoksa yeniden mi olduğunu
+            # AÇIKÇA yazıyor. True/False'ın yanına None gerekiyor, çünkü ikisini de
+            # söylemeyen bir yöntem metni için "ilk ihraç" varsaymak, olmayan bir
+            # bilgiyi varmış gibi kullanmak olurdu.
+            if 'yeniden' in yontem_fold:
+                yeniden = True
+            elif 'ilk' in yontem_fold:
+                yeniden = False
+            else:
+                yeniden = None
 
             forecast = self._forecast_one_issuance(item, hist, is_auction, yeniden)
             rows.append({
@@ -1499,8 +1508,10 @@ class TreasuryAuctionScraper:
                                is_auction: bool, yeniden: bool) -> Dict:
         """Tek bir planlı ihraç için geçmişe dayalı ham tahmin üretir.
 
-        - Yeniden ihraç: aynı tahvil (İtfa Tarihi eşleşmesi) geçmişinden.
-        - İlk ihraç: aynı senet tipi + benzer vadeli son ihalelerden.
+        - Yeniden ihraç: aynı tahvil (İtfa Tarihi + senet TÜRÜ eşleşmesi) geçmişinden.
+        - İlk ihraç: aynı senet tipi + benzer vadeli son ihalelerden. Hazine'nin
+          takvimde yazdığı 'İlk ihraç' bilgisi burada BAĞLAYICIDIR: ilk ihracın
+          tanımı gereği aynı tahvilin geçmişi yoktur.
         - Doğrudan satış (kira sertifikası/altın/USD): ihale verisi yok → tahmin yok.
 
         NOT: Buradaki tutar 'geçmiş ortalama'dır; strateji hedefine ölçekleme
@@ -1525,7 +1536,7 @@ class TreasuryAuctionScraper:
         target_years = float(ym.group(1)) if ym else (float(mm.group(1)) / 12 if mm else None)
 
         res = self._forecast_from_comparables(item['senet_tanimi'], item['itfa_tarihi'],
-                                              target_years, hist)
+                                              target_years, hist, yeniden=yeniden)
         if res is None:
             empty['Kıyas Bazı'] = 'Kıyas verisi yok'
             return empty
@@ -1539,17 +1550,53 @@ class TreasuryAuctionScraper:
 
     @staticmethod
     def _forecast_from_comparables(senet_tanimi: str, itfa_tarihi: str,
-                                   target_years: Optional[float], hist: pd.DataFrame) -> Optional[Dict]:
+                                   target_years: Optional[float], hist: pd.DataFrame,
+                                   yeniden: Optional[bool] = None,
+                                   isin: Optional[str] = None) -> Optional[Dict]:
         """Geçmiş kıyas ihalelerden ham gerçekleşme + bid-to-cover üretir.
 
-        Önce aynı tahvil (İtfa Tarihi eşleşmesi = yeniden ihraç), yoksa aynı tip +
-        benzer vadeli son ihaleler. Hem ileriye dönük tahmin hem backtest bunu kullanır.
+        Kıyas sırası: aynı tahvil (backtest'te ISIN, planda itfa+tür eşleşmesi),
+        yoksa aynı tip + benzer vadeli son ihaleler. Hem ileriye dönük tahmin hem
+        backtest bunu kullanır.
+
+        "AYNI TAHVİL" ÜÇ KOŞULLUDUR — üçü de kusurdan sonra kondu:
+
+        (1) İtfa tarihi eşleşmesi TEK BAŞINA tahvil kimliği DEĞİLDİR. Hazine aynı
+            itfa gününe farklı türde senet ihraç ediyor: 13.09.2028 itfalı planlı
+            Sabit Kuponlu tahvil, aynı gün itfa olan bir DEĞİŞKEN FAİZLİ tahvilin
+            (TRT130928T12) 2021-22 ihaleleriyle kıyaslanıyordu. Beş planlı itfa
+            eşleşmesinin dördü böyle çapraz eşleşmeydi — 11.09.2030'da TLREF'e
+            endeksli senet TÜFE'ye endeksliyle, 16.04.2031'de sabit kuponlu senet
+            değişken faizliyle kıyaslandı ve o sonuncusu takvimin EN BÜYÜK tahmini
+            (113,7 milyar TL) idi. Artık senet tanımı da eşleşmek zorunda.
+
+        (2) İLK İHRAÇTA "aynı tahvil" diye bir şey YOKTUR. Hazine takvimde bunu
+            açıkça yazıyor ('İhale / İlk ihraç') ve kod bu bilgiyi hesaplayıp
+            fonksiyona geçiriyor ama KULLANMIYORDU: `yeniden` parametresi
+            tanımlıydı, gövdede hiç geçmiyordu. Ölü bir parametre, olmayan bir
+            denetimden daha kötüdür — okuyan denetim var sanır.
+
+        (3) Backtest'te tahvilin gerçek kimliği ELDE VAR: ISIN. Orada itfa+tür
+            yaklaşıklığına gerek yok, doğrudan ISIN eşleşiyor.
+
         hist: sayısal Toplam(Gerçekleşme)/Toplam(Teklif)/Vade (Yıl) ve '_d' sütunlarını içermeli.
         """
         amt_col = 'Toplam(Gerçekleşme)'
         bid_col = 'Toplam(Teklif)'
-        comparables = hist[hist['İtfa Tarihi'] == itfa_tarihi] if itfa_tarihi else hist.iloc[0:0]
-        basis = 'Aynı tahvil (itfa eşleşmesi)'
+        bos = hist.iloc[0:0]
+
+        if isin and 'ISIN' in hist.columns:
+            comparables = hist[hist['ISIN'] == isin]
+            basis = 'Aynı tahvil (ISIN eşleşmesi)'
+        elif yeniden is False:
+            comparables, basis = bos, ''      # ilk ihraç: aynı tahvil aranmaz
+        elif itfa_tarihi:
+            comparables = hist[(hist['İtfa Tarihi'] == itfa_tarihi)
+                               & (hist['Senet Tanımı'] == senet_tanimi)]
+            basis = 'Aynı tahvil (itfa + tür eşleşmesi)'
+        else:
+            comparables, basis = bos, ''
+
         if comparables.empty:
             cand = hist[hist['Senet Tanımı'] == senet_tanimi]
             if target_years is not None and 'Vade (Yıl)' in cand.columns:
@@ -1610,7 +1657,8 @@ class TreasuryAuctionScraper:
             if prior.empty:
                 continue
             res = self._forecast_from_comparables(r['Senet Tanımı'], r['İtfa Tarihi'],
-                                                  r.get('Vade (Yıl)'), prior)
+                                                  r.get('Vade (Yıl)'), prior,
+                                                  isin=r.get('ISIN'))
             if res is None:
                 continue
             actual_amt = float(r['Toplam(Gerçekleşme)'])
