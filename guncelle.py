@@ -510,16 +510,32 @@ _PAKET_KODU = (
 # USDTRY, REER ve Hazine hatlarının dördü de tam bu yüzden hiç koşmadı.
 # Bulutta bunları kurmak da anlamsız: torch tek başına ~2 GB.
 AGIR_PAKET = {
-    "dash", "dash-bootstrap-components",   # hazine canlı panosu
-    "streamlit",                           # fx canlı panosu
     "torch", "transformers", "scikit-learn",   # fx: FinBERT (yalnız --tam)
     "praw", "ntscraper", "deep-translator", "vaderSentiment",  # fx: kaynak hasadı
     "playwright",                          # marj: MEDAS hasadı (ham dosya varsa gereksiz)
 }
 
+# CANLI PANEL paketleri. AGIR_PAKET'ten AYRI tutulmaları şart: ağır paketler
+# TAM kipte gerçekten gerekir (fx'in FinBERT'i tam kipte koşar), panel
+# paketleri ise HİÇBİR veri koşusunda gerekmez — panel yerelde elle açılan
+# bir kolaylıktır. İkisi aynı kümedeyken "tam kip ağırları da kursun" kuralı
+# panelinkileri de kuruyordu: 31.08.2026'da Hazine hattının tam kip koşusu
+# dash kurmaya çalışırken düştü ve yeni İç Borçlanma Stratejisi inmedi.
+# Bunlar yalnız --panel ve --kur yollarında kurulur.
+PANEL_PAKET = {
+    "dash", "dash-bootstrap-components",   # hazine canlı panosu
+    "streamlit",                           # fx canlı panosu
+}
 
-def _req_paketler(d: Path, agir_dahil: bool = True) -> list[str]:
-    """requirements.txt → dağıtım adları (sürüm, ekstra, koşul, yorum ayıklanmış)."""
+
+def _req_paketler(d: Path, agir_dahil: bool = True,
+                  panel_dahil: bool = False) -> list[str]:
+    """requirements.txt → dağıtım adları (sürüm, ekstra, koşul, yorum ayıklanmış).
+
+    panel_dahil YALNIZ --panel/--kur yollarında açılır: canlı pano paketleri
+    hiçbir veri koşusunun gereği değildir ve "eksik" sayılırlarsa hattı komple
+    atlatırlar.
+    """
     req = d / "requirements.txt"
     if not req.exists():
         return []
@@ -529,6 +545,8 @@ def _req_paketler(d: Path, agir_dahil: bool = True) -> list[str]:
         if not s or s.startswith("-"):        # -r include, --index-url …
             continue
         s = re.split(r"[<>=!~;\[ ]", s, 1)[0].strip()
+        if s in PANEL_PAKET and not panel_dahil:
+            continue
         if s and (agir_dahil or s not in AGIR_PAKET):
             adlar.append(s)
     return adlar
@@ -603,6 +621,9 @@ def sistem_kur(secilen: list["Hat"], tam: bool, gunluk: bool = False) -> bool:
                 continue
             ad = re.split(r"[<>=!~;\[ ]", x, 1)[0].strip()
             # Günlük kip de ağır paketleri ister (bkz. eksik_paketler).
+            # Panel paketleri hiçbir veri koşusunda gerekmez.
+            if ad in PANEL_PAKET:
+                continue
             if ad and (tam or gunluk or ad not in AGIR_PAKET):
                 paketler.add(x)
     if not paketler:
