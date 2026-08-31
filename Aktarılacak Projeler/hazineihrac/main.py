@@ -328,6 +328,12 @@ class TreasuryAuctionScraper:
         # Strateji tarihsel cache (çeyrekler arası birikim)
         self.strategy_cache_file = ".strategy_history.json"
         self.strategy_history = self._load_strategy_history()
+        # Son işlenen strateji PDF'inin BORÇ SERVİSİ satırları (ay -> {ic, dis}).
+        # Hedefin kendisi kadar önemli, çünkü aylık hedefin NEDENİNİ taşıyor:
+        # Eylül-Kasım 2026 dokümanında Kasım hedefi Eylül'ün üçte biri ve sebebi
+        # o ayın iç borç servisinin de üçte bir olması (122,7 vs 296,7 milyar TL).
+        # Bu satır olmadan okur küçülmeyi bir politika kararı sanır.
+        self.strategy_servis: Dict[str, Dict[str, float]] = {}
         
         # Çekilecek alanlar
         self.fields = [
@@ -520,6 +526,9 @@ class TreasuryAuctionScraper:
                 entry["target"] = target
                 entry["source"] = source_title
                 entry["parser"] = STRATEGY_PARSER_VERSION
+            servis = (self.strategy_servis or {}).get(month_key)
+            if servis:
+                self.strategy_history[month_key]["servis"] = dict(servis)
         self._save_strategy_history()
 
     @staticmethod
@@ -963,6 +972,8 @@ class TreasuryAuctionScraper:
             dogrudan_line = None
             ic_borclanma_line = None
             toplam_line = None
+            ic_servis_line = None
+            dis_servis_line = None
 
             for line in lines:
                 if "Piyasadan İhale Yoluyla İç Borçlanma" in line:
@@ -978,6 +989,10 @@ class TreasuryAuctionScraper:
                     ic_borclanma_line = line
                 if re.search(r"^Toplam\s", line) or "Toplam İç Borçlanma" in line:
                     toplam_line = line
+                if "İç Borç Servisi" in line:
+                    ic_servis_line = line
+                if "Dış Borç Servisi" in line:
+                    dis_servis_line = line
 
             if piyasa_line and kamu_line:
                 # Ondalık ayracını TEK SATIRDAN DEĞİL, tablo bağlamından tespit et:
@@ -1062,6 +1077,34 @@ class TreasuryAuctionScraper:
                                 )
                         except Exception:
                             pass
+
+                # Borç servisi satırları: hedefin NEDENİ. Hedeflerle AYNI sütun
+                # sırasını taşıdıkları için aynı ay dizinlemesi kullanılır; ay
+                # anahtarları results'tan alınır ki yıl geçişi mantığı bir kez
+                # yazılmış olsun.
+                self.strategy_servis = {}
+                ay_sirasi = [m for m in months]
+                for etiket, satir in (("ic", ic_servis_line), ("dis", dis_servis_line)):
+                    if not satir:
+                        continue
+                    degerler = NUMBER_TOKEN_RE.findall(satir)
+                    for i, month in enumerate(ay_sirasi):
+                        if i >= len(degerler):
+                            break
+                        month_idx = MONTH_ORDER.index(month)
+                        actual_year = year - 1 if month_idx > last_month_idx else year
+                        key = f"{month} {actual_year}"
+                        if key not in results:
+                            continue
+                        try:
+                            v = parse_localized_number(degerler[i], decimal_sep)
+                        except Exception:
+                            continue
+                        if not (STRATEGY_TARGET_MIN <= v <= STRATEGY_TARGET_MAX):
+                            continue
+                        self.strategy_servis.setdefault(key, {})[etiket] = v
+                if self.strategy_servis:
+                    logger.info(f"Borç servisi satırları: {self.strategy_servis}")
 
                 # Toplam satırı ile çapraz kontrol
                 if toplam_line and results:

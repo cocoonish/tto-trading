@@ -114,6 +114,45 @@ if os.path.exists(_sh):
     if _kaynak:
         plan_aylik["plan_strateji"] = max(_kaynak, key=_kaynak.get)
 
+# (b2) Sayfa metni için TEK anahtar altında ay listesi. Neden birleşik metin:
+# takvimdeki ay sayısı DEĞİŞKEN (çeyreğin sonuna doğru iki, yeni doküman
+# inince üç). Sayfa plan_ay3_* diye ayrı bir <Deger> çağırsaydı, takvim iki
+# aya düştüğü gün o anahtar ozet.json'dan kaybolur ve sayfa sınavı kırılırdı —
+# yani metin, veriden daha katı bir şekle bağlanmış olurdu. Ay sayısı
+# değişebilir, anahtar değişmez.
+def _tr(x, n=1):
+    return f"{x:,.{n}f}".replace(",", "\x00").replace(".", ",").replace("\x00", ".")
+
+_satir, _rev = [], []
+for i in range(1, plan_aylik.get("plan_ay_adet", 0) + 1):
+    ad = plan_aylik.get(f"plan_ay{i}_ad")
+    bek, hed = plan_aylik.get(f"plan_ay{i}_beklenen"), plan_aylik.get(f"plan_ay{i}_hedef")
+    if ad is None or bek is None:
+        continue
+    _satir.append(f"{ad} {_tr(bek)}" + (f" vs {_tr(hed)}" if hed is not None else ""))
+    onc, fark = plan_aylik.get(f"plan_ay{i}_onceki"), plan_aylik.get(f"plan_ay{i}_revizyon")
+    if onc is not None and hed is not None:
+        isaret = "+" if (fark or 0) > 0 else "\u2212"
+        _rev.append(f"{ad} {_tr(onc)} \u2192 {_tr(hed)} ({isaret}{_tr(abs(fark))})")
+    elif plan_aylik.get(f"plan_ay{i}_yeni"):
+        _rev.append(f"{ad} takvime ilk kez girdi \u2014 revizyonu yok")
+# Hedefin NEDENİ: aylık iç borç servisi. Kasım hedefinin Eylül'ün üçte biri
+# olması bir politika kararı değil, o ayın itfasının üçte bir olmasıdır —
+# doküman bunu kendi tablosunda yazıyor. Satır okunamadıysa yazılmaz, boş
+# bırakılıp sebebi söylenir.
+_servis = []
+if os.path.exists(_sh):
+    _h2 = json.load(open(_sh, encoding="utf-8"))
+    for ad in _hedef_ayi:
+        sv = ((_h2.get(ad) or {}).get("servis") or {}).get("ic")
+        if sv is not None:
+            _servis.append(f"{ad} {_tr(float(sv))}")
+plan_aylik["plan_servis_metin"] = (" \u00b7 ".join(_servis)
+                                   or "belgenin borç servisi satırı okunmadı")
+
+plan_aylik["plan_aylik_metin"] = " \u00b7 ".join(_satir) or "planlı takvim boş"
+plan_aylik["plan_revizyon_metin"] = " \u00b7 ".join(_rev) or "önceki doküman elde yok"
+
 # (b2) USD hacmi — grafiğin KENDİ çıktısından, ve yalnız seri SAĞLAMSA.
 # ihrac_usd grafiği USD/TRY kurunu yfinance'ten çekiyor ve o çekim şu anda
 # bozuk: elde yalnız 6 aylık kur var, son kur 32,89 (yıllar öncesinin
