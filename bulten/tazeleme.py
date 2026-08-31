@@ -32,6 +32,10 @@ KOK = BURASI.parent
 DURUM = BURASI / "tazeleme_durumu.json"
 ONBELLEK_SAAT = 4          # ulusal takvim önbelleğinin ömrü
 IHALE_CSV = KOK / "Aktarılacak Projeler" / "hazineihrac" / "hazine_planlanan_ihaleler.csv"
+# Strateji duyurusunun beklendiği saat (TR). HMB duyuruyu ayın son iş günü
+# mesai bitimine doğru yayımlıyor; erken bakmak boş koşu, geç bakmak bayat
+# takvim demek. İkinci şans ertesi iş günü aynı saatte.
+STRATEJI_SAATI = (17, 30)
 
 # Ulusal takvim yayım anlarını TÜRKİYE saatiyle verir; bulut koşucusu UTC'de
 # çalışır. İkisi karşılaştırılırken saat dilimi sabitlenmezse 14:30'da duyurulan
@@ -56,6 +60,7 @@ class Tetik:
     en_gec: int = 30                    # emniyet ağı: bu kadar gün sonra takvimsiz koş
     gecikme_dk: int = 45                # yayım anı ile verinin API'ye düşmesi arası
     ihale: bool = False                 # Hazine ihale planından da tetiklensin mi
+    strateji: bool = False              # Hazine'nin aylık İç Borçlanma Stratejisi'nden de
 
 
 # Kalıplar, takvimde GERÇEKTEN bulunan seri adlarından türetildi; uydurma kalıp
@@ -95,8 +100,14 @@ TETIKLER: tuple[Tetik, ...] = (
           r"Merkezi Yönetim Bütçe Denge Tablosu|Merkezi Yönetim Borç Stoku"
           r"|Bütçe Finansmanı İstatistikleri|Merkezi Yönetim İç Borç", ("HMB",), en_gec=45),
     # Hazine ihaleleri ulusal takvimde yok: hattın kendi ihale planından sürülür.
-    Tetik("hazine", "Hazine iç borçlanma ihaleleri (kendi ihale planı)",
-          en_gec=12, ihale=True),
+    # İki ayrı tetik kaynağı, çünkü iki ayrı olay var. İHALE günü sonucu
+    # (miktar, faiz, teklif) getirir; STRATEJİ günü önümüzdeki üç ayın
+    # takvimini ve aylık borçlanma hedeflerini DEĞİŞTİRİR. Yalnız ihale
+    # tetiği varken strateji günü hattı koşturmuyordu: yeni takvim ancak bir
+    # sonraki ihaleye kadar görünmüyor, sayfadaki "planlanan ihraçlar" tablosu
+    # ve hedefler o zamana dek eski stratejiyi gösteriyordu.
+    Tetik("hazine", "Hazine iç borçlanma ihaleleri + aylık İç Borçlanma Stratejisi",
+          en_gec=12, ihale=True, strateji=True),
     # GSYH üç aylık ve TÜİK yayımı ~60 gün gecikmeli; emniyet ağı bir çeyreği
     # aşacak kadar uzun (100 gün) çünkü takvim kaydı okunamazsa hattın bir
     # sonraki yayıma kadar beklemesi gerekir, boşuna koşması değil.
@@ -158,6 +169,50 @@ def _an(metin: str) -> dt.datetime | None:
         return dt.datetime.fromisoformat(str(metin)[:19])
     except (ValueError, TypeError):
         return None
+
+
+def _is_gunu_geri(g: dt.date) -> dt.date:
+    """Hafta sonuna denk gelirse bir önceki iş gününe çek."""
+    while g.weekday() >= 5:
+        g -= dt.timedelta(days=1)
+    return g
+
+
+def _is_gunu_ileri(g: dt.date) -> dt.date:
+    while g.weekday() >= 5:
+        g += dt.timedelta(days=1)
+    return g
+
+
+def _ay_son_is_gunu(yil: int, ay: int) -> dt.date:
+    son = (dt.date(yil + (ay == 12), (ay % 12) + 1, 1) - dt.timedelta(days=1))
+    return _is_gunu_geri(son)
+
+
+def _strateji_anlari(simdi: dt.datetime) -> list[tuple[str, dt.datetime]]:
+    """Hazine'nin üç aylık İç Borçlanma Stratejisi'nin yayım anları.
+
+    Strateji ayın SON İŞ GÜNÜ akşamı yayımlanır ve ertesi günden başlayan ÜÇ
+    AYIN ihraç takvimini, aylık borçlanma hedeflerini ve itfa programını
+    belirler. Resmî yayım takviminde bu duyurunun kendi satırı yok, ihale
+    tetiği de yakalamıyor (strateji günü bir ihale günü değildir).
+
+    Bu ay ve önceki ay için iki an üretilir: son iş günü ve ertesi iş günü.
+    İkincisi ikinci şanstır — yayım kayarsa ya da o akşamki koşu düşerse hat
+    yine de ertesi gün tazelenir.
+    """
+    anlar: list[tuple[str, dt.datetime]] = []
+    for geri in (0, 1):
+        ay, yil = simdi.month - geri, simdi.year
+        if ay <= 0:
+            ay += 12; yil -= 1
+        g = _ay_son_is_gunu(yil, ay)
+        anlar.append((f"İç Borçlanma Stratejisi {g:%d.%m}",
+                      dt.datetime.combine(g, dt.time(*STRATEJI_SAATI))))
+        e = _is_gunu_ileri(g + dt.timedelta(days=1))
+        anlar.append((f"İç Borçlanma Stratejisi {g:%d.%m} (ikinci şans)",
+                      dt.datetime.combine(e, dt.time(*STRATEJI_SAATI))))
+    return anlar
 
 
 def _ihale_gunleri() -> list[dt.date]:
@@ -278,6 +333,10 @@ def kararlar(hatlar: list[str] | None = None,
                 hazir = an + dt.timedelta(minutes=t.gecikme_dk)
                 if son < hazir <= simdi:
                     tetikleyen.append(f"{k['adi']} — {an:%d.%m %H:%M}")
+        if t.strateji:
+            for ad_, an in _strateji_anlari(simdi):
+                if son < an <= simdi:
+                    tetikleyen.append(ad_)
         if t.ihale:
             for g in ihaleler:
                 # İhale günü ve ertesi gün (sonuç/ödeme) tazeleme gerektirir.

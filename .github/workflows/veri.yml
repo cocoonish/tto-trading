@@ -53,6 +53,15 @@ on:
         description: 'Hangi hatlar (boş = takvimdeki hepsi)'
         type: string
         default: ''
+      # TAM KİP. Hafif kip mevcut veriden çıktı üretir; TAM kip kaynağa gidip
+      # yeniden kazır. Hazine hattı için ayrım kritik: yeni İç Borçlanma
+      # Stratejisi ancak tam kipte iniyor. Takvim tetiği (bkz. bulten/tazeleme.py
+      # strateji tetiği) bunu ayın son iş günü kendiliğinden yapar; bu girdi,
+      # yayım kaydığında ya da elle bir tazeleme gerektiğinde açık kapıdır.
+      tam:
+        description: 'Seçilen hatları TAM kipte koş (kaynağa git, yeniden kaz)'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -190,11 +199,16 @@ jobs:
           fi
           # "zorla" = takvimi hiç sorma. Süzgeci geçirmemek, ona "her şey
           # gerekli" dedirtmekten daha dürüst: karar defterine sahte tetik yazılmaz.
+          KIP=""
+          if [ "${{ inputs.tam }}" = "true" ]; then
+            KIP="--tam"
+            echo "TAM kip — seçilen hatlar kaynağa gidip yeniden kazıyacak"
+          fi
           if [ "${{ inputs.zorla }}" = "true" ]; then
             echo "Takvim atlandı — seçilen hatlar koşulsuz tazeleniyor"
-            python guncelle.py $HATLAR --sistem-kur
+            python guncelle.py $HATLAR $KIP --sistem-kur
           else
-            python guncelle.py $HATLAR --gerekli --sistem-kur
+            python guncelle.py $HATLAR $KIP --gerekli --sistem-kur
           fi
 
       # Hazine ihaleleri AYRI: hattın hafif kipi yalnız mevcut veriden grafik
