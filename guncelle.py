@@ -344,6 +344,18 @@ HATLAR: list[Hat] = [
         ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
         {"cikti/*.html": "*"},
         not_="Üç aylık; TÜİK yayımı ~60 gün gecikmeli."),
+    Hat("elnino", "El Niño & Gıda Enflasyonu", P / "ElNino", "el-nino",
+        # veri.py ONI'yi NOAA'nın üç ayrı genel ucundan sırayla dener (hiçbiri
+        # çalışmazsa hat DURUR) ve TÜFE alt endekslerini Enflasyon hattıyla AYNI
+        # kodlardan çeker. metrik.py'nin kurucu kararı: ham gıda enflasyonu ile
+        # ONI'yi korele etmek sahte ilişki üretir (ikisinin de kendi trendi var),
+        # bu yüzden ölçüm GÖRECELİ gıda enflasyonu (gıda − manşet) üzerinden
+        # yapılır. İki bağımsız ölçüt: çapraz korelasyon (kalıcılık yanlısı,
+        # yalnız gecikme profili için) ve epizot çalışması (yanlılıktan geçmez,
+        # tez buna dayanır). Geçiş katsayısı senaryo hesabı için ölçülür.
+        ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
+        {"cikti/*.html": "*"},
+        not_="ONI aylık, TÜFE aylık; ENSO tahminleri üç ayda bir belirginleşir."),
     Hat("marj", "Yiyecek Hizmetleri Marjı", Path("Research/marj"), "yiyecek-hizmetleri-marj",
         ["src/web_cikti.py", "src/ozet_uret.py"],
         ["src/run_all.py", "src/web_cikti.py", "src/ozet_uret.py"],
@@ -358,7 +370,8 @@ def _renk(m, k):  # k: 32 yeşil, 31 kırmızı, 33 sarı, 36 camgöbeği
 
 
 EVDS_HATLAR = {"tcmb", "usdtry", "reer", "yabanci", "marj", "enflasyon",
-               "kredi", "fonlama", "odemeler", "dibs", "butce", "buyume"}
+               "kredi", "fonlama", "odemeler", "dibs", "butce", "buyume",
+               "elnino"}
 # Liste sütun genişliği hat adlarından türetilir — yeni bir uzun ad eklendiğinde
 # hizalama sessizce bozulmasın ("enflasyon" 9 karakter, eski sabit 8'di).
 _AD_G = max(len(h.ad) for h in HATLAR) + 1
