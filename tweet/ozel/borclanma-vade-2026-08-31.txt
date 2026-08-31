@@ -1,0 +1,29 @@
+Yeni Borçlanma Programı — Vade Uzuyor, Maliyet Değişmiyor
+
+Hazine Eylül–Kasım İç Borçlanma Stratejisi'ni yayımladı. Manşet hedef revizyonları oldu; asıl değişiklik takvimde: Hazine bonosu tamamen çıkarıldı. Son 12 ayda 475,3 milyar TL bono satılmıştı; planda sıfır.
+
+NE DEĞİŞTİ. Eylül'den 8 aylık bono çıktı (önceki planın Eylül ihale satışının %25,7'siydi), yerine 8 yıllık yeniden ihraç girdi. Ekim'de en uzun kâğıt 9 yıldan 8 yıla döndü, ağırlığı %15'ten %5'e indi. Kasım'da 2031 itfalı yeni bir 5 yıllık açılıyor; üç ayın tek TLREF'siz ayı.
+
+VADE. Eski takvimin satırlarını alıp AYNI yöntemle yeniden hesapladık; yoksa ölçtüğümüz Hazine'nin kararı değil kendi yöntem değişikliğimiz olurdu. Ağırlıklı ortalama vade: Eylül 2,85 → 3,85 yıl (+1,00), Ekim 4,34 → 3,77 (−0,57). Uzama üç ayın yalnız birinde; Ekim kısalıyor. Yuvarlanan vade 3,28'den 3,82'ye (Ekim tepe), Kasım'da 3,79 — seviye kayması, trend değil. Büyüklük olağan: 0,51 yıllık hareket 77 gözlemin %42'lik yüzdeliğinde.
+
+FAİZ RİSKİ UZAMIYOR — asıl bulgu bu. Vade 3,17'den 3,78 yıla çıkarken yeniden fiyatlama vadesi 1,99'dan 1,92'ye KISALIYOR: planın yarısı TLREF'e endeksli, kuponu üç ayda bir yenileniyor. Kilitlenen itfa takvimi, kupon değil.
+
+MALİYET DE DEĞİŞMİYOR. Son dört ayda fiilen ödenen bileşik faiz: bono %41,73 · 1-3 yıl %41,50 · 3-6 yıl %37,87 · 6 yıl+ %35,12. Uzun kâğıt 6,61 puan ucuz. Ama plan kendi kova maliyetleriyle fiyatlanınca harmanlanmış maliyet %41,71 — bononunkiyle aynı. Sebep: ucuz uzun kâğıt planın %6,5'i, en pahalısı olan TLREF'e endeksli (%43,89) yarısı.
+
+O HÂLDE NEDEN. Bono hâkim olunan bir enstrümandı. Faizler hızla düşerse TLREF'e endeksli kazanır, bono kaybeder (kuponu sabit); düşmezse 8 yıllık %35,12 kilitli kazanır, bono yine kaybeder (8 ay sonra pahalıya çevrilir). Her iki senaryoda da daha iyisi var — çıkarılması için faiz görüşü gerekmiyor, bu yüzden karardan yön sinyali de çıkmıyor.
+
+KAZANÇ İTFADA. 12 aylık itfa 1.201,8 milyar TL, en ağır çeyrek 2030Ç1'de 544,5 milyar. Bugün satılan 8 aylık bono Mayıs 2027'de çevrilmek zorunda; aynı para 8 yıllığa gidince yük 2034'e kayıyor. Ödenen prim, alınan güvenlik.
+
+PLANIN KENDİSİ. Hedefler revize ediliyor: 82 ayda ortalama 3,0 sürüm, medyan revizyon %−13,7, yalnız %27'si yukarı (Eylül: 294,2 → 247,9 → 261,9). Hedefe de tam ulaşılmıyor: son 24 ayın gerçekleşme oranı ortalama %92,1, bandı %54–%120.
+
+TALEP VE ARZ. 18 Ağustos'ta 9,05 yıllık tahvilden 74,4 milyar TL satıldı (%35,12); 6 yıl+ önceki rekor 40,1 milyardı. Alıcı var ama bid-to-cover 1,63 — 2025Ç3'te 3,15'ti. Planın üç aylık 6 yıl+ arzı 32,4 milyar: tek bir Ağustos ihalesinin yarısından az, yani etki seviyede değil göreli değerde.
+
+FAİZ TARAFI. Üç ölçü çelişiyor. PKA anketi 12 ay sonrası politikayı %29,59 bekliyor, OIS 2027'yi ~%33,50 fiyatlıyor, DİBS 1 yıllık %39,88 — politika faizinin 290 baz puan ÜSTÜNDE, yani tahvil eğrisi ön uçta indirim fiyatlamıyor (1y1y %40,07). Fisher'la PKA tutarlı (%4,8 reel); OIS'in 2027 seviyesi anketin %18,03 enflasyon beklentisiyle %13,1 reel demek — ancak dezenflasyon anket kadar iyi gitmezse tutarlı.
+
+BEKLENTİMİZ. Fiyatlanan 150 baz puan indirim, çekirdek aylık momentum %2,25'te kalırsa reel faizi %3,3'ten %2,1'e indirir. Momentum %1,9'un altına inmezse fiyatlamanın 100–125 baz puana gerilemesini, 2027'nin %33,50'sinin de %30–32'ye inmesini bekliyoruz. Kırılma olmazsa düzeltme yakın vadeden gelir: eğri düzleşmez, dikleşir.
+
+NE İZLEMELİ. 3 Eylül TÜFE'de çekirdek momentum. 15 Eylül 8 yıllığın bid-to-cover'ı. 13 Ekim: merkez bankası alımı olmadan ilk uzun ihale. Eylül sonu yeni doküman — bono dönüyor mu, sabit kupon payı %49,4'ten yukarı mı.
+
+TEK CÜMLE. Hazine ucuz olduğu için değil güvenli olduğu için uzuyor: maliyet aynı, itfa takvimi seyreliyor, faiz görüşü dengelenmiş duruyor.
+
+Analizdir; yatırım tavsiyesi değildir.
