@@ -343,6 +343,75 @@ def main() -> int:
     oz["vp_uzama_3a"] = round(plan_d3, 2)
     oz["vp_uzama_yuzdelik"] = round(float((d3.abs() <= abs(plan_d3)).mean() * 100), 0)
     oz["vp_uzama_n"] = int(len(d3))
+    # ── 10) HEDEF NE KADAR TUTAR: revizyon ve gerçekleşme ────────────────────
+    # Planın kendisi bir tahmindir ve iki yerden kayar: Hazine hedefi dokümandan
+    # dokümana REVİZE eder, sonra da hedefe tam ulaşmaz. İkisi de ölçülebilir ve
+    # ikisi de projeksiyonun güven aralığını belirler.
+    sh = KOK / ".strategy_history.json"
+    if sh.exists():
+        H = json.load(open(sh, encoding="utf-8"))
+        revler, surumler_n = [], []
+        for ay, e in H.items():
+            v = [x["target"] for x in (e.get("history") or [])
+                 if isinstance(x, dict) and x.get("target") is not None]
+            if len(v) >= 2 and v[0] > 0:
+                revler.append((v[-1] - v[0]) / v[0] * 100)
+                surumler_n.append(len(v))
+        if revler:
+            import statistics as st
+            oz["vp_rev_n"] = len(revler)
+            oz["vp_rev_medyan"] = round(st.median(revler), 1)
+            oz["vp_rev_yukari_pay"] = round(sum(1 for x in revler if x > 0) / len(revler) * 100, 0)
+            oz["vp_rev_mutlak_ort"] = round(sum(abs(x) for x in revler) / len(revler), 1)
+            oz["vp_rev_surum_ort"] = round(sum(surumler_n) / len(surumler_n), 1)
+        # Plan aylarının kendi revizyon zinciri (ilk hedeften bugüne)
+        for i, ad in enumerate([oz.get(f"vp_plan_ay{k}_ad") for k in (1, 2, 3)], start=1):
+            if not ad:
+                continue
+            v = [x["target"] for x in ((H.get(ad) or {}).get("history") or [])
+                 if isinstance(x, dict) and x.get("target") is not None]
+            if len(v) >= 2:
+                oz[f"vp_rev_ay{i}_zincir"] = " → ".join(
+                    f"{x:.1f}".replace(".", ",") for x in v)
+                oz[f"vp_rev_ay{i}_surum"] = len(v)
+                oz[f"vp_rev_ay{i}_ilk"] = round(v[0], 1)
+
+    gerc = pd.read_csv(KOK / "hazine_hedef_gerceklesme.csv", encoding="utf-8-sig")
+    ger = gerc[pd.to_numeric(gerc["Gerçekleşen Borçlanma (Milyar TL)"],
+                             errors="coerce") > 0]
+    oran = pd.to_numeric(ger["Gerçekleşme Oranı (%)"], errors="coerce").dropna()
+    s24 = oran.tail(24)
+    oz["vp_gerc_24a_ort"] = round(float(s24.mean()), 1)
+    oz["vp_gerc_24a_medyan"] = round(float(s24.median()), 1)
+    oz["vp_gerc_24a_min"] = round(float(s24.min()), 1)
+    oz["vp_gerc_24a_maks"] = round(float(s24.max()), 1)
+    oz["vp_gerc_24a_std"] = round(float(s24.std()), 1)
+    oz["vp_gerc_alti_pay"] = round(float((s24 < 100).mean() * 100), 0)
+
+    # ── 11) PLANIN BEKLENEN MALİYETİ ─────────────────────────────────────────
+    # Planın tür/vade karması, son dönemde ödenen faizlerle fiyatlanırsa ortaya
+    # ne çıkar? Bu bir TAHMİN değil, bir KARMA HESABIDIR: "aynı fiyatlar
+    # sürerse bu sepet ne kadara mal olur". Faizler değişirse sayı değişir;
+    # amacı seviye öngörmek değil, kompozisyonun maliyet imzasını göstermek.
+    def _kova_ad(v):
+        return ("1a" if v <= 1 else "1_3" if v <= 3 else "3_6" if v <= 6 else "6p")
+    pay_top, agir = 0.0, 0.0
+    eksik = []
+    for _, r in pl2.iterrows():
+        tip = "degisken" if r["Senet Tanımı"] in DEGISKEN else (
+            "reel" if r["Senet Tanımı"] in REEL else "sabit")
+        k = f"vp_maliyet_{tip}_{_kova_ad(r['v'])}"
+        if k in oz:
+            agir += oz[k] * r["g"]; pay_top += r["g"]
+        else:
+            eksik.append(f"{r['Senet Tanımı'][:18]} {r['v']:.1f}y")
+    if pay_top > 0:
+        oz["vp_plan_maliyet"] = round(agir / pay_top, 2)
+        oz["vp_plan_maliyet_kapsam"] = round(pay_top / float(pl2["g"].sum()) * 100, 0)
+    if eksik:
+        oz["vp_plan_maliyet_eksik"] = "; ".join(sorted(set(eksik)))
+        print(f"  ! plan maliyetinde kova karşılığı olmayan satır: {eksik}")
+
     oz["_tarih"] = hist["_d"].max().strftime("%d.%m.%Y")
 
     json.dump({"ozet": oz, "gecmis_aov": gecmis_aov, "plan_aov": aov_yeni,
