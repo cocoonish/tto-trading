@@ -274,6 +274,75 @@ def main() -> int:
             oz["vp_eski_eylul_bono_pay"] = round(
                 float(b1["ham"].sum()) / float(e1["ham"].sum()) * 100, 1)
             oz["vp_eski_eylul_bono_vade"] = round(float(b1["v"].iloc[0]), 2)
+    # ── 6) YENİDEN FİYATLAMA VADESİ (duration vekili) ────────────────────────
+    # Vade "kâğıt ne zaman itfa olur" der; yeniden fiyatlama "kuponu ne zaman
+    # değişir" der. TLREF'e endeksli ve değişken faizli senetlerin kuponu üç
+    # ayda bir yenilenir, yani vadesi 4 yıl olsa da faiz duyarlılığı ~0,25
+    # yıldır. İkisini ayırmadan "vade uzadı, faiz riski arttı" demek YANLIŞTIR.
+    # BU BİR VEKİLDİR, ölçülmüş DV01 değil: kupon yapısı ve stok gerekirdi.
+    # Vekilin varsayımı tek satırda ve açıkça durur ki okur payını biçebilsin.
+    DEGISKEN_REPRICE = 0.25
+    def _reprice(v, tip):
+        return DEGISKEN_REPRICE if tip in DEGISKEN else v
+    for ad, d_ in (("gecmis", None), ("plan", None)):
+        pass
+    h6 = hist[hist["ay"] >= pd.Period("2025-09", "M")].copy()
+    h6["rp"] = [_reprice(v, t) for v, t in zip(h6["Vade (Yıl)"], h6["Senet Tanımı"])]
+    oz["vp_reprice_gecmis"] = round(float(
+        (h6["rp"] * h6["Toplam(Gerçekleşme)"]).sum() / h6["Toplam(Gerçekleşme)"].sum()), 2)
+    oz["vp_vade_gecmis_ayni_pencere"] = round(float(
+        (h6["Vade (Yıl)"] * h6["Toplam(Gerçekleşme)"]).sum() / h6["Toplam(Gerçekleşme)"].sum()), 2)
+    pl2 = plan.dropna(subset=["g"]).copy()
+    pl2["v"] = pl2["Vade Terimi"].map(_vade_yil)
+    pl2["rp"] = [_reprice(v, t) for v, t in zip(pl2["v"], pl2["Senet Tanımı"])]
+    oz["vp_reprice_plan"] = round(float((pl2["rp"] * pl2["g"]).sum() / pl2["g"].sum()), 2)
+    oz["vp_reprice_varsayim"] = DEGISKEN_REPRICE
+
+    # ── 7) İTFA DUVARI ───────────────────────────────────────────────────────
+    # DİKKAT — bu ALT SINIRDIR. Elimizdeki tek itfa kaynağı ihale veri setidir;
+    # doğrudan satışlar (kira sertifikası, altın/dolar senetleri), 2019 öncesi
+    # ihraçlar ve kupon ödemeleri BU TOPLAMDA YOK. Gerçek itfa yükü daha
+    # büyüktür. Sayıyı "işte itfa takvimi" diye sunmak uydurma olurdu; kapsamı
+    # yazılarak sunuluyor.
+    hist["_it"] = pd.to_datetime(hist["İtfa Tarihi"], dayfirst=True, errors="coerce")
+    ileri = hist.dropna(subset=["_it"])
+    ileri = ileri[ileri["_it"] > hist["_d"].max()]
+    itfa = (ileri.groupby(ileri["_it"].dt.to_period("Q"))["Toplam(Gerçekleşme)"]
+            .agg(["sum", "count"]))
+    itfa_d = {str(i): {"mlr": round(float(r["sum"]) / 1000, 1), "adet": int(r["count"])}
+              for i, r in itfa.iterrows()}
+    if itfa_d:
+        zirve = max(itfa_d, key=lambda k: itfa_d[k]["mlr"])
+        oz["vp_itfa_zirve_ceyrek"] = zirve.replace("Q", " · Ç")
+        oz["vp_itfa_zirve_mlr"] = itfa_d[zirve]["mlr"]
+        oz["vp_itfa_zirve_adet"] = itfa_d[zirve]["adet"]
+        oz["vp_itfa_12a_mlr"] = round(sum(
+            v["mlr"] for k, v in itfa_d.items()
+            if pd.Period(k, freq="Q").to_timestamp() < hist["_d"].max() + pd.DateOffset(months=12)), 1)
+
+    # ── 8) BONO PAYININ TARİHÇESİ ────────────────────────────────────────────
+    aylik_top = hist.groupby("ay")["Toplam(Gerçekleşme)"].sum()
+    bono_ay = (hist[hist["Senet Tanımı"] == "Hazine Bonosu"]
+               .groupby("ay")["Toplam(Gerçekleşme)"].sum())
+    pay = (bono_ay / aylik_top * 100).dropna()
+    son24 = pay[pay.index >= hist["ay"].max() - 23]
+    oz["vp_bono_pay_24a_ort"] = round(float(son24.mean()), 1)
+    oz["vp_bono_pay_son_ay"] = round(float(pay.get(hist["ay"].max(), 0.0)), 1)
+    sifir = [str(a) for a in aylik_top.index if a not in bono_ay.index
+             and a >= hist["ay"].max() - 23]
+    oz["vp_bono_sifir_ay_24a"] = len(sifir)
+
+    # ── 9) UZAMANIN TARİHSEL YERİ ────────────────────────────────────────────
+    # 3 aylık yuvarlanan vadedeki 3 aylık değişimin dağılımı: bugünkü sıçrama
+    # olağan mı, olağandışı mı? "Vade uzadı" cümlesi ancak bu dağılıma göre
+    # anlam kazanır.
+    ys = pd.Series({pd.Period(k, freq="M"): v for k, v in yuv.items()}).sort_index()
+    gecmis_yuv = ys[ys.index <= pd.Period(sorted(gecmis_aov, key=lambda s: pd.Period(s, freq='M'))[-1], freq="M")]
+    d3 = gecmis_yuv.diff(3).dropna()
+    plan_d3 = float(ys.get(pd.Period(sorted(aov_yeni)[-1], freq="M"), float("nan"))) - float(gecmis_yuv.iloc[-1])
+    oz["vp_uzama_3a"] = round(plan_d3, 2)
+    oz["vp_uzama_yuzdelik"] = round(float((d3.abs() <= abs(plan_d3)).mean() * 100), 0)
+    oz["vp_uzama_n"] = int(len(d3))
     oz["_tarih"] = hist["_d"].max().strftime("%d.%m.%Y")
 
     json.dump({"ozet": oz, "gecmis_aov": gecmis_aov, "plan_aov": aov_yeni,
@@ -283,7 +352,8 @@ def main() -> int:
               open(KOK / "vade_proj.json", "w"), ensure_ascii=False, indent=1)
     print("yazildi:", KOK / "vade_proj.json")
 
-    _grafikler(gecmis_aov, aov_yeni, aov_eski, yuv, komp, plan_komp, maliyet, b2c, oz)
+    _grafikler(gecmis_aov, aov_yeni, aov_eski, yuv, komp, plan_komp, maliyet, b2c, oz,
+               itfa_d, h6, pl2)
     print(json.dumps(oz, ensure_ascii=False))
     return 0
 
@@ -292,7 +362,8 @@ def _x(aylar):
     return [pd.Period(a, freq="M").to_timestamp() for a in aylar]
 
 
-def _grafikler(gecmis, plan_aov, eski_aov, yuv, komp, plan_komp, maliyet, b2c, oz):
+def _grafikler(gecmis, plan_aov, eski_aov, yuv, komp, plan_komp, maliyet, b2c, oz,
+               itfa_d=None, h6=None, pl2=None):
     # (1) VADE PATİKASI
     fig = go.Figure()
     ga = sorted(gecmis, key=lambda s: pd.Period(s, freq="M"))
@@ -372,7 +443,43 @@ def _grafikler(gecmis, plan_aov, eski_aov, yuv, komp, plan_komp, maliyet, b2c, o
     ortak_stil(fig, "Talep derinliği: bid-to-cover, vade kovası × çeyrek")
     fig.update_yaxes(title_text="Teklif / Satış (x)")
     fig.write_html(KOK / "vade_talep.html", include_plotlyjs="cdn")
-    print("grafikler yazildi: vade_patika, vade_kompozisyon, vade_maliyet, vade_talep")
+
+    # (5) İTFA DUVARI
+    if itfa_d:
+        ks = sorted(itfa_d, key=lambda k: pd.Period(k, freq="Q"))[:8]
+        fig = go.Figure(go.Bar(
+            x=[pd.Period(k, freq="Q").to_timestamp() for k in ks],
+            y=[itfa_d[k]["mlr"] for k in ks], marker_color=SLATE,
+            text=[f"{itfa_d[k]['adet']} kâğıt" for k in ks], textposition="outside",
+            hovertemplate="%{y:.1f} mlr TL<extra></extra>"))
+        ortak_stil(fig, "İtfa duvarı — çeyreklik (YALNIZ ihale ihraçları; alt sınır)",
+                   hovermode="closest")
+        fig.update_yaxes(title_text="Milyar TL")
+        fig.write_html(KOK / "vade_itfa.html", include_plotlyjs="cdn")
+
+    # (6) VADE vs YENİDEN FİYATLAMA
+    if h6 is not None and pl2 is not None:
+        fig = go.Figure()
+        fig.add_trace(go.Bar(x=["Son 12 ay (gerçekleşen)", "Planlı takvim"],
+                             y=[oz["vp_vade_gecmis_ayni_pencere"], oz["vp_plan_aov_toplam"]],
+                             name="Ağırlıklı ortalama VADE", marker_color=CLARET,
+                             text=[f"{tr(oz['vp_vade_gecmis_ayni_pencere'], 2)} yıl",
+                                   f"{tr(oz['vp_plan_aov_toplam'], 2)} yıl"],
+                             textposition="outside"))
+        fig.add_trace(go.Bar(x=["Son 12 ay (gerçekleşen)", "Planlı takvim"],
+                             y=[oz["vp_reprice_gecmis"], oz["vp_reprice_plan"]],
+                             name="Ağırlıklı YENİDEN FİYATLAMA vadesi (vekil)",
+                             marker_color=TEAL,
+                             text=[f"{tr(oz['vp_reprice_gecmis'], 2)} yıl",
+                                   f"{tr(oz['vp_reprice_plan'], 2)} yıl"],
+                             textposition="outside"))
+        fig.update_layout(barmode="group")
+        ortak_stil(fig, "Vade uzuyor, faiz duyarlılığı uzamıyor "
+                        "(değişken kuponlular 0,25 yıl sayıldı)", hovermode="closest")
+        fig.update_yaxes(title_text="Yıl")
+        fig.write_html(KOK / "vade_reprice.html", include_plotlyjs="cdn")
+    print("grafikler yazildi: vade_patika, vade_kompozisyon, vade_maliyet, vade_talep, "
+          "vade_itfa, vade_reprice")
 
 
 if __name__ == "__main__":
