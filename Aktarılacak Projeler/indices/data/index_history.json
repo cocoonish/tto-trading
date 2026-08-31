@@ -555,5 +555,78 @@
       "as_of": "2026-08-23",
       "n_assets": 15
     }
+  },
+  {
+    "timestamp": "2026-08-31T04:27:45.720231+00:00",
+    "indices": {
+      "EURUSD": {
+        "value": 0.0,
+        "category": "Neutral"
+      },
+      "USDJPY": {
+        "value": 0.0,
+        "category": "Neutral"
+      },
+      "USDCHF": {
+        "value": 0.0,
+        "category": "Neutral"
+      },
+      "GBPUSD": {
+        "value": 0.0,
+        "category": "Neutral"
+      },
+      "AUDUSD": {
+        "value": 0.0,
+        "category": "Neutral"
+      },
+      "NZDUSD": {
+        "value": 0.0,
+        "category": "Neutral"
+      },
+      "USDCAD": {
+        "value": 0.0,
+        "category": "Neutral"
+      },
+      "USDNOK": {
+        "value": 0.0,
+        "category": "Neutral"
+      },
+      "USDSEK": {
+        "value": 0.0,
+        "category": "Neutral"
+      },
+      "XAUUSD": {
+        "value": 0.0,
+        "category": "Neutral"
+      },
+      "XAGUSD": {
+        "value": 0.0,
+        "category": "Neutral"
+      },
+      "SPX": {
+        "value": 0.0,
+        "category": "Neutral"
+      },
+      "UST2Y": {
+        "value": 0.0,
+        "category": "Neutral"
+      },
+      "UST10Y": {
+        "value": 0.0,
+        "category": "Neutral"
+      },
+      "BIST100": {
+        "value": 0.0,
+        "category": "Neutral"
+      }
+    },
+    "regime": {
+      "label": "Transitioning",
+      "basket_spread": -0.098,
+      "avg_correlation": -0.0218,
+      "pc1_share": 0.2937,
+      "as_of": "2026-08-23",
+      "n_assets": 15
+    }
   }
 ]
