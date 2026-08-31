@@ -201,14 +201,40 @@ jobs:
           # gerekli" dedirtmekten daha dürüst: karar defterine sahte tetik yazılmaz.
           KIP=""
           if [ "${{ inputs.tam }}" = "true" ]; then
+            # TAM kip DAR olmalı. Bütün hatları kaynaktan yeniden kazımak, bu
+            # deponun zaten bir kez ödediği 37 dakikalık faturadır; üstelik
+            # aşağıdaki hasar geri alma, tam kipte koşan hatların TAMAMINI
+            # geri alır ve geniş bir liste iyi çıktıyı da çöpe atardı.
+            if [ -z "${{ inputs.hatlar }}" ]; then
+              echo "::error::TAM kip hat listesi ister — 'hatlar' boş bırakılamaz."
+              exit 1
+            fi
             KIP="--tam"
             echo "TAM kip — seçilen hatlar kaynağa gidip yeniden kazıyacak"
           fi
           if [ "${{ inputs.zorla }}" = "true" ]; then
             echo "Takvim atlandı — seçilen hatlar koşulsuz tazeleniyor"
-            python guncelle.py $HATLAR $KIP --sistem-kur
+            SECIM="$HATLAR $KIP --sistem-kur"
           else
-            python guncelle.py $HATLAR $KIP --gerekli --sistem-kur
+            SECIM="$HATLAR $KIP --gerekli --sistem-kur"
+          fi
+          # HASAR GERİ ALMA — yalnız TAM kipte. 2026-08-25'te Hazine hattı
+          # buluttan kazıyıp 448 ihale yerine 16 buldu ve birikmiş geçmişi
+          # ezdi; guncelle.py artık veri tarihi geriye giden hattı DÜŞMÜŞ
+          # sayıyor ama dosyaları diske çoktan yazmış oluyor ve commit adımı
+          # (if: always()) onu yayardı. O sigorta Hazine adımında vardı,
+          # burada YOKTU — yani 'tam' girdisi eklenince aynı kusur bu yoldan
+          # geri gelirdi. Hafif kip kaynağa gitmediği için bu riski taşımaz.
+          if [ -n "$KIP" ]; then
+            if python guncelle.py $SECIM; then
+              echo "TAM kip temiz bitti"
+            else
+              echo "::warning::TAM kip düştü — diskteki değişiklikler geri alınıyor, depodaki birikmiş veri korunuyor."
+              git checkout -- "Aktarılacak Projeler" Research site/public/projeler || true
+              exit 1
+            fi
+          else
+            python guncelle.py $SECIM
           fi
 
       # Hazine ihaleleri AYRI: hattın hafif kipi yalnız mevcut veriden grafik
