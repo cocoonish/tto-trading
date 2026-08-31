@@ -1623,14 +1623,38 @@ class TreasuryAuctionScraper:
         """
         existing_isins = set()
         existing_df = None
-        if not FORCE_ALL_FETCH and os.path.exists(EXCEL_OUTPUT):
-            try:
-                existing_df = pd.read_excel(EXCEL_OUTPUT, sheet_name='İhale Verileri')
-                if 'ISIN' in existing_df.columns:
-                    existing_isins = set(existing_df['ISIN'].dropna().astype(str).unique())
-                    logger.info(f"Mevcut Excel'den {len(existing_isins)} ISIN, {len(existing_df)} satır okundu.")
-            except Exception as e:
-                logger.warning(f"Mevcut Excel okunamadı: {str(e)}")
+        # BİRİKMİŞ GEÇMİŞ: önce Excel, YOKSA CSV.
+        #
+        # Excel .gitignore'da — depo yalnız CSV'yi taşıyor. Yerelde Excel hep
+        # elde olduğu için bu hiç görünmedi; BULUTTA ise taze checkout'ta Excel
+        # yok, existing_df None kalıyor ve artımlı tarama yalnız o koşuda
+        # çekilen avuç dolusu ihaleyi döndürüyordu. Aşağıdaki to_csv da 448
+        # satırlık birikmiş dosyayı 16 satırla EZİYORDU (25.08.2026 ve yeniden
+        # 31.08.2026; ikincisinde yeni İç Borçlanma Stratejisi bu yüzden siteye
+        # inemedi — guncelle.py'nin "VERİ GERİLEDİ" kapısı koşuyu reddetti).
+        #
+        # Yani kusur artımlı taramada değil, birikimin YANLIŞ DOSYADAN
+        # okunmasındaydı: depoda duran sürüm CSV'dir, doğrusu odur.
+        if not FORCE_ALL_FETCH:
+            for yol, oku in ((EXCEL_OUTPUT, lambda f: pd.read_excel(f, sheet_name='İhale Verileri')),
+                             (CSV_OUTPUT, lambda f: pd.read_csv(f, encoding='utf-8-sig'))):
+                if not os.path.exists(yol):
+                    continue
+                try:
+                    existing_df = oku(yol)
+                except Exception as e:
+                    logger.warning(f"Birikmiş veri okunamadı ({yol}): {e}")
+                    existing_df = None
+                    continue
+                if existing_df is not None and not existing_df.empty:
+                    if 'ISIN' in existing_df.columns:
+                        existing_isins = set(existing_df['ISIN'].dropna().astype(str).unique())
+                    logger.info(f"Birikmiş veri {yol}: {len(existing_isins)} ISIN, "
+                                f"{len(existing_df)} satır okundu.")
+                    break
+            else:
+                logger.warning("Birikmiş veri dosyası YOK (ne Excel ne CSV) — "
+                               "bu koşu sıfırdan tarayacak.")
 
         all_auction_data = []
         comparison_df = pd.DataFrame()
@@ -2150,7 +2174,7 @@ def main():
         
         # Tüm ihale verilerini çek ve analiz et
         df, comparison_df = scraper.scrape_all_auctions()
-        
+
         if not df.empty:
             print(f"\n{'='*60}")
             print(f"✓ BAŞARILI! Toplam {len(df)} ihale verisi çekildi")
@@ -2207,6 +2231,20 @@ def main():
                 print(planned_df[show_cols].to_string(index=False))
 
             # Excel ve CSV'ye kaydet
+            # SON KAPI: birikmiş dosyayı KÜÇÜLTEREK yazma. Yukarıdaki
+            # birleştirme doğru çalışıyorsa bu satır hiç tetiklenmez; ama
+            # aynı hasar iki kez yaşandığı için tek katmanlı sigortaya
+            # güvenilmiyor. Küçülme bir hata değil, bir VERİ KAYBIDIR.
+            if os.path.exists(CSV_OUTPUT):
+                try:
+                    _n_eski = len(pd.read_csv(CSV_OUTPUT, encoding='utf-8-sig'))
+                except Exception:
+                    _n_eski = 0
+                if _n_eski and len(df) < _n_eski:
+                    raise SystemExit(
+                        f"YAZMA REDDEDİLDİ — birikmiş {_n_eski} ihale, yazılacak "
+                        f"{len(df)}. Kaynak eksik veri döndürmüş olabilir; "
+                        f"depodaki dosya korunuyor.")
             scraper.save_to_excel(df, comparison_df, wam_df, filename=EXCEL_OUTPUT)
             df.to_csv(CSV_OUTPUT, index=False, encoding='utf-8-sig')
 
