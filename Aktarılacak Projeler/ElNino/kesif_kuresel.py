@@ -1,107 +1,121 @@
 # -*- coding: utf-8 -*-
-"""KEŞİF — El Niño'nun küresel kanadı için veri kaynağı ÖLÇÜMÜ.
+"""KEŞİF — açık çıkan kaynakların GERÇEKTEN ne sunduğunu ölçer.
 
-Bu betik hiçbir şey yazmaz; yalnız FRED'in hangi serileri GERÇEKTEN sunduğunu,
-hangi tarihte başladığını ve son değerini ölçer. Seri kodu uydurulup hatta
-girmesin diye kurulan keşif iş akışıyla koşar (bkz. .github/workflows/kesif.yml).
-
-Neden FRED: FAO'nun gıda fiyat endeksi CSV'si her ay adı değişen bir dosyada
-duruyor (kırılgan). FRED tek bir genel uçtan (anahtarsız CSV) hem IMF birincil
-emtia fiyatlarını hem ABD TÜFE'sini hem politika faizini veriyor — tek host,
-sabit kod. Emtia serileri 1980'de başlıyorsa Türkiye'de ölçülemeyen şey
-(yeterli sayıda güçlü epizot) küresel tarafta ÖLÇÜLEBİLİR hale gelir.
+kesif_kaynak.py hangi kapının açık olduğunu söyledi (FRED kapalı; Dünya Bankası
+Pink Sheet, BLS, BIS ve ECB açık). Bu betik o kapıların ARDINDAKİNİ ölçer:
+Pink Sheet'in sayfa ve sütun adları, serilerin başlangıç/bitiş tarihleri,
+BLS'in kaç yıl geriye verdiği. Sütun adı uydurulup hatta girmesin.
 """
 from __future__ import annotations
 
 import io
+import json
 import sys
 import urllib.request
 
 import pandas as pd
 
-UC = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={}"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36")
 
-ADAYLAR = [
-    # ── IMF birincil emtia fiyat endeksleri (aylık, USD)
-    ("PFOODINDEXM",     "IMF gıda fiyat endeksi"),
-    ("PALLFNFINDEXM",   "IMF tüm emtia endeksi"),
-    ("PNFUELINDEXM",    "IMF yakıt dışı emtia endeksi"),
-    ("PNRGINDEXM",      "IMF enerji endeksi"),
-    ("PRAWMINDEXM",     "IMF tarımsal hammadde endeksi"),
-    ("PBEVEINDEXM",     "IMF içecek endeksi"),
-    # ── ENSO'nun doğrudan vurduğu ürünler
-    ("PWHEAMTUSDM",     "buğday"),
-    ("PMAIZMTUSDM",     "mısır"),
-    ("PRICENPQUSDM",    "pirinç"),
-    ("PSOYBUSDM",       "soya fasulyesi"),
-    ("PPOILUSDM",       "palm yağı"),
-    ("PSUGAISAUSDM",    "şeker (ISA)"),
-    ("PCOFFOTMUSDM",    "kahve (robusta/other mild)"),
-    ("PCOCOUSDM",       "kakao"),
-    ("PLAMBUSDM",       "kuzu"),
-    ("PORANGUSDM",      "portakal"),
-    ("PBANSOPUSDM",     "muz"),
-    # ── ABD: enflasyon, gıda, politika faizi, tahvil
-    ("CPIAUCSL",        "ABD TÜFE (mevsimsellikten arındırılmış)"),
-    ("CPIAUCNS",        "ABD TÜFE (ham)"),
-    ("CPIUFDSL",        "ABD TÜFE gıda"),
-    ("CPIUFDNS",        "ABD TÜFE gıda (ham)"),
-    ("CUSR0000SAF11",   "ABD TÜFE evde tüketilen gıda"),
-    ("CPILFESL",        "ABD çekirdek TÜFE"),
-    ("FEDFUNDS",        "Fed etkin politika faizi (aylık)"),
-    ("DGS10",           "ABD 10 yıllık tahvil (günlük)"),
-    ("DFII10",          "ABD 10 yıllık reel (TIPS, günlük)"),
-    ("T10YIE",          "ABD 10 yıllık başabaş enflasyon"),
-    ("DTWEXBGS",        "Geniş dolar endeksi"),
-    # ── dünya geneli
-    ("FPCPITOTLZGWLD",  "Dünya TÜFE enflasyonu (yıllık, Dünya Bankası)"),
-]
+PINK = ("https://thedocs.worldbank.org/en/doc/"
+        "18675f1d1639c7a34d463f59263ba0a2-0050012025/related/"
+        "CMO-Historical-Data-Monthly.xlsx")
+BLS = "https://api.bls.gov/publicAPI/v2/timeseries/data/"
+BIS = "https://stats.bis.org/api/v2/data/dataflow/BIS/WS_CBPOL/1.0/M.{}?format=csv"
+ECB = ("https://data-api.ecb.europa.eu/service/data/ICP/M.U2.N.{}.4.ANR"
+       "?format=csvdata&startPeriod=1990-01")
 
 
-def cek(kod: str) -> pd.Series | None:
-    req = urllib.request.Request(UC.format(kod), headers={"User-Agent": UA})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        ham = r.read().decode("utf-8", errors="replace")
-    df = pd.read_csv(io.StringIO(ham))
-    if df.shape[1] < 2:
-        return None
-    tar = pd.to_datetime(df.iloc[:, 0], errors="coerce")
-    deg = pd.to_numeric(df.iloc[:, 1].replace(".", None), errors="coerce")
-    s = pd.Series(deg.to_numpy(), index=pd.Index(tar)).dropna()
-    return s if len(s) else None
+def _ham(url: str, veri: bytes | None = None, tur: str | None = None, za: int = 60) -> bytes:
+    b = {"User-Agent": UA}
+    if tur:
+        b["Content-Type"] = tur
+    req = urllib.request.Request(url, data=veri, headers=b)
+    with urllib.request.urlopen(req, timeout=za) as r:
+        return r.read()
+
+
+def pink() -> None:
+    print("══ Dünya Bankası Pink Sheet (aylık)")
+    ham = _ham(PINK, za=120)
+    print(f"   indirildi: {len(ham):,} bayt")
+    xl = pd.ExcelFile(io.BytesIO(ham))
+    print(f"   sayfalar: {xl.sheet_names}")
+    for sayfa in xl.sheet_names:
+        df = pd.read_excel(xl, sheet_name=sayfa, header=None)
+        print(f"\n   ── sayfa '{sayfa}'  ({df.shape[0]} satır × {df.shape[1]} sütun)")
+        # Veri bloğu: ilk sütunu YYYYMxx kalıbına uyan ilk satır.
+        ilk = None
+        for i, v in enumerate(df.iloc[:, 0].astype(str)):
+            if len(v) == 7 and v[:4].isdigit() and v[4] == "M" and v[5:].isdigit():
+                ilk = i
+                break
+        print(f"      ilk veri satırı: {ilk}")
+        for i in range(0, min(ilk if ilk is not None else 8, 8)):
+            hucre = [str(x)[:26] for x in df.iloc[i].tolist()[:14]]
+            print(f"      başlık[{i}] {hucre}")
+        if ilk is not None:
+            print(f"      ilk tarih: {df.iloc[ilk, 0]}   son tarih: {df.iloc[-1, 0]}")
+            print(f"      ilk satır değerleri: {[str(x)[:10] for x in df.iloc[ilk].tolist()[:14]]}")
+
+
+def bls() -> None:
+    print("\n══ BLS (anahtarsız v2) — 10 yıllık dilim sınaması")
+    govde = json.dumps({"seriesid": ["CUUR0000SA0", "CUUR0000SAF1", "CUUR0000SA0L1E"],
+                        "startyear": "1960", "endyear": "1969"}).encode()
+    j = json.loads(_ham(BLS, govde, "application/json"))
+    print(f"   durum: {j.get('status')}  mesaj: {j.get('message')}")
+    for s in j.get("Results", {}).get("series", []):
+        d = s.get("data") or []
+        if d:
+            print(f"   {s['seriesID']}: {len(d)} gözlem, "
+                  f"{d[-1]['year']}-{d[-1]['period']} → {d[0]['year']}-{d[0]['period']}")
+        else:
+            print(f"   {s['seriesID']}: BOŞ (1960'lar yok)")
+
+
+def bis() -> None:
+    print("\n══ BIS — merkez bankası politika faizleri")
+    for ulke in ("US", "TR", "XM"):
+        try:
+            ham = _ham(BIS.format(ulke)).decode("utf-8", "replace")
+        except Exception as ex:
+            print(f"   {ulke}: DÜŞTÜ — {str(ex)[:70]}")
+            continue
+        df = pd.read_csv(io.StringIO(ham))
+        kol = [c for c in df.columns if c in ("TIME_PERIOD", "OBS_VALUE")]
+        if len(kol) < 2:
+            print(f"   {ulke}: beklenen sütunlar yok — {list(df.columns)[:12]}")
+            continue
+        d = df[["TIME_PERIOD", "OBS_VALUE"]].dropna()
+        print(f"   {ulke}: {len(d)} ay, {d['TIME_PERIOD'].iloc[0]} → "
+              f"{d['TIME_PERIOD'].iloc[-1]}, son {d['OBS_VALUE'].iloc[-1]}")
+
+
+def ecb() -> None:
+    print("\n══ ECB — Euro Bölgesi HICP (yıllık % değişim)")
+    for kod, ad in (("000000", "manşet"), ("010000", "gıda ve alkolsüz içecek")):
+        try:
+            ham = _ham(ECB.format(kod)).decode("utf-8", "replace")
+        except Exception as ex:
+            print(f"   {ad}: DÜŞTÜ — {str(ex)[:70]}")
+            continue
+        df = pd.read_csv(io.StringIO(ham))
+        d = df[["TIME_PERIOD", "OBS_VALUE"]].dropna()
+        print(f"   {ad}: {len(d)} ay, {d['TIME_PERIOD'].iloc[0]} → "
+              f"{d['TIME_PERIOD'].iloc[-1]}, son {d['OBS_VALUE'].iloc[-1]}")
 
 
 def main() -> int:
-    istenen = [a for a in sys.argv[1:] if a.strip()]
-    liste = [(k, ad) for k, ad in ADAYLAR if not istenen or k in istenen]
-    print(f"── FRED keşfi · {len(liste)} aday seri\n")
-    print(f"{'KOD':<18}{'DURUM':<8}{'BAŞ':<10}{'SON':<10}{'N':>7}  {'SON DEĞER':>12}  AÇIKLAMA")
-    print("-" * 118)
-    olan, olmayan = [], []
-    for kod, ad in liste:
+    sec = [a.lower() for a in sys.argv[1:] if a.strip()]
+    for ad, f in (("pink", pink), ("bls", bls), ("bis", bis), ("ecb", ecb)):
+        if sec and ad not in sec:
+            continue
         try:
-            s = cek(kod)
+            f()
         except Exception as ex:
-            olmayan.append((kod, ad, str(ex)[:60]))
-            print(f"{kod:<18}{'DÜŞTÜ':<8}{'-':<10}{'-':<10}{'-':>7}  {'-':>12}  {ad}  [{str(ex)[:40]}]")
-            continue
-        if s is None:
-            olmayan.append((kod, ad, "boş"))
-            print(f"{kod:<18}{'BOŞ':<8}{'-':<10}{'-':<10}{'-':>7}  {'-':>12}  {ad}")
-            continue
-        olan.append(kod)
-        print(f"{kod:<18}{'VAR':<8}{s.index.min():%Y-%m}   {s.index.max():%Y-%m}   "
-              f"{len(s):>5}  {s.iloc[-1]:>12,.2f}  {ad}")
-
-    print("\n── ÖZET")
-    print(f"   çalışan: {len(olan)}/{len(liste)}")
-    if olmayan:
-        print("   ÇALIŞMAYAN (hatta girmemeli):")
-        for kod, ad, sebep in olmayan:
-            print(f"     {kod:<18} {ad}  — {sebep}")
-    print("\n   HATTA GİRECEK KODLAR: " + " ".join(olan))
+            print(f"   !! {ad} keşfi düştü: {type(ex).__name__}: {str(ex)[:120]}")
     return 0
 
 
