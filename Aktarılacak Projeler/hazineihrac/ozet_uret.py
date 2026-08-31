@@ -68,14 +68,51 @@ pl["tahmin"] = pd.to_numeric(pl["Tahmini Gerçekleşme (Milyon TL)"], errors="co
 pl["hedef"] = pd.to_numeric(pl["Aylık Strateji Hedefi (Milyar TL)"], errors="coerce")
 AY_ADI = {1: "Ocak", 2: "Şubat", 3: "Mart", 4: "Nisan", 5: "Mayıs", 6: "Haziran",
           7: "Temmuz", 8: "Ağustos", 9: "Eylül", 10: "Ekim", 11: "Kasım", 12: "Aralık"}
+# İç Borçlanma Stratejisi ÜÇ aylık bir dokümandır; takvim de üç ayı taşır.
+# Sayfa uzun süre yalnız ilk iki ayı bastı, yani her yeni strateji yayımlandığında
+# dokümanın GETİRDİĞİ ay (en uzak ay) sayfada hiç görünmüyordu. Ay sayısı artık
+# takvimden okunur ve kaç ay varsa o kadar anahtar yazılır (plan_ay_adet).
 plan_aylik = {}
 _ihaleli = pl[pl["tahmin"].notna()]
-for i, (ayp, g) in enumerate(sorted(_ihaleli.groupby("ayp"), key=lambda x: x[0])[:2], start=1):
-    plan_aylik[f"plan_ay{i}_ad"] = f"{AY_ADI[ayp.month]} {ayp.year}"
+_aylar = sorted(_ihaleli.groupby("ayp"), key=lambda x: x[0])
+plan_aylik["plan_ay_adet"] = len(_aylar)
+_hedef_ayi = {}
+for i, (ayp, g) in enumerate(_aylar, start=1):
+    ad = f"{AY_ADI[ayp.month]} {ayp.year}"
+    plan_aylik[f"plan_ay{i}_ad"] = ad
     plan_aylik[f"plan_ay{i}_beklenen"] = round(float(g["tahmin"].sum()) / 1000.0, 1)
     hedefler = g["hedef"].dropna()
     if len(hedefler):
         plan_aylik[f"plan_ay{i}_hedef"] = round(float(hedefler.iloc[0]), 1)
+        _hedef_ayi[ad] = float(hedefler.iloc[0])
+if _hedef_ayi:
+    plan_aylik["plan_hedef_toplam"] = round(sum(_hedef_ayi.values()), 1)
+
+# (b1) Yürürlükteki strateji dokümanı ve onun getirdiği REVİZYON. Sayfada
+# "strateji revizyonları" şekli var ama tek bir canlı sayı yoktu: yeni bir
+# doküman çıktığında metin eski hedefleri anlatmaya devam ediyordu. Revizyon
+# ancak aynı ay için ÖNCEKİ dokümanda da bir hedef varsa yazılır — ilk kez
+# takvime giren ay için "revizyon" diye bir şey yoktur (uydurma yok).
+_sh = os.path.join(BASE, ".strategy_history.json")
+if os.path.exists(_sh):
+    _h = json.load(open(_sh, encoding="utf-8"))
+    _kaynak = {}
+    for ad in _hedef_ayi:
+        kayit = _h.get(ad) or {}
+        gecmis = kayit.get("history") or []
+        if kayit.get("source"):
+            _kaynak[kayit["source"]] = _kaynak.get(kayit["source"], 0) + 1
+        i = list(_hedef_ayi).index(ad) + 1
+        if len(gecmis) >= 2:
+            onceki = gecmis[-2]
+            if onceki.get("target") is not None:
+                plan_aylik[f"plan_ay{i}_onceki"] = round(float(onceki["target"]), 1)
+                plan_aylik[f"plan_ay{i}_revizyon"] = round(
+                    float(_hedef_ayi[ad]) - float(onceki["target"]), 1)
+        else:
+            plan_aylik[f"plan_ay{i}_yeni"] = 1   # takvime ilk kez giren ay
+    if _kaynak:
+        plan_aylik["plan_strateji"] = max(_kaynak, key=_kaynak.get)
 
 # (b2) USD hacmi — grafiğin KENDİ çıktısından, ve yalnız seri SAĞLAMSA.
 # ihrac_usd grafiği USD/TRY kurunu yfinance'ten çekiyor ve o çekim şu anda

@@ -30,10 +30,21 @@
  "pay_bono": 9.5,
  "pay_degisken": 6.8,
  "pay_kuponsuz": 1.7,
+ "plan_ay_adet": 3,
  "plan_ay1_ad": "Eylül 2026",
  "plan_ay1_beklenen": 227.8,
  "plan_ay1_hedef": 261.9,
  "plan_ay2_ad": "Ekim 2026",
  "plan_ay2_beklenen": 199.2,
- "plan_ay2_hedef": 229.1
+ "plan_ay2_hedef": 229.1,
+ "plan_ay3_ad": "Kasım 2026",
+ "plan_ay3_beklenen": 74.3,
+ "plan_ay3_hedef": 85.4,
+ "plan_hedef_toplam": 576.4,
+ "plan_ay1_onceki": 247.9,
+ "plan_ay1_revizyon": 14.0,
+ "plan_ay2_onceki": 235.1,
+ "plan_ay2_revizyon": -6.0,
+ "plan_ay3_yeni": 1,
+ "plan_strateji": "Eylül – Kasım 2026 İç Borçlanma Stratejisi"
 }
