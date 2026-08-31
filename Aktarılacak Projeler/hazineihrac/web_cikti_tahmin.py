@@ -426,19 +426,33 @@ def _kur_evds() -> dict[str, float]:
     from urllib.parse import urlencode
     import requests
 
-    bitis = (pd.Timestamp.today() + pd.Timedelta(days=EVDS_ILERI_GUN)).strftime("%d-%m-%Y")
-    params = {"series": "TP.DK.USD.A.YTL", "startDate": "01-01-2000",
-              "endDate": bitis, "type": "json"}
-    r = requests.get(f"{EVDS_BASE}/{urlencode(params)}",
-                     headers={"key": evds_anahtari()}, timeout=45)
-    r.raise_for_status()
-    items = r.json().get("items", [])
-    if not items:
+    # PARÇALI ÇEKİM. Tek istekle 2000'den bugüne sorulduğunda EVDS sessizce
+    # KIRPIYOR: 2005'e uzanan ihale geçmişine karşılık yalnız son 33 ay geldi
+    # ve grafik "eksik" değil, KISA göründü — hata vermeden. Beş yıllık
+    # pencerelerle sorulup birleştiriliyor; kırpma varsa her pencerede ayrı
+    # ayrı olur ve toplam yine tam gelir.
+    anahtar = evds_anahtari()
+    bugun = pd.Timestamp.today()
+    bitis_ts = bugun + pd.Timedelta(days=EVDS_ILERI_GUN)
+    parcalar = []
+    bas = pd.Timestamp("2000-01-01")
+    while bas < bitis_ts:
+        son = min(bas + pd.DateOffset(years=5), bitis_ts)
+        params = {"series": "TP.DK.USD.A.YTL",
+                  "startDate": bas.strftime("%d-%m-%Y"),
+                  "endDate": son.strftime("%d-%m-%Y"), "type": "json"}
+        r = requests.get(f"{EVDS_BASE}/{urlencode(params)}",
+                         headers={"key": anahtar}, timeout=45)
+        r.raise_for_status()
+        parcalar.extend(r.json().get("items", []) or [])
+        bas = son + pd.Timedelta(days=1)
+    if not parcalar:
         raise RuntimeError("EVDS boş döndü")
-    d = pd.DataFrame(items)
+    d = pd.DataFrame(parcalar)
     d["Tarih"] = pd.to_datetime(d["Tarih"].astype(str), format="%d-%m-%Y")
     d["v"] = pd.to_numeric(d["TP_DK_USD_A_YTL"], errors="coerce")
-    d = d.dropna(subset=["v"]).sort_values("Tarih").set_index("Tarih")["v"]
+    d = (d.dropna(subset=["v"]).drop_duplicates(subset=["Tarih"])
+           .sort_values("Tarih").set_index("Tarih")["v"])
     ay = d.resample("ME").last()
     return {pd.Timestamp(t).strftime("%Y-%m"): float(v) for t, v in ay.items() if pd.notna(v)}
 
