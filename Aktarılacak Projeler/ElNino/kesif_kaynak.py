@@ -20,7 +20,33 @@ UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36")
 ZA = 8
 
+# İKİNCİ TUR. Birinci tur 31.08.2026'da şunu ölçtü: FRED koşucudan ZAMAN AŞIMINA
+# uğruyor (üç uç, üçü de), IMF SDMX'in DNS'i çözülmüyor, IMF datamapper 403,
+# stooq JavaScript kapısı koyuyor. Açık çıkanlar: Dünya Bankası Pink Sheet
+# (xlsx, aylık, 1960→), BLS API (anahtarsız, ABD TÜFE), FAO sayfası, NOAA.
+# Eksik kalan iki şey aranıyor: politika faizi ve Türkiye dışı bir TÜFE karşılığı.
 ADAYLAR = [
+    ("BIS toplu — merkez bankası politika faizleri (aylık, uzun tarihçe)",
+     "https://data.bis.org/static/bulk/WS_CBPOL_csv_flat.zip"),
+    ("BIS API — politika faizi (ABD)",
+     "https://stats.bis.org/api/v2/data/dataflow/BIS/WS_CBPOL/1.0/M.US?format=csv"),
+    ("Fed DDP — H.15 (politika faizi)",
+     "https://www.federalreserve.gov/datadownload/Output.aspx?rel=H15&series=bf17364827e38702b42a58cf8eaa3f78&lastobs=&from=&to=&filetype=csv&label=include&layout=seriescolumn"),
+    ("NY Fed — etkin federal fonlama oranı",
+     "https://markets.newyorkfed.org/api/rates/unsecured/effr/last/10.json"),
+    ("Dünya Bankası API — dünya TÜFE (yıllık)",
+     "https://api.worldbank.org/v2/country/WLD/indicator/FP.CPI.TOTL.ZG?format=json&per_page=100"),
+    ("ECB SDW — Euro Bölgesi HICP manşet",
+     "https://data-api.ecb.europa.eu/service/data/ICP/M.U2.N.000000.4.ANR?format=csvdata&startPeriod=2024-01"),
+    ("ECB SDW — Euro Bölgesi HICP gıda",
+     "https://data-api.ecb.europa.eu/service/data/ICP/M.U2.N.010000.4.ANR?format=csvdata&startPeriod=2024-01"),
+    ("BLS — ABD TÜFE gıda (CUUR0000SAF1)",
+     "https://api.bls.gov/publicAPI/v2/timeseries/data/CUUR0000SAF1"),
+    ("BLS — ABD çekirdek TÜFE (CUUR0000SA0L1E)",
+     "https://api.bls.gov/publicAPI/v2/timeseries/data/CUUR0000SA0L1E"),
+]
+
+ADAYLAR_TUR1 = [
     ("FRED csv (emtia gıda)",
      "https://fred.stlouisfed.org/graph/fredgraph.csv?id=PFOODINDEXM"),
     ("FRED csv (ABD TÜFE)",
@@ -42,6 +68,7 @@ ADAYLAR = [
     ("NOAA ONI (halihazırda çalışan uç — kontrol)",
      "https://www.cpc.ncep.noaa.gov/data/indices/oni.ascii.txt"),
 ]
+# Argümansız koşuda iki tur da yoklanır; "tur1"/"tur2" ile daraltılır.
 
 
 def dene(ad: str, url: str) -> None:
@@ -68,8 +95,14 @@ def dene(ad: str, url: str) -> None:
 
 def main() -> int:
     sec = [a for a in sys.argv[1:] if a.strip()]
-    print(f"── kaynak yoklaması (zaman aşımı {ZA} sn)\n")
-    for ad, url in ADAYLAR:
+    liste = list(ADAYLAR)
+    if "tur2" not in sec:
+        liste += ADAYLAR_TUR1
+    sec = [a for a in sec if a not in ("tur1", "tur2")]
+    if "tur1" in sys.argv[1:]:
+        liste = list(ADAYLAR_TUR1)
+    print(f"── kaynak yoklaması (zaman aşımı {ZA} sn) · {len(liste)} aday\n")
+    for ad, url in liste:
         if sec and not any(x.lower() in ad.lower() for x in sec):
             continue
         dene(ad, url)
