@@ -15,14 +15,18 @@ on:
         description: 'Tweet metni dosyası (depo yolu)'
         type: string
         default: 'tweet/ozel/kredi-2026-08-30.txt'
+      # Grafik İSTİSNADIR: varsayılan boş. Önceden kredi betiğine bağlıydı ve
+      # ilgisiz her gönderimde matplotlib koşup 403 alan bir yükleme deniyordu
+      # (GitHub boş dizgeyi de varsayılana çevirdiği için kapatmak da mümkün
+      # değildi). Grafik isteyen çağrı yolunu açıkça verir.
       grafik_betigi:
         description: 'Önce koşulacak grafik betiği (boş = grafik üretme)'
         type: string
-        default: 'tweet/grafik_kredi.py'
+        default: ''
       resimler:
         description: 'Eklenecek PNGler (boşlukla ayrık depo yolları)'
         type: string
-        default: 'tweet/ozel/cikti/kredi-buyume.png tweet/ozel/cikti/kredi-segment.png'
+        default: ''
       gonder:
         description: 'Gerçekten gönder (kapalıysa kuru koşu)'
         type: boolean
