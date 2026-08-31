@@ -450,6 +450,25 @@ class TreasuryAuctionScraper:
                         for k in eski:
                             data.pop(k, None)
                         self._invalidate_strategy_urls()
+                    # TEK SEFERLİK GEÇİŞ — borç servisi satırı. Ayrıştırıcı
+                    # artık "İç/Dış Borç Servisi" satırlarını da okuyor, ama
+                    # PDF'ler processed_urls'te olduğu için hiç yeniden
+                    # indirilmezdi: yeni alan sonsuza kadar boş kalırdı.
+                    # Sürüm numarasını yükseltmek işi görürdü ama 80+ aylık
+                    # geçmişi de DÜŞÜRÜRDÜ ve eski PDF'lerden bir kısmı artık
+                    # indirilemiyorsa o aylar geri gelmezdi — bir alan eklemek
+                    # için ölçülmüş veriyi riske atmak yanlış takas. Bunun
+                    # yerine yalnız URL önbelleği düşürülüyor: geçmiş yerinde
+                    # kalır, PDF'ler yeniden ayrıştırılır, alan dolar. Kayıtların
+                    # herhangi biri alanı taşımaya başladığı anda bir daha
+                    # tetiklenmez.
+                    if data and not any(isinstance(v, dict) and v.get("servis")
+                                        for v in data.values()):
+                        logger.warning(
+                            "Strateji cache: hiçbir ayda borç servisi satırı yok — "
+                            "strateji PDF'leri yeniden ayrıştırılacak (geçmiş korunur)."
+                        )
+                        self._invalidate_strategy_urls()
                     logger.info(f"Strateji cache'den {len(data)} ay yüklendi")
                     return data
         except Exception as e:
