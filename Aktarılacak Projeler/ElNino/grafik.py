@@ -91,8 +91,11 @@ def sekil_02(M):
 
 def sekil_03(M):
     fig = go.Figure()
-    for etiket, ad, renk in (("modern", "2005'ten bugüne", CLARET),
-                             ("tam", "tam örneklem", GOLD)):
+    # Örneklem aynıysa tek eğri: iki kez çizmek sahte sağlamlık izlenimi verir.
+    seriler = ([("modern", f"{M.get('orneklem_bas','')} → {M.get('orneklem_son','')}", CLARET)]
+               if M.get("orneklem_ayni")
+               else [("modern", "2005'ten bugüne", CLARET), ("tam", "tam örneklem", GOLD)])
+    for etiket, ad, renk in seriler:
         c = M.get(f"capraz_{etiket}")
         if not c:
             continue

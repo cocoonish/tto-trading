@@ -126,7 +126,12 @@ def main() -> int:
                    "oni_son": _r(oni.iloc[-1]),
                    "oni_son_ay": f"{oni.index.max():%Y-%m}"}
 
-    # ── 1. çapraz korelasyon (tam ve modern örneklem)
+    # ── 1. çapraz korelasyon
+    # NOT: TÜFE alt endeksleri zaten 2005 sonrasında başlıyor, yani "tam" ve
+    # "modern" örneklem AYNI. İkisini ayrı ayrı raporlamak sahte bir sağlamlık
+    # izlenimi verir; örtüşme ölçülür ve aynıysa tek örneklem yazılır.
+    sonuc["orneklem_bas"] = f"{gor_gida.index.min():%Y-%m}"
+    sonuc["orneklem_son"] = f"{gor_gida.index.max():%Y-%m}"
     for etiket, kesit in (("tam", None), ("modern", MODERN_BAS)):
         g = gor_gida if kesit is None else gor_gida.loc[kesit:]
         h = gor_ham if kesit is None else gor_ham.loc[kesit:]
@@ -201,6 +206,23 @@ def main() -> int:
         {"ay": f"{t:%Y-%m}", "oni": _r(oni_m.get(t)), "goreceli_gida": _r(gor_gida.get(t))}
         for t in gor_gida.loc[MODERN_BAS:].index
     ]
+    # ── HÜKÜM. Kanıtın gücü ÖLÇÜTLE belirlenir. Türkiye TÜFE alt endeksleri
+    # kısa olduğu için ölçülebilir epizot sayısı azdır; üçün altında bir örnekle
+    # yön iddia etmek istatistik değil hikâyedir.
+    n_ep = len(sonuc.get("epizot_sonrasi") or [])
+    if n_ep < 3:
+        sonuc["hukum"] = "yetersiz"
+        sonuc["hukum_metin"] = (
+            f"Ölçülebilir epizot sayısı {n_ep}. Türkiye TÜFE alt endeksleri "
+            f"{sonuc['orneklem_bas']} tarihinde başlıyor ve o tarihten bu yana "
+            "yalnız bu kadar güçlü El Niño epizodu tamamlandı. Bu örneklemle "
+            "El Niño'nun Türkiye gıda enflasyonuna YÖNÜ hakkında hüküm "
+            "kurulamaz; ölçülen fark yönü ne olursa olsun kanıt sayılmaz.")
+    else:
+        sonuc["hukum"] = "olculebilir"
+        sonuc["hukum_metin"] = f"{n_ep} epizot ölçüldü."
+    print(f"   HÜKÜM: {sonuc['hukum']} — {sonuc['hukum_metin'][:80]}…")
+
     sonuc["uyarilar"] = _UYARI
     sonuc["yontem_notu"] = (
         "Çapraz korelasyon katsayıları yukarı yanlıdır: iki seri de kalıcıdır. "
