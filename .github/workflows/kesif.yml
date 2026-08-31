@@ -17,6 +17,10 @@ on:
         description: 'Koşulacak keşif betiği (depo yolu)'
         type: string
         default: 'Aktarılacak Projeler/Buyume/kesif.py'
+      argumanlar:
+        description: 'Betiğe geçilecek argümanlar (ör. daraltılacak grup kodları)'
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -42,4 +46,4 @@ jobs:
             exit 1
           fi
       - name: Keşif
-        run: python "${{ inputs.betik }}"
+        run: python "${{ inputs.betik }}" ${{ inputs.argumanlar }}

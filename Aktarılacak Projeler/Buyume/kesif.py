@@ -83,6 +83,14 @@ def main() -> int:
         kayit = (kod, ad, frek, str(g.get("START_DATE") or ""), str(g.get("END_DATE") or ""))
         (arsiv if ARSIV.search(ad) else canli).append(kayit)
 
+    # Argüman verilirse YALNIZ o gruplar ayrıntılanır: grup dizini geldikten
+    # sonra ilgilenilen avuç dolusu gruba inmek gerekiyor ve tam döküm log
+    # kuyruğuna sığmıyor.
+    istenen = {g.strip() for g in (sys.argv[1] if len(sys.argv) > 1 else "").split(",") if g.strip()}
+    if istenen:
+        canli = [k for k in canli if k[0] in istenen]
+        print(f"   ARGÜMANLA DARALTILDI → {len(canli)} grup: "
+              + ", ".join(sorted(k for k, *_ in canli)))
     print(f"   eşleşen: {len(canli) + len(arsiv)}  (canlı {len(canli)} · arşiv {len(arsiv)})")
     print("\n   ARŞİV grupları (incelenmeyecek): "
           + ", ".join(k for k, *_ in sorted(arsiv)) + "\n")
