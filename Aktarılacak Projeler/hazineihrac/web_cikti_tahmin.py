@@ -976,3 +976,16 @@ if __name__ == "__main__":
     }
     for ad, bilgi in ciktilar.items():
         print(f"{ad:28s} -> {bilgi}")
+
+    # Figürlerin ölçümlerini DOSYAYA yaz. ozet_uret.py bu dosyayı okuyor
+    # (usd_son_ay_mlr oradan geliyor) ama onu yazan kimse yoktu: depodaki
+    # grafik_ozet.json 25.08'de elle koşulmuş bir sürümden kalmıştı ve her
+    # bulut koşusunda olduğu gibi duruyordu. Yani sayfa, aylar önce ölçülmüş
+    # bir kur serisini "canlı" sanarak okuyacaktı — usd_son_ay_mlr'nin bir
+    # türlü yazılamamasının sebebi de buydu, kur çekimi düzeldikten sonra bile.
+    # Ölü bir bağımlılık, kırık bir bağımlılıktan sinsidir: dosya vardır,
+    # okunur, hiçbir şey hata vermez.
+    with open(KOK / "grafik_ozet.json", "w", encoding="utf-8") as f:
+        json.dump({k: v for k, v in ciktilar.items() if v is not None},
+                  f, ensure_ascii=False, indent=1)
+    print(f"yazildi: {KOK / 'grafik_ozet.json'}")
