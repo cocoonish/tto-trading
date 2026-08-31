@@ -45,6 +45,11 @@ def pink() -> None:
     for sayfa in xl.sheet_names:
         df = pd.read_excel(xl, sheet_name=sayfa, header=None)
         print(f"\n   ── sayfa '{sayfa}'  ({df.shape[0]} satır × {df.shape[1]} sütun)")
+        if df.empty:
+            print("      (boş sayfa, atlandı)")
+            continue
+        if sayfa.lower() not in ("monthly prices", "monthly indices"):
+            continue
         # Veri bloğu: ilk sütunu YYYYMxx kalıbına uyan ilk satır.
         ilk = None
         for i, v in enumerate(df.iloc[:, 0].astype(str)):
@@ -58,6 +63,15 @@ def pink() -> None:
         if ilk is not None:
             print(f"      ilk tarih: {df.iloc[ilk, 0]}   son tarih: {df.iloc[-1, 0]}")
             print(f"      ilk satır değerleri: {[str(x)[:10] for x in df.iloc[ilk].tolist()[:14]]}")
+            # BÜTÜN sütun adları — eşleme bunlardan kurulacak, tahminle değil.
+            ust = df.iloc[:ilk]
+            puan = ust.apply(lambda r: sum(1 for x in r[1:]
+                                           if isinstance(x, str) and x.strip()), axis=1)
+            bas_i = int(puan.idxmax())
+            adlar = [str(x).strip() for x in df.iloc[bas_i].tolist()[1:]]
+            print(f"      SÜTUN ADLARI (başlık satırı {bas_i}, {len(adlar)} adet):")
+            for j in range(0, len(adlar), 4):
+                print("        " + " | ".join(f"{a[:34]:<34}" for a in adlar[j:j+4]))
 
 
 def bls() -> None:

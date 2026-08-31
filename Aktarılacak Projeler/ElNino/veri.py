@@ -8,19 +8,31 @@
   TÜFE  EVDS'ten manşet, çekirdek ve gıda alt endeksleri (ÖKTG aileleri).
         Kodlar Enflasyon hattının kullandıklarıyla AYNI; iki hat aynı seriyi
         farklı koddan çekerse bir gün sessizce ayrışırlar.
-  FRED  IMF birincil emtia fiyatları + ABD TÜFE/gıda/çekirdek + Fed politika
-        faizi. NEDEN GEREKLİ: Türkiye TÜFE alt endeksleri 2006'da başlıyor ve
-        o pencerede yalnız İKİ güçlü El Niño tamamlandı — yön hakkında hüküm
-        kurulamıyor. Aynı epizot tanımı 1980'de başlayan emtia serilerine
-        uygulanınca örneklem BEŞ epizoda çıkar: Türkiye'de ölçülemeyen şey
-        küresel tarafta ölçülebilir. FRED seçildi çünkü FAO'nun gıda endeksi
-        her ay adı değişen bir CSV'de duruyor (kırılgan), FRED ise tek host,
-        anahtarsız ve sabit kodlu.
+  KÜRESEL  Dört kaynak, dört ayrı kapı:
+        · Dünya Bankası Pink Sheet (xlsx) — aylık emtia endeksleri ve ürün
+          fiyatları, 1960'tan bugüne.
+        · BLS (anahtarsız v2 API) — ABD TÜFE manşet, gıda ve çekirdek.
+        · BIS (SDMX CSV) — merkez bankası politika faizleri; ABD serisi
+          1954'te başlıyor, Türkiye ve Euro Bölgesi de aynı uçtan geliyor.
+        · ECB (SDMX CSV) — Euro Bölgesi HICP manşet ve gıda, yıllık % değişim.
+
+        NEDEN GEREKLİ: Türkiye TÜFE alt endeksleri 2006'da başlıyor ve o
+        pencerede yalnız İKİ güçlü El Niño tamamlandı — yön hakkında hüküm
+        kurulamıyor. Aynı epizot tanımı 1960'ta başlayan emtia serilerine
+        uygulanınca örneklem kat kat büyür: Türkiye'de ölçülemeyen şey,
+        şokun GELDİĞİ yerde ölçülebilir.
+
+        NEDEN BU KAYNAKLAR: FRED bu koşucudan erişilemiyor — üç ucu da zaman
+        aşımına uğradı (31.08.2026 keşif koşusu); IMF'in SDMX ucunun DNS'i
+        çözülmüyor, datamapper 403 veriyor. Ölçülerek seçilen bu dört kapı
+        FRED'in vereceğinden daha fazlasını veriyor: örneklem 1980 yerine
+        1960'ta başlıyor ve karşılaştırmaya ikinci bir ekonomi (Euro Bölgesi)
+        giriyor.
 
 KÜRESEL BLOK YUMUŞAK DÜŞER. ONI ya da TÜFE gelmezse hat DURUR — onlar tezin
-gövdesi. FRED gelmezse hat durmaz ama sessiz de kalmaz: kunye.json'a
-"kuresel_durum" yazılır, uyarı listesine düşer ve ölçüm katmanı küresel
-bölümü hiç üretmez (eski değeri taşımaz).
+gövdesi. Küresel kaynaklar gelmezse hat durmaz ama sessiz de kalmaz:
+kunye.json'a "kuresel_durum" yazılır, uyarı listesine düşer, eski kuresel.csv
+SİLİNİR ve ölçüm katmanı küresel bölümü hiç üretmez (eski değeri taşımaz).
 """
 from __future__ import annotations
 
@@ -60,32 +72,58 @@ TUFE_SERI = {
     "cekirdek_c":      "TP.FE25.OKTG04",
 }
 
-# ── FRED (anahtarsız CSV). Kodlar 31.08.2026'da kesif_kuresel.py ile ölçüldü.
-FRED_UC = "https://fred.stlouisfed.org/graph/fredgraph.csv?id={}"
-FRED_SERI = {
-    # IMF birincil emtia fiyat endeksleri (aylık, USD, 2016=100)
-    "emtia_gida":     "PFOODINDEXM",
-    "emtia_tum":      "PALLFNFINDEXM",
-    "emtia_yakitsiz": "PNFUELINDEXM",
-    "emtia_icecek":   "PBEVEINDEXM",
-    "emtia_hammadde": "PRAWMINDEXM",
-    # ENSO'nun doğrudan vurduğu ürünler (USD/ton ya da USD/kg)
-    "bugday":  "PWHEAMTUSDM",
-    "misir":   "PMAIZMTUSDM",
-    "pirinc":  "PRICENPQUSDM",
-    "soya":    "PSOYBUSDM",
-    "palm":    "PPOILUSDM",
-    "seker":   "PSUGAISAUSDM",
-    "kahve":   "PCOFFOTMUSDM",
-    "kakao":   "PCOCOUSDM",
-    # ABD
-    "abd_tufe":      "CPIAUCSL",
-    "abd_gida":      "CPIUFDSL",
-    "abd_cekirdek":  "CPILFESL",
-    "fed_faiz":      "FEDFUNDS",
+# ── KÜRESEL KANADIN KAYNAKLARI. 31.08.2026'da koşucudan ölçüldü: FRED üç
+# ucundan da ZAMAN AŞIMINA uğruyor, IMF SDMX'in DNS'i çözülmüyor, IMF
+# datamapper 403 veriyor. Açık kapılar aşağıdakiler ve FRED'den DAHA İYİLER:
+# Pink Sheet aylık emtiayı 1960'a taşıyor (FRED 1980), BIS politika faizini
+# 1954'ten veriyor, ECB ikinci bir karşılaştırma ekonomisi (Euro Bölgesi)
+# getiriyor. Her kaynak kendi başına yumuşak düşer.
+PINK_UCLARI = (
+    "https://thedocs.worldbank.org/en/doc/18675f1d1639c7a34d463f59263ba0a2-"
+    "0050012025/related/CMO-Historical-Data-Monthly.xlsx",
+    "https://thedocs.worldbank.org/en/doc/5d903e848db1d1b83e0ec8f744e55570-"
+    "0350012021/related/CMO-Historical-Data-Monthly.xlsx",
+)
+BLS_UC = "https://api.bls.gov/publicAPI/v2/timeseries/data/"
+BLS_SERI = {"abd_tufe": "CUUR0000SA0", "abd_gida": "CUUR0000SAF1",
+            "abd_cekirdek": "CUUR0000SA0L1E"}
+BLS_BAS = 1960
+BIS_UC = "https://stats.bis.org/api/v2/data/dataflow/BIS/WS_CBPOL/1.0/M.{}?format=csv"
+BIS_ULKE = {"faiz_abd": "US", "faiz_tr": "TR", "faiz_ea": "XM"}
+ECB_UC = ("https://data-api.ecb.europa.eu/service/data/ICP/M.U2.N.{}.4.ANR"
+          "?format=csvdata&startPeriod=1990-01")
+ECB_SERI = {"ea_tufe_12a": "000000", "ea_gida_12a": "010000"}
+
+# Pink Sheet sütun adları dosyanın kendisinden okunur; buradaki eşleme
+# ARANACAK adı verir (küçük harfe indirilip boşluklar sadeleştirilerek).
+PINK_ENDEKS = {
+    "emtia_enerji":   "energy",
+    "emtia_yakitsiz": "non-energy",
+    "emtia_tarim":    "agriculture",
+    "emtia_icecek":   "beverages",
+    "emtia_gida":     "food",
+    "emtia_yaglar":   "oils & meals",
+    "emtia_tahil":    "grains",
+    "emtia_diger":    "other food",
+    "emtia_hammadde": "raw materials",
+    "emtia_gubre":    "fertilizers",
+    "emtia_metal":    "metals & minerals",
+}
+PINK_URUN = {
+    "palm":    "palm oil",
+    "soya":    "soybeans",
+    "pirinc":  "rice, thai 5%",
+    "bugday":  "wheat, us hrw",
+    "misir":   "maize",
+    "seker":   "sugar, world",
+    "kahve":   "coffee, robusta",
+    "kakao":   "cocoa",
+    "muz":     "banana, us",
+    "portakal": "orange",
+    "cay":     "tea, avg 3 auctions",
 }
 # Küresel blok bunlarsız anlamsızdır; biri bile yoksa blok üretilmez.
-FRED_ZORUNLU = ("emtia_gida", "abd_tufe", "abd_gida")
+KURESEL_ZORUNLU = ("emtia_gida", "abd_tufe", "abd_gida")
 
 # DJF → merkez ay Ocak; JFM → Şubat; … ONI üç aylık kayan ortalamadır ve
 # etiketi ORTA aya karşılık gelir. Bunu kaydırmak bütün gecikme ölçümünü
@@ -215,45 +253,190 @@ def tufe_cek() -> pd.DataFrame:
     return t
 
 
-def _fred_seri(kod: str) -> pd.Series | None:
-    metin = _metin_cek(FRED_UC.format(kod), deneme=2)
-    df = pd.read_csv(io.StringIO(metin))
-    if df.shape[1] < 2:
+def _ad_sadelestir(x) -> str:
+    return re.sub(r"\s+", " ", str(x)).strip().lower()
+
+
+def _pink_sayfa(xl, sayfa: str) -> pd.DataFrame | None:
+    """Pink Sheet sayfasını başlık satırını BULARAK okur.
+
+    Dosyanın başlık düzeni yıllar içinde değişiyor (birim satırı, kod satırı,
+    boş satırlar). Sabit skiprows vermek, düzen değişince SESSİZCE yanlış
+    sütun okumak demekti. Onun yerine ilk 'YYYYMxx' satırı bulunur ve başlık,
+    onun üstündeki satırlar arasından EN ÇOK metin taşıyan satır seçilir.
+    """
+    df = pd.read_excel(xl, sheet_name=sayfa, header=None)
+    ilk = None
+    for i, v in enumerate(df.iloc[:, 0].astype(str)):
+        if len(v) == 7 and v[:4].isdigit() and v[4] == "M" and v[5:].isdigit():
+            ilk = i
+            break
+    if ilk is None or ilk == 0:
         return None
-    tar = pd.to_datetime(df.iloc[:, 0], errors="coerce")
-    deg = pd.to_numeric(df.iloc[:, 1].replace(".", None), errors="coerce")
-    s = pd.Series(deg.to_numpy(), index=pd.Index(tar)).dropna()
-    # Aylık seriler ayın ilk gününe damgalıdır; yine de normalize edilir ki
-    # ONI ile birleştirme gün farkından sessizce boşa düşmesin.
-    s.index = s.index.to_period("M").to_timestamp()
+    ust = df.iloc[:ilk]
+    puan = ust.apply(lambda r: sum(1 for x in r[1:]
+                                   if isinstance(x, str) and x.strip()), axis=1)
+    bas_i = int(puan.idxmax())
+    adlar = ["tarih"] + [_ad_sadelestir(x) for x in df.iloc[bas_i].tolist()[1:]]
+    veri = df.iloc[ilk:].copy()
+    veri.columns = adlar
+    idx = pd.to_datetime(veri["tarih"].astype(str).str.replace("M", "-", regex=False),
+                         format="%Y-%m", errors="coerce")
+    veri = veri.drop(columns=["tarih"])
+    veri.index = pd.Index(idx)
+    veri = veri[~veri.index.isna()]
+    return veri.apply(pd.to_numeric, errors="coerce")
+
+
+def _pink_es(veri: pd.DataFrame, aranan: str) -> pd.Series | None:
+    """Sütunu tam adla, olmazsa ÖNEK eşlemesiyle bulur (adlar yıllara göre
+    'Coffee, Robusta' ↔ 'Coffee, robusta, **' gibi kuyruk alıyor)."""
+    if veri is None:
+        return None
+    for k in veri.columns:
+        if k == aranan:
+            return veri[k]
+    aday = [k for k in veri.columns if isinstance(k, str) and k.startswith(aranan)]
+    return veri[aday[0]] if aday else None
+
+
+def pink_cek() -> tuple[dict[str, pd.Series], list[str]]:
+    ham = None
+    for uc in PINK_UCLARI:
+        try:
+            req = urllib.request.Request(uc, headers={"User-Agent": UA})
+            with urllib.request.urlopen(req, timeout=120) as r:
+                ham = r.read()
+            print(f"  Pink Sheet alındı: {len(ham):,} bayt")
+            break
+        except Exception as ex:
+            uyar(f"Pink Sheet ucu düştü: {uc[:60]}… — {ex}")
+    if ham is None:
+        return {}, list(PINK_ENDEKS) + list(PINK_URUN)
+    xl = pd.ExcelFile(io.BytesIO(ham))
+    sayfalar = {}
+    for sayfa in xl.sheet_names:
+        d = _pink_sayfa(xl, sayfa)
+        if d is not None and not d.empty:
+            sayfalar[_ad_sadelestir(sayfa)] = d
+    endeks = sayfalar.get("monthly indices")
+    fiyat = sayfalar.get("monthly prices")
+    alinan, dusen = {}, []
+    for ad, aranan in PINK_ENDEKS.items():
+        s = _pink_es(endeks, aranan)
+        (alinan.setdefault(ad, s) if s is not None else dusen.append(ad))
+    for ad, aranan in PINK_URUN.items():
+        s = _pink_es(fiyat, aranan)
+        (alinan.setdefault(ad, s) if s is not None else dusen.append(ad))
+    if dusen:
+        uyar(f"Pink Sheet'te bulunamayan sütun: {', '.join(dusen)}")
+    if alinan:
+        ilk = next(iter(alinan.values()))
+        print(f"  Pink Sheet: {len(alinan)} seri, {ilk.dropna().index.min():%Y-%m} → "
+              f"{ilk.dropna().index.max():%Y-%m}")
+    return {k: v.dropna() for k, v in alinan.items()}, dusen
+
+
+def bls_cek() -> tuple[dict[str, pd.Series], list[str]]:
+    """BLS anahtarsız v2: istek başına EN ÇOK 10 YIL. Dilimler birleştirilir."""
+    par = {ad: {} for ad in BLS_SERI}
+    kod_ad = {v: k for k, v in BLS_SERI.items()}
+    bit = pd.Timestamp.today().year
+    yil = BLS_BAS
+    while yil <= bit:
+        y2 = min(yil + 9, bit)
+        govde = json.dumps({"seriesid": list(BLS_SERI.values()),
+                            "startyear": str(yil), "endyear": str(y2)}).encode()
+        try:
+            req = urllib.request.Request(
+                BLS_UC, data=govde,
+                headers={"User-Agent": UA, "Content-Type": "application/json"})
+            with urllib.request.urlopen(req, timeout=90) as r:
+                j = json.loads(r.read().decode("utf-8"))
+        except Exception as ex:
+            uyar(f"BLS dilimi düştü {yil}-{y2}: {ex}")
+            yil = y2 + 1
+            continue
+        if j.get("status") != "REQUEST_SUCCEEDED":
+            uyar(f"BLS dilimi reddetti {yil}-{y2}: {j.get('message')}")
+            yil = y2 + 1
+            continue
+        for s in j.get("Results", {}).get("series", []):
+            ad = kod_ad.get(s.get("seriesID"))
+            for d in s.get("data") or []:
+                if not str(d.get("period", "")).startswith("M") or d["period"] == "M13":
+                    continue
+                t = pd.Timestamp(int(d["year"]), int(d["period"][1:]), 1)
+                try:
+                    par[ad][t] = float(d["value"])
+                except (TypeError, ValueError):
+                    pass
+        yil = y2 + 1
+    alinan = {k: pd.Series(v).sort_index() for k, v in par.items() if v}
+    dusen = [k for k in BLS_SERI if k not in alinan]
+    if alinan:
+        ilk = next(iter(alinan.values()))
+        print(f"  BLS: {len(alinan)} seri, {ilk.index.min():%Y-%m} → {ilk.index.max():%Y-%m}")
+    return alinan, dusen
+
+
+def _sdmx_csv(url: str) -> pd.Series | None:
+    req = urllib.request.Request(url, headers={"User-Agent": UA})
+    with urllib.request.urlopen(req, timeout=90) as r:
+        df = pd.read_csv(io.StringIO(r.read().decode("utf-8", "replace")))
+    if "TIME_PERIOD" not in df.columns or "OBS_VALUE" not in df.columns:
+        return None
+    d = df[["TIME_PERIOD", "OBS_VALUE"]].dropna()
+    idx = pd.to_datetime(d["TIME_PERIOD"].astype(str), format="%Y-%m", errors="coerce")
+    s = pd.Series(pd.to_numeric(d["OBS_VALUE"], errors="coerce").to_numpy(),
+                  index=pd.Index(idx)).dropna()
     return s[~s.index.duplicated(keep="last")].sort_index() if len(s) else None
 
 
-def fred_cek() -> tuple[pd.DataFrame | None, list[str]]:
-    """FRED bloğu. Yumuşak düşer: eksik seri uyarı üretir, hattı durdurmaz."""
+def bis_ecb_cek() -> tuple[dict[str, pd.Series], list[str]]:
     alinan, dusen = {}, []
-    for ad, kod in FRED_SERI.items():
+    for ad, ulke in BIS_ULKE.items():
         try:
-            s = _fred_seri(kod)
+            s = _sdmx_csv(BIS_UC.format(ulke))
         except Exception as ex:
-            dusen.append(ad)
-            uyar(f"FRED serisi düştü: {ad} ({kod}) — {ex}")
+            s = None
+            uyar(f"BIS düştü ({ulke}): {ex}")
+        (alinan.setdefault(ad, s) if s is not None else dusen.append(ad))
+    for ad, kod in ECB_SERI.items():
+        try:
+            s = _sdmx_csv(ECB_UC.format(kod))
+        except Exception as ex:
+            s = None
+            uyar(f"ECB düştü ({kod}): {ex}")
+        (alinan.setdefault(ad, s) if s is not None else dusen.append(ad))
+    for ad, s in alinan.items():
+        print(f"  {ad}: {len(s)} ay, {s.index.min():%Y-%m} → {s.index.max():%Y-%m}, "
+              f"son {s.iloc[-1]:.2f}")
+    return alinan, dusen
+
+
+def kuresel_cek() -> tuple[pd.DataFrame | None, list[str]]:
+    """Küresel blok. YUMUŞAK DÜŞER: eksik seri uyarı üretir, hattı durdurmaz."""
+    alinan, dusen = {}, []
+    for f in (pink_cek, bls_cek, bis_ecb_cek):
+        try:
+            a, d = f()
+        except Exception as ex:
+            uyar(f"{f.__name__} tümüyle düştü: {ex}")
             continue
-        if s is None or s.empty:
-            dusen.append(ad)
-            uyar(f"FRED serisi boş: {ad} ({kod})")
-            continue
-        alinan[ad] = s
-    eksik_zorunlu = [a for a in FRED_ZORUNLU if a not in alinan]
-    if eksik_zorunlu:
-        uyar(f"FRED zorunlu serileri eksik ({eksik_zorunlu}) — KÜRESEL BLOK ÜRETİLMEYECEK")
+        alinan.update(a)
+        dusen += d
+    eksik = [a for a in KURESEL_ZORUNLU if a not in alinan]
+    if eksik:
+        uyar(f"küresel zorunlu seriler eksik ({eksik}) — KÜRESEL BLOK ÜRETİLMEYECEK")
         return None, dusen
     df = pd.DataFrame(alinan).sort_index()
-    print(f"  FRED alındı: {df.shape[1]}/{len(FRED_SERI)} seri, {len(df)} ay, "
+    df = df[df.index.notna()]
+    print(f"  küresel blok: {df.shape[1]} seri, {len(df)} ay, "
           f"{df.index.min():%Y-%m} → {df.index.max():%Y-%m}")
     if dusen:
-        print(f"  ! FRED'de alınamayan: {', '.join(dusen)}")
-    return df, dusen
+        print(f"  ! alınamayan: {', '.join(sorted(set(dusen)))}")
+    return df, sorted(set(dusen))
 
 
 def main() -> int:
@@ -263,7 +446,7 @@ def main() -> int:
     oni.to_frame("oni").to_csv(DATA / "oni.csv", encoding="utf-8")
     tufe = tufe_cek()
     tufe.to_csv(DATA / "tufe.csv", encoding="utf-8")
-    kur, kur_dusen = fred_cek()
+    kur, kur_dusen = kuresel_cek()
     kur_yol = DATA / "kuresel.csv"
     if kur is not None:
         kur.to_csv(kur_yol, encoding="utf-8")
