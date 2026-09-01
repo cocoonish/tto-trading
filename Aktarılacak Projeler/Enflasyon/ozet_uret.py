@@ -378,8 +378,11 @@ def main() -> int:
         # Kestirim örnekleminin TAMAMI (yalnız son 24 ay değil).
         ft = ip.get("fark_tum") or {}
         for k, o_ in (("ort", 2), ("medyan", 2), ("std", 2), ("mutlak_ort", 2),
-                      ("ustte_pay", 0), ("t", 2), ("p", 4), ("n", 0)):
+                      ("ustte_pay", 0), ("t", 2), ("p", 4), ("n", 0),
+                      ("min", 2), ("maks", 2)):
             koy(f"itp_tum_{k}", ft.get("ito_ustte_pay" if k == "ustte_pay" else k), o_)
+        koy("itp_tum_min_ay", ft.get("min_ay"), None)
+        koy("itp_tum_maks_ay", ft.get("maks_ay"), None)
         for k in ("sabit", "egim", "se_egim", "se_sabit", "r", "spearman",
                   "r2", "se_artik"):
             koy(f"itp_{k}", r_.get(k), 3)
@@ -408,9 +411,16 @@ def main() -> int:
         # ortalama fark ayrışıyor mu (Welch) ve OYNAKLIK ayrışıyor mu (std
         # oranı). Rejim yılı iddiası asıl ikincisidir; ortalama aynı çıksa
         # bile dört kat oynak bir dönem kestirimi kendine çeker.
+        # HÜKÜM ÜÇ HÂLLİDİR. n=0 iken "ayrışmıyor" yazmak, yapılmamış bir
+        # sınamanın sonucunu bildirmek olurdu: dışlanacak ay yoksa Welch
+        # sınaması hiç koşmuyor. Sayfa bu anahtarı koşulsuz bastığı için
+        # üçüncü hâl açıkça yazılıyor.
         koy("itp_d_hukum",
-            ("dışlanan dönemin ortalama farkı da oynaklığı da kalan örneklemden "
-             "ayrışıyor" if ds.get("ort_ayrisiyor") else
+            ("bugün dışlanan ay yok — kural kurulu ama örneklemde o yıllar "
+             "hiç bulunmuyor, dolayısıyla karşılaştırma da yapılmadı"
+             if not ds.get("n") else
+             "dışlanan dönemin ortalama farkı kalan örneklemden ayrışıyor"
+             if ds.get("ort_ayrisiyor") else
              "ortalama fark istatistiksel olarak ayrışmıyor; dışlamanın "
              "gerekçesi ortalama değil OYNAKLIK"), None)
 

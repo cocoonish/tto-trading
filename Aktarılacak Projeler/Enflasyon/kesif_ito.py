@@ -1,6 +1,23 @@
 # -*- coding: utf-8 -*-
 """İTO (İstanbul Ticaret Odası) endeksleri — EVDS keşif koşusu.
 
+SONUÇ (01.09.2026 koşusu) — BU SORU CEVAPLANDI, YENİDEN KOŞMAYA GEREK YOK:
+  · EVDS grup kataloğu `categories/type=json` ucundan AÇILIYOR (154 grup) ve
+    154 grubun HİÇBİRİNİN adında İTO / İstanbul / geçinme / ücretliler /
+    ticaret odası geçmiyor. `datagroups/...` uçlarının üçü de 400/404.
+  · Kod uzayında YALNIZ İKİ seri var ve ikisi de aynı ayda başlıyor:
+        TP.FG.IST1.23   n=31   2024-01 → 2026-07   136,89 → 320,26
+        TP.FG.IST2.23   n=31   2024-01 → 2026-07   134,02 → 312,99
+    TP.FG.IST1.01–30, TP.FG.IST.01–15, TP.FG.IST2.01–15 aralığındaki diğer
+    bütün kodlar HTTP 400 döndürüyor: EVDS'te böyle seriler yok.
+  · Yani İTO–TÜFE karşılaştırması EVDS ile 2024 Ocak'tan geriye GÖTÜRÜLEMEZ.
+    2023 (ve öncesi) için İTO verisi başka bir kaynaktan gelmek zorunda;
+    İTO'nun kendi sitesi bu koşuculardan erişilebilir DEĞİL.
+
+Betik yine de duruyor: soru "elimizdeki serinin daha uzun bir kardeşi var mı"
+ileride yeniden sorulabilir (EVDS geçmişi geriye doğru tamamlayabilir) ve o
+zaman cevabı tahmin etmek yerine ÖLÇMEK gerekir.
+
 NEDEN: Hattımızdaki `ito_ist` (TP.FG.IST1.23) Ocak 2024'te başlıyor ve
 İTO–TÜFE karşılaştırması 30 aylık bir örnekleme sıkışıyor. İki ihtimal var ve
 ikisi de ölçülmeden bilinemez:

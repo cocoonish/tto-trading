@@ -853,12 +853,16 @@ def sekil_12(ip, damga):
     if not ip or not ip.get("kayan"):
         return None
     ds = ip.get("dislama") or {}
-    n_panel = 3 if ds.get("n") else 2
+    # ÜÇÜNCÜ PANEL HER ZAMAN ÇİZİLİR. Yalnız dışlama varken çizilseydi, hiçbir
+    # şey dışlanmadığında okur "örneklem hangi enflasyon rejimini kapsıyor"
+    # sorusunu soramazdı — oysa bir eşleme kuralının en önemli sınırı budur:
+    # kural, ancak gördüğü rejimde geçerlidir.
+    n_panel = 3
     basliklar = ["Takvim ayına göre ortalama fark (İTO − TÜFE) — kestirim örneklemi",
-                 "İlişki kararlı mı? 12 aylık kayan korelasyon, eğim ve ortalama fark"]
-    if n_panel == 3:
-        basliklar.append("Dışlama haklı mı? Aylık TÜFE'nin salınımı — dışlanan dönem "
-                         "ve kalan örneklem")
+                 "İlişki kararlı mı? 12 aylık kayan korelasyon, eğim ve ortalama fark",
+                 ("Örneklem hangi rejimi kapsıyor? Aylık TÜFE — dışlanan dönem gri"
+                  if ds.get("n") else
+                  "Örneklem hangi rejimi kapsıyor? Aylık TÜFE'nin salınımı")]
     fig = make_subplots(rows=n_panel, cols=1, vertical_spacing=0.09,
                         subplot_titles=tuple(basliklar))
     tk = pd.DataFrame(ip["takvim"])
@@ -886,20 +890,21 @@ def sekil_12(ip, damga):
     # ÜÇÜNCÜ PANEL: dışlama gerekçesinin KENDİSİ. "Outlier" demek yetmez;
     # dışlanan dönemin aylık TÜFE'sinin nasıl salındığı gösterilir ve kalan
     # örneklemin bandıyla yan yana konur.
-    if n_panel == 3:
-        t = pd.DataFrame(ip["tablo"])
-        x = pd.to_datetime(t["ay"] + "-01")
-        fig.add_trace(go.Bar(
-            x=x, y=t["tufe"],
-            marker_color=[GRI if dis else TEAL for dis in t["dislandi"]],
-            name="Aylık TÜFE (gri: dışlanan)",
-            hovertemplate="%{y:.2f}%<extra>aylık TÜFE</extra>"), row=3, col=1)
-        for v, ad_, renk in ((ds.get("kalan_tufe_maks"), "kalan örneklem en yüksek", LACI),
-                             (ds.get("kalan_tufe_min"), "kalan örneklem en düşük", LACI)):
-            if v is not None:
-                fig.add_hline(y=v, line=dict(color=renk, width=1.2, dash="dash"),
-                              row=3, col=1)
-        fig.update_yaxes(title_text="aylık %", row=3, col=1)
+    t = pd.DataFrame(ip["tablo"])
+    if "dislandi" not in t.columns:
+        t["dislandi"] = False
+    x = pd.to_datetime(t["ay"] + "-01")
+    fig.add_trace(go.Bar(
+        x=x, y=t["tufe"],
+        marker_color=[GRI if dis else TEAL for dis in t["dislandi"]],
+        name=("Aylık TÜFE (gri: dışlanan)" if ds.get("n") else "Aylık TÜFE"),
+        hovertemplate="%{y:.2f}%<extra>aylık TÜFE</extra>"), row=3, col=1)
+    kal = t[~t["dislandi"]]["tufe"]
+    if len(kal):
+        for v in (float(kal.min()), float(kal.max())):
+            fig.add_hline(y=v, line=dict(color=LACI, width=1.2, dash="dash"),
+                          row=3, col=1)
+    fig.update_yaxes(title_text="aylık %", row=3, col=1)
     fig.update_yaxes(title_text="puan", row=1, col=1)
     fig.update_yaxes(title_text="r / eğim / puan", row=2, col=1)
     for an in fig.layout.annotations:
@@ -910,14 +915,17 @@ def sekil_12(ip, damga):
     alt2 = ("Takvim düzeltmesinin örneklem dışı etkisi ölçülemedi" if zarar is None else
             f"Takvim ayı düzeltmesi örneklem DIŞI hatayı {zarar:+.3f} puan "
             f"DEĞİŞTİRİYOR — tablo ikna edici, kural değil".replace(".", ","))
-    alt3 = ("Alt panel: 12 aylık pencere · noktalı yatay çizgi eğim = 1 "
-            "(birebir geçiş)")
-    if n_panel == 3:
+    kal_t = t[~t["dislandi"]]["tufe"]
+    if ds.get("n"):
         alt3 = (f"En alt panel: dışlanan dönemde aylık TÜFE "
                 f"%{ds.get('tufe_min', 0):.2f}–%{ds.get('tufe_maks', 0):.2f} "
-                f"arasında salındı; kalan örneklemde "
+                f"arasında salındı; kestirim örnekleminde "
                 f"%{ds.get('kalan_tufe_min', 0):.2f}–%{ds.get('kalan_tufe_maks', 0):.2f} "
                 f"(kesikli çizgiler)").replace(".", ",")
+    else:
+        alt3 = (f"En alt panel: örneklemde aylık TÜFE %{float(kal_t.min()):.2f} ile "
+                f"%{float(kal_t.max()):.2f} arasında salındı (kesikli çizgiler) — "
+                f"kural ancak bu bantta sınanmıştır").replace(".", ",")
     return _duzen(
         fig, "Takvim ayı, kararlılık ve dışlama kararı",
         [f"Üst panel kestirim örnekleminden; her çubuğun üstündeki n o takvim "
