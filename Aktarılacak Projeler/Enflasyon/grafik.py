@@ -638,11 +638,224 @@ SEKILLER = [
 ]
 
 
+# ===========================================================================
+# İTO kanadı — şekil 10-12
+#
+# NEDEN AYRI ÜÇ FİGÜR: İTO okuması üç ayrı soruya cevap veriyor ve üçü aynı
+# eksene sığmıyor. (10) İki seri ne kadar yakın ve fark ne? (11) Farkı bir
+# KURALA çevirebilir miyiz, ve o kural piyasanın fiyatladığı ankete karşı ne
+# yapıyor? (12) İlişki kararlı mı, takvim ayı bir şey söylüyor mu?
+#
+# İTO PROFİLİ YOKSA FİGÜR ÜRETİLMEZ ve kos() hattı DURDURUR — sessizce eski
+# grafikle taze metin yayımlanmasın (bkz. kos() sonundaki kapı).
+def _ito_yukle() -> dict | None:
+    y = VERI / "ito_profil.json"
+    if not y.exists():
+        return None
+    d = json.loads(y.read_text(encoding="utf-8"))
+    return d if d.get("tablo") else None
+
+
+def sekil_10(ip, damga):
+    """İTO ve TÜFE: aylık okuma, fark ve yıllık yakınsama."""
+    if not ip:
+        return None
+    fig = make_subplots(rows=3, cols=1, vertical_spacing=0.075,
+                        subplot_titles=("Aylık değişim: İTO (İstanbul) ve TÜFE (Türkiye)",
+                                        "Fark = İTO − TÜFE, puan",
+                                        "12 aylık değişim ve aradaki makas"))
+    t = pd.DataFrame(ip["tablo"])
+    x = pd.to_datetime(t["ay"] + "-01")
+    fig.add_trace(go.Bar(x=x, y=t["ito"], name="İTO · aylık", marker_color=GOLD,
+                         hovertemplate="%{y:.2f}%<extra>İTO</extra>"), row=1, col=1)
+    fig.add_trace(go.Bar(x=x, y=t["tufe"], name="TÜFE · aylık", marker_color=TEAL,
+                         hovertemplate="%{y:.2f}%<extra>TÜFE</extra>"), row=1, col=1)
+    f = ip["fark"]
+    renk = [CLARET if v > 0 else LACI for v in t["fark"]]
+    fig.add_trace(go.Bar(x=x, y=t["fark"], name="Fark (İTO − TÜFE)",
+                         marker_color=renk,
+                         hovertemplate="%{y:+.2f} puan<extra>fark</extra>"),
+                  row=2, col=1)
+    fig.add_hline(y=f["ort"], line=dict(color=INK, width=1.4, dash="dash"),
+                  annotation_text=f"ortalama {f['ort']:+.2f}".replace(".", ","),
+                  annotation_position="top left",
+                  annotation_font=dict(size=10, color=INK), row=2, col=1)
+    for yon in (+1, -1):
+        fig.add_hline(y=f["ort"] + yon * f["std"], line=dict(color=GRI, width=1, dash="dot"),
+                      row=2, col=1)
+    y = pd.DataFrame(ip["yillik"])
+    xy = pd.to_datetime(y["ay"] + "-01")
+    fig.add_trace(go.Scatter(x=xy, y=y["ito"], name="İTO · 12 aylık", mode="lines",
+                             line=dict(color=GOLD, width=2.2),
+                             hovertemplate="%{y:.2f}%<extra>İTO 12a</extra>"), row=3, col=1)
+    fig.add_trace(go.Scatter(x=xy, y=y["tufe"], name="TÜFE · 12 aylık", mode="lines",
+                             line=dict(color=TEAL, width=2.2),
+                             hovertemplate="%{y:.2f}%<extra>TÜFE 12a</extra>"), row=3, col=1)
+    fig.add_trace(go.Scatter(x=xy, y=y["fark"], name="Makas (sağ eksen yok, puan)",
+                             mode="lines", line=dict(color=CLARET, width=1.6, dash="dot"),
+                             hovertemplate="%{y:+.2f} puan<extra>makas</extra>"),
+                  row=3, col=1)
+    fig.update_yaxes(title_text="aylık %", row=1, col=1)
+    fig.update_yaxes(title_text="puan", row=2, col=1)
+    fig.update_yaxes(title_text="yıllık % / puan", row=3, col=1)
+    fig.update_layout(barmode="group")
+    for an in fig.layout.annotations:
+        if an.text and "ortalama" not in an.text:
+            an.font.size = 12
+            an.font.color = INK
+    yo = ip.get("yillik_ozet", {})
+    return _duzen(
+        fig, "İTO ile TÜFE: aynı ayın iki ölçümü",
+        [f"İTO İstanbul endeksi (EVDS TP.FG.IST1.23) ve TÜFE Türkiye geneli · "
+         f"{ip['ilk_ay']}–{ip['son_ay']}, n={ip['n_toplam']} ay · veri: {damga}",
+         f"Fark ortalaması {f['ort']:+.2f} puan (medyan {f['medyan']:+.2f}), "
+         f"İTO ayların %{f['ito_ustte_pay']:.0f}'inde yukarıda; "
+         f"noktalı çizgiler ortalama ± 1 standart sapma".replace(".", ","),
+         f"Alt panel: 12 aylık makas {yo.get('maks', 0):.2f} puan zirvesinden "
+         f"{yo.get('son', 0):.2f} puana indi".replace(".", ",")],
+        n_panel=3)
+
+
+def sekil_11(ip, damga):
+    """İTO'dan TÜFE'ye: eşleme, kural yarışı, sürpriz."""
+    if not ip or not ip.get("kural", {}).get("skor"):
+        return None
+    fig = make_subplots(rows=3, cols=1, vertical_spacing=0.085,
+                        subplot_titles=(
+                            "Koşullu eşleme: İTO aylık okuması → TÜFE beklentisi",
+                            "Kural yarışı: örneklem DIŞI ortalama mutlak hata",
+                            "Sürpriz sürprizi öngörür mü? (ankete göre sapmalar)"))
+    t = pd.DataFrame(ip["tablo"])
+    es = pd.DataFrame(ip["esleme"])
+    fig.add_trace(go.Scatter(x=es["ito"], y=es["ust"], mode="lines", name="%95 öngörü aralığı",
+                             line=dict(color=GRID, width=0), showlegend=False,
+                             hoverinfo="skip"), row=1, col=1)
+    fig.add_trace(go.Scatter(x=es["ito"], y=es["alt"], mode="lines", name="%95 öngörü aralığı",
+                             line=dict(color=GRID, width=0), fill="tonexty",
+                             fillcolor="rgba(29,92,92,0.10)",
+                             hovertemplate="%{y:.2f}%<extra>alt sınır</extra>"), row=1, col=1)
+    fig.add_trace(go.Scatter(x=es["ito"], y=es["ito"], mode="lines", name="45° (TÜFE = İTO)",
+                             line=dict(color=GRI, width=1.2, dash="dot"),
+                             hovertemplate="%{y:.2f}%<extra>45°</extra>"), row=1, col=1)
+    fig.add_trace(go.Scatter(x=es["ito"], y=es["tufe"], mode="lines", name="Regresyon",
+                             line=dict(color=TEAL, width=2.4),
+                             hovertemplate="%{y:.2f}%<extra>regresyon</extra>"), row=1, col=1)
+    fig.add_trace(go.Scatter(x=t["ito"], y=t["tufe"], mode="markers", name="Aylık gözlem",
+                             marker=dict(color=CLARET, size=7, opacity=0.8),
+                             text=t["ad"],
+                             hovertemplate="%{text}<br>İTO %{x:.2f}% → TÜFE %{y:.2f}%"
+                                           "<extra></extra>"), row=1, col=1)
+    ad = {"naif": "Naif: TÜFE = İTO", "sabit": "Sabit kaydırma",
+          "medyan": "Medyan kaydırma", "oransal": "Oransal",
+          "regresyon": "Regresyon", "takvimli": "Takvim ayı düzeltmeli"}
+    sk = ip["kural"]["skor"]
+    sira = sorted(sk, key=lambda c: sk[c]["mae"])
+    kaz = ip["kural"]["kazanan"]
+    anket = ip.get("anket") or {}
+    etiket = [ad[c] for c in sira]
+    deger = [sk[c]["mae"] for c in sira]
+    renkler = [TEAL if c == kaz else (CLARET if c == "takvimli" else GRI) for c in sira]
+    if anket.get("pka_mae") is not None:
+        etiket.append("PKA anketi (piyasa)")
+        deger.append(anket["pka_mae"])
+        renkler.append(GOLD)
+    fig.add_trace(go.Bar(x=etiket, y=deger, marker_color=renkler, name="MAE, puan",
+                         hovertemplate="%{y:.3f} puan<extra>%{x}</extra>"), row=2, col=1)
+    sp = ip.get("surpriz") or {}
+    if sp:
+        sat = pd.DataFrame(ip["kural"]["satir"])
+        # Sürpriz paneli kendi verisini taşımıyor; eşleme çizgisi katsayıdan
+        # kurulur ve nokta bulutu yerine ölçülen doğru çizilir.
+        xs = np.linspace(-1.5, 1.5, 40)
+        fig.add_trace(go.Scatter(x=xs, y=sp["sabit"] + sp["egim"] * xs, mode="lines",
+                                 name=f"TÜFE sürprizi = {sp['sabit']:.2f} + "
+                                      f"{sp['egim']:.2f} × İTO sürprizi",
+                                 line=dict(color=CLARET, width=2.4),
+                                 hovertemplate="%{y:+.2f} puan<extra></extra>"), row=3, col=1)
+        fig.add_trace(go.Scatter(x=xs, y=xs, mode="lines", name="Birebir geçiş (45°)",
+                                 line=dict(color=GRI, width=1.2, dash="dot"),
+                                 hoverinfo="skip"), row=3, col=1)
+        fig.add_hline(y=0, line=dict(color=GRID, width=1), row=3, col=1)
+        fig.add_vline(x=0, line=dict(color=GRID, width=1), row=3, col=1)
+    fig.update_xaxes(title_text="İTO aylık, %", row=1, col=1)
+    fig.update_yaxes(title_text="TÜFE aylık, %", row=1, col=1)
+    fig.update_yaxes(title_text="MAE, puan", row=2, col=1)
+    fig.update_xaxes(title_text="İTO − anket, puan", row=3, col=1)
+    fig.update_yaxes(title_text="TÜFE − anket, puan", row=3, col=1)
+    for an in fig.layout.annotations:
+        an.font.size = 12
+        an.font.color = INK
+    k = ip["kural"]
+    r = ip["regresyon"]
+    alt3 = ("Sürpriz regresyonu ölçülemedi (anket serisi eksik)" if not sp else
+            f"İTO ankete göre 1 puan yukarıdaysa TÜFE ortalama "
+            f"{sp['egim']:.2f} puan yukarıda geliyor (t={sp['t']:.2f}, "
+            f"R²={sp['r2']:.2f}, işaret uyumu %{sp['isaret_uyumu']:.0f})".replace(".", ","))
+    return _duzen(
+        fig, "İTO okumasından TÜFE beklentisine",
+        [f"Aralık %95 ÖNGÖRÜ aralığıdır (güven aralığı değil): tek bir ayın "
+         f"nereye düşeceğini gösterir · n={r['n']} ay · veri: {damga}",
+         f"Orta panel: her kural genişleyen pencereyle, KENDİ geleceğini görmeden "
+         f"kuruldu · {k['n']} örneklem dışı ay ({k['ilk_ay']}–{k['son_ay']})",
+         alt3],
+        n_panel=3)
+
+
+def sekil_12(ip, damga):
+    """Takvim ayı profili ve ilişkinin kararlılığı."""
+    if not ip or not ip.get("kayan"):
+        return None
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.11,
+                        subplot_titles=(
+                            "Takvim ayına göre ortalama fark (İTO − TÜFE)",
+                            "İlişki kararlı mı? 12 aylık kayan korelasyon, eğim ve ortalama fark"))
+    tk = pd.DataFrame(ip["takvim"])
+    fig.add_trace(go.Bar(x=tk["ad"], y=tk["ort_fark"],
+                         marker_color=[CLARET if v > 0 else LACI for v in tk["ort_fark"]],
+                         name="Ortalama fark", text=[f"n={n}" for n in tk["n"]],
+                         textposition="outside", textfont=dict(size=10, color=GRI),
+                         hovertemplate="%{y:+.2f} puan · %{text}<extra>%{x}</extra>"),
+                  row=1, col=1)
+    fig.add_hline(y=ip["fark"]["ort"], line=dict(color=INK, width=1.4, dash="dash"),
+                  row=1, col=1)
+    ky = pd.DataFrame(ip["kayan"])
+    xk = pd.to_datetime(ky["ay"] + "-01")
+    fig.add_trace(go.Scatter(x=xk, y=ky["r"], name="Korelasyon (r)", mode="lines",
+                             line=dict(color=TEAL, width=2.2),
+                             hovertemplate="%{y:.3f}<extra>r</extra>"), row=2, col=1)
+    fig.add_trace(go.Scatter(x=xk, y=ky["egim"], name="Regresyon eğimi", mode="lines",
+                             line=dict(color=GOLD, width=2.0),
+                             hovertemplate="%{y:.3f}<extra>eğim</extra>"), row=2, col=1)
+    fig.add_trace(go.Scatter(x=xk, y=ky["ort_fark"], name="Ortalama fark, puan",
+                             mode="lines", line=dict(color=CLARET, width=1.8, dash="dot"),
+                             hovertemplate="%{y:+.3f} puan<extra>ortalama fark</extra>"),
+                  row=2, col=1)
+    fig.add_hline(y=1.0, line=dict(color=GRI, width=1, dash="dot"), row=2, col=1)
+    fig.update_yaxes(title_text="puan", row=1, col=1)
+    fig.update_yaxes(title_text="r / eğim / puan", row=2, col=1)
+    for an in fig.layout.annotations:
+        an.font.size = 12
+        an.font.color = INK
+    k = ip["kural"]
+    zarar = k.get("takvimli_zarar")
+    alt2 = ("Takvim düzeltmesinin örneklem dışı etkisi ölçülemedi" if zarar is None else
+            f"Takvim ayı düzeltmesi örneklem DIŞI hatayı {zarar:+.3f} puan "
+            f"DEĞİŞTİRİYOR — tablo ikna edici, kural değil".replace(".", ","))
+    return _duzen(
+        fig, "Takvim ayı ve ilişkinin kararlılığı",
+        [f"Üst panel tüm örneklem üzerinden; her çubuğun üstündeki n o takvim "
+         f"ayındaki gözlem sayısıdır · veri: {damga}",
+         alt2,
+         "Alt panel: 12 aylık pencere · noktalı yatay çizgi eğim = 1 (birebir geçiş)"],
+        n_panel=2)
+
+
 def kos() -> None:
     a, M, SA, K, D, B, R, o, tani = _yukle()
     # atalet serisini metrik'ten yeniden üret (ozet yalnız son değeri taşır)
     o["atalet_seri"] = {k: v["seri"] for k, v in metrik.atalet_olc(SA).items()}
     damga = o["son_ay_ad"]
+    ip = _ito_yukle()
     print(f"Enflasyon — grafikler · veri {damga}")
     ciktilar = [
         (sekil_01(M, o, damga), "01_manset_momentum.html"),
@@ -655,6 +868,27 @@ def kos() -> None:
         (sekil_08(R, M, o, damga), "08_reel_faiz.html"),
         (sekil_09(a, B, damga), "09_baz_etkisi.html"),
     ]
+    # İTO KANADI KOŞULLU: İTO serisi EVDS'te Ocak 2024'te başlıyor ve tek bir
+    # dış seriye bağlı. Onu zorunlu figür saymak, seri bir gün gelmediğinde
+    # çalışan dokuz figürü de birlikte düşürürdü — orantısız bir sigorta.
+    # Ama "atla ve geç" de olmaz: eski HTML yerinde kalır, sayfa taze metinle
+    # bayat grafiği yan yana basar. Doğrusu üçüncü yol: profil yoksa figürler
+    # üretilmez VE eski kopyaları SİLİNİR, uyarı düşer, hat devam eder.
+    ITO_CIKTI = ["10_ito_tufe.html", "11_ito_kural.html", "12_ito_takvim.html"]
+    if ip:
+        ciktilar += [
+            (sekil_10(ip, damga), ITO_CIKTI[0]),
+            (sekil_11(ip, damga), ITO_CIKTI[1]),
+            (sekil_12(ip, damga), ITO_CIKTI[2]),
+        ]
+    else:
+        print("  ! İTO profili yok (data/ito_profil.json) — İTO figürleri "
+              "üretilmedi ve eski kopyaları SİLİNİYOR (bayat grafik yayımlanmasın).")
+        # Üretim klasörü VE sitedeki kopya: kopyalama adımı yalnız yazar,
+        # silmez. Yalnız birini temizlemek bayat dosyayı sitede bırakırdı.
+        for ad in ITO_CIKTI:
+            (CIKTI / ad).unlink(missing_ok=True)
+            (veri.KOK / "site/public/projeler/enflasyon" / ad).unlink(missing_ok=True)
     n = 0
     for fig, ad in ciktilar:
         if fig is None:

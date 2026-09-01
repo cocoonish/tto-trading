@@ -604,6 +604,296 @@ def ito_nowcast(a: pd.DataFrame) -> dict:
     }
 
 
+def ito_profil(a: pd.DataFrame, aylar: int = 24) -> dict:
+    """İTO ile TÜFE arasındaki farkın AY AY profili ve "İTO şu geldiyse TÜFE'den
+    ne beklenir" sorusunun ölçülmüş cevabı.
+
+    ito_nowcast() regresyonu kurar ve örneklem İÇİ uyumu (R²) verir. Bu modül
+    onun cevaplayamadığı beş soruyu ölçer:
+
+    (1) FARKIN KENDİSİ VE ANLAMLILIĞI. Regresyon katsayısı farkın ortalamasını
+        gizler; okur "İTO kaç puan yukarıda gelir" diye sorar. Fark ay ay
+        yazılır ve sıfırdan farklı olup olmadığı t ile sınanır.
+    (2) EĞİM 1 Mİ. Eğim 1'den ayırt edilemiyorsa ilişki "sabit kaydırma"dır ve
+        regresyon eğimi kurmaya değmez. Bu sınanmadan regresyon yazmak,
+        veriden okunmayan bir yapıyı varsaymaktır.
+    (3) HANGİ KURAL. Beş aday kural (naif · sabit kaydırma · medyan kaydırma ·
+        oransal · regresyon · TAKVİM AYI düzeltmeli) genişleyen pencereyle,
+        örneklem DIŞI kıyaslanır. Örneklem içi R² iyimserdir; asıl soru
+        "yarın hangisini kullanayım"dır. Sıralamanın pencereye duyarlı olup
+        olmadığı da ölçülür — duyarlıysa hüküm verilmez.
+    (4) ANKETTEN İYİ Mİ. Asıl kıyas naif kural değil PİYASA BEKLENTİSİdir:
+        PKA'nın cari ay nowcast'i fiyatlanan sayıdır. Aynı pencerede eşli
+        farkla sınanır; anlamlı değilse "iyi" denmez.
+    (5) SÜRPRİZ SÜRPRİZİ ÖNGÖRÜR MÜ. Tradable soru budur: İTO ankete göre
+        yukarıda geldiyse TÜFE de ankete göre yukarıda mı gelir? İTO ayın
+        sonunda, PKA ayın ortasında oluştuğu için İTO GERÇEKTEN yeni bilgidir.
+    """
+    if "ito_ist" not in a.columns:
+        return {}
+    d = pd.DataFrame({"tufe": aylik(a["tufe"].dropna()),
+                      "ito": aylik(a["ito_ist"].dropna())}).dropna()
+    if len(d) < 18:
+        return {"n": int(len(d)), "not": "örneklem yetersiz"}
+    d["fark"] = d["ito"] - d["tufe"]
+    son = d.tail(aylar)
+    from scipy import stats as _st
+
+    AY_AD = {1: "Ocak", 2: "Şubat", 3: "Mart", 4: "Nisan", 5: "Mayıs",
+             6: "Haziran", 7: "Temmuz", 8: "Ağustos", 9: "Eylül", 10: "Ekim",
+             11: "Kasım", 12: "Aralık"}
+
+    tablo = [{"ay": i.strftime("%Y-%m"),
+              "ad": f"{AY_AD[i.month]} {i.year}",
+              "ito": round(float(r["ito"]), 2),
+              "tufe": round(float(r["tufe"]), 2),
+              "fark": round(float(r["fark"]), 2)}
+             for i, r in son.iterrows()]
+
+    f = son["fark"]
+    t_ist, p_ist = _st.ttest_1samp(f.values, 0.0)
+    fark_ozet = {
+        "n": int(len(f)),
+        "ort": round(float(f.mean()), 2),
+        "medyan": round(float(f.median()), 2),
+        "std": round(float(f.std(ddof=1)), 2),
+        "min": round(float(f.min()), 2),
+        "maks": round(float(f.max()), 2),
+        "mutlak_ort": round(float(f.abs().mean()), 2),
+        "ito_ustte_pay": round(float((f > 0).mean() * 100), 0),
+        "min_ay": son["fark"].idxmin().strftime("%Y-%m"),
+        "maks_ay": son["fark"].idxmax().strftime("%Y-%m"),
+        "t": round(float(t_ist), 2),
+        "p": round(float(p_ist), 4),
+        "anlamli": bool(p_ist < 0.05),
+    }
+
+    # Takvim ayı mevsimselliği — TÜM örneklem. Ay başına gözlem sayısı yazılır;
+    # ikiyle mevsimsellik ölçülmez ve bu tablodan KURAL çıkarılmaz. Kuralın
+    # işe yarayıp yaramadığı (3)'te örneklem dışı sınanıyor.
+    takvim = []
+    for ay_no, g in d.groupby(d.index.month):
+        takvim.append({"ay": int(ay_no), "ad": AY_AD[int(ay_no)], "n": int(len(g)),
+                       "ort_fark": round(float(g["fark"].mean()), 2),
+                       "ort_ito": round(float(g["ito"].mean()), 2),
+                       "ort_tufe": round(float(g["tufe"].mean()), 2)})
+    takvim.sort(key=lambda x: x["ay"])
+
+    # ---- regresyon (tam örneklem) ve EĞİM = 1 SINAMASI
+    X = np.column_stack([np.ones(len(d)), d["ito"].values])
+    b_, *_ = np.linalg.lstsq(X, d["tufe"].values, rcond=None)
+    e_ = d["tufe"].values - X @ b_
+    nn, kk = len(d), X.shape[1]
+    s2 = float(e_ @ e_) / max(nn - kk, 1)
+    XtX_inv = np.linalg.pinv(X.T @ X)
+    se_b = np.sqrt(np.diag(XtX_inv) * s2)
+    tkrit = float(_st.t.ppf(0.975, max(nn - kk, 1)))
+    t_bir = float((b_[1] - 1.0) / se_b[1]) if se_b[1] else float("nan")
+    p_bir = float(2 * (1 - _st.t.cdf(abs(t_bir), max(nn - kk, 1))))
+    regresyon = {
+        "n": int(nn),
+        "sabit": round(float(b_[0]), 3), "se_sabit": round(float(se_b[0]), 3),
+        "egim": round(float(b_[1]), 3), "se_egim": round(float(se_b[1]), 3),
+        "r": round(float(d["tufe"].corr(d["ito"])), 3),
+        "spearman": round(float(_st.spearmanr(d["ito"], d["tufe"]).statistic), 3),
+        "r2": round(float(1 - (e_ @ e_) / (((d["tufe"] - d["tufe"].mean()) ** 2).sum())), 3),
+        "se_artik": round(float(np.sqrt(s2)), 3),
+        "t_egim_bir": round(t_bir, 2), "p_egim_bir": round(p_bir, 4),
+        "egim_birden_farkli": bool(p_bir < 0.05),
+    }
+
+    # Koşullu eşleme: nokta tahmin + ÖNGÖRÜ aralığı (güven aralığı DEĞİL).
+    # Aralık se_ong = sqrt(s2·(1 + x0'(X'X)^-1 x0)) ile kurulur; yani katsayı
+    # belirsizliğine artık varyansı da eklenir — okurun sorduğu "TÜFE nereye
+    # düşer" sorusu tek bir gözlemin nereye düşeceği sorusudur.
+    esleme = []
+    for x in np.arange(0.5, 5.01, 0.5):
+        x0 = np.array([1.0, float(x)])
+        se = float(np.sqrt(s2 * (1.0 + x0 @ XtX_inv @ x0)))
+        m = float(b_[0] + b_[1] * x)
+        esleme.append({"ito": round(float(x), 2), "tufe": round(m, 2),
+                       "alt": round(m - tkrit * se, 2), "ust": round(m + tkrit * se, 2),
+                       "sabit_kural": round(float(x - d["fark"].mean()), 2)})
+
+    # ---- (3) KURAL YARIŞI — genişleyen pencere, örneklem DIŞI.
+    # Her adımda kuralın bütün parametreleri YALNIZ o ana kadarki veriyle
+    # kurulur; hiçbir kural kendi geleceğini görmez.
+    def _yaris(asgari: int) -> tuple[dict, list]:
+        satir = []
+        for k in range(asgari, len(d)):
+            g, x = d.iloc[:k], d.iloc[k]
+            xi, ay = float(x["ito"]), d.index[k].month
+            Xg = np.column_stack([np.ones(len(g)), g["ito"].values])
+            bg, *_ = np.linalg.lstsq(Xg, g["tufe"].values, rcond=None)
+            ga = g[g.index.month == ay]
+            satir.append({
+                "ay": d.index[k].strftime("%Y-%m"),
+                "gercek": round(float(x["tufe"]), 2),
+                "naif": round(xi, 3),
+                "sabit": round(xi - float(g["fark"].mean()), 3),
+                "medyan": round(xi - float(g["fark"].median()), 3),
+                "oransal": round(xi * float((g["tufe"] / g["ito"]).median()), 3),
+                "regresyon": round(float(bg[0] + bg[1] * xi), 3),
+                "takvimli": round(xi - float(ga["fark"].mean() if len(ga) >= 2
+                                             else g["fark"].mean()), 3),
+            })
+        if not satir:
+            return {}, []
+        df = pd.DataFrame(satir).set_index("ay")
+        skor = {}
+        for c in ("naif", "sabit", "medyan", "oransal", "regresyon", "takvimli"):
+            h = (df[c] - df["gercek"]).values
+            skor[c] = {"mae": round(float(np.abs(h).mean()), 3),
+                       "rmse": round(float(np.sqrt((h ** 2).mean())), 3),
+                       "yanlilik": round(float(h.mean()), 3),
+                       "isabet_03": round(float((np.abs(h) <= 0.3).mean() * 100), 0),
+                       "isabet_05": round(float((np.abs(h) <= 0.5).mean() * 100), 0)}
+        return skor, satir
+
+    ASGARI = 12
+    skor, yaris_satir = _yaris(ASGARI)
+    skor_dar, _ = _yaris(18)          # dayanıklılık: pencere kısalırsa sıralama tutuyor mu
+    kazanan = min(skor, key=lambda c: skor[c]["mae"]) if skor else None
+    kazanan_dar = min(skor_dar, key=lambda c: skor_dar[c]["mae"]) if skor_dar else None
+    kural = {
+        "asgari": ASGARI,
+        "n": len(yaris_satir),
+        "ilk_ay": yaris_satir[0]["ay"] if yaris_satir else None,
+        "son_ay": yaris_satir[-1]["ay"] if yaris_satir else None,
+        "skor": skor,
+        "kazanan": kazanan,
+        "skor_dar": skor_dar, "kazanan_dar": kazanan_dar,
+        "siralama_dayanikli": bool(kazanan is not None and kazanan == kazanan_dar),
+        "takvimli_zarar": (round(skor["takvimli"]["mae"] - skor[kazanan]["mae"], 3)
+                           if kazanan else None),
+        "satir": yaris_satir,
+    }
+
+    # ---- (4) ANKET KIYASI ve (5) SÜRPRİZ REGRESYONU
+    # PKA'nın cari ay sorusu ayın İLK YARISINDA sorulur; İTO ayın SONUNDA
+    # oluşur ve ertesi ayın başında yayımlanır. Yani İTO ankete göre iki üç
+    # haftalık YENİ bilgidir ve "sürpriz sürprizi öngörür mü" sorusu meşrudur.
+    anket, surpriz = {}, {}
+    if "pka_ay_cari" in a.columns:
+        dp = pd.DataFrame({"tufe": d["tufe"], "ito": d["ito"],
+                           "pka": a["pka_ay_cari"].dropna()}).dropna()
+        if len(dp) >= 18:
+            ort_fark = float(d["fark"].mean())
+            e_pka = (dp["pka"] - dp["tufe"]).values
+            e_ito = (dp["ito"] - ort_fark - dp["tufe"]).values      # örneklem İÇİ
+            # örneklem DIŞI eşli kıyas: kaydırma da genişleyen pencereyle
+            oh_p, oh_i = [], []
+            for k in range(ASGARI, len(dp)):
+                g, x = dp.iloc[:k], dp.iloc[k]
+                oh_p.append(float(x["pka"] - x["tufe"]))
+                oh_i.append(float(x["ito"] - (g["ito"] - g["tufe"]).mean() - x["tufe"]))
+            fark_mae = np.abs(np.array(oh_i)) - np.abs(np.array(oh_p))
+            t_e, p_e = _st.ttest_1samp(fark_mae, 0.0) if len(fark_mae) > 1 else (float("nan"),) * 2
+            anket = {
+                "n": int(len(dp)),
+                "ilk_ay": dp.index[0].strftime("%Y-%m"),
+                "pka_mae_ici": round(float(np.abs(e_pka).mean()), 3),
+                "ito_mae_ici": round(float(np.abs(e_ito).mean()), 3),
+                "n_disi": len(oh_p),
+                "pka_mae": round(float(np.abs(oh_p).mean()), 3),
+                "ito_mae": round(float(np.abs(oh_i).mean()), 3),
+                "esli_fark": round(float(fark_mae.mean()), 3),
+                "esli_t": round(float(t_e), 2), "esli_p": round(float(p_e), 3),
+                "ito_anlamli_iyi": bool(p_e < 0.05 and fark_mae.mean() < 0),
+            }
+            sr = dp["tufe"] - dp["pka"]            # TÜFE sürprizi (fiyatlanan sayıya göre)
+            si = dp["ito"] - dp["pka"]             # İTO'nun aynı ankete göre sapması
+            Xs = np.column_stack([np.ones(len(dp)), si.values])
+            bs, *_ = np.linalg.lstsq(Xs, sr.values, rcond=None)
+            es = sr.values - Xs @ bs
+            s2s = float(es @ es) / max(len(dp) - 2, 1)
+            ses = np.sqrt(np.diag(np.linalg.pinv(Xs.T @ Xs)) * s2s)
+            ts = float(bs[1] / ses[1]) if ses[1] else float("nan")
+            uyum = ((si > 0) == (sr > 0))
+            g25 = dp[si.abs() >= 0.25]
+            u25 = ((si[si.abs() >= 0.25] > 0) == (sr[si.abs() >= 0.25] > 0))
+            surpriz = {
+                "n": int(len(dp)),
+                "sabit": round(float(bs[0]), 3),
+                "egim": round(float(bs[1]), 3), "se_egim": round(float(ses[1]), 3),
+                "t": round(ts, 2),
+                "p": round(float(2 * (1 - _st.t.cdf(abs(ts), max(len(dp) - 2, 1)))), 4),
+                "r": round(float(sr.corr(si)), 3),
+                "r2": round(float(1 - (es @ es) / (((sr - sr.mean()) ** 2).sum())), 3),
+                "isaret_uyumu": round(float(uyum.mean() * 100), 0),
+                "isaret_p": round(float(_st.binomtest(int(uyum.sum()), len(uyum), 0.5).pvalue), 4),
+                "isaret_uyumu_25": round(float(u25.mean() * 100), 0),
+                "n_25": int(len(g25)),
+                "anlamli": bool(2 * (1 - _st.t.cdf(abs(ts), max(len(dp) - 2, 1))) < 0.05),
+            }
+
+    # İlişkinin KARARLILIĞI: 12 aylık kayan korelasyon ve eğim.
+    kayan = []
+    for i in range(12, len(d) + 1):
+        g = d.iloc[i - 12:i]
+        Xk = np.column_stack([np.ones(12), g["ito"].values])
+        bk, *_ = np.linalg.lstsq(Xk, g["tufe"].values, rcond=None)
+        kayan.append({"ay": g.index[-1].strftime("%Y-%m"),
+                      "r": round(float(g["tufe"].corr(g["ito"])), 3),
+                      "egim": round(float(bk[1]), 3),
+                      "ort_fark": round(float(g["fark"].mean()), 3)})
+
+    # ---- FARK SEVİYEYE Mİ BAĞLI? (orantısallık sınaması)
+    # Kayan ortalama fark disenflasyonla birlikte daraldı; bu, farkın SABİT
+    # değil ORANSAL olduğunu düşündürüyor (aynı yüzde fark, düşen enflasyonda
+    # daha az PUAN eder). Sezgi ölçülmeden yazılmaz: fark, İTO seviyesine
+    # regres edilir ve katsayının anlamlılığı rapor edilir. Anlamlı değilse
+    # "orantısal" bir hüküm verilmez, yalnız yön not edilir.
+    Xo = np.column_stack([np.ones(len(d)), d["ito"].values])
+    bo, *_ = np.linalg.lstsq(Xo, d["fark"].values, rcond=None)
+    eo = d["fark"].values - Xo @ bo
+    s2o = float(eo @ eo) / max(len(d) - 2, 1)
+    seo = np.sqrt(np.diag(np.linalg.pinv(Xo.T @ Xo)) * s2o)
+    to = float(bo[1] / seo[1]) if seo[1] else float("nan")
+    po = float(2 * (1 - _st.t.cdf(abs(to), max(len(d) - 2, 1))))
+    oranti = {
+        "egim": round(float(bo[1]), 3), "se": round(float(seo[1]), 3),
+        "t": round(to, 2), "p": round(po, 4),
+        "r": round(float(d["fark"].corr(d["ito"])), 3),
+        "anlamli": bool(po < 0.05),
+        "oran_medyan": round(float((d["tufe"] / d["ito"]).median()), 3),
+        "kayan_ilk": round(float(kayan[0]["ort_fark"]), 3) if kayan else None,
+        "kayan_son": round(float(kayan[-1]["ort_fark"]), 3) if kayan else None,
+        "kayan_maks": round(float(max(x["ort_fark"] for x in kayan)), 3) if kayan else None,
+        "kayan_r_min": round(float(min(x["r"] for x in kayan)), 3) if kayan else None,
+        "kayan_r_maks": round(float(max(x["r"] for x in kayan)), 3) if kayan else None,
+        "kayan_egim_min": round(float(min(x["egim"] for x in kayan)), 3) if kayan else None,
+        "kayan_egim_maks": round(float(max(x["egim"] for x in kayan)), 3) if kayan else None,
+        "kayan_n": len(kayan),
+    }
+
+    yil = pd.DataFrame({"tufe": yillik(a["tufe"].dropna()),
+                        "ito": yillik(a["ito_ist"].dropna())}).dropna()
+    yillik_tablo = [{"ay": i.strftime("%Y-%m"),
+                     "ito": round(float(r["ito"]), 2),
+                     "tufe": round(float(r["tufe"]), 2),
+                     "fark": round(float(r["ito"] - r["tufe"]), 2)}
+                    for i, r in yil.iterrows()]
+    yfark = yil["ito"] - yil["tufe"]
+    yillik_ozet = {"n": int(len(yfark)), "ort": round(float(yfark.mean()), 2),
+                   "son": round(float(yfark.iloc[-1]), 2),
+                   "maks": round(float(yfark.max()), 2),
+                   "maks_ay": yfark.idxmax().strftime("%Y-%m"),
+                   "min": round(float(yfark.min()), 2),
+                   "min_ay": yfark.idxmin().strftime("%Y-%m"),
+                   "son_ito": round(float(yil["ito"].iloc[-1]), 2),
+                   "son_tufe": round(float(yil["tufe"].iloc[-1]), 2)}
+
+    return {"pencere_ay": int(len(son)), "tablo": tablo, "fark": fark_ozet,
+            "takvim": takvim, "regresyon": regresyon, "esleme": esleme,
+            "kural": kural, "anket": anket, "surpriz": surpriz,
+            "oranti": oranti,
+            "kayan": kayan, "yillik": yillik_tablo, "yillik_ozet": yillik_ozet,
+            "ilk_ay": d.index[0].strftime("%Y-%m"),
+            "son_ay": d.index[-1].strftime("%Y-%m"),
+            "n_toplam": int(len(d))}
+
+
 # ===========================================================================
 # 11. Ana akış
 # ===========================================================================
@@ -784,6 +1074,10 @@ def kos() -> dict:
     atalet = atalet_olc(SA)
 
     ito = ito_nowcast(a)
+    profil = ito_profil(a)
+    if profil:
+        (VERI / "ito_profil.json").write_text(
+            json.dumps(profil, ensure_ascii=False, indent=1), encoding="utf-8")
 
     # ---------------------------------------------------------------- özet
     ozet = ozet_topla(a, g, SA, M, K, D, B, R, bek, atalet, ito, w_katki, w_ana,

@@ -347,6 +347,115 @@ def main() -> int:
     koy("ito_ima_ust", ito.get("ima_ust"))
     koy("ito_ima_yari", ito.get("ima_yari_genislik"))
 
+    # ---------------------------------------------------------------- İTO profili
+    # ito_profil.json ayrı bir dosyadır ve metrik_ozet.json'a GÖMÜLMEZ: içinde
+    # tablo/satır listeleri var, özet dosyası ise skaler sözlük olarak okunuyor.
+    # Dosya YOKSA anahtarlar yazılmaz ve sayfadaki statik yedekler görünür —
+    # ama o zaman sayfa sınavının 1. kuralı düşer, yani sessizce donmaz.
+    ipy = VERI / "ito_profil.json"
+    ip = json.loads(ipy.read_text(encoding="utf-8")) if ipy.exists() else {}
+    if not ip.get("tablo"):
+        uyar("ito_profil.json yok ya da boş — İTO profili anahtarları atlandı.")
+    else:
+        f_, r_ = ip["fark"], ip["regresyon"]
+        koy("itp_pencere", ip.get("pencere_ay"), 0)
+        koy("itp_n", ip.get("n_toplam"), 0)
+        koy("itp_ilk_ay", ip.get("ilk_ay"), None)
+        koy("itp_son_ay", ip.get("son_ay"), None)
+        for k, o_ in (("ort", 2), ("medyan", 2), ("std", 2), ("min", 2),
+                      ("maks", 2), ("mutlak_ort", 2), ("ustte_pay", 0),
+                      ("t", 2), ("p", 4)):
+            koy(f"itp_{k}", f_.get("ito_ustte_pay" if k == "ustte_pay" else k), o_)
+        koy("itp_min_ay", f_.get("min_ay"), None)
+        koy("itp_maks_ay", f_.get("maks_ay"), None)
+        for k in ("sabit", "egim", "se_egim", "se_sabit", "r", "spearman",
+                  "r2", "se_artik"):
+            koy(f"itp_{k}", r_.get(k), 3)
+        koy("itp_t_bir", r_.get("t_egim_bir"), 2)
+        koy("itp_p_bir", r_.get("p_egim_bir"), 4)
+
+        ku = ip.get("kural") or {}
+        sk, skd = ku.get("skor") or {}, ku.get("skor_dar") or {}
+        koy("itp_k_n", ku.get("n"), 0)
+        koy("itp_k_ilk", ku.get("ilk_ay"), None)
+        koy("itp_k_son", ku.get("son_ay"), None)
+        koy("itp_k_asgari", ku.get("asgari"), 0)
+        for c in ("naif", "sabit", "medyan", "oransal", "regresyon", "takvimli"):
+            koy(f"itp_mae_{c}", (sk.get(c) or {}).get("mae"), 3)
+            koy(f"itp_maed_{c}", (skd.get(c) or {}).get("mae"), 3)
+            koy(f"itp_is05_{c}", (sk.get(c) or {}).get("isabet_05"), 0)
+        KURAL_AD = {"naif": "naif kural (TÜFE = İTO)", "sabit": "sabit kaydırma",
+                    "medyan": "medyan kaydırma", "oransal": "oransal kural",
+                    "regresyon": "regresyon", "takvimli": "takvim ayı düzeltmesi"}
+        koy("itp_kazanan", KURAL_AD.get(ku.get("kazanan"), ku.get("kazanan")), None)
+        koy("itp_kazanan_dar", KURAL_AD.get(ku.get("kazanan_dar"), ku.get("kazanan_dar")),
+            None)
+        koy("itp_takvimli_zarar", ku.get("takvimli_zarar"), 3)
+        # Sıralama pencereye duyarlıysa "en iyi kural şudur" CÜMLESİ KURULMAZ.
+        # Metin bu anahtarı basar; hüküm koda gömülü, MDX'te elle yazılmaz.
+        koy("itp_siralama_metin",
+            ("aynı kural iki pencerede de kazanıyor"
+             if ku.get("siralama_dayanikli") else
+             "sıralama pencereye duyarlı — hiçbir kural için 'en iyisi budur' "
+             "denemez"), None)
+
+        an = ip.get("anket") or {}
+        if an:
+            koy("itp_pka_mae", an.get("pka_mae"), 3)
+            koy("itp_ito_mae", an.get("ito_mae"), 3)
+            koy("itp_esli", an.get("esli_fark"), 3)
+            koy("itp_esli_t", an.get("esli_t"), 2)
+            koy("itp_esli_p", an.get("esli_p"), 3)
+            koy("itp_anket_n", an.get("n_disi"), 0)
+            koy("itp_anket_hukum",
+                ("İTO kuralı anketten ölçülebilir biçimde iyi"
+                 if an.get("ito_anlamli_iyi") else
+                 "aradaki fark istatistiksel olarak ayırt edilemiyor"), None)
+
+        sp = ip.get("surpriz") or {}
+        if sp:
+            koy("itp_s_egim", sp.get("egim"), 3)
+            koy("itp_s_se", sp.get("se_egim"), 3)
+            koy("itp_s_sabit", sp.get("sabit"), 3)
+            koy("itp_s_t", sp.get("t"), 2)
+            koy("itp_s_p", sp.get("p"), 4)
+            koy("itp_s_r2", sp.get("r2"), 2)
+            koy("itp_s_r", sp.get("r"), 3)
+            koy("itp_s_n", sp.get("n"), 0)
+            koy("itp_s_uyum", sp.get("isaret_uyumu"), 0)
+            koy("itp_s_uyum_p", sp.get("isaret_p"), 4)
+            koy("itp_s_uyum25", sp.get("isaret_uyumu_25"), 0)
+            koy("itp_s_n25", sp.get("n_25"), 0)
+
+        orn = ip.get("oranti") or {}
+        for k in ("egim", "se", "t", "r", "oran_medyan", "kayan_ilk", "kayan_son",
+                  "kayan_maks", "kayan_r_min", "kayan_r_maks",
+                  "kayan_egim_min", "kayan_egim_maks"):
+            koy(f"itp_o_{k}", orn.get(k), 3)
+        koy("itp_o_p", orn.get("p"), 4)
+        koy("itp_o_n", orn.get("kayan_n"), 0)
+        koy("itp_o_hukum",
+            ("fark İTO seviyesiyle ölçülebilir biçimde artıyor"
+             if orn.get("anlamli") else
+             "seviye bağımlılığı bu örneklemde istatistiksel olarak "
+             "doğrulanamıyor"), None)
+
+        yo = ip.get("yillik_ozet") or {}
+        for k in ("ort", "son", "maks", "min", "son_ito", "son_tufe"):
+            koy(f"itp_y_{k}", yo.get(k), 2)
+        koy("itp_y_maks_ay", yo.get("maks_ay"), None)
+
+        # Koşullu eşleme tablosu OLDUĞU GİBİ taşınır: hem MDX tablosu hem de
+        # sayfadaki hesap aracı aynı diziyi okur. İki yerde iki kopya olsaydı
+        # bir gün sessizce ayrışırlardı.
+        koy("itp_esleme", ip.get("esleme"), None)
+        koy("itp_tablo", ip.get("tablo"), None)
+        for e in ip.get("esleme") or []:
+            k = f"{e['ito']:.1f}".replace(".", "")
+            koy(f"itp_es{k}", e["tufe"], 2)
+            koy(f"itp_es{k}_alt", e["alt"], 2)
+            koy(f"itp_es{k}_ust", e["ust"], 2)
+
     # ---------------------------------------------------------------- denetim
     dg = m.get("dogrulama") or {}
     koy("dogrulama_yillik_pp", (dg.get("yillik") or {}).get("maks_fark_pp"), 4)
