@@ -357,6 +357,17 @@ o ritimlere bölünür — tek kip, en yavaş ritme mahkûm eder.
   durduğu ve depoyla taşınmadığı için `bulten.py` her koşuda kendini kurar.
   Sürücü komutu kabuktan geçtiğinden **yollar tırnaklanmalı** (depo yolunda boşluk var).
 
+**Kurucu ilke — bir dosyanın SONU, kodun sonu değildir.** `uge_profil`
+metrik.py'ye eklendi ve dosyanın sonuna yazıldı — yani `if __name__` kapısının
+ALTINA. Python tanımı çalıştırmadan `kos()` koşmaya başladı ve hat NameError
+ile düştü; sözdizimi doğruydu, `py_compile` temiz geçti, modül olarak içe
+aktarıldığında fonksiyon ÇALIŞIYORDU (yerel sınama bu yüzden yeşil verdi).
+Hata yalnız betik olarak koşarken görünüyor ve hattın bütün adımlarını birden
+düşürüyor. Derlenmesi, içe aktarılması ve koşması ÜÇ AYRI sınamadır; ilk ikisi
+geçti diye üçüncüsü geçmez. Sigorta araca kondu: `guncelle.py`nin ön denetimi
+artık her adım betiğini ayrıştırıp kapıdan sonra `def`/`class` arıyor ve
+bulursa ENGEL üretiyor — statik, saniyeler sürüyor, koşturmadan soruyor.
+
 **Kurucu ilke — okur dili HER YAYINDA geçerlidir, tek yerden tanımlanır.**
 Kural yalnız site yazıları için değil: bülten, teknik bülten, tweetler ve
 proje panoları — okura giden ne varsa. İki aile yasak. **Kod dili**: dosya,

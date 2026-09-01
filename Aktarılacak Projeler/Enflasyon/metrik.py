@@ -2162,10 +2162,6 @@ def yaz_tablo(M: pd.DataFrame, s_ay: pd.Timestamp) -> None:
     print("  * oynak: 3a SAAR ±%25 salınıyor, merkezî ölçü olarak okunmaz.")
 
 
-if __name__ == "__main__":
-    kos()
-
-
 # ---------------------------------------------------------------------------
 def uge_profil(a: pd.DataFrame, dislanan: tuple[int, ...] = DISLANAN_YIL) -> dict:
     """İTO'NUN İKİNCİ BAŞLIK ENDEKSİ: Ücretliler Geçinme Endeksi.
@@ -2324,3 +2320,7 @@ def uge_profil(a: pd.DataFrame, dislanan: tuple[int, ...] = DISLANAN_YIL) -> dic
                 "maks_ay": fark.abs().idxmax().strftime("%Y-%m"),
             }
     return out
+
+
+if __name__ == "__main__":
+    kos()

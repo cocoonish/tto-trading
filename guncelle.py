@@ -692,6 +692,36 @@ def _eksik_scriptler(h: "Hat", tam: bool, gunluk: bool = False) -> list[str]:
     return yok
 
 
+def _kapidan_sonra_tanim(yol: Path) -> list[str]:
+    """`if __name__ == "__main__":` kapısından SONRA tanımlanan üst düzey
+    ad var mı?
+
+    NEDEN VAR: bir hattın ölçüm katmanına yeni bir fonksiyon eklendi ve
+    dosyanın SONUNA yazıldı — yani modül kapısından sonrasına. Python tanımı
+    çalıştırmadan kos() koşmaya başladı ve hat NameError ile düştü. Sözdizimi
+    doğru, içe aktarma doğru, derleme temiz; hata yalnız KOŞARKEN görünüyor ve
+    hattın bütün adımlarını birden düşürüyor.
+
+    Ölçüt statiktir ve saniyeler sürer: kapıdan sonra `def` ya da `class`
+    görürse o adı döndürür. Bir dosyayı koşturmadan önce sorulacak en ucuz
+    soru bu."""
+    try:
+        import ast
+        agac = ast.parse(yol.read_text(encoding="utf-8"))
+    except Exception:
+        return []                       # derlenmiyorsa başka ölçüt söyler
+    kapi = None
+    for d in agac.body:
+        if (isinstance(d, ast.If) and ast.dump(d.test).count("__name__")
+                and ast.dump(d.test).count("__main__")):
+            kapi = d.lineno
+    if kapi is None:
+        return []
+    return [f"{g.name} (satır {g.lineno})" for g in agac.body
+            if isinstance(g, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef))
+            and g.lineno > kapi]
+
+
 def denetle(secilen: list["Hat"], tam: bool, duzelt: bool) -> int:
     """Hiçbir şey koşturmadan 'bu makinede güncelleme + yayın patlar mı?' der."""
     print(f"{'═' * 78}\n  ÖN DENETİM · {len(secilen)} hat · kip: "
@@ -743,6 +773,20 @@ def denetle(secilen: list["Hat"], tam: bool, duzelt: bool) -> int:
         else:
             paket_m, kotu = _renk("tam", 32), False
         script_m = _renk("EKSİK: " + ", ".join(yok), 31) if yok else "✓"
+        # KAPI ÖLÇÜTÜ: modül kapısından sonra tanım kalmışsa hat koşarken
+        # NameError ile düşer. Statik, saniyeler sürer, ENGEL üretir —
+        # koşturup öğrenmek yerine önce sorulur.
+        for adim in h.adimlar(tam):
+            ilk = adim.split()[0]
+            if not ilk.endswith(".py"):
+                continue
+            gec = _kapidan_sonra_tanim(KOK / h.klasor / ilk)
+            if gec:
+                engel.append(
+                    f"{h.ad}: {ilk} — `if __name__` kapısından SONRA tanım var "
+                    f"({', '.join(gec)}). Python bu tanımları çalıştırmadan "
+                    f"koşuya başlar; hat NameError ile düşer. Tanımı kapının "
+                    f"üstüne taşıyın.")
         if yok:
             engel.append(f"{h.ad}: script yok — {', '.join(yok)}")
         print(f"  {h.ad:{_AD_G}s} {yorum:12s} {anahtar_m:8s} {paket_m:22s} {script_m}")
