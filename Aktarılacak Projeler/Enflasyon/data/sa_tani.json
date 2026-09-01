@@ -1074,10 +1074,8 @@
   }
  },
  "kosular_arasi": {
-  "var": true,
-  "n": 12,
-  "maks_pp": 0.0,
-  "ort_pp": 0.0,
+  "var": false,
+  "not": "önceki koşu AYNI veriyle yapılmış (sa.csv değişmedi) — koşular arası revizyon bu koşuda ölçülemedi",
   "onceki_kosum": "2026-09-01"
  },
  "vintage": {
