@@ -699,6 +699,77 @@ def main() -> int:
             koy(f"itp_es{k}_alt", e["alt"], 2)
             koy(f"itp_es{k}_ust", e["ust"], 2)
 
+    # ------------------------------------------------- ÜGE (ücretliler geçinme)
+    # AYRI DOSYA, AYRI KOŞUL: İTO'nun tüketici endeksi üretilemese bile ÜGE
+    # ölçümü ayakta kalabilir ve tersi de doğru. Tek koşula bağlanırsa biri
+    # düştüğünde sayfa iki bölümü birden statik yedeğe düşürürdü.
+    ugy = VERI / "uge_profil.json"
+    up = json.loads(ugy.read_text(encoding="utf-8")) if ugy.exists() else {}
+    if not up.get("n"):
+        uyar("uge_profil.json yok ya da boş — ÜGE anahtarları atlandı.")
+    else:
+        koy("uge_n", up.get("n"), 0)
+        koy("uge_ilk_ay", up.get("ilk_ay"), None)
+        koy("uge_son_ay", up.get("son_ay"), None)
+        # Üç fark birden: ÜGE−TÜFE, İTO−TÜFE, ÜGE−İTO. Üçüncüsü olmadan okur
+        # ayrışmanın ne kadarının ÜGE'ye ait olduğunu göremez.
+        for on, blok in (("uge_ut", "uge_tufe"), ("uge_it", "ito_tufe"),
+                         ("uge_ui", "uge_ito")):
+            f = up.get(blok) or {}
+            for k in ("ort", "medyan", "std", "min", "maks", "mutlak_ort"):
+                koy(f"{on}_{k}", f.get(k), 2)
+            koy(f"{on}_t", f.get("t"), 2)
+            koy(f"{on}_p", f.get("p"), 4)
+            koy(f"{on}_ustte_pay", f.get("ito_ustte_pay"), 0)
+            koy(f"{on}_maks_ay", f.get("maks_ay"), None)
+            koy(f"{on}_min_ay", f.get("min_ay"), None)
+        for on, blok in (("uge_ruge", "reg_uge"), ("uge_rito", "reg_ito")):
+            r = up.get(blok) or {}
+            for k in ("sabit", "egim", "se_egim", "r", "r2", "sigma"):
+                koy(f"{on}_{k}", r.get(k), 3)
+            koy(f"{on}_t_bir", r.get("t_bir"), 2)
+            koy(f"{on}_p_bir", r.get("p_bir"), 4)
+        ya = up.get("yaris") or {}
+        for k in ("mae_uge", "mae_ito", "esli_fark"):
+            koy(f"uge_{k}", ya.get(k), 3)
+        koy("uge_yaris_n", ya.get("n"), 0)
+        koy("uge_yaris_ilk_ay", ya.get("ilk_ay"), None)
+        koy("uge_esli_t", ya.get("esli_t"), 2)
+        koy("uge_esli_p", ya.get("esli_p"), 3)
+        koy("uge_yaris_hukum", ya.get("hukum"), None)
+        bk = up.get("bekleyen") or {}
+        koy("uge_b_ay", bk.get("ay"), None)
+        koy("uge_b_ad", bk.get("ad"), None)
+        koy("uge_b_uge", bk.get("uge"), 2)
+        koy("uge_b_sabit", bk.get("sabit"), 2)
+        koy("uge_b_regresyon", bk.get("regresyon"), 2)
+        koy("uge_b_n", bk.get("n_gecmis"), 0)
+        ki = up.get("kimlik") or {}
+        koy("uge_k_ortak", ki.get("ortak"), 0)
+        koy("uge_k_maks_sapma", ki.get("maks_sapma"), 4)
+        koy("uge_k_ort_sapma", ki.get("ort_sapma"), 4)
+        koy("uge_k_sapan", ki.get("sapan"), 0)
+        va = up.get("varyant") or {}
+        koy("uge_v_son_95", va.get("son_95"), 2)
+        koy("uge_v_son_85", va.get("son_85"), 2)
+        koy("uge_v_ort_fark", va.get("ort_mutlak_fark"), 2)
+        koy("uge_v_maks_fark", va.get("maks_mutlak_fark"), 2)
+        koy("uge_v_maks_ay", va.get("maks_ay"), None)
+        koy("uge_v_n", va.get("n"), 0)
+        # HÜKÜM KODDA: "hangi endeks daha yukarıda" cümlesi iki ortalamanın
+        # sırasına bağlı ve o sıra değişebilir.
+        ut, it_ = (up.get("uge_tufe") or {}), (up.get("ito_tufe") or {})
+        if ut.get("ort") is not None and it_.get("ort") is not None:
+            fark = ut["ort"] - it_["ort"]
+            koy("uge_kiyas_hukum",
+                (f"ÜGE, TÜFE'den ortalama "
+                 + f"{ut['ort']:.2f}".replace(".", ",") + " puan yukarıda; "
+                 f"İTO'nun tüketici endeksi ise "
+                 + f"{it_['ort']:.2f}".replace(".", ",") + " puan. Aradaki "
+                 + f"{abs(fark):.2f}".replace(".", ",") + " puanlık açıklık "
+                 + ("ÜGE" if fark > 0 else "tüketici endeksi") +
+                 " tarafında"), None)
+
     # ---------------------------------------------------------------- denetim
     dg = m.get("dogrulama") or {}
     koy("dogrulama_yillik_pp", (dg.get("yillik") or {}).get("maks_fark_pp"), 4)

@@ -1490,6 +1490,13 @@ def kos() -> dict:
     if profil:
         (VERI / "ito_profil.json").write_text(
             json.dumps(profil, ensure_ascii=False, indent=1), encoding="utf-8")
+    # ÜGE AYRI DOSYA: İTO'nun ikinci başlık endeksi ayrı bir ölçüm zinciri ve
+    # kendi kimlik doğrulaması var. Aynı dosyaya gömülseydi, biri üretilemeyince
+    # diğeri de sayfadan düşerdi — iki endeksin kaderi birbirine bağlı değil.
+    uge = uge_profil(a)
+    if uge:
+        (VERI / "uge_profil.json").write_text(
+            json.dumps(uge, ensure_ascii=False, indent=1), encoding="utf-8")
 
     # ---------------------------------------------------------------- özet
     ozet = ozet_topla(a, g, SA, M, K, D, B, R, bek, atalet, ito, w_katki, w_ana,
@@ -2157,3 +2164,163 @@ def yaz_tablo(M: pd.DataFrame, s_ay: pd.Timestamp) -> None:
 
 if __name__ == "__main__":
     kos()
+
+
+# ---------------------------------------------------------------------------
+def uge_profil(a: pd.DataFrame, dislanan: tuple[int, ...] = DISLANAN_YIL) -> dict:
+    """İTO'NUN İKİNCİ BAŞLIK ENDEKSİ: Ücretliler Geçinme Endeksi.
+
+    NEDEN AYRI BİR ÖLÇÜM: ÜGE, tüketici fiyat endeksinin başka bir adı değil.
+    Aynı şehri ölçüyor ama başka bir soruyu cevaplıyor — bir ücretli hanenin
+    GEÇİM MALİYETİ. Sepeti farklı bir harcama yapısına göre ağırlıklandırılmış,
+    dolayısıyla aynı ay için farklı bir sayı üretmesi normaldir, hata değil.
+    Okurun sorusu şu: TÜİK TÜFE'sini kestirmek için hangisi daha iyi bir öncü?
+
+    ÜÇLÜ KARŞILAŞTIRMA. İki değil üç seri hizalanıyor (ÜGE · İTO TÜFE · TÜİK
+    TÜFE) ve üç fark birden ölçülüyor. İki serilik kıyas "ÜGE TÜFE'den yukarıda"
+    der ve okur bunu ÜGE'ye özgü sanır; oysa İTO'nun tüketici endeksi de
+    yukarıda. Ayrışmanın ÜGE'ye ait olan kısmı ancak üçüncü seri masadayken
+    görünür.
+
+    HANGİ ÜGE. Endeksin dört baz varyantı var (1963/1968/1985/1995) ve aylık
+    değişimleri BİRBİRİNDEN FARKLI. "ÜGE %şu kadar arttı" cümlesi hangi varyant
+    olduğu söylenmeden kurulamaz; sayfa bu farkı bir sayıyla gösterebilsin diye
+    1985 varyantı da taşınıyor ve iki varyantın açıklığı ölçülüyor.
+    """
+    from scipy import stats as _st
+    if "ito_uge" not in a.columns:
+        return {}
+    uge_ay = aylik(a["ito_uge"].dropna()).dropna()
+    if uge_ay.empty:
+        return {}
+
+    # ---- KİMLİK: EVDS serisi İTO'nun yayımladığı tabloyla ay ay kıyaslanır.
+    # Ad artık EVDS'ten okunabiliyor; doğrulama yine de kalkmıyor. Ad kaynağın
+    # ETİKETİ, sayı kaynağın KENDİSİDİR — biri değişip diğeri değişmeyebilir.
+    yay = (_ito_yayim().get("uge") or {})
+    kimlik: dict = {"esik": ITO_DOGRULAMA_ESIK}
+    if yay:
+        y = pd.Series({pd.Timestamp(k + "-01"): float(v) for k, v in yay.items()})
+        ortak = uge_ay.index.intersection(y.index)
+        if len(ortak):
+            sapma = (uge_ay.loc[ortak] - y.loc[ortak]).abs()
+            kimlik.update({
+                "ortak": int(len(ortak)),
+                "maks_sapma": round(float(sapma.max()), 4),
+                "ort_sapma": round(float(sapma.mean()), 4),
+                "sapan": int((sapma > ITO_DOGRULAMA_ESIK).sum()),
+            })
+            if kimlik["sapan"]:
+                kotu = sapma[sapma > ITO_DOGRULAMA_ESIK]
+                uyar(f"ÜGE KİMLİK DOĞRULAMASI DÜŞTÜ: {len(kotu)} ayda EVDS "
+                     f"serisi İTO'nun yayımıyla tutmuyor (en büyük sapma "
+                     f"{kotu.max():.3f} puan, {kotu.idxmax():%Y-%m}). Sayfadaki "
+                     f"ÜGE iddiaları askıya alınmalı.")
+
+    # ---- ÜÇLÜ HİZALAMA
+    ito_ay, _ = _ito_seri(a)
+    ucu = pd.DataFrame({"uge": uge_ay,
+                        "ito": ito_ay,
+                        "tufe": aylik(a["tufe"].dropna())}).dropna()
+    if len(ucu) < 18:
+        return {"n": int(len(ucu)), "not": "örneklem yetersiz", "kimlik": kimlik}
+    ucu["uge_tufe"] = ucu["uge"] - ucu["tufe"]
+    ucu["ito_tufe"] = ucu["ito"] - ucu["tufe"]
+    ucu["uge_ito"] = ucu["uge"] - ucu["ito"]
+
+    out: dict = {"n": int(len(ucu)), "kimlik": kimlik,
+                 "ilk_ay": ucu.index[0].strftime("%Y-%m"),
+                 "son_ay": ucu.index[-1].strftime("%Y-%m")}
+    for ad, sut in (("uge_tufe", "uge_tufe"), ("ito_tufe", "ito_tufe"),
+                    ("uge_ito", "uge_ito")):
+        out[ad] = _fark_ozet(ucu[sut])
+
+    # ---- İLİŞKİNİN BİÇİMİ: her iki öncü için AYNI kod, aynı örneklem.
+    # İki ayrı yerde iki ayrı regresyon yazmak, bir gün ikisinin farklı
+    # örneklemde koşması demekti; kıyasın anlamı da o gün biterdi.
+    def _regres(x: pd.Series, y: pd.Series) -> dict:
+        X = np.column_stack([np.ones(len(x)), x.values])
+        kat, *_ = np.linalg.lstsq(X, y.values, rcond=None)
+        art = y.values - X @ kat
+        n, k = len(x), 2
+        s2 = float(art @ art) / (n - k)
+        se = np.sqrt(np.diag(s2 * np.linalg.inv(X.T @ X)))
+        ss_t = float(((y.values - y.values.mean()) ** 2).sum())
+        r = float(np.corrcoef(x.values, y.values)[0, 1])
+        return {"sabit": round(float(kat[0]), 3), "egim": round(float(kat[1]), 3),
+                "se_egim": round(float(se[1]), 3),
+                "t_bir": round(float((kat[1] - 1) / se[1]), 2),
+                "p_bir": round(float(2 * (1 - _st.t.cdf(abs((kat[1] - 1) / se[1]),
+                                                        n - k))), 4),
+                "r": round(r, 3), "r2": round(1 - float(art @ art) / ss_t, 3),
+                "sigma": round(float(np.sqrt(s2)), 3)}
+    out["reg_uge"] = _regres(ucu["uge"], ucu["tufe"])
+    out["reg_ito"] = _regres(ucu["ito"], ucu["tufe"])
+
+    # ---- HANGİSİ DAHA İYİ ÖNCÜ: örneklem DIŞI, genişleyen pencere, sabit
+    # kaydırma kuralı. Örneklem içi R² iyimserdir ve iki seriyi kıyaslarken
+    # asıl soru "geçmişe hangisi uydu" değil, "yarın hangisini kullanayım".
+    asgari = max(12, len(ucu) // 3)
+    hata_uge, hata_ito, aylar_od = [], [], []
+    for i in range(asgari, len(ucu)):
+        gec, simdi = ucu.iloc[:i], ucu.iloc[i]
+        hata_uge.append((simdi["uge"] - gec["uge_tufe"].mean()) - simdi["tufe"])
+        hata_ito.append((simdi["ito"] - gec["ito_tufe"].mean()) - simdi["tufe"])
+        aylar_od.append(ucu.index[i])
+    if hata_uge:
+        hu, hi = np.array(hata_uge), np.array(hata_ito)
+        esli_t, esli_p = _st.ttest_rel(np.abs(hu), np.abs(hi))
+        out["yaris"] = {
+            "n": len(hu),
+            "ilk_ay": aylar_od[0].strftime("%Y-%m"),
+            "mae_uge": round(float(np.abs(hu).mean()), 3),
+            "mae_ito": round(float(np.abs(hi).mean()), 3),
+            "esli_fark": round(float((np.abs(hu) - np.abs(hi)).mean()), 3),
+            "esli_t": round(float(esli_t), 2),
+            "esli_p": round(float(esli_p), 3),
+        }
+        # HÜKÜM KODDA: "ÜGE daha iyi öncü" cümlesi ancak fark ayırt
+        # edilebiliyorsa kurulabilir. Metne elle yazılsaydı örneklem
+        # büyüdüğünde yanlış hüküm basılırdı.
+        y = out["yaris"]
+        if y["esli_p"] < 0.05:
+            iyi = "ÜGE" if y["esli_fark"] < 0 else "tüketici endeksi"
+            y["hukum"] = (f"{iyi} ölçülebilir biçimde daha isabetli "
+                          f"(eşli fark {abs(y['esli_fark']):.3f} puan, "
+                          f"p = {y['esli_p']:.3f})".replace(".", ","))
+        else:
+            y["hukum"] = ("iki öncünün isabeti bu örneklemde birbirinden "
+                          "AYIRT EDİLEMİYOR (p = "
+                          + f"{y['esli_p']:.3f}".replace(".", ",") + ")")
+
+    # ---- BEKLEYEN AY: ÜGE geldi, TÜFE bekleniyor.
+    son_uge_ay = uge_ay.index[-1]
+    t_ham = aylik(a["tufe"].dropna())
+    if son_uge_ay not in t_ham.index:
+        gec = ucu[ucu.index < son_uge_ay]
+        x = float(uge_ay.loc[son_uge_ay])
+        r = out["reg_uge"]
+        out["bekleyen"] = {
+            "ay": son_uge_ay.strftime("%Y-%m"),
+            "ad": ad_uzun(son_uge_ay),
+            "uge": round(x, 2),
+            "sabit": round(x - float(gec["uge_tufe"].mean()), 2),
+            "regresyon": round(r["sabit"] + r["egim"] * x, 2),
+            "n_gecmis": int(len(gec)),
+        }
+
+    # ---- HANGİ ÜGE: varyantlar arası açıklık. Tek bir "ÜGE" yok.
+    if "ito_uge_85" in a.columns:
+        v85 = aylik(a["ito_uge_85"].dropna()).dropna()
+        ortak = uge_ay.index.intersection(v85.index)
+        if len(ortak) > 6:
+            fark = (uge_ay.loc[ortak] - v85.loc[ortak])
+            out["varyant"] = {
+                "n": int(len(ortak)),
+                "son_95": round(float(uge_ay.loc[ortak[-1]]), 2),
+                "son_85": round(float(v85.loc[ortak[-1]]), 2),
+                "ort_mutlak_fark": round(float(fark.abs().mean()), 2),
+                "maks_mutlak_fark": round(float(fark.abs().max()), 2),
+                "maks_ay": fark.abs().idxmax().strftime("%Y-%m"),
+            }
+    return out

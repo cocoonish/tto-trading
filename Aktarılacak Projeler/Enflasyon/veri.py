@@ -319,17 +319,30 @@ ANA_SERI = {
     "mallar":      "TP.FE25.OKTG08",
     "yi_ufe":      "TP.TUFE1YI.T1",
     "ykke":        "TP.YKKE.TR",
-    # KİMLİĞİ SAYIYLA PİNLENDİ. EVDS bu kodun ADINI hiçbir uçtan vermiyor
-    # (veri yanıtında ad yok, datagroups 404, serieList boş). Serinin ne
-    # olduğu, hesapladığımız aylık değişimlerin İTO'nun kendi yayımıyla
-    # tutmasıyla belirlendi: 30 ayın 30'u 0,01 puan içinde ve manşet
-    # agregaları (yıllık %34,96 · yıl sonuna göre %23,58) tam olarak
-    # yeniden üretiliyor. Karşılaştırma her koşuda tekrarlanır —
-    # bkz. metrik._ito_seri ve ito_yayim.json.
-    # DİKKAT: bu seri İstanbul TÜKETİCİ FİYAT İNDEKSİ'dir; İTO'nun ayrıca
-    # yayımladığı "Ücretliler Geçinme İndeksi" BAŞKA bir endekstir ve
-    # muhtemelen TP.FG.IST2.23'tür (aynı pencere, farklı seviye).
+    # İTO AİLESİ — adlar EVDS'İN KENDİSİNDEN OKUNDU.
+    # Serinin adı bir süre "EVDS vermiyor" sanıldı; vermiyor değildi, YANLIŞ
+    # UÇTAN soruluyordu. serieList ucu DOĞRU GRUP KODUYLA çağrılınca 51 seri
+    # adıyla birlikte geliyor. Doğru sıra: katalogdan grup kodu → serieList →
+    # ad. "Bulamadım" ile "yok" arasındaki fark yine buradaydı.
+    #   TP.FG.IST1.23  Genel Endeks (İTO 2023=100)          2024-01 →
+    #   TP.FG.IST2.23  Gıda Ve Alkolsüz İçecekler           (13 alt grubun ilki)
+    #   TP.FG.U95      İstanbul Ücretliler Geçinme Endeksi (1995=100)  1996-01 →
+    # Ad okunabiliyor olsa da sayıyla doğrulama KALKMAZ: ad kaynağın
+    # etiketidir, sayı kaynağın kendisi. İkisi ayrışırsa hattın haberi olmalı.
     "ito_ist":     "TP.FG.IST1.23",
+    # ÜCRETLİLER GEÇİNME ENDEKSİ — İTO'nun ikinci başlık endeksi ve TÜFE'nin
+    # değil GEÇİM MALİYETİNİN ölçüsü: sepeti ücretli hane harcama yapısına
+    # göre ağırlıklandırılmış. Dört baz varyantı var (1963/1968/1985/1995) ve
+    # AYLIK DEĞİŞİMLERİ BİRBİRİNDEN FARKLI — yani "ÜGE şu kadar arttı" cümlesi
+    # hangi varyant olduğu söylenmeden kurulamaz. Ağustos 2026'da U95 %1,97,
+    # U85 %1,15, U68 %1,33, U63 %1,18 veriyor. İTO'nun yayımladığı ve basında
+    # çıkan tablo U95'tir; kimlik 2024-01→2026-08 arasındaki 32 ayın tamamında
+    # o tabloyla birebir tutarak pinlendi (bkz. ito_yayim.json → uge).
+    "ito_uge":     "TP.FG.U95",
+    # KIYAS VARYANTI: aynı endeksin 1985 bazı. Tek başına yayımlanmıyor ama
+    # varyantlar arası farkın büyüklüğünü OKURA göstermek için taşınıyor —
+    # "hangi ÜGE" sorusunun cevabı sayfada bir sayıyla verilebilsin.
+    "ito_uge_85":  "TP.FG.U85",
 }
 
 # Katkı ayrıştırmasının beşlisi — TCMB'nin aylık Fiyat Gelişmeleri raporundaki
