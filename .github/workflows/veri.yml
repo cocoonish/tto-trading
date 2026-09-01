@@ -115,7 +115,11 @@ jobs:
           if [ ! -f "$BETIK" ]; then
             echo "::error::Betik yok: $BETIK"; exit 1
           fi
-          cd "$(dirname "$BETIK")" && python3 "$(basename "$BETIK")"
+          # -u: tamponsuz çıktı. İlk keşif koşusu 20 dakikada tek satır
+          # yazmadan iptal edildi — Python stdout'u tampona alıyordu ve
+          # iptalle birlikte tampon da gitti. İlerlemenin görünmesi,
+          # takıldığı adımı yeni bir koşu açmadan bulabilmek demek.
+          cd "$(dirname "$BETIK")" && python3 -u "$(basename "$BETIK")"
 
   tazele:
     # Zamanlanmış koşuda `inputs` bağlamı boştur; `!inputs.kesif` orada da

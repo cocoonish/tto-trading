@@ -604,82 +604,35 @@ def ito_nowcast(a: pd.DataFrame) -> dict:
     }
 
 
-def ito_profil(a: pd.DataFrame, aylar: int = 24) -> dict:
-    """İTO ile TÜFE arasındaki farkın AY AY profili ve "İTO şu geldiyse TÜFE'den
-    ne beklenir" sorusunun ölçülmüş cevabı.
+# 2023 ÖRNEKLEM DIŞI TUTULUYOR — VE BU BİR KARAR OLDUĞU İÇİN ÖLÇÜLÜYOR.
+# 2023 Türkiye enflasyonunda rejim yılıydı: Haziran'da seçim sonrası kur
+# sıçraması, Temmuz'da ÖTV/KDV ayarlamaları ve %34'lük asgari ücret ara zammı
+# tek bir yıla sığdı. Aylık TÜFE aynı yıl içinde %0,04 ile %9,49 arasında
+# dolaştı. Böyle bir yılda İTO ile TÜFE arasındaki fark, iki sepetin yapısal
+# farkını değil o ayın şokunun iki sepete hangi hızda girdiğini ölçer.
+#
+# Ama "outlier" demek yetmez; dışlamanın KENDİSİ bir varsayımdır ve sınanmadan
+# kabul edilirse tam da kaçındığımız şey olur. Bu yüzden modül her ölçümü İKİ
+# örneklemde birden koşturuyor (`karsilastirma` bloğu) ve dışlanan dönemin
+# istatistikleri ayrıca yazılıyor (`dislama` bloğu): okur farkın gerçekten
+# ayrıştığını GÖRÜR, bize güvenmek zorunda kalmaz.
+DISLANAN_YIL = (2023,)
 
-    ito_nowcast() regresyonu kurar ve örneklem İÇİ uyumu (R²) verir. Bu modül
-    onun cevaplayamadığı beş soruyu ölçer:
 
-    (1) FARKIN KENDİSİ VE ANLAMLILIĞI. Regresyon katsayısı farkın ortalamasını
-        gizler; okur "İTO kaç puan yukarıda gelir" diye sorar. Fark ay ay
-        yazılır ve sıfırdan farklı olup olmadığı t ile sınanır.
-    (2) EĞİM 1 Mİ. Eğim 1'den ayırt edilemiyorsa ilişki "sabit kaydırma"dır ve
-        regresyon eğimi kurmaya değmez. Bu sınanmadan regresyon yazmak,
-        veriden okunmayan bir yapıyı varsaymaktır.
-    (3) HANGİ KURAL. Beş aday kural (naif · sabit kaydırma · medyan kaydırma ·
-        oransal · regresyon · TAKVİM AYI düzeltmeli) genişleyen pencereyle,
-        örneklem DIŞI kıyaslanır. Örneklem içi R² iyimserdir; asıl soru
-        "yarın hangisini kullanayım"dır. Sıralamanın pencereye duyarlı olup
-        olmadığı da ölçülür — duyarlıysa hüküm verilmez.
-    (4) ANKETTEN İYİ Mİ. Asıl kıyas naif kural değil PİYASA BEKLENTİSİdir:
-        PKA'nın cari ay nowcast'i fiyatlanan sayıdır. Aynı pencerede eşli
-        farkla sınanır; anlamlı değilse "iyi" denmez.
-    (5) SÜRPRİZ SÜRPRİZİ ÖNGÖRÜR MÜ. Tradable soru budur: İTO ankete göre
-        yukarıda geldiyse TÜFE de ankete göre yukarıda mı gelir? İTO ayın
-        sonunda, PKA ayın ortasında oluştuğu için İTO GERÇEKTEN yeni bilgidir.
-    """
-    if "ito_ist" not in a.columns:
-        return {}
-    d = pd.DataFrame({"tufe": aylik(a["tufe"].dropna()),
-                      "ito": aylik(a["ito_ist"].dropna())}).dropna()
-    if len(d) < 18:
-        return {"n": int(len(d)), "not": "örneklem yetersiz"}
-    d["fark"] = d["ito"] - d["tufe"]
-    son = d.tail(aylar)
+def _ito_kestir(d: pd.DataFrame, a: pd.DataFrame, asgari: int) -> dict:
+    """Bir örneklem üzerinde bütün kestirimleri koşturur.
+
+    AYRI FONKSİYON OLMASININ SEBEBİ: aynı hesabın "2023 dahil" ve "2023 hariç"
+    iki kopyasını yan yana yazmak, iki kopyanın bir gün sessizce ayrışması
+    demekti. Dışlamanın etkisini ölçmek istiyorsak iki ölçüm AYNI koddan
+    çıkmalı; yoksa ölçtüğümüz şey dışlama değil, iki kopya arasındaki fark
+    olur."""
     from scipy import stats as _st
+    if len(d) < 12:
+        return {}
+    out: dict = {}
 
-    AY_AD = {1: "Ocak", 2: "Şubat", 3: "Mart", 4: "Nisan", 5: "Mayıs",
-             6: "Haziran", 7: "Temmuz", 8: "Ağustos", 9: "Eylül", 10: "Ekim",
-             11: "Kasım", 12: "Aralık"}
-
-    tablo = [{"ay": i.strftime("%Y-%m"),
-              "ad": f"{AY_AD[i.month]} {i.year}",
-              "ito": round(float(r["ito"]), 2),
-              "tufe": round(float(r["tufe"]), 2),
-              "fark": round(float(r["fark"]), 2)}
-             for i, r in son.iterrows()]
-
-    f = son["fark"]
-    t_ist, p_ist = _st.ttest_1samp(f.values, 0.0)
-    fark_ozet = {
-        "n": int(len(f)),
-        "ort": round(float(f.mean()), 2),
-        "medyan": round(float(f.median()), 2),
-        "std": round(float(f.std(ddof=1)), 2),
-        "min": round(float(f.min()), 2),
-        "maks": round(float(f.max()), 2),
-        "mutlak_ort": round(float(f.abs().mean()), 2),
-        "ito_ustte_pay": round(float((f > 0).mean() * 100), 0),
-        "min_ay": son["fark"].idxmin().strftime("%Y-%m"),
-        "maks_ay": son["fark"].idxmax().strftime("%Y-%m"),
-        "t": round(float(t_ist), 2),
-        "p": round(float(p_ist), 4),
-        "anlamli": bool(p_ist < 0.05),
-    }
-
-    # Takvim ayı mevsimselliği — TÜM örneklem. Ay başına gözlem sayısı yazılır;
-    # ikiyle mevsimsellik ölçülmez ve bu tablodan KURAL çıkarılmaz. Kuralın
-    # işe yarayıp yaramadığı (3)'te örneklem dışı sınanıyor.
-    takvim = []
-    for ay_no, g in d.groupby(d.index.month):
-        takvim.append({"ay": int(ay_no), "ad": AY_AD[int(ay_no)], "n": int(len(g)),
-                       "ort_fark": round(float(g["fark"].mean()), 2),
-                       "ort_ito": round(float(g["ito"].mean()), 2),
-                       "ort_tufe": round(float(g["tufe"].mean()), 2)})
-    takvim.sort(key=lambda x: x["ay"])
-
-    # ---- regresyon (tam örneklem) ve EĞİM = 1 SINAMASI
+    # ---- regresyon (örneklem içi) ve EĞİM = 1 SINAMASI
     X = np.column_stack([np.ones(len(d)), d["ito"].values])
     b_, *_ = np.linalg.lstsq(X, d["tufe"].values, rcond=None)
     e_ = d["tufe"].values - X @ b_
@@ -690,8 +643,9 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24) -> dict:
     tkrit = float(_st.t.ppf(0.975, max(nn - kk, 1)))
     t_bir = float((b_[1] - 1.0) / se_b[1]) if se_b[1] else float("nan")
     p_bir = float(2 * (1 - _st.t.cdf(abs(t_bir), max(nn - kk, 1))))
-    regresyon = {
-        "n": int(nn),
+    out["regresyon"] = {
+        "n": int(nn), "ilk_ay": d.index[0].strftime("%Y-%m"),
+        "son_ay": d.index[-1].strftime("%Y-%m"),
         "sabit": round(float(b_[0]), 3), "se_sabit": round(float(se_b[0]), 3),
         "egim": round(float(b_[1]), 3), "se_egim": round(float(se_b[1]), 3),
         "r": round(float(d["tufe"].corr(d["ito"])), 3),
@@ -702,10 +656,10 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24) -> dict:
         "egim_birden_farkli": bool(p_bir < 0.05),
     }
 
-    # Koşullu eşleme: nokta tahmin + ÖNGÖRÜ aralığı (güven aralığı DEĞİL).
-    # Aralık se_ong = sqrt(s2·(1 + x0'(X'X)^-1 x0)) ile kurulur; yani katsayı
-    # belirsizliğine artık varyansı da eklenir — okurun sorduğu "TÜFE nereye
-    # düşer" sorusu tek bir gözlemin nereye düşeceği sorusudur.
+    # ---- koşullu eşleme: nokta tahmin + ÖNGÖRÜ aralığı (güven aralığı DEĞİL).
+    # se_ong = sqrt(s2·(1 + x0'(X'X)^-1 x0)); katsayı belirsizliğine artık
+    # varyansı da eklenir — okurun sorduğu "TÜFE nereye düşer" sorusu tek bir
+    # gözlemin nereye düşeceği sorusudur.
     esleme = []
     for x in np.arange(0.5, 5.01, 0.5):
         x0 = np.array([1.0, float(x)])
@@ -714,13 +668,50 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24) -> dict:
         esleme.append({"ito": round(float(x), 2), "tufe": round(m, 2),
                        "alt": round(m - tkrit * se, 2), "ust": round(m + tkrit * se, 2),
                        "sabit_kural": round(float(x - d["fark"].mean()), 2)})
+    out["esleme"] = esleme
 
-    # ---- (3) KURAL YARIŞI — genişleyen pencere, örneklem DIŞI.
-    # Her adımda kuralın bütün parametreleri YALNIZ o ana kadarki veriyle
+    # ---- ORANTISALLIK: fark İTO seviyesine mi bağlı?
+    Xo = np.column_stack([np.ones(len(d)), d["ito"].values])
+    bo, *_ = np.linalg.lstsq(Xo, d["fark"].values, rcond=None)
+    eo = d["fark"].values - Xo @ bo
+    s2o = float(eo @ eo) / max(len(d) - 2, 1)
+    seo = np.sqrt(np.diag(np.linalg.pinv(Xo.T @ Xo)) * s2o)
+    to = float(bo[1] / seo[1]) if seo[1] else float("nan")
+    po = float(2 * (1 - _st.t.cdf(abs(to), max(len(d) - 2, 1))))
+
+    # ---- KAYAN KARARLILIK (12 aylık pencere)
+    kayan = []
+    for i in range(12, len(d) + 1):
+        g = d.iloc[i - 12:i]
+        Xk = np.column_stack([np.ones(12), g["ito"].values])
+        bk, *_ = np.linalg.lstsq(Xk, g["tufe"].values, rcond=None)
+        kayan.append({"ay": g.index[-1].strftime("%Y-%m"),
+                      "r": round(float(g["tufe"].corr(g["ito"])), 3),
+                      "egim": round(float(bk[1]), 3),
+                      "ort_fark": round(float(g["fark"].mean()), 3)})
+    out["kayan"] = kayan
+    out["oranti"] = {
+        "egim": round(float(bo[1]), 3), "se": round(float(seo[1]), 3),
+        "t": round(to, 2), "p": round(po, 4),
+        "r": round(float(d["fark"].corr(d["ito"])), 3),
+        "anlamli": bool(po < 0.05),
+        "oran_medyan": round(float((d["tufe"] / d["ito"]).median()), 3),
+        "kayan_ilk": round(float(kayan[0]["ort_fark"]), 3) if kayan else None,
+        "kayan_son": round(float(kayan[-1]["ort_fark"]), 3) if kayan else None,
+        "kayan_maks": round(float(max(x["ort_fark"] for x in kayan)), 3) if kayan else None,
+        "kayan_r_min": round(float(min(x["r"] for x in kayan)), 3) if kayan else None,
+        "kayan_r_maks": round(float(max(x["r"] for x in kayan)), 3) if kayan else None,
+        "kayan_egim_min": round(float(min(x["egim"] for x in kayan)), 3) if kayan else None,
+        "kayan_egim_maks": round(float(max(x["egim"] for x in kayan)), 3) if kayan else None,
+        "kayan_n": len(kayan),
+    }
+
+    # ---- KURAL YARIŞI — genişleyen pencere, örneklem DIŞI.
+    # Her ay için kuralın bütün parametreleri yalnız o ana kadarki veriyle
     # kurulur; hiçbir kural kendi geleceğini görmez.
-    def _yaris(asgari: int) -> tuple[dict, list]:
+    def _yaris(asg: int) -> tuple[dict, list]:
         satir = []
-        for k in range(asgari, len(d)):
+        for k in range(asg, len(d)):
             g, x = d.iloc[:k], d.iloc[k]
             xi, ay = float(x["ito"]), d.index[k].month
             Xg = np.column_stack([np.ones(len(g)), g["ito"].values])
@@ -750,18 +741,16 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24) -> dict:
                        "isabet_05": round(float((np.abs(h) <= 0.5).mean() * 100), 0)}
         return skor, satir
 
-    ASGARI = 12
-    skor, yaris_satir = _yaris(ASGARI)
-    skor_dar, _ = _yaris(18)          # dayanıklılık: pencere kısalırsa sıralama tutuyor mu
+    skor, yaris_satir = _yaris(asgari)
+    skor_dar, _ = _yaris(asgari + 6)
     kazanan = min(skor, key=lambda c: skor[c]["mae"]) if skor else None
     kazanan_dar = min(skor_dar, key=lambda c: skor_dar[c]["mae"]) if skor_dar else None
-    kural = {
-        "asgari": ASGARI,
+    out["kural"] = {
+        "asgari": asgari, "asgari_dar": asgari + 6,
         "n": len(yaris_satir),
         "ilk_ay": yaris_satir[0]["ay"] if yaris_satir else None,
         "son_ay": yaris_satir[-1]["ay"] if yaris_satir else None,
-        "skor": skor,
-        "kazanan": kazanan,
+        "skor": skor, "kazanan": kazanan,
         "skor_dar": skor_dar, "kazanan_dar": kazanan_dar,
         "siralama_dayanikli": bool(kazanan is not None and kazanan == kazanan_dar),
         "takvimli_zarar": (round(skor["takvimli"]["mae"] - skor[kazanan]["mae"], 3)
@@ -769,29 +758,28 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24) -> dict:
         "satir": yaris_satir,
     }
 
-    # ---- (4) ANKET KIYASI ve (5) SÜRPRİZ REGRESYONU
+    # ---- ANKET KIYASI ve SÜRPRİZ REGRESYONU
     # PKA'nın cari ay sorusu ayın İLK YARISINDA sorulur; İTO ayın SONUNDA
     # oluşur ve ertesi ayın başında yayımlanır. Yani İTO ankete göre iki üç
     # haftalık YENİ bilgidir ve "sürpriz sürprizi öngörür mü" sorusu meşrudur.
-    anket, surpriz = {}, {}
+    out["anket"], out["surpriz"] = {}, {}
     if "pka_ay_cari" in a.columns:
         dp = pd.DataFrame({"tufe": d["tufe"], "ito": d["ito"],
                            "pka": a["pka_ay_cari"].dropna()}).dropna()
         if len(dp) >= 18:
-            ort_fark = float(d["fark"].mean())
             e_pka = (dp["pka"] - dp["tufe"]).values
+            ort_fark = float(d["fark"].mean())
             e_ito = (dp["ito"] - ort_fark - dp["tufe"]).values      # örneklem İÇİ
-            # örneklem DIŞI eşli kıyas: kaydırma da genişleyen pencereyle
             oh_p, oh_i = [], []
-            for k in range(ASGARI, len(dp)):
+            for k in range(asgari, len(dp)):
                 g, x = dp.iloc[:k], dp.iloc[k]
                 oh_p.append(float(x["pka"] - x["tufe"]))
                 oh_i.append(float(x["ito"] - (g["ito"] - g["tufe"]).mean() - x["tufe"]))
             fark_mae = np.abs(np.array(oh_i)) - np.abs(np.array(oh_p))
-            t_e, p_e = _st.ttest_1samp(fark_mae, 0.0) if len(fark_mae) > 1 else (float("nan"),) * 2
-            anket = {
-                "n": int(len(dp)),
-                "ilk_ay": dp.index[0].strftime("%Y-%m"),
+            t_e, p_e = (_st.ttest_1samp(fark_mae, 0.0) if len(fark_mae) > 1
+                        else (float("nan"),) * 2)
+            out["anket"] = {
+                "n": int(len(dp)), "ilk_ay": dp.index[0].strftime("%Y-%m"),
                 "pka_mae_ici": round(float(np.abs(e_pka).mean()), 3),
                 "ito_mae_ici": round(float(np.abs(e_ito).mean()), 3),
                 "n_disi": len(oh_p),
@@ -810,11 +798,10 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24) -> dict:
             ses = np.sqrt(np.diag(np.linalg.pinv(Xs.T @ Xs)) * s2s)
             ts = float(bs[1] / ses[1]) if ses[1] else float("nan")
             uyum = ((si > 0) == (sr > 0))
-            g25 = dp[si.abs() >= 0.25]
-            u25 = ((si[si.abs() >= 0.25] > 0) == (sr[si.abs() >= 0.25] > 0))
-            surpriz = {
-                "n": int(len(dp)),
-                "sabit": round(float(bs[0]), 3),
+            b25 = si.abs() >= 0.25
+            u25 = ((si[b25] > 0) == (sr[b25] > 0))
+            out["surpriz"] = {
+                "n": int(len(dp)), "sabit": round(float(bs[0]), 3),
                 "egim": round(float(bs[1]), 3), "se_egim": round(float(ses[1]), 3),
                 "t": round(ts, 2),
                 "p": round(float(2 * (1 - _st.t.cdf(abs(ts), max(len(dp) - 2, 1)))), 4),
@@ -822,50 +809,152 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24) -> dict:
                 "r2": round(float(1 - (es @ es) / (((sr - sr.mean()) ** 2).sum())), 3),
                 "isaret_uyumu": round(float(uyum.mean() * 100), 0),
                 "isaret_p": round(float(_st.binomtest(int(uyum.sum()), len(uyum), 0.5).pvalue), 4),
-                "isaret_uyumu_25": round(float(u25.mean() * 100), 0),
-                "n_25": int(len(g25)),
+                "isaret_uyumu_25": round(float(u25.mean() * 100), 0) if len(u25) else None,
+                "n_25": int(b25.sum()),
                 "anlamli": bool(2 * (1 - _st.t.cdf(abs(ts), max(len(dp) - 2, 1))) < 0.05),
             }
+    return out
 
-    # İlişkinin KARARLILIĞI: 12 aylık kayan korelasyon ve eğim.
-    kayan = []
-    for i in range(12, len(d) + 1):
-        g = d.iloc[i - 12:i]
-        Xk = np.column_stack([np.ones(12), g["ito"].values])
-        bk, *_ = np.linalg.lstsq(Xk, g["tufe"].values, rcond=None)
-        kayan.append({"ay": g.index[-1].strftime("%Y-%m"),
-                      "r": round(float(g["tufe"].corr(g["ito"])), 3),
-                      "egim": round(float(bk[1]), 3),
-                      "ort_fark": round(float(g["fark"].mean()), 3)})
 
-    # ---- FARK SEVİYEYE Mİ BAĞLI? (orantısallık sınaması)
-    # Kayan ortalama fark disenflasyonla birlikte daraldı; bu, farkın SABİT
-    # değil ORANSAL olduğunu düşündürüyor (aynı yüzde fark, düşen enflasyonda
-    # daha az PUAN eder). Sezgi ölçülmeden yazılmaz: fark, İTO seviyesine
-    # regres edilir ve katsayının anlamlılığı rapor edilir. Anlamlı değilse
-    # "orantısal" bir hüküm verilmez, yalnız yön not edilir.
-    Xo = np.column_stack([np.ones(len(d)), d["ito"].values])
-    bo, *_ = np.linalg.lstsq(Xo, d["fark"].values, rcond=None)
-    eo = d["fark"].values - Xo @ bo
-    s2o = float(eo @ eo) / max(len(d) - 2, 1)
-    seo = np.sqrt(np.diag(np.linalg.pinv(Xo.T @ Xo)) * s2o)
-    to = float(bo[1] / seo[1]) if seo[1] else float("nan")
-    po = float(2 * (1 - _st.t.cdf(abs(to), max(len(d) - 2, 1))))
-    oranti = {
-        "egim": round(float(bo[1]), 3), "se": round(float(seo[1]), 3),
-        "t": round(to, 2), "p": round(po, 4),
-        "r": round(float(d["fark"].corr(d["ito"])), 3),
-        "anlamli": bool(po < 0.05),
-        "oran_medyan": round(float((d["tufe"] / d["ito"]).median()), 3),
-        "kayan_ilk": round(float(kayan[0]["ort_fark"]), 3) if kayan else None,
-        "kayan_son": round(float(kayan[-1]["ort_fark"]), 3) if kayan else None,
-        "kayan_maks": round(float(max(x["ort_fark"] for x in kayan)), 3) if kayan else None,
-        "kayan_r_min": round(float(min(x["r"] for x in kayan)), 3) if kayan else None,
-        "kayan_r_maks": round(float(max(x["r"] for x in kayan)), 3) if kayan else None,
-        "kayan_egim_min": round(float(min(x["egim"] for x in kayan)), 3) if kayan else None,
-        "kayan_egim_maks": round(float(max(x["egim"] for x in kayan)), 3) if kayan else None,
-        "kayan_n": len(kayan),
+def _fark_ozet(f: pd.Series) -> dict:
+    from scipy import stats as _st
+    if f.empty:
+        return {}
+    t_ist, p_ist = (_st.ttest_1samp(f.values, 0.0) if len(f) > 1
+                    else (float("nan"),) * 2)
+    return {
+        "n": int(len(f)),
+        "ort": round(float(f.mean()), 2),
+        "medyan": round(float(f.median()), 2),
+        "std": round(float(f.std(ddof=1)), 2) if len(f) > 1 else None,
+        "min": round(float(f.min()), 2),
+        "maks": round(float(f.max()), 2),
+        "mutlak_ort": round(float(f.abs().mean()), 2),
+        "ito_ustte_pay": round(float((f > 0).mean() * 100), 0),
+        "min_ay": f.idxmin().strftime("%Y-%m"),
+        "maks_ay": f.idxmax().strftime("%Y-%m"),
+        "t": round(float(t_ist), 2), "p": round(float(p_ist), 4),
+        "anlamli": bool(p_ist < 0.05),
     }
+
+
+def ito_profil(a: pd.DataFrame, aylar: int = 24,
+               dislanan: tuple[int, ...] = DISLANAN_YIL) -> dict:
+    """İTO ile TÜFE arasındaki farkın AY AY profili ve "İTO şu geldiyse TÜFE'den
+    ne beklenir" sorusunun ölçülmüş cevabı.
+
+    ito_nowcast() regresyonu kurar ve örneklem İÇİ uyumu (R²) verir. Bu modül
+    onun cevaplayamadığı altı soruyu ölçer:
+
+    (1) FARKIN KENDİSİ VE ANLAMLILIĞI. Regresyon katsayısı farkın ortalamasını
+        gizler; okur "İTO kaç puan yukarıda gelir" diye sorar. Fark ay ay
+        yazılır ve sıfırdan farklı olup olmadığı t ile sınanır.
+    (2) EĞİM 1 Mİ. Eğim 1'den ayırt edilemiyorsa ilişki "sabit kaydırma"dır ve
+        regresyon eğimi kurmaya değmez.
+    (3) HANGİ KURAL. Altı aday kural genişleyen pencereyle, örneklem DIŞI
+        kıyaslanır. Örneklem içi R² iyimserdir; asıl soru "yarın hangisini
+        kullanayım"dır. Sıralamanın pencereye duyarlılığı da ölçülür.
+    (4) ANKETTEN İYİ Mİ. Asıl kıyas naif kural değil PİYASA BEKLENTİSİdir.
+    (5) SÜRPRİZ SÜRPRİZİ ÖNGÖRÜR MÜ. Tradable soru budur.
+    (6) DIŞLAMA HAKLI MI. `dislanan` yıllar kestirimden çıkarılır ama tablodan
+        ve grafikten ÇIKARILMAZ; dışlanan dönemin istatistikleri ayrıca
+        yazılır ve bütün kestirim İKİ örneklemde birden koşturulur. Bir
+        gözlemi atmak veriye müdahaledir; müdahalenin sonucu görünmezse
+        okurun elinde yalnız bizim sözümüz kalır.
+    """
+    if "ito_ist" not in a.columns:
+        return {}
+    tam = pd.DataFrame({"tufe": aylik(a["tufe"].dropna()),
+                        "ito": aylik(a["ito_ist"].dropna())}).dropna()
+    if len(tam) < 18:
+        return {"n": int(len(tam)), "not": "örneklem yetersiz"}
+    tam["fark"] = tam["ito"] - tam["tufe"]
+
+    disli = tam.index.year.isin(dislanan)
+    d = tam[~disli]                      # KESTİRİM örneklemi
+    dis = tam[disli]                     # dışlanan dönem — ölçülür, atılmaz
+    if len(d) < 18:
+        # Dışlama örneklemi kestirilemez hâle getiriyorsa dışlama YAPILMAZ ve
+        # bu durum açıkça yazılır. Sessizce tam örnekleme dönmek, sayfada
+        # "2023 hariç" yazarken 2023'ü dahil etmek olurdu.
+        d, dis, dislanan = tam, tam.iloc[:0], ()
+
+    AY_AD = {1: "Ocak", 2: "Şubat", 3: "Mart", 4: "Nisan", 5: "Mayıs",
+             6: "Haziran", 7: "Temmuz", 8: "Ağustos", 9: "Eylül", 10: "Ekim",
+             11: "Kasım", 12: "Aralık"}
+
+    # TABLO TAM ÖRNEKLEMDİR; dışlanan satırlar İŞARETLENİR, silinmez.
+    tablo = [{"ay": i.strftime("%Y-%m"),
+              "ad": f"{AY_AD[i.month]} {i.year}",
+              "ito": round(float(r["ito"]), 2),
+              "tufe": round(float(r["tufe"]), 2),
+              "fark": round(float(r["fark"]), 2),
+              "dislandi": bool(i.year in dislanan)}
+             for i, r in tam.iterrows()]
+
+    son = d.tail(aylar)
+    fark_ozet = _fark_ozet(son["fark"])
+    fark_tum = _fark_ozet(d["fark"])
+
+    # Takvim ayı mevsimselliği — KESTİRİM örnekleminden. Ay başına gözlem
+    # sayısı yazılır; bu tablodan KURAL çıkarılmaz, kuralın işe yarayıp
+    # yaramadığı yarışta örneklem dışı sınanıyor.
+    takvim = []
+    for ay_no, g in d.groupby(d.index.month):
+        takvim.append({"ay": int(ay_no), "ad": AY_AD[int(ay_no)], "n": int(len(g)),
+                       "ort_fark": round(float(g["fark"].mean()), 2),
+                       "ort_ito": round(float(g["ito"].mean()), 2),
+                       "ort_tufe": round(float(g["tufe"].mean()), 2)})
+    takvim.sort(key=lambda x: x["ay"])
+
+    # ---- ASGARİ PENCERE. Kural yarışının başlangıç penceresi örneklemin
+    # boyuna göre ölçeklenir: sabit 12 yazmak, örneklem büyüdükçe yarışı
+    # gereksiz kısa bir tarihçeyle kurmak demekti. Üçte bir, en az 12.
+    asgari = max(12, len(d) // 3)
+
+    kestirim = _ito_kestir(d, a, asgari)
+    # Dışlamanın etkisi: AYNI kod, AYNI başlangıç penceresi, tam örneklemle.
+    # İki sonuç yan yana durunca "2023'ü attık" cümlesi bir iddia değil,
+    # ölçülmüş bir farka dönüşüyor.
+    #
+    # asgari'yi ikisinde de aynı tutmak zorunlu: farklı pencerelerle koşsalardı
+    # aradaki fark dışlamanın değil pencerenin eseri olurdu. Yine de kural
+    # yarışının MAE'leri BİREBİR kıyaslanamaz — tam örneklemde yarış dışlanan
+    # ayları da PUANLIYOR, yani iki MAE farklı ay kümelerinde ölçülüyor. Bu
+    # yüzden karşılaştırmaya yalnız kazananın ADI giriyor, MAE'si değil;
+    # katsayılar (regresyon, sürpriz) ise aynı tanım üzerinden kıyaslanabilir.
+    kestirim_tam = _ito_kestir(tam, a, asgari) if len(dis) else {}
+
+    from scipy import stats as _st
+    dislama = {"yillar": list(dislanan), "n": int(len(dis))}
+    if len(dis):
+        dislama.update({
+            "ilk_ay": dis.index[0].strftime("%Y-%m"),
+            "son_ay": dis.index[-1].strftime("%Y-%m"),
+            "fark": _fark_ozet(dis["fark"]),
+            "tufe_min": round(float(dis["tufe"].min()), 2),
+            "tufe_maks": round(float(dis["tufe"].max()), 2),
+            "tufe_std": round(float(dis["tufe"].std(ddof=1)), 2),
+            "ito_std": round(float(dis["ito"].std(ddof=1)), 2),
+            "kalan_tufe_std": round(float(d["tufe"].std(ddof=1)), 2),
+            "kalan_tufe_min": round(float(d["tufe"].min()), 2),
+            "kalan_tufe_maks": round(float(d["tufe"].max()), 2),
+        })
+        # İKİ DÖNEMİN FARKI GERÇEKTEN AYRIŞIYOR MU? Welch t (eşit varyans
+        # varsaymaz — dışlamanın gerekçesi zaten varyansın farklı olması).
+        tw, pw = _st.ttest_ind(dis["fark"].values, d["fark"].values,
+                               equal_var=False)
+        dislama.update({
+            "welch_t": round(float(tw), 2), "welch_p": round(float(pw), 4),
+            "ort_ayrisiyor": bool(pw < 0.05),
+            # Oynaklık oranı: dışlanan dönemin farkı ne kadar daha oynak?
+            "std_orani": (round(float(dis["fark"].std(ddof=1)
+                                      / d["fark"].std(ddof=1)), 2)
+                          if len(dis) > 1 and d["fark"].std(ddof=1) else None),
+            "tufe_std_orani": (round(float(dis["tufe"].std(ddof=1)
+                                           / d["tufe"].std(ddof=1)), 2)
+                               if len(dis) > 1 and d["tufe"].std(ddof=1) else None),
+        })
 
     yil = pd.DataFrame({"tufe": yillik(a["tufe"].dropna()),
                         "ito": yillik(a["ito_ist"].dropna())}).dropna()
@@ -884,14 +973,48 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24) -> dict:
                    "son_ito": round(float(yil["ito"].iloc[-1]), 2),
                    "son_tufe": round(float(yil["tufe"].iloc[-1]), 2)}
 
-    return {"pencere_ay": int(len(son)), "tablo": tablo, "fark": fark_ozet,
-            "takvim": takvim, "regresyon": regresyon, "esleme": esleme,
-            "kural": kural, "anket": anket, "surpriz": surpriz,
-            "oranti": oranti,
-            "kayan": kayan, "yillik": yillik_tablo, "yillik_ozet": yillik_ozet,
-            "ilk_ay": d.index[0].strftime("%Y-%m"),
-            "son_ay": d.index[-1].strftime("%Y-%m"),
-            "n_toplam": int(len(d))}
+    cikti = {"pencere_ay": int(len(son)), "tablo": tablo,
+             "fark": fark_ozet, "fark_tum": fark_tum, "takvim": takvim,
+             "dislama": dislama,
+             "yillik": yillik_tablo, "yillik_ozet": yillik_ozet,
+             "tam_ilk_ay": tam.index[0].strftime("%Y-%m"),
+             "tam_son_ay": tam.index[-1].strftime("%Y-%m"),
+             "n_tam": int(len(tam)),
+             "ilk_ay": d.index[0].strftime("%Y-%m"),
+             "son_ay": d.index[-1].strftime("%Y-%m"),
+             "n_toplam": int(len(d))}
+    cikti.update(kestirim)
+    if kestirim_tam:
+        cikti["karsilastirma"] = {
+            "n_dahil": int(len(tam)), "n_haric": int(len(d)),
+            "dahil": {
+                "egim": kestirim_tam["regresyon"]["egim"],
+                "se_egim": kestirim_tam["regresyon"]["se_egim"],
+                "sabit": kestirim_tam["regresyon"]["sabit"],
+                "r": kestirim_tam["regresyon"]["r"],
+                "r2": kestirim_tam["regresyon"]["r2"],
+                "se_artik": kestirim_tam["regresyon"]["se_artik"],
+                "p_egim_bir": kestirim_tam["regresyon"]["p_egim_bir"],
+                "kazanan": (kestirim_tam.get("kural") or {}).get("kazanan"),
+                "s_egim": (kestirim_tam.get("surpriz") or {}).get("egim"),
+                "s_t": (kestirim_tam.get("surpriz") or {}).get("t"),
+                "s_r2": (kestirim_tam.get("surpriz") or {}).get("r2"),
+            },
+            "haric": {
+                "egim": kestirim["regresyon"]["egim"],
+                "se_egim": kestirim["regresyon"]["se_egim"],
+                "sabit": kestirim["regresyon"]["sabit"],
+                "r": kestirim["regresyon"]["r"],
+                "r2": kestirim["regresyon"]["r2"],
+                "se_artik": kestirim["regresyon"]["se_artik"],
+                "p_egim_bir": kestirim["regresyon"]["p_egim_bir"],
+                "kazanan": (kestirim.get("kural") or {}).get("kazanan"),
+                "s_egim": (kestirim.get("surpriz") or {}).get("egim"),
+                "s_t": (kestirim.get("surpriz") or {}).get("t"),
+                "s_r2": (kestirim.get("surpriz") or {}).get("r2"),
+            },
+        }
+    return cikti
 
 
 # ===========================================================================

@@ -358,21 +358,74 @@ def main() -> int:
         uyar("ito_profil.json yok ya da boş — İTO profili anahtarları atlandı.")
     else:
         f_, r_ = ip["fark"], ip["regresyon"]
+        # ÖRNEKLEM İKİ TÜRLÜDÜR ve sayfa ikisini de anmak zorunda: TAM örneklem
+        # (tabloda ve grafikte görünen) ile KESTİRİM örneklemi (dışlanan yıllar
+        # çıkarılmış). Tek bir "n" yazmak, okuru grafikte saydığı aylarla
+        # metindeki n arasında çelişkiye düşürürdü.
         koy("itp_pencere", ip.get("pencere_ay"), 0)
-        koy("itp_n", ip.get("n_toplam"), 0)
+        koy("itp_n", ip.get("n_toplam"), 0)           # kestirim örneklemi
         koy("itp_ilk_ay", ip.get("ilk_ay"), None)
         koy("itp_son_ay", ip.get("son_ay"), None)
+        koy("itp_n_tam", ip.get("n_tam"), 0)          # tam örneklem
+        koy("itp_tam_ilk_ay", ip.get("tam_ilk_ay"), None)
+        koy("itp_tam_son_ay", ip.get("tam_son_ay"), None)
         for k, o_ in (("ort", 2), ("medyan", 2), ("std", 2), ("min", 2),
                       ("maks", 2), ("mutlak_ort", 2), ("ustte_pay", 0),
                       ("t", 2), ("p", 4)):
             koy(f"itp_{k}", f_.get("ito_ustte_pay" if k == "ustte_pay" else k), o_)
         koy("itp_min_ay", f_.get("min_ay"), None)
         koy("itp_maks_ay", f_.get("maks_ay"), None)
+        # Kestirim örnekleminin TAMAMI (yalnız son 24 ay değil).
+        ft = ip.get("fark_tum") or {}
+        for k, o_ in (("ort", 2), ("medyan", 2), ("std", 2), ("mutlak_ort", 2),
+                      ("ustte_pay", 0), ("t", 2), ("p", 4), ("n", 0)):
+            koy(f"itp_tum_{k}", ft.get("ito_ustte_pay" if k == "ustte_pay" else k), o_)
         for k in ("sabit", "egim", "se_egim", "se_sabit", "r", "spearman",
                   "r2", "se_artik"):
             koy(f"itp_{k}", r_.get(k), 3)
         koy("itp_t_bir", r_.get("t_egim_bir"), 2)
         koy("itp_p_bir", r_.get("p_egim_bir"), 4)
+
+        # ---- DIŞLAMA: kararın kendisi ve gerekçesinin ÖLÇÜSÜ
+        ds = ip.get("dislama") or {}
+        koy("itp_d_n", ds.get("n"), 0)
+        koy("itp_d_yillar", ", ".join(str(y) for y in ds.get("yillar") or []), None)
+        koy("itp_d_ilk_ay", ds.get("ilk_ay"), None)
+        koy("itp_d_son_ay", ds.get("son_ay"), None)
+        df_ = ds.get("fark") or {}
+        for k, o_ in (("ort", 2), ("medyan", 2), ("std", 2), ("min", 2),
+                      ("maks", 2), ("mutlak_ort", 2), ("ustte_pay", 0)):
+            koy(f"itp_d_{k}", df_.get("ito_ustte_pay" if k == "ustte_pay" else k), o_)
+        koy("itp_d_min_ay", df_.get("min_ay"), None)
+        koy("itp_d_maks_ay", df_.get("maks_ay"), None)
+        for k in ("tufe_min", "tufe_maks", "tufe_std", "ito_std",
+                  "kalan_tufe_std", "kalan_tufe_min", "kalan_tufe_maks",
+                  "std_orani", "tufe_std_orani"):
+            koy(f"itp_d_{k}", ds.get(k), 2)
+        koy("itp_d_welch_t", ds.get("welch_t"), 2)
+        koy("itp_d_welch_p", ds.get("welch_p"), 4)
+        # DIŞLAMANIN GEREKÇESİ İKİ AYRI SORUDUR ve ikisi de ölçülüyor:
+        # ortalama fark ayrışıyor mu (Welch) ve OYNAKLIK ayrışıyor mu (std
+        # oranı). Rejim yılı iddiası asıl ikincisidir; ortalama aynı çıksa
+        # bile dört kat oynak bir dönem kestirimi kendine çeker.
+        koy("itp_d_hukum",
+            ("dışlanan dönemin ortalama farkı da oynaklığı da kalan örneklemden "
+             "ayrışıyor" if ds.get("ort_ayrisiyor") else
+             "ortalama fark istatistiksel olarak ayrışmıyor; dışlamanın "
+             "gerekçesi ortalama değil OYNAKLIK"), None)
+
+        # ---- DIŞLAMANIN SONUCU: aynı kod, iki örneklem
+        ka = ip.get("karsilastirma") or {}
+        if ka:
+            koy("itp_k_n_dahil", ka.get("n_dahil"), 0)
+            koy("itp_k_n_haric", ka.get("n_haric"), 0)
+            for yon in ("dahil", "haric"):
+                blok = ka.get(yon) or {}
+                for k in ("egim", "se_egim", "sabit", "r", "r2", "se_artik",
+                          "s_egim", "s_t", "s_r2"):
+                    koy(f"itp_{yon}_{k}", blok.get(k), 3)
+                koy(f"itp_{yon}_p_bir", blok.get("p_egim_bir"), 4)
+                koy(f"itp_{yon}_kazanan", blok.get("kazanan"), None)
 
         ku = ip.get("kural") or {}
         sk, skd = ku.get("skor") or {}, ku.get("skor_dar") or {}
@@ -380,6 +433,7 @@ def main() -> int:
         koy("itp_k_ilk", ku.get("ilk_ay"), None)
         koy("itp_k_son", ku.get("son_ay"), None)
         koy("itp_k_asgari", ku.get("asgari"), 0)
+        koy("itp_k_asgari_dar", ku.get("asgari_dar"), 0)
         for c in ("naif", "sabit", "medyan", "oransal", "regresyon", "takvimli"):
             koy(f"itp_mae_{c}", (sk.get(c) or {}).get("mae"), 3)
             koy(f"itp_maed_{c}", (skd.get(c) or {}).get("mae"), 3)

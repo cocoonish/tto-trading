@@ -657,7 +657,11 @@ def _ito_yukle() -> dict | None:
 
 
 def sekil_10(ip, damga):
-    """İTO ve TÜFE: aylık okuma, fark ve yıllık yakınsama."""
+    """İTO ve TÜFE: aylık okuma, fark ve yıllık yakınsama.
+
+    DIŞLANAN YIL GRAFİKTEN ÇIKARILMAZ, İŞARETLENİR. Kestirimden çıkarılan bir
+    dönemi grafikten de silmek, okura "böyle bir dönem yoktu" demektir; oysa
+    dışlamanın gerekçesi tam olarak o dönemin nasıl göründüğüdür."""
     if not ip:
         return None
     fig = make_subplots(rows=3, cols=1, vertical_spacing=0.075,
@@ -665,20 +669,38 @@ def sekil_10(ip, damga):
                                         "Fark = İTO − TÜFE, puan",
                                         "12 aylık değişim ve aradaki makas"))
     t = pd.DataFrame(ip["tablo"])
+    if "dislandi" not in t.columns:
+        t["dislandi"] = False
     x = pd.to_datetime(t["ay"] + "-01")
     fig.add_trace(go.Bar(x=x, y=t["ito"], name="İTO · aylık", marker_color=GOLD,
                          hovertemplate="%{y:.2f}%<extra>İTO</extra>"), row=1, col=1)
     fig.add_trace(go.Bar(x=x, y=t["tufe"], name="TÜFE · aylık", marker_color=TEAL,
                          hovertemplate="%{y:.2f}%<extra>TÜFE</extra>"), row=1, col=1)
     f = ip["fark"]
-    renk = [CLARET if v > 0 else LACI for v in t["fark"]]
+    ds = ip.get("dislama") or {}
+    # Dışlanan aylar GRİ; kestirime giren aylar işaretine göre renkli.
+    renk = [GRI if dis else (CLARET if v > 0 else LACI)
+            for v, dis in zip(t["fark"], t["dislandi"])]
     fig.add_trace(go.Bar(x=x, y=t["fark"], name="Fark (İTO − TÜFE)",
-                         marker_color=renk,
+                         marker_color=renk, customdata=t["dislandi"],
                          hovertemplate="%{y:+.2f} puan<extra>fark</extra>"),
                   row=2, col=1)
+    # Dışlanan aralık her panelde gölgelendirilir — okur hangi dönemin
+    # kestirime girmediğini bir bakışta görsün.
+    if ds.get("n"):
+        d0 = pd.Timestamp(ds["ilk_ay"] + "-01") - pd.Timedelta(days=15)
+        d1 = pd.Timestamp(ds["son_ay"] + "-01") + pd.Timedelta(days=15)
+        for r in (1, 2):
+            fig.add_vrect(x0=d0, x1=d1, fillcolor=GRI, opacity=0.10,
+                          line_width=0, row=r, col=1)
+        fig.add_annotation(x=d0 + (d1 - d0) / 2, yref="y2 domain", y=1.0,
+                           text=f"{', '.join(str(y) for y in ds['yillar'])} — "
+                                "kestirim DIŞI (grafikte duruyor)",
+                           showarrow=False, font=dict(size=10, color=GRI),
+                           row=2, col=1)
     fig.add_hline(y=f["ort"], line=dict(color=INK, width=1.4, dash="dash"),
-                  annotation_text=f"ortalama {f['ort']:+.2f}".replace(".", ","),
-                  annotation_position="top left",
+                  annotation_text=f"kestirim ortalaması {f['ort']:+.2f}".replace(".", ","),
+                  annotation_position="top right",
                   annotation_font=dict(size=10, color=INK), row=2, col=1)
     for yon in (+1, -1):
         fig.add_hline(y=f["ort"] + yon * f["std"], line=dict(color=GRI, width=1, dash="dot"),
@@ -691,7 +713,7 @@ def sekil_10(ip, damga):
     fig.add_trace(go.Scatter(x=xy, y=y["tufe"], name="TÜFE · 12 aylık", mode="lines",
                              line=dict(color=TEAL, width=2.2),
                              hovertemplate="%{y:.2f}%<extra>TÜFE 12a</extra>"), row=3, col=1)
-    fig.add_trace(go.Scatter(x=xy, y=y["fark"], name="Makas (sağ eksen yok, puan)",
+    fig.add_trace(go.Scatter(x=xy, y=y["fark"], name="Makas (puan)",
                              mode="lines", line=dict(color=CLARET, width=1.6, dash="dot"),
                              hovertemplate="%{y:+.2f} puan<extra>makas</extra>"),
                   row=3, col=1)
@@ -700,17 +722,21 @@ def sekil_10(ip, damga):
     fig.update_yaxes(title_text="yıllık % / puan", row=3, col=1)
     fig.update_layout(barmode="group")
     for an in fig.layout.annotations:
-        if an.text and "ortalama" not in an.text:
+        if an.text and "ortalama" not in an.text and "kestirim DIŞI" not in an.text:
             an.font.size = 12
             an.font.color = INK
     yo = ip.get("yillik_ozet", {})
+    alt2 = (f"Fark ortalaması {f['ort']:+.2f} puan (medyan {f['medyan']:+.2f}), "
+            f"İTO ayların %{f['ito_ustte_pay']:.0f}'inde yukarıda; "
+            f"noktalı çizgiler ortalama ± 1 standart sapma").replace(".", ",")
+    if ds.get("n"):
+        alt2 += f" · gri sütunlar {', '.join(str(y) for y in ds['yillar'])}: kestirim dışı"
     return _duzen(
         fig, "İTO ile TÜFE: aynı ayın iki ölçümü",
         [f"İTO İstanbul endeksi (EVDS TP.FG.IST1.23) ve TÜFE Türkiye geneli · "
-         f"{ip['ilk_ay']}–{ip['son_ay']}, n={ip['n_toplam']} ay · veri: {damga}",
-         f"Fark ortalaması {f['ort']:+.2f} puan (medyan {f['medyan']:+.2f}), "
-         f"İTO ayların %{f['ito_ustte_pay']:.0f}'inde yukarıda; "
-         f"noktalı çizgiler ortalama ± 1 standart sapma".replace(".", ","),
+         f"tam örneklem {ip.get('tam_ilk_ay')}–{ip.get('tam_son_ay')} "
+         f"(n={ip.get('n_tam')}), kestirim n={ip['n_toplam']} · veri: {damga}",
+         alt2,
          f"Alt panel: 12 aylık makas {yo.get('maks', 0):.2f} puan zirvesinden "
          f"{yo.get('son', 0):.2f} puana indi".replace(".", ",")],
         n_panel=3)
@@ -726,6 +752,8 @@ def sekil_11(ip, damga):
                             "Kural yarışı: örneklem DIŞI ortalama mutlak hata",
                             "Sürpriz sürprizi öngörür mü? (ankete göre sapmalar)"))
     t = pd.DataFrame(ip["tablo"])
+    if "dislandi" not in t.columns:
+        t["dislandi"] = False
     es = pd.DataFrame(ip["esleme"])
     fig.add_trace(go.Scatter(x=es["ito"], y=es["ust"], mode="lines", name="%95 öngörü aralığı",
                              line=dict(color=GRID, width=0), showlegend=False,
@@ -737,14 +765,36 @@ def sekil_11(ip, damga):
     fig.add_trace(go.Scatter(x=es["ito"], y=es["ito"], mode="lines", name="45° (TÜFE = İTO)",
                              line=dict(color=GRI, width=1.2, dash="dot"),
                              hovertemplate="%{y:.2f}%<extra>45°</extra>"), row=1, col=1)
-    fig.add_trace(go.Scatter(x=es["ito"], y=es["tufe"], mode="lines", name="Regresyon",
+    fig.add_trace(go.Scatter(x=es["ito"], y=es["tufe"], mode="lines",
+                             name="Regresyon (kestirim örneklemi)",
                              line=dict(color=TEAL, width=2.4),
                              hovertemplate="%{y:.2f}%<extra>regresyon</extra>"), row=1, col=1)
-    fig.add_trace(go.Scatter(x=t["ito"], y=t["tufe"], mode="markers", name="Aylık gözlem",
+    # DIŞLAMANIN ETKİSİ GÖRÜNÜR OLSUN: aynı kodla tam örneklemde kurulan
+    # doğru da çizilir. İki doğru üst üste düşüyorsa dışlama sonucu
+    # değiştirmiyor demektir ve okur bunu gözüyle görür.
+    ka = (ip.get("karsilastirma") or {}).get("dahil") or {}
+    if ka.get("egim") is not None:
+        fig.add_trace(go.Scatter(
+            x=es["ito"], y=ka["sabit"] + ka["egim"] * es["ito"], mode="lines",
+            name="Regresyon (dışlanan yıllar DAHİL)",
+            line=dict(color=MOR, width=1.8, dash="dash"),
+            hovertemplate="%{y:.2f}%<extra>tam örneklem</extra>"), row=1, col=1)
+    kal = t[~t["dislandi"]]
+    dis = t[t["dislandi"]]
+    fig.add_trace(go.Scatter(x=kal["ito"], y=kal["tufe"], mode="markers",
+                             name="Aylık gözlem (kestirime giren)",
                              marker=dict(color=CLARET, size=7, opacity=0.8),
-                             text=t["ad"],
+                             text=kal["ad"],
                              hovertemplate="%{text}<br>İTO %{x:.2f}% → TÜFE %{y:.2f}%"
                                            "<extra></extra>"), row=1, col=1)
+    if len(dis):
+        fig.add_trace(go.Scatter(x=dis["ito"], y=dis["tufe"], mode="markers",
+                                 name="Dışlanan yıl (kestirime girmedi)",
+                                 marker=dict(color=GRI, size=8, symbol="x",
+                                             opacity=0.85),
+                                 text=dis["ad"],
+                                 hovertemplate="%{text}<br>İTO %{x:.2f}% → TÜFE %{y:.2f}%"
+                                               "<extra>dışlandı</extra>"), row=1, col=1)
     ad = {"naif": "Naif: TÜFE = İTO", "sabit": "Sabit kaydırma",
           "medyan": "Medyan kaydırma", "oransal": "Oransal",
           "regresyon": "Regresyon", "takvimli": "Takvim ayı düzeltmeli"}
@@ -763,9 +813,6 @@ def sekil_11(ip, damga):
                          hovertemplate="%{y:.3f} puan<extra>%{x}</extra>"), row=2, col=1)
     sp = ip.get("surpriz") or {}
     if sp:
-        sat = pd.DataFrame(ip["kural"]["satir"])
-        # Sürpriz paneli kendi verisini taşımıyor; eşleme çizgisi katsayıdan
-        # kurulur ve nokta bulutu yerine ölçülen doğru çizilir.
         xs = np.linspace(-1.5, 1.5, 40)
         fig.add_trace(go.Scatter(x=xs, y=sp["sabit"] + sp["egim"] * xs, mode="lines",
                                  name=f"TÜFE sürprizi = {sp['sabit']:.2f} + "
@@ -794,7 +841,7 @@ def sekil_11(ip, damga):
     return _duzen(
         fig, "İTO okumasından TÜFE beklentisine",
         [f"Aralık %95 ÖNGÖRÜ aralığıdır (güven aralığı değil): tek bir ayın "
-         f"nereye düşeceğini gösterir · n={r['n']} ay · veri: {damga}",
+         f"nereye düşeceğini gösterir · kestirim n={r['n']} ay · veri: {damga}",
          f"Orta panel: her kural genişleyen pencereyle, KENDİ geleceğini görmeden "
          f"kuruldu · {k['n']} örneklem dışı ay ({k['ilk_ay']}–{k['son_ay']})",
          alt3],
@@ -802,13 +849,18 @@ def sekil_11(ip, damga):
 
 
 def sekil_12(ip, damga):
-    """Takvim ayı profili ve ilişkinin kararlılığı."""
+    """Takvim ayı profili, ilişkinin kararlılığı ve dışlanan dönem."""
     if not ip or not ip.get("kayan"):
         return None
-    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.11,
-                        subplot_titles=(
-                            "Takvim ayına göre ortalama fark (İTO − TÜFE)",
-                            "İlişki kararlı mı? 12 aylık kayan korelasyon, eğim ve ortalama fark"))
+    ds = ip.get("dislama") or {}
+    n_panel = 3 if ds.get("n") else 2
+    basliklar = ["Takvim ayına göre ortalama fark (İTO − TÜFE) — kestirim örneklemi",
+                 "İlişki kararlı mı? 12 aylık kayan korelasyon, eğim ve ortalama fark"]
+    if n_panel == 3:
+        basliklar.append("Dışlama haklı mı? Aylık TÜFE'nin salınımı — dışlanan dönem "
+                         "ve kalan örneklem")
+    fig = make_subplots(rows=n_panel, cols=1, vertical_spacing=0.09,
+                        subplot_titles=tuple(basliklar))
     tk = pd.DataFrame(ip["takvim"])
     fig.add_trace(go.Bar(x=tk["ad"], y=tk["ort_fark"],
                          marker_color=[CLARET if v > 0 else LACI for v in tk["ort_fark"]],
@@ -831,6 +883,23 @@ def sekil_12(ip, damga):
                              hovertemplate="%{y:+.3f} puan<extra>ortalama fark</extra>"),
                   row=2, col=1)
     fig.add_hline(y=1.0, line=dict(color=GRI, width=1, dash="dot"), row=2, col=1)
+    # ÜÇÜNCÜ PANEL: dışlama gerekçesinin KENDİSİ. "Outlier" demek yetmez;
+    # dışlanan dönemin aylık TÜFE'sinin nasıl salındığı gösterilir ve kalan
+    # örneklemin bandıyla yan yana konur.
+    if n_panel == 3:
+        t = pd.DataFrame(ip["tablo"])
+        x = pd.to_datetime(t["ay"] + "-01")
+        fig.add_trace(go.Bar(
+            x=x, y=t["tufe"],
+            marker_color=[GRI if dis else TEAL for dis in t["dislandi"]],
+            name="Aylık TÜFE (gri: dışlanan)",
+            hovertemplate="%{y:.2f}%<extra>aylık TÜFE</extra>"), row=3, col=1)
+        for v, ad_, renk in ((ds.get("kalan_tufe_maks"), "kalan örneklem en yüksek", LACI),
+                             (ds.get("kalan_tufe_min"), "kalan örneklem en düşük", LACI)):
+            if v is not None:
+                fig.add_hline(y=v, line=dict(color=renk, width=1.2, dash="dash"),
+                              row=3, col=1)
+        fig.update_yaxes(title_text="aylık %", row=3, col=1)
     fig.update_yaxes(title_text="puan", row=1, col=1)
     fig.update_yaxes(title_text="r / eğim / puan", row=2, col=1)
     for an in fig.layout.annotations:
@@ -841,13 +910,20 @@ def sekil_12(ip, damga):
     alt2 = ("Takvim düzeltmesinin örneklem dışı etkisi ölçülemedi" if zarar is None else
             f"Takvim ayı düzeltmesi örneklem DIŞI hatayı {zarar:+.3f} puan "
             f"DEĞİŞTİRİYOR — tablo ikna edici, kural değil".replace(".", ","))
+    alt3 = ("Alt panel: 12 aylık pencere · noktalı yatay çizgi eğim = 1 "
+            "(birebir geçiş)")
+    if n_panel == 3:
+        alt3 = (f"En alt panel: dışlanan dönemde aylık TÜFE "
+                f"%{ds.get('tufe_min', 0):.2f}–%{ds.get('tufe_maks', 0):.2f} "
+                f"arasında salındı; kalan örneklemde "
+                f"%{ds.get('kalan_tufe_min', 0):.2f}–%{ds.get('kalan_tufe_maks', 0):.2f} "
+                f"(kesikli çizgiler)").replace(".", ",")
     return _duzen(
-        fig, "Takvim ayı ve ilişkinin kararlılığı",
-        [f"Üst panel tüm örneklem üzerinden; her çubuğun üstündeki n o takvim "
+        fig, "Takvim ayı, kararlılık ve dışlama kararı",
+        [f"Üst panel kestirim örnekleminden; her çubuğun üstündeki n o takvim "
          f"ayındaki gözlem sayısıdır · veri: {damga}",
-         alt2,
-         "Alt panel: 12 aylık pencere · noktalı yatay çizgi eğim = 1 (birebir geçiş)"],
-        n_panel=2)
+         alt2, alt3],
+        n_panel=n_panel)
 
 
 def kos() -> None:

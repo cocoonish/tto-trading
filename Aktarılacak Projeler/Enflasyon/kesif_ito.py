@@ -24,6 +24,13 @@ import pandas as pd
 
 import veri
 
+# ÇIKTI TAMPONLANMAZ. İlk koşu 20 dakikalık iş bütçesini doldurdu ve TEK SATIR
+# öğrenmeden bitti: Python stdout'u tty olmayan yere yazarken tamponluyor,
+# GitHub log'una hiçbir şey düşmedi ve koşu iptal edildiğinde tampon da gitti.
+# Uzun süren bir keşifte ilerlemenin GÖRÜNMESİ, keşfin kendisi kadar önemli —
+# yoksa "hangi adımda takıldı" sorusu ancak yeni bir koşuyla cevaplanır.
+print = __import__("functools").partial(print, flush=True)   # noqa: A001
+
 # EVDS grup kodu adlandırması tek biçimli değil (bie_tukfiy2025, bie_oktug2025).
 # İTO tarafında hangisinin geçtiğini BİLMİYORUZ; hepsi yoklanır ve açık çıkan
 # kullanılır. Tahmin edip tek koda bağlanmak, kapalı çıktığında "seri yok"
@@ -35,18 +42,25 @@ GRUP_ADAYLARI = [
 
 # Grup kataloğu hiç açılmazsa ikinci yol: kod uzayını doğrudan yoklamak.
 # TP.FG.IST1.23 elimizdeki; kardeşleri aynı önekte olmalı.
-KOD_ADAYLARI = (
-    [f"TP.FG.IST1.{i:02d}" for i in range(1, 31)]
-    + [f"TP.FG.IST.{i:02d}" for i in range(1, 16)]
-    + [f"TP.FG.IST2.{i:02d}" for i in range(1, 16)]
-)
+# KOD UZAYI DAR TUTULUR. İlk sürüm 90 kod yokluyordu ve her ıskalanan kod
+# istemcinin yeniden deneme bütçesini harcadığı için 20 dakika yetmedi. Keşfin
+# işi kod uzayını taramak değil, SORUYU cevaplamak: "elimizdeki serinin daha
+# uzun bir kardeşi var mı". Katalog açılırsa kodlar zaten oradan gelir; kapalı
+# kalırsa bu kısa liste yeter.
+KOD_ADAYLARI = [
+    "TP.FG.IST1.23",                       # elimizdeki seri — kıyas noktası
+    "TP.FG.IST1.01", "TP.FG.IST1.02", "TP.FG.IST1.03",
+    "TP.FG.IST1.22", "TP.FG.IST1.24",
+    "TP.FG.IST.01", "TP.FG.IST.23",
+    "TP.FG.IST2.23",
+]
 
 
 def _olc(kod: str) -> dict:
     """Bir serinin KAPSAMINI ölç. 'Veri geldi' ile 'veri tam geldi' aynı şey
     değil: dönen serinin ilk/son ayı ve gözlem sayısı yazılır."""
     try:
-        s = veri.evds_aylik(kod, bas="01-01-1990", yenile=True).dropna()
+        s = veri.evds_aylik(kod, bas="01-01-2000", yenile=True).dropna()
     except Exception as ex:
         return {"kod": kod, "durum": f"HATA: {type(ex).__name__}: {ex}"[:160]}
     if s.empty:
@@ -61,6 +75,9 @@ def _olc(kod: str) -> dict:
 
 def main() -> int:
     print("İTO keşif — EVDS")
+    # SORU: TP.FG.IST1.23 elimizde Ocak 2024'te başlıyor. Bu serinin GERÇEK
+    # başlangıcı mı, yoksa daha uzun bir kardeşi mi var? Cevap ya katalogdan
+    # ya kapsam ölçümünden gelir.
     print("\n▶ 1. GRUP KATALOGLARI YOKLANIYOR")
     acik: list[tuple[str, pd.DataFrame]] = []
     for g in GRUP_ADAYLARI:
