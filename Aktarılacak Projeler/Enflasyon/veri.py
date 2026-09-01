@@ -319,6 +319,16 @@ ANA_SERI = {
     "mallar":      "TP.FE25.OKTG08",
     "yi_ufe":      "TP.TUFE1YI.T1",
     "ykke":        "TP.YKKE.TR",
+    # KİMLİĞİ SAYIYLA PİNLENDİ. EVDS bu kodun ADINI hiçbir uçtan vermiyor
+    # (veri yanıtında ad yok, datagroups 404, serieList boş). Serinin ne
+    # olduğu, hesapladığımız aylık değişimlerin İTO'nun kendi yayımıyla
+    # tutmasıyla belirlendi: 30 ayın 30'u 0,01 puan içinde ve manşet
+    # agregaları (yıllık %34,96 · yıl sonuna göre %23,58) tam olarak
+    # yeniden üretiliyor. Karşılaştırma her koşuda tekrarlanır —
+    # bkz. metrik._ito_seri ve ito_yayim.json.
+    # DİKKAT: bu seri İstanbul TÜKETİCİ FİYAT İNDEKSİ'dir; İTO'nun ayrıca
+    # yayımladığı "Ücretliler Geçinme İndeksi" BAŞKA bir endekstir ve
+    # muhtemelen TP.FG.IST2.23'tür (aynı pencere, farklı seviye).
     "ito_ist":     "TP.FG.IST1.23",
 }
 
@@ -364,7 +374,7 @@ TAZELIK = {
     "tufe":     ("TÜFE / ÖKTG / Yİ-ÜFE", 1, 6),
     "beklenti": ("PKA beklenti anketi", 0, 25),
     "ykke":     ("Yeni Kiracı Kira Endeksi", 1, 20),
-    "ito":      ("İstanbul TÜFE (İTO)", 1, 5),
+    "ito":      ("İstanbul Tüketici Fiyat İndeksi (İTO, 2023=100)", 1, 5),
 }
 FAIZ_TAZELIK_GUN = 4   # iş günü seriler: 4 takvim günü
 
@@ -462,7 +472,8 @@ def tazelik_denetimi(aylik: pd.DataFrame, gunluk: pd.DataFrame) -> list[str]:
     _denet("tufe", "yi_ufe", "Yİ-ÜFE (TP.TUFE1YI.T1)")
     _denet("beklenti", "pka_12a", "PKA 12 ay beklentisi (TP.PKAUO.S01.E.U)")
     _denet("ykke", "ykke", "YKKE (TP.YKKE.TR)")
-    _denet("ito", "ito_ist", "İstanbul TÜFE (TP.FG.IST1.23)")
+    _denet("ito", "ito_ist",
+           "İTO İstanbul Tüketici Fiyat İndeksi, 2023=100 (TP.FG.IST1.23)")
 
     for ad, kod in FAIZ.items():
         if ad not in gunluk.columns or gunluk[ad].dropna().empty:

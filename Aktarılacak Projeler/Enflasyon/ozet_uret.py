@@ -389,6 +389,27 @@ def main() -> int:
         koy("itp_t_bir", r_.get("t_egim_bir"), 2)
         koy("itp_p_bir", r_.get("p_egim_bir"), 4)
 
+        # ---- KİMLİK DOĞRULAMASI. Serinin ne olduğu adına bakarak değil,
+        # İTO'nun kendi yayımıyla tutmasıyla biliniyor; ölçü sayfada durmalı.
+        km = ip.get("kimlik") or {}
+        koy("itp_k_ortak", km.get("ortak_ay"), 0)
+        koy("itp_k_maks_sapma", km.get("maks_sapma"), 4)
+        koy("itp_k_ort_sapma", km.get("ort_sapma"), 4)
+        koy("itp_k_esik", km.get("esik"), 2)
+        koy("itp_k_sapan", km.get("sapan_ay"), 0)
+        koy("itp_k_dolduruldu_n", km.get("dolduruldu_n"), 0)
+        koy("itp_k_dolduruldu", ", ".join(km.get("dolduruldu") or []) or "yok", None)
+        koy("itp_k_hukum",
+            ("seri İTO'nun yayımıyla tutuyor — kimlik sayıyla doğrulandı"
+             if km.get("dogrulandi") else
+             "SERİ İTO'NUN YAYIMIYLA TUTMUYOR — sayfadaki İTO iddiaları "
+             "güvenilmez, hattın kaynağı gözden geçirilmeli"), None)
+        ms = (km.get("manset") or [{}])[0]
+        koy("itp_k_yillik_bizim", ms.get("yillik_bizim"), 2)
+        koy("itp_k_yillik_ito", ms.get("yillik_ito"), 2)
+        koy("itp_k_yilsonu_bizim", ms.get("yilsonu_bizim"), 2)
+        koy("itp_k_yilsonu_ito", ms.get("yilsonu_ito"), 2)
+
         # ---- DIŞLAMA: kararın kendisi ve gerekçesinin ÖLÇÜSÜ
         ds = ip.get("dislama") or {}
         koy("itp_d_n", ds.get("n"), 0)

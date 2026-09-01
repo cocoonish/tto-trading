@@ -619,29 +619,118 @@ def ito_nowcast(a: pd.DataFrame) -> dict:
 DISLANAN_YIL = (2023,)
 
 
-def _ito_elle() -> dict:
-    """EVDS'in henüz yayımlamadığı İTO okumaları (ito_elle.json).
+def _ito_yayim() -> dict:
+    """İTO'nun KENDİ yayımladığı aylık değişim oranları (ito_yayim.json).
 
-    NEDEN VAR: İTO ayın ilk günlerinde yayımlanıyor, EVDS'e düşmesi birkaç gün
-    alıyor. Aradaki pencerede sayfadaki "bu ay ne bekleriz" bloğu boş kalıyordu
-    — oysa okumanın kendisi kamuya açık.
+    Bu dosya bir kolaylık değil, bir SİGORTADIR. Hattımızdaki İTO serisi
+    EVDS'te `TP.FG.IST1.23` koduyla duruyor ve EVDS erişilebilir hiçbir uçtan
+    bu kodun ADINI vermiyor: veri yanıtında ad yok, `datagroups` uçları 404,
+    `serieList` boş dönüyor. Yani seriyi "İstanbul TÜFE" diye etiketlemek
+    ölçülmemiş bir iddiaydı ve bir süre öyle kaldı.
 
-    NEDEN DAR: elle girilen bir sayı ölçülmüş veri DEĞİLDİR ve öyle
-    davranılmaz. Üç kayıt birden taşınır (değer, kaynak, giriş tarihi), sayfada
-    kaynağı YAZILIR, ve kullanımı tek bir hâlle sınırlıdır: ay gerçekten
-    beklerken (İTO yok, TÜFE de yok). Ayın TÜFE'si geldiği anda değer düşer —
-    kestirime giren çift kaynağın kendi sayısı olmalı. EVDS o ayı yayımladığında
-    iki sayı KARŞILAŞTIRILIR; ayrışıyorlarsa uyarı düşer."""
-    y = VERI.parent / "ito_elle.json"
+    Kimlik artık ADLA değil SAYIYLA pinleniyor: her koşuda kendi
+    hesapladığımız aylık değişimler İTO'nun yayımıyla karşılaştırılır. 30 ayın
+    30'u 0,01 puan içinde tutuyor ve manşet agregaları (yıllık, yıl sonuna
+    göre) tam olarak yeniden üretiliyor. Kod bir gün başka bir seriye
+    çevrilirse ya da EVDS içeriği değişirse bu karşılaştırma DÜŞER."""
+    y = VERI.parent / "ito_yayim.json"
     if not y.exists():
         return {}
     try:
-        d = json.loads(y.read_text(encoding="utf-8"))
+        return json.loads(y.read_text(encoding="utf-8"))
     except Exception as ex:
-        uyar(f"ito_elle.json okunamadı ({type(ex).__name__}) — elle giriş yok sayıldı.")
+        uyar(f"ito_yayim.json okunamadı ({type(ex).__name__}) — İTO kimlik "
+             f"doğrulaması YAPILAMADI.")
         return {}
-    return d.get("aylik") or {}
 
+
+# Yuvarlamadan doğan fark 0,01 puanı geçmez (İTO iki ondalık yayımlıyor,
+# biz seviye endeksinden hesaplıyoruz). Eşik onun iki katı.
+ITO_DOGRULAMA_ESIK = 0.02
+
+
+def _ito_seri(a: pd.DataFrame) -> tuple[pd.Series, dict]:
+    """İTO aylık değişim serisi + kimlik doğrulaması.
+
+    Seri EVDS seviye endeksinden hesaplanır; İTO'nun yayımı hem DOĞRULAR hem
+    de EVDS'in veremediği ayları DOLDURUR. Doldurulan ay işaretlenir — bir
+    sayının nereden geldiği, sayının kendisi kadar önemli."""
+    # dropna ŞART: pct_change ilk ayı NaN bırakır ve o ay indekste DURUR.
+    # Düşürülmezse iki kusur birden çıkar — boş ay "ortak ay" diye sayılıp
+    # doğrulama örneklemini şişirir, ve indekste göründüğü için doldurma da
+    # onu atlar. Seviye endeksinin başladığı ayın değişimi ancak İTO'nun
+    # yayımından gelebilir; tam da doldurmanın var oluş sebebi bu.
+    ham = (aylik(a["ito_ist"].dropna()).dropna()
+           if "ito_ist" in a.columns else pd.Series(dtype=float))
+    yay = _ito_yayim()
+    kayit = {pd.Timestamp(k + "-01"): float(v)
+             for k, v in (yay.get("aylik") or {}).items()}
+    tani: dict = {"yayim_ay": len(kayit)}
+    if not kayit:
+        tani["durum"] = "İTO yayımı yok — kimlik doğrulanamadı"
+        return ham, tani
+
+    ortak = [t for t in ham.index if t in kayit]
+    if ortak:
+        sap = pd.Series({t: ham.loc[t] - kayit[t] for t in ortak})
+        tani.update({
+            "ortak_ay": len(ortak),
+            "maks_sapma": round(float(sap.abs().max()), 4),
+            "ort_sapma": round(float(sap.abs().mean()), 4),
+            "esik": ITO_DOGRULAMA_ESIK,
+            "sapan_ay": int((sap.abs() > ITO_DOGRULAMA_ESIK).sum()),
+            "ilk_ay": min(ortak).strftime("%Y-%m"),
+            "son_ay": max(ortak).strftime("%Y-%m"),
+        })
+        tani["dogrulandi"] = bool(tani["sapan_ay"] == 0)
+        if not tani["dogrulandi"]:
+            kotu = sap[sap.abs() > ITO_DOGRULAMA_ESIK]
+            uyar(f"İTO KİMLİK DOĞRULAMASI DÜŞTÜ: {len(kotu)} ayda hesapladığımız "
+                 f"değişim İTO'nun yayımıyla {ITO_DOGRULAMA_ESIK} puandan fazla "
+                 f"ayrışıyor (en kötü {kotu.abs().max():.3f} puan, "
+                 f"{kotu.abs().idxmax():%Y-%m}). EVDS serisi İTO İstanbul TÜFE "
+                 f"OLMAYABİLİR ya da içeriği değişmiştir.")
+    else:
+        tani["durum"] = "ortak ay yok — doğrulama yapılamadı"
+
+    # DOLDURMA: EVDS'in veremediği aylar. Seviye endeksi 2024-01'de başlıyor,
+    # yani o ayın değişimi hesaplanamaz; son ay da EVDS'e birkaç gün geç düşer.
+    eklenen = sorted(t for t in kayit if t not in ham.index)
+    for t in eklenen:
+        ham = pd.concat([ham, pd.Series([kayit[t]], index=[t])])
+    ham = ham.sort_index()
+    tani["dolduruldu"] = [t.strftime("%Y-%m") for t in eklenen]
+    tani["dolduruldu_n"] = len(eklenen)
+
+    # MANŞET AGREGALARI da yeniden üretilir: aylık oran tutup yıllık tutmuyorsa
+    # seri doğru ama BİZİM zincirimiz bozuk demektir.
+    ms = (yay.get("mansetler") or {})
+    lv = a["ito_ist"].dropna() if "ito_ist" in a.columns else pd.Series(dtype=float)
+    kontrol = []
+    for ay_s, m in ms.items():
+        t = pd.Timestamp(ay_s + "-01")
+        onceki = t - pd.DateOffset(months=1)
+        if onceki not in lv.index:
+            continue
+        sev = float(lv.loc[onceki]) * (1 + float(m["aylik"]) / 100.0)
+        gecen = t - pd.DateOffset(months=12)
+        aralik = pd.Timestamp(f"{t.year - 1}-12-01")
+        satir = {"ay": ay_s}
+        if gecen in lv.index and m.get("yillik") is not None:
+            satir["yillik_bizim"] = round((sev / float(lv.loc[gecen]) - 1) * 100, 2)
+            satir["yillik_ito"] = float(m["yillik"])
+        if aralik in lv.index and m.get("yil_sonuna_gore") is not None:
+            satir["yilsonu_bizim"] = round((sev / float(lv.loc[aralik]) - 1) * 100, 2)
+            satir["yilsonu_ito"] = float(m["yil_sonuna_gore"])
+        kontrol.append(satir)
+        for k1, k2, ad in (("yillik_bizim", "yillik_ito", "yıllık"),
+                           ("yilsonu_bizim", "yilsonu_ito", "yıl sonuna göre")):
+            if k1 in satir and abs(satir[k1] - satir[k2]) > ITO_DOGRULAMA_ESIK:
+                uyar(f"İTO {ay_s} {ad} agregası tutmuyor: bizim "
+                     f"{satir[k1]:.2f} · İTO {satir[k2]:.2f}.")
+    if kontrol:
+        tani["manset"] = kontrol
+    return ham, tani
 
 
 def _ito_kestir(d: pd.DataFrame, a: pd.DataFrame, asgari: int) -> dict:
@@ -898,8 +987,9 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24,
     """
     if "ito_ist" not in a.columns:
         return {}
+    ito_ay, kimlik = _ito_seri(a)
     tam = pd.DataFrame({"tufe": aylik(a["tufe"].dropna()),
-                        "ito": aylik(a["ito_ist"].dropna())}).dropna()
+                        "ito": ito_ay}).dropna()
     if len(tam) < 18:
         return {"n": int(len(tam)), "not": "örneklem yetersiz"}
     tam["fark"] = tam["ito"] - tam["tufe"]
@@ -1000,38 +1090,9 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24,
     # TÜFE geldiğinde blok kendini SÖZ DEFTERİNE çevirir: tahmin ile
     # gerçekleşme yan yana durur ve hata ölçülür. Tahmini yayımlayıp sonucu
     # ölçmemek, karnesi olmayan bir tahmin demektir.
-    i_ham = aylik(a["ito_ist"].dropna())
+    i_ham = ito_ay
     t_ham = aylik(a["tufe"].dropna())
-    elle = _ito_elle()
-    elle_kaynak = elle_dogrulama = None
-    # ELLE GİRİŞ YALNIZ GERÇEKTEN BEKLEYEN AY İÇİN. Koşullar ayrı ayrı
-    # sınanır ve hiçbiri örtük bırakılmaz.
-    for ay_str, kayit in sorted(elle.items()):
-        try:
-            t = pd.Timestamp(ay_str + "-01")
-            v = float(kayit["deger"])
-        except Exception:
-            uyar(f"ito_elle.json: '{ay_str}' kaydı okunamadı — atlandı.")
-            continue
-        if t in i_ham.index:
-            # EVDS artık bu ayı yayımlamış: elle girilen sayı SESSİZCE doğru
-            # sayılmaz, karşılaştırılır.
-            fark = float(i_ham.loc[t]) - v
-            elle_dogrulama = {"ay": ay_str, "elle": round(v, 3),
-                              "evds": round(float(i_ham.loc[t]), 3),
-                              "fark": round(fark, 3)}
-            if abs(fark) > 0.05:
-                uyar(f"İTO {ay_str}: elle girilen {v:.2f} ile EVDS'in yayımladığı "
-                     f"{float(i_ham.loc[t]):.2f} AYRIŞIYOR ({fark:+.2f} puan). "
-                     f"ito_elle.json güncellenmeli.")
-            continue
-        if t in t_ham.index:
-            uyar(f"İTO {ay_str}: TÜFE yayımlanmış ama İTO EVDS'te yok; elle "
-                 f"girilen değer KULLANILMADI (kestirime giren çift kaynağın "
-                 f"kendi sayısı olmalı).")
-            continue
-        i_ham = pd.concat([i_ham, pd.Series([v], index=[t])]).sort_index()
-        elle_kaynak = kayit.get("kaynak") or "elle girildi"
+    dolduruldu = set(kimlik.get("dolduruldu") or [])
 
     bekleyen = {}
     if len(i_ham):
@@ -1058,8 +1119,10 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24,
                 "ad": f"{AY_AD[son_ito_ay.month]} {son_ito_ay.year}",
                 "beklemede": bool(beklemede),
                 "ito": round(x, 2),
-                "ito_kaynak": elle_kaynak or "EVDS (TP.FG.IST1.23)",
-                "ito_elle": bool(elle_kaynak),
+                "ito_kaynak": ("İTO resmî yayımı (EVDS'e henüz düşmedi)"
+                               if son_ito_ay.strftime("%Y-%m") in dolduruldu
+                               else "EVDS · TP.FG.IST1.23"),
+                "ito_elle": bool(son_ito_ay.strftime("%Y-%m") in dolduruldu),
                 "n_gecmis": int(len(gec)),
                 "naif": round(x, 2),
                 "sabit": round(x - float(gec["fark"].mean()), 2),
@@ -1131,7 +1194,7 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24,
     cikti = {"pencere_ay": int(len(son)), "tablo": tablo,
              "fark": fark_ozet, "fark_tum": fark_tum, "takvim": takvim,
              "dislama": dislama, "bekleyen": bekleyen,
-             "elle_dogrulama": elle_dogrulama,
+             "kimlik": kimlik,
              "yillik": yillik_tablo, "yillik_ozet": yillik_ozet,
              "tam_ilk_ay": tam.index[0].strftime("%Y-%m"),
              "tam_son_ay": tam.index[-1].strftime("%Y-%m"),
