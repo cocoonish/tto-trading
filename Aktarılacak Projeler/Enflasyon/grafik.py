@@ -648,6 +648,16 @@ SEKILLER = [
 #
 # İTO PROFİLİ YOKSA FİGÜR ÜRETİLMEZ ve kos() hattı DURDURUR — sessizce eski
 # grafikle taze metin yayımlanmasın (bkz. kos() sonundaki kapı).
+def _uge_yukle() -> dict | None:
+    """ÜGE profili AYRI dosyadan okunur ve ayrı koşullanır: İTO'nun tüketici
+    endeksi üretilemese bile ÜGE figürü ayakta kalabilir, tersi de doğru."""
+    y = VERI / "uge_profil.json"
+    if not y.exists():
+        return None
+    d = json.loads(y.read_text(encoding="utf-8"))
+    return d if d.get("n") else None
+
+
 def _ito_yukle() -> dict | None:
     y = VERI / "ito_profil.json"
     if not y.exists():
@@ -1005,6 +1015,79 @@ def sekil_13(ip, damga):
         n_panel=2)
 
 
+def sekil_14(up, a, damga):
+    """ÜÇLÜ KARŞILAŞTIRMA: ÜGE · İTO tüketici · TÜİK TÜFE.
+
+    İki serilik kıyas "ÜGE, TÜFE'den yukarıda" der ve okur bunu ÜGE'ye özgü
+    sanır; oysa İTO'nun tüketici endeksi de yukarıda. Ayrışmanın ÜGE'ye ait
+    olan kısmı ancak üçüncü seri masadayken görünür — üst panel bu yüzden üç
+    seriyi birden çiziyor, orta panel iki farkı yan yana koyuyor, alt panel
+    "hangi ÜGE" sorusunu iki baz varyantıyla cevaplıyor."""
+    if not up:
+        return None
+    uge = aylik_seri = None
+    try:
+        import metrik as _m
+        uge = _m.aylik(a["ito_uge"].dropna()).dropna()
+        ito = _m.aylik(a["ito_ist"].dropna()).dropna()
+        tufe = _m.aylik(a["tufe"].dropna()).dropna()
+        v85 = (_m.aylik(a["ito_uge_85"].dropna()).dropna()
+               if "ito_uge_85" in a.columns else None)
+    except Exception:
+        return None
+    bas = pd.Timestamp("2024-01-01")
+    uge, ito, tufe = uge[uge.index >= bas], ito[ito.index >= bas], tufe[tufe.index >= bas]
+    if v85 is not None:
+        v85 = v85[v85.index >= bas]
+    fig = make_subplots(rows=3, cols=1, vertical_spacing=0.09,
+                        subplot_titles=(
+                            "Üç ölçüm, aynı aylar: aylık değişim",
+                            "İki fark yan yana — ayrışmanın ne kadarı ÜGE'ye ait",
+                            "Hangi ÜGE: aynı endeksin iki baz varyantı"))
+    _cizgi(fig, uge, "İTO Ücretliler Geçinme (1995=100)", CLARET, row=1, kalin=2.4)
+    _cizgi(fig, ito, "İTO Tüketici Fiyat (2023=100)", TEAL, row=1, kalin=2.0)
+    _cizgi(fig, tufe, "TÜİK TÜFE (Türkiye)", INK, row=1, kalin=2.0, kesik="dot")
+    ort = pd.DataFrame({"uge": uge, "ito": ito, "tufe": tufe}).dropna()
+    fig.add_trace(go.Bar(x=ort.index, y=ort["uge"] - ort["tufe"],
+                         name="ÜGE − TÜFE", marker_color=CLARET, opacity=0.85),
+                  row=2, col=1)
+    fig.add_trace(go.Bar(x=ort.index, y=ort["ito"] - ort["tufe"],
+                         name="İTO tüketici − TÜFE", marker_color=TEAL, opacity=0.85),
+                  row=2, col=1)
+    fig.add_hline(y=0, line=dict(color=GRID, width=1), row=2, col=1)
+    for ad, v, ry in (("ÜGE − TÜFE", up.get("uge_tufe"), CLARET),
+                      ("İTO − TÜFE", up.get("ito_tufe"), TEAL)):
+        if v and v.get("ort") is not None:
+            fig.add_hline(y=v["ort"], line=dict(color=ry, width=1, dash="dash"),
+                          row=2, col=1)
+    if v85 is not None and len(v85):
+        _cizgi(fig, uge, "1995=100 (yayımlanan)", CLARET, row=3, kalin=2.2)
+        _cizgi(fig, v85, "1985=100", GOLD, row=3, kalin=2.0, kesik="dash")
+    fig.update_yaxes(title_text="aylık %", row=1, col=1)
+    fig.update_yaxes(title_text="puan", row=2, col=1)
+    fig.update_yaxes(title_text="aylık %", row=3, col=1)
+    va = up.get("varyant") or {}
+    ya = up.get("yaris") or {}
+    alt = [f"Örneklem {up.get('ilk_ay')} → {up.get('son_ay')} ({up.get('n')} ay) · "
+           f"veri: {damga}"]
+    ut, it_ = (up.get("uge_tufe") or {}), (up.get("ito_tufe") or {})
+    if ut.get("ort") is not None:
+        alt.append(
+            (f"Kesikli çizgiler ortalama farklar: ÜGE {ut['ort']:+.2f} puan, "
+             f"İTO tüketici {it_.get('ort', 0):+.2f} puan — ikisi arasındaki fark "
+             f"{(up.get('uge_ito') or {}).get('ort', 0):+.2f} puan ve "
+             f"p = {(up.get('uge_ito') or {}).get('p', 0):.3f}").replace(".", ","))
+    if ya:
+        alt.append((f"Örneklem DIŞI ortalama mutlak hata: ÜGE {ya['mae_uge']:.3f} · "
+                    f"İTO tüketici {ya['mae_ito']:.3f} puan — "
+                    + str(ya.get("hukum", ""))).replace(".", ","))
+    if va:
+        alt.append((f"Alt panel: aynı endeksin iki bazı ortalama "
+                    f"{va['ort_mutlak_fark']:.2f} puan ayrışıyor, en çok "
+                    f"{va['maks_mutlak_fark']:.2f} puan ({va['maks_ay']})").replace(".", ","))
+    return _duzen(fig, "Ücretliler geçinme endeksi: ikinci öncü", alt, n_panel=3)
+
+
 def kos() -> None:
     a, M, SA, K, D, B, R, o, tani = _yukle()
     # atalet serisini metrik'ten yeniden üret (ozet yalnız son değeri taşır)
@@ -1031,6 +1114,7 @@ def kos() -> None:
     # üretilmez VE eski kopyaları SİLİNİR, uyarı düşer, hat devam eder.
     ITO_CIKTI = ["10_ito_tufe.html", "11_ito_kural.html", "12_ito_takvim.html",
                  "13_ito_bulut.html"]
+    UGE_CIKTI = ["14_uge_ucler.html"]
     if ip:
         ciktilar += [
             (sekil_10(ip, damga), ITO_CIKTI[0]),
@@ -1044,6 +1128,17 @@ def kos() -> None:
         # Üretim klasörü VE sitedeki kopya: kopyalama adımı yalnız yazar,
         # silmez. Yalnız birini temizlemek bayat dosyayı sitede bırakırdı.
         for ad in ITO_CIKTI:
+            (CIKTI / ad).unlink(missing_ok=True)
+            (veri.KOK / "site/public/projeler/enflasyon" / ad).unlink(missing_ok=True)
+    # ÜGE KANADI AYRI KOŞULLU: kendi profil dosyası var ve İTO tüketici
+    # kanadıyla birlikte düşmesi için bir sebep yok.
+    up = _uge_yukle()
+    if up:
+        ciktilar += [(sekil_14(up, a, damga), UGE_CIKTI[0])]
+    else:
+        print("  ! ÜGE profili yok (data/uge_profil.json) — ÜGE figürü "
+              "üretilmedi ve eski kopyası SİLİNİYOR.")
+        for ad in UGE_CIKTI:
             (CIKTI / ad).unlink(missing_ok=True)
             (veri.KOK / "site/public/projeler/enflasyon" / ad).unlink(missing_ok=True)
     n = 0
