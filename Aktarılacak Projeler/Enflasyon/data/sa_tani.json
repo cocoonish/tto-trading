@@ -1076,7 +1076,7 @@
  "kosular_arasi": {
   "var": false,
   "not": "önceki koşu AYNI veriyle yapılmış (sa.csv değişmedi) — koşular arası revizyon bu koşuda ölçülemedi",
-  "onceki_kosum": "2026-08-28"
+  "onceki_kosum": "2026-09-01"
  },
  "vintage": {
   "k_maks": 6,
