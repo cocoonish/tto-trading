@@ -93,6 +93,23 @@ def main() -> int:
         for kid, g in bulundu[:10]:
             print(f"    kategori {kid}: " + json.dumps(g, ensure_ascii=False)[:400])
 
+    # DEPODA ZATEN VARMIŞ. Bu betiğin ilk sürümü yedi grup kodu TAHMİN etti ve
+    # yedisi de boş döndü. Oysa deponun başka bir hattı (ÖdemelerDengesi) EVDS'in
+    # BÜTÜN veri gruplarını (675 kayıt) çoktan indirip önbelleğe almış ve içinde
+    # "İstanbul Tüketici Fiyat Endeksi" adlı grup duruyordu: bie_itouge2023.
+    # Bir kaynağa sormadan önce DEPOYA sormak gerekiyordu — aynı soru başka bir
+    # hat tarafından çoktan cevaplanmış olabilir.
+    print("\n▶ 2b. ADI DEPODAN BULUNAN GRUPLARIN SERİ LİSTESİ")
+    for g in ("bie_itouge2023", "bie_itouge85", "bie_ito95", "bie_itoteuc",
+              "bie_itotefe", "bie_ito68"):
+        v = _dene(f"serieList code={g}", f"{veri.BASE}/serieList/type=json&code={g}",
+                  kes=200)
+        kayit = v if isinstance(v, list) else ((v or {}).get("items") or [])
+        for sr in kayit or []:
+            print(f"      {sr.get('SERIE_CODE',''):16s} "
+                  f"{sr.get('START_DATE','')}→{sr.get('END_DATE',''):12s} "
+                  f"{sr.get('SERIE_NAME','')}")
+
     print("\n▶ 3. DOĞRUDAN SERİ META VERİ UÇLARI")
     for uc in ["serieList/type=json&code=bie_fgist1",
                "serieList/type=json&code=TP.FG.IST1",
