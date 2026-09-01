@@ -934,6 +934,77 @@ def sekil_12(ip, damga):
         n_panel=n_panel)
 
 
+def sekil_13(ip, damga):
+    """TAHMİN BULUTU — bekleyen ayın TÜFE dağılımı.
+
+    Nokta tahmin okura yanlış bir kesinlik veriyor ve en çok merak edilen
+    soruyu hiç cevaplamıyor: TÜFE İTO'nun ÜSTÜNDE gelebilir mi? Bu figür
+    dağılımı çizer ve o olasılığı yazar."""
+    bk = (ip or {}).get("bekleyen") or {}
+    b = bk.get("bulut")
+    if not b:
+        return None
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.13,
+                        subplot_titles=(
+                            f"{bk.get('ad','')} TÜFE tahmin bulutu — İTO %"
+                            + f"{b['ito']:.2f}".replace(".", ","),
+                            "Geçmişte TÜFE, İTO'nun üstünde geldiği aylar"))
+    ad = {"parametrik": "A · regresyon + t (simetri VARSAYAR)",
+          "ampirik": "B · regresyon merkezi + ampirik artık",
+          "tarihsel": "C · sabit kaydırma + tarihsel farklar"}
+    renk = {"parametrik": GRI, "ampirik": TEAL, "tarihsel": GOLD}
+    q = b["yuzdelikler"]
+    for k in ("parametrik", "ampirik", "tarihsel"):
+        v = b[f"y_{k}"]
+        # Kutu-benzeri: 5–95 ince çizgi, 25–75 kalın, medyan işaret.
+        fig.add_trace(go.Scatter(
+            x=[v[0], v[-1]], y=[ad[k], ad[k]], mode="lines",
+            line=dict(color=renk[k], width=2), name=f"{ad[k]} · %5–%95",
+            hovertemplate="%{x:.2f}%<extra>%5–%95</extra>"), row=1, col=1)
+        fig.add_trace(go.Scatter(
+            x=[v[2], v[4]], y=[ad[k], ad[k]], mode="lines",
+            line=dict(color=renk[k], width=9), showlegend=False,
+            hovertemplate="%{x:.2f}%<extra>%25–%75</extra>"), row=1, col=1)
+        fig.add_trace(go.Scatter(
+            x=[v[3]], y=[ad[k]], mode="markers", showlegend=False,
+            marker=dict(color="white", size=9, line=dict(color=INK, width=2)),
+            hovertemplate="medyan %{x:.2f}%<extra></extra>"), row=1, col=1)
+    # İTO çizgisi: bulutun sağında kalan kısım "TÜFE İTO'nun üstünde" demek.
+    fig.add_vline(x=b["ito"], line=dict(color=CLARET, width=2, dash="dash"),
+                  row=1, col=1)
+    pu = b.get("p_ustunde") or {}
+    fig.add_annotation(
+        x=b["ito"], y=1.06, yref="y domain", showarrow=False,
+        text=(f"İTO %{b['ito']:.2f} — sağı: TÜFE İTO'nun ÜSTÜNDE "
+              f"(P ≈ %{pu.get('ampirik', 0):.0f})").replace(".", ","),
+        font=dict(size=10, color=CLARET), xanchor="left", row=1, col=1)
+    ua = pd.DataFrame(b.get("ustunde_aylar") or [])
+    if len(ua):
+        x2 = pd.to_datetime(ua["ay"] + "-01")
+        fig.add_trace(go.Bar(x=x2, y=ua["fark"], marker_color=LACI,
+                             name="Fark (İTO − TÜFE), eksi aylar",
+                             hovertemplate="%{y:+.2f} puan<extra>%{x|%Y-%m}</extra>"),
+                      row=2, col=1)
+        fig.add_hline(y=0, line=dict(color=GRID, width=1), row=2, col=1)
+    fig.update_xaxes(title_text="aylık TÜFE, %", row=1, col=1)
+    fig.update_yaxes(title_text="", row=1, col=1)
+    fig.update_yaxes(title_text="puan", row=2, col=1)
+    for an in fig.layout.annotations:
+        if an.text and "İTO %" not in an.text:
+            an.font.size = 12
+            an.font.color = INK
+    return _duzen(
+        fig, "Nokta tahmin değil, bulut",
+        [f"Üç kuruluş yan yana: tek kuruluş modelini gizler · n={b['n']} ay · "
+         f"veri: {damga}",
+         f"P(TÜFE > İTO): parametrik %{pu.get('parametrik', 0):.0f} · "
+         f"ampirik %{pu.get('ampirik', 0):.0f} · tarihsel %{pu.get('tarihsel', 0):.0f} — "
+         f"parametrik yüksek çıkıyor çünkü simetri varsayıyor, artıklar ise "
+         f"sağa çarpık (çarpıklık {b.get('carpiklik', 0):.2f})".replace(".", ","),
+         f"Alt panel: örneklemde TÜFE'nin İTO'yu aştığı {b.get('ustunde_n', 0)} ay"],
+        n_panel=2)
+
+
 def kos() -> None:
     a, M, SA, K, D, B, R, o, tani = _yukle()
     # atalet serisini metrik'ten yeniden üret (ozet yalnız son değeri taşır)
@@ -958,12 +1029,14 @@ def kos() -> None:
     # Ama "atla ve geç" de olmaz: eski HTML yerinde kalır, sayfa taze metinle
     # bayat grafiği yan yana basar. Doğrusu üçüncü yol: profil yoksa figürler
     # üretilmez VE eski kopyaları SİLİNİR, uyarı düşer, hat devam eder.
-    ITO_CIKTI = ["10_ito_tufe.html", "11_ito_kural.html", "12_ito_takvim.html"]
+    ITO_CIKTI = ["10_ito_tufe.html", "11_ito_kural.html", "12_ito_takvim.html",
+                 "13_ito_bulut.html"]
     if ip:
         ciktilar += [
             (sekil_10(ip, damga), ITO_CIKTI[0]),
             (sekil_11(ip, damga), ITO_CIKTI[1]),
             (sekil_12(ip, damga), ITO_CIKTI[2]),
+            (sekil_13(ip, damga), ITO_CIKTI[3]),
         ]
     else:
         print("  ! İTO profili yok (data/ito_profil.json) — İTO figürleri "

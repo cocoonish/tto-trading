@@ -619,6 +619,70 @@ def main() -> int:
                     koy("itp_b_en_iyi", AD[en], None)
                     koy("itp_b_en_iyi_hata", hatalar[en], 2)
 
+            # ---- TAHMİN BULUTU. Nokta tahmin okura sahte bir kesinlik verir
+            # ve en çok sorulan soruyu hiç cevaplamaz: TÜFE İTO'nun ÜSTÜNDE
+            # gelebilir mi? Üç kuruluş yan yana basılıyor çünkü tek kuruluş
+            # modelin kendisini gizler; aralarındaki fark okurun görmesi
+            # gereken belirsizliğin bir parçası.
+            bl = bk.get("bulut") or {}
+            if bl:
+                koy("itp_bulut_n", bl.get("n"), 0)
+                koy("itp_bulut_ito", bl.get("ito"), 2)
+                koy("itp_bulut_merkez_reg", bl.get("merkez_reg"), 2)
+                koy("itp_bulut_merkez_sabit", bl.get("merkez_sabit"), 2)
+                koy("itp_bulut_carpiklik", bl.get("carpiklik"), 2)
+                koy("itp_bulut_shapiro", bl.get("shapiro_p"), 3)
+                pu = bl.get("p_ustunde") or {}
+                koy("itp_bulut_p_par", pu.get("parametrik"), 0)
+                koy("itp_bulut_p_amp", pu.get("ampirik"), 0)
+                koy("itp_bulut_p_tar", pu.get("tarihsel"), 0)
+                koy("itp_bulut_ustunde_n", bl.get("ustunde_n"), 0)
+                # Yüzdelikler: her kuruluş için ayrı anahtar. Tablo MDX'te
+                # elle yazılamaz — sayılar her ay değişiyor.
+                KIS = {"parametrik": "a", "ampirik": "b", "tarihsel": "c"}
+                for kur, kis in KIS.items():
+                    v = bl.get(f"y_{kur}") or []
+                    for i, q in enumerate(bl.get("yuzdelikler") or []):
+                        if i < len(v):
+                            koy(f"itp_bulut_{kis}_p{q}", v[i], 2)
+                for e in bl.get("esik") or []:
+                    ad = f"{e['esik']:.1f}".replace(".", "")
+                    koy(f"itp_bulut_{'ust' if e['yon'] == '>' else 'alt'}{ad}",
+                        e.get("p"), 0)
+                # HÜKÜM KODDA: "gelebilir" ile "gelemez" arasındaki fark bir
+                # sayıdan geliyor; o sayı değişince cümlenin de değişmesi
+                # gerekir. MDX'e elle yazılsaydı bir ay sonra yanlış olurdu.
+                un = bl.get("ustunde_n") or 0
+                if un:
+                    koy("itp_bulut_hukum",
+                        f"gelebilir: örneklemin {bl.get('n')} ayının {un}'inde "
+                        f"TÜFE İTO'nun ÜSTÜNDE geldi. Bu ay için olasılık "
+                        f"%{pu.get('ampirik', 0):.0f} (ampirik) — düşük ama "
+                        f"yok sayılacak kadar değil", None)
+                else:
+                    koy("itp_bulut_hukum",
+                        f"bu örneklemin {bl.get('n')} ayının HİÇBİRİNDE TÜFE "
+                        f"İTO'nun üstünde gelmedi", None)
+                # ZAMAN KİPİ KODDA: aynı bölüm ay beklerken de, TÜFE geldikten
+                # sonra da basılıyor. "gelebilir mi" cümlesi karne kipinde
+                # geçmiş zamana dönmeli — MDX'e tek kip yazmak, ayın yarısında
+                # yanlış kipi yayımlamak demekti.
+                koy("itp_bulut_zaman",
+                    ("aşağıdaki bulut, TÜFE yayımlanmadan ÖNCE, yalnız bu aya "
+                     "kadarki veriyle kuruldu"
+                     if bk.get("beklemede") else
+                     "aşağıdaki bulut o gün, TÜFE yayımlanmadan önceki veriyle "
+                     "kurulmuş olsaydı böyle görünecekti; gerçekleşme yukarıda"),
+                    None)
+                ua = bl.get("ustunde_aylar") or []
+                if ua:
+                    en_b = min(ua, key=lambda r: r["fark"])
+                    koy("itp_bulut_en_ay", en_b.get("ay"), None)
+                    koy("itp_bulut_en_fark", abs(en_b.get("fark", 0)), 2)
+                    koy("itp_bulut_ustunde_aylar", ua, None)
+                    koy("itp_bulut_ustunde_metin",
+                        " · ".join(r["ay"] for r in ua), None)
+
         yo = ip.get("yillik_ozet") or {}
         for k in ("ort", "son", "maks", "min", "son_ito", "son_tufe"):
             koy(f"itp_y_{k}", yo.get(k), 2)

@@ -1167,6 +1167,76 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24,
                         bs_ = sp_["sabit"] + sp_["egim"] * (x - bek)
                         bekleyen["beklenen_surpriz"] = round(float(bs_), 2)
                         bekleyen["surprizden_tufe"] = round(float(bek + bs_), 2)
+            # ---- TAHMİN BULUTU: nokta tahmin YETMİYOR.
+            # "İTO 1,66 geldi, TÜFE 1,4 olur" cümlesi okura yanlış bir kesinlik
+            # veriyor ve en çok merak edilen soruyu hiç cevaplamıyor: TÜFE
+            # İTO'nun ÜSTÜNDE gelebilir mi? Gelebiliyor — örneklemde dört ayda
+            # bir oluyor. Bulut, o olasılığı sayıyla söyler.
+            #
+            # ÜÇ KURULUŞ, ÇÜNKÜ TEK KURULUŞ MODELİNİ GİZLER:
+            #  A parametrik  — regresyon merkezi + t dağılımı. SİMETRİ VARSAYAR.
+            #  B ampirik artık — aynı merkez, ama dağılım geçmiş artıklardan.
+            #                    Simetri varsaymaz; A ile farkı, varsayımın
+            #                    fiyatını gösterir.
+            #  C tarihsel fark — sabit kaydırma merkezi + geçmiş farklar.
+            #                    En ham hâli: "geçmişteki her ay tekrarlasa".
+            # Üçü de basılır. Ayrışıyorlarsa okur bunu görmeli.
+            reg_art = gec["tufe"].values - Xg @ bg
+            xi = x                       # bekleyen ayın İTO okuması
+            merkez_sabit = xi - float(gec["fark"].mean())
+            YUZDE = (5, 10, 25, 50, 75, 90, 95)
+            bulutlar = {
+                "parametrik": np.array([reg + _st.t.ppf(q / 100, max(len(gec) - 2, 1)) * seg
+                                        for q in YUZDE]),
+                "ampirik": np.percentile(reg + reg_art, YUZDE),
+                "tarihsel": np.percentile(xi - gec["fark"].values, YUZDE),
+            }
+            bulut = {
+                "n": int(len(gec)), "ito": round(xi, 2),
+                "merkez_reg": round(reg, 2), "merkez_sabit": round(merkez_sabit, 2),
+                "yuzdelikler": list(YUZDE),
+                "carpiklik": round(float(_st.skew(reg_art)), 2),
+                "shapiro_p": round(float(_st.shapiro(reg_art).pvalue), 3),
+            }
+            for ad, v in bulutlar.items():
+                bulut[f"y_{ad}"] = [round(float(x), 2) for x in v]
+            # TÜFE İTO'NUN ÜSTÜNDE GELİR Mİ? Üç kuruluşun da cevabı yazılır.
+            ust_amp = (reg + reg_art) > xi
+            ust_tar = (xi - gec["fark"].values) > xi          # ≡ fark < 0
+            bulut["p_ustunde"] = {
+                "parametrik": round(float((1 - _st.t.cdf((xi - reg) / seg,
+                                                         max(len(gec) - 2, 1))) * 100), 0),
+                "ampirik": round(float(ust_amp.mean() * 100), 0),
+                "tarihsel": round(float(ust_tar.mean() * 100), 0),
+            }
+            bulut["ustunde_n"] = int(ust_tar.sum())
+            bulut["ustunde_aylar"] = [
+                {"ay": t.strftime("%Y-%m"), "ito": round(float(r["ito"]), 2),
+                 "tufe": round(float(r["tufe"]), 2), "fark": round(float(r["fark"]), 2)}
+                for t, r in gec[gec["fark"] < 0].iterrows()]
+            # Eşik olasılıkları — ampirik bulut (simetri varsaymayan)
+            amp = reg + reg_art
+            bulut["esik"] = [
+                {"esik": e, "yon": yon,
+                 "p": round(float(((amp > e) if yon == ">" else (amp < e)).mean() * 100), 0)}
+                for e, yon in ((2.5, ">"), (2.0, ">"), (1.5, ">"), (1.0, "<"), (0.5, "<"))]
+            # BULUTUN KENDİ İÇ TUTARLILIĞI ÖLÇÜLÜR. Yüzdelikler monoton
+            # olmalı ve "tarihsel" kuruluşun P(TÜFE>İTO) değeri, tanım gereği,
+            # eksi farklı ay payına EŞİT olmalı (xi − fark > xi ⟺ fark < 0).
+            # İkisi de bir gün sessizce bozulabilir; sessiz bozulma en pahalısı,
+            # çünkü sayfa yine yeşil koşar ve okur yanlış olasılığı okur.
+            for ad, v in bulutlar.items():
+                if any(v[i] > v[i + 1] + 1e-9 for i in range(len(v) - 1)):
+                    uyar(f"BULUT: {ad} kuruluşunun yüzdelikleri monoton değil "
+                         f"({[round(float(z), 2) for z in v]}) — sayfadaki "
+                         f"olasılıklar güvenilmez.")
+            _bekl = round(float((gec["fark"] < 0).mean() * 100), 0)
+            if abs(bulut["p_ustunde"]["tarihsel"] - _bekl) > 1e-9:
+                uyar(f"BULUT: tarihsel P(TÜFE>İTO) = "
+                     f"{bulut['p_ustunde']['tarihsel']}%, eksi farklı ay payı ise "
+                     f"{_bekl}% — ikisi tanım gereği aynı olmalıydı.")
+            bekleyen["bulut"] = bulut
+
             if not beklemede:
                 ger = float(t_ham.loc[son_ito_ay])
                 bekleyen["gercek"] = round(ger, 2)
