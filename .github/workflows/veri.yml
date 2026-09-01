@@ -62,6 +62,18 @@ on:
         description: 'Seçilen hatları TAM kipte koş (kaynağa git, yeniden kaz)'
         type: boolean
         default: false
+      # KEŞİF KİPİ. Yeni bir seri/kaynak kurulmadan önce YOKLANMASI gerekiyor
+      # (CLAUDE.md — dış kaynak önce yoklanır) ve o yoklama EVDS anahtarını
+      # isteyen, ağa çıkan bir koşu. Şimdiye kadar bu, veri.yml'i bir dalda
+      # geçici olarak "keşif kipine almak"la yapıldı: iş akışı dosyası
+      # düzenlenip geri alınıyordu. Elle yapılan her adım bir gün atlanır ve
+      # geri alma unutulursa main'deki tazeleme kipi bozulur. Keşif artık
+      # birinci sınıf bir girdi: dosyaya dokunulmaz, koşu depoya YAZMAZ,
+      # çıktı log'da kalır.
+      kesif:
+        description: 'Keşif betiği koş (ör. Aktarılacak Projeler/Enflasyon/kesif_ito.py) — depoya yazmaz'
+        type: string
+        default: ''
 
 permissions:
   contents: write
@@ -72,7 +84,43 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # KEŞİF — ayrı iş, çünkü tazelemenin hiçbir adımını (önbellek geri alma,
+  # commit, tazeleme damgası) koşturmamalı. Depoya YAZMAZ: `contents: read`.
+  kesif:
+    if: inputs.kesif != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    env:
+      TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
+      PYTHONPATH: ${{ github.workspace }}/ortak
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Temel bağımlılıklar
+        run: pip install --quiet requests pandas numpy
+      # YOL KAPISI: yalnız depodaki bir kesif*.py koşabilir. Girdi serbest metin
+      # olduğu için ne koşacağı ölçülmeden kabul edilmez.
+      - name: Keşif betiğini koş
+        run: |
+          BETIK="${{ inputs.kesif }}"
+          case "$(basename "$BETIK")" in
+            kesif*.py) ;;
+            *) echo "::error::Yalnız kesif*.py koşulabilir: $BETIK"; exit 1;;
+          esac
+          if [ ! -f "$BETIK" ]; then
+            echo "::error::Betik yok: $BETIK"; exit 1
+          fi
+          cd "$(dirname "$BETIK")" && python3 "$(basename "$BETIK")"
+
   tazele:
+    # Zamanlanmış koşuda `inputs` bağlamı boştur; `!inputs.kesif` orada da
+    # doğru okur (boş dizge ve null'ün ikisi de "keşif yok" demektir).
+    if: ${{ !inputs.kesif }}
     runs-on: ubuntu-latest
     # İş bütçesi. Tazeleme adımının kendi sınırı 45 dakika (aşağıda, ölçülmüş);
     # bu sınır onun ÜSTÜNDE durur ki adım kesildiğinde commit'e kadar olan
