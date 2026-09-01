@@ -356,3 +356,17 @@ o ritimlere bölünür — tek kip, en yavaş ritme mahkûm eder.
   yazılı sürümü seçer, önbellekte anahtarları birleştirir. Sürücü `.git/config`'de
   durduğu ve depoyla taşınmadığı için `bulten.py` her koşuda kendini kurar.
   Sürücü komutu kabuktan geçtiğinden **yollar tırnaklanmalı** (depo yolunda boşluk var).
+
+**Kurucu ilke — sayfa okura yazılır, kendi yapımına değil.** Yazılarda ve
+tweetlerde "bu kodda şöyle yapılmıştı ama böyle oldu", "yazının ilk sürümünde
+şu hata vardı", "ozet.json'dan okunur", "MDX'e dokunulmadan tazelenir" gibi
+cümlelerin yeri yok: hiçbiri okurun kararını değiştirmiyor ve metnin
+güvenilirliğini de artırmıyor — bulguyu taşıyan cümle kalır, süreç anlatısı
+gider. Yapım kararları, ölçüm kusurları ve düzeltme gerekçeleri **sohbette**
+konuşulur, commit mesajına ve koda yazılır. Ayrım ince ama nettir: "günlük
+hizalama bu olayı −4,8σ, haftalık +0,4σ verir, doğrusu haftalıktır" OKURA bir
+şey söyler; "ilk hesabımız günlüktü ve yanlıştı" söylemez. Yayımlanmış bir
+SAYININ düzeltilmesi ayrı iştir ve kalır (okur eski sayıya göre karar vermiş
+olabilir): tarihli, eski/yeni değerleri yazan kısa bir düzeltme notu — ama
+sürüm tarihçesi anlatmadan. Sigorta araca kondu: `sayfa_sinavi.py`'nin 9.
+ölçütü bütün içerik dosyalarını tarar ve bu dili bulursa sınav DÜŞER.
