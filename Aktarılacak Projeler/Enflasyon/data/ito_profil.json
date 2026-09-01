@@ -377,50 +377,46 @@
   "n": 0
  },
  "bekleyen": {
-  "ay": "2026-07",
-  "ad": "Temmuz 2026",
-  "beklemede": false,
-  "ito": 2.06,
-  "n_gecmis": 29,
-  "naif": 2.06,
-  "sabit": 1.73,
-  "oransal": 1.69,
-  "regresyon": 1.84,
-  "alt": 0.64,
-  "ust": 3.03,
+  "ay": "2026-08",
+  "ad": "Ağustos 2026",
+  "beklemede": true,
+  "ito": 1.66,
+  "ito_kaynak": "İTO İstanbul Ücretliler Geçinme Endeksi, Ağustos 2026 yayımı (kullanıcı bildirimi)",
+  "ito_elle": true,
+  "n_gecmis": 30,
+  "naif": 1.66,
+  "sabit": 1.33,
+  "oransal": 1.39,
+  "regresyon": 1.48,
+  "alt": 0.3,
+  "ust": 2.67,
   "ayni_ay": [
    {
-    "ay": "2024-07",
-    "ito": 3.99,
-    "tufe": 3.23,
-    "fark": 0.76
+    "ay": "2024-08",
+    "ito": 3.03,
+    "tufe": 2.47,
+    "fark": 0.55
    },
    {
-    "ay": "2025-07",
-    "ito": 2.63,
-    "tufe": 2.06,
-    "fark": 0.57
-   },
-   {
-    "ay": "2026-07",
-    "ito": 2.06,
-    "tufe": 1.78,
-    "fark": 0.28
+    "ay": "2025-08",
+    "ito": 1.84,
+    "tufe": 2.04,
+    "fark": -0.2
    }
   ],
-  "ayni_ay_n": 3,
-  "ayni_ay_ort_fark": 0.54,
-  "anket": 1.68,
-  "ito_sapma": 0.38,
-  "beklenen_surpriz": 0.07,
-  "surprizden_tufe": 1.75,
-  "gercek": 1.78,
-  "hata_naif": 0.28,
-  "hata_sabit": -0.05,
-  "hata_oransal": -0.09,
-  "hata_regresyon": 0.06,
-  "aralik_tuttu": true
+  "ayni_ay_n": 2,
+  "ayni_ay_ort_fark": 0.18,
+  "takvimli": 1.48,
+  "ayni_ay_t": -0.43,
+  "ayni_ay_p": 0.733,
+  "ayni_ay_ayrisiyor": false,
+  "ayni_ay_genel_ayrim": 0.16,
+  "anket": 1.67,
+  "ito_sapma": -0.01,
+  "beklenen_surpriz": -0.14,
+  "surprizden_tufe": 1.53
  },
+ "elle_dogrulama": null,
  "yillik": [
   {
    "ay": "2025-01",
@@ -1072,6 +1068,10 @@
  "surpriz": {
   "n": 30,
   "sabit": -0.138,
+  "se_sabit": 0.103,
+  "t_sabit": -1.34,
+  "p_sabit": 0.1898,
+  "sabit_anlamli": false,
   "egim": 0.547,
   "se_egim": 0.127,
   "t": 4.32,

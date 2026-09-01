@@ -619,6 +619,31 @@ def ito_nowcast(a: pd.DataFrame) -> dict:
 DISLANAN_YIL = (2023,)
 
 
+def _ito_elle() -> dict:
+    """EVDS'in henüz yayımlamadığı İTO okumaları (ito_elle.json).
+
+    NEDEN VAR: İTO ayın ilk günlerinde yayımlanıyor, EVDS'e düşmesi birkaç gün
+    alıyor. Aradaki pencerede sayfadaki "bu ay ne bekleriz" bloğu boş kalıyordu
+    — oysa okumanın kendisi kamuya açık.
+
+    NEDEN DAR: elle girilen bir sayı ölçülmüş veri DEĞİLDİR ve öyle
+    davranılmaz. Üç kayıt birden taşınır (değer, kaynak, giriş tarihi), sayfada
+    kaynağı YAZILIR, ve kullanımı tek bir hâlle sınırlıdır: ay gerçekten
+    beklerken (İTO yok, TÜFE de yok). Ayın TÜFE'si geldiği anda değer düşer —
+    kestirime giren çift kaynağın kendi sayısı olmalı. EVDS o ayı yayımladığında
+    iki sayı KARŞILAŞTIRILIR; ayrışıyorlarsa uyarı düşer."""
+    y = VERI.parent / "ito_elle.json"
+    if not y.exists():
+        return {}
+    try:
+        d = json.loads(y.read_text(encoding="utf-8"))
+    except Exception as ex:
+        uyar(f"ito_elle.json okunamadı ({type(ex).__name__}) — elle giriş yok sayıldı.")
+        return {}
+    return d.get("aylik") or {}
+
+
+
 def _ito_kestir(d: pd.DataFrame, a: pd.DataFrame, asgari: int) -> dict:
     """Bir örneklem üzerinde bütün kestirimleri koşturur.
 
@@ -800,8 +825,17 @@ def _ito_kestir(d: pd.DataFrame, a: pd.DataFrame, asgari: int) -> dict:
             uyum = ((si > 0) == (sr > 0))
             b25 = si.abs() >= 0.25
             u25 = ((si[b25] > 0) == (sr[b25] > 0))
+            t_sab = float(bs[0] / ses[0]) if ses[0] else float("nan")
+            p_sab = float(2 * (1 - _st.t.cdf(abs(t_sab), max(len(dp) - 2, 1))))
             out["surpriz"] = {
                 "n": int(len(dp)), "sabit": round(float(bs[0]), 3),
+                # SABİT AYRI BİR İDDİADIR. Negatif bir sabit "anket sistematik
+                # olarak yukarı yanlı" demektir; İTO ankete denk geldiği aylarda
+                # tahmini AŞAĞI çeken tek terim de budur. Sınanmadan kullanılırsa
+                # gürültü, sinyal diye okunur.
+                "se_sabit": round(float(ses[0]), 3),
+                "t_sabit": round(t_sab, 2), "p_sabit": round(p_sab, 4),
+                "sabit_anlamli": bool(p_sab < 0.05),
                 "egim": round(float(bs[1]), 3), "se_egim": round(float(ses[1]), 3),
                 "t": round(ts, 2),
                 "p": round(float(2 * (1 - _st.t.cdf(abs(ts), max(len(dp) - 2, 1)))), 4),
@@ -968,6 +1002,37 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24,
     # ölçmemek, karnesi olmayan bir tahmin demektir.
     i_ham = aylik(a["ito_ist"].dropna())
     t_ham = aylik(a["tufe"].dropna())
+    elle = _ito_elle()
+    elle_kaynak = elle_dogrulama = None
+    # ELLE GİRİŞ YALNIZ GERÇEKTEN BEKLEYEN AY İÇİN. Koşullar ayrı ayrı
+    # sınanır ve hiçbiri örtük bırakılmaz.
+    for ay_str, kayit in sorted(elle.items()):
+        try:
+            t = pd.Timestamp(ay_str + "-01")
+            v = float(kayit["deger"])
+        except Exception:
+            uyar(f"ito_elle.json: '{ay_str}' kaydı okunamadı — atlandı.")
+            continue
+        if t in i_ham.index:
+            # EVDS artık bu ayı yayımlamış: elle girilen sayı SESSİZCE doğru
+            # sayılmaz, karşılaştırılır.
+            fark = float(i_ham.loc[t]) - v
+            elle_dogrulama = {"ay": ay_str, "elle": round(v, 3),
+                              "evds": round(float(i_ham.loc[t]), 3),
+                              "fark": round(fark, 3)}
+            if abs(fark) > 0.05:
+                uyar(f"İTO {ay_str}: elle girilen {v:.2f} ile EVDS'in yayımladığı "
+                     f"{float(i_ham.loc[t]):.2f} AYRIŞIYOR ({fark:+.2f} puan). "
+                     f"ito_elle.json güncellenmeli.")
+            continue
+        if t in t_ham.index:
+            uyar(f"İTO {ay_str}: TÜFE yayımlanmış ama İTO EVDS'te yok; elle "
+                 f"girilen değer KULLANILMADI (kestirime giren çift kaynağın "
+                 f"kendi sayısı olmalı).")
+            continue
+        i_ham = pd.concat([i_ham, pd.Series([v], index=[t])]).sort_index()
+        elle_kaynak = kayit.get("kaynak") or "elle girildi"
+
     bekleyen = {}
     if len(i_ham):
         son_ito_ay = i_ham.index[-1]
@@ -993,6 +1058,8 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24,
                 "ad": f"{AY_AD[son_ito_ay.month]} {son_ito_ay.year}",
                 "beklemede": bool(beklemede),
                 "ito": round(x, 2),
+                "ito_kaynak": elle_kaynak or "EVDS (TP.FG.IST1.23)",
+                "ito_elle": bool(elle_kaynak),
                 "n_gecmis": int(len(gec)),
                 "naif": round(x, 2),
                 "sabit": round(x - float(gec["fark"].mean()), 2),
@@ -1011,6 +1078,21 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24,
             bekleyen["ayni_ay_n"] = int(len(ayni))
             bekleyen["ayni_ay_ort_fark"] = (round(float(ayni["fark"].mean()), 2)
                                             if len(ayni) else None)
+            # TAKVİM AYI KURALI da hesaplanır — ama YANINDA sınamasıyla.
+            # "Bu ay tipik olarak şöyle gelir" cümlesi ancak o ayın farkı
+            # diğer aylardan AYRIŞIYORSA kurulabilir; ayrışmıyorsa elimizdeki
+            # şey iki üç gözlemin ortalamasıdır ve tahmin değildir.
+            if len(ayni):
+                bekleyen["takvimli"] = round(x - float(ayni["fark"].mean()), 2)
+                digeri = d[d.index.month != son_ito_ay.month]
+                if len(ayni) > 1 and len(digeri) > 1:
+                    tw, pw = _st.ttest_ind(ayni["fark"].values, digeri["fark"].values,
+                                           equal_var=False)
+                    bekleyen["ayni_ay_t"] = round(float(tw), 2)
+                    bekleyen["ayni_ay_p"] = round(float(pw), 3)
+                    bekleyen["ayni_ay_ayrisiyor"] = bool(pw < 0.05)
+                bekleyen["ayni_ay_genel_ayrim"] = round(
+                    float(d["fark"].mean() - ayni["fark"].mean()), 2)
             if "pka_ay_cari" in a.columns:
                 pk = a["pka_ay_cari"].dropna()
                 if son_ito_ay in pk.index:
@@ -1049,6 +1131,7 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24,
     cikti = {"pencere_ay": int(len(son)), "tablo": tablo,
              "fark": fark_ozet, "fark_tum": fark_tum, "takvim": takvim,
              "dislama": dislama, "bekleyen": bekleyen,
+             "elle_dogrulama": elle_dogrulama,
              "yillik": yillik_tablo, "yillik_ozet": yillik_ozet,
              "tam_ilk_ay": tam.index[0].strftime("%Y-%m"),
              "tam_son_ay": tam.index[-1].strftime("%Y-%m"),

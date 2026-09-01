@@ -481,6 +481,14 @@ def main() -> int:
             koy("itp_s_egim", sp.get("egim"), 3)
             koy("itp_s_se", sp.get("se_egim"), 3)
             koy("itp_s_sabit", sp.get("sabit"), 3)
+            koy("itp_s_se_sabit", sp.get("se_sabit"), 3)
+            koy("itp_s_t_sabit", sp.get("t_sabit"), 2)
+            koy("itp_s_p_sabit", sp.get("p_sabit"), 4)
+            koy("itp_s_sabit_hukum",
+                ("sabit sıfırdan ayrışıyor: anket bu örneklemde sistematik yanlı"
+                 if sp.get("sabit_anlamli") else
+                 "sabit sıfırdan ayırt edilemiyor — İTO ankete denk geldiğinde "
+                 "kanalın söyleyecek bir şeyi yok"), None)
             koy("itp_s_t", sp.get("t"), 2)
             koy("itp_s_p", sp.get("p"), 4)
             koy("itp_s_r2", sp.get("r2"), 2)
@@ -515,6 +523,46 @@ def main() -> int:
                 koy(f"itp_b_{k}", bk.get(k), 2)
             koy("itp_b_ayni_n", bk.get("ayni_ay_n"), 0)
             koy("itp_b_ayni_ort", bk.get("ayni_ay_ort_fark"), 2)
+            koy("itp_b_takvimli", bk.get("takvimli"), 2)
+            koy("itp_b_ayni_t", bk.get("ayni_ay_t"), 2)
+            koy("itp_b_ayni_p", bk.get("ayni_ay_p"), 3)
+            koy("itp_b_ayni_ayrim", bk.get("ayni_ay_genel_ayrim"), 2)
+            # HÜKÜM KODDA. "Ağustos'ta fark daha küçük gelir" cümlesi ancak
+            # o ayın farkı diğer aylardan ayrışıyorsa kurulabilir; MDX'e elle
+            # yazılırsa bir sonraki ay yanlış hüküm basılır.
+            if bk.get("ayni_ay_p") is not None:
+                koy("itp_b_ayni_hukum",
+                    (f"{bk.get('ad', '').split()[0]} ayının farkı diğer aylardan "
+                     f"ölçülebilir biçimde ayrışıyor"
+                     if bk.get("ayni_ay_ayrisiyor") else
+                     f"{bk.get('ad', '').split()[0]} ayının farkı diğer aylardan "
+                     f"AYRIŞMIYOR (p = "
+                     + f"{bk['ayni_ay_p']:.3f}".replace(".", ",") +
+                     f", n = {bk.get('ayni_ay_n')}); elimizdeki şey bir kural "
+                     f"değil, birkaç gözlemin ortalaması"), None)
+            # ÖZET CÜMLESİ İKİ HÂLLİ. Yönetici özeti bu tek anahtarı basıyor;
+            # "gerçekleşen" alanı ay beklerken YOK ve MDX onu koşulsuz
+            # çağırırsa sayfa sınavı (haklı olarak) düşer. Şeklin değiştiği
+            # yerde metin de koddan gelmeli.
+            def _t(v, n=2):
+                return f"{v:.{n}f}".replace(".", ",") if v is not None else "—"
+            if bk.get("beklemede"):
+                koy("itp_b_ozet_metin",
+                    f"{bk.get('ad')} İTO'su %{_t(bk.get('ito'))} geldi; "
+                    f"kurallar TÜFE için %{_t(bk.get('sabit'))}–%{_t(bk.get('regresyon'))} "
+                    f"bandını, piyasa anketi ise %{_t(bk.get('anket'))} diyor. "
+                    f"TÜFE yayımlanınca blok karneye döner", None)
+            else:
+                koy("itp_b_ozet_metin",
+                    f"{bk.get('ad')}: İTO %{_t(bk.get('ito'))} geldi, sabit kaydırma "
+                    f"%{_t(bk.get('sabit'))} dedi, gerçekleşen "
+                    f"%{_t(bk.get('gercek'))}", None)
+            koy("itp_b_kaynak", bk.get("ito_kaynak"), None)
+            koy("itp_b_elle",
+                ("EVDS bu ayı henüz yayımlamadı; okuma elle girildi ve kaynağı "
+                 "yukarıda yazılı. EVDS yayımladığı an iki sayı karşılaştırılır."
+                 if bk.get("ito_elle") else
+                 "okuma EVDS'ten geliyor"), None)
             koy("itp_b_anket", bk.get("anket"), 2)
             koy("itp_b_sapma", bk.get("ito_sapma"), 2)
             koy("itp_b_surpriz", bk.get("beklenen_surpriz"), 2)

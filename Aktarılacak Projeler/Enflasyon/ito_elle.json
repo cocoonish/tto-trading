@@ -1,0 +1,10 @@
+{
+  "_not": "EVDS'in HENÜZ yayımlamadığı İTO okumaları. Bu dosya bir istisna kapısıdır ve dar tutulur: buradaki bir değer YALNIZ o ayın TÜFE'si de yokken, yani ay gerçekten BEKLERKEN kullanılır. Ayın TÜFE'si yayımlandığı anda değer düşer — kestirime giren (İTO, TÜFE) çifti kaynağın kendi sayısı olmalıdır. EVDS o ayı yayımladığında metrik.py iki sayıyı KARŞILAŞTIRIR ve ayrışıyorlarsa uyarı üretir; elle girilen bir sayı sessizce doğru sayılmaz.",
+  "aylik": {
+    "2026-08": {
+      "deger": 1.66,
+      "kaynak": "İTO İstanbul Ücretliler Geçinme Endeksi, Ağustos 2026 yayımı (kullanıcı bildirimi)",
+      "girildi": "2026-09-01"
+    }
+  }
+}
