@@ -1,0 +1,23 @@
+İTO Geldi, TÜFE Perşembe — Analitik Karşılık Ne, Piyasa Nerede
+
+VERİ. İTO'nun İstanbul Tüketici Fiyat Endeksi ağustosta aylık %1,66 arttı. TÜİK'in ağustos TÜFE'si 3 Eylül 10:00'da geliyor. İki seriyi karşılaştırabildiğimiz 31 ayın tamamını (Ocak 2024 başlangıçlı; endeks daha geriye gitmiyor) ölçtük.
+
+ÖNCE BİR YANLIŞ. İTO öncü gösterge DEĞİL. Bir ay önceki İTO ile bugünkü TÜFE arasındaki korelasyon −0,015; yani sıfır. Eşzamanlı korelasyon 0,915, R² 0,837. İTO gelecek ayı değil AYNI ayı ölçüyor — doğru sözcük "öncü" değil, nowcast. Regresyon eğimi 0,878 (standart hata 0,072), 1'den ayırt edilemiyor: ilişki birebir geçiş artı sabit bir kaydırma.
+
+KAYDIRMA NE KADAR. İTO sistematik olarak yukarıda geliyor: ortalama fark +0,35 puan, medyan +0,37, standart sapma 0,57. İTO ayların %74'ünde üstte. Sıfırdan farkı tesadüf değil: t = 3,44, p = 0,0017.
+
+ANALİTİK KARŞILIK. %1,66'lık İTO okumasından kuralların TÜFE beklentisi: sabit kaydırma %1,31 · oransal %1,43 · regresyon %1,48. Naif kural (TÜFE = İTO) %1,66. %95 öngörü aralığı %0,32–%2,64.
+
+AMA NOKTA TAHMİN YANLIŞ BİR KESİNLİK. Bulut olarak: medyan %1,29–%1,48 (üç ayrı kuruluş), P(TÜFE > %1,50) = %39, P(TÜFE > %2,00) = %16, P(TÜFE < %1,00) = %13.
+
+TÜFE İTO'NUN ÜSTÜNDE GELEBİLİR Mİ. Gelebilir. 31 ayın 8'inde geldi; en büyüğü Mayıs 2024'te 1,16 puanla. Bu ay için olasılık %26. Simetri varsayan parametrik kuruluş %37 diyor ama artıklar sağa çarpık (çarpıklık +0,79), yani o sayı şişik. "İTO tavandır" diye okumak, dörtte bir olasılıkla yanlış taraftan yakalanmaktır.
+
+PİYASA NEREDE. PKA'nın cari ay medyanı %1,67. Yani piyasa neredeyse tam naif kuralda; İTO tabanlı kurallar 0,2–0,35 puan AŞAĞIDA. Bu ayrışmayı fazla ciddiye almayın: örneklem dışı ortalama mutlak hata her kuralda 0,37–0,52 puan bandında, yani fark bir standart hatanın içinde. Ve İTO kuralının anketi geçtiği ölçülemedi (eşli fark p = 0,291). Kurulabilecek cümle "İTO haklı, anket yanılıyor" değil; iki bağımsız gösterge bir standart hata kadar ayrışıyor.
+
+MEVSİMSELLİK KURAL ÜRETMİYOR. Elimizdeki iki ağustos birbirinin tersi işaret taşıyor (2024'te İTO 0,55 puan yukarıda, 2025'te 0,20 puan aşağıda). Ayrışma sınandı: p = 0,707, n = 2. Takvim ayı düzeltmesi örneklem dışı yarışta zaten sonuncu, hatayı büyütüyor. Kullanmayın.
+
+YILLIĞA NE OLUR. Baz sert: geçen yılın ağustosu %2,04'tü. Temmuz sonunda yıllık %31,75. Aylık %1,31 gelirse yıllık %30,82'ye, %1,48 gelirse %31,04'e, %1,66 gelirse %31,27'ye iner. Yıllığın YÜKSELMESİ için ağustosun %2,04'ü aşması gerekiyor; bulutta bunun olasılığı %16'nın biraz altında. Yani yıllık enflasyonun gerilemesi bu ay büyük olasılıkla devam edecek — soru gerileyip gerilemeyeceği değil, hızı.
+
+OKUMAMIZ. Merkez %1,3–%1,5, piyasa %1,67, aralarındaki mesafe gürültünün içinde. Asıl bilgi noktada değil kuyrukta: %2,00 üstü bir okuma (olasılık %16) yıllıktaki gerilemeyi neredeyse durdurur ve 10 Eylül Kurulu öncesi anlatıyı değiştirir; %1,00 altı bir okuma (olasılık %13) indirim patikasını hızlandırma tartışmasını açar. Ortadaki geniş bant, TÜİK ne yazarsa yazsın, kimsenin görüşünü değiştirmemeli.
+
+Analizdir; yatırım tavsiyesi değildir.
