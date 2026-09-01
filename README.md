@@ -97,6 +97,14 @@ emsaline ve fiyat etkisine kadar açan uzun yazılar. Bültenden farkı kapsam d
 **derinlik**: bülten günün tamamını özetler, analiz tek olayı sonuna kadar açar.
 Sitede `/analiz/` adresinde.
 
+Yazım standardı **[`analiz/YAZIM.md`](analiz/YAZIM.md)**, şablon
+[`analiz/sablon.mdx`](analiz/sablon.mdx): tarihli slug ve başlık, yönetici
+özeti (tez · soru–cevap · altı ölçüm), "Ne ölçmedik" kapanışı, her sayı
+`<Deger>` ile canlı. Kapı `site/tools/analiz_sinavi.py` (sayfa sınavının 10.
+ölçütü). Aynı konunun yazıları slug kökünden **seri** olur ve sayfada
+birbirine bağlanır. Yayın günü X gönderisi yönetici özetinden kendiliğinden
+kurulur (`tweet/analiz.py`).
+
 ## Dersler
 
 `site/src/content/arastirma/` — teori + gerçek veriyle adım adım pratik:
@@ -150,12 +158,30 @@ seri için bile. Bu yüzden kıyas, `_tarih`i farklı olan en son görüntüye g
 Depo secret'ları: `TTO_EVDS_KEY` (zorunlu), `TTO_YAYIN_TOKEN` (isteğe bağlı — bulut
 doğrudan yayına gönderebilsin diye public depoya yazma yetkili PAT).
 
+## X gönderileri
+
+`tweet/` — bülten, haftaya bakış, teknik analiz ve analiz yazıları yayın günü
+X'te tek uzun gönderi olarak çıkar (link yok, emoji yok, site atfı yok).
+Metin yalnız yayımlanmış katmandan kurulur: bülten okuması ve gündem
+(`uret.py`), analizin yönetici özeti (`analiz.py`). Her gönderi
+**`tweet/denetim.py`** kapısından geçer — tavsiye dili, link, HTML kalıntısı,
+site atfı, sayı ortasında kesik cümle, boş bölüm etiketi, sorumluluk notu, okur
+dili; engel varsa gönderim durur. `gonder.py` defter tutar (aynı içerik bir kez),
+bayat içeriği göndermez, gönderilen metni `tweet/arsiv/`e yazar ve defteri
+`site/src/data/tweet/`e aynalar — sayfa künyesindeki "X gönderisi" bağı buradan.
+Önizleme: `python3 tweet/gonder.py --kuru`.
+
 ## Yayın
 
 Site iki depoda yaşar: **kaynak burada** (private), **yayın** ayrı bir public depoda
 (`cocoonish/cocoonish.github.io`). `yayinla.bat` şunu yapar: yerelde derler (CI'da
 patlamasın diye), `site/` klasörünü public depo klonuna kopyalar, gömülü kimlik bilgisi
-taraması yapar, commit'ler ve push eder. Push'u gören GitHub Actions derleyip Pages'e
+taraması yapar, commit'ler ve push eder. Bulut iş akışı (`yayin.yml`) aynı işi
+her içerik commit'inde yapar ve kopyalamadan ÖNCE siteyi derleyip
+`site/tools/sayfa_sinavi.py`yi koşturur: derleme ya da sınav düşerse yayın durur.
+Yerelde aynı kapı: `cd site && npm run yayin-kontrol` (derleme + KaTeX + sayfa sınavı).
+Sayfa kimliği (kanonik adres, bağlantı önizleme kartı, RSS: `/rss.xml`,
+`/bulten/rss.xml`, `/teknik/rss.xml`, `/analiz/rss.xml`) siteyle birlikte üretilir. Push'u gören GitHub Actions derleyip Pages'e
 koyar (~2 dk) → https://cocoonish.github.io/
 
 Public depoya **yalnız `site/` gider**: veri hatları, `Research/`, `bat/`, `CLAUDE.md`

@@ -405,7 +405,7 @@ def olc_dilim(e: Enstruman, zaman, acilis, yuksek, dusuk, kapanis,
     return js, ham
 
 
-def olc_enstruman(e: Enstruman, s: dict) -> tuple[dict, dict]:
+def olc_enstruman(e: Enstruman, s: dict, tazelik: bool = True) -> tuple[dict, dict]:
     """Üç dilimli ölçüm. (json_enstruman, {dilim: cizim_ham}) döner."""
     g = s["gunluk"]
     if not g:
@@ -414,6 +414,17 @@ def olc_enstruman(e: Enstruman, s: dict) -> tuple[dict, dict]:
         g["zaman"], g["acilis"], g["yuksek"], g["dusuk"], g["kapanis"])
     if len(gk) < 60:
         raise SystemExit(f"{e.kod}: günlük seri çok kısa ({len(gk)} bar)")
+    # KAYNAK TAZELİĞİ. Yalnız "seri var mı" sorulmuyordu; kaynak haftalarca geride
+    # kalsa koşu yeşil biter, yazı katmanı eski veriye yorum yazardı. Son kapanmış
+    # bar bugünden 6 günden eskiyse ölçüm KURULMAZ (bayram payı dahil).
+    try:
+        son_bar = datetime.fromisoformat(str(tarih[-1])[:10]).date()
+        yas = (datetime.now(timezone.utc).date() - son_bar).days
+    except Exception:                                          # noqa: BLE001
+        son_bar, yas = None, None
+    if tazelik and yas is not None and yas > 6:
+        raise SystemExit(f"{e.kod}: son günlük bar {son_bar} — kaynak {yas} gün geride, "
+                         "ölçüm kurulmaz")
     if e.tip == "getiri" and not (0.0 < gk[-1] < 25.0):
         raise SystemExit(f"{e.kod}: getiri {gk[-1]} — kotasyon ölçeği "
                          "beklenenden farklı, seri güvenilmez")

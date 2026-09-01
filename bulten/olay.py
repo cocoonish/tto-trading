@@ -15,8 +15,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
-from ayar import IZLEMLER, RITIM, RITIM_ALAN, GRUPLAR, Izlem
+from ayar import IZLEMLER, RITIM, RITIM_ALAN, GRUPLAR, Izlem, HAT_ADI
 import gozlem
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "ortak"))
+from bicim import sayi as _sayi  # noqa: E402  — sayı yazımı TEK yerden (ortak/bicim.py)
 
 
 @dataclass
@@ -36,10 +40,9 @@ class Olay:
     aciklama: str = ""
 
 
-def _s(x: float, ondalik: int = 1) -> str:
-    """Türkçe sayı biçimi: binlik ayıracı nokta, ondalık ayıracı virgül."""
-    m = f"{x:,.{ondalik}f}"          # 1,234.56
-    return m.replace(",", "|").replace(".", ",").replace("|", ".")
+def _s(x: float, ondalik: int = 1, isaret: bool = False) -> str:
+    """Türkçe sayı biçimi (ortak/bicim.sayi): binlik nokta, ondalık virgül, eksi U+2212."""
+    return _sayi(x, ondalik, isaret)
 
 
 def _yon(fark: float, artis: str = "arttı", azalis: str = "azaldı") -> str:
@@ -147,7 +150,7 @@ def yeni_veri_olaylari(hatlar: list[str], pencere_saat: float = 30.0) -> list[Ol
         yas = _yas_saat(ilk.get("t", ""))
         if yas is not None and yas <= pencere_saat:
             out.append(Olay("diger", "bilgi", f"{hat}: yeni veri",
-                            f"{hat}: veri sürümü ilerledi ({onc.get('v')} → {v}).",
+                            f"{HAT_ADI.get(hat, hat)}: veri sürümü ilerledi ({onc.get('v')} → {v}).",
                             hat=hat, tarih=v, onceki_tarih=str(onc.get("v"))))
     return out
 
@@ -164,7 +167,8 @@ def _gecikme(hat: str, sg: tuple[str, str] | None, azami_gun: int,
     gun = int(yas // 24)
     if gun <= azami_gun:
         return None
-    etiket = f"{hat} — {ad}" if ad else hat
+    hat_adi = HAT_ADI.get(hat, hat)      # okura slug değil ad
+    etiket = f"{hat_adi} — {ad}" if ad else hat_adi
     return Olay("diger", "dikkat", f"{etiket}: veri gecikti",
                 f"{etiket}: son veri sürümü {surum}; {gun} gündür yenilenmedi "
                 f"(beklenen ritim ≤ {azami_gun} gün).",
@@ -222,7 +226,7 @@ def haber_endeksi_olaylari() -> list[Olay]:
     olaylar = []
     for m in hareketler:
         z = m.get("z")
-        olcu = (f"{z:+.1f} standart sapma" if z is not None
+        olcu = (f"{_s(z, 1, True)} standart sapma" if z is not None
                 else "hattın oynaklık tarihçesi henüz σ için yetmiyor")
         kat = ""
         if m.get("kat") and m.get("onceki_kat") and m["kat"] != m["onceki_kat"]:
@@ -231,8 +235,8 @@ def haber_endeksi_olaylari() -> list[Olay]:
             grup="haber", seviye="dikkat",
             baslik=f"Haber tonu — {m['ad']}",
             metin=(f"{m['ad']} haber-duyarlılık endeksi {ne_kadar} "
-                   f"{m['onceki']:+.2f}'den {m['deger']:+.2f}'ye geçti "
-                   f"({m['fark']:+.2f}{kat}; {olcu}; {m.get('makale', '?')} makale, "
+                   f"{_s(m['onceki'], 2, True)}'den {_s(m['deger'], 2, True)}'ye geçti "
+                   f"({_s(m['fark'], 2, True)}{kat}; {olcu}; {m.get('makale', '?')} makale, "
                    f"kıyas {kiyas}). Sebebini haber akışından bul."),
             hat="fx-haber-endeksi", anahtar=m["kod"],
             deger=m["deger"], onceki=m["onceki"], fark=m["fark"],

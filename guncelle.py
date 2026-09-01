@@ -4,7 +4,7 @@
 
 Kullanım:
   python guncelle.py                    # etkileşimli menü: hangileri, hafif/tam, commit?
-  python guncelle.py --hepsi            # 8 hattın hepsi (hafif mod)
+  python guncelle.py --hepsi            # kütükteki bütün hatlar (hafif mod)
   python guncelle.py tcmb reer          # yalnız bunlar
   python guncelle.py --hepsi --tam      # ağır adımlar dahil (FX GDELT+FinBERT, Hazine scraper)
   python guncelle.py --hepsi --commit   # bitince siteye kopyalanan çıktıları commit'le + push
@@ -242,7 +242,8 @@ HATLAR: list[Hat] = [
         {f"{f}.html": f"{f}.html" for f in ["planlanan_ihraclar", "tahmin_dogrulama", "tahmin_aylik",
          "strateji_revizyon", "faiz_gelisimi", "fiyat_araligi", "ihrac_hacmi", "ihrac_tempo", "ihrac_usd",
          "talep_analizi", "vade_dagilimi", "hedef_gerceklesme", "vade_analizi",
-         "vade_patika", "vade_kompozisyon", "vade_maliyet", "vade_talep"]}
+         "vade_patika", "vade_kompozisyon", "vade_maliyet", "vade_talep",
+         "vade_itfa", "vade_reprice"]}       # analiz sayfasında gömülü — sözleşme bir bütündür
         | {"tablolar.json": "tablolar.json"},
         "tam kip: Hazine sitesini tarar (scraper), ilk koşu 10-20 dk",
         panel=["dashboard.py"]),            # Dash → http://127.0.0.1:8050

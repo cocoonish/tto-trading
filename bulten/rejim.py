@@ -38,6 +38,22 @@ class Satir:
     konum: str = ""               # hattın kendi hesapladığı tarihsel konum
 
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "ortak"))
+from bicim import sayi as _sayi, yuzde as _yuzde  # noqa: E402  — sayı yazımı TEK yerden
+
+
+def redk_konum(sapma10) -> str:
+    """REDK'in on yıllık ortalamaya göre yeri — yön işaretten okunur.
+
+    Sapma eksiye döndüğü gün "%−3,2 üstünde" yazılmasın: büyüklük mutlak,
+    yön sözcükle ("altında"). Sapma yoksa boş."""
+    if sapma10 is None:
+        return ""
+    yon = "üstünde" if sapma10 >= 0 else "altında"
+    return f"on yıllık ortalamanın {_yuzde(abs(sapma10), 1)} {yon}"
+
 def _al(hat: str, *anahtarlar):
     d = gozlem.anlik(hat) or {}
     out = []
@@ -110,8 +126,7 @@ def panosu() -> list[dict]:
                      "söyler.") if sapma10 is not None else ("", "")
         s.append(Satir("Reel efektif kur", round(redk, 1), "endeks",
                        "TÜFE bazlı REDK", e, a,
-                       konum=f"on yıllık ortalamanın %{sapma10:+.1f} üstünde"
-                       if sapma10 is not None else ""))
+                       konum=redk_konum(sapma10)))
 
     if egim is not None:
         e, a = _esik(egim, 0, "normal eğim", "ters eğri",
@@ -132,7 +147,7 @@ def panosu() -> list[dict]:
                      "takdirîdir ve buraya yazıldığı için tartışılabilir.")
         hesap = "2 yıllık TÜFEX başabaş enflasyonu − anketin 2 yıllık beklentisi"
         if basabas2y is not None and anket2y is not None:
-            hesap += f" ({basabas2y:.2f} − {anket2y:.2f})"
+            hesap += f" ({_sayi(basabas2y, 2)} − {_sayi(anket2y, 2)})"
         s.append(Satir("Enflasyon risk primi (2y)", round(prim2y, 2), "puan",
                        hesap, e, a))
 
@@ -155,7 +170,7 @@ def panosu() -> list[dict]:
         aciklama = ("Brüt rezervin ne kadarının borçlanılmamış ve swap'a bağlı olmayan "
                     "kısım olduğu — rezervin miktarı değil KALİTESİ.")
         if altin_pay is not None:
-            aciklama += f" Brüt rezervin %{altin_pay:.1f}'i altın."
+            aciklama += f" Brüt rezervin {_yuzde(altin_pay, 1)}'i altın."
         s.append(Satir("Rezerv kalitesi", round(v, 1), "%",
                        "swap hariç net rezerv / brüt rezerv", "", aciklama))
 

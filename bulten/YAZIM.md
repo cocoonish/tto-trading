@@ -3,7 +3,8 @@
 Bu dosya, günlük ve haftalık bülteni **yazan** katmanın görev tarifidir. Bültenin
 ölçülen kısmı (piyasa fotoğrafı, takvim, göstergeler, hat hat değişim) otomatik
 koşudan gelir ve yazan taraf ona **dokunmaz**. Yazan taraf dört alanı doldurur:
-`yorum`, `ozet`, `gundem`.
+`yorum`, `ozet`, `gundem` ve — yalnız yayımlanmış bir sayı düzeltiliyorsa —
+`duzeltmeler`.
 
 Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
 
@@ -25,6 +26,7 @@ Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
    | 1 | ölçüm yok / boş ölçüyle üretilmiş / veri bayat | **iş akışlarını tetikle** (aşağı bak) |
    | 2 | bugünün bülteni zaten yazılmış | yapacak bir şey yok |
    | 3 | cumartesi | bülten üretilmez |
+   | 4 | yalnız pazar: haftalık bülten tamam, teknik analiz bekliyor | "Haftalık teknik analiz" bölümüne geç |
 
    **Kod 1 ise: bülteni YEREL ÜRETMEYE ÇALIŞMA.** Rutin metni "dosya yoksa
    `python3 bulten.py --tur gunluk` ile üret" diyor; bu, yazı katmanının koştuğu
@@ -71,13 +73,20 @@ Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
    hareketi. Yüzdesi küçük diye 2σ'lık bir hareketi atlama — 26.08'de günün
    asıl haberi (kredi endekslerinin 1,6σ'lık ortak hareketi) ham listede hiç
    görünmüyordu. Manşete bakıp sebep uydurma; hareketin gerçek sürücüsünü bul.
-3. **Yaz.** Aşağıdaki bölümleri doldur.
-4. **Denetle.** `python3 bulten/denetim.py` — çıkış kodu 0 olana kadar düzelt.
-   Denetim güven değil ölçüm içindir: "atladığımız bir şey var mı" sorusunun
-   cevabını o verir.
-5. **Kaydet.** Yamayı `python3 bulten/yaz.py yama.json --damga "<okuduğun
-   olusturma>"` ile uygula. Damga tutmazsa uygulama reddedilir: bülteni yeniden
-   oku, sayıları güncel ölçüye karşı gözden geçir, yeni damgayla tekrar dene.
+3. **Yaz.** Aşağıdaki bölümleri doldur; yamayı `yama.json` dosyasına yaz.
+4. **Denetle — yazmadan.** `python3 bulten/yaz.py yama.json --damga "<okuduğun
+   olusturma>" --denetle`: yama bellekte uygulanır, denetim o sonuç üzerinde
+   koşar, dosyaya yazılmaz. Çıkış kodu 0 olana kadar düzelt. Denetim güven
+   değil ölçüm içindir: "atladığımız bir şey var mı" sorusunun cevabını o verir.
+   (Eski akış `denetim.py`yi doğrudan çağırıyordu; o araç DİSKTEKİ dosyayı okur,
+   yani yazı henüz dosyada yokken koşuyordu.)
+5. **Kaydet.** Aynı komut `--denetle` olmadan: `python3 bulten/yaz.py yama.json
+   --damga "<okuduğun olusturma>"`. Kapı iki kez sorar — damga tutmuyorsa (çıkış
+   3) bülteni yeniden oku ve metni güncel ölçüye göre gözden geçir; denetim
+   ENGEL üretiyorsa (çıkış 5) dosya YAZILMAZ, engelleri gider. Ölçüm katmanından
+   gelen ve senin gideremeyeceğin bir engel varsa (ör. kapanmamış seansın barı)
+   bunu BİLDİR; `--engelle-yaz` yalnız bilinçli istisnadır ve engeller dosyaya
+   işlenir.
 6. **Push et — YAYINLAMA.** `git add -A && git commit -m "bülten: <tarih>
    yazı katmanı" && git pull --rebase --autostash && git push`. Push'tan sonrası
    senin işin değil: ayrı bir iş akışı siteyi public depoya çıkarır. `yayinla.py`
@@ -90,6 +99,8 @@ Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
 ---
 
 ## Doldurulacak alanlar
+
+Dört alan: `yorum`, `ozet`, `gundem` ve — yalnız gerektiğinde — `duzeltmeler`.
 
 ### `yorum` — "Günün / Haftanın okuması"
 Bültenin tepesindeki okuma. Günlükte **en az 350**, haftalıkta **en az 600**
@@ -123,6 +134,27 @@ Yazı bölümleri, **her biri en az 300 kelime**:
 | `emtia_surucu` | Emtia ve enerji: fiyat hareketinin sebebi (crack spread dahil) |
 | `risk_firsat` | Riskler ve fırsatlar |
 | `beklenti` | Yaklaşan veriler: beklentiler ve ne izlenmeli |
+
+### `duzeltmeler` — yayımlanmış bir sayının düzeltme kaydı
+
+Denetimin "YAYIMLANAN SAYI DEĞİŞTİ" uyarısına verilen cevabın YAPISAL eşi.
+Metindeki "yayımlanan X yerine gerçek değer Y" kalıbı kalır (okur metinde
+görür); aynı düzeltme bir de liste olarak yazılır ki sayfa onu "Düzeltmeler"
+bölümünde bassın ve site bütün bültenlerin düzeltmelerini `/duzeltmeler/`
+sayfasında tek listede toplayabilsin. Her kayıt dört alan taşır:
+
+```json
+"duzeltmeler": [
+  {"alan": "Brent günlük değişim, 28.08 kapanışı",
+   "eski": "−%11,36", "yeni": "−%1,74",
+   "sebep": "vadeli devir düzeltmesi kurulamamıştı; ham kontrat kapanışı yayımlandı"}
+]
+```
+
+`tarih` boş bırakılırsa bugünün tarihi yazılır. `alan`, `eski`, `yeni` eksikse
+yazma reddedilir — neyin neye düzeltildiğini söylemeyen kayıt okura hesap
+vermez. Liste yamada bütünüyle yazılır. Düzeltme yoksa alan hiç gönderilmez.
+Sebep okur diliyle yazılır: "ölçü kusuru" değil, kusurun ne olduğu.
 
 ---
 
@@ -279,7 +311,11 @@ atlamıştı; `onem_puani` ve ABD Hazine kaynağı bu yüzden eklendi.)
 
 **Metin kendi ayakları üstünde dursun.** Yazdığın `yorum` ve `gundem`
 bölümleri yalnız sitede okunmuyor: aynı metin X'e tek gönderi olarak da çıkıyor
-ve orada ne sayfa, ne tablo, ne de başka bir bölüm var. Bu yüzden sayfa
+ve orada ne sayfa, ne tablo, ne de başka bir bölüm var. Gönderi
+`tweet/denetim.py` kapısından geçer (tavsiye dili, link, HTML kalıntısı, site
+atfı, sayı ortasında kesik cümle, sorumluluk notu); kapı düşerse gönderim
+durur ve o sabah X'te hiçbir şey çıkmaz — yani metnin tweete uygunluğu senin
+sorumluluğun. Gönderiyi önceden görmek için: `python3 tweet/gonder.py --kuru`. Bu yüzden sayfa
 mobilyasına atıf yapma — "bu sayfadaki piyasa fotoğrafında", "yukarıdaki pano",
 "ayrıntısı jeopolitik bölümünde", "bu bültenin takip ettiği" gibi ifadeler
 kullanma. Söylemek istediğin şeyi kendi cümlesi içinde tamamla: "fotoğrafta
@@ -410,8 +446,10 @@ eşleştirme. Ölçü ile haber çelişiyorsa varsayılan, ÖLÇÜYÜ sorgulamak
 **"YAYIMLANAN SAYI DEĞİŞTİ" uyarısı ciddidir.** Denetim, aynı enstrümanın aynı
 bar gününe ait günlük değişimini önceki bültenlerde yayımladığımızla karşılaştırır.
 Listelenen her sayı için ya sebebi bul (meşru revizyon) ya da metinde
-"yayımlanan X yerine gerçek hareket Y" kalıbıyla geri al. Listenin uzun olması
-tek bir ölçüm kusuruna işaret eder; tek tek değil, KAYNAĞINI ara.
+"yayımlanan X yerine gerçek hareket Y" kalıbıyla geri al **ve aynı düzeltmeyi
+`duzeltmeler` alanına yapısal kayıt olarak yaz** (yukarıda). Metinde kalıp var
+ama kayıt yoksa denetim uyarı düşer. Listenin uzun olması tek bir ölçüm
+kusuruna işaret eder; tek tek değil, KAYNAĞINI ara.
 
 **Bir ölçüyü kendi içinde ÇAPRAZLA.** 31.08.2026'da denetimin "yayımlanan sayı değişti"
 uyarısı on iki satır listeledi ve liste tek bir sebebe çıkmadı — İKİ ayrı kusur vardı,

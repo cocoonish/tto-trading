@@ -6,16 +6,26 @@ Yazı katmanı (bir Claude oturumu) bültenin ÖLÇÜLEN kısmına dokunmamalı:
 fotoğrafı, takvim, göstergeler ve hat hat değişim hep deterministik koşudan
 gelir. Yazan taraf yalnız dört alana dokunur:
 
-    yorum     "Günün/Haftanın okuması" — HTML paragraflar
-    ozet      {"ne_oldu": "...", "ne_bekleniyor": "..."}
-    gundem    bölüm kimliği → HTML metin (bkz. ayar.GUNDEM_YAZI_BOLUMLERI)
+    yorum        "Günün/Haftanın okuması" — HTML paragraflar
+    ozet         {"ne_oldu": "...", "ne_bekleniyor": "..."}
+    gundem       bölüm kimliği → HTML metin (bkz. ayar.GUNDEM_YAZI_BOLUMLERI)
+    duzeltmeler  [{"alan": "...", "eski": "...", "yeni": "...", "sebep": "...",
+                   "tarih": "YYYY-MM-DD"}] — daha önce YAYIMLANMIŞ bir sayının
+                 düzeltme kaydı. Metindeki "yayımlanan X yerine gerçek değer Y"
+                 kalıbının yapısal eşi: sayfa "Düzeltmeler" bölümünde basar,
+                 site /duzeltmeler/ sayfasında bütün bültenlerinkini toplar.
+                 Liste bütünüyle yazılır (yama mevcut listeyi DEĞİŞTİRİR).
     (gundem_kaynagi otomatik "yazili" olur — sayfa yalnız bunu yayımlar)
 
 Kullanım — yama dosyası ya da borudan JSON:
 
-    python3 bulten/yaz.py yama.json
+    python3 bulten/yaz.py yama.json --damga "<olusturma>" --denetle   # sına, yazma
+    python3 bulten/yaz.py yama.json --damga "<olusturma>"             # denetim temizse yaz
     cat yama.json | python3 bulten/yaz.py -
     python3 bulten/yaz.py yama.json --tarih 2026-08-26
+
+Çıkış kodları: 0 yazıldı · 2 girdi hatası · 3 damga uyuşmadı · 5 denetim ENGEL
+(dosyaya yazılmadı).
 
 Yama, mevcut içeriğin ÜZERİNE yazar ama dosyadaki diğer her şeyi korur; bir
 bölümü boş göndermek onu silmez (kazara boşaltmaya karşı). Silmek gerekirse
@@ -33,7 +43,33 @@ from pathlib import Path
 BURASI = Path(__file__).resolve().parent
 BULTEN = BURASI.parent / "site" / "src" / "data" / "bulten"
 
-YAZILABILIR = ("yorum", "ozet", "gundem")
+YAZILABILIR = ("yorum", "ozet", "gundem", "duzeltmeler")
+DUZELTME_ZORUNLU = ("alan", "eski", "yeni")
+
+
+def duzeltmeleri_dogrula(liste) -> list[dict]:
+    """Düzeltme kayıtlarını biçimce sınar; eksik alan varsa yazma REDDEDİLİR.
+    Yarım bir düzeltme kaydı ("neyin, neye" yazmayan) okura hesap vermez."""
+    if not isinstance(liste, list):
+        raise SystemExit("duzeltmeler bir liste olmalı: [{alan, eski, yeni, sebep?, tarih?}]")
+    temiz: list[dict] = []
+    for i, d in enumerate(liste, 1):
+        if not isinstance(d, dict):
+            raise SystemExit(f"duzeltmeler[{i}] bir nesne değil")
+        eksik = [k for k in DUZELTME_ZORUNLU if not str(d.get(k, "")).strip()]
+        if eksik:
+            raise SystemExit(f"duzeltmeler[{i}]: eksik alan {', '.join(eksik)} — "
+                             "her düzeltme neyin (alan), neyden (eski) neye (yeni) "
+                             "düzeltildiğini yazar")
+        t = str(d.get("tarih") or date.today().isoformat())
+        try:
+            dt.date.fromisoformat(t)
+        except ValueError:
+            raise SystemExit(f"duzeltmeler[{i}]: tarih YYYY-MM-DD olmalı ({t!r})")
+        temiz.append({"tarih": t, "alan": str(d["alan"]).strip(),
+                      "eski": str(d["eski"]).strip(), "yeni": str(d["yeni"]).strip(),
+                      "sebep": str(d.get("sebep") or "").strip()})
+    return temiz
 
 
 def uygula(hedef: Path, yama: dict) -> tuple[dict, list[str]]:
@@ -78,6 +114,23 @@ def uygula(hedef: Path, yama: dict) -> tuple[dict, list[str]]:
         if mevcut:
             b["gundem_kaynagi"] = "yazili"
 
+    if "duzeltmeler" in yama:
+        if yama["duzeltmeler"] is None:
+            b["duzeltmeler"] = []
+            degisen.append("düzeltmeler silindi")
+        else:
+            b["duzeltmeler"] = duzeltmeleri_dogrula(yama["duzeltmeler"])
+            degisen.append(f"duzeltmeler ({len(b['duzeltmeler'])} kayıt)")
+
+    # YAZI DAMGASI. `yorum_zamani` yalnız gün taşıyordu ve yalnız yorum
+    # değişince atılıyordu; sayfa saat bekliyordu. Her uygulanan yama dilimli
+    # bir an ve artan bir sürüm numarası bırakır: okur künyede yazının saatini,
+    # denetim ise ölçüm ile yazı arasındaki sırayı görür.
+    if degisen:
+        b["yazi_zamani"] = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+        b["yazi_surumu"] = int(b.get("yazi_surumu") or 0) + 1
+        b.setdefault("ilk_yazi_zamani", b["yazi_zamani"])
+
     return b, degisen
 
 
@@ -114,6 +167,17 @@ def main() -> int:
     ap.add_argument("--damgasiz", action="store_true",
                     help="her iki sigortayı da bilerek atla (ölçümün "
                          "yenilenmediğini kendin doğruladıysan)")
+    # DENETİM KAPISI. Rehber "denetle, sonra kaydet" der; ama denetim diskteki
+    # dosyayı okuduğu için yazı henüz dosyada yokken koşuyordu ve yazılmış
+    # bültende hiçbir ARAÇ denetimi dayatmıyordu — yalnız rehber metni istiyordu.
+    # Şimdi yama bellekte uygulanır, denetim o sonuç üzerinde koşar; ENGEL varsa
+    # dosya YAZILMAZ (çıkış 5). --denetle: yalnız sına, yazma. --engelle-yaz:
+    # engelleri bilerek geçip yaz (denetim çıktısı JSON'a işlenir, sayfa görmez).
+    ap.add_argument("--denetle", action="store_true",
+                    help="yamayı bellekte uygula, denetimi koştur, dosyaya YAZMA")
+    ap.add_argument("--engelle-yaz", action="store_true",
+                    help="denetim engel üretse de yaz (bilinçli istisna; engeller "
+                         "JSON'da 'denetim' alanına kaydedilir)")
     a = ap.parse_args()
 
     ham = sys.stdin.read() if a.yama == "-" else Path(a.yama).read_text(encoding="utf-8")
@@ -153,10 +217,14 @@ def main() -> int:
                   "yeni damgayla tekrar uygula.", file=sys.stderr)
             return 3
     elif a.yama != "-":
-        # Damga verilmedi: yama dosyasının mtime'ıyla taban sigorta.
-        yazildi = dt.datetime.fromtimestamp(Path(a.yama).stat().st_mtime)
+        # Damga verilmedi: yama dosyasının mtime'ıyla taban sigorta. İki taraf
+        # da UTC'ye çevrilir — eski hâli yerel saati dilimsiz UTC damgayla
+        # kıyaslıyordu ve dilim farkı kadar kördü.
+        yazildi = dt.datetime.fromtimestamp(Path(a.yama).stat().st_mtime, tz=dt.timezone.utc)
         try:
             olcum = dt.datetime.fromisoformat(mevcut)
+            if olcum.tzinfo is None:
+                olcum = olcum.replace(tzinfo=dt.timezone.utc)
         except ValueError:
             olcum = None
         if olcum and olcum > yazildi:
@@ -175,6 +243,23 @@ def main() -> int:
     if not degisen:
         print("yamada yazılacak içerik yok")
         return 0
+
+    # Denetim, yama uygulanmış BELLEKTEKİ bülten üzerinde koşar.
+    import denetim
+    d = denetim.Denetim(b)
+    kod = d.kos()
+    if a.denetle:
+        print("(--denetle: dosyaya yazılmadı) " + " · ".join(degisen))
+        return kod
+    if kod and not a.engelle_yaz:
+        print(f"\nYAZMA REDDEDİLDİ: denetim {len(d.engel)} ENGEL üretti. Engelleri giderip "
+              "yamayı yeniden uygula; bilinçli istisna için --engelle-yaz.", file=sys.stderr)
+        return 5
+    if kod:
+        b["denetim"] = {"engel": d.engel, "uyari": d.uyari,
+                        "zaman": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
+                        "not": "engellere rağmen --engelle-yaz ile yazıldı"}
+        print("::warning::engellere rağmen yazılıyor (--engelle-yaz); engeller JSON'a işlendi.")
     if a.yazma:
         print("(yazılmadı) " + " · ".join(degisen))
         return 0

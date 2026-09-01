@@ -26,9 +26,11 @@ def sina(ad: str, fn) -> None:
         fn()
         SAYAC["gecti"] += 1
         print(f"  ✓ {ad}")
-    except Exception as e:
+    except KeyboardInterrupt:
+        raise
+    except BaseException as e:            # SystemExit de bir düşüş, süiti kesmesin
         SAYAC["dustu"] += 1
-        print(f"  ✗ {ad}: {e}")
+        print(f"  ✗ {ad}: {type(e).__name__}: {e}")
 
 
 SAHTE_BULTEN = {
@@ -128,10 +130,27 @@ def _site_atfi_ve_gundem():
 
 
 def _kirpma():
+    import denetim as dn
     m = "Cümle bir. " * 100
-    k = uret._kirp(m)
-    assert len(k) <= uret.SINIR, "kırpma sınırı aşıyor"
+    k = uret._kirp(m, 275)
+    assert len(k) <= 275, "kırpma sınırı aşıyor"
     assert k.endswith(".") or k.endswith("…"), f"kırpma ortadan kesti: …{k[-20:]}"
+    # (a) 125 karakterlik tam cümle 260'lık pencerede KABUL edilir (eski eşik reddediyordu)
+    c1 = "Günün kilit gelişmesi Türkiye'de bir veri değil bir ölçünün geri gelmesiydi ve bu bir ölçünün geri gelmesidir, tamam." 
+    c2 = "İkinci cümle uzun uzun anlatır, sonra bir de üçüncüsü gelir ve bunlar hep birlikte iki yüz altmış karakteri kolayca aşar, hiç şüphesiz aşar, kesin aşar."
+    k = uret._kirp(c1 + " " + c2, 260)
+    assert k == c1, f"tam cümle kabul edilmedi: {k[-40:]!r}"
+    # (b) kelime kırpması bağlaçla ya da sayıyla bitmez
+    k = uret._kirp("Sabah büyüme geldi ve dolar yükseldi ve faizler düştü ve", 40)
+    assert not k.rstrip("…").endswith(" ve"), k
+    k = uret._kirp("Banka eylülde %1,25 ve", 20)
+    e, _ = dn.denetle("Sabah Notu — 1 Eylül 2026\n\n" + ("Düz cümle. " * 20) + k + "\n\nÖlçüm ve yorumdur; yatırım tavsiyesi değildir.", "bulten")
+    assert not any("kırpma" in x for x in e), e
+    # (c) etiket ikilemesi
+    assert uret._etiketle("Kilit gelişme", "Günün kilit gelişmesi şu.") == "Günün kilit gelişmesi şu."
+    assert uret._etiketle("Kilit gelişme", "Hazine ihaleyi iptal etti.").startswith("Kilit gelişme: ")
+    # (d) tipografi: aralık ve eksi; yıl-ay korunur
+    assert uret._tipografi("bant %1,25-%2,10, fark -0,3, 2024-05'te") == "bant %1,25–%2,10, fark −0,3, 2024-05'te"
 
 
 def _gonder_sigortalari():
@@ -152,9 +171,13 @@ def _gonder_sigortalari():
 
         ortam = {k: v for k, v in dict(**__import__("os").environ).items()
                  if not k.startswith("TW_")}
-        yama = ("import uret; from pathlib import Path; "
+        # Analiz kanalı da sınama dizinine bakar: gerçek depoda bugün tarihli
+        # bir analiz varsa "yeni içerik yok" beklentisini bozardı.
+        bos = Path(td) / "analiz-bos"; bos.mkdir()
+        yama = ("import uret, analiz; from pathlib import Path; "
                 f"uret.BULTENLER = Path({str(bult)!r}); "
                 f"uret.TEKNIKLER = Path({str(tekn)!r}); "
+                f"analiz.ANALIZ_DIZIN = Path({str(bos)!r}); "
                 "import gonder, sys; sys.argv = ['gonder.py'] + "
                 "sys.argv[1:]; raise SystemExit(gonder.main())")
 
@@ -167,7 +190,7 @@ def _gonder_sigortalari():
         # anahtar yok → kuru koşuya düşer, yeşil biter, zinciri basar
         kod, cikti = kos("--defter", str(defter))
         assert kod == 0, f"anahtarsız koşu düştü: {cikti[-300:]}"
-        assert "KURU" in cikti and "Sabah Bülteni" in cikti or "Haftaya Bakış" in cikti
+        assert "KURU" in cikti and ("Sabah Notu" in cikti or "Haftaya Bakış" in cikti), cikti[-300:]
         assert not defter.exists(), "kuru koşu deftere yazdı"
         # defterde kayıtlıysa atlanır
         defter.write_text(json.dumps({f"bulten:{bugun}": {"idler": ["1"]}}),
@@ -179,6 +202,28 @@ def _gonder_sigortalari():
         defter.write_text("{}", encoding="utf-8")
         kod, cikti = kos("--defter", str(defter))
         assert dun not in cikti, "bayat bülten (dün) bugünkü koşuya girdi"
+
+
+def _kapi_oge_basina():
+    """Kalite kapısı öğe başına: kirli öğe düşer, temiz olan geçer."""
+    import gonder
+    temiz = ("Sabah Notu — 1 Eylül 2026\n\n" + "Piyasa şu sebeple böyle hareket etti. " * 8
+             + "\n\nGündem\nKilit gelişme: bir şey oldu.\n\nÖlçüm ve yorumdur; yatırım tavsiyesi değildir.")
+    kirli = temiz.replace("böyle hareket etti.", "böyle hareket etti; bakınız https://x.com/a.")
+    gecen, dusen = gonder.kapidan_gecir([("bulten:2026-09-01", [temiz], []),
+                                         ("analiz:x", [kirli], [("analiz", "düşen cümle")])])
+    assert [k for k, _ in gecen] == ["bulten:2026-09-01"], gecen
+    assert [k for k, _ in dusen] == ["analiz:x"], dusen
+
+
+def _ayna_projeksiyon():
+    """Site aynası yalnız kimlik + zaman taşır; iç not ve tohum kaydı sızmaz."""
+    import gonder
+    d = {"bulten:2026-09-01": {"idler": ["1"], "zaman": "z", "not": "iç not"},
+         "analiz:tohum": {"idler": [], "zaman": "", "not": "özel gönderimle atıldı"},
+         "bulten:2026-09-02": {"durum": "gönderiliyor", "zaman": "z", "ozet": "abc"}}
+    a = gonder._ayna(d)
+    assert a == {"bulten:2026-09-01": {"id": "1", "zaman": "z"}}, a
 
 
 def _jeton_kasasi():
@@ -202,8 +247,132 @@ def _jeton_kasasi():
         del os.environ["TW_KILIT"]
 
 
+SAHTE_ANALIZ_MDX = """---
+title: '2 Eylül 2026 Sınama Yazısı — yönetici özetinden gönderi'
+description: 'Sınama açıklaması.'
+pubDate: 2026-09-02
+tags: ['sinama']
+durum: 'aktif'
+kaynak: 'sentetik'
+ozet: 'Sınama tezi tek cümle.'
+seviye: 'orta'
+onkosul: []
+---
+
+import Deger from '../../components/Deger.astro';
+
+<div class="yonetici">
+  <span class="etiket">Yönetici özeti</span>
+
+  <p class="tez">Bu yazı ölçümü anlatıyor. Merkez
+  %<Deger proje="sinama" anahtar="merkez" ondalik={2}>9,99</Deger> ve
+  fark <Deger proje="sinama" anahtar="fark" ondalik={1} isaret={true}>+0,1</Deger> puan.</p>
+
+  <table>
+    <tbody>
+      <tr><td>Gelir mi</td><td>Evet, %<Deger proje="sinama" anahtar="merkez" ondalik={2}>9,99</Deger>. Ayrıntısı yukarıdaki grafikte duruyor.</td></tr>
+      <tr><td>Kanıtın gücü</td><td><b>Orta.</b> Örneklem 31 ay.</td></tr>
+    </tbody>
+  </table>
+
+  <ul class="rakamlar">
+    <li><b>%<Deger proje="sinama" anahtar="merkez" ondalik={2}>9,99</Deger></b><span>birleşik merkez</span></li>
+    <li><b><Deger proje="sinama" anahtar="yok" ondalik={2}>0,42</Deger></b><span>bulunamayan anahtar yedeğiyle</span></li>
+  </ul>
+</div>
+
+Gövde.
+
+## Ne ölçmedik
+
+Bir şey.
+"""
+
+
+def _analiz_zinciri():
+    """Analiz gönderisi yönetici özetinden kurulur; <Deger> canlı çözülür,
+    sayfa mobilyasına atıf yapan cümle düşer, sorumluluk notu kalır."""
+    import analiz as an
+    with tempfile.TemporaryDirectory() as td:
+        kok = Path(td)
+        (kok / "analiz").mkdir()
+        (kok / "analiz" / "sinama-yazisi-2026-09-02.mdx").write_text(SAHTE_ANALIZ_MDX, encoding="utf-8")
+        (kok / "ozet" / "sinama").mkdir(parents=True)
+        (kok / "ozet" / "sinama" / "ozet.json").write_text(
+            json.dumps({"merkez": 1.4849, "fark": -0.36}), encoding="utf-8")
+        eski = (an.ANALIZ_DIZIN, an.OZET_DIZIN)
+        an.ANALIZ_DIZIN, an.OZET_DIZIN = kok / "analiz", kok / "ozet"
+        an._OZET_ONBELLEK.clear()
+        try:
+            yazilar = an.bugunun_analizleri(dt.date(2026, 9, 2))
+            assert len(yazilar) == 1, f"bugünün analizi bulunamadı: {len(yazilar)}"
+            assert not an.bugunun_analizleri(dt.date(2026, 9, 1)), "bayat koruması: dünkü tarih yazı döndürdü"
+            t = an.analiz_zinciri(yazilar[0])[0]
+        finally:
+            an.ANALIZ_DIZIN, an.OZET_DIZIN = eski
+            an._OZET_ONBELLEK.clear()
+    assert t.startswith("Analiz — 2 Eylül 2026\nSınama Yazısı"), t[:60]
+    assert "%1,48" in t and "9,99" not in t, "canlı değer çözülmedi (yedek kaldı)"
+    assert "−0,4 puan" in t, f"isaretli/eksi biçimi yanlış: {t[:400]}"
+    assert "0,42" in t, "bulunamayan anahtarın yedeği kalmadı"
+    assert "GELİR Mİ." in t and "KANITIN GÜCÜ." in t, "tablo satırları Türkçe büyük harfle etiketlenmedi"
+    assert "yukarıdaki grafikte" not in t, "sayfa mobilyasına atıf düşmedi"
+    assert "Evet, %1,48." in t, "atıf cümlesi düşerken komşu cümle kayboldu"
+    assert "Kilit ölçümler — birleşik merkez: %1,48" in t, "rakam şeridi yok"
+    assert t.endswith("Analizdir; yatırım tavsiyesi değildir."), "sorumluluk notu sonda değil"
+    assert "<" not in t and "Deger" not in t, "etiket sızdı"
+
+
+def _denetim():
+    """Kalite kapısı: her sigorta kusur geri konarak sınanır."""
+    import denetim as dn
+    temiz = ("Sabah Notu — 1 Eylül 2026\n\n" + "Piyasa bugün şu sebeple böyle hareket etti. " * 8
+             + "\n\nGünün öne çıkanları: Brent −%1,20 · BIST 100 +%0,40"
+             + "\n\nÖlçüm ve yorumdur; yatırım tavsiyesi değildir.")
+    e, u = dn.denetle(temiz, "bulten")
+    assert not e, f"temiz metin engel üretti: {e}"
+    def engel(m, iz):
+        e, _ = dn.denetle(m, "bulten")
+        assert any(iz in x for x in e), f"{iz!r} yakalanmadı: {e}"
+    engel(temiz.replace("böyle hareket etti.", "böyle hareket etti, alın."), "tavsiye")
+    engel(temiz + " https://x.com/a", "link")
+    engel(temiz.replace("Brent", "<b>Brent</b>"), "HTML")
+    engel(temiz.replace("Brent", "bu sayfadaki Brent"), "atıf")
+    engel(temiz.replace("Ölçüm ve yorumdur; yatırım tavsiyesi değildir.", "Bitti."), "sorumluluk")
+    engel(temiz.replace("BIST 100 +%0,40", "BIST 100 +%0,…"), "kırpma")
+    engel(temiz.replace("Günün öne çıkanları: Brent −%1,20 · BIST 100 +%0,40", "Pano:"), "içeriksiz")
+    engel(temiz.replace("hareket etti.", "ozet.json'dan okundu."), "okura değil")
+    engel("Kısa.", "kısa")
+    engel(temiz + " " + ("x" * 4000), "uzun")
+    _, u = dn.denetle(temiz.replace("−%1,20", "-%1,20"), "bulten")
+    assert any("ASCII" in x for x in u), f"ASCII tire uyarısı yok: {u}"
+    _, u = dn.denetle(temiz.replace("Brent", "İTO yukarıda geliyor, Brent"), "analiz")
+    assert any("yukarıda" in x for x in u), "belirsiz atıf uyarı vermedi"
+    e, _ = dn.denetle(temiz.replace("Brent", "yukarıdaki tabloda Brent"), "analiz")
+    assert any("mobilya" in x for x in e), f"'yukarıdaki tablo' engel üretmedi: {e}"
+
+
+def _kapanis_notu():
+    """Sorumluluk notu her gönderinin SON satırı ve kırpmadan muaf."""
+    zb = uret.bulten_zinciri(SAHTE_BULTEN)[0]
+    zt = uret.teknik_zinciri(SAHTE_TEKNIK)[0]
+    assert zb.endswith(uret.SORUMLULUK_BULTEN), zb[-80:]
+    assert zt.endswith(uret.SORUMLULUK_TEKNIK), zt[-80:]
+    # gövde tavanı aşsa bile not kalır
+    sisman = {**SAHTE_BULTEN, "yorum": "<p>Uzun uzun anlatı cümlesi burada. </p>" * 400}
+    z = uret.bulten_zinciri(sisman)[0]
+    assert len(z) <= uret.TEK_TAVAN and z.endswith(uret.SORUMLULUK_BULTEN), (len(z), z[-60:])
+    import denetim as dn
+    for z_, tur in ((zb, "bulten"), (zt, "teknik")):
+        e, _ = dn.denetle(z_, tur)
+        assert not e, f"{tur} zinciri kendi kapısından geçmedi: {e}"
+
+
 def main() -> int:
     print("tweet duman sınaması:")
+    sina("analiz gönderisi: yönetici özeti, canlı <Deger>, atıf düşer, not sonda", _analiz_zinciri)
+    sina("kalite kapısı: tavsiye · link · HTML · atıf · kesik · boş etiket · dil · uzunluk", _denetim)
+    sina("sorumluluk notu her gönderide, kırpmadan muaf", _kapanis_notu)
     sina("zincirler: uzunluk, HTML sızıntısı, link, yapı bayrağı", _zincirler)
     sina("site atfı yok · gündem girdi · öksüz cümle düştü",
          _site_atfi_ve_gundem)
@@ -211,6 +380,8 @@ def main() -> int:
     sina("gonder: anahtarsız yeşil, defter mükerrerliği, bayat koruması",
          _gonder_sigortalari)
     sina("jeton kasası: şifreli gidiş-dönüş, yanlış kilit düşer", _jeton_kasasi)
+    sina("kalite kapısı öğe başına: kirli düşer, temiz geçer", _kapi_oge_basina)
+    sina("defter aynası projeksiyon: yalnız kimlik + zaman", _ayna_projeksiyon)
     print(f"\n  {SAYAC['gecti']} geçti · {SAYAC['dustu']} DÜŞTÜ")
     return 1 if SAYAC["dustu"] else 0
 

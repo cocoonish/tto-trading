@@ -113,6 +113,10 @@ TETIKLER: tuple[Tetik, ...] = (
     # sonraki yayıma kadar beklemesi gerekir, boşuna koşması değil.
     Tetik("buyume", "TÜİK Dönemsel Gayrisafi Yurt İçi Hasıla (üç aylık)",
           r"Gayrisafi Yurt İçi Hasıla", ("TÜİK",), en_gec=100, gecikme_dk=90),
+    # El Niño hattının yerli kanadı TÜFE ile ilerler; küresel kanat (ONI) aylık
+    # ve takvimsiz — TÜFE günü ikisi birden yoklanır, emniyet ağı bir ayı aşar.
+    Tetik("elnino", "NOAA ONI (aylık, takvimsiz) + TÜFE yayımı",
+          r"Tüketici Fiyat Endeksi", ("TÜİK",), en_gec=35, gecikme_dk=90),
     # GDELT haber akışı sürekli; resmî yayım takvimi yok, haftalık ritim yeter.
     Tetik("fx", "GDELT haber akışı (resmî takvimi yok, haftalık ritim)", en_gec=9),
 )

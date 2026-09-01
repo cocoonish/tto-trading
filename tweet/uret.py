@@ -22,10 +22,9 @@ KOK = BURASI.parent
 BULTENLER = KOK / "site" / "src" / "data" / "bulten"
 TEKNIKLER = KOK / "site" / "src" / "data" / "teknik"
 
-SITE = "https://cocoonish.github.io"
 # Hesap X Premium: 280 sınırı yok, içerik TEK tweet olarak atılır (zincir
 # değil). Sınırlar teknik değil editoryal: bölüm başına kırpma + toplam tavan.
-SINIR = 275                 # eski zincir kipinin kalıntısı; _kirp varsayılanı
+# Tavan TEK yerde durur; analiz.py ve denetim.py buradan okur.
 TEK_TAVAN = 3800            # tek tweetin toplam üst sınırı (okunurluk)
 YORUM_SINIR = 1200          # anlatı gövdesi (bültenin 'okuması'ndan)
 GUNDEM_PARCA = 260          # gündem bölümü başına
@@ -54,8 +53,20 @@ SITE_IZLERI = (
     "fotoğraf",                              # 'piyasa fotoğrafı' sitedeki tablo
     "bu bölüm", "bölümdeki", "bölümünde",    # bölümler arası çapraz atıf
     "panoda", "panosunda", "panosunun",      # rejim / gösterge panosu
-    "tabloda", "tablodaki", "yukarıda", "aşağıda", "buradaki not",
+    "tabloda", "tablodaki", "buradaki not",
 )
+# "yukarıda/aşağıda" Türkçede "daha yüksek/düşük" da demek ("İTO yukarıda
+# geliyor"); yalnız SAYFA bağlamında iz sayılır. Eski hâli bu iki sözcüğü
+# koşulsuz düşürüyordu ve gerçek bilgi taşıyan cümleler sessizce gidiyordu.
+SITE_IZ_KALIPLARI = (
+    re.compile(r"\b(yukarıda|aşağıda)(ki)?\s+(tablo|grafik|pano|bölüm|liste|şerit|"
+               r"anlat|veril|yazıl|açıkla|göster|ayrıntı)", re.I),
+)
+
+
+def _site_izi_var(cumle: str) -> bool:
+    alt = cumle.lower()
+    return any(iz in alt for iz in SITE_IZLERI) or any(k.search(cumle) for k in SITE_IZ_KALIPLARI)
 
 # Cümle sınırı: nokta TEK BAŞINA yetmez. Türkçede sıra sayısı da noktayla
 # yazılır ("12. ayını doldurdu") ve binlik ayracı da noktadır; ham (?<=[.!?])\s+
@@ -72,18 +83,25 @@ _ANAFORA = {"bu", "bunu", "bunun", "buna", "bunlar", "bundan", "o", "onu",
             "ayrıca", "oysa", "buradaki", "yani", "söz"}
 
 
-def _site_disi(metin: str) -> str:
+# Düşen cümleler GÖRÜNÜR tutulur: gonder.py kuru ve gerçek koşuda listeler,
+# denetim oranı ölçer. Sessizce silinen bir cümle, yazı katmanının bir daha
+# aynı hatayı yapmasına yol açar; görünen cümle geri bildirimdir.
+DUSEN: list[tuple[str, str]] = []
+
+
+def _site_disi(metin: str, bolum: str = "") -> str:
     """Siteye/bültene atıf yapan cümleleri ve öksüz kalan devamlarını düşürür."""
     kalan, onceki_dustu = [], False
     for c in _CUMLE.split(metin or ""):
         if not c.strip():
             continue
-        dus = any(iz in c.lower() for iz in SITE_IZLERI)
+        dus = _site_izi_var(c)
         if not dus and onceki_dustu:
             bas = [w.strip('"\'(),;:.') for w in c.lower().split()[:6]]
             dus = any(w in _ANAFORA for w in bas)
         if dus:
             onceki_dustu = True
+            DUSEN.append((bolum, c.strip()))
             continue
         onceki_dustu = False
         kalan.append(c)
@@ -100,21 +118,78 @@ GUNDEM_BOLUMLERI = (
 )
 
 
-def _kirp(metin: str, sinir: int = SINIR) -> str:
-    """Cümle sınırında kırpar; sığmazsa kelime sınırında, '…' ile."""
+# Kelime kırpmasının sonunda kalamayacak sözcükler: bağlaç, edat, sayı.
+_ASILI = {"ve", "ile", "ama", "veya", "ya", "da", "de", "ki", "için", "gibi", "kadar",
+          "göre", "sonra", "önce", "ancak", "fakat", "yani", "çünkü", "bir", "bu", "o"}
+_ASILI_SON = re.compile(r"(?:\d|%|[(,;:—–-])$")
+
+
+def _kirp(metin: str, sinir: int) -> str:
+    """Sınıra sığdırır — üç kademede, en okunurundan başlayarak.
+
+    1. Sınır içinde TAM cümle(ler) varsa orada kes (en az 80 karakter kalsın).
+    2. Cümle yoksa yan tümce sınırı: '; ' ': ' ' — ' ', ' (en az 80 karakter).
+    3. Yoksa kelime sınırında kes ve '…' ekle — ama son sözcük bağlaç/edat ya
+       da sayı ise onu da düşür: "…gündeme geldi ve…" ile "…%1,…" okura yarım
+       bir cümlenin ortasında kalmış hissi verir (31.08 ve 01.09 gönderilerinde
+       görüldü; kalite kapısı bu ikisini ENGEL sayar).
+
+    Eski eşik "cümle sonu sınırın yarısını geçsin"di: 260 karakterlik pencerede
+    125 karakterlik tam bir cümle reddediliyor, yerine kelime ortası kırpma
+    seçiliyordu — ve 've' ile biten bir gündem satırı yayına gidiyordu.
+    """
     m = metin.strip()
     if len(m) <= sinir:
         return m
-    # son tam cümle (noktalı virgül CÜMLE SAYILMAZ — "yayımlanıyor;" gibi
-    # yarım bırakılmış görünen kapanışlar 30.08 taslağında görüldü)
     kes = -1
     for isaret in (". ", "! ", "? "):
         i = m.rfind(isaret, 0, sinir)
         kes = max(kes, i + 1 if i > 0 else -1)
-    if kes > sinir * 0.5:
+    if kes >= 80:
         return m[:kes].strip()
+    for isaret in ("; ", ": ", " — ", " – ", ", "):
+        i = m.rfind(isaret, 0, sinir - 1)
+        if i >= 80:
+            return m[:i].rstrip(" ,;:—–") + "…"
     i = m.rfind(" ", 0, sinir - 1)
-    return (m[:i] if i > 0 else m[:sinir - 1]).rstrip(" ,;·") + "…"
+    govde = (m[:i] if i > 0 else m[:sinir - 1]).rstrip(" ,;:·(—–-")
+    sozcukler = govde.split(" ")
+    while sozcukler and (sozcukler[-1].lower().strip("\"'()") in _ASILI or _ASILI_SON.search(sozcukler[-1])):
+        sozcukler.pop()
+    govde = " ".join(sozcukler).rstrip(" ,;:·(—–-")
+    return govde + "…"
+
+
+def _etiketle(etiket: str, metin: str) -> str:
+    """'Kilit gelişme: Günün kilit gelişmesi …' ikilemesini önler: cümlenin ilk
+    altı sözcüğü etiketin kök sözcüklerini taşıyorsa etiket düşer."""
+    kokler = {k[:5].lower() for k in etiket.split() if len(k) > 3}
+    bas = [w.strip('"\'(),;:.').lower()[:5] for w in metin.split()[:6]]
+    if kokler and kokler <= set(bas):
+        return metin
+    return f"{etiket}: {metin}"
+
+
+def _tipografi(metin: str) -> str:
+    """Yalnız gönderi metnine: aralık tiresi '–', sayı önünde eksi '−'."""
+    # Yıl-ay yazımı ("2024-05") aralık değildir: dört haneli sayıdan sonraki tire kalır.
+    m = re.sub(r"(?<!\d{4})(?<=\d)-(?=%?\d)", "–", metin)
+    m = re.sub(r"(?<![\w.,])-(?=[%\d])", "−", m)
+    return m
+
+
+# SORUMLULUK NOTU her gönderinin son satırıdır ve kırpmadan MUAFTIR. Eskiden
+# not gövdeyle birlikte tavana kırpılıyordu: uzun bir sabah gövdesi notu
+# düşürebilirdi ve kimse fark etmezdi. Şimdi gövde, notun payı düşülerek
+# kırpılır; not her koşulda yerinde kalır. Bültende "bülten" sözcüğü
+# kullanılmaz — o sözcük site atfı izidir ve tweet kendi başına durur.
+SORUMLULUK_BULTEN = "Ölçüm ve yorumdur; yatırım tavsiyesi değildir."
+SORUMLULUK_TEKNIK = "Analizdir; yatırım tavsiyesi değildir."
+
+
+def _kapat(govde: str, not_: str, tavan: int = TEK_TAVAN) -> str:
+    """Gövdeyi tavana sığdır, tipografiyi düzelt, sorumluluk notunu SONRA ekle."""
+    return _tipografi(_kirp(govde, tavan - len(not_) - 2)) + "\n\n" + not_
 
 
 def _tr_sayi(x: float, ondalik: int = 2) -> str:
@@ -147,6 +222,21 @@ def _tr_tarih(iso: str) -> str:
     return f"{int(g)} {AYLAR[int(a)]} {y}"
 
 
+def _tr_kisa_tarih(t: str) -> str:
+    """'21.08.2026' → '21 Ağu' · '07.2026' → 'Tem 2026' · ISO → '21 Ağu'; tanımadığını boş bırakır."""
+    t = (t or "").strip()
+    m = re.match(r"^(\d{2})\.(\d{2})\.(\d{4})$", t)
+    if m:
+        return f"{int(m.group(1))} {AYLAR[int(m.group(2))][:3]}"
+    m = re.match(r"^(\d{2})\.(\d{4})$", t)
+    if m:
+        return f"{AYLAR[int(m.group(1))][:3]} {m.group(2)}"
+    m = re.match(r"^(\d{4})-(\d{2})-(\d{2})", t)
+    if m:
+        return f"{int(m.group(3))} {AYLAR[int(m.group(2))][:3]}"
+    return ""
+
+
 # ── bülten zinciri ───────────────────────────────────────────────────────────
 
 def bulten_zinciri(b: dict) -> list[str]:
@@ -161,7 +251,8 @@ def bulten_zinciri(b: dict) -> list[str]:
     tarih = _tr_tarih(b["tarih"])
 
     oz = b.get("ozet") or {}
-    anlati = _site_disi(_duz(b.get("yorum") or "")) or _site_disi(_duz(oz.get("ne_oldu") or ""))
+    DUSEN.clear()
+    anlati = _site_disi(_duz(b.get("yorum") or ""), "yorum") or _site_disi(_duz(oz.get("ne_oldu") or ""), "ne_oldu")
     if not anlati:
         raise SystemExit("bültenin okuması da özeti de boş — tweet kurulamaz")
     bolumler = [f"{baslik} — {tarih}", _kirp(anlati, YORUM_SINIR)]
@@ -172,10 +263,10 @@ def bulten_zinciri(b: dict) -> list[str]:
     gundem = b.get("gundem") or {}
     satirlar, toplam = [], 0
     for anahtar, etiket in GUNDEM_BOLUMLERI:
-        parca = _site_disi(_duz(gundem.get(anahtar) or ""))
+        parca = _site_disi(_duz(gundem.get(anahtar) or ""), anahtar)
         if not parca:
             continue
-        satir = f"{etiket}: {_kirp(parca, GUNDEM_PARCA)}"
+        satir = _etiketle(etiket, _kirp(parca, GUNDEM_PARCA))
         if toplam + len(satir) > GUNDEM_SINIR:
             break
         satirlar.append(satir)
@@ -193,16 +284,26 @@ def bulten_zinciri(b: dict) -> list[str]:
                     for h in liste[:5] if h.get("deger") is not None]
         bolumler.append(f"{etiket}: " + " · ".join(parcalar))
 
+    # PANO: birim ve veri tarihi de yazılır. "Net rezerv 66,9 (−0,2)" 1 Eylül
+    # gönderisinde 21 Ağustos'un haftalık serisiydi ve okur bunu bilemezdi;
+    # sitede her sayının yanında tarihi yazar, gönderide de yazmalı.
     gost = b.get("gostergeler") or []
     parcalar = []
     for g in gost[:5]:
-        if g.get("metin") and g.get("ad"):
-            fark = f" ({g['fark_metin']})" if g.get("fark_metin") else ""
-            parcalar.append(f"{g['ad']} {g['metin']}{fark}")
+        if not (g.get("metin") and g.get("ad")):
+            continue
+        birim = (g.get("birim") or "").strip()
+        deger = f"%{g['metin']}" if birim == "%" else (f"{g['metin']} {birim}" if birim else g["metin"])
+        fark = f" ({g['fark_metin']})" if g.get("fark_metin") else ""
+        tarih = ""
+        vt = str(g.get("veri_tarihi") or "")
+        if vt and vt[:10] != b["tarih"] and _tr_kisa_tarih(vt) and _tr_kisa_tarih(vt) != _tr_kisa_tarih(b["tarih"]):
+            tarih = f" · {_tr_kisa_tarih(vt)}"
+        parcalar.append(f"{g['ad']} {deger}{fark}{tarih}")
     if parcalar:
         bolumler.append("Pano: " + " · ".join(parcalar))
 
-    ne_bek = _site_disi(_duz(oz.get("ne_bekleniyor") or ""))
+    ne_bek = _site_disi(_duz(oz.get("ne_bekleniyor") or ""), "ne_bekleniyor")
     if ne_bek:
         etiket = "Önümüzdeki hafta: " if haftalik else "Beklenen: "
         # Metin zaten etiketle başlıyorsa ikilenmesin ("Önümüzdeki hafta:
@@ -211,7 +312,7 @@ def bulten_zinciri(b: dict) -> list[str]:
             bolumler.append(_kirp(ne_bek, BEKLENTI_SINIR))
         else:
             bolumler.append(etiket + _kirp(ne_bek, BEKLENTI_SINIR))
-    return [_kirp("\n\n".join(bolumler), TEK_TAVAN)]
+    return [_kapat("\n\n".join(bolumler), SORUMLULUK_BULTEN)]
 
 
 # ── teknik zinciri ───────────────────────────────────────────────────────────
@@ -250,7 +351,8 @@ def teknik_zinciri(t: dict) -> list[str]:
     Biçim: link yok, emoji yok; enstrüman satırları sade, kapanışta kısa
     sorumluluk notu (analizdir, tavsiye değildir)."""
     tarih = _tr_tarih(t["tarih"])
-    giris = _duz(t.get("giris") or "")
+    DUSEN.clear()
+    giris = _site_disi(_duz(t.get("giris") or ""), "giris")
     if not giris:
         raise SystemExit("teknik giriş boş — tweet kurulamaz")
     bolumler = [f"Haftalık Teknik Analiz — {tarih}", _kirp(giris, GIRIS_SINIR)]
@@ -261,8 +363,7 @@ def teknik_zinciri(t: dict) -> list[str]:
         bolumler.append("1 saatlik, 4 saatlik ve günlük grafiklerden özet:\n"
                         + "\n".join(satirlar))
 
-    bolumler.append("Analizdir; yatırım tavsiyesi değildir.")
-    return [_kirp("\n\n".join(bolumler), TEK_TAVAN)]
+    return [_kapat("\n\n".join(bolumler), SORUMLULUK_TEKNIK)]
 
 
 # ── kaynak seçimi ────────────────────────────────────────────────────────────

@@ -81,6 +81,28 @@ jobs:
               exit 1 ;;
           esac
 
+      # Depoda yazılmış olması yetmez: SİTE onu gösteriyor mu? Yayın iş akışı
+      # token yoksa yeşil biter, tetikleyicisi düşerse sessiz kalır — "yazıldı
+      # ama siteye çıkmadı" hâlini depoya bakan hiçbir ölçüt göremez. Bülten
+      # beslemesinin ilk maddesi bugünün adresini taşımıyorsa alarm.
+      - name: Site bugünün sayısını gösteriyor mu
+        run: |
+          set +e
+          python bulten/zincir.py >/dev/null 2>&1; kod=$?
+          set -e
+          case "$kod" in 2|4) ;; *) echo "bülten yazılmamış ya da cumartesi — site denetimi atlandı"; exit 0;; esac
+          bugun=$(date -u +%Y-%m-%d)
+          besleme=$(curl -fsS --max-time 30 https://cocoonish.github.io/bulten/rss.xml || true)
+          if [ -z "$besleme" ]; then
+            echo "::warning::bülten beslemesi okunamadı (ağ ya da yayın) — site denetimi sonuçsuz"
+            exit 0
+          fi
+          ilk=$(printf '%s' "$besleme" | grep -o '<link>[^<]*</link>' | sed -n '2p')
+          case "$ilk" in
+            *"/bulten/$bugun/"*) echo "✓ Site bugünün sayısını gösteriyor: $ilk" ;;
+            *) echo "::error::SİTE BUGÜNÜN SAYISINI GÖSTERMİYOR — beslemenin ilk maddesi: $ilk (beklenen /bulten/$bugun/). Yayın iş akışı düşmüş ya da tetiklenmemiş olabilir."; exit 1 ;;
+          esac
+
       # Pazar günleri ikinci soru: HAFTALIK TEKNİK ANALİZ yazıldı mı?
       # Teknik bülteni de rutin yazar (bkz. bulten/YAZIM.md) ve rutin metnine
       # güvenilmez — sigorta araca konur. Ölçüm var ama yorum yoksa ya da

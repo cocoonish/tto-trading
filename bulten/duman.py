@@ -45,6 +45,33 @@ def son_bulten() -> dict | None:
     return json.loads(dosyalar[-1].read_text(encoding="utf-8")) if dosyalar else None
 
 
+def _bicim():
+    import sys as _s
+    _s.path.insert(0, str(Path(__file__).resolve().parents[1] / "ortak"))
+    import bicim as bc
+    import olay as ol
+    import rejim as rj
+    assert bc.sayi(-1.247, 3) == "−1,247" and bc.sayi(1234.5) == "1.234,5"
+    assert bc.yuzde(-1.884, 2) == "−%1,88" and bc.yuzde(0.4, 1, True) == "+%0,4"
+    assert bc.degisim(-6.5, "bp", 1) == "−6,5 bp" and bc.degisim(0.4, "%") == "+%0,40"
+    assert bc.sayi(-0.001, 2) == "0,00", "yuvarlanan sıfır işaret taşımaz"
+    assert ol._s(-696.0, 0) == "−696" and ol._s(0.4, 1, True) == "+0,4"
+    assert rj.redk_konum(7.3) == "on yıllık ortalamanın %7,3 üstünde", rj.redk_konum(7.3)
+    assert rj.redk_konum(-3.2) == "on yıllık ortalamanın %3,2 altında", rj.redk_konum(-3.2)
+    assert rj.redk_konum(None) == ""
+    import denetim as dn
+    class _D(dn.Denetim):
+        def __init__(self, b):
+            self.b = b; self.gecen = []; self.uyari = []; self.engel = []; self.ayrinti = False
+    d = _D({"tarih": "2026-09-01", "yorum": {"giris": "<p>Endeks -1.247'den -696'ya geçti; sapma %+7.3 oldu.</p>"}})
+    d.bicim()
+    assert any("ASCII eksi" in u for u in d.uyari), d.uyari
+    assert any("ondalık noktası" in u for u in d.uyari), d.uyari
+    d2 = _D({"tarih": "2026-09-01", "yorum": {"giris": "<p>Endeks −1,247'den −696'ya geçti; %7,3 üstünde. Veri 31.08.2026.</p>"}})
+    d2.bicim()
+    assert not d2.uyari, d2.uyari
+
+
 def main() -> int:
     import ayar, denetim, gozlem, grafik_veri, olay, rejim, soz, surpriz, tazeleme, uret
 
@@ -151,7 +178,7 @@ def main() -> int:
         import zincir
         with contextlib.redirect_stdout(_io.StringIO()):
             kod, _ = zincir.durum()
-        assert kod in (0, 1, 2, 3), f"beklenmeyen zincir kodu: {kod}"
+        assert kod in (0, 1, 2, 3, 4), f"beklenmeyen zincir kodu: {kod}"
     sina("zincir: durum raporu", _zincir)
 
     # ── YAZILMIŞ BÜLTEN KORUNUYOR MU (27.08.2026 kusuru)
@@ -555,6 +582,85 @@ def main() -> int:
             _g.anlik, _g.son_gorulme, _g.onceki_surum_anahtar = g_anlik, g_son, g_onceki
             _s.arsivle, _s.arsiv_oku = s_arsivle, s_oku
     sina("surpriz: geliş sürüm saatinden okunuyor", _surpriz_gelis)
+
+    # ── yaz.py: düzeltme kaydı biçimce sınanır; denetim yarım kaydı engeller
+    def _duzeltme():
+        import yaz
+        b = {"gundem_kaynagi": "yazili", "gundem": {"kilit": "x"}}
+        import tempfile, json as _j
+        with tempfile.TemporaryDirectory() as td:
+            hedef = Path(td) / "b.json"
+            hedef.write_text(_j.dumps(b), encoding="utf-8")
+            yeni, degisen = yaz.uygula(hedef, {"duzeltmeler": [
+                {"alan": "Brent günlük değişim (28.08)", "eski": "−%11,36", "yeni": "−%1,74",
+                 "sebep": "vadeli devir düzeltmesi kurulamamıştı"}]})
+            assert yeni["duzeltmeler"][0]["tarih"], "tarih doldurulmadı"
+            assert any("duzeltmeler" in d for d in degisen), degisen
+            try:
+                yaz.uygula(hedef, {"duzeltmeler": [{"alan": "x", "eski": "1"}]})
+            except SystemExit as e:
+                assert "yeni" in str(e), str(e)
+            else:
+                raise AssertionError("eksik alanlı düzeltme kabul edildi")
+        d = denetim.Denetim({**b, "duzeltmeler": [{"alan": "x", "eski": "", "yeni": "2"}]})
+        d.duzeltme()
+        assert any("Düzeltme kaydı" in e for e in d.engel), d.engel
+        d2 = denetim.Denetim({**b, "yorum": "<p>Yayımlanan −%11,36 yerine gerçek hareket −%1,74.</p>"})
+        d2.duzeltme()
+        assert any("duzeltmeler kaydı boş" in u for u in d2.uyari), d2.uyari
+    sina("yaz/denetim: düzeltme kaydı biçimce tam, yarım kayıt engel", _duzeltme)
+
+    # ── yaz.py: yazı katmanının TEK giriş kapısı — sözleşmesi sınanır
+    def _yaz():
+        import yaz, tempfile, json as _j, subprocess as _sp, os as _os, time as _t
+        with tempfile.TemporaryDirectory() as td:
+            hedef = Path(td) / "2026-01-05.json"
+            b0 = {"tarih": "2026-01-05", "olusturma": "2026-01-05T04:00:00+00:00",
+                  "gundem_kaynagi": "taban", "yorum": "<p>eski</p>", "gundem": {}}
+            hedef.write_text(_j.dumps(b0), encoding="utf-8")
+            # (a) yabancı alan reddi
+            try:
+                yaz.uygula(hedef, {"piyasa": {}})
+            except SystemExit as e:
+                assert "dokunamaz" in str(e)
+            else:
+                raise AssertionError("yabancı alan kabul edildi")
+            # (b) null siler, boş dizge ezmez
+            b, d = yaz.uygula(hedef, {"yorum": ""})
+            assert b["yorum"] == "<p>eski</p>" and not d, (b["yorum"], d)
+            b, d = yaz.uygula(hedef, {"yorum": None})
+            assert b["yorum"] is None and "yorum silindi" in d
+            # (c) gündem yaması yayın damgasını 'yazili' yapar; yazı damgası ve sürüm atılır
+            b, d = yaz.uygula(hedef, {"gundem": {"kilit": "<p>x</p>"}})
+            assert b["gundem_kaynagi"] == "yazili" and b["yazi_surumu"] == 1 and b["yazi_zamani"].endswith("+00:00")
+            hedef.write_text(_j.dumps(b), encoding="utf-8")
+            b, _ = yaz.uygula(hedef, {"gundem": {"kilit": "<p>y</p>"}})
+            assert b["yazi_surumu"] == 2 and b["ilk_yazi_zamani"], b.get("yazi_surumu")
+            # (d) damgasız taban sigorta: ölçüm yamadan SONRAYSA red (çıkış 3) — alt süreçle
+            yama = Path(td) / "yama.json"; yama.write_text(_j.dumps({"yorum": "<p>z</p>"}), encoding="utf-8")
+            eski_mtime = _t.time() - 3600
+            _os.utime(yama, (eski_mtime, eski_mtime))
+            gelecek = {**b, "olusturma": "2099-01-01T00:00:00+00:00"}
+            hedef.write_text(_j.dumps(gelecek), encoding="utf-8")
+            kod = _sp.run([sys.executable, "-c",
+                           f"import sys; sys.path.insert(0, {str(BURASI)!r}); import yaz; "
+                           f"yaz.BULTEN = __import__('pathlib').Path({td!r}); "
+                           f"sys.argv = ['yaz.py', {str(yama)!r}, '--tarih', '2026-01-05']; "
+                           "raise SystemExit(yaz.main())"],
+                          capture_output=True, text=True).returncode
+            assert kod == 3, f"mtime sigortası: beklenen 3, gelen {kod}"
+            # (e) denetim ENGEL → yazma reddi (çıkış 5); dosya değişmez
+            hedef.write_text(_j.dumps(b0), encoding="utf-8")
+            kod = _sp.run([sys.executable, "-c",
+                           f"import sys; sys.path.insert(0, {str(BURASI)!r}); import yaz; "
+                           f"yaz.BULTEN = __import__('pathlib').Path({td!r}); "
+                           f"sys.argv = ['yaz.py', {str(yama)!r}, '--tarih', '2026-01-05', '--damgasiz']; "
+                           "raise SystemExit(yaz.main())"],
+                          capture_output=True, text=True).returncode
+            assert kod == 5, f"denetim kapısı: beklenen 5, gelen {kod}"
+            assert _j.loads(hedef.read_text(encoding="utf-8"))["yorum"] == "<p>eski</p>", "engelli yama yazıldı"
+    sina("yaz.py: yabancı alan reddi · null siler · boş ezmez · yazı damgası/sürümü · mtime sigortası · denetim kapısı", _yaz)
+    sina("bicim: sayı yazımı tek kaynak · REDK konumu yön okur · denetim sızıntıyı görür", _bicim)
 
     for ad in gecen:
         print(f"  ✓ {ad}")

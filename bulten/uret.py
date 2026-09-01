@@ -24,7 +24,7 @@ import argparse
 import json
 import sys
 from dataclasses import asdict
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from pathlib import Path
 
 BURASI = Path(__file__).resolve().parent
@@ -321,6 +321,10 @@ def temalar() -> dict:
         pass
     for t in d.get("temalar", []):
         t["olculer"] = [piyasa_satir[a] for a in t.get("varliklar", []) if a in piyasa_satir]
+    # Defterin yazara yönelik iç notları (`_aciklama`, `_yazar_notu`) bültenin
+    # JSON'uyla public depoya gidiyordu. Okura gitmeyen not siteye de gitmez.
+    for k in [k for k in d if k.startswith("_") and k != "_son_guncelleme"]:
+        d.pop(k, None)
     return d
 
 
@@ -412,7 +416,9 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         "tarih": tarih.isoformat(),
         "gun": takvim_m.GUNLER_TR[tarih.weekday()],
         "tr_tarih": f"{tarih.day} {takvim_m.AYLAR_TR[tarih.month - 1]} {tarih.year}",
-        "olusturma": datetime.now().isoformat(timespec="seconds"),
+        # DİLİMLİ damga. Koşucu UTC'de çalışıyor ve eski dilimsiz damga sayfada
+        # İstanbul saati gibi basılıyordu ("04:30" — 07:30'un UTC hâli).
+        "olusturma": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "gostergeler": gostergeler(haftalik),
         # Rejim panosu: gösterge şeridi seviyeyi verir, bu pano seviyelerin
         # BİRLİKTE ne anlama geldiğini. Her satır iki ölçülen büyüklüğün farkı

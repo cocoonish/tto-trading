@@ -6,13 +6,18 @@ Yazı katmanı (Claude oturumu) yalnız şu alanlara dokunabilir:
 
     giris                      haftanın çerçevesi — HTML paragraflar
     yorum.<slug>               enstrüman yorumu — HTML (trend, momentum,
-                               seviyeler, iki yönlü senaryo + geçersizlik)
+                               seviyeler, iki yönlü senaryo + geçersizlik);
+                               iskelet dört <h4>: Günlük · 4 saatlik · 1 saatlik ·
+                               Ortak görüş (ölçümü eksik dilim muaf)
+    duzeltmeler                yayımlanmış bir sayının düzeltme kaydı
+                               [{alan, eski, yeni, sebep?, tarih?}] — bültenle aynı
 
 Kullanım:
     python3 teknik/yaz.py yama.json --damga <olcum_zamani>
     cat yama.json | python3 teknik/yaz.py - --damga ...
 
-İki sigorta, ikisi de ARAÇTA (rutin metnine güvenilmez — bkz. CLAUDE.md):
+Sigortalar ARAÇTA (rutin metnine güvenilmez — bkz. CLAUDE.md): damga, sayı
+kaynağı, okur dili, TAVSİYE DİLİ (ortak/tavsiye_dili.py) ve yorum iskeleti.
 
 1. DAMGA. --damga, hedef dosyanın olcum_zamani'siyle birebir aynı olmalı.
    Yazan taraf hangi ölçüme yorum yazdığını okumuş olmak zorunda; bayat bir
@@ -34,7 +39,16 @@ import sys
 from pathlib import Path
 
 BURASI = Path(__file__).resolve().parent
-VERI = BURASI.parent / "site" / "src" / "data" / "teknik"
+KOK = BURASI.parent
+VERI = KOK / "site" / "src" / "data" / "teknik"
+sys.path.insert(0, str(KOK / "ortak"))
+sys.path.insert(0, str(KOK / "bulten"))
+from tavsiye_dili import TAVSIYE  # noqa: E402  — bülten/analiz/tweet kapılarıyla AYNI kalıp
+
+# Yorumun İSKELETİ SABİT (bulten/YAZIM.md, "Haftalık teknik analiz"): dört
+# <h4> başlığı. Ölçümde eksik dilim varsa o dilimin başlığı atlanabilir.
+ISKELET = {"Günlük": "gun", "4 saatlik": "s4", "1 saatlik": "s1", "Ortak görüş": None}
+KELIME_ARALIGI = (250, 400)        # rehberin istediği; dışına çıkan UYARI alır
 
 
 def _sayilari_topla(dugum, havuz: set[str]) -> None:
@@ -95,6 +109,8 @@ def main() -> int:
                    help="damga sigortasını bilinçli atla")
     p.add_argument("--serbest", action="store_true",
                    help="sayı-kaynağı sigortasını bilinçli atla")
+    p.add_argument("--iskeletsiz", action="store_true",
+                   help="dört <h4> iskeleti sigortasını bilinçli atla")
     a = p.parse_args()
 
     dosyalar = sorted(VERI.glob("????-??-??.json"))
@@ -127,13 +143,13 @@ def main() -> int:
     ham = sys.stdin.read() if a.yama == "-" else Path(a.yama).read_text(encoding="utf-8")
     yama = json.loads(ham)
 
-    izinli = {"giris", "yorum"}
+    izinli = {"giris", "yorum", "duzeltmeler"}
     yabanci = [k for k in yama if k not in izinli]
     if yabanci:
         raise SystemExit(
             f"yazı katmanı bu alanlara dokunamaz: {', '.join(yabanci)}\n"
-            "dokunabildikleri: giris, yorum (slug → HTML). Ölçülen alanlar "
-            "teknik/olc.py'den gelir; elle yazılırsa bülten ölçüm olmaktan çıkar.")
+            "dokunabildikleri: giris, yorum (slug → HTML), duzeltmeler. Ölçülen "
+            "alanlar teknik/olc.py'den gelir; elle yazılırsa bülten ölçüm olmaktan çıkar.")
 
     sluglar = {e["slug"]: e for e in b["enstrumanlar"]}
     havuz: set[str] = set()
@@ -153,6 +169,7 @@ def main() -> int:
         b["giris"] = yama["giris"]
         degisen.append(f"giris ({len(str(yama['giris']).split())} kelime)")
 
+    uyarilar: list[str] = []
     for slug, metin in (yama.get("yorum") or {}).items():
         if slug not in sluglar:
             raise SystemExit(f"bilinmeyen enstrüman: {slug!r} — "
@@ -162,8 +179,32 @@ def main() -> int:
         s = dogrula_sayilar(str(metin), havuz)
         if s:
             tum_sorunlu[slug] = s
+        # İSKELET: dört <h4>; ölçümü eksik dilimin başlığı muaf.
+        basliklar = {re.sub(r"\s+", " ", b).strip() for b in re.findall(r"<h4>(.*?)</h4>", str(metin), re.S)}
+        dilimler = sluglar[slug].get("dilimler") or {}
+        eksik = [ad for ad, kod in ISKELET.items()
+                 if ad not in basliklar and not (kod and (dilimler.get(kod) or {}).get("eksik"))]
+        if eksik and not a.iskeletsiz:
+            raise SystemExit(
+                f"{slug}: yorum iskeleti eksik — <h4> başlıkları: {', '.join(eksik)}. "
+                "Rehber dört başlık ister (Günlük · 4 saatlik · 1 saatlik · Ortak görüş); "
+                "ölçümü eksik dilim muaf. Bilinçli istisna: --iskeletsiz.")
+        n_kelime = len(re.sub(r"<[^>]+>", " ", str(metin)).split())
+        if not KELIME_ARALIGI[0] <= n_kelime <= KELIME_ARALIGI[1]:
+            uyarilar.append(f"{slug}: {n_kelime} kelime (rehber {KELIME_ARALIGI[0]}–{KELIME_ARALIGI[1]})")
         sluglar[slug]["yorum"] = metin
-        degisen.append(f"yorum.{slug} ({len(str(metin).split())} kelime)")
+        degisen.append(f"yorum.{slug} ({n_kelime} kelime)")
+
+    # DÜZELTMELER — bültenle aynı sözleşme (bulten/yaz.py): alan, eski, yeni, sebep, tarih.
+    if "duzeltmeler" in yama:
+        # Bu dosya da `yaz` adıyla yüklenir; `import yaz` kendini bulur. Bülten
+        # sürümü yola göre, ayrı adla yüklenir.
+        import importlib.util
+        _spec = importlib.util.spec_from_file_location("bulten_yaz", KOK / "bulten" / "yaz.py")
+        bulten_yaz = importlib.util.module_from_spec(_spec)
+        _spec.loader.exec_module(bulten_yaz)
+        b["duzeltmeler"] = [] if yama["duzeltmeler"] is None else bulten_yaz.duzeltmeleri_dogrula(yama["duzeltmeler"])
+        degisen.append(f"duzeltmeler ({len(b['duzeltmeler'])} kayıt)")
 
     # OKUR DİLİ KAPISI. Sayı denetimi "uydurma yok" der; bu kapı "okura yaz"
     # der. İkisi ayrı kusur: bir cümlenin her sayısı ölçümden gelebilir ve yine
@@ -174,6 +215,13 @@ def main() -> int:
     import okur_dili
     yazilan = " ".join([str(yama.get("giris") or "")]
                        + [str(v) for v in (yama.get("yorum") or {}).values()])
+    # TAVSİYE DİLİ KAPISI: rehber "alın/satın yazılmaz, senaryo dili" der; kapı
+    # yalnız rehberde duruyordu ve tavsiye dili sayfaya girip tweet kapısında
+    # düşebiliyordu. Kalıp ortak (ortak/tavsiye_dili.py).
+    t = TAVSIYE.search(re.sub(r"<[^>]+>", " ", yazilan))
+    if t:
+        raise SystemExit(f"TAVSİYE DİLİ — yazma reddedildi: {t.group(0)!r}. "
+                         "Senaryo dili kullanılır; 'alın', 'satın', 'hedef fiyat' yazılmaz.")
     dil_bulgu = okur_dili.tara(yazilan)
     if dil_bulgu:
         dokum = "\n".join(f"  {a_}: {e!r} (satır {s_})" for a_, e, s_ in dil_bulgu)
@@ -196,8 +244,14 @@ def main() -> int:
         return 0
 
     b["yazili"] = all(e.get("yorum") for e in b["enstrumanlar"]) and bool(b.get("giris"))
+    # YORUM DAMGASI: yazı katmanının anı (dilimli UTC) ve sürümü — künye ve RSS bunu okur.
+    from datetime import datetime, timezone
+    b["yorum_zamani"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    b["yazi_surumu"] = int(b.get("yazi_surumu") or 0) + 1
     hedef.write_text(json.dumps(b, ensure_ascii=False, indent=1) + "\n",
                      encoding="utf-8")
+    for u in uyarilar:
+        print(f"::warning::{u}")
     print(f"yazıldı: {hedef.name} — " + " · ".join(degisen))
     print(f"yazili = {b['yazili']}" +
           ("" if b["yazili"] else "  (tüm yorumlar + giriş dolunca sayfa yayımlanır)"))

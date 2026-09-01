@@ -35,6 +35,10 @@ on:
         description: 'Önce bu id''li tweeti sil (düzeltme akışı)'
         type: string
         default: ''
+      anahtar:
+        description: 'Defter anahtarı (ör. analiz:<slug>); boş = ozel:<dosya kökü>. Aynı anahtar ikinci kez gönderilmez.'
+        type: string
+        default: ''
 
 permissions:
   contents: write
@@ -75,16 +79,21 @@ jobs:
           for r in ${{ inputs.resimler }}; do RESIMLER="$RESIMLER --resim $r"; done
           SIL=""
           if [ -n "${{ inputs.sil_id }}" ]; then SIL="--sil ${{ inputs.sil_id }}"; fi
-          python tweet/ozel.py --metin "${{ inputs.metin }}" $RESIMLER $SIL \
+          ANAHTAR=""
+          if [ -n "${{ inputs.anahtar }}" ]; then ANAHTAR="--anahtar ${{ inputs.anahtar }}"; fi
+          ZORLA=""
+          if [ -n "${{ inputs.sil_id }}" ]; then ZORLA="--zorla"; fi
+          python tweet/ozel.py --metin "${{ inputs.metin }}" $RESIMLER $SIL $ANAHTAR $ZORLA \
             ${{ inputs.gonder == true && '--gonder' || '' }}
 
       # Jeton kasası: gönderim koşusu refresh token'ı döndürür; kaybolmasın.
-      - name: Jetonu commit'le
+      - name: Jeton, defter ve arşivi commit'le
         if: always()
         run: |
           git config --global user.name  "tto-tweet"
           git config --global user.email "bot@users.noreply.github.com"
           git add tweet/oauth2.enc 2>/dev/null || true
+          git add tweet/defter.json tweet/arsiv site/src/data/tweet 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "jeton değişmedi"
           else

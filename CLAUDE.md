@@ -20,10 +20,26 @@ TTO Trading/
 │   └── indices/                 # FX haber-duyarlılık endeksi (üç kip: hafif/günlük/tam)
 ├── teknik/                      # Haftalık teknik analiz bülteni (olc.py ölçer,
 │                                #   yaz.py yorum kapısı — her sayı ölçümden; pazar koşusu)
-├── tweet/                       # Bültenlerin X zincirleri (uret.py kurar, gonder.py
-│                                #   defterli/bayat-korumalı gönderir; TW_* secret'sız KURU)
+├── tweet/                       # X gönderileri: uret.py bülten/teknik, analiz.py analiz
+│                                #   yazısını yönetici özetinden kurar; denetim.py KALİTE
+│                                #   KAPISI; gonder.py defterli/bayat-korumalı gönderir,
+│                                #   metni arsiv/'e, defteri site/src/data/tweet/'e aynalar
+├── analiz/                      # Analiz yazım rehberi (YAZIM.md) + şablon (sablon.mdx);
+│                                #   kapısı site/tools/analiz_sinavi.py
 └── Research/                    # Ham araştırma dosyaları (Excel vb.)
 ```
+
+Site kabuğunun tek kaynakları: `site/src/lib/bolumler.ts` (bölüm numaraları,
+adresler, RSS beslemeleri — başlık, alt bilgi ve kicker'lar buradan okur),
+`site/src/lib/bicim.ts` (sayı/tarih/İstanbul saati yazımı — başka yerde sayı
+biçimlenmez; Python eşi `ortak/bicim.py`, ikisi aynı sözleşmeyi taşır: eksi
+U+2212, ondalık virgül, yüzde önde, bp arkada — bülten ölçüm katmanı, olay
+cümleleri ve rejim metinleri sayıyı oradan yazar, `bulten/denetim.py`nin
+`bicim` ölçütü sızıntıyı uyarı olarak listeler), `site/src/lib/yayinlar.ts` (bülten ve teknik sayılarının yayın
+kapısı, sayı numarası ve önizleme özeti — dört sayfa ve dört RSS beslemesi
+buradan okur). Bağlantı önizleme kartları `site/tools/og_kart.py` ile çizilir
+(`site/public/og/`); sayfa kimliği (kanonik adres, og/twitter meta, JSON-LD)
+`Base.astro`'da kurulur.
 
 ## Komutlar (site/ içinde)
 
@@ -73,7 +89,16 @@ TTO Trading/
    ne kadar · faize etkisi · kanıtın gücü) ve `.rakamlar` şeridinde altı anahtar
    ölçüm. Özetteki her sayı da `<Deger>` ile bağlanır — özet donarsa yazının geri
    kalanı tazelenirken okur yanlış sonucu okur. Özet, gövdedeki bir kutuyu
-   TEKRARLAMAZ; onu soğurur.
+   TEKRARLAMAZ; onu soğurur. **Tam standart `analiz/YAZIM.md`de, şablon
+   `analiz/sablon.mdx`te; kapı `site/tools/analiz_sinavi.py`** (sayfa sınavının
+   10. ölçütü): 1 Eylül 2026'dan sonra yayımlanan yazılarda tarihli slug/başlık,
+   zorunlu ön bilgi, yönetici özeti ve kapanış bölümü ("Ne ölçmedik") ENGEL;
+   eski yazılar değiştirilmez, yalnız bilgi olarak raporlanır. Slug'ın tarihsiz
+   kökü SERİ anahtarıdır: aynı kökten yazılar sayfada "bu serinin diğer yazıları"
+   kutusuyla birbirine bağlanır — konu kökü yazıdan yazıya aynı yazılır.
+   **X gönderisi kendiliğinden çıkar:** `tweet/analiz.py` yayın günü `pubDate`i
+   bugün olan yazının yönetici özetini (tez, tablo satırları, rakamlar; `<Deger>`
+   canlı çözülür) gönderiye çevirir; defter aynı yazıyı ikinci kez göndermez.
 
 ## Grafik güncelleme akışı
 
@@ -99,6 +124,7 @@ taslak; repo GitHub'a bağlanınca aktifleştirilecek).
 | `denetim.py` | 40 ölçüt; engel varsa bülten yayına gitmez. `karanlik`: donan seri · `yerlesmemis`: kapanmamış seansın barı · `revizyon`: yayımlanan sayı sonradan değişti mi · `haber_tonu`: haber endeksinin olağandışı hareketi anılmış mı |
 | `tazeleme.py` | hangi hattın koşacağına resmî yayım takvimi karar verir |
 | `zincir.py` | veri→ölçüm→yazı zincirinin durumu; eksik halkayı ve çıkış koduyla ne yapılacağını söyler |
+| `yaz.py` | yazı katmanının yazma kapısı: `yorum`, `ozet`, `gundem` ve **`duzeltmeler`** (yayımlanmış sayının yapısal düzeltme kaydı — sayfa "Düzeltmeler" bölümü ve `/duzeltmeler/` listesi buradan) |
 
 **Kurucu ilke — saat.** Bir `ozet.json` tek bir yayım ritmi taşımaz: aynı dosyada
 günlük ve haftalık seriler yan yana durur. Bir anahtarın saati, önce açıkça
@@ -350,7 +376,12 @@ o ritimlere bölünür — tek kip, en yavaş ritme mahkûm eder.
   `include_plotlyjs='cdn'` ile üretilirse ~%98 küçülür.
 - Site dili Türkçe; tasarım jetonları `site/src/styles/global.css` başında
   (`--paper`, `--ink`, `--claret`; Fraunces / Newsreader / IBM Plex Mono).
-- `astro.config.mjs` içindeki `site:` alanı gerçek domain alınınca güncellenecek.
+- `astro.config.mjs` içindeki `site:` alanı yayın adresidir (`https://cocoonish.github.io`);
+  kanonik bağlantı, site haritası, RSS ve önizleme kartları bu kökten kurulur.
+  Kendi alan adı alınırsa yalnız burası değişir: `robots.txt` bir uç noktadır
+  (`site/src/pages/robots.txt.ts`) ve Base/RSS'te yedek adres yoktur — `site`
+  tanımsızsa derleme DÜŞER, yanlış kanonik adres basılmaz. Python tarafında
+  `yayinla.py` adresi astro.config ile karşılaştırır.
 - Bülten dosyalarında otomatik koşu ile yazı katmanı aynı gün dosyasına dokunur;
   bu çakışma **elle çözülmez**. `.gitattributes` + `bulten/birlestir.py` sürücüsü
   yazılı sürümü seçer, önbellekte anahtarları birleştirir. Sürücü `.git/config`'de
@@ -367,6 +398,25 @@ düşürüyor. Derlenmesi, içe aktarılması ve koşması ÜÇ AYRI sınamadır
 geçti diye üçüncüsü geçmez. Sigorta araca kondu: `guncelle.py`nin ön denetimi
 artık her adım betiğini ayrıştırıp kapıdan sonra `def`/`class` arıyor ve
 bulursa ENGEL üretiyor — statik, saniyeler sürüyor, koşturmadan soruyor.
+
+**Kurucu ilke — yayın kapısı DERLEMEDEN ve SINAVDAN geçer.** `yayin.yml`
+public depoya kopyalamadan önce siteyi derler ve `sayfa_sinavi.py`yi koşturur;
+düşerse yayın durur ve iş akışı e-posta gönderir. Yerelde aynı şey `cd site &&
+npm run yayin-kontrol`. Sınavın kapsamı büyüdü: (11) her proje sayfasının
+HAT_MANSET girdisi ve anahtarı ozet.json'da var mı (eksik pano ana sayfa
+tablosundan SESSİZCE düşüyordu), (12) her ozet.json'un `_tarih`i çözülüyor ve
+yarından ileri değil (TÜFEX metin karşılaştırmasıyla en ESKİ bacağı hattın
+saati yapmıştı, sayfa "81 gün önce" diyordu), (13) lib/bicim dışında yerel
+biçimleyici (uyarı), (9b) okur dili derlenmiş çıktıda da (uyarı — bileşen
+dizgeleri yalnız orada görünür). KaTeX kapısı aracı ya da node'u bulamazsa
+artık yeşil geçmez, düşer. Eskiden ham kaynak
+kopyalanıyor, derleme yalnız public depoda yapılıyordu: derleme düşerse site
+sessizce eski sürümde kalıyordu (30.08.2026). Aynı ilke tweette:
+`tweet/denetim.py` her gönderiyi (bülten, teknik, analiz, özel) gönderimden
+önce sınar — tavsiye dili, link, emoji, HTML kalıntısı, site atfı, sayı
+ortasında kesik cümle, boş bölüm etiketi, sorumluluk notu, okur dili — ve engel
+varsa gönderim durur. Sorumluluk notu her gönderinin son satırıdır ve kırpmadan
+muaftır (`uret._kapat`).
 
 **Kurucu ilke — okur dili HER YAYINDA geçerlidir, tek yerden tanımlanır.**
 Kural yalnız site yazıları için değil: bülten, teknik bülten, tweetler ve

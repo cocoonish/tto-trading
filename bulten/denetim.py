@@ -53,10 +53,9 @@ BUYUK_HAREKET_ESIGI = 1.5     # % — bunu aşan hareket metinde ANILMALI
 # gün sessizce ayrışır ve hangisinin neyi gördüğü kimsenin aklında kalmazdı.
 sys.path.insert(0, str(KOK / "ortak"))
 import okur_dili  # noqa: E402
-# Yatırım tavsiyesi sayılabilecek kalıplar
-TAVSIYE = re.compile(
-    r"\b(al[ıi]n|sat[ıi]n|pozisyon a[çc]|hedef fiyat|tavsiye ediyoruz|öneriyoruz|"
-    r"kesinlikle al|kesinlikle sat|portföy[üu]n[üu]ze ekleyin)\b", re.I)
+# Yatırım tavsiyesi sayılabilecek kalıplar — TEK tanım ortak/tavsiye_dili.py'de
+# (teknik yorum kapısı, analiz kapısı ve tweet kapısı aynı listeyi kullanır).
+from tavsiye_dili import TAVSIYE  # noqa: E402
 
 
 # Bültenin OKURA GÖRÜNEN yazı alanları. Liste elle tutuluyor ama tek yerde
@@ -911,6 +910,65 @@ class Denetim:
         else:
             self._ok("daha önce yayımlanan sayı değişmemiş")
 
+    # Okur metninde sayı yazımı: eksi U+2212, ondalık virgül (ortak/bicim ile
+    # aynı sözleşme). ASCII tire ve nokta ondalık bir hattın kendi f-string'inden
+    # sızar; kapı burada UYARI verir — yeni bir hat eklendiğinde sızıntı adıyla
+    # görünsün, yayını durdurmasın (sayı doğru, yazımı kusurlu).
+    ASCII_EKSI = re.compile(r"(?:(?<=\s)|(?<=\()|^)-(?=\d)")
+    NOKTA_ONDALIK = re.compile(r"(?<![\d.])\d{1,3}\.\d{1,3}(?![\d.])")
+
+    def bicim(self):
+        metin = "\n".join(_duz(str(m)) for m in _metinler(self.b))
+        eksi = self.ASCII_EKSI.findall(metin)
+        # Tarih (31.08) ve sürüm/kod (1.2.3) nokta taşır; yalnız okur cümlesindeki
+        # "%7.3" / "-1.247 → -696" kalıbı hedeflenir: önünde % veya işaret olan.
+        nokta = re.findall(r"[%+\-−]\d{1,3}\.\d{1,3}(?![\d.])", metin)
+        if eksi:
+            ornek = re.findall(r"\S*(?:(?<=\s)|(?<=\())-\d\S*", metin)[:3]
+            self.uyari.append(f"{len(eksi)} yerde ASCII eksi (−) yerine tire: "
+                              + ", ".join(repr(o) for o in ornek))
+        if nokta:
+            self.uyari.append(f"{len(nokta)} yerde ondalık noktası (virgül olmalı): "
+                              + ", ".join(repr(o) for o in nokta[:3]))
+        if not eksi and not nokta:
+            self._ok("sayı yazımı: eksi U+2212, ondalık virgül")
+
+    def duzeltme(self):
+        """Düzeltme kaydı biçimce tam mı; ve 'yayımlanan sayı değişti' uyarısı
+        varsa yazan taraf hesabını vermiş mi.
+
+        Yayımlanmış bir sayının düzeltilmesi metinde "yayımlanan X yerine
+        gerçek değer Y" kalıbıyla yapılır; aynı düzeltme bültenin `duzeltmeler`
+        listesine de yapısal olarak yazılır ki sayfa onu "Düzeltmeler"
+        bölümünde bassın ve site bütün düzeltmeleri tek listede toplayabilsin.
+        Yarım kayıt (neyin neye düzeltildiğini yazmayan) ENGEL: okura hesap
+        vermeyen bir düzeltme, düzeltme değildir.
+        """
+        liste = self.b.get("duzeltmeler")
+        if liste is not None and not isinstance(liste, list):
+            self.engel.append("duzeltmeler listesi bozuk (liste değil)")
+            liste = []
+        liste = liste or []
+        bozuk = 0
+        for i, d in enumerate(liste, 1):
+            eksik = [k for k in ("alan", "eski", "yeni") if not str((d or {}).get(k, "")).strip()]
+            if eksik:
+                bozuk += 1
+                self.engel.append(f"Düzeltme kaydı {i} eksik: {', '.join(eksik)} yok")
+        if liste and not bozuk:
+            self._ok(f"{len(liste)} düzeltme kaydı biçimce tam")
+        elif not liste:
+            self._ok("düzeltme kaydı yok (sayı değişmediyse doğal)")
+        # Metinde geri alma kalıbı var ama yapısal kayıt yoksa: okur sayfada
+        # düzeltmeyi görür, düzeltmeler listesi görmez — UYARI.
+        # Ham metinde aranır: _sade() Türkçe 'ı'yı düşürür ("yay mlanan") ve kalıbı kaçırır.
+        g = self.b.get("gundem") or {}
+        ham = " ".join(_duz(v) for v in g.values()) + " " + _duz(self.b.get("yorum") or "")
+        if not liste and re.search(r"yayımlanan\s+[^.]{1,80}?\s+yerine", ham, re.I):
+            self.uyari.append("Metinde 'yayımlanan … yerine' geri alma kalıbı var ama "
+                              "duzeltmeler kaydı boş — düzeltme kaydını da yaz "
+                              "(bulten/yaz.py, alan: duzeltmeler).")
+
     def karanlik(self):
         """Hattın saati ilerlerken İÇİNDEKİ bir serinin donması.
 
@@ -1238,8 +1296,8 @@ class Denetim:
     def kos(self) -> int:
         self.yazi(); self.veri(); self.atif(); self.sayi(); self.nabiz(); self.tekrar()
         self.tema(); self.izleme(); self.dil(); self.tazelik(); self.karanlik()
-        self.yerlesmemis(); self.piyasa_seansi(); self.revizyon()
-        self.devir(); self.haber_tonu()
+        self.yerlesmemis(); self.piyasa_seansi(); self.revizyon(); self.duzeltme()
+        self.devir(); self.haber_tonu(); self.bicim()
         self.olagandisilik_penceresi()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")

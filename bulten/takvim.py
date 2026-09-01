@@ -63,6 +63,11 @@ class Kayit:
         return f"{d.day} {AYLAR_TR[d.month - 1]} {d.year}"
 
 
+import sys as _sys
+from pathlib import Path as _Path
+_sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "ortak"))
+from bicim import sayi as _sayi  # noqa: E402  — sayı yazımı TEK yerden
+
 def _onbellege_yaz(ad: str, veri):
     (ONBELLEK / f"{ad}.json").write_text(
         json.dumps({"zaman": datetime.now().isoformat(timespec="seconds"), "veri": veri},
@@ -118,9 +123,9 @@ def hazine(ufuk_gun: int = 21) -> list[Kayit]:
         b2c = r[sut["Tahmini Bid-to-Cover"]] if "Tahmini Bid-to-Cover" in sut else None
         bek = ""
         if tahmin:
-            bek = f"model: {tahmin/1000:.1f} mlr TL gerçekleşme"
+            bek = f"model: {_sayi(tahmin / 1000, 1)} mlr TL gerçekleşme"
             if b2c:
-                bek += f", teklif/karşılama {b2c:.2f}"
+                bek += f", teklif/karşılama {_sayi(b2c, 2)}"
         elif "Doğrudan" in yontem:
             bek = "doğrudan satış — ihale tahmini yok"
         out.append(Kayit(g.isoformat(), "", "TR",

@@ -247,7 +247,10 @@ jobs:
             # veri hiç ilerlemiyordu. Takvim onu taze sanıp dokuz gün daha
             # bekliyor, yani veri kalıcı olarak donuyordu — üstelik her koşu
             # yeşil bittiği için sessizce.
-            HATLAR="tcmb usdtry reer yabanci fonlama kredi enflasyon dibs odemeler butce marj"
+            # buyume ve elnino da listede: analiz yazılarındaki canlı sayılar
+            # (<Deger>) bu hatlardan beslenir; takvim süzgeci onları yalnız
+            # kendi yayım günlerinde (GSYH / TÜFE) koşturur.
+            HATLAR="tcmb usdtry reer yabanci fonlama kredi enflasyon dibs odemeler butce marj buyume elnino"
           fi
           # "zorla" = takvimi hiç sorma. Süzgeci geçirmemek, ona "her şey
           # gerekli" dedirtmekten daha dürüst: karar defterine sahte tetik yazılmaz.
