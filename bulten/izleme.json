@@ -1,6 +1,6 @@
 {
  "_aciklama": "İZLEME DEFTERİ — bültenin verdiği sözlerin kaydı. Bülten 'şunu izleyeceğiz', 'yarın belli olacak', 'sebebi anlaşılmıyor' dediği an buraya bir kayıt düşülür. Her koşuda yazı katmanı önce bu defteri açar: vadesi gelen ya da gelişme olan her kayıt için bültende doğal bir yerde hesap verilir — 'dün şuna bakacağız demiştik, işte olan bu' tonunda, madde listesi olarak değil. Cevabı bulunan kayıt kapatılır (durum: kapandı + sonuç), gelişme olmayan kayıt açık kalır ve zorla anılmaz. Bu defter bülteni birbirini takip eden bir yazı dizisi yapar; yazarı kısıtlamak için değil, unutmasın diye vardır.",
- "_son_guncelleme": "2026-08-31",
+ "_son_guncelleme": "2026-09-01",
  "kayitlar": [
   {
    "konu": "RBOB benzinin tek günde %10,59 düşüşünün sebebi",
@@ -66,11 +66,12 @@
   {
    "konu": "İkinci çeyrek büyümesi ve indirim patikası",
    "acilis": "2026-08-23",
-   "durum": "acik",
+   "durum": "kapandi",
    "soz": "'Büyüme verisi faiz indirim patikasının hızına dair tartışmanın merkezinde; beklentinin üzerinde büyüme indirim beklentilerini erteler' dedik. Günlük bülten %37 faiz + %25,9 kredi büyümesinin ürettiği yavaşlamanın ölçüsü olacağını ekledi.",
    "ne_bakilacak": "31 Ağustos 10:00 GSYH (2025 + II. çeyrek) ve temmuz işgücü; DİBS kısa ucunun tepkisi.",
    "vade": "2026-09-01",
-   "sonuc": ""
+   "sonuc": "Veri 31 Ağustos 10:00'da geldi ve soru beklentinin ALTINDA cevaplandı. Türkiye ekonomisi ikinci çeyrekte yıllık %2,3, bir önceki çeyreğe göre %1,1 büyüdü; ekonomistlerin ortanca beklentisi %2,80'di. Büyümenin bileşimi de yavaşlamayı doğruluyor: hanehalkı tüketimi 2,3 puan, net ihracat 0,6 puan ve yatırım 0,2 puan katkı verirken kamu harcamaları 0,2 puan, stoklar 0,5 puan aşağı çekti; hanehalkı tüketimi %3,5 artarken gayrisafi sabit sermaye oluşumu yalnız %0,6 arttı ve ithalat %6,4 daraldı — net ihracatın katkısı talebin güçlü olmasından değil ithalatın çökmesinden geliyor. Sözün mekanizması doğrulandı: beklentinin altındaki büyüme indirim alanını genişletti ve kısa uç aynı gün buna göre fiyatlandı — üç aylık DİBS noktası %38,20'den %37,67'ye, iki yıl sonrasının bir yıllık faizi %35,03'ten %34,90'a indi. Uzun uç ters yöne gitti: dokuz yıllık nokta %30,07'den %30,23'e çıktı.",
+   "isabet": "tuttu"
   },
   {
    "konu": "Anket ile tahvil eğrisi arasındaki uçurum hangi yönde kapanacak",
@@ -203,12 +204,12 @@
   {
    "konu": "Fonlama tabanı 5 milyar TL eşiğini ne zaman geçecek",
    "acilis": "2026-08-28",
-   "durum": "acik",
+   "durum": "kapandi",
    "soz": "Bu kayıt bir YAYIM sorusu sanılarak açılmıştı; 30.08'de yanlış öncül üzerine kurulduğu görüldü ve yeniden çerçevelendi. TCMB ağırlıklı ortalama fonlama maliyetini her gün yayımlıyor. Panoda 7 Ağustos'tan kalma %40,00'ın durmasının sebebi, fonlama bacağının 5 milyar TL eşiğinin altında kalması ve ölçünün bilgi taşımadığı günlerin elenmesi. İhale tutarları tırmanıyor: 24 Ağustos'ta 1, 25'inde 2, 26'sında 3, 27'sinde 4 milyar TL. Eşik aşıldığı gün temiz seri kendiliğinden geri gelir — bir teyit geldiği için değil.",
    "ne_bakilacak": "Fonlama bacağının 5 milyar TL'yi aşıp aşmadığı; aştığı gün ağırlıklı ortalama fonlama maliyetinin politika faizinden ayrışıp ayrışmadığı. O güne kadar gevşemenin ölçüsü sterilizasyon maliyeti.",
    "vade": "2026-09-10",
-   "sonuc": "",
-   "isabet": ""
+   "sonuc": "Eşik 31 Ağustos'ta aşıldı ve kayıt tam öngördüğü biçimde kapandı: bir teyit gelmedi, taban büyüdü. Fonlama bacağı 27 Ağustos'taki 4 milyar TL düzeyinden 103,0 milyar TL'ye çıktı, sterilizasyon 799,1 milyar TL'ye indi ve sistemin merkez bankasına net alacağı 1.247 milyar TL'den 696,1 milyar TL'ye geriledi. Ağırlıklı ortalama fonlama maliyeti serisi böylece kendiliğinden geri geldi: 31 Ağustos itibarıyla %37,00 ve geçerli — 7 Ağustos'tan bu yana ilk temiz okuma. Değerin politika faizine birebir eşit çıkması da kaydın ikinci öngörüsünü doğruluyor: bu tabanda ağırlıklı ortalama, politika faizinin kendisinden başka bir şey söylemiyor. Marjinal TCMB faizi %37,01 ile ölçünün fiilî yerini korudu.",
+   "isabet": "tuttu"
   },
   {
    "konu": "Warsh'ın ilk Jackson Hole konuşması ve %6'lık korunma fiyatı",
@@ -249,6 +250,22 @@
    "vade": "2026-09-03",
    "sonuc": "",
    "isabet": ""
+  },
+  {
+   "konu": "Piyasa fotoğrafında 28 Ağustos barının eksikliği",
+   "acilis": "2026-09-01",
+   "durum": "acik",
+   "soz": "1 Eylül ölçümünde 51 satırın 25'i günlük değişimini 28 Ağustos kapanışına değil 27 Ağustos kapanışına göre hesapladı: kaynak, borsa endeksleri, ABD getirileri, dolar endeksi ve kredi fonları için 28 Ağustos barını hiç vermedi. Ölçüm iki kez, ayrı koşularda tekrarlandı ve bar iki seferinde de gelmedi; yani geçici bir kesinti değil kalıcı bir boşluk. İkinci kusur daha sinsi: iki yıllık ABD getirisi serisi 20 Ağustos'tan 28 Ağustos'a kadar tam olarak 4,17'de dondu, yani 28 Ağustos'taki Warsh tepkisini hiç kaydetmedi ve 31 Ağustos'ta 4,349'a geçerek dokuz seansı tek kalemde yazdı. Bugünkü metin bu iki satır ailesine dayanan hükümleri kendi kıyas gününü söyleyerek kurdu.",
+   "ne_bakilacak": "28 Ağustos barının sonraki koşularda geri gelip gelmediği; gelmezse günlük değişim kolonunun kıyas barını hangi güne oturttuğunun satır satır yazılması. İki yıllık getiri serisinin yeniden donup donmadığı.",
+   "vade": "2026-09-04"
+  },
+  {
+   "konu": "Büyüme yavaşlarken kur hızının artması — 10 Eylül'ün ikilemi",
+   "acilis": "2026-09-01",
+   "durum": "acik",
+   "soz": "31 Ağustos aynı gün iki zıt işaret üretti. Büyüme %2,3 ile beklentinin (%2,80) altında geldi ve indirim alanını genişletti; aynı gün bir aylık yıllıklandırılmış devalüasyon hızı %20,2'den %24,4'e sıçradı ve dolar 48,2469 ile 52 haftalık aralığın tam tepesine çıktı. TL taşıma makası hâlâ 12,6 puan artıda, yani hedge'siz TL taşıma kârlı; ama makas kur hızı yükseldikçe kapanıyor. Diyoruz ki 10 Eylül Kurul'unun asıl kısıtı büyüme değil kurun hızıdır: hız %30'a yaklaştıkça gevşemenin fiyatı, kazandığı alandan büyük olur.",
+   "ne_bakilacak": "Devalüasyon hızının %30 eşiğine yaklaşıp yaklaşmadığı ve taşıma makasının yönü; 3 Eylül ağustos enflasyonu; 10 Eylül 14:00 Kurul kararı ve metnin kur vurgusu.",
+   "vade": "2026-09-10"
   }
  ]
 }
