@@ -30,6 +30,7 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
   (12) ÖZET SAATİ — her ozet.json'un `_tarih`i çözülüyor, yarından ileri
       değil ve canlı bacakların en yenisinden geride kalmamış.
   (13) BİÇİM TEK KAYNAK (uyarı) — lib/bicim.ts dışında yerel biçimleyici.
+  (14) CSS JETONU — kullanılan her var(--x) global.css'te ya da dosyada tanımlı.
   (9b) OKUR DİLİ, derlenmiş çıktıda (uyarı) — bileşen dizgeleri de kapıya girer.
 
 Koşum:  python3 site/tools/sayfa_sinavi.py
@@ -477,6 +478,28 @@ def main() -> int:
     for yol, n in yerel:
         uyari.append(f"yerel biçimleyici: {yol} ({n}) — lib/bicim'e taşınmalı")
     print(f"  {len(yerel)} dosyada yerel biçimleyici")
+
+    # ---------------------------------------------------------------- (14)
+    # CSS JETONU TANIMLI MI. `var(--x)` tanımsızsa tarayıcı sessizce kalıtıma
+    # düşer: iki içindekiler etiketi ev stilinin grisini almıyordu ve hiçbir
+    # şey söylemiyordu. Statik, saniyeler sürer: kullanılan her jeton global.css
+    # ya da aynı dosyada tanımlı olmalı.
+    print("\n▶ CSS jetonları (var(--x) tanımlı mı)")
+    # Tanım her yerde olabilir: global.css, bileşen <style>'ı ya da satır içi
+    # style="--d: 40ms" (kademeli animasyon gecikmesi bileşenden gelir).
+    dosyalar = sorted((KOK / "site/src").rglob("*.astro")) + sorted((KOK / "site/src").rglob("*.css"))
+    tanimli: set[str] = set()
+    for yol in dosyalar:
+        tanimli |= set(re.findall(r"(--[a-zA-Z0-9-]+)\s*:", yol.read_text(encoding="utf-8")))
+    tanimsiz = []
+    for yol in dosyalar:
+        icerik = yol.read_text(encoding="utf-8")
+        for ad in set(re.findall(r"var\((--[a-zA-Z0-9-]+)", icerik)):
+            if ad not in tanimli:
+                tanimsiz.append(f"{yol.relative_to(KOK / 'site/src').as_posix()}: var({ad})")
+    for t in tanimsiz:
+        hata.append("tanımsız CSS jetonu — " + t)
+    print(f"  {len(tanimli)} jeton tanımlı · tanımsız kullanım {len(tanimsiz)}")
 
     # (9b) OKUR DİLİ, DERLENMİŞ ÇIKTIDA (uyarı). 9. ölçüt yalnız içerik
     # dosyalarına bakıyor; bileşenlerden gelen dizgeleri ("ozet.json"

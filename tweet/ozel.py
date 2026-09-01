@@ -8,8 +8,11 @@
 Düzenli bültenlerin dışında kalan gönderiler için (tema tweetleri, veri
 duyuruları). Kimlik altyapısı gonder.py ile ortak: OAuth 2.0, dönen refresh
 token şifreli kasaya yazılır (iş akışı commit'ler). Kurallar aynı: LİNK
-YAZILMAZ (metinde http görülürse koşu düşer), defter tutulmaz — tek seferlik
-gönderimi çağıran tekrarlamamaktan sorumludur.
+YAZILMAZ (metinde http görülürse koşu düşer). Gönderim DEFTERLİDİR: --anahtar
+zorunlu (analiz:<slug> ya da ozel:<ad>); anahtar defterde kimlikliyse ikinci
+gönderim durur (--zorla yalnız --sil ile, düzeltme akışı); gönderimden sonra
+defter, metin arşivi ve sitenin aynası gonder.py ile aynı yoldan yazılır —
+böylece siteye X bağı kurulur ve araç kanalı aynı yazıyı ikinci kez atmaz.
 
 Görseller X API v2 medya ucuna yüklenir (POST /2/media/upload). Bu uç
 'media.write' kapsamı ister; refresh token o kapsamsız üretildiyse 403 döner
@@ -22,7 +25,8 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-import gonder  # noqa: E402 — _erisim_al, JETON_DOSYA, UC ortak
+KOK = Path(__file__).resolve().parents[1]
+import gonder  # noqa: E402 — _erisim_al, JETON_DOSYA, UC, defter/arşiv/ayna ortak
 
 # v2 medya ucu 'media.write' kapsamı ister; X'in yeni konsolunun kapsam
 # listesinde media.write SEÇENEĞİ YOK (30.08'de görüldü). Eski v1.1 ucu ise
@@ -74,7 +78,14 @@ def main() -> int:
                    help="gerçekten gönder (verilmezse kuru)")
     p.add_argument("--sil", help="önce bu id'li tweeti sil (düzeltme akışı: "
                                  "eski gönderi kaldırılıp yenisi atılır)")
+    p.add_argument("--anahtar", help="defter anahtarı: analiz:<slug> ya da ozel:<ad> "
+                                     "(--gonder ile zorunlu)")
+    p.add_argument("--zorla", action="store_true",
+                   help="anahtar defterde olsa da gönder (yalnız --sil ile: düzeltme)")
     a = p.parse_args()
+    if a.zorla and not a.sil:
+        raise SystemExit("--zorla yalnız --sil ile: eski gönderi silinmeden aynı anahtara "
+                         "ikinci gönderi mükerrer olur")
 
     metin = Path(a.metin).read_text(encoding="utf-8").strip()
     if "http" in metin.lower():
@@ -85,7 +96,12 @@ def main() -> int:
     # kapıdan geçer. Düzenli gönderiler (gonder.py) de aynı kapıyı kullanır;
     # kural bir yerde durur, iki yerde uygulanır.
     import denetim as tw_denetim
-    engel, uyari = tw_denetim.denetle(metin, "analiz")
+    # Tür ilk satırdan: özel kanaldan bülten de, analiz de, tema gönderisi de
+    # çıkar; türe bağlı ölçütler (başlık satırı, Gündem) yalnız uyanı sınar.
+    ilk = metin.split("\n", 1)[0]
+    tur = ("bulten" if ilk.startswith(("Sabah Notu", "Haftaya Bakış"))
+           else "analiz" if ilk.startswith("Analiz — ") else "ozel")
+    engel, uyari = tw_denetim.denetle(metin, tur)
     print(tw_denetim.rapor(engel, uyari, Path(a.metin).name))
     if engel:
         raise SystemExit("tweet denetimi ENGEL üretti — gönderim durdu.")
@@ -96,8 +112,26 @@ def main() -> int:
         if not r.exists():
             raise SystemExit(f"görsel yok: {r}")
 
-    print(f"── özel tweet ({len(metin)} karakter, {len(resimler)} görsel)"
-          + (" · KURU" if not a.gonder else ""))
+    # Anahtar: analiz dosyası slug'ına eşleşiyorsa onu öner — araç kanalıyla
+    # aynı anahtar, yani analiz.py aynı yazıyı bir daha atmaz.
+    anahtar = a.anahtar
+    if not anahtar:
+        kok = Path(a.metin).stem
+        if (KOK / "site" / "src" / "content" / "analiz" / f"{kok}.mdx").exists():
+            anahtar = f"analiz:{kok}"
+            print(f"· anahtar dosya adından: {anahtar}")
+        else:
+            anahtar = f"ozel:{kok}"                 # iş akışı sözleşmesi: boş = ozel:<dosya kökü>
+            print(f"· anahtar dosya adından: {anahtar}")
+    if anahtar and not (anahtar.startswith("analiz:") or anahtar.startswith("ozel:")):
+        raise SystemExit(f"anahtar 'analiz:' ya da 'ozel:' ile başlar: {anahtar!r}")
+    defter = gonder._defter_oku(gonder.DEFTER)
+    if anahtar and (defter.get(anahtar) or {}).get("idler") and not a.zorla:
+        raise SystemExit(f"{anahtar} defterde kimlikli — zaten gönderildi "
+                         f"({defter[anahtar]['idler'][0]}). Düzeltme: --sil <id> --zorla.")
+
+    print(f"── özel tweet ({len(metin)} karakter, {len(resimler)} görsel"
+          + (f", {anahtar}" if anahtar else "") + (" · KURU" if not a.gonder else "") + ")")
     print(metin)
     if not a.gonder:
         return 0
@@ -122,7 +156,16 @@ def main() -> int:
     if yanit.status_code not in (200, 201):
         raise SystemExit(f"tweet gönderilemedi (HTTP {yanit.status_code}): "
                          f"{yanit.text[:300]}")
-    print(f"✓ gönderildi — id: {yanit.json()['data']['id']}")
+    kimlik = str(yanit.json()["data"]["id"])
+    print(f"✓ gönderildi — id: {kimlik}")
+    # Defter + arşiv + ayna: gonder.py ile aynı yol, aynı biçim.
+    import datetime as _dt
+    zaman = _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds")
+    defter[anahtar] = {"idler": [kimlik], "zaman": zaman, "tur": "ozel",
+                       "ozet": gonder.hashlib.sha256(metin.encode("utf-8")).hexdigest()[:12]}
+    gonder._defter_yaz(gonder.DEFTER, defter)
+    yol = gonder._arsivle(anahtar, [metin], [kimlik], zaman)
+    print(f"· deftere yazıldı ({anahtar}); arşiv: {yol.relative_to(KOK)}")
     return 0
 
 

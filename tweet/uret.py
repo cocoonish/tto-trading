@@ -49,7 +49,7 @@ def _duz(metin: str) -> str:
 # yazmak uydurma olurdu, kırpmak değil.
 SITE_IZLERI = (
     "bu sayfa", "sayfadaki", "sayfanın", "sayfamız", "sitede", "sitemiz",
-    "bülten",                                # bültende, bu bültenin, bültenimiz
+    "bu bülten", "bültenimiz", "bültende", "bültenin ", "bu sabah notu",   # öz-atıf; "TCMB haftalık bülteni" düşmez
     "fotoğraf",                              # 'piyasa fotoğrafı' sitedeki tablo
     "bu bölüm", "bölümdeki", "bölümünde",    # bölümler arası çapraz atıf
     "panoda", "panosunda", "panosunun",      # rejim / gösterge panosu
@@ -60,7 +60,7 @@ SITE_IZLERI = (
 # koşulsuz düşürüyordu ve gerçek bilgi taşıyan cümleler sessizce gidiyordu.
 SITE_IZ_KALIPLARI = (
     re.compile(r"\b(yukarıda|aşağıda)(ki)?\s+(tablo|grafik|pano|bölüm|liste|şerit|"
-               r"anlat|veril|yazıl|açıkla|göster|ayrıntı)", re.I),
+               r"anlat|veril|yazıl|açık|göster|ayrıntı)", re.I),      # açıkla·açıkça
 )
 
 

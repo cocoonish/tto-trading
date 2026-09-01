@@ -350,6 +350,18 @@ def _denetim():
     assert any("yukarıda" in x for x in u), "belirsiz atıf uyarı vermedi"
     e, _ = dn.denetle(temiz.replace("Brent", "yukarıdaki tabloda Brent"), "analiz")
     assert any("mobilya" in x for x in e), f"'yukarıdaki tablo' engel üretmedi: {e}"
+    e, _ = dn.denetle(temiz.replace("Sabah Notu — 1 Eylül 2026", "Günaydın piyasa"), "bulten")
+    assert any("başlık satırı" in x for x in e), f"başlıksız bülten gönderisi geçti: {e}"
+    _, u = dn.denetle(temiz.replace("−%1,20", "%1,20-%1,40"), "bulten")
+    assert any("aralık tiresi" in x for x in u), f"aralık tiresi uyarısı yok: {u}"
+    _, u = dn.denetle(temiz.replace("Brent −%1,20", "Brent −%1,20 ve TL %37,00 ile %2,80")
+                      + "\n\nGündem: fonlama %37,00 ve büyüme %2,80 açıklandı.", "bulten")
+    assert any("aynı sayıları" in x for x in u), f"ortak sayı uyarısı yok: {u}"
+    assert dn.EN_COK == __import__("uret").TEK_TAVAN, "tavan tek kaynak değil"
+    import uret as ur
+    assert not ur._site_izi_var("TCMB haftalık bülteninde menkul kıymet stoku arttı."), "gerçek bilgi düştü"
+    assert ur._site_izi_var("Bu bültenin cevaplaması gereken soru şu."), "öz-atıf düşmedi"
+    assert ur._site_izi_var("Ayrıntı aşağıda açıkça yazılır."), "'aşağıda açıkça' düşmedi"
 
 
 def _kapanis_notu():

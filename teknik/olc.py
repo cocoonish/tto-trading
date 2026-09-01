@@ -558,7 +558,18 @@ def ciz_dilim(e: Enstruman, dilim_kod: str, dilim_ad: str, ham: dict,
     fig.add_trace(go.Scatter(x=z, y=mac["sinyal"][-n:], name="sinyal",
                              line=dict(width=1.1, color="#b8860b"),
                              showlegend=False), row=3, col=1)
-    aralik = f"{z[0]} → {z[-1]}" + (" (UTC)" if saatlik else "")
+    # Sayfadaki tablo İstanbul saatiyle; grafik başlığı da aynı dilimde yazar,
+    # yoksa okur aynı barı iki etiketle görür (28T21:00 UTC ↔ 29 Ağu 00:00).
+    def _ist(t: str) -> str:
+        if len(t) <= 10:
+            return f"{t[8:10]}.{t[5:7]}.{t[0:4]}"
+        try:
+            from zoneinfo import ZoneInfo
+            d = datetime.fromisoformat(t[:16]).replace(tzinfo=timezone.utc).astimezone(ZoneInfo("Europe/Istanbul"))
+            return d.strftime("%d.%m.%Y %H:%M")
+        except Exception:                                      # noqa: BLE001
+            return t
+    aralik = f"{_ist(str(z[0]))} → {_ist(str(z[-1]))}" + (" · İstanbul saati" if saatlik else "")
     fig.update_layout(title=f"{e.ad} — {dilim_ad} ({aralik})",
                       xaxis_rangeslider_visible=False, height=760,
                       legend=dict(orientation="h"))

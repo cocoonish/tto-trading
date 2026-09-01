@@ -12,9 +12,9 @@ on:
   workflow_dispatch:
     inputs:
       metin:
-        description: 'Tweet metni dosyası (depo yolu)'
+        description: 'Tweet metni dosyası (depo yolu) — boş bırakılırsa iş düşer; gönderilmiş bir dosya varsayılan olarak durmaz'
         type: string
-        default: 'tweet/ozel/kredi-2026-08-30.txt'
+        default: ''
       # Grafik İSTİSNADIR: varsayılan boş. Önceden kredi betiğine bağlıydı ve
       # ilgisiz her gönderimde matplotlib koşup 403 alan bir yükleme deniyordu
       # (GitHub boş dizgeyi de varsayılana çevirdiği için kapatmak da mümkün
@@ -75,6 +75,7 @@ jobs:
 
       - name: Gönder
         run: |
+          if [ -z "${{ inputs.metin }}" ]; then echo "::error::metin dosyası verilmedi"; exit 1; fi
           RESIMLER=""
           for r in ${{ inputs.resimler }}; do RESIMLER="$RESIMLER --resim $r"; done
           SIL=""

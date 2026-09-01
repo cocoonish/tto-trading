@@ -39,7 +39,22 @@ import okur_dili  # noqa: E402
 from tavsiye_dili import TAVSIYE  # noqa: E402  — bülten/teknik/analiz kapılarıyla AYNI kalıp
 
 EN_AZ = 200          # bundan kısa bir tweet içerik değil, kaza
-EN_COK = 3800        # uret.TEK_TAVAN ile aynı (Premium tavanı değil, okunurluk)
+try:
+    import uret as _uret
+    EN_COK = _uret.TEK_TAVAN          # tavan TEK yerde (uret); burada kopya tutulmaz
+except Exception:                                              # noqa: BLE001
+    EN_COK = 3800
+
+# İlk satır türe göre bir başlık taşır — okur akışta hangi yayının geldiğini
+# ilk bakışta görür. Bülten: "Sabah Notu — 1 Eylül 2026" / "Haftaya Bakış — …";
+# analiz: "Analiz — 1 Eylül 2026". Teknik başlığı uret'in kendi kalıbından gelir.
+ILK_SATIR = {
+    "bulten": re.compile(r"^(Sabah Notu|Haftaya Bakış) — \d{1,2} [A-ZÇĞİÖŞÜ][a-zçğıöşü]+ \d{4}"),
+    "analiz": re.compile(r"^Analiz — \d{1,2} [A-ZÇĞİÖŞÜ][a-zçğıöşü]+ \d{4}"),
+}
+
+# Aralık tiresi: "%1,25-%2,10", "3-5 gün" → Türkçe yazımda uzun tire (–). UYARI.
+ARALIK_TIRESI = re.compile(r"(?<=[\d%])-(?=[%\d])")
 
 # Sorumluluk notu: her tür tweet aynı kapanışla biter. Kalıp esnek — "Analizdir;
 # yatırım tavsiyesi değildir." ve "Analiz ve ölçümdür; yatırım tavsiyesi
@@ -51,8 +66,8 @@ SORUMLULUK = re.compile(r"yatırım tavsiyesi değildir", re.I)
 EMOJI = re.compile("[\U0001F000-\U0001FAFF\U00002600-\U000027BF\U0001F1E6-\U0001F1FF️⭐⬆⬇✅❌]")
 
 # Sayıdan hemen önce ASCII tire: "-1,88" yerine "−1,88" olmalı. Aralık tiresi
-# ("%1,25-%2,10") de yakalanır ve o da yanlış — Türkçe yazımda aralık için
-# uzun tire (–) kullanılır. UYARI seviyesinde: gönderimi durdurmaz, kaydı düşer.
+# ("%1,25-%2,10") ayrı kalıpla (ARALIK_TIRESI) yakalanır — Türkçe yazımda aralık
+# için uzun tire (–). İkisi de UYARI: gönderimi durdurmaz, kaydı düşer.
 ASCII_EKSI = re.compile(r"(?<![\w.,])-(?=[%\d])")
 
 HTML_KALINTI = re.compile(r"<[a-zA-Z/][^>]*>|&nbsp;|&amp;|&lt;|&gt;|&#\d+;|&quot;")
@@ -162,6 +177,11 @@ def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
         engel.append(f"metin cümle sonuyla bitmiyor: {m[-30:]!r}")
     if not SORUMLULUK.search(m):
         engel.append("sorumluluk notu yok ('… yatırım tavsiyesi değildir.')")
+    ilk = ILK_SATIR.get(tur)
+    if ilk and not ilk.search(m.split("\n", 1)[0]):
+        engel.append(f"{tur} gönderisi başlık satırıyla açılmıyor: {m.split(chr(10), 1)[0][:50]!r}")
+    if tur == "bulten" and not re.search(r"^Gündem", m, re.M):
+        uyari.append("bülten gönderisinde 'Gündem' bölümü yok")
 
     # ── tekrar: aynı cümle (≥ 8 kelime) iki kez
     gorulen: dict[str, int] = {}
@@ -172,11 +192,27 @@ def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
     tekrar = [s for s, n in gorulen.items() if n > 1]
     if tekrar:
         uyari.append(f"{len(tekrar)} cümle iki kez geçiyor: {tekrar[0][:70]!r}…")
+    # Yakın tekrar: iki paragraf aynı SAYILARI taşıyor (yorum "fonlama %37,00'ye
+    # indi" ↔ gündem "fonlama … %37,00"). Birebir cümle eşitliği bunu görmez.
+    paragraflar = [p for p in re.split(r"\n\s*\n", m) if p.strip()]
+    sayilar = [set(re.findall(r"%?\d+(?:[.,]\d+)+%?", p)) for p in paragraflar]
+    ortak = []
+    for i in range(len(sayilar)):
+        for j in range(i + 1, len(sayilar)):
+            kesisim = {x for x in sayilar[i] & sayilar[j] if len(x) >= 4}
+            if len(kesisim) >= 2:
+                ortak.append((i + 1, j + 1, sorted(kesisim)[:3]))
+    if ortak:
+        i, j, k = ortak[0]
+        uyari.append(f"{len(ortak)} paragraf çifti aynı sayıları taşıyor (ör. {i}. ve {j}.: {', '.join(k)}) — yorum ile gündem birbirini tekrarlıyor olabilir")
 
     # ── tipografi
     n_eksi = len(ASCII_EKSI.findall(m))
     if n_eksi:
         uyari.append(f"sayı önünde ASCII tire {n_eksi} yerde (− ya da – bekleniyor)")
+    n_aralik = len(ARALIK_TIRESI.findall(m))
+    if n_aralik:
+        uyari.append(f"aralık tiresi ASCII {n_aralik} yerde ('%1,25-%2,10' → '%1,25–%2,10')")
     if "  " in m:
         uyari.append("çift boşluk var")
     if re.search(r"\s[,.;:!?]", m):
