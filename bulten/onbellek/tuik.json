@@ -1,45 +1,6 @@
 {
- "zaman": "2026-08-31T04:38:51",
+ "zaman": "2026-09-01T04:17:35",
  "veri": [
-  {
-   "tarih": "2026-08-31",
-   "saat": "10:00",
-   "ulke": "TR",
-   "olay": "TÜİK: GSYH (2025)",
-   "onem": 1,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "Yıllık Gayrisafi Yurt İçi Hasıla"
-  },
-  {
-   "tarih": "2026-08-31",
-   "saat": "10:00",
-   "ulke": "TR",
-   "olay": "TÜİK: GSYH (II. Çeyrek: Nisan-Haziran 2026)",
-   "onem": 1,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "Dönemsel Gayrisafi Yurt İçi Hasıla"
-  },
-  {
-   "tarih": "2026-08-31",
-   "saat": "10:00",
-   "ulke": "TR",
-   "olay": "TÜİK: İşgücü (Temmuz 2026)",
-   "onem": 1,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "İşgücü İstatistikleri"
-  },
   {
    "tarih": "2026-09-03",
    "saat": "10:00",
@@ -299,6 +260,19 @@
    "beklenti_sayi": null,
    "onceki": "",
    "not_": "Merkezi Yönetim Borç Stoku İstatistikleri (Merkezi Yönetim Borç Stoku Enstrüman Dağılımı, Döviz-Faiz Yapısı, Vadeye Kalan Ortalama Süre)"
+  },
+  {
+   "tarih": "2026-09-22",
+   "saat": "10:00",
+   "ulke": "TR",
+   "olay": "TÜİK: Tüketici güveni (Eylül 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "Tüketici Güven Endeksi"
   }
  ]
 }
