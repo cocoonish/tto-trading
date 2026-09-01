@@ -244,6 +244,45 @@ Anlık görüntü artık seansını yazıyor (`piyasa.kapanis_seansi`), denetim
 kaçırılan SEANS sayısını ölçüyor (takvim günü değil: tek tatil uyarı, iki
 seans engel) ve duman sınaması ölçeklemenin geri konmasını yakalıyor.
 
+**Kurucu ilke — ikna edici bir tablo, sınanmamış bir kuraldır; ve sınama
+ÖRNEKLEM DIŞI olur.** İTO ile TÜFE arasındaki farkın takvim ayı profili son
+derece düzgün duruyordu: Mayıs tek eksi ay (−0,44 puan), Nisan/Ekim/Kasım
+belirgin artı, ve her birinin makul bir açıklaması vardı (İstanbul'un kira ve
+hizmet ağırlığı, okul dönemi, turizm sezonu). Kural olarak koda girmesi
+kaçınılmaz görünüyordu. Örneklem DIŞI sınandı: altı kuralın yarıştığı
+genişleyen pencerede takvim ayı düzeltmesi İKİ pencerede de SONUNCU, hatayı
+0,125 puan BÜYÜTÜYOR. Sebep çubukların üstünde yazıyordu — ay başına 2–3 gözlem
+var, yani her ay için tahmin edilen parametre, onu tahmin edecek gözlemden
+fazla. Konsaydı sitedeki her aylık tahmin sistematik olarak daha kötü olacaktı
+ve hiçbir yeşil koşu bunu söylemeyecekti. Bir örüntü ne kadar iyi bir hikâye
+anlatıyorsa onu sınamadan kabul etme eğilimi o kadar güçlüdür; üç gözlemden
+kurulmuş her örüntü için bir açıklama bulunabilir. Örneklem İÇİ uyum (R²)
+bu soruyu cevaplamaz — sorulacak soru "geçmişe ne kadar uydu" değil, "yarın
+hangisini kullanayım"dır.
+
+İkinci yarısı: SIRALAMA DA BİR SONUÇTUR. Aynı yarışta başlangıç penceresi 12
+aydan 18 aya çekilince kazanan değişti. Bunun karşılığı "o hâlde 12 ayı
+seçeyim" değil, "hiçbir kural için 'en iyisi budur' denemez"dir — ve bu hüküm
+metne değil KODA yazılır (`itp_siralama_metin`), çünkü örneklem büyüdüğünde
+hükmün kendisi de değişmelidir. Doğru kıyas noktası da naif kural değil
+PİYASADIR: aynı pencerede PKA anketi 0,481, İTO kuralı 0,388 verdi ama eşli
+farkın p'si 0,414 — yani "İTO piyasadan iyi tahmin ediyor" cümlesi bu veriyle
+KURULAMAZ ve kurulmadı.
+
+**Kurucu ilke — bir denetimin KAPSAMI denetimin parçasıdır.** Sayfa sınavının
+1. kuralı doğruydu, koşuyordu, yeşil bitiyordu — ve `<Deger>` kullanımlarının
+546'sından yalnız 180'ine bakıyordu. Çünkü yalnız `site/src/content/projeler/`
+altını tarıyordu; `<Deger>` sözleşmesi ise koleksiyondan bağımsız (bileşen
+`ozet.json`'u `/projeler/<proje>/` genel yolundan çeker). Büyüme yazısı
+projeler'den analiz'e taşındığı gün sınavın görüş alanından da çıkmıştı ve
+kimse fark etmemişti; borçlanma ve El Niño yazıları hiç girmemişti. Aynı kusur
+bu dosyada bir kez daha kayıtlı: hat listesi elle tutulduğu için sınav
+hazine-ihrac sayfasına hiç bakmıyordu. İki olayın ortak noktası ölçütün yanlış
+olması değil, ölçütün BAKMADIĞI yerin olması — ve bakılmayan yer, geçen
+sınavla aynı görünür. Bir denetim eklenirken "bu ölçüt doğru mu" kadar "bu
+ölçüt neyi HİÇ görmüyor" da sorulur; kapsam bir listeden değil, sözleşmenin
+kendi tanımından türetilir.
+
 **Kurucu ilke — kopya sözleşmesi bir bütündür; SIRA kusuru gizler.** Hattın
 siteye kopyalanacak çıktı listesi bir sözleşmedir ve eksik bir dosya kopyalamayı
 yarıda keser. Hazine hattının iki grafiği yalnız tam kipte üretiliyor ve

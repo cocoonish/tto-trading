@@ -171,9 +171,15 @@ data/dagilim.csv        kırpılmış ortalama, medyan, difüzyon
 data/baz_senaryo.csv    12 aylık üç senaryo patikası
 data/reel_faiz.csv      dört reel faiz ölçüsü
 data/beklenti.json      PKA isabet ölçüleri
-cikti/NN_*.html         9 şekil (ev stili, plotly.js CDN'den)
+data/ito_profil.json    İTO–TÜFE farkı: ay ay tablo, t sınaması, eğim=1 sınaması,
+                        koşullu eşleme (öngörü aralığı), altı kurallık örneklem
+                        DIŞI yarış + dayanıklılık, PKA anketiyle eşli kıyas,
+                        sürpriz regresyonu, kayan kararlılık, yıllık makas
+cikti/NN_*.html         12 şekil (ev stili, plotly.js CDN'den); 10–12 İTO kanadı
+                        ve KOŞULLU: ito_profil.json yoksa üretilmez, eski
+                        kopyaları hem cikti'den hem siteden silinir, hat durmaz
 cikti/yukseklikler.json şekil yükseklikleri — MDX'teki yukseklik={} ile aynı kaynak
-ozet.json               sayfa metnindeki oynak sayılar (188 anahtar)
+ozet.json               sayfa metnindeki oynak sayılar (~405 anahtar; 109'u itp_*)
 uyarilar.json           tazelik/kaynak/denetim uyarıları + çapraz doğrulama sonucu
 ```
 
@@ -190,6 +196,9 @@ uyarilar.json           tazelik/kaynak/denetim uyarıları + çapraz doğrulama 
 | 07 | `07_beklenti.html` | 3 (üç kesim, PKA ufukları, isabet) | 1373 |
 | 08 | `08_reel_faiz.html` | 2 (reel, nominal) | 1057 |
 | 09 | `09_baz_etkisi.html` | 2 (patika, düşen aylar) | 1059 |
+| 10 | `10_ito_tufe.html` | 3 (aylık okuma, fark, yıllık makas) | 1349 |
+| 11 | `11_ito_kural.html` | 3 (eşleme, kural yarışı, sürpriz) | 1349 |
+| 12 | `12_ito_takvim.html` | 2 (takvim ayı, kayan kararlılık) | 985 |
 
 Yükseklikler `cikti/yukseklikler.json`'dan okunmalı; tablo koşum başına
 değişebilir (alt başlık satırı ve lejant satırı sayısına bağlı).
