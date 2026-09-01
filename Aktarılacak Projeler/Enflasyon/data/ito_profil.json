@@ -376,6 +376,51 @@
   ],
   "n": 0
  },
+ "bekleyen": {
+  "ay": "2026-07",
+  "ad": "Temmuz 2026",
+  "beklemede": false,
+  "ito": 2.06,
+  "n_gecmis": 29,
+  "naif": 2.06,
+  "sabit": 1.73,
+  "oransal": 1.69,
+  "regresyon": 1.84,
+  "alt": 0.64,
+  "ust": 3.03,
+  "ayni_ay": [
+   {
+    "ay": "2024-07",
+    "ito": 3.99,
+    "tufe": 3.23,
+    "fark": 0.76
+   },
+   {
+    "ay": "2025-07",
+    "ito": 2.63,
+    "tufe": 2.06,
+    "fark": 0.57
+   },
+   {
+    "ay": "2026-07",
+    "ito": 2.06,
+    "tufe": 1.78,
+    "fark": 0.28
+   }
+  ],
+  "ayni_ay_n": 3,
+  "ayni_ay_ort_fark": 0.54,
+  "anket": 1.68,
+  "ito_sapma": 0.38,
+  "beklenen_surpriz": 0.07,
+  "surprizden_tufe": 1.75,
+  "gercek": 1.78,
+  "hata_naif": 0.28,
+  "hata_sabit": -0.05,
+  "hata_oransal": -0.09,
+  "hata_regresyon": 0.06,
+  "aralik_tuttu": true
+ },
  "yillik": [
   {
    "ay": "2025-01",

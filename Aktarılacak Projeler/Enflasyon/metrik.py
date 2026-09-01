@@ -956,6 +956,79 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24,
                                if len(dis) > 1 and d["tufe"].std(ddof=1) else None),
         })
 
+    # ---- BEKLEYEN AY: İTO GELDİ, TÜFE HENÜZ GELMEDİ.
+    # Ayın başında sahne hep aynı: İTO yayımlanmış, TÜİK'i bekliyoruz. Bu blok
+    # o boşluğu doldurur — üç kuralın beklentisi, öngörü aralığı, varsa anket
+    # ve sürpriz kanalı. AYA ÖZEL DEĞİL, GENEL: hangi ay bekliyorsa onu bulur.
+    # Belirli bir ayı koda gömmek, bir sonraki ay sessizce yanlış ayı
+    # göstermek demekti.
+    #
+    # TÜFE geldiğinde blok kendini SÖZ DEFTERİNE çevirir: tahmin ile
+    # gerçekleşme yan yana durur ve hata ölçülür. Tahmini yayımlayıp sonucu
+    # ölçmemek, karnesi olmayan bir tahmin demektir.
+    i_ham = aylik(a["ito_ist"].dropna())
+    t_ham = aylik(a["tufe"].dropna())
+    bekleyen = {}
+    if len(i_ham):
+        son_ito_ay = i_ham.index[-1]
+        beklemede = son_ito_ay not in t_ham.index
+        # Kural parametreleri YALNIZ o aydan ÖNCEKİ veriyle kurulur; bekleyen
+        # ay kestirime giremez (zaten TÜFE'si yok) ama gerçekleşme geldikten
+        # sonra da geriye dönük "kendi geleceğini görmüş" bir tahmin
+        # üretmemeliyiz — karne ancak böyle dürüst olur.
+        gec = d[d.index < son_ito_ay]
+        if len(gec) >= 12:
+            x = float(i_ham.iloc[-1])
+            Xg = np.column_stack([np.ones(len(gec)), gec["ito"].values])
+            bg, *_ = np.linalg.lstsq(Xg, gec["tufe"].values, rcond=None)
+            eg = gec["tufe"].values - Xg @ bg
+            s2g = float(eg @ eg) / max(len(gec) - 2, 1)
+            Vg = np.linalg.pinv(Xg.T @ Xg)
+            x0 = np.array([1.0, x])
+            seg = float(np.sqrt(s2g * (1.0 + x0 @ Vg @ x0)))
+            tk = float(_st.t.ppf(0.975, max(len(gec) - 2, 1)))
+            reg = float(bg[0] + bg[1] * x)
+            bekleyen = {
+                "ay": son_ito_ay.strftime("%Y-%m"),
+                "ad": f"{AY_AD[son_ito_ay.month]} {son_ito_ay.year}",
+                "beklemede": bool(beklemede),
+                "ito": round(x, 2),
+                "n_gecmis": int(len(gec)),
+                "naif": round(x, 2),
+                "sabit": round(x - float(gec["fark"].mean()), 2),
+                "oransal": round(x * float((gec["tufe"] / gec["ito"]).median()), 2),
+                "regresyon": round(reg, 2),
+                "alt": round(reg - tk * seg, 2),
+                "ust": round(reg + tk * seg, 2),
+            }
+            # Aynı TAKVİM AYININ geçmişi — betimleyicidir, kural değildir
+            # (takvim düzeltmesi örneklem dışı yarışta sonuncu çıkıyor).
+            ayni = d[d.index.month == son_ito_ay.month]
+            bekleyen["ayni_ay"] = [
+                {"ay": i.strftime("%Y-%m"), "ito": round(float(r["ito"]), 2),
+                 "tufe": round(float(r["tufe"]), 2), "fark": round(float(r["fark"]), 2)}
+                for i, r in ayni.iterrows()]
+            bekleyen["ayni_ay_n"] = int(len(ayni))
+            bekleyen["ayni_ay_ort_fark"] = (round(float(ayni["fark"].mean()), 2)
+                                            if len(ayni) else None)
+            if "pka_ay_cari" in a.columns:
+                pk = a["pka_ay_cari"].dropna()
+                if son_ito_ay in pk.index:
+                    bek = float(pk.loc[son_ito_ay])
+                    sp_ = kestirim.get("surpriz") or {}
+                    bekleyen["anket"] = round(bek, 2)
+                    bekleyen["ito_sapma"] = round(x - bek, 2)
+                    if sp_.get("egim") is not None:
+                        bs_ = sp_["sabit"] + sp_["egim"] * (x - bek)
+                        bekleyen["beklenen_surpriz"] = round(float(bs_), 2)
+                        bekleyen["surprizden_tufe"] = round(float(bek + bs_), 2)
+            if not beklemede:
+                ger = float(t_ham.loc[son_ito_ay])
+                bekleyen["gercek"] = round(ger, 2)
+                for k in ("naif", "sabit", "oransal", "regresyon"):
+                    bekleyen[f"hata_{k}"] = round(bekleyen[k] - ger, 2)
+                bekleyen["aralik_tuttu"] = bool(bekleyen["alt"] <= ger <= bekleyen["ust"])
+
     yil = pd.DataFrame({"tufe": yillik(a["tufe"].dropna()),
                         "ito": yillik(a["ito_ist"].dropna())}).dropna()
     yillik_tablo = [{"ay": i.strftime("%Y-%m"),
@@ -975,7 +1048,7 @@ def ito_profil(a: pd.DataFrame, aylar: int = 24,
 
     cikti = {"pencere_ay": int(len(son)), "tablo": tablo,
              "fark": fark_ozet, "fark_tum": fark_tum, "takvim": takvim,
-             "dislama": dislama,
+             "dislama": dislama, "bekleyen": bekleyen,
              "yillik": yillik_tablo, "yillik_ozet": yillik_ozet,
              "tam_ilk_ay": tam.index[0].strftime("%Y-%m"),
              "tam_son_ay": tam.index[-1].strftime("%Y-%m"),

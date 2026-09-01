@@ -504,6 +504,52 @@ def main() -> int:
              "seviye bağımlılığı bu örneklemde istatistiksel olarak "
              "doğrulanamıyor"), None)
 
+        # ---- BEKLEYEN AY (İTO geldi, TÜFE bekleniyor) ya da son ayın KARNESİ
+        bk = ip.get("bekleyen") or {}
+        if bk:
+            koy("itp_b_ay", bk.get("ay"), None)
+            koy("itp_b_ad", bk.get("ad"), None)
+            koy("itp_b_ito", bk.get("ito"), 2)
+            koy("itp_b_n", bk.get("n_gecmis"), 0)
+            for k in ("naif", "sabit", "oransal", "regresyon", "alt", "ust"):
+                koy(f"itp_b_{k}", bk.get(k), 2)
+            koy("itp_b_ayni_n", bk.get("ayni_ay_n"), 0)
+            koy("itp_b_ayni_ort", bk.get("ayni_ay_ort_fark"), 2)
+            koy("itp_b_anket", bk.get("anket"), 2)
+            koy("itp_b_sapma", bk.get("ito_sapma"), 2)
+            koy("itp_b_surpriz", bk.get("beklenen_surpriz"), 2)
+            koy("itp_b_surpriz_tufe", bk.get("surprizden_tufe"), 2)
+            koy("itp_b_gercek", bk.get("gercek"), 2)
+            for k in ("naif", "sabit", "oransal", "regresyon"):
+                koy(f"itp_b_hata_{k}", bk.get(f"hata_{k}"), 2)
+            koy("itp_b_ayni_ay", bk.get("ayni_ay"), None)
+            # DURUM METNİ: sayfa aynı bloğu iki hâlde de basıyor. Hangi hâlde
+            # olduğunu MDX'e yazmak, bir gün yanlış hâli basmak demekti.
+            if bk.get("beklemede"):
+                koy("itp_b_durum",
+                    f"{bk.get('ad')} İTO'su yayımlandı, TÜFE henüz gelmedi — "
+                    f"aşağıdaki sayılar TAHMİNDİR", None)
+            else:
+                ger = bk.get("gercek")
+                g_tr = f"{ger:.2f}".replace(".", ",")
+                koy("itp_b_durum",
+                    f"{bk.get('ad')} TÜFE'si yayımlandı: %{g_tr}. Aşağıdaki "
+                    "tahminler o gün, YALNIZ o aya kadarki veriyle kurulmuş "
+                    "olsaydı ne verirdi — karnesiyle birlikte", None)
+                koy("itp_b_aralik_tuttu",
+                    "öngörü aralığı gerçekleşmeyi İÇERDİ" if bk.get("aralik_tuttu")
+                    else "öngörü aralığı gerçekleşmeyi KAÇIRDI", None)
+                # En iyi kural bu ay hangisiydi (mutlak hata en küçük)
+                hatalar = {k: abs(bk[f"hata_{k}"]) for k in
+                           ("naif", "sabit", "oransal", "regresyon")
+                           if bk.get(f"hata_{k}") is not None}
+                if hatalar:
+                    en = min(hatalar, key=hatalar.get)
+                    AD = {"naif": "naif kural", "sabit": "sabit kaydırma",
+                          "oransal": "oransal kural", "regresyon": "regresyon"}
+                    koy("itp_b_en_iyi", AD[en], None)
+                    koy("itp_b_en_iyi_hata", hatalar[en], 2)
+
         yo = ip.get("yillik_ozet") or {}
         for k in ("ort", "son", "maks", "min", "son_ito", "son_tufe"):
             koy(f"itp_y_{k}", yo.get(k), 2)
