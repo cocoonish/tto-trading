@@ -73,14 +73,65 @@ def _olc(kod: str) -> dict:
     }
 
 
+# Grup kodunu TAHMİN ETMEK yanlış yöntemdi: yedi adayın yedisi de boş döndü ve
+# bu "İTO grubu yok" değil "tahminlerim tutmadı" demek. Doğrusu grup listesini
+# EVDS'ten İSTEMEK ve adına göre aramak — kapsam bir tahmin listesinden değil,
+# kaynağın kendi kataloğundan türetilir.
+KATALOG_UCLARI = [
+    "datagroups/mode=0/type=json",
+    "datagroups/type=json",
+    "datagroups/mode=1/type=json",
+    "categories/type=json",
+    "datagroups/key=/mode=0/type=json",
+]
+ARANAN = ("ito", "istanbul", "geçinme", "gecinme", "ücretli", "ucretli",
+          "ticaret odası", "ticaret odasi")
+
+
+def _gruplari_ara() -> list[dict]:
+    """EVDS'in grup kataloğunu indir ve adında İTO/İstanbul geçenleri döndür."""
+    for uc in KATALOG_UCLARI:
+        try:
+            veri_ = veri._cek(f"{veri.BASE}/{uc}")
+        except Exception as ex:
+            print(f"  {uc:34s} kapalı ({str(ex)[:70]})")
+            continue
+        kayit = veri_ if isinstance(veri_, list) else (
+            veri_.get("items") or veri_.get("data") or [])
+        if not kayit:
+            print(f"  {uc:34s} boş")
+            continue
+        print(f"  {uc:34s} AÇIK — {len(kayit)} grup")
+        bulun = []
+        for k in kayit:
+            metin = " ".join(str(v) for v in k.values()).lower()
+            if any(a in metin for a in ARANAN):
+                bulun.append(k)
+        print(f"    adında aranan sözcük geçen grup: {len(bulun)}")
+        for b in bulun[:40]:
+            print("    " + json.dumps(b, ensure_ascii=False)[:220])
+        return bulun
+    return []
+
+
 def main() -> int:
     print("İTO keşif — EVDS")
     # SORU: TP.FG.IST1.23 elimizde Ocak 2024'te başlıyor. Bu serinin GERÇEK
     # başlangıcı mı, yoksa daha uzun bir kardeşi mi var? Cevap ya katalogdan
     # ya kapsam ölçümünden gelir.
+    print("\n▶ 0. EVDS GRUP KATALOĞU — ADINA GÖRE ARA (tahmin değil)")
+    ad_bulunan = _gruplari_ara()
+    ek_grup = []
+    for b in ad_bulunan:
+        for anahtar_ in ("DATAGROUP_CODE", "datagroupCode", "CATEGORY_CODE",
+                         "code", "GRUP_KODU"):
+            if b.get(anahtar_):
+                ek_grup.append(str(b[anahtar_]))
+                break
+
     print("\n▶ 1. GRUP KATALOGLARI YOKLANIYOR")
     acik: list[tuple[str, pd.DataFrame]] = []
-    for g in GRUP_ADAYLARI:
+    for g in list(dict.fromkeys(ek_grup + GRUP_ADAYLARI)):
         try:
             kat = veri.seri_listesi(g, yenile=True)
             if kat.empty:
