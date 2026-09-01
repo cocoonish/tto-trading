@@ -171,6 +171,9 @@ data/dagilim.csv        kırpılmış ortalama, medyan, difüzyon
 data/baz_senaryo.csv    12 aylık üç senaryo patikası
 data/reel_faiz.csv      dört reel faiz ölçüsü
 data/beklenti.json      PKA isabet ölçüleri
+kesif_ito.py            EVDS'te daha uzun bir İTO serisi var mı? (keşif; sonucu
+                        dosyanın başında kayıtlı: YOK — iki seri de 2024-01'de
+                        başlıyor. `veri.yml` → `kesif` girdisiyle koşar.)
 data/ito_profil.json    İTO–TÜFE farkı: ay ay tablo, t sınaması, eğim=1 sınaması,
                         koşullu eşleme (öngörü aralığı), altı kurallık örneklem
                         DIŞI yarış + dayanıklılık, PKA anketiyle eşli kıyas,
@@ -197,8 +200,8 @@ uyarilar.json           tazelik/kaynak/denetim uyarıları + çapraz doğrulama 
 | 08 | `08_reel_faiz.html` | 2 (reel, nominal) | 1057 |
 | 09 | `09_baz_etkisi.html` | 2 (patika, düşen aylar) | 1059 |
 | 10 | `10_ito_tufe.html` | 3 (aylık okuma, fark, yıllık makas) | 1349 |
-| 11 | `11_ito_kural.html` | 3 (eşleme, kural yarışı, sürpriz) | 1349 |
-| 12 | `12_ito_takvim.html` | 2 (takvim ayı, kayan kararlılık) | 985 |
+| 11 | `11_ito_kural.html` | 3 (eşleme, kural yarışı, sürpriz) | 1373 |
+| 12 | `12_ito_takvim.html` | 3 (takvim ayı, kayan kararlılık, örneklem rejimi) | 1349 |
 
 Yükseklikler `cikti/yukseklikler.json`'dan okunmalı; tablo koşum başına
 değişebilir (alt başlık satırı ve lejant satırı sayısına bağlı).

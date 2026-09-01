@@ -269,6 +269,44 @@ PİYASADIR: aynı pencerede PKA anketi 0,481, İTO kuralı 0,388 verdi ama eşli
 farkın p'si 0,414 — yani "İTO piyasadan iyi tahmin ediyor" cümlesi bu veriyle
 KURULAMAZ ve kurulmadı.
 
+**Kurucu ilke — "bulamadım" ile "yok" aynı şey değildir; kaynağın kataloğu
+TAHMİN EDİLMEZ, İSTENİR.** İTO–TÜFE karşılaştırmasını 2023'e uzatmak için
+EVDS'te daha uzun bir İTO serisi arandı. İlk keşif yedi grup kodu TAHMİN etti
+(`bie_fgist`, `bie_ito`, `bie_gecinme`…) ve yedisi de boş döndü. Bu sonucun
+anlamı "İTO grubu yok" değil, "tahminlerim tutmadı"dır — ve ikisi birbirine
+tıpatıp benzer. Doğrusu grup listesini istemekti: `categories/type=json` ucu
+açıldı, 154 grup geldi ve adında İTO/İstanbul/geçinme geçen grup gerçekten
+YOK. Kod uzayı da ölçüldü: yalnız iki seri veri döndürüyor (`TP.FG.IST1.23`,
+`TP.FG.IST2.23`) ve ikisi de 2024-01'de başlıyor; kalan kırk kod HTTP 400.
+Ancak bu iki ölçümden sonra "örneklem geriye götürülemez" cümlesi kurulabilir.
+
+Keşif koşusunun kendisi de araca bağlandı: `veri.yml`'in `kesif` girdisi
+depodaki bir `kesif*.py`yi `contents: read` ile koşturur, tazeleme hiç
+çalışmaz. Önceden bu iş, iş akışı dosyasını bir dalda geçici olarak "keşif
+kipine alarak" yapılıyordu; elle yapılan her adım bir gün atlanır ve geri
+alma unutulursa main bozulur. İki de tuzak ölçüldü: Python stdout'u tty
+olmayan yere TAMPONLUYOR (ilk koşu 20 dakikada tek satır yazmadan iptal
+edildi, tamponla birlikte her şey gitti — `python3 -u` şart), ve ıskalanan
+her kod istemcinin yeniden deneme bütçesini harcadığı için kod uzayı DAR
+tutulmalı. Uzun bir keşifte ilerlemenin görünmesi, keşfin kendisi kadar
+önemli.
+
+**Kurucu ilke — bir DIŞLAMA kuralı, dışlayacak veri yokken de kurulur; ve
+dışlama silmek değil İŞARETLEMEKTİR.** "2023 outlier, karşılaştırmaya
+katmayalım" isteği geldi ama EVDS'te 2023 İTO'su yok. Kural yine de koda
+kondu (`DISLANAN_YIL`), çünkü veri geldiği gün kendiliğinden devreye girmesi,
+o gün birinin hatırlamasına bel bağlamaktan güvenli. Kuralın üç davranışı
+"bir gözlemi atmak veriye müdahaledir; müdahalenin sonucu görünmezse okurun
+elinde yalnız bizim sözümüz kalır" ilkesinden türüyor: dışlanan aylar
+tablodan ve grafikten SİLİNMEZ (gri sütun, gölgeli aralık, ayrı sembol);
+dışlanan dönemin kendi istatistikleri ayrıca yazılır ve iki dönemin farkı
+Welch t ile sınanır; bütün kestirim AYNI kodla iki örneklemde birden koşup
+sonuç yan yana basılır. Kıyas edilemeyecek sayı da kıyasa SOKULMAZ — tam
+örneklemde kural yarışı dışlanan ayları da puanlıyor, yani iki MAE farklı ay
+kümesinde ölçülüyor; karşılaştırmaya yalnız katsayılar giriyor. Ve hüküm
+metni üç hâlli: dışlanan ay yokken "ayrışmıyor" yazmak, koşmamış bir
+sınamanın sonucunu bildirmek olurdu.
+
 **Kurucu ilke — bir denetimin KAPSAMI denetimin parçasıdır.** Sayfa sınavının
 1. kuralı doğruydu, koşuyordu, yeşil bitiyordu — ve `<Deger>` kullanımlarının
 546'sından yalnız 180'ine bakıyordu. Çünkü yalnız `site/src/content/projeler/`
