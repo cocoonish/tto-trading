@@ -7,14 +7,14 @@
   "esik_aylik_pp": 0.01,
   "not": "formül/kolon hizalaması denetimi — tazelik denetimi değildir",
   "yillik": {
-   "n": 36,
+   "n": 35,
    "maks_fark_pp": 0.0,
    "son_ay_biz": 31.7541,
    "son_ay_evds": 31.7541,
    "evds_son_ay": "2026-07"
   },
   "aylik": {
-   "n": 36,
+   "n": 35,
    "maks_fark_pp": 0.0,
    "son_ay_biz": 1.7848,
    "son_ay_evds": 1.7848,
@@ -22,10 +22,8 @@
   }
  },
  "kosular_arasi": {
-  "var": true,
-  "n": 12,
-  "maks_pp": 0.0,
-  "ort_pp": 0.0,
+  "var": false,
+  "not": "önceki koşu AYNI veriyle yapılmış (sa.csv değişmedi) — koşular arası revizyon bu koşuda ölçülemedi",
   "onceki_kosum": "2026-08-28"
  },
  "vintage": {
