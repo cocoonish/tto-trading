@@ -1497,6 +1497,10 @@ def kos() -> dict:
     if uge:
         (VERI / "uge_profil.json").write_text(
             json.dumps(uge, ensure_ascii=False, indent=1), encoding="utf-8")
+    bir = birlesik_tahmin(a)
+    if bir:
+        (VERI / "birlesik.json").write_text(
+            json.dumps(bir, ensure_ascii=False, indent=1), encoding="utf-8")
 
     # ---------------------------------------------------------------- özet
     ozet = ozet_topla(a, g, SA, M, K, D, B, R, bek, atalet, ito, w_katki, w_ana,
@@ -2319,6 +2323,199 @@ def uge_profil(a: pd.DataFrame, dislanan: tuple[int, ...] = DISLANAN_YIL) -> dic
                 "maks_mutlak_fark": round(float(fark.abs().max()), 2),
                 "maks_ay": fark.abs().idxmax().strftime("%Y-%m"),
             }
+    return out
+
+
+def birlesik_tahmin(a: pd.DataFrame) -> dict:
+    """ÜÇ SERİYİ BİRLİKTE KULLANMAK NE KAZANDIRIR?
+
+    İTO iki başlık endeksi yayımlıyor ve ikisi de aynı ayın TÜFE'sini kestirmek
+    için kullanılabilir. Ayrı ayrı ölçmek "hangisi daha iyi" sorusunu
+    cevaplıyor; asıl soru ise şu: İKİSİNİ BİRDEN görmek, tek başına en iyisini
+    görmeye kıyasla bir şey kazandırıyor mu?
+
+    Bu soru üç ayrı sınamayla cevaplanıyor ve üçü de aynı yöne bakmalı:
+
+    (1) KAPSAMA (encompassing). İki öncüyü aynı regresyona koyarsınız. İkinci
+        öncünün katsayısı sıfırdan ayırt edilemiyorsa, birincisi onu KAPSIYOR
+        demektir: ikinci seride birincinin taşımadığı bir bilgi yok.
+    (2) DÜZELTİLMİŞ AÇIKLAMA GÜCÜ. Değişken eklemek R²'yi asla düşürmez; adj-R²
+        düşebilir. Düşüyorsa eklenen değişken, harcadığı serbestlik derecesini
+        geri ödemiyor.
+    (3) ÖRNEKLEM DIŞI YARIŞ. Asıl hakem bu. Yedi aday aynı genişleyen pencerede,
+        aynı aylarda yarışıyor: iki tekil sabit kaydırma, iki tekil regresyon,
+        birleşik regresyon ve iki bileşim kuralı (eşit ağırlık, ters-MSE).
+
+    NEDEN BİLEŞİM DE DENENİYOR: iki tahminin ortalaması, ikisinden de iyi
+    olabilir — hataları bağımsızsa. Bu bir varsayım değil, ölçülebilir bir şey;
+    ölçülüyor.
+    """
+    from scipy import stats as _st
+    if "ito_uge" not in a.columns or "ito_ist" not in a.columns:
+        return {}
+    ito_ay, _ = _ito_seri(a)
+    d = pd.DataFrame({"ito": ito_ay,
+                      "uge": aylik(a["ito_uge"].dropna()),
+                      "tufe": aylik(a["tufe"].dropna())}).dropna()
+    if len(d) < 18:
+        return {"n": int(len(d)), "not": "örneklem yetersiz"}
+
+    def _ekk(X: np.ndarray, y: np.ndarray) -> tuple:
+        b, *_ = np.linalg.lstsq(X, y, rcond=None)
+        art = y - X @ b
+        n, k = X.shape
+        s2 = float(art @ art) / (n - k)
+        se = np.sqrt(np.diag(s2 * np.linalg.inv(X.T @ X)))
+        sst = float(((y - y.mean()) ** 2).sum())
+        r2 = 1 - float(art @ art) / sst
+        return b, se, art, s2, r2, 1 - (1 - r2) * (n - 1) / (n - k)
+
+    y = d["tufe"].values
+    out: dict = {"n": int(len(d)),
+                 "ilk_ay": d.index[0].strftime("%Y-%m"),
+                 "son_ay": d.index[-1].strftime("%Y-%m"),
+                 "r_ito_uge": round(float(np.corrcoef(d["ito"], d["uge"])[0, 1]), 3)}
+    for ad, sut in (("ito", ["ito"]), ("uge", ["uge"]), ("birlesik", ["ito", "uge"])):
+        X = np.column_stack([np.ones(len(d))] + [d[c].values for c in sut])
+        b, se, art, s2, r2, adj = _ekk(X, y)
+        n, k = X.shape
+        blok = {"r2": round(r2, 3), "adj_r2": round(adj, 3),
+                "sigma": round(float(np.sqrt(s2)), 3),
+                "sabit": round(float(b[0]), 3)}
+        for i, c in enumerate(sut, start=1):
+            t = float(b[i] / se[i])
+            blok[f"b_{c}"] = round(float(b[i]), 3)
+            blok[f"se_{c}"] = round(float(se[i]), 3)
+            blok[f"t_{c}"] = round(t, 2)
+            blok[f"p_{c}"] = round(float(2 * (1 - _st.t.cdf(abs(t), n - k))), 4)
+        out[ad] = blok
+    # KAPSAMA HÜKMÜ KODDA: hangi öncünün hangisini kapsadığı katsayıların
+    # anlamlılığından çıkar ve örneklem büyüdükçe değişebilir.
+    bl = out["birlesik"]
+    ito_var, uge_var = bl["p_ito"] < 0.05, bl["p_uge"] < 0.05
+    out["kapsama"] = (
+        "ito" if (ito_var and not uge_var) else
+        "uge" if (uge_var and not ito_var) else
+        "ikisi" if (ito_var and uge_var) else "hicbiri")
+    out["adj_kazanc"] = round(bl["adj_r2"] - out["ito"]["adj_r2"], 4)
+
+    # ---- ÖRNEKLEM DIŞI YARIŞ: yedi aday, aynı pencere, aynı aylar.
+    asgari = max(12, len(d) // 3)
+    ADAY = ("ito_sabit", "uge_sabit", "ito_reg", "uge_reg", "birlesik_reg",
+            "esit_ortalama", "ters_mse")
+    hata = {k: [] for k in ADAY}
+    aylar: list = []
+    for i in range(asgari, len(d)):
+        g, simdi = d.iloc[:i], d.iloc[i]
+        gy = g["tufe"].values
+        t_ito = simdi["ito"] - (g["ito"] - g["tufe"]).mean()
+        t_uge = simdi["uge"] - (g["uge"] - g["tufe"]).mean()
+        hata["ito_sabit"].append(t_ito - simdi["tufe"])
+        hata["uge_sabit"].append(t_uge - simdi["tufe"])
+        for ad, sut in (("ito_reg", ["ito"]), ("uge_reg", ["uge"]),
+                        ("birlesik_reg", ["ito", "uge"])):
+            X = np.column_stack([np.ones(len(g))] + [g[c].values for c in sut])
+            b, *_ = np.linalg.lstsq(X, gy, rcond=None)
+            tah = b[0] + sum(bb * simdi[c] for bb, c in zip(b[1:], sut))
+            hata[ad].append(float(tah) - simdi["tufe"])
+        hata["esit_ortalama"].append((t_ito + t_uge) / 2 - simdi["tufe"])
+        # TERS-MSE AĞIRLIK: yalnız GEÇMİŞ hatalardan kurulur. Gerçekleşmeyi
+        # gören bir ağırlık, örneklem dışı olmaktan çıkar.
+        if len(hata["ito_sabit"]) > 3:
+            e1 = np.array(hata["ito_sabit"][:-1]); e2 = np.array(hata["uge_sabit"][:-1])
+            m1, m2 = float((e1 ** 2).mean()), float((e2 ** 2).mean())
+            w = (1 / m1) / (1 / m1 + 1 / m2) if m1 > 0 and m2 > 0 else 0.5
+        else:
+            w = 0.5
+        hata["ters_mse"].append(w * t_ito + (1 - w) * t_uge - simdi["tufe"])
+        aylar.append(d.index[i])
+    yaris = {}
+    for k in ADAY:
+        e = np.array(hata[k])
+        yaris[k] = {"mae": round(float(np.abs(e).mean()), 3),
+                    "rmse": round(float(np.sqrt((e ** 2).mean())), 3),
+                    "yanlilik": round(float(e.mean()), 3)}
+    en_iyi = min(ADAY, key=lambda k: yaris[k]["mae"])
+    for k in ADAY:
+        if k == en_iyi:
+            yaris[k]["p_vs_en_iyi"] = None
+            continue
+        t_, p_ = _st.ttest_rel(np.abs(np.array(hata[k])),
+                               np.abs(np.array(hata[en_iyi])))
+        yaris[k]["p_vs_en_iyi"] = round(float(p_), 3)
+    out["yaris"] = {"n": len(aylar), "ilk_ay": aylar[0].strftime("%Y-%m"),
+                    "en_iyi": en_iyi, "adaylar": yaris,
+                    "ayirt_edilen": [k for k in ADAY
+                                     if (yaris[k]["p_vs_en_iyi"] or 1) < 0.05]}
+    AD_TR = {"ito_sabit": "İTO + sabit kaydırma", "uge_sabit": "ÜGE + sabit kaydırma",
+             "ito_reg": "İTO regresyon", "uge_reg": "ÜGE regresyon",
+             "birlesik_reg": "birleşik regresyon (İTO + ÜGE)",
+             "esit_ortalama": "eşit ağırlıklı bileşim", "ters_mse": "ters-MSE bileşim"}
+    out["yaris"]["en_iyi_ad"] = AD_TR[en_iyi]
+    out["yaris"]["ad"] = AD_TR
+    # HÜKÜM KODDA: "birleştirmek kazandırıyor" cümlesi ancak bileşim kuralı
+    # ölçülebilir biçimde önde bitirirse kurulabilir.
+    birlesik_aday = ("birlesik_reg", "esit_ortalama", "ters_mse")
+    if en_iyi in birlesik_aday:
+        out["yaris"]["hukum"] = (
+            f"birleştirmek kazandırıyor: {AD_TR[en_iyi]} en düşük hatayı veriyor")
+    else:
+        gerideler = [f"{AD_TR[k]} {yaris[k]['mae']:.3f}" for k in birlesik_aday]
+        out["yaris"]["hukum"] = (
+            f"birleştirmek KAZANDIRMIYOR: en düşük hatayı {AD_TR[en_iyi]} veriyor "
+            f"({yaris[en_iyi]['mae']:.3f} puan); bileşim kuralları geride "
+            f"({' · '.join(gerideler)})").replace(".", ",")
+
+    # ---- BEKLEYEN AY: her aday için tahmin + birleşik bulut
+    son = d.index[-1]
+    t_ham = aylik(a["tufe"].dropna())
+    uge_ay = aylik(a["ito_uge"].dropna()).dropna()
+    bek_ay = None
+    for c in (uge_ay.index[-1], ito_ay.index[-1]):
+        if c not in t_ham.index and (bek_ay is None or c > bek_ay):
+            bek_ay = c
+    if bek_ay is not None and bek_ay in ito_ay.index and bek_ay in uge_ay.index:
+        xi, xu = float(ito_ay.loc[bek_ay]), float(uge_ay.loc[bek_ay])
+        g = d[d.index < bek_ay]
+        gy = g["tufe"].values
+        tah = {"ito_sabit": xi - (g["ito"] - g["tufe"]).mean(),
+               "uge_sabit": xu - (g["uge"] - g["tufe"]).mean()}
+        artiklar = {}
+        for ad, sut, deg in (("ito_reg", ["ito"], [xi]), ("uge_reg", ["uge"], [xu]),
+                             ("birlesik_reg", ["ito", "uge"], [xi, xu])):
+            X = np.column_stack([np.ones(len(g))] + [g[c].values for c in sut])
+            b, se, art, s2, r2, adj = _ekk(X, gy)
+            tah[ad] = float(b[0] + sum(bb * v for bb, v in zip(b[1:], deg)))
+            artiklar[ad] = art
+        tah["esit_ortalama"] = (tah["ito_sabit"] + tah["uge_sabit"]) / 2
+        e1 = np.array(hata["ito_sabit"]); e2 = np.array(hata["uge_sabit"])
+        m1, m2 = float((e1 ** 2).mean()), float((e2 ** 2).mean())
+        w = (1 / m1) / (1 / m1 + 1 / m2) if m1 > 0 and m2 > 0 else 0.5
+        tah["ters_mse"] = w * tah["ito_sabit"] + (1 - w) * tah["uge_sabit"]
+        # BULUT: örneklem dışı yarışın KAZANANI üzerinden ve AMPİRİK artıkla.
+        # Parametrik aralık simetri varsayar; artıklar sağa çarpık.
+        art_k = (artiklar.get(en_iyi) if en_iyi in artiklar
+                 else np.array(hata[en_iyi]) * -1.0)
+        bulut = np.asarray(tah[en_iyi]) + np.asarray(art_k, dtype=float)
+        YUZDE = (5, 10, 25, 50, 75, 90, 95)
+        out["bekleyen"] = {
+            "ay": bek_ay.strftime("%Y-%m"), "ad": ad_uzun(bek_ay),
+            "ito": round(xi, 2), "uge": round(xu, 2),
+            "n_gecmis": int(len(g)),
+            "tahmin": {k: round(float(v), 2) for k, v in tah.items()},
+            "ters_mse_agirlik": round(float(w), 2),
+            "en_iyi": en_iyi, "en_iyi_ad": AD_TR[en_iyi],
+            "merkez": round(float(tah[en_iyi]), 2),
+            "yayilim": round(float(max(tah.values()) - min(tah.values())), 2),
+            "yuzdelikler": list(YUZDE),
+            "bulut": [round(float(v), 2) for v in np.percentile(bulut, YUZDE)],
+            "p_ito_ustu": round(float((bulut > xi).mean() * 100), 0),
+            "esik": [{"esik": e, "yon": yon,
+                      "p": round(float(((bulut > e) if yon == ">"
+                                        else (bulut < e)).mean() * 100), 0)}
+                     for e, yon in ((2.5, ">"), (2.0, ">"), (1.5, ">"),
+                                    (1.0, "<"), (0.5, "<"))],
+        }
     return out
 
 

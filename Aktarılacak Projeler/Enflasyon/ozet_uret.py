@@ -770,6 +770,74 @@ def main() -> int:
                  + ("ÜGE" if fark > 0 else "tüketici endeksi") +
                  " tarafında"), None)
 
+    # ------------------------------------------------ ÜÇLÜ BİRLEŞİK TAHMİN
+    biy = VERI / "birlesik.json"
+    bp = json.loads(biy.read_text(encoding="utf-8")) if biy.exists() else {}
+    if not bp.get("n"):
+        uyar("birlesik.json yok ya da boş — birleşik tahmin anahtarları atlandı.")
+    else:
+        koy("br_n", bp.get("n"), 0)
+        koy("br_ilk_ay", bp.get("ilk_ay"), None)
+        koy("br_son_ay", bp.get("son_ay"), None)
+        koy("br_r_ito_uge", bp.get("r_ito_uge"), 3)
+        koy("br_adj_kazanc", bp.get("adj_kazanc"), 4)
+        for on, blok in (("br_i", "ito"), ("br_u", "uge"), ("br_b", "birlesik")):
+            mm = bp.get(blok) or {}
+            for k in ("r2", "adj_r2", "sigma", "sabit"):
+                koy(f"{on}_{k}", mm.get(k), 3)
+            for c in ("ito", "uge"):
+                if f"b_{c}" in mm:
+                    koy(f"{on}_b_{c}", mm[f"b_{c}"], 3)
+                    koy(f"{on}_se_{c}", mm[f"se_{c}"], 3)
+                    koy(f"{on}_t_{c}", mm[f"t_{c}"], 2)
+                    koy(f"{on}_p_{c}", mm[f"p_{c}"], 4)
+        # KAPSAMA HÜKMÜ: hangi öncünün hangisini kapsadığı katsayıdan çıkar.
+        kap = bp.get("kapsama")
+        koy("br_kapsama_hukum", {
+            "ito": ("İTO'nun tüketici endeksi ÜGE'yi KAPSIYOR: ikisi aynı "
+                    "regresyona konduğunda ÜGE'nin katsayısı sıfırdan ayırt "
+                    "edilemiyor, tüketici endeksininki ise güçlü kalıyor"),
+            "uge": ("ÜGE tüketici endeksini KAPSIYOR: birleşik modelde yalnız "
+                    "ÜGE'nin katsayısı anlamlı"),
+            "ikisi": ("iki öncü de birleşik modelde anlamlı — ikisi ayrı bilgi "
+                      "taşıyor"),
+            "hicbiri": ("birleşik modelde iki katsayı da anlamsız; bu, ikisinin "
+                        "birbirine çok yakın olmasının işareti"),
+        }.get(kap, ""), None)
+        ya = bp.get("yaris") or {}
+        koy("br_yaris_n", ya.get("n"), 0)
+        koy("br_yaris_ilk_ay", ya.get("ilk_ay"), None)
+        koy("br_en_iyi_ad", ya.get("en_iyi_ad"), None)
+        koy("br_yaris_hukum", ya.get("hukum"), None)
+        KIS = {"ito_sabit": "is", "uge_sabit": "us", "ito_reg": "ir",
+               "uge_reg": "ur", "birlesik_reg": "br", "esit_ortalama": "eo",
+               "ters_mse": "tm"}
+        for ad, kis in KIS.items():
+            v = (ya.get("adaylar") or {}).get(ad) or {}
+            koy(f"br_{kis}_mae", v.get("mae"), 3)
+            koy(f"br_{kis}_rmse", v.get("rmse"), 3)
+            koy(f"br_{kis}_yanlilik", v.get("yanlilik"), 3)
+            koy(f"br_{kis}_p", v.get("p_vs_en_iyi"), 3)
+        bk = bp.get("bekleyen") or {}
+        if bk:
+            koy("br_b_ay", bk.get("ay"), None)
+            koy("br_b_ad", bk.get("ad"), None)
+            koy("br_b_ito", bk.get("ito"), 2)
+            koy("br_b_uge", bk.get("uge"), 2)
+            koy("br_b_merkez", bk.get("merkez"), 2)
+            koy("br_b_merkez_ad", bk.get("en_iyi_ad"), None)
+            koy("br_b_yayilim", bk.get("yayilim"), 2)
+            koy("br_b_agirlik", bk.get("ters_mse_agirlik"), 2)
+            koy("br_b_n", bk.get("n_gecmis"), 0)
+            for ad, kis in KIS.items():
+                koy(f"br_b_{kis}", (bk.get("tahmin") or {}).get(ad), 2)
+            for q, v in zip(bk.get("yuzdelikler") or [], bk.get("bulut") or []):
+                koy(f"br_b_p{q}", v, 2)
+            koy("br_b_p_ito_ustu", bk.get("p_ito_ustu"), 0)
+            for e in bk.get("esik") or []:
+                ad_ = f"{e['esik']:.1f}".replace(".", "")
+                koy(f"br_b_{'ust' if e['yon'] == '>' else 'alt'}{ad_}", e.get("p"), 0)
+
     # ---------------------------------------------------------------- denetim
     dg = m.get("dogrulama") or {}
     koy("dogrulama_yillik_pp", (dg.get("yillik") or {}).get("maks_fark_pp"), 4)

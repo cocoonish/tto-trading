@@ -1088,6 +1088,196 @@ def sekil_14(up, a, damga):
     return _duzen(fig, "Ücretliler geçinme endeksi: ikinci öncü", alt, n_panel=3)
 
 
+def _birlesik_yukle() -> dict | None:
+    y = VERI / "birlesik.json"
+    if not y.exists():
+        return None
+    d = json.loads(y.read_text(encoding="utf-8"))
+    return d if d.get("n") else None
+
+
+def sekil_15(bp, a, damga):
+    """SAÇILIM: iki öncünün TÜFE ile ilişkisi yan yana.
+
+    Tablodaki R² soyut kalır; saçılım aynı şeyi göz kararı okunur yapar.
+    45° çizgisi de eklenir: nokta bulutu o çizginin ALTINDA toplanıyorsa öncü
+    sistematik olarak yukarıda geliyor demektir — kaydırmanın kendisi budur."""
+    if not bp:
+        return None
+    try:
+        import metrik as _m
+        ito, _ = _m._ito_seri(a)
+        d = pd.DataFrame({"ito": ito, "uge": _m.aylik(a["ito_uge"].dropna()),
+                          "tufe": _m.aylik(a["tufe"].dropna())}).dropna()
+    except Exception:
+        return None
+    # PANELLER ALT ALTA (ev kuralı): yan yana düzen aynı eksende iki bulutu
+    # görsel olarak kıyaslatır ama dar ekranda ikisini de okunmaz yapar.
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.13,
+                        subplot_titles=("İTO tüketici endeksi → TÜFE",
+                                        "Ücretliler geçinme endeksi → TÜFE"))
+    for sut, sut_c, renk in (("ito", 1, TEAL), ("uge", 2, CLARET)):
+        m = bp.get(sut) or {}
+        x = d[sut]
+        fig.add_trace(go.Scatter(
+            x=x, y=d["tufe"], mode="markers", showlegend=False,
+            marker=dict(color=renk, size=8, opacity=0.8,
+                        line=dict(color="white", width=1)),
+            text=[t.strftime("%Y-%m") for t in d.index],
+            hovertemplate="%{text}<br>öncü %{x:.2f}% · TÜFE %{y:.2f}%<extra></extra>"),
+            row=sut_c, col=1)
+        u = np.linspace(float(x.min()), float(x.max()), 50)
+        fig.add_trace(go.Scatter(
+            x=u, y=m.get("sabit", 0) + m.get(f"b_{sut}", 1) * u, mode="lines",
+            line=dict(color=renk, width=2), showlegend=False,
+            hovertemplate="uyum<extra></extra>"), row=sut_c, col=1)
+        fig.add_trace(go.Scatter(
+            x=u, y=u, mode="lines", showlegend=False,
+            line=dict(color=GRI, width=1, dash="dot"),
+            hovertemplate="45° (TÜFE = öncü)<extra></extra>"), row=sut_c, col=1)
+        fig.add_annotation(
+            x=0.02, y=0.97, xref=f"x{sut_c if sut_c > 1 else ''} domain",
+            yref=f"y{sut_c if sut_c > 1 else ''} domain",
+            showarrow=False, align="left", xanchor="left", yanchor="top",
+            font=dict(size=11, color=INK),
+            text=(f"eğim {m.get('b_' + sut, 0):.3f} · R² {m.get('r2', 0):.3f}<br>"
+                  f"artık σ {m.get('sigma', 0):.3f} puan").replace(".", ","))
+        fig.update_xaxes(title_text="öncü, aylık %", row=sut_c, col=1)
+        fig.update_yaxes(title_text="TÜFE, aylık %", row=sut_c, col=1)
+    return _duzen(
+        fig, "Aynı ay, iki öncü: ilişkinin biçimi",
+        [f"Her nokta bir ay · {bp.get('ilk_ay')} → {bp.get('son_ay')} "
+         f"({bp.get('n')} ay) · veri: {damga}",
+         "Noktalı çizgi 45°: TÜFE = öncü. Bulutun altında toplanması, öncünün "
+         "sistematik olarak yukarıda geldiği anlamına gelir",
+         (f"İki öncü birbiriyle de ilişkili: r = {bp.get('r_ito_uge', 0):.3f} — "
+          f"aynı şehrin fiyatlarını ölçüyorlar").replace(".", ",")],
+        n_panel=2)
+
+
+def sekil_16(bp, damga):
+    """ÖRNEKLEM DIŞI YARIŞ: yedi kural, aynı aylar, aynı pencere.
+
+    Örneklem içi R² iyimserdir; "yarın hangisini kullanayım" sorusunun cevabı
+    burada. Üst panel ortalama mutlak hatayı sıralar, alt panel her kuralın
+    yanlılığını (sistematik yön hatası) gösterir."""
+    if not bp or not bp.get("yaris"):
+        return None
+    y = bp["yaris"]
+    ad = y["ad"]
+    sirali = sorted(y["adaylar"].items(), key=lambda kv: kv[1]["mae"])
+    etiket = [ad[k] for k, _ in sirali]
+    mae = [v["mae"] for _, v in sirali]
+    rmse = [v["rmse"] for _, v in sirali]
+    yanl = [v["yanlilik"] for _, v in sirali]
+    renk = [CLARET if k == y["en_iyi"] else
+            (TEAL if k.startswith("ito") else
+             (GOLD if k.startswith("uge") else LACI)) for k, _ in sirali]
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.16,
+                        subplot_titles=("Ortalama mutlak hata (düşük = iyi)",
+                                        "Yanlılık: kural sistematik olarak "
+                                        "yukarı mı aşağı mı sapıyor"))
+    fig.add_trace(go.Bar(x=mae, y=etiket, orientation="h", marker_color=renk,
+                         name="MAE", text=[f"{v:.3f}".replace(".", ",") for v in mae],
+                         textposition="outside",
+                         hovertemplate="MAE %{x:.3f} puan<extra>%{y}</extra>"),
+                  row=1, col=1)
+    fig.add_trace(go.Scatter(x=rmse, y=etiket, mode="markers", name="RMSE",
+                             marker=dict(color=INK, size=9, symbol="diamond"),
+                             hovertemplate="RMSE %{x:.3f}<extra>%{y}</extra>"),
+                  row=1, col=1)
+    fig.add_trace(go.Bar(x=yanl, y=etiket, orientation="h",
+                         marker_color=[GRI if abs(v) < 0.05 else
+                                       (CLARET if v > 0 else LACI) for v in yanl],
+                         name="yanlılık", showlegend=False,
+                         hovertemplate="%{x:+.3f} puan<extra>%{y}</extra>"),
+                  row=2, col=1)
+    fig.add_vline(x=0, line=dict(color=GRID, width=1), row=2, col=1)
+    fig.update_xaxes(title_text="puan", row=1, col=1)
+    fig.update_xaxes(title_text="puan (+ = TÜFE'yi yüksek tahmin ediyor)", row=2, col=1)
+    ayirt = y.get("ayirt_edilen") or []
+    return _duzen(
+        fig, "Yarın hangisini kullanayım: örneklem dışı yarış",
+        [f"Genişleyen pencere · {y['n']} ay ({y['ilk_ay']}'den) · veri: {damga}",
+         f"Kazanan: {y['en_iyi_ad']}. " + (
+             f"Ondan ölçülebilir biçimde geride kalan: "
+             f"{', '.join(ad[k] for k in ayirt)}" if ayirt else
+             "Hiçbir kural ondan ölçülebilir biçimde geride değil (eşli t, %5) — "
+             "sıralama var, kesinlik yok"),
+         y.get("hukum", "")],
+        n_panel=2)
+
+
+def sekil_17(bp, damga):
+    """BEKLEYEN AYIN BİRLEŞİK TAHMİNİ: yedi aday ve bulut.
+
+    Okurun eline tek sayı vermek yanlış bir kesinlik olur; yedi kuralın nerede
+    toplandığını ve dağılımın nereye yayıldığını birlikte göstermek, kararın
+    hangi belirsizlikle alındığını görünür kılar."""
+    if not bp or not bp.get("bekleyen"):
+        return None
+    bk = bp["bekleyen"]
+    ad = (bp.get("yaris") or {}).get("ad", {})
+    tah = bk["tahmin"]
+    sirali = sorted(tah.items(), key=lambda kv: kv[1])
+    fig = make_subplots(rows=2, cols=1, vertical_spacing=0.15,
+                        row_heights=[0.55, 0.45],
+                        subplot_titles=(
+                            f"{bk['ad']}: yedi kural ne diyor",
+                            "Tahmin bulutu — dağılım nereye yayılıyor"))
+    fig.add_trace(go.Bar(
+        x=[v for _, v in sirali], y=[ad.get(k, k) for k, _ in sirali],
+        orientation="h",
+        marker_color=[CLARET if k == bk["en_iyi"] else
+                      (TEAL if k.startswith("ito") else
+                       (GOLD if k.startswith("uge") else LACI))
+                      for k, _ in sirali],
+        text=[f"%{v:.2f}".replace(".", ",") for _, v in sirali],
+        textposition="outside", showlegend=False,
+        hovertemplate="%{x:.2f}%<extra>%{y}</extra>"), row=1, col=1)
+    fig.add_vline(x=bk["ito"], line=dict(color=INK, width=2, dash="dash"),
+                  row=1, col=1)
+    fig.add_annotation(x=bk["ito"], y=1.04, yref="y domain", showarrow=False,
+                       xanchor="left", font=dict(size=10, color=INK),
+                       text=f"İTO %{bk['ito']:.2f}".replace(".", ","), row=1, col=1)
+    q, v = bk["yuzdelikler"], bk["bulut"]
+    fig.add_trace(go.Scatter(x=[v[0], v[-1]], y=["bulut", "bulut"], mode="lines",
+                             line=dict(color=GRI, width=2), showlegend=False,
+                             hovertemplate="%5–%95<extra></extra>"), row=2, col=1)
+    fig.add_trace(go.Scatter(x=[v[2], v[4]], y=["bulut", "bulut"], mode="lines",
+                             line=dict(color=CLARET, width=12), showlegend=False,
+                             hovertemplate="%25–%75<extra></extra>"), row=2, col=1)
+    fig.add_trace(go.Scatter(x=[v[3]], y=["bulut"], mode="markers", showlegend=False,
+                             marker=dict(color="white", size=11,
+                                         line=dict(color=INK, width=2)),
+                             hovertemplate="medyan %{x:.2f}%<extra></extra>"),
+                  row=2, col=1)
+    for e in bk.get("esik") or []:
+        fig.add_vline(x=e["esik"], line=dict(color=GRID, width=1, dash="dot"),
+                      row=2, col=1)
+        fig.add_annotation(x=e["esik"], y=-0.42, yref="y2 domain", showarrow=False,
+                           font=dict(size=9, color=GRI),
+                           text=(f"%{e['esik']:.1f}<br>{e['yon']} %{e['p']:.0f}"
+                                 ).replace(".", ","), row=2, col=1)
+    fig.add_vline(x=bk["ito"], line=dict(color=INK, width=2, dash="dash"),
+                  row=2, col=1)
+    fig.update_xaxes(title_text="TÜFE, aylık %", row=1, col=1)
+    fig.update_xaxes(title_text="TÜFE, aylık %", row=2, col=1)
+    fig.update_yaxes(showticklabels=False, row=2, col=1)
+    return _duzen(
+        fig, f"{bk['ad']} TÜFE'si: birleşik okuma",
+        [f"Girdi: İTO %{bk['ito']:.2f} · ÜGE %{bk['uge']:.2f} · "
+         f"kurallar {bk['n_gecmis']} aylık geçmişten · veri: {damga}".replace(".", ","),
+         (f"Yedi kural {min(tah.values()):.2f} ile {max(tah.values()):.2f} arasında "
+          f"({bk['yayilim']:.2f} puanlık yayılım); merkez {bk['merkez']:.2f} — "
+          f"örneklem dışı yarışın kazananı {bk['en_iyi_ad']}").replace(".", ","),
+         (f"Alt panelde kesikli çizgi İTO okuması: sağında kalan alan TÜFE'nin "
+          f"İTO'yu aşma ihtimali, P = %{bk['p_ito_ustu']:.0f}"),
+         "Noktalı dikey çizgiler eşikler; altlarındaki sayı o eşiğin aşılma "
+         "(ya da altında kalma) olasılığıdır"],
+        n_panel=2)
+
+
 def kos() -> None:
     a, M, SA, K, D, B, R, o, tani = _yukle()
     # atalet serisini metrik'ten yeniden üret (ozet yalnız son değeri taşır)
@@ -1115,6 +1305,7 @@ def kos() -> None:
     ITO_CIKTI = ["10_ito_tufe.html", "11_ito_kural.html", "12_ito_takvim.html",
                  "13_ito_bulut.html"]
     UGE_CIKTI = ["14_uge_ucler.html"]
+    BIR_CIKTI = ["15_sacilim.html", "16_yaris.html", "17_agustos.html"]
     if ip:
         ciktilar += [
             (sekil_10(ip, damga), ITO_CIKTI[0]),
@@ -1139,6 +1330,19 @@ def kos() -> None:
         print("  ! ÜGE profili yok (data/uge_profil.json) — ÜGE figürü "
               "üretilmedi ve eski kopyası SİLİNİYOR.")
         for ad in UGE_CIKTI:
+            (CIKTI / ad).unlink(missing_ok=True)
+            (veri.KOK / "site/public/projeler/enflasyon" / ad).unlink(missing_ok=True)
+    # BİRLEŞİK KANAT: üç seriyi birlikte kullanan ölçüm. Kendi dosyası,
+    # kendi koşulu.
+    bp = _birlesik_yukle()
+    if bp:
+        ciktilar += [(sekil_15(bp, a, damga), BIR_CIKTI[0]),
+                     (sekil_16(bp, damga), BIR_CIKTI[1]),
+                     (sekil_17(bp, damga), BIR_CIKTI[2])]
+    else:
+        print("  ! Birleşik ölçüm yok (data/birlesik.json) — figürler üretilmedi "
+              "ve eski kopyaları SİLİNİYOR.")
+        for ad in BIR_CIKTI:
             (CIKTI / ad).unlink(missing_ok=True)
             (veri.KOK / "site/public/projeler/enflasyon" / ad).unlink(missing_ok=True)
     n = 0

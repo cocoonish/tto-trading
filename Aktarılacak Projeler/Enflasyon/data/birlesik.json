@@ -1,0 +1,170 @@
+{
+ "n": 31,
+ "ilk_ay": "2024-01",
+ "son_ay": "2026-07",
+ "r_ito_uge": 0.873,
+ "ito": {
+  "r2": 0.837,
+  "adj_r2": 0.832,
+  "sigma": 0.549,
+  "sabit": 0.02,
+  "b_ito": 0.878,
+  "se_ito": 0.072,
+  "t_ito": 12.21,
+  "p_ito": 0.0
+ },
+ "uge": {
+  "r2": 0.689,
+  "adj_r2": 0.678,
+  "sigma": 0.759,
+  "sabit": 0.001,
+  "b_uge": 0.838,
+  "se_uge": 0.105,
+  "t_uge": 8.01,
+  "p_uge": 0.0
+ },
+ "birlesik": {
+  "r2": 0.841,
+  "adj_r2": 0.83,
+  "sigma": 0.552,
+  "sabit": -0.07,
+  "b_ito": 0.768,
+  "se_ito": 0.148,
+  "t_ito": 5.18,
+  "p_ito": 0.0,
+  "b_uge": 0.132,
+  "se_uge": 0.156,
+  "t_uge": 0.85,
+  "p_uge": 0.4044
+ },
+ "kapsama": "ito",
+ "adj_kazanc": -0.002,
+ "yaris": {
+  "n": 19,
+  "ilk_ay": "2025-01",
+  "en_iyi": "ito_reg",
+  "adaylar": {
+   "ito_sabit": {
+    "mae": 0.393,
+    "rmse": 0.481,
+    "yanlilik": -0.042,
+    "p_vs_en_iyi": 0.571
+   },
+   "uge_sabit": {
+    "mae": 0.601,
+    "rmse": 0.801,
+    "yanlilik": -0.104,
+    "p_vs_en_iyi": 0.085
+   },
+   "ito_reg": {
+    "mae": 0.37,
+    "rmse": 0.464,
+    "yanlilik": 0.042,
+    "p_vs_en_iyi": null
+   },
+   "uge_reg": {
+    "mae": 0.569,
+    "rmse": 0.766,
+    "yanlilik": -0.025,
+    "p_vs_en_iyi": 0.111
+   },
+   "birlesik_reg": {
+    "mae": 0.427,
+    "rmse": 0.515,
+    "yanlilik": -0.01,
+    "p_vs_en_iyi": 0.173
+   },
+   "esit_ortalama": {
+    "mae": 0.462,
+    "rmse": 0.576,
+    "yanlilik": -0.073,
+    "p_vs_en_iyi": 0.214
+   },
+   "ters_mse": {
+    "mae": 0.448,
+    "rmse": 0.547,
+    "yanlilik": -0.069,
+    "p_vs_en_iyi": 0.21
+   }
+  },
+  "ayirt_edilen": [],
+  "en_iyi_ad": "İTO regresyon",
+  "ad": {
+   "ito_sabit": "İTO + sabit kaydırma",
+   "uge_sabit": "ÜGE + sabit kaydırma",
+   "ito_reg": "İTO regresyon",
+   "uge_reg": "ÜGE regresyon",
+   "birlesik_reg": "birleşik regresyon (İTO + ÜGE)",
+   "esit_ortalama": "eşit ağırlıklı bileşim",
+   "ters_mse": "ters-MSE bileşim"
+  },
+  "hukum": "birleştirmek KAZANDIRMIYOR: en düşük hatayı İTO regresyon veriyor (0,370 puan); bileşim kuralları geride (birleşik regresyon (İTO + ÜGE) 0,427 · eşit ağırlıklı bileşim 0,462 · ters-MSE bileşim 0,448)"
+ },
+ "bekleyen": {
+  "ay": "2026-08",
+  "ad": "Ağustos 2026",
+  "ito": 1.66,
+  "uge": 1.97,
+  "n_gecmis": 31,
+  "tahmin": {
+   "ito_sabit": 1.31,
+   "uge_sabit": 1.45,
+   "ito_reg": 1.48,
+   "uge_reg": 1.65,
+   "birlesik_reg": 1.47,
+   "esit_ortalama": 1.38,
+   "ters_mse": 1.35
+  },
+  "ters_mse_agirlik": 0.74,
+  "en_iyi": "ito_reg",
+  "en_iyi_ad": "İTO regresyon",
+  "merkez": 1.48,
+  "yayilim": 0.34,
+  "yuzdelikler": [
+   5,
+   10,
+   25,
+   50,
+   75,
+   90,
+   95
+  ],
+  "bulut": [
+   0.75,
+   0.98,
+   1.14,
+   1.43,
+   1.72,
+   2.29,
+   2.42
+  ],
+  "p_ito_ustu": 26.0,
+  "esik": [
+   {
+    "esik": 2.5,
+    "yon": ">",
+    "p": 3.0
+   },
+   {
+    "esik": 2.0,
+    "yon": ">",
+    "p": 16.0
+   },
+   {
+    "esik": 1.5,
+    "yon": ">",
+    "p": 39.0
+   },
+   {
+    "esik": 1.0,
+    "yon": "<",
+    "p": 13.0
+   },
+   {
+    "esik": 0.5,
+    "yon": "<",
+    "p": 0.0
+   }
+  ]
+ }
+}
