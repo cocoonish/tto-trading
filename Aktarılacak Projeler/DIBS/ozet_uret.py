@@ -471,10 +471,26 @@ def main() -> int:
             and "carry_2y_politika" in O and "carry_2y_aofm" in O):
         koy("spread_politika_aofm",
             O["carry_2y_politika"] - O["carry_2y_aofm"], 2)
+    # AYNI GÜN ŞARTI SAYFAYI DA BAĞLAR. Şart düştüğünde anahtar yazılmıyordu ama
+    # sayfa onu KOŞULSUZ çağırıyordu; sonuç, sayfa sınavının "ozet.json'da
+    # olmayan anahtar" bulgusu ve okurun gördüğü donmuş statik yedek. TLREF iş
+    # günü bir seri, politika faizi ise her gün taşınıyor: pazartesi koşusunda
+    # tarihler ayrışıyor ve şart MEŞRU biçimde düşüyor. Yani kusur kapıda değil,
+    # kapının ardında hiçbir şey yazmamasında. Sayı yoksa SEBEBİ yazılıyor;
+    # sayfa her koşuda dolan tek bir metin anahtarı çağırıyor.
     if (O.get("carry_2y_politika_tarih") == O.get("carry_2y_tlref_tarih")
             and "carry_2y_politika" in O and "carry_2y_tlref" in O):
-        koy("spread_politika_tlref",
-            O["carry_2y_politika"] - O["carry_2y_tlref"], 2)
+        d = O["carry_2y_politika"] - O["carry_2y_tlref"]
+        koy("spread_politika_tlref", d, 2)
+        koy("spread_politika_tlref_metin",
+            f"{abs(round(d, 2)):.2f}".replace(".", ",") + " puan", None)
+    else:
+        koy("spread_politika_tlref_metin",
+            "aynı güne ait iki taşıma bu koşuda yok (politika "
+            f"{O.get('carry_2y_politika_tarih', '?')}, TLREF "
+            f"{O.get('carry_2y_tlref_tarih', '?')}); makas hesaplanmadı — "
+            "farklı günlerin farkı faiz makası değil, gün farkı + faiz makasıdır",
+            None)
     # Prose içinde İŞARETSİZ okunan ("… ondan X puan aşağıda") cümleler için
     # MUTLAK değerli anahtar: negatif sayı işaretiyle basılınca cümle çift
     # olumsuzlamaya düşüyordu ("ondan −10,2 puan aşağıda").
