@@ -24,7 +24,7 @@ import json
 import re
 import sys
 import unicodedata
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 BURASI = Path(__file__).resolve().parent
@@ -693,6 +693,75 @@ class Denetim:
         else:
             self._ok("kapanmamış seansın barı yok")
 
+    def piyasa_seansi(self):
+        """Anlık görüntü HANGİ seansa ait — ve bülten bunu söylüyor mu?
+
+        31.08.2026 pazartesi bülteninde elli piyasa satırının ELLİSİ 28.08
+        Cuma kapanışını taşıyordu ve "günlük değişim" diye yayımlandı. Bu
+        BAYAT VERİ DEĞİL: pazartesi sabahı son kapanmış seans gerçekten
+        Cuma'dır, başka bir sayı yoktur. Kusur ölçümde değil ETİKETTE —
+        pazartesi okuyan biri hareketi bugüne ait sanır.
+
+        Ölçütün iki eşiği var ve ikisi farklı şeyi söyler:
+        · Beklenen son seans (bülten gününden önceki en yakın hafta içi günü)
+          ile anlık görüntünün tarihi AYNIYSA gecikme normaldir; yalnız
+          etiketin varlığı denetlenir.
+        · Bir gün daha eskiyse UYARI (resmî tatil buna girer).
+        · İki gün ve fazlasıysa ENGEL: artık gerçekten bayat veri yayımlanıyor.
+
+        NOT — σ ölçeklemesi BU KUSURUN ÇÖZÜMÜ DEĞİL. Hafta sonu boşluğunun
+        oynaklığı şişirdiği sezgisi ölçüldü ve YANLIŞ çıktı: 49 enstrümanda üç
+        günlük boşluk σ'sının bir günlüğe oranı medyan 1,00 (bkz. piyasa.py).
+        Kapanıştan kapanışa hareket, arada kaç takvim günü olursa olsun tek
+        seanslık risktir. Düzeltilecek şey ölçü değil, okurun gördüğü etikettir.
+        """
+        p = self.b.get("piyasa") or {}
+        kt = p.get("kapanis_tarih")
+        if not kt:
+            self.uyari.append("Piyasa anlık görüntüsünün seans tarihi YOK "
+                              "(piyasa.kapanis_tarih) — okur hareketin hangi güne "
+                              "ait olduğunu göremez.")
+            return
+        try:
+            bulten_g = datetime.fromisoformat(str(self.b.get("tarih"))[:10]).date()
+            kapanis_g = datetime.fromisoformat(str(kt)[:10]).date()
+        except Exception:
+            return
+        beklenen = bulten_g - timedelta(days=1)
+        while beklenen.weekday() >= 5:                 # hafta sonunu atla
+            beklenen -= timedelta(days=1)
+        # Fark TAKVİM günüyle değil KAÇIRILAN SEANS sayısıyla ölçülür. Salı
+        # bülteninde Cuma kapanışı üç takvim günü geridedir ama kaçırılan tek
+        # bir seans vardır (pazartesi); takvimle ölçmek tek tatili bile engel
+        # sayardı.
+        fark, g = 0, kapanis_g + timedelta(days=1)
+        while g <= beklenen:
+            if g.weekday() < 5:
+                fark += 1
+            g += timedelta(days=1)
+        etiket = p.get("kapanis_seansi")
+        takvim_gun = (bulten_g - kapanis_g).days
+        if fark >= 2:
+            self.engel.append(
+                f"BAYAT PİYASA ANLIK GÖRÜNTÜSÜ: kapanış {kt}, beklenen son seans "
+                f"{beklenen.isoformat()}, {fark} seans kaçırılmış. Bülten bugünkü "
+                f"tarihle çıkarken piyasa satırları o kadar eski olamaz.")
+            return
+        if fark == 1:
+            self.uyari.append(
+                f"Piyasa anlık görüntüsü beklenen son seanstan bir seans eski "
+                f"(kapanış {kt}, beklenen {beklenen.isoformat()}) — resmî tatil "
+                f"değilse ölçüm yenilenmeli.")
+            return
+        if not etiket:
+            self.uyari.append("Piyasa anlık görüntüsünde seans ETİKETİ yok "
+                              "(piyasa.kapanis_seansi).")
+        elif takvim_gun >= 2:
+            self._ok(f"piyasa seansı etiketli: {etiket} ({takvim_gun} takvim günü "
+                     f"geride — hafta sonu/tatil, tek seans)")
+        else:
+            self._ok(f"piyasa seansı etiketli: {etiket}")
+
     def devir(self):
         """Devir düzeltmesi kurulamamış vadeli seri var mı.
 
@@ -1128,7 +1197,8 @@ class Denetim:
     def kos(self) -> int:
         self.yazi(); self.veri(); self.atif(); self.sayi(); self.nabiz(); self.tekrar()
         self.tema(); self.izleme(); self.dil(); self.tazelik(); self.karanlik()
-        self.yerlesmemis(); self.revizyon(); self.devir(); self.haber_tonu()
+        self.yerlesmemis(); self.piyasa_seansi(); self.revizyon()
+        self.devir(); self.haber_tonu()
         self.olagandisilik_penceresi()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")

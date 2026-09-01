@@ -221,6 +221,29 @@ günden kalmıştı. Ölü bir bağımlılık kırık olandan tehlikelidir: dosy
 okunur, hata vermez, yalnızca yaşlanır. Bir dosya okunuyorsa onu üreten adım
 hattın adım listesinde GÖRÜNMELİDİR.
 
+**Kurucu ilke — sezgi ölçülmeden koda girmez; ÖLÇÜ ile ETİKET ayrı kusurlardır.**
+"Pazartesi kapanışı Cuma'ya göre ÜÇ takvim günü kapsar, öyleyse günlük σ ile
+kıyaslamak hareketi olduğundan olağandışı gösterir." Sezgi ikna edici ve
+YANLIŞ. 49 enstrümanda bir yıllık seride ölçüldü: üç takvim günlük (hafta sonu)
+değişimlerin σ'sının bir günlüğe oranı **medyan 1,00** — rastgele yürüyüşün
+beklediği √3 = 1,73 değil; 1,30'u aşan yalnız üç enstrüman (hafta sonu seansı
+olan enerji vadelileri ve JPY). Üç günden uzun boşluklarda da (bayram) oran
+1,02. Sebep basit: bunlar KAPANIŞTAN KAPANIŞA fiyatlar, hafta sonunda seans
+yoktur, yani "üç takvim günü" hâlâ TEK seanslık risktir. USD/TRY'de hafta sonu
+değişimlerinin ortalaması (+0,029%) hafta içinin (+0,068%) altında — taşıma
+bile birikmiyor. Ölçekleme uygulansaydı gerçek hareketler sistematik olarak
+gizlenirdi.
+
+Ama aynı gözlemin ardında GERÇEK bir kusur vardı ve o ölçüde değil ETİKETTE:
+31.08.2026 pazartesi bülteninde elli piyasa satırının ELLİSİ 28.08 Cuma
+kapanışını taşıyordu ve "günlük değişim" diye yayımlandı; hangi seansa ait
+olduğunu söyleyen tek bir alan yoktu. Pazartesi okuyan biri hareketi bugüne
+ait sanar. Bir gözlem "sayı yanlış" diye geldiğinde önce sayı ölçülür; sayı
+doğruysa soru biter değil, YER DEĞİŞTİRİR — okurun gördüğü etikete geçer.
+Anlık görüntü artık seansını yazıyor (`piyasa.kapanis_seansi`), denetim
+kaçırılan SEANS sayısını ölçüyor (takvim günü değil: tek tatil uyarı, iki
+seans engel) ve duman sınaması ölçeklemenin geri konmasını yakalıyor.
+
 **Kurucu ilke — kopya sözleşmesi bir bütündür; SIRA kusuru gizler.** Hattın
 siteye kopyalanacak çıktı listesi bir sözleşmedir ve eksik bir dosya kopyalamayı
 yarıda keser. Hazine hattının iki grafiği yalnız tam kipte üretiliyor ve

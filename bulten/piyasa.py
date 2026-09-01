@@ -236,6 +236,22 @@ def _ham_veri(tazele: bool = False) -> dict:
     except Exception:
         pass                       # düzeltme yapılamazsa ham seriyle devam
     d = {"zaman": datetime.now().isoformat(timespec="seconds"), "seri": seri}
+    # ÖNBELLEK BAŞARISIZ ÇEKİMLE EZİLMEZ. 31.08.2026'da ağı kapalı bir ortamda
+    # tek bir çağrı elli serilik önbelleği SIFIR seriyle üzerine yazdı; dosya
+    # izlenen bir dosya olduğu için depodaki iyi sürüm de tehlikeye girdi.
+    # Yahoo bütün istekleri reddettiğinde çekim "başarılı ama boş" görünür —
+    # "veri geldi" ile "veri TAM geldi" ayrımının bir örneği daha. Kural: yeni
+    # anlık görüntü eldekinden AZ seri taşıyorsa yazılmaz; çağıran eski
+    # önbellekle devam eder ve durumu bilir.
+    eski_n = 0
+    try:
+        eski_n = len((json.loads(HAM.read_text(encoding="utf-8")) or {}).get("seri") or {})
+    except Exception:
+        pass
+    if len(seri) < eski_n:
+        print(f"  ! piyasa önbelleği YAZILMADI — çekim {len(seri)} seri döndü, "
+              f"öncekinde {eski_n} var. Eski önbellek korunuyor.")
+        return json.loads(HAM.read_text(encoding="utf-8"))
     HAM.write_text(json.dumps(d, ensure_ascii=False), encoding="utf-8")
     return d
 
@@ -423,6 +439,28 @@ def _yerlesmemis_dus(seri: dict) -> dict:
     return seri
 
 
+def _tarih_gun(t: str):
+    """ISO tarihi ordinal güne çevir; ayrıştırılamazsa None."""
+    import datetime as _dt
+    try:
+        return _dt.date.fromisoformat(str(t)[:10]).toordinal()
+    except Exception:
+        return None
+
+
+# ÖLÇÜLDÜ — HAFTA SONU BOŞLUĞU σ'YI ŞİŞİRMİYOR (31.08.2026).
+# Sezgi şunu söyler: pazartesi kapanışı Cuma'ya göre ÜÇ takvim günü kapsar,
+# öyleyse günlük σ ile kıyaslamak hareketi olduğundan olağandışı gösterir.
+# Sezgi YANLIŞ ve ölçüldü. 49 enstrümanın tamamında, bir yıllık seride, üç
+# takvim günlük (hafta sonu) değişimlerin σ'sının bir günlüklere oranı:
+#     medyan 1,00   (rastgele yürüyüş beklentisi √3 = 1,73)
+#     1,30'u aşan yalnız 3/49 — NG, RB (hafta sonu seansı olan enerji) ve JPY
+# Üç günden UZUN boşluklarda da (bayram, 4-11 gün) oran medyanı 1,02.
+# Sebep basit: bunlar KAPANIŞTAN KAPANIŞA fiyatlar; hafta sonu seans yoktur,
+# yani "üç takvim günü" hâlâ TEK seanslık risktir. USD/TRY'de hafta sonu
+# değişimlerinin ortalaması (+0,029%) hafta içinin (+0,068%) ALTINDA — taşıma
+# bile birikmiyor. Bu yüzden d1_sigma'ya boşluk ölçeklemesi UYGULANMAZ;
+# uygulansaydı gerçek hareketleri sistematik olarak gizlerdi.
 def _degisim(kapanis: list[float], tarih: list[str], geri: int) -> float | None:
     if len(kapanis) <= geri:
         return None
@@ -556,6 +594,14 @@ def satir(v: Varlik, seri: dict) -> dict | None:
         # önceki yayımla kıyaslanabilir değildir; denetim bunu uyarıya çevirir.
         "roll_bilinmiyor": bool(s.get("roll_bilinmiyor")),
         "son": round(son, v.ondalik), "tarih": t[-1],
+        # d1'in kapsadığı TAKVİM günü. Pazartesi kapanışı Cuma'ya göre üç
+        # takvim günü geride ama BİR seans ilerideymiş gibi ölçülür — ve bu
+        # DOĞRUDUR: kapanıştan kapanışa hareket, arada kaç takvim günü olursa
+        # olsun tek seanslık risktir. 49 enstrümanda ölçüldü, bkz. aşağıdaki
+        # not. Alan yine de yazılıyor çünkü OKURUN gördüğü şey takvim: pazartesi
+        # yayımlanan bültende "günlük değişim" Cuma'ya aitse bunun söylenmesi
+        # gerekir (satır tarihini denetim de bu alandan okur).
+        "gap_gun": ((_tarih_gun(t[-1]) - _tarih_gun(t[-2])) if len(t) > 1 else None),
         "d1": d(1), "h1": d(5), "a1": d(21), "ybb": ybb,
         "degisim_birim": "bp" if getiri else "%",
         "yil_yuksek": round(max(pencere), v.ondalik),
@@ -573,6 +619,20 @@ def satir(v: Varlik, seri: dict) -> dict | None:
         "h1_sigma": (None if sigma_h is None or d(5) is None
                      else round(d(5) / sigma_h, 1)),
     }
+
+
+GUN_ADI = {0: "Pazartesi", 1: "Salı", 2: "Çarşamba", 3: "Perşembe",
+           4: "Cuma", 5: "Cumartesi", 6: "Pazar"}
+
+
+def _seans_metni(iso: str) -> str:
+    """'2026-08-28' → '28.08.2026 Cuma kapanışı'."""
+    import datetime as _dt
+    try:
+        g = _dt.date.fromisoformat(str(iso)[:10])
+    except Exception:
+        return str(iso)
+    return f"{g:%d.%m.%Y} {GUN_ADI[g.weekday()]} kapanışı"
 
 
 def turetilmis(seri: dict) -> list[dict]:
@@ -787,8 +847,17 @@ def topla(tazele: bool = False, haftalik: bool = False) -> dict:
         if icerik:
             gruplar.append({"id": gid, "baslik": baslik, "satirlar": icerik})
     eksik = [v.ad for v in VARLIKLAR if v.kod not in seri]
+    # ANLIK GÖRÜNTÜNÜN SEANSI. Satırların tamamı aynı güne ait olmayabilir
+    # (farklı borsalar, farklı tatiller); en tazesi ile en bayatı ayrı ayrı
+    # yazılır. Pazartesi yayımlanan bir bültende bu alan "Cuma" der ve okur
+    # "günlük değişim"i bugüne ait sanmaz — 31.08.2026'da elli satırın ellisi
+    # üç gün geride yayımlandı ve bunu söyleyen hiçbir alan yoktu.
+    _tarihler = sorted({s["tarih"] for g in gruplar for s in g["satirlar"] if s.get("tarih")})
     return {
         "zaman": ham["zaman"],
+        "kapanis_tarih": _tarihler[-1] if _tarihler else None,
+        "kapanis_en_eski": _tarihler[0] if _tarihler else None,
+        "kapanis_seansi": _seans_metni(_tarihler[-1]) if _tarihler else None,
         "gruplar": gruplar,
         "turetilmis": turetilmis(seri),
         "tr_faizleri": tr_faizleri(),

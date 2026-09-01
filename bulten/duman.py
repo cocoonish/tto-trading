@@ -268,6 +268,52 @@ def main() -> int:
             _den.datetime = gercek
     sina("denetim: kapanmamış bar ENGEL", _denetim_yerlesmemis)
 
+    # SEANS ETİKETİ. 31.08.2026 pazartesi bülteninde elli piyasa satırının
+    # ellisi 28.08 Cuma kapanışını taşıyordu ve "günlük değişim" diye
+    # yayımlandı — hangi seansa ait olduğunu söyleyen hiçbir alan yoktu.
+    # Ölçüt üç durumu ayırmalı: pazartesi/Cuma NORMAL, tek tatil UYARI,
+    # ikiden fazla kaçırılan seans ENGEL. Takvim günüyle ölçmek tek tatili
+    # bile engel sayardı; sınama tam bu ayrımı zorluyor.
+    def _denetim_piyasa_seansi():
+        import denetim as _den
+        def calistir(bulten, kapanis, etiket=True):
+            d = _den.Denetim({"tarih": bulten, "piyasa": {
+                "kapanis_tarih": kapanis,
+                "kapanis_seansi": f"{kapanis} kapanışı" if etiket else None}})
+            d.piyasa_seansi()
+            return d
+        d = calistir("2026-08-31", "2026-08-28")          # Pzt bülteni, Cuma kapanışı
+        assert not d.engel and not d.uyari, f"normal hafta sonu boşluğu şikâyet üretti: {d.engel + d.uyari}"
+        d = calistir("2026-09-01", "2026-08-28")          # bir tatil kaçırılmış
+        assert d.uyari and not d.engel, "tek kaçırılan seans uyarı üretmedi ya da engel oldu"
+        d = calistir("2026-09-02", "2026-08-28")          # iki seans kaçırılmış
+        assert d.engel and "BAYAT" in d.engel[0], "iki kaçırılan seans ENGEL üretmedi"
+        d = calistir("2026-08-31", "2026-08-28", etiket=False)
+        assert d.uyari and "ETİKET" in d.uyari[0], "seans etiketi eksikken uyarı çıkmadı"
+        d = calistir("2026-08-31", None)
+        assert d.uyari, "seans tarihi hiç yokken uyarı çıkmadı"
+
+    sina("denetim: piyasa seansı etiketli ve bayat değil", _denetim_piyasa_seansi)
+
+    # HAFTA SONU BOŞLUĞU σ'YI ŞİŞİRMİYOR — ölçülen olgu koda bağlanıyor.
+    # Sezgi "pazartesi hareketi üç takvim günü kapsar, günlük σ ile kıyaslamak
+    # onu olağandışı gösterir" der. Ölçüm bunun tersini söyledi (σ3/σ1 medyanı
+    # 1,00). Bu sınama, birinin ileride d1_sigma'ya boşluk ölçeklemesi
+    # eklemesini yakalar: aynı hareket, farklı boşlukla, aynı σ'yı vermelidir.
+    def _sigma_boslugu_olceklemez():
+        import piyasa as _p
+        k = [100.0 + i * 0.1 for i in range(25)]
+        t_bitisik = [f"2026-01-{i + 1:02d}" for i in range(25)]      # ardışık günler
+        t_bosluklu = list(t_bitisik[:-1]) + ["2026-01-27"]           # son adım 3 gün sonra
+        a = _p.satir(_p.VARLIKLAR[0], {_p.VARLIKLAR[0].kod: {"kapanis": k, "tarih": t_bitisik}})
+        b = _p.satir(_p.VARLIKLAR[0], {_p.VARLIKLAR[0].kod: {"kapanis": k, "tarih": t_bosluklu}})
+        assert a["d1_sigma"] == b["d1_sigma"], (
+            "boşluk σ'yı değiştirdi — kapanıştan kapanışa hareket tek seanslık "
+            "risktir, ölçekleme uygulanmamalı")
+        assert a["gap_gun"] == 1 and b["gap_gun"] == 3, "gap_gun takvim boşluğunu vermiyor"
+
+    sina("piyasa: σ takvim boşluğuna göre ölçeklenmiyor", _sigma_boslugu_olceklemez)
+
     # HAFTALIK BÜLTENİN PENCERESİ HAFTADIR. 30.08.2026'ya kadar haftaya bakış
     # bülteni günlük σ listesini basıyor ve sayfada "Günün olağandışı
     # hareketleri" başlığı duruyordu. Kusur geri konarak sınanıyor: haftalık
