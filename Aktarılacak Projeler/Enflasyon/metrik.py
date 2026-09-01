@@ -1624,8 +1624,10 @@ def kosular_arasi_izi(SA: pd.DataFrame) -> dict:
             eski_m = aylik(eski["tufe"].dropna()) if "tufe" in ortak else None
             if ayni:
                 out = {"var": False,
-                       "not": "önceki koşu AYNI veriyle yapılmış (sa.csv değişmedi) — "
-                              "koşular arası revizyon bu koşuda ölçülemedi",
+                       # CÜMLE OKURA GİDİYOR: sayfada <Deger> ile basılıyor,
+                       # dolayısıyla dosya adı taşıyamaz.
+                       "not": "önceki ölçüm aynı veriyle yapılmış — iki ölçüm "
+                              "arasındaki revizyon bu kez ölçülemedi",
                        "onceki_kosum": dt.datetime.fromtimestamp(
                            onceki_yol.stat().st_mtime).strftime("%Y-%m-%d")}
             elif yeni_m is not None and eski_m is not None:

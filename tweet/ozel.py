@@ -79,6 +79,19 @@ def main() -> int:
     metin = Path(a.metin).read_text(encoding="utf-8").strip()
     if "http" in metin.lower():
         raise SystemExit("metinde link var — kural: tweetlerde link verilmez")
+    # OKUR DİLİ KAPISI. Kalıplar ortak/okur_dili.py'de; aynı liste bülten
+    # denetiminde ve sayfa sınavında da koşuyor. Tweet en kısa metin ve en
+    # geniş okur kitlesi: "ozet.json'dan okunur" ya da "ilk sürümde şöyle
+    # demiştik" cümlesinin buraya girmesi, hiçbir okurun anlamayacağı bir
+    # satırı en görünür yere koymak demek.
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ortak"))
+    import okur_dili
+    bulgu = okur_dili.tara(metin)
+    if bulgu:
+        dokum = " · ".join(f"{a_}: {e!r} (satır {s_})" for a_, e, s_ in bulgu[:5])
+        raise SystemExit(
+            f"metinde okura değil kendimize yazan dil var — {dokum}. "
+            "Yapım kararları ve sürüm tarihçesi tweete girmez.")
     if len(metin) > 3800:
         raise SystemExit(f"metin çok uzun ({len(metin)} karakter)")
     if len(a.resim) > 4:

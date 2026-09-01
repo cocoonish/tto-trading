@@ -48,14 +48,50 @@ ASGARI_KRITIK_TAKVIM = 3
 BUYUK_HAREKET_ESIGI = 1.5     # % — bunu aşan hareket metinde ANILMALI
 
 # Okura hiçbir şey söylemeyen geliştirici dili
-KOD_DILI = re.compile(
-    r"\b[a-z_][a-z0-9_]*\.(py|json|csv|mdx|astro)\b|"
-    r"\bozet\.json\b|\bayar\.py\b|guncelle\.py|\bhat(?:ı|ın|lar)?\b\s*(?:koş|düş)|"
-    r"\b[a-z]+_[a-z]+_[a-z]+\b(?![^<]*</code>)", re.I)
+# KOD DİLİ + YAPIM DİLİ — kalıplar burada DEĞİL, ortak/okur_dili.py'de.
+# Aynı kural site sayfalarında ve tweetlerde de uygulanıyor; üç ayrı liste bir
+# gün sessizce ayrışır ve hangisinin neyi gördüğü kimsenin aklında kalmazdı.
+sys.path.insert(0, str(KOK / "ortak"))
+import okur_dili  # noqa: E402
 # Yatırım tavsiyesi sayılabilecek kalıplar
 TAVSIYE = re.compile(
     r"\b(al[ıi]n|sat[ıi]n|pozisyon a[çc]|hedef fiyat|tavsiye ediyoruz|öneriyoruz|"
     r"kesinlikle al|kesinlikle sat|portföy[üu]n[üu]ze ekleyin)\b", re.I)
+
+
+# Bültenin OKURA GÖRÜNEN yazı alanları. Liste elle tutuluyor ama tek yerde
+# duruyor ve ölçütün kapsamı buradan okunuyor; yeni bir yazı alanı eklendiğinde
+# buraya da eklenmezse dil denetimi onu göremez.
+YAZI_ALANLARI = ("gundem", "yorum", "temalar", "notlar", "one_cikanlar",
+                 "ozet", "sonuclar", "veri_gunlugu")
+
+
+# Okurun GÖRMEDİĞİ makine alanları: hat/anahtar/kod adları burada durur ve
+# doğaları gereği snake_case'tir. Bunları taramak, bültenin kendi iskeletini
+# kod dili sanmak olurdu — ölçüt her koşuda düşerdi ve kimse ona bakmazdı.
+MAKINE_ALANI = {"anahtar", "hat", "slug", "kod", "id", "src", "proje",
+                "kaynak_kod", "seri", "tip", "grup", "seviye", "durum",
+                "ikon", "renk", "sinif"}
+
+
+def _metinler(b: dict) -> list:
+    """Bültenin OKURA GÖRÜNEN yazı yapraklarını topla (makine alanları hariç)."""
+    cikan: list[str] = []
+
+    def gez(d, ad=None):
+        if isinstance(d, str):
+            if ad not in MAKINE_ALANI:
+                cikan.append(d)
+        elif isinstance(d, dict):
+            for k, v in d.items():
+                gez(v, k)
+        elif isinstance(d, list):
+            for v in d:
+                gez(v, ad)
+
+    for ad in YAZI_ALANLARI:
+        gez(b.get(ad), ad)
+    return cikan
 
 
 def _duz(html: str) -> str:
@@ -610,16 +646,21 @@ class Denetim:
 
     # ────────────────────────────────────────────── dil ve üslup
     def dil(self):
-        g = self.b.get("gundem") or {}
-        tam = " ".join([_duz(v) for v in g.values()]) + " " + _duz(self.b.get("yorum") or "")
-        for m in set(KOD_DILI.findall(tam)):
-            pass
-        bulunan = KOD_DILI.search(tam)
-        if bulunan:
-            self.engel.append(f"Okura anlamsız geliştirici dili: '{bulunan.group(0)}' "
-                              "— dosya/alan/kod adı bültende geçmez.")
+        # KAPSAM DENETİMİN PARÇASIDIR. Bu ölçüt yalnız gündem ve yoruma
+        # bakıyordu; bültenin OKURA GÖRÜNEN metni bundan ibaret değil —
+        # temalar, notlar, öne çıkanlar, söz defteri ve takvimin beklenti
+        # alanları da sayfada basılıyor. Kod dili oralara sızdığında ölçüt
+        # yeşil kalıyordu.
+        tam = " ".join(_duz(x) for x in _metinler(self.b))
+        bulgu = okur_dili.tara(tam)
+        if bulgu:
+            aile, esl, _ = bulgu[0]
+            self.engel.append(
+                f"Okura değil kendimize yazan dil ({aile}): '{esl}' — "
+                f"toplam {len(bulgu)} yer. Dosya/alan adları ve kendi sürüm "
+                f"tarihçemiz bültende geçmez.")
         else:
-            self._ok("kod dili yok")
+            self._ok("okur dili temiz (kod dili + yapım dili)")
         t = TAVSIYE.search(tam)
         if t:
             self.engel.append(f"Yatırım tavsiyesi kalıbı: '{t.group(0)}'")

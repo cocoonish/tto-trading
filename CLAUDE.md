@@ -357,6 +357,25 @@ o ritimlere bölünür — tek kip, en yavaş ritme mahkûm eder.
   durduğu ve depoyla taşınmadığı için `bulten.py` her koşuda kendini kurar.
   Sürücü komutu kabuktan geçtiğinden **yollar tırnaklanmalı** (depo yolunda boşluk var).
 
+**Kurucu ilke — okur dili HER YAYINDA geçerlidir, tek yerden tanımlanır.**
+Kural yalnız site yazıları için değil: bülten, teknik bülten, tweetler ve
+proje panoları — okura giden ne varsa. İki aile yasak. **Kod dili**: dosya,
+anahtar ve boru hattı adları (`ozet.json`, `metrik.py`, `itp_b_sabit`, MDX,
+cron, iş akışı) — okurun elinde bu şeylerin hiçbiri yok. **Yapım dili**: kendi
+sürüm tarihçemizin anlatısı ("bu yazının ilk sürümünde şu hata vardı",
+"önceki sürümde şöyle yazıyordu", "kod hatasıydı, düzeltildi"). Kalıplar
+`ortak/okur_dili.py`de TEK yerde durur ve dört kapı da onu içe aktarır:
+`sayfa_sinavi.py` (9. ölçüt), `bulten/denetim.py` (ENGEL), `tweet/ozel.py` +
+`tweet/gonder.py` (gönderim durur), `teknik/yaz.py` (yazma reddedilir). Üç ayrı
+liste tutulsaydı bir gün sessizce ayrışır ve hangisinin neyi gördüğü kimsenin
+aklında kalmazdı. Muafiyetler de tanımın parçası: etiket içi, kod bloğu,
+backtick, markdown bağlantı hedefi ve kaynağın kendi BÜYÜK harfli alan adları
+(`YLD_YTM_MID`, `TP.PY.P06.ON`) taranmaz — kaynak künyesi okura verilen bir
+bilgidir, bizim değişken adımız değil. Alan sözlüğü de yasaklanmaz: "repo" ve
+"push" piyasa terimidir. Ölçüt bir kez fazla geniş koşturuldu ve 951 bulgunun
+tamamı etiket içiydi; bir denetim yanlış alarm ürettiğinde kimse ona bakmaz,
+yani kapsam kadar HASSASİYET de denetimin parçasıdır.
+
 **Kurucu ilke — sayfa okura yazılır, kendi yapımına değil.** Yazılarda ve
 tweetlerde "bu kodda şöyle yapılmıştı ama böyle oldu", "yazının ilk sürümünde
 şu hata vardı", "ozet.json'dan okunur", "MDX'e dokunulmadan tazelenir" gibi

@@ -203,6 +203,21 @@ def main() -> int:
               "(yazılmış değil ya da defterde kayıtlı).")
         return 0
 
+    # OKUR DİLİ KAPISI — düzenli zincirler de aynı süzgeçten geçer.
+    # Metin uret.py'de kuruluyor ve kaynağı bültenin kendi metni; bültenin dil
+    # denetimi bunu yakalar ama zincir başka alanlardan da cümle taşıyabilir.
+    # Kapıyı iki yere birden koymanın maliyeti yok, birine koymamanın var.
+    import sys as _sys
+    _sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ortak"))
+    import okur_dili
+    for anahtar, zincir in is_listesi:
+        bulgu = okur_dili.tara("\n".join(zincir))
+        if bulgu:
+            dokum = " · ".join(f"{a_}: {e!r}" for a_, e, _ in bulgu[:5])
+            raise SystemExit(
+                f"{anahtar}: zincirde okura değil kendimize yazan dil var — "
+                f"{dokum}. Gönderim durdu.")
+
     erisim: str | None = None
     for anahtar, zincir in is_listesi:
         _bas(zincir, anahtar + (" · KURU KOŞU" if kuru else ""))

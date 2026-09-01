@@ -165,6 +165,23 @@ def main() -> int:
         sluglar[slug]["yorum"] = metin
         degisen.append(f"yorum.{slug} ({len(str(metin).split())} kelime)")
 
+    # OKUR DİLİ KAPISI. Sayı denetimi "uydurma yok" der; bu kapı "okura yaz"
+    # der. İkisi ayrı kusur: bir cümlenin her sayısı ölçümden gelebilir ve yine
+    # de okurun anlamayacağı bir cümle olabilir. Kalıplar ortak/okur_dili.py'de,
+    # bülten denetimi ve sayfa sınavıyla ORTAK.
+    import sys as _sys
+    _sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ortak"))
+    import okur_dili
+    yazilan = " ".join([str(yama.get("giris") or "")]
+                       + [str(v) for v in (yama.get("yorum") or {}).values()])
+    dil_bulgu = okur_dili.tara(yazilan)
+    if dil_bulgu:
+        dokum = "\n".join(f"  {a_}: {e!r} (satır {s_})" for a_, e, s_ in dil_bulgu)
+        raise SystemExit(
+            "OKURA DEĞİL KENDİMİZE YAZAN DİL — yazma reddedildi:\n" + dokum +
+            "\nDosya/alan adları ve kendi sürüm tarihçemiz bültene girmez; "
+            "bulguyu taşıyan cümle kalır, süreç anlatısı gider.")
+
     if tum_sorunlu and not a.serbest:
         satirlar = [f"  {k}: {', '.join(v)}" for k, v in tum_sorunlu.items()]
         raise SystemExit(
