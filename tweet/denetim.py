@@ -83,7 +83,10 @@ LINK = re.compile(
     r"|\bwww\.\S+"                                             # www.
     r"|\[[^\]]+\]\([^)]+\)"                                    # markdown bağlantısı
     r"|\b(?:t\.co|x\.com|twitter\.com|bit\.ly|youtu\.be)(?:/\S*)?"   # kısaltıcılar ve X
-    r"|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\." + _TLD + r"(?:\.[a-z]{2})?(?=[/\s,.;:!?)\"»]|$)",  # çıplak alan adı
+    # Çıplak alan adı: KÜÇÜK harf (gerçek alan adları öyle yazılır; "ettik.Biz de",
+    # "TCMB.de" gibi boşluğu unutulmuş yeni cümleler link sanılmaz) ve ardından
+    # sözcük karakteri gelmez — kesme ('da, ’da), uzun tire, üç nokta, tırnak dahil.
+    r"|(?-i:\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\." + _TLD + r"(?:\.[a-z]{2})?)(?![\w-])",
     re.I)
 
 

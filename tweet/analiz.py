@@ -224,7 +224,8 @@ def analiz_zinciri(a: dict) -> list[str]:
                 bolumler.append(_kirp("Kilit ölçümler — " + " · ".join(parcalar), RAKAM_SINIR))
         # Canlı çözülemeyen değer yedek metniyle gitti: sayı doğru olabilir ama
         # yazının derleme günündeki hâlidir — kayda düşer, gönderim durmaz.
-        n_yedek = yedek_kalan_sayisi(str(a.get("govde") or ""))
+        blok = re.search(r'<div class="yonetici">(.*?)\n</div>', str(a.get("govde") or ""), re.S)
+        n_yedek = yedek_kalan_sayisi(blok.group(1) if blok else "")     # tweete yalnız özet girer
         if n_yedek:
             UYARILAR.append(f"{a['slug']}: {n_yedek} canlı değer çözülemedi, yedek metin gönderildi")
     else:

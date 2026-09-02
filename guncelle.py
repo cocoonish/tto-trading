@@ -420,7 +420,9 @@ HATLAR: list[Hat] = [
         ["veri_cek.py", "hesap.py", "grafik.py"], [],
         {"pozisyon.html": "pozisyon.html", "bilesim.html": "bilesim.html", "kisa_vade.html": "kisa_vade.html"},
         "EVDS bie_fdvy; takvim tetiği aylık — çekim düşerse hat durur, site korunur",
-        tarih_anahtarlari=("_tarih", "net_pozisyon_tarih")),
+        # _tarih zaten net pozisyonun ayı; ikinci saat tcmb hattından gelen
+        # haftalık rezerv bacağı — donarsa tazelik denetimi görsün.
+        tarih_anahtarlari=("_tarih", "acik_rezerv_tarih")),
 ]
 HAT = {h.ad: h for h in HATLAR}
 

@@ -336,9 +336,11 @@ def _denetim():
         assert any(iz in x for x in e), f"{iz!r} yakalanmadı: {e}"
     engel(temiz.replace("böyle hareket etti.", "böyle hareket etti, alın."), "tavsiye")
     engel(temiz + " https://x.com/a", "link")
-    for lnk in ("cocoonish.github.io", "x.com/i/status/1", "www.tcmb.gov.tr", "[oku](https://a.b)", "t.co/abc", "tcmb.gov.tr/x"):
+    for lnk in ("cocoonish.github.io", "x.com/i/status/1", "www.tcmb.gov.tr", "[oku](https://a.b)", "t.co/abc", "tcmb.gov.tr/x",
+                "cocoonish.github.io'da", "bloomberght.com’da", "tcmb.gov.tr…", "bloomberght.com—", "X.com/a"):
         engel(temiz.replace("Brent", f"Brent ({lnk})"), "link")
-    for masum in ("A.Ş. bilançosu", "vb. Bu", "%1,25 ile %2,10 arası.", "TL 48,17.", "ör. TCMB", "2026-09-01"):
+    for masum in ("A.Ş. bilançosu", "vb. Bu", "%1,25 ile %2,10 arası.", "TL 48,17.", "ör. TCMB", "2026-09-01",
+                  "ettik.Biz de", "kapandı.Me", "TCMB.de", "T.C. Hazine", "14.30'da", "1.000 TL"):
         e0, _ = dn.denetle(temiz.replace("Brent", f"Brent {masum}"), "bulten")
         assert not any("link" in x for x in e0), f"{masum!r} link sanıldı: {e0}"
     import gonder as gd

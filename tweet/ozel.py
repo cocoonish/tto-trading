@@ -21,6 +21,7 @@ ve hata ne yapılacağını söyler.
 from __future__ import annotations
 
 import argparse
+import re
 import sys
 from pathlib import Path
 
@@ -115,17 +116,30 @@ def main() -> int:
 
     # Anahtar: analiz dosyası slug'ına eşleşiyorsa onu öner — araç kanalıyla
     # aynı anahtar, yani analiz.py aynı yazıyı bir daha atmaz.
+    # Anahtar araç kanalıyla (gonder.py) AYNI biçimde olmalı, yoksa aynı içerik
+    # iki kanaldan iki kez gider: bülten → bulten:<YYYY-MM-DD> (ilk satırdaki
+    # tarihten), analiz → analiz:<slug> (dosya kökü slug'a eşleşmezse --anahtar
+    # zorunlu), tema/duyuru → ozel:<dosya kökü>.
+    AYLAR = ("ocak", "şubat", "mart", "nisan", "mayıs", "haziran", "temmuz", "ağustos",
+             "eylül", "ekim", "kasım", "aralık")
     anahtar = a.anahtar
     if not anahtar:
         kok = Path(a.metin).stem
-        if (KOK / "site" / "src" / "content" / "analiz" / f"{kok}.mdx").exists():
+        if tur == "bulten":
+            m_t = re.search(r"(\d{1,2})\s+([A-Za-zÇĞİÖŞÜçğıöşü]+)\s+(\d{4})", ilk)
+            if not m_t or m_t.group(2).lower() not in AYLAR:
+                raise SystemExit(f"bülten gönderisinin ilk satırından tarih çözülemedi: {ilk!r} — --anahtar bulten:YYYY-MM-DD ver")
+            anahtar = f"bulten:{int(m_t.group(3)):04d}-{AYLAR.index(m_t.group(2).lower()) + 1:02d}-{int(m_t.group(1)):02d}"
+        elif (KOK / "site" / "src" / "content" / "analiz" / f"{kok}.mdx").exists():
             anahtar = f"analiz:{kok}"
-            print(f"· anahtar dosya adından: {anahtar}")
+        elif tur == "analiz":
+            raise SystemExit(f"analiz gönderisi ama dosya kökü ({kok}) hiçbir analiz slug'ına eşleşmiyor — "
+                             "--anahtar analiz:<slug> ver; yoksa araç kanalı aynı yazıyı bir daha atar")
         else:
             anahtar = f"ozel:{kok}"                 # iş akışı sözleşmesi: boş = ozel:<dosya kökü>
-            print(f"· anahtar dosya adından: {anahtar}")
-    if anahtar and not (anahtar.startswith("analiz:") or anahtar.startswith("ozel:")):
-        raise SystemExit(f"anahtar 'analiz:' ya da 'ozel:' ile başlar: {anahtar!r}")
+        print(f"· anahtar: {anahtar}")
+    if not re.match(r"^(analiz|ozel|bulten|teknik):", anahtar):
+        raise SystemExit(f"anahtar 'bulten:', 'teknik:', 'analiz:' ya da 'ozel:' ile başlar: {anahtar!r}")
     defter = gonder._defter_oku(gonder.DEFTER)
     if anahtar and (defter.get(anahtar) or {}).get("idler") and not a.zorla:
         raise SystemExit(f"{anahtar} defterde kimlikli — zaten gönderildi "

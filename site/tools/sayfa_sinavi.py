@@ -29,6 +29,7 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       anahtarı ozet.json'da mı? (eksik pano tablodan sessizce düşerdi)
   (11b) PROJE BAŞLIĞI — cümle düzeni; '&' engel, Başlık Düzeni uyarı.
   (11c) PROJE BAĞLANTI METNİ — gövdedeki /projeler/ bağları başlığı cümle düzeninde taşır; slug metin olmaz (uyarı).
+  (11d) PROJE ÖN BİLGİSİ — description'da elle sayı, guncelleme büyük harf/şekil no, kaynak '&'/grup kodu, tags büyük harf (uyarı).
   (2c) KOŞU KUTUSU — `sayi=` ya da slotta elle uyarı özeti yok (dosyadan basılır).
   (12) ÖZET SAATİ — her ozet.json'un `_tarih`i çözülüyor, yarından ileri
       değil ve canlı bacakların en yenisinden geride kalmamış.
@@ -351,6 +352,10 @@ def main() -> int:
         kirik = []
         for h in sayfa:
             metin = h.read_text(encoding="utf-8", errors="replace")
+            # Hedefi olmayan çıpa: "#kosu"ya bağ var ama sayfada id="kosu" yok.
+            if 'href="#kosu"' in metin and 'id="kosu"' not in metin:
+                kirik.append((h.relative_to(dist).parent.as_posix() or ".", 0, 0, 0))
+                hata.append(f"dist/{h.relative_to(dist).parent.as_posix()}: '#kosu' bağının hedefi yok")
             n_kt = metin.count("katex-error")
             # Ham <Deger> etiketi: MDX bileşeni çözememiş, metne kaçmış.
             n_dg = metin.count("&lt;Deger") + metin.count("&#x3C;Deger")
@@ -446,8 +451,10 @@ def main() -> int:
                 continue
             kapanis = mdx.find("</KosuKutusu>", m.end())
             govde = mdx[m.end():kapanis] if kapanis > 0 else ""
-            if re.search(r"\d", govde):
-                hata.append(f"{yol.stem}: koşu kutusu slotunda sayı taşıyan metin — uyarılar dosyadan basılır")
+            # Slot yazarın yorumu için serbesttir (tolerans, kural — sayı taşıyabilir);
+            # yasak olan ESKİ ÖZET kalıbıdır: "N uyarı", "Bu koşuda … düştü", bayatlık hükmü.
+            if re.search(r"\d+\s*uyarı|Bu koşuda .* düştü|uyarı yok|BAYAT VERİ", govde, re.I):
+                hata.append(f"{yol.stem}: koşu kutusu slotunda elle uyarı özeti — uyarılar dosyadan basılır")
 
     # ---------------------------------------------------------------- (11b)
     # PROJE BAŞLIĞI YAZIMI (projeler/YAZIM.md): cümle düzeni — ilk sözcük büyük,
@@ -489,6 +496,43 @@ def main() -> int:
                 uyari.append(f"proje bağlantı metni ({yol.stem}): {norm!r} — {'slug metin olmaz' if slugmu else 'cümle düzeni'}")
                 n_bag += 1
     print(f"  {len(proje_mdx)} başlık · uyarı {n_baslik_uyari} · bağlantı metni uyarı {n_bag}")
+
+    # (11d) PROJE ÖN BİLGİSİ (projeler/YAZIM.md; uyarı). description'da elle
+    # sayılmış şekil/senaryo sayısı, guncelleme büyük harfle ya da şekil
+    # numarasıyla başlıyor, kaynak'ta '&' ya da EVDS grup kodu (bie_…), tags
+    # büyük harf. Ayrıştırıcı deponun tek ön bilgi ayrıştırıcısı (ortak/on_bilgi).
+    print("\n▶ Proje ön bilgisi (projeler/YAZIM.md)")
+    sys.path.insert(0, str(KOK / "ortak"))
+    import on_bilgi
+    n_on = 0
+    for yol in proje_mdx:
+        try:
+            fm = on_bilgi.ayristir(yol.read_text(encoding="utf-8"))
+        except Exception as ex:                                    # noqa: BLE001
+            uyari.append(f"ön bilgi ayrıştırılamadı ({yol.stem}): {ex}")
+            n_on += 1
+            continue
+        bulgu = []
+        acik = str(fm.get("description") or "")
+        if re.search(r"\b\d+\s+(grafik|şekil|senaryo|tablo|hesap aracı)", acik, re.I):
+            bulgu.append("description elle sayılmış şekil/senaryo sayısı taşıyor")
+        ritim = str(fm.get("guncelleme") or "")
+        if ritim and ritim[0].isupper() and ritim.split()[0] not in OZEL_AD:
+            bulgu.append(f"guncelleme büyük harfle başlıyor: {ritim[:40]!r}")
+        if re.search(r"\bŞekil\s*\d", ritim):
+            bulgu.append("guncelleme şekil numarası taşıyor")
+        kaynak = str(fm.get("kaynak") or "")
+        if "&" in kaynak:
+            bulgu.append("kaynak '&' taşıyor ('ve' yazılır)")
+        if re.search(r"\bbie_[a-z0-9]+", kaynak):
+            bulgu.append("kaynak EVDS grup kodu taşıyor (kodlar gövdedeki Kaynaklar'a)")
+        etiketler = fm.get("tags") or []
+        if isinstance(etiketler, list) and any(str(t) != str(t).lower() for t in etiketler):
+            bulgu.append("tags küçük harf olmalı")
+        for b_ in bulgu:
+            uyari.append(f"proje ön bilgisi ({yol.stem}): {b_}")
+        n_on += len(bulgu)
+    print(f"  {len(proje_mdx)} pano · ön bilgi uyarı {n_on}")
 
     # ---------------------------------------------------------------- (12)
     # ÖZET SAATİ. `_tarih` hattın en yeni CANLI bacağının günüdür (CLAUDE.md

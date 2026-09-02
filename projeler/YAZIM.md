@@ -7,7 +7,7 @@ her sayı kendi tarihini taşır. Metin kısa, sayılar canlı, şekillerin hesa
 anlatılmış olmalıdır.
 
 Rehber esastır; kural buraya yazılır ve araca konur. Ölçülebilen her kural
-`site/tools/sayfa_sinavi.py`de bir ölçüttür (1, 2, 2c, 11, 11b, 11c, 12).
+`site/tools/sayfa_sinavi.py`de bir ölçüttür (1, 2, 2c, 11, 11b, 11c, 11d, 12).
 
 ---
 
