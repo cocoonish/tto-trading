@@ -43,5 +43,11 @@
   "idler": [],
   "zaman": "",
   "not": "özel gönderimle atıldı (tweet/ozel/ito-tufe-2026-09-01.txt); araç kanalı 2026-09-01'de açıldı, bu kayıt ikinci gönderimi önler"
+ },
+ "bulten:2026-09-02": {
+  "idler": [
+   "2095009212698939532"
+  ],
+  "zaman": "2026-09-02T04:41:35+00:00"
  }
 }
