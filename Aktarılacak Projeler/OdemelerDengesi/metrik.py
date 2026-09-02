@@ -830,7 +830,7 @@ def finansman_ihtiyaci(M: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
             "tarafı ihtiyaç tarafından türetildiği için sapma tanım gereği "
             "sıfırdır ve anapara bacaklarını sınamaz. Anaparanın bağımsız "
             "denetimi haftalık dış borç ödeme takvimiyle yapılan mertebe "
-            "kıyasıdır (bkz. uyarilar.json).")
+            "kıyasıdır; sonucu bu sayfadaki koşu kaydında görünür.")
         # İhtiyacın cari açıktan gelen payı: "açık kadar borç çevirmek" cümlesi
         # sayfada sayıya bağlansın.
         if float(s.iloc[-1]) != 0:
@@ -1127,8 +1127,8 @@ def kos() -> int:
         "fisher_not": (
             "Depo kuralı: reel getiri Fisher ile hesaplanır ((1+i)/(1+π)−1), "
             "basit çıkarmayla değil. Bu hat USD cinsi akım büyüklükleriyle "
-            "çalışır ve şu an bir reel faiz serisi yayımlamaz; kural, "
-            "metrik.py'deki fisher_reel() ile kodda hazır durur."),
+            "çalışır ve şu an bir reel faiz serisi yayımlamaz; kural yine "
+            "de yerinde durur, bir reel seri eklendiği gün onunla hesaplanır."),
         "revizyon_notu": (
             "Ödemeler dengesi TCMB'nin revizyon politikasına tabidir: son "
             "3–12 ay rutin olarak, yıllık revizyonlarda daha geriye dönük "

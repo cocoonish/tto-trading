@@ -417,8 +417,8 @@ yarından ileri değil (TÜFEX metin karşılaştırmasıyla en ESKİ bacağı h
 saati yapmıştı, sayfa "81 gün önce" diyordu), (13) lib/bicim dışında yerel
 biçimleyici (uyarı), (9b) okur dili derlenmiş çıktıda da (uyarı — bileşen
 dizgeleri yalnız orada görünür), (17) koşu kaydının okur dili — hatların
-`uyarilar.json` satırları ve `uyari_metni` sayfaya olduğu gibi basılır — kod ve
-yapım dili ENGEL, anahtar adı ve biçim UYARI.
+`uyarilar.json` satırları ve `ozet.json`un CÜMLE olan her metin alanı sayfaya
+olduğu gibi basılır — kod ve yapım dili ENGEL, anahtar adı ve biçim UYARI.
 Tam ve bağlayıcı liste `sayfa_sinavi.py` başlığındadır (2c, 11b–11d, 14, 15,
 16 dahil); bu paragraf onu ÖZETLER, kapsamı o dosya tanımlar. KaTeX kapısı
 aracı ya da node'u bulamazsa
@@ -437,8 +437,8 @@ muaftır (`uret._kapat`).
 **Kurucu ilke — okur dili HER YAYINDA geçerlidir, tek yerden tanımlanır.**
 Kural yalnız site yazıları için değil: bülten, teknik bülten, tweetler ve
 proje panoları — okura giden ne varsa. Hatların KOŞU KAYDI da öyle:
-`uyarilar.json` satırları ve `ozet.json` `uyari_metni` sayfaya olduğu gibi
-basılır (koşu kutusu, `<Deger>`), ve hatların Python'u onları OPERATÖR için
+`uyarilar.json` satırları ve `ozet.json`un cümle olan her metin alanı sayfaya
+olduğu gibi basılır (koşu kutusu, `<Deger>`), ve hatların Python'u onları OPERATÖR için
 yazıyordu — `kkm_aktif` bayrağı, `bie_pydibsarsiv` grubu, '5.2%', "`python
 irfcl_arsiv.py` ile doldurun" okura gitti, dokuzuncu ölçüt yeşildi (kaynak MDX
 değil, veri dosyası). `okur_dili.kosu_kaydi_tara` bu satırları MUAFİYETSİZ
@@ -465,6 +465,34 @@ bilgidir, bizim değişken adımız değil. Alan sözlüğü de yasaklanmaz: "re
 "push" piyasa terimidir. Ölçüt bir kez fazla geniş koşturuldu ve 951 bulgunun
 tamamı etiket içiydi; bir denetim yanlış alarm ürettiğinde kimse ona bakmaz,
 yani kapsam kadar HASSASİYET de denetimin parçasıdır.
+
+**Kurucu ilke — SIFIR bir ölçüm sonucudur; ölçülemeyen boş bırakılır.**
+Altın fiyat etkisi Γ(L) = Q(L)·[P(L+1) − P(L)] iki uçtaki fiyatı ister. Fiyat
+serisi tatilde son değerini taşır (`ffill`) ve bu doğrudur: piyasa kapalıysa
+fiyat gerçekten kımıldamamıştır, Γ = 0 bir ölçümdür. Ama besleme DURDUĞUNDA
+seri aynı görünür ve Γ yine 0 çıkar — bu kez ölçüm değil, ölçememenin izidir.
+Ölçüldü (02.09.2026, 918 iş günü): fiyat 14 günde taşınmış ve Γ'nın sıfır
+çıktığı günlerin TAMAMI (14/14) taşımadan doğuyor; gerçek kotasyonla ölçülmüş
+tek bir sıfır yok. Yani sayfada yayımlanan her "günün fiyat etkisi 0,00" sahte
+ve okur onu "TCMB bugün altında hiçbir şey yapmadı" diye okuyor. İkisini ayıran
+şey taşınan günden SONRA gerçek kotasyon gelip gelmediğidir: geldiyse tatil,
+gelmediyse kesinti — bu yüzden yalnız serinin SAĞ UCUNDAKİ taşıma bloğu
+maskelenir, ortadaki bloklar dokunulmadan kalır. Maske Λ'ya ancak ΔQ ≠ 0 iken
+uygulanır: miktar kımıldamadıysa Λ fiyattan bağımsız olarak TAM sıfırdır ve
+ölçülebilen bir sıfırı boşaltmak da bir kusurdur. Sigorta imzaya kondu:
+`fiyat_kaynak` argümanının VARSAYILANI YOK — bir çağrı yerinde unutulursa
+TypeError verir, sessizce sahte sıfır üretmez (bir çağrı yeri gerçekten
+unutulmuştu). Ve ölçülemeyen bir seans sayfada görünür: akım serisinin
+seviyeden kaç seans geride kaldığı ve SEBEBİ tek cümleyle yazılır, besleme
+yetiştiğinde cümle kendiliğinden döner.
+
+**Kurucu ilke — hattın duman sınaması, hattın koşusunun içindedir.** Bir hat
+klasöründe `duman.py` varsa `guncelle.py` onu adımlardan ÖNCE koşturur ve
+düşerse hat koşmaz; `--denetle` de aynı yardımcıyı çağırır. Sınama yalnız
+`--denetle` yazan birinin eline bağlı kalsaydı zamanlanmış koşu onu hiç
+sormazdı — ve bozuk bir ölçüm katmanı çıktısını siteye kopyalamış olurdu.
+Sınamada duran her madde bir gün gerçekten yanlış yayımlanmış bir sayıdır;
+ağa çıkmaz, saniyeler sürer.
 
 **Kurucu ilke — sayfa okura yazılır, kendi yapımına değil.** Yazılarda ve
 tweetlerde "bu kodda şöyle yapılmıştı ama böyle oldu", "yazının ilk sürümünde

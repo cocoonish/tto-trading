@@ -196,3 +196,28 @@ def kosu_kaydi_tara(satirlar) -> list[tuple[int, str, str]]:
             for e in re.finditer(kal, s, re.M):
                 ekle(i, "biçim", e.group(0))
     return bulgu
+
+
+# ── (4) KOŞU KAYDININ KAPSAMI — hangi alanlar okura OLDUĞU GİBİ gider?
+# Ölçüt bir zamanlar iki alan adı sayıyordu (`uyari_metni`, `bayat_cumlesi`) ve
+# doğruydu, koşuyordu, yeşil bitiyordu — ama sayfaya `<Deger>` ile basılan
+# onlarca cümle alanını HİÇ görmüyordu. 02.09.2026'da ölçüldü: dört hatta beş
+# ayrı sızıntı tam bu boşluktan yayımlanmıştı (bir EVDS grup kodu, iki dosya
+# adı, bir fonksiyon adı, bir anahtar adı, bir ay kodu) ve hepsi sayfada
+# duruyordu. Kapsam bir listeden değil SÖZLEŞMEDEN türetilir: okura olduğu gibi
+# basılan şey "cümle"dir. Kısa etiketler (kaynak adı, ay adı, çapa tipi, tarih)
+# cümle değildir ve elenir — bir denetimin hassasiyeti de kapsamı kadar önemli.
+CUMLE_ESIK = 40    # boşluk içeren ve bundan uzun metin değeri = cümle
+
+
+def ozet_cumleleri(ozet: dict) -> list[tuple[str, str]]:
+    """ozet.json'un okura basılan cümle alanları → [(alan adı, metin), …].
+
+    Tek tanım: yayın kapısı (sayfa sınavı 17) ve hat koşusu (guncelle.py) aynı
+    kapsamı bu fonksiyondan okur. İki ayrı liste tutulsaydı bir gün sessizce
+    ayrışır ve hangisinin neyi gördüğü kimsenin aklında kalmazdı.
+    """
+    if not isinstance(ozet, dict):
+        return []
+    return [(a, d) for a, d in sorted(ozet.items())
+            if isinstance(d, str) and " " in d and len(d) >= CUMLE_ESIK]

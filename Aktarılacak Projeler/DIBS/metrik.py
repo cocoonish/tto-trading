@@ -1058,7 +1058,7 @@ def kos() -> int:
                           "getiri doğrudan ödeme/fiyat oranından okunur."),
             "on_yil": ("Aktif sıfır kuponlu evrenin en uzun noktası ~9 yıl. "
                        "'2y−10y' eğimi burada 2y−9y ile VEKİL edilmiştir."),
-            "gosterge_fiyat": ("bie_pydibs TCMB'nin GÖSTERGE NİTELİĞİNDEKİ "
+            "gosterge_fiyat": ("Bu noktalar TCMB'nin GÖSTERGE NİTELİĞİNDEKİ "
                                "değerleridir; işlem görmemiş kıymette model "
                                "fiyatı olabilir. Noktalar tam bağımsız gözlem "
                                "değildir — eğrinin bu kadar tutarlı çıkması "

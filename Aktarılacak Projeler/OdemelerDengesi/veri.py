@@ -55,6 +55,17 @@ import urllib.request
 
 import pandas as pd
 
+
+def _aylar() -> list[str]:
+    """Okura yazılan ay adı — ortak sözleşmeden. Ay kodu ('05.2013') okurun
+    elinde bir şey ifade etmez; adı ('Mayıs 2013') eder."""
+    try:
+        import bicim
+    except ImportError:
+        sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2] / "ortak"))
+        import bicim
+    return bicim.AYLAR_TR
+
 # --------------------------------------------------------------------------- yollar
 PROJE = pathlib.Path(__file__).resolve().parent
 KOK = PROJE.parent.parent                      # …/TTO Trading
@@ -947,7 +958,8 @@ def kos(yenile: bool = False) -> dict:
             "TP.ODANA6.Q35 / Q36": (
                 "IMF kredileri ve ödemeler dengesi finansmanı. Bugün sıfır "
                 "(son sıfırdan farklı ay: "
-                + (lambda s: f"{s.index[-1]:%m.%Y}" if len(s) else "yok")(
+                + (lambda s: (f"{_aylar()[s.index[-1].month - 1]} "
+                              f"{s.index[-1].year}") if len(s) else "yok")(
                     a["imf_kredileri"][a["imf_kredileri"] != 0].dropna()
                     if "imf_kredileri" in a.columns else pd.Series(dtype=float))
                 + "), ama rezerv kimliği ancak onlarla kapanıyor: "

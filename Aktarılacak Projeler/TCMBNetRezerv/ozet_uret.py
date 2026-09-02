@@ -115,6 +115,34 @@ if ak_etiket is not None:
     ay_ad = AYLAR[ak_etiket.month - 1]
     ay_n = int(maske.sum())
 
+# --- Akım seviyenin kaç seans gerisinde? -------------------------------------
+# Sayfada seviye grafiği 31.08'i, akım grafiği 26.08'i gösterdiğinde okur haklı
+# olarak "neden" diye sorar. Etiket farkı (bir iş günü) YAPISALDIR ve cevap
+# değildir: akım L → L+1'i taşır, yani son etiketin ölçtüğü KAPANIŞ zaten
+# seviyenin son günüdür. Doğru ölçü bu yüzden etiketler arasında değil,
+# `ak_tarih_kapanis` ile seviyenin son günü arasında kurulur — besleme
+# yetişiyorsa bu fark SIFIRDIR. Sıfırdan büyükse ölçülemeyen seans var demektir
+# ve tek sebebi altın fiyatının ilerlememesidir: fiyat farkı olmadan Γ, onsuz
+# da net alım hesaplanamaz. Cümle kendi durumunu söyler; besleme yetiştiğinde
+# kendiliğinden "aynı güne kadar geliyor" hâline döner.
+_ak_kapanis = (_gunler[_gunler.index(ak_etiket) + 1]
+               if ak_etiket is not None
+               and _gunler.index(ak_etiket) + 1 < len(_gunler) else None)
+_ak_gecikme = (len(_gunler) - 1 - _gunler.index(_ak_kapanis)
+               if _ak_kapanis is not None else 0)
+_fiyat_son_gercek = g.loc[g["altin_fiyat_kaynak"].astype(str) != "ffill", "Tarih"]
+if _ak_gecikme <= 0:
+    _ak_gecikme_cumle = ("Akım serisi seviye serisiyle aynı kapanışa kadar "
+                         "geliyor; ölçülemeyen seans yok.")
+else:
+    _seans = "bir seans" if _ak_gecikme == 1 else f"{_ak_gecikme} seans"
+    _ak_gecikme_cumle = (
+        f"Akım serisi seviye serisinin {_seans} gerisinde: altın fiyatı "
+        + (f"{_fiyat_son_gercek.iloc[-1]:%d.%m.%Y} tarihinden beri ilerlemedi"
+           if len(_fiyat_son_gercek) else "ilerlemedi")
+        + ". Fiyat farkı ölçülemeyen günde fiyat etkisi de net alım da boş "
+          "bırakılır; sıfır yazılmaz.")
+
 # Birikimli serinin ilk geçerli günü = çıpa (altin_etkisi.CIPA_TARIHI ya da
 # --capa ile verilen tarih). Sabiti burada TEKRAR YAZMIYORUZ: veriden okunur.
 # Birikim, çıpa gününün KENDİ akımını da içerir; yani gerçek başlangıç noktası
@@ -254,6 +282,8 @@ ozet = {
     "ak_cipa_etiket": cipa_ham,
     "ak_birikimli": (_yuvarla(aks["net_doviz_alimi_birikimli"])
                      if aks is not None else None),
+    "ak_gecikme_isgunu": _ak_gecikme,
+    "ak_gecikme_cumle": _ak_gecikme_cumle,
 
     # --- Belirsizlik bantları (raporlama kuralı: nokta tahmin tek başına
     # yayımlanmaz). Kaynak: altin_etkisi.py'deki adlandırılmış hata bütçesi;

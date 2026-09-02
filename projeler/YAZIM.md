@@ -53,8 +53,10 @@ metin serbesttir (11c, uyarı).
    hattın Python'u onları okur dilinde yazar: kod/anahtar adı, grup kodu,
    backtick, ondalık nokta, ISO tarih yok (`ortak/okur_dili.kosu_kaydi_tara`;
    `guncelle.py` hat koşarken uyarır; sınav 17'de kod ve yapım dili engel,
-   anahtar adı ve biçim uyarı). Sayı `ortak/bicim`den yazılır. Aynı kural `ozet.json`
-   `uyari_metni` ve `bayat_cumlesi` için geçerli — `<Deger>` ile sayfaya basılırlar.
+   anahtar adı ve biçim uyarı). Sayı `ortak/bicim`den yazılır. Aynı kural `ozet.json`un
+   CÜMLE olan her metin alanı için geçerli (`okur_dili.ozet_cumleleri`: boşluk
+   içeren ve 40 karakterden uzun her metin değeri) — hepsi `<Deger>` ile sayfaya
+   basılabilir, kapsam bir alan listesinden değil bu sözleşmeden türer.
 5. **Kaynaklar** — seri kodları kod biçiminde (`TP.AB.A02`), yayım takvimi.
 
 ## Sayılar ve dil

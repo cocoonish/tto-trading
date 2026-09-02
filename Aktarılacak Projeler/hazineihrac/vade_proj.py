@@ -228,7 +228,8 @@ def main() -> int:
         if f"vp_plan_ay{i}_fark" in oz:
             kars.append(f"{oz[f'vp_plan_ay{i}_ad']} {oz[f'vp_plan_ay{i}_eski_aov']:.2f} → "
                         f"{oz[f'vp_plan_ay{i}_aov']:.2f} yıl "
-                        f"({oz[f'vp_plan_ay{i}_fark']:+.2f})".replace(".", ","))
+                        f"({oz[f'vp_plan_ay{i}_fark']:+.2f})"
+                        .replace(".", ",").replace("-", "\u2212"))
     oz["vp_karsilastirma_metin"] = " · ".join(kars) or "önceki takvim arşivde yok"
     for k, v in maliyet.items():
         tip, kova = k.split("|")

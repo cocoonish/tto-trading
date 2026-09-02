@@ -484,8 +484,8 @@ def turevleri_ekle(secilen: list["Hat"], atlanan_adlar: set[str] | frozenset = f
 
 def okur_dili_bulgulari(hedef: Path) -> list[str]:
     """Siteye kopyalanan koşu kaydının okur dili: uyarilar.json `uyarilar` ve
-    ozet.json `uyari_metni`/`bayat_cumlesi` sayfaya OLDUĞU GİBİ basılır (koşu
-    kutusu, veri durumu şeridi). Operatör için yazılmış bir satır — `kkm_aktif`
+    ozet.json'un CÜMLE olan her metin alanı sayfaya OLDUĞU GİBİ basılır (koşu
+    kutusu, veri durumu şeridi, `<Deger>` ile gömülen açıklama cümleleri). Operatör için yazılmış bir satır — `kkm_aktif`
     bayrağı, bie_ grup kodu, '5.2%' — hat koştuğu anda burada görünür; yayın
     kapısı (sayfa sınavı 17) aynı soruyu ENGEL olarak sorar. Tanım tek yerde:
     ortak/okur_dili.kosu_kaydi_tara."""
@@ -500,12 +500,40 @@ def okur_dili_bulgulari(hedef: Path) -> list[str]:
         pass
     try:
         d = json.loads((hedef / "ozet.json").read_text(encoding="utf-8"))
-        satirlar += [(f"ozet.json {a}", d[a]) for a in ("uyari_metni", "bayat_cumlesi")
-                     if isinstance(d.get(a), str)]
+        satirlar += [(f"ozet.json {a}", m)
+                     for a, m in okur_dili.ozet_cumleleri(d)]
     except (OSError, ValueError, AttributeError):
         pass
     return [f"{k}: {esl!r} ({aile})"
             for k, m in satirlar for _i, aile, esl in okur_dili.kosu_kaydi_tara([m])]
+
+
+def duman_kos(h: "Hat") -> str | None:
+    """Hattın klasöründeki `duman.py` — ağa çıkmadan, saniyeler içinde, hattın
+    kendi ölçüm sözleşmelerini sorar. Geçerse None, düşerse tek satırlık sebep.
+
+    NEDEN KOŞU'NUN İÇİNDE: sınama yalnız `--denetle` yazan birinin eline
+    bağlıysa bir gün koşulmaz — zamanlanmış koşu `--denetle` demiyor. Ölçüm
+    katmanı sözleşmesini bozmuş bir hat, bozuk çıktıyı siteye kopyalamadan
+    ÖNCE durmalı. Maliyeti saniyeler; yalnız `duman.py`si olan hat için koşar.
+    """
+    yol = KOK / h.klasor / "duman.py"
+    if not yol.exists():
+        return None
+    try:
+        r = subprocess.run([hat_python(h), "-u", "duman.py"],
+                           cwd=str(KOK / h.klasor), env=_COCUK_ENV,
+                           capture_output=True, text=True,
+                           encoding="utf-8", errors="replace", timeout=180)
+    except Exception as e:                                  # zaman aşımı dahil
+        return f"duman sınaması koşmadı ({type(e).__name__})"
+    if r.returncode == 0:
+        return None
+    dusen = [x.strip() for x in (r.stdout + r.stderr).splitlines()
+             if x.strip().startswith("✗")]
+    return ("duman sınaması DÜŞTÜ: "
+            + ("; ".join(dusen[:3]) if dusen else "ayrıntı koşu çıktısında")
+            + f' — çözüm: cd "{h.klasor}" && python duman.py')
 
 
 def yukseklik_denetimi(h: "Hat") -> str | None:
@@ -892,6 +920,24 @@ def denetle(secilen: list["Hat"], tam: bool, duzelt: bool) -> int:
                     engel = [x for x in engel if not x.startswith(f"{h.ad}:")]
                     print(_renk("    ✓ giderildi", 32))
 
+    # DUMAN SINAMASI: klasöründe `duman.py` olan hat, ağa çıkmadan kendi
+    # ölçüm sözleşmelerini sorar. Buraya bağlanmasının sebebi kapsam: bir
+    # sınama yalnız elle koşulduğu sürece bir gün koşulmaz. Ön denetim zaten
+    # her güncellemenin önünde duruyor ve saniyeler sürüyor; sınama da orada
+    # durur. Paketleri eksik olan hat atlanır (ayrı bir ENGEL zaten var).
+    dumanli = [h for h in secilen if (KOK / h.klasor / "duman.py").exists()]
+    if dumanli:
+        print("\n▶ Duman sınamaları")
+        for h in dumanli:
+            if eksik_paketler(h, tam):
+                print(f"  {h.ad:{_AD_G}s} {_renk('atlandı — paket eksik', 33)}")
+                continue
+            sebep = duman_kos(h)
+            print(f"  {h.ad:{_AD_G}s} "
+                  + (_renk("✓ temiz", 32) if sebep is None else _renk("DÜŞTÜ", 31)))
+            if sebep:
+                engel.append(f"{h.ad}: {sebep}")
+
     print("\n▶ Site")
     site = KOK / "site"
     nm = site / "node_modules"
@@ -953,6 +999,9 @@ def kos(h: Hat, tam: bool, gunluk: bool = False) -> tuple[bool, str, float]:
         return False, (f"eksik paket [{nerede}]: {', '.join(eksik[:4])}"
                        + (f" +{len(eksik) - 4}" if len(eksik) > 4 else "")
                        + f" — çözüm: python guncelle.py --kur {h.ad}"), time.time() - t0
+    sebep = duman_kos(h)
+    if sebep:
+        return False, sebep, time.time() - t0
     for i, adim in enumerate(h.adimlar(tam, gunluk), 1):
         print(f"    [{i}] {adim}")
         kod, son = _adim_kos([py, *adim.split()], d)
