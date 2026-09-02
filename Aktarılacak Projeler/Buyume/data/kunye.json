@@ -4,7 +4,7 @@
    "evds_grup": "bie_gsyzhtaken",
    "baslik": "Harcama yöntemi · takvim arındırılmış zincirlenmiş hacim (2009=100)",
    "seri_sayisi": 8,
-   "son_ceyrek": "2026Q1",
+   "son_ceyrek": "2026Q2",
    "adlar": {
     "TP_GSYIH40_HY_B1GQ": "Gross Domestic Product (Purchaser's Price) (Expenditure Approach, Calendar Adjusted Chained Volume Index)",
     "TP_GSYIH40_HY_P311": "Final Consumption Expenditures of Households (Expenditure Approach, Calendar Adjusted Chained Volume Index)",
@@ -20,7 +20,7 @@
    "evds_grup": "bie_gsyzhend",
    "baslik": "Harcama yöntemi · mevsim ve takvim arındırılmış zincirlenmiş hacim",
    "seri_sayisi": 8,
-   "son_ceyrek": "2026Q1",
+   "son_ceyrek": "2026Q2",
    "adlar": {
     "TP_GSYIH30_HY_B1GQ": "Gross Domestic Product (Purchaser's Price) (Expenditure Approach, Seasonally and Calendar Adjusted Chained Volume Index)",
     "TP_GSYIH30_HY_P311": "Final Consumption Expenditures of Households (Expenditure Approach, Seasonally and Calendar Adjusted Chained Volume Index)",
@@ -36,7 +36,7 @@
    "evds_grup": "bie_gsyhhrccar",
    "baslik": "Harcama yöntemi · cari fiyatlarla",
    "seri_sayisi": 8,
-   "son_ceyrek": "2026Q1",
+   "son_ceyrek": "2026Q2",
    "adlar": {
     "TP_GSYIH20_BY_B1GQ": "Gross Domestic Product (Purchaser's Price) (Expenditure Approach, Current Prices)",
     "TP_GSYIH20_BY_P311": "Final Consumption Expenditure of Resident Households (Expenditure Approach, Current Prices)",
@@ -52,7 +52,7 @@
    "evds_grup": "bie_gsyhuretzinc",
    "baslik": "Üretim yöntemi (A10) · zincirlenmiş hacim",
    "seri_sayisi": 14,
-   "son_ceyrek": "2026Q1",
+   "son_ceyrek": "2026Q2",
    "adlar": {
     "TP_GSYIH40_IFC_B1GQ": "Gross Domestic Product (Purchaser's Price) (By Economic Activity, Chained Volume)",
     "TP_GSYIH40_IFC_A": "A - Agriculture, Forestry and Fishing (By Economic Activity, Chained Volume)",
@@ -74,7 +74,7 @@
    "evds_grup": "bie_gsyhuretcar",
    "baslik": "Üretim yöntemi (A10) · cari fiyatlarla",
    "seri_sayisi": 14,
-   "son_ceyrek": "2026Q1",
+   "son_ceyrek": "2026Q2",
    "adlar": {
     "TP_GSYIH040_IFK_B1GQ": "Gross Domestic Product (Purchaser's Price) (By Economic Activity, Chained Volume)",
     "TP_GSYIH040_IFK_A": "A - Agriculture, Forestry and Fishing (By Economic Activity, Chained Volume)",
@@ -96,7 +96,7 @@
    "evds_grup": "bie_nihaitukh",
    "baslik": "Hanehalkı tüketimi · dayanıklılık türüne göre, cari",
    "seri_sayisi": 5,
-   "son_ceyrek": "2026Q1",
+   "son_ceyrek": "2026Q2",
    "adlar": {
     "TP_GSYIH100_HY_P31HNT": "Domestic Consumption By Resident and Non-Resident Households (Household Final Consumtion, By Durability Type, Current Prices)",
     "TP_GSYIH100_HY_P311": "Durable Goods (Household Final Consumtion, By Durability Type, Current Prices)",
