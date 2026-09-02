@@ -61,8 +61,8 @@ HAT_ADI = {
     "butce-borc": "Bütçe ve borç stoku",
     "tl-tasima": "TL taşıma defteri",
     "tufex-basabas": "TÜFEX ve başabaş enflasyon",
-    "makroihtiyati": "Makroihtiyati izi",
-    "reel-sektor-fx": "Reel sektör döviz pozisyonu",
+    "makroihtiyati": "Makroihtiyatinin izi",
+    "reel-sektor-fx": "Reel sektörün döviz pozisyonu",
     "buyume": "Büyüme",
     "el-nino": "El Niño ve gıda enflasyonu",
 }

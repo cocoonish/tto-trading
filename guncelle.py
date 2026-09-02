@@ -268,7 +268,7 @@ HATLAR: list[Hat] = [
         ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
         {"cikti/*.html": "*", "uyarilar.json": "uyarilar.json"},
         tarih_anahtarlari=("_tarih", "faiz_gun")),
-    Hat("kredi", "Kredi & Parasal Büyüklükler", P / "Kredi", "kredi-parasal",
+    Hat("kredi", "Kredi ve Parasal Büyüklükler", P / "Kredi", "kredi-parasal",
         # veri.py EVDS3'ten dört frekansta çeker (haftalık para ve banka, iş günü
         # kur/bilanço/APİ, aylık KKM ve banka türü, üç aylık BKEA) ve aile bazlı
         # tazelik + kimlik denetimlerini yapar. metrik.py kur etkisinden
@@ -281,7 +281,7 @@ HATLAR: list[Hat] = [
         # Üç ayrı frekans, üç ayrı donma riski: haftalık kredi ilerlerken aylık
         # KKM/banka türü tarafı sessizce durabiliyor. Tek anahtara bakmak yetmez.
         tarih_anahtarlari=("_tarih", "gun_tarih", "ay_tarih")),
-    Hat("fonlama", "TCMB Fonlama & Likidite", P / "Fonlama", "fonlama-likidite",
+    Hat("fonlama", "TCMB Fonlama ve Likidite", P / "Fonlama", "fonlama-likidite",
         # veri.py EVDS3'ten çeker (12 saat TTL'li önbellek; iş günü serileri
         # 366 günlük, haftalık seriler 900 haftalık parçalar hâlinde — EVDS
         # 1000 satırdan sonrasını SESSİZCE kırpıyor). metrik.py AOFM'yi tabanı
@@ -297,7 +297,7 @@ HATLAR: list[Hat] = [
         # haftalık faiz Cuma, ZK tabanı bir hafta daha geriden. Tek anahtara
         # bakmak "veri tazelendi" derdi.
         tarih_anahtarlari=("_tarih", "hafta_kisa", "zk_taban_tarih")),
-    Hat("odemeler", "Ödemeler Dengesi & Dış Finansman", P / "OdemelerDengesi",
+    Hat("odemeler", "Ödemeler Dengesi ve Dış Finansman", P / "OdemelerDengesi",
         "odemeler-dengesi",
         # veri.py EVDS3'ten dört frekansta çeker (aylık ödemeler dengesi,
         # haftalık dış borç ödeme takvimi, üç aylık GSYH, günlük kur) ve
@@ -313,7 +313,7 @@ HATLAR: list[Hat] = [
         # ~2 ay gecikmeli, haftalık takvim ~5 gün, GSYH ~145 gün. Tek anahtara
         # bakmak "veri tazelendi" derdi.
         tarih_anahtarlari=("_tarih", "_tarih2", "_tarih3")),
-    Hat("dibs", "DİBS Verim Eğrisi & Reel Faiz", P / "DIBS", "dibs-verim-egrisi",
+    Hat("dibs", "DİBS Verim Eğrisi ve Reel Faiz", P / "DIBS", "dibs-verim-egrisi",
         # veri.py EVDS3'ten DİBS strip evrenini (güncel + arşiv) ve referans
         # faizleri çeker; önbellek seri bazında TTL'lidir ve çekim istisnayla
         # düşerse DOLU önbelleğe DOKUNMAZ (boş önbellek "EVDS doğruladı"
@@ -329,7 +329,7 @@ HATLAR: list[Hat] = [
         # İki frekans, iki donma riski: eğri ve referans faizler günlük, anket
         # ile TÜFE aylık. Tek anahtara bakmak "veri tazelendi" derdi.
         tarih_anahtarlari=("_tarih", "_tarih2")),
-    Hat("butce", "Bütçe & Borç Stoku", P / "Butce", "butce-borc",
+    Hat("butce", "Bütçe ve Borç Stoku", P / "Butce", "butce-borc",
         # veri.py EVDS3'ten aylık bütçe, üç aylık dış borç ve GSYH, haftalık
         # menkul kıymet sahipliği ve günlük kur çeker. metrik.py'nin kritik işi
         # STOK TANIMI: iç borç (ihraç tabanlı) ile brüt dış borç (yerleşiklik
@@ -356,7 +356,7 @@ HATLAR: list[Hat] = [
         ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
         {"cikti/*.html": "*"},
         not_="Üç aylık; TÜİK yayımı ~60 gün gecikmeli."),
-    Hat("elnino", "El Niño & Gıda Enflasyonu", P / "ElNino", "el-nino",
+    Hat("elnino", "El Niño ve Gıda Enflasyonu", P / "ElNino", "el-nino",
         # veri.py ONI'yi NOAA'nın üç ayrı genel ucundan sırayla dener (hiçbiri
         # çalışmazsa hat DURUR) ve TÜFE alt endekslerini Enflasyon hattıyla AYNI
         # kodlardan çeker. metrik.py'nin kurucu kararı: ham gıda enflasyonu ile

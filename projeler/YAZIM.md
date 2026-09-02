@@ -7,7 +7,7 @@ her sayı kendi tarihini taşır. Metin kısa, sayılar canlı, şekillerin hesa
 anlatılmış olmalıdır.
 
 Rehber esastır; kural buraya yazılır ve araca konur. Ölçülebilen her kural
-`site/tools/sayfa_sinavi.py`de bir ölçüttür (1, 2, 11, 11b, 12).
+`site/tools/sayfa_sinavi.py`de bir ölçüttür (1, 2, 2c, 11, 11b, 11c, 12).
 
 ---
 
@@ -18,7 +18,10 @@ korunur (TCMB, TL, TÜFEX, DİBS, REDK, USD/TRY, GSYH). `&` yazılmaz, `ve`
 yazılır. Ör. `TCMB net rezerv takibi`, `Yabancı pozisyonu: DİBS ve hisse
 akımları`. Liste sayfasında ve ana sayfa tablosunda on yedi başlık alt alta
 durur; iki üslup yan yana yayın kimliğini bozar. Sınav: `&` engel, Başlık
-Düzeni uyarı (11b).
+Düzeni uyarı (11b). **Gövdedeki bağlantı metni de sayfanın başlığını
+taşır** (`<a href="/projeler/enflasyon/">Enflasyon panosu</a>`); slug'ın kendisi
+("kredi-parasal") okura gitmez, "Kredi hattının" gibi açıklayıcı küçük harfli
+metin serbesttir (11c, uyarı).
 
 ## Ön bilgi (frontmatter)
 

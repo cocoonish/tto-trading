@@ -28,6 +28,7 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
   (11) MANŞET KAPSAMI — her proje sayfasının HAT_MANSET girdisi var mı ve
       anahtarı ozet.json'da mı? (eksik pano tablodan sessizce düşerdi)
   (11b) PROJE BAŞLIĞI — cümle düzeni; '&' engel, Başlık Düzeni uyarı.
+  (11c) PROJE BAĞLANTI METNİ — gövdedeki /projeler/ bağları başlığı cümle düzeninde taşır; slug metin olmaz (uyarı).
   (2c) KOŞU KUTUSU — `sayi=` ya da slotta elle uyarı özeti yok (dosyadan basılır).
   (12) ÖZET SAATİ — her ozet.json'un `_tarih`i çözülüyor, yarından ileri
       değil ve canlı bacakların en yenisinden geride kalmamış.
@@ -471,7 +472,22 @@ def main() -> int:
         if buyuk:
             uyari.append(f"proje başlığı Başlık Düzeni'nde ({yol.stem}): {baslik!r} — {buyuk}")
             n_baslik_uyari += 1
-    print(f"  {len(proje_mdx)} başlık · uyarı {n_baslik_uyari}")
+    # (11c) Gövdedeki /projeler/ bağlantı metinleri de aynı kurala uyar: Başlık
+    # Düzeni ya da slug'ın kendisi ("kredi-parasal") okura gitmez — uyarı.
+    n_bag = 0
+    for yol in proje_mdx:
+        govde = yol.read_text(encoding="utf-8")
+        metinler = [m.group(2) for m in re.finditer(r'<a href="/projeler/([a-z-]+)/?">([^<]*?)</a>', govde, re.S)]
+        metinler += [m.group(1) for m in re.finditer(r"\[([^\]]{2,60})\]\(/projeler/[a-z-]+/?\)", govde)]
+        for ic in metinler:
+            norm = " ".join(ic.split())
+            sozcukler = re.split(r"[\s:/—–]+", norm)[1:]
+            buyuk = [w for w in sozcukler if w and w[0].isupper() and w not in OZEL_AD and not w.isupper()]
+            slugmu = re.fullmatch(r"[a-z]+(?:-[a-z]+)+", norm) is not None
+            if buyuk or slugmu:
+                uyari.append(f"proje bağlantı metni ({yol.stem}): {norm!r} — {'slug metin olmaz' if slugmu else 'cümle düzeni'}")
+                n_bag += 1
+    print(f"  {len(proje_mdx)} başlık · uyarı {n_baslik_uyari} · bağlantı metni uyarı {n_bag}")
 
     # ---------------------------------------------------------------- (12)
     # ÖZET SAATİ. `_tarih` hattın en yeni CANLI bacağının günüdür (CLAUDE.md
