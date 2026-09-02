@@ -119,6 +119,19 @@ TETIKLER: tuple[Tetik, ...] = (
           r"Tüketici Fiyat Endeksi", ("TÜİK",), en_gec=35, gecikme_dk=90),
     # GDELT haber akışı sürekli; resmî yayım takvimi yok, haftalık ritim yeter.
     Tetik("fx", "GDELT haber akışı (resmî takvimi yok, haftalık ritim)", en_gec=9),
+    # TÜREV HATLAR (carry, tufex, makro) BİLEREK tarifsiz: kendi kaynaklarına
+    # gitmezler, üst hatların depoya yazdığı CSV'lerden saniyeler içinde
+    # hesaplanırlar ve kararlar() tarifsiz hattı her koşuda koşturur. Üst
+    # hattın tetiğine bağlanmaları yanlış olurdu: üst hat düşüp bir sonraki
+    # koşuda kurtulursa türev hattın damgası tetiği geçmiş sayar ve sayfa bir
+    # gün bayat kalır.
+    # Reel sektör döviz pozisyonu: TCMB, aylık, ~2 ay gecikmeli. KALIP TAKVİMDE
+    # DOĞRULANMADI (02.09.2026: takvim ucu bu koşucudan okunamadı). Ölü çıkarsa
+    # kararlar() "KALIP ÖLÜ" der ve hattı yine koşturur — ilk koşunun logu
+    # kalıbı doğrular ya da düzelttirir.
+    Tetik("reelfx", "TCMB finansal kesim dışındaki firmaların döviz varlık ve "
+                    "yükümlülükleri (aylık, ~2 ay gecikmeli)",
+          r"Finansal Kesim Dışındaki Firmaların Döviz Varlık", ("TCMB",), en_gec=75),
 )
 
 TETIK = {t.hat: t for t in TETIKLER}

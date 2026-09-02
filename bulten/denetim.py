@@ -858,16 +858,32 @@ class Denetim:
         else:
             self._ok(f"haber tonu: {len(hareketler)} olağandışı hareket anılmış")
 
+    # Revizyon kıyasına giren seriler: (ad, satır listesi, anahtar üretici,
+    # değer alanı, tolerans). Anahtar MUTLAKA satırın kendi tarihini içerir:
+    # kıyas ancak AYNI güne ait sayı için anlamlıdır. Tarih taşımayan alanlar
+    # (piyasa.turetilmis, rejim) kıyasa girmez — farklı günlerin sayısını
+    # "değişti" diye listelemek uydurma olurdu.
+    REVIZYON_SERILERI = (
+        ("piyasa", lambda b: [s for g in (b.get("piyasa", {}).get("gruplar") or []) for s in (g.get("satirlar") or [])],
+         lambda s: (s.get("kod"), s.get("tarih")), "d1", 0.005),
+        ("TL faiz", lambda b: b.get("piyasa", {}).get("tr_faizleri") or [],
+         lambda s: (s.get("ad"), s.get("tarih")), "deger", 0.005),
+        ("gösterge", lambda b: b.get("gostergeler") or [],
+         lambda s: (s.get("hat"), s.get("anahtar"), s.get("veri_tarihi")), "deger", None),
+    )
+
     def revizyon(self):
         """Daha önce YAYIMLADIĞIMIZ bir sayı sonradan değişti mi.
 
-        Bir enstrümanın aynı bar gününe ait günlük değişimi iki farklı bültende
-        iki farklı değerle çıkıyorsa, ikisinden biri yanlış yayımlanmıştır.
-        27.08'de tam bu oldu ve yazan taraf bunu ENERJİDE fark edip düzeltti,
-        ama aynı kusurun metallerde de olduğunu görmedi — çünkü fark etmesi
-        gözüne çarpmasına bağlıydı, ölçülmüyordu. Artık ölçülüyor: değişen her
-        sayı adıyla listelenir, yazan taraf ya kaynağını doğrular ya da
-        "yayımlanan X yerine gerçek hareket Y" kalıbıyla geri alır.
+        Bir serinin aynı güne ait değeri iki farklı bültende iki farklı
+        sayıyla çıkıyorsa, ikisinden biri yanlış yayımlanmıştır. 27.08'de tam
+        bu oldu ve yazan taraf bunu ENERJİDE fark edip düzeltti, ama aynı
+        kusurun metallerde de olduğunu görmedi — çünkü fark etmesi gözüne
+        çarpmasına bağlıydı, ölçülmüyordu. Artık ölçülüyor ve yalnız piyasa
+        satırlarında değil: TL faiz seti ve gösterge şeridi de kıyasa girer
+        (REVIZYON_SERILERI). Değişen her sayı adıyla listelenir; yazan taraf
+        ya kaynağını doğrular ya da "yayımlanan X yerine gerçek değer Y"
+        kalıbıyla geri alır.
         """
         try:
             dosyalar = sorted(BULTEN.glob("*.json"))
@@ -877,38 +893,42 @@ class Denetim:
         oncekiler = [d for d in dosyalar if d.stem < str(bugunku)][-3:]
         if not oncekiler:
             return
-        simdi = {}
-        for g in (self.b.get("piyasa", {}).get("gruplar") or []):
-            for s in (g.get("satirlar") or []):
-                if s.get("tarih") is not None and s.get("d1") is not None:
-                    simdi[(s.get("kod"), s["tarih"])] = (s["ad"], s["d1"], s.get("degisim_birim", ""))
-        degisen = []
+        eskiler = []
         for d in reversed(oncekiler):
             try:
-                eski_b = json.loads(d.read_text(encoding="utf-8"))
+                eskiler.append((d.stem, json.loads(d.read_text(encoding="utf-8"))))
             except Exception:
                 continue
-            for g in (eski_b.get("piyasa", {}).get("gruplar") or []):
-                for s in (g.get("satirlar") or []):
-                    anahtar = (s.get("kod"), s.get("tarih"))
-                    if anahtar not in simdi or s.get("d1") is None:
+        degisen = []
+        for seri_ad, satirlar, anahtar_f, alan, tol in self.REVIZYON_SERILERI:
+            simdi = {}
+            for s in satirlar(self.b):
+                k = anahtar_f(s)
+                if None in k or s.get(alan) is None:
+                    continue
+                t = tol if tol is not None else 0.5 * 10 ** (-int(s.get("ondalik", 2)))
+                simdi[k] = (s.get("ad"), s[alan], s.get("degisim_birim", s.get("birim", "")), t)
+            for stem, eski_b in eskiler:
+                for s in satirlar(eski_b):
+                    k = anahtar_f(s)
+                    if k not in simdi or s.get(alan) is None:
                         continue
-                    ad, yeni_d1, birim = simdi[anahtar]
-                    if abs(float(s["d1"]) - float(yeni_d1)) <= 0.005:
+                    ad, yeni, birim, t = simdi[k]
+                    if abs(float(s[alan]) - float(yeni)) <= t:
                         continue
-                    if any(x[0] == ad for x in degisen):
+                    if any(x[0] == seri_ad and x[1] == ad for x in degisen):
                         continue
-                    degisen.append((ad, s["d1"], yeni_d1, birim, d.stem))
+                    degisen.append((seri_ad, ad, s[alan], yeni, birim, stem))
         if degisen:
-            satir = ", ".join(f"{ad}: {e}{b} → {y}{b} ({g} bülteninde yayımlandı)"
-                              for ad, e, y, b, g in degisen[:6])
+            satir = ", ".join(f"{sa} · {ad}: {e}{b} → {y}{b} ({g} bülteninde yayımlandı)"
+                              for sa, ad, e, y, b, g in degisen[:6])
             self.uyari.append(
                 f"YAYIMLANAN SAYI DEĞİŞTİ ({len(degisen)}) — {satir}"
                 + (" …" if len(degisen) > 6 else "")
                 + ". Her birinin sebebini bul; ölçü düzeltmesiyse metinde "
-                "'yayımlanan X yerine gerçek hareket Y' kalıbıyla geri al.")
+                "'yayımlanan X yerine gerçek değer Y' kalıbıyla geri al.")
         else:
-            self._ok("daha önce yayımlanan sayı değişmemiş")
+            self._ok("daha önce yayımlanan sayı değişmemiş (piyasa, TL faiz, gösterge)")
 
     # Okur metninde sayı yazımı: eksi U+2212, ondalık virgül (ortak/bicim ile
     # aynı sözleşme). ASCII tire ve nokta ondalık bir hattın kendi f-string'inden

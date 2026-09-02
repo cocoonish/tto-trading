@@ -20,7 +20,8 @@ Kullanım:
     python3 tweet/denetim.py dosya.txt      # tek metni sına, çıkış 1 = engel
 
 Kalıplar tek yerde durur: okur dili ortak/okur_dili.py'den, tavsiye dili
-bulten/denetim.py'den alınır — üç ayrı liste bir gün sessizce ayrışırdı.
+ortak/tavsiye_dili.py'den, uzunluk tavanı uret.TEK_TAVAN'dan alınır — ayrı
+listeler bir gün sessizce ayrışırdı.
 """
 from __future__ import annotations
 

@@ -302,6 +302,9 @@ def main() -> int:
                     print(f"::warning::{anahtar}: yayın günü {gun - dt.timedelta(days=1)}, "
                           "bir gün gecikmeyle gönderiliyor.")
                 z = analiz_m.analiz_zinciri(an)
+                for u in analiz_m.UYARILAR:
+                    print(f"::warning::{u}")
+                analiz_m.UYARILAR.clear()
                 is_listesi.append((anahtar, z, list(uret.DUSEN)))
 
     if not is_listesi:

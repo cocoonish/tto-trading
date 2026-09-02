@@ -27,6 +27,8 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       bilgi, yönetici özeti, kapanış bölümü.
   (11) MANŞET KAPSAMI — her proje sayfasının HAT_MANSET girdisi var mı ve
       anahtarı ozet.json'da mı? (eksik pano tablodan sessizce düşerdi)
+  (11b) PROJE BAŞLIĞI — cümle düzeni; '&' engel, Başlık Düzeni uyarı.
+  (2c) KOŞU KUTUSU — `sayi=` ya da slotta elle uyarı özeti yok (dosyadan basılır).
   (12) ÖZET SAATİ — her ozet.json'un `_tarih`i çözülüyor, yarından ileri
       değil ve canlı bacakların en yenisinden geride kalmamış.
   (13) BİÇİM TEK KAYNAK (uyarı) — lib/bicim.ts dışında yerel biçimleyici.
@@ -428,6 +430,48 @@ def main() -> int:
                 hata.append(f"HAT_MANSET: {slug}.{alan}='{k.group(1)}' ozet.json'da yok")
         n_tam += 1
     print(f"  {len(proje_mdx)} pano · girdisi ve anahtarı tam {n_tam}")
+
+    # (2c) KOŞU KUTUSU ELLE SAYI TAŞIMAZ. Kutu uyarı listesini koşu kaydından
+    # basar; MDX'te `sayi=` ya da slot içinde uyarı özeti kalırsa donar ve
+    # 1/2b ölçütleri onu GÖRMEZ (yalnız <Deger> tarar). Kendini kapatan etiket
+    # slotsuz sayılır.
+    for yol in proje_mdx:
+        mdx = yol.read_text(encoding="utf-8")
+        for m in re.finditer(r"<KosuKutusu\b([^>]*?)(/?)>", mdx):
+            if "sayi=" in m.group(1):
+                hata.append(f"{yol.stem}: koşu kutusunda `sayi=` — sayı koşu kaydından gelir, elle yazılmaz")
+            if m.group(2):
+                continue
+            kapanis = mdx.find("</KosuKutusu>", m.end())
+            govde = mdx[m.end():kapanis] if kapanis > 0 else ""
+            if re.search(r"\d", govde):
+                hata.append(f"{yol.stem}: koşu kutusu slotunda sayı taşıyan metin — uyarılar dosyadan basılır")
+
+    # ---------------------------------------------------------------- (11b)
+    # PROJE BAŞLIĞI YAZIMI (projeler/YAZIM.md): cümle düzeni — ilk sözcük büyük,
+    # kalanlar küçük; özel ad ve kısaltmalar korunur; '&' yerine 've'. İki üslup
+    # yan yana liste sayfasında ve ana sayfa tablosunda göze çarpıyordu.
+    # '&' ENGEL, büyük harf uyarı (özel ad listesi kodda; yanlış alarm ölçülür).
+    print("\n▶ Proje başlığı yazımı (projeler/YAZIM.md)")
+    OZEL_AD = {"TCMB", "TL", "TÜFEX", "DİBS", "REDK", "USD/TRY", "GSYH", "FX", "TÜFE", "ÜFE",
+               "İTO", "PPK", "BIST", "ABD", "AB", "IMF", "OIS", "ASW", "DXY", "GSYİH", "TÜİK",
+               "Hazine", "Merkezi", "Türkiye", "İstanbul", "Avrupa", "Fed", "ECB"}
+    n_baslik_uyari = 0
+    for yol in proje_mdx:
+        on = yol.read_text(encoding="utf-8")[:2000]
+        m = re.search(r"^title:\s*['\"](.+?)['\"]\s*$", on, re.M)
+        if not m:
+            continue
+        baslik = m.group(1)
+        if "&" in baslik:
+            hata.append(f"proje başlığı '&' taşıyor ({yol.stem}): {baslik!r} — 've' yazılır")
+        sozcukler = re.split(r"[\s:/—–-]+", baslik)[1:]
+        buyuk = [w for w in sozcukler if w and w[0].isupper() and w not in OZEL_AD
+                 and not w.isupper()]
+        if buyuk:
+            uyari.append(f"proje başlığı Başlık Düzeni'nde ({yol.stem}): {baslik!r} — {buyuk}")
+            n_baslik_uyari += 1
+    print(f"  {len(proje_mdx)} başlık · uyarı {n_baslik_uyari}")
 
     # ---------------------------------------------------------------- (12)
     # ÖZET SAATİ. `_tarih` hattın en yeni CANLI bacağının günüdür (CLAUDE.md

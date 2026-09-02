@@ -99,6 +99,12 @@ jobs:
             echo "defter ve jeton değişmedi"
           else
             git commit -m "tweet: $(date -u +'%Y-%m-%d') defter/arşiv/jeton (otomatik)"
-            git pull --rebase --autostash
-            git push
+            # Yarışta düşen push defter commit'ini kaybederdi; ertesi koşu aynı
+            # içeriği yeniden atardı. Üç deneme, sonuncusu da düşerse iş DÜŞER
+            # (sessiz kayıp yok: e-posta gider, defter elle kurtarılır).
+            for i in 1 2 3; do
+              if git pull --rebase --autostash && git push; then break; fi
+              if [ "$i" = 3 ]; then echo "::error::defter push edilemedi — mükerrer gönderi riski, elle kurtar"; exit 1; fi
+              sleep $((i * 5))
+            done
           fi

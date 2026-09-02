@@ -73,19 +73,25 @@ Her hattın ayrıca **tek başına çalışan** bir deposu var (yalnız o projey
 
 | Hat | Sayfa | Kaynak | Tek başına depo |
 |---|---|---|---|
-| `tcmb` | TCMB Net Rezerv Takibi | EVDS analitik bilanço + IRFCL | [tcmb-net-rezerv](https://github.com/cocoonish/tcmb-net-rezerv) |
-| `usdtry` | USD/TRY Devalüasyon Hızı | EVDS kur | [usdtry-deval](https://github.com/cocoonish/usdtry-deval) |
-| `reer` | TL Reel Efektif Döviz Kuru | EVDS REDK | [try-reer](https://github.com/cocoonish/try-reer) |
-| `yabanci` | Yabancı Pozisyonu (DİBS/hisse) | EVDS menkul kıymet ist. | [yabanci-pozisyon](https://github.com/cocoonish/yabanci-pozisyon) |
-| `hazine` | Hazine İhraç Takvimi & İhale Analizi | Hazine sitesi (scraper) | [hazine-ihrac](https://github.com/cocoonish/hazine-ihrac) |
-| `fx` | FX Haber-Duyarlılık Endeksi | GDELT + RSS + FinBERT | [fx-haber-endeksi](https://github.com/cocoonish/fx-haber-endeksi) |
-| `marj` | Yiyecek Hizmetleri: Fiyat/Maliyet Marjı | EVDS + TÜİK MEDAS | [yiyecek-marj](https://github.com/cocoonish/yiyecek-marj) |
-| `enflasyon` | Enflasyon Panosu | EVDS3 TÜFE ağacı + ÖKTG + anketler | — |
-| `kredi` | Kredi ve Parasal Büyüklükler | EVDS3 haftalık para-banka + analitik bilanço | — |
-| `fonlama` | TCMB Fonlama ve Likidite | EVDS3 APİ + kotasyon + TLREF + ZK | — |
-| `dibs` | DİBS Verim Eğrisi ve Reel Faiz | EVDS3 DİBS fiyat/kupon + TÜFEX + anket | — |
-| `odemeler` | Ödemeler Dengesi ve Dış Finansman | EVDS3 ödemeler dengesi + dış borç + GSYH | — |
-| `butce` | Bütçe ve Borç Stoku | EVDS3 bütçe + dış borç + menkul kıymet sahipliği | — |
+| `tcmb` | TCMB net rezerv takibi | EVDS analitik bilanço + IRFCL | [tcmb-net-rezerv](https://github.com/cocoonish/tcmb-net-rezerv) |
+| `usdtry` | USD/TRY devalüasyon hızı | EVDS kur | [usdtry-deval](https://github.com/cocoonish/usdtry-deval) |
+| `reer` | TL reel efektif döviz kuru | EVDS REDK | [try-reer](https://github.com/cocoonish/try-reer) |
+| `yabanci` | Yabancı pozisyonu: DİBS ve hisse akımları | EVDS menkul kıymet ist. | [yabanci-pozisyon](https://github.com/cocoonish/yabanci-pozisyon) |
+| `hazine` | Hazine ihraç takvimi ve ihale analizi | Hazine sitesi (scraper) | [hazine-ihrac](https://github.com/cocoonish/hazine-ihrac) |
+| `fx` | FX haber-duyarlılık endeksi | GDELT + RSS + FinBERT | [fx-haber-endeksi](https://github.com/cocoonish/fx-haber-endeksi) |
+| `marj` | Yiyecek hizmetleri: fiyat/maliyet marjı | EVDS + TÜİK MEDAS | [yiyecek-marj](https://github.com/cocoonish/yiyecek-marj) |
+| `enflasyon` | Enflasyon panosu | EVDS3 TÜFE ağacı + ÖKTG + anketler | — |
+| `kredi` | Kredi ve parasal büyüklükler | EVDS3 haftalık para-banka + analitik bilanço | — |
+| `fonlama` | TCMB fonlama ve likidite | EVDS3 APİ + kotasyon + TLREF + ZK | — |
+| `dibs` | DİBS verim eğrisi ve reel faiz | EVDS3 DİBS fiyat/kupon + TÜFEX + anket | — |
+| `odemeler` | Ödemeler dengesi ve dış finansman | EVDS3 ödemeler dengesi + dış borç + GSYH | — |
+| `butce` | Merkezi yönetim bütçesi ve borç stoku | EVDS3 bütçe + dış borç + menkul kıymet sahipliği | — |
+| `carry` | TL taşıma defteri | Fonlama + DİBS depo serileri (türev) | — |
+| `tufex` | TÜFEX ve başabaş enflasyon | DİBS + Enflasyon depo serileri (türev) | — |
+| `makro` | Makroihtiyatinin izi | Kredi + Fonlama depo serileri (türev) | — |
+| `reelfx` | Reel sektörün döviz pozisyonu | EVDS3 bie_fdvy (aylık) | — |
+
+Panoların yazım standardı **[`projeler/YAZIM.md`](projeler/YAZIM.md)** (başlık cümle düzeni, ön bilgi alanları, `ozet.json` saat sözleşmesi).
 
 Siteye girmeyen ek araç: [try-asw](https://github.com/cocoonish/try-asw) — Bloomberg TRY OIS
 eğrisiyle ASW hesaplayıcı (BBG terminali gerektirir, o yüzden sitede yok).

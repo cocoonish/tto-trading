@@ -45,6 +45,56 @@ def son_bulten() -> dict | None:
     return json.loads(dosyalar[-1].read_text(encoding="utf-8")) if dosyalar else None
 
 
+def _yayin_takvimi():
+    """Okura anlatılan saat, iş akışının gerçek saati olmalı. JSON tek kaynak;
+    her adımın saati ilgili cron satırından (UTC+3) türetilmiş olmalı."""
+    import json as _json, re as _re
+    kok = Path(__file__).resolve().parents[1]
+    tk = _json.loads((kok / "site" / "src" / "data" / "yayin_takvimi.json").read_text(encoding="utf-8"))
+    n = 0
+    for y in tk["yayinlar"]:
+        for ad in y["adimlar"]:
+            yml = (kok / ".github" / "workflows" / ad["is_akisi"]).read_text(encoding="utf-8")
+            cronlar = _re.findall(r"^\s*-\s*cron:\s*'(\d+) (\d+) ", yml, _re.M)
+            assert len(cronlar) > ad["cron_no"], f"{ad['is_akisi']}: {ad['cron_no']}. cron yok ({len(cronlar)} var)"
+            dk, saat = cronlar[ad["cron_no"]]
+            ist = f"{(int(saat) + 3) % 24:02d}:{int(dk):02d}"
+            assert ist == ad["istanbul"], (f"{y['yayin']} · {ad['ad']}: takvim {ad['istanbul']} diyor, "
+                                          f"{ad['is_akisi']} cron {ist} İstanbul")
+            n += 1
+    assert n >= 6, f"takvimde çok az adım sınandı ({n})"
+
+
+def _revizyon():
+    import json as _json
+    import tempfile
+    import denetim as dn
+    class _D(dn.Denetim):
+        def __init__(self, b):
+            self.b = b; self.gecen = []; self.uyari = []; self.engel = []; self.ayrinti = False
+    def bulten(tarih, faiz, gosterge, piyasa_d1, gun="31.08.2026"):
+        return {"tarih": tarih,
+                "piyasa": {"gruplar": [{"satirlar": [{"kod": "XAU", "ad": "Altın", "tarih": gun, "d1": piyasa_d1, "degisim_birim": "%"}]}],
+                           "tr_faizleri": [{"ad": "Politika faizi", "deger": faiz, "birim": "%", "tarih": gun}]},
+                "gostergeler": [{"ad": "USD/TRY", "hat": "usdtry", "anahtar": "kur", "deger": gosterge, "ondalik": 2, "veri_tarihi": gun}]}
+    eski_BULTEN = dn.BULTEN
+    with tempfile.TemporaryDirectory() as td:
+        dn.BULTEN = Path(td)
+        (dn.BULTEN / "2026-08-31.json").write_text(_json.dumps(bulten("2026-08-31", 40.0, 48.10, -0.86)), encoding="utf-8")
+        try:
+            d1 = _D(bulten("2026-09-01", 37.0, 48.17, 1.78)); d1.revizyon()
+            assert len(d1.uyari) == 1 and "TL faiz · Politika faizi" in d1.uyari[0] and "gösterge · USD/TRY" in d1.uyari[0] \
+                and "piyasa · Altın" in d1.uyari[0], d1.uyari
+            d2 = _D(bulten("2026-09-01", 40.0, 48.10, -0.86)); d2.revizyon()
+            assert not d2.uyari, d2.uyari
+            d3 = _D(bulten("2026-09-01", 37.0, 48.17, 1.78, gun="01.09.2026")); d3.revizyon()
+            assert not d3.uyari, f"farklı günün sayısı revizyon sanıldı: {d3.uyari}"
+            d4 = _D(bulten("2026-09-01", 40.0, 48.104, -0.86)); d4.revizyon()
+            assert not d4.uyari, f"yuvarlama payı içindeki fark revizyon sanıldı: {d4.uyari}"
+        finally:
+            dn.BULTEN = eski_BULTEN
+
+
 def _bicim():
     import sys as _s
     _s.path.insert(0, str(Path(__file__).resolve().parents[1] / "ortak"))
@@ -661,6 +711,8 @@ def main() -> int:
             assert _j.loads(hedef.read_text(encoding="utf-8"))["yorum"] == "<p>eski</p>", "engelli yama yazıldı"
     sina("yaz.py: yabancı alan reddi · null siler · boş ezmez · yazı damgası/sürümü · mtime sigortası · denetim kapısı", _yaz)
     sina("bicim: sayı yazımı tek kaynak · REDK konumu yön okur · denetim sızıntıyı görür", _bicim)
+    sina("denetim: revizyon ölçütü TL faiz ve göstergeyi de görür, farklı günü karıştırmaz", _revizyon)
+    sina("yayın takvimi (hakkında sayfası) iş akışı cron'larıyla aynı saati söylüyor", _yayin_takvimi)
 
     for ad in gecen:
         print(f"  ✓ {ad}")

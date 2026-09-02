@@ -32,6 +32,8 @@ TEZ_SINIR = 900            # tez paragrafı
 SATIR_SINIR = 420          # tablo satırı başına
 RAKAM_SINIR = 700          # rakam şeridi
 GOVDE_SINIR = uret.TEK_TAVAN
+# Gönderimi durdurmayan ama kayda düşmesi gereken bulgular (gonder.py ::warning:: basar).
+UYARILAR: list[str] = []
 _kirp = uret._kirp
 
 # Yönetici özeti sayfa mobilyasına atıf yapabilir; tweet kendi başına durur.
@@ -220,6 +222,11 @@ def analiz_zinciri(a: dict) -> list[str]:
             parcalar = [f"{etiket}: {deger}" for deger, etiket in yo["rakamlar"] if deger and etiket]
             if parcalar:
                 bolumler.append(_kirp("Kilit ölçümler — " + " · ".join(parcalar), RAKAM_SINIR))
+        # Canlı çözülemeyen değer yedek metniyle gitti: sayı doğru olabilir ama
+        # yazının derleme günündeki hâlidir — kayda düşer, gönderim durmaz.
+        n_yedek = yedek_kalan_sayisi(str(a.get("govde") or ""))
+        if n_yedek:
+            UYARILAR.append(f"{a['slug']}: {n_yedek} canlı değer çözülemedi, yedek metin gönderildi")
     else:
         # Yedek yol: yalnız ön bilgideki TEZ (ozet). Açıklama alınmaz — statik
         # metindir, sayıları canlı değildir; yönetici özeti olmayan bir yazının
@@ -228,6 +235,7 @@ def analiz_zinciri(a: dict) -> list[str]:
         if not tez:
             raise SystemExit(f"{a['slug']}: yönetici özeti de tez de yok — gönderi kurulamaz")
         bolumler.append(_kirp(tez, TEZ_SINIR))
+        UYARILAR.append(f"{a['slug']}: yönetici özeti yok — statik tez gönderildi, sayılar canlı değil")
     # Tavan aşılıyorsa sondan değil ORTADAN kısılır: rakam şeridi ve tez kalır,
     # tablo satırları SONDAN itibaren düşer.
     def _metin() -> str:

@@ -250,7 +250,12 @@ jobs:
             # buyume ve elnino da listede: analiz yazılarındaki canlı sayılar
             # (<Deger>) bu hatlardan beslenir; takvim süzgeci onları yalnız
             # kendi yayım günlerinde (GSYH / TÜFE) koşturur.
-            HATLAR="tcmb usdtry reer yabanci fonlama kredi enflasyon dibs odemeler butce marj buyume elnino"
+            # carry tufex makro reelfx EN SONDA: türev hatlar üst hatların (fonlama,
+            # dibs, kredi, enflasyon, tcmb) bu koşuda yazdığı CSV/özetten hesaplanır
+            # ve guncelle.py hatları BU SIRAYLA koşturur. Tazeleme takviminde
+            # tarifleri yok → her koşuda çalışırlar (saniyeler); reelfx'in tarifi
+            # var (aylık, EVDS).
+            HATLAR="tcmb usdtry reer yabanci fonlama kredi enflasyon dibs odemeler butce marj buyume elnino carry tufex makro reelfx"
           fi
           # "zorla" = takvimi hiç sorma. Süzgeci geçirmemek, ona "her şey
           # gerekli" dedirtmekten daha dürüst: karar defterine sahte tetik yazılmaz.
@@ -319,41 +324,6 @@ jobs:
             echo "::warning::Hazine tam kipi düştü (büyük olasılıkla kazıma eksik veri getirdi) — diskteki değişiklikler geri alınıyor, depodaki birikmiş geçmiş korunuyor."
             git checkout -- "Aktarılacak Projeler/hazineihrac" "site/public/projeler/hazine-ihrac" || true
           fi
-
-      # Taşıma defteri kendi kaynağına gitmez: Fonlama ve DİBS'in depoya
-      # yazdığı CSV'lerden türetilir. O yüzden takvim süzgecine tabi değildir
-      # ve her koşuda çalışır — girdileri değişmediyse çıktı da değişmez ve
-      # commit adımı zaten hiçbir şey yazmaz. Saniyeler sürer.
-      - name: TL taşıma defteri (depodaki serilerden)
-        if: always()
-        run: |
-          cd "Aktarılacak Projeler/Carry"
-          python hesap.py
-          python grafik.py
-          cp makas.html endeks.html nakit_tahvil.html konvansiyon.html ozet.json \
-             "../../site/public/projeler/tl-tasima/"
-          cd ../..
-          cd "Aktarılacak Projeler/Tufex"
-          python hesap.py
-          python grafik.py
-          cp basabas_anket.html prim_kesit.html prim_tarihce.html reel_tarihce.html \
-             mevsim.html ozet.json "../../site/public/projeler/tufex-basabas/"
-          cd ../..
-          cd "Aktarılacak Projeler/Makroihtiyati"
-          python hesap.py
-          python grafik.py
-          cp ayrisma.html kacak.html makas.html bkea.html ozet.json duzenlemeler.json \
-             "../../site/public/projeler/makroihtiyati/"
-          cd ../..
-          # Reel sektör FX ağa çıkar (EVDS): düşerse uyar, yer tutucularla devam.
-          cd "Aktarılacak Projeler/ReelSektorFX"
-          python veri_cek.py || echo "::warning::ReelSektorFX EVDS çekimi düştü — sayfa taslak kalır"
-          python hesap.py
-          python grafik.py
-          cp pozisyon.html bilesim.html kisa_vade.html ozet.json \
-             "../../site/public/projeler/reel-sektor-fx/"
-          cd ../..
-          python site/tools/plotly_stil.py --hepsi >/dev/null
 
       # NABIZ: bu iş akışının koştuğunun kaydı. tazeleme_durumu.json yalnız
       # BAŞARIYLA TAZELENEN hattın damgasını tutar; sakin bir günde hiçbir hat

@@ -23,8 +23,8 @@ Kip:
 Sözleşme:
   · Her hat kendi klasöründe koşar; bir adım düşerse o hat DURUR, siteye kopyalama yapılmaz.
   · Diğer hatlar etkilenmez; sonda özet tablo ve çıkış kodu (biri düştüyse 1).
-  · Kopyalama tablosu HATLAR içinde — cron (.github/workflows/veri-guncelle.yml) ile aynı
-    kaynak→hedef eşlemesi. Yeni çıktı eklerken ikisini birden güncelle.
+  · Kopyalama tablosu HATLAR içinde — cron (.github/workflows/veri.yml) aynı kütükten
+    koşar; siteye giden her çıktı burada listelenir, YAML'de kopya tutulmaz.
   · Yorumlayıcı: her hat, klasöründe .venv varsa ONUN python'uyla koşar (bat/kur.bat ya da
     --kur bunu kurar); yoksa guncelle.py'yi çalıştıran python. Eskiden hep ikincisiydi → bat
     ile venv kurulan Windows'ta sistem python'u tcmb/pdfplumber'ı bulamıyor, ilk hat düşüyordu.
@@ -381,6 +381,46 @@ HATLAR: list[Hat] = [
         ["src/run_all.py", "src/web_cikti.py", "src/ozet_uret.py"],
         {"output/web/*.html": "*", "output/ozet.json": "ozet.json"},
         "tam kip: EVDS/TÜİK'ten yeniden çeker; MEDAS için Playwright"),
+    # ── TÜREV HATLAR — kendi kaynağına gitmez, üstteki hatların depoya yazdığı
+    # CSV'lerden hesaplanır. SIRA BAĞLAYICIDIR: kos() hatları komut satırı /
+    # kütük sırasıyla koşturur; bunlar Fonlama, DİBS, Kredi ve Enflasyon'dan
+    # SONRA durmalı, yoksa aynı koşuda dünkü CSV'den hesaplanırlar. Tazeleme
+    # takviminde tarifleri YOK: kararlar() onları "tarifi yok — koşuluyor" ile
+    # her koşuda koşturur (saniyeler); üst hattın tetiğine bağlanmaları, üst
+    # hat düşüp bir sonraki koşuda kurtulduğunda bunları bir gün bayat bırakırdı.
+    # Eskiden veri.yml içinde elle `cd … && python hesap.py && cp …` adımıyla
+    # koşuyorlardı: kopya sözleşmesi YAML'de kopya olarak duruyor, tazelik ve
+    # geriye-gitme kapısı, ön denetim ve --liste onları hiç görmüyordu.
+    # ozet.json kopya sözlüğüne yazılmaz: kos() proje kökündekini kendisi kopyalar.
+    Hat("carry", "TL Taşıma Defteri", P / "Carry", "tl-tasima",
+        ["hesap.py", "grafik.py"], [],
+        {"makas.html": "makas.html", "endeks.html": "endeks.html",
+         "nakit_tahvil.html": "nakit_tahvil.html", "konvansiyon.html": "konvansiyon.html"},
+        "türev hat: Fonlama + DİBS depo serilerinden; her koşuda, saniyeler",
+        tarih_anahtarlari=("_tarih", "endeks_tarih")),
+    Hat("tufex", "TÜFEX ve Başabaş Enflasyon", P / "Tufex", "tufex-basabas",
+        ["hesap.py", "grafik.py"], [],
+        {"basabas_anket.html": "basabas_anket.html", "prim_kesit.html": "prim_kesit.html",
+         "prim_tarihce.html": "prim_tarihce.html", "reel_tarihce.html": "reel_tarihce.html",
+         "mevsim.html": "mevsim.html"},
+        "türev hat: DİBS + Enflasyon depo serilerinden; her koşuda, saniyeler",
+        tarih_anahtarlari=("_tarih", "basabas_2y_tarih")),
+    Hat("makro", "Makroihtiyatinin İzi", P / "Makroihtiyati", "makroihtiyati",
+        ["hesap.py", "grafik.py"], [],
+        {"ayrisma.html": "ayrisma.html", "kacak.html": "kacak.html", "makas.html": "makas.html",
+         "bkea.html": "bkea.html", "duzenlemeler.json": "duzenlemeler.json"},
+        "türev hat: Kredi + Fonlama depo serilerinden; düzenleme defteri elle tutulur",
+        tarih_anahtarlari=("_tarih",)),
+    # Reel sektör FX ağa çıkar (EVDS bie_fdvy, aylık, ~2 ay gecikmeli). Çekim
+    # düşerse hat DURUR ve siteye hiçbir şey kopyalanmaz: sitedeki son iyi
+    # çıktı kalır, koşu ✗ ile görünür. Eski YAML yolu "düşerse uyar, yer
+    # tutucularla devam" diyordu — o yol depodaki gerçek veriyi yer tutucuyla
+    # ezme riski taşıyordu.
+    Hat("reelfx", "Reel Sektörün Döviz Pozisyonu", P / "ReelSektorFX", "reel-sektor-fx",
+        ["veri_cek.py", "hesap.py", "grafik.py"], [],
+        {"pozisyon.html": "pozisyon.html", "bilesim.html": "bilesim.html", "kisa_vade.html": "kisa_vade.html"},
+        "EVDS bie_fdvy; takvim tetiği aylık — çekim düşerse hat durur, site korunur",
+        tarih_anahtarlari=("_tarih", "net_pozisyon_tarih")),
 ]
 HAT = {h.ad: h for h in HATLAR}
 
@@ -391,7 +431,7 @@ def _renk(m, k):  # k: 32 yeşil, 31 kırmızı, 33 sarı, 36 camgöbeği
 
 EVDS_HATLAR = {"tcmb", "usdtry", "reer", "yabanci", "marj", "enflasyon",
                "kredi", "fonlama", "odemeler", "dibs", "butce", "buyume",
-               "elnino"}
+               "elnino", "reelfx"}
 # Liste sütun genişliği hat adlarından türetilir — yeni bir uzun ad eklendiğinde
 # hizalama sessizce bozulmasın ("enflasyon" 9 karakter, eski sabit 8'di).
 _AD_G = max(len(h.ad) for h in HATLAR) + 1

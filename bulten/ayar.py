@@ -96,10 +96,10 @@ RITIM = {
     "tl-tasima": 6,
     "tufex-basabas": 6,
     "makroihtiyati": 11,
-    # "reel-sektor-fx" BİLEREK yok: hat henüz ilk çekimini yapmadı ve ozet.json
-    # yer tutucu. Ritme yazmak, ölçülmemiş bir şeyi ölçülüyor gibi göstermek
-    # olurdu; hat gerçekten koşunca eklenecek (TCMB reel sektör döviz varlık ve
-    # yükümlülükleri aylık, ~2 ay gecikmeli → 75).
+    # Aylık, TCMB ~2 ay gecikmeli yayımlar; 75 gün bir yayım kaymasını taşır.
+    # (Hat ilk çekimini yaptı ve özet gerçek veri taşıyor; önceki "yer tutucu"
+    # gerekçesi düştü.)
+    "reel-sektor-fx": 75,
 }
 
 # Bir hattın ozet.json'u birden fazla SAAT taşıyabilir: aynı dosyada günlük bir
