@@ -20,6 +20,7 @@ seridir; olamayacağı bir mimari kurulmamıştır.
 """
 from __future__ import annotations
 
+from datetime import datetime
 import json
 from pathlib import Path
 
@@ -79,7 +80,16 @@ def hesapla():
                 if deger is not None:
                     ozet[f"{on}_{v}"] = deger
                     ozet[f"{on}_{v}_tarih"] = tarih
-    ozet["_tarih"] = max((ozet[k] for k in ozet if k.endswith("_tarih")), default="")
+    # Hattın saati = en YENİ canlı bacağın günü. Metin karşılaştırması
+    # ("12.06.2026" > "01.09.2026") donmuş 3y bacağını hattın tarihi yapıyor,
+    # sayfa "81 gün önce" diyordu — veri bugüne aitken.
+    def _gun(t):
+        try:
+            return datetime.strptime(str(t), "%d.%m.%Y")
+        except ValueError:
+            return datetime.min
+    tarihler = [ozet[k] for k in ozet if k.endswith("_tarih") and ozet[k]]
+    ozet["_tarih"] = max(tarihler, key=_gun, default="")
     ozet["pka_12a"], _ = son("pka_12a")
     ozet["pka_24a"], _ = son("pka_24a")
 

@@ -21,7 +21,9 @@ KIRMIZI, YESIL, GRI, MAVI = "#8e1f2f", "#1d5c5c", "#8a8578", "#9a7327"
 
 
 def yaz(fig, ad):
-    fig.write_html(BURASI / ad, include_plotlyjs="cdn", config=CFG)
+    # Sabit div kimliği: Plotly rastgele id üretiyor ve veri değişmese de HTML her
+    # koşuda değişip commit üretiyordu (01.09: bir günde beş boş commit).
+    fig.write_html(BURASI / ad, include_plotlyjs="cdn", config=CFG, div_id=ad.replace(".html", ""))
     print(" ", ad)
 
 

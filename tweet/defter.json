@@ -24,6 +24,26 @@
   ],
   "zaman": "2026-09-01T04:38:27+00:00"
  },
+ "analiz:borclanma-programi-vade-2026-08-31": {
+  "idler": [],
+  "zaman": "",
+  "not": "özel gönderimle atıldı (tweet/ozel/borclanma-vade-2026-08-31.txt); araç kanalı 2026-09-01'de açıldı, bu kayıt ikinci gönderimi önler"
+ },
+ "analiz:buyume-2026-08-31": {
+  "idler": [],
+  "zaman": "",
+  "not": "özel gönderimle atıldı (tweet/ozel/buyume-2026-08-31.txt); araç kanalı 2026-09-01'de açıldı, bu kayıt ikinci gönderimi önler"
+ },
+ "analiz:el-nino-enflasyon-2026-08-31": {
+  "idler": [],
+  "zaman": "",
+  "not": "özel gönderimle atıldı (tweet/ozel/elnino-2026-08-31.txt); araç kanalı 2026-09-01'de açıldı, bu kayıt ikinci gönderimi önler"
+ },
+ "analiz:ito-tufe-esleme-2026-09-01": {
+  "idler": [],
+  "zaman": "",
+  "not": "özel gönderimle atıldı (tweet/ozel/ito-tufe-2026-09-01.txt); araç kanalı 2026-09-01'de açıldı, bu kayıt ikinci gönderimi önler"
+ },
  "bulten:2026-09-02": {
   "idler": [
    "2095009212698939532"

@@ -645,11 +645,22 @@ def turetilmis(seri: dict) -> list[dict]:
 
     out = []
 
-    def ekle(ad, deger, birim, d1, aciklama, ondalik=2):
+    def bar_gunu(*kodlar) -> str:
+        """Bacakların son bar günü; farklıysa hepsi ('2026-08-28/2026-08-29').
+        Türev satırın 'aynı gün' anahtarı budur — revizyon kıyası bu alandan yürür."""
+        gunler = sorted({str(seri[k]["tarih"][-1]) for k in kodlar
+                         if seri.get(k) and seri[k].get("tarih")})
+        return "/".join(gunler)
+
+    def ekle(ad, deger, birim, d1, aciklama, ondalik=2, kodlar=(), degisim_birim=None):
         if deger is None:
             return
         out.append({"ad": ad, "deger": round(deger, ondalik), "birim": birim,
-                    "d1": None if d1 is None else round(d1, 1), "aciklama": aciklama})
+                    "d1": None if d1 is None else round(d1, 1), "aciklama": aciklama,
+                    # Revizyon ve biçim için: satırın günü, hanesi ve değişimin birimi
+                    # (BIST dolar bazlı: seviye USD puan, günlük değişim %).
+                    "tarih": bar_gunu(*kodlar), "ondalik": ondalik,
+                    "degisim_birim": degisim_birim if degisim_birim is not None else birim})
 
     # Verim eğrisi eğimleri (baz puan)
     for ad, uzun, kisa, acik in (
@@ -665,7 +676,7 @@ def turetilmis(seri: dict) -> list[dict]:
             continue
         e = (u - ks) * 100
         d1 = ((u - ks) - (u1 - k1)) * 100 if (u1 is not None and k1 is not None) else None
-        ekle(ad, e, "bp", d1, acik, 0)
+        ekle(ad, e, "bp", d1, acik, 0, kodlar=(uzun, kisa))
 
     # Crack spread'ler (rafineri marjı) — ABD kontratlarından, varil başına dolar.
     # 1 varil = 42 galon. 3:2:1 = 3 varil ham petrolden 2 varil benzin + 1 varil distilat.
@@ -678,18 +689,22 @@ def turetilmis(seri: dict) -> list[dict]:
             d1 = c321 - (2 * rb1 * 42 + ho1 * 42 - 3 * cl1) / 3
         ekle("3:2:1 crack spread", c321, "USD/varil", d1,
              "Rafineri marjı: 3 varil ham petrolden 2 varil benzin + 1 varil distilat. "
-             "Genişlemesi ürün talebinin ham petrolden güçlü olduğunu gösterir.")
+             "Genişlemesi ürün talebinin ham petrolden güçlü olduğunu gösterir.",
+             kodlar=("CL=F", "RB=F", "HO=F"))
         ekle("Benzin crack (RBOB−WTI)", rb * 42 - cl, "USD/varil",
              (rb * 42 - cl) - (rb1 * 42 - cl1) if None not in (rb1, cl1) else None,
-             "Benzin rafineri marjı; sürüş sezonu ve ürün stoklarına duyarlı.")
+             "Benzin rafineri marjı; sürüş sezonu ve ürün stoklarına duyarlı.",
+             kodlar=("CL=F", "RB=F"))
         ekle("Distilat crack (HO−WTI)", ho * 42 - cl, "USD/varil",
              (ho * 42 - cl) - (ho1 * 42 - cl1) if None not in (ho1, cl1) else None,
-             "Motorin/kalorifer marjı; sanayi ve nakliye talebinin göstergesi.")
+             "Motorin/kalorifer marjı; sanayi ve nakliye talebinin göstergesi.",
+             kodlar=("CL=F", "HO=F"))
     bz, bz1 = son("BZ=F"), son("BZ=F", 1)
     if None not in (bz, cl):
         ekle("Brent−WTI farkı", bz - cl, "USD/varil",
              (bz - cl) - (bz1 - cl1) if None not in (bz1, cl1) else None,
-             "Atlantik havzası ile ABD iç piyasası arasındaki taşıma/arz farkı.")
+             "Atlantik havzası ile ABD iç piyasası arasındaki taşıma/arz farkı.",
+             kodlar=("BZ=F", "CL=F"))
 
     # Oranlar
     xau, xag = son("GC=F"), son("SI=F")
@@ -697,7 +712,8 @@ def turetilmis(seri: dict) -> list[dict]:
     if None not in (xau, xag) and xag:
         ekle("Altın/gümüş oranı", xau / xag, "kat",
              (xau / xag - xau1 / xag1) if None not in (xau1, xag1) and xag1 else None,
-             "Yükselmesi güvenli liman talebinin sanayi talebine baskın geldiğini gösterir.")
+             "Yükselmesi güvenli liman talebinin sanayi talebine baskın geldiğini gösterir.",
+             kodlar=("GC=F", "SI=F"))
 
     # BIST'in dolar bazlı seviyesi — yabancı yatırımcının gördüğü getiri
     x, usd = son("XU100.IS"), son("USDTRY=X")
@@ -705,7 +721,8 @@ def turetilmis(seri: dict) -> list[dict]:
     if None not in (x, usd) and usd:
         ekle("BIST 100 (dolar bazlı)", x / usd, "USD puan",
              ((x / usd) / (x1 / usd1) - 1) * 100 if None not in (x1, usd1) and usd1 else None,
-             "TL endeksin kurdan arındırılmış hâli; yabancının gördüğü performans.", 1)
+             "TL endeksin kurdan arındırılmış hâli; yabancının gördüğü performans.", 1,
+             kodlar=("XU100.IS", "USDTRY=X"), degisim_birim="%")
     return out
 
 

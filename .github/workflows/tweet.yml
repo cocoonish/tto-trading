@@ -8,8 +8,12 @@
 # gönderilmez, iş yeşil biter) — yani bu iş akışı anahtarlar eklenmeden de
 # zararsızca çalışır.
 #
-# Tetikler: yazı katmanının push'u (bülten/teknik JSON'ları değişince) +
-# yedek cron'lar (zamanlanmış tetikleyicinin sicili gereği) + elle.
+# Tetikler: yazı katmanının push'u (bülten/teknik JSON'ları ya da bir analiz
+# yazısı değişince) + yedek cron'lar (zamanlanmış tetikleyicinin sicili gereği)
+# + elle. Her gönderi tweet/denetim.py kapısından geçer: tavsiye dili, link,
+# HTML kalıntısı, site atfı, sayı ortasında kesik cümle, sorumluluk notu.
+# Gönderilen metin tweet/arsiv/ altında saklanır; defterin aynası
+# site/src/data/tweet/ altına yazılır ki sayfa X gönderisine bağ verebilsin.
 
 name: Tweet zinciri
 
@@ -19,8 +23,14 @@ on:
     paths:
       - 'site/src/data/bulten/**'
       - 'site/src/data/teknik/**'
+      # Analiz yazıları: yayın günü pubDate'i bugün olan yazı, yönetici
+      # özetinden kurulan gönderiyle X'e çıkar (tweet/analiz.py). Elle yazılan
+      # özel gönderim (tweet-ozel.yml) istisna içindir, kural bu.
+      - 'site/src/content/analiz/**'
   schedule:
-    - cron: '35 5 * * 1-5'    # 08:35 İstanbul — sabah bülteninin yazısından sonra
+    - cron: '35 5 * * *'      # 08:35 İstanbul — sabah bülteninin yazısından sonra;
+                              # HER GÜN: cumartesi bülten yok ama gece push edilen
+                              # bir analiz yazısı ertesi sabah çıkabilsin
     - cron: '25 15 * * 0'     # 18:25 İstanbul — pazar haftalık + teknik sonrası
     - cron: '25 18 * * 0'     # 21:25 İstanbul — pazar yedeği
   workflow_dispatch:
@@ -83,10 +93,18 @@ jobs:
           # kayboldu, eldeki secret ölü kaldı.
           git add tweet/defter.json 2>/dev/null || true
           git add tweet/oauth2.enc  2>/dev/null || true
+          git add tweet/arsiv 2>/dev/null || true
+          git add site/src/data/tweet 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "defter ve jeton değişmedi"
           else
-            git commit -m "tweet: $(date -u +'%Y-%m-%d') defter/jeton (otomatik)"
-            git pull --rebase --autostash
-            git push
+            git commit -m "tweet: $(date -u +'%Y-%m-%d') defter/arşiv/jeton (otomatik)"
+            # Yarışta düşen push defter commit'ini kaybederdi; ertesi koşu aynı
+            # içeriği yeniden atardı. Üç deneme, sonuncusu da düşerse iş DÜŞER
+            # (sessiz kayıp yok: e-posta gider, defter elle kurtarılır).
+            for i in 1 2 3; do
+              if git pull --rebase --autostash && git push; then break; fi
+              if [ "$i" = 3 ]; then echo "::error::defter push edilemedi — mükerrer gönderi riski, elle kurtar"; exit 1; fi
+              sleep $((i * 5))
+            done
           fi

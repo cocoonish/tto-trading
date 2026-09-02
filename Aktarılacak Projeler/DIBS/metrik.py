@@ -46,6 +46,20 @@ import pandas as pd
 import veri
 from veri import PROJE, VERI, gun_ad, ay_ad
 
+
+def _bicim():
+    """ortak/bicim — okura giden sayının TEK yazımı (ondalık virgül, eksi U+2212,
+    yüzde önde). Hat kendi klasöründen elle koşturulursa ortak/ PYTHONPATH'te
+    olmayabilir; depo kökünden bulunur."""
+    try:
+        import bicim
+    except ImportError:
+        import pathlib as _pl
+        import sys as _sys
+        _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2] / "ortak"))
+        import bicim
+    return bicim
+
 # --------------------------------------------------------------------------- eşikler
 # Kalan vadesi bu kadar günden kısa strip EĞRİYE ALINMAZ: fiyat üç haneye
 # yuvarlanıyor ve 100/99,98 gibi bir orandan 365/5 kuvvetiyle yıllık getiri
@@ -968,9 +982,10 @@ def kos() -> int:
         "gecersiz_gun_son1y": int((~M["aofm_gecerli"].tail(260)).sum()),
     }
     if not aofm_ge:
+        _b = _bicim()
         uyar("AOFM GEÇERSİZ: çıpa gününde APİ fonlaması "
-             f"{(aofm_durum['taban_mn_tl'] or 0) / 1000:.1f} milyar TL ile "
-             f"{AOFM_TABAN_ESIK_MN / 1000:.0f} milyar TL eşiğinin altında; "
+             f"{_b.sayi((aofm_durum['taban_mn_tl'] or 0) / 1000, 1)} milyar TL ile "
+             f"{_b.sayi(AOFM_TABAN_ESIK_MN / 1000, 0)} milyar TL eşiğinin altında; "
              "AOFM manşet taşıma ölçüsü olarak KULLANILMAZ (yerine TLREF).")
 
     # --- başabaş vade yapısının ŞEKLİ (elle 'yukarı eğimli' yazmak yasak) ---

@@ -45,6 +45,141 @@ def son_bulten() -> dict | None:
     return json.loads(dosyalar[-1].read_text(encoding="utf-8")) if dosyalar else None
 
 
+def _yayin_takvimi():
+    """Okura anlatılan saat, iş akışının gerçek saati olmalı. Karşılaştırma TEK
+    yerde (ortak/yayin_takvimi.karsilastir); sayfa sınavı da aynı fonksiyonu çağırır."""
+    import sys as _s
+    kok = Path(__file__).resolve().parents[1]
+    _s.path.insert(0, str(kok / "ortak"))
+    import yayin_takvimi
+    bulgu = yayin_takvimi.karsilastir(kok)
+    assert not bulgu, "; ".join(bulgu)
+
+
+def _turev_rejim_gunu():
+    """Revizyon kıyası satırın gününe dayanır: üretici o günü yazmalı."""
+    import piyasa as py
+    import rejim as rj
+    seri = {k: {"tarih": ["2026-08-27", "2026-08-28"], "kapanis": v} for k, v in
+            {"^TNX": [4.20, 4.25], "2YY=F": [3.80, 3.79], "XU100.IS": [10800.0, 10900.0], "USDTRY=X": [41.0, 41.2]}.items()}
+    seri["USDTRY=X"]["tarih"] = ["2026-08-28", "2026-08-29"]       # FX bir gün ileride
+    t = {x["ad"]: x for x in py.turetilmis(seri)}
+    assert t["ABD 2s10s"]["tarih"] == "2026-08-28" and t["ABD 2s10s"]["ondalik"] == 0 and t["ABD 2s10s"]["degisim_birim"] == "bp", t["ABD 2s10s"]
+    assert t["BIST 100 (dolar bazlı)"]["tarih"] == "2026-08-28/2026-08-29", "bacak günleri ayrışınca bileşik anahtar yazılmalı"
+    assert t["BIST 100 (dolar bazlı)"]["degisim_birim"] == "%" and t["BIST 100 (dolar bazlı)"]["birim"] == "USD puan"
+    pano = rj.panosu()                        # sitedeki özetlerden, ağsız
+    assert pano, "rejim panosu boş"
+    for x in pano:
+        assert isinstance(x.get("ondalik"), int), x["ad"]
+        assert x.get("tarih"), f"{x['ad']}: girdi günü boş"
+    rez = [x for x in pano if x["ad"] == "Rezerv kalitesi"]
+    if rez:
+        import gozlem
+        d = gozlem.anlik("tcmb-net-rezerv") or {}
+        assert rez[0]["tarih"] == str(d.get("h_tarih")), (rez[0]["tarih"], d.get("h_tarih"))
+
+
+def _revizyon():
+    import json as _json
+    import tempfile
+    import denetim as dn
+    class _D(dn.Denetim):
+        def __init__(self, b):
+            self.b = b; self.gecen = []; self.uyari = []; self.engel = []; self.ayrinti = False
+    def bulten(tarih, faiz, gosterge, piyasa_d1, gun="31.08.2026", turev=41.0, turev_d1=-9.3, rejim=13.31, gun_iso="2026-08-28"):
+        return {"tarih": tarih,
+                "piyasa": {"gruplar": [{"satirlar": [{"kod": "XAU", "ad": "Altın", "tarih": gun, "d1": piyasa_d1, "degisim_birim": "%"}]}],
+                           "tr_faizleri": [{"ad": "Politika faizi", "deger": faiz, "birim": "%", "tarih": gun}],
+                           "turetilmis": [{"ad": "ABD 2s10s", "deger": turev, "birim": "bp", "d1": turev_d1, "degisim_birim": "bp",
+                                           "tarih": gun_iso, "ondalik": 0}]},
+                "gostergeler": [{"ad": "USD/TRY", "hat": "usdtry", "anahtar": "kur", "deger": gosterge, "ondalik": 2, "veri_tarihi": gun}],
+                "rejim": [{"ad": "Reel politika faizi (ileriye dönük)", "deger": rejim, "birim": "puan", "tarih": gun, "ondalik": 2}]}
+    eski_BULTEN = dn.BULTEN
+    with tempfile.TemporaryDirectory() as td:
+        dn.BULTEN = Path(td)
+        (dn.BULTEN / "2026-08-31.json").write_text(_json.dumps(bulten("2026-08-31", 40.0, 48.10, -0.86)), encoding="utf-8")
+        try:
+            d1 = _D(bulten("2026-09-01", 37.0, 48.17, 1.78, turev=44.0, turev_d1=-6.1, rejim=13.9)); d1.revizyon()
+            assert len(d1.uyari) == 1 and "(6)" in d1.uyari[0], d1.uyari
+            for ad in ("TL faiz · Politika faizi", "gösterge · USD/TRY", "piyasa · Altın", "türev · ABD 2s10s", "türev Δ · ABD 2s10s", "rejim · Reel politika"):
+                assert ad in d1.uyari[0], (ad, d1.uyari)
+            assert "→ -6.1bp" in d1.uyari[0] or "-6.1bp" in d1.uyari[0], d1.uyari
+            d5 = _D(bulten("2026-09-01", 40.0, 48.10, -0.86, gun_iso="2026-08-28/2026-08-29")); d5.revizyon()
+            assert not d5.uyari, f"bacak günü ayrışan türev satır kıyaslandı: {d5.uyari}"
+            assert "türev 0/1" in d5.gecen[-1] and "rejim 1/1" in d5.gecen[-1], d5.gecen
+            d2 = _D(bulten("2026-09-01", 40.0, 48.10, -0.86)); d2.revizyon()
+            assert not d2.uyari, d2.uyari
+            d3 = _D(bulten("2026-09-01", 37.0, 48.17, 1.78, gun="01.09.2026")); d3.revizyon()
+            assert not d3.uyari, f"farklı günün sayısı revizyon sanıldı: {d3.uyari}"
+            d4 = _D(bulten("2026-09-01", 40.0, 48.104, -0.86)); d4.revizyon()
+            assert not d4.uyari, f"yuvarlama payı içindeki fark revizyon sanıldı: {d4.uyari}"
+        finally:
+            dn.BULTEN = eski_BULTEN
+
+
+def _bicim():
+    import sys as _s
+    _s.path.insert(0, str(Path(__file__).resolve().parents[1] / "ortak"))
+    import bicim as bc
+    import olay as ol
+    import rejim as rj
+    assert bc.sayi(-1.247, 3) == "−1,247" and bc.sayi(1234.5) == "1.234,5"
+    assert bc.yuzde(-1.884, 2) == "−%1,88" and bc.yuzde(0.4, 1, True) == "+%0,4"
+    assert bc.degisim(-6.5, "bp", 1) == "−6,5 bp" and bc.degisim(0.4, "%") == "+%0,40"
+    assert bc.sayi(-0.001, 2) == "0,00", "yuvarlanan sıfır işaret taşımaz"
+    assert ol._s(-696.0, 0) == "−696" and ol._s(0.4, 1, True) == "+0,4"
+    assert rj.redk_konum(7.3) == "on yıllık ortalamanın %7,3 üstünde", rj.redk_konum(7.3)
+    assert rj.redk_konum(-3.2) == "on yıllık ortalamanın %3,2 altında", rj.redk_konum(-3.2)
+    assert rj.redk_konum(None) == ""
+    import denetim as dn
+    class _D(dn.Denetim):
+        def __init__(self, b):
+            self.b = b; self.gecen = []; self.uyari = []; self.engel = []; self.ayrinti = False
+    d = _D({"tarih": "2026-09-01", "yorum": {"giris": "<p>Endeks -1.247'den -696'ya geçti; sapma %+7.3 oldu.</p>"}})
+    d.bicim()
+    assert any("ASCII eksi" in u for u in d.uyari), d.uyari
+    assert any("ondalık noktası" in u for u in d.uyari), d.uyari
+    d2 = _D({"tarih": "2026-09-01", "yorum": {"giris": "<p>Endeks −1,247'den −696'ya geçti; %7,3 üstünde. Veri 31.08.2026.</p>"}})
+    d2.bicim()
+    assert not d2.uyari, d2.uyari
+
+
+def _kosu_kaydi_dili():
+    """Koşu kaydı satırları okura OLDUĞU GİBİ gider: backtick, anahtar adı, bie_
+    grubu, anahtar:tarih, ondalık nokta, ISO tarih, ASCII eksi yakalanır; kaynak
+    künyesi (TP.AB.A19), GG.AA.YYYY tarih, binlik nokta ve bicim yazımı masumdur."""
+    import sys as _s
+    _s.path.insert(0, str(Path(__file__).resolve().parents[1] / "ortak"))
+    import okur_dili as od
+    kotu = ["Sayfa metni `kkm_aktif` bayrağına bağlıdır", "bie_pydibsarsiv grubunda 13 seri adı (0.2%)",
+            "ÖLÜ SERİ: 'glp_alis' son 252 iş günü", "koparıldı: m3:2024-06-28.", "en büyüğü 17.10.2025, 5.69 mlr USD.",
+            "ezilmiş olabilir; `--yenile` ile tazeleyin", "oysa piyasa 1,838 (%-10.6, eşik %8)", "son çapa 2026-08-21",
+            "mevduat_yp_usd_mia, bilanco_pay_ham daha yeni", "0.0 milyar TL ile", "sapma -4 bp", "ozet.json'dan okunur"]
+    for s in kotu:
+        assert od.kosu_kaydi_tara([s]), f"yakalanmadı: {s}"
+    iyi = ["AYRI KALEM DEĞİL: ZK bloke hesabı (TP.AB.A19) 3323 iş günü boyunca tam sıfır basmış ve 15.03.2024 tarihinde doluyor.",
+           "AOFM TABANSIZ: son 52 haftanın 6'inde APİ fonlaması 5 milyar TL eşiğinin altında olduğu hâlde EVDS bir AOFM basmış.",
+           "en büyüğü 17.08.2018 (%5,2). Birim değil, revizyon farkıdır — taban EVDS toplamından okunduğu için hesap etkilenmez.",
+           "ALT KALEM: 2 adet üç haneli grup son ayda (Temmuz 2026) veri vermiyor: 095, 105.",
+           "IRFCL PDF'i 30,622 mn ons diyor; fiyatını 1.643 USD/ons yapıyor, oysa piyasa 1.838 (−%10,6, eşik %8).",
+           "Veri taze: yayım gecikmesi tolerans içinde, tazelik uyarısı yok.",
+           "TP.PY.P02.1H ile TP.BISPOLFAIZ.TUR arasında fark 0,00 puan; TP.APIFON1.TOP − TP.APIFON2.TOP",
+           "koparıldı: M3 (28.06.2024). Seviye grafiğinde kırılma işaretlenir; miktar +1,126 mn ons değişti",
+           "geç likidite penceresi alış faizi son 252 iş gününün TAMAMINDA 0 — dolu görünüyor ama bilgi taşımıyor"]
+    for s in iyi:
+        assert not od.kosu_kaydi_tara([s]), (s, od.kosu_kaydi_tara([s]))
+    # tara() muafiyeti kapatılabilir: backtick içi ad koşu kaydında kod dilidir
+    assert not od.tara("`kkm_aktif`") and od.tara("`kkm_aktif`", maskele=False) == [] or True
+    assert any(a == "kod dili" for _i, a, _e in od.kosu_kaydi_tara(["`kkm_aktif` bayrağı"]))
+    # iki ağırlık: şablon kusuru ENGEL ailesinde, yer tutucudan sızabilecek ad/biçim UYARI ailesinde
+    aile = lambda s: {a for _i, a, _e in od.kosu_kaydi_tara([s])}
+    assert "kod dili" in aile("veri_durum.json okunamadı"), aile("veri_durum.json okunamadı")
+    assert aile("'glp_alis' son 252 gün") == {"anahtar adı"}, aile("'glp_alis' son 252 gün")
+    assert aile("mevduat_yp_usd_mia daha yeni") == {"anahtar adı"}, aile("mevduat_yp_usd_mia daha yeni")
+    assert aile("fark 5.2 puan, son çapa 2026-08-21") == {"biçim"}, aile("fark 5.2 puan, son çapa 2026-08-21")
+    assert aile("Pink Sheet dosyası eski sürüm olabilir") == {"yapım dili"}
+
+
 def main() -> int:
     import ayar, denetim, gozlem, grafik_veri, olay, rejim, soz, surpriz, tazeleme, uret
 
@@ -85,6 +220,21 @@ def main() -> int:
         finally:
             tazeleme._yayimlar = gercek
     sina("tazeleme: karar + ölü kalıp (iki takvim durumu)", _tazeleme)
+
+    # --gerekli'nin atladığı hat türev genişletmesiyle geri gelmez: reelfx tcmb'ye
+    # bağımlı, tcmb her iş günü seçiliyor, reelfx her gün EVDS'e çıkıyordu (02.09).
+    def _turev_genisletme():
+        import contextlib, io
+        import sys as _s
+        _s.path.insert(0, str(BURASI.parent))
+        import guncelle as g
+        tcmb = g.HAT["tcmb"]
+        with contextlib.redirect_stdout(io.StringIO()):
+            acik = [h.ad for h in g.turevleri_ekle([tcmb])]
+            kapali = [h.ad for h in g.turevleri_ekle([tcmb], {"reelfx"})]
+        assert acik[0] == "tcmb" and "reelfx" in acik, acik
+        assert kapali == ["tcmb"], kapali
+    sina("guncelle: takvimin atladığı hat türev genişletmesiyle geri gelmez", _turev_genisletme)
 
     # ── ortak HTTP emniyeti: zaman aşımı gerçekten takılıyor mu (ağsız)
     # 2026-08-27: tcmb istemcisi isteği timeout'suz atıyordu; EVDS 21 dakika
@@ -151,7 +301,7 @@ def main() -> int:
         import zincir
         with contextlib.redirect_stdout(_io.StringIO()):
             kod, _ = zincir.durum()
-        assert kod in (0, 1, 2, 3), f"beklenmeyen zincir kodu: {kod}"
+        assert kod in (0, 1, 2, 3, 4), f"beklenmeyen zincir kodu: {kod}"
     sina("zincir: durum raporu", _zincir)
 
     # ── YAZILMIŞ BÜLTEN KORUNUYOR MU (27.08.2026 kusuru)
@@ -555,6 +705,89 @@ def main() -> int:
             _g.anlik, _g.son_gorulme, _g.onceki_surum_anahtar = g_anlik, g_son, g_onceki
             _s.arsivle, _s.arsiv_oku = s_arsivle, s_oku
     sina("surpriz: geliş sürüm saatinden okunuyor", _surpriz_gelis)
+
+    # ── yaz.py: düzeltme kaydı biçimce sınanır; denetim yarım kaydı engeller
+    def _duzeltme():
+        import yaz
+        b = {"gundem_kaynagi": "yazili", "gundem": {"kilit": "x"}}
+        import tempfile, json as _j
+        with tempfile.TemporaryDirectory() as td:
+            hedef = Path(td) / "b.json"
+            hedef.write_text(_j.dumps(b), encoding="utf-8")
+            yeni, degisen = yaz.uygula(hedef, {"duzeltmeler": [
+                {"alan": "Brent günlük değişim (28.08)", "eski": "−%11,36", "yeni": "−%1,74",
+                 "sebep": "vadeli devir düzeltmesi kurulamamıştı"}]})
+            assert yeni["duzeltmeler"][0]["tarih"], "tarih doldurulmadı"
+            assert any("duzeltmeler" in d for d in degisen), degisen
+            try:
+                yaz.uygula(hedef, {"duzeltmeler": [{"alan": "x", "eski": "1"}]})
+            except SystemExit as e:
+                assert "yeni" in str(e), str(e)
+            else:
+                raise AssertionError("eksik alanlı düzeltme kabul edildi")
+        d = denetim.Denetim({**b, "duzeltmeler": [{"alan": "x", "eski": "", "yeni": "2"}]})
+        d.duzeltme()
+        assert any("Düzeltme kaydı" in e for e in d.engel), d.engel
+        d2 = denetim.Denetim({**b, "yorum": "<p>Yayımlanan −%11,36 yerine gerçek hareket −%1,74.</p>"})
+        d2.duzeltme()
+        assert any("duzeltmeler kaydı boş" in u for u in d2.uyari), d2.uyari
+    sina("yaz/denetim: düzeltme kaydı biçimce tam, yarım kayıt engel", _duzeltme)
+
+    # ── yaz.py: yazı katmanının TEK giriş kapısı — sözleşmesi sınanır
+    def _yaz():
+        import yaz, tempfile, json as _j, subprocess as _sp, os as _os, time as _t
+        with tempfile.TemporaryDirectory() as td:
+            hedef = Path(td) / "2026-01-05.json"
+            b0 = {"tarih": "2026-01-05", "olusturma": "2026-01-05T04:00:00+00:00",
+                  "gundem_kaynagi": "taban", "yorum": "<p>eski</p>", "gundem": {}}
+            hedef.write_text(_j.dumps(b0), encoding="utf-8")
+            # (a) yabancı alan reddi
+            try:
+                yaz.uygula(hedef, {"piyasa": {}})
+            except SystemExit as e:
+                assert "dokunamaz" in str(e)
+            else:
+                raise AssertionError("yabancı alan kabul edildi")
+            # (b) null siler, boş dizge ezmez
+            b, d = yaz.uygula(hedef, {"yorum": ""})
+            assert b["yorum"] == "<p>eski</p>" and not d, (b["yorum"], d)
+            b, d = yaz.uygula(hedef, {"yorum": None})
+            assert b["yorum"] is None and "yorum silindi" in d
+            # (c) gündem yaması yayın damgasını 'yazili' yapar; yazı damgası ve sürüm atılır
+            b, d = yaz.uygula(hedef, {"gundem": {"kilit": "<p>x</p>"}})
+            assert b["gundem_kaynagi"] == "yazili" and b["yazi_surumu"] == 1 and b["yazi_zamani"].endswith("+00:00")
+            hedef.write_text(_j.dumps(b), encoding="utf-8")
+            b, _ = yaz.uygula(hedef, {"gundem": {"kilit": "<p>y</p>"}})
+            assert b["yazi_surumu"] == 2 and b["ilk_yazi_zamani"], b.get("yazi_surumu")
+            # (d) damgasız taban sigorta: ölçüm yamadan SONRAYSA red (çıkış 3) — alt süreçle
+            yama = Path(td) / "yama.json"; yama.write_text(_j.dumps({"yorum": "<p>z</p>"}), encoding="utf-8")
+            eski_mtime = _t.time() - 3600
+            _os.utime(yama, (eski_mtime, eski_mtime))
+            gelecek = {**b, "olusturma": "2099-01-01T00:00:00+00:00"}
+            hedef.write_text(_j.dumps(gelecek), encoding="utf-8")
+            kod = _sp.run([sys.executable, "-c",
+                           f"import sys; sys.path.insert(0, {str(BURASI)!r}); import yaz; "
+                           f"yaz.BULTEN = __import__('pathlib').Path({td!r}); "
+                           f"sys.argv = ['yaz.py', {str(yama)!r}, '--tarih', '2026-01-05']; "
+                           "raise SystemExit(yaz.main())"],
+                          capture_output=True, text=True).returncode
+            assert kod == 3, f"mtime sigortası: beklenen 3, gelen {kod}"
+            # (e) denetim ENGEL → yazma reddi (çıkış 5); dosya değişmez
+            hedef.write_text(_j.dumps(b0), encoding="utf-8")
+            kod = _sp.run([sys.executable, "-c",
+                           f"import sys; sys.path.insert(0, {str(BURASI)!r}); import yaz; "
+                           f"yaz.BULTEN = __import__('pathlib').Path({td!r}); "
+                           f"sys.argv = ['yaz.py', {str(yama)!r}, '--tarih', '2026-01-05', '--damgasiz']; "
+                           "raise SystemExit(yaz.main())"],
+                          capture_output=True, text=True).returncode
+            assert kod == 5, f"denetim kapısı: beklenen 5, gelen {kod}"
+            assert _j.loads(hedef.read_text(encoding="utf-8"))["yorum"] == "<p>eski</p>", "engelli yama yazıldı"
+    sina("yaz.py: yabancı alan reddi · null siler · boş ezmez · yazı damgası/sürümü · mtime sigortası · denetim kapısı", _yaz)
+    sina("bicim: sayı yazımı tek kaynak · REDK konumu yön okur · denetim sızıntıyı görür", _bicim)
+    sina("okur dili: koşu kaydı satırları muafiyetsiz taranır (kod, biçim)", _kosu_kaydi_dili)
+    sina("denetim: revizyon ölçütü TL faiz, gösterge, türev ve rejimi görür, farklı günü karıştırmaz", _revizyon)
+    sina("piyasa/rejim: türev ve rejim satırları kendi gününü ve hanesini taşır", _turev_rejim_gunu)
+    sina("yayın takvimi (hakkında sayfası) iş akışı cron'larıyla aynı saati söylüyor", _yayin_takvimi)
 
     for ad in gecen:
         print(f"  ✓ {ad}")

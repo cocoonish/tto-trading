@@ -53,10 +53,9 @@ BUYUK_HAREKET_ESIGI = 1.5     # % — bunu aşan hareket metinde ANILMALI
 # gün sessizce ayrışır ve hangisinin neyi gördüğü kimsenin aklında kalmazdı.
 sys.path.insert(0, str(KOK / "ortak"))
 import okur_dili  # noqa: E402
-# Yatırım tavsiyesi sayılabilecek kalıplar
-TAVSIYE = re.compile(
-    r"\b(al[ıi]n|sat[ıi]n|pozisyon a[çc]|hedef fiyat|tavsiye ediyoruz|öneriyoruz|"
-    r"kesinlikle al|kesinlikle sat|portföy[üu]n[üu]ze ekleyin)\b", re.I)
+# Yatırım tavsiyesi sayılabilecek kalıplar — TEK tanım ortak/tavsiye_dili.py'de
+# (teknik yorum kapısı, analiz kapısı ve tweet kapısı aynı listeyi kullanır).
+from tavsiye_dili import TAVSIYE  # noqa: E402
 
 
 # Bültenin OKURA GÖRÜNEN yazı alanları. Liste elle tutuluyor ama tek yerde
@@ -859,16 +858,39 @@ class Denetim:
         else:
             self._ok(f"haber tonu: {len(hareketler)} olağandışı hareket anılmış")
 
+    # Revizyon kıyasına giren seriler: (ad, satır listesi, anahtar üretici,
+    # değer alanı, tolerans, birim alanı). Anahtar MUTLAKA satırın kendi
+    # tarihini içerir: kıyas ancak AYNI güne ait sayı için anlamlıdır. Türev
+    # büyüklüklerin günü bacaklarının bar günleridir, rejim satırının günü
+    # girdilerinin günleri (bileşik anahtar; günler ayrışırsa o gün kıyas
+    # yapılmaz — uydurma yok). Tarih alanı olmayan eski bültenler süzgeçte düşer.
+    REVIZYON_SERILERI = (
+        ("piyasa", lambda b: [s for g in (b.get("piyasa", {}).get("gruplar") or []) for s in (g.get("satirlar") or [])],
+         lambda s: (s.get("kod"), s.get("tarih")), "d1", 0.005, "degisim_birim"),
+        ("TL faiz", lambda b: b.get("piyasa", {}).get("tr_faizleri") or [],
+         lambda s: (s.get("ad"), s.get("tarih")), "deger", 0.005, "birim"),
+        ("gösterge", lambda b: b.get("gostergeler") or [],
+         lambda s: (s.get("hat"), s.get("anahtar"), s.get("veri_tarihi")), "deger", None, "birim"),
+        ("türev", lambda b: b.get("piyasa", {}).get("turetilmis") or [],
+         lambda s: (s.get("ad"), s.get("tarih") or None), "deger", None, "birim"),
+        ("türev Δ", lambda b: b.get("piyasa", {}).get("turetilmis") or [],
+         lambda s: (s.get("ad"), s.get("tarih") or None), "d1", 0.05, "degisim_birim"),
+        ("rejim", lambda b: b.get("rejim") or [],
+         lambda s: (s.get("ad"), s.get("tarih") or None), "deger", None, "birim"),
+    )
+
     def revizyon(self):
         """Daha önce YAYIMLADIĞIMIZ bir sayı sonradan değişti mi.
 
-        Bir enstrümanın aynı bar gününe ait günlük değişimi iki farklı bültende
-        iki farklı değerle çıkıyorsa, ikisinden biri yanlış yayımlanmıştır.
-        27.08'de tam bu oldu ve yazan taraf bunu ENERJİDE fark edip düzeltti,
-        ama aynı kusurun metallerde de olduğunu görmedi — çünkü fark etmesi
-        gözüne çarpmasına bağlıydı, ölçülmüyordu. Artık ölçülüyor: değişen her
-        sayı adıyla listelenir, yazan taraf ya kaynağını doğrular ya da
-        "yayımlanan X yerine gerçek hareket Y" kalıbıyla geri alır.
+        Bir serinin aynı güne ait değeri iki farklı bültende iki farklı
+        sayıyla çıkıyorsa, ikisinden biri yanlış yayımlanmıştır. 27.08'de tam
+        bu oldu ve yazan taraf bunu ENERJİDE fark edip düzeltti, ama aynı
+        kusurun metallerde de olduğunu görmedi — çünkü fark etmesi gözüne
+        çarpmasına bağlıydı, ölçülmüyordu. Artık ölçülüyor ve yalnız piyasa
+        satırlarında değil: TL faiz seti ve gösterge şeridi de kıyasa girer
+        (REVIZYON_SERILERI). Değişen her sayı adıyla listelenir; yazan taraf
+        ya kaynağını doğrular ya da "yayımlanan X yerine gerçek değer Y"
+        kalıbıyla geri alır.
         """
         try:
             dosyalar = sorted(BULTEN.glob("*.json"))
@@ -878,38 +900,109 @@ class Denetim:
         oncekiler = [d for d in dosyalar if d.stem < str(bugunku)][-3:]
         if not oncekiler:
             return
-        simdi = {}
-        for g in (self.b.get("piyasa", {}).get("gruplar") or []):
-            for s in (g.get("satirlar") or []):
-                if s.get("tarih") is not None and s.get("d1") is not None:
-                    simdi[(s.get("kod"), s["tarih"])] = (s["ad"], s["d1"], s.get("degisim_birim", ""))
-        degisen = []
+        eskiler = []
         for d in reversed(oncekiler):
             try:
-                eski_b = json.loads(d.read_text(encoding="utf-8"))
+                eskiler.append((d.stem, json.loads(d.read_text(encoding="utf-8"))))
             except Exception:
                 continue
-            for g in (eski_b.get("piyasa", {}).get("gruplar") or []):
-                for s in (g.get("satirlar") or []):
-                    anahtar = (s.get("kod"), s.get("tarih"))
-                    if anahtar not in simdi or s.get("d1") is None:
+        degisen = []
+        eslesme: dict[str, tuple[int, int]] = {}      # seri → (kıyaslanan çift, bugünkü satır)
+        for seri_ad, satirlar, anahtar_f, alan, tol, birim_alani in self.REVIZYON_SERILERI:
+            simdi = {}
+            for s in satirlar(self.b):
+                k = anahtar_f(s)
+                if None in k or s.get(alan) is None:
+                    continue
+                t = tol if tol is not None else 0.5 * 10 ** (-int(s.get("ondalik", 2)))
+                simdi[k] = (s.get("ad"), s[alan], s.get(birim_alani) or s.get("birim", ""), t)
+            cift = 0
+            for stem, eski_b in eskiler:
+                for s in satirlar(eski_b):
+                    k = anahtar_f(s)
+                    if k not in simdi or s.get(alan) is None:
                         continue
-                    ad, yeni_d1, birim = simdi[anahtar]
-                    if abs(float(s["d1"]) - float(yeni_d1)) <= 0.005:
+                    cift += 1
+                    ad, yeni, birim, t = simdi[k]
+                    if abs(float(s[alan]) - float(yeni)) <= t:
                         continue
-                    if any(x[0] == ad for x in degisen):
+                    if any(x[0] == seri_ad and x[1] == ad for x in degisen):
                         continue
-                    degisen.append((ad, s["d1"], yeni_d1, birim, d.stem))
+                    degisen.append((seri_ad, ad, s[alan], yeni, birim, stem))
+            eslesme[seri_ad] = (cift, len(simdi))
         if degisen:
-            satir = ", ".join(f"{ad}: {e}{b} → {y}{b} ({g} bülteninde yayımlandı)"
-                              for ad, e, y, b, g in degisen[:6])
+            satir = ", ".join(f"{sa} · {ad}: {e}{b} → {y}{b} ({g} bülteninde yayımlandı)"
+                              for sa, ad, e, y, b, g in degisen[:6])
             self.uyari.append(
                 f"YAYIMLANAN SAYI DEĞİŞTİ ({len(degisen)}) — {satir}"
                 + (" …" if len(degisen) > 6 else "")
                 + ". Her birinin sebebini bul; ölçü düzeltmesiyse metinde "
-                "'yayımlanan X yerine gerçek hareket Y' kalıbıyla geri al.")
+                "'yayımlanan X yerine gerçek değer Y' kalıbıyla geri al.")
         else:
-            self._ok("daha önce yayımlanan sayı değişmemiş")
+            # Kapsam denetimin parçasıdır: hangi seride kaç çift kıyaslandı yazılır —
+            # türev/rejim satırları tarih taşımayan eski bültenlerle hiç eşleşmez ve
+            # bu "temiz" değil "kıyaslanmadı" demektir.
+            kapsam = " · ".join(f"{ad} {c}/{n}" for ad, (c, n) in eslesme.items())
+            self._ok(f"daha önce yayımlanan sayı değişmemiş — kıyaslanan çift/bugünkü satır: {kapsam}")
+
+    # Okur metninde sayı yazımı: eksi U+2212, ondalık virgül (ortak/bicim ile
+    # aynı sözleşme). ASCII tire ve nokta ondalık bir hattın kendi f-string'inden
+    # sızar; kapı burada UYARI verir — yeni bir hat eklendiğinde sızıntı adıyla
+    # görünsün, yayını durdurmasın (sayı doğru, yazımı kusurlu).
+    ASCII_EKSI = re.compile(r"(?:(?<=\s)|(?<=\()|^)-(?=\d)")
+    NOKTA_ONDALIK = re.compile(r"(?<![\d.])\d{1,3}\.\d{1,3}(?![\d.])")
+
+    def bicim(self):
+        metin = "\n".join(_duz(str(m)) for m in _metinler(self.b))
+        eksi = self.ASCII_EKSI.findall(metin)
+        # Tarih (31.08) ve sürüm/kod (1.2.3) nokta taşır; yalnız okur cümlesindeki
+        # "%7.3" / "-1.247 → -696" kalıbı hedeflenir: önünde % veya işaret olan.
+        nokta = re.findall(r"[%+\-−]\d{1,3}\.\d{1,3}(?![\d.])", metin)
+        if eksi:
+            ornek = re.findall(r"\S*(?:(?<=\s)|(?<=\())-\d\S*", metin)[:3]
+            self.uyari.append(f"{len(eksi)} yerde ASCII eksi (−) yerine tire: "
+                              + ", ".join(repr(o) for o in ornek))
+        if nokta:
+            self.uyari.append(f"{len(nokta)} yerde ondalık noktası (virgül olmalı): "
+                              + ", ".join(repr(o) for o in nokta[:3]))
+        if not eksi and not nokta:
+            self._ok("sayı yazımı: eksi U+2212, ondalık virgül")
+
+    def duzeltme(self):
+        """Düzeltme kaydı biçimce tam mı; ve 'yayımlanan sayı değişti' uyarısı
+        varsa yazan taraf hesabını vermiş mi.
+
+        Yayımlanmış bir sayının düzeltilmesi metinde "yayımlanan X yerine
+        gerçek değer Y" kalıbıyla yapılır; aynı düzeltme bültenin `duzeltmeler`
+        listesine de yapısal olarak yazılır ki sayfa onu "Düzeltmeler"
+        bölümünde bassın ve site bütün düzeltmeleri tek listede toplayabilsin.
+        Yarım kayıt (neyin neye düzeltildiğini yazmayan) ENGEL: okura hesap
+        vermeyen bir düzeltme, düzeltme değildir.
+        """
+        liste = self.b.get("duzeltmeler")
+        if liste is not None and not isinstance(liste, list):
+            self.engel.append("duzeltmeler listesi bozuk (liste değil)")
+            liste = []
+        liste = liste or []
+        bozuk = 0
+        for i, d in enumerate(liste, 1):
+            eksik = [k for k in ("alan", "eski", "yeni") if not str((d or {}).get(k, "")).strip()]
+            if eksik:
+                bozuk += 1
+                self.engel.append(f"Düzeltme kaydı {i} eksik: {', '.join(eksik)} yok")
+        if liste and not bozuk:
+            self._ok(f"{len(liste)} düzeltme kaydı biçimce tam")
+        elif not liste:
+            self._ok("düzeltme kaydı yok (sayı değişmediyse doğal)")
+        # Metinde geri alma kalıbı var ama yapısal kayıt yoksa: okur sayfada
+        # düzeltmeyi görür, düzeltmeler listesi görmez — UYARI.
+        # Ham metinde aranır: _sade() Türkçe 'ı'yı düşürür ("yay mlanan") ve kalıbı kaçırır.
+        g = self.b.get("gundem") or {}
+        ham = " ".join(_duz(v) for v in g.values()) + " " + _duz(self.b.get("yorum") or "")
+        if not liste and re.search(r"yayımlanan\s+[^.]{1,80}?\s+yerine", ham, re.I):
+            self.uyari.append("Metinde 'yayımlanan … yerine' geri alma kalıbı var ama "
+                              "duzeltmeler kaydı boş — düzeltme kaydını da yaz "
+                              "(bulten/yaz.py, alan: duzeltmeler).")
 
     def karanlik(self):
         """Hattın saati ilerlerken İÇİNDEKİ bir serinin donması.
@@ -1238,8 +1331,8 @@ class Denetim:
     def kos(self) -> int:
         self.yazi(); self.veri(); self.atif(); self.sayi(); self.nabiz(); self.tekrar()
         self.tema(); self.izleme(); self.dil(); self.tazelik(); self.karanlik()
-        self.yerlesmemis(); self.piyasa_seansi(); self.revizyon()
-        self.devir(); self.haber_tonu()
+        self.yerlesmemis(); self.piyasa_seansi(); self.revizyon(); self.duzeltme()
+        self.devir(); self.haber_tonu(); self.bicim()
         self.olagandisilik_penceresi()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")

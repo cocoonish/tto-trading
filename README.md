@@ -73,19 +73,30 @@ Her hattın ayrıca **tek başına çalışan** bir deposu var (yalnız o projey
 
 | Hat | Sayfa | Kaynak | Tek başına depo |
 |---|---|---|---|
-| `tcmb` | TCMB Net Rezerv Takibi | EVDS analitik bilanço + IRFCL | [tcmb-net-rezerv](https://github.com/cocoonish/tcmb-net-rezerv) |
-| `usdtry` | USD/TRY Devalüasyon Hızı | EVDS kur | [usdtry-deval](https://github.com/cocoonish/usdtry-deval) |
-| `reer` | TL Reel Efektif Döviz Kuru | EVDS REDK | [try-reer](https://github.com/cocoonish/try-reer) |
-| `yabanci` | Yabancı Pozisyonu (DİBS/hisse) | EVDS menkul kıymet ist. | [yabanci-pozisyon](https://github.com/cocoonish/yabanci-pozisyon) |
-| `hazine` | Hazine İhraç Takvimi & İhale Analizi | Hazine sitesi (scraper) | [hazine-ihrac](https://github.com/cocoonish/hazine-ihrac) |
-| `fx` | FX Haber-Duyarlılık Endeksi | GDELT + RSS + FinBERT | [fx-haber-endeksi](https://github.com/cocoonish/fx-haber-endeksi) |
-| `marj` | Yiyecek Hizmetleri: Fiyat/Maliyet Marjı | EVDS + TÜİK MEDAS | [yiyecek-marj](https://github.com/cocoonish/yiyecek-marj) |
-| `enflasyon` | Enflasyon Panosu | EVDS3 TÜFE ağacı + ÖKTG + anketler | — |
-| `kredi` | Kredi ve Parasal Büyüklükler | EVDS3 haftalık para-banka + analitik bilanço | — |
-| `fonlama` | TCMB Fonlama ve Likidite | EVDS3 APİ + kotasyon + TLREF + ZK | — |
-| `dibs` | DİBS Verim Eğrisi ve Reel Faiz | EVDS3 DİBS fiyat/kupon + TÜFEX + anket | — |
-| `odemeler` | Ödemeler Dengesi ve Dış Finansman | EVDS3 ödemeler dengesi + dış borç + GSYH | — |
-| `butce` | Bütçe ve Borç Stoku | EVDS3 bütçe + dış borç + menkul kıymet sahipliği | — |
+| `tcmb` | TCMB net rezerv takibi | EVDS analitik bilanço + IRFCL | [tcmb-net-rezerv](https://github.com/cocoonish/tcmb-net-rezerv) |
+| `usdtry` | USD/TRY devalüasyon hızı | EVDS kur | [usdtry-deval](https://github.com/cocoonish/usdtry-deval) |
+| `reer` | TL reel efektif döviz kuru | EVDS REDK | [try-reer](https://github.com/cocoonish/try-reer) |
+| `yabanci` | Yabancı pozisyonu: DİBS ve hisse akımları | EVDS menkul kıymet ist. | [yabanci-pozisyon](https://github.com/cocoonish/yabanci-pozisyon) |
+| `hazine` | Hazine ihraç takvimi ve ihale analizi | Hazine sitesi (scraper) | [hazine-ihrac](https://github.com/cocoonish/hazine-ihrac) |
+| `fx` | FX haber-duyarlılık endeksi | GDELT + RSS + FinBERT | [fx-haber-endeksi](https://github.com/cocoonish/fx-haber-endeksi) |
+| `enflasyon` | Enflasyon panosu | EVDS3 TÜFE ağacı + ÖKTG + anketler | — |
+| `kredi` | Kredi ve parasal büyüklükler | EVDS3 haftalık para-banka + analitik bilanço | — |
+| `fonlama` | TCMB fonlama ve likidite | EVDS3 APİ + kotasyon + TLREF + ZK | — |
+| `odemeler` | Ödemeler dengesi ve dış finansman | EVDS3 ödemeler dengesi + dış borç + GSYH | — |
+| `dibs` | DİBS verim eğrisi ve reel faiz | EVDS3 DİBS fiyat/kupon + TÜFEX + anket | — |
+| `butce` | Merkezi yönetim bütçesi ve borç stoku | EVDS3 bütçe + dış borç + menkul kıymet sahipliği | — |
+| `buyume` | Büyüme analiz yazısı (`analiz/buyume-<tarih>`; pano yok) | EVDS3 GSYH grupları: harcama, üretim, hanehalkı | — |
+| `elnino` | El Niño ve gıda enflasyonu analiz yazısı (`analiz/el-nino-enflasyon-<tarih>`; pano yok) | NOAA ONI + EVDS TÜFE + Dünya Bankası Pink Sheet, BLS, BIS, ECB | — |
+| `marj` | Yiyecek hizmetleri: fiyat/maliyet marjı | EVDS + TÜİK MEDAS | [yiyecek-marj](https://github.com/cocoonish/yiyecek-marj) |
+| `carry` | TL taşıma defteri | Fonlama + DİBS depo serileri (türev) | — |
+| `tufex` | TÜFEX ve başabaş enflasyon | DİBS + Enflasyon depo serileri (türev) | — |
+| `makro` | Makroihtiyatinin izi | Kredi + Fonlama depo serileri (türev) | — |
+| `reelfx` | Reel sektörün döviz pozisyonu | EVDS3 bie_fdvy (aylık) | — |
+
+Sıra kütüğün sırasıdır (`python guncelle.py --liste`, 19 hat): türev hatlar besledikleri
+hatlardan SONRA koşar. Tablo elle tutulur; kütükle ayrıştığında kütük doğrudur.
+
+Panoların yazım standardı **[`projeler/YAZIM.md`](projeler/YAZIM.md)** (başlık cümle düzeni, ön bilgi alanları, `ozet.json` saat sözleşmesi).
 
 Siteye girmeyen ek araç: [try-asw](https://github.com/cocoonish/try-asw) — Bloomberg TRY OIS
 eğrisiyle ASW hesaplayıcı (BBG terminali gerektirir, o yüzden sitede yok).
@@ -96,6 +107,14 @@ eğrisiyle ASW hesaplayıcı (BBG terminali gerektirir, o yüzden sitede yok).
 emsaline ve fiyat etkisine kadar açan uzun yazılar. Bültenden farkı kapsam değil
 **derinlik**: bülten günün tamamını özetler, analiz tek olayı sonuna kadar açar.
 Sitede `/analiz/` adresinde.
+
+Yazım standardı **[`analiz/YAZIM.md`](analiz/YAZIM.md)**, şablon
+[`analiz/sablon.mdx`](analiz/sablon.mdx): tarihli slug ve başlık, yönetici
+özeti (tez · soru–cevap · altı ölçüm), "Ne ölçmedik" kapanışı, her sayı
+`<Deger>` ile canlı. Kapı `site/tools/analiz_sinavi.py` (sayfa sınavının 10.
+ölçütü). Aynı konunun yazıları slug kökünden **seri** olur ve sayfada
+birbirine bağlanır. Yayın günü X gönderisi yönetici özetinden kendiliğinden
+kurulur (`tweet/analiz.py`).
 
 ## Dersler
 
@@ -150,12 +169,31 @@ seri için bile. Bu yüzden kıyas, `_tarih`i farklı olan en son görüntüye g
 Depo secret'ları: `TTO_EVDS_KEY` (zorunlu), `TTO_YAYIN_TOKEN` (isteğe bağlı — bulut
 doğrudan yayına gönderebilsin diye public depoya yazma yetkili PAT).
 
+## X gönderileri
+
+`tweet/` — bülten, haftaya bakış, teknik analiz ve analiz yazıları yayın günü
+X'te tek uzun gönderi olarak çıkar (**hiç link yok** — açık adres, www ve çıplak alan
+adı dahil; emoji yok, site atfı yok).
+Metin yalnız yayımlanmış katmandan kurulur: bülten okuması ve gündem
+(`uret.py`), analizin yönetici özeti (`analiz.py`). Her gönderi
+**`tweet/denetim.py`** kapısından geçer — tavsiye dili, link, HTML kalıntısı,
+site atfı, sayı ortasında kesik cümle, boş bölüm etiketi, sorumluluk notu, okur
+dili; engel varsa gönderim durur. `gonder.py` defter tutar (aynı içerik bir kez),
+bayat içeriği göndermez, gönderilen metni `tweet/arsiv/`e yazar ve defteri
+`site/src/data/tweet/`e aynalar — sayfa künyesindeki "X gönderisi" bağı buradan.
+Önizleme: `python3 tweet/gonder.py --kuru`.
+
 ## Yayın
 
 Site iki depoda yaşar: **kaynak burada** (private), **yayın** ayrı bir public depoda
 (`cocoonish/cocoonish.github.io`). `yayinla.bat` şunu yapar: yerelde derler (CI'da
 patlamasın diye), `site/` klasörünü public depo klonuna kopyalar, gömülü kimlik bilgisi
-taraması yapar, commit'ler ve push eder. Push'u gören GitHub Actions derleyip Pages'e
+taraması yapar, commit'ler ve push eder. Bulut iş akışı (`yayin.yml`) aynı işi
+her içerik commit'inde yapar ve kopyalamadan ÖNCE siteyi derleyip
+`site/tools/sayfa_sinavi.py`yi koşturur: derleme ya da sınav düşerse yayın durur.
+Yerelde aynı kapı: `cd site && npm run yayin-kontrol` (derleme + KaTeX + sayfa sınavı).
+Sayfa kimliği (kanonik adres, bağlantı önizleme kartı, RSS: `/rss.xml`,
+`/bulten/rss.xml`, `/teknik/rss.xml`, `/analiz/rss.xml`) siteyle birlikte üretilir. Push'u gören GitHub Actions derleyip Pages'e
 koyar (~2 dk) → https://cocoonish.github.io/
 
 Public depoya **yalnız `site/` gider**: veri hatları, `Research/`, `bat/`, `CLAUDE.md`

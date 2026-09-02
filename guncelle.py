@@ -4,7 +4,7 @@
 
 Kullanım:
   python guncelle.py                    # etkileşimli menü: hangileri, hafif/tam, commit?
-  python guncelle.py --hepsi            # 8 hattın hepsi (hafif mod)
+  python guncelle.py --hepsi            # kütükteki bütün hatlar (hafif mod)
   python guncelle.py tcmb reer          # yalnız bunlar
   python guncelle.py --hepsi --tam      # ağır adımlar dahil (FX GDELT+FinBERT, Hazine scraper)
   python guncelle.py --hepsi --commit   # bitince siteye kopyalanan çıktıları commit'le + push
@@ -23,8 +23,8 @@ Kip:
 Sözleşme:
   · Her hat kendi klasöründe koşar; bir adım düşerse o hat DURUR, siteye kopyalama yapılmaz.
   · Diğer hatlar etkilenmez; sonda özet tablo ve çıkış kodu (biri düştüyse 1).
-  · Kopyalama tablosu HATLAR içinde — cron (.github/workflows/veri-guncelle.yml) ile aynı
-    kaynak→hedef eşlemesi. Yeni çıktı eklerken ikisini birden güncelle.
+  · Kopyalama tablosu HATLAR içinde — cron (.github/workflows/veri.yml) aynı kütükten
+    koşar; siteye giden her çıktı burada listelenir, YAML'de kopya tutulmaz.
   · Yorumlayıcı: her hat, klasöründe .venv varsa ONUN python'uyla koşar (bat/kur.bat ya da
     --kur bunu kurar); yoksa guncelle.py'yi çalıştıran python. Eskiden hep ikincisiydi → bat
     ile venv kurulan Windows'ta sistem python'u tcmb/pdfplumber'ı bulamıyor, ilk hat düşüyordu.
@@ -37,7 +37,7 @@ Sözleşme:
   · Ev stili (site/tools/plotly_stil.py) her koşunun sonunda TEK KEZ uygulanır.
 """
 from __future__ import annotations
-import argparse, os, re, shutil, subprocess, sys, time
+import argparse, json, os, re, shutil, subprocess, sys, time
 from collections import deque
 from datetime import datetime
 from dataclasses import dataclass, field
@@ -171,6 +171,10 @@ class Hat:
     tam: list[str]                 # ağır hat (boşsa hafif ile aynı)
     kopya: dict[str, str]          # kaynak (klasöre göreli) → hedef dosya adı
     not_: str = ""
+    # Bu hat şu hatların ÇIKTISINDAN hesaplanır (türev hat). Komut satırında
+    # bir üst hat seçilince türevleri de listenin SONUNA eklenir: üst hat elle
+    # tazelenip türevi dünkü seriden hesaplanmış kalmasın.
+    bagimli: tuple[str, ...] = ()
     # ozet.json'da veri tarihini taşıyan alan(lar) — tazelik denetimi.
     # LİSTE olmasının sebebi: bir hattın farklı frekanslı birden çok çıktısı
     # olabiliyor ve biri ilerlerken diğeri sessizce donabiliyor (TCMB'de rezerv
@@ -242,7 +246,8 @@ HATLAR: list[Hat] = [
         {f"{f}.html": f"{f}.html" for f in ["planlanan_ihraclar", "tahmin_dogrulama", "tahmin_aylik",
          "strateji_revizyon", "faiz_gelisimi", "fiyat_araligi", "ihrac_hacmi", "ihrac_tempo", "ihrac_usd",
          "talep_analizi", "vade_dagilimi", "hedef_gerceklesme", "vade_analizi",
-         "vade_patika", "vade_kompozisyon", "vade_maliyet", "vade_talep"]}
+         "vade_patika", "vade_kompozisyon", "vade_maliyet", "vade_talep",
+         "vade_itfa", "vade_reprice"]}       # analiz sayfasında gömülü — sözleşme bir bütündür
         | {"tablolar.json": "tablolar.json"},
         "tam kip: Hazine sitesini tarar (scraper), ilk koşu 10-20 dk",
         panel=["dashboard.py"]),            # Dash → http://127.0.0.1:8050
@@ -267,7 +272,7 @@ HATLAR: list[Hat] = [
         ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
         {"cikti/*.html": "*", "uyarilar.json": "uyarilar.json"},
         tarih_anahtarlari=("_tarih", "faiz_gun")),
-    Hat("kredi", "Kredi & Parasal Büyüklükler", P / "Kredi", "kredi-parasal",
+    Hat("kredi", "Kredi ve Parasal Büyüklükler", P / "Kredi", "kredi-parasal",
         # veri.py EVDS3'ten dört frekansta çeker (haftalık para ve banka, iş günü
         # kur/bilanço/APİ, aylık KKM ve banka türü, üç aylık BKEA) ve aile bazlı
         # tazelik + kimlik denetimlerini yapar. metrik.py kur etkisinden
@@ -280,7 +285,7 @@ HATLAR: list[Hat] = [
         # Üç ayrı frekans, üç ayrı donma riski: haftalık kredi ilerlerken aylık
         # KKM/banka türü tarafı sessizce durabiliyor. Tek anahtara bakmak yetmez.
         tarih_anahtarlari=("_tarih", "gun_tarih", "ay_tarih")),
-    Hat("fonlama", "TCMB Fonlama & Likidite", P / "Fonlama", "fonlama-likidite",
+    Hat("fonlama", "TCMB Fonlama ve Likidite", P / "Fonlama", "fonlama-likidite",
         # veri.py EVDS3'ten çeker (12 saat TTL'li önbellek; iş günü serileri
         # 366 günlük, haftalık seriler 900 haftalık parçalar hâlinde — EVDS
         # 1000 satırdan sonrasını SESSİZCE kırpıyor). metrik.py AOFM'yi tabanı
@@ -296,7 +301,7 @@ HATLAR: list[Hat] = [
         # haftalık faiz Cuma, ZK tabanı bir hafta daha geriden. Tek anahtara
         # bakmak "veri tazelendi" derdi.
         tarih_anahtarlari=("_tarih", "hafta_kisa", "zk_taban_tarih")),
-    Hat("odemeler", "Ödemeler Dengesi & Dış Finansman", P / "OdemelerDengesi",
+    Hat("odemeler", "Ödemeler Dengesi ve Dış Finansman", P / "OdemelerDengesi",
         "odemeler-dengesi",
         # veri.py EVDS3'ten dört frekansta çeker (aylık ödemeler dengesi,
         # haftalık dış borç ödeme takvimi, üç aylık GSYH, günlük kur) ve
@@ -312,7 +317,7 @@ HATLAR: list[Hat] = [
         # ~2 ay gecikmeli, haftalık takvim ~5 gün, GSYH ~145 gün. Tek anahtara
         # bakmak "veri tazelendi" derdi.
         tarih_anahtarlari=("_tarih", "_tarih2", "_tarih3")),
-    Hat("dibs", "DİBS Verim Eğrisi & Reel Faiz", P / "DIBS", "dibs-verim-egrisi",
+    Hat("dibs", "DİBS Verim Eğrisi ve Reel Faiz", P / "DIBS", "dibs-verim-egrisi",
         # veri.py EVDS3'ten DİBS strip evrenini (güncel + arşiv) ve referans
         # faizleri çeker; önbellek seri bazında TTL'lidir ve çekim istisnayla
         # düşerse DOLU önbelleğe DOKUNMAZ (boş önbellek "EVDS doğruladı"
@@ -328,7 +333,7 @@ HATLAR: list[Hat] = [
         # İki frekans, iki donma riski: eğri ve referans faizler günlük, anket
         # ile TÜFE aylık. Tek anahtara bakmak "veri tazelendi" derdi.
         tarih_anahtarlari=("_tarih", "_tarih2")),
-    Hat("butce", "Bütçe & Borç Stoku", P / "Butce", "butce-borc",
+    Hat("butce", "Bütçe ve Borç Stoku", P / "Butce", "butce-borc",
         # veri.py EVDS3'ten aylık bütçe, üç aylık dış borç ve GSYH, haftalık
         # menkul kıymet sahipliği ve günlük kur çeker. metrik.py'nin kritik işi
         # STOK TANIMI: iç borç (ihraç tabanlı) ile brüt dış borç (yerleşiklik
@@ -355,7 +360,7 @@ HATLAR: list[Hat] = [
         ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
         {"cikti/*.html": "*"},
         not_="Üç aylık; TÜİK yayımı ~60 gün gecikmeli."),
-    Hat("elnino", "El Niño & Gıda Enflasyonu", P / "ElNino", "el-nino",
+    Hat("elnino", "El Niño ve Gıda Enflasyonu", P / "ElNino", "el-nino",
         # veri.py ONI'yi NOAA'nın üç ayrı genel ucundan sırayla dener (hiçbiri
         # çalışmazsa hat DURUR) ve TÜFE alt endekslerini Enflasyon hattıyla AYNI
         # kodlardan çeker. metrik.py'nin kurucu kararı: ham gıda enflasyonu ile
@@ -380,6 +385,48 @@ HATLAR: list[Hat] = [
         ["src/run_all.py", "src/web_cikti.py", "src/ozet_uret.py"],
         {"output/web/*.html": "*", "output/ozet.json": "ozet.json"},
         "tam kip: EVDS/TÜİK'ten yeniden çeker; MEDAS için Playwright"),
+    # ── TÜREV HATLAR — kendi kaynağına gitmez, üstteki hatların depoya yazdığı
+    # CSV'lerden hesaplanır. SIRA BAĞLAYICIDIR: kos() hatları komut satırı /
+    # kütük sırasıyla koşturur; bunlar Fonlama, DİBS, Kredi ve Enflasyon'dan
+    # SONRA durmalı, yoksa aynı koşuda dünkü CSV'den hesaplanırlar. Tazeleme
+    # takviminde tarifleri YOK: kararlar() onları "tarifi yok — koşuluyor" ile
+    # her koşuda koşturur (saniyeler); üst hattın tetiğine bağlanmaları, üst
+    # hat düşüp bir sonraki koşuda kurtulduğunda bunları bir gün bayat bırakırdı.
+    # Eskiden veri.yml içinde elle `cd … && python hesap.py && cp …` adımıyla
+    # koşuyorlardı: kopya sözleşmesi YAML'de kopya olarak duruyor, tazelik ve
+    # geriye-gitme kapısı, ön denetim ve --liste onları hiç görmüyordu.
+    # ozet.json kopya sözlüğüne yazılmaz: kos() proje kökündekini kendisi kopyalar.
+    Hat("carry", "TL Taşıma Defteri", P / "Carry", "tl-tasima",
+        ["hesap.py", "grafik.py"], [],
+        {"makas.html": "makas.html", "endeks.html": "endeks.html",
+         "nakit_tahvil.html": "nakit_tahvil.html", "konvansiyon.html": "konvansiyon.html"},
+        "türev hat: Fonlama + DİBS depo serilerinden; her koşuda, saniyeler",
+        tarih_anahtarlari=("_tarih", "endeks_tarih"), bagimli=("fonlama", "dibs")),
+    Hat("tufex", "TÜFEX ve Başabaş Enflasyon", P / "Tufex", "tufex-basabas",
+        ["hesap.py", "grafik.py"], [],
+        {"basabas_anket.html": "basabas_anket.html", "prim_kesit.html": "prim_kesit.html",
+         "prim_tarihce.html": "prim_tarihce.html", "reel_tarihce.html": "reel_tarihce.html",
+         "mevsim.html": "mevsim.html"},
+        "türev hat: DİBS + Enflasyon depo serilerinden; her koşuda, saniyeler",
+        tarih_anahtarlari=("_tarih", "basabas_2y_tarih"), bagimli=("dibs", "enflasyon")),
+    Hat("makro", "Makroihtiyatinin İzi", P / "Makroihtiyati", "makroihtiyati",
+        ["hesap.py", "grafik.py"], [],
+        {"ayrisma.html": "ayrisma.html", "kacak.html": "kacak.html", "makas.html": "makas.html",
+         "bkea.html": "bkea.html", "duzenlemeler.json": "duzenlemeler.json"},
+        "türev hat: Kredi + Fonlama depo serilerinden; düzenleme defteri elle tutulur",
+        tarih_anahtarlari=("_tarih",), bagimli=("kredi", "fonlama")),
+    # Reel sektör FX ağa çıkar (EVDS bie_fdvy, aylık, ~2 ay gecikmeli). Çekim
+    # düşerse hat DURUR ve siteye hiçbir şey kopyalanmaz: sitedeki son iyi
+    # çıktı kalır, koşu ✗ ile görünür. Eski YAML yolu "düşerse uyar, yer
+    # tutucularla devam" diyordu — o yol depodaki gerçek veriyi yer tutucuyla
+    # ezme riski taşıyordu.
+    Hat("reelfx", "Reel Sektörün Döviz Pozisyonu", P / "ReelSektorFX", "reel-sektor-fx",
+        ["veri_cek.py", "hesap.py", "grafik.py"], [],
+        {"pozisyon.html": "pozisyon.html", "bilesim.html": "bilesim.html", "kisa_vade.html": "kisa_vade.html"},
+        "EVDS bie_fdvy; takvim tetiği aylık — çekim düşerse hat durur, site korunur",
+        # _tarih zaten net pozisyonun ayı; ikinci saat tcmb hattından gelen
+        # haftalık rezerv bacağı — donarsa tazelik denetimi görsün.
+        tarih_anahtarlari=("_tarih", "acik_rezerv_tarih"), bagimli=("tcmb",)),
 ]
 HAT = {h.ad: h for h in HATLAR}
 
@@ -390,7 +437,7 @@ def _renk(m, k):  # k: 32 yeşil, 31 kırmızı, 33 sarı, 36 camgöbeği
 
 EVDS_HATLAR = {"tcmb", "usdtry", "reer", "yabanci", "marj", "enflasyon",
                "kredi", "fonlama", "odemeler", "dibs", "butce", "buyume",
-               "elnino"}
+               "elnino", "reelfx"}
 # Liste sütun genişliği hat adlarından türetilir — yeni bir uzun ad eklendiğinde
 # hizalama sessizce bozulmasın ("enflasyon" 9 karakter, eski sabit 8'di).
 _AD_G = max(len(h.ad) for h in HATLAR) + 1
@@ -412,6 +459,53 @@ def anahtar_uyar(secilen: list["Hat"]):
     if eksik:
         print(_renk(f"  [UYARI] EVDS anahtarı yok: {', '.join(eksik)} hatları düşecek. "
                     "Çözüm: kök klasöre .evds_key dosyası (tek satır anahtar) ya da TTO_EVDS_KEY ortam değişkeni.", 33))
+
+
+def turevleri_ekle(secilen: list["Hat"], atlanan_adlar: set[str] | frozenset = frozenset()) -> list["Hat"]:
+    """Seçilen bir üst hattın TÜREVLERİ de koşar (kütük sırasıyla, sonda): elle
+    "fonlama" tazelenince taşıma defteri dünkü seriden hesaplanmış kalmazdı.
+
+    Takvimin bilinçle ATLADIĞI hat geri eklenmez. reelfx tcmb'ye bağımlı ama
+    kendi 30 günlük EVDS ritmi var (tazeleme.py emniyet ağı); tcmb her iş günü
+    seçildiği için genişletme onu her gün ağa çıkarıyor, "30 günde bir EVDS"
+    sözleşmesi kâğıt üstünde kalıyordu (02.09.2026). --gerekli yokken (elle
+    koşu) davranış aynı: atlanan küme boştur."""
+    secili = {h.ad for h in secilen}
+    eklenen: list[Hat] = []
+    for h in HATLAR:
+        if h.bagimli and h.ad not in secili and set(h.bagimli) & secili:
+            if h.ad in atlanan_adlar:
+                print(f"  · {h.ad}: takvim atladı (yeni yayım yok) — türev genişletmesi geri eklemedi")
+                continue
+            eklenen.append(h); secili.add(h.ad)
+            print(f"  + {h.ad}: {', '.join(x for x in h.bagimli if x in secili)} seçildiği için türev hat da koşacak")
+    return list(secilen) + eklenen
+
+
+def okur_dili_bulgulari(hedef: Path) -> list[str]:
+    """Siteye kopyalanan koşu kaydının okur dili: uyarilar.json `uyarilar` ve
+    ozet.json `uyari_metni`/`bayat_cumlesi` sayfaya OLDUĞU GİBİ basılır (koşu
+    kutusu, veri durumu şeridi). Operatör için yazılmış bir satır — `kkm_aktif`
+    bayrağı, bie_ grup kodu, '5.2%' — hat koştuğu anda burada görünür; yayın
+    kapısı (sayfa sınavı 17) aynı soruyu ENGEL olarak sorar. Tanım tek yerde:
+    ortak/okur_dili.kosu_kaydi_tara."""
+    if _ORTAK not in sys.path:
+        sys.path.insert(0, _ORTAK)
+    import okur_dili
+    satirlar: list[tuple[str, str]] = []
+    try:
+        u = json.loads((hedef / "uyarilar.json").read_text(encoding="utf-8"))
+        satirlar += [("uyarilar.json", str(x)) for x in (u.get("uyarilar") or [])]
+    except (OSError, ValueError, AttributeError):
+        pass
+    try:
+        d = json.loads((hedef / "ozet.json").read_text(encoding="utf-8"))
+        satirlar += [(f"ozet.json {a}", d[a]) for a in ("uyari_metni", "bayat_cumlesi")
+                     if isinstance(d.get(a), str)]
+    except (OSError, ValueError, AttributeError):
+        pass
+    return [f"{k}: {esl!r} ({aile})"
+            for k, m in satirlar for _i, aile, esl in okur_dili.kosu_kaydi_tara([m])]
 
 
 def yukseklik_denetimi(h: "Hat") -> str | None:
@@ -899,6 +993,10 @@ def kos(h: Hat, tam: bool, gunluk: bool = False) -> tuple[bool, str, float]:
     yuk = yukseklik_denetimi(h)
     if yuk:
         print(_renk(f"    [UYARI] {yuk}", 33))
+    # OKUR DİLİ — koşu kaydı ve özet cümleleri sayfaya olduğu gibi basılır;
+    # operatör dili burada görünsün, yayın kapısında (sayfa sınavı 17) ENGEL olur.
+    for dil in okur_dili_bulgulari(hedef):
+        print(_renk(f"    [UYARI] okur dili — {dil}", 33))
 
     yeni_tarih = _ozet_tarih(h)
     y, e = _tarih_ozeti(yeni_tarih), _tarih_ozeti(eski_tarih)
@@ -1056,6 +1154,7 @@ def main():
     else:
         secilen, tam, cm = menu()
     if not secilen: print("hat seçilmedi"); return 2
+    atlanan_adlar: set[str] = set()      # --gerekli'nin bilinçle atladığı hatlar
 
     # Resmî yayım takvimi süzgeci: kaynağı son tazelemeden bu yana yayımlanmamış
     # hattı koşturmak, aynı veriyi ikinci kez indirmektir. 2026-08-25 bulut
@@ -1074,6 +1173,7 @@ def main():
         print(_tz.rapor([h.ad for h in secilen]))
         gerek = set(_tz.gerekli([h.ad for h in secilen]))
         atlanan = [h for h in secilen if h.ad not in gerek]
+        atlanan_adlar = {h.ad for h in atlanan}
         secilen = [h for h in secilen if h.ad in gerek]
         if atlanan:
             print(f"\n  {len(atlanan)} hat atlandı (yeni yayım yok): "
@@ -1131,24 +1231,30 @@ def main():
     anahtar_uyar(secilen)
     print(f"\n{'═'*64}\n  {len(secilen)} hat · kip: {'TAM' if tam else 'hafif'} · commit: {'evet' if cm else 'hayır'}\n{'═'*64}")
     sonuc = []
-    for h in secilen:
-        print(f"\n▶ {h.baslik}  ({h.klasor})")
-        ok, mesaj, sn = kos(h, tam, a.gunluk)
-        sonuc.append((h, ok, mesaj, sn))
-        print(_renk(f"    {'✓' if ok else '✗'} {mesaj}  [{sn:.0f}s]", 32 if ok else 31))
+    secilen = turevleri_ekle(secilen, atlanan_adlar)
 
-    ev_stili()
-
-    # Tazeleme damgası yalnız BAŞARILI hatlara vurulur: düşen hat bir sonraki
-    # koşuda yeniden denensin, "koştu sayıldı ama veri gelmedi" durumu oluşmasın.
-    # --gerekli verilmese de damgalanır: hat gerçekten koştuysa takvim bunu
-    # bilmeli, yoksa elle zorlanan tazeleme bir sonraki koşuda tekrar edilir.
-    _tz = tazeleme_modulu()
-    if _tz is not None:
-        basarili = [h.ad for h, ok, _, _ in sonuc if ok]
-        if basarili:
-            _tz.durum_yaz(basarili)
-            print(f"\n  Tazeleme damgası güncellendi: {' '.join(basarili)}")
+    try:
+        for h in secilen:
+            print(f"\n▶ {h.baslik}  ({h.klasor})")
+            ok, mesaj, sn = kos(h, tam, a.gunluk)
+            sonuc.append((h, ok, mesaj, sn))
+            print(_renk(f"    {'✓' if ok else '✗'} {mesaj}  [{sn:.0f}s]", 32 if ok else 31))
+    finally:
+        # Döngü bir istisnayla kesilse de: kopyalanmış grafikler ev stilinden
+        # geçer ve BAŞARILI hatların damgası yazılır — yoksa commit adımı ham
+        # Plotly HTML'ini yayınlar ve tamamlanan hat bir sonraki koşuda yeniden
+        # koşar (ölçüldü: veri.yml adım sınırı gerçekten doluyor).
+        ev_stili()
+        # Tazeleme damgası yalnız BAŞARILI hatlara vurulur: düşen hat bir sonraki
+        # koşuda yeniden denensin, "koştu sayıldı ama veri gelmedi" durumu oluşmasın.
+        # --gerekli verilmese de damgalanır: hat gerçekten koştuysa takvim bunu
+        # bilmeli, yoksa elle zorlanan tazeleme bir sonraki koşuda tekrar edilir.
+        _tz = tazeleme_modulu()
+        if _tz is not None:
+            basarili = [h.ad for h, ok, _, _ in sonuc if ok]
+            if basarili:
+                _tz.durum_yaz(basarili)
+                print(f"\n  Tazeleme damgası güncellendi: {' '.join(basarili)}")
 
     print(f"\n{'═'*64}\n  ÖZET\n{'═'*64}")
     for h, ok, mesaj, sn in sonuc:

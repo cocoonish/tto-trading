@@ -34,6 +34,10 @@ jobs:
   olc:
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    env:
+      # ortak/sitecustomize.py: zaman aşımısız HTTP isteğine varsayılan zaman
+      # aşımı + yeniden deneme (bülten ve veri işleriyle aynı koruma).
+      PYTHONPATH: ${{ github.workspace }}/ortak
     steps:
       - uses: actions/checkout@v4
 
@@ -55,8 +59,10 @@ jobs:
       - name: Ev stili
         run: python site/tools/plotly_stil.py site/public/teknik/*.html
 
+      # Yalnız BAŞARIDA commit: `if: always()` kaldırıldı. Ölçüm ikinci
+      # enstrümanda düşerse ilk enstrümanın yeni haftaya ait grafikleri eski
+      # haftanın JSON'uyla yan yana yayına gidiyordu — grafik yeni, tablo eski.
       - name: Commit
-        if: always()
         run: |
           git config --global user.name  "tto-teknik"
           git config --global user.email "bot@users.noreply.github.com"

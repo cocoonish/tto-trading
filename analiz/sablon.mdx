@@ -1,0 +1,106 @@
+---
+title: '<GG Ay YYYY> <Konu> — <alt başlık>'
+description: 'İki–altı cümle: ne ölçüldü, ne bulundu, hangi sayılarla. Bağlantı önizlemesinde ve RSS''te görünür.'
+pubDate: YYYY-AA-GG
+tags: ['konu', 'alt konu', 'faiz']
+durum: 'aktif'
+kaynak: 'Veri kaynakları okur adıyla (ör. TCMB EVDS; TÜİK TÜFE) — seri kodları Kaynakça bölümüne'
+guncelleme: 'serinin yayım ritmi (ör. aylık; TÜİK ayın 3''ü 10:00)'
+veriTarihi: YYYY-AA-GG
+ozet: 'TEK cümle: yazının tezi. Kartta lede olur, X gönderisinin yedeğidir.'
+seviye: 'orta'
+onkosul: []
+# duzeltmeler:                      # yalnız yayımlanmış bir sayı düzeltilirse
+#   - { tarih: 'YYYY-AA-GG', alan: 'hangi sayı', eski: '…', yeni: '…', sebep: '…' }
+---
+
+import GrafikEmbed from '../../components/GrafikEmbed.astro';
+import Deger from '../../components/Deger.astro';
+
+<div class="yonetici">
+  <span class="etiket">Yönetici özeti</span>
+
+  <p class="tez">Tek paragraf tez: ne oldu, neden önemli, sonuç ne. Oynak her sayı
+  <Deger proje="<hat>" anahtar="<anahtar>" ondalik={2}>0,00</Deger> ile bağlanır.</p>
+
+  <table>
+    <tbody>
+      <tr>
+        <td>Gelir mi</td>
+        <td>Cevap ve kanıtı, tek paragraf.</td>
+      </tr>
+      <tr>
+        <td>Ne zaman</td>
+        <td>…</td>
+      </tr>
+      <tr>
+        <td>Ne kadar</td>
+        <td>…</td>
+      </tr>
+      <tr>
+        <td>Faize etkisi</td>
+        <td>…</td>
+      </tr>
+      <tr>
+        <td>Kanıtın gücü</td>
+        <td><b>Zayıf / Orta / Güçlü.</b> Örneklem büyüklüğü ve sınırı.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  {/* Rakam şeridi: 5–8 öğe, her biri <b>değer</b><span>etiket</span> — X gönderisi bu ikiliyi okur. */}
+  <ul class="rakamlar">
+    <li><b>%<Deger proje="<hat>" anahtar="<anahtar>" ondalik={2}>0,00</Deger></b><span>ölçümün adı</span></li>
+    <li><b>…</b><span>…</span></li>
+    <li><b>…</b><span>…</span></li>
+    <li><b>…</b><span>…</span></li>
+    <li><b>…</b><span>…</span></li>
+    <li><b>…</b><span>…</span></li>
+  </ul>
+</div>
+
+{/* İsteğe bağlı — uzun yazıda okuma haritası; sayfa mobilyasına atıf yalnız burada serbest.
+<div class="not gezinme">
+  <span class="etiket">Bu yazı nasıl okunur</span>
+  <p>Bölüm 1 mekanizmayı, Bölüm 2 ölçümü, Bölüm 3 piyasaya geçişi anlatır; acelesi olan yönetici özetiyle yetinebilir.</p>
+</div>
+*/}
+
+Giriş paragrafı: soru nedir, neden şimdi.
+
+## Bölüm 1 — Mekanizma
+
+Önce teori ve türetim ($…$ ile KaTeX), sonra gerçek verilerle adım adım hesap.
+
+## Bölüm 2 — Ölçüm
+
+<GrafikEmbed src="/projeler/<hat>/<dosya>.html" baslik="Şeklin tek cümlelik açıklaması" no="01" />
+
+**Bu seri nasıl hesaplanıyor.** Kaynak, formül, dönüşümler, varsayımlar.
+
+## Bölüm 3 — Piyasaya geçiş
+
+…
+
+{/* İsteğe bağlı — ana anlatıyı kesmemesi gereken teknik ayrıntı, kapanıştan ÖNCE.
+## Yöntem eki
+
+Türetimler, alternatif tanımlar, sağlamlık sınamaları.
+*/}
+
+## Ne ölçmedik
+
+Ölçülmeyen ve ölçülemeyen her şey, sebebiyle. (Bölüm adı tek ve tam budur.)
+
+## İzleme listesi
+
+| tarih | veri | neyi doğrular / çürütür |
+|---|---|---|
+| GG.AA.YYYY | … | … |
+
+{/* İsteğe bağlı — en sonda.
+## Kaynakça
+
+- TCMB EVDS `TP.FG.IST1.23` — İTO İstanbul geçinme endeksi, aylık.
+- TÜİK, Tüketici Fiyat Endeksi (2025=100), yayım takvimi.
+*/}

@@ -36,6 +36,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import json
 import os
 import sys
@@ -44,9 +45,19 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import uret  # noqa: E402
+import analiz as analiz_m  # noqa: E402
+import denetim as denetim_m  # noqa: E402
 
 BURASI = Path(__file__).resolve().parent
+KOK = BURASI.parent
 DEFTER = BURASI / "defter.json"
+# Defterin site tarafındaki AYNASI: public depoya yalnız site/ çıkar; sayfa,
+# bültenin/analizin X gönderisine bağ verebilsin diye defter oraya da yazılır.
+DEFTER_AYNA = KOK / "site" / "src" / "data" / "tweet" / "defter.json"
+# Gönderilen METNİN arşivi. Defter yalnız kimlik taşıyor; X'te silinen ya da
+# düzeltilen bir gönderinin ne dediği depoda kalmıyordu. Her gerçek gönderim
+# metniyle birlikte buraya yazılır ve iş akışı commit'ler.
+ARSIV = BURASI / "arsiv"
 JETON_DOSYA = BURASI / "oauth2.enc"
 UC = "https://api.x.com/2/tweets"
 JETON_UC = "https://api.x.com/2/oauth2/token"
@@ -106,12 +117,15 @@ def _erisim_al(dosya: Path) -> str:
 
 
 def _defter_oku(yol: Path) -> dict:
-    if yol.exists():
-        try:
-            return json.loads(yol.read_text(encoding="utf-8"))
-        except Exception:                                      # noqa: BLE001
-            pass
-    return {}
+    """Defter bozuksa DURUR. Eskiden bozuk JSON sessizce boş defter sayılıyordu:
+    boş defter = "hiçbir şey gönderilmedi" = her şey yeniden gönderilir."""
+    if not yol.exists():
+        return {}
+    try:
+        return json.loads(yol.read_text(encoding="utf-8"))
+    except Exception as e:                                     # noqa: BLE001
+        raise SystemExit(f"{yol} okunamadı ({e}) — defter bozuk; elle düzelt, "
+                         "boş sayıp yeniden göndermek mükerrer gönderi demek.")
 
 
 def _bas(zincir: list[str], baslik: str) -> None:
@@ -122,17 +136,64 @@ def _bas(zincir: list[str], baslik: str) -> None:
     print()
 
 
+def _arsivle(anahtar: str, zincir: list[str], idler: list[str], zaman: str) -> Path:
+    """Gönderilen metni depoya yaz: tweet/arsiv/<tur>-<ad>.txt."""
+    ARSIV.mkdir(parents=True, exist_ok=True)
+    yol = ARSIV / (anahtar.replace(":", "-") + ".txt")
+    baslik = (f"# {anahtar} · {zaman} · "
+              + (" ".join(f"https://x.com/i/status/{i}" for i in idler) or "kimlik yok"))
+    yol.write_text(baslik + "\n\n" + "\n\n---\n\n".join(zincir) + "\n", encoding="utf-8")
+    return yol
+
+
+def _ayna(defter: dict) -> dict:
+    """Sitenin okuduğu PROJEKSİYON: yalnız kimlik ve zaman. İç notlar ("ilk
+    gönderi eski biçimdeydi…"), 'gönderiliyor' işaretleri ve kimliksiz tohum
+    kayıtları public depoya taşınmaz."""
+    out = {}
+    for k, v in defter.items():
+        idler = (v or {}).get("idler") or []
+        if idler:
+            out[k] = {"id": str(idler[0]), "zaman": str((v or {}).get("zaman") or "")}
+    return out
+
+
+def _defter_yaz(defter_yolu: Path, defter: dict) -> None:
+    defter_yolu.write_text(json.dumps(defter, ensure_ascii=False, indent=1) + "\n",
+                           encoding="utf-8")
+    # Ayna yalnız GERÇEK defter için; sınama defterleri siteye sızmaz.
+    if defter_yolu.resolve() == DEFTER.resolve():
+        DEFTER_AYNA.parent.mkdir(parents=True, exist_ok=True)
+        DEFTER_AYNA.write_text(json.dumps(_ayna(defter), ensure_ascii=False, indent=1) + "\n",
+                               encoding="utf-8")
+
+
 def _gonder_zincir(zincir: list[str], erisim: str) -> list[str]:
-    """Zinciri sırayla gönderir, her tweet öncekine yanıt olur. ID listesi döner."""
+    """Zinciri sırayla gönderir, her tweet öncekine yanıt olur. ID listesi döner.
+    429 ve 5xx'te BİR kez bekleyip yeniden dener — geçici bir kesinti için sabahı
+    kaybetmemek; iki kez düşerse gerçekten düşmüştür."""
     import requests
+    # LİNK YASAĞI — denetim kapısından bağımsız ikinci kilit: zincirin herhangi
+    # bir parçasında link varsa HİÇBİR parça gönderilmez (yarım zincir kalmaz).
+    for metin in zincir:
+        b = denetim_m.link_var(metin)
+        if b:
+            raise SystemExit(f"tweet metninde link ({b!r}) — kural: tweetlerde HİÇ link "
+                             "kullanılmaz; gönderim durdu, defter yazılmadı.")
     idler: list[str] = []
     for i, metin in enumerate(zincir):
         govde: dict = {"text": metin}
         if idler:
             govde["reply"] = {"in_reply_to_tweet_id": idler[-1]}
-        yanit = requests.post(
-            UC, json=govde, timeout=30,
-            headers={"Authorization": f"Bearer {erisim}"})
+        for deneme in (1, 2):
+            yanit = requests.post(
+                UC, json=govde, timeout=30,
+                headers={"Authorization": f"Bearer {erisim}"})
+            if yanit.status_code in (429, 500, 502, 503, 504) and deneme == 1:
+                print(f"::warning::X {yanit.status_code} — 8 saniye sonra bir kez daha deneniyor")
+                time.sleep(8)
+                continue
+            break
         if yanit.status_code == 402:
             raise SystemExit(
                 "X: 'credits depleted' — geliştirici hesabında API kredisi yok. "
@@ -167,9 +228,29 @@ def _gonder_zincir(zincir: list[str], erisim: str) -> list[str]:
     return idler
 
 
+def kapidan_gecir(is_listesi: list[tuple[str, list[str], list]]) -> tuple[list, list]:
+    """Kalite kapısı ÖĞE BAŞINA: kirli öğe düşer ve loga yazılır, temiz öğeler
+    gönderilir. Eskiden tek öğedeki engel bütün gönderimi durduruyordu — bir
+    analiz gönderisindeki kusur, o sabahın bültenini de X'ten alıkoyuyordu."""
+    gecen, dusen = [], []
+    for anahtar, zincir, dusen_cumleler in is_listesi:
+        tur = anahtar.split(":")[0]
+        engel, uyari = denetim_m.denetle("\n".join(zincir), tur)
+        if dusen_cumleler:
+            uyari = list(uyari) + [f"{len(dusen_cumleler)} cümle site atfı yüzünden düştü: "
+                                   + " | ".join(f"[{b}] {c[:70]}…" for b, c in dusen_cumleler[:3])]
+        print(denetim_m.rapor(engel, uyari, anahtar))
+        if engel:
+            print(f"::error::{anahtar}: tweet denetimi ENGEL üretti — bu öğe gönderilmedi.")
+            dusen.append((anahtar, engel))
+        else:
+            gecen.append((anahtar, zincir))
+    return gecen, dusen
+
+
 def main() -> int:
     p = argparse.ArgumentParser()
-    p.add_argument("--tur", choices=("bulten", "teknik", "hepsi"), default="hepsi")
+    p.add_argument("--tur", choices=("bulten", "teknik", "analiz", "hepsi"), default="hepsi")
     p.add_argument("--tarih", help="varsayılan: bugün (UTC); bayat koruması "
                                    "yalnız varsayılanda uygulanır")
     p.add_argument("--kuru", action="store_true", help="gönderme, yalnız bas")
@@ -187,53 +268,85 @@ def main() -> int:
               "repo secret'ına eklenince gönderim açılır.")
 
     defter = _defter_oku(defter_yolu)
-    is_listesi: list[tuple[str, list[str]]] = []
+    for k, v in defter.items():
+        if (v or {}).get("durum") == "gönderiliyor":
+            print(f"::warning::{k}: önceki koşu gönderim ortasında kesilmiş görünüyor — "
+                  "X'te var mı diye bak, defteri elle tamamla ya da kaydı sil. "
+                  "Bu koşuda o içerik yeniden GÖNDERİLMİYOR.")
+    is_listesi: list[tuple[str, list[str], list]] = []
 
     if a.tur in ("bulten", "hepsi"):
         b = uret.yazilmis_bulten(tarih)
         if b and f"bulten:{tarih}" not in defter:
-            is_listesi.append((f"bulten:{tarih}", uret.bulten_zinciri(b)))
+            z = uret.bulten_zinciri(b)
+            is_listesi.append((f"bulten:{tarih}", z, list(uret.DUSEN)))
     if a.tur in ("teknik", "hepsi"):
         t = uret.yazilmis_teknik(tarih)
         if t and f"teknik:{tarih}" not in defter:
-            is_listesi.append((f"teknik:{tarih}", uret.teknik_zinciri(t)))
+            z = uret.teknik_zinciri(t)
+            is_listesi.append((f"teknik:{tarih}", z, list(uret.DUSEN)))
+    # ANALİZ KANALI. Yayın günü pubDate'i bugün olan her analiz yazısı, kendi
+    # yönetici özetinden kurulan gönderiyle X'e çıkar. Pencere iki gün: gece
+    # yarısından sonra push edilen ya da tetikleyicisi düşen yazı ertesi sabah
+    # uyarıyla çıkar; daha eskisi ancak --tarih ile ve bilerek gönderilir.
+    # Defter anahtarı analiz:<slug> — özel gönderimle atılmış yazılar deftere
+    # işlenir ki araç kanalı aynı yazıyı ikinci kez atmasın.
+    if a.tur in ("analiz", "hepsi"):
+        gun = dt.date.fromisoformat(tarih)
+        for gecikme in (0, 1):
+            for an in analiz_m.bugunun_analizleri(gun - dt.timedelta(days=gecikme)):
+                anahtar = f"analiz:{an['slug']}"
+                if anahtar in defter:
+                    continue
+                if gecikme:
+                    print(f"::warning::{anahtar}: yayın günü {gun - dt.timedelta(days=1)}, "
+                          "bir gün gecikmeyle gönderiliyor.")
+                z = analiz_m.analiz_zinciri(an)
+                for u in analiz_m.UYARILAR:
+                    print(f"::warning::{u}")
+                analiz_m.UYARILAR.clear()
+                is_listesi.append((anahtar, z, list(uret.DUSEN)))
 
     if not is_listesi:
         print(f"{tarih}: gönderilecek yeni içerik yok "
               "(yazılmış değil ya da defterde kayıtlı).")
         return 0
 
-    # OKUR DİLİ KAPISI — düzenli zincirler de aynı süzgeçten geçer.
-    # Metin uret.py'de kuruluyor ve kaynağı bültenin kendi metni; bültenin dil
-    # denetimi bunu yakalar ama zincir başka alanlardan da cümle taşıyabilir.
-    # Kapıyı iki yere birden koymanın maliyeti yok, birine koymamanın var.
-    import sys as _sys
-    _sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ortak"))
-    import okur_dili
-    for anahtar, zincir in is_listesi:
-        bulgu = okur_dili.tara("\n".join(zincir))
-        if bulgu:
-            dokum = " · ".join(f"{a_}: {e!r}" for a_, e, _ in bulgu[:5])
-            raise SystemExit(
-                f"{anahtar}: zincirde okura değil kendimize yazan dil var — "
-                f"{dokum}. Gönderim durdu.")
+    # KALİTE KAPISI — tweet/denetim.py, öğe başına. Bültenin sayfa denetimi
+    # metni sınıyor ama gönderi o metnin KIRPILMIŞ hâli; kırpmanın kusurunu
+    # ancak gönderi metnine bakan bir denetim görür.
+    gecen, dusen = kapidan_gecir(is_listesi)
 
     erisim: str | None = None
-    for anahtar, zincir in is_listesi:
+    for anahtar, zincir in gecen:
         _bas(zincir, anahtar + (" · KURU KOŞU" if kuru else ""))
         if kuru:
             continue
         if erisim is None:
             erisim = _erisim_al(JETON_DOSYA)
-        idler = _gonder_zincir(zincir, erisim)
-        defter[anahtar] = {
-            "idler": idler,
-            "zaman": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
-        }
-        defter_yolu.write_text(
-            json.dumps(defter, ensure_ascii=False, indent=1) + "\n",
-            encoding="utf-8")
+        # İKİ AŞAMALI KAYIT: gönderimden ÖNCE "gönderiliyor" işareti yazılır;
+        # süreç POST ile kayıt arasında ölürse bir sonraki koşu bunu görür ve
+        # aynı içeriği körlemesine yeniden atmaz. HTTP hatasında işaret silinir
+        # (gönderilmediği kesin), kimlik gelince kayıt tamamlanır.
+        simdi = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+        defter[anahtar] = {"durum": "gönderiliyor", "zaman": simdi,
+                           "ozet": hashlib.sha256("\n".join(zincir).encode("utf-8")).hexdigest()[:12]}
+        _defter_yaz(defter_yolu, defter)
+        try:
+            idler = _gonder_zincir(zincir, erisim)
+        except SystemExit:
+            defter.pop(anahtar, None)
+            _defter_yaz(defter_yolu, defter)
+            raise
+        zaman = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
+        defter[anahtar] = {"idler": idler, "zaman": zaman}
+        _defter_yaz(defter_yolu, defter)
+        if defter_yolu.resolve() == DEFTER.resolve():
+            _arsivle(anahtar, zincir, idler, zaman)
         print(f"✓ {anahtar} gönderildi — {len(idler)} tweet, kök: {idler[0]}")
+    if dusen:
+        print(f"\n{len(dusen)} öğe kapıdan geçemedi: " + ", ".join(k for k, _ in dusen))
+        return 1
     return 0
 
 

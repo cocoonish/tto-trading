@@ -21,6 +21,28 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
   (8) DERLENMİŞ ÇIKTI — dist/ içinde KaTeX hatası, ham <Deger> etiketi ya
       da çözülmemiş MDX yorumu var mı? Kaynağı sınayan ölçütlerin
       göremediği tek şey: okurun gerçekte gördüğü sayfa.
+  (9) OKUR DİLİ — kod ve yapım dili (ortak/okur_dili.py).
+  (10) ANALİZ BİÇİMİ — analiz/YAZIM.md'nin araçtaki karşılığı
+      (site/tools/analiz_sinavi.py): tarihli slug ve başlık, zorunlu ön
+      bilgi, yönetici özeti, kapanış bölümü.
+  (11) MANŞET KAPSAMI — her proje sayfasının HAT_MANSET girdisi var mı ve
+      anahtarı ozet.json'da mı? (eksik pano tablodan sessizce düşerdi)
+  (11b) PROJE BAŞLIĞI — cümle düzeni; '&' engel, Başlık Düzeni uyarı.
+  (11c) PROJE BAĞLANTI METNİ — gövdedeki /projeler/ bağları başlığı cümle düzeninde taşır; slug metin olmaz (uyarı).
+  (11d) PROJE ÖN BİLGİSİ — kaynak/guncelleme yok → ENGEL; description'da elle sayı, guncelleme büyük harf/şekil no, kaynak '&'/grup kodu, tags büyük harf (uyarı).
+  (2c) KOŞU KUTUSU — `sayi=` ya da slotta elle uyarı özeti yok (dosyadan basılır).
+  (12) ÖZET SAATİ — her ozet.json'un `_tarih`i çözülüyor, yarından ileri
+      değil ve canlı bacakların en yenisinden geride kalmamış.
+  (13) BİÇİM TEK KAYNAK (uyarı) — lib/bicim.ts dışında yerel biçimleyici.
+  (14) CSS JETONU — kullanılan her var(--x) global.css'te ya da dosyada tanımlı.
+  (15) SİMGE SÖZLEŞMESİ — ilan edilen her simge var ve boyutu ilanla aynı.
+  (16) YAYIN TAKVİMİ — hakkında sayfasının saatleri iş akışı cron'larıyla aynı.
+  (17) KOŞU KAYDI OKUR DİLİ — public/projeler/*/uyarilar.json `uyarilar` ve
+      ozet.json `uyari_metni`/`bayat_cumlesi` okura OLDUĞU GİBİ basılır
+      (ortak/okur_dili.kosu_kaydi_tara): kod dili ve yapım dili (backtick, dosya
+      adı, bie_ kodu, komut anahtarı — şablon kusuru) ENGEL; snake_case anahtar
+      adı ve biçim sızıntısı (veri kaynaklı olabilir) UYARI.
+  (9b) OKUR DİLİ, derlenmiş çıktıda (uyarı) — bileşen dizgeleri de kapıya girer.
 
 Koşum:  python3 site/tools/sayfa_sinavi.py
 Çıkış:  0 = geçti · 1 = en az bir sınav düştü
@@ -103,6 +125,7 @@ MUAF_KALIP = re.compile(r"\{/\*\s*sinav-muaf:\s*([A-Za-z0-9_]+)")
 def main() -> int:
     hata: list[str] = []
 
+    uyari: list[str] = []      # kapı değil, adıyla görünen bulgular
     def bulgu(slug: str, mesaj: str) -> None:
         """Kural 2–5 bulgusu: TAM_SINAV'daki hatta kapı, diğerlerinde bilgi."""
         if slug in TAM_SINAV:
@@ -295,19 +318,26 @@ def main() -> int:
     print(f"  toplam {n_sayfa} sayfa · {n_kul} <Deger> kullanımı")
 
     print("\n▶ KaTeX")
+    # Bir KAPI, aracı eksikken yeşil geçmez: dosya adı değişse ya da node
+    # bulunmasa sınav sessizce daralır ve ham LaTeX yayına çıkardı.
     kt = KOK / "site/tools/katex_sinavi.mjs"
     if not kt.exists():
-        print("  – katex_sinavi.mjs yok, atlandı")
+        hata.append("KaTeX sınav aracı (site/tools/katex_sinavi.mjs) yok — ölçüt koşamadı")
     else:
-        r = subprocess.run(["node", str(kt)], cwd=str(KOK / "site"),
-                           capture_output=True, text=True)
-        cikti = [x for x in r.stdout.splitlines() if x.strip()]
-        for satir in cikti[:14]:
-            print("  " + satir)
-        if r.returncode != 0:
-            hata.append("KaTeX: formül ayrıştırılamadı (ayrıntı yukarıda)")
-        elif r.returncode != 0 or not cikti:
-            print("  – node/katex yok, atlandı")
+        try:
+            r = subprocess.run(["node", str(kt)], cwd=str(KOK / "site"),
+                               capture_output=True, text=True)
+        except FileNotFoundError:
+            r = None
+            hata.append("KaTeX: node bulunamadı — ölçüt koşamadı")
+        if r is not None:
+            cikti = [x for x in r.stdout.splitlines() if x.strip()]
+            for satir in cikti[:14]:
+                print("  " + satir)
+            if r.returncode != 0:
+                hata.append("KaTeX: formül ayrıştırılamadı (ayrıntı yukarıda)")
+            elif not cikti:
+                hata.append("KaTeX: araç çıktı vermedi — ölçüt koşmuş sayılmaz")
 
     # (8) DERLENMİŞ ÇIKTIYA BAK — OKURUN GÖRDÜĞÜ ŞEY BUDUR.
     # 6. ve 7. ölçütler kaynağı sınıyor ve ikisi de yeşil bitiyordu; sayfada
@@ -328,6 +358,10 @@ def main() -> int:
         kirik = []
         for h in sayfa:
             metin = h.read_text(encoding="utf-8", errors="replace")
+            # Hedefi olmayan çıpa: "#kosu"ya bağ var ama sayfada id="kosu" yok.
+            if 'href="#kosu"' in metin and 'id="kosu"' not in metin:
+                kirik.append((h.relative_to(dist).parent.as_posix() or ".", 0, 0, 0))
+                hata.append(f"dist/{h.relative_to(dist).parent.as_posix()}: '#kosu' bağının hedefi yok")
             n_kt = metin.count("katex-error")
             # Ham <Deger> etiketi: MDX bileşeni çözememiş, metne kaçmış.
             n_dg = metin.count("&lt;Deger") + metin.count("&#x3C;Deger")
@@ -366,13 +400,339 @@ def main() -> int:
             bulgu += 1
     print(f"  {len(icerik)} sayfa tarandı · bulgu {bulgu}")
 
+    # ---------------------------------------------------------------- (10)
+    # ANALİZ BİÇİMİ. analiz/YAZIM.md'nin araçtaki karşılığı (analiz_sinavi.py):
+    # tarihli slug ve başlık, zorunlu ön bilgi, uzun yazıda yönetici özeti,
+    # kapanış bölümü. Rehber tarihinden (1 Eylül 2026) sonraki yazılarda KAPI,
+    # daha eskilerde bilgi — yayımlanmış yazılar değiştirilmez.
+    print("\n▶ Analiz biçimi (analiz/YAZIM.md)")
+    try:
+        sys.path.insert(0, str(KOK / "site" / "tools"))
+        import analiz_sinavi
+        if analiz_sinavi.main([]) != 0:
+            hata.append("analiz biçim sınavı düştü — rehber sonrası bir yazı analiz/YAZIM.md'ye uymuyor")
+    except Exception as ex:                                        # noqa: BLE001
+        hata.append(f"analiz biçim sınavı koşturulamadı ({type(ex).__name__}: {ex})")
+
+    # ---------------------------------------------------------------- (11)
+    # MANŞET KAPSAMI. Ana sayfa tablosu ve proje kartları HAT_MANSET'ten
+    # okur; girdisi olmayan pano tablodan SESSİZCE düşer ve koşu yeşil biter.
+    # Hat listesi üç yerde (guncelle kütüğü, projeler koleksiyonu, HAT_MANSET)
+    # elle tutuluyor; bu ölçüt üçüncüsünü ilk ikisine bağlar.
+    print("\n▶ Manşet kapsamı (lib/anaSayfa.ts HAT_MANSET ↔ projeler/*.mdx ↔ ozet.json)")
+    ana = (KOK / "site/src/lib/anaSayfa.ts").read_text(encoding="utf-8")
+    proje_mdx = sorted((KOK / "site/src/content/projeler").glob("*.mdx"))
+    n_tam = 0
+    for yol in proje_mdx:
+        slug = yol.stem
+        on = yol.read_text(encoding="utf-8")[:2000]
+        pasif = re.search(r"^durum:\s*'?(taslak|arsiv)'?", on, re.M) is not None
+        m = re.search(r"^\s*'?%s'?:\s*\{([^}]*)\}" % re.escape(slug), ana, re.M)
+        if not m:
+            (uyari if pasif else hata).append(
+                f"HAT_MANSET: {slug} girdisi yok — ana sayfa tablosunda ve kartta veri satırı çıkmaz")
+            continue
+        oz = KOK / "site/public/projeler" / slug / "ozet.json"
+        if not oz.exists():
+            (uyari if pasif else hata).append(f"HAT_MANSET: {slug} için ozet.json yok")
+            continue
+        d = json.loads(oz.read_text(encoding="utf-8"))
+        for alan in ("anahtar", "tarihAlani"):
+            k = re.search(alan + r":\s*'([^']+)'", m.group(1))
+            if k and k.group(1) not in d:
+                hata.append(f"HAT_MANSET: {slug}.{alan}='{k.group(1)}' ozet.json'da yok")
+        n_tam += 1
+    print(f"  {len(proje_mdx)} pano · girdisi ve anahtarı tam {n_tam}")
+
+    # (2c) KOŞU KUTUSU ELLE SAYI TAŞIMAZ. Kutu uyarı listesini koşu kaydından
+    # basar; MDX'te `sayi=` ya da slot içinde uyarı özeti kalırsa donar ve
+    # 1/2b ölçütleri onu GÖRMEZ (yalnız <Deger> tarar). Kendini kapatan etiket
+    # slotsuz sayılır.
+    for yol in proje_mdx:
+        mdx = yol.read_text(encoding="utf-8")
+        for m in re.finditer(r"<KosuKutusu\b([^>]*?)(/?)>", mdx):
+            if "sayi=" in m.group(1):
+                hata.append(f"{yol.stem}: koşu kutusunda `sayi=` — sayı koşu kaydından gelir, elle yazılmaz")
+            if m.group(2):
+                continue
+            kapanis = mdx.find("</KosuKutusu>", m.end())
+            govde = mdx[m.end():kapanis] if kapanis > 0 else ""
+            # Slot yazarın yorumu için serbesttir (tolerans, kural — sayı taşıyabilir);
+            # yasak olan ESKİ ÖZET kalıbıdır: "N uyarı", "Bu koşuda … düştü", bayatlık hükmü.
+            if re.search(r"\d+\s*uyarı|Bu koşuda .* düştü|uyarı yok|BAYAT VERİ", govde, re.I):
+                hata.append(f"{yol.stem}: koşu kutusu slotunda elle uyarı özeti — uyarılar dosyadan basılır")
+
+    # ---------------------------------------------------------------- (11b)
+    # PROJE BAŞLIĞI YAZIMI (projeler/YAZIM.md): cümle düzeni — ilk sözcük büyük,
+    # kalanlar küçük; özel ad ve kısaltmalar korunur; '&' yerine 've'. İki üslup
+    # yan yana liste sayfasında ve ana sayfa tablosunda göze çarpıyordu.
+    # '&' ENGEL, büyük harf uyarı (özel ad listesi kodda; yanlış alarm ölçülür).
+    print("\n▶ Proje başlığı yazımı (projeler/YAZIM.md)")
+    OZEL_AD = {"TCMB", "TL", "TÜFEX", "DİBS", "REDK", "USD/TRY", "GSYH", "FX", "TÜFE", "ÜFE",
+               "İTO", "PPK", "BIST", "ABD", "AB", "IMF", "OIS", "ASW", "DXY", "GSYİH", "TÜİK",
+               "Hazine", "Merkezi", "Türkiye", "İstanbul", "Avrupa", "Fed", "ECB"}
+    n_baslik_uyari = 0
+    for yol in proje_mdx:
+        on = yol.read_text(encoding="utf-8")[:2000]
+        m = re.search(r"^title:\s*['\"](.+?)['\"]\s*$", on, re.M)
+        if not m:
+            continue
+        baslik = m.group(1)
+        if "&" in baslik:
+            hata.append(f"proje başlığı '&' taşıyor ({yol.stem}): {baslik!r} — 've' yazılır")
+        sozcukler = re.split(r"[\s:/—–-]+", baslik)[1:]
+        buyuk = [w for w in sozcukler if w and w[0].isupper() and w not in OZEL_AD
+                 and not w.isupper()]
+        if buyuk:
+            uyari.append(f"proje başlığı Başlık Düzeni'nde ({yol.stem}): {baslik!r} — {buyuk}")
+            n_baslik_uyari += 1
+    # (11c) Gövdedeki /projeler/ bağlantı metinleri de aynı kurala uyar: Başlık
+    # Düzeni ya da slug'ın kendisi ("kredi-parasal") okura gitmez — uyarı.
+    n_bag = 0
+    for yol in proje_mdx:
+        govde = yol.read_text(encoding="utf-8")
+        metinler = [m.group(2) for m in re.finditer(r'<a href="/projeler/([a-z-]+)/?">([^<]*?)</a>', govde, re.S)]
+        metinler += [m.group(1) for m in re.finditer(r"\[([^\]]{2,60})\]\(/projeler/[a-z-]+/?\)", govde)]
+        for ic in metinler:
+            norm = " ".join(ic.split())
+            sozcukler = re.split(r"[\s:/—–]+", norm)[1:]
+            buyuk = [w for w in sozcukler if w and w[0].isupper() and w not in OZEL_AD and not w.isupper()]
+            slugmu = re.fullmatch(r"[a-z]+(?:-[a-z]+)+", norm) is not None
+            if buyuk or slugmu:
+                uyari.append(f"proje bağlantı metni ({yol.stem}): {norm!r} — {'slug metin olmaz' if slugmu else 'cümle düzeni'}")
+                n_bag += 1
+    print(f"  {len(proje_mdx)} başlık · uyarı {n_baslik_uyari} · bağlantı metni uyarı {n_bag}")
+
+    # (11d) PROJE ÖN BİLGİSİ (projeler/YAZIM.md; uyarı). description'da elle
+    # sayılmış şekil/senaryo sayısı, guncelleme büyük harfle ya da şekil
+    # numarasıyla başlıyor, kaynak'ta '&' ya da EVDS grup kodu (bie_…), tags
+    # büyük harf. Ayrıştırıcı deponun tek ön bilgi ayrıştırıcısı (ortak/on_bilgi).
+    print("\n▶ Proje ön bilgisi (projeler/YAZIM.md)")
+    sys.path.insert(0, str(KOK / "ortak"))
+    import on_bilgi
+    n_on = 0
+    for yol in proje_mdx:
+        try:
+            fm = on_bilgi.ayristir(yol.read_text(encoding="utf-8"))
+        except Exception as ex:                                    # noqa: BLE001
+            uyari.append(f"ön bilgi ayrıştırılamadı ({yol.stem}): {ex}")
+            n_on += 1
+            continue
+        bulgu = []
+        # kaynak ve guncelleme ZORUNLU (projeler/YAZIM.md): şema isteğe bağlı
+        # tutuyordu ve rehberin 'zorunlu' dediği şey hiçbir kapıda zorunlu değildi.
+        for alan in ("kaynak", "guncelleme"):
+            if not str(fm.get(alan) or "").strip():
+                hata.append(f"proje ön bilgisi ({yol.stem}): `{alan}` yok — pano künyesi "
+                            "kaynağını ve yayım ritmini yazar (projeler/YAZIM.md)")
+        acik = str(fm.get("description") or "")
+        if re.search(r"\b\d+\s+(grafik|şekil|senaryo|tablo|hesap aracı)", acik, re.I):
+            bulgu.append("description elle sayılmış şekil/senaryo sayısı taşıyor")
+        ritim = str(fm.get("guncelleme") or "")
+        if ritim and ritim[0].isupper() and ritim.split()[0] not in OZEL_AD:
+            bulgu.append(f"guncelleme büyük harfle başlıyor: {ritim[:40]!r}")
+        if re.search(r"\bŞekil\s*\d", ritim):
+            bulgu.append("guncelleme şekil numarası taşıyor")
+        kaynak = str(fm.get("kaynak") or "")
+        if "&" in kaynak:
+            bulgu.append("kaynak '&' taşıyor ('ve' yazılır)")
+        if re.search(r"\bbie_[a-z0-9]+", kaynak):
+            bulgu.append("kaynak EVDS grup kodu taşıyor (kodlar gövdedeki Kaynaklar'a)")
+        etiketler = fm.get("tags") or []
+        if isinstance(etiketler, list) and any(str(t) != str(t).lower() for t in etiketler):
+            bulgu.append("tags küçük harf olmalı")
+        for b_ in bulgu:
+            uyari.append(f"proje ön bilgisi ({yol.stem}): {b_}")
+        n_on += len(bulgu)
+    print(f"  {len(proje_mdx)} pano · ön bilgi uyarı {n_on}")
+
+    # ---------------------------------------------------------------- (12)
+    # ÖZET SAATİ. `_tarih` hattın en yeni CANLI bacağının günüdür (CLAUDE.md
+    # "Kurucu ilke — saat"); sözleşme yalnız gelenekte yaşıyordu ve bozulduğunda
+    # (TÜFEX: metin karşılaştırmasıyla en eski bacak) hiçbir kapı düşmüyordu.
+    # ENGEL: `_tarih` yok/çözülemiyor ya da yarından ileri. UYARI: `_tarih`
+    # canlı bacakların en yenisinden bir günden fazla geride.
+    print("\n▶ Özet saati (public/projeler/*/ozet.json `_tarih`)")
+    sys.path.insert(0, str(KOK / "ortak"))
+    import bicim as _bicim
+    import datetime as _dt
+    bugun = _dt.date.today()
+    ozetler_hepsi = sorted((KOK / "site/public/projeler").glob("*/ozet.json"))
+    for oz in ozetler_hepsi:
+        slug = oz.parent.name
+        try:
+            d = json.loads(oz.read_text(encoding="utf-8"))
+        except Exception as ex:                                    # noqa: BLE001
+            hata.append(f"{slug}/ozet.json okunamadı: {ex}")
+            continue
+        t = _bicim.tarihe_cevir(d.get("_tarih"))
+        if t is None:
+            hata.append(f"{slug}/ozet.json: `_tarih` yok ya da çözülemiyor ({d.get('_tarih')!r})")
+            continue
+        if t > bugun + _dt.timedelta(days=1):
+            hata.append(f"{slug}/ozet.json: `_tarih` {d['_tarih']} yarından ileri")
+        canli = [_bicim.tarihe_cevir(v) for k, v in d.items()
+                 if k.endswith("_tarih") and k != "_tarih" and isinstance(v, str)]
+        canli = [c for c in canli if c is not None and c <= bugun + _dt.timedelta(days=1)]
+        if canli and (max(canli) - t).days > 1:
+            uyari.append(f"{slug}/ozet.json: `_tarih` {d['_tarih']} ama bir bacak "
+                         f"{max(canli):%d.%m.%Y} — hattın saati geride kalmış olabilir")
+    print(f"  {len(ozetler_hepsi)} özet tarandı")
+
+    # ---------------------------------------------------------------- (13)
+    # BİÇİM TEK KAYNAK (uyarı). lib/bicim.ts "başka yerde sayı biçimlenmez"
+    # der; kural yorumda kalmasın. Hesap araçları henüz kendi biçimleyicisini
+    # taşıyor — kapı değil uyarı, ama adıyla görünür.
+    print("\n▶ Yerel biçimleyici (lib/bicim.ts dışında)")
+    kalip = re.compile(r"toLocaleString\('tr-TR'|toLocaleDateString\(|Intl\.DateTimeFormat\(")
+    yerel = []
+    for yol in sorted((KOK / "site/src").rglob("*")):
+        if yol.suffix not in (".astro", ".ts") or yol.name == "bicim.ts":
+            continue
+        n = len(kalip.findall(yol.read_text(encoding="utf-8")))
+        if n:
+            yerel.append((yol.relative_to(KOK / "site/src").as_posix(), n))
+    for yol, n in yerel:
+        uyari.append(f"yerel biçimleyici: {yol} ({n}) — lib/bicim'e taşınmalı")
+    print(f"  {len(yerel)} dosyada yerel biçimleyici")
+
+    # ---------------------------------------------------------------- (14)
+    # CSS JETONU TANIMLI MI. `var(--x)` tanımsızsa tarayıcı sessizce kalıtıma
+    # düşer: iki içindekiler etiketi ev stilinin grisini almıyordu ve hiçbir
+    # şey söylemiyordu. Statik, saniyeler sürer: kullanılan her jeton global.css
+    # ya da aynı dosyada tanımlı olmalı.
+    print("\n▶ CSS jetonları (var(--x) tanımlı mı)")
+    # Tanım her yerde olabilir: global.css, bileşen <style>'ı ya da satır içi
+    # style="--d: 40ms" (kademeli animasyon gecikmesi bileşenden gelir).
+    dosyalar = sorted((KOK / "site/src").rglob("*.astro")) + sorted((KOK / "site/src").rglob("*.css"))
+    tanimli: set[str] = set()
+    for yol in dosyalar:
+        tanimli |= set(re.findall(r"(--[a-zA-Z0-9-]+)\s*:", yol.read_text(encoding="utf-8")))
+    tanimsiz = []
+    for yol in dosyalar:
+        icerik = yol.read_text(encoding="utf-8")
+        for ad in set(re.findall(r"var\((--[a-zA-Z0-9-]+)", icerik)):
+            if ad not in tanimli:
+                tanimsiz.append(f"{yol.relative_to(KOK / 'site/src').as_posix()}: var({ad})")
+    for t in tanimsiz:
+        hata.append("tanımsız CSS jetonu — " + t)
+    print(f"  {len(tanimli)} jeton tanımlı · tanımsız kullanım {len(tanimsiz)}")
+
+    # ---------------------------------------------------------------- (15)
+    # SİMGE SÖZLEŞMESİ. Base.astro'nun ilan ettiği her simge dosyası public/
+    # altında var mı; PNG ise gerçek boyutu `sizes` ile aynı mı; SVG ilan
+    # edilmiş mi. İlan edilip üretilmeyen ya da üretilip ilan edilmeyen simge
+    # sözleşmeyi yarım bırakır.
+    print("\n▶ Simge sözleşmesi (Base.astro ↔ public/)")
+    import struct as _struct
+    base = (KOK / "site/src/layouts/Base.astro").read_text(encoding="utf-8")
+    simgeler = re.findall(r'<link rel="(icon|apple-touch-icon)"([^>]*)>', base)
+    svg_var = False
+    for rel, nit in simgeler:
+        href = re.search(r'href="([^"]+)"', nit)
+        if not href:
+            hata.append(f"simge bağı href'siz: {rel}")
+            continue
+        dosya = KOK / "site/public" / href.group(1).lstrip("/")
+        if not dosya.exists():
+            hata.append(f"ilan edilen simge yok: {href.group(1)}")
+            continue
+        if dosya.suffix == ".svg":
+            svg_var = True
+        elif dosya.suffix == ".png":
+            bas = dosya.read_bytes()[:24]
+            g, y = _struct.unpack(">II", bas[16:24]) if bas[12:16] == b"IHDR" else (0, 0)
+            m = re.search(r'sizes="(\d+)x(\d+)"', nit)
+            if m and (g, y) != (int(m.group(1)), int(m.group(2))):
+                hata.append(f"simge boyutu ilanla farklı: {href.group(1)} {g}×{y}, ilan {m.group(1)}×{m.group(2)}")
+    if not svg_var:
+        hata.append("SVG simge ilan edilmemiş (favicon.svg tek kaynaktır)")
+    for png in sorted((KOK / "site/public").glob("*.png")):
+        if png.name not in base:
+            uyari.append(f"public/{png.name} üretilmiş ama Base.astro ilan etmiyor")
+    print(f"  {len(simgeler)} simge ilanı")
+
+    # ---------------------------------------------------------------- (16)
+    # YAYIN TAKVİMİ. Hakkında sayfasının saatleri iş akışı cron'larından
+    # türetilir; sayfayı YAYIMLAYAN kapı kaymayı görmezse sayfa eski saati
+    # anlatmaya devam eder. Karşılaştırma ortak/yayin_takvimi.py'de tek yerde
+    # (bulten/duman.py de aynı fonksiyonu çağırır).
+    print("\n▶ Yayın takvimi (hakkında ↔ iş akışı cron'ları)")
+    sys.path.insert(0, str(KOK / "ortak"))
+    import yayin_takvimi
+    takvim_bulgu = yayin_takvimi.karsilastir(KOK)
+    for b_ in takvim_bulgu:
+        hata.append("yayın takvimi — " + b_)
+    print(f"  bulgu {len(takvim_bulgu)}")
+
+    # ---------------------------------------------------------------- (17)
+    # KOŞU KAYDI OKUR DİLİ. Koşu kutusu uyarilar.json'daki `uyarilar` listesini,
+    # veri durumu şeridi ozet.json'daki `uyari_metni`/`bayat_cumlesi`ni OLDUĞU
+    # GİBİ basar; bu satırları hatların Python'u operatör için yazıyordu ve 9.
+    # ölçüt onları görmüyordu (kaynak MDX değil, veri dosyası): `kkm_aktif`
+    # bayrağı, `bie_pydibsarsiv` grubu ve '5.2%' okura gitti, sınav yeşildi.
+    # Kural tek yerde (okur_dili.kosu_kaydi_tara); guncelle.py aynı soruyu hat
+    # koştuğu anda uyarı olarak sorar. Burada iki ağırlık: şablondan başka
+    # yerden gelemeyecek kusur (backtick, dosya adı, bie_ kodu, yapım dili)
+    # ENGEL; bir yer tutucudan sızabilecek anahtar adı ve biçim UYARI — veri
+    # kaynaklı bir sızıntı günün bültenini durdurmaz, ama adıyla görünür.
+    print("\n▶ Koşu kaydı okur dili (public/projeler/*/uyarilar.json · ozet.json)")
+    n_kayit = n_kk = 0
+    for klasor in sorted(p for p in (KOK / "site/public/projeler").iterdir() if p.is_dir()):
+        satirlar: list[tuple[str, str]] = []
+        uj = klasor / "uyarilar.json"
+        if uj.exists():
+            try:
+                u = json.loads(uj.read_text(encoding="utf-8"))
+                if isinstance(u, dict):
+                    satirlar += [("uyarilar.json", str(x)) for x in (u.get("uyarilar") or [])]
+            except Exception as ex:                                # noqa: BLE001
+                hata.append(f"{klasor.name}/uyarilar.json okunamadı: {ex}")
+        oj = klasor / "ozet.json"
+        if oj.exists():
+            try:
+                d = json.loads(oj.read_text(encoding="utf-8"))
+                for alan in ("uyari_metni", "bayat_cumlesi"):
+                    if isinstance(d.get(alan), str):
+                        satirlar.append((f"ozet.json `{alan}`", d[alan]))
+            except Exception:                                      # noqa: BLE001
+                pass                       # okunamayan özeti 12. ölçüt düşürür
+        n_kayit += len(satirlar)
+        for kaynak_adi, metin in satirlar:
+            for _i, aile, esl in okur_dili.kosu_kaydi_tara([metin]):
+                hedef = hata if aile in okur_dili.KOSU_KAYDI_ENGEL else uyari
+                hedef.append(f"koşu kaydı {aile} — {klasor.name}/{kaynak_adi}: {esl!r}")
+                n_kk += 1
+    print(f"  {n_kayit} satır tarandı · bulgu {n_kk}")
+
+    # (9b) OKUR DİLİ, DERLENMİŞ ÇIKTIDA (uyarı). 9. ölçüt yalnız içerik
+    # dosyalarına bakıyor; bileşenlerden gelen dizgeleri ("ozet.json"
+    # bağlantı metni) yalnız okurun gördüğü sayfa taşır.
+    if (KOK / "site/dist").exists():
+        print("\n▶ Okur dili (derlenmiş sayfa metni)")
+        n_dist = 0
+        for h in sorted((KOK / "site/dist").rglob("index.html")):
+            html = h.read_text(encoding="utf-8", errors="replace")
+            # Kaynaktaki muafiyetlerin karşılığı: kod bloğu ve satır içi kod
+            # okura "kod" olarak sunulur, taranmaz.
+            html = re.sub(r"<(script|style|code|pre)[^>]*>.*?</\1>", " ", html, flags=re.S)
+            duz = re.sub(r"<[^>]+>", " ", html)
+            for aile, esl, _sat in okur_dili.tara(duz):
+                if n_dist < 12:
+                    uyari.append(f"dist okur dili — {h.relative_to(KOK / 'site/dist').parent.as_posix() or '.'}: "
+                                 f"{aile}: {esl!r}")
+                n_dist += 1
+        print(f"  bulgu {n_dist}")
+
     print()
+    for u in uyari:
+        print("  ! " + u)
     if hata:
         for h in hata:
             print("  ✗ " + h)
-        print(f"\nSAYFA SINAVI DÜŞTÜ ({len(hata)} bulgu).")
+        print(f"\nSAYFA SINAVI DÜŞTÜ ({len(hata)} bulgu · {len(uyari)} uyarı).")
         return 1
-    print("SAYFA SINAVI GEÇTİ.")
+    print(f"SAYFA SINAVI GEÇTİ ({len(uyari)} uyarı).")
     return 0
 
 

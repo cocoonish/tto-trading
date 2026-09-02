@@ -113,8 +113,26 @@ TETIKLER: tuple[Tetik, ...] = (
     # sonraki yayıma kadar beklemesi gerekir, boşuna koşması değil.
     Tetik("buyume", "TÜİK Dönemsel Gayrisafi Yurt İçi Hasıla (üç aylık)",
           r"Gayrisafi Yurt İçi Hasıla", ("TÜİK",), en_gec=100, gecikme_dk=90),
+    # El Niño hattının yerli kanadı TÜFE ile ilerler; küresel kanat (ONI) aylık
+    # ve takvimsiz — TÜFE günü ikisi birden yoklanır, emniyet ağı bir ayı aşar.
+    Tetik("elnino", "NOAA ONI (aylık, takvimsiz) + TÜFE yayımı",
+          r"Tüketici Fiyat Endeksi", ("TÜİK",), en_gec=35, gecikme_dk=90),
     # GDELT haber akışı sürekli; resmî yayım takvimi yok, haftalık ritim yeter.
     Tetik("fx", "GDELT haber akışı (resmî takvimi yok, haftalık ritim)", en_gec=9),
+    # TÜREV HATLAR (carry, tufex, makro) BİLEREK tarifsiz: kendi kaynaklarına
+    # gitmezler, üst hatların depoya yazdığı CSV'lerden saniyeler içinde
+    # hesaplanırlar ve kararlar() tarifsiz hattı her koşuda koşturur. Üst
+    # hattın tetiğine bağlanmaları yanlış olurdu: üst hat düşüp bir sonraki
+    # koşuda kurtulursa türev hattın damgası tetiği geçmiş sayar ve sayfa bir
+    # gün bayat kalır.
+    # Reel sektör döviz pozisyonu: TCMB, aylık, ~2 ay gecikmeli. BİLEREK
+    # KALIPSIZ (fx gibi, yalnız emniyet ağı): yayımın takvimdeki adı bu
+    # koşucudan doğrulanamadı ve ölü bir kalıp "KALIP ÖLÜ" ile hattı HER koşuda
+    # EVDS'e gönderirdi — aylık bir seri için haftada 31 çekim. 30 günde bir
+    # koşar; ad doğrulandığında kalıp yazılır ve hat yayım gününe bağlanır.
+    Tetik("reelfx", "TCMB finansal kesim dışındaki firmaların döviz varlık ve "
+                    "yükümlülükleri (aylık, ~2 ay gecikmeli; takvimsiz, 30 günde bir)",
+          en_gec=30),
 )
 
 TETIK = {t.hat: t for t in TETIKLER}

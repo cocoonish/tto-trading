@@ -984,8 +984,8 @@ def kos() -> int:
         durum = json.loads((VERI / "veri_durum.json").read_text(encoding="utf-8"))
         devir += list(durum.get("uyarilar") or [])
     except Exception as ex:
-        uyar(f"veri_durum.json okunamadı ({ex}) — veri katmanının uyarıları "
-             "devralınamadı. Tazelik uyarıları bu koşuda GÖRÜNMEYEBİLİR.")
+        uyar(f"VERİ KATMANI KAYDI OKUNAMADI ({type(ex).__name__}) — veri katmanının "
+             "uyarıları devralınamadı; tazelik uyarıları bu koşuda GÖRÜNMEYEBİLİR.")
         durum = {}
     for u in devir:
         if u not in _UYARI:

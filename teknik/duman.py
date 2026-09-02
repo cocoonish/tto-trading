@@ -150,7 +150,8 @@ def _yapi():
 def _olcum_ve_grafik():
     e = olc.Enstruman("SENTETIK", "sentetik", "Sentetik", "fiyat", 2)
     js, hamlar = olc.olc_enstruman(
-        e, {"gunluk": _sentetik_gunluk(), "saatlik": _sentetik_saatlik()})
+        e, {"gunluk": _sentetik_gunluk(), "saatlik": _sentetik_saatlik()},
+        tazelik=False)                       # sentetik seri 2025'te başlar, tazelik ayrı sınanır
     for kod in ("s1", "s4", "gun"):
         d = js["dilimler"][kod]
         assert "eksik" not in d, f"{kod} dilimi eksik çıktı"
@@ -178,10 +179,22 @@ def _getiri_olcek():
     e = olc.Enstruman("SAHTE10Y", "s10y", "Sahte getiri", "getiri", 3, "%")
     try:
         olc.olc_enstruman(e, {"gunluk": _sentetik_gunluk(200, taban=45.0),
-                              "saatlik": None})
-    except SystemExit:
+                              "saatlik": None}, tazelik=False)
+    except SystemExit as ex:
+        assert "kotasyon" in str(ex), f"yanlış sebeple durdu: {ex}"
         return
     raise AssertionError("45 'getirisi' kabul edildi — kotasyon ölçeği sigortası yok")
+
+
+def _tazelik():
+    """Kaynak haftalarca geride kalmışsa ölçüm kurulmaz (varsayılan yol)."""
+    e = olc.Enstruman("SENTETIK", "sentetik", "Sentetik", "fiyat", 2)
+    try:
+        olc.olc_enstruman(e, {"gunluk": _sentetik_gunluk(), "saatlik": None})
+    except SystemExit as ex:
+        assert "geride" in str(ex), f"yanlış sebeple durdu: {ex}"
+        return
+    raise AssertionError("aylarca eski günlük seri kabul edildi — tazelik sigortası yok")
 
 
 def _yaz_kapisi():
@@ -212,23 +225,39 @@ def _yaz_kapisi():
                 finally:
                     sys.argv = eski_argv
 
+            ISK = '<h4>Günlük</h4><p>{}</p><h4>4 saatlik</h4><p>a</p><h4>1 saatlik</h4><p>b</p><h4>Ortak görüş</h4><p>c</p>'   # rehberin dört <h4> iskeleti
             assert kos({"piyasa": []}, "--damgasiz") == 1, "yabancı alan kabul edildi"
             assert kos({"yorum": {"xxx": "a"}}, "--damgasiz") == 1, "bilinmeyen slug kabul edildi"
-            assert kos({"yorum": {"us10y": "hedef 9,999 seviyesi"}},
+            assert kos({"yorum": {"us10y": ISK.format("hedef 9,999 seviyesi")}},
                        "--damgasiz") == 1, "ölçümde olmayan sayı kabul edildi"
-            assert kos({"yorum": {"us10y": "hedef 14.999,9 seviyesi"}},
+            assert kos({"yorum": {"us10y": ISK.format("hedef 14.999,9 seviyesi")}},
                        "--damgasiz") == 1, "ölçümde olmayan binlikli sayı kabul edildi"
-            assert kos({"yorum": {"us10y": "14.140 tabanı ve %38,2 düzeltmesi"}},
+            assert kos({"yorum": {"us10y": ISK.format("14.140 tabanı ve %38,2 düzeltmesi")}},
                        "--damgasiz") == 0, \
                 "sıfırla biten ölçülü sayı (14.140) ya da fib oranı reddedildi"
-            assert kos({"yorum": {"us10y": "x"}},
+            assert kos({"yorum": {"us10y": ISK.format("x")}},
                        "--damga", "yanlis") == 1, "yanlış damga kabul edildi"
-            assert kos({"yorum": {"us10y": "4,672 üstünde kaldıkça 4,55 desteği izlenir"}},
+            # yeni kapılar: iskelet · tavsiye dili · okur dili · düzeltme sözleşmesi
+            assert kos({"yorum": {"us10y": "<p>iskeletsiz yorum</p>"}}, "--damgasiz") == 1, \
+                "dört <h4> iskeleti olmayan yorum kabul edildi"
+            assert kos({"yorum": {"us10y": "<p>iskeletsiz yorum</p>"}}, "--damgasiz", "--iskeletsiz") == 0, \
+                "--iskeletsiz bilinçli istisnayı geçirmedi"
+            assert kos({"yorum": {"us10y": ISK.format("4,55 gelirse alın")}}, "--damgasiz") == 1, \
+                "tavsiye dili kabul edildi"
+            assert kos({"yorum": {"us10y": ISK.format("seviye ozet.json'dan okunur")}}, "--damgasiz") == 1, \
+                "okur dili kabul edildi"
+            assert kos({"duzeltmeler": [{"alan": "x", "eski": "1"}]}, "--damgasiz") == 1, \
+                "yarım düzeltme kaydı kabul edildi"
+            assert kos({"duzeltmeler": [{"alan": "DXY günlük", "eski": "4,55", "yeni": "4,672", "sebep": "s"}]},
+                       "--damgasiz") == 0, "geçerli düzeltme kaydı reddedildi"
+            assert kos({"yorum": {"us10y": ISK.format("4,672 üstünde kaldıkça 4,55 desteği izlenir")}},
                        "--damga", "2026-08-30T13:00:00+00:00") == 0, \
                 "geçerli yama reddedildi"
             son = json.loads(hedef.read_text(encoding="utf-8"))
             assert son["enstrumanlar"][0]["yorum"], "yorum yazılmadı"
             assert son["yazili"] is False, "giriş yokken yazili=True oldu"
+            assert son.get("yorum_zamani", "").endswith("+00:00") and son.get("yazi_surumu"), "yorum damgası/sürümü atılmadı"
+            assert son["duzeltmeler"][0]["tarih"], "düzeltme kaydı yazılmadı"
             assert kos({"giris": "Haftanın çerçevesi."},
                        "--damga", "2026-08-30T13:00:00+00:00") == 0
             son = json.loads(hedef.read_text(encoding="utf-8"))
@@ -282,6 +311,7 @@ def main() -> int:
     sina("yapı ölçümü: yön, sıkışma, çift tepe", _yapi)
     sina("üç dilimli ölçüm + üç grafik (sentetik seri)", _olcum_ve_grafik)
     sina("getiri kotasyon ölçeği sigortası", _getiri_olcek)
+    sina("kaynak tazeliği sigortası", _tazelik)
     sina("yaz.py kapısı: yabancı alan/slug/sayı/damga", _yaz_kapisi)
     sina("zincir: pazar teknik halkası (kod 4)", _zincir_pazar)
     print(f"\n  {SAYAC['gecti']} geçti · {SAYAC['dustu']} DÜŞTÜ")

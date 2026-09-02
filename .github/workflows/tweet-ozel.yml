@@ -12,9 +12,9 @@ on:
   workflow_dispatch:
     inputs:
       metin:
-        description: 'Tweet metni dosyası (depo yolu)'
+        description: 'Tweet metni dosyası (depo yolu) — boş bırakılırsa iş düşer; gönderilmiş bir dosya varsayılan olarak durmaz'
         type: string
-        default: 'tweet/ozel/kredi-2026-08-30.txt'
+        default: ''
       # Grafik İSTİSNADIR: varsayılan boş. Önceden kredi betiğine bağlıydı ve
       # ilgisiz her gönderimde matplotlib koşup 403 alan bir yükleme deniyordu
       # (GitHub boş dizgeyi de varsayılana çevirdiği için kapatmak da mümkün
@@ -33,6 +33,10 @@ on:
         default: false
       sil_id:
         description: 'Önce bu id''li tweeti sil (düzeltme akışı)'
+        type: string
+        default: ''
+      anahtar:
+        description: 'Defter anahtarı (ör. analiz:<slug>); boş = türetilir (bülten → bulten:<tarih>, analiz slug''ına eşleşen kök → analiz:<slug>, aksi ozel:<dosya kökü>); kökteki günde analiz yayımlandıysa ZORUNLU, yoksa koşu durur. Aynı anahtar ikinci kez gönderilmez.'
         type: string
         default: ''
 
@@ -71,24 +75,34 @@ jobs:
 
       - name: Gönder
         run: |
+          if [ -z "${{ inputs.metin }}" ]; then echo "::error::metin dosyası verilmedi"; exit 1; fi
           RESIMLER=""
           for r in ${{ inputs.resimler }}; do RESIMLER="$RESIMLER --resim $r"; done
           SIL=""
           if [ -n "${{ inputs.sil_id }}" ]; then SIL="--sil ${{ inputs.sil_id }}"; fi
-          python tweet/ozel.py --metin "${{ inputs.metin }}" $RESIMLER $SIL \
+          ANAHTAR=""
+          if [ -n "${{ inputs.anahtar }}" ]; then ANAHTAR="--anahtar ${{ inputs.anahtar }}"; fi
+          ZORLA=""
+          if [ -n "${{ inputs.sil_id }}" ]; then ZORLA="--zorla"; fi
+          python tweet/ozel.py --metin "${{ inputs.metin }}" $RESIMLER $SIL $ANAHTAR $ZORLA \
             ${{ inputs.gonder == true && '--gonder' || '' }}
 
       # Jeton kasası: gönderim koşusu refresh token'ı döndürür; kaybolmasın.
-      - name: Jetonu commit'le
+      - name: Jeton, defter ve arşivi commit'le
         if: always()
         run: |
           git config --global user.name  "tto-tweet"
           git config --global user.email "bot@users.noreply.github.com"
           git add tweet/oauth2.enc 2>/dev/null || true
+          git add tweet/defter.json tweet/arsiv site/src/data/tweet 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "jeton değişmedi"
           else
             git commit -m "tweet: $(date -u +'%Y-%m-%d') jeton (özel gönderim)"
-            git pull --rebase --autostash
-            git push
+            # Yarışta düşen push jetonu ve defteri kaybederdi (tweet.yml ile aynı sigorta).
+            for i in 1 2 3; do
+              if git pull --rebase --autostash && git push; then break; fi
+              if [ "$i" = 3 ]; then echo "::error::jeton/defter push edilemedi — TW_REFRESH_TOKEN yeniden üretilmeli, defter elle kurtarılmalı"; exit 1; fi
+              sleep $((i * 5))
+            done
           fi

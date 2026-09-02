@@ -134,6 +134,20 @@ _ANAHTAR: str | None = None
 _ISTEK = {"n": 0}
 
 
+def _bicim():
+    """ortak/bicim — okura giden sayının TEK yazımı (ondalık virgül, eksi U+2212,
+    yüzde önde). Hat kendi klasöründen elle koşturulursa ortak/ PYTHONPATH'te
+    olmayabilir; depo kökünden bulunur."""
+    try:
+        import bicim
+    except ImportError:
+        import pathlib as _pl
+        import sys as _sys
+        _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2] / "ortak"))
+        import bicim
+    return bicim
+
+
 def uyar(mesaj: str) -> None:
     """Görünür uyarı: ekrana basılır ve uyarilar.json'a taşınır."""
     if mesaj not in _UYARI:
@@ -375,8 +389,10 @@ def evren(dg: str, yenile: bool = False) -> dict[str, dict]:
             e["fiyat_bas"] = s.get("START_DATE")
             e["fiyat_son"] = s.get("END_DATE")
     if ayristirilamayan:
-        uyar(f"AD BİÇİMİ: {dg} grubunda {ayristirilamayan} seri adı "
-             f"ayrıştırılamadı ({ayristirilamayan / max(len(ham), 1) * 100:.1f}%) "
+        # Okura grup KODU değil adı: 'bie_pydibsarsiv' okurun elinde olmayan bir şeydir.
+        grup_adi = "arşiv" if dg == DG_DIBS_ARSIV else "güncel"
+        uyar(f"AD BİÇİMİ: {grup_adi} DİBS grubunda {ayristirilamayan} seri adı "
+             f"ayrıştırılamadı ({_bicim().yuzde(ayristirilamayan / max(len(ham), 1) * 100, 1)}) "
              "— TCMB ad biçimini değiştirmiş olabilir; bu kıymetler evrene "
              "girmedi.")
     for e in kayit.values():
@@ -528,7 +544,7 @@ def cek_fiyatlar(plan: dict[str, tuple[pd.Timestamp, pd.Timestamp]],
     if bos_imzasiz:
         uyar(f"BOŞ ÖNBELLEK (imzasız): {bos_imzasiz} kıymetin önbellek dosyası "
              "boş ama 'EVDS doğruladı' imzası taşımıyor — eski bir koşuda "
-             "ezilmiş olabilir; `--yenile` ile tazeleyin.")
+             "ezilmiş olabilir; önbellek yenilenmeli.")
     toplam_bos = bos_dogrulanmis + bos_imzasiz + len(dusen_kalici)
     if plan and toplam_bos / len(plan) > BOS_PAY_ESIK:
         raise SystemExit(

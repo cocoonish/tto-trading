@@ -43,6 +43,30 @@ class Izlem:
     tarih_alani: str = ""
 
 
+# Hatların OKURA görünen adları. Olay cümleleri ("hazine-ihrac: veri gecikti")
+# ve sayfadaki kaynak notları eskiden slug basıyordu — okurun elinde slug yok.
+HAT_ADI = {
+    "usdtry-deval": "USD/TRY devalüasyon hızı",
+    "tcmb-net-rezerv": "TCMB net rezerv",
+    "yabanci-pozisyon": "Yabancı pozisyonu",
+    "fonlama-likidite": "TCMB fonlama ve likidite",
+    "kredi-parasal": "Kredi ve parasal büyüklükler",
+    "enflasyon": "Enflasyon panosu",
+    "try-reer": "TL reel efektif kur",
+    "yiyecek-hizmetleri-marj": "Yiyecek hizmetleri marjı",
+    "hazine-ihrac": "Hazine ihraç",
+    "fx-haber-endeksi": "FX haber endeksi",
+    "dibs-verim-egrisi": "DİBS verim eğrisi",
+    "odemeler-dengesi": "Ödemeler dengesi",
+    "butce-borc": "Bütçe ve borç stoku",
+    "tl-tasima": "TL taşıma defteri",
+    "tufex-basabas": "TÜFEX ve başabaş enflasyon",
+    "makroihtiyati": "Makroihtiyatinin izi",
+    "reel-sektor-fx": "Reel sektörün döviz pozisyonu",
+    "buyume": "Büyüme",
+    "el-nino": "El Niño ve gıda enflasyonu",
+}
+
 # Hatların yayım ritmi — "veri gecikti" uyarısı için. Gün cinsinden azami sessizlik.
 RITIM = {
     "usdtry-deval": 4,          # günlük (hafta sonu boşluğu payı)
@@ -72,10 +96,10 @@ RITIM = {
     "tl-tasima": 6,
     "tufex-basabas": 6,
     "makroihtiyati": 11,
-    # "reel-sektor-fx" BİLEREK yok: hat henüz ilk çekimini yapmadı ve ozet.json
-    # yer tutucu. Ritme yazmak, ölçülmemiş bir şeyi ölçülüyor gibi göstermek
-    # olurdu; hat gerçekten koşunca eklenecek (TCMB reel sektör döviz varlık ve
-    # yükümlülükleri aylık, ~2 ay gecikmeli → 75).
+    # Aylık, TCMB ~2 ay gecikmeli yayımlar; 75 gün bir yayım kaymasını taşır.
+    # (Hat ilk çekimini yaptı ve özet gerçek veri taşıyor; önceki "yer tutucu"
+    # gerekçesi düştü.)
+    "reel-sektor-fx": 75,
 }
 
 # Bir hattın ozet.json'u birden fazla SAAT taşıyabilir: aynı dosyada günlük bir

@@ -35,7 +35,7 @@ VARSAYILAN_KLON = KOK.parent / "TTO Trading Yayin"
 YAYIN_URL = "https://cocoonish.github.io/"
 
 # site/ içinden kopyalanmayacaklar (üretilmiş ya da yerel)
-HARIC = {"node_modules", "dist", ".astro", ".DS_Store"}
+HARIC = {"node_modules", "dist", ".astro", ".DS_Store", "tools"}   # tools: özel depoya bağımlı iç araçlar
 # Public depoda korunacak, kaynaktan gelmeyecek dosyalar
 KORUNAN = {".git", ".github", "README.md", ".gitignore", "CNAME"}
 
@@ -192,15 +192,23 @@ def kopyala(klon: Path, kuru: bool) -> int:
 
 
 def site_url_yaz(klon: Path, url: str, kuru: bool):
-    """astro.config'teki site: alanını yayın adresine sabitle (sitemap için)."""
+    """astro.config'teki site: alanı yayın adresine EŞİT olmalı.
+
+    Eskiden uyuşmazlık sessizce yeniden yazılıyordu; kaynaktaki alan aylarca
+    örnek adreste kaldı ve kaynağın kendi derlemesi (RSS, kanonik, kartlar)
+    yanlış kökle çıktı. Şimdi uyuşmazlık bir kusurdur: yayın durur, kaynak
+    düzeltilir — kopyada gizlice onarılmaz."""
     p = klon / "astro.config.mjs"
     if not p.exists():
         return
     s = p.read_text(encoding="utf-8")
-    yeni = re.sub(r"site:\s*'[^']*'", f"site: '{url.rstrip('/')}'", s, count=1)
-    if yeni != s and not kuru:
-        p.write_text(yeni, encoding="utf-8")
-        print(f"    astro.config site: {url.rstrip('/')}")
+    m = re.search(r"site:\s*'([^']*)'", s)
+    mevcut = (m.group(1) if m else "").rstrip("/")
+    if mevcut != url.rstrip("/"):
+        raise SystemExit(
+            f"astro.config.mjs site: alanı {mevcut!r}, yayın adresi {url.rstrip('/')!r} — "
+            "uyuşmuyor. Kaynaktaki site/astro.config.mjs düzeltilmeli; kopyada gizlice "
+            "yeniden yazılmaz (RSS, kanonik ve önizleme kartları o kökten kurulur).")
 
 
 def main() -> int:

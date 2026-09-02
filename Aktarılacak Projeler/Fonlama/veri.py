@@ -616,6 +616,10 @@ def olu_seri_denetimi(g: pd.DataFrame) -> list[str]:
     Burada yalnız RAPORLANIR; NaN'a çevirme metrik.py'de, tek yerde yapılır.
     """
     uy: list[str] = []
+    # Okura sütun adı değil okur adı gider (koşu kutusu bu satırı olduğu gibi basar).
+    OKUR_ADI = {"glp_alis": "geç likidite penceresi alış faizi",
+                "fon_ihale": "ihale fonlaması",
+                "ste_liksen": "likidite senedi sterilizasyonu"}
     for ad in ("glp_alis", "fon_ihale", "ste_liksen"):
         if ad not in g.columns:
             continue
@@ -624,7 +628,7 @@ def olu_seri_denetimi(g: pd.DataFrame) -> list[str]:
             continue
         son252 = s.iloc[-252:]
         if len(son252) and (son252 == 0).all():
-            uy.append(f"ÖLÜ SERİ: '{ad}' son {len(son252)} iş gününün "
+            uy.append(f"ÖLÜ SERİ: {OKUR_ADI.get(ad, ad)} son {len(son252)} iş gününün "
                       "TAMAMINDA 0 — dolu görünüyor ama bilgi taşımıyor; "
                       "grafikte 'yok' olarak işlenecek.")
     return uy

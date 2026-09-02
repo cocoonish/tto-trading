@@ -5,14 +5,14 @@
 # ozet.json'larını tazeler, eşikleri uygular, takvimi ve kaynak taramasını
 # ekler, site/src/data/bulten/<tarih>.json yazar.
 #
-# Yorum katmanı ayrıdır (Mac'te zamanlanmış Claude görevi) ve aynı dosyanın
-# 'yorum' alanını doldurur; bu iş o alanı KORUR (bkz. bulten/uret.py: yaz()).
+# Yazı katmanı ayrıdır (claude.ai bulut rutini; bkz. bulten/YAZIM.md) ve aynı
+# dosyanın yorum/özet/gündem alanlarını bulten/yaz.py kapısından doldurur; bu
+# iş o alanları KORUR (bkz. bulten/uret.py: yaz()) ve yazılmış bülteni ezmez
+# (bulten.py kapısı). Siteye çıkış ayrı iş akışının (yayin.yml) işidir:
+# derleme + sayfa sınavı + public depoya kopya.
 #
-# Gereken depo secret'ları:
-#   TTO_EVDS_KEY    (zorunlu) EVDS'e giden hatlar için.
-#   TTO_YAYIN_TOKEN (isteğe bağlı) public depoya (cocoonish.github.io) yazma
-#                   yetkisi olan fine-grained PAT. Yoksa bülten yalnız bu depoya
-#                   commit'lenir; siteye Mac'teki yayinla.py ile çıkar.
+# Gereken depo secret'ı: TTO_EVDS_KEY (zorunlu) — EVDS'e giden hatlar için.
+# TTO_YAYIN_TOKEN bu işte değil yayin.yml'de kullanılır.
 
 name: Günlük bülten
 
