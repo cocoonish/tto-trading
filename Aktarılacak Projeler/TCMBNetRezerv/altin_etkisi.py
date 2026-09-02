@@ -162,6 +162,24 @@ import os
 
 import pandas as pd
 
+
+def _bicim():
+    """ortak/bicim — okura giden sayının TEK yazımı (ondalık virgül, eksi U+2212,
+    yüzde önde). Hat kendi klasöründen elle koşturulursa ortak/ PYTHONPATH'te
+    olmayabilir; depo kökünden bulunur."""
+    try:
+        import bicim
+    except ImportError:
+        import pathlib as _pl
+        import sys as _sys
+        _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2] / "ortak"))
+        import bicim
+    return bicim
+
+
+# Çapa kaynağının okur adı: koşu kaydı sayfaya olduğu gibi basılır, 'irfcl_pdf' okura gitmez.
+KAYNAK_ADI = {"irfcl_pdf": "IRFCL PDF", "ima": "ima", "evds_aylik": "EVDS aylık"}
+
 BURASI = os.path.dirname(os.path.abspath(__file__))
 CIKTI_CSV = os.path.join(BURASI, "altin_etkisi.csv")
 
@@ -384,12 +402,13 @@ def ons_capalari(gozlem: pd.DataFrame | None, altin_deger_M: pd.Series,
             oran = (deg_fiyat / p - 1.0)
             kotu = oran.abs() > ONS_CAPA_RED_ORAN
             for t in s.index[kotu.fillna(False)]:
+                _b = _bicim()
                 red.append(
                     f"ONS ÇAPASI REDDEDİLDİ ({t:%d.%m.%Y}): IRFCL PDF'i "
-                    f"{s.loc[t]:.3f} mn ons diyor; bu, ima edilen değerleme "
-                    f"fiyatını {deg_fiyat.loc[t]:,.0f} USD/ons yapıyor, oysa "
-                    f"piyasa {p.loc[t]:,.0f} (%{oran.loc[t] * 100:+.1f}, eşik "
-                    f"%{ONS_CAPA_RED_ORAN * 100:.0f}). Fiyat farkıyla "
+                    f"{_b.sayi(s.loc[t], 3)} mn ons diyor; bu, ima edilen değerleme "
+                    f"fiyatını {_b.sayi(deg_fiyat.loc[t], 0)} USD/ons yapıyor, oysa "
+                    f"piyasa {_b.sayi(p.loc[t], 0)} ({_b.yuzde(oran.loc[t] * 100, 1, isaret=True)}, eşik "
+                    f"{_b.yuzde(ONS_CAPA_RED_ORAN * 100, 0)}). Fiyat farkıyla "
                     "açıklanamaz — PDF düzeni değişmiş olabilir. O hafta "
                     "kademe 2 (ima) çapası kullanılıyor."
                 )
@@ -546,7 +565,7 @@ def altin_tanilari(capalar: pd.DataFrame, altin_deger_M: pd.Series,
             uyarilar.append(
                 f"{baslik} — {len(eski)} TARİHSEL çapada (son "
                 f"{TANI_YAKIN_CAPA} çapanın dışında); en büyüğü "
-                f"{en_kotu[0]:%d.%m.%Y}, {abs(en_kotu[1]):.2f} mlr USD. "
+                f"{en_kotu[0]:%d.%m.%Y}, {_bicim().sayi(abs(en_kotu[1]), 2)} mlr USD. "
                 "Ayrıntı koşu çıktısında."
             )
 
@@ -567,12 +586,13 @@ def altin_tanilari(capalar: pd.DataFrame, altin_deger_M: pd.Series,
         sapma_usd = abs(q_pdf - q_ima) * p / 1000.0     # milyar USD
         sapma_oran = abs(q_pdf / q_ima - 1.0) if q_ima else 0.0
         if sapma_usd > ONS_TANI_ESIK_USD and sapma_oran > ONS_TANI_ESIK_ORAN:
+            _b = _bicim()
             kalem_ons.append((t, sapma_usd, (
                 f"ALTIN MİKTAR TANISI ({t:%d.%m.%Y}): yayımlanan ons "
-                f"{q_pdf:.3f} ile ima edilen ons {q_ima:.3f} arasındaki fark "
-                f"%{sapma_oran * 100:.1f}, yani {sapma_usd:.2f} mlr USD'lik "
-                f"sahte miktar etkisi (eşikler %{ONS_TANI_ESIK_ORAN * 100:.0f} "
-                f"ve {ONS_TANI_ESIK_USD:.2f} mlr USD). Fiyat kaynağı kaymış ya "
+                f"{_b.sayi(q_pdf, 3)} ile ima edilen ons {_b.sayi(q_ima, 3)} arasındaki fark "
+                f"{_b.yuzde(sapma_oran * 100, 1)}, yani {_b.sayi(sapma_usd, 2)} mlr USD'lik "
+                f"sahte miktar etkisi (eşikler {_b.yuzde(ONS_TANI_ESIK_ORAN * 100, 0)} "
+                f"ve {_b.sayi(ONS_TANI_ESIK_USD, 2)} mlr USD). Fiyat kaynağı kaymış ya "
                 "da PDF ayrıştırıcısı bozulmuş olabilir.")))
     _yayimla("ALTIN MİKTAR TANISI", kalem_ons)
 
@@ -591,13 +611,15 @@ def altin_tanilari(capalar: pd.DataFrame, altin_deger_M: pd.Series,
             sicrama = abs(dq) * p / 1000.0
             oran = abs(dq / onceki.loc[t])
             if sicrama > ONS_SICRAMA_ESIK_USD and oran > ONS_SICRAMA_ESIK_ORAN:
+                _b = _bicim()
+                kaynak_ad = str(capalar.loc[t, "kaynak"])
                 kalem_sic.append((t, sicrama, (
                     f"ALTIN MİKTAR SIÇRAMASI ({t:%d.%m.%Y}): iki çapa arasında "
-                    f"miktar {dq:+.3f} mn ons değişti (%{oran * 100:.1f}, "
-                    f"{sicrama:.2f} mlr USD; eşikler "
-                    f"%{ONS_SICRAMA_ESIK_ORAN * 100:.0f} ve "
-                    f"{ONS_SICRAMA_ESIK_USD:.2f}, kaynak "
-                    f"{capalar.loc[t, 'kaynak']}). Bu gerçek bir altın "
+                    f"miktar {_b.sayi(dq, 3, isaret=True)} mn ons değişti ({_b.yuzde(oran * 100, 1)}, "
+                    f"{_b.sayi(sicrama, 2)} mlr USD; eşikler "
+                    f"{_b.yuzde(ONS_SICRAMA_ESIK_ORAN * 100, 0)} ve "
+                    f"{_b.sayi(ONS_SICRAMA_ESIK_USD, 2)} mlr USD, kaynak "
+                    f"{KAYNAK_ADI.get(kaynak_ad, kaynak_ad.replace('_', ' '))}). Bu gerçek bir altın "
                     "alım/satımı mı, yoksa fiyat kaynağının kayması mı — "
                     "miktar etkisi (Λ) buna göre okunmalı.")))
     _yayimla("ALTIN MİKTAR SIÇRAMASI", kalem_sic)

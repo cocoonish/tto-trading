@@ -97,10 +97,11 @@ tarih iki yerde görünür ve listede hangi yazının hangi güne ait olduğu ok
 
 ## Dil
 
-- **Okura yazılır, yapıma değil.** Dosya adı, anahtar adı, "hat koştu",
-  "kodda düzeltildi", "ilk sürümde şöyleydi" sayfaya girmez
-  (`ortak/okur_dili.py`; sayfa sınavı 9. ölçüt düşürür). Yapım kararları
-  sohbette ve commit mesajında konuşulur.
+- **Okura yazılır, yapıma değil.** Dosya adı, anahtar adı ("ozet.json",
+  "itp_b_sabit"), sürüm anlatısı ("ilk sürümde şöyleydi", "kod hatasıydı")
+  sayfaya girmez (`ortak/okur_dili.py`; sayfa sınavı 9. ölçüt düşürür). "Koşu"
+  ve "veri tarihi" okura verilen kayıt adlarıdır, yasak değildir. Yapım
+  kararları sohbette ve commit mesajında konuşulur.
 - **Tavsiye dili yok.** "Alın", "satın", "hedef fiyat" yazılmaz; senaryo dili
   kullanılır. Yazı yatırım tavsiyesi değildir ve sayfa bunu söyler.
 - **Uydurma yok.** Sürpriz yalnız sayısal beklenti varsa hesaplanır; kıyas

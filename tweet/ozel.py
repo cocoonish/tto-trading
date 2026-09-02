@@ -8,8 +8,11 @@
 Düzenli bültenlerin dışında kalan gönderiler için (tema tweetleri, veri
 duyuruları). Kimlik altyapısı gonder.py ile ortak: OAuth 2.0, dönen refresh
 token şifreli kasaya yazılır (iş akışı commit'ler). Kurallar aynı: LİNK
-YAZILMAZ (metinde http görülürse koşu düşer). Gönderim DEFTERLİDİR: --anahtar
-zorunlu (analiz:<slug> ya da ozel:<ad>); anahtar defterde kimlikliyse ikinci
+YAZILMAZ (metinde http görülürse koşu düşer). Gönderim DEFTERLİDİR: anahtar
+araç kanalıyla (gonder.py) AYNI biçimde türetilir — bülten → bulten:<tarih>,
+analiz slug'ına eşleşen kök → analiz:<slug>, aksi ozel:<kök>; kökteki günde
+yayımlanan analiz varsa ozel: yedeğine düşülmez, --anahtar istenir (yoksa araç
+kanalı aynı yazıyı bir daha atar). Anahtar defterde kimlikliyse ikinci
 gönderim durur (--zorla yalnız --sil ile, düzeltme akışı); gönderimden sonra
 defter, metin arşivi ve sitenin aynası gonder.py ile aynı yoldan yazılır —
 böylece siteye X bağı kurulur ve araç kanalı aynı yazıyı ikinci kez atmaz.
@@ -70,6 +73,54 @@ def _yukle(erisim: str, yol: Path) -> str:
     return str(kimlik)
 
 
+AYLAR = ("ocak", "şubat", "mart", "nisan", "mayıs", "haziran", "temmuz", "ağustos",
+         "eylül", "ekim", "kasım", "aralık")
+
+
+def anahtar_turet(metin_yolu: Path, ilk: str, tur: str, gonder: bool) -> str:
+    """Defter anahtarı — araç kanalıyla (gonder.py) AYNI biçimde, yoksa aynı içerik
+    iki kanaldan iki kez gider: bülten → bulten:<YYYY-MM-DD> (ilk satırdaki
+    tarihten); dosya kökü bir analiz slug'ıysa → analiz:<slug>; 'Analiz — '
+    başlıklı ama eşleşmeyen kök → durur; aksi → ozel:<kök>.
+
+    ozel: yedeğine düşmeden önce kökteki tarihe bakılır: o gün ya da bir gün
+    önce yayımlanan analiz varsa (araç kanalının iki günlük penceresi) ve
+    gönderim isteniyorsa DURUR. Serbest başlıklı bir analiz özeti ozel:<kök> ile
+    gitse araç kanalı analiz:<slug> defterde yok diye aynı yazıyı ertesi sabah
+    bir daha atardı — defterdeki elle yazılmış analiz: kayıtları bunun bir kez
+    olduğunu söylüyor. Kuru koşuda öneri basılır, operatör anahtarı görür."""
+    kok = metin_yolu.stem
+    if tur == "bulten":
+        m_t = re.search(r"(\d{1,2})\s+([A-Za-zÇĞİÖŞÜçğıöşü]+)\s+(\d{4})", ilk)
+        if not m_t or m_t.group(2).lower() not in AYLAR:
+            raise SystemExit(f"bülten gönderisinin ilk satırından tarih çözülemedi: {ilk!r} — --anahtar bulten:YYYY-MM-DD ver")
+        return f"bulten:{int(m_t.group(3)):04d}-{AYLAR.index(m_t.group(2).lower()) + 1:02d}-{int(m_t.group(1)):02d}"
+    if (KOK / "site" / "src" / "content" / "analiz" / f"{kok}.mdx").exists():
+        return f"analiz:{kok}"
+    if tur == "analiz":
+        raise SystemExit(f"analiz gönderisi ama dosya kökü ({kok}) hiçbir analiz slug'ına eşleşmiyor — "
+                         "--anahtar analiz:<slug> ver; yoksa araç kanalı aynı yazıyı bir daha atar")
+    m_g = re.search(r"\d{4}-\d{2}-\d{2}", kok)
+    if m_g:
+        import datetime as _dt
+        import analiz as analiz_m
+        try:
+            gun = _dt.date.fromisoformat(m_g.group(0))
+        except ValueError:
+            gun = None
+        if gun is not None:
+            yayimlanan = sorted({an["slug"] for g in (0, 1)
+                                 for an in analiz_m.bugunun_analizleri(gun - _dt.timedelta(days=g))})
+            if yayimlanan:
+                ileti = (f"{kok}: o günlerde yayımlanan analiz var ({', '.join(yayimlanan)}) ama kök "
+                         "hiçbirine eşleşmiyor — bu bir analiz özetiyse --anahtar analiz:<slug>, tema "
+                         "gönderisiyse --anahtar ozel:<ad> ver; boş bırakılırsa araç kanalı aynı yazıyı bir daha atar")
+                if gonder:
+                    raise SystemExit(ileti)
+                print(f"::warning::{ileti}")
+    return f"ozel:{kok}"                             # iş akışı sözleşmesi: boş = ozel:<dosya kökü>
+
+
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--metin", required=True, help="tweet metni dosyası")
@@ -79,8 +130,10 @@ def main() -> int:
                    help="gerçekten gönder (verilmezse kuru)")
     p.add_argument("--sil", help="önce bu id'li tweeti sil (düzeltme akışı: "
                                  "eski gönderi kaldırılıp yenisi atılır)")
-    p.add_argument("--anahtar", help="defter anahtarı: analiz:<slug> ya da ozel:<ad> "
-                                     "(--gonder ile zorunlu)")
+    p.add_argument("--anahtar", help="defter anahtarı: analiz:<slug> ya da ozel:<ad>; "
+                                     "verilmezse türetilir (bülten → bulten:<tarih>, analiz "
+                                     "slug'ına eşleşen kök → analiz:<slug>, aksi ozel:<kök>); "
+                                     "kökteki günde analiz yayımlandıysa --gonder için ZORUNLU")
     p.add_argument("--zorla", action="store_true",
                    help="anahtar defterde olsa da gönder (yalnız --sil ile: düzeltme)")
     a = p.parse_args()
@@ -114,29 +167,9 @@ def main() -> int:
         if not r.exists():
             raise SystemExit(f"görsel yok: {r}")
 
-    # Anahtar: analiz dosyası slug'ına eşleşiyorsa onu öner — araç kanalıyla
-    # aynı anahtar, yani analiz.py aynı yazıyı bir daha atmaz.
-    # Anahtar araç kanalıyla (gonder.py) AYNI biçimde olmalı, yoksa aynı içerik
-    # iki kanaldan iki kez gider: bülten → bulten:<YYYY-MM-DD> (ilk satırdaki
-    # tarihten), analiz → analiz:<slug> (dosya kökü slug'a eşleşmezse --anahtar
-    # zorunlu), tema/duyuru → ozel:<dosya kökü>.
-    AYLAR = ("ocak", "şubat", "mart", "nisan", "mayıs", "haziran", "temmuz", "ağustos",
-             "eylül", "ekim", "kasım", "aralık")
     anahtar = a.anahtar
     if not anahtar:
-        kok = Path(a.metin).stem
-        if tur == "bulten":
-            m_t = re.search(r"(\d{1,2})\s+([A-Za-zÇĞİÖŞÜçğıöşü]+)\s+(\d{4})", ilk)
-            if not m_t or m_t.group(2).lower() not in AYLAR:
-                raise SystemExit(f"bülten gönderisinin ilk satırından tarih çözülemedi: {ilk!r} — --anahtar bulten:YYYY-MM-DD ver")
-            anahtar = f"bulten:{int(m_t.group(3)):04d}-{AYLAR.index(m_t.group(2).lower()) + 1:02d}-{int(m_t.group(1)):02d}"
-        elif (KOK / "site" / "src" / "content" / "analiz" / f"{kok}.mdx").exists():
-            anahtar = f"analiz:{kok}"
-        elif tur == "analiz":
-            raise SystemExit(f"analiz gönderisi ama dosya kökü ({kok}) hiçbir analiz slug'ına eşleşmiyor — "
-                             "--anahtar analiz:<slug> ver; yoksa araç kanalı aynı yazıyı bir daha atar")
-        else:
-            anahtar = f"ozel:{kok}"                 # iş akışı sözleşmesi: boş = ozel:<dosya kökü>
+        anahtar = anahtar_turet(Path(a.metin), ilk, tur, a.gonder)
         print(f"· anahtar: {anahtar}")
     if not re.match(r"^(analiz|ozel|bulten|teknik):", anahtar):
         raise SystemExit(f"anahtar 'bulten:', 'teknik:', 'analiz:' ya da 'ozel:' ile başlar: {anahtar!r}")

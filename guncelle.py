@@ -37,7 +37,7 @@ Sözleşme:
   · Ev stili (site/tools/plotly_stil.py) her koşunun sonunda TEK KEZ uygulanır.
 """
 from __future__ import annotations
-import argparse, os, re, shutil, subprocess, sys, time
+import argparse, json, os, re, shutil, subprocess, sys, time
 from collections import deque
 from datetime import datetime
 from dataclasses import dataclass, field
@@ -459,6 +459,53 @@ def anahtar_uyar(secilen: list["Hat"]):
     if eksik:
         print(_renk(f"  [UYARI] EVDS anahtarı yok: {', '.join(eksik)} hatları düşecek. "
                     "Çözüm: kök klasöre .evds_key dosyası (tek satır anahtar) ya da TTO_EVDS_KEY ortam değişkeni.", 33))
+
+
+def turevleri_ekle(secilen: list["Hat"], atlanan_adlar: set[str] | frozenset = frozenset()) -> list["Hat"]:
+    """Seçilen bir üst hattın TÜREVLERİ de koşar (kütük sırasıyla, sonda): elle
+    "fonlama" tazelenince taşıma defteri dünkü seriden hesaplanmış kalmazdı.
+
+    Takvimin bilinçle ATLADIĞI hat geri eklenmez. reelfx tcmb'ye bağımlı ama
+    kendi 30 günlük EVDS ritmi var (tazeleme.py emniyet ağı); tcmb her iş günü
+    seçildiği için genişletme onu her gün ağa çıkarıyor, "30 günde bir EVDS"
+    sözleşmesi kâğıt üstünde kalıyordu (02.09.2026). --gerekli yokken (elle
+    koşu) davranış aynı: atlanan küme boştur."""
+    secili = {h.ad for h in secilen}
+    eklenen: list[Hat] = []
+    for h in HATLAR:
+        if h.bagimli and h.ad not in secili and set(h.bagimli) & secili:
+            if h.ad in atlanan_adlar:
+                print(f"  · {h.ad}: takvim atladı (yeni yayım yok) — türev genişletmesi geri eklemedi")
+                continue
+            eklenen.append(h); secili.add(h.ad)
+            print(f"  + {h.ad}: {', '.join(x for x in h.bagimli if x in secili)} seçildiği için türev hat da koşacak")
+    return list(secilen) + eklenen
+
+
+def okur_dili_bulgulari(hedef: Path) -> list[str]:
+    """Siteye kopyalanan koşu kaydının okur dili: uyarilar.json `uyarilar` ve
+    ozet.json `uyari_metni`/`bayat_cumlesi` sayfaya OLDUĞU GİBİ basılır (koşu
+    kutusu, veri durumu şeridi). Operatör için yazılmış bir satır — `kkm_aktif`
+    bayrağı, bie_ grup kodu, '5.2%' — hat koştuğu anda burada görünür; yayın
+    kapısı (sayfa sınavı 17) aynı soruyu ENGEL olarak sorar. Tanım tek yerde:
+    ortak/okur_dili.kosu_kaydi_tara."""
+    if _ORTAK not in sys.path:
+        sys.path.insert(0, _ORTAK)
+    import okur_dili
+    satirlar: list[tuple[str, str]] = []
+    try:
+        u = json.loads((hedef / "uyarilar.json").read_text(encoding="utf-8"))
+        satirlar += [("uyarilar.json", str(x)) for x in (u.get("uyarilar") or [])]
+    except (OSError, ValueError, AttributeError):
+        pass
+    try:
+        d = json.loads((hedef / "ozet.json").read_text(encoding="utf-8"))
+        satirlar += [(f"ozet.json {a}", d[a]) for a in ("uyari_metni", "bayat_cumlesi")
+                     if isinstance(d.get(a), str)]
+    except (OSError, ValueError, AttributeError):
+        pass
+    return [f"{k}: {esl!r} ({aile})"
+            for k, m in satirlar for _i, aile, esl in okur_dili.kosu_kaydi_tara([m])]
 
 
 def yukseklik_denetimi(h: "Hat") -> str | None:
@@ -946,6 +993,10 @@ def kos(h: Hat, tam: bool, gunluk: bool = False) -> tuple[bool, str, float]:
     yuk = yukseklik_denetimi(h)
     if yuk:
         print(_renk(f"    [UYARI] {yuk}", 33))
+    # OKUR DİLİ — koşu kaydı ve özet cümleleri sayfaya olduğu gibi basılır;
+    # operatör dili burada görünsün, yayın kapısında (sayfa sınavı 17) ENGEL olur.
+    for dil in okur_dili_bulgulari(hedef):
+        print(_renk(f"    [UYARI] okur dili — {dil}", 33))
 
     yeni_tarih = _ozet_tarih(h)
     y, e = _tarih_ozeti(yeni_tarih), _tarih_ozeti(eski_tarih)
@@ -1103,6 +1154,7 @@ def main():
     else:
         secilen, tam, cm = menu()
     if not secilen: print("hat seçilmedi"); return 2
+    atlanan_adlar: set[str] = set()      # --gerekli'nin bilinçle atladığı hatlar
 
     # Resmî yayım takvimi süzgeci: kaynağı son tazelemeden bu yana yayımlanmamış
     # hattı koşturmak, aynı veriyi ikinci kez indirmektir. 2026-08-25 bulut
@@ -1121,6 +1173,7 @@ def main():
         print(_tz.rapor([h.ad for h in secilen]))
         gerek = set(_tz.gerekli([h.ad for h in secilen]))
         atlanan = [h for h in secilen if h.ad not in gerek]
+        atlanan_adlar = {h.ad for h in atlanan}
         secilen = [h for h in secilen if h.ad in gerek]
         if atlanan:
             print(f"\n  {len(atlanan)} hat atlandı (yeni yayım yok): "
@@ -1178,13 +1231,7 @@ def main():
     anahtar_uyar(secilen)
     print(f"\n{'═'*64}\n  {len(secilen)} hat · kip: {'TAM' if tam else 'hafif'} · commit: {'evet' if cm else 'hayır'}\n{'═'*64}")
     sonuc = []
-    # Seçilen bir üst hattın TÜREVLERİ de koşar (kütük sırasıyla, sonda): elle
-    # "fonlama" tazelenince taşıma defteri dünkü seriden hesaplanmış kalmazdı.
-    secili_adlar = {h.ad for h in secilen}
-    for h in HATLAR:
-        if h.bagimli and h.ad not in secili_adlar and set(h.bagimli) & secili_adlar:
-            secilen.append(h); secili_adlar.add(h.ad)
-            print(f"  + {h.ad}: {', '.join(x for x in h.bagimli if x in secili_adlar)} seçildiği için türev hat da koşacak")
+    secilen = turevleri_ekle(secilen, atlanan_adlar)
 
     try:
         for h in secilen:

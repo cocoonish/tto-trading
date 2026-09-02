@@ -537,7 +537,8 @@ def main() -> int:
     elif kur_yol.exists():
         # Eski dosyayı BIRAKMAK, bayat sayıyı taze gibi göstermek olurdu.
         kur_yol.unlink()
-        uyar("kuresel.csv silindi — küresel blok bu koşuda alınamadı")
+        uyar("KÜRESEL BLOK ALINAMADI: bu koşuda küresel seriler çekilemedi; "
+             "eski tablo silindi (bayat sayı taze gibi yayımlanmaz).")
     (DATA / "kunye.json").write_text(json.dumps({
         "oni_uc": uc,
         "oni_bas": f"{oni.index.min():%Y-%m}", "oni_son": f"{oni.index.max():%Y-%m}",

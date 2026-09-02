@@ -7,7 +7,7 @@ her sayı kendi tarihini taşır. Metin kısa, sayılar canlı, şekillerin hesa
 anlatılmış olmalıdır.
 
 Rehber esastır; kural buraya yazılır ve araca konur. Ölçülebilen her kural
-`site/tools/sayfa_sinavi.py`de bir ölçüttür (1, 2, 2c, 11, 11b, 11c, 11d, 12).
+`site/tools/sayfa_sinavi.py`de bir ölçüttür (1, 2, 2c, 11, 11b, 11c, 11d, 12, 17).
 
 ---
 
@@ -32,8 +32,8 @@ metin serbesttir (11c, uyarı).
 | `pubDate` / `updatedDate` | evet / metin değişince | metnin tarihi; verinin tarihi ayrıdır ve şeritte görünür |
 | `tags` | evet | küçük harf |
 | `durum` | evet | `aktif` · `taslak` · `arsiv` |
-| `kaynak` | evet | **okur adıyla** ("TCMB EVDS", "TÜİK"); seri kodları gövdedeki Kaynaklar bölümüne, kod biçiminde |
-| `guncelleme` | evet | yayım ritmi, küçük harfle başlar, parantezde kaynak ve saat: `her iş günü (TCMB gösterge kuru, 15:30)`, `aylık (TÜİK, ayın 3'ü 10:00)`; şekil numarası geçmez |
+| `kaynak` | evet — şema ve 11d engel | **okur adıyla** ("TCMB EVDS", "TÜİK"); seri kodları gövdedeki Kaynaklar bölümüne, kod biçiminde |
+| `guncelleme` | evet — şema ve 11d engel | yayım ritmi, küçük harfle başlar; kaynağın yayım saati biliniyorsa parantezde yazılır: `her iş günü (TCMB gösterge kuru, 15:30)`, `aylık (TÜİK, ayın 3'ü 10:00)`; bilinmiyorsa ritim tek başına yeter (`aylık`); şekil numarası geçmez |
 
 ## Gövde
 
@@ -49,15 +49,23 @@ metin serbesttir (11c, uyarı).
    şeklin altında "bu seri nasıl hesaplanıyor": kaynak, formül, dönüşüm,
    varsayım.
 4. **Koşu kutusu** (isteğe bağlı, `KosuKutusu`): son koşunun uyarı listesi
-   dosyadan gelir; elle özet yazılmaz.
+   dosyadan gelir; elle özet yazılmaz. **Uyarı satırları okura gider**, yani
+   hattın Python'u onları okur dilinde yazar: kod/anahtar adı, grup kodu,
+   backtick, ondalık nokta, ISO tarih yok (`ortak/okur_dili.kosu_kaydi_tara`;
+   `guncelle.py` hat koşarken uyarır; sınav 17'de kod ve yapım dili engel,
+   anahtar adı ve biçim uyarı). Sayı `ortak/bicim`den yazılır. Aynı kural `ozet.json`
+   `uyari_metni` ve `bayat_cumlesi` için geçerli — `<Deger>` ile sayfaya basılırlar.
 5. **Kaynaklar** — seri kodları kod biçiminde (`TP.AB.A02`), yayım takvimi.
 
 ## Sayılar ve dil
 
 - Türkçe yazım tek yerden (`lib/bicim`): ondalık virgül, binlik nokta, eksi
   U+2212, yüzde önde ("%1,48"), baz puan sonda ("−6,5 bp").
-- Okura yazılır, yapıma değil: dosya adı, anahtar adı, "hat koştu" sayfaya
-  girmez (`ortak/okur_dili.py`, sınav 9).
+- Okura yazılır, yapıma değil: dosya adı, anahtar adı ve sürüm anlatısı
+  ("ilk sürümde şöyleydi") sayfaya girmez (`ortak/okur_dili.py`; sınav 9 içerik
+  dosyalarında engel, 9b derlenmiş çıktıda uyarı, 17 koşu kaydında engel).
+  "Koşu" ve "veri tarihi" okura verilen kayıt adlarıdır ve şeritte/kutuda
+  geçer; yasak olan koşunun İÇ adlarıdır (dosya, anahtar, grup kodu).
 - Tavsiye dili yok; senaryo dili.
 - Uydurma yok: ölçülmeyen değer boş bırakılır, sebebi yazılır.
 

@@ -31,6 +31,20 @@ import pandas as pd
 import veri
 from veri import PROJE, VERI, gun_ad
 
+
+def _bicim():
+    """ortak/bicim — okura giden sayının TEK yazımı (ondalık virgül, eksi U+2212,
+    yüzde önde). Hat kendi klasöründen elle koşturulursa ortak/ PYTHONPATH'te
+    olmayabilir; depo kökünden bulunur."""
+    try:
+        import bicim
+    except ImportError:
+        import pathlib as _pl
+        import sys as _sys
+        _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2] / "ortak"))
+        import bicim
+    return bicim
+
 # --------------------------------------------------------------------------- eşikler
 # AOFM'nin geçerli sayılması için gereken en küçük fonlama tabanı (milyon TL).
 # 700 mn TL'lik bir fonlamanın ağırlıklı ortalaması "sistemin fonlama maliyeti"
@@ -335,9 +349,9 @@ def zk_metrikleri(M: pd.DataFrame, h: pd.DataFrame) -> tuple[pd.DataFrame, dict]
                 tani["taban_birim_tekil_gun"] = int(len(tekil))
                 if len(tekil):
                     uyar(f"ZK TABANI VİNTAJ: {len(tekil)} haftada iki tablo "
-                         f"(bie_tldthvade ↔ bie_zorundth) %1'den fazla "
+                         "(vadeli mevduat tablosu ↔ zorunlu karşılık tablosu) %1'den fazla "
                          f"ayrışıyor; en büyüğü {bagil.idxmax():%d.%m.%Y} "
-                         f"({bagil.max():.1%}). Birim değil, revizyon farkıdır "
+                         f"({_bicim().yuzde(bagil.max() * 100, 1)}). Birim değil, revizyon farkıdır "
                          "— taban EVDS toplamından okunduğu için hesap "
                          "etkilenmez.")
     elif {"zk_taban_tl", "dth_tl"} <= set(h.columns):
@@ -648,10 +662,10 @@ def dogrula(g: pd.DataFrame, M: pd.DataFrame, a: pd.DataFrame) -> tuple[dict, li
                          f"{f5.max():.4f} mlr USD farklı. İki sayfada iki farklı "
                          "swap tanımı dolaşıyor olabilir.")
         except Exception as ex:
-            uyar(f"Rezerv hattı gunluk.csv okunamadı ({ex}); hatlar arası swap "
+            uyar(f"REZERV HATTI OKUNAMADI ({type(ex).__name__}); hatlar arası swap "
                  "tutarlılığı sınanamadı.")
     else:
-        uyar("Rezerv hattı gunluk.csv yok — hatlar arası swap tutarlılığı "
+        uyar("REZERV HATTI ÇIKTISI YOK — hatlar arası swap tutarlılığı "
              "sınanamadı (Şekil 08 çapraz paneli eksik kalabilir).")
 
     # (T2) aylık gecelik repo AOF — TANI (farklı araç; durdurmaz)
@@ -765,8 +779,8 @@ def kos() -> int:
             (VERI / "veri_durum.json").read_text(encoding="utf-8"))
         devir += list(durum.get("uyarilar") or [])
     except Exception as ex:
-        uyar(f"veri_durum.json okunamadı ({ex}) — veri katmanının uyarıları "
-             "devralınamadı. Tazelik uyarıları bu koşuda GÖRÜNMEYEBİLİR.")
+        uyar(f"VERİ KATMANI KAYDI OKUNAMADI ({type(ex).__name__}) — veri katmanının "
+             "uyarıları devralınamadı; tazelik uyarıları bu koşuda GÖRÜNMEYEBİLİR.")
     for u in devir:
         if u not in _UYARI:
             _UYARI.append(u)

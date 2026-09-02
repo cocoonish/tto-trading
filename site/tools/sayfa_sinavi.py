@@ -29,7 +29,7 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       anahtarı ozet.json'da mı? (eksik pano tablodan sessizce düşerdi)
   (11b) PROJE BAŞLIĞI — cümle düzeni; '&' engel, Başlık Düzeni uyarı.
   (11c) PROJE BAĞLANTI METNİ — gövdedeki /projeler/ bağları başlığı cümle düzeninde taşır; slug metin olmaz (uyarı).
-  (11d) PROJE ÖN BİLGİSİ — description'da elle sayı, guncelleme büyük harf/şekil no, kaynak '&'/grup kodu, tags büyük harf (uyarı).
+  (11d) PROJE ÖN BİLGİSİ — kaynak/guncelleme yok → ENGEL; description'da elle sayı, guncelleme büyük harf/şekil no, kaynak '&'/grup kodu, tags büyük harf (uyarı).
   (2c) KOŞU KUTUSU — `sayi=` ya da slotta elle uyarı özeti yok (dosyadan basılır).
   (12) ÖZET SAATİ — her ozet.json'un `_tarih`i çözülüyor, yarından ileri
       değil ve canlı bacakların en yenisinden geride kalmamış.
@@ -37,6 +37,11 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
   (14) CSS JETONU — kullanılan her var(--x) global.css'te ya da dosyada tanımlı.
   (15) SİMGE SÖZLEŞMESİ — ilan edilen her simge var ve boyutu ilanla aynı.
   (16) YAYIN TAKVİMİ — hakkında sayfasının saatleri iş akışı cron'larıyla aynı.
+  (17) KOŞU KAYDI OKUR DİLİ — public/projeler/*/uyarilar.json `uyarilar` ve
+      ozet.json `uyari_metni`/`bayat_cumlesi` okura OLDUĞU GİBİ basılır
+      (ortak/okur_dili.kosu_kaydi_tara): kod dili ve yapım dili (backtick, dosya
+      adı, bie_ kodu, komut anahtarı — şablon kusuru) ENGEL; snake_case anahtar
+      adı ve biçim sızıntısı (veri kaynaklı olabilir) UYARI.
   (9b) OKUR DİLİ, derlenmiş çıktıda (uyarı) — bileşen dizgeleri de kapıya girer.
 
 Koşum:  python3 site/tools/sayfa_sinavi.py
@@ -514,6 +519,12 @@ def main() -> int:
             n_on += 1
             continue
         bulgu = []
+        # kaynak ve guncelleme ZORUNLU (projeler/YAZIM.md): şema isteğe bağlı
+        # tutuyordu ve rehberin 'zorunlu' dediği şey hiçbir kapıda zorunlu değildi.
+        for alan in ("kaynak", "guncelleme"):
+            if not str(fm.get(alan) or "").strip():
+                hata.append(f"proje ön bilgisi ({yol.stem}): `{alan}` yok — pano künyesi "
+                            "kaynağını ve yayım ritmini yazar (projeler/YAZIM.md)")
         acik = str(fm.get("description") or "")
         if re.search(r"\b\d+\s+(grafik|şekil|senaryo|tablo|hesap aracı)", acik, re.I):
             bulgu.append("description elle sayılmış şekil/senaryo sayısı taşıyor")
@@ -653,6 +664,46 @@ def main() -> int:
     for b_ in takvim_bulgu:
         hata.append("yayın takvimi — " + b_)
     print(f"  bulgu {len(takvim_bulgu)}")
+
+    # ---------------------------------------------------------------- (17)
+    # KOŞU KAYDI OKUR DİLİ. Koşu kutusu uyarilar.json'daki `uyarilar` listesini,
+    # veri durumu şeridi ozet.json'daki `uyari_metni`/`bayat_cumlesi`ni OLDUĞU
+    # GİBİ basar; bu satırları hatların Python'u operatör için yazıyordu ve 9.
+    # ölçüt onları görmüyordu (kaynak MDX değil, veri dosyası): `kkm_aktif`
+    # bayrağı, `bie_pydibsarsiv` grubu ve '5.2%' okura gitti, sınav yeşildi.
+    # Kural tek yerde (okur_dili.kosu_kaydi_tara); guncelle.py aynı soruyu hat
+    # koştuğu anda uyarı olarak sorar. Burada iki ağırlık: şablondan başka
+    # yerden gelemeyecek kusur (backtick, dosya adı, bie_ kodu, yapım dili)
+    # ENGEL; bir yer tutucudan sızabilecek anahtar adı ve biçim UYARI — veri
+    # kaynaklı bir sızıntı günün bültenini durdurmaz, ama adıyla görünür.
+    print("\n▶ Koşu kaydı okur dili (public/projeler/*/uyarilar.json · ozet.json)")
+    n_kayit = n_kk = 0
+    for klasor in sorted(p for p in (KOK / "site/public/projeler").iterdir() if p.is_dir()):
+        satirlar: list[tuple[str, str]] = []
+        uj = klasor / "uyarilar.json"
+        if uj.exists():
+            try:
+                u = json.loads(uj.read_text(encoding="utf-8"))
+                if isinstance(u, dict):
+                    satirlar += [("uyarilar.json", str(x)) for x in (u.get("uyarilar") or [])]
+            except Exception as ex:                                # noqa: BLE001
+                hata.append(f"{klasor.name}/uyarilar.json okunamadı: {ex}")
+        oj = klasor / "ozet.json"
+        if oj.exists():
+            try:
+                d = json.loads(oj.read_text(encoding="utf-8"))
+                for alan in ("uyari_metni", "bayat_cumlesi"):
+                    if isinstance(d.get(alan), str):
+                        satirlar.append((f"ozet.json `{alan}`", d[alan]))
+            except Exception:                                      # noqa: BLE001
+                pass                       # okunamayan özeti 12. ölçüt düşürür
+        n_kayit += len(satirlar)
+        for kaynak_adi, metin in satirlar:
+            for _i, aile, esl in okur_dili.kosu_kaydi_tara([metin]):
+                hedef = hata if aile in okur_dili.KOSU_KAYDI_ENGEL else uyari
+                hedef.append(f"koşu kaydı {aile} — {klasor.name}/{kaynak_adi}: {esl!r}")
+                n_kk += 1
+    print(f"  {n_kayit} satır tarandı · bulgu {n_kk}")
 
     # (9b) OKUR DİLİ, DERLENMİŞ ÇIKTIDA (uyarı). 9. ölçüt yalnız içerik
     # dosyalarına bakıyor; bileşenlerden gelen dizgeleri ("ozet.json"

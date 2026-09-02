@@ -6,6 +6,12 @@ Bu fonksiyon iki kaynağı karşılaştırır ve ayrışmaları liste olarak dö
 (boş liste = uyum). İki kapı onu çağırır: bulten/duman.py (veri/bülten
 koşularında) ve site/tools/sayfa_sinavi.py (yayın kapısı) — sayfayı yayımlayan
 kapı kaymayı görmezse sayfa eski saati anlatmaya devam ederdi.
+
+Kapsam da sınanır: sitede yayımlanan her zamanlanmış yayının bir "X gönderisi"
+adımı olmalı (hakkında sayfasının 'Takip' bölümü her yayının X'te de çıktığını
+söylüyor; teknik analiz satırında adım yoktu ve sayfa kendi içinde çelişiyordu).
+Bir adım `okura: false` taşıyabilir: kayıtta durur, cron'la karşılaştırılır,
+hakkında sayfasına basılmaz (nöbetçi yoklaması okurun görmediği bir iç alarm).
 """
 from __future__ import annotations
 
@@ -31,6 +37,10 @@ def karsilastir(kok: Path) -> list[str]:
         ad_y = y.get("yayin", "?")
         if re.search(r"\b\d{1,2}:\d{2}\b", str(y.get("aciklama", ""))):
             bulgu.append(f"{ad_y}: açıklamada elle saat var — saat yalnız adımlarda (cron'dan türetilir)")
+        adlar = [str(a.get("ad", "")) for a in y.get("adimlar", [])]
+        if "sitede" in adlar and "X gönderisi" not in adlar:
+            bulgu.append(f"{ad_y}: sitede yayımlanan zamanlanmış yayının 'X gönderisi' adımı yok "
+                         "(hakkında 'Takip' her yayının X'te de çıktığını söylüyor)")
         for ad in y.get("adimlar", []):
             yml_yolu = kok / ".github" / "workflows" / str(ad.get("is_akisi", ""))
             if not yml_yolu.exists():

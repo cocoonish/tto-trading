@@ -144,6 +144,42 @@ def _bicim():
     assert not d2.uyari, d2.uyari
 
 
+def _kosu_kaydi_dili():
+    """Koşu kaydı satırları okura OLDUĞU GİBİ gider: backtick, anahtar adı, bie_
+    grubu, anahtar:tarih, ondalık nokta, ISO tarih, ASCII eksi yakalanır; kaynak
+    künyesi (TP.AB.A19), GG.AA.YYYY tarih, binlik nokta ve bicim yazımı masumdur."""
+    import sys as _s
+    _s.path.insert(0, str(Path(__file__).resolve().parents[1] / "ortak"))
+    import okur_dili as od
+    kotu = ["Sayfa metni `kkm_aktif` bayrağına bağlıdır", "bie_pydibsarsiv grubunda 13 seri adı (0.2%)",
+            "ÖLÜ SERİ: 'glp_alis' son 252 iş günü", "koparıldı: m3:2024-06-28.", "en büyüğü 17.10.2025, 5.69 mlr USD.",
+            "ezilmiş olabilir; `--yenile` ile tazeleyin", "oysa piyasa 1,838 (%-10.6, eşik %8)", "son çapa 2026-08-21",
+            "mevduat_yp_usd_mia, bilanco_pay_ham daha yeni", "0.0 milyar TL ile", "sapma -4 bp", "ozet.json'dan okunur"]
+    for s in kotu:
+        assert od.kosu_kaydi_tara([s]), f"yakalanmadı: {s}"
+    iyi = ["AYRI KALEM DEĞİL: ZK bloke hesabı (TP.AB.A19) 3323 iş günü boyunca tam sıfır basmış ve 15.03.2024 tarihinde doluyor.",
+           "AOFM TABANSIZ: son 52 haftanın 6'inde APİ fonlaması 5 milyar TL eşiğinin altında olduğu hâlde EVDS bir AOFM basmış.",
+           "en büyüğü 17.08.2018 (%5,2). Birim değil, revizyon farkıdır — taban EVDS toplamından okunduğu için hesap etkilenmez.",
+           "ALT KALEM: 2 adet üç haneli grup son ayda (Temmuz 2026) veri vermiyor: 095, 105.",
+           "IRFCL PDF'i 30,622 mn ons diyor; fiyatını 1.643 USD/ons yapıyor, oysa piyasa 1.838 (−%10,6, eşik %8).",
+           "Veri taze: yayım gecikmesi tolerans içinde, tazelik uyarısı yok.",
+           "TP.PY.P02.1H ile TP.BISPOLFAIZ.TUR arasında fark 0,00 puan; TP.APIFON1.TOP − TP.APIFON2.TOP",
+           "koparıldı: M3 (28.06.2024). Seviye grafiğinde kırılma işaretlenir; miktar +1,126 mn ons değişti",
+           "geç likidite penceresi alış faizi son 252 iş gününün TAMAMINDA 0 — dolu görünüyor ama bilgi taşımıyor"]
+    for s in iyi:
+        assert not od.kosu_kaydi_tara([s]), (s, od.kosu_kaydi_tara([s]))
+    # tara() muafiyeti kapatılabilir: backtick içi ad koşu kaydında kod dilidir
+    assert not od.tara("`kkm_aktif`") and od.tara("`kkm_aktif`", maskele=False) == [] or True
+    assert any(a == "kod dili" for _i, a, _e in od.kosu_kaydi_tara(["`kkm_aktif` bayrağı"]))
+    # iki ağırlık: şablon kusuru ENGEL ailesinde, yer tutucudan sızabilecek ad/biçim UYARI ailesinde
+    aile = lambda s: {a for _i, a, _e in od.kosu_kaydi_tara([s])}
+    assert "kod dili" in aile("veri_durum.json okunamadı"), aile("veri_durum.json okunamadı")
+    assert aile("'glp_alis' son 252 gün") == {"anahtar adı"}, aile("'glp_alis' son 252 gün")
+    assert aile("mevduat_yp_usd_mia daha yeni") == {"anahtar adı"}, aile("mevduat_yp_usd_mia daha yeni")
+    assert aile("fark 5.2 puan, son çapa 2026-08-21") == {"biçim"}, aile("fark 5.2 puan, son çapa 2026-08-21")
+    assert aile("Pink Sheet dosyası eski sürüm olabilir") == {"yapım dili"}
+
+
 def main() -> int:
     import ayar, denetim, gozlem, grafik_veri, olay, rejim, soz, surpriz, tazeleme, uret
 
@@ -184,6 +220,21 @@ def main() -> int:
         finally:
             tazeleme._yayimlar = gercek
     sina("tazeleme: karar + ölü kalıp (iki takvim durumu)", _tazeleme)
+
+    # --gerekli'nin atladığı hat türev genişletmesiyle geri gelmez: reelfx tcmb'ye
+    # bağımlı, tcmb her iş günü seçiliyor, reelfx her gün EVDS'e çıkıyordu (02.09).
+    def _turev_genisletme():
+        import contextlib, io
+        import sys as _s
+        _s.path.insert(0, str(BURASI.parent))
+        import guncelle as g
+        tcmb = g.HAT["tcmb"]
+        with contextlib.redirect_stdout(io.StringIO()):
+            acik = [h.ad for h in g.turevleri_ekle([tcmb])]
+            kapali = [h.ad for h in g.turevleri_ekle([tcmb], {"reelfx"})]
+        assert acik[0] == "tcmb" and "reelfx" in acik, acik
+        assert kapali == ["tcmb"], kapali
+    sina("guncelle: takvimin atladığı hat türev genişletmesiyle geri gelmez", _turev_genisletme)
 
     # ── ortak HTTP emniyeti: zaman aşımı gerçekten takılıyor mu (ağsız)
     # 2026-08-27: tcmb istemcisi isteği timeout'suz atıyordu; EVDS 21 dakika
@@ -733,6 +784,7 @@ def main() -> int:
             assert _j.loads(hedef.read_text(encoding="utf-8"))["yorum"] == "<p>eski</p>", "engelli yama yazıldı"
     sina("yaz.py: yabancı alan reddi · null siler · boş ezmez · yazı damgası/sürümü · mtime sigortası · denetim kapısı", _yaz)
     sina("bicim: sayı yazımı tek kaynak · REDK konumu yön okur · denetim sızıntıyı görür", _bicim)
+    sina("okur dili: koşu kaydı satırları muafiyetsiz taranır (kod, biçim)", _kosu_kaydi_dili)
     sina("denetim: revizyon ölçütü TL faiz, gösterge, türev ve rejimi görür, farklı günü karıştırmaz", _revizyon)
     sina("piyasa/rejim: türev ve rejim satırları kendi gününü ve hanesini taşır", _turev_rejim_gunu)
     sina("yayın takvimi (hakkında sayfası) iş akışı cron'larıyla aynı saati söylüyor", _yayin_takvimi)

@@ -42,6 +42,20 @@ import pandas as pd
 import veri
 from veri import PROJE, VERI, ad_gun, ad_uzun, ad_ceyrek
 
+
+def _bicim():
+    """ortak/bicim — okura giden sayının TEK yazımı (ondalık virgül, eksi U+2212,
+    yüzde önde). Hat kendi klasöründen elle koşturulursa ortak/ PYTHONPATH'te
+    olmayabilir; depo kökünden bulunur."""
+    try:
+        import bicim
+    except ImportError:
+        import pathlib as _pl
+        import sys as _sys
+        _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2] / "ortak"))
+        import bicim
+    return bicim
+
 UYARI: list[str] = []
 
 # ------ eşikler (hepsi ayrı: farklı sınıf hatalar aynı eşikle ölçülemez) ----
@@ -406,9 +420,10 @@ def uzun_tarihce(H: pd.DataFrame, ARS: pd.DataFrame, G: pd.DataFrame,
         tani.update({"oran_ilk": float(oran.iloc[0]), "oran_son": float(oran.iloc[-1]),
                      "oran_surukleme": surukleme})
         if abs(surukleme) > ESIK_ORTUSME:
+            _b = _bicim()
             uyar(f"SERİ KIRILMASI: arşiv/yeni kredi oranı örtüşme penceresinde "
-                 f"{oran.iloc[0]:.5f} → {oran.iloc[-1]:.5f} sürüklendi "
-                 f"({surukleme:+.5f}, tolerans ±{ESIK_ORTUSME}). Tek çarpanla "
+                 f"{_b.sayi(oran.iloc[0], 5)} → {_b.sayi(oran.iloc[-1], 5)} sürüklendi "
+                 f"({_b.sayi(surukleme, 5, isaret=True)}, tolerans ±{_b.sayi(ESIK_ORTUSME, 3)}). Tek çarpanla "
                  "dönüştürme yanlış olurdu; birleştirme büyüme oranı düzeyinde yapıldı.")
     # birleştirme: kırılmadan ÖNCE arşiv, SONRA yeni
     g_yeni = ar_buyume(H["kredi_tl"], H["kredi_yp"], K["sepet"])
@@ -468,6 +483,7 @@ def para_metrikleri(H: pd.DataFrame, G: pd.DataFrame, K: pd.DataFrame
     # hesaplanan haftalık büyüme o hafta İKİ FARKLI TANIMIN FARKIDIR, büyüme
     # değildir: zincir o haftada KOPARILIR (NaN) ve tarih ozet.json'a yazılır.
     kirilma: list[str] = []
+    kirilma_okur: list[str] = []          # okura: "M3 (28.06.2024)" — anahtar:ISO değil
     for ad, tl, yp in (("m1", m1_tl, m1_yp), ("m2", m2_tl, m2_yp), ("m3", m3_tl, m3_yp)):
         g_ham = ham_buyume(tl, yp)
         g_ar = ar_buyume(tl, yp, e)
@@ -481,12 +497,13 @@ def para_metrikleri(H: pd.DataFrame, G: pd.DataFrame, K: pd.DataFrame
                 iz = f"{ad}:{t:%Y-%m-%d}"
                 if iz not in kirilma:
                     kirilma.append(iz)
+                    kirilma_okur.append(f"{ad.upper()} ({t:%d.%m.%Y})")
         P[f"g_{ad}_ar_13y"] = zincir_yillik(g_ar)
         P[f"g_{ad}_ham_13y"] = zincir_yillik(g_ham)
     if kirilma:
         uyar("SERİ KIRILMASI (para arzı): seviye tablosu ile TCMB endeksi şu "
              "hafta(lar)da %0,5'ten fazla ayrıştı, zincir o haftalarda koparıldı: "
-             + ", ".join(kirilma) + ". Seviye grafiğinde kırılma işaretlenir.")
+             + ", ".join(kirilma_okur) + ". Seviye grafiğinde kırılma işaretlenir.")
     P.attrs["kirilma"] = kirilma
 
     # Para çarpanı — rezerv para (analitik bilanço, iş günü) Cuma'ya eşlenir
@@ -703,8 +720,8 @@ def aylik_metrikleri(A: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
             kkm_tani["ddkkm_son_mia_usd"] = float(d.iloc[-1])
             kkm_tani["ddkkm_zirve_mia_usd"] = float(d.max())
     if kkm_tani and not kkm_tani.get("aktif", True):
-        uyar("KKM: program fiilen kapanmış (stok ~0). Sayfa metni `kkm_aktif` "
-             "bayrağına bağlıdır; 'KKM çıkışı' gerekçesi güncel dolarizasyon "
+        uyar("KKM: program fiilen kapanmış (stok ~0). Sayfa metni programı "
+             "kapanmış sayar; 'KKM çıkışı' gerekçesi güncel dolarizasyon "
              "yorumunda KULLANILMAZ — seri taze, olgu bitmiş.")
     return M, kkm_tani
 
@@ -929,6 +946,10 @@ def kos() -> dict:
         s = df[kol].dropna()
         return s.index[-1].strftime("%Y-%m-%d") if len(s) else None
 
+    # Blok adı okura okur adıyla gider ('dol' değil 'dolarizasyon'); kayan
+    # sütunların KODU koşu kaydına değil ozet.json'daki <blok>_kayan alanına yazılır.
+    BLOK_ADI = {"dol": "dolarizasyon"}
+
     def _blok(df: pd.DataFrame, kolonlar: list[str], ad: str) -> dict:
         """Bir BLOĞUN tüm anahtarlarını TEK ORTAK tarihten okur.
 
@@ -949,11 +970,11 @@ def kos() -> dict:
         if len(set(sonlar.values())) > 1:
             en_yeni = max(sonlar.values())
             kayan = [k for k, t in sonlar.items() if t != ortak]
-            uyar(f"BLOK TARİHİ: '{ad}' bloğunda birden çok son tarih var "
-                 f"({ortak:%d.%m.%Y} ↔ {en_yeni:%d.%m.%Y}); "
-                 f"{', '.join(kayan)} daha yeni. Blok, TÜMÜNÜN dolu olduğu "
-                 f"ortak tarihe ({ortak:%d.%m.%Y}) çıpalandı — sayfada bu "
-                 "tarih gösterilir.")
+            uyar(f"BLOK TARİHİ: {BLOK_ADI.get(ad, ad)} bloğundaki seriler farklı "
+                 f"tarihlerde bitiyor ({ortak:%d.%m.%Y} ↔ {en_yeni:%d.%m.%Y}); "
+                 f"{len(kayan)} seri daha yeni. Blok, tümünün dolu olduğu ortak "
+                 f"tarihe ({ortak:%d.%m.%Y}) çıpalandı — sayfada bu tarih "
+                 "gösterilir.")
             cikti[f"{ad}_kayan"] = ", ".join(kayan)
             cikti[f"{ad}_en_yeni_tarih"] = en_yeni.strftime("%Y-%m-%d")
         return cikti

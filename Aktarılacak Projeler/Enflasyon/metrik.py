@@ -639,7 +639,7 @@ def _ito_yayim() -> dict:
     try:
         return json.loads(y.read_text(encoding="utf-8"))
     except Exception as ex:
-        uyar(f"ito_yayim.json okunamadı ({type(ex).__name__}) — İTO kimlik "
+        uyar(f"İTO YAYIM KAYDI OKUNAMADI ({type(ex).__name__}) — İTO kimlik "
              f"doğrulaması YAPILAMADI.")
         return {}
 

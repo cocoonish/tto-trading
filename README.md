@@ -79,17 +79,22 @@ Her hattın ayrıca **tek başına çalışan** bir deposu var (yalnız o projey
 | `yabanci` | Yabancı pozisyonu: DİBS ve hisse akımları | EVDS menkul kıymet ist. | [yabanci-pozisyon](https://github.com/cocoonish/yabanci-pozisyon) |
 | `hazine` | Hazine ihraç takvimi ve ihale analizi | Hazine sitesi (scraper) | [hazine-ihrac](https://github.com/cocoonish/hazine-ihrac) |
 | `fx` | FX haber-duyarlılık endeksi | GDELT + RSS + FinBERT | [fx-haber-endeksi](https://github.com/cocoonish/fx-haber-endeksi) |
-| `marj` | Yiyecek hizmetleri: fiyat/maliyet marjı | EVDS + TÜİK MEDAS | [yiyecek-marj](https://github.com/cocoonish/yiyecek-marj) |
 | `enflasyon` | Enflasyon panosu | EVDS3 TÜFE ağacı + ÖKTG + anketler | — |
 | `kredi` | Kredi ve parasal büyüklükler | EVDS3 haftalık para-banka + analitik bilanço | — |
 | `fonlama` | TCMB fonlama ve likidite | EVDS3 APİ + kotasyon + TLREF + ZK | — |
-| `dibs` | DİBS verim eğrisi ve reel faiz | EVDS3 DİBS fiyat/kupon + TÜFEX + anket | — |
 | `odemeler` | Ödemeler dengesi ve dış finansman | EVDS3 ödemeler dengesi + dış borç + GSYH | — |
+| `dibs` | DİBS verim eğrisi ve reel faiz | EVDS3 DİBS fiyat/kupon + TÜFEX + anket | — |
 | `butce` | Merkezi yönetim bütçesi ve borç stoku | EVDS3 bütçe + dış borç + menkul kıymet sahipliği | — |
+| `buyume` | Büyüme analiz yazısı (`analiz/buyume-<tarih>`; pano yok) | EVDS3 GSYH grupları: harcama, üretim, hanehalkı | — |
+| `elnino` | El Niño ve gıda enflasyonu analiz yazısı (`analiz/el-nino-enflasyon-<tarih>`; pano yok) | NOAA ONI + EVDS TÜFE + Dünya Bankası Pink Sheet, BLS, BIS, ECB | — |
+| `marj` | Yiyecek hizmetleri: fiyat/maliyet marjı | EVDS + TÜİK MEDAS | [yiyecek-marj](https://github.com/cocoonish/yiyecek-marj) |
 | `carry` | TL taşıma defteri | Fonlama + DİBS depo serileri (türev) | — |
 | `tufex` | TÜFEX ve başabaş enflasyon | DİBS + Enflasyon depo serileri (türev) | — |
 | `makro` | Makroihtiyatinin izi | Kredi + Fonlama depo serileri (türev) | — |
 | `reelfx` | Reel sektörün döviz pozisyonu | EVDS3 bie_fdvy (aylık) | — |
+
+Sıra kütüğün sırasıdır (`python guncelle.py --liste`, 19 hat): türev hatlar besledikleri
+hatlardan SONRA koşar. Tablo elle tutulur; kütükle ayrıştığında kütük doğrudur.
 
 Panoların yazım standardı **[`projeler/YAZIM.md`](projeler/YAZIM.md)** (başlık cümle düzeni, ön bilgi alanları, `ozet.json` saat sözleşmesi).
 

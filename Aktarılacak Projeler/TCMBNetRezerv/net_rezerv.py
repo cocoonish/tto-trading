@@ -1591,9 +1591,8 @@ def hat_kos(start: str = "01-01-2002", end: str | None = None,
                 f"SWAP ÇAPA KAPSAMI DÜŞÜK: günlük serinin yalnız "
                 f"%{haftalik_oran * 100:.0f}'i haftalık IRFCL çapasına "
                 f"dayanıyor (hedef %{SWAP_HAFTALIK_CAPA_HEDEF * 100:.0f}); "
-                "geri kalanı ay sonu çapasından taşınıyor. `python "
-                "irfcl_arsiv.py` ile haftalık arşivi doldurmak bu kalemin "
-                "hatasını belirgin şekilde küçültür."
+                "geri kalanı ay sonu çapasından taşınıyor. Haftalık arşiv "
+                "doldurulduğunda bu kalemin hatası belirgin şekilde küçülür."
             )
 
     # Yayımlanmayan ama denetlenen tanılar — uyarilar.json'a yazılır, sayfaya

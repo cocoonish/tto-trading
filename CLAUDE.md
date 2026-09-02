@@ -43,8 +43,11 @@ buradan okur). Bağlantı önizleme kartları `site/tools/og_kart.py` ile çizil
 çizilmez; sayfa kimliği (kanonik adres, og/twitter meta, JSON-LD)
 `Base.astro`'da kurulur. Hakkında sayfasındaki yayın takvimi
 `site/src/data/yayin_takvimi.json`dan okunur; her adımın saati ilgili iş akışının
-cron'undan türetilir ve `bulten/duman.py` ikisini karşılaştırır — cron kayarsa
-sınama düşer, sayfa eski saati anlatmaya devam edemez.
+cron'undan türetilir ve `ortak/yayin_takvimi.karsilastir` ikisini karşılaştırır —
+`bulten/duman.py` ile sayfa sınavının 16. ölçütü aynı fonksiyonu çağırır; cron
+kayarsa sınama da yayın kapısı da düşer, sayfa eski saati anlatmaya devam edemez.
+Aynı fonksiyon kapsamı da sınar (sitede çıkan her zamanlanmış yayının X adımı);
+`okura: false` adımlar kayıtta durur, sayfaya basılmaz.
 
 ## Komutlar (site/ içinde)
 
@@ -413,7 +416,12 @@ tablosundan SESSİZCE düşüyordu), (12) her ozet.json'un `_tarih`i çözülüy
 yarından ileri değil (TÜFEX metin karşılaştırmasıyla en ESKİ bacağı hattın
 saati yapmıştı, sayfa "81 gün önce" diyordu), (13) lib/bicim dışında yerel
 biçimleyici (uyarı), (9b) okur dili derlenmiş çıktıda da (uyarı — bileşen
-dizgeleri yalnız orada görünür). KaTeX kapısı aracı ya da node'u bulamazsa
+dizgeleri yalnız orada görünür), (17) koşu kaydının okur dili — hatların
+`uyarilar.json` satırları ve `uyari_metni` sayfaya olduğu gibi basılır — kod ve
+yapım dili ENGEL, anahtar adı ve biçim UYARI.
+Tam ve bağlayıcı liste `sayfa_sinavi.py` başlığındadır (2c, 11b–11d, 14, 15,
+16 dahil); bu paragraf onu ÖZETLER, kapsamı o dosya tanımlar. KaTeX kapısı
+aracı ya da node'u bulamazsa
 artık yeşil geçmez, düşer. Eskiden ham kaynak
 kopyalanıyor, derleme yalnız public depoda yapılıyordu: derleme düşerse site
 sessizce eski sürümde kalıyordu (30.08.2026). Aynı ilke tweette:
@@ -428,7 +436,20 @@ muaftır (`uret._kapat`).
 
 **Kurucu ilke — okur dili HER YAYINDA geçerlidir, tek yerden tanımlanır.**
 Kural yalnız site yazıları için değil: bülten, teknik bülten, tweetler ve
-proje panoları — okura giden ne varsa. İki aile yasak. **Kod dili**: dosya,
+proje panoları — okura giden ne varsa. Hatların KOŞU KAYDI da öyle:
+`uyarilar.json` satırları ve `ozet.json` `uyari_metni` sayfaya olduğu gibi
+basılır (koşu kutusu, `<Deger>`), ve hatların Python'u onları OPERATÖR için
+yazıyordu — `kkm_aktif` bayrağı, `bie_pydibsarsiv` grubu, '5.2%', "`python
+irfcl_arsiv.py` ile doldurun" okura gitti, dokuzuncu ölçüt yeşildi (kaynak MDX
+değil, veri dosyası). `okur_dili.kosu_kaydi_tara` bu satırları MUAFİYETSİZ
+tarar (backtick orada kod göstermez), iki parçalı anahtar adı, `bie_` kodu,
+anahtar:tarih çifti ve biçim sözleşmesini (ondalık nokta, ISO tarih, ASCII
+eksi) de sorar; `guncelle.py` hat koştuğu anda uyarır, sayfa sınavı (17) iki
+ağırlıkla kapı olur: şablondan başka yerden gelemeyecek kusur (backtick, dosya
+adı, `bie_` kodu, komut anahtarı, yapım dili) ENGEL; bir yer tutucudan
+sızabilecek anahtar adı ve biçim UYARI — veri kaynaklı bir sızıntı günün
+bültenini durdurmaz, ama adıyla görünür. Hattın uyarı şablonu sayıyı
+`ortak/bicim`den yazar. İki aile yasak. **Kod dili**: dosya,
 anahtar ve boru hattı adları (`ozet.json`, `metrik.py`, `itp_b_sabit`, MDX,
 cron, iş akışı) — okurun elinde bu şeylerin hiçbiri yok. **Yapım dili**: kendi
 sürüm tarihçemizin anlatısı ("bu yazının ilk sürümünde şu hata vardı",

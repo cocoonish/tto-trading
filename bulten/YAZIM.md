@@ -329,8 +329,9 @@ tweet bozulmaz — ama SENİN cümlen kaybolur ve okur onu X'te hiç görmez.
 Metni baştan bağlamsız yazmak, cümleni kurtarmanın tek yolu.
 
 **Kod dili yasak.** Okuyucuya hiçbir şey söylemeyen geliştirici dili sayfaya
-girmez: dosya adı, alan adı, "hat koştu", "eşikler ayar.py içinde" gibi.
-Denetim bunu ölçer ve engeller.
+girmez: dosya adı, alan adı, "eşikler ayar.py içinde", "itp_b_sabit" gibi.
+Denetim bunu ölçer ve engeller (`ortak/okur_dili.py`, tek tanım). "Koşu" ve
+"veri tarihi" okura verilen kayıt adlarıdır, yasak değildir.
 
 **Tavsiye dili yasak.** "Alın", "satın", "hedef fiyat", "pozisyon açın"
 yazılmaz. Site analiz yayımlar, yatırım tavsiyesi vermez.

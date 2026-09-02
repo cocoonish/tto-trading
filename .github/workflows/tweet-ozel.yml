@@ -36,7 +36,7 @@ on:
         type: string
         default: ''
       anahtar:
-        description: 'Defter anahtarı (ör. analiz:<slug>); boş = ozel:<dosya kökü>. Aynı anahtar ikinci kez gönderilmez.'
+        description: 'Defter anahtarı (ör. analiz:<slug>); boş = türetilir (bülten → bulten:<tarih>, analiz slug''ına eşleşen kök → analiz:<slug>, aksi ozel:<dosya kökü>); kökteki günde analiz yayımlandıysa ZORUNLU, yoksa koşu durur. Aynı anahtar ikinci kez gönderilmez.'
         type: string
         default: ''
 

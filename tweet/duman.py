@@ -409,6 +409,34 @@ def _kapanis_notu():
         assert not e, f"{tur} zinciri kendi kapısından geçmedi: {e}"
 
 
+def _ozel_anahtar():
+    """Özel gönderinin defter anahtarı araç kanalıyla aynı biçimde türetilir; kökteki
+    günde yayımlanan analiz varken serbest başlıklı kök ozel: yedeğine SESSİZCE düşmez."""
+    import ozel
+    import analiz as an
+    kok = Path(__file__).resolve().parents[1]
+    P_ = Path
+    assert ozel.anahtar_turet(P_("x/bulten-2026-08-31.txt"), "Sabah Notu — 31 Ağustos 2026", "bulten", True) == "bulten:2026-08-31"
+    assert ozel.anahtar_turet(P_("x/haftaya.txt"), "Haftaya Bakış — 6 Eylül 2026", "bulten", True) == "bulten:2026-09-06"
+    aktif = [a for a in an.analizler() if str(a.get("durum", "aktif")) == "aktif" and str(a.get("pubDate", ""))[:10]]
+    assert aktif, "sınama için yayımda analiz yok"
+    slug = aktif[0]["slug"]
+    assert ozel.anahtar_turet(P_(f"x/{slug}.txt"), "Serbest başlık", "ozel", True) == f"analiz:{slug}"
+    gun = str(aktif[0]["pubDate"])[:10]
+    try:
+        ozel.anahtar_turet(P_(f"x/serbest-kok-{gun}.txt"), "Serbest başlık", "ozel", True)
+        raise AssertionError("analiz gününde serbest kök ozel: ile geçti")
+    except SystemExit as ex:
+        assert "analiz" in str(ex) and "--anahtar" in str(ex), str(ex)
+    assert ozel.anahtar_turet(P_(f"x/serbest-kok-{gun}.txt"), "Serbest başlık", "ozel", False) == f"ozel:serbest-kok-{gun}"
+    assert ozel.anahtar_turet(P_("x/kredi-2020-01-04.txt"), "Serbest başlık", "ozel", True) == "ozel:kredi-2020-01-04"
+    try:
+        ozel.anahtar_turet(P_("x/yok-boyle-slug.txt"), "Analiz — 1 Eylül 2026", "analiz", True)
+        raise AssertionError("eşleşmeyen analiz kökü geçti")
+    except SystemExit as ex:
+        assert "analiz:<slug>" in str(ex)
+
+
 def main() -> int:
     print("tweet duman sınaması:")
     sina("analiz gönderisi: yönetici özeti, canlı <Deger>, atıf düşer, not sonda", _analiz_zinciri)
@@ -423,6 +451,7 @@ def main() -> int:
     sina("jeton kasası: şifreli gidiş-dönüş, yanlış kilit düşer", _jeton_kasasi)
     sina("kalite kapısı öğe başına: kirli düşer, temiz geçer", _kapi_oge_basina)
     sina("defter aynası projeksiyon: yalnız kimlik + zaman", _ayna_projeksiyon)
+    sina("özel gönderi anahtarı: araç kanalıyla aynı biçim, analiz gününde sessiz ozel: yok", _ozel_anahtar)
     print(f"\n  {SAYAC['gecti']} geçti · {SAYAC['dustu']} DÜŞTÜ")
     return 1 if SAYAC["dustu"] else 0
 
