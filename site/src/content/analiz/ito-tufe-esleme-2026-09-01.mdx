@@ -12,7 +12,7 @@ duzeltmeler:
     sebep: '%90 bant 5. ve 95. yüzdelik arasıdır; künyede 10.–90. yüzdelik aralığı yazılmıştı. Gövdedeki tablo ve tez baştan beri %0,75–%2,42 taşıyor.'
 tags: ['enflasyon', 'tüfe', 'ito', 'nowcast', 'öncü gösterge', 'tahmin', 'istatistik']
 durum: 'aktif'
-kaynak: 'TCMB EVDS: İTO İstanbul Tüketici Fiyat Endeksi (2023=100) ve İstanbul Ücretliler Geçinme Endeksi (1995=100), ikisinin kimliği de İTO''nun kendi yayım tablolarıyla ay ay doğrulandı; TÜİK TÜFE (Türkiye geneli); TCMB Piyasa Katılımcıları Anketi cari ay TÜFE beklentisi. Bütün ölçümler Ocak 2024 – Temmuz 2026 aylık endeks seviyelerinden, yayımlanan yuvarlanmış oranlardan değil.'
+kaynak: 'TCMB EVDS: İTO İstanbul Tüketici Fiyat Endeksi (2023=100) ve İstanbul Ücretliler Geçinme Endeksi (1995=100), ikisinin kimliği de İTO''nun kendi yayım tablolarıyla ay ay doğrulandı; TÜİK TÜFE (Türkiye geneli); TCMB Piyasa Katılımcıları Anketi cari ay TÜFE beklentisi. Aylık değişimler Ocak 2024 – Temmuz 2026 aylık endeks seviyelerinden hesaplanıyor, yayımlanan yuvarlanmış oranlardan değil; yalnız serinin başladığı ay ile henüz veri dağıtım sistemine düşmemiş son ay İTO''nun yayımladığı orandan alınıyor.'
 guncelleme: 'aylık; İTO ayın ilk günlerinde, TÜİK ayın 3''ü 10:00'
 ozet: 'İTO''nun iki endeksi de TÜFE''nin üstünde geliyor ama aynı bilgiyi taşıyor; birlikte kullanmak ölçülebilir bir kazanç vermiyor. Ağustos 2026 için merkez %1,48, %90 bant %0,75–%2,42; TÜFE''nin İTO''yu aşma olasılığı %26 ve bu 31 ayın 8''inde gerçekleşti.'
 seviye: 'orta'
@@ -234,6 +234,10 @@ ay ay karşılaştırılıyor:
 | En büyük sapma, puan | <Deger proje="enflasyon" anahtar="itp_k_maks_sapma" ondalik={4}>0,0071</Deger> | <Deger proje="enflasyon" anahtar="uge_k_maks_sapma" ondalik={4}>0,0049</Deger> |
 | Ortalama sapma, puan | <Deger proje="enflasyon" anahtar="itp_k_ort_sapma" ondalik={4}>0,0029</Deger> | <Deger proje="enflasyon" anahtar="uge_k_ort_sapma" ondalik={4}>0,0024</Deger> |
 | Eşiği aşan ay | <Deger proje="enflasyon" anahtar="itp_k_sapan" ondalik={0}>0</Deger> | <Deger proje="enflasyon" anahtar="uge_k_sapan" ondalik={0}>0</Deger> |
+
+Karşılaştırılan ay sayısı örneklemden bir eksik ve sebebi tanımın kendisinde: seviye
+endeksi Ocak 2024'te başlıyor, yani o ayın değişimi seviyeden hesaplanamıyor ve İTO'nun
+yayımladığı orandan alınıyor. Kıyasa yalnız seviyeden hesaplanan aylar giriyor.
 
 Sapmanın tamamı yuvarlamadan: İTO iki ondalık yayımlıyor, biz seviye endeksinden
 hesaplıyoruz. Üstüne, tüketici endeksinin <Deger proje="enflasyon" anahtar="itp_b_ad">Ağustos 2026</Deger>
@@ -566,9 +570,10 @@ Kural seçimi, kuralın kendi belirsizliğinden daha az önemli.
 alınıyor; sebebi keyfi değil, örneklem dışı yarışın kazananı bu
 (<Deger proje="enflasyon" anahtar="br_b_merkez_ad">İTO regresyon</Deger>).
 
-Ters-MSE bileşimin geçmiş hatalardan türettiği ağırlık da bilgi veriyor: tüketici
-endeksine <Deger proje="enflasyon" anahtar="br_b_agirlik" ondalik={2}>0,74</Deger>,
-ücretliler geçinmeye kalanı. Kural, kendi kendine de aynı sonuca varıyor.
+Ters-MSE bileşiminin geçmiş hatalardan türettiği ağırlık tüketici endeksine
+<Deger proje="enflasyon" anahtar="br_b_agirlik" ondalik={2}>0,74</Deger>, ücretliler
+geçinmeye kalanı veriyor. Bu ağırlık iki tekil kuralın göreli isabetini yansıtır; ikinci
+endeksin ek bilgi taşımadığını ayrıca sınamaz — o sonuç Bölüm 5'in üç sınamasından gelir.
 
 ### 6.2 Nokta değil bulut
 
@@ -702,8 +707,14 @@ yollara girmesini engeller.
 **Takvim ayı düzeltmesi işe yaramıyor.** Üst paneldeki profil son derece ikna edici
 görünüyor: mayıs tek eksi ay, nisan ve ekim belirgin artı, her birinin makul bir
 açıklaması var. Her çubuğun üstündeki gözlem sayısı ise **n = 2 ya da n = 3**.
-Ay başına tahmin edilen parametre, onu tahmin edecek gözlemden fazla. Örneklem dışı
-yarışta takvim ayı düzeltmesi **iki pencerede de sonuncu** ve hatayı
+Ay başına tahmin edilen parametre, onu tahmin edecek gözlemden fazla. Yalnız tüketici
+endeksiyle kurulan altı kuralın ayrı örneklem dışı yarışında (naif, sabit kaydırma,
+medyan, oransal, regresyon, takvim ayı düzeltmesi; aynı
+<Deger proje="enflasyon" anahtar="itp_k_n" ondalik={0}>19</Deger> ay) takvim ayı
+düzeltmesi **iki pencerede de sonuncu** —
+<Deger proje="enflasyon" anahtar="itp_mae_takvimli" ondalik={3}>0,521</Deger> ve
+<Deger proje="enflasyon" anahtar="itp_maed_takvimli" ondalik={3}>0,593</Deger> puan — ve
+düzeltmesiz kurala göre hatayı
 <Deger proje="enflasyon" anahtar="itp_takvimli_zarar" ondalik={3}>0,151</Deger>
 puan **büyütüyor**.
 
