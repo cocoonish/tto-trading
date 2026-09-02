@@ -161,7 +161,8 @@ doğrudan yayına gönderebilsin diye public depoya yazma yetkili PAT).
 ## X gönderileri
 
 `tweet/` — bülten, haftaya bakış, teknik analiz ve analiz yazıları yayın günü
-X'te tek uzun gönderi olarak çıkar (link yok, emoji yok, site atfı yok).
+X'te tek uzun gönderi olarak çıkar (**hiç link yok** — açık adres, www ve çıplak alan
+adı dahil; emoji yok, site atfı yok).
 Metin yalnız yayımlanmış katmandan kurulur: bülten okuması ve gündem
 (`uret.py`), analizin yönetici özeti (`analiz.py`). Her gönderi
 **`tweet/denetim.py`** kapısından geçer — tavsiye dili, link, HTML kalıntısı,

@@ -146,7 +146,8 @@ yok — kayıt zaten söylüyor).
    depoya çıkarır; sınav düşerse yayın durur.
 7. **X gönderisi kendiliğinden çıkar:** tweet iş akışı, yayın günü `pubDate`
    bugüne eşit olan analizi yönetici özetinden kurar ve gönderir (defter aynı
-   yazıyı ikinci kez göndermez; eski tarihli yazı gönderilmez). Metni önceden
+   yazıyı ikinci kez göndermez; eski tarihli yazı gönderilmez). Gönderide HİÇ
+   link olmaz — yazıya bağ da verilmez; okur X'te metnin tamamını okur. Metni önceden
    görmek için: `python3 tweet/gonder.py --tur analiz --kuru`.
 
 ## Dokunulmazlık

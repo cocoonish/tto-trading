@@ -88,14 +88,15 @@ def main() -> int:
                          "ikinci gönderi mükerrer olur")
 
     metin = Path(a.metin).read_text(encoding="utf-8").strip()
-    if "http" in metin.lower():
-        raise SystemExit("metinde link var — kural: tweetlerde link verilmez")
+    import denetim as tw_denetim
+    baglanti = tw_denetim.link_var(metin)
+    if baglanti:
+        raise SystemExit(f"metinde link var ({baglanti!r}) — kural: tweetlerde HİÇ link kullanılmaz")
     # KALİTE KAPISI — tweet/denetim.py. Okur dili (ortak tanım), tavsiye dili
     # (bülten denetimiyle aynı kalıp), link, emoji, HTML kalıntısı, sayı
     # ortasında kesik cümle, boş bölüm etiketi, uzunluk ve sorumluluk notu tek
     # kapıdan geçer. Düzenli gönderiler (gonder.py) de aynı kapıyı kullanır;
     # kural bir yerde durur, iki yerde uygulanır.
-    import denetim as tw_denetim
     # Tür ilk satırdan: özel kanaldan bülten de, analiz de, tema gönderisi de
     # çıkar; türe bağlı ölçütler (başlık satırı, Gündem) yalnız uyanı sınar.
     ilk = metin.split("\n", 1)[0]

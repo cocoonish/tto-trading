@@ -173,6 +173,13 @@ def _gonder_zincir(zincir: list[str], erisim: str) -> list[str]:
     429 ve 5xx'te BİR kez bekleyip yeniden dener — geçici bir kesinti için sabahı
     kaybetmemek; iki kez düşerse gerçekten düşmüştür."""
     import requests
+    # LİNK YASAĞI — denetim kapısından bağımsız ikinci kilit: zincirin herhangi
+    # bir parçasında link varsa HİÇBİR parça gönderilmez (yarım zincir kalmaz).
+    for metin in zincir:
+        b = denetim_m.link_var(metin)
+        if b:
+            raise SystemExit(f"tweet metninde link ({b!r}) — kural: tweetlerde HİÇ link "
+                             "kullanılmaz; gönderim durdu, defter yazılmadı.")
     idler: list[str] = []
     for i, metin in enumerate(zincir):
         govde: dict = {"text": metin}

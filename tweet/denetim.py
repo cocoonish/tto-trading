@@ -70,6 +70,27 @@ EMOJI = re.compile("[\U0001F000-\U0001FAFF\U00002600-\U000027BF\U0001F1E6-\U0001
 # için uzun tire (–). İkisi de UYARI: gönderimi durdurmaz, kaydı düşer.
 ASCII_EKSI = re.compile(r"(?<![\w.,])-(?=[%\d])")
 
+# LİNK YASAĞI — kullanıcı kararı, istisnasız: tweetlerde HİÇ link kullanılmaz.
+# Açık adres, www., markdown bağlantısı, kısaltıcı ve X adresleri, ÇIPLAK alan
+# adı (cocoonish.github.io, tcmb.gov.tr) — hepsi ENGEL. Tanım tek yerde durur;
+# gonder.py gönderimden hemen önce ve ozel.py de aynı fonksiyonu çağırır, yani
+# kapı denetim atlansa bile gönderim katmanında bir kez daha kapanır.
+_TLD = r"(?:com|net|org|io|co|gov|edu|info|biz|xyz|app|dev|me|tv|tr|de|uk|us|eu|ai|page|site|news|link|ly)"
+LINK = re.compile(
+    r"https?://\S+"                                            # açık adres
+    r"|\bwww\.\S+"                                             # www.
+    r"|\[[^\]]+\]\([^)]+\)"                                    # markdown bağlantısı
+    r"|\b(?:t\.co|x\.com|twitter\.com|bit\.ly|youtu\.be)(?:/\S*)?"   # kısaltıcılar ve X
+    r"|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\." + _TLD + r"(?:\.[a-z]{2})?(?=[/\s,.;:!?)\"»]|$)",  # çıplak alan adı
+    re.I)
+
+
+def link_var(metin: str) -> str | None:
+    """Metinde link/alan adı varsa yakalanan parçayı döndürür; yoksa None."""
+    m = LINK.search(metin or "")
+    return m.group(0) if m else None
+
+
 HTML_KALINTI = re.compile(r"<[a-zA-Z/][^>]*>|&nbsp;|&amp;|&lt;|&gt;|&#\d+;|&quot;")
 
 # Bölüm etiketi yalnız kalmış: "Gündem" ya da "Pano:" satırının ardında içerik yok.
@@ -129,8 +150,9 @@ def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
         engel.append(f"metin çok uzun ({len(m)} karakter, en çok {EN_COK})")
 
     # ── içerik kuralları (kullanıcı kararları — 30.08 / 31.08)
-    if re.search(r"https?://|www\.", m, re.I):
-        engel.append("link var — tweetlerde link verilmez")
+    baglanti = link_var(m)
+    if baglanti:
+        engel.append(f"link var ({baglanti!r}) — tweetlerde HİÇ link kullanılmaz")
     if EMOJI.search(m):
         engel.append(f"emoji/süsleme var: {EMOJI.search(m).group(0)!r}")
     kalinti = HTML_KALINTI.search(m)

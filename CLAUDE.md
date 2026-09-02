@@ -413,7 +413,10 @@ artık yeşil geçmez, düşer. Eskiden ham kaynak
 kopyalanıyor, derleme yalnız public depoda yapılıyordu: derleme düşerse site
 sessizce eski sürümde kalıyordu (30.08.2026). Aynı ilke tweette:
 `tweet/denetim.py` her gönderiyi (bülten, teknik, analiz, özel) gönderimden
-önce sınar — tavsiye dili, link, emoji, HTML kalıntısı, site atfı, sayı
+önce sınar — tavsiye dili, link (**tweetlerde HİÇ link kullanılmaz** —
+kullanıcı kararı; açık adres, www, çıplak alan adı ve X adresi dahil, tanım
+`tweet/denetim.LINK`, gönderim katmanı `gonder._gonder_zincir` ikinci kez
+kilitler), emoji, HTML kalıntısı, site atfı, sayı
 ortasında kesik cümle, boş bölüm etiketi, sorumluluk notu, okur dili — ve engel
 varsa gönderim durur. Sorumluluk notu her gönderinin son satırıdır ve kırpmadan
 muaftır (`uret._kapat`).

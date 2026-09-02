@@ -312,7 +312,8 @@ atlamıştı; `onem_puani` ve ABD Hazine kaynağı bu yüzden eklendi.)
 **Metin kendi ayakları üstünde dursun.** Yazdığın `yorum` ve `gundem`
 bölümleri yalnız sitede okunmuyor: aynı metin X'e tek gönderi olarak da çıkıyor
 ve orada ne sayfa, ne tablo, ne de başka bir bölüm var. Gönderi
-`tweet/denetim.py` kapısından geçer (tavsiye dili, link, HTML kalıntısı, site
+`tweet/denetim.py` kapısından geçer (tavsiye dili, link — tweetlerde HİÇ link
+kullanılmaz, çıplak alan adı dahil —, HTML kalıntısı, site
 atfı, sayı ortasında kesik cümle, sorumluluk notu); kapı düşerse gönderim
 durur ve o sabah X'te hiçbir şey çıkmaz — yani metnin tweete uygunluğu senin
 sorumluluğun. Gönderiyi önceden görmek için: `python3 tweet/gonder.py --kuru`. Bu yüzden sayfa
