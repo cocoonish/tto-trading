@@ -38,7 +38,7 @@ cümleleri ve rejim metinleri sayıyı oradan yazar, `bulten/denetim.py`nin
 `bicim` ölçütü sızıntıyı uyarı olarak listeler), `site/src/lib/yayinlar.ts` (bülten ve teknik sayılarının yayın
 kapısı, sayı numarası ve önizleme özeti — dört sayfa ve dört RSS beslemesi
 buradan okur). Bağlantı önizleme kartları `site/tools/og_kart.py` ile çizilir
-(`site/public/og/`); site simgesinin PNG türevleri (32 · 180 apple-touch · 512)
+(`site/public/og/`); site simgesinin PNG türevleri (32 · 180 apple-touch)
 `site/tools/favicon_uret.py` ile SVG'den üretilir — SVG tek kaynaktır, PNG elle
 çizilmez; sayfa kimliği (kanonik adres, og/twitter meta, JSON-LD)
 `Base.astro`'da kurulur. Hakkında sayfasındaki yayın takvimi

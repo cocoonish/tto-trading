@@ -55,13 +55,20 @@ def _yayin_takvimi():
     for y in tk["yayinlar"]:
         for ad in y["adimlar"]:
             yml = (kok / ".github" / "workflows" / ad["is_akisi"]).read_text(encoding="utf-8")
-            cronlar = _re.findall(r"^\s*-\s*cron:\s*'(\d+) (\d+) ", yml, _re.M)
+            cronlar = _re.findall(r"^\s*-\s*cron:\s*'(\d+) (\d+) (\S+) (\S+) (\S+)'", yml, _re.M)
             assert len(cronlar) > ad["cron_no"], f"{ad['is_akisi']}: {ad['cron_no']}. cron yok ({len(cronlar)} var)"
-            dk, saat = cronlar[ad["cron_no"]]
+            dk, saat, _gun, _ay, hafta_gunu = cronlar[ad["cron_no"]]
+            assert int(saat) + 3 < 24, f"{ad['is_akisi']}: cron {saat} UTC İstanbul'da güne taşar — takvim günü kayar"
             ist = f"{(int(saat) + 3) % 24:02d}:{int(dk):02d}"
             assert ist == ad["istanbul"], (f"{y['yayin']} · {ad['ad']}: takvim {ad['istanbul']} diyor, "
                                           f"{ad['is_akisi']} cron {ist} İstanbul")
+            beklenen = {"hafta içi": {"1-5"}, "pazar": {"0", "7"}}.get(y["gunler"])
+            if beklenen:
+                assert hafta_gunu in beklenen | {"*"}, (f"{y['yayin']} · {ad['ad']}: takvim '{y['gunler']}' diyor, "
+                                                       f"{ad['is_akisi']} cron gün alanı '{hafta_gunu}'")
             n += 1
+        assert not _re.search(r"\b\d{1,2}:\d{2}\b", y.get("aciklama", "")), \
+            f"{y['yayin']}: açıklamada elle saat var — saat yalnız adımlarda (cron'dan türetilir)"
     assert n >= 6, f"takvimde çok az adım sınandı ({n})"
 
 

@@ -34,6 +34,7 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       değil ve canlı bacakların en yenisinden geride kalmamış.
   (13) BİÇİM TEK KAYNAK (uyarı) — lib/bicim.ts dışında yerel biçimleyici.
   (14) CSS JETONU — kullanılan her var(--x) global.css'te ya da dosyada tanımlı.
+  (15) SİMGE SÖZLEŞMESİ — ilan edilen her simge var ve boyutu ilanla aynı.
   (9b) OKUR DİLİ, derlenmiş çıktıda (uyarı) — bileşen dizgeleri de kapıya girer.
 
 Koşum:  python3 site/tools/sayfa_sinavi.py
@@ -560,6 +561,40 @@ def main() -> int:
     for t in tanimsiz:
         hata.append("tanımsız CSS jetonu — " + t)
     print(f"  {len(tanimli)} jeton tanımlı · tanımsız kullanım {len(tanimsiz)}")
+
+    # ---------------------------------------------------------------- (15)
+    # SİMGE SÖZLEŞMESİ. Base.astro'nun ilan ettiği her simge dosyası public/
+    # altında var mı; PNG ise gerçek boyutu `sizes` ile aynı mı; SVG ilan
+    # edilmiş mi. İlan edilip üretilmeyen ya da üretilip ilan edilmeyen simge
+    # sözleşmeyi yarım bırakır.
+    print("\n▶ Simge sözleşmesi (Base.astro ↔ public/)")
+    import struct as _struct
+    base = (KOK / "site/src/layouts/Base.astro").read_text(encoding="utf-8")
+    simgeler = re.findall(r'<link rel="(icon|apple-touch-icon)"([^>]*)>', base)
+    svg_var = False
+    for rel, nit in simgeler:
+        href = re.search(r'href="([^"]+)"', nit)
+        if not href:
+            hata.append(f"simge bağı href'siz: {rel}")
+            continue
+        dosya = KOK / "site/public" / href.group(1).lstrip("/")
+        if not dosya.exists():
+            hata.append(f"ilan edilen simge yok: {href.group(1)}")
+            continue
+        if dosya.suffix == ".svg":
+            svg_var = True
+        elif dosya.suffix == ".png":
+            bas = dosya.read_bytes()[:24]
+            g, y = _struct.unpack(">II", bas[16:24]) if bas[12:16] == b"IHDR" else (0, 0)
+            m = re.search(r'sizes="(\d+)x(\d+)"', nit)
+            if m and (g, y) != (int(m.group(1)), int(m.group(2))):
+                hata.append(f"simge boyutu ilanla farklı: {href.group(1)} {g}×{y}, ilan {m.group(1)}×{m.group(2)}")
+    if not svg_var:
+        hata.append("SVG simge ilan edilmemiş (favicon.svg tek kaynaktır)")
+    for png in sorted((KOK / "site/public").glob("*.png")):
+        if png.name not in base:
+            uyari.append(f"public/{png.name} üretilmiş ama Base.astro ilan etmiyor")
+    print(f"  {len(simgeler)} simge ilanı")
 
     # (9b) OKUR DİLİ, DERLENMİŞ ÇIKTIDA (uyarı). 9. ölçüt yalnız içerik
     # dosyalarına bakıyor; bileşenlerden gelen dizgeleri ("ozet.json"

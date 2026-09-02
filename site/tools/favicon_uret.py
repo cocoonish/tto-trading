@@ -26,7 +26,19 @@ from og_kart import chromium_bul  # noqa: E402
 
 PUBLIC = BURASI.parent / "public"
 SVG = PUBLIC / "favicon.svg"
-BOYUTLAR = {32: "favicon-32.png", 180: "apple-touch-icon.png", 512: "favicon-512.png"}
+# Yalnız Base.astro'nun İLAN ETTİĞİ boyutlar: ilan edilmeyen bir dosya üretmek
+# kopya sözleşmesini yarım bırakır (sayfa sınavı 15 ikisini karşılaştırır).
+BOYUTLAR = {32: "favicon-32.png", 180: "apple-touch-icon.png"}
+
+
+def png_boyut(yol: Path) -> tuple[int, int]:
+    """PNG IHDR'dan genişlik ve yükseklik (kütüphanesiz)."""
+    import struct
+    with yol.open("rb") as f:
+        bas = f.read(24)
+    if bas[:8] != b"\x89PNG\r\n\x1a\n" or bas[12:16] != b"IHDR":
+        raise SystemExit(f"{yol.name}: PNG değil")
+    return struct.unpack(">II", bas[16:24])
 
 
 def ciz(chromium: str, boyut: int, hedef: Path) -> None:
@@ -46,6 +58,12 @@ def ciz(chromium: str, boyut: int, hedef: Path) -> None:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
         if r.returncode != 0 or not hedef.exists():
             raise SystemExit(f"{hedef.name}: çizim düştü ({r.returncode}): {r.stderr[-400:]}")
+    # Çıktının GERÇEK boyutu ölçülür: yeni başsız kip pencere çerçevesi payı
+    # bırakabiliyor; 32 px istenip 32 px gelmediyse dosya silinir, araç düşer.
+    g, y = png_boyut(hedef)
+    if (g, y) != (boyut, boyut):
+        hedef.unlink()
+        raise SystemExit(f"{hedef.name}: {g}×{y} çıktı, {boyut}×{boyut} bekleniyordu — Chromium yolu headless_shell olmalı")
 
 
 def main() -> int:
