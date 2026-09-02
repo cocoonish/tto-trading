@@ -1,144 +1,139 @@
 {
- "_ceyrek": "2026Q1",
- "_tarih": "31.03.2026",
- "buyume_yillik": 2.48,
- "buyume_ceyreklik": 0.13,
- "ayristirma_tabani": 2.57,
- "ayarlama_farki": 0.09,
- "onceki_ceyrek": "2025Q1",
- "agirlik_donemi": "2025Q1",
+ "_ceyrek": "2026Q2",
+ "_tarih": "30.06.2026",
+ "buyume_yillik": 2.32,
+ "buyume_ceyreklik": 1.12,
+ "ayristirma_tabani": 2.27,
+ "ayarlama_farki": -0.05,
+ "onceki_ceyrek": "2025Q2",
+ "agirlik_donemi": "2025Q2",
  "katkilar": {
   "P311": {
    "ad": "Hanehalkı tüketimi",
-   "buyume": 5.24,
-   "agirlik": 56.4,
-   "katki": 2.96,
+   "buyume": 3.48,
+   "agirlik": 54.1,
+   "katki": 1.88,
    "isaret": 1
   },
   "P312": {
    "ad": "Hizmet eden kuruluşlar",
-   "buyume": 0.67,
-   "agirlik": 0.4,
-   "katki": 0.0,
+   "buyume": 3.06,
+   "agirlik": 0.3,
+   "katki": 0.01,
    "isaret": 1
   },
   "P32": {
    "ad": "Devlet tüketimi",
-   "buyume": 2.63,
-   "agirlik": 15.7,
-   "katki": 0.41,
+   "buyume": -1.79,
+   "agirlik": 13.5,
+   "katki": -0.24,
    "isaret": 1
   },
   "P51G": {
    "ad": "Sabit sermaye yatırımı",
-   "buyume": 3.03,
-   "agirlik": 30.5,
-   "katki": 0.92,
+   "buyume": 0.62,
+   "agirlik": 31.5,
+   "katki": 0.19,
    "isaret": 1
   },
   "P6": {
    "ad": "İhracat",
-   "buyume": -12.72,
-   "agirlik": 25.3,
-   "katki": -3.22,
+   "buyume": -3.45,
+   "agirlik": 25.4,
+   "katki": -0.88,
    "isaret": 1
   },
   "P7": {
    "ad": "İthalat",
-   "buyume": -1.58,
-   "agirlik": 27.4,
-   "katki": 0.43,
+   "buyume": -6.41,
+   "agirlik": 26.8,
+   "katki": 1.71,
    "isaret": -1
   }
  },
- "katki_toplami": 1.51,
- "artik": 1.06,
+ "katki_toplami": 2.68,
+ "artik": -0.41,
  "artik_aciklama": "stok değişimi (zincirlenmiş hacim endeksi yayımlanmıyor) ve zincirleme tutarsızlığı",
  "sektorler": {
   "A": {
    "ad": "Tarım, ormancılık, balıkçılık",
-   "buyume": 4.61,
-   "agirlik": 2.4
+   "buyume": 13.3,
+   "agirlik": 3.9
   },
   "BTE": {
    "ad": "Sanayi",
-   "buyume": -0.75,
-   "agirlik": 18.8
+   "buyume": 2.39,
+   "agirlik": 18.9
   },
   "C": {
    "ad": "  İmalat (sanayinin içinde)",
-   "buyume": -1.43,
-   "agirlik": 15.9
+   "buyume": 2.4,
+   "agirlik": 16.0
   },
   "F": {
    "ad": "İnşaat",
-   "buyume": 3.25,
-   "agirlik": 5.9
+   "buyume": -1.89,
+   "agirlik": 6.5
   },
   "GTI": {
    "ad": "Ticaret, ulaştırma, konaklama",
-   "buyume": 3.7,
-   "agirlik": 23.5
+   "buyume": 0.46,
+   "agirlik": 25.3
   },
   "J": {
    "ad": "Bilgi ve iletişim",
-   "buyume": 9.5,
-   "agirlik": 2.4
+   "buyume": 8.63,
+   "agirlik": 2.6
   },
   "K": {
    "ad": "Finans ve sigorta",
-   "buyume": 3.46,
-   "agirlik": 4.0
+   "buyume": 2.13,
+   "agirlik": 3.8
   },
   "L": {
    "ad": "Gayrimenkul",
-   "buyume": 2.98,
-   "agirlik": 9.9
+   "buyume": 2.12,
+   "agirlik": 9.1
   },
   "MN": {
    "ad": "Mesleki ve idari faaliyetler",
-   "buyume": 1.95,
-   "agirlik": 5.4
+   "buyume": 1.98,
+   "agirlik": 5.5
   },
   "OTQ": {
    "ad": "Kamu, eğitim, sağlık",
-   "buyume": 1.84,
-   "agirlik": 13.7
+   "buyume": 3.95,
+   "agirlik": 11.3
   },
   "RTU": {
    "ad": "Diğer hizmetler",
-   "buyume": 5.19,
-   "agirlik": 2.9
+   "buyume": 3.22,
+   "agirlik": 2.0
   }
  },
  "dayaniklilik": {
   "P311": {
    "ad": "Dayanıklı mal",
-   "nominal_buyume": 27.24,
-   "pay": 8.4
+   "nominal_buyume": 19.73,
+   "pay": 9.1
   },
   "P312": {
    "ad": "Yarı dayanıklı mal",
-   "nominal_buyume": 19.92,
+   "nominal_buyume": 24.8,
    "pay": 9.8
   },
   "P313": {
    "ad": "Dayanıksız mal",
-   "nominal_buyume": 33.99,
-   "pay": 30.5
+   "nominal_buyume": 38.99,
+   "pay": 32.5
   },
   "P314": {
    "ad": "Hizmetler",
-   "nominal_buyume": 47.82,
-   "pay": 51.3
+   "nominal_buyume": 40.55,
+   "pay": 48.6
   }
  },
  "tarihce": [
-  {
-   "ceyrek": "2015Q2",
-   "yillik": 6.57,
-   "ceyreklik": 2.29
-  },
   {
    "ceyrek": "2015Q3",
    "yillik": 5.97,
@@ -311,48 +306,53 @@
   },
   {
    "ceyrek": "2024Q1",
-   "yillik": 5.59,
-   "ceyreklik": 0.85
+   "yillik": 5.76,
+   "ceyreklik": 1.02
   },
   {
    "ceyrek": "2024Q2",
-   "yillik": 2.42,
-   "ceyreklik": -0.12
+   "yillik": 2.58,
+   "ceyreklik": -0.2
   },
   {
    "ceyrek": "2024Q3",
-   "yillik": 2.8,
-   "ceyreklik": 0.63
+   "yillik": 2.95,
+   "ceyreklik": 0.56
   },
   {
    "ceyrek": "2024Q4",
-   "yillik": 3.38,
-   "ceyreklik": 1.31
+   "yillik": 3.51,
+   "ceyreklik": 1.6
   },
   {
    "ceyrek": "2025Q1",
-   "yillik": 3.04,
-   "ceyreklik": 0.74
+   "yillik": 3.16,
+   "ceyreklik": 0.93
   },
   {
    "ceyrek": "2025Q2",
-   "yillik": 4.45,
-   "ceyreklik": 1.29
+   "yillik": 4.65,
+   "ceyreklik": 1.15
   },
   {
    "ceyrek": "2025Q3",
-   "yillik": 3.56,
-   "ceyreklik": 1.0
+   "yillik": 3.65,
+   "ceyreklik": 0.84
   },
   {
    "ceyrek": "2025Q4",
-   "yillik": 3.44,
-   "ceyreklik": 0.38
+   "yillik": 3.56,
+   "ceyreklik": 0.27
   },
   {
    "ceyrek": "2026Q1",
-   "yillik": 2.57,
-   "ceyreklik": 0.13
+   "yillik": 2.69,
+   "ceyreklik": 0.31
+  },
+  {
+   "ceyrek": "2026Q2",
+   "yillik": 2.27,
+   "ceyreklik": 1.12
   }
  ],
  "uyarilar": []
