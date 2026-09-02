@@ -38,7 +38,7 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
   (15) SİMGE SÖZLEŞMESİ — ilan edilen her simge var ve boyutu ilanla aynı.
   (16) YAYIN TAKVİMİ — hakkında sayfasının saatleri iş akışı cron'larıyla aynı.
   (17) KOŞU KAYDI OKUR DİLİ — public/projeler/*/uyarilar.json `uyarilar` ve
-      ozet.json `uyari_metni`/`bayat_cumlesi` okura OLDUĞU GİBİ basılır
+      ozet.json'un CÜMLE olan her metin alanı okura OLDUĞU GİBİ basılır
       (ortak/okur_dili.kosu_kaydi_tara): kod dili ve yapım dili (backtick, dosya
       adı, bie_ kodu, komut anahtarı — şablon kusuru) ENGEL; snake_case anahtar
       adı ve biçim sızıntısı (veri kaynaklı olabilir) UYARI.
@@ -692,9 +692,10 @@ def main() -> int:
         if oj.exists():
             try:
                 d = json.loads(oj.read_text(encoding="utf-8"))
-                for alan in ("uyari_metni", "bayat_cumlesi"):
-                    if isinstance(d.get(alan), str):
-                        satirlar.append((f"ozet.json `{alan}`", d[alan]))
+                # KAPSAM, LİSTEDEN DEĞİL SÖZLEŞMEDEN — tanım tek yerde:
+                # okur_dili.ozet_cumleleri (gerekçesi orada yazılı).
+                satirlar += [(f"ozet.json `{a}`", m)
+                             for a, m in okur_dili.ozet_cumleleri(d)]
             except Exception:                                      # noqa: BLE001
                 pass                       # okunamayan özeti 12. ölçüt düşürür
         n_kayit += len(satirlar)

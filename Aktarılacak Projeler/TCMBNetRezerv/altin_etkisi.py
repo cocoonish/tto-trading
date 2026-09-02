@@ -345,10 +345,15 @@ def fiyat_tasima_tanisi(kaynak: pd.Series) -> list[str]:
     if t.iloc[-1]:
         son_gercek = kaynak[kaynak != "ffill"]
         if len(son_gercek):
+            bos = olculemeyen_fiyat_gunleri(kaynak)
+            gunler = bos[bos].index
+            araligi = (f"{gunler[0]:%d.%m.%Y} ve sonrası"
+                       if len(gunler) > 1 else f"{gunler[0]:%d.%m.%Y}")
             uyarilar.append(
                 f"ALTIN FİYATI SERİNİN UCUNDA TAŞINIYOR: son gerçek kotasyon "
-                f"{son_gercek.index[-1]:%d.%m.%Y}. Sağ uçtaki fiyat etkisi ve "
-                "akım rakamları bu taşımaya dayanıyor."
+                f"{son_gercek.index[-1]:%d.%m.%Y}. Fiyatın kımıldayıp "
+                "kımıldamadığı bilinmediği için fiyat etkisi ve net döviz "
+                f"alımı {araligi} için boş bırakıldı; sıfır yazılmadı."
             )
     return uyarilar
 
@@ -463,7 +468,41 @@ def ons_serisi(capalar: pd.DataFrame,
 # ---------------------------------------------------------------------------
 # Ayrıştırma
 # ---------------------------------------------------------------------------
-def altin_fiyat_etkisi(ons: pd.Series, fiyat: pd.Series) -> pd.DataFrame:
+def olculemeyen_fiyat_gunleri(kaynak: pd.Series) -> pd.Series:
+    """Fiyat farkının ÖLÇÜLEMEDİĞİ günler (Γ burada boş bırakılır).
+
+    Γ(L) = Q(L)·[P(L+1) − P(L)]; iki ucundan biri TAŞINMIŞSA fark ölçülmüş
+    değildir. Taşımanın iki sebebi olabilir ve ikisi aynı görünür:
+
+      · ORTADAKİ taşıma — piyasa kapalıydı (tatil). Fiyat gerçekten kımıldamadı,
+        Γ = 0 doğru bir ölçümdür.
+      · SONDAKİ taşıma — besleme durmuş olabilir. Fiyatın kımıldayıp
+        kımıldamadığını BİLMİYORUZ; Γ = 0 yazmak ölçmediğimiz bir şeyi
+        ölçmüş gibi göstermektir.
+
+    İkisini ayıran şey, taşınan günden SONRA gerçek bir kotasyon gelip
+    gelmediğidir: geldiyse tatil, gelmediyse kesinti. Bu yüzden yalnız serinin
+    SAĞ UCUNDAKİ taşıma bloğu maskelenir; ortadaki bloklar dokunulmadan kalır.
+
+    Ölçüldü (02.09.2026, 918 iş günü): fiyat 14 günde taşınmış ve Γ'nın
+    SIFIR çıktığı günlerin TAMAMI (14/14) bu taşımalardan doğuyor — gerçek
+    kotasyonla ölçülmüş tek bir sıfır yok. Yani sayfadaki her sıfır, ölçüm
+    değil taşımanın izidir.
+    """
+    tasindi = (kaynak == "ffill")
+    if not tasindi.any():
+        return pd.Series(False, index=kaynak.index)
+    gercek = ~tasindi
+    if not gercek.any():                       # hiç gerçek kotasyon yok
+        return pd.Series(True, index=kaynak.index)
+    son_gercek = kaynak.index[gercek][-1]
+    uctaki_tasima = tasindi & (kaynak.index > son_gercek)
+    # Γ(L) iki ucu da ister: L ya da L+1 uçtaki taşımadaysa fark ölçülemez.
+    return uctaki_tasima | uctaki_tasima.shift(-1, fill_value=False)
+
+
+def altin_fiyat_etkisi(ons: pd.Series, fiyat: pd.Series,
+                       fiyat_kaynak: pd.Series | None) -> pd.DataFrame:
     """Laspeyres fiyat/miktar ayrıştırması. Etiket L, değer L→L+1 (mlr USD).
 
     Dönen sütunlar:
@@ -473,6 +512,17 @@ def altin_fiyat_etkisi(ons: pd.Series, fiyat: pd.Series) -> pd.DataFrame:
                            bundan biraz farklıdır, oradaki değerleme fiyatı
                            TCMB'nin haftalık kotasyonudur)
       bennet_fark          |Γ_Laspeyres − Γ_Bennet|  (tanı)
+
+    `fiyat_kaynak` ZORUNLUDUR ve `None` verilmesi bilinçli bir tercihtir
+    (yalnız sınamada). Varsayılanı olsaydı bir çağrı yerinde unutulur ve o
+    hat sessizce taşınmış fiyattan sıfır üretirdi — bu bir kez oldu. Verilirse
+    fiyat FARKININ ölçülemediği günlerde Γ boş
+    bırakılır (bkz. olculemeyen_fiyat_gunleri). Sıfır bir ölçüm sonucudur;
+    taşınan fiyat ölçüm değildir. Λ ve Bennet farkı yalnız ΔQ ≠ 0 iken
+    fiyata bağlıdır; miktar kımıldamadıysa ikisi de TAM OLARAK sıfırdır ve
+    maskelenmez — ölçülebilen bir sıfırı boşaltmak da bir kusurdur. Seviye
+    tanısı V(L) = Q(L)·P(L) bir FARK değildir, dokunulmaz; fiyatının taşındığı
+    `altin_fiyat_kaynak` alanında zaten görünür.
     """
     q = ons.astype(float)
     p = fiyat.astype(float)
@@ -481,11 +531,18 @@ def altin_fiyat_etkisi(ons: pd.Series, fiyat: pd.Series) -> pd.DataFrame:
     gamma = q * dp / 1000.0
     lam = p.shift(-1) * dq / 1000.0
     bennet = (q + q.shift(-1)) / 2.0 * dp / 1000.0
+    fark = (gamma - bennet).abs()               # = ½·|ΔQ·ΔP|
+    if fiyat_kaynak is not None:
+        olcusuz = olculemeyen_fiyat_gunleri(fiyat_kaynak.reindex(q.index))
+        miktar_olcusuz = olcusuz & dq.ne(0.0)   # ΔQ = 0 ise ΔP'den bağımsız
+        gamma = gamma.mask(olcusuz)
+        lam = lam.mask(miktar_olcusuz)
+        fark = fark.mask(miktar_olcusuz)
     return pd.DataFrame({
         "altin_fiyat_etkisi": gamma,
         "altin_miktar_etkisi": lam,
         "altin_deger_ima": q * p / 1000.0,
-        "bennet_fark": (gamma - bennet).abs(),
+        "bennet_fark": fark,
     })
 
 
@@ -729,7 +786,7 @@ def arindirma_hatti(index: pd.DatetimeIndex, agort: pd.Series, kap: pd.Series,
     f = fiyat_serisi(agort, kap, index)
     capalar = ons_capalari(gozlem, altin_deger_M, f["altin_fiyat"], aylik_ons)
     q = ons_serisi(capalar, index)
-    etki = altin_fiyat_etkisi(q["ons"], f["altin_fiyat"])
+    etki = altin_fiyat_etkisi(q["ons"], f["altin_fiyat"], f["altin_fiyat_kaynak"])
     akim = net_doviz_alimi(swap_haric, kamu_doviz_usd,
                            etki["altin_fiyat_etkisi"],
                            etki["altin_miktar_etkisi"])
@@ -787,7 +844,8 @@ def _gunlukten_uret(gunluk: pd.DataFrame, cipa: str) -> pd.DataFrame:
             "gunluk.csv beklenen sütunları taşımıyor: " + ", ".join(eksik) +
             ". Önce `python net_rezerv.py` koşturun."
         )
-    etki = altin_fiyat_etkisi(gunluk["ons"], gunluk["altin_fiyat"])
+    etki = altin_fiyat_etkisi(gunluk["ons"], gunluk["altin_fiyat"],
+                              gunluk["altin_fiyat_kaynak"])
     akim = net_doviz_alimi(gunluk["swap_haric_usd"],
                            gunluk["kamu_doviz_mev_usd"],
                            etki["altin_fiyat_etkisi"],

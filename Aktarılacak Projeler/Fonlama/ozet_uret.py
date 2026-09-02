@@ -234,7 +234,7 @@ def main() -> int:
         f"{tr_sayi(O.get('swap_satim_mlr_tl'), 1)} milyar TL'lik TL "
         "ÇEKİLMESİNE denk gelir ve toplamdan düşülmüştür; yalnız alım bacaklı "
         f"eski tanım {tr_sayi(O.get('api_ve_swap_alim_mlr'), 1)} milyar TL "
-        "verirdi ve api_ve_swap_alim_mlr anahtarında tanı olarak durur.")
+        "verirdi; bu eski tanım tanı olarak ayrıca izlenir.")
 
     # --- zorunlu karşılıklar ----------------------------------------------
     zk = m.get("zk") or {}
