@@ -104,8 +104,18 @@ jobs:
         working-directory: site
         run: npm ci --no-audit --no-fund
 
+      # YIĞIN SINIRI. 02.09.2026'da derleme koşucuda "JavaScript heap out of
+      # memory" ile düştü (2.030 MB'ta abort, çıkış 134) — aynı kaynak yerelde
+      # sorunsuz derleniyordu, çünkü Node varsayılan yığını MAKİNENİN belleğine
+      # göre seçiyor ve koşucuda ~2 GB'ta duruyor. Kusur içerikte değil sınırda:
+      # sayfa sayısı ve MDX boyutu büyüdükçe (bugün 56 sayfa, en büyüğü 91 KB,
+      # binlerce KaTeX formülü) tek geçişte tutulan ağaç o sınırı aşıyor.
+      # Koşucunun 16 GB'ı var; 6 GB hem bugünkü ihtiyacın kat kat üstünde hem de
+      # gerçek bir sızıntı olursa hâlâ düşecek kadar dar.
       - name: Derleme
         working-directory: site
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
         run: npm run build
 
       - name: Sayfa sınavı
