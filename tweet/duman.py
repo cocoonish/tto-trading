@@ -366,6 +366,8 @@ def _denetim():
     assert any("başlık satırı" in x for x in e), f"başlıksız bülten gönderisi geçti: {e}"
     _, u = dn.denetle(temiz.replace("−%1,20", "%1,20-%1,40"), "bulten")
     assert any("aralık tiresi" in x for x in u), f"aralık tiresi uyarısı yok: {u}"
+    _, u = dn.denetle(temiz.replace("Brent", "Brent (2026-09-01 kapanışı, 2026-08-31'e göre)"), "bulten")
+    assert not any("aralık tiresi" in x for x in u), f"ISO tarih aralık tiresi sanıldı: {u}"
     _, u = dn.denetle(temiz.replace("Brent −%1,20", "Brent −%1,20 ve TL %37,00 ile %2,80")
                       + "\n\nGündem: fonlama %37,00 ve büyüme %2,80 açıklandı.", "bulten")
     assert any("aynı sayıları" in x for x in u), f"ortak sayı uyarısı yok: {u}"

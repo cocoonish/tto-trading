@@ -55,7 +55,8 @@ ILK_SATIR = {
 }
 
 # Aralık tiresi: "%1,25-%2,10", "3-5 gün" → Türkçe yazımda uzun tire (–). UYARI.
-ARALIK_TIRESI = re.compile(r"(?<=[\d%])-(?=[%\d])")
+# ISO tarih ("2026-09-01") aralık değildir: yıl ve ay tireleri dışarıda.
+ARALIK_TIRESI = re.compile(r"(?<!\d{4})(?<!\d{4}-\d{2})(?<=[\d%])-(?=[%\d])")
 
 # Sorumluluk notu: her tür tweet aynı kapanışla biter. Kalıp esnek — "Analizdir;
 # yatırım tavsiyesi değildir." ve "Analiz ve ölçümdür; yatırım tavsiyesi
@@ -233,9 +234,10 @@ def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
     n_eksi = len(ASCII_EKSI.findall(m))
     if n_eksi:
         uyari.append(f"sayı önünde ASCII tire {n_eksi} yerde (− ya da – bekleniyor)")
-    n_aralik = len(ARALIK_TIRESI.findall(m))
-    if n_aralik:
-        uyari.append(f"aralık tiresi ASCII {n_aralik} yerde ('%1,25-%2,10' → '%1,25–%2,10')")
+    araliklar = [m[max(0, x.start() - 8):x.end() + 8] for x in ARALIK_TIRESI.finditer(m)]
+    if araliklar:
+        uyari.append(f"aralık tiresi ASCII {len(araliklar)} yerde (uzun tire – bekleniyor): "
+                     + ", ".join(repr(a.strip()) for a in araliklar[:3]))
     if "  " in m:
         uyari.append("çift boşluk var")
     if re.search(r"\s[,.;:!?]", m):
