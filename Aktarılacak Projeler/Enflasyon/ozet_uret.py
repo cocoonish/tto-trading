@@ -29,6 +29,28 @@ def uyar(m: str) -> None:
     print(f"UYARI: {m}", file=sys.stderr)
 
 
+def ay_okur(iso: str | None) -> str | None:
+    """'2024-05' → 'Mayıs 2024'. ISO ay kodu MAKİNE yazımıdır; okur metninde
+    ay adı geçer. Türkçe ekler de buna bağlı: '2025-04'de' yanlış ('dört'
+    sesiyle 'te' gerekirdi), 'Nisan 2025' ise ek almadan cümleye girer."""
+    try:
+        y, a = str(iso).split("-")
+        return f"{AY_TR[int(a)]} {int(y)}"
+    except (ValueError, KeyError, IndexError, AttributeError):
+        return None
+
+
+def koy_ay(anahtar: str, iso: str | None) -> None:
+    """Ay anahtarını İKİ biçimde yazar: makine (ISO) ve okur ('<anahtar>_ad').
+
+    Sayfa hangisini basacağına kendi karar verir; grafik ve tablo sıralaması
+    ISO ister, okur cümlesi ad ister."""
+    koy(anahtar, iso, None)
+    ad = ay_okur(iso)
+    if ad:
+        koy(f"{anahtar}_ad", ad, None)
+
+
 def koy(anahtar: str, deger, ondalik: int | None = 2) -> None:
     if deger is None or (isinstance(deger, float) and pd.isna(deger)):
         uyar(f"'{anahtar}' kaynakta yok — anahtar atlandı.")
@@ -381,8 +403,8 @@ def main() -> int:
                       ("ustte_pay", 0), ("t", 2), ("p", 4), ("n", 0),
                       ("min", 2), ("maks", 2)):
             koy(f"itp_tum_{k}", ft.get("ito_ustte_pay" if k == "ustte_pay" else k), o_)
-        koy("itp_tum_min_ay", ft.get("min_ay"), None)
-        koy("itp_tum_maks_ay", ft.get("maks_ay"), None)
+        koy_ay("itp_tum_min_ay", ft.get("min_ay"))
+        koy_ay("itp_tum_maks_ay", ft.get("maks_ay"))
         for k in ("sabit", "egim", "se_egim", "se_sabit", "r", "spearman",
                   "r2", "se_artik"):
             koy(f"itp_{k}", r_.get(k), 3)
@@ -677,16 +699,16 @@ def main() -> int:
                 ua = bl.get("ustunde_aylar") or []
                 if ua:
                     en_b = min(ua, key=lambda r: r["fark"])
-                    koy("itp_bulut_en_ay", en_b.get("ay"), None)
+                    koy_ay("itp_bulut_en_ay", en_b.get("ay"))
                     koy("itp_bulut_en_fark", abs(en_b.get("fark", 0)), 2)
                     koy("itp_bulut_ustunde_aylar", ua, None)
                     koy("itp_bulut_ustunde_metin",
-                        " · ".join(r["ay"] for r in ua), None)
+                        " · ".join(ay_okur(r["ay"]) or r["ay"] for r in ua), None)
 
         yo = ip.get("yillik_ozet") or {}
         for k in ("ort", "son", "maks", "min", "son_ito", "son_tufe"):
             koy(f"itp_y_{k}", yo.get(k), 2)
-        koy("itp_y_maks_ay", yo.get("maks_ay"), None)
+        koy_ay("itp_y_maks_ay", yo.get("maks_ay"))
 
         # Koşullu eşleme tablosu OLDUĞU GİBİ taşınır: hem MDX tablosu hem de
         # sayfadaki hesap aracı aynı diziyi okur. İki yerde iki kopya olsaydı
@@ -754,7 +776,7 @@ def main() -> int:
         koy("uge_v_son_85", va.get("son_85"), 2)
         koy("uge_v_ort_fark", va.get("ort_mutlak_fark"), 2)
         koy("uge_v_maks_fark", va.get("maks_mutlak_fark"), 2)
-        koy("uge_v_maks_ay", va.get("maks_ay"), None)
+        koy_ay("uge_v_maks_ay", va.get("maks_ay"))
         koy("uge_v_n", va.get("n"), 0)
         # HÜKÜM KODDA: "hangi endeks daha yukarıda" cümlesi iki ortalamanın
         # sırasına bağlı ve o sıra değişebilir.
@@ -777,8 +799,8 @@ def main() -> int:
         uyar("birlesik.json yok ya da boş — birleşik tahmin anahtarları atlandı.")
     else:
         koy("br_n", bp.get("n"), 0)
-        koy("br_ilk_ay", bp.get("ilk_ay"), None)
-        koy("br_son_ay", bp.get("son_ay"), None)
+        koy_ay("br_ilk_ay", bp.get("ilk_ay"))
+        koy_ay("br_son_ay", bp.get("son_ay"))
         koy("br_r_ito_uge", bp.get("r_ito_uge"), 3)
         koy("br_adj_kazanc", bp.get("adj_kazanc"), 4)
         for on, blok in (("br_i", "ito"), ("br_u", "uge"), ("br_b", "birlesik")):
