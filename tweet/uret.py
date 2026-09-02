@@ -37,8 +37,12 @@ AYLAR = ["", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz",
 
 
 def _duz(metin: str) -> str:
-    """HTML → düz metin: etiketler söker, boşluk normalleştirir."""
+    """HTML → düz metin: etiketler söker, varlıkları çözer, boşluk normalleştirir.
+    'S&amp;P 500' çözülmeden tweete sızıyor ve HTML kalıntısı engeli günün
+    gönderisini düşürüyordu (28.08 ölçüldü)."""
+    import html as _html
     m = re.sub(r"<[^>]+>", " ", metin or "")
+    m = _html.unescape(m)
     return re.sub(r"\s+", " ", m).strip()
 
 
@@ -173,7 +177,7 @@ def _etiketle(etiket: str, metin: str) -> str:
 def _tipografi(metin: str) -> str:
     """Yalnız gönderi metnine: aralık tiresi '–', sayı önünde eksi '−'."""
     # Yıl-ay yazımı ("2024-05") aralık değildir: dört haneli sayıdan sonraki tire kalır.
-    m = re.sub(r"(?<!\d{4})(?<=\d)-(?=%?\d)", "–", metin)
+    m = re.sub(r"(?<!\d{4})(?<!\d{4}-\d{2})(?<=\d)-(?=%?\d)", "–", metin)   # 2026-09-01 dokunulmaz
     m = re.sub(r"(?<![\w.,])-(?=[%\d])", "−", m)
     return m
 

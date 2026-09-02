@@ -326,6 +326,7 @@ def _analiz_zinciri():
 def _denetim():
     """Kalite kapısı: her sigorta kusur geri konarak sınanır."""
     import denetim as dn
+    import uret as ur
     temiz = ("Sabah Notu — 1 Eylül 2026\n\n" + "Piyasa bugün şu sebeple böyle hareket etti. " * 8
              + "\n\nGünün öne çıkanları: Brent −%1,20 · BIST 100 +%0,40"
              + "\n\nÖlçüm ve yorumdur; yatırım tavsiyesi değildir.")
@@ -337,12 +338,24 @@ def _denetim():
     engel(temiz.replace("böyle hareket etti.", "böyle hareket etti, alın."), "tavsiye")
     engel(temiz + " https://x.com/a", "link")
     for lnk in ("cocoonish.github.io", "x.com/i/status/1", "www.tcmb.gov.tr", "[oku](https://a.b)", "t.co/abc", "tcmb.gov.tr/x",
-                "cocoonish.github.io'da", "bloomberght.com’da", "tcmb.gov.tr…", "bloomberght.com—", "X.com/a"):
+                "cocoonish.github.io'da", "bloomberght.com’da", "tcmb.gov.tr…", "bloomberght.com—", "X.com/a",
+                "Bloomberg.com'a göre", "Reuters.com", "COCOONISH.GITHUB.IO", "Investing.com", "boj.or.jp", "kur.de/x", "x．com"):
         engel(temiz.replace("Brent", f"Brent ({lnk})"), "link")
     for masum in ("A.Ş. bilançosu", "vb. Bu", "%1,25 ile %2,10 arası.", "TL 48,17.", "ör. TCMB", "2026-09-01",
-                  "ettik.Biz de", "kapandı.Me", "TCMB.de", "T.C. Hazine", "14.30'da", "1.000 TL"):
+                  "ettik.Biz de", "kapandı.Me", "TCMB.de", "T.C. Hazine", "14.30'da", "1.000 TL", "1.tr", "S&P 500"):
         e0, _ = dn.denetle(temiz.replace("Brent", f"Brent {masum}"), "bulten")
         assert not any("link" in x for x in e0), f"{masum!r} link sanıldı: {e0}"
+    for zayif in ("kur.de", "riksbank.se", "snb.ch"):     # tek etiket + ülke kodu: uyarı, engel değil
+        e0, u = dn.denetle(temiz.replace("Brent", f"Brent {zayif} yükseldi,"), "bulten")
+        assert not any("link" in x for x in e0) and any("alan adına benzeyen" in x for x in u), f"{zayif}: {e0} {u}"
+    e, _ = dn.denetle(temiz.replace("Brent", "Brent ⏰ 10:00 •"), "bulten")
+    assert any("emoji" in x for x in e), f"⏰/• emoji engeli yok: {e}"
+    assert ur._duz("<p>S&amp;P 500 &nbsp;yükseldi</p>") == "S&P 500 yükseldi", ur._duz("<p>S&amp;P 500 &nbsp;yükseldi</p>")
+    assert ur._tipografi("2026-09-01'e göre 3-5 gün") == "2026-09-01'e göre 3–5 gün", ur._tipografi("2026-09-01'e göre 3-5 gün")
+    import subprocess as _sp, sys as _sys
+    cikti = _sp.run([_sys.executable, "-c", "import sys; sys.path.insert(0, 'tweet'); import denetim, uret; print(uret.__file__)"],
+                    capture_output=True, text=True, cwd=str(Path(__file__).resolve().parents[1]))
+    assert cikti.stdout.strip().endswith("tweet/uret.py"), f"denetim tek başına yüklenince uret gölgelendi: {cikti.stdout} {cikti.stderr[-200:]}"
     import gonder as gd
     try:
         gd._gonder_zincir(["Sabah Notu\n\nMetin https://x.com/a"], "sahte-jeton")

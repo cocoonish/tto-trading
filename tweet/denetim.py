@@ -31,9 +31,12 @@ from pathlib import Path
 
 BURASI = Path(__file__).resolve().parent
 KOK = BURASI.parent
-sys.path.insert(0, str(BURASI))
+# Yol sırası bilinçli: tweet/ EN ÖNDE. bulten/ da yolda dursaydı `import uret`
+# bulten/uret.py'yi getirebilir ve aynı kapı iki yoldan iki farklı sonuç verirdi
+# (ölçüldü: CLI'da 'bülten' izi engel, gonder yolunda değil). Ortak kalıplar
+# ortak/'tan; bulten/'a bağımlılık yok.
 sys.path.insert(0, str(KOK / "ortak"))
-sys.path.insert(0, str(KOK / "bulten"))
+sys.path.insert(0, str(BURASI))
 
 import okur_dili  # noqa: E402
 
@@ -65,7 +68,8 @@ SORUMLULUK = re.compile(r"yatırım tavsiyesi değildir", re.I)
 
 # Emoji ve süsleme: 30.08 kararı — yok. Aralıklar: semboller, piktogramlar,
 # bayraklar, varyasyon seçicisi. Tipografik işaretler (−, ·, →, σ, ≈, ±) serbest.
-EMOJI = re.compile("[\U0001F000-\U0001FAFF\U00002600-\U000027BF\U0001F1E6-\U0001F1FF️⭐⬆⬇✅❌]")
+EMOJI = re.compile("[\U0001F000-\U0001FAFF\U00002600-\U000027BF\U0001F1E6-\U0001F1FF\u2300-\u23FF\u25A0-\u25FF"
+                   "\u2B00-\u2BFF\u203C\u2049\u2122\u2139\u3030\u303D\u3297\u3299\u00A9\u00AE\u2022\uFE0F⭐⬆⬇✅❌]")
 
 # Sayıdan hemen önce ASCII tire: "-1,88" yerine "−1,88" olmalı. Aralık tiresi
 # ("%1,25-%2,10") ayrı kalıpla (ARALIK_TIRESI) yakalanır — Türkçe yazımda aralık
@@ -77,23 +81,57 @@ ASCII_EKSI = re.compile(r"(?<![\w.,])-(?=[%\d])")
 # adı (cocoonish.github.io, tcmb.gov.tr) — hepsi ENGEL. Tanım tek yerde durur;
 # gonder.py gönderimden hemen önce ve ozel.py de aynı fonksiyonu çağırır, yani
 # kapı denetim atlansa bile gönderim katmanında bir kez daha kapanır.
-_TLD = r"(?:com|net|org|io|co|gov|edu|info|biz|xyz|app|dev|me|tv|tr|de|uk|us|eu|ai|page|site|news|link|ly)"
+_TLD_LISTE = ("com net org io co gov edu info biz xyz app dev me tv tr de uk us eu ai page site news link ly "
+              "ch jp ru se no fr it es nl at dk fi pl cz hu kr cn in br au ca nz za mx ar il sa ae qa sg hk tw be pt gr ie").split()
+# TLD ya tamamı küçük ya tamamı BÜYÜK: 'ettik.Biz de' baş harfi büyük bir cümle
+# başıdır, alan adı değil; 'COCOONISH.GITHUB.IO' ise alan adıdır.
+_TLD = "(?:" + "|".join(_TLD_LISTE + [t.upper() for t in _TLD_LISTE]) + ")"
+_ETIKET = r"(?!\d+\.)[A-Za-z0-9][A-Za-z0-9-]*"                 # salt rakamlı etiket alan adı değil ('1.tr')
 LINK = re.compile(
     r"https?://\S+"                                            # açık adres
     r"|\bwww\.\S+"                                             # www.
     r"|\[[^\]]+\]\([^)]+\)"                                    # markdown bağlantısı
     r"|\b(?:t\.co|x\.com|twitter\.com|bit\.ly|youtu\.be)(?:/\S*)?"   # kısaltıcılar ve X
-    # Çıplak alan adı: KÜÇÜK harf (gerçek alan adları öyle yazılır; "ettik.Biz de",
-    # "TCMB.de" gibi boşluğu unutulmuş yeni cümleler link sanılmaz) ve ardından
-    # sözcük karakteri gelmez — kesme ('da, ’da), uzun tire, üç nokta, tırnak dahil.
-    r"|(?-i:\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\." + _TLD + r"(?:\.[a-z]{2})?)(?![\w-])",
+    # Çıplak alan adı (kesin): iki+ etiket ("cocoonish.github.io", "tcmb.gov.tr"),
+    # ya da 3+ harfli TLD ("bloomberght.com"), ya da yol ("kur.de/x"). Ardından
+    # sözcük karakteri gelmez — kesme ('da, ’da), uzun tire, üç nokta dahil.
+    r"|(?-i:\b" + _ETIKET + r"(?:\." + _ETIKET + r")+\." + _TLD + r"(?:\.[a-z]{2})?(?:/\S*)?)(?![\w-])"
+    r"|(?-i:\b" + _ETIKET + r"\.(?:" + "|".join([t for t in _TLD_LISTE if len(t) >= 3] + [t.upper() for t in _TLD_LISTE if len(t) >= 3]) + r")(?:/\S*)?)(?![\w-])"
+    r"|(?-i:\b" + _ETIKET + r"\." + _TLD + r"/\S*)",
     re.I)
+# Zayıf iz: tek etiket + iki harfli ülke kodu, yolsuz ("kur.de", "snb.ch"). Gerçek
+# alan adı da olabilir, noktadan sonra boşluğu unutulmuş "de/da" bağlacı da —
+# gönderimi durdurmaz, UYARI olarak listelenir ve yazan kişi bakar.
+ZAYIF_LINK = re.compile(r"(?-i:\b" + _ETIKET + r"\.(?:" + "|".join([t for t in _TLD_LISTE if len(t) == 2] + [t.upper() for t in _TLD_LISTE if len(t) == 2]) + r"))(?![\w/-])")
+_NOKTA_BENZERI = str.maketrans({"\u2024": ".", "\u3002": ".", "\uff0e": ".", "\u2025": ".."})
+
+
+def _normalize(metin: str) -> str:
+    """Unicode nokta benzerleri ('x．com', 'x․com') gerçek noktaya; NFKC."""
+    import unicodedata
+    return unicodedata.normalize("NFKC", (metin or "").translate(_NOKTA_BENZERI))
 
 
 def link_var(metin: str) -> str | None:
     """Metinde link/alan adı varsa yakalanan parçayı döndürür; yoksa None."""
-    m = LINK.search(metin or "")
-    return m.group(0) if m else None
+    for m in LINK.finditer(_normalize(metin)):
+        parca = m.group(0)
+        # 'TCMB.de' gibi tamamı büyük ≥3 harfli etiket + küçük iki harfli TLD:
+        # boşluğu unutulmuş cümle sonu — alan adı sayılmaz.
+        if re.fullmatch(r"[A-Z0-9]{3,}\.[a-z]{2}", parca):
+            continue
+        return parca
+    return None
+
+
+def zayif_link(metin: str) -> str | None:
+    """Tek etiket + iki harfli ülke kodu ('kur.de'): uyarı, engel değil."""
+    m = ZAYIF_LINK.search(_normalize(metin))
+    if not m:
+        return None
+    if re.fullmatch(r"[A-Z0-9]{3,}\.[a-z]{2}", m.group(0)):
+        return None
+    return m.group(0)
 
 
 HTML_KALINTI = re.compile(r"<[a-zA-Z/][^>]*>|&nbsp;|&amp;|&lt;|&gt;|&#\d+;|&quot;")
@@ -158,6 +196,11 @@ def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
     baglanti = link_var(m)
     if baglanti:
         engel.append(f"link var ({baglanti!r}) — tweetlerde HİÇ link kullanılmaz")
+    zayif = zayif_link(m)
+    if zayif and not baglanti:
+        uyari.append(f"alan adına benzeyen parça ({zayif!r}) — link ise sil, yazım hatasıysa boşluğu koy")
+    if re.search(r"\w \.(?:com|net|org|io|gov|tr)\b", m, re.I):
+        uyari.append("boşluklu nokta ile alan adı benzeri parça ('x .com')")
     if EMOJI.search(m):
         engel.append(f"emoji/süsleme var: {EMOJI.search(m).group(0)!r}")
     kalinti = HTML_KALINTI.search(m)
