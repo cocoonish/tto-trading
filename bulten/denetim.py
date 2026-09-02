@@ -859,17 +859,24 @@ class Denetim:
             self._ok(f"haber tonu: {len(hareketler)} olağandışı hareket anılmış")
 
     # Revizyon kıyasına giren seriler: (ad, satır listesi, anahtar üretici,
-    # değer alanı, tolerans). Anahtar MUTLAKA satırın kendi tarihini içerir:
-    # kıyas ancak AYNI güne ait sayı için anlamlıdır. Tarih taşımayan alanlar
-    # (piyasa.turetilmis, rejim) kıyasa girmez — farklı günlerin sayısını
-    # "değişti" diye listelemek uydurma olurdu.
+    # değer alanı, tolerans, birim alanı). Anahtar MUTLAKA satırın kendi
+    # tarihini içerir: kıyas ancak AYNI güne ait sayı için anlamlıdır. Türev
+    # büyüklüklerin günü bacaklarının bar günleridir, rejim satırının günü
+    # girdilerinin günleri (bileşik anahtar; günler ayrışırsa o gün kıyas
+    # yapılmaz — uydurma yok). Tarih alanı olmayan eski bültenler süzgeçte düşer.
     REVIZYON_SERILERI = (
         ("piyasa", lambda b: [s for g in (b.get("piyasa", {}).get("gruplar") or []) for s in (g.get("satirlar") or [])],
-         lambda s: (s.get("kod"), s.get("tarih")), "d1", 0.005),
+         lambda s: (s.get("kod"), s.get("tarih")), "d1", 0.005, "degisim_birim"),
         ("TL faiz", lambda b: b.get("piyasa", {}).get("tr_faizleri") or [],
-         lambda s: (s.get("ad"), s.get("tarih")), "deger", 0.005),
+         lambda s: (s.get("ad"), s.get("tarih")), "deger", 0.005, "birim"),
         ("gösterge", lambda b: b.get("gostergeler") or [],
-         lambda s: (s.get("hat"), s.get("anahtar"), s.get("veri_tarihi")), "deger", None),
+         lambda s: (s.get("hat"), s.get("anahtar"), s.get("veri_tarihi")), "deger", None, "birim"),
+        ("türev", lambda b: b.get("piyasa", {}).get("turetilmis") or [],
+         lambda s: (s.get("ad"), s.get("tarih") or None), "deger", None, "birim"),
+        ("türev Δ", lambda b: b.get("piyasa", {}).get("turetilmis") or [],
+         lambda s: (s.get("ad"), s.get("tarih") or None), "d1", 0.05, "degisim_birim"),
+        ("rejim", lambda b: b.get("rejim") or [],
+         lambda s: (s.get("ad"), s.get("tarih") or None), "deger", None, "birim"),
     )
 
     def revizyon(self):
@@ -900,25 +907,29 @@ class Denetim:
             except Exception:
                 continue
         degisen = []
-        for seri_ad, satirlar, anahtar_f, alan, tol in self.REVIZYON_SERILERI:
+        eslesme: dict[str, tuple[int, int]] = {}      # seri → (kıyaslanan çift, bugünkü satır)
+        for seri_ad, satirlar, anahtar_f, alan, tol, birim_alani in self.REVIZYON_SERILERI:
             simdi = {}
             for s in satirlar(self.b):
                 k = anahtar_f(s)
                 if None in k or s.get(alan) is None:
                     continue
                 t = tol if tol is not None else 0.5 * 10 ** (-int(s.get("ondalik", 2)))
-                simdi[k] = (s.get("ad"), s[alan], s.get("degisim_birim", s.get("birim", "")), t)
+                simdi[k] = (s.get("ad"), s[alan], s.get(birim_alani) or s.get("birim", ""), t)
+            cift = 0
             for stem, eski_b in eskiler:
                 for s in satirlar(eski_b):
                     k = anahtar_f(s)
                     if k not in simdi or s.get(alan) is None:
                         continue
+                    cift += 1
                     ad, yeni, birim, t = simdi[k]
                     if abs(float(s[alan]) - float(yeni)) <= t:
                         continue
                     if any(x[0] == seri_ad and x[1] == ad for x in degisen):
                         continue
                     degisen.append((seri_ad, ad, s[alan], yeni, birim, stem))
+            eslesme[seri_ad] = (cift, len(simdi))
         if degisen:
             satir = ", ".join(f"{sa} · {ad}: {e}{b} → {y}{b} ({g} bülteninde yayımlandı)"
                               for sa, ad, e, y, b, g in degisen[:6])
@@ -928,7 +939,11 @@ class Denetim:
                 + ". Her birinin sebebini bul; ölçü düzeltmesiyse metinde "
                 "'yayımlanan X yerine gerçek değer Y' kalıbıyla geri al.")
         else:
-            self._ok("daha önce yayımlanan sayı değişmemiş (piyasa, TL faiz, gösterge)")
+            # Kapsam denetimin parçasıdır: hangi seride kaç çift kıyaslandı yazılır —
+            # türev/rejim satırları tarih taşımayan eski bültenlerle hiç eşleşmez ve
+            # bu "temiz" değil "kıyaslanmadı" demektir.
+            kapsam = " · ".join(f"{ad} {c}/{n}" for ad, (c, n) in eslesme.items())
+            self._ok(f"daha önce yayımlanan sayı değişmemiş — kıyaslanan çift/bugünkü satır: {kapsam}")
 
     # Okur metninde sayı yazımı: eksi U+2212, ondalık virgül (ortak/bicim ile
     # aynı sözleşme). ASCII tire ve nokta ondalık bir hattın kendi f-string'inden

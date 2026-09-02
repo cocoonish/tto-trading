@@ -125,13 +125,14 @@ TETIKLER: tuple[Tetik, ...] = (
     # hattın tetiğine bağlanmaları yanlış olurdu: üst hat düşüp bir sonraki
     # koşuda kurtulursa türev hattın damgası tetiği geçmiş sayar ve sayfa bir
     # gün bayat kalır.
-    # Reel sektör döviz pozisyonu: TCMB, aylık, ~2 ay gecikmeli. KALIP TAKVİMDE
-    # DOĞRULANMADI (02.09.2026: takvim ucu bu koşucudan okunamadı). Ölü çıkarsa
-    # kararlar() "KALIP ÖLÜ" der ve hattı yine koşturur — ilk koşunun logu
-    # kalıbı doğrular ya da düzelttirir.
+    # Reel sektör döviz pozisyonu: TCMB, aylık, ~2 ay gecikmeli. BİLEREK
+    # KALIPSIZ (fx gibi, yalnız emniyet ağı): yayımın takvimdeki adı bu
+    # koşucudan doğrulanamadı ve ölü bir kalıp "KALIP ÖLÜ" ile hattı HER koşuda
+    # EVDS'e gönderirdi — aylık bir seri için haftada 31 çekim. 30 günde bir
+    # koşar; ad doğrulandığında kalıp yazılır ve hat yayım gününe bağlanır.
     Tetik("reelfx", "TCMB finansal kesim dışındaki firmaların döviz varlık ve "
-                    "yükümlülükleri (aylık, ~2 ay gecikmeli)",
-          r"Finansal Kesim Dışındaki Firmaların Döviz Varlık", ("TCMB",), en_gec=75),
+                    "yükümlülükleri (aylık, ~2 ay gecikmeli; takvimsiz, 30 günde bir)",
+          en_gec=30),
 )
 
 TETIK = {t.hat: t for t in TETIKLER}

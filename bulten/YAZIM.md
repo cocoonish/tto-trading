@@ -444,8 +444,12 @@ harekete aitti. Bir başlığın hangi güne ait olduğunu kontrol etmeden ölç
 eşleştirme. Ölçü ile haber çelişiyorsa varsayılan, ÖLÇÜYÜ sorgulamaktır — haberi
 ölçüye uydurmak değil.
 
-**"YAYIMLANAN SAYI DEĞİŞTİ" uyarısı ciddidir.** Denetim, aynı enstrümanın aynı
-bar gününe ait günlük değişimini önceki bültenlerde yayımladığımızla karşılaştırır.
+**"YAYIMLANAN SAYI DEĞİŞTİ" uyarısı ciddidir.** Denetim, aynı SERİNİN aynı güne
+ait değerini önceki üç bültende yayımladığımızla karşılaştırır — piyasa
+satırlarının günlük değişimi, TL faiz seti, gösterge şeridi, türev büyüklükler
+(bacak bar günleri aynıysa) ve rejim panosu (girdi günleri aynıysa). Temiz
+geçtiğinde seri başına kaç çift kıyaslandığını da yazar: "türev 0/9" kıyas
+yapılmadığı, "temiz" olmadığı anlamına gelir.
 Listelenen her sayı için ya sebebi bul (meşru revizyon) ya da metinde
 "yayımlanan X yerine gerçek hareket Y" kalıbıyla geri al **ve aynı düzeltmeyi
 `duzeltmeler` alanına yapısal kayıt olarak yaz** (yukarıda). Metinde kalıp var

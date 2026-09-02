@@ -4,9 +4,10 @@
 
 Site simgesi yalnız SVG'ydi: iOS ana ekranı, Safari sekmesi ve bazı RSS
 okuyucuları SVG'yi okumaz, boş kare gösterir. Bu araç site/public/favicon.svg'yi
-üç boyutta PNG'ye çevirir; Base.astro bunları <link> ile ilan eder.
+Base.astro'nun ilan ettiği iki boyutta PNG'ye çevirir (sayfa sınavı 15 ilan ile
+üretimi karşılaştırır).
 
-    python3 site/tools/favicon_uret.py            # 32 · 180 (apple-touch) · 512
+    python3 site/tools/favicon_uret.py            # 32 · 180 (apple-touch)
     python3 site/tools/favicon_uret.py --chromium /yol/chrome
 
 Tek kaynak SVG'dir: renk ya da harf değişirse SVG düzenlenir ve araç yeniden

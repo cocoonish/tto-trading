@@ -99,6 +99,10 @@ jobs:
             echo "jeton değişmedi"
           else
             git commit -m "tweet: $(date -u +'%Y-%m-%d') jeton (özel gönderim)"
-            git pull --rebase --autostash
-            git push
+            # Yarışta düşen push jetonu ve defteri kaybederdi (tweet.yml ile aynı sigorta).
+            for i in 1 2 3; do
+              if git pull --rebase --autostash && git push; then break; fi
+              if [ "$i" = 3 ]; then echo "::error::jeton/defter push edilemedi — TW_REFRESH_TOKEN yeniden üretilmeli, defter elle kurtarılmalı"; exit 1; fi
+              sleep $((i * 5))
+            done
           fi

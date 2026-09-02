@@ -46,30 +46,37 @@ def son_bulten() -> dict | None:
 
 
 def _yayin_takvimi():
-    """Okura anlatılan saat, iş akışının gerçek saati olmalı. JSON tek kaynak;
-    her adımın saati ilgili cron satırından (UTC+3) türetilmiş olmalı."""
-    import json as _json, re as _re
+    """Okura anlatılan saat, iş akışının gerçek saati olmalı. Karşılaştırma TEK
+    yerde (ortak/yayin_takvimi.karsilastir); sayfa sınavı da aynı fonksiyonu çağırır."""
+    import sys as _s
     kok = Path(__file__).resolve().parents[1]
-    tk = _json.loads((kok / "site" / "src" / "data" / "yayin_takvimi.json").read_text(encoding="utf-8"))
-    n = 0
-    for y in tk["yayinlar"]:
-        for ad in y["adimlar"]:
-            yml = (kok / ".github" / "workflows" / ad["is_akisi"]).read_text(encoding="utf-8")
-            cronlar = _re.findall(r"^\s*-\s*cron:\s*'(\d+) (\d+) (\S+) (\S+) (\S+)'", yml, _re.M)
-            assert len(cronlar) > ad["cron_no"], f"{ad['is_akisi']}: {ad['cron_no']}. cron yok ({len(cronlar)} var)"
-            dk, saat, _gun, _ay, hafta_gunu = cronlar[ad["cron_no"]]
-            assert int(saat) + 3 < 24, f"{ad['is_akisi']}: cron {saat} UTC İstanbul'da güne taşar — takvim günü kayar"
-            ist = f"{(int(saat) + 3) % 24:02d}:{int(dk):02d}"
-            assert ist == ad["istanbul"], (f"{y['yayin']} · {ad['ad']}: takvim {ad['istanbul']} diyor, "
-                                          f"{ad['is_akisi']} cron {ist} İstanbul")
-            beklenen = {"hafta içi": {"1-5"}, "pazar": {"0", "7"}}.get(y["gunler"])
-            if beklenen:
-                assert hafta_gunu in beklenen | {"*"}, (f"{y['yayin']} · {ad['ad']}: takvim '{y['gunler']}' diyor, "
-                                                       f"{ad['is_akisi']} cron gün alanı '{hafta_gunu}'")
-            n += 1
-        assert not _re.search(r"\b\d{1,2}:\d{2}\b", y.get("aciklama", "")), \
-            f"{y['yayin']}: açıklamada elle saat var — saat yalnız adımlarda (cron'dan türetilir)"
-    assert n >= 6, f"takvimde çok az adım sınandı ({n})"
+    _s.path.insert(0, str(kok / "ortak"))
+    import yayin_takvimi
+    bulgu = yayin_takvimi.karsilastir(kok)
+    assert not bulgu, "; ".join(bulgu)
+
+
+def _turev_rejim_gunu():
+    """Revizyon kıyası satırın gününe dayanır: üretici o günü yazmalı."""
+    import piyasa as py
+    import rejim as rj
+    seri = {k: {"tarih": ["2026-08-27", "2026-08-28"], "kapanis": v} for k, v in
+            {"^TNX": [4.20, 4.25], "2YY=F": [3.80, 3.79], "XU100.IS": [10800.0, 10900.0], "USDTRY=X": [41.0, 41.2]}.items()}
+    seri["USDTRY=X"]["tarih"] = ["2026-08-28", "2026-08-29"]       # FX bir gün ileride
+    t = {x["ad"]: x for x in py.turetilmis(seri)}
+    assert t["ABD 2s10s"]["tarih"] == "2026-08-28" and t["ABD 2s10s"]["ondalik"] == 0 and t["ABD 2s10s"]["degisim_birim"] == "bp", t["ABD 2s10s"]
+    assert t["BIST 100 (dolar bazlı)"]["tarih"] == "2026-08-28/2026-08-29", "bacak günleri ayrışınca bileşik anahtar yazılmalı"
+    assert t["BIST 100 (dolar bazlı)"]["degisim_birim"] == "%" and t["BIST 100 (dolar bazlı)"]["birim"] == "USD puan"
+    pano = rj.panosu()                        # sitedeki özetlerden, ağsız
+    assert pano, "rejim panosu boş"
+    for x in pano:
+        assert isinstance(x.get("ondalik"), int), x["ad"]
+        assert x.get("tarih"), f"{x['ad']}: girdi günü boş"
+    rez = [x for x in pano if x["ad"] == "Rezerv kalitesi"]
+    if rez:
+        import gozlem
+        d = gozlem.anlik("tcmb-net-rezerv") or {}
+        assert rez[0]["tarih"] == str(d.get("h_tarih")), (rez[0]["tarih"], d.get("h_tarih"))
 
 
 def _revizyon():
@@ -79,19 +86,27 @@ def _revizyon():
     class _D(dn.Denetim):
         def __init__(self, b):
             self.b = b; self.gecen = []; self.uyari = []; self.engel = []; self.ayrinti = False
-    def bulten(tarih, faiz, gosterge, piyasa_d1, gun="31.08.2026"):
+    def bulten(tarih, faiz, gosterge, piyasa_d1, gun="31.08.2026", turev=41.0, turev_d1=-9.3, rejim=13.31, gun_iso="2026-08-28"):
         return {"tarih": tarih,
                 "piyasa": {"gruplar": [{"satirlar": [{"kod": "XAU", "ad": "Altın", "tarih": gun, "d1": piyasa_d1, "degisim_birim": "%"}]}],
-                           "tr_faizleri": [{"ad": "Politika faizi", "deger": faiz, "birim": "%", "tarih": gun}]},
-                "gostergeler": [{"ad": "USD/TRY", "hat": "usdtry", "anahtar": "kur", "deger": gosterge, "ondalik": 2, "veri_tarihi": gun}]}
+                           "tr_faizleri": [{"ad": "Politika faizi", "deger": faiz, "birim": "%", "tarih": gun}],
+                           "turetilmis": [{"ad": "ABD 2s10s", "deger": turev, "birim": "bp", "d1": turev_d1, "degisim_birim": "bp",
+                                           "tarih": gun_iso, "ondalik": 0}]},
+                "gostergeler": [{"ad": "USD/TRY", "hat": "usdtry", "anahtar": "kur", "deger": gosterge, "ondalik": 2, "veri_tarihi": gun}],
+                "rejim": [{"ad": "Reel politika faizi (ileriye dönük)", "deger": rejim, "birim": "puan", "tarih": gun, "ondalik": 2}]}
     eski_BULTEN = dn.BULTEN
     with tempfile.TemporaryDirectory() as td:
         dn.BULTEN = Path(td)
         (dn.BULTEN / "2026-08-31.json").write_text(_json.dumps(bulten("2026-08-31", 40.0, 48.10, -0.86)), encoding="utf-8")
         try:
-            d1 = _D(bulten("2026-09-01", 37.0, 48.17, 1.78)); d1.revizyon()
-            assert len(d1.uyari) == 1 and "TL faiz · Politika faizi" in d1.uyari[0] and "gösterge · USD/TRY" in d1.uyari[0] \
-                and "piyasa · Altın" in d1.uyari[0], d1.uyari
+            d1 = _D(bulten("2026-09-01", 37.0, 48.17, 1.78, turev=44.0, turev_d1=-6.1, rejim=13.9)); d1.revizyon()
+            assert len(d1.uyari) == 1 and "(6)" in d1.uyari[0], d1.uyari
+            for ad in ("TL faiz · Politika faizi", "gösterge · USD/TRY", "piyasa · Altın", "türev · ABD 2s10s", "türev Δ · ABD 2s10s", "rejim · Reel politika"):
+                assert ad in d1.uyari[0], (ad, d1.uyari)
+            assert "→ -6.1bp" in d1.uyari[0] or "-6.1bp" in d1.uyari[0], d1.uyari
+            d5 = _D(bulten("2026-09-01", 40.0, 48.10, -0.86, gun_iso="2026-08-28/2026-08-29")); d5.revizyon()
+            assert not d5.uyari, f"bacak günü ayrışan türev satır kıyaslandı: {d5.uyari}"
+            assert "türev 0/1" in d5.gecen[-1] and "rejim 1/1" in d5.gecen[-1], d5.gecen
             d2 = _D(bulten("2026-09-01", 40.0, 48.10, -0.86)); d2.revizyon()
             assert not d2.uyari, d2.uyari
             d3 = _D(bulten("2026-09-01", 37.0, 48.17, 1.78, gun="01.09.2026")); d3.revizyon()
@@ -718,7 +733,8 @@ def main() -> int:
             assert _j.loads(hedef.read_text(encoding="utf-8"))["yorum"] == "<p>eski</p>", "engelli yama yazıldı"
     sina("yaz.py: yabancı alan reddi · null siler · boş ezmez · yazı damgası/sürümü · mtime sigortası · denetim kapısı", _yaz)
     sina("bicim: sayı yazımı tek kaynak · REDK konumu yön okur · denetim sızıntıyı görür", _bicim)
-    sina("denetim: revizyon ölçütü TL faiz ve göstergeyi de görür, farklı günü karıştırmaz", _revizyon)
+    sina("denetim: revizyon ölçütü TL faiz, gösterge, türev ve rejimi görür, farklı günü karıştırmaz", _revizyon)
+    sina("piyasa/rejim: türev ve rejim satırları kendi gününü ve hanesini taşır", _turev_rejim_gunu)
     sina("yayın takvimi (hakkında sayfası) iş akışı cron'larıyla aynı saati söylüyor", _yayin_takvimi)
 
     for ad in gecen:

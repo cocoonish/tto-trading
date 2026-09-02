@@ -50,7 +50,7 @@ on:
         type: boolean
         default: false
       hatlar:
-        description: 'Hangi hatlar (boş = takvimdeki hepsi)'
+        description: 'Hangi hatlar (boş = takvimdeki hepsi). Bir üst hat yazılınca türevleri (carry, tufex, makro, reelfx) de koşar.'
         type: string
         default: ''
       # TAM KİP. Hafif kip mevcut veriden çıktı üretir; TAM kip kaynağa gidip
@@ -253,8 +253,8 @@ jobs:
             # carry tufex makro reelfx EN SONDA: türev hatlar üst hatların (fonlama,
             # dibs, kredi, enflasyon, tcmb) bu koşuda yazdığı CSV/özetten hesaplanır
             # ve guncelle.py hatları BU SIRAYLA koşturur. Tazeleme takviminde
-            # tarifleri yok → her koşuda çalışırlar (saniyeler); reelfx'in tarifi
-            # var (aylık, EVDS).
+            # tarifleri yok → her koşuda çalışırlar (saniyeler); reelfx takvimsiz
+            # emniyet ağıyla 30 günde bir EVDS'e gider.
             HATLAR="tcmb usdtry reer yabanci fonlama kredi enflasyon dibs odemeler butce marj buyume elnino carry tufex makro reelfx"
           fi
           # "zorla" = takvimi hiç sorma. Süzgeci geçirmemek, ona "her şey
@@ -296,6 +296,16 @@ jobs:
           else
             python guncelle.py $SECIM
           fi
+
+      # Türev hatlar ağa çıkmaz ve saniyeler sürer: tazeleme adımı düşse ya da
+      # zaman sınırına çarpsa bile üst hatların depoya yazdığı seriden panolar
+      # kurulur ve ev stili uygulanır (kütük tek kaynak, izolasyon burada).
+      - name: Türev hatlar (tazeleme düşse de)
+        if: always()
+        timeout-minutes: 5
+        run: |
+          python guncelle.py carry tufex makro
+          python site/tools/plotly_stil.py --hepsi >/dev/null
 
       # Hazine ihaleleri AYRI: hattın hafif kipi yalnız mevcut veriden grafik
       # üretir, ihale listesini TAM kip (main.py) hmb.gov.tr'den kazır. İhale

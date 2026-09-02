@@ -36,6 +36,7 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
   (13) BİÇİM TEK KAYNAK (uyarı) — lib/bicim.ts dışında yerel biçimleyici.
   (14) CSS JETONU — kullanılan her var(--x) global.css'te ya da dosyada tanımlı.
   (15) SİMGE SÖZLEŞMESİ — ilan edilen her simge var ve boyutu ilanla aynı.
+  (16) YAYIN TAKVİMİ — hakkında sayfasının saatleri iş akışı cron'larıyla aynı.
   (9b) OKUR DİLİ, derlenmiş çıktıda (uyarı) — bileşen dizgeleri de kapıya girer.
 
 Koşum:  python3 site/tools/sayfa_sinavi.py
@@ -639,6 +640,19 @@ def main() -> int:
         if png.name not in base:
             uyari.append(f"public/{png.name} üretilmiş ama Base.astro ilan etmiyor")
     print(f"  {len(simgeler)} simge ilanı")
+
+    # ---------------------------------------------------------------- (16)
+    # YAYIN TAKVİMİ. Hakkında sayfasının saatleri iş akışı cron'larından
+    # türetilir; sayfayı YAYIMLAYAN kapı kaymayı görmezse sayfa eski saati
+    # anlatmaya devam eder. Karşılaştırma ortak/yayin_takvimi.py'de tek yerde
+    # (bulten/duman.py de aynı fonksiyonu çağırır).
+    print("\n▶ Yayın takvimi (hakkında ↔ iş akışı cron'ları)")
+    sys.path.insert(0, str(KOK / "ortak"))
+    import yayin_takvimi
+    takvim_bulgu = yayin_takvimi.karsilastir(KOK)
+    for b_ in takvim_bulgu:
+        hata.append("yayın takvimi — " + b_)
+    print(f"  bulgu {len(takvim_bulgu)}")
 
     # (9b) OKUR DİLİ, DERLENMİŞ ÇIKTIDA (uyarı). 9. ölçüt yalnız içerik
     # dosyalarına bakıyor; bileşenlerden gelen dizgeleri ("ozet.json"

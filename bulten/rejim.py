@@ -36,6 +36,8 @@ class Satir:
     etiket: str = ""              # rejim adı
     aciklama: str = ""            # etiketi doğuran eşik
     konum: str = ""               # hattın kendi hesapladığı tarihsel konum
+    tarih: str = ""               # girdilerin günü — farklıysa hepsi ('31.08.2026/07.2026')
+    ondalik: int = 2              # deger kaç haneyle yuvarlandı (revizyon toleransı)
 
 
 import sys as _sys
@@ -63,6 +65,29 @@ def _al(hat: str, *anahtarlar):
     return out if len(out) > 1 else out[0]
 
 
+def _gun(hat: str, *anahtarlar, acik: str = "") -> str:
+    """Anahtarların kendi günü (gozlem sözleşmesi: açık alan → <anahtar>_tarih →
+    hattın saati). Gösterge şeridiyle AYNI alan geçilmeli — ör. tcmb-net-rezerv
+    haftalık serileri için 'h_tarih' — yoksa aynı sayı iki yerde iki tarih taşır."""
+    d = gozlem.anlik(hat) or {}
+    gunler = []
+    for a in anahtarlar:
+        t = gozlem.anahtar_tarihi(d, a, acik) if d else ""
+        if t and t != "?" and t not in gunler:
+            gunler.append(t)
+    return "/".join(gunler)
+
+
+def _gunler(*parcalar: str) -> str:
+    """Birden çok hattın günlerini tek anahtarda birleştir (yinelenenler düşer)."""
+    out: list[str] = []
+    for p in parcalar:
+        for g in p.split("/"):
+            if g and g not in out:
+                out.append(g)
+    return "/".join(out)
+
+
 def _esik(v: float | None, sinir: float, ust: str, alt: str, aciklama: str):
     if v is None:
         return "", ""
@@ -80,6 +105,17 @@ def panosu() -> list[dict]:
     prim2y, basabas2y, anket2y = _al("tufex-basabas", "prim_2y", "basabas_2y", "anket_2y")
     ayrisma, = [_al("makroihtiyati", "ayrisma")]
 
+    # Girdilerin günleri — satırın revizyon anahtarı (aynı güne ait sayı kıyaslanır).
+    g_politika = _gun("fonlama-likidite", "politika")
+    g_tufe12, g_bek12 = _gun("enflasyon", "tufe_12a"), _gun("enflasyon", "bek_12a")
+    g_d1a = _gun("usdtry-deval", "d1a")
+    g_kredi = _gun("kredi-parasal", "g_ar_13y")
+    g_redk = _gun("try-reer", "redk")
+    g_egim = _gun("dibs-verim-egrisi", "egim_2y9y")
+    g_rezerv = _gun("tcmb-net-rezerv", "h_brut", "h_swap_haric", acik="h_tarih")   # gösterge şeridiyle aynı alan
+    g_prim = _gun("tufex-basabas", "prim_2y")
+    g_ayrisma = _gun("makroihtiyati", "ayrisma")
+
     s: list[Satir] = []
 
     if politika is not None and bek12 is not None:
@@ -90,7 +126,7 @@ def panosu() -> list[dict]:
                      "karşılamıyor demektir.")
         s.append(Satir("Reel politika faizi (ileriye dönük)", round(v, 2), "puan",
                        "politika faizi − anketin 12 ay sonrası enflasyon beklentisi",
-                       e, a))
+                       e, a, tarih=_gunler(g_politika, g_bek12), ondalik=2))
 
     if politika is not None and tufe12 is not None:
         v = politika - tufe12
@@ -98,7 +134,7 @@ def panosu() -> list[dict]:
                      "Geriye dönük reel faiz gerçekleşmiş enflasyonu kullanır; ileriye "
                      "dönük olandan ayrışması beklentinin gerçekleşmeden kopmasıdır.")
         s.append(Satir("Reel politika faizi (geriye dönük)", round(v, 2), "puan",
-                       "politika faizi − yıllık TÜFE", e, a))
+                       "politika faizi − yıllık TÜFE", e, a, tarih=_gunler(g_politika, g_tufe12), ondalik=2))
 
     if politika is not None and d1a is not None:
         v = politika - d1a
@@ -108,7 +144,7 @@ def panosu() -> list[dict]:
                      "pozisyonlarının en hızlı çözüldüğü andır.")
         s.append(Satir("TL taşıma makası", round(v, 1), "puan",
                        "politika faizi − 1 aylık yıllıklandırılmış devalüasyon hızı",
-                       e, a))
+                       e, a, tarih=_gunler(g_politika, g_d1a), ondalik=1))
 
     if kredi is not None and tufe12 is not None:
         v = kredi - tufe12
@@ -117,7 +153,7 @@ def panosu() -> list[dict]:
                      "olarak küçülüyor demektir — makroihtiyati sıkılığın asıl ölçüsü.")
         s.append(Satir("Reel kredi büyümesi", round(v, 1), "puan",
                        "kur arındırılmış 13 hafta yıllıklandırılmış kredi büyümesi − yıllık TÜFE",
-                       e, a))
+                       e, a, tarih=_gunler(g_kredi, g_tufe12), ondalik=1))
 
     if redk is not None:
         e, a = _esik(sapma10, 0, "reel değerli", "reel ucuz",
@@ -126,14 +162,14 @@ def panosu() -> list[dict]:
                      "söyler.") if sapma10 is not None else ("", "")
         s.append(Satir("Reel efektif kur", round(redk, 1), "endeks",
                        "TÜFE bazlı REDK", e, a,
-                       konum=redk_konum(sapma10)))
+                       konum=redk_konum(sapma10), tarih=g_redk, ondalik=1))
 
     if egim is not None:
         e, a = _esik(egim, 0, "normal eğim", "ters eğri",
                      "Kısa vadeli getirinin uzun vadeliyi aşması, piyasanın bugünkü "
                      "sıkılığın kalıcı olmadığını fiyatlaması demektir.")
         s.append(Satir("DİBS eğri eğimi (2y−9y)", round(egim, 2), "puan",
-                       "2 yıllık spot getiri − 9 yıllık spot getiri", e, a))
+                       "2 yıllık spot getiri − 9 yıllık spot getiri", e, a, tarih=g_egim, ondalik=2))
 
     # Dezenflasyon güvenilirliği. Panonun geri kalanı politikanın NE KADAR SIKI
     # olduğunu ölçüyor; bu satır piyasanın o sıkılığın SONUCUNA inanıp
@@ -149,7 +185,7 @@ def panosu() -> list[dict]:
         if basabas2y is not None and anket2y is not None:
             hesap += f" ({_sayi(basabas2y, 2)} − {_sayi(anket2y, 2)})"
         s.append(Satir("Enflasyon risk primi (2y)", round(prim2y, 2), "puan",
-                       hesap, e, a))
+                       hesap, e, a, tarih=g_prim, ondalik=2))
 
     # Makroihtiyati çerçevenin ETKİNLİĞİ. Reel kredi büyümesi toplamın ne
     # yaptığını söyler; bu satır sınırın İÇİNDE kalanla DIŞINA taşan arasındaki
@@ -163,7 +199,7 @@ def panosu() -> list[dict]:
                      "15 puan eşiği takdirîdir.")
         s.append(Satir("Makroihtiyati ayrışma", round(ayrisma, 1), "puan",
                        "sınır dışı kalemlerin büyümesi − sınıra tabi kalemlerin büyümesi",
-                       e, a))
+                       e, a, tarih=g_ayrisma, ondalik=1))
 
     if brut and swap_haric is not None:
         v = 100 * swap_haric / brut
@@ -172,7 +208,7 @@ def panosu() -> list[dict]:
         if altin_pay is not None:
             aciklama += f" Brüt rezervin {_yuzde(altin_pay, 1)}'i altın."
         s.append(Satir("Rezerv kalitesi", round(v, 1), "%",
-                       "swap hariç net rezerv / brüt rezerv", "", aciklama))
+                       "swap hariç net rezerv / brüt rezerv", "", aciklama, tarih=g_rezerv, ondalik=1))
 
     return [vars(x) for x in s]
 
