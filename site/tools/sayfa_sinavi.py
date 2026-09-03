@@ -9,7 +9,12 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       Yoksa sayfada STATİK yedek görünür ve veri tazelendikçe donar.
   (2) ÇIPLAK OYNAK SAYI — ozet.json'daki oynak bir değerin Türkçe biçimi,
       MDX'te <Deger> ile sarılmadan düz metin olarak geçiyor mu? (CLAUDE.md
-      kural 5'in ihlali: bir sonraki tazelemede o cümle donar.)
+      kural 5'in ihlali: bir sonraki tazelemede o cümle donar.) Ölçüt bir
+      ÇAKIŞMA aramasıdır, yani tesadüf üretir; hassasiyeti üç kuralla korunur:
+      uydurma sayılarla kurulmuş kutular `sinav-ornek` bloğuyla tarama dışıdır,
+      TAM SAYI (sayım) yalnız kendi yazımıyla aranır ve bulgusu uyarıdır,
+      eksi işareti sayının parçası sayılır. Üçü de sentetik örneklerle
+      sınanıyor: site/tools/duman_sinav.py.
   (3) Şekil yüksekliği — MDX'teki yukseklik={} değeri, üretimin
       cikti/yukseklikler.json'daki gerçek script height'i ile aynı mı?
   (4) Dosya kümesi — üretimdeki figürler siteye birebir kopyalanmış mı ve
@@ -104,10 +109,29 @@ def tr(v: float, ondalik: int) -> str:
              .replace("-", "−"))
 
 
+# ÖRNEK BLOĞU. Bir kutunun İÇİNDEKİ bütün sayılar uydurmaysa (formülün nasıl
+# işlediğini göstermek için seçilmiş varsayımlar), o kutu tarama dışıdır:
+#     {/* sinav-ornek: uydurma yuvarlak sayılarla aritmetik örneği */}
+#     … kutu …
+#     {/* /sinav-ornek */}
+# Anahtar bazlı `sinav-muaf` bu iş için YANLIŞ ARAÇTI ve bu iki kez ölçüldü.
+# Aynı kutu 2026-09-02'de ikinci kez çarpıştı: ilkinde forward_1y1y örnek
+# kutusunun 40,03'üyle, ikincisinde kimlik_cok_kaynakli kutunun 51,00 TL
+# varsayımıyla — ve ikinci çarpışma yayını 12 saat durdurdu. Anahtar muafiyeti
+# çarpışan anahtarı SAYFANIN TAMAMINDA kör eder (yani gerçek bir donmuş sayıyı
+# da kaçırır) ve bir sonraki tesadüf için hiçbir şey yapmaz; kutuyu işaretlemek
+# ise sebebin kendisini adlandırır: oradaki sayılar veri değil, VARSAYIM.
+ORNEK_BLOK = re.compile(
+    r"\{/\*\s*sinav-ornek:[\s\S]*?\*/\}[\s\S]*?\{/\*\s*/sinav-ornek\s*\*/\}")
+ORNEK_AC = re.compile(r"\{/\*\s*sinav-ornek:")
+ORNEK_KAPA = re.compile(r"\{/\*\s*/sinav-ornek\s*\*/\}")
+
+
 def deger_disi(mdx: str) -> str:
-    """MDX'ten <Deger …>…</Deger> bloklarını, kod bloklarını ve satır içi
-    kodu çıkar — geriye kalan, gerçekten çıplak duran metindir."""
-    s = re.sub(r"<Deger\b[\s\S]*?</Deger>", " ", mdx)
+    """MDX'ten <Deger …>…</Deger> bloklarını, örnek bloklarını, kod bloklarını
+    ve satır içi kodu çıkar — geriye kalan, gerçekten çıplak duran metindir."""
+    s = ORNEK_BLOK.sub(" ", mdx)
+    s = re.sub(r"<Deger\b[\s\S]*?</Deger>", " ", s)
     s = re.sub(r"```[\s\S]*?```", " ", s)
     s = re.sub(r"`[^`]*`", " ", s)
     s = re.sub(r"\$\$[\s\S]*?\$\$", " ", s)      # KaTeX blokları
@@ -122,6 +146,53 @@ def deger_disi(mdx: str) -> str:
 MUAF_KALIP = re.compile(r"\{/\*\s*sinav-muaf:\s*([A-Za-z0-9_]+)")
 
 
+def ciplak_sayilar(disi: str, ozet: dict, muaf: set[str]) -> tuple[list[str], list[str]]:
+    """(2) Çıplak oynak sayı: (ENGEL listesi, UYARI listesi).
+
+    `disi` = deger_disi(mdx), yani <Deger>, örnek bloğu, kod ve KaTeX çıkarılmış
+    metin. Modül düzeyinde durmasının sebebi sınanabilir olması: bu ölçüt bir
+    kez yanlış alarm verdiğinde yayın 12 saat durdu, yani hassasiyeti kodun
+    kendisi kadar önemli (bkz. site/tools/duman_sinav.py).
+
+    İKİ AĞIRLIK — TAM SAYI ile ONDALIKLI ÖLÇÜ aynı şey değil. JSON'da 51 yazan
+    bir değer bir SAYIMDIR (kaç gözlem, kaç kaynak, kaç gün eşik) ve sayfada
+    "51" diye geçer, "51,00" diye değil; ama tarama ikisini de deniyordu.
+    kimlik_cok_kaynakli 52'den 51'e düştüğü gün "51,00" bir aritmetik örneğinin
+    FİYAT varsayımıyla çarpıştı ve yayın durdu. Tam sayı artık yalnız kendi
+    yazımıyla aranır ve bulgusu KAPI DEĞİL uyarıdır: sayımların çoğu yöntemsel
+    sabittir (250 iş günlük pencere, 100 günlük tolerans) ve metinde yazılması
+    DOĞRUDUR — ölçüldü, kapı yapmak iki sayfada birden yanlış alarm veriyor.
+    """
+    ciplak: list[str] = []          # ondalıklı ölçü → kapı
+    sayim: list[str] = []           # tam sayı sayım → yalnız uyarı
+    for k, v in ozet.items():
+        if k in muaf:
+            continue
+        if not isinstance(v, (int, float)) or isinstance(v, bool):
+            continue
+        if abs(v) < TARAMA_ALT_SINIR:
+            continue
+        tam = isinstance(v, int)
+        for d in ((0,) if tam else TARAMA_ONDALIK):
+            metin = tr(float(v), d)
+            if len(metin.replace(".", "").replace(",", "")) < 3:
+                continue              # iki haneli sayılar çok yaygın, taranmaz
+            # İŞARET DE SAYININ PARÇASI. Eksiyi dışlamayan bir arama, metindeki
+            # "−22,1"i pozitif 22,1 değeriyle eşleştirir; tl-tasima'nın tarihsel
+            # listesi bu yüzden çarpışıyordu. tr() eksiyi U+2212 ile yazar,
+            # kaynak metinde ASCII "-" de geçebilir.
+            # SAĞ SINIR: amaç "136,89" içindeki "36,8"i saymamak, cümle sonu
+            # noktasını da saymamak DEĞİL. Eski kalıp ayrım yapmıyordu ve
+            # "bugün 36,79." gibi CÜMLE SONUNDAKİ her çıplak sayıyı kaçırıyordu
+            # — yani ölçütün asıl işi olan sınıfı. Ayraç ancak ardından RAKAM
+            # geliyorsa sayının parçasıdır.
+            if re.search(r"(?<![\d.,\-\u2212])" + re.escape(metin)
+                         + r"(?!\d)(?![.,]\d)", disi):
+                (sayim if tam else ciplak).append(f"{k}={metin}")
+                break
+    return ciplak, sayim
+
+
 def main() -> int:
     hata: list[str] = []
 
@@ -133,6 +204,17 @@ def main() -> int:
         else:
             print(f"  (bilgi, kapı değil) {mesaj}")
     TUM_MDX = sorted((KOK / "site/src/content").rglob("*.mdx"))
+
+    # ÖRNEK BLOĞU KAPANMIŞ MI? Kapanmayan bir açılış, sayfanın geri kalanını
+    # sessizce taramadan düşürürdü — yani muafiyet, denetimin kendisinde bir
+    # delik açardı. Bu yüzden dengesi ayrıca sorulur ve ENGEL üretir.
+    for yol in TUM_MDX:
+        m = yol.read_text(encoding="utf-8")
+        ac, kapa = len(ORNEK_AC.findall(m)), len(ORNEK_KAPA.findall(m))
+        if ac != kapa:
+            hata.append(f"{yol.relative_to(KOK / 'site/src/content')}: "
+                        f"sinav-ornek bloğu dengesiz ({ac} açılış, {kapa} kapanış) "
+                        "— kapanmayan blok sayfanın kalanını taramadan düşürür")
     for slug, klasor in HATLAR:
         proje = KOK / klasor
         mp = KOK / "site/src/content/projeler" / f"{slug}.mdx"
@@ -158,25 +240,15 @@ def main() -> int:
         # (2) çıplak oynak sayı
         disi = deger_disi(mdx)
         muaf = set(MUAF_KALIP.findall(mdx))
-        ciplak = []
-        for k, v in o.items():
-            if k in muaf:
-                continue
-            if not isinstance(v, (int, float)) or isinstance(v, bool):
-                continue
-            if abs(v) < TARAMA_ALT_SINIR:
-                continue
-            for d in TARAMA_ONDALIK:
-                metin = tr(float(v), d)
-                if len(metin.replace(".", "").replace(",", "")) < 3:
-                    continue          # iki haneli sayılar çok yaygın, taranmaz
-                if re.search(r"(?<![\d.,])" + re.escape(metin) + r"(?![\d.,])", disi):
-                    ciplak.append(f"{k}={metin}")
-                    break
+        ciplak, sayim = ciplak_sayilar(disi, o, muaf)
         if ciplak:
             bulgu(slug, f"{slug}: ÇIPLAK OYNAK SAYI (kural 5): "
                         + ", ".join(sorted(set(ciplak))))
+        if sayim:
+            uyari.append(f"{slug}: çıplak SAYIM (kural 5, uyarı — yöntemsel "
+                         f"sabit olabilir): " + ", ".join(sorted(set(sayim))))
         print(f"  (2) çıplak oynak sayı: {len(set(ciplak))}"
+              + (f" · sayım {len(set(sayim))}" if sayim else "")
               + (f" · muaf: {sorted(muaf)}" if muaf else ""))
 
         # (2b) statik yedek ↔ canlı değer — BİLGİ (düşürmez)
