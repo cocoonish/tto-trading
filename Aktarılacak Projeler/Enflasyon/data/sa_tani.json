@@ -19,166 +19,166 @@
    "mevsimsel_genlik_pp": 0.731
   },
   "cekirdek_b": {
-   "n": 259,
+   "n": 260,
    "tatil_katsayi": {
     "ramazan": 0.0,
     "bayram": 0.0,
     "kurban": 0.0
    },
    "tatil_t": {
-    "ramazan": -0.29,
+    "ramazan": -0.3,
     "bayram": -0.37,
-    "kurban": -0.39
+    "kurban": -0.4
    },
-   "mevsim_p": 0.0023,
+   "mevsim_p": 0.0024,
    "mevsimsel": true,
-   "mevsimsel_genlik_pp": 0.685
+   "mevsimsel_genlik_pp": 0.708
   },
   "cekirdek_c": {
-   "n": 259,
+   "n": 260,
    "tatil_katsayi": {
     "ramazan": 0.0,
     "bayram": 0.0,
     "kurban": 0.0
    },
    "tatil_t": {
-    "ramazan": -0.31,
+    "ramazan": -0.32,
     "bayram": -0.21,
     "kurban": -0.32
    },
    "mevsim_p": 0.0,
    "mevsimsel": true,
-   "mevsimsel_genlik_pp": 0.612
+   "mevsimsel_genlik_pp": 0.642
   },
   "hizmet": {
-   "n": 259,
+   "n": 260,
    "tatil_katsayi": {
     "ramazan": 0.0,
     "bayram": 0.0,
     "kurban": 0.0
    },
    "tatil_t": {
-    "ramazan": -0.14,
-    "bayram": -0.1,
-    "kurban": -0.35
+    "ramazan": -0.15,
+    "bayram": -0.11,
+    "kurban": -0.37
    },
    "mevsim_p": 0.0,
    "mevsimsel": true,
-   "mevsimsel_genlik_pp": 0.962
+   "mevsimsel_genlik_pp": 0.991
   },
   "temel_mal": {
-   "n": 259,
+   "n": 260,
    "tatil_katsayi": {
     "ramazan": 0.0,
     "bayram": 0.0,
     "kurban": 0.0
    },
    "tatil_t": {
-    "ramazan": -0.39,
+    "ramazan": -0.38,
     "bayram": -0.19,
-    "kurban": -0.17
+    "kurban": -0.16
    },
    "mevsim_p": 0.0,
    "mevsimsel": true,
-   "mevsimsel_genlik_pp": 1.4
+   "mevsimsel_genlik_pp": 1.43
   },
   "kira": {
-   "n": 259,
+   "n": 260,
    "tatil_katsayi": {
     "ramazan": 0.0,
     "bayram": 0.0,
     "kurban": 0.0
    },
    "tatil_t": {
-    "ramazan": -0.08,
-    "bayram": -0.45,
-    "kurban": -0.07
+    "ramazan": -0.1,
+    "bayram": -0.46,
+    "kurban": -0.09
    },
    "mevsim_p": 0.0,
    "mevsimsel": true,
-   "mevsimsel_genlik_pp": 1.124
+   "mevsimsel_genlik_pp": 1.053
   },
   "enerji": {
-   "n": 259,
+   "n": 260,
    "tatil_katsayi": {
     "ramazan": 0.0,
     "bayram": 0.0,
     "kurban": 0.0
    },
    "tatil_t": {
-    "ramazan": -0.57,
-    "bayram": -0.59,
-    "kurban": 0.06
+    "ramazan": -0.59,
+    "bayram": -0.6,
+    "kurban": 0.04
    },
-   "mevsim_p": 0.026,
+   "mevsim_p": 0.0249,
    "mevsimsel": true,
-   "mevsimsel_genlik_pp": 1.683
+   "mevsimsel_genlik_pp": 1.773
   },
   "gida": {
-   "n": 259,
+   "n": 260,
    "tatil_katsayi": {
     "ramazan": 0.0,
     "bayram": 0.0,
     "kurban": 0.0
    },
    "tatil_t": {
-    "ramazan": 0.91,
-    "bayram": -0.19,
-    "kurban": -0.64
+    "ramazan": 0.92,
+    "bayram": -0.18,
+    "kurban": -0.63
    },
    "mevsim_p": 0.0,
    "mevsimsel": true,
-   "mevsimsel_genlik_pp": 1.528
+   "mevsimsel_genlik_pp": 1.585
   },
   "islenmemis_gida": {
-   "n": 259,
+   "n": 260,
    "tatil_katsayi": {
     "ramazan": 0.0,
     "bayram": 0.0,
     "kurban": 0.0
    },
    "tatil_t": {
-    "ramazan": 1.23,
-    "bayram": 0.25,
-    "kurban": -0.44
+    "ramazan": 1.24,
+    "bayram": 0.26,
+    "kurban": -0.42
    },
    "mevsim_p": 0.0,
    "mevsimsel": true,
-   "mevsimsel_genlik_pp": 2.783
+   "mevsimsel_genlik_pp": 2.85
   },
   "islenmis_gida": {
-   "n": 259,
+   "n": 260,
    "tatil_katsayi": {
     "ramazan": 0.0,
     "bayram": 0.0,
     "kurban": 0.0
    },
    "tatil_t": {
-    "ramazan": -0.14,
-    "bayram": -0.89,
-    "kurban": -0.67
+    "ramazan": -0.15,
+    "bayram": -0.9,
+    "kurban": -0.68
    },
-   "mevsim_p": 0.2853,
+   "mevsim_p": 0.2259,
    "mevsimsel": false
   },
   "alkol_tutun_altin": {
-   "n": 259,
+   "n": 260,
    "tatil_katsayi": {
     "ramazan": 0.0,
     "bayram": 0.0,
     "kurban": 0.0
    },
    "tatil_t": {
-    "ramazan": -0.11,
-    "bayram": 0.56,
-    "kurban": 0.94
+    "ramazan": -0.14,
+    "bayram": 0.55,
+    "kurban": 0.9
    },
    "mevsim_p": 0.0003,
    "mevsimsel": true,
-   "mevsimsel_genlik_pp": 1.395
+   "mevsimsel_genlik_pp": 1.406
   },
   "yonetilen_haric": {
-   "n": 259,
+   "n": 260,
    "tatil_katsayi": {
     "ramazan": 0.0,
     "bayram": 0.0,
@@ -186,26 +186,26 @@
    },
    "tatil_t": {
     "ramazan": 0.19,
-    "bayram": -0.14,
-    "kurban": -0.44
+    "bayram": -0.15,
+    "kurban": -0.45
    },
    "mevsim_p": 0.0001,
    "mevsimsel": true,
-   "mevsimsel_genlik_pp": 0.762
+   "mevsimsel_genlik_pp": 0.779
   },
   "yi_ufe": {
-   "n": 259,
+   "n": 260,
    "tatil_katsayi": {
     "ramazan": 0.0,
     "bayram": 0.0,
     "kurban": 0.0
    },
    "tatil_t": {
-    "ramazan": 0.28,
-    "bayram": -0.66,
-    "kurban": -0.17
+    "ramazan": 0.27,
+    "bayram": -0.67,
+    "kurban": -0.18
    },
-   "mevsim_p": 0.5237,
+   "mevsim_p": 0.5193,
    "mevsimsel": false
   }
  },
@@ -1074,8 +1074,10 @@
   }
  },
  "kosular_arasi": {
-  "var": false,
-  "not": "önceki ölçüm aynı veriyle yapılmış — iki ölçüm arasındaki revizyon bu kez ölçülemedi",
+  "var": true,
+  "n": 12,
+  "maks_pp": 0.0,
+  "ort_pp": 0.0,
   "onceki_kosum": "2026-09-01"
  },
  "vintage": {
@@ -1090,59 +1092,59 @@
    },
    "cekirdek_b": {
     "n": 6,
-    "mm_maks_pp": 0.485,
-    "mm_ort_pp": 0.16,
-    "saar3_maks_pp": 2.226,
-    "saar3_ort_pp": 1.009
+    "mm_maks_pp": 0.51,
+    "mm_ort_pp": 0.148,
+    "saar3_maks_pp": 2.179,
+    "saar3_ort_pp": 0.901
    },
    "cekirdek_c": {
     "n": 6,
-    "mm_maks_pp": 0.653,
-    "mm_ort_pp": 0.167,
-    "saar3_maks_pp": 5.168,
-    "saar3_ort_pp": 1.453
+    "mm_maks_pp": 0.573,
+    "mm_ort_pp": 0.141,
+    "saar3_maks_pp": 5.448,
+    "saar3_ort_pp": 1.022
    },
    "hizmet": {
     "n": 6,
-    "mm_maks_pp": 4.328,
-    "mm_ort_pp": 1.63,
-    "saar3_maks_pp": 17.055,
-    "saar3_ort_pp": 8.962
+    "mm_maks_pp": 4.332,
+    "mm_ort_pp": 1.083,
+    "saar3_maks_pp": 17.036,
+    "saar3_ort_pp": 6.478
    },
    "temel_mal": {
     "n": 6,
-    "mm_maks_pp": 0.467,
-    "mm_ort_pp": 0.2,
-    "saar3_maks_pp": 2.325,
-    "saar3_ort_pp": 1.146
+    "mm_maks_pp": 0.421,
+    "mm_ort_pp": 0.114,
+    "saar3_maks_pp": 2.708,
+    "saar3_ort_pp": 1.107
    },
    "kira": {
     "n": 6,
-    "mm_maks_pp": 2.86,
-    "mm_ort_pp": 1.031,
-    "saar3_maks_pp": 9.628,
-    "saar3_ort_pp": 5.911
+    "mm_maks_pp": 4.472,
+    "mm_ort_pp": 2.088,
+    "saar3_maks_pp": 11.529,
+    "saar3_ort_pp": 7.543
    },
    "enerji": {
     "n": 6,
-    "mm_maks_pp": 5.531,
-    "mm_ort_pp": 1.31,
-    "saar3_maks_pp": 48.316,
-    "saar3_ort_pp": 11.786
+    "mm_maks_pp": 5.596,
+    "mm_ort_pp": 2.021,
+    "saar3_maks_pp": 44.185,
+    "saar3_ort_pp": 10.385
    },
    "gida": {
     "n": 6,
-    "mm_maks_pp": 0.244,
-    "mm_ort_pp": 0.081,
-    "saar3_maks_pp": 6.996,
-    "saar3_ort_pp": 1.888
+    "mm_maks_pp": 0.14,
+    "mm_ort_pp": 0.041,
+    "saar3_maks_pp": 6.728,
+    "saar3_ort_pp": 1.675
    },
    "islenmemis_gida": {
     "n": 6,
-    "mm_maks_pp": 0.243,
-    "mm_ort_pp": 0.071,
-    "saar3_maks_pp": 2.224,
-    "saar3_ort_pp": 0.698
+    "mm_maks_pp": 0.069,
+    "mm_ort_pp": 0.041,
+    "saar3_maks_pp": 0.741,
+    "saar3_ort_pp": 0.347
    },
    "islenmis_gida": {
     "n": 6,
@@ -1153,17 +1155,17 @@
    },
    "alkol_tutun_altin": {
     "n": 6,
-    "mm_maks_pp": 0.713,
-    "mm_ort_pp": 0.229,
-    "saar3_maks_pp": 3.03,
-    "saar3_ort_pp": 1.476
+    "mm_maks_pp": 0.886,
+    "mm_ort_pp": 0.266,
+    "saar3_maks_pp": 3.474,
+    "saar3_ort_pp": 1.628
    },
    "yonetilen_haric": {
     "n": 6,
-    "mm_maks_pp": 0.14,
-    "mm_ort_pp": 0.072,
-    "saar3_maks_pp": 0.857,
-    "saar3_ort_pp": 0.4
+    "mm_maks_pp": 0.043,
+    "mm_ort_pp": 0.022,
+    "saar3_maks_pp": 0.822,
+    "saar3_ort_pp": 0.248
    },
    "yi_ufe": {
     "n": 6,
@@ -1177,19 +1179,19 @@
    "seri": "hizmet",
    "ad": "Hizmet",
    "n": 6,
-   "mm_maks_pp": 4.328,
-   "mm_ort_pp": 1.63,
-   "saar3_maks_pp": 17.055,
-   "saar3_ort_pp": 8.962
+   "mm_maks_pp": 4.332,
+   "mm_ort_pp": 1.083,
+   "saar3_maks_pp": 17.036,
+   "saar3_ort_pp": 6.478
   },
   "en_oynak_etiketli": {
    "seri": "enerji",
    "ad": "Enerji",
    "n": 6,
-   "mm_maks_pp": 5.531,
-   "mm_ort_pp": 1.31,
-   "saar3_maks_pp": 48.316,
-   "saar3_ort_pp": 11.786
+   "mm_maks_pp": 5.596,
+   "mm_ort_pp": 2.021,
+   "saar3_maks_pp": 44.185,
+   "saar3_ort_pp": 10.385
   }
  }
 }

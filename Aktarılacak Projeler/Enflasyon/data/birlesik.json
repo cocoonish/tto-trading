@@ -111,7 +111,7 @@
    "uge_sabit": 1.45,
    "ito_reg": 1.48,
    "uge_reg": 1.65,
-   "birlesik_reg": 1.47,
+   "birlesik_reg": 1.46,
    "esit_ortalama": 1.38,
    "ters_mse": 1.35
   },
@@ -153,7 +153,7 @@
    {
     "esik": 1.5,
     "yon": ">",
-    "p": 39.0
+    "p": 35.0
    },
    {
     "esik": 1.0,

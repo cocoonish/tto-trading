@@ -389,15 +389,15 @@
   "ad": "Ağustos 2026",
   "beklemede": true,
   "ito": 1.66,
-  "ito_kaynak": "İTO resmî yayımı (EVDS'e henüz düşmedi)",
-  "ito_elle": true,
+  "ito_kaynak": "EVDS · TP.FG.IST1.23",
+  "ito_elle": false,
   "n_gecmis": 31,
   "naif": 1.66,
   "sabit": 1.31,
   "oransal": 1.43,
   "regresyon": 1.48,
   "alt": 0.32,
-  "ust": 2.64,
+  "ust": 2.63,
   "ayni_ay": [
    {
     "ay": "2024-08",
@@ -536,7 +536,7 @@
     {
      "esik": 1.5,
      "yon": ">",
-     "p": 39.0
+     "p": 35.0
     },
     {
      "esik": 1.0,
@@ -553,19 +553,18 @@
  },
  "kimlik": {
   "yayim_ay": 32,
-  "ortak_ay": 30,
+  "ortak_ay": 31,
   "maks_sapma": 0.0071,
   "ort_sapma": 0.0029,
   "esik": 0.02,
   "sapan_ay": 0,
   "ilk_ay": "2024-02",
-  "son_ay": "2026-07",
+  "son_ay": "2026-08",
   "dogrulandi": true,
   "dolduruldu": [
-   "2024-01",
-   "2026-08"
+   "2024-01"
   ],
-  "dolduruldu_n": 2,
+  "dolduruldu_n": 1,
   "manset": [
    {
     "ay": "2026-08",
