@@ -10,6 +10,17 @@ Bütün değerler data/ altındaki ÜRETİLMİŞ dosyalardan okunur; elle sayı
 yazılmaz. Bir değer kaynakta yoksa anahtar ATLANIR ve stderr'e uyarı basılır —
 MDX'teki statik yedek görünür, ama sessizce yanlış bir sayı basılmaz.
 
+ŞEKİL SAATLERİ — hattın figürleri dört ayrı ritimde biter, GrafikEmbed ise açık
+anahtar verilmezse hattın tek ana saatini basar. MDX'te `tarihAnahtari` ile
+bağlanan anahtarlar:
+
+    sekil02_kisa  → Şekil 02 (yalnız çeyreklik GSYH oranı)
+    sekil07_kisa  → Şekil 07 (aylık stok + çeyreklik oran; birleşik damga)
+    sekil08_kisa  → Şekil 08 (aylık kompozisyon + haftalık eurobond kırılımı)
+    sekil09_kisa  → Şekil 09 (aylık stok çıpası + çeyreklik oran sütunu)
+    sekil13_kisa  → Şekil 13 (çeyreklik finansal hesaplar)
+    hafta_kisa    → Şekil 10 · 11 (yalnız haftalık menkul kıymet tabloları)
+
 Koşum:  python3 ozet_uret.py   (önce veri.py → metrik.py → grafik.py)
 """
 from __future__ import annotations
@@ -109,6 +120,25 @@ def tr_ay(t) -> str:
 
 def _seri(df: pd.DataFrame, kol: str) -> pd.Series:
     return df[kol] if kol in df.columns else pd.Series(dtype=float)
+
+
+def _bacak_ucu(df: pd.DataFrame, kolonlar) -> "pd.Timestamp | None":
+    """Bir figür BACAĞININ ucu: çizilen sütunların son geçerli gözlemlerinin
+    EN ESKİSİ.
+
+    Neden en eski: bacağın sözü serilerin KIYASIDIR ve kıyas ancak hepsinin
+    ölçüldüğü güne kadar kurulabilir. Yapısal yazılır — bugün hangi sütunun
+    daha uzun olduğuna bakmaz.
+
+    Kolon yoksa ya da hepsi boşsa None döner: o zaman damga YAZILMAZ ve sayfa
+    o şeklin altına tarih hiç basmaz. Yanlış bir tarih, tarihsizlikten kötüdür.
+    """
+    uclar = []
+    for k in kolonlar:
+        sr = _seri(df, k).dropna()
+        if len(sr):
+            uclar.append(sr.index[-1])
+    return min(uclar) if uclar else None
 
 
 def main() -> int:
@@ -445,6 +475,71 @@ def main() -> int:
         koy("sok10_degisim", O.get("sok_arti10_degisim"), 1)
         if O.get("sok_arti10_stok_gsyh") is not None and O.get("stok_gsyh") is not None:
             koy("sok10_gsyh_puan", O["sok_arti10_stok_gsyh"] - O["stok_gsyh"], 2)
+
+    # ===================================================== şekil saatleri
+    # HATTIN SAATİ, ŞEKLİN SAATİ DEĞİLDİR. GrafikEmbed açık bir anahtar
+    # verilmemişse hattın TEK ana saatini (`_tarih`, bütçe ayı) basar; bu hattın
+    # figürleri ise DÖRT ayrı ritimde: aylık bütçe/stok, haftalık menkul kıymet
+    # tabloları, çeyreklik GSYH oranları ve çeyreklik finansal hesaplar. Tek
+    # damga iki yönde birden yalan söylüyordu — haftalık paneller iki buçuk ay
+    # eski görünüyor, çeyreklik paneller üç ay taze görünüyordu.
+    #
+    # Değerler TÜRETİLMEZ, figürün ÇİZDİĞİ sütunlardan ölçülür; MDX'te
+    # `tarihAnahtari` ile bağlanır. İki ritmi birden taşıyan figürde tek bir uç
+    # seçmek öbür panel hakkında yalan olurdu, o yüzden BİRLEŞİK damga yazılır
+    # (bileşen tanımadığı dizgeyi olduğu gibi basar; sayfa sınavı 18b içindeki
+    # her tarihi ayrıca sınar).
+    #
+    #   Şekil 02 — yalnız çeyreklik GSYH oranları
+    #   Şekil 07 — aylık stok düzeyi + çeyreklik stok/GSYH
+    #   Şekil 08 — aylık para kompozisyonu + haftalık eurobond kırılımı
+    #   Şekil 09 — aylık stok çıpası + çeyreklik stok/GSYH sütunu
+    #   Şekil 13 — çeyreklik finansal hesaplar (GSYH ailesinden AYRI yayımlanır)
+    #   Şekil 10 · 11 — yalnız haftalık: `hafta_kisa` yeter, yeni anahtar yok.
+    _u02 = _bacak_ucu(C, ("denge_gsyh", "fdd_gsyh", "faiz_gsyh"))
+    if _u02 is not None:
+        O["sekil02_kisa"] = tr_tarih(_u02)
+    else:
+        uyar("'sekil02_kisa' ölçülemedi — Şekil 02 hattın aylık saatiyle "
+             "damgalanır ve çeyreklik panel olduğundan taze görünür.")
+    _u07a = _bacak_ucu(M, ("ic_borc_trl", "dis_senet_trl", "dis_kredi_trl",
+                           "toplam_borc_trl"))
+    _u07c = _bacak_ucu(C, ("stok_gsyh", "net_stok_gsyh", "fh_borc_gsyh"))
+    if _u07a is not None and _u07c is not None:
+        O["sekil07_kisa"] = f"aylık {tr_ay(_u07a)} · çeyreklik {tr_tarih(_u07c)}"
+    else:
+        uyar("'sekil07_kisa' ölçülemedi — Şekil 07 hattın ana saatiyle damgalanır.")
+    _u08a = _bacak_ucu(M, ("doviz_pay", "yurt_disi_pay", "pay_ic_satis_doviz"))
+    _u08h = _bacak_ucu(H, ("pay_eb_usd", "pay_eb_eur", "pay_eb_jpy"))
+    if _u08a is not None and _u08h is not None:
+        O["sekil08_kisa"] = f"aylık {tr_ay(_u08a)} · haftalık {tr_tarih(_u08h)}"
+    else:
+        uyar("'sekil08_kisa' ölçülemedi — Şekil 08 hattın ana saatiyle damgalanır.")
+    # Şekil 09'un yatay ekseni TARİH DEĞİL (USD/TRY düzeyi); çerçevenin ucu
+    # senaryonun kendi çıpalarıdır ve ikisi de ölçüm katmanında ölçülür.
+    _s09a, _s09c = sen.get("cipa_ay"), sen.get("cipa_ceyrek")
+    if _s09a and _s09c:
+        O["sekil09_kisa"] = (f"aylık {tr_ay(pd.Timestamp(_s09a))} · "
+                             f"çeyreklik {tr_tarih(pd.Timestamp(_s09c))}")
+    elif _s09a:
+        O["sekil09_kisa"] = tr_ay(pd.Timestamp(_s09a))
+    else:
+        uyar("'sekil09_kisa' ölçülemedi — Şekil 09 hattın ana saatiyle damgalanır.")
+    # Finansal hesaplar GSYH oranlarından AYRI bir yayım ailesidir; ikisi bugün
+    # aynı çeyrekte bitiyor ama ayrışabilirler, o yüzden ayrı ölçülür.
+    # LİSTE FİGÜRÜN ÇİZDİĞİ BÜTÜN SÜTUNLARI SAYAR — alt paneldeki iki stok
+    # düzeyi (brüt · net) dahil. Bugün ikisi de min'i değiştirmiyor (brüt bir
+    # çeyrek İLERİDE, net aynı çeyrekte bitiyor) ama min yapısal yazılır:
+    # bugünkü sıralamaya göre eksik bırakılan bir bacak, sıralama döndüğü gün
+    # damgayı sessizce taze gösterir.
+    _u13 = _bacak_ucu(C, ("yukum_toplam_trl", "varlik_toplam_trl",
+                          "net_fin_deger_trl", "borc_senedi_trl", "nakit_trl",
+                          "stok_trl", "net_stok_trl"))
+    if _u13 is not None:
+        O["sekil13_kisa"] = tr_tarih(_u13)
+    else:
+        uyar("'sekil13_kisa' ölçülemedi — Şekil 13 hattın aylık saatiyle "
+             "damgalanır ve çeyreklik panel olduğundan taze görünür.")
 
     # ===================================================== kapsam ve doğrulama
     _kf = m["butce"].get("kapsam_farki_24ay")

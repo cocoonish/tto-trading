@@ -20,7 +20,8 @@ import sys
 
 import pandas as pd
 
-from veri import PROJE, VERI, AY_TR, AY_KISA, tazelik_tolerans
+from veri import (PROJE, VERI, AY_TR, AY_KISA, sekil_saatleri,
+                  tazelik_tolerans)
 
 O: dict = {}
 
@@ -301,6 +302,13 @@ def main() -> int:
     if kkm.get("zirve_tarih"):
         z = pd.Timestamp(kkm["zirve_tarih"])
         O["kkm_zirve_donem"] = f"{AY_TR[z.month]} {z.year}"
+    if kkm.get("son_tarih"):
+        # KKM AYLIK bir stok; hattın ana saati ise HAFTALIK. Şekil 07'nin
+        # damgası buradan gelir. Hattın aylık ANA saatinden (`ay_tarih`) ayrı
+        # bir anahtar, çünkü ikisi ayrı ayrı donabilir: bugün ikisi de Temmuz
+        # 2026'yı gösteriyor, yarın KKM serisi dururken aylık banka türü
+        # tablosu ilerleyebilir ve şekil o gün yanlış aya damgalanırdı.
+        O["kkm_son_tarih"] = pd.Timestamp(kkm["son_tarih"]).strftime("%m.%Y")
     O["kkm_cumlesi"] = (
         "Program açık: stok ve aylık akım güncel." if kkm.get("aktif") else
         "Program fiilen kapanmıştır; grafik bir akım hikâyesi değil, bitmiş bir "
@@ -442,6 +450,16 @@ def main() -> int:
         "Bu koşuda uyarı düşmedi." if not uyarilar else
         "Bu koşuda düşen tek uyarı budur:" if len(uyarilar) == 1 else
         f"Bu koşuda {len(uyarilar)} uyarı düştü:")
+
+    # ------------------------------------------------- şekil saat defteri
+    # GrafikEmbed her şeklin altına "veri <tarih>" basar ve MDX'te ayrı bir
+    # anahtar verilmemişse o tarih hattın TEK ana saatinden gelir. Bu hat üç
+    # ritim taşıyor, yani tek damga dört figürde yalan söylüyordu; defter o
+    # boşluğu kapatır. Değeri None olan figürün altına sayfa tarih BASMAZ.
+    # Tanım — hangi figürün saati nereden geliyor, hangisi neden tarihsiz —
+    # veri.sekil_saatleri'nde, tek yerde: aynı defteri grafik.py figürün KENDİ
+    # alt başlığı için de okuyor ve iki liste bir gün sessizce ayrışırdı.
+    O["_sekil_tarih"] = sekil_saatleri(m)
 
     yol = PROJE / "ozet.json"
     yol.write_text(json.dumps(O, ensure_ascii=False, indent=1), encoding="utf-8")

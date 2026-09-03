@@ -498,10 +498,92 @@ endeks yenilenmemiş gibi duruyor." Endeks yenilenmişti; yenilenmeyen şey
 etiketti. Çözüm `<Deger>`de zaten olan sözleşmenin şekle taşınması: hat her
 figürün ucunu KENDİ çizen kodundan ilan eder (`ozet.json` → `_sekil_tarih`),
 bileşen sırayla açık anahtar → defter → ana saat der, ölçülemeyen uç `null`
-kalır ve o şeklin altına tarih HİÇ basılmaz. Ölçüldü: sitedeki 83 gömülü
-figürün 38'inde damga, figürün kendi verisiyle ayrışıyordu. Kapı da kondu
+kalır ve o şeklin altına tarih HİÇ basılmaz. Kapı da kondu
 (sayfa sınavı 18): defter açan hatta yarından ileri tarih ENGEL, girdi eksiği
 UYARI — bir figürün unutulması yayını durdurmaz ama adıyla görünür.
+
+**Kurucu ilke — bir figürün damgası BAĞLAYICI bacaktır; ve bazı figürler tek
+bir günle dürüst anlatılamaz.** Kural bütün hatlara yayılırken asıl soru
+"hangi tarih" değil, "iki bacaklı bir figürde HANGİSİ" oldu. Cevap en eskisi:
+figürün sözü serilerin KIYASIDIR ve kıyas ancak hepsinin ölçüldüğü güne kadar
+kurulabilir; en tazesini yazmak öbür bacağı olduğundan yeni gösterir. TL taşıma
+Şekil 01 ve 03'te nakit bacağı TLREF'e, tahvil bacağı DİBS'e bağlı ve ayrı
+düşebiliyor — `min()` bu yüzden yapısal yazılır, bugünkü sıralamaya bakmaz.
+Ama bacaklar birbirinden çok uzaksa en eskisi de yalan söyler: ödemeler dengesi
+Şekil 12'de eurobond akımı aylık (30.06), ödeme takvimi haftalık (26.08) biter
+ve aradaki 57 günde hangi bacak seçilse öbürü hakkında yanıltıcı olur. Üçüncü
+yol damgayı İKİ PARÇALI yazmaktır ("aylık 30.06.2026 · haftalık 26.08.2026");
+bileşen tanımadığı dizgeyi olduğu gibi basar. Dördüncü hâl de var: Kredi Şekil
+03'ün dört paneli üç ritimde ve tek damga hangisi olursa olsun bir grubu
+yanıltır — defterde `None`, sayfada tarih YOK, her panel kendi saatini kendi
+başlığında taşır.
+
+Bu genişleme yeni bir kusur sınıfını da açtı: figürün İÇİNDEKİ alt yazı
+("Çıpa: 2 Eylül 2026") okura sayfa damgası kadar görünür ve iki taraf ayrı
+kaynaktan besleniyordu. Fonlama Şekil 05'in hiçbir paneli 02.09'da bitmiyor;
+o tarih hattın ana saatiydi ve figürün içine basılıyordu. Kural: hat figür
+saatlerini TEK bir fonksiyonda tutar ve hem çizim koduna hem özet üreticisine
+oradan verir (`Kredi/veri.py` → `sekil_saatleri`). İki ayrı liste bir gün
+sessizce ayrışır ve hangisinin neyi söylediği kimsenin aklında kalmaz.
+
+Yayılmanın ölçüsü tekrarlanabilir tutuldu, çünkü "kaç figür yanlış" sorusunun
+cevabı ölçme yöntemine bağlı. Sitedeki 411 gömülü figürün 237'si derslere ait
+statik dosyalar (özetleri yok, zaten tarih basılmıyor); damga sözleşmesi kalan
+174'ü bağlıyor. Bunların 92'si TEK SAATLİ, yani çizilen bütün izler aynı günde
+bitiyor. O 92 figürde tarama 12 aday verdi, 10'u gerçek çıktı ve onu da
+kapandı. Kalan 82 figür karma; onlarda "doğru tarih" tek bir ölçüyle
+tanımlanamadığı için hat hat, bacak bacak ölçüldü — 28 figürün damgası değişti.
+
+Kalan iki aday TARAMANIN kendi yanlış pozitifiydi ve ikisi de aynı dersi
+veriyor: **bir figürün son x değeri, verisinin ucu DEĞİLDİR.** Hazine
+`vade_talep` çeyreklik kovalarla çiziliyor ve son kova 2026-07-01 diye
+etiketli — ama o kova AÇIK çeyrektir ve içindeki en yeni ihale 18.08'dir, yani
+damga zaten doğruydu. Enflasyon `13_ito_bulut`ta on izin dokuzu tarihsiz saçılım;
+tek tarihli iz "farkın EKSİ olduğu aylar" filtresi ve son eksi ay 2026-05 —
+serinin ucu değil, alt kümenin ucu. İkisinde de ölçüt "yanlış tarih" diye
+bağırıyordu ve sayfa doğruydu. Otomatik tarama kusuru BULUR, hükmü figürün ne
+çizdiğine bakan biri verir.
+
+En büyük ayrışmayı tarama DEĞİL, hat hat ölçüm buldu: enflasyon Şekil 05'in
+sekiz izinden YEDİSİ 2025-12'de bitiyor (`dagilim.csv` orada donmuş) ve sayfa
+onu 08.2026 diye damgalıyordu — 245 gün. Tek bir iz (TÜFE 3a SAAR referansı)
+bugüne kadar geldiği için figür "karma" sayılıyor ve tek-saatli tarama ona
+BAKAMIYOR. Otomatik ölçüt tartışmasız olanı bulur; tartışmalı olanı gözle
+ölçmek gerekir.
+
+Aynı hattın kuyruğunda ikinci bir kusur çıktı ve o damgayla değil BİLEŞENLE
+ilgili: `Deger.astro`nun KENDİ tarih ayrıştırıcısı vardı ve `AA.YYYY` yazımını
+tanımıyordu. Aylık bir saat gün gibi yazılamayacağı için (`01.07.2026` okura o
+GÜNÜN ölçümü gibi görünür) o yazım her yerde kullanılıyor — sonuç: on beş
+`*_tarih` anahtarının, aralarında bütçe ve enflasyon hatlarının ANA saatinin,
+bayatlık denetimi sessizce KAPALIYDI. Ayrıştıramayan bir denetim hep "sorun
+yok" der. Ayrıştırma `lib/bicim`e devredildi; ölçüm katmanındaki eşiyle
+(`ortak/bicim.py`) aynı sözleşme, tek tanım.
+
+Kapıya iki basamak daha kondu: 18b açık `tarihAnahtari`nin gerçekten çözülüp
+çözülmediğini sorar (anahtar yok/dizge değil → UYARI, yarından ileri → ENGEL,
+birleşik damganın İÇİNDEKİ her tarih ayrı ayrı), 18c ise aynı figüre konmuş iki
+ilanın (açık anahtar + defter) ÇELİŞMEDİĞİNİ. İkisi de `site/tools/duman_sinav.py`
+ile sınanıyor — çünkü bu ölçüt yayının önünde duruyor ve yanlış alarmı siteyi
+durdurur; birleşik damgayı kusur sayan bir sürüm tam olarak bunu yapardı.
+
+**Kurucu ilke — okur dili kapıları FİGÜRÜN İÇİNE de bakar; ve bir sınav
+bakmadığı hattı geçmiş sayar.** Yayılma iki kör nokta daha açtı, ikisi de
+"bakılmayan yer, geçen sınavla aynı görünür" sınıfından. Birincisi: okur dili
+ölçütleri MDX'i (9), derlenmiş sayfayı (9b) ve koşu kaydını (17) tarıyordu ama
+gömülü Plotly HTML'inin BAŞLIK ve ALT YAZI metnini hiçbiri taramıyordu — oysa o
+metin şeklin tam üstünde, okurun gözünün ilk gittiği yerde duruyor. Ölçüldü:
+164 figürde 76 kod/yapım dili sızıntısı, aralarında okura kendi sürüm
+tarihçemizi anlatan bir alt yazı ("bu halka yazının ilk sürümünde
+ölçülmemişti"). Yeni ölçüt (19) yapım dilini ENGEL sayıyor (taban sıfıra
+indirildi), kod dilini TEK satırda toplanan UYARI (taban yetmiş altı; hepsini
+engel yapmak yayını mevcut kusurla durdururdu, ve `bie_` grup kodunun kaynak
+künyesi mi kod dili mi olduğu ayrıca karar ister). İkincisi: sayfa sınavı
+özeti HATTIN KLASÖRÜNDE arıyordu ve yiyecek-hizmetleri-marj hattı özetini
+başka bir dizine yazdığı için BÜTÜNÜYLE atlanıyordu — on yedi figürlü, doksan
+`<Deger>` çağıran bir sayfa aylarca hiçbir ölçüte girmedi. Kapsam listeden
+değil SÖZLEŞMEDEN türetilir: sayfanın okuduğu dosya
+`site/public/projeler/<slug>/ozet.json`dur, sınav da artık onu okuyor.
 
 **Kurucu ilke — YAYININ ÖNÜNDE DURAN denetimin yanlış alarmı, arızanın
 kendisidir; ve bir ÇAKIŞMA araması tesadüf üretir.** 02.09.2026 16:46'dan

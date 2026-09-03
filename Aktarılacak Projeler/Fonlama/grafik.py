@@ -26,7 +26,10 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
 import veri
-from veri import VERI, gun_ad
+# Pencere sabitleri ve ŞEKİL SAATLERİ veri.py'de, tek yerde durur: figürün
+# alt yazısındaki tarihi burası, sayfadaki damgayı ozet_uret.py aynı
+# fonksiyondan okur.
+from veri import (VERI, GEC_BAS, SWAP_BAS, TAM_BAS, YAKIN_BAS, ZK_BAS, gun_ad)
 
 CIKTI = veri.PROJE / "cikti"
 CIKTI.mkdir(exist_ok=True)
@@ -41,13 +44,8 @@ OLAY = "rgba(142,31,47,0.10)"          # örtük sıkılaştırma dönemi gölge
 PANEL_PX = 340
 LEJANT_SATIR_PX = 22
 
-# Pencereler. Sabitler burada; panel başlıklarındaki yıllar bu sabitlerden
+# Pencereler veri.py'den gelir; panel başlıklarındaki yıllar o sabitlerden
 # TÜRETİLİR — sabit değişince başlık da değişsin, sessizce yanlışa dönmesin.
-YAKIN_BAS = "2024-01-01"
-TAM_BAS = "2011-01-03"
-SWAP_BAS = "2021-01-04"
-ZK_BAS = "2019-01-01"
-GEC_BAS = "2016-01-01"
 
 
 def _yil(t: str) -> int:
@@ -165,6 +163,56 @@ def _duzen(fig, baslik: str, alt: list[str], n_panel: int,
     return fig
 
 
+def _cipa(damga: str | None) -> str:
+    """Alt yazıdaki " · Çıpa: <gün>" eki — damga ÖLÇÜLEMEMİŞSE hiç yazılmaz.
+
+    Bir figürün panelleri farklı günlerde bitiyorsa tek bir çıpa hangi bacağı
+    seçse öbürü hakkında yalan olur; o zaman tarih figürün alt yazısında
+    ÇIKMAZ, her panel kendi gününü kendi başlığında taşır.
+    """
+    return f" · Çıpa: {damga}" if damga else ""
+
+
+def _panel_veri(damga: str | None, etiket: str = "veri") -> str:
+    """Panel başlığındaki " — veri <gün>" eki; ölçülemeyen panelde hiç yazılmaz.
+
+    Figürün panelleri farklı günlerde bitiyorsa okurun hangi panele hangi güne
+    kadar baktığı panelin ÜSTÜNDE yazar; tek bir figür çıpası bunu anlatamaz.
+    """
+    return f" · {etiket} {damga}" if damga else ""
+
+
+def _cizili_uc(fig) -> pd.Timestamp | None:
+    """Figürün gerçekten ÇİZDİĞİ uç: her izin son dolu gözlemi, en eskisi.
+
+    veri.sekil_saatleri kolon ADIYLA ölçüyor, bu fonksiyon FİGÜRÜN KENDİSİNİ
+    ölçüyor; ikisi ayrışırsa figüre bir iz eklenmiş ve saat listesi
+    güncellenmemiş demektir. Kusur göze çarpmaz — damga bir gün kayar ve
+    koşu yeşil biter — bu yüzden kos() ayrışmada DURUR.
+    """
+    uclar = []
+    for tr in fig.data:
+        x, y = getattr(tr, "x", None), getattr(tr, "y", None)
+        if x is None or y is None:
+            continue
+        try:
+            xa = np.asarray(x)
+            ya = np.asarray(y, dtype="float64")
+        except (TypeError, ValueError):
+            continue
+        n = min(len(xa), len(ya))
+        if n == 0:
+            continue
+        dolu = np.flatnonzero(np.isfinite(ya[:n]))
+        if not len(dolu):
+            continue
+        try:
+            uclar.append(pd.Timestamp(xa[dolu[-1]]))
+        except (TypeError, ValueError):
+            continue
+    return min(uclar) if uclar else None
+
+
 def _yaz(fig, ad: str) -> pathlib.Path:
     yol = CIKTI / ad
     fig.write_html(yol, include_plotlyjs="cdn", full_html=True,
@@ -250,7 +298,7 @@ def sekil_01(M, o, damga):
     pol_bas = M["politika"].dropna()
     pol_bas = pol_bas.index[0] if len(pol_bas) else None
     alt = [
-        f"Veri: TCMB EVDS3 · iş günü · Çıpa: {damga}. Politika faizi = 1 hafta "
+        f"Veri: TCMB EVDS3 · iş günü{_cipa(damga)}. Politika faizi = 1 hafta "
         "vadeli repo SATIŞ kotasyonu (TP.PY.P02.1H); koridor = O/N borç alma "
         "(TP.PY.P01.ON) – O/N borç verme (TP.PY.P02.ON).",
         "AOFM (TP.APIFON4) fonlama bacağının tutar-ağırlıklı faizidir; fonlama "
@@ -302,7 +350,7 @@ def sekil_02(M, o, damga):
     ort_neg = M.loc[M["net_fonlama"] < 0, "spread_tlref_aofm"].dropna()
     ort_poz = M.loc[M["net_fonlama"] > 0, "spread_tlref_aofm"].dropna()
     alt = [
-        f"Veri: TCMB EVDS3 · iş günü · Çıpa: {damga}. Pencere "
+        f"Veri: TCMB EVDS3 · iş günü{_cipa(damga)}. Pencere "
         f"{_yil(YAKIN_BAS)}–bugün.",
         "Marjinal TCMB faizi: sistem net BORÇLUYSA fonlamanın fiyatı (AOFM), "
         "net ALACAKLIYSA sterilizasyonun fiyatı (AOSM). Son bir yılda "
@@ -315,8 +363,8 @@ def sekil_02(M, o, damga):
         ("Üç makasın son dolu günü AYNI OLMAYABİLİR: AOFM tabansız günlerde "
          "tanımsız olduğu için AOFM'li makaslar TLREF'li makastan geride "
          "kalabilir. Bu yüzden makaslar birbirinden çıkarılarak okunmaz; "
-         "ozet.json'da her makasın kendi tarihi ve ayrıca son ORTAK güne "
-         "çıpalı sürümü (`*_ortak_gun`) taşınır."),
+         "her makasın kendi tarihi ve son ORTAK güne çıpalı sürümleri sayfa "
+         "metninde ayrıca verilir."),
     ]
     _duzen(fig, "Politika faizi ile piyasa ve fiilî fonlama faizi arasındaki "
                 "makaslar", alt, 3, y_baslik="puan")
@@ -375,7 +423,7 @@ def sekil_03(M, o, damga):
     liksen = M["ste_liksen"].dropna()
     lik_bas = f"{liksen.index[0]:%d.%m.%Y}" if len(liksen) else "—"
     alt = [
-        f"Veri: TCMB EVDS3 · bie_apifon · iş günü · Çıpa: {damga}. EVDS birimi "
+        f"Veri: TCMB EVDS3 · bie_apifon · iş günü{_cipa(damga)}. EVDS birimi "
         "milyon TL; grafikte milyar TL'ye çevrildi. Pencere "
         f"{_yil(YAKIN_BAS)}–bugün.",
         "Net fonlama POZİTİF: sistem TCMB'ye net borçlu, TL likiditesi açık. "
@@ -434,7 +482,7 @@ def sekil_04(M, o, damga):
     son_alim = float(M["swap_alim_usd"].dropna().iloc[-1])
     son_satim = float(M["swap_satim_usd"].dropna().iloc[-1])
     alt = [
-        f"Veri: TCMB EVDS3 · bie_swaptektarf · iş günü · Çıpa: {damga}. EVDS "
+        f"Veri: TCMB EVDS3 · bie_swaptektarf · iş günü{_cipa(damga)}. EVDS "
         "birimi milyon ABD doları; TL karşılığı için TP.DK.USD.A.YTL "
         f"kullanıldı. Pencere {_yil(SWAP_BAS)}–bugün.",
         "Swap, fonlamanın bilanço DIŞI bacağıdır ve İKİ YÖNLÜDÜR: alım yönlü "
@@ -459,7 +507,15 @@ def sekil_04(M, o, damga):
 # ===========================================================================
 # ŞEKİL 05 — Zorunlu karşılıklar ve sistem likiditesi
 # ===========================================================================
-def sekil_05(M, Z, o, damga):
+def sekil_05(M, Z, o, panel_saat: dict):
+    """Bu figürün TEK saati yok: dört panel, dört gün.
+
+    Bloke hesap ile ima edilen oran analitik bilançonun gününde, tesis adımları
+    son ADIM gününde, sistem likiditesi gün başı likidite tablosunun gününde
+    biter — ve o tablo daha erken yayımlandığı için ötekilerin İLERİSİNDE
+    durur. Tek çıpa hangi bacağı seçse öbürü hakkında yalan olurdu; alt yazıda
+    tarih ÇIKMAZ, her panel kendi gününü kendi başlığında taşır.
+    """
     if Z is None or Z.empty:
         return None
     # Panel (a)'da iki büyüklük ~14 kat farklı (bloke hesap ~1,1 trilyon TL,
@@ -470,13 +526,16 @@ def sekil_05(M, Z, o, damga):
                         specs=[[{"secondary_y": True}], [{}], [{}], [{}]],
                         subplot_titles=(
                             "a) ZK bloke hesabı ve ZK'ya tabi taban "
-                            "(milyar TL)",
+                            f"(milyar TL){_panel_veri(panel_saat['bloke'])}",
                             "b) İma edilen efektif tesis oranı (%) — TCMB'nin "
-                            "ilan ettiği oran DEĞİLDİR",
+                            "ilan ettiği oran DEĞİLDİR"
+                            f"{_panel_veri(panel_saat['oran'])}",
                             "c) Tesis dönemi adımları (milyar TL) — seri bir "
-                            "basamak fonksiyonudur",
+                            "basamak fonksiyonudur"
+                            f"{_panel_veri(panel_saat['adim'], 'son adım')}",
                             "d) Bankalar serbest mevduatı ve gün başı toplam "
-                            "likidite (milyar TL)"))
+                            "likidite (milyar TL)"
+                            f"{_panel_veri(panel_saat['likidite'])}"))
     # ZK panelinin başlangıcı SABİT DEĞİL: bloke hesap ayrı kalem olarak
     # yayımlanmaya başladığı günden birkaç ay önce başlar. Sabit tarih yazmak,
     # kalem tarihi değiştiğinde paneli sessizce boş bir yıla açardı.
@@ -514,7 +573,11 @@ def sekil_05(M, Z, o, damga):
     ort_gun = zk.get("adim_ortalama_gun")
     alt = [
         f"Veri: TCMB EVDS3 · iş günü (bloke hesap, likidite) + haftalık "
-        f"(taban) · Çıpa: {damga}. Pencere {zk_bas:%m.%Y}–bugün.",
+        f"(taban). Pencere {zk_bas:%m.%Y}–bugün.",
+        ("DÖRT PANELİN DÖRT AYRI GÜNÜ VAR: her panelin son gözlem günü kendi "
+         "başlığında yazılıdır. Gün başı likidite tablosu (d) daha erken "
+         "yayımlandığı için İLERİDE, tesis adımları (c) basamak fonksiyonu "
+         "olduğu için GERİDE durur — (c)'nin durması eksiklik değil, veridir."),
         (f"ZK bloke hesabı (TP.AB.A19) analitik bilançoda AYRI KALEM olarak "
          f"{pd.Timestamp(bloke_bas):%d.%m.%Y} tarihinde doğdu; öncesinde "
          "bankalar mevduatı bloke/serbest diye ayrılmıyordu ve seri tam sıfır "
@@ -553,7 +616,7 @@ def sekil_05(M, Z, o, damga):
 # ===========================================================================
 # ŞEKİL 06 — Fonlama maliyeti → mevduat/kredi faizi geçişkenliği
 # ===========================================================================
-def sekil_06(H, o, damga, damga_hafta):
+def sekil_06(H, o, damga):
     if H is None or H.empty or "marjinal" not in H.columns:
         return None
     fig = make_subplots(rows=3, cols=1, vertical_spacing=0.085,
@@ -594,11 +657,11 @@ def sekil_06(H, o, damga, damga_hafta):
     tic = g.get("ticari_tl", {})
     mev = g.get("mevduat_tl", {})
     alt = [
-        f"Veri: TCMB EVDS3 · haftalık (Cuma) faiz akımları · faiz verisi "
-        f"Çıpa: {damga_hafta}, marjinal faiz Çıpa: {damga}. Pencere "
-        f"{_yil(GEC_BAS)}–bugün.",
-        ("Marjinal TCMB faizi haftalık ortalamaya indirgenir; β, haftalık "
-         "FARKLARIN 52 haftalık yuvarlanan EKK katsayısıdır "
+        f"Veri: TCMB EVDS3 · haftalık (Cuma) faiz akımları{_cipa(damga)}. "
+        f"Pencere {_yil(GEC_BAS)}–bugün. Marjinal TCMB faizi günlük seriden "
+        "gelir ama haftalık ortalamaya indirgenir; üç panel de aynı Cuma'da "
+        "biter.",
+        ("β, haftalık FARKLARIN 52 haftalık yuvarlanan EKK katsayısıdır "
          "(Δfaiz = α + β·Δmarjinal). β = 1 tam geçişkenlik demektir."),
         (f"Tam örneklem: ticari kredi β = {tic.get('tam_beta', float('nan')):.2f} "
          f"(en iyi gecikme {tic.get('en_iyi_gecikme_hafta', '?')} hafta, "
@@ -655,7 +718,7 @@ def sekil_07(M, o, damga):
     en_uzun = max(don, key=lambda d: d["gun"]) if don else None
     en_derin = max(don, key=lambda d: d["asim_maks_pp"]) if don else None
     alt = [
-        f"Veri: TCMB EVDS3 · iş günü · Çıpa: {damga}. Pencere "
+        f"Veri: TCMB EVDS3 · iş günü{_cipa(damga)}. Pencere "
         f"{_yil(TAM_BAS)}–bugün. Konum kırpılmaz: bandın DIŞINA çıkması asıl "
         "anlatılacak olgudur.",
         (f"Kırmızı gölgeler: AOFM'nin koridor tavanını en az "
@@ -715,9 +778,10 @@ def sekil_08(M, R, o, damga):
 
     d = (o.get("dogrulama") or {}).get("hatlar_arasi_swap") or {}
     alt = [
-        f"Veri: bu hat TCMB EVDS3 bie_swaptektarf (Çıpa: {damga}); rezerv "
-        "verisi TTO Trading rezerv hattının kendi boru hattından "
-        f"(gunluk.csv, son gözlem {R.index[-1]:%d.%m.%Y}).",
+        f"Veri: bu hat TCMB EVDS3 bie_swaptektarf; rezerv verisi TTO Trading "
+        "rezerv hattının kendi boru hattından. İki seri yalnız ORTAK iş "
+        f"günlerinde çizilir{_cipa(damga)}; rezerv hattının kendi son gözlemi "
+        f"{gun_ad(R.index[-1])}.",
         ("İki hat aynı seriyi FARKLI soru için kullanıyor: burada 'TL "
          "likiditesine ne kadar katkı', rezerv hattında 'rezervin ne kadarı "
          "ödünç'. Kimlik: yerleşik swap düzeltmesi = alım yönlü − satım yönlü "
@@ -750,43 +814,50 @@ SEKILLER = [
 
 
 def _yukle():
-    M = pd.read_csv(VERI / "metrik.csv", index_col=0, parse_dates=True)
+    M, Z, H, R = veri.cerceveler()
     o = json.loads((VERI / "metrik_ozet.json").read_text(encoding="utf-8"))
-    zyol, hyol = VERI / "zk.csv", VERI / "haftalik_metrik.csv"
-    Z = pd.read_csv(zyol, index_col=0, parse_dates=True) if zyol.exists() else None
-    H = pd.read_csv(hyol, index_col=0, parse_dates=True) if hyol.exists() else None
-    ryol = veri.KOK / "Aktarılacak Projeler" / "TCMBNetRezerv" / "gunluk.csv"
-    R = None
-    if ryol.exists():
-        try:
-            R = pd.read_csv(ryol, index_col=0, parse_dates=True)
-        except Exception as ex:
-            print(f"  ! rezerv hattı okunamadı ({ex}) — Şekil 08 üretilemeyecek.")
+    if R is None:
+        print("  ! rezerv hattının günlük çıktısı yok — Şekil 08 üretilemeyecek.")
     return M, Z, H, R, o
 
 
 def kos() -> None:
     M, Z, H, R, o = _yukle()
-    s_gun = pd.Timestamp(o["son_gun"])
-    s_hafta = pd.Timestamp(o["son_hafta"])
-    damga, damga_h = gun_ad(s_gun), gun_ad(s_hafta)
-    print(f"TCMB fonlama & likidite — grafikler · veri {damga}")
+    # DAMGA FİGÜR BAŞINA. Eskiden sekiz şeklin sekizi de hattın günlük APİ
+    # saatiyle damgalanıyordu; bu hat beş ritim taşıyor ve damga iki figürde
+    # yalan söylüyordu — haftalık geçişkenlik figürü on iki gün eskiyken
+    # "bugün" diye, ZK figürü de dört ayrı günde biten dört paneline tek gün
+    # yazarak. Aynı defteri ozet_uret.py sayfa altındaki damga için okur:
+    # figürün İÇİNDEKİ ile ALTINDAKİ tarih tek kaynaktan gelsin.
+    saat = veri.sekil_saatleri(M, Z, H, R, uzun=True)
+    zk_saat = veri.zk_panel_saatleri(M, Z, uzun=True)
+    print(f"TCMB fonlama & likidite — grafikler · günlük bacak "
+          f"{gun_ad(pd.Timestamp(o['son_gun']))}")
 
     ciktilar = [
-        (sekil_01(M, o, damga), "01_koridor_faizler.html"),
-        (sekil_02(M, o, damga), "02_spreadler.html"),
-        (sekil_03(M, o, damga), "03_net_api_kompozisyon.html"),
-        (sekil_04(M, o, damga), "04_swap_fonlama.html"),
-        (sekil_05(M, Z, o, damga), "05_zk_likidite.html"),
-        (sekil_06(H, o, damga, damga_h), "06_gecirgenlik.html"),
-        (sekil_07(M, o, damga), "07_koridor_konumu.html"),
-        (sekil_08(M, R, o, damga), "08_rezerv_capraz.html"),
+        (sekil_01(M, o, saat["01_koridor_faizler.html"]), "01_koridor_faizler.html"),
+        (sekil_02(M, o, saat["02_spreadler.html"]), "02_spreadler.html"),
+        (sekil_03(M, o, saat["03_net_api_kompozisyon.html"]), "03_net_api_kompozisyon.html"),
+        (sekil_04(M, o, saat["04_swap_fonlama.html"]), "04_swap_fonlama.html"),
+        (sekil_05(M, Z, o, zk_saat), "05_zk_likidite.html"),
+        (sekil_06(H, o, saat["06_gecirgenlik.html"]), "06_gecirgenlik.html"),
+        (sekil_07(M, o, saat["07_koridor_konumu.html"]), "07_koridor_konumu.html"),
+        (sekil_08(M, R, o, saat["08_rezerv_capraz.html"]), "08_rezerv_capraz.html"),
     ]
     n = 0
     for fig, ad in ciktilar:
         if fig is None:
             print(f"  ATLANDI: {ad} — girdisi üretilemedi (uyarilar.json'a bakın)")
             continue
+        # SAAT LİSTESİ FİGÜRDEN AYRIŞAMAZ. İlan edilen uç ile figürün gerçekten
+        # çizdiği uç karşılaştırılır: bir figüre iz eklenip saat listesi
+        # güncellenmezse damga sessizce kayar ve koşu yeşil biter.
+        beyan, cizili = saat[ad], _cizili_uc(fig)
+        if beyan and cizili is not None and gun_ad(cizili) != beyan:
+            raise SystemExit(
+                f"DUR: {ad} için ilan edilen uç ({beyan}) figürün çizdiği uçtan "
+                f"({gun_ad(cizili)}) farklı. veri.sekil_saatleri'ndeki kolon "
+                "listesi figürün izleriyle ayrışmış — damga yalan söyler.")
         _yaz(fig, ad)
         n += 1
     (CIKTI / "yukseklikler.json").write_text(json.dumps(

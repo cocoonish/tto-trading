@@ -8,7 +8,18 @@ her seri burada da var; yakın akraba paneller tek grafikte birleştirildi
 (ör. dört konseptin maliyet endeksi tek şekilde, seçmeli değil üst üste).
 
 Kaynak: output/seriler.xlsx sekmeleri (analiz.py üretir). Ham veriye dokunulmaz.
+
+ŞEKİL SAATİ. Bu hattın figürleri aynı ayda bitmez: TÜFE panelleri TÜİK'in ayın
+başında yayımladığı manşet endeksten, konsept maliyet/fiyat panelleri madde
+düzeyi derlemeden, food-cost paneli porsiyon maliyeti tablosundan gelir. Tek bir
+ana saat basıldığında damga İKİ YÖNDE birden yalan söylüyordu — taze TÜFE paneli
+bir ay bayat, bayat food-cost paneli bir ay taze görünüyordu. Her figürün ucu bu
+yüzden ONU ÇİZEN kodun elinde, çizdiği çerçeveden ölçülür (`_yaz(..., uc=...)`)
+ve output/sekil_tarih.json'a yazılır; ozet_uret.py onu `_sekil_tarih` defteri
+olarak ozet.json'a taşır. Ölçü ile figürün İÇİNDEKİ etiket (başlıktaki dönem)
+aynı değişkenden gelir; iki ayrı liste bir gün sessizce ayrışırdı.
 """
+import json
 import os
 import pandas as pd
 import plotly.graph_objects as go
@@ -50,6 +61,12 @@ KONSEPT_AD = {
     "fast_food": "Fast-food",
 }
 
+# Hizmet ciro panelinin karşılaştırdığı yıllar (salgın yılı ve toparlanma
+# ortalaması). Lejant etiketi de figürün veri ucu da buradan türer; iki yerde
+# ayrı yazılsaydı biri güncellendiğinde öbürü sessizce eskirdi.
+CIRO_TABAN = 2020
+CIRO_SALGIN = [2021, 2022]
+
 
 def _duzen(fig, baslik, y_baslik, alt_not=""):
     """Ev stili: başlık solda, lejant altta yatay, beyaz zemin, responsive."""
@@ -77,13 +94,88 @@ def _duzen(fig, baslik, y_baslik, alt_not=""):
     return fig
 
 
-def _yaz(fig, ad):
+# Figür başına ölçülen veri ucu: {dosya adı: "AA.YYYY" | None}. _yaz() doldurur,
+# sekil_tarih_yaz() diske verir. Ölçülemeyen uç None kalır ve sayfa o şeklin
+# altına tarih HİÇ basmaz — yanlış bir tarih, tarihsizlikten kötüdür.
+SEKIL_TARIH = {}
+SEKIL_TARIH_YOL = os.path.join(BASE, "output", "sekil_tarih.json")
+
+
+def _ay(ts):
+    """Timestamp → 'AA.YYYY'; ölçülemeyen uç None.
+
+    AYLIK bir gözlem dönemin İLK gününe damgalanır ve onu gün gibi yazmak
+    ("01.07.2026") okura o GÜNÜN ölçümüymüş gibi görünür. Bu hattın bütün
+    serileri aylık; damga da ay yazımıyla basılır (ortak/bicim ve lib/bicim
+    ikisini de çözer, 'AA.YYYY' ayın son gününe demirlenir).
+    """
+    if ts is None:
+        return None
+    t = pd.Timestamp(ts)
+    if pd.isna(t):
+        return None
+    return f"{t.month:02d}.{t.year}"
+
+
+def _en_eski(uclar):
+    """Bacakların EN ESKİ ucu (bkz. _seri_ucu); hiçbiri ölçülemediyse None."""
+    var = [u for u in uclar if u is not None and not pd.isna(u)]
+    return min(var) if var else None
+
+
+def _seri_ucu(df, kolonlar=None):
+    """Çizilen kolonların EN ESKİ son gözlemi (Timestamp) — ölçülemezse None.
+
+    Karma bir figürde damga BAĞLAYICI bacaktır: figürün sözü serilerin
+    kıyasıdır ve kıyas ancak hepsinin ölçüldüğü aya kadar kurulabilir. En
+    tazesini yazmak geride kalan bacağı olduğundan yeni gösterir; min()
+    bu yüzden yapısal yazılır, bugünkü sıralamaya bakmaz.
+    """
+    kolonlar = list(df.columns) if kolonlar is None else [c for c in kolonlar if c in df.columns]
+    uclar = [df[c].last_valid_index() for c in kolonlar]
+    uclar = [u for u in uclar if u is not None]
+    return min(uclar) if uclar else None
+
+
+def _yaz(fig, ad, uc):
+    """Figürü yazar ve ucunu deftere işler.
+
+    `uc`in VARSAYILANI YOK: yarın eklenecek bir figürde unutulursa TypeError
+    verir. Varsayılan None olsaydı figür sessizce tarihsiz yayımlanır, defterde
+    "ucu ölçülmedi" diye geçerli görünür ve hiçbir kapı bunu sormazdı. Ölçülemeyen
+    bir uç için None AÇIKÇA yazılır — karar görünür olsun.
+    """
     os.makedirs(CIKTI, exist_ok=True)
     yol = os.path.join(CIKTI, ad)
     fig.write_html(yol, include_plotlyjs="cdn", full_html=True,
                    config={"responsive": True, "displaylogo": False})
-    print(f"  yazildi: {yol}")
+    SEKIL_TARIH[ad] = _ay(uc)
+    print(f"  yazildi: {yol}  (veri ucu: {SEKIL_TARIH[ad] or 'ölçülemedi'})")
     return yol
+
+
+def sekil_tarih_yaz():
+    """Bu koşuda ölçülen uçları defterle BİRLEŞTİRİP diske yazar.
+
+    Birleştirme, üzerine yazma DEĞİL: bir figür bu koşuda üretilemediyse (ağ
+    düştü, sekme okunamadı) eski HTML dosyası yerinde duruyordur ve onun için
+    daha önce ÖLÇÜLMÜŞ uç hâlâ doğrudur. Üzerine yazmak o figürü defterden
+    düşürür ve damga sessizce hattın ana saatine geri döner — kusurun ta kendisi.
+    """
+    eski = {}
+    if os.path.exists(SEKIL_TARIH_YOL):
+        try:
+            with open(SEKIL_TARIH_YOL, encoding="utf-8") as f:
+                yuk = json.load(f)
+            if isinstance(yuk, dict):
+                eski = yuk
+        except (ValueError, OSError) as exc:
+            print(f"  UYARI: eski şekil saat defteri okunamadi: {exc}")
+    defter = {**eski, **SEKIL_TARIH}
+    with open(SEKIL_TARIH_YOL, "w", encoding="utf-8") as f:
+        json.dump(defter, f, ensure_ascii=False, indent=1, sort_keys=True)
+    print(f"\nsekil saatleri yazildi: {SEKIL_TARIH_YOL} ({len(defter)} figur)")
+    return defter
 
 
 def _oku(sekme):
@@ -100,6 +192,7 @@ def uret():
 
     # --- 01: Fiyat/maliyet oranı — dört konsept (PNG 09-13'ün özü) ---
     oran = _oku("Fiyat_maliyet_orani")
+    ciz = [k for k in ["ev_yemekleri", "kirmizi_et", "tavuk", "fast_food"] if k in oran.columns]
     fig = go.Figure()
     for i, k in enumerate(["ev_yemekleri", "kirmizi_et", "tavuk", "fast_food"]):
         if k in oran.columns:
@@ -108,29 +201,31 @@ def uret():
     fig.add_hline(y=1.0, line=dict(color=INK, width=1, dash="dot"))
     _duzen(fig, "Fiyat / maliyet oranı — dört konsept (2013 Ocak = 1)", "oran",
            "1,0 çizgisi 2013 Ocak çıpası. Oran kâr marjı SEVİYESİ değil, o çıpaya göre göreli seviyedir.")
-    yollar.append(_yaz(fig, "oran_konseptler.html"))
+    yollar.append(_yaz(fig, "oran_konseptler.html", _seri_ucu(oran, ciz)))
 
     # --- 02: Konsept maliyet endeksleri (PNG 05-08) ---
     mal = _oku("Konsept_maliyet")
+    ciz = [c for c in mal.columns if c in KONSEPT_AD]
     fig = go.Figure()
-    for i, k in enumerate([c for c in mal.columns if c in KONSEPT_AD]):
+    for i, k in enumerate(ciz):
         fig.add_trace(go.Scatter(x=mal.index, y=mal[k], name=KONSEPT_AD[k],
                                  line=dict(color=PALET[i], width=2)))
     _duzen(fig, "Konsept maliyet endeksleri (2013 Ocak = 100)", "endeks",
            "Ağırlıklar: %21 işgücü · %49 gıda · %5 enerji · %10 kira · %15 diğer (notun Tablo 4'ü).")
     fig.update_yaxes(type="log")
-    yollar.append(_yaz(fig, "maliyet_endeksleri.html"))
+    yollar.append(_yaz(fig, "maliyet_endeksleri.html", _seri_ucu(mal, ciz)))
 
     # --- 03: Konsept fiyat endeksleri ---
     fiy = _oku("Konsept_fiyat")
+    ciz = [c for c in fiy.columns if c in KONSEPT_AD]
     fig = go.Figure()
-    for i, k in enumerate([c for c in fiy.columns if c in KONSEPT_AD]):
+    for i, k in enumerate(ciz):
         fig.add_trace(go.Scatter(x=fiy.index, y=fiy[k], name=KONSEPT_AD[k],
                                  line=dict(color=PALET[i], width=2)))
     _duzen(fig, "Konsept fiyat endeksleri (2013 Ocak = 100)", "endeks",
            "Nisan 2022 sonrası madde fiyatı yayını durduğu için COICOP-2018 5'li grup endeksleriyle uzatıldı (PROXY 2).")
     fig.update_yaxes(type="log")
-    yollar.append(_yaz(fig, "fiyat_endeksleri.html"))
+    yollar.append(_yaz(fig, "fiyat_endeksleri.html", _seri_ucu(fiy, ciz)))
 
     # --- 04: Maliyet bileşenleri (işgücü/gıda/enerji/kira/diğer) ---
     bil = _oku("Maliyet_bilesenleri")
@@ -141,7 +236,7 @@ def uret():
     _duzen(fig, "Maliyet bileşenleri (2013 Ocak = 100)", "endeks",
            "İşgücü: brüt asgari ücret · Kira: TÜFE-kira (duyarlılıkta Yeni Kiracı Kira Endeksi) · Enerji ve diğer: TÜFE alt kalemleri.")
     fig.update_yaxes(type="log")
-    yollar.append(_yaz(fig, "maliyet_bilesenleri.html"))
+    yollar.append(_yaz(fig, "maliyet_bilesenleri.html", _seri_ucu(bil)))
 
     # --- 05: Katkı ayrıştırması (iki yıl önce → güncel ay) yığılı bar ---
     kat = pd.read_csv(os.path.join(BASE, "output", "katki_ayristirma.csv"), index_col=0)
@@ -155,7 +250,9 @@ def uret():
     fig.update_layout(barmode="stack")
     _duzen(fig, f"Maliyet artışının kalem katkıları, {_ad_kisa(_once)} → {_ad_kisa(_son)}", "puan",
            "Toplam sütun yüksekliği iki yıllık maliyet artışıdır (%).")
-    yollar.append(_yaz(fig, "katki_ayristirma.html"))
+    # Uç, iki yıllık değişimin BİTTİĞİ aydır; başlıktaki dönem etiketiyle aynı
+    # değişkenden gelir ki şeklin içi ile sayfadaki damga ayrışamasın.
+    yollar.append(_yaz(fig, "katki_ayristirma.html", _son))
 
     # --- 06: Food-cost oranları (çıpasız doğrulama) ---
     fc = pd.read_csv(os.path.join(BASE, "output", "food_cost_orani.csv"), index_col=0)
@@ -166,32 +263,48 @@ def uret():
                                  line=dict(color=PALET[i % len(PALET)], width=1.8)))
     _duzen(fig, "Food-cost oranı — porsiyon gramajıyla, çıpasız", "%",
            "Gıda maliyeti / satış fiyatı. Çıpa varsayımı içermez; oranın düşmesi marjın genişlemesi yönünde kanıttır.")
-    yollar.append(_yaz(fig, "food_cost.html"))
+    # Bu panelin ucu hattın ana saatinin GERİSİNDE kalabiliyor; ölçü bu yüzden
+    # çizilen çerçeveden okunur, hattın ana saatinden değil.
+    # SEBEP ÖLÇÜLDÜ ve bir yayım takvimi farkı DEĞİL: bu CSV ile xlsx'in
+    # FoodCost_orani_% sekmesini marj_seviye.hesapla() AYNI çağrıda yazıyor
+    # (rapor.py), yani ikisi tanımı gereği aynı ayda bitmeli. Depodaki CSV
+    # 2026-06'da, sekme 2026-07'de bitiyor — CSV daha ESKİ bir koşudan kalma.
+    # Damga dürüst (figür gerçekten Haziran'da bitiyor) ama asıl kusur giderilmedi:
+    # bir sonraki tam koşu ikisini eşitlemeli. Okura SEBEP yazılmadı.
+    yollar.append(_yaz(fig, "food_cost.html", _seri_ucu(fc)))
 
     # --- 07: İma edilen kârlılık — merkez senaryo ve bant ---
     try:
         merkez = _oku("Ima_marj_%22.5_merkez")
+        ciz = [x for x in merkez.columns if x in KONSEPT_AD]
         fig = go.Figure()
-        for i, c in enumerate([x for x in merkez.columns if x in KONSEPT_AD]):
+        for i, c in enumerate(ciz):
             fig.add_trace(go.Scatter(x=merkez.index, y=merkez[c], name=KONSEPT_AD[c],
                                      line=dict(color=PALET[i], width=2)))
         _duzen(fig, "İma edilen satış kârlılığı — merkez senaryo (m₀ = %22,5)", "%",
                "marj(t) = 1 − (1−m₀)·R̄/R(t). Mekanik türetimdir: kalite ve kompozisyon değişimini de 'marj' sayar.")
-        yollar.append(_yaz(fig, "ima_marj.html"))
+        yollar.append(_yaz(fig, "ima_marj.html", _seri_ucu(merkez, ciz)))
     except Exception as exc:
         print(f"  UYARI: ima marj grafigi atlandi: {exc}")
 
     # --- 08: Duyarlılık — 18 koşuda güncel oran dağılımı ---
     duy = pd.read_csv(os.path.join(BASE, "output", "duyarlilik.csv"))
+    # Senaryoların değerlendirildiği ay tablonun KENDİ içinde yazılı; başlık da
+    # damga da oradan okunur. Hattın ana saatinden okunsaydı tablo bir koşu geri
+    # kaldığında başlık ölçülmemiş bir ayı anlatırdı.
+    duy_son = pd.to_datetime(duy["donem_son"].dropna().iloc[-1], errors="coerce") \
+        if "donem_son" in duy.columns and duy["donem_son"].notna().any() else None
+    if duy_son is None or pd.isna(duy_son):
+        duy_son = _son
     fig = go.Figure()
     for i, k in enumerate(["ev_yemekleri", "kirmizi_et", "tavuk", "fast_food"]):
         kol = f"oran_son_{k}"
         if kol in duy.columns:
             fig.add_trace(go.Box(y=duy[kol], name=KONSEPT_AD[k],
                                  marker_color=PALET[i], boxpoints="all", jitter=0.4))
-    _duzen(fig, f"Duyarlılık: {len(duy)} senaryoda {_ad_uzun(_son)} fiyat/maliyet oranı", "oran",
+    _duzen(fig, f"Duyarlılık: {len(duy)} senaryoda {_ad_uzun(duy_son)} fiyat/maliyet oranı", "oran",
            "3 ağırlık seti × 3 kira göstergesi × tür kaması açık/kapalı. Dar kutu = bulgunun varsayımlara dayanıklı olduğu.")
-    yollar.append(_yaz(fig, "duyarlilik.html"))
+    yollar.append(_yaz(fig, "duyarlilik.html", duy_son))
 
     print(f"\n{len(yollar)} grafik uretildi.")
     return yollar
@@ -224,21 +337,29 @@ def uret_ek():
     try:
         import grafikler
         import numpy as np
-        ciro = grafikler.hizmet_ciro_oku()
+        ciro, ay_kapsam = grafikler.hizmet_ciro_oku(kapsam=True)
         # Veri ZATEN yillik ortalama (indeks = yil); resample YAPILMAZ.
         yillik = ciro.pct_change() * 100
         yillik.index = [int(y) for y in yillik.index]
         sut = [c for c in yillik.columns if str(c).split(" ")[0] in list("HIJLMN")][:6]
         etk = {c: str(c).split(" - ")[-1][:22] for c in sut}
         fig = go.Figure()
-        fig.add_trace(go.Bar(x=[etk[c] for c in sut], y=yillik.loc[2020, sut],
-                             name="2020", marker_color=TEAL))
-        fig.add_trace(go.Bar(x=[etk[c] for c in sut], y=yillik.loc[[2021, 2022], sut].mean(),
-                             name="2021–2022 ort.", marker_color=CLARET))
+        fig.add_trace(go.Bar(x=[etk[c] for c in sut], y=yillik.loc[CIRO_TABAN, sut],
+                             name=str(CIRO_TABAN), marker_color=TEAL))
+        fig.add_trace(go.Bar(x=[etk[c] for c in sut], y=yillik.loc[CIRO_SALGIN, sut].mean(),
+                             name=f"{CIRO_SALGIN[0]}–{CIRO_SALGIN[-1]} ort.", marker_color=CLARET))
         fig.update_layout(barmode="group")
         _duzen(fig, "Hizmet ciro endeksleri — yıllık % değişim", "%",
                "TÜİK Ticaret ve Hizmet Ciro Endeksleri (2015=100). Cari fiyatlarla, arındırılmamış endekslerin yıllık ortalamalarından.")
-        yollar.append(_yaz(fig, "hizmet_ciro.html"))
+        # Bu panel salgın epizodunu anlatan SABİT bir karşılaştırma: en son
+        # çizilen gözlem 2021–2022 ortalamasının bitiş yılıdır, dosyanın son ayı
+        # değil. Yıl ortalamasının kapsadığı SON AY ölçülür (yıl yarım ölçülmüş
+        # olabilir); hattın ana saati basılsaydı dört yıl bayat bir panel bugünün
+        # verisiymiş gibi görünürdü.
+        son_yil = max([CIRO_TABAN, *CIRO_SALGIN])
+        uc = (pd.Timestamp(year=son_yil, month=int(ay_kapsam[son_yil]), day=1)
+              if son_yil in ay_kapsam else None)
+        yollar.append(_yaz(fig, "hizmet_ciro.html", uc))
     except Exception as exc:
         print(f"  UYARI: hizmet ciro grafigi atlandi: {exc}")
 
@@ -246,29 +367,46 @@ def uret_ek():
     try:
         ser = _tufe_serileri()
         baz = pd.Timestamp("2019-12-01")
+        # Bu üç panel CANLI EVDS'ten çizilir ve hattın konsept serilerinden bir
+        # ay İLERİDE bitebilir. SEBEP ÖLÇÜLDÜ ve bir yayım takvimi farkı DEĞİL:
+        # xlsx'in EVDS_ham sekmesi HAM bir EVDS dökümüdür (hiçbir derleme yok) ve
+        # 2026-07'de bitiyor, oysa aynı serileri EVDS bugün 2026-08 ile veriyor.
+        # Yani geride kalan şey madde düzeyi derleme değil, xlsx anlık
+        # görüntüsünün kendisi: hafif kip bu panelleri her koşuda yeniden çizer
+        # ama xlsx'i kurmaz, o yalnız tam kipte ilerler (CLAUDE.md, "bir hattın
+        # kipi ölçüsünün ritmine göre bölünür"). Damga dürüst — her figür kendi
+        # ayını söylüyor — ama kip bölünmesi hâlâ açık bir iş.
+        # Uç, çizilen DÖNÜŞMÜŞ serinin son dolu ayıdır — düzey ile aylık/yıllık
+        # değişimin son dolu ayı aynı olmak zorunda değil.
 
         fig = go.Figure()
+        uclar = []
         for (ad, s), r in zip(ser.items(), RENK):
             sb = (s / s.loc[baz] * 100).loc["2019-12-01":]
+            uclar.append(sb.last_valid_index())
             fig.add_trace(go.Scatter(x=sb.index, y=sb.values, name=ad, line=dict(color=r, width=2)))
         _duzen(fig, "TÜFE fiyat endeksleri (2019 Aralık = 100)", "endeks",
                "Gıda ve yemek hariç TÜFE, yıllık resmî ağırlıklarla zincirlenerek hesaplanmıştır.")
-        yollar.append(_yaz(fig, "tufe_endeks.html"))
+        yollar.append(_yaz(fig, "tufe_endeks.html", _en_eski(uclar)))
 
         fig = go.Figure()
+        uclar = []
         for (ad, s), r in zip(ser.items(), RENK):
             mm = (s.pct_change(fill_method=None) * 100).loc["2019-12-01":]
+            uclar.append(mm.last_valid_index())
             fig.add_trace(go.Scatter(x=mm.index, y=mm.values, name=ad, line=dict(color=r, width=1.6)))
         _duzen(fig, "TÜFE fiyat endeksleri — aylık % değişim", "%")
-        yollar.append(_yaz(fig, "tufe_aylik.html"))
+        yollar.append(_yaz(fig, "tufe_aylik.html", _en_eski(uclar)))
 
         fig = go.Figure()
+        uclar = []
         for (ad, s), r in zip(ser.items(), RENK):
             yy = (s.pct_change(12, fill_method=None) * 100).loc["2019-12-01":]
+            uclar.append(yy.last_valid_index())
             fig.add_trace(go.Scatter(x=yy.index, y=yy.values, name=ad, line=dict(color=r, width=2)))
         _duzen(fig, "TÜFE fiyat endeksleri — yıllık % değişim", "%",
                "Yemek hizmetleri ile manşet arasındaki farkın kapanması, akım fiyatlamada normalleşme sinyalidir.")
-        yollar.append(_yaz(fig, "tufe_yillik.html"))
+        yollar.append(_yaz(fig, "tufe_yillik.html", _en_eski(uclar)))
     except Exception as exc:
         print(f"  UYARI: TUFE grafikleri atlandi: {exc}")
 
@@ -291,7 +429,9 @@ def uret_ek():
         fig.add_hline(y=1.0, line=dict(color=INK, width=1, dash="dash"))
         _duzen(fig, "Fiyat/maliyet oranları — ev yemekleri = 1", "oran",
                "Konseptler arası ayrışma: 1'in üstü, o konseptin ev yemeklerinden daha çok açıldığını gösterir.")
-        yollar.append(_yaz(fig, "oran_normalize.html"))
+        # Üç çubuk grubunun ikisi geçmişe bakan KIYAS NOKTASI (uzun dönem
+        # ortalaması ve iki yıl öncesi); figürün ölçtüğü an en yenisidir.
+        yollar.append(_yaz(fig, "oran_normalize.html", _son))
     except Exception as exc:
         print(f"  UYARI: normalize oran grafigi atlandi: {exc}")
 
@@ -306,7 +446,9 @@ def uret_konsept_oranlari():
       · Nisan 2022 splice isareti (fiyat tarafi proxy'ye gectigi an)
       · iki yil once ve guncel ay noktalarinin isaretlenip etiketlenmesi
     """
-    import endeks as _e
+    # (Bu dört panelin verisi seriler.xlsx'ten gelir; endeks/veri modülleri
+    # gerekmez. Kullanılmayan bir içe aktarma buraya EVDS anahtarı zorunluluğu
+    # taşıyordu ve modülün "internetsiz koşabilir" sözünü sessizce bozuyordu.)
     ETIKET = {"kirmizi_et": "Kırmızı et ağırlıklı", "tavuk": "Tavuk eti ağırlıklı",
               "ev_yemekleri": "Ev yemekleri", "fast_food": "Fast-food"}
     RENK = {"ev_yemekleri": TEAL, "kirmizi_et": CLARET, "tavuk": GOLD, "fast_food": "#2f4b7c"}
@@ -351,7 +493,9 @@ def uret_konsept_oranlari():
         _duzen(fig, f"Fiyat / maliyet oranı — {ETIKET[k]} (2013 Ocak = 1)", "oran",
                "Oran kâr marjı SEVİYESİNİ göstermez; 2013 Ocak'a göre göreli seviyedir.<br>"
                "Nis 2022 sonrası fiyat tarafı 11111/11112 endeksleriyle uzatılmış proxy'dir.")
-        yollar.append(_yaz(fig, f"oran_{k}.html"))
+        # Tek serili panel: uç, o konseptin kendi son dolu ayı. İşaretli iki
+        # nokta aynı serinin üstünde durur, ayrı bacak değildir.
+        yollar.append(_yaz(fig, f"oran_{k}.html", srs.index[-1] if len(srs) else None))
     return yollar
 
 
@@ -359,4 +503,5 @@ if __name__ == "__main__":
     y = uret()
     y += uret_ek()
     y += uret_konsept_oranlari()
+    sekil_tarih_yaz()
     print(f"\nTOPLAM {len(y)} grafik.")

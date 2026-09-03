@@ -1354,17 +1354,30 @@ def kos() -> None:
     o["atalet_seri"] = {k: v["seri"] for k, v in metrik.atalet_olc(SA).items()}
     damga = o["son_ay_ad"]
     ip = _ito_yukle()
+    up = _uge_yukle()
+    bp = _birlesik_yukle()
     print(f"Enflasyon — grafikler · veri {damga}")
+    # HER FİGÜR KENDİ SAATİNİ TAŞIR. Figürün İÇİNDEKİ alt yazı ("veri: …")
+    # okura sayfa damgası kadar görünür; ikisi ayrı kaynaktan beslenirse bir
+    # gün sessizce ayrışır. İkisi de aynı tablodan okunur — biri sayfa
+    # sözleşmesinin yazımıyla, öbürü figür alt başlığının yazımıyla.
+    saat = veri.sekil_saatleri(o, ip, up, bp)
+    saat_uzun = veri.sekil_saatleri(o, ip, up, bp, uzun=True)
+
+    def dmg(ad: str) -> str:
+        """Figürün alt başlığına girecek uç; ölçülemiyorsa hattın ana saati."""
+        return saat_uzun.get(ad) or damga
+
     ciktilar = [
-        (sekil_01(M, o, damga), "01_manset_momentum.html"),
-        (sekil_02(M, damga), "02_cekirdek_momentum.html"),
-        (sekil_03(a, M, SA, tani, damga), "03_arindirma.html"),
-        (sekil_04(K, o, damga), "04_katki.html"),
-        (sekil_05(D, M, o, damga), "05_dagilim_difuzyon.html"),
-        (sekil_06(M, o, damga), "06_hizmet_mal.html"),
-        (sekil_07(a, M, o, damga), "07_beklenti.html"),
-        (sekil_08(R, M, o, damga), "08_reel_faiz.html"),
-        (sekil_09(a, B, damga), "09_baz_etkisi.html"),
+        (sekil_01(M, o, dmg("01_manset_momentum.html")), "01_manset_momentum.html"),
+        (sekil_02(M, dmg("02_cekirdek_momentum.html")), "02_cekirdek_momentum.html"),
+        (sekil_03(a, M, SA, tani, dmg("03_arindirma.html")), "03_arindirma.html"),
+        (sekil_04(K, o, dmg("04_katki.html")), "04_katki.html"),
+        (sekil_05(D, M, o, dmg("05_dagilim_difuzyon.html")), "05_dagilim_difuzyon.html"),
+        (sekil_06(M, o, dmg("06_hizmet_mal.html")), "06_hizmet_mal.html"),
+        (sekil_07(a, M, o, dmg("07_beklenti.html")), "07_beklenti.html"),
+        (sekil_08(R, M, o, dmg("08_reel_faiz.html")), "08_reel_faiz.html"),
+        (sekil_09(a, B, dmg("09_baz_etkisi.html")), "09_baz_etkisi.html"),
     ]
     # İTO KANADI KOŞULLU: İTO serisi EVDS'te Ocak 2024'te başlıyor ve tek bir
     # dış seriye bağlı. Onu zorunlu figür saymak, seri bir gün gelmediğinde
@@ -1378,10 +1391,10 @@ def kos() -> None:
     BIR_CIKTI = BIR_CIKTI_ADLARI
     if ip:
         ciktilar += [
-            (sekil_10(ip, damga), ITO_CIKTI[0]),
-            (sekil_11(ip, damga), ITO_CIKTI[1]),
-            (sekil_12(ip, damga), ITO_CIKTI[2]),
-            (sekil_13(ip, damga), ITO_CIKTI[3]),
+            (sekil_10(ip, dmg(ITO_CIKTI[0])), ITO_CIKTI[0]),
+            (sekil_11(ip, dmg(ITO_CIKTI[1])), ITO_CIKTI[1]),
+            (sekil_12(ip, dmg(ITO_CIKTI[2])), ITO_CIKTI[2]),
+            (sekil_13(ip, dmg(ITO_CIKTI[3])), ITO_CIKTI[3]),
         ]
     else:
         print("  ! İTO profili yok (data/ito_profil.json) — İTO figürleri "
@@ -1393,9 +1406,8 @@ def kos() -> None:
             (veri.KOK / "site/public/projeler/enflasyon" / ad).unlink(missing_ok=True)
     # ÜGE KANADI AYRI KOŞULLU: kendi profil dosyası var ve İTO tüketici
     # kanadıyla birlikte düşmesi için bir sebep yok.
-    up = _uge_yukle()
     if up:
-        ciktilar += [(sekil_14(up, a, damga), UGE_CIKTI[0])]
+        ciktilar += [(sekil_14(up, a, dmg(UGE_CIKTI[0])), UGE_CIKTI[0])]
     else:
         print("  ! ÜGE profili yok (data/uge_profil.json) — ÜGE figürü "
               "üretilmedi ve eski kopyası SİLİNİYOR.")
@@ -1404,10 +1416,9 @@ def kos() -> None:
             (veri.KOK / "site/public/projeler/enflasyon" / ad).unlink(missing_ok=True)
     # BİRLEŞİK KANAT: üç seriyi birlikte kullanan ölçüm. Kendi dosyası,
     # kendi koşulu.
-    bp = _birlesik_yukle()
     if bp:
-        ciktilar += [(sekil_15(bp, a, damga), BIR_CIKTI[0]),
-                     (sekil_16(bp, damga), BIR_CIKTI[1])]
+        ciktilar += [(sekil_15(bp, a, dmg(BIR_CIKTI[0])), BIR_CIKTI[0]),
+                     (sekil_16(bp, dmg(BIR_CIKTI[1])), BIR_CIKTI[1])]
         # 17 KENDİ KOŞULUNU TAŞIR: ne bekleyen ay ne karne varsa (yarış daha
         # tek ay bile üretmemişse) figürün çizecek şeyi yoktur. Bu NORMAL bir
         # durumdur, arıza değil — zorunlu figür sayılırsa çalışan on altı figür
@@ -1415,7 +1426,7 @@ def kos() -> None:
         # tam bu oldu: ağustos TÜFE'si yayımlanınca bekleyen ay kalmadı,
         # figür üretilemedi, hat DURDU ve pano temmuzda kaldı.
         if tahmin_figuru_var(bp):
-            ciktilar += [(sekil_17(bp, damga), BIR_CIKTI[2])]
+            ciktilar += [(sekil_17(bp, dmg(BIR_CIKTI[2])), BIR_CIKTI[2])]
         else:
             print("  ! Ne bekleyen ay ne karne var — tahmin figürü üretilmedi "
                   "ve eski kopyası SİLİNİYOR.")

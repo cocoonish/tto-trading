@@ -2123,6 +2123,17 @@ def ozet_topla(a, g, SA, M, K, D, B, R, bek, atalet, ito, w_katki, w_ana,
             v = D[kol].dropna()
             if len(v):
                 o[f"dagilim__{kol}"] = float(v.iloc[-1])
+        # KESİTİN KENDİ SAATİ. Kırpılmış ortalama, medyan ve difüzyon üç haneli
+        # alt kalem kırılımını ister ve o kırılım ana endeksten aylarca geride
+        # yayımlanıyor — yani bu blok `son_ay`da DEĞİL, kendi ayında biter.
+        # Ölçülüp yazılmazsa kesit panelleri hattın ana saatiyle damgalanır ve
+        # aylarca bayatken TAZE görünür.
+        # Ölçülemiyorsa anahtar YAZILMAZ: figür o zaman hattın ana saatine
+        # düşer (bugünkü davranış), uydurma bir ay ilan edilmez.
+        _dson = max((D[k].dropna().index.max() for k in D.columns
+                     if len(D[k].dropna())), default=None)
+        if _dson is not None:
+            o["dagilim__son_ay"] = pd.Timestamp(_dson).strftime("%Y-%m")
     if not K.empty:
         sonk = K.dropna(subset=[c for c in K.columns if c.startswith("y_")]).iloc[-1]
         o["katki_yillik"] = {c[2:]: float(sonk[c]) * 100

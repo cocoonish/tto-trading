@@ -172,6 +172,29 @@ def main():
     except Exception as exc:
         _uyar(f"Konsept_maliyet okunamadi: {exc}")
 
+    # --- Sekil saat defteri (figuru cizen kod olcer: web_cikti.py) ---
+    # Hattin figurleri ayni ayda bitmez: TUFE panelleri manset endeksten bir ay
+    # ILERIDE, food-cost paneli porsiyon maliyet tablosundan bir ay GERIDE, hizmet
+    # ciro paneli ise salgin epizodunu anlatan sabit bir karsilastirma. Tek ana
+    # saat basildiginda damga iki yonde birden yalan soyluyordu. Defteri BURADA
+    # kurmayiz — olcum, figuru cizen cerceveyi elinde tutan web_cikti.py'de yapilir
+    # ve output/sekil_tarih.json'a yazilir; burasi yalnizca tasir. Dosya hattin
+    # adim listesinde GORUNEN bir adimdan gelir (web_cikti.py, ozet_uret'ten once
+    # kosar), yani olu bir bagimlilik degildir.
+    sekil_yol = os.path.join(OUT, "sekil_tarih.json")
+    if os.path.exists(sekil_yol):
+        try:
+            with open(sekil_yol, encoding="utf-8") as f:
+                defter = json.load(f)
+            if isinstance(defter, dict) and defter:
+                ozet["_sekil_tarih"] = defter
+            else:
+                _uyar("sekil saat defteri bos ya da sozluk degil")
+        except ValueError as exc:
+            _uyar(f"sekil saat defteri okunamadi: {exc}")
+    else:
+        _uyar("sekil saat defteri yok; her figur hattin ana saatiyle damgalanacak")
+
     yol = os.path.join(OUT, "ozet.json")
     json.dump(ozet, open(yol, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(json.dumps(ozet, ensure_ascii=False))

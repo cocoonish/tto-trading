@@ -409,6 +409,86 @@ def ad_kisa(t) -> str:
     return f"{AY_KISA[t.month]}-{str(t.year)[2:]}"
 
 
+# --------------------------------------------------------------------------- şekil saatleri
+#  BU HATTIN FİGÜRLERİ TEK RİTİMDE DEĞİL. Manşet, çekirdek, katkı ve beklenti
+#  serileri ana endeksle birlikte ilerler; KESİT ölçüleri (kırpılmış ortalama,
+#  medyan, difüzyon) üç haneli alt kalem kırılımını bekler ve ondan aylarca
+#  geride biter. Sayfa hepsine hattın tek ana saatini basarsa kesit paneli
+#  bayatken TAZE görünür — okurun "fiyat artışı hâlâ ne kadar yaygın" sorusunu
+#  cevapladığını sandığı panel, aslında aylar önceki yaygınlığı gösterir.
+#
+#  Değerler ÖLÇÜMDEN gelir, türetilmez: `son_ay` (ana endeks), `dagilim__son_ay`
+#  (kesitin kendi ucu) ve kanat profillerinin kendi `son_ay`ları. Ölçüm yoksa
+#  değer None kalır ve o şeklin altına tarih basılmaz — uydurmaktan iyidir.
+#
+#  Defter BURADA duruyor çünkü iki tüketicisi var: grafik.py figürün KENDİ alt
+#  başlığına yazar, ozet_uret.py sayfa altındaki damga için ozet.json'a
+#  `_sekil_tarih` olarak koyar. İki ayrı liste tutulsaydı bir gün sessizce
+#  ayrışır ve hangisinin neyi söylediği kimsenin aklında kalmazdı.
+def sekil_saatleri(o: dict, ip: dict | None = None, up: dict | None = None,
+                   bp: dict | None = None, uzun: bool = False
+                   ) -> dict[str, str | None]:
+    """Figür başına veri ucu; `o` = data/metrik_ozet.json, kanatlar profil dosyaları.
+
+    `uzun=True` figür alt başlığının yazımını verir ("Ağustos 2026");
+    varsayılan site sözleşmesidir ("08.2026", ortak/bicim ayın son gününe
+    demirler). AYLIK bir gözlemi gün gibi yazmak ("01.08.2026") okura o GÜNÜN
+    ölçümüymüş gibi görünürdü.
+    """
+    def ay(t):
+        if not t:
+            return None
+        t = pd.Timestamp(t)
+        return ad_uzun(t) if uzun else t.strftime("%m.%Y")
+
+    def baglayici(*tarihler):
+        """Karma figürün damgası: bacakların EN ESKİSİ.
+
+        Figürün sözü serilerin KIYASIDIR ve kıyas ancak hepsinin ölçüldüğü aya
+        kadar kurulabilir; en tazesini yazmak öbür bacağı olduğundan yeni
+        gösterir. min() yapısal — bugünkü sıralamayı varsaymaz.
+        """
+        g = [pd.Timestamp(t) for t in tarihler if t]
+        return ay(min(g)) if g else None
+
+    ana = o.get("son_ay")
+    kesit = o.get("dagilim__son_ay")
+    d: dict[str, str | None] = {
+        "01_manset_momentum.html": ay(ana),
+        "02_cekirdek_momentum.html": ay(ana),
+        "03_arindirma.html": ay(ana),
+        "04_katki.html": ay(ana),
+        # İKİ RİTİM BİR FİGÜRDE: iki panelin de konusu kesittir, üstteki
+        # manşet SAAR'ı yalnız kıyas çizgisidir. Bağlayıcı bacak kesittir.
+        "05_dagilim_difuzyon.html": baglayici(kesit, ana),
+        "06_hizmet_mal.html": ay(ana),
+        "07_beklenti.html": ay(ana),
+        # Fonlama maliyeti içinde bulunulan aya kadar var (reel__faiz_tarih),
+        # enflasyon bacağı bir ay geride: figür ikisinin KARŞILAŞTIRMASI
+        # olduğu için ortak ay bağlar.
+        "08_reel_faiz.html": baglayici(o.get("reel__ex_post_tarih") or ana,
+                                       o.get("reel__faiz_tarih")),
+        # Senaryo bacakları geleceğe uzanır ama ÖLÇÜM değildir; figürün
+        # ölçülmüş ucu gerçekleşen seridir.
+        "09_baz_etkisi.html": ay(ana),
+    }
+    if ip:
+        # İTO kanadının dördü de aynı profilden çizilir; ucu profilin son ayı.
+        # 13'ün alt paneli daha erken bir ayda biter GÖRÜNÜR ama o bir SEÇİMDİR
+        # (TÜFE'nin İTO'yu aştığı aylar), ölçümün durduğu yer değil — çizilen
+        # izden okunan bir uç orada ölçüm değil, seçim sonucu olurdu.
+        for _ad in ("10_ito_tufe.html", "11_ito_kural.html",
+                    "12_ito_takvim.html", "13_ito_bulut.html"):
+            d[_ad] = ay(ip.get("son_ay"))
+    if up:
+        d["14_uge_ucler.html"] = baglayici(up.get("son_ay"), ana)
+    if bp:
+        d["15_sacilim.html"] = baglayici(bp.get("son_ay"), ana)
+        d["16_yaris.html"] = ay(bp.get("son_ay"))
+        d["17_tahmin.html"] = ay(bp.get("son_ay"))
+    return d
+
+
 # --------------------------------------------------------------------------- toplama
 def _panel(kodlar: dict[str, str], yenile: bool = False) -> pd.DataFrame:
     out: dict[str, pd.Series] = {}

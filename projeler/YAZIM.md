@@ -77,6 +77,38 @@ Defter açan hatta sınav (18) girdi eksiğini UYARI, yarından ileri ya da
 dört gün eskiyken "bugün" diye damgalanıyordu ve okur bunu tersinden okuyup
 TAZE endeksi bayat sanıyordu.
 
+**Karma figürde damga BAĞLAYICI, yani EN ESKİ bacaktır.** Bir figür iki seriyi
+yan yana koyuyorsa sözü onların KIYASIDIR ve kıyas ancak ikisinin de ölçüldüğü
+güne kadar kurulabilir; en taze bacağı yazmak öbürünü olduğundan yeni gösterir.
+`min()` yapısal yazılır, bugünkü sıralamaya bakmaz — besleme sırası değişince
+damga kendiliğinden öbür bacağa döner.
+
+**Bacaklar birbirinden çok uzaksa damga İKİSİNİ birden yazabilir:**
+`"aylık 30.06.2026 · haftalık 26.08.2026"`. Bileşen tanımadığı dizgeyi olduğu
+gibi basar; sınav (18b) içindeki her tarihi ayrı ayrı sınar. Bu yol yalnız açık
+anahtarla kullanılır — defterde çözülebilir tek bir tarih ya da `null` durur.
+Ne zaman birleşik, ne zaman en eski: bacaklar aynı olguyu farklı ritimde
+ölçüyorsa (ödemeler dengesi Şekil 12'de eurobond akımı aylık, ödeme takvimi
+haftalık; aralarında 57 gün) tek gün hangi bacağı seçerse seçsin öbürü hakkında
+yanıltıcı olur — birleşik yaz. Aynı ritimde olup biri bir–iki gün geriden
+geliyorsa (TLREF kurun bir gün gerisinde) en eskisini yaz.
+
+**Bir tarih AY ise ay yazılır.** Aylık gözlem dönemin ilk gününe damgalanır ve
+onu `01.07.2026` diye yazmak okura o GÜNÜN ölçümü gibi görünür; `07.2026` yaz —
+`ortak/bicim` ve `lib/bicim` ikisini de çözer, `AA.YYYY` ayın son gününe
+demirlenir. `2026-Ç1` gibi bir dizge hiçbir tarafta ÇÖZÜLMEZ, anahtar olarak
+kullanılamaz.
+
+**Aynı figüre iki ilan konabilir ama çelişemez.** Açık anahtar ile defter
+girdisi birlikte durursa bu bir güvenlik payıdır (defter bir gün yazılmazsa
+sayfa yine doğru günü basar); ayrıştıkları gün figürün kendi alt başlığı ile
+sayfadaki damga farklı tarih söyler — sınav (18c) bunu ENGEL sayar.
+
+**Figürün İÇİNDEKİ tarih de okura görünür.** Alt yazıdaki "Çıpa: …" ile sayfa
+damgası aynı kaynaktan gelmelidir; hat, figür saatlerini TEK bir fonksiyonda
+tutup hem çizim koduna hem özet üreticisine oradan versin (`Kredi/veri.py`
+içindeki `sekil_saatleri` kalıbı). İki ayrı liste bir gün sessizce ayrışır.
+
 ## Uydurma sayılarla örnek kutusu
 
 Bir kutunun bütün sayıları formülü göstermek için SEÇİLMİŞSE (gerçek gözlem

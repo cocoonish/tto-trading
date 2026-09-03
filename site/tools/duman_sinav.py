@@ -146,6 +146,123 @@ e, u, n = sekil_saat_bulgulari(
 sina("çözülemeyen tarih ENGEL", len(e) == 1 and "çözülemeyen" in e[0], f"engel={e}")
 
 # ---------------------------------------------------------------------------
+# (18b/18c) AÇIK ŞEKİL TARİHİ. Bu ölçüt yayının ÖNÜNDE duruyor: yanlış alarmı
+# siteyi durdurur. Sınamanın çekirdeği BİRLEŞİK DAMGA — ödemeler dengesi
+# Şekil 12'nin üç paneli 57 gün arayla bitiyor ve tek bir uç hangi bacağı
+# seçse öbürü hakkında yalan olur; damga bu yüzden ikisini birden yazar ve
+# ölçüt bunu kusur saymamalı. Ama içindeki her tarih yine sınanmalı.
+print("\n▶ Açık şekil tarihi (18b) ve çift ilan çelişkisi (18c)")
+
+import sys as _s2
+_s2.path.insert(0, str(_YOL.resolve().parents[2] / "ortak"))
+import bicim as _bcm
+
+acik_saat_bulgulari = _mod.acik_saat_bulgulari
+COZ = _bcm.tarihe_cevir
+
+
+def acik(deger, defter=None, defter_var=False, anahtar="k"):
+    o = {anahtar: deger} if deger is not None else {}
+    return acik_saat_bulgulari("s · f.html → `k`", o, anahtar, defter,
+                               defter_var, YARIN, COZ)
+
+
+e, u = acik("26.08.2026")
+sina("tek tarih temiz geçiyor", not e and not u, f"engel={e} uyari={u}")
+
+e, u = acik("07.2026")
+sina("AA.YYYY yazımı da tarihtir", not e and not u, f"engel={e} uyari={u}")
+
+e, u = acik("aylık 30.06.2026 · haftalık 26.08.2026")
+sina("BİRLEŞİK DAMGA kusur değil (yanlış alarm yok)",
+     not e and not u, f"engel={e} uyari={u}")
+
+ileri2 = (YARIN + _dt.timedelta(days=3)).strftime("%d.%m.%Y")
+e, u = acik(f"aylık 30.06.2026 · haftalık {ileri2}")
+sina("birleşik damganın İÇİNDEKİ ileri tarih ENGEL",
+     len(e) == 1 and "YARINDAN İLERİ" in e[0], f"engel={e}")
+
+e, u = acik(None)
+sina("anahtar yok → UYARI (sayfa bir alt basamağa düşer)",
+     not e and len(u) == 1, f"engel={e} uyari={u}")
+
+e, u = acik(2026)
+sina("dizge olmayan değer → UYARI", not e and len(u) == 1, f"engel={e} uyari={u}")
+
+e, u = acik("son ihale günü")
+sina("içinde hiç tarih olmayan dizge → UYARI",
+     not e and len(u) == 1 and "tarih değil" in u[0], f"engel={e} uyari={u}")
+
+e, u = acik("26.08.2026", defter="26.08.2026", defter_var=True)
+sina("çift ilan AYNI günü söylüyorsa temiz", not e and not u, f"engel={e} uyari={u}")
+
+e, u = acik("26.08.2026", defter="21.08.2026", defter_var=True)
+sina("çift ilan AYRIŞIYORSA ENGEL",
+     len(e) == 1 and "ÇELİŞKİ" in e[0], f"engel={e}")
+
+e, u = acik("26.08.2026", defter=None, defter_var=True)
+sina("defterde None + açık anahtar var → çelişki değil",
+     not e and not u, f"engel={e} uyari={u}")
+
+e, u = acik("26.08.2026", defter="2026-08-26", defter_var=True)
+sina("aynı gün farklı YAZIMLA yazılmışsa çelişki değil",
+     not e and not u, f"engel={e} uyari={u}")
+
+
+# ---------------------------------------------------------------------------
+# (19) ŞEKİL METNİNDE OKUR DİLİ. Bu ölçüt yayının önünde duruyor ve ağırlıkları
+# BUGÜNKÜ tabana göre seçildi: yapım dili ENGEL (taban sıfır), kod dili UYARI
+# (taban yetmiş altı). Ağırlıklar ters çevrilirse site durur; sınama bunu tutar.
+print("\n▶ Şekil metninde okur dili (19)")
+
+sekil_metinleri = _mod.sekil_metinleri
+sekil_okur_dili = _mod.sekil_okur_dili
+
+HAM = ('var gd = document.getElementById("x");'
+       'Plotly.newPlot("x",[{"x":["2026-08-21"],"y":[1.5],'
+       '"name":"Kredi b\\u00fcy\\u00fcmesi (bie_hpbitablo2)","type":"scatter",'
+       '"hovertemplate":"%{x}\\u003cbr\\u003eR\\u00b2 %{y}"}],'
+       '{"title":{"text":"\\u003cb\\u003eBa\\u015fl\\u0131k\\u003c\\u002fb\\u003e'
+       '\\u003cbr\\u003e\\u003csup\\u003eBu halka yaz\\u0131n\\u0131n ilk '
+       's\\u00fcr\\u00fcm\\u00fcnde \\u00d6L\\u00c7\\u00dcLMEM\\u0130\\u015eTI.'
+       '\\u003c\\u002fsup\\u003e"}})')
+
+metinler = sekil_metinleri(HAM)
+sina("başlık, lejant ve hover metni çıkarılıyor", len(metinler) >= 2,
+     f"gelen {metinler}")
+sina("HTML etiketleri düz metne iniyor",
+     not any("<b>" in t or "<sup>" in t for t in metinler), f"{metinler}")
+sina("birim kod kaçışları çözülüyor",
+     any("büyümesi" in t for t in metinler), f"{metinler}")
+
+e, u, say = sekil_okur_dili(metinler, "x/y.html")
+sina("figür metnindeki YAPIM DİLİ ENGEL",
+     len(e) == 1 and "yapım dili" in e[0], f"engel={e}")
+sina("figür metnindeki bie_ kodu UYARI, ENGEL değil",
+     len(u) == 1 and "bie_hpbitablo2" in u[0], f"uyari={u}")
+
+e, u, say = sekil_okur_dili(
+    ["Veri: TCMB EVDS3 · TP.PY.P06.ON · iş günü · Çıpa: 2 Eylül 2026."], "x/y.html")
+sina("kaynağın BÜYÜK harfli alan adı kusur değil (künyedir)",
+     not e and not u, f"engel={e} uyari={u}")
+
+e, u, say = sekil_okur_dili(["Eksen etiketi 0.53 ve -1.20 değerleri"], "x/y.html")
+sina("biçim ailesi yalnız SAYILIR, uyarı üretmez",
+     not e and not u and say.get("biçim", 0) > 0, f"engel={e} uyari={u} say={say}")
+
+e, u, say = sekil_okur_dili(["Kredi büyümesi kur etkisinden arındırılmıştır."],
+                            "x/y.html")
+sina("temiz alt yazı temiz geçiyor", not e and not u, f"engel={e} uyari={u}")
+
+e2, u2, _ = sekil_okur_dili(metinler + metinler, "x/y.html")
+sina("aynı kusur iki kez geçse tek kez bildiriliyor",
+     len(e2) == 1 and len(u2) == 1, f"engel={e2} uyari={u2}")
+
+sina("veri dizileri metin sayılmıyor",
+     not any(t.startswith("2026-08-21") for t in metinler), f"{metinler}")
+
+
+# ---------------------------------------------------------------------------
 print(f"\n{'═' * 70}")
 print(f"  {len(GECTI)} geçti · {len(DUSTU)} düştü")
 if DUSTU:

@@ -52,8 +52,14 @@ def _yil_ekseni(ax):
 
 
 # ------------------------------------------------------------------ Grafik 1: hizmet ciro
-def hizmet_ciro_oku():
-    """Hizmet ciro endeksi (2015=100) — bölüm bazında yıllık ortalama endeksler."""
+def hizmet_ciro_oku(kapsam=False):
+    """Hizmet ciro endeksi (2015=100) — bölüm bazında yıllık ortalama endeksler.
+
+    `kapsam=True` ikinci bir değer daha döndürür: {yıl: o yılın ölçülen SON ayı}.
+    Yıllık ortalama, kendisini kuran son aya kadar ölçülmüştür — bir panelin veri
+    ucu buradan okunur, takvim yılının sonu VARSAYILMAZ (son yıl yarım gelmiş
+    olabilir ve o zaman "12.YYYY" ölçülmemiş bir ayı ilan ederdi).
+    """
     ham = pd.read_excel(ROOT / "data/raw/tuik_hizmet_ciro_2015.xls", sheet_name="T2", header=None)
     # bölüm başlıkları 4. satırda (index 4), blok başı kolonları
     basliklar = {}
@@ -68,7 +74,11 @@ def hizmet_ciro_oku():
         vals = pd.to_numeric(ham.iloc[8:, j], errors="coerce")  # arındırılmamış endeks
         df = pd.DataFrame({"yil": yillar.values, "ay": aylar.values, "v": vals.values}).dropna()
         out[ad] = df.groupby("yil")["v"].mean()
-    return pd.DataFrame(out)
+    tablo = pd.DataFrame(out)
+    if not kapsam:
+        return tablo
+    takvim = pd.DataFrame({"yil": yillar.values, "ay": aylar.values}).dropna()
+    return tablo, {int(y): int(a) for y, a in takvim.groupby("yil")["ay"].max().items()}
 
 
 def grafik_1():

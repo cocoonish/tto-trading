@@ -503,6 +503,81 @@ def ad_ceyrek(t) -> str:
     return f"{t.year}-Ç{(t.month - 1) // 3 + 1}"
 
 
+# ===========================================================================
+#  ŞEKİL SAAT DEFTERİ — bir figürün damgası, HATTIN saati değildir
+# ===========================================================================
+#  Bu hat üç ritim taşıyor (haftalık para/banka · aylık KKM ve banka türü ·
+#  çeyreklik BKEA) ama dokuz şeklin dokuzu da HAFTALIK saatle damgalanıyordu:
+#  grafik.py figürün alt başlığına, GrafikEmbed de sayfada şeklin altına aynı
+#  `son_hafta`yı basıyordu. Dört figürde ölçüldü (03.09.2026):
+#    · 07_kkm.html — çizilen üç serinin de ucu 2026-07-01, damga 21.08.2026:
+#      KAPANMIŞ bir programın Temmuz stoku ağustos tarihiyle sunuluyordu (+51
+#      gün). Seri bayat değil (aylık aile için beklenen gecikme zaten 51 gün);
+#      yanlış olan veri değil, ETİKET.
+#    · 06_dolarizasyon.html — yedi izin BEŞİ 2026-08-14'te bitiyor, yalnız
+#      ikisi 08-21'de. Hat bunu kendisi ölçüp uyarı bile basmış ve bloğu ortak
+#      tarihe (14.08) çıpalamış; sayfanın METNİ 14.08 derken aynı sayfadaki
+#      ŞEKLİN damgası 21.08 diyordu. Sayfa kendi kendisiyle çelişiyordu.
+#    · 09_kredi_enflasyon.html — örneklem AYLIK ve figürün kendi alt başlığı
+#      "2006-04 → 2026-08 (241 ay)" yazarken damga tek bir GÜN gösteriyordu.
+#    · 03_kredi_kirilim.html — dört panel, ÜÇ saat (p1/p2 haftalık 21.08 ·
+#      p3 aylık Temmuz · p4 çeyreklik 2026-Ç2). Bu figür tek damgayla dürüst
+#      anlatılamaz: en eski bacağı (BKEA) yazmak görsel olarak baskın haftalık
+#      panelleri beş ay bayat gösterir, en tazesini yazmak aylık ve çeyreklik
+#      panelleri taze gösterir. Bu yüzden defterde None — sayfa o şeklin altına
+#      tarih HİÇ basmaz ve figür üç saati kendi panel başlıklarında taşır.
+#      Yanlış bir tarih, tarihsizlikten kötüdür.
+#  Kalan beş figürün bütün bacakları haftalık kaynaklardan geliyor ve ölçümde
+#  hepsi `son_hafta`da bitiyor; onlar ana saatte kalır.
+#
+#  Defter BURADA duruyor çünkü iki tüketicisi var: grafik.py figürün KENDİ alt
+#  başlığına yazar, ozet_uret.py sayfa altındaki damga için ozet.json'a
+#  `_sekil_tarih` olarak koyar. İki ayrı liste tutulsaydı bir gün sessizce
+#  ayrışır ve hangisinin neyi söylediği kimsenin aklında kalmazdı.
+def sekil_saatleri(o: dict, uzun: bool = False) -> dict[str, str | None]:
+    """Figür başına veri ucu; `o` = data/metrik_ozet.json.
+
+    Değerler ÖLÇÜMDEN gelir, türetilmez: `son_hafta`, `dol_tarih` (metrik.py'nin
+    dolarizasyon bloğunu çıpaladığı ortak tarih), `kkm.son_tarih` ve
+    `uzun_capraz.son`. Ölçüm yoksa değer None kalır ve o şeklin altına tarih
+    basılmaz — uydurmaktan iyidir.
+
+    `uzun=True` figür alt başlığının yazımını verir ("21 Ağustos 2026" ·
+    "Temmuz 2026"); varsayılan site sözleşmesidir ("21.08.2026" · "07.2026",
+    ortak/bicim ikisini de çözer, ikincisi ayın son gününe demirler).
+    """
+    def gun(t):
+        if not t:
+            return None
+        t = pd.Timestamp(t)
+        return ad_gun(t) if uzun else t.strftime("%d.%m.%Y")
+
+    def ay(t):
+        # AYLIK bir gözlem dönemin İLK gününe damgalanır; onu gün gibi yazmak
+        # ("01.07.2026") okura o günün ölçümüymüş gibi görünür. Ay yazılır.
+        if not t:
+            return None
+        t = pd.Timestamp(t)
+        return ad_uzun(t) if uzun else t.strftime("%m.%Y")
+
+    hafta = gun(o.get("son_hafta"))
+    return {
+        "01_kredi_buyume.html": hafta,
+        "02_kur_etkisi.html": hafta,
+        "03_kredi_kirilim.html": None,          # dört panel, üç saat (yukarı bak)
+        # 04'te AOFM ve makası 14 gün daha eski (fonlama tabanı eşiğin altına
+        # düştüğü haftalar geçersiz işaretleniyor) ama o iki iz on altı izden
+        # ikisi ve TANI izidir; kendi saatleri sayfa metninde `aofm_tarih` ile,
+        # beklenti bacağınınki `pka_tarih` ile ayrıca yazılıyor.
+        "04_faiz_spread.html": hafta,
+        "05_para_arzi.html": hafta,
+        "06_dolarizasyon.html": gun(o.get("dol_tarih")),
+        "07_kkm.html": ay((o.get("kkm") or {}).get("son_tarih")),
+        "08_takip.html": hafta,
+        "09_kredi_enflasyon.html": ay((o.get("uzun_capraz") or {}).get("son")),
+    }
+
+
 # --------------------------------------------------------------------------- toplama
 def _panel(kodlar: dict[str, str], frekans: str, bas: str | None = None,
            yenile: bool = False) -> pd.DataFrame:
