@@ -7,17 +7,17 @@
   "r2": 0.837,
   "adj_r2": 0.831,
   "sigma": 0.544,
-  "sabit": 0.055,
+  "sabit": 0.056,
   "b_ito": 0.87,
   "se_ito": 0.07,
-  "t_ito": 12.41,
+  "t_ito": 12.4,
   "p_ito": 0.0
  },
  "uge": {
   "r2": 0.692,
   "adj_r2": 0.682,
   "sigma": 0.747,
-  "sabit": 0.02,
+  "sabit": 0.021,
   "b_uge": 0.834,
   "se_uge": 0.102,
   "t_uge": 8.21,
@@ -26,8 +26,8 @@
  "birlesik": {
   "r2": 0.841,
   "adj_r2": 0.83,
-  "sigma": 0.546,
-  "sabit": -0.032,
+  "sigma": 0.547,
+  "sabit": -0.031,
   "b_ito": 0.762,
   "se_ito": 0.146,
   "t_ito": 5.2,
@@ -35,7 +35,7 @@
   "b_uge": 0.13,
   "se_uge": 0.154,
   "t_uge": 0.84,
-  "p_uge": 0.4083
+  "p_uge": 0.4084
  },
  "kapsama": "ito",
  "adj_kazanc": -0.001,
@@ -51,7 +51,7 @@
     "p_vs_en_iyi": 0.441
    },
    "uge_sabit": {
-    "mae": 0.59,
+    "mae": 0.591,
     "rmse": 0.786,
     "yanlilik": -0.118,
     "p_vs_en_iyi": 0.083
@@ -70,7 +70,7 @@
    },
    "birlesik_reg": {
     "mae": 0.424,
-    "rmse": 0.509,
+    "rmse": 0.51,
     "yanlilik": -0.028,
     "p_vs_en_iyi": 0.168
    },
@@ -117,19 +117,19 @@
    "ters_mse": 1.35
   },
   "sapma": {
-   "ito_sabit": -0.53,
+   "ito_sabit": -0.54,
    "uge_sabit": -0.39,
-   "ito_reg": -0.36,
+   "ito_reg": -0.37,
    "uge_reg": -0.19,
    "birlesik_reg": -0.38,
    "esit_ortalama": -0.46,
-   "ters_mse": -0.49
+   "ters_mse": -0.5
   },
   "ters_mse_agirlik": 0.74,
   "en_iyi": "ito_reg",
   "en_iyi_ad": "İTO regresyon",
   "merkez": 1.48,
-  "merkez_sapma": -0.36,
+  "merkez_sapma": -0.37,
   "yayilim": 0.34,
   "en_yakin": "uge_reg",
   "en_yakin_ad": "ÜGE regresyon",
@@ -158,6 +158,39 @@
   "bant_90": true,
   "tufe_ito_ustu": true,
   "tufe_uge_ustu": false,
-  "hukum": "Ağustos 2026 TÜFE'si %1,84 geldi; İTO regresyon %1,48 diyordu — gerçekleşme tahminin üzerinde, sapma 0,36 puan, %80 bandının içinde."
+  "p_ito_ustu": 26.0,
+  "esik": [
+   {
+    "esik": 2.5,
+    "yon": ">",
+    "p": 3.0,
+    "tuttu": false
+   },
+   {
+    "esik": 2.0,
+    "yon": ">",
+    "p": 16.0,
+    "tuttu": false
+   },
+   {
+    "esik": 1.5,
+    "yon": ">",
+    "p": 35.0,
+    "tuttu": true
+   },
+   {
+    "esik": 1.0,
+    "yon": "<",
+    "p": 13.0,
+    "tuttu": false
+   },
+   {
+    "esik": 0.5,
+    "yon": "<",
+    "p": 0.0,
+    "tuttu": false
+   }
+  ],
+  "hukum": "Ağustos 2026 TÜFE'si %1,84 geldi; İTO regresyon %1,48 diyordu — gerçekleşme tahminin üzerinde, sapma 0,37 puan, %80 bandının içinde."
  }
 }

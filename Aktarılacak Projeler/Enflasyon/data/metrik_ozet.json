@@ -8,22 +8,24 @@
   "not": "formül/kolon hizalaması denetimi — tazelik denetimi değildir",
   "yillik": {
    "n": 36,
-   "maks_fark_pp": 0.005364,
-   "son_ay_biz": 31.502,
+   "maks_fark_pp": 0.0,
+   "son_ay_biz": 31.5073,
    "son_ay_evds": 31.5073,
    "evds_son_ay": "2026-08"
   },
   "aylik": {
    "n": 36,
-   "maks_fark_pp": 0.004154,
-   "son_ay_biz": 1.84,
+   "maks_fark_pp": 0.0,
+   "son_ay_biz": 1.8442,
    "son_ay_evds": 1.8442,
    "evds_son_ay": "2026-08"
   }
  },
  "kosular_arasi": {
-  "var": false,
-  "not": "önceki ölçüm aynı veriyle yapılmış — iki ölçüm arasındaki revizyon bu kez ölçülemedi",
+  "var": true,
+  "n": 12,
+  "maks_pp": 0.002,
+  "ort_pp": 0.0,
   "onceki_kosum": "2026-09-03"
  },
  "vintage": {
@@ -1015,14 +1017,14 @@
  "ocak_sa_ort": 1.66,
  "ocak_duzeltme_pp": 0.916,
  "ocak_n": 21,
- "tufe__aylik_ham": 1.8399999999999972,
- "tufe__aylik_sa": 2.0806996591959726,
- "tufe__saar3_sa": 29.183894560255872,
- "tufe__saar6_sa": 31.14535863279857,
- "tufe__yillik": 31.501979078010134,
- "tufe__saar3_ham": 20.077079352241277,
- "tufe__saar6_ham": 27.867781743985496,
- "tufe__ecb3": 31.513576274905873,
+ "tufe__aylik_ham": 1.8441538810369584,
+ "tufe__aylik_sa": 2.0830026111677835,
+ "tufe__saar3_sa": 29.195881507286824,
+ "tufe__saar6_sa": 31.151252502072712,
+ "tufe__yillik": 31.507342820912854,
+ "tufe__saar3_ham": 20.09667151330463,
+ "tufe__saar6_ham": 27.878212977020176,
+ "tufe__ecb3": 31.518020263192636,
  "tufe__oynak": false,
  "tufe__mevsimsel": true,
  "tufe__mevsim_p": 0.0,
@@ -1177,52 +1179,52 @@
  "dagilim__kirpma_08_saar3": 25.825749505431794,
  "dagilim__kirpma_10_saar3": 25.684220239592847,
  "katki_yillik": {
-  "oktg10": 8.548329144081714,
-  "oktg09": 2.824157716283738,
-  "oktg18": 4.4007661204115776,
-  "oktg22": 1.0097814906116407,
-  "oktg23": 14.719301513614717
+  "oktg10": 8.541526078450229,
+  "oktg09": 2.826955179835785,
+  "oktg18": 4.399167785231689,
+  "oktg22": 1.018018692850867,
+  "oktg23": 14.721696487436148
  },
  "katki_aylik": {
-  "oktg10": 0.05530056564083071,
-  "oktg09": 0.4030550322848063,
-  "oktg18": -0.06802991124752986,
-  "oktg22": 0.21164217502371366,
-  "oktg23": 1.2412197516055252
+  "oktg10": 0.055231071262445086,
+  "oktg09": 0.4035369790963673,
+  "oktg18": -0.06797457533315912,
+  "oktg22": 0.21419147136427244,
+  "oktg23": 1.2414166760879872
  },
- "katki_ay_artik_pp": 0.0044,
+ "katki_ay_artik_pp": 0.0039,
  "katki_ay_artik_tum_pp": 0.0058,
- "katki_yil_artik_pp": 0.0028,
+ "katki_yil_artik_pp": 0.0022,
  "katki_yil_artik_tum_pp": 0.0065,
  "baz": {
   "son3_sa": {
-   "12ay_sonra": 29.183894560255695,
-   "aylik_varsayim": 2.1568197546387724,
-   "yil_sonu": 32.942160710108446
+   "12ay_sonra": 29.19588150728689,
+   "aylik_varsayim": 2.157609646905745,
+   "yil_sonu": 32.95169512804259
   },
   "son12_ort": {
-   "12ay_sonra": 31.501979078010024,
-   "aylik_varsayim": 2.3083366976656583,
-   "yil_sonu": 33.73262571020816
+   "12ay_sonra": 31.507342820912633,
+   "aylik_varsayim": 2.30868443980623,
+   "yil_sonu": 33.73989872924854
   },
   "gecen_yil": {
-   "12ay_sonra": 31.501979078010134,
+   "12ay_sonra": 31.507342820912854,
    "aylik_varsayim": 3.2344897823703977,
-   "yil_sonu": 31.501979078010134
+   "yil_sonu": 31.507342820912854
   }
  },
  "yilsonu": {
   "kumulatif": 22.07,
   "anket": 29.43,
   "kalan_ay": 4,
-  "gereken_aylik": 1.48,
+  "gereken_aylik": 1.47,
   "momentum_aylik": 2.16,
   "acik_puan": 0.68
  },
  "reel__faiz": 37.0,
- "reel__ex_post": 4.180941580147879,
+ "reel__ex_post": 4.176692389387782,
  "reel__ex_ante": 10.760772899991933,
- "reel__egilime_gore": 6.05037142311764,
+ "reel__egilime_gore": 6.040531943948246,
  "reel__ileri_ex_ante": 9.794120138947736,
  "reel__faiz_tarih": "2026-09-01",
  "reel__ex_post_tarih": "2026-08-01",
@@ -1252,7 +1254,7 @@
    "p36": {
     "n": 36,
     "mae": 0.512,
-    "yanlilik": 0.055,
+    "yanlilik": 0.056,
     "rmse": 0.63
    },
    "p60": {
@@ -1319,40 +1321,40 @@
  "ito": {
   "n": 31,
   "ilk_ay": "2024-02-01",
-  "sabit": 0.0755,
-  "egim": 0.8621,
-  "se_sabit": 0.2719,
+  "sabit": 0.0759,
+  "egim": 0.862,
+  "se_sabit": 0.272,
   "se_egim": 0.0891,
-  "se_artik": 0.5528,
+  "se_artik": 0.5529,
   "r": 0.874,
   "r2": 0.763,
   "r_bir_ay_onceden": -0.0,
   "son_ito_aylik": 1.658,
-  "ima_aylik": 1.5049,
-  "ima_alt": 0.336,
-  "ima_ust": 2.6737,
-  "ima_yari_genislik": 1.1688,
+  "ima_aylik": 1.5051,
+  "ima_alt": 0.3361,
+  "ima_ust": 2.6742,
+  "ima_yari_genislik": 1.169,
   "ornek_disi_sinandi": false,
   "son_ay": "2026-08-01"
  },
  "agirlik_son_yil": {
   "yil": "2026",
   "katki": {
-   "oktg10": 24.45,
-   "oktg09": 6.99,
-   "oktg18": 26.97,
-   "oktg22": 3.12,
-   "oktg23": 38.46
+   "oktg10": 24.42,
+   "oktg09": 7.0,
+   "oktg18": 26.95,
+   "oktg22": 3.16,
+   "oktg23": 38.47
   },
-  "artik_pp": 0.0032,
+  "artik_pp": 0.0025,
   "kip": "öncüle en yakın"
  },
  "agirlik_kayma_pp": {
-  "oktg10": -0.51,
-  "oktg09": -3.22,
-  "oktg18": -2.91,
-  "oktg22": -0.86,
-  "oktg23": 7.5
+  "oktg10": -0.54,
+  "oktg09": -3.21,
+  "oktg18": -2.93,
+  "oktg22": -0.82,
+  "oktg23": 7.51
  },
- "uyari_sayisi": 3
+ "uyari_sayisi": 2
 }
