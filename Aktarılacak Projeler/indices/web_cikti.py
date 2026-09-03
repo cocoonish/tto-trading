@@ -334,6 +334,26 @@ def rejim_ozeti(seriler=None):
 # Grafikler
 # ═══════════════════════════════════════════════════════════════════════════════
 
+def _anlik_veri_ucu(kayit):
+    """Anlik endeks figurlerinin VERI ucu (ISO gun) — sekil saat defteri icin."""
+    uc = _son_kosunun_veri_ucu(kayit)
+    return str(uc)[:10] if uc else None
+
+
+def _kalibrasyon_tarihi():
+    """Optimizasyon figurunun ait oldugu gun: parametrelerin kalibre edildigi
+    tarih. Bu figur kosuyla ilerlemez; kosu gunuyle damgalanirsa okur her gun
+    yeniden kalibre edildigini sanir."""
+    try:
+        with open(config.OPTIMIZED_PARAMS, "r", encoding="utf-8") as f:
+            par = json.load(f)
+        damga = [v.get("timestamp") for v in par.values()
+                 if isinstance(v, dict) and v.get("timestamp")]
+        return max(damga)[:10] if damga else None
+    except Exception:
+        return None
+
+
 def ciz_tarihce(tarihce, cikti_yolu):
     """Her parite bir cizgi; y=0 referans, +-0.3/+-0.7 kategori bantlari."""
     # parite -> (x, y) serileri
@@ -659,7 +679,12 @@ def ciz_duyarlilik_getiri(cikti_yolu):
     look-ahead yok); y = hafta kapanisindan sonraki 5 islem gununun yuzde
     getirisi (yfinance gunluk kapanis). Varlik secimi dropdown ile; her varlikta
     OLS trend dogrusu ve Pearson korelasyonu + n annotation'i.
-    Dondurulen ikinci deger: {varlik: (r, n)} korelasyon ozeti.
+    Dondurulen ikinci deger: {varlik: (r, n)} korelasyon ozeti; ucuncu deger
+    bu sacilimin VERI UCU, yani puani hesaplanabilmis en son hafta. Bu tarih
+    `as_of`tan bir hafta GERIDEDIR ve bu yapisaldir: y ekseni hafta
+    kapanisindan SONRAKI bes islem gununun getirisi, yani son hafta icin
+    heniiz olculemez. Sayfa bu figuru kendi tarihiyle damgalasin diye
+    donduruluyor — hattin ana saatiyle damgalanirsa 11 gun ileri gorunuyordu.
     """
     import numpy as np
     import pandas as pd
@@ -675,6 +700,7 @@ def ciz_duyarlilik_getiri(cikti_yolu):
     anotasyonlar = {}    # varlik -> annotation dict
     kor_ozet = {}        # varlik -> (pearson_r, n)
     atlananlar = []
+    kullanilan_haftalar = []   # puani hesaplanabilmis haftalarin tamami
 
     for anahtar, seri in seriler.items():
         ad = _gorunen_ad(anahtar)
@@ -716,6 +742,7 @@ def ciz_duyarlilik_getiri(cikti_yolu):
             atlananlar.append(anahtar)
             continue
 
+        kullanilan_haftalar.extend(hafta_etiket)
         r, p = stats.pearsonr(x, y)
         egim, kesisim = np.polyfit(x, y, 1)
         xs = [min(x), max(x)]
@@ -786,7 +813,8 @@ def ciz_duyarlilik_getiri(cikti_yolu):
     fig.write_html(cikti_yolu, include_plotlyjs="cdn")
     if atlananlar:
         print(f"  Not: fiyat verisi olmayan varliklar atlandi: {', '.join(atlananlar)}")
-    return cikti_yolu, kor_ozet
+    son_hafta = max(kullanilan_haftalar) if kullanilan_haftalar else None
+    return cikti_yolu, kor_ozet, son_hafta
 
 
 def ciz_fiyat_endeks(cikti_yolu, seriler=None):
@@ -1106,15 +1134,62 @@ def uret(cikti_dizini=None, rejim=None, yalniz_anlik=False):
     tarihce = yukle_tarihce()
     if not tarihce:
         raise ValueError(f"Bos tarihce: {HISTORY_FILE}")
+
+    # ── ŞEKİL SAAT DEFTERİ ───────────────────────────────────────────────────
+    # Bu hattin İKİ saati var (bkz. gunluk/tam kip notu) ve sayfa bunu
+    # gosteremiyordu: GrafikEmbed, `tarihAnahtari` verilmemisse hattin ANA
+    # saatini (`_tarih`) basiyor, o da anlik endeksin ucu. Sonuc: GDELT tabanli
+    # dort figur gunlerce eski oldugu halde "veri 03.09.2026" diye
+    # damgalaniyordu; okurun gordugu tek tarih bu oldugu icin de taze endeks
+    # bayat, bayat panel taze gorunuyordu. Artik her figur KENDI ucunu bildirir
+    # ve ozet_uret.py bunu `_sekil_tarih` olarak ozete tasir.
+    #
+    # Defter MERGE edilir: `--anlik` kipi haftalik figurleri yeniden cizmez,
+    # onlarin tarihi de degismemelidir — ustune yazmak, cizilmemis bir figure
+    # bugunun tarihini atmak olurdu.
+    saat_yolu = os.path.join(hedef, "sekil_tarih.json")
+    sekil_tarih = {}
+    if os.path.exists(saat_yolu):
+        try:
+            with open(saat_yolu, encoding="utf-8") as f:
+                sekil_tarih = json.load(f)
+        except Exception:
+            sekil_tarih = {}
+
+    def _saat_yaz():
+        with open(saat_yolu, "w", encoding="utf-8") as f:
+            json.dump(dict(sorted(sekil_tarih.items())), f,
+                      ensure_ascii=False, indent=1)
+
+    anlik_uc = _anlik_veri_ucu(tarihce[-1])
+    for ad in ("endeks_tarihce.html", "endeks_son.html", "son_mansetler.html"):
+        if anlik_uc:
+            sekil_tarih[ad] = anlik_uc
+
     yollar = [
         ciz_tarihce(tarihce, os.path.join(hedef, "endeks_tarihce.html")),
         ciz_son_snapshot(tarihce, os.path.join(hedef, "endeks_son.html")),
     ]
     if yalniz_anlik:
+        # son_mansetler bu kipte CIZILMIYOR; saatini de ilerletme.
+        sekil_tarih.pop("son_mansetler.html", None)
+        if os.path.exists(saat_yolu):
+            try:
+                with open(saat_yolu, encoding="utf-8") as f:
+                    onceki = json.load(f)
+                if "son_mansetler.html" in onceki:
+                    sekil_tarih["son_mansetler.html"] = onceki["son_mansetler.html"]
+            except Exception:
+                pass
+        _saat_yaz()
         return yollar
 
     try:
         yollar.append(ciz_optimizasyon(os.path.join(hedef, "optimizasyon.html")))
+        # Optimizasyon figuru KALIBRASYON gunune aittir, kosu gunune degil.
+        kal = _kalibrasyon_tarihi()
+        if kal:
+            sekil_tarih["optimizasyon.html"] = kal
     except Exception as exc:
         print(f"UYARI: optimizasyon.html uretilemedi: {exc}")
 
@@ -1137,6 +1212,12 @@ def uret(cikti_dizini=None, rejim=None, yalniz_anlik=False):
         # birleştirir) — elle yazılmaz; önbellek ilerlemezse sayfada da ilerlemez.
         with open(os.path.join(hedef, "rejim_ozet.json"), "w", encoding="utf-8") as f:
             json.dump(ozet, f, ensure_ascii=False, indent=1)
+        # GDELT haftalik arsivinden cizilen her figur AYNI ucu tasir.
+        if ozet.get("as_of"):
+            for _ad in ("rejim.html", "rejim_tarihce.html",
+                        "korelasyon_matrisi.html", "yuvarlanan_korelasyon.html",
+                        "fiyat_endeks.html"):
+                sekil_tarih[_ad] = str(ozet["as_of"])[:10]
     except Exception as exc:
         print(f"UYARI: rejim.html uretilemedi: {exc}")
 
@@ -1169,14 +1250,18 @@ def uret(cikti_dizini=None, rejim=None, yalniz_anlik=False):
         print(f"UYARI: son_mansetler.html uretilemedi: {exc}")
 
     try:
-        yol, kor_ozet = ciz_duyarlilik_getiri(os.path.join(hedef, "duyarlilik_getiri.html"))
+        yol, kor_ozet, dg_son = ciz_duyarlilik_getiri(
+            os.path.join(hedef, "duyarlilik_getiri.html"))
         yollar.append(yol)
+        if dg_son:
+            sekil_tarih["duyarlilik_getiri.html"] = str(dg_son)[:10]
         print("  Haftalik duyarlilik → 5g ileri getiri (Pearson r, n hafta):")
         for anahtar, (r, n) in sorted(kor_ozet.items()):
             print(f"    {anahtar:<8} r {r:+.4f} (n={n})")
     except Exception as exc:
         print(f"UYARI: duyarlilik_getiri.html uretilemedi: {exc}")
 
+    _saat_yaz()
     return yollar
 
 

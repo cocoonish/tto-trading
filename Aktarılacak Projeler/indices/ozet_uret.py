@@ -202,5 +202,52 @@ try:
         ozet["rejim_varlik"] = ro["n_assets"]
 except Exception:
     pass
+# ── ŞEKİL SAAT DEFTERİ: her figür KENDİ tarihiyle damgalansın ───────────────
+# Sayfadaki her şeklin altında "veri <tarih>" yazar ve o tarih, MDX'te ayrı bir
+# anahtar verilmemişse hattın ANA saatinden (`_tarih`) gelir. Bu hatta iki saat
+# var ve tek damga ikisini birden anlatamıyordu: GDELT tabanlı dört panel
+# günlerce eskiyken "bugün" diye damgalanıyor, okur da taze endeksin bayat
+# olduğunu sanıyordu ("aşağıda haberler geliyor ama endeks yenilenmemiş gibi").
+#
+# Defterin ASIL kaynağı web_cikti.py'nin yazdığı cikti/sekil_tarih.json: orada
+# her figürün ucu ÇİZİLDİĞİ ANDA, çizen kodun elindeki seriden yazılır. Burada
+# yalnızca (a) o dosya henüz yokken bilinen saatlerden dolduruyoruz,
+# (b) ölçülemeyen figürü None ile İŞARETLİYORUZ — uydurma bir tarih yerine
+# sayfada hiç tarih çıkmasın diye (bkz. GrafikEmbed).
+ANLIK = ("endeks_tarihce.html", "endeks_son.html", "son_mansetler.html")
+HAFTALIK = ("rejim.html", "rejim_tarihce.html", "korelasyon_matrisi.html",
+            "yuvarlanan_korelasyon.html", "fiyat_endeks.html")
+sekil = {}
+try:
+    sekil = json.load(open(os.path.join(BASE, "cikti", "sekil_tarih.json")))
+except Exception:
+    pass
+
+
+def _iso(m):
+    """'03.09.2026' / '2026-08-30' / '2026-09-03 06:32 UTC' → 'YYYY-AA-GG'."""
+    m = str(m or "")
+    if len(m) >= 10 and m[4] == "-":
+        return m[:10]
+    if len(m) >= 10 and m[2] == ".":
+        g, a, y = m[:10].split(".")
+        return f"{y}-{a}-{g}"
+    return None
+
+
+_anlik = _iso(ozet.get("_tarih"))
+_haftalik = _iso(ozet.get("rejim_tarih")) or _iso(ozet.get("veri_sonu"))
+for _ad in ANLIK:
+    sekil.setdefault(_ad, _anlik)
+for _ad in HAFTALIK:
+    sekil.setdefault(_ad, _haftalik)
+sekil.setdefault("optimizasyon.html", _iso(ozet.get("opt_kalibrasyon")))
+# duyarlilik_getiri: ucu YAPISAL olarak as_of'tan bir hafta geride (y ekseni
+# hafta kapanışından SONRAKİ beş günün getirisi). Kaç gün geride olduğunu
+# TÜRETMİYORUZ; web_cikti.py ölçüp yazana kadar None kalır ve sayfa o şeklin
+# altına tarih basmaz. Yanlış bir tarih, tarihsizlikten kötüdür.
+sekil.setdefault("duyarlilik_getiri.html", None)
+ozet["_sekil_tarih"] = dict(sorted(sekil.items()))
+
 json.dump(ozet, open(os.path.join(BASE, "ozet.json"), "w"), ensure_ascii=False, indent=1)
 print(json.dumps(ozet, ensure_ascii=False))
