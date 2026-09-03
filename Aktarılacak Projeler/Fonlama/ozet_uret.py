@@ -108,6 +108,19 @@ def main() -> int:
             O[f"{ad}_tarih"] = tr_tarih(t)
     v, _ = son(M["koridor_bant"])
     koy("koridor_bant", v, 2)
+    # POLİTİKA FAİZİ NE ZAMANDAN BERİ SABİT. Bir karar gününde ilk sorulan
+    # şey seviyenin kendisi değil, ne kadar süredir orada durduğudur: yedi
+    # aylık bir bekleme ile geçen ay yapılmış bir indirim aynı seviyeyi
+    # taşısa da aynı duruşu anlatmaz. Tarih seriden OKUNUR, elle yazılmaz.
+    _pf = M["politika"].dropna() if "politika" in M.columns else None
+    if _pf is not None and len(_pf):
+        _dg = _pf[_pf.diff() != 0]
+        if len(_dg):
+            _sd = _dg.index[-1]
+            O["politika_son_degisim"] = tr_tarih(_sd)
+            koy("politika_sabit_gun", (s_gun - _sd).days, 0)
+            koy("politika_onceki", float(_pf.loc[:_sd].iloc[-2])
+                if len(_pf.loc[:_sd]) > 1 else None, 2)
     # AOFM çıpa gününde geçerli mi? Sayfa metni bu bayrağa bağlanır: geçersizse
     # "fonlama maliyeti şu kadar" cümlesi KURULMAZ.
     O["aofm_gecerli"] = bool(M["aofm_gecerli"].reindex([s_gun]).fillna(False).iloc[0])

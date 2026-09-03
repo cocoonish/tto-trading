@@ -383,6 +383,11 @@ def main() -> int:
                 koy("baz_momentum_ilk", float(_s.iloc[0]), 2)
                 O["baz_momentum_ilk_ay"] = (
                     f"{AY_TR[bz['tarih'].iloc[0].month]} {bz['tarih'].iloc[0].year}")
+        # DÜŞEN AYLAR AY AY: patikanın şeklini açıklayan sayı bunlar. Yalnız
+        # "elverişli aylar" cümlesi hangi ayın ne kadar elverişli olduğunu
+        # söylemiyor.
+        for _t, _o in zip(bz["tarih"], bz["dusen_aylik"]):
+            koy(f"baz_dus_{_t.month:02d}", float(_o), 2)
     except Exception as ex:
         uyar(f"baz_senaryo.csv okunamadı ({ex}) — 'baz_dusen' anahtarı atlandı.")
 
@@ -397,6 +402,69 @@ def main() -> int:
         koy("ys_gereken_aylik", ys.get("gereken_aylik"), 2)
         koy("ys_momentum_aylik", ys.get("momentum_aylik"), 2)
         koy("ys_acik_puan", ys.get("acik_puan"), 2)
+
+    # ------------------------------------------------- ana harcama grupları
+    # KAYNAK, İSTATİSTİK KURUMUNUN KENDİ TABLOSUDUR. Bu hattın katkı
+    # ayrıştırması özel kapsamlı eksende (gıda · enerji · temel mal ·
+    # alkol-tütün-altın · hizmet) kuruluyor; on üç harcama grubu ekseni ayrı
+    # bir kırılım ve o eksende resmî tablo hem daha erken hem daha kesin.
+    # KİMLİK yine sorulur: katkılar manşete toplanmıyorsa hiçbir anahtar
+    # yazılmaz — yarım bir tablo, olmayan bir tablodan tehlikelidir.
+    try:
+        yy = json.loads((PROJE / "tuik_yayim.json").read_text(encoding="utf-8"))
+    except Exception:
+        yy = {}
+    _say = m.get("son_ay")
+    _ay_s = _say[:7] if _say else None
+    _gr = ((yy.get("gruplar") or {}).get(_ay_s) or {}) if _ay_s else {}
+    _manset = O.get("tufe_aylik")
+    if _gr and _manset is not None:
+        _top = sum(float(v.get("katki", 0)) for v in _gr.values())
+        if abs(_top - float(_manset)) > 0.02:
+            uyar(f"GRUP KATKISI KİMLİĞİ TUTMADI ({_ay_s}): toplam {_top:.2f}, "
+                 f"manşet {_manset:.2f} — grup anahtarları yazılmadı.")
+        else:
+            for kod, blok in _gr.items():
+                koy(f"grup{kod}_aylik", blok.get("aylik"), 2)
+                koy(f"grup{kod}_katki", blok.get("katki"), 2)
+                O[f"grup{kod}_ad"] = veri.ANA_GRUP_AD.get(kod, kod)
+            # YOĞUNLAŞMA: manşetin ne kadarı kaç gruptan geliyor. Grup ADI da
+            # yazılır — sayfa "ulaştırma" diye sabitlenirse bir sonraki ay
+            # yalan söyler.
+            _sir = sorted(_gr.items(), key=lambda kv: -float(kv[1].get("katki", 0)))
+            _en = _sir[0]
+            O["katki_en_ad"] = veri.ANA_GRUP_AD.get(_en[0], _en[0])
+            koy("katki_en_puan", float(_en[1].get("katki", 0)), 2)
+            koy("katki_en_pay", float(_en[1].get("katki", 0)) / float(_manset) * 100, 0)
+            _u3 = sum(float(v.get("katki", 0)) for _, v in _sir[:3])
+            koy("ilk3_katki", _u3, 2)
+            koy("ilk3_pay", _u3 / float(_manset) * 100, 0)
+            O["ilk3_ad"] = " · ".join(veri.ANA_GRUP_AD.get(k, k) for k, _ in _sir[:3])
+            _son = _sir[-1]
+            O["katki_en_dusuk_ad"] = veri.ANA_GRUP_AD.get(_son[0], _son[0])
+            koy("katki_en_dusuk_puan", float(_son[1].get("katki", 0)), 2)
+    # ALT SINIF SAYIMI: kaç ürün arttı, kaç azaldı. Yayılımın en ham ölçüsü.
+    _mn = ((yy.get("mansetler") or {}).get(_ay_s) or {}) if _ay_s else {}
+    for _a in ("alt_sinif_artan", "alt_sinif_azalan", "alt_sinif_degismeyen",
+               "alt_sinif_toplam"):
+        koy(_a, _mn.get(_a), 0)
+
+    # KESİT ARINDIRMASININ KAPSAMI: kaç grup arındırılmadan geçti, ağırlıkça
+    # ne kadar. Difüzyon ve kırpılmış ortalama bu kesitten çıkıyor; kapsamı
+    # yazılmazsa okur ölçünün ne kadarının arındırılmış olduğunu bilemez.
+    _kt = m.get("kesit_tani") or {}
+    koy("kesit_n", _kt.get("n"), 0)
+    koy("kesit_arindirilmayan", _kt.get("arindirilmayan_n"), 0)
+    koy("kesit_arindirilmayan_agirlik", _kt.get("arindirilmayan_agirlik"), 1)
+    koy("kesit_tatil_gecen", _kt.get("tatil_gecen_n"), 0)
+
+    # ANKETİN FAİZ PATİKASI: 12 ay sonrası politika faizi beklentisi bugünkü
+    # seviyeden kaç baz puan aşağıda. Fark okurun aradığı sayı; iki seviyeyi
+    # yan yana yazıp çıkarmayı ona bırakmak, sayfanın işi değil.
+    _pf = m.get("reel__faiz")
+    _bf = O.get("bek_faiz_12a")
+    if _pf is not None and _bf is not None:
+        koy("bek_faiz_indirim_bp", (float(_pf) - float(_bf)) * 100, 0)
 
     # ---------------------------------------------------------------- atalet, İTO
     for ad, k in (("hizmet", "hizmet"), ("temel_mal", "mal"),
