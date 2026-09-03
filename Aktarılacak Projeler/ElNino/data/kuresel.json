@@ -1,17 +1,17 @@
 {
- "_tarih": "01.07.2026",
- "_ay": "2026-07",
+ "_tarih": "01.08.2026",
+ "_ay": "2026-08",
  "kur_bas": "1954-07",
- "kur_son": "2026-07",
+ "kur_son": "2026-08",
  "esik": 1.5,
  "asgari_ay": 5,
  "ufuk": 18,
  "epizot_sayisi": 4,
  "emtia_bas": "1960-01",
- "emtia_son": "2026-07",
+ "emtia_son": "2026-08",
  "emtia_yas_ay": 0,
- "reel_gida_son": 5.74,
- "nominal_gida_son": 8.35,
+ "reel_gida_son": 6.38,
+ "nominal_gida_son": 11.52,
  "kuresel": {
   "kayitlar": [
    {
@@ -160,7 +160,7 @@
   },
   {
    "gecikme": 21,
-   "korelasyon": 0.102,
+   "korelasyon": 0.101,
    "n": 786
   },
   {
@@ -276,7 +276,7 @@
    "toplu": true,
    "olculen": 4,
    "epizot_ortalama": -1.64,
-   "kosulsuz": -0.31,
+   "kosulsuz": -0.3,
    "fark": -1.33,
    "son_epizot_tepe": 11.9,
    "bas": "1961-01"
@@ -360,7 +360,7 @@
    "toplu": false,
    "olculen": 4,
    "epizot_ortalama": -6.79,
-   "kosulsuz": 1.08,
+   "kosulsuz": 1.09,
    "fark": -7.88,
    "son_epizot_tepe": 0.0,
    "bas": "1961-01"
@@ -454,17 +454,17 @@
    }
   ],
   "olculen": 4,
-  "kosulsuz": -2.02,
+  "kosulsuz": -2.05,
   "orneklem_bas": "1961-01",
-  "orneklem_son": "2026-07",
+  "orneklem_son": "2026-08",
   "epizot_ortalama": -1.36,
-  "fark": 0.66
+  "fark": 0.68
  },
  "gor_emtia_olculen": 4,
- "gor_emtia_kosulsuz": -2.02,
+ "gor_emtia_kosulsuz": -2.05,
  "gor_emtia_epizot_ortalama": -1.36,
- "gor_emtia_fark": 0.66,
- "gor_emtia_son": -19.03,
+ "gor_emtia_fark": 0.68,
+ "gor_emtia_son": -21.39,
  "abd": {
   "kayitlar": [
    {
@@ -512,7 +512,7 @@
  "abd_gecis_n": 796,
  "gecis_yillik_tr_beta": 0.869,
  "gecis_yillik_tr_r2": 0.965,
- "gecis_yillik_tr_n": 247,
+ "gecis_yillik_tr_n": 248,
  "gecis_yillik_abd_beta": 0.669,
  "gecis_yillik_abd_r2": 0.594,
  "gecis_yillik_abd_n": 786,
@@ -524,9 +524,9 @@
  "abd_cekirdek_gecikme": 9,
  "abd_cekirdek_n": 786,
  "tr_cekirdek_beta": 0.352,
- "tr_cekirdek_r2": 0.274,
+ "tr_cekirdek_r2": 0.273,
  "tr_cekirdek_gecikme": 0,
- "tr_cekirdek_n": 258,
+ "tr_cekirdek_n": 259,
  "ea": {
   "kayitlar": [
    {
@@ -4022,7 +4022,7 @@
   },
   {
    "ay": "2026-07",
-   "deger": 5.74
+   "deger": 6.38
   }
  ],
  "uyarilar": [],

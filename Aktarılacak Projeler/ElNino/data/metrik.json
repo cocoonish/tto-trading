@@ -1,10 +1,10 @@
 {
- "_tarih": "01.07.2026",
- "_ay": "2026-07",
+ "_tarih": "01.08.2026",
+ "_ay": "2026-08",
  "oni_son": 1.39,
  "oni_son_ay": "2026-06",
  "orneklem_bas": "2006-01",
- "orneklem_son": "2026-07",
+ "orneklem_son": "2026-08",
  "capraz_tam": [
   {
    "gecikme": 0,
@@ -14,127 +14,127 @@
   {
    "gecikme": 1,
    "korelasyon": -0.038,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 2,
    "korelasyon": -0.093,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 3,
    "korelasyon": -0.151,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 4,
    "korelasyon": -0.205,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 5,
    "korelasyon": -0.252,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 6,
    "korelasyon": -0.288,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 7,
    "korelasyon": -0.314,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 8,
-   "korelasyon": -0.33,
-   "n": 247
+   "korelasyon": -0.329,
+   "n": 248
   },
   {
    "gecikme": 9,
-   "korelasyon": -0.339,
-   "n": 247
+   "korelasyon": -0.338,
+   "n": 248
   },
   {
    "gecikme": 10,
    "korelasyon": -0.345,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 11,
    "korelasyon": -0.354,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 12,
    "korelasyon": -0.362,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 13,
    "korelasyon": -0.364,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 14,
    "korelasyon": -0.354,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 15,
    "korelasyon": -0.336,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 16,
    "korelasyon": -0.315,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 17,
    "korelasyon": -0.293,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 18,
    "korelasyon": -0.274,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 19,
    "korelasyon": -0.253,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 20,
-   "korelasyon": -0.231,
-   "n": 247
+   "korelasyon": -0.23,
+   "n": 248
   },
   {
    "gecikme": 21,
    "korelasyon": -0.206,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 22,
-   "korelasyon": -0.181,
-   "n": 247
+   "korelasyon": -0.18,
+   "n": 248
   },
   {
    "gecikme": 23,
    "korelasyon": -0.152,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 24,
    "korelasyon": -0.124,
-   "n": 247
+   "n": 248
   }
  ],
  "capraz_tam_en_iyi_gecikme": 13,
  "capraz_tam_en_iyi_kor": -0.364,
- "capraz_tam_n": 247,
+ "capraz_tam_n": 248,
  "capraz_tam_ham_en_iyi_gecikme": 15,
  "capraz_tam_ham_en_iyi_kor": -0.251,
  "capraz_modern": [
@@ -146,127 +146,127 @@
   {
    "gecikme": 1,
    "korelasyon": -0.038,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 2,
    "korelasyon": -0.093,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 3,
    "korelasyon": -0.151,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 4,
    "korelasyon": -0.205,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 5,
    "korelasyon": -0.252,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 6,
    "korelasyon": -0.288,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 7,
    "korelasyon": -0.314,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 8,
-   "korelasyon": -0.33,
-   "n": 247
+   "korelasyon": -0.329,
+   "n": 248
   },
   {
    "gecikme": 9,
-   "korelasyon": -0.339,
-   "n": 247
+   "korelasyon": -0.338,
+   "n": 248
   },
   {
    "gecikme": 10,
    "korelasyon": -0.345,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 11,
    "korelasyon": -0.354,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 12,
    "korelasyon": -0.362,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 13,
    "korelasyon": -0.364,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 14,
    "korelasyon": -0.354,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 15,
    "korelasyon": -0.336,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 16,
    "korelasyon": -0.315,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 17,
    "korelasyon": -0.293,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 18,
    "korelasyon": -0.274,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 19,
    "korelasyon": -0.253,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 20,
-   "korelasyon": -0.231,
-   "n": 247
+   "korelasyon": -0.23,
+   "n": 248
   },
   {
    "gecikme": 21,
    "korelasyon": -0.206,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 22,
-   "korelasyon": -0.181,
-   "n": 247
+   "korelasyon": -0.18,
+   "n": 248
   },
   {
    "gecikme": 23,
    "korelasyon": -0.152,
-   "n": 247
+   "n": 248
   },
   {
    "gecikme": 24,
    "korelasyon": -0.124,
-   "n": 247
+   "n": 248
   }
  ],
  "capraz_modern_en_iyi_gecikme": 13,
  "capraz_modern_en_iyi_kor": -0.364,
- "capraz_modern_n": 247,
+ "capraz_modern_n": 248,
  "capraz_modern_ham_en_iyi_gecikme": 15,
  "capraz_modern_ham_en_iyi_kor": -0.251,
  "orneklem_ayni": true,
@@ -317,13 +317,13 @@
  "epizot_ortalama": -0.93,
  "kosulsuz_ortalama": 2.65,
  "epizot_fark": -3.58,
- "gecis_beta": 0.541,
- "gecis_r2": 0.624,
- "gecis_n": 258,
- "gida_12a": 37.52,
- "tufe_12a": 31.75,
- "goreceli_gida_son": 5.77,
- "hamgida_12a": 39.69,
+ "gecis_beta": 0.54,
+ "gecis_r2": 0.623,
+ "gecis_n": 259,
+ "gida_12a": 33.79,
+ "tufe_12a": 31.51,
+ "goreceli_gida_son": 2.29,
+ "hamgida_12a": 34.14,
  "tarihce": [
   {
    "ay": "2006-01",
@@ -1559,6 +1559,11 @@
    "ay": "2026-07",
    "oni": 1.39,
    "goreceli_gida": 5.77
+  },
+  {
+   "ay": "2026-08",
+   "oni": null,
+   "goreceli_gida": 2.29
   }
  ],
  "hukum": "yetersiz",
