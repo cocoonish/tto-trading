@@ -215,8 +215,18 @@ except Exception:
 # (b) ölçülemeyen figürü None ile İŞARETLİYORUZ — uydurma bir tarih yerine
 # sayfada hiç tarih çıkmasın diye (bkz. GrafikEmbed).
 ANLIK = ("endeks_tarihce.html", "endeks_son.html", "son_mansetler.html")
+# GDELT önbelleğinin ucuyla (as_of) BİREBİR biten figürler. Ölçüldü: rejim,
+# rejim tarihçesi ve korelasyon matrisi matrisin son satırında bitiyor.
+# fiyat_endeks KARMA — fiyat bacağı bugüne kadar gelir, duyarlılık bacağı
+# as_of'ta durur; ortak ölçüm orada bittiği için ESKİ bacak damga olur.
 HAFTALIK = ("rejim.html", "rejim_tarihce.html", "korelasyon_matrisi.html",
-            "yuvarlanan_korelasyon.html", "fiyat_endeks.html")
+            "fiyat_endeks.html")
+# UCU AS_OF'TAN DA GERİDE OLAN figürler: ileri getiri kaydırması son noktaları
+# düşürür (yuvarlanan korelasyonda 20g pencere + shift, duyarlılık-getiride
+# 5 günlük ileri pencere). Kaç gün geride olduklarını TÜRETMİYORUZ —
+# web_cikti.py ölçüp deftere yazana kadar None kalırlar ve sayfa o şekillerin
+# altına tarih basmaz. Az yanlış da yanlıştır: as_of'tan damgalamak
+# yuvarlanan korelasyonda iki gün ileri bir tarih basmak olurdu.
 sekil = {}
 try:
     sekil = json.load(open(os.path.join(BASE, "cikti", "sekil_tarih.json")))
@@ -242,11 +252,8 @@ for _ad in ANLIK:
 for _ad in HAFTALIK:
     sekil.setdefault(_ad, _haftalik)
 sekil.setdefault("optimizasyon.html", _iso(ozet.get("opt_kalibrasyon")))
-# duyarlilik_getiri: ucu YAPISAL olarak as_of'tan bir hafta geride (y ekseni
-# hafta kapanışından SONRAKİ beş günün getirisi). Kaç gün geride olduğunu
-# TÜRETMİYORUZ; web_cikti.py ölçüp yazana kadar None kalır ve sayfa o şeklin
-# altına tarih basmaz. Yanlış bir tarih, tarihsizlikten kötüdür.
-sekil.setdefault("duyarlilik_getiri.html", None)
+for _ad in ("duyarlilik_getiri.html", "yuvarlanan_korelasyon.html"):
+    sekil.setdefault(_ad, None)
 ozet["_sekil_tarih"] = dict(sorted(sekil.items()))
 
 json.dump(ozet, open(os.path.join(BASE, "ozet.json"), "w"), ensure_ascii=False, indent=1)

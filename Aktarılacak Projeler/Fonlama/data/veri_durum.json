@@ -1,9 +1,9 @@
 {
- "kosum": "2026-09-02",
- "son_gun": "2026-09-01",
+ "kosum": "2026-09-03",
+ "son_gun": "2026-09-02",
  "son_hafta": "2026-08-21",
  "gunluk_seri": 54,
- "gunluk_gozlem": 3943,
+ "gunluk_gozlem": 3944,
  "haftalik_seri": 13,
  "haftalik_gozlem": 712,
  "aylik_seri": 3,
@@ -24,7 +24,7 @@
    "not": "artık kapsam farkıdır (bilançonun APİ kalemi işlemiş faizi de taşır); eşik son 250 iş gününe uygulanır"
   },
   "APIFON3 = A − B": {
-   "n": 3936,
+   "n": 3937,
    "maks_fark": 1.1641532182693481e-10,
    "maks_bagil": 3.5492476166748422e-12,
    "maks_tarih": "2016-09-29",
@@ -65,6 +65,8 @@
   }
  },
  "uyarilar": [
+  "TAZELİK: Haftalık ticari kredi faizi (TP.KTF17) son gözlemi 21.08.2026 (13 gün önce, tolerans 12 gün).",
+  "TAZELİK: Haftalık TL mevduat faizi (TP.TRY.MT06) son gözlemi 21.08.2026 (13 gün önce, tolerans 12 gün).",
   "ÖLÜ SERİ: geç likidite penceresi alış faizi son 252 iş gününün TAMAMINDA 0 — dolu görünüyor ama bilgi taşımıyor; grafikte 'yok' olarak işlenecek."
  ]
 }

@@ -1,0 +1,22 @@
+# analiz:tufe-eylul-ppk-2026-09-03 · 2026-09-03T10:16:56+00:00 · https://x.com/i/status/2095455993958129776
+
+Analiz — 3 Eylül 2026
+Ağustos TÜFE — 10 Eylül PPK'sinde indirim ihtimali arttı mı, azaldı mı
+
+Ağustos TÜFE'si aylık 1,84, yıllık 31,50 geldi. Anket 1,67 diyordu; 0,17 puanlık sapma, aynı anketin son 36 aydaki ortalama mutlak hatasının (0,51 puan) yalnız 0,33 katı — tek başına sürpriz değil. Sürprizin küçüklüğü rahatlatıcı, KIRILIM değil: manşetin 45'i tek gruptan geliyor, buna karşılık hizmet aylık 3,08 ve yıllık 40,28 ile hiç kımıldamadı, hedefle uyumlu aylık oranın üzerindeki kalem oranı 83,1. Yıl sonu aritmetiği açığı tek sayıya indiriyor: anketin 29,43'ü kalan 4 ayda aylık 1,48 ister; bugünkü mevsimsellikten arındırılmış momentum aylık 2,16 veriyor. Aradaki 0,68 puan, 10 Eylül'de masadaki asıl soru.
+
+İNDİRİM İHTİMALİ ARTTI MI. Azaldı — ama az. Veri hem anketin (0,17 puan) hem bu çalışmanın kural setinin (−0,36 puan) üstünde geldi ve yapışkan kanat soğumadı. Sapmaların ikisi de kendi hata dağılımlarının içinde kaldığı için bu bir şok değil, bir doğrulama başarısızlığı: indirim için gereken hızlanan disenflasyonun kanıtı bu ayda da gelmedi.
+
+NE ZAMAN KARAR. 10 Eylül 2026, 14:00; toplantı özeti 17 Eylül. Kurul o gün elinde yalnız Ağustos verisini bulunduracak — Eylül TÜFE'si 3 Ekim'de, yani bir sonraki toplantıdan (22 Ekim) önce gelecek.
+
+NE KADAR ALAN VAR. Politika faizi 37,00 ve 224 gündür sabit. İleriye bakan reel faiz 10,76, eğilime bakan 6,05, gerçekleşene bakan 4,18. Tartışma bu üç sayı arasında geçiyor: hangisi çıpa alınırsa duruş o kadar sıkı görünüyor.
+
+EĞRİ NE FİYATLIYOR. 1 yıllık sıfır kuponlu getiri son bir ayda −247, son üç ayda −490 baz puan geriledi. Bu bir olasılık ölçümü değil, bir konumlanma ölçümü: gevşeme beklentisi fiyatlara çoktan girdi.
+
+YILLIK ENFLASYON NE YAPACAK. Momentum aynı kalırsa yıllık oran önce düşüyor (Ekim 2026'de 29,63), sonra geri tırmanıyor ve yıl sonunda 32,94 oluyor. Elverişli baz Eylül–Ekim'de, elverişsiz baz Kasım–Aralık'ta.
+
+KANITIN GÜCÜ. Orta. Kırılım, momentum ve reel faiz ölçümleri doğrudan; sürpriz ölçümü 0,51 puanlık hata bandı taşıyor.
+
+Kilit ölçümler — Ağustos aylık TÜFE: %1,84 · yıllık TÜFE: %31,50 · hizmet yıllık: %40,28 · hedef üstü kalem oranı: %83,1 · yıl sonu hedefi ile momentum arası aylık açık: 0,68 puan · gerçekleşene göre reel faiz: %4,18 · ankete göre reel faiz: %10,76 · 1 yıllık getiride bir aylık değişim: −247 bp
+
+Analizdir; yatırım tavsiyesi değildir.

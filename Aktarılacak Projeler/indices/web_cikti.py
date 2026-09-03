@@ -999,6 +999,7 @@ def ciz_yuvarlanan_korelasyon(seriler, cikti_yolu):
 
     fig = go.Figure()
     varliklar = []
+    _uclar = []          # cizilen her izin sag kenari
     ort_ozet = {}
     for anahtar, seri in seriler.items():
         ticker = config.ASSETS[anahtar]["ticker"]
@@ -1022,6 +1023,8 @@ def ciz_yuvarlanan_korelasyon(seriler, cikti_yolu):
             if len(birlesik) < 40:
                 continue
             yuvlar[gun] = birlesik["duy"].rolling(20).corr(birlesik["get"]).dropna()
+            if len(yuvlar[gun]):
+                _uclar.append(yuvlar[gun].index.max())
         if len(yuvlar) < len(UFUKLAR):
             continue  # iki ufuk da kurulamayan varlik atlanir
 
@@ -1061,7 +1064,13 @@ def ciz_yuvarlanan_korelasyon(seriler, cikti_yolu):
     fig.add_hline(y=0, line_color=INK, line_width=0.8, opacity=0.35)
     fig.update_yaxes(title_text="Pearson r (20 günlük pencere)", range=[-1, 1])
     fig.write_html(cikti_yolu, include_plotlyjs="cdn")
-    return cikti_yolu, ort_ozet
+    # FIGURUN KENDI SAG KENARI. Duyarlilik ile ileri getirinin kesisimi
+    # aliniyor ve ufuk kadar kaydirma (shift -1 / -5) son noktalari dusuruyor;
+    # yani bu figur GDELT ucundan da (as_of) birkac gun geride biter. Olculdu:
+    # 30.08 as_of'ta figurun sag kenari 28.08. Damgayi as_of'tan atmak iki gun
+    # ileri bir tarih basmak olurdu — az yanlis da yanlistir.
+    son_uc = max(_uclar).strftime("%Y-%m-%d") if _uclar else None
+    return cikti_yolu, ort_ozet, son_uc
 
 
 def ciz_son_mansetler(cikti_yolu, adet=40):
@@ -1235,9 +1244,11 @@ def uret(cikti_dizini=None, rejim=None, yalniz_anlik=False):
             except Exception as exc:
                 print(f"UYARI: {ad} uretilemedi: {exc}")
         try:
-            yol, ort_ozet = ciz_yuvarlanan_korelasyon(
+            yol, ort_ozet, yk_son = ciz_yuvarlanan_korelasyon(
                 matris, os.path.join(hedef, "yuvarlanan_korelasyon.html"))
             yollar.append(yol)
+            if yk_son:
+                sekil_tarih["yuvarlanan_korelasyon.html"] = yk_son
             print("  Yuvarlanan korelasyon ortalamalari (20g pencere ort.):")
             for anahtar, degerler in sorted(ort_ozet.items()):
                 print(f"    {anahtar:<8} 1g {degerler['1g']:+.4f} | 5g {degerler['5g']:+.4f}")

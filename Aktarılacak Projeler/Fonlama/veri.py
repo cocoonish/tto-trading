@@ -400,11 +400,17 @@ TAZELIK_GUNLUK = {
     "swap_alim":    ("Swap stoku (TP.SWAPTEKTAR.*)",          4, False),
     "usdtry":       ("Döviz kuru (TP.DK.USD.A.YTL)",          4, True),
 }
+# ETİKETLER OKURA GİDİYOR. Bu satırlar uyarilar.json'a ve oradan sayfadaki koşu
+# kutusuna OLDUĞU GİBİ basılıyor. Günlük tabloda parantez içi kaynağın KENDİ
+# yayımladığı seri kodu (TP.PY.P02.1H) — okurun EVDS'te arayabileceği bir
+# künye. Haftalık tabloda ise EVDS'in iç GRUP kodu yazıyordu (bie_kt100h): o
+# kod okurun elinde hiçbir şey ifade etmez ve okur dili ölçütü onu ENGEL
+# sayıyor. Seri kodları zaten yukarıda tanımlı; künye onlardan yazılır.
 TAZELIK_HAFTALIK = {
-    "f_ticari_tl":  ("Haftalık kredi faizi (bie_kt100h)",     12),
-    "f_mevduat_tl": ("Haftalık mevduat faizi (bie_mt100h)",   12),
-    "zk_taban_tl":  ("ZK'ya tabi taban (bie_tldthvade)",      20),
-    "dth_tl":       ("ZK'ya tabi DTH (bie_zorundth)",         20),
+    "f_ticari_tl":  ("Haftalık ticari kredi faizi (TP.KTF17)",      12),
+    "f_mevduat_tl": ("Haftalık TL mevduat faizi (TP.TRY.MT06)",     12),
+    "zk_taban_tl":  ("ZK'ya tabi TL mevduat tabanı (TP.TLDTHVADE.KB6)", 20),
+    "dth_tl":       ("ZK'ya tabi DTH (TP.ZORUNDTH.KB8)",            20),
 }
 
 def tazelik_tolerans(aile: str = "gunluk") -> int:
