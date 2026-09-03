@@ -383,6 +383,23 @@ def main() -> int:
                 koy("baz_momentum_ilk", float(_s.iloc[0]), 2)
                 O["baz_momentum_ilk_ay"] = (
                     f"{AY_TR[bz['tarih'].iloc[0].month]} {bz['tarih'].iloc[0].year}")
+                # BU YILIN İÇİNDEKİ DİP AYRI ÖLÇÜLÜR. On iki aylık ufkun
+                # dibi gelecek yılın içine düşebiliyor (elverişli baz ocak ve
+                # nisanda da var); oysa yıl sonu tartışması yalnız kalan aylara
+                # bakıyor. Tek bir "dip" yazmak iki farklı soruyu tek sayıyla
+                # cevaplamak olurdu.
+                _yil = bz["tarih"].iloc[0].year
+                _bu = bz[bz["tarih"].dt.year == _yil]
+                if len(_bu):
+                    _sy = _bu["son3_sa"].dropna()
+                    if len(_sy):
+                        _j = int(_sy.idxmin())
+                        koy("baz_yil_dip", float(_sy.min()), 2)
+                        _dt2 = bz["tarih"].iloc[_j]
+                        O["baz_yil_dip_ay"] = f"{AY_TR[_dt2.month]} {_dt2.year}"
+                    # Patikanın ay ay kendisi: şeklin anlatısı buradan kuruluyor.
+                    for _t2, _v2 in zip(_bu["tarih"], _bu["son3_sa"]):
+                        koy(f"baz_yol_{_t2.month:02d}", float(_v2), 2)
         # DÜŞEN AYLAR AY AY: patikanın şeklini açıklayan sayı bunlar. Yalnız
         # "elverişli aylar" cümlesi hangi ayın ne kadar elverişli olduğunu
         # söylemiyor.

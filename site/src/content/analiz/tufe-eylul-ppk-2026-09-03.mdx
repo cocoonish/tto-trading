@@ -40,7 +40,7 @@ import Deger from '../../components/Deger.astro';
       </tr>
       <tr>
         <td>Yıllık enflasyon ne yapacak</td>
-        <td>Momentum aynı kalırsa yıllık oran önce <b>düşüyor</b> (<Deger proje="enflasyon" anahtar="baz_momentum_dip_ay" ondalik={0}>Ekim 2026</Deger>'de <Deger proje="enflasyon" anahtar="baz_momentum_dip" ondalik={2}>29,63</Deger>), sonra geri tırmanıyor ve yıl sonunda <Deger proje="enflasyon" anahtar="baz_momentum_yilsonu" ondalik={2}>32,94</Deger> oluyor. Elverişli baz Eylül–Ekim'de, elverişsiz baz Kasım–Aralık'ta.</td>
+        <td>Momentum aynı kalırsa yıllık oran yıl içinde önce <b>düşüyor</b> (<Deger proje="enflasyon" anahtar="baz_yil_dip_ay" ondalik={0}>Ekim 2026</Deger>'de %<Deger proje="enflasyon" anahtar="baz_yil_dip" ondalik={2}>29,63</Deger>), sonra geri tırmanıyor ve yıl sonunda %<Deger proje="enflasyon" anahtar="baz_momentum_yilsonu" ondalik={2}>32,94</Deger> oluyor. Elverişli baz Eylül–Ekim'de, elverişsiz baz Kasım–Aralık'ta.</td>
       </tr>
       <tr>
         <td>Kanıtın gücü</td>
@@ -245,7 +245,13 @@ Anketin kendi ileri patikası bu açığı kabul ediyor mu? Ediyor, ama sona ata
 | Geçen yılın tekrarı | %<Deger proje="enflasyon" anahtar="baz_tekrar_aylik" ondalik={2}>3,23</Deger> | %<Deger proje="enflasyon" anahtar="baz_tekrar_yilsonu" ondalik={2}>31,50</Deger> |
 | Anket | (gereken %<Deger proje="enflasyon" anahtar="ys_gereken_aylik" ondalik={2}>1,48</Deger>) | %<Deger proje="enflasyon" anahtar="ys_anket" ondalik={2}>29,43</Deger> |
 
-**Patikanın şekli sonucundan daha önemli.** Momentum senaryosunda yıllık oran önce DÜŞÜYOR: <Deger proje="enflasyon" anahtar="baz_momentum_ilk_ay" ondalik={0}>Eylül 2026</Deger>'de %<Deger proje="enflasyon" anahtar="baz_momentum_ilk" ondalik={2}>30,13</Deger>, <Deger proje="enflasyon" anahtar="baz_momentum_dip_ay" ondalik={0}>Ekim 2026</Deger>'de dip yaparak %<Deger proje="enflasyon" anahtar="baz_momentum_dip" ondalik={2}>29,63</Deger>. Sonra geri tırmanıyor ve yıl sonunda %<Deger proje="enflasyon" anahtar="baz_momentum_yilsonu" ondalik={2}>32,94</Deger> oluyor.
+**Patikanın şekli sonucundan daha önemli.** Momentum senaryosunda yıllık oran önce DÜŞÜYOR, sonra geri tırmanıyor:
+
+| ay | Eylül | Ekim | Kasım | Aralık |
+|---|---|---|---|---|
+| yıllık TÜFE (momentum senaryosu) | %<Deger proje="enflasyon" anahtar="baz_yol_09" ondalik={2}>30,13</Deger> | %<Deger proje="enflasyon" anahtar="baz_yol_10" ondalik={2}>29,63</Deger> | %<Deger proje="enflasyon" anahtar="baz_yol_11" ondalik={2}>31,29</Deger> | %<Deger proje="enflasyon" anahtar="baz_yol_12" ondalik={2}>32,94</Deger> |
+
+Yıl içindeki dip <Deger proje="enflasyon" anahtar="baz_yil_dip_ay" ondalik={0}>Ekim 2026</Deger>'da, %<Deger proje="enflasyon" anahtar="baz_yil_dip" ondalik={2}>29,63</Deger>. On iki aylık ufkun tamamına bakıldığında dip daha da aşağıda ve daha ileride: <Deger proje="enflasyon" anahtar="baz_momentum_dip_ay" ondalik={0}>Nisan 2027</Deger>'de %<Deger proje="enflasyon" anahtar="baz_momentum_dip" ondalik={2}>26,30</Deger> — çünkü elverişli baz penceresi ocak ve nisanda tekrar açılıyor.
 
 Sebep takvimde: endeksten düşen aylar Eylül %<Deger proje="enflasyon" anahtar="baz_dus_09" ondalik={2}>3,23</Deger> ve Ekim %<Deger proje="enflasyon" anahtar="baz_dus_10" ondalik={2}>2,55</Deger> ile yüksek, Kasım %<Deger proje="enflasyon" anahtar="baz_dus_11" ondalik={2}>0,87</Deger> ve Aralık %<Deger proje="enflasyon" anahtar="baz_dus_12" ondalik={2}>0,89</Deger> ile çok düşük. Elverişli baz penceresi <Deger proje="enflasyon" anahtar="baz_elverisli_aylar" ondalik={0}>Eylül–Ekim, Ocak–Şubat ve Nisan</Deger>.
 
