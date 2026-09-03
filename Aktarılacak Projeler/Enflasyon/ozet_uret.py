@@ -1003,6 +1003,12 @@ def main() -> int:
                 koy(f"br_k_{kis}_sapma", (kr.get("sapma") or {}).get(ad), 2)
             for q, v in zip(kr.get("yuzdelikler") or [], kr.get("bulut") or []):
                 koy(f"br_k_p{q}", v, 2)
+            koy("br_k_p_ito_ustu", kr.get("p_ito_ustu"), 0)
+            for e in kr.get("esik") or []:
+                ad_ = f"{e['esik']:.1f}".replace(".", "")
+                on_ = "ust" if e["yon"] == ">" else "alt"
+                koy(f"br_k_{on_}{ad_}", e.get("p"), 0)
+                O[f"br_k_{on_}{ad_}_tuttu"] = "evet" if e.get("tuttu") else "hayır"
             # BANT HÜKMÜ KODDA: gerçekleşmenin hangi banda düştüğü, bandın
             # kendisinden okunur; metne sabit yazılırsa bir sonraki ay yalan
             # söyler.

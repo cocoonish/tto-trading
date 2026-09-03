@@ -2639,6 +2639,17 @@ def birlesik_tahmin(a: pd.DataFrame) -> dict:
                                 <= np.percentile(bulut, 95)),
                 "tufe_ito_ustu": bool(gercek > xi),
                 "tufe_uge_ustu": bool(gercek > xu),
+                # EX-ANTE OLASILIKLAR KARNEDE DE DURUR. Sayı geldikten sonra
+                # "ne demiştik"i silmek, tahminin sınanabilirliğini de siler:
+                # okur %26 demiş bir kuralın o kuyruğu tutturduğunu ancak iki
+                # sayıyı yan yana görürse değerlendirebilir.
+                "p_ito_ustu": round(float((bulut > xi).mean() * 100), 0),
+                "esik": [{"esik": e, "yon": yon,
+                          "p": round(float(((bulut > e) if yon == ">"
+                                            else (bulut < e)).mean() * 100), 0),
+                          "tuttu": bool((gercek > e) if yon == ">" else (gercek < e))}
+                         for e, yon in ((2.5, ">"), (2.0, ">"), (1.5, ">"),
+                                        (1.0, "<"), (0.5, "<"))],
             }
             k_ = out["karne"]
             bant = ("%50 bandının içinde" if k_["bant_50"] else
