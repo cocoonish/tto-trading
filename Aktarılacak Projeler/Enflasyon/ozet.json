@@ -1127,7 +1127,9 @@
  "dogrulama_yillik_pp": 0.0,
  "dogrulama_aylik_pp": 0.0,
  "dogrulama_n": 35,
- "kosu_revizyon_durum": "önceki ölçüm aynı veriyle yapılmış — iki ölçüm arasındaki revizyon bu kez ölçülemedi",
+ "kosu_revizyon_maks": 0.0,
+ "kosu_revizyon_ort": 0.0,
+ "kosu_revizyon_durum": "önceki koşuya (2026-09-03) göre ölçüldü",
  "sa_rev_k": 6,
  "sa_rev_tufe_maks": 0.117,
  "sa_rev_tufe_ort": 0.04,
@@ -1152,7 +1154,7 @@
  "sa_rev_oynak_maks": 5.596,
  "sa_rev_oynak_saar3": 44.19,
  "sa_yontem": "STL(log, period=12, seasonal=13, robust) + hareketli tatil ön-arındırması",
- "uyari_sayisi": 1,
- "uyari_metni": "ALT KALEM: 2 adet üç haneli grup son ayda (Temmuz 2026) veri vermiyor: 095, 105.",
- "uyari_cumlesi": "Bu koşuda düşen tek uyarı budur:"
+ "uyari_sayisi": 2,
+ "uyari_metni": "KISMİ YAYIM: 15/72 seri en yeni aydan (Ağustos 2026) GERİDE — ana_01, ana_02, ana_03, ana_04, ana_05, ana_06 +9. Kaynak seri ailelerini aynı anda güncellemiyor; ölçüm ortak tarihe hizalandığı için pano en geride kalan ailenin ayında kalır. Yayım günüyse birkaç saat sonra yeniden koşturun. · ALT KALEM: 2 adet üç haneli grup son ayda (Temmuz 2026) veri vermiyor: 095, 105.",
+ "uyari_cumlesi": "Bu koşuda 2 uyarı düştü:"
 }
