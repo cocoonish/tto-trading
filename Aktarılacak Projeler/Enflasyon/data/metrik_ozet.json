@@ -7,18 +7,18 @@
   "esik_aylik_pp": 0.01,
   "not": "formül/kolon hizalaması denetimi — tazelik denetimi değildir",
   "yillik": {
-   "n": 35,
-   "maks_fark_pp": 0.0,
-   "son_ay_biz": 31.7541,
-   "son_ay_evds": 31.7541,
-   "evds_son_ay": "2026-07"
+   "n": 36,
+   "maks_fark_pp": 0.005364,
+   "son_ay_biz": 31.502,
+   "son_ay_evds": 31.5073,
+   "evds_son_ay": "2026-08"
   },
   "aylik": {
-   "n": 35,
-   "maks_fark_pp": 0.0,
-   "son_ay_biz": 1.7848,
-   "son_ay_evds": 1.7848,
-   "evds_son_ay": "2026-07"
+   "n": 36,
+   "maks_fark_pp": 0.004154,
+   "son_ay_biz": 1.84,
+   "son_ay_evds": 1.8442,
+   "evds_son_ay": "2026-08"
   }
  },
  "kosular_arasi": {
@@ -1211,6 +1211,14 @@
    "yil_sonu": 31.501979078010134
   }
  },
+ "yilsonu": {
+  "kumulatif": 22.07,
+  "anket": 29.43,
+  "kalan_ay": 4,
+  "gereken_aylik": 1.48,
+  "momentum_aylik": 2.16,
+  "acik_puan": 0.68
+ },
  "reel__faiz": 37.0,
  "reel__ex_post": 4.180941580147879,
  "reel__ex_ante": 10.760772899991933,
@@ -1280,6 +1288,25 @@
     "mae": 1.469,
     "yanlilik": 1.082,
     "rmse": 2.722
+   }
+  },
+  "son_ay": {
+   "ay": "2026-08",
+   "ad": "Ağustos 2026",
+   "anket": 1.67,
+   "gercek": 1.84,
+   "surpriz": 0.17
+  },
+  "ileri": {
+   "h1": {
+    "ay": "2026-09",
+    "ad": "Eylül 2026",
+    "oran": 2.08
+   },
+   "h2": {
+    "ay": "2026-10",
+    "ad": "Ekim 2026",
+    "oran": 1.97
    }
   }
  },
