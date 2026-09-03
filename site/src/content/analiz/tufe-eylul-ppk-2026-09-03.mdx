@@ -167,9 +167,20 @@ $$\text{SAAR}_3 \;=\; \left(\prod_{k=0}^{2}\bigl(1+\pi^{SA}_{t-k}\bigr)\right)^{
 | Yönetilen fiyatlar hariç | %<Deger proje="enflasyon" anahtar="fharic_aylik" ondalik={2}>1,72</Deger> | %<Deger proje="enflasyon" anahtar="fharic_aylik_sa" ondalik={2}>1,99</Deger> | — | %<Deger proje="enflasyon" anahtar="fharic_12a" ondalik={2}>29,96</Deger> |
 
 <GrafikEmbed
+  src="/projeler/enflasyon/01_manset_momentum.html"
+  baslik="Manşet enflasyonun dört ölçüsü: aylık, arındırılmış aylık, üç ve altı aylık yıllıklandırılmış"
+  no="03"
+  yukseklik={1265}
+/>
+
+**Bu şekil nasıl hesaplanıyor.** Aynı seri dört farklı pencereyle okunuyor. Yıllık oran en yavaş tepki vereni; üç aylık yıllıklandırılmış ölçü en hızlısı ama en gürültülüsü. Altı aylık, ikisinin arasında bir uzlaşma. Bir dönüş noktası önce üç aylıkta görünür, sonra altı aylıkta, en son yıllıkta — bu yüzden politika tartışması yıllık orandan değil, kısa pencerelerden okunur.
+
+Bu ayki okuma: üç aylık yıllıklandırılmış ölçü %<Deger proje="enflasyon" anahtar="baz_momentum_12ay" ondalik={2}>29,18</Deger>, altı aylık %<Deger proje="enflasyon" anahtar="tufe_6a" ondalik={2}>31,15</Deger>, yıllık %<Deger proje="enflasyon" anahtar="tufe_12a" ondalik={2}>31,50</Deger>. Üçünün de aynı yerde toplanması, momentumun yıllık orandan ayrışmadığını — yani hızlanan bir disenflasyonun izinin OLMADIĞINI — gösteriyor.
+
+<GrafikEmbed
   src="/projeler/enflasyon/06_hizmet_mal.html"
   baslik="Hizmet ve temel mallar: iki kanadın momentumu ve aradaki makas"
-  no="03"
+  no="04"
   yukseklik={1349}
 />
 
@@ -195,7 +206,7 @@ Yoğunlaşmanın "dar tabanlı" mı yoksa "genel" mi olduğunu üç ölçü birl
 <GrafikEmbed
   src="/projeler/enflasyon/05_dagilim_difuzyon.html"
   baslik="Kesit dağılımı ve difüzyon: kaç kalem hangi eşiğin üstünde"
-  no="04"
+  no="05"
   yukseklik={1085}
 />
 
@@ -232,7 +243,7 @@ Anketin kendi ileri patikası bu açığı kabul ediyor mu? Ediyor, ama sona ata
 <GrafikEmbed
   src="/projeler/enflasyon/09_baz_etkisi.html"
   baslik="Üç senaryoda önümüzdeki on iki ayın yıllık enflasyon patikası"
-  no="05"
+  no="06"
   yukseklik={1059}
 />
 
@@ -274,7 +285,7 @@ Yaklaşık $i - \pi$ formülü bu seviyelerde kullanılamaz: %37 faiz ve %31,5 e
 <GrafikEmbed
   src="/projeler/enflasyon/08_reel_faiz.html"
   baslik="Reel faizin üç ölçüsü: gerçekleşene, ana eğilime ve beklentiye göre"
-  no="06"
+  no="07"
   yukseklik={1057}
 />
 
@@ -297,7 +308,7 @@ Ve o varsayımın dayanağı zayıf. Aynı anketin cari ay tahminleri son 36 ayd
 <GrafikEmbed
   src="/projeler/enflasyon/07_beklenti.html"
   baslik="Beklenti seti: piyasa, reel kesim ve hanehalkı; ufka göre isabet"
-  no="07"
+  no="08"
   yukseklik={1373}
 />
 
@@ -306,9 +317,18 @@ Ve o varsayımın dayanağı zayıf. Aynı anketin cari ay tahminleri son 36 ayd
 ### Eğri ne fiyatlamış
 
 <GrafikEmbed
+  src="/projeler/dibs-verim-egrisi/01_egri_bugun.html"
+  baslik="Sıfır kuponlu getiri eğrisi: bugünkü kesit ve kotasyon bulutu"
+  no="09"
+  yukseklik={1243}
+/>
+
+**Bu şekil nasıl hesaplanıyor.** Eğri, ihraç edilmiş sabit kuponlu tahvillerin kotasyonlarından bootstrap ile çıkarılan sıfır kuponlu getirilerdir; her nokta bir vadedeki saf iskonto oranıdır ve kupon etkisinden arındırılmıştır. Politika faizi BASİT yıllık, eğri BİLEŞİK yıllık yayımlanır; ikisi karşılaştırılmadan önce aynı konvansiyona çevrilmelidir — çevrilmezse taşımanın işareti bile ters çıkabilir.
+
+<GrafikEmbed
   src="/projeler/dibs-verim-egrisi/02_egri_hareketi.html"
   baslik="Sıfır kuponlu getiri eğrisinin bir ay ve üç ay öncesine göre hareketi"
-  no="08"
+  no="10"
   yukseklik={1597}
 />
 
