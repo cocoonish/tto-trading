@@ -1,0 +1,20 @@
+# bulten:2026-09-03 · 2026-09-03T04:49:02+00:00 · https://x.com/i/status/2095373475233816985
+
+Sabah Notu — 3 Eylül 2026
+
+2 Eylül, korunmanın fiyatının iki piyasada birbirinden ayrıldığı gündü. Hisse tarafında korunma bir günde %6,98 ucuzladı; oynaklık endeksi 16,34'ten 15,20'ye geriledi ve kendi yıllık aralığının alt onda birine indi. Tahvil tarafında korunma aynı gün %2,35 daha pahalandı; tahvil oynaklığı ölçüsü 79,71'e çıktı. Bu bir günlük tesadüf değil: 26 Ağustos kapanışından 2 Eylül kapanışına, beş seansta tahvil oynaklığı 69,44'ten 79,71'e %14,8 yükseldi, hisse oynaklığı ise 15,21'den 15,20'ye — yani hiç kımıldamadı. İki piyasa aynı beş günü izledi ve biri riskin arttığını, diğeri azaldığını fiyatladı. Ayrışmayı tetikleyen veri belliydi. ABD'de ağustos özel sektör istihdamı 38 bin arttı ve beklentinin dokuz bin altında kaldı; bu, yılın en küçük aylık kazancı. Hisse tarafı bunu rahatlama diye okudu: getirilerin beş seanslık tırmanışı durdu, S&P 500 %0,46, Dow Jones %0,56, küçük şirket endeksi %1,13 yükseldi — en çok kazanan grubun faize en duyarlı grup olması tesadüf değil. Tahvil tarafı aynı veriyi tersinden okudu.
+
+Gündem
+Kilit gelişme: Günün sürücüleri önem sırasına dizildiğinde başa ABD işgücü piyasası geçiyor. ADP ölçümü ağustosta 38 binlik bir artış gösterdi; beklentinin dokuz bin, bir önceki ayın sekiz bin altında kalan bu rakam yılın en küçük aylık kazancı.
+Türkiye makro: Türkiye tarafında günün ölçülen verisi yoktu; bugün 10:00'da açıklanacak ağustos enflasyonu bu haftanın tek belirleyici yayımı.
+Türkiye politika: Düzenleme tarafında günün somut adımı sermaye piyasalarından geldi: Sermaye Piyasası Kurulu, yatırım ve kripto varlık işlemlerinde yabancıların pasaportla işlem yapabilmesine imkân veren bir düzenleme yaptı.
+Jeopolitik: Enerji fiyatının kaynağındaki askerî çerçeve iki yönlü bir haber üretti. ABD'nin Hürmüz Boğazı çevresindeki İran hedeflerine yönelik saldırıları, iki süper tankerin vurulmasının ardından 1 Eylül'de ham petrolü iki havzada birden yaklaşık %5 yukarı taşımıştı.
+Küresel makro: Günün belirleyici verisi ABD'den geldi. ADP'nin ağustos özel sektör istihdamı 38 bin artış gösterdi; Dow Jones anketinin beklentisi 47 bin, temmuz gerçekleşmesi 46 bindi.
+
+Günün öne çıkanları: VIX −%6,98 · Nikkei 225 −%2,85 · MOVE (tahvil oynaklığı) +%2,35 · Doğal gaz (Henry Hub) +%1,79 · Bitcoin −%1,46
+
+Pano: USD/TRY 48,21 (+0,02) · 1 aylık yıllıklandırılmış deval. hızı %21,4 (−0,1) · Net rezerv 66,9 mlr USD (−0,2) · 21 Ağu · Swap hariç net rezerv 55,9 mlr USD (+1,6) · 21 Ağu · Net rezerv (günlük tahmin) 65,6 mlr USD (−2,7) · 1 Eyl
+
+Beklenen: Bugün 10:00'da ağustos enflasyonu geliyor: anket ortancası yıllık %31,52, TCMB anketi yıl sonu için %29,43 ve 12 ay sonrası için %23,69 veriyor, kendi baz etkisi modelimizin aralığı %33,97 ile %31,75 arasında. Aynı saatte yurt içi üretici fiyatları, 14:30'da haftalık para ve banka istatistikleri yayımlanacak; ikincisi kredi büyümesinin %23,7'den hangi yöne gittiğini ve tüketici kredisindeki 12,8 puanlık yavaşlamanın sürüp sürmediğini gösterecek.
+
+Ölçüm ve yorumdur; yatırım tavsiyesi değildir.
