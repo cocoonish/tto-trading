@@ -1074,8 +1074,10 @@
   }
  },
  "kosular_arasi": {
-  "var": false,
-  "not": "önceki ölçüm aynı veriyle yapılmış — iki ölçüm arasındaki revizyon bu kez ölçülemedi",
+  "var": true,
+  "n": 12,
+  "maks_pp": 0.002,
+  "ort_pp": 0.0,
   "onceki_kosum": "2026-09-03"
  },
  "vintage": {
