@@ -20,6 +20,7 @@ Denetim üç sınıf bulgu üretir:
 from __future__ import annotations
 
 import argparse
+import html as html_kacis
 import json
 import re
 import sys
@@ -94,7 +95,12 @@ def _metinler(b: dict) -> list:
 
 
 def _duz(html: str) -> str:
-    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", html or "")).strip()
+    # Varlık kaçışları da çözülür: metin HTML olarak yazıldığı için "S&P 500"
+    # kaynakta "S&amp;P 500" duruyor ve çözülmeden ad eşleşmesi tutmuyordu —
+    # endeksin ADININ parçası olan 500, ölçülmemiş bir sayı gibi listeleniyordu.
+    # Okur sayfada "S&P 500" görüyor; denetim de onu görmeli.
+    duz = html_kacis.unescape(html or "")
+    return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", duz)).strip()
 
 
 def _kelime(html: str) -> int:
@@ -138,7 +144,15 @@ CAPA_DISI = {
 
 def _kilit_capalari(madde: dict) -> tuple[list[str], list[str]]:
     """(özel ad çapaları, Türkçe konu çapaları) — ikisi de boş olabilir."""
-    ozel = [w for w in re.findall(r"[A-Za-zÇĞİÖŞÜçğıöşü.]{4,}", madde.get("baslik") or "")
+    baslik = madde.get("baslik") or ""
+    # Google Haberler beslemesindeki başlıklar " - Yayıncı" ekiyle geliyor ve o
+    # ek TEK çapa olarak kalabiliyor ("… inflation to 3.3% - Euronews.com").
+    # Yayıncının adı haberin konusu değildir: okura yazılan bir metnin onu
+    # anması beklenemez, yani uyarı konu düzgün işlense de kapanmaz. Yayıncı
+    # eki atılır; geriye çapa kalmazsa ölçüt zaten uyarı üretmiyor.
+    if "news.google.com" in (madde.get("baglanti") or "") and " - " in baslik:
+        baslik = baslik.rsplit(" - ", 1)[0]
+    ozel = [w for w in re.findall(r"[A-Za-zÇĞİÖŞÜçğıöşü.]{4,}", baslik)
             if w.lower().strip(".") not in CAPA_DISI and not w.islower()]
     kaynak = madde.get("kaynak") or ""
     konu = kaynak.split("—", 1)[1] if "—" in kaynak else ""
@@ -267,7 +281,14 @@ ANAHTAR_KELIME = {
             "BIST 100": ["bist"], "BIST 30": ["bist"], "BIST Bankacılık": ["bist", "banka"],
             "S&P 500": ["s p 500", "sp 500", "abd hisse", "wall"],
             "Nasdaq 100": ["nasdaq"], "Dow Jones": ["dow"], "Russell 2000": ["russell"],
-            "VIX": ["vix", "oynaklık"], "Brent": ["brent", "petrol"], "WTI": ["wti", "petrol"],
+            "VIX": ["vix", "oynaklık", "oynaklığı"],
+            # MOVE'un hiç karşılığı yoktu: eşleştirici tam adı ("MOVE (tahvil
+            # oynaklığı)") arıyordu ve hiçbir doğal Türkçe cümle onu içermez.
+            # VIX'in kardeşi olan bu satır, atıf zorunlu olduğu hâlde hangi
+            # yazımla anılırsa anılsın atıfsız görünüyordu.
+            "MOVE (tahvil oynaklığı)": ["move", "tahvil oynaklığı",
+                                        "tahvil oynaklık"],
+            "Brent": ["brent", "petrol"], "WTI": ["wti", "petrol"],
             "Altın (XAU, ons)": ["altın"], "Gümüş (XAG, ons)": ["gümüş"],
             "Platin": ["platin"], "Bakır": ["bakır"], "Bitcoin": ["bitcoin", "kripto"],
             "Dolar endeksi (DXY)": ["dolar endeksi", "dxy"],
@@ -297,8 +318,13 @@ def anilmi(ad: str, sade_metin: str) -> bool:
     İki ayrı ölçüt (piyasa atfı, haber tonu) aynı soruyu soruyor; iki ayrı
     eşleştirici iki ayrı doğru üretirdi.
     """
-    for k in ANAHTAR_KELIME.get(ad, [_sade(ad)]):
-        if k in sade_metin:
+    # Anahtar kelimeler de metinle AYNI süzgeçten geçirilir. Geçirilmediğinde
+    # süzgecin düşürdüğü harfi (ı, ç, ğ…) taşıyan her anahtar ölü doğuyordu:
+    # "oynaklık", "isveç kron" ve "norveç kron" metin doğru yazılmış olsa bile
+    # HİÇBİR ZAMAN eşleşmiyordu, çünkü metin tarafında "oynakl k" duruyordu.
+    # Kusur tek anahtarda değil süzgeç uyuşmazlığındaydı; onarım da orada.
+    for k in ANAHTAR_KELIME.get(ad, [ad]):
+        if _sade(k) in sade_metin:
             return True
     parcalar = _sade(ad).split()
     return bool(parcalar) and parcalar[0] in sade_metin
