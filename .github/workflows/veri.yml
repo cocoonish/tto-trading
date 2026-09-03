@@ -380,6 +380,14 @@ jobs:
             echo "veri değişmedi — commit yok"
           else
             git commit -m "veri: $(date -u +'%Y-%m-%d %H:%M') tazeleme (otomatik)"
-            git pull --rebase --autostash
+            # ÜRETİLEN DOSYA ÇAKIŞMASI KOŞUYU DÜŞÜRMEZ. İki tazeleme peş peşe
+          # koştuğunda ikincisi, birincisinin push'undan ÖNCEKİ sha'yı checkout
+          # etmiş olur; ikisi de ozet.json'u yeniden ürettiği için rebase
+          # içerik çakışması verir ve koşu, TAZE VERİYİ HESAPLADIKTAN SONRA
+          # düşer — 03.09'da ağustos TÜFE'si böyle kayboldu. Bu dosyalar
+          # üretim çıktısı: doğru sürüm her zaman EN SON HESAPLANANDIR.
+          # Rebase sırasında -X theirs, yeniden uygulanan (bizim) commit'i
+          # tercih eder.
+          git pull --rebase --autostash -X theirs
             git push
           fi
