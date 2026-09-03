@@ -959,8 +959,17 @@ def main() -> int:
             koy(f"br_{kis}_rmse", v.get("rmse"), 3)
             koy(f"br_{kis}_yanlilik", v.get("yanlilik"), 3)
             koy(f"br_{kis}_p", v.get("p_vs_en_iyi"), 3)
-        bk = bp.get("bekleyen") or {}
+        # br_b_* = "ELDEKİ EN SON BİRLEŞİK TAHMİN". Bekleyen ay varsa odur;
+        # o ayın TÜFE'si yayımlanınca bekleyen ay kalmaz ama tahmin ORTADAN
+        # KALKMAZ — karne bloğu aynı tahmini gerçekleşmeyle birlikte taşır.
+        # Köprü olmadan sayfa yayım gününde 28 anahtarı birden kaybediyordu:
+        # ölçüldü, 03.09'da ağustos TÜFE'si gelince analiz yazısının bütün
+        # ağustos bloğu statik yedeğe düştü ve yayın kapısı DÜŞTÜ. Bir hattın
+        # ölçmeyi bıraktığı anahtar, o anahtarı okuyan sayfayı düşürür; ritmi
+        # değişen bir blok ya köprülenir ya da okuyan sayfa uyarlanır.
+        bk = bp.get("bekleyen") or bp.get("karne") or {}
         if bk:
+            koy("br_b_kaynak", "bekleyen" if bp.get("bekleyen") else "karne", None)
             koy("br_b_ay", bk.get("ay"), None)
             koy("br_b_ad", bk.get("ad"), None)
             koy("br_b_ito", bk.get("ito"), 2)

@@ -158,6 +158,34 @@
   "bant_90": true,
   "tufe_ito_ustu": true,
   "tufe_uge_ustu": false,
+  "p_ito_ustu": 26.0,
+  "esik": [
+   {
+    "esik": 2.5,
+    "yon": ">",
+    "p": 3.0
+   },
+   {
+    "esik": 2.0,
+    "yon": ">",
+    "p": 16.0
+   },
+   {
+    "esik": 1.5,
+    "yon": ">",
+    "p": 35.0
+   },
+   {
+    "esik": 1.0,
+    "yon": "<",
+    "p": 13.0
+   },
+   {
+    "esik": 0.5,
+    "yon": "<",
+    "p": 0.0
+   }
+  ],
   "hukum": "Ağustos 2026 TÜFE'si %1,84 geldi; İTO regresyon %1,48 diyordu — gerçekleşme tahminin üzerinde, sapma 0,36 puan, %80 bandının içinde."
  }
 }

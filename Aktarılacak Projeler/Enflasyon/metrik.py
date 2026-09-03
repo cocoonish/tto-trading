@@ -2639,6 +2639,17 @@ def birlesik_tahmin(a: pd.DataFrame) -> dict:
                                 <= np.percentile(bulut, 95)),
                 "tufe_ito_ustu": bool(gercek > xi),
                 "tufe_uge_ustu": bool(gercek > xu),
+                # KARNE, TAHMİNİN KENDİSİNİ DE TAŞIR. Bekleyen ay bloğundaki
+                # her alan burada da olmalı: yayımdan sonra "ne bekliyorduk"
+                # sorusu ortadan kalkmaz, cevabı GERÇEKLEŞMEYLE yan yana
+                # okunur. Bu iki alan eksikti ve sayfa yayım gününde onları
+                # kaybediyordu (aşağıya bak: br_b_* köprüsü).
+                "p_ito_ustu": round(float((bulut > xi).mean() * 100), 0),
+                "esik": [{"esik": e, "yon": yon,
+                          "p": round(float(((bulut > e) if yon == ">"
+                                            else (bulut < e)).mean() * 100), 0)}
+                         for e, yon in ((2.5, ">"), (2.0, ">"), (1.5, ">"),
+                                        (1.0, "<"), (0.5, "<"))],
             }
             k_ = out["karne"]
             bant = ("%50 bandının içinde" if k_["bant_50"] else
