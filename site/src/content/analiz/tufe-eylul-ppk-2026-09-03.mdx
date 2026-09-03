@@ -32,7 +32,7 @@ import Deger from '../../components/Deger.astro';
       </tr>
       <tr>
         <td>Ne kadar alan var</td>
-        <td>Politika faizi <Deger proje="fonlama-likidite" anahtar="politika" ondalik={2}>37,00</Deger> ve <Deger proje="enflasyon" anahtar="politika_sabit_gun" ondalik={0}>224</Deger> gündür sabit. İleriye bakan reel faiz <Deger proje="enflasyon" anahtar="reel_exante" ondalik={2}>10,76</Deger>, eğilime bakan <Deger proje="enflasyon" anahtar="reel_egilim" ondalik={2}>6,05</Deger>, gerçekleşene bakan <Deger proje="enflasyon" anahtar="reel_expost" ondalik={2}>4,18</Deger>. Tartışma bu üç sayı arasında geçiyor: hangisi çıpa alınırsa duruş o kadar sıkı görünüyor.</td>
+        <td>Politika faizi <Deger proje="fonlama-likidite" anahtar="politika" ondalik={2}>37,00</Deger> ve <Deger proje="fonlama-likidite" anahtar="politika_sabit_gun" ondalik={0}>224</Deger> gündür sabit. İleriye bakan reel faiz <Deger proje="enflasyon" anahtar="reel_exante" ondalik={2}>10,76</Deger>, eğilime bakan <Deger proje="enflasyon" anahtar="reel_egilim" ondalik={2}>6,05</Deger>, gerçekleşene bakan <Deger proje="enflasyon" anahtar="reel_expost" ondalik={2}>4,18</Deger>. Tartışma bu üç sayı arasında geçiyor: hangisi çıpa alınırsa duruş o kadar sıkı görünüyor.</td>
       </tr>
       <tr>
         <td>Eğri ne fiyatlıyor</td>
@@ -107,13 +107,13 @@ Aynı soruyu bağımsız bir kaynakla da soruyoruz. İTO'nun İstanbul endeksler
 
 <Deger proje="enflasyon" anahtar="br_k_hukum" ondalik={0}>Ağustos 2026 TÜFE'si %1,84 geldi; İTO regresyon %1,48 diyordu — gerçekleşme tahminin üzerinde, sapma 0,36 puan, %80 bandının içinde.</Deger> Gerçekleşme bulutun <Deger proje="enflasyon" anahtar="br_k_yuzdelik" ondalik={0}>77</Deger>'inci yüzdeliğine düştü. Yedi kural içinde gerçekleşmeye en yakın olanı <Deger proje="enflasyon" anahtar="br_k_en_yakin_ad" ondalik={0}>ÜGE regresyon</Deger> (<Deger proje="enflasyon" anahtar="br_k_en_yakin_sapma" ondalik={2}>−0,19</Deger> puan).
 
-TÜFE, İTO'nun tüketici endeksinin (<Deger proje="enflasyon" anahtar="br_k_ito" ondalik={2}>1,66</Deger>) **üzerinde**, ücretliler geçinme endeksinin (<Deger proje="enflasyon" anahtar="br_k_uge" ondalik={2}>1,97</Deger>) **altında** kaldı. Eşleme yazısı TÜFE'nin İTO'yu aşma olasılığını %26 vermişti; bu ay o kuyruk gerçekleşti.
+TÜFE, İTO'nun tüketici endeksinin (%<Deger proje="enflasyon" anahtar="br_k_ito" ondalik={2}>1,66</Deger>) **üzerinde**, ücretliler geçinme endeksinin (%<Deger proje="enflasyon" anahtar="br_k_uge" ondalik={2}>1,97</Deger>) **altında** kaldı. Kuralların bu kuyruğa verdiği olasılık %<Deger proje="enflasyon" anahtar="br_k_p_ito_ustu" ondalik={0}>26</Deger> idi; bu ay gerçekleşti.
 
 İki bağımsız tahminci de aynı yönde yanıldı: gerçekleşme ikisinin de üstünde. Tek bir tahmincinin yanılması gürültüdür; ikisinin aynı yönde yanılması, ağustosta hesaba katılmayan ortak bir itki olduğunun işaretidir. O itkinin ne olduğu bir sonraki bölümde.
 
-## Bölüm 2 — Kırılım: manşetin %45'i tek gruptan
+## Bölüm 2 — Kırılım: manşet nereden geldi
 
-Aylık manşet, on iki ana harcama grubunun ağırlıklı katkılarının toplamıdır:
+Aylık manşet, on üç ana harcama grubunun ağırlıklı katkılarının toplamıdır:
 
 $$\pi_t \;=\; \sum_{g} w_{g,t}\,\pi_{g,t}$$
 
@@ -122,16 +122,17 @@ Burada $w_{g,t}$ grubun bir önceki ay sonundaki güncel ağırlığı, $\pi_{g,
 | grup | aylık | katkı (puan) |
 |---|---|---|
 | Ulaştırma | %<Deger proje="enflasyon" anahtar="grup07_aylik" ondalik={2}>4,82</Deger> | <Deger proje="enflasyon" anahtar="grup07_katki" ondalik={2}>0,82</Deger> |
-| Konut, su, elektrik, gaz | %<Deger proje="enflasyon" anahtar="grup04_aylik" ondalik={2}>2,26</Deger> | <Deger proje="enflasyon" anahtar="grup04_katki" ondalik={2}>0,27</Deger> |
+| Konut, su, elektrik, gaz ve diğer yakıtlar | %<Deger proje="enflasyon" anahtar="grup04_aylik" ondalik={2}>2,26</Deger> | <Deger proje="enflasyon" anahtar="grup04_katki" ondalik={2}>0,27</Deger> |
 | Alkollü içecekler ve tütün | %<Deger proje="enflasyon" anahtar="grup02_aylik" ondalik={2}>6,89</Deger> | <Deger proje="enflasyon" anahtar="grup02_katki" ondalik={2}>0,18</Deger> |
-| Eğitim | %<Deger proje="enflasyon" anahtar="grup10_aylik" ondalik={2}>8,62</Deger> | <Deger proje="enflasyon" anahtar="grup10_katki" ondalik={2}>0,17</Deger> |
-| Lokanta ve oteller | %<Deger proje="enflasyon" anahtar="grup11_aylik" ondalik={2}>1,50</Deger> | <Deger proje="enflasyon" anahtar="grup11_katki" ondalik={2}>0,17</Deger> |
-| Ev eşyası | %<Deger proje="enflasyon" anahtar="grup05_aylik" ondalik={2}>1,75</Deger> | <Deger proje="enflasyon" anahtar="grup05_katki" ondalik={2}>0,13</Deger> |
-| Çeşitli mal ve hizmetler | %<Deger proje="enflasyon" anahtar="grup13_aylik" ondalik={2}>2,39</Deger> | <Deger proje="enflasyon" anahtar="grup13_katki" ondalik={2}>0,10</Deger> |
-| Haberleşme | %<Deger proje="enflasyon" anahtar="grup08_aylik" ondalik={2}>2,60</Deger> | <Deger proje="enflasyon" anahtar="grup08_katki" ondalik={2}>0,08</Deger> |
-| Eğlence ve kültür | %<Deger proje="enflasyon" anahtar="grup09_aylik" ondalik={2}>1,87</Deger> | <Deger proje="enflasyon" anahtar="grup09_katki" ondalik={2}>0,08</Deger> |
+| Eğitim hizmetleri | %<Deger proje="enflasyon" anahtar="grup10_aylik" ondalik={2}>8,62</Deger> | <Deger proje="enflasyon" anahtar="grup10_katki" ondalik={2}>0,17</Deger> |
+| Lokanta ve konaklama hizmetleri | %<Deger proje="enflasyon" anahtar="grup11_aylik" ondalik={2}>1,50</Deger> | <Deger proje="enflasyon" anahtar="grup11_katki" ondalik={2}>0,17</Deger> |
+| Mobilya, ev eşyası ve ev bakımı | %<Deger proje="enflasyon" anahtar="grup05_aylik" ondalik={2}>1,75</Deger> | <Deger proje="enflasyon" anahtar="grup05_katki" ondalik={2}>0,13</Deger> |
+| Kişisel bakım, sosyal koruma ve çeşitli | %<Deger proje="enflasyon" anahtar="grup13_aylik" ondalik={2}>2,39</Deger> | <Deger proje="enflasyon" anahtar="grup13_katki" ondalik={2}>0,10</Deger> |
+| Bilgi ve iletişim | %<Deger proje="enflasyon" anahtar="grup08_aylik" ondalik={2}>2,60</Deger> | <Deger proje="enflasyon" anahtar="grup08_katki" ondalik={2}>0,08</Deger> |
+| Eğlence, spor ve kültür | %<Deger proje="enflasyon" anahtar="grup09_aylik" ondalik={2}>1,87</Deger> | <Deger proje="enflasyon" anahtar="grup09_katki" ondalik={2}>0,08</Deger> |
 | Gıda ve alkolsüz içecekler | %<Deger proje="enflasyon" anahtar="grup01_aylik" ondalik={2}>0,22</Deger> | <Deger proje="enflasyon" anahtar="grup01_katki" ondalik={2}>0,06</Deger> |
 | Sağlık | %<Deger proje="enflasyon" anahtar="grup06_aylik" ondalik={2}>0,70</Deger> | <Deger proje="enflasyon" anahtar="grup06_katki" ondalik={2}>0,02</Deger> |
+| Sigorta ve finansal hizmetler | %<Deger proje="enflasyon" anahtar="grup12_aylik" ondalik={2}>0,05</Deger> | <Deger proje="enflasyon" anahtar="grup12_katki" ondalik={2}>0,00</Deger> |
 | Giyim ve ayakkabı | %<Deger proje="enflasyon" anahtar="grup03_aylik" ondalik={2}>−3,54</Deger> | <Deger proje="enflasyon" anahtar="grup03_katki" ondalik={2}>−0,24</Deger> |
 
 En büyük katkı <Deger proje="enflasyon" anahtar="katki_en_ad" ondalik={0}>Ulaştırma</Deger> grubundan: tek başına <Deger proje="enflasyon" anahtar="katki_en_puan" ondalik={2}>0,82</Deger> puan, yani manşetin <Deger proje="enflasyon" anahtar="katki_en_pay" ondalik={0}>45</Deger>'i. İlk üç grup birlikte <Deger proje="enflasyon" anahtar="ilk3_katki" ondalik={2}>1,27</Deger> puan, manşetin <Deger proje="enflasyon" anahtar="ilk3_pay" ondalik={0}>69</Deger>'u.
@@ -254,7 +255,7 @@ Bunun karar için anlamı şudur: **Eylül ve Ekim'de yayımlanacak yıllık ora
 
 ### Politika duruşu
 
-Politika faizi <Deger proje="fonlama-likidite" anahtar="politika" ondalik={2}>37,00</Deger> ve <Deger proje="enflasyon" anahtar="politika_sabit_gun" ondalik={0}>224</Deger> gündür — <Deger proje="enflasyon" anahtar="politika_son_degisim" ondalik={0}>22.01.2026</Deger>'dan beri — değişmedi. Faiz koridoru <Deger proje="fonlama-likidite" anahtar="koridor_alt" ondalik={2}>35,50</Deger>–<Deger proje="fonlama-likidite" anahtar="koridor_ust" ondalik={2}>40,00</Deger> ve asimetrik. Ağırlıklı ortalama fonlama maliyeti politika faizinden <Deger proje="fonlama-likidite" anahtar="spread_aofm_politika" ondalik={2}>0,00</Deger> puan farklı; gecelik referans oran politikanın <Deger proje="fonlama-likidite" anahtar="spread_tlref_politika" ondalik={2}>−0,09</Deger> puan altında. Yani fiili duruş ilan edilen duruşla aynı; örtük bir sıkılaştırma ya da gevşeme yok.
+Politika faizi <Deger proje="fonlama-likidite" anahtar="politika" ondalik={2}>37,00</Deger> ve <Deger proje="fonlama-likidite" anahtar="politika_sabit_gun" ondalik={0}>224</Deger> gündür — <Deger proje="fonlama-likidite" anahtar="politika_son_degisim" ondalik={0}>22.01.2026</Deger>'dan beri — değişmedi. Faiz koridoru <Deger proje="fonlama-likidite" anahtar="koridor_alt" ondalik={2}>35,50</Deger>–<Deger proje="fonlama-likidite" anahtar="koridor_ust" ondalik={2}>40,00</Deger> ve asimetrik. Ağırlıklı ortalama fonlama maliyeti politika faizinden <Deger proje="fonlama-likidite" anahtar="spread_aofm_politika" ondalik={2}>0,00</Deger> puan farklı; gecelik referans oran politikanın <Deger proje="fonlama-likidite" anahtar="spread_tlref_politika" ondalik={2}>−0,09</Deger> puan altında. Yani fiili duruş ilan edilen duruşla aynı; örtük bir sıkılaştırma ya da gevşeme yok.
 
 ### Hangi reel faiz
 
