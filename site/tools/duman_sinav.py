@@ -113,6 +113,39 @@ e, u = tara("$y = 36{,}79$ formülü.", {"spot_3a": 36.79})
 sina("KaTeX taranmıyor", not e, f"gelen {e}")
 
 # ---------------------------------------------------------------------------
+print("\n▶ Şekil saat defteri")
+
+import datetime as _dt
+YARIN = _dt.date.today() + _dt.timedelta(days=1)
+sekil_saat_bulgulari = _mod.sekil_saat_bulgulari
+MDX2 = ('<GrafikEmbed src="/projeler/x/a.html" />\n'
+        '<GrafikEmbed src="/projeler/x/b.html" />\n')
+
+e, u, n = sekil_saat_bulgulari(
+    "x", {"_sekil_tarih": {"a.html": "2026-08-30", "b.html": "2026-09-03"}}, MDX2, YARIN)
+sina("eksiksiz defter temiz geçiyor", not e and not u, f"engel={e} uyari={u}")
+sina("gömülü figür sayısı doğru", n == 2, f"gelen {n}")
+
+e, u, n = sekil_saat_bulgulari("x", {"_sekil_tarih": {"a.html": "2026-08-30"}}, MDX2, YARIN)
+sina("defterde girdisi olmayan figür UYARI, ENGEL değil",
+     not e and len(u) == 1 and "b.html" in u[0], f"engel={e} uyari={u}")
+
+ileri = (YARIN + _dt.timedelta(days=3)).isoformat()
+e, u, n = sekil_saat_bulgulari(
+    "x", {"_sekil_tarih": {"a.html": ileri, "b.html": "2026-09-03"}}, MDX2, YARIN)
+sina("yarından ileri şekil saati ENGEL",
+     len(e) == 1 and "YARINDAN İLERİ" in e[0], f"engel={e}")
+
+e, u, n = sekil_saat_bulgulari(
+    "x", {"_sekil_tarih": {"a.html": None, "b.html": "2026-09-03"}}, MDX2, YARIN)
+sina("None = 'ucu ölçülmedi' — engel değil, uyarı da değil",
+     not e and not u, f"engel={e} uyari={u}")
+
+e, u, n = sekil_saat_bulgulari(
+    "x", {"_sekil_tarih": {"a.html": "dün", "b.html": "2026-09-03"}}, MDX2, YARIN)
+sina("çözülemeyen tarih ENGEL", len(e) == 1 and "çözülemeyen" in e[0], f"engel={e}")
+
+# ---------------------------------------------------------------------------
 print(f"\n{'═' * 70}")
 print(f"  {len(GECTI)} geçti · {len(DUSTU)} düştü")
 if DUSTU:

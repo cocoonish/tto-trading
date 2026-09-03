@@ -47,6 +47,10 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       (ortak/okur_dili.kosu_kaydi_tara): kod dili ve yapım dili (backtick, dosya
       adı, bie_ kodu, komut anahtarı — şablon kusuru) ENGEL; snake_case anahtar
       adı ve biçim sızıntısı (veri kaynaklı olabilir) UYARI.
+  (18) ŞEKİL SAAT DEFTERİ — bir hattın figürleri farklı ritimlerdeyse
+      GrafikEmbed'in varsayılan damgası (hattın tek ana saati) yalan söyler.
+      `_sekil_tarih` sözlüğü açan hatta: çözülemeyen ya da yarından ileri
+      tarih ENGEL, defterde girdisi olmayan gömülü figür UYARI.
   (9b) OKUR DİLİ, derlenmiş çıktıda (uyarı) — bileşen dizgeleri de kapıya girer.
 
 Koşum:  python3 site/tools/sayfa_sinavi.py
@@ -144,6 +148,46 @@ def deger_disi(mdx: str) -> str:
 # içinde yazılır ki gerekçe sayıdan ayrı düşmesin:
 #     {/* sinav-muaf: agirlik_kayma_09 — TCMB Blog alıntısı, tarihsel sabit */}
 MUAF_KALIP = re.compile(r"\{/\*\s*sinav-muaf:\s*([A-Za-z0-9_]+)")
+
+
+def sekil_saat_bulgulari(slug: str, ozet: dict, mdx: str, yarin):
+    """(18) Şekil saat defteri: (ENGEL listesi, UYARI listesi, figür sayısı).
+
+    Bir hattın figürleri farklı ritimlerde olabilir; GrafikEmbed'in varsayılan
+    damgası ise hattın TEK ana saati. `_sekil_tarih` sözlüğü bu boşluğu kapatır
+    ve bu ölçüt onu sınar. Modül düzeyinde durmasının sebebi sınanabilir olması
+    (site/tools/duman_sinav.py).
+
+    · defterdeki tarih çözülemiyor ya da YARINDAN İLERİ → ENGEL (ölçülmemiş bir
+      günü ilan etmek, sıfır yazmakla aynı sınıftan bir uydurmadır),
+    · gömülü bir figürün defterde girdisi yok → UYARI (hattın ana saatiyle
+      damgalanır; yeni bir figür bunu unutabilir ve yayını durdurmak orantısız),
+    · girdi VAR ama değeri None → geçerli: "ucu ölçülmedi", sayfa tarih basmaz.
+    """
+    import sys as _s
+    import pathlib as _p
+    _s.path.insert(0, str(_p.Path(__file__).resolve().parents[2] / "ortak"))
+    import bicim as _b
+    hata_, uyari_ = [], []
+    defter = ozet.get("_sekil_tarih") or {}
+    for ad, deger in sorted(defter.items()):
+        if deger is None:
+            continue
+        g = _b.tarihe_cevir(str(deger))
+        if g is None:
+            hata_.append(f"{slug}: şekil saat defterinde çözülemeyen tarih "
+                         f"({ad} = {deger!r})")
+        elif g >= yarin:
+            hata_.append(f"{slug}: şekil saati YARINDAN İLERİ ({ad} = {deger})"
+                         " — ölçülmemiş bir gün ilan edilemez")
+    gomulu = set(re.findall(rf'/projeler/{re.escape(slug)}/([^"\s]+\.html)', mdx))
+    eksik = sorted(gomulu - set(defter))
+    if eksik:
+        uyari_.append(f"{slug}: şekil saat defterinde girdisi olmayan figür "
+                      f"({len(eksik)}): {', '.join(eksik[:4])}"
+                      + (" …" if len(eksik) > 4 else "")
+                      + " — hattın ana saatiyle damgalanıyor")
+    return hata_, uyari_, len(gomulu)
 
 
 def ciplak_sayilar(disi: str, ozet: dict, muaf: set[str]) -> tuple[list[str], list[str]]:
@@ -736,6 +780,46 @@ def main() -> int:
     for b_ in takvim_bulgu:
         hata.append("yayın takvimi — " + b_)
     print(f"  bulgu {len(takvim_bulgu)}")
+
+    # ---------------------------------------------------------------- (18)
+    # ŞEKİL SAAT DEFTERİ. GrafikEmbed her şeklin altına "veri <tarih>" basar;
+    # tarih, MDX'te `tarihAnahtari` verilmemişse hattın ANA saatinden gelir.
+    # Bir hattın figürleri farklı ritimlerdeyse o damga YALAN söyler ve iki
+    # yönde birden: FX haber endeksinde GDELT panelleri dört gün eskiyken
+    # "bugün" diye damgalanıyor, okur da bunu tersinden okuyup taze endeksi
+    # bayat sanıyordu. Çözüm hattın kendi ilanı: `_sekil_tarih` sözlüğü, her
+    # figürün ucunu ÇİZEN kodun elinden yazar.
+    #
+    # Ölçüt ilan edeni ölçer, ilan etmeyeni zorlamaz — 17 hattın hepsine bir
+    # defter dayatmak, tek saatli hatlar için boş iş olurdu. Bir hat defteri
+    # AÇTIYSA eksiksiz olmalı: gömülü her figürünün girdisi bulunmalı (UYARI,
+    # çünkü yeni bir figür bunu unutabilir ve yayını durdurmak orantısız) ve
+    # hiçbir tarih YARINDAN İLERİ olmamalı (ENGEL, çünkü bu ölçülemez bir
+    # iddiadır). Girdinin değeri null olabilir: "bu figürün ucu ölçülmedi"
+    # demektir ve sayfa o şeklin altına tarih basmaz — uydurmaktan iyidir.
+    print("\n▶ Şekil saat defteri (ozet.json `_sekil_tarih`)")
+    import datetime as _dt2
+    sys.path.insert(0, str(KOK / "ortak"))
+    import bicim as _bicim2
+    yarin = _dt2.date.today() + _dt2.timedelta(days=1)
+    n_defter = n_sekil = 0
+    for slug, _klasor in HATLAR:
+        oj = KOK / "site/public/projeler" / slug / "ozet.json"
+        mp = KOK / "site/src/content/projeler" / f"{slug}.mdx"
+        if not oj.exists() or not mp.exists():
+            continue
+        try:
+            o = json.loads(oj.read_text(encoding="utf-8"))
+        except Exception:                                      # noqa: BLE001
+            continue
+        if not isinstance(o.get("_sekil_tarih"), dict):
+            continue
+        n_defter += 1
+        e_, u_, n_ = sekil_saat_bulgulari(slug, o, mp.read_text(encoding="utf-8"), yarin)
+        hata.extend(e_)
+        uyari.extend(u_)
+        n_sekil += n_
+    print(f"  {n_defter} hat defter açmış · {n_sekil} figür")
 
     # ---------------------------------------------------------------- (17)
     # KOŞU KAYDI OKUR DİLİ. Koşu kutusu uyarilar.json'daki `uyarilar` listesini,

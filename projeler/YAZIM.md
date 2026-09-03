@@ -59,6 +59,24 @@ metin serbesttir (11c, uyarı).
    basılabilir, kapsam bir alan listesinden değil bu sözleşmeden türer.
 5. **Kaynaklar** — seri kodları kod biçiminde (`TP.AB.A02`), yayım takvimi.
 
+## Şeklin tarihi: hattın saati değil, ŞEKLİN saati
+
+Her şeklin altında "veri <tarih>" yazar. Varsayılan, hattın ana saatidir
+(`_tarih`) — ve bir hattın bütün figürleri aynı saatte DEĞİLSE bu yalan olur.
+Üç basamak, sırayla:
+
+1. MDX'te açık `tarihAnahtari="<anahtar>"` — yazarın kararı, kazanır.
+2. Hattın **şekil saat defteri**: `ozet.json`'daki `_sekil_tarih` sözlüğü
+   (`{"rejim.html": "2026-08-30", …}`), figürü ÇİZEN kod tarafından yazılır.
+   Değer `null` ise "bu figürün ucu ölçülmedi" demektir ve tarih hiç basılmaz —
+   yanlış bir tarih, tarihsizlikten kötüdür.
+3. Hiçbiri yoksa `_tarih`.
+
+Defter açan hatta sınav (18) girdi eksiğini UYARI, yarından ileri ya da
+çözülemeyen tarihi ENGEL sayar. Ölçüldü: FX haber endeksinde GDELT panelleri
+dört gün eskiyken "bugün" diye damgalanıyordu ve okur bunu tersinden okuyup
+TAZE endeksi bayat sanıyordu.
+
 ## Uydurma sayılarla örnek kutusu
 
 Bir kutunun bütün sayıları formülü göstermek için SEÇİLMİŞSE (gerçek gözlem

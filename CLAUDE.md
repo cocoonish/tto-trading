@@ -486,6 +486,23 @@ unutulmuştu). Ve ölçülemeyen bir seans sayfada görünür: akım serisinin
 seviyeden kaç seans geride kaldığı ve SEBEBİ tek cümleyle yazılır, besleme
 yetiştiğinde cümle kendiliğinden döner.
 
+**Kurucu ilke — bir ŞEKLİN tarihi, HATTIN tarihi değildir.** FX haber endeksi
+sayfasında on figürün hepsi "veri 03.09.2026" diye damgalanıyordu; oysa dördü
+GDELT haftalık arşivinden geliyor ve 30.08'de bitiyordu, biri temmuzdaki
+kalibrasyona aitti, biri de yapısal olarak bir hafta geride. Sebep basit:
+`GrafikEmbed`, `tarihAnahtari` verilmemişse hattın TEK ana saatini basıyor.
+Kusur okura iki yönde birden yalan söylüyor — bayat panel taze görünüyor, ve
+okur tek damgayı sayfanın tamamına yorup TAZE endeksi bayat sanıyor.
+Kullanıcının ilk cümlesi buydu: "aşağıda haberlerin geldiğini görüyorum ama
+endeks yenilenmemiş gibi duruyor." Endeks yenilenmişti; yenilenmeyen şey
+etiketti. Çözüm `<Deger>`de zaten olan sözleşmenin şekle taşınması: hat her
+figürün ucunu KENDİ çizen kodundan ilan eder (`ozet.json` → `_sekil_tarih`),
+bileşen sırayla açık anahtar → defter → ana saat der, ölçülemeyen uç `null`
+kalır ve o şeklin altına tarih HİÇ basılmaz. Ölçüldü: sitedeki 83 gömülü
+figürün 38'inde damga, figürün kendi verisiyle ayrışıyordu. Kapı da kondu
+(sayfa sınavı 18): defter açan hatta yarından ileri tarih ENGEL, girdi eksiği
+UYARI — bir figürün unutulması yayını durdurmaz ama adıyla görünür.
+
 **Kurucu ilke — YAYININ ÖNÜNDE DURAN denetimin yanlış alarmı, arızanın
 kendisidir; ve bir ÇAKIŞMA araması tesadüf üretir.** 02.09.2026 16:46'dan
 03.09 04:31'e kadar yayın iş akışı arka arkaya ALTI KEZ düştü, site on iki
