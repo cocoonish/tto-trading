@@ -99,5 +99,65 @@
    "ters_mse": "ters-MSE bileşim"
   },
   "hukum": "birleştirmek KAZANDIRMIYOR: en düşük hatayı İTO regresyon veriyor (0,370 puan); bileşim kuralları geride (birleşik regresyon (İTO + ÜGE) 0,424 · eşit ağırlıklı bileşim 0,462 · ters-MSE bileşim 0,450)"
+ },
+ "karne": {
+  "ay": "2026-08",
+  "ad": "Ağustos 2026",
+  "ito": 1.66,
+  "uge": 1.97,
+  "gercek": 1.84,
+  "n_gecmis": 31,
+  "tahmin": {
+   "ito_sabit": 1.31,
+   "uge_sabit": 1.45,
+   "ito_reg": 1.48,
+   "uge_reg": 1.65,
+   "birlesik_reg": 1.46,
+   "esit_ortalama": 1.38,
+   "ters_mse": 1.35
+  },
+  "sapma": {
+   "ito_sabit": -0.53,
+   "uge_sabit": -0.39,
+   "ito_reg": -0.36,
+   "uge_reg": -0.19,
+   "birlesik_reg": -0.38,
+   "esit_ortalama": -0.46,
+   "ters_mse": -0.49
+  },
+  "ters_mse_agirlik": 0.74,
+  "en_iyi": "ito_reg",
+  "en_iyi_ad": "İTO regresyon",
+  "merkez": 1.48,
+  "merkez_sapma": -0.36,
+  "yayilim": 0.34,
+  "en_yakin": "uge_reg",
+  "en_yakin_ad": "ÜGE regresyon",
+  "en_yakin_sapma": -0.19,
+  "yuzdelikler": [
+   5,
+   10,
+   25,
+   50,
+   75,
+   90,
+   95
+  ],
+  "bulut": [
+   0.75,
+   0.98,
+   1.14,
+   1.43,
+   1.72,
+   2.29,
+   2.42
+  ],
+  "gercek_yuzdelik": 77.0,
+  "bant_50": false,
+  "bant_80": true,
+  "bant_90": true,
+  "tufe_ito_ustu": true,
+  "tufe_uge_ustu": false,
+  "hukum": "Ağustos 2026 TÜFE'si %1,84 geldi; İTO regresyon %1,48 diyordu — gerçekleşme tahminin üzerinde, sapma 0,36 puan, %80 bandının içinde."
  }
 }
