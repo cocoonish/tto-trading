@@ -480,15 +480,6 @@ def tazelik_denetimi(aylik: pd.DataFrame, gunluk: pd.DataFrame) -> list[str]:
                 f"{bugun:%d.%m.%Y} itibarıyla {ad_uzun(beklenen)} beklenirdi "
                 f"({eksik} ay geride, {etiket} takvimi). Kaynak durmuş olabilir.")
 
-    # ---- MANŞET AİLESİNİ TÜİK'İN KENDİ YAYIMINDAN DOLDUR (kısmi yayım köprüsü)
-    # EVDS yayım gününde manşet ailesini saatlerce geç güncelliyor. Boş bırakmak
-    # panoyu dünkü ayda tutuyor; beklemek de bir seçenek ama yayım günü tam da
-    # okurun baktığı gün. Köprü şu: TÜİK'in yayımladığı ORAN, bir önceki ayın
-    # SEVİYESİNE uygulanır. Kaynak açıkça yazılır, EVDS geldiğinde iki sayı
-    # karşılaştırılır ve ayrışırsa uyarı düşer — yani köprü kalıcı bir varsayım
-    # değil, geçici bir dolgu.
-    aylik, _kopru = _manset_kopru(aylik, uy)
-
     # KISMİ YAYIM: "veri geldi" ile "veri TAM geldi" aynı şey değil.
     # 03.09.2026'da EVDS'te 72 serinin 57'si ağustosa geçmişti (çekirdek,
     # hizmet, gıda, Yİ-ÜFE, İTO) ama MANŞET ailesi — TP.TUKFIY2025.GENEL ve
@@ -688,8 +679,20 @@ def kos(yenile: bool = False) -> dict:
         print(f"    {len(agac)} seri · hane dağılımı "
               + ", ".join(f"{h}:{n}" for h, n in agac["hane"].value_counts().sort_index().items()))
 
+    # ---- MANŞET KÖPRÜSÜ, son_ay()'DAN ÖNCE KOŞAR.
+    # SIRA BAĞLAYICI: son_ay() çekirdek serilerin TAMAMININ bulunduğu son ayı
+    # verir ve sonucu önbelleğe alır. Köprü ondan sonra koşarsa dosyaya ağustos
+    # yazılır ama analizin "güncel ayı" temmuz kalır — pano yine dünkü ayı
+    # gösterir ve hiçbir denetim bunu yakalamaz, çünkü iki sayı da kendi
+    # içinde tutarlıdır. Dolgu, ayın kim olduğu sorulmadan ÖNCE yapılmalı.
+    _kopru_uy: list[str] = []
+    aylik, _kopru = _manset_kopru(aylik, _kopru_uy)
+    for _u in _kopru_uy:
+        uyar(_u)
+
     s_ay = son_ay(aylik)
-    print(f"  SON AY: {ad_uzun(s_ay)}")
+    print(f"  SON AY: {ad_uzun(s_ay)}"
+          + (f"  [manşet köprüsü: {len(_kopru)} seri]" if _kopru else ""))
 
     uy = tazelik_denetimi(aylik, gunluk)
     for u in uy:
