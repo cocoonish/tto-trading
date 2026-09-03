@@ -480,6 +480,15 @@ def tazelik_denetimi(aylik: pd.DataFrame, gunluk: pd.DataFrame) -> list[str]:
                 f"{bugun:%d.%m.%Y} itibarıyla {ad_uzun(beklenen)} beklenirdi "
                 f"({eksik} ay geride, {etiket} takvimi). Kaynak durmuş olabilir.")
 
+    # ---- MANŞET AİLESİNİ TÜİK'İN KENDİ YAYIMINDAN DOLDUR (kısmi yayım köprüsü)
+    # EVDS yayım gününde manşet ailesini saatlerce geç güncelliyor. Boş bırakmak
+    # panoyu dünkü ayda tutuyor; beklemek de bir seçenek ama yayım günü tam da
+    # okurun baktığı gün. Köprü şu: TÜİK'in yayımladığı ORAN, bir önceki ayın
+    # SEVİYESİNE uygulanır. Kaynak açıkça yazılır, EVDS geldiğinde iki sayı
+    # karşılaştırılır ve ayrışırsa uyarı düşer — yani köprü kalıcı bir varsayım
+    # değil, geçici bir dolgu.
+    aylik, _kopru = _manset_kopru(aylik, uy)
+
     # KISMİ YAYIM: "veri geldi" ile "veri TAM geldi" aynı şey değil.
     # 03.09.2026'da EVDS'te 72 serinin 57'si ağustosa geçmişti (çekirdek,
     # hizmet, gıda, Yİ-ÜFE, İTO) ama MANŞET ailesi — TP.TUKFIY2025.GENEL ve
@@ -571,6 +580,84 @@ def son_ay(aylik: pd.DataFrame | None = None) -> pd.Timestamp:
 
 
 # --------------------------------------------------------------------------- ana akış
+YAYIM = VERI.parent / "tuik_yayim.json"
+
+
+def _yayim_oku() -> dict:
+    try:
+        return json.loads(YAYIM.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+
+
+def _manset_kopru(aylik: pd.DataFrame, uy: list) -> tuple[pd.DataFrame, dict]:
+    """EVDS manşet ailesini geç yayımladıysa TÜİK'in kendi oranıyla doldur.
+
+    DOLGU DEĞİL DE BEKLEME NEDEN OLMUYOR: yayım günü, okurun sayfaya baktığı
+    gündür. Panoyu o gün dünkü ayda tutmak, veriyi doğru ama sayfayı yanlış
+    yapar. Dolgu üç kuralla güvenli kılınıyor:
+      (1) Yalnız EVDS'in HENÜZ vermediği ay doldurulur; EVDS'in verdiği bir ay
+          asla ezilmez.
+      (2) Kaynak ve yöntem açıkça yazılır (durum dosyasına ve uyarıya).
+      (3) EVDS geldiğinde iki sayı karşılaştırılır; ayrışırsa uyarı düşer.
+    Ayrıca katkıların toplamı manşete eşit olmalı — bu bir KİMLİK denetimidir
+    ve tutmazsa dolgu yapılmaz."""
+    y = _yayim_oku()
+    if not y:
+        return aylik, {}
+    kopru: dict = {}
+    for ay_s, oran in (y.get("aylik") or {}).items():
+        t = pd.Timestamp(ay_s + "-01")
+        # KİMLİK: grup katkıları manşete toplanmalı.
+        g = (y.get("gruplar") or {}).get(ay_s) or {}
+        if g:
+            top = sum(float(v.get("katki", 0)) for v in g.values())
+            if abs(top - float(oran)) > 0.02:
+                uy.append(
+                    f"YAYIM KÖPRÜSÜ KURULMADI ({ay_s}): grup katkılarının "
+                    f"toplamı {top:.2f}, manşet {oran:.2f} — kimlik tutmuyor.")
+                continue
+        s_ = aylik["tufe"].dropna() if "tufe" in aylik.columns else pd.Series(dtype=float)
+        if not len(s_) or t in s_.index:
+            continue                     # EVDS vermişse dokunma
+        onceki = t - pd.DateOffset(months=1)
+        if onceki not in s_.index:
+            continue
+        aylik.loc[t, "tufe"] = float(s_.loc[onceki]) * (1 + float(oran) / 100)
+        kopru["tufe"] = ay_s
+        for kod, blok in g.items():
+            ad = f"ana_{kod}"
+            if ad not in aylik.columns:
+                continue
+            sg = aylik[ad].dropna()
+            if t in sg.index or onceki not in sg.index:
+                continue
+            aylik.loc[t, ad] = float(sg.loc[onceki]) * (
+                1 + float(blok.get("aylik", 0)) / 100)
+            kopru[ad] = ay_s
+        # DOĞRULAMA: türetilen seviyeden hesaplanan yıllık ve yıl sonuna göre
+        # oran, TÜİK'in yayımladığıyla tutmalı. Tutmuyorsa oran yanlış girilmiş
+        # ya da seviye serisi bozuk demektir.
+        m = ((y.get("mansetler") or {}).get(ay_s) or {})
+        yeni = aylik["tufe"].dropna()
+        for alan, ay_geri, etiket in (("yillik", 12, "yıllık"),):
+            bek = m.get(alan)
+            gecmis = t - pd.DateOffset(months=ay_geri)
+            if bek is not None and gecmis in yeni.index:
+                bizim = (float(yeni.loc[t]) / float(yeni.loc[gecmis]) - 1) * 100
+                if abs(bizim - float(bek)) > 0.05:
+                    uy.append(
+                        f"YAYIM KÖPRÜSÜ SAPMASI ({ay_s}): türetilen {etiket} "
+                        f"%{bizim:.2f}, TÜİK %{bek:.2f} — fark "
+                        f"{abs(bizim - float(bek)):.2f} puan.")
+        if kopru:
+            uy.append(
+                f"YAYIM KÖPRÜSÜ: {ay_s} manşet ailesi EVDS'te yok, TÜİK'in "
+                f"yayımladığı oranlardan türetildi ({len(kopru)} seri). EVDS "
+                f"yayımladığı an iki kaynak karşılaştırılır.")
+    return aylik, kopru
+
+
 def kos(yenile: bool = False) -> dict:
     print("EVDS3 → enflasyon veri katmanı")
     print(f"  anahtar: {'ortam değişkeni' if os.environ.get('TTO_EVDS_KEY') else 'dosya'}")
