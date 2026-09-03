@@ -294,7 +294,7 @@ def sekil_01(KE, M, o, damga):
     ev = o.get("evren", {})
     n_son = int(o["kapsama"]["nokta_son"])
     alt = [
-        f"Veri: TCMB EVDS3 · <i>bie_pydibs</i> gösterge değerleri · Çıpa: {damga}. "
+        f"Veri: TCMB EVDS3 · DİBS gösterge değerleri · Çıpa: {damga}. "
         f"Eğri {n_son} sıfır kuponlu strip'ten kuruluyor; vade aralığı "
         f"{_sayi(M.loc[bugun_g, 'vade_min'], 2)}–"
         f"{_sayi(M.loc[bugun_g, 'vade_maks'], 2)} yıl.",

@@ -277,7 +277,7 @@ def _mertebe_uv_anapara(rapor: dict, M: pd.DataFrame, H: pd.DataFrame) -> None:
     """Uzun vadeli anaparayı BAĞIMSIZ bir kaynakla mertebe olarak kıyaslar.
 
     Aylık ödemeler dengesinden türetilen `uv_anapara12` ile TCMB'nin HAFTALIK
-    dış borç ödeme takviminin (bie_dbafod) 52 haftalık toplamı. Kapsamlar
+    dış borç ödeme takviminin 52 haftalık toplamı. Kapsamlar
     farklı — haftalık seri Hazine, TCMB ve duyurulmuş diğer ödemeleri kapsar,
     banka ve reel sektörün bütün kredi itfalarını değil — bu yüzden EŞİTLİK
     değil ORAN BANDI sınanır. Tautolojik kimliğin göremediği "anapara bacağı

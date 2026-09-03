@@ -5,13 +5,13 @@ Ne yapar
 --------
 1. EVDS3'ten dört ayrı frekansta seri çeker:
    · HAFTALIK (Cuma)  — Haftalık Para ve Banka İstatistikleri (bie_hpbitablo1…7),
-     para arzı endeksleri (bie_kavramsal), kredi/mevduat faizleri (bie_kt100h,
+     para arzı endeksleri, kredi/mevduat faizleri (bie_kt100h,
      bie_mt100h, bie_kt200h), kart harcaması, zorunlu karşılık tabanı;
-     ayrıca 31.01.2025'te kapanan ARŞİV tabloları (bie_kredi) — uzun tarihçe için.
-   · İŞ GÜNÜ         — kur (bie_dkdovytl), analitik bilanço (bie_abanlbil),
-     APİ fonlaması/AOFM (bie_apifon), politika faizi kotasyonları (bie_pyintbnk).
+     ayrıca 31.01.2025'te kapanan ARŞİV tabloları — uzun tarihçe için.
+   · İŞ GÜNÜ         — kur, analitik bilanço,
+     APİ fonlaması/AOFM, politika faizi kotasyonları.
    · AYLIK           — KKM stoku, banka türüne göre krediler, beklenti anketi.
-   · ÜÇ AYLIK        — Banka Kredileri Eğilim Anketi (bie_bkea).
+   · ÜÇ AYLIK        — Banka Kredileri Eğilim Anketi.
 2. Her seriyi TTL'li önbelleğe (data/cache/*.csv) yazar; ağ düşerse ESKİ
    önbelleğe düşer ama SESSİZ kalmaz — uyarı basar, uyarilar.json'a taşınır.
 3. Dönem sabitlerini VERİDEN okur: son_hafta(), son_gun(), son_ay(), son_ceyrek().

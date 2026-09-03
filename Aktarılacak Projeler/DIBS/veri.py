@@ -675,7 +675,7 @@ TAZELIK_GUNLUK = {
     "aofm":        ("AOFM (TP.APIFON4)", 5),
     "koridor_ust": ("Faiz koridoru (TP.PY.P02.ON)", 5),
 }
-TAZELIK_EGRI = ("DİBS gösterge değerleri (bie_pydibs)", 5)
+TAZELIK_EGRI = ("DİBS gösterge değerleri", 5)
 # PKA ayın ikinci yarısında yayımlanır; TÜFE ayın ilk haftasında. 45 gün
 # toleransı iki yayımın da kaçmasını yakalar, normal ritmi alarm saymaz.
 TAZELIK_AYLIK = {

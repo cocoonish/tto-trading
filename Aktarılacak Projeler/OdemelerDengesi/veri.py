@@ -3,12 +3,12 @@
 
 Ne yapar
 --------
-1. EVDS3 REST servisinden ödemeler dengesi ANALİTİK sunumunu (bie_odana6),
-   AYRINTILI sunumu (bie_odeayrsunum6), altın & enerji hariç cari işlemler
-   tablosunu (bie_hariccariacik), TCMB'nin dış borç çevirme oranlarını
-   (bie_oderoll), yurt dışı borçlanma senedi akımını (bie_odeydiebs), haftalık
-   dış borç ödemelerini (bie_dbafod), GSYH'yi (bie_gsyhhrccar), USD/TRY kurunu
-   (bie_dkdovytl) ve rezerv STOKUNU (bie_abreserv) çeker.
+1. EVDS3 REST servisinden ödemeler dengesi ANALİTİK sunumunu,
+   AYRINTILI sunumu, altın & enerji hariç cari işlemler
+   tablosunu, TCMB'nin dış borç çevirme oranlarını
+  , yurt dışı borçlanma senedi akımını, haftalık
+   dış borç ödemelerini, GSYH'yi, USD/TRY kurunu
+   ve rezerv STOKUNU çeker.
 2. Her seriyi TTL'li önbelleğe (data/cache/*.csv) yazar. Çıktı CSV'leri HER
    koşuda yeniden yazılır — "dosya varsa atla" YASAK.
 3. BİRİMİ EVDS meta verisinden OKUR (datagroups → BIRIMI) ve koddaki beklenen
@@ -487,21 +487,21 @@ GUNLUK: dict[str, tuple[str, str, str]] = {
 #   · Kur: TCMB ertesi günün kurunu bir gün ÖNCE ilan eder → negatif gecikme
 #     alarm sayılmaz.
 TAZELIK_AYLIK = {
-    "cari":        ("Ödemeler dengesi — analitik sunum (bie_odana6)", 85, False),
-    "ay_cari":     ("Ödemeler dengesi — ayrıntılı sunum (bie_odeayrsunum6)", 85, False),
-    "hc_cekirdek": ("Altın & enerji hariç cari (bie_hariccariacik)", 85, False),
-    "roll_bnk":    ("Dış borç çevirme oranları (bie_oderoll)", 85, False),
-    "eb_kullanim": ("Yurt dışı borçlanma senedi akımı (bie_odeydiebs)", 85, False),
-    "rezerv_stok": ("Rezerv stoku (bie_abreserv)", 85, False),
+    "cari":        ("Ödemeler dengesi — analitik sunum", 85, False),
+    "ay_cari":     ("Ödemeler dengesi — ayrıntılı sunum", 85, False),
+    "hc_cekirdek": ("Altın & enerji hariç cari", 85, False),
+    "roll_bnk":    ("Dış borç çevirme oranları", 85, False),
+    "eb_kullanim": ("Yurt dışı borçlanma senedi akımı", 85, False),
+    "rezerv_stok": ("Rezerv stoku", 85, False),
 }
 TAZELIK_HAFTALIK = {
-    "borc_odeme_top": ("Haftalık dış borç ödemeleri (bie_dbafod)", 12, False),
+    "borc_odeme_top": ("Haftalık dış borç ödemeleri", 12, False),
 }
 TAZELIK_CEYREK = {
-    "gsyh_bin_tl": ("GSYH, cari fiyatlarla (bie_gsyhhrccar)", 165, False),
+    "gsyh_bin_tl": ("GSYH, cari fiyatlarla", 165, False),
 }
 TAZELIK_GUNLUK = {
-    "usdtry": ("USD/TRY kuru (bie_dkdovytl)", 5, True),
+    "usdtry": ("USD/TRY kuru", 5, True),
 }
 
 

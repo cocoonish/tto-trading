@@ -401,10 +401,10 @@ TAZELIK_GUNLUK = {
     "usdtry":       ("Döviz kuru (TP.DK.USD.A.YTL)",          4, True),
 }
 TAZELIK_HAFTALIK = {
-    "f_ticari_tl":  ("Haftalık kredi faizi (bie_kt100h)",     12),
-    "f_mevduat_tl": ("Haftalık mevduat faizi (bie_mt100h)",   12),
-    "zk_taban_tl":  ("ZK'ya tabi taban (bie_tldthvade)",      20),
-    "dth_tl":       ("ZK'ya tabi DTH (bie_zorundth)",         20),
+    "f_ticari_tl":  ("Haftalık kredi faizi",     12),
+    "f_mevduat_tl": ("Haftalık mevduat faizi",   12),
+    "zk_taban_tl":  ("ZK'ya tabi taban",      20),
+    "dth_tl":       ("ZK'ya tabi DTH",         20),
 }
 
 def tazelik_tolerans(aile: str = "gunluk") -> int:
