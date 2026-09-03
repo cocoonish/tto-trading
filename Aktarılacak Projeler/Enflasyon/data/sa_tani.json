@@ -1,6 +1,6 @@
 {
  "yontem": "STL(log, period=12, seasonal=13, robust) + hareketli tatil ön-arındırması",
- "pencere_sonu": "2026-07-01",
+ "pencere_sonu": "2026-08-01",
  "seriler": {
   "tufe": {
    "n": 260,
@@ -1076,8 +1076,8 @@
  "kosular_arasi": {
   "var": true,
   "n": 12,
-  "maks_pp": 0.462,
-  "ort_pp": 0.097,
+  "maks_pp": 0.0,
+  "ort_pp": 0.0,
   "onceki_kosum": "2026-09-03"
  },
  "vintage": {
