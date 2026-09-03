@@ -655,6 +655,18 @@ AGIR_PAKET = {
 # panelinkileri de kuruyordu: 31.08.2026'da Hazine hattının tam kip koşusu
 # dash kurmaya çalışırken düştü ve yeni İç Borçlanma Stratejisi inmedi.
 # Bunlar yalnız --panel ve --kur yollarında kurulur.
+# TORCH: KOŞUCUDA GPU YOK, CUDA DA OLMAMALI. Ölçüldü (03.09.2026, pip
+# --dry-run): `torch>=2.0.0` Linux'ta 27 paket çözüyor ve 19'u
+# nvidia-*/cuda-*/triton — cuda-toolkit, cudnn, nccl, cusparselt, nvshmem…
+# Hepsi GPU içindir; FinBERT bu koşucularda CPU'da çıkarım yapar. O gün FX
+# hattı tam bu yüzden düştü: koşucunun diski "No space left on device" ile
+# doldu ve kurulum adımı bitmeden öldü — hat koşamadı, endeks o akşam
+# ilerlemedi. Torch bu yüzden ÖNCE resmî CPU kanalından kurulur; kanal
+# açılmazsa uyarı basılır ve normal kurulum kendi yolunu dener (yoklanmamış
+# bir kaynağa hattı mahkûm etmeyiz).
+TORCH_CPU_INDEKS = "https://download.pytorch.org/whl/cpu"
+TORCH_AILESI = {"torch", "torchvision", "torchaudio"}
+
 PANEL_PAKET = {
     "dash", "dash-bootstrap-components",   # hazine canlı panosu
     "streamlit",                           # fx canlı panosu
@@ -765,12 +777,46 @@ def sistem_kur(secilen: list["Hat"], tam: bool, gunluk: bool = False) -> bool:
     sirali = sorted(paketler)
     print(f"  {len(sirali)} gereksinim kuruluyor: "
           + ", ".join(re.split(r"[<>=!~;\[ ]", x, 1)[0] for x in sirali))
-    r = subprocess.run([PY, "-m", "pip", "install", "--quiet", *sirali],
-                       env=_COCUK_ENV)
-    if r.returncode:
-        print(_renk("  ✗ kurulum düştü", 31))
+
+    def _ad(x: str) -> str:
+        return re.split(r"[<>=!~;\[ ]", x, 1)[0].strip().lower()
+
+    torchlar = [x for x in sirali if _ad(x) in TORCH_AILESI]
+    if torchlar:
+        print(f"  torch CPU kanalından kuruluyor ({TORCH_CPU_INDEKS})")
+        rt = _pip_kos([*torchlar, "--index-url", TORCH_CPU_INDEKS])
+        if rt is not True:
+            print(_renk("  [uyarı] CPU kanalı açılmadı; torch varsayılan "
+                        "kanaldan kurulacak (CUDA paketleri diski doldurabilir)", 33))
+        else:
+            sirali = [x for x in sirali if _ad(x) not in TORCH_AILESI]
+    if sirali and _pip_kos(sirali) is not True:
         return False
     return True
+
+
+def _pip_kos(arglar: list[str]) -> bool:
+    """pip install — düşerse SEBEBİ yazar, yalnız 'düştü' demez.
+
+    03.09.2026'da FX hattı bu adımda öldü ve koşu kaydında görünen tek şey
+    '✗ kurulum düştü' idi; gerçek sebep ("No space left on device") yedi yüz
+    satırlık günlüğün ortasında duruyordu. Bir arıza mesajı, arızayı arayan
+    kişiye ne yapacağını söylemelidir."""
+    r = subprocess.run([PY, "-m", "pip", "install", "--quiet", *arglar],
+                       env=_COCUK_ENV, capture_output=True, text=True,
+                       encoding="utf-8", errors="replace")
+    if not r.returncode:
+        return True
+    cikti = (r.stdout or "") + (r.stderr or "")
+    for satir in cikti.splitlines()[-12:]:
+        print(f"    {satir}")
+    if "No space left on device" in cikti or "Errno 28" in cikti:
+        print(_renk("  ✗ kurulum düştü: KOŞUCUNUN DİSKİ DOLDU. Ağır paketler "
+                    "(torch/CUDA) sığmıyor — iş akışında diski boşaltan adım "
+                    "koşuyor mu, torch CPU kanalından mı kuruluyor?", 31))
+    else:
+        print(_renk("  ✗ kurulum düştü", 31))
+    return False
 
 
 def hat_anahtari(h: "Hat") -> str | None:

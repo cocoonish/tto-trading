@@ -161,6 +161,22 @@ jobs:
           echo "ad=$AD" >> "$GITHUB_OUTPUT"
           echo "Tetik: ${TETIK:-elle} · Kip: $AD"
 
+      # KOŞUCUNUN DİSKİ. 03.09.2026 16:24 koşusu kurulum adımında
+      # "No space left on device" ile öldü: FX hattı torch + transformers
+      # istiyor ve `torch>=2.0.0` Linux'ta 27 paket çözüyor, 19'u
+      # nvidia-*/cuda-*/triton (ölçüldü, pip --dry-run). Koşucuda GPU yok,
+      # yani o gigabaytlar ölü ağırlık — ama diski gerçekten dolduruyorlar.
+      # guncelle.py artık torch'u resmî CPU kanalından kuruyor; bu adım
+      # ikinci emniyet: koşucunun ön yüklü ama bu depoda HİÇ kullanılmayan
+      # araç zincirlerini siler. Saniyeler sürer, onlarca gigabayt açar.
+      - name: Koşucu diskini boşalt
+        run: |
+          echo "önce:"; df -h / | tail -1
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
+                      /usr/local/share/boost /opt/hostedtoolcache/CodeQL \
+                      /usr/local/graalvm /usr/local/share/powershell || true
+          echo "sonra:"; df -h / | tail -1
+
       - name: FX hattı — ${{ steps.kip.outputs.ad }}
         id: fx
         run: python guncelle.py fx ${{ steps.kip.outputs.bayrak }} --sistem-kur
