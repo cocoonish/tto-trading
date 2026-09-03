@@ -1,90 +1,90 @@
 {
- "n": 31,
+ "n": 32,
  "ilk_ay": "2024-01",
- "son_ay": "2026-07",
- "r_ito_uge": 0.873,
+ "son_ay": "2026-08",
+ "r_ito_uge": 0.877,
  "ito": {
   "r2": 0.837,
-  "adj_r2": 0.832,
-  "sigma": 0.549,
-  "sabit": 0.02,
-  "b_ito": 0.878,
-  "se_ito": 0.072,
-  "t_ito": 12.21,
+  "adj_r2": 0.831,
+  "sigma": 0.544,
+  "sabit": 0.055,
+  "b_ito": 0.87,
+  "se_ito": 0.07,
+  "t_ito": 12.41,
   "p_ito": 0.0
  },
  "uge": {
-  "r2": 0.689,
-  "adj_r2": 0.678,
-  "sigma": 0.759,
-  "sabit": 0.001,
-  "b_uge": 0.838,
-  "se_uge": 0.105,
-  "t_uge": 8.01,
+  "r2": 0.692,
+  "adj_r2": 0.682,
+  "sigma": 0.747,
+  "sabit": 0.02,
+  "b_uge": 0.834,
+  "se_uge": 0.102,
+  "t_uge": 8.21,
   "p_uge": 0.0
  },
  "birlesik": {
   "r2": 0.841,
   "adj_r2": 0.83,
-  "sigma": 0.552,
-  "sabit": -0.07,
-  "b_ito": 0.768,
-  "se_ito": 0.148,
-  "t_ito": 5.18,
+  "sigma": 0.546,
+  "sabit": -0.032,
+  "b_ito": 0.762,
+  "se_ito": 0.146,
+  "t_ito": 5.2,
   "p_ito": 0.0,
-  "b_uge": 0.132,
-  "se_uge": 0.156,
-  "t_uge": 0.85,
-  "p_uge": 0.4044
+  "b_uge": 0.13,
+  "se_uge": 0.154,
+  "t_uge": 0.84,
+  "p_uge": 0.4083
  },
  "kapsama": "ito",
- "adj_kazanc": -0.002,
+ "adj_kazanc": -0.001,
  "yaris": {
-  "n": 19,
+  "n": 20,
   "ilk_ay": "2025-01",
   "en_iyi": "ito_reg",
   "adaylar": {
    "ito_sabit": {
-    "mae": 0.393,
-    "rmse": 0.481,
-    "yanlilik": -0.042,
-    "p_vs_en_iyi": 0.571
+    "mae": 0.4,
+    "rmse": 0.484,
+    "yanlilik": -0.066,
+    "p_vs_en_iyi": 0.441
    },
    "uge_sabit": {
-    "mae": 0.601,
-    "rmse": 0.801,
-    "yanlilik": -0.104,
-    "p_vs_en_iyi": 0.085
+    "mae": 0.59,
+    "rmse": 0.786,
+    "yanlilik": -0.118,
+    "p_vs_en_iyi": 0.083
    },
    "ito_reg": {
     "mae": 0.37,
-    "rmse": 0.464,
-    "yanlilik": 0.042,
+    "rmse": 0.46,
+    "yanlilik": 0.022,
     "p_vs_en_iyi": null
    },
    "uge_reg": {
-    "mae": 0.569,
-    "rmse": 0.766,
-    "yanlilik": -0.025,
-    "p_vs_en_iyi": 0.111
+    "mae": 0.55,
+    "rmse": 0.747,
+    "yanlilik": -0.033,
+    "p_vs_en_iyi": 0.131
    },
    "birlesik_reg": {
-    "mae": 0.427,
-    "rmse": 0.515,
-    "yanlilik": -0.01,
-    "p_vs_en_iyi": 0.173
+    "mae": 0.424,
+    "rmse": 0.509,
+    "yanlilik": -0.028,
+    "p_vs_en_iyi": 0.168
    },
    "esit_ortalama": {
     "mae": 0.462,
-    "rmse": 0.576,
-    "yanlilik": -0.073,
-    "p_vs_en_iyi": 0.214
+    "rmse": 0.57,
+    "yanlilik": -0.092,
+    "p_vs_en_iyi": 0.19
    },
    "ters_mse": {
-    "mae": 0.448,
-    "rmse": 0.547,
-    "yanlilik": -0.069,
-    "p_vs_en_iyi": 0.21
+    "mae": 0.45,
+    "rmse": 0.544,
+    "yanlilik": -0.09,
+    "p_vs_en_iyi": 0.174
    }
   },
   "ayirt_edilen": [],
@@ -98,73 +98,6 @@
    "esit_ortalama": "eşit ağırlıklı bileşim",
    "ters_mse": "ters-MSE bileşim"
   },
-  "hukum": "birleştirmek KAZANDIRMIYOR: en düşük hatayı İTO regresyon veriyor (0,370 puan); bileşim kuralları geride (birleşik regresyon (İTO + ÜGE) 0,427 · eşit ağırlıklı bileşim 0,462 · ters-MSE bileşim 0,448)"
- },
- "bekleyen": {
-  "ay": "2026-08",
-  "ad": "Ağustos 2026",
-  "ito": 1.66,
-  "uge": 1.97,
-  "n_gecmis": 31,
-  "tahmin": {
-   "ito_sabit": 1.31,
-   "uge_sabit": 1.45,
-   "ito_reg": 1.48,
-   "uge_reg": 1.65,
-   "birlesik_reg": 1.46,
-   "esit_ortalama": 1.38,
-   "ters_mse": 1.35
-  },
-  "ters_mse_agirlik": 0.74,
-  "en_iyi": "ito_reg",
-  "en_iyi_ad": "İTO regresyon",
-  "merkez": 1.48,
-  "yayilim": 0.34,
-  "yuzdelikler": [
-   5,
-   10,
-   25,
-   50,
-   75,
-   90,
-   95
-  ],
-  "bulut": [
-   0.75,
-   0.98,
-   1.14,
-   1.43,
-   1.72,
-   2.29,
-   2.42
-  ],
-  "p_ito_ustu": 26.0,
-  "esik": [
-   {
-    "esik": 2.5,
-    "yon": ">",
-    "p": 3.0
-   },
-   {
-    "esik": 2.0,
-    "yon": ">",
-    "p": 16.0
-   },
-   {
-    "esik": 1.5,
-    "yon": ">",
-    "p": 35.0
-   },
-   {
-    "esik": 1.0,
-    "yon": "<",
-    "p": 13.0
-   },
-   {
-    "esik": 0.5,
-    "yon": "<",
-    "p": 0.0
-   }
-  ]
+  "hukum": "birleştirmek KAZANDIRMIYOR: en düşük hatayı İTO regresyon veriyor (0,370 puan); bileşim kuralları geride (birleşik regresyon (İTO + ÜGE) 0,424 · eşit ağırlıklı bileşim 0,462 · ters-MSE bileşim 0,450)"
  }
 }

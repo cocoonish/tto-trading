@@ -1,6 +1,6 @@
 {
  "_aciklama": "Veri iş akışının son koşusu. denetim.py bunun yaşına bakar: veri hattı sessizce düşerse bülten ölçüm katmanının bayat olduğunu bilmeden yazılır.",
- "veri_kosusu": "2026-09-03T09:16:51+00:00",
- "sonuc": "success",
+ "veri_kosusu": "2026-09-03T09:20:21+00:00",
+ "sonuc": "failure",
  "kaynak": "veri.yml"
 }

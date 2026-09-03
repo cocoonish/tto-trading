@@ -248,36 +248,44 @@
    "tufe": 1.78,
    "fark": 0.28,
    "dislandi": false
+  },
+  {
+   "ay": "2026-08",
+   "ad": "Ağustos 2026",
+   "ito": 1.66,
+   "tufe": 1.84,
+   "fark": -0.18,
+   "dislandi": false
   }
  ],
  "fark": {
   "n": 24,
-  "ort": 0.39,
-  "medyan": 0.36,
-  "std": 0.44,
+  "ort": 0.36,
+  "medyan": 0.34,
+  "std": 0.46,
   "min": -0.44,
   "maks": 1.39,
-  "mutlak_ort": 0.48,
-  "ito_ustte_pay": 79.0,
+  "mutlak_ort": 0.47,
+  "ito_ustte_pay": 75.0,
   "min_ay": "2026-04",
   "maks_ay": "2025-04",
-  "t": 4.3,
-  "p": 0.0003,
+  "t": 3.84,
+  "p": 0.0008,
   "anlamli": true
  },
  "fark_tum": {
-  "n": 31,
-  "ort": 0.35,
-  "medyan": 0.37,
-  "std": 0.57,
+  "n": 32,
+  "ort": 0.33,
+  "medyan": 0.36,
+  "std": 0.56,
   "min": -1.16,
   "maks": 1.39,
-  "mutlak_ort": 0.56,
-  "ito_ustte_pay": 74.0,
+  "mutlak_ort": 0.55,
+  "ito_ustte_pay": 72.0,
   "min_ay": "2024-05",
   "maks_ay": "2025-04",
-  "t": 3.44,
-  "p": 0.0017,
+  "t": 3.34,
+  "p": 0.0022,
   "anlamli": true
  },
  "takvim": [
@@ -340,10 +348,10 @@
   {
    "ay": 8,
    "ad": "Ağustos",
-   "n": 2,
-   "ort_fark": 0.18,
-   "ort_ito": 2.43,
-   "ort_tufe": 2.25
+   "n": 3,
+   "ort_fark": 0.06,
+   "ort_ito": 2.17,
+   "ort_tufe": 2.12
   },
   {
    "ay": 9,
@@ -387,7 +395,7 @@
  "bekleyen": {
   "ay": "2026-08",
   "ad": "Ağustos 2026",
-  "beklemede": true,
+  "beklemede": false,
   "ito": 1.66,
   "ito_kaynak": "EVDS · TP.FG.IST1.23",
   "ito_elle": false,
@@ -410,19 +418,25 @@
     "ito": 1.84,
     "tufe": 2.04,
     "fark": -0.2
+   },
+   {
+    "ay": "2026-08",
+    "ito": 1.66,
+    "tufe": 1.84,
+    "fark": -0.18
    }
   ],
-  "ayni_ay_n": 2,
-  "ayni_ay_ort_fark": 0.18,
-  "takvimli": 1.48,
-  "ayni_ay_t": -0.48,
-  "ayni_ay_p": 0.707,
+  "ayni_ay_n": 3,
+  "ayni_ay_ort_fark": 0.06,
+  "takvimli": 1.6,
+  "ayni_ay_t": -1.13,
+  "ayni_ay_p": 0.344,
   "ayni_ay_ayrisiyor": false,
-  "ayni_ay_genel_ayrim": 0.17,
+  "ayni_ay_genel_ayrim": 0.28,
   "anket": 1.67,
   "ito_sapma": -0.01,
-  "beklenen_surpriz": -0.15,
-  "surprizden_tufe": 1.52,
+  "beklenen_surpriz": -0.13,
+  "surprizden_tufe": 1.54,
   "bulut": {
    "n": 31,
    "ito": 1.66,
@@ -549,7 +563,13 @@
      "p": 0.0
     }
    ]
-  }
+  },
+  "gercek": 1.84,
+  "hata_naif": -0.18,
+  "hata_sabit": -0.53,
+  "hata_oransal": -0.41,
+  "hata_regresyon": -0.36,
+  "aralik_tuttu": true
  },
  "kimlik": {
   "yayim_ay": 32,
@@ -689,111 +709,117 @@
    "ito": 35.19,
    "tufe": 31.75,
    "fark": 3.44
+  },
+  {
+   "ay": "2026-08",
+   "ito": 34.96,
+   "tufe": 31.5,
+   "fark": 3.45
   }
  ],
  "yillik_ozet": {
-  "n": 19,
-  "ort": 6.84,
-  "son": 3.44,
+  "n": 20,
+  "ort": 6.67,
+  "son": 3.45,
   "maks": 10.32,
   "maks_ay": "2025-05",
   "min": 3.44,
   "min_ay": "2026-07",
-  "son_ito": 35.19,
-  "son_tufe": 31.75
+  "son_ito": 34.96,
+  "son_tufe": 31.5
  },
  "tam_ilk_ay": "2024-01",
- "tam_son_ay": "2026-07",
- "n_tam": 31,
+ "tam_son_ay": "2026-08",
+ "n_tam": 32,
  "ilk_ay": "2024-01",
- "son_ay": "2026-07",
- "n_toplam": 31,
+ "son_ay": "2026-08",
+ "n_toplam": 32,
  "regresyon": {
-  "n": 31,
+  "n": 32,
   "ilk_ay": "2024-01",
-  "son_ay": "2026-07",
-  "sabit": 0.02,
-  "se_sabit": 0.239,
-  "egim": 0.878,
-  "se_egim": 0.072,
+  "son_ay": "2026-08",
+  "sabit": 0.055,
+  "se_sabit": 0.231,
+  "egim": 0.87,
+  "se_egim": 0.07,
   "r": 0.915,
-  "spearman": 0.865,
+  "spearman": 0.87,
   "r2": 0.837,
-  "se_artik": 0.549,
-  "t_egim_bir": -1.7,
-  "p_egim_bir": 0.1003,
+  "se_artik": 0.544,
+  "t_egim_bir": -1.86,
+  "p_egim_bir": 0.0733,
   "egim_birden_farkli": false
  },
  "esleme": [
   {
    "ito": 0.5,
-   "tufe": 0.46,
-   "alt": -0.74,
-   "ust": 1.66,
-   "sabit_kural": 0.15
+   "tufe": 0.49,
+   "alt": -0.69,
+   "ust": 1.67,
+   "sabit_kural": 0.17
   },
   {
    "ito": 1.0,
-   "tufe": 0.9,
-   "alt": -0.28,
-   "ust": 2.08,
-   "sabit_kural": 0.65
+   "tufe": 0.93,
+   "alt": -0.24,
+   "ust": 2.09,
+   "sabit_kural": 0.67
   },
   {
    "ito": 1.5,
-   "tufe": 1.34,
-   "alt": 0.17,
-   "ust": 2.5,
-   "sabit_kural": 1.15
+   "tufe": 1.36,
+   "alt": 0.21,
+   "ust": 2.51,
+   "sabit_kural": 1.17
   },
   {
    "ito": 2.0,
-   "tufe": 1.78,
-   "alt": 0.62,
+   "tufe": 1.8,
+   "alt": 0.66,
    "ust": 2.93,
-   "sabit_kural": 1.65
+   "sabit_kural": 1.67
   },
   {
    "ito": 2.5,
-   "tufe": 2.21,
-   "alt": 1.07,
+   "tufe": 2.23,
+   "alt": 1.1,
    "ust": 3.36,
-   "sabit_kural": 2.15
+   "sabit_kural": 2.17
   },
   {
    "ito": 3.0,
-   "tufe": 2.65,
-   "alt": 1.51,
+   "tufe": 2.67,
+   "alt": 1.54,
    "ust": 3.79,
-   "sabit_kural": 2.65
+   "sabit_kural": 2.67
   },
   {
    "ito": 3.5,
-   "tufe": 3.09,
-   "alt": 1.95,
-   "ust": 4.24,
-   "sabit_kural": 3.15
+   "tufe": 3.1,
+   "alt": 1.97,
+   "ust": 4.23,
+   "sabit_kural": 3.17
   },
   {
    "ito": 4.0,
    "tufe": 3.53,
-   "alt": 2.38,
-   "ust": 4.68,
-   "sabit_kural": 3.65
+   "alt": 2.4,
+   "ust": 4.67,
+   "sabit_kural": 3.67
   },
   {
    "ito": 4.5,
    "tufe": 3.97,
-   "alt": 2.81,
-   "ust": 5.13,
-   "sabit_kural": 4.15
+   "alt": 2.82,
+   "ust": 5.12,
+   "sabit_kural": 4.17
   },
   {
    "ito": 5.0,
-   "tufe": 4.41,
-   "alt": 3.23,
-   "ust": 5.59,
-   "sabit_kural": 4.65
+   "tufe": 4.4,
+   "alt": 3.24,
+   "ust": 5.57,
+   "sabit_kural": 4.67
   }
  ],
  "kayan": [
@@ -916,123 +942,129 @@
    "r": 0.927,
    "egim": 0.992,
    "ort_fark": 0.219
+  },
+  {
+   "ay": "2026-08",
+   "r": 0.928,
+   "egim": 0.988,
+   "ort_fark": 0.22
   }
  ],
  "oranti": {
-  "egim": 0.122,
-  "se": 0.072,
-  "t": 1.7,
-  "p": 0.1003,
-  "r": 0.301,
+  "egim": 0.13,
+  "se": 0.07,
+  "t": 1.86,
+  "p": 0.0733,
+  "r": 0.321,
   "anlamli": false,
-  "oran_medyan": 0.862,
+  "oran_medyan": 0.864,
   "kayan_ilk": 0.35,
-  "kayan_son": 0.219,
+  "kayan_son": 0.22,
   "kayan_maks": 0.631,
   "kayan_r_min": 0.794,
   "kayan_r_maks": 0.962,
   "kayan_egim_min": 0.762,
   "kayan_egim_maks": 1.026,
-  "kayan_n": 20
+  "kayan_n": 21
  },
  "kural": {
   "asgari": 12,
   "asgari_dar": 18,
-  "n": 19,
+  "n": 20,
   "ilk_ay": "2025-01",
-  "son_ay": "2026-07",
+  "son_ay": "2026-08",
   "skor": {
    "naif": {
-    "mae": 0.471,
-    "rmse": 0.585,
-    "yanlilik": 0.35,
-    "isabet_03": 42.0,
-    "isabet_05": 63.0
+    "mae": 0.456,
+    "rmse": 0.572,
+    "yanlilik": 0.324,
+    "isabet_03": 45.0,
+    "isabet_05": 65.0
    },
    "sabit": {
-    "mae": 0.392,
-    "rmse": 0.481,
-    "yanlilik": -0.041,
-    "isabet_03": 42.0,
-    "isabet_05": 63.0
+    "mae": 0.399,
+    "rmse": 0.483,
+    "yanlilik": -0.066,
+    "isabet_03": 40.0,
+    "isabet_05": 60.0
    },
    "medyan": {
-    "mae": 0.421,
-    "rmse": 0.505,
-    "yanlilik": -0.19,
-    "isabet_03": 47.0,
-    "isabet_05": 58.0
+    "mae": 0.428,
+    "rmse": 0.507,
+    "yanlilik": -0.208,
+    "isabet_03": 45.0,
+    "isabet_05": 55.0
    },
    "oransal": {
-    "mae": 0.372,
-    "rmse": 0.5,
-    "yanlilik": -0.082,
-    "isabet_03": 58.0,
-    "isabet_05": 74.0
+    "mae": 0.374,
+    "rmse": 0.496,
+    "yanlilik": -0.098,
+    "isabet_03": 55.0,
+    "isabet_05": 75.0
    },
    "regresyon": {
-    "mae": 0.37,
-    "rmse": 0.463,
-    "yanlilik": 0.043,
-    "isabet_03": 47.0,
-    "isabet_05": 79.0
+    "mae": 0.369,
+    "rmse": 0.459,
+    "yanlilik": 0.022,
+    "isabet_03": 45.0,
+    "isabet_05": 80.0
    },
    "takvimli": {
-    "mae": 0.521,
-    "rmse": 0.668,
-    "yanlilik": -0.048,
-    "isabet_03": 32.0,
-    "isabet_05": 63.0
+    "mae": 0.513,
+    "rmse": 0.656,
+    "yanlilik": -0.064,
+    "isabet_03": 30.0,
+    "isabet_05": 65.0
    }
   },
   "kazanan": "regresyon",
   "skor_dar": {
    "naif": {
-    "mae": 0.422,
-    "rmse": 0.513,
-    "yanlilik": 0.246,
-    "isabet_03": 46.0,
-    "isabet_05": 69.0
+    "mae": 0.405,
+    "rmse": 0.497,
+    "yanlilik": 0.215,
+    "isabet_03": 50.0,
+    "isabet_05": 71.0
    },
    "sabit": {
-    "mae": 0.404,
-    "rmse": 0.48,
-    "yanlilik": -0.144,
-    "isabet_03": 38.0,
-    "isabet_05": 54.0
+    "mae": 0.413,
+    "rmse": 0.484,
+    "yanlilik": -0.172,
+    "isabet_03": 36.0,
+    "isabet_05": 50.0
    },
    "medyan": {
-    "mae": 0.449,
-    "rmse": 0.533,
-    "yanlilik": -0.254,
-    "isabet_03": 46.0,
-    "isabet_05": 54.0
+    "mae": 0.457,
+    "rmse": 0.535,
+    "yanlilik": -0.276,
+    "isabet_03": 43.0,
+    "isabet_05": 50.0
    },
    "oransal": {
-    "mae": 0.413,
-    "rmse": 0.545,
-    "yanlilik": -0.191,
-    "isabet_03": 46.0,
-    "isabet_05": 69.0
+    "mae": 0.412,
+    "rmse": 0.536,
+    "yanlilik": -0.207,
+    "isabet_03": 43.0,
+    "isabet_05": 71.0
    },
    "regresyon": {
-    "mae": 0.413,
-    "rmse": 0.489,
-    "yanlilik": -0.052,
-    "isabet_03": 38.0,
-    "isabet_05": 77.0
+    "mae": 0.409,
+    "rmse": 0.481,
+    "yanlilik": -0.074,
+    "isabet_03": 36.0,
+    "isabet_05": 79.0
    },
    "takvimli": {
-    "mae": 0.593,
-    "rmse": 0.738,
-    "yanlilik": -0.155,
-    "isabet_03": 23.0,
-    "isabet_05": 54.0
+    "mae": 0.576,
+    "rmse": 0.718,
+    "yanlilik": -0.169,
+    "isabet_03": 21.0,
+    "isabet_05": 57.0
    }
   },
-  "kazanan_dar": "sabit",
+  "kazanan_dar": "naif",
   "siralama_dayanikli": false,
-  "takvimli_zarar": 0.151,
+  "takvimli_zarar": 0.144,
   "satir": [
    {
     "ay": "2025-01",
@@ -1223,37 +1255,47 @@
     "oransal": 1.732,
     "regresyon": 1.832,
     "takvimli": 1.396
+   },
+   {
+    "ay": "2026-08",
+    "gercek": 1.84,
+    "naif": 1.658,
+    "sabit": 1.308,
+    "medyan": 1.287,
+    "oransal": 1.43,
+    "regresyon": 1.476,
+    "takvimli": 1.482
    }
   ]
  },
  "anket": {
-  "n": 31,
+  "n": 32,
   "ilk_ay": "2024-01",
-  "pka_mae_ici": 0.512,
-  "ito_mae_ici": 0.443,
-  "n_disi": 19,
-  "pka_mae": 0.506,
-  "ito_mae": 0.393,
-  "esli_fark": -0.114,
-  "esli_t": -1.09,
-  "esli_p": 0.291,
+  "pka_mae_ici": 0.502,
+  "ito_mae_ici": 0.446,
+  "n_disi": 20,
+  "pka_mae": 0.49,
+  "ito_mae": 0.4,
+  "esli_fark": -0.09,
+  "esli_t": -0.88,
+  "esli_p": 0.389,
   "ito_anlamli_iyi": false
  },
  "surpriz": {
-  "n": 31,
-  "sabit": -0.142,
-  "se_sabit": 0.101,
-  "t_sabit": -1.4,
-  "p_sabit": 0.1711,
+  "n": 32,
+  "sabit": -0.128,
+  "se_sabit": 0.098,
+  "t_sabit": -1.31,
+  "p_sabit": 0.2016,
   "sabit_anlamli": false,
-  "egim": 0.572,
-  "se_egim": 0.114,
+  "egim": 0.563,
+  "se_egim": 0.112,
   "t": 5.02,
   "p": 0.0,
-  "r": 0.682,
-  "r2": 0.465,
-  "isaret_uyumu": 71.0,
-  "isaret_p": 0.0294,
+  "r": 0.676,
+  "r2": 0.457,
+  "isaret_uyumu": 69.0,
+  "isaret_p": 0.0501,
   "isaret_uyumu_25": 75.0,
   "n_25": 24,
   "anlamli": true

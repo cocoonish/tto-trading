@@ -3,7 +3,7 @@
  "pencere_sonu": "2026-07-01",
  "seriler": {
   "tufe": {
-   "n": 259,
+   "n": 260,
    "tatil_katsayi": {
     "ramazan": 0.0,
     "bayram": 0.0,
@@ -12,11 +12,11 @@
    "tatil_t": {
     "ramazan": 0.04,
     "bayram": -0.3,
-    "kurban": -0.26
+    "kurban": -0.27
    },
    "mevsim_p": 0.0,
    "mevsimsel": true,
-   "mevsimsel_genlik_pp": 0.731
+   "mevsimsel_genlik_pp": 0.748
   },
   "cekirdek_b": {
    "n": 260,
@@ -1053,31 +1053,31 @@
     "mevsim_p": 0.9307
    }
   ],
-  "arindirilmayan_agirlik": 16.56,
+  "arindirilmayan_agirlik": 19.89,
   "yogunlasma": {
-   "hhi": 0.0779,
-   "esdeger_kalem": 12.8,
-   "en_buyuk_pay": 21.9,
+   "hhi": 0.0839,
+   "esdeger_kalem": 11.9,
+   "en_buyuk_pay": 22.7,
    "en_buyuk_kod": "g3_011",
    "en_buyuk_ad": "011. Gıda",
-   "ilk3_pay": 36.4
+   "ilk3_pay": 38.7
   },
   "medyan_kalem": {
    "bas": "2021-01",
-   "ay": 67,
+   "ay": 60,
    "en_sik_kod": "g3_011",
    "en_sik_ad": "011. Gıda",
-   "en_sik_n": 15,
-   "en_sik_pay": 22.4,
-   "son_kod": "g3_011",
-   "son_ad": "011. Gıda"
+   "en_sik_n": 12,
+   "en_sik_pay": 20.0,
+   "son_kod": "g3_045",
+   "son_ad": "045. Elektrik, Gaz Ve Diğer Yakıtlar"
   }
  },
  "kosular_arasi": {
   "var": true,
   "n": 12,
-  "maks_pp": 0.0,
-  "ort_pp": 0.0,
+  "maks_pp": 0.462,
+  "ort_pp": 0.097,
   "onceki_kosum": "2026-09-03"
  },
  "vintage": {
@@ -1085,10 +1085,10 @@
   "seriler": {
    "tufe": {
     "n": 6,
-    "mm_maks_pp": 0.117,
-    "mm_ort_pp": 0.04,
-    "saar3_maks_pp": 0.736,
-    "saar3_ort_pp": 0.285
+    "mm_maks_pp": 0.033,
+    "mm_ort_pp": 0.02,
+    "saar3_maks_pp": 0.362,
+    "saar3_ort_pp": 0.256
    },
    "cekirdek_b": {
     "n": 6,
