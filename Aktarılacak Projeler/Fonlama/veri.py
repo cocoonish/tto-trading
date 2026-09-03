@@ -480,6 +480,181 @@ def son_hafta(haftalik: pd.DataFrame | None = None) -> pd.Timestamp:
     return tam.index[-1]
 
 
+# --------------------------------------------------------------------------- şekil saatleri
+# SUNUM PENCERELERİ — her figürün SOL sınırı. Sağ ucu veri belirler; pencereler
+# burada durur çünkü figürün SAATİ de onlara bağlı: bir kalem pencerenin içinde
+# baştan sona sıfırsa grafik onu çizmez, çizilmeyen bir kalem de figürün ucunu
+# geriye çekemez. İki dosyada iki pencere sabiti tutulsaydı biri değişip öteki
+# unutulurdu.
+YAKIN_BAS = "2024-01-01"
+TAM_BAS = "2011-01-03"
+SWAP_BAS = "2021-01-04"
+ZK_BAS = "2019-01-01"
+GEC_BAS = "2016-01-01"
+
+
+def cerceveler():
+    """Ölçüm katmanının çerçeveleri: metrik · ZK · haftalık · rezerv hattı.
+
+    grafik.py figürün alt yazısı için, ozet_uret.py sayfa damgası için AYNI
+    saatleri soruyor; çerçeveleri iki yerde ayrı ayrı açsalardı bir gün biri
+    bir dosyayı okumayı unutur, figürün içindeki tarih ile altındaki damga
+    sessizce ayrışırdı.
+    """
+    M = pd.read_csv(VERI / "metrik.csv", index_col=0, parse_dates=True)
+
+    def _oku(yol, etiket):
+        if not yol.exists():
+            return None
+        try:
+            return pd.read_csv(yol, index_col=0, parse_dates=True)
+        except Exception as ex:
+            print(f"  ! {etiket} okunamadı ({ex})")
+            return None
+
+    Z = _oku(VERI / "zk.csv", "zk.csv")
+    H = _oku(VERI / "haftalik_metrik.csv", "haftalik_metrik.csv")
+    R = _oku(KOK / "Aktarılacak Projeler" / "TCMBNetRezerv" / "gunluk.csv",
+             "rezerv hattı gunluk.csv")
+    return M, Z, H, R
+
+
+def _uc(df, kolonlar, pencere: str | None = None,
+        sifir_atla: set[str] | None = None):
+    """Verilen kolonların son DOLU gözlemlerinin EN ESKİSİ (pd.Timestamp | None).
+
+    EN ESKİ, çünkü bir figürün sözü serilerinin KIYASIDIR ve kıyas ancak
+    hepsinin ölçüldüğü güne kadar kurulabilir. `min()` yapısal yazılır: bugün
+    hangi bacağın önde olduğuna bakmaz.
+
+    `sifir_atla`: grafik yığın/kanal kalemlerini pencere içinde baştan sona
+    sıfırsa ÇİZMİYOR (ölü kalem eksenin altına yapışıyordu). Çizilmeyen bir
+    kalem figürün ucunu da belirleyemez, aynı elemeyi burada da yaparız.
+    """
+    if df is None or getattr(df, "empty", True):
+        return None
+    if pencere:
+        bas = max(pd.Timestamp(pencere), df.index[0])
+        df = df.loc[df.index >= bas]
+    sifir_atla = sifir_atla or set()
+    uclar = []
+    for k in kolonlar:
+        if k not in df.columns:
+            continue
+        s = df[k].dropna()
+        if s.empty:
+            continue
+        if k in sifir_atla and float(s.abs().max()) < 1e-9:
+            continue
+        uclar.append(s.index[-1])
+    return min(uclar) if uclar else None
+
+
+# Şekil 03/04'ün yığılı ve kanal kalemleri — grafik bunları pencere içinde
+# tamamen sıfırsa çizmez; saat hesabı da aynı elemeyi uygular.
+_FON_KALEM = ["fon_ihale", "fon_kot_repo", "fon_kot_depo", "fon_glp",
+              "fon_kot_diger"]
+_STE_KALEM = ["ste_ihale", "ste_kot", "ste_liksen", "ste_diger"]
+_SWAP_KANAL = ["swap_tcmb_piy", "swap_bist", "swap_gelenek", "swap_miktar",
+               "swap_altin_piy"]
+
+
+def zk_panel_saatleri(M, Z, uzun: bool = False) -> dict[str, str | None]:
+    """Şekil 05'in DÖRT panelinin ayrı ayrı ucu.
+
+    Bu figürün tek saati yok: bloke hesap ile ima edilen oran analitik
+    bilançonun gününde, tesis adımları son ADIM gününde, sistem likiditesi gün
+    başı likidite tablosunun gününde biter — ve o tablo daha erken yayımlandığı
+    için ötekilerin İLERİSİNDE durur. Tek damga hangi bacağı seçse öbürü
+    hakkında yalan olur; bu yüzden figürün defter değeri None'dır ve her panel
+    kendi gününü kendi başlığında taşır.
+    """
+    def yaz(t):
+        return None if t is None else (gun_ad(t) if uzun
+                                       else pd.Timestamp(t).strftime("%d.%m.%Y"))
+
+    adim = None
+    if Z is not None and not Z.empty and "zk_bloke" in Z.columns:
+        d = Z["zk_bloke"].diff()
+        d = d[d.abs() > 1e-6]
+        adim = d.index[-1] if len(d) else None
+    return {
+        "bloke": yaz(_uc(Z, ["zk_bloke", "zk_taban"])),
+        "oran": yaz(_uc(Z, ["zk_oran"])),
+        "adim": yaz(adim),
+        "likidite": yaz(_uc(M, ["serbest_mevduat", "gun_basi_likidite"])),
+    }
+
+
+def sekil_saatleri(M, Z, H, R, uzun: bool = False) -> dict[str, str | None]:
+    """Figür başına ÇİZİLEN çerçevenin ucu — hattın TEK ana saati değil.
+
+    Bu hat beş ayrı yayım ritmi taşıyor (APİ aynı gün · analitik bilanço bir
+    gün · gün başı likidite tablosu bir gün İLERİ · haftalık faizler Cuma ·
+    ZK tabanı on üç gün). Sekiz figürün sekizine de aynı damgayı basmak iki
+    yönde birden yanlıştı: haftalık geçişkenlik figürü on iki gün eskiyken
+    "bugün" diye damgalanıyor, ZK figürü ise dört ayrı günde biten dört panele
+    tek bir gün yazıyordu.
+
+    Değer ÖLÇÜLÜR: figürün çizdiği kolonların son dolu gözlemi, hepsinin en
+    eskisi. Ölçülemiyorsa None kalır ve o şeklin altına ne figürün kendi alt
+    yazısı ne de sayfa tarih basar — yanlış bir tarih, tarihsizlikten kötüdür.
+
+    `uzun=True` figür alt yazısının yazımını verir ("2 Eylül 2026");
+    varsayılan site sözleşmesidir ("02.09.2026").
+
+    İki tüketici var ve ikisi de burayı okur: grafik.py figürün KENDİ alt
+    yazısına, ozet_uret.py sayfa damgası için ozet.json'un şekil saat
+    defterine. İki liste tutulsaydı bir gün sessizce ayrışır ve okur aynı
+    figürün içinde ve altında iki farklı tarih görürdü.
+    """
+    def yaz(t):
+        return None if t is None else (gun_ad(t) if uzun
+                                       else pd.Timestamp(t).strftime("%d.%m.%Y"))
+
+    # Şekil 08 iki hattın ORTAK iş günlerinde çizilir; ucu da o kesişimden
+    # ölçülür, tek başına hiçbir hattınkinden değil.
+    m8 = r8 = None
+    if R is not None and not R.empty:
+        ortak = M.index.intersection(R.index)
+        if len(ortak):
+            m8, r8 = M.loc[ortak], R.loc[ortak]
+
+    return {
+        "01_koridor_faizler.html": yaz(_uc(M, [
+            "koridor_alt", "koridor_ust", "politika", "aofm", "aosm", "tlref",
+            "glp_satis", "aofm_ham"])),
+        "02_spreadler.html": yaz(_uc(M, [
+            "spread_tlref_politika", "spread_aofm_politika",
+            "spread_marjinal_politika", "spread_tlref_aofm"])),
+        "03_net_api_kompozisyon.html": yaz(_uc(
+            M, ["net_fonlama"] + _FON_KALEM + _STE_KALEM, pencere=YAKIN_BAS,
+            sifir_atla=set(_FON_KALEM + _STE_KALEM))),
+        "04_swap_fonlama.html": yaz(_uc(
+            M, _SWAP_KANAL + ["swap_alim_usd", "swap_satim_usd",
+                              "swap_alim_tl", "swap_satim_tl", "fon_top",
+                              "tcmb_tl_saglama"],
+            pencere=SWAP_BAS,
+            sifir_atla=set(_SWAP_KANAL) | {"swap_satim_tl"})
+            if "swap_alim_usd" in M.columns else None),
+        # Dört panel, dört saat: tek uç seçilemez (bkz. zk_panel_saatleri).
+        "05_zk_likidite.html": None,
+        "06_gecirgenlik.html": yaz(_uc(H, [
+            "marjinal", "politika_h", "f_ticari_tl", "f_tuketici",
+            "f_mevduat_tl", "makas", "kredi_marj", "mevduat_marj",
+            "beta_ticari_tl", "beta_mevduat_tl"], pencere=GEC_BAS)),
+        "07_koridor_konumu.html": yaz(_uc(M, [
+            "konum_tlref", "konum_aofm", "aofm_koridor_ustu", "koridor_bant",
+            "politika", "koridor_alt", "koridor_ust"], pencere=TAM_BAS)),
+        "08_rezerv_capraz.html": yaz(min(
+            [t for t in (_uc(m8, ["swap_alim_usd", "swap_satim_usd"]),
+                         _uc(r8, ["swap_yerli_usd", "net_rezerv_usd",
+                                  "swap_haric_net_rezerv_usd",
+                                  "swap_toplam_usd"])) if t is not None],
+            default=None) if m8 is not None else None),
+    }
+
+
 # --------------------------------------------------------------------------- denetimler
 def tazelik_denetimi(g: pd.DataFrame, h: pd.DataFrame) -> list[str]:
     bugun = pd.Timestamp.today().normalize()

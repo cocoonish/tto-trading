@@ -210,6 +210,59 @@ sina("aynı gün farklı YAZIMLA yazılmışsa çelişki değil",
 
 
 # ---------------------------------------------------------------------------
+# (19) ŞEKİL METNİNDE OKUR DİLİ. Bu ölçüt yayının önünde duruyor ve ağırlıkları
+# BUGÜNKÜ tabana göre seçildi: yapım dili ENGEL (taban sıfır), kod dili UYARI
+# (taban yetmiş altı). Ağırlıklar ters çevrilirse site durur; sınama bunu tutar.
+print("\n▶ Şekil metninde okur dili (19)")
+
+sekil_metinleri = _mod.sekil_metinleri
+sekil_okur_dili = _mod.sekil_okur_dili
+
+HAM = ('var gd = document.getElementById("x");'
+       'Plotly.newPlot("x",[{"x":["2026-08-21"],"y":[1.5],'
+       '"name":"Kredi b\\u00fcy\\u00fcmesi (bie_hpbitablo2)","type":"scatter",'
+       '"hovertemplate":"%{x}\\u003cbr\\u003eR\\u00b2 %{y}"}],'
+       '{"title":{"text":"\\u003cb\\u003eBa\\u015fl\\u0131k\\u003c\\u002fb\\u003e'
+       '\\u003cbr\\u003e\\u003csup\\u003eBu halka yaz\\u0131n\\u0131n ilk '
+       's\\u00fcr\\u00fcm\\u00fcnde \\u00d6L\\u00c7\\u00dcLMEM\\u0130\\u015eTI.'
+       '\\u003c\\u002fsup\\u003e"}})')
+
+metinler = sekil_metinleri(HAM)
+sina("başlık, lejant ve hover metni çıkarılıyor", len(metinler) >= 2,
+     f"gelen {metinler}")
+sina("HTML etiketleri düz metne iniyor",
+     not any("<b>" in t or "<sup>" in t for t in metinler), f"{metinler}")
+sina("birim kod kaçışları çözülüyor",
+     any("büyümesi" in t for t in metinler), f"{metinler}")
+
+e, u, say = sekil_okur_dili(metinler, "x/y.html")
+sina("figür metnindeki YAPIM DİLİ ENGEL",
+     len(e) == 1 and "yapım dili" in e[0], f"engel={e}")
+sina("figür metnindeki bie_ kodu UYARI, ENGEL değil",
+     len(u) == 1 and "bie_hpbitablo2" in u[0], f"uyari={u}")
+
+e, u, say = sekil_okur_dili(
+    ["Veri: TCMB EVDS3 · TP.PY.P06.ON · iş günü · Çıpa: 2 Eylül 2026."], "x/y.html")
+sina("kaynağın BÜYÜK harfli alan adı kusur değil (künyedir)",
+     not e and not u, f"engel={e} uyari={u}")
+
+e, u, say = sekil_okur_dili(["Eksen etiketi 0.53 ve -1.20 değerleri"], "x/y.html")
+sina("biçim ailesi yalnız SAYILIR, uyarı üretmez",
+     not e and not u and say.get("biçim", 0) > 0, f"engel={e} uyari={u} say={say}")
+
+e, u, say = sekil_okur_dili(["Kredi büyümesi kur etkisinden arındırılmıştır."],
+                            "x/y.html")
+sina("temiz alt yazı temiz geçiyor", not e and not u, f"engel={e} uyari={u}")
+
+e2, u2, _ = sekil_okur_dili(metinler + metinler, "x/y.html")
+sina("aynı kusur iki kez geçse tek kez bildiriliyor",
+     len(e2) == 1 and len(u2) == 1, f"engel={e2} uyari={u2}")
+
+sina("veri dizileri metin sayılmıyor",
+     not any(t.startswith("2026-08-21") for t in metinler), f"{metinler}")
+
+
+# ---------------------------------------------------------------------------
 print(f"\n{'═' * 70}")
 print(f"  {len(GECTI)} geçti · {len(DUSTU)} düştü")
 if DUSTU:

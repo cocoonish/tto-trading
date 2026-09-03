@@ -299,8 +299,14 @@ def sekil_09(G):
     _duzen(fig, "Küresel fiyattan iç fiyata — geçiş nerede en güçlü",
            ["Her nokta: küresel reel gıda emtia enflasyonunun k ay ÖNCEKİ değeriyle "
             "kurulan regresyonun açıklama gücü.",
-            "Bu halka yazının ilk sürümünde ÖLÇÜLMEMİŞTİ ve en zayıf yer olarak "
-            "işaretlenmişti; artık ölçülü.",
+            # OKUR DİLİ. Bu satır okura kendi SÜRÜM TARİHÇEMİZİ anlatıyordu
+            # ("yazının ilk sürümünde ölçülmemişti… artık ölçülü") ve hiçbir
+            # kapı onu görmüyordu: okur dili ölçütleri MDX'i, koşu kaydını ve
+            # derlenmiş sayfayı tarıyor, gömülü Plotly HTML'inin BAŞLIK metnini
+            # taramıyordu. Kalan bulgu okur için aynı: zincirin bu halkası
+            # ölçülüyor mu, ölçülmüyor mu.
+            "Bu halka doğrudan ölçülür; zincirin zayıf yeri varsayım değil, "
+            "ölçümün kendisidir.",
             "Noktalı dikey çizgiler her eğrinin en güçlü gecikmesi."],
            h=450, y_baslik="R²")
     fig.update_xaxes(title_text="gecikme (ay)")

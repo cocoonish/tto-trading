@@ -19,7 +19,8 @@ import sys
 
 import pandas as pd
 
-from veri import PROJE, VERI, AY_TR, gun_ad, tazelik_tolerans
+from veri import (PROJE, VERI, AY_TR, cerceveler, gun_ad, sekil_saatleri,
+                  tazelik_tolerans)
 
 O: dict = {}
 
@@ -69,14 +70,17 @@ def tr_tarih(t) -> str:
 
 
 def main() -> int:
-    M = pd.read_csv(VERI / "metrik.csv", index_col=0, parse_dates=True)
+    # Çerçeveleri grafik katmanıyla AYNI yardımcı açar: şekil saat defteri
+    # figürlerin ölçüldüğü çerçevelerden okunuyor ve iki dosya kendi
+    # yükleyicisini tutsaydı biri bir dosyayı atlar, figürün içindeki tarih ile
+    # altındaki damga sessizce ayrışırdı.
+    M, Z, H, R = cerceveler()
     m = json.loads((VERI / "metrik_ozet.json").read_text(encoding="utf-8"))
     uy = json.loads((PROJE / "uyarilar.json").read_text(encoding="utf-8"))
     vd = json.loads((VERI / "veri_durum.json").read_text(encoding="utf-8"))
-    # ZK büyüklükleri metrik_ozet.json'daki `zk` bloğundan okunur (oran, taban,
-    # tesis adımları orada zaten türetilmiş); data/zk.csv yalnız grafik içindir.
-    hyol = VERI / "haftalik_metrik.csv"
-    H = pd.read_csv(hyol, index_col=0, parse_dates=True) if hyol.exists() else None
+    # ZK BÜYÜKLÜKLERİ metrik_ozet.json'daki `zk` bloğundan okunur (oran, taban,
+    # tesis adımları orada zaten türetilmiş); data/zk.csv burada yalnız şekil
+    # saatleri için açılır.
 
     s_gun = pd.Timestamp(m["son_gun"])
     s_hafta = pd.Timestamp(m["son_hafta"])
@@ -476,6 +480,15 @@ def main() -> int:
         f"Bu koşuda {len(uyarilar)} uyarı düştü:")
     O["aosm_not"] = m.get("aosm_not")
     O["zk_oran_not"] = m.get("zk_oran_not")
+
+    # ------------------------------------------------- şekil saat defteri
+    # GrafikEmbed her şeklin altına "veri <tarih>" basar; MDX'te ayrı bir
+    # anahtar verilmemişse o tarih hattın TEK ana saatinden gelirdi. Bu hat beş
+    # ritim taşıyor, yani tek damga iki figürde yalan söylüyordu. Değeri None
+    # olan figürün altına sayfa tarih BASMAZ — tek uç seçilemeyen figürde her
+    # panel kendi gününü kendi başlığında taşır. Tanım veri.sekil_saatleri'nde,
+    # tek yerde: aynı defteri grafik.py figürün KENDİ alt yazısı için de okur.
+    O["_sekil_tarih"] = sekil_saatleri(M, Z, H, R)
 
     yol = PROJE / "ozet.json"
     yol.write_text(json.dumps(O, ensure_ascii=False, indent=1), encoding="utf-8")

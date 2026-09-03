@@ -1099,6 +1099,13 @@ def main() -> int:
         "Bu koşuda düşen tek uyarı budur:" if len(uyarilar) == 1 else
         f"Bu koşuda {len(uyarilar)} uyarı düştü:")
 
+    # ŞEKİL SAAT DEFTERİ — grafik.py ile AYNI tablodan (veri.sekil_saatleri).
+    # Hattın figürleri tek ritimde değil: kesit panelleri (kırpılmış ortalama,
+    # medyan, difüzyon) alt kalem kırılımını bekler ve manşet serilerinden
+    # aylarca geride biter. Tek ana saat basılırsa o paneller TAZE görünür.
+    O["_sekil_tarih"] = dict(sorted(
+        veri.sekil_saatleri(m, ip, up, bp).items()))
+
     yol = PROJE / "ozet.json"
     yol.write_text(json.dumps(O, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"ozet.json yazıldı: {len(O)} anahtar · veri {O['donem']} · "

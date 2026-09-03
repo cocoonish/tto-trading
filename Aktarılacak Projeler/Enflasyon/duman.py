@@ -10,6 +10,7 @@ Koşum:  python duman.py     (çıkış kodu 0 = geçti, 1 = düştü)
 from __future__ import annotations
 
 import ast
+import re
 import sys
 from pathlib import Path
 
@@ -151,6 +152,81 @@ sina("17 numaralı çıktının adında ay adı yok",
                         "eylul", "eylül", "ekim", "kasim", "kasım", "aralik",
                         "aralık")),
      str(grafik.BIR_CIKTI_ADLARI))
+
+# ---------------------------------------------------------------------------
+# 4. ŞEKİL SAAT DEFTERİ: BAĞLAYICI BACAK, YAZIM VE ÖLÇÜLEMEYEN HÂL
+# ---------------------------------------------------------------------------
+# Bu hattın figürleri tek ritimde değil: kesit ölçüleri (kırpılmış ortalama,
+# medyan, difüzyon) üç haneli kırılımı bekler ve ana endeksten aylarca geride
+# biter. 05'in İKİ paneli de o kesite dayanır; tek ana saat basılırsa sekiz ay
+# bayat bir panel bugünün TÜFE'siyle damgalanır ve okur onu bugünün yaygınlığı
+# sanır. Aşağıdaki maddeler damganın hangi bacaktan geldiğini, nasıl yazıldığını
+# ve ölçülemeyince ne olduğunu sorar.
+print("\n▶ Şekil saat defteri")
+
+_S05 = "05_dagilim_difuzyon.html"
+
+sina("kesit geride ise damga KESİTİN ayı",
+     veri.sekil_saatleri({"son_ay": "2026-08-01",
+                          "dagilim__son_ay": "2025-12"})[_S05] == "12.2025",
+     str(veri.sekil_saatleri({"son_ay": "2026-08-01",
+                              "dagilim__son_ay": "2025-12"})[_S05]))
+
+# min() YAPISAL yazılır: bugün kesit geride diye öyle kalacağı varsayılamaz.
+# Sıralama tersine döndüğünde de kazanan EN ESKİ bacaktır.
+sina("kesit daha TAZE olsa da damga yine en eski bacak",
+     veri.sekil_saatleri({"son_ay": "2026-08-01",
+                          "dagilim__son_ay": "2026-09"})[_S05] == "08.2026")
+
+sina("kesitin kendi saati ölçülemezse figür ana saate düşer",
+     veri.sekil_saatleri({"son_ay": "2026-08-01"})[_S05] == "08.2026")
+
+# Yanlış bir tarih, tarihsizlikten kötüdür: hiç ölçüm yoksa defter None taşır
+# ve bileşen o şeklin altına tarih HİÇ basmaz. Soru TEK figüre sorulmaz —
+# uydurma bir gün ilk sızacağı yerde tek bir şekil olmayabilir.
+_bos = veri.sekil_saatleri({})
+sina("hiç ölçüm yoksa HİÇBİR figürün damgası yok (uydurma değil)",
+     all(v is None for v in _bos.values()),
+     str({k: v for k, v in _bos.items() if v is not None}))
+
+# Fonlama maliyeti içinde bulunulan aya kadar var, enflasyon bacağı bir ay
+# geride; figür ikisinin KARŞILAŞTIRMASI olduğu için ortak ay bağlar.
+sina("reel faiz damgası fonlamanın DEĞİL enflasyonun ayı",
+     veri.sekil_saatleri({"son_ay": "2026-08-01",
+                          "reel__ex_post_tarih": "2026-08-01",
+                          "reel__faiz_tarih": "2026-09-01"}
+                         )["08_reel_faiz.html"] == "08.2026")
+
+# AYLIK bir gözlem GÜN gibi yazılmaz: "01.08.2026" okura o GÜNÜN ölçümüymüş
+# gibi görünür. Defterin tamamı ay yazımında olmalı.
+_kanat = {"son_ay": "2026-08"}
+_defter = veri.sekil_saatleri({"son_ay": "2026-08-01",
+                               "dagilim__son_ay": "2025-12"},
+                              _kanat, _kanat, _kanat)
+sina("defterdeki her damga AA.YYYY yazımında",
+     bool(_defter) and all(re.fullmatch(r"\d{2}\.\d{4}", v)
+                           for v in _defter.values() if v),
+     str(sorted({v for v in _defter.values() if v})))
+
+# Kanat profili üretilemediğinde o figürler ÇİZİLMEZ; defterde de görünmemeli,
+# yoksa var olmayan bir şekle hattın ana saati yazılırdı.
+sina("kanat profili yoksa kanadın figürleri defterde yok",
+     not any(k[:2] in {"10", "11", "12", "13", "14", "15", "16", "17"}
+             for k in veri.sekil_saatleri({"son_ay": "2026-08-01"})))
+
+# Figürün İÇİNDEKİ alt yazı okura sayfa damgası kadar görünür; ikisi ayrı
+# kaynaktan beslenirse bir gün sessizce ayrışır.
+sina("figür alt başlığı aynı tablodan, uzun yazımla",
+     veri.sekil_saatleri({"son_ay": "2026-08-01",
+                          "dagilim__son_ay": "2025-12"},
+                         uzun=True)[_S05] == "Aralık 2025")
+
+# İKİ TÜKETİCİ, TEK TABLO: çizim katmanı da özet üreticisi de saati aynı
+# fonksiyondan almalı. Ayrı iki liste tutulsaydı biri güncellenir, öbürü
+# kalırdı ve hangisinin neyi söylediği kimsenin aklında kalmazdı.
+sina("çizim ve özet katmanı saati aynı fonksiyondan alıyor",
+     "sekil_saatleri" in Path(grafik.__file__).read_text(encoding="utf-8")
+     and "sekil_saatleri" in (veri.PROJE / "ozet_uret.py").read_text(encoding="utf-8"))
 
 # ---------------------------------------------------------------------------
 print(f"\n{'═' * 70}")

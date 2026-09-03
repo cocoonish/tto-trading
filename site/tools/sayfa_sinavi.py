@@ -58,6 +58,10 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
   (18c) ÇİFT İLAN ÇELİŞMEZ — bir figürün hem açık anahtarı hem defter girdisi
       varsa ikisi aynı günü söylemeli; ayrışırsa şeklin kendi alt başlığı ile
       sayfadaki damga farklı tarih söyler → ENGEL.
+  (19) ŞEKİL METNİNDE OKUR DİLİ — gömülü Plotly başlık/alt yazı/lejant metni de
+      okura basılır ve 9 · 9b · 17 ölçütlerinin hiçbiri oraya bakmıyordu.
+      Yapım dili ENGEL (taban sıfır), kod dili tek satırda toplanan UYARI
+      (taban yetmiş altı), anahtar adı ve biçim yalnız sayılır.
   (9b) OKUR DİLİ, derlenmiş çıktıda (uyarı) — bileşen dizgeleri de kapıya girer.
 
 Koşum:  python3 site/tools/sayfa_sinavi.py
@@ -261,6 +265,80 @@ def acik_saat_bulgulari(nerede: str, ozet: dict, anahtar: str, defter_deger,
     return hata_, uyari_
 
 
+# Plotly HTML'inde okura GÖRÜNEN metin alanları. Figürün başlığı, alt yazısı,
+# lejant adı ve hover şablonu sayfada okunur; veri dizileri okunmaz.
+SEKIL_METIN = re.compile(r'"(?:text|title|name|hovertemplate)":"((?:[^"\\]|\\.){4,8000})"')
+SEKIL_ETIKET = re.compile(r"<[^>]{1,40}>")
+
+
+def sekil_metinleri(ham: str) -> list[str]:
+    """Gömülü bir Plotly HTML'inden okura görünen metinleri çıkarır.
+
+    JSON kaçışları (birim kod, açılı ayraç, bölü, tırnak) çözülür ve HTML
+    etiketleri boşluğa indirilir — okurun gördüğü düz metin kalsın.
+    """
+    cikti = []
+    for m in SEKIL_METIN.finditer(ham):
+        t = m.group(1)
+        t = re.sub(r"\\u([0-9a-fA-F]{4})", lambda x: chr(int(x.group(1), 16)), t)
+        t = t.replace("\\u003c", "<").replace("\\/", "/").replace('\\"', '"')
+        t = SEKIL_ETIKET.sub(" ", t)
+        if len(t) > 8:
+            cikti.append(t)
+    return cikti
+
+
+def sekil_okur_dili(metinler, nerede: str):
+    """(19) Figür metninde okur dili: (ENGEL, UYARI, aile→sayım).
+
+    NEDEN VAR. Okur dili ölçütleri MDX'i (9), derlenmiş sayfayı (9b) ve koşu
+    kaydını (17) tarıyordu; gömülü Plotly HTML'inin BAŞLIK ve ALT YAZI metnini
+    hiçbiri taramıyordu. Oysa o metin sayfada, şeklin tam üstünde, okurun
+    gözünün ilk gittiği yerde duruyor. Ölçüldü (03.09.2026): 164 figürde 36
+    ayrı kod/yapım dili sızıntısı vardı ve HEPSİ her yeşil koşudan geçmişti —
+    aralarında bir figürün okura kendi sürüm tarihçemizi anlatan alt yazısı da
+    ("bu halka yazının ilk sürümünde ölçülmemişti"). "Bir denetimin KAPSAMI
+    denetimin parçasıdır"; bakılmayan yer, geçen sınavla aynı görünür.
+
+    AĞIRLIK, okura ULAŞAN kusura ve BUGÜNKÜ tabana göre:
+    · yapım dili → ENGEL. Sürüm tarihçesini okura anlatmanın savunulabilir bir
+      hâli yok ve bugün taban SIFIR: tek bulgu düzeltildi, yani bu kapı ancak
+      YENİ bir sızıntıda düşer.
+    · kod dili → UYARI. Taban bugün sıfır DEĞİL (yetmiş altı bulgu, otuz altı
+      ayrı kod, on beş figürde). Bunları ENGEL yapmak yayını MEVCUT kusurla
+      durdururdu ve yanlış alarmla düşen bir denetim, kapatılan bir denetimdir.
+      Üstelik `bie_` bir tartışma taşıyor: CLAUDE.md kaynağın BÜYÜK harfli
+      alan adlarını (`TP.PY.P06.ON`) kaynak künyesi sayıp muaf tutuyor ve EVDS
+      grup kodu da bir künye olabilir. Karar verilene kadar sayılır ve görünür
+      durur. Çağıran taraf bunları TEK bir uyarı satırında topluyor: yetmiş
+      altı satır, kırk üç satırlık uyarı listesini okunmaz hâle getirirdi ve
+      kimsenin bakmadığı bir kayıt, olmayan kayıtla aynıdır.
+    · anahtar adı ve biçim → yalnız SAYILIR, satır satır basılmaz: biçim
+      ailesi tek başına 218 bulgu veriyor (eksen etiketlerindeki ondalık
+      nokta) ve her birini uyarı diye basmak, kimsenin bakmadığı bir kayıt
+      üretirdi. Sayı görünür, gürültü görünmez.
+    """
+    # Kalıp listesi burada DEĞİL: aynı kural MDX'te, koşu kaydında, bültende
+    # ve tweette de uygulanıyor ve tek tanım ortak/okur_dili.py'de duruyor.
+    import sys as _s3
+    import pathlib as _p3
+    _s3.path.insert(0, str(_p3.Path(__file__).resolve().parents[2] / "ortak"))
+    import okur_dili as _od
+    hata_, uyari_, sayim = [], [], {}
+    gorulen = set()
+    for metin in metinler:
+        for _i, aile, esl in _od.kosu_kaydi_tara([metin]):
+            sayim[aile] = sayim.get(aile, 0) + 1
+            if (aile, esl) in gorulen:
+                continue
+            gorulen.add((aile, esl))
+            if aile == "yapım dili":
+                hata_.append(f"şekil metni yapım dili — {nerede}: {esl!r}")
+            elif aile == "kod dili":
+                uyari_.append(f"şekil metni kod dili — {nerede}: {esl!r}")
+    return hata_, uyari_, sayim
+
+
 def ciplak_sayilar(disi: str, ozet: dict, muaf: set[str]) -> tuple[list[str], list[str]]:
     """(2) Çıplak oynak sayı: (ENGEL listesi, UYARI listesi).
 
@@ -333,9 +411,33 @@ def main() -> int:
     for slug, klasor in HATLAR:
         proje = KOK / klasor
         mp = KOK / "site/src/content/projeler" / f"{slug}.mdx"
-        oj = proje / "ozet.json"
-        if not mp.exists() or not oj.exists():
-            print(f"  – {slug}: sayfa ya da ozet.json yok, atlandı")
+        # ÖZET, HATTIN KLASÖRÜNDEN DEĞİL SİTEDEN OKUNUR. Sayfanın sözleşmesi
+        # `site/public/projeler/<slug>/ozet.json`dur: `<Deger>` de `GrafikEmbed`
+        # de çalışma anında TAM O DOSYAYI çeker; hat klasöründeki kopya bir
+        # uygulama ayrıntısıdır ve her hat onu aynı yere yazmaz. Sınav klasöre
+        # bakıyordu ve yiyecek-hizmetleri-marj hattını BÜTÜNÜYLE atlıyordu —
+        # o hat özetini `Research/marj/output/` altına yazıyor, kökte
+        # `ozet.json` yok. Atlanan hat, geçen sınavla aynı görünür: on yedi
+        # figürlü bir sayfa aylarca hiçbir ölçüte girmedi ve kimse fark etmedi.
+        # "Bir denetimin KAPSAMI denetimin parçasıdır"; kapsam listeden değil
+        # SÖZLEŞMEDEN türetilir, o yüzden önce site kopyası, yoksa hat kopyası.
+        oj = KOK / "site/public/projeler" / slug / "ozet.json"
+        if not oj.exists():
+            oj = proje / "ozet.json"
+        if not mp.exists():
+            # Proje SAYFASI olmayan hat (çıktısı analiz/araştırma yazılarında
+            # gömülü): bu döngü sayfa ölçütlerini koşar, sayfa yoksa koşacak
+            # ölçüt de yok. `<Deger>` ve şekil damgası ölçütleri onları başka
+            # yerden, sözleşmeden türeyen kapsamla zaten görüyor.
+            print(f"  – {slug}: proje sayfası yok (çıktısı yazılara gömülü), atlandı")
+            continue
+        if not oj.exists():
+            # SAYFA VAR AMA ÖZET YOK: sayfadaki her `<Deger>` çalışma anında
+            # boşa düşer ve okur statik yedeği görür — donmuş sayı. Sessizce
+            # atlamak, bu hattı bir daha hiçbir ölçütün görmemesi demekti.
+            uyari.append(f"{slug}: sayfası var ama yayımlanmış ozet.json'u yok "
+                         "— sayfadaki canlı değerler statik yedekte donar")
+            print(f"  – {slug}: ozet.json bulunamadı, atlandı")
             continue
         mdx = mp.read_text(encoding="utf-8")
         o = json.loads(oj.read_text(encoding="utf-8"))
@@ -943,6 +1045,39 @@ def main() -> int:
             hata.extend(e_)
             uyari.extend(u_)
     print(f"  {n_ta} açık anahtar")
+
+    # ---------------------------------------------------------------- (19)
+    # ŞEKİL METNİNDE OKUR DİLİ. Gerekçe ve ağırlıklar sekil_okur_dili'de.
+    # Kapsam SÖZLEŞMEDEN: siteye kopyalanmış her gömülü figür — hangi hattın
+    # ürettiği, hangi koleksiyonda gömülü olduğu fark etmez; okur hepsini
+    # aynı biçimde görüyor.
+    print("\n▶ Şekil metninde okur dili (gömülü Plotly başlık ve alt yazıları)")
+    n_sek = 0
+    kod_bulgu: dict[str, set[str]] = {}
+    aile_sayim: dict[str, int] = {}
+    for hp in sorted((KOK / "site/public/projeler").rglob("*.html")):
+        ham = hp.read_text(encoding="utf-8", errors="ignore")
+        if "Plotly" not in ham:
+            continue
+        n_sek += 1
+        nerede = f"{hp.parent.name}/{hp.name}"
+        e_, u_, say_ = sekil_okur_dili(sekil_metinleri(ham), nerede)
+        hata.extend(e_)
+        for satir in u_:
+            kod_bulgu.setdefault(satir.split(": ", 1)[-1], set()).add(nerede)
+        for a_, n_ in say_.items():
+            aile_sayim[a_] = aile_sayim.get(a_, 0) + n_
+    if kod_bulgu:
+        ornek = ", ".join(sorted(kod_bulgu)[:6])
+        uyari.append(
+            f"şekil metninde kod dili: {len(kod_bulgu)} ayrı kod, "
+            f"{len({y for ys in kod_bulgu.values() for y in ys})} figürde "
+            f"({ornek}{' …' if len(kod_bulgu) > 6 else ''}) — figürü üreten "
+            "hattın alt yazısı okura değil operatöre yazıyor")
+    print(f"  {n_sek} figür · kod dili {len(kod_bulgu)} ayrı kod · "
+          + " · ".join(f"{a} {n}" for a, n in sorted(aile_sayim.items())))
+    for esl, yerler in sorted(kod_bulgu.items()):
+        print(f"    – {esl}: {len(yerler)} figür ({sorted(yerler)[0]}…)")
 
     # ---------------------------------------------------------------- (17)
     # KOŞU KAYDI OKUR DİLİ. Koşu kutusu uyarilar.json'daki `uyarilar` listesini,
