@@ -65,8 +65,8 @@
   }
  },
  "uyarilar": [
-  "TAZELİK: Haftalık ticari kredi faizi (TP.KTF17) son gözlemi 21.08.2026 (13 gün önce, tolerans 12 gün).",
-  "TAZELİK: Haftalık TL mevduat faizi (TP.TRY.MT06) son gözlemi 21.08.2026 (13 gün önce, tolerans 12 gün).",
+  "TAZELİK: Haftalık kredi faizi son gözlemi 21.08.2026 (13 gün önce, tolerans 12 gün).",
+  "TAZELİK: Haftalık mevduat faizi son gözlemi 21.08.2026 (13 gün önce, tolerans 12 gün).",
   "ÖLÜ SERİ: geç likidite penceresi alış faizi son 252 iş gününün TAMAMINDA 0 — dolu görünüyor ama bilgi taşımıyor; grafikte 'yok' olarak işlenecek."
  ]
 }

@@ -1,8 +1,8 @@
 {
  "son_ay": "2026-06-01",
- "son_ceyrek": "2026-03-31",
+ "son_ceyrek": "2026-06-30",
  "son_hafta": "2026-08-26",
- "son_gun": "2026-08-28",
+ "son_gun": "2026-09-03",
  "esik": {
   "oran_payda_mn_usd": 10000.0,
   "roll_payda_mn_usd": 500.0,
@@ -38,21 +38,21 @@
   "turev_kalemi_var": true
  },
  "gsyh": {
-  "gsyh4_trilyon_usd": 1.634,
-  "gsyh4_donem": "2026-03-31",
+  "gsyh4_trilyon_usd": 1.7,
+  "gsyh4_donem": "2026-06-30",
   "mertebe_bant_trn": [
    1.0,
    2.0
   ],
   "mertebe_gecti": true,
-  "nokta_kur_farki_yuzde": -2.0,
-  "cari_gsyh_son": -2.44,
-  "cari_gsyh_donem": "2026-03-31",
+  "nokta_kur_farki_yuzde": -1.97,
+  "cari_gsyh_son": -2.29,
+  "cari_gsyh_donem": "2026-06-30",
   "cari_gsyh_min": -8.81,
   "cari_gsyh_min_donem": "2011-12-31",
   "cari_gsyh_maks": 2.69,
   "cari_gsyh_maks_donem": "2019-09-30",
-  "cekirdek_gsyh_son": 1.62
+  "cekirdek_gsyh_son": 1.7
  },
  "kalite": {
   "pay_brut_son": 64.0,
@@ -129,7 +129,7 @@
   "anapara_dgr_12ay": 17845.0,
   "anapara_gh_12ay": 2796.0,
   "eurobond_kapsam_notu": "İki eurobond kapsamı vardır ve KARIŞTIRILMAMALIDIR: A1/A2 kısa vadeyi DE içeren toplam (Şekil 12), A11/A21 yalnız uzun vadeli (Şekil 11'in anapara ve brüt kullanım bacağı). Fark bir sapma değil, kapsam farkıdır.",
-  "kimlik_tautoloji_notu": "Alt paneldeki 'ihtiyaç = kaynak' eşitliği TAUTOLOJİDİR: kaynak tarafı ihtiyaç tarafından türetildiği için sapma tanım gereği sıfırdır ve anapara bacaklarını sınamaz. Anaparanın bağımsız denetimi haftalık dış borç ödeme takvimiyle yapılan mertebe kıyasıdır (bkz. uyarilar.json).",
+  "kimlik_tautoloji_notu": "Alt paneldeki 'ihtiyaç = kaynak' eşitliği TAUTOLOJİDİR: kaynak tarafı ihtiyaç tarafından türetildiği için sapma tanım gereği sıfırdır ve anapara bacaklarını sınamaz. Anaparanın bağımsız denetimi haftalık dış borç ödeme takvimiyle yapılan mertebe kıyasıdır; sonucu bu sayfadaki koşu kaydında görünür.",
   "ihtiyacta_cari_acik_payi_yuzde": 30.9
  },
  "haftalik": {
@@ -310,12 +310,12 @@
    "tautoloji": false
   },
   "GSYH mertebe denetimi": {
-   "trilyon_usd": 1.634,
+   "trilyon_usd": 1.7,
    "bant": [
     1.0,
     2.0
    ],
-   "donem": "2026-03-31",
+   "donem": "2026-06-30",
    "gecti": true,
    "durdurucu": true,
    "not": "bin TL → /1000 → mn TL → /çeyrek ort. USDTRY → mn USD; 4 çeyreklik toplam YILLIK GSYH'dir."
@@ -342,7 +342,7 @@
  "tanim_notu": "Bu hat finans hesabı olarak ANALİTİK sunumun REZERV HARİÇ kalemini (TP.ODANA6.Q13) kullanır. Ayrıntılı sunumun TP.ODEAYRSUNUM6.Q101 kalemi rezervi İÇERİR; köprü Q101 = Q13 + Q33'tür ve ikisi aynı grafikte 'finans hesabı' diye yan yana konulamaz.",
  "isaret_notu": "BPM6: finans hesabı = net varlık edinimi − net yükümlülük oluşumu; POZİTİF = sermaye ÇIKIŞI. Giriş gösterimi için işaret metrik katmanında TEK YERDE çevrilir. Rezerv akımı POZİTİF = rezerv ARTIŞI (stokla sınandı).",
  "kalite_notu": "'Kaliteli finansman' bir değer yargısı değil VADE ölçüsüdür: net doğrudan yatırım girişi + özel sektörün net uzun vadeli kredi kullanımı. Oranların paydası küçüldüğünde oran patladığı için DÜZEY başroldür; oran payda eşiğin altındayken boş bırakılır.",
- "fisher_not": "Depo kuralı: reel getiri Fisher ile hesaplanır ((1+i)/(1+π)−1), basit çıkarmayla değil. Bu hat USD cinsi akım büyüklükleriyle çalışır ve şu an bir reel faiz serisi yayımlamaz; kural, metrik.py'deki fisher_reel() ile kodda hazır durur.",
+ "fisher_not": "Depo kuralı: reel getiri Fisher ile hesaplanır ((1+i)/(1+π)−1), basit çıkarmayla değil. Bu hat USD cinsi akım büyüklükleriyle çalışır ve şu an bir reel faiz serisi yayımlamaz; kural yine de yerinde durur, bir reel seri eklendiği gün onunla hesaplanır.",
  "revizyon_notu": "Ödemeler dengesi TCMB'nin revizyon politikasına tabidir: son 3–12 ay rutin olarak, yıllık revizyonlarda daha geriye dönük değişir. Çekirdek cari denge TÜİK dış ticaret istatistiklerinden beslenir ve TÜİK revizyonu buraya da yansır. Yayımlanmış bir sayının bir sonraki koşuda farklı çıkması NORMALDİR.",
  "uyarilar": []
 }

@@ -1,13 +1,13 @@
 {
- "kosum": "2026-08-28",
+ "kosum": "2026-09-03",
  "son_ay": "2026-06-01",
- "son_ceyrek": "2026-03-31",
+ "son_ceyrek": "2026-06-30",
  "son_hafta": "2026-08-26",
- "son_gun": "2026-08-28",
+ "son_gun": "2026-09-03",
  "gecikme_gun": {
-  "aylik": 59,
-  "ceyrek": 150,
-  "haftalik": 2,
+  "aylik": 65,
+  "ceyrek": 65,
+  "haftalik": 8,
   "gunluk": 0
  },
  "aylik_seri": 91,
@@ -15,9 +15,9 @@
  "haftalik_seri": 4,
  "haftalik_gozlem": 713,
  "ceyrek_seri": 1,
- "ceyrek_gozlem": 125,
+ "ceyrek_gozlem": 126,
  "gunluk_seri": 1,
- "gunluk_gozlem": 7991,
+ "gunluk_gozlem": 7995,
  "birim": {
   "bie_odana6": {
    "ad": "Ödemeler Dengesi-Analitik Sunum",
@@ -250,7 +250,7 @@
   "TP.ODANA6.Q21 (diğer yatırım varlık — Merkez Bankası): son 60 ayın tamamında 0; Q20 zaten içeriyor."
  ],
  "tani_serileri": {
-  "TP.ODANA6.Q35 / Q36": "IMF kredileri ve ödemeler dengesi finansmanı. Bugün sıfır (son sıfırdan farklı ay: 05.2013), ama rezerv kimliği ancak onlarla kapanıyor: Q33 = Q34 + Q35 + Q36. Metriğe ve grafiğe GİRMEZLER."
+  "TP.ODANA6.Q35 / Q36": "IMF kredileri ve ödemeler dengesi finansmanı. Bugün sıfır (son sıfırdan farklı ay: Mayıs 2013), ama rezerv kimliği ancak onlarla kapanıyor: Q33 = Q34 + Q35 + Q36. Metriğe ve grafiğe GİRMEZLER."
  },
  "uyarilar": []
 }
