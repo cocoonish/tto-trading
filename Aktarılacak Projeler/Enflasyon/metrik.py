@@ -537,6 +537,35 @@ def beklenti_isabeti(a: pd.DataFrame) -> dict:
                 "yanlilik": round(float(ee.mean()), 3),
                 "rmse": round(float(np.sqrt((ee ** 2).mean())), 3),
             }
+    # ---- YAYIMLANAN AYIN SÜRPRİZİ ve ANKETİN İLERİ PATİKASI.
+    # Bir yayım gününde sorulan ilk soru "beklentiye göre nasıl geldi"dir ve
+    # cevabı ancak anketin KENDİ hata dağılımıyla birlikte anlam taşır:
+    # +0,2 puanlık bir sapma, ortalama mutlak hatası 0,5 puan olan bir ankette
+    # sürpriz değildir. İkisi bu yüzden aynı blokta durur.
+    if "pka_ay_cari" in a.columns and len(m):
+        son = m.index[-1]
+        bek0 = a["pka_ay_cari"].dropna()
+        if son in bek0.index:
+            out["son_ay"] = {
+                "ay": son.strftime("%Y-%m"), "ad": ad_uzun(son),
+                "anket": round(float(bek0.loc[son]), 2),
+                "gercek": round(float(m.loc[son]), 2),
+                "surpriz": round(float(m.loc[son] - bek0.loc[son]), 2),
+            }
+        # İLERİ PATİKA: anketin kendi bir ve iki ay sonrası tahminleri, aynı
+        # ankete ait. Bunlar "piyasa ne bekliyor" sorusunun tek ölçülmüş
+        # cevabı; yıl sonu aritmetiği bunlarla sınanır.
+        ileri = {}
+        for h, kod in ((1, "pka_ay_1"), (2, "pka_ay_2")):
+            if kod in a.columns and len(a[kod].dropna()):
+                b_ = a[kod].dropna()
+                ileri[f"h{h}"] = {"ay": (b_.index[-1] + pd.DateOffset(months=h)
+                                         ).strftime("%Y-%m"),
+                                  "ad": ad_uzun(b_.index[-1]
+                                                + pd.DateOffset(months=h)),
+                                  "oran": round(float(b_.iloc[-1]), 2)}
+        if ileri:
+            out["ileri"] = ileri
     return out
 
 
@@ -2110,6 +2139,31 @@ def ozet_topla(a, g, SA, M, K, D, B, R, bek, atalet, ito, w_katki, w_ana,
                          "yil_sonu": (float(B[ad][B.index.month == 12].iloc[0])
                                       if (B.index.month == 12).any() else None)}
                     for ad in ("son3_sa", "son12_ort", "gecen_yil")}
+    # ---- YIL SONU ARİTMETİĞİ: anketin yıl sonu tahmini KAÇ AYLIK NE ORANA
+    # denk geliyor? Senaryolar "şu hızda gidersek nereye varırız" diyor;
+    # buradaki soru tersi: "oraya varmak için ne gerekir". İkisi yan yana
+    # konmadan anketin iddiasının büyüklüğü görünmüyor — kalan aylara bölünmüş
+    # bir yıl sonu hedefi, aylık momentumla doğrudan karşılaştırılabilir.
+    _t = a["tufe"].dropna() if "tufe" in a.columns else pd.Series(dtype=float)
+    _by = a["pka_yilsonu"].dropna() if "pka_yilsonu" in a.columns else pd.Series(dtype=float)
+    if len(_t) and len(_by):
+        _son = _t.index[-1]
+        _ara = pd.Timestamp(f"{_son.year - 1}-12-01")
+        _kalan = 12 - _son.month
+        if _ara in _t.index and _kalan > 0:
+            _kum = float(_t.loc[_son] / _t.loc[_ara] - 1) * 100
+            _hedef = float(_by.iloc[-1])
+            _ger = ((1 + _hedef / 100) / (1 + _kum / 100)) ** (1 / _kalan) - 1
+            _mom = (o.get("baz", {}).get("son3_sa", {}) or {}).get("aylik_varsayim")
+            o["yilsonu"] = {
+                "kumulatif": round(_kum, 2),
+                "anket": round(_hedef, 2),
+                "kalan_ay": int(_kalan),
+                "gereken_aylik": round(_ger * 100, 2),
+                "momentum_aylik": round(float(_mom), 2) if _mom is not None else None,
+                "acik_puan": (round(float(_mom) - _ger * 100, 2)
+                              if _mom is not None else None),
+            }
     if not R.empty:
         for kol in ("faiz", "ex_post", "ex_ante", "egilime_gore", "ileri_ex_ante"):
             v = R[kol].dropna()

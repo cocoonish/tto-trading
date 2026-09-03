@@ -285,6 +285,31 @@ def main() -> int:
           if bi.get(h, {}).get("p60", {}).get("mae") and bi.get(h, {}).get("p36", {}).get("mae")]
     if _o:
         koy("isabet_p60_p36_orani", sum(_o) / len(_o), 1)
+    # YAYIMLANAN AYIN SÜRPRİZİ: anket ne diyordu, ne geldi. Sayının kendisi
+    # kadar anketin KENDİ hata dağılımı da sayfaya çıkar — 0,2 puanlık bir
+    # sapmanın sürpriz olup olmadığı ancak onunla okunur.
+    _sa = bi.get("son_ay") or {}
+    if _sa:
+        koy("anket_ay", _sa.get("ad"), None)
+        koy("anket_ay_bek", _sa.get("anket"), 2)
+        koy("anket_ay_gercek", _sa.get("gercek"), 2)
+        koy("anket_ay_surpriz", _sa.get("surpriz"), 2)
+        # HÜKÜM KODDA: eşik anketin ölçülmüş ortalama mutlak hatasıdır, sabit
+        # bir sayı değil; örneklem büyüdükçe eşik de değişmelidir.
+        _mae = (bi.get("h0", {}).get("p36") or {}).get("mae")
+        _sp = _sa.get("surpriz")
+        if _mae and _sp is not None:
+            koy("anket_ay_hukum",
+                ("anketin ortalama mutlak hatasının altında — bu ölçüye göre "
+                 "sürpriz sayılmaz" if abs(_sp) <= _mae else
+                 "anketin ortalama mutlak hatasını aşıyor — bu ölçüye göre "
+                 "sürpriz"), None)
+            koy("anket_ay_mae_kati", abs(_sp) / _mae, 2)
+    for h, kis in (("h1", "1"), ("h2", "2")):
+        _il = (bi.get("ileri") or {}).get(h) or {}
+        if _il:
+            koy(f"anket_ileri{kis}_ad", _il.get("ad"), None)
+            koy(f"anket_ileri{kis}", _il.get("oran"), 2)
 
     # ---------------------------------------------------------------- reel faiz
     koy("faiz", m.get("reel__faiz"))
@@ -346,6 +371,18 @@ def main() -> int:
             O["baz_elverisli_n"] = len(elv)
     except Exception as ex:
         uyar(f"baz_senaryo.csv okunamadı ({ex}) — 'baz_dusen' anahtarı atlandı.")
+
+    # YIL SONU ARİTMETİĞİ: anketin yıl sonu tahmini kalan aylarda ne oran ister,
+    # bugünkü momentum ne veriyor. İkisi arasındaki açık, "beklenti mi momentum
+    # mu" tartışmasının tek sayıya indirgenmiş hâli.
+    ys = m.get("yilsonu") or {}
+    if ys:
+        koy("ys_kumulatif", ys.get("kumulatif"), 2)
+        koy("ys_anket", ys.get("anket"), 2)
+        koy("ys_kalan_ay", ys.get("kalan_ay"), 0)
+        koy("ys_gereken_aylik", ys.get("gereken_aylik"), 2)
+        koy("ys_momentum_aylik", ys.get("momentum_aylik"), 2)
+        koy("ys_acik_puan", ys.get("acik_puan"), 2)
 
     # ---------------------------------------------------------------- atalet, İTO
     for ad, k in (("hizmet", "hizmet"), ("temel_mal", "mal"),
