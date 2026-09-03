@@ -407,10 +407,17 @@ TAZELIK_GUNLUK = {
 # kod okurun elinde hiçbir şey ifade etmez ve okur dili ölçütü onu ENGEL
 # sayıyor. Seri kodları zaten yukarıda tanımlı; künye onlardan yazılır.
 TAZELIK_HAFTALIK = {
+<<<<<<< HEAD
     "f_ticari_tl":  ("Haftalık ticari kredi faizi (TP.KTF17)",      12),
     "f_mevduat_tl": ("Haftalık TL mevduat faizi (TP.TRY.MT06)",     12),
     "zk_taban_tl":  ("ZK'ya tabi TL mevduat tabanı (TP.TLDTHVADE.KB6)", 20),
     "dth_tl":       ("ZK'ya tabi DTH (TP.ZORUNDTH.KB8)",            20),
+=======
+    "f_ticari_tl":  ("Haftalık kredi faizi",     12),
+    "f_mevduat_tl": ("Haftalık mevduat faizi",   12),
+    "zk_taban_tl":  ("ZK'ya tabi taban",      20),
+    "dth_tl":       ("ZK'ya tabi DTH",         20),
+>>>>>>> origin/main
 }
 
 def tazelik_tolerans(aile: str = "gunluk") -> int:

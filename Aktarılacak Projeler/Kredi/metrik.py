@@ -1109,9 +1109,9 @@ def kos() -> dict:
         ayrinti = " · ".join(f"{a.upper()}: {d['maks_pp']:.3f} puan" for a, d in dusen)
         raise SystemExit(
             f"DUR: ham para arzı doğrulaması düştü ({ayrinti}; tolerans "
-            f"{ESIK_HAM_ENDEKS_PP}). Seviye tablosundan (bie_hpbitablo1) hesaplanan "
+            f"{ESIK_HAM_ENDEKS_PP}). Seviye tablosundan hesaplanan "
             "13 haftalık yıllıklandırılmış büyüme, TCMB'nin ayrı bir üründe "
-            "yayımladığı ham endeksle (bie_kavramsal) uyuşmuyor — kalem "
+            "yayımladığı ham endeksle uyuşmuyor — kalem "
             "numaralandırması ya da birim değişmiş olabilir. Siteye kopyalama "
             "YAPILMAZ; yanlış bir M2 grafiği hiç grafik olmamasından kötüdür.")
     return o

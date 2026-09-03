@@ -71,6 +71,16 @@ jobs:
             echo "değişiklik yok — commit yok"
           else
             git commit -m "teknik: $(date -u +'%Y-%m-%d') haftalık ölçüm (otomatik)"
-            git pull --rebase --autostash
-            git push
+            # PUSH YARIŞI KOŞUYU DÜŞÜRMEZ: pull ile push arasında başka bir
+            # itme düşerse push reddedilir ve hesaplanan çıktı çöpe gider.
+            for deneme in 1 2 3 4 5; do
+              git pull --rebase --autostash || true
+              if git push; then break; fi
+              if [ "$deneme" = "5" ]; then
+                echo "::error::push beş denemede de reddedildi."
+                exit 1
+              fi
+              echo "::warning::push reddedildi (deneme $deneme) — yeniden deneniyor."
+              sleep $((deneme * 5))
+            done
           fi

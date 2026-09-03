@@ -388,6 +388,21 @@ jobs:
           # üretim çıktısı: doğru sürüm her zaman EN SON HESAPLANANDIR.
           # Rebase sırasında -X theirs, yeniden uygulanan (bizim) commit'i
           # tercih eder.
-          git pull --rebase --autostash -X theirs
-            git push
+          # PUSH YARIŞI KOŞUYU DÜŞÜRMEZ. pull ile push arasında başka bir
+          # itme düşerse push REDDEDİLİR ve hesaplanan veri, tam da
+          # hesaplandıktan sonra çöpe gider — 03.09'da iki kez böyle oldu.
+          # Reddedilen her denemede yeniden rebase edilip tekrar denenir.
+          for deneme in 1 2 3 4 5; do
+            git pull --rebase --autostash -X theirs || true
+            if git push; then
+              echo "push tamam (deneme $deneme)"
+              break
+            fi
+            if [ "$deneme" = "5" ]; then
+              echo "::error::push beş denemede de reddedildi."
+              exit 1
+            fi
+            echo "::warning::push reddedildi (deneme $deneme) — yeniden deneniyor."
+            sleep $((deneme * 5))
+          done
           fi

@@ -353,7 +353,7 @@ def sekil_03(M, H, A, C, o, damga):
     return _duzen(fig, f"Kredi kırılımı ve kredi arzı–talebi · veri {damga}", [
         "Tüketici kalemleri EVDS'te TL+YP BİRLEŞİK yayımlanıyor; o seriler HAM'dır. Ticari ve "
         "KOBİ'de TL/YP ayrı olduğu için arındırma uygulanmıştır.",
-        "Aylık seri (bie_krehacbs) TL/YP kırılımı taşımaz: üçüncü paneldeki büyümeler HAM'dır ve "
+        "Aylık seri TL/YP kırılımı taşımaz: üçüncü paneldeki büyümeler HAM'dır ve "
         "birinci panelin arındırılmış serileriyle aynı cümlede okunmaz.",
         "BKEA net yüzde değişimdir, seviye değildir; standart serilerinde işaret sıkılaşma/gevşeme "
         "yönünü, talep serilerinde artış/azalış yönünü gösterir.",
