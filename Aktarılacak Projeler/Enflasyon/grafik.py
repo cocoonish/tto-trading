@@ -655,7 +655,10 @@ def _uge_yukle() -> dict | None:
     if not y.exists():
         return None
     d = json.loads(y.read_text(encoding="utf-8"))
-    return d if d.get("n") else None
+    # "n" var ama "yaris" yoksa örneklem yetersiz demektir: blok kendi
+    # içinde tutarlı ama figürlerin istediği alanları TAŞIMAZ. Yarım bir
+    # sözlükle çizime girmek, eksik anahtarda hattı düşürürdü.
+    return d if d.get("n") and d.get("yaris") else None
 
 
 def _ito_yukle() -> dict | None:
@@ -1208,23 +1211,53 @@ def sekil_16(bp, damga):
         n_panel=2)
 
 
+# BİRLEŞİK KANADIN ÇIKTI ADLARI — MODÜL DÜZEYİNDE, çünkü duman sınaması da
+# aynı listeyi sorar. 17'nin adı AY TAŞIMAZ: figür her ay yeniden çizilir ve
+# kipi veriden çıkar (bekleyen ay / karne). Dosya adına ay yazmak, bir ay
+# sonra yalan söyleyen bir adres bırakır ve sayfadaki gömme bağlantısını kırar.
+BIR_CIKTI_ADLARI = ["15_sacilim.html", "16_yaris.html", "17_tahmin.html"]
+
+
+def tahmin_figuru_var(bp) -> bool:
+    """17 numaralı figürün çizecek şeyi VAR MI?
+
+    Kararı tek yerde tutuyor: hem çizim işlevi hem kos()'un zorunlu figür
+    listesi buradan sorar. İki yerde iki koşul yazılsaydı biri bir gün
+    ayrışır ve figür "zorunlu ama üretilemez" durumuna düşerdi — hattı
+    düşüren tam olarak bu durumdur."""
+    return bool(bp and (bp.get("bekleyen") or bp.get("karne")))
+
+
 def sekil_17(bp, damga):
-    """BEKLEYEN AYIN BİRLEŞİK TAHMİNİ: yedi aday ve bulut.
+    """AYIN BİRLEŞİK OKUMASI — İKİ KİPLİ: bekleyen ay ya da KARNE.
 
     Okurun eline tek sayı vermek yanlış bir kesinlik olur; yedi kuralın nerede
     toplandığını ve dağılımın nereye yayıldığını birlikte göstermek, kararın
-    hangi belirsizlikle alındığını görünür kılar."""
-    if not bp or not bp.get("bekleyen"):
+    hangi belirsizlikle alındığını görünür kılar.
+
+    KİP, VERİNİN DURUMUNDAN ÇIKAR. İTO/ÜGE geldi TÜFE gelmediyse figür ileriye
+    bakar. TÜFE geldiği an aynı figür geriye döner ve KARNEYE dönüşür: aynı yedi
+    kural aynı tarifle, ama gerçekleşme karşısında. Yayımdan sonra tahmini
+    ekrandan kaldırmak, tahminin tutup tutmadığını da kaldırırdı — okur bir
+    sonraki ay aynı kurala neye dayanarak güveneceğini bilemezdi."""
+    if not tahmin_figuru_var(bp):
         return None
-    bk = bp["bekleyen"]
+    bk = bp.get("bekleyen") or bp.get("karne")
+    karne = not bp.get("bekleyen") and bool(bp.get("karne"))
     ad = (bp.get("yaris") or {}).get("ad", {})
     tah = bk["tahmin"]
     sirali = sorted(tah.items(), key=lambda kv: kv[1])
+    ust = (f"{bk['ad']}: yedi kural ne demişti"
+           if karne else f"{bk['ad']}: yedi kural ne diyor")
+    alt = ("Tahmin bulutu — gerçekleşme nereye düştü"
+           if karne else "Tahmin bulutu — dağılım nereye yayılıyor")
     fig = make_subplots(rows=2, cols=1, vertical_spacing=0.15,
-                        row_heights=[0.55, 0.45],
-                        subplot_titles=(
-                            f"{bk['ad']}: yedi kural ne diyor",
-                            "Tahmin bulutu — dağılım nereye yayılıyor"))
+                        row_heights=[0.55, 0.45], subplot_titles=(ust, alt))
+    if karne:
+        etiket = [f"%{v:.2f} ({bk['sapma'][k]:+.2f})".replace(".", ",")
+                  for k, v in sirali]
+    else:
+        etiket = [f"%{v:.2f}".replace(".", ",") for _, v in sirali]
     fig.add_trace(go.Bar(
         x=[v for _, v in sirali], y=[ad.get(k, k) for k, _ in sirali],
         orientation="h",
@@ -1232,14 +1265,25 @@ def sekil_17(bp, damga):
                       (TEAL if k.startswith("ito") else
                        (GOLD if k.startswith("uge") else LACI))
                       for k, _ in sirali],
-        text=[f"%{v:.2f}".replace(".", ",") for _, v in sirali],
-        textposition="outside", showlegend=False,
+        text=etiket, textposition="outside", showlegend=False,
         hovertemplate="%{x:.2f}%<extra>%{y}</extra>"), row=1, col=1)
-    fig.add_vline(x=bk["ito"], line=dict(color=INK, width=2, dash="dash"),
-                  row=1, col=1)
+    for satir in (1, 2):
+        fig.add_vline(x=bk["ito"], line=dict(color=INK, width=2, dash="dash"),
+                      row=satir, col=1)
     fig.add_annotation(x=bk["ito"], y=1.04, yref="y domain", showarrow=False,
                        xanchor="left", font=dict(size=10, color=INK),
                        text=f"İTO %{bk['ito']:.2f}".replace(".", ","), row=1, col=1)
+    # GERÇEKLEŞME ÇİZGİSİ yalnız karnede: tahminlerin hangisinin hangi yönde
+    # kaçırdığı ancak gerçek sayının yanında okunur.
+    if karne:
+        for satir in (1, 2):
+            fig.add_vline(x=bk["gercek"], line=dict(color=CLARET, width=2.5),
+                          row=satir, col=1)
+        fig.add_annotation(x=bk["gercek"], y=1.04, yref="y domain",
+                           showarrow=False, xanchor="right",
+                           font=dict(size=10, color=CLARET),
+                           text=f"gerçekleşen %{bk['gercek']:.2f}".replace(".", ","),
+                           row=1, col=1)
     q, v = bk["yuzdelikler"], bk["bulut"]
     fig.add_trace(go.Scatter(x=[v[0], v[-1]], y=["bulut", "bulut"], mode="lines",
                              line=dict(color=GRI, width=2), showlegend=False,
@@ -1252,30 +1296,56 @@ def sekil_17(bp, damga):
                                          line=dict(color=INK, width=2)),
                              hovertemplate="medyan %{x:.2f}%<extra></extra>"),
                   row=2, col=1)
-    for e in bk.get("esik") or []:
-        fig.add_vline(x=e["esik"], line=dict(color=GRID, width=1, dash="dot"),
-                      row=2, col=1)
-        fig.add_annotation(x=e["esik"], y=-0.42, yref="y2 domain", showarrow=False,
-                           font=dict(size=9, color=GRI),
-                           text=(f"%{e['esik']:.1f}<br>{e['yon']} %{e['p']:.0f}"
-                                 ).replace(".", ","), row=2, col=1)
-    fig.add_vline(x=bk["ito"], line=dict(color=INK, width=2, dash="dash"),
-                  row=2, col=1)
+    if karne:
+        fig.add_trace(go.Scatter(
+            x=[bk["gercek"]], y=["bulut"], mode="markers", showlegend=False,
+            marker=dict(color=CLARET, size=14, symbol="diamond",
+                        line=dict(color="white", width=1.5)),
+            hovertemplate="gerçekleşen %{x:.2f}%<extra></extra>"), row=2, col=1)
+    else:
+        for e in bk.get("esik") or []:
+            fig.add_vline(x=e["esik"], line=dict(color=GRID, width=1, dash="dot"),
+                          row=2, col=1)
+            fig.add_annotation(x=e["esik"], y=-0.42, yref="y2 domain",
+                               showarrow=False, font=dict(size=9, color=GRI),
+                               text=(f"%{e['esik']:.1f}<br>{e['yon']} %{e['p']:.0f}"
+                                     ).replace(".", ","), row=2, col=1)
     fig.update_xaxes(title_text="TÜFE, aylık %", row=1, col=1)
     fig.update_xaxes(title_text="TÜFE, aylık %", row=2, col=1)
     fig.update_yaxes(showticklabels=False, row=2, col=1)
-    return _duzen(
-        fig, f"{bk['ad']} TÜFE'si: birleşik okuma",
-        [f"Girdi: İTO %{bk['ito']:.2f} · ÜGE %{bk['uge']:.2f} · "
-         f"kurallar {bk['n_gecmis']} aylık geçmişten · veri: {damga}".replace(".", ","),
-         (f"Yedi kural {min(tah.values()):.2f} ile {max(tah.values()):.2f} arasında "
-          f"({bk['yayilim']:.2f} puanlık yayılım); merkez {bk['merkez']:.2f} — "
-          f"örneklem dışı yarışın kazananı {bk['en_iyi_ad']}").replace(".", ","),
-         (f"Alt panelde kesikli çizgi İTO okuması: sağında kalan alan TÜFE'nin "
-          f"İTO'yu aşma ihtimali, P = %{bk['p_ito_ustu']:.0f}"),
-         "Noktalı dikey çizgiler eşikler; altlarındaki sayı o eşiğin aşılma "
-         "(ya da altında kalma) olasılığıdır"],
-        n_panel=2)
+    ortak_alt = [
+        f"Girdi: İTO %{bk['ito']:.2f} · ÜGE %{bk['uge']:.2f} · "
+        f"kurallar {bk['n_gecmis']} aylık geçmişten · veri: {damga}".replace(".", ","),
+    ]
+    if karne:
+        bant = ("%50 bandının içinde" if bk.get("bant_50") else
+                "%80 bandının içinde" if bk.get("bant_80") else
+                "%90 bandının içinde" if bk.get("bant_90") else
+                "%90 bandının DIŞINDA")
+        baslik = f"{bk['ad']} TÜFE'si: kurallar ne demişti, ne geldi"
+        altlar = ortak_alt + [
+            (f"Gerçekleşen %{bk['gercek']:.2f}; kuralların merkezi "
+             f"%{bk['merkez']:.2f} ({bk['en_iyi_ad']}) — sapma "
+             f"{abs(bk['merkez_sapma']):.2f} puan, {bant}").replace(".", ","),
+            (f"Yedi kuralın en yakını {bk['en_yakin_ad']} "
+             f"({bk['en_yakin_sapma']:+.2f} puan); yayılım {bk['yayilim']:.2f} "
+             f"puan").replace(".", ","),
+            "Kurallar o ay tahmin edilirken elde olan veriyle kuruldu; "
+            "kazanan da o günün hata tarihçesinden seçildi",
+        ]
+    else:
+        baslik = f"{bk['ad']} TÜFE'si: birleşik okuma"
+        altlar = ortak_alt + [
+            (f"Yedi kural {min(tah.values()):.2f} ile {max(tah.values()):.2f} "
+             f"arasında ({bk['yayilim']:.2f} puanlık yayılım); merkez "
+             f"{bk['merkez']:.2f} — örneklem dışı yarışın kazananı "
+             f"{bk['en_iyi_ad']}").replace(".", ","),
+            (f"Alt panelde kesikli çizgi İTO okuması: sağında kalan alan TÜFE'nin "
+             f"İTO'yu aşma ihtimali, P = %{bk['p_ito_ustu']:.0f}"),
+            "Noktalı dikey çizgiler eşikler; altlarındaki sayı o eşiğin aşılma "
+            "(ya da altında kalma) olasılığıdır",
+        ]
+    return _duzen(fig, baslik, altlar, n_panel=2)
 
 
 def kos() -> None:
@@ -1305,7 +1375,7 @@ def kos() -> None:
     ITO_CIKTI = ["10_ito_tufe.html", "11_ito_kural.html", "12_ito_takvim.html",
                  "13_ito_bulut.html"]
     UGE_CIKTI = ["14_uge_ucler.html"]
-    BIR_CIKTI = ["15_sacilim.html", "16_yaris.html", "17_agustos.html"]
+    BIR_CIKTI = BIR_CIKTI_ADLARI
     if ip:
         ciktilar += [
             (sekil_10(ip, damga), ITO_CIKTI[0]),
@@ -1337,8 +1407,21 @@ def kos() -> None:
     bp = _birlesik_yukle()
     if bp:
         ciktilar += [(sekil_15(bp, a, damga), BIR_CIKTI[0]),
-                     (sekil_16(bp, damga), BIR_CIKTI[1]),
-                     (sekil_17(bp, damga), BIR_CIKTI[2])]
+                     (sekil_16(bp, damga), BIR_CIKTI[1])]
+        # 17 KENDİ KOŞULUNU TAŞIR: ne bekleyen ay ne karne varsa (yarış daha
+        # tek ay bile üretmemişse) figürün çizecek şeyi yoktur. Bu NORMAL bir
+        # durumdur, arıza değil — zorunlu figür sayılırsa çalışan on altı figür
+        # onunla birlikte düşer ve pano bir daha tazelenmez. 03.09.2026'da
+        # tam bu oldu: ağustos TÜFE'si yayımlanınca bekleyen ay kalmadı,
+        # figür üretilemedi, hat DURDU ve pano temmuzda kaldı.
+        if tahmin_figuru_var(bp):
+            ciktilar += [(sekil_17(bp, damga), BIR_CIKTI[2])]
+        else:
+            print("  ! Ne bekleyen ay ne karne var — tahmin figürü üretilmedi "
+                  "ve eski kopyası SİLİNİYOR.")
+            (CIKTI / BIR_CIKTI[2]).unlink(missing_ok=True)
+            (veri.KOK / "site/public/projeler/enflasyon" / BIR_CIKTI[2]).unlink(
+                missing_ok=True)
     else:
         print("  ! Birleşik ölçüm yok (data/birlesik.json) — figürler üretilmedi "
               "ve eski kopyaları SİLİNİYOR.")

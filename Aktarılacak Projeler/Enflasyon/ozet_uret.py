@@ -859,6 +859,41 @@ def main() -> int:
             for e in bk.get("esik") or []:
                 ad_ = f"{e['esik']:.1f}".replace(".", "")
                 koy(f"br_b_{'ust' if e['yon'] == '>' else 'alt'}{ad_}", e.get("p"), 0)
+        # KARNE: yayımdan sonra tahminin kendisi kadar TUTUP TUTMADIĞI da
+        # sayfada durur. Anahtarlar bekleyen ayınkiyle aynı kalıpta (br_k_*)
+        # çünkü sayfa ikisini yan yana yazıyor.
+        kr = bp.get("karne") or {}
+        if kr:
+            koy("br_k_ay", kr.get("ay"), None)
+            koy("br_k_ad", kr.get("ad"), None)
+            koy("br_k_ito", kr.get("ito"), 2)
+            koy("br_k_uge", kr.get("uge"), 2)
+            koy("br_k_gercek", kr.get("gercek"), 2)
+            koy("br_k_merkez", kr.get("merkez"), 2)
+            koy("br_k_merkez_ad", kr.get("en_iyi_ad"), None)
+            koy("br_k_merkez_sapma", kr.get("merkez_sapma"), 2)
+            koy("br_k_yayilim", kr.get("yayilim"), 2)
+            koy("br_k_agirlik", kr.get("ters_mse_agirlik"), 2)
+            koy("br_k_n", kr.get("n_gecmis"), 0)
+            koy("br_k_en_yakin_ad", kr.get("en_yakin_ad"), None)
+            koy("br_k_en_yakin_sapma", kr.get("en_yakin_sapma"), 2)
+            koy("br_k_yuzdelik", kr.get("gercek_yuzdelik"), 0)
+            koy("br_k_hukum", kr.get("hukum"), None)
+            for ad, kis in KIS.items():
+                koy(f"br_k_{kis}", (kr.get("tahmin") or {}).get(ad), 2)
+                koy(f"br_k_{kis}_sapma", (kr.get("sapma") or {}).get(ad), 2)
+            for q, v in zip(kr.get("yuzdelikler") or [], kr.get("bulut") or []):
+                koy(f"br_k_p{q}", v, 2)
+            # BANT HÜKMÜ KODDA: gerçekleşmenin hangi banda düştüğü, bandın
+            # kendisinden okunur; metne sabit yazılırsa bir sonraki ay yalan
+            # söyler.
+            koy("br_k_bant", ("%50" if kr.get("bant_50") else
+                              "%80" if kr.get("bant_80") else
+                              "%90" if kr.get("bant_90") else "%90 dışı"), None)
+            koy("br_k_tufe_ito_ustu", "evet" if kr.get("tufe_ito_ustu") else "hayır",
+                None)
+            koy("br_k_tufe_uge_ustu", "evet" if kr.get("tufe_uge_ustu") else "hayır",
+                None)
 
     # ---------------------------------------------------------------- denetim
     dg = m.get("dogrulama") or {}

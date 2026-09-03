@@ -60,6 +60,7 @@ import numpy as np
 import pandas as pd
 from statsmodels.tsa.seasonal import STL
 
+import bicim
 import veri
 from veri import VERI, ad_uzun
 
@@ -2466,56 +2467,136 @@ def birlesik_tahmin(a: pd.DataFrame) -> dict:
             f"({yaris[en_iyi]['mae']:.3f} puan); bileşim kuralları geride "
             f"({' · '.join(gerideler)})").replace(".", ",")
 
-    # ---- BEKLEYEN AY: her aday için tahmin + birleşik bulut
-    son = d.index[-1]
-    t_ham = aylik(a["tufe"].dropna())
-    uge_ay = aylik(a["ito_uge"].dropna()).dropna()
-    bek_ay = None
-    for c in (uge_ay.index[-1], ito_ay.index[-1]):
-        if c not in t_ham.index and (bek_ay is None or c > bek_ay):
-            bek_ay = c
-    if bek_ay is not None and bek_ay in ito_ay.index and bek_ay in uge_ay.index:
-        xi, xu = float(ito_ay.loc[bek_ay]), float(uge_ay.loc[bek_ay])
-        g = d[d.index < bek_ay]
+    # ---- TEK BİR AY İÇİN YEDİ TAHMİN + AMPİRİK BULUT.
+    # AYNI TARİF İKİ YERDE KULLANILIR: henüz açıklanmamış ay (ileriye dönük) ve
+    # EN SON AÇIKLANMIŞ ay (karne). İki ayrı kopya yazılsaydı biri bir gün
+    # sessizce değişir, karne de tahmini üreten kuralın karnesi olmaktan
+    # çıkardı — ölçtüğümüz şey, ölçtüğümüzü sandığımız şey olmazdı.
+    def _bir_ay(ay, xi, xu, hata_o_gun):
+        """AY'dan ÖNCEKİ veriyle yedi tahmin, ters-MSE ağırlığı ve bulut.
+
+        hata_o_gun: o ay tahmin edilirken ELDE OLAN hata tarihçesi. Bekleyen ay
+        için bütün yarış hatalarıdır; karne için o ayın KENDİ hatası çıkarılır —
+        yoksa hem ağırlık hem kazanan seçimi gerçekleşmeyi görmüş olur."""
+        g = d[d.index < ay]
+        if len(g) < asgari or not len(hata_o_gun["ito_sabit"]):
+            return None
         gy = g["tufe"].values
-        tah = {"ito_sabit": xi - (g["ito"] - g["tufe"]).mean(),
-               "uge_sabit": xu - (g["uge"] - g["tufe"]).mean()}
+        tah = {"ito_sabit": float(xi - (g["ito"] - g["tufe"]).mean()),
+               "uge_sabit": float(xu - (g["uge"] - g["tufe"]).mean())}
         artiklar = {}
-        for ad, sut, deg in (("ito_reg", ["ito"], [xi]), ("uge_reg", ["uge"], [xu]),
-                             ("birlesik_reg", ["ito", "uge"], [xi, xu])):
+        for ad_, sut, deg in (("ito_reg", ["ito"], [xi]),
+                              ("uge_reg", ["uge"], [xu]),
+                              ("birlesik_reg", ["ito", "uge"], [xi, xu])):
             X = np.column_stack([np.ones(len(g))] + [g[c].values for c in sut])
             b, se, art, s2, r2, adj = _ekk(X, gy)
-            tah[ad] = float(b[0] + sum(bb * v for bb, v in zip(b[1:], deg)))
-            artiklar[ad] = art
+            tah[ad_] = float(b[0] + sum(bb * v for bb, v in zip(b[1:], deg)))
+            artiklar[ad_] = art
         tah["esit_ortalama"] = (tah["ito_sabit"] + tah["uge_sabit"]) / 2
-        e1 = np.array(hata["ito_sabit"]); e2 = np.array(hata["uge_sabit"])
+        e1 = np.array(hata_o_gun["ito_sabit"]); e2 = np.array(hata_o_gun["uge_sabit"])
         m1, m2 = float((e1 ** 2).mean()), float((e2 ** 2).mean())
         w = (1 / m1) / (1 / m1 + 1 / m2) if m1 > 0 and m2 > 0 else 0.5
         tah["ters_mse"] = w * tah["ito_sabit"] + (1 - w) * tah["uge_sabit"]
-        # BULUT: örneklem dışı yarışın KAZANANI üzerinden ve AMPİRİK artıkla.
-        # Parametrik aralık simetri varsayar; artıklar sağa çarpık.
-        art_k = (artiklar.get(en_iyi) if en_iyi in artiklar
-                 else np.array(hata[en_iyi]) * -1.0)
-        bulut = np.asarray(tah[en_iyi]) + np.asarray(art_k, dtype=float)
-        YUZDE = (5, 10, 25, 50, 75, 90, 95)
-        out["bekleyen"] = {
-            "ay": bek_ay.strftime("%Y-%m"), "ad": ad_uzun(bek_ay),
-            "ito": round(xi, 2), "uge": round(xu, 2),
-            "n_gecmis": int(len(g)),
-            "tahmin": {k: round(float(v), 2) for k, v in tah.items()},
-            "ters_mse_agirlik": round(float(w), 2),
-            "en_iyi": en_iyi, "en_iyi_ad": AD_TR[en_iyi],
-            "merkez": round(float(tah[en_iyi]), 2),
-            "yayilim": round(float(max(tah.values()) - min(tah.values())), 2),
-            "yuzdelikler": list(YUZDE),
-            "bulut": [round(float(v), 2) for v in np.percentile(bulut, YUZDE)],
-            "p_ito_ustu": round(float((bulut > xi).mean() * 100), 0),
-            "esik": [{"esik": e, "yon": yon,
-                      "p": round(float(((bulut > e) if yon == ">"
-                                        else (bulut < e)).mean() * 100), 0)}
-                     for e, yon in ((2.5, ">"), (2.0, ">"), (1.5, ">"),
-                                    (1.0, "<"), (0.5, "<"))],
-        }
+        # O GÜNÜN KAZANANI: kazanan da bir tahmin sonucudur; gerçekleşmeyi
+        # görerek seçilirse karne kendi kendini kayırır.
+        iyi = min(ADAY, key=lambda k: float(np.abs(np.array(hata_o_gun[k])).mean()))
+        # BULUT ampirik artıkla kurulur: parametrik aralık simetri varsayar,
+        # artıklar sağa çarpık.
+        art_k = (artiklar.get(iyi) if iyi in artiklar
+                 else np.array(hata_o_gun[iyi]) * -1.0)
+        bulut = np.asarray(tah[iyi]) + np.asarray(art_k, dtype=float)
+        return tah, w, iyi, bulut
+
+    YUZDE = (5, 10, 25, 50, 75, 90, 95)
+
+    # ---- BEKLEYEN AY: İTO/ÜGE geldi, TÜFE henüz gelmedi.
+    t_ham = aylik(a["tufe"].dropna())
+    uge_ay = aylik(a["ito_uge"].dropna()).dropna()
+    # BEKLEYEN AY, İKİ ÖNCÜNÜN DE BULUNDUĞU EN SON TÜFE'SİZ AYDIR.
+    # Yalnız serilerin SON ayına bakmak, öncüler farklı günlerde yayımlandığında
+    # tahmini sessizce yok ediyordu: İTO ÜGE'den bir ay öndeyse aday o ay
+    # seçiliyor, sonra "ÜGE'de de var mı" denetimi düşüyor ve elde ÜGE'nin de
+    # bulunduğu geçerli bir ay dururken hiçbir tahmin üretilmiyordu.
+    ortak_bos = [c for c in ito_ay.index
+                 if c in uge_ay.index and c not in t_ham.index]
+    bek_ay = max(ortak_bos) if ortak_bos else None
+    if bek_ay is not None:
+        xi, xu = float(ito_ay.loc[bek_ay]), float(uge_ay.loc[bek_ay])
+        cik = _bir_ay(bek_ay, xi, xu, hata)
+        if cik:
+            tah, w, iyi, bulut = cik
+            out["bekleyen"] = {
+                "ay": bek_ay.strftime("%Y-%m"), "ad": ad_uzun(bek_ay),
+                "ito": round(xi, 2), "uge": round(xu, 2),
+                "n_gecmis": int(len(d[d.index < bek_ay])),
+                "tahmin": {k: round(float(v), 2) for k, v in tah.items()},
+                "ters_mse_agirlik": round(float(w), 2),
+                "en_iyi": iyi, "en_iyi_ad": AD_TR[iyi],
+                "merkez": round(float(tah[iyi]), 2),
+                "yayilim": round(float(max(tah.values()) - min(tah.values())), 2),
+                "yuzdelikler": list(YUZDE),
+                "bulut": [round(float(v), 2) for v in np.percentile(bulut, YUZDE)],
+                "p_ito_ustu": round(float((bulut > xi).mean() * 100), 0),
+                "esik": [{"esik": e, "yon": yon,
+                          "p": round(float(((bulut > e) if yon == ">"
+                                            else (bulut < e)).mean() * 100), 0)}
+                         for e, yon in ((2.5, ">"), (2.0, ">"), (1.5, ">"),
+                                        (1.0, "<"), (0.5, "<"))],
+            }
+
+    # ---- KARNE: EN SON AÇIKLANMIŞ AY. Bir tahmin kuralı ancak gerçekleşmeyle
+    # yüzleştirilirse bir şey söyler; sayı geldiği gün "şunu bekliyorduk"
+    # cümlesi sessizce silinirse okurun elinde yalnız bizim sözümüz kalır.
+    # BAKIŞ AÇISI SIKI: o ay tahmin edilirken elde OLMAYAN hiçbir şey
+    # kullanılmaz — ne o ayın hatası, ne onunla seçilmiş bir kazanan.
+    son = d.index[-1]
+    hata_o_gun = {k: v[:-1] for k, v in hata.items()}
+    if len(hata_o_gun["ito_sabit"]):
+        xi, xu = float(d["ito"].iloc[-1]), float(d["uge"].iloc[-1])
+        cik = _bir_ay(son, xi, xu, hata_o_gun)
+        if cik:
+            tah, w, iyi, bulut = cik
+            gercek = float(d["tufe"].iloc[-1])
+            sapma = {k: round(float(v - gercek), 2) for k, v in tah.items()}
+            en_yakin = min(ADAY, key=lambda k: abs(sapma[k]))
+            out["karne"] = {
+                "ay": son.strftime("%Y-%m"), "ad": ad_uzun(son),
+                "ito": round(xi, 2), "uge": round(xu, 2),
+                "gercek": round(gercek, 2),
+                "n_gecmis": int(len(d[d.index < son])),
+                "tahmin": {k: round(float(v), 2) for k, v in tah.items()},
+                "sapma": sapma,
+                "ters_mse_agirlik": round(float(w), 2),
+                "en_iyi": iyi, "en_iyi_ad": AD_TR[iyi],
+                "merkez": round(float(tah[iyi]), 2),
+                "merkez_sapma": sapma[iyi],
+                "yayilim": round(float(max(tah.values()) - min(tah.values())), 2),
+                "en_yakin": en_yakin, "en_yakin_ad": AD_TR[en_yakin],
+                "en_yakin_sapma": sapma[en_yakin],
+                "yuzdelikler": list(YUZDE),
+                "bulut": [round(float(v), 2) for v in np.percentile(bulut, YUZDE)],
+                # Gerçekleşme bulutun neresine düştü: bant içi mi, kuyruk mu?
+                "gercek_yuzdelik": round(float((bulut < gercek).mean() * 100), 0),
+                "bant_50": bool(np.percentile(bulut, 25) <= gercek
+                                <= np.percentile(bulut, 75)),
+                "bant_80": bool(np.percentile(bulut, 10) <= gercek
+                                <= np.percentile(bulut, 90)),
+                "bant_90": bool(np.percentile(bulut, 5) <= gercek
+                                <= np.percentile(bulut, 95)),
+                "tufe_ito_ustu": bool(gercek > xi),
+                "tufe_uge_ustu": bool(gercek > xu),
+            }
+            k_ = out["karne"]
+            bant = ("%50 bandının içinde" if k_["bant_50"] else
+                    "%80 bandının içinde" if k_["bant_80"] else
+                    "%90 bandının içinde" if k_["bant_90"] else
+                    "%90 bandının DIŞINDA")
+            yon = "üzerinde" if k_["merkez_sapma"] < 0 else "altında"
+            k_["hukum"] = (
+                f"{k_['ad']} TÜFE'si {bicim.yuzde(gercek, 2)} geldi; "
+                f"{AD_TR[iyi]} {bicim.yuzde(k_['merkez'], 2)} diyordu — "
+                f"gerçekleşme tahminin {yon}, sapma "
+                f"{bicim.sayi(abs(k_['merkez_sapma']), 2)} puan, {bant}.")
     return out
 
 
