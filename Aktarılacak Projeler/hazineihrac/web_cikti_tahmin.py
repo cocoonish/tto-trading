@@ -230,11 +230,41 @@ def tahmin_dogrulama() -> dict:
         line=dict(color=GRI, width=1.5, dash="dash"), hoverinfo="skip",
     ))
 
-    stiller = {
-        "Aynı tahvil (itfa eşleşmesi)": dict(renk=CLARET, sembol="circle"),
-        "Aynı tip + benzer vade": dict(renk=TEAL, sembol="diamond"),
+    # KIYAS BAZI EŞLEMESİ ARTIK SESSİZ DÜŞÜRMEZ. Sözlük iki etiketi TAM METİNLE
+    # tanıyordu ve backtest üreticisi o etiketlerden birini değiştirmişti:
+    # "Aynı tahvil (itfa eşleşmesi)" yerine "Aynı tahvil (ISIN eşleşmesi)"
+    # yazılıyor. Eşleşmeyen grup `continue` ile düşünce 456 ihalenin 346'sı —
+    # 08.07.2026'dan sonraki HER ihale dahil — grafikten çıktı; geriye tek bir
+    # iz kaldı ("Aynı tip + benzer vade", n=110, son gözlem 07.07.2026) ama sol
+    # üstteki kutu MAPE'yi hâlâ 456 satır üzerinden yazıyordu. Yani figür
+    # 07.07'de duruyor, künyesi 456 ihale diyor, altındaki damga da hattın
+    # 18.08 saatini basıyordu: üç ayrı yerde üç ayrı gerçek.
+    # İki katmanlı çözüm: (a) etiket ÖNEKLE eşlenir — kaynağın parantez içindeki
+    # açıklamayı değiştirmesi bir daha veri düşüremez; (b) hiçbir önekle
+    # eşleşmeyen kıyas bazı da KENDİ iziyle çizilir ve koşu kaydına yazılır.
+    # Sessiz düşürme yerine görünür çizim: bilinmeyen bir etiket artık
+    # grafikte de, kayıtta da kendini gösterir.
+    ONEK_STIL = {
+        "Aynı tahvil": dict(renk=CLARET, sembol="circle"),
+        "Aynı tip": dict(renk=TEAL, sembol="diamond"),
     }
-    for kiyas, st in stiller.items():
+    BILINMEYEN_STIL = dict(renk=GOLD, sembol="square")
+
+    def _kiyas_stil(kiyas: str) -> dict:
+        for onek, st in ONEK_STIL.items():
+            if str(kiyas).startswith(onek):
+                return st
+        return BILINMEYEN_STIL
+
+    # Sıra deterministik olsun: büyük grup önce, eşitlikte ada göre.
+    sayim = df["Kıyas Bazı"].value_counts()
+    gruplar = sorted(sayim.index, key=lambda k: (-int(sayim[k]), str(k)))
+    yeni_etiket = [k for k in gruplar if _kiyas_stil(k) is BILINMEYEN_STIL]
+    if yeni_etiket:
+        print("  ! tahmin_dogrulama: tanınmayan kıyas bazı, varsayılan izle "
+              "çiziliyor: " + " · ".join(map(str, yeni_etiket)))
+    for kiyas in gruplar:
+        st = _kiyas_stil(kiyas)
         sub = df[df["Kıyas Bazı"] == kiyas]
         if sub.empty:
             continue

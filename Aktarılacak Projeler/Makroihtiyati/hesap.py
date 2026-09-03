@@ -94,6 +94,31 @@ def hesapla():
     dfr = defter()
     kayitlar = dfr.get("kayitlar", [])
     ozet["_tarih"] = ozet.get("g_ar_13y_tarih", "")
+
+    # ── ŞEKİL SAAT DEFTERİ — her figür KENDİ bacağının günüyle damgalanır ────
+    # GrafikEmbed, MDX'te `tarihAnahtari` verilmemişse şeklin altına hattın ANA
+    # saatini (`_tarih`) basar; o saat de haftalık kredi bacağıdır. Ama bu hat
+    # TEK saatli değil: haftalık kredi/faiz serilerinin (Cuma) yanında ÇEYREKLİK
+    # Banka Kredileri Eğilim Anketi duruyor. Ölçüldü (03.09.2026): ceyreklik.csv
+    # 2026-04-01'de (2026-Ç2 anketi) bitiyor, şekil 04'ün altında ise 21.08.2026
+    # yazıyordu — 142 gün. Okur dört buçuk ay eski bir anketi bugünün verisi
+    # sanıyordu; üstelik sayfanın kendi metni doğru söylüyor ("son çeyrekte"),
+    # damga onu yalanlıyordu.
+    #
+    # Makas figürü (03) bugün TESADÜFEN doğru damgalıydı: faiz.csv ile
+    # metrik_haftalik.csv'nin indeksleri şu an birebir aynı (1129 satır, ölçüldü)
+    # — ama bunlar EVDS'te ayrı ürünler (hacimler bie_hpbitablo, faizler
+    # bie_kt100h) ve faiz tablosunun bir hafta geç yayımlandığı gün damga
+    # sessizce yanlışa döner. Bu yüzden her figür ana saate değil, ÇİZDİĞİ
+    # çerçevenin ucuna bağlanır. Değerler yukarıda seriden OKUNDU, burada
+    # türetilmiyor; bir bacak hiç ölçülemediyse anahtar None kalır ve sayfa o
+    # şeklin altına tarih basmaz (yanlış tarih, tarihsizlikten kötüdür).
+    ozet["_sekil_tarih"] = {
+        "ayrisma.html": ozet.get("g_tuketici_13y_tarih"),        # h — haftalık
+        "kacak.html": ozet.get("kacak_bkk_tarih"),               # h — haftalık
+        "makas.html": ozet.get("makas_ihtiyac_tarih"),           # f — haftalık faiz
+        "bkea.html": ozet.get("bkea_std_isletme_tarih"),         # b — çeyreklik anket
+    }
     ozet["defter_toplam"] = len(kayitlar)
     ozet["defter_dogrulanmis"] = sum(1 for k in kayitlar
                                      if k.get("dogrulama") == "dogrulandi")

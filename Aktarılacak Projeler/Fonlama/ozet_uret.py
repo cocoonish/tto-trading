@@ -190,6 +190,16 @@ def main() -> int:
     O["koridor_simetrik"] = bool(v is not None and abs(v) < 1e-9)
 
     # --- APİ büyüklükleri (milyon TL → milyar TL) --------------------------
+    # SİSTEM LİKİDİTESİ APİ İLE AYNI SAATTE DEĞİL. Serbest mevduat
+    # (TP.PPIBSM) ve gün başı likidite (TP.PPIGBTL) gün başı likidite
+    # tablosundan gelir ve o tablo APİ tablosundan ÖNCE yayımlanır: 03.09.2026
+    # koşusunda ikisi de 03.09'u doldurmuşken APİ üçlüsü (net_fonlama/fon_top/
+    # ste_top) 02.09'da bitiyordu. Bu döngü tarihi ATIYORDU (`v, _ = son(...)`),
+    # yani iki likidite sayısı hattın ana saati altında basılıyor ve okur
+    # onları APİ gününe ait sanıyordu. Her sayı kendi tarihini taşır
+    # (CLAUDE.md "Kurucu ilke — saat").
+    LIKIDITE = ("serbest_mevduat", "gun_basi_likidite")
+    lik_gun = []
     for ad, kol in (("net_fonlama", "net_fonlama"), ("fonlama", "fon_top"),
                     ("sterilizasyon", "ste_top"), ("ste_ihale", "ste_ihale"),
                     ("ste_kotasyon", "ste_kot"), ("ste_liksen", "ste_liksen"),
@@ -200,8 +210,22 @@ def main() -> int:
                     ("tcmb_tl_saglama", "tcmb_tl_saglama")):
         if kol not in M.columns:
             continue
-        v, _ = son(M[kol])
+        v, t = son(M[kol])
         koy(f"{ad}_mlr", v / 1000.0 if v is not None else None, 1)
+        if ad in LIKIDITE and t is not None:
+            # ANAHTAR ADI SÖZLEŞMENİN PARÇASIDIR. `<Deger>` bir sayının kendi
+            # saatini `<anahtar>_tarih` ile arar (Deger.astro) ve buradaki
+            # sayının anahtarı `<ad>_mlr`dir. `<ad>_tarih` yazılınca arama
+            # TUTMAZ ve ipucu sessizce hattın `_tarih`ine düşer: tabloda
+            # "03.09.2026" yazarken sayının üstüne gelince "veri: 02.09.2026"
+            # görünüyordu — yani eklenen saat okura HİÇ ulaşmıyordu.
+            O[f"{ad}_mlr_tarih"] = tr_tarih(t)
+            lik_gun.append(t)
+    # İki likidite sayısını BİRLİKTE taşıyan cümlenin (ve Şekil 05'in d
+    # panelinin) çıpası ikisinin ORTAK, yani ESKİ günüdür — bugün aynı günde
+    # bitiyorlar, biri gecikirse cümle taze görünmesin.
+    if lik_gun:
+        O["likidite_tarih"] = tr_tarih(min(lik_gun))
     O["net_fonlama_isaret"] = (
         "sistem TCMB'ye net borçlu" if (O.get("net_fonlama_mlr") or 0) > 0
         else "sistem TCMB'nin net alacaklısı")

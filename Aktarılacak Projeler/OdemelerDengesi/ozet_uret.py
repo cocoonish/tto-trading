@@ -14,6 +14,13 @@ sayısı" gibi gösterirdi:
     _tarih3  → haftalık dış borç ödemeleri (hattın en taze verisi)
     _tarih4  → günlük kur (GSYH dönüşümünün girdisi)
 
+ŞEKİL DAMGALARI. Aynı ayrışma sayfadaki ŞEKİLLERİN altındaki "veri <tarih>"
+etiketinde de var: o etiket, ayrı bir anahtar verilmemişse hattın ANA saatini
+basar ve on iki figürün ikisi aynı saatte değil. İkisinin damgası bu yüzden
+kendi anahtarını taşır ve sayfada tarihAnahtari ile bağlanır:
+    oran_kisa     → Şekil 04 (yalnız çeyreklik seriden çizilir)
+    sekil12_kisa  → Şekil 12 (iki ayrı ritimdeki panelleri birden yazar)
+
 Bütün değerler data/ altındaki ÜRETİLMİŞ dosyalardan okunur; elle sayı
 yazılmaz. Bir değer kaynakta yoksa anahtar ATLANIR ve stderr'e uyarı basılır —
 MDX'teki statik yedek görünür, ama sessizce yanlış bir sayı basılmaz.
@@ -112,6 +119,20 @@ def main() -> int:
     O["hafta_kisa"] = tr_tarih(s_hafta)
     O["kur_gun"] = gun_ad(s_gun)
     O["kosum_tarihi"] = tr_tarih(bugun)
+    # ŞEKİL 12'NİN KARMA DAMGASI. Sayfa her şeklin altına "veri <tarih>" basar
+    # ve ayrı bir anahtar verilmezse hattın ANA saatini (_tarih = aylık
+    # ödemeler dengesi) kullanır. Şekil 12'nin üç paneli İKİ ayrı saatte:
+    # (a) ve (b) eurobond akımı ödemeler dengesi ritminde, (c) haftalık dış
+    # borç ödeme takvimi kendi çarşamba ritminde. 03.09.2026 doğrulama turunda
+    # ölçüldü: aylık bacak 30.06.2026'da, haftalık bacak 26.08.2026'da bitiyor,
+    # yani aradaki mesafe 57 GÜN. Tek damga hangi bacağı seçerse seçsin YALAN
+    # söylüyor — aylık damga en taze paneli 57 gün bayat gösteriyordu, haftalık
+    # damga da Haziran'da duran iki paneli iki ay taze gösterirdi. Bu yüzden
+    # damga İKİSİNİ birden yazar; tarihYaz() tanımadığı dizgeyi olduğu gibi
+    # geçirir. Şekil saat defterine konamaz: orada yalnız ÇÖZÜLEBİLİR tek bir
+    # tarih ya da null durabilir (sayfa sınavı 18 ENGEL üretir), yani bu
+    # birleşik damga şeklin kendi etiketinden, tarihAnahtari ile bağlanır.
+    O["sekil12_kisa"] = f"aylık {O['ay_kisa']} · haftalık {O['hafta_kisa']}"
     # Yayım gecikmesi DÖNEM SONUNDAN ve DUVAR SAATİNE göre ölçülür; verinin
     # kendi son gününü referans almak denetimi kendi kendine referanslı
     # yapardı ("son gözlem bugün, demek ki taze").
@@ -183,6 +204,31 @@ def main() -> int:
         f"Cari denge/GSYH oranı {O['ceyrek']} çeyreğine aittir; aylık cari "
         f"denge ondan {tr_sayi(gecik_ay, 1)} ay ilerdedir. Oranı 'son ayın "
         "sayısı' diye sunmak sessiz bayatlama olurdu.")
+    # ŞEKİL 04'ÜN DAMGASI — ORANIN KENDİ ÇEYREĞİ. Bu şekil aylık metriğe HİÇ
+    # dokunmaz: yalnız çeyreklik çerçeveden cari_gsyh / cekirdek_gsyh / gsyh4
+    # çizer, yani ucu ÇEYREKTİR. Şeklin kendi alt metni bunu zaten söylüyordu
+    # ("ORANIN çıpası …") ama sayfa üstündeki damga hattın aylık saatini
+    # basıyordu.
+    #
+    # BUGÜN AYRIŞMA YOK: 03.09.2026 koşusunda aylık bacak da çeyreklik oran da
+    # 30.06.2026'da bitiyor (oran_gecikmesi_ay = 0,0), yani damga değişmiyor.
+    # Kural yine de şimdi konur, çünkü ayrışma bu hattın TABİATINDA var: aylık
+    # ödemeler dengesi her ay ilerler, oran ise paydası GSYH olduğu için ancak
+    # çeyreklik hesap yayımlanınca ilerler ve bu ikisi arasındaki mesafe bir
+    # çeyreğe kadar açılabilir. O gün geldiğinde kuralın devreye girmesi,
+    # birinin o gün hatırlamasına bel bağlamaktan güvenlidir; sayfanın kendi
+    # metni de zaten aynı sessiz bayatlamaya karşı uyarıyor.
+    #
+    # ceyrek_kisa DEĞİL: o çıpa GSYH'nin (gsyh_bin_tl) son çeyreğidir ve
+    # ödemeler dengesi geciktiğinde oran ondan bir çeyrek GERİDE kalabilir.
+    # Damga figürün BAĞLAYICI, yani en eski bacağından okunur: cari_gsyh'nin
+    # ölçülen son çeyreği. Alt panelin GSYH bacağı bundan ileri olabilir ve
+    # ortak ölçüm oranın bittiği yerde biter.
+    if gs.get("cari_gsyh_donem"):
+        O["oran_kisa"] = tr_tarih(gs["cari_gsyh_donem"])
+    else:
+        uyar("'oran_kisa' kaynakta yok — Şekil 04 hattın aylık saatiyle "
+             "damgalanır ve bir çeyrek taze görünebilir.")
     if G is not None and not G.empty:
         v, t = son(G["usdtry_ceyrek_ort"])
         koy("usdtry_ceyrek_ort", v, 2)

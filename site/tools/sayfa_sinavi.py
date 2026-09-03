@@ -51,6 +51,13 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       GrafikEmbed'in varsayılan damgası (hattın tek ana saati) yalan söyler.
       `_sekil_tarih` sözlüğü açan hatta: çözülemeyen ya da yarından ileri
       tarih ENGEL, defterde girdisi olmayan gömülü figür UYARI.
+  (18b) AÇIK ŞEKİL TARİHİ — MDX'teki `tarihAnahtari` gerçekten çözülüyor mu:
+      anahtar yok/dizge değil ya da içinde hiç tarih yok → UYARI, tarih
+      yarından ileri → ENGEL. Birleşik damga ("aylık … · haftalık …") geçerli
+      sayılır; içindeki her tarih ayrıca sınanır.
+  (18c) ÇİFT İLAN ÇELİŞMEZ — bir figürün hem açık anahtarı hem defter girdisi
+      varsa ikisi aynı günü söylemeli; ayrışırsa şeklin kendi alt başlığı ile
+      sayfadaki damga farklı tarih söyler → ENGEL.
   (9b) OKUR DİLİ, derlenmiş çıktıda (uyarı) — bileşen dizgeleri de kapıya girer.
 
 Koşum:  python3 site/tools/sayfa_sinavi.py
@@ -188,6 +195,70 @@ def sekil_saat_bulgulari(slug: str, ozet: dict, mdx: str, yarin):
                       + (" …" if len(eksik) > 4 else "")
                       + " — hattın ana saatiyle damgalanıyor")
     return hata_, uyari_, len(gomulu)
+
+
+# GG.AA.YYYY · YYYY-AA-GG · AA.YYYY — ortak/bicim.tarihe_cevir'in çözdüğü
+# yazımlar. Birleşik bir damgada ("aylık 30.06.2026 · haftalık 26.08.2026")
+# tarihleri BULMAK için gerekir; çözmek için değil, çözümü bicim yapar.
+TARIH_IZI = re.compile(r"\d{2}\.\d{2}\.\d{4}|\d{4}-\d{2}-\d{2}|(?<!\d\.)\b\d{2}\.\d{4}\b")
+
+
+def acik_saat_bulgulari(nerede: str, ozet: dict, anahtar: str, defter_deger,
+                        defter_var: bool, yarin, coz):
+    """(18b/18c) MDX'teki `tarihAnahtari` ↔ ozet.json — (ENGEL, UYARI).
+
+    GrafikEmbed sırası: açık anahtar → şekil saat defteri → hattın ana saati.
+    Bu ölçüt ilk basamağı sınar ve ilk ikisinin ÇELİŞMEDİĞİNİ de sorar.
+
+    Dört durum, okura ULAŞAN sonuca göre ağırlıklandırılır:
+
+    · anahtar yok ya da dizge değil → UYARI. Bileşen anahtarı ancak DİZGE ise
+      kullanır; yoksa sessizce bir alt basamağa düşer, yani yazar bir saat
+      İLAN ETMİŞTİR ama sayfa başkasını basar ve ikisi de yeşil görünür.
+    · dizge ve TEK bir tarih → yarından ileriyse ENGEL: ölçülmemiş bir günü
+      ilan etmek, sıfır yazmakla aynı sınıftan bir uydurmadır.
+    · dizge, tek tarih değil ama İÇİNDE tarih(ler) var → BİRLEŞİK DAMGA, geçerli.
+      Bileşen tanımadığı dizgeyi olduğu gibi basar (bicim.tarihYaz) ve bazı
+      figürler tek bir uçla dürüst anlatılamaz: ödemeler dengesi Şekil 12'nin
+      panelleri 57 gün arayla biter, hangi bacak seçilse öbürü hakkında yalan
+      olur. Böyle bir damgada tarihlerin HER BİRİ ayrıca sınanır (biri bile
+      yarından ileriyse ENGEL) ama dizgenin kendisi kusur sayılmaz — yoksa bu
+      ölçüt yayının önünde duran bir YANLIŞ ALARM olurdu.
+    · dizge ama içinde hiç tarih yok → UYARI: sayfa şeklin altına tarih diye
+      tarih olmayan bir şey basar.
+
+    Ve (18c): aynı figür için hem açık anahtar hem defter girdisi varsa ikisi
+    AYNI günü söylemeli. Birlikte durmaları bir güvenlik payıdır — defter bir
+    gün yazılmazsa sayfa yine doğru günü basar — ama ayrıştıkları gün figürün
+    KENDİ alt başlığı (defterden) ile sayfadaki damga (anahtardan) iki farklı
+    tarih söyler ve sayfa kendi kendisiyle çelişir. Dolarizasyon şeklinde tam
+    olarak bu olmuştu; tek fark iki ilandan birinin hattın ana saati olmasıydı.
+    """
+    hata_, uyari_ = [], []
+    v = ozet.get(anahtar)
+    if not isinstance(v, str) or not v.strip():
+        uyari_.append(f"{nerede}: anahtar ozet.json'da yok ya da dizge değil "
+                      f"({v!r}) — damga sessizce bir alt basamağa düşüyor")
+        return hata_, uyari_
+    tek = coz(v)
+    parcalar = [] if tek else [coz(m.group(0)) for m in TARIH_IZI.finditer(v)]
+    gunler = [tek] if tek else [g for g in parcalar if g]
+    if not gunler:
+        uyari_.append(f"{nerede}: değer tarih değil ({v!r}) — şeklin altına "
+                      "olduğu gibi basılır")
+        return hata_, uyari_
+    for g in gunler:
+        if g >= yarin:
+            hata_.append(f"{nerede}: şekil tarihi YARINDAN İLERİ ({v})"
+                         " — ölçülmemiş bir gün ilan edilemez")
+            break
+    if defter_var and isinstance(defter_deger, str):
+        d = coz(defter_deger)
+        if d is not None and tek is not None and d != tek:
+            hata_.append(f"{nerede}: ÇELİŞKİ — şekil saat defteri {defter_deger}, "
+                         f"açık anahtar {v}; figürün kendi alt başlığı ile "
+                         "sayfadaki damga farklı gün söyler")
+    return hata_, uyari_
 
 
 def ciplak_sayilar(disi: str, ozet: dict, muaf: set[str]) -> tuple[list[str], list[str]]:
@@ -820,6 +891,58 @@ def main() -> int:
         uyari.extend(u_)
         n_sekil += n_
     print(f"  {n_defter} hat defter açmış · {n_sekil} figür")
+
+    # --------------------------------------------------------------- (18b)
+    # AÇIK ANAHTAR GERÇEKTEN ÇÖZÜLÜYOR MU. Damganın ilk basamağı MDX'teki
+    # `tarihAnahtari`dir, ama 18. ölçüt yalnız DEFTER AÇAN hatta bakıyordu ve
+    # açık anahtarı hiçbir şey ölçmüyordu — "bir denetimin KAPSAMI denetimin
+    # parçasıdır" kusurunun aynısı, bir basamak yukarıda. GrafikEmbed anahtarı
+    # ancak DİZGE ise kullanır; yoksa, null ise ya da sayıysa sessizce hattın
+    # ana saatine düşer. Yani yazar bir saat İLAN ETMİŞTİR, sayfa başkasını
+    # basar ve ikisi de yeşil görünür. Somut hâli: hazine-ihrac'ta `plan_tarih`
+    # yürürlükteki takvimin iskeleti arşivdekilerin hiçbiriyle tutmazsa hiç
+    # yazılmıyor; Şekil 02 ve 11 o gün 13 gün eski bir damgaya döner ve kimse
+    # görmez.
+    # Kapsam listeden değil SÖZLEŞMEDEN: hattı `src` söyler, yani analiz ve
+    # araştırma sayfalarına gömülü figürler de girer — bileşen de tam olarak
+    # böyle çözüyor.
+    # ÜÇ HÂL, okura ULAŞAN kusura göre — hassasiyet de ölçütün parçası:
+    #  · anahtar yok ya da DİZGE DEĞİL → bileşen sessizce hattın ana saatine
+    #    düşer, ilan edilen saat ile basılan saat ayrışır ve hiçbir iz kalmaz
+    #    → UYARI (sayfa yine savunulabilir bir gün basar, yayını durdurmaz);
+    #  · dizge ama içinde HİÇ tarih yok → bileşen onu şeklin altına OLDUĞU
+    #    GİBİ basar → UYARI;
+    #  · içindeki bir tarih YARINDAN İLERİ → ENGEL, ölçülmemiş bir gün okura
+    #    basılıyor. 12. ölçüt bu soruyu yalnız `_tarih` için sorar ve bacak
+    #    tarihlerini eleyip geçer, yani buraya bakan başka kimse yok.
+    # Tarihler dizgenin İÇİNDE aranır, dizgenin kendisi tarih olmak zorunda
+    # değil: bileşenin sözleşmesi dizgeyi geçirmek (odemeler-dengesi'nde iki
+    # saatli bir etiket bilerek böyle yazılıyor). "Saf tarih değil" diye uyarı
+    # üretmek, doğru çalışan bir sayfada kalıcı yanlış alarm olurdu.
+    print("\n▶ Açık şekil tarihi (MDX `tarihAnahtari` ↔ ozet.json)")
+    n_ta = 0
+    for mdx_yol in sorted((KOK / "site/src/content").rglob("*.mdx")):
+        for etiket in re.findall(r"<GrafikEmbed\b[^>]*/>", mdx_yol.read_text(encoding="utf-8")):
+            ta = re.search(r'tarihAnahtari="([^"]+)"', etiket)
+            sr = re.search(r'src="/projeler/([^/"]+)/([^"]+)"', etiket)
+            if not ta or not sr:
+                continue
+            n_ta += 1
+            anahtar, slug2, dosya2 = ta.group(1), sr.group(1), sr.group(2)
+            nerede = f"{mdx_yol.name} · {dosya2} → `{anahtar}`"
+            oj2 = KOK / "site/public/projeler" / slug2 / "ozet.json"
+            try:
+                o2 = json.loads(oj2.read_text(encoding="utf-8"))
+            except Exception as ex:                                # noqa: BLE001
+                uyari.append(f"{nerede}: {slug2}/ozet.json okunamadı ({ex})")
+                continue
+            dft = o2.get("_sekil_tarih")
+            dft = dft if isinstance(dft, dict) else {}
+            e_, u_ = acik_saat_bulgulari(nerede, o2, anahtar, dft.get(dosya2),
+                                         dosya2 in dft, yarin, _bicim2.tarihe_cevir)
+            hata.extend(e_)
+            uyari.extend(u_)
+    print(f"  {n_ta} açık anahtar")
 
     # ---------------------------------------------------------------- (17)
     # KOŞU KAYDI OKUR DİLİ. Koşu kutusu uyarilar.json'daki `uyarilar` listesini,

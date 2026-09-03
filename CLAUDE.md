@@ -498,10 +498,49 @@ endeks yenilenmemiş gibi duruyor." Endeks yenilenmişti; yenilenmeyen şey
 etiketti. Çözüm `<Deger>`de zaten olan sözleşmenin şekle taşınması: hat her
 figürün ucunu KENDİ çizen kodundan ilan eder (`ozet.json` → `_sekil_tarih`),
 bileşen sırayla açık anahtar → defter → ana saat der, ölçülemeyen uç `null`
-kalır ve o şeklin altına tarih HİÇ basılmaz. Ölçüldü: sitedeki 83 gömülü
-figürün 38'inde damga, figürün kendi verisiyle ayrışıyordu. Kapı da kondu
+kalır ve o şeklin altına tarih HİÇ basılmaz. Kapı da kondu
 (sayfa sınavı 18): defter açan hatta yarından ileri tarih ENGEL, girdi eksiği
 UYARI — bir figürün unutulması yayını durdurmaz ama adıyla görünür.
+
+**Kurucu ilke — bir figürün damgası BAĞLAYICI bacaktır; ve bazı figürler tek
+bir günle dürüst anlatılamaz.** Kural bütün hatlara yayılırken asıl soru
+"hangi tarih" değil, "iki bacaklı bir figürde HANGİSİ" oldu. Cevap en eskisi:
+figürün sözü serilerin KIYASIDIR ve kıyas ancak hepsinin ölçüldüğü güne kadar
+kurulabilir; en tazesini yazmak öbür bacağı olduğundan yeni gösterir. TL taşıma
+Şekil 01 ve 03'te nakit bacağı TLREF'e, tahvil bacağı DİBS'e bağlı ve ayrı
+düşebiliyor — `min()` bu yüzden yapısal yazılır, bugünkü sıralamaya bakmaz.
+Ama bacaklar birbirinden çok uzaksa en eskisi de yalan söyler: ödemeler dengesi
+Şekil 12'de eurobond akımı aylık (30.06), ödeme takvimi haftalık (26.08) biter
+ve aradaki 57 günde hangi bacak seçilse öbürü hakkında yanıltıcı olur. Üçüncü
+yol damgayı İKİ PARÇALI yazmaktır ("aylık 30.06.2026 · haftalık 26.08.2026");
+bileşen tanımadığı dizgeyi olduğu gibi basar. Dördüncü hâl de var: Kredi Şekil
+03'ün dört paneli üç ritimde ve tek damga hangisi olursa olsun bir grubu
+yanıltır — defterde `None`, sayfada tarih YOK, her panel kendi saatini kendi
+başlığında taşır.
+
+Bu genişleme yeni bir kusur sınıfını da açtı: figürün İÇİNDEKİ alt yazı
+("Çıpa: 2 Eylül 2026") okura sayfa damgası kadar görünür ve iki taraf ayrı
+kaynaktan besleniyordu. Fonlama Şekil 05'in hiçbir paneli 02.09'da bitmiyor;
+o tarih hattın ana saatiydi ve figürün içine basılıyordu. Kural: hat figür
+saatlerini TEK bir fonksiyonda tutar ve hem çizim koduna hem özet üreticisine
+oradan verir (`Kredi/veri.py` → `sekil_saatleri`). İki ayrı liste bir gün
+sessizce ayrışır ve hangisinin neyi söylediği kimsenin aklında kalmaz.
+
+Yayılmanın ölçüsü tekrarlanabilir tutuldu, çünkü "kaç figür yanlış" sorusunun
+cevabı ölçme yöntemine bağlı. Sitedeki 411 gömülü figürün 237'si derslere ait
+statik dosyalar (özetleri yok, zaten tarih basılmıyor); damga sözleşmesi kalan
+174'ü bağlıyor. Bunların 92'si TEK SAATLİ, yani çizilen bütün izler aynı günde
+bitiyor — hüküm burada tartışmasız ve yanlış pozitif üretmiyor. O 92 figürde
+ayrışma 12'den 0'a indi (ölçüm: her izin `"x"` dizisindeki en büyük ISO tarih
+ile sayfanın basacağı damganın AYI). Kalan 82 figür karma; onlarda "doğru
+tarih" tek bir ölçüyle tanımlanamadığı için hat hat, bacak bacak ölçüldü.
+
+Kapıya iki basamak daha kondu: 18b açık `tarihAnahtari`nin gerçekten çözülüp
+çözülmediğini sorar (anahtar yok/dizge değil → UYARI, yarından ileri → ENGEL,
+birleşik damganın İÇİNDEKİ her tarih ayrı ayrı), 18c ise aynı figüre konmuş iki
+ilanın (açık anahtar + defter) ÇELİŞMEDİĞİNİ. İkisi de `site/tools/duman_sinav.py`
+ile sınanıyor — çünkü bu ölçüt yayının önünde duruyor ve yanlış alarmı siteyi
+durdurur; birleşik damgayı kusur sayan bir sürüm tam olarak bunu yapardı.
 
 **Kurucu ilke — YAYININ ÖNÜNDE DURAN denetimin yanlış alarmı, arızanın
 kendisidir; ve bir ÇAKIŞMA araması tesadüf üretir.** 02.09.2026 16:46'dan

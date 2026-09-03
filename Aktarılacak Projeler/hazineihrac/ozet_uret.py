@@ -153,6 +153,57 @@ plan_aylik["plan_servis_metin"] = (" \u00b7 ".join(_servis)
 plan_aylik["plan_aylik_metin"] = " \u00b7 ".join(_satir) or "planlı takvim boş"
 plan_aylik["plan_revizyon_metin"] = " \u00b7 ".join(_rev) or "önceki doküman elde yok"
 
+# (b3) TAKVİMİN KENDİ SAATİ — Şekil 02 ve Şekil 11'in damgası.
+# Bu iki figür ihale kayıtlarından DEĞİL, yürürlükteki strateji dokümanından
+# besleniyor. Hattın ana saati (`_tarih` = son ihale günü) onları 13 gün geride
+# gösteriyordu: sayfa "veri 18.08.2026" basarken Şekil 11'in altındaki metin
+# 31.08'de yakalanan Eylül–Kasım dokümanının revizyonlarını anlatıyordu. Okur
+# damgaya bakıp "yeni doküman henüz girmemiş" diye okuyor — ölçüm taze, etiket
+# eski. (Aynı kusurun FX hattındaki hâli için bkz. CLAUDE.md "bir ŞEKLİN
+# tarihi, HATTIN tarihi değildir".)
+#
+# Doküman kendi yayım gününü söylemiyor: .strategy_history.json yalnız doküman
+# ADINI tutar, tarih alanı yok. Ölçülebilen tek gün onu ilk kez YAKALADIĞIMIZ
+# gündür — takvim_arsiv/ altında yürürlükteki takvimle AYNI İSKELETİ
+# (tarih+senet+vade üçlüsü; tanım vade_proj._iskelet ile birebir) taşıyan
+# dosyaların EN ESKİ tarih öneki. En yenisi DEĞİL: aynı doküman her tam kip
+# koşusunda yeniden arşivleniyor (bugün 2026-08-31 ve 2026-09-01 kopyaları
+# var) ve en yenisini almak, hiçbir şey değişmediği hâlde her koşuda tazelenen
+# sahte bir damga üretirdi. Arşiv boşsa ya da eşleşen dosya yoksa anahtar
+# YAZILMAZ; sayfa o zaman hattın ana saatine düşer ve eksikliği sayfa sınavı
+# (1. ölçüt) bağırır — uydurma bir gün yazmaktansa bilinen eskiye düşmek yeğdir.
+def _plan_tarih():
+    ars = os.path.join(BASE, "takvim_arsiv")
+    if not os.path.isdir(ars):
+        return None
+    try:
+        simdiki = frozenset(zip(pl["İhale Tarihi"], pl["Senet Tanımı"], pl["Vade Terimi"]))
+    except KeyError:
+        return None
+    onek = []
+    for ad in sorted(os.listdir(ars)):
+        if not ad.endswith(".csv") or len(ad) < 10 or ad[4] != "-":
+            continue
+        try:
+            t = pd.read_csv(os.path.join(ars, ad), encoding="utf-8-sig")
+            if frozenset(zip(t["İhale Tarihi"], t["Senet Tanımı"], t["Vade Terimi"])) == simdiki:
+                onek.append(ad[:10])
+        except Exception:
+            continue
+    if not onek:
+        print("  ! plan_tarih YAZILMADI — arşivde yürürlükteki takvimle aynı "
+              "iskeleti taşıyan dosya yok")
+        return None
+    y, a, g = min(onek).split("-")
+    return f"{g}.{a}.{y}"
+
+
+_pt = _plan_tarih()
+if _pt:
+    # Bu gün, dokümanın YAYIM günü değil, hattın onu ilk gördüğü gündür;
+    # ikisi arasında bir gecikme olabilir ve bu tarih ondan asla ERKEN olmaz.
+    plan_aylik["plan_tarih"] = _pt
+
 # (b2) USD hacmi — grafiğin KENDİ çıktısından, ve yalnız seri SAĞLAMSA.
 # ihrac_usd grafiği USD/TRY kurunu yfinance'ten çekiyor ve o çekim şu anda
 # bozuk: elde yalnız 6 aylık kur var, son kur 32,89 (yıllar öncesinin
@@ -227,6 +278,27 @@ ozet = {
     **usd,
     **_vade_proj(),
 }
+
+# ŞEKİL 02'NİN BİRLEŞİK DAMGASI — iki bacak, iki saat, tek satır.
+# Şekil 02 iki seriyi yan yana koyuyor: HEDEF bacağı (dolu barlar ve kümülatif
+# hedef alanı) yürürlükteki strateji dokümanına kadar gelir, GERÇEKLEŞEN bacağı
+# (çerçeveli barlar ve kümülatif çizgi) son ihale gününde biter. 03.09.2026'da
+# aralarında 13 gün var. Tek bir gün yazmak hangi bacağı seçerse seçsin öbürü
+# hakkında yalan olur — en tazesi gerçekleşmeyi iki hafta ileri gösterir, en
+# eskisi de yeni dokümanın hiç girmediğini düşündürür (kusurun ilk hâli tam
+# olarak buydu). Şekil 11'de böyle bir ikilik YOK: orada geçmiş veri hiç
+# çizilmiyor, tek bacak takvimdir ve damgası `plan_tarih`tir.
+# Birleşik damganın sözleşmesi ödemeler dengesi Şekil 12 ile aynı: bileşen
+# tanımadığı dizgeyi olduğu gibi basar, sayfa sınavı (18b) içindeki her tarihi
+# ayrı ayrı sınar. Doküman tarihi ölçülemediyse anahtar yazılmaz ve şekil
+# hattın ana saatine, yani gerçekleşen bacağa düşer — bilinen eskiye düşmek,
+# uydurma bir güne yazmaktan yeğdir.
+if ozet.get("plan_tarih"):
+    # Yazım: bileşen bu dizgeyi "veri …" ekinin ARDINA basıyor, yani okur
+    # "veri hedefte 31.08.2026 · gerçekleşende 18.08.2026" görür.
+    ozet["plan_gerc_kisa"] = (f"hedefte {ozet['plan_tarih']} · "
+                              f"gerçekleşende {ozet['_tarih']}")
+
 yol = os.path.join(BASE, "ozet.json")
 json.dump(ozet, open(yol, "w"), ensure_ascii=False, indent=1)
 print("yazildi:", yol); print(json.dumps(ozet, ensure_ascii=False))

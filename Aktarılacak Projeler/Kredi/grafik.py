@@ -9,7 +9,10 @@ Kurallar (site sözleşmesi):
   · Lejant altta yatay, beyaz zemin, include_plotlyjs="cdn",
     config: responsive=True, displaylogo=False.
   · Şekil numarası BELGE SIRASINI izler; dosya adı = şekil no (NN_ad.html).
-  · Her grafiğin başlığında VERİ TARİHİ vardır (bayat grafik gözle görülür).
+  · Her grafiğin başlığında VERİ TARİHİ vardır (bayat grafik gözle görülür) ve o
+    tarih hattın ana saati DEĞİL, figürün KENDİ ucudur (veri.sekil_saatleri).
+    Tek bir uç seçilemeyen figürde başlıkta tarih çıkmaz ve her panel kendi
+    saatini kendi başlığında taşır — yanlış bir tarih, tarihsizlikten kötüdür.
   · Bir figür üretilemezse hat DURUR — siteye kopyalama yapılmaz.
 
 Koşum:  python3 grafik.py   (önce veri.py → metrik.py)
@@ -69,6 +72,16 @@ def _lejant_satir(fig) -> int:
         gorulen.add(grup)
         toplam += len(ad) + 8
     return max(1, -(-toplam // 105))
+
+
+def _veri(damga: str | None) -> str:
+    """Başlıktaki " · veri <tarih>" eki — damga ÖLÇÜLEMEMİŞSE hiç yazılmaz.
+
+    Bir figürün panelleri farklı ritimdeyse tek bir uç seçilemez (bkz.
+    veri.sekil_saatleri); o zaman defter None döner ve başlığa tarih girmez.
+    Yanlış bir tarih, tarihsizlikten kötüdür — "veri None" ise ikisinden de.
+    """
+    return f" · veri {damga}" if damga else ""
 
 
 def _duzen(fig, baslik: str, alt: list[str], n_panel: int,
@@ -225,7 +238,7 @@ def sekil_01(M, U, o, damga):
     _sifir_cizgi(fig, 2)
     fig.update_yaxes(title_text="%, yıllıklandırılmış", row=1, col=1)
     fig.update_yaxes(title_text="%, yıllıklandırılmış", row=2, col=1)
-    return _duzen(fig, f"Kredi büyümesi — kur etkisinden arındırılmış · veri {damga}", [
+    return _duzen(fig, f"Kredi büyümesi — kur etkisinden arındırılmış{_veri(damga)}", [
         "Sıra bağlayıcı: önce haftalık arındırma, sonra zincirleme, sonra yıllıklandırma "
         "(13 haftalık bileşik, üs 52/13 = 4). Basit ölçekleme kullanılmaz.",
         "Kur: zorunlu karşılığa tabi DTH'dan ima edilen sepet (TP.ZORUNDTH.KB8/KB7).",
@@ -284,7 +297,7 @@ def sekil_02(M, K, AY, o, damga):
                      showgrid=False)
     fig.update_yaxes(title_text="milyar TL", row=3, col=1)
     ayr = o.get("ayristirma") or {}
-    return _duzen(fig, f"Kur etkisinin büyüklüğü · veri {damga}", [
+    return _duzen(fig, f"Kur etkisinin büyüklüğü{_veri(damga)}", [
         "Ham büyüme iki bileşenin toplamıdır: gerçek kredi akımı + YP kredinin yeniden değerlemesi. "
         "Arındırma ikinciyi dışarıda bırakır.",
         f"Laspeyres kimliği Γ + Λ = ΔK · en büyük bağıl artık "
@@ -298,14 +311,25 @@ def sekil_02(M, K, AY, o, damga):
 #  Şekil 03 — kredi türü kırılımı, katılım bankaları, eğilim anketi
 # ===========================================================================
 def sekil_03(M, H, A, C, o, damga):
+    # BU FİGÜRÜN TEK SAATİ YOK: dört panel, üç ritim (p1/p2 haftalık ·
+    # p3 aylık · p4 çeyreklik). Tek damga en tazeyi yazarsa alt iki paneli
+    # taze gösterir, en eskiyi yazarsa üst iki paneli aylarca bayat gösterir;
+    # bu yüzden defter None döndürür (veri.sekil_saatleri) ve başlıkta tarih
+    # çıkmaz. Onun yerine HER PANEL kendi saatini kendi başlığında taşır —
+    # okurun hangi panele hangi güne bakarak baktığı panelin üstünde yazar.
+    s_h = ad_gun(pd.Timestamp(o["son_hafta"]))
+    s_a = veri.ad_uzun(pd.Timestamp(o["son_ay"]))
+    s_c = veri.ad_ceyrek(pd.Timestamp(o["son_ceyrek"]))
     fig = make_subplots(rows=4, cols=1, vertical_spacing=0.065,
                         specs=[[{"secondary_y": False}], [{"secondary_y": False}],
                                [{"secondary_y": True}], [{"secondary_y": False}]],
                         subplot_titles=(
-                            "Kredi türüne göre büyüme (13 haftalık, yıllıklandırılmış)",
-                            "Stok kompozisyonu (milyar TL) — yurt içi şubeler",
-                            "Katılım bankaları dahil ve hariç: 12 aylık büyüme (aylık seri, HAM)",
-                            "Banka Kredileri Eğilim Anketi — standartlar ve talep (net yüzde değişim)"))
+                            f"Kredi türüne göre büyüme (13 haftalık, yıllıklandırılmış) — veri {s_h}",
+                            f"Stok kompozisyonu (milyar TL) — yurt içi şubeler · veri {s_h}",
+                            "Katılım bankaları dahil ve hariç: 12 aylık büyüme "
+                            f"(aylık seri, HAM) — veri {s_a}",
+                            "Banka Kredileri Eğilim Anketi — standartlar ve talep "
+                            f"(net yüzde değişim) — veri {s_c}"))
     for ad, kol, renk in (("Tüketici (TL+YP birleşik)", "g_tuketici_13y", CLARET),
                           ("Ticari (arındırılmış)", "g_ticari_13y", TEAL),
                           ("KOBİ (arındırılmış)", "g_kobi_13y", LACI),
@@ -350,7 +374,7 @@ def sekil_03(M, H, A, C, o, damga):
     fig.update_yaxes(title_text="%, 12 aylık", row=3, col=1, secondary_y=False)
     fig.update_yaxes(title_text="%", row=3, col=1, secondary_y=True, showgrid=False)
     fig.update_yaxes(title_text="net yüzde", row=4, col=1)
-    return _duzen(fig, f"Kredi kırılımı ve kredi arzı–talebi · veri {damga}", [
+    return _duzen(fig, f"Kredi kırılımı ve kredi arzı–talebi{_veri(damga)}", [
         "Tüketici kalemleri EVDS'te TL+YP BİRLEŞİK yayımlanıyor; o seriler HAM'dır. Ticari ve "
         "KOBİ'de TL/YP ayrı olduğu için arındırma uygulanmıştır.",
         "Aylık seri TL/YP kırılımı taşımaz: üçüncü paneldeki büyümeler HAM'dır ve "
@@ -404,7 +428,7 @@ def sekil_04(F, o, damga):
     fig.update_yaxes(title_text="%", row=1, col=1)
     fig.update_yaxes(title_text="puan", row=2, col=1)
     fig.update_yaxes(title_text="%", row=3, col=1)
-    return _duzen(fig, f"Kredi faizleri ve spread'ler · veri {damga}", [
+    return _duzen(fig, f"Kredi faizleri ve spread'ler{_veri(damga)}", [
         "Faizler YENİ KULLANDIRIM (akım) faizleridir, stok değil. Politika faizi tek başına "
         "çizilmez; koridor ve AOFM ile birlikte okunur.",
         "Reel faiz TAM FISHER ile hesaplanır: (1+i)/(1+π<sup>e</sup>) − 1. Bu düzeyde (i − π) yaklaşımı "
@@ -460,7 +484,7 @@ def sekil_05(P, o, damga):
     fig.update_yaxes(title_text="kat", row=3, col=1)
     fig.update_yaxes(title_text="milyar TL", row=4, col=1)
     a2 = ((o.get("dogrulama") or {}).get("arindirilmis") or {}).get("m2") or {}
-    return _duzen(fig, f"Parasal büyüklükler ve para çarpanı · veri {damga}", [
+    return _duzen(fig, f"Parasal büyüklükler ve para çarpanı{_veri(damga)}", [
         "Türkiye'nin M1'i YP VADESİZ MEVDUATI içerir; bu, M1'i kur hareketine duyarlı kılar: "
         "arındırılmamış bir 'M1 patladı' cümlesi çoğu zaman kur cümlesidir.",
         "Birinci panel TCMB'nin KENDİ arındırdığı endekslerdir. İkinci panel bu çalışmanın "
@@ -509,7 +533,7 @@ def sekil_06(D, o, damga):
     fig.update_yaxes(title_text="milyar TL", row=1, col=1)
     fig.update_yaxes(title_text="%", row=2, col=1)
     fig.update_yaxes(title_text="milyar ABD doları", row=3, col=1)
-    return _duzen(fig, f"Mevduat kompozisyonu ve dolarizasyon · veri {damga}", [
+    return _duzen(fig, f"Mevduat kompozisyonu ve dolarizasyon{_veri(damga)}", [
         "Ham pay DTH'ın TL KARŞILIĞI üzerinden hesaplandığı için kur yükselirken kendiliğinden yükselir. "
         "Arındırılmış pay DTH'ı çıpa kuruyla yeniden değerler.",
         f"Arındırma çıpası: {dol.get('cipa', '—')} (kur {dol.get('cipa_kur', float('nan')):.4f}); "
@@ -554,7 +578,7 @@ def sekil_07(A, o, damga):
     durum = ("Program hâlâ açık; stok ve aylık değişim güncel akımı ölçer." if aktif else
              "Program fiilen KAPANMIŞTIR: bu şekil bitmiş bir rejimin tarihidir; güncel "
              "dolarizasyon yorumunda 'KKM çıkışı' gerekçesi kullanılmaz.")
-    return _duzen(fig, f"Kur Korumalı Mevduat — stok ve çıkış · veri {damga}", [
+    return _duzen(fig, f"Kur Korumalı Mevduat — stok ve çıkış{_veri(damga)}", [
         "KKM TL cinsinden açılan ama getirisi kur artışına endeksli bir mevduattır: M2'nin TL "
         "bacağında durur, YP bacağında değil.",
         "Çıkışı üç yere birden gidebilir — TL mevduata (dolarizasyon değişmez), DTH'ye (yükselir) "
@@ -586,7 +610,7 @@ def sekil_08(M, H, o, damga):
     fig.update_yaxes(title_text="%", row=1, col=1)
     fig.update_yaxes(title_text="milyar TL", row=2, col=1, secondary_y=False)
     fig.update_yaxes(title_text="%", row=2, col=1, secondary_y=True, showgrid=False)
-    return _duzen(fig, f"Takipteki alacaklar ve karşılıklar · veri {damga}", [
+    return _duzen(fig, f"Takipteki alacaklar ve karşılıklar{_veri(damga)}", [
         "Oran, takipteki alacakların KREDİ + TAKİP toplamına bölümüdür; paydaya takibin kendisi de "
         "girdiği için krediyi tek başına kullanan ölçüden düşüktür.",
         "Karşılık oranı, özel VE BEKLENEN ZARAR karşılıklarının takip stokuna oranıdır; beklenen zarar "
@@ -642,7 +666,7 @@ def sekil_09(CU, o, damga):
     en_r = tani.get("en_iyi_korel")
     yon = ("enflasyon momentumu kredi büyümesinin ÖNÜNDE" if (en_g or 0) < 0
            else "kredi büyümesi enflasyon momentumunun ÖNÜNDE")
-    return _duzen(fig, f"Kredi büyümesi ve enflasyon momentumu · veri {damga}", [
+    return _duzen(fig, f"Kredi büyümesi ve enflasyon momentumu{_veri(damga)}", [
         "Bu bir NEDENSELLİK İDDİASI DEĞİLDİR; gecikmeli korelasyon ölçüsüdür. Aynı pencerede her iki "
         "seriyi de kur hareketi besliyor olabilir.",
         f"Örneklem {tani.get('bas', '—')[:7]} → {tani.get('son', '—')[:7]} ({tani.get('n', 0)} ay). "
@@ -669,18 +693,24 @@ SEKILLER = [
 
 def kos() -> None:
     M, P, D, F, A, K, AY, H, C, U, CU, o = _yukle()
-    damga = ad_gun(pd.Timestamp(o["son_hafta"]))
-    print(f"Kredi & parasal büyüklükler — grafikler · veri {damga}")
+    # DAMGA FİGÜR BAŞINA. Eskiden dokuz şeklin dokuzu da hattın haftalık
+    # saatiyle damgalanıyordu; hat üç ritim taşıyor ve damga dört figürde
+    # yalan söylüyordu (ölçüm ve gerekçe: veri.sekil_saatleri). Aynı defteri
+    # ozet_uret.py sayfa altındaki damga için ozet.json'a koyar — figürün
+    # içindeki ile altındaki tarih tek kaynaktan gelsin.
+    saat = veri.sekil_saatleri(o, uzun=True)
+    hafta = ad_gun(pd.Timestamp(o["son_hafta"]))
+    print(f"Kredi & parasal büyüklükler — grafikler · haftalık bacak {hafta}")
     ciktilar = [
-        (sekil_01(M, U, o, damga), "01_kredi_buyume.html"),
-        (sekil_02(M, K, AY, o, damga), "02_kur_etkisi.html"),
-        (sekil_03(M, H, A, C, o, damga), "03_kredi_kirilim.html"),
-        (sekil_04(F, o, damga), "04_faiz_spread.html"),
-        (sekil_05(P, o, damga), "05_para_arzi.html"),
-        (sekil_06(D, o, damga), "06_dolarizasyon.html"),
-        (sekil_07(A, o, damga), "07_kkm.html"),
-        (sekil_08(M, H, o, damga), "08_takip.html"),
-        (sekil_09(CU, o, damga), "09_kredi_enflasyon.html"),
+        (sekil_01(M, U, o, saat["01_kredi_buyume.html"]), "01_kredi_buyume.html"),
+        (sekil_02(M, K, AY, o, saat["02_kur_etkisi.html"]), "02_kur_etkisi.html"),
+        (sekil_03(M, H, A, C, o, saat["03_kredi_kirilim.html"]), "03_kredi_kirilim.html"),
+        (sekil_04(F, o, saat["04_faiz_spread.html"]), "04_faiz_spread.html"),
+        (sekil_05(P, o, saat["05_para_arzi.html"]), "05_para_arzi.html"),
+        (sekil_06(D, o, saat["06_dolarizasyon.html"]), "06_dolarizasyon.html"),
+        (sekil_07(A, o, saat["07_kkm.html"]), "07_kkm.html"),
+        (sekil_08(M, H, o, saat["08_takip.html"]), "08_takip.html"),
+        (sekil_09(CU, o, saat["09_kredi_enflasyon.html"]), "09_kredi_enflasyon.html"),
     ]
     n = 0
     for fig, ad in ciktilar:

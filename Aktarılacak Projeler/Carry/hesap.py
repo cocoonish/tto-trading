@@ -122,6 +122,30 @@ def hesapla() -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     son_dibs = d.dropna(subset=["carry_2y_tlref"]).iloc[-1]
     son_endeks = d.dropna(subset=["endeks"]).iloc[-1]
 
+    # ŞEKİL 03'ÜN KENDİ SAATİ. Hattın ana saati (_tarih) kurun günüdür, çünkü
+    # kur en taze seridir: 03.09.2026'da kur o günü doldurmuşken TLREF henüz
+    # yayımlanmamıştı ve TLREF'e bağlı HER seri 02.09'da bitiyordu. Şekil 03'ün
+    # iki bacağı da o gruptan: nakit bacağı (TLREF bileşik − 1a deval) Fonlama
+    # hattının TLREF'ine, tahvil bacağı (2y DİBS taşıması) DİBS hattının taşıma
+    # kolonuna bağlı — ve ikisi AYRI hattın CSV'sinden geldiği için ayrı da
+    # düşebilir. Damga bu yüzden bağlayıcı, yani EN ESKİ bacaktır: figürün sözü
+    # iki serinin KIYASI ve kıyas ancak ikisinin birden olduğu güne kadar
+    # kurulabilir. Ana saatle damgalanınca şekil 02.09 kesitini gösterirken
+    # sayfada "veri 03.09.2026" yazıyordu — bir gün bayat figür taze görünüyor.
+    sekil_nakit_tahvil = min(d["makas_tlref_b_d1a"].dropna().index[-1],
+                             d["carry_2y_tlref"].dropna().index[-1])
+
+    # ŞEKİL 01 DE İKİ SAATLİ. İki iz çiziliyor: politika − 1a deval (politika
+    # faizi günlük, kur günlük → bugün) ve TLREF bileşik − 3a deval (TLREF bir
+    # gün geriden gelir). Damga ana saatten okununca EN TAZE bacağı söylüyordu,
+    # yani TLREF izinin bir gün bayat olduğu her gün figür taze görünüyordu.
+    # Kural şekil 03'teki ile aynı: figürün sözü iki makasın KIYASI ve kıyas
+    # ancak ikisinin de ölçüldüğü güne kadar kurulabilir — damga bağlayıcı,
+    # yani EN ESKİ bacaktır. min() burada yapısaldır, bugünkü sıralamaya
+    # bakmaz: TLREF beslemesi öne geçerse damga kendiliğinden öbür bacağa döner.
+    sekil_makas = min(d["makas_politika_d1a"].dropna().index[-1],
+                      d["makas_tlref_b_d3a"].dropna().index[-1])
+
     # Çöküş dönemleri: endeksin zirveden %10'dan derin düştüğü aralıklar
     cokusler = []
     seri = e["zirveden"]
@@ -179,6 +203,8 @@ def hesapla() -> tuple[pd.DataFrame, pd.DataFrame, dict]:
         "carry_2y_politika": r(son_dibs["carry_2y_politika"], 2),
         "carry_3a_tlref": r(son_dibs["carry_3a_tlref"], 2),
         "carry_tarih": f"{son_dibs.name:%d.%m.%Y}",
+        "nakit_tahvil_tarih": f"{sekil_nakit_tahvil:%d.%m.%Y}",
+        "makas_tarih": f"{sekil_makas:%d.%m.%Y}",
         "n2y": r(son_dibs["n2y"], 2), "f_1y1y": r(son_dibs["f_1y1y"], 2),
         "endeks": r(son_endeks["endeks"]),
         "endeks_tarih": f"{son_endeks.name:%d.%m.%Y}",

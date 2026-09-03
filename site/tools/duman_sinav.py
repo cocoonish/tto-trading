@@ -146,6 +146,70 @@ e, u, n = sekil_saat_bulgulari(
 sina("çözülemeyen tarih ENGEL", len(e) == 1 and "çözülemeyen" in e[0], f"engel={e}")
 
 # ---------------------------------------------------------------------------
+# (18b/18c) AÇIK ŞEKİL TARİHİ. Bu ölçüt yayının ÖNÜNDE duruyor: yanlış alarmı
+# siteyi durdurur. Sınamanın çekirdeği BİRLEŞİK DAMGA — ödemeler dengesi
+# Şekil 12'nin üç paneli 57 gün arayla bitiyor ve tek bir uç hangi bacağı
+# seçse öbürü hakkında yalan olur; damga bu yüzden ikisini birden yazar ve
+# ölçüt bunu kusur saymamalı. Ama içindeki her tarih yine sınanmalı.
+print("\n▶ Açık şekil tarihi (18b) ve çift ilan çelişkisi (18c)")
+
+import sys as _s2
+_s2.path.insert(0, str(_YOL.resolve().parents[2] / "ortak"))
+import bicim as _bcm
+
+acik_saat_bulgulari = _mod.acik_saat_bulgulari
+COZ = _bcm.tarihe_cevir
+
+
+def acik(deger, defter=None, defter_var=False, anahtar="k"):
+    o = {anahtar: deger} if deger is not None else {}
+    return acik_saat_bulgulari("s · f.html → `k`", o, anahtar, defter,
+                               defter_var, YARIN, COZ)
+
+
+e, u = acik("26.08.2026")
+sina("tek tarih temiz geçiyor", not e and not u, f"engel={e} uyari={u}")
+
+e, u = acik("07.2026")
+sina("AA.YYYY yazımı da tarihtir", not e and not u, f"engel={e} uyari={u}")
+
+e, u = acik("aylık 30.06.2026 · haftalık 26.08.2026")
+sina("BİRLEŞİK DAMGA kusur değil (yanlış alarm yok)",
+     not e and not u, f"engel={e} uyari={u}")
+
+ileri2 = (YARIN + _dt.timedelta(days=3)).strftime("%d.%m.%Y")
+e, u = acik(f"aylık 30.06.2026 · haftalık {ileri2}")
+sina("birleşik damganın İÇİNDEKİ ileri tarih ENGEL",
+     len(e) == 1 and "YARINDAN İLERİ" in e[0], f"engel={e}")
+
+e, u = acik(None)
+sina("anahtar yok → UYARI (sayfa bir alt basamağa düşer)",
+     not e and len(u) == 1, f"engel={e} uyari={u}")
+
+e, u = acik(2026)
+sina("dizge olmayan değer → UYARI", not e and len(u) == 1, f"engel={e} uyari={u}")
+
+e, u = acik("son ihale günü")
+sina("içinde hiç tarih olmayan dizge → UYARI",
+     not e and len(u) == 1 and "tarih değil" in u[0], f"engel={e} uyari={u}")
+
+e, u = acik("26.08.2026", defter="26.08.2026", defter_var=True)
+sina("çift ilan AYNI günü söylüyorsa temiz", not e and not u, f"engel={e} uyari={u}")
+
+e, u = acik("26.08.2026", defter="21.08.2026", defter_var=True)
+sina("çift ilan AYRIŞIYORSA ENGEL",
+     len(e) == 1 and "ÇELİŞKİ" in e[0], f"engel={e}")
+
+e, u = acik("26.08.2026", defter=None, defter_var=True)
+sina("defterde None + açık anahtar var → çelişki değil",
+     not e and not u, f"engel={e} uyari={u}")
+
+e, u = acik("26.08.2026", defter="2026-08-26", defter_var=True)
+sina("aynı gün farklı YAZIMLA yazılmışsa çelişki değil",
+     not e and not u, f"engel={e} uyari={u}")
+
+
+# ---------------------------------------------------------------------------
 print(f"\n{'═' * 70}")
 print(f"  {len(GECTI)} geçti · {len(DUSTU)} düştü")
 if DUSTU:

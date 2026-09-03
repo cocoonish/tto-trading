@@ -401,7 +401,12 @@ HATLAR: list[Hat] = [
         {"makas.html": "makas.html", "endeks.html": "endeks.html",
          "nakit_tahvil.html": "nakit_tahvil.html", "konvansiyon.html": "konvansiyon.html"},
         "türev hat: Fonlama + DİBS depo serilerinden; her koşuda, saniyeler",
-        tarih_anahtarlari=("_tarih", "endeks_tarih"), bagimli=("fonlama", "dibs")),
+        # Üç saat: _tarih kurun günü (en taze seri), endeks_tarih TLREF'e kapılı
+        # endeksin günü, nakit_tahvil_tarih ise Şekil 03'ün iki bacağının
+        # ESKİSİ — yani DİBS taşıma kolonu donarsa donan tek anahtar odur.
+        # İlk ikisi DİBS bacağını hiç görmüyordu.
+        tarih_anahtarlari=("_tarih", "endeks_tarih", "nakit_tahvil_tarih"),
+        bagimli=("fonlama", "dibs")),
     Hat("tufex", "TÜFEX ve Başabaş Enflasyon", P / "Tufex", "tufex-basabas",
         ["hesap.py", "grafik.py"], [],
         {"basabas_anket.html": "basabas_anket.html", "prim_kesit.html": "prim_kesit.html",
@@ -414,7 +419,14 @@ HATLAR: list[Hat] = [
         {"ayrisma.html": "ayrisma.html", "kacak.html": "kacak.html", "makas.html": "makas.html",
          "bkea.html": "bkea.html", "duzenlemeler.json": "duzenlemeler.json"},
         "türev hat: Kredi + Fonlama depo serilerinden; düzenleme defteri elle tutulur",
-        tarih_anahtarlari=("_tarih",), bagimli=("kredi", "fonlama")),
+        # _tarih haftalık kredi bacağı; ikinci saat ÇEYREKLİK Banka Kredileri
+        # Eğilim Anketi. Tek anahtarla bayatlık denetimi çeyreklik bacağa HİÇ
+        # bakmıyordu: 03.09.2026'da anket 2026-04-01'de duruyordu (142 gün) ve
+        # hiçbir koşu bunu söylemiyordu. İki yayım arasında bu anahtar tabiatı
+        # gereği DONUK görünür — mesaj hangi bacağın kımıldamadığını adıyla
+        # yazar; aranan şey bacağın büsbütün ölmesi ve geriye gitmesidir.
+        tarih_anahtarlari=("_tarih", "bkea_std_isletme_tarih"),
+        bagimli=("kredi", "fonlama")),
     # Reel sektör FX ağa çıkar (EVDS bie_fdvy, aylık, ~2 ay gecikmeli). Çekim
     # düşerse hat DURUR ve siteye hiçbir şey kopyalanmaz: sitedeki son iyi
     # çıktı kalır, koşu ✗ ile görünür. Eski YAML yolu "düşerse uyar, yer
