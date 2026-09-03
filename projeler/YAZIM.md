@@ -59,6 +59,24 @@ metin serbesttir (11c, uyarı).
    basılabilir, kapsam bir alan listesinden değil bu sözleşmeden türer.
 5. **Kaynaklar** — seri kodları kod biçiminde (`TP.AB.A02`), yayım takvimi.
 
+## Uydurma sayılarla örnek kutusu
+
+Bir kutunun bütün sayıları formülü göstermek için SEÇİLMİŞSE (gerçek gözlem
+değilse), kutu tarama dışına alınır:
+
+```
+{/* sinav-ornek: bu kutunun bütün sayıları uydurma — <gerekçe> */}
+… kutu …
+{/* /sinav-ornek */}
+```
+
+Gerekçe zorunlu, kapanış zorunlu (kapanmayan blok sınavı DÜŞÜRÜR — yoksa
+sayfanın kalanı sessizce taramadan çıkardı). Anahtar bazlı `sinav-muaf`
+yalnız TEK bir tarihsel alıntı için; bir kutunun tamamı için kullanılmaz,
+çünkü o anahtarı sayfanın TAMAMINDA kör eder ve bir sonraki tesadüf için
+hiçbir şey yapmaz. Ölçüldü: aynı kutu iki kez çarpıştı, ikincisi yayını
+on iki saat durdurdu.
+
 ## Sayılar ve dil
 
 - Türkçe yazım tek yerden (`lib/bicim`): ondalık virgül, binlik nokta, eksi

@@ -118,6 +118,16 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=6144
         run: npm run build
 
+      # SINAVIN KENDİ DUMAN SINAMASI, sınavdan ÖNCE. 02.09.2026'da yayın altı
+      # kez üst üste düştü ve site on iki saat dondu; sebep sınanan sayfada
+      # değil, SINAVIN KENDİSİNDEYDİ — bir hattın verisi tazelenince iki değer
+      # bir sayfadaki uydurma aritmetik örneğinin sabitleriyle çakıştı ve ölçüt
+      # bunu ihlal saydı. Yayının önünde duran bir denetimin yanlış alarmı
+      # siteyi durduruyor; o yüzden hassasiyeti artık sentetik örneklerle
+      # ölçülüyor. Ağa çıkmaz, saniyeler sürer.
+      - name: Sınavın duman sınaması
+        run: python3 site/tools/duman_sinav.py
+
       - name: Sayfa sınavı
         run: python3 site/tools/sayfa_sinavi.py
 

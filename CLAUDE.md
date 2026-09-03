@@ -486,6 +486,29 @@ unutulmuştu). Ve ölçülemeyen bir seans sayfada görünür: akım serisinin
 seviyeden kaç seans geride kaldığı ve SEBEBİ tek cümleyle yazılır, besleme
 yetiştiğinde cümle kendiliğinden döner.
 
+**Kurucu ilke — YAYININ ÖNÜNDE DURAN denetimin yanlış alarmı, arızanın
+kendisidir; ve bir ÇAKIŞMA araması tesadüf üretir.** 02.09.2026 16:46'dan
+03.09 04:31'e kadar yayın iş akışı arka arkaya ALTI KEZ düştü, site on iki
+saat dondu ve günün bülteni yayına hiç çıkmadı. Depoda tek bir dosya
+değişmemişti: DİBS hattının verisi tazelendi, `kimlik_cok_kaynakli` 52'den
+51'e ve `spot_3a` 37,06'dan 36,79'a indi, ikisi de sayfadaki UYDURMA aritmetik
+örneğinin sabitleriyle ("gösterge fiyatı 51,00 TL olsun", "yıllık kupon oranı
+%36,8") tesadüfen çakıştı ve çıplak oynak sayı ölçütü bunu ihlal saydı. Ölçüt
+doğruydu, sayfa doğruydu, kusur ÖLÇÜTÜN HASSASİYETİNDEYDİ. Aynı kutu bir kez
+daha çarpışmıştı (40,03 ile `forward_1y1y`) ve o zaman anahtar bazlı bir
+muafiyet konmuştu — yanlış araç: anahtarı sayfanın TAMAMINDA kör eder, yani
+gerçek bir donmuş sayıyı da kaçırır, ve bir sonraki tesadüf için hiçbir şey
+yapmaz. Doğrusu sebebi adlandırmak: o kutudaki sayılar veri değil VARSAYIM,
+öyleyse kutu işaretlenir (`sinav-ornek`). Üç hassasiyet kuralı ölçülerek
+kondu: uydurma kutuları tarama dışı, TAM SAYI yalnız kendi yazımıyla aranır ve
+bulgusu UYARI (sayımların çoğu yöntemsel sabittir — 250 iş günlük pencere, 100
+günlük tolerans), eksi işareti sayının parçasıdır ("−22,1" pozitif 22,1 ile
+eşleşmez). Örneklem dışı sınandı: 63 geçmiş veri sürümü bugünkü sayfalara
+karşı koşuldu, düzeltmeden önce 1 sürüm yayını durduruyordu, sonra 0. Ve
+sınavın kendisi artık sınanıyor (`site/tools/duman_sinav.py`, yayın kapısının
+İLK adımı): bir denetim yayının önünde duruyorsa, onun yanlış alarmı da bir
+arızadır ve regresyon sınaması ister.
+
 **Kurucu ilke — hattın duman sınaması, hattın koşusunun içindedir.** Bir hat
 klasöründe `duman.py` varsa `guncelle.py` onu adımlardan ÖNCE koşturur ve
 düşerse hat koşmaz; `--denetle` de aynı yardımcıyı çağırır. Sınama yalnız
