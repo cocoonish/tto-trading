@@ -369,6 +369,20 @@ def main() -> int:
             O["baz_elverissiz_aylar"] = ay_araliklari(elz)
             koy("baz_kiyas_aylik", ileri)
             O["baz_elverisli_n"] = len(elv)
+        # MOMENTUM PATİKASININ DİBİ: yıllık enflasyon bu senaryoda önce
+        # DÜŞÜP sonra geri tırmanıyor, çünkü elverişli baz Eylül–Ekim'de,
+        # elverişsiz baz Kasım–Aralık'ta. Yalnız yıl sonunu yazmak bu V'yi
+        # gizler ve aradaki dip, kararın alındığı aylara denk geliyor.
+        if "son3_sa" in bz.columns:
+            _s = bz["son3_sa"].dropna()
+            if len(_s):
+                _i = int(_s.idxmin())
+                koy("baz_momentum_dip", float(_s.min()), 2)
+                _dt = bz["tarih"].iloc[_i]
+                O["baz_momentum_dip_ay"] = f"{AY_TR[_dt.month]} {_dt.year}"
+                koy("baz_momentum_ilk", float(_s.iloc[0]), 2)
+                O["baz_momentum_ilk_ay"] = (
+                    f"{AY_TR[bz['tarih'].iloc[0].month]} {bz['tarih'].iloc[0].year}")
     except Exception as ex:
         uyar(f"baz_senaryo.csv okunamadı ({ex}) — 'baz_dusen' anahtarı atlandı.")
 
