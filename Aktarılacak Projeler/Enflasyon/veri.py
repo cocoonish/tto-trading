@@ -601,4 +601,12 @@ def kos(yenile: bool = False) -> dict:
 
 if __name__ == "__main__":
     import sys
-    kos(yenile="--yenile" in sys.argv)
+    # YAYIM GÜNÜ ÖNBELLEK BAYAT VERİYİ KİLİTLER. Seri önbelleği 12 saat taze
+    # sayılıyor; TÜİK ise ayın 3'ünde 10.00'da yayımlıyor. Sabah 07.00'de
+    # koşmuş bir tazeleme, yayımdan SONRA koşan bir tazelemeye eski dosyayı
+    # verir ve hat "veri değişmedi" diyerek yeşil biter — yayım gününde
+    # sayfada dünkü ay durur. Zorlanmış koşu bu yüzden önbelleği ATLAR:
+    # elle tetiklenen bir tazelemenin tek sebebi zaten "yeni veri var".
+    zorla = ("--yenile" in sys.argv
+             or (os.environ.get("TTO_YENILE") or "").strip() in ("1", "true", "True"))
+    kos(yenile=zorla)

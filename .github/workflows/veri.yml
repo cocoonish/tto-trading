@@ -274,6 +274,13 @@ jobs:
           fi
           if [ "${{ inputs.zorla }}" = "true" ]; then
             echo "Takvim atlandı — seçilen hatlar koşulsuz tazeleniyor"
+            # ÖNBELLEK DE ATLANIR. Seri önbelleği 12 saat taze sayılıyor;
+            # TÜİK ise ayın 3'ünde 10.00'da yayımlıyor. Sabah koşmuş bir
+            # tazeleme, yayımdan SONRA koşana eski dosyayı verir ve hat
+            # "veri değişmedi" diyerek yeşil biter — yayım gününde sayfada
+            # dünkü ay durur. Elle tetiklenen bir tazelemenin tek sebebi
+            # zaten "yeni veri var"; önbelleği dinlemesi anlamsız.
+            export TTO_YENILE=1
             SECIM="$HATLAR $KIP --sistem-kur"
           else
             SECIM="$HATLAR $KIP --gerekli --sistem-kur"
