@@ -480,6 +480,34 @@ def tazelik_denetimi(aylik: pd.DataFrame, gunluk: pd.DataFrame) -> list[str]:
                 f"{bugun:%d.%m.%Y} itibarıyla {ad_uzun(beklenen)} beklenirdi "
                 f"({eksik} ay geride, {etiket} takvimi). Kaynak durmuş olabilir.")
 
+    # KISMİ YAYIM: "veri geldi" ile "veri TAM geldi" aynı şey değil.
+    # 03.09.2026'da EVDS'te 72 serinin 57'si ağustosa geçmişti (çekirdek,
+    # hizmet, gıda, Yİ-ÜFE, İTO) ama MANŞET ailesi — TP.TUKFIY2025.GENEL ve
+    # on üç ana harcama grubu — hâlâ temmuzdaydı. Ölçüm katmanı ortak tarihe
+    # hizaladığı için sessizce temmuzda kaldı; hat yeşil bitti, "veri
+    # değişmedi" dedi ve yayım gününde pano dünkü ayı gösterdi. Arızanın
+    # görüntüsü ile sağlığın görüntüsü yine aynıydı.
+    #
+    # Bu ölçüt o sessizliği kapatıyor: seriler arasında AY FARKI varsa
+    # görünür uyarı düşer ve hangi ailenin geride kaldığı adıyla yazılır.
+    son_aylar: dict[str, pd.Timestamp] = {}
+    for ad in aylik.columns:
+        s_ = aylik[ad].dropna()
+        if len(s_):
+            son_aylar[ad] = s_.index[-1]
+    if son_aylar:
+        en_yeni = max(son_aylar.values())
+        geride = sorted(ad for ad, t in son_aylar.items() if t < en_yeni)
+        if geride:
+            ornek = ", ".join(geride[:6]) + (f" +{len(geride) - 6}"
+                                             if len(geride) > 6 else "")
+            uy.append(
+                f"KISMİ YAYIM: {len(geride)}/{len(son_aylar)} seri en yeni aydan "
+                f"({ad_uzun(en_yeni)}) GERİDE — {ornek}. Kaynak seri ailelerini "
+                f"aynı anda güncellemiyor; ölçüm ortak tarihe hizalandığı için "
+                f"pano en geride kalan ailenin ayında kalır. Yayım günüyse "
+                f"birkaç saat sonra yeniden koşturun.")
+
     _denet("tufe", "tufe", "TÜFE (TP.TUKFIY2025.GENEL)")
     _denet("tufe", "cekirdek_c", "Çekirdek C (TP.FE25.OKTG04)")
     _denet("tufe", "yi_ufe", "Yİ-ÜFE (TP.TUFE1YI.T1)")
