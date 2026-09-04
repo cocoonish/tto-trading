@@ -1,30 +1,30 @@
 {
- "kosum": "2026-09-03",
- "son_gun": "2026-09-02",
- "son_hafta": "2026-08-21",
+ "kosum": "2026-09-04",
+ "son_gun": "2026-09-03",
+ "son_hafta": "2026-08-28",
  "gunluk_seri": 54,
- "gunluk_gozlem": 3944,
+ "gunluk_gozlem": 3945,
  "haftalik_seri": 13,
- "haftalik_gozlem": 712,
+ "haftalik_gozlem": 713,
  "aylik_seri": 3,
  "kimlik": {
   "A24/1000 = −APIFON3": {
-   "n": 3936,
+   "n": 3938,
    "n_pencere": 250,
    "maks_fark": 123523.64000000001,
    "maks_tarih": "2021-12-21",
    "pencere_maks_fark": 4030.475999999908,
-   "pencere_maks_bagil": 0.008706729622395869,
-   "pencere_olcek_medyan": 462915.0295,
-   "tam_ortalama_mutlak": 4058.216050914634,
-   "son_fark": 21.819000000017695,
+   "pencere_maks_bagil": 0.008659654917045437,
+   "pencere_olcek_medyan": 465431.4795,
+   "tam_ortalama_mutlak": 4056.2195018791263,
+   "son_fark": 170.67700000002515,
    "birim": "mn TL",
    "esik_bagil": 0.01,
    "gecti": true,
    "not": "artık kapsam farkıdır (bilançonun APİ kalemi işlemiş faizi de taşır); eşik son 250 iş gününe uygulanır"
   },
   "APIFON3 = A − B": {
-   "n": 3937,
+   "n": 3938,
    "maks_fark": 1.1641532182693481e-10,
    "maks_bagil": 3.5492476166748422e-12,
    "maks_tarih": "2016-09-29",
@@ -34,7 +34,7 @@
    "gecti": true
   },
   "A16 = A17+A18+A21+A22": {
-   "n": 3936,
+   "n": 3938,
    "maks_fark": 1.4901161193847656e-08,
    "maks_bagil": 1.9838399662022157e-16,
    "maks_tarih": "2013-01-02",
@@ -44,7 +44,7 @@
    "gecti": true
   },
   "A18 = A19+A20": {
-   "n": 3936,
+   "n": 3938,
    "maks_fark": 1.0,
    "maks_bagil": 5.273360159169584e-10,
    "maks_tarih": "2024-04-22",
@@ -54,19 +54,17 @@
    "gecti": true
   },
   "A15 = A16+A24+A25": {
-   "n": 3936,
+   "n": 3938,
    "maks_fark": 3.0,
    "maks_bagil": 5.552068239804487e-08,
    "maks_tarih": "2016-03-21",
-   "son_fark": 0.0,
+   "son_fark": 1.0,
    "birim": "bin TL",
    "esik_bagil": 1e-06,
    "gecti": true
   }
  },
  "uyarilar": [
-  "TAZELİK: Haftalık ticari kredi faizi (TP.KTF17) son gözlemi 21.08.2026 (13 gün önce, tolerans 12 gün).",
-  "TAZELİK: Haftalık TL mevduat faizi (TP.TRY.MT06) son gözlemi 21.08.2026 (13 gün önce, tolerans 12 gün).",
   "ÖLÜ SERİ: geç likidite penceresi alış faizi son 252 iş gününün TAMAMINDA 0 — dolu görünüyor ama bilgi taşımıyor; grafikte 'yok' olarak işlenecek."
  ]
 }

@@ -1,6 +1,6 @@
 {
- "tarih": "2026-09-02",
- "kosum": "2026-09-03",
+ "tarih": "2026-09-03",
+ "kosum": "2026-09-04",
  "uyarilar": [
   "ONS ÇAPASI REDDEDİLDİ (10.03.2023): IRFCL PDF'i 30,622 mn ons diyor; bu, ima edilen değerleme fiyatını 1.643 USD/ons yapıyor, oysa piyasa 1.838 (−%10,6, eşik %8). Fiyat farkıyla açıklanamaz — PDF düzeni değişmiş olabilir. O hafta kademe 2 (ima) çapası kullanılıyor.",
   "ONS ÇAPASI REDDEDİLDİ (17.03.2023): IRFCL PDF'i 32,309 mn ons diyor; bu, ima edilen değerleme fiyatını 1.639 USD/ons yapıyor, oysa piyasa 1.931 (−%15,1, eşik %8). Fiyat farkıyla açıklanamaz — PDF düzeni değişmiş olabilir. O hafta kademe 2 (ima) çapası kullanılıyor.",
@@ -11,10 +11,10 @@
   "SWAP ÇAPA KAPSAMI DÜŞÜK: günlük serinin yalnız %33'i haftalık IRFCL çapasına dayanıyor (hedef %50); geri kalanı ay sonu çapasından taşınıyor. Haftalık arşiv doldurulduğunda bu kalemin hatası belirgin şekilde küçülür."
  ],
  "tani": {
-  "zincirleme_dt": -0.414,
-  "swap_haftalik_capa_orani": 0.329,
+  "zincirleme_dt": 4.687,
+  "swap_haftalik_capa_orani": 0.33,
   "son_ons_capa": "2026-08-28",
   "capa_boslugu": -3.06,
-  "kur_varyant_fark": 0.117
+  "kur_varyant_fark": 0.12
  }
 }

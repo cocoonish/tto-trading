@@ -1,6 +1,19 @@
 {
- "_aciklama": "Veri iş akışının son koşusu. denetim.py bunun yaşına bakar: veri hattı sessizce düşerse bülten ölçüm katmanının bayat olduğunu bilmeden yazılır.",
- "veri_kosusu": "2026-09-04T07:25:26+00:00",
+ "_aciklama": "Veri iş akışının koşu defteri. Üst düzeydeki veri_kosusu/sonuc alanları EN SON kaydın kopyasıdır (denetim.py ve zincir.py onları okur); kosular listesi son 60 koşuyu tutar, en eski başta. Tek kayıt tutulduğu sürece 'sabah veri penceresi ateşlendi mi' sorusu geriye dönük cevapsızdı.",
+ "veri_kosusu": "2026-09-04T13:08:30+00:00",
  "sonuc": "success",
- "kaynak": "veri.yml"
+ "kaynak": "veri.yml",
+ "kosular": [
+  {
+   "zaman": "2026-09-04T07:25:26+00:00",
+   "sonuc": "success",
+   "tetik": "bilinmiyor"
+  },
+  {
+   "zaman": "2026-09-04T13:08:30+00:00",
+   "sonuc": "success",
+   "tetik": "schedule",
+   "cron": "47 8 * * 1-5"
+  }
+ ]
 }
