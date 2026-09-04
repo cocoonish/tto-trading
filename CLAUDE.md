@@ -228,9 +228,11 @@ bitti ve e-posta geldi. Mükerrerlik kaydını da yazdı; aynı gün ikinci kez
 sorulduğunda "zaten bildirilmiş" deyip susuyor. Bir yan bulgu kayda değer:
 alarmın kendi commit'i ikinci bir koşu TETİKLEMEDİ — GitHub, `GITHUB_TOKEN`
 ile atılan push'lardan iş akışı ateşlemiyor, yani alarm yapısal olarak kendini
-besleyen bir döngüye giremez. Ölçülmemiş tek incelik kaldı: kanıtlanan
-tetikleyici PUSH'tu, `workflow_run` yolu ilk o kaynaktan gelen alarmda
-kapanacak.
+besleyen bir döngüye giremez. `workflow_run` yolu da aynı gün ölçüldü: iki
+koşu o tetikleyiciyle uyandı ve ikisi de yeşil bitti, yani hem taşıyıcı hem
+mükerrerlik bastırması gerçek olayda çalışıyor. Geriye tek bileşim kaldı —
+`workflow_run` + DÜŞME; ölçülen düşme push kaynaklıydı ve üç koşunun aktörü de
+aynı, ama "aynı mekanizma" bir çıkarımdır, ölçüm değil.
 
 Ölçünün tanımı da tek yerde (`bulten/gecikme.py`) ve söz KODA YAZILMADI,
 `site/src/data/yayin_takvimi.json`dan çözülüyor: sitenin okura ilan ettiği saat

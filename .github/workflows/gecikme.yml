@@ -35,11 +35,17 @@
 # "[cocoonish/tto-trading] Run failed: Gecikme alarmı - main (f2ff770)",
 # 08:01 UTC. Yani PUSH yolu kanıtlı.
 #
-# KALAN İNCE NOKTA — `workflow_run` yolu HENÜZ ölçülmedi. Ölçülen tetikleyici
-# push'tu; `workflow_run` ile uyanan bir koşunun düşmesinde bildirimin aktörü
-# tetikleyen koşudan miras alınır ve o koşu ZAMANLANMIŞ olabilir. Mekanizma
-# aynı görünüyor ama "görünüyor" ölçüm değildir: ilk `workflow_run` kaynaklı
-# alarm geldiğinde bu satır kapanacak. O güne kadar bu yol AÇIK işaretlidir.
+# `workflow_run` YOLU DA ÖLÇÜLDÜ (aynı gün, 08:05 ve 08:08). İki koşu bu
+# tetikleyiciyle uyandı, ikisi de YEŞİL bitti — çünkü günün alarmı zaten
+# kaydedilmişti. Yani iki şey birden kanıtlandı: taşıyıcı `workflow_run` ile
+# gerçekten uyanıyor, ve mükerrerlik bastırması gerçek olayda çalışıyor
+# (gün içinde ikinci, üçüncü uyanma e-posta üretmiyor).
+#
+# GERİYE TEK BİLEŞİM KALDI: `workflow_run` + DÜŞME. Ölçülen düşme push
+# kaynaklıydı; bu üç koşunun `triggering_actor`ı da aynı (depo sahibi), yani
+# bildirimin yönlendirmesi aynı mekanizmadan geçiyor. Buna rağmen "aynı
+# mekanizma" bir çıkarımdır, ölçüm değil: ilk gerçekten geç kalan sabahta
+# alarm bir veri koşusundan uyanıp düştüğünde bu satır da kapanacak.
 #
 # Ölçünün kendisi bu dosyada DEĞİL: söz `site/src/data/yayin_takvimi.json`dan
 # çözülür, karar `bulten/gecikme.py`nin tek fonksiyonundan gelir. Burası
