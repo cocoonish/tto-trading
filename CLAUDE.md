@@ -220,6 +220,18 @@ ateşleniyordu; alarm oraya, olay akışına taşındı (`gecikme.yml`, CRON YOK
 koşunun bitmesini beklemeden. Nöbetçi silinmedi, YEDEĞE döndü: tek fonksiyon,
 iki taşıyıcı — biri olay tetikli, biri cron'lu.
 
+Kanalın kendisi de ÖLÇÜLDÜ, çünkü "düşen iş akışı e-posta gönderir" cümlesi bu
+depoda yalnız ZAMANLANMIŞ koşu için yazılıydı ve yeni taşıyıcı cron'suz. İlk
+gerçek alarm ölçümü yaptı: dosya main'e girdiği anda push ile uyandı, bugünün
+gecikmesini (39,5 dk, pay 24 dk, darboğaz yazı) ölçtü, sekiz saniyede kırmızı
+bitti ve e-posta geldi. Mükerrerlik kaydını da yazdı; aynı gün ikinci kez
+sorulduğunda "zaten bildirilmiş" deyip susuyor. Bir yan bulgu kayda değer:
+alarmın kendi commit'i ikinci bir koşu TETİKLEMEDİ — GitHub, `GITHUB_TOKEN`
+ile atılan push'lardan iş akışı ateşlemiyor, yani alarm yapısal olarak kendini
+besleyen bir döngüye giremez. Ölçülmemiş tek incelik kaldı: kanıtlanan
+tetikleyici PUSH'tu, `workflow_run` yolu ilk o kaynaktan gelen alarmda
+kapanacak.
+
 Ölçünün tanımı da tek yerde (`bulten/gecikme.py`) ve söz KODA YAZILMADI,
 `site/src/data/yayin_takvimi.json`dan çözülüyor: sitenin okura ilan ettiği saat
 neyse gecikme ona göre ölçülür, cron kayarsa `karsilastir()` ikisini birlikte
