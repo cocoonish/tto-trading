@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import re
 import sys
 import traceback
 from pathlib import Path
@@ -178,6 +179,173 @@ def _kosu_kaydi_dili():
     assert aile("mevduat_yp_usd_mia daha yeni") == {"anahtar adı"}, aile("mevduat_yp_usd_mia daha yeni")
     assert aile("fark 5.2 puan, son çapa 2026-08-21") == {"biçim"}, aile("fark 5.2 puan, son çapa 2026-08-21")
     assert aile("Pink Sheet dosyası eski sürüm olabilir") == {"yapım dili"}
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# İŞ AKIŞI BÜTÇESİ — 04.09.2026 arızasını ÖNCEDEN yakalayan aritmetik özdeşlik
+# ══════════════════════════════════════════════════════════════════════════════
+#
+# O sabah 45 dakikalık tazeleme çöpe gitti ve bu bir kaza değil, dosyanın
+# GARANTİSİYDİ: kurulum 5 + tazele 45 + türev 5 = 55 > iş sınırı 50, üstelik
+# "Hazine ihaleleri" adımının HİÇ zaman aşımı yoktu. 04:22–05:07 tazeleme kendi
+# sınırını doldurdu, 05:07'de Hazine başladı, 05:12'de İŞ sınırı doldu ve
+# `if: always()` taşıyan Koşu nabzı ile Commit adımlarının İKİSİ DE pending
+# kaldı. `if: always()` sigortası ADIM zaman aşımına karşı çalışıyor, İŞ zaman
+# aşımına karşı ÇALIŞMIYOR.
+#
+# Ölçüt bir EŞİK DEĞİL, bir özdeşliktir: adım sınırlarının toplamı artı sınırsız
+# adımların ölçülmüş payı, iş sınırını aşamaz. Bugünkü (düzeltilmemiş) dosyaya
+# karşı koşulsa DÜŞERDİ — arızayı ağa çıkmadan, saniyeler içinde yakalayan tek
+# sınama bu. duman.py zaten veri.yml, bulten.yml ve fx.yml'in İLK adımı, yani
+# kimsenin `--denetle` yazmasına bağlı değil.
+#
+# KAPSAM — bilerek DAR ve burada adıyla yazılı: yalnız veri.yml'in `tazele` işi.
+# Bakılmayan yerler: aynı dosyanın `kesif` işi (20 dk, tek adım, ağ bütçesi
+# başka) ve öbür sekiz iş akışı. Kural onlara körü körüne yayılamaz: adım
+# sınırı OLMAMASI orada bilinçli olabilir ve yayının önünde duran bir denetimin
+# yanlış alarmı arızanın kendisidir. Yayılacaksa her iş için ayrı ölçülür.
+
+# Kurulum payı: iş tetiklendiği an ile `tazele` adımının başladığı an arasındaki
+# fark — checkout, setup-python, önbellek, pip, duman sınaması, EVDS kapısı ve
+# takvim tanısı. ÖLÇÜLDÜ ama n=1: 04.09.2026'da iş 04:17'de tetiklendi, adım
+# 04:22'de başladı. Gözlem birikince p90'a geçilmeli.
+KURULUM_DK = 5
+
+# Kuyruk payı: sınırı olmayan SON iki adım (Koşu nabzı, Commit). Ölçülen süre
+# bugüne dek 13 saniye; 2 dakika onun üstünde bir TAVAN — commit adımının push
+# yeniden deneme döngüsü en kötü hâlde 50 saniye uyuyor.
+KUYRUK_DK = 2
+
+# MUAFİYET LİSTESİ — adıyla durur, sessiz genişlemez. Buraya yalnız süresi
+# ölçülmüş, ağa çıkmayan ya da kurulum/kuyruk payının İÇİNDE sayılan adımlar
+# girer. Bir adım yeniden adlandırılırsa muafiyeti kendiliğinden düşer ve ölçüt
+# onu sınır ister diye rapor eder — yanlış yönde değil, GÜVENLİ yönde bozulur.
+MUAF_ADIMLAR = {
+    "Önbellek depoyu ezmesin": "iki git komutu, saniyeler; kurulum payının içinde",
+    "Temel bağımlılıklar": "pip (önbellekli), kurulum payının içinde ölçüldü",
+    "Duman sınaması (bülten katmanları)": "ağsız, saniyeler; kurulum payının içinde",
+    "EVDS anahtarı": "tek kabuk koşulu; kurulum payının içinde",
+    "Tazeleme takvimi ne diyor (tanı — koşuyu durdurmaz)": "yerel takvim okuması, ağsız",
+    "Koşu nabzı": "tek dosya yazımı; kuyruk payında sayılıyor",
+    "Commit": "git add/commit/push; kuyruk payında sayılıyor",
+}
+
+
+def _yml_anahtar(adim: dict, s: str) -> None:
+    m = re.match(r"^(name|run|uses|timeout-minutes):\s*(.*)$", s)
+    if not m:
+        return
+    k, v = m.group(1), m.group(2).strip()
+    if k == "name":
+        adim["ad"] = v
+    elif k == "run":
+        adim["run"] = True
+    elif k == "uses":
+        adim["uses"] = v
+    elif k == "timeout-minutes":
+        adim["timeout"] = int(v)
+
+
+def _yml_is(metin: str, is_adi: str) -> tuple[int | None, list[dict]]:
+    """`jobs.<is_adi>` işini ayrıştır: (iş sınırı, adımlar).
+
+    PyYAML KULLANILMIYOR — bilerek. Bu sınama veri.yml'in İLK adımı olarak
+    koşuyor ve o noktada koşucuda yalnız stdlib var (pip listesi requests,
+    pandas, numpy, plotly, openpyxl). Bir bağımlılık eklemek, ölçütü tam da
+    korumaya çalıştığı adımın önünde düşürürdü.
+
+    Ayrıştıramazsa YÜKSELİR, sessizce geçmez: "bulamadım" ile "yok" aynı şey
+    değildir ve bakılmayan yer geçen sınavla aynı görünür.
+    """
+    satirlar = metin.splitlines()
+    if not any(s.rstrip() == "jobs:" for s in satirlar):
+        raise AssertionError("iş akışında 'jobs:' yok — bütçe ölçülemiyor")
+    bas = next((i for i, s in enumerate(satirlar)
+                if re.match(rf"^  {re.escape(is_adi)}:\s*$", s)), None)
+    if bas is None:
+        raise AssertionError(f"'jobs.{is_adi}' işi bulunamadı — ölçütün kapsamı kaymış "
+                             f"olabilir; iş yeniden adlandırıldıysa ölçüt de güncellenmeli")
+    son = len(satirlar)
+    for i in range(bas + 1, len(satirlar)):
+        s = satirlar[i]
+        if s.strip() and not s.lstrip().startswith("#") and not s.startswith("    "):
+            son = i
+            break
+
+    is_sinir = None
+    adim_bas = None
+    for i in range(bas + 1, son):
+        s = satirlar[i]
+        m = re.match(r"^    timeout-minutes:\s*(\d+)", s)
+        if m:
+            is_sinir = int(m.group(1))
+        if re.match(r"^    steps:\s*$", s):
+            adim_bas = i
+    if adim_bas is None:
+        raise AssertionError(f"'jobs.{is_adi}.steps' bulunamadı")
+
+    adimlar: list[dict] = []
+    simdiki: dict | None = None
+    blok = None            # `run: |` gövdesi: girintisi 8'den derin satırlar atlanır
+    for i in range(adim_bas + 1, son):
+        ham = satirlar[i]
+        if not ham.strip():
+            continue
+        girinti = len(ham) - len(ham.lstrip())
+        if blok is not None:
+            if girinti > blok:
+                continue
+            blok = None
+        if ham.lstrip().startswith("#"):
+            continue
+        if ham.startswith("      - "):
+            simdiki = {"ad": None, "run": False, "uses": None, "timeout": None}
+            adimlar.append(simdiki)
+            icerik = ham[8:]
+            _yml_anahtar(simdiki, icerik)
+            if icerik.rstrip().endswith(("|", ">")):
+                blok = 8
+            continue
+        if simdiki is not None and girinti == 8:
+            s = ham.strip()
+            _yml_anahtar(simdiki, s)
+            if s.rstrip().endswith(("|", ">")):
+                blok = 8
+    return is_sinir, adimlar
+
+
+def butce_bulgulari(metin: str, is_adi: str = "tazele") -> list[str]:
+    """İş akışı metninden bütçe kusurlarını çıkar. Boş liste = temiz."""
+    is_sinir, adimlar = _yml_is(metin, is_adi)
+    bulgular: list[str] = []
+    if is_sinir is None:
+        return [f"'{is_adi}' işinin timeout-minutes'i yok — iş bütçesi sınırsız, "
+                "asılan bir adım koşucuyu altı saat yakabilir"]
+
+    toplam = sum(a["timeout"] for a in adimlar if a["timeout"])
+    gereken = toplam + KURULUM_DK + KUYRUK_DK
+    if gereken > is_sinir:
+        parcalar = ", ".join(f"{a['ad'] or a['uses']} {a['timeout']}"
+                             for a in adimlar if a["timeout"])
+        bulgular.append(
+            f"ARİTMETİK KAPANMIYOR: adım sınırları ({parcalar}) toplamı {toplam} "
+            f"+ kurulum {KURULUM_DK} + kuyruk {KUYRUK_DK} = {gereken} dk > iş sınırı "
+            f"{is_sinir} dk. İş sınırı dolduğunda GitHub `if: always()` adımlarını da "
+            f"öldürür: tazelenen hatlar commit edilmeden gider (04.09.2026). Ya adım "
+            f"sınırları kısılır ya iş sınırı {gereken} dakikanın üstüne çıkarılır.")
+
+    for a in adimlar:
+        if not a["run"] or a["timeout"] is not None:
+            continue
+        ad = a["ad"] or a["uses"] or "(adsız adım)"
+        if ad in MUAF_ADIMLAR:
+            continue
+        bulgular.append(
+            f"SINIRSIZ ADIM: '{ad}' bir komut koşuyor ama timeout-minutes taşımıyor. "
+            f"Sınırsız bir adım kendisinden SONRA gelen bütün adımların sigortasını "
+            f"yakar — 04.09'da Hazine adımı tam bunu yaptı. Ya sınır konur ya da "
+            f"süresi ölçülüp MUAF_ADIMLAR'a adıyla yazılır.")
+    return bulgular
 
 
 def main() -> int:
@@ -783,6 +951,1147 @@ def main() -> int:
             assert kod == 5, f"denetim kapısı: beklenen 5, gelen {kod}"
             assert _j.loads(hedef.read_text(encoding="utf-8"))["yorum"] == "<p>eski</p>", "engelli yama yazıldı"
     sina("yaz.py: yabancı alan reddi · null siler · boş ezmez · yazı damgası/sürümü · mtime sigortası · denetim kapısı", _yaz)
+
+    # ── İŞ AKIŞI BÜTÇESİ: 04.09.2026'yı önceden yakalayan aritmetik
+    #
+    # Ölçütün KENDİSİ sınanır. Bu sınama veri.yml, bulten.yml ve fx.yml'in ilk
+    # adımında koşuyor: yanlış alarmı üç iş akışını birden durdurur, yani
+    # regresyon fikstürü olmadan konamaz. Üç soru: (a) düzeltilmiş dosya
+    # GEÇİYOR mu, (b) 04.09'un dosyası DÜŞÜYOR mu, (c) muafiyet listesi hem
+    # koruyor hem sessiz genişlemiyor mu.
+    def _is_akisi_butcesi():
+        yml = BURASI.parent / ".github" / "workflows" / "veri.yml"
+        assert yml.exists(), f"{yml} yok"
+        metin = yml.read_text(encoding="utf-8")
+
+        # (a) BUGÜNKÜ dosya temiz — ve ayrıştırıcı gerçekten BAKMIŞ olmalı.
+        # "Bulgu yok" ile "hiçbir şey görmedim" aynı görünür; makullük
+        # eşikleri o ikisini ayırır.
+        sinir, adimlar = _yml_is(metin, "tazele")
+        assert sinir and sinir > 0, "iş sınırı okunamadı"
+        assert len(adimlar) >= 8, f"yalnız {len(adimlar)} adım ayrıştırıldı — ayrıştırıcı kör"
+        adlar = {a["ad"] for a in adimlar if a["ad"]}
+        for zorunlu in ("Gereken hatları tazele", "Hazine ihaleleri (ihale günüyse tam kip)",
+                        "Koşu nabzı", "Commit"):
+            assert zorunlu in adlar, f"'{zorunlu}' adımı ayrıştırılamadı: {sorted(adlar)}"
+        assert sum(1 for a in adimlar if a["timeout"]) >= 3, "adım sınırları okunamadı"
+        assert sum(1 for a in adimlar if a["uses"]) >= 3, "uses adımları ayrıştırılamadı"
+        bulgu = butce_bulgulari(metin)
+        assert not bulgu, "bugünkü veri.yml bütçe ölçütünü geçmiyor:\n    " + "\n    ".join(bulgu)
+
+        # (b) 04.09.2026 SABAHININ dosyası — ölçüt onu YAKALAMALI. İki kusur
+        # birden var: aritmetik kapanmıyor (45+5+5+2=57 > 50) ve Hazine adımı
+        # sınırsız. Ölçüt ikisini de ayrı ayrı söylemeli; yalnız birini
+        # söyleyen bir ölçüt "bir düzeltme genelleştirilmeden tamamlanmaz"
+        # ilkesini ihlal ederdi.
+        dun = """jobs:
+  tazele:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - name: Duman sınaması (bülten katmanları)
+        run: python bulten/duman.py
+      - name: Gereken hatları tazele
+        id: tazele
+        timeout-minutes: 45
+        run: |
+          python guncelle.py $SECIM
+      - name: Türev hatlar (tazeleme düşse de)
+        if: always()
+        timeout-minutes: 5
+        run: |
+          python guncelle.py carry tufex makro
+      - name: Hazine ihaleleri (ihale günüyse tam kip)
+        if: always()
+        continue-on-error: true
+        run: |
+          python guncelle.py hazine --tam --sistem-kur
+      - name: Koşu nabzı
+        if: always()
+        run: |
+          python - <<'PY'
+          print("nabız")
+          PY
+      - name: Commit
+        if: always()
+        run: |
+          git add -A
+"""
+        b = butce_bulgulari(dun)
+        assert any("ARİTMETİK KAPANMIYOR" in x for x in b), f"04.09 aritmetiği yakalanmadı: {b}"
+        assert any("SINIRSIZ ADIM" in x and "Hazine" in x for x in b), \
+            f"sınırsız Hazine adımı yakalanmadı: {b}"
+
+        # (c) Muafiyet listesi iki yönde de sınanır: listedeki ad sessiz,
+        # listede olmayan ad ENGEL, `uses:` adımı yapısal olarak muaf.
+        kalip = """jobs:
+  tazele:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/setup-python@v5
+      - name: %s
+        run: echo x
+      - name: Gereken hatları tazele
+        timeout-minutes: 40
+        run: echo y
+"""
+        assert not butce_bulgulari(kalip % "Commit"), \
+            "muaf adım boşuna sınır istedi"
+        yeni = butce_bulgulari(kalip % "Yeni ağ adımı")
+        assert len(yeni) == 1 and "Yeni ağ adımı" in yeni[0], \
+            f"muaf olmayan sınırsız adım yakalanmadı: {yeni}"
+
+        # (d) İş sınırı hiç yoksa da konuşmalı — sınırsız iş, sınırsız adımdan beter.
+        sinirsiz = butce_bulgulari(kalip.replace("    timeout-minutes: 60\n", "") % "Commit")
+        assert sinirsiz and "iş bütçesi sınırsız" in sinirsiz[0], sinirsiz
+
+        # (f) BİR SİGORTA, KENDİNDEN ÖNCEKİNİ KAPATMAMALI. Hazine adımına
+        # 04.09'da tavan konurken şu gözden kaçtı: adımın `timeout-minutes`
+        # sınırı dolduğunda GitHub kabuğu öldürür, kabuk ölünce yarım kazımayı
+        # geri alan `git checkout` dalı HİÇ koşmaz ve Commit adımı
+        # (`if: always()`, artık iş bütçesi sayesinde gerçekten koşuyor) o yarım
+        # CSV'yi commit eder — 25.08'de aynı hat 448 ihalelik geçmişi 16 satıra
+        # düşürmüştü. Kabuk içi `timeout` denetimi kabuğa geri verir; sınır
+        # adımınkinin ALTINDA olmalı, yoksa yine adım tavanına çarpılır.
+        hazine = metin.split("- name: Hazine ihaleleri")[-1].split("- name: Koşu nabzı")[0]
+        assert "git checkout --" in hazine, \
+            "Hazine adımının geri alma dalı kaybolmuş — yarım kazıma commit edilir"
+        mm = re.search(r"timeout\s+(?:-k\s+\S+\s+)?(\d+)m\s+python guncelle\.py hazine", hazine)
+        assert mm, ("Hazine tam kipi kabuk içi `timeout` ile sınırlanmamış: adımın "
+                    "timeout-minutes sınırı dolduğunda kabuk öldürülür, geri alma dalı "
+                    "koşmaz ve yarım kazıma commit edilir.")
+        hz = next((a["timeout"] for a in adimlar
+                   if (a["ad"] or "").startswith("Hazine ihaleleri")), None)
+        assert hz and int(mm.group(1)) < hz, (
+            f"kabuk içi sınır ({mm.group(1)} dk) adım tavanının ({hz} dk) altında değil "
+            "— geri almaya vakit kalmıyor")
+
+        # (e) AYRIŞTIRAMAZSA SESSİZ GEÇMEZ. Ölçütün en tehlikeli bozulma biçimi
+        # bu: iş yeniden adlandırılır, ayrıştırıcı hiçbir şey bulamaz, sınav
+        # yeşil geçer ve aritmetik bir daha hiç sorulmaz.
+        for bozuk in ("jobs:\n  baska:\n    timeout-minutes: 5\n", "name: x\n"):
+            try:
+                butce_bulgulari(bozuk)
+            except AssertionError:
+                pass
+            else:
+                raise AssertionError(f"ayrıştırılamayan iş akışı sessizce geçti: {bozuk!r}")
+    sina("iş akışı: veri.yml adım/iş bütçesi aritmetiği kapanıyor", _is_akisi_butcesi)
+
+    # ── ADIM ZAMAN AŞIMI: asılan bir hat bütün bütçeyi yemesin
+    #
+    # 04.09.2026'ya kadar `_adim_kos` hiçbir duvar saati sınırı taşımıyordu:
+    # `ortak/sitecustomize.py` yalnız HTTP isteğine sınır takıyor, adımın
+    # toplam süresine değil. 27.08'de EVDS 21 dakika astı ve dört hattın
+    # üçünün tamamlanmış işi çöpe gitti. SINANMAYAN EMNİYET EMNİYET DEĞİLDİR:
+    # bu sınama bilerek asılan sahte bir betikle koşuyor, ağ istemiyor.
+    def _adim_zaman_asimi():
+        import os as _os
+        import tempfile
+        import time as _t
+        import sys as _s
+        _s.path.insert(0, str(BURASI.parent))
+        import guncelle as g
+
+        with tempfile.TemporaryDirectory() as td:
+            # Betik bir TORUN açıp kendisi de asılır: öldürmenin süreç AĞACINI
+            # kapsadığı ancak böyle ölçülebilir. Yalnız çocuğu öldüren bir
+            # düzeltme bu sınamayı geçemez.
+            betik = Path(td) / "asil.py"
+            betik.write_text(
+                "import subprocess, sys, time\n"
+                "t = subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(600)'])\n"
+                "print('TORUN', t.pid, flush=True)\n"
+                "time.sleep(600)\n", encoding="utf-8")
+
+            t0 = _t.time()
+            kod, son, asti = g._adim_kos([sys.executable, "-u", str(betik)], Path(td), 2)
+            gecen = _t.time() - t0
+
+            assert asti, "zaman aşımı raporlanmadı — asılan adım sessizce beklendi"
+            assert gecen < 30, f"kesme {gecen:.0f} saniye sürdü — sınır uygulanmıyor"
+            assert any("zaman aşımı" in x for x in son), f"son satırlarda iz yok: {son}"
+
+            if _os.name != "nt":
+                torun = next((int(x.split()[1]) for x in son if x.startswith("TORUN")), None)
+                assert torun, f"torun PID'i okunamadı: {son}"
+                for _ in range(30):
+                    try:
+                        _os.kill(torun, 0)
+                    except (ProcessLookupError, PermissionError):
+                        break
+                    _t.sleep(0.1)
+                else:
+                    try:
+                        _os.kill(torun, 9)
+                    finally:
+                        raise AssertionError(
+                            f"torun {torun} hâlâ ayakta — yalnız çocuk öldürüldü, "
+                            "süreç AĞACI değil")
+
+            # DÖNGÜ SÜRMELİ: kesme, sıradaki adımı koşturmayı engellememeli.
+            hizli = Path(td) / "hizli.py"
+            hizli.write_text("print('bitti')\n", encoding="utf-8")
+            kod2, son2, asti2 = g._adim_kos([sys.executable, "-u", str(hizli)], Path(td), 2)
+            assert kod2 == 0 and not asti2 and "bitti" in son2, (kod2, asti2, son2)
+
+            # Sınır verilmezse eski davranış: beklenir, kesilmez.
+            kod3, _, asti3 = g._adim_kos([sys.executable, "-u", str(hizli)], Path(td))
+            assert kod3 == 0 and not asti3
+
+        # TAVAN KİPE BAĞLI. Hafif kipte tavan var; TAM ve GÜNLÜK kipler
+        # ölçülerek uzun (FX tam kipi 1 sa 45 dk) ve kendi iş akışlarında
+        # koşuyor — onlara hafif kipin tavanını dayatmak haftalık FX koşusunu
+        # her hafta öldüren bir YANLIŞ ALARM olurdu.
+        h = g.HAT["kredi"]
+        assert g.adim_tavani(h, False, False) == g.ADIM_TAVAN_SN
+        assert g.adim_tavani(h, True, False) is None, "TAM kipe tavan konmuş"
+        assert g.adim_tavani(h, False, True) is None, "GÜNLÜK kipe tavan konmuş"
+        # Tohum, ölçülen en yavaş hafif-kip hattının (kredi 869 sn) üstünde
+        # olmalı; altına düşerse o hat her koşuda kesilir.
+        assert g.ADIM_TAVAN_SN >= 900, f"tavan ölçülen en yavaş hattın altına indi: {g.ADIM_TAVAN_SN}"
+        import inspect
+        assert "adim_tavan_sn" in inspect.signature(g.kos).parameters, \
+            "kos() dışarıdan tavan alamıyor — bütçe ucu kapanmış"
+    sina("guncelle: asılan adım duvar saatiyle kesiliyor, süreç ağacı ölüyor", _adim_zaman_asimi)
+
+    # ── KOŞU NABZI DEFTERİ: biriktirir, ama eski okuyucuları kırmaz
+    #
+    # Dosya 04.09.2026'ya kadar her koşuda ÜZERİNE yazıyordu ve "bu sabahki
+    # veri penceresi ateşlendi mi" sorusu geriye dönük cevapsızdı. Defter o
+    # soruyu cevaplanabilir yapıyor; ama iki okuyucu (denetim.nabiz,
+    # zincir.durum) üst düzey alanları okuyor ve UYUMLULUK SÖZLEŞMESİ bu
+    # sınamayla kilitleniyor — biçim değişikliğinin sessizce kırdığı bir
+    # okuyucu, ölçülemeyen bir arıza demek.
+    def _nabiz_defteri():
+        import datetime as _dt
+        import tempfile
+        import nabiz as nb
+
+        with tempfile.TemporaryDirectory() as td:
+            p = Path(td) / "kosu_nabzi.json"
+
+            # (a) ESKİ BİÇİM GÖÇÜ: defter öncesi tek kayıt kaybolmaz.
+            p.write_text(json.dumps({
+                "_aciklama": "eski", "veri_kosusu": "2026-09-03T18:51:34+00:00",
+                "sonuc": "success", "kaynak": "veri.yml"}, ensure_ascii=False),
+                encoding="utf-8")
+            d = nb.kaydet(p, sonuc="success", tetik="schedule", cron="13 2 * * 1-5")
+            assert len(d["kosular"]) == 2, d["kosular"]
+            assert d["kosular"][0]["zaman"].startswith("2026-09-03"), "eski kayıt düştü"
+            assert d["kosular"][-1]["cron"] == "13 2 * * 1-5", "pencere kaydedilmedi"
+
+            # (b) UYUMLULUK: üst düzey alanlar en son kaydın kopyası.
+            assert d["veri_kosusu"] == d["kosular"][-1]["zaman"]
+            assert d["sonuc"] == "success" and d["kaynak"] == "veri.yml"
+
+            # (c) MEVCUT OKUYUCULAR yeni biçimi kırılmadan okuyor.
+            import denetim as _den
+            import zincir as _z
+            eski_yer = _den.BURASI
+            try:
+                nb.kaydet(p, sonuc="success", tetik="workflow_dispatch",
+                          an=_dt.datetime.now(_dt.timezone.utc))
+                _den.BURASI = Path(td)
+                dd = _den.Denetim({"tarih": "2026-09-04"})
+                dd.nabiz()
+                assert not dd.uyari, f"taze nabız uyarı üretti: {dd.uyari}"
+                # Bayat nabız hâlâ görülüyor: sözleşme yalnız 'okunuyor' değil,
+                # 'aynı hükmü veriyor' demek.
+                nb.kaydet(p, sonuc="failure", tetik="schedule",
+                          an=_dt.datetime.now(_dt.timezone.utc) - _dt.timedelta(days=3))
+                dd2 = _den.Denetim({"tarih": "2026-09-04"})
+                dd2.nabiz()
+                assert dd2.uyari, "üç gün önceki nabız uyarı üretmedi"
+            finally:
+                _den.BURASI = eski_yer
+
+            # zincir.durum() nabzı KENDİ klasöründen okuyor; ayrıştırma
+            # sözleşmesi burada doğrudan sınanır.
+            ham = json.loads(p.read_text(encoding="utf-8"))
+            assert _dt.datetime.fromisoformat(
+                str(ham["veri_kosusu"]).replace("Z", "+00:00")), "zincir bunu ayrıştıramaz"
+            assert ham.get("sonuc") == "failure"
+
+            # (d) PENCERE: 61. kayıt en eskisini düşürür.
+            p.write_text(json.dumps({"kosular": [
+                {"zaman": f"2026-01-01T00:{i:02d}:00+00:00", "sonuc": "success",
+                 "tetik": "schedule"} for i in range(nb.AZAMI)]}, ensure_ascii=False),
+                encoding="utf-8")
+            d = nb.kaydet(p, sonuc="success", tetik="schedule")
+            assert len(d["kosular"]) == nb.AZAMI, len(d["kosular"])
+            assert d["kosular"][0]["zaman"] == "2026-01-01T00:01:00+00:00", \
+                "en eski kayıt düşmedi"
+
+            # (e) BOZUK DOSYA KOŞUYU DÜŞÜRMEZ: nabız tutamamak, koşuyu
+            # öldürmekten iyidir.
+            p.write_text("{bozuk", encoding="utf-8")
+            d = nb.kaydet(p, sonuc="success", tetik="schedule")
+            assert len(d["kosular"]) == 1, d
+
+            # (f) 5./6. madde alanları BUGÜN YAZILMAZ — ölçülmemiş bir sayı
+            # ölçülmüş gibi görünmesin.
+            assert "butce_dk" not in d["kosular"][-1]
+            assert "atlanan_butce" not in d["kosular"][-1]
+            d = nb.kaydet(p, sonuc="success", tetik="schedule", butce_dk=8,
+                          atlanan_butce=["tcmb", "dibs"])
+            assert d["kosular"][-1]["butce_dk"] == 8
+            assert d["kosular"][-1]["atlanan_butce"] == ["tcmb", "dibs"]
+
+        # İŞ AKIŞI GERÇEKTEN BU MODÜLÜ ÇAĞIRIYOR MU — gömülü bir kopya
+        # sınanmamış bir kopyadır.
+        yml = (BURASI.parent / ".github" / "workflows" / "veri.yml").read_text(encoding="utf-8")
+        assert "python bulten/nabiz.py" in yml, "veri.yml nabız modülünü çağırmıyor"
+        assert "kosu_nabzi.json" in yml.split("Commit")[-1], \
+            "commit adımı nabız dosyasını eklemiyor — defter depoya hiç ulaşmaz"
+    sina("nabız: koşu defteri biriktiriyor, denetim ve zincir kırılmıyor", _nabiz_defteri)
+
+    # ── HAT SÜRESİ DEFTERİ. `kos()` süreyi zaten ölçüyordu ve hiçbir yere
+    # yazmıyordu; 04.09'da 45 dakikayı hangi hattın yediği bu yüzden geriye
+    # dönük CEVAPSIZ. Ölçü depoya girmezse bütçe de sıralama da uydurma olur.
+    def _hat_suresi():
+        import tempfile
+        import inspect
+        import sys as _s
+        _s.path.insert(0, str(BURASI.parent))
+        import guncelle as g
+
+        class _H:
+            def __init__(self, ad): self.ad = ad
+
+        with tempfile.TemporaryDirectory() as td:
+            y = Path(td) / "hat_suresi.json"
+            for i in range(12):
+                g.sure_kaydet([(_H("tcmb"), True, "ok", 100 + i),
+                               (_H("kredi"), False, "adım 1 düştü", 800)],
+                              tam=False, gunluk=False, yol=y)
+            d = g.sure_oku(y)
+            assert len(d["tcmb"]) == g.SURE_KAYIT, f"defter budanmadı: {len(d['tcmb'])}"
+            assert d["tcmb"][0]["sn"] == 102.0, "on birinci koşu en ESKİyi düşürmedi"
+            assert g.medyan("tcmb", yol=y) == 106.5, g.medyan("tcmb", yol=y)
+            assert g.p90("tcmb", yol=y) == 110.0, g.p90("tcmb", yol=y)
+            # Düşen koşunun süresi medyana GİRMEZ: "bu hat ne kadar sürüyor"
+            # sorusunun cevabı, işleyen koşuların süresidir.
+            assert g.medyan("kredi", yol=y) is None
+            assert g.medyan("kredi", yol=y, yalniz_basarili=False) == 800.0
+            assert g.medyan("tcmb", kip="tam", yol=y) is None, "kip süzgeci çalışmıyor"
+            # Zaman aşımı ayrı bir sonuç: "düştü" ile aynı kefeye konmaz.
+            # MESAJ UYDURULMAZ — `kos()`un GERÇEKTEN ürettiği cümle kullanılır.
+            # Uydurma bir dizgeyle sınandığı sürece bu ölçüt yeşil kalıyordu:
+            # defter küçük harf arıyor, mesaj BÜYÜK harfle geliyordu ve asılan
+            # her hat "düştü" diye kaydediliyordu.
+            _kaynak = inspect.getsource(g.kos)
+            assert "ZAMAN_ASIMI_IMZASI" in _kaynak, \
+                "kos() zaman aşımı imzasını tek tanımdan almıyor"
+            _gercek = (f"{g.ZAMAN_ASIMI_IMZASI} — adım 2 (veri.py) 900 saniyede "
+                       "bitmedi; süreç ağacı öldürüldü.")
+            g.sure_kaydet([(_H("x"), False, _gercek, 900)], tam=False, yol=y)
+            assert g.sure_oku(y)["x"][0]["sonuc"] == "zaman aşımı", \
+                f"gerçek zaman aşımı mesajı 'düştü' diye kaydedildi: {_gercek!r}"
+            # BOZUK DOSYA İSTİSNA FIRLATMAZ: çağıran tohuma düşer.
+            y.write_text("bozuk{", encoding="utf-8")
+            assert g.sure_oku(y) == {} and g.medyan("tcmb", yol=y) is None \
+                and g.p90("tcmb", yol=y) is None
+
+        # WIRING: yazma gerçekten `finally` bloğunda mı. Sarılmasaydı, adım
+        # zaman aşımına çarpan bir koşu ölçüyü hiç bırakmazdı.
+        kaynak = inspect.getsource(g.main)
+        i_fin = kaynak.index("finally:")
+        assert "sure_kaydet(" in kaynak[i_fin:], \
+            "sure_kaydet finally bloğunda değil — kesilen koşu ölçü bırakmaz"
+        yml = (BURASI.parent / ".github" / "workflows" / "veri.yml").read_text(encoding="utf-8")
+        assert "bulten/hat_suresi.json" in yml.split("Commit")[-1], \
+            "commit adımı hat süresi defterini eklemiyor — ölçü depoya ulaşmaz"
+        # DOSYA DEPODA DURMAK ZORUNDA. `git add a b yok` EKSİK yolda düşer ve
+        # HİÇBİR ŞEYİ stage'lemez (ölçüldü) — yani defter silinirse commit adımı
+        # tazeleme damgasını ve nabzı da sessizce commit etmez olur.
+        assert g.HAT_SURESI.exists(), \
+            "bulten/hat_suresi.json depoda yok — commit adımının git add'i eksik " \
+            "yolda düşer ve hiçbir dosyayı stage'lemez"
+    sina("guncelle: hat süresi ölçülüp deftere yazılıyor (budama, kip, bozuk dosya)",
+         _hat_suresi)
+
+    # ── GECİKME: söz ile gerçekleşenin TEK karşılaştırması, ve ENGEL sınıfının
+    # HİÇ TANIMLANMAMASI. Bu ikinci madde yapısal bir kilittir: gecikme ölçüsü
+    # ileride bir yayın kapısına bağlanmak istenirse bu sınama düşer. Geç kalmış
+    # bir bülteni durduran kapı, gecikmeyi yokluğa çevirir.
+    def _gecikme():
+        import datetime as _dt
+        import json as _j
+        import tempfile
+        import gecikme as gk
+
+        def kur(td, bultenler=None, teknikler=None, tweetler=None, nabiz_an=None,
+                takvim_duzelt=None):
+            k = Path(td)
+            (k / "site" / "src" / "data" / "bulten").mkdir(parents=True, exist_ok=True)
+            (k / "site" / "src" / "data" / "teknik").mkdir(parents=True, exist_ok=True)
+            (k / "site" / "src" / "data" / "tweet").mkdir(parents=True, exist_ok=True)
+            (k / "bulten").mkdir(parents=True, exist_ok=True)
+            tk = _j.loads((BURASI.parent / "site" / "src" / "data" /
+                           "yayin_takvimi.json").read_text(encoding="utf-8"))
+            if takvim_duzelt:
+                takvim_duzelt(tk)
+            (k / "site" / "src" / "data" / "yayin_takvimi.json").write_text(
+                _j.dumps(tk, ensure_ascii=False), encoding="utf-8")
+            for g, b in (bultenler or {}).items():
+                (k / "site" / "src" / "data" / "bulten" / f"{g}.json").write_text(
+                    _j.dumps(b, ensure_ascii=False), encoding="utf-8")
+            for g, b in (teknikler or {}).items():
+                (k / "site" / "src" / "data" / "teknik" / f"{g}.json").write_text(
+                    _j.dumps(b, ensure_ascii=False), encoding="utf-8")
+            (k / "site" / "src" / "data" / "tweet" / "defter.json").write_text(
+                _j.dumps(tweetler or {}, ensure_ascii=False), encoding="utf-8")
+            if nabiz_an:
+                (k / "bulten" / "kosu_nabzi.json").write_text(
+                    _j.dumps({"veri_kosusu": nabiz_an, "sonuc": "success"}),
+                    encoding="utf-8")
+            return k
+
+        cuma, pazar, cmt = _dt.date(2026, 9, 4), _dt.date(2026, 8, 30), _dt.date(2026, 9, 5)
+        with tempfile.TemporaryDirectory() as td:
+            k = kur(td)
+            # (a) SÖZ = en ERKEN tüketici adımı (sitede 08:11 İst = 05:11 UTC)
+            s = gk.soz(k, "Günlük bülten", cuma)
+            assert s == _dt.datetime(2026, 9, 4, 5, 11, tzinfo=_dt.timezone.utc), s
+            # Pazar: X gönderisi (18:25) siteden (18:41) ÖNCE — en erken odur.
+            sp = gk.soz(k, "Haftaya bakış", pazar)
+            assert sp == _dt.datetime(2026, 8, 30, 15, 25, tzinfo=_dt.timezone.utc), sp
+            # (b) PAY takvimin KENDİ tüketici aralığı — uydurma değil
+            assert gk.pay(k, "Günlük bülten") == 24, gk.pay(k, "Günlük bülten")
+            assert gk.pay(k, "Haftaya bakış") == 16, gk.pay(k, "Haftaya bakış")
+            # (h) cumartesi yayın günü değil
+            assert gk.olc(k, cmt) == [], "cumartesi için satır üretildi"
+
+        # (c) TAM 0 dakika ZAMANINDA — sınır dışlamalı değil
+        with tempfile.TemporaryDirectory() as td:
+            k = kur(td, bultenler={"2026-09-04": {
+                "tarih": "2026-09-04", "tur": "gunluk", "gundem_kaynagi": "yazili",
+                "olusturma": "2026-09-04T04:30:00+00:00",
+                "ilk_yazi_zamani": "2026-09-04T05:11:00+00:00"}},
+                nabiz_an="2026-09-04T04:20:00+00:00")
+            r = gk.olc(k, cuma, _dt.datetime(2026, 9, 4, 6, 0, tzinfo=_dt.timezone.utc))
+            assert len(r) == 1 and r[0]["gecikme_dk"] == 0.0, r
+            assert r[0]["sinif"] == "zamaninda", r[0]
+            # Darboğaz EN UZUN bacaktır: veri→ölçüm 10 dk, ölçüm→yazı 41 dk.
+            assert r[0]["darbogaz"] == "yazı", (r[0]["darbogaz"], r[0]["bacaklar"])
+            assert r[0]["bacaklar"]["olcum→yazi"] == 41.0, r[0]["bacaklar"]
+
+        # (f) YAZI YOK: sıfır gecikme DEĞİL. Söz geçmeden zamanında, geçtikten
+        #     ve payı aştıktan sonra alarm.
+        with tempfile.TemporaryDirectory() as td:
+            k = kur(td, bultenler={"2026-09-04": {
+                "tarih": "2026-09-04", "tur": "gunluk", "gundem_kaynagi": "taban",
+                "olusturma": "2026-09-04T04:30:00+00:00"}},
+                nabiz_an="2026-09-04T02:20:00+00:00")
+            erken = gk.olc(k, cuma, _dt.datetime(2026, 9, 4, 4, 18, tzinfo=_dt.timezone.utc))[0]
+            assert erken["henuz_yazilmadi"] and erken["ilk_yazi"] is None
+            assert erken["sinif"] == "zamaninda", erken
+            gec = gk.olc(k, cuma, _dt.datetime(2026, 9, 4, 6, 30, tzinfo=_dt.timezone.utc))[0]
+            assert gec["sinif"] == "alarm" and gec["darbogaz"] == "yazı", gec
+
+        # (g) ÖLÇÜM DOSYASI HİÇ YOK = yokluk; söz geçtiyse payı YOKTUR.
+        #     04.09'un 05:12 hâli: bülten henüz üretilmemişti.
+        with tempfile.TemporaryDirectory() as td:
+            k = kur(td, nabiz_an="2026-09-03T18:51:34+00:00")
+            once = gk.olc(k, cuma, _dt.datetime(2026, 9, 4, 4, 18, tzinfo=_dt.timezone.utc))[0]
+            assert once["sinif"] == "zamaninda", once
+            sonra = gk.olc(k, cuma, _dt.datetime(2026, 9, 4, 5, 12, tzinfo=_dt.timezone.utc))[0]
+            assert sonra["sinif"] == "alarm" and sonra["darbogaz"] == "ölçüm", sonra
+
+        # (e) PAZAR İKİ YAYIN — ayrı satır, ayrı gerçekleşme kaydı
+        with tempfile.TemporaryDirectory() as td:
+            k = kur(td,
+                    bultenler={"2026-08-30": {"tarih": "2026-08-30", "tur": "haftalik",
+                                              "gundem_kaynagi": "yazili",
+                                              "olusturma": "2026-08-30T15:38:18"}},
+                    teknikler={"2026-08-30": {"tarih": "2026-08-30", "yazili": True,
+                                              "olcum_zamani": "2026-08-30T16:28:20+00:00"}})
+            r = gk.olc(k, pazar, _dt.datetime(2026, 8, 30, 20, 0, tzinfo=_dt.timezone.utc))
+            assert len(r) == 2, [x["yayin"] for x in r]
+            assert {x["yayin"] for x in r} == {"Haftaya bakış", "Haftalık teknik analiz"}
+            # ALT SINIR etiketlenir: yazı anı kaydedilmemiş, ölçüm damgası kullanıldı
+            assert all(x["alt_sinir"] and x["olculmedi"] for x in r), r
+
+        # (i) KAPSAM KUSURU: tüketici adımı silinen yayın SESSİZCE GEÇMEZ
+        with tempfile.TemporaryDirectory() as td:
+            def sil(tk):
+                for y in tk["yayinlar"]:
+                    if y.get("yayin") == "Günlük bülten":
+                        y["adimlar"] = [a for a in y["adimlar"]
+                                        if a.get("ad") not in gk.TUKETICI]
+            k = kur(td, takvim_duzelt=sil)
+            try:
+                gk.soz(k, "Günlük bülten", cuma)
+            except ValueError:
+                pass
+            else:
+                raise AssertionError("tüketici adımı yokken sessizce geçildi")
+
+        # (d) YAPISAL KİLİT — ÜÇTEN FAZLA SINIF YOK ve hiçbir girdi dördüncüyü
+        #     üretmiyor. Yayını DURDURAN bir sınıf bu modülde tanımlı değildir.
+        assert gk.SINIFLAR == ("zamaninda", "uyari", "alarm"), gk.SINIFLAR
+        kaynak = Path(gk.__file__).read_text(encoding="utf-8")
+        import re as _re
+        assert not _re.search(r"""["']engel["']""", kaynak, _re.I), \
+            "gecikme.py'ye yayın kapısı sınıfı eklenmiş — gecikme yokluğa çevrilir"
+        with tempfile.TemporaryDirectory() as td:
+            for yazili in (True, False):
+                for ilk in (None, "2026-09-04T03:00:00+00:00", "2026-09-04T09:00:00+00:00"):
+                    b = {"tarih": "2026-09-04", "tur": "gunluk",
+                         "gundem_kaynagi": "yazili" if yazili else "taban",
+                         "olusturma": "2026-09-04T04:30:00+00:00"}
+                    if ilk:
+                        b["ilk_yazi_zamani"] = ilk
+                    k = kur(td, bultenler={"2026-09-04": b})
+                    for saat in (0, 4, 5, 6, 12, 23):
+                        for x in gk.olc(k, cuma, _dt.datetime(2026, 9, 4, saat, 30,
+                                                              tzinfo=_dt.timezone.utc)):
+                            assert x["sinif"] in gk.SINIFLAR, x["sinif"]
+
+        # (j) TEKRAR KOŞULU: defter boşken ve tek günlük gecikmede SESSİZ
+        with tempfile.TemporaryDirectory() as td:
+            d = Path(td) / "defter.jsonl"
+            assert gk.tekrar(d)[0] is False, "boş defter tekrar üretti"
+            satir = lambda t, s: _j.dumps({"tarih": t, "yayin": "Günlük bülten", "sinif": s})
+            d.write_text("\n".join([satir("2026-08-31", "zamaninda"),
+                                    satir("2026-09-01", "zamaninda"),
+                                    satir("2026-09-02", "zamaninda"),
+                                    satir("2026-09-03", "zamaninda"),
+                                    satir("2026-09-04", "alarm")]) + "\n", encoding="utf-8")
+            assert gk.tekrar(d)[0] is False, "tek günlük gecikme tekrar sayıldı"
+            d.write_text("\n".join([satir("2026-08-31", "zamaninda"),
+                                    satir("2026-09-01", "uyari"),
+                                    satir("2026-09-02", "zamaninda"),
+                                    satir("2026-09-03", "alarm"),
+                                    satir("2026-09-04", "alarm")]) + "\n", encoding="utf-8")
+            assert gk.tekrar(d)[0] is True, "beş günün üçü gecikmeliyken tekrar tutmadı"
+    sina("gecikme: söz takvimden çözülüyor, yokluk gecikmeden ayrı, ENGEL sınıfı YOK",
+         _gecikme)
+
+    # ── GECİKME KAYDI YAZMANIN YAN ETKİSİ. Rutinin kaçınamayacağı tek araç
+    # yaz.py; kayıt bir bayrağa değil, yazma işleminin kendisine bağlı. Ve
+    # ölçümdeki bir kusur YAZMAYI DÜŞÜRMEMELİ — try/except gerçekten kapı değil.
+    def _gecikme_defteri():
+        import json as _j
+        import subprocess as _sp
+        import tempfile
+        with tempfile.TemporaryDirectory() as td:
+            k = Path(td)
+            (k / "site" / "src" / "data" / "bulten").mkdir(parents=True)
+            (k / "site" / "src" / "data" / "teknik").mkdir(parents=True)
+            (k / "site" / "src" / "data" / "tweet").mkdir(parents=True)
+            (k / "bulten").mkdir(parents=True)
+            import shutil as _sh
+            _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
+                      k / "site" / "src" / "data" / "yayin_takvimi.json")
+            (k / "site" / "src" / "data" / "tweet" / "defter.json").write_text(
+                "{}", encoding="utf-8")
+            (k / "bulten" / "kosu_nabzi.json").write_text(
+                _j.dumps({"veri_kosusu": "2026-01-05T02:20:00+00:00", "sonuc": "success"}),
+                encoding="utf-8")
+            bd = k / "site" / "src" / "data" / "bulten"
+            hedef = bd / "2026-01-05.json"                     # pazartesi
+            b0 = {"tarih": "2026-01-05", "tur": "gunluk",
+                  "olusturma": "2026-01-05T04:00:00+00:00",
+                  "gundem_kaynagi": "taban", "yorum": "<p>eski</p>", "gundem": {}}
+            hedef.write_text(_j.dumps(b0), encoding="utf-8")
+            yama = k / "yama.json"
+            yama.write_text(_j.dumps({"yorum": "<p>yeni</p>"}), encoding="utf-8")
+            defter = k / "gecikme_defteri.jsonl"
+
+            on = (f"import sys, pathlib; sys.path.insert(0, {str(BURASI)!r}); ")
+            kur = (f"import yaz; yaz.KOK = pathlib.Path({str(k)!r}); "
+                   f"yaz.BULTEN = pathlib.Path({str(bd)!r}); "
+                   f"sys.argv = ['yaz.py', {str(yama)!r}, '--tarih', '2026-01-05', "
+                   "'--damgasiz', '--engelle-yaz']; raise SystemExit(yaz.main())")
+
+            # (a) yazma → defter satırı açılır ve ilk_yazi_zamani ile TUTARLI
+            r = _sp.run([sys.executable, "-c",
+                         on + f"import gecikme; gecikme.DEFTER = pathlib.Path({str(defter)!r}); "
+                         + kur], capture_output=True, text=True)
+            assert r.returncode == 0, (r.returncode, r.stdout[-600:], r.stderr[-600:])
+            assert defter.exists(), "defter satırı hiç açılmadı"
+            satirlar = [_j.loads(x) for x in defter.read_text(encoding="utf-8").splitlines() if x.strip()]
+            assert len(satirlar) == 1, satirlar
+            yazilan = _j.loads(hedef.read_text(encoding="utf-8"))
+            assert satirlar[0]["ilk_yazi"] == yazilan["ilk_yazi_zamani"], satirlar[0]
+            assert satirlar[0]["yayin"] == "Günlük bülten" and satirlar[0]["tarih"] == "2026-01-05"
+            assert satirlar[0]["sinif"] in ("zamaninda", "uyari", "alarm")
+
+            # (b) GECİKME MODÜLÜ BOZUKKEN DE YAZILIR — try/except kapı değil
+            hedef.write_text(_j.dumps(b0), encoding="utf-8")
+            bozuk = ("import sys, types; m = types.ModuleType('gecikme');\n"
+                     "def _bozuk(*a, **kw): raise RuntimeError('bilerek bozuldu')\n"
+                     "m.defter_yaz = _bozuk; m.ozet_satiri = _bozuk; "
+                     "sys.modules['gecikme'] = m; ")
+            r2 = _sp.run([sys.executable, "-c", on + bozuk + kur],
+                         capture_output=True, text=True)
+            assert r2.returncode == 0, (r2.returncode, r2.stderr[-600:])
+            assert _j.loads(hedef.read_text(encoding="utf-8"))["yorum"] == "<p>yeni</p>", \
+                "gecikme ölçümündeki kusur YAZMAYI düşürdü — try/except kapı olmuş"
+            assert "gecikme kaydı yazılamadı" in r2.stderr, r2.stderr[-400:]
+    sina("yaz.py: gecikme kaydı yazmanın yan etkisi, kusuru yazmayı DÜŞÜRMÜYOR",
+         _gecikme_defteri)
+
+    # ── BUGÜN TAZELENEMEYEN HATLAR. Kesmenin ve düşen bir koşunun bedeli
+    # yazarın önüne konur; UYARI, engel değil. Kör koşuda TEK satıra iner.
+    def _denetim_tazeleme_atlandi():
+        import denetim as _den
+        import nabiz as _nb
+        import tazeleme as _tz
+        from datetime import date as _date
+
+        bugun = _date.today().isoformat()
+        temel = {"tarih": bugun, "tur": "gunluk"}
+        gercek_y, gercek_d, gercek_oku = _tz._yayimlar, _tz.durum_oku, _nb.oku
+        try:
+            # (a) KÖR KOŞU → tek satır, hat hat on altı satır değil
+            _tz._yayimlar = lambda y: ([], False)
+            d = _den.Denetim(dict(temel)); d.tazeleme_atlandi()
+            assert len(d.uyari) == 1 and "kör koşu" in d.uyari[0], d.uyari
+            assert "hattın tamamı" in d.uyari[0], d.uyari[0]
+
+            # (b) HEPSİ BUGÜN TAZELENDİ → sessiz
+            sahte = [{"adi": "TCMB Analitik Bilanço", "kurum": "TCMB",
+                      "an": f"{bugun}T02:30:00"}]
+            _tz._yayimlar = lambda y: (sahte, True)
+            _tz.durum_oku = lambda: {t.hat: f"{bugun}T04:22:00" for t in _tz.TETIKLER}
+            d2 = _den.Denetim(dict(temel)); d2.tazeleme_atlandi()
+            assert not d2.uyari, d2.uyari
+
+            # (c) GEREKLİ AMA DAMGASI DÜNKÜ → adıyla ve SEBEBİYLE listelenir;
+            #     okurun gördüğü ad basılır, hattın kısa adı değil
+            _tz.durum_oku = lambda: {t.hat: "2026-01-01T04:22:00" for t in _tz.TETIKLER}
+            _nb.oku = lambda p: {"kosular": [{"zaman": "x", "sonuc": "success"}]}
+            d3 = _den.Denetim(dict(temel)); d3.tazeleme_atlandi()
+            assert d3.uyari and "tazelenemeyen" in d3.uyari[0], d3.uyari
+            assert "koşu düştü ya da kaynak yayımlamadı" in d3.uyari[0], d3.uyari[0]
+            assert "TCMB fonlama ve likidite" in d3.uyari[0], d3.uyari[0]
+            assert not d3.engel, "ölçüt ENGEL üretti — kaynak düştüğünde yayını durdururdu"
+
+            # (d) BÜTÇEYLE ATLANAN hat ayrı sebeple anılır (5./6. maddeler
+            #     geldiğinde alan dolacak; biçim bugünden hazır)
+            _nb.oku = lambda p: {"kosular": [{"zaman": "x", "sonuc": "success",
+                                              "atlanan_butce": ["fonlama"]}]}
+            d4 = _den.Denetim(dict(temel)); d4.tazeleme_atlandi()
+            assert "bütçe ile atlandı: TCMB fonlama ve likidite" in d4.uyari[0], d4.uyari[0]
+
+            # (e) ARŞİV KOŞUSU: eski bir bülteni bugünün kararlarıyla ölçmez
+            d5 = _den.Denetim({"tarih": "2026-01-05", "tur": "gunluk"})
+            d5.tazeleme_atlandi()
+            assert not d5.uyari and not d5.gecen, (d5.uyari, d5.gecen)
+
+            # (f) KISA TAVAN GERÇEKTEN TAKILIYOR MU. Bu ölçüt yazı katmanının
+            #     kritik yolunda; takvim ucu düştüğünde 25 sn × yıl × yeniden
+            #     deneme, bültenin yazılmasını dakikalarca geciktirirdi.
+            gorulen = {}
+
+            def _kaydet(y):
+                gorulen["sn"] = _tz.TAKVIM_ZAMAN_ASIMI
+                return ([], False)
+            _tz._yayimlar = _kaydet
+            _den.Denetim(dict(temel)).tazeleme_atlandi()
+            assert gorulen.get("sn") == _den.TAKVIM_YOKLAMA_SN, gorulen
+            assert _tz.TAKVIM_ZAMAN_ASIMI == 25, "tavan geri konmadı — koşu kalıcı kısaldı"
+        finally:
+            _tz._yayimlar, _tz.durum_oku, _nb.oku = gercek_y, gercek_d, gercek_oku
+    sina("denetim: bugün tazelenemeyen hatlar UYARI, kör koşuda tek satır",
+         _denetim_tazeleme_atlandi)
+
+
+    # ── FİKSTÜR: ALARMIN YANLIŞ ALARM ORANI DEPODAKİ GERÇEK SAYILARA KİLİTLİ.
+    #
+    # "Yayının önünde duran denetimin yanlış alarmı arızanın kendisidir" —
+    # gecikme alarmı yayının değil bir e-posta kanalının önünde duruyor ama
+    # aynı mantık geçerli: her sabah öten alarm iki haftada okunmaz olur.
+    # Fikstür ayrıca eşiğin SESSİZCE SIKIŞTIRILMASINI yasaklar; eşik oynatılırsa
+    # dört temiz günün biri kırmızıya döner ve veri/bülten koşuları durur.
+    # Bir denetimin doğruluğu kadar SUSTUĞU günler de sınanmalı.
+    #
+    # ÖLÇÜM (04.09.2026, `python3 bulten/gecikme.py --gecmis`, depodaki gerçek
+    # bülten dosyalarına karşı): hafta içi günlük bültenin on gözleminde
+    # 6 ALARM / 4 TEMİZ, YANLIŞ POZİTİF YOK — altı alarmın altısı da deponun
+    # kendi kaydında arıza ya da gecikme geçen günler.
+    #
+    # DÜRÜSTLÜK NOTU — ALT SINIR. `ilk_yazi_zamani` alanı yalnız 03.09'dan beri
+    # yazılıyor. Ondan eski günlerde yazı anı ölçüm damgasından ALT SINIR olarak
+    # alınıyor; gerçek yazı anı 11–14 dakika sonrasıdır. Yani ALARM hükümleri
+    # güvenli (alt sınır bile sözü aşıyorsa gecikme kesindir) ama TEMİZ
+    # günlerin payı göründüğünden İNCE: −31,9/−40,6/−41,2 yerine ≈−21/−30/−31.
+    # Fikstür bu günleri `True` ile adıyla etiketliyor; iki hafta gerçek yazı
+    # anı birikince yeniden ölçülmeli.
+    def _gecikme_fikstur():
+        import json as _j
+        import shutil as _sh
+        import tempfile
+        import gecikme as gk
+
+        # FİKSTÜRÜN GİRDİSİ DE ÖLÇÜLMÜŞ BİR SABİTTİR — CANLI DOSYA DEĞİL.
+        #
+        # Bu ölçüt VERİNİN önünde duruyor (`veri.yml`, `bulten.yml` ve `fx.yml`
+        # duman'ı ilk adım olarak koşuyor), yani yanlış alarmı üç iş akışını
+        # birden durdurur. İlk sürüm beklenen sınıfları DEPODAKİ CANLI bülten
+        # dosyalarına karşı oynatıyordu ve o dosyalar meşru olarak değişebilir:
+        # `yaz.py` yayımlanmış bir sayıya düzeltme yazıldığında
+        # `ilk_yazi_zamani`ni `setdefault` ile O ANIN damgasıyla doldurur
+        # (alan 03.09 öncesi sayılarda hiç yok). Ölçüldü (04.09.2026):
+        # 31.08 sayısına bugün bir düzeltme yazmak yetiyor — `alt_sinir`
+        # True'dan False'a, sınıf `zamaninda`dan `alarm`a dönüyor ve duman
+        # DÜŞÜYOR. Yani okura verilen sözün ölçüsü doğru, sayfa doğru, kusur
+        # ÖLÇÜTÜN HASSASİYETİNDE: bir DÜZELTME yayımlamak veri hattını
+        # durdururdu. "Yayının ya da verinin önünde duran denetimin yanlış
+        # alarmı arızanın kendisidir."
+        #
+        # Bu yüzden girdi de dondurulur: aşağıdaki damgalar 04.09.2026'da
+        # depodaki dosyalardan OKUNDU ve fikstürün kendi girdisi oldu. Ölçüt
+        # böylece KURALI kilitler (eşik sessizce sıkıştırılamaz — oynatılırsa
+        # dört temiz günün biri kırmızıya döner), depodaki verinin sonraki
+        # hâlini değil. Canlı veri yine de oynatılıyor; ayrışırsa aşağıdaki
+        # çapraz bakış onu ADIYLA basar ama iş akışını DÜŞÜRMEZ — kusuru
+        # tarama bulur, hükmü ona bakan biri verir.
+        OLCULEN_GIRDI = {
+            "bulten": {
+                "2026-08-23": ("haftalik", "2026-08-23T23:12:07", None),
+                "2026-08-24": ("gunluk", "2026-08-24T11:18:48", None),
+                "2026-08-25": ("gunluk", "2026-08-25T21:07:12", None),
+                "2026-08-26": ("gunluk", "2026-08-26T07:59:29", None),
+                "2026-08-27": ("gunluk", "2026-08-27T12:27:44", None),
+                "2026-08-28": ("gunluk", "2026-08-28T07:36:29", None),
+                "2026-08-30": ("haftalik", "2026-08-30T15:38:18", None),
+                "2026-08-31": ("gunluk", "2026-08-31T04:39:03", None),
+                "2026-09-01": ("gunluk", "2026-09-01T04:30:26", None),
+                "2026-09-02": ("gunluk", "2026-09-02T04:29:47", None),
+                "2026-09-03": ("gunluk", "2026-09-03T04:31:14+00:00",
+                               "2026-09-03T04:44:55+00:00"),
+                "2026-09-04": ("gunluk", "2026-09-04T05:39:02+00:00",
+                               "2026-09-04T05:50:32+00:00"),
+            },
+            # 23.08'in teknik ölçümü depoda HİÇ YOK; o satırın alarmı bir
+            # gecikme değil YOKLUK ölçüsüdür ve fikstür onu da böyle taşır.
+            "teknik": {"2026-08-30": "2026-08-30T16:28:20+00:00"},
+        }
+
+        def _fikstur_deposu(td):
+            k = Path(td)
+            for alt in ("bulten", "teknik", "tweet"):
+                (k / "site" / "src" / "data" / alt).mkdir(parents=True, exist_ok=True)
+            (k / "bulten").mkdir(parents=True, exist_ok=True)
+            _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
+                      k / "site" / "src" / "data" / "yayin_takvimi.json")
+            (k / "site" / "src" / "data" / "tweet" / "defter.json").write_text(
+                "{}", encoding="utf-8")
+            for g, (tur, olusturma, ilk) in OLCULEN_GIRDI["bulten"].items():
+                b = {"tarih": g, "tur": tur, "gundem_kaynagi": "yazili",
+                     "olusturma": olusturma}
+                if ilk:
+                    b["ilk_yazi_zamani"] = ilk
+                (k / "site" / "src" / "data" / "bulten" / f"{g}.json").write_text(
+                    _j.dumps(b, ensure_ascii=False), encoding="utf-8")
+            for g, olcum in OLCULEN_GIRDI["teknik"].items():
+                (k / "site" / "src" / "data" / "teknik" / f"{g}.json").write_text(
+                    _j.dumps({"olcum_zamani": olcum, "yazili": True},
+                             ensure_ascii=False), encoding="utf-8")
+            return k
+
+        # (tarih, yayın) → (sınıf, yazı anı ALT SINIRDAN mı)
+        HAFTA_ICI = {
+            ("2026-08-24", "Günlük bülten"): ("alarm", True),
+            ("2026-08-25", "Günlük bülten"): ("alarm", True),
+            ("2026-08-26", "Günlük bülten"): ("alarm", True),
+            ("2026-08-27", "Günlük bülten"): ("alarm", True),
+            ("2026-08-28", "Günlük bülten"): ("alarm", True),
+            ("2026-08-31", "Günlük bülten"): ("zamaninda", True),
+            ("2026-09-01", "Günlük bülten"): ("zamaninda", True),
+            ("2026-09-02", "Günlük bülten"): ("zamaninda", True),
+            ("2026-09-03", "Günlük bülten"): ("zamaninda", False),
+            ("2026-09-04", "Günlük bülten"): ("alarm", False),
+        }
+        # PAZAR n=2 — planın fikstürü bu satırları HİÇ saymıyordu; tam oynatma
+        # onları da üretiyor ve ölçü onlar için de kuruluyor. İki gözlemle eşik
+        # açılmadığı için e-posta kanalının KAPSAMI DIŞINDALAR (aşağıdaki
+        # sınama bunu ayrıca doğruluyor), ama ölçüldükleri görünmeli.
+        PAZAR = {
+            ("2026-08-23", "Haftaya bakış"): "alarm",
+            ("2026-08-23", "Haftalık teknik analiz"): "alarm",
+            ("2026-08-30", "Haftaya bakış"): "uyari",
+            ("2026-08-30", "Haftalık teknik analiz"): "alarm",
+        }
+
+        # Oynatma dondurulmuş girdi üzerinde koşar. `gecmis()` düz sözlük
+        # döndürdüğü için geçici depo hemen kapanabilir.
+        with tempfile.TemporaryDirectory() as _td:
+            satirlar = {(s["tarih"], s["yayin"]): s
+                        for s in gk.gecmis(_fikstur_deposu(_td))}
+        for anahtar, (sinif, alt) in HAFTA_ICI.items():
+            s = satirlar.get(anahtar)
+            assert s is not None, f"fikstür günü oynatmada yok: {anahtar}"
+            assert s["sinif"] == sinif, (anahtar, s["sinif"], "beklenen", sinif)
+            assert s["alt_sinir"] is alt, (anahtar, "alt sınır etiketi kaydı", s["alt_sinir"])
+            if sinif == "zamaninda":
+                assert s["gecikme_dk"] <= 0, (anahtar, s["gecikme_dk"])
+            else:
+                assert s["gecikme_dk"] > s["pay_dk"], (anahtar, s["gecikme_dk"], s["pay_dk"])
+        for anahtar, sinif in PAZAR.items():
+            s = satirlar.get(anahtar)
+            assert s is not None, f"pazar satırı oynatmada yok: {anahtar}"
+            assert s["sinif"] == sinif, (anahtar, s["sinif"], "beklenen", sinif)
+
+        alarm = [k for k, (s, _) in HAFTA_ICI.items() if s == "alarm"]
+        temiz = [k for k, (s, _) in HAFTA_ICI.items() if s == "zamaninda"]
+        assert (len(alarm), len(temiz)) == (6, 4), (len(alarm), len(temiz))
+
+        # 04.09'un kendi sayısı: söz 05:11Z, yazı 05:50:32Z → +39,5 dk, payı
+        # (24 dk) aşıyor. Arızanın ölçüsü budur; kayarsa fikstür yeniden ölçülür.
+        dort = satirlar[("2026-09-04", "Günlük bülten")]
+        assert 39.0 <= dort["gecikme_dk"] <= 40.0, dort["gecikme_dk"]
+        assert dort["pay_dk"] == 24, dort["pay_dk"]
+
+        # CANLI ÇAPRAZ BAKIŞ — RAPOR EDER, DÜŞÜRMEZ. Depodaki dosyalar meşru
+        # olarak değişebilir (bir düzeltme, yeniden kurulan bir ölçüm); o zaman
+        # değişen şey KURAL değil VERİDİR ve veri hattını durdurması yanlış
+        # olur. Ama sessizce geçmesi de yanlış: "bakılmayan yer geçen sınavla
+        # aynı görünür". Ayrışma adıyla basılır, hükmü ona bakan biri verir.
+        beklenen = {k: s for k, (s, _) in HAFTA_ICI.items()}
+        beklenen.update(PAZAR)
+        canli = {(s["tarih"], s["yayin"]): s for s in gk.gecmis(BURASI.parent)}
+        for anahtar, sinif in sorted(beklenen.items()):
+            c = canli.get(anahtar)
+            if c is None:
+                print(f"  ! fikstür sapması — {anahtar[0]} · {anahtar[1]}: "
+                      "depoda artık oynatılmıyor (ölçüm dosyası silinmiş?)")
+            elif c["sinif"] != sinif:
+                print(f"  ! fikstür sapması — {anahtar[0]} · {anahtar[1]}: "
+                      f"depo şimdi '{c['sinif']}' diyor, ölçülen girdi "
+                      f"'{sinif}' demişti ({gk._sayi(c['gecikme_dk'])} dk). "
+                      "Kural değil VERİ değişmiş olabilir; bak ve fikstürü "
+                      "yeniden ölç.")
+
+        # SENTETİK SAATLER — gecikmenin YOKLUKTAN farkı tam burada ölçülür.
+        # 04.09'un GERÇEK zaman çizgisi oynatılıyor: 05:24'e kadar ortada ölçüm
+        # dosyası yok, yazı 05:50'de düşüyor.
+        cuma = dt.date(2026, 9, 4)
+        yazilmis = {"tarih": "2026-09-04", "tur": "gunluk", "gundem_kaynagi": "yazili",
+                    "olusturma": "2026-09-04T05:39:02+00:00",
+                    "ilk_yazi_zamani": "2026-09-04T05:50:32+00:00"}
+        with tempfile.TemporaryDirectory() as td:
+            k = Path(td)
+            for alt in ("bulten", "teknik", "tweet"):
+                (k / "site" / "src" / "data" / alt).mkdir(parents=True, exist_ok=True)
+            (k / "bulten").mkdir(parents=True, exist_ok=True)
+            _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
+                      k / "site" / "src" / "data" / "yayin_takvimi.json")
+            (k / "site" / "src" / "data" / "tweet" / "defter.json").write_text(
+                "{}", encoding="utf-8")
+            dosya = k / "site" / "src" / "data" / "bulten" / "2026-09-04.json"
+
+            def saatte(h, m):
+                return gk.olc(k, cuma, dt.datetime(2026, 9, 4, h, m,
+                                                   tzinfo=dt.timezone.utc))[0]
+
+            # 04:18 — söz (05:11Z) henüz geçmedi: ortada bülten olmaması bile
+            # bu saatte bir gecikme DEĞİLDİR.
+            assert saatte(4, 18)["sinif"] == "zamaninda", "04:18'de söz henüz geçmemişti"
+            # 05:12 — söz geçti ve ölçüm dosyası HİÇ YOK: bu yokluktur, payı da
+            # yoktur. (04.09'un 05:12'deki gerçek hâli.)
+            bes_oniki = saatte(5, 12)
+            assert bes_oniki["sinif"] == "alarm" and bes_oniki["darbogaz"] == "ölçüm", bes_oniki
+            # 06:30 — bülten YAZILMIŞ ama geç: gecikme, yokluğun kapanmasıyla
+            # kapanmaz. Ölçü "söz verilen saatte yerinde miydi" diye sorar.
+            dosya.write_text(_j.dumps(yazilmis, ensure_ascii=False), encoding="utf-8")
+            for h, m in ((6, 30), (12, 0), (23, 0)):
+                s = saatte(h, m)
+                assert s["sinif"] == "alarm", (h, m, s["sinif"])
+                assert s["ilk_yazi"] is not None and 39.0 <= s["gecikme_dk"] <= 40.0, s
+
+            # Cumartesi yayın günü değil; takvimden tüketici adımı silinirse
+            # SESSİZCE GEÇMEZ (kapsam kusuruna karşı).
+            assert gk.olc(k, dt.date(2026, 9, 5)) == []
+            tk = _j.loads((k / "site" / "src" / "data" / "yayin_takvimi.json")
+                          .read_text(encoding="utf-8"))
+            for y in tk["yayinlar"]:
+                if y.get("yayin") == "Günlük bülten":
+                    y["adimlar"] = [a for a in y["adimlar"]
+                                    if a.get("ad") not in gk.TUKETICI]
+            (k / "site" / "src" / "data" / "yayin_takvimi.json").write_text(
+                _j.dumps(tk, ensure_ascii=False), encoding="utf-8")
+            try:
+                gk.olc(k, cuma)
+            except ValueError:
+                pass
+            else:
+                raise AssertionError("tüketici adımı silinince fonksiyon sessizce geçti")
+    sina("gecikme fikstürü: 6 alarm / 4 temiz, yanlış pozitif yok (alt sınır etiketli)",
+         _gecikme_fikstur)
+
+    # ── ALARM KANALI: KAPSAM + MÜKERRERLİK. Ölçü bütün yayınları görür, e-posta
+    # kanalı yalnız eşiği ÖLÇÜLMÜŞ yayını taşır (pazar n=2, kapsam dışı ve
+    # nöbetçinin yokluk sorusunda kalıyor). Mükerrerlik kaydı olmadan alarm her
+    # uyanmada öterdi: iş akışı günde 40–70 kez uyanıyor.
+    def _gecikme_alarm_kanali():
+        import datetime as _dt
+        import json as _j
+        import shutil as _sh
+        import tempfile
+        import gecikme as gk
+
+        def kur(td, bultenler=None, teknikler=None):
+            k = Path(td)
+            for alt in ("bulten", "teknik", "tweet"):
+                (k / "site" / "src" / "data" / alt).mkdir(parents=True, exist_ok=True)
+            (k / "bulten").mkdir(parents=True, exist_ok=True)
+            _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
+                      k / "site" / "src" / "data" / "yayin_takvimi.json")
+            (k / "site" / "src" / "data" / "tweet" / "defter.json").write_text(
+                "{}", encoding="utf-8")
+            for alt, kayit in (("bulten", bultenler or {}), ("teknik", teknikler or {})):
+                for g, b in kayit.items():
+                    (k / "site" / "src" / "data" / alt / f"{g}.json").write_text(
+                        _j.dumps(b, ensure_ascii=False), encoding="utf-8")
+            return k
+
+        gec = {"tarih": "2026-09-04", "tur": "gunluk", "gundem_kaynagi": "yazili",
+               "olusturma": "2026-09-04T05:39:00+00:00",
+               "ilk_yazi_zamani": "2026-09-04T05:50:32+00:00"}
+        cuma, pazar = _dt.date(2026, 9, 4), _dt.date(2026, 8, 30)
+
+        with tempfile.TemporaryDirectory() as td:
+            k = kur(td, bultenler={"2026-09-04": gec})
+            kayit = Path(td) / "alarm_kaydi.json"
+
+            # (a) İLK KARAR: kapsamdaki alarm YENİ
+            r1 = gk.alarm_karari(k, cuma, kayit)
+            assert [s["yayin"] for s in r1["alarm"]] == ["Günlük bülten"], r1["alarm"]
+            assert len(r1["yeni"]) == 1 and "39,5" in r1["gerekce"], r1["gerekce"]
+
+            # (b) KAYIT YAZILDIKTAN SONRA MÜKERRER DEĞİL — sıra kritik: kanal
+            #     önce kaydı yazar, sonra düşer; tersi her uyanmada e-posta.
+            gk.alarm_kaydi_yaz(kayit, r1["yeni"])
+            r2 = gk.alarm_karari(k, cuma, kayit)
+            assert r2["alarm"] and not r2["yeni"], r2
+            assert "zaten bildirilmiş" in r2["gerekce"], r2["gerekce"]
+
+            # (c) KAYIT SİLİNİRSE yeniden alarm (kanal kendi kendini susturamaz)
+            kayit.unlink()
+            assert gk.alarm_karari(k, cuma, kayit)["yeni"], "kayıt silindi, alarm dönmedi"
+
+            # (d) BOZUK KAYIT SESSİZLİK ÜRETMEZ: okunamayan kayıt "hiç
+            #     bildirilmemiş" sayılır — kaybolmuş alarmdansa çift alarm.
+            kayit.write_text("{bozuk", encoding="utf-8")
+            assert gk.alarm_karari(k, cuma, kayit)["yeni"], "bozuk kayıt alarmı susturdu"
+
+            # (e) KAYIT SINIRSIZ BÜYÜMEZ
+            eski = {"kayitlar": {f"2020-01-{i:02d}|X": {"an": "x"} for i in range(1, 29)}}
+            kayit.write_text(_j.dumps(eski), encoding="utf-8")
+            gercek_azami = gk.ALARM_KAYIT_AZAMI
+            try:
+                gk.ALARM_KAYIT_AZAMI = 10
+                d = gk.alarm_kaydi_yaz(kayit, r1["yeni"])
+                assert len(d["kayitlar"]) == 10, len(d["kayitlar"])
+                assert "2026-09-04|Günlük bülten" in d["kayitlar"], "yeni kayıt budandı"
+            finally:
+                gk.ALARM_KAYIT_AZAMI = gercek_azami
+
+        # (f) PAZAR KAPSAM DIŞI — ölçülür, defterde görünür, E-POSTA GÖNDERMEZ.
+        #     n=2 ile eşik açılmaz; yokluk sorusu cron'lu nöbetçide kalıyor.
+        with tempfile.TemporaryDirectory() as td:
+            k = kur(td,
+                    bultenler={"2026-08-30": {"tarih": "2026-08-30", "tur": "haftalik",
+                                              "gundem_kaynagi": "yazili",
+                                              "olusturma": "2026-08-30T19:00:00+00:00"}})
+            r = gk.alarm_karari(k, pazar, None)
+            siniflar = {s["yayin"]: s["sinif"] for s in r["satirlar"]}
+            assert "alarm" in siniflar.values(), siniflar
+            assert r["alarm"] == [] and r["yeni"] == [], r
+            assert r["kapsam_disi"], r["kapsam_disi"]
+            assert gk.ALARM_KAPSAMI == ("Günlük bülten",), gk.ALARM_KAPSAMI
+
+        # (g) ZAMANINDA GÜN: kanal SESSİZ (sustuğu gün de sınanır)
+        with tempfile.TemporaryDirectory() as td:
+            erken = dict(gec, ilk_yazi_zamani="2026-09-04T04:38:00+00:00",
+                         olusturma="2026-09-04T04:29:00+00:00")
+            k = kur(td, bultenler={"2026-09-04": erken})
+            r = gk.alarm_karari(k, cuma, None)
+            assert not r["alarm"] and not r["yeni"], r
+
+        # (h) CLI: karar dosyası iş akışının okuduğu biçimde
+        import subprocess as _sp
+        with tempfile.TemporaryDirectory() as td:
+            k = kur(td, bultenler={"2026-09-04": gec})
+            cikti, kayit = Path(td) / "cikti.txt", Path(td) / "k.json"
+            komut = [sys.executable, "-c",
+                     f"import sys, pathlib; sys.path.insert(0, {str(BURASI)!r});\n"
+                     f"import gecikme; gecikme.KOK = pathlib.Path({str(k)!r});\n"
+                     "sys.argv = ['gecikme.py', '--gun', '2026-09-04', '--alarm', "
+                     f"'--kaydi-yaz', '--kayit', {str(kayit)!r}, '--cikti', {str(cikti)!r}];\n"
+                     "raise SystemExit(gecikme.main())"]
+            r1 = _sp.run(komut, capture_output=True, text=True)
+            assert r1.returncode == 1, (r1.returncode, r1.stdout[-400:], r1.stderr[-400:])
+            alanlar = dict(x.split("=", 1) for x in
+                           cikti.read_text(encoding="utf-8").splitlines() if "=" in x)
+            assert alanlar["alarm"] == "1" and alanlar["yeni"] == "1", alanlar
+            assert alanlar["gun"] == "2026-09-04" and alanlar["ozet"], alanlar
+            assert kayit.exists(), "kayıt yazılmadı — kanal her uyanmada öterdi"
+            r2 = _sp.run(komut, capture_output=True, text=True)
+            assert r2.returncode == 0, (r2.returncode, r2.stdout[-400:])
+    sina("gecikme alarmı: kapsam ölçülmüş yayınla sınırlı, mükerrer e-posta yok",
+         _gecikme_alarm_kanali)
+
+    # ── ALARMIN TAŞIYICISI ZAMANLAYICIDAN BAĞIMSIZ MI. 04.09'da alarm, izlediği
+    # zamanlayıcıyla hata kaynağını paylaşıyordu: sabah penceresinin tamamı
+    # (veri 02:13/02:41, ölçüm 03:23/03:51, nöbetçi 06:37) hiç ateşlenmedi.
+    # Bu sınama, birinin gecikme.yml'e "bir de cron koyalım" demesini yakalar.
+    def _gecikme_yml():
+        y = (BURASI.parent / ".github" / "workflows" / "gecikme.yml")
+        assert y.exists(), "gecikme.yml yok — alarmın cron'suz taşıyıcısı kurulmamış"
+        m = y.read_text(encoding="utf-8")
+        govde = "\n".join(s for s in m.splitlines() if not s.lstrip().startswith("#"))
+        assert "cron" not in govde, \
+            "gecikme.yml'e cron eklenmiş — alarm yine izlediği zamanlayıcıya bağlandı"
+        for beklenen in ("workflow_run:", "requested", "completed", "workflow_dispatch:",
+                         "push:", "sinama_gun"):
+            assert beklenen in govde, f"gecikme.yml'de {beklenen} yok"
+        for is_akisi in ("Veri tazeleme", "Günlük bülten", "Siteyi yayınla",
+                         "Haftalık teknik analiz"):
+            assert is_akisi in govde, f"gecikme.yml {is_akisi} koşusunu dinlemiyor"
+        # SIRA KRİTİK: önce kayıt yazılıp push edilir, SONRA alarm verilir.
+        # Tersi, her uyanmada mükerrer e-posta demek.
+        kayit_yeri = govde.index("Alarm kaydını işle")
+        alarm_yeri = govde.index("name: Alarm\n")
+        assert kayit_yeri < alarm_yeri, "alarm adımı kayıt adımından ÖNCE geliyor"
+        assert "cancel-in-progress: false" in govde, \
+            "yarıda kesilen alarm koşusu, kaybolan alarm demektir"
+        # KÖR KALMAK SESSİZ OLAMAZ: araç karar üretemezse iş akışı düşer.
+        # Yoksa bozuk bir alarm kanalı, sağlıklı olanla aynı görünürdü —
+        # bu depodaki asıl kusur zaten buydu.
+        assert "grep -q '^gun=' \"$GITHUB_OUTPUT\"" in govde, \
+            "karar üretilemediğinde iş akışı yeşil bitiyor — alarm kanalı kör kalabilir"
+
+        # NÖBETÇİ SİLİNMEDİ, ROLÜ DEĞİŞTİ: cron'ları ve mevcut adımları AYNEN
+        # duruyor; yeni adım yalnız tekrar koşulunda düşer ve yalnız bülten
+        # YAZILMIŞKEN (zincir kodu 2/4) koşar — yoksa yokluk alarmıyla ÇİFT
+        # alarm üretirdi.
+        n = (BURASI.parent / ".github" / "workflows" / "nobetci.yml").read_text(encoding="utf-8")
+        for cron in ("37 6 * * 1-5", "7 8 * * 1-5", "37 10 * * 1-5",
+                     "31 16 * * 0", "1 18 * * 0"):
+            assert f"'{cron}'" in n, f"nöbetçinin cron'u değişmiş: {cron}"
+        for adim in ("Bülten çıktı mı", "Site bugünün sayısını gösteriyor mu",
+                     "Teknik bülten çıktı mı (yalnız pazar)"):
+            assert adim in n, f"nöbetçinin mevcut adımı düşmüş: {adim}"
+        assert "Gecikme tekrar ediyor mu (yedek kanal)" in n, "nöbetçi yedeği eklenmemiş"
+        yedek = n.split("Gecikme tekrar ediyor mu (yedek kanal)")[1]
+        assert "gecikme.tekrar()" in yedek, "yedek kanal kendi eşiğini kurmuş"
+        assert "2|4)" in yedek, "yedek kanal bülten yazılmamışken de koşuyor — çift alarm"
+    sina("alarm taşıyıcısı: gecikme.yml cron'suz, nöbetçi yedeğe döndü", _gecikme_yml)
+
+    # ── ZİNCİR RAPORU SAYIYI BASAR, ÇIKIŞ KODUNU DEĞİŞTİRMEZ. Rutinin sabah
+    # attığı ilk adım bu araç; 04.09'da doğru çalıştı, kod 1 döndürdü, ama
+    # elinde SAYI yoktu ve bildirimi de sayısız kaldı. Ek bloklar SALT OKUNUR.
+    def _zincir_ek_bloklar():
+        import contextlib, io as _io
+        import json as _j
+        import shutil as _sh
+        import tempfile
+        import zincir
+
+        gec = {"tarih": "2026-09-04", "tur": "gunluk", "gundem_kaynagi": "yazili",
+               "olusturma": "2026-09-04T05:39:00+00:00",
+               "ilk_yazi_zamani": "2026-09-04T05:50:32+00:00",
+               "piyasa": {"gruplar": [{"id": "x"}]},
+               "haberler": {"haber": [{"baslik": "x"}]},
+               "gundem": {"kilit": "<p>x</p>"},
+               "temalar": {"temalar": [{"ad": "T", "durum": "aktif", "gelisme": "eski",
+                                        "son_gozlem": "a", "izlenecek_gosterge": "b"}]}}
+
+        def kur(td, b, defter_gelisme):
+            k = Path(td)
+            (k / "site" / "src" / "data" / "bulten").mkdir(parents=True, exist_ok=True)
+            (k / "site" / "src" / "data" / "teknik").mkdir(parents=True, exist_ok=True)
+            (k / "site" / "src" / "data" / "tweet").mkdir(parents=True, exist_ok=True)
+            (k / "bulten").mkdir(parents=True, exist_ok=True)
+            _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
+                      k / "site" / "src" / "data" / "yayin_takvimi.json")
+            (k / "site" / "src" / "data" / "tweet" / "defter.json").write_text(
+                "{}", encoding="utf-8")
+            (k / "site" / "src" / "data" / "bulten" / f"{b['tarih']}.json").write_text(
+                _j.dumps(b, ensure_ascii=False), encoding="utf-8")
+            (k / "bulten" / "temalar.json").write_text(_j.dumps(
+                {"temalar": [{"ad": "T", "durum": "aktif", "gelisme": defter_gelisme,
+                              "son_gozlem": "a", "izlenecek_gosterge": "b"}]},
+                ensure_ascii=False), encoding="utf-8")
+            (k / "bulten" / "kosu_nabzi.json").write_text(_j.dumps(
+                {"veri_kosusu": "2026-09-04T02:20:00+00:00", "sonuc": "success",
+                 "kosular": [{"zaman": "2026-09-04T02:20:00+00:00", "sonuc": "success",
+                              "atlanan_butce": ["tcmb", "dibs"]}]}), encoding="utf-8")
+            return k
+
+        asil = (zincir.KOK, zincir.BURASI, zincir.BULTENLER, zincir.TEKNIKLER)
+
+        def calistir(k, gun):
+            zincir.KOK = k
+            zincir.BURASI = k / "bulten"
+            zincir.BULTENLER = k / "site" / "src" / "data" / "bulten"
+            zincir.TEKNIKLER = k / "site" / "src" / "data" / "teknik"
+            tampon = _io.StringIO()
+            with contextlib.redirect_stdout(tampon):
+                kod, _ = zincir.durum(gun)
+            return kod, tampon.getvalue()
+
+        try:
+            # (a) GEÇ YAZILMIŞ BÜLTEN: sayı basılır, çıkış kodu YİNE 2
+            with tempfile.TemporaryDirectory() as td:
+                k = kur(td, gec, "eski")
+                kod, cikti = calistir(k, dt.date(2026, 9, 4))
+                assert kod == 2, kod
+                assert "SÖZ RİSK ALTINDA" in cikti, cikti[-600:]
+                assert "39,5" in cikti, "gecikme DAKİKASI basılmadı"
+                assert "darboğaz" in cikti, "darboğaz halka basılmadı"
+                # (c) atlanan hatlar son koşudan okunur
+                assert "atlanan hatlar" in cikti and "tcmb" in cikti, cikti[-600:]
+
+            # (b) TEMA KIYASI 0. ADIMDA: defter ölçümden yeniyse uyarı çıkar.
+            #     04.09'da bu yazı sırasında fark edildi ve ölçüm iki kez
+            #     yeniden kuruldu (~11 dakika).
+            with tempfile.TemporaryDirectory() as td:
+                k = kur(td, gec, "defterde YENİ metin")
+                kod, cikti = calistir(k, dt.date(2026, 9, 4))
+                assert kod == 2, kod
+                assert "TEMA DEFTERİ ÖLÇÜMDEN YENİ" in cikti, cikti[-600:]
+                assert "--yeniden-olc" in cikti, "ne yapılacağı yazılmamış"
+            with tempfile.TemporaryDirectory() as td:
+                k = kur(td, gec, "eski")
+                _, cikti = calistir(k, dt.date(2026, 9, 4))
+                assert "TEMA DEFTERİ ÖLÇÜMDEN YENİ" not in cikti, "boşuna uyarı"
+
+            # (d) ZAMANINDA GÜN: risk satırı YOK (her sabah bağırmaz)
+            with tempfile.TemporaryDirectory() as td:
+                erken = dict(gec, ilk_yazi_zamani="2026-09-04T04:38:00+00:00")
+                k = kur(td, erken, "eski")
+                _, cikti = calistir(k, dt.date(2026, 9, 4))
+                assert "SÖZ RİSK ALTINDA" not in cikti, cikti[-400:]
+
+            # (e) ÇIKIŞ KODU SÖZLEŞMESİ: ek bloklar hiçbir kodu değiştirmez;
+            #     bloklardan biri bilerek bozulsa bile.
+            with tempfile.TemporaryDirectory() as td:
+                k = kur(td, gec, "eski")
+                assert calistir(k, dt.date(2026, 9, 5))[0] == 3, "cumartesi kodu bozuldu"
+                gercek = zincir._gecikme_blogu
+                try:
+                    def _patla(g):
+                        raise RuntimeError("bilerek bozuldu")
+                    zincir._gecikme_blogu = _patla
+                    kod, cikti = calistir(k, dt.date(2026, 9, 4))
+                    assert kod == 2, f"ek bloktaki kusur çıkış kodunu değiştirdi: {kod}"
+                    assert "gecikme bloğu okunamadı" in cikti, cikti[-400:]
+                finally:
+                    zincir._gecikme_blogu = gercek
+        finally:
+            zincir.KOK, zincir.BURASI, zincir.BULTENLER, zincir.TEKNIKLER = asil
+    sina("zincir: gecikme dakikası ve tema kıyası raporda, çıkış kodu değişmiyor",
+         _zincir_ek_bloklar)
+
     sina("bicim: sayı yazımı tek kaynak · REDK konumu yön okur · denetim sızıntıyı görür", _bicim)
     sina("okur dili: koşu kaydı satırları muafiyetsiz taranır (kod, biçim)", _kosu_kaydi_dili)
     sina("denetim: revizyon ölçütü TL faiz, gösterge, türev ve rejimi görür, farklı günü karıştırmaz", _revizyon)

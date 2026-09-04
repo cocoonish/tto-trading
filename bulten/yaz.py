@@ -41,7 +41,8 @@ from datetime import date
 from pathlib import Path
 
 BURASI = Path(__file__).resolve().parent
-BULTEN = BURASI.parent / "site" / "src" / "data" / "bulten"
+KOK = BURASI.parent
+BULTEN = KOK / "site" / "src" / "data" / "bulten"
 
 YAZILABILIR = ("yorum", "ozet", "gundem", "duzeltmeler")
 DUZELTME_ZORUNLU = ("alan", "eski", "yeni")
@@ -265,6 +266,31 @@ def main() -> int:
         return 0
     hedef.write_text(json.dumps(b, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"{hedef.name} güncellendi: " + " · ".join(degisen))
+
+    # GECİKME KAYDI — yazmanın YAN ETKİSİ, ayrı bir adım değil.
+    #
+    # Rutinin kaçınamayacağı tek araç bu dosya: bültenin yazılmasının başka bir
+    # yolu yok ve rutin metni onu adıyla çağırıyor. Hiçbir bayrak, hiçbir
+    # argüman gerekmiyor; rutin metni hiç değişmese de kayıt atlanamaz. Sözün
+    # (yayın takviminden) tutulup tutulmadığı, ancak KAYIT birikirse
+    # sınanabilir bir eşiğe dönüşür.
+    #
+    # try/except ŞART VE KAPI DEĞİL: gecikme ölçümündeki bir kusur bültenin
+    # yazılmasını düşürmemeli. Dosya zaten diske yazıldı; buradan sonrası
+    # yalnız defter.
+    #
+    # Kayıt `uygula()` içinde DEĞİL burada duruyor (planın işaret ettiği satır
+    # orasıydı): `uygula()` --denetle ve --yazma kiplerinde de koşuyor ve
+    # denetim ENGEL ürettiğinde dosya YAZILMIYOR. Oradan yazılan bir satır,
+    # hiç gerçekleşmemiş bir yazıyı deftere geçirirdi — "uydurma yok".
+    try:
+        sys.path.insert(0, str(BURASI))
+        import gecikme
+        satir = gecikme.defter_yaz(KOK, b, t)
+        if satir:
+            print("  " + gecikme.ozet_satiri(satir))
+    except Exception as ex:                                    # noqa: BLE001
+        print(f"(gecikme kaydı yazılamadı: {ex})", file=sys.stderr)
     return 0
 
 

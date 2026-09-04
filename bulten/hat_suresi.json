@@ -1,0 +1,5 @@
+{
+ "_aciklama": "Her veri hattının son koşularının süresi (saniye). Bütçe, sıralama ve adım tavanı buradan türetilir; ölçüm birikene kadar tohum değerler kullanılır.",
+ "_kayit": 10,
+ "hatlar": {}
+}

@@ -47,6 +47,11 @@ ASGARI_OZET_ORANI = 0.35
 ASGARI_KILIT = 3
 ASGARI_KRITIK_TAKVIM = 3
 BUYUK_HAREKET_ESIGI = 1.5     # % — bunu aşan hareket metinde ANILMALI
+# Tazeleme takvimi ucunun yoklama bütçesi (sn) — `tazeleme_atlandi` için.
+# CLAUDE.md'nin kaynak yoklama ölçüsüyle aynı: bir kaynağın açık olup
+# olmadığı 8 saniyede anlaşılır; kapalıysa beklemenin bedeli bültenin
+# geç yazılmasıdır.
+TAKVIM_YOKLAMA_SN = 8
 
 # Okura hiçbir şey söylemeyen geliştirici dili
 # KOD DİLİ + YAPIM DİLİ — kalıplar burada DEĞİL, ortak/okur_dili.py'de.
@@ -719,6 +724,106 @@ class Denetim:
         if gecikmis:
             self.uyari.append("Veri gecikmiş hatlar: " + ", ".join(gecikmis))
 
+    # ────────────────────────────────────── bugün tazelenemeyen hatlar
+    def tazeleme_atlandi(self):
+        """Bugün tazelenmesi GEREKEN ama tazelenemeyen hatlar — UYARI, engel değil.
+
+        Mevcut `tazelik` ölçütü bu soruyu SORAMIYOR: eşikleri hattın yayım
+        ritmi (4–45 gün), yani "bugünkü koşu hiç gelmedi" hâli o eşiğe varana
+        kadar görünmez. 04.09.2026'da veri koşusu 50 dakika yandı ve TEK BİR
+        hat bile tazelenmeden iptal edildi; denetim o sabah yalnız
+        "hazine-ihrac (16g)" diyebildi — on altı hattın hiçbirinin
+        tazelenmediğini söyleyemedi.
+
+        Ölçü iki mevcut kaynağın karşılaştırmasıdır, yeni eşik yoktur:
+        resmî yayım takvimi bugün hangi hattın koşması gerektiğini,
+        `tazeleme_durumu.json` de son başarılı tazelemeyi söyler.
+
+        ENGEL DEĞİL, bilinçli: kaynak gerçekten yayımlamadığında ya da bir hat
+        birkaç gün düştüğünde bu ölçüt her sabah yayını durdururdu. Ve bilinçli
+        bir atlama ile sessiz bir arıza AYNI GÖRÜNMEMELİ — sebep satırın içine
+        yazılır.
+
+        HASSASİYET KAPISI: takvim ucu okunamadığında (kör koşu) bütün hatlar
+        "gerekli" görünür; ölçüt o hâlde hat hat on altı satır patlatmaz, tek
+        satıra iner. "Kapsam kadar hassasiyet de denetimin parçasıdır" — on
+        altı satırlık bir uyarıya kimse bakmaz.
+        """
+        # Yalnız BUGÜNÜN bülteni için anlamlı: takvim kararları şu ana ait,
+        # arşiv koşusunda (--hepsi) eski bir bülteni bugünün kararlarıyla
+        # ölçmek uydurma olurdu.
+        bugun = date.today().isoformat()
+        if str(self.b.get("tarih", "")) != bugun:
+            return
+        try:
+            sys.path.insert(0, str(BURASI))
+            import ayar, tazeleme                              # noqa: E402
+            # KISA TAVAN. Bu ölçüt yazı katmanının kritik yolunda koşuyor;
+            # takvim ucu düştüğünde bültenin yazılmasını dakikalarca
+            # geciktirmek, düzeltilmeye çalışılan arızanın ta kendisi olurdu.
+            # 8 saniye deponun kendi kaynak yoklama bütçesi.
+            with tazeleme.zaman_asimi(TAKVIM_YOKLAMA_SN):
+                kararlar = tazeleme.kararlar()
+        except Exception:                                      # noqa: BLE001
+            return                                             # ölçemiyorsak susarız
+        if not kararlar:
+            return
+
+        kor = [k for k in kararlar if str(k.sebep).startswith(tazeleme.KOR_KOSU)]
+        if kor:
+            self.uyari.append(
+                f"Veri yayım takvimi okunamadı: {len(kor)} hattın tamamı kör koşu "
+                "listesinde — hangi hattın bugün tazelenmesi gerektiği ölçülemiyor.")
+            return
+
+        gerekli = [k for k in kararlar if k.kossun]
+        if not gerekli:
+            self._ok("bugün tazelenmesi gereken hat yok")
+            return
+
+        # Bütçeyle bilinçli atlanan hatlar (sabah bütçesi henüz YOK; alan
+        # doldurulduğunda sebep kendiliğinden ayrışsın diye okunuyor).
+        atlanan: set[str] = set()
+        try:
+            import nabiz                                       # noqa: E402
+            d = nabiz.oku(nabiz.yol(BURASI))
+            son = (d.get("kosular") or [])[-1] if isinstance(d.get("kosular"), list) else {}
+            atlanan = {str(x) for x in (son.get("atlanan_butce") or [])}
+        except Exception:                                      # noqa: BLE001
+            pass
+
+        durum = tazeleme.durum_oku()
+        # Hattın kısa adı → okurun gördüğü ad. Kütük tek kaynak (guncelle.py);
+        # okunamazsa kısa ad basılır, ölçüt susmaz.
+        ad_slug: dict[str, str] = {}
+        try:
+            sys.path.insert(0, str(KOK))
+            import guncelle                                    # noqa: E402
+            ad_slug = {h.ad: h.slug for h in guncelle.HATLAR}
+        except Exception:                                      # noqa: BLE001
+            pass
+
+        # SEBEBE GÖRE GRUPLA. On üç hattın on üçüne aynı gerekçeyi ayrı ayrı
+        # yazmak, bakılmayan bir uyarı üretir; sebep bir kez, hatlar adıyla.
+        eksik: dict[str, list[str]] = {}
+        for k in gerekli:
+            son_tazeleme = str(durum.get(k.hat, ""))
+            if son_tazeleme[:10] == bugun:
+                continue
+            okur_adi = ayar.HAT_ADI.get(ad_slug.get(k.hat, ""), k.hat)
+            sebep = ("bütçe ile atlandı" if k.hat in atlanan
+                     else "koşu düştü ya da kaynak yayımlamadı")
+            eksik.setdefault(sebep, []).append(okur_adi)
+        if eksik:
+            self.uyari.append(
+                "Bugün tazelenmesi gereken ama tazelenemeyen hatlar — "
+                + "; ".join(f"{sebep}: {', '.join(adlar)}"
+                            for sebep, adlar in eksik.items())
+                + ". Bu hatların sayıları dünkü sürümde; kullanılacaksa kendi "
+                  "tarihiyle anılmalı.")
+        else:
+            self._ok(f"gereken {len(gerekli)} hattın hepsi bugün tazelendi")
+
     def yerlesmemis(self):
         """Kapanmamış seansın barı bültende olmamalı — ENGEL.
 
@@ -1356,7 +1461,8 @@ class Denetim:
 
     def kos(self) -> int:
         self.yazi(); self.veri(); self.atif(); self.sayi(); self.nabiz(); self.tekrar()
-        self.tema(); self.izleme(); self.dil(); self.tazelik(); self.karanlik()
+        self.tema(); self.izleme(); self.dil(); self.tazelik(); self.tazeleme_atlandi()
+        self.karanlik()
         self.yerlesmemis(); self.piyasa_seansi(); self.revizyon(); self.duzeltme()
         self.devir(); self.haber_tonu(); self.bicim()
         self.olagandisilik_penceresi()

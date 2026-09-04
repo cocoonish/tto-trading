@@ -162,6 +162,91 @@ akışı DÜŞER, düşen iş akışı e-posta gönderir). Arızanın görüntü
 görüntüsü aynıydı: yayın iş akışı "değişiklik yok" deyip yeşil bitiyor, site
 dünkü bülteni göstermeye devam ediyordu. Nöbetçi o sessizliği kapatıyor.
 
+**Kurucu ilke — bir İŞİN bütçesi, adımlarının toplamının ÜSTÜNDE durmalıdır;
+ve `if: always()` İŞ zaman aşımına karşı ÇALIŞMAZ.** 04.09.2026 sabahı 45
+dakikalık tazeleme çöpe gitti ve bu bir kaza değil, `veri.yml`in kendi
+GARANTİSİYDİ: kurulum 5 + tazele 45 + türev 5 = 55 > iş sınırı 50, üstelik
+"Hazine ihaleleri" adımının HİÇ zaman aşımı yoktu. 04:22–05:07 tazeleme kendi
+sınırını doldurdu, 05:07'de Hazine başladı, 05:12'de İŞ sınırı doldu ve
+`if: always()` taşıyan Koşu nabzı ile Commit adımlarının İKİSİ DE pending
+kaldı — GitHub iş sınırında `always()` adımlarını da öldürüyor. Elli dakika
+yandı, tazeleme damgası hiç ilerlemedi ve bir sonraki koşu aynı elli dakikayı
+baştan yakacaktı. Sigorta 27.08'de tam bu kaybı önlemek için konmuştu ve ADIM
+zaman aşımına karşı çalışıyordu; kimse İŞ zaman aşımını sormamıştı — bir
+sigortanın hangi arızaya karşı çalıştığı konduğu gün yazılmazsa, sonraki
+oturum onu her arızaya karşı sanır. Üç düzeltme birlikte gider: işi kesip
+DEFTER TUTMAYA yer bırakmak (tazele 45→40, iş 50→65, Hazine'ye tavan), asılan
+adımı duvar saatiyle kesip DÖNGÜYÜ SÜRDÜRMEK, ve aritmetiği
+`bulten/duman.py`ye ENGEL olarak koymak. O ölçüt bir eşik değil ÖZDEŞLİKTİR —
+adım sınırlarının toplamı artı sınırsız adımların ölçülmüş payı, iş sınırını
+aşamaz — ve 04.09'un dosyasına karşı koşulduğunda düşüyor, bugünküne karşı
+geçiyor. Kural: sınırsız bir adım, kendisinden SONRA gelen bütün adımların
+sigortasını yakar.
+
+Kesmenin kendisi de genelleştirildi. `_adim_kos` yalnız doğrudan çocuğu
+öldürseydi torunlar (hattın `.venv`i, kazıyıcı, asılı istek) ayakta kalırdı;
+süreç AĞACI öldürülüyor ve döngü SÜRÜYOR — bir hattın asılması, tazelenmiş
+öbür hatların commit'ini götürmemeli. Çıktı ayrı bir iş parçacığından
+pompalanıyor, çünkü hiç çıktı üretmeden asılan bir süreçte okuma döngüsünün
+kendisi bloklanır ve zaman aşımı satırına hiç gelinmez; asılmanın en yaygın
+biçimi tam olarak budur. Tavan yalnız HAFİF kipte: TAM ve GÜNLÜK kipler
+ölçülerek uzun (FX tam kipi 1 sa 45 dk) ve kendi iş akışlarında koşuyor,
+onlara hafif kipin tavanını dayatmak haftalık FX koşusunu her hafta öldüren
+bir yanlış alarm olurdu.
+
+İkinci yarısı ölçünün kendisiyle ilgili ve "bir denetimin KAPSAMI denetimin
+parçasıdır" kusurunun bir eşi: `kosu_nabzi.json` her koşuda ÜZERİNE yazıyordu,
+yani "bu sabahki veri penceresi ateşlendi mi" sorusu geriye dönük CEVAPSIZDI —
+o sabah altı cron'un hiçbiri ateşlenmemişti ve depoda bunun izi yoktu. Dosya
+var, okunuyor, hata vermiyor, yalnızca sorulan soruyu göremiyor. Artık son
+altmış koşu birikiyor (tetik ve hangi cron penceresi olduğu dahil); üst düzey
+alanlar en son kaydın kopyası olarak KALIYOR ki `denetim.nabiz` ve
+`zincir.durum` kırılmasın — biçim değişikliğinin sessizce kırdığı bir okuyucu,
+ölçülemeyen yeni bir arıza demektir. Ölçülmeyen bir seviyeye eşik de
+KONULMAZ: pencere ateşlenme oranı önce birikir, alarm hakkı sonra verilir.
+
+**Kurucu ilke — bir ALARM, izlediği zamanlayıcıya BAĞLANAMAZ; ve YOKLUK ile
+GECİKME ayrı ölçülerdir.** 04.09.2026'da bülten çıktı — 65 dakika geç, ve
+kimse haber almadı. İki bağımsız sebepten: (1) `nobetci.yml` YOKLUK soruyor
+("bülten yazılmış mı"), oysa o gün bülten 05:50'de yazılmıştı; nöbetçi
+06:37'de baksaydı YEŞİL geçerdi, yani arıza onun sorduğu soruya göre HİÇ
+OLMAMIŞ sayılır. (2) Nöbetçi zaten hiç koşmadı: kendisi de düşen zamanlayıcıda
+ve o sabah pencerenin TAMAMI (veri 02:13/02:41, ölçüm 03:23/03:51, nöbetçi
+06:37) ateşlenmedi. Bir alarmın izlediği arıza ile alarmın kendi hata kaynağı
+AYNI olduğunda, alarm tam ihtiyaç duyulan günde susar. Depodaki on iş
+akışından yalnız `yayin.yml` ve `tweet.yml` cron'suz (push · workflow_run)
+ateşleniyordu; alarm oraya, olay akışına taşındı (`gecikme.yml`, CRON YOK) ve
+`workflow_run: requested` sayesinde rutinin 04:17'deki tetiklemesiyle uyanır —
+koşunun bitmesini beklemeden. Nöbetçi silinmedi, YEDEĞE döndü: tek fonksiyon,
+iki taşıyıcı — biri olay tetikli, biri cron'lu.
+
+Ölçünün tanımı da tek yerde (`bulten/gecikme.py`) ve söz KODA YAZILMADI,
+`site/src/data/yayin_takvimi.json`dan çözülüyor: sitenin okura ilan ettiği saat
+neyse gecikme ona göre ölçülür, cron kayarsa `karsilastir()` ikisini birlikte
+kaydırır. Ve bir YAPISAL KİLİT: o modülde yayını durduran bir sınıf HİÇ
+TANIMLI DEĞİL (`SINIFLAR = zamaninda · uyari · alarm`), duman sınaması hem
+sabiti hem kaynak metnini sınıyor. Sebebi 02.09'da ölçüldü: yayının önünde
+duran bir denetimin yanlış alarmı siteyi on iki saat durdurmuştu. Geç kalmış
+bir bülteni DURDURAN kapı, gecikmeyi yokluğa çevirir — yani ölçtüğü şeyi
+büyütür.
+
+**KARAR (04.09.2026, kullanıcıya açıkça soruldu).** Kurtarma yolunu kısaltmak
+için bir "sabah bütçesi" tasarlanmıştı: araç kalan zamanı hesaplayıp sığmayan
+hattı dünkü sürümde bırakacaktı. REDDEDİLDİ — "veri tam olsun, geç çıksın".
+Gerekçe kayda geçsin ki bir sonraki oturum aynı şeyi yeniden önermesin:
+"zamanında ama bir hattı bayat" ile "geç ama tam" arasındaki tercih EDİTORYAL
+bir karardır ve bir araca devredilmez; enflasyon günü kredi hattının bir gün
+eski kalması, yirmi dakikalık gecikmeden pahalı olabilir. Bütçe yerine
+gecikmenin ÖLÇÜLMESİ ve ALARM VERMESİ seçildi: bülten gerektiği kadar geç
+çıkar, ama artık sessizce geç çıkmaz.
+
+**AÇIK SORU — bu planın kapatmadığı tek nokta arızası.** Cron'lar düştüğünde
+zinciri başlatan ilk uyanma hâlâ claude.ai rutinidir ve bir aracı depo dışı
+zamanlayıcı KURAMAZ (27.08'de ölçüldü). Depo dışı ikinci bir tetikleyici
+(cron-job.org vb.) soruldu ve şimdilik istenmedi; gerekçe, rutinin bugüne
+kadar hiç düşmemiş olması — düşen hep GitHub cron'ları oldu. Rutin düşerse bu
+plan onu YAKALAYAMAZ; yakaladığı şey cron'ların düşmesidir.
+
 **Kurucu ilke — sigorta metne değil araca konur.** Yazı katmanını ateşleyen
 rutinin metni depoda değil, claude.ai hesabının rutin ayarlarında durur ve bir
 aracı onu DEĞİŞTİREMEZ. 27.08.2026'da iki ayrı sınamayla ölçüldü.

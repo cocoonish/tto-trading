@@ -20,6 +20,27 @@
 # Saat seçimi kayda dayanıyor: bu depoda 02:00–04:30 UTC penceresindeki
 # zamanlanmış koşular sistematik olarak düşüyor, 06:00–16:00 arasındakiler
 # (gecikmeli de olsa) koşuyor. Nöbetçi bu yüzden 06:37'de.
+#
+# ROL DEĞİŞTİ (04.09.2026) — NÖBETÇİ ARTIK YEDEK.
+#
+# Birincil alarm `gecikme.yml`e geçti ve o CRON TAŞIMIYOR: başka iş
+# akışlarının `requested`/`completed` olaylarıyla ve push'la uyanıyor. Sebep
+# 04.09 sabahında ölçüldü — o gün nöbetçi HİÇ ateşlenmedi (son koşusu 03.09
+# 14:42), yani alarm izlediği zamanlayıcıyla hata kaynağını paylaşıyordu.
+# Ateşlenseydi bile YEŞİL geçecekti: bülten 05:50'de yazılmıştı ve nöbetçi
+# YOKLUK soruyor, GECİKME değil.
+#
+# Peki neden silinmiyor? Çünkü `gecikme.yml`in kendi kör noktası var: onu
+# hiçbir olay uyandırmazsa (bütün iş akışları düşerse, hiç push olmazsa) o da
+# susar. İki taşıyıcı, TEK ölçü: biri olay tetikli (asıl), biri cron'lu
+# (yedek). Yokluk sorusu da burada kalıyor — gecikme ölçüsü "söz verilen
+# saatte yerinde miydi" diye sorar, nöbetçi "site bugünün sayısını gösteriyor
+# mu" diye; ikisi aynı soru değil.
+#
+# Nöbetçinin SAATİ değişmedi. Sözün hemen ardına (05:26Z) çekmek, deponun
+# kendi kaydıyla çelişirdi: erken ölçüm yapabilmesi için erken olması gerekir
+# ama erken olduğu için ateşlenmeyebilir. Erken uyarı işi cron'suz olana
+# verildi.
 
 name: Nöbetçi (bülten çıktı mı)
 
@@ -129,4 +150,48 @@ jobs:
                     "katmanı koşmamış ya da push edememiş. Sayfa eski sayıyı gösteriyor.")
               sys.exit(1)
           print("✓ Teknik bülten yerinde.")
+          PY
+
+      # YEDEK GECİKME ALARMI — aynı ölçü, ikinci taşıyıcı.
+      #
+      # Birincil kanal `gecikme.yml` cron'suz uyanır; bu adım onun hiç
+      # uyanmadığı hâle karşı ikinci şanstır. Ölçünün TEK tanımı yine
+      # `bulten/gecikme.py` — burada yeni bir eşik kurulmuyor, o dosyanın
+      # `tekrar()` fonksiyonu çağrılıyor. İki kapı iki ayrı tanım tutsaydı
+      # bir gün sessizce ayrışır ve hangisinin neyi gördüğü kimsenin aklında
+      # kalmazdı.
+      #
+      # TEK GÜN DÜŞÜRMEZ, bilerek. Bu depodaki arızalar gün-biçimli ve tek
+      # günün gecikmesi gürültüden ayrılamaz; ayrıca birincil kanal o günü
+      # zaten bildirmiş olur — nöbetçinin aynı günü ikinci kez bildirmesi
+      # mükerrer alarm demektir. Eşik `tekrar()`: son beş YAYIN gününün en az
+      # üçü uyarı/alarm. Pencere bir ÖLÇÜM DEĞİL, yöntemsel bir seçimdir
+      # ("bir iş haftası") ve kodda adıyla durur; yirmi gözlem birikince
+      # gecikme dağılımından yeniden türetilmeli.
+      #
+      # YALNIZ BÜLTEN YAZILMIŞKEN koşar (zincir kodu 2 ya da 4). Yazılmamışsa
+      # yukarıdaki yokluk alarmı zaten ötüyor; ikisi birden ötseydi tek arıza
+      # iki e-posta üretirdi.
+      - name: Gecikme tekrar ediyor mu (yedek kanal)
+        if: always()
+        run: |
+          set +e
+          python bulten/zincir.py >/dev/null 2>&1; kod=$?
+          set -e
+          case "$kod" in
+            2|4) ;;
+            *) echo "bülten yazılmamış ya da yayın günü değil — gecikme yedeği atlandı"; exit 0;;
+          esac
+          python - <<'PY'
+          import sys
+          sys.path.insert(0, "bulten")
+          import gecikme
+          var, gerekce = gecikme.tekrar()
+          if var:
+              print(f"::error::GECİKME TEKRAR EDİYOR — {gerekce}. Tek gün "
+                    "gürültü olabilir, tekrar eden gecikme sözün tutulmadığının "
+                    "ölçüsüdür: ya zincir hızlanmalı ya da yayın takvimindeki "
+                    "saat gerçeğe çekilmeli.")
+              sys.exit(1)
+          print(f"✓ Gecikme tekrar etmiyor — {gerekce}")
           PY
