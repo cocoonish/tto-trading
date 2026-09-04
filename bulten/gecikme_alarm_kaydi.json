@@ -1,0 +1,11 @@
+{
+ "_aciklama": "Gönderilmiş gecikme alarmlarının kaydı. Tek işi aynı gün için ikinci kez e-posta göndermemek; ölçünün kendisi gecikme_defteri.jsonl'de durur.",
+ "kayitlar": {
+  "2026-09-04|Günlük bülten": {
+   "an": "2026-09-04T08:00:45+00:00",
+   "gecikme_dk": 39.5,
+   "sinif": "alarm",
+   "darbogaz": "yazı"
+  }
+ }
+}
