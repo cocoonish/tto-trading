@@ -12,7 +12,7 @@
 #              aradaki 16 dakika bu işin bitmesine YETMİYORDU (37 dakikalık koşu
 #              görüldü). Ölçüm, tazeleme daha koşarken depoya bakıyor ve dünün
 #              verisiyle bülten kuruyordu — sessiz, çünkü iki iş de yeşil bitiyor.
-#              70 dakikalık pay, iş bütçesinin (50 dk) tamamını kapsıyor.
+#              70 dakikalık pay, iş bütçesinin (65 dk) tamamını kapsıyor.
 # Dakikalar bilinçli olarak yuvarlak DEĞİL: GitHub'ın zamanlayıcısı saat başı
 # ve yarımlarda sıkışıyor ve bu depoda 30 dk ile 2 saat arası gecikmeler görüldü.
 #   11:47 TR — TÜİK 10:00 bültenleri (TÜFE, Yİ-ÜFE, hizmet ÜFE) API'ye düştü
@@ -126,10 +126,24 @@ jobs:
     # doğru okur (boş dizge ve null'ün ikisi de "keşif yok" demektir).
     if: ${{ !inputs.kesif }}
     runs-on: ubuntu-latest
-    # İş bütçesi. Tazeleme adımının kendi sınırı 45 dakika (aşağıda, ölçülmüş);
-    # bu sınır onun ÜSTÜNDE durur ki adım kesildiğinde commit'e kadar olan
-    # adımlar koşacak vakit bulsun (bugüne dek 13 saniye sürdüler).
-    timeout-minutes: 50
+    # İŞ BÜTÇESİ — ADIM SINIRLARININ TOPLAMININ ÜSTÜNDE DURMAK ZORUNDA.
+    #
+    # 04.09.2026'da tam olarak bu tutmadı ve 45 dakikalık tazeleme çöpe gitti:
+    # kurulum 5 (ölçüldü: iş 04:17'de tetiklendi, tazele adımı 04:22'de başladı)
+    # + tazele 45 + türev 5 = 55 > 50, üstelik Hazine adımının HİÇ sınırı yoktu.
+    # 04:22–05:07 tazeleme kendi sınırını doldurdu, 05:07'de Hazine başladı,
+    # 05:12'de İŞ sınırı doldu ve `if: always()` taşıyan Koşu nabzı ile Commit
+    # adımlarının İKİSİ DE pending kaldı. `if: always()` sigortası ADIM zaman
+    # aşımına karşı çalışıyor, İŞ zaman aşımına karşı ÇALIŞMIYOR: iş sınırı
+    # dolduğunda GitHub always() adımlarını da öldürüyor. Sonuç: 50 dakika
+    # yandı, tazeleme damgası hiç ilerlemedi, bir sonraki koşu aynı 50 dakikayı
+    # baştan yakacaktı.
+    #
+    # Yeni aritmetik (bulten/duman.py `_is_akisi_butcesi` bunu ENGEL olarak sınar):
+    #   kurulum 5 + tazele 40 + türev 5 + hazine 8 + nabız/commit 2 = 60 ≤ 65
+    # İş sınırını yalnız büyütmek yanışı uzatırdı; asıl düzeltme İŞİ (tazeleme)
+    # kesip DEFTER TUTMAYA (damga + commit) yer bırakmaktır.
+    timeout-minutes: 65
     env:
       TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
       # ortak/sitecustomize.py: zaman aşımısız kalan her HTTP isteğine varsayılan
@@ -235,9 +249,20 @@ jobs:
         # Sınırın işi hâlâ aynı — kaynağında takılan bir hat koşuyu sonsuza
         # kadar yakmasın. Ama eşiğin normal işin ÜSTÜNDE olması şart, yoksa
         # sağlıklı koşuyu arızalı gösterir. En yavaş iki hat tek başına 21,4
-        # dakika (kredi + net rezerv); 45 dakika bunun üzerine yeterli pay
-        # bırakıyor ve iş düzeyindeki 50 dakikalık sınırın altında kalıyor.
-        timeout-minutes: 45
+        # dakika (kredi + net rezerv); 40 dakika bunun üzerine hâlâ yeterli pay
+        # bırakıyor.
+        #
+        # 45'ten 40'a ÇEKİLDİ (04.09.2026). Beş dakika burada kaybedilmiyor,
+        # yer değiştiriyor: iş bütçesinin kuyruğuna, Hazine adımının sınırına
+        # ve commit'e. 04.09'da bu adım 45 dakikayı SONUNA KADAR yaktı ve
+        # karşılığında sıfır çıktı alındı, çünkü commit adımına sıra gelmedi.
+        # Yarım tazeleme, commit edilmiş yarım tazelemedir; hiç commit
+        # edilmemiş tam tazeleme ise hiçbir şeydir.
+        #
+        # Hangi hattın o 45 dakikayı yediği BİLİNMİYOR (iptal edilen koşunun
+        # logları 404). Bu yüzden 40 dakika ölçülmüş bir süre değil, ölçülmüş
+        # iş yükünün (25,0 dk, 27.08) üstünde bir tavandır.
+        timeout-minutes: 40
         run: |
           HATLAR="${{ inputs.hatlar }}"
           if [ -z "$HATLAR" ]; then
@@ -323,11 +348,20 @@ jobs:
       # altkümesini getiriyor ve hat CSV'yi eklemek yerine BAŞTAN yazıyor.
       # guncelle.py artık veri tarihi geriye giden hattı düşmüş sayıyor; burada
       # ayrıca diskteki hasar geri alınıyor, yoksa commit adımı onu yayardı.
-      # if: always() — üstteki tazeleme adımı düşse (ya da 25 dk sınırına çarpsa)
+      # if: always() — üstteki tazeleme adımı düşse (ya da 40 dk sınırına çarpsa)
       # bile ihale günü ihale çekilir. İki hattın kaderi birbirine bağlı değil.
+      #
+      # SINIR ZORUNLU. 04.09.2026'ya kadar bu adımın HİÇ zaman aşımı yoktu:
+      # 05:07'de başladı, iş bütçesinin kalan beş dakikalık payını yedi ve
+      # 05:12'de iş sınırı dolunca Koşu nabzı ile Commit adımları hiç koşmadı.
+      # Sınırsız bir adım, kendisinden SONRA gelen bütün adımların sigortasını
+      # yakar. 8 dakika ÖLÇÜLMÜŞ DEĞİL, açıkça GEÇİCİ BİR TAVANDIR: işi
+      # "sınırsız"ı bitirmek, doğru sayıyı vermek değil. Hat sürelerinin
+      # kaydı biriktiğinde medyandan türetilecek.
       - name: Hazine ihaleleri (ihale günüyse tam kip)
         if: always()
         continue-on-error: true
+        timeout-minutes: 8
         run: |
           GEREK=$(python -c "import sys; sys.path.insert(0,'bulten'); import tazeleme; print(' '.join(tazeleme.gerekli(['hazine'])))")
           if [ "$GEREK" != "hazine" ]; then
@@ -335,10 +369,29 @@ jobs:
             exit 0
           fi
           echo "İhale günü — Hazine sitesi taranıyor (tam kip)"
-          if python guncelle.py hazine --tam --sistem-kur; then
+          # SINIR KABUĞUN İÇİNDE DE OLMAK ZORUNDA. Adımın `timeout-minutes`
+          # sınırı dolduğunda GitHub kabuğu da öldürür: aşağıdaki `else` dalı —
+          # yani diskteki YARIM kazımayı geri alan `git checkout` — hiç koşmaz
+          # ve Commit adımı (`if: always()`) o yarım CSV'yi commit eder.
+          # 25.08.2026'da aynı hat depodaki 448 ihalelik geçmişi 16 satıra
+          # düşürmüştü; geri alma tam bunun için konmuştu. Adıma tavan konarken
+          # (04.09) o tavanın geri almayı da öldürdüğü gözden kaçtı: bir sigorta
+          # eklenirken kendisinden ÖNCE konmuş sigortayı kapatıp kapatmadığı
+          # sorulur. Kabuk içi `timeout` denetimi kabuğa geri verir (çıkış 124),
+          # dıştaki 8 dakika yerinde durur ama artık ona ÇARPILMAZ.
+          # 7 dakika ÖLÇÜM DEĞİL, adım tavanından TÜRETİLMİŞTİR: kazımanın
+          # tavanı (8, kendisi de geçici) eksi geri almaya bırakılan bir
+          # dakika. Adım tavanı ölçüye bağlandığında bu da onunla iner;
+          # bulten/duman.py ikisinin arasındaki sırayı ENGEL olarak sınıyor.
+          if timeout -k 30s 7m python guncelle.py hazine --tam --sistem-kur; then
             echo "Hazine hattı tazelendi"
           else
-            echo "::warning::Hazine tam kipi düştü (büyük olasılıkla kazıma eksik veri getirdi) — diskteki değişiklikler geri alınıyor, depodaki birikmiş geçmiş korunuyor."
+            KOD=$?
+            if [ "$KOD" -ge 124 ]; then
+              echo "::warning::Hazine tam kipi 7 dakikalık kabuk sınırında kesildi (kaynak asılmış olabilir) — diskteki yarım kazıma geri alınıyor, depodaki birikmiş geçmiş korunuyor."
+            else
+              echo "::warning::Hazine tam kipi düştü (büyük olasılıkla kazıma eksik veri getirdi) — diskteki değişiklikler geri alınıyor, depodaki birikmiş geçmiş korunuyor."
+            fi
             git checkout -- "Aktarılacak Projeler/hazineihrac" "site/public/projeler/hazine-ihrac" || true
           fi
 
@@ -347,23 +400,23 @@ jobs:
       # koşmaz ve o dosya "hat düştü" ile "yapacak iş yoktu" ayrımını veremez.
       # Nabız bu ayrımı verir: koşunun kendisi ne zaman oldu, sonucu neydi.
       # 26.08'de veri hattı düştü ve aşağı akıştaki hiçbir katman bunu bilemedi.
+      #
+      # DEFTER, TEK KAYIT DEĞİL (04.09.2026). Dosya eskiden her koşuda üzerine
+      # yazıyordu; "bu sabahki veri penceresi ateşlendi mi" sorusu bu yüzden
+      # geriye dönük cevapsızdı — 04.09 sabahı altı cron'un hiçbiri ateşlenmedi
+      # ve depoda bunun izi yoktu. Artık son koşular biriktiriliyor. Üst düzey
+      # veri_kosusu/sonuc alanları en son kaydın kopyası olarak KALIYOR:
+      # denetim.py ve zincir.py onları okuyor, kırılmıyorlar.
+      #
+      # Kod ayrı bir modülde (bulten/nabiz.py), burada gömülü değil: gömülü
+      # heredoc'u duman sınaması çağıramaz, ancak bir KOPYASINI sınayabilirdi.
       - name: Koşu nabzı
         if: always()
-        run: |
-          python - <<'PY'
-          import json, os, datetime as dt
-          from pathlib import Path
-          Path("bulten/kosu_nabzi.json").write_text(json.dumps({
-              "_aciklama": "Veri iş akışının son koşusu. denetim.py bunun yaşına bakar: "
-                           "veri hattı sessizce düşerse bülten ölçüm katmanının bayat "
-                           "olduğunu bilmeden yazılır.",
-              "veri_kosusu": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
-              "sonuc": os.environ.get("ADIM_SONUC", "bilinmiyor"),
-              "kaynak": "veri.yml",
-          }, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-          PY
+        run: python bulten/nabiz.py
         env:
           ADIM_SONUC: ${{ steps.tazele.outcome || 'koşmadı' }}
+          TETIK: ${{ github.event_name }}
+          CRON: ${{ github.event.schedule }}
 
       # if: always() ŞART. 2026-08-27 koşusunda dört hattın ÜÇÜ başarıyla
       # tazelendi (USDTRY 27.08'e geçti, fonlama ve DİBS koştu) ve 37 dakikalık
@@ -375,7 +428,9 @@ jobs:
         run: |
           git config --global user.name  "tto-veri"
           git config --global user.email "bot@users.noreply.github.com"
-          git add "Aktarılacak Projeler" Research site/public/projeler bulten/tazeleme_durumu.json bulten/kosu_nabzi.json bulten/onbellek || true
+          # hat_suresi.json: her hattın ölçülmüş koşu süresi. Commit edilmeyen
+          # bir ölçüm ölçülmemiş sayılır — bütçe ve sıralama bu dosyadan türer.
+          git add "Aktarılacak Projeler" Research site/public/projeler bulten/tazeleme_durumu.json bulten/kosu_nabzi.json bulten/hat_suresi.json bulten/onbellek || true
           if git diff --cached --quiet; then
             echo "veri değişmedi — commit yok"
           else

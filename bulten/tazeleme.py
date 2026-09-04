@@ -22,6 +22,7 @@ import csv
 import datetime as dt
 import json
 import re
+from contextlib import contextmanager
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -31,6 +32,14 @@ BURASI = Path(__file__).resolve().parent
 KOK = BURASI.parent
 DURUM = BURASI / "tazeleme_durumu.json"
 ONBELLEK_SAAT = 4          # ulusal takvim önbelleğinin ömrü
+# Takvim ucunun zaman aşımı (sn). ÇAĞIRANA GÖRE DEĞİŞİR: tazeleme koşusunda
+# bekleyecek vakit var, ama `denetim.tazeleme_atlandi` aynı ölçüyü YAZI
+# KATMANININ kritik yolunda soruyor ve orada çöken bir ağ, bültenin
+# yazılmasını dakikalarca geciktirmemeli — düzeltilmeye çalışılan şeyin ta
+# kendisi olurdu. Kısa tavan `zaman_asimi()` bağlamıyla dayatılır; imza
+# değiştirilmiyor çünkü `_yayimlar` birkaç sınamada tek argümanlı bir sahteyle
+# değiştiriliyor ve yeni bir parametre onları sessizce düşürürdü.
+TAKVIM_ZAMAN_ASIMI = 25
 IHALE_CSV = KOK / "Aktarılacak Projeler" / "hazineihrac" / "hazine_planlanan_ihaleler.csv"
 # Strateji duyurusunun beklendiği saat (TR). HMB duyuruyu ayın son iş günü
 # mesai bitimine doğru yayımlıyor; erken bakmak boş koşu, geç bakmak bayat
@@ -137,6 +146,13 @@ TETIKLER: tuple[Tetik, ...] = (
 
 TETIK = {t.hat: t for t in TETIKLER}
 
+# KÖR KOŞU İMZASI. Takvim ucu okunamadığında her hat "gerekli" sayılır ve
+# gerekçesi bu dizgeyle başlar. Metni okuyan ikinci bir yer var (denetim.py'nin
+# `tazeleme_atlandi` ölçütü hat hat 17 satır patlatmak yerine tek satıra iner);
+# iki ayrı yere yazılmış aynı dizge bir gün sessizce ayrışır, bu yüzden TEK
+# tanım burada durur.
+KOR_KOSU = "TAKVİM ALINAMADI"
+
 
 # ── ulusal takvimden yayımlanmış kayıtlar ────────────────────────────────────
 
@@ -161,7 +177,7 @@ def _yayimlar(yillar: tuple[int, ...]) -> tuple[list[dict], bool]:
             except ValueError:
                 taze = False
         if not taze:
-            metin = _getir(TUIK_UC.format(yil=yil))
+            metin = _getir(TUIK_UC.format(yil=yil), TAKVIM_ZAMAN_ASIMI)
             if metin:
                 try:
                     kayitlar = json.loads(metin).get("yayindaOlanlarList", [])
@@ -252,6 +268,18 @@ def _ihale_gunleri() -> list[dt.date]:
     return sorted(set(gunler))
 
 
+@contextmanager
+def zaman_asimi(sn: int):
+    """Takvim ucuna GEÇİCİ ve kısa bir tavan koy (kritik yoldaki çağıranlar için)."""
+    global TAKVIM_ZAMAN_ASIMI
+    onceki = TAKVIM_ZAMAN_ASIMI
+    TAKVIM_ZAMAN_ASIMI = sn
+    try:
+        yield
+    finally:
+        TAKVIM_ZAMAN_ASIMI = onceki
+
+
 # ── durum defteri ────────────────────────────────────────────────────────────
 
 def durum_oku() -> dict[str, str]:
@@ -313,7 +341,7 @@ def kararlar(hatlar: list[str] | None = None,
             cikti.append(Karar(ad, True, "hiç tazelenmemiş"))
             continue
         if not takvim_saglam:
-            cikti.append(Karar(ad, True, "TAKVİM ALINAMADI — kör koşu "
+            cikti.append(Karar(ad, True, f"{KOR_KOSU} — kör koşu "
                                          "(yayım takvimi okunamadığı için hat koşuluyor)"))
             continue
 

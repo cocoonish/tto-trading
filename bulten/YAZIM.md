@@ -54,6 +54,8 @@ Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
    Bu yüzden zinciri elle tamamladığın her sabah bunu bildirimde YAZ: hangi
    halka düştü, ne tetiklendi, bülten kaçta çıktı. Sessizce onarmak, arızayı
    görünmez kılar — ve bu zincirin asıl kusuru zaten görünmez olmasıydı.
+   Bildirimde gecikme DAKİKASI ve darboğaz halka yazılır — "gecikti" değil,
+   kaç dakika ve hangi halka; `zincir.py` ikisini de basıyor.
 
 1. **Bülteni oku ve damgasını not al.** `site/src/data/bulten/<bugün>.json`.
    İçinde ölçülmüş her şey var: 51 enstrümanlık piyasa fotoğrafı, TL faiz seti
@@ -281,7 +283,7 @@ Kalıcı çözüm rutin metnini claude.ai arayüzünden düzeltmektir.
 |---|---|---|
 | "Dosya yoksa `python3 bulten.py --tur gunluk` ile üret" | Üretme — o oturumda ağ kapalı, 0 enstrümanlık fotoğraf çıkar ve önbellek kirlenir; iş akışlarını tetikle | **Araçla kapatıldı**: `bulten.py` 40 enstrümanın altında dosyayı YAZMIYOR (çıkış 4) |
 | `python3 bulten/yaz.py yama.json` (damgasız) | `--damga "<olusturma>"` ver | Araçla kapatıldı: damga verilmese de yama dosyasının zamanı ölçümle kıyaslanıyor |
-| `zincir.py` hiç geçmiyor | 0. adım zincire bakmaktır | Yalnız rehberde — rutin düzeltilene kadar boşluk |
+| `zincir.py` hiç geçmiyor | 0. adım zincire bakmaktır | **Araçla ÖLÇÜLDÜ**: `yaz.py` gecikmeyi zincir raporundan bağımsız kaydeder ve `gecikme.yml` alarmı zincir raporuna hiç bakmadan verir. Dayatılamıyor, ama artık görünmüyor da değil |
 
 **Silip yeniden kurmak da çözüm değil.** 27.08.2026'da denendi: aracının
 kurduğu bir rutin ateşlendiğinde depoya erişemiyor (sınama koşusu 24 saniyede,
@@ -289,10 +291,17 @@ tek bir dosyaya dokunamadan bitti). Mevcut rutinlerin taşıdığı kaynak depo
 bağlantısının `create_trigger`'da karşılığı yok. Yani düzeltme yalnız
 claude.ai arayüzünden yapılabilir.
 
-Üçüncü satır kapatılamadı: bir aracın dayatabileceği bir karşılığı yok. Zincire
-bakmayan bir koşu, eksik halkayı fark etmeden yazmaya kalkışır; o durumda da
-ilk satırdaki kapı devreye girer ve sakat ölçü yazılmaz. Yani en kötü hâlde
-bülten çıkmaz — yanlış bülten çıkmaz.
+Üçüncü satır hâlâ DAYATILAMIYOR: rutinin bu aracı koşturmasını sağlayacak bir
+karşılık yok. Zincire bakmayan bir koşu, eksik halkayı fark etmeden yazmaya
+kalkışır; o durumda da ilk satırdaki kapı devreye girer ve sakat ölçü
+yazılmaz. Yani en kötü hâlde bülten çıkmaz — yanlış bülten çıkmaz.
+
+Ama satırın maliyeti artık GÖRÜNÜYOR ve bu bilerek araca bağlandı: gecikme
+kaydı `yaz.py`nin yan etkisidir (bülteni yazmanın başka yolu yok, hiçbir
+bayrak gerekmiyor), alarmı taşıyan iş akışı zincir raporuna hiç bakmıyor ve
+uyandırıcısı bir cron değil. Yani rutin bu rehberin tek satırını okumasa bile
+gecikme ölçülür, kaydedilir ve haber verilir. Rehbere yazılmış bir kural,
+"rutin metnine yazıldı" kadar zayıftır; bu bölümün varlık sebebi de zaten o.
 
 **Rutini bir aracı yeniden kuramaz.** Mevcut iki rutin (hafta içi 04:15 UTC,
 pazar 14:45 UTC) hesabın arayüzünden oluşturuldu; aracının onları güncelleme ya
@@ -406,6 +415,11 @@ damganın yaşına bakıyor. İki uyarı doğrudan sana:
 - *"Son veri koşusunun tazeleme adımı 'failure' ile bitti"* — bazı hatlar
   çekilememiş. Hangilerinin eski kaldığını veri tarihlerinden bul ve metinde
   o hatlara dayanan hüküm kurma.
+- *"Bugün tazelenmesi gereken ama tazelenemeyen hatlar: …"* — bu hatların
+  sayısı dünkü sürümde. Günün haberini onların üstüne kurma; kullanacaksan
+  kendi tarihiyle kullan ("kredi verisi 3 Eylül'de kaldı"). Bültende yazılacak
+  şey hattın BAYATLIĞIDIR; koşunun geciktiği, hangi iş akışının düştüğü okuru
+  ilgilendirmez ve okur diline girmez.
 
 Üçüncü uyarı seri düzeyinde:
 

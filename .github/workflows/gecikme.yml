@@ -1,0 +1,189 @@
+# GECİKME ALARMI — CRON YOK. Bilerek.
+#
+# NEDEN VAR. 04.09.2026 sabahı bülten okura verilen sözün 41 dakika ötesinde
+# sitede oldu, arızayı KULLANICI fark etti ve sistem 65 dakika boyunca bildiği
+# hâlde hiçbir şey söylemedi. İki ayrı sebepten sessiz kaldı ve ikisi de
+# tasarımdaydı:
+#
+#   (1) SORU YANLIŞTI. Depodaki tek alarm (`nobetci.yml`) YOKLUK ölçüyor:
+#       bülten 05:50'de yazılmıştı, nöbetçi 06:37'de baksaydı YEŞİL geçerdi.
+#       Arıza, nöbetçinin sorduğu soruya göre hiç olmamış sayılır.
+#   (2) SORAN DA AYNI ZAMANLAYICIDAYDI. O sabah veri (02:13, 02:41), ölçüm
+#       (03:23, 03:51) VE NÖBETÇİ (06:37) — sabah penceresinin tamamı hiç
+#       ateşlenmedi. Yani alarm, izlediği zamanlayıcıyla hata kaynağını
+#       PAYLAŞIYORDU: "tek katmanlı sigorta yetmez" ilkesinin doğrudan ihlali.
+#
+# Bu iş akışı ikinci kusuru kapatır. Depodaki dokuz iş akışından yalnız
+# `yayin.yml` ve `tweet.yml` cron'a bakmadan da ateşleniyor; bu onuncusu HİÇ
+# cron taşımıyor. Uyanma kaynağı başka iş akışlarının kendisi: bir koşu
+# İSTENDİĞİNDE (`requested`) ve BİTTİĞİNDE (`completed`) burası uyanır.
+# `requested` seçimi ölçülmüş bir kazanç: 04.09'da rutinin 04:17'deki
+# dispatch'i ölçeri 04:17'de uyandırırdı — 05:12'deki `completed`'ı
+# beklemeden, yani kullanıcının sorusundan bir saat önce.
+#
+# AYRI İŞ AKIŞI OLMASI BİLİNÇLİ. `yayin.yml`e tek satır girmiyor. Gecikme
+# ölçüsü hiçbir yayını durdurmaz (`bulten/gecikme.py`de yayın kapısı sınıfı
+# TANIMLI DEĞİLDİR ve duman sınaması bunu kilitler): yanlış alarmın bedeli
+# BİR E-POSTADIR, site değil. 02.09'da yayın kapısının yanlış alarmı siteyi
+# on iki saat dondurmuştu; o hata bilerek tekrarlanmıyor.
+#
+# ÖLÇÜLMEMİŞ HALKA — VARSAYIM, İŞARETLİ. "Düşen bir iş akışı e-posta
+# gönderir" cümlesi bu depoda yalnız ZAMANLANMIŞ koşu (nobetci.yml) için
+# yazılı. `workflow_run` ile tetiklenmiş bir koşunun düşmesinde bildirimin
+# KİME gittiği (tetikleyen koşunun aktörüne mi, depo sahibine mi) HİÇ
+# ölçülmedi. Yani bu dosyanın e-posta bacağı bugün bir VARSAYIMDIR. Ölçmenin
+# yolu açık ve tek seferlik: `sinama_gun: 2026-09-04` ile elle tetikle
+# (bilerek kırmızı biter), e-postanın düşüp düşmediğine bak; sonra aynı
+# sınamayı bir veri koşusu tetikleyerek tekrarla. Gelmiyorsa elde kalan şey
+# yalnız bir defterdir ve bunun ADIYLA söylenmesi gerekir.
+#
+# Ölçünün kendisi bu dosyada DEĞİL: söz `site/src/data/yayin_takvimi.json`dan
+# çözülür, karar `bulten/gecikme.py`nin tek fonksiyonundan gelir. Burası
+# yalnız TAŞIYICIDIR — iki tanım bir gün sessizce ayrışır.
+
+name: Gecikme alarmı
+
+on:
+  # CRON YOK — bu dosyanın varlık sebebi tam olarak budur.
+  workflow_run:
+    workflows:
+      - "Veri tazeleme"
+      - "Günlük bülten"
+      - "Siteyi yayınla"
+      - "Haftalık teknik analiz"
+    # requested: koşu İSTENDİĞİNDE uyan — bitişini bekleme.
+    # completed:  koşu bittiğinde bir kez daha bak (uzun koşuda söz o arada geçer).
+    types: [requested, completed]
+  # Yazı katmanının push'u da bir uyanma kaynağıdır: bülten yazıldıktan hemen
+  # sonra ölçü kesinleşir ve gecikme varsa aynı dakikada bildirilir.
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      sinama_gun:
+        description: 'Hangi gün ölçülsün (YYYY-MM-DD). Boş bırakılırsa bugün.'
+        required: false
+        default: ''
+
+# Aynı anda birden çok uyanma olabilir (bir veri koşusu ile bir yayın koşusu
+# aynı dakikada). cancel-in-progress KAPALI: yarıda kesilen bir alarm koşusu,
+# alarmın kaybolması demektir.
+concurrency:
+  group: gecikme-alarmi
+  cancel-in-progress: false
+
+# contents: write — YALNIZ mükerrerlik kaydı için (bulten/gecikme_alarm_kaydi.json).
+# Kaydı GitHub Actions önbelleğinde tutmak da düşünüldü ve seçilmedi: önbellek
+# kalıcı değil, düştüğünde alarm her uyanmada yeniden öter ve alarmın kendi
+# güvenilirliği düşer. Yazılan tek dosya `bulten/` altındadır; `yayinla.py`
+# public depoya yalnız `site/` kopyaladığı için siteye YAPISAL olarak ulaşamaz.
+permissions:
+  contents: write
+
+jobs:
+  olc:
+    runs-on: ubuntu-latest
+    # TAVAN, ÖLÇÜM DEĞİL — ve öyle işaretli. Bu işin gerçek süresi henüz
+    # ölçülmedi (seyrek çekim + sistemin python3'ü, kabaca yarım dakika
+    # bekleniyor); tavanın tek işi "sınırsız"ı bitirmek. Bir hafta koştuktan
+    # sonra gerçek süre okunup buradaki sayı ondan türetilmeli.
+    timeout-minutes: 6
+    steps:
+      # Sparse checkout: bu iş yalnız ölçüm için gereken dosyaları ister.
+      # Depo klonu tam çekilseydi her uyanma onlarca saniye sürerdi ve günde
+      # 40–70 kez uyanıyor. setup-python YOK, pip YOK — koşucunun sistem
+      # python3'ü stdlib'den fazlasını istemeyen bu ölçüye yetiyor.
+      # `ref: main` AÇIKÇA veriliyor: `workflow_run` olayında checkout,
+      # tetikleyen koşunun sha'sını alır ve o sha, tetikleyen koşu başlarken
+      # geçerli olandır. Gecikme ölçüsü DEPONUN ŞU ANKİ HÂLİNİ sorar — bir
+      # dakika önce yazılmış bülteni görmeyen bir ölçü, olmayan bir gecikmeyi
+      # bildirirdi.
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          sparse-checkout: |
+            bulten
+            ortak
+            site/src/data
+            .github/workflows
+
+      - name: Gecikmeyi ölç
+        id: olcum
+        env:
+          # Girdi kabuğa ENV üzerinden geçiyor, satır içi ${{ }} ile değil:
+          # şablon yerine koyma kabuk enjeksiyonuna açık bir kalıptır.
+          SINAMA_GUN: ${{ github.event.inputs.sinama_gun }}
+        run: |
+          gun_arg=""
+          if [ -n "$SINAMA_GUN" ]; then gun_arg="--gun $SINAMA_GUN"; fi
+          set +e
+          python3 -u bulten/gecikme.py $gun_arg \
+            --kayit bulten/gecikme_alarm_kaydi.json \
+            --kaydi-yaz \
+            --cikti "$GITHUB_OUTPUT"
+          kod=$?
+          set -e
+          # Bu adım alarm yüzünden DÜŞMEZ: karar bir sonraki iki adımda
+          # okunuyor ve SIRA kritik — önce kayıt push edilir, sonra alarm
+          # verilir. Tersi her uyanmada mükerrer e-posta demek.
+          if [ "$kod" != "0" ]; then
+            echo "::warning::ölçüm aracı $kod ile bitti — karar çıktıdan okunuyor"
+          fi
+          # AMA KÖR KALMAK BAŞKA ŞEY. Araç karar üretemediyse (takvim
+          # okunamadı, dosya bozuk, bir istisna) çıktı dosyasına hiçbir şey
+          # yazılmaz; aşağıdaki iki adım da koşulsuz atlanır ve iş akışı YEŞİL
+          # biterdi — yani bozuk bir alarm kanalı, sağlıklı bir alarm kanalıyla
+          # aynı görünürdü. Bu depodaki asıl kusur zaten buydu.
+          if ! grep -q '^gun=' "$GITHUB_OUTPUT"; then
+            echo "::error::GECİKME ÖLÇÜMÜ KARAR ÜRETEMEDİ (çıkış $kod) — alarm kanalı KÖR. Yukarıdaki iz sürümüne bak."
+            exit 1
+          fi
+
+      # Mükerrerlik kaydını depoya yaz. YALNIZ yeni alarm varken çalışır, yani
+      # sakin günlerde bu iş akışı depoya hiç dokunmaz.
+      #
+      # Bu push yayını TETİKLEMEZ (yayin.yml `push` tetikleyicisi yalnız
+      # `site/**` yollarını dinliyor) ve kendini de tetiklemez: GitHub kendi
+      # GITHUB_TOKEN'ıyla atılan push'larda yeni iş akışı başlatmaz.
+      - name: Alarm kaydını işle
+        if: steps.olcum.outputs.yeni == '1'
+        env:
+          GUN: ${{ steps.olcum.outputs.gun }}
+        run: |
+          git config --global user.name  "tto-gecikme"
+          git config --global user.email "bot@users.noreply.github.com"
+          git add bulten/gecikme_alarm_kaydi.json || true
+          if git diff --cached --quiet; then
+            echo "kayıt değişmedi — commit yok"
+            exit 0
+          fi
+          git commit -m "gecikme: $GUN alarm kaydı (otomatik)"
+          for deneme in 1 2 3 4 5; do
+            git pull --rebase --autostash -X theirs || true
+            if git push; then
+              echo "push tamam (deneme $deneme)"
+              exit 0
+            fi
+            echo "::warning::push reddedildi (deneme $deneme) — yeniden deneniyor."
+            sleep $((deneme * 5))
+          done
+          # Kayıt push edilemedi: alarm YİNE verilir. Kaybolmuş bir alarmdansa
+          # çift alarm — mükerrerlik bir rahatsızlık, sessizlik bir arıza.
+          echo "::warning::alarm kaydı push edilemedi; aynı gün için mükerrer alarm gelebilir."
+
+      # Alarmın kendisi. Bu adım DÜŞER, düşen iş akışı bildirim gönderir.
+      # Yayının önünde durmaz: bu iş akışının kırmızı bitmesi hiçbir şeyi
+      # engellemez, yalnız haber verir.
+      - name: Alarm
+        if: steps.olcum.outputs.yeni == '1'
+        env:
+          OZET: ${{ steps.olcum.outputs.ozet }}
+        run: |
+          echo "::error::YAYIN SÖZÜ AŞILDI — $OZET"
+          exit 1
+
+      - name: Sessiz geçiş
+        if: steps.olcum.outputs.yeni != '1'
+        env:
+          OZET: ${{ steps.olcum.outputs.ozet }}
+        run: echo "✓ $OZET"

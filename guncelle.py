@@ -37,7 +37,7 @@ Sözleşme:
   · Ev stili (site/tools/plotly_stil.py) her koşunun sonunda TEK KEZ uygulanır.
 """
 from __future__ import annotations
-import argparse, json, os, re, shutil, subprocess, sys, time
+import argparse, json, os, re, shutil, signal, subprocess, sys, threading, time
 from collections import deque
 from datetime import datetime
 from dataclasses import dataclass, field
@@ -1018,28 +1018,141 @@ def denetle(secilen: list["Hat"], tam: bool, duzelt: bool) -> int:
     return 0
 
 
-def _adim_kos(komut: list[str], cwd: Path) -> tuple[int, list[str]]:
+# ADIM TAVANI — TOHUM, ölçüm değil.
+#
+# 900 saniye, ölçülen en yavaş hafif-kip HATTININ (kredi 869 sn, 27.08) üstünde
+# duruyor ve o hat DÖRT adıma bölünüyor, yani tek bir adım bu tavana yaklaşmıyor.
+# İşi bir hattı hızlandırmak değil, ASILMIŞ bir adımı bütün bütçeyi yemeden
+# kesmek: 27.08'de EVDS 21 dakika astı ve dört hattın üçünün tamamlanmış işi
+# çöpe gitti. `bulten/hat_suresi.json` biriktiğinde p90×2'ye geçilecek; okuyucu
+# bu yüzden tek yerde (`adim_tavani`) duruyor.
+ADIM_TAVAN_SN = 900
+
+# ZAMAN AŞIMI İMZASI — TEK TANIM.
+# `kos()` asılan bir adımı bu dizgeyle başlayan bir cümleyle bildiriyor ve
+# `sure_kaydet()` süre defterine "zaman aşımı mı, düştü mü" diye onu okuyor.
+# İki yere ayrı ayrı yazılmış aynı dizge bir gün sessizce ayrışır — nitekim
+# ayrışmıştı: defter küçük harfle arıyordu, mesaj BÜYÜK harfle geliyordu ve
+# asılan her hat deftere "düştü" diye geçiyordu. Süre defterinin var oluş
+# sebebi tam da "hangi hat astı" sorusuydu (04.09.2026: 45 dakikayı hangi hat
+# yedi, bilinmiyor); o soruyu cevaplayamayan bir kayıt işe yaramaz.
+ZAMAN_ASIMI_IMZASI = "ZAMAN AŞIMI"
+
+
+def adim_tavani(h: "Hat", tam: bool, gunluk: bool) -> float | None:
+    """Bir adımın duvar saati tavanı (saniye). None = tavan yok.
+
+    TAM ve GÜNLÜK kiplerde TAVAN YOK — bilerek. Bu kipler ölçülerek uzun:
+    FX'in tam kipi 26.08'de 1 saat 45 dakikada bitti ve kendi iş akışında
+    (fx.yml, 300 dakikalık bütçe) koşuyor. Onlara hafif kipin tavanını
+    dayatmak, yayının önünde duran bir denetimin yanlış alarmı olurdu —
+    haftalık FX koşusunu her hafta öldürürdü. Hafif kip ise "depodaki veriden
+    grafik + ozet.json (dakikalar)" diye tanımlı; orada 15 dakikayı aşan bir
+    adım çalışmıyor, ASILMIŞTIR.
+    """
+    if tam or gunluk:
+        return None
+    return ADIM_TAVAN_SN
+
+
+def _agaci_oldur(p: subprocess.Popen):
+    """Süreç AĞACINI öldür — yalnız çocuğu değil.
+
+    Hatlar alt süreç açıyor (kendi .venv'i, pip, kazıyıcı). Yalnız doğrudan
+    çocuğu öldürmek torunları ayakta bırakır: koşucu boş yere dolu kalır ve
+    asılı istek hâlâ ağda durur. POSIX'te çocuk kendi oturumunda açıldığı için
+    süreç GRUBU sinyallenebiliyor; Windows'ta taskkill /T ağacı geziyor.
+    """
+    try:
+        if os.name == "nt":
+            subprocess.run(["taskkill", "/F", "/T", "/PID", str(p.pid)],
+                           capture_output=True)
+            return
+        gid = os.getpgid(p.pid)
+        os.killpg(gid, signal.SIGTERM)
+        try:
+            p.wait(timeout=5)                    # düzgün kapanmaya şans
+            return
+        except subprocess.TimeoutExpired:
+            os.killpg(gid, signal.SIGKILL)
+    except Exception:                            # noqa: BLE001
+        try:
+            p.kill()
+        except Exception:                        # noqa: BLE001
+            pass
+
+
+def _adim_kos(komut: list[str], cwd: Path,
+              sinir_sn: float | None = None) -> tuple[int, list[str], bool]:
     """Adımı koştur; çıktıyı ekrana AKTARIRKEN günlüğe yaz ve son 40 satırı tut.
 
     subprocess.run(...) ile çocuğun çıktısı doğrudan terminale gidiyordu: canlı
     görünüyordu ama hiçbir yere kaydedilmiyor, hata mesajı özete de taşınamıyordu.
+
+    DUVAR SAATİ ZAMAN AŞIMI (`sinir_sn`). 04.09.2026'ya kadar burada hiçbir
+    zaman aşımı yoktu: `ortak/sitecustomize.py` yalnız HTTP İSTEĞİNE sınır
+    takıyor, adımın toplam süresine değil. Bir hat asıldığında tazeleme adımının
+    bütün bütçesini yiyor ve ONDAN SONRAKİ hatların tamamlanmış işi commit
+    edilmeden gidiyordu (27.08: EVDS 21 dakika astı, dört hattın üçünün işi
+    çöpe gitti). Sınır dolduğunda süreç AĞACI öldürülür, adım "zaman aşımı"
+    diye raporlanır ve DÖNGÜ SÜRER — bir hattın asılması, tazelenmiş öbür
+    hatların kaderini paylaşmaz.
+
+    Çıktı ayrı bir iş parçacığından pompalanıyor: `for satir in p.stdout`
+    doğrudan koşsaydı, hiç çıktı üretmeden asılan bir süreçte O DÖNGÜ
+    bloklanırdı ve `wait(timeout=…)` satırına hiç gelinmezdi. Asılmanın en
+    yaygın biçimi tam olarak budur.
+
+    Döner: (çıkış kodu, son satırlar, zaman aşımına uğradı mı).
     """
+    # Çocuk KENDİ süreç grubunda açılır ki ağacı tek sinyalle öldürülebilsin.
+    ek = ({"creationflags": subprocess.CREATE_NEW_PROCESS_GROUP} if os.name == "nt"
+          else {"start_new_session": True})
     p = subprocess.Popen(komut, cwd=str(cwd), env=_COCUK_ENV,
                          stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                         text=True, bufsize=1, encoding="utf-8", errors="replace")
+                         text=True, bufsize=1, encoding="utf-8", errors="replace",
+                         **ek)
     son: deque[str] = deque(maxlen=40)
-    for satir in p.stdout:                       # satır satır: canlılık korunur
-        satir = satir.rstrip("\n")
-        # print() değil: sys.stdout zaten Tee ise iki kez yazılırdı.
-        sys.__stdout__.write(satir + "\n")
-        sys.__stdout__.flush()
-        gunluge_yaz(satir)
-        son.append(satir)
-    p.wait()
-    return p.returncode, list(son)
+
+    def _pompala():
+        try:
+            for satir in p.stdout:               # satır satır: canlılık korunur
+                satir = satir.rstrip("\n")
+                # print() değil: sys.stdout zaten Tee ise iki kez yazılırdı.
+                sys.__stdout__.write(satir + "\n")
+                sys.__stdout__.flush()
+                gunluge_yaz(satir)
+                son.append(satir)
+        except Exception:                        # noqa: BLE001
+            pass                                 # boru kapandı (süreç öldürüldü)
+
+    okuyucu = threading.Thread(target=_pompala, daemon=True)
+    okuyucu.start()
+    asti = False
+    try:
+        p.wait(timeout=sinir_sn)
+    except subprocess.TimeoutExpired:
+        asti = True
+        _agaci_oldur(p)
+        try:
+            p.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            pass
+        son.append(f"[zaman aşımı] adım {sinir_sn:.0f} saniyede bitmedi; "
+                   f"süreç ağacı öldürüldü")
+    except KeyboardInterrupt:
+        # Çocuk kendi oturumunda olduğu için terminalin Ctrl+C'sini ARTIK
+        # almıyor; elle öldürülmezse guncelle.py kapandıktan sonra ayakta kalırdı.
+        _agaci_oldur(p)
+        raise
+    okuyucu.join(timeout=5)
+    return p.returncode, list(son), asti
 
 
-def kos(h: Hat, tam: bool, gunluk: bool = False) -> tuple[bool, str, float]:
+def kos(h: Hat, tam: bool, gunluk: bool = False,
+        adim_tavan_sn: float | None = None) -> tuple[bool, str, float]:
+    # adim_tavan_sn: çağıran bir tavan dayatabilir (sabah bütçesi bu ucu
+    # kullanacak); verilmezse kipe göre varsayılan tavan uygulanır.
     d = KOK / h.klasor
     t0 = time.time()
     eski_tarih = _ozet_tarih(h)
@@ -1060,9 +1173,16 @@ def kos(h: Hat, tam: bool, gunluk: bool = False) -> tuple[bool, str, float]:
     sebep = duman_kos(h)
     if sebep:
         return False, sebep, time.time() - t0
+    tavan = adim_tavan_sn if adim_tavan_sn is not None else adim_tavani(h, tam, gunluk)
     for i, adim in enumerate(h.adimlar(tam, gunluk), 1):
         print(f"    [{i}] {adim}")
-        kod, son = _adim_kos([py, *adim.split()], d)
+        kod, son, asti = _adim_kos([py, *adim.split()], d, tavan)
+        if asti:
+            # Zaman aşımı DÜŞMEDİR ama sebebi ayrı: hat damgalanmaz, bir
+            # sonraki koşuda yeniden denenir, öbür hatlar koşmaya devam eder.
+            return False, (f"{ZAMAN_ASIMI_IMZASI} — adım {i} ({adim}) {tavan:.0f} saniyede "
+                           f"bitmedi; süreç ağacı öldürüldü. Kaynak asılmış olabilir. "
+                           f"Öbür hatlar etkilenmedi."), time.time() - t0
         if kod != 0:
             ipucu = ""
             if py == PY and not (d / ".venv").exists():
@@ -1214,6 +1334,112 @@ def menu() -> tuple[list[Hat], bool, bool]:
     return secilen, tam, cm
 
 
+# ── HAT SÜRESİ DEFTERİ ───────────────────────────────────────────────────────
+# `kos()` her hattın süresini ZATEN ölçüyordu (dördüncü dönüş değeri) ve o sayı
+# hiçbir yere yazılmıyordu. 04.09.2026'da tazeleme adımı 45 dakikalık sınırını
+# doldurdu ve HANGİ HATTIN yediğini bugün hâlâ bilmiyoruz: iptal edilen koşunun
+# günlükleri 404, `gunlukler/` de .gitignore'da. Ölçülmeyen bir süreden bütçe de
+# sıralama da türetilemez; "sezgi ölçülmeden koda girmez" bu yüzden önce ÖLÇÜYÜ
+# makine okuyabilir hâle getirmeyi gerektiriyor.
+#
+# Commit edilmeyen bir ölçüm, ölçülmemiş bir ölçümdür: yazma `finally` bloğunda
+# (adım zaman aşımına çarpsa da koşar) ve dosya veri.yml'in `git add` listesinde.
+HAT_SURESI = KOK / "bulten" / "hat_suresi.json"
+SURE_KAYIT = 10                    # hat başına saklanan son koşu sayısı
+
+
+def _kip_adi(tam: bool, gunluk: bool) -> str:
+    return "tam" if tam else ("gunluk" if gunluk else "hafif")
+
+
+def sure_oku(yol: Path | None = None) -> dict[str, list[dict]]:
+    """Defteri oku. Dosya yok ya da BOZUKSA boş sözlük — istisna fırlatmaz.
+
+    Bu defteri okuyan taraf (bütçe, sıralama, adım tavanı) onsuz da çalışmak
+    zorunda: bir kayıt dosyasının bozulması hattı düşüremez."""
+    y = Path(yol) if yol else HAT_SURESI
+    try:
+        d = json.loads(y.read_text(encoding="utf-8"))
+        h = d.get("hatlar")
+        return h if isinstance(h, dict) else {}
+    except Exception:                                          # noqa: BLE001
+        return {}
+
+
+def sure_kaydet(sonuc, tam: bool, gunluk: bool = False,
+                yol: Path | None = None, simdi: datetime | None = None) -> bool:
+    """Koşan hatların sürelerini deftere ekle; hat başına son SURE_KAYIT koşu.
+
+    `sonuc`: `main()`in biriktirdiği (hat, ok, mesaj, saniye) dörtlüleri.
+    Döner: yazıldı mı (yazılamaması koşuyu DÜŞÜRMEZ — çağıran zaten sarmalıyor).
+    """
+    from datetime import timezone       # modül başındaki ortak satıra dokunmadan
+    y = Path(yol) if yol else HAT_SURESI
+    an = (simdi or datetime.now(timezone.utc)).isoformat(timespec="seconds")
+    kip = _kip_adi(tam, gunluk)
+    defter = sure_oku(y)
+    for h, ok, mesaj, sn in sonuc:
+        ad = getattr(h, "ad", str(h))
+        kayit = defter.get(ad)
+        if not isinstance(kayit, list):
+            kayit = []
+        kayit.append({"an": an, "sn": round(float(sn), 1), "kip": kip,
+                      # Büyük/küçük harfe DUYARSIZ: imza tek yerde tanımlı
+                      # ama mesaj cümle içinde geçiyor ve bir gün yazımı değişir.
+                      "sonuc": "ok" if ok else (
+                          "zaman aşımı"
+                          if ZAMAN_ASIMI_IMZASI.lower() in str(mesaj).lower()
+                          else "düştü")})
+        defter[ad] = kayit[-SURE_KAYIT:]
+    y.parent.mkdir(parents=True, exist_ok=True)
+    y.write_text(json.dumps(
+        {"_aciklama": "Her veri hattının son koşularının süresi (saniye). Bütçe, "
+                      "sıralama ve adım tavanı buradan türetilir; ölçüm birikene "
+                      "kadar tohum değerler kullanılır.",
+         "_kayit": SURE_KAYIT,
+         "hatlar": {k: defter[k] for k in sorted(defter)}},
+        ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    return True
+
+
+def _sureler(hat: str, kip: str | None, yol: Path | None,
+             yalniz_basarili: bool) -> list[float]:
+    kayit = sure_oku(yol).get(hat) or []
+    out = []
+    for k in kayit:
+        if not isinstance(k, dict):
+            continue
+        if kip and k.get("kip") != kip:
+            continue
+        if yalniz_basarili and k.get("sonuc") != "ok":
+            continue
+        try:
+            out.append(float(k["sn"]))
+        except (KeyError, TypeError, ValueError):
+            continue
+    return sorted(out)
+
+
+def medyan(hat: str, kip: str | None = None, yol: Path | None = None,
+           yalniz_basarili: bool = True) -> float | None:
+    """Hattın ölçülmüş medyan süresi (sn). Kayıt yoksa None — çağıran TOHUMA düşer."""
+    v = _sureler(hat, kip, yol, yalniz_basarili)
+    if not v:
+        return None
+    n = len(v)
+    return v[n // 2] if n % 2 else round((v[n // 2 - 1] + v[n // 2]) / 2, 1)
+
+
+def p90(hat: str, kip: str | None = None, yol: Path | None = None,
+        yalniz_basarili: bool = True) -> float | None:
+    """Hattın 90. yüzdeliği (en yakın sıra). Kayıt yoksa None."""
+    v = _sureler(hat, kip, yol, yalniz_basarili)
+    if not v:
+        return None
+    import math
+    return v[max(0, math.ceil(0.9 * len(v)) - 1)]
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("hatlar", nargs="*", help="kısa adlar: " + " ".join(HAT))
@@ -1347,6 +1573,16 @@ def main():
             sonuc.append((h, ok, mesaj, sn))
             print(_renk(f"    {'✓' if ok else '✗'} {mesaj}  [{sn:.0f}s]", 32 if ok else 31))
     finally:
+        # HAT SÜRESİ ÖNCE YAZILIR. Ölçünün kendisi en ucuz iş (tek küçük dosya)
+        # ve ondan sonraki her adım (ev stili, damga) düşebilir; ölçü düşerse
+        # bir sonraki koşu yine körlemesine bütçe yapar.
+        try:
+            if sonuc:
+                sure_kaydet(sonuc, tam, a.gunluk)
+                print(f"\n  Hat süresi deftere yazıldı: "
+                      f"{HAT_SURESI.relative_to(KOK)} ({len(sonuc)} kayıt)")
+        except Exception as _ex:                               # noqa: BLE001
+            print(_renk(f"  [uyarı] hat süresi yazılamadı: {_ex}", 33))
         # Döngü bir istisnayla kesilse de: kopyalanmış grafikler ev stilinden
         # geçer ve BAŞARILI hatların damgası yazılır — yoksa commit adımı ham
         # Plotly HTML'ini yayınlar ve tamamlanan hat bir sonraki koşuda yeniden
