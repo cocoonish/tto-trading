@@ -92,6 +92,12 @@ TETIKLER: tuple[Tetik, ...] = (
           ("TCMB",), en_gec=6, gecikme_dk=45),
     Tetik("kredi", "Haftalık ve Aylık Para ve Banka İstatistikleri (Perşembe 14:30)",
           r"(Haftalık|Aylık) Para ve Banka İstatistikleri", ("TCMB",), en_gec=11),
+    # YP mevduatı hattı kredi ile AYNI yayımdan besleniyor (haftalık para ve
+    # banka istatistikleri, perşembe 14:30) ama AYRI tablolardan: stok, stok
+    # kırılımı ve resmî parite ayrıştırması. Tetik tarifi olmayan bir hat
+    # tazeleme takviminde hiç geçmez ve her koşuda gereksiz yere ağa çıkar.
+    Tetik("ypmevduat", "Haftalık Para ve Banka İstatistikleri (Perşembe 14:30)",
+          r"Haftalık Para ve Banka İstatistikleri", ("TCMB",), en_gec=11),
     Tetik("yabanci", "TCMB Menkul Kıymet İstatistikleri (Perşembe)",
           r"Menkul Kıymet İstatistikleri", ("TCMB",), en_gec=11),
     Tetik("enflasyon", "TÜFE / Yİ-ÜFE ve alt endeksler (ayın ilk iş günleri)",

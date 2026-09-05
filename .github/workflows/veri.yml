@@ -280,7 +280,15 @@ jobs:
             # ve guncelle.py hatları BU SIRAYLA koşturur. Tazeleme takviminde
             # tarifleri yok → her koşuda çalışırlar (saniyeler); reelfx takvimsiz
             # emniyet ağıyla 30 günde bir EVDS'e gider.
-            HATLAR="tcmb usdtry reer yabanci fonlama kredi enflasyon dibs odemeler butce marj buyume elnino carry tufex makro reelfx"
+            # ypmevduat kredi'nin hemen ardında: ikisi de AYNI yayımdan
+            # besleniyor (Haftalık Para ve Banka İstatistikleri, perşembe) ve
+            # türev hatlardan önce koşmalı. Hat kütüğe alınmıştı ama bu listede
+            # YOKTU: altı cron penceresinin hiçbiri onu çalıştırmıyordu, yani
+            # site kopyası hiç oluşmuyor, sayfadaki her canlı değer statik
+            # yedekte donuyor ve hiçbir kapı bunu görmüyordu — hat "tam
+            # kurulmuş" görünür. Elle tetiklemek de yetmezdi: sonraki haftalar
+            # yine hiç tazelenmezdi.
+            HATLAR="tcmb usdtry reer yabanci fonlama kredi ypmevduat enflasyon dibs odemeler butce marj buyume elnino carry tufex makro reelfx"
           fi
           # "zorla" = takvimi hiç sorma. Süzgeci geçirmemek, ona "her şey
           # gerekli" dedirtmekten daha dürüst: karar defterine sahte tetik yazılmaz.

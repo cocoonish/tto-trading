@@ -1,7 +1,13 @@
 # Keşif koşusu — bir veri kaynağının GERÇEKTEN ne sunduğunu ölçer.
 #
-# Neden ayrı iş akışı: bu oturumların ağ vekili tcmb.gov.tr ve TÜİK'i
-# kapatıyor, EVDS anahtarı da yalnız depo secret'ında duruyor. Yeni bir hat
+# Neden ayrı iş akışı: bu oturumların çıkış politikası VERİ KAYNAKLARININ
+# TAMAMINI kapatıyor, EVDS anahtarı da yalnız depo secret'ında duruyor.
+# Kapsam 05.09.2026'da ölçüldü ve önce DAR yazılmıştı ("tcmb.gov.tr ve TÜİK"):
+# vekilin kendi kaydına göre evds3.tcmb.gov.tr, www.tcmb.gov.tr, data.tuik.gov.tr,
+# api.worldbank.org ve api.stlouisfed.org'un HEPSİ aynı gerekçeyle reddediliyor
+# (ağ geçidi CONNECT'e 403). Açık olan yalnız geliştirme altyapısı (GitHub, npm,
+# PyPI). Ayrım önemli: dar yazım, sonraki oturuma "öyleyse Dünya Bankası
+# açıktır" dedirtir ve yoklanmadan hat kurdurur. Yeni bir hat
 # kurulmadan önce seri kodlarının var olduğunu, biriminin ve frekansının ne
 # olduğunu ÖLÇMEK gerekiyor — uydurma seri kodu hatta girmesin. Bu ihtiyaç
 # depoda üçüncü kez çıktı (TCMB APİ, ödemeler dengesi, şimdi GSYH) ve her
