@@ -83,6 +83,13 @@ KAVRAMLAR = {
 # başka tablolarında olabilir, o yüzden 1–7 birden taranıyor.
 GRUPLAR = [f"bie_hpbitablo{i}" for i in range(1, 8)] + ["bie_zorundth"]
 
+# Argüman verilirse YALNIZ o gruplar taranır. İlk koşu sekiz grubu birden
+# döküyor ve log uzun oluyor; ikinci turda "şu iki tabloyu adıyla göster"
+# demek gerekiyor. Kod uzayını daraltmak keşfin kendi dersi (CLAUDE.md).
+import sys as _sys
+if len(_sys.argv) > 1:
+    GRUPLAR = [g for g in _sys.argv[1:] if g.startswith("bie_")] or GRUPLAR
+
 
 def grup_serileri(grup: str) -> list[dict]:
     d = cek(f"serieList/type=json&code={grup}")
