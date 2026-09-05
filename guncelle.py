@@ -301,6 +301,62 @@ HATLAR: list[Hat] = [
         # haftalık faiz Cuma, ZK tabanı bir hafta daha geriden. Tek anahtara
         # bakmak "veri tazelendi" derdi.
         tarih_anahtarlari=("_tarih", "hafta_kisa", "zk_taban_tarih")),
+    Hat("ypmevduat", "Yurt içi yerleşiklerin YP mevduatı", P / "YPMevduat",
+        "yp-mevduat",
+        # Hattın sorusu "mevduat ne kadar arttı" değil, "artışın ne kadarı
+        # fiili para akımı, ne kadarı değerleme": seri milyon dolar cinsinden
+        # yayımlanıyor ve sepette euro, diğer para birimleri ve KIYMETLİ MADEN
+        # var; euro dolara karşı değer kazandığında hiç yeni para girmeden
+        # stok yükseliyor.
+        # AYRIŞTIRMAYI BU HAT TÜRETMİYOR — TCMB parite etkisini ve ondan
+        # arındırılmış değişimi RESMÎ olarak yayımlıyor; hattın işi o
+        # ayrıştırmayı okunur kılmak ve KİMLİĞİ denetlemektir. Kendi kur
+        # sepetimizden ikinci bir "parite etkisi" hesaplamak okura iki rakip
+        # gerçek üretirdi.
+        #
+        # veri.py haftalık üç tabloyu (stok, stok kırılımı, resmî ayrıştırma)
+        # 12 saat TTL'li ve SERİ BAZINDA önbellekle çeker; uzun aralık parçalı
+        # istenir çünkü EVDS 1000 satırdan sonrasını SESSİZCE kırpıyor ("veri
+        # geldi" ile "veri TAM geldi" aynı şey değildir). Gelen serinin KAPSAMI
+        # ölçülür: çekirdeğin tam olduğu hafta sayısı 26'nın altına düşerse
+        # çıktı ÜRETİLMEZ ve hat DURUR — yarım kalmış bir çekim, kırpma ya da
+        # çökme demektir. metrik.py Δ stok = arındırılmış değişim + parite
+        # etkisi kimliğini ölçer; ARTIK yayına engel DEĞİLDİR (Kredi'deki
+        # Laspeyres artığının aynısı: ölçülür, yazılır, sayfada görünür),
+        # çünkü kimlik TCMB'nin İKİ AYRI TABLOSU arasında kuruluyor ve
+        # yuvarlama farkı taşır — sıkı bir eşik her koşuda yanlış alarm
+        # üretirdi. DURDURAN tek ölçüm KAPSAM KİMLİĞİDİR (gerçek kişi + tüzel
+        # kişi = toplam, aynı tablodan, ölçülmüş): tutmuyorsa kalem
+        # numaralandırması kaymıştır ve o hâlde üretilen bir pano hiç
+        # panodan kötüdür; ölçüm çerçeveleri yazılmadan hat düşer, siteye
+        # kopyalama olmaz. grafik.py altı şekil üretir; ilan edilen veri ucu
+        # figürün gerçekten çizdiği uçtan YENİ ise hat DURUR (bayat panelin
+        # taze damgalanması bu hattın en olası kusuru). ozet_uret.py blok
+        # saatlerini ve şekil saat defterini yazar; hiçbir saat kurulamıyorsa
+        # DURUR — tarihsiz bir özet yayına giremez.
+        #
+        # DİKKAT: geniş toplam (yurt dışı yerleşik bankalar dahil) bu hattın
+        # manşeti DEĞİLDİR; sayfada yalnız adıyla ve farkıyla geçer. İki
+        # toplamı aynı şeymiş gibi yan yana koymak bu hattın en pahalı hatası
+        # olurdu. Sıra bağlayıcıdır.
+        ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
+        {"cikti/*.html": "*", "uyarilar.json": "uyarilar.json"},
+        # Hattın ana saati (blokların EN YENİSİ) artı ÜÇ blok saati, yani üç
+        # ayrı donma riski — hepsi aynı haftalık yayımdan
+        # gelse de ayrı EVDS tablolarından okunuyor ve biri ilerlerken öbürü
+        # sessizce durabilir: stok tabloları, resmî ayrıştırma tablosu, ve
+        # dolarizasyonun beslendiği TL karşılıkları. Tek anahtara bakmak o
+        # durumda "veri tazelendi" derdi. `kimlik_tarih` bilerek YOK ama
+        # gerekçesi "türetilmiş olması" DEĞİL: o saat kendi başına ölçülüyor ve
+        # stok ile akım saatinin en eskisinden GERİDE de olabiliyor (ardışık
+        # iki gözlem tam yedi gün değilse haftalık değişim ölçülemez, blok bir
+        # hafta geriye çıpalanır). Listeye girmemesinin sebebi, kimliğin
+        # kendisinin hattı DURDURMAMASI: geride kalması bir donma değil,
+        # ölçülemeyen bir haftadır ve koşu kaydında adıyla görünür. Şekil
+        # damgası da o ölçülmüş saatten okunuyor. Sepet bileşimi tablosu (bir hafta
+        # geriden gelen ayrı popülasyon) hat tarafından BİLEREK çekilmiyor;
+        # çekildiği gün DÖRDÜNCÜ bir anahtar gerekir.
+        tarih_anahtarlari=("_tarih", "stok_tarih", "akim_tarih", "dol_tarih")),
     Hat("odemeler", "Ödemeler Dengesi ve Dış Finansman", P / "OdemelerDengesi",
         "odemeler-dengesi",
         # veri.py EVDS3'ten dört frekansta çeker (aylık ödemeler dengesi,
@@ -448,8 +504,8 @@ def _renk(m, k):  # k: 32 yeşil, 31 kırmızı, 33 sarı, 36 camgöbeği
 
 
 EVDS_HATLAR = {"tcmb", "usdtry", "reer", "yabanci", "marj", "enflasyon",
-               "kredi", "fonlama", "odemeler", "dibs", "butce", "buyume",
-               "elnino", "reelfx"}
+               "kredi", "fonlama", "ypmevduat", "odemeler", "dibs", "butce",
+               "buyume", "elnino", "reelfx"}
 # Liste sütun genişliği hat adlarından türetilir — yeni bir uzun ad eklendiğinde
 # hizalama sessizce bozulmasın ("enflasyon" 9 karakter, eski sabit 8'di).
 _AD_G = max(len(h.ad) for h in HATLAR) + 1
