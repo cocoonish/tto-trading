@@ -116,7 +116,12 @@ sina("KaTeX taranmıyor", not e, f"gelen {e}")
 print("\n▶ Şekil saat defteri")
 
 import datetime as _dt
-YARIN = _dt.date.today() + _dt.timedelta(days=1)
+# SINIR "yarın" DEĞİL, ERTESİ İŞ GÜNÜ — tanım ortak/bicim.sonraki_is_gunu'da,
+# gerekçe orada. Buradaki sınamalar o sınırla koşar; adı da onu söylesin.
+import sys as _s0, pathlib as _p0
+_s0.path.insert(0, str(_p0.Path(__file__).resolve().parents[2] / "ortak"))
+import bicim as _bcm0
+YARIN = _bcm0.sonraki_is_gunu(_dt.date.today())
 sekil_saat_bulgulari = _mod.sekil_saat_bulgulari
 MDX2 = ('<GrafikEmbed src="/projeler/x/a.html" />\n'
         '<GrafikEmbed src="/projeler/x/b.html" />\n')
@@ -133,8 +138,8 @@ sina("defterde girdisi olmayan figür UYARI, ENGEL değil",
 ileri = (YARIN + _dt.timedelta(days=3)).isoformat()
 e, u, n = sekil_saat_bulgulari(
     "x", {"_sekil_tarih": {"a.html": ileri, "b.html": "2026-09-03"}}, MDX2, YARIN)
-sina("yarından ileri şekil saati ENGEL",
-     len(e) == 1 and "YARINDAN İLERİ" in e[0], f"engel={e}")
+sina("ertesi iş gününden ileri şekil saati ENGEL",
+     len(e) == 1 and "İLERİ" in e[0], f"engel={e}")
 
 e, u, n = sekil_saat_bulgulari(
     "x", {"_sekil_tarih": {"a.html": None, "b.html": "2026-09-03"}}, MDX2, YARIN)
@@ -180,7 +185,7 @@ sina("BİRLEŞİK DAMGA kusur değil (yanlış alarm yok)",
 ileri2 = (YARIN + _dt.timedelta(days=3)).strftime("%d.%m.%Y")
 e, u = acik(f"aylık 30.06.2026 · haftalık {ileri2}")
 sina("birleşik damganın İÇİNDEKİ ileri tarih ENGEL",
-     len(e) == 1 and "YARINDAN İLERİ" in e[0], f"engel={e}")
+     len(e) == 1 and "İLERİ" in e[0], f"engel={e}")
 
 e, u = acik(None)
 sina("anahtar yok → UYARI (sayfa bir alt basamağa düşer)",
@@ -260,6 +265,41 @@ sina("aynı kusur iki kez geçse tek kez bildiriliyor",
 
 sina("veri dizileri metin sayılmıyor",
      not any(t.startswith("2026-08-21") for t in metinler), f"{metinler}")
+
+
+# ---------------------------------------------------------------------------
+# ERTESİ İŞ GÜNÜ SINIRI. Bu, yayının önünde duran bir sınırdır ve 04.09.2026'da
+# yanlış alarmı siteyi YİRMİ BİR SAAT durdurdu: TCMB cuma günü PAZARTESİ'nin
+# gösterge kurunu yayımlıyor, hat bunu bilerek çekiyor, ölçüt "yarından ileri"
+# diyip yayın iş akışını arka arkaya dört kez düşürdü. Sınır artık takvimi
+# değil YAYIM SÖZLEŞMESİNİ izliyor; sınama onu her gün için kilitliyor.
+print("\n▶ Ertesi iş günü sınırı (ortak/bicim.sonraki_is_gunu)")
+
+_sig = _bcm0.sonraki_is_gunu
+sina("perşembe → cuma (hafta içi +1)",
+     _sig(_dt.date(2026, 9, 3)) == _dt.date(2026, 9, 4), str(_sig(_dt.date(2026, 9, 3))))
+sina("CUMA → PAZARTESİ (+3, arızanın kendisi)",
+     _sig(_dt.date(2026, 9, 4)) == _dt.date(2026, 9, 7), str(_sig(_dt.date(2026, 9, 4))))
+sina("cumartesi → pazartesi", _sig(_dt.date(2026, 9, 5)) == _dt.date(2026, 9, 7),
+     str(_sig(_dt.date(2026, 9, 5))))
+sina("pazar → pazartesi", _sig(_dt.date(2026, 9, 6)) == _dt.date(2026, 9, 7),
+     str(_sig(_dt.date(2026, 9, 6))))
+sina("pazartesi → salı", _sig(_dt.date(2026, 9, 7)) == _dt.date(2026, 9, 8),
+     str(_sig(_dt.date(2026, 9, 7))))
+sina("sınır GEVŞEMEDİ — en çok +3 gün",
+     all((_sig(_dt.date(2026, 9, g)) - _dt.date(2026, 9, g)).days <= 3 for g in range(1, 29)),
+     "bir gün +3'ten fazla ileri")
+
+# 04.09'un GERÇEK vakası: cuma çekilen seri pazartesiyle bitiyor.
+_cuma, _pzt = _dt.date(2026, 9, 4), _dt.date(2026, 9, 7)
+sina("04.09 vakası: pazartesi damgası cuma günü ENGEL DEĞİL", _pzt <= _sig(_cuma),
+     "yanlış alarm geri geldi")
+sina("iki hafta ileri tarih HÂLÂ engel", _dt.date(2026, 9, 18) > _sig(_cuma),
+     "sınır fazla gevşedi")
+
+e, u = acik("18.09.2026")
+sina("açık anahtarda iki hafta ileri tarih ENGEL",
+     len(e) == 1 and "İLERİ" in e[0], f"engel={e}")
 
 
 # ---------------------------------------------------------------------------

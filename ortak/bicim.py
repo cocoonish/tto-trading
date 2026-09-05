@@ -13,7 +13,7 @@ listeler.
 """
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 EKSI = "−"
 
@@ -98,3 +98,27 @@ def tarihe_cevir(t) -> date | None:
     except ValueError:
         return None
     return None
+
+
+def sonraki_is_gunu(gun: date) -> date:
+    """`gun`den SONRAKİ ilk iş günü (Pzt–Cum).
+
+    Yayımlanmış bir tarihin ne kadar ileri olabileceğinin sınırı budur, "yarın"
+    değil. Sebep kaynağın kendi yayım sözleşmesi: TCMB ERTESİ İŞ GÜNÜNÜN
+    gösterge kurunu bugün yayımlıyor (USDTRYDeval hattı bunu bilerek istiyor —
+    `EVDS_ILERI_GUN`), yani cuma günü çekilen seri PAZARTESİ ile biter.
+    "Yarından ileri olamaz" kuralı bu yüzden her cuma öğleden sonra yanlış
+    alarm veriyordu: 04.09.2026 (cuma) tazelemesinden sonra sayfa sınavı
+    `usdtry-deval/ozet.json: _tarih 07.09.2026 yarından ileri` diye DÜŞTÜ ve
+    yayın iş akışı arka arkaya dört kez kırmızı bitti — site yirmi bir saat
+    dondu, dördü de kullanıcıya e-posta olarak gitti. Veri doğruydu, ölçüt
+    yanlıştı; ve yayının önünde duran bir denetimin yanlış alarmı arızanın
+    kendisidir.
+
+    Sınır GEVŞEK DEĞİL: hafta içi hâlâ +1 gün, hafta sonunu atlarken en çok
+    +3 gün. Haftalar ileri bir tarih yine ENGEL üretir.
+    """
+    ertesi = gun + timedelta(days=1)
+    while ertesi.weekday() >= 5:                    # 5=Cmt, 6=Paz
+        ertesi += timedelta(days=1)
+    return ertesi

@@ -161,7 +161,7 @@ def deger_disi(mdx: str) -> str:
 MUAF_KALIP = re.compile(r"\{/\*\s*sinav-muaf:\s*([A-Za-z0-9_]+)")
 
 
-def sekil_saat_bulgulari(slug: str, ozet: dict, mdx: str, yarin):
+def sekil_saat_bulgulari(slug: str, ozet: dict, mdx: str, sinir):
     """(18) Şekil saat defteri: (ENGEL listesi, UYARI listesi, figür sayısı).
 
     Bir hattın figürleri farklı ritimlerde olabilir; GrafikEmbed'in varsayılan
@@ -188,9 +188,9 @@ def sekil_saat_bulgulari(slug: str, ozet: dict, mdx: str, yarin):
         if g is None:
             hata_.append(f"{slug}: şekil saat defterinde çözülemeyen tarih "
                          f"({ad} = {deger!r})")
-        elif g >= yarin:
-            hata_.append(f"{slug}: şekil saati YARINDAN İLERİ ({ad} = {deger})"
-                         " — ölçülmemiş bir gün ilan edilemez")
+        elif g > sinir:
+            hata_.append(f"{slug}: şekil saati ERTESİ İŞ GÜNÜNDEN İLERİ "
+                         f"({ad} = {deger}) — ölçülmemiş bir gün ilan edilemez")
     gomulu = set(re.findall(rf'/projeler/{re.escape(slug)}/([^"\s]+\.html)', mdx))
     eksik = sorted(gomulu - set(defter))
     if eksik:
@@ -208,7 +208,7 @@ TARIH_IZI = re.compile(r"\d{2}\.\d{2}\.\d{4}|\d{4}-\d{2}-\d{2}|(?<!\d\.)\b\d{2}\
 
 
 def acik_saat_bulgulari(nerede: str, ozet: dict, anahtar: str, defter_deger,
-                        defter_var: bool, yarin, coz):
+                        defter_var: bool, sinir, coz):
     """(18b/18c) MDX'teki `tarihAnahtari` ↔ ozet.json — (ENGEL, UYARI).
 
     GrafikEmbed sırası: açık anahtar → şekil saat defteri → hattın ana saati.
@@ -252,8 +252,8 @@ def acik_saat_bulgulari(nerede: str, ozet: dict, anahtar: str, defter_deger,
                       "olduğu gibi basılır")
         return hata_, uyari_
     for g in gunler:
-        if g >= yarin:
-            hata_.append(f"{nerede}: şekil tarihi YARINDAN İLERİ ({v})"
+        if g > sinir:
+            hata_.append(f"{nerede}: şekil tarihi ERTESİ İŞ GÜNÜNDEN İLERİ ({v})"
                          " — ölçülmemiş bir gün ilan edilemez")
             break
     if defter_var and isinstance(defter_deger, str):
@@ -858,11 +858,17 @@ def main() -> int:
         if t is None:
             hata.append(f"{slug}/ozet.json: `_tarih` yok ya da çözülemiyor ({d.get('_tarih')!r})")
             continue
-        if t > bugun + _dt.timedelta(days=1):
-            hata.append(f"{slug}/ozet.json: `_tarih` {d['_tarih']} yarından ileri")
+        # SINIR "yarın" DEĞİL, ERTESİ İŞ GÜNÜ (ortak/bicim.sonraki_is_gunu —
+        # gerekçe orada): TCMB ertesi iş gününün gösterge kurunu bugün
+        # yayımlıyor, yani cuma çekilen seri PAZARTESİ ile biter. "Yarından
+        # ileri" kuralı bu yüzden her cuma yanlış alarm veriyordu.
+        sinir = _bicim.sonraki_is_gunu(bugun)
+        if t > sinir:
+            hata.append(f"{slug}/ozet.json: `_tarih` {d['_tarih']} ertesi iş "
+                        f"gününden ({sinir:%d.%m.%Y}) ileri")
         canli = [_bicim.tarihe_cevir(v) for k, v in d.items()
                  if k.endswith("_tarih") and k != "_tarih" and isinstance(v, str)]
-        canli = [c for c in canli if c is not None and c <= bugun + _dt.timedelta(days=1)]
+        canli = [c for c in canli if c is not None and c <= sinir]
         if canli and (max(canli) - t).days > 1:
             uyari.append(f"{slug}/ozet.json: `_tarih` {d['_tarih']} ama bir bacak "
                          f"{max(canli):%d.%m.%Y} — hattın saati geride kalmış olabilir")
@@ -974,7 +980,7 @@ def main() -> int:
     import datetime as _dt2
     sys.path.insert(0, str(KOK / "ortak"))
     import bicim as _bicim2
-    yarin = _dt2.date.today() + _dt2.timedelta(days=1)
+    sinir = _bicim2.sonraki_is_gunu(_dt2.date.today())
     n_defter = n_sekil = 0
     for slug, _klasor in HATLAR:
         oj = KOK / "site/public/projeler" / slug / "ozet.json"
@@ -988,7 +994,7 @@ def main() -> int:
         if not isinstance(o.get("_sekil_tarih"), dict):
             continue
         n_defter += 1
-        e_, u_, n_ = sekil_saat_bulgulari(slug, o, mp.read_text(encoding="utf-8"), yarin)
+        e_, u_, n_ = sekil_saat_bulgulari(slug, o, mp.read_text(encoding="utf-8"), sinir)
         hata.extend(e_)
         uyari.extend(u_)
         n_sekil += n_
@@ -1041,7 +1047,7 @@ def main() -> int:
             dft = o2.get("_sekil_tarih")
             dft = dft if isinstance(dft, dict) else {}
             e_, u_ = acik_saat_bulgulari(nerede, o2, anahtar, dft.get(dosya2),
-                                         dosya2 in dft, yarin, _bicim2.tarihe_cevir)
+                                         dosya2 in dft, sinir, _bicim2.tarihe_cevir)
             hata.extend(e_)
             uyari.extend(u_)
     print(f"  {n_ta} açık anahtar")
