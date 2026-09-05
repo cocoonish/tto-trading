@@ -1,0 +1,579 @@
+{
+ "son_hafta": "2026-08-28",
+ "stok_toplam_mia": 231.357,
+ "stok_gercek_mia": 148.8487,
+ "stok_tuzel_mia": 82.5083,
+ "maden_gercek_mia": 89.58509600000001,
+ "maden_tuzel_mia": 8.931075,
+ "genis_toplam_mia": 271.071869,
+ "maden_toplam_mia": 98.516171,
+ "maden_pay_gercek": 60.18533987868218,
+ "maden_pay_tuzel": 10.824456448623957,
+ "maden_pay_toplam": 42.58188470631967,
+ "gercek_pay": 64.33723639224229,
+ "tuzel_pay": 35.66276360775771,
+ "genis_fark_mia": 39.71486900000001,
+ "genis_fark_pay": 14.651047763277866,
+ "stok_tarih": "2026-08-28",
+ "ar_toplam_mn": -2714.76188,
+ "pe_toplam_mn": 44.43488,
+ "ar_gercek_mn": -637.884295,
+ "pe_gercek_mn": 172.850295,
+ "ar_tuzel_mn": -2076.877585,
+ "pe_tuzel_mn": -128.415415,
+ "ar_gercek_usd_mn": -98.012,
+ "pe_gercek_usd_mn": 0.0,
+ "ar_gercek_eur_mn": 78.881705,
+ "pe_gercek_eur_mn": -117.900705,
+ "ar_gercek_diger_mn": 34.286,
+ "pe_gercek_diger_mn": 0.0,
+ "ar_gercek_maden_mn": -653.04,
+ "pe_gercek_maden_mn": 290.751,
+ "ar_tuzel_usd_mn": -145.901,
+ "pe_tuzel_usd_mn": 0.0,
+ "ar_tuzel_eur_mn": -1874.095585,
+ "pe_tuzel_eur_mn": -156.860415,
+ "ar_tuzel_diger_mn": 34.588,
+ "pe_tuzel_diger_mn": 0.0,
+ "ar_tuzel_maden_mn": -91.469,
+ "pe_tuzel_maden_mn": 28.445,
+ "kum_ay_ar_toplam_mn": -106.8165939999999,
+ "kum_ay_ar_gercek_mn": 482.1907209999998,
+ "kum_ay_ar_tuzel_mn": -589.0073150000003,
+ "kum_ay_pe_toplam_mn": 11114.832594,
+ "kum_ay_pe_gercek_mn": 9782.916279,
+ "kum_ay_pe_tuzel_mn": 1331.9163150000002,
+ "kum_ay_ar_gercek_maden_mn": -181.038,
+ "kum_ay_ar_tuzel_maden_mn": -321.321,
+ "kum_yil_ar_toplam_mn": 10534.62127,
+ "kum_yil_ar_gercek_mn": 6313.199542,
+ "kum_yil_ar_tuzel_mn": 4221.421727999999,
+ "kum_yil_pe_toplam_mn": -635.276270000001,
+ "kum_yil_ar_gercek_maden_mn": 12326.264,
+ "kum_4h_ar_toplam_mn": -106.81659399999808,
+ "kum_4h_pe_toplam_mn": 11114.832594000001,
+ "kum_13h_ar_toplam_mn": 301.9534619999995,
+ "kum_13h_pe_toplam_mn": 627.8705379999988,
+ "akim_tarih": "2026-08-28",
+ "delta_toplam_mn": -2670.2999999999884,
+ "kimlik_artik_toplam_mn": 0.02700000001166103,
+ "delta_gercek_mn": -465.0,
+ "kimlik_artik_gercek_mn": 0.03399999999996339,
+ "delta_tuzel_mn": -2205.300000000003,
+ "kimlik_artik_tuzel_mn": -0.007000000002733486,
+ "kimlik_tarih": "2026-08-28",
+ "dol_pay_ham": 37.51566471418759,
+ "dol_pay_ar": 37.45164535652689,
+ "dol_pay_fark": 0.06401935766069755,
+ "mevduat_tl_mlr": 18486.263313,
+ "mevduat_yp_mlr": 11099.1731463,
+ "mevduat_yp_ar_mlr": 11068.891923891642,
+ "dol_tarih": "2026-08-28",
+ "kimlik_kaydirma": 0,
+ "kimlik_esik": 25.0,
+ "kimlik_esik_bagil": 0.01,
+ "kimlik_pencere_hafta": 52,
+ "kimlik_artik_bagil": 0.003931282236601906,
+ "kimlik_tutuyor": true,
+ "kimlik_cumlesi": "Resmî ayrıştırma stok değişimini kapatıyor: son 52 haftada en büyük fark 5,8 milyon dolar. Tolerans, o haftanın brüt hareketinin %1'i ya da 25,0 milyon dolar — hangisi büyükse.",
+ "kum_ay_bas": "2026-08-07",
+ "kum_ay_hafta": 4,
+ "kum_ay_etiket": "Ağustos 2026",
+ "kum_yil_bas": "2026-01-02",
+ "kum_yil_hafta": 35,
+ "kum_yil_etiket": "2026",
+ "kum_4h_kapsam_gun": 21,
+ "kum_13h_kapsam_gun": 84,
+ "kum_pencere_kisa_hafta": 4,
+ "kum_pencere_uzun_hafta": 13,
+ "dol_cipa": "2026-01-02",
+ "dol_cipa_etiket": "2 Ocak 2026",
+ "dol_pay_cipa": 38.34126140363322,
+ "dol_cumlesi": "Dolarizasyon payı 2 Ocak 2026 çıpasında %38,3, son haftada %37,5. Resmî parite etkisinden arındırıldığında son haftadaki pay %37,5; iki ölçünün farkı 0,06 puan.",
+ "ayrisma_n_hafta": 139,
+ "ayrisma_ters_hafta": 48,
+ "ayrisma_ters_oran": 0.34532374100719426,
+ "ayrisma_ters_oran_ilk_yari": 0.3188405797101449,
+ "ayrisma_ters_oran_ikinci_yari": 0.37142857142857144,
+ "ayrisma_korel": 0.2768037615594861,
+ "ayrisma_korel_son_pencere": -0.00343669254379202,
+ "ayrisma_cumlesi": "Gerçek ve tüzel kişilerin arındırılmış haftalık akımları ölçülen 139 haftada %34,5 oranında ters yönde hareket etti; örneklemin ilk yarısında %31,9, ikinci yarısında %37,1. İki akımın korelasyonu 0,28.",
+ "kum_yontem_cumlesi": "Haftalık gözlemler cumaya damgalıdır ve bir önceki cumadan bu yana olan değişimi taşır. Ay içi toplam, o aya damgalı haftaların toplamıdır: ayın ilk haftası bir önceki ayın son günlerini de kapsar.",
+ "taban_sozlugu": "Sayfada üç ayrı taban var: yurt içi yerleşiklerin toplam yabancı para mevduatı (TP.HPBITABLO2.10), yurt dışı yerleşikleri de içeren geniş toplam (TP.HPBITABLO4.1) ve aynı mevduatın Türk lirası karşılığı (TP.HPBITABLO2.6). Manşet birincisidir; ikincisi yalnız farkıyla birlikte anılır, dolarizasyon payı ise yalnız üçüncüsünden hesaplanır.",
+ "kapsam_cumlesi": "Ölçüm 28 Haziran 2024 ile 28 Ağustos 2026 arasındaki 114 haftayı kapsıyor. Resmî ayrıştırma tablosu 5 Ocak 2024 tarihinde, stok tabloları 28 Haziran 2024 tarihinde başlıyor; aradaki 25 hafta için stok değişimi yok ve kümüle akım stoktan geriye uzatılmaz.",
+ "sifir_cumlesi": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) son 139 haftanın tamamında tam sıfır. O haftalarda gerçekten hiç hareket olmamış olabilir; kaynağın bu bacağı yayımlamayı bırakmış olması da aynı görünür ve elimizdeki gözlemle ikisi ayırt edilemiyor. Sıfırlar olduğu gibi bırakıldı.",
+ "ayristirma": {
+  "kaydirma": 0,
+  "esik_mn": 25.0,
+  "esik_bagil": 0.01,
+  "pencere_hafta": 52,
+  "bacak": {
+   "gercek": {
+    "n_hafta": 113,
+    "pencere_hafta": 52,
+    "artik_son_mn": 0.03399999999996339,
+    "artik_maks_mn": 1.6290000000235523,
+    "artik_maks_tarih": "2026-03-27",
+    "artik_pencere_maks_mn": 1.6290000000235523,
+    "artik_bagil_maks": 0.0005774382566768927,
+    "artik_bagil_maks_tarih": "2025-08-22",
+    "artik_bagil_pencere_maks": 0.00018166643082968736,
+    "artik_bagil_son": 4.1937275674846186e-05,
+    "asim_hafta": 0,
+    "birim": "mn USD",
+    "tutuyor": true
+   },
+   "tuzel": {
+    "n_hafta": 113,
+    "pencere_hafta": 52,
+    "artik_son_mn": -0.007000000002733486,
+    "artik_maks_mn": 4.193000000005895,
+    "artik_maks_tarih": "2026-03-27",
+    "artik_pencere_maks_mn": 4.193000000005895,
+    "artik_bagil_maks": 0.003931282236601906,
+    "artik_bagil_maks_tarih": "2026-03-27",
+    "artik_bagil_pencere_maks": 0.003931282236601906,
+    "artik_bagil_son": 3.174181391195404e-06,
+    "asim_hafta": 0,
+    "birim": "mn USD",
+    "tutuyor": true
+   },
+   "toplam": {
+    "n_hafta": 113,
+    "pencere_hafta": 52,
+    "artik_son_mn": 0.02700000001166103,
+    "artik_maks_mn": 5.822000000000116,
+    "artik_maks_tarih": "2026-03-27",
+    "artik_pencere_maks_mn": 5.822000000000116,
+    "artik_bagil_maks": 0.0005802528311841368,
+    "artik_bagil_maks_tarih": "2026-03-27",
+    "artik_bagil_pencere_maks": 0.0005802528311841368,
+    "artik_bagil_son": 9.785456551370055e-06,
+    "asim_hafta": 0,
+    "birim": "mn USD",
+    "tutuyor": true
+   }
+  },
+  "tutuyor": true,
+  "asan_bacak": [],
+  "artik_pencere_maks_mn": 5.822000000000116,
+  "artik_maks_mn": 5.822000000000116,
+  "artik_bagil_maks": 0.003931282236601906,
+  "artik_bagil_pencere_maks": 0.003931282236601906,
+  "n_hafta": 113,
+  "cumle": "Resmî ayrıştırma stok değişimini kapatıyor: son 52 haftada en büyük fark 5,8 milyon dolar. Tolerans, o haftanın brüt hareketinin %1'i ya da 25,0 milyon dolar — hangisi büyükse."
+ },
+ "kumule": {
+  "son_hafta": "2026-08-28",
+  "ay_bas": "2026-08-07",
+  "ay_hafta": 4,
+  "ay_etiket": "Ağustos 2026",
+  "yil_bas": "2026-01-02",
+  "yil_hafta": 35,
+  "yil_etiket": "2026",
+  "pencere_kisa_hafta": 4,
+  "pencere_uzun_hafta": 13,
+  "pencere_kisa_kapsam_gun": 21,
+  "pencere_uzun_kapsam_gun": 84
+ },
+ "dolarizasyon": {
+  "cipa": "2026-01-02",
+  "cipa_etiket": "2 Ocak 2026",
+  "ham_cipa": 38.34126140363322,
+  "ham_son": 37.51566471418759,
+  "ar_son": 37.45164535652689,
+  "fark_son": 0.06401935766069755,
+  "pe_kum_son_mn": 631.197719,
+  "son_hafta": "2026-08-28",
+  "yontem": "arındırılmış pay, resmî parite etkisinin çıpadan bu yana birikmiş toplamı stoktan düşülerek kuruldu; kur serisi kullanılmadı",
+  "cumle": "Dolarizasyon payı 2 Ocak 2026 çıpasında %38,3, son haftada %37,5. Resmî parite etkisinden arındırıldığında son haftadaki pay %37,5; iki ölçünün farkı 0,06 puan."
+ },
+ "ayrisma": {
+  "n_hafta": 139,
+  "yeterli": true,
+  "ters_hafta": 48,
+  "ayni_hafta": 91,
+  "sifir_hafta": 0,
+  "ters_oran": 0.34532374100719426,
+  "ters_oran_ilk_yari": 0.3188405797101449,
+  "ters_oran_ikinci_yari": 0.37142857142857144,
+  "korel": 0.2768037615594861,
+  "korel_son_pencere": -0.00343669254379202,
+  "pencere_hafta": 52,
+  "gercek_pay_son": 64.33723639224229,
+  "tuzel_pay_son": 35.66276360775771,
+  "hukum": "Bu bir ölçümdür, kural değildir: örneklem dışı sınanmadan bir davranış kuralına dönüştürülmez."
+ },
+ "hizalama": {
+  "aday": {
+   "gercek": {
+    "kaydirmalar": {
+     "-1": {
+      "n": 112,
+      "medyan_mutlak_artik": 1293.6529999999943,
+      "maks_artik": 11830.871999999988,
+      "birim": "mn USD"
+     },
+     "0": {
+      "n": 113,
+      "medyan_mutlak_artik": 0.029999999999986926,
+      "maks_artik": 1.6290000000235523,
+      "birim": "mn USD"
+     },
+     "1": {
+      "n": 113,
+      "medyan_mutlak_artik": 1271.2730000000001,
+      "maks_artik": 11830.853000000006,
+      "birim": "mn USD"
+     }
+    },
+    "en_kucuk_artik_kaydirma": "0"
+   },
+   "tuzel": {
+    "kaydirmalar": {
+     "-1": {
+      "n": 112,
+      "medyan_mutlak_artik": 2027.0485000000015,
+      "maks_artik": 6306.566,
+      "birim": "mn USD"
+     },
+     "0": {
+      "n": 113,
+      "medyan_mutlak_artik": 0.03799999999682768,
+      "maks_artik": 4.1930000000058385,
+      "birim": "mn USD"
+     },
+     "1": {
+      "n": 113,
+      "medyan_mutlak_artik": 2021.8450000000014,
+      "maks_artik": 6306.549,
+      "birim": "mn USD"
+     }
+    },
+    "en_kucuk_artik_kaydirma": "0"
+   }
+  },
+  "secilen": 0,
+  "esik_oran": 0.1,
+  "gerekce": "Kaynağın kendi damgası en küçük artığı veriyor; kaydırma uygulanmadı."
+ },
+ "sifir": {
+  "esik_hafta": 26,
+  "seri": {
+   "ar_gercek_diger": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "asildi": false
+   },
+   "ar_tuzel_diger": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "asildi": false
+   },
+   "pe_gercek_diger": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 139,
+    "ic_sifir_hafta": 0,
+    "asildi": true
+   },
+   "pe_tuzel_diger": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 139,
+    "ic_sifir_hafta": 0,
+    "asildi": true
+   },
+   "ar_gercek_maden": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "asildi": false
+   },
+   "ar_tuzel_maden": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "asildi": false
+   },
+   "pe_gercek_maden": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "asildi": false
+   },
+   "pe_tuzel_maden": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "asildi": false
+   },
+   "maden_gercek": {
+    "n_gozlem": 114,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "asildi": false
+   },
+   "maden_tuzel": {
+    "n_gozlem": 114,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "asildi": false
+   },
+   "maden_diger": {
+    "n_gozlem": 114,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "asildi": false
+   }
+  },
+  "asan_seri": 2,
+  "cumle": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) son 139 haftanın tamamında tam sıfır. O haftalarda gerçekten hiç hareket olmamış olabilir; kaynağın bu bacağı yayımlamayı bırakmış olması da aynı görünür ve elimizdeki gözlemle ikisi ayırt edilemiyor. Sıfırlar olduğu gibi bırakıldı."
+ },
+ "dogrulama": {
+  "kapsam": {
+   "kapsam": {
+    "kimlik": "TP.HPBITABLO2.11 + TP.HPBITABLO2.12 = TP.HPBITABLO2.10",
+    "n": 114,
+    "maks_fark_mn": 0.1000000000349246,
+    "maks_tarih": "2024-11-01",
+    "son_fark_mn": 0.0,
+    "esik_mn": 2.0,
+    "esik_bagil": 1e-05,
+    "asim_hafta": 0,
+    "birim": "mn USD",
+    "gecti": true
+   },
+   "lira_tabani": {
+    "kimlik": "TP.HPBITABLO2.3 + TP.HPBITABLO2.6 = TP.HPBITABLO2.2",
+    "n": 114,
+    "maks_fark_bin_tl": 0.0,
+    "maks_bagil": 0.0,
+    "maks_tarih": "2024-06-28",
+    "son_fark_bin_tl": 0.0,
+    "son_bagil": 0.0,
+    "birim": "bin TL",
+    "esik_bagil": null,
+    "gecti": null
+   }
+  },
+  "kimlik": {
+   "kaydirma": 0,
+   "esik_mn": 25.0,
+   "esik_bagil": 0.01,
+   "pencere_hafta": 52,
+   "bacak": {
+    "gercek": {
+     "n_hafta": 113,
+     "pencere_hafta": 52,
+     "artik_son_mn": 0.03399999999996339,
+     "artik_maks_mn": 1.6290000000235523,
+     "artik_maks_tarih": "2026-03-27",
+     "artik_pencere_maks_mn": 1.6290000000235523,
+     "artik_bagil_maks": 0.0005774382566768927,
+     "artik_bagil_maks_tarih": "2025-08-22",
+     "artik_bagil_pencere_maks": 0.00018166643082968736,
+     "artik_bagil_son": 4.1937275674846186e-05,
+     "asim_hafta": 0,
+     "birim": "mn USD",
+     "tutuyor": true
+    },
+    "tuzel": {
+     "n_hafta": 113,
+     "pencere_hafta": 52,
+     "artik_son_mn": -0.007000000002733486,
+     "artik_maks_mn": 4.193000000005895,
+     "artik_maks_tarih": "2026-03-27",
+     "artik_pencere_maks_mn": 4.193000000005895,
+     "artik_bagil_maks": 0.003931282236601906,
+     "artik_bagil_maks_tarih": "2026-03-27",
+     "artik_bagil_pencere_maks": 0.003931282236601906,
+     "artik_bagil_son": 3.174181391195404e-06,
+     "asim_hafta": 0,
+     "birim": "mn USD",
+     "tutuyor": true
+    },
+    "toplam": {
+     "n_hafta": 113,
+     "pencere_hafta": 52,
+     "artik_son_mn": 0.02700000001166103,
+     "artik_maks_mn": 5.822000000000116,
+     "artik_maks_tarih": "2026-03-27",
+     "artik_pencere_maks_mn": 5.822000000000116,
+     "artik_bagil_maks": 0.0005802528311841368,
+     "artik_bagil_maks_tarih": "2026-03-27",
+     "artik_bagil_pencere_maks": 0.0005802528311841368,
+     "artik_bagil_son": 9.785456551370055e-06,
+     "asim_hafta": 0,
+     "birim": "mn USD",
+     "tutuyor": true
+    }
+   },
+   "tutuyor": true,
+   "asan_bacak": [],
+   "artik_pencere_maks_mn": 5.822000000000116,
+   "artik_maks_mn": 5.822000000000116,
+   "artik_bagil_maks": 0.003931282236601906,
+   "artik_bagil_pencere_maks": 0.003931282236601906,
+   "n_hafta": 113,
+   "cumle": "Resmî ayrıştırma stok değişimini kapatıyor: son 52 haftada en büyük fark 5,8 milyon dolar. Tolerans, o haftanın brüt hareketinin %1'i ya da 25,0 milyon dolar — hangisi büyükse."
+  },
+  "hizalama": {
+   "aday": {
+    "gercek": {
+     "kaydirmalar": {
+      "-1": {
+       "n": 112,
+       "medyan_mutlak_artik": 1293.6529999999943,
+       "maks_artik": 11830.871999999988,
+       "birim": "mn USD"
+      },
+      "0": {
+       "n": 113,
+       "medyan_mutlak_artik": 0.029999999999986926,
+       "maks_artik": 1.6290000000235523,
+       "birim": "mn USD"
+      },
+      "1": {
+       "n": 113,
+       "medyan_mutlak_artik": 1271.2730000000001,
+       "maks_artik": 11830.853000000006,
+       "birim": "mn USD"
+      }
+     },
+     "en_kucuk_artik_kaydirma": "0"
+    },
+    "tuzel": {
+     "kaydirmalar": {
+      "-1": {
+       "n": 112,
+       "medyan_mutlak_artik": 2027.0485000000015,
+       "maks_artik": 6306.566,
+       "birim": "mn USD"
+      },
+      "0": {
+       "n": 113,
+       "medyan_mutlak_artik": 0.03799999999682768,
+       "maks_artik": 4.1930000000058385,
+       "birim": "mn USD"
+      },
+      "1": {
+       "n": 113,
+       "medyan_mutlak_artik": 2021.8450000000014,
+       "maks_artik": 6306.549,
+       "birim": "mn USD"
+      }
+     },
+     "en_kucuk_artik_kaydirma": "0"
+    }
+   },
+   "secilen": 0,
+   "esik_oran": 0.1,
+   "gerekce": "Kaynağın kendi damgası en küçük artığı veriyor; kaydırma uygulanmadı."
+  },
+  "sifir": {
+   "esik_hafta": 26,
+   "seri": {
+    "ar_gercek_diger": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "asildi": false
+    },
+    "ar_tuzel_diger": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "asildi": false
+    },
+    "pe_gercek_diger": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 139,
+     "ic_sifir_hafta": 0,
+     "asildi": true
+    },
+    "pe_tuzel_diger": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 139,
+     "ic_sifir_hafta": 0,
+     "asildi": true
+    },
+    "ar_gercek_maden": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "asildi": false
+    },
+    "ar_tuzel_maden": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "asildi": false
+    },
+    "pe_gercek_maden": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "asildi": false
+    },
+    "pe_tuzel_maden": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "asildi": false
+    },
+    "maden_gercek": {
+     "n_gozlem": 114,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "asildi": false
+    },
+    "maden_tuzel": {
+     "n_gozlem": 114,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "asildi": false
+    },
+    "maden_diger": {
+     "n_gozlem": 114,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "asildi": false
+    }
+   },
+   "asan_seri": 2,
+   "cumle": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) son 139 haftanın tamamında tam sıfır. O haftalarda gerçekten hiç hareket olmamış olabilir; kaynağın bu bacağı yayımlamayı bırakmış olması da aynı görünür ve elimizdeki gözlemle ikisi ayırt edilemiyor. Sıfırlar olduğu gibi bırakıldı."
+  },
+  "ayrisma": {
+   "n_hafta": 139,
+   "yeterli": true,
+   "ters_hafta": 48,
+   "ayni_hafta": 91,
+   "sifir_hafta": 0,
+   "ters_oran": 0.34532374100719426,
+   "ters_oran_ilk_yari": 0.3188405797101449,
+   "ters_oran_ikinci_yari": 0.37142857142857144,
+   "korel": 0.2768037615594861,
+   "korel_son_pencere": -0.00343669254379202,
+   "pencere_hafta": 52,
+   "gercek_pay_son": 64.33723639224229,
+   "tuzel_pay_son": 35.66276360775771,
+   "hukum": "Bu bir ölçümdür, kural değildir: örneklem dışı sınanmadan bir davranış kuralına dönüştürülmez."
+  }
+ },
+ "esik": {
+  "kimlik_son_stok_payi": 0.0001080581093288727,
+  "kapsam_mn_usd": 2.0,
+  "kapsam_bagil": 1e-05,
+  "kimlik_mn_usd": 25.0,
+  "kimlik_bagil": 0.01,
+  "kimlik_pencere_hafta": 52,
+  "hizalama_oran": 0.1,
+  "tarihce_hafta": 52,
+  "sifir_blok_hafta": 26
+ },
+ "uyarilar": [
+  "KİMLİK BOZUK: Kırılım tablosundaki tüzel kişi stoku ana tablodakiyle aynı (TP.HPBITABLO4.8 = TP.HPBITABLO2.12) — en büyük sapma 0,1 mn USD (%0,0001, 05.07.2024); eşik %0,0001. Kalem numaralandırması ya da birim değişmiş olabilir.",
+  "AYIRT EDİLEMİYOR: Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) son 139 haftanın tamamında tam sıfır. O haftalarda gerçekten hiç hareket olmamış olabilir; kaynağın bu bacağı yayımlamayı bırakmış olması da aynı görünür ve elimizdeki gözlemle ikisi ayırt edilemiyor. Sıfırlar olduğu gibi bırakıldı."
+ ]
+}
