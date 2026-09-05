@@ -481,7 +481,16 @@ def kapsam_kimligi(H: pd.DataFrame) -> tuple[list[str], dict]:
                           "b": H["stok_toplam"]}).dropna()
         if len(d):
             fark = (d["a"] - d["b"]).abs()
-            esik = np.maximum(ESIK_KAPSAM_MN, ESIK_KAPSAM_BAGIL * d["b"].abs())
+            # YAYIM HASSASİYETİ TABANI — ölçülür, varsayılmaz. Sabit 2,0'ın
+            # gerekçesi "kaynak bir ondalıkla yayımlıyor" ölçümüydü ve o ölçüm
+            # 2026'da doğru; kaynak yarın hassasiyetini değiştirirse gerekçe
+            # yalan olur ama sabit yerinde kalır. Ölçülen taban bu yüzden
+            # yanına konuyor: etkin eşik ÜÇÜNÜN büyüğü. Bugün hiçbir şeyi
+            # değiştirmiyor (ölçülen taban 0,2 · sabit 2,0) — değiştirmemesi
+            # de doğrulanmış olsun diye kayda yazılıyor.
+            taban = float(veri.yayim_adimi(d["a"]) + veri.yayim_adimi(d["b"]))
+            esik = np.maximum(max(ESIK_KAPSAM_MN, taban),
+                              ESIK_KAPSAM_BAGIL * d["b"].abs())
             asim = fark > esik
             rapor["kapsam"] = {
                 "kimlik": "TP.HPBITABLO2.11 + TP.HPBITABLO2.12 = TP.HPBITABLO2.10",
@@ -490,6 +499,7 @@ def kapsam_kimligi(H: pd.DataFrame) -> tuple[list[str], dict]:
                 "maks_tarih": str(fark.idxmax().date()),
                 "son_fark_mn": float(fark.iloc[-1]),
                 "esik_mn": ESIK_KAPSAM_MN, "esik_bagil": ESIK_KAPSAM_BAGIL,
+                "yayim_taban_mn": taban,
                 "asim_hafta": int(asim.sum()),
                 "birim": "mn USD",
                 "gecti": bool(not asim.any()),
@@ -652,7 +662,16 @@ def ayristir(H: pd.DataFrame, kaydirma: int) -> tuple[pd.DataFrame, dict]:
             continue
         artik = A[d_] - A[a_] - A[p_]
         brut = A[a_].abs() + A[p_].abs()
-        esik = np.maximum(ESIK_KIMLIK_MN, ESIK_KIMLIK_BAGIL * brut)
+        # Mutlak kol, ÖLÇÜLEN yayım hassasiyetinin altına düşemez. Δ stok iki
+        # yuvarlanmış seviyenin farkı, arındırılmış ve parite de ayrı ayrı
+        # yuvarlanmış: üç bağımsız ızgara. Bugün taban 25,0'ın çok altında
+        # (kaynak ondalıklı yayımlıyor) ve sabit devrede kalıyor; kaynak bir
+        # gün tam sayıya geçerse eşik kendiliğinden yukarı kayar. Aynı sınıf
+        # kusur kırılım kimliğinde ölçüldü ve orada yanlış alarma dönüştü.
+        taban_k = float(veri.yayim_adimi(A[d_]) + veri.yayim_adimi(A[a_])
+                        + veri.yayim_adimi(A[p_]))
+        esik = np.maximum(max(ESIK_KIMLIK_MN, taban_k),
+                          ESIK_KIMLIK_BAGIL * brut)
         A[f"artik_{etiket}"] = artik
         A[f"esik_{etiket}"] = esik
         gecerli = artik.dropna()
@@ -688,6 +707,7 @@ def ayristir(H: pd.DataFrame, kaydirma: int) -> tuple[pd.DataFrame, dict]:
             "artik_bagil_son": float(bagil.iloc[-1]),
             "asim_hafta": int(asim.sum()),
             "birim": "mn USD",
+            "yayim_taban_mn": taban_k,
             "tutuyor": bool(not asim.any()),
         }
         if asim.any():
@@ -1142,6 +1162,72 @@ def _sag_uc_sifir(s: pd.Series) -> int:
     return int(n)
 
 
+def _yapisal_cumle(yapisal: list[str], H: pd.DataFrame) -> str:
+    """Yapısal sıfırın OKUR cümlesi — ölçülen gözlem sayısıyla.
+
+    Cümle üç parçadan kuruluyor ve her parçanın kendi ÖLÇÜM koşulu var; koşul
+    tutmazsa o parça hiç yazılmaz. Ölçülmemiş bir cümle parçası, ölçülmüş
+    parçaların yanında ondan ayırt edilemez.
+    """
+    b = _bicim()
+    # HAFTA SAYISI EN KISA SERİDEN. Bulgu "her birinin serisi baştan sona
+    # sıfır"dır ve seriler farklı uzunlukta olabilir; en uzununu yazmak kısa
+    # olanı hakkında ölçülmemiş bir şey söylemek olurdu.
+    n = min(int(H[a].dropna().shape[0]) for a in yapisal)
+    # Ad listesi altı seride kesilir: bir kaynak kesintisi düzinelerce bacağı
+    # birden vurabilir ve otuz adlık bir duvarda bulgunun kendisi kaybolur.
+    # Tam liste makine kaydında (`seri`) duruyor.
+    parca = [f"{veri._adlar(yapisal, en_fazla=min(len(yapisal), 6))} serinin "
+             f"ilk gözleminden bu yana baştan sona tam sıfır — en kısası "
+             f"{b.sayi(n, 0)} hafta ve bir kez bile sıfırdan farklı bir değer "
+             "yayımlanmamış. Bu bir ölçümdür, donmuş besleme değil — yayımı "
+             "duran bir seri önce sıfırdan farklı değerler gösterir, sonra "
+             "sıfıra düşer; burada öncesi yok."]
+
+    # (a) TANIM GEREĞİ SIFIR. Yalnız gerekçesi kayıtlı bacaklar için yazılır;
+    # gerekçe kaynağın yöntem belgesinden değil aritmetikten geliyor.
+    gerekce = [veri.TANIM_SIFIRI[a] for a in yapisal if a in veri.TANIM_SIFIRI]
+    if gerekce:
+        parca.append(f"Bunların bir bölümünde sıfır zaten tanım gereğidir: "
+                     f"{gerekce[0]}.")
+
+    # (b) AYNI KIRILIMIN ÖTEKİ BACAKLARI. Hüküm ("kaynak şunu hesaplamıyor")
+    # kurulmuyor; yalnız yayımlanan seride ne görüldüğü yazılıyor — yöntem
+    # belgesi okunmadı ve okunmadan kaynağın ne yaptığı söylenemez.
+    #
+    # Kıyas YALNIZ dokunulan kırılımların içinde kurulur. Bütün kırılımlara
+    # bakılsaydı arındırılmış değişimin euro bacağı da "öteki bacak" sayılırdı
+    # ve cümle, parite etkisi hakkında başka bir tablonun gözlemiyle
+    # kurulmuş olurdu.
+    dokunan = [k for k in veri.KIRILIMLAR
+               if any(a in yapisal for a in k.parcalar)]
+    sifir_ad: list[str] = []
+    oteki: list[str] = []
+    for kir in dokunan:
+        for a in kir.parcalar:
+            (sifir_ad if a in yapisal else oteki).append(a)
+    kisa_sifir = list(dict.fromkeys(veri.bacak_kisa_adi(a) for a in sifir_ad))
+    kisa_oteki = [x for x in dict.fromkeys(veri.bacak_kisa_adi(a)
+                                           for a in oteki)
+                  if x not in kisa_sifir]
+    # Öteki bacaklar SAYIYLA anlatılır, sıfatla değil. "Aynı haftalarda
+    # sıfırdan farklı" demek, o bacakların hiç sıfır çıkmadığını İDDİA
+    # etmektir; oysa ölçülen şey sıfırdan farklı gözlem SAYISIDIR ve bir bacak
+    # arada sıfır çıkabilir. En SEYREK olanı yazılır: cümlenin taşıdığı en
+    # zayıf gözlem hangisiyse okur onu görür.
+    dolu = [int((H[a].dropna() != 0).sum()) for a in oteki if a in H.columns]
+    kapsam = [int(H[a].dropna().shape[0]) for a in oteki if a in H.columns]
+    if kisa_sifir and kisa_oteki and dolu and min(dolu) > 0:
+        parca.append(
+            f"Aynı kırılımların öteki bacakları ({' ve '.join(kisa_oteki)}) "
+            "aynı dönemde hareket gösteriyor: en seyreğinde bile sıfırdan "
+            f"farklı gözlem sayısı {b.sayi(min(dolu), 0)} hafta, ölçülen "
+            f"toplam {b.sayi(min(kapsam), 0)} hafta. Yani yayımlanan seride "
+            f"bu ölçü yalnız {' ve '.join(kisa_oteki)} bacaklarında sıfırdan "
+            f"farklı çıkıyor, {' ve '.join(kisa_sifir)} bacaklarında hiç.")
+    return " ".join(parca)
+
+
 def sifir_olc(H: pd.DataFrame, kolonlar, esik_hafta: int) -> tuple[list[str], dict]:
     """Sıfırları ÖLÇER ve raporlar; MASKELEMEZ. Gerekçesi aşağıda.
 
@@ -1150,17 +1236,33 @@ def sifir_olc(H: pd.DataFrame, kolonlar, esik_hafta: int) -> tuple[list[str], di
     versin. Sessizce yanlış kapsamla koşan bir sıfır denetimi, hiç
     koşmayandan kötüdür.
 
+    ÜÇ HÂL, İKİ DEĞİL — ve bu bir düzeltmedir. Denetim iki hâl tanıyordu
+    (sağ uçta uzun blok → "ayırt edilemiyor"; ortadaki blok → ölçüm) ve ilk
+    gerçek koşuda bunun bedeli ölçüldü: dört bacak serinin İLK gözleminden
+    beri, yani 139 haftanın 139'unda tam sıfır ve bir kez bile sıfırdan
+    farklı değer yayımlanmamış. Okur "kaynağın bu bacağı yayımlamayı bırakmış
+    olması da aynı görünür" cümlesini okudu — oysa GÖRÜNMÜYOR: donan bir seri
+    önce sıfırdan farklı değerler gösterir, sonra sıfıra düşer. Sağ uçtaki
+    blok serinin TAMAMINI kaplıyorsa öncesi yoktur, dolayısıyla donma değildir
+    ve ikisi ölçümle AYIRT EDİLİR. Ayırt edilebilen bir şeye "ayırt edilemiyor"
+    demek, ölçülmüş bir şeyi ölçülmemiş göstermektir.
+
+      (i)   blok = bütün seri  → YAPISAL sıfır. Uyarı değil ÖLÇÜM: ne olduğu
+            söylenir, gözlem sayısıyla.
+      (ii)  blok sağ uçta ama öncesinde sıfırdan farklı gözlem var → gerçekten
+            AYIRT EDİLEMEZ; uyarı düşer (aşağıdaki gerekçe).
+      (iii) blok serinin ortasında → ölçüm; arkasından gerçek bir gözlem
+            gelmiştir, uyarı yok.
+
     NEDEN MASKELEME YOK — ve bu bir eksiklik değil, ölçülmüş bir karar:
     Bu depoda taşınan bir fiyattan doğan sahte sıfırlar maskelendi, ama orada
     KANIT vardı: sıfırların tamamının taşımadan doğduğu 918 iş gününde
     ölçülmüştü ve taşınan günden sonra gerçek kotasyon gelip gelmediği ikisini
-    ayırıyordu. Burada öyle bir kanıt YOK. Bu hattın serileri taşınmıyor:
+    ayırıyordu. (ii) hâlinde öyle bir kanıt YOK. Bu hattın serileri taşınmıyor:
     yayım dursa gözlem gelmez, boş kalır — sıfır GÖRÜNMEZ. Sağ uçtaki bir
     sıfır bloğu ise gerçekten akım olmamasıyla da, kaynağın o bacağı
-    yayımlamayı bırakmasıyla da açıklanabilir ve elimizdeki gözlemle ikisi
-    AYIRT EDİLEMEZ. Maskelemek "bu bir ölçüm değildir" demektir; bu da
-    ölçülmemiş bir iddiadır. Serinin ortasındaki sıfırlar zaten ölçümdür:
-    arkalarından gerçek bir gözlem gelmiştir.
+    yayımlamayı bırakmasıyla da açıklanabilir. Maskelemek "bu bir ölçüm
+    değildir" demektir; bu da ölçülmemiş bir iddiadır.
 
     Maskelemeyi haklı kılacak kanıt şudur: bloğun ardından sıfırdan farklı
     bir gözlem gelmesi — ki o an blok sağ uçta olmaktan çıkar ve zaten
@@ -1170,6 +1272,7 @@ def sifir_olc(H: pd.DataFrame, kolonlar, esik_hafta: int) -> tuple[list[str], di
     b = _bicim()
     rapor: dict = {"esik_hafta": int(esik_hafta), "seri": {}}
     uzun: list[str] = []
+    yapisal: list[str] = []
     en_uzun = 0
     for ad in kolonlar:
         if ad not in H.columns:
@@ -1179,17 +1282,32 @@ def sifir_olc(H: pd.DataFrame, kolonlar, esik_hafta: int) -> tuple[list[str], di
             continue
         sag = _sag_uc_sifir(H[ad])
         ic = int((d.iloc[:len(d) - sag] == 0).sum()) if sag < len(d) else 0
+        # Serinin TAMAMI sıfırsa hâl yapısaldır; eşik burada hiç sorulmaz,
+        # çünkü "yarım yıl mı geçti" sorusunun cevabı hükmü değiştirmiyor.
+        tam = bool(sag == len(d))
+        hal = "yapisal" if tam else ("ayirt_edilemez" if sag >= esik_hafta
+                                     else "olcum")
         rapor["seri"][ad] = {
             "n_gozlem": int(len(d)),
             "sag_uc_sifir_hafta": sag,
             "ic_sifir_hafta": ic,
+            "hal": hal,
             "asildi": bool(sag >= esik_hafta),
         }
-        if sag >= esik_hafta:
+        if tam:
+            yapisal.append(ad)
+        elif sag >= esik_hafta:
             uzun.append(ad)
             en_uzun = max(en_uzun, sag)
     rapor["asan_seri"] = len(uzun)
+    rapor["yapisal_seri"] = len(yapisal)
     uy: list[str] = []
+    if yapisal:
+        # UYARI DEĞİL, ÖLÇÜM: koşu kaydına satır düşmez. Yapısal bir sıfırı
+        # her hafta uyarı diye basmak, denetimi kalıcı olarak kırmızı tutar ve
+        # bir denetim sürekli uyarı verdiğinde kimse ona bakmaz — o gün
+        # gerçekten donan bir bacak bu duvarda kaybolur.
+        rapor["yapisal_cumle"] = _yapisal_cumle(yapisal, H)
     if uzun:
         # Cümle RAPORDA taşınır. Uyarı metnini sonradan ikiye bölüp özete
         # koymak, bir seri adının içinde iki nokta geçtiği gün cümleyi ortadan
@@ -1197,16 +1315,17 @@ def sifir_olc(H: pd.DataFrame, kolonlar, esik_hafta: int) -> tuple[list[str], di
         # sessizce ayrışırdı.
         rapor["cumle"] = (
             f"{veri._adlar(uzun)} son {b.sayi(en_uzun, 0)} haftanın tamamında "
-            "tam sıfır. O haftalarda gerçekten hiç hareket olmamış olabilir; "
-            "kaynağın bu bacağı yayımlamayı bırakmış olması da aynı görünür "
-            "ve elimizdeki gözlemle ikisi ayırt edilemiyor. Sıfırlar olduğu "
-            "gibi bırakıldı.")
-        uy.append(
-            f"AYIRT EDİLEMİYOR: {veri._adlar(uzun)} son "
-            f"{b.sayi(en_uzun, 0)} haftanın tamamında tam sıfır. O haftalarda "
+            "tam sıfır; öncesinde sıfırdan farklı gözlemler var. O haftalarda "
             "gerçekten hiç hareket olmamış olabilir; kaynağın bu bacağı "
             "yayımlamayı bırakmış olması da aynı görünür ve elimizdeki "
             "gözlemle ikisi ayırt edilemiyor. Sıfırlar olduğu gibi bırakıldı.")
+        uy.append(
+            f"AYIRT EDİLEMİYOR: {veri._adlar(uzun)} son "
+            f"{b.sayi(en_uzun, 0)} haftanın tamamında tam sıfır; öncesinde "
+            "sıfırdan farklı gözlemler var. O haftalarda gerçekten hiç "
+            "hareket olmamış olabilir; kaynağın bu bacağı yayımlamayı "
+            "bırakmış olması da aynı görünür ve elimizdeki gözlemle ikisi "
+            "ayırt edilemiyor. Sıfırlar olduğu gibi bırakıldı.")
     return uy, rapor
 
 
@@ -1248,7 +1367,7 @@ def kos() -> int:
     M = stok_metrikleri(H)
     D, dol_tani = dolarizasyon(H, A)
     ayrisma = ayrisma_olc(A, M)
-    sifir_uy, sifir_rapor = sifir_olc(H, veri.OLU_ADAY, ESIK_SIFIR_BLOK)
+    sifir_uy, sifir_rapor = sifir_olc(H, veri.SIFIR_KAPSAMI, ESIK_SIFIR_BLOK)
     for u in sifir_uy:
         uyar(u)
 
@@ -1399,6 +1518,12 @@ def kos() -> int:
             f"{b.tarih_uzun(stok_ilk)} tarihinde başlıyor; aradaki "
             f"{b.sayi(abs(fark_hafta), 0)} hafta için stok değişimi yok ve "
             "kümüle akım stoktan geriye uzatılmaz.")
+    # İKİ AYRI ANAHTAR, çünkü iki ayrı hâl: biri ölçülmüş bir yapı
+    # (yapısal sıfır), öteki ölçülemeyen bir belirsizlik. Tek anahtarda
+    # toplansalardı sayfa ikisini aynı kutuda aynı ağırlıkta gösterirdi ve
+    # okur "ayırt edilemiyor"u da bir ölçüm sanardı.
+    if sifir_rapor.get("yapisal_cumle"):
+        o["sifir_yapisal_cumlesi"] = sifir_rapor["yapisal_cumle"]
     if sifir_rapor.get("cumle"):
         o["sifir_cumlesi"] = sifir_rapor["cumle"]
 

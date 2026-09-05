@@ -586,7 +586,7 @@ def main() -> int:
     # metnin ikinci bir tanımı olurdu.
     for a in ("kimlik_cumlesi", "dol_cumlesi", "ayrisma_cumlesi",
               "kum_yontem_cumlesi", "taban_sozlugu", "kapsam_cumlesi",
-              "sifir_cumlesi"):
+              "sifir_cumlesi", "sifir_yapisal_cumlesi"):
         if m.get(a):
             O[a] = str(m[a])
 

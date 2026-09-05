@@ -85,6 +85,7 @@ import time
 import urllib.request
 from typing import NamedTuple
 
+import numpy as np
 import pandas as pd
 
 # --------------------------------------------------------------------------- yollar
@@ -402,8 +403,8 @@ HAFTALIK: dict[str, Seri] = {
     # ölçülmüş tek kalem budur (3.263,5 milyon dolar, farkın yaklaşık yüzde
     # sekizi) ve farkın tamamını "yurt dışı bacak" saymanın neden yanlış
     # olduğunu ölçüyle gösteren şey odur. Yayımlanan bir değeri beslemediği
-    # için tazelik denetiminin dışında (bkz. TAZELIK_DISI); 1.3 başlığı
-    # ölçüldüğü gün sayfaya çıkabilir.
+    # için tazelik ve sıfır denetimlerinin dışında (bkz. DENETIM_DISI);
+    # 1.3 başlığı ölçüldüğü gün sayfaya çıkabilir.
     "maden_diger": Seri(
         "TP.HPBITABLO4.20", "2024-06-28", "mn USD",
         "Kıymetli maden depo hesapları, diğer bölüm (TP.HPBITABLO4.20)"),
@@ -564,16 +565,17 @@ AILE_TOLERANS = {"haftalik": 12}
 # Tek istisna GEREKÇELİDİR ve adıyla duruyor: `maden_diger` hiçbir yayımlanan
 # değeri beslemiyor (aşağıdaki not), yani donması okurun gördüğü hiçbir sayıyı
 # etkilemez; onun için uyarı basmak okura görmediği bir seriyi anlatmak olurdu.
-TAZELIK_DISI = ("maden_diger",)
+#
+# İSTİSNA TEK ADLA DURUYOR ÇÜNKÜ TEK GEREKÇESİ VAR: "okurun gördüğü hiçbir
+# sayıyı beslemiyor". O gerekçe tazeliğe olduğu kadar sıfır denetimine de
+# aynen uyar — iki denetim iki ayrı istisna listesi tutsaydı bir gün sessizce
+# ayrışır ve hangisinin neyi görmediği kimsenin aklında kalmazdı. Ad bu yüzden
+# ailenin değil GEREKÇENİN adıdır.
+DENETIM_DISI = ("maden_diger",)
 TAZELIK_SERI = {
-    "haftalik": tuple(a for a in HAFTALIK if a not in TAZELIK_DISI),
+    "haftalik": tuple(a for a in HAFTALIK if a not in DENETIM_DISI),
 }
 
-# ÖLÜ SERİ adayları: kıymetli maden ve "diğer para birimleri" bacakları
-# gerçekten küçük olabilir ve tek bir haftada sıfır çıkması bir ÖLÇÜMDÜR.
-# Ama bir yılın TAMAMI sıfırsa seri dolu görünüp bilgi taşımıyordur. Burada
-# yalnız RAPORLANIR; sıfırı NaN'a çevirmek (eğer gerekirse) ölçüm katmanının
-# işidir ve TEK yerde yapılır.
 # SIFIR BLOĞU EŞİĞİ — TEK TANIM. Ölçüm katmanı bu sabiti içe aktarır
 # (`metrik.ESIK_SIFIR_BLOK`). İki yerde ayrı yazılıydı (52 ve 26) ve aynı dört
 # seri için okura iki farklı hafta sayısı basılıyordu; bir gün biri güncellenip
@@ -581,10 +583,79 @@ TAZELIK_SERI = {
 # yayımlanmıyor" arasını ayırmaya yeten en kısa penceredir.
 SIFIR_BLOK_HAFTA = 26
 
-OLU_ADAY = ("ar_gercek_diger", "ar_tuzel_diger", "pe_gercek_diger",
-            "pe_tuzel_diger", "ar_gercek_maden", "ar_tuzel_maden",
-            "pe_gercek_maden", "pe_tuzel_maden",
-            "maden_gercek", "maden_tuzel", "maden_diger")
+# SIFIR DENETİMİNİN KAPSAMI — ELLE TUTULAN LİSTEDEN DEĞİL, KATALOĞUN KENDİSİ.
+#
+# Burada on bir seri adı elle yazılıydı ("ölü seri adayları") ve o listede
+# dolar bacakları YOKTU. Gerçek veriyle ölçüldüğünde dört bacak serinin
+# tamamında tam sıfır çıktı — `pe_*_diger` ve `pe_*_usd` — ama denetim yalnız
+# ikisini gördü, çünkü öteki ikisi listede değildi. Bakılmayan yer geçen
+# sınavla aynı görünür: kapsam hiç uyarı üretmediği için hiç sorgulanmadı.
+#
+# Doğru kapsam bir yargıdan ("hangi seri sıfır OLABİLİR") değil sözleşmeden
+# türer: özete değer besleyen HER seri. Hangi sıfırın ölçüm, hangisinin
+# ölçümün yokluğu olduğu sorusu kapsamda değil SINIFLANDIRMADA cevaplanır
+# (bkz. `metrik.sifir_olc` üç hâli) — orada cevap veriden gelir, listeden
+# değil. Kapsamı dar tutmanın hiçbir kazancı yok: sıfır olmayan bir seri
+# zaten hiçbir cümle üretmez.
+SIFIR_KAPSAMI = tuple(a for a in HAFTALIK if a not in DENETIM_DISI)
+
+# KIRILIM SÖZLEŞMESİ — üst kalem ↔ onu oluşturan bacaklar, TEK TANIM.
+#
+# İki tüketicisi var ve ikisi de aynı ağacı soruyor: kaynak kimliği denetimi
+# ("bacakların toplamı üst kaleme eşit mi") ve sıfır denetiminin yapısal sıfır
+# cümlesi ("bu bacak hep sıfırsa, aynı kırılımın ÖTEKİ bacakları ne yapıyor").
+# Ağaç iki yerde ayrı yazılsaydı bir gün sessizce ayrışırdı.
+#
+# Kalem numaraları burada YAZILMIYOR, katalogdan türetiliyor (`kirilim_adi`):
+# okur adının içine elle yazılmış bir kod aralığı, katalog değiştiği gün
+# yalan söylemeye başlar ve hiçbir denetim bunu görmez.
+class Kirilim(NamedTuple):
+    ust: str
+    parcalar: tuple[str, ...]
+    etiket: str        # okura basılacak kırılım adı (kod aralığı EKLENİR)
+
+
+KIRILIMLAR: tuple[Kirilim, ...] = (
+    Kirilim("ar_gercek",
+            ("ar_gercek_usd", "ar_gercek_eur", "ar_gercek_diger",
+             "ar_gercek_maden"),
+            "Gerçek kişilerin arındırılmış değişiminde para birimi kırılımı"),
+    Kirilim("ar_tuzel",
+            ("ar_tuzel_usd", "ar_tuzel_eur", "ar_tuzel_diger",
+             "ar_tuzel_maden"),
+            "Tüzel kişilerin arındırılmış değişiminde para birimi kırılımı"),
+    Kirilim("pe_gercek",
+            ("pe_gercek_usd", "pe_gercek_eur", "pe_gercek_diger",
+             "pe_gercek_maden"),
+            "Gerçek kişilerin parite etkisinde para birimi kırılımı"),
+    Kirilim("pe_tuzel",
+            ("pe_tuzel_usd", "pe_tuzel_eur", "pe_tuzel_diger",
+             "pe_tuzel_maden"),
+            "Tüzel kişilerin parite etkisinde para birimi kırılımı"),
+    Kirilim("ar_toplam", ("ar_gercek", "ar_tuzel"),
+            "Arındırılmış değişimde gerçek ve tüzel kişi"),
+    Kirilim("pe_toplam", ("pe_gercek", "pe_tuzel"),
+            "Parite etkisinde gerçek ve tüzel kişi"),
+)
+
+# TANIM GEREĞİ SIFIR — sıfırın ÖLÇÜMDEN ÖNCE bilindiği bacaklar, gerekçesiyle.
+#
+# Bu bir KAPSAM listesi DEĞİLDİR ve öyle olmadığı için elle tutulabilir:
+# denetimin neye baktığını belirlemiyor (kapsam kataloğun kendisi), yalnızca
+# ölçülen bir yapısal sıfırın yanına bir CÜMLE ekliyor. Bir gün yeni bir bacak
+# eklenip buraya yazılmazsa kaybedilen şey bir açıklama cümlesidir, bir kör
+# nokta değil — kusurun bedeli sınırlı olduğu için liste elle tutulabilir.
+#
+# Gerekçe ilk ilkelerden: dolar cinsi bir mevduatın DOLAR olarak ölçülen
+# parite etkisi olamaz, çünkü ortada çapraz kur yoktur. Bu, kaynağın yöntem
+# belgesinden okunmuş bir iddia değil aritmetiktir; "kaynak şöyle hesaplıyor"
+# cümlesi kurulmaz, kurulamaz da — yöntem belgesi okunmadı.
+TANIM_SIFIRI: dict[str, str] = {
+    "pe_gercek_usd": "dolar cinsi bir mevduatın dolar olarak ölçülen parite "
+                     "etkisi olamaz, çünkü ortada çapraz kur yoktur",
+    "pe_tuzel_usd": "dolar cinsi bir mevduatın dolar olarak ölçülen parite "
+                    "etkisi olamaz, çünkü ortada çapraz kur yoktur",
+}
 
 # ÖLÇÜM BLOKLARININ OKUR ADLARI — TEK TANIM.
 # İki modül aynı kutuya yazıyor (ölçüm katmanının ortak hafta uyarısı ve özet
@@ -640,6 +711,99 @@ def birim(ad: str) -> str:
     buradan okur; birim ikinci bir yerde yazılmaz."""
     s = HAFTALIK.get(ad)
     return s.birim if s is not None else ""
+
+
+# BİRİMİN OKUR YAZIMI — TEK TANIM. Katalogdaki "mn USD" bir künye kısaltması;
+# okura giden cümlede birim açık yazılır ("milyon dolar"), çünkü okurun elinde
+# bizim kısaltma sözleşmemiz yok. Kapsam kimliğinin uyarısı bunu zaten açık
+# yazıyordu, kırılım kimliğininki katalog kısaltmasını basıyordu — aynı kutuda
+# aynı birimin iki yazımı.
+BIRIM_OKUR = {"mn USD": "milyon dolar", "bin TL": "bin lira"}
+
+
+def birim_okur(birim_ad: str) -> str:
+    """Bir birimin okur yazımı. Bilinmeyen birim OLDUĞU GİBİ döner — uydurma
+    bir çeviri, yanlış birimle yayımlanmış bir sayıdan farksız olurdu."""
+    return BIRIM_OKUR.get(birim_ad, birim_ad)
+
+
+def bacak_kisa_adi(ad: str) -> str:
+    """Bir kırılım bacağının KISA okur adı: "euro", "kıymetli maden", "dolar".
+
+    Okur adının son virgülden sonraki parçası alınır ve kaynak kodu atılır.
+    Kısa adlar AYRI bir sözlükte tutulsaydı katalogla bir gün ayrışırdı —
+    burada tek kaynak yine `Seri.okur_adi`dır.
+    """
+    tam = okur_adi(ad).split(" (")[0]
+    return tam.rsplit(", ", 1)[-1].strip()
+
+
+def kirilim_adi(k: "Kirilim") -> str:
+    """Bir kırılımın okur adı, KOD ARALIĞI KATALOGDAN TÜRETİLEREK.
+
+    Kod aralığı ("TP.HPBITABLO5.3–5.6 = TP.HPBITABLO5.2") daha önce her
+    kimliğin adına ELLE yazılıydı. Elle yazılmış bir kod, katalog değiştiği
+    gün yalan söylemeye başlar ve hiçbir denetim bunu göremez: okur adı
+    yalnızca okunur, sınanmaz. Şimdi tek kaynak katalog.
+
+    İki yazım var ve seçim parça sayısından türüyor: ikiden çok bacakta
+    aralık, iki bacakta toplama. Sebep okunurluk — dört kalemi tek tek yazmak
+    adı okunmaz uzunluğa çıkarır, iki kalemi aralık diye yazmak ise aradaki
+    kalemleri de kapsıyormuş gibi görünür.
+
+    Aralığın İKİ UCU DA TAM KOD yazılır. Kısaltılmış bir uç ("5.3–6") okurun
+    kaynakta arayabileceği bir künye değildir ve kısaltmanın nereden kesileceği
+    kaynağın kod yazımına bağlıdır — bir gün başka bir tablo eklendiğinde
+    sessizce yanlış yere keser.
+    """
+    kodlar = [HAFTALIK[a].kod for a in k.parcalar if a in HAFTALIK]
+    ust_kod = HAFTALIK[k.ust].kod if k.ust in HAFTALIK else k.ust
+    if not kodlar:
+        return k.etiket
+    sol = f"{kodlar[0]}–{kodlar[-1]}" if len(kodlar) > 2 else " + ".join(kodlar)
+    return f"{k.etiket} toplamı ({sol} = {ust_kod})"
+
+
+def yayim_adimi(s: pd.Series, tavan: float = 1.0) -> float:
+    """Bir serinin YAYIM ADIMI — kaynağın onu hangi ızgarada yayımladığı.
+
+    ÖLÇÜLÜR, VARSAYILMAZ. Bu hatta iki tablo iki ayrı hassasiyet taşıyor ve
+    ikisi gerçek veriden ölçüldü: stok tabloları bir ondalıkla (adım 0,1
+    milyon dolar), kırılım tablosu üç ondalıkla (adım 0,001) yayımlanıyor.
+    Sabit bir taban yazılsaydı kaynak hassasiyetini değiştirdiği gün ya
+    yanlış alarm ya da sessizce körelmiş bir kapı kalırdı.
+
+    Ölçü, bütün gözlemlerin üzerinde durduğu en KABA ondalık ızgaradır:
+    değerlerin hepsi 0,1'in katıysa adım 0,1'dir.
+
+    NEDEN ONDALIK BASAMAK SAYMIYORUZ. İlk sürüm `repr` üzerinden basamak
+    sayıyordu ve TOPLAM serilerde çöktü: 100.476,8 + 62.668,4 kayan noktada
+    163.145,19999999998 eder, on dört basamak görünür ve ölçü "ızgara yok"
+    der. Oysa iki tanesi de 0,1 ızgarasında olan sayıların toplamı da 0,1
+    ızgarasındadır — üstelik kimlik denetiminin bir tarafı tam olarak böyle
+    bir toplamdır, yani ölçü en çok ihtiyaç duyulan yerde susardı. Doğrusu
+    bölünebilirliği kayan nokta payıyla SORMAK: pay büyüklükle birlikte
+    büyür (v/g ne kadar büyükse gösterimin kendi hatası o kadar büyük), bu
+    yüzden orantılı.
+
+    `tavan` bir emniyettir, bir varsayım değil: tamsayı yayımlanan bir seride
+    ölçülen adım 1,0 çıkar ve bir eşiğin tabanı bundan büyük olamamalı.
+    Tavansız bırakılsaydı gelecekte tam sayılarla yayımlanan (ve hepsi ona
+    bölünen) bir seri tabanı kendi ölçeğine kadar şişirebilirdi.
+    """
+    d = s.dropna()
+    if d.empty:
+        return 0.0
+    v = d.to_numpy(dtype=float)
+    for us in range(0, 7):
+        g = 10.0 ** (-us)
+        oran = v / g
+        pay = np.maximum(1e-6, np.abs(oran) * 1e-12)
+        if bool(np.all(np.abs(oran - np.round(oran)) <= pay)):
+            return min(g, float(tavan))
+    # Altı basamaktan sonrası ızgara değil: seri yuvarlanmamış demektir ve
+    # yuvarlanmamış bir seriye yuvarlama tabanı çıkarmak anlamsız olurdu.
+    return 0.0
 
 
 def _adlar(adlar, en_fazla: int = 3) -> str:
@@ -994,6 +1158,37 @@ def _kimlik(rapor: dict, uy: list[str], ad: str, sol: pd.Series, sag: pd.Series,
     eşik KONMAZ. Ölçülmeyen bir seviyeye eşik koymak, ilk koşuda yanlış alarm
     üretip yayının önünde durmak demektir — ve yayının önünde duran bir
     denetimin yanlış alarmı arızanın kendisidir.
+
+    EŞİĞİN MUTLAK TABANI YAYIM HASSASİYETİNDEN GELİR — ve bu bir düzeltmedir.
+    Bağıl eşik TEK BAŞINA konmuştu (1e-6) ve ilk gerçek koşuda YANLIŞ ALARM
+    verdi: kırılım tablosundaki tüzel kişi stoku ile ana tablodaki aynı kalem
+    en fazla 0,063 milyon dolar ayrışıyor, oysa 61.383 milyon dolarlık bir
+    stokta 1e-6 yalnız 0,061 milyon dolara denk geliyordu. Okur, olmayan bir
+    arızayı ("kalem numaralandırması değişmiş olabilir") okudu.
+
+    Ölçülen fark ARIZA DEĞİL, iki tablonun ayrı ayrı yuvarlanmasıdır ve
+    büyüklüğü de bunu söylüyor: ana tablo bir ondalıkla (adım 0,1), kırılım
+    tablosu üç ondalıkla (adım 0,001) yayımlanıyor; 114 haftanın 113'ünde fark
+    zaten 0,05'in — yani kaba ızgaranın YARISININ — altında.
+
+    Taban neden YARIM adım değil TAM adım: 05.07.2024'te ana tablo 61.382,7
+    yazarken kırılım tablosu 61.382,763 yazıyor, yani 61.382,8'e yuvarlanması
+    gereken bir sayı aşağı yuvarlanmış. İki tablo aynı anlık değerin iki
+    yuvarlaması DEĞİL: en az biri kendisi de yuvarlanmış parçaların toplamı ya
+    da başka bir revizyon vintajı. Yarım adım (0,0505) bu gözlemi ÖLÇÜLMÜŞ
+    biçimde kaçırıyor; taban bu yüzden her iki tablonun TAM adımı toplanarak
+    kurulur (0,1 + 0,001 = 0,101) ve ölçülen en büyük farka 1,6 kat pay bırakır.
+
+    TESPİT PAYI DARALMIYOR ve bu da ölçüldü. Bu kapının yakalaması gereken
+    arıza kalem kaymasıdır: karşılaştırmaya giren bacak değişir. Tüzel kişi
+    stokunun yerine aynı tablodaki EN YAKIN komşu kalem (gerçek kişilerin
+    kıymetli maden hesabı) konursa artık 32.436 milyon dolara, gerçek kişi
+    stoku konursa 83.557'ye, geniş toplam konursa 199.915'e çıkıyor. Taban
+    (0,101) ile en küçük gerçek arıza arasında BEŞ büyüklük basamağı var; eşik
+    yanlış alarmı susturmak için değil, ÖLÇÜLEN yayım hassasiyetinden
+    türetildi.
+
+    Etkin eşik ikisinin BÜYÜĞÜDÜR: ölçek büyüdüğünde bağıl kol devralır.
     """
     b = _bicim()
     d = pd.DataFrame({"s": sol, "r": sag, "o": olcek}).dropna()
@@ -1002,6 +1197,10 @@ def _kimlik(rapor: dict, uy: list[str], ad: str, sol: pd.Series, sag: pd.Series,
         return
     fark = (d["s"] - d["r"]).abs()
     bagil = fark / d["o"].abs().clip(lower=1e-9)
+    # Taban iki tarafın ÖLÇÜLEN adımından kuruluyor; taraflar aynı ızgaradaysa
+    # toplam yine iki tam adımdır — iki bağımsız yuvarlama var demektir.
+    adim_sol, adim_sag = yayim_adimi(d["s"]), yayim_adimi(d["r"])
+    taban = float(adim_sol + adim_sag)
     rapor[ad] = {
         "n": int(len(d)),
         "maks_fark": float(fark.max()),
@@ -1010,16 +1209,38 @@ def _kimlik(rapor: dict, uy: list[str], ad: str, sol: pd.Series, sag: pd.Series,
         "son_fark": float(fark.iloc[-1]),
         "birim": birim_ad,
         "esik_bagil": esik_bagil,
-        "gecti": None if esik_bagil is None else bool(bagil.max() <= esik_bagil),
+        "yayim_adimi_sol": float(adim_sol),
+        "yayim_adimi_sag": float(adim_sag),
+        "esik_taban": taban,
+        "gecti": None,
     }
-    if esik_bagil is not None and bagil.max() > esik_bagil:
+    if esik_bagil is None:
+        return
+    esik = (esik_bagil * d["o"].abs()).clip(lower=taban)
+    asim = fark > esik
+    rapor[ad]["asim_hafta"] = int(asim.sum())
+    rapor[ad]["gecti"] = bool(not asim.any())
+    if asim.any():
+        # OKURA NE SÖYLER: iki tablo aynı kalemi aynı hafta farklı yazmış ve
+        # fark yuvarlamayla açıklanamayacak kadar büyük. Kaç KAT olduğu
+        # cümlenin içinde, çünkü "0,3 milyon dolar" tek başına büyük mü küçük
+        # mü olduğunu söylemez — kıyas noktası yayım hassasiyetidir.
+        en = float(fark.max())
+        gun = fark.idxmax()
+        kat = en / taban if taban > 0 else float("inf")
+        # Ondalık, sayının BÜYÜKLÜĞÜNE göre: eşiğin hemen üstündeki bir sapma
+        # ancak üç haneyle anlaşılır (0,105 ile 0,15 farklı şeyler), on binler
+        # mertebesindeki bir kalem kaymasında aynı üç hane gürültüdür ve
+        # sayıyı okunmaz yapar.
         uy.append(
-            f"KİMLİK BOZUK: {ad} — en büyük sapma "
-            f"{b.sayi(float(fark.max()), 1)} {birim_ad} "
-            f"({b.yuzde(float(bagil.max()) * 100, 4)}, "
-            f"{b.tarih_kisa(bagil.idxmax())}); eşik "
-            f"{b.yuzde(esik_bagil * 100, 4)}. Kalem numaralandırması ya da "
-            "birim değişmiş olabilir.")
+            f"KİMLİK BOZUK: {ad} — kaynağın iki tablosu aynı haftada farklı "
+            f"değer veriyor. En büyük fark {b.sayi(en, 3 if en < 10 else 1)} "
+            f"{birim_okur(birim_ad)} ({b.tarih_kisa(gun)}), yayım "
+            f"yuvarlamasının bırakabileceği payın {b.sayi(kat, 1)} katı; "
+            f"toplam {b.sayi(int(asim.sum()), 0)} haftada aşılıyor. Bu kadarı "
+            "yuvarlamadan doğamaz: kaynağın kalem numaralandırması ya da "
+            "birimi değişmiş olabilir ve bu iki kalemden beslenen sayılar "
+            "sınanana kadar temkinle okunmalı.")
 
 
 def kimlik_denetimi(H: pd.DataFrame) -> tuple[list[str], dict]:
@@ -1069,41 +1290,16 @@ def kimlik_denetimi(H: pd.DataFrame) -> tuple[list[str], dict]:
                 "(TP.HPBITABLO4.8 = TP.HPBITABLO2.12)",
                 H["k_tuzel"], H["stok_tuzel"], H["stok_tuzel"], 1e-6, "mn USD")
 
-    # (2) ÖLÇÜLMEMİŞ — dört kırılımın toplamı üst kaleme eşit mi.
-    dortlu = {
-        "Gerçek kişilerin arındırılmış değişiminde para birimi kırılımı toplamı "
-        "(TP.HPBITABLO5.3–5.6 = TP.HPBITABLO5.2)":
-            (["ar_gercek_usd", "ar_gercek_eur", "ar_gercek_diger",
-              "ar_gercek_maden"], "ar_gercek"),
-        "Tüzel kişilerin arındırılmış değişiminde para birimi kırılımı toplamı "
-        "(TP.HPBITABLO5.8–5.11 = TP.HPBITABLO5.7)":
-            (["ar_tuzel_usd", "ar_tuzel_eur", "ar_tuzel_diger",
-              "ar_tuzel_maden"], "ar_tuzel"),
-        "Gerçek kişilerin parite etkisinde para birimi kırılımı toplamı "
-        "(TP.HPBITABLO5.14–5.17 = TP.HPBITABLO5.13)":
-            (["pe_gercek_usd", "pe_gercek_eur", "pe_gercek_diger",
-              "pe_gercek_maden"], "pe_gercek"),
-        "Tüzel kişilerin parite etkisinde para birimi kırılımı toplamı "
-        "(TP.HPBITABLO5.19–5.22 = TP.HPBITABLO5.18)":
-            (["pe_tuzel_usd", "pe_tuzel_eur", "pe_tuzel_diger",
-              "pe_tuzel_maden"], "pe_tuzel"),
-    }
-    for ad, (parcalar, ust) in dortlu.items():
-        if set(parcalar) | {ust} <= K:
-            _kimlik(rapor, uy, ad, H[parcalar].sum(axis=1, min_count=len(parcalar)),
-                    H[ust], H[ust].abs().clip(lower=1.0), None, "mn USD")
-    # Gerçek + tüzel = toplam, ayrıştırmanın iki bloğunda da.
-    for ad, (parcalar, ust) in {
-        "Arındırılmış değişimde gerçek ve tüzel kişi toplamı "
-        "(TP.HPBITABLO5.2 + TP.HPBITABLO5.7 = TP.HPBITABLO5.1)":
-            (["ar_gercek", "ar_tuzel"], "ar_toplam"),
-        "Parite etkisinde gerçek ve tüzel kişi toplamı "
-        "(TP.HPBITABLO5.13 + TP.HPBITABLO5.18 = TP.HPBITABLO5.12)":
-            (["pe_gercek", "pe_tuzel"], "pe_toplam"),
-    }.items():
-        if set(parcalar) | {ust} <= K:
-            _kimlik(rapor, uy, ad, H[parcalar].sum(axis=1, min_count=len(parcalar)),
-                    H[ust], H[ust].abs().clip(lower=1.0), None, "mn USD")
+    # (2) ÖLÇÜLMEMİŞ — bacakların toplamı üst kaleme eşit mi.
+    # Ağaç KIRILIMLAR sözleşmesinden okunuyor: aynı ağaç sıfır denetiminin
+    # yapısal sıfır cümlesini de besliyor ve iki yerde ayrı yazılsaydı bir gün
+    # sessizce ayrışırdı. Kalem numaraları da elle değil katalogdan.
+    for kir in KIRILIMLAR:
+        parcalar = list(kir.parcalar)
+        if set(parcalar) | {kir.ust} <= K:
+            _kimlik(rapor, uy, kirilim_adi(kir),
+                    H[parcalar].sum(axis=1, min_count=len(parcalar)),
+                    H[kir.ust], H[kir.ust].abs().clip(lower=1.0), None, "mn USD")
     return uy, rapor
 
 
@@ -1218,7 +1414,7 @@ def olu_seri_olc(H: pd.DataFrame, pencere: int = SIFIR_BLOK_HAFTA) -> dict:
     """
     olu: list[str] = []
     n_pencere = 0
-    for ad in OLU_ADAY:
+    for ad in SIFIR_KAPSAMI:
         if ad not in H.columns:
             continue
         s_ = H[ad].dropna()

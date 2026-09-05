@@ -206,6 +206,53 @@ def _kapsami_boz(H: pd.DataFrame, buyukluk: float = 500.0) -> pd.DataFrame:
     return B
 
 
+def _yuvarlama_ayrismasi(H: pd.DataFrame, eski_esik: float = 1e-6,
+                         tavan: float = 0.09) -> pd.DataFrame:
+    """İki tablo AYNI kalemi ayrı ayrı yuvarlamış olsun — GERÇEKTE ölçülen hâl.
+
+    `_cerceve` kırılım tablosunu ana tablonun BİREBİR kopyası yapıyor, yani
+    ayrışma tam sıfır ve sıkı bir eşik orada hiç sınanmıyor. Gerçek veri öyle
+    değil: ana tablo bir ondalıkla (ızgara 0,1), kırılım tablosu üç ondalıkla
+    (0,001) yayımlanıyor ve 114 haftada en büyük ayrışma 0,063 milyon dolar —
+    ızgaranın altında, ama 61.383 milyon dolarlık stokta bağıl olarak
+    1,03e-06, yani eski bağıl eşiğin ÜSTÜNDE. Yanlış alarm tam bu aralıktan
+    çıktı.
+
+    BÜYÜKLÜK SABİT YAZILMAZ, ÖLÇÜLEREK SEÇİLİR: sentetik çerçevenin seviyeleri
+    gerçek veriyle aynı mertebede ama aynı sayı değil, sabit bir 0,063 burada
+    bağıl olarak eşiğin ALTINDA kalır ve sınama sessizce anlamsızlaşırdı —
+    "yanlış alarm yok" iddiası, yanlış alarmın hiç mümkün olmadığı bir
+    çerçevede geçerdi. Büyüklük bu yüzden çerçevenin kendi seviyesinden
+    türetiliyor: eski bağıl kuralı aşacak kadar büyük, ölçülen ızgaranın
+    (0,1 + 0,001) altında kalacak kadar küçük.
+
+    En kötü hâl en KÜÇÜK seviyeye konuyor, çünkü bağıl ölçü orada patlar —
+    gerçek veride de kırılan bacak iki stokun küçüğüydü.
+    """
+    rng = np.random.default_rng(7702)
+    B = H.copy()
+    for kol in ("k_gercek", "k_tuzel"):
+        seviye = B[kol].abs()
+        b = min(1.05 * eski_esik * float(seviye.min()), tavan)
+        gur = rng.uniform(-b, b, len(B))
+        gur[int(seviye.fillna(np.inf).to_numpy().argmin())] = b
+        B[kol] = (B[kol] + gur).round(3)
+    return B
+
+
+def _kalem_kaydir(H: pd.DataFrame) -> pd.DataFrame:
+    """Kaynağın kalem numaralandırması kaymış olsun: kırılım tablosundaki tüzel
+    kişi stokunun yerine AYNI TABLODAKİ EN YAKIN komşu kalem gelsin.
+
+    Yuvarlama tabanının tespit payını yemediğini gösteren senaryo budur: en
+    yakın komşuyla bile artık on binlerce milyon dolar olur, tabanın beş
+    büyüklük basamağı üstünde.
+    """
+    B = H.copy()
+    B["k_tuzel"] = B["maden_gercek"]
+    return B
+
+
 def _hafta_kaydir(H: pd.DataFrame) -> pd.DataFrame:
     """Kaynak, bir haftanın hareketini BİR SONRAKİ cumaya damgalamış olsun.
 
@@ -901,6 +948,93 @@ sina("ölçülmüş kimlik bozulunca kaynak kimliği uyarısı düşüyor",
      any(x.startswith("KİMLİK BOZUK") for x in _uy_kb),
      "; ".join(_uy_kb)[:140])
 
+# --- YAYIM HASSASİYETİ TABANI ------------------------------------------------
+# İLK GERÇEK KOŞUDA YANLIŞ ALARM VERDİ. Kimlik eşiği yalnız BAĞILDI (1e-6) ve
+# kırılım tablosuyla ana tablo arasındaki 0,063 milyon dolarlık ayrışma —
+# 61.383 milyon dolarlık bir stokta 1e-6 tam olarak 0,061'e denk geliyordu —
+# ihlal sayıldı. Okur "kalem numaralandırması değişmiş olabilir" diye olmayan
+# bir arızayı okudu. Yayının önünde duran bir denetimin yanlış alarmı arızanın
+# kendisidir; kapsam kadar HASSASİYET de denetimin parçasıdır.
+print("\n▶ Yayım hassasiyeti: yuvarlama tabanı ve tespit payı")
+
+sina("yayım adımı ÖLÇÜLÜYOR: bir ondalıkla yayımlanan seride 0,1",
+     veri.yayim_adimi(H0["stok_gercek"]) == 0.1,
+     str(veri.yayim_adimi(H0["stok_gercek"])))
+_ince = (H0["stok_gercek"] + 0.037).round(3)
+sina("yayım adımı ÖLÇÜLÜYOR: üç ondalıkla yayımlanan seride 0,001",
+     veri.yayim_adimi(_ince) == 0.001, str(veri.yayim_adimi(_ince)))
+# İLK SÜRÜM BURADA ÇÖKTÜ: ondalık basamak sayan bir ölçü, iki yuvarlanmış
+# sayının TOPLAMINDA (100.476,8 + 62.668,4 = 163.145,19999999998) on dört
+# basamak görür ve "ızgara yok" der. Oysa kimlik denetiminin bir tarafı tam
+# olarak böyle bir toplamdır — ölçü en çok gerektiği yerde susardı.
+sina("iki yuvarlanmış serinin TOPLAMINDA da ızgara ölçülüyor (0,1)",
+     veri.yayim_adimi(H0["stok_gercek"] + H0["stok_tuzel"]) == 0.1,
+     str(veri.yayim_adimi(H0["stok_gercek"] + H0["stok_tuzel"])))
+sina("yuvarlanmamış seride ızgara YOK diyor (taban uydurmuyor)",
+     veri.yayim_adimi(H0["stok_gercek"] * np.pi) == 0.0,
+     str(veri.yayim_adimi(H0["stok_gercek"] * np.pi)))
+sina("tam sayı yayımlanan seride adım TAVANDA duruyor",
+     veri.yayim_adimi(H0["stok_gercek"].round(0)) == 1.0,
+     str(veri.yayim_adimi(H0["stok_gercek"].round(0))))
+
+_uyari_sifirla()
+_Hy = _yuvarlama_ayrismasi(H0)
+_uy_y, _rap_y = veri.kimlik_denetimi(_Hy)
+_topla(*_uy_y)
+_capraz = [r for a, r in _rap_y.items()
+           if r.get("esik_bagil") is not None and "TP.HPBITABLO4" in a]
+sina("ölçülen yayım ayrışması YANLIŞ ALARM üretmiyor",
+     not any(x.startswith("KİMLİK BOZUK") for x in _uy_y),
+     "; ".join(_uy_y)[:200])
+# Bu iddia sınamayı bir REGRESYON sınamasına çeviriyor: eski kural (yalnız
+# bağıl 1e-6) bu çerçevede GERÇEKTEN düşerdi. Düşmeseydi yukarıdaki "yanlış
+# alarm yok" iddiası boş bir iddia olurdu.
+sina("eski kural (yalnız bağıl eşik) bu çerçevede DÜŞERDİ",
+     any(r["maks_bagil"] > 1e-6 for r in _capraz),
+     str([round(r["maks_bagil"], 9) for r in _capraz]))
+sina("taban ÖLÇÜLEN iki ızgaranın toplamı (0,1 + 0,001)",
+     bool(_capraz) and all(abs(r["esik_taban"] - 0.101) < 1e-9 for r in _capraz),
+     str([r.get("esik_taban") for r in _capraz]))
+
+# TESPİT PAYI DARALMIYOR. Taban yanlış alarmı susturmak için değil, ölçülen
+# yayım hassasiyetinden kondu; yakalaması gereken arıza beş büyüklük basamağı
+# daha büyük.
+_uyari_sifirla()
+_uy_kk, _rap_kk = veri.kimlik_denetimi(_kalem_kaydir(H0))
+_topla(*_uy_kk)
+_kk = [x for x in _uy_kk if x.startswith("KİMLİK BOZUK")]
+sina("yuvarlama tabanı GERÇEK kalem kaymasını hâlâ yakalıyor", bool(_kk),
+     "; ".join(_uy_kk)[:140])
+sina("kalem kayması artığı tabanın en az bin katı",
+     any(r["maks_fark"] > 1000 * r["esik_taban"]
+         for a, r in _rap_kk.items()
+         if r.get("esik_bagil") is not None and r.get("gecti") is False),
+     str([(round(r["maks_fark"], 1), r["esik_taban"])
+          for r in _rap_kk.values() if r.get("gecti") is False]))
+# Uyarı METNİ de okura ne olduğunu söylemeli: kaç kat olduğunu yazmayan bir
+# cümle, "0,3 milyon dolar" büyük mü küçük mü sorusunu okurun elinde bırakır.
+sina("uyarı, farkın yuvarlama payının kaç KATI olduğunu yazıyor",
+     bool(_kk) and "katı" in _kk[0] and "yuvarlamadan doğamaz" in _kk[0],
+     (_kk[0] if _kk else "")[:180])
+# Birim OKUR yazımıyla basılır: katalogdaki kısaltma bizim künyemiz, okurun
+# elinde onun karşılığı yok. Aynı kutudaki kapsam uyarısı zaten açık yazıyordu.
+sina("uyarı birimi okur diliyle yazıyor (künye kısaltması değil)",
+     bool(_kk) and "milyon dolar" in _kk[0] and "mn USD" not in _kk[0],
+     (_kk[0] if _kk else "")[:180])
+
+# KAPSAM SÖZLEŞMEDEN TÜRER. Kırılım ağacına elle bir bacak eklenmeyi unutursa
+# o bacağın toplamı hiç sınanmaz ve bakılmayan yer geçen sınavla aynı görünür.
+_agac = {a for k in veri.KIRILIMLAR for a in (k.ust,) + tuple(k.parcalar)}
+_ayristirma_serileri = {a for a in veri.HAFTALIK
+                        if a.startswith(("ar_", "pe_"))}
+sina("ayrıştırma tablosunun HER serisi kırılım ağacında (kimlik kapsamı tam)",
+     _ayristirma_serileri <= _agac,
+     str(sorted(_ayristirma_serileri - _agac)))
+sina("kırılım adındaki kalem numaraları KATALOGDAN türetiliyor",
+     all(veri.HAFTALIK[k.ust].kod in veri.kirilim_adi(k)
+         and veri.HAFTALIK[k.parcalar[0]].kod in veri.kirilim_adi(k)
+         for k in veri.KIRILIMLAR))
+
 
 # ===========================================================================
 # 6. DOLARİZASYON — neyin arındırıldığı ETİKETİN kendisidir
@@ -999,7 +1133,7 @@ print("\n▶ Sıfır ile donma: ölç, maskeleme")
 _kol = "ar_gercek_diger"
 Hs_sag = _sifir_blok(H0, _kol, 30, sag_uc=True)
 _once = Hs_sag[_kol].copy()
-uy_s, r_s = metrik.sifir_olc(Hs_sag, veri.OLU_ADAY, metrik.ESIK_SIFIR_BLOK)
+uy_s, r_s = metrik.sifir_olc(Hs_sag, veri.SIFIR_KAPSAMI, metrik.ESIK_SIFIR_BLOK)
 _topla(*uy_s, r_s.get("cumle"))
 
 sina("sağ uçtaki sıfır bloğunun uzunluğu doğru ölçülüyor",
@@ -1019,7 +1153,7 @@ sina("sıfırlar MASKELENMİYOR (çerçeve değişmiyor)",
 # Serinin ORTASINDAKİ sıfır bloğu ölçümdür: arkasından gerçek bir gözlem
 # gelmiştir. Onu da işaretleyen bir denetim yanlış alarm üretir.
 Hs_ic = _sifir_blok(H0, _kol, 30, sag_uc=False)
-uy_ic, r_ic = metrik.sifir_olc(Hs_ic, veri.OLU_ADAY, metrik.ESIK_SIFIR_BLOK)
+uy_ic, r_ic = metrik.sifir_olc(Hs_ic, veri.SIFIR_KAPSAMI, metrik.ESIK_SIFIR_BLOK)
 sina("serinin ORTASINDAKİ sıfır bloğu sağ uç sayılmıyor",
      r_ic["seri"][_kol]["sag_uc_sifir_hafta"] == 0
      and r_ic["seri"][_kol]["ic_sifir_hafta"] >= 30,
@@ -1028,7 +1162,7 @@ sina("ortadaki blok için uyarı DÜŞMÜYOR (yanlış alarm yok)", not uy_ic,
      "; ".join(uy_ic)[:120])
 
 Hs_kisa = _sifir_blok(H0, _kol, metrik.ESIK_SIFIR_BLOK - 1, sag_uc=True)
-uy_kisa, _ = metrik.sifir_olc(Hs_kisa, veri.OLU_ADAY, metrik.ESIK_SIFIR_BLOK)
+uy_kisa, _ = metrik.sifir_olc(Hs_kisa, veri.SIFIR_KAPSAMI, metrik.ESIK_SIFIR_BLOK)
 sina("eşiğin altındaki sağ uç bloğu uyarı üretmiyor", not uy_kisa,
      "; ".join(uy_kisa)[:120])
 
@@ -1056,6 +1190,93 @@ sina("veri katmanı ölü seriyi MAKİNE kaydına yazıyor, okura cümle KURMUYO
      str({k: _olu.get(k) for k in ("pencere_hafta", "olculen_hafta")}))
 sina("sıfır bloğu eşiği TEK tanımdan geliyor",
      metrik.ESIK_SIFIR_BLOK is veri.SIFIR_BLOK_HAFTA)
+
+# --- ÜÇÜNCÜ HÂL: YAPISAL SIFIR ----------------------------------------------
+# İLK GERÇEK KOŞUDA ÖLÇÜLDÜ. Dört bacak serinin İLK gözleminden beri tam sıfır
+# ve bir kez bile sıfırdan farklı değer yayımlanmamış; okur yine de "kaynağın
+# bu bacağı yayımlamayı bırakmış olması da aynı görünür" cümlesini okudu.
+# GÖRÜNMÜYOR: donan bir seri önce sıfırdan farklı değerler gösterir, sonra
+# sıfıra düşer. Sağ uçtaki blok serinin TAMAMINI kaplıyorsa öncesi yoktur ve
+# ikisi ölçümle ayırt EDİLİR. Ayırt edilebilene "ayırt edilemiyor" demek,
+# ölçülmüş bir şeyi ölçülmemiş göstermektir.
+print("\n▶ Sıfırın üç hâli: yapısal · ayırt edilemez · ölçüm")
+
+_uyari_sifirla()
+_YAP = "pe_gercek_usd"
+Hy_tam = _sifir_blok(H0, _YAP, len(H0), sag_uc=True)
+uy_y, r_y = metrik.sifir_olc(Hy_tam, veri.SIFIR_KAPSAMI, metrik.ESIK_SIFIR_BLOK)
+_topla(*uy_y, r_y.get("yapisal_cumle"), r_y.get("cumle"))
+
+sina("serinin TAMAMI sıfırsa hâl YAPISAL",
+     r_y["seri"][_YAP]["hal"] == "yapisal"
+     and r_y["seri"][_YAP]["sag_uc_sifir_hafta"] == r_y["seri"][_YAP]["n_gozlem"],
+     str(r_y["seri"][_YAP]))
+sina("yapısal sıfır UYARI üretmiyor (ölçümdür, alarm değil)", not uy_y,
+     "; ".join(uy_y)[:160])
+sina("yapısal sıfıra 'ayırt edilemiyor' DENMİYOR",
+     "ayırt edilemiyor" not in (r_y.get("yapisal_cumle") or ""),
+     (r_y.get("yapisal_cumle") or "")[:160])
+sina("yapısal sıfır cümlesi ÖLÇÜLEN gözlem sayısını yazıyor",
+     str(len(H0)) in (r_y.get("yapisal_cumle") or "")
+     or f"{len(H0):,}".replace(",", ".") in (r_y.get("yapisal_cumle") or ""),
+     (r_y.get("yapisal_cumle") or "")[:200])
+sina("yapısal sıfır cümlesi donmayı ÖLÇÜYLE eliyor",
+     "donmuş besleme değil" in (r_y.get("yapisal_cumle") or ""))
+# Aynı kırılımın öteki bacakları hakkındaki cümle ancak onlar GERÇEKTEN
+# sıfırdan farklıysa kurulur — sorulmadan yazılan bir kıyas, ölçüm değil
+# iddiadır.
+sina("öteki bacaklar cümlesi kırılımın KENDİ bacaklarından kuruluyor",
+     "euro" in (r_y.get("yapisal_cumle") or "")
+     and "kıymetli maden" in (r_y.get("yapisal_cumle") or ""),
+     (r_y.get("yapisal_cumle") or "")[-200:])
+# ÖTEKİ BACAKLAR SIFATLA DEĞİL SAYIYLA ANLATILIR. "Aynı haftalarda sıfırdan
+# farklı" demek, o bacakların hiç sıfır çıkmadığını İDDİA etmektir; ölçülen
+# şey sıfırdan farklı gözlem SAYISIDIR. Bir bacak otuz hafta sustuğunda cümle
+# bunu göstermeli, yoksa okur ölçülmemiş bir kesinlik okur.
+_uyari_sifirla()
+_Hy_seyrek = _sifir_blok(Hy_tam, "pe_gercek_eur", 30, sag_uc=True)
+_, r_yb = metrik.sifir_olc(_Hy_seyrek, veri.SIFIR_KAPSAMI,
+                           metrik.ESIK_SIFIR_BLOK)
+_topla(r_yb.get("yapisal_cumle"), r_yb.get("cumle"))
+sina("öteki bacak arada sustuğunda cümle ÖLÇÜLEN hafta sayısını yazıyor",
+     f"{len(H0) - 30}" in (r_yb.get("yapisal_cumle") or ""),
+     (r_yb.get("yapisal_cumle") or "")[-220:])
+
+# İKİNCİ HÂL KORUNUYOR: sıfırdan farklı gözlemlerin ARDINDAN gelen sağ uç
+# bloğu gerçekten ayırt edilemez ve uyarısı DURUYOR. Yapısal hâli tanıyan bir
+# düzeltmenin en kolay kaza biçimi, bu hâli de sessizce yutmasıdır.
+sina("sıfırdan farklı gözlemden SONRA gelen blok hâlâ AYIRT EDİLEMEZ",
+     r_s["seri"][_kol]["hal"] == "ayirt_edilemez", str(r_s["seri"][_kol]))
+sina("ortadaki blok ÖLÇÜM olarak sınıflanıyor",
+     r_ic["seri"][_kol]["hal"] == "olcum", str(r_ic["seri"][_kol]))
+
+# İKİSİ AYNI KOŞUDA BİRLİKTE OLABİLİR ve AYRI cümlelerdir. Tek cümlede
+# toplansalardı okur ölçülmüş bir yapıyı ölçülemeyen bir belirsizlikle aynı
+# ağırlıkta okurdu.
+_uyari_sifirla()
+Hy_iki = _sifir_blok(Hy_tam, _kol, 30, sag_uc=True)
+uy_i, r_i = metrik.sifir_olc(Hy_iki, veri.SIFIR_KAPSAMI, metrik.ESIK_SIFIR_BLOK)
+_topla(*uy_i, r_i.get("yapisal_cumle"), r_i.get("cumle"))
+sina("yapısal sıfır ile donma aynı koşuda AYRI cümlelerde",
+     bool(r_i.get("yapisal_cumle")) and bool(r_i.get("cumle"))
+     and r_i["yapisal_seri"] == 1 and r_i["asan_seri"] == 1,
+     f"yapısal {r_i.get('yapisal_seri')} · aşan {r_i.get('asan_seri')}")
+sina("donma uyarısı yapısal seriyi ADIYLA ANMIYOR",
+     bool(uy_i) and veri.okur_adi(_YAP) not in uy_i[0],
+     "; ".join(uy_i)[:160])
+
+# KAPSAM: denetim, dolar bacaklarına HİÇ BAKMIYORDU. Elle tutulan listede
+# yoklardı ve dördünden ikisi (dolar bacakları) yapısal sıfırdı — bakılmayan
+# yer geçen sınavla aynı görünür. Kapsam artık kataloğun kendisi.
+_bacaklar = {a for k in veri.KIRILIMLAR for a in k.parcalar}
+sina("sıfır denetimi kırılımların HER bacağını görüyor (dolar dahil)",
+     _bacaklar <= set(veri.SIFIR_KAPSAMI),
+     str(sorted(_bacaklar - set(veri.SIFIR_KAPSAMI))))
+sina("sıfır kapsamı KATALOGDAN türetiliyor, elle tutulan listeden değil",
+     set(veri.SIFIR_KAPSAMI) == set(veri.HAFTALIK) - set(veri.DENETIM_DISI),
+     f"{len(veri.SIFIR_KAPSAMI)} seri")
+sina("tazelik ile sıfır denetimi AYNI istisnayı taşıyor (tek gerekçe)",
+     set(veri.TAZELIK_SERI["haftalik"]) == set(veri.SIFIR_KAPSAMI))
 
 
 # ===========================================================================

@@ -101,7 +101,7 @@
  "kum_yontem_cumlesi": "Haftalık gözlemler cumaya damgalıdır ve bir önceki cumadan bu yana olan değişimi taşır. Ay içi toplam, o aya damgalı haftaların toplamıdır: ayın ilk haftası bir önceki ayın son günlerini de kapsar.",
  "taban_sozlugu": "Sayfada üç ayrı taban var: yurt içi yerleşiklerin toplam yabancı para mevduatı (TP.HPBITABLO2.10), yurt dışı yerleşikleri de içeren geniş toplam (TP.HPBITABLO4.1) ve aynı mevduatın Türk lirası karşılığı (TP.HPBITABLO2.6). Manşet birincisidir; ikincisi yalnız farkıyla birlikte anılır, dolarizasyon payı ise yalnız üçüncüsünden hesaplanır.",
  "kapsam_cumlesi": "Ölçüm 28 Haziran 2024 ile 28 Ağustos 2026 arasındaki 114 haftayı kapsıyor. Resmî ayrıştırma tablosu 5 Ocak 2024 tarihinde, stok tabloları 28 Haziran 2024 tarihinde başlıyor; aradaki 25 hafta için stok değişimi yok ve kümüle akım stoktan geriye uzatılmaz.",
- "sifir_cumlesi": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) son 139 haftanın tamamında tam sıfır. O haftalarda gerçekten hiç hareket olmamış olabilir; kaynağın bu bacağı yayımlamayı bırakmış olması da aynı görünür ve elimizdeki gözlemle ikisi ayırt edilemiyor. Sıfırlar olduğu gibi bırakıldı.",
+ "sifir_yapisal_cumlesi": "Parite etkisi, gerçek kişiler, dolar (TP.HPBITABLO5.14) · Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, dolar (TP.HPBITABLO5.19) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) serinin ilk gözleminden bu yana baştan sona tam sıfır — en kısası 139 hafta ve bir kez bile sıfırdan farklı bir değer yayımlanmamış. Bu bir ölçümdür, donmuş besleme değil — yayımı duran bir seri önce sıfırdan farklı değerler gösterir, sonra sıfıra düşer; burada öncesi yok. Bunların bir bölümünde sıfır zaten tanım gereğidir: dolar cinsi bir mevduatın dolar olarak ölçülen parite etkisi olamaz, çünkü ortada çapraz kur yoktur. Aynı kırılımların öteki bacakları (euro ve kıymetli maden) aynı dönemde hareket gösteriyor: en seyreğinde bile sıfırdan farklı gözlem sayısı 139 hafta, ölçülen toplam 139 hafta. Yani yayımlanan seride bu ölçü yalnız euro ve kıymetli maden bacaklarında sıfırdan farklı çıkıyor, dolar ve diğer para birimleri bacaklarında hiç.",
  "ayristirma": {
   "kaydirma": 0,
   "esik_mn": 25.0,
@@ -121,6 +121,7 @@
     "artik_bagil_son": 4.1937275674846186e-05,
     "asim_hafta": 0,
     "birim": "mn USD",
+    "yayim_taban_mn": 0.10000200000000001,
     "tutuyor": true
    },
    "tuzel": {
@@ -136,6 +137,7 @@
     "artik_bagil_son": 3.174181391195404e-06,
     "asim_hafta": 0,
     "birim": "mn USD",
+    "yayim_taban_mn": 0.10000200000000001,
     "tutuyor": true
    },
    "toplam": {
@@ -151,6 +153,7 @@
     "artik_bagil_son": 9.785456551370055e-06,
     "asim_hafta": 0,
     "birim": "mn USD",
+    "yayim_taban_mn": 0.10000200000000001,
     "tutuyor": true
    }
   },
@@ -260,75 +263,241 @@
  "sifir": {
   "esik_hafta": 26,
   "seri": {
-   "ar_gercek_diger": {
-    "n_gozlem": 139,
+   "stok_toplam": {
+    "n_gozlem": 114,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
+    "hal": "olcum",
     "asildi": false
    },
-   "ar_tuzel_diger": {
-    "n_gozlem": 139,
+   "stok_gercek": {
+    "n_gozlem": 114,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
+    "hal": "olcum",
     "asildi": false
    },
-   "pe_gercek_diger": {
-    "n_gozlem": 139,
-    "sag_uc_sifir_hafta": 139,
-    "ic_sifir_hafta": 0,
-    "asildi": true
-   },
-   "pe_tuzel_diger": {
-    "n_gozlem": 139,
-    "sag_uc_sifir_hafta": 139,
-    "ic_sifir_hafta": 0,
-    "asildi": true
-   },
-   "ar_gercek_maden": {
-    "n_gozlem": 139,
+   "stok_tuzel": {
+    "n_gozlem": 114,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
+    "hal": "olcum",
     "asildi": false
    },
-   "ar_tuzel_maden": {
-    "n_gozlem": 139,
+   "mevduat_yi": {
+    "n_gozlem": 114,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
+    "hal": "olcum",
     "asildi": false
    },
-   "pe_gercek_maden": {
-    "n_gozlem": 139,
+   "mevduat_tl": {
+    "n_gozlem": 114,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
+    "hal": "olcum",
     "asildi": false
    },
-   "pe_tuzel_maden": {
-    "n_gozlem": 139,
+   "mevduat_yp_tl": {
+    "n_gozlem": 114,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "genis_toplam": {
+    "n_gozlem": 114,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "k_gercek": {
+    "n_gozlem": 114,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
     "asildi": false
    },
    "maden_gercek": {
     "n_gozlem": 114,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "k_tuzel": {
+    "n_gozlem": 114,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
     "asildi": false
    },
    "maden_tuzel": {
     "n_gozlem": 114,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
+    "hal": "olcum",
     "asildi": false
    },
-   "maden_diger": {
-    "n_gozlem": 114,
+   "ar_toplam": {
+    "n_gozlem": 139,
     "sag_uc_sifir_hafta": 0,
     "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "ar_gercek": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "ar_gercek_usd": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "ar_gercek_eur": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "ar_gercek_diger": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "ar_gercek_maden": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "ar_tuzel": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "ar_tuzel_usd": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "ar_tuzel_eur": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "ar_tuzel_diger": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "ar_tuzel_maden": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "pe_toplam": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "pe_gercek": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "pe_gercek_usd": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 139,
+    "ic_sifir_hafta": 0,
+    "hal": "yapisal",
+    "asildi": true
+   },
+   "pe_gercek_eur": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "pe_gercek_diger": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 139,
+    "ic_sifir_hafta": 0,
+    "hal": "yapisal",
+    "asildi": true
+   },
+   "pe_gercek_maden": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "pe_tuzel": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "pe_tuzel_usd": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 139,
+    "ic_sifir_hafta": 0,
+    "hal": "yapisal",
+    "asildi": true
+   },
+   "pe_tuzel_eur": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
+    "asildi": false
+   },
+   "pe_tuzel_diger": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 139,
+    "ic_sifir_hafta": 0,
+    "hal": "yapisal",
+    "asildi": true
+   },
+   "pe_tuzel_maden": {
+    "n_gozlem": 139,
+    "sag_uc_sifir_hafta": 0,
+    "ic_sifir_hafta": 0,
+    "hal": "olcum",
     "asildi": false
    }
   },
-  "asan_seri": 2,
-  "cumle": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) son 139 haftanın tamamında tam sıfır. O haftalarda gerçekten hiç hareket olmamış olabilir; kaynağın bu bacağı yayımlamayı bırakmış olması da aynı görünür ve elimizdeki gözlemle ikisi ayırt edilemiyor. Sıfırlar olduğu gibi bırakıldı."
+  "asan_seri": 0,
+  "yapisal_seri": 4,
+  "yapisal_cumle": "Parite etkisi, gerçek kişiler, dolar (TP.HPBITABLO5.14) · Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, dolar (TP.HPBITABLO5.19) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) serinin ilk gözleminden bu yana baştan sona tam sıfır — en kısası 139 hafta ve bir kez bile sıfırdan farklı bir değer yayımlanmamış. Bu bir ölçümdür, donmuş besleme değil — yayımı duran bir seri önce sıfırdan farklı değerler gösterir, sonra sıfıra düşer; burada öncesi yok. Bunların bir bölümünde sıfır zaten tanım gereğidir: dolar cinsi bir mevduatın dolar olarak ölçülen parite etkisi olamaz, çünkü ortada çapraz kur yoktur. Aynı kırılımların öteki bacakları (euro ve kıymetli maden) aynı dönemde hareket gösteriyor: en seyreğinde bile sıfırdan farklı gözlem sayısı 139 hafta, ölçülen toplam 139 hafta. Yani yayımlanan seride bu ölçü yalnız euro ve kıymetli maden bacaklarında sıfırdan farklı çıkıyor, dolar ve diğer para birimleri bacaklarında hiç."
  },
  "dogrulama": {
   "kapsam": {
@@ -340,6 +509,7 @@
     "son_fark_mn": 0.0,
     "esik_mn": 2.0,
     "esik_bagil": 1e-05,
+    "yayim_taban_mn": 0.2,
     "asim_hafta": 0,
     "birim": "mn USD",
     "gecti": true
@@ -376,6 +546,7 @@
      "artik_bagil_son": 4.1937275674846186e-05,
      "asim_hafta": 0,
      "birim": "mn USD",
+     "yayim_taban_mn": 0.10000200000000001,
      "tutuyor": true
     },
     "tuzel": {
@@ -391,6 +562,7 @@
      "artik_bagil_son": 3.174181391195404e-06,
      "asim_hafta": 0,
      "birim": "mn USD",
+     "yayim_taban_mn": 0.10000200000000001,
      "tutuyor": true
     },
     "toplam": {
@@ -406,6 +578,7 @@
      "artik_bagil_son": 9.785456551370055e-06,
      "asim_hafta": 0,
      "birim": "mn USD",
+     "yayim_taban_mn": 0.10000200000000001,
      "tutuyor": true
     }
    },
@@ -474,75 +647,241 @@
   "sifir": {
    "esik_hafta": 26,
    "seri": {
-    "ar_gercek_diger": {
-     "n_gozlem": 139,
+    "stok_toplam": {
+     "n_gozlem": 114,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
+     "hal": "olcum",
      "asildi": false
     },
-    "ar_tuzel_diger": {
-     "n_gozlem": 139,
+    "stok_gercek": {
+     "n_gozlem": 114,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
+     "hal": "olcum",
      "asildi": false
     },
-    "pe_gercek_diger": {
-     "n_gozlem": 139,
-     "sag_uc_sifir_hafta": 139,
-     "ic_sifir_hafta": 0,
-     "asildi": true
-    },
-    "pe_tuzel_diger": {
-     "n_gozlem": 139,
-     "sag_uc_sifir_hafta": 139,
-     "ic_sifir_hafta": 0,
-     "asildi": true
-    },
-    "ar_gercek_maden": {
-     "n_gozlem": 139,
+    "stok_tuzel": {
+     "n_gozlem": 114,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
+     "hal": "olcum",
      "asildi": false
     },
-    "ar_tuzel_maden": {
-     "n_gozlem": 139,
+    "mevduat_yi": {
+     "n_gozlem": 114,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
+     "hal": "olcum",
      "asildi": false
     },
-    "pe_gercek_maden": {
-     "n_gozlem": 139,
+    "mevduat_tl": {
+     "n_gozlem": 114,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
+     "hal": "olcum",
      "asildi": false
     },
-    "pe_tuzel_maden": {
-     "n_gozlem": 139,
+    "mevduat_yp_tl": {
+     "n_gozlem": 114,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "genis_toplam": {
+     "n_gozlem": 114,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "k_gercek": {
+     "n_gozlem": 114,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
      "asildi": false
     },
     "maden_gercek": {
      "n_gozlem": 114,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "k_tuzel": {
+     "n_gozlem": 114,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
      "asildi": false
     },
     "maden_tuzel": {
      "n_gozlem": 114,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
+     "hal": "olcum",
      "asildi": false
     },
-    "maden_diger": {
-     "n_gozlem": 114,
+    "ar_toplam": {
+     "n_gozlem": 139,
      "sag_uc_sifir_hafta": 0,
      "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "ar_gercek": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "ar_gercek_usd": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "ar_gercek_eur": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "ar_gercek_diger": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "ar_gercek_maden": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "ar_tuzel": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "ar_tuzel_usd": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "ar_tuzel_eur": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "ar_tuzel_diger": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "ar_tuzel_maden": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "pe_toplam": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "pe_gercek": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "pe_gercek_usd": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 139,
+     "ic_sifir_hafta": 0,
+     "hal": "yapisal",
+     "asildi": true
+    },
+    "pe_gercek_eur": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "pe_gercek_diger": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 139,
+     "ic_sifir_hafta": 0,
+     "hal": "yapisal",
+     "asildi": true
+    },
+    "pe_gercek_maden": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "pe_tuzel": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "pe_tuzel_usd": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 139,
+     "ic_sifir_hafta": 0,
+     "hal": "yapisal",
+     "asildi": true
+    },
+    "pe_tuzel_eur": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
+     "asildi": false
+    },
+    "pe_tuzel_diger": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 139,
+     "ic_sifir_hafta": 0,
+     "hal": "yapisal",
+     "asildi": true
+    },
+    "pe_tuzel_maden": {
+     "n_gozlem": 139,
+     "sag_uc_sifir_hafta": 0,
+     "ic_sifir_hafta": 0,
+     "hal": "olcum",
      "asildi": false
     }
    },
-   "asan_seri": 2,
-   "cumle": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) son 139 haftanın tamamında tam sıfır. O haftalarda gerçekten hiç hareket olmamış olabilir; kaynağın bu bacağı yayımlamayı bırakmış olması da aynı görünür ve elimizdeki gözlemle ikisi ayırt edilemiyor. Sıfırlar olduğu gibi bırakıldı."
+   "asan_seri": 0,
+   "yapisal_seri": 4,
+   "yapisal_cumle": "Parite etkisi, gerçek kişiler, dolar (TP.HPBITABLO5.14) · Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, dolar (TP.HPBITABLO5.19) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) serinin ilk gözleminden bu yana baştan sona tam sıfır — en kısası 139 hafta ve bir kez bile sıfırdan farklı bir değer yayımlanmamış. Bu bir ölçümdür, donmuş besleme değil — yayımı duran bir seri önce sıfırdan farklı değerler gösterir, sonra sıfıra düşer; burada öncesi yok. Bunların bir bölümünde sıfır zaten tanım gereğidir: dolar cinsi bir mevduatın dolar olarak ölçülen parite etkisi olamaz, çünkü ortada çapraz kur yoktur. Aynı kırılımların öteki bacakları (euro ve kıymetli maden) aynı dönemde hareket gösteriyor: en seyreğinde bile sıfırdan farklı gözlem sayısı 139 hafta, ölçülen toplam 139 hafta. Yani yayımlanan seride bu ölçü yalnız euro ve kıymetli maden bacaklarında sıfırdan farklı çıkıyor, dolar ve diğer para birimleri bacaklarında hiç."
   },
   "ayrisma": {
    "n_hafta": 139,
@@ -572,8 +911,5 @@
   "tarihce_hafta": 52,
   "sifir_blok_hafta": 26
  },
- "uyarilar": [
-  "KİMLİK BOZUK: Kırılım tablosundaki tüzel kişi stoku ana tablodakiyle aynı (TP.HPBITABLO4.8 = TP.HPBITABLO2.12) — en büyük sapma 0,1 mn USD (%0,0001, 05.07.2024); eşik %0,0001. Kalem numaralandırması ya da birim değişmiş olabilir.",
-  "AYIRT EDİLEMİYOR: Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) son 139 haftanın tamamında tam sıfır. O haftalarda gerçekten hiç hareket olmamış olabilir; kaynağın bu bacağı yayımlamayı bırakmış olması da aynı görünür ve elimizdeki gözlemle ikisi ayırt edilemiyor. Sıfırlar olduğu gibi bırakıldı."
- ]
+ "uyarilar": []
 }
