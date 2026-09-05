@@ -53,5 +53,9 @@ jobs:
             echo "::error::TTO_EVDS_KEY tanımlı değil — keşif EVDS'e çıkamaz."
             exit 1
           fi
+      # `-u` ŞART. Python stdout'u tty OLMAYAN yere TAMPONLUYOR ve uzun bir
+      # keşifte bu, ilerlemenin HİÇ görünmemesi demek: 02.09'da yirmi dakikalık
+      # bir koşu tek satır yazmadan iptal edildi ve tamponla birlikte ölçülen
+      # her şey gitti. Ders CLAUDE.md'ye yazılmıştı ama araca konmamıştı.
       - name: Keşif
-        run: python "${{ inputs.betik }}" ${{ inputs.argumanlar }}
+        run: python -u "${{ inputs.betik }}" ${{ inputs.argumanlar }}
