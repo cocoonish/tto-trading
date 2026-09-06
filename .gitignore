@@ -58,3 +58,6 @@ Research/Al Brooks/
 # Finder/kopya artıkları
 * 2.json
 * 2.py
+
+# Yazı katmanının geçici yama dosyası — bültene uygulandıktan sonra işi biter
+yama.json

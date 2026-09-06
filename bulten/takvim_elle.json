@@ -27,6 +27,8 @@
    "olay": "TCMB PPK faiz kararı",
    "onem": 1,
    "kaynak": "TCMB 2026 Para Politikası metni, Ek 2",
+   "beklenti": "AA Finans anketi (25 ekonomist, 05.09.2026): 24'ü politika faizinin %37,00'de sabit kalmasını, biri 100 baz puan indirimle %36,00'ya inmesini bekliyor; medyan %37,00. Aynı ankette yıl sonu politika faizi medyanı %35,00, ilk indirimin medyan zamanlaması ekim 2026",
+   "beklenti_sayi": 37.0,
    "not": "Karar 14:00; özet 17 Eylül'de."
   },
   {

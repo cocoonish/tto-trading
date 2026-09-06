@@ -282,7 +282,13 @@ def _sayi_coz(m: str) -> tuple[float, int] | None:
 # Ölçülen büyüklüklerin metinde hangi sözcüklerle anıldığı. Hem atıf denetimi
 # (hareket anılmış mı) hem sayı denetimi (anılan sayı doğru mu) buna bakar.
 ANAHTAR_KELIME = {
-            "USD/TRY": ["usd try", "dolar kuru", "usdtry"],
+            # "dolar/TL" en doğal Türkçe yazım ve eşleştiricide KARŞILIĞI YOKTU:
+            # doğru yazılmış bir cümle ("dolar/TL haftalık %0,91 arttı") atıfsız
+            # görünüyordu. MOVE ve "ABD 10Y" ile aynı kusur ailesi — kural yazımı
+            # ile okur yazımının ayrışması. TL çaprazlarının üçü birden kapatıldı.
+            "USD/TRY": ["usd try", "dolar kuru", "usdtry", "dolar tl"],
+            "EUR/TRY": ["eur try", "eurotry", "euro tl", "euro kuru"],
+            "GBP/TRY": ["gbp try", "gbptry", "sterlin tl"],
             "BIST 100": ["bist"], "BIST 30": ["bist"], "BIST Bankacılık": ["bist", "banka"],
             "S&P 500": ["s p 500", "sp 500", "abd hisse", "wall"],
             "Nasdaq 100": ["nasdaq"], "Dow Jones": ["dow"], "Russell 2000": ["russell"],
