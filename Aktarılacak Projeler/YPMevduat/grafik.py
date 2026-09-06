@@ -749,6 +749,26 @@ def sekil_05(A: pd.DataFrame, o: dict, damga: str | None):
     """
     if not _olculdu(o, "kimlik_tarih") or _kol(A, "artik_toplam") is None:
         return None
+
+    # FİGÜR, KİMLİĞİN KURULABİLDİĞİ PENCEREYE KIRPILIR.
+    #
+    # Kimlik İKİ TABLODAN birden besleniyor ve tarihçe asimetrik: değişim
+    # tablosu 2014'te, stok tabloları 2024'te başlıyor. Artık ancak ikisinin
+    # ortak haftasında ölçülebilir; tolerans bandı ise yalnız arındırılmış
+    # değişim ile parite etkisinin brüt hareketinden türediği için ÖLÇÜLEMEYEN
+    # dönemde de hesaplanabiliyordu. Kırpılmadığında sonuç ölçüldü: alt panelin
+    # ekseni 2014'e açılıyor, artık izleri panelin sağ yüzde on yedisine
+    # sıkışıyor ve panelin geri kalanını tek başına tolerans bandı dolduruyor —
+    # okur, kimliğin on iki yıl boyunca sınandığını ve hep tuttuğunu görür.
+    # Oysa o dönemde kimlik HİÇ sınanmadı.
+    #
+    # Kural: bir figür, ÖLÇÜLEMEYEN bir dönemi çizmez. Kırpma pencereyi
+    # artığın kendisinden alır (bugünkü sıralamaya bakmaz), üst panel de aynı
+    # pencereye girer — üstteki kıyasın ("çubukların toplamı kesikli izi
+    # kapatıyor mu") sorusu da ancak stok bacağı varken sorulabilir.
+    _artik = A["artik_toplam"].dropna()
+    A = A.loc[_artik.index[0]:_artik.index[-1]] if len(_artik) else A
+
     fig = make_subplots(
         rows=2, cols=1, vertical_spacing=0.11,
         subplot_titles=(
@@ -783,9 +803,19 @@ def sekil_05(A: pd.DataFrame, o: dict, damga: str | None):
         "yayımlıyor. Üstteki panelde yığılı çubukların toplamı, kesikli izle "
         "çizilen stok değişimini kapatmalıdır; alttaki panel aradaki farkı "
         "gösterir.",
-        o.get("kimlik_cumlesi") or
-        ("Kimlik bu koşuda sınanamadı: iki tablonun ortak haftası yok. "
-         "Ölçülmemiş bir sınavın sonucu bildirilmez."),
+        # HÜKÜM, ÖLÇÜM VE TOLERANS ARTIK ÜÇ AYRI KAYNAKTAN BİRLEŞİYOR.
+        # Koşu kaydının cümlesi mekanikleşti (yalnız ölçümü bildiriyor); hüküm
+        # kendi anahtarında, toleransın iki bacağı ve pencere uzunluğu da
+        # öyle. Nüansı kuran yer BURASI — figürün gözden geçirilmiş alt
+        # yazısı — ve sayıları ölçümden çekiyor: bir gün eşik değişirse alt
+        # yazı kendiliğinden düzelir.
+        (o.get("kimlik_hukum") or "Kimlik bu koşuda sınanamadı.") + " "
+        + (o.get("kimlik_cumlesi") or
+           "Ölçülmemiş bir sınavın sonucu bildirilmez.")
+        + f" Ölçüm penceresi son {_sy(o, 'kimlik_pencere_hafta', 0)} hafta; "
+          f"tolerans, o haftanın brüt hareketinin "
+          f"{_yz(o, 'kimlik_esik_pay', 0)} kadarı ya da "
+          f"{_sy(o, 'kimlik_esik_mn', 1)} milyon dolar — hangisi büyükse.",
         f"Artığın son haftadaki değeri toplamda "
         f"{_sy(o, 'kimlik_artik_toplam_mn', 1)}, gerçek kişilerde "
         f"{_sy(o, 'kimlik_artik_gercek_mn', 1)}, tüzel kişilerde "
@@ -793,7 +823,9 @@ def sekil_05(A: pd.DataFrame, o: dict, damga: str | None):
         "izler toleransın iki yönünü gösteriyor.",
         "Bu şekil iki tablodan birden besleniyor ve tarihi, ikisinin en eski "
         "olanına bağlıdır: bir kıyas ancak her iki tarafın da ölçüldüğü güne "
-        "kadar kurulabilir.",
+        "kadar kurulabilir. Aynı sebeple şekil yalnız iki tablonun ORTAK "
+        "haftalarını çiziyor; değişim tablosunun tek başına uzandığı daha "
+        "eski dönemde kimlik sınanamaz ve o dönem burada gösterilmez.",
     ]
     if isinstance(kaydirma, int) and kaydirma != 0:
         alt.insert(3, "Değişim tablosunun haftası, stok tablosunun haftasıyla "
@@ -862,9 +894,20 @@ def sekil_06(D: pd.DataFrame, o: dict, damga: str | None):
         "TP.HPBITABLO2.6). Ham pay, sepet dolara karşı değer kazandığında "
         "hiçbir hesap değişmeden yükselir; arındırılmış pay bu hareketten "
         "temizlenmiştir.",
-        o.get("dol_cumlesi") or
-        ("Arındırılmış pay bu koşuda kurulamadı; şekilde yalnız ham pay "
-         "görünüyor."),
+        # ÜÇ PAY VE ÇIPA ARTIK ALT YAZIDA KURULUYOR. Koşu kaydının cümlesi
+        # yalnız iki ölçünün FARKINI bildiriyor; çıpadaki pay, son haftadaki
+        # ham pay ve arındırılmış pay kendi anahtarlarında duruyor — üstelik
+        # çıpadaki pay KENDİ saatiyle. Okur üçünü de burada yan yana görür.
+        # ÇIPANIN GÜNÜ OKUR YAZIMIYLA: ölçüm katmanının `dol_cipa` alanı ISO
+        # yazımdadır (makine kaydı) ve okura basılamaz; okur yazımı ayrı bir
+        # alanda duruyor ve biçim sözleşmesi tek yerden geliyor.
+        (f"Dolarizasyon payı {o.get('dol_cipa_etiket', '—')} çıpasında "
+         f"{_yz(o, 'dol_pay_cipa', 1)}, son haftada {_yz(o, 'dol_pay_ham', 1)}; "
+         f"aynı haftada arındırılmış pay {_yz(o, 'dol_pay_ar', 1)}. "
+         if o.get("dol_pay_ar") is not None else
+         "Arındırılmış pay bu koşuda kurulamadı; şekilde yalnız ham pay "
+         "görünüyor. ")
+        + (o.get("dol_cumlesi") or ""),
         "Arındırma için kur serisi kullanılmadı: yabancı para bacağı, resmî "
         "parite etkisinin çıpadan bu yana birikmiş toplamı stoktan düşülerek "
         "ölçeklendi. Oran birimsizdir ve kuru sadeleştirir. Çıpa her takvim "

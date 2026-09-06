@@ -75,7 +75,10 @@
  "kimlik_pencere_hafta": 52,
  "kimlik_artik_bagil": 0.003931282236601906,
  "kimlik_tutuyor": true,
- "kimlik_cumlesi": "Resmî ayrıştırma stok değişimini kapatıyor: son 52 haftada en büyük fark 5,8 milyon dolar. Tolerans, o haftanın brüt hareketinin %1'i ya da 25,0 milyon dolar — hangisi büyükse.",
+ "kimlik_hukum": "Resmî ayrıştırma stok değişimini kapatıyor.",
+ "kimlik_esik_mn": 25.0,
+ "kimlik_esik_pay": 1.0,
+ "kimlik_cumlesi": "Ölçülen pencerede resmî ayrıştırma ile stok değişimi arasındaki en büyük fark 5,8 milyon dolar.",
  "kum_ay_bas": "2026-08-07",
  "kum_ay_hafta": 4,
  "kum_ay_etiket": "Ağustos 2026",
@@ -89,7 +92,7 @@
  "dol_cipa": "2026-01-02",
  "dol_cipa_etiket": "2 Ocak 2026",
  "dol_pay_cipa": 38.34126140363322,
- "dol_cumlesi": "Dolarizasyon payı 2 Ocak 2026 çıpasında %38,3, son haftada %37,5. Resmî parite etkisinden arındırıldığında son haftadaki pay %37,5; iki ölçünün farkı 0,06 puan.",
+ "dol_cumlesi": "Dolarizasyon payının ham ölçüsü ile parite etkisinden arındırılmış ölçüsü son haftada 0,06 puan ayrışıyor.",
  "ayrisma_n_hafta": 139,
  "ayrisma_ters_hafta": 48,
  "ayrisma_ters_oran": 0.34532374100719426,
@@ -97,14 +100,50 @@
  "ayrisma_ters_oran_ikinci_yari": 0.37142857142857144,
  "ayrisma_korel": 0.2768037615594861,
  "ayrisma_korel_son_pencere": -0.00343669254379202,
- "ayrisma_cumlesi": "Gerçek ve tüzel kişilerin arındırılmış haftalık akımları ölçülen 139 haftada %34,5 oranında ters yönde hareket etti; örneklemin ilk yarısında %31,9, ikinci yarısında %37,1. İki akımın korelasyonu 0,28.",
- "kum_yontem_cumlesi": "Haftalık gözlemler cumaya damgalıdır ve bir önceki cumadan bu yana olan değişimi taşır. Ay içi toplam, o aya damgalı haftaların toplamıdır: ayın ilk haftası bir önceki ayın son günlerini de kapsar.",
- "taban_sozlugu": "Sayfada üç ayrı taban var: yurt içi yerleşiklerin toplam yabancı para mevduatı (TP.HPBITABLO2.10), yurt dışı yerleşikleri de içeren geniş toplam (TP.HPBITABLO4.1) ve aynı mevduatın Türk lirası karşılığı (TP.HPBITABLO2.6). Manşet birincisidir; ikincisi yalnız farkıyla birlikte anılır, dolarizasyon payı ise yalnız üçüncüsünden hesaplanır.",
- "kapsam_cumlesi": "Bu sayfada iki ayrı pencere var. Resmî ayrıştırma tablosundan ölçülen haftalar 5 Ocak 2024 tarihinde başlıyor: haftalık arındırılmış akım, parite etkisi ve kümüle toplamlar 139 haftayı kapsıyor. Stok tablolarından ölçülen haftalar 28 Haziran 2024 tarihinde başlıyor; stokun haftalık değişimi ve ikisinin birbirini kapatıp kapatmadığı ancak her iki tablonun birden ölçüldüğü 114 haftada kurulabiliyor. Aradaki 25 hafta için stok gözlemi yok: o haftalarda akım ölçülüyor, stok değişimi ölçülmüyor ve stok akımdan geriye uzatılmıyor.",
- "sifir_tanim_cumlesi": "Parite etkisi, gerçek kişiler, dolar (TP.HPBITABLO5.14) · Parite etkisi, tüzel kişiler, dolar (TP.HPBITABLO5.19) serisinde sıfır TANIM GEREĞİDİR: dolar cinsi bir mevduatın dolar olarak ölçülen parite etkisi olamaz, çünkü ortada çapraz kur yoktur. Bu hüküm gözlem sayısına dayanmıyor — ortada ölçülecek bir büyüklük yok. Bunlardan Parite etkisi, tüzel kişiler, dolar (TP.HPBITABLO5.19) serisinin kaynakta ne zaman yayımlanmaya başladığı ölçülmedi; tanım gereği sıfır hükmü buna dayanmıyor, elimizdeki haftaların tamamı da onunla uyumlu.",
- "sifir_dayanaksiz_cumlesi": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) serisi elimizdeki 139 haftanın tamamında tam sıfır ve bir kez bile sıfırdan farklı bir değer yayımlanmamış. Donmuş besleme bunu açıklamıyor: yayımı duran bir seri önce sıfırdan farklı değerler gösterir, sonra sıfıra düşer — burada öncesi yok. Aynı kırılımların öteki bacakları (euro ve kıymetli maden) aynı dönemde hareket gösteriyor: ölçülen 139 haftanın tamamında sıfırdan farklı. Aynı kesenin arındırılmış akımı ise hareketli: Arındırılmış değişim, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.5) · Arındırılmış değişim, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.10) toplamı ölçülen 139 haftanın tamamında sıfırdan farklı. Ölçülenler birlikte şunu söylüyor: sıfır, hareketin yokluğu değil ÖLÇÜNÜN yokluğu olabilir ve ikisi elimizdeki gözlemle ayırt edilemez. Kaynağın bu bacağı nasıl hesapladığı ölçülmedi; yöntem belgesi okunmadı ve okunmadan kaynak adına bir cümle kurulmaz. Bunun manşete dokunan bir sonucu var: parite etkisi hiç yayımlanmayan bir bacakta arındırılmış akım da parite etkisinden gerçekte arındırılmamış olabilir ve o bacak manşet akımın içindedir. Arındırmanın ne kadar eksik kaldığı ölçülemez — ölçülemeyen şeyin kendisi odur; ölçülebilen şey etkilenen dilimin büyüklüğüdür. Bu kesenin haftalık akımının mutlak medyanı 98,5 milyon dolar, manşet akımınki 1.238,0 milyon dolar; haftalık oranın medyanı %8,1, kesenin en büyük haftası 573,7 milyon dolar. Manşet bu yüzden geçersiz olmuyor, ama bu dilim kadar bir belirsizlik taşıdığı bilinerek okunur.",
- "sifir_hukumsuz_cumlesi": "Başlangıcı ölçülmediği için hüküm kurulamayan bir sıfır bu koşuda yok: ölçülen 33 serinin baştan sona sıfır olanlarının hepsinde ya sıfırın kayda geçmiş bir gerekçesi var ya da kaynağın ilk gözlemi ölçülmüş.",
- "sifir_cumlesi": "Sağ ucunda 26 haftadan uzun kesintisiz sıfır taşıyan bir bacak bu koşuda yok: ölçülen 33 serinin hiçbirinde yayımın durmuş olabileceğini düşündüren bir blok bulunmadı.",
+ "ayrisma_cumlesi": "Gerçek ve tüzel kişilerin arındırılmış haftalık akımlarının ters yönde hareket ettiği haftaların payı %34,5.",
+ "taban_manset_kod": "TP.HPBITABLO2.10",
+ "taban_genis_kod": "TP.HPBITABLO4.1",
+ "taban_lira_kod": "TP.HPBITABLO2.6",
+ "kapsam_cumlesi": "Stok tabloları, resmî ayrıştırma tablosundan 25 hafta sonra başlıyor.",
+ "kapsam_akim_bas": "2024-01-05",
+ "kapsam_stok_bas": "2024-06-28",
+ "kapsam_ortak_bas": "2024-06-28",
+ "kapsam_akim_hafta": 139,
+ "kapsam_ortak_hafta": 114,
+ "kapsam_asimetri_hafta": 25,
+ "sifir_tanim_cumlesi": "Parite etkisi, gerçek kişiler, dolar (TP.HPBITABLO5.14) · Parite etkisi, tüzel kişiler, dolar (TP.HPBITABLO5.19) serisinde sıfır TANIM GEREĞİDİR: dolar cinsi bir mevduatın dolar olarak ölçülen parite etkisi olamaz, çünkü ortada çapraz kur yoktur.",
+ "sifir_dayanaksiz_cumlesi": "Bu koşuda bu sınıfa giren bacak yok.",
+ "sifir_hukumsuz_cumlesi": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) serisi elimizdeki 139 haftanın tamamında tam sıfır; bu sıfırın serinin başından beri sürüp sürmediği bu koşuda ölçülmedi.",
+ "sifir_cumlesi": "Bu koşuda bu sınıfa giren bacak yok.",
+ "sifir_olculen_seri": 33,
+ "sifir_esik_hafta": 26,
+ "sifir_tanim_seri": 2,
+ "sifir_dayanaksiz_seri": 0,
+ "sifir_hukumsuz_seri": 2,
+ "sifir_ayirt_edilemez_seri": 0,
+ "sifir_celiskili_seri": 0,
+ "sifir_tam_sifir_seri": 4,
+ "sifir_ayirt_edilemez_maks_hafta": 0,
+ "sifir_tanim_bas_kanitsiz_seri": 1,
+ "sifir_tanim_bas_kirpik_seri": 1,
+ "sifir_hukumsuz_bas_kanitsiz_seri": 0,
+ "sifir_hukumsuz_bas_kirpik_seri": 2,
+ "sifir_hukumsuz_hafta": 139,
+ "sifir_dayanaksiz_hafta": null,
+ "sifir_dayanaksiz_kiyas_dolu_min_hafta": null,
+ "sifir_dayanaksiz_kiyas_kapsam_min_hafta": null,
+ "sifir_dayanaksiz_kese_zayif_pay": null,
+ "sifir_dayanaksiz_kese_zayif_hafta": null,
+ "sifir_dayanaksiz_kese_zayif_sifirdisi_hafta": null,
+ "sifir_dayanaksiz_dilim_hafta": null,
+ "sifir_dayanaksiz_dilim_medyan_mn": null,
+ "sifir_dayanaksiz_dilim_maks_mn": null,
+ "sifir_dayanaksiz_manset_medyan_mn": null,
+ "sifir_dayanaksiz_dilim_manset_pay": null,
+ "sifir_dayanaksiz_kiyas_oteki_seri": 0,
+ "sifir_dayanaksiz_kese_seri": 0,
+ "sifir_dayanaksiz_kese_hareketli_seri": 0,
+ "sifir_dayanaksiz_kese_durgun_seri": 0,
  "ayristirma": {
   "kaydirma": 0,
   "esik_mn": 25.0,
@@ -167,7 +206,7 @@
   "artik_bagil_maks": 0.003931282236601906,
   "artik_bagil_pencere_maks": 0.003931282236601906,
   "n_hafta": 113,
-  "cumle": "Resmî ayrıştırma stok değişimini kapatıyor: son 52 haftada en büyük fark 5,8 milyon dolar. Tolerans, o haftanın brüt hareketinin %1'i ya da 25,0 milyon dolar — hangisi büyükse."
+  "cumle": "Ölçülen pencerede resmî ayrıştırma ile stok değişimi arasındaki en büyük fark 5,8 milyon dolar."
  },
  "kumule": {
   "son_hafta": "2026-08-28",
@@ -192,7 +231,7 @@
   "pe_kum_son_mn": 631.197719,
   "son_hafta": "2026-08-28",
   "yontem": "arındırılmış pay, resmî parite etkisinin çıpadan bu yana birikmiş toplamı stoktan düşülerek kuruldu; kur serisi kullanılmadı",
-  "cumle": "Dolarizasyon payı 2 Ocak 2026 çıpasında %38,3, son haftada %37,5. Resmî parite etkisinden arındırıldığında son haftadaki pay %37,5; iki ölçünün farkı 0,06 puan."
+  "cumle": "Dolarizasyon payının ham ölçüsü ile parite etkisinden arındırılmış ölçüsü son haftada 0,06 puan ayrışıyor."
  },
  "ayrisma": {
   "n_hafta": 139,
@@ -265,7 +304,7 @@
  },
  "sifir": {
   "esik_hafta": 26,
-  "bas_olculen_seri": 12,
+  "bas_olculen_seri": 2,
   "seri": {
    "stok_toplam": {
     "n_gozlem": 114,
@@ -384,7 +423,7 @@
     "ic_sifir_hafta": 0,
     "hal": "olcum",
     "tanim_gerekcesi": false,
-    "bas_olculdu": true,
+    "bas_olculdu": false,
     "asildi": false
    },
    "ar_gercek": {
@@ -394,7 +433,7 @@
     "ic_sifir_hafta": 0,
     "hal": "olcum",
     "tanim_gerekcesi": false,
-    "bas_olculdu": true,
+    "bas_olculdu": false,
     "asildi": false
    },
    "ar_gercek_usd": {
@@ -404,7 +443,7 @@
     "ic_sifir_hafta": 0,
     "hal": "olcum",
     "tanim_gerekcesi": false,
-    "bas_olculdu": true,
+    "bas_olculdu": false,
     "asildi": false
    },
    "ar_gercek_eur": {
@@ -434,7 +473,7 @@
     "ic_sifir_hafta": 0,
     "hal": "olcum",
     "tanim_gerekcesi": false,
-    "bas_olculdu": true,
+    "bas_olculdu": false,
     "asildi": false
    },
    "ar_tuzel": {
@@ -504,7 +543,7 @@
     "ic_sifir_hafta": 0,
     "hal": "olcum",
     "tanim_gerekcesi": false,
-    "bas_olculdu": true,
+    "bas_olculdu": false,
     "asildi": false
    },
    "pe_gercek_usd": {
@@ -514,7 +553,7 @@
     "ic_sifir_hafta": 0,
     "hal": "tanim",
     "tanim_gerekcesi": true,
-    "bas_olculdu": true,
+    "bas_olculdu": false,
     "asildi": true
    },
    "pe_gercek_eur": {
@@ -524,7 +563,7 @@
     "ic_sifir_hafta": 0,
     "hal": "olcum",
     "tanim_gerekcesi": false,
-    "bas_olculdu": true,
+    "bas_olculdu": false,
     "asildi": false
    },
    "pe_gercek_diger": {
@@ -532,9 +571,9 @@
     "sifirdisi_hafta": 0,
     "sag_uc_sifir_hafta": 139,
     "ic_sifir_hafta": 0,
-    "hal": "dayanaksiz",
+    "hal": "bas_olculmedi",
     "tanim_gerekcesi": false,
-    "bas_olculdu": true,
+    "bas_olculdu": false,
     "asildi": true
    },
    "pe_gercek_maden": {
@@ -544,7 +583,7 @@
     "ic_sifir_hafta": 0,
     "hal": "olcum",
     "tanim_gerekcesi": false,
-    "bas_olculdu": true,
+    "bas_olculdu": false,
     "asildi": false
    },
    "pe_tuzel": {
@@ -582,9 +621,9 @@
     "sifirdisi_hafta": 0,
     "sag_uc_sifir_hafta": 139,
     "ic_sifir_hafta": 0,
-    "hal": "dayanaksiz",
+    "hal": "bas_olculmedi",
     "tanim_gerekcesi": false,
-    "bas_olculdu": true,
+    "bas_olculdu": false,
     "asildi": true
    },
    "pe_tuzel_maden": {
@@ -601,37 +640,47 @@
   "olculen_seri": 33,
   "asan_seri": 0,
   "tanim_seri": 2,
-  "dayanaksiz_seri": 2,
-  "hukumsuz_seri": 0,
+  "dayanaksiz_seri": 0,
+  "hukumsuz_seri": 2,
   "celiskili_seri": 0,
-  "tanim_cumle": "Parite etkisi, gerçek kişiler, dolar (TP.HPBITABLO5.14) · Parite etkisi, tüzel kişiler, dolar (TP.HPBITABLO5.19) serisinde sıfır TANIM GEREĞİDİR: dolar cinsi bir mevduatın dolar olarak ölçülen parite etkisi olamaz, çünkü ortada çapraz kur yoktur. Bu hüküm gözlem sayısına dayanmıyor — ortada ölçülecek bir büyüklük yok. Bunlardan Parite etkisi, tüzel kişiler, dolar (TP.HPBITABLO5.19) serisinin kaynakta ne zaman yayımlanmaya başladığı ölçülmedi; tanım gereği sıfır hükmü buna dayanmıyor, elimizdeki haftaların tamamı da onunla uyumlu.",
-  "dayanaksiz_cumle": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) serisi elimizdeki 139 haftanın tamamında tam sıfır ve bir kez bile sıfırdan farklı bir değer yayımlanmamış. Donmuş besleme bunu açıklamıyor: yayımı duran bir seri önce sıfırdan farklı değerler gösterir, sonra sıfıra düşer — burada öncesi yok. Aynı kırılımların öteki bacakları (euro ve kıymetli maden) aynı dönemde hareket gösteriyor: ölçülen 139 haftanın tamamında sıfırdan farklı. Aynı kesenin arındırılmış akımı ise hareketli: Arındırılmış değişim, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.5) · Arındırılmış değişim, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.10) toplamı ölçülen 139 haftanın tamamında sıfırdan farklı. Ölçülenler birlikte şunu söylüyor: sıfır, hareketin yokluğu değil ÖLÇÜNÜN yokluğu olabilir ve ikisi elimizdeki gözlemle ayırt edilemez. Kaynağın bu bacağı nasıl hesapladığı ölçülmedi; yöntem belgesi okunmadı ve okunmadan kaynak adına bir cümle kurulmaz. Bunun manşete dokunan bir sonucu var: parite etkisi hiç yayımlanmayan bir bacakta arındırılmış akım da parite etkisinden gerçekte arındırılmamış olabilir ve o bacak manşet akımın içindedir. Arındırmanın ne kadar eksik kaldığı ölçülemez — ölçülemeyen şeyin kendisi odur; ölçülebilen şey etkilenen dilimin büyüklüğüdür. Bu kesenin haftalık akımının mutlak medyanı 98,5 milyon dolar, manşet akımınki 1.238,0 milyon dolar; haftalık oranın medyanı %8,1, kesenin en büyük haftası 573,7 milyon dolar. Manşet bu yüzden geçersiz olmuyor, ama bu dilim kadar bir belirsizlik taşıdığı bilinerek okunur.",
+  "tanim_cumle": "Parite etkisi, gerçek kişiler, dolar (TP.HPBITABLO5.14) · Parite etkisi, tüzel kişiler, dolar (TP.HPBITABLO5.19) serisinde sıfır TANIM GEREĞİDİR: dolar cinsi bir mevduatın dolar olarak ölçülen parite etkisi olamaz, çünkü ortada çapraz kur yoktur.",
+  "tanim_tani": {
+   "seri": [
+    "pe_gercek_usd",
+    "pe_tuzel_usd"
+   ],
+   "bas_kanitsiz_seri": 1,
+   "bas_kirpik_seri": 1,
+   "bas_kanitsiz": [
+    "pe_tuzel_usd"
+   ],
+   "bas_kirpik": [
+    "pe_gercek_usd"
+   ]
+  },
+  "dayanaksiz_cumle": "Bu koşuda bu sınıfa giren bacak yok.",
   "dayanaksiz": {
-   "hafta": 139,
+   "seri": [],
+   "hafta": null
+  },
+  "hukumsuz_cumle": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) serisi elimizdeki 139 haftanın tamamında tam sıfır; bu sıfırın serinin başından beri sürüp sürmediği bu koşuda ölçülmedi.",
+  "hukumsuz_tani": {
    "seri": [
     "pe_gercek_diger",
     "pe_tuzel_diger"
    ],
-   "kiyas_belirsiz_kisa_ad": [],
-   "kiyas_oteki_seri": [
-    "pe_gercek_eur",
-    "pe_gercek_maden",
-    "pe_tuzel_eur",
-    "pe_tuzel_maden"
-   ],
-   "kese_seri": [
-    "ar_gercek_diger",
-    "ar_tuzel_diger"
-   ],
-   "kese_hafta": 139,
-   "kese_sifirdisi_hafta": 139,
-   "kese_medyan_mn": 98.47800000000001,
-   "kese_maks_mn": 573.675,
-   "manset_medyan_mn": 1237.998118,
-   "kese_manset_oran_medyan_pay": 8.11947071054271
+   "hafta": 139,
+   "bas_kanitsiz_seri": 0,
+   "bas_kirpik_seri": 2,
+   "bas_kanitsiz": [],
+   "bas_kirpik": [
+    "pe_gercek_diger",
+    "pe_tuzel_diger"
+   ]
   },
-  "hukumsuz_cumle": "Başlangıcı ölçülmediği için hüküm kurulamayan bir sıfır bu koşuda yok: ölçülen 33 serinin baştan sona sıfır olanlarının hepsinde ya sıfırın kayda geçmiş bir gerekçesi var ya da kaynağın ilk gözlemi ölçülmüş.",
-  "cumle": "Sağ ucunda 26 haftadan uzun kesintisiz sıfır taşıyan bir bacak bu koşuda yok: ölçülen 33 serinin hiçbirinde yayımın durmuş olabileceğini düşündüren bir blok bulunmadı."
+  "tam_sifir_seri": 4,
+  "ayirt_edilemez_maks_hafta": 0,
+  "cumle": "Bu koşuda bu sınıfa giren bacak yok."
  },
  "dogrulama": {
   "kapsam": {
@@ -728,7 +777,7 @@
    "artik_bagil_maks": 0.003931282236601906,
    "artik_bagil_pencere_maks": 0.003931282236601906,
    "n_hafta": 113,
-   "cumle": "Resmî ayrıştırma stok değişimini kapatıyor: son 52 haftada en büyük fark 5,8 milyon dolar. Tolerans, o haftanın brüt hareketinin %1'i ya da 25,0 milyon dolar — hangisi büyükse."
+   "cumle": "Ölçülen pencerede resmî ayrıştırma ile stok değişimi arasındaki en büyük fark 5,8 milyon dolar."
   },
   "hizalama": {
    "aday": {
@@ -785,7 +834,7 @@
   },
   "sifir": {
    "esik_hafta": 26,
-   "bas_olculen_seri": 12,
+   "bas_olculen_seri": 2,
    "seri": {
     "stok_toplam": {
      "n_gozlem": 114,
@@ -904,7 +953,7 @@
      "ic_sifir_hafta": 0,
      "hal": "olcum",
      "tanim_gerekcesi": false,
-     "bas_olculdu": true,
+     "bas_olculdu": false,
      "asildi": false
     },
     "ar_gercek": {
@@ -914,7 +963,7 @@
      "ic_sifir_hafta": 0,
      "hal": "olcum",
      "tanim_gerekcesi": false,
-     "bas_olculdu": true,
+     "bas_olculdu": false,
      "asildi": false
     },
     "ar_gercek_usd": {
@@ -924,7 +973,7 @@
      "ic_sifir_hafta": 0,
      "hal": "olcum",
      "tanim_gerekcesi": false,
-     "bas_olculdu": true,
+     "bas_olculdu": false,
      "asildi": false
     },
     "ar_gercek_eur": {
@@ -954,7 +1003,7 @@
      "ic_sifir_hafta": 0,
      "hal": "olcum",
      "tanim_gerekcesi": false,
-     "bas_olculdu": true,
+     "bas_olculdu": false,
      "asildi": false
     },
     "ar_tuzel": {
@@ -1024,7 +1073,7 @@
      "ic_sifir_hafta": 0,
      "hal": "olcum",
      "tanim_gerekcesi": false,
-     "bas_olculdu": true,
+     "bas_olculdu": false,
      "asildi": false
     },
     "pe_gercek_usd": {
@@ -1034,7 +1083,7 @@
      "ic_sifir_hafta": 0,
      "hal": "tanim",
      "tanim_gerekcesi": true,
-     "bas_olculdu": true,
+     "bas_olculdu": false,
      "asildi": true
     },
     "pe_gercek_eur": {
@@ -1044,7 +1093,7 @@
      "ic_sifir_hafta": 0,
      "hal": "olcum",
      "tanim_gerekcesi": false,
-     "bas_olculdu": true,
+     "bas_olculdu": false,
      "asildi": false
     },
     "pe_gercek_diger": {
@@ -1052,9 +1101,9 @@
      "sifirdisi_hafta": 0,
      "sag_uc_sifir_hafta": 139,
      "ic_sifir_hafta": 0,
-     "hal": "dayanaksiz",
+     "hal": "bas_olculmedi",
      "tanim_gerekcesi": false,
-     "bas_olculdu": true,
+     "bas_olculdu": false,
      "asildi": true
     },
     "pe_gercek_maden": {
@@ -1064,7 +1113,7 @@
      "ic_sifir_hafta": 0,
      "hal": "olcum",
      "tanim_gerekcesi": false,
-     "bas_olculdu": true,
+     "bas_olculdu": false,
      "asildi": false
     },
     "pe_tuzel": {
@@ -1102,9 +1151,9 @@
      "sifirdisi_hafta": 0,
      "sag_uc_sifir_hafta": 139,
      "ic_sifir_hafta": 0,
-     "hal": "dayanaksiz",
+     "hal": "bas_olculmedi",
      "tanim_gerekcesi": false,
-     "bas_olculdu": true,
+     "bas_olculdu": false,
      "asildi": true
     },
     "pe_tuzel_maden": {
@@ -1121,37 +1170,47 @@
    "olculen_seri": 33,
    "asan_seri": 0,
    "tanim_seri": 2,
-   "dayanaksiz_seri": 2,
-   "hukumsuz_seri": 0,
+   "dayanaksiz_seri": 0,
+   "hukumsuz_seri": 2,
    "celiskili_seri": 0,
-   "tanim_cumle": "Parite etkisi, gerçek kişiler, dolar (TP.HPBITABLO5.14) · Parite etkisi, tüzel kişiler, dolar (TP.HPBITABLO5.19) serisinde sıfır TANIM GEREĞİDİR: dolar cinsi bir mevduatın dolar olarak ölçülen parite etkisi olamaz, çünkü ortada çapraz kur yoktur. Bu hüküm gözlem sayısına dayanmıyor — ortada ölçülecek bir büyüklük yok. Bunlardan Parite etkisi, tüzel kişiler, dolar (TP.HPBITABLO5.19) serisinin kaynakta ne zaman yayımlanmaya başladığı ölçülmedi; tanım gereği sıfır hükmü buna dayanmıyor, elimizdeki haftaların tamamı da onunla uyumlu.",
-   "dayanaksiz_cumle": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) serisi elimizdeki 139 haftanın tamamında tam sıfır ve bir kez bile sıfırdan farklı bir değer yayımlanmamış. Donmuş besleme bunu açıklamıyor: yayımı duran bir seri önce sıfırdan farklı değerler gösterir, sonra sıfıra düşer — burada öncesi yok. Aynı kırılımların öteki bacakları (euro ve kıymetli maden) aynı dönemde hareket gösteriyor: ölçülen 139 haftanın tamamında sıfırdan farklı. Aynı kesenin arındırılmış akımı ise hareketli: Arındırılmış değişim, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.5) · Arındırılmış değişim, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.10) toplamı ölçülen 139 haftanın tamamında sıfırdan farklı. Ölçülenler birlikte şunu söylüyor: sıfır, hareketin yokluğu değil ÖLÇÜNÜN yokluğu olabilir ve ikisi elimizdeki gözlemle ayırt edilemez. Kaynağın bu bacağı nasıl hesapladığı ölçülmedi; yöntem belgesi okunmadı ve okunmadan kaynak adına bir cümle kurulmaz. Bunun manşete dokunan bir sonucu var: parite etkisi hiç yayımlanmayan bir bacakta arındırılmış akım da parite etkisinden gerçekte arındırılmamış olabilir ve o bacak manşet akımın içindedir. Arındırmanın ne kadar eksik kaldığı ölçülemez — ölçülemeyen şeyin kendisi odur; ölçülebilen şey etkilenen dilimin büyüklüğüdür. Bu kesenin haftalık akımının mutlak medyanı 98,5 milyon dolar, manşet akımınki 1.238,0 milyon dolar; haftalık oranın medyanı %8,1, kesenin en büyük haftası 573,7 milyon dolar. Manşet bu yüzden geçersiz olmuyor, ama bu dilim kadar bir belirsizlik taşıdığı bilinerek okunur.",
+   "tanim_cumle": "Parite etkisi, gerçek kişiler, dolar (TP.HPBITABLO5.14) · Parite etkisi, tüzel kişiler, dolar (TP.HPBITABLO5.19) serisinde sıfır TANIM GEREĞİDİR: dolar cinsi bir mevduatın dolar olarak ölçülen parite etkisi olamaz, çünkü ortada çapraz kur yoktur.",
+   "tanim_tani": {
+    "seri": [
+     "pe_gercek_usd",
+     "pe_tuzel_usd"
+    ],
+    "bas_kanitsiz_seri": 1,
+    "bas_kirpik_seri": 1,
+    "bas_kanitsiz": [
+     "pe_tuzel_usd"
+    ],
+    "bas_kirpik": [
+     "pe_gercek_usd"
+    ]
+   },
+   "dayanaksiz_cumle": "Bu koşuda bu sınıfa giren bacak yok.",
    "dayanaksiz": {
-    "hafta": 139,
+    "seri": [],
+    "hafta": null
+   },
+   "hukumsuz_cumle": "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16) · Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21) serisi elimizdeki 139 haftanın tamamında tam sıfır; bu sıfırın serinin başından beri sürüp sürmediği bu koşuda ölçülmedi.",
+   "hukumsuz_tani": {
     "seri": [
      "pe_gercek_diger",
      "pe_tuzel_diger"
     ],
-    "kiyas_belirsiz_kisa_ad": [],
-    "kiyas_oteki_seri": [
-     "pe_gercek_eur",
-     "pe_gercek_maden",
-     "pe_tuzel_eur",
-     "pe_tuzel_maden"
-    ],
-    "kese_seri": [
-     "ar_gercek_diger",
-     "ar_tuzel_diger"
-    ],
-    "kese_hafta": 139,
-    "kese_sifirdisi_hafta": 139,
-    "kese_medyan_mn": 98.47800000000001,
-    "kese_maks_mn": 573.675,
-    "manset_medyan_mn": 1237.998118,
-    "kese_manset_oran_medyan_pay": 8.11947071054271
+    "hafta": 139,
+    "bas_kanitsiz_seri": 0,
+    "bas_kirpik_seri": 2,
+    "bas_kanitsiz": [],
+    "bas_kirpik": [
+     "pe_gercek_diger",
+     "pe_tuzel_diger"
+    ]
    },
-   "hukumsuz_cumle": "Başlangıcı ölçülmediği için hüküm kurulamayan bir sıfır bu koşuda yok: ölçülen 33 serinin baştan sona sıfır olanlarının hepsinde ya sıfırın kayda geçmiş bir gerekçesi var ya da kaynağın ilk gözlemi ölçülmüş.",
-   "cumle": "Sağ ucunda 26 haftadan uzun kesintisiz sıfır taşıyan bir bacak bu koşuda yok: ölçülen 33 serinin hiçbirinde yayımın durmuş olabileceğini düşündüren bir blok bulunmadı."
+   "tam_sifir_seri": 4,
+   "ayirt_edilemez_maks_hafta": 0,
+   "cumle": "Bu koşuda bu sınıfa giren bacak yok."
   },
   "ayrisma": {
    "n_hafta": 139,
@@ -1189,5 +1248,13 @@
   "tarihce_hafta": 52,
   "sifir_blok_hafta": 26
  },
- "uyarilar": []
+ "uyarilar": [
+  "KAPSAM: 22 seri bu koşuda kaynağın yayımladığı ilk gözlemden geride başlıyor; en uzun eksik Arındırılmış değişim, toplam (TP.HPBITABLO5.1) serisinde (28.02.2014 yerine 05.01.2024). Tarihçenin başı bu koşuda alınamadı."
+ ],
+ "cerceve_imza": {
+  "satir": 139,
+  "sutun": 34,
+  "ilk": "2024-01-05",
+  "son": "2026-08-28"
+ }
 }

@@ -343,22 +343,30 @@ HATLAR: list[Hat] = [
         # üçüncü bir hâli — kaynağın o bacağı hiç HESAPLAMIYOR olmasını —
         # elemiyor. Dolar bacaklarında sıfır TANIM GEREĞİDİR (doların dolara
         # karşı çaprazı yoktur) ve orada "ölçümdür" doğru. Dolar DIŞI
-        # bacaklarda dayanak YOK: kese canlı (arındırılmış akımı 139 haftanın
-        # 139'unda sıfırdan farklı, mutlak medyanı 98,5 milyon dolar) ama
-        # parite etkisi tam sıfır — oysa hareketli bir dolar dışı kesenin
-        # dolara karşı parite etkisi, çapraz kur kımıldadığı sürece sıfır
-        # olamaz. Orada kurulabilecek en güçlü cümle şudur: sıfır, hareketin
-        # yokluğu değil ÖLÇÜNÜN yokluğu olabilir ve ikisi elimizdeki gözlemle
-        # ayırt edilemez. "TCMB şöyle hesaplıyor" DENMEZ — yöntem belgesi
-        # okunmadı.
+        # bacaklarda dayanak YOK: keseler canlı (arındırılmış akımları
+        # haftadan haftaya hareket ediyor) ama parite etkisi tam sıfır — oysa
+        # hareketli bir dolar dışı kesenin dolara karşı parite etkisi, çapraz
+        # kur kımıldadığı sürece sıfır olamaz. Orada kurulabilecek en güçlü
+        # cümle şudur: sıfır, hareketin yokluğu değil ÖLÇÜNÜN yokluğu olabilir
+        # ve ikisi elimizdeki gözlemle ayırt edilemez. "TCMB şöyle hesaplıyor"
+        # DENMEZ — yöntem belgesi okunmadı.
+        # KESELER TEK TEK ÖLÇÜLÜR, TOPLANARAK DEĞİL. Gerçek ve tüzel kişilerin
+        # diğer para birimleri hesapları AYRI keselerdir; toplam iki yönde
+        # birden yanıltıyordu — baştan sona sıfır bir bacak, hareketli bir
+        # bacakla toplanınca ADIYLA "hareketli" diye geçiyor; zıt işaretle
+        # kımıldayan iki bacak ise toplamda sıfır verip ikisi birden
+        # hareketsiz görünüyordu. Cümle yalnız ölçümü TUTAN keseleri anar.
         #
         # VE SONUCU SAYFADA DURUR: parite etkisi hiç yayımlanmayan bir bacakta
         # arındırılmış akım da parite etkisinden gerçekte arındırılmamış
         # olabilir, o bacak da manşet akımın İÇİNDEDİR. Arındırmanın ne kadar
         # eksik kaldığı ölçülemez (ölçülemeyen şeyin kendisi odur); ölçülebilen
-        # şey etkilenen dilimin büyüklüğüdür ve yazılır — kesenin haftalık
-        # akımının mutlak medyanı manşetinkinin yüzde 8'i, en büyük haftası
-        # 573,7 milyon dolar. Sınır ne abartılır ne gizlenir. Dört sıfır
+        # şey etkilenen DİLİMİN büyüklüğüdür ve yazılır: bu bacakların haftalık
+        # akımları işaretten bağımsız toplanır (mahsup dilimi olduğundan küçük
+        # gösterirdi) ve manşet akımın yanında oranıyla birlikte durur. ÖLÇÜLEN
+        # ŞEY BELİRSİZLİĞİN KENDİSİ DEĞİL, DOKUNDUĞU DİLİMDİR — cümle bir
+        # zamanlar "bu dilim kadar bir belirsizlik" diye bitiyor, yani ölçülen
+        # akımı ölçülmemiş arındırma açığına EŞİTLİYORDU. Dört sıfır
         # cümlesi (tanım · dayanaksız · yayımı durmuş olabilecek blok ·
         # başlangıcı ölçülmemiş seri) DÖRT AYRI ANAHTARDA taşınır ve bulgu
         # olmasa da yazılır: bulgu varken yazılıp yokken düşen bir anahtar,
@@ -370,8 +378,11 @@ HATLAR: list[Hat] = [
         # akım, parite etkisi, kümüle toplamlar, ayrışma) uzun pencereden;
         # Δ stok ve kimlik ancak ORTAK pencerede kurulabiliyor. Tek bir
         # "ölçüm şu kadar haftayı kapsıyor" cümlesi okura sayfanın yarısını
-        # beş kat kısa gösterirdi; ayrım koda ve okur cümlesine ayrı ayrı
-        # geçmiş durumda.
+        # beş kat kısa gösterirdi; ayrım koda geçti ve iki pencerenin sayıları
+        # düz anahtarlarda duruyor (`kapsam_akim_hafta` · `kapsam_ortak_hafta`
+        # · `kapsam_asimetri_hafta` ve iki başlangıç günü). Hangi ölçümün
+        # hangi pencereden geldiğini anlatan nesir SAYFANIN işi; koşu
+        # kaydının cümlesi tek farkı bildirir.
         #
         # BAŞLANGIÇ KÜNYEDE KANITIYLA DURUYOR ve bu bir HÜKÜM KAPISIDIR.
         # 05.01.2024 bir süre "kaynağın ilk gözlemi" diye durdu; ölçüm değil,
@@ -379,7 +390,15 @@ HATLAR: list[Hat] = [
         # de aynı sabitten başlıyor, kapsam denetimi de onu ölçüt alıyordu.
         # Ölçülmemiş başlangıç taşıyan seri üzerine artık DAYANAKSIZ SIFIR
         # hükmü kurulmuyor — o hükmün tek dayanağı "serinin öncesi yok"
-        # cümlesidir. Tanım gereği sıfır (dolar bacaklarının parite etkisi) bu
+        # cümlesidir. KAPI İKİ YARILIDIR ve ikisi de sorulur: kaynağın ilk
+        # gözlemi ÖLÇÜLMÜŞ olmalı (künyedeki kanıt) VE elimizdeki çerçeve o
+        # gözleme kadar UZANMALI. Yalnız katalog sorulduğunda kırpılmış bir
+        # tarihçe ile tam bir tarihçe tıpatıp aynı görünüyordu; hüküm elde
+        # OLAN veriden kurulur. Eksiğin hangi yarıdan geldiği SAYIYLA kayda
+        # geçer (`sifir_*_bas_kanitsiz_seri` · `sifir_*_bas_kirpik_seri`);
+        # cümle tarafsız açılır ("bu koşuda ölçülmedi"), çünkü tek bir
+        # "kaynakta ne zaman yayımlanmaya başladığı ölçülmedi" cümlesi,
+        # eksik bizim çekimimizdeyken okuru kaynağa yönlendirirdi. Tanım gereği sıfır (dolar bacaklarının parite etkisi) bu
         # kapıya girmez: dayanağı gözlem değil aritmetik, ve iki özdeş bacağı
         # aynı kutuda iki ayrı hikâyeyle anlatmak okura kusur gibi görünürdü.
         # Çekim katalogdaki başlangıçtan bir yıl geriden soruyor ve kapsam
