@@ -65,6 +65,7 @@ HAT_ADI = {
     "reel-sektor-fx": "Reel sektörün döviz pozisyonu",
     "buyume": "Büyüme",
     "el-nino": "El Niño ve gıda enflasyonu",
+    "ovp": "Orta Vadeli Program ve ima edilen kur",
 }
 
 # Hatların yayım ritmi — "veri gecikti" uyarısı için. Gün cinsinden azami sessizlik.
@@ -100,6 +101,10 @@ RITIM = {
     # (Hat ilk çekimini yaptı ve özet gerçek veri taşıyor; önceki "yer tutucu"
     # gerekçesi düştü.)
     "reel-sektor-fx": 75,
+    # Ana saati canlı bacakların EN YENİSİ, yani kur: her iş günü ilerler.
+    # Aylık enflasyon bacağı ayrı bir saattir ve RITIM_ALAN'da denetlenir —
+    # buraya aylık bir tolerans yazmak kurun donmasını görünmez yapardı.
+    "ovp": 6,
 }
 
 # Bir hattın ozet.json'u birden fazla SAAT taşıyabilir: aynı dosyada günlük bir
@@ -112,6 +117,10 @@ RITIM = {
 # donuk kalır; 10 gün üç günlük gecikme payı bırakır.
 RITIM_ALAN = {
     ("tcmb-net-rezerv", "h_tarih"): (10, "haftalık resmî seri"),
+    # Programın enflasyon karşılaştırması kardeş hattın ölçümünden besleniyor
+    # ve AYLIK ritimde: kur her gün ilerlerken bu bacak sessizce donabilir ve
+    # ana saate bakan denetim onu hiç görmez.
+    ("ovp", "tufe_tarih"): (50, "gerçekleşen enflasyon bacağı"),
 }
 
 # `karanlik` denetiminin hat başına eşiği (gün). Anahtarın KENDİ veri tarihi,
@@ -127,6 +136,9 @@ KARANLIK_GUN: dict[str, int] = {
     # damgalanıyor: 2. çeyrek anketi 01.04 tarihiyle durur ve ancak Temmuz
     # ortasında yayımlanır. Meşru gecikme tek başına ~135 güne çıkar.
     "makroihtiyati": 200,
+    # Aynı özette günlük kur ile AYLIK enflasyon bacağı yan yana duruyor;
+    # aylık bir kalem yeni ay yayımlanana kadar bir öncekinin tarihinde durur.
+    "ovp": 75,
 }
 
 # Tarih taşıyan ama TAZELİK saati OLMAYAN anahtarlar.
@@ -195,6 +207,21 @@ IZLEMLER: list[Izlem] = [
           "", "", "kur", "p_tarih"),
     Izlem("try-reer", "redk", "TÜFE bazlı reel efektif kur", "endeks", 1, "delta", 2.0, 4.0, "",
           "Aylık; 100 üstü TL'nin uzun dönem ortalamasına göre değerli olduğunu gösterir.", "kur"),
+    # Orta Vadeli Program bir kur patikası yayımlamıyor; iki milli gelir
+    # satırının oranı onu ele veriyor. İzlenen üç büyüklük de gerçekleşen kur
+    # her gün ilerledikçe DEĞİŞİR — programın kendi sayıları sabit dursa bile.
+    Izlem("ovp", "yil_sonu_ustel", "Programın ima ettiği yıl sonu kuru", "TL/$", 2,
+          "delta", 0.5, 1.0, "",
+          "Yıl ortalaması programın ima ettiğine eşitlenirse kurun yıl sonunda "
+          "geleceği seviye; gerçekleşen ortalama kaydıkça oynar.", "kur"),
+    Izlem("ovp", "sapma_bu_yil", "Yıl içi ortalamanın programdan sapması", "%", 1,
+          "delta", 0.5, 1.0, "",
+          "Eksi değer, gerçekleşen ortalamanın programın ima ettiğinin altında "
+          "kaldığını söyler.", "kur"),
+    Izlem("ovp", "gereken_ort", "Kalan günlerin tutturması gereken ortalama", "TL/$", 2,
+          "delta", 0.5, 1.5, "",
+          "Programın yıl ortalaması tutsun diye kalan işlem günlerinin ortalaması; "
+          "yıl sonuna yaklaştıkça tek bir günün etkisi büyür.", "kur"),
 
     # ─────────────────────────────── faiz, fonlama, likidite
     Izlem("fonlama-likidite", "politika", "Politika faizi", "%", 2, "degisim", None, None, "",

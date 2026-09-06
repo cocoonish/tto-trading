@@ -1,0 +1,416 @@
+{
+ "kosum": "2026-09-06",
+ "son_gun": "2026-09-03",
+ "kapsam": {
+  "n": 2937,
+  "bas": "2015-01-02",
+  "son": "2026-09-03",
+  "gerekli_bas": "2023-10-01",
+  "yeterli": true,
+  "sorulan_bas": "2015-01-01"
+ },
+ "bosluk": {
+  "maks_gun": 7,
+  "maks_tarih": "2016-09-16",
+  "uzun_bosluk": 17
+ },
+ "tazelik": {
+  "kur": {
+   "son": "2026-09-03",
+   "gecikme_gun": 3,
+   "tolerans": 6
+  },
+  "faiz": {
+   "son": "2026-09-03",
+   "gecikme_gun": 3,
+   "tolerans": 6
+  },
+  "tufe": {
+   "son": "2026-08-01",
+   "gecikme_gun": 36,
+   "tolerans": 45
+  }
+ },
+ "tutarlilik": [
+  {
+   "program": "ovp2027",
+   "yil": 2026,
+   "ad": "nominal_gsyh",
+   "olculen": 34.953590234183515,
+   "beklenen": 34.90979999999999,
+   "sapma": 0.043790234183525456,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2027,
+   "ad": "nominal_gsyh",
+   "olculen": 30.301361516649884,
+   "beklenen": 30.25,
+   "sapma": 0.051361516649883754,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2028,
+   "ad": "nominal_gsyh",
+   "olculen": 19.76224518240759,
+   "beklenen": 19.767000000000003,
+   "sapma": -0.004754817592413474,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2029,
+   "ad": "nominal_gsyh",
+   "olculen": 14.984532676597784,
+   "beklenen": 14.975000000000005,
+   "sapma": 0.009532676597778789,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2025,
+   "ad": "cari_gsyh",
+   "olculen": -1.8913857677902621,
+   "beklenen": -1.9,
+   "sapma": 0.008614232209737782,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2025,
+   "ad": "faiz_gsyh",
+   "olculen": 3.248525481886751,
+   "beklenen": 3.2,
+   "sapma": 0.048525481886750654,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2025,
+   "ad": "dis_ticaret",
+   "olculen": -92.19999999999999,
+   "beklenen": -92.2,
+   "sapma": 1.4210854715202004e-14,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2026,
+   "ad": "cari_gsyh",
+   "olculen": -2.6084568918176827,
+   "beklenen": -2.6,
+   "sapma": -0.00845689181768261,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2026,
+   "ad": "faiz_gsyh",
+   "olculen": 3.3099383685234227,
+   "beklenen": 3.3,
+   "sapma": 0.009938368523422891,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2026,
+   "ad": "dis_ticaret",
+   "olculen": -105.0,
+   "beklenen": -105.0,
+   "sapma": 0.0,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2027,
+   "ad": "cari_gsyh",
+   "olculen": -1.940524193548387,
+   "beklenen": -1.9,
+   "sapma": -0.0405241935483871,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2027,
+   "ad": "faiz_gsyh",
+   "olculen": 3.5744152796136937,
+   "beklenen": 3.6,
+   "sapma": -0.025584720386306437,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2027,
+   "ad": "dis_ticaret",
+   "olculen": -105.0,
+   "beklenen": -105.0,
+   "sapma": 0.0,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2028,
+   "ad": "cari_gsyh",
+   "olculen": -1.7694882831181253,
+   "beklenen": -1.8,
+   "sapma": 0.030511716881874706,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2028,
+   "ad": "faiz_gsyh",
+   "olculen": 3.524372296972609,
+   "beklenen": 3.5,
+   "sapma": 0.024372296972608787,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2028,
+   "ad": "dis_ticaret",
+   "olculen": -108.5,
+   "beklenen": -108.5,
+   "sapma": 0.0,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2029,
+   "ad": "cari_gsyh",
+   "olculen": -1.595505617977528,
+   "beklenen": -1.6,
+   "sapma": 0.004494382022472099,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2029,
+   "ad": "faiz_gsyh",
+   "olculen": 3.424817651706597,
+   "beklenen": 3.4,
+   "sapma": 0.02481765170659722,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2029,
+   "ad": "dis_ticaret",
+   "olculen": -110.0,
+   "beklenen": -110.0,
+   "sapma": 0.0,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2025,
+   "ad": "nominal_gsyh",
+   "olculen": 39.45544665485456,
+   "beklenen": 39.455,
+   "sapma": 0.00044665485456363285,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2026,
+   "ad": "nominal_gsyh",
+   "olculen": 24.249344634040426,
+   "beklenen": 24.24860000000002,
+   "sapma": 0.0007446340404051455,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2027,
+   "ad": "nominal_gsyh",
+   "olculen": 15.725435882832617,
+   "beklenen": 15.66869999999998,
+   "sapma": 0.056735882832636975,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2028,
+   "ad": "nominal_gsyh",
+   "olculen": 13.411851553587017,
+   "beklenen": 13.400000000000013,
+   "sapma": 0.011851553587003849,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2024,
+   "ad": "cari_gsyh",
+   "olculen": -0.7511045655375551,
+   "beklenen": -0.8,
+   "sapma": 0.04889543446244493,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2024,
+   "ad": "faiz_gsyh",
+   "olculen": 2.849485275977303,
+   "beklenen": 2.8,
+   "sapma": 0.04948527597730301,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2024,
+   "ad": "dis_ticaret",
+   "olculen": -82.19999999999999,
+   "beklenen": -82.2,
+   "sapma": 1.4210854715202004e-14,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2025,
+   "ad": "cari_gsyh",
+   "olculen": -1.4404079031230084,
+   "beklenen": -1.4,
+   "sapma": -0.04040790312300846,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2025,
+   "ad": "faiz_gsyh",
+   "olculen": 3.3012753501986203,
+   "beklenen": 3.3,
+   "sapma": 0.0012753501986204618,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2025,
+   "ad": "dis_ticaret",
+   "olculen": -93.19999999999999,
+   "beklenen": -93.2,
+   "sapma": 1.4210854715202004e-14,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2026,
+   "ad": "cari_gsyh",
+   "olculen": -1.3449939686369121,
+   "beklenen": -1.3,
+   "sapma": -0.044993968636912074,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2026,
+   "ad": "faiz_gsyh",
+   "olculen": 3.5488046390618324,
+   "beklenen": 3.5,
+   "sapma": 0.04880463906183241,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2026,
+   "ad": "dis_ticaret",
+   "olculen": -96.0,
+   "beklenen": -96.0,
+   "sapma": 0.0,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2027,
+   "ad": "cari_gsyh",
+   "olculen": -1.1627906976744187,
+   "beklenen": -1.2,
+   "sapma": 0.037209302325581284,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2027,
+   "ad": "faiz_gsyh",
+   "olculen": 3.3999955260273365,
+   "beklenen": 3.4,
+   "sapma": -4.473972663454617e-06,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2027,
+   "ad": "dis_ticaret",
+   "olculen": -99.0,
+   "beklenen": -99.0,
+   "sapma": 0.0,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2028,
+   "ad": "cari_gsyh",
+   "olculen": -0.9809119830328737,
+   "beklenen": -1.0,
+   "sapma": 0.019088016967126253,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2028,
+   "ad": "faiz_gsyh",
+   "olculen": 3.2999990137775277,
+   "beklenen": 3.3,
+   "sapma": -9.862224721324253e-07,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2028,
+   "ad": "dis_ticaret",
+   "olculen": -102.0,
+   "beklenen": -102.0,
+   "sapma": 0.0,
+   "birim": "milyar dolar"
+  }
+ ],
+ "programlar": {
+  "ovp2027": {
+   "yayin_ay": "2026-09",
+   "satir": 35,
+   "sutun": [
+    "2025",
+    "2026",
+    "2027",
+    "2028",
+    "2029"
+   ]
+  },
+  "ovp2026": {
+   "yayin_ay": "2025-09",
+   "satir": 35,
+   "sutun": [
+    "2024",
+    "2025",
+    "2026",
+    "2027",
+    "2028"
+   ]
+  }
+ },
+ "kur": [
+  2937,
+  1
+ ],
+ "faiz": [
+  3945,
+  2
+ ],
+ "tufe": [
+  248,
+  1
+ ],
+ "cerceve_imza": "2937x1·2015-01-02·2026-09-03",
+ "uyarilar": []
+}

@@ -1,0 +1,144 @@
+kalem,ad,birim,ondalik,yil,yeni,eski,fark,fark_birim
+ima_kur,İma edilen ortalama kur,TL/dolar,3,2025,39.47627965043695,39.62970044614404,-0.38713589550238847,%
+ima_kur,İma edilen ortalama kur,TL/dolar,3,2026,46.86765513454146,46.59650180940893,0.5819177719426527,%
+ima_kur,İma edilen ortalama kur,TL/dolar,3,2027,56.05191532258065,50.71242200794101,10.528965297306314,%
+ima_kur,İma edilen ortalama kur,TL/dolar,3,2028,63.69392635102822,53.76299045599151,18.471695511740215,%
+gsyh_tl,"GSYH, lira (cari fiyatlarla)",milyar TL,0,2025,63241.0,62179.0,1.7079721449363872,%
+gsyh_tl,"GSYH, lira (cari fiyatlarla)",milyar TL,0,2026,85346.0,77257.0,10.470248650607704,%
+gsyh_tl,"GSYH, lira (cari fiyatlarla)",milyar TL,0,2027,111207.0,89406.0,24.384269512113278,%
+gsyh_tl,"GSYH, lira (cari fiyatlarla)",milyar TL,0,2028,133184.0,101397.0,31.349053719538045,%
+gsyh_usd,"GSYH, dolar (cari fiyatlarla)",milyar dolar,0,2025,1602.0,1569.0,2.103250478011476,%
+gsyh_usd,"GSYH, dolar (cari fiyatlarla)",milyar dolar,0,2026,1821.0,1658.0,9.831121833534384,%
+gsyh_usd,"GSYH, dolar (cari fiyatlarla)",milyar dolar,0,2027,1984.0,1763.0,12.535450935904713,%
+gsyh_usd,"GSYH, dolar (cari fiyatlarla)",milyar dolar,0,2028,2091.0,1886.0,10.869565217391308,%
+kisi_basi_gelir,Kişi başına gelir,dolar,0,2025,18040.0,17748.0,1.6452558034708131,%
+kisi_basi_gelir,Kişi başına gelir,dolar,0,2026,20523.0,18621.0,10.214274206540995,%
+kisi_basi_gelir,Kişi başına gelir,dolar,0,2027,22285.0,19710.0,13.064434297311012,%
+kisi_basi_gelir,Kişi başına gelir,dolar,0,2028,23419.0,20987.0,11.58812598275123,%
+nufus,Nüfus (yıl ortası),bin kişi,0,2026,86321.0,86447.0,-0.1457540458315476,%
+nufus,Nüfus (yıl ortası),bin kişi,0,2027,86856.0,86856.0,0.0,%
+nufus,Nüfus (yıl ortası),bin kişi,0,2028,87252.0,87252.0,0.0,%
+buyume,GSYH büyümesi,%,1,2025,3.7,3.3,0.40000000000000036,puan
+buyume,GSYH büyümesi,%,1,2026,3.3,3.8,-0.5,puan
+buyume,GSYH büyümesi,%,1,2027,4.2,4.3,-0.09999999999999964,puan
+buyume,GSYH büyümesi,%,1,2028,4.6,5.0,-0.40000000000000036,puan
+toplam_tuketim,Toplam tüketim artışı,%,1,2025,3.6,2.5,1.1,puan
+toplam_tuketim,Toplam tüketim artışı,%,1,2026,3.5,3.3,0.20000000000000018,puan
+toplam_tuketim,Toplam tüketim artışı,%,1,2027,4.0,3.8,0.20000000000000018,puan
+toplam_tuketim,Toplam tüketim artışı,%,1,2028,4.1,4.4,-0.3000000000000007,puan
+sabit_sermaye,Toplam sabit sermaye yatırımı artışı,%,1,2025,7.3,4.6,2.7,puan
+sabit_sermaye,Toplam sabit sermaye yatırımı artışı,%,1,2026,3.1,4.0,-0.8999999999999999,puan
+sabit_sermaye,Toplam sabit sermaye yatırımı artışı,%,1,2027,4.0,4.2,-0.20000000000000018,puan
+sabit_sermaye,Toplam sabit sermaye yatırımı artışı,%,1,2028,4.7,4.9,-0.20000000000000018,puan
+nihai_yurtici_talep,Toplam nihai yurt içi talep artışı,%,1,2025,4.5,3.0,1.5,puan
+nihai_yurtici_talep,Toplam nihai yurt içi talep artışı,%,1,2026,3.4,3.5,-0.10000000000000009,puan
+nihai_yurtici_talep,Toplam nihai yurt içi talep artışı,%,1,2027,4.0,3.9,0.10000000000000009,puan
+nihai_yurtici_talep,Toplam nihai yurt içi talep artışı,%,1,2028,4.3,4.5,-0.20000000000000018,puan
+net_ihracat_katki,Net ihracatın büyümeye katkısı,puan,1,2025,-1.1,-0.3,-0.8,puan
+net_ihracat_katki,Net ihracatın büyümeye katkısı,puan,1,2026,-0.5,0.0,-0.5,puan
+net_ihracat_katki,Net ihracatın büyümeye katkısı,puan,1,2027,0.0,0.1,-0.1,puan
+net_ihracat_katki,Net ihracatın büyümeye katkısı,puan,1,2028,0.1,0.2,-0.1,puan
+yurtici_tasarruf_gsyh,Toplam yurt içi tasarruf / GSYH,%,1,2025,29.9,30.6,-0.7000000000000028,puan
+yurtici_tasarruf_gsyh,Toplam yurt içi tasarruf / GSYH,%,1,2026,30.2,30.8,-0.6000000000000014,puan
+yurtici_tasarruf_gsyh,Toplam yurt içi tasarruf / GSYH,%,1,2027,30.3,31.1,-0.8000000000000007,puan
+yurtici_tasarruf_gsyh,Toplam yurt içi tasarruf / GSYH,%,1,2028,30.5,31.2,-0.6999999999999993,puan
+tasarruf_yatirim_farki_gsyh,Tasarruf−yatırım farkı / GSYH,%,1,2025,-1.8,-1.4,-0.40000000000000013,puan
+tasarruf_yatirim_farki_gsyh,Tasarruf−yatırım farkı / GSYH,%,1,2026,-2.5,-1.3,-1.2,puan
+tasarruf_yatirim_farki_gsyh,Tasarruf−yatırım farkı / GSYH,%,1,2027,-1.9,-1.1,-0.7999999999999998,puan
+tasarruf_yatirim_farki_gsyh,Tasarruf−yatırım farkı / GSYH,%,1,2028,-1.8,-0.9,-0.9,puan
+deflator,GSYH deflatörü artışı,%,1,2025,36.5,35.0,1.5,puan
+deflator,GSYH deflatörü artışı,%,1,2026,30.6,19.7,10.900000000000002,puan
+deflator,GSYH deflatörü artışı,%,1,2027,25.0,10.9,14.1,puan
+deflator,GSYH deflatörü artışı,%,1,2028,14.5,8.0,6.5,puan
+tufe,"TÜFE, yıl sonu",%,1,2025,30.9,28.5,2.3999999999999986,puan
+tufe,"TÜFE, yıl sonu",%,1,2026,28.4,16.0,12.399999999999999,puan
+tufe,"TÜFE, yıl sonu",%,1,2027,21.0,9.0,12.0,puan
+tufe,"TÜFE, yıl sonu",%,1,2028,13.5,8.0,5.5,puan
+cari,Cari işlemler dengesi,milyar dolar,1,2025,-30.3,-22.6,34.070796460176986,%
+cari,Cari işlemler dengesi,milyar dolar,1,2026,-47.5,-22.3,113.00448430493275,%
+cari,Cari işlemler dengesi,milyar dolar,1,2027,-38.5,-20.5,87.80487804878048,%
+cari,Cari işlemler dengesi,milyar dolar,1,2028,-37.0,-18.5,100.0,%
+cari_gsyh,Cari işlemler dengesi / GSYH,%,1,2025,-1.9,-1.4,-0.5,puan
+cari_gsyh,Cari işlemler dengesi / GSYH,%,1,2026,-2.6,-1.3,-1.3,puan
+cari_gsyh,Cari işlemler dengesi / GSYH,%,1,2027,-1.9,-1.2,-0.7,puan
+cari_gsyh,Cari işlemler dengesi / GSYH,%,1,2028,-1.8,-1.0,-0.8,puan
+altin_haric_cari,Altın hariç cari işlemler dengesi,milyar dolar,1,2025,-10.3,-5.3,94.33962264150946,%
+altin_haric_cari,Altın hariç cari işlemler dengesi,milyar dolar,1,2026,-34.0,-6.0,466.6666666666667,%
+altin_haric_cari,Altın hariç cari işlemler dengesi,milyar dolar,1,2027,-23.5,-6.9,240.57971014492753,%
+altin_haric_cari,Altın hariç cari işlemler dengesi,milyar dolar,1,2028,-20.5,-7.5,173.33333333333334,%
+altin_haric_cari_gsyh,Altın hariç cari işlemler dengesi / GSYH,%,1,2025,-0.6,-0.3,-0.3,puan
+altin_haric_cari_gsyh,Altın hariç cari işlemler dengesi / GSYH,%,1,2026,-1.9,-0.4,-1.5,puan
+altin_haric_cari_gsyh,Altın hariç cari işlemler dengesi / GSYH,%,1,2027,-1.2,-0.4,-0.7999999999999999,puan
+altin_haric_cari_gsyh,Altın hariç cari işlemler dengesi / GSYH,%,1,2028,-1.0,-0.4,-0.6,puan
+ihracat,"İhracat (genel ticaret sistemi, fob)",milyar dolar,1,2025,273.2,273.8,-0.21913805697589828,%
+ihracat,"İhracat (genel ticaret sistemi, fob)",milyar dolar,1,2026,282.0,282.0,0.0,%
+ihracat,"İhracat (genel ticaret sistemi, fob)",milyar dolar,1,2027,292.0,294.0,-0.6802721088435382,%
+ihracat,"İhracat (genel ticaret sistemi, fob)",milyar dolar,1,2028,302.5,308.5,-1.944894651539708,%
+ithalat,"İthalat (genel ticaret sistemi, cif)",milyar dolar,1,2025,365.4,367.0,-0.4359673024523225,%
+ithalat,"İthalat (genel ticaret sistemi, cif)",milyar dolar,1,2026,387.0,378.0,2.3809523809523725,%
+ithalat,"İthalat (genel ticaret sistemi, cif)",milyar dolar,1,2027,397.0,393.0,1.0178117048346147,%
+ithalat,"İthalat (genel ticaret sistemi, cif)",milyar dolar,1,2028,411.0,410.5,0.12180267965895553,%
+dis_ticaret_dengesi,Dış ticaret dengesi,milyar dolar,1,2025,-92.2,-93.2,-1.0729613733905574,%
+dis_ticaret_dengesi,Dış ticaret dengesi,milyar dolar,1,2026,-105.0,-96.0,9.375,%
+dis_ticaret_dengesi,Dış ticaret dengesi,milyar dolar,1,2027,-105.0,-99.0,6.060606060606055,%
+dis_ticaret_dengesi,Dış ticaret dengesi,milyar dolar,1,2028,-108.5,-102.0,6.372549019607843,%
+dis_ticaret_hacmi_gsyh,Dış ticaret hacmi / GSYH,%,1,2025,39.9,40.8,-0.8999999999999986,puan
+dis_ticaret_hacmi_gsyh,Dış ticaret hacmi / GSYH,%,1,2026,36.7,39.8,-3.0999999999999943,puan
+dis_ticaret_hacmi_gsyh,Dış ticaret hacmi / GSYH,%,1,2027,34.7,39.0,-4.299999999999997,puan
+dis_ticaret_hacmi_gsyh,Dış ticaret hacmi / GSYH,%,1,2028,34.1,38.1,-4.0,puan
+brent,Ham petrol fiyatı (Brent),dolar/varil,1,2025,69.1,70.0,-1.28571428571429,%
+brent,Ham petrol fiyatı (Brent),dolar/varil,1,2026,88.0,65.0,35.384615384615394,%
+brent,Ham petrol fiyatı (Brent),dolar/varil,1,2027,76.0,65.1,16.74347158218128,%
+brent,Ham petrol fiyatı (Brent),dolar/varil,1,2028,72.0,65.6,9.756097560975618,%
+enerji_ithalati,Enerji ithalatı,milyar dolar,1,2025,62.5,64.0,-2.34375,%
+enerji_ithalati,Enerji ithalatı,milyar dolar,1,2026,71.0,63.0,12.698412698412698,%
+enerji_ithalati,Enerji ithalatı,milyar dolar,1,2027,66.0,62.5,5.600000000000005,%
+enerji_ithalati,Enerji ithalatı,milyar dolar,1,2028,63.5,62.0,2.4193548387096753,%
+turizm_geliri,Turizm gelirleri,milyar dolar,1,2025,65.2,64.0,1.8750000000000044,%
+turizm_geliri,Turizm gelirleri,milyar dolar,1,2026,65.0,68.0,-4.411764705882348,%
+turizm_geliri,Turizm gelirleri,milyar dolar,1,2027,70.0,71.0,-1.4084507042253502,%
+turizm_geliri,Turizm gelirleri,milyar dolar,1,2028,73.5,75.0,-2.0000000000000018,%
+seyahat_geliri,Seyahat gelirleri,milyar dolar,1,2025,60.0,59.5,0.8403361344537785,%
+seyahat_geliri,Seyahat gelirleri,milyar dolar,1,2026,60.0,61.8,-2.9126213592232997,%
+seyahat_geliri,Seyahat gelirleri,milyar dolar,1,2027,64.5,64.5,0.0,%
+seyahat_geliri,Seyahat gelirleri,milyar dolar,1,2028,67.5,68.2,-1.026392961876832,%
+issizlik,İşsizlik oranı,%,1,2025,8.3,8.5,-0.1999999999999993,puan
+issizlik,İşsizlik oranı,%,1,2026,8.1,8.4,-0.3000000000000007,puan
+issizlik,İşsizlik oranı,%,1,2027,8.0,8.2,-0.1999999999999993,puan
+issizlik,İşsizlik oranı,%,1,2028,7.8,7.8,0.0,puan
+isgucu_katilim,İşgücüne katılma oranı,%,1,2025,53.5,53.7,-0.20000000000000284,puan
+isgucu_katilim,İşgücüne katılma oranı,%,1,2026,52.9,54.4,-1.5,puan
+isgucu_katilim,İşgücüne katılma oranı,%,1,2027,53.4,55.1,-1.7000000000000028,puan
+isgucu_katilim,İşgücüne katılma oranı,%,1,2028,54.0,56.0,-2.0,puan
+istihdam,İstihdam düzeyi,bin kişi,0,2025,32566.0,32605.0,-0.11961355620303538,%
+istihdam,İstihdam düzeyi,bin kişi,0,2026,32579.0,33336.0,-2.2708183345332422,%
+istihdam,İstihdam düzeyi,bin kişi,0,2027,33236.0,34128.0,-2.6136896390060893,%
+istihdam,İstihdam düzeyi,bin kişi,0,2028,33925.0,35130.0,-3.4301167093652163,%
+istihdam_orani,İstihdam oranı,%,1,2025,49.0,49.1,-0.10000000000000142,puan
+istihdam_orani,İstihdam oranı,%,1,2026,48.6,49.8,-1.1999999999999957,puan
+istihdam_orani,İstihdam oranı,%,1,2027,49.2,50.5,-1.2999999999999972,puan
+istihdam_orani,İstihdam oranı,%,1,2028,49.8,51.6,-1.8000000000000043,puan
+faiz_gideri,Genel devlet faiz gideri,milyar TL,1,2025,2054.4,2052.7,0.08281775222878096,%
+faiz_gideri,Genel devlet faiz gideri,milyar TL,1,2026,2824.9,2741.7,3.0346135609293556,%
+faiz_gideri,Genel devlet faiz gideri,milyar TL,1,2027,3975.0,3039.8,30.76518191986315,%
+faiz_gideri,Genel devlet faiz gideri,milyar TL,1,2028,4693.9,3346.1,40.27972863931144,%
+faiz_gideri_gsyh,Genel devlet faiz gideri / GSYH,%,1,2025,3.2,3.3,-0.09999999999999964,puan
+faiz_gideri_gsyh,Genel devlet faiz gideri / GSYH,%,1,2026,3.3,3.5,-0.20000000000000018,puan
+faiz_gideri_gsyh,Genel devlet faiz gideri / GSYH,%,1,2027,3.6,3.4,0.20000000000000018,puan
+faiz_gideri_gsyh,Genel devlet faiz gideri / GSYH,%,1,2028,3.5,3.3,0.20000000000000018,puan
+genel_devlet_dengesi,Genel devlet dengesi,milyar TL,1,2025,-1339.0,-1939.3,-30.95446810704894,%
+genel_devlet_dengesi,Genel devlet dengesi,milyar TL,1,2026,-2277.9,-2412.5,-5.579274611398954,%
+genel_devlet_dengesi,Genel devlet dengesi,milyar TL,1,2027,-3676.7,-2379.7,54.50266840358029,%
+genel_devlet_dengesi,Genel devlet dengesi,milyar TL,1,2028,-4140.7,-2603.5,59.043595160361036,%
+genel_devlet_dengesi_gsyh,Genel devlet dengesi / GSYH,%,1,2025,-2.1,-3.1,1.0,puan
+genel_devlet_dengesi_gsyh,Genel devlet dengesi / GSYH,%,1,2026,-2.7,-3.1,0.3999999999999999,puan
+genel_devlet_dengesi_gsyh,Genel devlet dengesi / GSYH,%,1,2027,-3.3,-2.7,-0.5999999999999996,puan
+genel_devlet_dengesi_gsyh,Genel devlet dengesi / GSYH,%,1,2028,-3.1,-2.6,-0.5,puan
+kkgd,Kamu kesimi genel dengesi,milyar TL,1,2025,-1592.0,-2183.8,-27.09955124095613,%
+kkgd,Kamu kesimi genel dengesi,milyar TL,1,2026,-2655.8,-2594.0,2.382420971472632,%
+kkgd,Kamu kesimi genel dengesi,milyar TL,1,2027,-3539.7,-2586.4,36.85818125579956,%
+kkgd,Kamu kesimi genel dengesi,milyar TL,1,2028,-3790.9,-2587.4,46.513874932364544,%
+kkgd_gsyh,Kamu kesimi genel dengesi / GSYH,%,1,2025,-2.5,-3.5,1.0,puan
+kkgd_gsyh,Kamu kesimi genel dengesi / GSYH,%,1,2026,-3.1,-3.4,0.2999999999999998,puan
+kkgd_gsyh,Kamu kesimi genel dengesi / GSYH,%,1,2027,-3.2,-2.9,-0.30000000000000027,puan
+kkgd_gsyh,Kamu kesimi genel dengesi / GSYH,%,1,2028,-2.8,-2.6,-0.19999999999999973,puan

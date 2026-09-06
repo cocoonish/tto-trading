@@ -288,7 +288,16 @@ jobs:
             # yedekte donuyor ve hiçbir kapı bunu görmüyordu — hat "tam
             # kurulmuş" görünür. Elle tetiklemek de yetmezdi: sonraki haftalar
             # yine hiç tazelenmezdi.
-            HATLAR="tcmb usdtry reer yabanci fonlama kredi ypmevduat enflasyon dibs odemeler butce marj buyume elnino carry tufex makro reelfx"
+            # ovp EN SONDA ve bunun iki ayrı sebebi var. (1) Hat fonlama ve
+            # enflasyon hatlarına BAĞIMLI: taşıma bacağı Fonlama'nın, gerçekleşen
+            # enflasyon karşılaştırması Enflasyon'un bu koşuda depoya yazdığı
+            # seriden okunuyor; ikisinden önce koşarsa o iki bacak dünkü seriden
+            # hesaplanmış kalır. (2) Ama carry/tufex/makro gibi SALT türev
+            # değildir: kendi kur serisini EVDS'ten çeker, yani "Türev hatlar"
+            # adımına taşınamaz — o adım saniyelik ve `if: always()`, ağa çıkan
+            # bir hattı oraya koymak tazeleme düştüğü koşuda onu da düşürürdü.
+            # Sıra değişecekse bu iki kısıt birlikte sorulmalı.
+            HATLAR="tcmb usdtry reer yabanci fonlama kredi ypmevduat enflasyon dibs odemeler butce marj buyume elnino carry tufex makro reelfx ovp"
           fi
           # "zorla" = takvimi hiç sorma. Süzgeci geçirmemek, ona "her şey
           # gerekli" dedirtmekten daha dürüst: karar defterine sahte tetik yazılmaz.

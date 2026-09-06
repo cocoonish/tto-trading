@@ -1,0 +1,14 @@
+# Kardeş EVDS hatlarıyla (Kredi, Fonlama, YPMevduat) AYNI liste: hat aynı üç
+# kütüphaneyi kullanıyor ve ağ katmanı stdlib urllib ile yazıldı — requests
+# eklenmez. Üstel patikanın kapalı çözümü yok ama ikiye bölme numpy ile
+# yazıldı; scipy BAĞIMLILIK OLARAK EKLENMEDİ, tek bir tek değişkenli kök
+# bulma için bir kütüphane daha kurmak koşucuyu yavaşlatır.
+#
+# NEDEN BU DOSYA VAR: guncelle.py'nin ön denetimi eksik paketi burada arar.
+# Dosya YOKSA liste boş döner, "paket: tam" yazılır ve HİÇBİR paket sorulmaz —
+# bakılmayan yer geçen sınavla aynı görünür. Ayrıca --kur bu dosyadan kurar:
+# dosyasız bir hatta .venv kurulur ama içi boş kalır ve hat ilk adımda
+# ImportError ile düşer.
+pandas>=2.0
+numpy>=1.24
+plotly>=5.18

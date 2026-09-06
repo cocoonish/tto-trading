@@ -564,6 +564,44 @@ HATLAR: list[Hat] = [
         # _tarih zaten net pozisyonun ayı; ikinci saat tcmb hattından gelen
         # haftalık rezerv bacağı — donarsa tazelik denetimi görsün.
         tarih_anahtarlari=("_tarih", "acik_rezerv_tarih"), bagimli=("tcmb",)),
+    Hat("ovp", "Orta Vadeli Program ve ima edilen kur", P / "OVP", "ovp",
+        # Hattın sorusu: program GSYH'yi hem TL hem dolar cinsinden yayımlıyor
+        # ve ikisinin ORANI, programın ima ettiği ORTALAMA KURDUR. Program bir
+        # kur patikası yayımlamaz — bu oran onu ele verir. Gerçekleşen kur her
+        # gün değiştiği için "programın tutması için yıl sonunda kur kaç olmalı"
+        # sorusunun cevabı HER GÜN DEĞİŞİR; hattın işi o cevabı canlı tutmak.
+        #
+        # İKİ KATMAN, İKİ AYRI RİTİM. Program tabloları STATİKTİR: yayımlanmış
+        # bir belgenin sayıları bir daha değişmez, ağdan çekilmez, hat
+        # klasöründeki `programlar.json`da kaynak künyesiyle (hangi belge,
+        # hangi tablo, hangi sayfa) ELLE tutulur — Makroihtiyati'nin düzenleme
+        # defteriyle aynı sözleşme. Gerçekleşen kur CANLIDIR ve EVDS3'ten
+        # günlük çekilir, parçalı istekle ve seri bazında TTL'li önbellekle.
+        #
+        # TÜREV BACAKLAR VE NEDEN ZORUNLU DEĞİLLER: taşıma ölçümü Fonlama
+        # hattının, gerçekleşen enflasyon karşılaştırması Enflasyon hattının
+        # depoya yazdığı seriden okunur; ikisi de ağa çıkmaz. `bagimli` bu
+        # yüzden konuyor — üst hat tazelenmeden bu hat koşarsa o iki bacak
+        # dünkü seriden hesaplanmış kalır. Ama düşmeleri hattı DURDURMAZ:
+        # manşet (ima edilen kur) yalnız kur bacağına ve program tablosuna
+        # dayanıyor, düşen bacağın figürü üretilmez ve anahtarları `null`
+        # yazılır. Bir kardeş hattın düşmesi bu hattın manşetini götürmemeli.
+        #
+        # DURDURAN TEK ÖLÇÜM KAPSAMDIR: kur serisi en eski programın ilk
+        # sütun yılından bir önceki yılın kapanışına kadar uzanmıyorsa çıktı
+        # ÜRETİLMEZ — kırpılmış bir tarihçeyle ne yöntem sınaması ne de yıl
+        # sonu iması kurulabilir. Çizim katmanında zorunlu figür eksikse hat
+        # yine durur (eski grafikle taze metin yayımlanmasın). Sıra bağlayıcı.
+        ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
+        {"cikti/*.html": "*", "uyarilar.json": "uyarilar.json"},
+        "program tabloları elle tutulur (programlar.json); kur EVDS3'ten canlı",
+        # Üç ayrı ritim, üç ayrı donma riski: kur her iş günü, lira gecelik
+        # faiz her iş günü (kardeş hattın koşusuna bağlı), gerçekleşen
+        # enflasyon aylık. `_tarih` canlı bacakların EN YENİSİ olduğu için tek
+        # başına bakmak, kur ilerlerken donmuş bir enflasyon bacağını
+        # göstermez.
+        tarih_anahtarlari=("_tarih", "kur_tarih", "tufe_tarih"),
+        bagimli=("fonlama", "enflasyon")),
 ]
 HAT = {h.ad: h for h in HATLAR}
 
@@ -574,7 +612,7 @@ def _renk(m, k):  # k: 32 yeşil, 31 kırmızı, 33 sarı, 36 camgöbeği
 
 EVDS_HATLAR = {"tcmb", "usdtry", "reer", "yabanci", "marj", "enflasyon",
                "kredi", "fonlama", "ypmevduat", "odemeler", "dibs", "butce",
-               "buyume", "elnino", "reelfx"}
+               "buyume", "elnino", "reelfx", "ovp"}
 # Liste sütun genişliği hat adlarından türetilir — yeni bir uzun ad eklendiğinde
 # hizalama sessizce bozulmasın ("enflasyon" 9 karakter, eski sabit 8'di).
 _AD_G = max(len(h.ad) for h in HATLAR) + 1

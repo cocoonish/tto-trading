@@ -1,0 +1,2416 @@
+{
+ "bu_yil": 2026,
+ "kur_tarih": "2026-09-03",
+ "faiz_tarih": "2026-09-03",
+ "tufe_tarih": "2026-08-01",
+ "program_eski_yayin": "2025-09-30",
+ "carry_tarih": "2026-09-03",
+ "program_yeni": {
+  "kod": "ovp2027",
+  "kisa": "OVP 2027–2029",
+  "ad": "Orta Vadeli Program (2027–2029)",
+  "yayin_ay": "2026-09",
+  "yayin_yazi": "Eylül 2026",
+  "kaynak": "Strateji ve Bütçe Başkanlığı, Orta Vadeli Program (2027–2029), Eylül 2026"
+ },
+ "program_eski": {
+  "kod": "ovp2026",
+  "kisa": "OVP 2026–2028",
+  "ad": "Orta Vadeli Program (2026–2028)",
+  "yayin_ay": "2025-09",
+  "yayin_yazi": "Eylül 2025",
+  "kaynak": "Strateji ve Bütçe Başkanlığı, Orta Vadeli Program (2026–2028), Eylül 2025"
+ },
+ "ima": {
+  "ovp2027": {
+   "2025": 39.47627965043695,
+   "2026": 46.86765513454146,
+   "2027": 56.05191532258065,
+   "2028": 63.69392635102822,
+   "2029": 68.82741573033708
+  },
+  "ovp2026": {
+   "2024": 32.83284241531664,
+   "2025": 39.62970044614404,
+   "2026": 46.59650180940893,
+   "2027": 50.71242200794101,
+   "2028": 53.76299045599151
+  }
+ },
+ "gerceklesen_yil": [
+  {
+   "yil": 2015,
+   "n": 253,
+   "ortalama": 2.7200162055335966,
+   "ilk": 2.3269,
+   "son": 2.9076,
+   "ilk_gun": "2015-01-02",
+   "son_gun": "2015-12-31"
+  },
+  {
+   "yil": 2016,
+   "n": 251,
+   "ortalama": 3.0212450199203187,
+   "ilk": 2.9181,
+   "son": 3.5318,
+   "ilk_gun": "2016-01-04",
+   "son_gun": "2016-12-30"
+  },
+  {
+   "yil": 2017,
+   "n": 256,
+   "ortalama": 3.6452625,
+   "ilk": 3.5192,
+   "son": 3.8104,
+   "ilk_gun": "2017-01-02",
+   "son_gun": "2017-12-29"
+  },
+  {
+   "yil": 2018,
+   "n": 254,
+   "ortalama": 4.803231496062993,
+   "ilk": 3.7719,
+   "son": 5.2609,
+   "ilk_gun": "2018-01-01",
+   "son_gun": "2018-12-31"
+  },
+  {
+   "yil": 2019,
+   "n": 249,
+   "ortalama": 5.670829718875502,
+   "ilk": 5.281,
+   "son": 5.9402,
+   "ilk_gun": "2019-01-02",
+   "son_gun": "2019-12-31"
+  },
+  {
+   "yil": 2020,
+   "n": 252,
+   "ortalama": 7.009030158730159,
+   "ilk": 5.94,
+   "son": 7.3405,
+   "ilk_gun": "2020-01-02",
+   "son_gun": "2020-12-31"
+  },
+  {
+   "yil": 2021,
+   "n": 249,
+   "ortalama": 8.88536827309237,
+   "ilk": 7.4194,
+   "son": 12.9775,
+   "ilk_gun": "2021-01-04",
+   "son_gun": "2021-12-31"
+  },
+  {
+   "yil": 2022,
+   "n": 252,
+   "ortalama": 16.563770238095238,
+   "ilk": 13.329,
+   "son": 18.6966,
+   "ilk_gun": "2022-01-03",
+   "son_gun": "2022-12-30"
+  },
+  {
+   "yil": 2023,
+   "n": 253,
+   "ortalama": 23.743790118577074,
+   "ilk": 18.6983,
+   "son": 29.3973,
+   "ilk_gun": "2023-01-02",
+   "son_gun": "2023-12-29"
+  },
+  {
+   "yil": 2024,
+   "n": 250,
+   "ortalama": 32.7921452,
+   "ilk": 29.4382,
+   "son": 35.2233,
+   "ilk_gun": "2024-01-02",
+   "son_gun": "2024-12-31"
+  },
+  {
+   "yil": 2025,
+   "n": 251,
+   "ortalama": 39.47606972111554,
+   "ilk": 35.2803,
+   "son": 42.8623,
+   "ilk_gun": "2025-01-02",
+   "son_gun": "2025-12-31"
+  },
+  {
+   "yil": 2026,
+   "n": 167,
+   "ortalama": 45.27102215568862,
+   "ilk": 42.8457,
+   "son": 48.2075,
+   "ilk_gun": "2026-01-02",
+   "son_gun": "2026-09-03"
+  }
+ ],
+ "yontem": [
+  {
+   "program": "ovp2027",
+   "program_kisa": "OVP 2027–2029",
+   "yil": 2025,
+   "ima": 39.47627965043695,
+   "gerceklesen": 39.47606972111554,
+   "n": 251,
+   "fark_yuzde": 0.0005317888100098145
+  },
+  {
+   "program": "ovp2026",
+   "program_kisa": "OVP 2026–2028",
+   "yil": 2024,
+   "ima": 32.83284241531664,
+   "gerceklesen": 32.7921452,
+   "n": 250,
+   "fark_yuzde": 0.12410659646824307
+  }
+ ],
+ "yontem_esik_yuzde": 1.0,
+ "yil_gun_ortancasi": 251,
+ "bu_yil_olcum": {
+  "ovp2027": {
+   "yil": 2026,
+   "ovp_ortalama": 46.86765513454146,
+   "gerceklesen_ortalama": 45.27102215568862,
+   "n_gerceklesen": 167,
+   "son_kur": 48.2075,
+   "son_gun": "2026-09-03",
+   "yil_basi": 42.8457,
+   "yil_basi_gun": "2026-01-02",
+   "onceki_kapanis": 42.8623,
+   "onceki_kapanis_gun": "2025-12-31",
+   "sapma_yuzde": -3.406684149803174,
+   "kalan_gun": 85,
+   "ytd_yuzde": 12.470632700531725,
+   "yil_basindan_yuzde": 12.514207960192048,
+   "toplam_gun": 252,
+   "gereken_ortalama": 50.00456934005232,
+   "gereken_bugune_gore_yuzde": 3.7277795779750322,
+   "yil_sonu_dogrusal": 51.759846369870864,
+   "yil_sonu_ustel": 51.80242838259124,
+   "patika_farki_yuzde": 0.08226842950052049,
+   "yil_sonu_kalan_hareket_yuzde": 7.457197287955686,
+   "kalan_tatil_payi": 1,
+   "kalan_tatil_ornek_yil": 5,
+   "kalan_gun_tatilsiz": 84,
+   "gereken_ortalama_tatilsiz": 50.04191355678459
+  },
+  "ovp2026": {
+   "yil": 2026,
+   "ovp_ortalama": 46.59650180940893,
+   "gerceklesen_ortalama": 45.27102215568862,
+   "n_gerceklesen": 167,
+   "son_kur": 48.2075,
+   "son_gun": "2026-09-03",
+   "yil_basi": 42.8457,
+   "yil_basi_gun": "2026-01-02",
+   "onceki_kapanis": 42.8623,
+   "onceki_kapanis_gun": "2025-12-31",
+   "sapma_yuzde": -2.8445904783621856,
+   "kalan_gun": 85,
+   "ytd_yuzde": 12.470632700531725,
+   "yil_basindan_yuzde": 12.514207960192048,
+   "toplam_gun": 252,
+   "gereken_ortalama": 49.200679482012355,
+   "gereken_bugune_gore_yuzde": 2.0602177711193326,
+   "yil_sonu_dogrusal": 50.17076176676861,
+   "yil_sonu_ustel": 50.1838400978148,
+   "patika_farki_yuzde": 0.02606763498427256,
+   "yil_sonu_kalan_hareket_yuzde": 4.099652746595028,
+   "kalan_tatil_payi": 1,
+   "kalan_tatil_ornek_yil": 5,
+   "kalan_gun_tatilsiz": 84,
+   "gereken_ortalama_tatilsiz": 49.2316815971624
+  }
+ },
+ "zincir": {
+  "ovp2027": [
+   {
+    "program": "ovp2027",
+    "yil": 2026,
+    "giris": 42.8623,
+    "ovp_ortalama": 46.86765513454146,
+    "cikis": 51.80242838259124,
+    "deval_yuzde": 20.857789672022363,
+    "gun": 85,
+    "tufe_yuzde": 28.4,
+    "reel_tl_yuzde": 6.240566163294314,
+    "makas_puan": 7.542210327977635
+   },
+   {
+    "program": "ovp2027",
+    "yil": 2027,
+    "giris": 51.80242838259124,
+    "ovp_ortalama": 56.05191532258065,
+    "cikis": 60.4912421592082,
+    "deval_yuzde": 16.772985452428955,
+    "gun": 251,
+    "tufe_yuzde": 21.0,
+    "reel_tl_yuzde": 3.6198565371894587,
+    "makas_puan": 4.227014547571045
+   },
+   {
+    "program": "ovp2027",
+    "yil": 2028,
+    "giris": 60.4912421592082,
+    "ovp_ortalama": 63.69392635102822,
+    "cikis": 66.98096197060298,
+    "deval_yuzde": 10.72836261869834,
+    "gun": 251,
+    "tufe_yuzde": 13.5,
+    "reel_tl_yuzde": 2.5030961496703474,
+    "makas_puan": 2.7716373813016606
+   },
+   {
+    "program": "ovp2027",
+    "yil": 2029,
+    "giris": 66.98096197060298,
+    "ovp_ortalama": 68.82741573033708,
+    "cikis": 70.69244071821389,
+    "deval_yuzde": 5.54109501926805,
+    "gun": 251,
+    "tufe_yuzde": 9.0,
+    "reel_tl_yuzde": 3.2773063232862,
+    "makas_puan": 3.4589049807319503
+   }
+  ],
+  "ovp2026": [
+   {
+    "program": "ovp2026",
+    "yil": 2026,
+    "giris": 42.8623,
+    "ovp_ortalama": 46.59650180940893,
+    "cikis": 50.1838400978148,
+    "deval_yuzde": 17.08153808315187,
+    "gun": 85,
+    "tufe_yuzde": 16.0,
+    "reel_tl_yuzde": -0.9237477580656406,
+    "makas_puan": -1.0815380831518695
+   },
+   {
+    "program": "ovp2026",
+    "yil": 2027,
+    "giris": 50.1838400978148,
+    "ovp_ortalama": 50.71242200794101,
+    "cikis": 51.24046356001453,
+    "deval_yuzde": 2.1055053980329808,
+    "gun": 251,
+    "tufe_yuzde": 9.0,
+    "reel_tl_yuzde": 6.75232405450672,
+    "makas_puan": 6.894494601967019
+   },
+   {
+    "program": "ovp2026",
+    "yil": 2028,
+    "giris": 51.24046356001453,
+    "ovp_ortalama": 53.76299045599151,
+    "cikis": 56.345984841705686,
+    "deval_yuzde": 9.96384678626374,
+    "gun": 251,
+    "tufe_yuzde": 8.0,
+    "reel_tl_yuzde": -1.7859022248292722,
+    "makas_puan": -1.9638467862637405
+   }
+  ]
+ },
+ "kumule": {
+  "ovp2027": {
+   "bas_yil": 2026,
+   "son_yil": 2029,
+   "bas": 42.8623,
+   "son": 70.69244071821389,
+   "kur_yuzde": 64.9291818642814,
+   "tufe_yuzde": 92.2085726,
+   "reel_tl_yuzde": 16.54006309093714
+  },
+  "ovp2026": {
+   "bas_yil": 2026,
+   "son_yil": 2028,
+   "bas": 42.8623,
+   "son": 56.345984841705686,
+   "kur_yuzde": 31.458145833764604,
+   "tufe_yuzde": 36.55520000000001,
+   "reel_tl_yuzde": 3.8773209023356348
+  }
+ },
+ "carry": {
+  "gerceklesen": {
+   "yil": 2026,
+   "tl_yuzde": 29.614134914688982,
+   "tl_yol": "endeks",
+   "ortalama_gecelik": 39.10777185628743,
+   "kur_yuzde": 12.514207960192048,
+   "net_yuzde": 15.198015667982979,
+   "gun": 244,
+   "n_faiz": 167,
+   "bas_gun": "2026-01-02",
+   "son_gun": "2026-09-03",
+   "faiz_son_gun": "2026-09-03",
+   "yillik_yuzde": 23.570747447535044
+  },
+  "faiz_varsayimi": 37.0,
+  "faiz_varsayimi_gun": "2026-09-03",
+  "ileri": [
+   {
+    "yil": 2026,
+    "faiz": 37.0,
+    "deval_yuzde": 20.857789672022363,
+    "basit_yuzde": 13.356367323764196,
+    "bilesik_yuzde": 6.701507956908781,
+    "reel_faiz_yuzde": 6.697819314641751
+   },
+   {
+    "yil": 2027,
+    "faiz": 37.0,
+    "deval_yuzde": 16.772985452428955,
+    "basit_yuzde": 17.321655748718644,
+    "bilesik_yuzde": 10.434004546344,
+    "reel_faiz_yuzde": 13.223140495867792
+   },
+   {
+    "yil": 2028,
+    "faiz": 37.0,
+    "deval_yuzde": 10.72836261869834,
+    "basit_yuzde": 23.726204163038233,
+    "bilesik_yuzde": 16.462558475203593,
+    "reel_faiz_yuzde": 20.70484581497798
+   },
+   {
+    "yil": 2029,
+    "faiz": 37.0,
+    "deval_yuzde": 5.54109501926805,
+    "basit_yuzde": 29.807256571469807,
+    "bilesik_yuzde": 22.186608012636256,
+    "reel_faiz_yuzde": 25.688073394495415
+   }
+  ]
+ },
+ "revizyon": [
+  {
+   "kalem": "ima_kur",
+   "ad": "İma edilen ortalama kur",
+   "birim": "TL/dolar",
+   "ondalik": 3,
+   "yil": 2025,
+   "yeni": 39.47627965043695,
+   "eski": 39.62970044614404,
+   "fark": -0.38713589550238847,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "ima_kur",
+   "ad": "İma edilen ortalama kur",
+   "birim": "TL/dolar",
+   "ondalik": 3,
+   "yil": 2026,
+   "yeni": 46.86765513454146,
+   "eski": 46.59650180940893,
+   "fark": 0.5819177719426527,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "ima_kur",
+   "ad": "İma edilen ortalama kur",
+   "birim": "TL/dolar",
+   "ondalik": 3,
+   "yil": 2027,
+   "yeni": 56.05191532258065,
+   "eski": 50.71242200794101,
+   "fark": 10.528965297306314,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "ima_kur",
+   "ad": "İma edilen ortalama kur",
+   "birim": "TL/dolar",
+   "ondalik": 3,
+   "yil": 2028,
+   "yeni": 63.69392635102822,
+   "eski": 53.76299045599151,
+   "fark": 18.471695511740215,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "gsyh_tl",
+   "ad": "GSYH, lira (cari fiyatlarla)",
+   "birim": "milyar TL",
+   "ondalik": 0,
+   "yil": 2025,
+   "yeni": 63241.0,
+   "eski": 62179.0,
+   "fark": 1.7079721449363872,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "gsyh_tl",
+   "ad": "GSYH, lira (cari fiyatlarla)",
+   "birim": "milyar TL",
+   "ondalik": 0,
+   "yil": 2026,
+   "yeni": 85346.0,
+   "eski": 77257.0,
+   "fark": 10.470248650607704,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "gsyh_tl",
+   "ad": "GSYH, lira (cari fiyatlarla)",
+   "birim": "milyar TL",
+   "ondalik": 0,
+   "yil": 2027,
+   "yeni": 111207.0,
+   "eski": 89406.0,
+   "fark": 24.384269512113278,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "gsyh_tl",
+   "ad": "GSYH, lira (cari fiyatlarla)",
+   "birim": "milyar TL",
+   "ondalik": 0,
+   "yil": 2028,
+   "yeni": 133184.0,
+   "eski": 101397.0,
+   "fark": 31.349053719538045,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "gsyh_usd",
+   "ad": "GSYH, dolar (cari fiyatlarla)",
+   "birim": "milyar dolar",
+   "ondalik": 0,
+   "yil": 2025,
+   "yeni": 1602.0,
+   "eski": 1569.0,
+   "fark": 2.103250478011476,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "gsyh_usd",
+   "ad": "GSYH, dolar (cari fiyatlarla)",
+   "birim": "milyar dolar",
+   "ondalik": 0,
+   "yil": 2026,
+   "yeni": 1821.0,
+   "eski": 1658.0,
+   "fark": 9.831121833534384,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "gsyh_usd",
+   "ad": "GSYH, dolar (cari fiyatlarla)",
+   "birim": "milyar dolar",
+   "ondalik": 0,
+   "yil": 2027,
+   "yeni": 1984.0,
+   "eski": 1763.0,
+   "fark": 12.535450935904713,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "gsyh_usd",
+   "ad": "GSYH, dolar (cari fiyatlarla)",
+   "birim": "milyar dolar",
+   "ondalik": 0,
+   "yil": 2028,
+   "yeni": 2091.0,
+   "eski": 1886.0,
+   "fark": 10.869565217391308,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "kisi_basi_gelir",
+   "ad": "Kişi başına gelir",
+   "birim": "dolar",
+   "ondalik": 0,
+   "yil": 2025,
+   "yeni": 18040.0,
+   "eski": 17748.0,
+   "fark": 1.6452558034708131,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "kisi_basi_gelir",
+   "ad": "Kişi başına gelir",
+   "birim": "dolar",
+   "ondalik": 0,
+   "yil": 2026,
+   "yeni": 20523.0,
+   "eski": 18621.0,
+   "fark": 10.214274206540995,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "kisi_basi_gelir",
+   "ad": "Kişi başına gelir",
+   "birim": "dolar",
+   "ondalik": 0,
+   "yil": 2027,
+   "yeni": 22285.0,
+   "eski": 19710.0,
+   "fark": 13.064434297311012,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "kisi_basi_gelir",
+   "ad": "Kişi başına gelir",
+   "birim": "dolar",
+   "ondalik": 0,
+   "yil": 2028,
+   "yeni": 23419.0,
+   "eski": 20987.0,
+   "fark": 11.58812598275123,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "nufus",
+   "ad": "Nüfus (yıl ortası)",
+   "birim": "bin kişi",
+   "ondalik": 0,
+   "yil": 2026,
+   "yeni": 86321.0,
+   "eski": 86447.0,
+   "fark": -0.1457540458315476,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "nufus",
+   "ad": "Nüfus (yıl ortası)",
+   "birim": "bin kişi",
+   "ondalik": 0,
+   "yil": 2027,
+   "yeni": 86856.0,
+   "eski": 86856.0,
+   "fark": 0.0,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "nufus",
+   "ad": "Nüfus (yıl ortası)",
+   "birim": "bin kişi",
+   "ondalik": 0,
+   "yil": 2028,
+   "yeni": 87252.0,
+   "eski": 87252.0,
+   "fark": 0.0,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "buyume",
+   "ad": "GSYH büyümesi",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 3.7,
+   "eski": 3.3,
+   "fark": 0.40000000000000036,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "buyume",
+   "ad": "GSYH büyümesi",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 3.3,
+   "eski": 3.8,
+   "fark": -0.5,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "buyume",
+   "ad": "GSYH büyümesi",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 4.2,
+   "eski": 4.3,
+   "fark": -0.09999999999999964,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "buyume",
+   "ad": "GSYH büyümesi",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 4.6,
+   "eski": 5.0,
+   "fark": -0.40000000000000036,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "toplam_tuketim",
+   "ad": "Toplam tüketim artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 3.6,
+   "eski": 2.5,
+   "fark": 1.1,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "toplam_tuketim",
+   "ad": "Toplam tüketim artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 3.5,
+   "eski": 3.3,
+   "fark": 0.20000000000000018,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "toplam_tuketim",
+   "ad": "Toplam tüketim artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 4.0,
+   "eski": 3.8,
+   "fark": 0.20000000000000018,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "toplam_tuketim",
+   "ad": "Toplam tüketim artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 4.1,
+   "eski": 4.4,
+   "fark": -0.3000000000000007,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "sabit_sermaye",
+   "ad": "Toplam sabit sermaye yatırımı artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 7.3,
+   "eski": 4.6,
+   "fark": 2.7,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "sabit_sermaye",
+   "ad": "Toplam sabit sermaye yatırımı artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 3.1,
+   "eski": 4.0,
+   "fark": -0.8999999999999999,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "sabit_sermaye",
+   "ad": "Toplam sabit sermaye yatırımı artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 4.0,
+   "eski": 4.2,
+   "fark": -0.20000000000000018,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "sabit_sermaye",
+   "ad": "Toplam sabit sermaye yatırımı artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 4.7,
+   "eski": 4.9,
+   "fark": -0.20000000000000018,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "nihai_yurtici_talep",
+   "ad": "Toplam nihai yurt içi talep artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 4.5,
+   "eski": 3.0,
+   "fark": 1.5,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "nihai_yurtici_talep",
+   "ad": "Toplam nihai yurt içi talep artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 3.4,
+   "eski": 3.5,
+   "fark": -0.10000000000000009,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "nihai_yurtici_talep",
+   "ad": "Toplam nihai yurt içi talep artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 4.0,
+   "eski": 3.9,
+   "fark": 0.10000000000000009,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "nihai_yurtici_talep",
+   "ad": "Toplam nihai yurt içi talep artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 4.3,
+   "eski": 4.5,
+   "fark": -0.20000000000000018,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "net_ihracat_katki",
+   "ad": "Net ihracatın büyümeye katkısı",
+   "birim": "puan",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": -1.1,
+   "eski": -0.3,
+   "fark": -0.8,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "net_ihracat_katki",
+   "ad": "Net ihracatın büyümeye katkısı",
+   "birim": "puan",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": -0.5,
+   "eski": 0.0,
+   "fark": -0.5,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "net_ihracat_katki",
+   "ad": "Net ihracatın büyümeye katkısı",
+   "birim": "puan",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 0.0,
+   "eski": 0.1,
+   "fark": -0.1,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "net_ihracat_katki",
+   "ad": "Net ihracatın büyümeye katkısı",
+   "birim": "puan",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 0.1,
+   "eski": 0.2,
+   "fark": -0.1,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "yurtici_tasarruf_gsyh",
+   "ad": "Toplam yurt içi tasarruf / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 29.9,
+   "eski": 30.6,
+   "fark": -0.7000000000000028,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "yurtici_tasarruf_gsyh",
+   "ad": "Toplam yurt içi tasarruf / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 30.2,
+   "eski": 30.8,
+   "fark": -0.6000000000000014,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "yurtici_tasarruf_gsyh",
+   "ad": "Toplam yurt içi tasarruf / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 30.3,
+   "eski": 31.1,
+   "fark": -0.8000000000000007,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "yurtici_tasarruf_gsyh",
+   "ad": "Toplam yurt içi tasarruf / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 30.5,
+   "eski": 31.2,
+   "fark": -0.6999999999999993,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "tasarruf_yatirim_farki_gsyh",
+   "ad": "Tasarruf−yatırım farkı / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": -1.8,
+   "eski": -1.4,
+   "fark": -0.40000000000000013,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "tasarruf_yatirim_farki_gsyh",
+   "ad": "Tasarruf−yatırım farkı / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": -2.5,
+   "eski": -1.3,
+   "fark": -1.2,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "tasarruf_yatirim_farki_gsyh",
+   "ad": "Tasarruf−yatırım farkı / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": -1.9,
+   "eski": -1.1,
+   "fark": -0.7999999999999998,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "tasarruf_yatirim_farki_gsyh",
+   "ad": "Tasarruf−yatırım farkı / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": -1.8,
+   "eski": -0.9,
+   "fark": -0.9,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "deflator",
+   "ad": "GSYH deflatörü artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 36.5,
+   "eski": 35.0,
+   "fark": 1.5,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "deflator",
+   "ad": "GSYH deflatörü artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 30.6,
+   "eski": 19.7,
+   "fark": 10.900000000000002,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "deflator",
+   "ad": "GSYH deflatörü artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 25.0,
+   "eski": 10.9,
+   "fark": 14.1,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "deflator",
+   "ad": "GSYH deflatörü artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 14.5,
+   "eski": 8.0,
+   "fark": 6.5,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "tufe",
+   "ad": "TÜFE, yıl sonu",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 30.9,
+   "eski": 28.5,
+   "fark": 2.3999999999999986,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "tufe",
+   "ad": "TÜFE, yıl sonu",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 28.4,
+   "eski": 16.0,
+   "fark": 12.399999999999999,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "tufe",
+   "ad": "TÜFE, yıl sonu",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 21.0,
+   "eski": 9.0,
+   "fark": 12.0,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "tufe",
+   "ad": "TÜFE, yıl sonu",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 13.5,
+   "eski": 8.0,
+   "fark": 5.5,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "cari",
+   "ad": "Cari işlemler dengesi",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": -30.3,
+   "eski": -22.6,
+   "fark": 34.070796460176986,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "cari",
+   "ad": "Cari işlemler dengesi",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": -47.5,
+   "eski": -22.3,
+   "fark": 113.00448430493275,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "cari",
+   "ad": "Cari işlemler dengesi",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": -38.5,
+   "eski": -20.5,
+   "fark": 87.80487804878048,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "cari",
+   "ad": "Cari işlemler dengesi",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": -37.0,
+   "eski": -18.5,
+   "fark": 100.0,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "cari_gsyh",
+   "ad": "Cari işlemler dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": -1.9,
+   "eski": -1.4,
+   "fark": -0.5,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "cari_gsyh",
+   "ad": "Cari işlemler dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": -2.6,
+   "eski": -1.3,
+   "fark": -1.3,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "cari_gsyh",
+   "ad": "Cari işlemler dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": -1.9,
+   "eski": -1.2,
+   "fark": -0.7,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "cari_gsyh",
+   "ad": "Cari işlemler dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": -1.8,
+   "eski": -1.0,
+   "fark": -0.8,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "altin_haric_cari",
+   "ad": "Altın hariç cari işlemler dengesi",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": -10.3,
+   "eski": -5.3,
+   "fark": 94.33962264150946,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "altin_haric_cari",
+   "ad": "Altın hariç cari işlemler dengesi",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": -34.0,
+   "eski": -6.0,
+   "fark": 466.6666666666667,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "altin_haric_cari",
+   "ad": "Altın hariç cari işlemler dengesi",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": -23.5,
+   "eski": -6.9,
+   "fark": 240.57971014492753,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "altin_haric_cari",
+   "ad": "Altın hariç cari işlemler dengesi",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": -20.5,
+   "eski": -7.5,
+   "fark": 173.33333333333334,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "altin_haric_cari_gsyh",
+   "ad": "Altın hariç cari işlemler dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": -0.6,
+   "eski": -0.3,
+   "fark": -0.3,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "altin_haric_cari_gsyh",
+   "ad": "Altın hariç cari işlemler dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": -1.9,
+   "eski": -0.4,
+   "fark": -1.5,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "altin_haric_cari_gsyh",
+   "ad": "Altın hariç cari işlemler dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": -1.2,
+   "eski": -0.4,
+   "fark": -0.7999999999999999,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "altin_haric_cari_gsyh",
+   "ad": "Altın hariç cari işlemler dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": -1.0,
+   "eski": -0.4,
+   "fark": -0.6,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "ihracat",
+   "ad": "İhracat (genel ticaret sistemi, fob)",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 273.2,
+   "eski": 273.8,
+   "fark": -0.21913805697589828,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "ihracat",
+   "ad": "İhracat (genel ticaret sistemi, fob)",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 282.0,
+   "eski": 282.0,
+   "fark": 0.0,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "ihracat",
+   "ad": "İhracat (genel ticaret sistemi, fob)",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 292.0,
+   "eski": 294.0,
+   "fark": -0.6802721088435382,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "ihracat",
+   "ad": "İhracat (genel ticaret sistemi, fob)",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 302.5,
+   "eski": 308.5,
+   "fark": -1.944894651539708,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "ithalat",
+   "ad": "İthalat (genel ticaret sistemi, cif)",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 365.4,
+   "eski": 367.0,
+   "fark": -0.4359673024523225,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "ithalat",
+   "ad": "İthalat (genel ticaret sistemi, cif)",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 387.0,
+   "eski": 378.0,
+   "fark": 2.3809523809523725,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "ithalat",
+   "ad": "İthalat (genel ticaret sistemi, cif)",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 397.0,
+   "eski": 393.0,
+   "fark": 1.0178117048346147,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "ithalat",
+   "ad": "İthalat (genel ticaret sistemi, cif)",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 411.0,
+   "eski": 410.5,
+   "fark": 0.12180267965895553,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "dis_ticaret_dengesi",
+   "ad": "Dış ticaret dengesi",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": -92.2,
+   "eski": -93.2,
+   "fark": -1.0729613733905574,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "dis_ticaret_dengesi",
+   "ad": "Dış ticaret dengesi",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": -105.0,
+   "eski": -96.0,
+   "fark": 9.375,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "dis_ticaret_dengesi",
+   "ad": "Dış ticaret dengesi",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": -105.0,
+   "eski": -99.0,
+   "fark": 6.060606060606055,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "dis_ticaret_dengesi",
+   "ad": "Dış ticaret dengesi",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": -108.5,
+   "eski": -102.0,
+   "fark": 6.372549019607843,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "dis_ticaret_hacmi_gsyh",
+   "ad": "Dış ticaret hacmi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 39.9,
+   "eski": 40.8,
+   "fark": -0.8999999999999986,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "dis_ticaret_hacmi_gsyh",
+   "ad": "Dış ticaret hacmi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 36.7,
+   "eski": 39.8,
+   "fark": -3.0999999999999943,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "dis_ticaret_hacmi_gsyh",
+   "ad": "Dış ticaret hacmi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 34.7,
+   "eski": 39.0,
+   "fark": -4.299999999999997,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "dis_ticaret_hacmi_gsyh",
+   "ad": "Dış ticaret hacmi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 34.1,
+   "eski": 38.1,
+   "fark": -4.0,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "brent",
+   "ad": "Ham petrol fiyatı (Brent)",
+   "birim": "dolar/varil",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 69.1,
+   "eski": 70.0,
+   "fark": -1.28571428571429,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "brent",
+   "ad": "Ham petrol fiyatı (Brent)",
+   "birim": "dolar/varil",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 88.0,
+   "eski": 65.0,
+   "fark": 35.384615384615394,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "brent",
+   "ad": "Ham petrol fiyatı (Brent)",
+   "birim": "dolar/varil",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 76.0,
+   "eski": 65.1,
+   "fark": 16.74347158218128,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "brent",
+   "ad": "Ham petrol fiyatı (Brent)",
+   "birim": "dolar/varil",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 72.0,
+   "eski": 65.6,
+   "fark": 9.756097560975618,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "enerji_ithalati",
+   "ad": "Enerji ithalatı",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 62.5,
+   "eski": 64.0,
+   "fark": -2.34375,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "enerji_ithalati",
+   "ad": "Enerji ithalatı",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 71.0,
+   "eski": 63.0,
+   "fark": 12.698412698412698,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "enerji_ithalati",
+   "ad": "Enerji ithalatı",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 66.0,
+   "eski": 62.5,
+   "fark": 5.600000000000005,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "enerji_ithalati",
+   "ad": "Enerji ithalatı",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 63.5,
+   "eski": 62.0,
+   "fark": 2.4193548387096753,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "turizm_geliri",
+   "ad": "Turizm gelirleri",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 65.2,
+   "eski": 64.0,
+   "fark": 1.8750000000000044,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "turizm_geliri",
+   "ad": "Turizm gelirleri",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 65.0,
+   "eski": 68.0,
+   "fark": -4.411764705882348,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "turizm_geliri",
+   "ad": "Turizm gelirleri",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 70.0,
+   "eski": 71.0,
+   "fark": -1.4084507042253502,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "turizm_geliri",
+   "ad": "Turizm gelirleri",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 73.5,
+   "eski": 75.0,
+   "fark": -2.0000000000000018,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "seyahat_geliri",
+   "ad": "Seyahat gelirleri",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 60.0,
+   "eski": 59.5,
+   "fark": 0.8403361344537785,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "seyahat_geliri",
+   "ad": "Seyahat gelirleri",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 60.0,
+   "eski": 61.8,
+   "fark": -2.9126213592232997,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "seyahat_geliri",
+   "ad": "Seyahat gelirleri",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 64.5,
+   "eski": 64.5,
+   "fark": 0.0,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "seyahat_geliri",
+   "ad": "Seyahat gelirleri",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 67.5,
+   "eski": 68.2,
+   "fark": -1.026392961876832,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "issizlik",
+   "ad": "İşsizlik oranı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 8.3,
+   "eski": 8.5,
+   "fark": -0.1999999999999993,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "issizlik",
+   "ad": "İşsizlik oranı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 8.1,
+   "eski": 8.4,
+   "fark": -0.3000000000000007,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "issizlik",
+   "ad": "İşsizlik oranı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 8.0,
+   "eski": 8.2,
+   "fark": -0.1999999999999993,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "issizlik",
+   "ad": "İşsizlik oranı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 7.8,
+   "eski": 7.8,
+   "fark": 0.0,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "isgucu_katilim",
+   "ad": "İşgücüne katılma oranı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 53.5,
+   "eski": 53.7,
+   "fark": -0.20000000000000284,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "isgucu_katilim",
+   "ad": "İşgücüne katılma oranı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 52.9,
+   "eski": 54.4,
+   "fark": -1.5,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "isgucu_katilim",
+   "ad": "İşgücüne katılma oranı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 53.4,
+   "eski": 55.1,
+   "fark": -1.7000000000000028,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "isgucu_katilim",
+   "ad": "İşgücüne katılma oranı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 54.0,
+   "eski": 56.0,
+   "fark": -2.0,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "istihdam",
+   "ad": "İstihdam düzeyi",
+   "birim": "bin kişi",
+   "ondalik": 0,
+   "yil": 2025,
+   "yeni": 32566.0,
+   "eski": 32605.0,
+   "fark": -0.11961355620303538,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "istihdam",
+   "ad": "İstihdam düzeyi",
+   "birim": "bin kişi",
+   "ondalik": 0,
+   "yil": 2026,
+   "yeni": 32579.0,
+   "eski": 33336.0,
+   "fark": -2.2708183345332422,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "istihdam",
+   "ad": "İstihdam düzeyi",
+   "birim": "bin kişi",
+   "ondalik": 0,
+   "yil": 2027,
+   "yeni": 33236.0,
+   "eski": 34128.0,
+   "fark": -2.6136896390060893,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "istihdam",
+   "ad": "İstihdam düzeyi",
+   "birim": "bin kişi",
+   "ondalik": 0,
+   "yil": 2028,
+   "yeni": 33925.0,
+   "eski": 35130.0,
+   "fark": -3.4301167093652163,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "istihdam_orani",
+   "ad": "İstihdam oranı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 49.0,
+   "eski": 49.1,
+   "fark": -0.10000000000000142,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "istihdam_orani",
+   "ad": "İstihdam oranı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 48.6,
+   "eski": 49.8,
+   "fark": -1.1999999999999957,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "istihdam_orani",
+   "ad": "İstihdam oranı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 49.2,
+   "eski": 50.5,
+   "fark": -1.2999999999999972,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "istihdam_orani",
+   "ad": "İstihdam oranı",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 49.8,
+   "eski": 51.6,
+   "fark": -1.8000000000000043,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "faiz_gideri",
+   "ad": "Genel devlet faiz gideri",
+   "birim": "milyar TL",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 2054.4,
+   "eski": 2052.7,
+   "fark": 0.08281775222878096,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "faiz_gideri",
+   "ad": "Genel devlet faiz gideri",
+   "birim": "milyar TL",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 2824.9,
+   "eski": 2741.7,
+   "fark": 3.0346135609293556,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "faiz_gideri",
+   "ad": "Genel devlet faiz gideri",
+   "birim": "milyar TL",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 3975.0,
+   "eski": 3039.8,
+   "fark": 30.76518191986315,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "faiz_gideri",
+   "ad": "Genel devlet faiz gideri",
+   "birim": "milyar TL",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 4693.9,
+   "eski": 3346.1,
+   "fark": 40.27972863931144,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "faiz_gideri_gsyh",
+   "ad": "Genel devlet faiz gideri / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": 3.2,
+   "eski": 3.3,
+   "fark": -0.09999999999999964,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "faiz_gideri_gsyh",
+   "ad": "Genel devlet faiz gideri / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": 3.3,
+   "eski": 3.5,
+   "fark": -0.20000000000000018,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "faiz_gideri_gsyh",
+   "ad": "Genel devlet faiz gideri / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": 3.6,
+   "eski": 3.4,
+   "fark": 0.20000000000000018,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "faiz_gideri_gsyh",
+   "ad": "Genel devlet faiz gideri / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": 3.5,
+   "eski": 3.3,
+   "fark": 0.20000000000000018,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "genel_devlet_dengesi",
+   "ad": "Genel devlet dengesi",
+   "birim": "milyar TL",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": -1339.0,
+   "eski": -1939.3,
+   "fark": -30.95446810704894,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "genel_devlet_dengesi",
+   "ad": "Genel devlet dengesi",
+   "birim": "milyar TL",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": -2277.9,
+   "eski": -2412.5,
+   "fark": -5.579274611398954,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "genel_devlet_dengesi",
+   "ad": "Genel devlet dengesi",
+   "birim": "milyar TL",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": -3676.7,
+   "eski": -2379.7,
+   "fark": 54.50266840358029,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "genel_devlet_dengesi",
+   "ad": "Genel devlet dengesi",
+   "birim": "milyar TL",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": -4140.7,
+   "eski": -2603.5,
+   "fark": 59.043595160361036,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "genel_devlet_dengesi_gsyh",
+   "ad": "Genel devlet dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": -2.1,
+   "eski": -3.1,
+   "fark": 1.0,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "genel_devlet_dengesi_gsyh",
+   "ad": "Genel devlet dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": -2.7,
+   "eski": -3.1,
+   "fark": 0.3999999999999999,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "genel_devlet_dengesi_gsyh",
+   "ad": "Genel devlet dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": -3.3,
+   "eski": -2.7,
+   "fark": -0.5999999999999996,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "genel_devlet_dengesi_gsyh",
+   "ad": "Genel devlet dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": -3.1,
+   "eski": -2.6,
+   "fark": -0.5,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "kkgd",
+   "ad": "Kamu kesimi genel dengesi",
+   "birim": "milyar TL",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": -1592.0,
+   "eski": -2183.8,
+   "fark": -27.09955124095613,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "kkgd",
+   "ad": "Kamu kesimi genel dengesi",
+   "birim": "milyar TL",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": -2655.8,
+   "eski": -2594.0,
+   "fark": 2.382420971472632,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "kkgd",
+   "ad": "Kamu kesimi genel dengesi",
+   "birim": "milyar TL",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": -3539.7,
+   "eski": -2586.4,
+   "fark": 36.85818125579956,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "kkgd",
+   "ad": "Kamu kesimi genel dengesi",
+   "birim": "milyar TL",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": -3790.9,
+   "eski": -2587.4,
+   "fark": 46.513874932364544,
+   "fark_birim": "%"
+  },
+  {
+   "kalem": "kkgd_gsyh",
+   "ad": "Kamu kesimi genel dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2025,
+   "yeni": -2.5,
+   "eski": -3.5,
+   "fark": 1.0,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "kkgd_gsyh",
+   "ad": "Kamu kesimi genel dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2026,
+   "yeni": -3.1,
+   "eski": -3.4,
+   "fark": 0.2999999999999998,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "kkgd_gsyh",
+   "ad": "Kamu kesimi genel dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2027,
+   "yeni": -3.2,
+   "eski": -2.9,
+   "fark": -0.30000000000000027,
+   "fark_birim": "puan"
+  },
+  {
+   "kalem": "kkgd_gsyh",
+   "ad": "Kamu kesimi genel dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "yil": 2028,
+   "yeni": -2.8,
+   "eski": -2.6,
+   "fark": -0.19999999999999973,
+   "fark_birim": "puan"
+  }
+ ],
+ "faiz_gideri": {
+  "ovp2027": [
+   {
+    "program": "ovp2027",
+    "yil": 2025,
+    "deflator_tufe_makasi_puan": 5.600000000000001
+   },
+   {
+    "program": "ovp2027",
+    "yil": 2026,
+    "nominal_gsyh_yuzde": 34.953590234183515,
+    "faiz_gideri_yuzde": 37.5048676012461,
+    "fark_puan": 2.551277367062582,
+    "deflator_tufe_makasi_puan": 2.200000000000003
+   },
+   {
+    "program": "ovp2027",
+    "yil": 2027,
+    "nominal_gsyh_yuzde": 30.301361516649884,
+    "faiz_gideri_yuzde": 40.712945590994366,
+    "fark_puan": 10.411584074344482,
+    "deflator_tufe_makasi_puan": 4.0
+   },
+   {
+    "program": "ovp2027",
+    "yil": 2028,
+    "nominal_gsyh_yuzde": 19.76224518240759,
+    "faiz_gideri_yuzde": 18.08553459119495,
+    "fark_puan": -1.6767105912126397,
+    "deflator_tufe_makasi_puan": 1.0
+   },
+   {
+    "program": "ovp2027",
+    "yil": 2029,
+    "nominal_gsyh_yuzde": 14.984532676597784,
+    "faiz_gideri_yuzde": 11.736509086260893,
+    "fark_puan": -3.2480235903368904,
+    "deflator_tufe_makasi_puan": 0.5
+   }
+  ],
+  "ovp2026": [
+   {
+    "program": "ovp2026",
+    "yil": 2024,
+    "deflator_tufe_makasi_puan": 14.899999999999999
+   },
+   {
+    "program": "ovp2026",
+    "yil": 2025,
+    "nominal_gsyh_yuzde": 39.45544665485456,
+    "faiz_gideri_yuzde": 61.566312475403365,
+    "fark_puan": 22.110865820548803,
+    "deflator_tufe_makasi_puan": 6.5
+   },
+   {
+    "program": "ovp2026",
+    "yil": 2026,
+    "nominal_gsyh_yuzde": 24.249344634040426,
+    "faiz_gideri_yuzde": 33.56554781507284,
+    "fark_puan": 9.316203181032414,
+    "deflator_tufe_makasi_puan": 3.6999999999999993
+   },
+   {
+    "program": "ovp2026",
+    "yil": 2027,
+    "nominal_gsyh_yuzde": 15.725435882832617,
+    "faiz_gideri_yuzde": 10.87281613597404,
+    "fark_puan": -4.852619746858577,
+    "deflator_tufe_makasi_puan": 1.9000000000000004
+   },
+   {
+    "program": "ovp2026",
+    "yil": 2028,
+    "nominal_gsyh_yuzde": 13.411851553587017,
+    "faiz_gideri_yuzde": 10.076320810579631,
+    "fark_puan": -3.3355307430073857,
+    "deflator_tufe_makasi_puan": 0.0
+   }
+  ]
+ },
+ "tutarlilik": [
+  {
+   "program": "ovp2027",
+   "yil": 2026,
+   "ad": "nominal_gsyh",
+   "olculen": 34.953590234183515,
+   "beklenen": 34.90979999999999,
+   "sapma": 0.043790234183525456,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2027,
+   "ad": "nominal_gsyh",
+   "olculen": 30.301361516649884,
+   "beklenen": 30.25,
+   "sapma": 0.051361516649883754,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2028,
+   "ad": "nominal_gsyh",
+   "olculen": 19.76224518240759,
+   "beklenen": 19.767000000000003,
+   "sapma": -0.004754817592413474,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2029,
+   "ad": "nominal_gsyh",
+   "olculen": 14.984532676597784,
+   "beklenen": 14.975000000000005,
+   "sapma": 0.009532676597778789,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2025,
+   "ad": "cari_gsyh",
+   "olculen": -1.8913857677902621,
+   "beklenen": -1.9,
+   "sapma": 0.008614232209737782,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2025,
+   "ad": "faiz_gsyh",
+   "olculen": 3.248525481886751,
+   "beklenen": 3.2,
+   "sapma": 0.048525481886750654,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2025,
+   "ad": "dis_ticaret",
+   "olculen": -92.19999999999999,
+   "beklenen": -92.2,
+   "sapma": 1.4210854715202004e-14,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2026,
+   "ad": "cari_gsyh",
+   "olculen": -2.6084568918176827,
+   "beklenen": -2.6,
+   "sapma": -0.00845689181768261,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2026,
+   "ad": "faiz_gsyh",
+   "olculen": 3.3099383685234227,
+   "beklenen": 3.3,
+   "sapma": 0.009938368523422891,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2026,
+   "ad": "dis_ticaret",
+   "olculen": -105.0,
+   "beklenen": -105.0,
+   "sapma": 0.0,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2027,
+   "ad": "cari_gsyh",
+   "olculen": -1.940524193548387,
+   "beklenen": -1.9,
+   "sapma": -0.0405241935483871,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2027,
+   "ad": "faiz_gsyh",
+   "olculen": 3.5744152796136937,
+   "beklenen": 3.6,
+   "sapma": -0.025584720386306437,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2027,
+   "ad": "dis_ticaret",
+   "olculen": -105.0,
+   "beklenen": -105.0,
+   "sapma": 0.0,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2028,
+   "ad": "cari_gsyh",
+   "olculen": -1.7694882831181253,
+   "beklenen": -1.8,
+   "sapma": 0.030511716881874706,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2028,
+   "ad": "faiz_gsyh",
+   "olculen": 3.524372296972609,
+   "beklenen": 3.5,
+   "sapma": 0.024372296972608787,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2028,
+   "ad": "dis_ticaret",
+   "olculen": -108.5,
+   "beklenen": -108.5,
+   "sapma": 0.0,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2029,
+   "ad": "cari_gsyh",
+   "olculen": -1.595505617977528,
+   "beklenen": -1.6,
+   "sapma": 0.004494382022472099,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2029,
+   "ad": "faiz_gsyh",
+   "olculen": 3.424817651706597,
+   "beklenen": 3.4,
+   "sapma": 0.02481765170659722,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2027",
+   "yil": 2029,
+   "ad": "dis_ticaret",
+   "olculen": -110.0,
+   "beklenen": -110.0,
+   "sapma": 0.0,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2025,
+   "ad": "nominal_gsyh",
+   "olculen": 39.45544665485456,
+   "beklenen": 39.455,
+   "sapma": 0.00044665485456363285,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2026,
+   "ad": "nominal_gsyh",
+   "olculen": 24.249344634040426,
+   "beklenen": 24.24860000000002,
+   "sapma": 0.0007446340404051455,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2027,
+   "ad": "nominal_gsyh",
+   "olculen": 15.725435882832617,
+   "beklenen": 15.66869999999998,
+   "sapma": 0.056735882832636975,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2028,
+   "ad": "nominal_gsyh",
+   "olculen": 13.411851553587017,
+   "beklenen": 13.400000000000013,
+   "sapma": 0.011851553587003849,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2024,
+   "ad": "cari_gsyh",
+   "olculen": -0.7511045655375551,
+   "beklenen": -0.8,
+   "sapma": 0.04889543446244493,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2024,
+   "ad": "faiz_gsyh",
+   "olculen": 2.849485275977303,
+   "beklenen": 2.8,
+   "sapma": 0.04948527597730301,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2024,
+   "ad": "dis_ticaret",
+   "olculen": -82.19999999999999,
+   "beklenen": -82.2,
+   "sapma": 1.4210854715202004e-14,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2025,
+   "ad": "cari_gsyh",
+   "olculen": -1.4404079031230084,
+   "beklenen": -1.4,
+   "sapma": -0.04040790312300846,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2025,
+   "ad": "faiz_gsyh",
+   "olculen": 3.3012753501986203,
+   "beklenen": 3.3,
+   "sapma": 0.0012753501986204618,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2025,
+   "ad": "dis_ticaret",
+   "olculen": -93.19999999999999,
+   "beklenen": -93.2,
+   "sapma": 1.4210854715202004e-14,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2026,
+   "ad": "cari_gsyh",
+   "olculen": -1.3449939686369121,
+   "beklenen": -1.3,
+   "sapma": -0.044993968636912074,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2026,
+   "ad": "faiz_gsyh",
+   "olculen": 3.5488046390618324,
+   "beklenen": 3.5,
+   "sapma": 0.04880463906183241,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2026,
+   "ad": "dis_ticaret",
+   "olculen": -96.0,
+   "beklenen": -96.0,
+   "sapma": 0.0,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2027,
+   "ad": "cari_gsyh",
+   "olculen": -1.1627906976744187,
+   "beklenen": -1.2,
+   "sapma": 0.037209302325581284,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2027,
+   "ad": "faiz_gsyh",
+   "olculen": 3.3999955260273365,
+   "beklenen": 3.4,
+   "sapma": -4.473972663454617e-06,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2027,
+   "ad": "dis_ticaret",
+   "olculen": -99.0,
+   "beklenen": -99.0,
+   "sapma": 0.0,
+   "birim": "milyar dolar"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2028,
+   "ad": "cari_gsyh",
+   "olculen": -0.9809119830328737,
+   "beklenen": -1.0,
+   "sapma": 0.019088016967126253,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2028,
+   "ad": "faiz_gsyh",
+   "olculen": 3.2999990137775277,
+   "beklenen": 3.3,
+   "sapma": -9.862224721324253e-07,
+   "birim": "puan"
+  },
+  {
+   "program": "ovp2026",
+   "yil": 2028,
+   "ad": "dis_ticaret",
+   "olculen": -102.0,
+   "beklenen": -102.0,
+   "sapma": 0.0,
+   "birim": "milyar dolar"
+  }
+ ],
+ "tutarlilik_esik_puan": 0.1,
+ "tufe_gerceklesen": {
+  "2006": 9.65348568940334,
+  "2007": 8.387240554308285,
+  "2008": 10.063799210543012,
+  "2009": 6.525803908563765,
+  "2010": 6.401029833770977,
+  "2011": 10.44817156944582,
+  "2012": 6.163803837928361,
+  "2013": 7.400459634226775,
+  "2014": 8.169948848005127,
+  "2015": 8.808332036810796,
+  "2016": 8.533056290752384,
+  "2017": 11.91973752398483,
+  "2018": 20.30176224970528,
+  "2019": 11.836092200504943,
+  "2020": 14.599319013699176,
+  "2021": 36.08090167750451,
+  "2022": 64.26959753021009,
+  "2023": 64.77291859068686,
+  "2024": 44.378771424028464,
+  "2025": 30.89232831613636
+ },
+ "tufe_son": 31.507342820912854,
+ "tufe_son_ay": "2026-08-01",
+ "uyarilar": [],
+ "cerceve_imza": "2937x1·2015-01-02·2026-09-03"
+}
