@@ -555,7 +555,11 @@
    "son_fark": 0.0,
    "birim": "mn USD",
    "esik_bagil": 1e-06,
-   "gecti": true
+   "yayim_adimi_sol": 0.1,
+   "yayim_adimi_sag": 0.1,
+   "esik_taban": 0.2,
+   "gecti": true,
+   "asim_hafta": 0
   },
   "Kırılım tablosundaki gerçek kişi stoku ana tablodakiyle aynı (TP.HPBITABLO4.3 = TP.HPBITABLO2.11)": {
    "n": 114,
@@ -565,7 +569,11 @@
    "son_fark": 0.008000000001629815,
    "birim": "mn USD",
    "esik_bagil": 1e-06,
-   "gecti": true
+   "yayim_adimi_sol": 0.001,
+   "yayim_adimi_sag": 0.1,
+   "esik_taban": 0.101,
+   "gecti": true,
+   "asim_hafta": 0
   },
   "Kırılım tablosundaki tüzel kişi stoku ana tablodakiyle aynı (TP.HPBITABLO4.8 = TP.HPBITABLO2.12)": {
    "n": 114,
@@ -575,9 +583,13 @@
    "son_fark": 0.00900000000547152,
    "birim": "mn USD",
    "esik_bagil": 1e-06,
-   "gecti": false
+   "yayim_adimi_sol": 0.001,
+   "yayim_adimi_sag": 0.1,
+   "esik_taban": 0.101,
+   "gecti": true,
+   "asim_hafta": 0
   },
-  "Gerçek kişilerin arındırılmış değişiminde para birimi kırılımı toplamı (TP.HPBITABLO5.3–5.6 = TP.HPBITABLO5.2)": {
+  "Gerçek kişilerin arındırılmış değişiminde para birimi kırılımı toplamı (TP.HPBITABLO5.3–TP.HPBITABLO5.6 = TP.HPBITABLO5.2)": {
    "n": 139,
    "maks_fark": 0.00010000000020227162,
    "maks_bagil": 3.238048363712888e-06,
@@ -585,9 +597,12 @@
    "son_fark": 0.0,
    "birim": "mn USD",
    "esik_bagil": null,
+   "yayim_adimi_sol": 1e-06,
+   "yayim_adimi_sag": 1e-06,
+   "esik_taban": 2e-06,
    "gecti": null
   },
-  "Tüzel kişilerin arındırılmış değişiminde para birimi kırılımı toplamı (TP.HPBITABLO5.8–5.11 = TP.HPBITABLO5.7)": {
+  "Tüzel kişilerin arındırılmış değişiminde para birimi kırılımı toplamı (TP.HPBITABLO5.8–TP.HPBITABLO5.11 = TP.HPBITABLO5.7)": {
    "n": 139,
    "maks_fark": 0.00010000000020227162,
    "maks_bagil": 2.990551352249506e-07,
@@ -595,9 +610,12 @@
    "son_fark": 0.0,
    "birim": "mn USD",
    "esik_bagil": null,
+   "yayim_adimi_sol": 1e-06,
+   "yayim_adimi_sag": 1e-06,
+   "esik_taban": 2e-06,
    "gecti": null
   },
-  "Gerçek kişilerin parite etkisinde para birimi kırılımı toplamı (TP.HPBITABLO5.14–5.17 = TP.HPBITABLO5.13)": {
+  "Gerçek kişilerin parite etkisinde para birimi kırılımı toplamı (TP.HPBITABLO5.14–TP.HPBITABLO5.17 = TP.HPBITABLO5.13)": {
    "n": 139,
    "maks_fark": 0.00010000000008858478,
    "maks_bagil": 4.410102487771507e-07,
@@ -605,9 +623,12 @@
    "son_fark": 2.842170943040401e-14,
    "birim": "mn USD",
    "esik_bagil": null,
+   "yayim_adimi_sol": 1e-06,
+   "yayim_adimi_sag": 1e-06,
+   "esik_taban": 2e-06,
    "gecti": null
   },
-  "Tüzel kişilerin parite etkisinde para birimi kırılımı toplamı (TP.HPBITABLO5.19–5.22 = TP.HPBITABLO5.18)": {
+  "Tüzel kişilerin parite etkisinde para birimi kırılımı toplamı (TP.HPBITABLO5.19–TP.HPBITABLO5.22 = TP.HPBITABLO5.18)": {
    "n": 139,
    "maks_fark": 0.00010000000000331966,
    "maks_bagil": 4.5751305055870096e-06,
@@ -615,6 +636,9 @@
    "son_fark": 0.0,
    "birim": "mn USD",
    "esik_bagil": null,
+   "yayim_adimi_sol": 1e-06,
+   "yayim_adimi_sag": 1e-06,
+   "esik_taban": 2e-06,
    "gecti": null
   },
   "Arındırılmış değişimde gerçek ve tüzel kişi toplamı (TP.HPBITABLO5.2 + TP.HPBITABLO5.7 = TP.HPBITABLO5.1)": {
@@ -625,6 +649,9 @@
    "son_fark": 0.0,
    "birim": "mn USD",
    "esik_bagil": null,
+   "yayim_adimi_sol": 1e-06,
+   "yayim_adimi_sag": 1e-06,
+   "esik_taban": 2e-06,
    "gecti": null
   },
   "Parite etkisinde gerçek ve tüzel kişi toplamı (TP.HPBITABLO5.13 + TP.HPBITABLO5.18 = TP.HPBITABLO5.12)": {
@@ -635,6 +662,9 @@
    "son_fark": 7.105427357601002e-15,
    "birim": "mn USD",
    "esik_bagil": null,
+   "yayim_adimi_sol": 1e-06,
+   "yayim_adimi_sag": 1e-06,
+   "esik_taban": 2e-06,
    "gecti": null
   }
  },
@@ -697,12 +727,12 @@
  "olu_seri": {
   "pencere_hafta": 26,
   "seri": [
+   "pe_gercek_usd",
    "pe_gercek_diger",
+   "pe_tuzel_usd",
    "pe_tuzel_diger"
   ],
   "olculen_hafta": 26
  },
- "uyarilar": [
-  "KİMLİK BOZUK: Kırılım tablosundaki tüzel kişi stoku ana tablodakiyle aynı (TP.HPBITABLO4.8 = TP.HPBITABLO2.12) — en büyük sapma 0,1 mn USD (%0,0001, 05.07.2024); eşik %0,0001. Kalem numaralandırması ya da birim değişmiş olabilir."
- ]
+ "uyarilar": []
 }

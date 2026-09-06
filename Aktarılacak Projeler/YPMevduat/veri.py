@@ -45,12 +45,41 @@ bie_hpbitablo2'de .10/.11/.12 MİLYON USD, .1/.2/.3/.6 BİN TL. "Trilyon"
 KATALOGDA durur (`Seri.birim`) ve tek kaynaktan okunur: metrik katmanı
 dönüşümü oradan alır, üç ayrı liste tutulsaydı bir gün sessizce ayrışırdı.
 
-TARİHÇE ASİMETRİK — KUSUR DEĞİL
--------------------------------
-Değişim tablosu (hpbitablo5) 05-01-2024'ten, stok tabloları (2 ve 4)
-28-06-2024'ten başlıyor. Bu bir hizalama kusuru DEĞİLDİR ve hizalanmaya
-çalışılmaz: her serinin KENDİ başlangıcı katalogda yazılıdır, gelen serinin
-kapsamı ona karşı ölçülür ve kümüle akım stoktan geriye uzatılmaz.
+TARİHÇE ASİMETRİK — KUSUR DEĞİL, AMA ÖLÇÜLMESİ GEREKEN BİR ASİMETRİ
+-------------------------------------------------------------------
+Değişim tablosu (hpbitablo5) 28-02-2014'ten, stok tabloları (2 ve 4)
+28-06-2024'ten başlıyor: on yılı aşan bir fark. Bu bir hizalama kusuru
+DEĞİLDİR ve hizalanmaya çalışılmaz; ama HANGİ ÖLÇÜM HANGİ PENCEREDEN geliyor
+sorusu, asimetri büyüdükçe sayfanın yarısını belirler:
+
+  · Yalnız değişim tablosundan türeyen her şey (haftalık arındırılmış akım,
+    parite etkisi, kümüle toplamlar, iki bacağın ayrışması) o tablonun KENDİ
+    penceresine sahiptir — stok tablosunun geç başlaması onları bağlamaz.
+  · Stokun haftalık değişimini ve kimliği (Δ stok ≟ arındırılmış + parite)
+    isteyen her şey İKİ tabloyu birden ister, yani yalnız ORTAK pencerede
+    kurulabilir; kümüle akım da stoktan geriye uzatılmaz.
+
+Ayrım yalnız cümlede değil KODDA duruyor: kimlik ayrı bir bloğa çıpalanıyor,
+kümüle akım stok tablosunun ucuna hiç bakmıyor, ve okur cümlesi iki pencereyi
+ayrı sayılarla yazıyor. Tek bir "ölçüm şu kadar haftayı kapsıyor" cümlesi
+asimetri 25 haftayken küçük bir kusurdu; 539 haftaya çıkınca okura sayfanın
+yarısını beş kat kısa gösterir hâle geldi.
+
+BAŞLANGIÇ ELLE YAZILMAZ, ÖLÇÜLÜR
+--------------------------------
+28-02-2014 bir ölçümdür ve künyede kanıtıyla durur (`Seri.bas_kanit`: hangi
+alt sınırdan sorulduğunda çıktı). Önceki değer (05-01-2024) ölçüm değildi —
+ilk keşif koşusunun kendi sorgu alt sınırının iziydi, üstelik çekim de aynı
+sabitten başlıyordu ve kapsam denetimi de onu ölçüt alıyordu: üç yer
+birbirini doğruluyor görünürken hiçbiri ölçmüyordu. Üç sigorta birlikte
+gider ve tek başına hiçbiri yetmez: (i) künye başlangıcın ölçülüp
+ölçülmediğini TAŞIR ve ölçülmemiş başlangıç üzerine hüküm kurulmaz —
+dayanağı "serinin öncesi yok" olan hükümler, yani DAYANAKSIZ sıfır sınıfı;
+tanım gereği sıfır o dayanağı hiç kullanmaz ve kapıya girmez. (ii) Çekim
+katalogdaki başlangıçtan bir yıl GERİDEN
+sorar, böylece tarihçe uzarsa cevabın kendisi söyler; (iii) kapsam denetimi
+iki yöne birden bakar — geç başlayan seri kırpma izidir, erken başlayan seri
+kataloğun geride kaldığının.
 
 UÇ NOKTA NOTU (ölçülmüş)
 ------------------------
@@ -76,6 +105,7 @@ Koşum:  python3 veri.py [--yenile]      · ağa çıkar
 """
 from __future__ import annotations
 
+import contextlib
 import datetime as dt
 import json
 import os
@@ -85,6 +115,7 @@ import time
 import urllib.request
 from typing import NamedTuple
 
+import numpy as np
 import pandas as pd
 
 # --------------------------------------------------------------------------- yollar
@@ -133,7 +164,50 @@ UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
 
 CACHE_TTL_SAAT = 12
 DEMET = 6                 # tek istekte kaç seri (satır sınırı seri sayısına bağlı DEĞİL)
-PARCA_HAFTA_GUN = 6300    # ~900 hafta: 1000 satırlık sessiz kırpmanın altında
+
+# YAYIM RİTMİ — TEK TANIM, üç tüketici.
+# Bu hattın bütün serileri aynı yayımdan gelir (Haftalık Para ve Banka
+# İstatistikleri; Perşembe yayımı, Cuma damgalı, yedi günde bir). Üç ayrı ölçü
+# bu tek sayıdan türer: parça uzunluğu (tek istekte kaç gün), tazelik toleransı
+# (kaç günlük gecikme olağan) ve KAPSAM toleransı (beklenen başlangıç ile gelen
+# başlangıç arasındaki kaç günlük fark kırpma sayılmaz). Üçü ayrı ayrı
+# yazılsaydı bir gün sessizce ayrışır ve hangisinin neyi söylediği kimsenin
+# aklında kalmazdı — bu depoda tam olarak bu sınıf kusur ölçüldü.
+AILE_RITIM_GUN = {"haftalik": 7}
+
+# EVDS'İN SESSİZ KIRPMASI — depo genelinde ölçülmüş davranış: tek istek
+# ~1000 satır döndürüyor, gerisini UYARI VERMEDEN kırpıyor ve aralığın
+# SONUNDAN geriye dolduruyor, yani kesilen şey tarihçenin BAŞIDIR. HTTP 200
+# döner, "items" doludur, koşu yeşil biter.
+SATIR_SINIRI = 1000
+# Parça, sınırın onda dokuzu. Yüzde onluk pay bir güvenlik payı değil ölçüm
+# payıdır: sınır "~1000" diye ölçüldü, tam 1000 diye değil.
+PARCA_PAYI = 0.9
+PARCA_HAFTA_GUN = int(SATIR_SINIRI * PARCA_PAYI) * AILE_RITIM_GUN["haftalik"]
+
+# YOKLAMA PAYI — ÇEKİM, KATALOGDAKİ BAŞLANGIÇTAN GERİDEN SORAR.
+#
+# Bu payın gerekçesi bu hattın en pahalı kusurudur ve kusur yanlış bir tarih
+# DEĞİLDİ: ölçüt ile ölçülen AYNI sabitten geliyordu. Katalogdaki başlangıç
+# çekimin alt sınırıydı, kapsam denetimi de gelen başlangıcı aynı sabite karşı
+# soruyordu — yani seri o sabitten daha eski bir gözlem taşısa bile denetim onu
+# GÖREMEZDİ, çünkü hiç sorulmuyordu. Elle yazılmış bir sabit, kendi kendini
+# doğrulayan bir ölçüm gibi görünüyordu ve on iki buçuk yıllık tarihçenin iki
+# buçuk yılı yayımlanıyordu.
+#
+# Alt sınır bu yüzden bir yıl (53 hafta) GERİDEN sorulur: kaynak katalogdakinden
+# eski bir gözlem yayımlıyorsa cevabın kendisi bunu söyler. 371 gün tam elli üç
+# haftadır, yani sorgu alt sınırı da bir CUMAYA düşer ve haftalık ızgara kaymaz.
+# Bedeli sıfıra yakın: yoklama payıyla birlikte pencere hâlâ tek parçaya sığıyor
+# (aşağıdaki aritmetik `duman.py`de ENGEL olarak sınanıyor).
+#
+# YOKLAMA, HÜKÜM İÇİN YETMEZ. Bir yıllık pay "bu serinin başlangıcı ölçüldü"
+# demek için değil, "başlangıç kaydığında görelim" demek içindir; serinin
+# GERÇEKTEN nerede başladığı ancak kaynağın verebileceğinden kesinlikle daha
+# eski bir alt sınırla (bkz. KESIF_ALT_SINIR) ölçülür. İkisi karıştırılırsa
+# yoklama, kapatmak için konduğu kusurun kendisine dönüşür.
+YOKLAMA_GUN = 53 * AILE_RITIM_GUN["haftalik"]
+
 ILERI_GUN = 10            # bitiş tarihi ileri atılır (aşağıda gerekçesi)
 
 _UYARI: list[str] = []
@@ -150,8 +224,30 @@ _ANAHTAR: str | None = None
 # damgasının altında, üstelik aynı kutuda "SERİ YOK: …" cümlesi dururken.
 # Sayfa kendisiyle çelişiyordu. Aile tanımı burada durur ki kapsam bir listeden
 # değil sözleşmeden türesin.
-TAZELIK_IZI = ("TAZELİK", "ESKİ ÖNBELLEK", "SERİ YOK", "HAFTA ATLANDI",
-               "ARALIK KISALDI", "KAPSAM", "ÖLÇÜM EKSİK", "BAYAT")
+#
+# AİLE İKİYE AYRILDI: BAYATLIK SAĞ UCA DAİR BİR HÜKÜMDÜR.
+# Tek aile vardı ve içinde tarihçeye dair iki önek duruyordu ("HAFTA ATLANDI",
+# "ARALIK KISALDI", "KAPSAM"). Bunlar SERİNİN TAMAMINI tarıyor: 2015'teki tek
+# bir eksik hafta, verisi bugüne kadar gelmiş bir sayfayı HER KOŞUDA bayat
+# ilan ediyordu. On iki yıllık haftalık bir seride bir boşluk bulunması
+# neredeyse kesin olduğu için hüküm kalıcı olurdu — yani ölçü, ölçtüğü şeyi
+# ayırt edemez hâle gelirdi: gerçekten donmuş bir besleme ile on yıl önceki
+# bir tatil kayması aynı cümleyi basardı.
+#
+# AYRIM: "bugünkü sayılar ilerlemedi mi" ile "tarihçenin şeklinde bir kusur
+# var mı" AYRI sorulardır. Birincisi sayfadaki sayıya dokunur (bayatlık),
+# ikincisi pencereye dokunur ve okura yine bildirilir — ama sayfayı bayat
+# ilan etmez. Boşluk uyarıları bu yüzden kendi tarihine göre iki önekten
+# birini alıyor (bkz. `bosluk_uyarilari`), KAPSAM ise tanımı gereği
+# tarihçenin BAŞINA dair bir bulgudur ve sağ uçla ilgisi yoktur.
+SAG_UC_IZI = ("TAZELİK", "ESKİ ÖNBELLEK", "SERİ YOK", "HAFTA ATLANDI",
+              "ARALIK KISALDI", "ÖLÇÜM EKSİK", "BAYAT")
+TARIHCE_IZI = ("KAPSAM", "TARİHÇEDE BOŞLUK", "TARİHÇEDE KISA ARALIK")
+
+# Bayatlık hükmünü kuran aile SAĞ UÇ ailesidir; ad bunu söylesin diye
+# `SAG_UC_IZI` yazılıyor. Eski ad ATIF olarak duruyor (iki liste değil, tek
+# tanımın iki adı): ayrı ayrı yazılsalardı bir gün sessizce ayrışırdı.
+TAZELIK_IZI = SAG_UC_IZI
 
 
 def uyar(mesaj: str) -> None:
@@ -324,28 +420,199 @@ def _demet_cek(kodlar: list[str], bas: pd.Timestamp, son: pd.Timestamp,
     return d[~d.index.duplicated(keep="last")].sort_index()
 
 
-def _cache_yolu(kod: str, bicim_ad: str) -> pathlib.Path:
-    """Önbellek SERİ BAZINDA tutulur: demet bileşimi değişince (bir seri eklenip
-    çıkınca) önbelleğin tamamı geçersizleşmesin."""
-    return CACHE / f"evds_{bicim_ad}_{kod.replace('.', '_')}.csv"
+def sorgu_alt_siniri(s: Seri) -> pd.Timestamp:
+    """Bu serinin çekimde SORULACAĞI alt sınır — TEK TANIM, ÜÇ TÜKETİCİ.
+
+    Aritmetik üç yerde birden lazım: çekim (isteğin başlangıcı), kapsam kaydı
+    (`sorulan_bas` — gelen başlangıcın anlamı ona bağlı) ve ÖNBELLEK ANAHTARI
+    (aşağıdaki gerekçe). Üçü ayrı ayrı yazılsaydı biri güncellenip öteki
+    unutulurdu; bu depoda tam bu sınıf kusur defalarca ölçüldü.
+    """
+    return pd.Timestamp(s.bas) - pd.Timedelta(days=YOKLAMA_GUN)
+
+
+def _cache_yolu(kod: str, bicim_ad: str, alt_sinir) -> pathlib.Path:
+    """Önbellek dosyası — ADI, DOSYAYI ÜRETEN SORGUYU DA TAŞIR.
+
+    Önbellek SERİ BAZINDA tutulur: demet bileşimi değişince (bir seri eklenip
+    çıkınca) önbelleğin tamamı geçersizleşmesin.
+
+    ANAHTAR NEDEN ALT SINIRI TAŞIYOR — ÖLÇÜLMÜŞ BİR ARIZA. Anahtar bir süre
+    yalnız biçim ve seri kodundan kuruluydu, yani AYNI dosya adı iki farklı
+    sorgunun cevabını taşıyabiliyordu. Katalogdaki başlangıç 2024'ten 2014'e
+    çekildiğinde (beş kat tarihçe) önbellekteki 139 haftalık dosya hâlâ TAZE
+    görünüyordu: TTL dolmamıştı, ad değişmemişti, dosya olduğu gibi okunuyordu.
+    Sonuç sessiz ve iki katlıydı — hat kısa tarihçeyle koşuyor, KAPSAM denetimi
+    de gelen başlangıcı yeni katalogla kıyaslayıp kırpma görüyor ve kusuru
+    KAYNAĞA yıkan bir uyarı basıyordu ("tarihçenin başı kesilmiş olabilir").
+    Koşu yeşil bitiyordu. Koşucu önbelleği CI'da da geri yüklendiği için arıza
+    yerelde kalmıyordu.
+
+    KURAL (sınıf kusur): ÖNBELLEKLENEN BİR ÇIKTI, ONU ÜRETEN GİRDİYİ DE
+    TAŞIMALIDIR. Girdi burada sorgunun alt sınırıdır ve o da katalogdaki
+    başlangıç ile yoklama payından türer: ikisinden biri değişince ad değişir,
+    eski dosya bir daha okunmaz.
+
+    ÜST SINIR ADA GİRMEZ, ÇÜNKÜ HER GÜN DEĞİŞİR: istek hep "bugün + pay"a
+    kadar sorulur ve o ucun tazeliğini TTL ölçer. Ada konsaydı önbellek her
+    gün baştan kurulur, yani hiç önbellek olmazdı.
+    """
+    d = pd.Timestamp(alt_sinir)
+    return CACHE / f"evds_{bicim_ad}_{kod.replace('.', '_')}_{d:%Y%m%d}.csv"
+
+
+def _cache_eskisini_sil(kod: str, bicim_ad: str, tut: pathlib.Path) -> None:
+    """Aynı serinin BAŞKA bir sorgu penceresinden kalmış önbellek dosyaları.
+
+    Anahtar pencereyi taşıdığı için eski dosya artık OKUNMUYOR; ama silinmezse
+    koşucu önbelleğinde sonsuza kadar birikir ve — daha kötüsü — katalogdaki
+    başlangıç bir gün geri alınırsa yeniden CANLANIR. Bir daha okunmayacak
+    dosyayı bırakmak, kapatılan kusura geri dönüş yolu bırakmaktır.
+    """
+    guvenli = kod.replace(".", "_")
+    # ÖNEK SONDAKİ ALT ÇİZGİYİ TAŞIR VE BU BİLİNÇLİDİR: "…TABLO5_1" yazımı
+    # "…TABLO5_10" ile başlıyor, yani çizgisiz bir önek bir serinin
+    # temizliğinde BAŞKA bir serinin önbelleğini silerdi.
+    adaylar = list(CACHE.glob(f"evds_{bicim_ad}_{guvenli}_*.csv"))
+    # PENCERESİZ ESKİ YAZIM da temizlenir. Koşucu önbelleği bu dosyaları
+    # taşımaya devam ediyor ve artık hiçbir yerden okunmuyorlar; bırakılırsa
+    # sonsuza kadar birikirler. Ad TAM eşleşmeyle silinir, jokerle değil.
+    eski_yazim = CACHE / f"evds_{bicim_ad}_{guvenli}.csv"
+    if eski_yazim.exists():
+        adaylar.append(eski_yazim)
+    for y in adaylar:
+        if y != tut:
+            with contextlib.suppress(OSError):
+                y.unlink()
 
 
 # ===========================================================================
 # SERİ KATALOĞU
 # ===========================================================================
-class Seri(NamedTuple):
-    """Bir serinin TEK künyesi: kod · başlangıç · birim · okur adı.
+# BAŞLANGICIN ÖLÇÜLDÜĞÜ KEŞFİN ALT SINIRI.
+# "Kaynağın verebileceğinden kesinlikle daha eski" olması ŞART: bir başlangıcı
+# ölçmek, ondan ÖNCESİNİ sorup boş cevap almaktır. Alt sınır serinin gerçek
+# başlangıcına yakınsa gelen cevap serinin değil SORGUNUN alt sınırıdır ve ikisi
+# tıpatıp aynı görünür.
+KESIF_ALT_SINIR = "2005-01-01"
 
-    Dört alanı dört ayrı sözlükte tutmak bu depoda ölçülmüş bir arıza
-    sınıfıdır: listeler bir gün sessizce ayrışır ve hangisinin neyi söylediği
-    kimsenin aklında kalmaz. Buradaki tek satır dört tüketiciyi birden besler —
-    çekim (kod), kapsam denetimi (bas), ölçüm katmanının birim dönüşümü
-    (birim) ve okura basılan her uyarı satırı (okur_adi).
+
+class Seri(NamedTuple):
+    """Bir serinin TEK künyesi: kod · başlangıç · başlangıcın kanıtı · birim · ad.
+
+    Alanları ayrı sözlüklerde tutmak bu depoda ölçülmüş bir arıza sınıfıdır:
+    listeler bir gün sessizce ayrışır ve hangisinin neyi söylediği kimsenin
+    aklında kalmaz. Buradaki tek satır beş tüketiciyi birden besler — çekim
+    (kod), kapsam denetimi (bas), HÜKÜM KAPISI (bas_kanit), ölçüm katmanının
+    birim dönüşümü (birim) ve okura basılan her uyarı satırı (okur_adi).
+
+    NEDEN BAŞLANGICIN AYRI BİR KANIT ALANI VAR. Başlangıç bu hatta bir kez
+    ELLE yazıldı ve ölçüm sanıldı: ilk keşif koşusu 2024 başından sormuştu,
+    dönen ilk cuma katalogda "kaynağın yayımladığı ilk gözlem" diye durdu ve
+    çekim de aynı sabitten başladı. Ölçüt ile ölçülen aynı sabitten geliyordu,
+    yani kapsam denetimi bu kusuru YAPISAL OLARAK göremezdi — daha eski bir
+    gözlem hiç sorulmadığı için hiç görünmedi. Kusur elli iki hafta değil BEŞ
+    KAT tarihçe kaybettirdi (653 hafta yerine 139).
+
+    Bir sabitin ölçüm sanılmasını engelleyen tek şey, ölçülüp ölçülmediğinin
+    KÜNYEDE yazılı olmasıdır. `bas_kanit` bunu tek bir soruya indirir: bu
+    başlangıç HANGİ alt sınırdan sorulduğunda çıktı? Boşsa hiç sorulmamıştır.
+
+    VARSAYILAN BOŞTUR VE BU BİLİNÇLİDİR. Yarın kataloğa eklenen bir seri kanıt
+    alanı yazılmadan gelirse "ölçülmemiş" sayılır ve üzerine hüküm kurulmaz —
+    yani unutmanın bedeli sessiz bir yanlış değil, eksik bir cümledir. Ters
+    varsayılan (ölçülmüş saymak) tam olarak kapatmaya çalıştığımız kusuru
+    yeniden üretirdi.
     """
     kod: str
     bas: str          # kaynağın yayımladığı İLK gözlem (kapsam denetiminin ölçütü)
     birim: str        # "mn USD" | "bin TL"
     okur_adi: str     # okura basılacak ad; parantezde kaynağın KENDİ seri kodu
+    bas_kanit: str = ""   # `bas`ın ölçüldüğü sorgunun ALT SINIRI; boş = ölçülmedi
+
+
+def kapsam_tolerans(aile: str = "haftalik") -> int:
+    """Beklenen başlangıç ile gelen başlangıç arasında kırpma saymadığımız fark.
+
+    Tolerans YAYIM RİTMİNDEN türer, elle yazılmaz: bir yayım aralığı kadar
+    kayma kırpma değil, kaynağın kendi damgalama kararıdır (tatil kayması ilk
+    haftayı birkaç gün öteleyebilir). İki aralık ise artık kaymadır — ve bu
+    hatta gerçek bir kırpmanın ilk işareti de tam bir hafta olur: seri satır
+    sınırını aştığı gün kaynak tarihçenin başından BİR hafta keser, yüz hafta
+    değil. Dar tolerans o ilk haftayı yakalar, geniş tolerans kaçırırdı.
+    """
+    return int(AILE_RITIM_GUN[aile])
+
+
+def bas_olculdu(ad: str) -> bool:
+    """KATALOG YARISI: bu serinin başlangıcı ÖLÇÜLDÜ mü — yoksa elle mi yazıldı?
+
+    DİKKAT — BU FONKSİYON TEK BAŞINA HÜKÜM KAPISI DEĞİLDİR. Yalnız kataloğu
+    sorar; elimizdeki çerçevenin o başlangıca gerçekten uzanıp uzanmadığını
+    SORMAZ. Hüküm kapısı `bas_olculen(H)`dir ve iki yarıyı birlikte ister
+    (gerekçesi orada).
+
+    Ölçüt bir bayrak değil ARİTMETİKTİR ve sebebi budur: bayrak elle konur,
+    aritmetik konamaz. Bir başlangıç ancak ONDAN ÖNCESİ sorulup boş dönmüşse
+    ölçülmüştür; sorgunun alt sınırı `bas`ın kendisiyse (bu hattın kusuru tam
+    buydu) cevap zaten `bas`tan erken OLAMAZ ve ölçüm yapılmamıştır. Kanıt
+    alanına yanlışlıkla `bas` yazan bir sonraki oturum bu yüzden sessizce
+    "ölçüldü" damgası alamaz: aritmetik onu eler.
+
+    Yayım ritmi kadar pay bırakılır — alt sınır ile başlangıç arasında yalnız
+    birkaç günlük fark, kaynağın ilk haftasını sormamış olmakla aynı şeydir.
+    """
+    s = HAFTALIK.get(ad)
+    if s is None or not s.bas_kanit:
+        return False
+    return (pd.Timestamp(s.bas) - pd.Timestamp(s.bas_kanit)).days > kapsam_tolerans()
+
+
+def bas_cerceveye_ulasti(H: pd.DataFrame, ad: str) -> bool:
+    """VERİ YARISI: ELİMİZDEKİ çerçeve, katalogdaki başlangıca kadar uzanıyor mu?
+
+    Katalog "kaynak bu seriyi 28.02.2014'te yayımlamaya başladı" der; bu
+    fonksiyon "peki bu koşuda çektiğimiz seri oraya kadar geliyor mu" diye
+    sorar. İkisi AYRI sorulardır ve ayrıştıkları hâl sessizdir: kırpılmış ya da
+    bayat önbellekten okunmuş bir çerçevede katalog hâlâ 2014 der, elimizdeki
+    seri 2024'te başlar ve fark hiçbir yerde hükme girmez.
+
+    Tolerans kapsam denetimiyle AYNI: bir yayım aralığı kadar kayma kırpma
+    değil, kaynağın damgalama kararıdır. İki eşik ayrı yazılsaydı biri
+    güncellenip öteki unutulurdu.
+    """
+    s = HAFTALIK.get(ad)
+    if s is None or ad not in H.columns:
+        return False
+    d = H[ad].dropna()
+    if d.empty:
+        return False
+    return (d.index[0] - pd.Timestamp(s.bas)).days <= kapsam_tolerans()
+
+
+def bas_olculen(H: pd.DataFrame) -> tuple[str, ...]:
+    """HÜKÜM KAPISI — "bu serinin ÖNCESİ YOK" diyebileceğimiz seriler.
+
+    KAPI NEDEN İKİ YARILI. Dayanağı "serinin öncesi yok" olan her hüküm iki
+    ayrı şeyin birden doğru olmasını ister:
+
+      (i)  KAYNAĞIN ilk gözlemi ölçülmüş olmalı — yoksa katalogdaki başlangıç
+           bir sorgu sınırının izi olabilir (`bas_olculdu`);
+      (ii) ELİMİZDEKİ çerçeve o başlangıca kadar uzanmalı — yoksa gördüğümüz
+           ilk gözlem serinin değil ÇEKİMİN başlangıcıdır.
+
+    Kapı uzun süre yalnız (i)'yi soruyordu ve (ii) hiç sorulmuyordu. Sonuç
+    yapısal olarak sessizdi: katalog 2014 derken elde 2024'te başlayan 139
+    haftalık bir çerçeve varken "bu bacak serinin ilk gözleminden beri sıfır,
+    üzerine hüküm kurulabilir" cümlesi kuruluyordu — 514 hafta hiç görülmeden.
+    Kırpılmış bir tarihçe ile tam bir tarihçe, katalog tarafından bakıldığında
+    TIPATIP AYNI görünür; farkı yalnız veriye sorarak görebilirsiniz.
+
+    KURAL (sınıf kusur): BİR HÜKÜM, ELDE OLAN VERİDEN KURULUR. Kataloğu sorup
+    veriyi sormayan bir kapı, kapatmak için konduğu kusurun kendisine döner.
+    """
+    return tuple(a for a in HAFTALIK
+                 if bas_olculdu(a) and bas_cerceveye_ulasti(H, a))
 
 
 # Okur adında parantez içi TP kodu bilinçlidir: okurun EVDS'te arayabileceği
@@ -357,7 +624,8 @@ HAFTALIK: dict[str, Seri] = {
     # ---- bie_hpbitablo2 · STOK · MİLYON USD · yalnız YURT İÇİ yerleşikler ----
     "stok_toplam": Seri(
         "TP.HPBITABLO2.10", "2024-06-28", "mn USD",
-        "Yurt içi yerleşiklerin toplam YP mevduatı (TP.HPBITABLO2.10)"),
+        "Yurt içi yerleşiklerin toplam YP mevduatı (TP.HPBITABLO2.10)",
+        bas_kanit=KESIF_ALT_SINIR),
     "stok_gercek": Seri(
         "TP.HPBITABLO2.11", "2024-06-28", "mn USD",
         "Gerçek kişilerin YP mevduatı (TP.HPBITABLO2.11)"),
@@ -381,7 +649,8 @@ HAFTALIK: dict[str, Seri] = {
     # DİKKAT: genis_toplam YURT DIŞI yerleşikleri de içerir; manşet DEĞİLDİR.
     "genis_toplam": Seri(
         "TP.HPBITABLO4.1", "2024-06-28", "mn USD",
-        "Toplam YP mevduat, yurt dışı yerleşikler dahil (TP.HPBITABLO4.1)"),
+        "Toplam YP mevduat, yurt dışı yerleşikler dahil (TP.HPBITABLO4.1)",
+        bas_kanit=KESIF_ALT_SINIR),
     "k_gercek": Seri(
         "TP.HPBITABLO4.3", "2024-06-28", "mn USD",
         "Gerçek kişiler, kırılım tablosu (TP.HPBITABLO4.3)"),
@@ -402,79 +671,106 @@ HAFTALIK: dict[str, Seri] = {
     # ölçülmüş tek kalem budur (3.263,5 milyon dolar, farkın yaklaşık yüzde
     # sekizi) ve farkın tamamını "yurt dışı bacak" saymanın neden yanlış
     # olduğunu ölçüyle gösteren şey odur. Yayımlanan bir değeri beslemediği
-    # için tazelik denetiminin dışında (bkz. TAZELIK_DISI); 1.3 başlığı
-    # ölçüldüğü gün sayfaya çıkabilir.
+    # için tazelik ve sıfır denetimlerinin dışında (bkz. DENETIM_DISI);
+    # 1.3 başlığı ölçüldüğü gün sayfaya çıkabilir.
     "maden_diger": Seri(
         "TP.HPBITABLO4.20", "2024-06-28", "mn USD",
         "Kıymetli maden depo hesapları, diğer bölüm (TP.HPBITABLO4.20)"),
     # ---- bie_hpbitablo5 · RESMÎ AYRIŞTIRMA · HAFTALIK DEĞİŞİM · MİLYON USD ----
+    #
+    # BAŞLANGIÇ: 28.02.2014 — ÖLÇÜLDÜ, yazılmadı. Bu ailenin başlangıcı bir
+    # süre 05.01.2024 diye durdu ve o tarih bir ölçüm DEĞİLDİ: ilk keşif koşusu
+    # 01.01.2024'ten sormuştu ve 05.01.2024 ondan sonraki ilk cumadır — yani
+    # sorgunun kendi alt sınırının izi. Yirmi iki serinin HEPSİNİN aynı güne
+    # yapışması kırpılmış bir tarihçenin imzasıydı; 2005'ten sorulduğunda
+    # tablonun 28.02.2014'te başladığı ve 653 hafta taşıdığı görüldü — beş kat.
+    #
+    # KANIT ALANI ONU TAŞIYAN SERİDE DURUR. Aile başına tek bir not yazılsaydı
+    # kanıt seriden seriye devredilirdi; oysa ölçülen şey SERİNİN kendi
+    # cevabıdır. Bu ailede on seri doğrudan soruldu (1 · 2 · 3 · 6 · 13 · 14 ·
+    # 15 · 16 · 17 · 21) ve onu da aynı güne cevap verdi. Kalan on ikisi için
+    # "aynı tablo, aynı yayım" makul bir ÇIKARIMDIR ama ölçüm değildir ve bu
+    # hattın bütün kusuru tam olarak bir çıkarımı ölçüm saymaktan doğdu; kanıt
+    # alanları boş kalır, hüküm kapısı onları eler ve keşif koşusu bir sonraki
+    # ağ turunda kapatır.
+    #
     # 1. Parite etkisinden ARINDIRILMIŞ değişim (yurt içi yerleşikler)
     "ar_toplam": Seri(
-        "TP.HPBITABLO5.1", "2024-01-05", "mn USD",
-        "Arındırılmış değişim, toplam (TP.HPBITABLO5.1)"),
+        "TP.HPBITABLO5.1", "2014-02-28", "mn USD",
+        "Arındırılmış değişim, toplam (TP.HPBITABLO5.1)",
+        bas_kanit=KESIF_ALT_SINIR),
     "ar_gercek": Seri(
-        "TP.HPBITABLO5.2", "2024-01-05", "mn USD",
-        "Arındırılmış değişim, gerçek kişiler (TP.HPBITABLO5.2)"),
+        "TP.HPBITABLO5.2", "2014-02-28", "mn USD",
+        "Arındırılmış değişim, gerçek kişiler (TP.HPBITABLO5.2)",
+        bas_kanit=KESIF_ALT_SINIR),
     "ar_gercek_usd": Seri(
-        "TP.HPBITABLO5.3", "2024-01-05", "mn USD",
-        "Arındırılmış değişim, gerçek kişiler, dolar (TP.HPBITABLO5.3)"),
+        "TP.HPBITABLO5.3", "2014-02-28", "mn USD",
+        "Arındırılmış değişim, gerçek kişiler, dolar (TP.HPBITABLO5.3)",
+        bas_kanit=KESIF_ALT_SINIR),
     "ar_gercek_eur": Seri(
-        "TP.HPBITABLO5.4", "2024-01-05", "mn USD",
+        "TP.HPBITABLO5.4", "2014-02-28", "mn USD",
         "Arındırılmış değişim, gerçek kişiler, euro (TP.HPBITABLO5.4)"),
     "ar_gercek_diger": Seri(
-        "TP.HPBITABLO5.5", "2024-01-05", "mn USD",
+        "TP.HPBITABLO5.5", "2014-02-28", "mn USD",
         "Arındırılmış değişim, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.5)"),
     "ar_gercek_maden": Seri(
-        "TP.HPBITABLO5.6", "2024-01-05", "mn USD",
-        "Arındırılmış değişim, gerçek kişiler, kıymetli maden (TP.HPBITABLO5.6)"),
+        "TP.HPBITABLO5.6", "2014-02-28", "mn USD",
+        "Arındırılmış değişim, gerçek kişiler, kıymetli maden (TP.HPBITABLO5.6)",
+        bas_kanit=KESIF_ALT_SINIR),
     "ar_tuzel": Seri(
-        "TP.HPBITABLO5.7", "2024-01-05", "mn USD",
+        "TP.HPBITABLO5.7", "2014-02-28", "mn USD",
         "Arındırılmış değişim, tüzel kişiler (TP.HPBITABLO5.7)"),
     "ar_tuzel_usd": Seri(
-        "TP.HPBITABLO5.8", "2024-01-05", "mn USD",
+        "TP.HPBITABLO5.8", "2014-02-28", "mn USD",
         "Arındırılmış değişim, tüzel kişiler, dolar (TP.HPBITABLO5.8)"),
     "ar_tuzel_eur": Seri(
-        "TP.HPBITABLO5.9", "2024-01-05", "mn USD",
+        "TP.HPBITABLO5.9", "2014-02-28", "mn USD",
         "Arındırılmış değişim, tüzel kişiler, euro (TP.HPBITABLO5.9)"),
     "ar_tuzel_diger": Seri(
-        "TP.HPBITABLO5.10", "2024-01-05", "mn USD",
+        "TP.HPBITABLO5.10", "2014-02-28", "mn USD",
         "Arındırılmış değişim, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.10)"),
     "ar_tuzel_maden": Seri(
-        "TP.HPBITABLO5.11", "2024-01-05", "mn USD",
+        "TP.HPBITABLO5.11", "2014-02-28", "mn USD",
         "Arındırılmış değişim, tüzel kişiler, kıymetli maden (TP.HPBITABLO5.11)"),
     # 2. PARİTE ETKİSİ (yurt içi yerleşikler)
     "pe_toplam": Seri(
-        "TP.HPBITABLO5.12", "2024-01-05", "mn USD",
+        "TP.HPBITABLO5.12", "2014-02-28", "mn USD",
         "Parite etkisi, toplam (TP.HPBITABLO5.12)"),
     "pe_gercek": Seri(
-        "TP.HPBITABLO5.13", "2024-01-05", "mn USD",
-        "Parite etkisi, gerçek kişiler (TP.HPBITABLO5.13)"),
+        "TP.HPBITABLO5.13", "2014-02-28", "mn USD",
+        "Parite etkisi, gerçek kişiler (TP.HPBITABLO5.13)",
+        bas_kanit=KESIF_ALT_SINIR),
     "pe_gercek_usd": Seri(
-        "TP.HPBITABLO5.14", "2024-01-05", "mn USD",
-        "Parite etkisi, gerçek kişiler, dolar (TP.HPBITABLO5.14)"),
+        "TP.HPBITABLO5.14", "2014-02-28", "mn USD",
+        "Parite etkisi, gerçek kişiler, dolar (TP.HPBITABLO5.14)",
+        bas_kanit=KESIF_ALT_SINIR),
     "pe_gercek_eur": Seri(
-        "TP.HPBITABLO5.15", "2024-01-05", "mn USD",
-        "Parite etkisi, gerçek kişiler, euro (TP.HPBITABLO5.15)"),
+        "TP.HPBITABLO5.15", "2014-02-28", "mn USD",
+        "Parite etkisi, gerçek kişiler, euro (TP.HPBITABLO5.15)",
+        bas_kanit=KESIF_ALT_SINIR),
     "pe_gercek_diger": Seri(
-        "TP.HPBITABLO5.16", "2024-01-05", "mn USD",
-        "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16)"),
+        "TP.HPBITABLO5.16", "2014-02-28", "mn USD",
+        "Parite etkisi, gerçek kişiler, diğer para birimleri (TP.HPBITABLO5.16)",
+        bas_kanit=KESIF_ALT_SINIR),
     "pe_gercek_maden": Seri(
-        "TP.HPBITABLO5.17", "2024-01-05", "mn USD",
-        "Parite etkisi, gerçek kişiler, kıymetli maden (TP.HPBITABLO5.17)"),
+        "TP.HPBITABLO5.17", "2014-02-28", "mn USD",
+        "Parite etkisi, gerçek kişiler, kıymetli maden (TP.HPBITABLO5.17)",
+        bas_kanit=KESIF_ALT_SINIR),
     "pe_tuzel": Seri(
-        "TP.HPBITABLO5.18", "2024-01-05", "mn USD",
+        "TP.HPBITABLO5.18", "2014-02-28", "mn USD",
         "Parite etkisi, tüzel kişiler (TP.HPBITABLO5.18)"),
     "pe_tuzel_usd": Seri(
-        "TP.HPBITABLO5.19", "2024-01-05", "mn USD",
+        "TP.HPBITABLO5.19", "2014-02-28", "mn USD",
         "Parite etkisi, tüzel kişiler, dolar (TP.HPBITABLO5.19)"),
     "pe_tuzel_eur": Seri(
-        "TP.HPBITABLO5.20", "2024-01-05", "mn USD",
+        "TP.HPBITABLO5.20", "2014-02-28", "mn USD",
         "Parite etkisi, tüzel kişiler, euro (TP.HPBITABLO5.20)"),
     "pe_tuzel_diger": Seri(
-        "TP.HPBITABLO5.21", "2024-01-05", "mn USD",
-        "Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21)"),
+        "TP.HPBITABLO5.21", "2014-02-28", "mn USD",
+        "Parite etkisi, tüzel kişiler, diğer para birimleri (TP.HPBITABLO5.21)",
+        bas_kanit=KESIF_ALT_SINIR),
     "pe_tuzel_maden": Seri(
-        "TP.HPBITABLO5.22", "2024-01-05", "mn USD",
+        "TP.HPBITABLO5.22", "2014-02-28", "mn USD",
         "Parite etkisi, tüzel kişiler, kıymetli maden (TP.HPBITABLO5.22)"),
 }
 
@@ -540,18 +836,39 @@ CEKILMEYEN_KUNYE = {
 CEKIRDEK = ("stok_gercek", "stok_tuzel", "ar_gercek", "ar_tuzel",
             "pe_gercek", "pe_tuzel")
 
+# BAŞLANGICI KATALOGDA ÖLÇÜLMÜŞ SERİLER — KÜNYENİN SAYIMI, HÜKÜM KAPISI DEĞİL.
+#
+# Liste elle tutulmuyor, künyeden TÜRETİLİYOR; elle tutulan bir "bunlar
+# ölçüldü" listesi kataloğun kendisinden ayrışabilir ve o gün ikisi de doğru
+# görünür. Kapsam sözleşmenin kendisinden gelir: ölçülmüş başlangıç =
+# kanıt alanı `bas`tan yayım ritmi kadar önce duran seri.
+#
+# BU SABİT BİR HÜKÜM KAPISI DEĞİLDİR VE ÖYLE KULLANILMAZ. Modül düzeyinde
+# durduğu için elinde ÇERÇEVE YOKTUR: kataloğun ne dediğini bilir, o koşuda
+# gerçekten ne çekildiğini bilemez. Hüküm kapısı `bas_olculen(H)`dir ve
+# ikisini birden sorar; ayrımın gerekçesi o fonksiyonda yazılı. Buradaki
+# sayım yalnız KÜNYEYE basılır ("kaç serinin başlangıcı ölçülmüş"), yani
+# kataloğun kendi hakkındaki ifadesidir ve öyle adlandırılmıştır.
+BAS_OLCULEN = tuple(a for a in HAFTALIK if bas_olculdu(a))
+
 # Kapsam kapısı: çekirdeğin TAM olduğu hafta sayısı bunun altına düşerse
 # çıktı ÜRETİLMEZ. Bu bir analiz penceresi eşiği DEĞİL, KIRPMA/ÇÖKME
-# dedektörüdür: kaynağın yayımladığı tarihçe ölçüldü (stok 114, değişim 139
-# hafta), yarım yılın altına düşen bir çekirdek yarım kalmış bir çekimdir.
+# dedektörüdür: kaynağın yayımladığı tarihçe ölçüldü (stok tabloları 114,
+# değişim tablosu 653 hafta), yarım yılın altına düşen bir çekirdek yarım
+# kalmış bir çekimdir. Eşik ORTAK pencereye bakar (çekirdek hem stok hem
+# değişim bacağı taşıyor), yani tarihçe asimetrisi onu 114'ün üstüne
+# çıkarmaz — ve çıkarmamalı: kapı kırpmayı arıyor, uzunluğu değil.
 # Her ölçümün kendi pencere yeterliliği ölçüm katmanının işidir.
 ASGARI_HAFTA = 26
 
 # Tazelik: bu hatta TEK yayım ritmi var (Haftalık Para ve Banka İstatistikleri,
-# Perşembe yayımı, Cuma damgalı, 6 gün gecikme). Tolerans 12 takvim günü =
-# bir yayım aralığı artı bir tatil payı. Tek eşik ancak ritim gerçekten tekse
-# doğrudur; sepet bileşimi eklenirse KENDİ ailesiyle (20 gün) eklenmelidir.
-AILE_TOLERANS = {"haftalik": 12}
+# Perşembe yayımı, Cuma damgalı, 6 gün gecikme). Tolerans bir yayım aralığı
+# artı bir tatil payıdır ve ARALIK ELLE YAZILMAZ: ritim tek yerde tanımlı
+# (AILE_RITIM_GUN) ve tazelik toleransı da kapsam toleransı da oradan türüyor.
+# Tek eşik ancak ritim gerçekten tekse doğrudur; sepet bileşimi eklenirse
+# KENDİ ritmiyle eklenmelidir.
+TATIL_PAYI_GUN = 5
+AILE_TOLERANS = {a: r + TATIL_PAYI_GUN for a, r in AILE_RITIM_GUN.items()}
 
 # TAZELİK KAPSAMI BİR LİSTEDEN DEĞİL SÖZLEŞMEDEN TÜRER. Elle tutulan bir
 # "bakılacaklar" listesi otuz beş serinin onunu kapsıyordu ve kalan yirmi beşi
@@ -564,16 +881,17 @@ AILE_TOLERANS = {"haftalik": 12}
 # Tek istisna GEREKÇELİDİR ve adıyla duruyor: `maden_diger` hiçbir yayımlanan
 # değeri beslemiyor (aşağıdaki not), yani donması okurun gördüğü hiçbir sayıyı
 # etkilemez; onun için uyarı basmak okura görmediği bir seriyi anlatmak olurdu.
-TAZELIK_DISI = ("maden_diger",)
+#
+# İSTİSNA TEK ADLA DURUYOR ÇÜNKÜ TEK GEREKÇESİ VAR: "okurun gördüğü hiçbir
+# sayıyı beslemiyor". O gerekçe tazeliğe olduğu kadar sıfır denetimine de
+# aynen uyar — iki denetim iki ayrı istisna listesi tutsaydı bir gün sessizce
+# ayrışır ve hangisinin neyi görmediği kimsenin aklında kalmazdı. Ad bu yüzden
+# ailenin değil GEREKÇENİN adıdır.
+DENETIM_DISI = ("maden_diger",)
 TAZELIK_SERI = {
-    "haftalik": tuple(a for a in HAFTALIK if a not in TAZELIK_DISI),
+    "haftalik": tuple(a for a in HAFTALIK if a not in DENETIM_DISI),
 }
 
-# ÖLÜ SERİ adayları: kıymetli maden ve "diğer para birimleri" bacakları
-# gerçekten küçük olabilir ve tek bir haftada sıfır çıkması bir ÖLÇÜMDÜR.
-# Ama bir yılın TAMAMI sıfırsa seri dolu görünüp bilgi taşımıyordur. Burada
-# yalnız RAPORLANIR; sıfırı NaN'a çevirmek (eğer gerekirse) ölçüm katmanının
-# işidir ve TEK yerde yapılır.
 # SIFIR BLOĞU EŞİĞİ — TEK TANIM. Ölçüm katmanı bu sabiti içe aktarır
 # (`metrik.ESIK_SIFIR_BLOK`). İki yerde ayrı yazılıydı (52 ve 26) ve aynı dört
 # seri için okura iki farklı hafta sayısı basılıyordu; bir gün biri güncellenip
@@ -581,10 +899,112 @@ TAZELIK_SERI = {
 # yayımlanmıyor" arasını ayırmaya yeten en kısa penceredir.
 SIFIR_BLOK_HAFTA = 26
 
-OLU_ADAY = ("ar_gercek_diger", "ar_tuzel_diger", "pe_gercek_diger",
-            "pe_tuzel_diger", "ar_gercek_maden", "ar_tuzel_maden",
-            "pe_gercek_maden", "pe_tuzel_maden",
-            "maden_gercek", "maden_tuzel", "maden_diger")
+# SIFIR DENETİMİNİN KAPSAMI — ELLE TUTULAN LİSTEDEN DEĞİL, KATALOĞUN KENDİSİ.
+#
+# Burada on bir seri adı elle yazılıydı ("ölü seri adayları") ve o listede
+# dolar bacakları YOKTU. Gerçek veriyle ölçüldüğünde dört bacak serinin
+# tamamında tam sıfır çıktı — `pe_*_diger` ve `pe_*_usd` — ama denetim yalnız
+# ikisini gördü, çünkü öteki ikisi listede değildi. Bakılmayan yer geçen
+# sınavla aynı görünür: kapsam hiç uyarı üretmediği için hiç sorgulanmadı.
+#
+# Doğru kapsam bir yargıdan ("hangi seri sıfır OLABİLİR") değil sözleşmeden
+# türer: özete değer besleyen HER seri. Hangi sıfırın ölçüm, hangisinin
+# ölçümün yokluğu olduğu sorusu kapsamda değil SINIFLANDIRMADA cevaplanır
+# (bkz. `metrik.sifir_olc` beş hâli) — orada cevap veriden gelir, listeden
+# değil. Kapsamı dar tutmanın hiçbir kazancı yok: sıfır olmayan bir seri
+# zaten hiçbir cümle üretmez.
+SIFIR_KAPSAMI = tuple(a for a in HAFTALIK if a not in DENETIM_DISI)
+
+# KIRILIM SÖZLEŞMESİ — üst kalem ↔ onu oluşturan bacaklar, TEK TANIM.
+#
+# İki tüketicisi var ve ikisi de aynı ağacı soruyor: kaynak kimliği denetimi
+# ("bacakların toplamı üst kaleme eşit mi") ve sıfır denetiminin dayanaksız
+# sıfır cümlesi ("bu bacak hep sıfırsa, aynı kırılımın ÖTEKİ bacakları ne
+# yapıyor" — ve aynı kesenin arındırılmış akımı ne yapıyor).
+# Ağaç iki yerde ayrı yazılsaydı bir gün sessizce ayrışırdı.
+#
+# Kalem numaraları burada YAZILMIYOR, katalogdan türetiliyor (`kirilim_adi`):
+# okur adının içine elle yazılmış bir kod aralığı, katalog değiştiği gün
+# yalan söylemeye başlar ve hiçbir denetim bunu görmez.
+class Kirilim(NamedTuple):
+    ust: str
+    parcalar: tuple[str, ...]
+    etiket: str        # okura basılacak kırılım adı (kod aralığı EKLENİR)
+
+
+KIRILIMLAR: tuple[Kirilim, ...] = (
+    Kirilim("ar_gercek",
+            ("ar_gercek_usd", "ar_gercek_eur", "ar_gercek_diger",
+             "ar_gercek_maden"),
+            "Gerçek kişilerin arındırılmış değişiminde para birimi kırılımı"),
+    Kirilim("ar_tuzel",
+            ("ar_tuzel_usd", "ar_tuzel_eur", "ar_tuzel_diger",
+             "ar_tuzel_maden"),
+            "Tüzel kişilerin arındırılmış değişiminde para birimi kırılımı"),
+    Kirilim("pe_gercek",
+            ("pe_gercek_usd", "pe_gercek_eur", "pe_gercek_diger",
+             "pe_gercek_maden"),
+            "Gerçek kişilerin parite etkisinde para birimi kırılımı"),
+    Kirilim("pe_tuzel",
+            ("pe_tuzel_usd", "pe_tuzel_eur", "pe_tuzel_diger",
+             "pe_tuzel_maden"),
+            "Tüzel kişilerin parite etkisinde para birimi kırılımı"),
+    Kirilim("ar_toplam", ("ar_gercek", "ar_tuzel"),
+            "Arındırılmış değişimde gerçek ve tüzel kişi"),
+    Kirilim("pe_toplam", ("pe_gercek", "pe_tuzel"),
+            "Parite etkisinde gerçek ve tüzel kişi"),
+)
+
+# TANIM GEREĞİ SIFIR — sıfırın ÖLÇÜMDEN ÖNCE bilindiği bacaklar, gerekçesiyle.
+#
+# Bu bir KAPSAM listesi DEĞİLDİR ve öyle olmadığı için elle tutulabilir:
+# denetimin neye baktığını belirlemiyor (kapsam kataloğun kendisi), yalnızca
+# ölçülen bir sıfırı TANIM sınıfına taşıyor ve gerekçesini yazıyor; buraya
+# yazılmayan bir bacağın sıfırı dayanaksız sayılır. Bir gün yeni bir bacak
+# eklenip buraya yazılmazsa kaybedilen şey bir açıklama cümlesidir, bir kör
+# nokta değil — kusurun bedeli sınırlı olduğu için liste elle tutulabilir.
+#
+# Gerekçe ilk ilkelerden: dolar cinsi bir mevduatın DOLAR olarak ölçülen
+# parite etkisi olamaz, çünkü ortada çapraz kur yoktur. Bu, kaynağın yöntem
+# belgesinden okunmuş bir iddia değil aritmetiktir; "kaynak şöyle hesaplıyor"
+# cümlesi kurulmaz, kurulamaz da — yöntem belgesi okunmadı.
+TANIM_SIFIRI: dict[str, str] = {
+    "pe_gercek_usd": "dolar cinsi bir mevduatın dolar olarak ölçülen parite "
+                     "etkisi olamaz, çünkü ortada çapraz kur yoktur",
+    "pe_tuzel_usd": "dolar cinsi bir mevduatın dolar olarak ölçülen parite "
+                    "etkisi olamaz, çünkü ortada çapraz kur yoktur",
+}
+
+# PARİTE ETKİSİ ↔ ARINDIRILMIŞ AKIM EŞİ — TEK TANIM, AĞAÇTAN TÜRETİLİYOR.
+#
+# NEDEN VAR. Bir bacağın parite etkisi hiç yayımlanmıyorsa, AYNI KESENİN
+# arındırılmış akımı da parite etkisinden arındırılmamış olabilir — ve o akım
+# manşetin içindedir. Sınırın büyüklüğünü yazabilmek için "bu parite bacağının
+# arındırılmış eşi hangisi" sorusunun tek bir cevabı olmalı.
+#
+# EŞLEME ADDAN DEĞİL AĞAÇTAN ÇIKIYOR. "pe_" önekini "ar_" ile değiştiren bir
+# dize ameliyatı bugün doğru sonucu verirdi ve yarın bir ad değiştiğinde
+# sessizce yanlış bacağı eşlerdi. Burada eşleme KIRILIMLAR sözleşmesindeki
+# konumdan geliyor: iki üst kalemin bacak listeleri aynı sırada aynı para
+# birimlerini taşıyor. Sıralar bir gün ayrışırsa eşleme None döner ve o cümle
+# HİÇ KURULMAZ — yanlış bir eş, hiç eş olmamasından kötüdür.
+AYRISTIRMA_ESI: tuple[tuple[str, str], ...] = (
+    ("pe_gercek", "ar_gercek"),
+    ("pe_tuzel", "ar_tuzel"),
+)
+
+
+def arindirilmis_esi(ad: str) -> str | None:
+    """Bir parite etkisi bacağının AYNI KESEDEKİ arındırılmış akım bacağı."""
+    for pe_ust, ar_ust in AYRISTIRMA_ESI:
+        pe = next((k for k in KIRILIMLAR if k.ust == pe_ust), None)
+        ar = next((k for k in KIRILIMLAR if k.ust == ar_ust), None)
+        if pe is None or ar is None or len(pe.parcalar) != len(ar.parcalar):
+            continue
+        if ad in pe.parcalar:
+            return ar.parcalar[pe.parcalar.index(ad)]
+    return None
+
 
 # ÖLÇÜM BLOKLARININ OKUR ADLARI — TEK TANIM.
 # İki modül aynı kutuya yazıyor (ölçüm katmanının ortak hafta uyarısı ve özet
@@ -642,6 +1062,150 @@ def birim(ad: str) -> str:
     return s.birim if s is not None else ""
 
 
+# BİRİMİN OKUR YAZIMI — TEK TANIM. Katalogdaki "mn USD" bir künye kısaltması;
+# okura giden cümlede birim açık yazılır ("milyon dolar"), çünkü okurun elinde
+# bizim kısaltma sözleşmemiz yok. Kapsam kimliğinin uyarısı bunu zaten açık
+# yazıyordu, kırılım kimliğininki katalog kısaltmasını basıyordu — aynı kutuda
+# aynı birimin iki yazımı.
+BIRIM_OKUR = {"mn USD": "milyon dolar", "bin TL": "bin lira"}
+
+
+def birim_okur(birim_ad: str) -> str:
+    """Bir birimin okur yazımı. Bilinmeyen birim OLDUĞU GİBİ döner — uydurma
+    bir çeviri, yanlış birimle yayımlanmış bir sayıdan farksız olurdu."""
+    return BIRIM_OKUR.get(birim_ad, birim_ad)
+
+
+def bacak_kisa_adi(ad: str) -> str:
+    """Bir kırılım bacağının KISA okur adı: "euro", "kıymetli maden", "dolar".
+
+    Okur adının son virgülden sonraki parçası alınır ve kaynak kodu atılır.
+    Kısa adlar AYRI bir sözlükte tutulsaydı katalogla bir gün ayrışırdı —
+    burada tek kaynak yine `Seri.okur_adi`dır.
+    """
+    tam = okur_adi(ad).split(" (")[0]
+    return tam.rsplit(", ", 1)[-1].strip()
+
+
+def kirilim_adi(k: "Kirilim") -> str:
+    """Bir kırılımın okur adı, KOD ARALIĞI KATALOGDAN TÜRETİLEREK.
+
+    Kod aralığı ("TP.HPBITABLO5.3–5.6 = TP.HPBITABLO5.2") daha önce her
+    kimliğin adına ELLE yazılıydı. Elle yazılmış bir kod, katalog değiştiği
+    gün yalan söylemeye başlar ve hiçbir denetim bunu göremez: okur adı
+    yalnızca okunur, sınanmaz. Şimdi tek kaynak katalog.
+
+    İki yazım var ve seçim parça sayısından türüyor: ikiden çok bacakta
+    aralık, iki bacakta toplama. Sebep okunurluk — dört kalemi tek tek yazmak
+    adı okunmaz uzunluğa çıkarır, iki kalemi aralık diye yazmak ise aradaki
+    kalemleri de kapsıyormuş gibi görünür.
+
+    Aralığın İKİ UCU DA TAM KOD yazılır. Kısaltılmış bir uç ("5.3–6") okurun
+    kaynakta arayabileceği bir künye değildir ve kısaltmanın nereden kesileceği
+    kaynağın kod yazımına bağlıdır — bir gün başka bir tablo eklendiğinde
+    sessizce yanlış yere keser.
+    """
+    kodlar = [HAFTALIK[a].kod for a in k.parcalar if a in HAFTALIK]
+    ust_kod = HAFTALIK[k.ust].kod if k.ust in HAFTALIK else k.ust
+    if not kodlar:
+        return k.etiket
+    sol = f"{kodlar[0]}–{kodlar[-1]}" if len(kodlar) > 2 else " + ".join(kodlar)
+    return f"{k.etiket} toplamı ({sol} = {ust_kod})"
+
+
+# YAYIM ADIMININ ÖLÇÜLEBİLİRLİK KOŞULLARI — iki ayrı sabit, iki ayrı gerekçe.
+#
+# (a) IZGARA ARALIĞI. Üs döngüsü sıfırdan başlıyordu, yani ölçülebilen en KABA
+# ızgara 1,0 idi; üstüne bir de `tavan=1.0` konmuştu. İkisi birlikte "kaynak
+# hassasiyetini kabalaştırırsa taban kendiliğinden kayar" sigortasını YAPISAL
+# OLARAK ATIL bırakıyordu: kaynak yarın on milyon dolarlık yuvarlamaya geçse
+# ölçülen adım yine 1,0 çıkar, taban on kat dar kalır ve iki tablonun MEŞRU
+# yuvarlama farkı "KİMLİK BOZUK" diye yayımlanırdı — yayının önünde duran bir
+# denetimin yanlış alarmı arızanın kendisidir. Aralık artık kaba tarafa da üç
+# basamak açık ve tavan yok.
+ADIM_US_KABA = -3
+ADIM_US_INCE = 6
+
+# (b) ÖRNEKLEM. Kaba tarafı açmak tek başına YENİ bir kusur üretir ve o kusur
+# bugünkü veride ölçüldü: baştan sona sıfır olan dört seri tek bir değer
+# taşıyor ve tek bir değer HER ızgaranın üstünde durur. Eski sürüm onlara 1,0
+# (tavanın kendisi), tavansız sürüm 1.000,0 diyordu; ikisi de ölçüm değil
+# TESADÜF — üstelik tavan bu tesadüfü ölçüm gibi gösteriyordu.
+#
+# Ayıran şey BENZERSİZ gözlem sayısıdır ve eşik aritmetikten gelir: gerçek
+# ızgara bir basamak daha ince olsaydı, N benzersiz değerin hepsinin kaba
+# ızgaraya düşme olasılığı 10⁻ᴺ olurdu. Altı benzersiz değer bunu milyonda
+# bire indirir; altısının altında ölçüm YAPILMAZ ve sebebi adıyla döner.
+# Bugünkü veride eşik yalnız o dört sıfır seriyi eliyor: kalan otuz serinin
+# benzersiz gözlem sayısı 114 ile 139 arasında.
+ADIM_ASGARI_BENZERSIZ = 6
+
+
+def yayim_adimi_olc(s: pd.Series) -> tuple[float, str]:
+    """Bir serinin YAYIM ADIMI ve ölçümün HÂLİ — kaynağın hangi ızgarada
+    yayımladığı, ve ölçülemediyse NEDEN ölçülemediği.
+
+    ÖLÇÜLÜR, VARSAYILMAZ. Bu hatta iki tablo iki ayrı hassasiyet taşıyor ve
+    ikisi gerçek veriden ölçüldü: stok tabloları bir ondalıkla (adım 0,1
+    milyon dolar), kırılım tablosu üç ondalıkla (adım 0,001) yayımlanıyor.
+    Sabit bir taban yazılsaydı kaynak hassasiyetini değiştirdiği gün ya yanlış
+    alarm ya da sessizce körelmiş bir kapı kalırdı.
+
+    Ölçü, bütün gözlemlerin üzerinde durduğu en KABA ondalık ızgaradır:
+    değerlerin hepsi 0,1'in katıysa adım 0,1'dir.
+
+    NEDEN ONDALIK BASAMAK SAYMIYORUZ. İlk sürüm `repr` üzerinden basamak
+    sayıyordu ve TOPLAM serilerde çöktü: 100.476,8 + 62.668,4 kayan noktada
+    163.145,19999999998 eder, on dört basamak görünür ve ölçü "ızgara yok"
+    der. Oysa iki tanesi de 0,1 ızgarasında olan sayıların toplamı da 0,1
+    ızgarasındadır — üstelik kimlik denetiminin bir tarafı tam olarak böyle
+    bir toplamdır, yani ölçü en çok ihtiyaç duyulan yerde susardı. Doğrusu
+    bölünebilirliği kayan nokta payıyla SORMAK: pay büyüklükle birlikte büyür
+    (v/g ne kadar büyükse gösterimin kendi hatası o kadar büyük), bu yüzden
+    orantılı.
+
+    AMA ORANTILI PAYIN BİR SINIRI VAR ve eski sürüm o sınırı sormuyordu: pay
+    0,5'e ulaştığında HER gerçek sayı bir tam sayının payı içindedir, yani
+    sınama ızgarayı değil hiçbir şeyi ölçer. Eski sürüm o hâlde de bir ızgara
+    DÖNDÜRÜYORDU — ölçemediğini söylemek yerine yanlış bir ızgara vermek,
+    eşiğin tabanını sessizce şişirir. Pay ızgara inceldikçe büyüdüğü için,
+    bir ızgarada karar verilemiyorsa daha incesinde hiç verilemez; ölçüm o
+    noktada durur ve hâl adıyla döner.
+
+    DÖNEN SIFIR ÜÇ AYRI ŞEY OLABİLİR ve üçü ayrı adla döner: hiç gözlem yok ·
+    örneklem bir ızgarayı tesadüften ayıramayacak kadar dar · seri
+    yuvarlanmamış. Sıfırı tek başına döndüren eski imza bu üçünü aynı
+    görüntüye indiriyordu; eşiğin tabanı olarak sıfır, tabanın KONULMADIĞI
+    anlamına gelir ve okura hangi sebeple konulmadığı da söylenmelidir.
+    """
+    d = s.dropna()
+    if d.empty:
+        return 0.0, "gozlem_yok"
+    if int(d.nunique()) < ADIM_ASGARI_BENZERSIZ:
+        return 0.0, "ornek_yetersiz"
+    v = d.to_numpy(dtype=float)
+    for us in range(ADIM_US_KABA, ADIM_US_INCE + 1):
+        g = 10.0 ** (-us)
+        oran = v / g
+        pay = np.maximum(1e-6, np.abs(oran) * 1e-12)
+        if not bool(np.all(pay < 0.5)):
+            return 0.0, "karar_verilemez"
+        if bool(np.all(np.abs(oran - np.round(oran)) <= pay)):
+            return float(g), "olculdu"
+    # En ince ızgaradan sonrası ızgara değil: seri yuvarlanmamış demektir ve
+    # yuvarlanmamış bir seriye yuvarlama tabanı çıkarmak anlamsız olurdu.
+    return 0.0, "izgara_yok"
+
+
+def yayim_adimi(s: pd.Series) -> float:
+    """`yayim_adimi_olc`un yalnız adımı — hâli önemsemeyen çağrı yerleri için.
+
+    `tavan` argümanı KALDIRILDI, eklenmedi: ölçülemeyen bir ızgarayı bir
+    tavanla sınırlamak, ölçülmemiş bir sayıyı ölçülmüş gibi göstermenin başka
+    bir biçimiydi. Ölçülemeyen ızgara artık sıfır döner ve taban KONULMAZ.
+    """
+    return yayim_adimi_olc(s)[0]
+
 def _adlar(adlar, en_fazla: int = 3) -> str:
     """Bir uyarı cümlesine sığacak kadar okur adı; gerisi sayıyla.
 
@@ -692,8 +1256,14 @@ def cek_kume(kodlar: dict[str, Seri], bicim_ad: str, parca_gun: int,
     kalınmaz: çevrimdışı bir koşunun sağlıklı bir koşuyla aynı görünmesi, bu
     depoda ölçülmüş bir arıza sınıfıdır.
     """
+    # ÖNBELLEK ANAHTARI SORGU PENCERESİNİ TAŞIR (bkz. `_cache_yolu`): kataloğun
+    # başlangıcı değişince ad da değişir, yani eski pencerenin cevabı bir daha
+    # okunmaz. Bunun tazelikle ilgisi yok — 139 haftalık bir dosya TTL dolmadan
+    # da yanlış cevaptır, çünkü sorulan soru artık başkadır.
     eksik = [ad for ad, s in kodlar.items()
-             if yenile or not _taze(_cache_yolu(s.kod, bicim_ad), CACHE_TTL_SAAT)]
+             if yenile or not _taze(_cache_yolu(s.kod, bicim_ad,
+                                                sorgu_alt_siniri(s)),
+                                    CACHE_TTL_SAAT)]
     if eksik:
         print(f"  {etiket}: {len(eksik)}/{len(kodlar)} seri kaynaktan çekiliyor "
               f"({-(-len(eksik) // DEMET)} demet)", flush=True)
@@ -707,7 +1277,14 @@ def cek_kume(kodlar: dict[str, Seri], bicim_ad: str, parca_gun: int,
         son = pd.Timestamp.today().normalize() + pd.Timedelta(days=ILERI_GUN)
         for i in range(0, len(eksik), DEMET):
             grup = eksik[i:i + DEMET]
-            bas = min(pd.Timestamp(kodlar[a].bas) for a in grup)
+            # YOKLAMA PAYI: katalogdaki başlangıçtan BİR YIL GERİDEN sorulur.
+            # Çekim alt sınırı ile kapsam denetiminin ölçütü aynı sabit
+            # olduğunda denetim yapısal olarak kördür — daha eski bir gözlem
+            # hiç sorulmadığı için hiç görünmez. Payı ekleyen tek satır,
+            # `kapsam_uyarilari`nin "tarihçe uzamış" dalını ölçülebilir
+            # kılan şeydir; kaldırılırsa o dal ölü koda döner ve sessizce
+            # hep temiz görünür.
+            bas = min(sorgu_alt_siniri(kodlar[a]) for a in grup)
             d = _demet_cek([kodlar[a].kod for a in grup], bas, son,
                            parca_gun, bicim_ad)
             for a in grup:
@@ -715,12 +1292,15 @@ def cek_kume(kodlar: dict[str, Seri], bicim_ad: str, parca_gun: int,
                 if g in d.columns and d[g].notna().any():
                     s = d[g].dropna()
                     s.name = kodlar[a].kod
-                    s.to_csv(_cache_yolu(kodlar[a].kod, bicim_ad))
+                    yeni = _cache_yolu(kodlar[a].kod, bicim_ad,
+                                       sorgu_alt_siniri(kodlar[a]))
+                    s.to_csv(yeni)
+                    _cache_eskisini_sil(kodlar[a].kod, bicim_ad, yeni)
     out: dict[str, pd.Series] = {}
     yok: list[str] = []
     bayat: list[tuple[str, float]] = []
     for ad, s in kodlar.items():
-        yol = _cache_yolu(s.kod, bicim_ad)
+        yol = _cache_yolu(s.kod, bicim_ad, sorgu_alt_siniri(s))
         if not yol.exists():
             yok.append(ad)
             continue
@@ -752,6 +1332,31 @@ def cek_kume(kodlar: dict[str, Seri], bicim_ad: str, parca_gun: int,
 
 
 # --------------------------------------------------------------------------- kapsam
+def cerceve_imza(H: pd.DataFrame) -> dict:
+    """Bir çerçevenin KÜNYESİ: türetilmiş bir kayıt, HANGİ çerçeveyi anlattığını
+    söylemelidir.
+
+    `_cache_yolu` ile AYNI SINIF kusura karşı. Ölçüm katmanı, veri katmanının
+    bıraktığı koşu kaydından uyarıları devralıyor ve o kaydın anlattığı
+    çerçevenin ELİNDEKİ çerçeve olduğunu varsayıyordu. Varsayım sessizce
+    düşer: veri katmanı düştüğü, atlandığı ya da başka bir pencereyle koştuğu
+    her koşuda kayıt yerinde durur, okunur, hata vermez — yalnızca başka bir
+    çerçeveyi anlatır. Bir kayıt kendi girdisini taşımıyorsa, onu okuyan
+    katman yanlış olduğunu ölçemez.
+
+    Künye ne kadar dar olursa o kadar iyi: satır ve sütun sayısı ile iki uç,
+    pencerenin uzaması (653 hafta), kısalması (kırpma) ve ilerlemesi (yeni
+    hafta) hâllerinin üçünü de birden ayırt eder.
+    """
+    idx = H.index
+    return {
+        "satir": int(H.shape[0]),
+        "sutun": int(H.shape[1]),
+        "ilk": None if not len(idx) else pd.Timestamp(idx[0]).strftime("%Y-%m-%d"),
+        "son": None if not len(idx) else pd.Timestamp(idx[-1]).strftime("%Y-%m-%d"),
+    }
+
+
 def kapsam_olc(H: pd.DataFrame) -> dict:
     """Her serinin KENDİ ilk gözlemi, KENDİ son gözlemi ve gözlem sayısı.
 
@@ -762,56 +1367,161 @@ def kapsam_olc(H: pd.DataFrame) -> dict:
     """
     kapsam: dict[str, dict] = {}
     for ad, s in HAFTALIK.items():
+        # SORULAN alt sınır kayda GİRER, çünkü gelen başlangıcın anlamı ona
+        # bağlı: sorgu alt sınırı ile cevap AYNI güne düşüyorsa o cevap
+        # serinin başlangıcı değil sorgunun sınırıdır ve ikisi tıpatıp aynı
+        # görünür. Bu hattın en pahalı kusuru tam olarak buydu ve kayıtta
+        # sorulanın izi olmadığı için geriye dönük de görülemiyordu.
+        # HÜKÜM KAPISI KAYDA ÜÇ ALANLA GİRER, BİRLE DEĞİL. Kayıt bir süre
+        # yalnız `bas_olculdu` taşıyordu ve o alan KATALOĞUN ifadesidir;
+        # kırpılmış bir çerçevede de aynen "ölçüldü" der. Kapının iki yarısı
+        # ayrı ayrı yazılır ki geriye dönük bakan biri hangi yarının düştüğünü
+        # görebilsin — ikisi tek bayrakta toplanırsa fark ölçülemez hâle gelir.
+        ortak = {"kod": s.kod, "birim": s.birim, "beklenen_bas": s.bas,
+                 "bas_kanit": s.bas_kanit,
+                 "bas_kanit_var": bas_olculdu(ad),
+                 "sorulan_bas": sorgu_alt_siniri(s).strftime("%Y-%m-%d")}
         if ad not in H.columns:
-            kapsam[ad] = {"kod": s.kod, "birim": s.birim,
-                          "beklenen_bas": s.bas, "bas": None, "son": None, "n": 0}
+            kapsam[ad] = {**ortak, "bas": None, "son": None, "n": 0,
+                          "cerceve_basa_uzaniyor": False, "bas_olculdu": False}
             continue
         d = H[ad].dropna()
+        uzaniyor = bas_cerceveye_ulasti(H, ad)
         kapsam[ad] = {
-            "kod": s.kod, "birim": s.birim, "beklenen_bas": s.bas,
+            **ortak,
             "bas": None if d.empty else d.index[0].strftime("%Y-%m-%d"),
             "son": None if d.empty else d.index[-1].strftime("%Y-%m-%d"),
             "n": int(len(d)),
+            "cerceve_basa_uzaniyor": bool(uzaniyor),
+            "bas_olculdu": bool(ortak["bas_kanit_var"] and uzaniyor),
         }
     return kapsam
 
 
 def kapsam_uyarilari(kapsam: dict) -> list[str]:
-    """Kırpma izi: seri kaynağın yayımladığı ilk gözlemden GERİDE başlıyor mu?
+    """Beklenen başlangıç ile gelen başlangıç AYRIŞTI mı — iki yöne birden?
 
-    1000 satırlık sessiz kırpma HTTP 200 döndürür, "items" doludur ve koşu
-    yeşil biter — eksik olan yalnız tarihçedir. Ölçüt bu yüzden gelen serinin
-    başlangıcını katalogdaki BEKLENEN başlangıca karşı sorar.
+    İKİ AYRI ARIZA, İKİ AYRI CÜMLE. Ölçüt uzun süre yalnız birini sorabiliyordu
+    ve öteki YAPISAL OLARAK görünmezdi.
 
-    Tolerans bir haftadır: kaynak ilk gözlemi bir hafta kaydırırsa bu kırpma
-    değil, yayım kararıdır.
+      (a) GEÇ BAŞLIYOR — kırpma izi. Kaynak tek istekte ~1000 satır döndürüp
+          gerisini uyarı vermeden kesiyor ve aralığın SONUNDAN geriye
+          doldurduğu için kesilen şey tarihçenin BAŞIDIR. HTTP 200 döner,
+          gövde doludur, koşu yeşil biter; eksik olan yalnız tarihçedir.
 
-    Bulgu TEK cümlede toplanır. Kırpma bir istek düzeyinde olur, yani aynı
-    demetteki bütün serileri birden vurur; seri seri yazmak bir olayı otuz beş
-    kez anlatmak olurdu. Seri bazlı ayrıntı kaybolmuyor — koşu durumunun
-    kapsam kaydında her serinin kendi başlangıcı, son günü ve gözlem sayısı
-    ayrı ayrı duruyor.
+      (b) ERKEN BAŞLIYOR — tarihçe uzamış, biz kısa soruyoruz. Bu dal ancak
+          çekim katalogdaki başlangıçtan GERİDEN sorduğu için ölçülebilir
+          (bkz. YOKLAMA_GUN). Alt sınır ile ölçüt aynı sabit olsaydı cevap
+          hiçbir zaman beklenenden erken OLAMAZDI ve denetim sonsuza kadar
+          "temiz" derdi — bu hattın on iki buçuk yıllık tarihçesinin iki buçuk
+          yılı tam olarak böyle kayboldu. Bulgu bir ALT SINIRDIR: yoklama payı
+          kadar geriye bakabiliyoruz, kaynak daha da eskiye gidiyor olabilir.
+
+    Tolerans yayım ritminden türer (`kapsam_tolerans`): bir yayım aralığı
+    kadar kayma kırpma değil, kaynağın damgalama kararıdır.
+
+    Bulgu ailesi başına TEK cümlede toplanır. İki arıza da istek düzeyinde
+    olur, yani aynı demetteki bütün serileri birden vurur; seri seri yazmak
+    bir olayı otuz beş kez anlatmak olurdu. Seri bazlı ayrıntı kaybolmuyor —
+    koşu kaydında her serinin sorulan alt sınırı, gelen başlangıcı, son günü
+    ve gözlem sayısı ayrı ayrı duruyor.
     """
     b = _bicim()
+    tol = kapsam_tolerans()
     gec: list[tuple[str, pd.Timestamp, pd.Timestamp, int]] = []
+    erken: list[tuple[str, pd.Timestamp, pd.Timestamp, int]] = []
     for ad, k in kapsam.items():
         if not k["bas"]:
             continue
         bek = pd.Timestamp(k["beklenen_bas"])
         bas = pd.Timestamp(k["bas"])
-        if (bas - bek).days > 7:
-            gec.append((ad, bas, bek, (bas - bek).days))
-    if not gec:
-        return []
-    ad, bas, bek, _ = max(gec, key=lambda x: x[3])
-    if len(gec) == 1:
-        return [f"KAPSAM: {okur_adi(ad)} {b.tarih_kisa(bas)} tarihinde başlıyor; "
-                f"kaynağın yayımladığı ilk gözlem {b.tarih_kisa(bek)}. "
-                "Tarihçenin başı kesilmiş olabilir."]
-    return [f"KAPSAM: {b.sayi(len(gec), 0)} seri kaynağın yayımladığı ilk "
-            f"gözlemden geride başlıyor; en uzun eksik {okur_adi(ad)} "
-            f"serisinde ({b.tarih_kisa(bek)} yerine {b.tarih_kisa(bas)}). "
-            "Tarihçenin başı kesilmiş olabilir."]
+        fark = (bas - bek).days
+        if fark > tol:
+            gec.append((ad, bas, bek, fark))
+        elif -fark > tol:
+            erken.append((ad, bas, bek, -fark))
+
+    uy: list[str] = []
+    if gec:
+        ad, bas, bek, _ = max(gec, key=lambda x: x[3])
+        if len(gec) == 1:
+            # CÜMLE KUSURU KAYNAĞA YIKMAZ. "Kaynak tarihçeyi kesti" bir
+            # ÇIKARIMDIR ve bu hatta yanlış çıktı: aynı görüntü, sorgu
+            # penceresi değişmişken eski cevabı taşımaya devam eden bir
+            # önbellekten de doğuyordu. Ölçülen şey elimizdeki serinin nerede
+            # BAŞLADIĞIDIR; nerede kesildiği ölçülmedi ve yazılmaz.
+            uy.append(
+                f"KAPSAM: {okur_adi(ad)} bu koşuda {b.tarih_kisa(bas)} "
+                f"tarihinde başlıyor; kaynağın yayımladığı ilk gözlem "
+                f"{b.tarih_kisa(bek)}. Tarihçenin başı bu koşuda alınamadı.")
+        else:
+            uy.append(
+                f"KAPSAM: {b.sayi(len(gec), 0)} seri bu koşuda kaynağın "
+                f"yayımladığı ilk gözlemden geride başlıyor; en uzun eksik "
+                f"{okur_adi(ad)} serisinde ({b.tarih_kisa(bek)} yerine "
+                f"{b.tarih_kisa(bas)}). Tarihçenin başı bu koşuda alınamadı.")
+    if erken:
+        ad, bas, bek, gun = max(erken, key=lambda x: x[3])
+        # "EN AZ" bilinçli: yoklama payı kadar geriye bakılıyor, dolayısıyla
+        # ölçülen fark gerçek farkın alt sınırıdır. "Tam şu kadar" yazmak,
+        # ölçülmemiş bir kesinlik bildirmek olurdu.
+        kac = f"{b.sayi(gun / AILE_RITIM_GUN['haftalik'], 0)} hafta"
+        if len(erken) == 1:
+            uy.append(
+                f"KAPSAM: {okur_adi(ad)} {b.tarih_kisa(bas)} tarihinde "
+                f"başlıyor; bu sayfa onu {b.tarih_kisa(bek)} tarihinden "
+                f"itibaren ölçüyordu. Kaynak en az {kac} daha eski gözlem "
+                "yayımlıyor ve ölçüm o kadar geriye uzatılmadı.")
+        else:
+            uy.append(
+                f"KAPSAM: {b.sayi(len(erken), 0)} seri, bu sayfanın ölçmeye "
+                f"başladığı tarihten daha eski gözlem taşıyor; en uzunu "
+                f"{okur_adi(ad)} serisinde ({b.tarih_kisa(bek)} yerine "
+                f"{b.tarih_kisa(bas)}). Kaynak en az {kac} daha eski gözlem "
+                "yayımlıyor ve ölçüm o kadar geriye uzatılmadı.")
+    return uy
+
+
+def parca_aritmetigi(bugun: pd.Timestamp | None = None) -> dict:
+    """"653 haftalık seri tek isteğe sığar mı?" — ÖLÇÜLÜR, varsayılmaz.
+
+    Soru kaynağın sessiz kırpmasıyla ilgili ve cevabı bir HÜKÜM değil bir
+    ARİTMETİKTİR; aritmetik olduğu için yaşlanmaz ve `duman.py` onu ENGEL
+    olarak sınayabilir. Yorumda "sığıyor" yazmak, tarihçe uzadıkça bir gün
+    sessizce yalan olurdu.
+
+    Üç büyüklük ölçülür ve üçü de aynı sınıra (SATIR_SINIRI) karşı durur:
+
+      · EN GENİŞ İSTEK — katalogdaki en eski başlangıç, yoklama payıyla
+        birlikte, bugüne kadar: kaç haftalık satır ister? Bugün 2014'ün
+        başından bugüne yaklaşık yedi yüz hafta, sınırın altında, yani
+        çekim TEK parçaya sığıyor ve tarihçenin başı kesilmiyor.
+      · PARÇA TAVANI — parçalama devreye girdiğinde bir parça kaç satır
+        döndürür? Tarihçe uzadığında istek bölünür ve her parça kendi başına
+        sınırın altında kalır; yani cevap "bugün sığıyor" değil, "yarın da
+        kesilmez"dir.
+      · KALAN PAY — tek parçanın dolmasına kaç hafta var? Bir sınıra ne kadar
+        yaklaşıldığı, sınırın aşılıp aşılmadığı kadar önemli: pay ölçülmezse
+        parçalamanın ilk kez devreye girdiği gün de görünmez.
+    """
+    bugun = pd.Timestamp.today().normalize() if bugun is None else bugun
+    en_eski = min(pd.Timestamp(s.bas) for s in HAFTALIK.values())
+    sorulan = min(sorgu_alt_siniri(s) for s in HAFTALIK.values())
+    ritim = AILE_RITIM_GUN["haftalik"]
+    gun = int((bugun + pd.Timedelta(days=ILERI_GUN) - sorulan).days)
+    return {
+        "en_eski_bas": en_eski.strftime("%Y-%m-%d"),
+        "sorulan_bas": sorulan.strftime("%Y-%m-%d"),
+        "istek_gun": gun,
+        "istek_satir": gun // ritim + 1,
+        "parca_gun": PARCA_HAFTA_GUN,
+        "parca_satir": PARCA_HAFTA_GUN // ritim,
+        "parca_sayisi": -(-gun // PARCA_HAFTA_GUN),
+        "satir_siniri": SATIR_SINIRI,
+        "kalan_hafta": (PARCA_HAFTA_GUN - gun) // ritim,
+        "tek_parca": gun <= PARCA_HAFTA_GUN,
+        "siniri_asiyor": (gun // ritim + 1) > SATIR_SINIRI,
+    }
 
 
 def bosluk_olc(H: pd.DataFrame) -> dict:
@@ -848,15 +1558,42 @@ def bosluk_olc(H: pd.DataFrame) -> dict:
     return out
 
 
-def bosluk_uyarilari(H: pd.DataFrame) -> list[str]:
-    """Beklenmeyen aralık TEK cümlede — ama İKİ AİLE ayrı cümlelerde.
+def bosluk_sag_ucta(tarih, bugun=None) -> bool:
+    """Bu boşluk SAĞ UÇTA mı — yani bu koşuda yayımlanan sayılara dokunuyor mu?
 
-    Eksik bir hafta bir OLAYDIR, altı seri değil: yayım durduğunda çekirdeğin
-    tamamı aynı haftayı birden atlar. Ama "hafta atlandı" ile "aralık kısaldı"
-    aynı cümlede anlatılamaz, çünkü sonuçları farklı: atlanan haftayı takvime
-    bağlı kümüleler hiç saymaz, kısalan aralık ise o haftanın stok değişimini
-    ölçülemez kılar. Bir cümlede toplansalardı okur hangisinin olduğunu
-    bilemezdi ve ikisinin de doğru göründüğü bir kusur çıkardı.
+    ÖLÇÜT TAZELİK TOLERANSIDIR, YENİ BİR SABİT DEĞİL. "Sayfadaki sayı ilerledi
+    mi" sorusunun penceresi zaten tanımlı (`tazelik_tolerans`); boşluğun aynı
+    pencereye düşüp düşmediği de aynı tanımdan sorulur. İkinci bir eşik
+    yazılsaydı biri güncellenip öteki unutulurdu.
+    """
+    bugun = pd.Timestamp.today().normalize() if bugun is None else pd.Timestamp(bugun)
+    return int((bugun - pd.Timestamp(tarih)).days) <= tazelik_tolerans()
+
+
+def bosluk_uyarilari(H: pd.DataFrame, bugun=None) -> list[str]:
+    """Beklenmeyen aralık TEK cümlede — ama DÖRT AİLE ayrı cümlelerde.
+
+    İKİ EKSEN VAR VE İKİSİ DE BAĞIMSIZ.
+
+    (1) NE OLDU. "Hafta atlandı" ile "aralık kısaldı" aynı cümlede
+        anlatılamaz, çünkü sonuçları farklı: atlanan haftayı takvime bağlı
+        kümüleler hiç saymaz, kısalan aralık ise o haftanın stok değişimini
+        ölçülemez kılar. Bir cümlede toplansalardı okur hangisinin olduğunu
+        bilemezdi ve ikisinin de doğru göründüğü bir kusur çıkardı.
+
+    (2) NEREDE OLDU — VE BU BİR DÜZELTMEDİR. Boşluk ölçümü tarihçenin
+        TAMAMINI tarıyor, ama ürettiği cümlenin öneki bayatlık ailesindeydi:
+        2015'te atlanmış tek bir hafta, verisi bugüne kadar gelmiş bir sayfayı
+        HER KOŞUDA "bayat" ilan ediyordu. On iki yıllık haftalık bir seride
+        boşluk bulunmaması neredeyse imkânsız olduğu için hüküm KALICI olurdu
+        ve gerçekten donmuş bir beslemeden ayırt edilemezdi.
+
+        Eski bir boşluk bir TARİHÇE özelliğidir: pencereye dokunur, okura
+        bildirilir, ama bu koşuda yayımlanan sayı hakkında hiçbir şey
+        söylemez. Bayatlık SAĞ UCA dair bir hükümdür. İkisi ayrı önek alır
+        (bkz. `SAG_UC_IZI` · `TARIHCE_IZI`) ve yalnız sağ uçtaki bayatlığı
+        tetikler. Bulgunun kendisi hiçbir hâlde kaybolmaz — kaybolan yalnız
+        yanlış hüküm.
     """
     b = _bicim()
     bosluk = bosluk_olc(H)
@@ -865,19 +1602,59 @@ def bosluk_uyarilari(H: pd.DataFrame) -> list[str]:
     uy: list[str] = []
     atlanan = sorted({t for r in bosluk.values() for t in r["atlanan"]})
     kisalan = sorted({t for r in bosluk.values() for t in r["kisalan"]})
-    if atlanan:
-        uy.append(
-            f"HAFTA ATLANDI: çekirdek serilerde {b.sayi(len(atlanan), 0)} hafta "
-            f"eksik; en yenisi {b.tarih_kisa(atlanan[-1])}. Takvime bağlı "
-            "kümüle toplamlar o haftaları hiç saymaz, sabit uzunluklu pencereler "
-            "ise pencereyi geriye uzatır.")
-    if kisalan:
-        uy.append(
-            f"ARALIK KISALDI: {b.sayi(len(kisalan), 0)} gözlem bir öncekinden "
-            f"yedi günden az sonra damgalanmış; en yenisi "
-            f"{b.tarih_kisa(kisalan[-1])}. O haftaların stok değişimi "
-            "ölçülmemiş sayılıyor.")
+    for tarihler, sag_onek, tar_onek, govde in (
+        (atlanan, "HAFTA ATLANDI", "TARİHÇEDE BOŞLUK",
+         "çekirdek serilerde {n} hafta eksik; en yenisi {t}. Takvime bağlı "
+         "kümüle toplamlar o haftaları hiç saymaz, sabit uzunluklu pencereler "
+         "ise pencereyi geriye uzatır."),
+        (kisalan, "ARALIK KISALDI", "TARİHÇEDE KISA ARALIK",
+         "{n} gözlem bir öncekinden yedi günden az sonra damgalanmış; en "
+         "yenisi {t}. O haftaların stok değişimi ölçülmemiş sayılıyor."),
+    ):
+        if not tarihler:
+            continue
+        sag = [x for x in tarihler if bosluk_sag_ucta(x, bugun)]
+        eski = [x for x in tarihler if not bosluk_sag_ucta(x, bugun)]
+        # Sağ uçtaki bulgu ile eski bulgu AYRI cümlelerde ve ayrı sayılarla
+        # yazılır: tek cümlede toplansalardı sayının hangi kümeyi saydığı
+        # okunmaz olurdu ve önek de ikisinden birini yanlış temsil ederdi.
+        if sag:
+            uy.append(f"{sag_onek}: " + govde.format(
+                n=b.sayi(len(sag), 0), t=b.tarih_kisa(sag[-1])))
+        if eski:
+            uy.append(f"{tar_onek}: " + govde.format(
+                n=b.sayi(len(eski), 0), t=b.tarih_kisa(eski[-1]))
+                + " Bu boşluklar tarihçenin içinde kaldı; bu koşuda yayımlanan "
+                  "sayılara dokunmuyorlar.")
     return uy
+
+
+def cerceve_uyarilari(H: pd.DataFrame) -> list[str]:
+    """ÇERÇEVEDEN TÜRETİLEBİLEN bütün uyarılar — TEK TANIM, İKİ KATMAN.
+
+    NEDEN VAR. Ölçüm katmanı bu uyarıları veri katmanının bıraktığı koşu
+    kaydından DEVRALIYORDU ve kendisi hiç ölçmüyordu. Devralma sessizce
+    yanlış olabilir: kayıt bir önceki koşudan kalmış, başka bir pencereyle
+    yazılmış ya da veri katmanı hiç koşmamış olabilir. Ölçüldü — kayıttaki
+    uyarı listesi BOŞ dururken ölçülen çerçeve kapsam uyarısı gerektiriyordu;
+    yani sayfa "bu koşuda uyarı yok" diyordu ve o cümle kaydın yaşı kadar
+    eskiydi.
+
+    KURAL: bir uyarı ÇERÇEVEDEN türetilebiliyorsa, ÖLÇEN katman onu kendi
+    çerçevesinden türetir; devralınan kayıt yalnız çerçeveden türetilemeyen
+    olayları taşır (ağ düştü, seri hiç gelmedi, önbellekten okundu).
+
+    Liste burada tek yerde duruyor ki iki katman aynı soruyu aynı sırayla
+    sorsun; iki ayrı çağrı listesi bir gün sessizce ayrışırdı.
+    """
+    uy = list(kapsam_uyarilari(kapsam_olc(H)))
+    uy += bosluk_uyarilari(H)
+    uy += tazelik_denetimi(H)
+    uy += kimlik_denetimi(H)[0]
+    uy += genis_fark_olc(H)[0]
+    # Tekilleştirme SIRAYI korur: aynı cümle iki kaynaktan gelse de okur onu
+    # bir kez görür ve ilk göründüğü yerde görür.
+    return list(dict.fromkeys(uy))
 
 
 def kapsam_yeterli(H: pd.DataFrame) -> tuple[bool, str]:
@@ -994,6 +1771,37 @@ def _kimlik(rapor: dict, uy: list[str], ad: str, sol: pd.Series, sag: pd.Series,
     eşik KONMAZ. Ölçülmeyen bir seviyeye eşik koymak, ilk koşuda yanlış alarm
     üretip yayının önünde durmak demektir — ve yayının önünde duran bir
     denetimin yanlış alarmı arızanın kendisidir.
+
+    EŞİĞİN MUTLAK TABANI YAYIM HASSASİYETİNDEN GELİR — ve bu bir düzeltmedir.
+    Bağıl eşik TEK BAŞINA konmuştu (1e-6) ve ilk gerçek koşuda YANLIŞ ALARM
+    verdi: kırılım tablosundaki tüzel kişi stoku ile ana tablodaki aynı kalem
+    en fazla 0,063 milyon dolar ayrışıyor, oysa 61.383 milyon dolarlık bir
+    stokta 1e-6 yalnız 0,061 milyon dolara denk geliyordu. Okur, olmayan bir
+    arızayı ("kalem numaralandırması değişmiş olabilir") okudu.
+
+    Ölçülen fark ARIZA DEĞİL, iki tablonun ayrı ayrı yuvarlanmasıdır ve
+    büyüklüğü de bunu söylüyor: ana tablo bir ondalıkla (adım 0,1), kırılım
+    tablosu üç ondalıkla (adım 0,001) yayımlanıyor; 114 haftanın 113'ünde fark
+    zaten 0,05'in — yani kaba ızgaranın YARISININ — altında.
+
+    Taban neden YARIM adım değil TAM adım: 05.07.2024'te ana tablo 61.382,7
+    yazarken kırılım tablosu 61.382,763 yazıyor, yani 61.382,8'e yuvarlanması
+    gereken bir sayı aşağı yuvarlanmış. İki tablo aynı anlık değerin iki
+    yuvarlaması DEĞİL: en az biri kendisi de yuvarlanmış parçaların toplamı ya
+    da başka bir revizyon vintajı. Yarım adım (0,0505) bu gözlemi ÖLÇÜLMÜŞ
+    biçimde kaçırıyor; taban bu yüzden her iki tablonun TAM adımı toplanarak
+    kurulur (0,1 + 0,001 = 0,101) ve ölçülen en büyük farka 1,6 kat pay bırakır.
+
+    TESPİT PAYI DARALMIYOR ve bu da ölçüldü. Bu kapının yakalaması gereken
+    arıza kalem kaymasıdır: karşılaştırmaya giren bacak değişir. Tüzel kişi
+    stokunun yerine aynı tablodaki EN YAKIN komşu kalem (gerçek kişilerin
+    kıymetli maden hesabı) konursa artık 32.436 milyon dolara, gerçek kişi
+    stoku konursa 83.557'ye, geniş toplam konursa 199.915'e çıkıyor. Taban
+    (0,101) ile en küçük gerçek arıza arasında BEŞ büyüklük basamağı var; eşik
+    yanlış alarmı susturmak için değil, ÖLÇÜLEN yayım hassasiyetinden
+    türetildi.
+
+    Etkin eşik ikisinin BÜYÜĞÜDÜR: ölçek büyüdüğünde bağıl kol devralır.
     """
     b = _bicim()
     d = pd.DataFrame({"s": sol, "r": sag, "o": olcek}).dropna()
@@ -1002,6 +1810,11 @@ def _kimlik(rapor: dict, uy: list[str], ad: str, sol: pd.Series, sag: pd.Series,
         return
     fark = (d["s"] - d["r"]).abs()
     bagil = fark / d["o"].abs().clip(lower=1e-9)
+    # Taban iki tarafın ÖLÇÜLEN adımından kuruluyor; taraflar aynı ızgaradaysa
+    # toplam yine iki tam adımdır — iki bağımsız yuvarlama var demektir.
+    (adim_sol, hal_sol) = yayim_adimi_olc(d["s"])
+    (adim_sag, hal_sag) = yayim_adimi_olc(d["r"])
+    taban = float(adim_sol + adim_sag)
     rapor[ad] = {
         "n": int(len(d)),
         "maks_fark": float(fark.max()),
@@ -1010,16 +1823,60 @@ def _kimlik(rapor: dict, uy: list[str], ad: str, sol: pd.Series, sag: pd.Series,
         "son_fark": float(fark.iloc[-1]),
         "birim": birim_ad,
         "esik_bagil": esik_bagil,
-        "gecti": None if esik_bagil is None else bool(bagil.max() <= esik_bagil),
+        "yayim_adimi_sol": float(adim_sol),
+        "yayim_adimi_sag": float(adim_sag),
+        # ADIMIN HÂLİ DE KAYDA GİRER. Sıfır bir adım üç ayrı sebepten gelir
+        # (gözlem yok · örneklem dar · seri yuvarlanmamış) ve üçünün eşiğe
+        # etkisi aynı olsa da tanısı aynı değil: sıfır tabanla koşan bir
+        # kimlik, tabanı ölçülmüş sanılan bir kimlikle tıpatıp aynı görünür.
+        "yayim_adimi_hal_sol": hal_sol,
+        "yayim_adimi_hal_sag": hal_sag,
+        "esik_taban": taban,
+        "gecti": None,
     }
-    if esik_bagil is not None and bagil.max() > esik_bagil:
+    if esik_bagil is None:
+        return
+    esik = (esik_bagil * d["o"].abs()).clip(lower=taban)
+    asim = fark > esik
+    rapor[ad]["asim_hafta"] = int(asim.sum())
+    rapor[ad]["gecti"] = bool(not asim.any())
+    if asim.any():
+        # OKURA NE SÖYLER: iki tablo aynı kalemi aynı hafta farklı yazmış ve
+        # fark yuvarlamayla açıklanamayacak kadar büyük. Kaç KAT olduğu
+        # cümlenin içinde, çünkü "0,3 milyon dolar" tek başına büyük mü küçük
+        # mü olduğunu söylemez — kıyas noktası yayım hassasiyetidir.
+        en = float(fark.max())
+        gun = fark.idxmax()
+        # Ondalık, sayının BÜYÜKLÜĞÜNE göre: eşiğin hemen üstündeki bir sapma
+        # ancak üç haneyle anlaşılır (0,105 ile 0,15 farklı şeyler), on binler
+        # mertebesindeki bir kalem kaymasında aynı üç hane gürültüdür ve
+        # sayıyı okunmaz yapar.
+        bas = (f"KİMLİK BOZUK: {ad} — kaynağın iki tablosu aynı haftada farklı "
+               f"değer veriyor. En büyük fark "
+               f"{b.sayi(en, 3 if en < 10 else 1)} {birim_okur(birim_ad)} "
+               f"({b.tarih_kisa(gun)})")
+        # KIYAS NOKTASININ ADI, ÖLÇÜLEN ŞEYİN ADI OLMALI. Burada "yayım
+        # yuvarlamasının bırakabileceği pay" yazıyordu, oysa bölen TAM
+        # adımların toplamıdır (0,1 + 0,001) ve yuvarlamanın bırakabileceği
+        # pay onun YARISIDIR (0,0505) — bu dosyanın kendi belgesi de o payı
+        # öyle ölçüyor. İki ad aynı sayıya konunca okura verilen kat sayısı
+        # iki kat küçük görünüyordu: gerçek bir kalem kaymasının kaç kat
+        # olduğunu soran biri yanlış bir ölçekle bakıyordu.
+        if taban > 0:
+            bas += (f", iki tablonun ölçülen yayım adımları toplamının "
+                    f"{b.sayi(en / taban, 1)} katı")
+        else:
+            # TABAN ÖLÇÜLEMEDİĞİNDE KIYAS DA YAZILMAZ. Ölçülmemiş bir bölenle
+            # kurulan "şu kadar kat" cümlesi, kaç kat olduğunu ölçmüş gibi
+            # görünürdü; eksik olan şey adıyla anılır.
+            bas += (", yayım yuvarlamasının bırakabileceği pay bu koşuda "
+                    "ölçülemedi ve karşılaştırma yalnız oransal eşikle "
+                    "yapıldı")
         uy.append(
-            f"KİMLİK BOZUK: {ad} — en büyük sapma "
-            f"{b.sayi(float(fark.max()), 1)} {birim_ad} "
-            f"({b.yuzde(float(bagil.max()) * 100, 4)}, "
-            f"{b.tarih_kisa(bagil.idxmax())}); eşik "
-            f"{b.yuzde(esik_bagil * 100, 4)}. Kalem numaralandırması ya da "
-            "birim değişmiş olabilir.")
+            bas + f"; toplam {b.sayi(int(asim.sum()), 0)} haftada aşılıyor. "
+            "Bu kadarı yuvarlamadan doğamaz: kaynağın kalem numaralandırması "
+            "ya da birimi değişmiş olabilir ve bu iki kalemden beslenen "
+            "sayılar sınanana kadar temkinle okunmalı.")
 
 
 def kimlik_denetimi(H: pd.DataFrame) -> tuple[list[str], dict]:
@@ -1052,59 +1909,134 @@ def kimlik_denetimi(H: pd.DataFrame) -> tuple[list[str], dict]:
     rapor: dict = {}
     K = set(H.columns)
 
-    if {"stok_gercek", "stok_tuzel", "stok_toplam"} <= K:
-        _kimlik(rapor, uy,
-                "Gerçek ve tüzel kişi stoklarının toplamı yurt içi toplama eşit "
-                "(TP.HPBITABLO2.11 + TP.HPBITABLO2.12 = TP.HPBITABLO2.10)",
+    def _var(ad: str, gerekli) -> bool:
+        """Kimliğin girdileri yüklendi mi — YOKSA SUSMAK YOK.
+
+        Eksik sütunda kimlik SESSİZCE atlanıyordu ve kardeşi (kapsam kimliği)
+        aynı durumda "SINANAMADI" diyordu: aynı olayın iki katmanda iki farklı
+        görüntüsü. Atlanan bir kimlik, geçen bir kimlikle tıpatıp aynı görünür
+        — koşu kaydında ne uyarı vardır ne künye satırı, yani bakılmayan yer
+        geçen sınavla aynıdır. Sessiz atlama, ölçmediğini ölçmüş gibi
+        göstermenin en ucuz biçimidir.
+        """
+        eksik = [a for a in gerekli if a not in K]
+        if not eksik:
+            return True
+        rapor[ad] = {"gecti": None, "sinandi": False,
+                     "yuklenemeyen": sorted(eksik)}
+        uy.append(f"KİMLİK SINANAMADI: {ad} — "
+                  f"{_adlar(eksik, en_fazla=min(len(eksik), 4))} bu koşuda "
+                  "yüklenemedi; kaynağın kendi kalemleri arasındaki bu "
+                  "bağıntı ölçülemiyor.")
+        return False
+
+    _ad_kapsam = ("Gerçek ve tüzel kişi stoklarının toplamı yurt içi toplama "
+                  "eşit (TP.HPBITABLO2.11 + TP.HPBITABLO2.12 = "
+                  "TP.HPBITABLO2.10)")
+    if _var(_ad_kapsam, ("stok_gercek", "stok_tuzel", "stok_toplam")):
+        _kimlik(rapor, uy, _ad_kapsam,
                 H["stok_gercek"] + H["stok_tuzel"], H["stok_toplam"],
                 H["stok_toplam"], 1e-6, "mn USD")
-    if {"k_gercek", "stok_gercek"} <= K:
-        _kimlik(rapor, uy,
-                "Kırılım tablosundaki gerçek kişi stoku ana tablodakiyle aynı "
-                "(TP.HPBITABLO4.3 = TP.HPBITABLO2.11)",
+    _ad_kg = ("Kırılım tablosundaki gerçek kişi stoku ana tablodakiyle aynı "
+              "(TP.HPBITABLO4.3 = TP.HPBITABLO2.11)")
+    if _var(_ad_kg, ("k_gercek", "stok_gercek")):
+        _kimlik(rapor, uy, _ad_kg,
                 H["k_gercek"], H["stok_gercek"], H["stok_gercek"], 1e-6, "mn USD")
-    if {"k_tuzel", "stok_tuzel"} <= K:
-        _kimlik(rapor, uy,
-                "Kırılım tablosundaki tüzel kişi stoku ana tablodakiyle aynı "
-                "(TP.HPBITABLO4.8 = TP.HPBITABLO2.12)",
+    _ad_kt = ("Kırılım tablosundaki tüzel kişi stoku ana tablodakiyle aynı "
+              "(TP.HPBITABLO4.8 = TP.HPBITABLO2.12)")
+    if _var(_ad_kt, ("k_tuzel", "stok_tuzel")):
+        _kimlik(rapor, uy, _ad_kt,
                 H["k_tuzel"], H["stok_tuzel"], H["stok_tuzel"], 1e-6, "mn USD")
 
-    # (2) ÖLÇÜLMEMİŞ — dört kırılımın toplamı üst kaleme eşit mi.
-    dortlu = {
-        "Gerçek kişilerin arındırılmış değişiminde para birimi kırılımı toplamı "
-        "(TP.HPBITABLO5.3–5.6 = TP.HPBITABLO5.2)":
-            (["ar_gercek_usd", "ar_gercek_eur", "ar_gercek_diger",
-              "ar_gercek_maden"], "ar_gercek"),
-        "Tüzel kişilerin arındırılmış değişiminde para birimi kırılımı toplamı "
-        "(TP.HPBITABLO5.8–5.11 = TP.HPBITABLO5.7)":
-            (["ar_tuzel_usd", "ar_tuzel_eur", "ar_tuzel_diger",
-              "ar_tuzel_maden"], "ar_tuzel"),
-        "Gerçek kişilerin parite etkisinde para birimi kırılımı toplamı "
-        "(TP.HPBITABLO5.14–5.17 = TP.HPBITABLO5.13)":
-            (["pe_gercek_usd", "pe_gercek_eur", "pe_gercek_diger",
-              "pe_gercek_maden"], "pe_gercek"),
-        "Tüzel kişilerin parite etkisinde para birimi kırılımı toplamı "
-        "(TP.HPBITABLO5.19–5.22 = TP.HPBITABLO5.18)":
-            (["pe_tuzel_usd", "pe_tuzel_eur", "pe_tuzel_diger",
-              "pe_tuzel_maden"], "pe_tuzel"),
-    }
-    for ad, (parcalar, ust) in dortlu.items():
-        if set(parcalar) | {ust} <= K:
-            _kimlik(rapor, uy, ad, H[parcalar].sum(axis=1, min_count=len(parcalar)),
-                    H[ust], H[ust].abs().clip(lower=1.0), None, "mn USD")
-    # Gerçek + tüzel = toplam, ayrıştırmanın iki bloğunda da.
-    for ad, (parcalar, ust) in {
-        "Arındırılmış değişimde gerçek ve tüzel kişi toplamı "
-        "(TP.HPBITABLO5.2 + TP.HPBITABLO5.7 = TP.HPBITABLO5.1)":
-            (["ar_gercek", "ar_tuzel"], "ar_toplam"),
-        "Parite etkisinde gerçek ve tüzel kişi toplamı "
-        "(TP.HPBITABLO5.13 + TP.HPBITABLO5.18 = TP.HPBITABLO5.12)":
-            (["pe_gercek", "pe_tuzel"], "pe_toplam"),
-    }.items():
-        if set(parcalar) | {ust} <= K:
-            _kimlik(rapor, uy, ad, H[parcalar].sum(axis=1, min_count=len(parcalar)),
-                    H[ust], H[ust].abs().clip(lower=1.0), None, "mn USD")
+    # (2) ÖLÇÜLMEMİŞ — bacakların toplamı üst kaleme eşit mi.
+    # Ağaç KIRILIMLAR sözleşmesinden okunuyor: aynı ağaç sıfır denetiminin
+    # cümlelerini de besliyor ve iki yerde ayrı yazılsaydı bir gün sessizce
+    # ayrışırdı. Kalem numaraları da elle değil katalogdan.
+    for kir in KIRILIMLAR:
+        parcalar = list(kir.parcalar)
+        if _var(kirilim_adi(kir), parcalar + [kir.ust]):
+            _kimlik(rapor, uy, kirilim_adi(kir),
+                    H[parcalar].sum(axis=1, min_count=len(parcalar)),
+                    H[kir.ust], H[kir.ust].abs().clip(lower=1.0), None, "mn USD")
+
+    # (4) KAPSANMA — eşitlik değil, İÇİNDE OLMA. İki seri hiçbir kimliğe
+    # girmiyordu ve altı yayımlanan sayıyı besliyorlar.
+    #
+    # NEDEN EŞİTLİK KURULAMIYOR: kırılım tablosunun gerçek kişi bloğu 4.3'ten
+    # 4.7'ye kadar sürüyor ve arasındaki para birimi kalemleri (4.4–4.6) bu
+    # hatta ÇEKİLMİYOR, yani "bacakların toplamı üst kaleme eşit" sorusu
+    # sorulamıyor. Sorulabilen soru daha zayıf ama boş değil: maden hesabı
+    # üst kalemin İÇİNDE mi?
+    #
+    # NEDEN ÖNEMLİ: sayfa bu iki seriden bir PAY yazıyor (maden hesaplarının
+    # stok içindeki oranı) ve o payın anlamlı olması kalemin gerçekten üst
+    # kalemin bir parçası olmasına bağlı. Kalem numaralandırması kayar da
+    # 4.7'nin yerine bloğun dışından bir kalem gelirse, pay sessizce yüzü
+    # aşabilir ya da daha kötüsü aşmadan yanlış olur. Kıyas AYNI TABLONUN
+    # kalemiyle kurulur (4.3 · 4.8), çünkü payda olarak kullanılan ana tablo
+    # kalemine köprü zaten yukarıdaki iki sıkı kimlikle kurulu.
+    for ic, dis, ad in (
+            ("maden_gercek", "k_gercek",
+             "Gerçek kişilerin kıymetli maden hesapları kırılım tablosundaki "
+             "gerçek kişi stokunun içinde (TP.HPBITABLO4.7 ≤ TP.HPBITABLO4.3)"),
+            ("maden_tuzel", "k_tuzel",
+             "Tüzel kişilerin kıymetli maden hesapları kırılım tablosundaki "
+             "tüzel kişi stokunun içinde (TP.HPBITABLO4.12 ≤ TP.HPBITABLO4.8)")):
+        if _var(ad, (ic, dis)):
+            _kapsanma(rapor, uy, ad, H[ic], H[dis], "mn USD")
     return uy, rapor
+
+
+def _kapsanma(rapor: dict, uy: list[str], ad: str, ic: pd.Series,
+              dis: pd.Series, birim_ad: str) -> None:
+    """Bir kalem ötekinin İÇİNDE mi — kapsanma denetimi, eşitlik değil.
+
+    EŞİK UYDURULMUYOR, TANIMDAN GELİYOR: bir alt kalem üst kalemi aşamaz.
+    Tolerans yalnız yayım yuvarlamasıdır (iki tarafın ölçülen adımı), çünkü
+    aşımın kendisi bir yorum değil aritmetik bir imkânsızlıktır. Adım
+    ölçülemezse tolerans SIFIR olur ve bu doğru taraftır: ölçemediğimiz bir
+    payı cömertçe vermek, kapıyı sessizce körelmiş bırakır.
+
+    Ölçüm her hâlde künyeye yazılır — en büyük pay, o payın haftası, aşım
+    sayısı. Bugün pay gerçek kişilerde en çok yüzde 61,5, tüzel kişilerde
+    yüzde 13,2: kapsanma rahatça tutuyor ve o rahatlık ölçülmüş olarak
+    duruyor, "herhâlde tutuyordur" olarak değil.
+    """
+    b = _bicim()
+    d = pd.DataFrame({"i": ic, "d": dis}).dropna()
+    if d.empty:
+        rapor[ad] = {"gecti": None, "sinandi": False, "n": 0}
+        uy.append(f"KİMLİK SINANAMADI: {ad} — girdi serileri kesişmiyor.")
+        return
+    (adim_ic, hal_ic) = yayim_adimi_olc(d["i"])
+    (adim_dis, hal_dis) = yayim_adimi_olc(d["d"])
+    tolerans = float(adim_ic + adim_dis)
+    asim_mn = d["i"] - d["d"] - tolerans
+    pay = d["i"] / d["d"].abs().clip(lower=1e-9) * 100.0
+    asim = asim_mn > 0
+    rapor[ad] = {
+        "n": int(len(d)), "sinandi": True,
+        "maks_pay": float(pay.max()),
+        "maks_pay_tarih": str(pay.idxmax().date()),
+        "son_pay": float(pay.iloc[-1]),
+        "tolerans": tolerans,
+        "yayim_adimi_hal_ic": hal_ic, "yayim_adimi_hal_dis": hal_dis,
+        "asim_hafta": int(asim.sum()),
+        "birim": birim_ad,
+        "gecti": bool(not asim.any()),
+    }
+    if asim.any():
+        # İKİ CÜMLE. Burada üç vardı ve ortadaki cümle ölçüyü, sonuncusu
+        # gerekçeyi anlatıyordu; ölçü ile gerekçe tek cümlede birleştirildi ve
+        # kaydın geri kalanı (aşımın haftası, payı, toplam hafta sayısı) zaten
+        # rapor bloğunda duruyor. Koşu kaydı satırı mekanik olmalı: olayı ve
+        # büyüklüğünü söyler, argümanı sayfaya bırakır.
+        uy.append(
+            f"KAPSANMA BOZUK: {ad} — alt kalem üst kalemi aşıyor; en büyük "
+            f"aşım {b.sayi(float(asim_mn.max()), 1)} {birim_okur(birim_ad)}, "
+            f"toplam {b.sayi(int(asim.sum()), 0)} hafta. Bir alt kalem üst "
+            "kalemi aşamaz: bu iki kalemden hesaplanan paylar sınanana kadar "
+            "temkinle okunmalı.")
 
 
 def genis_fark_olc(H: pd.DataFrame) -> tuple[list[str], dict]:
@@ -1218,7 +2150,7 @@ def olu_seri_olc(H: pd.DataFrame, pencere: int = SIFIR_BLOK_HAFTA) -> dict:
     """
     olu: list[str] = []
     n_pencere = 0
-    for ad in OLU_ADAY:
+    for ad in SIFIR_KAPSAMI:
         if ad not in H.columns:
             continue
         s_ = H[ad].dropna()
@@ -1297,6 +2229,26 @@ def _en_eski(*adaylar) -> pd.Timestamp | None:
     return min(z)
 
 
+def _dol_sekil_saati(o: dict, blok: object) -> object:
+    """Şekil 06'nın damgası: ÇİZİLEN bacakların en eskisi.
+
+    Kural üç hâlli ve her hâl ölçüme karşılık gelir:
+      · iki bacak da ölçülmüş  → EN ESKİSİ (kıyas o güne kadar kurulabilir)
+      · yalnız ham ölçülmüş    → ham (arındırılmış iz zaten çizilmiyor)
+      · hiçbiri ölçülmemiş     → bloğun saati; o da yoksa None
+    """
+    # HAM BACAĞIN SAATİ BLOĞUN SAATİDİR: blok tam da doğrudan ölçülen ham
+    # sütunlara çıpalanıyor (`cipa_kolonlari`), yani `dol_tarih` ham bacağın
+    # kendi ucudur. İlk yazımda burada `dol_pay_ham_tarih` okunuyordu; o
+    # anahtarı ölçüm katmanı YAZMIYOR (özet üreticisi sonradan türetiyor) ve
+    # kural sessizce hiç ateşlenmiyordu — kuralı doğru yazıp onu OKUNMAYAN bir
+    # anahtara bağlamak, kuralı hiç yazmamakla aynı şey.
+    ar = o.get("dol_ar_tarih")
+    if blok and ar:
+        return _en_eski(blok, ar)
+    return _zaman(blok)
+
+
 def sekil_saatleri(o: dict, uzun: bool = False) -> dict[str, str | None]:
     """Figür başına VERİ UCU — hattın tek ana saati değil.
 
@@ -1349,9 +2301,28 @@ def sekil_saatleri(o: dict, uzun: bool = False) -> dict[str, str | None]:
         # yanlış alarmı arızanın kendisidir. Yedek yol (`_en_eski`) duruyor:
         # ölçüm katmanı bu bloğu hiç yazmamışsa figür tarihsiz kalmasın.
         "05_kimlik.html": yaz(o.get("kimlik_tarih")) or yaz(_en_eski(stok, akim)),
-        # Dolarizasyon bloğu kendi ortak tarihine çıpalanır (TL ve YP bacakları
-        # aynı tabloda ama ölçüm katmanı bloğu ortak tarihe demirler).
-        "06_dolarizasyon.html": yaz(dol),
+        # DOLARİZASYON FİGÜRÜ KARMA: ham payı ve ARINDIRILMIŞ payı YAN YANA
+        # çiziyor, yani sözü ikisinin KIYASIDIR ve kıyas ancak ikisinin de
+        # ölçüldüğü güne kadar kurulabilir. Damga bu yüzden bloğun saati
+        # (`dol_tarih`) DEĞİL, çizilen iki bacağın EN ESKİSİDİR.
+        #
+        # Ayrım yeni değil, ama bu figürde YENİ GÖRÜNÜR OLDU: blok saati
+        # doğrudan ölçülen sütunlara çıpalandığı gün (türev kümüle sütunların
+        # tek bir eksik parite haftası yüzünden bloğu altı ay geriye
+        # çekmesini önlemek için) `dol_tarih` ham bacağın tarihi oldu.
+        # O düzeltme <Deger> sözleşmesi için doğru — ham pay gerçekten o gün
+        # ölçüldü — ama ŞEKİL sözleşmesi başka bir soru soruyor. Arındırılmış
+        # bacak aylar önce bittiğinde figür en TAZE bacağıyla damgalanır ve
+        # bayat yarısı taze görünür; rehberdeki "karma figürde bağlayıcı bacak
+        # EN ESKİSİDİR" kuralının tam tersi. İki sözleşme aynı saati
+        # paylaşamaz, çünkü aynı soruyu sormuyorlar.
+        #
+        # `min` YAPISAL yazılır, bugünkü sıralamaya bakmaz: bugün iki bacak da
+        # aynı gün bitiyor ve kural bugün hiçbir şeyi değiştirmiyor — ama
+        # kuralın konduğu gün ölçülmemiş bir sıralamaya bel bağlanamaz.
+        # Bacaklardan biri hiç ölçülmemişse damga YOK: ölçülmeyen ucun daha
+        # yeni olduğu kanıtlanamaz.
+        "06_dolarizasyon.html": yaz(_dol_sekil_saati(o, dol)),
     }
 
 
@@ -1369,12 +2340,28 @@ def kunye_yaz() -> None:
     print(f"  kaynak    : EVDS3 · {BASE}")
     print(f"  seri sayısı: {len(HAFTALIK)} (hepsi haftalık, Cuma damgalı)")
     print(f"  çekirdek  : {len(CEKIRDEK)} seri · asgari kapsam {ASGARI_HAFTA} hafta")
-    print(f"  tolerans  : haftalık aile {tazelik_tolerans('haftalik')} takvim günü")
-    print("\n  KOD                  BAŞLANGIÇ   BİRİM     AD")
+    print(f"  tolerans  : tazelik {tazelik_tolerans('haftalik')} · "
+          f"kapsam {kapsam_tolerans('haftalik')} takvim günü "
+          f"(ritim {AILE_RITIM_GUN['haftalik']} gün)")
+    a = parca_aritmetigi()
+    print(f"  çekim     : {a['sorulan_bas']} → bugün · {a['istek_satir']} satır "
+          f"· {a['parca_sayisi']} parça · satır sınırı {a['satir_siniri']} "
+          f"(tek parçanın dolmasına {a['kalan_hafta']} hafta)")
+    print(f"  yoklama   : katalogdaki başlangıçtan {YOKLAMA_GUN} gün geriden "
+          "sorulur; tarihçe uzarsa cevabın kendisi söyler")
+    print("\n  KOD                  BAŞLANGIÇ   KANIT       BİRİM     AD")
     for ad, s in HAFTALIK.items():
         yildiz = "*" if ad in CEKIRDEK else " "
-        print(f"  {yildiz}{s.kod:<20} {s.bas}  {s.birim:<8}  {s.okur_adi}")
+        # Başlangıcın ölçülüp ölçülmediği künyenin GÖRÜNEN parçasıdır: bir
+        # sabitin ölçüm sanılması bu hatta beş kat tarihçe kaybettirdi ve
+        # kaybın tek görünür işareti, kimsenin bakmadığı bir sabitti.
+        kanit = s.bas_kanit if bas_olculdu(ad) else "ÖLÇÜLMEDİ"
+        print(f"  {yildiz}{s.kod:<20} {s.bas}  {kanit:<10}  {s.birim:<8}  "
+              f"{s.okur_adi}")
     print("\n  (* çekirdek: hattın saatini bu serilerin ortak dolu haftası verir)")
+    print(f"  (KANIT: başlangıcın ölçüldüğü sorgunun alt sınırı — "
+          f"{len(BAS_OLCULEN)}/{len(HAFTALIK)} seri ölçülmüş. Ölçülmemiş "
+          "başlangıç taşıyan seri üzerine hüküm kurulmaz.)")
     print("\n  ŞEKİL SAAT DEFTERİ (anahtarlar; değerleri ölçüm katmanı doldurur)")
     for dosya, deger in sekil_saatleri({}).items():
         print(f"    {dosya:<26} {deger}")
@@ -1387,7 +2374,152 @@ def kunye_yaz() -> None:
 
 
 # --------------------------------------------------------------------------- ana akış
+def _tanimadi(r: dict) -> str:
+    """Tanınmayan bir kaydın NE TAŞIDIĞINI yazar — atlamanın yerine geçer.
+
+    Bir kaydı sessizce atlamak, ölçülmemiş bir şeyi ölçülmüş gibi göstermenin
+    en sessiz biçimidir: döküm kısalır, hiçbir şey hata vermez ve o ölçünün
+    hiç basılmadığını kimse fark etmez. Alan adları yazılınca yeni kayıt türü
+    ilk koşuda adıyla görünür.
+    """
+    bilinen = ", ".join(k for k in sorted(r) if k not in ("gecti", "n"))
+    return f"ölçü tanınmadı ({bilinen})" if bilinen else "ölçü tanınmadı (boş kayıt)"
+
+
+def _olcu_yazi(r: dict, alanlar: tuple[str, ...], kalip) -> str:
+    """Kayıt beklenen alanları taşıyorsa ölçüyü yazar, taşımıyorsa adını."""
+    return kalip(r) if set(alanlar) <= set(r) else _tanimadi(r)
+
+
+def kimlik_dokumu(kim_rapor: dict) -> list[str]:
+    """Kimlik kayıtlarının operatör dökümü — AĞSIZ, bu yüzden SINANABİLİR."""
+    satirlar: list[str] = []
+    for ad, r in kim_rapor.items():
+        isaret = "?" if r.get("gecti") is None else ("✓" if r["gecti"] else "✗")
+        n = r.get("n")
+        n_yazi = f"n={n:>4}" if isinstance(n, int) else "n=   ?"
+        if "maks_fark" in r:
+            olcu = f"maks {r['maks_fark']:>12,.3f} {r.get('birim', '')}"
+        elif "maks_pay" in r:
+            # `maks_pay` ZATEN yüzde cinsindendir (61,5 = %61,5). İlk yazımda
+            # yüzle çarpılıp %6.150 basıldı; birimi tahmin etmek yerine kaydın
+            # kendi değerine bakmak gerekiyordu.
+            olcu = f"maks pay {r['maks_pay']:>9,.3f}%"
+        else:
+            # Tanınmayan kayıt SESSİZCE ATLANMAZ: hangi ölçüyü taşıdığı yazılır.
+            # Atlamak, bir kimliğin sınanmadığını sınanmış gibi göstermektir.
+            olcu = _tanimadi(r)
+        satirlar.append(f"    kimlik {isaret} {n_yazi}  {olcu}  ·  {ad}")
+    return satirlar
+
+
+def durum_kaydi(H: pd.DataFrame) -> dict:
+    """`kos()`un ÖLÇEN yarısı: çerçeveden türeyen her uyarı ve her rapor.
+
+    AĞA ÇIKMAZ — ve ayrılmasının sebebi tam olarak budur. `kos()` içindeki tek
+    ağ işi `cek_kume`dir; geri kalanı bir DataFrame'in fonksiyonudur, yani
+    sınanabilir. Ayrılana kadar sınanmıyordu da: duman sınaması ağa
+    çıkamadığı için hattın BİRİNCİ adımının giriş noktası hiç koşturulmuyordu
+    ve ölçüldü — duman koşarken `veri.kos`un çalışan satır sayısı SIFIRDI,
+    ölçüm/çizim/özet giriş noktalarınınki 195/34/189.
+
+    Kusurun ilk biçimi kayda değer: döküm döngüsü `kim_rapor`ın TAMAMINI
+    dolaşıp her kayıttan `maks_fark` okuyordu, oysa `kimlik_denetimi` üç ayrı
+    şekilde kayıt yazıyor (eşitlik: `maks_fark` · kapsanma: `maks_pay` ·
+    sınanamadı: ikisi de yok). İkinci tür kayıt eklendiği gün hattın birinci
+    adımı her koşuda KeyError ile düşer; ölçüm, çizim ve özet hiç koşmaz.
+    Derlenmesi, içe aktarılması ve KOŞMASI üç ayrı sınamadır ve burada
+    üçüncüsü kimsenin bakmadığı yerdeydi.
+    """
+    kapsam = kapsam_olc(H)
+    s_hafta = son_hafta(H)
+    # ÇERÇEVEDEN TÜRETİLEN UYARILAR TEK ÇAĞRIDA. Ölçüm katmanı da AYNI
+    # fonksiyonu kendi okuduğu çerçeveyle çağırıyor; iki katman aynı soruyu
+    # aynı sırayla soruyor ve devralınan bayat bir kayıt onların yerini
+    # alamıyor (bkz. `cerceve_uyarilari`).
+    for u in cerceve_uyarilari(H):
+        uyar(u)
+    # Raporlar AYRICA alınır: koşu kaydına giren ayrıntı uyarı cümlesinden
+    # zengin (bacak bacak artık, kapsam farkının payı ve tarihi). Cümleler
+    # yukarıda zaten basıldı; `uyar` tekilleştirdiği için ikinci kez düşmez.
+    _, kim_rapor = kimlik_denetimi(H)
+    _, yd_rapor = genis_fark_olc(H)
+    return {
+        "kosum": dt.date.today().isoformat(),
+        "son_hafta": s_hafta.strftime("%Y-%m-%d"),
+        "haftalik": [int(H.shape[0]), int(H.shape[1])],
+        # KAYIT, ANLATTIĞI ÇERÇEVEYİ ADIYLA TAŞIR. Ölçüm katmanı bu künyeyi
+        # kendi okuduğu çerçeveyle karşılaştırıyor; tutmuyorsa kaydın
+        # uyarılarını devralmıyor ve bunu görünür kılıyor.
+        "cerceve_imza": cerceve_imza(H),
+        # Çekim penceresinin aritmetiği kayda GİRER: "sığdı mı" sorusunun
+        # cevabı bir yorum satırında yaşlanmasın, her koşuda yeniden ölçülsün.
+        "parca": parca_aritmetigi(),
+        "kapsam": kapsam,
+        "bosluk": bosluk_olc(H),
+        "tazelik": tazelik_olc(H),
+        "kimlik": kim_rapor,
+        "genis_fark": yd_rapor,
+        # ÖLÜ SERİ yalnız MAKİNE kaydına yazılır: okura giden cümle ölçüm
+        # katmanında, tek yerde kuruluyor (bkz. olu_seri_olc gerekçesi).
+        "olu_seri": olu_seri_olc(H),
+        "hizalama": hizalama_olc(H),
+        "uyarilar": list(_UYARI),
+    }
+
+
+def kosu_dokumu(durum: dict) -> list[str]:
+    """Operatör dökümünün TAMAMI — KAYITTAN okunur, ağa çıkmaz.
+
+    Dökümdeki sayılar BİLEREK ortak/bicim'den geçmiyor: bu satırlar koşu
+    kütüğüne düşen OPERATÖR tanısıdır, okura hiçbir yerden basılmaz, ve sabit
+    genişlikli hizalama kimlik satırlarının büyüklüklerini yan yana okunur
+    kılıyor. Okura giden her satır (uyar() şablonları) biçimi ortak/bicim'den
+    yazar; ayrım burada yazılı ki bir sonraki oturum bu kalıbı bir uyarı
+    şablonuna kopyalamasın.
+
+    ÜÇ DÖKÜM DE KAYDIN ALANLARINI SORAR, VARSAYMAZ. Bir raporun biçimi
+    değiştiğinde bu fonksiyon düşmez, tanımadığı kaydı adıyla basar — hattın
+    birinci adımı bir döküm satırı yüzünden ölmemeli.
+    """
+    satirlar = list(kimlik_dokumu(durum.get("kimlik") or {}))
+    yd = durum.get("genis_fark") or {}
+    if yd:
+        satirlar.append("    kapsam farkı (geniş toplam − yurt içi toplam): "
+                        + _olcu_yazi(
+                            yd, ("son_fark_mn_usd", "son_pay", "son_tarih"),
+                            lambda r: (f"{r['son_fark_mn_usd']:,.1f} mn USD "
+                                       f"({r['son_pay'] * 100:.1f}% pay, "
+                                       f"{r['son_tarih']})")))
+    for etiket, r in (durum.get("hizalama") or {}).items():
+        satirlar.append(
+            f"    hizalama [{etiket}] artığı en küçük kaydırma: "
+            + _olcu_yazi(r, ("en_kucuk_artik_kaydirma",),
+                         lambda x: f"{x['en_kucuk_artik_kaydirma']} hafta"))
+        kayd = r.get("kaydirmalar")
+        if not isinstance(kayd, dict):
+            satirlar.append("      kaydırma dökümü tanınmadı ("
+                            + ", ".join(sorted(r)) + ")")
+            continue
+        for k, v in kayd.items():
+            satirlar.append(
+                f"      k={k:>2}: "
+                + _olcu_yazi(v, ("n", "medyan_mutlak_artik"),
+                             lambda x: (f"n={x['n']:>4}  medyan artık "
+                                        f"{x['medyan_mutlak_artik']:>10,.2f} "
+                                        "mn USD")))
+    return satirlar
+
+
 def kos(yenile: bool = False) -> dict:
+    """Hattın birinci adımı: ÇEK, kapsam kapısından geçir, ÖLÇ ve yaz.
+
+    Gövde bilerek ince: ağa çıkmayan her iş ayrı bir fonksiyonda duruyor
+    (`durum_kaydi` · `kosu_dokumu`) ve duman sınaması onları GERÇEK çerçeveyle
+    koşturuyor. Buraya yeniden ölçüm satırı eklenirse o iş bir daha
+    sınanamaz — ağa çıkan bir giriş noktası, ağa çıkmayan hiçbir işi
+    içinde tutmamalı.
+    """
     print("EVDS3 → yurt içi yerleşiklerin YP mevduatı, veri katmanı")
     print(f"  anahtar: {'ortam değişkeni' if os.environ.get('TTO_EVDS_KEY') else 'dosya'}")
 
@@ -1402,69 +2534,16 @@ def kos(yenile: bool = False) -> dict:
             "depodaki sürüme dokunulmadı; hattın sonraki adımları koşmaz. "
             "Eksik kapsamla üretilen bir pano, hiç pano olmamasından kötüdür.")
 
-    kapsam = kapsam_olc(H)
-    for u in kapsam_uyarilari(kapsam):
-        uyar(u)
-    for u in bosluk_uyarilari(H):
-        uyar(u)
-
-    s_hafta = son_hafta(H)
-    print(f"  SON HAFTA: {ad_gun(s_hafta)} (Cuma)")
-
-    for u in tazelik_denetimi(H):
-        uyar(u)
-    kim_uy, kim_rapor = kimlik_denetimi(H)
-    for u in kim_uy:
-        uyar(u)
-    yd_uy, yd_rapor = genis_fark_olc(H)
-    for u in yd_uy:
-        uyar(u)
-    # ÖLÜ SERİ yalnız MAKİNE kaydına yazılır: okura giden cümle ölçüm
-    # katmanında, tek yerde kuruluyor (bkz. olu_seri_olc gerekçesi).
-    olu = olu_seri_olc(H)
-    hizalama = hizalama_olc(H)
+    print(f"  SON HAFTA: {ad_gun(son_hafta(H))} (Cuma)")
+    durum = durum_kaydi(H)
 
     H.to_csv(VERI / "haftalik.csv")
-    # Uyarı cümleleri okur için TOPLANIYOR; ölçümün kendisi burada SERİ SERİ
-    # duruyor. Toplamak bilgiyi atmak değil, okura tek olay olarak göstermek —
-    # ayrıntıyı arayan koşu kaydında bulur.
-    durum = {
-        "kosum": dt.date.today().isoformat(),
-        "son_hafta": s_hafta.strftime("%Y-%m-%d"),
-        "haftalik": [int(H.shape[0]), int(H.shape[1])],
-        "kapsam": kapsam,
-        "bosluk": bosluk_olc(H),
-        "tazelik": tazelik_olc(H),
-        "kimlik": kim_rapor,
-        "genis_fark": yd_rapor,
-        "hizalama": hizalama,
-        "olu_seri": olu,
-        "uyarilar": list(_UYARI),
-    }
     (VERI / "veri_durum.json").write_text(
         json.dumps(durum, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"  yazıldı: data/haftalik.csv ({H.shape[0]}x{H.shape[1]})")
 
-    # Aşağıdaki dökümdeki sayılar BİLEREK ortak/bicim'den geçmiyor: bu satırlar
-    # koşu kütüğüne düşen OPERATÖR tanısıdır, okura hiçbir yerden basılmaz, ve
-    # sabit genişlikli hizalama dokuz kimlik satırının büyüklüklerini yan yana
-    # okunur kılıyor. Okura giden her satır (uyar() şablonları) biçimi
-    # ortak/bicim'den yazar; ayrım burada yazılı ki bir sonraki oturum bu
-    # kalıbı bir uyarı şablonuna kopyalamasın.
-    for ad, r in kim_rapor.items():
-        isaret = "?" if r["gecti"] is None else ("✓" if r["gecti"] else "✗")
-        print(f"    kimlik {isaret} n={r['n']:>4}  maks {r['maks_fark']:>12,.3f} "
-              f"{r['birim']}  ·  {ad}")
-    if yd_rapor:
-        print(f"    kapsam farkı (geniş toplam − yurt içi toplam): "
-              f"{yd_rapor['son_fark_mn_usd']:,.1f} mn USD "
-              f"({yd_rapor['son_pay'] * 100:.1f}% pay, {yd_rapor['son_tarih']})")
-    for etiket, r in hizalama.items():
-        print(f"    hizalama [{etiket}] artığı en küçük kaydırma: "
-              f"{r['en_kucuk_artik_kaydirma']} hafta")
-        for k, v in r["kaydirmalar"].items():
-            print(f"      k={k:>2}: n={v['n']:>4}  medyan artık "
-                  f"{v['medyan_mutlak_artik']:>10,.2f} mn USD")
+    for satir in kosu_dokumu(durum):
+        print(satir)
     if _UYARI:
         print(f"\n[{len(_UYARI)} uyarı]")
     return durum

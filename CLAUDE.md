@@ -506,6 +506,26 @@ geçti diye üçüncüsü geçmez. Sigorta araca kondu: `guncelle.py`nin ön den
 artık her adım betiğini ayrıştırıp kapıdan sonra `def`/`class` arıyor ve
 bulursa ENGEL üretiyor — statik, saniyeler sürüyor, koşturmadan soruyor.
 
+**Kurucu ilke — AĞA ÇIKAN bir giriş noktası, ağa çıkmayan hiçbir işi içinde
+tutmamalı.** Duman sınamaları ağa çıkmaz; öyleyse ağa çıkan bir `kos()`un
+İÇİNDE duran her ölçüm, döküm ve kayıt kurulumu hiçbir kapı tarafından
+KOŞTURULMAZ. YPMevduat'ta ölçüldü (05.09.2026): duman koşarken ölçüm katmanının
+giriş noktasının 195, özetinkinin 189, çizimninkinin 34 satırı çalışıyordu —
+veri katmanınınki SIFIR. Bulunan kusur da tam oradaydı: künye döngüsü kimlik
+kayıtlarının TAMAMINDAN `maks_fark` okuyordu, oysa denetim üç ayrı biçimde
+kayıt yazıyor (eşitlik · kapsanma · sınanamadı) ve ikinci tür eklendiği gün
+hattın BİRİNCİ adımı her koşuda KeyError ile ölürdü; ölçüm, çizim, özet hiç
+koşmazdı. Derlenmesi, içe aktarılması ve koşması üç ayrı sınamadır ve üçüncüsü
+kimsenin bakmadığı yerdeydi. Düzeltme iki parçalı ve ikisi de genelleştirilir:
+(1) ağa çıkmayan iş AYRI fonksiyonlara çıkar (`durum_kaydi` · `kosu_dokumu`) ve
+duman onları GERÇEK çerçeveyle çağırır; ayrıca ağa çıkan tek çağrı (`cek_kume`)
+sarmalanıp giriş noktasının KENDİSİ de koşturulur — kapsam kapısı ve dosya
+yazımı dahil. (2) Bir döküm kaydın alanlarını SORAR, varsaymaz: tanımadığı
+kaydı düşmeden, ADIYLA basar — sessizce atlamak, ölçülmemiş bir şeyi ölçülmüş
+gibi göstermenin en sessiz biçimidir. Yapısal kilit de kapıya kondu: `kos()`
+gövdesinde ölçüm çağrısı kalırsa duman DÜŞER, yoksa bir sonraki oturum onları
+geri taşır ve kapsam sessizce sıfıra döner.
+
 **Kurucu ilke — yayın kapısı DERLEMEDEN ve SINAVDAN geçer.** `yayin.yml`
 public depoya kopyalamadan önce siteyi derler ve `sayfa_sinavi.py`yi koşturur;
 düşerse yayın durur ve iş akışı e-posta gönderir. Yerelde aynı şey `cd site &&
