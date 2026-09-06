@@ -17,6 +17,8 @@ TTO Trading/
 │   ├── TRYREER/                 # TÜFE/Yi-ÜFE ağırlıklı REDK analizi
 │   ├── hazineihrac/             # Hazine ihale scraper + analiz (kendi .git'i var!)
 │   ├── USDTRYDeval/             # USD/TRY trend kanalları
+│   ├── OVP/                     # Orta Vadeli Program: ima edilen kur (GSYH_TL/GSYH_USD),
+│   │                            #   program tabloları programlar.json'da ELLE tutulur
 │   └── indices/                 # FX haber-duyarlılık endeksi (üç kip: hafif/günlük/tam)
 ├── teknik/                      # Haftalık teknik analiz bülteni (olc.py ölçer,
 │                                #   yaz.py yorum kapısı — her sayı ölçümden; pazar koşusu)
@@ -748,3 +750,75 @@ SAYININ düzeltilmesi ayrı iştir ve kalır (okur eski sayıya göre karar verm
 olabilir): tarihli, eski/yeni değerleri yazan kısa bir düzeltme notu — ama
 sürüm tarihçesi anlatmadan. Sigorta araca kondu: `sayfa_sinavi.py`'nin 9.
 ölçütü bütün içerik dosyalarını tarar ve bu dili bulursa sınav DÜŞER.
+
+**Kurucu ilke — YAYIMLANMIŞ BİR BELGE de bir veri kaynağıdır, ama CANLI
+DEĞİLDİR; ve iki cins bacağı tek damgayla anlatmak iki yönde birden yalan
+söyler.** Orta Vadeli Program hattının iki bacağı var: yılda bir yayımlanan,
+bir daha değişmeyecek bir tablo ve her iş günü ilerleyen bir kur serisi.
+Aralarındaki mesafe bir yıla varıyor. "Karma figürde damga EN ESKİ bacaktır"
+kuralı burada düz uygulansaydı TAZE kur bacağı bir yıl bayat görünürdü — kuralın
+önlemek için yazıldığı iki kusurdan İKİNCİSİ. Kural belgeye değil CANLI seriye
+konur; belge bacağı damgada ADIYLA durur ("program 09.2025 · kur 03.09.2026").
+Bunun bir uzantısı da ölçüldü: belgenin kapağı yalnız AYI yazıyor, gün belgede
+geçmiyor. Bir ay damgası ortak/bicim sözleşmesinde ayın SON gününe demirlenir
+ve ay henüz kapanmadıysa o gün YARINA düşer, yani yayına giden bir damga
+ölçülmemiş bir günü ilan eder. Ay kapanmadan gün yazılmıyor: o figürün damgası
+o gün için yalnız canlı bacağı taşır, program sürümü figürün KENDİ alt
+başlığında okura yine görünür, ve ay kapandığı gün damga kendiliğinden gelir.
+Birleşik damganın nereye yazılacağı da sözleşmenin parçası: şekil saat defteri
+(`_sekil_tarih`) çözülebilir TEK bir tarih ya da `null` ister ve çözemediğini
+ENGEL sayar, o yüzden birleşik damga MDX'in açık `tarihAnahtari`sine düşer.
+İkisi de AYNI fonksiyondan mekanik olarak ayrılıyor (`veri.defter_ayir`), çünkü
+elle tutulan iki liste bir gün sessizce ayrışır.
+
+**Kurucu ilke — bir TAHMİN TABLOSUNUN sütunu üç türlüdür ve ölçüt hangisine
+baktığını bilmelidir.** Program tablosunda gerçekleşme, gerçekleşme tahmini ve
+program sütunları yan yana durur. Hattın yöntem sınaması (ima edilen kur ile
+gerçekleşen günlük ortalamanın farkı) yalnız KAPANMIŞ ve GERÇEKLEŞME olarak
+yayımlanmış sütunlarda kurulur: tahmin sütunundaki fark yöntem farkı değil
+TAHMİN hatasıdır, program sütunu henüz olmamış bir yıldır, açık bir yılın yarım
+ortalaması da yıl ortalaması değildir. Ayrım yapılmasaydı geçen yılın kendi
+tahmin hatası (+%0,39) ölçünün güvenilmezliği gibi görünürdü; ayrımla birlikte
+sınama iki kapanmış yılda +%0,12 ve %0,00 veriyor, yani "ima edilen kur pratikte
+USD/TRY ortalamasıdır" cümlesi bir varsayım değil bir ÖLÇÜM. Sınama her koşuda
+yeniden yapılıyor ve sonucu yayımlanıyor — bir kez doğrulanıp bırakılan hüküm,
+kaynak yöntemini değiştirdiği gün sessizce yanlışa döner. Aynı sebeple elle
+tutulan tablonun KENDİ özdeşlikleri de her koşuda sınanıyor (nominal gelir
+artışı = (1+büyüme)(1+deflatör); cari denge oranı; faiz gideri oranı; dış
+ticaret dengesi = ihracat − ithalat): elle aktarılan bir tabloda kayan bir hücre
+hiçbir yerde hata vermez, yalnız sayfada yanlış bir sayı görünür.
+
+**Kurucu ilke — İKİ VARSAYIMIN AYNI SONUCU VERMESİ ancak ikisi AYNI KISITI
+tutturuyorsa bir sonuçtur.** Yıl ortalaması bilindiğinde yıl sonu seviyesi hâlâ
+patikanın biçimine bağlı; hat iki uç varsayımı (doğrusal ve üstel) ayrı ayrı
+çözüp ikisini de yayımlıyor ve yakın çıkmalarını sayfada bir SAĞLAMLIK sonucu
+olarak sunuyor. O cümle ilk yazımda geçersizdi: doğrusal çözüm "ortalama uçların
+ortasıdır" kestirmesiyle yazılmıştı ve bugünü bir kez daha sayıyordu, yani
+kısıtı SAĞLAMIYORDU — üstel çözüm bugünü saymıyor. İki patika farklı kısıtları
+tutturunca "yakınlık" bir tesadüfe döner ve sayfadaki hüküm dayanaksız kalır.
+Duman sınaması bu yüzden yakınlığı değil KISITI ölçüyor: her iki patikanın da
+hedef ortalamayı tutturduğu ayrı ayrı sınanıyor. Kusur ancak o ölçüt yazıldıktan
+sonra görüldü — yakınlığı sınayan bir ölçüt (fark < %1) her iki hâlde de yeşil
+geçerdi.
+
+**Kurucu ilke — bir KONVANSİYON ölçünün parçasıdır ve iki farklı konvansiyon
+aynı sayfada yan yana durabilir, yeter ki adında dursun.** Gerçekleşen taşımada
+lira bacağı GÖZLEM GÜNLERİ üzerinden bileşikleniyor (her kotasyon bir günlük
+faiz taşır, hafta sonu ayrıca eklenmez); takvim günüyle hesaplamak aynı dönemde
+on puanı aşan bir fark üretiyor ve ölçüt bunu duman sınamasında kilitliyor.
+İleriye dönük taşımada ise iki konvansiyon BİRDEN yayımlanıyor: basit olan
+yıllık faiz kotasyonunun yıllık devalüasyona bölünmesi (sayfadaki ex-ante reel
+faizle aynı konvansiyon, yani onunla kıyaslanabilir), bileşik olan gecelikte
+dönen bir pozisyonun gerçekten biriktirdiği getiri (gerçekleşen bacakla aynı
+konvansiyon). Tek konvansiyon yazılsaydı sayfadaki iki sayıdan biri öbürüyle
+kıyaslanamaz olurdu ve okur bunu göremezdi. Ve ileriye dönük bacağın taşıdığı
+varsayım (lira faizinin sabit kalması) okura AYRI bir cümlede yazılıyor: bir
+projeksiyonun varsayımı gizlenirse okur onu ölçüm sanır.
+
+**Kurucu ilke — bir YIL sayı değil ETİKETTİR.** Özet üreticisi yıl sütunlarını
+sayı olarak yazıyordu ve sayfa onları biçim sözleşmesinden geçirip binlik
+ayracıyla "2.026" diye basıyordu. Kusur hiçbir hesabı bozmuyor, hiçbir kapıyı
+düşürmüyor ve yalnızca okurun gözünde bir yılı bir miktara çeviriyordu; sayfa
+sınavının "statik yedek sapması" bilgisi onu ancak yan etkiyle gösterdi.
+Adlandırdığı şey bir gözlem değil bir SÜTUN olan her anahtar metin yazılır ve
+hiçbir ölçüme, sapma taramasına ya da bayatlık hükmüne girmez.

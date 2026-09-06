@@ -81,6 +81,14 @@ TETIKLER: tuple[Tetik, ...] = (
           r"Gösterge Niteliğindeki Merkez Bankası Kurları", ("TCMB",), en_gec=6, gecikme_dk=30),
     Tetik("fonlama", "TCMB Analitik Bilanço (her iş günü 14:30)",
           r"TCMB Analitik Bilanço", ("TCMB",), en_gec=6, gecikme_dk=45),
+    # Orta Vadeli Program hattının CANLI bacağı kurdur: program tabloları
+    # yayımlanmış bir belgenin sabitleri, ama "programın tutması için yıl
+    # sonunda kur kaç olmalı" sorusunun cevabı her yeni kotasyonla değişiyor.
+    # Tetiği kur yayımına bağlamanın sebebi bu; tetiği olmayan bir hat
+    # takvimde hiç geçmez ve HER koşuda gereksiz yere ağa çıkar.
+    Tetik("ovp", "TCMB gösterge niteliğindeki kurlar (her iş günü 15:30)",
+          r"Gösterge Niteliğindeki Merkez Bankası Kurları", ("TCMB",),
+          en_gec=6, gecikme_dk=30),
     # Net rezerv hattının GÜNLÜK serisi tamamen Analitik Bilanço'dan üretilir
     # (TP.AB.A02/A11/A13/A14 — bkz. net_rezerv.py). O yayım burada tetik değilse
     # hat yalnız haftalık yayımda koşar ve günlük seri, her iş günü 14:30'da yeni
