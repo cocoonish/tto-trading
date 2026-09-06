@@ -1,282 +1,471 @@
 {
- "kosum": "2026-09-05",
+ "kosum": "2026-09-06",
  "son_hafta": "2026-08-28",
  "haftalik": [
-  139,
+  653,
   34
  ],
+ "cerceve_imza": {
+  "satir": 653,
+  "sutun": 34,
+  "ilk": "2014-02-28",
+  "son": "2026-08-28"
+ },
+ "parca": {
+  "en_eski_bas": "2014-02-28",
+  "sorulan_bas": "2013-02-22",
+  "istek_gun": 4954,
+  "istek_satir": 708,
+  "parca_gun": 6300,
+  "parca_satir": 900,
+  "parca_sayisi": 1,
+  "satir_siniri": 1000,
+  "kalan_hafta": 192,
+  "tek_parca": true,
+  "siniri_asiyor": false
+ },
  "kapsam": {
   "stok_toplam": {
    "kod": "TP.HPBITABLO2.10",
    "birim": "mn USD",
    "beklenen_bas": "2024-06-28",
+   "bas_kanit": "2005-01-01",
+   "bas_kanit_var": true,
+   "sorulan_bas": "2023-06-23",
    "bas": "2024-06-28",
    "son": "2026-08-28",
-   "n": 114
+   "n": 114,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": true
   },
   "stok_gercek": {
    "kod": "TP.HPBITABLO2.11",
    "birim": "mn USD",
    "beklenen_bas": "2024-06-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2023-06-23",
    "bas": "2024-06-28",
    "son": "2026-08-28",
-   "n": 114
+   "n": 114,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "stok_tuzel": {
    "kod": "TP.HPBITABLO2.12",
    "birim": "mn USD",
    "beklenen_bas": "2024-06-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2023-06-23",
    "bas": "2024-06-28",
    "son": "2026-08-28",
-   "n": 114
+   "n": 114,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "mevduat_yi": {
    "kod": "TP.HPBITABLO2.2",
    "birim": "bin TL",
    "beklenen_bas": "2024-06-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2023-06-23",
    "bas": "2024-06-28",
    "son": "2026-08-28",
-   "n": 114
+   "n": 114,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "mevduat_tl": {
    "kod": "TP.HPBITABLO2.3",
    "birim": "bin TL",
    "beklenen_bas": "2024-06-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2023-06-23",
    "bas": "2024-06-28",
    "son": "2026-08-28",
-   "n": 114
+   "n": 114,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "mevduat_yp_tl": {
    "kod": "TP.HPBITABLO2.6",
    "birim": "bin TL",
    "beklenen_bas": "2024-06-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2023-06-23",
    "bas": "2024-06-28",
    "son": "2026-08-28",
-   "n": 114
+   "n": 114,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "genis_toplam": {
    "kod": "TP.HPBITABLO4.1",
    "birim": "mn USD",
    "beklenen_bas": "2024-06-28",
+   "bas_kanit": "2005-01-01",
+   "bas_kanit_var": true,
+   "sorulan_bas": "2023-06-23",
    "bas": "2024-06-28",
    "son": "2026-08-28",
-   "n": 114
+   "n": 114,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": true
   },
   "k_gercek": {
    "kod": "TP.HPBITABLO4.3",
    "birim": "mn USD",
    "beklenen_bas": "2024-06-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2023-06-23",
    "bas": "2024-06-28",
    "son": "2026-08-28",
-   "n": 114
+   "n": 114,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "maden_gercek": {
    "kod": "TP.HPBITABLO4.7",
    "birim": "mn USD",
    "beklenen_bas": "2024-06-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2023-06-23",
    "bas": "2024-06-28",
    "son": "2026-08-28",
-   "n": 114
+   "n": 114,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "k_tuzel": {
    "kod": "TP.HPBITABLO4.8",
    "birim": "mn USD",
    "beklenen_bas": "2024-06-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2023-06-23",
    "bas": "2024-06-28",
    "son": "2026-08-28",
-   "n": 114
+   "n": 114,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "maden_tuzel": {
    "kod": "TP.HPBITABLO4.12",
    "birim": "mn USD",
    "beklenen_bas": "2024-06-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2023-06-23",
    "bas": "2024-06-28",
    "son": "2026-08-28",
-   "n": 114
+   "n": 114,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "maden_diger": {
    "kod": "TP.HPBITABLO4.20",
    "birim": "mn USD",
    "beklenen_bas": "2024-06-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2023-06-23",
    "bas": "2024-06-28",
    "son": "2026-08-28",
-   "n": 114
+   "n": 114,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "ar_toplam": {
    "kod": "TP.HPBITABLO5.1",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "2005-01-01",
+   "bas_kanit_var": true,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": true
   },
   "ar_gercek": {
    "kod": "TP.HPBITABLO5.2",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "2005-01-01",
+   "bas_kanit_var": true,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": true
   },
   "ar_gercek_usd": {
    "kod": "TP.HPBITABLO5.3",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "2005-01-01",
+   "bas_kanit_var": true,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": true
   },
   "ar_gercek_eur": {
    "kod": "TP.HPBITABLO5.4",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "ar_gercek_diger": {
    "kod": "TP.HPBITABLO5.5",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "ar_gercek_maden": {
    "kod": "TP.HPBITABLO5.6",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "2005-01-01",
+   "bas_kanit_var": true,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": true
   },
   "ar_tuzel": {
    "kod": "TP.HPBITABLO5.7",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "ar_tuzel_usd": {
    "kod": "TP.HPBITABLO5.8",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "ar_tuzel_eur": {
    "kod": "TP.HPBITABLO5.9",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "ar_tuzel_diger": {
    "kod": "TP.HPBITABLO5.10",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "ar_tuzel_maden": {
    "kod": "TP.HPBITABLO5.11",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "pe_toplam": {
    "kod": "TP.HPBITABLO5.12",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "pe_gercek": {
    "kod": "TP.HPBITABLO5.13",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "2005-01-01",
+   "bas_kanit_var": true,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": true
   },
   "pe_gercek_usd": {
    "kod": "TP.HPBITABLO5.14",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "2005-01-01",
+   "bas_kanit_var": true,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": true
   },
   "pe_gercek_eur": {
    "kod": "TP.HPBITABLO5.15",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "2005-01-01",
+   "bas_kanit_var": true,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": true
   },
   "pe_gercek_diger": {
    "kod": "TP.HPBITABLO5.16",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "2005-01-01",
+   "bas_kanit_var": true,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": true
   },
   "pe_gercek_maden": {
    "kod": "TP.HPBITABLO5.17",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "2005-01-01",
+   "bas_kanit_var": true,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": true
   },
   "pe_tuzel": {
    "kod": "TP.HPBITABLO5.18",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "pe_tuzel_usd": {
    "kod": "TP.HPBITABLO5.19",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "pe_tuzel_eur": {
    "kod": "TP.HPBITABLO5.20",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   },
   "pe_tuzel_diger": {
    "kod": "TP.HPBITABLO5.21",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "2005-01-01",
+   "bas_kanit_var": true,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": true
   },
   "pe_tuzel_maden": {
    "kod": "TP.HPBITABLO5.22",
    "birim": "mn USD",
-   "beklenen_bas": "2024-01-05",
-   "bas": "2024-01-05",
+   "beklenen_bas": "2014-02-28",
+   "bas_kanit": "",
+   "bas_kanit_var": false,
+   "sorulan_bas": "2013-02-22",
+   "bas": "2014-02-28",
    "son": "2026-08-28",
-   "n": 139
+   "n": 653,
+   "cerceve_basa_uzaniyor": true,
+   "bas_olculdu": false
   }
  },
  "bosluk": {},
@@ -285,7 +474,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -293,7 +482,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -301,7 +490,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -309,7 +498,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -317,7 +506,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -325,7 +514,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -333,7 +522,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -341,7 +530,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -349,7 +538,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -357,7 +546,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -365,7 +554,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -373,7 +562,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -381,7 +570,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -389,7 +578,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -397,7 +586,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -405,7 +594,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -413,7 +602,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -421,7 +610,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -429,7 +618,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -437,7 +626,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -445,7 +634,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -453,7 +642,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -461,7 +650,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -469,7 +658,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -477,7 +666,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -485,7 +674,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -493,7 +682,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -501,7 +690,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -509,7 +698,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -517,7 +706,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -525,7 +714,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -533,7 +722,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   },
@@ -541,7 +730,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 8,
+   "gecikme": 9,
    "yok": false,
    "gec": false
   }
@@ -557,6 +746,8 @@
    "esik_bagil": 1e-06,
    "yayim_adimi_sol": 0.1,
    "yayim_adimi_sag": 0.1,
+   "yayim_adimi_hal_sol": "olculdu",
+   "yayim_adimi_hal_sag": "olculdu",
    "esik_taban": 0.2,
    "gecti": true,
    "asim_hafta": 0
@@ -571,6 +762,8 @@
    "esik_bagil": 1e-06,
    "yayim_adimi_sol": 0.001,
    "yayim_adimi_sag": 0.1,
+   "yayim_adimi_hal_sol": "olculdu",
+   "yayim_adimi_hal_sag": "olculdu",
    "esik_taban": 0.101,
    "gecti": true,
    "asim_hafta": 0
@@ -585,87 +778,127 @@
    "esik_bagil": 1e-06,
    "yayim_adimi_sol": 0.001,
    "yayim_adimi_sag": 0.1,
+   "yayim_adimi_hal_sol": "olculdu",
+   "yayim_adimi_hal_sag": "olculdu",
    "esik_taban": 0.101,
    "gecti": true,
    "asim_hafta": 0
   },
   "Gerçek kişilerin arındırılmış değişiminde para birimi kırılımı toplamı (TP.HPBITABLO5.3–TP.HPBITABLO5.6 = TP.HPBITABLO5.2)": {
-   "n": 139,
+   "n": 653,
    "maks_fark": 0.00010000000020227162,
-   "maks_bagil": 3.238048363712888e-06,
-   "maks_tarih": "2024-02-16",
+   "maks_bagil": 1.9300920652670224e-05,
+   "maks_tarih": "2014-04-18",
    "son_fark": 0.0,
    "birim": "mn USD",
    "esik_bagil": null,
    "yayim_adimi_sol": 1e-06,
    "yayim_adimi_sag": 1e-06,
+   "yayim_adimi_hal_sol": "olculdu",
+   "yayim_adimi_hal_sag": "olculdu",
    "esik_taban": 2e-06,
    "gecti": null
   },
   "Tüzel kişilerin arındırılmış değişiminde para birimi kırılımı toplamı (TP.HPBITABLO5.8–TP.HPBITABLO5.11 = TP.HPBITABLO5.7)": {
-   "n": 139,
-   "maks_fark": 0.00010000000020227162,
-   "maks_bagil": 2.990551352249506e-07,
-   "maks_tarih": "2024-03-15",
+   "n": 653,
+   "maks_fark": 0.00010000000065701897,
+   "maks_bagil": 6.2097915991588356e-06,
+   "maks_tarih": "2019-02-22",
    "son_fark": 0.0,
    "birim": "mn USD",
    "esik_bagil": null,
    "yayim_adimi_sol": 1e-06,
    "yayim_adimi_sag": 1e-06,
+   "yayim_adimi_hal_sol": "olculdu",
+   "yayim_adimi_hal_sag": "olculdu",
    "esik_taban": 2e-06,
    "gecti": null
   },
   "Gerçek kişilerin parite etkisinde para birimi kırılımı toplamı (TP.HPBITABLO5.14–TP.HPBITABLO5.17 = TP.HPBITABLO5.13)": {
-   "n": 139,
-   "maks_fark": 0.00010000000008858478,
-   "maks_bagil": 4.410102487771507e-07,
-   "maks_tarih": "2024-04-19",
+   "n": 653,
+   "maks_fark": 0.00010000000020227162,
+   "maks_bagil": 0.00010000000000250087,
+   "maks_tarih": "2019-05-03",
    "son_fark": 2.842170943040401e-14,
    "birim": "mn USD",
    "esik_bagil": null,
    "yayim_adimi_sol": 1e-06,
    "yayim_adimi_sag": 1e-06,
+   "yayim_adimi_hal_sol": "olculdu",
+   "yayim_adimi_hal_sag": "olculdu",
    "esik_taban": 2e-06,
    "gecti": null
   },
   "Tüzel kişilerin parite etkisinde para birimi kırılımı toplamı (TP.HPBITABLO5.19–TP.HPBITABLO5.22 = TP.HPBITABLO5.18)": {
-   "n": 139,
-   "maks_fark": 0.00010000000000331966,
-   "maks_bagil": 4.5751305055870096e-06,
-   "maks_tarih": "2024-03-29",
+   "n": 653,
+   "maks_fark": 0.00010000000020227162,
+   "maks_bagil": 3.165859372533353e-05,
+   "maks_tarih": "2020-05-15",
    "son_fark": 0.0,
    "birim": "mn USD",
    "esik_bagil": null,
    "yayim_adimi_sol": 1e-06,
    "yayim_adimi_sag": 1e-06,
+   "yayim_adimi_hal_sol": "olculdu",
+   "yayim_adimi_hal_sag": "olculdu",
    "esik_taban": 2e-06,
    "gecti": null
   },
   "Arındırılmış değişimde gerçek ve tüzel kişi toplamı (TP.HPBITABLO5.2 + TP.HPBITABLO5.7 = TP.HPBITABLO5.1)": {
-   "n": 139,
-   "maks_fark": 0.00010000000020227162,
-   "maks_bagil": 1.4124249908910564e-07,
-   "maks_tarih": "2024-05-24",
+   "n": 653,
+   "maks_fark": 0.00010000000111176632,
+   "maks_bagil": 2.552381243985039e-06,
+   "maks_tarih": "2022-04-29",
    "son_fark": 0.0,
    "birim": "mn USD",
    "esik_bagil": null,
    "yayim_adimi_sol": 1e-06,
    "yayim_adimi_sag": 1e-06,
+   "yayim_adimi_hal_sol": "olculdu",
+   "yayim_adimi_hal_sag": "olculdu",
    "esik_taban": 2e-06,
    "gecti": null
   },
   "Parite etkisinde gerçek ve tüzel kişi toplamı (TP.HPBITABLO5.13 + TP.HPBITABLO5.18 = TP.HPBITABLO5.12)": {
-   "n": 139,
-   "maks_fark": 0.00010000000008858478,
-   "maks_bagil": 8.216042480498784e-07,
-   "maks_tarih": "2024-05-31",
+   "n": 653,
+   "maks_fark": 0.00010000000020227162,
+   "maks_bagil": 2.021263693949102e-05,
+   "maks_tarih": "2017-08-11",
    "son_fark": 7.105427357601002e-15,
    "birim": "mn USD",
    "esik_bagil": null,
    "yayim_adimi_sol": 1e-06,
    "yayim_adimi_sag": 1e-06,
+   "yayim_adimi_hal_sol": "olculdu",
+   "yayim_adimi_hal_sag": "olculdu",
    "esik_taban": 2e-06,
    "gecti": null
+  },
+  "Gerçek kişilerin kıymetli maden hesapları kırılım tablosundaki gerçek kişi stokunun içinde (TP.HPBITABLO4.7 ≤ TP.HPBITABLO4.3)": {
+   "n": 114,
+   "sinandi": true,
+   "maks_pay": 61.506893359052384,
+   "maks_pay_tarih": "2026-02-27",
+   "son_pay": 60.18534311339464,
+   "tolerans": 0.002,
+   "yayim_adimi_hal_ic": "olculdu",
+   "yayim_adimi_hal_dis": "olculdu",
+   "asim_hafta": 0,
+   "birim": "mn USD",
+   "gecti": true
+  },
+  "Tüzel kişilerin kıymetli maden hesapları kırılım tablosundaki tüzel kişi stokunun içinde (TP.HPBITABLO4.12 ≤ TP.HPBITABLO4.8)": {
+   "n": 114,
+   "sinandi": true,
+   "maks_pay": 13.167254504662845,
+   "maks_pay_tarih": "2026-02-20",
+   "son_pay": 10.824457629355093,
+   "tolerans": 0.002,
+   "yayim_adimi_hal_ic": "olculdu",
+   "yayim_adimi_hal_dis": "olculdu",
+   "asim_hafta": 0,
+   "birim": "mn USD",
+   "gecti": true
   }
  },
  "genis_fark": {
@@ -675,6 +908,16 @@
   "son_pay": 0.14651047763277866,
   "en_kucuk_fark": 34516.35699999999,
   "birim": "mn USD"
+ },
+ "olu_seri": {
+  "pencere_hafta": 26,
+  "seri": [
+   "pe_gercek_usd",
+   "pe_gercek_diger",
+   "pe_tuzel_usd",
+   "pe_tuzel_diger"
+  ],
+  "olculen_hafta": 26
  },
  "hizalama": {
   "gercek": {
@@ -723,16 +966,6 @@
    },
    "en_kucuk_artik_kaydirma": "0"
   }
- },
- "olu_seri": {
-  "pencere_hafta": 26,
-  "seri": [
-   "pe_gercek_usd",
-   "pe_gercek_diger",
-   "pe_tuzel_usd",
-   "pe_tuzel_diger"
-  ],
-  "olculen_hafta": 26
  },
  "uyarilar": []
 }
