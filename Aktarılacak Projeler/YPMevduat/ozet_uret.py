@@ -177,6 +177,12 @@ BLOK_KURAL = (
     # sayıyı serbest bırakıyor.
     (re.compile(r"^(ar_|pe_|ayrisma_)"), "akim"),
     (re.compile(r"^kum_(ay|yil|\d+h)_"), "akim"),
+    # BÜTÜN ÖRNEKLEM toplamları da yalnız ayrıştırma tablosundan geliyor ve
+    # `sifir_` gibi SAATSİZ değiller: bir toplamın son haftası, toplandığı
+    # pencerenin sağ ucudur ve her hafta ilerler. Saati akım bloğunun saatidir.
+    # (`tum_bas` ve `tum_son` pencerenin kendi uçları, sayı değil — onlar
+    # zaten `koy` yolundan tarih olarak yazılıyor.)
+    (re.compile(r"^tum_"), "akim"),
     # Dolarizasyon payı mevduatın LİRA karşılığından hesaplanıyor; ölçüm
     # katmanı onu kendi ortak haftasına çıpalıyor.
     (re.compile(r"^(dol_|mevduat_)"), "dol"),
@@ -588,8 +594,29 @@ def main() -> int:
               "kum_ay_ar_gercek_maden_mn", "kum_ay_ar_tuzel_maden_mn",
               "kum_yil_ar_toplam_mn", "kum_yil_ar_gercek_mn",
               "kum_yil_ar_tuzel_mn", "kum_yil_pe_toplam_mn",
-              "kum_yil_ar_gercek_maden_mn"):
+              "kum_yil_ar_gercek_maden_mn", "kum_yil_ar_tuzel_maden_mn"):
         olc(a, m.get(a), 1)
+    # BÜTÜN ÖRNEKLEMİN TOPLAMLARI. Sayfanın manşet iddiası bunlara dayanıyor;
+    # anahtarı olmayan bir iddia, sayfada donmuş bir sayı demektir. Pencere de
+    # birlikte yazılır (`tum_bas` · `tum_son` · `tum_hafta`): bir toplamın
+    # anlamı, hangi pencereden toplandığından ayrılamaz ve o pencere her hafta
+    # bir hafta uzuyor.
+    for a in ("tum_ar_toplam_mia", "tum_ar_maden_mia", "tum_ar_maden_disi_mia",
+              "tum_pe_toplam_mia",
+              "tum_ar_gercek_mia", "tum_ar_gercek_maden_mia",
+              "tum_ar_gercek_maden_disi_mia",
+              "tum_ar_tuzel_mia", "tum_ar_tuzel_maden_mia",
+              "tum_ar_tuzel_maden_disi_mia"):
+        olc(a, m.get(a), 1)
+    olc("tum_hafta", m.get("tum_hafta"), 0)
+    # Pencerenin uçları TARİH; `koy` sayıya çevirir. Kümüle başlangıçlarında
+    # kullanılan yol burada da geçerli: tarih biçimi tek yerden (`lib/bicim`in
+    # Python eşi) çözülür ve okur yazımıyla basılır.
+    for a in ("tum_bas", "tum_son"):
+        d = b.tarihe_cevir(m.get(a))
+        if d is not None:
+            O[a] = pd.Timestamp(d).strftime("%d.%m.%Y")
+            O[f"{a}_gun"] = ad_gun(pd.Timestamp(d))
     # Sabit pencereler: pencere uzunluğu ölçüm katmanının sabiti, anahtar adı
     # da onu taşıyor. Uzunluk değişirse anahtar adı da değişir ve sayfa
     # "on üç haftalık" derken dört haftalık bir sayı basmaz.
@@ -601,6 +628,28 @@ def main() -> int:
     for a in ("kum_ay_ar_toplam_mn", "kum_yil_ar_toplam_mn"):
         if m.get(a) is not None:
             olc(a.replace("_mn", "_mia"), m[a] / 1e3, 2)
+    # YIL İÇİ KIRILIM, MİLYAR CİNSİNDEN VE MADEN/MADEN DIŞI AYRI. Sayfanın
+    # ayrışma anlatısı bu altı sayıya dayanıyor ve maden dışı bacak hiçbir
+    # anahtarda yoktu: sayfa iki büyük sayının farkını KENDİ alıp yazmak
+    # zorunda kalırdı, yani her tazelemede donan bir üçüncü sayı üretirdi.
+    # Fark burada alınıyor, çünkü ölçüm katmanının işi budur; ve yuvarlama tek
+    # yerde yapılıyor, yani sayfadaki üç sayı birbirini tutuyor.
+    for kesim, tam, maden in (("gercek", "kum_yil_ar_gercek_mn",
+                               "kum_yil_ar_gercek_maden_mn"),
+                              ("tuzel", "kum_yil_ar_tuzel_mn",
+                               "kum_yil_ar_tuzel_maden_mn"),
+                              ("toplam", "kum_yil_ar_toplam_mn", None)):
+        t, md = m.get(tam), m.get(maden) if maden else None
+        if maden is None and (m.get("kum_yil_ar_gercek_maden_mn") is not None
+                              and m.get("kum_yil_ar_tuzel_maden_mn") is not None):
+            md = (m["kum_yil_ar_gercek_maden_mn"]
+                  + m["kum_yil_ar_tuzel_maden_mn"])
+        if t is None:
+            continue
+        olc(f"kum_yil_ar_{kesim}_mia", t / 1e3, 1)
+        if md is not None:
+            olc(f"kum_yil_ar_{kesim}_maden_mia", md / 1e3, 1)
+            olc(f"kum_yil_ar_{kesim}_maden_disi_mia", (t - md) / 1e3, 1)
     # TOPLANAN HAFTA SAYISI DA BİR ÖLÇÜMDÜR ve akım bloğuna aittir: ay başında
     # sıfıra yakın bir kümüle ile beslemesi durmuş bir kümüle aynı görünür,
     # ikisini ayıran şey budur. Yöntem sabitleri (pencere uzunlukları) ise

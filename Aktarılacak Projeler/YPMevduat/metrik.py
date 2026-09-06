@@ -250,7 +250,12 @@ KUM_OZET = (
     "kum_ay_pe_toplam_mn", "kum_ay_pe_gercek_mn", "kum_ay_pe_tuzel_mn",
     "kum_ay_ar_gercek_maden_mn", "kum_ay_ar_tuzel_maden_mn",
     "kum_yil_ar_toplam_mn", "kum_yil_ar_gercek_mn", "kum_yil_ar_tuzel_mn",
+    # Yıl içi TÜZEL maden bacağı burada YOKTU ve ay içi karşılığı vardı. Sayfa
+    # gerçek/tüzel ayrışmasını MADEN ile DÖVİZ ekseninde anlatıyor; iki kesimin
+    # maden bacağından biri eksikse o eksen yarım kalır ve okur farkı kendi
+    # çıkaramaz (maden dışı = toplam − maden).
     "kum_yil_pe_toplam_mn", "kum_yil_ar_gercek_maden_mn",
+    "kum_yil_ar_tuzel_maden_mn",
     f"kum_{PENCERE_KISA}h_ar_toplam_mn", f"kum_{PENCERE_KISA}h_pe_toplam_mn",
     f"kum_{PENCERE_UZUN}h_ar_toplam_mn", f"kum_{PENCERE_UZUN}h_pe_toplam_mn",
 )
@@ -1823,6 +1828,47 @@ def kos() -> int:
     # kaydında adıyla görünür — bu, bayat bir sayı yayımlamaktan iyidir.
     cipa_kol = list(akim_gorunum.columns)
     o.update(_blok(AK, list(AK.columns), "akim", cipa_kolonlari=cipa_kol))
+
+    # BÜTÜN ÖRNEKLEM. Sayfanın manşet iddiası ("on iki buçuk yılın net fiili
+    # akımının şu kadarı kıymetli maden") bu üç sayıya dayanıyor ve HİÇBİRİNİN
+    # anahtarı yoktu: sayfa onları statik yazmak zorunda kalırdı ve bir sonraki
+    # tazelemede donardı. Bir sayfanın en çok konuştuğu sayı, donması en pahalı
+    # olan sayıdır — kural 5 tam olarak bunun için var.
+    #
+    # Pencere `kapsam_akim_*` ile ilan ediliyor; burada yalnız TOPLAMLAR var.
+    # Maden dışı AYRICA yazılıyor, okurun çıkarması beklenmiyor: iki büyük
+    # sayının farkı olarak okunan bir üçüncü sayı, yuvarlama yüzünden sayfada
+    # tutmayabilir ve okur hangisinin yanlış olduğunu bilemez.
+    _ar = A["ar_toplam"].dropna() if "ar_toplam" in A.columns else None
+    if _ar is not None and len(_ar):
+        _md = pd.Series(0.0, index=A.index)
+        for _k in ("ar_gercek_maden", "ar_tuzel_maden"):
+            if _k in A.columns:
+                _md = _md.add(A[_k].fillna(0.0), fill_value=0.0)
+        _md = _md.reindex(_ar.index)
+        o["tum_ar_toplam_mia"] = round(float(_ar.sum()) / 1000.0, 2)
+        o["tum_ar_maden_mia"] = round(float(_md.sum()) / 1000.0, 2)
+        o["tum_ar_maden_disi_mia"] = round(
+            (float(_ar.sum()) - float(_md.sum())) / 1000.0, 2)
+        if "pe_toplam" in A.columns:
+            o["tum_pe_toplam_mia"] = round(
+                float(A["pe_toplam"].dropna().sum()) / 1000.0, 2)
+        # KİŞİ BAZINDA KIRILIM. Sayfanın en keskin cümlesi burada: iki kesim
+        # aynı pencerede TERS yönde davranıyor (biri madene girip dövizden
+        # çıkıyor, öteki dövize giriyor). Üç sayı da anahtar ister, yoksa
+        # sayfa onları statik yazar ve her hafta biraz daha yanlış olur.
+        for _kesim in ("gercek", "tuzel"):
+            _t = A.get(f"ar_{_kesim}")
+            _m = A.get(f"ar_{_kesim}_maden")
+            if _t is None or _m is None:
+                continue
+            _ts, _ms = float(_t.dropna().sum()), float(_m.dropna().sum())
+            o[f"tum_ar_{_kesim}_mia"] = round(_ts / 1000.0, 2)
+            o[f"tum_ar_{_kesim}_maden_mia"] = round(_ms / 1000.0, 2)
+            o[f"tum_ar_{_kesim}_maden_disi_mia"] = round((_ts - _ms) / 1000.0, 2)
+        o["tum_bas"] = _ar.index.min().strftime("%d.%m.%Y")
+        o["tum_son"] = _ar.index.max().strftime("%d.%m.%Y")
+        o["tum_hafta"] = int(len(_ar))
 
     # KİMLİK BLOĞU — stok değişimi ve artık İKİ TABLODAN birden geliyor,
     # öyleyse kendi saatleri var ve o saat ikisinin EN ESKİSİDİR. Şekil
