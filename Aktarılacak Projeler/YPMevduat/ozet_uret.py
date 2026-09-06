@@ -584,9 +584,15 @@ def main() -> int:
     # Ölçüm katmanının kurduğu cümleler OLDUĞU GİBİ taşınır: içlerindeki her
     # sayı orada biçim sözleşmesinden yazıldı ve burada yeniden kurmak aynı
     # metnin ikinci bir tanımı olurdu.
+    # SIFIRIN DÖRT CÜMLESİ DÖRT AYRI ANAHTARDA taşınır ve sayfa onları aynı
+    # kutuda aynı ağırlıkta toplamamalıdır: tanım gereği sıfır (dayanağı
+    # aritmetik), dayanağı olmayan sıfır (ayırt edilemeyen ve manşete dokunan
+    # sınır), yayımı durmuş olabilecek blok (kaynaktaki belirsizlik) ve
+    # başlangıcı ölçülmemiş seri (bizim sormadığımız soru).
     for a in ("kimlik_cumlesi", "dol_cumlesi", "ayrisma_cumlesi",
               "kum_yontem_cumlesi", "taban_sozlugu", "kapsam_cumlesi",
-              "sifir_cumlesi", "sifir_yapisal_cumlesi"):
+              "sifir_cumlesi", "sifir_tanim_cumlesi",
+              "sifir_dayanaksiz_cumlesi", "sifir_hukumsuz_cumlesi"):
         if m.get(a):
             O[a] = str(m[a])
 

@@ -488,7 +488,9 @@ def kapsam_kimligi(H: pd.DataFrame) -> tuple[list[str], dict]:
             # yanına konuyor: etkin eşik ÜÇÜNÜN büyüğü. Bugün hiçbir şeyi
             # değiştirmiyor (ölçülen taban 0,2 · sabit 2,0) — değiştirmemesi
             # de doğrulanmış olsun diye kayda yazılıyor.
-            taban = float(veri.yayim_adimi(d["a"]) + veri.yayim_adimi(d["b"]))
+            (adim_a, hal_a) = veri.yayim_adimi_olc(d["a"])
+            (adim_b, hal_b) = veri.yayim_adimi_olc(d["b"])
+            taban = float(adim_a + adim_b)
             esik = np.maximum(max(ESIK_KAPSAM_MN, taban),
                               ESIK_KAPSAM_BAGIL * d["b"].abs())
             asim = fark > esik
@@ -500,18 +502,42 @@ def kapsam_kimligi(H: pd.DataFrame) -> tuple[list[str], dict]:
                 "son_fark_mn": float(fark.iloc[-1]),
                 "esik_mn": ESIK_KAPSAM_MN, "esik_bagil": ESIK_KAPSAM_BAGIL,
                 "yayim_taban_mn": taban,
+                "yayim_adimi_hal_sol": hal_a, "yayim_adimi_hal_sag": hal_b,
+                # UYGULANAN eşik de kayda girer, yalnız sabitleri değil: üç
+                # kollu bir eşikte hangisinin devraldığı haftadan haftaya
+                # değişir ve sabitleri okuyan biri eşiği yanlış bilir.
+                "uygulanan_esik_maks_mn": float(esik.max()),
+                "uygulanan_esik_son_mn": float(esik.iloc[-1]),
+                # OKURA YAZILAN SAYI DA KAYDA GİRER: uyarı en büyük farkın
+                # HAFTASINDAKİ eşiği yazıyor ve künyedeki en büyük eşik
+                # başka bir hafta olabilir. İki sayı kayda ayrı girmezse
+                # "metindeki eşik doğru mu" sorusu kayıttan cevaplanamaz.
+                "uygulanan_esik_maks_fark_haftasi_mn": float(
+                    esik.loc[fark.idxmax()]),
                 "asim_hafta": int(asim.sum()),
                 "birim": "mn USD",
                 "gecti": bool(not asim.any()),
             }
             if asim.any():
+                # TOLERANS DİYE YAZILAN SAYI, UYGULANAN SAYI OLMALI. Metin
+                # sabit tabanı ("2,0 milyon dolar") tolerans diye yazıyordu,
+                # oysa eşik ÜÇ KOLUN BÜYÜĞÜ ve bağıl kol bugünkü stokta 2,31
+                # milyon dolara denk geliyor — yani haftaların yarısında
+                # okura söylenen tolerans, uygulanandan küçüktü. Bir kapının
+                # okura yanlış eşik bildirmesi, eşiğin kendisinin yanlış
+                # olmasından ayırt edilemez: ikisi de "bu fark neden geçti"
+                # sorusunu cevapsız bırakır.
+                gun = fark.idxmax()
                 dur.append(
                     "KAPSAM KİMLİĞİ: gerçek ve tüzel kişilerin YP mevduatı "
                     "toplamı, yurt içi yerleşiklerin toplam YP mevduatını "
                     f"vermiyor — en büyük fark {b.sayi(float(fark.max()), 1)} "
-                    f"milyon dolar ({b.tarih_kisa(fark.idxmax())}), tolerans "
-                    f"{b.sayi(ESIK_KAPSAM_MN, 1)} milyon dolar. Kalem "
-                    "numaralandırması ya da birim değişmiş olabilir.")
+                    f"milyon dolar ({b.tarih_kisa(gun)}); o haftada uygulanan "
+                    f"tolerans {b.sayi(float(esik.loc[gun]), 2)} milyon dolar "
+                    f"(sabit taban {b.sayi(ESIK_KAPSAM_MN, 1)} milyon dolar, "
+                    f"ölçülen yayım yuvarlaması {b.sayi(taban, 3)} milyon "
+                    "dolar ve toplamın yüz binde biri arasından en büyüğü). "
+                    "Kalem numaralandırması ya da birim değişmiş olabilir.")
     else:
         uyar("KAPSAM KİMLİĞİ SINANAMADI: gerçek kişi, tüzel kişi ve toplam YP "
              "mevduat serilerinin üçü birden yüklenemedi; stok kırılımının "
@@ -1162,117 +1188,320 @@ def _sag_uc_sifir(s: pd.Series) -> int:
     return int(n)
 
 
-def _yapisal_cumle(yapisal: list[str], H: pd.DataFrame) -> str:
-    """Yapısal sıfırın OKUR cümlesi — ölçülen gözlem sayısıyla.
+def _hukumsuz_cumle(hukumsuz: list[str], H: pd.DataFrame,
+                    olculen_seri: int) -> str:
+    """Baştan sona sıfır ÇIKAN ama üzerine hüküm KURULAMAYAN seriler.
 
-    Cümle üç parçadan kuruluyor ve her parçanın kendi ÖLÇÜM koşulu var; koşul
-    tutmazsa o parça hiç yazılmaz. Ölçülmemiş bir cümle parçası, ölçülmüş
-    parçaların yanında ondan ayırt edilemez.
+    NEDEN AYRI BİR CÜMLE. "Bu bacak serinin ilk gözleminden beri sıfır"
+    demek, elimizdeki ilk gözlemin SERİNİN ilk gözlemi olduğunu varsayar.
+    Başlangıcı ölçülmemiş bir seride bu varsayım tutmaz: elimizdeki ilk
+    gözlem, kaynağın ilk gözlemi değil SORGUNUN alt sınırı olabilir — ve
+    ikisi tıpatıp aynı görünür. Bu hatta tam olarak bu oldu: yirmi iki seri
+    yıllarca 2024 başında başlıyor sanıldı, oysa 2014'te başlıyorlardı.
+
+    Sıfırın kendisi ÖLÇÜLDÜ ve yazılır; ölçülmeyen şey onun ne anlama
+    geldiğidir. "Yapısal" demek de "donmuş" demek de aynı ölçülmemiş adımı
+    atlar, bu yüzden ikisi de denmez ve eksik olan ADIYLA yazılır — okur
+    bunun bir belirsizlik değil, bizim henüz sormadığımız bir soru olduğunu
+    görsün.
     """
     b = _bicim()
-    # HAFTA SAYISI EN KISA SERİDEN. Bulgu "her birinin serisi baştan sona
-    # sıfır"dır ve seriler farklı uzunlukta olabilir; en uzununu yazmak kısa
-    # olanı hakkında ölçülmemiş bir şey söylemek olurdu.
-    n = min(int(H[a].dropna().shape[0]) for a in yapisal)
-    # Ad listesi altı seride kesilir: bir kaynak kesintisi düzinelerce bacağı
-    # birden vurabilir ve otuz adlık bir duvarda bulgunun kendisi kaybolur.
-    # Tam liste makine kaydında (`seri`) duruyor.
-    parca = [f"{veri._adlar(yapisal, en_fazla=min(len(yapisal), 6))} serinin "
-             f"ilk gözleminden bu yana baştan sona tam sıfır — en kısası "
-             f"{b.sayi(n, 0)} hafta ve bir kez bile sıfırdan farklı bir değer "
-             "yayımlanmamış. Bu bir ölçümdür, donmuş besleme değil — yayımı "
-             "duran bir seri önce sıfırdan farklı değerler gösterir, sonra "
-             "sıfıra düşer; burada öncesi yok."]
+    if not olculen_seri:
+        return ("Başlangıcı ölçülmediği için hüküm kurulamayan bir sıfır var "
+                "mı, bu koşuda ölçülemedi: gözlem yüklenemedi.")
+    if not hukumsuz:
+        return ("Başlangıcı ölçülmediği için hüküm kurulamayan bir sıfır bu "
+                f"koşuda yok: ölçülen {b.sayi(olculen_seri, 0)} serinin "
+                "baştan sona sıfır olanlarının hepsinde ya sıfırın kayda "
+                "geçmiş bir gerekçesi var ya da kaynağın ilk gözlemi "
+                "ölçülmüş.")
+    n = min(int(H[a].dropna().shape[0]) for a in hukumsuz)
+    return (f"{veri._adlar(hukumsuz, en_fazla=min(len(hukumsuz), 6))} serisi "
+            f"elimizdeki {b.sayi(n, 0)} haftanın tamamında tam sıfır. Bu "
+            "sıfırın serinin başından beri sürüp sürmediği SÖYLENEMEZ: "
+            "kaynağın bu seriyi ne zaman yayımlamaya başladığı ölçülmedi, "
+            "yani elimizdeki ilk gözlem serinin ilk gözlemi olmayabilir. "
+            "Ölçülen sıfır yazıldı, üzerine hüküm kurulmadı.")
 
-    # (a) TANIM GEREĞİ SIFIR. Yalnız gerekçesi kayıtlı bacaklar için yazılır;
-    # gerekçe kaynağın yöntem belgesinden değil aritmetikten geliyor.
-    gerekce = [veri.TANIM_SIFIRI[a] for a in yapisal if a in veri.TANIM_SIFIRI]
-    if gerekce:
-        parca.append(f"Bunların bir bölümünde sıfır zaten tanım gereğidir: "
-                     f"{gerekce[0]}.")
 
-    # (b) AYNI KIRILIMIN ÖTEKİ BACAKLARI. Hüküm ("kaynak şunu hesaplamıyor")
-    # kurulmuyor; yalnız yayımlanan seride ne görüldüğü yazılıyor — yöntem
-    # belgesi okunmadı ve okunmadan kaynağın ne yaptığı söylenemez.
-    #
-    # Kıyas YALNIZ dokunulan kırılımların içinde kurulur. Bütün kırılımlara
-    # bakılsaydı arındırılmış değişimin euro bacağı da "öteki bacak" sayılırdı
-    # ve cümle, parite etkisi hakkında başka bir tablonun gözlemiyle
-    # kurulmuş olurdu.
+# MANŞET AKIM — sınırın büyüklüğü NEYE göre yazılacak.
+# Hattın okura verdiği asıl ürün parite etkisinden arındırılmış akımdır ve
+# kırılım bacakları onun İÇİNDEDİR. Bir bacağın parite etkisi hiç
+# yayımlanmıyorsa sınır o bacakta kalmaz, manşete taşınır; büyüklüğü de ancak
+# manşetin yanında anlam taşır ("98,5 milyon dolar" tek başına büyük mü küçük
+# mü olduğunu söylemez).
+MANSET_AKIM = "ar_toplam"
+
+
+def _tanim_cumle(tanim: list[str], olculen_bas, olculen_seri: int) -> str:
+    """TANIM GEREĞİ SIFIR — dayanağı veride değil ARİTMETİKTE olan sıfır.
+
+    NEDEN AYRI BİR SINIF VE AYRI BİR CÜMLE. Baştan sona sıfır çıkan bütün
+    bacaklar tek bir cümlede toplanıyordu ve o cümle hepsi için birden "bu bir
+    ölçümdür, donmuş besleme değil" diyordu. Ölçüm DONMAYI eliyor; üçüncü bir
+    hâli — kaynağın o bacağı hiç hesaplamıyor olması — elemiyor. Dolar
+    bacaklarında üçüncü hâlin sorulmasına gerek yok: dolar cinsi bir mevduatın
+    dolar olarak ölçülen parite etkisi zaten olamaz. Öteki bacaklarda ise
+    dayanak YOK ve onlar kendi cümlelerinde anılır. İkisini aynı kutuda aynı
+    ağırlıkta anmak, dayanaksız olana dayanağı olanın gücünü ödünç verirdi.
+
+    HAFTA SAYILMIYOR ve bu bilinçli: hüküm veriden gelmiyor. Kaç hafta
+    ölçüldüğünü yazmak, sıfırın dayanağı gözlem sayısıymış gibi görünürdü —
+    oysa bir hafta ölçülseydi de, bin hafta ölçülseydi de aynı şey doğru
+    olurdu. Bu yüzden bu sınıf, başlangıcı ölçülmemiş bir seride de kurulur:
+    hüküm kapısının koruduğu dayanak ("serinin öncesi yok") burada hiç
+    kullanılmıyor. Ölçülmemiş başlangıç yine de ADIYLA anılır, çünkü okurun
+    bilmesi gereken şey hükmün neye dayandığı kadar neye dayanmadığıdır.
+    """
+    b = _bicim()
+    if not olculen_seri:
+        return ("Tanım gereği sıfır olması beklenen bacaklar bu koşuda "
+                "ölçülemedi: gözlem yüklenemedi.")
+    if not tanim:
+        return ("Tanım gereği sıfır olan bir bacak bu koşuda bulunmadı: "
+                f"ölçülen {b.sayi(olculen_seri, 0)} serinin hiçbirinde "
+                "sıfırın kayda geçmiş bir gerekçesi yok.")
+    # Gerekçe TEKİLLEŞTİRİLİR: iki dolar bacağı aynı aritmetiği taşıyor ve
+    # aynı cümleyi iki kez yazmak okura iki ayrı dayanak varmış gibi görünür.
+    gerekce = list(dict.fromkeys(veri.TANIM_SIFIRI[a] for a in tanim))
+    parca = [f"{veri._adlar(tanim, en_fazla=min(len(tanim), 6))} serisinde "
+             f"sıfır TANIM GEREĞİDİR: {'; '.join(gerekce)}. Bu hüküm gözlem "
+             "sayısına dayanmıyor — ortada ölçülecek bir büyüklük yok."]
+    eksik = [a for a in tanim if a not in set(olculen_bas)]
+    if eksik:
+        parca.append(
+            f"Bunlardan {veri._adlar(eksik, en_fazla=min(len(eksik), 4))} "
+            "serisinin kaynakta ne zaman yayımlanmaya başladığı ölçülmedi; "
+            "tanım gereği sıfır hükmü buna dayanmıyor, elimizdeki haftaların "
+            "tamamı da onunla uyumlu.")
+    return " ".join(parca)
+
+
+def _dayanaksiz_cumle(dayanaksiz: list[str], H: pd.DataFrame,
+                      tanim: list[str], hukumsuz: list[str],
+                      olculen_seri: int) -> tuple[str, dict]:
+    """DAYANAĞI OLMAYAN SIFIR — ölçüleni yaz, ötesine geçme.
+
+    NE ÖLÇÜLDÜ. (a) Elimizdeki haftaların tamamında sıfır ve bir kez bile
+    sıfırdan farklı değer yayımlanmamış — bu DONMAYI eler, çünkü yayımı duran
+    bir seri önce sıfırdan farklı değerler gösterir, sonra sıfıra düşer.
+    (b) Aynı kırılımın öteki bacakları aynı dönemde hareket ediyor. (c) Aynı
+    kesenin ARINDIRILMIŞ akımı hareketli, yani kese ölü değil.
+
+    NE ÖLÇÜLMEDİ. Kaynağın bu bacağı nasıl hesapladığı. Yöntem belgesi
+    okunmadı ve okunmadan "kaynak bunu hesaplamıyor" cümlesi kurulamaz.
+    Kurulabilecek en güçlü cümle şudur: sıfır, hareketin yokluğu değil
+    ÖLÇÜNÜN yokluğu olabilir ve ikisi elimizdeki gözlemle ayırt edilemez.
+
+    VE BUNUN MANŞETE DOKUNAN BİR SONUCU VAR. Parite etkisi hiç yayımlanmayan
+    bir bacakta, arındırılmış akım da parite etkisinden arındırılmamış
+    olabilir; o bacak manşet akımın içindedir. Arındırmanın ne kadar eksik
+    kaldığı ölçülemez — ölçülemeyen şeyin kendisi odur. Ölçülebilen şey
+    ETKİLENEN DİLİMİN büyüklüğüdür ve o yazılır: ne abartılır, ne gizlenir.
+
+    ADLANDIRMA İLE ÖLÇÜM AYNI SERİ KÜMESİNDEN TÜRER. Kıyas cümlesi kısa
+    adlarla kuruluyor ("euro ve kıymetli maden") ama sayılar seri seri
+    ölçülüyordu ve iki küme AYRI süzülüyordu: adı anılmayan bir bacağın gözlem
+    sayısı, anılan bacaklara yakıştırılıyordu. Yapısal bir bacak bir gün
+    sıfırdan farklı bir değer yayımlarsa (kapının izlediği olayın ta kendisi)
+    kısa adı hem sıfır hem hareketli kümede birden geçer; o hâlde kısa ad
+    AYIRT EDİCİ DEĞİLDİR ve parça HİÇ YAZILMAZ. Bir cümle parçasının kendi
+    ölçüm koşulu tutmuyorsa o parça yazılmaz — ölçülmemiş bir parça,
+    ölçülmüşlerin yanında onlardan ayırt edilemez.
+    """
+    b = _bicim()
+    tani: dict = {}
+    if not olculen_seri:
+        return ("Dayanağı olmayan bir sıfır var mı, bu koşuda ölçülemedi: "
+                "gözlem yüklenemedi.", tani)
+    if not dayanaksiz:
+        return ("Gerekçesi kayıtlı olmayan, baştan sona sıfır bir bacak bu "
+                f"koşuda yok: ölçülen {b.sayi(olculen_seri, 0)} serinin "
+                "hiçbiri elimizdeki haftaların tamamında sıfır değil.", tani)
+
+    # HAFTA SAYISI EN KISA SERİDEN: seriler farklı uzunlukta olabilir ve en
+    # uzununu yazmak, kısa olan hakkında ölçülmemiş bir şey söylemek olurdu.
+    n = min(int(H[a].dropna().shape[0]) for a in dayanaksiz)
+    tani["hafta"] = int(n)
+    tani["seri"] = list(dayanaksiz)
+    parca = [f"{veri._adlar(dayanaksiz, en_fazla=min(len(dayanaksiz), 6))} "
+             f"serisi elimizdeki {b.sayi(n, 0)} haftanın tamamında tam sıfır "
+             "ve bir kez bile sıfırdan farklı bir değer yayımlanmamış. Donmuş "
+             "besleme bunu açıklamıyor: yayımı duran bir seri önce sıfırdan "
+             "farklı değerler gösterir, sonra sıfıra düşer — burada öncesi yok."]
+
+    # (a) AYNI KIRILIMIN ÖTEKİ BACAKLARI. Kıyas yalnız dokunulan kırılımların
+    # içinde kurulur: bütün kırılımlara bakılsaydı cümle, parite etkisi
+    # hakkında başka bir tablonun gözlemiyle kurulmuş olurdu.
+    tam_sifir = set(dayanaksiz) | set(tanim) | set(hukumsuz)
     dokunan = [k for k in veri.KIRILIMLAR
-               if any(a in yapisal for a in k.parcalar)]
+               if any(a in dayanaksiz for a in k.parcalar)]
     sifir_ad: list[str] = []
     oteki: list[str] = []
     for kir in dokunan:
         for a in kir.parcalar:
-            (sifir_ad if a in yapisal else oteki).append(a)
+            if a in dayanaksiz:
+                sifir_ad.append(a)
+            elif a in tam_sifir:
+                # BAŞKA BİR SINIFIN SIFIRI. O da baştan sona sıfır; "öteki
+                # bacaklar hareket gösteriyor" kıyasında anmak cümleyi kendi
+                # ölçümüne aykırı yapardı.
+                continue
+            else:
+                oteki.append(a)
     kisa_sifir = list(dict.fromkeys(veri.bacak_kisa_adi(a) for a in sifir_ad))
-    kisa_oteki = [x for x in dict.fromkeys(veri.bacak_kisa_adi(a)
-                                           for a in oteki)
-                  if x not in kisa_sifir]
-    # Öteki bacaklar SAYIYLA anlatılır, sıfatla değil. "Aynı haftalarda
-    # sıfırdan farklı" demek, o bacakların hiç sıfır çıkmadığını İDDİA
-    # etmektir; oysa ölçülen şey sıfırdan farklı gözlem SAYISIDIR ve bir bacak
-    # arada sıfır çıkabilir. En SEYREK olanı yazılır: cümlenin taşıdığı en
-    # zayıf gözlem hangisiyse okur onu görür.
+    kisa_oteki = list(dict.fromkeys(veri.bacak_kisa_adi(a) for a in oteki))
+    belirsiz = sorted(set(kisa_sifir) & set(kisa_oteki))
     dolu = [int((H[a].dropna() != 0).sum()) for a in oteki if a in H.columns]
     kapsam = [int(H[a].dropna().shape[0]) for a in oteki if a in H.columns]
-    if kisa_sifir and kisa_oteki and dolu and min(dolu) > 0:
+    tani["kiyas_belirsiz_kisa_ad"] = belirsiz
+    tani["kiyas_oteki_seri"] = list(oteki)
+    if kisa_sifir and kisa_oteki and not belirsiz and dolu and min(dolu) > 0:
+        # Öteki bacaklar SAYIYLA anlatılır, sıfatla değil: "aynı haftalarda
+        # sıfırdan farklı" demek onların hiç sıfır çıkmadığını İDDİA etmektir.
+        # En SEYREK olanı yazılır — cümlenin taşıdığı en zayıf gözlem hangisi
+        # ise okur onu görür.
+        # Aynı sayıyı iki kez okutmak okura ikincisini bir alt küme
+        # sandırır; tam kapsama TAMAMI diye yazılır.
+        say = (f"ölçülen {b.sayi(min(kapsam), 0)} haftanın tamamında sıfırdan "
+               "farklı" if min(dolu) == min(kapsam)
+               else "en seyreğinde bile sıfırdan farklı gözlem sayısı "
+                    f"{b.sayi(min(dolu), 0)} hafta, ölçülen toplam "
+                    f"{b.sayi(min(kapsam), 0)} hafta")
         parca.append(
             f"Aynı kırılımların öteki bacakları ({' ve '.join(kisa_oteki)}) "
-            "aynı dönemde hareket gösteriyor: en seyreğinde bile sıfırdan "
-            f"farklı gözlem sayısı {b.sayi(min(dolu), 0)} hafta, ölçülen "
-            f"toplam {b.sayi(min(kapsam), 0)} hafta. Yani yayımlanan seride "
-            f"bu ölçü yalnız {' ve '.join(kisa_oteki)} bacaklarında sıfırdan "
-            f"farklı çıkıyor, {' ve '.join(kisa_sifir)} bacaklarında hiç.")
-    return " ".join(parca)
+            f"aynı dönemde hareket gösteriyor: {say}.")
+
+    # (b) KESENİN KENDİSİ ÖLÜ MÜ? Parite etkisi sıfır olan bacağın AYNI
+    # kesedeki arındırılmış akımı. Hareketliyse "o kesede hiçbir şey olmuyor"
+    # açıklaması da elenir; hareketsizse böyle bir cümle KURULMAZ.
+    es = [veri.arindirilmis_esi(a) for a in dayanaksiz]
+    ar_kol = [a for a in es if a and a in H.columns]
+    kese = (H[ar_kol].sum(axis=1, min_count=len(ar_kol)).dropna()
+            if ar_kol else pd.Series(dtype=float))
+    dolu_ar = int((kese != 0).sum()) if len(kese) else 0
+    tani["kese_seri"] = list(ar_kol)
+    tani["kese_hafta"] = int(len(kese))
+    tani["kese_sifirdisi_hafta"] = dolu_ar
+    if len(kese) and dolu_ar:
+        tani["kese_medyan_mn"] = float(kese.abs().median())
+        tani["kese_maks_mn"] = float(kese.abs().max())
+        # "139 haftanın 139 haftasında" diye yazmak sayıyı iki kez okutur ve
+        # okur ikincisini bir alt küme sanar; tam kapsama TAMAMI diye yazılır.
+        kac = ("tamamında" if dolu_ar == len(kese)
+               else f"{b.sayi(dolu_ar, 0)} haftasında")
+        # "toplamı" ancak toplanacak birden çok bacak varsa yazılır: tek
+        # bacakta okur, olmayan bir toplama işlemi arar.
+        govde = (f"{veri._adlar(ar_kol, en_fazla=min(len(ar_kol), 4))}"
+                 + (" toplamı" if len(ar_kol) > 1 else ""))
+        parca.append(
+            f"Aynı kesenin arındırılmış akımı ise hareketli: {govde} ölçülen "
+            f"{b.sayi(len(kese), 0)} haftanın {kac} sıfırdan farklı.")
+
+    # (c) HÜKÜM — ölçümün kapsadığı yere kadar, bir adım ötesine değil.
+    # HÜKÜM CÜMLESİ KAÇ GÖZLEME DAYANDIĞINI SAYMAZ: yukarıdaki parçaların
+    # her birinin kendi ölçüm koşulu var ve tutmayan parça hiç yazılmıyor.
+    # "Bu üç gözlem" diye başlayan bir cümle, iki parçanın yazıldığı bir
+    # koşuda olmayan bir gözleme dayanıyormuş gibi görünürdü.
+    parca.append(
+        "Ölçülenler birlikte şunu söylüyor: sıfır, hareketin yokluğu değil "
+        "ÖLÇÜNÜN yokluğu olabilir ve ikisi elimizdeki gözlemle ayırt "
+        "edilemez. Kaynağın bu bacağı nasıl hesapladığı ölçülmedi; yöntem "
+        "belgesi okunmadı ve okunmadan kaynak adına bir cümle kurulmaz.")
+
+    # (d) SONUÇ VE BÜYÜKLÜĞÜ.
+    manset = (H[MANSET_AKIM].dropna() if MANSET_AKIM in H.columns
+              else pd.Series(dtype=float))
+    ortak = kese.index.intersection(manset.index) if len(kese) else []
+    if len(ortak) and dolu_ar:
+        k2 = kese.loc[ortak].abs()
+        m2 = manset.loc[ortak].abs()
+        oran = float((k2 / m2.clip(lower=1e-9)).median() * 100.0)
+        tani["manset_medyan_mn"] = float(m2.median())
+        tani["kese_manset_oran_medyan_pay"] = oran
+        parca.append(
+            "Bunun manşete dokunan bir sonucu var: parite etkisi hiç "
+            "yayımlanmayan bir bacakta arındırılmış akım da parite "
+            "etkisinden gerçekte arındırılmamış olabilir ve o bacak manşet "
+            "akımın içindedir. Arındırmanın ne kadar eksik kaldığı "
+            "ölçülemez — ölçülemeyen şeyin kendisi odur; ölçülebilen şey "
+            "etkilenen dilimin büyüklüğüdür. Bu kesenin haftalık akımının "
+            f"mutlak medyanı {b.sayi(float(k2.median()), 1)} milyon dolar, "
+            f"manşet akımınki {b.sayi(float(m2.median()), 1)} milyon dolar; "
+            f"haftalık oranın medyanı {b.yuzde(oran, 1)}, kesenin en büyük "
+            f"haftası {b.sayi(float(k2.max()), 1)} milyon dolar. Manşet bu "
+            "yüzden geçersiz olmuyor, ama bu dilim kadar bir belirsizlik "
+            "taşıdığı bilinerek okunur.")
+    return " ".join(parca), tani
 
 
-def sifir_olc(H: pd.DataFrame, kolonlar, esik_hafta: int) -> tuple[list[str], dict]:
+def sifir_olc(H: pd.DataFrame, kolonlar, esik_hafta: int,
+              olculen_bas) -> tuple[list[str], dict]:
     """Sıfırları ÖLÇER ve raporlar; MASKELEMEZ. Gerekçesi aşağıda.
 
-    Argümanların VARSAYILANI YOKTUR: hangi bacaklara bakıldığı ve eşiğin ne
-    olduğu bu ölçünün anlamını belirliyor, unutulursa Python hemen hata
-    versin. Sessizce yanlış kapsamla koşan bir sıfır denetimi, hiç
-    koşmayandan kötüdür.
+    Argümanların VARSAYILANI YOKTUR: hangi bacaklara bakıldığı, eşiğin ne
+    olduğu ve hangi serilerin BAŞLANGICININ ÖLÇÜLDÜĞÜ bu ölçünün anlamını
+    belirliyor; unutulursa Python hemen hata versin. Sessizce yanlış kapsamla
+    koşan bir sıfır denetimi, hiç koşmayandan kötüdür.
 
-    ÜÇ HÂL, İKİ DEĞİL — ve bu bir düzeltmedir. Denetim iki hâl tanıyordu
-    (sağ uçta uzun blok → "ayırt edilemiyor"; ortadaki blok → ölçüm) ve ilk
-    gerçek koşuda bunun bedeli ölçüldü: dört bacak serinin İLK gözleminden
-    beri, yani 139 haftanın 139'unda tam sıfır ve bir kez bile sıfırdan
-    farklı değer yayımlanmamış. Okur "kaynağın bu bacağı yayımlamayı bırakmış
-    olması da aynı görünür" cümlesini okudu — oysa GÖRÜNMÜYOR: donan bir seri
-    önce sıfırdan farklı değerler gösterir, sonra sıfıra düşer. Sağ uçtaki
-    blok serinin TAMAMINI kaplıyorsa öncesi yoktur, dolayısıyla donma değildir
-    ve ikisi ölçümle AYIRT EDİLİR. Ayırt edilebilen bir şeye "ayırt edilemiyor"
-    demek, ölçülmüş bir şeyi ölçülmemiş göstermektir.
+    BEŞ HÂL. Üçüncüsü hattın ilk gerçek koşusunda, dördüncüsü tarihçenin
+    ölçülen başa çekildiği gün, beşincisi de "ölçüm donmayı eler ama
+    ölçülmemişliği elemez" kusuru görüldüğünde eklendi.
 
-      (i)   blok = bütün seri  → YAPISAL sıfır. Uyarı değil ÖLÇÜM: ne olduğu
-            söylenir, gözlem sayısıyla.
-      (ii)  blok sağ uçta ama öncesinde sıfırdan farklı gözlem var → gerçekten
-            AYIRT EDİLEMEZ; uyarı düşer (aşağıdaki gerekçe).
-      (iii) blok serinin ortasında → ölçüm; arkasından gerçek bir gözlem
+      (i)   blok = bütün seri VE sıfırın kayda geçmiş bir GEREKÇESİ var →
+            TANIM SIFIRI. Hüküm veriden değil aritmetikten gelir; hafta
+            sayılmaz, başlangıcın ölçülmüş olması da gerekmez.
+      (ii)  blok = bütün seri, gerekçe YOK, başlangıç ölçülmüş → DAYANAKSIZ
+            SIFIR. Ölçülen yazılır (donma elenir), hüküm kurulmaz; manşete
+            dokunan sonucu büyüklüğüyle birlikte yazılır.
+      (iii) blok = bütün seri, gerekçe yok, başlangıç ÖLÇÜLMEMİŞ → HÜKÜM
+            KURULMAZ. Sıfır ölçüldü, anlamı ölçülmedi.
+      (iv)  blok sağ uçta ama öncesinde sıfırdan farklı gözlem var → gerçekten
+            AYIRT EDİLEMEZ; uyarı düşer.
+      (v)   blok serinin ortasında → ölçüm; arkasından gerçek bir gözlem
             gelmiştir, uyarı yok.
+
+    (i) ile (ii) NEDEN AYRILDI. İkisi bir zamanlar tek sınıftı ve tek cümle
+    hepsi için birden "bu bir ölçümdür, donmuş besleme değil" diyordu. Ölçüm
+    donmayı eliyor; ÜÇÜNCÜ bir hâli — kaynağın o bacağı hiç hesaplamıyor
+    olmasını — elemiyor. Ve veri o üçüncü hâle işaret ediyordu: dolar dışı
+    kese canlı (arındırılmış akımı haftadan haftaya hareket ediyor) ama parite
+    etkisi tam sıfır; oysa dolar dışı bir kesenin dolara karşı parite etkisi,
+    çapraz kur kımıldadığı sürece sıfır olamaz. Dolar bacaklarında ise sıfır
+    tanım gereğidir ve orada "bu bir ölçümdür" DOĞRU. Ayırt edilebilene "ayırt
+    edilemiyor" demek yanlıştı; ayırt edilemeyene "ölçümdür" demek de yanlış.
+
+    (iii) NEDEN VAR. Yapısal hükmün dayanağı "serinin öncesi yok" cümlesidir
+    ve o cümle ancak elimizdeki ilk gözlem SERİNİN ilk gözlemiyse doğrudur.
+    Bu hatta öyle değildi: katalogdaki başlangıç elle yazılmış bir sabitti,
+    çekimin alt sınırıydı ve kapsam denetiminin ölçütüydü — üç yer birbirini
+    doğruluyor görünürken hiçbiri ölçmüyordu. 2005'ten sorulduğunda tarihçenin
+    139 değil 653 hafta olduğu çıktı; hüküm bu kez GÜÇLENDİ ama bu bir şans
+    meselesiydi. Kapı hükmün sonucunu değil DAYANAĞINI sorar — ve yalnız o
+    dayanağı KULLANAN sınıfa uygulanır: tanım sıfırı onu hiç kullanmaz.
+
+    TANIM SIFIRININ ÇELİŞMESİ DE ÖLÇÜLÜR. Kayda geçmiş bir gerekçe, sıfırın
+    ölçülmeden önce bilindiğini söyler; o bacakta sıfırdan farklı bir değer
+    çıkarsa yanlış olan gerekçe ya da kalem eşleşmesidir ve bu bir uyarıdır.
+    Bir iddianın YANLIŞLANABİLİR olması onun ölçülebilir olmasıdır; hiçbir
+    denetimin bakmadığı bir iddia, sınanmamış bir kural olarak kalır.
 
     NEDEN MASKELEME YOK — ve bu bir eksiklik değil, ölçülmüş bir karar:
     Bu depoda taşınan bir fiyattan doğan sahte sıfırlar maskelendi, ama orada
     KANIT vardı: sıfırların tamamının taşımadan doğduğu 918 iş gününde
-    ölçülmüştü ve taşınan günden sonra gerçek kotasyon gelip gelmediği ikisini
-    ayırıyordu. (ii) hâlinde öyle bir kanıt YOK. Bu hattın serileri taşınmıyor:
-    yayım dursa gözlem gelmez, boş kalır — sıfır GÖRÜNMEZ. Sağ uçtaki bir
-    sıfır bloğu ise gerçekten akım olmamasıyla da, kaynağın o bacağı
-    yayımlamayı bırakmasıyla da açıklanabilir. Maskelemek "bu bir ölçüm
-    değildir" demektir; bu da ölçülmemiş bir iddiadır.
-
-    Maskelemeyi haklı kılacak kanıt şudur: bloğun ardından sıfırdan farklı
-    bir gözlem gelmesi — ki o an blok sağ uçta olmaktan çıkar ve zaten
-    dokunulmaz. Böyle bir kanıt olmadan sıfırlar OLDUĞU GİBİ bırakılır ve
-    ayırt edilemediği YAZILIR.
+    ölçülmüştü. Burada öyle bir kanıt YOK. Bu hattın serileri taşınmıyor:
+    yayım dursa gözlem gelmez, boş kalır — sıfır GÖRÜNMEZ. Maskelemek "bu bir
+    ölçüm değildir" demektir; bu da ölçülmemiş bir iddiadır.
     """
     b = _bicim()
-    rapor: dict = {"esik_hafta": int(esik_hafta), "seri": {}}
+    olculen = set(olculen_bas)
+    rapor: dict = {"esik_hafta": int(esik_hafta),
+                   "bas_olculen_seri": len(olculen), "seri": {}}
     uzun: list[str] = []
-    yapisal: list[str] = []
+    tanim: list[str] = []
+    dayanaksiz: list[str] = []
+    hukumsuz: list[str] = []
+    celiski: list[str] = []
     en_uzun = 0
     for ad in kolonlar:
         if ad not in H.columns:
@@ -1282,32 +1511,68 @@ def sifir_olc(H: pd.DataFrame, kolonlar, esik_hafta: int) -> tuple[list[str], di
             continue
         sag = _sag_uc_sifir(H[ad])
         ic = int((d.iloc[:len(d) - sag] == 0).sum()) if sag < len(d) else 0
-        # Serinin TAMAMI sıfırsa hâl yapısaldır; eşik burada hiç sorulmaz,
-        # çünkü "yarım yıl mı geçti" sorusunun cevabı hükmü değiştirmiyor.
+        # Serinin TAMAMI sıfırsa eşik hiç sorulmaz — "yarım yıl mı geçti"
+        # sorusunun cevabı hükmü değiştirmiyor. Sorulan şey BAŞKA: sıfırın
+        # kayda geçmiş bir gerekçesi var mı, yoksa elimizdeki ilk gözlem
+        # serinin ilk gözlemi mi?
         tam = bool(sag == len(d))
-        hal = "yapisal" if tam else ("ayirt_edilemez" if sag >= esik_hafta
-                                     else "olcum")
+        bas_var = ad in olculen
+        gerekceli = ad in veri.TANIM_SIFIRI
+        if tam:
+            hal = ("tanim" if gerekceli
+                   else ("dayanaksiz" if bas_var else "bas_olculmedi"))
+        else:
+            hal = "ayirt_edilemez" if sag >= esik_hafta else "olcum"
         rapor["seri"][ad] = {
             "n_gozlem": int(len(d)),
+            "sifirdisi_hafta": int((d != 0).sum()),
             "sag_uc_sifir_hafta": sag,
             "ic_sifir_hafta": ic,
             "hal": hal,
+            "tanim_gerekcesi": bool(gerekceli),
+            "bas_olculdu": bool(bas_var),
             "asildi": bool(sag >= esik_hafta),
         }
         if tam:
-            yapisal.append(ad)
-        elif sag >= esik_hafta:
-            uzun.append(ad)
-            en_uzun = max(en_uzun, sag)
+            (tanim if gerekceli
+             else (dayanaksiz if bas_var else hukumsuz)).append(ad)
+        else:
+            if gerekceli:
+                celiski.append(ad)
+            if sag >= esik_hafta:
+                uzun.append(ad)
+                en_uzun = max(en_uzun, sag)
+    olculen_seri = len(rapor["seri"])
+    rapor["olculen_seri"] = olculen_seri
     rapor["asan_seri"] = len(uzun)
-    rapor["yapisal_seri"] = len(yapisal)
+    rapor["tanim_seri"] = len(tanim)
+    rapor["dayanaksiz_seri"] = len(dayanaksiz)
+    rapor["hukumsuz_seri"] = len(hukumsuz)
+    rapor["celiskili_seri"] = len(celiski)
     uy: list[str] = []
-    if yapisal:
-        # UYARI DEĞİL, ÖLÇÜM: koşu kaydına satır düşmez. Yapısal bir sıfırı
-        # her hafta uyarı diye basmak, denetimi kalıcı olarak kırmızı tutar ve
-        # bir denetim sürekli uyarı verdiğinde kimse ona bakmaz — o gün
-        # gerçekten donan bir bacak bu duvarda kaybolur.
-        rapor["yapisal_cumle"] = _yapisal_cumle(yapisal, H)
+
+    # DÖRT CÜMLE HER KOŞUDA YAZILIR, BULGU OLMASA DA. Bulgu varken yazılıp
+    # yokken hiç yazılmayan bir anahtar, sayfada statik yedeğe düşer: hüküm
+    # tam yanlışlaştığı anda okur eski cümleyi okumaya devam eder. Kardeş okur
+    # cümleleri (tazelik, kapsam) bulgu yokken de "yok" metniyle yazılıyor;
+    # sıfır cümleleri de artık öyle.
+    rapor["tanim_cumle"] = _tanim_cumle(tanim, olculen, olculen_seri)
+    rapor["dayanaksiz_cumle"], rapor["dayanaksiz"] = _dayanaksiz_cumle(
+        dayanaksiz, H, tanim, hukumsuz, olculen_seri)
+    rapor["hukumsuz_cumle"] = _hukumsuz_cumle(hukumsuz, H, olculen_seri)
+
+    if celiski:
+        # KAYDA GEÇMİŞ GEREKÇE ÇELİŞİYOR. Uyarı: sıfır beklenen bir bacakta
+        # değer çıktı, yani ya gerekçe ya kalem eşleşmesi yanlış. İkisi de
+        # okurun gördüğü sayıları etkiler.
+        uy.append(
+            f"TANIM SIFIRI ÇELİŞİYOR: {veri._adlar(celiski)} — sıfır olması "
+            "kayda geçmiş bir gerekçeye dayanıyordu, ama ölçülen haftalarda "
+            "sıfırdan farklı değerler var (en çok "
+            f"{b.sayi(max(rapor['seri'][a]['sifirdisi_hafta'] for a in celiski), 0)}"
+            " hafta). Gerekçe ya da kalemin karşılığı yanlış; bu bacaktan "
+            "beslenen sayılar sınanana kadar temkinle okunmalı.")
+
     if uzun:
         # Cümle RAPORDA taşınır. Uyarı metnini sonradan ikiye bölüp özete
         # koymak, bir seri adının içinde iki nokta geçtiği gün cümleyi ortadan
@@ -1326,6 +1591,15 @@ def sifir_olc(H: pd.DataFrame, kolonlar, esik_hafta: int) -> tuple[list[str], di
             "hareket olmamış olabilir; kaynağın bu bacağı yayımlamayı "
             "bırakmış olması da aynı görünür ve elimizdeki gözlemle ikisi "
             "ayırt edilemiyor. Sıfırlar olduğu gibi bırakıldı.")
+    elif not olculen_seri:
+        rapor["cumle"] = ("Yayımı durmuş görünen bir sıfır bloğu var mı, bu "
+                          "koşuda ölçülemedi: gözlem yüklenemedi.")
+    else:
+        rapor["cumle"] = (
+            f"Sağ ucunda {b.sayi(esik_hafta, 0)} haftadan uzun kesintisiz "
+            "sıfır taşıyan bir bacak bu koşuda yok: ölçülen "
+            f"{b.sayi(olculen_seri, 0)} serinin hiçbirinde yayımın durmuş "
+            "olabileceğini düşündüren bir blok bulunmadı.")
     return uy, rapor
 
 
@@ -1367,7 +1641,8 @@ def kos() -> int:
     M = stok_metrikleri(H)
     D, dol_tani = dolarizasyon(H, A)
     ayrisma = ayrisma_olc(A, M)
-    sifir_uy, sifir_rapor = sifir_olc(H, veri.SIFIR_KAPSAMI, ESIK_SIFIR_BLOK)
+    sifir_uy, sifir_rapor = sifir_olc(H, veri.SIFIR_KAPSAMI, ESIK_SIFIR_BLOK,
+                                      veri.BAS_OLCULEN)
     for u in sifir_uy:
         uyar(u)
 
@@ -1508,27 +1783,96 @@ def kos() -> int:
         return (H[kol].dropna().index[0]
                 if kol in H.columns and H[kol].notna().any() else None)
     ar_ilk, stok_ilk = _ilk("ar_toplam"), _ilk("stok_toplam")
+    ar_seri = H["ar_toplam"].dropna() if ar_ilk is not None else None
     if len(tam) and ar_ilk is not None and stok_ilk is not None:
+        # İKİ PENCERE, İKİ CÜMLE PARÇASI — ve bu bir düzeltmedir.
+        #
+        # Cümle "ölçüm şu kadar haftayı kapsıyor" diye TEK bir sayı yazıyordu
+        # ve o sayı ORTAK pencereydi (iki tablonun kesişimi). Tarihçe simetriye
+        # yakınken kusur küçüktü; ölçülen başa çekildiğinde asimetri 25 haftadan
+        # beş yüz haftanın üstüne çıktı ve tek sayı okura sayfanın YARISINI
+        # olduğundan kısa gösterir hâle geldi: kümüle akım figürleri on iki
+        # yılı çiziyor, metin "yüz on dört haftayı kapsıyor" diyordu.
+        #
+        # Hangi ölçüm hangi pencereden geliyor, ayrımı ŞUDUR ve yapısaldır:
+        #   · Yalnız değişim tablosundan türeyen her şey (haftalık arındırılmış
+        #     akım, parite etkisi, kümüle toplamlar, iki bacağın ayrışması)
+        #     değişim tablosunun KENDİ penceresine sahiptir — stok tablosunun
+        #     geç başlaması onları hiç bağlamaz.
+        #   · Stokun haftalık değişimini ve kimliği (Δ stok ≟ arındırılmış +
+        #     parite) isteyen her şey İKİ tabloyu birden ister, yani yalnız
+        #     ORTAK pencerede kurulabilir.
+        # Ayrım koda da böyle geçti: kimlik bloğu ayrı çıpalanıyor, kümüle
+        # akım stok tablosunun ucuna hiç bakmıyor.
         fark_hafta = int(round((stok_ilk - ar_ilk).days / 7))
-        o["kapsam_cumlesi"] = (
-            f"Ölçüm {b.tarih_uzun(tam.index[0])} ile "
-            f"{b.tarih_uzun(tam.index[-1])} arasındaki "
-            f"{b.sayi(len(tam), 0)} haftayı kapsıyor. Resmî ayrıştırma tablosu "
-            f"{b.tarih_uzun(ar_ilk)} tarihinde, stok tabloları "
-            f"{b.tarih_uzun(stok_ilk)} tarihinde başlıyor; aradaki "
-            f"{b.sayi(abs(fark_hafta), 0)} hafta için stok değişimi yok ve "
-            "kümüle akım stoktan geriye uzatılmaz.")
-    # İKİ AYRI ANAHTAR, çünkü iki ayrı hâl: biri ölçülmüş bir yapı
-    # (yapısal sıfır), öteki ölçülemeyen bir belirsizlik. Tek anahtarda
-    # toplansalardı sayfa ikisini aynı kutuda aynı ağırlıkta gösterirdi ve
-    # okur "ayırt edilemiyor"u da bir ölçüm sanardı.
-    if sifir_rapor.get("yapisal_cumle"):
-        o["sifir_yapisal_cumlesi"] = sifir_rapor["yapisal_cumle"]
-    if sifir_rapor.get("cumle"):
-        o["sifir_cumlesi"] = sifir_rapor["cumle"]
+        # CÜMLE ÖLÇTÜĞÜ ŞEYİ SÖYLER: "tablo şu tarihte başlıyor" bir KAYNAK
+        # iddiasıdır, oysa burada ölçülen şey ELİMİZDEKİ haftalardır. İkisi
+        # ayrıştığında — çekim kırpıldığında ya da katalog geride kaldığında —
+        # cümle kaynak hakkında yanlış bir şey söyler ve aynı kutudaki kapsam
+        # uyarısıyla çelişir. Kaynağın kendi başlangıcı ayrı bir ölçümdür
+        # (künyede durur, kapsam denetimi onu ayrıca sorar); bu cümle yalnız
+        # hangi ölçümün hangi pencereden geldiğini anlatır.
+        # ASİMETRİ SIFIRSA BOŞLUK CÜMLESİ YAZILMAZ. Kaynak stok tarihçesini
+        # geriye doldurursa (ya da bir gün iki tablo aynı haftada başlarsa)
+        # sabit metin "aradaki sıfır hafta için stok gözlemi yok" der ve
+        # olmayan bir boşluğu anlatır — ölçülmemiş bir şeyi ölçülmüş gibi
+        # göstermenin küçük ama aynı sınıftan bir biçimi. Ölçüldü: simetrik
+        # pencerede cümle tam bunu yazıyordu.
+        if fark_hafta:
+            o["kapsam_cumlesi"] = (
+                f"Bu sayfada iki ayrı pencere var. Resmî ayrıştırma "
+                f"tablosundan ölçülen haftalar {b.tarih_uzun(ar_ilk)} "
+                "tarihinde başlıyor: haftalık arındırılmış akım, parite "
+                "etkisi ve kümüle toplamlar "
+                f"{b.sayi(int(len(ar_seri)), 0)} haftayı kapsıyor. Stok "
+                f"tablolarından ölçülen haftalar {b.tarih_uzun(stok_ilk)} "
+                "tarihinde başlıyor; stokun haftalık değişimi ve ikisinin "
+                "birbirini kapatıp kapatmadığı ancak her iki tablonun birden "
+                f"ölçüldüğü {b.sayi(len(tam), 0)} haftada kurulabiliyor. "
+                f"Aradaki {b.sayi(abs(fark_hafta), 0)} hafta için stok "
+                "gözlemi yok: o haftalarda akım ölçülüyor, stok değişimi "
+                "ölçülmüyor ve stok akımdan geriye uzatılmıyor.")
+        else:
+            o["kapsam_cumlesi"] = (
+                f"Resmî ayrıştırma tablosu ile stok tablolarından ölçülen "
+                f"haftalar aynı tarihte başlıyor ({b.tarih_uzun(ar_ilk)}): "
+                "haftalık akım, kümüle toplamlar, stokun haftalık değişimi ve "
+                "ikisinin birbirini kapatıp kapatmadığı aynı "
+                f"{b.sayi(len(tam), 0)} haftalık pencerede ölçülüyor.")
+        # Ayrımın MAKİNE kaydı: cümle okura, sayılar koşu kaydına. İkisi aynı
+        # ölçümden geldiği için bir gün ayrışamazlar.
+        dog_kapsam = {
+            "akim_bas": ar_ilk.strftime("%Y-%m-%d"),
+            "akim_hafta": int(len(ar_seri)),
+            "stok_bas": stok_ilk.strftime("%Y-%m-%d"),
+            "ortak_bas": tam.index[0].strftime("%Y-%m-%d"),
+            "ortak_hafta": int(len(tam)),
+            "asimetri_hafta": int(abs(fark_hafta)),
+        }
+    else:
+        dog_kapsam = {}
+    # DÖRT AYRI ANAHTAR, çünkü dört ayrı hâl — ve dördü sayfada AYNI KUTUDA
+    # AYNI AĞIRLIKTA anılmamalı:
+    #   · tanım gereği sıfır — dayanağı aritmetik, veriye hiç bakmıyor;
+    #   · dayanağı olmayan sıfır — donma elendi, ama sıfırın hareketin mi
+    #     ölçünün mü yokluğu olduğu ayırt EDİLEMİYOR (ve manşete dokunuyor);
+    #   · yayımı durmuş olabilecek blok — kaynak tarafındaki belirsizlik;
+    #   · başlangıcı ölçülmemiş seri — bizim henüz sormadığımız soru.
+    # Tek anahtarda toplansalardı okur, dayanağı olmayan bir sıfırı da,
+    # bizim sormadığımız bir soruyu da ölçüm sanırdı.
+    #
+    # DÖRDÜ DE HER KOŞUDA YAZILIR, BULGU OLMASA DA. Bulgu varken yazılıp
+    # yokken düşen bir anahtar sayfada statik yedeğe düşer: hüküm tam
+    # yanlışlaştığı anda okur eski cümleyi okumaya devam eder — yani anahtar,
+    # en çok gerektiği gün DONAR. Kardeş okur cümleleri (tazelik, kapsam)
+    # zaten bulgu yokken de "yok" metniyle yazılıyor.
+    o["sifir_tanim_cumlesi"] = sifir_rapor["tanim_cumle"]
+    o["sifir_dayanaksiz_cumlesi"] = sifir_rapor["dayanaksiz_cumle"]
+    o["sifir_hukumsuz_cumlesi"] = sifir_rapor["hukumsuz_cumle"]
+    o["sifir_cumlesi"] = sifir_rapor["cumle"]
 
     dog = {"kapsam": kapsam_rapor, "kimlik": ayr_tani, "hizalama": hiz_tani,
-           "sifir": sifir_rapor, "ayrisma": ayrisma}
+           "sifir": sifir_rapor, "ayrisma": ayrisma, "pencere": dog_kapsam}
     o["ayristirma"] = ayr_tani
     o["kumule"] = kum_tani
     o["dolarizasyon"] = dol_tani

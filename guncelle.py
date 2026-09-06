@@ -335,6 +335,56 @@ HATLAR: list[Hat] = [
         # saatlerini ve şekil saat defterini yazar; hiçbir saat kurulamıyorsa
         # DURUR — tarihsiz bir özet yayına giremez.
         #
+        # SIFIRIN İKİ SINIFI AYRI YAZILIR — ve ikincisi MANŞETE DOKUNUR.
+        # Baştan sona sıfır çıkan bacaklar bir zamanlar tek sınıftı ve tek
+        # cümle hepsi için birden "bu bir ölçümdür, donmuş besleme değil"
+        # diyordu. Ölçüm DONMAYI eliyor (donan seri önce değer gösterir,
+        # sonra sıfıra düşer; serinin tamamı sıfırsa öncesi yoktur), ama
+        # üçüncü bir hâli — kaynağın o bacağı hiç HESAPLAMIYOR olmasını —
+        # elemiyor. Dolar bacaklarında sıfır TANIM GEREĞİDİR (doların dolara
+        # karşı çaprazı yoktur) ve orada "ölçümdür" doğru. Dolar DIŞI
+        # bacaklarda dayanak YOK: kese canlı (arındırılmış akımı 139 haftanın
+        # 139'unda sıfırdan farklı, mutlak medyanı 98,5 milyon dolar) ama
+        # parite etkisi tam sıfır — oysa hareketli bir dolar dışı kesenin
+        # dolara karşı parite etkisi, çapraz kur kımıldadığı sürece sıfır
+        # olamaz. Orada kurulabilecek en güçlü cümle şudur: sıfır, hareketin
+        # yokluğu değil ÖLÇÜNÜN yokluğu olabilir ve ikisi elimizdeki gözlemle
+        # ayırt edilemez. "TCMB şöyle hesaplıyor" DENMEZ — yöntem belgesi
+        # okunmadı.
+        #
+        # VE SONUCU SAYFADA DURUR: parite etkisi hiç yayımlanmayan bir bacakta
+        # arındırılmış akım da parite etkisinden gerçekte arındırılmamış
+        # olabilir, o bacak da manşet akımın İÇİNDEDİR. Arındırmanın ne kadar
+        # eksik kaldığı ölçülemez (ölçülemeyen şeyin kendisi odur); ölçülebilen
+        # şey etkilenen dilimin büyüklüğüdür ve yazılır — kesenin haftalık
+        # akımının mutlak medyanı manşetinkinin yüzde 8'i, en büyük haftası
+        # 573,7 milyon dolar. Sınır ne abartılır ne gizlenir. Dört sıfır
+        # cümlesi (tanım · dayanaksız · yayımı durmuş olabilecek blok ·
+        # başlangıcı ölçülmemiş seri) DÖRT AYRI ANAHTARDA taşınır ve bulgu
+        # olmasa da yazılır: bulgu varken yazılıp yokken düşen bir anahtar,
+        # hüküm tam yanlışlaştığı anda sayfada statik yedeğe düşerdi.
+        #
+        # TARİHÇE ASİMETRİK VE ASİMETRİ BÜYÜK: resmî ayrıştırma tablosu
+        # 28.02.2014'te (653 hafta), stok tabloları 28.06.2024'te (114 hafta)
+        # başlıyor. Yalnız değişim tablosundan türeyen ölçümler (haftalık
+        # akım, parite etkisi, kümüle toplamlar, ayrışma) uzun pencereden;
+        # Δ stok ve kimlik ancak ORTAK pencerede kurulabiliyor. Tek bir
+        # "ölçüm şu kadar haftayı kapsıyor" cümlesi okura sayfanın yarısını
+        # beş kat kısa gösterirdi; ayrım koda ve okur cümlesine ayrı ayrı
+        # geçmiş durumda.
+        #
+        # BAŞLANGIÇ KÜNYEDE KANITIYLA DURUYOR ve bu bir HÜKÜM KAPISIDIR.
+        # 05.01.2024 bir süre "kaynağın ilk gözlemi" diye durdu; ölçüm değil,
+        # ilk keşif koşusunun kendi sorgu alt sınırının iziydi — üstelik çekim
+        # de aynı sabitten başlıyor, kapsam denetimi de onu ölçüt alıyordu.
+        # Ölçülmemiş başlangıç taşıyan seri üzerine artık DAYANAKSIZ SIFIR
+        # hükmü kurulmuyor — o hükmün tek dayanağı "serinin öncesi yok"
+        # cümlesidir. Tanım gereği sıfır (dolar bacaklarının parite etkisi) bu
+        # kapıya girmez: dayanağı gözlem değil aritmetik, ve iki özdeş bacağı
+        # aynı kutuda iki ayrı hikâyeyle anlatmak okura kusur gibi görünürdü.
+        # Çekim katalogdaki başlangıçtan bir yıl geriden soruyor ve kapsam
+        # denetimi iki yöne birden bakıyor.
+        #
         # DİKKAT: geniş toplam (yurt dışı yerleşik bankalar dahil) bu hattın
         # manşeti DEĞİLDİR; sayfada yalnız adıyla ve farkıyla geçer. İki
         # toplamı aynı şeymiş gibi yan yana koymak bu hattın en pahalı hatası
