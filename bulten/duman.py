@@ -348,6 +348,28 @@ def butce_bulgulari(metin: str, is_adi: str = "tazele") -> list[str]:
     return bulgular
 
 
+def _hat_adi_kapsami():
+    """Okura slug basılmasın: izlenen ve ritmi ölçülen HER hattın adı olmalı.
+
+    Bültenin kaynak notu ile olay cümlesi hattı ADIYLA anar; ad
+    `ayar.HAT_ADI`den gelir ve eksikse ikisi de slug'a düşer — kod dili,
+    üstelik sayfa sınavının 9/17 ölçütleri veri dosyasına değil metne
+    baktığı için bunu göremez. Yeni bir hat eklendiğinde unutulacak yer
+    tam burasıdır: Izlem satırı yazılır, ad satırı yazılmaz.
+    """
+    import ayar                       # içe aktarma main() içinde yapılıyor
+    izlenen = {iz.hat for iz in ayar.IZLEMLER if iz.hat}
+    ritimli = set(ayar.RITIM) | {h for h, _a in ayar.RITIM_ALAN}
+    eksik = sorted((izlenen | ritimli) - set(ayar.HAT_ADI))
+    assert not eksik, f"HAT_ADI'nde adı olmayan hat: {eksik}"
+    bos = sorted(h for h, ad in ayar.HAT_ADI.items() if not ad.strip())
+    assert not bos, f"HAT_ADI boş: {bos}"
+    # Kaydın taşıdığı ad da ÖLÇÜLÜR: uret.dk() bunu yazmasa site eski yolu
+    # (proje sayfası başlığı) kullanmaya döner ve panosu olmayan hat slug'a düşer.
+    kaynak = (BURASI / "uret.py").read_text(encoding="utf-8")
+    assert '"hat_ad": ayar.HAT_ADI' in kaynak, "uret.dk() okura görünen adı kayda yazmıyor"
+
+
 def main() -> int:
     import ayar, denetim, gozlem, grafik_veri, olay, rejim, soz, surpriz, tazeleme, uret
 
@@ -2115,6 +2137,7 @@ def main() -> int:
     sina("denetim: revizyon ölçütü TL faiz, gösterge, türev ve rejimi görür, farklı günü karıştırmaz", _revizyon)
     sina("piyasa/rejim: türev ve rejim satırları kendi gününü ve hanesini taşır", _turev_rejim_gunu)
     sina("yayın takvimi (hakkında sayfası) iş akışı cron'larıyla aynı saati söylüyor", _yayin_takvimi)
+    sina("hat adı: izlenen her hattın okura görünen adı var, kayıt onu taşıyor", _hat_adi_kapsami)
 
     for ad in gecen:
         print(f"  ✓ {ad}")
