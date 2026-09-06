@@ -31,6 +31,7 @@ deger_disi = _mod.deger_disi
 ciplak_sayilar = _mod.ciplak_sayilar
 ORNEK_AC, ORNEK_KAPA = _mod.ORNEK_AC, _mod.ORNEK_KAPA
 MUAF_KALIP = _mod.MUAF_KALIP
+olu_ic_baglar = _mod.olu_ic_baglar
 
 GECTI: list[str] = []
 DUSTU: list[str] = []
@@ -300,6 +301,55 @@ sina("iki hafta ileri tarih HÂLÂ engel", _dt.date(2026, 9, 18) > _sig(_cuma),
 e, u = acik("18.09.2026")
 sina("açık anahtarda iki hafta ileri tarih ENGEL",
      len(e) == 1 and "İLERİ" in e[0], f"engel={e}")
+
+
+# ---------------------------------------------------------------------------
+print("\n▶ Ölü iç bağ (20. ölçüt)")
+
+import tempfile  # noqa: E402
+
+
+def _agac(dosyalar: dict[str, str]) -> pathlib.Path:
+    """Sentetik bir dist/ ağacı kur ve kökünü döndür."""
+    kok = pathlib.Path(tempfile.mkdtemp())
+    for yol, icerik in dosyalar.items():
+        d = kok / yol
+        d.parent.mkdir(parents=True, exist_ok=True)
+        d.write_text(icerik, encoding="utf-8")
+    return kok
+
+
+# ÖLÇÜLEN ARIZA: bültenin kaynak notu panosu OLMAYAN bir hattı
+# /projeler/<slug>/ diye bağlıyordu. Sayfa silindi, bağ kaldı, koşu yeşil bitti.
+kok = _agac({
+    "bulten/index.html": '<a href="/projeler/ovp/">Orta Vadeli Program</a>',
+    "projeler/ovp/ozet.json": "{}",          # varlıklar duruyor, SAYFA yok
+})
+k = olu_ic_baglar(kok)
+sina("panosu silinmiş hatta bağ ENGEL üretiyor", list(k) == ["/projeler/ovp/"], f"gelen {list(k)}")
+
+# Aynı ağaca sayfa konunca susmalı — yoksa ölçüt her yayını durdurur.
+(kok / "projeler/ovp/index.html").write_text("<p>pano</p>", encoding="utf-8")
+sina("sayfa varsa bağ geçerli", olu_ic_baglar(kok) == {}, f"gelen {list(olu_ic_baglar(kok))}")
+
+# YANLIŞ ALARM OLMASIN: varlık bağı (uzantılı dosya), çapa, sorgu ve dış adres.
+kok = _agac({
+    "s/index.html": ('<a href="/projeler/x/ozet.json">özet</a>'
+                     '<a href="/bulten/#kosu">koşu</a>'
+                     '<a href="/arama/?q=kur">arama</a>'
+                     '<a href="https://example.com/yok">dış</a>'
+                     '<a href="#bolum">çapa</a>'),
+    "projeler/x/ozet.json": "{}",
+    "bulten/index.html": "<p>b</p>",
+    "arama/index.html": "<p>a</p>",
+})
+sina("varlık · çapa · sorgu · dış adres yanlış alarm üretmiyor",
+     olu_ic_baglar(kok) == {}, f"gelen {list(olu_ic_baglar(kok))}")
+
+# Gerçekten kırık bir varlık bağı da yakalanmalı.
+kok = _agac({"s/index.html": '<a href="/og/yok.png">kart</a>'})
+sina("hedefsiz varlık bağı da yakalanıyor",
+     list(olu_ic_baglar(kok)) == ["/og/yok.png"], f"gelen {list(olu_ic_baglar(kok))}")
 
 
 # ---------------------------------------------------------------------------

@@ -359,7 +359,11 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
     grup_adi = dict(ayar.GRUPLAR)
 
     def dk(o):
-        return asdict(o)
+        # OKURA GÖRÜNEN AD KAYDA YAZILIR. Site bu adı eskiden proje sayfasının
+        # başlığından çözüyordu ve bu, HER HATTIN BİR PANOSU OLDUĞUNU varsayar;
+        # ölçümünü bir yazıya besleyen hat (panosu yok) sayfada slug'a düşerdi.
+        # Ad tek yerde tanımlı (ayar.HAT_ADI), kayıt onu taşır.
+        return {**asdict(o), "hat_ad": ayar.HAT_ADI.get(o.hat, "") if o.hat else ""}
 
     one_cikan = [dk(o) for o in olaylar if o.seviye == "onemli"]
     notlar = [dk(o) for o in olaylar if o.seviye == "dikkat" and o.grup != "diger"]

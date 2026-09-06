@@ -63,6 +63,10 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       Yapım dili ENGEL (taban sıfır), kod dili tek satırda toplanan UYARI
       (taban yetmiş altı), anahtar adı ve biçim yalnız sayılır.
   (9b) OKUR DİLİ, derlenmiş çıktıda (uyarı) — bileşen dizgeleri de kapıya girer.
+  (20) ÖLÜ İÇ BAĞ — dist/ içindeki her `href="/…"` bir dosyaya, sayfaya ya da
+      varlığa çözülmeli. Silinen bir sayfaya bağlanan başka bir sayfa hiçbir
+      yerde hata vermez; bağı kuran çoğu zaman bir bileşendir ve kaynakta
+      adres diye geçmez, o yüzden ölçüt kaynağa değil ÇIKTIYA bakar.
 
 Koşum:  python3 site/tools/sayfa_sinavi.py
 Çıkış:  0 = geçti · 1 = en az bir sınav düştü
@@ -74,6 +78,7 @@ import pathlib
 import re
 import subprocess
 import sys
+import urllib.parse
 
 KOK = pathlib.Path(__file__).resolve().parents[2]
 
@@ -384,6 +389,38 @@ def ciplak_sayilar(disi: str, ozet: dict, muaf: set[str]) -> tuple[list[str], li
                 (sayim if tam else ciplak).append(f"{k}={metin}")
                 break
     return ciplak, sayim
+
+
+IC_BAG = re.compile(r'\bhref="(/[^"#?]*)(?:[#?][^"]*)?"')
+
+
+def olu_ic_baglar(dist: pathlib.Path) -> dict[str, list[str]]:
+    """Derlenmiş çıktıdaki HEDEFSİZ iç bağlar: adres → onu basan sayfalar.
+
+    NEDEN VAR. Bültenin kaynak notu hattın slug'ını doğrudan
+    `/projeler/<slug>/` adresine çeviriyordu; bu, HER HATTIN BİR PANOSU
+    OLDUĞUNU varsayar. Varsayım tuttuğu sürece görünmez, tutmadığı gün
+    okura 404 verir ve koşu YEŞİL biter — bir sayfanın silinmesi, ona
+    bağlanan başka bir sayfayı hiçbir yerde hata vermeden bozar.
+
+    Ölçüt kaynağa değil ÇIKTIYA bakar, çünkü kırık bağların çoğu elle
+    yazılmaz: bir bileşen onu slug'dan kurar ve kaynakta `/projeler/` diye
+    bile geçmez.
+
+    Hedef üç biçimde var sayılır: dosyanın kendisi (varlıklar — ozet.json,
+    rss.xml, og kartı), `<yol>/index.html` (sayfa) ve `<yol>.html`.
+    Dış adresler, çapa (#) ve sorgu (?) taranmaz; ikisi de dosya sistemine
+    değil sayfanın kendi içine bakar.
+    """
+    kirik: dict[str, list[str]] = {}
+    for h in sorted(dist.rglob("*.html")):
+        for m in IC_BAG.finditer(h.read_text(encoding="utf-8", errors="ignore")):
+            yol = urllib.parse.unquote(m.group(1))
+            p = dist / yol.lstrip("/")
+            if p.is_file() or (p / "index.html").is_file() or p.with_suffix(p.suffix + ".html").is_file():
+                continue
+            kirik.setdefault(yol, []).append(h.relative_to(dist).as_posix())
+    return kirik
 
 
 def main() -> int:
@@ -1144,6 +1181,17 @@ def main() -> int:
                                  f"{aile}: {esl!r}")
                 n_dist += 1
         print(f"  bulgu {n_dist}")
+
+    # ------------------------------------------------------------ (20)
+    # ÖLÜ İÇ BAĞ. Silinen bir sayfaya bağlanan başka bir sayfa hiçbir yerde
+    # hata vermez; yalnız okur 404 görür. Ölçüt dist/ varsa koşar.
+    if (KOK / "site/dist").exists():
+        print("\n▶ Ölü iç bağ (dist/ içindeki href hedefleri)")
+        kirik = olu_ic_baglar(KOK / "site/dist")
+        for yol, sayfalar in sorted(kirik.items()):
+            hata.append(f"ölü iç bağ {yol} — {len(sayfalar)} sayfada, ör. "
+                        f"{sayfalar[0]}")
+        print(f"  hedefsiz adres {len(kirik)}")
 
     print()
     for u in uyari:

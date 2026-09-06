@@ -836,3 +836,21 @@ düşürmüyor ve yalnızca okurun gözünde bir yılı bir miktara çeviriyordu
 sınavının "statik yedek sapması" bilgisi onu ancak yan etkiyle gösterdi.
 Adlandırdığı şey bir gözlem değil bir SÜTUN olan her anahtar metin yazılır ve
 hiçbir ölçüme, sapma taramasına ya da bayatlık hükmüne girmez.
+
+**Kurucu ilke — bir SAYFA silindiğinde ona bağlanan bağ hiçbir yerde hata
+vermez; ve o bağı çoğu zaman kaynak değil bir BİLEŞEN kurar.** OVP panosu
+kaldırıldı — ölçüm hattı ve analiz yazısı kaldı, ikisi aynı şeyi anlatıyordu ve
+pano gereksizdi. Silme işlemi hiçbir yerde hata vermedi, vermezdi de: bültenin
+kaynak notu hattın slug'ını `/projeler/<slug>/` adresine BİLEŞENDE çeviriyordu
+ve o adres kaynakta hiç yazmıyor. Aynı satır hattın ADINI da panonun
+başlığından okuyordu, yani sayfa gidince okura slug basacaktı. İkisi de tek bir
+sessiz varsayımdan doğuyor: HER HATTIN BİR PANOSU VAR. Varsayım kırıldığı gün
+404 ile kod dili birlikte gelir ve koşu yeşil biter. Sözleşme yeniden yazıldı:
+bir hattın sayfası, o hattın `ozet.json`unu OKUYAN sayfadır — panosu varsa
+pano, yoksa `<Deger proje="<slug>">` çağıran en yeni analiz, hiçbiri yoksa bağ
+HİÇ KURULMAZ (`site/src/lib/hatSayfa.ts`); ad ise ölçüm katmanının kayda
+yazdığı `hat_ad`dan gelir (tek tanım `bulten/ayar.HAT_ADI`), pano başlığından
+değil. İki kapı kondu ve ikisi de arızaya karşı koşturularak sınandı: sayfa
+sınavının 20. ölçütü derlenmiş çıktıdaki her `href="/…"` hedefini sorar —
+kaynağa değil ÇIKTIYA bakar, çünkü bağı bileşen kurar — ve `bulten/duman.py`
+izlenen her hattın adının tanımlı olduğunu, kaydın da onu taşıdığını sınar.
