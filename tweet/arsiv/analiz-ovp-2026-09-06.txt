@@ -1,0 +1,26 @@
+# analiz:ovp-2026-09-06 · 2026-09-06T20:22:28+00:00 · https://x.com/i/status/2096695543263285631
+
+Analiz — 6 Eylül 2026
+Orta Vadeli Program — ima edilen kur patikası, faizin iki izi ve geçen yılın karnesi
+
+Orta Vadeli Program (2027–2029) bir kur tahmini yayımlamıyor; ama milli geliri hem lira hem dolar cinsinden yayımladığı için üçüncü bir satırı da yayımlamış oluyor — ima edilen ortalama kur, 2026 için 46,868, 2027 için 56,052, 2028 için 63,694, 2029 için 68,827 lira. Ölçü kapanmış iki yılda gerçekleşen günlük ortalamayı %0,12 ve %0,00 hatayla verdi, yani bir varsayım değil bir ölçüm. Gerçekleşen kur bu yıl programın ima ettiğinden yavaş gitti ve bu gecikme yıl sonuna doğru bir hızlanma borcu biriktiriyor. Faiz tarafında karşılık gelen bir satır yok: program sayısal bir politika faizi patikası yayımlamıyor, oradaki her sayı bir çıkarımdır.
+
+PROGRAM KUR İÇİN NE DİYOR. Ortalama kuru ima ediyor, yıl sonunu değil. Milli gelirin lira ve dolar satırlarının oranı bir tahmin değil, tablonun kendi aritmetiği: iki satır birlikte yayımlandığı anda üçüncüsü de yayımlanmış olur. Ayrım önemli, çünkü yıl ortalamasından yıl sonuna geçiş ayrı bir patika varsayımı ister; iki uç varsayım aynı ortalama kısıtını tutturuyor ve %0,082 farkla buluşuyor.
+
+YIL SONLARI KAÇA DENK GELİYOR. Her yılın çıkışı sonrakinin girişi yapılarak çözülünce 2026 sonu 51,80, 2027 sonu 60,49, 2028 sonu 66,98, 2029 sonu 70,69 lira çıkıyor. Yıl sonundan yıl sonuna devalüasyon sırasıyla %+20,9, %+16,8, %+10,7, %+5,5.
+
+GERÇEKLEŞME NEREDE DURUYOR. Yılın ilk 167 işlem gününde ortalama 45,271 lira; programdan sapma %−3,41, yıl başından bugüne kur %+12,47 ve son gözlem 48,2075. Program ancak kalan 85 günün ortalaması 50,005 olursa tutar — bugünkü seviyenin %+3,73 üstü.
+
+FAİZ PATİKASI VAR MI. Yok. Program sayısal bir politika faizi patikası yayımlamıyor; faize dair her sayı bir çıkarımdır ve iki ölçülebilir ize dayanır: bütçenin faiz gideri satırı, ve bugünkü faizin program enflasyonuna karşı bıraktığı reel getiri.
+
+İKİ İZ NE SÖYLÜYOR. Birinci iz bütçe: 2027 yılında genel devlet faiz gideri %40,7 artarken nominal milli gelir %30,3 artıyor, arada +10,4 puan var ve faiz gideri oranı %3,3 seviyesinden %3,6 seviyesine çıkıyor. İkinci iz reel faiz: politika faizi %37,00 seviyesinde kalırsa ileriye bakan reel getiri %+6,7 ile başlayıp %+20,7 seviyesine çıkıyor. Sabit faiz bir varsayımdır.
+
+TAŞIMA NE KAZANDIRDI. Yıl başından 3 Eylül 2026 tarihine kadar lira gecelikte bileşik %29,61 getirdi (ortalama gecelik oran %39,11), kur %12,51 yükseldi; dolar bazında net %+15,20, 244 takvim gününden yıllığa çevrilince %+23,57.
+
+GEÇEN YILIN PROGRAMI TUTTU MU. Kur tarafında yakın, enflasyon tarafında değil. Bir önceki program 2026 için 46,597 lira ima ediyordu ve gerçekleşen ortalamanın ondan sapması %−2,84; aynı program yıl sonu tüketici enflasyonunu %16,0 görüyordu, son okuma %31,51. Yeni programda 2027 enflasyonu +12,0, 2028 kur iması %+18,5 yukarı revize edildi.
+
+KANITIN GÜCÜ. Ölçüm güçlü, çıkarım orta. İma edilen kur tablonun kendi aritmetiğidir ve kapanmış iki yılda %0,12 hatayla gerçekleşen ortalamayı verdi; programların 38 iç özdeşliği sınandı, sapan çıkmadı. Zayıf halka ileriye dönük kısım: yıl sonu bir patika, ileriye dönük taşıma sabit faiz varsayımı taşır; faiz patikası ise hiç yayımlanmadı.
+
+Kilit ölçümler — programın 2027 için ima ettiği ortalama kur: 56,052 lira · 2026 yıl sonu iması: 51,80 lira · 2026 yıl sonundan yıl sonuna devalüasyon iması: %+20,9 · gerçekleşen yıl ortalamasının sapması: %−3,41 · programın tutması için kalan günlerin ortalaması: 50,005 lira · 2027 tüketici enflasyonu tahmininde revizyon: +12,0 puan · 2028 ima edilen ortalama kurda revizyon: %+18,5 · yıl başından bu yana dolar bazında net taşıma: %+15,20
+
+Analizdir; yatırım tavsiyesi değildir.
