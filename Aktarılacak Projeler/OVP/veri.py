@@ -401,7 +401,13 @@ def faiz_bacagi() -> pd.DataFrame:
              "koşuda yapılmadı.")
         return pd.DataFrame()
     d = pd.read_csv(FAIZ_DOSYA, index_col=0, parse_dates=True)
-    var = [k for k in ("tlref", "politika") if k in d.columns]
+    # ENDEKS DE ALINIR. Gecelik faizin BİLEŞİK getirisini kotasyonlardan
+    # yeniden kurmak gün sayımı sorar ve bu seride yanlış cevap on puanı aşan
+    # bir hata veriyor (bkz. metrik.carry_gerceklesen). Kaynağın kendi endeksi
+    # (BİST TLREF Endeksi) o hesabı zaten yapmış ve aynı dosyada duruyor;
+    # ölçünün resmî karşılığı varken onu yeniden türetmek, türetmenin
+    # doğruluğunu da ölçmeyi gerektirir.
+    var = [k for k in ("tlref", "tlref_endeks", "politika") if k in d.columns]
     if not var:
         uyar("SERİ YOK: TL gecelik faiz dosyasında beklenen sütunlar yok; "
              "taşıma ölçümü bu koşuda yapılmadı.")

@@ -366,23 +366,59 @@ def kumule_olc(zincir: list[dict]) -> dict:
 # ===========================================================================
 #  TAŞIMA
 # ===========================================================================
-def carry_gerceklesen(kur: pd.Series, gecelik: pd.Series, yil: int) -> dict | None:
-    """TL gecelik bileşik getiri eksi kur değişimi; gün sayımı 1/365.
+def tl_getiri_faktoru(gecelik: pd.Series, endeks: pd.Series | None,
+                      yil: int) -> tuple[float, str] | None:
+    """Liranın bir yıl içinde biriktirdiği getiri faktörü ve HANGİ YOLDAN.
 
-    Faktör GÖZLEM GÜNLERİ üzerinden birikir: her kotasyon bir günlük faiz
-    taşır. Takvim günüyle (hafta sonunu da faize sokarak) hesaplamak bu seride
-    aynı dönemde on puanı aşan bir fark üretiyor; konvansiyon bu yüzden koda
-    yazılı ve duman sınamasında kilitli.
+    GECELİK BİR FAİZ TAKVİM GÜNÜ TAŞIR, GÖZLEM GÜNÜ DEĞİL. Cuma kotasyonu
+    pazartesiye kadar üç gün işler; kotasyonları teker teker 1/365 ile
+    bileşiklemek hafta sonlarının ve tatillerin faizini tamamen düşürür.
+    Ölçüldü (2026 yılı başı → 03.09.2026, 244 takvim günü / 167 gözlem):
+    resmî endeks +%29,61, gözlem günüyle +%19,58 — 10,03 puan. Aradaki fark
+    taşımanın kendisiyle aynı büyüklükte, yani konvansiyon bir ayrıntı değil
+    ölçünün kendisi.
+
+    İki yol var ve HANGİSİNİN kullanıldığı kayda geçer:
+      · ENDEKS — BİST TLREF Endeksi. Bileşik getiriyi kaynağın kendisi
+        hesaplamıştır; gün sayımı, tatil ve yuvarlama onun sözleşmesindedir.
+        Elde varsa BU kullanılır.
+      · KOTASYON — endeks yoksa gecelik faiz TAKVİM GÜNÜ üzerinden
+        bileşiklenir: her kotasyon bir sonraki gözleme kadarki gün sayısını
+        taşır. Endeksin ölçtüğü şeyin yaklaşığıdır, aynısı değildir.
+    """
+    if endeks is not None:
+        e = endeks[endeks.index.year == yil].dropna()
+        if len(e) >= 2:
+            return float(e.iloc[-1] / e.iloc[0]), "endeks"
+    r = gecelik[gecelik.index.year == yil].dropna()
+    if len(r) < 2:
+        return None
+    # Her kotasyonun taşıdığı gün sayısı: bir SONRAKİ gözleme kadar. Son
+    # kotasyon dönemi kapattığı için bir gün taşır.
+    gun = np.diff(r.index.to_numpy()).astype("timedelta64[D]").astype(float)
+    gun = np.append(gun, 1.0)
+    return float(np.prod(1 + r.to_numpy() / 100 * gun / 365)), "kotasyon"
+
+
+def carry_gerceklesen(kur: pd.Series, gecelik: pd.Series, yil: int,
+                      endeks: pd.Series | None = None) -> dict | None:
+    """Liranın biriktirdiği getiri eksi kurun hareketi — dolar bazında taşıma.
+
+    Lira bacağı `tl_getiri_faktoru` ile ölçülür; gün sayımı konvansiyonunun
+    neden ölçünün kendisi olduğu orada yazılı.
     """
     k = kur[kur.index.year == yil]
     r = gecelik[gecelik.index.year == yil].dropna()
     if len(k) < 2 or len(r) < 2:
         return None
-    tl_faktor = float(np.prod(1 + r.to_numpy() / 100 / 365))
+    _tl = tl_getiri_faktoru(gecelik, endeks, yil)
+    if _tl is None:
+        return None
+    tl_faktor, tl_yol = _tl
     kur_faktor = float(k.iloc[-1] / k.iloc[0])
     net = tl_faktor / kur_faktor - 1
     takvim = int((k.index[-1] - k.index[0]).days)
-    d = {"yil": yil, "tl_yuzde": (tl_faktor - 1) * 100,
+    d = {"yil": yil, "tl_yuzde": (tl_faktor - 1) * 100, "tl_yol": tl_yol,
          "ortalama_gecelik": float(r.mean()),
          "kur_yuzde": (kur_faktor - 1) * 100, "net_yuzde": net * 100,
          "gun": takvim, "n_faiz": int(len(r)),
@@ -394,8 +430,13 @@ def carry_gerceklesen(kur: pd.Series, gecelik: pd.Series, yil: int) -> dict | No
     return d
 
 
-def carry_gunluk(kur: pd.Series, gecelik: pd.Series, yil: int) -> pd.DataFrame:
-    """Gerçekleşen taşımanın GÜNLÜK kümülatif izi — figürün çizdiği seri."""
+def carry_gunluk(kur: pd.Series, gecelik: pd.Series, yil: int,
+                 endeks: pd.Series | None = None) -> pd.DataFrame:
+    """Gerçekleşen taşımanın GÜNLÜK kümülatif izi — figürün çizdiği seri.
+
+    Lira bacağı, ÖZETTEKİ sayıyla AYNI konvansiyondan gelir: figür ile sayfada
+    yazan sayı ayrışırsa okur hangisinin doğru olduğunu bilemez.
+    """
     k = kur[kur.index.year == yil]
     r = gecelik[gecelik.index.year == yil].dropna()
     if len(k) < 2 or len(r) < 2:
@@ -404,7 +445,17 @@ def carry_gunluk(kur: pd.Series, gecelik: pd.Series, yil: int) -> pd.DataFrame:
     if len(ortak) < 2:
         return pd.DataFrame()
     k, r = k.reindex(ortak), r.reindex(ortak)
-    tl = np.cumprod(1 + r.to_numpy() / 100 / 365)
+    e = None
+    if endeks is not None:
+        e = endeks.reindex(ortak).ffill()
+        if e.isna().any():
+            e = None
+    if e is not None:
+        tl = (e / e.iloc[0]).to_numpy()
+    else:
+        gun = np.diff(ortak.to_numpy()).astype("timedelta64[D]").astype(float)
+        gun = np.append(gun, 1.0)
+        tl = np.cumprod(1 + r.to_numpy() / 100 * gun / 365)
     kf = (k / k.iloc[0]).to_numpy()
     return pd.DataFrame({"tl_yuzde": (tl - 1) * 100,
                          "kur_yuzde": (kf - 1) * 100,
@@ -564,6 +615,11 @@ def kos() -> int:
 
     kur = K["usdtry"].dropna()
     gecelik = F["tlref"].dropna() if "tlref" in F.columns else pd.Series(dtype=float)
+    # Endeks İSTEĞE BAĞLI: yoksa taşıma kotasyondan takvim günüyle kurulur ve
+    # hangi yolun kullanıldığı özete yazılır. Hattın durması gerekmez —
+    # kardeş bir hattın eksik sütunu bu hattın manşetini götürmemeli.
+    endeks = (F["tlref_endeks"].dropna()
+              if "tlref_endeks" in F.columns else None)
     bu_yil = int(pd.Timestamp(kur.index[-1]).year)
     kodlar = veri.program_kodlari(kayit)
     yeni = veri.program(kayit, kodlar[0])
@@ -623,7 +679,7 @@ def kos() -> int:
     # ---------------------------------------------------------------- taşıma
     o["carry"] = {}
     if not gecelik.empty:
-        cg = carry_gerceklesen(kur, gecelik, bu_yil)
+        cg = carry_gerceklesen(kur, gecelik, bu_yil, endeks)
         if cg:
             o["carry"]["gerceklesen"] = cg
         pol = F["politika"].dropna() if "politika" in F.columns else pd.Series(dtype=float)
@@ -672,7 +728,7 @@ def kos() -> int:
     pd.DataFrame([r for z in o["zincir"].values() for r in z]
                  ).to_csv(VERI / "metrik_zincir.csv", index=False)
     pd.DataFrame(o["revizyon"]).to_csv(VERI / "metrik_revizyon.csv", index=False)
-    cg = carry_gunluk(kur, gecelik, bu_yil) if not gecelik.empty else pd.DataFrame()
+    cg = carry_gunluk(kur, gecelik, bu_yil, endeks) if not gecelik.empty else pd.DataFrame()
     if not cg.empty:
         cg.to_csv(VERI / "metrik_carry.csv")
     (VERI / "metrik_ozet.json").write_text(

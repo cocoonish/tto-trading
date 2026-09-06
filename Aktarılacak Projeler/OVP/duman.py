@@ -115,6 +115,20 @@ def _faiz_serisi(kur: pd.Series, oran: float = 36.5) -> pd.DataFrame:
     return pd.DataFrame({"tlref": oran, "politika": 37.0}, index=kur.index)
 
 
+def _endeks_serisi(gecelik: pd.Series, yil: int) -> pd.Series:
+    """Sentetik TLREF endeksi — gecelik faizden TAKVİM GÜNÜYLE kurulur.
+
+    Kaynağın endeksi tam olarak bunu yapar: her kotasyon bir sonraki gözleme
+    kadarki günleri taşır. Sentetik hâlini burada kurmak, hattın endeks yolunu
+    ağa çıkmadan sınamayı ve iki yolun yakınlığını ÖLÇMEYİ mümkün kılıyor.
+    """
+    r = gecelik[gecelik.index.year == yil].dropna()
+    gun = np.diff(r.index.to_numpy()).astype("timedelta64[D]").astype(float)
+    gun = np.append(gun, 1.0)
+    return pd.Series(100.0 * np.cumprod(1 + r.to_numpy() / 100 * gun / 365),
+                     index=r.index)
+
+
 def _tufe_serisi() -> pd.DataFrame:
     idx = pd.date_range("2023-01-01", "2026-08-01", freq="MS")
     return pd.DataFrame({"tufe_12a": np.linspace(60.0, 31.5, len(idx))}, index=idx)
@@ -505,19 +519,42 @@ def bolum_carry() -> None:
     print("\n▶ Taşımanın gün sayımı")
     kur = _kur_serisi()
     faiz = _faiz_serisi(kur, 36.5)
+    # GECELİK BİR FAİZ TAKVİM GÜNÜ TAŞIR. Kotasyonları teker teker 1/365 ile
+    # bileşiklemek hafta sonlarının faizini tamamen düşürür; gerçek seride
+    # ölçülen fark 10,03 puan (resmî endeks +%29,61, gözlem günüyle +%19,58),
+    # yani taşımanın kendisiyle aynı büyüklükte. Sınama bir zamanlar YANLIŞ
+    # konvansiyonu kilitliyordu — bir kusuru sınamaya yazmak onu kalıcı yapar.
     c = metrik.carry_gerceklesen(kur, faiz["tlref"], BU_YIL)
-    n = int((kur.index.year == BU_YIL).sum())
-    beklenen = ((1 + 36.5 / 100 / 365) ** n - 1) * 100
-    sina("lira bacağı GÖZLEM GÜNLERİ üzerinden bileşikleniyor",
-         _yakin(c["tl_yuzde"], beklenen, 1e-9),
-         f"ölçülen {c['tl_yuzde']:.6f} ≠ {beklenen:.6f}")
-    takvim = (kur[kur.index.year == BU_YIL].index[-1]
-              - kur[kur.index.year == BU_YIL].index[0]).days
-    takvimle = ((1 + 36.5 / 100 / 365) ** takvim - 1) * 100
-    sina("takvim günüyle hesaplansaydı belirgin biçimde başka çıkardı",
-         abs(takvimle - c["tl_yuzde"]) > 5,
-         f"gözlem {c['tl_yuzde']:.2f} ↔ takvim {takvimle:.2f}")
     k = kur[kur.index.year == BU_YIL]
+    takvim = (k.index[-1] - k.index[0]).days
+    n = int((kur.index.year == BU_YIL).sum())
+    gozlemle = ((1 + 36.5 / 100 / 365) ** n - 1) * 100
+    takvimle = ((1 + 36.5 / 100 / 365) ** takvim - 1) * 100
+    sina("endeks YOKKEN lira bacağı KOTASYONDAN, takvim günüyle kuruluyor",
+         c["tl_yol"] == "kotasyon" and _yakin(c["tl_yuzde"], takvimle, 0.5),
+         f"yol={c['tl_yol']} ölçülen {c['tl_yuzde']:.4f} ↔ takvim {takvimle:.4f}")
+    sina("GÖZLEM günü konvansiyonu artık KULLANILMIYOR (eski kusur)",
+         abs(c["tl_yuzde"] - gozlemle) > 5,
+         f"ölçülen {c['tl_yuzde']:.2f} ↔ gözlemle {gozlemle:.2f}")
+    # ENDEKS VARSA O KAZANIR: kaynağın kendi bileşik getirisi, bizim
+    # türetmemizden önce gelir.
+    _e = _endeks_serisi(faiz["tlref"], BU_YIL)
+    ce = metrik.carry_gerceklesen(kur, faiz["tlref"], BU_YIL, _e)
+    sina("endeks varsa lira bacağı ENDEKSTEN geliyor",
+         ce["tl_yol"] == "endeks" and
+         _yakin(ce["tl_yuzde"], (_e[_e.index.year == BU_YIL].iloc[-1]
+                                 / _e[_e.index.year == BU_YIL].iloc[0] - 1) * 100,
+                1e-9))
+    sina("iki yol birbirine YAKIN (yedek yol endeksi yaklaşıyor)",
+         abs(ce["tl_yuzde"] - c["tl_yuzde"]) < 2.0,
+         f"endeks {ce['tl_yuzde']:.2f} ↔ kotasyon {c['tl_yuzde']:.2f}")
+    # FİGÜR İLE ÖZET AYNI KONVANSİYONDAN. Ayrışırlarsa okur sayfadaki sayı ile
+    # figürün son noktasını karşılaştırıp hangisinin doğru olduğunu bilemez.
+    g = metrik.carry_gunluk(kur, faiz["tlref"], BU_YIL, _e)
+    sina("günlük izin son noktası özetteki sayıyla AYNI",
+         not g.empty and _yakin(float(g["net_yuzde"].iloc[-1]),
+                                ce["net_yuzde"], 0.01),
+         f"figür {float(g['net_yuzde'].iloc[-1]):.4f} ↔ özet {ce['net_yuzde']:.4f}")
     sina("kur bacağı yıl içi İLK gözleme göre",
          _yakin(c["kur_yuzde"], (k.iloc[-1] / k.iloc[0] - 1) * 100))
     sina("net getiri lira faktörü ÷ kur faktörü − 1",

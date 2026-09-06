@@ -638,8 +638,15 @@ def sekil_06(o: dict, C: pd.DataFrame, damga: str | None):
 # Liste İKİYE bölünür ve bölünme zorunludur: seviye satırları YÜZDE, oran
 # satırları PUAN revize olur; ikisini aynı eksende çizmek birini görünmez,
 # ötekini devasa gösterirdi.
+# İŞARETLİ SATIR YÜZDE PANELİNE GİRMEZ. Eksi bir büyüklüğün yüzde revizyonu
+# okura TERSİNİ söyler: cari açık −22,3'ten −47,5'e giderken oran +%113 çıkar
+# ve alt yazı onu "yukarı revizyon" diye adlandırır — oysa açık ikiye
+# katlanmıştır. Cari dengenin anlamlı revizyonu zaten alt panelde, PUAN olarak
+# duruyor (`cari_gsyh`: −1,3 → −2,6, yani −1,3 puan; eksi burada kötüleşmedir
+# ve öyle okunur). Kapsam elle değil künyeden geliyor: satırın `isaretli`
+# bayrağı programlar.json'da duruyor ve ölçüm katmanı da aynı yerden okuyor.
 REV_YUZDE = ("ima_kur", "gsyh_tl", "gsyh_usd", "ihracat", "ithalat",
-             "faiz_gideri", "cari")
+             "faiz_gideri")
 REV_PUAN = ("tufe", "deflator", "buyume", "cari_gsyh", "faiz_gideri_gsyh",
             "issizlik")
 # Kalem renkleri AÇIKÇA verilir. Plotly'nin kendi döngüsüne bırakılsaydı aynı
@@ -678,7 +685,9 @@ def sekil_07(o: dict, damga: str | None):
     en = max(ima, key=lambda r: abs(r["fark"])) if ima else None
     alt = [
         f"İki programın ORTAK yıllarında satır satır fark: {yeni['kisa']} eksi "
-        f"{eski['kisa']}. Artı değer yukarı revizyondur.",
+        f"{eski['kisa']}. Artı değer yukarı revizyondur. Üst panelde yalnız "
+        f"işareti sabit kalemler var; bir dengenin yüzde revizyonu, açık "
+        f"büyürken bile artı çıkacağı için yanıltır.",
         (f"En büyük kur revizyonu {en['yil']} yılında: ima edilen ortalama kur "
          f"{_sy(en['eski'], 3)} liradan {_sy(en['yeni'], 3)} liraya, "
          f"{_yz(en['fark'], 1, True)}."

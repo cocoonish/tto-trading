@@ -801,11 +801,25 @@ hedef ortalamayı tutturduğu ayrı ayrı sınanıyor. Kusur ancak o ölçüt ya
 sonra görüldü — yakınlığı sınayan bir ölçüt (fark < %1) her iki hâlde de yeşil
 geçerdi.
 
-**Kurucu ilke — bir KONVANSİYON ölçünün parçasıdır ve iki farklı konvansiyon
-aynı sayfada yan yana durabilir, yeter ki adında dursun.** Gerçekleşen taşımada
-lira bacağı GÖZLEM GÜNLERİ üzerinden bileşikleniyor (her kotasyon bir günlük
-faiz taşır, hafta sonu ayrıca eklenmez); takvim günüyle hesaplamak aynı dönemde
-on puanı aşan bir fark üretiyor ve ölçüt bunu duman sınamasında kilitliyor.
+**Kurucu ilke — bir KONVANSİYON ölçünün parçasıdır; ve bir ölçünün RESMÎ
+karşılığı varken onu yeniden türetmek, türetmenin doğruluğunu da ölçmeyi
+gerektirir.** Gerçekleşen taşımada lira bacağı önce GÖZLEM GÜNLERİ üzerinden
+bileşiklendi — her kotasyon bir günlük faiz taşıyor sanıldı. Yanlıştı ve
+yanlışlığı ölçünün kendisi kadar büyüktü: gecelik bir faiz TAKVİM günü taşır,
+cuma kotasyonu pazartesiye kadar üç gün işler. 2026 yılı başı → 03.09 arasında
+resmî ölçü (BİST TLREF Endeksi) %+29,61, gözlem günüyle %+19,58 — 10,03 puan,
+yani taşımanın kendisiyle aynı mertebede. Kusuru pahalı yapan şey de buydu:
+sayfanın manşet sorularından biri "ne kadar taşıma getirisi verdi" ve cevap
+neredeyse yarı yarıya eksik çıkıyordu.
+İki ders birden çıktı. Birincisi: RESMÎ ÖLÇÜ VARSA O KULLANILIR. Endeks
+hattın zaten okuduğu dosyada, YAN SÜTUNDA duruyordu; gün sayımı, tatil ve
+yuvarlama onun sözleşmesinde çözülmüş. Kendi türetmemiz ancak endeks yokken
+devreye giriyor ve hangi yolun kullanıldığı kayda geçiyor (`tl_yol`).
+İkincisi ve daha sinsisi: DUMAN SINAMASI YANLIŞ KONVANSİYONU KİLİTLİYORDU —
+"lira bacağı gözlem günleri üzerinden bileşikleniyor" diye bir iddia yazılmıştı
+ve yeşil geçiyordu. Bir kusuru sınamaya yazmak onu kalıcı yapar; sınama artık
+gözlem günü konvansiyonunun KULLANILMADIĞINI, endeks varsa ondan gelindiğini
+ve figürle özetin aynı konvansiyondan beslendiğini sınıyor.
 İleriye dönük taşımada ise iki konvansiyon BİRDEN yayımlanıyor: basit olan
 yıllık faiz kotasyonunun yıllık devalüasyona bölünmesi (sayfadaki ex-ante reel
 faizle aynı konvansiyon, yani onunla kıyaslanabilir), bileşik olan gecelikte

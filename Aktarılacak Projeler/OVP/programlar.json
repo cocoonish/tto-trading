@@ -6,45 +6,264 @@
   "olculmeyen": "Ölçülemeyen hücre null bırakılır ve sebebi 'not' alanında yazılır. Sıfır yazılmaz: sıfır bir ölçüm sonucudur.",
   "capraz_dogrulama": "Sayılar PDF'te gliflerle kodluydu. Eşleme, kapanmış yılların yayımlanmış gerçekleşmeleriyle doğrulandı; ayrıca belgenin KENDİ içindeki üç özdeşlik sınandı ve tuttu: (1) nominal GSYH artışı = (1+büyüme)x(1+deflatör), (2) cari denge / GSYH = cari denge ÷ dolar GSYH, (3) faiz gideri / GSYH = faiz gideri ÷ TL GSYH. Dış ticaret dengesi de ihracat−ithalat ile birebir tutuyor. Bu sınamalar kayıt okunurken metrik katmanında HER KOŞUDA yeniden yapılır."
  },
-
  "satir": {
-  "gsyh_tl":                     {"ad": "GSYH (cari fiyatlarla)", "birim": "milyar TL", "ondalik": 0, "tablo": "Tablo 1.1", "grup": "buyume"},
-  "gsyh_usd":                    {"ad": "GSYH (cari fiyatlarla)", "birim": "milyar dolar", "ondalik": 0, "tablo": "Tablo 1.1", "grup": "buyume"},
-  "kisi_basi_gelir":             {"ad": "Kişi başına gelir", "birim": "dolar", "ondalik": 0, "tablo": "Tablo 1.1", "grup": "buyume"},
-  "nufus":                       {"ad": "Nüfus (yıl ortası)", "birim": "bin kişi", "ondalik": 0, "tablo": "Tablo 1.1", "grup": "istihdam"},
-  "buyume":                      {"ad": "GSYH büyümesi", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "buyume"},
-  "toplam_tuketim":              {"ad": "Toplam tüketim artışı", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "buyume"},
-  "sabit_sermaye":               {"ad": "Toplam sabit sermaye yatırımı artışı", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "buyume"},
-  "nihai_yurtici_talep":         {"ad": "Toplam nihai yurt içi talep artışı", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "buyume"},
-  "net_ihracat_katki":           {"ad": "Net ihracatın büyümeye katkısı", "birim": "puan", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "buyume"},
-  "yurtici_tasarruf_gsyh":       {"ad": "Toplam yurt içi tasarruf / GSYH", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "buyume"},
-  "tasarruf_yatirim_farki_gsyh": {"ad": "Tasarruf−yatırım farkı / GSYH", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "dis"},
-  "deflator":                    {"ad": "GSYH deflatörü artışı", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "enflasyon"},
-  "tufe":                        {"ad": "TÜFE, yıl sonu", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "enflasyon"},
-  "cari":                        {"ad": "Cari işlemler dengesi", "birim": "milyar dolar", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "dis"},
-  "cari_gsyh":                   {"ad": "Cari işlemler dengesi / GSYH", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "dis"},
-  "altin_haric_cari":            {"ad": "Altın hariç cari işlemler dengesi", "birim": "milyar dolar", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "dis"},
-  "altin_haric_cari_gsyh":       {"ad": "Altın hariç cari işlemler dengesi / GSYH", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "dis"},
-  "ihracat":                     {"ad": "İhracat (genel ticaret sistemi, fob)", "birim": "milyar dolar", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "dis"},
-  "ithalat":                     {"ad": "İthalat (genel ticaret sistemi, cif)", "birim": "milyar dolar", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "dis"},
-  "dis_ticaret_dengesi":         {"ad": "Dış ticaret dengesi", "birim": "milyar dolar", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "dis"},
-  "dis_ticaret_hacmi_gsyh":      {"ad": "Dış ticaret hacmi / GSYH", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "dis"},
-  "brent":                       {"ad": "Ham petrol fiyatı (Brent)", "birim": "dolar/varil", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "dis"},
-  "enerji_ithalati":             {"ad": "Enerji ithalatı", "birim": "milyar dolar", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "dis"},
-  "turizm_geliri":               {"ad": "Turizm gelirleri", "birim": "milyar dolar", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "dis"},
-  "seyahat_geliri":              {"ad": "Seyahat gelirleri", "birim": "milyar dolar", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "dis"},
-  "issizlik":                    {"ad": "İşsizlik oranı", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "istihdam"},
-  "isgucu_katilim":              {"ad": "İşgücüne katılma oranı", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "istihdam"},
-  "istihdam":                    {"ad": "İstihdam düzeyi", "birim": "bin kişi", "ondalik": 0, "tablo": "Tablo 1.1", "grup": "istihdam"},
-  "istihdam_orani":              {"ad": "İstihdam oranı", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.1", "grup": "istihdam"},
-  "faiz_gideri":                 {"ad": "Genel devlet faiz gideri", "birim": "milyar TL", "ondalik": 1, "tablo": "Tablo 1.5", "grup": "kamu"},
-  "faiz_gideri_gsyh":            {"ad": "Genel devlet faiz gideri / GSYH", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.5", "grup": "kamu"},
-  "genel_devlet_dengesi":        {"ad": "Genel devlet dengesi", "birim": "milyar TL", "ondalik": 1, "tablo": "Tablo 1.5", "grup": "kamu"},
-  "genel_devlet_dengesi_gsyh":   {"ad": "Genel devlet dengesi / GSYH", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.5", "grup": "kamu"},
-  "kkgd":                        {"ad": "Kamu kesimi genel dengesi", "birim": "milyar TL", "ondalik": 1, "tablo": "Tablo 1.2", "grup": "kamu"},
-  "kkgd_gsyh":                   {"ad": "Kamu kesimi genel dengesi / GSYH", "birim": "%", "ondalik": 1, "tablo": "Tablo 1.2", "grup": "kamu"}
+  "gsyh_tl": {
+   "ad": "GSYH, lira (cari fiyatlarla)",
+   "birim": "milyar TL",
+   "ondalik": 0,
+   "tablo": "Tablo 1.1",
+   "grup": "buyume"
+  },
+  "gsyh_usd": {
+   "ad": "GSYH, dolar (cari fiyatlarla)",
+   "birim": "milyar dolar",
+   "ondalik": 0,
+   "tablo": "Tablo 1.1",
+   "grup": "buyume"
+  },
+  "kisi_basi_gelir": {
+   "ad": "Kişi başına gelir",
+   "birim": "dolar",
+   "ondalik": 0,
+   "tablo": "Tablo 1.1",
+   "grup": "buyume"
+  },
+  "nufus": {
+   "ad": "Nüfus (yıl ortası)",
+   "birim": "bin kişi",
+   "ondalik": 0,
+   "tablo": "Tablo 1.1",
+   "grup": "istihdam"
+  },
+  "buyume": {
+   "ad": "GSYH büyümesi",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "buyume"
+  },
+  "toplam_tuketim": {
+   "ad": "Toplam tüketim artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "buyume"
+  },
+  "sabit_sermaye": {
+   "ad": "Toplam sabit sermaye yatırımı artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "buyume"
+  },
+  "nihai_yurtici_talep": {
+   "ad": "Toplam nihai yurt içi talep artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "buyume"
+  },
+  "net_ihracat_katki": {
+   "ad": "Net ihracatın büyümeye katkısı",
+   "birim": "puan",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "buyume",
+   "isaretli": true
+  },
+  "yurtici_tasarruf_gsyh": {
+   "ad": "Toplam yurt içi tasarruf / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "buyume"
+  },
+  "tasarruf_yatirim_farki_gsyh": {
+   "ad": "Tasarruf−yatırım farkı / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "dis",
+   "isaretli": true
+  },
+  "deflator": {
+   "ad": "GSYH deflatörü artışı",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "enflasyon"
+  },
+  "tufe": {
+   "ad": "TÜFE, yıl sonu",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "enflasyon"
+  },
+  "cari": {
+   "ad": "Cari işlemler dengesi",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "dis",
+   "isaretli": true
+  },
+  "cari_gsyh": {
+   "ad": "Cari işlemler dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "dis",
+   "isaretli": true
+  },
+  "altin_haric_cari": {
+   "ad": "Altın hariç cari işlemler dengesi",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "dis",
+   "isaretli": true
+  },
+  "altin_haric_cari_gsyh": {
+   "ad": "Altın hariç cari işlemler dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "dis",
+   "isaretli": true
+  },
+  "ihracat": {
+   "ad": "İhracat (genel ticaret sistemi, fob)",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "dis"
+  },
+  "ithalat": {
+   "ad": "İthalat (genel ticaret sistemi, cif)",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "dis"
+  },
+  "dis_ticaret_dengesi": {
+   "ad": "Dış ticaret dengesi",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "dis",
+   "isaretli": true
+  },
+  "dis_ticaret_hacmi_gsyh": {
+   "ad": "Dış ticaret hacmi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "dis"
+  },
+  "brent": {
+   "ad": "Ham petrol fiyatı (Brent)",
+   "birim": "dolar/varil",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "dis"
+  },
+  "enerji_ithalati": {
+   "ad": "Enerji ithalatı",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "dis"
+  },
+  "turizm_geliri": {
+   "ad": "Turizm gelirleri",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "dis"
+  },
+  "seyahat_geliri": {
+   "ad": "Seyahat gelirleri",
+   "birim": "milyar dolar",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "dis"
+  },
+  "issizlik": {
+   "ad": "İşsizlik oranı",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "istihdam"
+  },
+  "isgucu_katilim": {
+   "ad": "İşgücüne katılma oranı",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "istihdam"
+  },
+  "istihdam": {
+   "ad": "İstihdam düzeyi",
+   "birim": "bin kişi",
+   "ondalik": 0,
+   "tablo": "Tablo 1.1",
+   "grup": "istihdam"
+  },
+  "istihdam_orani": {
+   "ad": "İstihdam oranı",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.1",
+   "grup": "istihdam"
+  },
+  "faiz_gideri": {
+   "ad": "Genel devlet faiz gideri",
+   "birim": "milyar TL",
+   "ondalik": 1,
+   "tablo": "Tablo 1.5",
+   "grup": "kamu"
+  },
+  "faiz_gideri_gsyh": {
+   "ad": "Genel devlet faiz gideri / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.5",
+   "grup": "kamu"
+  },
+  "genel_devlet_dengesi": {
+   "ad": "Genel devlet dengesi",
+   "birim": "milyar TL",
+   "ondalik": 1,
+   "tablo": "Tablo 1.5",
+   "grup": "kamu",
+   "isaretli": true
+  },
+  "genel_devlet_dengesi_gsyh": {
+   "ad": "Genel devlet dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.5",
+   "grup": "kamu",
+   "isaretli": true
+  },
+  "kkgd": {
+   "ad": "Kamu kesimi genel dengesi",
+   "birim": "milyar TL",
+   "ondalik": 1,
+   "tablo": "Tablo 1.2",
+   "grup": "kamu",
+   "isaretli": true
+  },
+  "kkgd_gsyh": {
+   "ad": "Kamu kesimi genel dengesi / GSYH",
+   "birim": "%",
+   "ondalik": 1,
+   "tablo": "Tablo 1.2",
+   "grup": "kamu",
+   "isaretli": true
+  }
  },
-
  "programlar": [
   {
    "kod": "ovp2027",
@@ -54,47 +273,267 @@
    "yayin_gun_olculdu": false,
    "yayin_notu": "Belgenin kapağı yalnız ayı yazıyor (Eylül 2026); günü belgede geçmiyor, uydurulmadı.",
    "kaynak": "Strateji ve Bütçe Başkanlığı, Orta Vadeli Program (2027–2029), Eylül 2026",
-   "sayfa": {"Tablo 1.1": 61, "Tablo 1.2": 62, "Tablo 1.5": 65},
-   "sutun": {"2025": "gerceklesme", "2026": "tahmin", "2027": "program", "2028": "program", "2029": "program"},
+   "sayfa": {
+    "Tablo 1.1": 61,
+    "Tablo 1.2": 62,
+    "Tablo 1.5": 65
+   },
+   "sutun": {
+    "2025": "gerceklesme",
+    "2026": "tahmin",
+    "2027": "program",
+    "2028": "program",
+    "2029": "program"
+   },
    "not": {
     "nufus": "2025 sütunu ölçülemedi: belgenin metin katmanında nüfus satırı iki farklı okuma veriyor (85.518 ve 85.825) ve hangisinin basılı satır olduğu ayırt edilemiyor. Kalan dört yıl tek okuma veriyor. Bu satır hiçbir ölçüme girmiyor."
    },
    "deger": {
-    "gsyh_tl":                     {"2025": 63241,   "2026": 85346,   "2027": 111207,  "2028": 133184,  "2029": 153141},
-    "gsyh_usd":                    {"2025": 1602,    "2026": 1821,    "2027": 1984,    "2028": 2091,    "2029": 2225},
-    "kisi_basi_gelir":             {"2025": 18040,   "2026": 20523,   "2027": 22285,   "2028": 23419,   "2029": 24842},
-    "nufus":                       {"2025": null,    "2026": 86321,   "2027": 86856,   "2028": 87252,   "2029": 87636},
-    "buyume":                      {"2025": 3.7,     "2026": 3.3,     "2027": 4.2,     "2028": 4.6,     "2029": 5.0},
-    "toplam_tuketim":              {"2025": 3.6,     "2026": 3.5,     "2027": 4.0,     "2028": 4.1,     "2029": 4.4},
-    "sabit_sermaye":               {"2025": 7.3,     "2026": 3.1,     "2027": 4.0,     "2028": 4.7,     "2029": 5.1},
-    "nihai_yurtici_talep":         {"2025": 4.5,     "2026": 3.4,     "2027": 4.0,     "2028": 4.3,     "2029": 4.6},
-    "net_ihracat_katki":           {"2025": -1.1,    "2026": -0.5,    "2027": 0.0,     "2028": 0.1,     "2029": 0.2},
-    "yurtici_tasarruf_gsyh":       {"2025": 29.9,    "2026": 30.2,    "2027": 30.3,    "2028": 30.5,    "2029": 30.7},
-    "tasarruf_yatirim_farki_gsyh": {"2025": -1.8,    "2026": -2.5,    "2027": -1.9,    "2028": -1.8,    "2029": -1.6},
-    "deflator":                    {"2025": 36.5,    "2026": 30.6,    "2027": 25.0,    "2028": 14.5,    "2029": 9.5},
-    "tufe":                        {"2025": 30.9,    "2026": 28.4,    "2027": 21.0,    "2028": 13.5,    "2029": 9.0},
-    "cari":                        {"2025": -30.3,   "2026": -47.5,   "2027": -38.5,   "2028": -37.0,   "2029": -35.5},
-    "cari_gsyh":                   {"2025": -1.9,    "2026": -2.6,    "2027": -1.9,    "2028": -1.8,    "2029": -1.6},
-    "altin_haric_cari":            {"2025": -10.3,   "2026": -34.0,   "2027": -23.5,   "2028": -20.5,   "2029": -18.0},
-    "altin_haric_cari_gsyh":       {"2025": -0.6,    "2026": -1.9,    "2027": -1.2,    "2028": -1.0,    "2029": -0.8},
-    "ihracat":                     {"2025": 273.2,   "2026": 282.0,   "2027": 292.0,   "2028": 302.5,   "2029": 316.0},
-    "ithalat":                     {"2025": 365.4,   "2026": 387.0,   "2027": 397.0,   "2028": 411.0,   "2029": 426.0},
-    "dis_ticaret_dengesi":         {"2025": -92.2,   "2026": -105.0,  "2027": -105.0,  "2028": -108.5,  "2029": -110.0},
-    "dis_ticaret_hacmi_gsyh":      {"2025": 39.9,    "2026": 36.7,    "2027": 34.7,    "2028": 34.1,    "2029": 33.3},
-    "brent":                       {"2025": 69.1,    "2026": 88.0,    "2027": 76.0,    "2028": 72.0,    "2029": 67.0},
-    "enerji_ithalati":             {"2025": 62.5,    "2026": 71.0,    "2027": 66.0,    "2028": 63.5,    "2029": 61.0},
-    "turizm_geliri":               {"2025": 65.2,    "2026": 65.0,    "2027": 70.0,    "2028": 73.5,    "2029": 78.5},
-    "seyahat_geliri":              {"2025": 60.0,    "2026": 60.0,    "2027": 64.5,    "2028": 67.5,    "2029": 72.0},
-    "issizlik":                    {"2025": 8.3,     "2026": 8.1,     "2027": 8.0,     "2028": 7.8,     "2029": 7.6},
-    "isgucu_katilim":              {"2025": 53.5,    "2026": 52.9,    "2027": 53.4,    "2028": 54.0,    "2029": 54.7},
-    "istihdam":                    {"2025": 32566,   "2026": 32579,   "2027": 33236,   "2028": 33925,   "2029": 34711},
-    "istihdam_orani":              {"2025": 49.0,    "2026": 48.6,    "2027": 49.2,    "2028": 49.8,    "2029": 50.6},
-    "faiz_gideri":                 {"2025": 2054.4,  "2026": 2824.9,  "2027": 3975.0,  "2028": 4693.9,  "2029": 5244.8},
-    "faiz_gideri_gsyh":            {"2025": 3.2,     "2026": 3.3,     "2027": 3.6,     "2028": 3.5,     "2029": 3.4},
-    "genel_devlet_dengesi":        {"2025": -1339.0, "2026": -2277.9, "2027": -3676.7, "2028": -4140.7, "2029": -4105.5},
-    "genel_devlet_dengesi_gsyh":   {"2025": -2.1,    "2026": -2.7,    "2027": -3.3,    "2028": -3.1,    "2029": -2.7},
-    "kkgd":                        {"2025": -1592.0, "2026": -2655.8, "2027": -3539.7, "2028": -3790.9, "2029": -3651.9},
-    "kkgd_gsyh":                   {"2025": -2.5,    "2026": -3.1,    "2027": -3.2,    "2028": -2.8,    "2029": -2.4}
+    "gsyh_tl": {
+     "2025": 63241,
+     "2026": 85346,
+     "2027": 111207,
+     "2028": 133184,
+     "2029": 153141
+    },
+    "gsyh_usd": {
+     "2025": 1602,
+     "2026": 1821,
+     "2027": 1984,
+     "2028": 2091,
+     "2029": 2225
+    },
+    "kisi_basi_gelir": {
+     "2025": 18040,
+     "2026": 20523,
+     "2027": 22285,
+     "2028": 23419,
+     "2029": 24842
+    },
+    "nufus": {
+     "2025": null,
+     "2026": 86321,
+     "2027": 86856,
+     "2028": 87252,
+     "2029": 87636
+    },
+    "buyume": {
+     "2025": 3.7,
+     "2026": 3.3,
+     "2027": 4.2,
+     "2028": 4.6,
+     "2029": 5.0
+    },
+    "toplam_tuketim": {
+     "2025": 3.6,
+     "2026": 3.5,
+     "2027": 4.0,
+     "2028": 4.1,
+     "2029": 4.4
+    },
+    "sabit_sermaye": {
+     "2025": 7.3,
+     "2026": 3.1,
+     "2027": 4.0,
+     "2028": 4.7,
+     "2029": 5.1
+    },
+    "nihai_yurtici_talep": {
+     "2025": 4.5,
+     "2026": 3.4,
+     "2027": 4.0,
+     "2028": 4.3,
+     "2029": 4.6
+    },
+    "net_ihracat_katki": {
+     "2025": -1.1,
+     "2026": -0.5,
+     "2027": 0.0,
+     "2028": 0.1,
+     "2029": 0.2
+    },
+    "yurtici_tasarruf_gsyh": {
+     "2025": 29.9,
+     "2026": 30.2,
+     "2027": 30.3,
+     "2028": 30.5,
+     "2029": 30.7
+    },
+    "tasarruf_yatirim_farki_gsyh": {
+     "2025": -1.8,
+     "2026": -2.5,
+     "2027": -1.9,
+     "2028": -1.8,
+     "2029": -1.6
+    },
+    "deflator": {
+     "2025": 36.5,
+     "2026": 30.6,
+     "2027": 25.0,
+     "2028": 14.5,
+     "2029": 9.5
+    },
+    "tufe": {
+     "2025": 30.9,
+     "2026": 28.4,
+     "2027": 21.0,
+     "2028": 13.5,
+     "2029": 9.0
+    },
+    "cari": {
+     "2025": -30.3,
+     "2026": -47.5,
+     "2027": -38.5,
+     "2028": -37.0,
+     "2029": -35.5
+    },
+    "cari_gsyh": {
+     "2025": -1.9,
+     "2026": -2.6,
+     "2027": -1.9,
+     "2028": -1.8,
+     "2029": -1.6
+    },
+    "altin_haric_cari": {
+     "2025": -10.3,
+     "2026": -34.0,
+     "2027": -23.5,
+     "2028": -20.5,
+     "2029": -18.0
+    },
+    "altin_haric_cari_gsyh": {
+     "2025": -0.6,
+     "2026": -1.9,
+     "2027": -1.2,
+     "2028": -1.0,
+     "2029": -0.8
+    },
+    "ihracat": {
+     "2025": 273.2,
+     "2026": 282.0,
+     "2027": 292.0,
+     "2028": 302.5,
+     "2029": 316.0
+    },
+    "ithalat": {
+     "2025": 365.4,
+     "2026": 387.0,
+     "2027": 397.0,
+     "2028": 411.0,
+     "2029": 426.0
+    },
+    "dis_ticaret_dengesi": {
+     "2025": -92.2,
+     "2026": -105.0,
+     "2027": -105.0,
+     "2028": -108.5,
+     "2029": -110.0
+    },
+    "dis_ticaret_hacmi_gsyh": {
+     "2025": 39.9,
+     "2026": 36.7,
+     "2027": 34.7,
+     "2028": 34.1,
+     "2029": 33.3
+    },
+    "brent": {
+     "2025": 69.1,
+     "2026": 88.0,
+     "2027": 76.0,
+     "2028": 72.0,
+     "2029": 67.0
+    },
+    "enerji_ithalati": {
+     "2025": 62.5,
+     "2026": 71.0,
+     "2027": 66.0,
+     "2028": 63.5,
+     "2029": 61.0
+    },
+    "turizm_geliri": {
+     "2025": 65.2,
+     "2026": 65.0,
+     "2027": 70.0,
+     "2028": 73.5,
+     "2029": 78.5
+    },
+    "seyahat_geliri": {
+     "2025": 60.0,
+     "2026": 60.0,
+     "2027": 64.5,
+     "2028": 67.5,
+     "2029": 72.0
+    },
+    "issizlik": {
+     "2025": 8.3,
+     "2026": 8.1,
+     "2027": 8.0,
+     "2028": 7.8,
+     "2029": 7.6
+    },
+    "isgucu_katilim": {
+     "2025": 53.5,
+     "2026": 52.9,
+     "2027": 53.4,
+     "2028": 54.0,
+     "2029": 54.7
+    },
+    "istihdam": {
+     "2025": 32566,
+     "2026": 32579,
+     "2027": 33236,
+     "2028": 33925,
+     "2029": 34711
+    },
+    "istihdam_orani": {
+     "2025": 49.0,
+     "2026": 48.6,
+     "2027": 49.2,
+     "2028": 49.8,
+     "2029": 50.6
+    },
+    "faiz_gideri": {
+     "2025": 2054.4,
+     "2026": 2824.9,
+     "2027": 3975.0,
+     "2028": 4693.9,
+     "2029": 5244.8
+    },
+    "faiz_gideri_gsyh": {
+     "2025": 3.2,
+     "2026": 3.3,
+     "2027": 3.6,
+     "2028": 3.5,
+     "2029": 3.4
+    },
+    "genel_devlet_dengesi": {
+     "2025": -1339.0,
+     "2026": -2277.9,
+     "2027": -3676.7,
+     "2028": -4140.7,
+     "2029": -4105.5
+    },
+    "genel_devlet_dengesi_gsyh": {
+     "2025": -2.1,
+     "2026": -2.7,
+     "2027": -3.3,
+     "2028": -3.1,
+     "2029": -2.7
+    },
+    "kkgd": {
+     "2025": -1592.0,
+     "2026": -2655.8,
+     "2027": -3539.7,
+     "2028": -3790.9,
+     "2029": -3651.9
+    },
+    "kkgd_gsyh": {
+     "2025": -2.5,
+     "2026": -3.1,
+     "2027": -3.2,
+     "2028": -2.8,
+     "2029": -2.4
+    }
    }
   },
   {
@@ -105,45 +544,265 @@
    "yayin_gun_olculdu": false,
    "yayin_notu": "Belgenin kapağı yalnız ayı yazıyor (Eylül 2025); günü belgede geçmiyor, uydurulmadı.",
    "kaynak": "Strateji ve Bütçe Başkanlığı, Orta Vadeli Program (2026–2028), Eylül 2025",
-   "sayfa": {"Tablo 1.1": 54, "Tablo 1.2": 55, "Tablo 1.5": 58},
-   "sutun": {"2024": "gerceklesme", "2025": "tahmin", "2026": "program", "2027": "program", "2028": "program"},
+   "sayfa": {
+    "Tablo 1.1": 54,
+    "Tablo 1.2": 55,
+    "Tablo 1.5": 58
+   },
+   "sutun": {
+    "2024": "gerceklesme",
+    "2025": "tahmin",
+    "2026": "program",
+    "2027": "program",
+    "2028": "program"
+   },
    "not": {},
    "deger": {
-    "gsyh_tl":                     {"2024": 44587,   "2025": 62179,   "2026": 77257,   "2027": 89406,   "2028": 101397},
-    "gsyh_usd":                    {"2024": 1358,    "2025": 1569,    "2026": 1658,    "2027": 1763,    "2028": 1886},
-    "kisi_basi_gelir":             {"2024": 15325,   "2025": 17748,   "2026": 18621,   "2027": 19710,   "2028": 20987},
-    "nufus":                       {"2024": 85518,   "2025": 85825,   "2026": 86447,   "2027": 86856,   "2028": 87252},
-    "buyume":                      {"2024": 3.3,     "2025": 3.3,     "2026": 3.8,     "2027": 4.3,     "2028": 5.0},
-    "toplam_tuketim":              {"2024": 3.5,     "2025": 2.5,     "2026": 3.3,     "2027": 3.8,     "2028": 4.4},
-    "sabit_sermaye":               {"2024": 2.7,     "2025": 4.6,     "2026": 4.0,     "2027": 4.2,     "2028": 4.9},
-    "nihai_yurtici_talep":         {"2024": 3.3,     "2025": 3.0,     "2026": 3.5,     "2027": 3.9,     "2028": 4.5},
-    "net_ihracat_katki":           {"2024": 1.0,     "2025": -0.3,    "2026": 0.0,     "2027": 0.1,     "2028": 0.2},
-    "yurtici_tasarruf_gsyh":       {"2024": 30.1,    "2025": 30.6,    "2026": 30.8,    "2027": 31.1,    "2028": 31.2},
-    "tasarruf_yatirim_farki_gsyh": {"2024": -0.6,    "2025": -1.4,    "2026": -1.3,    "2027": -1.1,    "2028": -0.9},
-    "deflator":                    {"2024": 59.3,    "2025": 35.0,    "2026": 19.7,    "2027": 10.9,    "2028": 8.0},
-    "tufe":                        {"2024": 44.4,    "2025": 28.5,    "2026": 16.0,    "2027": 9.0,     "2028": 8.0},
-    "cari":                        {"2024": -10.2,   "2025": -22.6,   "2026": -22.3,   "2027": -20.5,   "2028": -18.5},
-    "cari_gsyh":                   {"2024": -0.8,    "2025": -1.4,    "2026": -1.3,    "2027": -1.2,    "2028": -1.0},
-    "altin_haric_cari":            {"2024": 3.4,     "2025": -5.3,    "2026": -6.0,    "2027": -6.9,    "2028": -7.5},
-    "altin_haric_cari_gsyh":       {"2024": 0.3,     "2025": -0.3,    "2026": -0.4,    "2027": -0.4,    "2028": -0.4},
-    "ihracat":                     {"2024": 261.8,   "2025": 273.8,   "2026": 282.0,   "2027": 294.0,   "2028": 308.5},
-    "ithalat":                     {"2024": 344.0,   "2025": 367.0,   "2026": 378.0,   "2027": 393.0,   "2028": 410.5},
-    "dis_ticaret_dengesi":         {"2024": -82.2,   "2025": -93.2,   "2026": -96.0,   "2027": -99.0,   "2028": -102.0},
-    "dis_ticaret_hacmi_gsyh":      {"2024": 44.6,    "2025": 40.8,    "2026": 39.8,    "2027": 39.0,    "2028": 38.1},
-    "brent":                       {"2024": 80.5,    "2025": 70.0,    "2026": 65.0,    "2027": 65.1,    "2028": 65.6},
-    "enerji_ithalati":             {"2024": 65.6,    "2025": 64.0,    "2026": 63.0,    "2027": 62.5,    "2028": 62.0},
-    "turizm_geliri":               {"2024": 60.5,    "2025": 64.0,    "2026": 68.0,    "2027": 71.0,    "2028": 75.0},
-    "seyahat_geliri":              {"2024": 56.3,    "2025": 59.5,    "2026": 61.8,    "2027": 64.5,    "2028": 68.2},
-    "issizlik":                    {"2024": 8.7,     "2025": 8.5,     "2026": 8.4,     "2027": 8.2,     "2028": 7.8},
-    "isgucu_katilim":              {"2024": 54.2,    "2025": 53.7,    "2026": 54.4,    "2027": 55.1,    "2028": 56.0},
-    "istihdam":                    {"2024": 32620,   "2025": 32605,   "2026": 33336,   "2027": 34128,   "2028": 35130},
-    "istihdam_orani":              {"2024": 49.5,    "2025": 49.1,    "2026": 49.8,    "2027": 50.5,    "2028": 51.6},
-    "faiz_gideri":                 {"2024": 1270.5,  "2025": 2052.7,  "2026": 2741.7,  "2027": 3039.8,  "2028": 3346.1},
-    "faiz_gideri_gsyh":            {"2024": 2.8,     "2025": 3.3,     "2026": 3.5,     "2027": 3.4,     "2028": 3.3},
-    "genel_devlet_dengesi":        {"2024": -2066.4, "2025": -1939.3, "2026": -2412.5, "2027": -2379.7, "2028": -2603.5},
-    "genel_devlet_dengesi_gsyh":   {"2024": -4.6,    "2025": -3.1,    "2026": -3.1,    "2027": -2.7,    "2028": -2.6},
-    "kkgd":                        {"2024": -2578.8, "2025": -2183.8, "2026": -2594.0, "2027": -2586.4, "2028": -2587.4},
-    "kkgd_gsyh":                   {"2024": -5.8,    "2025": -3.5,    "2026": -3.4,    "2027": -2.9,    "2028": -2.6}
+    "gsyh_tl": {
+     "2024": 44587,
+     "2025": 62179,
+     "2026": 77257,
+     "2027": 89406,
+     "2028": 101397
+    },
+    "gsyh_usd": {
+     "2024": 1358,
+     "2025": 1569,
+     "2026": 1658,
+     "2027": 1763,
+     "2028": 1886
+    },
+    "kisi_basi_gelir": {
+     "2024": 15325,
+     "2025": 17748,
+     "2026": 18621,
+     "2027": 19710,
+     "2028": 20987
+    },
+    "nufus": {
+     "2024": 85518,
+     "2025": 85825,
+     "2026": 86447,
+     "2027": 86856,
+     "2028": 87252
+    },
+    "buyume": {
+     "2024": 3.3,
+     "2025": 3.3,
+     "2026": 3.8,
+     "2027": 4.3,
+     "2028": 5.0
+    },
+    "toplam_tuketim": {
+     "2024": 3.5,
+     "2025": 2.5,
+     "2026": 3.3,
+     "2027": 3.8,
+     "2028": 4.4
+    },
+    "sabit_sermaye": {
+     "2024": 2.7,
+     "2025": 4.6,
+     "2026": 4.0,
+     "2027": 4.2,
+     "2028": 4.9
+    },
+    "nihai_yurtici_talep": {
+     "2024": 3.3,
+     "2025": 3.0,
+     "2026": 3.5,
+     "2027": 3.9,
+     "2028": 4.5
+    },
+    "net_ihracat_katki": {
+     "2024": 1.0,
+     "2025": -0.3,
+     "2026": 0.0,
+     "2027": 0.1,
+     "2028": 0.2
+    },
+    "yurtici_tasarruf_gsyh": {
+     "2024": 30.1,
+     "2025": 30.6,
+     "2026": 30.8,
+     "2027": 31.1,
+     "2028": 31.2
+    },
+    "tasarruf_yatirim_farki_gsyh": {
+     "2024": -0.6,
+     "2025": -1.4,
+     "2026": -1.3,
+     "2027": -1.1,
+     "2028": -0.9
+    },
+    "deflator": {
+     "2024": 59.3,
+     "2025": 35.0,
+     "2026": 19.7,
+     "2027": 10.9,
+     "2028": 8.0
+    },
+    "tufe": {
+     "2024": 44.4,
+     "2025": 28.5,
+     "2026": 16.0,
+     "2027": 9.0,
+     "2028": 8.0
+    },
+    "cari": {
+     "2024": -10.2,
+     "2025": -22.6,
+     "2026": -22.3,
+     "2027": -20.5,
+     "2028": -18.5
+    },
+    "cari_gsyh": {
+     "2024": -0.8,
+     "2025": -1.4,
+     "2026": -1.3,
+     "2027": -1.2,
+     "2028": -1.0
+    },
+    "altin_haric_cari": {
+     "2024": 3.4,
+     "2025": -5.3,
+     "2026": -6.0,
+     "2027": -6.9,
+     "2028": -7.5
+    },
+    "altin_haric_cari_gsyh": {
+     "2024": 0.3,
+     "2025": -0.3,
+     "2026": -0.4,
+     "2027": -0.4,
+     "2028": -0.4
+    },
+    "ihracat": {
+     "2024": 261.8,
+     "2025": 273.8,
+     "2026": 282.0,
+     "2027": 294.0,
+     "2028": 308.5
+    },
+    "ithalat": {
+     "2024": 344.0,
+     "2025": 367.0,
+     "2026": 378.0,
+     "2027": 393.0,
+     "2028": 410.5
+    },
+    "dis_ticaret_dengesi": {
+     "2024": -82.2,
+     "2025": -93.2,
+     "2026": -96.0,
+     "2027": -99.0,
+     "2028": -102.0
+    },
+    "dis_ticaret_hacmi_gsyh": {
+     "2024": 44.6,
+     "2025": 40.8,
+     "2026": 39.8,
+     "2027": 39.0,
+     "2028": 38.1
+    },
+    "brent": {
+     "2024": 80.5,
+     "2025": 70.0,
+     "2026": 65.0,
+     "2027": 65.1,
+     "2028": 65.6
+    },
+    "enerji_ithalati": {
+     "2024": 65.6,
+     "2025": 64.0,
+     "2026": 63.0,
+     "2027": 62.5,
+     "2028": 62.0
+    },
+    "turizm_geliri": {
+     "2024": 60.5,
+     "2025": 64.0,
+     "2026": 68.0,
+     "2027": 71.0,
+     "2028": 75.0
+    },
+    "seyahat_geliri": {
+     "2024": 56.3,
+     "2025": 59.5,
+     "2026": 61.8,
+     "2027": 64.5,
+     "2028": 68.2
+    },
+    "issizlik": {
+     "2024": 8.7,
+     "2025": 8.5,
+     "2026": 8.4,
+     "2027": 8.2,
+     "2028": 7.8
+    },
+    "isgucu_katilim": {
+     "2024": 54.2,
+     "2025": 53.7,
+     "2026": 54.4,
+     "2027": 55.1,
+     "2028": 56.0
+    },
+    "istihdam": {
+     "2024": 32620,
+     "2025": 32605,
+     "2026": 33336,
+     "2027": 34128,
+     "2028": 35130
+    },
+    "istihdam_orani": {
+     "2024": 49.5,
+     "2025": 49.1,
+     "2026": 49.8,
+     "2027": 50.5,
+     "2028": 51.6
+    },
+    "faiz_gideri": {
+     "2024": 1270.5,
+     "2025": 2052.7,
+     "2026": 2741.7,
+     "2027": 3039.8,
+     "2028": 3346.1
+    },
+    "faiz_gideri_gsyh": {
+     "2024": 2.8,
+     "2025": 3.3,
+     "2026": 3.5,
+     "2027": 3.4,
+     "2028": 3.3
+    },
+    "genel_devlet_dengesi": {
+     "2024": -2066.4,
+     "2025": -1939.3,
+     "2026": -2412.5,
+     "2027": -2379.7,
+     "2028": -2603.5
+    },
+    "genel_devlet_dengesi_gsyh": {
+     "2024": -4.6,
+     "2025": -3.1,
+     "2026": -3.1,
+     "2027": -2.7,
+     "2028": -2.6
+    },
+    "kkgd": {
+     "2024": -2578.8,
+     "2025": -2183.8,
+     "2026": -2594.0,
+     "2027": -2586.4,
+     "2028": -2587.4
+    },
+    "kkgd_gsyh": {
+     "2024": -5.8,
+     "2025": -3.5,
+     "2026": -3.4,
+     "2027": -2.9,
+     "2028": -2.6
+    }
    }
   }
  ]

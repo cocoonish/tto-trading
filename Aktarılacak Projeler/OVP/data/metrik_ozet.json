@@ -338,16 +338,17 @@
  "carry": {
   "gerceklesen": {
    "yil": 2026,
-   "tl_yuzde": 19.582407384594735,
+   "tl_yuzde": 29.614134914688982,
+   "tl_yol": "endeks",
    "ortalama_gecelik": 39.10777185628743,
    "kur_yuzde": 12.514207960192048,
-   "net_yuzde": 6.2820505539206595,
+   "net_yuzde": 15.198015667982979,
    "gun": 244,
    "n_faiz": 167,
    "bas_gun": "2026-01-02",
    "son_gun": "2026-09-03",
    "faiz_son_gun": "2026-09-03",
-   "yillik_yuzde": 9.542196504454514
+   "yillik_yuzde": 23.570747447535044
   },
   "faiz_varsayimi": 37.0,
   "faiz_varsayimi_gun": "2026-09-03",
@@ -433,7 +434,7 @@
   },
   {
    "kalem": "gsyh_tl",
-   "ad": "GSYH (cari fiyatlarla)",
+   "ad": "GSYH, lira (cari fiyatlarla)",
    "birim": "milyar TL",
    "ondalik": 0,
    "yil": 2025,
@@ -444,7 +445,7 @@
   },
   {
    "kalem": "gsyh_tl",
-   "ad": "GSYH (cari fiyatlarla)",
+   "ad": "GSYH, lira (cari fiyatlarla)",
    "birim": "milyar TL",
    "ondalik": 0,
    "yil": 2026,
@@ -455,7 +456,7 @@
   },
   {
    "kalem": "gsyh_tl",
-   "ad": "GSYH (cari fiyatlarla)",
+   "ad": "GSYH, lira (cari fiyatlarla)",
    "birim": "milyar TL",
    "ondalik": 0,
    "yil": 2027,
@@ -466,7 +467,7 @@
   },
   {
    "kalem": "gsyh_tl",
-   "ad": "GSYH (cari fiyatlarla)",
+   "ad": "GSYH, lira (cari fiyatlarla)",
    "birim": "milyar TL",
    "ondalik": 0,
    "yil": 2028,
@@ -477,7 +478,7 @@
   },
   {
    "kalem": "gsyh_usd",
-   "ad": "GSYH (cari fiyatlarla)",
+   "ad": "GSYH, dolar (cari fiyatlarla)",
    "birim": "milyar dolar",
    "ondalik": 0,
    "yil": 2025,
@@ -488,7 +489,7 @@
   },
   {
    "kalem": "gsyh_usd",
-   "ad": "GSYH (cari fiyatlarla)",
+   "ad": "GSYH, dolar (cari fiyatlarla)",
    "birim": "milyar dolar",
    "ondalik": 0,
    "yil": 2026,
@@ -499,7 +500,7 @@
   },
   {
    "kalem": "gsyh_usd",
-   "ad": "GSYH (cari fiyatlarla)",
+   "ad": "GSYH, dolar (cari fiyatlarla)",
    "birim": "milyar dolar",
    "ondalik": 0,
    "yil": 2027,
@@ -510,7 +511,7 @@
   },
   {
    "kalem": "gsyh_usd",
-   "ad": "GSYH (cari fiyatlarla)",
+   "ad": "GSYH, dolar (cari fiyatlarla)",
    "birim": "milyar dolar",
    "ondalik": 0,
    "yil": 2028,

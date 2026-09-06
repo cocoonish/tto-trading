@@ -498,9 +498,8 @@ sonu hedefinin üstünde; bir önceki yıl
 %<Deger proje="ovp" anahtar="tufe_gecen_yil" ondalik={2}>30,89</Deger> ile
 kapanmıştı. Bağımsız bir kıyas noktası da var: Piyasa Katılımcıları Anketi'nin
 yıl sonu beklentisi %<Deger proje="enflasyon" anahtar="ys_anket" ondalik={2}>29,43</Deger>.
-Program ile anket arasındaki mesafe bir puanın altında; yani programın
-enflasyon hedefi bu yıl için piyasanın söylediğinden çok uzak değil. Ayrışma
-uzak yıllarda başlıyor.
+Program bu yıl için piyasanın söylediğinin bir puan kadar üstünde duruyor;
+yakınlık asıl uzak yıllarda bozuluyor ve ayrışma orada başlıyor.
 
 ### Faiz: program yayımlamıyor, iki iz bırakıyor
 
@@ -729,7 +728,7 @@ biçimde yukarı taşınması.
   src="/projeler/ovp/07_revizyon.html"
   baslik="İki program arasındaki revizyon: ortak yıllarda satır satır fark"
   no="07"
-  yukseklik={1135}
+  yukseklik={1161}
   kaynak="Strateji ve Bütçe Başkanlığı"
 />
 
@@ -764,12 +763,14 @@ birlikte yayımlanır, sessizce kullanılmaz.
 bir bantla sınanıyor. Bant, kaynağın bir ondalık basamağa yuvarlamasının
 bıraktığı paydır: büyüme ve deflatör bir ondalıkla yayımlandığı için bileşimleri
 de o kadar sapabilir. Ölçülen en büyük sapma
-<Deger proje="ovp" anahtar="tutarlilik_maks" ondalik={3}>0,057</Deger> puan,
-yani bandın yarısından az.
+<Deger proje="ovp" anahtar="tutarlilik_maks" ondalik={3}>0,057</Deger> puan —
+bandın içinde, yani tablo kendi aritmetiğiyle tutarlı.
 
-**Gözlem günü konvansiyonu.** Gerçekleşen taşımada lira bacağı gözlem günleri
-üzerinden bileşikleniyor; kalan gün sayımı ise hafta içi günleri sayıyor. İkisi
-farklı sorulara cevap verdiği için farklı: biri geçmişte gerçekten faiz taşıyan
+**Gün sayımı.** Gecelik bir faiz takvim günü taşır: cuma kotasyonu pazartesiye
+kadar üç gün işler. Lira bacağı bu yüzden kaynağın kendi bileşik endeksinden
+okunuyor; endeks yoksa kotasyonlar takvim günüyle bileşikleniyor. Kalan gün
+sayımı ise hafta içi günleri sayar. İkisi farklı sorulara cevap verdiği için
+farklı: biri geçmişte gerçekten faiz taşıyan
 günleri sayar, öteki gelecekte kotasyon beklenen günleri.
 
 ## Ne ölçmedik
@@ -813,7 +814,7 @@ günleri sayar, öteki gelecekte kotasyon beklenen günleri.
 | tarih | veri | neyi doğrular / çürütür |
 |---|---|---|
 | 03.10.2026 | TÜİK eylül tüketici fiyat endeksi | Programın %<Deger proje="ovp" anahtar="p_tufe_y1" ondalik={1}>28,4</Deger> yıl sonu hedefine giden patikanın tutup tutmadığı |
-| 22.10.2026 | Para Politikası Kurulu kararı (ilan edilen takvim) | Sabit faiz varsayımının geçerliliği; ileriye dönük taşıma ve reel faiz sütunlarının tabanı |
+| bir sonraki faiz kararı | Para Politikası Kurulu | Sabit faiz varsayımının geçerliliği; ileriye dönük taşıma ve reel faiz sütunlarının tabanı |
 | her iş günü | TCMB gösterge kuru | Kalan günlerin tutturması gereken ortalama; gerçekleşen ile programın arası |
 | 31.12.2026 | Yılın son kur gözlemi | Yıl sonu imasının (<Deger proje="ovp" anahtar="zincir_y0_cikis" ondalik={2}>51,80</Deger>) doğrudan sınanması ve zincirin 2027 girişinin sabitlenmesi |
 | Ocak 2027 | 2026 aralık tüketici fiyat endeksi | Programın 2026 enflasyon tahmininin karnesi; deflatör makasının ilk yıl sınaması |
