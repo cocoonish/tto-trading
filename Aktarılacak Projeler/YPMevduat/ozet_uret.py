@@ -260,8 +260,10 @@ ISTEGE_BAGLI = (
     # (sayfa sınavının birinci ölçütü onu bulsun) ama ATLANAN ÖLÇÜM
     # SAYILMAZ: sayılsaydı sınıfın boş olduğu her koşuda sayfa kendini bayat
     # ilan ederdi. Ayrımı `konusuz()` taşıyor.
-    re.compile(r"^sifir_dayanaksiz_(hafta|kiyas_(dolu|kapsam)|kese_zayif|"
-               r"dilim|manset)"),
+    re.compile(r"^sifir_dayanaksiz_(hafta|kiyas_(dolu|kapsam)|kese_zayif)"),
+    # MANŞET SINIRI: sınıftan bağımsız ölçülür ama konusu olmayabilir —
+    # parite etkisi hiç yayımlanmayan bacak yoksa dilim de yoktur.
+    re.compile(r"^sifir_sinir_(dilim|manset)"),
     re.compile(r"^sifir_hukumsuz_hafta$"),
 )
 
@@ -731,21 +733,27 @@ def main() -> int:
               "sifir_dayanaksiz_kiyas_oteki_seri",
               "sifir_dayanaksiz_kese_seri",
               "sifir_dayanaksiz_kese_hareketli_seri",
-              "sifir_dayanaksiz_kese_durgun_seri"):
+              "sifir_dayanaksiz_kese_durgun_seri",
+              # MANŞET SINIRI SINIFTAN BAĞIMSIZ: parite etkisi hiç
+              # yayımlanmayan her bacak sayılır, sıfırın sebebi ölçülmüş olsun
+              # ya da olmasın. Sınıfa bağlı yazıldığında bacak sınıf
+              # değiştirdiğinde sınır sayfadan büsbütün kayboluyordu.
+              "sifir_sinir_seri", "sifir_sinir_kese_seri",
+              "sifir_sinir_kese_hareketli_seri",
+              "sifir_sinir_kese_durgun_seri"):
         koy(a, m.get(a), 0)
     for a in ("sifir_hukumsuz_hafta", "sifir_dayanaksiz_hafta",
               "sifir_dayanaksiz_kiyas_dolu_min_hafta",
               "sifir_dayanaksiz_kiyas_kapsam_min_hafta",
               "sifir_dayanaksiz_kese_zayif_hafta",
               "sifir_dayanaksiz_kese_zayif_sifirdisi_hafta",
-              "sifir_dayanaksiz_dilim_hafta"):
+              "sifir_sinir_dilim_hafta"):
         konusuz(a, m.get(a), 0)
     for a in ("sifir_dayanaksiz_kese_zayif_pay",
-              "sifir_dayanaksiz_dilim_manset_pay"):
+              "sifir_sinir_dilim_manset_pay"):
         konusuz(a, m.get(a), 1)
-    for a in ("sifir_dayanaksiz_dilim_medyan_mn",
-              "sifir_dayanaksiz_dilim_maks_mn",
-              "sifir_dayanaksiz_manset_medyan_mn"):
+    for a in ("sifir_sinir_dilim_medyan_mn", "sifir_sinir_dilim_maks_mn",
+              "sifir_sinir_manset_medyan_mn"):
         konusuz(a, m.get(a), 1)
 
     # GENİŞ TOPLAM ADIYLA VE FARKIYLA. Bu cümle sayfanın en pahalı hatasına

@@ -1453,7 +1453,54 @@ def _dayanaksiz_cumle(dayanaksiz: list[str], H: pd.DataFrame,
         tani["kese_zayif_pay"] = float(
             r["sifirdisi_hafta"] / max(r["hafta"], 1) * 100.0)
 
-    # (d) ETKİLENEN DİLİMİN BÜYÜKLÜĞÜ — MUTLAK DEĞERLERDEN.
+    # ETKİLENEN DİLİMİN BÜYÜKLÜĞÜ BU SINIFA AİT DEĞİL: sınır sıfırın NEDEN
+    # olduğundan bağımsızdır ve `_manset_siniri`de, sınıftan bağımsız ölçülür.
+    return (f"{veri._adlar(dayanaksiz, en_fazla=min(len(dayanaksiz), 6))} "
+            f"serisi elimizdeki {b.sayi(n, 0)} haftanın tamamında tam sıfır. "
+            "Hareketin yokluğu ile ölçünün yokluğu elimizdeki gözlemle ayırt "
+            "edilemiyor.", tani)
+
+
+def _manset_siniri(bacaklar: list[str], H: pd.DataFrame) -> dict:
+    """Parite etkisi HİÇ YAYIMLANMAYAN bacakların manşet akıma dokunan dilimi.
+
+    SINIFTAN BAĞIMSIZ — ve bu bir düzeltmedir. Sınır tek bir cümlede,
+    `dayanaksiz` sınıfının içinde ölçülüyordu: bacak `hukumsuz` sınıfına
+    düştüğünde (çerçeve serinin başına ulaşmıyor, yani sıfırın serinin
+    başından beri sürüp sürmediği ölçülemiyor) dört ölçünün DÖRDÜ birden
+    boşalıyor ve sınır okur metinlerinin tamamından kayboluyordu. Ölçüldü:
+    aynı bacak, aynı tam sıfır, tek fark çerçevenin başlangıcı — dayanaksız
+    sınıfında dilim manşetin medyanda %5,0'i diye yazılıyor, hükümsüz
+    sınıfında hiç yazılmıyordu, oysa dilim ölçülebiliyordu (%4,5).
+
+    Sınırın kendisi şudur ve sıfırın SEBEBİNE bakmaz: parite etkisi hiç
+    yayımlanmayan bir bacakta arındırılmış akım da parite etkisinden gerçekte
+    arındırılmamış olabilir, ve o bacak manşet akımın İÇİNDEDİR. Arındırmanın
+    ne kadar eksik kaldığı ölçülemez (ölçülemeyen şeyin kendisi odur);
+    ölçülebilen şey DOKUNULAN DİLİMİN büyüklüğüdür. Sıfırın gerekçesi kayda
+    geçmişse (tanım sıfırı) sınır YOKTUR ve o sınıf buraya girmez: doların
+    dolara karşı çaprazı olmadığı için orada arındırılacak bir şey de yok.
+
+    Dilim MUTLAK değerlerden toplanır: işaretli toplam zıt yönde kımıldayan
+    iki keseyi mahsup eder ve dilimi olduğundan küçük gösterirdi. Ölçü, hiçbir
+    kesesi kımıldamıyorsa yazılmaz — hepsi tam sıfırsa dokunulan dilim de
+    sıfırdır ve ölçülecek bir konu yoktur.
+    """
+    tani: dict = {"seri": list(bacaklar), "kese_seri": [], "kese_hareketli": [],
+                  "kese_durgun": [], "dilim_hafta": None}
+    if not bacaklar:
+        return tani
+    es = [veri.arindirilmis_esi(a) for a in bacaklar]
+    ar_kol = [a for a in es if a and a in H.columns]
+    hareketli, durgun = [], []
+    for e in ar_kol:
+        d = H[e].dropna()
+        if d.empty:
+            continue
+        (hareketli if (d != 0).any() else durgun).append(e)
+    tani["kese_seri"] = list(ar_kol)
+    tani["kese_hareketli"] = list(hareketli)
+    tani["kese_durgun"] = list(durgun)
     dilim = (H[ar_kol].abs().sum(axis=1, min_count=len(ar_kol)).dropna()
              if ar_kol else pd.Series(dtype=float))
     manset = (H[MANSET_AKIM].dropna() if MANSET_AKIM in H.columns
@@ -1468,11 +1515,7 @@ def _dayanaksiz_cumle(dayanaksiz: list[str], H: pd.DataFrame,
         tani["manset_medyan_mn"] = float(m2.median())
         tani["dilim_manset_oran_medyan_pay"] = float(
             (k2 / m2.clip(lower=1e-9)).median() * 100.0)
-
-    return (f"{veri._adlar(dayanaksiz, en_fazla=min(len(dayanaksiz), 6))} "
-            f"serisi elimizdeki {b.sayi(n, 0)} haftanın tamamında tam sıfır. "
-            "Hareketin yokluğu ile ölçünün yokluğu elimizdeki gözlemle ayırt "
-            "edilemiyor.", tani)
+    return tani
 
 
 def sifir_olc(H: pd.DataFrame, kolonlar, esik_hafta: int,
@@ -1606,6 +1649,15 @@ def sifir_olc(H: pd.DataFrame, kolonlar, esik_hafta: int,
         dayanaksiz, H, tanim, hukumsuz, olculen_seri)
     rapor["hukumsuz_cumle"], rapor["hukumsuz_tani"] = _hukumsuz_cumle(
         hukumsuz, H, olculen_seri)
+    # MANŞET SINIRI SINIFTAN BAĞIMSIZ ÖLÇÜLÜR. Parite etkisi hiç yayımlanmayan
+    # her bacak — sıfırın sebebi ölçülmüş olsun (dayanaksız) ya da
+    # ölçülememiş olsun (hükümsüz) — manşet akımın içindedir ve dilim
+    # ölçülebiliyorsa yazılır. Sınıfa bağlı ölçülüyordu ve bacak sınıf
+    # değiştirdiğinde sınır okur metinlerinin tamamından kayboluyordu.
+    # Gerekçesi kayda geçmiş sıfır (tanım sınıfı) buraya GİRMEZ: orada
+    # arındırılacak bir şey yok.
+    rapor["sinir"] = _manset_siniri(dayanaksiz + hukumsuz, H)
+    rapor["sinir_seri"] = len(dayanaksiz) + len(hukumsuz)
     # BAŞTAN SONA SIFIR BACAKLARIN TOPLAMI — üç sınıfa dağılıyor ve hiçbir
     # cümle artık ötekinin sayısını anmıyor; sayfanın ikisini yan yana
     # koyabilmesi için toplam KENDİ anahtarında duruyor.
@@ -1782,9 +1834,44 @@ def kos() -> int:
     o.update(_blok(kimlik_gorunum, list(kimlik_gorunum.columns), "kimlik"))
 
     # DOLARİZASYON BLOĞU — `dol_tarih` yazar (şekil defterinin üçüncü anahtarı).
+    #
+    # ÇIPA YALNIZ DOĞRUDAN ÖLÇÜLEN SÜTUNLARDAN — akım bloğuyla AYNI kural,
+    # ve bu bir düzeltmedir. Arındırılmış payın üç sütunu (`dol_pay_ar` ·
+    # `dol_pay_fark` · `mevduat_yp_ar_mlr`) birikmiş parite etkisinden
+    # TÜREYİP `cumsum(skipna=False)` ile kuruluyor: yıl içinde tek bir haftanın
+    # parite etkisi eksik gelirse üçü de o haftadan İTİBAREN ölçülemez olur.
+    # Ölçüldü — mart başında tek bir eksik hafta bloğun tamamını 28.08'den
+    # 27.02'ye çekiyor ve DOĞRUDAN ölçülen ham pay da altı ay geriye
+    # yayımlanıyordu (%50,9 yerine %50,6). Üstelik koşu kaydı bunu kaynağa
+    # yıkıyordu: "üç seri daha yeni" diye adlandırılanlar tam da doğrudan
+    # ölçülen sütunlardı. Türev bir sütun, türediği sütunun saatini
+    # KAYDIRMAMALI; kendisi o hafta ölçülemiyorsa zaten yazılmaz ve koşu
+    # kaydında `dol_delikli` olarak adıyla görünür.
     o.update(_blok(D, ["dol_pay_ham", "dol_pay_ar", "dol_pay_fark",
                        "mevduat_tl_mlr", "mevduat_yp_mlr",
-                       "mevduat_yp_ar_mlr"], "dol"))
+                       "mevduat_yp_ar_mlr"], "dol",
+                   cipa_kolonlari=["dol_pay_ham", "mevduat_tl_mlr",
+                                   "mevduat_yp_mlr"]))
+
+    # ARINDIRILMIŞ BACAĞIN KENDİ SAATİ. Bloğun saati (`dol_tarih`) çıpa
+    # sütunlarından, yani DOĞRUDAN ölçülen ham paydan geliyor — bu <Deger>
+    # sözleşmesi için doğru: ham pay gerçekten o gün ölçüldü ve türev bir
+    # sütunun boşluğu onu geriye çekmemeli.
+    #
+    # Ama ŞEKİL sözleşmesi başka bir soru soruyor. Şekil 06 ham payı ve
+    # arındırılmış payı YAN YANA çiziyor; sözü ikisinin KIYASIDIR ve kıyas
+    # ancak ikisinin de ölçüldüğü güne kadar kurulabilir. Bloğun saatiyle
+    # damgalanırsa figür en TAZE bacağını ilan eder ve aylar bayat kalmış
+    # arındırılmış yarısı taze görünür — rehberin "karma figürde bağlayıcı
+    # bacak EN ESKİSİDİR" kuralının tam tersi.
+    #
+    # Bu yüzden arındırılmış bacağın ucu AYRICA ölçülüp yazılıyor. Şekil saati
+    # onu ÖLÇÜM katmanından okur, kendisi türetmez: bir figürün ucunu, o ucu
+    # hesaplayan kod ilan eder. Bacak hiç ölçülemediyse anahtar YAZILMAZ ve
+    # şekil saati bunu "arındırılmış iz zaten çizilmiyor" diye okur.
+    _ar = D["dol_pay_ar"].dropna() if "dol_pay_ar" in D.columns else None
+    if _ar is not None and len(_ar):
+        o["dol_ar_tarih"] = _ar.index.max().strftime("%Y-%m-%d")
 
     o["kimlik_kaydirma"] = int(kaydirma)
     o["kimlik_esik"] = ESIK_KIMLIK_MN
@@ -1941,9 +2028,26 @@ def kos() -> int:
         # Beş sayı da aşağıdaki makine kaydından düz anahtarlara açılıyor
         # (`kapsam_akim_hafta` · `kapsam_ortak_hafta` · `kapsam_asimetri_hafta`
         # ve iki başlangıç günü), yani sayfa cümleyi kendisi kurabiliyor.
+        # CÜMLE, ÇERÇEVEDEN ÖLÇÜLENİ ANLATIR VE NEYİ ÖLÇTÜĞÜNÜ SÖYLER.
+        # "Stok tabloları … 25 hafta sonra başlıyor" bir KAYNAK iddiasıydı ve
+        # aynı koşuda yanlıştı: o gün kapsam uyarısı 22 serinin kırpık
+        # geldiğini söylüyordu ve kataloğun ölçtüğü gerçek fark 539 haftaydı.
+        # İki kutu birbirini yalanlıyordu. Ölçülen şey ELİMİZDEKİ gözlemlerdir;
+        # kaynağın kendi tarihçesi ayrı bir ölçümdür ve kapsam denetimi onu
+        # ayrıca soruyor.
         if fark_hafta:
+            # YÖN DE BİR ÖLÇÜMDÜR. `fark_hafta` işaretli hesaplanıyor ama
+            # cümle onu abs() ile yazıp yönü SABİT metne gömüyordu ("… sonra
+            # başlıyor"). Bugün stok tarihçesi kısa olduğu için doğru; kaynak
+            # stoku geriye doldurduğunda ya da ayrıştırma çekimi kırpıldığında
+            # işaret döner ve cümle tam TERSİNİ söyler — üstelik yanındaki iki
+            # tarih anahtarıyla çelişerek. Bir sayının mutlak değerini yazıp
+            # yönünü metne gömmek, ölçümün yarısını atmaktır.
+            once, sonra = ("stok gözlemleri", "resmî ayrıştırma gözlemleri")
+            if fark_hafta < 0:
+                once, sonra = sonra, once
             o["kapsam_cumlesi"] = (
-                "Stok tabloları, resmî ayrıştırma tablosundan "
+                f"Bu koşuda elimizdeki {once}, {sonra}nden "
                 f"{b.sayi(abs(fark_hafta), 0)} hafta sonra başlıyor.")
         else:
             # ASİMETRİ SIFIRSA FARK CÜMLESİ YAZILMAZ. Sabit metin "aradaki
@@ -1951,8 +2055,9 @@ def kos() -> int:
             # anlatır — ölçülmemiş bir şeyi ölçülmüş gibi göstermenin küçük
             # ama aynı sınıftan bir biçimi. Ölçüldü: simetrik pencerede cümle
             # tam bunu yazıyordu.
-            o["kapsam_cumlesi"] = ("Stok tabloları ile resmî ayrıştırma "
-                                   "tablosu aynı haftada başlıyor.")
+            o["kapsam_cumlesi"] = ("Bu koşuda elimizdeki stok gözlemleri ile "
+                                   "resmî ayrıştırma gözlemleri aynı haftada "
+                                   "başlıyor.")
         # Ayrımın MAKİNE kaydı: cümle okura, sayılar koşu kaydına. İkisi aynı
         # ölçümden geldiği için bir gün ayrışamazlar.
         dog_kapsam = {
@@ -2033,13 +2138,7 @@ def kos() -> int:
             ("sifir_dayanaksiz_kese_zayif_pay", "kese_zayif_pay"),
             ("sifir_dayanaksiz_kese_zayif_hafta", "kese_zayif_hafta"),
             ("sifir_dayanaksiz_kese_zayif_sifirdisi_hafta",
-             "kese_zayif_sifirdisi_hafta"),
-            ("sifir_dayanaksiz_dilim_hafta", "dilim_hafta"),
-            ("sifir_dayanaksiz_dilim_medyan_mn", "dilim_medyan_mn"),
-            ("sifir_dayanaksiz_dilim_maks_mn", "dilim_maks_mn"),
-            ("sifir_dayanaksiz_manset_medyan_mn", "manset_medyan_mn"),
-            ("sifir_dayanaksiz_dilim_manset_pay",
-             "dilim_manset_oran_medyan_pay")):
+             "kese_zayif_sifirdisi_hafta")):
         o[anahtar] = _f(_day.get(kaynak))
     # Kese sayımları: sınıf boşken de yazılır (sıfır bir ölçüm sonucudur —
     # dayanaksız sınıfı boşsa hiçbir kese bu soruya girmemiştir).
@@ -2047,6 +2146,24 @@ def kos() -> int:
     o["sifir_dayanaksiz_kese_seri"] = len(_day.get("kese_seri") or [])
     o["sifir_dayanaksiz_kese_hareketli_seri"] = len(_day.get("kese_hareketli") or [])
     o["sifir_dayanaksiz_kese_durgun_seri"] = len(_day.get("kese_durgun") or [])
+
+    # MANŞET SINIRI — SINIFTAN BAĞIMSIZ ANAHTARLAR. Parite etkisi hiç
+    # yayımlanmayan bacakların dokunduğu dilim, sıfırın sebebi ölçülmüş olsun
+    # ya da olmasın aynı büyüklüktür; anahtarlar bu yüzden sınıfın adını
+    # TAŞIMAZ. Sınıfa bağlı yazıldıklarında bacak sınıf değiştirdiğinde sınır
+    # okur metinlerinin tamamından kayboluyordu.
+    _sin = sifir_rapor["sinir"]
+    o["sifir_sinir_seri"] = int(sifir_rapor["sinir_seri"])
+    o["sifir_sinir_kese_seri"] = len(_sin.get("kese_seri") or [])
+    o["sifir_sinir_kese_hareketli_seri"] = len(_sin.get("kese_hareketli") or [])
+    o["sifir_sinir_kese_durgun_seri"] = len(_sin.get("kese_durgun") or [])
+    for anahtar, kaynak in (
+            ("sifir_sinir_dilim_hafta", "dilim_hafta"),
+            ("sifir_sinir_dilim_medyan_mn", "dilim_medyan_mn"),
+            ("sifir_sinir_dilim_maks_mn", "dilim_maks_mn"),
+            ("sifir_sinir_manset_medyan_mn", "manset_medyan_mn"),
+            ("sifir_sinir_dilim_manset_pay", "dilim_manset_oran_medyan_pay")):
+        o[anahtar] = _f(_sin.get(kaynak))
 
     dog = {"kapsam": kapsam_rapor, "kimlik": ayr_tani, "hizalama": hiz_tani,
            "sifir": sifir_rapor, "ayrisma": ayrisma, "pencere": dog_kapsam}

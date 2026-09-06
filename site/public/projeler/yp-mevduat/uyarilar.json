@@ -530,6 +530,27 @@
      "pe_tuzel_diger"
     ]
    },
+   "sinir": {
+    "seri": [
+     "pe_gercek_diger",
+     "pe_tuzel_diger"
+    ],
+    "kese_seri": [
+     "ar_gercek_diger",
+     "ar_tuzel_diger"
+    ],
+    "kese_hareketli": [
+     "ar_gercek_diger",
+     "ar_tuzel_diger"
+    ],
+    "kese_durgun": [],
+    "dilim_hafta": 139,
+    "dilim_medyan_mn": 128.963,
+    "dilim_maks_mn": 573.675,
+    "manset_medyan_mn": 1237.998118,
+    "dilim_manset_oran_medyan_pay": 10.417340563899433
+   },
+   "sinir_seri": 2,
    "tam_sifir_seri": 4,
    "ayirt_edilemez_maks_hafta": 0,
    "cumle": "Bu koşuda bu sınıfa giren bacak yok."

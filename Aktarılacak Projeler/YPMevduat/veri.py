@@ -2229,6 +2229,26 @@ def _en_eski(*adaylar) -> pd.Timestamp | None:
     return min(z)
 
 
+def _dol_sekil_saati(o: dict, blok: object) -> object:
+    """Şekil 06'nın damgası: ÇİZİLEN bacakların en eskisi.
+
+    Kural üç hâlli ve her hâl ölçüme karşılık gelir:
+      · iki bacak da ölçülmüş  → EN ESKİSİ (kıyas o güne kadar kurulabilir)
+      · yalnız ham ölçülmüş    → ham (arındırılmış iz zaten çizilmiyor)
+      · hiçbiri ölçülmemiş     → bloğun saati; o da yoksa None
+    """
+    # HAM BACAĞIN SAATİ BLOĞUN SAATİDİR: blok tam da doğrudan ölçülen ham
+    # sütunlara çıpalanıyor (`cipa_kolonlari`), yani `dol_tarih` ham bacağın
+    # kendi ucudur. İlk yazımda burada `dol_pay_ham_tarih` okunuyordu; o
+    # anahtarı ölçüm katmanı YAZMIYOR (özet üreticisi sonradan türetiyor) ve
+    # kural sessizce hiç ateşlenmiyordu — kuralı doğru yazıp onu OKUNMAYAN bir
+    # anahtara bağlamak, kuralı hiç yazmamakla aynı şey.
+    ar = o.get("dol_ar_tarih")
+    if blok and ar:
+        return _en_eski(blok, ar)
+    return _zaman(blok)
+
+
 def sekil_saatleri(o: dict, uzun: bool = False) -> dict[str, str | None]:
     """Figür başına VERİ UCU — hattın tek ana saati değil.
 
@@ -2281,9 +2301,28 @@ def sekil_saatleri(o: dict, uzun: bool = False) -> dict[str, str | None]:
         # yanlış alarmı arızanın kendisidir. Yedek yol (`_en_eski`) duruyor:
         # ölçüm katmanı bu bloğu hiç yazmamışsa figür tarihsiz kalmasın.
         "05_kimlik.html": yaz(o.get("kimlik_tarih")) or yaz(_en_eski(stok, akim)),
-        # Dolarizasyon bloğu kendi ortak tarihine çıpalanır (TL ve YP bacakları
-        # aynı tabloda ama ölçüm katmanı bloğu ortak tarihe demirler).
-        "06_dolarizasyon.html": yaz(dol),
+        # DOLARİZASYON FİGÜRÜ KARMA: ham payı ve ARINDIRILMIŞ payı YAN YANA
+        # çiziyor, yani sözü ikisinin KIYASIDIR ve kıyas ancak ikisinin de
+        # ölçüldüğü güne kadar kurulabilir. Damga bu yüzden bloğun saati
+        # (`dol_tarih`) DEĞİL, çizilen iki bacağın EN ESKİSİDİR.
+        #
+        # Ayrım yeni değil, ama bu figürde YENİ GÖRÜNÜR OLDU: blok saati
+        # doğrudan ölçülen sütunlara çıpalandığı gün (türev kümüle sütunların
+        # tek bir eksik parite haftası yüzünden bloğu altı ay geriye
+        # çekmesini önlemek için) `dol_tarih` ham bacağın tarihi oldu.
+        # O düzeltme <Deger> sözleşmesi için doğru — ham pay gerçekten o gün
+        # ölçüldü — ama ŞEKİL sözleşmesi başka bir soru soruyor. Arındırılmış
+        # bacak aylar önce bittiğinde figür en TAZE bacağıyla damgalanır ve
+        # bayat yarısı taze görünür; rehberdeki "karma figürde bağlayıcı bacak
+        # EN ESKİSİDİR" kuralının tam tersi. İki sözleşme aynı saati
+        # paylaşamaz, çünkü aynı soruyu sormuyorlar.
+        #
+        # `min` YAPISAL yazılır, bugünkü sıralamaya bakmaz: bugün iki bacak da
+        # aynı gün bitiyor ve kural bugün hiçbir şeyi değiştirmiyor — ama
+        # kuralın konduğu gün ölçülmemiş bir sıralamaya bel bağlanamaz.
+        # Bacaklardan biri hiç ölçülmemişse damga YOK: ölçülmeyen ucun daha
+        # yeni olduğu kanıtlanamaz.
+        "06_dolarizasyon.html": yaz(_dol_sekil_saati(o, dol)),
     }
 
 
@@ -2335,26 +2374,25 @@ def kunye_yaz() -> None:
 
 
 # --------------------------------------------------------------------------- ana akış
-def kimlik_dokumu(kim_rapor: dict) -> list[str]:
-    """Kimlik kayıtlarının operatör dökümü — AĞSIZ, bu yüzden SINANABİLİR.
+def _tanimadi(r: dict) -> str:
+    """Tanınmayan bir kaydın NE TAŞIDIĞINI yazar — atlamanın yerine geçer.
 
-    Bu fonksiyon `kos()`un içinden ÇIKARILDI ve sebebi kayda değer: döngü
-    `kim_rapor`ın TAMAMINI dolaşıp her kayıttan `n` ve `maks_fark` okuyordu,
-    oysa `kimlik_denetimi` üç ayrı şekilde kayıt yazıyor — eşitlik kimliği
-    (`maks_fark`), KAPSANMA kimliği (`maks_pay`, `maks_fark` YOK) ve
-    sınanamadı dalları. İkinci tür kayıt eklendiği gün `kos()` her koşuda
-    KeyError ile düşer, yani hattın BİRİNCİ adımı ölür ve ölçüm, çizim, özet
-    hiç koşmaz.
-
-    Kusuru bu kadar uzun yaşatan şey ölçümün kendisi değil, ÖLÇÜLEBİLİRLİĞİYDİ:
-    `kos()` ağa çıkıyor, duman sınaması ağa çıkamıyor, dolayısıyla hattın giriş
-    noktası HİÇ koşturulmuyordu. Derlenmesi, içe aktarılması ve KOŞMASI üç ayrı
-    sınamadır (CLAUDE.md) ve burada üçüncüsü kimsenin bakmadığı yerdeydi.
-    Ağ gerektirmeyen her parça, ağ gerektiren adımdan AYRILIR ki sınanabilsin.
-
-    Kayıt türünü ALANLARINDAN tanır, adından değil: yeni bir kimlik türü
-    eklendiğinde bu döngü düşmez, tanımadığı ölçüyü adıyla basar.
+    Bir kaydı sessizce atlamak, ölçülmemiş bir şeyi ölçülmüş gibi göstermenin
+    en sessiz biçimidir: döküm kısalır, hiçbir şey hata vermez ve o ölçünün
+    hiç basılmadığını kimse fark etmez. Alan adları yazılınca yeni kayıt türü
+    ilk koşuda adıyla görünür.
     """
+    bilinen = ", ".join(k for k in sorted(r) if k not in ("gecti", "n"))
+    return f"ölçü tanınmadı ({bilinen})" if bilinen else "ölçü tanınmadı (boş kayıt)"
+
+
+def _olcu_yazi(r: dict, alanlar: tuple[str, ...], kalip) -> str:
+    """Kayıt beklenen alanları taşıyorsa ölçüyü yazar, taşımıyorsa adını."""
+    return kalip(r) if set(alanlar) <= set(r) else _tanimadi(r)
+
+
+def kimlik_dokumu(kim_rapor: dict) -> list[str]:
+    """Kimlik kayıtlarının operatör dökümü — AĞSIZ, bu yüzden SINANABİLİR."""
     satirlar: list[str] = []
     for ad, r in kim_rapor.items():
         isaret = "?" if r.get("gecti") is None else ("✓" if r["gecti"] else "✗")
@@ -2370,31 +2408,31 @@ def kimlik_dokumu(kim_rapor: dict) -> list[str]:
         else:
             # Tanınmayan kayıt SESSİZCE ATLANMAZ: hangi ölçüyü taşıdığı yazılır.
             # Atlamak, bir kimliğin sınanmadığını sınanmış gibi göstermektir.
-            bilinen = ", ".join(k for k in sorted(r) if k not in ("gecti", "n"))
-            olcu = f"ölçü tanınmadı ({bilinen})"
+            olcu = _tanimadi(r)
         satirlar.append(f"    kimlik {isaret} {n_yazi}  {olcu}  ·  {ad}")
     return satirlar
 
 
-def kos(yenile: bool = False) -> dict:
-    print("EVDS3 → yurt içi yerleşiklerin YP mevduatı, veri katmanı")
-    print(f"  anahtar: {'ortam değişkeni' if os.environ.get('TTO_EVDS_KEY') else 'dosya'}")
+def durum_kaydi(H: pd.DataFrame) -> dict:
+    """`kos()`un ÖLÇEN yarısı: çerçeveden türeyen her uyarı ve her rapor.
 
-    H = cek_kume(HAFTALIK, "gun", PARCA_HAFTA_GUN, yenile, etiket="haftalık")
+    AĞA ÇIKMAZ — ve ayrılmasının sebebi tam olarak budur. `kos()` içindeki tek
+    ağ işi `cek_kume`dir; geri kalanı bir DataFrame'in fonksiyonudur, yani
+    sınanabilir. Ayrılana kadar sınanmıyordu da: duman sınaması ağa
+    çıkamadığı için hattın BİRİNCİ adımının giriş noktası hiç koşturulmuyordu
+    ve ölçüldü — duman koşarken `veri.kos`un çalışan satır sayısı SIFIRDI,
+    ölçüm/çizim/özet giriş noktalarınınki 195/34/189.
 
-    # SIRA BAĞLAYICI: kapsam kapısı her şeyden ÖNCE. Yarım kalmış bir çekimden
-    # ölçüm yapmak, yeşil bir koşunun içinde yanlış sayı yayımlamaktır.
-    yeter, sebep = kapsam_yeterli(H)
-    if not yeter:
-        raise SystemExit(
-            f"DUR: kapsam yetersiz — {sebep}. Haftalık çerçeve YAZILMADI ve "
-            "depodaki sürüme dokunulmadı; hattın sonraki adımları koşmaz. "
-            "Eksik kapsamla üretilen bir pano, hiç pano olmamasından kötüdür.")
-
+    Kusurun ilk biçimi kayda değer: döküm döngüsü `kim_rapor`ın TAMAMINI
+    dolaşıp her kayıttan `maks_fark` okuyordu, oysa `kimlik_denetimi` üç ayrı
+    şekilde kayıt yazıyor (eşitlik: `maks_fark` · kapsanma: `maks_pay` ·
+    sınanamadı: ikisi de yok). İkinci tür kayıt eklendiği gün hattın birinci
+    adımı her koşuda KeyError ile düşer; ölçüm, çizim ve özet hiç koşmaz.
+    Derlenmesi, içe aktarılması ve KOŞMASI üç ayrı sınamadır ve burada
+    üçüncüsü kimsenin bakmadığı yerdeydi.
+    """
     kapsam = kapsam_olc(H)
     s_hafta = son_hafta(H)
-    print(f"  SON HAFTA: {ad_gun(s_hafta)} (Cuma)")
-
     # ÇERÇEVEDEN TÜRETİLEN UYARILAR TEK ÇAĞRIDA. Ölçüm katmanı da AYNI
     # fonksiyonu kendi okuduğu çerçeveyle çağırıyor; iki katman aynı soruyu
     # aynı sırayla soruyor ve devralınan bayat bir kayıt onların yerini
@@ -2406,16 +2444,7 @@ def kos(yenile: bool = False) -> dict:
     # yukarıda zaten basıldı; `uyar` tekilleştirdiği için ikinci kez düşmez.
     _, kim_rapor = kimlik_denetimi(H)
     _, yd_rapor = genis_fark_olc(H)
-    # ÖLÜ SERİ yalnız MAKİNE kaydına yazılır: okura giden cümle ölçüm
-    # katmanında, tek yerde kuruluyor (bkz. olu_seri_olc gerekçesi).
-    olu = olu_seri_olc(H)
-    hizalama = hizalama_olc(H)
-
-    H.to_csv(VERI / "haftalik.csv")
-    # Uyarı cümleleri okur için TOPLANIYOR; ölçümün kendisi burada SERİ SERİ
-    # duruyor. Toplamak bilgiyi atmak değil, okura tek olay olarak göstermek —
-    # ayrıntıyı arayan koşu kaydında bulur.
-    durum = {
+    return {
         "kosum": dt.date.today().isoformat(),
         "son_hafta": s_hafta.strftime("%Y-%m-%d"),
         "haftalik": [int(H.shape[0]), int(H.shape[1])],
@@ -2431,32 +2460,90 @@ def kos(yenile: bool = False) -> dict:
         "tazelik": tazelik_olc(H),
         "kimlik": kim_rapor,
         "genis_fark": yd_rapor,
-        "hizalama": hizalama,
-        "olu_seri": olu,
+        # ÖLÜ SERİ yalnız MAKİNE kaydına yazılır: okura giden cümle ölçüm
+        # katmanında, tek yerde kuruluyor (bkz. olu_seri_olc gerekçesi).
+        "olu_seri": olu_seri_olc(H),
+        "hizalama": hizalama_olc(H),
         "uyarilar": list(_UYARI),
     }
+
+
+def kosu_dokumu(durum: dict) -> list[str]:
+    """Operatör dökümünün TAMAMI — KAYITTAN okunur, ağa çıkmaz.
+
+    Dökümdeki sayılar BİLEREK ortak/bicim'den geçmiyor: bu satırlar koşu
+    kütüğüne düşen OPERATÖR tanısıdır, okura hiçbir yerden basılmaz, ve sabit
+    genişlikli hizalama kimlik satırlarının büyüklüklerini yan yana okunur
+    kılıyor. Okura giden her satır (uyar() şablonları) biçimi ortak/bicim'den
+    yazar; ayrım burada yazılı ki bir sonraki oturum bu kalıbı bir uyarı
+    şablonuna kopyalamasın.
+
+    ÜÇ DÖKÜM DE KAYDIN ALANLARINI SORAR, VARSAYMAZ. Bir raporun biçimi
+    değiştiğinde bu fonksiyon düşmez, tanımadığı kaydı adıyla basar — hattın
+    birinci adımı bir döküm satırı yüzünden ölmemeli.
+    """
+    satirlar = list(kimlik_dokumu(durum.get("kimlik") or {}))
+    yd = durum.get("genis_fark") or {}
+    if yd:
+        satirlar.append("    kapsam farkı (geniş toplam − yurt içi toplam): "
+                        + _olcu_yazi(
+                            yd, ("son_fark_mn_usd", "son_pay", "son_tarih"),
+                            lambda r: (f"{r['son_fark_mn_usd']:,.1f} mn USD "
+                                       f"({r['son_pay'] * 100:.1f}% pay, "
+                                       f"{r['son_tarih']})")))
+    for etiket, r in (durum.get("hizalama") or {}).items():
+        satirlar.append(
+            f"    hizalama [{etiket}] artığı en küçük kaydırma: "
+            + _olcu_yazi(r, ("en_kucuk_artik_kaydirma",),
+                         lambda x: f"{x['en_kucuk_artik_kaydirma']} hafta"))
+        kayd = r.get("kaydirmalar")
+        if not isinstance(kayd, dict):
+            satirlar.append("      kaydırma dökümü tanınmadı ("
+                            + ", ".join(sorted(r)) + ")")
+            continue
+        for k, v in kayd.items():
+            satirlar.append(
+                f"      k={k:>2}: "
+                + _olcu_yazi(v, ("n", "medyan_mutlak_artik"),
+                             lambda x: (f"n={x['n']:>4}  medyan artık "
+                                        f"{x['medyan_mutlak_artik']:>10,.2f} "
+                                        "mn USD")))
+    return satirlar
+
+
+def kos(yenile: bool = False) -> dict:
+    """Hattın birinci adımı: ÇEK, kapsam kapısından geçir, ÖLÇ ve yaz.
+
+    Gövde bilerek ince: ağa çıkmayan her iş ayrı bir fonksiyonda duruyor
+    (`durum_kaydi` · `kosu_dokumu`) ve duman sınaması onları GERÇEK çerçeveyle
+    koşturuyor. Buraya yeniden ölçüm satırı eklenirse o iş bir daha
+    sınanamaz — ağa çıkan bir giriş noktası, ağa çıkmayan hiçbir işi
+    içinde tutmamalı.
+    """
+    print("EVDS3 → yurt içi yerleşiklerin YP mevduatı, veri katmanı")
+    print(f"  anahtar: {'ortam değişkeni' if os.environ.get('TTO_EVDS_KEY') else 'dosya'}")
+
+    H = cek_kume(HAFTALIK, "gun", PARCA_HAFTA_GUN, yenile, etiket="haftalık")
+
+    # SIRA BAĞLAYICI: kapsam kapısı her şeyden ÖNCE. Yarım kalmış bir çekimden
+    # ölçüm yapmak, yeşil bir koşunun içinde yanlış sayı yayımlamaktır.
+    yeter, sebep = kapsam_yeterli(H)
+    if not yeter:
+        raise SystemExit(
+            f"DUR: kapsam yetersiz — {sebep}. Haftalık çerçeve YAZILMADI ve "
+            "depodaki sürüme dokunulmadı; hattın sonraki adımları koşmaz. "
+            "Eksik kapsamla üretilen bir pano, hiç pano olmamasından kötüdür.")
+
+    print(f"  SON HAFTA: {ad_gun(son_hafta(H))} (Cuma)")
+    durum = durum_kaydi(H)
+
+    H.to_csv(VERI / "haftalik.csv")
     (VERI / "veri_durum.json").write_text(
         json.dumps(durum, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"  yazıldı: data/haftalik.csv ({H.shape[0]}x{H.shape[1]})")
 
-    # Aşağıdaki dökümdeki sayılar BİLEREK ortak/bicim'den geçmiyor: bu satırlar
-    # koşu kütüğüne düşen OPERATÖR tanısıdır, okura hiçbir yerden basılmaz, ve
-    # sabit genişlikli hizalama dokuz kimlik satırının büyüklüklerini yan yana
-    # okunur kılıyor. Okura giden her satır (uyar() şablonları) biçimi
-    # ortak/bicim'den yazar; ayrım burada yazılı ki bir sonraki oturum bu
-    # kalıbı bir uyarı şablonuna kopyalamasın.
-    for satir in kimlik_dokumu(kim_rapor):
+    for satir in kosu_dokumu(durum):
         print(satir)
-    if yd_rapor:
-        print(f"    kapsam farkı (geniş toplam − yurt içi toplam): "
-              f"{yd_rapor['son_fark_mn_usd']:,.1f} mn USD "
-              f"({yd_rapor['son_pay'] * 100:.1f}% pay, {yd_rapor['son_tarih']})")
-    for etiket, r in hizalama.items():
-        print(f"    hizalama [{etiket}] artığı en küçük kaydırma: "
-              f"{r['en_kucuk_artik_kaydirma']} hafta")
-        for k, v in r["kaydirmalar"].items():
-            print(f"      k={k:>2}: n={v['n']:>4}  medyan artık "
-                  f"{v['medyan_mutlak_artik']:>10,.2f} mn USD")
     if _UYARI:
         print(f"\n[{len(_UYARI)} uyarı]")
     return durum

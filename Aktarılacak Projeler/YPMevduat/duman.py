@@ -1703,12 +1703,56 @@ sina("öteki bacaklar kıyası kırılımın KENDİ bacaklarından ölçülüyor
 # MANŞETE DOKUNAN SONUCUN SAYILARI KAYITTA. Parite etkisi hiç yayımlanmayan
 # bir bacakta arındırılmış akım da arındırılmamış olabilir ve o bacak
 # manşetin içindedir; o CÜMLE sayfanındır, buradaki SAYI koşu kaydınındır.
-sina("dayanaksız sıfırın dokunduğu dilim BÜYÜKLÜĞÜYLE ölçülüyor",
-     _dy["dilim_medyan_mn"] > 0 and _dy["manset_medyan_mn"] > 0
-     and _dy["dilim_manset_oran_medyan_pay"] > 0
-     and _dy["dilim_maks_mn"] >= _dy["dilim_medyan_mn"],
-     str({k: _dy[k] for k in ("dilim_medyan_mn", "manset_medyan_mn",
+_sn = r_y["sinir"]
+sina("sıfırın dokunduğu dilim BÜYÜKLÜĞÜYLE ölçülüyor",
+     _sn["dilim_medyan_mn"] > 0 and _sn["manset_medyan_mn"] > 0
+     and _sn["dilim_manset_oran_medyan_pay"] > 0
+     and _sn["dilim_maks_mn"] >= _sn["dilim_medyan_mn"],
+     str({k: _sn[k] for k in ("dilim_medyan_mn", "manset_medyan_mn",
                               "dilim_manset_oran_medyan_pay")}))
+
+# --- E: SINIR, SIFIRIN NEDEN OLDUĞUNDAN BAĞIMSIZDIR -----------------------
+# ARIZANIN KENDİSİ: sınır yalnız `dayanaksiz` sınıfının içinde ölçülüyordu.
+# Bacak `hukumsuz` sınıfına düştüğünde — çerçeve serinin başına ulaşmıyor,
+# yani sıfırın serinin başından beri sürüp sürmediği ölçülemiyor — dört
+# ölçünün DÖRDÜ birden boşalıyor ve manşete dokunan sınır okur metinlerinin
+# TAMAMINDAN kayboluyordu. Oysa ETKİ aynı: parite etkisi yayımlanmayan bacak
+# manşet akımın içinde, ve dilim ölçülebiliyor. Ölçüldü — aynı bacak, aynı
+# tam sıfır, tek fark çerçevenin başlangıcı: dayanaksız sınıfında dilim
+# manşetin medyanda %5,0'i diye yazılıyor, hükümsüz sınıfında hiç
+# yazılmıyordu, oysa oradaki dilim %4,5.
+_kisa_bas = (pd.Timestamp(SON_HAFTA) - pd.Timedelta(weeks=104)).strftime("%Y-%m-%d")
+_Hh = _sifir_blok(_cerceve(bas=_kisa_bas), _DAY, 105, sag_uc=True)
+_uy_h, _r_h = metrik.sifir_olc(_Hh, veri.SIFIR_KAPSAMI, metrik.ESIK_SIFIR_BLOK,
+                               veri.bas_olculen(_Hh))
+_topla(*_uy_h, _r_h.get("hukumsuz_cumle"), _r_h.get("dayanaksiz_cumle"))
+_sn_h = _r_h["sinir"]
+# TUZAK GERÇEKTEN VAR MI: bacak gerçekten sınıf değiştirmediyse ölçüt vakumda
+# geçer ve kapattığı kusuru hiç göremez.
+sina("kısa çerçevede aynı bacak HÜKÜMSÜZ sınıfına düşüyor (tuzak gerçek)",
+     _r_h["hukumsuz_seri"] == 1 and _r_h["dayanaksiz_seri"] == 0
+     and r_y["dayanaksiz_seri"] == 1,
+     f"hükümsüz {_r_h['hukumsuz_seri']} · dayanaksız {_r_h['dayanaksiz_seri']}")
+sina("sınır SINIF DEĞİŞİNCE kaybolmuyor (sıfırın sebebinden bağımsız)",
+     _r_h["sinir_seri"] == 1
+     and _sn_h["dilim_medyan_mn"] > 0 and _sn_h["manset_medyan_mn"] > 0
+     and _sn_h["dilim_manset_oran_medyan_pay"] > 0,
+     f"hükümsüz sınıfta dilim {_sn_h.get('dilim_medyan_mn')} · "
+     f"pay {_sn_h.get('dilim_manset_oran_medyan_pay')}")
+# GEREKÇESİ KAYDA GEÇMİŞ SIFIR SINIRA GİRMEZ: doların dolara karşı çaprazı
+# yok, yani orada arındırılacak bir şey de yok. Sınırı bütün tam sıfırlara
+# yaymak, ölçülmemiş bir belirsizliği ölçülmüş gibi göstermek olurdu.
+sina("tanım gereği sıfır SINIRA GİRMİYOR (arındırılacak bir şey yok)",
+     _TAN not in _sn["seri"] and _TAN not in _sn_h["seri"]
+     and r_y["tanim_seri"] >= 1,
+     f"{_sn['seri']} · tanım {r_y['tanim_seri']}")
+# SINIR HİÇ KONUSU YOKKEN "ÖLÇÜLDÜ" DEMEZ: temiz çerçevede tam sıfır bacak
+# yalnız tanım sınıfında, öyleyse sınırın konusu yok ve ölçü null kalır.
+_r0 = metrik.sifir_olc(H0, veri.SIFIR_KAPSAMI, metrik.ESIK_SIFIR_BLOK,
+                       veri.bas_olculen(H0))[1]
+sina("sınırın konusu yokken ölçü YAZILMIYOR (sıfır diye doldurulmuyor)",
+     _r0["sinir_seri"] == 0 and "dilim_medyan_mn" not in _r0["sinir"],
+     str(_r0["sinir"])[:160])
 # --- E7: ÖLÇÜLEN İLE İDDİA EDİLEN AYNI ŞEY DEĞİL --------------------------
 # Cümle "…ama bu dilim kadar bir belirsizlik taşıdığı bilinerek okunur" diye
 # bitiyordu: ÖLÇÜLEN şey kesenin AKIMI, İDDİA edilen şey eksik ARINDIRMANIN
@@ -1781,9 +1825,9 @@ _isaretli = float((_Hy_mahsup["ar_gercek_diger"]
 sina("zıt işaretli iki kese MAHSUP EDİLMİYOR (dilim mutlak toplanıyor)",
      len(r_mah["dayanaksiz"]["kese_hareketli"]) == 2
      and _isaretli == 0.0
-     and r_mah["dayanaksiz"]["dilim_medyan_mn"] > 0,
+     and r_mah["sinir"]["dilim_medyan_mn"] > 0,
      f"işaretli medyan {_isaretli} · dilim "
-     f"{r_mah['dayanaksiz'].get('dilim_medyan_mn')}")
+     f"{r_mah['sinir'].get('dilim_medyan_mn')}")
 
 _Hy_olu = Hy_ikikese.copy()
 for _c in ("ar_gercek_diger", "ar_tuzel_diger"):
@@ -2628,9 +2672,13 @@ _tasinan = [
     "sifir_ayirt_edilemez_seri", "sifir_ayirt_edilemez_maks_hafta",
     "sifir_tanim_bas_kanitsiz_seri", "sifir_tanim_bas_kirpik_seri",
     "sifir_hukumsuz_bas_kanitsiz_seri", "sifir_hukumsuz_bas_kirpik_seri",
-    # dayanaksız sıfırın manşete dokunan sonucundan: dilim ve kese ölçüleri
-    "sifir_dayanaksiz_dilim_medyan_mn", "sifir_dayanaksiz_dilim_maks_mn",
-    "sifir_dayanaksiz_manset_medyan_mn", "sifir_dayanaksiz_dilim_manset_pay",
+    # manşete dokunan sınırdan: dilim ölçüleri — ANAHTARLAR SINIFIN ADINI
+    # TAŞIMAZ, çünkü sınır sıfırın neden olduğundan bağımsızdır.
+    "sifir_sinir_seri", "sifir_sinir_dilim_medyan_mn",
+    "sifir_sinir_dilim_maks_mn", "sifir_sinir_manset_medyan_mn",
+    "sifir_sinir_dilim_manset_pay", "sifir_sinir_kese_seri",
+    "sifir_sinir_kese_hareketli_seri", "sifir_sinir_kese_durgun_seri",
+    # dayanaksız sınıfın kendi ölçüleri: keselerin canlılığı ve kıyas
     "sifir_dayanaksiz_kese_seri", "sifir_dayanaksiz_kese_hareketli_seri",
     "sifir_dayanaksiz_kese_durgun_seri", "sifir_dayanaksiz_kiyas_oteki_seri",
 ]
@@ -2659,8 +2707,8 @@ sina("ölçüm taşımayan yöntem nesri koşu kaydından çıktı",
 # aynı görünür ama aynı şey değildir; ayrımı `konusuz()` taşıyor.
 sina("boş sınıfın ölçüsü null yazılıyor ama ATLANAN sayılmıyor",
      _T["o"]["sifir_dayanaksiz_seri"] == 0
-     and "sifir_dayanaksiz_dilim_medyan_mn" in _T["o"]
-     and _T["o"]["sifir_dayanaksiz_dilim_medyan_mn"] is None
+     and "sifir_sinir_dilim_medyan_mn" in _T["o"]
+     and _T["o"]["sifir_sinir_dilim_medyan_mn"] is None
      and not _T["atlanan"] and _T["o"]["bayat"] is False,
      f"atlanan {_T['atlanan']}")
 # DOLU SINIFTA AYNI ANAHTAR SAYIYI TAŞIR: null'ın "ölçülmedi" demesi, ölçümün
@@ -2669,10 +2717,10 @@ _TD = _kutu(_sifir_blok(H0, "pe_tuzel_diger", len(H0), sag_uc=True),
             sekil=False)
 sina("sınıf dolunca aynı anahtarlar SAYIYLA doluyor",
      _TD["o"]["sifir_dayanaksiz_seri"] == 1
-     and _TD["o"]["sifir_dayanaksiz_dilim_medyan_mn"] > 0
-     and _TD["o"]["sifir_dayanaksiz_manset_medyan_mn"] > 0
+     and _TD["o"]["sifir_sinir_dilim_medyan_mn"] > 0
+     and _TD["o"]["sifir_sinir_manset_medyan_mn"] > 0
      and _TD["o"]["sifir_dayanaksiz_kese_hareketli_seri"] == 1,
-     f"dilim {_TD['o'].get('sifir_dayanaksiz_dilim_medyan_mn')}")
+     f"dilim {_TD['o'].get('sifir_sinir_dilim_medyan_mn')}")
 sina("sınıf dolduğunda da cümle sözleşmesi tutuyor",
      not ozet_uret._cumle_olcusu_denetimi(_TD["kosu_uyarilari"]),
      "; ".join(ozet_uret._cumle_olcusu_denetimi(_TD["kosu_uyarilari"])[:3]))
@@ -2860,9 +2908,43 @@ except SystemExit:
     _uc_tutucu = False
 sina("ilan edilen uç ESKİYSE durmuyor (tutucu damga yanlış alarm değil)",
      _uc_tutucu)
-sina("figürün çizdiği uç izlerin EN ESKİSİNDEN ölçülüyor",
-     grafik._cizili_uc(_f_eski) == pd.Timestamp("2026-08-14"),
-     str(grafik._cizili_uc(_f_eski)))
+sina("tek izli figürde iki uç da o izin son dolu gözlemi",
+     grafik._cizili_uclar(_f_eski)
+     == (pd.Timestamp("2026-08-14"), pd.Timestamp("2026-08-14")),
+     str(grafik._cizili_uclar(_f_eski)))
+# İKİ İZ, İKİ AYRI SORU. "Figür ilan ettiği haftayı gösteriyor mu" sorusunun
+# cevabı EN YENİ uçtur; en eski uç yalnız "bir iz daha erken bitiyor" der ve
+# bu tek başına kusur değildir (pencere tanımı gereği kısa çizilen iz).
+_f_karma = _iz("2026-08-28")
+_f_karma.add_trace(go.Scatter(
+    x=pd.date_range("2026-01-02", "2026-05-29", freq="W-FRI"),
+    y=[1.0] * len(pd.date_range("2026-01-02", "2026-05-29", freq="W-FRI"))))
+sina("karma figürde en eski ve en yeni uç AYRI AYRI ölçülüyor",
+     grafik._cizili_uclar(_f_karma)
+     == (pd.Timestamp("2026-05-29"), pd.Timestamp("2026-08-28")),
+     str(grafik._cizili_uclar(_f_karma)))
+try:
+    with contextlib.redirect_stdout(io.StringIO()):
+        grafik._uc_denetimi("sinav.html", "28.08.2026", _f_karma)
+    _karma_gecti = True
+except SystemExit:
+    _karma_gecti = False
+sina("bir iz erken bitiyor diye hat DURMUYOR (bilerek kısa çizilen iz)",
+     _karma_gecti)
+# AMA KAPI HÂLÂ KAPI: HİÇBİR iz ilan edilene ulaşmıyorsa damga figürde olmayan
+# bir haftayı ilan ediyordur ve hat DURUR. İkisi birden sorulmazsa "düzeltme"
+# sessizce denetimi kaldırmak olabilirdi.
+_f_ikisi_eski = _iz("2026-08-14")
+_f_ikisi_eski.add_trace(go.Scatter(
+    x=pd.date_range("2026-01-02", "2026-05-29", freq="W-FRI"),
+    y=[1.0] * len(pd.date_range("2026-01-02", "2026-05-29", freq="W-FRI"))))
+try:
+    grafik._uc_denetimi("sinav.html", "28.08.2026", _f_ikisi_eski)
+    _hepsi_eski_kapisi = False
+except SystemExit:
+    _hepsi_eski_kapisi = True
+sina("HİÇBİR iz ilan edilene ulaşmıyorsa çizim katmanı DURUYOR",
+     _hepsi_eski_kapisi)
 
 _f_panel = make_subplots(rows=3, cols=1)
 try:
@@ -2941,7 +3023,7 @@ sina("çerçeveden türeyen uyarı ÇERÇEVEDEN ölçülüyor, temizde susuyor",
      "; ".join(veri.cerceve_uyarilari(_kirpik_c))[:160])
 sina("iki katman AYNI fonksiyonu çağırıyor (iki uyarı listesi yok)",
      "veri.cerceve_uyarilari(H)" in _kos_kod
-     and "cerceve_uyarilari(H)" in _iz_kaynak("kos"),
+     and "cerceve_uyarilari(H)" in _iz_kaynak("durum_kaydi"),
      "katmanlardan biri kendi listesini kuruyor")
 # KAYIT ANLATTIĞI ÇERÇEVEYİ ADIYLA TAŞIR — `_cache_yolu` ile aynı sınıf kural.
 sina("çerçeve künyesi pencereyi ayırt ediyor (kırpma · uzunluk · uç)",
@@ -2957,7 +3039,7 @@ sina("çerçeve künyesi pencereyi ayırt ediyor (kırpma · uzunluk · uç)",
 # (ilan edilen uç ile figürün çizdiği uç kıyaslanır ve ayrışırsa hat DURUR).
 sina("katmanlar arası koşu kayıtlarının hepsi künyesini taşıyor",
      "cerceve_imza" in _T["m"]
-     and "cerceve_imza" in inspect.getsource(veri.kos)
+     and "cerceve_imza" in inspect.getsource(veri.durum_kaydi)
      and "cerceve_imza" in (veri.PROJE / "ozet_uret.py").read_text(
          encoding="utf-8"),
      f"özette {'var' if 'cerceve_imza' in _T['m'] else 'YOK'}")
@@ -2997,6 +3079,36 @@ sina("lira bacakları yokken beş figür yazılıyor, hat DURMUYOR",
      and len(_L["html"]) == 5, f"{_L['dur']} · {_L['html']}")
 sina("üretilemeyen figürün damgası YOK (yanlış tarih basılmıyor)",
      veri.sekil_saatleri(_L["m"])["06_dolarizasyon.html"] is None)
+
+# --- ŞEKİL 06 KARMA: DAMGA BAĞLAYICI (EN ESKİ) BACAKTAN --------------------
+# Figür ham payı ve ARINDIRILMIŞ payı yan yana çiziyor; sözü ikisinin
+# KIYASIDIR ve kıyas ancak ikisinin de ölçüldüğü güne kadar kurulabilir.
+# Bloğun saati (`dol_tarih`) doğrudan ölçülen HAM sütunlara çıpalı — o çıpa
+# <Deger> sözleşmesi için doğru ama ŞEKİL sözleşmesi başka bir soru soruyor.
+# Blok saatiyle damgalanırsa figür en TAZE bacağını ilan eder ve aylar bayat
+# kalmış arındırılmış yarısı taze görünür.
+_m06 = dict(_kutu(H0)["m"])
+sina("iki bacak da ölçülmüşken damga ikisinin EN ESKİSİ",
+     veri.sekil_saatleri({**_m06, "dol_ar_tarih": "2026-02-27"}
+                         )["06_dolarizasyon.html"] == "27.02.2026")
+sina("arındırılmış bacak DAHA YENİ olsa da damga en eskiden (yapısal min)",
+     veri.sekil_saatleri({**_m06, "dol_tarih": "2026-02-27",
+                          "dol_ar_tarih": "2026-08-28"}
+                         )["06_dolarizasyon.html"] == "27.02.2026")
+# Arındırılmış iz HİÇ ölçülmediyse figürde de çizilmiyor; damga ham bacağın
+# kendi ucudur ve bu bir eksiklik değil, çizilenin doğru saatidir.
+# Arındırılmış iz HİÇ ölçülmediyse figürde de çizilmiyor; damga o zaman ham
+# bacağın kendi ucudur — bu bir eksiklik değil, ÇİZİLENİN doğru saatidir.
+_m06_arsiz = {k: v for k, v in _m06.items() if k != "dol_ar_tarih"}
+sina("arındırılmış bacak hiç ölçülmemişse damga ham bacağın ucu",
+     veri.sekil_saatleri({**_m06_arsiz, "dol_tarih": "2026-02-27"}
+                         )["06_dolarizasyon.html"] == "27.02.2026")
+# ÖLÇÜM KATMANI O SAATİ GERÇEKTEN YAZIYOR MU. Kuralı doğru yazıp onu kimsenin
+# yazmadığı bir anahtara bağlamak, kuralı hiç yazmamakla aynı şey — ilk yazımda
+# tam olarak bu oldu (`dol_pay_ham_tarih` okunuyordu, ölçüm katmanı yazmıyordu)
+# ve kural sessizce hiç ateşlenmedi. Anahtarın VARLIĞI ayrıca sınanır.
+sina("ölçüm katmanı arındırılmış bacağın saatini YAZIYOR",
+     "dol_ar_tarih" in _m06 and _m06["dol_ar_tarih"])
 # DÜŞEN HER ANAHTAR SAYFADA BİR STATİK YEDEK DEMEKTİR: sayfa "veri taze" derken
 # yirmi anahtarın yerinde donmuş sayılar görünüyordu ve hüküm bunu görmüyordu.
 # ÖLÇÜT "Veri taze" HÜKMÜNÜ arar, "taze" HECESİNİ değil: bayatlık gerekçesi
@@ -3083,7 +3195,10 @@ sina("bayatlık hükmü ÖLÇÜLEN gecikmeden kuruluyor",
 # 1.196,0. Sayı ile etiket ayrı yerlerden gelirse ikisi de doğru görünür.
 _Hg = H0.copy()
 _Hg.loc[pd.Timestamp("2026-06-05"), "ar_toplam"] = np.nan
-_G = _kutu(_Hg, sekil=False)
+# SINAMANIN KENDİ KAPSAMI: bu senaryo `sekil=False` ile koşuyordu ve çizim
+# katmanı hiç ateşlenmiyordu — yani kusurun ortaya çıktığı yer sınamanın
+# görüş alanının DIŞINDAYDI. Bir denetimin kapsamı denetimin parçasıdır.
+_G = _kutu(_Hg)
 _g_ay = pd.Timestamp(_G["o"]["kum_ay_bas"].split(".")[::-1][0]
                      + "-" + _G["o"]["kum_ay_bas"].split(".")[1]
                      + "-" + _G["o"]["kum_ay_bas"].split(".")[0])
@@ -3118,6 +3233,225 @@ sina("ölçülemeyen anahtar ÖZETTEN SİLİNMİYOR (yayın kapısı onu bulmal�
      "boş değere saat konmuş" if "kum_yil_ar_toplam_mn_tarih" in _G["o"] else "")
 sina("boş yazılan anahtar yine de ATLANAN sayılıyor (bayatlık hükmü düşer)",
      "kum_yil_ar_toplam_mn" in _G["atlanan"] and _G["o"]["bayat"] is True)
+
+# --- TÜREV SÜTUNUN BOŞLUĞU DOĞRUDAN ÖLÇÜLENİ GERİYE ÇEKMEZ ----------------
+# ARIZANIN KENDİSİ: dolarizasyon bloğunun çıpası BÜTÜN sütunlardan
+# hesaplanıyordu. Arındırılmış payın üç sütunu birikmiş parite etkisinden
+# türüyor ve `cumsum(skipna=False)` yüzünden tek bir eksik parite haftası
+# onları o haftadan İTİBAREN ölçülemez yapıyor. Ölçüldü: mart başında bir
+# hafta eksik gelince blok 28.08'den 27.02'ye düşüyor, yani DOĞRUDAN ölçülen
+# ham pay altı ay geriye yayımlanıyordu (%50,9 yerine %50,6). Üstelik koşu
+# kaydı bunu kaynağa yıkıyordu — "3 seri daha yeni" diye adlandırılanlar tam
+# da doğrudan ölçülen sütunlardı. Akım bloğunda aynı kural zaten vardı.
+_Hd = H0.copy()
+_Hd.loc[pd.Timestamp("2026-03-06"), ["pe_toplam", "pe_gercek", "pe_gercek_eur"]] = np.nan
+_D = _kutu(_Hd, sekil=False)
+# TUZAK GERÇEKTEN VAR MI: türev sütun gerçekten erken bitmiyorsa ölçüt vakumda
+# geçer. Ölçü doğrudan ölçüm katmanının kendi kaydından okunuyor.
+sina("türev pay sütunları boşluktan sonra ölçülemiyor (tuzak gerçek)",
+     _D["m"].get("dol_delikli") == ["dol_pay_ar", "dol_pay_fark",
+                                    "mevduat_yp_ar_mlr"],
+     str(_D["m"].get("dol_delikli")))
+sina("türev sütundaki boşluk dolarizasyon bloğunu geriye ÇEKMİYOR",
+     _D["m"]["dol_tarih"] == _T["m"]["dol_tarih"] == SON_HAFTA,
+     f"{_D['m']['dol_tarih']} · temiz {_T['m']['dol_tarih']}")
+sina("doğrudan ölçülen ham pay SON haftanın değeri kalıyor",
+     _D["m"]["dol_pay_ham"] == _T["m"]["dol_pay_ham"],
+     f"{_D['m'].get('dol_pay_ham')} · temiz {_T['m'].get('dol_pay_ham')}")
+# ÖLÇÜLEMEYEN DEĞER YAZILMAZ ve koşu kaydında ADIYLA görünür: geriye çekmemek,
+# ölçülemeyeni ölçülmüş gibi göstermek DEĞİLDİR.
+sina("ölçülemeyen arındırılmış pay YAZILMIYOR ve adıyla ilan ediliyor",
+     _D["o"]["dol_pay_ar"] is None
+     and isinstance(_T["o"]["dol_pay_ar"], float)
+     and any(x.startswith("ÖLÇÜM EKSİK") for x in _D["uyari"]),
+     f"{_D['o'].get('dol_pay_ar')!r}")
+
+# --- KAPSAM CÜMLESİ ÇERÇEVEDEN ÖLÇÜLENİ ANLATIR ---------------------------
+# ARIZANIN KENDİSİ: cümle "Stok tabloları, resmî ayrıştırma tablosundan 25
+# hafta sonra başlıyor" diyordu — bir KAYNAK iddiası. Aynı koşunun kaydında
+# kapsam uyarısı 22 serinin kırpık geldiğini söylüyor ve kataloğun ölçtüğü
+# gerçek fark 539 hafta; iki kutu birbirini yalanlıyordu. Ölçülen şey
+# ELİMİZDEKİ gözlemlerdir ve cümle bunu söylemeli.
+_kap_kirpik = _kutu(_kirpik_c, sekil=False)["o"].get("kapsam_cumlesi") or ""
+sina("kapsam cümlesi ÇERÇEVEDEN ölçüleni anlatıyor, kaynağın tablosunu değil",
+     "elimizdeki" in _kap_c and "elimizdeki" in _kap_kirpik
+     and "tabloları," not in _kap_c,
+     _kap_c[:160])
+# KIRPILMIŞ ÇERÇEVEDE CÜMLE İLE KAPSAM UYARISI ÇELİŞMİYOR: biri "elimizdeki
+# gözlemler" der, öteki "kaynağın ilk gözleminden geride başlıyoruz" — ikisi
+# aynı koşuda birlikte doğru.
+sina("kırpık çerçevede kapsam cümlesi ile kapsam uyarısı çelişmiyor",
+     "elimizdeki" in _kap_kirpik
+     and any(u.startswith("KAPSAM") for u in veri.cerceve_uyarilari(_kirpik_c)),
+     _kap_kirpik[:160])
+
+# --- BİLEREK KISA ÇİZİLEN İZ "BAYAT PANEL" DEĞİLDİR ------------------------
+# ARIZANIN KENDİSİ: uç denetimi figürün izlerinin EN ESKİSİNİ alıyordu. Yıl
+# içi kümüle, pencerenin TANIMI gereği bir boşluktan sonra yıl sonuna kadar
+# ölçülemez ve o iz erken biter; damga ise haftalık akımların ortak
+# haftasıdır. Sonuç: hat 02'de DURUYOR, 01 yazılmış, 02–06 hiç yazılmamış,
+# yükseklik künyesi hiç üretilmemiş, siteye kopyalama yok — çalışan beş figür
+# de gitmiyor. Kaynağın bir haftayı eksik yayımlaması bu hattın tasarımında
+# açıkça hayatta kalınabilir sayılan bir olay; bütün panoyu durdurması yanlış
+# alarmın kendisidir.
+sina("yıl içi kümüle erken bitince hat DURMUYOR, altı figür de yazılıyor",
+     _G["dur"] is None and _G["html"] == list(veri.SEKIL_DOSYALARI),
+     f"{_G['dur']}")
+# TUZAK GERÇEKTEN VAR MI: iz gerçekten ilan edilenden önce bitmiyorsa ölçüt
+# vakumda geçer ve kapattığı kusuru hiç göremez.
+_f02 = grafik.sekil_02(metrik.kumule(metrik.ayristir(_Hg, 0)[0]), _G["m"],
+                       veri.sekil_saatleri(_G["m"], uzun=True)["02_kumule_akim.html"])
+_e02, _y02 = grafik._cizili_uclar(_f02)
+_beyan02 = pd.Timestamp(b.tarihe_cevir(
+    veri.sekil_saatleri(_G["m"])["02_kumule_akim.html"]))
+sina("kümüle figüründe bir iz ilan edilenden ÖNCE bitiyor (tuzak gerçek)",
+     _e02 < _beyan02 <= _y02,
+     f"en eski {_e02.date()} · en yeni {_y02.date()} · ilan {_beyan02.date()}")
+
+
+# ===========================================================================
+# GİRİŞ NOKTASININ AĞSIZ YARISI — SINANIYOR MU?
+# ===========================================================================
+# ARIZANIN KENDİSİ VE ÖLÇÜSÜ. `veri.kos()`un künye döngüsü `kim_rapor`ın
+# TAMAMINI dolaşıp her kayıttan `maks_fark` okuyordu, oysa `kimlik_denetimi`
+# ÜÇ ayrı şekilde kayıt yazıyor: eşitlik (`maks_fark`), KAPSANMA (`maks_pay`,
+# `maks_fark` YOK) ve sınanamadı dalı (ikisi de yok). Hattın BİRİNCİ adımı her
+# koşuda KeyError ile ölürdü; ölçüm, çizim ve özet hiç koşmazdı. Derlenmesi ve
+# içe aktarılması geçiyordu, KOŞMASI düşüyordu.
+#
+# KUSURU BU KADAR YAŞATAN ŞEY ÖLÇÜLEBİLİRLİĞİYDİ. Duman koşarken dört giriş
+# noktasının çalışan satırları sayıldı: ölçüm 195, özet 189, çizim 34 —
+# ve `veri.kos` SIFIR. Tek sebebi `kos()`un ağa çıkmasıydı; ağa çıkmayan her
+# iş ondan AYRILDI (`durum_kaydi` · `kosu_dokumu`) ve buradan GERÇEK
+# çerçeveyle koşuyor.
+print("\n▶ Veri katmanının giriş noktası: ağsız yarısı gerçek çerçeveyle")
+
+_uyari_sifirla()
+_DURUM = veri.durum_kaydi(H0)
+sina("veri katmanının koşu kaydı GERÇEK çerçeveyle kuruluyor",
+     {"kosum", "son_hafta", "cerceve_imza", "parca", "kapsam", "bosluk",
+      "tazelik", "kimlik", "genis_fark", "hizalama", "olu_seri",
+      "uyarilar"} <= set(_DURUM)
+     and _DURUM["son_hafta"] == SON_HAFTA
+     and _DURUM["haftalik"] == [AKIM_HAFTA, H0.shape[1]],
+     f"{sorted(set(_DURUM))[:6]} · {_DURUM.get('son_hafta')}")
+# KAYIT JSON'A YAZILABİLİR OLMALI: `kos()` onu dosyaya yazıyor ve NaN ya da
+# Timestamp taşıyan bir alan orada patlar — ya da geçerli JSON olmayan bir
+# dosya bırakır ve ölçüm katmanı onu sessizce devralamaz.
+try:
+    json.dumps(_DURUM, ensure_ascii=False)
+    _kayit_json = True
+except (TypeError, ValueError) as _ex:
+    _kayit_json = False
+sina("koşu kaydı olduğu gibi JSON'a yazılabiliyor", _kayit_json)
+
+# DÖKÜM HER KAYIT TÜRÜNÜ BASAR VE DÜŞMEZ. Üç tür de gerçek çerçevede var:
+# eşitlik kimliği, kapsanma kimliği ve (kesişmeyen seriler için) sınanamadı.
+_KIM = dict(_DURUM["kimlik"])
+_tur = {"maks_fark": [a for a, r in _KIM.items() if "maks_fark" in r],
+        "maks_pay": [a for a, r in _KIM.items()
+                     if "maks_pay" in r and "maks_fark" not in r]}
+sina("gerçek çerçevede kimlik kayıtlarının İKİ türü de var (tuzak gerçek)",
+     bool(_tur["maks_fark"]) and bool(_tur["maks_pay"]),
+     f"eşitlik {len(_tur['maks_fark'])} · kapsanma {len(_tur['maks_pay'])}")
+_DOK = veri.kosu_dokumu(_DURUM)
+sina("döküm her kimlik kaydı için BİR satır basıyor ve düşmüyor",
+     sum(1 for x in _DOK if x.lstrip().startswith("kimlik")) == len(_KIM)
+     and all(a in " ".join(_DOK) for a in _KIM),
+     f"{len(_KIM)} kayıt · {sum(1 for x in _DOK if 'kimlik' in x)} satır")
+# ÜÇÜNCÜ TÜR (SINANAMADI) VE TANINMAYAN ALAN: sessizce ATLANMAZ. Atlamak, bir
+# kimliğin sınanmadığını sınanmış gibi göstermektir — ve yeni bir ölçü alanı
+# eklendiğinde döküm düşmemeli, tanımadığını ADIYLA basmalı.
+_KIM_KARMA = dict(_KIM)
+_KIM_KARMA["sınanamadı_sınav"] = {"gecti": None, "sinandi": False, "n": 0}
+_KIM_KARMA["yeni_ölçü_sınav"] = {"gecti": True, "n": 7, "maks_oran": 1.5}
+_DOK2 = veri.kosu_dokumu({**_DURUM, "kimlik": _KIM_KARMA})
+sina("sınanamadı ve BİLİNMEYEN alanlı kayıt sessizce ATLANMIYOR",
+     sum(1 for x in _DOK2 if x.lstrip().startswith("kimlik")) == len(_KIM) + 2
+     and sum(1 for x in _DOK2 if "ölçü tanınmadı" in x) == 2
+     and "maks_oran" in " ".join(_DOK2),
+     "; ".join(x for x in _DOK2 if "tanınmadı" in x)[:200])
+# GENİŞ FARK VE HİZALAMA DÖKÜMÜ DE KAYDIN ALANLARINI SORAR, VARSAYMAZ: aynı
+# sınıf kusur onlarda da mümkündü (kayıt biçimi değişince KeyError).
+sina("kapsam farkı ve hizalama dökümü gerçek kayıttan basılıyor",
+     any("kapsam farkı" in x for x in _DOK)
+     and sum(1 for x in _DOK if "hizalama [" in x) == len(_DURUM["hizalama"]),
+     f"hizalama {len(_DURUM['hizalama'])} bacak")
+_DOK3 = veri.kosu_dokumu({
+    "kimlik": {}, "genis_fark": {"yeni_alan": 1},
+    "hizalama": {"gercek": {"kaydirmalar": {"0": {"yeni": 2}}}}})
+sina("biçimi değişen kapsam/hizalama kaydında döküm DÜŞMÜYOR, adıyla basıyor",
+     len(_DOK3) == 3 and sum(1 for x in _DOK3 if "tanınmadı" in x) == 3,
+     "; ".join(_DOK3))
+# BOŞ KAYIT DA DÜŞÜRMEZ: `kos()` bir çerçevede hiç kimlik ölçemeyebilir.
+sina("boş koşu kaydında döküm boş liste veriyor", veri.kosu_dokumu({}) == [])
+
+# GİRİŞ NOKTASININ KENDİSİ DE KOŞUYOR. Ağa çıkan tek yer `cek_kume`; onu bu
+# çerçeveyi veren bir sarmalla değiştirince `kos()`un TAMAMI — kapsam kapısı,
+# kayıt yazımı ve döküm — ağsız koşar. Bir giriş noktasının "çağrılabildiği"
+# değil, GERÇEKTEN KOŞTUĞU sınanmalı: derlenmesi, içe aktarılması ve koşması
+# üç ayrı sınamadır.
+def _veri_kos(H):
+    kutu = Path(tempfile.mkdtemp(prefix="ypmevduat-duman-kos-"))
+    (kutu / "data").mkdir()
+    eski_veri, eski_cek = veri.VERI, veri.cek_kume
+    try:
+        veri.VERI = kutu / "data"
+        veri.cek_kume = lambda *a, **k: H.copy()
+        veri._SON.pop("hafta", None)
+        _uyari_sifirla()
+        cikti = io.StringIO()
+        with contextlib.redirect_stdout(cikti):
+            try:
+                durum, dur = veri.kos(), None
+            except SystemExit as ex:
+                durum, dur = None, str(ex)
+        return {"durum": durum, "dur": dur, "cikti": cikti.getvalue(),
+                "dosya": sorted(x.name for x in (kutu / "data").glob("*"))}
+    finally:
+        veri.VERI, veri.cek_kume = eski_veri, eski_cek
+        veri._SON.pop("hafta", None)
+        shutil.rmtree(kutu, ignore_errors=True)
+
+
+_VK = _veri_kos(H0)
+sina("veri katmanının GİRİŞ NOKTASI ağsız koşuyor ve iki dosyayı yazıyor",
+     _VK["dur"] is None and _VK["dosya"] == ["haftalik.csv", "veri_durum.json"]
+     and _VK["durum"]["son_hafta"] == SON_HAFTA,
+     f"{_VK['dur']} · {_VK['dosya']}")
+sina("giriş noktası dökümü ÇIKTIYA basıyor (kayıt sessizce kaybolmuyor)",
+     sum(1 for x in _VK["cikti"].splitlines()
+         if x.lstrip().startswith("kimlik")) == len(_VK["durum"]["kimlik"])
+     and "hizalama [" in _VK["cikti"] and "kapsam farkı" in _VK["cikti"],
+     _VK["cikti"][-300:])
+# KAPSAM KAPISI HÂLÂ KAPI: çekirdeği eksik bir çekimde hat DURUR ve hiçbir
+# dosya yazılmaz — depodaki doğru sürüme dokunulmaz.
+_VK_eksik = _veri_kos(H0.drop(columns=[next(iter(veri.CEKIRDEK))]))
+sina("kapsam yetersizken giriş noktası DURUYOR ve dosya YAZMIYOR",
+     _VK_eksik["dur"] is not None and _VK_eksik["dosya"] == []
+     and "kapsam yetersiz" in _VK_eksik["dur"],
+     f"{str(_VK_eksik['dur'])[:80]} · {_VK_eksik['dosya']}")
+
+# YAPISAL KİLİT: `kos()`un gövdesinde ağa çıkmayan iş KALMAMALI. Ölçüm
+# çağrıları oraya geri taşınırsa bir daha sınanamazlar ve bu sayfa yine
+# sıfır satır kapsamına döner — kusurun geri gelme biçimi tam olarak budur.
+_kos_govde = _iz_kaynak("kos")
+_kacak = [a for a in ("kimlik_denetimi(", "genis_fark_olc(", "hizalama_olc(",
+                      "olu_seri_olc(", "kapsam_olc(", "bosluk_olc(",
+                      "tazelik_olc(", "cerceve_uyarilari(")
+          if a in _kos_govde]
+sina("kos() gövdesinde ağa çıkmayan ölçüm KALMADI (hepsi ayrı fonksiyonda)",
+     not _kacak and "durum_kaydi(H)" in _kos_govde
+     and "kosu_dokumu(durum)" in _kos_govde,
+     f"kos() içinde kalan ölçüm çağrıları: {_kacak}")
+# ÜÇ GİRİŞ NOKTASININ AĞSIZ YARISI ZATEN ZİNCİRDEN KOŞUYOR (`_kutu`): ölçüm,
+# çizim ve özet uçtan uca ateşleniyor. Ölçüt bunu yapısal olarak sorar ki bir
+# gün zincirden çıkarılırlarsa sessiz kalmasın.
+sina("ölçüm, çizim ve özet giriş noktaları zincirden UÇTAN UCA koşuyor",
+     _T["m"]["son_hafta"] == SON_HAFTA and _T["dur"] is None
+     and _T["html"] == list(veri.SEKIL_DOSYALARI) and bool(_T["o"]),
+     f"{_T['dur']} · {len(_T['html'])} figür")
+_uyari_sifirla()
 
 
 # ---------------------------------------------------------------------------

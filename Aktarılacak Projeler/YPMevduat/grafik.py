@@ -330,12 +330,16 @@ def _kol(df: pd.DataFrame, ad: str):
     return s if s.notna().any() else None
 
 
-def _cizili_uc(fig) -> pd.Timestamp | None:
-    """Figürün gerçekten ÇİZDİĞİ uç: her izin son dolu gözlemi, EN ESKİSİ.
+def _cizili_uclar(fig) -> tuple[pd.Timestamp | None, pd.Timestamp | None]:
+    """Figürün ÇİZDİĞİ uçların EN ESKİSİ ve EN YENİSİ.
 
-    Saat defteri sütun adıyla ölçüyor, bu fonksiyon FİGÜRÜN KENDİSİNİ; ikisi
-    ayrışırsa figüre bir iz eklenmiş ve defter güncellenmemiş demektir. Kusur
-    göze çarpmaz — damga bir gün kayar ve koşu yeşil biter.
+    İKİSİ AYRI SORULARIN CEVABIDIR ve bir zamanlar yalnız biri ölçülüyordu.
+    "Figür ilan ettiği haftayı gösteriyor mu" sorusunun cevabı EN YENİ uçtur:
+    bir iz o haftaya kadar çiziliyorsa damga figürde olmayan bir haftayı ilan
+    etmiyordur. EN ESKİ uç başka bir şeyi söyler — figürün bir izi daha erken
+    bitiyor — ve bu tek başına bir kusur değildir: yıl içi kümüle, pencere
+    TANIMI gereği bir boşluktan sonra yıl sonuna kadar ölçülemez ve o iz
+    bilerek kısa çizilir.
     """
     uclar = []
     for tr in fig.data:
@@ -357,7 +361,7 @@ def _cizili_uc(fig) -> pd.Timestamp | None:
             uclar.append(pd.Timestamp(xa[dolu[-1]]))
         except (TypeError, ValueError):
             continue
-    return min(uclar) if uclar else None
+    return (min(uclar), max(uclar)) if uclar else (None, None)
 
 
 def _uc_denetimi(ad: str, beyan: str | None, fig) -> None:
@@ -372,28 +376,47 @@ def _uc_denetimi(ad: str, beyan: str | None, fig) -> None:
     YANLIŞ ALARMI, ARIZANIN KENDİSİDİR: bu depoda bir kez yayın altı koşu
     üst üste düştü ve site on iki saat dondu.
 
-    Bu yüzden yalnız ZARARLI yön durdurur:
-      · çizilen uç ilan edilenden ESKİYSE → figür göstermediği bir haftayı
-        ilan ediyor demektir; bu düpedüz yanlış bir tarihtir, hat DURUR.
-      · çizilen uç ilan edilenden YENİYSE → blok saati tutucudur, figür
-        gerçekte daha ileriye kadar çiziyor. Yalan değil ama sessiz de
-        kalınmaz: koşu kaydına operatör notu düşer.
+    ÖLÇÜ FİGÜRÜN EN YENİ İZİNDEN ALINIR, EN ESKİSİNDEN DEĞİL — ve bu bir
+    düzeltmedir. Sorulan şey "figür ilan ettiği haftayı gösteriyor mu"dur;
+    bir iz o haftaya kadar çiziliyorsa cevap EVET'tir, öteki izlerin nerede
+    bittiğinden bağımsız olarak. En eski uçla sorulduğunda kapı, TANIM GEREĞİ
+    kısa çizilen bir izi bayat panel sayıyordu: kaynak tek bir haftayı
+    atladığında yıl içi kümüle o haftadan yıl sonuna kadar ölçülemez hâle
+    geliyor (pencerenin tanımı bu) ve kümüle akım figürü ilan edilenden üç ay
+    geride bitiyordu. Ölçüldü — hat 02'de duruyor, 01 yazılmış, 02–06 hiç
+    yazılmamış, yükseklik künyesi hiç üretilmemiş, siteye kopyalama yok.
+    Bilerek kısa çizilen bir iz "bayat panel" değildir.
+
+    Üç hâl:
+      · figürün EN YENİ ucu ilan edilenden ESKİYSE → hiçbir iz o haftaya
+        ulaşmıyor; damga figürde olmayan bir haftayı ilan eder, hat DURUR.
+      · en yeni uç yetişiyor ama EN ESKİ iz geride bitiyorsa → figürün bir izi
+        daha erken bitiyor. Yalan değil (damga bloğun ortak haftasıdır) ama
+        sessiz de kalınmaz: koşu kaydına operatör notu düşer.
+      · bütün izler ilan edilenden İLERİ gidiyorsa → blok saati tutucudur;
+        yine not düşer.
     """
     if not beyan:
         return
     d = _bicim().tarihe_cevir(beyan)
-    cizili = _cizili_uc(fig)
-    if d is None or cizili is None:
+    eski, yeni = _cizili_uclar(fig)
+    if d is None or yeni is None:
         return
     beyan_t = pd.Timestamp(d)
-    if cizili < beyan_t:
+    if yeni < beyan_t:
         raise SystemExit(
-            f"DUR: {ad} için ilan edilen uç ({beyan}) figürün çizdiği uçtan "
-            f"({ad_gun(cizili)}) YENİ. Şekil saat defteri figürün izleriyle "
-            "ayrışmış; damga, figürde olmayan bir haftayı ilan eder.")
-    if cizili > beyan_t:
+            f"DUR: {ad} için ilan edilen uç ({beyan}) figürün çizdiği HİÇBİR "
+            f"ize ulaşmıyor; en yeni iz {ad_gun(yeni)} tarihinde bitiyor. "
+            "Şekil saat defteri figürün izleriyle ayrışmış; damga, figürde "
+            "olmayan bir haftayı ilan eder.")
+    if eski is not None and eski < beyan_t:
+        print(f"    not: {ad} — blok saati {beyan}, figürün en eski izi "
+              f"{ad_gun(eski)} tarihinde bitiyor; bir iz ilan edilenden önce "
+              "sona eriyor (türev bir sütun pencere tanımı gereği erken "
+              "bitebilir).")
+    elif eski is not None and eski > beyan_t:
         print(f"    not: {ad} — blok saati {beyan}, figürün kendi ucu "
-              f"{ad_gun(cizili)}; damga tutucu (bloğun bir bacağı geride).")
+              f"{ad_gun(eski)}; damga tutucu (bloğun bir bacağı geride).")
 
 
 def _yaz(fig, ad: str) -> pathlib.Path:
@@ -901,12 +924,22 @@ def sekil_06(D: pd.DataFrame, o: dict, damga: str | None):
         # ÇIPANIN GÜNÜ OKUR YAZIMIYLA: ölçüm katmanının `dol_cipa` alanı ISO
         # yazımdadır (makine kaydı) ve okura basılamaz; okur yazımı ayrı bir
         # alanda duruyor ve biçim sözleşmesi tek yerden geliyor.
+        # ALT YAZI, ÇİZİLENİ ANLATIR — ÖZETTEKİ DEĞERİ DEĞİL. Dal bir zamanlar
+        # `o["dol_pay_ar"]`e bakıyordu, yani bloğun ÇIPASINDAKİ değere; blok
+        # doğrudan ölçülen ham paya demirlendiği gün o değer boş kalabilir hâle
+        # geldi ve alt yazı "arındırılmış pay bu koşuda kurulamadı" demeye
+        # başladı — oysa arındırılmış iz figürde ÇİZİLİ. Okur, gözüyle gördüğü
+        # bir izin yokluğunu okur. Serinin VARLIĞI ile bir haftadaki DEĞERİ
+        # ayrı sorulardır: birincisi figürün, ikincisi özetin sorusu.
         (f"Dolarizasyon payı {o.get('dol_cipa_etiket', '—')} çıpasında "
-         f"{_yz(o, 'dol_pay_cipa', 1)}, son haftada {_yz(o, 'dol_pay_ham', 1)}; "
-         f"aynı haftada arındırılmış pay {_yz(o, 'dol_pay_ar', 1)}. "
-         if o.get("dol_pay_ar") is not None else
-         "Arındırılmış pay bu koşuda kurulamadı; şekilde yalnız ham pay "
-         "görünüyor. ")
+         f"{_yz(o, 'dol_pay_cipa', 1)}, son haftada {_yz(o, 'dol_pay_ham', 1)}. "
+         + (f"Arındırılmış pay aynı haftada {_yz(o, 'dol_pay_ar', 1)}. "
+            if o.get("dol_pay_ar") is not None else
+            "Arındırılmış iz de çizili, ama son haftada değeri ölçülemedi; "
+            "izin kendi ucu şeklin damgasında. ")
+         if _kol(D, "dol_pay_ar") is not None and _kol(D, "dol_pay_ar").notna().any()
+         else "Arındırılmış pay bu koşuda hiç ölçülemedi; şekilde yalnız ham "
+              "pay görünüyor. ")
         + (o.get("dol_cumlesi") or ""),
         "Arındırma için kur serisi kullanılmadı: yabancı para bacağı, resmî "
         "parite etkisinin çıpadan bu yana birikmiş toplamı stoktan düşülerek "
