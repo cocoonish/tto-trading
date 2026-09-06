@@ -129,12 +129,25 @@ def gostergeler(haftalik: bool = False) -> list[dict]:
 #   anket  → TCMB Piyasa Katılımcıları Anketi (enflasyon hattının ozet.json'u)
 #   model  → bu deponun kendi tahmini (Hazine ihale modeli, baz etkisi senaryoları)
 # Karıştırılmaz: anket piyasanın ne beklediğini, model bizim ne hesapladığımızı söyler.
-def _beklenti_metni(olay: str) -> str:
+#
+# BEKLENTİ, OLAYIN ÜLKESİNE AİTTİR. Buradaki iki kaynak da Türkiye'yi ölçüyor:
+# PKA anketi Türkiye enflasyon ve politika faizi beklentisidir, fonlama hattı
+# TCMB'nin faizidir. Eşleme yalnız olay ADINA bakınca "Fed (FOMC) faiz kararı"
+# satırı da tutuyordu ve okura Fed toplantısının beklentisi diye TÜRKİYE'nin
+# politika faizini (%37,00) ve PKA'nın 12 ay sonrası TL faiz beklentisini
+# gösteriyordu — ölçülmemiş bir şeyi ölçülmüş gibi göstermenin en sessiz
+# biçimi. Ad eşlemesi yetmez: kaydın ÜLKESİ sorulur. Aynı kusur ABD TÜFE
+# satırında bir kez daha vardı ve orada "abd" kelimesi elle dışlanmıştı;
+# elle dışlama bir sonraki yabancı veri satırında (euro alanı TÜFE'si) yine
+# tutardı. Ülke kapısı ikisini birden kapatır.
+def _beklenti_metni(olay: str, ulke: str = "TR") -> str:
+    if (ulke or "TR").upper() != "TR":
+        return ""              # yabancı takvim satırına Türkiye beklentisi iliştirilmez
     enf = gozlem.anlik("enflasyon") or {}
     fon = gozlem.anlik("fonlama-likidite") or {}
     s = olay.lower()
     p = []
-    if "tüfe" in s and "abd" not in s:
+    if "tüfe" in s:
         if enf.get("bek_yilsonu") is not None:
             p.append(f"anket (PKA, {enf.get('bek_n', '?')} katılımcı): yıl sonu "
                      f"%{olay_m._s(enf['bek_yilsonu'], 2)}")
@@ -158,7 +171,7 @@ def beklenti_iliştir(kayitlar: list) -> None:
     for k in kayitlar:
         if getattr(k, "beklenti", ""):
             continue           # Hazine ihalesi gibi kendi beklentisi olanlara dokunma
-        m = _beklenti_metni(k.olay)
+        m = _beklenti_metni(k.olay, getattr(k, "ulke", "TR"))
         if m:
             k.beklenti = m
 

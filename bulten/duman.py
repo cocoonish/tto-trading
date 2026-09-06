@@ -374,6 +374,24 @@ def main() -> int:
     sina("uret.gostergeler (günlük)", lambda: uret.gostergeler(haftalik=False))
     sina("uret.gostergeler (haftalık)", lambda: uret.gostergeler(haftalik=True))
 
+    # ── takvim beklentisi: TÜRKİYE ölçüsü yabancı satıra iliştirilemez.
+    # 06.09.2026'da Fed toplantısı satırı, adında "faiz kararı" geçtiği için
+    # Türkiye'nin politika faizini ve PKA anketinin TL faiz beklentisini
+    # beklenti diye basıyordu. Ölçüt ADA değil ÜLKEYE bakar; sınama ikisini de
+    # sorar ki bir sonraki oturum kapıyı ada geri çevirmesin.
+    def _beklenti_ulkesi():
+        for olay in ("Fed (FOMC) faiz kararı", "ECB para politikası kararı",
+                     "ABD TÜFE (Ağustos)", "Euro alanı TÜFE"):
+            for ulke in ("ABD", "EA", "GB"):
+                m = uret._beklenti_metni(olay, ulke)
+                if m:
+                    raise AssertionError(
+                        f"yabancı takvim satırına Türkiye beklentisi iliştirildi: "
+                        f"{ulke} · {olay} → {m}")
+        # TR satırında kapı KAPANMAMALI: hattın ölçüsü varsa beklenti yazılır.
+        uret._beklenti_metni("TCMB PPK faiz kararı", "TR")
+    sina("uret.beklenti: ülke kapısı", _beklenti_ulkesi)
+
     # ── tazeleme: takvim ucu SAHTE, sözleşme gerçek
     def _tazeleme():
         gercek = tazeleme._yayimlar
