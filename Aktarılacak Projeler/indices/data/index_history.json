@@ -927,58 +927,58 @@
     }
   },
   {
-    "timestamp": "2026-09-07T14:39:17.224855+00:00",
+    "timestamp": "2026-09-07T17:52:10.663116+00:00",
     "indices": {
       "EURUSD": {
-        "value": -0.2092,
+        "value": -0.1662,
         "category": "Bearish"
       },
       "USDJPY": {
-        "value": -0.2508,
+        "value": -0.2199,
         "category": "Bearish"
       },
       "USDCHF": {
-        "value": 0.1664,
+        "value": 0.2922,
         "category": "Bullish"
       },
       "GBPUSD": {
-        "value": -0.2449,
+        "value": -0.1919,
         "category": "Bearish"
       },
       "AUDUSD": {
-        "value": -0.1862,
+        "value": -0.1794,
         "category": "Bearish"
       },
       "NZDUSD": {
-        "value": -0.2779,
+        "value": -0.3867,
         "category": "Bearish"
       },
       "USDCAD": {
-        "value": -0.2711,
+        "value": -0.4138,
         "category": "Bearish"
       },
       "USDNOK": {
-        "value": -1.0,
-        "category": "Extremely Bearish"
+        "value": -0.1073,
+        "category": "Bearish"
       },
       "USDSEK": {
         "value": 0.0,
         "category": "Neutral"
       },
       "XAUUSD": {
-        "value": 0.0737,
+        "value": 0.0471,
         "category": "Neutral"
       },
       "XAGUSD": {
-        "value": 0.1549,
+        "value": 0.1472,
         "category": "Bullish"
       },
       "SPX": {
-        "value": 0.1116,
+        "value": 0.1134,
         "category": "Bullish"
       },
       "UST2Y": {
-        "value": -0.0187,
+        "value": -0.025,
         "category": "Neutral"
       },
       "UST10Y": {
@@ -986,11 +986,11 @@
         "category": "Extremely Bearish"
       },
       "BIST100": {
-        "value": 0.1886,
-        "category": "Bullish"
+        "value": 0.6069,
+        "category": "Extremely Bullish"
       }
     },
-    "veri_sonu": "2026-09-07T14:31:00+00:00",
+    "veri_sonu": "2026-09-07T17:09:26+00:00",
     "regime": {
       "label": "Transitioning",
       "basket_spread": -0.0424,
