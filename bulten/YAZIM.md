@@ -310,6 +310,33 @@ oturuma depo bağlanmadığı için özel depo klonlanamaz. Yani rutin metnini
 değiştirmenin tek yolu **claude.ai arayüzü**; oradan değiştirilecek bir şey
 yoksa yeni kural buraya yazılır ve rutin onu okuyarak öğrenir.
 
+## Tekrar — iki eksen
+
+Bültenin tekrarı iki ayrı yerde ölçülür ve ikisi ayrı kusurdur.
+
+**Sayı içi.** Aynı olgu birden çok bölümde yeniden ANLATILMAZ. Bir olgu bir kez
+tam anlatılır; ikinci geçişinde ya üzerine yeni bir işlem yapılır (aynı faiz
+taşıma hesabına girer) ya da tek cümleyle anılıp geçilir.
+
+**Günler arası.** *Bir sayı, önceki sayıyı özetlemez.* Okur dünkü bülteni
+okudu; bugünkü sayı DEĞİŞENİ anlatır. Ölçüldü (07.09.2026, 13 sayı): senin
+yazdığın düzyazı bu sınavı zaten geçiyor — gündem %0,6, yorum %0,3 birebir
+örtüşüyor. Tökezlediğimiz iki yer şunlar oldu:
+
+- **Söz defteri** ardışık iki sayı arasında %91,4 örtüşüyordu, çünkü 4.816
+  sözcüklük bölüm her sabah yeniden basılıyordu. Artık ölçüm katmanı kaydı
+  `degisti`/`duran` diye işaretliyor ve sayfa yalnız DEĞİŞENİ tam metinle
+  basıyor. Sana düşen: bir kaydın metnini ancak gerçekten değiştiyse güncelle.
+  Aynı sözü yeni sözcüklerle yeniden yazmak, kaydı "değişti" diye işaretler ve
+  tekrarı geri getirir.
+- **Özet** 24–25.08'de önceki sayıdan %97–100 aynen kopyalanmıştı. Özet, o
+  günün özetidir; dünkü özetin üzerine tarih atmak değil.
+
+Kapı `bulten/denetim.py`de ve ENGEL DEĞİL UYARI: sakin bir haftada iki sayının
+benzemesi meşrudur, vadesi gelen bir söz yeniden anılmalıdır. Uyarı hangi
+bölümün sürüklediğini adıyla söyler — hedef, sayfa düzyazısının %30'unun
+altında.
+
 ## Kurallar
 
 **Atıf disiplini.** `%1,5`'i aşan her hareket metinde **anılmalı** ve sebebi

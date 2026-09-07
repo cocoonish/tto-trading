@@ -49,6 +49,22 @@ SAYI_ADET_ESIK = 6
 # birebir ifade eşiği bunlar için ayrı sayılır (aşağıya bak).
 OZET_BOLUMLER = {"kilit", "yorum"}
 
+
+def _ozet_mi(ad: str) -> bool:
+    """Bu bölüm 'başka bölümlere değmesi TANIMI GEREĞİ meşru' ailesinden mi?
+
+    Kapsam sözleşmeye genişletilince (özet, temalar, söz defteri) İÇ tekrar
+    ölçüsü yapısal olarak şişti: 13 sayının 3'ü ENGEL eşiğini aşıyordu ve
+    hiçbiri gerçek kusur değildi. Sebebi basit — söz defteri "bültenin ne
+    dediğinin kaydı"dır, özet de özettir; ikisinin de gövdeye DEĞMESİ
+    gerekir. Aynı gerekçeyle `kilit` ve `yorum` zaten muaftı.
+
+    Muafiyet İÇ ölçüye özgüdür. GÜNLER ARASI ölçüde söz defteri tam tersine
+    asıl bakılacak yerdir: gövdeye değmesi meşru, kendini her gün yeniden
+    basması değil.
+    """
+    return ad in OZET_BOLUMLER or ad.startswith("ozet.") or ad == "soz_defteri"
+
 # Ölçüm dışı kalıplar: kaçınılmaz ve anlamlı tekrar eden teknik ifadeler.
 MUAF = re.compile(
     r"52 haftalık aralığın|baz puan|yılbaşından bu yana|milyar dolar|"
@@ -64,11 +80,45 @@ def _kelimeler(t: str) -> list[str]:
 
 
 def bolumler(b: dict) -> dict[str, str]:
-    """Bültenin ölçülecek yazı bölümleri (gündem + okuma), düz metin."""
+    """Bültenin ölçülecek yazı bölümleri — düz metin.
+
+    KAPSAM BİR LİSTEDEN DEĞİL SÖZLEŞMEDEN TÜRER: okura DÜZYAZI olarak basılan
+    her yazı-katmanı alanı ölçüye girer. Kural bir kez elle tutulan listeye
+    yazıldığında kaçınılmaz olarak geride kalır — ölçüldü (07.09.2026): liste
+    yalnız gündem + yorum'u kapsıyordu, yani sayfadaki düzyazının %27'sini.
+    Kapsam dışında kalan özet, temalar ve söz defteri, tekrarın asıl
+    biriktiği yerlerdi ve ölçüt onlara hiç bakmıyordu — bakılmayan yer, geçen
+    sınavla aynı görünür.
+    """
     out = {k: _duz(v) for k, v in (b.get("gundem") or {}).items() if _duz(v)}
     y = _duz(b.get("yorum") or "")
     if y:
         out["yorum"] = y
+    for k, v in (b.get("ozet") or {}).items():
+        if _duz(v):
+            out[f"ozet.{k}"] = _duz(v)
+    for i, t in enumerate(b.get("temalar") or []):
+        if not isinstance(t, dict):
+            continue
+        metin = _duz(" ".join(str(t.get(a) or "") for a in ("tez", "gelisme", "son_gozlem")))
+        if metin:
+            out[f"tema.{t.get('ad') or i}"] = metin
+    iz = b.get("izleme") or {}
+    if isinstance(iz, dict):
+        kayit = []
+        for grup in ("acik", "kapanan"):
+            for k in (iz.get(grup) or []):
+                if not isinstance(k, dict):
+                    continue
+                # DURAN kayıt sayfada tek satırla basılır; ölçüye de o hâliyle
+                # girer. Tam metnini saymak, basılmayan bir metni tekrar
+                # saymak olurdu.
+                if k.get("degisti") is False:
+                    kayit.append(str(k.get("konu") or ""))
+                else:
+                    kayit += [str(k.get(a) or "") for a in ("konu", "soz", "ne_bakilacak", "sonuc")]
+        if _duz(" ".join(kayit)):
+            out["soz_defteri"] = _duz(" ".join(kayit))
     return out
 
 
@@ -120,8 +170,68 @@ def olc(b: dict) -> dict:
     sayi = sayi_tekrari(bol)
     # Özet bölümlerinin (kilit/yorum) diğerlerine değmesi tanımı gereği; ağır
     # ihlal, ÖZET OLMAYAN iki bölümün birbirini tekrar etmesidir.
-    agir = [(s, y) for s, y in ifade if len([x for x in y if x not in OZET_BOLUMLER]) >= 2]
+    agir = [(s, y) for s, y in ifade if len([x for x in y if not _ozet_mi(x)]) >= 2]
     kelime = sum(len(t.split()) for t in bol.values()) or 1
     return {"bolum_sayisi": len(bol), "kelime": kelime,
             "ifade": ifade, "agir": agir, "sayi": sayi,
             "yogunluk": round(len(agir) / kelime * 1000, 1)}
+
+
+# ── GÜNLER ARASI TEKRAR ────────────────────────────────────────────────────
+#
+# Yukarıdaki ölçü bir SAYININ kendi içindeki tekrarı görür. Okurun asıl
+# şikâyeti ise başkaydı: "her gün aynı şeyleri söylemeyelim."
+#
+# Ölçüldü (07.09.2026, 13 sayı). Ardışık iki sayı arasında birebir 7-sözcük
+# öbeği örtüşmesi 26.08'den 06.09'a düzenli tırmanmış: %0,5 → %19,1 → %25,8
+# → %33,2 → %37,5 → %46,2. Kaynağı ayrıştırınca sebep tek bir yerde çıktı ve
+# YAZARDA DEĞİLDİ: gündem %0,6 · yorum %0,3 · özet %2,7 örtüşüyor — yani her
+# sabah yazılan düzyazı gerçekten yeni. Söz defteri ise %91,4 örtüşüyordu,
+# çünkü 4.816 sözcüklük bölüm her gün kelimesi kelimesine yeniden basılıyordu.
+# Defter düzeltildikten sonra aynı iki sayıda sayfa düzyazısının örtüşmesi
+# %47,3'ten %21,1'e indi.
+#
+# Bu ölçü ENGEL DEĞİL UYARIDIR ve bu bilinçli: sakin bir haftada iki sayının
+# birbirine benzemesi meşrudur, vadesi gelen bir söz yeniden anılmalıdır. Bir
+# yayın kapısının yanlış alarmı, ölçtüğü kusurdan pahalıdır. Uyarı hangi
+# BÖLÜMÜN sürüklediğini adıyla söyler — yazar neyi keseceğini görsün.
+# EŞİKLER ÖLÇÜLEN İKİ HÂLDEN TÜRETİLDİ, sezgiden değil:
+#   toplam    bozuk defter %47,3  ·  düzeltilmiş defter %21,1  → eşik 30
+#   bölüm     bozuk defter %91,5–100 · düzeltilmiş defter %71,4 → eşik 80
+# Bölüm eşiğinin 80 olması bilinçli: vadesi GELEN bir söz yeniden anılmalıdır
+# ("şunu bekliyorduk, bugün belli oldu") ve o gün metni tekrarlanır. Bu
+# tekrar okurun işine yarar; eşiği 60'a çekmek onu kusur sayar ve her sabah
+# öten bir uyarı iki haftada okunmaz olur.
+GUNLER_ARASI_UYARI = 30.0
+GUNLER_ARASI_BOLUM_UYARI = 80.0
+
+
+def gunler_arasi(bugun: dict[str, str], onceki: dict[str, str]) -> dict:
+    """İki sayının düzyazısı arasındaki birebir öbek örtüşmesi.
+
+    Girdi iki sayının `bolumler()` çıktısıdır. Dönen sözlük: toplam oran,
+    bölüm bölüm oran ve en çok taşıyan bölümler. Önceki sayı yoksa çağrılmaz —
+    ölçülmemiş bir oranı sıfır saymak, tekrarı yok saymaktır.
+    """
+    def _ob(t: str) -> set[tuple[str, ...]]:
+        k = _kelimeler(t)
+        return {tuple(k[i:i + OBEK]) for i in range(len(k) - OBEK + 1)}
+
+    onc_hepsi: set[tuple[str, ...]] = set()
+    for t in onceki.values():
+        onc_hepsi |= _ob(t)
+
+    bugun_hepsi: set[tuple[str, ...]] = set()
+    bolum_orani: dict[str, float] = {}
+    for ad, t in bugun.items():
+        o = _ob(t)
+        bugun_hepsi |= o
+        if o:
+            bolum_orani[ad] = round(100 * len(o & onc_hepsi) / len(o), 1)
+
+    oran = (round(100 * len(bugun_hepsi & onc_hepsi) / len(bugun_hepsi), 1)
+            if bugun_hepsi else 0.0)
+    agir = sorted((a for a, v in bolum_orani.items() if v >= GUNLER_ARASI_BOLUM_UYARI),
+                  key=lambda a: -bolum_orani[a])
+    return {"oran": oran, "bolum": bolum_orani, "agir": agir,
+            "uyari": oran >= GUNLER_ARASI_UYARI or bool(agir)}

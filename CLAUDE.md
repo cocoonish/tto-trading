@@ -928,3 +928,41 @@ HTML anlatan bir ders etiketi GÖSTERMEK zorundadır ve muafiyet olmasaydı
 ölçüt bir gün yayını tam da o yazı yüzünden durdururdu. Dört regresyon
 maddesi `site/tools/duman_sinav.py`de; ölçüt arızanın kendisine karşı
 koşturularak sınandı (20 kaçış → 0).
+
+**Kurucu ilke — TEKRARIN İKİ EKSENİ VARDIR ve biri hiç ölçülmüyordu.**
+Kullanıcı "tekrarlı olmasın, her gün aynı şeyleri söylemeyelim" dedi. Depoda
+bir tekrar ölçeri zaten vardı (`bulten/tekrar.py`) ama yalnız bir SAYININ
+KENDİ içine bakıyordu; "günler arası" ekseni hiç sorulmamıştı. Ölçüldü
+(07.09.2026, 13 sayı): ardışık iki sayı arasında birebir 7-sözcük öbeği
+örtüşmesi 26.08'den 06.09'a DÜZENLİ tırmanmış — %0,5 → %19,1 → %25,8 → %33,2
+→ %37,5 → %46,2.
+Kaynağı ayrıştırmak hükmü tersine çevirdi ve bu kayda değer: kusur YAZARDA
+DEĞİLDİ. Her sabah yazılan düzyazı gerçekten yeni — gündem %0,6 · yorum %0,3
+· özet %2,7. Tekrarın TAMAMI tek bir yerden geliyordu: söz defteri %91,4
+örtüşüyordu, çünkü 4.816 sözcüklük bölüm her sabah kelimesi kelimesine
+yeniden basılıyordu. Bir şikâyet "yazı tekrarlı" diye geldiğinde önce yazı
+ÖLÇÜLÜR; yazı temizse soru bitmez, YER DEĞİŞTİRİR — sayfanın kendi basım
+biçimine geçer.
+Düzeltme defteri SİLMİYOR, basım biçimini değiştiriyor: ölçüm katmanı her
+kaydı `degisti`/`duran` diye işaretler (üç ölçüt veriden türer — bugün açıldı,
+bugün kapandı, vadesi geldi; dördüncüsü önceki sayının metniyle kıyastır),
+sayfa değişeni TAM metniyle, duranı tek satırlık künyesiyle basar. Ölçüldü:
+defter 4.816 → 1.801 sözcük, sayfa düzyazısının günler arası örtüşmesi
+%47,3 → %21,1, haftalık sayı 18.456 → 15.644 sözcük.
+Üç tuzak kayda geçsin. (1) İlk kural KAPANMIŞ kayıt için de "vade yakın"
+soruyordu; kapanan 17 kaydın 16'sı "değişen" çıkıyor ve tekrar yerinde
+kalıyordu — kapanmış bir kayıt için vade ANLAMSIZDIR. (2) Ölçünün kapsamı
+elle tutulan bir listeydi (gündem + yorum = düzyazının %27'si); sözleşmeden
+türetilince — okura düzyazı olarak basılan her alan — asıl biriktiği yerler
+göründü. (3) Kapsam genişleyince İÇ tekrar ölçüsü yapısal olarak şişti ve 13
+sayının 3'ünü ENGELLEYECEKTİ; sebep gerçek kusur değil, söz defterinin ve
+özetin gövdeye DEĞMESİNİN tanımı gereği meşru olmasıydı — `kilit`/`yorum`
+zaten aynı gerekçeyle muaftı. Muafiyet İÇ ölçüye özgü: GÜNLER ARASI ölçüde
+söz defteri tam tersine asıl bakılacak yerdir.
+Eşikler iki ÖLÇÜLEN hâlden türetildi, sezgiden değil (toplam: bozuk %47,3 ·
+düzeltilmiş %21,1 → eşik 30; bölüm: bozuk %91,5–100 · düzeltilmiş %71,4 →
+eşik 80) ve ölçü ENGEL DEĞİL UYARI: sakin bir haftada iki sayının benzemesi
+meşrudur, vadesi gelen bir söz yeniden anılmalıdır. Yayının önünde duran bir
+denetimin yanlış alarmı, ölçtüğü kusurdan pahalıdır.
+Yan bulgu, eski kapının göremediği: 24–25.08'de `ozet` önceki sayıdan
+%97–100 aynen kopyalanmış. Bakılmayan yer, geçen sınavla aynı görünür.
