@@ -927,34 +927,34 @@
     }
   },
   {
-    "timestamp": "2026-09-07T06:47:58.182893+00:00",
+    "timestamp": "2026-09-07T14:39:17.224855+00:00",
     "indices": {
       "EURUSD": {
-        "value": 0.0212,
-        "category": "Neutral"
+        "value": -0.2092,
+        "category": "Bearish"
       },
       "USDJPY": {
-        "value": -0.2252,
+        "value": -0.2508,
         "category": "Bearish"
       },
       "USDCHF": {
-        "value": 0.2845,
+        "value": 0.1664,
         "category": "Bullish"
       },
       "GBPUSD": {
-        "value": -0.4219,
+        "value": -0.2449,
         "category": "Bearish"
       },
       "AUDUSD": {
-        "value": 0.0056,
-        "category": "Neutral"
+        "value": -0.1862,
+        "category": "Bearish"
       },
       "NZDUSD": {
-        "value": -0.2755,
+        "value": -0.2779,
         "category": "Bearish"
       },
       "USDCAD": {
-        "value": -0.4023,
+        "value": -0.2711,
         "category": "Bearish"
       },
       "USDNOK": {
@@ -962,41 +962,41 @@
         "category": "Extremely Bearish"
       },
       "USDSEK": {
-        "value": -1.0,
-        "category": "Extremely Bearish"
+        "value": 0.0,
+        "category": "Neutral"
       },
       "XAUUSD": {
-        "value": -0.0037,
+        "value": 0.0737,
         "category": "Neutral"
       },
       "XAGUSD": {
-        "value": 0.06,
-        "category": "Neutral"
+        "value": 0.1549,
+        "category": "Bullish"
       },
       "SPX": {
-        "value": 0.0045,
-        "category": "Neutral"
+        "value": 0.1116,
+        "category": "Bullish"
       },
       "UST2Y": {
-        "value": -0.0738,
+        "value": -0.0187,
         "category": "Neutral"
       },
       "UST10Y": {
-        "value": -0.4796,
-        "category": "Bearish"
+        "value": -0.5676,
+        "category": "Extremely Bearish"
       },
       "BIST100": {
-        "value": 0.0927,
-        "category": "Neutral"
+        "value": 0.1886,
+        "category": "Bullish"
       }
     },
-    "veri_sonu": "2026-09-07T06:18:02+00:00",
+    "veri_sonu": "2026-09-07T14:31:00+00:00",
     "regime": {
       "label": "Transitioning",
-      "basket_spread": -0.083,
-      "avg_correlation": -0.035,
-      "pc1_share": 0.2859,
-      "as_of": "2026-08-30",
+      "basket_spread": -0.0424,
+      "avg_correlation": -0.027,
+      "pc1_share": 0.2671,
+      "as_of": "2026-09-06",
       "n_assets": 15
     }
   }
