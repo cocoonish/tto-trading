@@ -295,27 +295,136 @@ def zaman_asimi(sn: int):
 
 
 # ── durum defteri ────────────────────────────────────────────────────────────
+#
+# BİR TETİK, VERİ İLERLEMEDİYSE TÜKETİLMİŞ SAYILMAZ.
+#
+# Defter eskiden tek şey biliyordu: hat en son ne zaman KOŞTU. Karar da ona
+# bakıyordu — "son koşumdan sonra bir yayım oldu mu". İkisinin arasında sessiz
+# bir varsayım var: hat koştuysa veriyi almıştır. `guncelle.py`nin damga
+# satırındaki yorum bu varsayımı zaten reddediyordu ("'koştu sayıldı ama veri
+# gelmedi' durumu oluşmasın") ama yalnız DÜŞEN koşu için: başarıyla biten ama
+# ELİ BOŞ dönen koşu damgayı yine de alıyordu.
+#
+# 03.09.2026'da kredi hattı tam bunu yaptı. Haftalık Para ve Banka
+# İstatistikleri perşembe 14:30'da duyuruldu, hat 16:28 ve 19:12'de koştu,
+# ikisinde de 21.08 haftasıyla döndü ve damgayı aldı. Kaynak veriyi geç
+# düşürdü — aynı yayımdan beslenen YP mevduatı hattı 06.09'da koştuğunda 28.08
+# haftasını buldu. Ama kredinin tetiği tüketilmişti: bir sonraki tetik 10.09
+# perşembeydi ve emniyet ağı (11 gün) haftalık döngüden UZUN. Site yedi gün
+# boyunca 17 gün eski veriyle kalacaktı, üstelik hattın kendi uyarı dosyası
+# "13 gün geride (tolerans 12)" diye yazmış olmasına rağmen: ölçü vardı, onu
+# okuyan yoktu.
+#
+# Defter artık koşunun ne getirdiğini de yazıyor: hattın site kopyasındaki veri
+# SÜRÜMÜ (`son_surum`) ve o sürümü değiştirmeyen ARDIŞIK koşu sayısı
+# (`deneme`). Sürüm ilerlerse sayaç sıfırlanır; ilerlemezse hat bir sonraki
+# pencerede yeniden denenir — önbelleği ATLAYARAK, çünkü önbellekte duran şey
+# tam da eli boş dönen koşunun cevabıdır.
 
-def durum_oku() -> dict[str, str]:
-    """Her hattın en son BAŞARIYLA koştuğu an."""
+# Kaç kez yeniden denenir. ÖLÇÜLMÜŞ BİR SAYI DEĞİL, TAVAN: kaynağın veriyi
+# hiç düşürmediği durumda hattın her pencerede koşup durmasını engeller.
+# Dört deneme, altı pencerelik günde kabaca bir günü kapsar; en pahalı hat
+# (kredi, 869 sn) için toplam maliyet ~58 dakika ve ancak GERÇEKTEN geciken
+# bir yayımda ödenir.
+TEKRAR_HAKKI = 4
+# İki deneme arasındaki en kısa süre (saat). Aynı pencerede peş peşe ateşlenen
+# iki koşunun denemeleri boşa harcamasını engeller.
+TEKRAR_SAAT = 2
+
+
+def _defter() -> dict:
     if not DURUM.exists():
         return {}
     try:
-        return json.loads(DURUM.read_text(encoding="utf-8")).get("son_kosum", {})
+        return json.loads(DURUM.read_text(encoding="utf-8"))
     except (ValueError, OSError):
         return {}
 
 
+def durum_oku() -> dict[str, str]:
+    """Her hattın en son BAŞARIYLA koştuğu an."""
+    return _defter().get("son_kosum", {}) or {}
+
+
+def surum_oku() -> dict[str, str]:
+    """Her hattın son koşusunda GÖRÜLEN veri sürümü."""
+    return _defter().get("son_surum", {}) or {}
+
+
+def deneme_oku() -> dict[str, int]:
+    """Sürümü ilerletmeden biten ardışık koşu sayısı."""
+    return _defter().get("deneme", {}) or {}
+
+
+def hat_surumu(hat: str) -> str:
+    """Hattın site kopyasındaki veri sürümü — hattın ANA SAATİ.
+
+    Kütük tek kaynak (`guncelle.HATLAR`): slug da, hangi alanların tarih
+    taşıdığı da (`tarih_anahtarlari`) orada duruyor. Burada ikinci bir liste
+    tutmak, ikisinin bir gün sessizce ayrışması demek. Okunamazsa boş dizge
+    döner ve sürüm kıyası HİÇ yapılmaz (uydurma kıyas, kıyas yapmamaktan
+    kötüdür).
+
+    NEDEN BÜTÜN ALANLAR DEĞİL, TEK SAAT. Bir ozet.json birden çok saat taşır ve
+    çoğu hatta bunlar FARKLI RİTİMDE: kredide `_tarih` haftalık, `gun_tarih`
+    günlük, `ay_tarih` aylıktır. Alanların hepsinden kurulan bir imza, günlük
+    bacak her iş günü ilerlediği için HER ZAMAN değişir — yani donan haftalık
+    bacak sayacı hiç artıramaz ve yeniden deneme, yazıldığı arıza için hiç
+    ateşlenmezdi. En eskisini almak da işlemiyor: aylık bacak bir ay boyunca
+    meşru olarak durur ve sağlıklı haftalarda boş yere dört deneme yakardı.
+    Ölçü bu yüzden hattın ana saatidir — `RITIM`in denetlediği saatin ta
+    kendisi (`_tarih`, yoksa kütükteki ilk alan; `tcmb` hattında `g_tarih`).
+
+    DIŞARIDA KALAN, adıyla: ana saati ilerlerken İÇİNDEKİ bir alanın donması
+    bu ölçüye görünmez. O ayrı bir denetimin işi ve zaten var — `RITIM_ALAN`
+    o alanları tek tek izliyor ve bültende "veri gecikti" olayını üretiyor."""
+    import sys
+    try:
+        sys.path.insert(0, str(KOK))
+        import guncelle                                        # noqa: E402
+        h = next((x for x in guncelle.HATLAR if x.ad == hat), None)
+        if h is None:
+            return ""
+        d = guncelle._ozet_tarih(h)
+        if not d:
+            return ""
+        ana = "_tarih" if "_tarih" in d else (h.tarih_anahtarlari[0]
+                                             if h.tarih_anahtarlari else "")
+        deger = str(d.get(ana, "")).strip()
+        return "" if deger in ("", "None") else deger
+    except Exception:                                          # noqa: BLE001
+        return ""
+
+
 def durum_yaz(hatlar: list[str], simdi: dt.datetime | None = None):
-    """Başarıyla koşan hatların damgasını güncelle (başarısızlar dokunulmaz)."""
+    """Başarıyla koşan hatların damgasını güncelle (başarısızlar dokunulmaz).
+
+    Damgayla birlikte koşunun NE GETİRDİĞİ de yazılır; kararı asıl o belirler."""
     simdi = simdi or _simdi()
-    d = durum_oku()
+    defter = _defter()
+    d = dict(defter.get("son_kosum", {}) or {})
+    s = dict(defter.get("son_surum", {}) or {})
+    n = dict(defter.get("deneme", {}) or {})
     for h in hatlar:
         d[h] = simdi.isoformat(timespec="seconds")
+        yeni_surum = hat_surumu(h)
+        if not yeni_surum:
+            # Sürüm okunamadı: sayacı ne artır ne sıfırla. Ölçülemeyen bir şeye
+            # göre karar vermek, ölçülmüş gibi davranmaktır.
+            continue
+        if yeni_surum != s.get(h, ""):
+            s[h] = yeni_surum
+            n[h] = 0
+        else:
+            n[h] = int(n.get(h, 0)) + 1
     DURUM.write_text(
-        json.dumps({"aciklama": "Her veri hattının en son başarıyla tazelendiği an. "
-                                "tazeleme.py bunu okuyup hangi hattın koşacağına karar verir.",
-                    "son_kosum": dict(sorted(d.items()))},
+        json.dumps({"aciklama": "Her veri hattının en son başarıyla tazelendiği an, "
+                                "o koşuda görülen veri sürümü ve sürümü ilerletmeden "
+                                "biten ardışık koşu sayısı. tazeleme.py bunu okuyup "
+                                "hangi hattın koşacağına karar verir.",
+                    "son_kosum": dict(sorted(d.items())),
+                    "son_surum": dict(sorted(s.items())),
+                    "deneme": dict(sorted(n.items()))},
                    ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
@@ -327,6 +436,10 @@ class Karar:
     kossun: bool
     sebep: str
     tetikleyen: list[str] = field(default_factory=list)
+    # Bu koşuda seri önbelleği ATLANSIN mı. Yalnız YENİDEN DENEME'de açılır:
+    # hat eli boş döndüyse, önbellekte duran şey tam da o boş cevaptır ve
+    # onu okuyan bir "yeniden deneme" hiçbir şeyi yeniden denemez.
+    yenile: bool = False
 
 
 def kararlar(hatlar: list[str] | None = None,
@@ -336,6 +449,8 @@ def kararlar(hatlar: list[str] | None = None,
     simdi = simdi or _simdi()
     hatlar = hatlar or [t.hat for t in TETIKLER]
     durum = durum_oku()
+    surum = surum_oku()
+    deneme = deneme_oku()
     yillar = tuple({simdi.year, (simdi - dt.timedelta(days=120)).year})
     yayim, takvim_saglam = _yayimlar(yillar)
     ihaleler = _ihale_gunleri()
@@ -409,10 +524,36 @@ def kararlar(hatlar: list[str] | None = None,
         tetikleyen = sorted(set(tetikleyen))
         if tetikleyen:
             cikti.append(Karar(ad, True, f"{len(tetikleyen)} yeni yayım", tetikleyen))
-        else:
+            continue
+
+        # YENİDEN DENEME. Buraya gelmek "son koşumdan bu yana yeni yayım yok"
+        # demek — ama son koşu VERİYİ İLERLETTİYSE. İlerletmediyse tetik
+        # tüketilmiş sayılmaz: kaynak yayımı geç düşürmüş olabilir ve bir
+        # sonraki tetiği beklemek, haftalık bir seride yedi gün bayat sayfa
+        # demektir (03.09.2026, kredi hattı).
+        kalan_hak = TEKRAR_HAKKI - int(deneme.get(ad, 0))
+        gecen_saat = (simdi - son).total_seconds() / 3600
+        if deneme.get(ad, 0) and kalan_hak > 0 and gecen_saat >= TEKRAR_SAAT:
+            cikti.append(Karar(
+                ad, True,
+                f"önceki koşu veriyi ilerletmedi ({surum.get(ad, '?')}) — "
+                f"yeniden deneniyor ({int(deneme[ad])}/{TEKRAR_HAKKI}), "
+                f"önbellek atlanıyor",
+                yenile=True))
+            continue
+
+        # Hakkı bitmiş bir hat SESSİZCE beklemez: gerekçe adıyla yazılır,
+        # yoksa "yeni yayım yok" satırı sağlıklı bir bekleyişle aynı görünür.
+        if deneme.get(ad, 0) >= TEKRAR_HAKKI:
             cikti.append(Karar(ad, False,
-                               f"yeni yayım yok — son tazeleme {son:%d.%m %H:%M} "
-                               f"({gecen} gün önce)"))
+                               f"veri {int(deneme[ad])} koşudur ilerlemedi "
+                               f"({surum.get(ad, '?')}); yeniden deneme hakkı doldu — "
+                               f"sıradaki yayım ya da emniyet ağı bekleniyor"))
+            continue
+
+        cikti.append(Karar(ad, False,
+                           f"yeni yayım yok — son tazeleme {son:%d.%m %H:%M} "
+                           f"({gecen} gün önce)"))
     return cikti
 
 

@@ -189,14 +189,27 @@ def _cek(yol: str, deneme: int = 3):
     raise RuntimeError(f"EVDS isteği düştü ({yol[:90]}): {son_hata}") from son_hata
 
 
+def _tazelik():
+    """ortak/tazelik — önbellek tazeliğinin TEK tanımı; TTO_YENILE orada okunur.
+    Hat kendi klasöründen elle koşturulursa ortak/ PYTHONPATH'te olmayabilir;
+    depo kökünden bulunur (kalıp: metrik.py'nin _bicim yardımcısı)."""
+    try:
+        import tazelik
+    except ImportError:
+        import pathlib as _pl
+        import sys as _sys
+        _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2] / "ortak"))
+        import tazelik
+    return tazelik
+
+
 def _taze(yol: pathlib.Path, ttl_saat: float) -> bool:
-    if not yol.exists():
-        return False
-    return (dt.datetime.now().timestamp() - yol.stat().st_mtime) / 3600 < ttl_saat
+    """Önbellek hâlâ kullanılabilir mi — karar ortak/tazelik'te (TTO_YENILE)."""
+    return _tazelik().taze(yol, ttl_saat)
 
 
 def _yas_gun(yol: pathlib.Path) -> float:
-    return (dt.datetime.now().timestamp() - yol.stat().st_mtime) / 86400
+    return _tazelik().yas_gun(yol)
 
 
 # --------------------------------------------------------------------------- ayrıştırıcılar

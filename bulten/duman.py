@@ -429,6 +429,117 @@ def main() -> int:
             tazeleme._yayimlar = gercek
     sina("tazeleme: karar + ölü kalıp (iki takvim durumu)", _tazeleme)
 
+    # ── ELİ BOŞ DÖNEN KOŞU TETİĞİ TÜKETMEZ (03.09.2026, kredi hattı)
+    #
+    # Ölçüt ARIZANIN KENDİSİNE karşı koşuluyor: perşembe yayımından sonra koşup
+    # 21.08 haftasıyla dönen bir hat, eski davranışta "yeni yayım yok" deyip bir
+    # sonraki perşembeye kadar uyuyordu. Sınama o günün defterini birebir kurar
+    # ve kararın "koşsun + önbelleği atla" olmasını ister; hakkı dolan hattın
+    # SUSMAMASINI da (gerekçe adıyla yazılır) sorar.
+    def _eli_bos_kosu():
+        gercek_y, gercek_d = tazeleme._yayimlar, tazeleme._defter
+        persembe = [{"adi": "Haftalık Para ve Banka İstatistikleri",
+                     "kurum": "TCMB", "an": "2026-09-03T14:30:00"}]
+
+        def defter(kosum, deneme):
+            return lambda: {"son_kosum": {"kredi": kosum},
+                            "son_surum": {"kredi": "21.08.2026"},
+                            "deneme": {"kredi": deneme}}
+
+        def karar(kosum, deneme, simdi):
+            tazeleme._defter = defter(kosum, deneme)
+            return tazeleme.kararlar(["kredi"], simdi=simdi)[0]
+
+        try:
+            tazeleme._yayimlar = lambda y: (persembe, True)
+
+            # (1) Yayımdan sonra koştu ve VERİ GELDİ → sayaç 0, hat beklemeli.
+            k = karar("2026-09-03T19:12:00", 0, dt.datetime(2026, 9, 3, 21, 0))
+            assert not k.kossun, f"veri gelmişken yeniden koşuyor: {k.sebep}"
+
+            # (2) Yayımdan sonra koştu, ELİ BOŞ döndü → koşmalı VE önbelleği
+            #     atlamalı. Önbelleği atlamayan bir "yeniden deneme", eli boş
+            #     koşunun kendi cevabını okur; hiçbir şeyi yeniden denemez.
+            k = karar("2026-09-03T19:12:00", 1, dt.datetime(2026, 9, 4, 5, 13))
+            assert k.kossun, f"eli boş koşudan sonra beklemeye geçti: {k.sebep}"
+            assert k.yenile, f"yeniden deneme önbelleği atlamıyor: {k.sebep}"
+
+            # (3) İki deneme arası en kısa süre: aynı pencerede peş peşe
+            #     ateşlenen iki koşu hakları boşa harcamamalı.
+            k = karar("2026-09-03T19:12:00", 1, dt.datetime(2026, 9, 3, 20, 12))
+            assert not k.kossun, f"TEKRAR_SAAT dinlenmiyor: {k.sebep}"
+
+            # (4) Hak dolunca durur — ama SUSMAZ: gerekçe sağlıklı bir
+            #     bekleyişten ayırt edilebilir olmalı.
+            k = karar("2026-09-04T05:13:00", tazeleme.TEKRAR_HAKKI,
+                      dt.datetime(2026, 9, 4, 11, 47))
+            assert not k.kossun, "hak dolduğu hâlde koşmaya devam ediyor"
+            assert "ilerlemedi" in k.sebep, f"sessiz bekleyiş: {k.sebep}"
+        finally:
+            tazeleme._yayimlar, tazeleme._defter = gercek_y, gercek_d
+    sina("tazeleme: eli boş dönen koşu tetiği tüketmez", _eli_bos_kosu)
+
+    # SÜRÜM ÖLÇÜSÜ HATTIN ANA SAATİDİR. Bütün tarih alanlarından kurulan bir
+    # imza, kredide günlük bacak her iş günü ilerlediği için hep değişir ve
+    # yeniden deneme yazıldığı arıza için HİÇ ateşlenmez. Ölçüt o gerilemeyi
+    # yakalar: ana saat tek başına okunmalı.
+    def _surum_ana_saat():
+        import sys as _s
+        _s.path.insert(0, str(BURASI.parent))
+        import guncelle as g
+        h = g.HAT["kredi"]
+        assert len(h.tarih_anahtarlari) > 1, \
+            "sınama kredinin çok saatli olmasına dayanıyor; kütük değişmiş"
+        s = tazeleme.hat_surumu("kredi")
+        if s:                       # site kopyası yoksa ölçü yapılmaz
+            d = g._ozet_tarih(h) or {}
+            assert s == str(d.get("_tarih")), \
+                f"sürüm ana saatten değil, imzadan kuruluyor: {s!r}"
+            for a in h.tarih_anahtarlari[1:]:
+                assert str(d.get(a, "")) not in s or str(d.get(a)) == s, \
+                    f"ikincil saat ({a}) sürüme sızıyor: {s!r}"
+    sina("tazeleme: sürüm ölçüsü hattın ana saati", _surum_ana_saat)
+
+    # ÖNBELLEK TAZELİĞİ TEK YERDE. TTO_YENILE bir zamanlar dokuz hattın
+    # yalnız BİRİNDE okunuyordu: "koşulsuz tazele" düğmesi kalan sekizde
+    # önbelleği hiç atlamıyordu ve koşu yeşil bitiyordu. Kapsam listeden
+    # değil sözleşmeden türetilir: dosyada TTL'li bir önbellek varsa
+    # tazelik kararı ortak/tazelik'ten geçmelidir.
+    def _onbellek_tek_tanim():
+        kok = BURASI.parent
+        adaylar = sorted(
+            [p for p in (kok / "Aktarılacak Projeler").glob("*/veri.py")]
+            + [p for p in (kok / "Research").glob("*/src/veri.py")])
+        ttl, devretmeyen = [], []
+        for p in adaylar:
+            src = p.read_text(encoding="utf-8")
+            if "CACHE_TTL" not in src:
+                continue
+            ttl.append(p)
+            if "_tazelik()" not in src:
+                devretmeyen.append(str(p.relative_to(kok)))
+        assert ttl, "TTL'li önbellek tutan hiçbir hat bulunamadı — tarama kör"
+        assert not devretmeyen, ("önbellek tazeliğini ortak/tazelik'e "
+                                 f"devretmeyen hat: {devretmeyen}")
+        # Ortak modülün kendisi de sözleşmeyi tutmalı.
+        import sys as _s
+        _s.path.insert(0, str(kok / "ortak"))
+        import tazelik as _tzk
+        import os as _os
+        eski = _os.environ.get(_tzk.YENILE_DEGISKENI)
+        try:
+            _os.environ[_tzk.YENILE_DEGISKENI] = "1"
+            assert not _tzk.taze(kok / "ortak" / "tazelik.py", 99999), \
+                "TTO_YENILE verilmişken önbellek hâlâ taze sayılıyor"
+        finally:
+            if eski is None:
+                _os.environ.pop(_tzk.YENILE_DEGISKENI, None)
+            else:
+                _os.environ[_tzk.YENILE_DEGISKENI] = eski
+        assert _tzk.taze(kok / "ortak" / "tazelik.py", 99999), \
+            "normal koşuda taze dosya bayat sayılıyor — önbellek işlevsiz kalır"
+    sina("tazelik: önbellek sözleşmesi tek tanımda", _onbellek_tek_tanim)
+
     # --gerekli'nin atladığı hat türev genişletmesiyle geri gelmez: reelfx tcmb'ye
     # bağımlı, tcmb her iş günü seçiliyor, reelfx her gün EVDS'e çıkıyordu (02.09).
     def _turev_genisletme():

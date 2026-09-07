@@ -67,6 +67,22 @@ _COCUK_ENV = {
 }
 
 
+def _yenile_degiskeni() -> str:
+    """Önbellek atlama bayrağının adı — TEK tanım ortak/tazelik'te.
+
+    Adı burada da yazmak, iki tarafın bir gün sessizce ayrışması demek: hat
+    bir dizgeyi okur, guncelle başkasını yazar ve "yeniden deneme" sessizce
+    önbellekten cevap verir. Ortak modül okunamazsa bilinen ad kullanılır ve
+    bu GÖRÜNÜR bir uyarıdır, sessiz bir varsayım değil."""
+    try:
+        sys.path.insert(0, _ORTAK)
+        import tazelik                                          # noqa: E402
+        return tazelik.YENILE_DEGISKENI
+    except Exception as _ex:                                    # noqa: BLE001
+        print(_renk(f"  (ortak/tazelik okunamadı: {_ex}) — TTO_YENILE varsayılıyor", 33))
+        return "TTO_YENILE"
+
+
 _ANSI = re.compile(r"\033\[[0-9;]*m")
 GUNLUK_KLASOR = KOK / "gunlukler"
 _GUNLUK = None          # açık dosya tanıtıcısı (yoksa None)
@@ -1651,6 +1667,7 @@ def main():
         secilen, tam, cm = menu()
     if not secilen: print("hat seçilmedi"); return 2
     atlanan_adlar: set[str] = set()      # --gerekli'nin bilinçle atladığı hatlar
+    yenile_hatlar: set[str] = set()      # yeniden denenen hatlar (önbellek atlanır)
 
     # Resmî yayım takvimi süzgeci: kaynağı son tazelemeden bu yana yayımlanmamış
     # hattı koşturmak, aynı veriyi ikinci kez indirmektir. 2026-08-25 bulut
@@ -1667,7 +1684,11 @@ def main():
     if a.gerekli:
         print(f"\n{'═'*64}\n  TAZELEME TAKVİMİ — hangi hat neden koşacak\n{'═'*64}")
         print(_tz.rapor([h.ad for h in secilen]))
-        gerek = set(_tz.gerekli([h.ad for h in secilen]))
+        # `gerekli()` değil `kararlar()`: karar YALNIZ "koşsun mu" değil, o
+        # koşunun önbelleği atlayıp atlamayacağını da taşıyor (yeniden deneme).
+        _kararlar = _tz.kararlar([h.ad for h in secilen])
+        gerek = {k.hat for k in _kararlar if k.kossun}
+        yenile_hatlar = {k.hat for k in _kararlar if k.kossun and getattr(k, "yenile", False)}
         atlanan = [h for h in secilen if h.ad not in gerek]
         atlanan_adlar = {h.ad for h in atlanan}
         secilen = [h for h in secilen if h.ad in gerek]
@@ -1729,10 +1750,21 @@ def main():
     sonuc = []
     secilen = turevleri_ekle(secilen, atlanan_adlar)
 
+    _YENILE = _yenile_degiskeni() if yenile_hatlar else ""
     try:
         for h in secilen:
             print(f"\n▶ {h.baslik}  ({h.klasor})")
-            ok, mesaj, sn = kos(h, tam, a.gunluk)
+            # Yeniden denenen hat önbelleği ATLAR; bayrak yalnız O hattın alt
+            # sürecine konur ve hemen geri alınır (bkz. tazeleme.TEKRAR_HAKKI).
+            atla = _YENILE and h.ad in yenile_hatlar
+            if atla:
+                print("    (yeniden deneme — seri önbelleği atlanıyor)")
+                _COCUK_ENV[_YENILE] = "1"
+            try:
+                ok, mesaj, sn = kos(h, tam, a.gunluk)
+            finally:
+                if atla:
+                    _COCUK_ENV.pop(_YENILE, None)
             sonuc.append((h, ok, mesaj, sn))
             print(_renk(f"    {'✓' if ok else '✗'} {mesaj}  [{sn:.0f}s]", 32 if ok else 31))
     finally:

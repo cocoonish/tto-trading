@@ -929,6 +929,52 @@ HTML anlatan bir ders etiketi GÖSTERMEK zorundadır ve muafiyet olmasaydı
 maddesi `site/tools/duman_sinav.py`de; ölçüt arızanın kendisine karşı
 koşturularak sınandı (20 kaçış → 0).
 
+**Kurucu ilke — BİR TETİK, VERİ İLERLEMEDİYSE TÜKETİLMEZ; ve bir önlem,
+KAÇ YERDE karşılığı olduğu ölçülmeden konmuş sayılmaz.** Kullanıcı "kredi
+datası güncellenmemiş gibi görünüyor" dedi ve haklıydı: site 17 gün eski
+haftayı gösteriyordu (21.08), oysa aynı yayımdan beslenen YP mevduatı hattı
+28.08'i çoktan bulmuştu. Kaynakta veri VARDI; kimse bir daha sormamıştı.
+Zincir şöyle koptu: Haftalık Para ve Banka İstatistikleri perşembe 14:30'da
+duyuruldu, tazeleme takvimi krediyi tetikledi, hat 03.09'da koştu, EVDS o anda
+hâlâ 21.08 haftasını veriyordu, hat eli boş döndü — ve DAMGAYI ALDI. Karar
+"son koşumdan sonra yayım oldu mu" diye sorduğu için tetik tüketilmiş sayıldı;
+bir sonraki tetik 10.09 perşembeydi ve emniyet ağı (11 gün) haftalık döngüden
+UZUN, yani hiç ateşlenmeyecekti. Kusurun görüntüsü sağlığın görüntüsüyle
+aynıydı: koşu yeşil, damga taze, sayfa bayat. Üstelik ölçü VARDI — hattın
+kendi `uyarilar.json`u "13 gün geride (tolerans 12)" yazmıştı ve onu okuyan
+hiçbir kapı yoktu. `guncelle.py`nin damga satırındaki yorum bu tuzağı zaten
+adıyla reddediyordu ("'koştu sayıldı ama veri gelmedi' durumu oluşmasın") ama
+yalnız DÜŞEN koşu için: başarıyla biten ama eli boş dönen koşu muaftı. Bir
+yorumun neyi kapsamadığı yazılmazsa, sonraki oturum onu her şeyi kapsıyor
+sanır.
+Defter artık koşunun NE GETİRDİĞİNİ de yazıyor (`son_surum`, `deneme`) ve
+sürümü ilerletmeyen koşu tetiği tüketmiyor: hat bir sonraki pencerede yeniden
+deneniyor, dört hakla ve iki saat arayla. Sayı ölçülmüş değil TAVAN, ve öyle
+yazıldı — kaynağın veriyi hiç düşürmediği hâlde hattın her pencerede koşup
+durmasını engelliyor; hak dolunca da SUSMUYOR, gerekçe adıyla yazılıyor, çünkü
+"yeni yayım yok" satırı sağlıklı bir bekleyişle birebir aynı görünür.
+Sürüm ölçüsünün TANIMI ayrı bir tuzaktı ve ilk yazımda tam ona düşülmüştü:
+imza hattın bütün tarih alanlarından kurulunca, kredinin GÜNLÜK bacağı her iş
+günü ilerlediği için imza her koşuda değişiyor, sayaç hiç artmıyor ve yeniden
+deneme yazıldığı arıza için HİÇ ateşlenmiyordu. En eskisini almak da işlemiyor
+(aylık bacak bir ay meşru olarak durur, sağlıklı haftalarda dört deneme
+yakardı). Ölçü hattın ANA SAATİ — `RITIM`in zaten denetlediği saat. Ana saati
+ilerlerken içindeki bir alanın donması bu ölçüye görünmez; o `RITIM_ALAN`ın
+işi ve dışarıda kaldığı adıyla yazıldı.
+İkinci yarısı önlemin KAPSAMIYLA ilgili. Yeniden deneme, önbellekten okuduğu
+sürece hiçbir şeyi yeniden denemez: önbellekte duran şey tam da eli boş dönen
+koşunun cevabıdır. Depoda bunun için bir düğme zaten vardı — `veri.yml`
+zorlanmış koşuda `TTO_YENILE=1` export ediyor ve yanındaki yorum kusuru TÜİK
+için birebir tarif ediyordu. Ölçüldü: TTL'li önbellek tutan DOKUZ dosyanın
+yalnız BİRİ (Enflasyon) o değişkeni okuyordu. Yani "takvimi dinleme, koşulsuz
+tazele" düğmesi sekiz hat için hiçbir şey yapmıyordu ve hiçbir koşu bunu
+söylemiyordu. Kural `ortak/tazelik.py`ye tek tanım olarak taşındı, dokuz hattın
+`_taze`si oraya devretti, ve kapsam bir listeden değil SÖZLEŞMEDEN türetildi:
+dosyada TTL'li bir önbellek varsa tazelik kararı oradan geçmelidir. Üç ölçüt de
+arızanın kendisine karşı koşturularak sınandı (yeniden deneme kaldırılınca,
+imza ana saat yerine bütün alanlardan kurulunca, bir hat devretmeyince ayrı
+ayrı DÜŞÜYOR; bugünkü ağaca karşı geçiyor).
+
 **Kurucu ilke — TEKRARIN İKİ EKSENİ VARDIR ve biri hiç ölçülmüyordu.**
 Kullanıcı "tekrarlı olmasın, her gün aynı şeyleri söylemeyelim" dedi. Depoda
 bir tekrar ölçeri zaten vardı (`bulten/tekrar.py`) ama yalnız bir SAYININ

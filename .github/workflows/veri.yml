@@ -322,6 +322,13 @@ jobs:
             # "veri değişmedi" diyerek yeşil biter — yayım gününde sayfada
             # dünkü ay durur. Elle tetiklenen bir tazelemenin tek sebebi
             # zaten "yeni veri var"; önbelleği dinlemesi anlamsız.
+            #
+            # BU SATIR 07.09.2026'YA KADAR DOKUZ HATTIN SEKİZİNDE HİÇBİR ŞEY
+            # YAPMIYORDU: değişkeni yalnız Enflasyon okuyordu, yani "koşulsuz
+            # tazele" düğmesi kalan sekiz hat için önbelleği hiç atlamıyordu ve
+            # koşu yeşil bitiyordu. Ölçüldü; kural ortak/tazelik.py'ye TEK tanım
+            # olarak taşındı, hatların _taze'si oraya devretti ve
+            # bulten/duman.py devretmeyen hattı ENGEL sayıyor.
             export TTO_YENILE=1
             SECIM="$HATLAR $KIP --sistem-kur"
           else

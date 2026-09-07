@@ -64,11 +64,23 @@ def log(msg):
 CACHE_TTL_SAAT = 24
 
 
+def _tazelik():
+    """ortak/tazelik — önbellek tazeliğinin TEK tanımı; TTO_YENILE orada okunur.
+    Hat kendi klasöründen elle koşturulursa ortak/ PYTHONPATH'te olmayabilir;
+    depo kökünden bulunur."""
+    try:
+        import tazelik
+    except ImportError:
+        import pathlib as _pl
+        import sys as _sys
+        _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[3] / "ortak"))
+        import tazelik
+    return tazelik
+
+
 def _cache_taze(cpath):
-    if not cpath.exists():
-        return False
-    yas_saat = (datetime.datetime.now().timestamp() - cpath.stat().st_mtime) / 3600
-    return yas_saat < CACHE_TTL_SAAT
+    """Önbellek hâlâ kullanılabilir mi — karar ortak/tazelik'te (TTO_YENILE)."""
+    return _tazelik().taze(cpath, CACHE_TTL_SAAT)
 
 
 def evds_cek(kod, start="01-01-2005", end=None, yenile=False):

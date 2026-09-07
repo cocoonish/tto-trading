@@ -122,15 +122,27 @@ def _cek(url: str, deneme: int = 3):
     raise RuntimeError(f"EVDS isteği düştü: {son_hata}") from son_hata
 
 
+def _tazelik():
+    """ortak/tazelik — önbellek tazeliğinin TEK tanımı; TTO_YENILE orada okunur.
+    Hat kendi klasöründen elle koşturulursa ortak/ PYTHONPATH'te olmayabilir;
+    depo kökünden bulunur (kalıp: metrik.py'nin _bicim yardımcısı)."""
+    try:
+        import tazelik
+    except ImportError:
+        import pathlib as _pl
+        import sys as _sys
+        _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2] / "ortak"))
+        import tazelik
+    return tazelik
+
+
 def _taze(yol: pathlib.Path, ttl_saat: float) -> bool:
-    if not yol.exists():
-        return False
-    yas = (dt.datetime.now().timestamp() - yol.stat().st_mtime) / 3600
-    return yas < ttl_saat
+    """Önbellek hâlâ kullanılabilir mi — karar ortak/tazelik'te (TTO_YENILE)."""
+    return _tazelik().taze(yol, ttl_saat)
 
 
 def _yas_gun(yol: pathlib.Path) -> float:
-    return (dt.datetime.now().timestamp() - yol.stat().st_mtime) / 86400
+    return _tazelik().yas_gun(yol)
 
 
 # --------------------------------------------------------------------------- seri çekimi
@@ -805,6 +817,7 @@ if __name__ == "__main__":
     # verir ve hat "veri değişmedi" diyerek yeşil biter — yayım gününde
     # sayfada dünkü ay durur. Zorlanmış koşu bu yüzden önbelleği ATLAR:
     # elle tetiklenen bir tazelemenin tek sebebi zaten "yeni veri var".
-    zorla = ("--yenile" in sys.argv
-             or (os.environ.get("TTO_YENILE") or "").strip() in ("1", "true", "True"))
+    # Değişkenin adı ve doğru sayılan değerleri ortak/tazelik'te TEK yerde;
+    # burada ikinci bir kopya tutmak, ikisinin bir gün sessizce ayrışması demek.
+    zorla = "--yenile" in sys.argv or _tazelik().yenile_istendi()
     kos(yenile=zorla)
