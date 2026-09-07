@@ -21,8 +21,8 @@
    "tolerans": 6
   },
   "faiz": {
-   "son": "2026-09-03",
-   "gecikme_gun": 4,
+   "son": "2026-09-04",
+   "gecikme_gun": 3,
    "tolerans": 6
   },
   "tufe": {
@@ -404,7 +404,7 @@
   1
  ],
  "faiz": [
-  3945,
+  3946,
   3
  ],
  "tufe": [
@@ -412,7 +412,5 @@
   1
  ],
  "cerceve_imza": "2939x1·2015-01-02·2026-09-07",
- "uyarilar": [
-  "BACAK GERİDE: TL gecelik faiz serisi kur serisinden 4 gün geride (03.09.2026 ↔ 07.09.2026)."
- ]
+ "uyarilar": []
 }

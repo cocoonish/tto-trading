@@ -1,5 +1,5 @@
 {
- "son_gun": "2026-09-03",
+ "son_gun": "2026-09-04",
  "esik": {
   "aofm_taban_mn_tl": 5000.0,
   "koridor_ustu_pay_pp": 0.05,
@@ -9,20 +9,20 @@
  "son_hafta": "2026-08-28",
  "rejim": {
   "pencere_gun": 253,
-  "net_negatif_gun": 210,
-  "net_pozitif_gun": 42,
+  "net_negatif_gun": 211,
+  "net_pozitif_gun": 41,
   "fonlama_sifir_gun": 21,
   "aofm_gecersiz_gun": 39,
   "aofm_gecersizken_dolu_gun": 38,
   "taban_esik_mn_tl": 5000.0,
   "marjinal_kaynak": {
-   "AOSM": 210,
-   "AOFM": 42,
+   "AOSM": 211,
+   "AOFM": 41,
    "yok": 1
   },
   "marjinal_kaynak_tam": {
    "AOFM": 3373,
-   "AOSM": 400,
+   "AOSM": 401,
    "TLREF (vekil)": 163,
    "yok": 9
   }
@@ -96,7 +96,7 @@
   "taban_son_tarih": "2026-08-21",
   "taban_son_mn_tl": 27352219.25014,
   "ima_oran_son": 4.260251200618889,
-  "ima_oran_tarih": "2026-09-03",
+  "ima_oran_tarih": "2026-09-04",
   "ima_oran_1y_once": 5.352591350868088
  },
  "gecirgenlik": {
@@ -257,11 +257,11 @@
  "dogrulama": {
   "net_fonlama": {
    "kaynak": "TP.APIFON1.TOP − TP.APIFON2.TOP ↔ TP.APIFON3",
-   "n": 3938,
+   "n": 3939,
    "maks_fark_mn_tl": 1.1641532182693481e-10,
    "esik_mn_tl": 1e-06,
-   "son_biz": -573368.1,
-   "son_evds": -573368.1,
+   "son_biz": -587647.1,
+   "son_evds": -587647.1,
    "gecti": true
   },
   "politika": {
@@ -277,29 +277,29 @@
   },
   "tlref": {
    "kaynak": "TP.BISTTLREF.ORAN ↔ TP.AOFOBAP (BİST gecelik repo AOF)",
-   "n": 1897,
+   "n": 1899,
    "maks_fark_pp": 0.5358000000000018,
-   "ort_fark_pp": 0.024003795466526038,
-   "p99_fark_pp": 0.16612799999999897,
+   "ort_fark_pp": 0.02398220115850442,
+   "p99_fark_pp": 0.16591399999999915,
    "esik_pp": 1.0,
-   "son_tlref": 36.9135,
-   "son_bist": 36.91,
+   "son_tlref": 36.9334,
+   "son_bist": 36.93,
    "gecti": true
   },
   "aosm_taban": {
    "kaynak": "(TP.APIFON2.IHA − ONI) / günlük 1HI tutarı ≈ 5 iş günü",
-   "n": 307,
-   "medyan_kat": 5.489990000000002,
+   "n": 308,
+   "medyan_kat": 5.413416052631581,
    "negatif_kalan_gun": 0,
    "not": "kalan bacağın tamamı haftalık depo alım ihalesi (1HI) varsayılıyor; oran 5'ten belirgin saparsa varsayım zayıflar"
   },
   "hatlar_arasi_swap": {
    "kaynak": "bu hat (TP.SWAPTEKTAR alım−satım)/1000 ↔ rezerv hattı gunluk.csv · swap_yerli_usd",
-   "n": 921,
+   "n": 922,
    "maks_fark_mlr_usd": 7.105427357601002e-15,
-   "son_biz": -5.064376210000001,
-   "son_rezerv": -5.064376210000001,
-   "son_tarih": "2026-09-03",
+   "son_biz": -4.33765312,
+   "son_rezerv": -4.33765312,
+   "son_tarih": "2026-09-04",
    "gecti": true
   },
   "gecelik_repo_aylik": {
@@ -311,12 +311,12 @@
   },
   "aofm_kompozisyon": {
    "kaynak": "(ihale×politika + kotasyon repo×koridor tavanı + GLP×GLP satış) / toplam ↔ TP.APIFON4",
-   "n": 3856,
-   "medyan_fark_pp": 0.43509512236316095,
+   "n": 3857,
+   "medyan_fark_pp": 0.43454372221046,
    "p95_fark_pp": 8.75,
    "maks_fark_pp": 17.77,
    "son250_medyan_pp": 0.0,
-   "son_gun": "2026-09-03",
+   "son_gun": "2026-09-04",
    "son_fark_pp": 0.0,
    "esik_pp": 0.05,
    "not": "Uç sapmalar geç likidite penceresi dönemlerinde ve kompozisyon geçişlerinde yoğunlaşır; kalibrasyon sabiti KULLANILMAZ.",
@@ -324,7 +324,7 @@
   },
   "aofm_bant": {
    "kaynak": "AOFM ∈ [koridor tabanı, GLP satış (yoksa tavan)]",
-   "n": 3857,
+   "n": 3858,
    "alt_ihlal_gun": 31,
    "ust_ihlal_gun": 1,
    "alt_ihlal_son": "2024-03-21",
