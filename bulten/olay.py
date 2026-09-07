@@ -20,7 +20,7 @@ import gozlem
 import sys as _sys
 from pathlib import Path as _Path
 _sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "ortak"))
-from bicim import sayi as _sayi  # noqa: E402  — sayı yazımı TEK yerden (ortak/bicim.py)
+from bicim import sayi as _sayi, yuzde as _yuzde  # noqa: E402  — sayı yazımı TEK yerden (ortak/bicim.py)
 
 
 @dataclass
@@ -49,6 +49,35 @@ def _yon(fark: float, artis: str = "arttı", azalis: str = "azaldı") -> str:
     return artis if fark > 0 else azalis
 
 
+# BİR SEVİYENİN BİRİMİ İLE FARKININ BİRİMİ AYNI DEĞİLDİR.
+#
+# Ölçüldü (07.09.2026): olay cümleleri "Tüketici kredisi büyümesi 12,8 %
+# azaldı: 43,0 → 30,2 %." diye çıkıyordu ve iki ayrı kusur taşıyordu.
+#   (1) BİÇİM: birim sayının ARKASINA ekleniyordu; sözleşme (ortak/bicim)
+#       yüzdeyi ÖNE alır. Derlenmiş sayfada 40 yerde "N %" yazıyordu.
+#   (2) ÖLÇÜ: %43,0'dan %30,2'ye inen bir oranın farkı 12,8 PUANDIR, %12,8
+#       değil. İkisi farklı büyüklükler — %12,8'lik bir düşüş 43,0'ı 37,5'e
+#       indirirdi. Yani cümle yalnız çirkin değil, YANLIŞTI.
+#
+# `ayar.IZLEMLER`in 56 kaydından 30'u `tip="delta"` + `birim="%"`: devalüasyon
+# hızı, TLREF, AOFM, TÜFE ailesi, kredi büyümeleri, DİBS getirileri, bütçe
+# oranları. Hepsi bu cümleden geçiyordu.
+FARK_BIRIMI = {"%": "puan"}
+
+
+def _sev(v: float, birim: str, ondalik: int) -> str:
+    """SEVİYE: birimiyle, sözleşmenin yazımıyla ("%37,00" · "48,03 mlr USD")."""
+    if birim == "%":
+        return _yuzde(v, ondalik)
+    return f"{_sayi(v, ondalik)} {birim}".strip()
+
+
+def _fark_yaz(v: float, birim: str, ondalik: int) -> str:
+    """FARK: yüzde cinsinden bir seviyenin farkı PUANDIR, yüzde değil."""
+    b = FARK_BIRIMI.get(birim, birim)
+    return f"{_sayi(v, ondalik)} {b}".strip()
+
+
 def _seviye(buyukluk: float, iz: Izlem) -> str | None:
     if iz.onemli is not None and buyukluk >= iz.onemli:
         return "onemli"
@@ -70,7 +99,7 @@ def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
             return None
         yon = "giriş" if yeni > 0 else "çıkış"
         return Olay(iz.grup, sv, iz.ad,
-                    f"{iz.ad}: {_s(abs(yeni), iz.ondalik)} {iz.birim} net {yon}.",
+                    f"{iz.ad}: {_sev(abs(yeni), iz.birim, iz.ondalik)} net {yon}.",
                     iz.hat, iz.anahtar, yeni, None, None, iz.birim, tarih, onceki_tarih,
                     iz.aciklama)
 
@@ -80,7 +109,7 @@ def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
         if not sv:
             return None
         return Olay(iz.grup, sv, iz.ad,
-                    f"{iz.ad}: {_s(yeni, iz.ondalik)} {iz.birim}.",
+                    f"{iz.ad}: {_sev(yeni, iz.birim, iz.ondalik)}.",
                     iz.hat, iz.anahtar, yeni, None, None, iz.birim, tarih, onceki_tarih,
                     iz.aciklama)
 
@@ -96,8 +125,9 @@ def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
             return None
         isaret = "+" if fark > 0 else "−"
         return Olay(iz.grup, "onemli", iz.ad,
-                    f"{iz.ad} değişti: {_s(eski, iz.ondalik)} → {_s(yeni, iz.ondalik)} "
-                    f"{iz.birim} ({isaret}{_s(abs(fark), iz.ondalik)} {iz.birim}).",
+                    f"{iz.ad} değişti: {_sev(eski, iz.birim, iz.ondalik)} → "
+                    f"{_sev(yeni, iz.birim, iz.ondalik)} "
+                    f"({isaret}{_fark_yaz(abs(fark), iz.birim, iz.ondalik)}).",
                     iz.hat, iz.anahtar, yeni, eski, fark, iz.birim, tarih, onceki_tarih,
                     iz.aciklama)
 
@@ -119,8 +149,8 @@ def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
     if not sv:
         return None
     return Olay(iz.grup, sv, iz.ad,
-                f"{iz.ad} {_s(abs(fark), iz.ondalik)} {iz.birim} {_yon(fark)}: "
-                f"{_s(eski, iz.ondalik)} → {_s(yeni, iz.ondalik)} {iz.birim}.",
+                f"{iz.ad} {_fark_yaz(abs(fark), iz.birim, iz.ondalik)} {_yon(fark)}: "
+                f"{_sev(eski, iz.birim, iz.ondalik)} → {_sev(yeni, iz.birim, iz.ondalik)}.",
                 iz.hat, iz.anahtar, yeni, eski, fark, iz.birim, tarih, onceki_tarih,
                 iz.aciklama)
 

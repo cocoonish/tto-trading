@@ -966,3 +966,51 @@ meşrudur, vadesi gelen bir söz yeniden anılmalıdır. Yayının önünde dura
 denetimin yanlış alarmı, ölçtüğü kusurdan pahalıdır.
 Yan bulgu, eski kapının göremediği: 24–25.08'de `ozet` önceki sayıdan
 %97–100 aynen kopyalanmış. Bakılmayan yer, geçen sınavla aynı görünür.
+
+**Kurucu ilke — bir KURAL yalnız YORUMA yazıldığında dayatılmaz; ve bir
+FARKIN birimi, SEVİYENİN birimi değildir.** İki kusur aynı turda çıktı ve
+ikisi de "kural var, kapı yok" sınıfından.
+Birincisi renk: `global.css` jetonun yanına kendi kuralını yazmıştı —
+"`--ink-30` yalnız çizgi ve kenarlıkta; metinde kullanılmaz". Kural doğruydu
+ve hiçbir yerde SORULMUYORDU: ölçüldü, sekiz dosyada on beş yerde metin rengi
+olarak kullanılıyordu. Kontrast 1,90:1; WCAG AA gövde 4,5 · büyük 3,0 · metin
+dışı öğe 3,0 — üçünü de geçmiyor. Üstelik en yoğun sayı sütunları (σ, 52
+hafta aralığı, tema sütunu) tam bu renkteydi, yani sayfanın en çok bakılan
+yeri en zor okunan yerdi. Hepsi `--ink-60`a (4,59:1) çekildi — jetonun kendi
+yorumunun "metinde kullanılabilir en soluk mürekkep" dediği değer. Kapı sayfa
+sınavının 23. ölçütü; `text-decoration-color` kapsam dışı, çünkü o alt çizgi
+rengidir, metin değil.
+İkincisi ölçü: olay cümlesi "Tüketici kredisi büyümesi 12,8 % azaldı: 43,0 →
+30,2 %." diye çıkıyordu. İki kusur birden. (a) Birim sayının ARKASINDAYDI;
+sözleşme yüzdeyi öne alır (derlenmiş sayfada 40 yer). (b) Daha ağırı:
+%43,0'dan %30,2'ye inen bir oranın farkı 12,8 PUANDIR, %12,8 değil — %12,8'lik
+bir düşüş 43,0'ı 37,5'e indirirdi. Cümle yalnız çirkin değil YANLIŞTI ve
+`ayar.IZLEMLER`in 56 kaydından 30'u bu daldan geçiyordu. Seviye ile farkın
+yazımı artık iki ayrı fonksiyonda (`olay._sev` · `olay._fark_yaz`) ve fark
+birimi tablodan türüyor (`FARK_BIRIMI = {"%": "puan"}`).
+Kapının kendi kalıbı da ölçülerek daraltıldı: ilk yazımda `\d\s+%` kullanıldı
+ve `\s` satır sonunu da eşlediği için alanlar "\n" ile birleştirilince 20
+bulgunun 20'si YANLIŞ POZİTİF çıktı (bir alanın sonundaki tarih + öbürünün
+başındaki yüzde). Kusurun gerçek biçimi aynı satırda ve boşlukla: `\d[ \t]+%`.
+
+**Kurucu ilke — `ch` bir KARAKTER genişliği değildir.** Satır uzunluğu
+`--olcu: 70ch` ve `.bulten { max-width: 74ch }` ile yazılıyordu ve ikisi de
+doğru görünüyordu (ideal bant 60–80). Ölçüldü: `ch` birimi '0' RAKAMININ
+genişliğidir ve Newsreader'da 0,5665em; bültenin kendi metninde ortalama
+karakter 0,4199em (57.651 karakter üzerinden). Oran 1,349 — yani 74ch bu
+fontta 74 değil ~100 KARAKTER. Sınırı yazan da okuyan da bandın içinde
+sanıyordu. En kötüsü haber özetleriydi: 13,1 px ve genişlik sınırı YOK →
+satır başına 129 karakter, 44 özet. Düzyazı ölçüsü artık `rem` cinsinden tek
+bir jetonda (`--olcu-metin: 32rem` ≈ 72 karakter) ve sınır SÜTUNA değil METNE
+konuyor — sütun 74ch'te kalmak zorunda, çünkü tablolar ve gösterge ızgarası o
+genişliği kullanıyor. Metnin %55,8'i 14 px altındaydı; en ağır iki blok
+(haber özeti, söz defteri) gövdenin bir kademe altına çıkarıldı.
+
+**Kurucu ilke — TEKİLLEŞTİRME KALIBI BİR KEZ YAZILIR, HER YERE UYGULANIR.**
+"Kritik takvim" ile "Takvim" bir zamanlar aynı olayı iki kez basıyordu ve
+çözüm bu dosyada zaten yazılıydı: anahtar kümesi kur, tam listeden çıkar.
+Aynı kusur olaylarda duruyordu ve kimse bakmamıştı — ölçüldü (13 sayı):
+"Öne çıkanlar" ve "Notlar" bölümlerindeki 115 maddenin 115'i de "Hat hat
+değişim"de BİREBİR tekrar ediyordu. Aynı kalıp hat+anahtar çiftiyle
+uygulandı; ölçüldü, 8/8 → 0. Bir kusur çözüldüğünde sorulacak soru "bu bölümü
+düzelttim mi" değil, "bu kalıbın uygulanmadığı başka yer var mı"dır.
