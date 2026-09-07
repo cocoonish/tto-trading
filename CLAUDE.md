@@ -912,3 +912,19 @@ indirilebiliyor. İçerik gerçek gönderi kimlikleri — zaten herkese açık
 tweetler, hesap adı yok — ama iz orada. Silmek için public deponun geçmişini
 YENİDEN YAZMAK gerekir; geri alınamaz bir işlem ve mevcut klonları bozar, o
 yüzden kullanıcı açıkça istemeden yapılmadı.
+
+**Kurucu ilke — bir METİN ALANININ dili sözleşmedir; bir alanı dışarıda
+bırakmak yazarın bilemeyeceği bir ayrım yaratır.** Yazı katmanının bütün metin
+alanları HTML taşıyor ve `yorum` ile `gundem.*` `set:html` ile basılıyordu;
+`ozet` ise METİN olarak basılıyordu. Yazar farkı bilemez — aynı kapıdan
+(`yaz.py`) aynı dille yazar — ve yazdı: dört bülten sayısında okur cümlenin
+başında "<p>" YAZISINI gördü, yirmi kaçış. Hiçbir kapı bunu sormuyordu, çünkü
+kaynak da veri de DOĞRUYDU; kusur yalnız iki tarafın farklı sözleşme
+konuşmasındaydı ve bu ancak ÇIKTIDA görünür. Alan artık aynı yoldan basılıyor
+ve sözleşme iki yönde de bozulmuyor: etiketle açılmayan bir değer `<p>` ile
+sarılır, yani düz metin de kabul. Kapı sayfa sınavının 22. ölçütü — dist'te
+kaçmış HER etiket (yalnız `<p>` değil) ENGEL, `<code>`/`<pre>` içi muaf:
+HTML anlatan bir ders etiketi GÖSTERMEK zorundadır ve muafiyet olmasaydı
+ölçüt bir gün yayını tam da o yazı yüzünden durdururdu. Dört regresyon
+maddesi `site/tools/duman_sinav.py`de; ölçüt arızanın kendisine karşı
+koşturularak sınandı (20 kaçış → 0).

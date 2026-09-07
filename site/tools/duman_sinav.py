@@ -33,6 +33,7 @@ ORNEK_AC, ORNEK_KAPA = _mod.ORNEK_AC, _mod.ORNEK_KAPA
 MUAF_KALIP = _mod.MUAF_KALIP
 olu_ic_baglar = _mod.olu_ic_baglar
 x_izleri = _mod.x_izleri
+kacan_etiketler = _mod.kacan_etiketler
 
 GECTI: list[str] = []
 DUSTU: list[str] = []
@@ -419,6 +420,33 @@ for _metin, _bekle in [
     _v = bool(x_izleri(_k))
     sina(f"{'yakalanıyor' if _bekle else 'yanlış alarm yok'}: {_metin[:34]}",
          _v == _bekle, f"gelen {_v}")
+
+
+# ---------------------------------------------------------------------------
+print("\n▶ Kaçan etiket (22. ölçüt)")
+
+# ÖLÇÜLEN ARIZA: yazı katmanının bütün metin alanları HTML taşıyor; `yorum` ve
+# `gundem.*` set:html ile basılıyordu, `ozet` ise METİN olarak. Dört bülten
+# sayısında okur cümlenin başında "<p>" yazısını gördü (yirmi kaçış).
+kok = _agac({"bulten/2026-09-06/index.html":
+             "<p>&lt;p&gt;Geçen hafta üç şey oldu.&lt;/p&gt;</p>"})
+sina("metin olarak basılan yazı alanı ENGEL üretiyor",
+     sorted(kacan_etiketler(kok)) == ["&lt;/p&gt;", "&lt;p&gt;"], f"gelen {sorted(kacan_etiketler(kok))}")
+
+kok = _agac({"bulten/2026-09-06/index.html":
+             "<div class='ozet-metin'><p>Geçen hafta üç şey oldu.</p></div>"})
+sina("set:html ile basılan alan sessiz", kacan_etiketler(kok) == {}, f"gelen {sorted(kacan_etiketler(kok))}")
+
+# KOD BLOĞU MUAF: HTML anlatan bir ders etiketi GÖSTERMEK zorunda; muafiyet
+# olmasaydı ölçüt bir gün yayını böyle bir yazı yüzünden durdururdu.
+kok = _agac({"arastirma/html-dersi/index.html":
+             "<p>Paragraf şöyle yazılır:</p><pre><code>&lt;p&gt;metin&lt;/p&gt;</code></pre>"})
+sina("kod bloğu içindeki etiket muaf", kacan_etiketler(kok) == {}, f"gelen {sorted(kacan_etiketler(kok))}")
+
+# Matematikteki karşılaştırma işaretleri etiket değildir.
+kok = _agac({"s/index.html": "<p>a &lt; b ve c &gt; d; 5 &lt; 10 olduğundan.</p>"})
+sina("küçüktür/büyüktür işareti yanlış alarm üretmiyor",
+     kacan_etiketler(kok) == {}, f"gelen {sorted(kacan_etiketler(kok))}")
 
 
 # ---------------------------------------------------------------------------
