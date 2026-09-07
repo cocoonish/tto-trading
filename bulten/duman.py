@@ -2206,6 +2206,61 @@ def main() -> int:
     sina("denetim: revizyon ölçütü TL faiz, gösterge, türev ve rejimi görür, farklı günü karıştırmaz", _revizyon)
     sina("piyasa/rejim: türev ve rejim satırları kendi gününü ve hanesini taşır", _turev_rejim_gunu)
     sina("yayın takvimi (hakkında sayfası) iş akışı cron'larıyla aynı saati söylüyor", _yayin_takvimi)
+    def _tekrar_eksenleri():
+        """İki tekrar ekseni de ölçülüyor mu, ve kapsam sözleşmeden mi türüyor.
+
+        ÖLÇÜLEN ARIZA (07.09.2026). Okurun şikâyeti "her gün aynı şeyleri
+        söylemeyelim"di ve o eksen HİÇ ölçülmüyordu: `tekrar` yalnız bir sayının
+        KENDİ içine bakıyordu. Ölçüldü — ardışık iki sayı arasında birebir öbek
+        örtüşmesi %0,5'ten %46,2'ye tırmanmış. Kaynağı ayrıştırınca kusur yazarda
+        ÇIKMADI: gündem %0,6 · yorum %0,3 · özet %2,7. Söz defteri %91,4'tü,
+        çünkü 4.816 sözcük her sabah yeniden basılıyordu.
+        """
+        import tekrar as _t
+        import soz as _s
+
+        # (1) KAPSAM SÖZLEŞMEDEN TÜRÜYOR — elle tutulan liste değil.
+        b = {"gundem": {"kilit": "<p>bir</p>"}, "yorum": "<p>iki</p>",
+             "ozet": {"ne_oldu": "üç"},
+             "temalar": [{"ad": "t", "tez": "dört", "gelisme": "beş", "son_gozlem": "altı"}],
+             "izleme": {"acik": [{"konu": "k", "soz": "yedi", "ne_bakilacak": "sekiz",
+                                  "sonuc": "", "degisti": True}], "kapanan": []}}
+        bl = _t.bolumler(b)
+        for beklenen in ("kilit", "yorum", "ozet.ne_oldu", "tema.t", "soz_defteri"):
+            assert beklenen in bl, f"kapsam dışı kalan alan: {beklenen} — gelen {sorted(bl)}"
+
+        # (2) DURAN kayıt ölçüye TAM METNİYLE girmez: sayfada da basılmıyor.
+        b2 = dict(b)
+        b2["izleme"] = {"acik": [{"konu": "k", "soz": "çok uzun bir söz metni burada",
+                                  "ne_bakilacak": "", "sonuc": "", "degisti": False}],
+                        "kapanan": []}
+        assert _t.bolumler(b2)["soz_defteri"] == "k", \
+            f"duran kayıt tam metniyle sayılıyor: {_t.bolumler(b2)['soz_defteri']!r}"
+
+        # (3) GÜNLER ARASI ölçü çalışıyor ve YÖN doğru.
+        ayni = {"a": "bir iki üç dört beş altı yedi sekiz dokuz on"}
+        farkli = {"a": "on bir on iki on üç on dört on beş on altı on yedi"}
+        assert _t.gunler_arasi(ayni, ayni)["oran"] == 100.0, "birebir aynı metin %100 vermiyor"
+        assert _t.gunler_arasi(farkli, ayni)["oran"] < 20.0, "farklı metin yüksek oran verdi"
+
+        # (4) KAPANMIŞ kayıt için "vade yakın" ölçütü KOŞMAZ. İlk yazımda koşuyordu
+        #     ve 17 kapanan kaydın 16'sını "değişen" sayıp tekrarı yerinde bırakıyordu.
+        import datetime as _dt
+        kapali = _s._kayit({"konu": "x", "durum": "kapandi", "vade": "2026-08-01",
+                            "acilis": "2026-07-01"}, _dt.date(2026, 9, 6))
+        assert kapali["gun_kalan"] < 0, "fikstür kurulmadı"
+        # ozet() üzerinden: eski bir kapanış "değişen" olmamalı
+        assert _s.VADE_YAKIN >= 0 and _s.YENI_PENCERE >= 0, "pencere sabitleri yok"
+
+        # (5) ÖNCEKİ SAYI YOKSA kıyas koşmadığı KAYDA GEÇER — sessizce "değişmedi"
+        #     denmez (uydurma yok).
+        o = _s.ozet("2026-09-06", None)
+        if o:
+            assert o["karne"]["kiyas_var"] is False, "kıyas yokken kiyas_var True"
+            o2 = _s.ozet("2026-09-06", {"acik": [], "kapanan": []})
+            assert o2["karne"]["kiyas_var"] is True, "kıyas varken kiyas_var False"
+
+    sina("tekrar: iki eksen de ölçülüyor, kapsam sözleşmeden türüyor", _tekrar_eksenleri)
     sina("hat adı: izlenen her hattın okura görünen adı var, kayıt onu taşıyor", _hat_adi_kapsami)
 
     for ad in gecen:

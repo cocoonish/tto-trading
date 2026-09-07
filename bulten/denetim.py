@@ -1284,6 +1284,47 @@ class Denetim:
                 f"{len(r['sayi'])} sayı {_t.SAYI_BOLUM_ESIK}+ bölümde tekrarlanıyor — "
                 f"her tekrarda üzerine yeni bir işlem yapılmıyorsa kes: {en}")
 
+        # GÜNLER ARASI TEKRAR. Yukarıdaki ölçü bir sayının KENDİ içine bakar;
+        # okurun asıl şikâyeti "her gün aynı şeyleri söylemeyelim"di ve o
+        # eksen hiç ölçülmüyordu. Ölçüm ENGEL DEĞİL UYARI: sakin bir haftada
+        # iki sayının benzemesi meşrudur, vadesi gelen bir söz yeniden anılır.
+        onceki = self._onceki_yazi()
+        if onceki is None:
+            self._ok("günler arası tekrar: önceki sayı yok, kıyas koşmadı")
+        else:
+            g = _t.gunler_arasi(_t.bolumler(self.b), onceki)
+            if g["uyari"]:
+                agir = ", ".join(f"{a} %{g['bolum'][a]:.0f}" for a in g["agir"][:3])
+                self.uyari.append(
+                    f"Günler arası tekrar %{g['oran']:.1f} (hedef <%{_t.GUNLER_ARASI_UYARI:.0f}): "
+                    f"bu sayının düzyazısının bu kadarı önceki sayıda AYNEN var."
+                    + (f" Sürükleyen bölüm: {agir}." if agir else "")
+                    + " Bir sayı önceki sayıyı özetlemez; değişeni anlat.")
+            else:
+                self._ok(f"günler arası tekrar düşük: %{g['oran']:.1f}")
+
+    def _onceki_yazi(self):
+        """Bir önceki sayının yazı bölümleri — günler arası kıyasın noktası.
+
+        Bulunamazsa None: ölçülemeyen bir oranı sıfır saymak, tekrarı yok
+        saymak olurdu.
+        """
+        import tekrar as _t
+        try:
+            dosyalar = sorted(BULTEN.glob("*.json"))
+        except Exception:                                      # noqa: BLE001
+            return None
+        onceki = [d for d in dosyalar if d.stem < str(self.b.get("tarih"))]
+        if not onceki:
+            return None
+        try:
+            import json as _j
+            b = _j.loads(onceki[-1].read_text(encoding="utf-8"))
+        except Exception:                                      # noqa: BLE001
+            return None
+        bl = _t.bolumler(b or {})
+        return bl or None
+
     def tema(self):
         """Tema defteri bakımı yapılmış mı, yazıda temaya atıf var mı.
 

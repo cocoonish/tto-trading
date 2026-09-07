@@ -450,7 +450,11 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         # Söz defteri: bültenin verdiği sözlerin okura görünen hâli. Defter
         # zaten tutuluyordu ama yalnız yazı katmanı ve denetim görüyordu;
         # hesap vermenin okura ulaşmayan hâli hesap vermek sayılmaz.
-        "izleme": soz_m.ozet(tarih.isoformat()),
+        # ÖNCEKİ SAYININ DEFTERİ argüman olarak geçiyor: söz defteri her sabah
+        # baştan basılmasın, yalnız DEĞİŞENİ tam metinle göstersin (bkz.
+        # soz.py'deki not — ardışık iki sayı arasında %91,4 birebir örtüşme
+        # ölçüldü). Önceki sayı yoksa kıyas koşmaz ve karne bunu söyler.
+        "izleme": soz_m.ozet(tarih.isoformat(), _onceki_izleme(tarih.isoformat())),
         # Sayfadaki satır içi SVG'lerin verisi. Plotly bültene girmez: gömülü
         # kütüphane tek grafikte 4,6 MB ve sabah notu o ağırlığı kaldırmaz.
         "grafikler": grafik_m.hazirla(),
@@ -584,6 +588,26 @@ def ozet_yaz(b: dict) -> str:
         satir.append(f"    · {o['metin']}")
     return "\n".join(satir)
 
+
+
+def _onceki_izleme(bugun: str) -> dict | None:
+    """Bir önceki sayının `izleme` bloğu — söz defterinin kıyas noktası.
+
+    Bulunamazsa None döner: kıyas KOŞMAZ ve karne `kiyas_var: False` yazar.
+    Ölçemediğimiz bir değişikliği "değişmedi" saymak, kaydı sessizce
+    gizlemek olurdu.
+    """
+    try:
+        dosyalar = sorted(CIKTI.glob("*.json"))
+    except Exception:                                          # noqa: BLE001
+        return None
+    onceki = [d for d in dosyalar if d.stem < str(bugun)]
+    if not onceki:
+        return None
+    try:
+        return (json.loads(onceki[-1].read_text(encoding="utf-8")) or {}).get("izleme")
+    except Exception:                                          # noqa: BLE001
+        return None
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,
