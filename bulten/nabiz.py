@@ -73,6 +73,7 @@ def _kosular(d: dict) -> list[dict]:
 
 def kaydet(p: Path, *, sonuc: str, tetik: str = "bilinmiyor", cron: str | None = None,
            butce_dk: float | None = None, atlanan_butce: list[str] | None = None,
+           takvim_alindi: bool | None = None, kosan_hat: int | None = None,
            an: dt.datetime | None = None) -> dict:
     """Bir koşuyu deftere yaz ve dosyayı kur. Yazılan sözlüğü döndürür."""
     d = oku(p)
@@ -95,6 +96,20 @@ def kaydet(p: Path, *, sonuc: str, tetik: str = "bilinmiyor", cron: str | None =
         kayit["butce_dk"] = butce_dk
     if atlanan_butce:
         kayit["atlanan_butce"] = list(atlanan_butce)
+    # KÖR KOŞUNUN İZİ. Takvim ucu okunamadığında `tazeleme.kararlar()` her hata
+    # "koşsun" diyor ve o koşu 19 hattın hepsini ağa gönderiyor — ölçülmüş 11
+    # hattın medyan toplamı 30,3 dk, kalan sekizin süresi hiç ölçülmemiş. Bu
+    # hâlin depoda TEK izi denetimin stdout'una bastığı bir satırdı; "bu ay kaç
+    # pencere kör koştu" sorusu geriye dönük CEVAPSIZDI ve cevap yalnız 90 gün
+    # sonra silinen Actions loglarındaydı.
+    #
+    # EŞİK YOK, BİLEREK: ölçülmeyen bir seviyeye eşik konmaz (CLAUDE.md). Bu
+    # alanlar önce birikir, alarm hakkı sonra verilir.
+    if takvim_alindi is not None:
+        kayit["takvim_alindi"] = bool(takvim_alindi)
+        kayit["kor_kosu"] = not takvim_alindi
+    if kosan_hat is not None:
+        kayit["kosan_hat"] = int(kosan_hat)
 
     kosular = _kosular(d)
     kosular.append(kayit)
@@ -140,11 +155,26 @@ def main() -> int:
         cron=ortam("CRON") or None,
         butce_dk=float(butce) if butce else None,
         atlanan_butce=atlanan or None,
+        # KÖR KOŞU İZİ. Değerleri `guncelle.py` yazıyor (kararları veren o);
+        # burada ortamdan okunuyor. Ortamda yoksa alan HİÇ yazılmaz — boş
+        # bırakmak, ölçülmemişi ölçülmüş gibi göstermekten iyidir.
+        takvim_alindi=(None if ortam("TTO_TAKVIM_ALINDI") is None
+                       else ortam("TTO_TAKVIM_ALINDI") == "1"),
+        kosan_hat=(int(ortam("TTO_KOSAN_HAT"))
+                   if (ortam("TTO_KOSAN_HAT") or "").isdigit() else None),
     )
     son = d["kosular"][-1]
     print(f"nabız: {son['zaman']} · {son['sonuc']} · {son['tetik']}"
           + (f" · {son['cron']}" if son.get("cron") else "")
+          + (" · KÖR KOŞU" if son.get("kor_kosu") else "")
+          + (f" · {son['kosan_hat']} hat" if son.get("kosan_hat") is not None else "")
           + f"  (defterde {len(d['kosular'])} koşu)")
+    # Kör koşu oranı BİRİKİYOR; eşik YOK. Ölçülmeyen bir seviyeye eşik konmaz.
+    kor = sum(1 for k in d["kosular"] if k.get("kor_kosu"))
+    olculen = sum(1 for k in d["kosular"] if "kor_kosu" in k)
+    if olculen:
+        print(f"  kör koşu: son {olculen} ölçülen koşunun {kor}'i "
+              f"(oran birikiyor, eşik henüz YOK)")
     return 0
 
 

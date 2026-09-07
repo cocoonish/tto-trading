@@ -975,6 +975,86 @@ arızanın kendisine karşı koşturularak sınandı (yeniden deneme kaldırıl�
 imza ana saat yerine bütün alanlardan kurulunca, bir hat devretmeyince ayrı
 ayrı DÜŞÜYOR; bugünkü ağaca karşı geçiyor).
 
+**Kurucu ilke — BİR ÖLÇÜ, TÜKETİCİSİ YOKSA ÖLÇÜLMEMİŞTİR; ve bir hattın KİPİ,
+ana saatini üreten adımı içermek zorundadır.** Kullanıcı "bütün projeler sürekli
+en güncel hâlinde olmalı" dedi. Kredi arızası bir örnekti; soru zincirin
+TAMAMINA soruldu ve altı kollu bir denetim koşuldu (36 ham bulgu → 10 doğrulama
+turuna girdi → 4 ayakta kaldı, 6 ÇÜRÜTÜLDÜ). Çürütülenler kayda değer, çünkü
+ikisi bu oturumun kendi hipotezleriydi: "haftalık hatların emniyet ağı (11 gün)
+yayım döngüsünden (7 gün) uzun, yapısal olarak hiç ateşlenemez" iddiası yanlış
+dosyadan ölçülmüştü, "FX günlük kipi bültenden sonra iniyor" iddiasının ham
+sayıları doğru ama çıkarımı yanlıştı. İkna edici bir teşhis, sınanmamış bir
+teşhistir.
+
+Ayakta kalan dördü ve ortak dersleri:
+
+(1) MARJ HATTININ HAFİF KİPİ DERLEME ZİNCİRİNİ HİÇ KOŞTURMUYORDU. Adım listesi
+`web_cikti.py` + `ozet_uret.py` idi ve İKİSİ DE yalnız OKUR; hattın ana saati
+`output/seriler.xlsx`ten türüyor ve o dosyayı yazan `rapor.py` yalnız TAM kipten
+çağrılıyor — tam kip ise cron'la ateşlenemiyor. Xlsx 26.08'den beri yeniden
+yazılmamıştı: 03.09'da Ağustos TÜFE'si yayımlandı, tetik ateşledi, hat KOŞTU,
+tetiği tüketti ve ana saatini ilerletemedi. Sayfada aynı anda üç figür Ağustos,
+on üçü Temmuz gösteriyordu. Ölü bağımlılık ilkesi bu depoda zaten yazılıydı
+("bir dosya okunuyorsa onu üreten adım adım listesinde GÖRÜNMELİDİR") — kural
+vardı, o hatta uygulanmamıştı. Hasat kapısı da ayrı bir adıma çıkarıldı
+(`Research/marj/src/hasat.py`), çünkü `rapor.py`yi tek başına eklemek İKİNCİ bir
+ölü bağımlılık kurardı.
+
+(2) ÖLÇÜNÜN TÜKETİCİSİ SIFIRDI. Aynı gün konan yeniden deneme defteri arızayı
+artık ölçüyordu, ama tek aday tüketici (`denetim.tazeleme_atlandi`)
+`[k for k in kararlar if k.kossun]` süzgeciyle TAM DA ARIZA HÂLİNİ atıyordu:
+hakkı dolan hat `kossun=False` döner. Ölçülen ama okunmayan bir sinyal,
+ölçülmemiş sinyaldir. `bulten/bayatlik.py` ölçünün tek tanımı oldu ve iki
+tüketicisi var: denetim satırı (süzgecin ÖNÜNDE) ve `gecikme.yml`in cron'suz
+alarm adımı. Ölçü DAR ve bilerek: alarm yalnız "kaynak yayımladı + hat koştu +
+ana saat ilerlemedi + hak doldu" bileşiminden doğar. Ham veri yaşı eşik OLAMAZ —
+ölçüldü, o gün üç hatta ateşlerdi ve İKİSİ MEŞRUDU (ödemeler dengesi 11.09'da
+yayımlanacaktı, hazinenin sıradaki ihalesi 14.09'daydı): ≥%67 yanlış pozitif.
+Ve `gecikme.py`nin eşi bir YAPISAL KİLİT: `SINIFLAR`da yayını durduran sınıf
+HİÇ TANIMLI DEĞİL.
+
+(3) KAPSAM ÜÇ AYRI YERDE SÖZLEŞMEDEN KOPMUŞTU. `ayar.RITIM` 21 hattın 18'ini
+taşıyordu; eksik üçü (yp-mevduat, buyume, el-nino) RITIM'i dolaşan SEKİZ çağrı
+yerinin hepsinden birden düşüyordu — panoları üretiliyor, bayatlıklarını soran
+kimse yok; en görünür sonucu üç aylık GSYH yayımının bültende HİÇ
+duyurulamamasıydı. `ayar.RITIM_ALAN` kütüğün İLAN ETTİĞİ 21 ikincil saatin
+1'ini denetliyordu. Ve `denetim._tarihe`nin KENDİ ayrıştırıcısı `AA.YYYY`
+yazımını tanımıyordu, yani beş hattın karanlık denetimi SESSİZCE KAPALIYDI
+(aynı kusur `Deger.astro`da bir kez daha ölçülmüştü — ayrıştıramayan bir
+denetim hep "sorun yok" der). Üçü de sözleşmeden türetildi ve `duman.py` her
+ilanın karşılığını ENGEL olarak sınıyor. EŞİKLER kopyalanmadı: RITIM "bu sürüme
+geçileli kaç gün", `Tetik.en_gec` "son KOŞUMDAN kaç gün" ölçer ve depo ikisini
+bilerek ayırmış (fx 5↔9, reelfx 75↔30); mekanik kopya reelfx'te her ay yanlış
+alarm üretirdi. Genişlemenin yanlış alarm maliyeti ölçüldü: SIFIR.
+
+(4) BİR TAVAN KENDİNİ KİLİTLEYEBİLİR. Hazine adımının 8 dakikalık sınırı hattın
+bulutta ölçülmüş süresinin (10–20 dk soğuk tarama) ALTINDAYDI: her tam kip
+kesiliyor, kesilen koşu `finally` koşmadığı için süre defterine hiçbir şey
+yazmıyor, defter boş olduğu için tavan hiç ölçüye bağlanamıyordu. Üç düzeltme
+birlikte gider: tavan üç parçadan kurulup parçalar YAZILDI (ön adım 2 + kazıma
+19 + geri alma 1 = 22, iş sınırı 80), ön adımın kendi sınırı kondu (sınırsızdı
+ve kabuk `timeout`unun DIŞINDAydı), ve `guncelle.py`ye SIGTERM tutucusu eklendi
+— artık kesilen koşu da `finally` zincirini koşturuyor, yani tamamlanan
+hatların süresi ve damgası korunuyor. Kapının kendi kör noktası da kapandı:
+bütçe ölçütü yalnız `timeout-minutes`e bakıyordu ve adımın İÇİNDEKİ sınırsız
+komutu göremiyordu; yeni ölçüt kabuk içi `timeout` TAŞIYAN adımlarda korumasız
+python çağrısı arıyor (kapsam dar ve adıyla yazılı, bugünkü ağaçta yanlış
+pozitif sıfır).
+
+Küçük ama aynı sınıftan üç kalan: `_ihale_gunleri` "adında tarih geçen her
+sütun" diyordu ve 20 günün 12'si ihale günü değildi (itfa tarihleri 2028'den
+itibaren GERÇEK tetiğe dönecekti) — sütun artık ADIYLA sorulyor, bulunamazsa
+dosyanın gerçek sütun adları yazılıyor. `olu_kaliplar()` 27.08'den beri ölçü
+üretiyordu ve beş çağrı yerinin hiçbiri kapı değildi; üstelik belgesi kodun
+TERSİNİ anlatıyordu ("hat emniyet ağına düşer" — oysa kod `kossun=True` veriyor,
+hat HER pencerede koşuyor, ölçülü maliyeti ~87 dk/gün). Ve kör koşunun izi
+nabız defterine kondu (EŞİK YOK, bilerek: ölçülmeyen bir seviyeye eşik konmaz).
+
+On üç arıza enjeksiyonunun on üçü de yakalandı; dördü ilk turda geçti ve sebep
+ölçütün körlüğü değil MUTASYONUN arızayı üretmemesiydi — bir regresyon
+sınamasının kendisi de yanlış olabilir, ve "ölçüt düşmedi" ile "arıza yok"
+birbirine tıpatıp benzer.
+
 **Kurucu ilke — TEKRARIN İKİ EKSENİ VARDIR ve biri hiç ölçülmüyordu.**
 Kullanıcı "tekrarlı olmasın, her gün aynı şeyleri söylemeyelim" dedi. Depoda
 bir tekrar ölçeri zaten vardı (`bulten/tekrar.py`) ama yalnız bir SAYININ

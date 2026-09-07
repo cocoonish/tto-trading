@@ -66,6 +66,18 @@ class Tetik:
     besleyen: str                       # insan dili: hattı besleyen yayım
     kalip: str = ""                     # ulusal takvimdeki seri adı (regex)
     kurum: tuple[str, ...] = ()         # sorumlu kurum süzgeci (aynı adlı seriler için)
+    # BİR HAT BİRDEN ÇOK KURUMDAN BESLENEBİLİR. `kalip`/`kurum` çifti tek bir
+    # (regex, kurum) tarifi taşıyor ve bu, farklı kurumlardan gelen serileri tek
+    # regex'e sıkıştırmayı zorunlu kılıyordu — ya da (butce'de olduğu gibi)
+    # ikinci kaynağı yazmamayı. Ölçüldü (07.09.2026): butce hattı aylık HMB
+    # serilerinin yanında HAFTALIK bir DİBS/eurobond ailesi de taşıyor
+    # (`_tarih2`, hattın kendi toleransı 12 gün) ve onu besleyen "Menkul Kıymet
+    # İstatistikleri" (TCMB, Perşembe) tarifte HİÇ yoktu: haftalık bir ailenin
+    # tek koruması 45 günlük emniyet ağıydı.
+    # Kurumu kalıptan ayrı tutmak ŞART: takvimde HMB'nin de adı "…Menkul Kıymet
+    # İstatistikleri" ile biten bir serisi var (Kamu Haznedarlığı) ve kurum
+    # süzgeci gevşetilseydi butce'yi gereksiz yere tetiklerdi.
+    ek_kaynaklar: tuple[tuple[str, tuple[str, ...]], ...] = ()
     en_gec: int = 30                    # emniyet ağı: bu kadar gün sonra takvimsiz koş
     gecikme_dk: int = 45                # yayım anı ile verinin API'ye düşmesi arası
     ihale: bool = False                 # Hazine ihale planından da tetiklensin mi
@@ -119,9 +131,22 @@ TETIKLER: tuple[Tetik, ...] = (
     Tetik("odemeler", "Ödemeler Dengesi + Kısa Vadeli Dış Borç + UYP",
           r"Ödemeler Dengesi İstatistikleri|Kısa Vadeli Dış Borç İstatistikleri"
           r"|Uluslararası Yatırım Pozisyonu", ("TCMB",), en_gec=45),
-    Tetik("butce", "Merkezi Yönetim Bütçe Denge Tablosu + Borç Stoku",
+    # Hat İKİ kurumdan besleniyor: aylık bütçe/borç serileri HMB'den, haftalık
+    # DİBS/eurobond ailesi TCMB'nin Menkul Kıymet İstatistikleri'nden. İkincisi
+    # 07.09.2026'ya kadar tarifte yoktu ve haftalık bacak (ozet `_tarih2`,
+    # hattın kendi toleransı 12 gün — Butce/veri.py) yalnız 45 günlük emniyet
+    # ağıyla korunuyordu; o gün 17 gün geride ölçüldü. Yan kazanç: haftalık
+    # tetik eklenince AYLIK bacak da her perşembe yoklanıyor, yani hattın
+    # tetiksiz kör penceresi 18 günden ≤7 güne iniyor.
+    Tetik("butce", "Merkezi Yönetim Bütçe Denge Tablosu + Borç Stoku (HMB) "
+                   "+ Menkul Kıymet İstatistikleri (TCMB, haftalık)",
           r"Merkezi Yönetim Bütçe Denge Tablosu|Merkezi Yönetim Borç Stoku"
-          r"|Bütçe Finansmanı İstatistikleri|Merkezi Yönetim İç Borç", ("HMB",), en_gec=45),
+          r"|Bütçe Finansmanı İstatistikleri|Merkezi Yönetim İç Borç", ("HMB",), en_gec=45,
+          # Kalıp BAŞTAN SONA bağlı: HMB'nin "Kamu Haznedarlığı İstatistikleri
+          # (… Mevduat ve Menkul Kıymet İstatistikleri)" serisi kurum süzgeciyle
+          # zaten eleniyor, ama serbest bir alt dizge eşleşmesi ileride başka bir
+          # TCMB serisinde yanlış tetik açabilirdi.
+          ek_kaynaklar=((r"^\s*Menkul Kıymet İstatistikleri\s*$", ("TCMB",)),)),
     # Hazine ihaleleri ulusal takvimde yok: hattın kendi ihale planından sürülür.
     # İki ayrı tetik kaynağı, çünkü iki ayrı olay var. İHALE günü sonucu
     # (miktar, faiz, teklif) getirir; STRATEJİ günü önümüzdeki üç ayın
@@ -263,22 +288,52 @@ def _strateji_anlari(simdi: dt.datetime) -> list[tuple[str, dt.datetime]]:
     return anlar
 
 
-def _ihale_gunleri() -> list[dt.date]:
-    """Hazine'nin planlanan ihale tarihleri — hattın kendi çıktısından."""
+# Sütun ADIYLA sorulur. Eski süzgeç "adında 'tarih' geçen her sütun" diyordu ve
+# dosyada ÜÇ sütun birden geçiyor: "İhale Tarihi" (asıl olan), "İtfa Tarihi"
+# (senedin vadesi — 2028–2034) ve "Son İhale Tarihi" (kıyas bazının geçmişi).
+# Ölçüldü (07.09.2026): üretilen 20 günün 12'si (%60) ihale günü DEĞİLDİ. Bugün
+# sahte tetik sayısı sıfır — kirli tarihlerin en yenisi damgadan eski — ama itfa
+# günleri 13.09.2028'den itibaren GERÇEK tetiğe döner ve gerekçe metni okura
+# "Hazine ihalesi 13.09.2028" diye yazılırdı.
+IHALE_SUTUNU = "İhale Tarihi"
+# Geleceğe ufuk: strateji üç ayı kapsıyor, ondan uzağı bu dosyada plan değil
+# ARTIK olur. Sınır bir eşik değil, dosyanın kendi sözleşmesinin süresi.
+IHALE_UFUK_GUN = 120
+
+
+def _ihale_gunleri(bugun: dt.date | None = None) -> list[dt.date]:
+    """Hazine'nin planlanan ihale tarihleri — hattın kendi çıktısından.
+
+    Döner: yalnız `İhale Tarihi` sütunundaki, bugünden ufuk kadar ileriye dek
+    olan günler. Sütun yoksa dosyanın GERÇEK sütun adları uyarıya yazılır —
+    "bulunamadı" deyip neyin bulunabileceğini söylememek, her düzeltme için ayrı
+    bir keşif koşusu demektir (CLAUDE.md)."""
     if not IHALE_CSV.exists():
         return []
+    bugun = bugun or _simdi().date()
+    ufuk = bugun + dt.timedelta(days=IHALE_UFUK_GUN)
     gunler: list[dt.date] = []
     with IHALE_CSV.open(encoding="utf-8-sig", newline="") as f:
-        for satir in csv.DictReader(f):
-            for anahtar, deger in satir.items():
-                if not anahtar or "tarih" not in anahtar.lower() or not deger:
+        okuyucu = csv.DictReader(f)
+        sutunlar = [s for s in (okuyucu.fieldnames or []) if s]
+        if IHALE_SUTUNU not in sutunlar:
+            print(f"  [uyarı] {IHALE_CSV.name}: '{IHALE_SUTUNU}' sütunu yok; "
+                  f"dosyadaki sütunlar: {sutunlar}")
+            return []
+        for satir in okuyucu:
+            deger = satir.get(IHALE_SUTUNU)
+            if not deger:
+                continue
+            for kalip in ("%Y-%m-%d", "%d.%m.%Y", "%d/%m/%Y"):
+                try:
+                    g = dt.datetime.strptime(str(deger)[:10], kalip).date()
+                except ValueError:
                     continue
-                for kalip in ("%Y-%m-%d", "%d.%m.%Y", "%d/%m/%Y"):
-                    try:
-                        gunler.append(dt.datetime.strptime(str(deger)[:10], kalip).date())
-                        break
-                    except ValueError:
-                        continue
+                # Geçmiş ihaleler tetik üretmez (damga zaten geçmiş), gelecekteki
+                # ufkun ötesi de plan değil artık.
+                if g <= ufuk:
+                    gunler.append(g)
+                break
     return sorted(set(gunler))
 
 
@@ -482,6 +537,17 @@ def kararlar(hatlar: list[str] | None = None,
             continue
 
         tetikleyen: list[str] = []
+        for kalip, kurum in t.ek_kaynaklar:
+            for k in yayim:
+                if kurum and k["kurum"] not in kurum:
+                    continue
+                if not re.search(kalip, k["adi"], re.I):
+                    continue
+                an = _an(k["an"])
+                if an is None:
+                    continue
+                if son < an + dt.timedelta(minutes=t.gecikme_dk) <= simdi:
+                    tetikleyen.append(f"{k['adi']} — {an:%d.%m %H:%M}")
         if t.kalip:
             # Kalıp takvimde HİÇ eşleşmiyorsa (kaynak seri adını değiştirmiş
             # olabilir) hat sessizce emniyet ağına düşer ve ayda birkaç koşuya
@@ -491,9 +557,17 @@ def kararlar(hatlar: list[str] | None = None,
                           if (not t.kurum or k["kurum"] in t.kurum)
                           and re.search(t.kalip, k["adi"], re.I))
             if eslesme == 0:
+                # KOŞSUN=True BİLİNÇLİ: ölü kalıp hattı emniyet ağına DÜŞÜRMEZ,
+                # HER PENCEREDE koşturur. Maliyeti ölçülü (hafta içi altı
+                # pencere × en pahalı hat 869 sn ≈ 87 dk/gün) ve bilerek
+                # ödeniyor — bayat bir pano, yanmış bir koşucu dakikasından
+                # pahalıdır. Gerekçe metni bu yüzden ADIYLA yazıyor;
+                # `denetim.olu_kalip` ölçütü de aynı listeyi bültende uyarı
+                # olarak basıyor ki durum sessiz kalmasın.
                 cikti.append(Karar(ad, True,
                                    "KALIP ÖLÜ — takvimde bu tarife uyan seri yok "
-                                   "(kaynak seri adını değiştirmiş olabilir)"))
+                                   "(kaynak seri adını değiştirmiş olabilir); "
+                                   "hat her pencerede koşuyor"))
                 continue
             for k in yayim:
                 if t.kurum and k["kurum"] not in t.kurum:
@@ -567,10 +641,21 @@ def olu_kaliplar(yillar: tuple[int, ...] | None = None) -> list[tuple[str, str]]
     """Takvimde HİÇBİR yayımla eşleşmeyen tetik kalıpları.
 
     Bu dosyanın en sinsi hata biçimi budur: seri adı değişir ya da kalıp baştan
-    yanlış yazılır, hiçbir şey patlamaz, hat sessizce emniyet ağına düşer ve
-    günde bir yerine `en_gec` günde bir koşar. Kimse fark etmez — veri "biraz
-    eski" görünür, o kadar. Onun için kalıplar her koşuda takvime karşı
-    sınanır ve tutmayan varsa yüksek sesle söylenir.
+    yanlış yazılır ve hiçbir şey patlamaz.
+
+    BELGE BİR ZAMANLAR KODUN TERSİNİ ANLATIYORDU (07.09.2026'da düzeltildi):
+    burada ve `kararlar()`da "hat sessizce emniyet ağına düşer, `en_gec` günde
+    bir koşar" yazıyordu. Kod bunun TERSİNİ yapıyor — `eslesme == 0` dalı
+    `kossun=True` veriyor, yani ölü kalıplı hat HER PENCEREDE koşuyor. Maliyet
+    ölçülü: hafta içi altı pencere × en pahalı hat 869 sn ≈ 87 dk/gün, yorumların
+    vaat ettiği "on bir günde bir" değil. Aynı dosyadaki reelfx yorumu doğrusunu
+    yazıyordu ("hattı HER koşuda EVDS'e gönderirdi"); iki yorum birbiriyle
+    çelişiyordu ve kimse ikisini yan yana okumamıştı.
+
+    Onun için kalıplar her koşuda takvime karşı sınanır ve tutmayan varsa yüksek
+    sesle söylenir — `denetim.olu_kalip` ölçütü bunu bültende UYARI olarak
+    basar (ENGEL değil: takvim ucu düştüğünde bu fonksiyon zaten boş liste
+    döndürüyor, yani yanlış alarm riski yapısal olarak yok).
 
     Takvim hiç çekilemediyse boş liste döner: kaynağın düşmesi kalıbın ölü
     olduğu anlamına gelmez, o durumda yanlış alarm vermek denetimi işe yaramaz
@@ -588,6 +673,10 @@ def olu_kaliplar(yillar: tuple[int, ...] | None = None) -> list[tuple[str, str]]
         return []
     olu = []
     for t in TETIKLER:
+        for kalip, kurum in t.ek_kaynaklar:
+            if not any((not kurum or k["kurum"] in kurum)
+                       and re.search(kalip, k["adi"], re.I) for k in yayim):
+                olu.append((t.hat, kalip))
         if not t.kalip:
             continue
         if not any((not t.kurum or k["kurum"] in t.kurum)

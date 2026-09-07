@@ -89,7 +89,11 @@ def main() -> int:
     # --- dönem çıpaları ----------------------------------------------------
     O["_tarih"] = tr_tarih(s_gun)                    # GÜNLÜK bacak (eğri)
     if s_ay is not None:
-        O["_tarih2"] = f"{s_ay.year}-{s_ay.month:02d}"   # AYLIK bacak (anket)
+        # AYLIK bacak (anket). Yazım ortak/bicim sözleşmesi: `AA.YYYY`.
+        # "2026-08" biçimi sözleşmede YOK (ISO yalnız tam gün için tanımlı) ve
+        # çözülemeyen bir saat, denetlenmeyen bir saattir — bu alanın bayatlık
+        # denetimi 07.09.2026'ya kadar sessizce kapalıydı.
+        O["_tarih2"] = f"{s_ay.month:02d}.{s_ay.year}"
         O["anket_ay"] = ay_ad(s_ay)
     O["gun"] = gun_ad(s_gun)
     O["gun_kisa"] = tr_tarih(s_gun)

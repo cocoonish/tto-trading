@@ -314,6 +314,9 @@ def _yml_is(metin: str, is_adi: str) -> tuple[int | None, list[dict]]:
     return is_sinir, adimlar
 
 
+_re_py = re.compile(r"\bpython3?\b")
+
+
 def butce_bulgulari(metin: str, is_adi: str = "tazele") -> list[str]:
     """İş akışı metninden bütçe kusurlarını çıkar. Boş liste = temiz."""
     is_sinir, adimlar = _yml_is(metin, is_adi)
@@ -345,6 +348,37 @@ def butce_bulgulari(metin: str, is_adi: str = "tazele") -> list[str]:
             f"Sınırsız bir adım kendisinden SONRA gelen bütün adımların sigortasını "
             f"yakar — 04.09'da Hazine adımı tam bunu yaptı. Ya sınır konur ya da "
             f"süresi ölçülüp MUAF_ADIMLAR'a adıyla yazılır.")
+
+    # ADIMIN İÇİ DE ADIMDIR. Ölçüt 07.09.2026'ya kadar yalnız `timeout-minutes`e
+    # bakıyordu ve Hazine adımının ÖN KOMUTUNU göremiyordu: adımın kabuk içi
+    # `timeout` koruması vardı ama takvimi soran python çağrısı o korumanın
+    # DIŞINDAydı ve kendi sınırı yoktu (istek başına 25 sn × 3 deneme × iki yıl
+    # URL'si = 1–2,5 dk). Yani sekiz dakikalık tavanın bir kısmı kazımaya değil
+    # ön adıma gidiyordu ve bunu hiçbir kapı sormuyordu.
+    #
+    # KAPSAM DAR VE ADIYLA YAZILI: yalnız kabuk içi `timeout` TAŞIYAN adımlar.
+    # O koruma orada olduğuna göre yazarı bir asılmanın mümkün olduğunu zaten
+    # biliyor; aynı adımdaki korumasız bir python çağrısı o sigortayı yakar.
+    # Koruma taşımayan adımlara bu kural yayılmaz — ölçüldü, bugünkü ağaçta
+    # on iş akışında yanlış pozitif SIFIR.
+    # `_yml_is` adım GÖVDESİNİ tutmuyor (run yalnız bir bayrak) — bu tarama
+    # ham metin üzerinde, adım bloklarını "- name:/- uses:" sınırından bölerek
+    # yapılır.
+    for blok in re.split(r"\n      - (?=name:|uses:)", metin):
+        if "timeout " not in blok and "timeout -k" not in blok:
+            continue
+        ad_m = re.search(r"^name: (.+)$", blok, re.M)
+        ad = ad_m.group(1).strip() if ad_m else "(adsız adım)"
+        for satir in blok.splitlines():
+            s = satir.strip()
+            if not s or s.startswith("#") or "timeout" in s:
+                continue
+            if not _re_py.search(s):
+                continue
+            bulgular.append(
+                f"ADIM İÇİNDE SINIRSIZ KOMUT: '{ad}' kabuk içi `timeout` ile "
+                f"korunuyor ama şu satır o korumanın DIŞINDA: {s[:70]!r}. "
+                f"Korumasız bir çağrı, aynı adımın sigortasını yakar.")
     return bulgular
 
 
@@ -539,6 +573,284 @@ def main() -> int:
         assert _tzk.taze(kok / "ortak" / "tazelik.py", 99999), \
             "normal koşuda taze dosya bayat sayılıyor — önbellek işlevsiz kalır"
     sina("tazelik: önbellek sözleşmesi tek tanımda", _onbellek_tek_tanim)
+
+    # ── KAPSAM SÖZLEŞMEDEN TÜRER (07.09.2026)
+    #
+    # ayar.RITIM 21 hattın 18'ini taşıyordu ve eksik üçü (yp-mevduat, buyume,
+    # el-nino) RITIM'i dolaşan SEKİZ çağrı yerinin hepsinden birden düşüyordu —
+    # panoları üretiliyor, bayatlıklarını soran kimse yok. RITIM_ALAN ise
+    # kütüğün İLAN ETTİĞİ 21 ikincil saatin 1'ini denetliyordu. İkisi de
+    # "ölçüt doğru, baktığı yer eksik" sınıfı; bakılmayan yer geçen sınavla
+    # aynı görünür. Kapsam artık listeden değil SÖZLEŞMEDEN türüyor:
+    # hattın kütükteki kaydı ve o kaydın ilan ettiği tarih alanları.
+    def _ritim_kapsami():
+        import sys as _s
+        _s.path.insert(0, str(BURASI.parent))
+        import guncelle as g
+
+        def ana(h):
+            return "_tarih" if "_tarih" in h.tarih_anahtarlari else h.tarih_anahtarlari[0]
+
+        slugs = {h.slug for h in g.HATLAR}
+        eksik_hat = sorted(slugs - set(ayar.RITIM))
+        assert not eksik_hat, f"kütükte olup RITIM'de olmayan hat: {eksik_hat}"
+
+        # Sitede ozet.json yazan her hat da denetlenmeli — kütük ile site
+        # kopyası ayrışırsa (bir hat kütüğe girmeden yayına çıkarsa) sessiz
+        # bir boşluk doğar.
+        ozetler = {y.parent.name for y in
+                   (BURASI.parent / "site" / "public" / "projeler").glob("*/ozet.json")}
+        eksik_ozet = sorted(ozetler - set(ayar.RITIM))
+        assert not eksik_ozet, f"ozet.json yazan ama RITIM'de olmayan hat: {eksik_ozet}"
+
+        # Okura görünen ad da kapsamın parçası: adı olmayan hat olay cümlesinde
+        # slug basar ve okurun elinde slug yoktur.
+        adsiz = sorted(set(ayar.RITIM) - set(ayar.HAT_ADI))
+        assert not adsiz, f"RITIM'de olup okur adı olmayan hat: {adsiz}"
+
+        # İkincil saatler: kütükteki HER ilan için bir eşik. Fazladan kayıt
+        # serbest (ör. tcmb h_tarih kütükte ilan edilmemiş ama denetleniyor);
+        # yasak olan EKSİK olanıdır.
+        alan = {(h.slug, a) for h in g.HATLAR for a in h.tarih_anahtarlari if a != ana(h)}
+        eksik_alan = sorted(alan - set(ayar.RITIM_ALAN))
+        assert not eksik_alan, f"ilan edilmiş ama eşiği yazılmamış ikincil saat: {eksik_alan}"
+        assert len(alan) >= 20, f"ilan taraması kör: yalnız {len(alan)} alan bulundu"
+    sina("kapsam: RITIM ve RITIM_ALAN kütükten türüyor", _ritim_kapsami)
+
+    # ── TARİH AYRIŞTIRMASI TEK TANIMDA (07.09.2026)
+    #
+    # denetim.py'nin KENDİ ayrıştırıcısı vardı ve `AA.YYYY` yazımını
+    # tanımıyordu; RITIM'deki beş hattın ANA saati tam o yazımda olduğu için
+    # karanlık denetimi o beş hattı bütünüyle atlıyordu. Ayrıştıramayan bir
+    # denetim hep "sorun yok" der. Aynı kusur `Deger.astro`da bir kez daha
+    # ölçülmüştü; sözleşme ortak/bicim'de TEK yerde.
+    def _tarih_tek_tanim():
+        import inspect
+        assert denetim._tarihe("08.2026") == dt.date(2026, 8, 31), \
+            "AA.YYYY çözülmüyor — beş hattın karanlık denetimi sessizce kapalı"
+        assert denetim._tarihe("18.08.2026") == dt.date(2026, 8, 18)
+        assert denetim._tarihe("2026-08-18") == dt.date(2026, 8, 18)
+        assert denetim._tarihe("2026-Ç1") is None, "sözleşmede olmayan yazım çözülüyor"
+        kaynak = inspect.getsource(denetim._tarihe)
+        assert "strptime" not in kaynak, \
+            "denetim'de yerel bir tarih ayrıştırıcısı geri kondu — sözleşme ikiye ayrıldı"
+    sina("denetim: tarih ayrıştırması ortak/bicim'de", _tarih_tek_tanim)
+
+    # ── KARANLIK ÖLÇÜTÜNÜN ALAN KÜMESİ İLANDAN (07.09.2026)
+    #
+    # Sonek kuralı ("_tarih ile biten") kütüğün ilan ettiği yedi ikincil saati
+    # görmüyordu (`_tarih2`, `_tarih3`, `faiz_gun`, `hafta_kisa`). Ve `tcmb`
+    # hattının hiç `_tarih`i yok — ana saati `g_tarih`; eski kod o hattı da
+    # bütünüyle atlıyordu.
+    def _karanlik_kapsami():
+        k = denetim._kutuk_saatleri()
+        assert len(k) >= 20, f"kütük okunamadı, kapsam kör: {len(k)} hat"
+        assert k["tcmb-net-rezerv"][0] == "g_tarih", \
+            "_tarih'i olmayan hattın ana saati kütükten çözülmüyor"
+        for slug, alanlar in (("butce-borc", {"_tarih2", "_tarih3"}),
+                              ("enflasyon", {"faiz_gun"}),
+                              ("fonlama-likidite", {"hafta_kisa", "zk_taban_tarih"})):
+            assert alanlar <= k[slug][1], f"{slug}: ilan edilmiş saat kapsam dışı"
+            for a in alanlar:
+                assert not (a.endswith("_tarih") and a != "_tarih") or a == "zk_taban_tarih", \
+                    f"{a} sonek kuralıyla zaten yakalanıyor — sınama boş küme sınıyor"
+    sina("denetim: karanlık alan kümesi kütükteki ilandan", _karanlik_kapsami)
+
+    # ── BİR HAT BİRDEN ÇOK KURUMDAN BESLENEBİLİR (07.09.2026)
+    #
+    # butce hattı aylık HMB serilerinin yanında HAFTALIK bir DİBS/eurobond
+    # ailesi taşıyor ve onu besleyen TCMB yayımı tarifte HİÇ yoktu: haftalık
+    # bir ailenin tek koruması 45 günlük emniyet ağıydı (o gün 17 gün geride).
+    # Sınama HEM tetiğin çalıştığını HEM de yanlış tetik açmadığını sorar:
+    # takvimde HMB'nin de adı "…Menkul Kıymet İstatistikleri" ile biten bir
+    # serisi var ve kurum süzgeci gevşetilseydi butce'yi boş yere koştururdu.
+    def _cok_kaynakli_tetik():
+        gercek_y, gercek_d = tazeleme._yayimlar, tazeleme._defter
+        # HMB kalıbı CANLI ama tetiklemiyor (damgadan eski) — yoksa "KALIP ÖLÜ"
+        # dalı devreye girer ve sınama ölçmek istediği şeyi hiç ölçemez.
+        canli = {"adi": "Merkezi Yönetim Bütçe Denge Tablosu", "kurum": "HMB",
+                 "an": "2026-08-17T17:30:00"}
+        tazeleme._defter = lambda: {"son_kosum": {"butce": "2026-08-28T17:56:34"}}
+
+        def karar(ek):
+            tazeleme._yayimlar = lambda y: ([canli] + ek, True)
+            return tazeleme.kararlar(["butce"], simdi=dt.datetime(2026, 9, 4, 16, 0))[0]
+
+        try:
+            assert not karar([]).kossun, "yeni yayım yokken koşuyor"
+            assert karar([{"adi": "Menkul Kıymet İstatistikleri", "kurum": "TCMB",
+                           "an": "2026-09-03T14:30:00"}]).kossun, \
+                "haftalık TCMB yayımı butce'yi tetiklemiyor"
+            assert not karar([{"adi": "Kamu Haznedarlığı İstatistikleri (Kamu Kurumları "
+                                      "Mevduat ve Menkul Kıymet İstatistikleri)",
+                               "kurum": "HMB", "an": "2026-09-03T17:30:00"}]).kossun, \
+                "HMB'nin benzer adlı serisi YANLIŞ tetik açıyor"
+            assert karar([{"adi": "Merkezi Yönetim Borç Stoku", "kurum": "HMB",
+                           "an": "2026-09-03T17:30:00"}]).kossun, \
+                "mevcut aylık tarif bozuldu"
+        finally:
+            tazeleme._yayimlar, tazeleme._defter = gercek_y, gercek_d
+    sina("tazeleme: bütçe hattı iki kurumdan besleniyor", _cok_kaynakli_tetik)
+
+    # ── BAYATLIK: ÖLÇÜNÜN TÜKETİCİSİ VE YAPISAL KİLİDİ (07.09.2026)
+    #
+    # Yeniden deneme defteri arızayı ölçüyor ama tek aday tüketici
+    # (`denetim.tazeleme_atlandi`) `kossun` süzgeciyle TAM DA ARIZA HÂLİNİ
+    # atıyordu: hakkı dolan hat `kossun=False` döner. Ölçülen ama okunmayan bir
+    # sinyal, ölçülmemiş sinyaldir.
+    def _bayatlik():
+        import inspect
+        import bayatlik
+
+        # (1) YAPISAL KİLİT: yayını durduran bir sınıf HİÇ TANIMLI DEĞİL.
+        # Sebebi 02.09'da ölçüldü — yayının önünde duran bir denetimin yanlış
+        # alarmı siteyi on iki saat durdurdu. Bayat bir hattı yayından ÇIKARAN
+        # kapı, bayatlığı yokluğa çevirir; yani ölçtüğü şeyi büyütür.
+        assert bayatlik.SINIFLAR == ("saglikli", "bilgi", "alarm"), \
+            f"bayatlık sınıfları değişmiş: {bayatlik.SINIFLAR}"
+        for yasak in ("engel", "durdur", "yayin_durur"):
+            assert yasak not in bayatlik.SINIFLAR, \
+                f"bayatlık ölçüsüne yayını durduran bir sınıf eklenmiş: {yasak}"
+
+        # (2) ALARM YALNIZ BİLEŞİMDEN DOĞAR, ham veri yaşından değil. Ölçüldü:
+        # ham yaşa dayanan bir kapı 07.09'da üç hatta ateşlerdi ve ikisi
+        # meşruydu (ödemeler 11.09'da yayımlanacak, hazinenin sıradaki ihalesi
+        # 14.09) — ilk günden ≥%67 yanlış pozitif.
+        gercek = bayatlik.tazeleme._defter
+        try:
+            bayatlik.tazeleme._defter = lambda: {
+                "son_kosum": {"kredi": "2026-09-03T19:12:00"},
+                "son_surum": {"kredi": "21.08.2026"},
+                "deneme": {"kredi": bayatlik.tazeleme.TEKRAR_HAKKI}}
+            al = bayatlik.alarmlar()
+            assert [b.hat for b in al] == ["kredi"], \
+                f"hak dolmuş hat alarm üretmiyor: {[b.hat for b in al]}"
+            assert "21.08.2026" in al[0].surum
+
+            bayatlik.tazeleme._defter = lambda: {
+                "son_kosum": {"kredi": "2026-09-03T19:12:00"},
+                "son_surum": {"kredi": "21.08.2026"},
+                "deneme": {"kredi": 1}}
+            assert not bayatlik.alarmlar(), \
+                "hak dolmadan alarm veriyor — yeniden deneme sürerken alarm erken"
+
+            # Sayacı hiç olmayan hat (kaynak henüz yayımlamadı) alarm ÜRETMEZ,
+            # veri yaşı ne olursa olsun.
+            bayatlik.tazeleme._defter = lambda: {
+                "son_kosum": {"odemeler": "2026-09-03T13:54:35"},
+                "son_surum": {"odemeler": "30.06.2026"}, "deneme": {}}
+            assert not bayatlik.alarmlar(), \
+                "kaynak yayımlamamışken alarm veriyor — ham veri yaşı eşiğe dönmüş"
+        finally:
+            bayatlik.tazeleme._defter = gercek
+
+        # (3) TÜKETİCİ: denetim ölçüsünü `kossun` süzgecinin ÖNÜNDE okumalı.
+        kaynak = inspect.getsource(denetim.Denetim.tazeleme_atlandi)
+        assert "bayatlik" in kaynak, "denetim bayatlık ölçüsünü hiç okumuyor"
+        assert kaynak.index("bayatlik") < kaynak.index("if k.kossun"), \
+            "bayatlık okuması kossun süzgecinin ARDINDA — süzgeç arıza hâlini atar"
+    sina("bayatlık: ölçü, tüketici ve yayını durdurmama kilidi", _bayatlik)
+
+    # ── İHALE SÜTUNU ADIYLA SORULUR (07.09.2026)
+    #
+    # Eski süzgeç "adında 'tarih' geçen her sütun" diyordu ve dosyada ÜÇ sütun
+    # birden geçiyor: İhale Tarihi (asıl), İtfa Tarihi (2028–2034) ve Son İhale
+    # Tarihi (kıyas geçmişi). Ölçüldü: 20 günün 12'si ihale günü DEĞİLDİ. Bugün
+    # sahte tetik yok — kirli tarihler damgadan eski — ama itfa günleri
+    # 13.09.2028'den itibaren gerçek tetiğe döner ve okura "Hazine ihalesi
+    # 13.09.2028" yazılırdı.
+    def _ihale_sutunu():
+        g = tazeleme._ihale_gunleri(dt.date(2026, 9, 7))
+        assert g, "ihale planı okunamadı — sınama kör"
+        assert len(g) == 8, f"ihale günü sayısı 8 değil: {len(g)} ({g[:3]}…)"
+        assert min(g) >= dt.date(2026, 9, 14) and max(g) <= dt.date(2026, 11, 10), \
+            f"ihale günleri plan aralığının dışında: {min(g)}–{max(g)}"
+        # İtfa tarihleri (2028+) sızmamalı — eski kusurun birebir izi.
+        assert not [x for x in g if x.year > 2026], \
+            "itfa tarihleri ihale günü sayılıyor"
+
+        # Sütun yoksa SESSİZ KALINMAZ: dosyanın gerçek sütun adları basılır.
+        import csv as _csv, io, contextlib, tempfile
+        from pathlib import Path as _Path
+        gercek = tazeleme.IHALE_CSV
+        with tempfile.TemporaryDirectory() as td:
+            sahte = _Path(td) / "plan.csv"
+            with gercek.open(encoding="utf-8-sig", newline="") as f:
+                satirlar = list(_csv.DictReader(f))
+            alanlar = [a for a in satirlar[0] if a and a != tazeleme.IHALE_SUTUNU]
+            with sahte.open("w", encoding="utf-8-sig", newline="") as f:
+                w = _csv.DictWriter(f, fieldnames=alanlar)
+                w.writeheader()
+                for s in satirlar:
+                    w.writerow({a: s.get(a) for a in alanlar})
+            tazeleme.IHALE_CSV = sahte
+            try:
+                cikti = io.StringIO()
+                with contextlib.redirect_stdout(cikti):
+                    assert tazeleme._ihale_gunleri(dt.date(2026, 9, 7)) == []
+                metin = cikti.getvalue()
+                assert "İtfa Tarihi" in metin, \
+                    "sütun bulunamadığında dosyanın gerçek sütunları yazılmıyor"
+            finally:
+                tazeleme.IHALE_CSV = gercek
+    sina("tazeleme: ihale sütunu adıyla sorulur", _ihale_sutunu)
+
+    # ── SIGTERM DEFTERİ ÖLDÜRMESİN (07.09.2026)
+    #
+    # Adımlar kabuk içi `timeout` ile kesiliyor ve `timeout` önce SIGTERM
+    # gönderir; Python varsayılan olarak `finally` bloklarını KOŞTURMADAN
+    # ölür. 06.09'da Hazine adımı böyle kesildi, süre deftere yazılmadı ve
+    # kısırdöngü kapandı: tavan hattın süresinin altında, her koşu tavanda
+    # kesiliyor, kesilen koşu ölçüm yazmadığı için tavan hiç ölçüye
+    # bağlanamıyor. SINANMAYAN EMNİYET EMNİYET DEĞİLDİR — bu sınama gerçek
+    # bir SIGTERM gönderiyor, ağ istemiyor.
+    def _sigterm_defteri():
+        import json as _j
+        import signal as _sig
+        import subprocess as _sp
+        import sys as _s
+        import tempfile
+        from pathlib import Path as _Path
+
+        kaynak = (BURASI.parent / "guncelle.py").read_text(encoding="utf-8")
+        assert "signal.signal(_im, _kesildi)" in kaynak, \
+            "guncelle.py'de SIGTERM tutucusu yok — kesilen koşu defter yazmaz"
+
+        govde = "\n".join([
+            "import sys, signal, pathlib, time",
+            "sys.path.insert(0, %r)" % str(BURASI.parent),
+            "import guncelle as g",
+            "g.HAT_SURESI = pathlib.Path(sys.argv[1])",
+            "def _k(i, f):",
+            "    raise SystemExit(124)",
+            "signal.signal(signal.SIGTERM, _k)",
+            'sonuc = [(g.HAT["hazine"], True, "sinama", 612.0)]',
+            "try:",
+            '    print("HAZIR", flush=True)',
+            "    time.sleep(30)",
+            "finally:",
+            "    g.sure_kaydet(sonuc, tam=True)",
+        ])
+        with tempfile.TemporaryDirectory() as td:
+            td = _Path(td)
+            defter = td / "hat_suresi.json"
+            betik = td / "kesinti.py"
+            betik.write_text(govde, encoding="utf-8")
+            p = _sp.Popen([_s.executable, "-u", str(betik), str(defter)],
+                          stdout=_sp.PIPE, text=True)
+            try:
+                assert p.stdout.readline().strip() == "HAZIR", "sınama betiği başlamadı"
+                p.send_signal(_sig.SIGTERM)
+                p.wait(timeout=15)
+            finally:
+                if p.poll() is None:
+                    p.kill()
+            assert defter.exists(), "SIGTERM sonrası defter HİÇ yazılmadı"
+            kayit = (_j.loads(defter.read_text(encoding="utf-8"))
+                     .get("hatlar", {}).get("hazine"))
+            assert kayit and kayit[0]["sn"] == 612.0, \
+                f"kesilen koşunun süresi deftere yazılmadı: {kayit}"
+    sina("guncelle: SIGTERM kesintisinde süre defteri yazılıyor", _sigterm_defteri)
 
     # --gerekli'nin atladığı hat türev genişletmesiyle geri gelmez: reelfx tcmb'ye
     # bağımlı, tcmb her iş günü seçiliyor, reelfx her gün EVDS'e çıkıyordu (02.09).
@@ -2154,10 +2466,17 @@ def main() -> int:
         #
         # Kapsam bir listeden değil KAYNAĞIN KENDİSİNDEN türetiliyor: gecikme.py
         # hangi depo köklerini okuyorsa checkout onları getirmeli.
+        # KAPSAM ÖLÇÜTÜ İKİ ARACI BİRDEN SORAR. gecikme.yml artık bayatlik.py'yi
+        # de koşturuyor ve o da depo köklerini okuyor; ölçütü tek dosyaya
+        # bakar bırakmak, ikinci aracın sessizce kör kalması demek olurdu —
+        # bu ölçütün yazıldığı kusurun ta kendisi.
         import re as _re
-        kaynak = (BURASI / "gecikme.py").read_text(encoding="utf-8")
-        kokler = {m.group(1) for m in _re.finditer(r'kok\s*/\s*"([^"]+)"', kaynak)}
-        assert kokler, "gecikme.py'de `kok / \"...\"` okuması bulunamadı — kalıp değişmiş olabilir"
+        kokler: set[str] = set()
+        for arac in ("gecikme.py", "bayatlik.py"):
+            kaynak = (BURASI / arac).read_text(encoding="utf-8")
+            kokler |= {g.group(1) for g in _re.finditer(r'KOK\s*/\s*"([^"]+)"', kaynak)}
+            kokler |= {g.group(1) for g in _re.finditer(r'kok\s*/\s*"([^"]+)"', kaynak)}
+        assert kokler, "gecikme.py/bayatlik.py'de `kok / \"...\"` okuması bulunamadı — kalıp değişmiş olabilir"
         kapsam = []
         for sat in m.splitlines():
             if sat.strip().startswith("#"):

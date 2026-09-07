@@ -521,11 +521,38 @@ HATLAR: list[Hat] = [
         ["veri.py", "metrik.py", "kuresel.py", "grafik.py", "ozet_uret.py"], [],
         {"cikti/*.html": "*"},
         not_="ONI aylık, TÜFE aylık; ENSO tahminleri üç ayda bir belirginleşir."),
+    # HAFİF KİP DERLEME ZİNCİRİNİ HİÇ KOŞTURMUYORDU (07.09.2026'da ölçüldü).
+    # Liste ["src/web_cikti.py", "src/ozet_uret.py"] idi ve İKİSİ DE yalnız
+    # OKUR: hattın ana saati ozet_uret'in `output/seriler.xlsx`ten türettiği
+    # aydır ve o dosyayı YAZAN rapor.py'dir — analiz.py değil (o üç CSV yazar).
+    # rapor.py yalnız run_all.py'den, yani TAM kipten çağrılıyordu ve tam kip
+    # cron'la ateşlenemiyor (veri.yml --tam yalnız elle, hat listesi zorunlu).
+    # Sonuç: xlsx 26.08 04:31'den beri yeniden yazılmadı; 03.09'da Ağustos TÜFE
+    # yayımlandı, tetik ateşlendi, hat KOŞTU, tetiği tüketti ve ana saati
+    # ilerletemedi. Sayfada aynı anda üç figür 08.2026, on üçü 07.2026
+    # gösteriyordu — okur için tek bir sayfada iki farklı ay.
+    #
+    # ozet_uret ayrıca katki_ayristirma.csv ve duyarlilik.csv okuyor; ikisini de
+    # analiz.py yazıyor ve o da listede yoktu — yani hat ÜÇ donmuş dosyadan
+    # besleniyordu. "Bir dosya okunuyorsa onu üreten adım hattın adım listesinde
+    # GÖRÜNMELİDİR" (CLAUDE.md).
+    #
+    # hasat.py listede, çünkü rapor.py'yi tek başına eklemek yeni bir ölü
+    # bağımlılık kurardı: data/raw/medas_tarim_ufe.xls yalnız oradan tazeleniyor
+    # ve donduğunda tür kaması sessizce 1'e düşüyor. Ağ/Playwright yoksa hasat
+    # DÜŞMEZ, uyarıyla eski dosyayla devam eder.
+    #
+    # SÜRE ÖLÇÜLMEDİ: hat EVDS anahtarı olmadan yerelde koşmuyor, defterde de
+    # (bulten/hat_suresi.json) marj kaydı YOK. Hafif kipin adım tavanı (900 sn)
+    # her adıma ayrı ayrı uygulanıyor, yani asılan bir adım tazeleme bütçesini
+    # götüremez; gerçek süre ilk bulut koşusunda deftere yazılacak ve tavan
+    # ancak ondan sonra ölçüye bağlanabilir.
     Hat("marj", "Yiyecek Hizmetleri Marjı", Path("Research/marj"), "yiyecek-hizmetleri-marj",
-        ["src/web_cikti.py", "src/ozet_uret.py"],
+        ["src/hasat.py", "src/veri.py", "src/analiz.py", "src/rapor.py",
+         "src/web_cikti.py", "src/ozet_uret.py"],
         ["src/run_all.py", "src/web_cikti.py", "src/ozet_uret.py"],
         {"output/web/*.html": "*", "output/ozet.json": "ozet.json"},
-        "tam kip: EVDS/TÜİK'ten yeniden çeker; MEDAS için Playwright"),
+        "tam kip: grafikler.py de koşar (matplotlib); MEDAS için Playwright"),
     # ── TÜREV HATLAR — kendi kaynağına gitmez, üstteki hatların depoya yazdığı
     # CSV'lerden hesaplanır. SIRA BAĞLAYICIDIR: kos() hatları komut satırı /
     # kütük sırasıyla koşturur; bunlar Fonlama, DİBS, Kredi ve Enflasyon'dan
@@ -1643,6 +1670,32 @@ def main():
     ap.add_argument("--duzelt", action="store_true",
                     help="--denetle ile: eksik bulunan hatların kurulumunu yap")
     a = ap.parse_args()
+
+    # SIGTERM DEFTERİ ÖLDÜRMESİN.
+    #
+    # Adımlar kabuk içi `timeout` ile kesiliyor ve `timeout` önce SIGTERM
+    # gönderiyor. Python'un varsayılan davranışı süreci `finally` bloklarını
+    # KOŞTURMADAN sonlandırmak: 06.09 koşusunda Hazine adımı tam böyle kesildi
+    # ve `finally` hiç koşmadığı için hat süresi deftere YAZILMADI, tazeleme
+    # damgası da vurulmadı. Sonuç bir kısırdöngüydü — tavan hattın ölçülmüş
+    # süresinin altındaydı, her koşu tavanda kesiliyordu, kesilen koşu ölçüm
+    # yazmadığı için tavan hiç ölçüye bağlanamıyordu.
+    #
+    # SystemExit yükseltmek `finally` zincirini ÇALIŞTIRIR: tamamlanan hatların
+    # süresi ve damgası yazılır, kopyalanmış çıktılar ev stilinden geçer.
+    # "Yarım tazeleme, commit edilmiş yarım tazelemedir; hiç commit edilmemiş
+    # tam tazeleme ise hiçbir şeydir."
+    def _kesildi(imza, _cerceve):
+        print(_renk(f"\n  [kesildi] sinyal {imza} — defter yazılıp çıkılıyor "
+                    f"(tamamlanan hatların süresi ve damgası korunuyor).", 33))
+        raise SystemExit(124)
+
+    for _im in (signal.SIGTERM, signal.SIGINT):
+        try:
+            signal.signal(_im, _kesildi)
+        except (ValueError, OSError):       # ana iş parçacığı değilse: sessiz geç
+            pass
+
     gunluk = gunluk_ac()
 
     if a.liste:
@@ -1688,6 +1741,26 @@ def main():
         # koşunun önbelleği atlayıp atlamayacağını da taşıyor (yeniden deneme).
         _kararlar = _tz.kararlar([h.ad for h in secilen])
         gerek = {k.hat for k in _kararlar if k.kossun}
+        # KÖR KOŞUNUN İZİ NABIZ DEFTERİNE. Takvim ucu düştüğünde her hat
+        # "koşsun" görünür ve o koşu bütün hatları ağa gönderir; bu hâlin
+        # depoda tek izi denetimin stdout'una bastığı bir satırdı, yani "bu ay
+        # kaç pencere kör koştu" sorusu geriye dönük CEVAPSIZDI. Değerleri
+        # kararı VEREN yazar; nabiz.py ortamdan okur.
+        _kor = any(str(k.sebep).startswith(_tz.KOR_KOSU) for k in _kararlar)
+        _olcu = {"TTO_TAKVIM_ALINDI": "0" if _kor else "1",
+                 "TTO_KOSAN_HAT": str(len(gerek))}
+        os.environ.update(_olcu)
+        # NABIZ AYRI BİR ADIMDA KOŞUYOR: `os.environ` bu sürecin dışına çıkmaz.
+        # GitHub'ın adımlar arası kanalı $GITHUB_ENV; dosya yoksa (yerel koşu)
+        # sessizce atlanır ve ölçü yalnız bu süreçte kalır.
+        _genv = os.environ.get("GITHUB_ENV")
+        if _genv:
+            try:
+                with open(_genv, "a", encoding="utf-8") as f:
+                    for _a, _d in _olcu.items():
+                        f.write(f"{_a}={_d}\n")
+            except OSError as _ex:
+                print(_renk(f"  (kör koşu izi $GITHUB_ENV'e yazılamadı: {_ex})", 33))
         yenile_hatlar = {k.hat for k in _kararlar if k.kossun and getattr(k, "yenile", False)}
         atlanan = [h for h in secilen if h.ad not in gerek]
         atlanan_adlar = {h.ad for h in atlanan}

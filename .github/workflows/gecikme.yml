@@ -111,10 +111,18 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: main
+          # site/public/projeler LİSTEDE OLMAK ZORUNDA: bayatlik.py hatların
+          # site kopyasındaki ana saati oradan okuyor. Yol eksik olsaydı dosya
+          # koşucuda HİÇ bulunmaz, ölçü sessizce kapanır ve iş akışı YEŞİL
+          # biterdi — X bacağında birebir bu yaşandı. Kapsam bir listeden değil
+          # KAYNAKTAN türetilip bulten/duman.py'de sınanıyor.
+          # (Yorumlar blok skalerin DIŞINDA: `|` içinde '#' yorum değildir,
+          # sparse desenine düz metin olarak girer.)
           sparse-checkout: |
             bulten
             ortak
             site/src/data
+            site/public/projeler
             tweet
             .github/workflows
 
@@ -182,6 +190,29 @@ jobs:
           # çift alarm — mükerrerlik bir rahatsızlık, sessizlik bir arıza.
           echo "::warning::alarm kaydı push edilemedi; aynı gün için mükerrer alarm gelebilir."
 
+      # BAYAT HAT ALARMI — gecikmeden AYRI bir ölçü.
+      #
+      # `gecikme.py` yayının SAATİNİ ölçüyor ("bülten sözünden kaç dakika geç
+      # çıktı"); bu adım verinin KENDİSİNİ ölçüyor ("kaynak yayımladı, hat
+      # koştu, veri gelmedi"). İki arıza bağımsız: bülten dakikası dakikasına
+      # çıkarken içindeki bir hattın verisi bir hafta eski olabilir — 03.09'da
+      # kredi hattında tam bu oldu ve hiçbir kanal ses çıkarmadı.
+      #
+      # Adım `continue-on-error` DEĞİL ama Alarm adımından AYRI: iki arıza
+      # ayrı ayrı görünmeli, biri ötekini maskelememeli.
+      - name: Bayat hat var mı
+        id: bayat
+        run: |
+          set +e
+          python3 -u bulten/bayatlik.py
+          kod=$?
+          set -e
+          echo "kod=$kod" >> "$GITHUB_OUTPUT"
+          if [ "$kod" != "0" ]; then
+            echo "::error::KAYNAK YAYIMLADI, VERİ GELMEDİ — yukarıdaki hatlar yeniden deneme hakkını doldurdu."
+          fi
+          exit 0
+
       # Alarmın kendisi. Bu adım DÜŞER, düşen iş akışı bildirim gönderir.
       # Yayının önünde durmaz: bu iş akışının kırmızı bitmesi hiçbir şeyi
       # engellemez, yalnız haber verir.
@@ -193,8 +224,16 @@ jobs:
           echo "::error::YAYIN SÖZÜ AŞILDI — $OZET"
           exit 1
 
+      # Bayat hat alarmı gecikme alarmından BAĞIMSIZ düşer: gecikme
+      # "zamanında" olsa bile bayat bir hat haber vermeye değer.
+      - name: Bayat hat alarmı
+        if: steps.bayat.outputs.kod != '0'
+        run: |
+          echo "::error::Bir ya da daha çok hat kaynağın yayımladığı veriyi getiremedi."
+          exit 1
+
       - name: Sessiz geçiş
-        if: steps.olcum.outputs.yeni != '1'
+        if: steps.olcum.outputs.yeni != '1' && steps.bayat.outputs.kod == '0'
         env:
           OZET: ${{ steps.olcum.outputs.ozet }}
-        run: echo "✓ $OZET"
+        run: echo "✓ $OZET · bayat hat yok"

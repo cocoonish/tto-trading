@@ -143,7 +143,15 @@ jobs:
     #   kurulum 5 + tazele 40 + türev 5 + hazine 8 + nabız/commit 2 = 60 ≤ 65
     # İş sınırını yalnız büyütmek yanışı uzatırdı; asıl düzeltme İŞİ (tazeleme)
     # kesip DEFTER TUTMAYA (damga + commit) yer bırakmaktır.
-    timeout-minutes: 65
+    #
+    # 07.09.2026'DA YENİDEN KURULDU. Hazine adımının 8 dakikası hattın ölçülmüş
+    # süresinin (bulutta 10–20 dk soğuk tarama) ALTINDAYDI ve kendini
+    # kilitliyordu: kesilen koşu süre defterine yazmadığı için tavan hiç ölçüye
+    # bağlanamıyordu. Adım 22'ye çıkınca aritmetik:
+    #   kurulum 5 + tazele 40 + türev 5 + hazine 22 + nabız 1 + commit 1 = 74 ≤ 80
+    # İş sınırı bir MALİYET DEĞİL TAVAN: Hazine adımı yalnız ihale günlerinde
+    # kazıyor, öbür günlerde saniyelerde "ihale yok" deyip çıkıyor.
+    timeout-minutes: 80
     env:
       TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
       # ortak/sitecustomize.py: zaman aşımısız kalan her HTTP isteğine varsayılan
@@ -385,9 +393,31 @@ jobs:
       - name: Hazine ihaleleri (ihale günüyse tam kip)
         if: always()
         continue-on-error: true
-        timeout-minutes: 8
+        # TAVAN ÜÇ PARÇADAN KURULUR VE PARÇALAR YAZILIR:
+        #   ön adım 2 + kazıma 19 + geri alma 1 = 22
+        # Eski 8 dakika hattın ÖLÇÜLMÜŞ süresinin (bulutta 10–20 dk) ALTINDAYDI
+        # ve kendini kilitliyordu: her tam kip 7. dakikada kesiliyor, kesilen
+        # koşu süre defterine hiçbir şey yazmadığı için tavan da hiç ölçüye
+        # bağlanamıyordu. 06.09 koşusu (#117) böyle düştü ve hazine hattı
+        # 18.08'de dondu.
+        #
+        # 19 ÖLÇÜM DEĞİL TAVAN. Bulutta her koşu SOĞUK tarama: xlsx .gitignore'da
+        # olduğu için artımlı erken durma hiç devreye girmiyor ve kazıyıcı 200
+        # sayfayı baştan geziyor. Gerçek süre ilk başarılı koşuda süre defterine
+        # yazılacak (guncelle.py tam kipte de yazıyor) ve tavan ondan sonra
+        # ölçüye çekilecek.
+        timeout-minutes: 22
         run: |
-          GEREK=$(python -c "import sys; sys.path.insert(0,'bulten'); import tazeleme; print(' '.join(tazeleme.gerekli(['hazine'])))")
+          # ÖN ADIM DA SINIRLI. Sınırsızdı ve kabuk `timeout`unun DIŞINDAydı:
+          # takvim ucu istek başına 25 sn, üç deneme, iki yıl URL'si — tek
+          # başına 1–2,5 dakika yiyebiliyordu. "Sınırsız bir adım, kendisinden
+          # SONRA gelen bütün adımların sigortasını yakar" kuralı bir adımın
+          # İÇİNDEKİ komutlar için de geçerli.
+          GEREK=$(timeout -k 10s 110s python -c "import sys; sys.path.insert(0,'bulten'); import tazeleme; print(' '.join(tazeleme.gerekli(['hazine'])))" || echo "TAKVIM_ZAMAN_ASIMI")
+          if [ "$GEREK" = "TAKVIM_ZAMAN_ASIMI" ]; then
+            echo "::warning::Hazine tetiği sorulurken takvim ucu 110 saniyede cevap vermedi — adım atlandı, kazımaya vakit bırakıldı."
+            exit 0
+          fi
           if [ "$GEREK" != "hazine" ]; then
             echo "İhale yok — Hazine hattı atlandı"
             exit 0
@@ -403,11 +433,11 @@ jobs:
           # eklenirken kendisinden ÖNCE konmuş sigortayı kapatıp kapatmadığı
           # sorulur. Kabuk içi `timeout` denetimi kabuğa geri verir (çıkış 124),
           # dıştaki 8 dakika yerinde durur ama artık ona ÇARPILMAZ.
-          # 7 dakika ÖLÇÜM DEĞİL, adım tavanından TÜRETİLMİŞTİR: kazımanın
-          # tavanı (8, kendisi de geçici) eksi geri almaya bırakılan bir
-          # dakika. Adım tavanı ölçüye bağlandığında bu da onunla iner;
-          # bulten/duman.py ikisinin arasındaki sırayı ENGEL olarak sınıyor.
-          if timeout -k 30s 7m python guncelle.py hazine --tam --sistem-kur; then
+          # 19 dakika adım tavanından TÜRETİLMİŞTİR: 22 eksi ön adıma ayrılan
+          # 2 dakika eksi geri almaya bırakılan 1 dakika. Adım tavanı ölçüye
+          # bağlandığında bu da onunla iner; bulten/duman.py ikisinin
+          # arasındaki sırayı ENGEL olarak sınıyor.
+          if timeout -k 30s 19m python guncelle.py hazine --tam --sistem-kur; then
             echo "Hazine hattı tazelendi"
           else
             KOD=$?
