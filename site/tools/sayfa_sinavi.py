@@ -76,6 +76,10 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       yerine metin olarak basılan bir alan okura "<p>" yazısını gösterir.
       dist'te kaçmış etiket ENGEL; `<code>`/`<pre>` içi muaf (bir ders HTML
       anlatıyorsa etiket göstermesi gerekir).
+  (23) SOLUK METİN — `color: var(--ink-30)` ENGEL. Kontrast 1,90:1 ve
+      global.css'in kendi yorumu "yalnız çizgi ve kenarlıkta" diyor; metin
+      için en soluk kabul edilen jeton --ink-60 (4,59:1).
+      `text-decoration-color` kapsam dışı (alt çizgi, metin değil).
 
 Koşum:  python3 site/tools/sayfa_sinavi.py
 Çıkış:  0 = geçti · 1 = en az bir sınav düştü
@@ -506,6 +510,37 @@ def kacan_etiketler(dist: pathlib.Path) -> dict[str, list[str]]:
         sayfa = h.relative_to(dist).parent.as_posix() or "."
         for m in KACAN_ETIKET.finditer(metin):
             bulgu.setdefault(m.group(0), []).append(sayfa)
+    return bulgu
+
+
+SOLUK_METIN = re.compile(r"(?<!-)\bcolor:\s*var\(--ink-30\)")
+
+
+def soluk_metin(kok: pathlib.Path) -> list[str]:
+    """Metin rengi olarak --ink-30 kullanan yerler — deponun KENDİ kuralı.
+
+    `global.css` jetonun yanına şunu yazmış: "--ink-30 yalnız çizgi ve
+    kenarlıkta; metinde kullanılmaz." Kural doğruydu ve HİÇBİR YERDE
+    DAYATILMIYORDU: ölçüldü (07.09.2026) — sekiz dosyada on beş yerde metin
+    rengi olarak kullanılıyordu. Kontrast 1,90:1; WCAG AA gövde metni 4,5:1,
+    büyük metin 3:1, metin dışı öğe 3:1 ister — üçünü de geçmiyor. Bültende
+    σ sütunu, 52 hafta aralığı ve tema sütunu bu renkteydi, yani sayfadaki
+    en yoğun sayı sütunları okunması en zor sütunlardı.
+
+    Kuralın kendisi zaten yazılıydı; eksik olan onu soran ölçüttü. Bir kural
+    yalnız yoruma yazıldığında, o yorumu okumayan bir sonraki oturum onu
+    bilmeden çiğner.
+
+    `text-decoration-color` KAPSAM DIŞI: o bir alt çizgi rengi, metnin
+    kendisi değil; soluk bir alt çizgi okunabilirliği düşürmez.
+    """
+    bulgu = []
+    for f in sorted(kok.glob("site/src/**/*")):
+        if f.suffix not in (".astro", ".css") or not f.is_file():
+            continue
+        for i, sat in enumerate(f.read_text(encoding="utf-8").splitlines(), 1):
+            if SOLUK_METIN.search(sat):
+                bulgu.append(f"{f.relative_to(kok / 'site/src').as_posix()}:{i}")
     return bulgu
 
 
@@ -1310,6 +1345,17 @@ def main() -> int:
         for esl, sayfalar in sorted(kacan.items()):
             hata.append(f"kaçan etiket {esl!r} — {len(sayfalar)} sayfada, ör. {sayfalar[0]}")
         print(f"  ayrı kaçış {len(kacan)}")
+
+    # ------------------------------------------------------------ (23)
+    # SOLUK METİN. global.css'in kendi yorumu "--ink-30 metinde kullanılmaz"
+    # diyor; kural hiçbir yerde dayatılmıyordu ve on beş yerde çiğnenmişti.
+    print("\n▶ Soluk metin (--ink-30 metin rengi olarak · kontrast 1,90:1)")
+    sol = soluk_metin(KOK)
+    for y in sol:
+        hata.append(f"soluk metin — {y}: `color: var(--ink-30)` kontrast 1,90:1 "
+                    f"(AA gövde 4,5:1). global.css: '--ink-30 yalnız çizgi ve "
+                    f"kenarlıkta'. Metin için --ink-60 (4,59:1).")
+    print(f"  ihlal {len(sol)}")
 
     print()
     for u in uyari:

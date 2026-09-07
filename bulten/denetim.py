@@ -1102,8 +1102,23 @@ class Denetim:
         if nokta:
             self.uyari.append(f"{len(nokta)} yerde ondalık noktası (virgül olmalı): "
                               + ", ".join(repr(o) for o in nokta[:3]))
-        if not eksi and not nokta:
-            self._ok("sayı yazımı: eksi U+2212, ondalık virgül")
+        # YÜZDE ÖNDE. Sözleşme (ortak/bicim.yuzde) "%12,8" yazar; "12,8 %"
+        # yazımı 07.09.2026'da derlenmiş sayfada 40 yerde ölçüldü ve kaynağı
+        # olay cümlesi üreticisiydi (birimi sayının arkasına ekliyordu).
+        # Üretici düzeltildi; bu ölçüt yazı katmanından gelecek sızıntıyı da
+        # görsün diye kondu — kural bir kez koda yazılınca öbür kapıdan girer.
+        # SATIR SONU DEĞİL, BOŞLUK. `\s` satır sonunu da eşliyor ve alanlar
+        # "\n" ile birleştirildiği için "…2026-08-31" + "%37,00" çifti yanlış
+        # pozitif veriyordu (ölçüldü: 20 bulgunun 20'si). Kusurun gerçek
+        # biçimi "12,8 %" — aynı satırda, boşlukla.
+        ters = re.findall(r"\d[ \t]+%(?!\d)", metin)
+        if ters:
+            ornek = re.findall(r"[^\s]+[ \t]+%(?!\d)", metin)[:3]
+            self.uyari.append(
+                f"{len(ters)} yerde yüzde sayının ARKASINDA (sözleşme: önde, '%12,8'): "
+                + ", ".join(repr(o) for o in ornek))
+        if not eksi and not nokta and not ters:
+            self._ok("sayı yazımı: eksi U+2212, ondalık virgül, yüzde önde")
 
     def duzeltme(self):
         """Düzeltme kaydı biçimce tam mı; ve 'yayımlanan sayı değişti' uyarısı
