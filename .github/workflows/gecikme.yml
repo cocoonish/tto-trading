@@ -115,6 +115,7 @@ jobs:
             bulten
             ortak
             site/src/data
+            tweet
             .github/workflows
 
       - name: Gecikmeyi ölç

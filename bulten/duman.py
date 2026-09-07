@@ -2032,6 +2032,32 @@ def main() -> int:
         govde = "\n".join(s for s in m.splitlines() if not s.lstrip().startswith("#"))
         assert "cron" not in govde, \
             "gecikme.yml'e cron eklenmiş — alarm yine izlediği zamanlayıcıya bağlandı"
+
+        # CHECKOUT KAPSAMI ÖLÇÜNÜN PARÇASIDIR. Alarm sparse-checkout ile koşuyor
+        # (günde 40–70 uyanma, tam klon pahalı) ve ölçüm aracının okuduğu bir
+        # dosya o listede yoksa araç HATA VERMEZ: `_json` istisnayı yutar, bacak
+        # None kalır, iş akışı YEŞİL biter — arızanın görüntüsü sağlığınkiyle
+        # aynı olur. Tam bu oldu: X bacağının kaynağı site aynasından
+        # (site/src/data, listede) gerçek deftere (tweet/, listede DEĞİL)
+        # taşındığında ölçü koşucuda her gün sessizce kapandı.
+        #
+        # Kapsam bir listeden değil KAYNAĞIN KENDİSİNDEN türetiliyor: gecikme.py
+        # hangi depo köklerini okuyorsa checkout onları getirmeli.
+        import re as _re
+        kaynak = (BURASI / "gecikme.py").read_text(encoding="utf-8")
+        kokler = {m.group(1) for m in _re.finditer(r'kok\s*/\s*"([^"]+)"', kaynak)}
+        assert kokler, "gecikme.py'de `kok / \"...\"` okuması bulunamadı — kalıp değişmiş olabilir"
+        kapsam = []
+        for sat in m.splitlines():
+            if sat.strip().startswith("#"):
+                continue
+            t = sat.strip()
+            if t and not t.endswith(":") and "  " not in t and "/" in t or t in ("bulten", "ortak", "tweet"):
+                kapsam.append(t)
+        eksik = sorted(k for k in kokler if not any(y == k or y.startswith(k + "/") for y in kapsam))
+        assert not eksik, (
+            f"gecikme.py {eksik} okuyor ama gecikme.yml sparse-checkout listesinde yok — "
+            "koşucuda dosya bulunamaz, ölçü sessizce kapanır")
         for beklenen in ("workflow_run:", "requested", "completed", "workflow_dispatch:",
                          "push:", "sinama_gun"):
             assert beklenen in govde, f"gecikme.yml'de {beklenen} yok"

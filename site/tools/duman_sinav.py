@@ -364,7 +364,7 @@ kok = _agac({
 })
 i = x_izleri(kok)
 sina("künye bağı ve yazısı ENGEL üretiyor",
-     any("x.com" in k for k in i) and any("X gönderisi" in k for k in i), f"gelen {sorted(i)}")
+     any("x.com" in k for k in i) and any("X gönderi" in k for k in i), f"gelen {sorted(i)}")
 
 # twitter:card künyesi KUSUR DEĞİL: hesap adı taşımaz, adres de yok.
 kok = _agac({
@@ -390,6 +390,35 @@ sina("rss.xml de taranıyor", len(x_izleri(kok)) == 1, f"gelen {sorted(x_izleri(
 # Temiz ağaç sessiz kalmalı — yanlış alarm yayını durdurur.
 kok = _agac({"s/index.html": "<p>Bülten, teknik analiz ve analiz yazıları RSS ile izlenir.</p>"})
 sina("temiz sayfa temiz geçiyor", x_izleri(kok) == {}, f"gelen {sorted(x_izleri(kok))}")
+
+# HASSASİYET, KAPSAM KADAR ÖLÇÜTÜN PARÇASI. Kalıp genişletildi (hesap anışı,
+# Twitter yazımı, X'ten/X'te paylaşım) ve sol harf sınırı ile lokatif şartı
+# ölçülerek kondu: sitede "VIX'te", "TÜFEX'te", "FX'te", "MDX'te" ve bir
+# istatistik yazısında "Y'den X'e çıkarım" geçiyor. Sonuncusu bugün yalnız
+# MDX'in kıvrık kesme işareti sayesinde kurtuluyordu — yani TESADÜFEN.
+for _metin, _bekle in [
+    ("bu notu X'te paylaştık", True),
+    ("X'de paylaşıldı", True),
+    ("X'ten paylaşıldı", True),
+    ("X hesabımızda duyurduk", True),
+    ("Twitter hesabımız", True),
+    ("Twitter'da paylaştık", True),
+    ("Twitter’da paylaştık", True),
+    ("yayın günü X'te de özetiyle çıkar", True),
+    ("Y'den X'e çıkarım az bilgi taşır", False),
+    ("Y’den X’e çıkarım az bilgi taşır", False),
+    ("oynaklık VIX'te de ortaya çıkar", False),
+    ("TÜFEX'te yayımlanan kupon", False),
+    ("spot FX'te güvenilir değildir", False),
+    ("MDX'te oynak sayılar", False),
+    ("VIX'ten paylaşılan seri", False),
+    ("PRZ kutusu X'te başlar", False),
+    ("D noktası X'ten uzaktır", False),
+]:
+    _k = _agac({"s/index.html": f"<p>{_metin}</p>"})
+    _v = bool(x_izleri(_k))
+    sina(f"{'yakalanıyor' if _bekle else 'yanlış alarm yok'}: {_metin[:34]}",
+         _v == _bekle, f"gelen {_v}")
 
 
 # ---------------------------------------------------------------------------
