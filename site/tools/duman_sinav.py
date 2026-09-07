@@ -32,6 +32,7 @@ ciplak_sayilar = _mod.ciplak_sayilar
 ORNEK_AC, ORNEK_KAPA = _mod.ORNEK_AC, _mod.ORNEK_KAPA
 MUAF_KALIP = _mod.MUAF_KALIP
 olu_ic_baglar = _mod.olu_ic_baglar
+x_izleri = _mod.x_izleri
 
 GECTI: list[str] = []
 DUSTU: list[str] = []
@@ -350,6 +351,45 @@ sina("varlık · çapa · sorgu · dış adres yanlış alarm üretmiyor",
 kok = _agac({"s/index.html": '<a href="/og/yok.png">kart</a>'})
 sina("hedefsiz varlık bağı da yakalanıyor",
      list(olu_ic_baglar(kok)) == ["/og/yok.png"], f"gelen {list(olu_ic_baglar(kok))}")
+
+
+# ---------------------------------------------------------------------------
+print("\n▶ X izi (21. ölçüt)")
+
+# ÖLÇÜLEN ARIZA: bülten/teknik/analiz künyesinde "Paylaşım · X gönderisi ↗"
+# satırı vardı ve bağı BİLEŞEN kuruyordu (lib/x.ts + defter aynası).
+kok = _agac({
+    "bulten/2026-09-06/index.html":
+        '<span class="kunye"><b>Paylaşım</b> <a href="https://x.com/i/status/123">X gönderisi ↗</a></span>',
+})
+i = x_izleri(kok)
+sina("künye bağı ve yazısı ENGEL üretiyor",
+     any("x.com" in k for k in i) and any("X gönderisi" in k for k in i), f"gelen {sorted(i)}")
+
+# twitter:card künyesi KUSUR DEĞİL: hesap adı taşımaz, adres de yok.
+kok = _agac({
+    "s/index.html": ('<meta name="twitter:card" content="summary_large_image">'
+                     '<meta name="twitter:title" content="TTO Trading">'
+                     '<meta name="twitter:image" content="/og/genel.png">'),
+})
+sina("twitter:card meta'sı yanlış alarm üretmiyor", x_izleri(kok) == {}, f"gelen {sorted(x_izleri(kok))}")
+
+# Türkçe "paylaşım" sözcüğü iktisadi anlamıyla geçiyor (turkiye-piyasa-tarihi).
+kok = _agac({"s/index.html": "<p>Gelir paylaşımı sözleşmeleri ve risk paylaşımı.</p>"})
+sina("Türkçe 'paylaşım' sözcüğü taranmıyor", x_izleri(kok) == {}, f"gelen {sorted(x_izleri(kok))}")
+
+# Hakkında sayfasının cümlesi de yakalanmalı — bağ olmadan da bir iz.
+kok = _agac({"hakkinda/index.html":
+             "<p>Analiz yazıları yayın günü X'te de özetiyle paylaşılır.</p>"})
+sina("bağsız cümle de yakalanıyor", len(x_izleri(kok)) == 1, f"gelen {sorted(x_izleri(kok))}")
+
+# RSS beslemesi de taranır: bağ oraya da düşebilir.
+kok = _agac({"bulten/rss.xml": '<link>https://twitter.com/hesap/status/9</link>'})
+sina("rss.xml de taranıyor", len(x_izleri(kok)) == 1, f"gelen {sorted(x_izleri(kok))}")
+
+# Temiz ağaç sessiz kalmalı — yanlış alarm yayını durdurur.
+kok = _agac({"s/index.html": "<p>Bülten, teknik analiz ve analiz yazıları RSS ile izlenir.</p>"})
+sina("temiz sayfa temiz geçiyor", x_izleri(kok) == {}, f"gelen {sorted(x_izleri(kok))}")
 
 
 # ---------------------------------------------------------------------------

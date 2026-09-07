@@ -93,8 +93,14 @@ jobs:
         run: |
           git config --global user.name  "tto-tweet"
           git config --global user.email "bot@users.noreply.github.com"
+          # AYRI AYRI: git add, listedeki TEK bir yol bile yoksa komutun
+          # TAMAMINI reddeder ve hiçbir şey sahnelenmez (tweet.yml'de 30.08'de
+          # ölçüldü). Bu satır dört yolu birden veriyordu; biri (site tarafına
+          # yazılan defter aynası) kaldırılınca tamamı reddedilecekti: defter ve
+          # arşiv sessizce sahnelenmez, mükerrer gönderi riski doğardı.
           git add tweet/oauth2.enc 2>/dev/null || true
-          git add tweet/defter.json tweet/arsiv site/src/data/tweet 2>/dev/null || true
+          git add tweet/defter.json 2>/dev/null || true
+          git add tweet/arsiv 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "jeton değişmedi"
           else

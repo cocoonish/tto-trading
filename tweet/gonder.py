@@ -51,9 +51,10 @@ import denetim as denetim_m  # noqa: E402
 BURASI = Path(__file__).resolve().parent
 KOK = BURASI.parent
 DEFTER = BURASI / "defter.json"
-# Defterin site tarafındaki AYNASI: public depoya yalnız site/ çıkar; sayfa,
-# bültenin/analizin X gönderisine bağ verebilsin diye defter oraya da yazılır.
-DEFTER_AYNA = KOK / "site" / "src" / "data" / "tweet" / "defter.json"
+# SİTE AYNASI YOK. Defter bir zamanlar site/src/data/tweet/defter.json'a da
+# yazılıyordu ve sayfa künyesi oradan "X gönderisi ↗" bağı kuruyordu. Site X
+# gönderisini artık okura göstermiyor (kullanıcı kararı), o yüzden ayna da
+# yazılmıyor: yazılan ama okunmayan bir dosya, bir gün yeniden okunur.
 # Gönderilen METNİN arşivi. Defter yalnız kimlik taşıyor; X'te silinen ya da
 # düzeltilen bir gönderinin ne dediği depoda kalmıyordu. Her gerçek gönderim
 # metniyle birlikte buraya yazılır ve iş akışı commit'ler.
@@ -146,26 +147,9 @@ def _arsivle(anahtar: str, zincir: list[str], idler: list[str], zaman: str) -> P
     return yol
 
 
-def _ayna(defter: dict) -> dict:
-    """Sitenin okuduğu PROJEKSİYON: yalnız kimlik ve zaman. İç notlar ("ilk
-    gönderi eski biçimdeydi…"), 'gönderiliyor' işaretleri ve kimliksiz tohum
-    kayıtları public depoya taşınmaz."""
-    out = {}
-    for k, v in defter.items():
-        idler = (v or {}).get("idler") or []
-        if idler:
-            out[k] = {"id": str(idler[0]), "zaman": str((v or {}).get("zaman") or "")}
-    return out
-
-
 def _defter_yaz(defter_yolu: Path, defter: dict) -> None:
     defter_yolu.write_text(json.dumps(defter, ensure_ascii=False, indent=1) + "\n",
                            encoding="utf-8")
-    # Ayna yalnız GERÇEK defter için; sınama defterleri siteye sızmaz.
-    if defter_yolu.resolve() == DEFTER.resolve():
-        DEFTER_AYNA.parent.mkdir(parents=True, exist_ok=True)
-        DEFTER_AYNA.write_text(json.dumps(_ayna(defter), ensure_ascii=False, indent=1) + "\n",
-                               encoding="utf-8")
 
 
 def _gonder_zincir(zincir: list[str], erisim: str) -> list[str]:

@@ -179,8 +179,8 @@ Metin yalnız yayımlanmış katmandan kurulur: bülten okuması ve gündem
 **`tweet/denetim.py`** kapısından geçer — tavsiye dili, link, HTML kalıntısı,
 site atfı, sayı ortasında kesik cümle, boş bölüm etiketi, sorumluluk notu, okur
 dili; engel varsa gönderim durur. `gonder.py` defter tutar (aynı içerik bir kez),
-bayat içeriği göndermez, gönderilen metni `tweet/arsiv/`e yazar ve defteri
-`site/src/data/tweet/`e aynalar — sayfa künyesindeki "X gönderisi" bağı buradan.
+bayat içeriği göndermez ve gönderilen metni `tweet/arsiv/`e yazar. Site tarafına
+hiçbir şey yazılmaz: sayfa X gönderisini okura göstermez (kullanıcı kararı).
 Önizleme: `python3 tweet/gonder.py --kuru`.
 
 ## Yayın

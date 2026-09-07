@@ -25,7 +25,7 @@ TTO Trading/
 ├── tweet/                       # X gönderileri: uret.py bülten/teknik, analiz.py analiz
 │                                #   yazısını yönetici özetinden kurar; denetim.py KALİTE
 │                                #   KAPISI; gonder.py defterli/bayat-korumalı gönderir,
-│                                #   metni arsiv/'e, defteri site/src/data/tweet/'e aynalar
+│                                #   metni arsiv/'e yazar; siteye HİÇBİR ŞEY yazmaz
 ├── analiz/                      # Analiz yazım rehberi (YAZIM.md) + şablon (sablon.mdx);
 │                                #   kapısı site/tools/analiz_sinavi.py
 └── Research/                    # Ham araştırma dosyaları (Excel vb.)
@@ -854,3 +854,28 @@ değil. İki kapı kondu ve ikisi de arızaya karşı koşturularak sınandı: s
 sınavının 20. ölçütü derlenmiş çıktıdaki her `href="/…"` hedefini sorar —
 kaynağa değil ÇIKTIYA bakar, çünkü bağı bileşen kurar — ve `bulten/duman.py`
 izlenen her hattın adının tanımlı olduğunu, kaydın da onu taşıdığını sınar.
+
+**KARAR (07.09.2026, kullanıcı) — site X gönderisini OKURA GÖSTERMEZ; hesap
+hiçbir yere yazılmaz.** Bülten, teknik ve analiz künyelerinde "Paylaşım ·
+X gönderisi ↗" satırı vardı ve hakkında sayfası her yayının X'te de çıktığını
+söylüyordu. Kaldırıldı. Tweet ATILMAYA devam ediyor — değişen, sitenin
+gönderiye bağ vermesi ve X'ten söz etmesi. Kaldırma yalnız metni silmekle
+bitmiyor, çünkü bağı METİN DEĞİL BİLEŞEN kuruyordu: künye satırı `lib/x.ts`
+üzerinden tweet defterinin site aynasını (`site/src/data/tweet/defter.json`)
+okuyordu ve o ayna gönderim katmanınca her gönderide yazılıyordu. Zincirin
+tamamı gitti: künye satırları, `lib/x.ts`, ayna dosyası, `gonder.py`nin ayna
+yazımı, iki tweet iş akışının `git add` yolu. Sonuncusunda gizli bir tuzak
+vardı ve tam da bu depoda bir kez ölçülmüştü: `tweet-ozel.yml` dört yolu TEK
+`git add` satırında veriyordu ve git, listedeki tek bir yol bile yoksa komutun
+TAMAMINI reddeder — ayna kalkınca defter ile arşiv sessizce sahnelenmez,
+mükerrer gönderi riski doğardı. Bir yolu kaldırırken o yolun geçtiği HER
+komutun hata davranışı sorulur.
+Yayın takviminin "X gönderisi" adımları SİLİNMEDİ, `okura: false` oldu: adım
+kayıtta durur ve `tweet.yml`in cron kayması ölçülmeye devam eder, sayfaya
+basılmaz. Bir denetimi, ölçtüğü şeyin okura görünmemesi gerekçesiyle
+kaldırmak, ölçümü de kaldırmaktır.
+Kapı sayfa sınavının 21. ölçütü: derlenmiş çıktıda x.com/twitter.com adresi ve
+"X gönderisi" yazısı ENGEL. Hassasiyeti ölçülerek kondu — `twitter:card`
+meta'sı (hesap adı taşımaz) ve Türkçe "paylaşım" sözcüğü (bir araştırma
+yazısında iktisadi anlamıyla geçiyor) taranmaz; altı regresyon maddesi
+`site/tools/duman_sinav.py`de.

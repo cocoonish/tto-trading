@@ -67,6 +67,11 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       varlığa çözülmeli. Silinen bir sayfaya bağlanan başka bir sayfa hiçbir
       yerde hata vermez; bağı kuran çoğu zaman bir bileşendir ve kaynakta
       adres diye geçmez, o yüzden ölçüt kaynağa değil ÇIKTIYA bakar.
+  (21) X İZİ — derlenmiş çıktıda x.com/twitter.com adresi ve "X gönderisi"
+      yazısı YOK (kullanıcı kararı: site gönderiyi okura göstermez, hesap
+      hiçbir yere yazılmaz). twitter:card meta'sı ve Türkçe "paylaşım"
+      sözcüğü taranmaz — ilki hesap adı taşımaz, ikincisi bir araştırma
+      yazısında iktisadi anlamıyla geçer.
 
 Koşum:  python3 site/tools/sayfa_sinavi.py
 Çıkış:  0 = geçti · 1 = en az bir sınav düştü
@@ -421,6 +426,40 @@ def olu_ic_baglar(dist: pathlib.Path) -> dict[str, list[str]]:
                 continue
             kirik.setdefault(yol, []).append(h.relative_to(dist).as_posix())
     return kirik
+
+
+X_BAG = re.compile(r'https?://(?:www\.)?(?:x|twitter)\.com/[^"\'\s<)]*')
+X_YAZI = re.compile(r'X gönderisi|X\'te (?:de )?(?:özetiyle )?(?:çıkar|paylaşıl)')
+
+
+def x_izleri(dist: pathlib.Path) -> dict[str, list[str]]:
+    """Derlenmiş çıktıda X/Twitter izi: bulgu → onu basan sayfalar.
+
+    KULLANICI KARARI (07.09.2026): "Paylaşım · X gönderisi" satırı sitenin
+    hiçbir yerinde olmayacak, Twitter hesabı da hiçbir yere yazılmayacak.
+    Tweet atılmaya devam ediyor; kaldırılan, sitenin okura gönderiyi
+    GÖSTERMESİ. Kararın kendisi bir tercihtir, ama kalıcılığı bir ÖLÇÜ ister:
+    bağı kuran şey bir bileşendi (künye satırı) ve kaynakta "x.com" diye
+    aranarak bulunamayan biçimlerde geri gelebilir.
+
+    İki aile ayrı ayrı sorulur, çünkü biri öbürü olmadan da dönebilir:
+      · BAĞ — x.com / twitter.com adresi (künye bağı, JSON-LD sameAs, bir
+        yazının kaynakçası),
+      · YAZI — "X gönderisi" etiketi ve "X'te de özetiyle çıkar" cümlesi.
+
+    <meta name="twitter:card|title|description|image"> KUSUR DEĞİL: bağlantı
+    önizleme künyesidir, hiçbir hesap adı taşımaz ve adresi de yoktur.
+    Türkçe "paylaşım" sözcüğü de taranmaz — bir araştırma yazısında iktisadi
+    anlamıyla geçiyor (turkiye-piyasa-tarihi), ölçüt onu kusur sayamaz.
+    """
+    bulgu: dict[str, list[str]] = {}
+    for h in sorted(list(dist.rglob("*.html")) + list(dist.rglob("*.xml"))):
+        metin = h.read_text(encoding="utf-8", errors="ignore")
+        sayfa = h.relative_to(dist).as_posix()
+        for kalip in (X_BAG, X_YAZI):
+            for m in kalip.finditer(metin):
+                bulgu.setdefault(m.group(0), []).append(sayfa)
+    return bulgu
 
 
 def main() -> int:
@@ -1192,6 +1231,16 @@ def main() -> int:
             hata.append(f"ölü iç bağ {yol} — {len(sayfalar)} sayfada, ör. "
                         f"{sayfalar[0]}")
         print(f"  hedefsiz adres {len(kirik)}")
+
+    # ------------------------------------------------------------ (21)
+    # X İZİ. Site X gönderisini okura göstermiyor (kullanıcı kararı); bağı
+    # kuran bileşendi, o yüzden ölçüt kaynağa değil ÇIKTIYA bakar.
+    if (KOK / "site/dist").exists():
+        print("\n▶ X izi (dist/ içinde gönderi bağı ve 'X gönderisi' yazısı)")
+        izler = x_izleri(KOK / "site/dist")
+        for esl, sayfalar in sorted(izler.items()):
+            hata.append(f"X izi {esl!r} — {len(sayfalar)} sayfada, ör. {sayfalar[0]}")
+        print(f"  ayrı iz {len(izler)}")
 
     print()
     for u in uyari:
