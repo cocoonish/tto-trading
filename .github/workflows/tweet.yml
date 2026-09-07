@@ -12,8 +12,8 @@
 # yazısı değişince) + yedek cron'lar (zamanlanmış tetikleyicinin sicili gereği)
 # + elle. Her gönderi tweet/denetim.py kapısından geçer: tavsiye dili, link,
 # HTML kalıntısı, site atfı, sayı ortasında kesik cümle, sorumluluk notu.
-# Gönderilen metin tweet/arsiv/ altında saklanır; defterin aynası
-# site/src/data/tweet/ altına yazılır ki sayfa X gönderisine bağ verebilsin.
+# Gönderilen metin tweet/arsiv/ altında saklanır. Site tarafına HİÇBİR ŞEY
+# yazılmaz: sayfa X gönderisini okura göstermiyor (kullanıcı kararı).
 
 name: Tweet zinciri
 
@@ -94,7 +94,6 @@ jobs:
           git add tweet/defter.json 2>/dev/null || true
           git add tweet/oauth2.enc  2>/dev/null || true
           git add tweet/arsiv 2>/dev/null || true
-          git add site/src/data/tweet 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "defter ve jeton değişmedi"
           else

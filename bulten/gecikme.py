@@ -60,6 +60,10 @@ TR_SAAT = 3
 # kaçırılmış; her sabah öten alarm iki haftada okunmaz olur). Ara halkalar
 # defterde ve raporda görünür, eşiğe girmez.
 TUKETICI = ("sitede", "X gönderisi")
+# `okura: false` BURADA ELENMEZ ve bu bilinçli. O bayrak takvimin HAKKINDA
+# sayfasına basılıp basılmayacağını söyler; bu ölçü ise zincirin kendi
+# saatlerini ölçer. X gönderisi okura gösterilmiyor diye adımı tüketici
+# saymamak, tweet.yml'in gecikmesini ölçüsüz bırakırdı.
 
 # Üç sınıf. Dördüncüsü — yayını durduran sınıf — bilerek yoktur; bkz. modül
 # başlığı ve duman sınaması.
@@ -237,9 +241,28 @@ def _gerceklesen(kok: Path, yayin: str, gun: dt.date) -> dict:
                 d["olculmedi"] = ("yazı anı kaydedilmemiş; ölçüm damgası ALT SINIR "
                                   "olarak kullanıldı")
 
-    defter = _json(kok / "site" / "src" / "data" / "tweet" / "defter.json") or {}
+    # X BACAĞI GERÇEK DEFTERDEN OKUNUR. Eskiden sitedeki AYNA okunuyordu
+    # (site/src/data/tweet/defter.json); o ayna sayfa künyesindeki "X gönderisi"
+    # bağı için vardı ve bağ kaldırılınca ayna da kalktı. Okuma olduğu gibi
+    # bırakılsaydı hiçbir yerde hata VERMEZDİ: `_json` istisnayı yutar, `or {}`
+    # boş sözlüğe düşer, `d["x"]` her gün None kalır ve zincirin son halkası
+    # ölçülmeden "ölçülmüş" görünürdü. Ölü bir bağımlılık kırık olandan
+    # tehlikelidir.
+    #
+    # KAYNAK DOSYA DEĞİŞTİ, ÖLÇÜNÜN ANLAMI DEĞİŞMEDİ: ayna bir PROJEKSİYONDU —
+    # yalnız gerçekten gönderilmiş (kimliği olan) kayıtları taşıyordu. Gerçek
+    # defterde "gönderiliyor" işaretleri ve kimliksiz tohum kayıtları da var ve
+    # onların `zaman`ı gönderim anı DEĞİL. Aynı süzgeç bu yüzden burada tekrar
+    # kuruluyor: kimliği olmayan kayıt X bacağını doldurmaz.
+    defter_yolu = kok / "tweet" / "defter.json"
+    defter = _json(defter_yolu)
+    if defter is None:
+        d["x"] = None
+        d["olculmedi"] = ((d.get("olculmedi") + "; ") if d.get("olculmedi") else "") + \
+            "gönderim defteri okunamadı — X bacağı ölçülemedi"
+        return d
     kayit = defter.get(f"{tweet_anahtari}:{gun.isoformat()}") or {}
-    d["x"] = _an(kayit.get("zaman"))
+    d["x"] = _an(kayit.get("zaman")) if (kayit.get("idler") or []) else None
     return d
 
 

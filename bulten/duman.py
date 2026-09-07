@@ -1368,7 +1368,7 @@ def main() -> int:
             k = Path(td)
             (k / "site" / "src" / "data" / "bulten").mkdir(parents=True, exist_ok=True)
             (k / "site" / "src" / "data" / "teknik").mkdir(parents=True, exist_ok=True)
-            (k / "site" / "src" / "data" / "tweet").mkdir(parents=True, exist_ok=True)
+            (k / "tweet").mkdir(parents=True, exist_ok=True)
             (k / "bulten").mkdir(parents=True, exist_ok=True)
             tk = _j.loads((BURASI.parent / "site" / "src" / "data" /
                            "yayin_takvimi.json").read_text(encoding="utf-8"))
@@ -1382,7 +1382,8 @@ def main() -> int:
             for g, b in (teknikler or {}).items():
                 (k / "site" / "src" / "data" / "teknik" / f"{g}.json").write_text(
                     _j.dumps(b, ensure_ascii=False), encoding="utf-8")
-            (k / "site" / "src" / "data" / "tweet" / "defter.json").write_text(
+            (k / "tweet").mkdir(parents=True, exist_ok=True)
+            (k / "tweet" / "defter.json").write_text(
                 _j.dumps(tweetler or {}, ensure_ascii=False), encoding="utf-8")
             if nabiz_an:
                 (k / "bulten" / "kosu_nabzi.json").write_text(
@@ -1404,6 +1405,43 @@ def main() -> int:
             assert gk.pay(k, "Haftaya bakış") == 16, gk.pay(k, "Haftaya bakış")
             # (h) cumartesi yayın günü değil
             assert gk.olc(k, cmt) == [], "cumartesi için satır üretildi"
+
+        # (i) X BACAĞI GERÇEKTEN ÖLÇÜLÜYOR MU. Bu bacak bugüne kadar hiç
+        #     sınanmamıştı: bütün fikstürler defteri BOŞ kuruyordu, yani
+        #     `x` her koşuda None çıkıyor ve ölü bir okuma da aynı sonucu
+        #     verirdi. Kaynak site aynasından gerçek deftere taşınırken
+        #     ("bir SAYFA silindiğinde ona bağlanan bağ hata vermez") kusur
+        #     tam buradan geçerdi: `_json(...) or {}` istisnayı yutuyor.
+        with tempfile.TemporaryDirectory() as td:
+            b = {"tarih": "2026-09-04", "tur": "gunluk", "gundem_kaynagi": "yazili",
+                 "olusturma": "2026-09-04T04:30:00+00:00",
+                 "ilk_yazi_zamani": "2026-09-04T05:11:00+00:00"}
+            k = kur(td, bultenler={"2026-09-04": b}, tweetler={
+                # gerçek defterin biçimi: idler + zaman
+                "bulten:2026-09-04": {"idler": ["1"], "zaman": "2026-09-04T05:35:00+00:00"}})
+            r = gk.olc(k, cuma, _dt.datetime(2026, 9, 4, 6, 0, tzinfo=_dt.timezone.utc))
+            assert r[0]["bacaklar"]["yazi→X"] == 24.0, r[0]["bacaklar"]
+
+        # (i2) KİMLİKSİZ KAYIT X BACAĞINI DOLDURMAZ. Site aynası bir
+        #      PROJEKSİYONDU ve yalnız gönderilmiş kayıtları taşıyordu; gerçek
+        #      defterde "gönderiliyor" işareti de var ve onun `zaman`ı gönderim
+        #      anı DEĞİL. Süzgeç düşerse bacak yanlış bir saatle dolar.
+        with tempfile.TemporaryDirectory() as td:
+            k = kur(td, bultenler={"2026-09-04": b}, tweetler={
+                "bulten:2026-09-04": {"durum": "gönderiliyor",
+                                      "zaman": "2026-09-04T05:35:00+00:00"}})
+            r = gk.olc(k, cuma, _dt.datetime(2026, 9, 4, 6, 0, tzinfo=_dt.timezone.utc))
+            assert r[0]["bacaklar"]["yazi→X"] is None, r[0]["bacaklar"]
+
+        # (i3) DEFTER YOKSA SESSİZ KALMAZ. Ölü bağımlılığın imzası tam buydu:
+        #      dosya gider, okuma `or {}` ile boşa düşer, bacak None kalır ve
+        #      "ölçülmedi" ile "gönderilmedi" ayırt edilemez olur.
+        with tempfile.TemporaryDirectory() as td:
+            k = kur(td, bultenler={"2026-09-04": b})
+            (k / "tweet" / "defter.json").unlink()
+            r = gk.olc(k, cuma, _dt.datetime(2026, 9, 4, 6, 0, tzinfo=_dt.timezone.utc))
+            assert r[0]["bacaklar"]["yazi→X"] is None, r[0]["bacaklar"]
+            assert "defteri okunamadı" in (r[0]["olculmedi"] or ""), r[0]["olculmedi"]
 
         # (c) TAM 0 dakika ZAMANINDA — sınır dışlamalı değil
         with tempfile.TemporaryDirectory() as td:
@@ -1522,12 +1560,13 @@ def main() -> int:
             k = Path(td)
             (k / "site" / "src" / "data" / "bulten").mkdir(parents=True)
             (k / "site" / "src" / "data" / "teknik").mkdir(parents=True)
-            (k / "site" / "src" / "data" / "tweet").mkdir(parents=True)
+            (k / "tweet").mkdir(parents=True)
             (k / "bulten").mkdir(parents=True)
             import shutil as _sh
             _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
                       k / "site" / "src" / "data" / "yayin_takvimi.json")
-            (k / "site" / "src" / "data" / "tweet" / "defter.json").write_text(
+            (k / "tweet").mkdir(parents=True, exist_ok=True)
+            (k / "tweet" / "defter.json").write_text(
                 "{}", encoding="utf-8")
             (k / "bulten" / "kosu_nabzi.json").write_text(
                 _j.dumps({"veri_kosusu": "2026-01-05T02:20:00+00:00", "sonuc": "success"}),
@@ -1721,7 +1760,8 @@ def main() -> int:
             (k / "bulten").mkdir(parents=True, exist_ok=True)
             _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
                       k / "site" / "src" / "data" / "yayin_takvimi.json")
-            (k / "site" / "src" / "data" / "tweet" / "defter.json").write_text(
+            (k / "tweet").mkdir(parents=True, exist_ok=True)
+            (k / "tweet" / "defter.json").write_text(
                 "{}", encoding="utf-8")
             for g, (tur, olusturma, ilk) in OLCULEN_GIRDI["bulten"].items():
                 b = {"tarih": g, "tur": tur, "gundem_kaynagi": "yazili",
@@ -1823,7 +1863,8 @@ def main() -> int:
             (k / "bulten").mkdir(parents=True, exist_ok=True)
             _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
                       k / "site" / "src" / "data" / "yayin_takvimi.json")
-            (k / "site" / "src" / "data" / "tweet" / "defter.json").write_text(
+            (k / "tweet").mkdir(parents=True, exist_ok=True)
+            (k / "tweet" / "defter.json").write_text(
                 "{}", encoding="utf-8")
             dosya = k / "site" / "src" / "data" / "bulten" / "2026-09-04.json"
 
@@ -1884,7 +1925,8 @@ def main() -> int:
             (k / "bulten").mkdir(parents=True, exist_ok=True)
             _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
                       k / "site" / "src" / "data" / "yayin_takvimi.json")
-            (k / "site" / "src" / "data" / "tweet" / "defter.json").write_text(
+            (k / "tweet").mkdir(parents=True, exist_ok=True)
+            (k / "tweet" / "defter.json").write_text(
                 "{}", encoding="utf-8")
             for alt, kayit in (("bulten", bultenler or {}), ("teknik", teknikler or {})):
                 for g, b in kayit.items():
@@ -2049,11 +2091,12 @@ def main() -> int:
             k = Path(td)
             (k / "site" / "src" / "data" / "bulten").mkdir(parents=True, exist_ok=True)
             (k / "site" / "src" / "data" / "teknik").mkdir(parents=True, exist_ok=True)
-            (k / "site" / "src" / "data" / "tweet").mkdir(parents=True, exist_ok=True)
+            (k / "tweet").mkdir(parents=True, exist_ok=True)
             (k / "bulten").mkdir(parents=True, exist_ok=True)
             _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
                       k / "site" / "src" / "data" / "yayin_takvimi.json")
-            (k / "site" / "src" / "data" / "tweet" / "defter.json").write_text(
+            (k / "tweet").mkdir(parents=True, exist_ok=True)
+            (k / "tweet" / "defter.json").write_text(
                 "{}", encoding="utf-8")
             (k / "site" / "src" / "data" / "bulten" / f"{b['tarih']}.json").write_text(
                 _j.dumps(b, ensure_ascii=False), encoding="utf-8")

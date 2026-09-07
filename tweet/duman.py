@@ -216,14 +216,34 @@ def _kapi_oge_basina():
     assert [k for k, _ in dusen] == ["analiz:x"], dusen
 
 
-def _ayna_projeksiyon():
-    """Site aynası yalnız kimlik + zaman taşır; iç not ve tohum kaydı sızmaz."""
+def _siteye_sizinti_yok():
+    """Gönderim katmanı SİTEYE hiçbir şey yazmaz.
+
+    Defter bir zamanlar site/src/data/tweet/defter.json'a aynalanıyordu ve sayfa
+    künyesi oradan "X gönderisi ↗" bağı kuruyordu. Site X gönderisini artık
+    okura göstermiyor; ayna da yazılmıyor. Sınama iki şeyi birden sorar, çünkü
+    biri düşerse öbürü sessizce geri gelir: kaynakta site yoluna yazan bir sabit
+    kalmadı VE gerçek bir defter yazımı site ağacına dokunmuyor.
+    """
     import gonder
-    d = {"bulten:2026-09-01": {"idler": ["1"], "zaman": "z", "not": "iç not"},
-         "analiz:tohum": {"idler": [], "zaman": "", "not": "özel gönderimle atıldı"},
-         "bulten:2026-09-02": {"durum": "gönderiliyor", "zaman": "z", "ozet": "abc"}}
-    a = gonder._ayna(d)
-    assert a == {"bulten:2026-09-01": {"id": "1", "zaman": "z"}}, a
+    import io, tokenize
+    ham = Path(gonder.__file__).read_text(encoding="utf-8")
+    # YORUMLAR ÇIKARILIR: bu dosyanın kendi açıklama satırı yolu ANIYOR ve
+    # ham metinde arayan bir ölçüt kendi belgesine takılır. Ölçülen şey KOD.
+    kod = "".join(t.string for t in tokenize.generate_tokens(io.StringIO(ham).readline)
+                  if t.type != tokenize.COMMENT).replace("\\", "/")
+    assert "DEFTER_AYNA" not in kod, "gönderim katmanında site aynası sabiti geri gelmiş"
+    assert "src/data/tweet" not in kod, "gönderim katmanı site/src/data/tweet yoluna yazıyor"
+    assert '"site"' not in kod and "'site'" not in kod, \
+        "gönderim katmanı site ağacında bir yol kuruyor"
+
+    site_tweet = gonder.KOK / "site" / "src" / "data" / "tweet"
+    vardi = site_tweet.exists()
+    with tempfile.TemporaryDirectory() as gecici:
+        yol = Path(gecici) / "defter.json"
+        gonder._defter_yaz(yol, {"bulten:2026-09-01": {"idler": ["1"], "zaman": "z"}})
+        assert yol.exists(), "defter yazılmadı"
+    assert site_tweet.exists() == vardi, "defter yazımı site ağacına dokundu"
 
 
 def _jeton_kasasi():
@@ -450,7 +470,7 @@ def main() -> int:
          _gonder_sigortalari)
     sina("jeton kasası: şifreli gidiş-dönüş, yanlış kilit düşer", _jeton_kasasi)
     sina("kalite kapısı öğe başına: kirli düşer, temiz geçer", _kapi_oge_basina)
-    sina("defter aynası projeksiyon: yalnız kimlik + zaman", _ayna_projeksiyon)
+    sina("gönderim katmanı siteye yazmıyor (X aynası kaldırıldı)", _siteye_sizinti_yok)
     sina("özel gönderi anahtarı: araç kanalıyla aynı biçim, analiz gününde sessiz ozel: yok", _ozel_anahtar)
     print(f"\n  {SAYAC['gecti']} geçti · {SAYAC['dustu']} DÜŞTÜ")
     return 1 if SAYAC["dustu"] else 0
