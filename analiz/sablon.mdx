@@ -7,7 +7,7 @@ durum: 'aktif'
 kaynak: 'Veri kaynakları okur adıyla (ör. TCMB EVDS; TÜİK TÜFE) — seri kodları Kaynakça bölümüne'
 guncelleme: 'serinin yayım ritmi (ör. aylık; TÜİK ayın 3''ü 10:00)'
 veriTarihi: YYYY-AA-GG
-ozet: 'TEK cümle: yazının tezi. Kartta lede olur, X gönderisinin yedeğidir.'
+ozet: 'TEK cümle: yazının tezi. Kartta lede olur; yazı okunmadan da tek başına durmalı.'
 seviye: 'orta'
 onkosul: []
 # duzeltmeler:                      # yalnız yayımlanmış bir sayı düzeltilirse
@@ -48,7 +48,7 @@ import Deger from '../../components/Deger.astro';
     </tbody>
   </table>
 
-  {/* Rakam şeridi: 5–8 öğe, her biri <b>değer</b><span>etiket</span> — X gönderisi bu ikiliyi okur. */}
+  {/* Rakam şeridi: 5–8 öğe, her biri <b>değer</b><span>etiket</span> — gönderi üreticisi bu ikiliyi okur. */}
   <ul class="rakamlar">
     <li><b>%<Deger proje="<hat>" anahtar="<anahtar>" ondalik={2}>0,00</Deger></b><span>ölçümün adı</span></li>
     <li><b>…</b><span>…</span></li>

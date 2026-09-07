@@ -429,7 +429,18 @@ def olu_ic_baglar(dist: pathlib.Path) -> dict[str, list[str]]:
 
 
 X_BAG = re.compile(r'https?://(?:www\.)?(?:x|twitter)\.com/[^"\'\s<)]*')
-X_YAZI = re.compile(r'X gönderisi|X\'te (?:de )?(?:özetiyle )?(?:çıkar|paylaşıl)')
+# Türkçe harf sınıfı: SOL SINIR bu ölçütün hassasiyetidir. Sınırsız yazılırsa
+# "VIX'te", "TÜFEX'te", "FX'te", "MDX'te" eşleşir ve yayın durur.
+_HARF = "A-Za-zÇĞİÖŞÜçğıöşü"
+# LOKATİF ŞART ("X'te/X'de" = platformDA) bilerek: bir istatistik yazısında
+# "Y'den X'e çıkarım" geçiyor ve orada X bir DEĞİŞKEN. Yönelme hâli dışarıda
+# kalmasaydı o cümle yayını durdururdu — ve bugün yalnız MDX'in kıvrık
+# kesme işareti sayesinde kurtuluyordu, yani tesadüfen.
+X_YAZI = re.compile(
+    rf"X gönderi"
+    rf"|(?<![{_HARF}])X['’]?(?:te|de)\s+(?:de\s+)?(?:özetiyle\s+)?(?:çıkar|paylaş)"
+    rf"|(?<![{_HARF}])X hesab|Twitter hesab|Twitter['’]d[ae]"
+    rf"|(?<![{_HARF}])X['’][td][ae]n\s+paylaş")
 
 
 def x_izleri(dist: pathlib.Path) -> dict[str, list[str]]:
@@ -1224,8 +1235,11 @@ def main() -> int:
     # ------------------------------------------------------------ (20)
     # ÖLÜ İÇ BAĞ. Silinen bir sayfaya bağlanan başka bir sayfa hiçbir yerde
     # hata vermez; yalnız okur 404 görür. Ölçüt dist/ varsa koşar.
-    if (KOK / "site/dist").exists():
-        print("\n▶ Ölü iç bağ (dist/ içindeki href hedefleri)")
+    print("\n▶ Ölü iç bağ (dist/ içindeki href hedefleri)")
+    if not (KOK / "site/dist").exists():
+        print("  – dist/ yok (önce `npm run build`), ÖLÇÜT KOŞMADI")
+        uyari.append("ölçüt 20 (ölü iç bağ) KOŞMADI — dist/ yok")
+    else:
         kirik = olu_ic_baglar(KOK / "site/dist")
         for yol, sayfalar in sorted(kirik.items()):
             hata.append(f"ölü iç bağ {yol} — {len(sayfalar)} sayfada, ör. "
@@ -1235,8 +1249,14 @@ def main() -> int:
     # ------------------------------------------------------------ (21)
     # X İZİ. Site X gönderisini okura göstermiyor (kullanıcı kararı); bağı
     # kuran bileşendi, o yüzden ölçüt kaynağa değil ÇIKTIYA bakar.
-    if (KOK / "site/dist").exists():
-        print("\n▶ X izi (dist/ içinde gönderi bağı ve 'X gönderisi' yazısı)")
+    print("\n▶ X izi (dist/ içinde gönderi bağı ve 'X gönderisi' yazısı)")
+    if not (KOK / "site/dist").exists():
+        # KOŞMAYAN ÖLÇÜT, GEÇEN ÖLÇÜT DEĞİLDİR. `npm run sinav` derlemiyor;
+        # yerelde onu koşan biri bu kararın TEK kapısının hiç çalışmadığını
+        # göremezdi ve rapor yine "GEÇTİ" derdi.
+        print("  – dist/ yok (önce `npm run build`), ÖLÇÜT KOŞMADI")
+        uyari.append("ölçüt 21 (X izi) KOŞMADI — dist/ yok; `npm run yayin-kontrol` derleyerek koşar")
+    else:
         izler = x_izleri(KOK / "site/dist")
         for esl, sayfalar in sorted(izler.items()):
             hata.append(f"X izi {esl!r} — {len(sayfalar)} sayfada, ör. {sayfalar[0]}")

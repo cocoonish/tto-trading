@@ -879,3 +879,36 @@ Kapı sayfa sınavının 21. ölçütü: derlenmiş çıktıda x.com/twitter.com
 meta'sı (hesap adı taşımaz) ve Türkçe "paylaşım" sözcüğü (bir araştırma
 yazısında iktisadi anlamıyla geçiyor) taranmaz; altı regresyon maddesi
 `site/tools/duman_sinav.py`de.
+
+İzin kaldırılması iki kör noktayı daha açtı ve ikisi de bu dosyada adı konmuş
+kusur sınıflarının eşi. Birincisi ÇALIŞMIYORDU ve yeşil bitiyordu: gecikme
+ölçüsünün X bacağı site aynasından gerçek deftere (`tweet/defter.json`)
+taşındı, ama alarmı taşıyan `gecikme.yml` SPARSE-CHECKOUT ile koşuyor ve
+listesinde `tweet` yoktu — koşucuda dosya hiç bulunmuyor, `_json` istisnayı
+yutuyor, bacak her gün ölçülemiyor ve iş akışı YEŞİL bitiyor. Sparse ağaç
+birebir kurulup ölçüldü: "gönderim defteri okunamadı", çıkış kodu 0. Bir
+ölçüm aracının okuduğu dosya, o aracı koşturan iş akışının CHECKOUT
+KAPSAMINDA yoksa ölçü sessizce kapanır; kapsam artık kaynaktan türetilip
+sınanıyor (`gecikme.py`nin `kok / "..."` okumaları ⊆ `gecikme.yml` listesi) ve
+`tweet` listeden çıkarılarak düşürüldüğü doğrulandı. İkincisi KAPININ KENDİ
+YANLIŞ ALARMIYDI: `analiz/sablon.mdx`in `ozet` yer tutucusu "X gönderisinin
+yedeğidir" diyordu ve o alan kartta okura basılıyor — şablondan kopyalanan
+ilk yazı 21. ölçüte takılıp YAYINI DURDURACAKTI. Kaldırmanın kendisi bir yayın
+arızasına dönüşürdü. Aynı sebeple 20 ve 21 artık `dist/` yokken SESSİZCE
+atlanmıyor: `npm run sinav` derlemiyor ve koşmamış bir ölçüt "GEÇTİ" hükmünün
+içinde görünmez kalıyordu.
+
+Kalıbın HASSASİYETİ de ölçülerek genişletildi (hesap anışı, "Twitter'da",
+"X'ten paylaşıldı"). Sol harf sınırı ve LOKATİF şart zorunlu: sitede "VIX'te",
+"TÜFEX'te", "FX'te", "MDX'te" geçiyor ve bir istatistik yazısında "Y'den X'e
+çıkarım" var — sonuncusu yönelme hâli dışarıda bırakılmasaydı yayını
+durdururdu ve bugün yalnız MDX'in kıvrık kesme işareti sayesinde
+kurtuluyordu, yani TESADÜFEN. Yirmi iki referans cümlesi duman sınavında.
+
+**AÇIK KALAN — PUBLIC DEPONUN GEÇMİŞİ.** Kaldırma HEAD'i temizler, GEÇMİŞİ
+değil: `cocoonish.github.io` public ve `src/lib/x.ts` ile
+`src/data/tweet/defter.json` eski commit'lerde (ör. 5643dc70) hâlâ
+indirilebiliyor. İçerik gerçek gönderi kimlikleri — zaten herkese açık
+tweetler, hesap adı yok — ama iz orada. Silmek için public deponun geçmişini
+YENİDEN YAZMAK gerekir; geri alınamaz bir işlem ve mevcut klonları bozar, o
+yüzden kullanıcı açıkça istemeden yapılmadı.
