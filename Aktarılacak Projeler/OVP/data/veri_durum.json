@@ -1,10 +1,10 @@
 {
- "kosum": "2026-09-06",
- "son_gun": "2026-09-03",
+ "kosum": "2026-09-07",
+ "son_gun": "2026-09-07",
  "kapsam": {
-  "n": 2937,
+  "n": 2939,
   "bas": "2015-01-02",
-  "son": "2026-09-03",
+  "son": "2026-09-07",
   "gerekli_bas": "2023-10-01",
   "yeterli": true,
   "sorulan_bas": "2015-01-01"
@@ -16,18 +16,18 @@
  },
  "tazelik": {
   "kur": {
-   "son": "2026-09-03",
-   "gecikme_gun": 3,
+   "son": "2026-09-07",
+   "gecikme_gun": 0,
    "tolerans": 6
   },
   "faiz": {
    "son": "2026-09-03",
-   "gecikme_gun": 3,
+   "gecikme_gun": 4,
    "tolerans": 6
   },
   "tufe": {
    "son": "2026-08-01",
-   "gecikme_gun": 36,
+   "gecikme_gun": 37,
    "tolerans": 45
   }
  },
@@ -400,17 +400,19 @@
   }
  },
  "kur": [
-  2937,
+  2939,
   1
  ],
  "faiz": [
   3945,
-  2
+  3
  ],
  "tufe": [
   248,
   1
  ],
- "cerceve_imza": "2937x1·2015-01-02·2026-09-03",
- "uyarilar": []
+ "cerceve_imza": "2939x1·2015-01-02·2026-09-07",
+ "uyarilar": [
+  "BACAK GERİDE: TL gecelik faiz serisi kur serisinden 4 gün geride (03.09.2026 ↔ 07.09.2026)."
+ ]
 }
