@@ -72,6 +72,10 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       hiçbir yere yazılmaz). twitter:card meta'sı ve Türkçe "paylaşım"
       sözcüğü taranmaz — ilki hesap adı taşımaz, ikincisi bir araştırma
       yazısında iktisadi anlamıyla geçer.
+  (22) KAÇAN ETİKET — yazı katmanının metin alanları HTML taşır; `set:html`
+      yerine metin olarak basılan bir alan okura "<p>" yazısını gösterir.
+      dist'te kaçmış etiket ENGEL; `<code>`/`<pre>` içi muaf (bir ders HTML
+      anlatıyorsa etiket göstermesi gerekir).
 
 Koşum:  python3 site/tools/sayfa_sinavi.py
 Çıkış:  0 = geçti · 1 = en az bir sınav düştü
@@ -470,6 +474,38 @@ def x_izleri(dist: pathlib.Path) -> dict[str, list[str]]:
         for kalip in (X_BAG, X_YAZI):
             for m in kalip.finditer(metin):
                 bulgu.setdefault(m.group(0), []).append(sayfa)
+    return bulgu
+
+
+KACAN_ETIKET = re.compile(
+    r"&lt;/?(?:p|div|span|strong|em|b|i|u|s|ul|ol|li|br|hr|a|h[1-6]|table|tr|td|th|"
+    r"blockquote|figure|figcaption|small|sup|sub)\b[^&]{0,60}&gt;")
+
+
+def kacan_etiketler(dist: pathlib.Path) -> dict[str, list[str]]:
+    """Okura ETİKET OLARAK görünen HTML: bulgu → onu basan sayfalar.
+
+    ÖLÇÜLEN ARIZA (07.09.2026). Yazı katmanının bütün metin alanları HTML
+    taşıyor ve `yorum` ile `gundem.*` `set:html` ile basılıyordu; `ozet` ise
+    METİN olarak basılıyordu. Sonuç: dört bülten sayısında okur, cümlenin
+    başında "<p>" yazısını gördü. Hiçbir kapı bunu sormuyordu — kaynak
+    doğruydu, veri doğruydu, yalnız iki taraf farklı sözleşme konuşuyordu.
+
+    Ölçüt genel: `set:html` unutulan HER alan bu izi bırakır, bülten olsun
+    proje panosu olsun. Kaynağa değil ÇIKTIYA bakar, çünkü kaçış derleme
+    anında doğar.
+
+    KOD BLOĞU MUAF: bir ders HTML anlatıyorsa `<code>`/`<pre>` içinde etiket
+    GÖSTERMESİ gerekir ve orada kaçış doğrudur. Muafiyet olmasaydı ölçüt
+    bir gün yayını böyle bir yazı yüzünden durdururdu.
+    """
+    bulgu: dict[str, list[str]] = {}
+    for h in sorted(dist.rglob("*.html")):
+        metin = re.sub(r"<(code|pre|script|style)[^>]*>.*?</\1>", " ",
+                       h.read_text(encoding="utf-8", errors="ignore"), flags=re.S)
+        sayfa = h.relative_to(dist).parent.as_posix() or "."
+        for m in KACAN_ETIKET.finditer(metin):
+            bulgu.setdefault(m.group(0), []).append(sayfa)
     return bulgu
 
 
@@ -1261,6 +1297,19 @@ def main() -> int:
         for esl, sayfalar in sorted(izler.items()):
             hata.append(f"X izi {esl!r} — {len(sayfalar)} sayfada, ör. {sayfalar[0]}")
         print(f"  ayrı iz {len(izler)}")
+
+    # ------------------------------------------------------------ (22)
+    # KAÇAN ETİKET. Yazı katmanının metni HTML taşır; bir alan `set:html`
+    # yerine metin olarak basılırsa okur cümlenin başında "<p>" görür.
+    print("\n▶ Kaçan etiket (dist/ içinde okura basılan HTML etiketi)")
+    if not (KOK / "site/dist").exists():
+        print("  – dist/ yok (önce `npm run build`), ÖLÇÜT KOŞMADI")
+        uyari.append("ölçüt 22 (kaçan etiket) KOŞMADI — dist/ yok")
+    else:
+        kacan = kacan_etiketler(KOK / "site/dist")
+        for esl, sayfalar in sorted(kacan.items()):
+            hata.append(f"kaçan etiket {esl!r} — {len(sayfalar)} sayfada, ör. {sayfalar[0]}")
+        print(f"  ayrı kaçış {len(kacan)}")
 
     print()
     for u in uyari:
