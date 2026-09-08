@@ -215,9 +215,17 @@ def medas_madde_fiyatlari():
     # Başlık satırlarını bul: ay adları 2. satırda (index 1?) — dinamik ara
     ay_satiri = None
     for i in range(6):
-        vals = ham.iloc[i].astype(str).tolist()
+        # pandas 3: Series.astype(str) eksik hücreyi 'nan' METNİNE çevirmez,
+        # NaN bırakır — `"Ocak" in nan` TypeError verir (08.09.2026, bulutta
+        # ölçüldü: hat ilk kez hafif kipte veri.py'yi koştururken düştü).
+        # Başlık hücreleri tek tek str()'ye çevrilir; Tarım ÜFE ayrıştırıcısı
+        # zaten bu kalıpta.
+        vals = ["" if pd.isna(v) else str(v) for v in ham.iloc[i].tolist()]
         if any("Ocak" in v for v in vals):
             ay_satiri = i; break
+    if ay_satiri is None:
+        raise RuntimeError("MEDAS madde fiyatları: ay başlık satırı ilk 6 satırda bulunamadı — "
+                           f"ilk satırlar: {[str(x)[:20] for x in ham.iloc[0].tolist()[:6]]}")
     aylar = ham.iloc[ay_satiri].tolist()
     ay_idx = {j: int(str(a).split("-")[0]) for j, a in enumerate(aylar)
               if isinstance(a, str) and "-" in a and str(a).split("-")[0].isdigit()}

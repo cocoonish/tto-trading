@@ -1234,6 +1234,79 @@ def main() -> int:
                     pass
     sina("ortak: HTTP zaman aşımı emniyeti", _http_emniyet)
 
+    # DEVRE KESİCİ (08.09.2026). Kaynak bütünüyle yanıt vermiyorsa her istek
+    # tam yeniden deneme bütçesini ödüyordu: marj hattı beş EVDS serisinde
+    # 15 dakikalık adım tavanını doldurdu ve 34 serinin önbelleği dururken
+    # hiçbir şey üretmeden kesildi. Kesici ikinci tam başarısızlıktan sonra
+    # aynı ana bilgisayara istekleri denemeden düşürür; başka ana bilgisayar
+    # etkilenmez; süre dolunca tek yoklama yapılır ve başarı sıfırlar.
+    def _devre_kesici():
+        import importlib.util, os as _os
+        import requests
+        from requests import exceptions as _hx
+        yol = BURASI.parent / "ortak" / "sitecustomize.py"
+        asil = requests.sessions.Session.request
+        onceden = getattr(requests.sessions.Session, "_tto_emniyet", False)
+        deneme: dict = {"n": 0, "urls": []}
+        kip = {"dus": True}
+
+        class _Yanit:
+            status_code = 200
+
+        def _sahte(self, method, url, **kw):
+            deneme["n"] += 1; deneme["urls"].append(str(url))
+            if kip["dus"]:
+                raise _hx.ReadTimeout("sahte zaman aşımı")
+            return _Yanit()
+
+        eski_env = {k: _os.environ.get(k) for k in ("TTO_HTTP_DENEME", "TTO_HTTP_KESICI_ESIK", "TTO_HTTP_KESICI_SN")}
+        try:
+            _os.environ["TTO_HTTP_DENEME"] = "1"          # sınama hızlı bitsin (bekleme yok)
+            _os.environ["TTO_HTTP_KESICI_ESIK"] = "2"
+            _os.environ["TTO_HTTP_KESICI_SN"] = "0.3"
+            requests.sessions.Session.request = _sahte
+            if onceden:
+                del requests.sessions.Session._tto_emniyet
+            spec = importlib.util.spec_from_file_location("_tto_kesici_sinama", yol)
+            m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+            # 1. ve 2. tam başarısızlık: istek gerçekten denenir
+            for _ in range(2):
+                try:
+                    requests.get("http://evds.sinama/a"); raise AssertionError("düşmedi")
+                except _hx.ReadTimeout:
+                    pass
+            assert deneme["n"] == 2, deneme
+            # 3.: kesici açık — hiç denenmez, ConnectionError ile döner
+            try:
+                requests.get("http://evds.sinama/b"); raise AssertionError("kesici açılmadı")
+            except _hx.ConnectionError as e:
+                assert "devre kesici" in str(e), str(e)
+            assert deneme["n"] == 2, f"kesici açıkken istek denendi: {deneme}"
+            # Başka ana bilgisayar etkilenmez
+            try:
+                requests.get("http://baska.sinama/c")
+            except _hx.ReadTimeout:
+                pass
+            assert deneme["n"] == 3 and deneme["urls"][-1].endswith("/c"), deneme
+            # Süre dolunca TEK yoklama; başarı sayacı sıfırlar, sonraki istekler normal
+            import time as _t; _t.sleep(0.35)
+            kip["dus"] = False
+            requests.get("http://evds.sinama/d")
+            requests.get("http://evds.sinama/e")
+            assert deneme["n"] == 5, f"yoklama/sıfırlama bozuk: {deneme}"
+            # Kesici kapatılabilir (KESICI_SN=0): üçüncü istek de denenir
+        finally:
+            requests.sessions.Session.request = asil
+            for k, v in eski_env.items():
+                if v is None: _os.environ.pop(k, None)
+                else: _os.environ[k] = v
+            if onceden:
+                requests.sessions.Session._tto_emniyet = True
+            else:
+                try: del requests.sessions.Session._tto_emniyet
+                except AttributeError: pass
+    sina("ortak: devre kesici — yanıt vermeyen ana bilgisayara ikinci düşmeden sonra istek denenmez", _devre_kesici)
+
     # ── denetim: son bülten üzerinde bütün ölçütler
     b = son_bulten()
     if b is None:

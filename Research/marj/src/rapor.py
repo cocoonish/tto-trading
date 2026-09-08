@@ -49,33 +49,43 @@ def excel_yaz(dosya=None):
         ["Uzun dönem penceresi", "2013-01 – 2022-12 (notla aynı)"],
     ], columns=["alan", "değer"])
 
-    with pd.ExcelWriter(dosya, engine="openpyxl") as w:
-        meta.to_excel(w, "META", index=False)
-        evds.to_excel(w, "EVDS_ham")
-        medas.to_excel(w, "MEDAS_madde_fiyat_TL")
-        tarim.to_excel(w, "TarimUFE_2020")
-        au.to_frame().to_excel(w, "AsgariUcret_brut")
-        sonuc["madde"].to_excel(w, "Madde_endeks_2013=100")
-        sonuc["madde_meta"].to_excel(w, "Madde_meta")
-        sonuc["yemek"].to_excel(w, "Yemek_gida_endeksleri")
-        sonuc["gida"].to_excel(w, "Konsept_gida")
-        sonuc["bilesen"].to_excel(w, "Maliyet_bilesenleri")
-        sonuc["maliyet"].to_excel(w, "Konsept_maliyet")
-        sonuc["fiyat"].to_excel(w, "Konsept_fiyat")
-        sonuc["oran"].to_excel(w, "Fiyat_maliyet_orani")
-        kars.to_excel(w, "Karsilastirma", index=False)
-        duy.to_excel(w, "Duyarlilik", index=False)
-        katki.to_excel(w, "Katki_2y")  # iki yıl önce → güncel ay (veri.once_ay → son_ay)
+    # ATOMİK YAZIM (08.09.2026). Bloğun içinde bir satır düşerse ExcelWriter
+    # kapanışta yine de kaydeder ve geride SAYFASIZ bir xlsx kalır (ölçüldü:
+    # 3 KB, "At least one sheet must be visible"); zincirin sonraki iki adımı
+    # (web_cikti, ozet_uret) o dosyayı okuyup düşer ve dosya depoya girerse
+    # sonraki her koşu da düşer. Geçici dosyaya yazılır, ancak tamamlanınca
+    # hedefe taşınır — yarım kalan yazım eski sürümü hiç bozmaz.
+    gecici = dosya.with_name(dosya.stem + ".tmp.xlsx")
+    if gecici.exists():
+        gecici.unlink()
+    with pd.ExcelWriter(gecici, engine="openpyxl") as w:
+        meta.to_excel(w, sheet_name="META", index=False)
+        evds.to_excel(w, sheet_name="EVDS_ham")
+        medas.to_excel(w, sheet_name="MEDAS_madde_fiyat_TL")
+        tarim.to_excel(w, sheet_name="TarimUFE_2020")
+        au.to_frame().to_excel(w, sheet_name="AsgariUcret_brut")
+        sonuc["madde"].to_excel(w, sheet_name="Madde_endeks_2013=100")
+        sonuc["madde_meta"].to_excel(w, sheet_name="Madde_meta")
+        sonuc["yemek"].to_excel(w, sheet_name="Yemek_gida_endeksleri")
+        sonuc["gida"].to_excel(w, sheet_name="Konsept_gida")
+        sonuc["bilesen"].to_excel(w, sheet_name="Maliyet_bilesenleri")
+        sonuc["maliyet"].to_excel(w, sheet_name="Konsept_maliyet")
+        sonuc["fiyat"].to_excel(w, sheet_name="Konsept_fiyat")
+        sonuc["oran"].to_excel(w, sheet_name="Fiyat_maliyet_orani")
+        kars.to_excel(w, sheet_name="Karsilastirma", index=False)
+        duy.to_excel(w, sheet_name="Duyarlilik", index=False)
+        katki.to_excel(w, sheet_name="Katki_2y")  # iki yıl önce → güncel ay (veri.once_ay → son_ay)
         marj = endeks.ima_edilen_marj(sonuc["oran"])
-        (marj[0.225] * 100).to_excel(w, "Ima_marj_%22.5_merkez")
+        (marj[0.225] * 100).to_excel(w, sheet_name="Ima_marj_%22.5_merkez")
         bant = pd.concat({f"cipa_%{int(m0*1000)/10}": (df * 100).loc[[veri.once_ay(), veri.son_ay()]]
                           for m0, df in marj.items()}, axis=0)
-        bant.round(1).to_excel(w, "Ima_marj_bant")
+        bant.round(1).to_excel(w, sheet_name="Ima_marj_bant")
         import marj_seviye
         ms = marj_seviye.hesapla(sonuc)
-        (ms["fc"] * 100).round(1).to_excel(w, "FoodCost_orani_%")
-        ms["tl_gida"].round(2).to_excel(w, "FoodCost_TL_gida")
-        ms["p_net"].round(2).to_excel(w, "FoodCost_TL_netfiyat")
+        (ms["fc"] * 100).round(1).to_excel(w, sheet_name="FoodCost_orani_%")
+        ms["tl_gida"].round(2).to_excel(w, sheet_name="FoodCost_TL_gida")
+        ms["p_net"].round(2).to_excel(w, sheet_name="FoodCost_TL_netfiyat")
+    gecici.replace(dosya)
     print(f"Excel yazıldı: {dosya}")
     return dosya
 
