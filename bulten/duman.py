@@ -852,6 +852,111 @@ def main() -> int:
                 f"kesilen koşunun süresi deftere yazılmadı: {kayit}"
     sina("guncelle: SIGTERM kesintisinde süre defteri yazılıyor", _sigterm_defteri)
 
+    # ── YAZI KATMANI OLMAYAN BİR İHALEYİ ANLATAMAZ (08.09.2026)
+    #
+    # Bülten okura iki kez olmamış bir olay anlattı: "Bugün Hazine iki yıl
+    # vadeli kira sertifikasını doğrudan satışla ihraç ediyor" ve "Dün yapılan
+    # sekiz ay vadeli hazine bonosu ihalesinin sonuçları henüz hatta düşmedi".
+    # İkisi de AĞUSTOS–EKİM stratejisindeydi ve 31.08'de yayımlanan EYLÜL–KASIM
+    # stratejisinde KALDIRILMIŞTI. Hat doğru davrandı (planı yeniledi, canlı
+    # dosyada o iki ihale yok); yazı katmanı eski stratejiden yazmayı sürdürdü.
+    # Tarihçeye karşı ölçüldü: kusur 31.08'de başlıyor ve 08.09'a kadar sekiz
+    # sayıda sürüyor, 30.08 ve öncesi TEMİZ — yani ölçüt o gün DOĞRU olan
+    # yazıyı geriye dönük kusurlu saymıyor.
+    def _ihale_iddiasi():
+        import ihale_takvimi as itk
+
+        # (1) PENCERE İKİ KAYNAKTAN AYNI ÇIKMALI. Günleri arşiv dosyasından,
+        # pencereyi hattın ilanından almak tarihçede tutarsız hüküm üretir;
+        # ikisinin ayrışması ayrıştırıcılardan birinin bozulduğu demektir.
+        ilan = itk.pencere_ilani()
+        t = itk.yururlukteki(dt.date(2026, 9, 8))
+        assert t is not None, "yürürlükteki strateji okunamadı — ölçüt kör"
+        gunler, bas, son = t
+        if ilan:
+            assert (bas, son) == ilan, \
+                f"pencere dosya adından {bas}–{son}, hattın ilanından {ilan}"
+        assert bas <= dt.date(2026, 9, 7) <= son, \
+            "07.09 stratejinin penceresinde değil — hüküm verilemez"
+        assert dt.date(2026, 9, 7) not in gunler and dt.date(2026, 9, 8) not in gunler, \
+            "kaldırılmış ihaleler yürürlükteki stratejide görünüyor"
+        assert dt.date(2026, 9, 14) in gunler, "gerçek ihale günü takvimde yok — tarama kör"
+
+        # (2) YIL ATLAYAN STRATEJİ de doğru okunmalı.
+        assert itk.pencere_adi("2026-11-30_Aralık--Şubat-2026-İç-Borçlanma-Stratejisi.csv") \
+            == (dt.date(2026, 12, 1), dt.date(2027, 2, 28)), "yıl atlayan pencere yanlış"
+
+        # (3) HASSASİYET. İlk yazımda çıpa "aynı cümledeki her tarih"ti ve
+        # 13 sayıda 49 bulgu verdi; çoğu aynı cümledeki alakasız bir yayımdı.
+        # Çıpa, iddianın EN YAKIN tarihi olmak zorunda.
+        def celis(metin, tarih="2026-09-08"):
+            return itk.celiskiler({"tarih": tarih, "gundem": {"x": metin}},
+                                  dt.date(2026, 9, 8))
+
+        assert celis("Dün yapılan sekiz ay vadeli hazine bonosu ihalesinin "
+                     "sonuçları henüz düşmedi."), "gerçek kusur yakalanmıyor"
+        assert not celis("4 Eylül'de ABD tarım dışı istihdamı, 14 Eylül'de "
+                         "Hazine'nin iki yıllık tahvil ihalesi var."), \
+            "araya giren tarih yanlış çıpa üretiyor (4 Eylül)"
+        assert not celis("Bugün Hazine'nin ihale takviminde kayıt yok."), \
+            "olumsuz cümle iddia sayılıyor"
+        assert not celis("14 Eylül'de Hazine iki yıllık tahvil ihalesi düzenliyor."), \
+            "takvimde OLAN bir ihale çelişki sayılıyor"
+
+        # (4) PENCERE DIŞINDA HÜKÜM YOK: depo o dönemi bilmiyor, ölçüt susar.
+        assert not celis("18 Ağustos'ta Hazine tahvil ihalesi yapmıştı."), \
+            "stratejinin kapsamadığı dönem için hüküm veriliyor"
+
+        # (5) STRATEJİ OKUNAMAZSA None — denetim uyarır, ENGEL üretmez.
+        gercek = itk.ARSIV
+        try:
+            itk.ARSIV = itk.ARSIV.parent / "yok-boyle-bir-klasor"
+            assert celis("Dün Hazine bono ihalesi yaptı.") is None, \
+                "arşiv yokken ölçüt hüküm veriyor"
+        finally:
+            itk.ARSIV = gercek
+
+        # (6) TARİHÇE SINIRI: kusur stratejinin değiştiği gün başlar.
+        import json as _j
+        kok = BURASI.parent / "site" / "src" / "data" / "bulten"
+        temiz, kusurlu = [], []
+        for y in sorted(kok.glob("2026-08-*.json")) + sorted(kok.glob("2026-09-0*.json")):
+            b = _j.loads(y.read_text(encoding="utf-8"))
+            c = itk.celiskiler(b)
+            if c is None:
+                continue
+            (kusurlu if c else temiz).append(y.stem)
+        # İDDİA TEK YÖNLÜ. "31.08 sonrası her sayı kusurlu" DENEMEZ: bir sayı
+        # düzeltildiğinde meşru olarak temizlenir (08.09 böyle temizlendi).
+        # Sorulacak şey ters yön: 31.08 ÖNCESİ hiçbir sayı kusurlu olmamalı —
+        # o günlerde ihale yürürlükteki stratejide gerçekten vardı ve yazı
+        # DOĞRUYDU. Ölçüt geçmişi geriye dönük suçlamamalı.
+        erken = [s for s in kusurlu if s <= "2026-08-30"]
+        assert not erken, f"31.08 ÖNCESİ kusurlu sayılan sayı (yanlış pozitif): {erken}"
+        assert kusurlu, ("tarihçede hiç kusur bulunmuyor — ölçüt kör "
+                         "(31.08–07.09 sayıları kaldırılmış ihaleyi hâlâ anlatıyor)")
+
+        # (7) PENCERE GERÇEKTEN BELGEDEN TÜRÜYOR MU. Bugün iki kaynak aynı
+        # cevabı veriyor, yani eşitlik sınaması tek başına ayrımı GÖSTERMEZ.
+        # Ayrım ancak GEÇMİŞ bir güne bakınca görünür: 25.08'de yürürlükteki
+        # strateji Ağustos–Ekim'di ve penceresi başkaydı.
+        eski = itk.yururlukteki(dt.date(2026, 8, 25))
+        assert eski is not None, "eski strateji okunamadı"
+        assert (eski[1], eski[2]) != (bas, son), \
+            ("geçmiş bir gün için de BUGÜNÜN penceresi dönüyor — pencere "
+             "günleri veren belgeden değil, hattın güncel ilanından türüyor")
+        assert dt.date(2026, 9, 7) in eski[0], \
+            "07.09 ihalesi o gün yürürlükte olan stratejide yok — fikstür bozuk"
+
+        # (8) ÖLÇÜNÜN TÜKETİCİSİ VAR MI. Ölçüt yazılıp `kos()` listesine
+        # konmazsa hiç koşmaz ve bugünkü gibi bir kusur yine yayına gider —
+        # bu depoda bir kez daha ölçülmüş bir kusur sınıfı.
+        import inspect
+        kaynak = inspect.getsource(denetim.Denetim.kos)
+        assert "self.ihale_iddiasi()" in kaynak, \
+            "ihale_iddiasi ölçütü denetim.kos() listesinde YOK — hiç koşmuyor"
+    sina("denetim: yazı katmanı olmayan bir ihaleyi anlatamaz", _ihale_iddiasi)
+
     # --gerekli'nin atladığı hat türev genişletmesiyle geri gelmez: reelfx tcmb'ye
     # bağımlı, tcmb her iş günü seçiliyor, reelfx her gün EVDS'e çıkıyordu (02.09).
     def _turev_genisletme():

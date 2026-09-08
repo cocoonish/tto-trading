@@ -78,6 +78,20 @@ def _fark_yaz(v: float, birim: str, ondalik: int) -> str:
     return f"{_sayi(v, ondalik)} {b}".strip()
 
 
+def _baglam(iz: Izlem, simdi: dict) -> str:
+    """Tek günlük okumanın yanına yazılan ikinci ölçü (bkz. ayar.Izlem.baglam).
+
+    ÖLÇÜLEMEYEN YAZILMAZ: anahtar yoksa ya da sayı değilse cümle bağlamsız
+    kurulur. Uydurma bir ortalama, ortalamasız cümleden kötüdür."""
+    if not iz.baglam:
+        return ""
+    anahtar, etiket = iz.baglam
+    v = simdi.get(anahtar)
+    if v is None or isinstance(v, bool) or not isinstance(v, (int, float)):
+        return ""
+    return f" {etiket} {_sev(float(v), iz.birim, iz.ondalik)}"
+
+
 def _seviye(buyukluk: float, iz: Izlem) -> str | None:
     if iz.onemli is not None and buyukluk >= iz.onemli:
         return "onemli"
@@ -148,9 +162,14 @@ def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
     sv = _seviye(abs(fark), iz)
     if not sv:
         return None
+    # BAĞLAM CÜMLENİN İÇİNDE, DİPNOTTA DEĞİL. Tek günlük sıçramayı okuyan biri
+    # ortalamayı da aynı satırda görmeli; ayrı bir yere yazılsaydı sıçramanın
+    # yanıltıcılığı ancak arayan için görünür olurdu.
+    ek = _baglam(iz, simdi)
     return Olay(iz.grup, sv, iz.ad,
                 f"{iz.ad} {_fark_yaz(abs(fark), iz.birim, iz.ondalik)} {_yon(fark)}: "
-                f"{_sev(eski, iz.birim, iz.ondalik)} → {_sev(yeni, iz.birim, iz.ondalik)}.",
+                f"{_sev(eski, iz.birim, iz.ondalik)} → {_sev(yeni, iz.birim, iz.ondalik)}"
+                + (f" ({ek.strip()})." if ek else "."),
                 iz.hat, iz.anahtar, yeni, eski, fark, iz.birim, tarih, onceki_tarih,
                 iz.aciklama)
 

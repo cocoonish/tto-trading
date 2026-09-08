@@ -41,6 +41,20 @@ class Izlem:
     # kullanılır. Yalnız gelenek dışı kalan anahtarlarda doldurulur:
     # tcmb-net-rezerv'in haftalık serisi h_net/h_brut'tur ama saati h_tarih'tir.
     tarih_alani: str = ""
+    # BAĞLAM ANAHTARI — tek günlük okumanın yanına yazılan ikinci ölçü.
+    #
+    # Bazı göstergeler tanımı gereği tek bir günün gürültüsünü büyütür:
+    # yıllıklandırma bir günlük fiyat farkını 365'e ölçekler, yani kotasyondaki
+    # küçük bir kayma (valör farkı, tatil, TCMB'nin ertesi gün kurunu bir gün
+    # önce ilan etmesi) orana büyük yansır. 08.09.2026 bülteninde bir aylık
+    # devalüasyon hızı tek günde 4,5 puan "arttı"; ölçüldü, %0,5'lik sahte bir
+    # kotasyon sıçraması o oranı 7,8 puan oynatıyor, aynı ölçünün beş günlük
+    # ortalamasını yalnız 1,6 puan (4,9× söndürme).
+    #
+    # Bağlam AYNI ÖLÇÜNÜN penceresi olmak zorunda: bir aylık hızın yanına bir
+    # HAFTALIK oranın ortalamasını yazmak iki farklı pencereyi aynı cümlede
+    # kıyaslamak olurdu. (hattaki anahtar, okura yazılacak etiket)
+    baglam: tuple[str, str] | None = None
 
 
 # Hatların OKURA görünen adları. Olay cümleleri ("hazine-ihrac: veri gecikti")
@@ -244,9 +258,13 @@ IZLEMLER: list[Izlem] = [
     Izlem("usdtry-deval", "kur", "USD/TRY", "", 2, "yuzde", 0.6, 1.2, "",
           "Günlük yüzde değişim; %1,2 üstü TL varlıklarda gün içi fiyatlamayı değiştirir.", "kur"),
     Izlem("usdtry-deval", "d1a", "1 aylık yıllıklandırılmış devalüasyon hızı", "%", 1, "delta", 4, 8,
-          "azalis", "Kurun seviyesi değil HIZI; TCMB'nin patika yönetimini bu gösterir.", "kur"),
+          "azalis", "Kurun seviyesi değil HIZI; TCMB'nin patika yönetimini bu gösterir. "
+          "Tek günlük okuma valör farkına duyarlıdır; son beş iş gününün ortalaması "
+          "yanında verilir.", "kur",
+          baglam=("d1a_ort", "son beş iş günü ortalaması")),
     Izlem("usdtry-deval", "d3a", "3 aylık yıllıklandırılmış devalüasyon hızı", "%", 1, "delta", 3, 6,
-          "azalis", "Daha yavaş ama daha güvenilir rejim göstergesi.", "kur"),
+          "azalis", "Daha yavaş ama daha güvenilir rejim göstergesi.", "kur",
+          baglam=("d3a_ort", "son beş iş günü ortalaması")),
     Izlem("tcmb-net-rezerv", "h_net", "Net rezerv (haftalık, resmî)", "mlr USD", 1, "delta", 1.5, 3.0,
           "artis", "Analitik bilançodan piyasa tanımıyla; haftalık yayımlanır.", "kur", "h_tarih"),
     Izlem("tcmb-net-rezerv", "h_swap_haric", "Swap hariç net rezerv", "mlr USD", 1, "delta", 1.5, 3.0,

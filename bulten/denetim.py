@@ -114,8 +114,23 @@ def _kelime(html: str) -> int:
 
 
 def _sade(m: str) -> str:
+    """Eşleştirme için sadeleştirme: aksan kalkar, harf kalır.
+
+    BİRLEŞTİRİCİ İŞARET BOŞLUĞA ÇEVRİLMEZ, SİLİNİR. Eskiden NFKD'nin ayırdığı
+    işaretler (nokta, çengel, şapka) `[^a-z0-9…]` süzgecinde BOŞLUK oluyordu ve
+    Türkçe büyük İ bunu asimetrik yapıyordu: `"İsveç".lower()` "i" + birleştirici
+    nokta üretir, yani "İsveç kronu" → "i svec  kronu", küçük harfle yazılmış
+    anahtar "isveç kron" → "isvec  kron". İkisi ASLA eşleşmiyordu.
+    Sonucu ölçüldü (08.09.2026): haber tonu ölçütü, metin USD/SEK hareketini
+    açıkça anlattığı hâlde "ANILMAMIŞ" diyip ENGEL üretti — kapanamayan bir
+    uyarı, yazarı bütün uyarıları görmezden gelmeye alıştırır. Aynı kusur sınıfı
+    bu dosyada bir kez daha kayıtlı ("süzgeç uyuşmazlığı"); orada anahtarlar
+    metinle aynı süzgeçten geçirilerek onarılmıştı, burada süzgecin KENDİSİ
+    onarılıyor: işaret silinince "İsveç" de "isveç" de "isvec" olur.
+    """
     m = unicodedata.normalize("NFKD", (m or "").lower())
-    return re.sub(r"[^a-z0-9ğüşiöç ]", " ", m)
+    m = "".join(c for c in m if not unicodedata.combining(c))
+    return re.sub(r"[^a-z0-9 ]", " ", m)
 
 
 # Kilit gelişme çapaları — İngilizce başlık, Türkçe metin.
@@ -1306,6 +1321,55 @@ class Denetim:
                 + ". Bu alanlar bayatlık denetiminin DIŞINDA kalıyor; yazım "
                   "ortak/bicim sözleşmesine çekilmeli (GG.AA.YYYY · AA.YYYY · ISO).")
 
+    def ihale_iddiasi(self):
+        """Yazı katmanının tarih bağlı ihale iddiası ÖLÇÜLEN takvimle tutuyor mu.
+
+        08.09.2026 bülteni okura iki kez olmamış bir olay anlattı: "Bugün Hazine
+        iki yıl vadeli kira sertifikasını doğrudan satışla ihraç ediyor" ve "Dün
+        yapılan sekiz ay vadeli hazine bonosu ihalesinin sonuçları henüz hatta
+        düşmedi". İkisi de AĞUSTOS–EKİM stratejisinde vardı (07.09 bono, 08.09
+        kira sertifikası) ve 31.08'de yayımlanan EYLÜL–KASIM stratejisinde
+        KALDIRILMIŞTI. Hat doğru davrandı — planı 31.08'de yeniledi, canlı
+        dosyada o iki ihale YOK — ama yazı katmanı iki hafta boyunca eski
+        stratejiden yazmayı sürdürdü: aynı iddia 23.08'den 07.09'a on üç sayıda
+        geçti ve söz defterinde bir de TAAHHÜT olarak durdu.
+
+        Ölçülen katman ile yazı katmanı çeliştiğinde hakem ÖLÇÜLEN katmandır.
+        Kaynak, hattın CANLI plan dosyası değil YÜRÜRLÜKTEKİ STRATEJİDİR: plan
+        dosyası yalnız bugünden ileriyi tutar, oysa iddia dünle ilgili de
+        olabilir. Strateji üç ayı kapsar ve o pencerenin İÇİNDE bir gün için
+        kayıt yoksa o gün ihale YOKTUR — hüküm kesindir. Pencerenin dışındaki
+        bir gün için depo bir şey bilmez ve ölçüt SUSAR (uydurma hüküm yok).
+        """
+        try:
+            sys.path.insert(0, str(BURASI))
+            import ihale_takvimi                                # noqa: E402
+        except Exception:                                       # noqa: BLE001
+            return
+        try:
+            bul = ihale_takvimi.celiskiler(self.b)
+        except Exception:                                       # noqa: BLE001
+            return
+        if bul is None:
+            # Strateji okunamadı: ölçüt hüküm veremez ve SESSİZ KALMAZ —
+            # ölçemediğini ölçülmüş gibi göstermek bu deponun ilk yasağı.
+            self.uyari.append(
+                "Hazine ihale takvimi okunamadı; yazı katmanının ihale "
+                "iddiaları bu sayıda ÖLÇÜLEMEDİ.")
+            return
+        if not bul:
+            self._ok("yazı katmanının ihale iddiaları takvimle tutuyor")
+            return
+        self.engel.append(
+            f"Yazı katmanı yürürlükteki ihale takviminde OLMAYAN {len(bul)} "
+            "ihale iddiası taşıyor: "
+            + " · ".join(f"{x['alan']} — {x['etiket']} ({x['gun']:%d.%m.%Y})"
+                         for x in bul[:4])
+            + ("…" if len(bul) > 4 else "")
+            + ". Bu günler yürürlükteki stratejinin kapsadığı dönemde ve o "
+              "stratejide kayıtları yok; iddia eski bir stratejiden geliyor "
+              "olabilir.")
+
     def olu_kalip(self):
         """Tetik tarifi takvimde HİÇBİR yayımla eşleşmiyor mu — UYARI.
 
@@ -1645,7 +1709,7 @@ class Denetim:
     def kos(self) -> int:
         self.yazi(); self.veri(); self.atif(); self.sayi(); self.nabiz(); self.tekrar()
         self.tema(); self.izleme(); self.dil(); self.tazelik(); self.tazeleme_atlandi()
-        self.karanlik(); self.olu_kalip()
+        self.karanlik(); self.olu_kalip(); self.ihale_iddiasi()
         self.yerlesmemis(); self.piyasa_seansi(); self.revizyon(); self.duzeltme()
         self.devir(); self.haber_tonu(); self.bicim()
         self.olagandisilik_penceresi()

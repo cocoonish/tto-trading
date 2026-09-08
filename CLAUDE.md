@@ -1055,6 +1055,72 @@ On üç arıza enjeksiyonunun on üçü de yakalandı; dördü ilk turda geçti 
 sınamasının kendisi de yanlış olabilir, ve "ölçüt düşmedi" ile "arıza yok"
 birbirine tıpatıp benzer.
 
+**Kurucu ilke — YAZI KATMANI, ÖLÇÜLEN KATMANIN BİLMEDİĞİ BİR OLAYI ANLATAMAZ;
+ve YILLIKLANDIRILMIŞ BİR HIZ TEK GÜNLE OKUNMAZ.** İki bulgu aynı sayıdan çıktı
+ve ikisi de "sayı doğru, bağlam eksik" sınıfından.
+
+Birincisi ağır. 08.09.2026 bülteni okura iki kez OLMAMIŞ bir olay anlattı:
+"Bugün Hazine iki yıl vadeli kira sertifikasını doğrudan satışla ihraç ediyor"
+ve "Dün yapılan sekiz ay vadeli hazine bonosu ihalesinin sonuçları henüz hatta
+düşmedi — modelin beklentisi 130,4 milyar TL". İkisi de AĞUSTOS–EKİM
+stratejisinde vardı ve Hazine 31.08'de yayımladığı EYLÜL–KASIM stratejisinde
+ikisini de takvimden çıkardı. HAT DOĞRU DAVRANDI: planı 31.08'de yeniledi,
+canlı dosyasında o iki ihale YOK, `kritik_takvim` yalnız 14–15 Eylül'ü
+gösteriyor. Yazı katmanı ise iki hafta boyunca eski stratejiden yazmayı
+sürdürdü — ölçüldü, aynı iddia 31.08'den 08.09'a SEKİZ sayıda geçti ve söz
+defterinde bir de TAAHHÜT olarak durdu ("Model 7 Eylül bono ihalesi için
+130,4 mlr TL gerçekleşme"). Ölçülen katman ile yazı katmanı çeliştiğinde hakem
+ölçülen katmandır ve bunu soran hiçbir kapı yoktu.
+Kaynak seçimi hükmün kendisi kadar önemli: canlı plan dosyası yalnız bugünden
+İLERİYİ tutar, oysa iddia dünle de ilgili olabilir. Hakem YÜRÜRLÜKTEKİ
+STRATEJİDİR — üç ayı kapsar, arşivde sürümleriyle durur ve pencerenin İÇİNDE
+bir gün için kaydı yoksa o gün ihale YOKTUR. Pencerenin dışında depo bir şey
+bilmez ve ölçüt SUSAR. Pencere, günleri veren belgenin KENDİSİNDEN türetilir:
+ilk yazımda arşiv dosyasının adındaki tarihten (+1 ay) kurulmuştu ve yanlış
+çıktı — o tarih belgenin yayım günü değil hattın onu TARADIĞI gündür, aynı
+strateji üç kez arşivlenmişti ve asıl sorulacak gün pencerenin dışında
+kalıyordu.
+Hassasiyet ölçülerek kuruldu: ilk kalıp "aynı cümledeki her tarih" diyordu ve
+13 sayıda 49 bulgu verdi, çoğu aynı cümlede geçen alakasız bir yayımdı
+("4 Eylül'de ABD tarım dışı istihdamı, 7 Eylül'de … bono ihalesi" → 4 Eylül
+yanlış yakalanıyordu). İki daraltma: çıpa ile iddia arasında en çok ~70
+karakter olabilir ve ARADA BAŞKA TARİH BULUNAMAZ. Tarihçeye karşı koşuldu ve
+sınır tam yerinde çıktı: 30.08 ve öncesi TEMİZ (o gün yürürlükte olan
+stratejide ihale gerçekten vardı, yazı DOĞRUYDU), kusur 31.08'de başlıyor.
+Bir ölçüt geçmişi geriye dönük suçlamamalı.
+Kapı kurulurken kendi kör noktası da ölçüldü: sınama `ihale_takvimi`yi
+DOĞRUDAN çağırıyordu, yani ölçütün `denetim.kos()` listesinde olup olmadığını
+sormuyordu — ölçüt yazılıp listeye konmasa hiç koşmazdı. Bu, aynı gün üç kez
+karşılaşılan "ölçü var, tüketici yok" kusurunun bir eşi.
+
+Yan bulgu, ölçütün KENDİ süzgecinde: düzeltilmiş metin USD/SEK hareketini
+açıkça anlattığı hâlde haber tonu ölçütü "ANILMAMIŞ" deyip ENGEL üretti.
+Sebep `_sade`de: NFKD'nin ayırdığı birleştirici işaretler BOŞLUĞA çevriliyordu
+ve Türkçe büyük İ bunu asimetrik yapıyordu — `"İsveç".lower()` "i" + nokta
+üretir, yani metin "i svec  kronu", anahtar "isvec  kron" oluyor ve ikisi ASLA
+eşleşmiyordu. Aynı kusur sınıfı bu dosyada bir kez daha kayıtlı ve orada
+anahtarlar metinle aynı süzgeçten geçirilerek onarılmıştı; bu kez süzgecin
+KENDİSİ onarıldı (işaret boşluğa çevrilmez, SİLİNİR). Etkisi ölçüldü: 13 sayı
+üzerinde ENGEL 6'dan 5'e indi — kaldırılan tek bulgu yanlış alarmın kendisi.
+Kapanamayan bir uyarı, yazarı bütün uyarıları görmezden gelmeye alıştırır.
+
+İkincisi ölçünün okunuşuyla ilgili ve kullanıcı adıyla koydu: "valör farkı vs.
+olduğunda hız çok artmış veya azalmış görünebiliyor". Yıllıklandırma bir GÜNLÜK
+fiyat farkını 365'e ölçekler; valör farkı, tatil ya da TCMB'nin ertesi gün
+kurunu bir gün önce ilan etmesi oranı tek günde sıçratır. 08.09 bülteninde bir
+aylık hız tek günde 4,5 puan "arttı" (%19,6 → %24,1). Ölçüldü: düzgün bir %20
+patikada son güne konan %0,5'lik sahte bir kotasyon sıçraması tek günlük oranı
+7,8 puan, AYNI ÖLÇÜNÜN beş günlük ortalamasını yalnız 1,6 puan oynatıyor —
+4,9× söndürme. Ortalama artık cümlenin İÇİNDE, dipnotta değil: sıçramayı okuyan
+biri ortalamayı aynı satırda görmeli.
+Bağlam AYNI ÖLÇÜNÜN penceresi olmak zorunda. Hattın zaten yazdığı
+`hafta_son_ort` buraya GİRMEDİ: o 1 HAFTALIK oranın haftalık ortalamasıdır ve
+bir AYLIK hızın yanına yazmak iki farklı pencereyi aynı cümlede kıyaslamak
+olurdu. Hat bu yüzden aynı `deval()` tanımını kaydırarak yeni bir ortalama
+üretiyor (`d1a_ort`, `d3a_ort`); iki ayrı formül bir gün sessizce ayrışır.
+Kapsam elle tutulmuyor: `ayar.Izlem.baglam` taşıyan her anahtar hem olay
+cümlesine hem gösterge şeridine kendiliğinden giriyor.
+
 **Kurucu ilke — TEKRARIN İKİ EKSENİ VARDIR ve biri hiç ölçülmüyordu.**
 Kullanıcı "tekrarlı olmasın, her gün aynı şeyleri söylemeyelim" dedi. Depoda
 bir tekrar ölçeri zaten vardı (`bulten/tekrar.py`) ama yalnız bir SAYININ
