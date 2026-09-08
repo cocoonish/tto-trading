@@ -230,8 +230,30 @@ jobs:
       # 26.08 koşusunda bu adım bir hatayla düştü ve `bash -e` yüzünden tazeleme
       # ile Hazine adımları ATLANDI: dört hattın verisi hazırken hiçbiri
       # çekilmedi. Bir raporun üretimi durdurma yetkisi olamaz.
+      # SINIR ÖLÇÜLDÜ. Bu adım 07.09 19:21 koşusunda 5 SANİYE sürdü; 08.09 04:17
+      # koşusunda 4 dakikayı geçmişti ve hâlâ bitmemişti — kırk kat. Aynı sabah
+      # denetim sebebi bağımsız olarak doğruladı: "yayım takvimi okunamadı, 18
+      # hattın tamamı kör koşu listesinde", yani TÜİK ucu gerçekten cevap
+      # vermiyordu. Adımın hiç zaman aşımı yok; `takvim._getir` isteği
+      # `timeout=25` ile atıyor ama requests'in zaman aşımı TOPLAM süreyi değil
+      # SOKET işlemini sınırlar — bayt bayt damlayan bir yanıtta okuma zaman
+      # aşımı her parçada sıfırlanır ve istek süresiz sürer. Çağrı yerindeki
+      # sınır bu arızaya karşı ÇALIŞMAZ; duvar saatiyle kesen sınır çalışır.
+      #
+      # Genel kural (bkz. CLAUDE.md): sınırsız bir adım, kendisinden SONRA gelen
+      # bütün adımların sigortasını yakar. İş bütçesi 65 dk ve sonraki adımların
+      # sınırları 40+5+8=53; bu adım on dakika asılsa aritmetik kapanmaz ve
+      # 04.09'da olduğu gibi Koşu nabzı ile Commit adımları İŞ zaman aşımına
+      # yakalanır (`if: always()` İŞ sınırına karşı çalışmaz). Tavan, ölçülen
+      # normal sürenin (5 sn) otuz katından fazla — yanlış alarm payı geniş.
+      #
+      # Kesilmesi üretimi bozmaz: adım TANIDIR, kararı vermez. `continue-on-error`
+      # sınırda düşmeyi de yutar, takvim alınamazsa `_yayimlar` bayat önbellekle
+      # devam eder ve hangi hattın koşacağına bir sonraki adım `--gerekli` ile
+      # kendisi karar verir.
       - name: Tazeleme takvimi ne diyor (tanı — koşuyu durdurmaz)
         continue-on-error: true
+        timeout-minutes: 3
         run: python bulten/tazeleme.py
 
       # Hafif kip: EVDS'e giden hatlar. Hangi hattın koşacağına --gerekli karar
