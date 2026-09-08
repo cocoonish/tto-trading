@@ -97,9 +97,10 @@ Aynı fonksiyon kapsamı da sınar (sitede çıkan her zamanlanmış yayının X
    **Uzun analizler (~20 KB üzeri) `<div class="yonetici">` ile bir YÖNETİCİ
    ÖZETİ ile açılır**: tek cümlelik tez, soru–cevap tablosu (gelir mi · ne zaman ·
    ne kadar · faize etkisi · kanıtın gücü) ve `.rakamlar` şeridinde altı anahtar
-   ölçüm. Özetteki her sayı da `<Deger>` ile bağlanır — özet donarsa yazının geri
-   kalanı tazelenirken okur yanlış sonucu okur. Özet, gövdedeki bir kutuyu
-   TEKRARLAMAZ; onu soğurur. **Tam standart `analiz/YAZIM.md`de, şablon
+   ölçüm. **Analizin sayıları SABİTTİR (karar 08.09.2026): yalnız panolar
+   canlıdır**; `<Deger>` analizde kullanılmaz, eski yazılardaki etiketler yedek
+   metniyle sabit basılır (Yazi.astro `data-deger="sabit"` kabı, sayfa sınavı
+   24). Özet, gövdedeki bir kutuyu TEKRARLAMAZ; onu soğurur. **Tam standart `analiz/YAZIM.md`de, şablon
    `analiz/sablon.mdx`te; kapı `site/tools/analiz_sinavi.py`** (sayfa sınavının
    10. ölçütü): 1 Eylül 2026'dan sonra yayımlanan yazılarda tarihli slug/başlık,
    zorunlu ön bilgi, yönetici özeti ve kapanış bölümü ("Ne ölçmedik") ENGEL;
@@ -107,8 +108,8 @@ Aynı fonksiyon kapsamı da sınar (sitede çıkan her zamanlanmış yayının X
    kökü SERİ anahtarıdır: aynı kökten yazılar sayfada "bu serinin diğer yazıları"
    kutusuyla birbirine bağlanır — konu kökü yazıdan yazıya aynı yazılır.
    **X gönderisi kendiliğinden çıkar:** `tweet/analiz.py` yayın günü `pubDate`i
-   bugün olan yazının yönetici özetini (tez, tablo satırları, rakamlar; `<Deger>`
-   canlı çözülür) gönderiye çevirir; defter aynı yazıyı ikinci kez göndermez.
+   bugün olan yazının yönetici özetini (tez, tablo satırları, rakamlar; sayılar
+   sayfadaki gibi sabit) gönderiye çevirir; defter aynı yazıyı ikinci kez göndermez.
 
 ## Grafik güncelleme akışı
 
@@ -1263,3 +1264,25 @@ yazmış ve kendi girdisini dondurmuştu — kaynağı düzeltmemişti; fikstür
 tarihçe bozuldu. Damga artık yalnız İLK yazımda atılır (ölçü takvim günü değil
 "yazılmış mı": geç kalan sayı ertesi gün ilk kez yazılıyorsa gerçek gecikmeyi
 taşımalı). Bir fikstürün kendini bir tuzaktan koruması, tuzağı kapatmaz.
+
+**KARAR (08.09.2026, kullanıcı) — YALNIZ PANOLAR CANLIDIR; analiz ve ders
+yazıları yayımlandığı günün metnidir.** "Analiz olarak yayımladıklarımızın canlı
+olmasına gerek yok, sadece projeler canlı olacak. Analizlerdeki canlı işaretini
+de silelim." Analizlerde 1.293, bir derste 10 `<Deger>` çağrısı vardı ve hepsi
+sayfa açılınca hattın bugünkü dosyasından tazeleniyordu — tarihli bir yazının
+altındaki sayı kayıyor, "3 Eylül" başlıklı bir analiz eylül ortasının verisini
+anlatıyordu. MDX'e dokunulmadı (yayımlanmış yazı değiştirilmez): düzen
+(`Yazi.astro`) pano dışı gövdeyi `data-deger="sabit"` kabına alır, `Deger`
+betiği kabın içine dokunmaz, stil alt çizgiyi ve yardım imlecini kaldırır;
+yedek metin — yazının yazıldığı günkü sayı — olduğu gibi kalır. Künyedeki
+"Ritim" satırı da yalnız panoda. Kapı sayfa sınavının 24. ölçütü: derlenmiş
+çıktıda kapsız canlı alan taşıyan analiz/ders ENGEL, kaplı pano ENGEL (kabı
+bileşen kurar, düzen değişikliği onu sessizce düşürebilir). Ölçüt 7 bilgi
+satırına indi: analizdeki eksik anahtar okuru etkilemez — 08.09'da tam bu
+sınıftan bir eksik (DİBS kıyas anahtarı, bir analiz yazısında) yayını üç kez
+durdurmuştu. Tweet üretici de sayfayla aynı sözleşmeye çekildi: gönderi
+sayfanın gösterdiği sabit sayıyı taşır, canlı çözmez. Kapsam dışı ve ADIYLA
+yazılı: analizlere gömülü figürler (`GrafikEmbed`) hattın dosyasıdır ve hat
+koştukça yenilenmeye DEVAM EDER — metin sabit, figür canlı; bir analiz figürün
+o günkü değerini anlatıyorsa tarihiyle anlatmalı. Figürleri de dondurmak
+(yayım günü kopyası) istenirse ayrı karar.

@@ -310,8 +310,9 @@ Bir şey.
 
 
 def _analiz_zinciri():
-    """Analiz gönderisi yönetici özetinden kurulur; <Deger> canlı çözülür,
-    sayfa mobilyasına atıf yapan cümle düşer, sorumluluk notu kalır."""
+    """Analiz gönderisi yönetici özetinden kurulur; <Deger> SABİT yedek metniyle
+    gider (sayfa ne gösteriyorsa — karar 08.09.2026, canlı çözüm yok), sayfa
+    mobilyasına atıf yapan cümle düşer, sorumluluk notu kalır."""
     import analiz as an
     with tempfile.TemporaryDirectory() as td:
         kok = Path(td)
@@ -332,13 +333,14 @@ def _analiz_zinciri():
             an.ANALIZ_DIZIN, an.OZET_DIZIN = eski
             an._OZET_ONBELLEK.clear()
     assert t.startswith("Analiz — 2 Eylül 2026\nSınama Yazısı"), t[:60]
-    assert "%1,48" in t and "9,99" not in t, "canlı değer çözülmedi (yedek kaldı)"
-    assert "−0,4 puan" in t, f"isaretli/eksi biçimi yanlış: {t[:400]}"
+    # ozet.json'da merkez=1,4849 duruyor ama gönderi SAYFAYI izler: yedek 9,99 kalır.
+    assert "%9,99" in t and "1,48" not in t, f"analiz sayısı canlı çözüldü — sayfa sabit, gönderi ayrıştı: {t[:300]}"
+    assert "+0,1 puan" in t and "−0,4" not in t, f"işaretli yedek metin korunmadı: {t[:400]}"
     assert "0,42" in t, "bulunamayan anahtarın yedeği kalmadı"
+    assert "Evet, %9,99." in t, "atıf cümlesi düşerken komşu cümle kayboldu"
     assert "GELİR Mİ." in t and "KANITIN GÜCÜ." in t, "tablo satırları Türkçe büyük harfle etiketlenmedi"
     assert "yukarıdaki grafikte" not in t, "sayfa mobilyasına atıf düşmedi"
-    assert "Evet, %1,48." in t, "atıf cümlesi düşerken komşu cümle kayboldu"
-    assert "Kilit ölçümler — birleşik merkez: %1,48" in t, "rakam şeridi yok"
+    assert "Kilit ölçümler — birleşik merkez: %9,99" in t, "rakam şeridi yok (sabit yedek metin beklenir)"
     assert t.endswith("Analizdir; yatırım tavsiyesi değildir."), "sorumluluk notu sonda değil"
     assert "<" not in t and "Deger" not in t, "etiket sızdı"
 
@@ -459,7 +461,7 @@ def _ozel_anahtar():
 
 def main() -> int:
     print("tweet duman sınaması:")
-    sina("analiz gönderisi: yönetici özeti, canlı <Deger>, atıf düşer, not sonda", _analiz_zinciri)
+    sina("analiz gönderisi: yönetici özeti, SABİT <Deger>, atıf düşer, not sonda", _analiz_zinciri)
     sina("kalite kapısı: tavsiye · link · HTML · atıf · kesik · boş etiket · dil · uzunluk", _denetim)
     sina("sorumluluk notu her gönderide, kırpmadan muaf", _kapanis_notu)
     sina("zincirler: uzunluk, HTML sızıntısı, link, yapı bayrağı", _zincirler)

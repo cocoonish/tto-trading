@@ -41,7 +41,7 @@ tarih iki yerde görünür ve listede hangi yazının hangi güne ait olduğu ok
 | `kaynak` | evet | veri kaynakları okur adıyla ("TCMB EVDS", "TÜİK TÜFE") — künye satırında görünür; seri kodları gövdedeki Kaynakça'ya, kod biçiminde |
 | `veriTarihi` | evet | yazının dayandığı verinin son günü, `YYYY-AA-GG` — künyede "Veri" olarak ve bağlantı önizlemesinde görünür; yazının tarihi ile verinin tarihi ayrı şeylerdir |
 | `duzeltmeler` | düzeltme varsa | yayımlanmış bir sayının düzeltme kaydı: `tarih`, `alan`, `eski`, `yeni`, `sebep` — sayfanın sonunda kutu olur, `/duzeltmeler/` sayfası toplar (bkz. "Yayımlanmış bir sayıyı düzeltmek") |
-| `guncelleme` | veri canlıysa | serinin yayım ritmi ("aylık; TÜİK ayın 3'ü") |
+| `guncelleme` | hayır | analizde basılmaz (yalnız panolar canlıdır); yazılırsa künyeye çıkmaz |
 | `ozet` | evet | TEK cümle: yazının tezi — kartta lede olur, X gönderisinin yedeğidir; iki cümleyi aşarsa uyarı |
 | `seviye` | evet | `giris` · `orta` · `ileri` |
 | `onkosul` | varsa | önce okunması gereken analizlerin slug listesi |
@@ -55,9 +55,9 @@ tarih iki yerde görünür ve listede hangi yazının hangi güne ait olduğu ok
    (5–8 anahtar ölçüm). Rakam şeridinin her öğesi **aynı sözleşmeyle**
    yazılır: `<li><b>değer</b><span>etiket</span></li>` — X gönderisi ve
    bağlantı kartı bu ikiliyi okur; kalın değer ya da etiket eksikse sınav
-   düşer. Özetteki her sayı `<Deger>` ile bağlanır: özet
-   donarsa yazının geri kalanı tazelenirken okur yanlış sonucu okur. Özet,
-   gövdedeki bir kutuyu tekrarlamaz; onu soğurur. **Tweet bu bloktan
+   düşer. Özetteki sayılar yazının tarihine ait SABİT sayılardır (bkz.
+   "Sayılar"): analiz yayımlandığı günün metnidir. Özet, gövdedeki bir
+   kutuyu tekrarlamaz; onu soğurur. **Tweet bu bloktan
    kurulur** — tez, tablo satırları ve rakamlar X'e olduğu gibi çıkar; bu
    yüzden özet kendi ayakları üstünde durmalı, "yukarıdaki grafik", "bu
    yazının 4. bölümü" gibi sayfa mobilyasına atıf içermemelidir.
@@ -85,12 +85,14 @@ tarih iki yerde görünür ve listede hangi yazının hangi güne ait olduğu ok
 
 ## Sayılar
 
-- **Her oynak sayı `<Deger>` ile yazılır**: `<Deger proje="enflasyon"
-  anahtar="br_b_merkez" ondalik={2}>1,48</Deger>`. Yedek metin derleme
-  anındaki değerdir; sayfa açılınca hattın güncel dosyasından tazelenir.
-  Tarihsel ve metodolojik sabitler (bir çalışmadan alıntı katsayı, bir bant
-  tanımı) statik kalır ve gerekirse `{/* sinav-muaf: anahtar — gerekçe */}`
-  ile işaretlenir.
+- **Analizin sayıları SABİTTİR** (karar 08.09.2026): analiz, tarihli bir
+  yazıdır ve yayımlandığı günün verisini anlatır; yalnız panolar (projeler)
+  canlıdır. Sayılar düz metin yazılır: `%1,48`. `<Deger>` etiketi analizde
+  KULLANILMAZ; eski yazılardaki etiketler yedek metniyle sabit basılır,
+  canlı işareti (alt çizgi, ipucu) çıkmaz — sayfa düzeni gövdeyi
+  `data-deger="sabit"` kabına alır, sayfa sınavının 24. ölçütü kabı arar.
+  Aynı konunun yeni verisi yeni bir yazıyla (aynı seri kökü, yeni tarih)
+  anlatılır; eski yazı değiştirilmez.
 - Türkçe yazım: ondalık virgül, binlik nokta, eksi işareti "−" (U+2212),
   yüzde işareti sayıdan önce ("%1,48"), baz puan sayıdan sonra ("−6,5 bp").
 - Her sayının yanında **neye göre** ve **hangi tarihe ait** olduğu yazar.
@@ -133,7 +135,9 @@ yok — kayıt zaten söylüyor).
 
 1. Yazıyı şablondan kur: `analiz/sablon.mdx` → `site/src/content/analiz/<konu>-<tarih>.mdx`.
 2. Grafikleri üreten hat varsa çıktıları `site/public/projeler/<slug>/` altına
-   koyar ve `ozet.json`u yazar; yazı sayıları oradan `<Deger>` ile çeker.
+   koyar; yazıya gömülen figür (`GrafikEmbed`) hattın dosyasıdır ve hat
+   koştukça yenilenir — metin sabit, figür canlı. Yazı figürün o günkü
+   değerini anlatıyorsa tarihiyle anlatır ("3 Eylül kapanışında …").
 3. Bağlantı kartı: `python3 site/tools/og_kart.py --analiz` — yalnız kartı
    olmayan analizler için 1200×630 görsel üretir (`site/public/og/analiz/
    <slug>.png`); X ve diğer önizleyiciler bu kartı gösterir. Kart yoksa bölüm
@@ -156,5 +160,5 @@ yok — kayıt zaten söylüyor).
 Yayımlanmış analizler ve dersler **değiştirilmez**; yalnız sayı düzeltmesi ve
 `updatedDate` ile işaretlenmiş bilinçli güncellemeler yapılır. Bu rehberin
 kuralları, rehberin yazıldığı günden (1 Eylül 2026) sonra yayımlanan yazılar
-için bağlayıcıdır; daha eski yazılar biçim ölçütlerinden muaftır, dil ve
-`<Deger>` ölçütleri her yazı için geçerlidir.
+için bağlayıcıdır; daha eski yazılar biçim ölçütlerinden muaftır, dil
+ölçütleri her yazı için geçerlidir.

@@ -34,6 +34,7 @@ MUAF_KALIP = _mod.MUAF_KALIP
 olu_ic_baglar = _mod.olu_ic_baglar
 x_izleri = _mod.x_izleri
 kacan_etiketler = _mod.kacan_etiketler
+sabit_kap_bulgulari = _mod.sabit_kap_bulgulari
 
 GECTI: list[str] = []
 DUSTU: list[str] = []
@@ -450,6 +451,31 @@ sina("küçüktür/büyüktür işareti yanlış alarm üretmiyor",
 
 
 # ---------------------------------------------------------------------------
+
+# ÖLÇÜLEN KARAR (08.09.2026): yalnız panolar canlı; analiz ve ders gövdesi
+# `data-deger="sabit"` kabında, Deger betiği dokunmaz. Kap bileşende kurulur;
+# bir düzen değişikliği onu sessizce düşürürse analizler yeniden canlanır ve
+# okur bunu göremez — ölçüt ÇIKTIYA bakar.
+kok = _agac({
+    "analiz/tufe-2026-09-03/index.html": '<div class="prose"><span class="canli-deger" data-proje="x">1,2</span></div>',
+    "arastirma/ders-a/index.html": '<div class="prose"><span class="canli-deger">3</span></div>',
+    "projeler/enflasyon/index.html": '<div class="prose"><span class="canli-deger">4</span></div>',
+})
+b = sabit_kap_bulgulari(kok)
+sina("analiz sayfasında kapsız canlı alan ENGEL", any(x.startswith("analiz/tufe-2026-09-03") for x in b), str(b))
+sina("ders sayfasında kapsız canlı alan ENGEL", any(x.startswith("arastirma/ders-a") for x in b), str(b))
+sina("proje sayfasında kap yokken bulgu yok", not any(x.startswith("projeler/") for x in b), str(b))
+kok = _agac({
+    "analiz/tufe-2026-09-03/index.html": '<div class="prose" data-deger="sabit"><span class="canli-deger">1,2</span></div>',
+    "analiz/index.html": '<a href="/analiz/tufe-2026-09-03/">kart</a>',
+    "projeler/enflasyon/index.html": '<div class="prose" data-deger="sabit"><span class="canli-deger">4</span></div>',
+    "bulten/2026-09-08/index.html": '<p>canlı-deger sözcüğü geçmiyor</p>',
+})
+b = sabit_kap_bulgulari(kok)
+sina("kaplı analiz temiz", not any(x.startswith("analiz/tufe") for x in b), str(b))
+sina("analiz liste sayfası (canlı alan yok) taranmaz", not any(x.startswith("analiz/index") for x in b), str(b))
+sina("SABİT KAPLI proje sayfası ENGEL — pano canlı kalmalı", any(x.startswith("projeler/enflasyon") for x in b), str(b))
+
 print(f"\n{'═' * 70}")
 print(f"  {len(GECTI)} geçti · {len(DUSTU)} düştü")
 if DUSTU:
