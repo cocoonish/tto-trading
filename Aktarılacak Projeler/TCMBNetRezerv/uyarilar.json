@@ -1,6 +1,6 @@
 {
- "tarih": "2026-09-04",
- "kosum": "2026-09-07",
+ "tarih": "2026-09-07",
+ "kosum": "2026-09-08",
  "uyarilar": [
   "ONS ÇAPASI REDDEDİLDİ (10.03.2023): IRFCL PDF'i 30,622 mn ons diyor; bu, ima edilen değerleme fiyatını 1.643 USD/ons yapıyor, oysa piyasa 1.838 (−%10,6, eşik %8). Fiyat farkıyla açıklanamaz — PDF düzeni değişmiş olabilir. O hafta kademe 2 (ima) çapası kullanılıyor.",
   "ONS ÇAPASI REDDEDİLDİ (17.03.2023): IRFCL PDF'i 32,309 mn ons diyor; bu, ima edilen değerleme fiyatını 1.639 USD/ons yapıyor, oysa piyasa 1.931 (−%15,1, eşik %8). Fiyat farkıyla açıklanamaz — PDF düzeni değişmiş olabilir. O hafta kademe 2 (ima) çapası kullanılıyor.",
@@ -8,14 +8,14 @@
   "ALTIN MİKTAR TANISI — 4 TARİHSEL çapada (son 8 çapanın dışında); en büyüğü 17.10.2025, 5,69 mlr USD. Ayrıntı koşu çıktısında.",
   "ALTIN MİKTAR SIÇRAMASI (24.07.2026): iki çapa arasında miktar +1,126 mn ons değişti (%4,7, 4,52 mlr USD; eşikler %4 ve 1,00 mlr USD, kaynak ima). Bu gerçek bir altın alım/satımı mı, yoksa fiyat kaynağının kayması mı — miktar etkisi (Λ) buna göre okunmalı.",
   "ALTIN MİKTAR SIÇRAMASI — 9 TARİHSEL çapada (son 8 çapanın dışında); en büyüğü 27.03.2026, 19,81 mlr USD. Ayrıntı koşu çıktısında.",
-  "ALTIN MİKTAR TAZELİĞİ: son çapa 28.08.2026 (10 gün önce, eşik 8). Miktar o günden beri taşınıyor; haftalık altın değeri yayımı kesilmiş olabilir.",
+  "ALTIN MİKTAR TAZELİĞİ: son çapa 28.08.2026 (11 gün önce, eşik 8). Miktar o günden beri taşınıyor; haftalık altın değeri yayımı kesilmiş olabilir.",
   "SWAP ÇAPA KAPSAMI DÜŞÜK: günlük serinin yalnız %33'i haftalık IRFCL çapasına dayanıyor (hedef %50); geri kalanı ay sonu çapasından taşınıyor. Haftalık arşiv doldurulduğunda bu kalemin hatası belirgin şekilde küçülür."
  ],
  "tani": {
-  "zincirleme_dt": 1.992,
-  "swap_haftalik_capa_orani": 0.331,
+  "zincirleme_dt": -0.561,
+  "swap_haftalik_capa_orani": 0.332,
   "son_ons_capa": "2026-08-28",
   "capa_boslugu": -3.06,
-  "kur_varyant_fark": 0.122
+  "kur_varyant_fark": 0.121
  }
 }
