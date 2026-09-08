@@ -77,7 +77,15 @@ class Tetik:
     # Kurumu kalıptan ayrı tutmak ŞART: takvimde HMB'nin de adı "…Menkul Kıymet
     # İstatistikleri" ile biten bir serisi var (Kamu Haznedarlığı) ve kurum
     # süzgeci gevşetilseydi butce'yi gereksiz yere tetiklerdi.
-    ek_kaynaklar: tuple[tuple[str, tuple[str, ...]], ...] = ()
+    #
+    # ÜÇÜNCÜ BACAK: yayımın İLERLETTİĞİ SAAT (ozet.json anahtarı). Ek kaynak
+    # hattın ANA saatini değil bir yan bacağını besler — butce'de haftalık
+    # yayım `_tarih2`yi ilerletir, `_tarih` aylık kalır. Sürüm ölçüsü yalnız
+    # ana saate bakarsa haftalık tetik her hafta "veri gelmedi" sayar ve dört
+    # pencerede yanlış alarma varır (08.09.2026'da tam bu sınıftan bir yanlış
+    # alarm türev hatlarda ölçüldü). Ölçü bu yüzden ana saat + ek kaynakların
+    # ilan ettiği saatlerden kurulur (`hat_surumu`).
+    ek_kaynaklar: tuple[tuple[str, tuple[str, ...], str], ...] = ()
     en_gec: int = 30                    # emniyet ağı: bu kadar gün sonra takvimsiz koş
     gecikme_dk: int = 45                # yayım anı ile verinin API'ye düşmesi arası
     ihale: bool = False                 # Hazine ihale planından da tetiklensin mi
@@ -146,7 +154,7 @@ TETIKLER: tuple[Tetik, ...] = (
           # (… Mevduat ve Menkul Kıymet İstatistikleri)" serisi kurum süzgeciyle
           # zaten eleniyor, ama serbest bir alt dizge eşleşmesi ileride başka bir
           # TCMB serisinde yanlış tetik açabilirdi.
-          ek_kaynaklar=((r"^\s*Menkul Kıymet İstatistikleri\s*$", ("TCMB",)),)),
+          ek_kaynaklar=((r"^\s*Menkul Kıymet İstatistikleri\s*$", ("TCMB",), "_tarih2"),)),
     # Hazine ihaleleri ulusal takvimde yok: hattın kendi ihale planından sürülür.
     # İki ayrı tetik kaynağı, çünkü iki ayrı olay var. İHALE günü sonucu
     # (miktar, faiz, teklif) getirir; STRATEJİ günü önümüzdeki üç ayın
@@ -411,8 +419,22 @@ def deneme_oku() -> dict[str, int]:
     return _defter().get("deneme", {}) or {}
 
 
+def izlenen_saatler(hat: str, tarih_anahtarlari: tuple[str, ...] = ()) -> list[str]:
+    """Sürüm ölçüsüne giren saat anahtarları: ana saat + tarifin ek
+    kaynaklarının ilan ettiği yan saatler. Tek tanım; `hat_surumu` ve duman
+    sınaması buradan okur."""
+    ana = "_tarih" if (not tarih_anahtarlari or "_tarih" in tarih_anahtarlari) \
+        else tarih_anahtarlari[0]
+    saatler = [ana]
+    t = TETIK.get(hat)
+    for _kalip, _kurum, alan in (t.ek_kaynaklar if t else ()):
+        if alan and alan not in saatler:
+            saatler.append(alan)
+    return saatler
+
+
 def hat_surumu(hat: str) -> str:
-    """Hattın site kopyasındaki veri sürümü — hattın ANA SAATİ.
+    """Hattın site kopyasındaki veri sürümü — hattın İZLENEN SAATLERİ.
 
     Kütük tek kaynak (`guncelle.HATLAR`): slug da, hangi alanların tarih
     taşıdığı da (`tarih_anahtarlari`) orada duruyor. Burada ikinci bir liste
@@ -428,11 +450,16 @@ def hat_surumu(hat: str) -> str:
     ateşlenmezdi. En eskisini almak da işlemiyor: aylık bacak bir ay boyunca
     meşru olarak durur ve sağlıklı haftalarda boş yere dört deneme yakardı.
     Ölçü bu yüzden hattın ana saatidir — `RITIM`in denetlediği saatin ta
-    kendisi (`_tarih`, yoksa kütükteki ilk alan; `tcmb` hattında `g_tarih`).
+    kendisi (`_tarih`, yoksa kütükteki ilk alan; `tcmb` hattında `g_tarih`) —
+    ARTI tarifin ek kaynaklarının ilan ettiği yan saatler (`izlenen_saatler`):
+    butce'de haftalık TCMB yayımı `_tarih2`yi ilerletir, ana saat aylık kalır;
+    yan saat imzaya girmezse haftalık tetik her hafta "veri gelmedi" sayar.
+    İmza " · " ile birleşir; ana saat okunamazsa boş döner.
 
-    DIŞARIDA KALAN, adıyla: ana saati ilerlerken İÇİNDEKİ bir alanın donması
-    bu ölçüye görünmez. O ayrı bir denetimin işi ve zaten var — `RITIM_ALAN`
-    o alanları tek tek izliyor ve bültende "veri gecikti" olayını üretiyor."""
+    DIŞARIDA KALAN, adıyla: izlenen saatler ilerlerken İÇİNDEKİ başka bir
+    alanın donması bu ölçüye görünmez. O ayrı bir denetimin işi ve zaten var —
+    `RITIM_ALAN` o alanları tek tek izliyor ve bültende "veri gecikti" olayını
+    üretiyor."""
     import sys
     try:
         sys.path.insert(0, str(KOK))
@@ -443,18 +470,40 @@ def hat_surumu(hat: str) -> str:
         d = guncelle._ozet_tarih(h)
         if not d:
             return ""
-        ana = "_tarih" if "_tarih" in d else (h.tarih_anahtarlari[0]
-                                             if h.tarih_anahtarlari else "")
-        deger = str(d.get(ana, "")).strip()
-        return "" if deger in ("", "None") else deger
+        saatler = izlenen_saatler(hat, tuple(h.tarih_anahtarlari or ()))
+        parcalar = []
+        for i, a in enumerate(saatler):
+            deger = str(d.get(a, "")).strip()
+            if deger in ("", "None"):
+                if i == 0:
+                    return ""                 # ana saat okunamadı: ölçü yok
+                continue                      # yan saat bugün yoksa imzaya girmez
+            parcalar.append(deger)
+        return " · ".join(parcalar)
     except Exception:                                          # noqa: BLE001
         return ""
 
 
-def durum_yaz(hatlar: list[str], simdi: dt.datetime | None = None):
+def durum_yaz(hatlar: list[str], simdi: dt.datetime | None = None,
+              sayilan: "set[str] | frozenset[str]" = frozenset()):
     """Başarıyla koşan hatların damgasını güncelle (başarısızlar dokunulmaz).
 
-    Damgayla birlikte koşunun NE GETİRDİĞİ de yazılır; kararı asıl o belirler."""
+    Damgayla birlikte koşunun NE GETİRDİĞİ de yazılır; kararı asıl o belirler.
+
+    `sayilan`: bu koşuda sürüm SAYACINA GİREN hatlar — yani koşusu bir yayım
+    tetiğinden ya da onun yeniden denemesinden doğanlar (`Karar.sayilir`).
+    Sayaç "kaynak yayımladı, veri gelmedi" ölçüsüdür ve ancak kaynağın
+    yayımladığı bilinen bir koşuda anlam taşır. 08.09.2026'da ölçüldü: sayaç
+    her başarılı koşuda artıyordu ve türev hatlar (makro · carry · tufex) her
+    pencerede koşup haftalık saatlerini ilerletemediği için günde altı kez
+    sayılıp aynı gün alarma düştü — alarm kanalı on dört kez öttü, duman
+    sınaması canlı defteri okuyup düştü ve veri tazeleme üç pencere atlandı.
+    Üç kural birden:
+      · tarifi olmayan hat (TETIK'te yok) sayaçtan ve sürüm defterinden
+        SİLİNİR — saati üst hattan gelir, ölçü ona uygulanamaz;
+      · sürüm değiştiyse sayaç sıfırlanır (kim koşturmuş olsun);
+      · sürüm değişmediyse sayaç yalnız SAYILAN koşuda artar; emniyet ağı,
+        elle koşu, ölü kalıp ya da kör koşu sayacı olduğu yerde bırakır."""
     simdi = simdi or _simdi()
     defter = _defter()
     d = dict(defter.get("son_kosum", {}) or {})
@@ -462,6 +511,9 @@ def durum_yaz(hatlar: list[str], simdi: dt.datetime | None = None):
     n = dict(defter.get("deneme", {}) or {})
     for h in hatlar:
         d[h] = simdi.isoformat(timespec="seconds")
+        if h not in TETIK:
+            s.pop(h, None); n.pop(h, None)
+            continue
         yeni_surum = hat_surumu(h)
         if not yeni_surum:
             # Sürüm okunamadı: sayacı ne artır ne sıfırla. Ölçülemeyen bir şeye
@@ -470,8 +522,10 @@ def durum_yaz(hatlar: list[str], simdi: dt.datetime | None = None):
         if yeni_surum != s.get(h, ""):
             s[h] = yeni_surum
             n[h] = 0
-        else:
+        elif h in sayilan:
             n[h] = int(n.get(h, 0)) + 1
+        else:
+            n.setdefault(h, 0)
     DURUM.write_text(
         json.dumps({"aciklama": "Her veri hattının en son başarıyla tazelendiği an, "
                                 "o koşuda görülen veri sürümü ve sürümü ilerletmeden "
@@ -495,6 +549,11 @@ class Karar:
     # hat eli boş döndüyse, önbellekte duran şey tam da o boş cevaptır ve
     # onu okuyan bir "yeniden deneme" hiçbir şeyi yeniden denemez.
     yenile: bool = False
+    # Bu koşu SÜRÜM SAYACINA girer mi. Yalnız yayım tetikli koşu ve onun
+    # yeniden denemesi: sayaç "kaynak yayımladı, veri gelmedi" ölçer ve
+    # kaynağın yayımladığı bilinmeyen bir koşuda (emniyet ağı, elle, tarifi
+    # yok, ölü kalıp, kör koşu) artması yanlış alarmdır (bkz. durum_yaz).
+    sayilir: bool = False
 
 
 def kararlar(hatlar: list[str] | None = None,
@@ -537,7 +596,7 @@ def kararlar(hatlar: list[str] | None = None,
             continue
 
         tetikleyen: list[str] = []
-        for kalip, kurum in t.ek_kaynaklar:
+        for kalip, kurum, _alan in t.ek_kaynaklar:
             for k in yayim:
                 if kurum and k["kurum"] not in kurum:
                     continue
@@ -597,7 +656,8 @@ def kararlar(hatlar: list[str] | None = None,
 
         tetikleyen = sorted(set(tetikleyen))
         if tetikleyen:
-            cikti.append(Karar(ad, True, f"{len(tetikleyen)} yeni yayım", tetikleyen))
+            cikti.append(Karar(ad, True, f"{len(tetikleyen)} yeni yayım", tetikleyen,
+                               sayilir=True))
             continue
 
         # YENİDEN DENEME. Buraya gelmek "son koşumdan bu yana yeni yayım yok"
@@ -613,7 +673,7 @@ def kararlar(hatlar: list[str] | None = None,
                 f"önceki koşu veriyi ilerletmedi ({surum.get(ad, '?')}) — "
                 f"yeniden deneniyor ({int(deneme[ad])}/{TEKRAR_HAKKI}), "
                 f"önbellek atlanıyor",
-                yenile=True))
+                yenile=True, sayilir=True))
             continue
 
         # Hakkı bitmiş bir hat SESSİZCE beklemez: gerekçe adıyla yazılır,
@@ -673,7 +733,7 @@ def olu_kaliplar(yillar: tuple[int, ...] | None = None) -> list[tuple[str, str]]
         return []
     olu = []
     for t in TETIKLER:
-        for kalip, kurum in t.ek_kaynaklar:
+        for kalip, kurum, _alan in t.ek_kaynaklar:
             if not any((not kurum or k["kurum"] in kurum)
                        and re.search(kalip, k["adi"], re.I) for k in yayim):
                 olu.append((t.hat, kalip))

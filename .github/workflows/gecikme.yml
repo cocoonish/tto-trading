@@ -158,20 +158,60 @@ jobs:
             exit 1
           fi
 
+      # BAYAT HAT ALARMI — gecikmeden AYRI bir ölçü.
+      #
+      # `gecikme.py` yayının SAATİNİ ölçüyor ("bülten sözünden kaç dakika geç
+      # çıktı"); bu adım verinin KENDİSİNİ ölçüyor ("kaynak yayımladı, hat
+      # koştu, veri gelmedi"). İki arıza bağımsız: bülten dakikası dakikasına
+      # çıkarken içindeki bir hattın verisi bir hafta eski olabilir — 03.09'da
+      # kredi hattında tam bu oldu ve hiçbir kanal ses çıkarmadı.
+      #
+      # MÜKERRERLİK KAYDI ŞART (08.09.2026'da ölçüldü): bu iş akışı günde
+      # 40–70 kez uyanıyor ve kayıtsız ilk sürüm aynı üç hat için ON DÖRT kez
+      # kırmızı bitip on dört e-posta gönderdi. Kayıt `hat|sürüm` anahtarlı —
+      # aynı hat aynı sürümde takılıyken bir kez bildirilir. Adım kayıt
+      # adımının ÖNÜNDE durur: kayıt push edilir, alarm SONRA verilir.
+      - name: Bayat hat var mı
+        id: bayat
+        run: |
+          set +e
+          python3 -u bulten/bayatlik.py \
+            --kayit bulten/bayatlik_alarm_kaydi.json \
+            --kaydi-yaz \
+            --cikti "$GITHUB_OUTPUT"
+          kod=$?
+          set -e
+          echo "kod=$kod" >> "$GITHUB_OUTPUT"
+          # KÖR KALMA KİLİDİ (gecikme adımının eşi): araç karar üretemediyse
+          # aşağıdaki adımlar koşulsuz atlanır ve iş akışı yeşil biterdi.
+          if ! grep -q '^bayat_yeni=' "$GITHUB_OUTPUT"; then
+            echo "::error::BAYATLIK ÖLÇÜMÜ KARAR ÜRETEMEDİ (çıkış $kod) — alarm kanalı KÖR."
+            exit 1
+          fi
+          if [ "$kod" != "0" ]; then
+            echo "::error::KAYNAK YAYIMLADI, VERİ GELMEDİ — yukarıdaki hatlar yeniden deneme hakkını doldurdu."
+          fi
+          exit 0
+
       # Mükerrerlik kaydını depoya yaz. YALNIZ yeni alarm varken çalışır, yani
-      # sakin günlerde bu iş akışı depoya hiç dokunmaz.
+      # sakin günlerde bu iş akışı depoya hiç dokunmaz. İki ölçünün kaydı da
+      # burada gider (gecikme · bayat hat).
       #
       # Bu push yayını TETİKLEMEZ (yayin.yml `push` tetikleyicisi yalnız
       # `site/**` yollarını dinliyor) ve kendini de tetiklemez: GitHub kendi
       # GITHUB_TOKEN'ıyla atılan push'larda yeni iş akışı başlatmaz.
       - name: Alarm kaydını işle
-        if: steps.olcum.outputs.yeni == '1'
+        if: steps.olcum.outputs.yeni == '1' || steps.bayat.outputs.yeni == '1'
         env:
           GUN: ${{ steps.olcum.outputs.gun }}
         run: |
           git config --global user.name  "tto-gecikme"
           git config --global user.email "bot@users.noreply.github.com"
+          # İKİ AYRI `git add`: git, tek komuttaki yollardan BİRİ bile yoksa
+          # komutun tamamını reddeder (bu depoda ölçüldü, tweet-ozel.yml).
+          # Bayat kaydı ilk alarma kadar yoktur.
           git add bulten/gecikme_alarm_kaydi.json || true
+          git add bulten/bayatlik_alarm_kaydi.json || true
           if git diff --cached --quiet; then
             echo "kayıt değişmedi — commit yok"
             exit 0
@@ -190,29 +230,6 @@ jobs:
           # çift alarm — mükerrerlik bir rahatsızlık, sessizlik bir arıza.
           echo "::warning::alarm kaydı push edilemedi; aynı gün için mükerrer alarm gelebilir."
 
-      # BAYAT HAT ALARMI — gecikmeden AYRI bir ölçü.
-      #
-      # `gecikme.py` yayının SAATİNİ ölçüyor ("bülten sözünden kaç dakika geç
-      # çıktı"); bu adım verinin KENDİSİNİ ölçüyor ("kaynak yayımladı, hat
-      # koştu, veri gelmedi"). İki arıza bağımsız: bülten dakikası dakikasına
-      # çıkarken içindeki bir hattın verisi bir hafta eski olabilir — 03.09'da
-      # kredi hattında tam bu oldu ve hiçbir kanal ses çıkarmadı.
-      #
-      # Adım `continue-on-error` DEĞİL ama Alarm adımından AYRI: iki arıza
-      # ayrı ayrı görünmeli, biri ötekini maskelememeli.
-      - name: Bayat hat var mı
-        id: bayat
-        run: |
-          set +e
-          python3 -u bulten/bayatlik.py
-          kod=$?
-          set -e
-          echo "kod=$kod" >> "$GITHUB_OUTPUT"
-          if [ "$kod" != "0" ]; then
-            echo "::error::KAYNAK YAYIMLADI, VERİ GELMEDİ — yukarıdaki hatlar yeniden deneme hakkını doldurdu."
-          fi
-          exit 0
-
       # Alarmın kendisi. Bu adım DÜŞER, düşen iş akışı bildirim gönderir.
       # Yayının önünde durmaz: bu iş akışının kırmızı bitmesi hiçbir şeyi
       # engellemez, yalnız haber verir.
@@ -225,15 +242,21 @@ jobs:
           exit 1
 
       # Bayat hat alarmı gecikme alarmından BAĞIMSIZ düşer: gecikme
-      # "zamanında" olsa bile bayat bir hat haber vermeye değer.
+      # "zamanında" olsa bile bayat bir hat haber vermeye değer. Yalnız YENİ
+      # bulguda: kayıtlı (aynı sürümde daha önce bildirilmiş) hat yeniden
+      # öttürmez.
       - name: Bayat hat alarmı
-        if: steps.bayat.outputs.kod != '0'
+        if: steps.bayat.outputs.yeni == '1'
+        env:
+          BAYAT: ${{ steps.bayat.outputs.bayat_ozet }}
         run: |
-          echo "::error::Bir ya da daha çok hat kaynağın yayımladığı veriyi getiremedi."
+          echo "::error::KAYNAK YAYIMLADI, VERİ GELMEDİ — $BAYAT"
           exit 1
 
       - name: Sessiz geçiş
-        if: steps.olcum.outputs.yeni != '1' && steps.bayat.outputs.kod == '0'
+        if: steps.olcum.outputs.yeni != '1' && steps.bayat.outputs.yeni != '1'
         env:
           OZET: ${{ steps.olcum.outputs.ozet }}
-        run: echo "✓ $OZET · bayat hat yok"
+          BAYAT_N: ${{ steps.bayat.outputs.bayat_alarm }}
+        run: |
+          echo "✓ $OZET · yeni bayat hat alarmı yok (kayıtlı bayat hat sayısı $BAYAT_N)"

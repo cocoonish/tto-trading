@@ -524,6 +524,8 @@ def main() -> int:
         h = g.HAT["kredi"]
         assert len(h.tarih_anahtarlari) > 1, \
             "sınama kredinin çok saatli olmasına dayanıyor; kütük değişmiş"
+        assert tazeleme.izlenen_saatler("kredi", tuple(h.tarih_anahtarlari)) == ["_tarih"], \
+            "ek kaynağı olmayan hatta izlenen saat yalnız ana saat olmalı"
         s = tazeleme.hat_surumu("kredi")
         if s:                       # site kopyası yoksa ölçü yapılmaz
             d = g._ozet_tarih(h) or {}
@@ -532,7 +534,117 @@ def main() -> int:
             for a in h.tarih_anahtarlari[1:]:
                 assert str(d.get(a, "")) not in s or str(d.get(a)) == s, \
                     f"ikincil saat ({a}) sürüme sızıyor: {s!r}"
-    sina("tazeleme: sürüm ölçüsü hattın ana saati", _surum_ana_saat)
+
+        # EK KAYNAĞIN İLERLETTİĞİ YAN SAAT İMZAYA GİRER, ÖTEKİLER GİRMEZ.
+        # butce: haftalık TCMB yayımı `_tarih2`yi ilerletir; ana saat aylık.
+        # Yan saat imzada olmasaydı haftalık tetik her hafta "veri gelmedi"
+        # sayar ve dört pencerede yanlış alarma varırdı.
+        hb = g.HAT["butce"]
+        assert tazeleme.izlenen_saatler("butce", tuple(hb.tarih_anahtarlari)) == ["_tarih", "_tarih2"], \
+            tazeleme.izlenen_saatler("butce", tuple(hb.tarih_anahtarlari))
+        sb = tazeleme.hat_surumu("butce")
+        if sb:
+            d = g._ozet_tarih(hb) or {}
+            parcalar = sb.split(" · ")
+            assert str(d.get("_tarih")) in parcalar and str(d.get("_tarih2")) in parcalar, \
+                f"butce imzası ana saat + haftalık yan saat olmalı: {sb!r}"
+            assert str(d.get("_tarih3")) not in parcalar or d.get("_tarih3") in (d.get("_tarih"), d.get("_tarih2")), \
+                f"tetiğe bağlı olmayan çeyreklik saat imzaya sızıyor: {sb!r}"
+        # Her ek kaynak bir saat İLAN EDER ve o saat kütükte tanımlıdır.
+        for t in tazeleme.TETIKLER:
+            for ek in t.ek_kaynaklar:
+                assert len(ek) == 3 and ek[2], f"{t.hat}: ek kaynak ilerlettiği saati ilan etmiyor: {ek}"
+                assert ek[2] in g.HAT[t.hat].tarih_anahtarlari, \
+                    f"{t.hat}: ek kaynağın saati ({ek[2]}) kütüğün tarih anahtarlarında yok"
+    sina("tazeleme: sürüm ölçüsü hattın izlenen saatleri", _surum_ana_saat)
+
+    # SAYAÇ YALNIZ SAYILAN KOŞUDA ARTAR (08.09.2026). İlk sürüm her başarılı
+    # koşuda artırıyordu; türev hatlar günde altı pencerede koşup haftalık
+    # saatini ilerletemediği için aynı gün alarma düştü. Sayaç "kaynak
+    # yayımladı, veri gelmedi" ölçer: kaynağın yayımladığı bilinmeyen bir
+    # koşuda (emniyet ağı, elle, tarifsiz, ölü kalıp, kör) artmaz.
+    def _sayac_sozlesmesi():
+        import json as _json, tempfile as _tf, inspect as _insp
+        from pathlib import Path as _P
+        gercek = (tazeleme._yayimlar, tazeleme._defter, tazeleme.DURUM, tazeleme.hat_surumu)
+        persembe = [{"adi": "Haftalık Para ve Banka İstatistikleri",
+                     "kurum": "TCMB", "an": "2026-09-03T14:30:00"}]
+        try:
+            # (1) Karar.sayilir: yeni yayım ve yeniden deneme SAYILIR
+            tazeleme._yayimlar = lambda y: (persembe, True)
+            tazeleme._defter = lambda: {"son_kosum": {"kredi": "2026-09-03T10:00:00"},
+                                        "son_surum": {"kredi": "21.08.2026"}, "deneme": {"kredi": 0}}
+            k = tazeleme.kararlar(["kredi"], simdi=dt.datetime(2026, 9, 3, 16, 0))[0]
+            assert k.kossun and k.tetikleyen and k.sayilir, f"yayım tetikli koşu sayılmıyor: {k}"
+            tazeleme._defter = lambda: {"son_kosum": {"kredi": "2026-09-03T19:12:00"},
+                                        "son_surum": {"kredi": "21.08.2026"}, "deneme": {"kredi": 1}}
+            k = tazeleme.kararlar(["kredi"], simdi=dt.datetime(2026, 9, 4, 5, 13))[0]
+            assert k.yenile and k.sayilir, f"yeniden deneme sayılmıyor: {k}"
+            # (2) SAYILMAYANLAR: emniyet ağı · ölü kalıp · tarifi yok · elle
+            tazeleme._yayimlar = lambda y: ([], True)
+            tazeleme._defter = lambda: {"son_kosum": {"kredi": "2026-07-20T10:00:00"}}
+            k = tazeleme.kararlar(["kredi"], simdi=dt.datetime(2026, 9, 3, 16, 0))[0]
+            assert k.kossun and "emniyet" in k.sebep and not k.sayilir, f"emniyet ağı koşusu sayılıyor: {k}"
+            tazeleme._defter = lambda: {"son_kosum": {"kredi": "2026-09-02T10:00:00"}}
+            k = tazeleme.kararlar(["kredi"], simdi=dt.datetime(2026, 9, 3, 16, 0))[0]
+            assert k.kossun and "KALIP ÖLÜ" in k.sebep and not k.sayilir, f"ölü kalıp koşusu sayılıyor: {k}"
+            k = tazeleme.kararlar(["makro"], simdi=dt.datetime(2026, 9, 3, 16, 0))[0]
+            assert k.kossun and not k.sayilir, f"tarifsiz hat sayılıyor: {k}"
+            k = tazeleme.kararlar(["kredi"], simdi=dt.datetime(2026, 9, 3, 16, 0), zorla=True)[0]
+            assert k.kossun and not k.sayilir, f"elle zorlanan koşu sayılıyor: {k}"
+
+            # (3) durum_yaz: sayaç yalnız SAYILAN koşuda artar, sürüm değişince
+            #     sıfırlanır, tarifsiz hat defterden SİLİNİR.
+            tmp = _P(_tf.mkdtemp()) / "durum.json"
+            tazeleme.DURUM = tmp
+            tazeleme._defter = gercek[1]          # gerçek okuyucu, geçici dosyadan
+            surum = {"kredi": "21.08.2026", "makro": "28.08.2026"}
+            tazeleme.hat_surumu = lambda h: surum.get(h, "")
+            an = dt.datetime(2026, 9, 3, 19, 12)
+            tazeleme.durum_yaz(["kredi", "makro"], an, sayilan={"kredi", "makro"})
+            d = _json.loads(tmp.read_text(encoding="utf-8"))
+            assert d["deneme"]["kredi"] == 0 and d["son_surum"]["kredi"] == "21.08.2026", d
+            assert "makro" not in d["deneme"] and "makro" not in d["son_surum"], \
+                f"tarifsiz hat sürüm defterine yazılıyor: {d}"
+            assert "makro" in d["son_kosum"], "tarifsiz hattın koşum damgası da gitti — o kalmalı"
+            tazeleme.durum_yaz(["kredi"], an, sayilan={"kredi"})
+            assert _json.loads(tmp.read_text(encoding="utf-8"))["deneme"]["kredi"] == 1
+            tazeleme.durum_yaz(["kredi"], an, sayilan=set())
+            assert _json.loads(tmp.read_text(encoding="utf-8"))["deneme"]["kredi"] == 1, \
+                "sayılmayan (elle/emniyet) koşu sayacı artırdı — 08.09.2026 arızası"
+            tazeleme.durum_yaz(["kredi"], an, sayilan={"kredi"})
+            assert _json.loads(tmp.read_text(encoding="utf-8"))["deneme"]["kredi"] == 2
+            surum["kredi"] = "28.08.2026"
+            tazeleme.durum_yaz(["kredi"], an, sayilan=set())
+            d = _json.loads(tmp.read_text(encoding="utf-8"))
+            assert d["deneme"]["kredi"] == 0 and d["son_surum"]["kredi"] == "28.08.2026", \
+                f"sürüm ilerlediğinde sayaç sıfırlanmadı: {d}"
+            # Eski defterde kalmış tarifsiz sayaç temizlenir
+            tmp.write_text(_json.dumps({"son_kosum": {}, "son_surum": {"makro": "28.08.2026"},
+                                        "deneme": {"makro": 8}}), encoding="utf-8")
+            tazeleme.durum_yaz(["makro"], an)
+            d = _json.loads(tmp.read_text(encoding="utf-8"))
+            assert "makro" not in d["deneme"] and "makro" not in d["son_surum"], d
+            # CANLI DEFTER BURADA SINANMAZ — bilerek. Eski koddan kalmış bir
+            # tarifsiz sayaç zararsızdır (bayatlık onu okumaz, bir sonraki
+            # durum_yaz siler); onu ENGEL yapmak veri iş akışını duman
+            # kapısında kilitler ve temizliği yapacak koşu hiç başlamaz —
+            # yanlış alarmı arızanın kendisi olan bir kapı. Temizliğin VARLIĞI
+            # kaynak metinden sınanır.
+            kaynak_dy = _insp.getsource(tazeleme.durum_yaz)
+            assert "if h not in TETIK:" in kaynak_dy and ".pop(h, None)" in kaynak_dy, \
+                "durum_yaz tarifsiz hattı defterden silmiyor"
+        finally:
+            tazeleme._yayimlar, tazeleme._defter, tazeleme.DURUM, tazeleme.hat_surumu = gercek
+        # (4) TÜKETİCİ: guncelle sayılan kümesini durum_yaz'a geçiriyor mu.
+        import sys as _s
+        _s.path.insert(0, str(BURASI.parent))
+        import guncelle as g
+        kaynak = _insp.getsource(g)
+        assert "durum_yaz(basarili, sayilan=" in kaynak, \
+            "guncelle sayılan kümesini durum_yaz'a geçirmiyor — sayaç hiç artmaz ya da hep artar"
+        assert 'getattr(k, "sayilir", False)' in kaynak, "guncelle Karar.sayilir'i okumuyor"
+    sina("tazeleme: sürüm sayacı yalnız yayım tetikli koşuda artar", _sayac_sozlesmesi)
 
     # ÖNBELLEK TAZELİĞİ TEK YERDE. TTO_YENILE bir zamanlar dokuz hattın
     # yalnız BİRİNDE okunuyordu: "koşulsuz tazele" düğmesi kalan sekizde
@@ -741,8 +853,86 @@ def main() -> int:
                 "son_surum": {"odemeler": "30.06.2026"}, "deneme": {}}
             assert not bayatlik.alarmlar(), \
                 "kaynak yayımlamamışken alarm veriyor — ham veri yaşı eşiğe dönmüş"
+
+            # (2b) TARİFİ OLMAYAN HAT alarm ÜRETEMEZ — sayaç ne kadar yüksek
+            # olsun. 08.09.2026'da makro/carry/tufex (türev, TETIK'te yok)
+            # sayaçları 8/4/4'e vardı ve alarm kanalı on dört kez öttü; sayaç
+            # o hatlar için anlamsızdı (saatleri üst hattan gelir).
+            for turev in ("makro", "carry", "tufex"):
+                assert turev not in bayatlik.tazeleme.TETIK, \
+                    f"sınama {turev}'in tarifsiz olmasına dayanıyor; tarif eklendiyse başka hat seç"
+            bayatlik.tazeleme._defter = lambda: {
+                "son_kosum": {"makro": "2026-09-08T21:56:59"},
+                "son_surum": {"makro": "28.08.2026"}, "deneme": {"makro": 8}}
+            assert not bayatlik.alarmlar(), \
+                "tarifsiz (türev) hat alarm üretiyor — 08.09.2026 arızası geri geldi"
+            b = [x for x in bayatlik.bulgular() if x.hat == "makro"]
+            assert b and b[0].sinif == "saglikli" and "tarifi yok" in b[0].sebep, b
+            assert b[0].deneme == 0, "tarifsiz hattın defterdeki eski sayacı rapora sızıyor"
+
+            # (2c) MÜKERRERLİK: aynı hat aynı sürümde BİR kez bildirilir;
+            #      sürüm ilerleyip yeniden takılırsa yeni alarmdır. Kanal günde
+            #      40–70 kez uyanıyor; kayıtsız sürüm on dört e-posta gönderdi.
+            import json as _json, tempfile as _tf
+            from pathlib import Path as _P
+            kayit = _P(_tf.mkdtemp()) / "bayat_kayit.json"
+            bayatlik.tazeleme._defter = lambda: {
+                "son_kosum": {"kredi": "2026-09-03T19:12:00"},
+                "son_surum": {"kredi": "21.08.2026"},
+                "deneme": {"kredi": bayatlik.tazeleme.TEKRAR_HAKKI}}
+            k1 = bayatlik.karar(kayit=kayit)
+            assert [x.hat for x in k1["yeni"]] == ["kredi"] and not k1["bilinen"], k1
+            bayatlik.alarm_kaydi_yaz(kayit, k1["yeni"])
+            k2 = bayatlik.karar(kayit=kayit)
+            assert not k2["yeni"] and [x.hat for x in k2["bilinen"]] == ["kredi"], \
+                "kayıtlı alarm yeniden 'yeni' sayılıyor — mükerrer e-posta"
+            assert k2["alarm"], "kayıt alarmı yok etti — bilinen alarm listede kalmalı"
+            bayatlik.tazeleme._defter = lambda: {
+                "son_kosum": {"kredi": "2026-09-10T19:12:00"},
+                "son_surum": {"kredi": "28.08.2026"},
+                "deneme": {"kredi": bayatlik.tazeleme.TEKRAR_HAKKI}}
+            k3 = bayatlik.karar(kayit=kayit)
+            assert [x.hat for x in k3["yeni"]] == ["kredi"], \
+                "sürüm ilerleyip yeniden takılan hat yeni alarm üretmiyor"
+            kay = _json.loads(kayit.read_text(encoding="utf-8"))
+            assert "kredi|21.08.2026" in kay["kayitlar"], kay
+            # Komut satırı: --kayit ile yeni alarm yoksa çıkış 0, kayıt yokken 1
+            bayatlik.tazeleme._defter = lambda: {
+                "son_kosum": {"kredi": "2026-09-03T19:12:00"},
+                "son_surum": {"kredi": "21.08.2026"},
+                "deneme": {"kredi": bayatlik.tazeleme.TEKRAR_HAKKI}}
+            import contextlib as _cl, io as _io
+            with _cl.redirect_stdout(_io.StringIO()):
+                assert bayatlik.main(["--kayit", str(kayit)]) == 0, \
+                    "kayıtlı alarm komut satırında hâlâ 1 döndürüyor — iş akışı her uyanmada düşer"
+                assert bayatlik.main([]) == 1, "kayıt yokken yeni alarm 1 döndürmeli"
+                cikti = kayit.parent / "cikti.txt"
+                assert bayatlik.main(["--kayit", str(kayit), "--cikti", str(cikti)]) == 0
+            satirlar = cikti.read_text(encoding="utf-8")
+            assert "bayat_yeni=0" in satirlar and "bayat_alarm=1" in satirlar, satirlar
         finally:
             bayatlik.tazeleme._defter = gercek
+
+        # (2d) TAŞIYICI BAĞLANTISI: ölçü var ama iş akışı kaydı yazmıyorsa
+        #      mükerrerlik kâğıt üstünde kalır. Adım sırası da sözleşme: bayat
+        #      ölçümü KAYIT adımının önünde, alarm adımı yalnız YENİ bulguda.
+        yml = (BURASI.parent / ".github/workflows/gecikme.yml").read_text(encoding="utf-8")
+        i_bayat = yml.index("- name: Bayat hat var mı")
+        i_kayit = yml.index("- name: Alarm kaydını işle")
+        i_alarm = yml.index("- name: Bayat hat alarmı")
+        assert i_bayat < i_kayit < i_alarm, "gecikme.yml adım sırası: bayat ölçümü → kayıt → alarm olmalı"
+        bayat_adim = yml[i_bayat:i_kayit]
+        for gerek in ("bulten/bayatlik.py", "--kaydi-yaz", "--kayit bulten/bayatlik_alarm_kaydi.json",
+                      "grep -q '^bayat_yeni='"):
+            assert gerek in bayat_adim, f"gecikme.yml bayat adımında {gerek!r} yok"
+        kayit_adim = yml[i_kayit:i_alarm]
+        assert "git add bulten/bayatlik_alarm_kaydi.json" in kayit_adim, \
+            "bayat mükerrerlik kaydı commit edilmiyor — her uyanmada yeniden öter"
+        assert "steps.bayat.outputs.yeni == '1'" in kayit_adim, \
+            "kayıt adımı bayat alarmında çalışmıyor"
+        alarm_adim = yml[i_alarm:]
+        assert "if: steps.bayat.outputs.yeni == '1'" in alarm_adim, \
+            "bayat alarmı 'yeni' değil başka bir çıktıya bağlı — kayıtlı alarm yeniden öter"
 
         # (3) TÜKETİCİ: denetim ölçüsünü `kossun` süzgecinin ÖNÜNDE okumalı.
         kaynak = inspect.getsource(denetim.Denetim.tazeleme_atlandi)
@@ -2154,7 +2344,18 @@ def main() -> int:
         bugun = _date.today().isoformat()
         temel = {"tarih": bugun, "tur": "gunluk"}
         gercek_y, gercek_d, gercek_oku = _tz._yayimlar, _tz.durum_oku, _nb.oku
+        gercek_defter = _tz._defter
         try:
+            # CANLI DEFTER SIZMAZ. Bu sınama 08.09.2026'da depodaki GERÇEK
+            # tazeleme_durumu.json'u okudu: türev hatların sahte sayacı
+            # denetime "Kaynak yayımladı ama veri gelmedi" uyarısı olarak girdi,
+            # (a) maddesinin "tek satır" iddiası düştü ve veri tazeleme iş akışı
+            # üç pencere boyunca duman kapısında kaldı. Bir duman sınaması
+            # deponun o günkü hâline değil, kendi kurduğu çerçeveye bakar.
+            # Koşum damgaları DURUR (kör koşu ölçütü "hiç tazelenmemiş"
+            # dalından önce gelmez), sürüm defteri ve sayaç BOŞ.
+            _tz._defter = lambda: {"son_kosum": {t.hat: "2026-01-01T04:22:00"
+                                                 for t in _tz.TETIKLER}}
             # (a) KÖR KOŞU → tek satır, hat hat on altı satır değil
             _tz._yayimlar = lambda y: ([], False)
             d = _den.Denetim(dict(temel)); d.tazeleme_atlandi()
@@ -2205,6 +2406,7 @@ def main() -> int:
             assert _tz.TAKVIM_ZAMAN_ASIMI == 25, "tavan geri konmadı — koşu kalıcı kısaldı"
         finally:
             _tz._yayimlar, _tz.durum_oku, _nb.oku = gercek_y, gercek_d, gercek_oku
+            _tz._defter = gercek_defter
     sina("denetim: bugün tazelenemeyen hatlar UYARI, kör koşuda tek satır",
          _denetim_tazeleme_atlandi)
 

@@ -25,26 +25,20 @@
   },
   "son_surum": {
     "butce": "07.2026",
-    "carry": "08.09.2026",
     "dibs": "08.09.2026",
     "fonlama": "07.09.2026",
     "fx": "2026-09-08 06:28 UTC",
-    "makro": "28.08.2026",
     "ovp": "09.09.2026",
     "tcmb": "07.09.2026",
-    "tufex": "08.09.2026",
     "usdtry": "09.09.2026"
   },
   "deneme": {
     "butce": 0,
-    "carry": 4,
     "dibs": 0,
     "fonlama": 0,
     "fx": 0,
-    "makro": 8,
     "ovp": 0,
     "tcmb": 0,
-    "tufex": 4,
     "usdtry": 0
   }
 }
