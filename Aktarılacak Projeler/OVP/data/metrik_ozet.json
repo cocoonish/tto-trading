@@ -1,10 +1,10 @@
 {
  "bu_yil": 2026,
  "kur_tarih": "2026-09-07",
- "faiz_tarih": "2026-09-03",
+ "faiz_tarih": "2026-09-04",
  "tufe_tarih": "2026-08-01",
  "program_eski_yayin": "2025-09-30",
- "carry_tarih": "2026-09-03",
+ "carry_tarih": "2026-09-04",
  "program_yeni": {
   "kod": "ovp2027",
   "kisa": "OVP 2027–2029",
@@ -338,20 +338,20 @@
  "carry": {
   "gerceklesen": {
    "yil": 2026,
-   "tl_yuzde": 29.614134914688982,
+   "tl_yuzde": 30.00759460790232,
    "tl_yol": "endeks",
-   "ortalama_gecelik": 39.10777185628743,
+   "ortalama_gecelik": 39.09482916666667,
    "kur_yuzde": 12.572790268334977,
-   "net_yuzde": 15.138067205879224,
+   "net_yuzde": 15.487583010076179,
    "gun": 248,
-   "n_faiz": 167,
+   "n_faiz": 168,
    "bas_gun": "2026-01-02",
    "son_gun": "2026-09-07",
-   "faiz_son_gun": "2026-09-03",
-   "yillik_yuzde": 23.055335373302132
+   "faiz_son_gun": "2026-09-04",
+   "yillik_yuzde": 23.605509573810668
   },
   "faiz_varsayimi": 37.0,
-  "faiz_varsayimi_gun": "2026-09-03",
+  "faiz_varsayimi_gun": "2026-09-04",
   "ileri": [
    {
     "yil": 2026,
@@ -2411,8 +2411,6 @@
  },
  "tufe_son": 31.507342820912854,
  "tufe_son_ay": "2026-08-01",
- "uyarilar": [
-  "BACAK GERİDE: TL gecelik faiz serisi kur serisinden 4 gün geride (03.09.2026 ↔ 07.09.2026)."
- ],
+ "uyarilar": [],
  "cerceve_imza": "2939x1·2015-01-02·2026-09-07"
 }
