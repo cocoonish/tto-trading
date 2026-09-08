@@ -23,27 +23,10 @@ def calistir(mod):
     if r.returncode != 0:
         raise SystemExit(f"{mod} hata ile bitti ({r.returncode})")
 
-MEDAS_YENILE_GUN = 35   # Tarım-ÜFE aylık; ham dosya bundan eskiyse yeniden hasat denenir
-
-
-def _eski(p, gun):
-    import time
-    return (not p.exists()) or (time.time() - p.stat().st_mtime) / 86400 > gun
-
-
-def hasat_dene(mod, hedef):
-    """MEDAS hasadı (Playwright). Ham dosya yoksa ZORUNLU; varsa ama eskiyse denenir,
-    başarısız olursa (Playwright yok, TÜİK erişilemedi) eski dosyayla devam edilir —
-    ama UYARI basılır. Eskiden yalnız dosya yoksa hasat yapılıyordu → Tarım-ÜFE ve
-    madde fiyatları ilk hasat ayında donuyordu; tür kaması sessizce 1'e düşüyordu."""
-    if not hedef.exists():
-        calistir(mod)
-        return
-    if _eski(hedef, MEDAS_YENILE_GUN):
-        print(f"\n===== {mod} (ham dosya {MEDAS_YENILE_GUN} günden eski, yeniden hasat deneniyor) =====")
-        r = subprocess.run([sys.executable, str(SRC / mod)], cwd=str(SRC))
-        if r.returncode != 0:
-            print(f"UYARI: {mod} başarısız ({r.returncode}); ESKİ ham dosyayla devam: {hedef.name}")
+# HASAT KAPISI hasat.py'ye TAŞINDI (kopyalanmadı): derleme zinciri artık hafif
+# kipte de koşuyor ve hasat kapısının o kipte de görünmesi gerekiyor. İki yerde
+# iki tanım bir gün sessizce ayrışırdı.
+from hasat import MEDAS_YENILE_GUN, hasat_dene  # noqa: F401,E402
 
 
 if __name__ == "__main__":

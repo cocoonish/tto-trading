@@ -929,6 +929,198 @@ HTML anlatan bir ders etiketi GÖSTERMEK zorundadır ve muafiyet olmasaydı
 maddesi `site/tools/duman_sinav.py`de; ölçüt arızanın kendisine karşı
 koşturularak sınandı (20 kaçış → 0).
 
+**Kurucu ilke — BİR TETİK, VERİ İLERLEMEDİYSE TÜKETİLMEZ; ve bir önlem,
+KAÇ YERDE karşılığı olduğu ölçülmeden konmuş sayılmaz.** Kullanıcı "kredi
+datası güncellenmemiş gibi görünüyor" dedi ve haklıydı: site 17 gün eski
+haftayı gösteriyordu (21.08), oysa aynı yayımdan beslenen YP mevduatı hattı
+28.08'i çoktan bulmuştu. Kaynakta veri VARDI; kimse bir daha sormamıştı.
+Zincir şöyle koptu: Haftalık Para ve Banka İstatistikleri perşembe 14:30'da
+duyuruldu, tazeleme takvimi krediyi tetikledi, hat 03.09'da koştu, EVDS o anda
+hâlâ 21.08 haftasını veriyordu, hat eli boş döndü — ve DAMGAYI ALDI. Karar
+"son koşumdan sonra yayım oldu mu" diye sorduğu için tetik tüketilmiş sayıldı;
+bir sonraki tetik 10.09 perşembeydi ve emniyet ağı (11 gün) haftalık döngüden
+UZUN, yani hiç ateşlenmeyecekti. Kusurun görüntüsü sağlığın görüntüsüyle
+aynıydı: koşu yeşil, damga taze, sayfa bayat. Üstelik ölçü VARDI — hattın
+kendi `uyarilar.json`u "13 gün geride (tolerans 12)" yazmıştı ve onu okuyan
+hiçbir kapı yoktu. `guncelle.py`nin damga satırındaki yorum bu tuzağı zaten
+adıyla reddediyordu ("'koştu sayıldı ama veri gelmedi' durumu oluşmasın") ama
+yalnız DÜŞEN koşu için: başarıyla biten ama eli boş dönen koşu muaftı. Bir
+yorumun neyi kapsamadığı yazılmazsa, sonraki oturum onu her şeyi kapsıyor
+sanır.
+Defter artık koşunun NE GETİRDİĞİNİ de yazıyor (`son_surum`, `deneme`) ve
+sürümü ilerletmeyen koşu tetiği tüketmiyor: hat bir sonraki pencerede yeniden
+deneniyor, dört hakla ve iki saat arayla. Sayı ölçülmüş değil TAVAN, ve öyle
+yazıldı — kaynağın veriyi hiç düşürmediği hâlde hattın her pencerede koşup
+durmasını engelliyor; hak dolunca da SUSMUYOR, gerekçe adıyla yazılıyor, çünkü
+"yeni yayım yok" satırı sağlıklı bir bekleyişle birebir aynı görünür.
+Sürüm ölçüsünün TANIMI ayrı bir tuzaktı ve ilk yazımda tam ona düşülmüştü:
+imza hattın bütün tarih alanlarından kurulunca, kredinin GÜNLÜK bacağı her iş
+günü ilerlediği için imza her koşuda değişiyor, sayaç hiç artmıyor ve yeniden
+deneme yazıldığı arıza için HİÇ ateşlenmiyordu. En eskisini almak da işlemiyor
+(aylık bacak bir ay meşru olarak durur, sağlıklı haftalarda dört deneme
+yakardı). Ölçü hattın ANA SAATİ — `RITIM`in zaten denetlediği saat. Ana saati
+ilerlerken içindeki bir alanın donması bu ölçüye görünmez; o `RITIM_ALAN`ın
+işi ve dışarıda kaldığı adıyla yazıldı.
+İkinci yarısı önlemin KAPSAMIYLA ilgili. Yeniden deneme, önbellekten okuduğu
+sürece hiçbir şeyi yeniden denemez: önbellekte duran şey tam da eli boş dönen
+koşunun cevabıdır. Depoda bunun için bir düğme zaten vardı — `veri.yml`
+zorlanmış koşuda `TTO_YENILE=1` export ediyor ve yanındaki yorum kusuru TÜİK
+için birebir tarif ediyordu. Ölçüldü: TTL'li önbellek tutan DOKUZ dosyanın
+yalnız BİRİ (Enflasyon) o değişkeni okuyordu. Yani "takvimi dinleme, koşulsuz
+tazele" düğmesi sekiz hat için hiçbir şey yapmıyordu ve hiçbir koşu bunu
+söylemiyordu. Kural `ortak/tazelik.py`ye tek tanım olarak taşındı, dokuz hattın
+`_taze`si oraya devretti, ve kapsam bir listeden değil SÖZLEŞMEDEN türetildi:
+dosyada TTL'li bir önbellek varsa tazelik kararı oradan geçmelidir. Üç ölçüt de
+arızanın kendisine karşı koşturularak sınandı (yeniden deneme kaldırılınca,
+imza ana saat yerine bütün alanlardan kurulunca, bir hat devretmeyince ayrı
+ayrı DÜŞÜYOR; bugünkü ağaca karşı geçiyor).
+
+**Kurucu ilke — BİR ÖLÇÜ, TÜKETİCİSİ YOKSA ÖLÇÜLMEMİŞTİR; ve bir hattın KİPİ,
+ana saatini üreten adımı içermek zorundadır.** Kullanıcı "bütün projeler sürekli
+en güncel hâlinde olmalı" dedi. Kredi arızası bir örnekti; soru zincirin
+TAMAMINA soruldu ve altı kollu bir denetim koşuldu (36 ham bulgu → 10 doğrulama
+turuna girdi → 4 ayakta kaldı, 6 ÇÜRÜTÜLDÜ). Çürütülenler kayda değer, çünkü
+ikisi bu oturumun kendi hipotezleriydi: "haftalık hatların emniyet ağı (11 gün)
+yayım döngüsünden (7 gün) uzun, yapısal olarak hiç ateşlenemez" iddiası yanlış
+dosyadan ölçülmüştü, "FX günlük kipi bültenden sonra iniyor" iddiasının ham
+sayıları doğru ama çıkarımı yanlıştı. İkna edici bir teşhis, sınanmamış bir
+teşhistir.
+
+Ayakta kalan dördü ve ortak dersleri:
+
+(1) MARJ HATTININ HAFİF KİPİ DERLEME ZİNCİRİNİ HİÇ KOŞTURMUYORDU. Adım listesi
+`web_cikti.py` + `ozet_uret.py` idi ve İKİSİ DE yalnız OKUR; hattın ana saati
+`output/seriler.xlsx`ten türüyor ve o dosyayı yazan `rapor.py` yalnız TAM kipten
+çağrılıyor — tam kip ise cron'la ateşlenemiyor. Xlsx 26.08'den beri yeniden
+yazılmamıştı: 03.09'da Ağustos TÜFE'si yayımlandı, tetik ateşledi, hat KOŞTU,
+tetiği tüketti ve ana saatini ilerletemedi. Sayfada aynı anda üç figür Ağustos,
+on üçü Temmuz gösteriyordu. Ölü bağımlılık ilkesi bu depoda zaten yazılıydı
+("bir dosya okunuyorsa onu üreten adım adım listesinde GÖRÜNMELİDİR") — kural
+vardı, o hatta uygulanmamıştı. Hasat kapısı da ayrı bir adıma çıkarıldı
+(`Research/marj/src/hasat.py`), çünkü `rapor.py`yi tek başına eklemek İKİNCİ bir
+ölü bağımlılık kurardı.
+
+(2) ÖLÇÜNÜN TÜKETİCİSİ SIFIRDI. Aynı gün konan yeniden deneme defteri arızayı
+artık ölçüyordu, ama tek aday tüketici (`denetim.tazeleme_atlandi`)
+`[k for k in kararlar if k.kossun]` süzgeciyle TAM DA ARIZA HÂLİNİ atıyordu:
+hakkı dolan hat `kossun=False` döner. Ölçülen ama okunmayan bir sinyal,
+ölçülmemiş sinyaldir. `bulten/bayatlik.py` ölçünün tek tanımı oldu ve iki
+tüketicisi var: denetim satırı (süzgecin ÖNÜNDE) ve `gecikme.yml`in cron'suz
+alarm adımı. Ölçü DAR ve bilerek: alarm yalnız "kaynak yayımladı + hat koştu +
+ana saat ilerlemedi + hak doldu" bileşiminden doğar. Ham veri yaşı eşik OLAMAZ —
+ölçüldü, o gün üç hatta ateşlerdi ve İKİSİ MEŞRUDU (ödemeler dengesi 11.09'da
+yayımlanacaktı, hazinenin sıradaki ihalesi 14.09'daydı): ≥%67 yanlış pozitif.
+Ve `gecikme.py`nin eşi bir YAPISAL KİLİT: `SINIFLAR`da yayını durduran sınıf
+HİÇ TANIMLI DEĞİL.
+
+(3) KAPSAM ÜÇ AYRI YERDE SÖZLEŞMEDEN KOPMUŞTU. `ayar.RITIM` 21 hattın 18'ini
+taşıyordu; eksik üçü (yp-mevduat, buyume, el-nino) RITIM'i dolaşan SEKİZ çağrı
+yerinin hepsinden birden düşüyordu — panoları üretiliyor, bayatlıklarını soran
+kimse yok; en görünür sonucu üç aylık GSYH yayımının bültende HİÇ
+duyurulamamasıydı. `ayar.RITIM_ALAN` kütüğün İLAN ETTİĞİ 21 ikincil saatin
+1'ini denetliyordu. Ve `denetim._tarihe`nin KENDİ ayrıştırıcısı `AA.YYYY`
+yazımını tanımıyordu, yani beş hattın karanlık denetimi SESSİZCE KAPALIYDI
+(aynı kusur `Deger.astro`da bir kez daha ölçülmüştü — ayrıştıramayan bir
+denetim hep "sorun yok" der). Üçü de sözleşmeden türetildi ve `duman.py` her
+ilanın karşılığını ENGEL olarak sınıyor. EŞİKLER kopyalanmadı: RITIM "bu sürüme
+geçileli kaç gün", `Tetik.en_gec` "son KOŞUMDAN kaç gün" ölçer ve depo ikisini
+bilerek ayırmış (fx 5↔9, reelfx 75↔30); mekanik kopya reelfx'te her ay yanlış
+alarm üretirdi. Genişlemenin yanlış alarm maliyeti ölçüldü: SIFIR.
+
+(4) BİR TAVAN KENDİNİ KİLİTLEYEBİLİR. Hazine adımının 8 dakikalık sınırı hattın
+bulutta ölçülmüş süresinin (10–20 dk soğuk tarama) ALTINDAYDI: her tam kip
+kesiliyor, kesilen koşu `finally` koşmadığı için süre defterine hiçbir şey
+yazmıyor, defter boş olduğu için tavan hiç ölçüye bağlanamıyordu. Üç düzeltme
+birlikte gider: tavan üç parçadan kurulup parçalar YAZILDI (ön adım 2 + kazıma
+19 + geri alma 1 = 22, iş sınırı 80), ön adımın kendi sınırı kondu (sınırsızdı
+ve kabuk `timeout`unun DIŞINDAydı), ve `guncelle.py`ye SIGTERM tutucusu eklendi
+— artık kesilen koşu da `finally` zincirini koşturuyor, yani tamamlanan
+hatların süresi ve damgası korunuyor. Kapının kendi kör noktası da kapandı:
+bütçe ölçütü yalnız `timeout-minutes`e bakıyordu ve adımın İÇİNDEKİ sınırsız
+komutu göremiyordu; yeni ölçüt kabuk içi `timeout` TAŞIYAN adımlarda korumasız
+python çağrısı arıyor (kapsam dar ve adıyla yazılı, bugünkü ağaçta yanlış
+pozitif sıfır).
+
+Küçük ama aynı sınıftan üç kalan: `_ihale_gunleri` "adında tarih geçen her
+sütun" diyordu ve 20 günün 12'si ihale günü değildi (itfa tarihleri 2028'den
+itibaren GERÇEK tetiğe dönecekti) — sütun artık ADIYLA sorulyor, bulunamazsa
+dosyanın gerçek sütun adları yazılıyor. `olu_kaliplar()` 27.08'den beri ölçü
+üretiyordu ve beş çağrı yerinin hiçbiri kapı değildi; üstelik belgesi kodun
+TERSİNİ anlatıyordu ("hat emniyet ağına düşer" — oysa kod `kossun=True` veriyor,
+hat HER pencerede koşuyor, ölçülü maliyeti ~87 dk/gün). Ve kör koşunun izi
+nabız defterine kondu (EŞİK YOK, bilerek: ölçülmeyen bir seviyeye eşik konmaz).
+
+On üç arıza enjeksiyonunun on üçü de yakalandı; dördü ilk turda geçti ve sebep
+ölçütün körlüğü değil MUTASYONUN arızayı üretmemesiydi — bir regresyon
+sınamasının kendisi de yanlış olabilir, ve "ölçüt düşmedi" ile "arıza yok"
+birbirine tıpatıp benzer.
+
+**Kurucu ilke — YAZI KATMANI, ÖLÇÜLEN KATMANIN BİLMEDİĞİ BİR OLAYI ANLATAMAZ;
+ve YILLIKLANDIRILMIŞ BİR HIZ TEK GÜNLE OKUNMAZ.** İki bulgu aynı sayıdan çıktı
+ve ikisi de "sayı doğru, bağlam eksik" sınıfından.
+
+Birincisi ağır. 08.09.2026 bülteni okura iki kez OLMAMIŞ bir olay anlattı:
+"Bugün Hazine iki yıl vadeli kira sertifikasını doğrudan satışla ihraç ediyor"
+ve "Dün yapılan sekiz ay vadeli hazine bonosu ihalesinin sonuçları henüz hatta
+düşmedi — modelin beklentisi 130,4 milyar TL". İkisi de AĞUSTOS–EKİM
+stratejisinde vardı ve Hazine 31.08'de yayımladığı EYLÜL–KASIM stratejisinde
+ikisini de takvimden çıkardı. HAT DOĞRU DAVRANDI: planı 31.08'de yeniledi,
+canlı dosyasında o iki ihale YOK, `kritik_takvim` yalnız 14–15 Eylül'ü
+gösteriyor. Yazı katmanı ise iki hafta boyunca eski stratejiden yazmayı
+sürdürdü — ölçüldü, aynı iddia 31.08'den 08.09'a SEKİZ sayıda geçti ve söz
+defterinde bir de TAAHHÜT olarak durdu ("Model 7 Eylül bono ihalesi için
+130,4 mlr TL gerçekleşme"). Ölçülen katman ile yazı katmanı çeliştiğinde hakem
+ölçülen katmandır ve bunu soran hiçbir kapı yoktu.
+Kaynak seçimi hükmün kendisi kadar önemli: canlı plan dosyası yalnız bugünden
+İLERİYİ tutar, oysa iddia dünle de ilgili olabilir. Hakem YÜRÜRLÜKTEKİ
+STRATEJİDİR — üç ayı kapsar, arşivde sürümleriyle durur ve pencerenin İÇİNDE
+bir gün için kaydı yoksa o gün ihale YOKTUR. Pencerenin dışında depo bir şey
+bilmez ve ölçüt SUSAR. Pencere, günleri veren belgenin KENDİSİNDEN türetilir:
+ilk yazımda arşiv dosyasının adındaki tarihten (+1 ay) kurulmuştu ve yanlış
+çıktı — o tarih belgenin yayım günü değil hattın onu TARADIĞI gündür, aynı
+strateji üç kez arşivlenmişti ve asıl sorulacak gün pencerenin dışında
+kalıyordu.
+Hassasiyet ölçülerek kuruldu: ilk kalıp "aynı cümledeki her tarih" diyordu ve
+13 sayıda 49 bulgu verdi, çoğu aynı cümlede geçen alakasız bir yayımdı
+("4 Eylül'de ABD tarım dışı istihdamı, 7 Eylül'de … bono ihalesi" → 4 Eylül
+yanlış yakalanıyordu). İki daraltma: çıpa ile iddia arasında en çok ~70
+karakter olabilir ve ARADA BAŞKA TARİH BULUNAMAZ. Tarihçeye karşı koşuldu ve
+sınır tam yerinde çıktı: 30.08 ve öncesi TEMİZ (o gün yürürlükte olan
+stratejide ihale gerçekten vardı, yazı DOĞRUYDU), kusur 31.08'de başlıyor.
+Bir ölçüt geçmişi geriye dönük suçlamamalı.
+Kapı kurulurken kendi kör noktası da ölçüldü: sınama `ihale_takvimi`yi
+DOĞRUDAN çağırıyordu, yani ölçütün `denetim.kos()` listesinde olup olmadığını
+sormuyordu — ölçüt yazılıp listeye konmasa hiç koşmazdı. Bu, aynı gün üç kez
+karşılaşılan "ölçü var, tüketici yok" kusurunun bir eşi.
+
+Yan bulgu, ölçütün KENDİ süzgecinde: düzeltilmiş metin USD/SEK hareketini
+açıkça anlattığı hâlde haber tonu ölçütü "ANILMAMIŞ" deyip ENGEL üretti.
+Sebep `_sade`de: NFKD'nin ayırdığı birleştirici işaretler BOŞLUĞA çevriliyordu
+ve Türkçe büyük İ bunu asimetrik yapıyordu — `"İsveç".lower()` "i" + nokta
+üretir, yani metin "i svec  kronu", anahtar "isvec  kron" oluyor ve ikisi ASLA
+eşleşmiyordu. Aynı kusur sınıfı bu dosyada bir kez daha kayıtlı ve orada
+anahtarlar metinle aynı süzgeçten geçirilerek onarılmıştı; bu kez süzgecin
+KENDİSİ onarıldı (işaret boşluğa çevrilmez, SİLİNİR). Etkisi ölçüldü: 13 sayı
+üzerinde ENGEL 6'dan 5'e indi — kaldırılan tek bulgu yanlış alarmın kendisi.
+Kapanamayan bir uyarı, yazarı bütün uyarıları görmezden gelmeye alıştırır.
+
+İkincisi ölçünün okunuşuyla ilgili ve kullanıcı adıyla koydu: "valör farkı vs.
+olduğunda hız çok artmış veya azalmış görünebiliyor". Yıllıklandırma bir GÜNLÜK
+fiyat farkını 365'e ölçekler; valör farkı, tatil ya da TCMB'nin ertesi gün
+kurunu bir gün önce ilan etmesi oranı tek günde sıçratır. 08.09 bülteninde bir
+aylık hız tek günde 4,5 puan "arttı" (%19,6 → %24,1). Ölçüldü: düzgün bir %20
+patikada son güne konan %0,5'lik sahte bir kotasyon sıçraması tek günlük oranı
+7,8 puan, AYNI ÖLÇÜNÜN beş günlük ortalamasını yalnız 1,6 puan oynatıyor —
+4,9× söndürme. Ortalama artık cümlenin İÇİNDE, dipnotta değil: sıçramayı okuyan
+biri ortalamayı aynı satırda görmeli.
+Bağlam AYNI ÖLÇÜNÜN penceresi olmak zorunda. Hattın zaten yazdığı
+`hafta_son_ort` buraya GİRMEDİ: o 1 HAFTALIK oranın haftalık ortalamasıdır ve
+bir AYLIK hızın yanına yazmak iki farklı pencereyi aynı cümlede kıyaslamak
+olurdu. Hat bu yüzden aynı `deval()` tanımını kaydırarak yeni bir ortalama
+üretiyor (`d1a_ort`, `d3a_ort`); iki ayrı formül bir gün sessizce ayrışır.
+Kapsam elle tutulmuyor: `ayar.Izlem.baglam` taşıyan her anahtar hem olay
+cümlesine hem gösterge şeridine kendiliğinden giriyor.
+
 **Kurucu ilke — TEKRARIN İKİ EKSENİ VARDIR ve biri hiç ölçülmüyordu.**
 Kullanıcı "tekrarlı olmasın, her gün aynı şeyleri söylemeyelim" dedi. Depoda
 bir tekrar ölçeri zaten vardı (`bulten/tekrar.py`) ama yalnız bir SAYININ

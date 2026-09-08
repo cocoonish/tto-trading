@@ -162,7 +162,13 @@ def main() -> int:
     # çıpalandığı okunabilsin.
     O["_tarih"] = tr_ay(s_ay)
     O["_tarih2"] = tr_tarih(s_hafta)          # haftalık menkul kıymet bacağı
-    O["_tarih3"] = ceyrek_ad(s_ceyrek)        # üç aylık GSYH / finansal hesap
+    # ÇEYREKLİK SAAT ortak/bicim SÖZLEŞMESİYLE yazılır: çeyreğin SON ayı
+    # (`AA.YYYY`), okur etiketi ("2026-Ç1") ayrıca `ceyrek` anahtarında durur.
+    # Sebebi ölçüldü (07.09.2026): "2026-Ç1" yazımını ne ortak/bicim ne de
+    # bültenin karanlık denetimi çözebiliyor ve çözemediği alanı SESSİZCE
+    # atlıyordu — yani bu bacağın donması hiçbir yerde sorulmuyordu. Bir SAAT
+    # ile bir ETİKET aynı anahtarda taşınamaz; saat kıyaslanabilir olmalı.
+    O["_tarih3"] = f"{(s_ceyrek.month - 1) // 3 * 3 + 3:02d}.{s_ceyrek.year}"
     O["ay"] = ay_ad(s_ay)
     O["ay_kisa"] = tr_ay(s_ay)
     O["ay_ad"] = AY_TR[s_ay.month]

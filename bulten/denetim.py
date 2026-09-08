@@ -58,6 +58,7 @@ TAKVIM_YOKLAMA_SN = 8
 # Aynı kural site sayfalarında ve tweetlerde de uygulanıyor; üç ayrı liste bir
 # gün sessizce ayrışır ve hangisinin neyi gördüğü kimsenin aklında kalmazdı.
 sys.path.insert(0, str(KOK / "ortak"))
+import bicim  # noqa: E402
 import okur_dili  # noqa: E402
 # Yatırım tavsiyesi sayılabilecek kalıplar — TEK tanım ortak/tavsiye_dili.py'de
 # (teknik yorum kapısı, analiz kapısı ve tweet kapısı aynı listeyi kullanır).
@@ -113,8 +114,23 @@ def _kelime(html: str) -> int:
 
 
 def _sade(m: str) -> str:
+    """Eşleştirme için sadeleştirme: aksan kalkar, harf kalır.
+
+    BİRLEŞTİRİCİ İŞARET BOŞLUĞA ÇEVRİLMEZ, SİLİNİR. Eskiden NFKD'nin ayırdığı
+    işaretler (nokta, çengel, şapka) `[^a-z0-9…]` süzgecinde BOŞLUK oluyordu ve
+    Türkçe büyük İ bunu asimetrik yapıyordu: `"İsveç".lower()` "i" + birleştirici
+    nokta üretir, yani "İsveç kronu" → "i svec  kronu", küçük harfle yazılmış
+    anahtar "isveç kron" → "isvec  kron". İkisi ASLA eşleşmiyordu.
+    Sonucu ölçüldü (08.09.2026): haber tonu ölçütü, metin USD/SEK hareketini
+    açıkça anlattığı hâlde "ANILMAMIŞ" diyip ENGEL üretti — kapanamayan bir
+    uyarı, yazarı bütün uyarıları görmezden gelmeye alıştırır. Aynı kusur sınıfı
+    bu dosyada bir kez daha kayıtlı ("süzgeç uyuşmazlığı"); orada anahtarlar
+    metinle aynı süzgeçten geçirilerek onarılmıştı, burada süzgecin KENDİSİ
+    onarılıyor: işaret silinince "İsveç" de "isveç" de "isvec" olur.
+    """
     m = unicodedata.normalize("NFKD", (m or "").lower())
-    return re.sub(r"[^a-z0-9ğüşiöç ]", " ", m)
+    m = "".join(c for c in m if not unicodedata.combining(c))
+    return re.sub(r"[^a-z0-9 ]", " ", m)
 
 
 # Kilit gelişme çapaları — İngilizce başlık, Türkçe metin.
@@ -241,16 +257,40 @@ def _geri_alinan(ham: str, son: int, degerler) -> bool:
 
 
 def _tarihe(v) -> date | None:
-    """'GG.AA.YYYY' ya da ISO kabul eder; ayrıştıramazsa None (uydurmaz)."""
-    if not isinstance(v, str):
-        return None
-    t = v.strip()
-    for kalip in ("%d.%m.%Y", "%Y-%m-%d"):
-        try:
-            return datetime.strptime(t[:10], kalip).date()
-        except ValueError:
-            continue
-    return None
+    """ozet.json tarih yazımı → gün. Sözleşme TEK yerde: ortak/bicim.
+
+    BURADA BİR ZAMANLAR İKİNCİ BİR AYRIŞTIRICI VARDI ve yalnız GG.AA.YYYY ile
+    ISO tanıyordu. Aylık bir saat gün gibi yazılamayacağı için (01.07.2026 okura
+    O GÜNÜN ölçümü gibi görünür) hatlar AA.YYYY yazıyor — ve RITIM'deki beş
+    hattın ana saati tam o yazımdaydı (enflasyon · try-reer · marj · butce-borc ·
+    reel-sektor-fx). `_tarihe` onları çözemeyince karanlık denetimi o beş hattı
+    BÜTÜNÜYLE atlıyordu: ayrıştıramayan bir denetim hep "sorun yok" der.
+    Site tarafı aynı yazımı lib/bicim ile çözüyordu; iki tarafın sözleşmesi
+    ayrışmıştı. Aynı kusur `Deger.astro`da bir kez daha ölçülmüştü (CLAUDE.md).
+    """
+    return bicim.tarihe_cevir(v)
+
+def _kutuk_saatleri() -> dict[str, tuple[str, set[str]]]:
+    """slug → (ana saat alanı, ilan edilmiş ikincil saatler).
+
+    Kütük (guncelle.HATLAR) tek kaynak: hangi alanın hattın ANA saati olduğu da,
+    hangilerinin ayrı ritimde ikincil saat olduğu da orada ilan ediliyor
+    (`Hat.tarih_anahtarlari`). Burada ikinci bir liste tutmak, ikisinin bir gün
+    sessizce ayrışması demek — ayrıştığı gün de denetim geçmiş görünür.
+    Kütük okunamazsa eski sözleşmeye düşülür (`_tarih` + sonek kuralı) ve
+    denetim susmaz, yalnız daralır."""
+    try:
+        sys.path.insert(0, str(KOK))
+        import guncelle                                        # noqa: E402
+        cikti: dict[str, tuple[str, set[str]]] = {}
+        for h in guncelle.HATLAR:
+            anahtarlar = tuple(h.tarih_anahtarlari or ("_tarih",))
+            ana = "_tarih" if "_tarih" in anahtarlar else anahtarlar[0]
+            cikti[h.slug] = (ana, {a for a in anahtarlar if a != ana})
+        return cikti
+    except Exception:                                          # noqa: BLE001
+        return {}
+
 
 KARSILIKSIZ_ORAN = 0.20
 KARSILIKSIZ_ASGARI = 8
@@ -782,6 +822,26 @@ class Denetim:
                 "listesinde — hangi hattın bugün tazelenmesi gerektiği ölçülemiyor.")
             return
 
+        # KAYNAK YAYIMLADI, VERİ GELMEDİ — bu satır `kossun` süzgecinin
+        # ÖNÜNDE durmak zorunda. Hakkı dolan hat `kossun=False` döner, yani
+        # aşağıdaki süzgeç TAM DA ARIZA HÂLİNİ atıyordu: ölçü 07.09.2026'da
+        # kondu ve tüketicisi sıfırdı. "Yeni yayım yok" satırıyla "yayım oldu
+        # ama veri gelmedi" satırı birbirine BİREBİR benzer; ayıran şey
+        # `deneme` sayacıdır.
+        try:
+            import bayatlik                                    # noqa: E402
+            al = bayatlik.alarmlar()
+        except Exception:                                      # noqa: BLE001
+            al = []
+        if al:
+            self.uyari.append(
+                f"Kaynak yayımladı ama veri gelmedi ({len(al)} hat): "
+                + " · ".join(f"{b.ad} — son görülen sürüm {b.surum}, "
+                             f"{b.deneme} koşudur ilerlemiyor" for b in al[:4])
+                + ("…" if len(al) > 4 else "")
+                + ". Yeniden deneme hakkı doldu; bu hatların sayfaları o "
+                  "sürümde donmuş demektir.")
+
         gerekli = [k for k in kararlar if k.kossun]
         if not gerekli:
             self._ok("bugün tazelenmesi gereken hat yok")
@@ -1182,19 +1242,36 @@ class Denetim:
         bilinen_sebep = getattr(ayar, "KARANLIK_BILINEN", {})
         karanlik: list[str] = []
         bilinen: list[str] = []
+        cozulemeyen: list[str] = []
         bakilan = 0
+        # ALAN KÜMESİ SONEKTEN DEĞİL İLANDAN. Sonek kuralı ("_tarih ile biten")
+        # kütüğün İLAN ETTİĞİ 21 ikincil saatin 7'sini görmüyordu — `_tarih2`,
+        # `_tarih3`, `faiz_gun` ve `hafta_kisa` o kalıba uymuyor ("_tarih2"
+        # `_tarih` ile bitmez. İlan ASILDIR; sonek yalnız ilanı olmayan alanlar
+        # için devam eder, çünkü bir hat ozet'ine ilan etmediği yeni bir saat
+        # yazabilir ve o da denetlenmelidir.
+        ilan = _kutuk_saatleri()
         for hat in ayar.RITIM:
             d = gozlem.anlik(hat)
             if not isinstance(d, dict):
                 continue
-            hat_t = _tarihe(d.get("_tarih"))
+            ana_alan, ikincil = ilan.get(hat, ("_tarih", set()))
+            hat_t = _tarihe(d.get(ana_alan))
             if hat_t is None:
+                # Hattın ANA saati çözülemiyorsa hat bütünüyle atlanır — ama
+                # sessizce değil: ayrıştıramayan bir denetim hep "sorun yok" der.
+                if d.get(ana_alan) is not None:
+                    cozulemeyen.append(f"{hat}/{ana_alan} ({d.get(ana_alan)!r} — ana saat)")
                 continue
             esik = int(esikler.get(hat, KARANLIK_GUN))
             tarihsel = getattr(ayar, "TARIHSEL_ISARET", None)
-            for alan, v in d.items():
-                if not (alan.endswith("_tarih") and alan != "_tarih"):
+            for alan in sorted(set(d) | ikincil):
+                if alan == ana_alan:
                     continue
+                if alan not in ikincil and not (alan.endswith("_tarih")
+                                                and alan != "_tarih"):
+                    continue
+                v = d.get(alan)
                 # "Bu uç nokta ne zaman yaşandı" diyen alanlar tazelik saati
                 # DEĞİL: `kum_zirve_tarih` 2026 Şubat'ında donmuş olmalı, o
                 # zirvenin tarihi öyle. Ayrım adlandırmadan okunuyor
@@ -1203,6 +1280,11 @@ class Denetim:
                     continue
                 kendi = _tarihe(v)
                 if kendi is None:
+                    # İLAN EDİLMİŞ bir saat çözülemiyorsa bu bir kusurdur ve
+                    # adıyla görünür; ilan edilmemiş bir alanın çözülememesi
+                    # (metin bir alan sonekle yakalanmış olabilir) sessiz kalır.
+                    if alan in ikincil and v is not None:
+                        cozulemeyen.append(f"{hat}/{alan} ({v!r})")
                     continue
                 bakilan += 1
                 gun = (hat_t - kendi).days
@@ -1229,6 +1311,109 @@ class Denetim:
                   "anılmalı.")
         elif bakilan:
             self._ok(f"açıklanmamış karanlık seri yok ({bakilan} anahtar saati denetlendi)")
+        if cozulemeyen:
+            # Çözülemeyen bir saat, DENETLENMEYEN bir saattir. Muafiyetle
+            # kapatılmaz; hat yazımını ortak/bicim sözleşmesine çeker.
+            self.uyari.append(
+                f"Tarih yazımı çözülemeyen {len(cozulemeyen)} ilan edilmiş saat: "
+                + " · ".join(sorted(cozulemeyen)[:6])
+                + ("…" if len(cozulemeyen) > 6 else "")
+                + ". Bu alanlar bayatlık denetiminin DIŞINDA kalıyor; yazım "
+                  "ortak/bicim sözleşmesine çekilmeli (GG.AA.YYYY · AA.YYYY · ISO).")
+
+    def ihale_iddiasi(self):
+        """Yazı katmanının tarih bağlı ihale iddiası ÖLÇÜLEN takvimle tutuyor mu.
+
+        08.09.2026 bülteni okura iki kez olmamış bir olay anlattı: "Bugün Hazine
+        iki yıl vadeli kira sertifikasını doğrudan satışla ihraç ediyor" ve "Dün
+        yapılan sekiz ay vadeli hazine bonosu ihalesinin sonuçları henüz hatta
+        düşmedi". İkisi de AĞUSTOS–EKİM stratejisinde vardı (07.09 bono, 08.09
+        kira sertifikası) ve 31.08'de yayımlanan EYLÜL–KASIM stratejisinde
+        KALDIRILMIŞTI. Hat doğru davrandı — planı 31.08'de yeniledi, canlı
+        dosyada o iki ihale YOK — ama yazı katmanı iki hafta boyunca eski
+        stratejiden yazmayı sürdürdü: aynı iddia 23.08'den 07.09'a on üç sayıda
+        geçti ve söz defterinde bir de TAAHHÜT olarak durdu.
+
+        Ölçülen katman ile yazı katmanı çeliştiğinde hakem ÖLÇÜLEN katmandır.
+        Kaynak, hattın CANLI plan dosyası değil YÜRÜRLÜKTEKİ STRATEJİDİR: plan
+        dosyası yalnız bugünden ileriyi tutar, oysa iddia dünle ilgili de
+        olabilir. Strateji üç ayı kapsar ve o pencerenin İÇİNDE bir gün için
+        kayıt yoksa o gün ihale YOKTUR — hüküm kesindir. Pencerenin dışındaki
+        bir gün için depo bir şey bilmez ve ölçüt SUSAR (uydurma hüküm yok).
+        """
+        try:
+            sys.path.insert(0, str(BURASI))
+            import ihale_takvimi                                # noqa: E402
+        except Exception:                                       # noqa: BLE001
+            return
+        try:
+            bul = ihale_takvimi.celiskiler(self.b)
+        except Exception:                                       # noqa: BLE001
+            return
+        if bul is None:
+            # Strateji okunamadı: ölçüt hüküm veremez ve SESSİZ KALMAZ —
+            # ölçemediğini ölçülmüş gibi göstermek bu deponun ilk yasağı.
+            self.uyari.append(
+                "Hazine ihale takvimi okunamadı; yazı katmanının ihale "
+                "iddiaları bu sayıda ÖLÇÜLEMEDİ.")
+            return
+        if not bul:
+            self._ok("yazı katmanının ihale iddiaları takvimle tutuyor")
+            return
+        self.engel.append(
+            f"Yazı katmanı yürürlükteki ihale takviminde OLMAYAN {len(bul)} "
+            "ihale iddiası taşıyor: "
+            + " · ".join(f"{x['alan']} — {x['etiket']} ({x['gun']:%d.%m.%Y})"
+                         for x in bul[:4])
+            + ("…" if len(bul) > 4 else "")
+            + ". Bu günler yürürlükteki stratejinin kapsadığı dönemde ve o "
+              "stratejide kayıtları yok; iddia eski bir stratejiden geliyor "
+              "olabilir.")
+
+    def olu_kalip(self):
+        """Tetik tarifi takvimde HİÇBİR yayımla eşleşmiyor mu — UYARI.
+
+        `tazeleme.olu_kaliplar()` bu ölçüyü 27.08'den beri üretiyordu ve depoda
+        BEŞ çağrı yeri vardı — hiçbiri kapı değildi: `__main__`, duman sınaması
+        (dönüşe assert yok) ve `veri.yml`in `continue-on-error: true` taşıyan
+        tanı adımı. Yani ölü bir kalıp yalnız kimsenin okumadığı bir log
+        satırına düşüyordu.
+
+        Bir kalıp öldüğünde hat emniyet ağına DÜŞMÜYOR, tam tersine HER
+        PENCEREDE koşuyor (`kararlar()` `kossun=True` veriyor): maliyeti hafta
+        içi altı pencere × en pahalı hat 869 sn ≈ 87 dk/gün. Yani sessiz kalan
+        şey hem bir kaynak değişikliği hem bir koşucu faturası.
+
+        ENGEL DEĞİL UYARI: takvim ucu düştüğünde `olu_kaliplar()` zaten boş
+        liste döndürüyor, yani yanlış alarm riski yapısal olarak yok — ama bir
+        kaynak adı değişikliğinin yayını durdurması da doğru olmazdı.
+        """
+        try:
+            sys.path.insert(0, str(BURASI))
+            import tazeleme                                    # noqa: E402
+            with tazeleme.zaman_asimi(TAKVIM_YOKLAMA_SN):
+                olu = tazeleme.olu_kaliplar()
+        except Exception:                                      # noqa: BLE001
+            return                                             # ölçemiyorsak susarız
+        if not olu:
+            self._ok("bütün tetik tarifleri takvimde karşılık buluyor")
+            return
+        ad_slug: dict[str, str] = {}
+        try:
+            sys.path.insert(0, str(KOK))
+            import guncelle                                    # noqa: E402
+            ad_slug = {h.ad: h.slug for h in guncelle.HATLAR}
+        except Exception:                                      # noqa: BLE001
+            pass
+        import ayar                                            # noqa: E402
+        satir = " · ".join(
+            f"{ayar.HAT_ADI.get(ad_slug.get(hat, ''), hat)} ({kalip[:40]})"
+            for hat, kalip in olu[:5])
+        self.uyari.append(
+            f"Tetik tarifi takvimde karşılık bulmayan {len(olu)} hat: {satir}"
+            + ("…" if len(olu) > 5 else "")
+            + ". Kaynak seri adını değiştirmiş olabilir; bu hatlar her veri "
+              "penceresinde koşuyor ve tazeleme takvimi onlar için işlemiyor.")
 
     def nabiz(self):
         """Veri iş akışı gerçekten koştu mu — ölçüm katmanının canlılığı.
@@ -1524,7 +1709,7 @@ class Denetim:
     def kos(self) -> int:
         self.yazi(); self.veri(); self.atif(); self.sayi(); self.nabiz(); self.tekrar()
         self.tema(); self.izleme(); self.dil(); self.tazelik(); self.tazeleme_atlandi()
-        self.karanlik()
+        self.karanlik(); self.olu_kalip(); self.ihale_iddiasi()
         self.yerlesmemis(); self.piyasa_seansi(); self.revizyon(); self.duzeltme()
         self.devir(); self.haber_tonu(); self.bicim()
         self.olagandisilik_penceresi()

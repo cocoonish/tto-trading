@@ -41,6 +41,20 @@ class Izlem:
     # kullanılır. Yalnız gelenek dışı kalan anahtarlarda doldurulur:
     # tcmb-net-rezerv'in haftalık serisi h_net/h_brut'tur ama saati h_tarih'tir.
     tarih_alani: str = ""
+    # BAĞLAM ANAHTARI — tek günlük okumanın yanına yazılan ikinci ölçü.
+    #
+    # Bazı göstergeler tanımı gereği tek bir günün gürültüsünü büyütür:
+    # yıllıklandırma bir günlük fiyat farkını 365'e ölçekler, yani kotasyondaki
+    # küçük bir kayma (valör farkı, tatil, TCMB'nin ertesi gün kurunu bir gün
+    # önce ilan etmesi) orana büyük yansır. 08.09.2026 bülteninde bir aylık
+    # devalüasyon hızı tek günde 4,5 puan "arttı"; ölçüldü, %0,5'lik sahte bir
+    # kotasyon sıçraması o oranı 7,8 puan oynatıyor, aynı ölçünün beş günlük
+    # ortalamasını yalnız 1,6 puan (4,9× söndürme).
+    #
+    # Bağlam AYNI ÖLÇÜNÜN penceresi olmak zorunda: bir aylık hızın yanına bir
+    # HAFTALIK oranın ortalamasını yazmak iki farklı pencereyi aynı cümlede
+    # kıyaslamak olurdu. (hattaki anahtar, okura yazılacak etiket)
+    baglam: tuple[str, str] | None = None
 
 
 # Hatların OKURA görünen adları. Olay cümleleri ("hazine-ihrac: veri gecikti")
@@ -66,6 +80,7 @@ HAT_ADI = {
     "buyume": "Büyüme",
     "el-nino": "El Niño ve gıda enflasyonu",
     "ovp": "Orta Vadeli Program ve ima edilen kur",
+    "yp-mevduat": "Yurt içi yerleşiklerin YP mevduatı",
 }
 
 # Hatların yayım ritmi — "veri gecikti" uyarısı için. Gün cinsinden azami sessizlik.
@@ -105,6 +120,23 @@ RITIM = {
     # Aylık enflasyon bacağı ayrı bir saattir ve RITIM_ALAN'da denetlenir —
     # buraya aylık bir tolerans yazmak kurun donmasını görünmez yapardı.
     "ovp": 6,
+    # AŞAĞIDAKİ ÜÇÜ 07.09.2026'DA EKLENDİ ve eklenme sebebi kayda değer: kütükte
+    # (guncelle.HATLAR) ve sitede ozet.json'u olan 21 hattın 18'i buradaydı.
+    # Eksik üçü, RITIM'i dolaşan SEKİZ çağrı yerinin hepsinden birden düşüyordu
+    # (uret · olay×2 · denetim×2 · bulten · gozlem · duman): panoları üretiliyor
+    # ama bayatlıklarını soran kimse yok. En görünür sonucu, üç aylık GSYH
+    # yayımının bültende HİÇ duyurulamamasıydı (olay.yeni_veri_olaylari listeyi
+    # buradan alıyor). Bugün üçü de tazeydi — kapatılan şey bugünkü bir hasar
+    # değil, GELECEKTEKİ körlük.
+    #
+    # DEĞERLER en_gec'ten KOPYALANMADI ve kopyalanamaz: RITIM "bu sürüme
+    # geçileli kaç gün", Tetik.en_gec "son KOŞUMDAN kaç gün" ölçer ve depo
+    # ikisini bilerek ayırmış (fx 5↔9, reel-sektor-fx 75↔30). Mekanik kopya
+    # reelfx eşiğini 30'a düşürür ve ~2 ay gecikmeli aylık bir seride her ay
+    # yanlış "veri gecikti" olayı üretirdi.
+    "yp-mevduat": 11,           # kredi ile AYNI yayım (haftalık para-banka, Perşembe)
+    "buyume": 100,              # üç aylık GSYH, TÜİK ~60 gün gecikmeli
+    "el-nino": 35,              # aylık ONI + aylık TÜFE
 }
 
 # Bir hattın ozet.json'u birden fazla SAAT taşıyabilir: aynı dosyada günlük bir
@@ -121,6 +153,41 @@ RITIM_ALAN = {
     # ve AYLIK ritimde: kur her gün ilerlerken bu bacak sessizce donabilir ve
     # ana saate bakan denetim onu hiç görmez.
     ("ovp", "tufe_tarih"): (50, "gerçekleşen enflasyon bacağı"),
+    # AŞAĞIDAKİLER 07.09.2026'DA EKLENDİ. Kütük (guncelle.Hat.tarih_anahtarlari)
+    # 22 ikincil saat İLAN EDİYOR; burada yalnız BİRİNİN eşiği yazılıydı, yani
+    # ilan edilmiş yirmi bir saatin donması hiçbir yerde sorulmuyordu. Bir hattın
+    # ANA saati her iş günü ilerlerken içindeki haftalık ya da aylık bacağın
+    # donması, ana saate bakan denetime tanımı gereği görünmez.
+    # Kapsam artık ELLE tutulmuyor: `bulten/duman.py` kütükteki her ilanın burada
+    # bir karşılığı olmasını ENGEL olarak sınıyor. Elle yazılan tek şey EŞİK ve
+    # gerekçesi — o, kaynağın ölçülmüş yayım ritmidir, mekanik türetilemez.
+    # Bugünkü ağaca karşı 22 alanın 22'si de eşiğin altında: bu kayıtlar bugün
+    # tek bir uyarı üretmiyor, gelecekteki körlüğü kapatıyor.
+    ("kredi-parasal", "gun_tarih"): (4, "günlük kur/bilanço bacağı"),
+    ("kredi-parasal", "ay_tarih"): (45, "aylık KKM ve banka türü bacağı"),
+    ("fonlama-likidite", "hafta_kisa"): (12, "haftalık fonlama bacağı"),
+    # Eşik hattın KENDİ ölçümünden: Fonlama/metrik.py zorunlu karşılık tabanının
+    # 13 gün gecikmeli geldiğini yazıyor ve 21 günü aşarsa ima edilen oranı hiç
+    # hesaplamıyor. İkinci bir sayı uydurmak yerine o sayı buraya alındı.
+    ("fonlama-likidite", "zk_taban_tarih"): (21, "zorunlu karşılık tabanı"),
+    ("butce-borc", "_tarih2"): (12, "haftalık DİBS/eurobond bacağı"),
+    ("butce-borc", "_tarih3"): (170, "çeyreklik bacak"),
+    ("odemeler-dengesi", "_tarih2"): (75, "aylık ikincil bacak"),
+    ("odemeler-dengesi", "_tarih3"): (12, "haftalık dış borç ödeme takvimi"),
+    ("dibs-verim-egrisi", "_tarih2"): (45, "aylık bacak"),
+    ("enflasyon", "faiz_gun"): (6, "günlük faiz bacağı"),
+    ("yp-mevduat", "stok_tarih"): (11, "haftalık stok bacağı"),
+    ("yp-mevduat", "akim_tarih"): (11, "haftalık akım bacağı"),
+    ("yp-mevduat", "dol_tarih"): (11, "haftalık dolarizasyon bacağı"),
+    ("tcmb-net-rezerv", "ak_tarih"): (6, "günlük akım bacağı"),
+    ("tl-tasima", "endeks_tarih"): (6, "TLREF endeks bacağı"),
+    ("tl-tasima", "nakit_tahvil_tarih"): (6, "nakit/tahvil bacağı"),
+    ("tufex-basabas", "basabas_2y_tarih"): (6, "2 yıllık başabaş bacağı"),
+    # Üç aylık BKEA ÇEYREĞİN BAŞIYLA damgalanıyor (2. çeyrek anketi 01.04 tarihini
+    # taşır ve temmuz ortasında yayımlanır); meşru gecikme tek başına ~135 gün.
+    ("makroihtiyati", "bkea_std_isletme_tarih"): (200, "üç aylık BKEA bacağı"),
+    ("reel-sektor-fx", "acik_rezerv_tarih"): (12, "haftalık rezerv bacağı"),
+    ("ovp", "kur_tarih"): (6, "günlük kur bacağı"),
 }
 
 # `karanlik` denetiminin hat başına eşiği (gün). Anahtarın KENDİ veri tarihi,
@@ -191,9 +258,13 @@ IZLEMLER: list[Izlem] = [
     Izlem("usdtry-deval", "kur", "USD/TRY", "", 2, "yuzde", 0.6, 1.2, "",
           "Günlük yüzde değişim; %1,2 üstü TL varlıklarda gün içi fiyatlamayı değiştirir.", "kur"),
     Izlem("usdtry-deval", "d1a", "1 aylık yıllıklandırılmış devalüasyon hızı", "%", 1, "delta", 4, 8,
-          "azalis", "Kurun seviyesi değil HIZI; TCMB'nin patika yönetimini bu gösterir.", "kur"),
+          "azalis", "Kurun seviyesi değil HIZI; TCMB'nin patika yönetimini bu gösterir. "
+          "Tek günlük okuma valör farkına duyarlıdır; son beş iş gününün ortalaması "
+          "yanında verilir.", "kur",
+          baglam=("d1a_ort", "son beş iş günü ortalaması")),
     Izlem("usdtry-deval", "d3a", "3 aylık yıllıklandırılmış devalüasyon hızı", "%", 1, "delta", 3, 6,
-          "azalis", "Daha yavaş ama daha güvenilir rejim göstergesi.", "kur"),
+          "azalis", "Daha yavaş ama daha güvenilir rejim göstergesi.", "kur",
+          baglam=("d3a_ort", "son beş iş günü ortalaması")),
     Izlem("tcmb-net-rezerv", "h_net", "Net rezerv (haftalık, resmî)", "mlr USD", 1, "delta", 1.5, 3.0,
           "artis", "Analitik bilançodan piyasa tanımıyla; haftalık yayımlanır.", "kur", "h_tarih"),
     Izlem("tcmb-net-rezerv", "h_swap_haric", "Swap hariç net rezerv", "mlr USD", 1, "delta", 1.5, 3.0,

@@ -43,6 +43,19 @@ import surpriz as surpriz_m  # noqa: E402
 import rejim as rejim_m  # noqa: E402
 
 
+# Panoda tek günlük okumanın yanına yazılacak BAĞLAM ölçüsü.
+# Kapsam ELLE tutulmuyor: ayar.IZLEMLER'de `baglam` taşıyan her anahtar buraya
+# kendiliğinden giriyor, yani iki listenin sessizce ayrışması mümkün değil.
+# Sebep tek bir cümlede: yıllıklandırma bir GÜNLÜK fiyat farkını 365'e ölçekler
+# ve valör farkı, tatil ya da TCMB'nin ertesi gün kurunu bir gün önce ilan
+# etmesi hızı tek günde sıçratır (08.09.2026: +4,5 puan). Ölçüldü — %0,5'lik
+# sahte bir kotasyon sıçraması bir aylık hızı 7,8 puan, aynı ölçünün beş günlük
+# ortalamasını 1,6 puan oynatıyor.
+def _pano_baglam() -> dict[tuple[str, str], tuple[str, str]]:
+    return {(iz.hat, iz.anahtar): iz.baglam
+            for iz in ayar.IZLEMLER if getattr(iz, "baglam", None)}
+
+
 # Sabah bakışı panosu: (hat, anahtar, ad, birim, ondalık, tarih alanı)
 # Son alan o göstergenin KENDİ saatidir; boş bırakılırsa `<anahtar>_tarih`
 # geleneği, o da yoksa hattın ana saati (`_tarih`) kullanılır. Panodaki tarih
@@ -108,7 +121,16 @@ def gostergeler(haftalik: bool = False) -> list[dict]:
                 kiyas = "son yayım (bir haftalık tarihçe yok)"
         eski = (onc or {}).get("d", {}).get(anahtar) if onc else None
         fark = (v - eski) if isinstance(eski, (int, float)) else None
+        # BAĞLAM: ölçülemiyorsa alan HİÇ yazılmaz (uydurma ortalama yok).
+        b_ad, b_metin = "", ""
+        b = _pano_baglam().get((hat, anahtar))
+        if b:
+            b_anahtar, b_etiket = b
+            bv = d.get(b_anahtar)
+            if bv is not None and not isinstance(bv, bool) and isinstance(bv, (int, float)):
+                b_ad, b_metin = b_etiket, olay_m._s(float(bv), ond)
         out.append({"ad": ad, "hat": hat, "anahtar": anahtar,
+                    **({"baglam_ad": b_ad, "baglam_metin": b_metin} if b_metin else {}),
                     "deger": round(float(v), ond), "birim": birim, "ondalik": ond,
                     "metin": olay_m._s(float(v), ond),
                     # Yuvarlamadan sonra sıfır kalan fark "−0,00" diye görünüyordu;
