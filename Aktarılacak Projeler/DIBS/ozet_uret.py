@@ -72,6 +72,46 @@ def tr_tarih(t) -> str:
     return f"{t.day:02d}.{t.month:02d}.{t.year}"
 
 
+# Sayfanın "—" ile boş bıraktığı ölçülemeyen değer. Anahtar SİLİNMEZ: sayfa
+# anahtarı adıyla çağırıyor ve silinen anahtar yayın kapısında ENGEL olur
+# (08.09.2026: `kiyas_*_9y_degisim_bp` düştü, yayın üç kez durdu); yer tutucu
+# olsaydı okur statik yedekteki DONMUŞ sayıyı görürdü. Boş bir hücre ikisinden
+# de dürüsttür — bileşen sayı olmayan değeri olduğu gibi basar.
+OLCULEMEDI = "—"
+
+# Okura yazılan vade adları (kıyas uyarıları için).
+VADE_AD = {"2y": "iki yıl", "1y": "bir yıl", "9y": "dokuz yıl"}
+
+
+def kiyas_degisim(M: pd.DataFrame, s_gun: pd.Timestamp, g: pd.Timestamp, kol: str,
+                  tolerans: int = ANLIK_TOLERANS_GUN):
+    """Kıyas günü `g`den çıpaya değişim (baz puan) ve değişimin BİTİŞ günü.
+
+    Çıpa gününün düğümü kurulamadıysa (vade boşluğu — dokuz yıl düğümü günlerin
+    %16'sında yok) toleransın içindeki SON DOLU gün alınır ve bitiş o günle
+    damgalanır: `<anahtar>_tarih` sözleşmesi, sayfa ipucunda o günü yazar.
+    Başlangıç sıkı: kıyas günü boşsa ölçü yoktur — kaydırılan bir başlangıcın
+    sayfada yeri yok, kıyas günü başlıkta tek bir tarih olarak duruyor.
+    Ölçülemezse None; anahtar yine de yazılır (OLCULEMEDI)."""
+    if kol not in M.columns or g not in M.index:
+        return None
+    v0 = M.loc[g, kol]
+    try:
+        v0 = float(v0)
+    except (TypeError, ValueError):
+        return None
+    if not np.isfinite(v0):
+        return None
+    seri = M.loc[:s_gun, kol].dropna()
+    seri = seri[np.isfinite(seri.astype(float))]
+    if seri.empty:
+        return None
+    t1 = pd.Timestamp(seri.index[-1])
+    if (pd.Timestamp(s_gun) - t1).days > tolerans:
+        return None
+    return (float(seri.iloc[-1]) - v0) * 100.0, t1
+
+
 def main() -> int:
     m = json.loads((VERI / "metrik_ozet.json").read_text(encoding="utf-8"))
     vd = json.loads((VERI / "veri_durum.json").read_text(encoding="utf-8"))
@@ -421,10 +461,26 @@ def main() -> int:
             O[etiket] = tr_tarih(kiyas[ad])
             g = pd.Timestamp(kiyas[ad])
             for kol, sonek in (("n2y", "2y"), ("n1y", "1y"), ("n9y", "9y")):
-                if g in M.index and np.isfinite(M.loc[g, kol]):
-                    koy(f"{etiket}_{sonek}", float(M.loc[g, kol]), 2)
-                    koy(f"{etiket}_{sonek}_degisim_bp",
-                        (float(M.loc[s_gun, kol]) - float(M.loc[g, kol])) * 100, 0)
+                # Bu anahtarlar SAYFADA ADIYLA çağrılıyor; ölçülemeyen değer
+                # atlanmaz, boş yazılır (bkz. OLCULEMEDI). Değişimin bitişi
+                # çıpa günü değilse kendi tarihiyle damgalanır.
+                seviye = M.loc[g, kol] if (g in M.index and kol in M.columns) else np.nan
+                if np.isfinite(seviye):
+                    koy(f"{etiket}_{sonek}", float(seviye), 2)
+                else:
+                    O[f"{etiket}_{sonek}"] = OLCULEMEDI
+                    uyar(f"{VADE_AD[sonek]} düğümü kıyas gününde ({tr_tarih(g)}) "
+                         "kurulamamış; seviye boş bırakıldı.")
+                r = kiyas_degisim(M, s_gun, g, kol)
+                if r is None:
+                    O[f"{etiket}_{sonek}_degisim_bp"] = OLCULEMEDI
+                    uyar(f"{VADE_AD[sonek]} düğümü için {tr_tarih(g)} kıyası kurulamadı "
+                         f"(kıyas günü ya da son {ANLIK_TOLERANS_GUN} gün boş); "
+                         "değişim boş bırakıldı.")
+                else:
+                    bp, t1 = r
+                    koy(f"{etiket}_{sonek}_degisim_bp", bp, 0)
+                    O[f"{etiket}_{sonek}_degisim_bp_tarih"] = tr_tarih(t1)
 
     # --- ters eğri / rejim tanısı -----------------------------------------
     egim = M["egim_2y9y"].dropna()

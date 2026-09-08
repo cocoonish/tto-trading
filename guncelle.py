@@ -726,6 +726,41 @@ def okur_dili_bulgulari(hedef: Path) -> list[str]:
             for k, m in satirlar for _i, aile, esl in okur_dili.kosu_kaydi_tara([m])]
 
 
+def sayfa_anahtar_bulgulari(h: "Hat", hedef: Path) -> list[str]:
+    """Sitedeki sayfaların bu hattan ADIYLA çağırdığı (`<Deger proje=slug
+    anahtar=…>`) ama yeni ozet.json'da OLMAYAN anahtarlar.
+
+    08.09.2026: DİBS hattı dokuz yıl düğümünü kuramadığı gün üç kıyas anahtarını
+    ATLADI; anahtarlar sayfada adıyla çağrılıyordu, yayın kapısı (sayfa sınavı 1)
+    eksik anahtarı ENGEL saydı ve yayın üç kez düştü. Kusur hattın koşusunda
+    doğdu ve o koşu YEŞİL bitti — ilk görüldüğü yer yayın kapısıydı. Bu satır
+    aynı soruyu hattın kopyaladığı anda sorar; kapsam sözleşmeden türer
+    (bileşen ozet.json'u `/projeler/<slug>/` yolundan çeker, koleksiyondan
+    bağımsız). UYARIDIR: hattı düşürmez — düşürmek hattın öbür sayılarını da
+    dondurmak olurdu — ama koşunun çıktısında adıyla görünür."""
+    icerik = SITE.parent.parent / "src" / "content"
+    oz = hedef / "ozet.json"
+    if not oz.exists() or not icerik.exists():
+        return []
+    try:
+        d = json.loads(oz.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return []
+    kalip = re.compile(r'<Deger\s+proje="' + re.escape(h.slug) + r'"\s+anahtar="([^"]+)"')
+    kul: set[str] = set()
+    for p in icerik.rglob("*.mdx"):
+        try:
+            kul |= set(kalip.findall(p.read_text(encoding="utf-8")))
+        except OSError:
+            continue
+    eksik = sorted(a for a in kul if a not in d)
+    if not eksik:
+        return []
+    return [f"sayfa {len(eksik)} anahtarı adıyla çağırıyor ama bu koşu yazmadı: "
+            + ", ".join(eksik[:6]) + ("…" if len(eksik) > 6 else "")
+            + " — yayın kapısı bunu ENGEL sayar; ölçülemeyen değer atlanmaz, boş yazılır"]
+
+
 def duman_kos(h: "Hat") -> str | None:
     """Hattın klasöründeki `duman.py` — ağa çıkmadan, saniyeler içinde, hattın
     kendi ölçüm sözleşmelerini sorar. Geçerse None, düşerse tek satırlık sebep.
@@ -1430,6 +1465,10 @@ def kos(h: Hat, tam: bool, gunluk: bool = False,
     # operatör dili burada görünsün, yayın kapısında (sayfa sınavı 17) ENGEL olur.
     for dil in okur_dili_bulgulari(hedef):
         print(_renk(f"    [UYARI] okur dili — {dil}", 33))
+    # SAYFA ANAHTARI — sayfanın adıyla çağırdığı anahtar bu koşuda yazılmadıysa
+    # yayın kapısı düşecek; kusur burada, hattın kendi koşusunda görünsün.
+    for sa in sayfa_anahtar_bulgulari(h, hedef):
+        print(_renk(f"    [UYARI] {sa}", 31))
 
     yeni_tarih = _ozet_tarih(h)
     y, e = _tarih_ozeti(yeni_tarih), _tarih_ozeti(eski_tarih)
@@ -1721,6 +1760,7 @@ def main():
     if not secilen: print("hat seçilmedi"); return 2
     atlanan_adlar: set[str] = set()      # --gerekli'nin bilinçle atladığı hatlar
     yenile_hatlar: set[str] = set()      # yeniden denenen hatlar (önbellek atlanır)
+    sayilan_hatlar: set[str] = set()     # sürüm sayacına giren hatlar (yayım tetikli koşu)
 
     # Resmî yayım takvimi süzgeci: kaynağı son tazelemeden bu yana yayımlanmamış
     # hattı koşturmak, aynı veriyi ikinci kez indirmektir. 2026-08-25 bulut
@@ -1762,6 +1802,11 @@ def main():
             except OSError as _ex:
                 print(_renk(f"  (kör koşu izi $GITHUB_ENV'e yazılamadı: {_ex})", 33))
         yenile_hatlar = {k.hat for k in _kararlar if k.kossun and getattr(k, "yenile", False)}
+        # SÜRÜM SAYACINA GİREN hatlar: koşusu bir yayım tetiğinden ya da onun
+        # yeniden denemesinden doğanlar. Emniyet ağı, kör koşu, ölü kalıp ve
+        # tarifsiz (türev) hat sayılmaz — kaynağın yayımladığı bilinmeyen bir
+        # koşuda "veri gelmedi" saymak yanlış alarmdır (bkz. tazeleme.durum_yaz).
+        sayilan_hatlar = {k.hat for k in _kararlar if k.kossun and getattr(k, "sayilir", False)}
         atlanan = [h for h in secilen if h.ad not in gerek]
         atlanan_adlar = {h.ad for h in atlanan}
         secilen = [h for h in secilen if h.ad in gerek]
@@ -1864,7 +1909,7 @@ def main():
         if _tz is not None:
             basarili = [h.ad for h, ok, _, _ in sonuc if ok]
             if basarili:
-                _tz.durum_yaz(basarili)
+                _tz.durum_yaz(basarili, sayilan=sayilan_hatlar)
                 print(f"\n  Tazeleme damgası güncellendi: {' '.join(basarili)}")
 
     print(f"\n{'═'*64}\n  ÖZET\n{'═'*64}")

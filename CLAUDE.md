@@ -1206,3 +1206,44 @@ Aynı kusur olaylarda duruyordu ve kimse bakmamıştı — ölçüldü (13 sayı
 değişim"de BİREBİR tekrar ediyordu. Aynı kalıp hat+anahtar çiftiyle
 uygulandı; ölçüldü, 8/8 → 0. Bir kusur çözüldüğünde sorulacak soru "bu bölümü
 düzelttim mi" değil, "bu kalıbın uygulanmadığı başka yer var mı"dır.
+
+**Kurucu ilke — BİR SAYAÇ NEYİ SAYDIĞINI BİLMELİDİR; ve bir alarmın yanlış
+pozitifi tek bir e-posta değil, bir ZİNCİRDİR.** 08.09.2026 akşamı kullanıcıya
+on dört "Gecikme alarmı", üç "Siteyi yayınla" ve üç "Veri tazeleme" arıza
+e-postası gitti. İki bağımsız kök vardı.
+Birincisi kendi elimizden çıktı. Aynı gün konan "kaynak yayımladı, veri
+gelmedi" sayacı HER başarılı koşuda artıyordu; oysa sayaç yalnız kaynağın
+yayımladığı BİLİNEN bir koşuda anlam taşır. Türev hatlar (makro · carry ·
+tufex) tazeleme takviminde tarifsizdir — üst hat koşunca koşar, saatleri üst
+hattan gelir — ve günde altı pencerede koşup haftalık saatlerini
+ilerletemedikleri için aynı gün "hak doldu"ya vardılar. Zincir şöyle yürüdü:
+sahte alarm cron'suz alarm kanalını her uyanmada (on dört koşu) kırmızı
+bitirdi ve kayıt olmadığı için her seferinde e-posta gitti; bülten denetimi
+aynı alarmı UYARI olarak bastı; duman sınaması CANLI defteri okuduğu için o
+uyarıyla düştü; duman düştüğü için veri tazeleme üç pencere boyunca HİÇ koşmadı.
+Bir ölçünün yanlış pozitifi, o ölçüyü okuyan her kapıya yayılır. Dört düzeltme
+birlikte gider ve dördü de arızanın kendisine karşı koşturularak sınandı:
+(1) sayaç yalnız yayım tetikli koşuda ve onun yeniden denemesinde artar
+(`Karar.sayilir` → `durum_yaz(sayilan=…)`); emniyet ağı, elle koşu, ölü kalıp,
+kör koşu ve tarifsiz hat sayılmaz, tarifsiz hat defterden SİLİNİR.
+(2) Sürüm imzası ana saat ARTI tarifin ek kaynaklarının ilan ettiği yan saat
+(`izlenen_saatler`): butce'de haftalık TCMB yayımı `_tarih2`yi ilerletir, ana
+saat aylık kalır — yan saat imzada olmasaydı haftalık tetik her hafta "veri
+gelmedi" sayardı; her ek kaynak ilerlettiği saati ADIYLA ilan eder.
+(3) Alarm kanalı MÜKERRERLİK KAYDI taşır (`bayatlik_alarm_kaydi.json`,
+anahtar hat|sürüm): aynı hat aynı sürümde takılıyken bir kez bildirilir. Kanal
+günde 40–70 kez uyanıyor; kayıtsız alarm iki günde okunmaz olur.
+(4) Duman sınaması deponun o günkü defterini DEĞİL kendi kurduğu çerçeveyi
+okur. Ve kapının kendi tuzağı adıyla yazıldı: canlı defterde eski koddan kalmış
+bir tarifsiz sayaç ENGEL yapılmadı — yapılsaydı veri iş akışı duman kapısında
+kilitlenir ve temizliği yapacak koşu hiç başlamazdı.
+İkinci kök hattaydı ve "ölçülemeyen boş bırakılır" ilkesinin eksik yarısı:
+DİBS dokuz yıl düğümünü kuramadığı gün `kiyas_*_9y_degisim_bp` çıpa gününün
+değerini istedi, NaN çıktı ve `koy()` anahtarı ATLADI. Sayfa anahtarı adıyla
+çağırıyor; yayın kapısı eksik anahtarı ENGEL saydı (doğru: yedekteki donmuş
+sayı yayımlanmamalı) ve yayın üç kez düştü — günün bülteni saatlerce çıkmadı.
+Kural: sayfanın adıyla çağırdığı anahtar HER koşuda yazılır — ölçülebiliyorsa
+toleransın içindeki son dolu günden ve KENDİ tarihiyle (`_degisim_bp_tarih`),
+ölçülemiyorsa boş ("—"); atlanmaz. Kusur hattın koşusunda doğdu ve o koşu
+yeşil bitti; `guncelle.py` artık kopyaladığı anda sayfanın çağırdığı eksik
+anahtarı adıyla uyarır, hattın kendi `duman.py`si döngüyü sınar.
