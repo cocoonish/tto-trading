@@ -73,9 +73,19 @@ def duzeltmeleri_dogrula(liste) -> list[dict]:
     return temiz
 
 
+def ilk_yazim_mi(b: dict) -> bool:
+    """Bu yama sayının İLK yazımı mı (ölçülen katman henüz yazılmamış), yoksa
+    yayımlanmış bir sayıya sonradan dokunuş mu (düzeltme kaydı)? İki şey buna
+    bağlı ve ikisi de aynı tanımdan okur: ilk yazı anı damgası (`uygula`) ve
+    gecikme defteri satırı (`main`) — yayımlanmış bir sayıya sonradan yazılan
+    düzeltme bir YAYIN olayı değildir."""
+    return str(b.get("gundem_kaynagi") or "") != "yazili"
+
+
 def uygula(hedef: Path, yama: dict) -> tuple[dict, list[str]]:
     b = json.loads(hedef.read_text(encoding="utf-8"))
     degisen: list[str] = []
+    ilk_yazim = ilk_yazim_mi(b)
 
     yabanci = [k for k in yama if k not in YAZILABILIR]
     if yabanci:
@@ -130,7 +140,17 @@ def uygula(hedef: Path, yama: dict) -> tuple[dict, list[str]]:
     if degisen:
         b["yazi_zamani"] = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
         b["yazi_surumu"] = int(b.get("yazi_surumu") or 0) + 1
-        b.setdefault("ilk_yazi_zamani", b["yazi_zamani"])
+        # İLK YAZI ANI YALNIZ İLK YAZIMDA DOLDURULUR. Yayımlanmış bir sayıya
+        # sonradan yazıldığında (düzeltme kaydı) `setdefault` o anın damgasını
+        # "ilk yazı" diye yazıyordu ve gecikme ölçüsü o günü on iki bin dakika
+        # geç gösteriyordu (08.09.2026'da yedi sayının düzeltmesiyle ölçüldü;
+        # 04.09'da fikstür bu tuzağı adıyla yazmış, kaynağı düzeltmemişti).
+        # Ölçü "yazılmış mı" — takvim günü değil: geç kalan bir sayı ertesi gün
+        # ilk kez yazılıyorsa damga GERÇEK gecikmeyi taşımalı. Eski sayının
+        # ilk yazı anı bilinmiyorsa BİLİNMEZ kalır — gecikme ölçüsü onu ölçüm
+        # damgasından alt sınır olarak alır ve öyle etiketler.
+        if ilk_yazim:
+            b.setdefault("ilk_yazi_zamani", b["yazi_zamani"])
 
     return b, degisen
 
@@ -240,6 +260,8 @@ def main() -> int:
               f"yama {yazildi:%H:%M:%S}. Açık damga için --damga kullan.)",
               file=sys.stderr)
 
+    ilk_yazim = ilk_yazim_mi(json.loads(hedef.read_text(encoding='utf-8')))
+
     b, degisen = uygula(hedef, yama)
     if not degisen:
         print("yamada yazılacak içerik yok")
@@ -266,6 +288,13 @@ def main() -> int:
         return 0
     hedef.write_text(json.dumps(b, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"{hedef.name} güncellendi: " + " · ".join(degisen))
+    if not ilk_yazim:
+        # Yayımlanmış sayıya sonradan dokunuş (düzeltme kaydı): yayın olayı
+        # değil, gecikme defterine satır açılmaz. 08.09.2026'da yedi arşiv
+        # sayısının düzeltmesi deftere yedi satır yazmış, üçü uydurma ilk yazı
+        # anıyla 12.390 dakika gecikme taşımıştı.
+        print("  (gecikme kaydı: yayımlanmış sayıya sonradan yazıldı — yayın defterine satır açılmaz)")
+        return 0
 
     # GECİKME KAYDI — yazmanın YAN ETKİSİ, ayrı bir adım değil.
     #

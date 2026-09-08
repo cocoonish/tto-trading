@@ -212,5 +212,14 @@ def celiskiler(b: dict, simdi: dt.date | None = None) -> list[dict] | None:
     if takvim is None:
         return None
     gunler, bas, son = takvim
+    # YAYIMLANMIŞ DÜZELTME ÇELİŞKİYİ KAPATIR. Sayfanın "Düzeltmeler" bölümü
+    # okura o iddianın düzeltildiğini aynı sayfada söylüyor; eski iddiayı
+    # metinden silmek tarihçeyi yeniden yazmak olurdu (okur eski sayıya göre
+    # karar vermiş olabilir). Kapsam, düzeltme kaydının `alan`ında iddianın
+    # tarih etiketinin ("7 Eylül") geçmesiyle kurulur — başka bir tarihi
+    # düzelten kayıt bu iddiayı kapatmaz.
+    duzeltilen = [str(d.get("alan") or "") for d in (b.get("duzeltmeler") or [])
+                  if isinstance(d, dict)]
     return [x for x in iddialar(b)
-            if bas <= x["gun"] <= son and x["gun"] not in gunler]
+            if bas <= x["gun"] <= son and x["gun"] not in gunler
+            and not any(x["etiket"] in a for a in duzeltilen)]

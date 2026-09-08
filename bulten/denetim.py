@@ -1019,6 +1019,17 @@ class Denetim:
         else:
             self._ok("vadeli devir düzeltmesi kurulu")
 
+    def _arsiv_sayisi(self) -> bool:
+        """Bu sayı bugünün sayısı değil mi (arşiv). CANLI durumla kıyaslayan
+        ölçütler (tema defterinin şu anki hâli, haber endeksinin bugünkü
+        hareketi) yalnız bugünün sayısına uygulanır: eski bir sayıyı bugünün
+        defteriyle ölçmek uydurma hüküm verir. 08.09.2026'da ölçüldü — yedi
+        arşiv sayısına yayımlanmış bir düzeltme kaydı yazılacaktı ve yazma
+        kapısı (yaz.py) bu iki ölçütün sahte ENGEL'i yüzünden yedisini de
+        reddetti; ölçütlerin ikisi de o sayıların DEĞİL bugünün defterini
+        okuyordu. tazeleme_atlandi aynı kapıyı baştan beri taşıyordu."""
+        return str(self.b.get("tarih", "")) != date.today().isoformat()
+
     def haber_tonu(self):
         """Haber endeksindeki olağandışı hareketler METİNDE anılmış mı — ENGEL.
 
@@ -1030,7 +1041,13 @@ class Denetim:
         Sebep de yazılmalı; onu bir ölçüt dayatamaz, ama YAZIM.md dayatır ve
         "sebebi netleşmedi" demek geçerli bir cevaptır. Burada ölçülen, hareketin
         okura hiç görünmemesi.
+
+        YALNIZ BUGÜNÜN SAYISI: kıyas anlık görüntüdür (bugünün hareketi), arşiv
+        sayısının metni o günün hareketini anlatır — bkz. _arsiv_sayisi.
         """
+        if self._arsiv_sayisi():
+            self._ok("haber tonu: arşiv sayısı, bugünün endeks hareketiyle kıyaslanmaz")
+            return
         try:
             sys.path.insert(0, str(BURASI))
             import gozlem                              # noqa: E402
@@ -1590,7 +1607,13 @@ class Denetim:
         Ölçüt basit: bültene işlenmiş görüntü ile defterin şu anki hâli
         karşılaştırılır. Ayrışıyorlarsa yapılacak şey bellidir — ölçümü yeniden
         kur, sonra yaz.
+
+        YALNIZ BUGÜNÜN SAYISI: arşiv sayısındaki görüntü o günün defteridir ve
+        defter o günden beri meşru olarak ilerlemiştir — bkz. _arsiv_sayisi.
         """
+        if self._arsiv_sayisi():
+            self._ok("tema görüntüsü: arşiv sayısı, defterin bugünkü hâliyle kıyaslanmaz")
+            return
         try:
             defter = json.loads((BURASI / "temalar.json").read_text(encoding="utf-8"))
         except Exception:

@@ -1092,6 +1092,19 @@ def main() -> int:
             "olumsuz cümle iddia sayılıyor"
         assert not celis("14 Eylül'de Hazine iki yıllık tahvil ihalesi düzenliyor."), \
             "takvimde OLAN bir ihale çelişki sayılıyor"
+        # (3b) YAYIMLANMIŞ DÜZELTME iddiayı kapatır — aynı etiketi taşıyan
+        #      kayıt; başka tarihi düzelten kayıt kapatmaz.
+        iddia = "7 Eylül'de sekiz aylık hazine bonosunun ilk ihracı var."
+        def celis_d(alan):
+            return itk.celiskiler({"tarih": "2026-09-01", "gundem": {"x": iddia},
+                                   "duzeltmeler": [{"alan": alan, "eski": "e", "yeni": "y",
+                                                    "sebep": "s", "tarih": "2026-09-08"}]},
+                                  dt.date(2026, 9, 8))
+        assert celis(iddia, "2026-09-01"), "fikstür: iddia tek başına çelişki üretmeli"
+        assert not celis_d("7 Eylül — sekiz ay vadeli hazine bonosu ihalesi"), \
+            "aynı sayfada yayımlanmış düzeltme çelişkiyi kapatmıyor"
+        assert celis_d("8 Eylül — Hazine ihraç takvimi"), \
+            "başka bir tarihi düzelten kayıt bu iddiayı kapatıyor — kapsam gevşek"
 
         # (4) PENCERE DIŞINDA HÜKÜM YOK: depo o dönemi bilmiyor, ölçüt susar.
         assert not celis("18 Ağustos'ta Hazine tahvil ihalesi yapmıştı."), \
@@ -1109,22 +1122,34 @@ def main() -> int:
         # (6) TARİHÇE SINIRI: kusur stratejinin değiştiği gün başlar.
         import json as _j
         kok = BURASI.parent / "site" / "src" / "data" / "bulten"
-        temiz, kusurlu = [], []
+        temiz, kusurlu, kusurlu_ham, duzeltilmis = [], [], [], []
         for y in sorted(kok.glob("2026-08-*.json")) + sorted(kok.glob("2026-09-0*.json")):
             b = _j.loads(y.read_text(encoding="utf-8"))
             c = itk.celiskiler(b)
             if c is None:
                 continue
             (kusurlu if c else temiz).append(y.stem)
+            # DÜZELTMELER SOYULMUŞ hâliyle: metnin kendisi kusuru taşıyor mu?
+            ham = dict(b); ham.pop("duzeltmeler", None)
+            if itk.celiskiler(ham):
+                kusurlu_ham.append(y.stem)
+                if not c:
+                    duzeltilmis.append(y.stem)
         # İDDİA TEK YÖNLÜ. "31.08 sonrası her sayı kusurlu" DENEMEZ: bir sayı
-        # düzeltildiğinde meşru olarak temizlenir (08.09 böyle temizlendi).
+        # düzeltildiğinde meşru olarak temizlenir (08.09 metni yeniden
+        # yazılarak, 31.08–07.09 yayımlanmış düzeltme kaydıyla temizlendi).
         # Sorulacak şey ters yön: 31.08 ÖNCESİ hiçbir sayı kusurlu olmamalı —
         # o günlerde ihale yürürlükteki stratejide gerçekten vardı ve yazı
         # DOĞRUYDU. Ölçüt geçmişi geriye dönük suçlamamalı.
-        erken = [s for s in kusurlu if s <= "2026-08-30"]
+        erken = [s for s in kusurlu_ham if s <= "2026-08-30"]
         assert not erken, f"31.08 ÖNCESİ kusurlu sayılan sayı (yanlış pozitif): {erken}"
-        assert kusurlu, ("tarihçede hiç kusur bulunmuyor — ölçüt kör "
-                         "(31.08–07.09 sayıları kaldırılmış ihaleyi hâlâ anlatıyor)")
+        # Metnin kendisi tarihçede kusuru TAŞIMALI (ölçüt kör değil) ve
+        # düzeltme kaydı onu kapatmalı: kusurlu_ham boşsa ölçüt kör, düzeltilmiş
+        # boşsa düzeltme yolu çalışmıyor.
+        assert kusurlu_ham, ("tarihçede metin düzeyinde hiç kusur bulunmuyor — ölçüt kör "
+                             "(31.08–07.09 sayıları kaldırılmış ihaleyi anlatıyordu)")
+        assert duzeltilmis, ("tarihçede düzeltme kaydıyla kapanmış sayı yok — "
+                             "yayımlanmış düzeltme çelişkiyi kapatmıyor")
 
         # (7) PENCERE GERÇEKTEN BELGEDEN TÜRÜYOR MU. Bugün iki kaynak aynı
         # cevabı veriyor, yani eşitlik sınaması tek başına ayrımı GÖSTERMEZ.
@@ -1429,7 +1454,13 @@ def main() -> int:
                  if x.get("durum") in ("aktif", "izlemede")]
         assert canli, "defterde canlı tema yok — sınama kurulamıyor"
 
-        taze = {"tarih": "2026-08-30", "temalar": {"temalar": defter["temalar"]}}
+        # BUGÜNÜN sayısı: ölçüt canlı defterle kıyaslar. Fikstür tarihi bugün
+        # olmak ZORUNDA — arşiv sayısında ölçüt bilerek susar (bkz.
+        # _denetim_arsiv_kapisi); sabit bir geçmiş tarih bu sınamayı sessizce
+        # boşa çıkarırdı.
+        from datetime import date as _date
+        bugun = _date.today().isoformat()
+        taze = {"tarih": bugun, "temalar": {"temalar": defter["temalar"]}}
         d = _den.Denetim(taze); d.tema()
         assert not [e for e in d.engel if "TEMA GÖRÜNTÜSÜ ESKİ" in e], \
             "defterle birebir aynı görüntü boşuna engellendi"
@@ -1439,10 +1470,14 @@ def main() -> int:
             if x.get("durum") in ("aktif", "izlemede"):
                 x["gelisme"] = "<p>Çürütücü ölçüt bugün sınanacak.</p>"
                 break
-        bayat = {"tarih": "2026-08-30", "temalar": {"temalar": eski}}
+        bayat = {"tarih": bugun, "temalar": {"temalar": eski}}
         d2 = _den.Denetim(bayat); d2.tema()
         assert [e for e in d2.engel if "TEMA GÖRÜNTÜSÜ ESKİ" in e], \
             "sayfadaki eski tema metni engel üretmedi"
+        # Aynı eski görüntü ARŞİV tarihli sayıda engel DEĞİL: o günün defteri o.
+        d3 = _den.Denetim({"tarih": "2026-08-30", "temalar": {"temalar": eski}}); d3.tema()
+        assert not [e for e in d3.engel if "TEMA GÖRÜNTÜSÜ ESKİ" in e], \
+            "arşiv sayısı bugünün defteriyle kıyaslanıp engellendi — düzeltme kaydı yazılamaz"
     sina("denetim: eski tema görüntüsü ENGEL", _denetim_tema_goruntusu)
 
     # HAFTALIK σ'NIN KENDİSİ. Pencereler ÖRTÜŞMEMELİ: örtüşen haftalık
@@ -2409,6 +2444,105 @@ def main() -> int:
             _tz._defter = gercek_defter
     sina("denetim: bugün tazelenemeyen hatlar UYARI, kör koşuda tek satır",
          _denetim_tazeleme_atlandi)
+
+    # CANLI DURUMLA KIYASLAYAN ÖLÇÜTLER YALNIZ BUGÜNÜN SAYISINA (08.09.2026).
+    # Tema görüntüsü ve haber tonu bugünün defterini okur; arşiv sayısına
+    # uygulanınca sahte ENGEL üretir ve yaz.py'nin düzeltme kaydı yazmasını
+    # engeller — yedi sayının düzeltmesi tam bu yüzden reddedilmişti.
+    def _denetim_arsiv_kapisi():
+        import denetim as _den
+        import gozlem as _gz
+        import json as _j
+        from datetime import date as _date
+        bugun = _date.today().isoformat()
+        gercek_anlik = _gz.anlik
+        gercek_read = _den.Path.read_text if hasattr(_den, "Path") else None
+        try:
+            _gz.anlik = lambda hat: ({"hareket": [{"ad": "AUD/USD", "onceki": -0.18, "deger": 0.03}]}
+                                     if hat == "fx-haber-endeksi" else {})
+            temalar = [{"ad": "Deneme teması", "durum": "aktif", "gelisme": "eski metin " * 6,
+                        "son_gozlem": "x", "izlenecek_gosterge": "y"}]
+            # (a) ARŞİV sayısı: haber tonu ve tema görüntüsü SUSAR (geçer)
+            d = _den.Denetim({"tarih": "2026-09-01", "tur": "gunluk",
+                              "temalar": {"temalar": temalar},
+                              "gundem": {"x": "<p>Metin AUD/USD'yi anmıyor.</p>"}})
+            d.haber_tonu()
+            assert not d.engel and any("arşiv" in g for g in d.gecen), (d.engel, d.gecen)
+            d2 = _den.Denetim({"tarih": "2026-09-01", "tur": "gunluk"})
+            d2._tema_goruntusu_taze(temalar)
+            assert not d2.engel and any("arşiv" in g for g in d2.gecen), (d2.engel, d2.gecen)
+            # (b) BUGÜNÜN sayısı: haber tonu ENGEL üretmeye devam eder
+            d3 = _den.Denetim({"tarih": bugun, "tur": "gunluk",
+                               "gundem": {"x": "<p>Metin hareketi anmıyor.</p>"}})
+            d3.haber_tonu()
+            assert d3.engel and "HABER TONU" in d3.engel[0], \
+                "bugünün sayısında haber tonu ölçütü kapandı — arşiv kapısı fazla geniş"
+            # (c) BUGÜNÜN sayısı: tema görüntüsü defterle kıyaslanır (defter okunur)
+            d4 = _den.Denetim({"tarih": bugun, "tur": "gunluk"})
+            d4._tema_goruntusu_taze([])
+            assert d4.engel or d4.uyari or d4.gecen, "tema görüntüsü bugün hiç hüküm vermedi"
+            assert not any("arşiv" in g for g in d4.gecen), "bugünün sayısı arşiv sayıldı"
+        finally:
+            _gz.anlik = gercek_anlik
+    sina("denetim: canlı durumla kıyaslayan ölçütler arşiv sayısında susar", _denetim_arsiv_kapisi)
+
+    # ARŞİV SAYISINA YAZILAN DÜZELTME "İLK YAZI ANI" UYDURMAZ (08.09.2026).
+    def _yaz_arsiv_ilk_yazi():
+        import yaz as _yaz, tempfile as _tf, json as _j
+        from pathlib import Path as _P
+        yama = {"duzeltmeler": [{"alan": "a", "eski": "e", "yeni": "y", "sebep": "s",
+                                 "tarih": "2026-09-08"}]}
+        td = _P(_tf.mkdtemp())
+        # (a) YAYIMLANMIŞ (yazılı) arşiv sayısına düzeltme → ilk yazı anı UYDURULMAZ
+        y1 = td / "2026-09-01.json"
+        y1.write_text(_j.dumps({"tarih": "2026-09-01", "tur": "gunluk", "gundem_kaynagi": "yazili",
+                                "olusturma": "2026-09-01T04:30:26", "gundem": {"x": "<p>m</p>"}}),
+                      encoding="utf-8")
+        b, degisen = _yaz.uygula(y1, yama)
+        assert degisen and "ilk_yazi_zamani" not in b, \
+            f"yayımlanmış sayıya yazılan düzeltme ilk yazı anını uydurdu: {b.get('ilk_yazi_zamani')}"
+        assert b.get("yazi_zamani") and b.get("yazi_surumu") == 1
+        # (b) HENÜZ YAZILMAMIŞ sayı (ölçülen katman) → ilk yazım, damga atılır —
+        #     tarihi eski olsa bile: geç yazılan sayının gecikmesi gerçektir.
+        y2 = td / "2026-09-04.json"
+        y2.write_text(_j.dumps({"tarih": "2026-09-04", "tur": "gunluk", "gundem_kaynagi": "taban",
+                                "olusturma": "2026-09-04T05:39:02+00:00"}), encoding="utf-8")
+        b2, _ = _yaz.uygula(y2, {"yorum": "<p>ilk yazı</p>"})
+        assert b2.get("ilk_yazi_zamani") == b2.get("yazi_zamani"), "ilk yazımda ilk yazı anı yazılmadı"
+        # (c) ilk yazımdan sonra ikinci yama damgayı DEĞİŞTİRMEZ
+        y2.write_text(_j.dumps(b2), encoding="utf-8")
+        b3, _ = _yaz.uygula(y2, yama)
+        assert b3["ilk_yazi_zamani"] == b2["ilk_yazi_zamani"] and b3["yazi_surumu"] == 2
+        # (d) UÇTAN UCA: yayımlanmış arşiv sayısına yaz.py ile düzeltme yazmak
+        #     gecikme DEFTERİNE satır açmaz (yayın olayı değil).
+        import subprocess as _sp
+        k = td / "depo"
+        bd = k / "site" / "src" / "data" / "bulten"; bd.mkdir(parents=True)
+        (k / "site" / "src" / "data" / "teknik").mkdir(parents=True)
+        (k / "tweet").mkdir(parents=True); (k / "bulten").mkdir(parents=True)
+        import shutil as _sh
+        _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
+                  k / "site" / "src" / "data" / "yayin_takvimi.json")
+        (k / "tweet" / "defter.json").write_text("{}", encoding="utf-8")
+        hedef = bd / "2026-01-05.json"
+        hedef.write_text(_j.dumps({"tarih": "2026-01-05", "tur": "gunluk",
+                                   "olusturma": "2026-01-05T04:00:00+00:00",
+                                   "gundem_kaynagi": "yazili", "yorum": "<p>yayımlandı</p>",
+                                   "gundem": {}}), encoding="utf-8")
+        yama_y = k / "yama.json"; yama_y.write_text(_j.dumps(yama), encoding="utf-8")
+        defter = k / "gecikme_defteri.jsonl"
+        r = _sp.run([sys.executable, "-c",
+                     f"import sys, pathlib; sys.path.insert(0, {str(BURASI)!r}); "
+                     f"import gecikme; gecikme.DEFTER = pathlib.Path({str(defter)!r}); "
+                     f"import yaz; yaz.KOK = pathlib.Path({str(k)!r}); yaz.BULTEN = pathlib.Path({str(bd)!r}); "
+                     f"sys.argv = ['yaz.py', {str(yama_y)!r}, '--tarih', '2026-01-05', '--damgasiz', '--engelle-yaz']; "
+                     "raise SystemExit(yaz.main())"], capture_output=True, text=True)
+        assert r.returncode == 0, (r.returncode, r.stdout[-500:], r.stderr[-500:])
+        assert not defter.exists(), "yayımlanmış sayıya düzeltme gecikme defterine satır açtı"
+        yazilan = _j.loads(hedef.read_text(encoding="utf-8"))
+        assert yazilan.get("duzeltmeler") and "ilk_yazi_zamani" not in yazilan, yazilan.keys()
+        assert "yayın defterine satır açılmaz" in r.stdout, r.stdout[-300:]
+    sina("yaz.py: arşiv sayısına düzeltme ilk yazı anını uydurmaz", _yaz_arsiv_ilk_yazi)
 
 
     # ── FİKSTÜR: ALARMIN YANLIŞ ALARM ORANI DEPODAKİ GERÇEK SAYILARA KİLİTLİ.

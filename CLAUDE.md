@@ -1247,3 +1247,19 @@ toleransın içindeki son dolu günden ve KENDİ tarihiyle (`_degisim_bp_tarih`)
 ölçülemiyorsa boş ("—"); atlanmaz. Kusur hattın koşusunda doğdu ve o koşu
 yeşil bitti; `guncelle.py` artık kopyaladığı anda sayfanın çağırdığı eksik
 anahtarı adıyla uyarır, hattın kendi `duman.py`si döngüyü sınar.
+
+Yedi sayının düzeltmesi yazılırken aynı sınıftan üç kusur daha çıktı ve üçü de
+"arşiv sayısı bugünün ölçüsüyle ölçülüyordu" başlığında toplanıyor. (1) Yazma
+kapısı (`yaz.py`) denetimi koşturur; tema görüntüsü ve haber tonu ölçütleri
+bugünün DEFTERİNİ okuyup eski sayıyla kıyaslıyordu ve yedi düzeltmenin yedisini
+sahte ENGEL ile reddetti — `tazeleme_atlandi`nin baştan beri taşıdığı "yalnız
+bugünün sayısı" kapısı ikisine de kondu (`_arsiv_sayisi`). (2) Yayımlanmış bir
+düzeltme kaydı, düzelttiği iddianın çelişkisini KAPATIR (`ihale_takvimi`,
+etiket `alan`da geçiyorsa): eski metni silmek tarihçeyi yeniden yazmak olurdu,
+okur eski sayıya göre karar vermiş olabilir. (3) `yaz.py` yayımlanmış sayıya
+yazılan düzeltmede `ilk_yazi_zamani`ni O ANIN damgasıyla dolduruyordu; gecikme
+ölçüsü üç günü 12.390 dakika geç gösterdi. 04.09'da fikstür bu tuzağı adıyla
+yazmış ve kendi girdisini dondurmuştu — kaynağı düzeltmemişti; fikstür geçti,
+tarihçe bozuldu. Damga artık yalnız İLK yazımda atılır (ölçü takvim günü değil
+"yazılmış mı": geç kalan sayı ertesi gün ilk kez yazılıyorsa gerçek gecikmeyi
+taşımalı). Bir fikstürün kendini bir tuzaktan koruması, tuzağı kapatmaz.
