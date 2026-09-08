@@ -15,13 +15,12 @@ onkosul: []
 ---
 
 import GrafikEmbed from '../../components/GrafikEmbed.astro';
-import Deger from '../../components/Deger.astro';
 
 <div class="yonetici">
   <span class="etiket">Yönetici özeti</span>
 
   <p class="tez">Tek paragraf tez: ne oldu, neden önemli, sonuç ne. Oynak her sayı
-  <Deger proje="<hat>" anahtar="<anahtar>" ondalik={2}>0,00</Deger> ile bağlanır.</p>
+  yazının tarihine ait sabit sayılardır (%0,00 gibi düz metin; analizde canlı değer yoktur).</p>
 
   <table>
     <tbody>
@@ -50,7 +49,7 @@ import Deger from '../../components/Deger.astro';
 
   {/* Rakam şeridi: 5–8 öğe, her biri <b>değer</b><span>etiket</span> — gönderi üreticisi bu ikiliyi okur. */}
   <ul class="rakamlar">
-    <li><b>%<Deger proje="<hat>" anahtar="<anahtar>" ondalik={2}>0,00</Deger></b><span>ölçümün adı</span></li>
+    <li><b>%0,00</b><span>ölçümün adı</span></li>
     <li><b>…</b><span>…</span></li>
     <li><b>…</b><span>…</span></li>
     <li><b>…</b><span>…</span></li>

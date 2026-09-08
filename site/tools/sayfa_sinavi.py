@@ -21,8 +21,11 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       hepsinde ev stili bloğu var mı?
   (5) Panel düzeni — paneller ALT ALTA mı? (yan yana panel yasak)
   (6) KaTeX — her formül ayrıştırılabiliyor mu? (rehype-katex düşmez, ham basar)
-  (7) <Deger> anahtarları TÜM koleksiyonlarda — analiz ve araştırma
-      sayfaları da aynı sözleşmeyi kullanıyor; kural 1 onları görmüyordu.
+  (7) <Deger> anahtarları analiz/araştırma sayfalarında — BİLGİ. Karar
+      08.09.2026: yalnız panolar canlıdır; analiz ve ders yazıları yayım
+      günündeki metindir ve <Deger> etiketleri yedek metniyle sabit kalır.
+      Eksik anahtar orada okuru etkilemez, yalnız sayılır (bilgi satırı);
+      bilinmeyen proje niteliği hâlâ engeldir (yazım hatası).
   (8) DERLENMİŞ ÇIKTI — dist/ içinde KaTeX hatası, ham <Deger> etiketi ya
       da çözülmemiş MDX yorumu var mı? Kaynağı sınayan ölçütlerin
       göremediği tek şey: okurun gerçekte gördüğü sayfa.
@@ -76,6 +79,11 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       yerine metin olarak basılan bir alan okura "<p>" yazısını gösterir.
       dist'te kaçmış etiket ENGEL; `<code>`/`<pre>` içi muaf (bir ders HTML
       anlatıyorsa etiket göstermesi gerekir).
+  (24) SABİT KAP — derlenmiş çıktıda analiz ve ders sayfalarının gövdesi
+      `data-deger="sabit"` kabındadır (Deger betiği dokunmaz, canlı işareti
+      basılmaz); kap yoksa ENGEL. Proje sayfasında kap OLMAMALI (pano
+      canlıdır) — varsa ENGEL. Ölçüt dist/ varsa koşar; yoksa koşmadığını
+      söyler.
   (23) SOLUK METİN — `color: var(--ink-30)` ENGEL. Kontrast 1,90:1 ve
       global.css'in kendi yorumu "yalnız çizgi ve kenarlıkta" diyor; metin
       için en soluk kabul edilen jeton --ink-60 (4,59:1).
@@ -516,6 +524,31 @@ def kacan_etiketler(dist: pathlib.Path) -> dict[str, list[str]]:
 SOLUK_METIN = re.compile(r"(?<!-)\bcolor:\s*var\(--ink-30\)")
 
 
+def sabit_kap_bulgulari(dist: Path) -> list[str]:
+    """(24) SABİT KAP. Karar 08.09.2026: yalnız panolar canlıdır. Derlenmiş
+    çıktıda analiz/ ve arastirma/ sayfalarında `canli-deger` alanı varsa gövde
+    `data-deger="sabit"` kabında olmalı (Deger betiği dokunmaz, işaret yok);
+    projeler/ sayfasında kap OLMAMALI — pano canlı kalır. Kaynağa değil ÇIKTIYA
+    bakılır: kabı bileşen kurar, bir düzen değişikliği onu sessizce düşürebilir."""
+    bulgu: list[str] = []
+    for h in sorted(dist.rglob("index.html")):
+        rel = h.relative_to(dist).as_posix()
+        ust = rel.split("/")[0]
+        try:
+            m = h.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        kap = 'data-deger="sabit"' in m
+        canli = "canli-deger" in m
+        if ust in ("analiz", "arastirma") and rel.count("/") >= 1:
+            if canli and not kap:
+                bulgu.append(f"{rel}: canlı değer alanı var ama sabit kap yok — analiz/ders sabittir")
+        elif ust == "projeler" and rel.count("/") >= 1:
+            if kap:
+                bulgu.append(f"{rel}: proje sayfası sabit kapta — pano canlı olmalı")
+    return bulgu
+
+
 def soluk_metin(kok: pathlib.Path) -> list[str]:
     """Metin rengi olarak --ink-30 kullanan yerler — deponun KENDİ kuralı.
 
@@ -711,15 +744,17 @@ def main() -> int:
     # için süslü parantez yutuldu ve dört formül sayfada ham metin olarak
     # yayımlandı. Kusuru derleme değil OKUR gördü. Denetim buraya kondu ki
     # sınavı koşturan herkes aynı soruyu sorsun.
-    # (7) <Deger> ANAHTARLARI — YALNIZ PROJE SAYFALARINDA DEĞİL, HER SAYFADA.
-    # Kural 1 yalnız site/src/content/projeler/<slug>.mdx'e bakıyordu. Ama
-    # <Deger> sözleşmesi koleksiyondan bağımsız: bileşen ozet.json'u
-    # /projeler/<proje>/ genel yolundan çekiyor ve analiz/araştırma sayfaları
-    # da onu kullanıyor. Büyüme yazısı projeler'den analiz'e taşındığı gün
-    # sınavın görüş alanından da çıkmıştı; borçlanma ve İTO yazıları hiç
-    # girmemişti. Donan bir sayının hangi klasörde durduğu okur için bir şey
-    # ifade etmiyor — denetim de ayırmamalı.
-    print("\n▶ Tüm sayfalarda <Deger> anahtarları")
+    # (7) <Deger> ANAHTARLARI — ANALİZ VE ARAŞTIRMA SAYFALARINDA, BİLGİ.
+    # Bir zamanlar ENGEL'di: <Deger> sözleşmesi koleksiyondan bağımsızdı ve
+    # analiz sayfaları da canlı çekiyordu. KARAR (08.09.2026, kullanıcı):
+    # yalnız panolar canlıdır; analiz ve ders yazıları yayımlandığı günün
+    # metnidir, <Deger> etiketleri orada yedek metniyle SABİT kalır (Yazi.astro
+    # kabı, ölçüt 24). Eksik bir anahtar o sayfalarda okura hiçbir şey
+    # yapmaz — 08.09'da DİBS'in üç kıyas anahtarı bir analiz yazısı yüzünden
+    # yayını durdurmuştu; o kapı artık burada değil, hattın kendi koşusunda
+    # (guncelle.sayfa_anahtar_bulgulari) ve pano ölçütünde (1). Bilinmeyen
+    # proje niteliği yazım hatasıdır ve ENGEL kalır.
+    print("\n▶ Analiz/araştırma sayfalarında <Deger> anahtarları (bilgi — sayfalar sabit)")
     # Tarayıcı /projeler/<slug>/ozet.json'u çeker; sınavın bakması gereken
     # dosya da odur. Bazı hatların çalışma klasöründeki ozet.json .gitignore'da
     # (Büyüme, El Niño) — proje klasörüne bakmak onları "bilinmeyen proje"
@@ -758,11 +793,9 @@ def main() -> int:
                         f"{[x for x in bilinmez if x not in ozet_yok]}")
         eksik = sorted({f"{pr}.{an}" for pr, an in kul
                         if pr in ozetler and an not in ozetler[pr]})
-        if eksik:
-            hata.append(f"{ad}: ozet.json'da olmayan anahtar: {eksik}")
-        print(f"  {ad}: {len(kul)} kullanım · eksik {len(eksik)}"
+        print(f"  {ad}: {len(kul)} kullanım (sabit) · bugünkü özette olmayan anahtar {len(eksik)}"
               + (f" · bilinmeyen proje {bilinmez}" if bilinmez else ""))
-    print(f"  toplam {n_sayfa} sayfa · {n_kul} <Deger> kullanımı")
+    print(f"  toplam {n_sayfa} sayfa · {n_kul} <Deger> kullanımı — hepsi yedek metniyle sabit")
 
     print("\n▶ KaTeX")
     # Bir KAPI, aracı eksikken yeşil geçmez: dosya adı değişse ya da node
@@ -1345,6 +1378,18 @@ def main() -> int:
         for esl, sayfalar in sorted(kacan.items()):
             hata.append(f"kaçan etiket {esl!r} — {len(sayfalar)} sayfada, ör. {sayfalar[0]}")
         print(f"  ayrı kaçış {len(kacan)}")
+
+    # ------------------------------------------------------------ (24)
+    # SABİT KAP. Yalnız panolar canlı; analiz ve ders gövdesi kapta.
+    print("\n▶ Sabit kap (dist/: analiz ve ders gövdesi data-deger=\"sabit\", pano değil)")
+    if not (KOK / "site/dist").exists():
+        print("  – dist/ yok (önce `npm run build`), ÖLÇÜT KOŞMADI")
+        uyari.append("ölçüt 24 (sabit kap) KOŞMADI — dist/ yok")
+    else:
+        sk = sabit_kap_bulgulari(KOK / "site/dist")
+        for b in sk:
+            hata.append(f"sabit kap — {b}")
+        print(f"  ihlal {len(sk)}")
 
     # ------------------------------------------------------------ (23)
     # SOLUK METİN. global.css'in kendi yorumu "--ink-30 metinde kullanılmaz"

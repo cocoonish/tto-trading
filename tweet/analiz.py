@@ -8,9 +8,10 @@ modül aynı işi ARAÇLA yapar: yazının kendi yönetici özetini (tez, soru�
 tablosu, altı anahtar ölçüm) alır ve gönderi metnine çevirir. Yeni hüküm
 ÜRETMEZ — cümleler yazının kendi cümleleri, sayılar yazının kendi sayılarıdır.
 
-Sayılar CANLI çözülür: yazıdaki her <Deger proje anahtar> etiketi, sayfanın
-yaptığı gibi, hattın site/public/projeler/<proje>/ozet.json dosyasından okunur
-ve Türkçe yazımla basılır. Yedek metin yalnız değer bulunamazsa kalır.
+Sayılar SABİTTİR (karar 08.09.2026): analiz yayımlandığı günün metnidir, yalnız
+panolar canlıdır. Yazıdaki her <Deger …>yedek</Deger> etiketi sayfada nasıl
+basılıyorsa (yedek metniyle) gönderiye de öyle girer; ozet.json OKUNMAZ.
+Gönderi ile sayfa aynı sayıyı söyler — iki kaynak bir gün sessizce ayrışmaz.
 
 Ağa çıkmaz; duman sınaması gerçek yazılarla çağırır.
 """
@@ -62,54 +63,22 @@ def analizler(dizin: Path | None = None) -> list[dict]:
     return [analizi_oku(y) for y in sorted((dizin or ANALIZ_DIZIN).glob("*.mdx"))]
 
 
-# ── canlı sayı çözümü (<Deger>) ─────────────────────────────────────────────
+# ── sayı çözümü (<Deger>) — SABİT ────────────────────────────────────────────
+#
+# Eskiden buradan ozet.json okunup değer canlı çözülüyordu. Analiz artık sabit
+# (karar 08.09.2026, bkz. modül başlığı): sayfanın gösterdiği şey etiketin
+# yedek metnidir, gönderi de onu taşır. `_OZET_ONBELLEK` geriye uyumluluk için
+# duruyor (duman sınaması temizliyor); hiçbir şey ona yazmaz.
 
 _OZET_ONBELLEK: dict[str, dict] = {}
-
-
-def _ozet(proje: str, dizin: Path | None = None) -> dict:
-    if proje not in _OZET_ONBELLEK:
-        yol = (dizin or OZET_DIZIN) / proje / "ozet.json"
-        try:
-            _OZET_ONBELLEK[proje] = json.loads(yol.read_text(encoding="utf-8"))
-        except Exception:                                      # noqa: BLE001
-            _OZET_ONBELLEK[proje] = {}
-    return _OZET_ONBELLEK[proje]
-
-
-def tr_sayi(v: float, ondalik: int, isaret: bool = False) -> str:
-    """Deger bileşeniyle aynı yazım: tr-TR ayraçları, eksi U+2212, isteğe bağlı +."""
-    s = f"{abs(float(v)):,.{ondalik}f}".replace(",", "@").replace(".", ",").replace("@", ".")
-    if v < 0:
-        return "−" + s
-    return ("+" if isaret and v > 0 else "") + s
-
 
 _DEGER = re.compile(r"<Deger\s+([^>]*?)>(.*?)</Deger>", re.S)
 
 
-def _nitelik(nit: str, ad: str) -> str | None:
-    m = re.search(ad + r'=(?:"([^"]*)"|\{([^}]*)\})', nit)
-    if not m:
-        return None
-    return m.group(1) if m.group(1) is not None else m.group(2)
-
-
 def degerleri_coz(html: str, ozet_dizin: Path | None = None) -> str:
-    """<Deger …>yedek</Deger> → canlı değer (bulunamazsa yedek)."""
-    def yerine(m: re.Match) -> str:
-        nit, yedek = m.group(1), m.group(2)
-        proje = _nitelik(nit, "proje") or ""
-        anahtar = _nitelik(nit, "anahtar") or ""
-        v = _ozet(proje, ozet_dizin).get(anahtar)
-        if v is None or isinstance(v, bool):
-            return yedek
-        if isinstance(v, (int, float)):
-            ond = int(_nitelik(nit, "ondalik") or 1)
-            isaret = (_nitelik(nit, "isaret") or "").strip() == "true"
-            return tr_sayi(v, ond, isaret)
-        return str(v)
-    return _DEGER.sub(yerine, html)
+    """<Deger …>yedek</Deger> → yedek metin (sayfadaki sabit sayı). `ozet_dizin`
+    geriye uyumluluk için alınır ve KULLANILMAZ — canlı çözüm yok."""
+    return _DEGER.sub(lambda m: m.group(2), html)
 
 
 # ── yönetici özeti ───────────────────────────────────────────────────────────
@@ -222,21 +191,14 @@ def analiz_zinciri(a: dict) -> list[str]:
             parcalar = [f"{etiket}: {deger}" for deger, etiket in yo["rakamlar"] if deger and etiket]
             if parcalar:
                 bolumler.append(_kirp("Kilit ölçümler — " + " · ".join(parcalar), RAKAM_SINIR))
-        # Canlı çözülemeyen değer yedek metniyle gitti: sayı doğru olabilir ama
-        # yazının derleme günündeki hâlidir — kayda düşer, gönderim durmaz.
-        blok = re.search(r'<div class="yonetici">(.*?)\n</div>', str(a.get("govde") or ""), re.S)
-        n_yedek = yedek_kalan_sayisi(blok.group(1) if blok else "")     # tweete yalnız özet girer
-        if n_yedek:
-            UYARILAR.append(f"{a['slug']}: {n_yedek} canlı değer çözülemedi, yedek metin gönderildi")
     else:
-        # Yedek yol: yalnız ön bilgideki TEZ (ozet). Açıklama alınmaz — statik
-        # metindir, sayıları canlı değildir; yönetici özeti olmayan bir yazının
-        # gönderisi kısa olur ve bunu söyler.
+        # Yedek yol: yalnız ön bilgideki TEZ (ozet). Açıklama alınmaz; yönetici
+        # özeti olmayan bir yazının gönderisi kısa olur ve bunu söyler.
         tez = _site_disi(_duz(str(a.get("ozet") or "")))
         if not tez:
             raise SystemExit(f"{a['slug']}: yönetici özeti de tez de yok — gönderi kurulamaz")
         bolumler.append(_kirp(tez, TEZ_SINIR))
-        UYARILAR.append(f"{a['slug']}: yönetici özeti yok — statik tez gönderildi, sayılar canlı değil")
+        UYARILAR.append(f"{a['slug']}: yönetici özeti yok — yalnız tez gönderildi")
     # Tavan aşılıyorsa sondan değil ORTADAN kısılır: rakam şeridi ve tez kalır,
     # tablo satırları SONDAN itibaren düşer.
     def _metin() -> str:
@@ -251,16 +213,6 @@ def analiz_zinciri(a: dict) -> list[str]:
         metin = _metin()
     return [metin]
 
-
-def yedek_kalan_sayisi(html: str, ozet_dizin: Path | None = None) -> int:
-    """Kaç <Deger> canlı çözülemedi (yedek metin kaldı) — uyarı ölçüsü."""
-    n = 0
-    for m in _DEGER.finditer(html):
-        nit = m.group(1)
-        v = _ozet(_nitelik(nit, "proje") or "", ozet_dizin).get(_nitelik(nit, "anahtar") or "")
-        if v is None or isinstance(v, bool):
-            n += 1
-    return n
 
 
 def bugunun_analizleri(gun: date | None = None, dizin: Path | None = None) -> list[dict]:

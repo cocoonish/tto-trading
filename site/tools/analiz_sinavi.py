@@ -143,8 +143,8 @@ def sina(yol: Path) -> tuple[list[str], list[str], bool]:
             if parca not in metin:
                 engel.append(f"yönetici özetinde {ad} yok")
         blok = re.search(r'<div class="yonetici">(.*?)\n</div>', metin, re.S)
-        if blok and "<Deger" not in blok.group(1):
-            uyari.append("yönetici özetinde hiç <Deger> yok — sayılar donuk")
+        # <Deger> ARANMAZ: analiz yayımlandığı günün metnidir (karar
+        # 08.09.2026); sayılar sabit yazılır, canlı bağ yalnız panolarda.
         # RAKAM ŞERİDİ SÖZLEŞMESİ: <li><b>değer</b><span>etiket</span></li>, 5–8 öğe.
         # Tweet üretici bu işaretlemeyi okur; span'sız bir öğe gönderiden düşer.
         rk = re.search(r'<ul class="rakamlar">(.*?)</ul>', metin, re.S)
