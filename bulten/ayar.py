@@ -250,7 +250,13 @@ KARANLIK_GUN: dict[str, int] = {
     "makroihtiyati": 200,
     # Aynı özette günlük kur ile AYLIK enflasyon bacağı yan yana duruyor;
     # aylık bir kalem yeni ay yayımlanana kadar bir öncekinin tarihinde durur.
-    "ovp": 75,
+    # 75, TÜFE bacağının ayın İLK gününde damgalandığı döneme aitti ve o yazım
+    # boşluğu ayın uzunluğu kadar ŞİŞİRİYORDU; çıpa ayın SON gününe alınınca
+    # (09.09.2026) ölçülen boşluk 38 günden 8 güne indi. Yapısal azami, yeni
+    # yayımdan bir gün önceki gündür: TÜFE ayın 3'ünde çıkar ve o güne dek bir
+    # önceki ayın sonu durur — 02.10 ana saatiyle 31.08 çıpası arası 32 gün.
+    # 50, yayımın bir hafta kaymasını da taşır; bugünkü ağaçta yanlış alarm 0.
+    "ovp": 50,
 }
 
 # Tarih taşıyan ama TAZELİK saati OLMAYAN anahtarlar.

@@ -140,6 +140,10 @@ BLOK_OKUR = {
 # "yeni program çıktı, deftere girmedi" demektir.
 TOLERANS_GUN = {"kur": 6, "faiz": 6, "tufe": 45, "program": 400}
 
+# Ritmi AYLIK olan bacaklar: yaşları ayın SON gününden ölçülür (bkz.
+# tazelik_olc). Ayrı bir küme, çünkü tolerans tablosu ritmi söylemez.
+AYLIK_BACAK = frozenset({"tufe"})
+
 # Şekil dosyaları TEK KAYNAK: grafik.py koşu sırasını buna karşı denetler,
 # duman panel künyesi ve zorunlu listeyle örtüşmesini sınar.
 SEKIL_DOSYALARI = (
@@ -555,7 +559,16 @@ def tazelik_olc(K: pd.DataFrame, F: pd.DataFrame, T: pd.DataFrame) -> dict:
         if s is None or s.empty:
             out[ad] = {"son": None, "gecikme_gun": None, "tolerans": TOLERANS_GUN[ad]}
             continue
+        # AYLIK bir bacağın YAŞI ayın SON gününden ölçülür. TÜFE serisi ayın
+        # İLK gününde indeksli; ham indeksten ölçmek yaşı ayın uzunluğu kadar
+        # (30 gün) BÜYÜTÜR ve tolerans daha veri gelmeden dolar. 09.09.2026'da
+        # ölçüldü: Ağustos TÜFE'si 03.09'da yayımlandı, 01.08 çıpasıyla yaş
+        # 15.09'da 45 günü aşıyor ve sıradaki yayıma (03.10) kadar 18 gün
+        # SAHTE "bacak gecikti" satırı okura basılacaktı. Çıpa ortak/bicim
+        # sözleşmesiyle aynı: bir ay damgası ayın son gününe demirlenir.
         son = s.index[-1]
+        if ad in AYLIK_BACAK:
+            son = son + pd.offsets.MonthEnd(0)
         out[ad] = {"son": son.strftime("%Y-%m-%d"),
                    "gecikme_gun": int((bugun - son).days),
                    "tolerans": TOLERANS_GUN[ad]}

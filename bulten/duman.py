@@ -979,6 +979,28 @@ def main() -> int:
         eksik_alan = sorted(alan - set(ayar.RITIM_ALAN))
         assert not eksik_alan, f"ilan edilmiş ama eşiği yazılmamış ikincil saat: {eksik_alan}"
         assert len(alan) >= 20, f"ilan taraması kör: yalnız {len(alan)} alan bulundu"
+
+        # BİR EŞİK, ÖLÇTÜĞÜ ALAN YOKSA HİÇ KOŞMAZ (09.09.2026'da ölçüldü).
+        # `denetim.tazelik` alanın kaydını bulamazsa `continue` der; yani adı
+        # kayan ya da yanlış yazılmış bir ikincil saat eşiğini alır, sınavı
+        # geçer ve SONSUZA KADAR sessiz kalır — bakılmayan yer geçen sınavla
+        # aynı görünür. Yukarıdaki ölçüt "her ilanın eşiği var mı" diye sorar,
+        # bu ölçüt "her eşiğin ALANI var mı" diye: kapsamın öbür yarısı.
+        # Kaynak sayfanın okuduğu dosyadır (site kopyası), kütük değil —
+        # denetim de oradan besleniyor. Bugünkü ağaçta 29 kaydın 29'u tutuyor.
+        kok = BURASI.parent / "site" / "public" / "projeler"
+        yok = []
+        for _slug, _alan in sorted(ayar.RITIM_ALAN):
+            _y = kok / _slug / "ozet.json"
+            if not _y.exists():
+                yok.append(f"{_slug}/{_alan} (ozet.json yok)")
+                continue
+            _d = json.loads(_y.read_text(encoding="utf-8"))
+            if not isinstance(_d.get(_alan), str) or not _d[_alan].strip():
+                yok.append(f"{_slug}/{_alan}")
+        assert not yok, (
+            "eşiği yazılı ama özette karşılığı olmayan ikincil saat: "
+            f"{yok} — bu alanların gecikme denetimi sessizce kapalı")
     sina("kapsam: RITIM ve RITIM_ALAN kütükten türüyor", _ritim_kapsami)
 
     # ── TARİH AYRIŞTIRMASI TEK TANIMDA (07.09.2026)

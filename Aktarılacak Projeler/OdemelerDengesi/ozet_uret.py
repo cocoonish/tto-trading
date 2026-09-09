@@ -89,6 +89,20 @@ def tr_tarih(t) -> str:
     return f"{t.day:02d}.{t.month:02d}.{t.year}"
 
 
+def tr_ay(t) -> str:
+    """AYLIK ve ÇEYREKLİK saatlerin yazımı: AA.YYYY (ortak/bicim sözleşmesi).
+
+    Aylık bir gözlem GÜN gibi yazılamaz — "30.06.2026" okura o GÜNÜN ölçümü
+    gibi görünür, oysa ölçü Haziran AYINA aittir. 09.09.2026'da ölçüldü: aynı
+    anahtarı (`ay_kisa`) yazan kardeş hat butce-borc "06.2026" yazıyordu, bu
+    hat "30.06.2026" — tek anahtar, iki sözleşme. Çeyreklik saat de aynı
+    yazımı kullanır ve çeyreğin SON ayını gösterir; etiket ayrı anahtarda
+    (`ceyrek`) durur.
+    """
+    t = pd.Timestamp(t)
+    return f"{t.month:02d}.{t.year}"
+
+
 def main() -> int:
     M = pd.read_csv(VERI / "metrik.csv", index_col=0, parse_dates=True)
     m = json.loads((VERI / "metrik_ozet.json").read_text(encoding="utf-8"))
@@ -105,16 +119,16 @@ def main() -> int:
     bugun = pd.Timestamp.today().normalize()
 
     # ======================================================= dönem çıpaları
-    O["_tarih"] = tr_tarih(donem_sonu(s_ay, "ay"))
-    O["_tarih2"] = tr_tarih(s_ceyrek)
+    O["_tarih"] = tr_ay(donem_sonu(s_ay, "ay"))
+    O["_tarih2"] = tr_ay(s_ceyrek)
     O["_tarih3"] = tr_tarih(s_hafta)
     O["_tarih4"] = tr_tarih(s_gun)
     O["ay"] = ay_ad(s_ay)
     O["ay_ad"] = AY_TR[s_ay.month]
     O["yil"] = int(s_ay.year)
-    O["ay_kisa"] = tr_tarih(donem_sonu(s_ay, "ay"))
+    O["ay_kisa"] = tr_ay(donem_sonu(s_ay, "ay"))
     O["ceyrek"] = ceyrek_ad(s_ceyrek)
-    O["ceyrek_kisa"] = tr_tarih(s_ceyrek)
+    O["ceyrek_kisa"] = tr_ay(s_ceyrek)
     O["hafta"] = gun_ad(s_hafta)
     O["hafta_kisa"] = tr_tarih(s_hafta)
     O["kur_gun"] = gun_ad(s_gun)
