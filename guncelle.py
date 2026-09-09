@@ -838,15 +838,36 @@ def yukseklik_denetimi(h: "Hat") -> str | None:
     return None
 
 
-def _ozet_tarih(h: Hat) -> dict[str, str] | None:
-    """Sitedeki ozet.json'daki veri tarih(ler)i — koşu öncesi/sonrası kıyas."""
+def _ozet_tarih_yol(h: Hat, y: Path) -> dict[str, str] | None:
+    """Verilen ozet.json'daki veri tarih(ler)i (hattın ilan ettiği anahtarlar)."""
     import json
-    y = SITE / h.slug / "ozet.json"
     try:
         d = json.load(open(y, encoding="utf-8"))
     except Exception:
         return None
     return {a: str(d.get(a)) for a in h.tarih_anahtarlari}
+
+
+def _ozet_tarih(h: Hat) -> dict[str, str] | None:
+    """Sitedeki ozet.json'daki veri tarih(ler)i — koşu öncesi/sonrası kıyas."""
+    return _ozet_tarih_yol(h, SITE / h.slug / "ozet.json")
+
+
+def _hat_ozet_yolu(h: Hat) -> Path:
+    """Hattın KENDİ ürettiği ozet.json — siteye kopyalanmadan önce okunan sürüm."""
+    return KOK / h.klasor / ("output/ozet.json" if "output/ozet.json" in h.kopya else "ozet.json")
+
+
+def gerileme_bulgusu(h: Hat, yeni_tarih, eski_tarih) -> list[str]:
+    """Hattın ilan ettiği saatlerden geriye gidenler ("anahtar: eski → yeni")."""
+    if not (yeni_tarih and eski_tarih):
+        return []
+    gerileyen = []
+    for a in h.tarih_anahtarlari:
+        yd, ed = _tarih_degeri(yeni_tarih.get(a, "")), _tarih_degeri(eski_tarih.get(a, ""))
+        if yd and ed and yd < ed:
+            gerileyen.append(f"{a}: {eski_tarih[a]} → {yeni_tarih[a]}")
+    return gerileyen
 
 
 def _tarih_degeri(m: str) -> "datetime.date | None":
@@ -1401,9 +1422,13 @@ def _adim_kos(komut: list[str], cwd: Path,
 
 
 def kos(h: Hat, tam: bool, gunluk: bool = False,
-        adim_tavan_sn: float | None = None) -> tuple[bool, str, float]:
+        adim_tavan_sn: float | None = None,
+        gerileme_kabul: bool = False) -> tuple[bool, str, float]:
     # adim_tavan_sn: çağıran bir tavan dayatabilir (sabah bütçesi bu ucu
     # kullanacak); verilmezse kipe göre varsayılan tavan uygulanır.
+    # gerileme_kabul: yalnız ELLE koşuda — kaynak sözleşmesi bilerek değişti
+    # (ör. valör tarihinden işlem gününe geçiş) ve tarihin bir kez geri
+    # gitmesi meşru. İş akışı bu ucu KULLANMAZ.
     d = KOK / h.klasor
     t0 = time.time()
     eski_tarih = _ozet_tarih(h)
@@ -1444,6 +1469,30 @@ def kos(h: Hat, tam: bool, gunluk: bool = False,
             if oz:
                 ipucu += f"  ⟨{oz.strip()[:110]}⟩"
             return False, f"adım {i} düştü: {adim}{ipucu}", time.time() - t0
+    # VERİ GERİYE GİDEMEZ — ve bu soru KOPYADAN ÖNCE sorulur. 2026-08-25
+    # bulut koşusunda Hazine hattı boş bir klasörde kazıyıp 448 ihale yerine
+    # 16 buldu ve ozet.json'u 18.08.2026'dan 04.06.2024'e çekti; koşu
+    # "başarılı" göründüğü için gerileme commit'lendi. Kapı o gün kondu ama
+    # KOPYADAN SONRA duruyordu ve "commit adımı onu dışarıda bırakır" diye
+    # yazıyordu — o cümle yalnız TAM kip için doğruydu (veri.yml düşen tam
+    # kipi `git checkout` ile geri alır); HAFİF kipte commit adımı siteye
+    # kopyalanmış gerilemiş dosyayı olduğu gibi commit'liyordu (09.09.2026,
+    # koşu #143 ile ölçüldü: hat "düştü", 24 dosya commit'lendi). Kapının
+    # kapsamı: sitenin kopyası hiç yazılmaz, hat damgalanmaz, sonraki koşuda
+    # tekrar denenir. Kapsamı DIŞI: hattın kendi klasöründeki dosyalar diskte
+    # kalır — onları tam kipte veri.yml geri alır, hafif kipte hatlar kaynaktan
+    # yeniden çeker.
+    yeni_kaynak = _ozet_tarih_yol(h, _hat_ozet_yolu(h))
+    gerileyen = gerileme_bulgusu(h, yeni_kaynak, eski_tarih)
+    if gerileyen and not gerileme_kabul:
+        mesaj = (f"VERİ GERİLEDİ — çıktı eskisinden geriye gitti ({'; '.join(gerileyen)}); "
+                 f"siteye KOPYALANMADI. Kaynak eksik veri döndürmüş olabilir; hattın birikmiş "
+                 f"veri dosyaları yerinde mi? Sözleşme bilerek değiştiyse: "
+                 f"python guncelle.py {h.ad} --gerileme-kabul")
+        return False, mesaj, time.time() - t0
+    if gerileyen:
+        print(_renk(f"    [UYARI] gerileme KABUL EDİLDİ (elle): {'; '.join(gerileyen)}", 33))
+
     # siteye kopyala
     hedef = SITE / h.slug
     hedef.mkdir(parents=True, exist_ok=True)
@@ -1482,22 +1531,6 @@ def kos(h: Hat, tam: bool, gunluk: bool = False,
 
     yeni_tarih = _ozet_tarih(h)
     y, e = _tarih_ozeti(yeni_tarih), _tarih_ozeti(eski_tarih)
-
-    # Veri GERİYE gidemez. 2026-08-25 bulut koşusunda Hazine hattı boş bir
-    # klasörde kazıyıp 448 ihale yerine 16 buldu ve ozet.json'u 18.08.2026'dan
-    # 04.06.2024'e çekti — koşu "başarılı" göründüğü için gerileme commit'lendi.
-    # Tarihi geri giden hat DÜŞMÜŞ sayılır: damgalanmaz, sonraki koşuda tekrar
-    # denenir ve commit adımı onu dışarıda bırakır.
-    if yeni_tarih and eski_tarih:
-        gerileyen = []
-        for a in h.tarih_anahtarlari:
-            yd, ed = _tarih_degeri(yeni_tarih.get(a, "")), _tarih_degeri(eski_tarih.get(a, ""))
-            if yd and ed and yd < ed:
-                gerileyen.append(f"{a}: {eski_tarih[a]} → {yeni_tarih[a]}")
-        if gerileyen:
-            return False, (f"VERİ GERİLEDİ — çıktı eskisinden geriye gitti "
-                           f"({'; '.join(gerileyen)}). Kaynak eksik veri döndürmüş "
-                           f"olabilir; hattın birikmiş veri dosyaları yerinde mi?"), time.time() - t0
 
     if yeni_tarih and eski_tarih:
         donan = [a for a in h.tarih_anahtarlari
@@ -1710,6 +1743,9 @@ def main():
     ap.add_argument("--denetle", action="store_true",
                     help="hiçbir şey koşturmadan ortamı denetle: python, git/node, EVDS anahtarı, "
                          "her hattın yorumlayıcısı ve paketleri")
+    ap.add_argument("--gerileme-kabul", action="store_true", dest="gerileme_kabul",
+                    help="veri tarihinin bir kez GERİ gitmesini kabul et (yalnız elle; kaynak "
+                         "sözleşmesi bilerek değiştiğinde — iş akışı kullanmaz)")
     ap.add_argument("--gerekli", action="store_true",
                     help="yalnız resmî yayım takvimine göre TAZELENMESİ GEREKEN hatları koş "
                          "(bulten/tazeleme.py); kaynağı yayımlanmamış hat atlanır")
@@ -1905,7 +1941,7 @@ def main():
             # her adımında değil, hat başına bir kez indirir.
             _COCUK_ENV[_KOSU_BASLANGIC] = str(time.time())
             try:
-                ok, mesaj, sn = kos(h, tam, a.gunluk)
+                ok, mesaj, sn = kos(h, tam, a.gunluk, gerileme_kabul=a.gerileme_kabul)
             finally:
                 _COCUK_ENV.pop(_KOSU_BASLANGIC, None)
                 if atla:

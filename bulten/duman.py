@@ -713,6 +713,53 @@ def main() -> int:
         assert not eksik, f"sürüm defterinde tabanı olmayan tarifli hat: {eksik} — python bulten/tazeleme.py --tohumla"
     sina("tazeleme: soğuk başlangıçta eli boş koşu 'ilerledi' sayılmaz", _soguk_baslangic)
 
+    # GERİLEME KAPISI KOPYADAN ÖNCE. Kapı 25.08'de konmuştu ama siteye
+    # kopyalamanın ARDINDA duruyordu ve "commit adımı onu dışarıda bırakır"
+    # diye yazıyordu — hafif kipte yazmıyordu: 09.09.2026 koşu #143'te hat
+    # "düştü", gerilemiş ozet.json siteye kopyalanmış ve commit'lenmişti.
+    # Sınama arızanın kendisine karşı: gerileyen hat sitenin dosyasına
+    # DOKUNAMAZ; açık kabulle (elle) kopyalar.
+    def _gerileme_kopyadan_once():
+        import json as _j, tempfile as _t, sys as _s, inspect as _insp
+        from pathlib import Path as _P
+        _s.path.insert(0, str(BURASI.parent))
+        import guncelle as g
+        kaynak = _insp.getsource(g.kos)
+        assert kaynak.index("gerileme_bulgusu(") < kaynak.index("# siteye kopyala"), \
+            "gerileme kapısı kopyadan SONRA duruyor — gerilemiş dosya siteye gider"
+        tmp = _P(_t.mkdtemp())
+        hat_kl = tmp / "hat"; hat_kl.mkdir()
+        (hat_kl / "ozet.json").write_text(_j.dumps({"_tarih": "08.09.2026"}), encoding="utf-8")
+        site = tmp / "site"; (site / "deneme").mkdir(parents=True)
+        (site / "deneme" / "ozet.json").write_text(_j.dumps({"_tarih": "09.09.2026"}), encoding="utf-8")
+        h = g.Hat(ad="deneme", baslik="Deneme", klasor=hat_kl, slug="deneme",
+                  hafif=[], tam=[], kopya={})
+        gercek = (g.SITE, g.eksik_paketler, g.duman_kos, g.hat_python, g.yukseklik_denetimi,
+                  g.okur_dili_bulgulari, g.sayfa_anahtar_bulgulari)
+        try:
+            g.SITE = site
+            g.eksik_paketler = lambda *a, **k: []
+            g.duman_kos = lambda *a, **k: None
+            g.hat_python = lambda *a, **k: g.PY
+            g.yukseklik_denetimi = lambda *a, **k: None
+            g.okur_dili_bulgulari = lambda *a, **k: []
+            g.sayfa_anahtar_bulgulari = lambda *a, **k: []
+            ok, mesaj, _ = g.kos(h, tam=False)
+            assert not ok and "VERİ GERİLEDİ" in mesaj and "KOPYALANMADI" in mesaj, mesaj
+            site_tarih = _j.loads((site / "deneme" / "ozet.json").read_text(encoding="utf-8"))["_tarih"]
+            assert site_tarih == "09.09.2026", f"gerilemiş dosya siteye kopyalandı: {site_tarih}"
+            ok, mesaj, _ = g.kos(h, tam=False, gerileme_kabul=True)
+            assert ok, mesaj
+            site_tarih = _j.loads((site / "deneme" / "ozet.json").read_text(encoding="utf-8"))["_tarih"]
+            assert site_tarih == "08.09.2026", "açık kabulde kopya yapılmadı"
+        finally:
+            (g.SITE, g.eksik_paketler, g.duman_kos, g.hat_python, g.yukseklik_denetimi,
+             g.okur_dili_bulgulari, g.sayfa_anahtar_bulgulari) = gercek
+        # İş akışı bu ucu KULLANMAZ: elle kabul yalnız komut satırından.
+        yml = (BURASI.parent / ".github" / "workflows" / "veri.yml").read_text(encoding="utf-8")
+        assert "--gerileme-kabul" not in yml, "veri.yml gerilemeyi kendiliğinden kabul ediyor"
+    sina("guncelle: gerileyen hat siteye kopyalanmaz (kapı kopyadan önce)", _gerileme_kopyadan_once)
+
     # ÖNBELLEK TAZELİĞİ TEK YERDE. TTO_YENILE bir zamanlar dokuz hattın
     # yalnız BİRİNDE okunuyordu: "koşulsuz tazele" düğmesi kalan sekizde
     # önbelleği hiç atlamıyordu ve koşu yeşil bitiyordu. Kapsam listeden
