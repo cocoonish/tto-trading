@@ -241,7 +241,9 @@ HATLAR: list[Hat] = [
          "akim.html": "akim.html",
          "swap.html": "swap.html",
          "tanim_farki.html": "tanim_farki.html"},
-        tarih_anahtarlari=("g_tarih", "ak_tarih")),
+        # p_swap_capa_tarih: haftalık IRFCL PDF bacağı (swap ve ons çapası).
+        # PDF alınamazsa bu saat donar ve başka hiçbir ölçü onu görmüyordu.
+        tarih_anahtarlari=("g_tarih", "ak_tarih", "p_swap_capa_tarih")),
     Hat("usdtry", "USDTRY Devalüasyon", P / "USDTRYDeval", "usdtry-deval",
         ["usdtry_deval_plotly.py", "usdtry_weekly_trends.py", "usdtry_monthly_trends.py", "ozet_uret.py"], [],
         {"usdtry_deval.html": "usdtry_deval.html", "usdtry_deval_3m.html": "usdtry_deval_3m.html",
@@ -583,7 +585,11 @@ HATLAR: list[Hat] = [
         # endeksin günü, nakit_tahvil_tarih ise Şekil 03'ün iki bacağının
         # ESKİSİ — yani DİBS taşıma kolonu donarsa donan tek anahtar odur.
         # İlk ikisi DİBS bacağını hiç görmüyordu.
-        tarih_anahtarlari=("_tarih", "endeks_tarih", "nakit_tahvil_tarih"),
+        # makas_tarih (Şekil 01) ve carry_tarih (Şekil 04) da İKİ BACAKLI ve
+        # ayrı donabiliyor (nakit bacağı TLREF, tahvil bacağı DİBS): ilan
+        # edilmeyen bir damganın bayatlığını hiçbir kapı sormuyordu.
+        tarih_anahtarlari=("_tarih", "endeks_tarih", "nakit_tahvil_tarih",
+                           "makas_tarih", "carry_tarih"),
         bagimli=("fonlama", "dibs")),
     Hat("tufex", "TÜFEX ve Başabaş Enflasyon", P / "Tufex", "tufex-basabas",
         ["hesap.py", "grafik.py"], [],

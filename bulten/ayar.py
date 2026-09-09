@@ -196,6 +196,14 @@ RITIM_ALAN = {
     ("yp-mevduat", "akim_tarih"): (11, "haftalık akım bacağı"),
     ("yp-mevduat", "dol_tarih"): (11, "haftalık dolarizasyon bacağı"),
     ("tcmb-net-rezerv", "ak_tarih"): (6, "günlük akım bacağı"),
+    # Haftalık IRFCL PDF: Cuma tarihli tablo ertesi Perşembe (F+6) yayımlanır,
+    # bir sonraki çapa F+13. Eşik döngüyü (7) + yayım gecikmesini (6) + payı
+    # kapsamalı; 10 dar kalır ve her hafta sahte gecikme basar.
+    ("tcmb-net-rezerv", "p_swap_capa_tarih"): (16, "haftalık swap/ons çapası (F+6 yayım)"),
+    # Taşıma figürlerinin bağlayıcı bacakları: nakit TLREF'e, tahvil DİBS'e
+    # bağlı ve ayrı düşebiliyor; ikisi de günlük ritimde.
+    ("tl-tasima", "makas_tarih"): (6, "Şekil 01 bağlayıcı bacağı"),
+    ("tl-tasima", "carry_tarih"): (6, "Şekil 04 bağlayıcı bacağı"),
     ("tl-tasima", "endeks_tarih"): (6, "TLREF endeks bacağı"),
     ("tl-tasima", "nakit_tahvil_tarih"): (6, "nakit/tahvil bacağı"),
     ("tufex-basabas", "basabas_2y_tarih"): (6, "2 yıllık başabaş bacağı"),

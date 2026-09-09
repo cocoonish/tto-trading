@@ -476,6 +476,41 @@ sina("kaplı analiz temiz", not any(x.startswith("analiz/tufe") for x in b), str
 sina("analiz liste sayfası (canlı alan yok) taranmaz", not any(x.startswith("analiz/index") for x in b), str(b))
 sina("SABİT KAPLI proje sayfası ENGEL — pano canlı kalmalı", any(x.startswith("projeler/enflasyon") for x in b), str(b))
 
+
+# ---------------------------------------------------------------- iş günü sınırı
+# Yayın kapısının "ileri tarih" ölçütü (12 · 18b) bu sınırı kullanıyor ve yanlış
+# alarmı SİTEYİ DURDURUR; o yüzden sınırın kendisi de sınanır. Tatil bilmeyen
+# bir sınır 31.12.2026'da yayını durduracaktı: TCMB o gün 04.01.2027 valörünü
+# ilan eder, hafta sonu bilen ama tatil bilmeyen sınır 01.01.2027 der ve
+# yayımlanan DOĞRU tarihi "ileri" sayar.
+print("\n▶ Ertesi iş günü sınırı (ortak/bicim.sonraki_is_gunu)")
+import datetime as _dtg
+import sys as _sg, pathlib as _pg
+_sg.path.insert(0, str(_pg.Path(__file__).resolve().parents[2] / "ortak"))
+import bicim as _bg
+
+for _g, _bek, _ad in (
+    ((2026, 12, 31), (2027, 1, 4), "yılbaşı: 31.12 perşembe -> 04.01 pazartesi"),
+    ((2026, 10, 28), (2026, 10, 30), "29 Ekim: 28.10 çarşamba -> 30.10 cuma"),
+    ((2026, 4, 22), (2026, 4, 24), "23 Nisan atlanıyor"),
+    ((2026, 9, 4), (2026, 9, 7), "cuma -> pazartesi (hafta sonu kuralı duruyor)"),
+    ((2026, 9, 9), (2026, 9, 10), "sıradan gün -> ertesi gün (sınır GEVŞEMEDİ)"),
+):
+    sina(f"iş günü sınırı — {_ad}",
+         _bg.sonraki_is_gunu(_dtg.date(*_g)) == _dtg.date(*_bek),
+         f"gelen {_bg.sonraki_is_gunu(_dtg.date(*_g))}")
+
+# Hareketli bayramlar GİRİLMEDİKÇE davranış değişmez: uydurma bir tarih,
+# olmayan bir tatilde sınırı gevşetir ve gerçek bir ileri tarihi kaçırır.
+sina("girilmemiş hareketli bayram yılında davranış hafta sonu kuralıyla aynı",
+     _bg.sonraki_is_gunu(_dtg.date(2027, 5, 14)) == _dtg.date(2027, 5, 17),
+     f"gelen {_bg.sonraki_is_gunu(_dtg.date(2027, 5, 14))}")
+_bg.HAREKETLI_TATIL[2099] = ("2099-03-02",)
+sina("hareketli tatil tablosu girildiğinde etkili",
+     _bg.sonraki_is_gunu(_dtg.date(2099, 3, 1)) == _dtg.date(2099, 3, 3),
+     f"gelen {_bg.sonraki_is_gunu(_dtg.date(2099, 3, 1))}")
+_bg.HAREKETLI_TATIL.pop(2099, None)
+
 print(f"\n{'═' * 70}")
 print(f"  {len(GECTI)} geçti · {len(DUSTU)} düştü")
 if DUSTU:

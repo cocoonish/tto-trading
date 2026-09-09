@@ -119,6 +119,42 @@ def sonraki_is_gunu(gun: date) -> date:
     +3 gün. Haftalar ileri bir tarih yine ENGEL üretir.
     """
     ertesi = gun + timedelta(days=1)
-    while ertesi.weekday() >= 5:                    # 5=Cmt, 6=Paz
+    while ertesi.weekday() >= 5 or tatil_mi(ertesi):   # 5=Cmt, 6=Paz
         ertesi += timedelta(days=1)
     return ertesi
+
+# RESMÎ TATİL — sınırın hafta sonundan sonraki yarısı.
+#
+# Yukarıdaki sınır yalnız hafta sonunu atlıyordu ve bu ölçülebilir bir gün
+# için yetmiyor: 31.12.2026 PERŞEMBE tam iş günü, TCMB o gün ertesi iş
+# gününün kurunu ilan eder ve ertesi iş günü 1 Ocak TATİL olduğu için
+# 04.01.2027'dir. Hafta sonu bilen ama tatil bilmeyen sınır o gün 01.01.2027
+# der ve yayımlanan DOĞRU tarihi "ileri" sayıp yayını durdurur — 04.09.2026'da
+# aynı sınıftan bir yanlış alarm siteyi yirmi bir saat dondurmuştu. Aynı hesap
+# 28.10.2026 için de tutuyor (29 Ekim tatil → sınır 30.10).
+#
+# SABİT tarihli tatiller kanunla bellidir ve burada tam listelenir. HAREKETLİ
+# olanlar (Ramazan ve Kurban bayramları) hicri takvimden gelir ve resmî
+# takvimden OKUNMADAN buraya YAZILMAZ — uydurma bir tarih, olmayan bir tatilde
+# sınırı gevşetir ve gerçek bir ileri tarihi kaçırır. Girilmemiş bir yıl için
+# davranış bugünküyle AYNI (yalnız hafta sonu atlanır), yani bu tablo hiçbir
+# koşulda yeni bir yanlış alarm üretemez: eklenen her gün sınırı yalnız İLERİ
+# taşır. Bayram günleri girildiğinde `HAREKETLI_TATIL`e yılıyla eklenir.
+TATIL_SABIT = (
+    (1, 1),      # Yılbaşı
+    (4, 23),     # Ulusal Egemenlik ve Çocuk Bayramı
+    (5, 1),      # Emek ve Dayanışma Günü
+    (5, 19),     # Atatürk'ü Anma, Gençlik ve Spor Bayramı
+    (7, 15),     # Demokrasi ve Millî Birlik Günü
+    (8, 30),     # Zafer Bayramı
+    (10, 29),    # Cumhuriyet Bayramı
+)
+# {yıl: (ISO gün, …)} — resmî takvimden girilir; boş yıl = yalnız hafta sonu.
+HAREKETLI_TATIL: dict[int, tuple[str, ...]] = {}
+
+
+def tatil_mi(gun: date) -> bool:
+    """`gun` resmî tatil mi (sabit tarihliler + girilmiş hareketli günler)."""
+    if (gun.month, gun.day) in TATIL_SABIT:
+        return True
+    return gun.isoformat() in HAREKETLI_TATIL.get(gun.year, ())
