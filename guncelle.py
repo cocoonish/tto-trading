@@ -467,7 +467,7 @@ HATLAR: list[Hat] = [
         # Dört ayrı yayım ritmi, dört ayrı donma riski: aylık ödemeler dengesi
         # ~2 ay gecikmeli, haftalık takvim ~5 gün, GSYH ~145 gün. Tek anahtara
         # bakmak "veri tazelendi" derdi.
-        tarih_anahtarlari=("_tarih", "_tarih2", "_tarih3")),
+        tarih_anahtarlari=("_tarih", "_tarih2", "_tarih3", "_tarih4")),
     Hat("dibs", "DİBS Verim Eğrisi ve Reel Faiz", P / "DIBS", "dibs-verim-egrisi",
         # veri.py EVDS3'ten DİBS strip evrenini (güncel + arşiv) ve referans
         # faizleri çeker; önbellek seri bazında TTL'lidir ve çekim istisnayla

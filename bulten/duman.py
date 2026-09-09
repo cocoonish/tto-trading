@@ -738,9 +738,14 @@ def main() -> int:
         for kotu in ("Finansmanı", "İç Borç"):
             assert kotu not in b.kalip and not any(kotu in ek[0] for ek in b.ek_kaynaklar), \
                 f"butce: hattın okumadığı '{kotu}' yayımı tarifte"
+        o = tazeleme.TETIK["odemeler"]
+        for kotu in ("Kısa Vadeli", "Yatırım Pozisyonu"):
+            assert kotu not in o.kalip, f"odemeler: hattın okumadığı '{kotu}' yayımı kalıpta"
         import sys as _s
         _s.path.insert(0, str(BURASI.parent))
         import guncelle as g
+        # Kütük dört ritmi ilan ediyor; günlük kur saati (_tarih4) kütükte olmalı.
+        assert "_tarih4" in g.HAT["odemeler"].tarih_anahtarlari, "odemeler günlük kur saati kütükte yok"
         assert "akim_tarih" in g.HAT["butce"].tarih_anahtarlari
         src = (BURASI.parent / "Aktarılacak Projeler" / "Butce" / "ozet_uret.py").read_text(encoding="utf-8")
         assert 'O["akim_tarih"]' in src, "Butce özet üreticisi akim_tarih yazmıyor"

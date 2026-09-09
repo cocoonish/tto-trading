@@ -144,9 +144,11 @@ TETIKLER: tuple[Tetik, ...] = (
           en_gec=45, gecikme_dk=90),
     Tetik("reer", "TCMB Reel Efektif Döviz Kuru (aylık)",
           r"Reel Efektif Döviz Kuru", ("TCMB",), en_gec=40),
-    Tetik("odemeler", "Ödemeler Dengesi + Kısa Vadeli Dış Borç + UYP",
-          r"Ödemeler Dengesi İstatistikleri|Kısa Vadeli Dış Borç İstatistikleri"
-          r"|Uluslararası Yatırım Pozisyonu", ("TCMB",), en_gec=45),
+    # Kısa Vadeli Dış Borç ve UYP yayımları kalıptaydı ama hat o serileri
+    # OKUMUYOR (OdemelerDengesi/veri.py'de karşılığı yok): her ay iki eli boş
+    # sayılan koşu + yeniden denemeler + sahte alarm (09.09.2026, kalıp kuralı).
+    Tetik("odemeler", "Ödemeler Dengesi İstatistikleri (aylık)",
+          r"Ödemeler Dengesi İstatistikleri", ("TCMB",), en_gec=45),
     # Hat İKİ kurumdan besleniyor: aylık bütçe/borç serileri HMB'den, haftalık
     # DİBS/eurobond ailesi TCMB'nin Menkul Kıymet İstatistikleri'nden. İkincisi
     # 07.09.2026'ya kadar tarifte yoktu ve haftalık bacak (ozet `_tarih2`,

@@ -184,7 +184,11 @@ RITIM_ALAN = {
     # Akım bacağı (gelir/gider) ana saatten 3–5 gün ÖNCE ilerler (Bütçe Denge
     # Tablosu ~15–17'si, Borç Stoku ~20'si); eşik ana saatle aynı, 45.
     ("butce-borc", "akim_tarih"): (45, "aylık bütçe akım bacağı (gelir/gider)"),
-    ("odemeler-dengesi", "_tarih2"): (75, "aylık ikincil bacak"),
+    # _tarih2 üç aylık GSYH bacağıdır (cari denge/GSYH oranı), aylık değil:
+    # ~91 günde bir ilerler; 75 her çeyrek 2–3 hafta sahte "gecikti" üretirdi.
+    ("odemeler-dengesi", "_tarih2"): (100, "çeyreklik GSYH bacağı"),
+    # Günlük kur bacağı; hat aylık tetikle koşar, bacak koşu gününde kalır.
+    ("odemeler-dengesi", "_tarih4"): (45, "günlük kur bacağı (aylık koşuda yenilenir)"),
     ("odemeler-dengesi", "_tarih3"): (12, "haftalık dış borç ödeme takvimi"),
     ("dibs-verim-egrisi", "_tarih2"): (45, "aylık bacak"),
     ("enflasyon", "faiz_gun"): (40, "günlük faiz bacağı"),
