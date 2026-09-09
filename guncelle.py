@@ -515,7 +515,11 @@ HATLAR: list[Hat] = [
         # fiyatlarla sektörel toplam + vergi GSYH'ye eşit mi, artık makul bantta
         # mı. Biri düşerse hat DURUR. Artık bileşenlere dağıtılmaz, ayrı yazılır.
         ["veri.py", "metrik.py", "grafik.py", "ozet_uret.py"], [],
-        {"cikti/*.html": "*"},
+        # uyarilar.json sözleşmeye SONRADAN girdi: hat her koşuda üretiyordu
+        # ama kopya listesinde olmadığı için siteye hiç gitmiyordu — okur
+        # dili kapısı (sayfa sınavı 17) ve koşu kutusu bu hatta taranacak
+        # dosya bulamıyordu. Ölçü vardı, tüketicisi yoktu.
+        {"cikti/*.html": "*", "uyarilar.json": "uyarilar.json"},
         not_="Üç aylık; TÜİK yayımı ~60 gün gecikmeli."),
     Hat("elnino", "El Niño ve Gıda Enflasyonu", P / "ElNino", "el-nino",
         # veri.py ONI'yi NOAA'nın üç ayrı genel ucundan sırayla dener (hiçbiri
@@ -880,6 +884,20 @@ def gerileme_bulgusu(h: Hat, yeni_tarih, eski_tarih) -> list[str]:
     return gerileyen
 
 
+def _bicim():
+    """ortak/bicim — tarih yazımının TEK sözleşmesi (site/src/lib/bicim.ts eşi)."""
+    global _BICIM
+    try:
+        return _BICIM
+    except NameError:
+        pass
+    import sys as _s
+    _s.path.insert(0, str(KOK / "ortak"))
+    import bicim as _b
+    _BICIM = _b
+    return _BICIM
+
+
 def _tarih_degeri(m: str) -> "datetime.date | None":
     """ozet.json'daki tarih metnini kıyaslanabilir bir güne çevir.
 
@@ -891,14 +909,29 @@ def _tarih_degeri(m: str) -> "datetime.date | None":
     m = (m or "").strip()
     if not m or m in ("None", "?"):
         return None
+    # AY VE GÜN YAZIMI ORTAK SÖZLEŞMEDEN ÇÖZÜLÜR (ortak/bicim.tarihe_cevir).
+    # Burada ikinci bir ayrıştırıcı vardı ve AYNI dizgeye 29 gün farklı gün
+    # veriyordu: "06.2026" → burada ayın 1'i, sözleşmede ayın SON günü.
+    # Ayrışma yalnız BİÇİM GEÇİŞİNDE görünüyor ve tam da orada zarar veriyor —
+    # bir hat gün yazımından ay yazımına geçtiğinde (30.06.2026 → 06.2026) veri
+    # hiç gerilemediği hâlde gerileme kapısı düşer ve hat siteye kopyalanmaz
+    # (09.09.2026'da büyüme hattında ölçüldü). Çeyrek yazımı ile damga
+    # sözleşmede yok; onlar burada kalıyor ve ikisi de dönemin SON gününe
+    # demirleniyor, yani ay yazımıyla aynı kural.
     ceyrek = re.match(r"^(\d{4})[-\s]*[ÇQq](\d)$", m)
     if ceyrek:
         yil, c = int(ceyrek.group(1)), int(ceyrek.group(2))
-        return _dt.date(yil, min(3 * c, 12), 1)
-    for kalip in ("%d.%m.%Y", "%Y-%m-%d", "%d/%m/%Y", "%m.%Y", "%Y-%m", "%Y"):
+        ay = min(3 * c, 12)
+        return _bicim().tarihe_cevir(f"{ay:02d}.{yil}")
+    iso_ay = re.match(r"^(\d{4})-(\d{2})$", m)   # sözleşmede yok; aynı kurala çekilir
+    if iso_ay:
+        return _bicim().tarihe_cevir(f"{iso_ay.group(2)}.{iso_ay.group(1)}")
+    ortak = _bicim().tarihe_cevir(m)
+    if ortak is not None:
+        return ortak
+    for kalip in ("%d/%m/%Y", "%Y"):       # sözleşmede olmayan iki eski yazım
         try:
-            return _dt.datetime.strptime(m[:len("2026-08-18") if "%d" in kalip else 7
-                                           if "%m" in kalip else 4], kalip).date()
+            return _dt.datetime.strptime(m[:10 if "%d" in kalip else 4], kalip).date()
         except ValueError:
             continue
     try:                                   # "2026-08-18 18:54 UTC" gibi damgalar
