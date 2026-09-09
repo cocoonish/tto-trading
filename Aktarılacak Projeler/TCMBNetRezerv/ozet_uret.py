@@ -86,10 +86,25 @@ son["d"] = son["net_rezerv_usd"].diff()
 uclar = son.dropna(subset=["d"]).reindex(
     son.dropna(subset=["d"])["d"].abs().sort_values(ascending=False).index
 ).head(3).sort_values("Tarih")
+#
+# ETİKET İLE SAAT AYRI ANAHTARLARDIR. Bu üçlünün gün yazısı bir zamanlar
+# `u1_tarih` adıyla ve `GG.AA` yazımıyla duruyordu; ikisi birden kusurdu.
+# 09.09.2026'da ölçüldü: `_tarih` soneki taşıyan bir alanı hem bültenin
+# karanlık denetimi hem sayfadaki canlı değer bileşeni SAAT sanıyor, ama
+# `11.08` biçim sözleşmesinde (GG.AA.YYYY · AA.YYYY · ISO) çözülmüyor —
+# ikisi de alanı SESSİZCE atlıyordu, yani bu sekiz alan bayatlık denetiminin
+# tamamen dışındaydı. Ayrıştıramayan bir denetim hep "sorun yok" der.
+# Şimdi üç ayrı iş üç ayrı anahtarda: `u1_delta` değer, `u1_delta_tarih`
+# onun saati (tam yazımla, çözülür), `u1_etiket` sayfada basılan kısa gün.
+# Saatin yaşı pencereyle SINIRLIDIR ve bayatlık eşiğine değmez: 903 kayan
+# pencerede ölçüldü, 21 işlem günü takvimde en fazla 35 gün kaplıyor
+# (medyan 28) — hem karanlık denetiminin hem canlı değer bileşeninin
+# öntanımlı 45 günlük eşiğinin altında, yani sahte "donmuş seri" üretmez.
 uc_alanlar = {}
 for i, (_, r) in enumerate(uclar.iterrows(), start=1):
-    uc_alanlar[f"u{i}_tarih"] = r["Tarih"].strftime("%d.%m")
+    uc_alanlar[f"u{i}_etiket"] = r["Tarih"].strftime("%d.%m")
     uc_alanlar[f"u{i}_delta"] = round(float(r["d"]), 1)
+    uc_alanlar[f"u{i}_delta_tarih"] = r["Tarih"].strftime("%d.%m.%Y")
 
 # --- Akım: son geçerli gün + son beş işlem günü + içinde bulunulan ay -------
 # Bütün ak_* TARİHLERİ HAM etikettir (akımın başladığı gün) — bkz. yukarıdaki
@@ -98,9 +113,13 @@ ak = g.dropna(subset=["net_doviz_alimi"])
 aks = ak.iloc[-1] if len(ak) else None
 ak_etiket = aks["Tarih"] if aks is not None else None
 son5 = ak.tail(5)
+# Aynı ayrım (bkz. yukarıdaki etiket/saat notu): `ak_g1` değer, `ak_g1_tarih`
+# onun saati — TAM yazımla, çünkü sayfadaki canlı değer bileşeni bu alanı
+# `ak_g1`in saati olarak okuyor; `ak_g1_etiket` sayfada basılan kısa gün.
 son5_alanlar = {}
 for i, (_, r) in enumerate(son5.iterrows(), start=1):
-    son5_alanlar[f"ak_g{i}_tarih"] = r["Tarih"].strftime("%d.%m")
+    son5_alanlar[f"ak_g{i}_etiket"] = r["Tarih"].strftime("%d.%m")
+    son5_alanlar[f"ak_g{i}_tarih"] = r["Tarih"].strftime("%d.%m.%Y")
     son5_alanlar[f"ak_g{i}"] = round(float(r["net_doviz_alimi"]), 1)
 
 # Aylık toplam ETİKET bazlıdır: etiketi o takvim ayına düşen akımların toplamı.
