@@ -261,6 +261,160 @@ sina("ağırlık çözümü: tek tek eksik çocuk yine dışarıda kalır",
      _r2 is not None and _r2["eksik_cocuk"] == 1 and "c" not in _r2["paylar"].index,
      str(_r2 and _r2["paylar"].index.tolist()))
 
+# ---------------------------------------------------------------------------
+# 5. KISMİ YAYIM: AİLE İÇİ KIYAS — AİLELER ARASI FARK TAKVİMDİR
+# ---------------------------------------------------------------------------
+# 09.09.2026: ölçüt 72 serinin tamamını tek en yeni aya karşı ölçüyordu. YKKE
+# yapısal olarak bir ay geriden gelir ve her koşuda "1/72 seri geride" diye
+# sayfaya basılıyordu; ay sonunda PKA cari ayı ilan edince TÜFE ailesinin
+# altmış küsur serisi "geride" görünecekti. Yanlış alarm basan bir uyarıyı
+# kimse okumaz — ölçütün yakalamak için yazıldığı 03.09 arızası da onunla
+# birlikte görünmez olurdu.
+print("\n▶ Kısmi yayım: aile içi kıyas")
+
+import datetime as _dt
+
+_AY7, _AY8, _AY9 = (pd.Timestamp(f"2026-0{i}-01") for i in (7, 8, 9))
+_kodlar: dict[str, object] = dict(veri.ANA_SERI)
+_kodlar.update({f"ana_{k}": None for k in veri.ANA_GRUP_AD})
+_kodlar.update({f"oktg{k}": None for k in veri.OKTG_AD})
+_kodlar.update(veri.BEKLENTI)
+_sutun = list(_kodlar)
+
+# KAPSAM SÖZLEŞMEDEN: kos()'un kurduğu her sütun bir aileye bağlı ve her aile
+# TAZELIK'te ilanlı. Ailesiz bir sütun ölçütün görmediği yerdir.
+_ailesiz = [k for k in _sutun if veri.seri_ailesi(k) is None]
+sina("kos()'un kurduğu her aylık sütunun bir yayım ailesi var", not _ailesiz, str(_ailesiz))
+_ilansiz = {veri.seri_ailesi(k) for k in _sutun} - set(veri.TAZELIK)
+sina("her aile TAZELIK'te toleransıyla ilanlı", not _ilansiz, str(_ilansiz))
+sina("İYA, hanehalkı ve PKA üç ayrı aile (ay içinde üç ayrı günde yayımlanır)",
+     len({veri.seri_ailesi("pka_12a"), veri.seri_ailesi("reel_kesim_12a"),
+          veri.seri_ailesi("hanehalki_12a")}) == 3)
+
+# (a) 09.09 hâli: YKKE bir ay geride, kalan her şey ağustosta → SATIR YOK.
+_bugun_hali = {k: _AY8 for k in _sutun}; _bugun_hali["ykke"] = _AY7
+sina("yapısal gecikmeli YKKE kısmi yayım sayılmaz", not veri.kismi_yayim(_bugun_hali),
+     str(veri.kismi_yayim(_bugun_hali)))
+
+# (b) Ay sonu: PKA cari ayı ilan etti, TÜFE ailesi henüz geçen ayda → SATIR YOK.
+_ay_sonu = {k: _AY7 for k in _sutun}
+for _k in _sutun:
+    if _k.startswith("pka_"):
+        _ay_sonu[_k] = _AY8
+sina("ay sonunda öne geçen PKA, TÜFE ailesini 'geride' saydırmaz",
+     not veri.kismi_yayim(_ay_sonu), str(veri.kismi_yayim(_ay_sonu))[:160])
+
+# (c) Ay ortası: PKA çıktı, İYA ve hanehalkı henüz çıkmadı → SATIR YOK.
+_ay_ortasi = {k: _AY8 for k in _sutun}
+for _k in _sutun:
+    if _k.startswith("pka_"):
+        _ay_ortasi[_k] = _AY9
+sina("ay ortasında PKA önde, İYA/hanehalkı geride: satır yok",
+     not veri.kismi_yayim(_ay_ortasi), str(veri.kismi_yayim(_ay_ortasi))[:160])
+
+# (d) 03.09 arızası: manşet + on üç ana grup temmuzda, ailenin kalanı ağustosta
+# → TEK satır, TÜFE ailesi adıyla, 14 seri, ağustos.
+_uc_eylul = {k: _AY8 for k in _sutun}
+for _k in ["tufe"] + [f"ana_{k}" for k in veri.ANA_GRUP_AD]:
+    _uc_eylul[_k] = _AY7
+_uc_eylul["ykke"] = _AY7                       # o gün de bir ay gerideydi
+_u = veri.kismi_yayim(_uc_eylul)
+sina("03.09 arızası (manşet ailesi geride) TEK satırla yakalanıyor", len(_u) == 1, str(_u))
+sina("satır aileyi ve geride kalan sayısını adıyla yazıyor",
+     bool(_u) and "TÜFE / ÖKTG / Yİ-ÜFE" in _u[0] and "14/" in _u[0]
+     and "Ağustos 2026" in _u[0], (_u or [""])[0][:200])
+sina("satırda manşet (TÜFE genel endeks) ilk altı adın içinde",
+     bool(_u) and "TÜFE genel endeks" in _u[0].split(" — ", 1)[-1].split(".")[0])
+sina("YKKE, TÜFE ailesinin satırında anılmıyor (kendi ailesi)",
+     bool(_u) and "Kiracı" not in _u[0])
+
+# (e) OKUR DİLİ: satır sayfaya olduğu gibi basılır — anahtar adı, ISO tarih,
+# backtick yok. İlk yazım "ykke" anahtarını basıyordu.
+_kusur = [x for x in _u if re.search(r"\b[a-z]+_[a-z]+\b|\d{4}-\d{2}|`", x)]
+sina("kısmi yayım satırı okur diliyle (anahtar adı, ISO tarih, backtick yok)", not _kusur, str(_kusur)[:200])
+try:
+    sys.path.insert(0, str(veri.PROJE.parents[1] / "ortak"))
+    import okur_dili as _od
+    _b = _od.kosu_kaydi_tara(_u)
+    sina("kısmi yayım satırı ortak/okur_dili koşu kaydı taramasından temiz", not _b, str(_b)[:200])
+except ImportError as _ex:
+    sina("ortak/okur_dili içe aktarıldı", False, str(_ex))
+
+# (f) Durmuş seri: iki ay ve daha çok geride kalan üye "birkaç saat" değil
+# "bırakmış olabilir" cümlesini alır.
+_durmus = {k: _AY9 for k in _sutun}; _durmus["oktg12"] = _AY7
+_ud = veri.kismi_yayim(_durmus)
+sina("iki ay geride kalan üye durmuş seri olarak yazılıyor",
+     len(_ud) == 1 and "bırakmış olabilir" in _ud[0] and "birkaç saat" not in _ud[0],
+     str(_ud)[:200])
+
+# (g) Ailesi tanımsız sütun sessizce atlanmaz, adıyla listelenir.
+_yabanci = {k: _AY8 for k in _sutun}; _yabanci["hizmet_ufe"] = _AY7
+_uy = veri.kismi_yayim(_yabanci)
+sina("ailesi tanımsız sütun adıyla görünür", any("TANIMSIZ" in x for x in _uy), str(_uy)[:160])
+
+# (h) ÖLÇÜ VAR, TÜKETİCİ VAR MI: tazelik_denetimi ölçütü gerçekten çağırıyor.
+_td = next(d for d in ast.parse(Path(veri.__file__).read_text(encoding="utf-8")).body
+           if isinstance(d, ast.FunctionDef) and d.name == "tazelik_denetimi")
+sina("tazelik_denetimi() kısmi yayım ölçütünü çağırıyor",
+     any(isinstance(n, ast.Call) and isinstance(n.func, ast.Name)
+         and n.func.id == "kismi_yayim" for n in ast.walk(_td)))
+
+# ---------------------------------------------------------------------------
+# 6. FAİZ BACAĞININ SAATİ GÜNDÜR; AÇIK AYIN ETİKETİ GELECEĞE DÜŞER
+# ---------------------------------------------------------------------------
+# 09.09.2026: özet `faiz_tarih` = "09.2026" yazıyordu — `faiz` 02.09
+# kotasyonuyken açık ayın etiketi. Biçim sözleşmesi aylık damgayı ayın son
+# gününe demirler: dosya 30.09.2026'yı ilan ediyordu ve sayfa sınavı geleceğe
+# düşen bacağı süzüp geçtiği, karanlık denetimi eksi gün farkını eşiğin altında
+# saydığı için hiçbir kapı düşmüyordu.
+print("\n▶ Faiz bacağının saati")
+
+import ozet_uret
+
+_bugun = _dt.date(2026, 9, 9)
+sina("gün varsa faiz saati kotasyonun günü (GG.AA.YYYY)",
+     ozet_uret.faiz_saati("2026-09-01", "2026-09-02", _bugun) == "02.09.2026",
+     str(ozet_uret.faiz_saati("2026-09-01", "2026-09-02", _bugun)))
+sina("gün yoksa yalnız KAPANMIŞ ay yazılır (AA.YYYY)",
+     ozet_uret.faiz_saati("2026-08-01", None, _bugun) == "08.2026")
+sina("gün yoksa AÇIK ay yazılmaz (ölçülemeyen boş kalır)",
+     ozet_uret.faiz_saati("2026-09-01", None, _bugun) is None)
+try:
+    import bicim as _bicim
+    for _ay, _gun in (("2026-09-01", "2026-09-02"), ("2026-08-01", None), ("2026-09-01", None)):
+        _v = ozet_uret.faiz_saati(_ay, _gun, _bugun)
+        _t = _bicim.tarihe_cevir(_v) if _v else None
+        sina(f"faiz saati bugünden ileri değil ({_ay!r}, {_gun!r})",
+             _t is None or _t <= _bugun, f"{_v} → {_t}")
+except ImportError as _ex:
+    sina("ortak/bicim içe aktarıldı", False, str(_ex))
+
+# Özet üreticisi damgayı bu fonksiyondan alıyor; ay etiketini doğrudan basan
+# eski yol geri gelmemeli.
+_ou = Path(ozet_uret.__file__).read_text(encoding="utf-8")
+_main = next(d for d in ast.parse(_ou).body
+             if isinstance(d, ast.FunctionDef) and d.name == "main")
+_faiz_atama = [n for n in ast.walk(_main) if isinstance(n, ast.Assign)
+               for t in n.targets if isinstance(t, ast.Subscript)
+               and isinstance(t.slice, ast.Constant) and t.slice.value == "faiz_tarih"]
+sina("özet üreticisi faiz_tarih'i faiz_saati() üzerinden yazıyor",
+     bool(_faiz_atama) and all(
+         "faiz_saati" in ast.dump(n.value) or
+         (isinstance(n.value, ast.Name) and n.value.id == "_ft") for n in _faiz_atama)
+     and 'reel__faiz_tarih"]).strftime("%m.%Y")' not in _ou)
+sina("ölçüm katmanı faiz gününü kendisi yazıyor (reel__faiz_gun)",
+     'o["reel__faiz_gun"]' in Path(metrik.__file__).read_text(encoding="utf-8"))
+sina("'yayımdan bu yana N gün' özete yazılmıyor (koşu anında donan sayı)",
+     "yayim_gecikme_gun" not in _ou)
+_mdx = veri.PROJE.parents[1] / "site/src/content/projeler/enflasyon.mdx"
+sina("proje sayfası 'yayımdan bu yana N gün' sayısını çağırmıyor",
+     _mdx.exists() and 'anahtar="yayim_gecikme_gun"' not in _mdx.read_text(encoding="utf-8"),
+     "sayfa yok" if not _mdx.exists() else "anahtar hâlâ çağrılıyor")
+sina("proje sayfası yayım tarihini ve günlük bacağın gününü çağırıyor",
+     _mdx.exists() and 'anahtar="yayim_tarihi"' in _mdx.read_text(encoding="utf-8")
+     and 'anahtar="faiz_gun"' in _mdx.read_text(encoding="utf-8"))
+
 print(f"\n{'═' * 70}")
 print(f"  {len(GECTI)} geçti · {len(DUSTU)} düştü")
 if DUSTU:
