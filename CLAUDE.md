@@ -1452,3 +1452,65 @@ anında sapmayı adıyla uyarıyor. DİBS'te aynı sınıfın bir sonraki hâli
 ölçülerek kapatıldı: alt yazıya veriden gelen ay adı girdiği için satır
 sayısı ay adının uzunluğuna bağlı olabilirdi; 12×12 = 144 ay bileşiminin
 hepsinde satır sayısı 3 çıktı ve bu ölçüm hattın duman sınamasına kilitlendi.
+
+**Kurucu ilke — BİR ÖLÇÜNÜN CETVELİ ÖLÇÜNÜN PARÇASIDIR; ve bir kuralın
+uygulanmadığı yer, kuralın yazıldığı yerle aynı görünür.** 09.09.2026'da
+denetimin görmediği dört hat (odemeler · fx · marj · ovp) aynı yöntemle
+incelendi: 26 ham bulgu, 4 ÇÜRÜTÜLDÜ, 4 oylanamadan kaldı.
+
+Turun ilk bulgusu oturumun KENDİ ölçümüydü ve yanlıştı. "Beş hattın yaşı
+toleransını aşıyor" diye ölçüldü — kredi · makroihtiyati · yabanci ·
+ypmevduat 12 gün (eşik 11), odemeler 71 (eşik 45) — ve haftalık dörtlünün
+tarihçesi bunu doğruluyordu (sağlıklı çevrimde azami 13 gün). Eşikleri
+gevşetmek kaçınılmaz görünüyordu. Tüketici okununca hüküm TERSİNE döndü:
+`denetim.tazelik` VERİ TARİHİNİN YAŞINI değil `gozlem.son_gorulme` ile
+"bu SÜRÜME geçileli kaç gün"ü ölçüyor; aynı hatlar o cetvelle 1, 1, 5, 0
+gün ve 21 hattın HİÇBİRİ eşiğini aşmıyor. Depo bu ayrımı `RITIM` ile
+`Tetik.en_gec` arasında zaten adıyla yazmıştı; ölçen taraf onu okumadan
+ölçtü. Bir eşiği tartışmadan önce onu OKUYAN kodun hangi büyüklüğü
+ölçtüğü sorulur — iki cetvel aynı birimi (gün) verir ve birbirine tıpatıp
+benzer.
+
+Ayakta kalanların en pahalısı OVP'deydi ve bir GÜN sonrası için kuruluydu.
+TÜFE serisi ayın İLK gününde indeksli; hat üç ayrı yerde bu ham indeksi
+saat olarak kullanıyordu. Kural dosyada ZATEN YAZILIYDI ("aylık bir gözlem
+GÜN gibi yazılamaz") ama yalnız `tufe_tarih`e uygulanmıştı: aynı bloktan
+fanlanan iki anahtar "01.08.2026" çıkıyor, `gecikme_tufe_gun` 39 yazıyor
+(doğrusu 9), ve asıl bedel 15.09.2026'da geliyordu — yaş 45 günlük
+toleransı aşıyor ve sıradaki TÜFE yayımına (03.10) kadar 18 gün okura
+SAHTE "bacak gecikti" satırı basılacaktı. Çıpa TEK yere (`_saatler`),
+yazım TEK fonksiyona (`blok_damga`) alındı: damga, yaş ve "en geride olan
+blok" seçimi aynı günden okur. Bir kural bir kez yazılır, HER YERE
+uygulanır; yazıldığı yerde doğru göründüğü için uygulanmadığı yer
+görünmez.
+
+Düzeltme kendi kuyruğunu da açtı: `KARANLIK_GUN['ovp']=75` tam o şişmeye
+göre konmuştu. Çıpa düzelince ölçülen iç boşluk 38 → 8 güne indi ve eşik
+ölçüden yeniden türetildi (yapısal azami 32 gün → eşik 50, yanlış alarm 0).
+Bir kusura göre konmuş eşik, kusur düzeltilince yeniden ölçülmezse
+gerekçesiz bir körlük olarak kalır.
+
+Aynı sınıfın iki eşi daha kapandı. (1) `Deger` bir anahtarın kendi saati
+yoksa hattın ANA saatini basar; FX'in optimizasyon karnesinin on anahtarı
+ızgara aramasından geliyor ve arama haftalarca yenilenmiyordu —
+kalibrasyon 22.07, ana saat 09.09, okur 49 gün önceki ölçümü bugünün
+ölçümü sanıyordu. "Bir ŞEKLİN tarihi HATTIN tarihi değildir" kuralının
+DEĞER tarafı. (2) Ödemeler dengesi ana saatini "30.06.2026" yazıyordu;
+aynı anahtarı (`ay_kisa`) yazan kardeş hat butce-borc "06.2026" yazıyor —
+tek anahtar adı, iki sözleşme, sayfa ikisini yan yana basıyor.
+
+Kapsam kapısının öbür yarısı da kondu. Ölçüt "kütükteki her ilanın eşiği
+var mı" diye soruyordu; "her eşiğin ALANI var mı" diye sormuyordu.
+`denetim.tazelik` bir alanın kaydını bulamazsa `continue` der, yani adı
+kayan bir ikincil saat eşiğini alır, sınavı geçer ve SONSUZA KADAR sessiz
+kalır. Bugünkü ağaçta 29 kaydın 29'u karşılığını buluyor (yanlış alarm 0);
+bir alan adı tek harf kaydırıldığında duman DÜŞÜYOR.
+
+ÇÜRÜTÜLENLER de kayda değer, çünkü ikisi ikna ediciydi. "OVP kur bacağı
+hâlâ EVDS valör damgalı" — hat Yahoo'ya geçtikten sonra koşmuş ve saatini
+ilerletmişti. "Tarifteki TCMB kur yayımı artık hattın hiçbir saatini
+ilerletmiyor, her gün sahte alarm doğacak" — mekanizma doğru, sonuç yanlış:
+Yahoo'nun işlem günleri TCMB'nin yayım günleriyle örtüşüyor, yani tetikli
+koşu saati yine ilerletiyor. Ölçüldü: 18 hattın 18'inde yeniden deneme
+sayacı 0. Bir tarifin GEREKÇESİ eskiyebilir; ürettiği DAVRANIŞ eskimemiş
+olabilir.
