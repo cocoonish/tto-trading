@@ -1416,3 +1416,39 @@ davranış bugünküyle birebir aynı, yani tablo hiçbir koşulda YENİ bir yan
 alarm üretemez: eklenen her gün sınırı yalnız İLERİ taşır. AÇIK KALAN:
 Ramazan ve Kurban günleri girilmedi; girilene kadar o haftalarda sınır
 yalnız hafta sonunu bilir.
+
+**Kurucu ilke — ZORLANMIŞ KOŞU BEDAVA BİR DOĞRULAMA ARACI DEĞİLDİR; ve bir
+KAYNAK SÖZLEŞMESİ değişimi hat başına BİR günlük engel demektir.** 09.09.2026
+akşamı on altı hattın yeni kodu buluta zorlanmış koşuyla (`zorla=true`) tek
+tek doğrulandı ve iki şey ölçüldü.
+
+(1) KREDİ ZORLANMIŞ KOŞUDA SIĞMIYOR. Hattın ÖNBELLEKLİ hafif koşusu ölçülü
+843 saniye; hafif kip adım tavanı 900. Yani sağlıklı hâlde bile pay %6 ve
+`TTO_YENILE=1` ile veri adımı 900 saniyeyi aşıp süreç ağacıyla birlikte
+kesildi. Tavanın yorumu "hafif kip dakikalarda biter, 15 dakikayı aşan adım
+ASILMIŞTIR" diyor — bu hat için o cümle DOĞRU DEĞİL. Tavanı ölçmeden
+büyütmek çare değil: dıştaki iş akışı adımı zaten 40 dakikada kesiyor ve o
+sınır bütün hatların toplamı için. Kural: kredi (ve ölçülen süresi tavana
+yaklaşan her hat) TAKVİMLE, yani önbellekli koşar; zorlanmış koşu bir
+doğrulama aracı olarak yalnız süresi tavanın yarısının altında ölçülmüş
+hatlarda kullanılır. Zamanlanmış koşu bu değişiklikten etkilenmiyor —
+ölçülen 843 saniye tavanın altında.
+
+(2) SÖZLEŞME DEĞİŞİNCE GERİLEME KAPISI BİR KEZ ÖTER VE BU DOĞRUDUR. USD/TRY
+valörden işlem gününe geçince OVP panosunun saati 09.09'dan 08.09'a
+"geriledi"; kapı siteye kopyalamayı durdurdu ve yayın bir koşu boyunca
+donmuş kaldı. Gerileme gerçek değildi — hattın kendi çıktısındaki
+`gecikme_kur_gun` ESKİ sürümde −1'di, yani yayımlanan damga KAPANMAMIŞ bir
+günü ilan ediyordu. Doğru çözüm hattın O KOŞUDA ürettiği özeti kabul
+etmektir (elle düzeltilmiş değer değil): 113 alanın hepsi hattın çıktısı,
+yeni ve düşen anahtar sıfır. Bir kaynak sözleşmesi değiştirilirken bu bir
+gün baştan hesaba katılır; kapı gevşetilmez.
+
+Yan ölçüm, aynı akşam üçüncü kez görülen bir sınıf: fonlama Şekil 07'nin
+alt yazısı kısaldı, figür 26 piksel alçaldı, sayfa eski yüksekliği ilan
+etmeye devam etti ve YAYIN DÜŞTÜ — kusur hattın yeşil biten koşusunda değil
+saatler sonra sitenin donmasında göründü. `guncelle.py` artık kopyalama
+anında sapmayı adıyla uyarıyor. DİBS'te aynı sınıfın bir sonraki hâli
+ölçülerek kapatıldı: alt yazıya veriden gelen ay adı girdiği için satır
+sayısı ay adının uzunluğuna bağlı olabilirdi; 12×12 = 144 ay bileşiminin
+hepsinde satır sayısı 3 çıktı ve bu ölçüm hattın duman sınamasına kilitlendi.
