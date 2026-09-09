@@ -1,5 +1,5 @@
 {
- "kosum": "2026-09-06",
+ "kosum": "2026-09-09",
  "son_hafta": "2026-08-28",
  "haftalik": [
   653,
@@ -14,13 +14,13 @@
  "parca": {
   "en_eski_bas": "2014-02-28",
   "sorulan_bas": "2013-02-22",
-  "istek_gun": 4954,
-  "istek_satir": 708,
+  "istek_gun": 4957,
+  "istek_satir": 709,
   "parca_gun": 6300,
   "parca_satir": 900,
   "parca_sayisi": 1,
   "satir_siniri": 1000,
-  "kalan_hafta": 192,
+  "kalan_hafta": 191,
   "tek_parca": true,
   "siniri_asiyor": false
  },
@@ -474,7 +474,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -482,7 +482,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -490,7 +490,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -498,7 +498,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -506,7 +506,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -514,7 +514,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -522,7 +522,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -530,7 +530,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -538,7 +538,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -546,7 +546,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -554,7 +554,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -562,7 +562,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -570,7 +570,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -578,7 +578,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -586,7 +586,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -594,7 +594,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -602,7 +602,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -610,7 +610,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -618,7 +618,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -626,7 +626,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -634,7 +634,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -642,7 +642,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -650,7 +650,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -658,7 +658,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -666,7 +666,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -674,7 +674,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -682,7 +682,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -690,7 +690,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -698,7 +698,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -706,7 +706,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -714,7 +714,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -722,7 +722,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   },
@@ -730,7 +730,7 @@
    "aile": "haftalik",
    "tolerans": 12,
    "son": "2026-08-28",
-   "gecikme": 9,
+   "gecikme": 12,
    "yok": false,
    "gec": false
   }

@@ -1,5 +1,5 @@
 {
- "_tarih": "01.08.2026",
+ "_tarih": "08.2026",
  "_ay": "2026-08",
  "kur_bas": "1954-07",
  "kur_son": "2026-08",
@@ -10,6 +10,22 @@
  "emtia_bas": "1960-01",
  "emtia_son": "2026-08",
  "emtia_yas_ay": 0,
+ "kaynak_pink_tarih": "08.2026",
+ "kaynak_pink_yas_ay": 0,
+ "kaynak_pink_kapsam": "Ocak 1960 → Ağustos 2026",
+ "kaynak_pink_durum": "güncel",
+ "kaynak_bls_tarih": "07.2026",
+ "kaynak_bls_yas_ay": 1,
+ "kaynak_bls_kapsam": "Ocak 1960 → Temmuz 2026",
+ "kaynak_bls_durum": "güncel",
+ "kaynak_bis_tarih": "08.2026",
+ "kaynak_bis_yas_ay": 0,
+ "kaynak_bis_kapsam": "Temmuz 1954 → Ağustos 2026",
+ "kaynak_bis_durum": "güncel",
+ "kaynak_ecb_tarih": "12.2025",
+ "kaynak_ecb_yas_ay": 8,
+ "kaynak_ecb_kapsam": "Ocak 1997 → Aralık 2025",
+ "kaynak_ecb_durum": "8 ay geride",
  "reel_gida_son": 6.38,
  "nominal_gida_son": 11.52,
  "kuresel": {
@@ -55,7 +71,7 @@
  "kur_capraz": [
   {
    "gecikme": 0,
-   "korelasyon": -0.232,
+   "korelasyon": -0.231,
    "n": 786
   },
   {
@@ -426,6 +442,7 @@
    "bas": "1961-01"
   }
  ],
+ "kirilim_tarih": "07.2026",
  "gor_emtia": {
   "kayitlar": [
    {
@@ -878,7 +895,79 @@
   }
  },
  "kur_hukum": "olculebilir",
- "kur_hukum_metin": "Küresel gıda emtiasında 4 güçlü El Niño epizodu ölçülebiliyor (örneklem 1961-01'den başlıyor). Türkiye'de bu sayı ikiydi; hüküm kurulamamasının sebebi kanalın yokluğu değil, yerel örneklemin kısalığıydı.",
+ "kur_hukum_metin": "Küresel gıda emtiasında 4 güçlü El Niño epizodu ölçülebiliyor (örneklem Ocak 1961 ayında başlıyor). Türkiye'de bu sayı ikiydi; hüküm kurulamamasının sebebi kanalın yokluğu değil, yerel örneklemin kısalığıydı.",
+ "_uc": {
+  "emtia": "2026-08",
+  "abd": "2026-07",
+  "reel_gida": "2026-07",
+  "kirilim": "2026-07",
+  "faiz_abd": "2026-08",
+  "ea": "2025-12"
+ },
+ "epizot_sayisi_tarih": "07.2026",
+ "reel_gida_son_tarih": "07.2026",
+ "nominal_gida_son_tarih": "08.2026",
+ "kur_olculen_tarih": "07.2026",
+ "kur_kosulsuz_tarih": "07.2026",
+ "kur_epizot_ortalama_tarih": "07.2026",
+ "kur_fark_tarih": "07.2026",
+ "kur_en_iyi_gecikme_tarih": "07.2026",
+ "kur_en_iyi_kor_tarih": "07.2026",
+ "kur_capraz_n_tarih": "07.2026",
+ "son_epizot_oni_tarih": "07.2026",
+ "gor_emtia_olculen_tarih": "07.2026",
+ "gor_emtia_kosulsuz_tarih": "07.2026",
+ "gor_emtia_epizot_ortalama_tarih": "07.2026",
+ "gor_emtia_fark_tarih": "07.2026",
+ "gor_emtia_son_tarih": "08.2026",
+ "abd_olculen_tarih": "07.2026",
+ "abd_kosulsuz_tarih": "07.2026",
+ "abd_epizot_ortalama_tarih": "07.2026",
+ "abd_fark_tarih": "07.2026",
+ "abd_goreceli_son_tarih": "07.2026",
+ "abd_gida_12a_tarih": "07.2026",
+ "abd_tufe_12a_tarih": "07.2026",
+ "abd_gecis_beta_tarih": "07.2026",
+ "abd_gecis_r2_tarih": "07.2026",
+ "abd_gecis_n_tarih": "07.2026",
+ "gecis_yillik_tr_beta_tarih": "08.2026",
+ "gecis_yillik_tr_r2_tarih": "08.2026",
+ "gecis_yillik_tr_n_tarih": "08.2026",
+ "gecis_yillik_abd_beta_tarih": "07.2026",
+ "gecis_yillik_abd_r2_tarih": "07.2026",
+ "gecis_yillik_abd_n_tarih": "07.2026",
+ "gecis_yillik_ea_beta_tarih": "12.2025",
+ "gecis_yillik_ea_r2_tarih": "12.2025",
+ "gecis_yillik_ea_n_tarih": "12.2025",
+ "abd_cekirdek_beta_tarih": "07.2026",
+ "abd_cekirdek_r2_tarih": "07.2026",
+ "abd_cekirdek_gecikme_tarih": "07.2026",
+ "abd_cekirdek_n_tarih": "07.2026",
+ "tr_cekirdek_beta_tarih": "08.2026",
+ "tr_cekirdek_r2_tarih": "08.2026",
+ "tr_cekirdek_gecikme_tarih": "08.2026",
+ "tr_cekirdek_n_tarih": "08.2026",
+ "ea_olculen_tarih": "12.2025",
+ "ea_kosulsuz_tarih": "12.2025",
+ "ea_epizot_ortalama_tarih": "12.2025",
+ "ea_fark_tarih": "12.2025",
+ "ea_goreceli_son_tarih": "12.2025",
+ "ea_gida_son_tarih": "12.2025",
+ "ea_tufe_son_tarih": "12.2025",
+ "fed_olculen_tarih": "07.2026",
+ "fed_kosulsuz_18ay_tarih": "08.2026",
+ "fed_hukum_tarih": "07.2026",
+ "fed_hukum_metin_tarih": "07.2026",
+ "gecis_abd_beta_tarih": "07.2026",
+ "gecis_abd_r2_tarih": "07.2026",
+ "gecis_abd_gecikme_tarih": "07.2026",
+ "gecis_abd_n_tarih": "07.2026",
+ "gecis_tr_beta_tarih": "07.2026",
+ "gecis_tr_r2_tarih": "07.2026",
+ "gecis_tr_gecikme_tarih": "07.2026",
+ "gecis_tr_n_tarih": "07.2026",
+ "kur_hukum_tarih": "07.2026",
+ "kur_hukum_metin_tarih": "07.2026",
  "reel_gida_tarihce": [
   {
    "ay": "1961-01",
@@ -4025,6 +4114,8 @@
    "deger": 6.38
   }
  ],
- "uyarilar": [],
+ "uyarilar": [
+  "Euro Bölgesi HICP (ECB) serisi hattın en yeni ayının 8 ay gerisinde (son gözlem Aralık 2025, hat Ağustos 2026); ondan türeyen sayılar o aya kadar ölçülmüştür ve kaynak yenilendiğinde kendiliğinden ilerler."
+ ],
  "yontem_notu": "Emtia fiyatları ABD TÜFE'siyle deflate edilir (reel). Epizot tanımı, pencere uzunluğu ve göreceli enflasyon tanımı Türkiye ölçümüyle AYNIDIR; iki taraf aynı cetvelle ölçülmezse karşılaştırma anlamsız olurdu. Fed patikası betimseldir ve ortalaması alınmaz."
 }
