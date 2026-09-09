@@ -750,6 +750,44 @@ def okur_dili_bulgulari(hedef: Path) -> list[str]:
             for k, m in satirlar for _i, aile, esl in okur_dili.kosu_kaydi_tara([m])]
 
 
+def yukseklik_bulgulari(h: "Hat") -> list[str]:
+    """Hattın ürettiği figür yüksekliği ile sayfanın İLAN ETTİĞİ yükseklik ayrıştı mı.
+
+    Yükseklik alt yazının SATIR SAYISINDAN türüyor; bir alt yazı uzayınca ya da
+    kısalınca figür 26 piksel oynuyor ve sayfa eski sayıyı ilan etmeye devam
+    ediyor. Sapma yayın kapısında (sayfa sınavı 3) ENGEL — yani kusur hattın
+    KENDİ koşusunda değil, saatler sonra yayın durduğunda görünüyor. 09.09.2026'da
+    ölçüldü: fonlama Şekil 07'nin alt yazısı kısaldı, hat yeşil bitti, yayın
+    iş akışı düştü ve site o sürümde dondu. Bu satır aynı soruyu kopyalama
+    anında sorar. UYARIDIR: hattı düşürmez (düşürmek hattın öbür figürlerini de
+    dondurmak olurdu) ama koşunun çıktısında adıyla görünür."""
+    icerik = SITE.parent.parent / "src" / "content"
+    yj = KOK / h.klasor / "cikti" / "yukseklikler.json"
+    if not yj.exists() or not icerik.exists():
+        return []
+    try:
+        uretim = json.loads(yj.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return []
+    sapan = []
+    for ad, px in uretim.items():
+        kalip = re.compile(r'src="/projeler/' + re.escape(h.slug) + "/" + re.escape(ad)
+                           + r'"[\s\S]{0,400}?yukseklik=\{(\d+)\}')
+        for mdx in icerik.rglob("*.mdx"):
+            try:
+                m = kalip.search(mdx.read_text(encoding="utf-8"))
+            except OSError:
+                continue
+            if m and int(m.group(1)) != int(px):
+                sapan.append(f"{ad}: sayfa {m.group(1)} ilan ediyor, üretim {px}")
+            if m:
+                break
+    if not sapan:
+        return []
+    return [f"figür yüksekliği sayfayla ayrıştı ({len(sapan)}): " + " · ".join(sapan[:4])
+            + " — yayın kapısı bunu ENGEL sayar"]
+
+
 def sayfa_anahtar_bulgulari(h: "Hat", hedef: Path) -> list[str]:
     """Sitedeki sayfaların bu hattan ADIYLA çağırdığı (`<Deger proje=slug
     anahtar=…>`) ama yeni ozet.json'da OLMAYAN anahtarlar.
@@ -1571,6 +1609,8 @@ def kos(h: Hat, tam: bool, gunluk: bool = False,
     # yayın kapısı düşecek; kusur burada, hattın kendi koşusunda görünsün.
     for sa in sayfa_anahtar_bulgulari(h, hedef):
         print(_renk(f"    [UYARI] {sa}", 31))
+    for yb in yukseklik_bulgulari(h):
+        print(_renk(f"    [UYARI] {yb}", 31))
 
     yeni_tarih = _ozet_tarih(h)
     y, e = _tarih_ozeti(yeni_tarih), _tarih_ozeti(eski_tarih)
