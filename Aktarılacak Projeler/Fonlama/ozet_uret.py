@@ -20,7 +20,7 @@ import sys
 import pandas as pd
 
 from veri import (PROJE, VERI, AY_TR, cerceveler, gun_ad, sekil_saatleri,
-                  tazelik_tolerans)
+                  tazelik_tolerans, yayim_gun_gecikmesi)
 
 O: dict = {}
 
@@ -57,6 +57,42 @@ def koy(anahtar: str, deger, ondalik: int | None = 2) -> None:
         O[anahtar] = int(round(float(deger)))
     else:
         O[anahtar] = round(float(deger), ondalik)
+
+
+def bayat_karari(gecikme_yayim_gun: int, hafta_gecikme_gun: int,
+                 uyarilar: list[str]) -> dict:
+    """Bayat bayrağı ve okura basılan cümlesi — AĞA ÇIKMAZ, sahte girdiyle koşar.
+
+    Karar `main()`in içinde duruyordu, yani hiçbir kapı onu koşturamıyordu:
+    tek sınayıcısı `bayatlik_sinavi.py` idi ve o dosya `duman.py` adını
+    taşımadığı için `guncelle.py` onu HİÇ görmüyordu (09.09.2026'da ölçüldü).
+    Ağa çıkmayan iş ayrı fonksiyona çıkar; duman sınaması onu gerçek
+    çerçeveyle çağırır.
+    """
+    tol_gun = tazelik_tolerans("gunluk")
+    tol_hafta = tazelik_tolerans("haftalik")
+    sebep: list[str] = []
+    if (gecikme_yayim_gun or 0) > tol_gun:
+        sebep.append(f"günlük bacak {gecikme_yayim_gun} yayım günü geride "
+                     f"(tolerans {tol_gun} yayım günü)")
+    if (hafta_gecikme_gun or 0) > tol_hafta:
+        sebep.append(f"haftalık bacak {hafta_gecikme_gun} gün geride "
+                     f"(tolerans {tol_hafta} gün)")
+    # Veri katmanının kendi tazelik/önbellek uyarıları da bayatlık kanıtıdır.
+    izler = [u for u in uyarilar
+             if u.startswith(("TAZELİK", "ESKİ ÖNBELLEK", "BAYAT"))]
+    if izler:
+        sebep.append(f"veri katmanı {len(izler)} tazelik/önbellek uyarısı bastı")
+    return {
+        "bayat": bool(sebep),
+        "bayat_tolerans_gun": tol_gun,
+        "bayat_tolerans_hafta": tol_hafta,
+        "bayat_cumlesi": (
+            "BAYAT VERİ: " + "; ".join(sebep)
+            + ". Sayfadaki sayılar bu koşuda İLERLEMEMİŞ olabilir."
+            if sebep else
+            "Veri taze: yayım gecikmesi tolerans içinde, tazelik uyarısı yok."),
+    }
 
 
 def son(s: pd.Series):
@@ -97,7 +133,13 @@ def main() -> int:
     O["kosum_tarihi"] = tr_tarih(bugun)
     # Yayım gecikmesi: APİ tablosu AYNI İŞ GÜNÜ yayımlanıyor; ölçülen gecikme
     # duvar saatine göre hesaplanır (verinin kendi son gününe göre değil).
+    # İKİ AYRI ÖLÇÜ, İKİ AYRI İŞ. Takvim günü okura "kaç gün geçti" der ve
+    # sayfada öyle yazılır; BAYATLIK kararı ise YAYIM GÜNÜ ile verilir, çünkü
+    # hafta sonu ve resmî tatilde kaynak kapalıdır ve takvim günü ölçüsü
+    # bayram haftalarında sekiz ayrı günde sahte alarm veriyordu (bkz.
+    # veri.TAZELIK_GUNLUK).
     koy("yayim_gecikme_gun", (bugun - s_gun).days, 0)
+    koy("yayim_gecikme_yayim_gun", yayim_gun_gecikmesi(s_gun, bugun), 0)
     koy("hafta_gecikme_gun", (bugun - s_hafta).days, 0)
 
     # --- faizler -----------------------------------------------------------
@@ -442,31 +484,8 @@ def main() -> int:
     # Yayım gecikmesi aile toleransını aşarsa veri BAYATTIR. Bu bayrak sayfada
     # görünür bir kutuya bağlanır: kaynak durduğunda hat yeşil bitse bile
     # okurun gördüğü ilk şey bayatlık olur.
-    tol_gun = tazelik_tolerans("gunluk")
-    tol_hafta = tazelik_tolerans("haftalik")
-    bayat_sebep: list[str] = []
-    if (O.get("yayim_gecikme_gun") or 0) > tol_gun:
-        bayat_sebep.append(
-            f"günlük bacak {O['yayim_gecikme_gun']} gün geride "
-            f"(tolerans {tol_gun} gün)")
-    if (O.get("hafta_gecikme_gun") or 0) > tol_hafta:
-        bayat_sebep.append(
-            f"haftalık bacak {O['hafta_gecikme_gun']} gün geride "
-            f"(tolerans {tol_hafta} gün)")
-    # Veri katmanının kendi tazelik/önbellek uyarıları da bayatlık kanıtıdır.
-    izler = [u for u in uyarilar
-             if u.startswith(("TAZELİK", "ESKİ ÖNBELLEK", "BAYAT"))]
-    if izler:
-        bayat_sebep.append(f"veri katmanı {len(izler)} tazelik/önbellek "
-                           "uyarısı bastı")
-    O["bayat"] = bool(bayat_sebep)
-    O["bayat_tolerans_gun"] = tol_gun
-    O["bayat_tolerans_hafta"] = tol_hafta
-    O["bayat_cumlesi"] = (
-        "BAYAT VERİ: " + "; ".join(bayat_sebep)
-        + ". Sayfadaki sayılar bu koşuda İLERLEMEMİŞ olabilir."
-        if bayat_sebep else
-        "Veri taze: yayım gecikmesi tolerans içinde, tazelik uyarısı yok.")
+    O.update(bayat_karari(O.get("yayim_gecikme_yayim_gun"),
+                          O.get("hafta_gecikme_gun"), uyarilar))
 
     O["uyari_sayisi"] = len(uyarilar)
     O["uyari_metni"] = ((O["bayat_cumlesi"] + " · " if O["bayat"] else "")

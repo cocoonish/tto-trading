@@ -19,6 +19,14 @@ YEŞİL bitip sayfada tek bir görünür iz bırakmaması, düzenin yasakladığ
 Ayrıca ters yön de sınanır: dokunulmamış kopyada `bayat` FALSE olmalıdır
 (her koşuda alarm veren bir bayrak, hiç alarm vermeyen kadar işe yaramaz).
 
+BU DOSYA BİR KAPI DEĞİLDİR ve olmamalıdır. Uçtan uca koşar: kopyayı gerçek
+veriyle ve DUVAR SAATİYLE sınar, yani depodaki veri birkaç gün eskiyse "ters
+yön" maddesi düşer. Hattın adımlarından önce koşan bir kapıya bağlansaydı,
+veriyi tazeleyecek koşuyu tam da bayatlık yüzünden durdururdu — yayının önünde
+duran bir denetimin yanlış alarmı arızanın kendisidir. Aynı iki iddia
+`duman.py`de kendi kurduğu çerçeveyle, duvar saatinden bağımsız olarak
+sınanıyor ve KAPI odur; bu dosya elle koşturulan uçtan uca sürümdür.
+
 Koşum:  python3 bayatlik_sinavi.py        (önce hattın normal koşusu)
 """
 from __future__ import annotations

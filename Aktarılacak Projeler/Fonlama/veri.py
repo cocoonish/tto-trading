@@ -41,6 +41,7 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import math
 import os
 import pathlib
 import sys
@@ -399,19 +400,98 @@ AYLIK: dict[str, tuple[str, str]] = {
     "api_trepo_ort":  ("TP.API.TREP.ORT.G1",   "2011-01-01"),
 }
 
+# --------------------------------------------------------------------------- yayım günü
+# KAYNAĞIN YAYIM TAKVİMİ. Tazelik ölçüsünün birimi TAKVİM GÜNÜ DEĞİL, kaynağın
+# yayım yaptığı gün sayısıdır. Sebep 09.09.2026'da ölçüldü: günlük çekirdek
+# serinin (APİ) 2018-09-14 → 2026-09-07 arasındaki 2.001 gözleminde hafta içi
+# boşlukların TAMAMI resmî tatildir ve takvim günü toleransı (4 gün) bayram
+# haftalarında SEKİZ ayrı günde sahte "BAYAT VERİ" basıyordu — 2019-08-14,
+# 2021-07-24/25, 2022-05-04, 2023-07-02, 2024-04-14, 2024-06-19, 2026-05-31.
+# Aynı tarihçede yayım günü ölçüsü SIFIR sahte alarm veriyor. Bir haftalık
+# kapanmanın tek yanlış alarmı bile pahalıdır: kapanamayan bir uyarı, okuru
+# bütün uyarıları görmezden gelmeye alıştırır.
+#
+# Sabit tatiller KURALLA yazılır (kanunla sabit, her yıl aynı gün). Hareketli
+# dinî bayramlar HESAPLANIR — ama hesap ÖLÇÜLDÜ ve ham hâliyle REDDEDİLDİ:
+# tablo takvimi (Kuveyt algoritması) 2019–2026 arasındaki 16 bayramın 10'unda
+# bir gün ileri düşüyor. Bir günlük kayma hem gerçek bir kapanma gününü
+# kaçırır hem olmayan bir gün uydurur, o yüzden pencere iki uçtan BİRER GÜN
+# genişletilir. Genişletmenin bedeli de ölçüldü: 2018-09 → 2026-09 arasında
+# ölçülen 39 hareketli kapanma gününün 39'u pencerenin içinde kalıyor ve
+# karşılığında yılda ortalama 3,1 gerçek yayım günü tazelik ölçüsünün dışında
+# kalıyor (hafta içi günlerin ~%1,2'si). Ölçülmemiş bir sınırı dar tutmak,
+# ölçülmüş bir yanlış alarmı geri getirmekten kötüdür.
+SABIT_TATIL = ((1, 1), (4, 23), (5, 1), (5, 19), (7, 15), (8, 30), (10, 29))
+BAYRAM_PAY_GUN = 1                 # hesabın ±1 günlük kaymasına karşı pencere payı
+BAYRAM_HICRI_ILK, BAYRAM_HICRI_SON = 1430, 1481      # ≈ 2008–2057 miladi
+
+
+def _hicri_jdn(hicri_yil: int, ay: int, gun: int) -> float:
+    """Tablo (aritmetik) hicri takviminin Jülyen gün sayısı."""
+    return (gun + math.ceil(29.5 * (ay - 1)) + (hicri_yil - 1) * 354
+            + math.floor((3 + 11 * hicri_yil) / 30) + 1948439.5) - 1
+
+
+def _jdn_tarih(jdn: float) -> dt.date:
+    return dt.date.fromordinal(int(jdn + 0.5) - 1721425)
+
+
+def _bayram_penceresi() -> frozenset:
+    """Ramazan (1–3 Şevval) ve Kurban (10–13 Zilhicce) bayramları, ±1 gün paylı."""
+    gunler: set = set()
+    for hy in range(BAYRAM_HICRI_ILK, BAYRAM_HICRI_SON):
+        for bas, uzunluk in ((_jdn_tarih(_hicri_jdn(hy, 10, 1)), 3),
+                             (_jdn_tarih(_hicri_jdn(hy, 12, 10)), 4)):
+            for k in range(-BAYRAM_PAY_GUN, uzunluk + BAYRAM_PAY_GUN):
+                gunler.add(bas + dt.timedelta(days=k))
+    return frozenset(gunler)
+
+
+BAYRAM_GUNLERI = _bayram_penceresi()
+
+
+def yayim_gunu(g) -> bool:
+    """TCMB'nin yayım yaptığı bir gün mü: hafta içi ve resmî tatil değil."""
+    g = pd.Timestamp(g).date()
+    if g.weekday() >= 5:
+        return False
+    if (g.month, g.day) in SABIT_TATIL:
+        return False
+    return g not in BAYRAM_GUNLERI
+
+
+def yayim_gun_gecikmesi(son, bugun) -> int:
+    """`son`dan SONRA `bugun`e kadar KAÇIRILAN yayım günü sayısı.
+
+    Referans DUVAR SAATİDİR: verinin kendi son gününü referans almak denetimi
+    kendi kendine referanslı hâle getirir ("son gözlem bugün, demek ki taze").
+    Değişen yalnız BİRİM — hafta sonu ve resmî tatil sayılmaz.
+    """
+    son = pd.Timestamp(son).date()
+    bugun = pd.Timestamp(bugun).date()
+    if bugun <= son:
+        return 0
+    return sum(1 for k in range(1, (bugun - son).days + 1)
+               if yayim_gunu(son + dt.timedelta(days=k)))
+
+
 # --------------------------------------------------------------------------- tazelik
-# (etiket, tolerans TAKVİM GÜNÜ, negatif gecikme muaf mı)
-# Referans DUVAR SAATİDİR: verinin kendi son gününü referans almak denetimi
-# kendi kendine referanslı hâle getirir ("son gözlem bugün, demek ki taze").
+# (etiket, tolerans YAYIM GÜNÜ, negatif gecikme muaf mı)
+# Eşikler SEZGİDEN değil ölçümden: 2018-09-14 → 2026-09-07 arasında her hafta
+# içi gün için "o gün koşsaydık kaç yayım günü geride olurduk" hesaplandı
+# (o günün kendi verisi henüz düşmemiş sayılarak, yani en kötü hâl). Dağılım
+# 2.081 koşuda APİ · AOFM · kotasyon · bilanço · likidite · swap · kur için
+# {0, 1}, TLREF için {0, 1, 2}. Tolerans gözlenen en kötü hâlin BİR ÜSTÜNDE
+# duruyor: sıfır paylı bir eşik ilk aksamada öter.
 TAZELIK_GUNLUK = {
-    "net_fonlama":  ("APİ fonlaması (TP.APIFON3)",            4, False),
-    "aofm":         ("AOFM (TP.APIFON4)",                     4, False),
-    "politika":     ("TCMB kotasyonları (TP.PY.P02.1H)",      4, False),
-    "tlref":        ("TLREF (TP.BISTTLREF.ORAN)",             5, False),
-    "ab_api":       ("Analitik bilanço (TP.AB.A24)",          5, False),
-    "serbest_mevduat": ("Sistem likiditesi (TP.PPIBSM)",      4, False),
-    "swap_alim":    ("Swap stoku (TP.SWAPTEKTAR.*)",          4, False),
-    "usdtry":       ("Döviz kuru (Yahoo Finance USD/TRY)",   4, True),
+    "net_fonlama":  ("APİ fonlaması (TP.APIFON3)",            2, False),
+    "aofm":         ("AOFM (TP.APIFON4)",                     2, False),
+    "politika":     ("TCMB kotasyonları (TP.PY.P02.1H)",      2, False),
+    "tlref":        ("TLREF (TP.BISTTLREF.ORAN)",             3, False),
+    "ab_api":       ("Analitik bilanço (TP.AB.A24)",          2, False),
+    "serbest_mevduat": ("Sistem likiditesi (TP.PPIBSM)",      2, False),
+    "swap_alim":    ("Swap stoku (TP.SWAPTEKTAR.*)",          2, False),
+    "usdtry":       ("Döviz kuru (Yahoo Finance USD/TRY)",    2, True),
 }
 # ETİKETLER OKURA GİDİYOR. Bu satırlar uyarilar.json'a ve oradan sayfadaki koşu
 # kutusuna OLDUĞU GİBİ basılıyor. Günlük tabloda parantez içi kaynağın KENDİ
@@ -419,15 +499,21 @@ TAZELIK_GUNLUK = {
 # künye. Haftalık tabloda ise EVDS'in iç GRUP kodu yazıyordu (bie_kt100h): o
 # kod okurun elinde hiçbir şey ifade etmez ve okur dili ölçütü onu ENGEL
 # sayıyor. Seri kodları zaten yukarıda tanımlı; künye onlardan yazılır.
+# HAFTALIK AİLE TAKVİM GÜNÜ ölçer: haftalık seri Cuma ETİKETLİ, yayımı ertesi
+# perşembedir; "kaçırılan yayım günü" burada tanımsız. Eşik yine ölçüldü
+# (09.09.2026, 2022→2026, 1.219 koşu günü): koşu anındaki en büyük gecikme
+# faiz bacağında 12, ZK bacağında 19 gün. Faiz bacağının eşiği 12 idi, yani
+# PAYI SIFIRDI ve tek bir gecikmiş yayım sahte alarm verirdi; günlük ailedeki
+# gibi gözlenen en kötü hâlin BİR ÜSTÜNE alındı.
 TAZELIK_HAFTALIK = {
-    "f_ticari_tl":  ("Haftalık ticari kredi faizi (TP.KTF17)",      12),
-    "f_mevduat_tl": ("Haftalık TL mevduat faizi (TP.TRY.MT06)",     12),
+    "f_ticari_tl":  ("Haftalık ticari kredi faizi (TP.KTF17)",      13),
+    "f_mevduat_tl": ("Haftalık TL mevduat faizi (TP.TRY.MT06)",     13),
     "zk_taban_tl":  ("ZK'ya tabi TL mevduat tabanı (TP.TLDTHVADE.KB6)", 20),
     "dth_tl":       ("ZK'ya tabi DTH (TP.ZORUNDTH.KB8)",            20),
 }
 
 def tazelik_tolerans(aile: str = "gunluk") -> int:
-    """Bu ailedeki EN SIKI tolerans (takvim günü).
+    """Bu ailedeki EN SIKI tolerans — günlük ailede YAYIM GÜNÜ, haftalıkta takvim günü.
 
     ozet_uret.py bayat bayrağını buradan okur; eşik iki yerde ayrı ayrı
     yazılırsa biri güncellenip öteki unutulur ve bayatlık sessizce kaçar.
@@ -669,21 +755,27 @@ def sekil_saatleri(M, Z, H, R, uzun: bool = False) -> dict[str, str | None]:
 
 
 # --------------------------------------------------------------------------- denetimler
-def tazelik_denetimi(g: pd.DataFrame, h: pd.DataFrame) -> list[str]:
-    bugun = pd.Timestamp.today().normalize()
+def tazelik_denetimi(g: pd.DataFrame, h: pd.DataFrame,
+                     bugun=None) -> list[str]:
+    """Aile bazlı tazelik. GÜNLÜK aile YAYIM GÜNÜ, haftalık aile takvim günü ölçer.
+
+    `bugun` yalnız sınama için açık: duman sınaması bayram haftasını sahte
+    saatle kurup ölçütü kendi arızasına karşı koşturuyor.
+    """
+    bugun = pd.Timestamp.today().normalize() if bugun is None else pd.Timestamp(bugun)
     uy: list[str] = []
     for ad, (etiket, tol, negatif_muaf) in TAZELIK_GUNLUK.items():
         if ad not in g.columns or g[ad].dropna().empty:
             uy.append(f"TAZELİK: '{etiket}' hiç yüklenemedi.")
             continue
         son = g[ad].dropna().index[-1]
-        gecikme = (bugun - son).days
-        if gecikme < 0 and negatif_muaf:
+        if son > bugun and negatif_muaf:
             continue          # kur: ertesi günün kuru bugünden ilan edilir
+        gecikme = yayim_gun_gecikmesi(son, bugun)
         if gecikme > tol:
             uy.append(f"TAZELİK: {etiket} son gözlemi {son:%d.%m.%Y} "
-                      f"({gecikme} gün önce, tolerans {tol} gün). "
-                      "Yayın durmuş olabilir.")
+                      f"({gecikme} yayım günü geride, tolerans {tol} yayım "
+                      "günü). Yayın durmuş olabilir.")
     for ad, (etiket, tol) in TAZELIK_HAFTALIK.items():
         if ad not in h.columns or h[ad].dropna().empty:
             uy.append(f"TAZELİK: '{etiket}' hiç yüklenemedi.")
@@ -879,8 +971,15 @@ def kos(yenile: bool = False) -> dict:
     h.to_csv(VERI / "haftalik.csv")
     a.to_csv(VERI / "aylik.csv")
 
+    # KOŞUNUN ANI da kayda giriyor, yalnız günü değil. Sebep: hattın ana saati
+    # (APİ çekirdeği) her koşuda bir iş günü geride çıkıyor ve "APİ tablosu
+    # gerçekten aynı gün mü yayımlanıyor, yoksa koşu saatimiz mi erken" sorusu
+    # ancak (koşu ANI, o koşuda gelen son gün) çiftleriyle cevaplanabilir.
+    # Gün çözünürlüğü bu soruyu göremez; kayıt tutulmadan da her ölçüm iki
+    # haftalık ayrı bir deney ister.
     durum = {
         "kosum": dt.date.today().isoformat(),
+        "kosum_an": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
         "son_gun": s_gun.strftime("%Y-%m-%d"),
         "son_hafta": s_hafta.strftime("%Y-%m-%d") if s_hafta is not None else None,
         "gunluk_seri": int(g.shape[1]), "gunluk_gozlem": int(g.shape[0]),
