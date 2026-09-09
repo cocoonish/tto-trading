@@ -1418,6 +1418,13 @@ def hat_kos(start: str = "01-01-2002", end: str | None = None,
     aylik_irfcl = fetch_irfcl_aylik(start, end)
 
     swap_pdf, pdf_tarih = None, None
+    # OKURA GÖRÜNEN UYARI, EKRANA BASILAN NOTUN YERİNE GEÇMEZ — İKİSİ DE OLUR.
+    # 09.09.2026'da ölçüldü: bu bacak düştüğünde tek iz `print`ti ve `uyarilar`
+    # listesi aşağıda SONRADAN kuruluyordu, yani hata ne uyarı kaydına ne de
+    # sayfaya HİÇ girmiyordu. Haftalık gözlem hattın en hassas çapasıdır (swap
+    # ve altın miktarı); donduğunda günlük seri sessizce aylık çapaya düşer ve
+    # koşu yeşil biter. Sebep operatöre ayrıntısıyla, okura tek cümleyle yazılır.
+    pdf_uyarisi: str | None = None
     if pdf_cek:
         try:
             swap_pdf = parse_weekly_pdf(fetch_latest_weekly_pdf())
@@ -1428,6 +1435,13 @@ def hat_kos(start: str = "01-01-2002", end: str | None = None,
             swap_pdf = None
             print(f"UYARI: haftalık IRFCL PDF alınamadı ({type(e).__name__}: {e}). "
                   "Swap çapası arşivdeki son gözlemle sınırlı kalacak.")
+            pdf_uyarisi = (
+                "HAFTALIK IRFCL YAYIMI ALINAMADI: bu koşuda TCMB'nin haftalık "
+                "Uluslararası Rezervler ve Döviz Likiditesi tablosuna "
+                "ulaşılamadı. Swap ve altın miktarı çapaları arşivdeki son "
+                "gözlemde kaldı; tablo gelene kadar günlük swap ve net alım "
+                "rakamları taşınan çapayla hesaplanıyor."
+            )
 
     gozlem = (pd.read_csv(GOZLEM_CSV, index_col=0, parse_dates=True)
               if os.path.exists(GOZLEM_CSV) else None)
@@ -1531,6 +1545,8 @@ def hat_kos(start: str = "01-01-2002", end: str | None = None,
     })
     uyarilar += kimlik_denetimi(raw, g, rez_usd, swap_pdf)
     uyarilar += altin_uyari
+    if pdf_uyarisi:
+        uyarilar.append(pdf_uyarisi)
 
     # Kur bacağı tanısı: TL kaynak ile USD kaynak arasındaki boşluk kayıyor mu?
     # (Seviye formülüne girmez; bkz. capa_boslugu.)
