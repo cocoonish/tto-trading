@@ -1,12 +1,12 @@
 metrik,konsept,orijinal,replikasyon,sapma,guncel,guncel_donem,gerekce
-maliyet_kat_ara19_tem24,kirmizi_et,8.1,7.86,-0.24,13.41,2026-06,Dana eti Nis-2022'ye kadar gerçek; sonrası 01122+Tarım-ÜFE sığır kaması proxy'si. Ayrıca 'diğer' kalemi ve baharat sepeti bileşim farkları.
-maliyet_kat_ara19_tem24,ev_yemekleri,6.6,6.34,-0.26,10.93,2026-06,Uyum yüksek.
-oran_tem24,ev_yemekleri,1.3,1.27,-0.03,1.28,2026-06,Uyum yüksek; kalan fark splice dönemindeki agregat fiyat uzatmasından.
-oran_tem24,kirmizi_et,1.54,1.2,-0.34,1.24,2026-06,Fiyat tarafı: TÜİK'te kebap/pide/döner maddeleri kırmızı et–tavuk ayrımı içermez (TCMB kendi mikro verisiyle ayrıştırmış); ayrıca Nis-2022 sonrası madde fiyatı yayımı durduğu için fiyatlar 11111/11112 agregatlarıyla uzatıldı — kebap özelindeki fiyat sıçraması agregata törpülenir.
-oran_tem24,tavuk,1.79,1.41,-0.38,1.49,2026-06,Aynı fiyat tarafı kısıtı; tavuk maliyeti Tarım-ÜFE kaması ile ayrıştırıldı fakat fiyat tarafı kırmızı et ile ortak madde setinden gelir.
-oran_tem24,fast_food,2.08,1.58,-0.5,1.65,2026-06,Pizza (1110110) sepete 2016'da girer; zincirli ortalama ile bileşime dahildir. TCMB'nin ürün düzeyi pizza/burger fiyatları TÜİK madde ortalamasından daha hızlı artmış görünüyor; ayrıca Nis-2022 sonrası 11112 agregat uzatması ürün-özel sıçramaları törpüler.
-uzun_donem_ort,ev_yemekleri,0.94,0.97,0.03,0.97,2026-06,—
-uzun_donem_ort,kirmizi_et,1.05,1.08,0.03,1.08,2026-06,—
-uzun_donem_ort,tavuk,1.09,1.1,0.01,1.1,2026-06,—
-uzun_donem_ort,fast_food,1.17,1.17,-0.0,1.17,2026-06,1110105 maddesi 2022 sepetinde 'Köfteler' (2024 sepetinde çiğ köfte); ortalama fiyat rölatifleri ile TCMB ürün endeksi arasındaki kompozisyon farkı.
-ev_2022_dip,ev_yemekleri,0.77,0.92,0.15,1.28,2026-06,"Dip, madde fiyatı yayınının durduğu Nis-2022 SONRASINDA gerçekleşti; uzatma agregat 11111 ile yapıldığından konsepte özgü fiyat frenlemesi kısmen gözlenemiyor."
+maliyet_kat_ara19_tem24,kirmizi_et,8.1,7.86,-0.24,13.65,2026-08,Dana eti Nis-2022'ye kadar gerçek; sonrası 01122+Tarım-ÜFE sığır kaması proxy'si. Ayrıca 'diğer' kalemi ve baharat sepeti bileşim farkları.
+maliyet_kat_ara19_tem24,ev_yemekleri,6.6,6.34,-0.26,11.24,2026-08,Uyum yüksek.
+oran_tem24,ev_yemekleri,1.3,1.27,-0.03,1.28,2026-08,Uyum yüksek; kalan fark splice dönemindeki agregat fiyat uzatmasından.
+oran_tem24,kirmizi_et,1.54,1.2,-0.34,1.26,2026-08,Fiyat tarafı: TÜİK'te kebap/pide/döner maddeleri kırmızı et–tavuk ayrımı içermez (TCMB kendi mikro verisiyle ayrıştırmış); ayrıca Nis-2022 sonrası madde fiyatı yayımı durduğu için fiyatlar 11111/11112 agregatlarıyla uzatıldı — kebap özelindeki fiyat sıçraması agregata törpülenir.
+oran_tem24,tavuk,1.79,1.41,-0.38,1.51,2026-08,Aynı fiyat tarafı kısıtı; tavuk maliyeti Tarım-ÜFE kaması ile ayrıştırıldı fakat fiyat tarafı kırmızı et ile ortak madde setinden gelir.
+oran_tem24,fast_food,2.08,1.58,-0.5,1.68,2026-08,Pizza (1110110) sepete 2016'da girer; zincirli ortalama ile bileşime dahildir. TCMB'nin ürün düzeyi pizza/burger fiyatları TÜİK madde ortalamasından daha hızlı artmış görünüyor; ayrıca Nis-2022 sonrası 11112 agregat uzatması ürün-özel sıçramaları törpüler.
+uzun_donem_ort,ev_yemekleri,0.94,0.97,0.03,0.97,2026-08,—
+uzun_donem_ort,kirmizi_et,1.05,1.08,0.03,1.08,2026-08,—
+uzun_donem_ort,tavuk,1.09,1.1,0.01,1.1,2026-08,—
+uzun_donem_ort,fast_food,1.17,1.17,-0.0,1.17,2026-08,1110105 maddesi 2022 sepetinde 'Köfteler' (2024 sepetinde çiğ köfte); ortalama fiyat rölatifleri ile TCMB ürün endeksi arasındaki kompozisyon farkı.
+ev_2022_dip,ev_yemekleri,0.77,0.92,0.15,1.28,2026-08,"Dip, madde fiyatı yayınının durduğu Nis-2022 SONRASINDA gerçekleşti; uzatma agregat 11111 ile yapıldığından konsepte özgü fiyat frenlemesi kısmen gözlenemiyor."

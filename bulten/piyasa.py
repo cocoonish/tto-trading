@@ -185,6 +185,29 @@ KAYNAK_YOK = [
 ]
 
 
+def _onbellek_birlestir(yeni: dict, eski: dict) -> dict | None:
+    """Çekilen seriyi önbellektekiyle birleştirir; yazılmamalıysa None döner.
+
+    AĞA ÇIKMAZ — bilerek. Bu karar bir zamanlar `_ham_veri`nin içinde, yani
+    yfinance çağrısının hemen ardında duruyordu ve hiçbir duman sınaması onu
+    koşturamıyordu; kusuru da tam orada kaldı (bkz. `_ham_veri`). Karar ayrı bir
+    fonksiyona çıktığı için artık sahte girdiyle sınanabiliyor.
+
+    Sözleşme üç hâlli:
+      · çekim BOŞ            → None (önbellek yazılmaz, damga ilerlemez)
+      · sembol çekimde YOK   → önbellekteki seri devredilir, adı `getirilmeyen`de
+      · sembol çekimde VAR   → çekilen seri eskisinin yerine geçer
+    """
+    if not yeni:
+        return None
+    getirilmeyen = sorted(set(eski) - set(yeni))
+    return {
+        "zaman": datetime.now().isoformat(timespec="seconds"),
+        "seri": {**{k: v for k, v in eski.items() if k not in yeni}, **yeni},
+        "getirilmeyen": getirilmeyen,
+    }
+
+
 def _ham_veri(tazele: bool = False) -> dict:
     """Tüm enstrümanların günlük kapanış serisi. Önbellek TTL'li."""
     if HAM.exists() and not tazele:
@@ -235,23 +258,56 @@ def _ham_veri(tazele: bool = False) -> dict:
         seri = _roll_duzelt(seri)
     except Exception:
         pass                       # düzeltme yapılamazsa ham seriyle devam
-    d = {"zaman": datetime.now().isoformat(timespec="seconds"), "seri": seri}
     # ÖNBELLEK BAŞARISIZ ÇEKİMLE EZİLMEZ. 31.08.2026'da ağı kapalı bir ortamda
     # tek bir çağrı elli serilik önbelleği SIFIR seriyle üzerine yazdı; dosya
     # izlenen bir dosya olduğu için depodaki iyi sürüm de tehlikeye girdi.
     # Yahoo bütün istekleri reddettiğinde çekim "başarılı ama boş" görünür —
-    # "veri geldi" ile "veri TAM geldi" ayrımının bir örneği daha. Kural: yeni
-    # anlık görüntü eldekinden AZ seri taşıyorsa yazılmaz; çağıran eski
-    # önbellekle devam eder ve durumu bilir.
-    eski_n = 0
+    # "veri geldi" ile "veri TAM geldi" ayrımının bir örneği daha.
+    #
+    # KORUMANIN İLK YAZIMI ÖLÇÜLEN ARIZADAN GENİŞTİ ve o genişlik 09.09.2026'da
+    # bültenin TAMAMINI dondurdu. Kural "yeni anlık görüntü eldekinden AZ seri
+    # taşıyorsa yazılmaz, eski önbellek olduğu gibi döner" biçimindeydi; ölçülen
+    # arıza ise TOPLU kayıptı (51 → 0). Aradaki fark bir sembolün KALICI olarak
+    # kaybolduğu gün ortaya çıktı: Yahoo `2YY=F` (ABD 2 yıllık getiri vadelisi)
+    # serisini emekliye ayırdı, çekim 51 yerine 50 seri döndürdü ve koruma tek
+    # eksik yüzünden SAĞLIKLI 50 seriyi de reddetti. Sonuç, arızanın en sinsi
+    # biçimiydi: koşu yeşil bitti, bülten dosyası yazıldı, ve elli bir piyasa
+    # satırının ELLİ BİRİ bir gün önceki anlık görüntünün birebir kopyasıydı —
+    # dünkü seansın günlük değişimi bugünün bülteninde yeniden yayımlanacaktı.
+    # Üstelik açık YARIN da düzelmeyeceği için donma kalıcıydı: eksik sembol
+    # geri gelmedikçe koruma her sabah aynı reddi verir ve fotoğraf her gün bir
+    # seans daha bayatlar. Bir sigortanın hangi arızaya karşı konduğu
+    # yazılmazsa, kapsamı sessizce o arızadan büyür.
+    #
+    # İki nesne birbirinden ayrıldı ve ayrım kasıtlı: ÖNBELLEK bir veri deposu,
+    # ANLIK GÖRÜNTÜ bir ölçümdür. Önbellek hiçbir seriyi kaybetmez (çekimden
+    # dönmeyen sembol eldeki seriyle DEVREDİLİR, yani kısmi bir çekim tarihçeyi
+    # budayamaz); ölçüm ise her satırın KENDİ bar tarihini taşımaya devam eder,
+    # yani devredilen bir sembol taze görünmez — sayfada 04.09 yazar, öbürleri
+    # 08.09. Yalnız çekimin HİÇBİR şey döndürmediği hâl — ölçülmüş olan arıza —
+    # yazmayı büsbütün durdurur; o durumda damga da ilerlemez, çünkü ilerlerse
+    # bayat bir fotoğraf kendini taze ilan eder.
+    eski = {}
     try:
-        eski_n = len((json.loads(HAM.read_text(encoding="utf-8")) or {}).get("seri") or {})
+        eski = (json.loads(HAM.read_text(encoding="utf-8")) or {}).get("seri") or {}
     except Exception:
         pass
-    if len(seri) < eski_n:
-        print(f"  ! piyasa önbelleği YAZILMADI — çekim {len(seri)} seri döndü, "
-              f"öncekinde {eski_n} var. Eski önbellek korunuyor.")
+    d = _onbellek_birlestir(seri, eski)
+    if d is None:
+        print(f"  ! piyasa çekimi BOŞ döndü — önbellek yazılmadı, "
+              f"eldeki {len(eski)} seri korunuyor.")
         return json.loads(HAM.read_text(encoding="utf-8"))
+    # Çekimden dönmeyen semboller ADIYLA yazılır. Sessizce devretmek, ölçülmemiş
+    # bir günü ölçülmüş gibi göstermenin en sessiz biçimi olurdu.
+    if d["getirilmeyen"]:
+        _ad = {v.kod: v.ad for v in VARLIKLAR}
+        _kunye = []
+        for k in d["getirilmeyen"]:
+            _son = (eski[k].get("tarih") or [None])[-1]
+            _kunye.append(f"{_ad.get(k, k)} ({k}, son bar {_son})")
+        print("  ! piyasa çekimi şu sembolleri döndürmedi — önbellekteki seri "
+              "devredildi, satır KENDİ bar tarihiyle yayımlanacak: "
+              + " · ".join(_kunye))
     HAM.write_text(json.dumps(d, ensure_ascii=False), encoding="utf-8")
     return d
 
@@ -880,6 +936,10 @@ def topla(tazele: bool = False, haftalik: bool = False) -> dict:
         "tr_faizleri": tr_faizleri(),
         "en_cok_hareket": en_cok_hareket(satirlar, haftalik=haftalik),
         "eksik": eksik,
+        # Bu koşunun çekiminden DÖNMEYEN, yani önbellekten devredilen semboller.
+        # Satırları anlık görüntüde durur ama kendi (eski) bar tarihiyle durur;
+        # alan, "bu satır bugün ölçülmedi" sorusunun tek yerden cevabıdır.
+        "getirilmeyen": ham.get("getirilmeyen") or [],
         "kaynak_yok": KAYNAK_YOK,
     }
 
