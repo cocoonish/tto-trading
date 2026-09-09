@@ -21,6 +21,21 @@ bağlanan anahtarlar:
     sekil13_kisa  → Şekil 13 (çeyreklik finansal hesaplar)
     hafta_kisa    → Şekil 10 · 11 (yalnız haftalık menkul kıymet tabloları)
 
+SAAT SÖZLEŞMESİ (ortak/bicim) — aylık ve çeyreklik saat AA.YYYY, günlük saat
+GG.AA.YYYY; okura basılan hiçbir metin alanı ISO yazımı ("2026-06") taşımaz.
+09.09.2026'da ölçüldü: altı çıpa anahtarı (`deflator_taban`, `tufe_son_ay`,
+`stok_son_ay`, `stok_ilk_ay`, `senaryo_cipa_ay`, `senaryo_cipa_ceyrek`) ve stok
+cümlesi ISO yazımıyla on üç yerde okura basılıyordu. Ölçüm katmanı ISO'da kalır
+(metrik_ozet.json makine dosyasıdır); dönüşüm burada, tek yerde yapılır.
+
+GECİKME ÖLÇÜSÜ — bütçe bacağının gecikmesi ay BAŞINDAN sayılıyordu ve aynı
+bacak sayfada üç ayrı yaşla dolaşıyordu (09.09.2026: metin 69 gün, şerit 39
+gün, yayımdan bu yana 19 gün). Ölçü artık veri.gecikme_gun'dan gelir: bütçe
+için BEKLENEN YAYIM GÜNÜNDEN (izleyen ayın 20'si), öbür bacaklar için gözlemin
+kendi tarihinden. Finansal hesaplar bacağı GSYH'den AYRI ölçülür
+(`finhesap_tarih`, `gecikme_finhesap_gun`, `tolerans_finhesap_gun`) ve bu
+bacaktan türeyen her anahtar kendi saatini `<anahtar>_tarih` ile taşır.
+
 Koşum:  python3 ozet_uret.py   (önce veri.py → metrik.py → grafik.py)
 """
 from __future__ import annotations
@@ -30,7 +45,18 @@ import sys
 
 import pandas as pd
 
-from veri import PROJE, VERI, AY_TR, TAZELIK, ay_ad, ceyrek_ad, gun_ad, _son_dolu
+from veri import (PROJE, VERI, AY_TR, TAZELIK, STOK_YAYIM_GUN, DENGE_YAYIM_GUN,
+                  FH_KOLONLAR, ay_ad, ceyrek_ad, gun_ad, _son_dolu, bacak_ucu,
+                  beklenen_yayim, gecikme_gun, saat_yaz)
+
+# Finansal hesaplar bacağından TÜRETİLEN özet anahtarları: hepsi TCMB'nin üç
+# aylık finansal hesaplarıyla biter ve kendi saatlerini taşır. Kapsam bu listeden
+# değil ölçümden gelir — her anahtarın saati KENDİ serisinin son dolu gözlemidir;
+# liste yalnız duman sınamasının "hangi anahtarlar saat taşımalı" sorusuna cevap.
+FH_ANAHTARLAR = ("net_fin_deger_trl", "yukum_toplam_trl", "varlik_toplam_trl",
+                 "nakit_trl", "borc_senedi_trl", "krediler_trl", "fh_borc_trl",
+                 "net_stok_trl", "fh_borc_gsyh", "net_stok_gsyh",
+                 "net_fin_deger_gsyh", "stok_fh_trl", "stok_gsyh_fh")
 
 O: dict = {}
 
@@ -118,30 +144,44 @@ def tr_ay(t) -> str:
     return f"{t.month:02d}.{t.year}"
 
 
+def _ay_yaz(v):
+    """Ölçüm katmanının ISO ay dizgesi ("2026-06") → okur yazımı ("06.2026").
+
+    Ölçülmemiş (None) olduğu gibi kalır: uydurulmaz. Çözülemeyen bir dizge de
+    olduğu gibi döner ve uyarı düşer — sessizce ISO basmaktansa adıyla görünsün.
+    """
+    if v is None:
+        return None
+    try:
+        return tr_ay(pd.Timestamp(v))
+    except (TypeError, ValueError):
+        uyar(f"ay çıpası çözülemedi: {v!r}")
+        return v
+
+
+def _gun_yaz(v):
+    """ISO gün ("2026-06-30") → "30.06.2026"; None olduğu gibi."""
+    if v is None:
+        return None
+    try:
+        return tr_tarih(pd.Timestamp(v))
+    except (TypeError, ValueError):
+        uyar(f"gün çıpası çözülemedi: {v!r}")
+        return v
+
+
 def _seri(df: pd.DataFrame, kol: str) -> pd.Series:
     return df[kol] if kol in df.columns else pd.Series(dtype=float)
 
 
 def _bacak_ucu(df: pd.DataFrame, kolonlar) -> "pd.Timestamp | None":
-    """Bir figür BACAĞININ ucu: çizilen sütunların son geçerli gözlemlerinin
-    EN ESKİSİ.
-
-    Neden en eski: bacağın sözü serilerin KIYASIDIR ve kıyas ancak hepsinin
-    ölçüldüğü güne kadar kurulabilir. Yapısal yazılır — bugün hangi sütunun
-    daha uzun olduğuna bakmaz.
-
-    Kolon yoksa ya da hepsi boşsa None döner: o zaman damga YAZILMAZ ve sayfa
-    o şeklin altına tarih hiç basmaz. Yanlış bir tarih, tarihsizlikten kötüdür.
-    """
-    uclar = []
-    for k in kolonlar:
-        sr = _seri(df, k).dropna()
-        if len(sr):
-            uclar.append(sr.index[-1])
-    return min(uclar) if uclar else None
+    """Bir figür BACAĞININ ucu — tanım veri.bacak_ucu'da (çizim katmanıyla ortak):
+    çizilen sütunların son geçerli gözlemlerinin EN ESKİSİ; hiçbiri yoksa None
+    ve damga YAZILMAZ. Yanlış bir tarih, tarihsizlikten kötüdür."""
+    return bacak_ucu(df, kolonlar)
 
 
-def main() -> int:
+def main(bugun=None) -> int:
     M = pd.read_csv(VERI / "aylik_metrik.csv", index_col=0, parse_dates=True)
     C = pd.read_csv(VERI / "ceyreklik_metrik.csv", index_col=0, parse_dates=True)
     H = pd.read_csv(VERI / "haftalik_metrik.csv", index_col=0, parse_dates=True)
@@ -154,7 +194,8 @@ def main() -> int:
     s_dis = pd.Timestamp(m["son_dis_ceyrek"])
     s_hafta = pd.Timestamp(m["son_hafta"])
     s_gun = pd.Timestamp(m["son_gun"])
-    bugun = pd.Timestamp.today().normalize()
+    bugun = (pd.Timestamp(bugun).normalize() if bugun is not None
+             else pd.Timestamp.today().normalize())
 
     # ===================================================== dönem çıpaları
     # "_tarih" hattın BAŞROL dönemidir: bütçe ayı. İkinci ve üçüncü frekanslar
@@ -167,9 +208,11 @@ def main() -> int:
     # tamamlanan ortak ay) DEĞİL; tazeleme tarifi Denge yayımını bu saate
     # bağlar (ek kaynak), yoksa her ay eli boş sayılan koşu + yeniden deneme
     # zinciri doğardı (09.09.2026).
+    _t_akim = None
     try:
         _aylik = pd.read_csv(VERI / "aylik.csv", index_col=0, parse_dates=True)
-        O["akim_tarih"] = tr_ay(_son_dolu(_aylik, ["my_gelir", "my_gider"], "akim"))
+        _t_akim = _son_dolu(_aylik, ["my_gelir", "my_gider"], "akim")
+        O["akim_tarih"] = tr_ay(_t_akim)
     except Exception as _ex:                                   # noqa: BLE001
         uyar(f"akım bacağının saati ölçülemedi: {_ex}")
     # ÇEYREKLİK SAAT ortak/bicim SÖZLEŞMESİYLE yazılır: çeyreğin SON ayı
@@ -189,13 +232,40 @@ def main() -> int:
     O["hafta_kisa"] = tr_tarih(s_hafta)
     O["kur_gun"] = gun_ad(s_gun)
     O["kosum_tarihi"] = tr_tarih(bugun)
+    # FİNANSAL HESAPLAR BACAĞININ KENDİ SAATİ. GSYH ile aynı çeyreklik dosyada
+    # durur ama TCMB ayrı takvimle yayımlar; 09.09.2026'da GSYH 2026-Ç2, finansal
+    # hesaplar 2026-Ç1 idi ve sayfa ikisini tek "GSYH ve finansal hesaplar"
+    # bacağı olarak 70 gün gecikmeli anlatıyordu — bacağın gerçek gecikmesi 161.
+    # Saat çeyreğin SON AYI (AA.YYYY, ortak/bicim), etiket ayrı anahtarda.
+    s_fh = _bacak_ucu(C, FH_KOLONLAR)
+    if s_fh is not None:
+        O["finhesap_tarih"] = saat_yaz("finhesap", s_fh)
+        O["finhesap_ceyrek"] = ceyrek_ad(s_fh)
+    else:
+        uyar("finansal hesaplar bacağının saati ölçülemedi — çeyreklik metrik "
+             "dosyasında bacağın hiçbir sütunu dolu değil.")
+        O["finhesap_ceyrek"] = "—"
     # Yayım gecikmesi DUVAR SAATİNE göre. Verinin kendi son gününü referans
-    # almak denetimi kendi kendine referanslı yapar.
-    koy("gecikme_butce_gun", (bugun - s_ay).days, 0)
-    koy("gecikme_hafta_gun", (bugun - s_hafta).days, 0)
-    koy("gecikme_ceyrek_gun", (bugun - s_ceyrek).days, 0)
-    koy("gecikme_dis_gun", (bugun - s_dis).days, 0)
-    koy("gecikme_kur_gun", (bugun - s_gun).days, 0)
+    # almak denetimi kendi kendine referanslı yapar. Ölçünün tanımı TEK yerde
+    # (veri.gecikme_gun): bütçe bacağı BEKLENEN YAYIM GÜNÜNDEN sayılır — HMB
+    # borç stokunu izleyen ayın ~20'sinde yayımlıyor (resmî takvime karşı
+    # ölçüldü) — öbür bacaklar gözlemin kendi tarihinden. Ay başından saymak
+    # aynı bacağa sayfada üç ayrı yaş yazdırıyordu (09.09.2026: 69 · 39 · 19).
+    O["beklenen_yayim_stok"] = tr_tarih(beklenen_yayim(s_ay, STOK_YAYIM_GUN))
+    koy("yayim_gun_stok", STOK_YAYIM_GUN, 0)
+    koy("yayim_gun_denge", DENGE_YAYIM_GUN, 0)
+    koy("gecikme_butce_gun", gecikme_gun("butce", s_ay, bugun), 0)
+    if _t_akim is not None:
+        _y_akim = beklenen_yayim(_t_akim, DENGE_YAYIM_GUN)
+        O["beklenen_yayim_denge"] = tr_tarih(_y_akim)
+        koy("gecikme_akim_gun", max(0, (bugun - _y_akim).days), 0)
+    koy("gecikme_hafta_gun", gecikme_gun("menkul", s_hafta, bugun), 0)
+    koy("gecikme_ceyrek_gun", gecikme_gun("ceyrek", s_ceyrek, bugun), 0)
+    koy("gecikme_dis_gun", gecikme_gun("disborc", s_dis, bugun), 0)
+    koy("gecikme_kur_gun", gecikme_gun("kur", s_gun, bugun), 0)
+    # Ölçülemeyen bacağın gecikmesi de sayfada ADIYLA boş durur, atlanmaz.
+    O["gecikme_finhesap_gun"] = (gecikme_gun("finhesap", s_fh, bugun)
+                                 if s_fh is not None else "—")
 
     # ===================================================== bütçe: düzeyler
     for ad, kol, ond in (
@@ -242,9 +312,9 @@ def main() -> int:
         uyar("tufe_yy bütçe ayına çıpalanamadı — anahtar atlandı.")
     v_manset, t_manset = son(_seri(M, "tufe_yy"))            # son yayımlanan ay
     koy("tufe_yy_manset", v_manset, 1)
-    O["deflator_taban"] = m["butce"]["deflator_taban_ay"]
+    O["deflator_taban"] = _ay_yaz(m["butce"]["deflator_taban_ay"])
     koy("deflator_taban_endeks", m["butce"].get("deflator_taban_endeks"), 2)
-    O["tufe_son_ay"] = m["butce"].get("tufe_son_ay")
+    O["tufe_son_ay"] = _ay_yaz(m["butce"].get("tufe_son_ay"))
     # Sayfada takvim ayı ELLE yazılmasın diye TÜFE ayının Türkçe adı.
     try:
         O["tufe_son_ay_ad"] = AY_TR[pd.Timestamp(O["tufe_son_ay"]).month]
@@ -348,8 +418,13 @@ def main() -> int:
     # "TL payı" bir ÜST SINIRDIR ve sayfada öyle etiketlenir.
     if O.get("doviz_pay") is not None:
         koy("tl_pay", 100 - O["doviz_pay"], 1)
-    O["stok_son_ay"] = m["stok"].get("birlesik_stok_son_ay")
-    O["stok_ilk_ay"] = m["stok"].get("birlesik_stok_ilk_ay")
+    O["stok_son_ay"] = _ay_yaz(m["stok"].get("birlesik_stok_son_ay"))
+    O["stok_ilk_ay"] = _ay_yaz(m["stok"].get("birlesik_stok_ilk_ay"))
+    # Düzyazı için ayın Türkçe adı (stok cümlesi "06.2026 itibarıyla" demez).
+    try:
+        O["stok_son_ay_ad"] = ay_ad(pd.Timestamp(m["stok"]["birlesik_stok_son_ay"]))
+    except Exception:                                          # noqa: BLE001
+        uyar("stok_son_ay_ad üretilemedi — anahtar atlandı.")
     O["doviz_payi_notu"] = m["stok"].get("doviz_payi_notu")
     O["yurt_disi_payi_notu"] = m["stok"].get("yurt_disi_payi_notu")
     O["stok_tanim_notu"] = m["stok"].get("stok_tanim_notu")
@@ -360,6 +435,14 @@ def main() -> int:
     koy("stok_duzeltme_yuzde", bil.get("duzeltme_yuzde"), 1)
 
     # ===================================================== GSYH oranları
+    # FİNANSAL HESAPLARDAN TÜREYEN ANAHTAR KENDİ SAATİNİ TAŞIR (`<anahtar>_tarih`,
+    # çeyreğin son ayı). Bu bacak GSYH'den bir çeyrek geride bitebiliyor; saat
+    # yazılmazsa sayfa değeri hattın aylık saatiyle etiketler ve 2026-Ç1'in
+    # sayısı 07.2026'nın ölçümü gibi görünür.
+    def _fh_saat(ad: str, t) -> None:
+        if ad in FH_ANAHTARLAR and t is not None and ad in O:
+            O[f"{ad}_tarih"] = saat_yaz("finhesap", t)
+
     for ad, kol in (("denge_gsyh", "denge_gsyh"), ("fdd_gsyh", "fdd_gsyh"),
                     ("faiz_gsyh", "faiz_gsyh"), ("gelir_gsyh", "gelir_gsyh"),
                     ("gider_gsyh", "gider_gsyh"), ("vergi_gsyh", "vergi_gsyh"),
@@ -367,6 +450,7 @@ def main() -> int:
                     ("net_fin_deger_gsyh", "net_fin_deger_gsyh")):
         v, t = son(_seri(C, kol))
         koy(ad, v, 2)
+        _fh_saat(ad, t)
     v, t = son(_seri(C, "gsyh_yil_trl"))
     koy("gsyh_yil_trl", v, 1)
     if t is not None:
@@ -379,9 +463,27 @@ def main() -> int:
                     ("krediler_trl", "krediler_trl"),
                     ("fh_borc_trl", "fh_borc_trl"),
                     ("net_stok_trl", "net_stok_trl")):
-        v, _ = son(_seri(C, kol))
+        v, t_fh = son(_seri(C, kol))
         koy(ad, v, 2)
-    koy("fh_borc_gsyh", son(_seri(C, "fh_borc_gsyh"))[0], 2)
+        _fh_saat(ad, t_fh)
+    v_fhg, t_fhg = son(_seri(C, "fh_borc_gsyh"))
+    koy("fh_borc_gsyh", v_fhg, 2)
+    _fh_saat("fh_borc_gsyh", t_fhg)
+    # FİNANSAL HESAPLAR ÇEYREĞİNE ÇIPALI BRÜT STOK VE ORAN. Şekil 13'ün tablosu
+    # "brüt − nakit = net" özdeşliğini gösterir ve üçü AYNI çeyrekte olmalı;
+    # brüt stok GSYH çeyreğinden (bir çeyrek ileride) alınınca tabloda
+    # 14,93 − 2,75 ≠ 11,54 görünüyordu ve "Şekil 07'deki aylık stokla aynı sayı
+    # değildir" cümlesi aynı sayıyı (14,93) iki kez basıyordu (09.09.2026).
+    if s_fh is not None and s_fh in C.index:
+        if "stok_trl" in C.columns:
+            koy("stok_fh_trl", float(C.loc[s_fh, "stok_trl"]), 2)
+            _fh_saat("stok_fh_trl", s_fh)
+        if "stok_gsyh" in C.columns:
+            koy("stok_gsyh_fh", float(C.loc[s_fh, "stok_gsyh"]), 2)
+            _fh_saat("stok_gsyh_fh", s_fh)
+    else:
+        uyar("'stok_fh_trl' ve 'stok_gsyh_fh' ölçülemedi — finansal hesaplar "
+             "çeyreği çeyreklik metrikte yok.")
     # ORAN ÇEYREĞİNE ÇIPALI stok. `son()` kullanılsaydı stok serisi GSYH'den
     # bir çeyrek ileri gittiği için bu sayı Şekil 07'nin aylık stokuyla
     # ÖZDEŞLEŞİR ve sayfanın "iki farklı çeyrek" açıklaması yalan olurdu.
@@ -466,8 +568,8 @@ def main() -> int:
     sen = m.get("senaryo") or {}
     koy("senaryo_kur", sen.get("kur"), 4)
     koy("senaryo_stok_trl", sen.get("toplam_trl"), 2)
-    O["senaryo_cipa_ay"] = sen.get("cipa_ay")
-    O["senaryo_cipa_ceyrek"] = sen.get("cipa_ceyrek")
+    O["senaryo_cipa_ay"] = _ay_yaz(sen.get("cipa_ay"))
+    O["senaryo_cipa_ceyrek"] = _gun_yaz(sen.get("cipa_ceyrek"))
     O["senaryo_notu"] = sen.get("not")
     for a in ("usd", "eur", "jpy"):
         koy(f"agirlik_{a}", (sen.get("agirlik") or {}).get(a, 0) * 100, 1)
@@ -576,6 +678,12 @@ def main() -> int:
         koy_denetim(f"{anahtar_on}_bant_max",
                     None if r.get("son6_max") is None else r["son6_max"] * 100,
                     ondalik, sinav)
+        # Denetim son ORTAK çeyrekte kurulur ve o çeyrek finansal hesapların
+        # çeyreğidir; anahtarlar o saati taşır, hattın aylık saatini değil.
+        if r.get("son_ceyrek"):
+            for ek in ("_fark", "_bant_min", "_bant_max", "_fark_mutlak"):
+                if f"{anahtar_on}{ek}" in O or ek == "_fark_mutlak":
+                    O[f"{anahtar_on}{ek}_tarih"] = saat_yaz("finhesap", r["son_ceyrek"])
 
     _bant("f34", "Toplam stok ↔ finansal hesaplar F.3+F.4")
     _bant("f3", "DİBS+eurobond ↔ finansal hesaplar F.3")
@@ -583,6 +691,8 @@ def main() -> int:
     for a_ in ("f34_fark", "f3_fark", "f4_fark"):
         if O.get(a_) is not None:
             koy(f"{a_}_mutlak", abs(O[a_]), 1)
+        else:
+            O.pop(f"{a_}_mutlak_tarih", None)
 
     # PAYDA BEKLENEN DENETİM LİSTESİNDEN gelir, sözlüğün uzunluğundan DEĞİL.
     # Sözlükten alınsaydı bir denetim hiç koşmadığında payda da küçülür
@@ -623,23 +733,29 @@ def main() -> int:
 
     # Aile bazlı bayat denetimi. Tek eşik bu hatta ANLAMSIZ: kur 2 günde,
     # GSYH 145 günde gelir ve ikisi de normaldir.
+    # Finansal hesaplar AYRI aile: GSYH ile aynı dosyada durur ama ayrı takvimle
+    # gelir; tek ailede ölçülünce gecikmesi GSYH'nin arkasına gizleniyordu.
     aile_gecikme = {
         "butce": (O.get("gecikme_butce_gun"), s_ay),
         "disborc": (O.get("gecikme_dis_gun"), s_dis),
         "menkul": (O.get("gecikme_hafta_gun"), s_hafta),
         "ceyrek": (O.get("gecikme_ceyrek_gun"), s_ceyrek),
+        "finhesap": (O.get("gecikme_finhesap_gun"), s_fh),
         "kur": (O.get("gecikme_kur_gun"), s_gun),
     }
     bayat_sebep: list[str] = []
     for aile, (gec, t) in aile_gecikme.items():
-        if gec is None:
-            continue
         etiket, tol, negatif_muaf = TAZELIK[aile]
+        # Tolerans ölçülemeyen bacak için de yazılır: sayfa onu adıyla çağırır.
         O[f"tolerans_{aile}_gun"] = tol
+        if not isinstance(gec, (int, float)):
+            bayat_sebep.append(f"{etiket} bacağının saati bu koşuda ölçülemedi")
+            continue
         if gec < 0 and negatif_muaf:
             continue
         if gec > tol:
-            bayat_sebep.append(f"{etiket} {gec} gün geride (tolerans {tol} gün)")
+            cipa = ("beklenen yayım gününden" if aile == "butce" else "geride")
+            bayat_sebep.append(f"{etiket} {gec} gün {cipa} (tolerans {tol} gün)")
     izler = [u for u in uyarilar
              if u.startswith(("TAZELİK", "ESKİ ÖNBELLEK", "BAYAT", "SERİ YOK"))]
     if izler:
@@ -655,15 +771,23 @@ def main() -> int:
         "BAYAT VERİ: " + "; ".join(bayat_sebep)
         + ". Sayfadaki sayılar bu koşuda İLERLEMEMİŞ olabilir."
         if bayat_sebep else
-        "Veri taze: altı yayım ailesinin de gecikmesi kendi toleransı içinde, "
-        "tazelik uyarısı yok.")
+        f"Veri taze: {len(aile_gecikme)} yayım ailesinin de gecikmesi kendi "
+        "toleransı içinde, tazelik uyarısı yok.")
     # Gecikmeyi ÇERÇEVELEYEN cümle de sayıdan türetilir; sayfa "bütçe verisi
-    # üç ay geriden gelir" gibi elle yazılmış bir ifadeyle çelişmesin.
+    # üç ay geriden gelir" gibi elle yazılmış bir ifadeyle çelişmesin. HER
+    # BACAK KENDİ ÇIPASINI SÖYLER: bütçe için yayım günü, öbürleri için gözlemin
+    # kendi tarihi — iki farklı ölçü tek "geriden geliyor" kalıbına sokulunca
+    # okur hangisinin ne olduğunu göremiyordu.
     O["gecikme_cumlesi"] = (
-        f"Bütçe gerçekleşmeleri {O.get('gecikme_butce_gun')} gün, brüt dış borç "
-        f"{O.get('gecikme_dis_gun')} gün, haftalık menkul kıymet istatistikleri "
-        f"{O.get('gecikme_hafta_gun')} gün, GSYH ve finansal hesaplar "
-        f"{O.get('gecikme_ceyrek_gun')} gün geriden geliyor.")
+        f"Bütçe gerçekleşmeleri ve iç borç stoku ({ay_ad(s_ay)}): beklenen yayım "
+        f"gününden ({O['beklenen_yayim_stok']}) bu yana {O.get('gecikme_butce_gun')} gün. "
+        f"Brüt dış borç ({ceyrek_ad(s_dis)}): çeyrek sonundan bu yana "
+        f"{O.get('gecikme_dis_gun')} gün. Haftalık menkul kıymet istatistikleri "
+        f"({tr_tarih(s_hafta)}): son gözlemden bu yana {O.get('gecikme_hafta_gun')} gün. GSYH "
+        f"({ceyrek_ad(s_ceyrek)}): çeyrek sonundan bu yana "
+        f"{O.get('gecikme_ceyrek_gun')} gün. Finansal hesaplar "
+        f"({O['finhesap_ceyrek']}): çeyrek sonundan bu yana "
+        f"{O['gecikme_finhesap_gun']} gün.")
 
     O["uyari_sayisi"] = len(uyarilar)
     O["uyari_metni"] = ((O["bayat_cumlesi"] + " · " if O["bayat"] else "")
@@ -687,7 +811,7 @@ def main() -> int:
         f"reel artış {tr_yuzde(O.get('gelir_reel_yy'))}; reel faiz dışı harcama "
         f"{tr_yuzde(O.get('fdg_reel_yy'))}.")
     O["stok_cumlesi"] = (
-        f"Merkezi yönetim borç stoku {O.get('stok_son_ay')} itibarıyla "
+        f"Merkezi yönetim borç stoku {O.get('stok_son_ay_ad') or O.get('stok_son_ay')} itibarıyla "
         f"{tr_sayi(O.get('toplam_borc_trl'), 2)} trilyon TL "
         f"(iç borç {tr_sayi(O.get('ic_borc_trl'), 2)} + yurt dışında ihraç senet "
         f"{tr_sayi(O.get('dis_senet_trl'), 2)} + dış kredi "

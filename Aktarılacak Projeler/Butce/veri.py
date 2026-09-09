@@ -14,10 +14,13 @@ Ne yapar
    HER KOŞUDA EVDS'ten okunanla karşılaştırılır; uyuşmazsa hat DURUR.
 3. Her seriyi TTL'li önbelleğe (data/cache/*.csv) yazar; ağ düşerse eski
    önbelleğe düşer ama SESSİZ kalmaz — uyarı basar, veri_durum.json'a taşınır.
-4. AİLE BAZLI tazelik denetimi yapar. Bu hatta ALTI ayrı yayım ritmi var
-   (bütçe/iç borç 83 gün · dış borç 54 · haftalık menkul kıymet 9 · üç aylık
-   GSYH & finansal hesaplar 145 · TÜFE 53 · kur 2). Tek eşik her koşuda yanlış
-   alarm üretirdi.
+4. AİLE BAZLI tazelik denetimi yapar. Bu hatta YEDİ ayrı yayım ritmi var
+   (bütçe/iç borç · dış borç · haftalık menkul kıymet · üç aylık GSYH · üç
+   aylık finansal hesaplar · TÜFE · kur). Tek eşik her koşuda yanlış alarm
+   üretirdi. Finansal hesaplar GSYH'den AYRI bir ailedir: ikisi aynı çeyreklik
+   dosyada yan yana durur ama ayrı kurumlar ayrı takvimle yayımlar ve 09.09.2026'da
+   ölçüldü — GSYH 2026-Ç2'deyken finansal hesaplar 2026-Ç1'de (161 gün), tek
+   ailede `max()` bu bacağın gecikmesini GSYH'nin arkasına gizliyordu.
 5. Kimlik denetimleri koşar (toplama kimlikleri + birim mertebesi). Durdurucu
    olanlar düşerse hat DURUR — yanlış birimle çizilmiş dolu bir grafik, boş
    grafikten kötüdür.
@@ -470,7 +473,7 @@ KUMELER = [
     ("İç borç stoku",          IC_BORC,   "ay",     "2003-01-01", None, "butce",   "aylik"),
     ("TÜFE",                   TUFE,      "ay",     "2005-01-01", None, "tufe",    "aylik"),
     ("Dış borç stoku",         DIS_BORC,  "ceyrek", "2003-01-01", None, "disborc", "ceyreklik"),
-    ("Finansal hesaplar",      FIN_HESAP, "ceyrek", "2010-10-01", None, "ceyrek",  "ceyreklik"),
+    ("Finansal hesaplar",      FIN_HESAP, "ceyrek", "2010-10-01", None, "finhesap", "ceyreklik"),
     ("GSYH",                   GSYH,      "ceyrek", "2003-01-01", None, "ceyrek",  "ceyreklik"),
     ("DİBS yazılı değer",      DIBS_YAZ,  "gun",    "2020-09-11", None, "menkul",  "haftalik"),
     ("DİBS vade",              DIBS_VADE, "gun",    "2020-09-11", None, "menkul",  "haftalik"),
@@ -595,14 +598,67 @@ def birim_denetimi(yenile: bool = False) -> tuple[dict, list[str]]:
 # Ölçülen gecikmeler (23.08.2026): bütçe & iç borç 83 · dış borç 54 ·
 # haftalık menkul kıymet 9 · GSYH & finansal hesap 145 · TÜFE 53 · kur 2.
 # Toleranslar ölçülenin bir yayım dönemi üstüne konur.
+# HMB YAYIM TAKVİMİ — BEKLENEN gün, ölçülmüş değil. Merkezi Yönetim Borç Stoku
+# İstatistikleri (hattın ANA saati) izleyen ayın ~20'sinde, Merkezi Yönetim
+# Bütçe Denge Tablosu (akım bacağı) ~15'inde yayımlanır; hafta sonuna düşen gün
+# izleyen ilk iş gününe kayar. İkisi de resmî takvime karşı ölçüldü (TÜİK Ulusal
+# Veri Yayımlama Takvimi, Ağustos 2026 verisi): Denge 15.09.2026 (Salı), Borç
+# Stoku 21.09.2026 (Pazartesi — 20'si Pazar). Resmî tatili GÖRMEZ; kaynağın
+# takvimine bağlanana kadar buradan çıkan gün "beklenen" diye etiketlenir.
+#
+# NEDEN GEREKLİ: bütçe ayının gecikmesi ay BAŞINDAN sayılıyordu ve aynı bacak
+# sayfada üç ayrı yaşla dolaşıyordu (09.09.2026'da ölçüldü: metin 69 gün, şerit
+# 39 gün, yayımdan bu yana 19 gün). Aylık bir gözlemin çıpası ayın ilk günü
+# değildir; okurun sorduğu soru "veri ne zaman geldi"dir ve onun ölçüsü yayım
+# günüdür.
+STOK_YAYIM_GUN = 20
+DENGE_YAYIM_GUN = 15
+
+
+def _is_gunu(t: dt.date) -> dt.date:
+    """Hafta sonuna düşen bir yayım günü izleyen ilk iş gününe kayar."""
+    while t.weekday() >= 5:
+        t += dt.timedelta(days=1)
+    return t
+
+
+def beklenen_yayim(ay, gun: int = STOK_YAYIM_GUN) -> pd.Timestamp:
+    """Bir bütçe ayının BEKLENEN yayım günü: izleyen ayın `gun`ü, iş gününe kaymış.
+
+    Ölçüm değildir (bkz. STOK_YAYIM_GUN gerekçesi); anahtar adları da öyle
+    yazılır (`beklenen_yayim_*`).
+    """
+    t = pd.Timestamp(ay).normalize() + pd.DateOffset(months=1)
+    return pd.Timestamp(_is_gunu(t.replace(day=gun).date()))
+
+
+# Aile → (okur etiketi, tolerans [takvim günü], negatif gecikme muaf mı).
+# TOLERANSIN ÇIPASI AİLEYE GÖRE DEĞİŞİR ve `gecikme_gun()` tek yerde tanımlar:
+# "butce" ailesi BEKLENEN YAYIM GÜNÜNDEN (izleyen ayın 20'si) sayılır — sağlıklı
+# aralık 0…~32 gün, 45 bir sonraki yayımın ~13 gün gecikmesine izin verir;
+# öbür aileler gözlemin kendi tarihinden sayılır (çeyrek sonu, Cuma, gün).
+#
+# "finhesap" GSYH'den AYRI: TCMB üç aylık finansal hesapları çeyrek sonundan
+# ~90 gün sonra yayımlıyor, yani bir sonraki çeyrek gelene dek bacak ~180 gün
+# geride kalır (09.09.2026'da ölçülen gecikme 161 gün, 2026-Ç2 henüz yok);
+# 200, o ritmin ~üç hafta ötesidir. GSYH ise TÜİK'ten çeyrek sonundan ~60 gün
+# sonra gelir; 170 orada kalır.
 TAZELIK = {
-    "butce":   ("Bütçe & iç borç stoku (HMB, aylık)",            100, False),
-    "disborc": ("Brüt dış borç (üç aylık)",                      110, False),
-    "menkul":  ("DİBS & eurobond (haftalık, Cuma)",               12, False),
-    "ceyrek":  ("GSYH & finansal hesaplar (üç aylık)",           170, False),
-    "tufe":    ("TÜFE (aylık)",                                   60, False),
-    "kur":     ("Döviz kuru (günlük)",                             4, True),
+    "butce":    ("Bütçe & iç borç stoku (HMB, aylık)",           45, False),
+    "disborc":  ("Brüt dış borç (üç aylık)",                    110, False),
+    "menkul":   ("DİBS & eurobond (haftalık, Cuma)",             12, False),
+    "ceyrek":   ("GSYH (TÜİK, üç aylık)",                       170, False),
+    "finhesap": ("Finansal hesaplar (TCMB, üç aylık)",          200, False),
+    "tufe":     ("TÜFE (aylık)",                                 60, False),
+    "kur":      ("Döviz kuru (günlük)",                           4, True),
 }
+# Gecikmesi beklenen YAYIM gününden ölçülen aileler → yayım günü.
+YAYIM_CIPASI = {"butce": STOK_YAYIM_GUN}
+# Ailenin saat yazımı (ortak/bicim sözleşmesi): aylık ve üç aylık saat AA.YYYY
+# (ay/çeyrek sonu), haftalık ve günlük saat GG.AA.YYYY. Aylık bir gözlemi gün
+# gibi yazmak ("01.07.2026") okura o günün ölçümü gibi görünür.
+AILE_BICIM = {"butce": "ay", "tufe": "ay", "disborc": "ceyrek", "ceyrek": "ceyrek",
+              "finhesap": "ceyrek", "menkul": "gun", "kur": "gun"}
 
 
 def tazelik_tolerans(aile: str) -> int:
@@ -612,6 +668,56 @@ def tazelik_tolerans(aile: str) -> int:
     biri güncellenip öteki unutulur ve bayatlık sessizce kaçar.
     """
     return TAZELIK[aile][1]
+
+
+def gecikme_gun(aile: str, son, bugun=None) -> int:
+    """Bir ailenin gecikmesi (takvim günü), DUVAR SAATİNE göre — TEK TANIM.
+
+    Veri katmanının tazelik denetimi de özet üreticisi de buradan ölçer; iki
+    ayrı formül bir gün sessizce ayrışırdı. "butce" için çıpa gözlem ayı değil
+    BEKLENEN YAYIM GÜNÜDÜR; veri beklenenden ERKEN geldiyse gecikme sıfırdır
+    (eksi bir yaş yayımlanmaz).
+    """
+    bugun = pd.Timestamp(bugun).normalize() if bugun is not None \
+        else pd.Timestamp.today().normalize()
+    son = pd.Timestamp(son).normalize()
+    if aile in YAYIM_CIPASI:
+        return max(0, (bugun - beklenen_yayim(son, YAYIM_CIPASI[aile])).days)
+    return (bugun - son).days
+
+
+# Finansal hesaplar bacağının ÖLÇÜM katmanındaki sütunları (ceyreklik_metrik.csv).
+# Özet üreticisi bacağın saatini, çizim katmanı Şekil 13'ün damgasını buradan
+# ölçer; iki ayrı liste bir gün sessizce ayrışır ve figürün içindeki alt yazı
+# sayfadaki damgadan başka bir çeyrek söyler.
+FH_KOLONLAR = ("yukum_toplam_trl", "varlik_toplam_trl", "net_fin_deger_trl",
+               "borc_senedi_trl", "nakit_trl", "krediler_trl")
+
+
+def bacak_ucu(df: pd.DataFrame, kolonlar) -> "pd.Timestamp | None":
+    """Bir figür/bacak ucu: çizilen sütunların son geçerli gözlemlerinin EN ESKİSİ.
+
+    Neden en eski: bacağın sözü serilerin KIYASIDIR ve kıyas ancak hepsinin
+    ölçüldüğü güne kadar kurulabilir. Yapısal yazılır — bugün hangi sütunun daha
+    uzun olduğuna bakmaz. Kolon yoksa ya da hepsi boşsa None: damga YAZILMAZ.
+    """
+    uclar = []
+    for k in kolonlar:
+        if k in df.columns:
+            sr = df[k].dropna()
+            if len(sr):
+                uclar.append(sr.index[-1])
+    return min(uclar) if uclar else None
+
+
+def saat_yaz(aile: str, t) -> str:
+    """Ailenin saatini sözleşmeyle yazar: aylık/üç aylık AA.YYYY, öbürleri GG.AA.YYYY."""
+    t = pd.Timestamp(t)
+    if AILE_BICIM.get(aile) == "ay":
+        return f"{t.month:02d}.{t.year}"
+    if AILE_BICIM.get(aile) == "ceyrek":
+        return f"{(t.month - 1) // 3 * 3 + 3:02d}.{t.year}"
+    return f"{t.day:02d}.{t.month:02d}.{t.year}"
 
 
 AY_TR = {1: "Ocak", 2: "Şubat", 3: "Mart", 4: "Nisan", 5: "Mayıs", 6: "Haziran",
@@ -717,10 +823,16 @@ def son_gun(gunluk: pd.DataFrame | None = None) -> pd.Timestamp:
 
 
 # --------------------------------------------------------------------------- denetimler
-def tazelik_denetimi(cerceveler: dict[str, pd.DataFrame]) -> list[str]:
+def tazelik_denetimi(cerceveler: dict[str, pd.DataFrame],
+                     bugun=None) -> list[str]:
     """Aile bazlı tazelik. Tek eşik bu hatta her koşuda yanlış alarm üretir:
-    kur 2 gün, GSYH 145 gün gecikmeli ve İKİSİ DE normaldir."""
-    bugun = pd.Timestamp.today().normalize()
+    kur 2 gün, GSYH 145 gün gecikmeli ve İKİSİ DE normaldir.
+
+    Aile içinde `max()` kalır — aile bir KURUMUN bir YAYIMIDIR ve o yayımın
+    serileri birlikte ilerler. Farklı takvimle yayımlanan bir bacak aynı aileye
+    konursa `max()` onu gizler: finansal hesaplar bu yüzden GSYH'den ayrıldı
+    (09.09.2026, 161 güne karşı 70).
+    """
     uy: list[str] = []
     aile_kolon: dict[str, list[str]] = {}
     for etiket, kodlar, _b, _bas, _p, aile, hedef in KUMELER:
@@ -740,13 +852,14 @@ def tazelik_denetimi(cerceveler: dict[str, pd.DataFrame]) -> list[str]:
             uy.append(f"TAZELİK: '{etiket}' ailesinden hiçbir seri yüklenemedi.")
             continue
         son = max(sonlar)
-        gecikme = (bugun - son).days
+        gecikme = gecikme_gun(aile, son, bugun)
         if gecikme < 0 and negatif_muaf:
             continue
         if gecikme > tol:
-            uy.append(f"TAZELİK: {etiket} son gözlemi {son:%d.%m.%Y} "
-                      f"({gecikme} gün önce, tolerans {tol} gün). "
-                      "Yayın durmuş olabilir.")
+            cipa = (f"beklenen yayım günü {beklenen_yayim(son, YAYIM_CIPASI[aile]):%d.%m.%Y}"
+                    if aile in YAYIM_CIPASI else f"son gözlemi {saat_yaz(aile, son)}")
+            uy.append(f"TAZELİK: {etiket} {cipa} ({gecikme} gün önce, "
+                      f"tolerans {tol} gün). Yayın durmuş olabilir.")
     return uy
 
 
