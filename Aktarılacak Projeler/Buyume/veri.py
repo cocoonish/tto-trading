@@ -60,10 +60,20 @@ _UYARI: list[str] = []
 _A: str | None = None
 
 
-def uyar(m: str) -> None:
+def uyar(m: str, ayrinti: str = "") -> None:
+    """Görünür uyarı: `m` OKURA gider, `ayrinti` yalnız ekrana.
+
+    09.09.2026'da ölçüldü: bu hattın uyarıları hiçbir dosyaya yazılmadığı için
+    okur dili kapılarına (sayfa sınavı 17) hiç girmemişti ve şablonlar
+    operatör için yazılmıştı — "bie_gsyzhtaken: demet düştü" satırı, uyarilar.json
+    siteye kopyalanır kopyalanmaz YAYIN ENGELİ üretirdi (kod dili: grup kodu).
+    Okura giden cümle grubun ADIYLA açılır; grup kodu ve istisna metni
+    ayrıntıya iner. Kaynağın kendi büyük harfli seri kodları (TP.GSYIH40_HY_P311)
+    kaynak künyesidir, okur diline aykırı değildir.
+    """
     if m not in _UYARI:
         _UYARI.append(m)
-    print("  ! " + m, flush=True)
+    print("  ! " + m + (f"   [{ayrinti}]" if ayrinti else ""), flush=True)
 
 
 def uyarilar() -> list[str]:
@@ -129,7 +139,8 @@ def _ayristir(items, kolonlar: list[str]) -> pd.DataFrame:
     return d[~d.index.isna()].sort_index()
 
 
-def _grup_cek(grup: str) -> tuple[pd.DataFrame, dict[str, str]]:
+def _grup_cek(grup: str, baslik: str) -> tuple[pd.DataFrame, dict[str, str]]:
+    """`baslik` okura giden uyarı cümlesinin öznesidir; `grup` yalnız ayrıntıda."""
     seriler = _seri_listesi(grup)
     if not seriler:
         raise SystemExit(f"{grup}: serieList boş döndü — hat duruyor")
@@ -144,7 +155,8 @@ def _grup_cek(grup: str) -> tuple[pd.DataFrame, dict[str, str]]:
         try:
             p = _ayristir(_cek(url).get("items", []), guvenli)
         except Exception as ex:
-            uyar(f"{grup}: demet düştü ({', '.join(demet)}) — {ex}; tek tek deneniyor")
+            uyar(f"{baslik}: bir seri demeti alınamadı, seriler tek tek denendi.",
+                 f"{grup} · {', '.join(demet)} · {ex}")
             p = pd.DataFrame()
             for k in demet:
                 try:
@@ -154,7 +166,8 @@ def _grup_cek(grup: str) -> tuple[pd.DataFrame, dict[str, str]]:
                         [k.replace(".", "_")])
                     p = tek if p.empty else p.join(tek, how="outer")
                 except Exception as ex2:
-                    uyar(f"{grup}: seri alınamadı {k} — {ex2}")
+                    uyar(f"{baslik}: {k} serisi bu koşuda alınamadı.",
+                         f"{grup} · {ex2}")
         if not p.empty:
             parcalar.append(p)
     if not parcalar:
@@ -171,19 +184,24 @@ def main() -> int:
     kunye: dict = {"gruplar": {}}
     for ad, (grup, baslik) in GRUPLAR.items():
         print(f"\n  {ad}  ({grup})")
-        tablo, adlar = _grup_cek(grup)
+        tablo, adlar = _grup_cek(grup, baslik)
         dolu = tablo.dropna(how="all")
         if dolu.empty:
             raise SystemExit(f"{ad}: tablo tamamen boş — hat duruyor")
         yol = DATA / f"{ad}.csv"
         tablo.to_csv(yol, encoding="utf-8")
         son = dolu.index.max()
+        etiket = f"{son.year}-Ç{(son.month - 1) // 3 + 1}"
         print(f"    {tablo.shape[1]} seri · {len(dolu)} dolu çeyrek · "
-              f"son {son:%Y-%m-%d} ({son.to_period('Q')})")
+              f"son {son:%d.%m.%Y} ({etiket})")
         kunye["gruplar"][ad] = {
             "evds_grup": grup, "baslik": baslik,
             "seri_sayisi": int(tablo.shape[1]),
-            "son_ceyrek": str(son.to_period("Q")),
+            # Çeyrek etiketi TEK yazımda: "2026-Ç2". `to_period("Q")` "2026Q2"
+            # veriyordu — İngilizce kalıp, ve künyeden uyarı metnine sızdığı
+            # gün okura basılırdı (ozet.json ve uyarilar.json sayfaya olduğu
+            # gibi gider).
+            "son_ceyrek": etiket,
             "adlar": adlar,
         }
     kunye["uyarilar"] = uyarilar()

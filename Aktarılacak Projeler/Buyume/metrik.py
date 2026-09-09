@@ -72,6 +72,10 @@ _UYARI: list[str] = []
 
 
 def uyar(m: str) -> None:
+    """Görünür uyarı. Cümle OKURA yazılır: `uyarilar.json` siteye kopyalanır ve
+    sayfaya olduğu gibi basılır (koşu kutusu), yani anahtar adı ve boru hattı
+    dili buraya giremez. Kaynağın kendi büyük harfli kodları (B1G, D21X31,
+    P311) kaynak künyesidir ve muaftır."""
     if m not in _UYARI:
         _UYARI.append(m)
     print("  ! " + m, flush=True)
@@ -103,6 +107,31 @@ def _r(x, n=2):
     return None if x is None or pd.isna(x) else round(float(x), n)
 
 
+def ceyrek_etiket(t) -> str:
+    """Okur ETİKETİ: "2026-Ç2". Saat DEĞİLDİR.
+
+    09.09.2026'da ölçüldü: hat etiketi `str(ts.to_period("Q"))` ile yazıyordu,
+    yani "2026Q2" — İngilizce kalıp, üstelik depodaki tek çeyrek yazımıyla
+    (kredi `ceyrek`, ödemeler dengesi, DİBS: "2026-Ç2") ayrışıyordu. Etiket
+    okura basılıyor: figür başlıkları ve `<Deger anahtar="_ceyrek">` bunu
+    gösterir.
+    """
+    return f"{t.year}-Ç{(t.month - 1) // 3 + 1}"
+
+
+def ceyrek_saati(t) -> str:
+    """Hattın SAATİ: çeyreğin SON AYI, "AA.YYYY" ("06.2026").
+
+    Biçim sözleşmesi (ortak/bicim.py = site/src/lib/bicim.ts) üç aylık bir
+    ölçünün gününü yazmaz: hat "30.06.2026" yazıyordu ve GrafikEmbed dört
+    figürün altına o günü basıyordu — okur çeyreğin tamamını anlatan bir
+    ölçüyü tek bir günün ölçümü sanar. AA.YYYY ayın SON gününe demirlenir,
+    yani bayatlık denetimi aynı günü görmeye devam eder (30.06.2026); değişen
+    yalnız okura ne yazdığımız.
+    """
+    return t.strftime("%m.%Y")
+
+
 def main() -> int:
     print("── Büyüme hattı · ölçüm")
     takvim = _oku("harcama_takvim")
@@ -123,7 +152,7 @@ def main() -> int:
             raise SystemExit(f"{ad}: B1GQ (GSYH) serisi yok — hat duruyor")
 
     son = gsyh_t.dropna().index.max()
-    ceyrek = str(son.to_period("Q"))
+    ceyrek = ceyrek_etiket(son)
     print(f"   son çeyrek: {ceyrek}")
 
     # ── yıllık ve çeyreklik büyüme
@@ -168,7 +197,9 @@ def main() -> int:
                 f"GSYH = {hedef:,.0f} (%{sapma:.2f} sapma)")
         print(f"   kimlik 2 ✓ sektörel toplam + vergi = GSYH (%{sapma:.3f} sapma)")
     else:
-        uyar("üretim tarafı cari fiyatlarda B1G / D21X31 yok — kimlik 2 koşulamadı")
+        uyar("Üretim tarafının cari fiyatlı toplamı (B1G) ya da vergi kalemi "
+             "(D21X31) bu yayımda yok — sektörel toplam ile GSYH karşılaştırması "
+             "bu koşuda yapılamadı.")
 
     # ── KATKI: w(t−4) × g(t), ithalat EKSİ
     onceki = son - pd.DateOffset(years=1)
@@ -180,12 +211,14 @@ def main() -> int:
         reel = _sutun(takvim, kod)
         nominal = _sutun(cari, kod)
         if reel is None or nominal is None:
-            uyar(f"{ad} ({kod}): reel ya da cari seri yok — katkıya girmiyor")
+            uyar(f"{ad}: reel ya da cari fiyatlı seri bu yayımda yok — "
+                 "katkı ayrıştırmasına girmiyor.")
             continue
         g = _yillik(reel).get(son)
         w = float(nominal.get(onceki)) / gsyh_c_onceki
         if pd.isna(g) or pd.isna(w):
-            uyar(f"{ad}: büyüme ya da ağırlık ölçülemedi")
+            uyar(f"{ad}: büyüme ya da ağırlık ölçülemedi — "
+                 "katkı ayrıştırmasına girmiyor.")
             continue
         k = isaret * w * float(g)
         katkilar[kod] = {"ad": ad, "buyume": _r(g), "agirlik": _r(w * 100, 1),
@@ -230,20 +263,20 @@ def main() -> int:
     tarihce = []
     for t in gsyh_t.dropna().index[-44:]:
         tarihce.append({
-            "ceyrek": str(t.to_period("Q")),
+            "ceyrek": ceyrek_etiket(t),
             "yillik": _r(yil_ser.get(t)),
             "ceyreklik": _r(cey_ser.get(t)),
         })
 
     cikti = {
         "_ceyrek": ceyrek,
-        "_tarih": son.strftime("%d.%m.%Y"),
+        "_tarih": ceyrek_saati(son),
         "buyume_yillik": _r(mansel),                 # MANŞET (arındırılmamış)
         "buyume_ceyreklik": _r(buyume_ceyreklik),
         "ayristirma_tabani": _r(buyume_yillik),      # takvim ar. harcama tarafı
         "ayarlama_farki": _r(ayarlama_farki),
-        "onceki_ceyrek": str(onceki.to_period("Q")),
-        "agirlik_donemi": str(onceki.to_period("Q")),
+        "onceki_ceyrek": ceyrek_etiket(onceki),
+        "agirlik_donemi": ceyrek_etiket(onceki),
         "katkilar": katkilar,
         "katki_toplami": _r(toplam_katki),
         "artik": _r(artik),

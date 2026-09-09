@@ -1,12 +1,12 @@
 {
- "_ceyrek": "2026Q2",
- "_tarih": "30.06.2026",
+ "_ceyrek": "2026-Ç2",
+ "_tarih": "06.2026",
  "buyume_yillik": 2.32,
  "buyume_ceyreklik": 1.12,
  "ayristirma_tabani": 2.27,
  "ayarlama_farki": -0.05,
- "onceki_ceyrek": "2025Q2",
- "agirlik_donemi": "2025Q2",
+ "onceki_ceyrek": "2025-Ç2",
+ "agirlik_donemi": "2025-Ç2",
  "katkilar": {
   "P311": {
    "ad": "Hanehalkı tüketimi",
@@ -135,222 +135,222 @@
  },
  "tarihce": [
   {
-   "ceyrek": "2015Q3",
+   "ceyrek": "2015-Ç3",
    "yillik": 5.97,
    "ceyreklik": 0.86
   },
   {
-   "ceyrek": "2015Q4",
+   "ceyrek": "2015-Ç4",
    "yillik": 7.38,
    "ceyreklik": 1.72
   },
   {
-   "ceyrek": "2016Q1",
+   "ceyrek": "2016-Ç1",
    "yillik": 4.65,
    "ceyreklik": -0.23
   },
   {
-   "ceyrek": "2016Q2",
+   "ceyrek": "2016-Ç2",
    "yillik": 4.51,
    "ceyreklik": 1.54
   },
   {
-   "ceyrek": "2016Q3",
+   "ceyrek": "2016-Ç3",
    "yillik": -0.02,
    "ceyreklik": -2.74
   },
   {
-   "ceyrek": "2016Q4",
+   "ceyrek": "2016-Ç4",
    "yillik": 4.25,
    "ceyreklik": 5.75
   },
   {
-   "ceyrek": "2017Q1",
+   "ceyrek": "2017-Ç1",
    "yillik": 5.26,
    "ceyreklik": 0.79
   },
   {
-   "ceyrek": "2017Q2",
+   "ceyrek": "2017-Ç2",
    "yillik": 6.14,
    "ceyreklik": 2.43
   },
   {
-   "ceyrek": "2017Q3",
+   "ceyrek": "2017-Ç3",
    "yillik": 11.61,
    "ceyreklik": 2.59
   },
   {
-   "ceyrek": "2017Q4",
+   "ceyrek": "2017-Ç4",
    "yillik": 7.56,
    "ceyreklik": 1.61
   },
   {
-   "ceyrek": "2018Q1",
+   "ceyrek": "2018-Ç1",
    "yillik": 8.32,
    "ceyreklik": 1.46
   },
   {
-   "ceyrek": "2018Q2",
+   "ceyrek": "2018-Ç2",
    "yillik": 6.24,
    "ceyreklik": 0.18
   },
   {
-   "ceyrek": "2018Q3",
+   "ceyrek": "2018-Ç3",
    "yillik": 3.26,
    "ceyreklik": -0.7
   },
   {
-   "ceyrek": "2018Q4",
+   "ceyrek": "2018-Ç4",
    "yillik": -2.19,
    "ceyreklik": -3.05
   },
   {
-   "ceyrek": "2019Q1",
+   "ceyrek": "2019-Ç1",
    "yillik": -1.66,
    "ceyreklik": 2.04
   },
   {
-   "ceyrek": "2019Q2",
+   "ceyrek": "2019-Ç2",
    "yillik": -0.55,
    "ceyreklik": 2.19
   },
   {
-   "ceyrek": "2019Q3",
+   "ceyrek": "2019-Ç3",
    "yillik": 1.14,
    "ceyreklik": 0.02
   },
   {
-   "ceyrek": "2019Q4",
+   "ceyrek": "2019-Ç4",
    "yillik": 6.29,
    "ceyreklik": 1.56
   },
   {
-   "ceyrek": "2020Q1",
+   "ceyrek": "2020-Ç1",
    "yillik": 3.93,
    "ceyreklik": 0.35
   },
   {
-   "ceyrek": "2020Q2",
+   "ceyrek": "2020-Ç2",
    "yillik": -10.09,
    "ceyreklik": -10.38
   },
   {
-   "ceyrek": "2020Q3",
+   "ceyrek": "2020-Ç3",
    "yillik": 6.05,
    "ceyreklik": 15.68
   },
   {
-   "ceyrek": "2020Q4",
+   "ceyrek": "2020-Ç4",
    "yillik": 6.0,
    "ceyreklik": 1.27
   },
   {
-   "ceyrek": "2021Q1",
+   "ceyrek": "2021-Ç1",
    "yillik": 8.33,
    "ceyreklik": 2.68
   },
   {
-   "ceyrek": "2021Q2",
+   "ceyrek": "2021-Ç2",
    "yillik": 22.14,
    "ceyreklik": 1.6
   },
   {
-   "ceyrek": "2021Q3",
+   "ceyrek": "2021-Ç3",
    "yillik": 8.77,
    "ceyreklik": 3.51
   },
   {
-   "ceyrek": "2021Q4",
+   "ceyrek": "2021-Ç4",
    "yillik": 10.42,
    "ceyreklik": 1.83
   },
   {
-   "ceyrek": "2022Q1",
+   "ceyrek": "2022-Ç1",
    "yillik": 7.46,
    "ceyreklik": -0.29
   },
   {
-   "ceyrek": "2022Q2",
+   "ceyrek": "2022-Ç2",
    "yillik": 7.31,
    "ceyreklik": 1.68
   },
   {
-   "ceyrek": "2022Q3",
+   "ceyrek": "2022-Ç3",
    "yillik": 3.87,
    "ceyreklik": 0.9
   },
   {
-   "ceyrek": "2022Q4",
+   "ceyrek": "2022-Ç4",
    "yillik": 3.08,
    "ceyreklik": 0.97
   },
   {
-   "ceyrek": "2023Q1",
+   "ceyrek": "2023-Ç1",
    "yillik": 3.64,
    "ceyreklik": -0.78
   },
   {
-   "ceyrek": "2023Q2",
+   "ceyrek": "2023-Ç2",
    "yillik": 5.33,
    "ceyreklik": 4.75
   },
   {
-   "ceyrek": "2023Q3",
+   "ceyrek": "2023-Ç3",
    "yillik": 6.02,
    "ceyreklik": 0.78
   },
   {
-   "ceyrek": "2023Q4",
+   "ceyrek": "2023-Ç4",
    "yillik": 4.76,
    "ceyreklik": 0.67
   },
   {
-   "ceyrek": "2024Q1",
+   "ceyrek": "2024-Ç1",
    "yillik": 5.76,
    "ceyreklik": 1.02
   },
   {
-   "ceyrek": "2024Q2",
+   "ceyrek": "2024-Ç2",
    "yillik": 2.58,
    "ceyreklik": -0.2
   },
   {
-   "ceyrek": "2024Q3",
+   "ceyrek": "2024-Ç3",
    "yillik": 2.95,
    "ceyreklik": 0.56
   },
   {
-   "ceyrek": "2024Q4",
+   "ceyrek": "2024-Ç4",
    "yillik": 3.51,
    "ceyreklik": 1.6
   },
   {
-   "ceyrek": "2025Q1",
+   "ceyrek": "2025-Ç1",
    "yillik": 3.16,
    "ceyreklik": 0.93
   },
   {
-   "ceyrek": "2025Q2",
+   "ceyrek": "2025-Ç2",
    "yillik": 4.65,
    "ceyreklik": 1.15
   },
   {
-   "ceyrek": "2025Q3",
+   "ceyrek": "2025-Ç3",
    "yillik": 3.65,
    "ceyreklik": 0.84
   },
   {
-   "ceyrek": "2025Q4",
+   "ceyrek": "2025-Ç4",
    "yillik": 3.56,
    "ceyreklik": 0.27
   },
   {
-   "ceyrek": "2026Q1",
+   "ceyrek": "2026-Ç1",
    "yillik": 2.69,
    "ceyreklik": 0.31
   },
   {
-   "ceyrek": "2026Q2",
+   "ceyrek": "2026-Ç2",
    "yillik": 2.27,
    "ceyreklik": 1.12
   }

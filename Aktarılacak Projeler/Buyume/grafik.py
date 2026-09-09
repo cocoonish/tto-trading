@@ -53,7 +53,7 @@ def _duzen(fig, baslik: str, alt: list[str], h: int = 460, y_baslik: str = ""):
 def _yaz(fig, ad: str):
     fig.write_html(CIKTI / ad, include_plotlyjs="cdn", full_html=True,
                    config={"responsive": True, "displaylogo": False})
-    print(f"  yazıldı: cikti/{ad}")
+    print(f"  yazıldı: {CIKTI.name}/{ad}")
 
 
 def sekil_01(M):
