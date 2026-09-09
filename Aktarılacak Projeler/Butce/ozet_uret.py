@@ -314,10 +314,15 @@ def main(bugun=None) -> int:
     koy("tufe_yy_manset", v_manset, 1)
     O["deflator_taban"] = _ay_yaz(m["butce"]["deflator_taban_ay"])
     koy("deflator_taban_endeks", m["butce"].get("deflator_taban_endeks"), 2)
-    O["tufe_son_ay"] = _ay_yaz(m["butce"].get("tufe_son_ay"))
+    _tufe_ham = m["butce"].get("tufe_son_ay")
+    O["tufe_son_ay"] = _ay_yaz(_tufe_ham)
     # Sayfada takvim ayı ELLE yazılmasın diye TÜFE ayının Türkçe adı.
+    # AY ADI HAM DEĞERDEN OKUNUR. `_ay_yaz` çıktısı (AA.YYYY) pandas'ın gün-ay-yıl
+    # sezgisine düşüyor: pd.Timestamp("08.2026") Ağustos değil OCAK veriyor ve
+    # sayfa yanlış ayı basıyordu (09.09.2026 ölçüldü). Biçimlenmiş bir dizge
+    # yeniden ayrıştırılmaz; kaynak değer neyse ad ondan türer.
     try:
-        O["tufe_son_ay_ad"] = AY_TR[pd.Timestamp(O["tufe_son_ay"]).month]
+        O["tufe_son_ay_ad"] = AY_TR[pd.Timestamp(_tufe_ham).month]
     except Exception:
         uyar("tufe_son_ay_ad üretilemedi — anahtar atlandı.")
     # Fisher: aynı veriden basit çıkarmayla kaç puan farklı bir sayı çıkardı.
