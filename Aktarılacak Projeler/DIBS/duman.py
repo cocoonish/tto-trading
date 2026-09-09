@@ -116,6 +116,39 @@ def _sayfa_anahtarlari():
     assert not uymayan, f"sayfa, döngünün üretmediği kıyas anahtarı çağırıyor: {uymayan}"
 
 
+def _yukseklik_ay_adindan_bagimsiz() -> None:
+    """Alt yazıdaki AY ADI figürün yüksekliğini oynatmamalı.
+
+    Yükseklik alt yazının SATIR SAYISINDAN türüyor (`ust = 92 + 26 * len(alt)`)
+    ve sayfa MDX'te aynı sayıyı ilan ediyor; sayfa sınavının 3. ölçütü sapmayı
+    ENGEL sayar. Alt yazıya veriden gelen bir ay adı girdiğinde ("Çizilen anket
+    Ağustos 2026, gerçekleşen TÜFE …") satır sayısı ay adının UZUNLUĞUNA bağlı
+    hâle gelir: eylülde sarma değişirse yükseklik 26 px oynar, MDX eski sayıyı
+    ilan eder ve YAYIN DURUR. Ölçüldü (09.09.2026): 12×12 = 144 ay bileşiminin
+    hepsinde satır sayısı 3 — yani bugünkü metin güvenli. Bu sınama o ölçümü
+    kilitliyor: alt yazı uzatılırsa ya da SATIR_SINIR değişirse burada düşer,
+    yayın kapısında değil.
+    """
+    import re as _re
+    kaynak = (BURASI / "grafik.py").read_text(encoding="utf-8")
+    ad = {"re": _re}
+    exec(_re.search(r"^SATIR_SINIR\s*=.*$", kaynak, _re.M).group(0), ad)
+    exec(_re.search(r"^def _bol\(.*?(?=^def |\Z)", kaynak, _re.S | _re.M).group(0), ad)
+    sablon = ("FREKANS UYUMSUZLUĞU: eğri GÜNLÜK, beklenti AYLIKTIR. Çizilen anket "
+              "{a}, gerçekleşen TÜFE {t} ayına ait. PKA ayın 20'sinden (varsayım — anket "
+              "resmî veri takviminde ayrı kalem değil), TÜFE ertesi ayın 3'ünden (TÜİK "
+              "yayım günü; hafta sonuna denk gelirse ilk iş günü) itibaren geçerli "
+              "sayılıp günlüğe yayılır.")
+    aylar = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz",
+             "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
+    sayilar = {len(ad["_bol"](sablon.format(a=f"{a} 2026", t=f"{t} 2026")))
+               for a in aylar for t in aylar}
+    assert len(sayilar) == 1, (
+        f"alt yazının satır sayısı ay adına göre değişiyor {sorted(sayilar)} — "
+        "figür yüksekliği veriye bağlı hâle geldi, MDX'teki yukseklik={} bir ay "
+        "sonra yanlışlanır ve yayın kapısı ENGEL verir")
+
+
 sina("kıyas değişimi: çıpa boşsa son dolu gün, kendi tarihiyle", _kiyas_son_dolu_gun)
 sina("kıyas anahtarı atlanmaz, boş yazılır; bitiş damgalanır", _anahtar_atlanmaz)
 
@@ -343,6 +376,9 @@ sina("şekil saat defteri: bağlayıcı bacak, iki parçalı damga, iki tüketic
      _sekil_saat_defteri)
 sina("aylık saat anahtarı AA.YYYY, okur etiketi ayrı anahtarda", _aylik_saat_anahtarlari)
 sina("anket yayım günü varsayımı okura yazılır; ek sayıya bağlı", _anket_yayim_varsayimi)
+sina("figür yüksekliği ay adından bağımsız (144 bileşimde satır sayısı sabit)",
+     _yukseklik_ay_adindan_bagimsiz)
+
 
 
 if __name__ == "__main__":
