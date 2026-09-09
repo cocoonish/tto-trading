@@ -6,7 +6,7 @@ from urllib.parse import urlencode
 from datetime import date
 import plotly.graph_objects as go
 import plotly.colors as pc
-from evds_ortak import evds_anahtari, EVDS_ILERI_GUN, EVDS_BASE
+from evds_ortak import evds_anahtari, EVDS_ILERI_GUN, EVDS_BASE, usdtry_serisi
 
 # Çıktılar script'in kendi klasörüne yazılır (taşınmaya dayanıklı)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -38,8 +38,8 @@ def fetch_evds(series_code: str, start: str, end: str) -> pd.Series:
 
 
 print(f"Veri aralığı: {fetch_start} – {fetch_end} (bugün: {today})")
-print("EVDS'den USD/TRY cekiliyor...")
-usdtry = fetch_evds("TP.DK.USD.A.YTL", fetch_start, fetch_end)
+print("Yahoo Finance'ten USD/TRY cekiliyor...")
+usdtry = usdtry_serisi(fetch_start)
 print(f"  {len(usdtry)} kayit, {usdtry.index[0].date()} - {usdtry.index[-1].date()}")
 
 # Grafik penceresi bugünle değil VERİYLE biter; erken yayımlanan ertesi iş günü kuru

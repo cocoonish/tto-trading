@@ -16,6 +16,7 @@ Anahtar:
 """
 
 import os
+import re
 import sys
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -89,3 +90,45 @@ def gizle_anahtar(metin: str, anahtar: str = "") -> str:
     if anahtar and len(anahtar) >= 4:
         return metin.replace(anahtar, f"{anahtar[:2]}***{anahtar[-2:]}")
     return metin
+
+
+# --------------------------------------------------------------------------- USD/TRY
+# KARAR (09.09.2026, kullanıcı): USD/TRY Yahoo Finance'ten. Kaynak, kapsam
+# ölçümü ve kapanmamış bar kuralı ortak/usdtry.py'de TEK tanım; bu hat yalnız
+# köprü kurar. Önbellek hattın kendi klasöründe (data/cache, izlenmez).
+USDTRY_ONBELLEK = os.path.join(BASE_DIR, "data", "cache", "usdtry_yahoo.csv")
+
+
+def _ortak_usdtry():
+    """ortak/usdtry — PYTHONPATH'te (sitecustomize) yoksa depo kökünden."""
+    try:
+        import usdtry  # noqa: F401
+        return usdtry
+    except ImportError:
+        kok = os.path.dirname(os.path.dirname(BASE_DIR))
+        sys.path.insert(0, os.path.join(kok, "ortak"))
+        import usdtry
+        return usdtry
+
+
+def usdtry_serisi(start, uyar=print):
+    """USD/TRY günlük kapanış (Yahoo Finance), `start` (GG-AA-YYYY, YYYY-AA-GG
+    ya da tarih) sonrası. Kapsam yetmezse ya da ağ düşerse eldeki önbellek
+    döner ve sebep `uyar` ile basılır; önbellek de yoksa hata."""
+    import pandas as pd
+    if isinstance(start, str) and re.fullmatch(r"\d{2}-\d{2}-\d{4}", start):
+        start = pd.to_datetime(start, format="%d-%m-%Y").date()
+    k = _ortak_usdtry().seri(bas=start, onbellek=USDTRY_ONBELLEK)
+    for u in k.uyarilar:
+        uyar("UYARI: " + u)
+    s = k.seri.rename("USDTRY=X")
+    return s
+
+
+def usdtry_kunye(start):
+    """ozet.json'a düşecek kaynak künyesi (kaynak adı, ilk/son gün, gözlem)."""
+    import pandas as pd
+    if isinstance(start, str) and re.fullmatch(r"\d{2}-\d{2}-\d{4}", start):
+        start = pd.to_datetime(start, format="%d-%m-%Y").date()
+    m = _ortak_usdtry()
+    return m.kunye(m.seri(bas=start, onbellek=USDTRY_ONBELLEK))

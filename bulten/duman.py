@@ -779,6 +779,54 @@ def main() -> int:
             tazeleme._yayimlar, tazeleme._defter, tazeleme.hat_surumu = gercek
     sina("tazeleme: kalıptaki her yayım hattın bir saatini ilerletir", _kalip_tuketilen_yayim)
 
+    # USD/TRY TEK KAYNAK (KARAR 09.09.2026, kullanıcı): kurun konu olduğu hatlar
+    # Yahoo Finance'i ortak/usdtry üzerinden okur; kapsam ve seviye sınaması
+    # kırpık/yanlış seviyeli seriyi eski önbelleğin üstüne yazdırmaz.
+    def _usdtry_tek_kaynak():
+        import sys as _s, tempfile as _tf, datetime as _dt
+        from pathlib import Path as _P
+        _s.path.insert(0, str(BURASI.parent / "ortak"))
+        import usdtry as _u, pandas as _pd, numpy as _np
+        bugun = _dt.datetime(2026, 9, 9, 12, 0, tzinfo=_dt.timezone.utc)
+        idx = _pd.bdate_range("2005-01-03", "2026-09-09")
+        tam = lambda a, b: _pd.Series(_np.linspace(1.3, 48.4, len(idx)), index=idx)
+        tmp = _P(_tf.mkdtemp()) / "u.csv"
+        k = _u.seri(onbellek=tmp, cek=tam, simdi=bugun)
+        assert not k.onbellekten and k.son == _dt.date(2026, 9, 8), \
+            f"bugünün kapanmamış barı düşmedi ya da ağdan gelmedi: {k.son} {k.onbellekten}"
+        import os as _os; _os.utime(tmp, (0, 0))
+        kidx = _pd.bdate_range("2026-03-09", "2026-09-09")
+        kirpik = lambda a, b: _pd.Series(_np.full(len(kidx), 8.5), index=kidx)   # yfinance arızası
+        k2 = _u.seri(onbellek=tmp, cek=kirpik, simdi=bugun)
+        assert k2.onbellekten and k2.n == k.n and k2.uyarilar, "kırpık/yanlış seviyeli seri önbelleği ezdi"
+        assert "başı kırpık" in k2.uyarilar[0] and "ayrışıyor" in k2.uyarilar[0], k2.uyarilar
+        def agsiz(a, b): raise RuntimeError("ağ yok")
+        k3 = _u.seri(onbellek=tmp, cek=agsiz, simdi=bugun)
+        assert k3.onbellekten and "erişilemedi" in k3.uyarilar[0], k3.uyarilar
+        try:
+            _u.seri(onbellek=_P(_tf.mkdtemp()) / "yok.csv", cek=agsiz, simdi=bugun)
+            raise AssertionError("önbellek yokken ağ düşünce hata vermedi")
+        except RuntimeError:
+            pass
+        # Sözleşme: kurun konu olduğu hatlar EVDS gösterge kurunu OKUMAZ.
+        kok = BURASI.parent / "Aktarılacak Projeler"
+        for yol in ("USDTRYDeval/ozet_uret.py", "USDTRYDeval/usdtry_deval_plotly.py",
+                    "USDTRYDeval/usdtry_weekly_trends.py", "USDTRYDeval/usdtry_monthly_trends.py"):
+            src = (kok / yol).read_text(encoding="utf-8")
+            assert "TP.DK.USD" not in src and "usdtry_serisi(" in src, f"{yol}: kur hâlâ EVDS'ten"
+        src = (kok / "Fonlama" / "veri.py").read_text(encoding="utf-8")
+        assert '"usdtry": ("TP.DK.USD' not in src and "def usdtry_sutunu" in src, "Fonlama kur sütunu EVDS'ten"
+        src = (kok / "OVP" / "veri.py").read_text(encoding="utf-8")
+        assert 'KUR_SERI = {"usdtry": "USDTRY=X"}' in src, "OVP kur bacağı EVDS'ten"
+        src = (kok / "TRYREER" / "usdtry_reer_analysis.py").read_text(encoding="utf-8")
+        assert "import yfinance" not in src and "_u.seri(" in src, "REER doğrudan yfinance okuyor"
+        src = (kok / "hazineihrac" / "web_cikti_tahmin.py").read_text(encoding="utf-8")
+        assert '("Yahoo Finance", _kur_yahoo), ("EVDS", _kur_evds)' in src, "hazine kur sırası Yahoo → EVDS değil"
+        # DÖNÜŞÜM kuru kapsam DIŞI ve adıyla: resmî istatistik hatları gösterge kurda kalır.
+        for yol in ("TCMBNetRezerv/net_rezerv.py", "Kredi/veri.py", "Butce/veri.py", "OdemelerDengesi/veri.py"):
+            assert "TP.DK.USD" in (kok / yol).read_text(encoding="utf-8"), f"{yol}: dönüşüm kuru değişmiş"
+    sina("usdtry: tek kaynak Yahoo Finance, kapsam/seviye sınamalı, dönüşüm kuru kapsam dışı", _usdtry_tek_kaynak)
+
     def _kosu_basina_tazele():
         """TTO_YENILE koşu başına indirir: bu koşuda yazılmış önbellek tazedir."""
         import os as _os, tempfile as _tf, time as _tm, importlib as _il, inspect as _insp

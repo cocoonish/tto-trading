@@ -101,41 +101,30 @@ def load_usdtry_local():
 
 
 def fetch_usdtry_yfinance():
-    """Yahoo Finance'ten USDTRY verisi çek (aylık ortalamaya indirgenir)"""
-    import yfinance as yf
+    """USD/TRY aylık ortalama — Yahoo Finance, ortak/usdtry üzerinden (TEK tanım).
 
-    print("📥 Yahoo Finance'ten USDTRY verisi çekiliyor...")
-
-    # Geniş tarih aralığı
-    ticker = yf.Ticker("TRY=X")
-    df = ticker.history(period="max")
-
-    if df.empty:
-        # Alternatif ticker dene
-        ticker = yf.Ticker("USDTRY=X")
-        df = ticker.history(period="max")
-
-    if df.empty:
-        raise RuntimeError("yfinance boş veri döndürdü (TRY=X ve USDTRY=X)")
-
-    df = df.reset_index()
-    df['Date'] = pd.to_datetime(df['Date']).dt.tz_localize(None)
-
-    # Aylık ortalamalara dönüştür (REDK aylık)
+    KARAR (09.09.2026): her hatta Yahoo Finance; kapsam ölçümü ve kapanmamış
+    bar kuralı ortak modülde. Yfinance'in kırpık/yanlış seviyeli seri arızası
+    orada seviye ve kapsam sınamasıyla yakalanır; kapsam yetmezse eldeki
+    önbellek döner ve sebep basılır. High/Low aylık kapanışların uç değerleri."""
+    try:
+        import usdtry as _u
+    except ImportError:
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(SCRIPT_DIR)), "ortak"))
+        import usdtry as _u
+    print("📥 Yahoo Finance'ten USDTRY verisi çekiliyor (ortak/usdtry)...")
+    k = _u.seri(bas="2005-01-03", onbellek=os.path.join(SCRIPT_DIR, "data", "cache", "usdtry_yahoo.csv"))
+    for m in k.uyarilar:
+        print("   ⚠️ " + m)
+    df = k.seri.rename("Close").reset_index()
+    df.columns = ["Date", "Close"]
     df['YearMonth'] = df['Date'].dt.to_period('M')
-    monthly = df.groupby('YearMonth').agg({
-        'Close': 'mean',
-        'High': 'max',
-        'Low': 'min',
-        'Volume': 'sum'
-    }).reset_index()
-
+    monthly = df.groupby('YearMonth').agg(Close=('Close', 'mean'), High=('Close', 'max'),
+                                          Low=('Close', 'min')).reset_index()
     monthly['Dönem'] = monthly['YearMonth'].dt.to_timestamp()
     monthly = monthly.rename(columns={'Close': 'USDTRY'})
     monthly = monthly[['Dönem', 'USDTRY', 'High', 'Low']]
-
     print(f"   ✅ {len(monthly)} aylık veri çekildi ({monthly['Dönem'].min().strftime('%Y-%m')} - {monthly['Dönem'].max().strftime('%Y-%m')})")
-
     return monthly
 
 

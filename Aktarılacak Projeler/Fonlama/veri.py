@@ -358,10 +358,10 @@ GUNLUK: dict[str, tuple[str, str]] = {
     "swap_miktar":      ("TP.SWAPTEKTAR.SWAPMSTOKUSDTUTAR",    "2021-01-04"),
     "swap_altin_piy":   ("TP.SWAPTEKTAR.SWAPASTOKUSDTUTAR",    "2021-01-04"),
     "swap_altin_ihale": ("TP.SWAPTEKTAR.SWAPXALIMSTOKUSDTUTAR", "2021-01-04"),
-    # Kur — swap stokunun TL karşılığı için. Gecikme −1 gün (TCMB ertesi günün
-    # kurunu bir gün önce ilan eder); tazelik denetimi bunu alarm saymaz.
-    "usdtry": ("TP.DK.USD.A.YTL", "2011-01-03"),
+    # Kur: EVDS'ten DEĞİL — USD/TRY her hatta Yahoo Finance (KARAR 09.09.2026),
+    # `usdtry_sutunu()` gunluk.csv'ye ekler; taşıma hattı bu sütunu okur.
 }
+USDTRY_BAS = "2011-01-03"
 
 # --- HAFTALIK(CUMA) --------------------------------------------------------
 # 2013 başlangıcı bilinçli: 2005'ten çekilirse 1080 satır olur ve EVDS 1000'de
@@ -411,7 +411,7 @@ TAZELIK_GUNLUK = {
     "ab_api":       ("Analitik bilanço (TP.AB.A24)",          5, False),
     "serbest_mevduat": ("Sistem likiditesi (TP.PPIBSM)",      4, False),
     "swap_alim":    ("Swap stoku (TP.SWAPTEKTAR.*)",          4, False),
-    "usdtry":       ("Döviz kuru (TP.DK.USD.A.YTL)",          4, True),
+    "usdtry":       ("Döviz kuru (Yahoo Finance USD/TRY)",   4, True),
 }
 # ETİKETLER OKURA GİDİYOR. Bu satırlar uyarilar.json'a ve oradan sayfadaki koşu
 # kutusuna OLDUĞU GİBİ basılıyor. Günlük tabloda parantez içi kaynağın KENDİ
@@ -829,11 +829,35 @@ def olu_seri_denetimi(g: pd.DataFrame) -> list[str]:
 
 
 # --------------------------------------------------------------------------- ana akış
+def usdtry_sutunu(g: pd.DataFrame, yenile: bool = False) -> pd.DataFrame:
+    """USD/TRY sütunu Yahoo Finance'ten (ortak/usdtry — kapsam ölçümlü).
+
+    KARAR (09.09.2026, kullanıcı): kurun konu olduğu her hatta Yahoo Finance.
+    Bu sütun taşıma hattının (Carry) kur bacağıdır. EVDS takviminin dışındaki
+    günler (TR tatili) alınmaz: sütun EVDS iş günü eksenine hizalanır."""
+    try:
+        import usdtry as _u
+    except ImportError:
+        import sys as _s
+        _s.path.insert(0, str(KOK / "ortak"))
+        import usdtry as _u
+    k = _u.seri(bas=USDTRY_BAS, onbellek=VERI / "cache" / "usdtry_yahoo.csv",
+                ttl_saat=0 if yenile else CACHE_TTL_SAAT)
+    for m in k.uyarilar:
+        uyar("USD/TRY: " + m)
+    g = g.copy()
+    g["usdtry"] = k.seri.reindex(g.index)
+    if g["usdtry"].notna().sum() == 0:
+        uyar("SERİ YOK: usdtry (Yahoo Finance) — kur sütunu boş kaldı.")
+    return g
+
+
 def kos(yenile: bool = False) -> dict:
     print("EVDS3 → TCMB fonlama & likidite veri katmanı")
     print(f"  anahtar: {'ortam değişkeni' if os.environ.get('TTO_EVDS_KEY') else 'dosya'}")
 
     g = cek_kume(GUNLUK, "gun", PARCA_GUN, yenile, etiket="iş günü")
+    g = usdtry_sutunu(g, yenile)
     h = cek_kume(HAFTALIK, "gun", PARCA_HAFTA_GUN, yenile, etiket="haftalık")
     a = cek_kume(AYLIK, "ay", 20000, yenile, etiket="aylık (doğrulama)")
 

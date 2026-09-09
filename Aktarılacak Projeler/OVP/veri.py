@@ -15,8 +15,8 @@ DEĞİŞİR. Hattın işi o cevabı canlı tutmaktır.
    değişmez; ağdan çekilmez, `programlar.json`da kaynak künyesiyle durur
    (hangi belge, hangi tablo, hangi sayfa). Bu dosya ELLE tutulur —
    Makroihtiyati hattındaki düzenleme defteriyle aynı sözleşme.
-2. GERÇEKLEŞEN KUR CANLIDIR. EVDS3'ten günlük gösterge kuru çekilir
-   (TP.DK.USD.A.YTL), parçalı istekle, seri bazında TTL'li önbellekle.
+2. GERÇEKLEŞEN KUR CANLIDIR. Yahoo Finance'ten günlük kapanış çekilir
+   (ortak/usdtry — kapsam ölçümlü, TTL'li önbellekle; KARAR 09.09.2026).
 
 Üçüncü ve dördüncü bacak DEPODAN gelir, ağdan değil: TL gecelik faiz
 (Fonlama hattının `data/gunluk.csv`si) ve gerçekleşen TÜFE (Enflasyon
@@ -110,7 +110,9 @@ ILERI_GUN = 10
 # kadar sağlam.
 KUR_BAS = "2015-01-01"
 
-KUR_SERI = {"usdtry": "TP.DK.USD.A.YTL"}
+# KARAR (09.09.2026, kullanıcı): gerçekleşen kur Yahoo Finance'ten (ortak/usdtry,
+# kapsam ölçümlü, kapanmamış bar düşürülür). Ad kod değil kaynak etiketi.
+KUR_SERI = {"usdtry": "USDTRY=X"}
 
 # --------------------------------------------------------------------------- uyarı
 # İKİ AİLE, İKİ AYRI HÜKÜM.
@@ -362,6 +364,20 @@ def cek_kume(kodlar: dict[str, str], yenile: bool = False) -> pd.DataFrame:
     t1 = pd.Timestamp.today().normalize() + pd.Timedelta(days=ILERI_GUN)
     out: dict[str, pd.Series] = {}
     for ad, kod in kodlar.items():
+        if kod == "USDTRY=X":
+            # Yahoo Finance — tek tanım ortak/usdtry; kapsam yetmezse eski önbellek.
+            try:
+                import usdtry as _u
+            except ImportError:
+                import sys as _s
+                _s.path.insert(0, str(PROJE.parent.parent / "ortak"))
+                import usdtry as _u
+            k = _u.seri(bas=KUR_BAS, onbellek=VERI / "cache" / "usdtry_yahoo.csv",
+                        ttl_saat=0 if yenile else CACHE_TTL_SAAT)
+            for m in k.uyarilar:
+                uyar("BAYAT: kur — " + m)
+            out[ad] = k.seri
+            continue
         cyol = _cache_yolu(kod, KUR_BAS)
         if _taze(cyol, CACHE_TTL_SAAT) and not yenile:
             s = pd.read_csv(cyol, index_col=0, parse_dates=True).iloc[:, 0]
@@ -822,8 +838,8 @@ def kunye_yaz() -> None:
         print(f"    {p['kisa']:<16} yayım {program_ay_yazi(p)} "
               f"(damga: {g.strftime('%m.%Y') if g else 'ay kapanmadı'}) "
               f"· {len(p['deger'])} satır · sütun {','.join(p['sutun'])}")
-    print(f"  kur serisi: {KUR_SERI['usdtry']} · {KUR_BAS} tarihinden, "
-          f"{PARCA_GUN} günlük parçalarla, bitiş +{ILERI_GUN} gün")
+    print(f"  kur serisi: Yahoo Finance {KUR_SERI['usdtry']} · {KUR_BAS} tarihinden, "
+          f"günlük kapanış (kapanmamış bar düşürülür)")
     print(f"  depodan gelen bacaklar: {FAIZ_DOSYA.name} (TL gecelik faiz) · "
           f"{TUFE_DOSYA.name} (gerçekleşen TÜFE)")
     print("  tolerans (gün): "

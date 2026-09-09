@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from urllib.parse import urlencode
 from datetime import date
-from evds_ortak import evds_anahtari, gizle_anahtar, EVDS_ILERI_GUN, EVDS_BASE
+from evds_ortak import evds_anahtari, gizle_anahtar, EVDS_ILERI_GUN, EVDS_BASE, usdtry_serisi
 
 # Çıktılar script'in kendi klasörüne yazılır (taşınmaya dayanıklı)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -68,8 +68,8 @@ def fetch_evds(series_code: str, start: str, end: str) -> pd.Series:
 
 
 print(f"Veri aralığı: {fetch_start} – {fetch_end} (bugün: {today})")
-print("EVDS'den USD/TRY cekiliyor...")
-usdtry = fetch_evds("TP.DK.USD.A.YTL", fetch_start, fetch_end)
+print("Yahoo Finance'ten USD/TRY cekiliyor...")
+usdtry = usdtry_serisi(fetch_start)
 print(f"  {len(usdtry)} kayit, {usdtry.index[0].date()} - {usdtry.index[-1].date()}")
 
 # Grafik penceresi bugünle değil VERİYLE biter; erken yayımlanan ertesi iş günü kuru
@@ -205,7 +205,7 @@ ax1.set_title(f'USDTRY Annualized Devaluasyon (ACT/365) & TCMB Politika Faizi\n'
               f'({display_start.strftime("%b %Y")} - {display_end.strftime("%b %Y")})',
              fontsize=15, fontweight='bold', pad=15, color='#ffffff')
 
-ax1.text(0.01, 0.02, 'Kaynak: TCMB EVDS (TP.DK.USD.A.YTL), TCMB PPK  |  Deval. >%150 veya <-%50 kliplendi',
+ax1.text(0.01, 0.02, 'Kaynak: Yahoo Finance (USDTRY=X), TCMB PPK  |  Deval. >%150 veya <-%50 kliplendi',
          transform=ax1.transAxes, fontsize=8, color='#888', ha='left', va='bottom')
 
 fig.tight_layout()

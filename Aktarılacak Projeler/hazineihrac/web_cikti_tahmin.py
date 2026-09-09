@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Hazine ihraç sistemi — web çıktıları (yalnız CSV/JSON okur; tek istisna:
-ihrac_usd için yfinance'ten USD/TRY kuru çekilir, erişilemezse o grafik atlanır).
+ihrac_usd için USD/TRY kuru Yahoo Finance'ten (ortak/usdtry) çekilir, erişilemezse EVDS yedeği, o da yoksa o grafik atlanır).
 
 Girdi (aynı klasörde):
   - hazine_ihale_verileri.csv     : ihale bazında tam veri (faiz, fiyat, teklif…)
@@ -487,19 +487,34 @@ def _kur_evds() -> dict[str, float]:
     return {pd.Timestamp(t).strftime("%Y-%m"): float(v) for t, v in ay.items() if pd.notna(v)}
 
 
-def _kur_yfinance() -> dict[str, float]:
-    import yfinance as yf
-    h = yf.Ticker("USDTRY=X").history(period="max", interval="1d")
-    if h.empty:
-        raise RuntimeError("boş kur serisi")
-    kur = h["Close"].resample("ME").last()
+def _kur_yahoo() -> dict[str, float]:
+    """USD/TRY ay sonu kuru — Yahoo Finance, ortak/usdtry üzerinden (TEK tanım).
+
+    KARAR (09.09.2026, kullanıcı): USD/TRY her hatta Yahoo Finance. Yukarıdaki
+    yfinance arızası (altı aylık, seviyesi yıllar geride seri) ortak modülde
+    KAPSAM ve SEVİYE sınamasıyla yakalanır: kapsam yetmezse eldeki önbellek
+    döner, o da yoksa hata — yani kırpık seri ASLA grafiğe girmez. EVDS
+    yalnız yedektir (aşağıda `_kur_evds`, ikinci sırada)."""
+    import sys as _s
+    kok = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    try:
+        import usdtry as _u
+    except ImportError:
+        _s.path.insert(0, os.path.join(kok, "ortak"))
+        import usdtry as _u
+    onbellek = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "cache",
+                            "usdtry_yahoo.csv")
+    k = _u.seri(bas="2005-01-03", onbellek=onbellek)
+    for m in k.uyarilar:
+        print("  ! ihrac_usd kur: " + m)
+    kur = k.seri.resample("ME").last()
     return {pd.Timestamp(t).strftime("%Y-%m"): float(v)
             for t, v in kur.items() if pd.notna(v)}
 
 
 def ihrac_usd() -> dict | None:
     kurlar, kaynak = {}, ""
-    for ad, cek in (("EVDS", _kur_evds), ("yfinance", _kur_yfinance)):
+    for ad, cek in (("Yahoo Finance", _kur_yahoo), ("EVDS", _kur_evds)):
         try:
             kurlar = cek()
             kaynak = ad

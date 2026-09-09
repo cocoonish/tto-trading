@@ -7,7 +7,7 @@ from datetime import date
 import plotly.graph_objects as go
 import plotly.io as pio
 from plotly.subplots import make_subplots
-from evds_ortak import evds_anahtari, EVDS_ILERI_GUN, EVDS_BASE
+from evds_ortak import evds_anahtari, EVDS_ILERI_GUN, EVDS_BASE, usdtry_serisi
 
 # Çıktılar script'in kendi klasörüne yazılır (taşınmaya dayanıklı)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -68,7 +68,7 @@ def fetch_evds_opt(series_code: str, start: str, end: str):
 
 print(f"Veri aralığı: {fetch_start} – {fetch_end} (bugün: {today})")
 print("EVDS'den veriler cekiliyor...")
-usdtry = fetch_evds("TP.DK.USD.A.YTL", fetch_start, fetch_end)
+usdtry = usdtry_serisi(fetch_start)
 tlref = fetch_evds_opt("TP.BISTTLREF.ORAN", fetch_start, fetch_end)
 kredi = fetch_evds_opt("TP.KTF101", fetch_start, fetch_end)
 mev_1m = fetch_evds_opt("TP.TRYTAS.MT01", fetch_start, fetch_end)
