@@ -876,6 +876,41 @@ def bolum_revizyon() -> None:
          "Figürde çizilmeyen bir kalem sessizce boş panel bırakırdı.")
 
 
+def bolum_aylik_ritim() -> None:
+    """AYLIK bir bacağın saati AA.YYYY yazılır ve yaşı ayın SON gününden ölçülür.
+
+    09.09.2026'da ölçüldü, iki ayrı yerde aynı kusur. (1) `ozet_uret.olc`
+    saati her blokta GG.AA.YYYY yazıyordu; TÜFE serisi ayın İLK gününde
+    indeksli olduğu için `tufe_son_tarih` ve `tufe_gecen_yil_tarih`
+    "01.08.2026" çıkıyordu — okura o GÜNÜN ölçümü gibi görünen bir aylık
+    gözlem. Kural dosyada zaten yazılıydı ama YALNIZ `tufe_tarih`e
+    uygulanıyordu. (2) `veri.tazelik_olc` yaşı ham indeksten ölçüyordu; 01.08
+    çıpasıyla yaş 15.09'da 45 günlük toleransı aşıyor ve sıradaki TÜFE
+    yayımına (03.10) kadar 18 gün SAHTE "bacak gecikti" satırı basılacaktı.
+    """
+    import datetime as _dt
+    import pandas as _pd
+
+    sina("aylık blok AA.YYYY, günlük blok GG.AA.YYYY yazılır",
+         ozet_uret.blok_damga("tufe", _dt.date(2026, 8, 1)) == "08.2026"
+         and ozet_uret.blok_damga("kur", _dt.date(2026, 9, 8)) == "08.09.2026")
+    sina("aylık blok kümesi TÜFE'yi tanıyor", "tufe" in ozet_uret.AYLIK_BLOK)
+
+    _idx = _pd.to_datetime(["2026-06-01", "2026-07-01", "2026-08-01"])
+    _T = _pd.DataFrame({"tufe_12a": [1.0, 2.0, 3.0]}, index=_idx)
+    _g = _pd.DataFrame({"usdtry": [1.0], "tlref": [1.0]},
+                       index=_pd.to_datetime(["2026-09-08"]))
+    _taz = veri.tazelik_olc(_g, _g, _T)
+    sina("aylık bacağın çıpası ayın SON günü",
+         _taz["tufe"]["son"] == "2026-08-31")
+    # Sahte alarmın kendisine karşı: eski çıpayla (01.08) 15.09'da yaş 45'i
+    # aşardı; yeni çıpayla sıradaki yayım gününde bile toleransın altında.
+    _yeni = (_pd.Timestamp("2026-10-03") - _pd.Timestamp("2026-08-31")).days
+    _eski = (_pd.Timestamp("2026-09-15") - _pd.Timestamp("2026-08-01")).days
+    sina("sağlıklı çevrimde aylık bacak toleransı aşmıyor",
+         _yeni < veri.TOLERANS_GUN["tufe"] <= _eski)
+
+
 def main() -> int:
     print("OVP hattı — duman sınaması (ağa çıkmaz)")
     bolum_ima()
@@ -892,6 +927,7 @@ def main() -> int:
     bolum_okur_dili()
     bolum_cumle()
     bolum_revizyon()
+    bolum_aylik_ritim()
     print(f"\n{GECTI} geçti · {DUSTU} düştü")
     if _KUSUR:
         print("Düşenler: " + " | ".join(_KUSUR))

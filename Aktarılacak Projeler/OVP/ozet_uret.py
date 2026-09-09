@@ -162,6 +162,24 @@ def koy(anahtar: str, deger, ondalik: int | None = 2) -> None:
     _yaz(anahtar, deger, ondalik)
 
 
+# Ritmi AYLIK olan bloklar. Bir bloğun saati KENDİ ritmiyle yazılır ve bu
+# kural TEK yerde durur: aşağıdaki üç çağrı yeri de buradan geçer.
+AYLIK_BLOK = frozenset({"tufe"})
+
+
+def blok_damga(ad: str, g) -> str:
+    """Bloğun saatini ritmine göre yazar: aylık AA.YYYY, günlük GG.AA.YYYY.
+
+    AYLIK bir gözlem GÜN gibi yazılamaz — "01.08.2026" okura o GÜNÜN ölçümü
+    gibi görünür ve TÜFE serisi ayın İLK gününde indekslendiği için yaşı bir
+    ay boyu fazla gösterir. Kural bu dosyada zaten yazılıydı ama YALNIZ
+    `tufe_tarih`e uygulanıyordu; aynı bloktan fanlanan `tufe_son_tarih` ve
+    `tufe_gecen_yil_tarih` "01.08.2026" diye çıkıyordu (09.09.2026'da
+    ölçüldü). Bir kural bir kez yazılır, her yere uygulanır.
+    """
+    return g.strftime("%m.%Y") if ad in AYLIK_BLOK else g.strftime("%d.%m.%Y")
+
+
 def olc(anahtar: str, deger, ondalik: int | None = 2) -> None:
     """koy + saatini KENDİ anahtarına fanlar (`<anahtar>_tarih`)."""
     koy(anahtar, deger, ondalik)
@@ -169,7 +187,7 @@ def olc(anahtar: str, deger, ondalik: int | None = 2) -> None:
         return
     ad = blok_ad(anahtar)
     if ad and _SAAT.get(ad):
-        O[f"{anahtar}_tarih"] = _SAAT[ad].strftime("%d.%m.%Y")
+        O[f"{anahtar}_tarih"] = blok_damga(ad, _SAAT[ad])
 
 
 def yil_yaz(anahtar: str, deger) -> None:
@@ -203,8 +221,17 @@ def _saatler(m: dict) -> dict[str, dt.date]:
     for blok, anahtar in (("kur", "kur_tarih"), ("faiz", "faiz_tarih"),
                           ("tufe", "tufe_tarih"), ("carry", "carry_tarih")):
         g = b.tarihe_cevir(m.get(anahtar))
-        if g:
-            out[blok] = g
+        if not g:
+            continue
+        if blok in AYLIK_BLOK:
+            # AYLIK bir bloğun saati ayın SON günüdür (ortak/bicim sözleşmesi).
+            # Ölçüm katmanı TÜFE ucunu ayın İLK gününde indeksli seriden
+            # yazıyor; çıpayı burada düzeltmezsek damga doğru çıksa bile
+            # `gecikme_tufe_gun` ve "en geride olan blok" seçimi ayın uzunluğu
+            # kadar (30 gün) yanılır — 09.09.2026'da 39 gün yazıyordu, doğrusu
+            # 9. Çıpa TEK yerde: damga, yaş ve sıralama aynı günden okur.
+            g = (g.replace(day=1) + dt.timedelta(days=32)).replace(day=1) - dt.timedelta(days=1)
+        out[blok] = g
     return out
 
 
@@ -307,16 +334,13 @@ def main() -> int:
 
     canli = {k: v for k, v in _SAAT.items() if k in ("kur", "faiz", "tufe")}
     ana_blok = max(canli, key=lambda k: canli[k])
-    O["_tarih"] = canli[ana_blok].strftime("%d.%m.%Y")
+    O["_tarih"] = blok_damga(ana_blok, canli[ana_blok])
     O["hat_saati_blok"] = BLOK_OKUR[ana_blok]
     for blok, g in _SAAT.items():
-        if blok == "tufe":
-            # AYLIK bir gözlem GÜN gibi yazılamaz: "01.08.2026" okura o GÜNÜN
-            # ölçümü gibi görünür. ortak/bicim iki yazımı da çözer.
-            O["tufe_tarih"] = g.strftime("%m.%Y")
-            O["tufe_ay"] = f"{b.AYLAR_TR[g.month - 1]} {g.year}"
+        O[f"{blok}_tarih"] = blok_damga(blok, g)
+        if blok in AYLIK_BLOK:
+            O[f"{blok}_ay"] = f"{b.AYLAR_TR[g.month - 1]} {g.year}"
         else:
-            O[f"{blok}_tarih"] = g.strftime("%d.%m.%Y")
             O[f"{blok}_gun"] = b.tarih_uzun(g)
     O["kosum_tarihi"] = dt.date.today().strftime("%d.%m.%Y")
     bugun = dt.date.today()
