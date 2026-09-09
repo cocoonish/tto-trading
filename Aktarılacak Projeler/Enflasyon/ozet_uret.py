@@ -75,6 +75,26 @@ def yayim_tarihi(son_ay: pd.Timestamp) -> dt.date:
     return t
 
 
+def faiz_saati(ay_iso: str | None, gun_iso: str | None, bugun: dt.date) -> str | None:
+    """Faiz bacağının saati: kotasyonun GÜNÜ; gün yoksa yalnız KAPANMIŞ ay.
+
+    `reel__faiz` günlük fonlama maliyetinin ay içindeki SON kotasyonudur; saati
+    o günün kendisidir, ayın etiketi değil. 09.09.2026'da ölçüldü: özet
+    `faiz_tarih` = "09.2026" yazıyordu — açık ayın etiketi. Biçim sözleşmesi
+    (ortak/bicim) aylık damgayı ayın son gününe demirler, yani yayımlanan dosya
+    30.09.2026'yı, ölçülmemiş bir günü ilan ediyordu; sayfa sınavı geleceğe
+    düşen bacağı süzüp geçiyor, karanlık denetimi eksi gün farkını eşiğin
+    altında sayıyordu — kusur her kapıdan sessizce geçiyordu. Açık ay gün
+    olmadan yazılamaz: ölçülemeyen boş bırakılır (None → anahtar atlanır)."""
+    if gun_iso:
+        return pd.Timestamp(gun_iso).strftime("%d.%m.%Y")
+    if ay_iso:
+        t = pd.Timestamp(ay_iso)
+        if (t.year, t.month) < (bugun.year, bugun.month):
+            return t.strftime("%m.%Y")
+    return None
+
+
 def kalem_ad(x: str) -> str:
     """COICOP grup adından sayı önekini at: "011. Gıda" → "Gıda"."""
     t = str(x)
@@ -117,7 +137,10 @@ def main() -> int:
     O["onceki_ay"] = AY_TR[onc.month]
     yt = yayim_tarihi(son)
     O["yayim_tarihi"] = yt.strftime("%d.%m.%Y")
-    O["yayim_gecikme_gun"] = (dt.date.today() - yt).days
+    # "Yayımdan bu yana N gün" YAZILMAZ: koşu anında hesaplanan bir gün sayısı
+    # dosyaya sabitlenir ve sayfa onu her gün bir daha yanlış basar (09.09.2026'da
+    # ölçüldü: 03.09 koşusunun "0 gün"ü altı gün sonra hâlâ sayfadaydı). Okur
+    # yayım gününü ve koşum gününü görür; fark sayfada değil okurda kurulur.
     O["kosum_tarihi"] = dt.date.today().strftime("%d.%m.%Y")
 
     # ---------------------------------------------------------------- momentum
@@ -317,17 +340,30 @@ def main() -> int:
     koy("reel_exante", m.get("reel__ex_ante"))
     koy("reel_egilim", m.get("reel__egilime_gore"))
     koy("reel_ileri", m.get("reel__ileri_ex_ante"))
-    if m.get("reel__faiz_tarih"):
-        O["faiz_tarih"] = pd.Timestamp(m["reel__faiz_tarih"]).strftime("%m.%Y")
-    # Günlük bacağın GERÇEK son gözlem günü. guncelle.py'nin tazelik denetimi
-    # bunu ayrı bir anahtar olarak izler: aylık TÜFE ayda bir ilerlerken faiz
-    # her iş günü ilerlemeli; biri donarken diğeri ilerleyebiliyor.
-    try:
-        gg = pd.read_csv(VERI / "gunluk.csv", index_col=0, parse_dates=True)
-        if "aofm" in gg.columns and gg["aofm"].notna().any():
-            O["faiz_gun"] = gg["aofm"].dropna().index[-1].strftime("%d.%m.%Y")
-    except Exception as ex:
-        uyar(f"günlük faiz tarihi okunamadı ({ex}).")
+    # Günlük bacağın GERÇEK son gözlem günü. Ölçüm katmanı `faiz`i hesapladığı
+    # dosyadan yazar (reel__faiz_gun); yoksa aynı dosya buradan okunur. Tazelik
+    # denetimi bunu ayrı bir anahtar olarak izler: aylık TÜFE ayda bir
+    # ilerlerken faiz her iş günü ilerlemeli; biri donarken diğeri
+    # ilerleyebiliyor. Sayfanın adıyla çağırdığı anahtar HER koşuda yazılır;
+    # ölçülemiyorsa "—" (izleyen denetim çözemediğini adıyla söyler).
+    faiz_gun = m.get("reel__faiz_gun")
+    if not faiz_gun:
+        try:
+            gg = pd.read_csv(VERI / "gunluk.csv", index_col=0, parse_dates=True)
+            if "aofm" in gg.columns and gg["aofm"].notna().any():
+                faiz_gun = gg["aofm"].dropna().index[-1].strftime("%Y-%m-%d")
+        except Exception as ex:
+            uyar(f"günlük faiz tarihi okunamadı ({ex}).")
+    O["faiz_gun"] = (pd.Timestamp(faiz_gun).strftime("%d.%m.%Y") if faiz_gun
+                     else "—")
+    # `faiz`in saati kotasyonun günüdür (bkz. faiz_saati): açık ayın etiketi
+    # geleceğe düşen bir damgadır ve yazılmaz.
+    _ft = faiz_saati(m.get("reel__faiz_tarih"), faiz_gun, dt.date.today())
+    if _ft:
+        O["faiz_tarih"] = _ft
+    else:
+        uyar("faiz bacağının saati ölçülemedi (açık ay, gün yok) — "
+             "'faiz_tarih' atlandı.")
     if m.get("reel__ex_post_faiz") is not None:
         koy("reel_expost_faiz", m["reel__ex_post_faiz"])
     if m.get("reel__faiz") is not None and m.get("tufe__yillik") is not None:
@@ -1109,7 +1145,8 @@ def main() -> int:
     yol = PROJE / "ozet.json"
     yol.write_text(json.dumps(O, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"ozet.json yazıldı: {len(O)} anahtar · veri {O['donem']} · "
-          f"yayım {O['yayim_tarihi']} ({O['yayim_gecikme_gun']} gün önce)")
+          f"yayım {O['yayim_tarihi']} · koşum {O['kosum_tarihi']} · "
+          f"faiz {O.get('faiz_tarih', '—')}")
     return 0
 
 

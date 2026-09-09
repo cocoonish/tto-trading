@@ -2189,6 +2189,11 @@ def ozet_topla(a, g, SA, M, K, D, B, R, bek, atalet, ito, w_katki, w_ana,
             o[f"reel__{kol}"] = float(v.iloc[-1]) if len(v) else None
         v = R["faiz"].dropna()
         o["reel__faiz_tarih"] = v.index[-1].strftime("%Y-%m-%d") if len(v) else None
+        # `faiz` ay içindeki SON günlük kotasyondur (resample "MS" → last);
+        # ay etiketi açık ayı geleceğe damgalar, saati kotasyonun günüdür.
+        # Özet üreticisi faiz_tarih'i buradan okur (09.09.2026).
+        if "aofm" in g.columns and g["aofm"].notna().any():
+            o["reel__faiz_gun"] = g["aofm"].dropna().index[-1].strftime("%Y-%m-%d")
         v = R["ex_post"].dropna()
         o["reel__ex_post_tarih"] = v.index[-1].strftime("%Y-%m-%d") if len(v) else None
         if len(v):

@@ -395,13 +395,91 @@ FAIZ = {
 # Tazelik: aile başına AYRI tolerans. Tek eşik H-ÜFE gibi bir ay geriden gelen
 # hatları her ay yanlışlıkla "bayat" işaretler.
 #   (aile etiketi, beklenen gecikme ayı, ayın kaçından sonra uyar)
+#
+# Bu tablo aynı zamanda AİLE BÖLÜMLEMESİDİR: `seri_ailesi()` aylık panelin her
+# sütununu buradaki bir anahtara bağlar ve kısmi yayım ölçütü yalnız aynı
+# ailenin üyelerini birbiriyle kıyaslar. Bir aile aynı gün, tek yayımla gelir;
+# iki aile arasındaki ay farkı ise TAKVİMDİR, kusur değil (YKKE bir ay geriden,
+# PKA ay ortasında cari aydan gelir). 09.09.2026'da ölçüldü: 72 serinin
+# tamamı tek en yeni aya karşı kıyaslanınca YKKE her ay "geride" sayılıyor ve
+# ay sonunda PKA öne geçince altmış küsur TÜFE serisi "geride" görünüyordu.
+# İYA ve hanehalkı beklentisi PKA'dan AYRI ailedir: üçü de cari ayı ölçer ama
+# üç ayrı kurum/anket, ay içinde üç ayrı günde yayımlar (PKA ay ortası, İYA ve
+# tüketici eğilim anketi ayın 20'li günleri) — tek "beklenti" ailesinde
+# tutulsalardı 15'i ile 25'i arasında her ay birbirlerini "geride" sayarlardı.
+# İYA/hane gün eşikleri takvimin ÜST SINIRIDIR (ayın 28'i); temsilci seri
+# denetimi (`_denet`) bu iki aile için henüz istenmiyor, tablo satırı ailenin
+# tanımı ve toleransının ilanı için duruyor.
 TAZELIK = {
     "tufe":     ("TÜFE / ÖKTG / Yİ-ÜFE", 1, 6),
     "beklenti": ("PKA beklenti anketi", 0, 25),
+    "iya":      ("İktisadi Yönelim Anketi reel kesim beklentisi", 0, 28),
+    "hane":     ("Tüketici Eğilim Anketi hanehalkı beklentisi", 0, 28),
     "ykke":     ("Yeni Kiracı Kira Endeksi", 1, 20),
     "ito":      ("İstanbul Tüketici Fiyat İndeksi (İTO, 2023=100)", 1, 5),
 }
 FAIZ_TAZELIK_GUN = 4   # iş günü seriler: 4 takvim günü
+
+# Okura basılan seri adları. Uyarı satırı sayfaya OLDUĞU GİBİ gider (koşu
+# kutusu); anahtar adı okurun elinde yok — "ykke" değil "Yeni Kiracı Kira
+# Endeksi" yazılır. Ana grup ve ÖKTG adları kendi tablolarından okunur.
+SERI_ETIKET = {
+    "tufe": "TÜFE genel endeks", "cekirdek_b": "çekirdek B",
+    "cekirdek_c": "çekirdek C", "hizmet": "hizmet", "temel_mal": "temel mallar",
+    "kira": "kira", "enerji": "enerji", "gida": "gıda",
+    "islenmemis_gida": "işlenmemiş gıda", "islenmis_gida": "işlenmiş gıda",
+    "alkol_tutun_altin": "alkol, tütün ve altın",
+    "yonetilen_haric": "yönetilen fiyatlar hariç", "mallar": "mallar",
+    "yi_ufe": "Yİ-ÜFE", "ykke": "Yeni Kiracı Kira Endeksi",
+    "ito_ist": "İTO genel endeks",
+    "ito_uge": "İTO ücretliler geçinme endeksi (1995 bazı)",
+    "ito_uge_85": "İTO ücretliler geçinme endeksi (1985 bazı)",
+    "pka_ay_cari": "PKA cari ay aylık TÜFE beklentisi",
+    "pka_ay_1": "PKA bir ay sonrası aylık TÜFE beklentisi",
+    "pka_ay_2": "PKA iki ay sonrası aylık TÜFE beklentisi",
+    "pka_yilsonu": "PKA yıl sonu beklentisi", "pka_12a": "PKA 12 ay beklentisi",
+    "pka_24a": "PKA 24 ay beklentisi", "pka_5y": "PKA 5 yıl beklentisi",
+    "pka_12a_medyan": "PKA 12 ay medyanı",
+    "pka_12a_std": "PKA 12 ay standart sapması",
+    "pka_12a_n": "PKA katılımcı sayısı",
+    "pka_faiz_12a": "PKA 12 ay politika faizi beklentisi",
+    "reel_kesim_12a": "reel kesim 12 ay beklentisi",
+    "hanehalki_12a": "hanehalkı 12 ay beklentisi",
+}
+
+
+def seri_ailesi(ad: str) -> str | None:
+    """Aylık panel sütunu → TAZELIK ailesi; hiçbirine bağlanamıyorsa None.
+
+    Kapsam sözleşmeden türer: `kos()` paneli ANA_SERI + ana grup + ÖKTG +
+    BEKLENTI sözlüklerinden kurar ve bu fonksiyon o dört kaynağın her anahtarını
+    bir aileye bağlamak zorundadır (duman.py sorar). None dönen bir sütun
+    sessizce atlanmaz, kısmi yayım ölçütü onu adıyla listeler."""
+    if ad.startswith("ana_") or ad.startswith("oktg"):
+        return "tufe"
+    if ad.startswith("pka_"):
+        return "beklenti"
+    if ad == "reel_kesim_12a":
+        return "iya"
+    if ad == "hanehalki_12a":
+        return "hane"
+    if ad == "ykke":
+        return "ykke"
+    if ad.startswith("ito_"):
+        return "ito"
+    if ad in ANA_SERI:
+        return "tufe"          # kalan ana seriler TÜİK'in aynı gün yayımladığı aile
+    return None
+
+
+def seri_etiketi(ad: str) -> str:
+    if ad in SERI_ETIKET:
+        return SERI_ETIKET[ad]
+    if ad.startswith("ana_") and ad[4:] in ANA_GRUP_AD:
+        return f"{ANA_GRUP_AD[ad[4:]]} (ana grup {ad[4:]})"
+    if ad.startswith("oktg") and ad[4:] in OKTG_AD:
+        return f"özel kapsamlı gösterge {OKTG_AD[ad[4:]]}"
+    return ad.replace("_", " ")
 
 
 # --------------------------------------------------------------------------- ay adları
@@ -544,6 +622,79 @@ def alt_kalem_kodlari(yenile: bool = False) -> pd.DataFrame:
     return kat[["kod", "ad", "kuyruk", "hane", "seviye", "ust", "bas", "son"]]
 
 
+def kismi_yayim(son_aylar: dict[str, pd.Timestamp]) -> list[str]:
+    """Aynı ailenin üyeleri aynı yayımla gelir; ailenin en yeni ayına ulaşmamış
+    üye KISMİ YAYIMDIR. Aileler birbiriyle KIYASLANMAZ.
+
+    "Veri geldi" ile "veri TAM geldi" aynı şey değil. 03.09.2026'da EVDS'te 72
+    serinin 57'si ağustosa geçmişti (çekirdek, hizmet, gıda, Yİ-ÜFE, İTO) ama
+    MANŞET ailesi — TP.TUKFIY2025.GENEL ve on üç ana harcama grubu — hâlâ
+    temmuzdaydı. Ölçüm katmanı ortak tarihe hizaladığı için sessizce temmuzda
+    kaldı; hat yeşil bitti, "veri değişmedi" dedi ve yayım gününde pano dünkü
+    ayı gösterdi. Bu ölçüt o sessizliği kapatıyor.
+
+    İlk yazımı 72 serinin TAMAMINI tek en yeni aya karşı ölçüyordu ve bu bir
+    yanlış alarm üreticisiydi (09.09.2026'da ölçüldü): YKKE yapısal olarak
+    bir ay geriden gelir ve her koşuda "1/72 seri geride" diye sayfaya
+    basılıyordu; ay sonunda PKA cari ayı ilan edince TÜFE ailesinin altmış
+    küsur serisi "geride" görünecekti. İki ailenin ay farkı takvimdir ve
+    toleransı TAZELIK'te aile başına ilan edilmiştir; kısmi yayım yalnız aynı
+    ailenin İÇİNDE, aynı gün gelmesi gereken serilerin ayrışmasıdır.
+
+    Bir ay geride kalan üye yayım gününün saatler süren eksiğidir; iki ay ve
+    daha çok geride kalan üye durmuş bir seridir (sınıflama değişiminde düşen
+    kalemler bu hatta bir kez ölçüldü) ve cümlesi ayrı yazılır. Ailesi
+    tanımlanmamış sütun sessizce atlanmaz, adıyla listelenir: bakılmayan yer,
+    geçen sınavla aynı görünür."""
+    uy: list[str] = []
+    aileler: dict[str, dict[str, pd.Timestamp]] = {}
+    tanimsiz: list[str] = []
+    for ad, t in son_aylar.items():
+        aile = seri_ailesi(ad)
+        if aile is None:
+            tanimsiz.append(ad)
+            continue
+        aileler.setdefault(aile, {})[ad] = pd.Timestamp(t)
+    for aile in sorted(aileler):
+        uyeler = aileler[aile]
+        en_yeni = max(uyeler.values())
+        geride = {ad: t for ad, t in uyeler.items() if t < en_yeni}
+        if not geride:
+            continue
+        etiket = TAZELIK[aile][0]
+        en_eski = min(geride.values())
+        ay_fark = (en_yeni.year - en_eski.year) * 12 + (en_yeni.month - en_eski.month)
+        # Manşet seriler önce, sonra ana gruplar, en sonda ÖKTG: okur ilk altı
+        # adda TÜFE genel endeksini görmeli, on üçüncü ana grubu değil.
+        adlar = sorted(geride, key=lambda a: (a.startswith("oktg"),
+                                             a.startswith("ana_"), a))
+        ornek = ", ".join(seri_etiketi(a) for a in adlar[:6])
+        if len(adlar) > 6:
+            ornek += f" ve {len(adlar) - 6} seri daha"
+        if ay_fark >= 2:
+            kuyruk = (f"Geride kalan seri ailenin en yeni ayından {ay_fark} ay eski; "
+                      "kaynak bu seriyi güncellemeyi bırakmış olabilir.")
+        elif aile == "tufe":
+            kuyruk = ("Kaynak aileyi bütünüyle güncellemedi; ölçüm ortak tarihe "
+                      "hizalandığı için pano geride kalan serinin ayında kalır. "
+                      "Yayım günüyse eksik seriler genellikle birkaç saat içinde "
+                      "gelir ve pano bir sonraki koşuda tamamlanır.")
+        else:
+            kuyruk = ("Kaynak aileyi bütünüyle güncellemedi; bu ailenin panelleri "
+                      "geride kalan ayda kalır. Yayım günüyse eksik seriler "
+                      "genellikle birkaç saat içinde gelir.")
+        uy.append(
+            f"KISMİ YAYIM: {etiket} ailesinde {len(geride)}/{len(uyeler)} seri "
+            f"ailenin en yeni ayından ({ad_uzun(en_yeni)}) geride — {ornek}. {kuyruk}")
+    if tanimsiz:
+        uy.append(
+            "YAYIM AİLESİ TANIMSIZ: "
+            + ", ".join(seri_etiketi(a) for a in sorted(tanimsiz))
+            + " — hangi yayım takvimine ait olduğu tanımlanmamış; kısmi yayım "
+              "ölçütü bu serileri göremiyor.")
+    return uy
+
+
 def tazelik_denetimi(aylik: pd.DataFrame, gunluk: pd.DataFrame) -> list[str]:
     """Aile bazlı tazelik. Bugünün takvim gününe göre eşik uygulanır."""
     bugun = pd.Timestamp.today().normalize()
@@ -572,33 +723,13 @@ def tazelik_denetimi(aylik: pd.DataFrame, gunluk: pd.DataFrame) -> list[str]:
                 f"{bugun:%d.%m.%Y} itibarıyla {ad_uzun(beklenen)} beklenirdi "
                 f"({eksik} ay geride, {etiket} takvimi). Kaynak durmuş olabilir.")
 
-    # KISMİ YAYIM: "veri geldi" ile "veri TAM geldi" aynı şey değil.
-    # 03.09.2026'da EVDS'te 72 serinin 57'si ağustosa geçmişti (çekirdek,
-    # hizmet, gıda, Yİ-ÜFE, İTO) ama MANŞET ailesi — TP.TUKFIY2025.GENEL ve
-    # on üç ana harcama grubu — hâlâ temmuzdaydı. Ölçüm katmanı ortak tarihe
-    # hizaladığı için sessizce temmuzda kaldı; hat yeşil bitti, "veri
-    # değişmedi" dedi ve yayım gününde pano dünkü ayı gösterdi. Arızanın
-    # görüntüsü ile sağlığın görüntüsü yine aynıydı.
-    #
-    # Bu ölçüt o sessizliği kapatıyor: seriler arasında AY FARKI varsa
-    # görünür uyarı düşer ve hangi ailenin geride kaldığı adıyla yazılır.
+    # KISMİ YAYIM — aile İÇİ kıyas; aileler arası fark takvimdir (bkz. kismi_yayim).
     son_aylar: dict[str, pd.Timestamp] = {}
     for ad in aylik.columns:
         s_ = aylik[ad].dropna()
         if len(s_):
             son_aylar[ad] = s_.index[-1]
-    if son_aylar:
-        en_yeni = max(son_aylar.values())
-        geride = sorted(ad for ad, t in son_aylar.items() if t < en_yeni)
-        if geride:
-            ornek = ", ".join(geride[:6]) + (f" +{len(geride) - 6}"
-                                             if len(geride) > 6 else "")
-            uy.append(
-                f"KISMİ YAYIM: {len(geride)}/{len(son_aylar)} seri en yeni aydan "
-                f"({ad_uzun(en_yeni)}) GERİDE — {ornek}. Kaynak seri ailelerini "
-                f"aynı anda güncellemiyor; ölçüm ortak tarihe hizalandığı için "
-                f"pano en geride kalan ailenin ayında kalır. Yayım günüyse "
-                f"birkaç saat sonra yeniden koşturun.")
+    uy.extend(kismi_yayim(son_aylar))
 
     _denet("tufe", "tufe", "TÜFE (TP.TUKFIY2025.GENEL)")
     _denet("tufe", "cekirdek_c", "Çekirdek C (TP.FE25.OKTG04)")
