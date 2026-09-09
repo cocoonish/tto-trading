@@ -216,6 +216,78 @@ def _normalize_date_str(d: str) -> str:
         return d
 
 
+def birikmis_son_ihale(klasor: Optional[str] = None) -> Optional[pd.Timestamp]:
+    """Depoda birikmiş verideki EN YENİ ihale tarihi — artımlı taramanın ÇIPASI.
+
+    Önce Excel, YOKSA CSV. Sıra kasıtlı: Excel yerelde daha zengin (ham sayfa),
+    CSV ise depoda İZLENEN sürümdür.
+
+    Kusurun ölçülmüş hâli (09.09.2026): çıpa yalnız `EXCEL_OUTPUT`'tan
+    okunuyordu ve o dosya .gitignore'da — yani BULUTTA taze checkout'ta hiç yok.
+    Çıpa None kalınca `get_auction_announcement_urls` her duyuruyu "yeni"
+    sayıyor, ardışık-eski sayacı hiç artmıyor ve erken durma HİÇ devreye
+    girmiyordu: kazıyıcı her tam kipte MAX_PAGES (200) sayfayı baştan geziyordu.
+    Aynı kusurun eşi birikmiş veriyi okuyan yolda (scrape_all_auctions) CSV'ye
+    düşülerek düzeltilmiş ("birikimin YANLIŞ DOSYADAN okunması"), erken durma
+    yolu genelleştirilmemişti. Depoda duran sürüm CSV'dir, doğrusu odur.
+
+    Öntanımlı klasör ÇALIŞMA DİZİNİDİR, modülün kendi klasörü değil: birikmiş
+    veriyi okuyan yol da (scrape_all_auctions) aynı yolu kullanıyor ve ikisinin
+    AYRIŞMAMASI gerekir. Ayrışsalardı çıpa dolu, birikim boş olabilir; tarama
+    erken durur ve o koşu birikmiş dosyayı avuç dolusu satırla ezerdi (bu depoda
+    bir kez oldu: 25.08 ve 31.08.2026). Çıpanın yokluğu ile birikimin yokluğu
+    aynı anda doğru olmalı.
+
+    Ağa çıkmaz; `duman.py` gerçek çerçeveyle çağırır.
+    """
+    kok = klasor or os.getcwd()
+    for yol, oku in ((os.path.join(kok, EXCEL_OUTPUT),
+                      lambda f: pd.read_excel(f, sheet_name='İhale Verileri')),
+                     (os.path.join(kok, CSV_OUTPUT),
+                      lambda f: pd.read_csv(f, encoding='utf-8-sig'))):
+        if not os.path.exists(yol):
+            continue
+        try:
+            df = oku(yol)
+        except Exception as e:
+            logger.warning(f"Çıpa dosyası okunamadı ({yol}): {e}")
+            continue
+        if 'İhale Tarihi' not in getattr(df, 'columns', []):
+            continue
+        tarihler = pd.to_datetime(df['İhale Tarihi'], format='%d.%m.%Y', errors='coerce').dropna()
+        if not tarihler.empty:
+            son = tarihler.max()
+            logger.info(f"Artımlı tarama çıpası: {son.strftime('%d.%m.%Y')} "
+                        f"({os.path.basename(yol)})")
+            return son
+    logger.warning("Artımlı tarama çıpası YOK (ne Excel ne CSV) — "
+                   "erken durma işlenmiş duyuru defterine düşecek.")
+    return None
+
+
+def duyuru_yeni(announcement_url: str, ihale_tarihi: Optional[pd.Timestamp],
+                cipa: Optional[pd.Timestamp], islenmis: set, zorla: bool = False) -> bool:
+    """Bu ihale duyurusu, elimizdekine göre YENİ mi? (erken durma kararı)
+
+    Üç hâl ve üçü de bir arızaya karşılık gelir:
+      · çıpa VAR ve başlıktan tarih okundu → tarih çıpadan geri değilse yeni.
+      · çıpa YOK (birikmiş dosya bulunamadı) → daha önce İŞLENMİŞ bir duyuru
+        yeni DEĞİLDİR. Eski kod burada koşulsuz "yeni" diyordu; sayaç hiç
+        artmadığı için tarama 200 sayfa sürüyordu.
+      · başlıktan tarih okunamadı → duyuru işlenmemişse yeni sayılır; erken
+        durma yüzünden hiç okunmamış bir duyurunun atlanması, birkaç fazla
+        sayfa gezmekten pahalıdır.
+
+    Ağa çıkmaz, saf fonksiyondur: karar `duman.py` tarafından doğruluk
+    tablosuyla sınanır.
+    """
+    if zorla:
+        return True
+    if cipa is not None and ihale_tarihi is not None and pd.notna(ihale_tarihi):
+        return bool(ihale_tarihi >= cipa)
+    return announcement_url not in (islenmis or set())
+
+
 def parse_issuance_calendar(full_text: str) -> List[Dict]:
     """Strateji PDF metninden ihraç takvimini (planlı ihraçlar) ayrıştırır.
 
@@ -600,18 +672,11 @@ class TreasuryAuctionScraper:
               - auction_items: List[(announcement_url, pdf_url)]  (ihale sonucu duyuruları)
               - strategy_pdfs: List[(pdf_url, baslik, ay_bilgi)]  (strateji raporları)
         """
-        # Mevcut Excel'den en son ihale tarihini al (inkremental erken durma için)
-        latest_excel_date = None
-        if not FORCE_ALL_FETCH and os.path.exists(EXCEL_OUTPUT):
-            try:
-                existing_df = pd.read_excel(EXCEL_OUTPUT, sheet_name='İhale Verileri')
-                if 'İhale Tarihi' in existing_df.columns:
-                    dates = pd.to_datetime(existing_df['İhale Tarihi'], format='%d.%m.%Y', errors='coerce')
-                    if not dates.dropna().empty:
-                        latest_excel_date = dates.max()
-                        logger.info(f"Excel'deki en yeni ihale tarihi: {latest_excel_date.strftime('%d.%m.%Y')}")
-            except Exception as e:
-                logger.warning(f"Mevcut Excel okunamadı: {str(e)}")
+        # Birikmiş veriden en son ihale tarihini al (inkremental erken durma için).
+        # Çıpa Excel'den DEĞİL, `birikmis_son_ihale`den okunur: Excel .gitignore'da
+        # ve bulutta hiç yok — çıpa None kalınca erken durma devre dışı kalıyor,
+        # kazıyıcı 200 sayfayı baştan geziyordu (09.09.2026'da ölçüldü).
+        latest_local_date = None if FORCE_ALL_FETCH else birikmis_son_ihale()
 
         auction_items: List[Tuple[str, str]] = []
         seen_announcements = set()
@@ -743,10 +808,9 @@ class TreasuryAuctionScraper:
                     tarih_str_en = self._tr_to_en_month(tarih_match.group(1))
                     parsed_date = pd.to_datetime(tarih_str_en, format='%d %B %Y', errors='coerce')
 
-                # Erken durma değerlendirmesi
-                if not FORCE_ALL_FETCH and latest_excel_date is not None and parsed_date is not None and parsed_date >= latest_excel_date:
-                    page_has_new_auction = True
-                elif latest_excel_date is None:
+                # Erken durma değerlendirmesi (karar tek yerde: duyuru_yeni)
+                if duyuru_yeni(announcement_url, parsed_date, latest_local_date,
+                               self.processed_urls, zorla=FORCE_ALL_FETCH):
                     page_has_new_auction = True
 
                 pdf_url = self._extract_pdf_url_from_content(content)
@@ -759,8 +823,11 @@ class TreasuryAuctionScraper:
                     auction_items.append((announcement_url, pdf_url))
                     logger.info(f"✓ İhale sonucu duyurusu: {title}")
 
-            # Ardışık eski sayfa sayacını güncelle
-            if not FORCE_ALL_FETCH and latest_excel_date is not None:
+            # Ardışık eski sayfa sayacını güncelle. Sayaç ÇIPA YOKKEN de işler:
+            # kararı `duyuru_yeni` veriyor ve çıpasız hâlde işlenmiş duyuru
+            # defterine düşüyor. Eski koşul (çıpa None değilse) bulutta hep
+            # yanlış çıkıyor, sayaç hiç artmıyordu.
+            if not FORCE_ALL_FETCH:
                 if page_has_any_auction and not page_has_new_auction:
                     consecutive_old_auction_pages += 1
                     logger.info(f"Sayfadaki tüm ihaleler mevcut veriden eski (ardışık: {consecutive_old_auction_pages}/{OLD_AUCTION_PAGE_THRESHOLD})")
