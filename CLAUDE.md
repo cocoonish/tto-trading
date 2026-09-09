@@ -1365,3 +1365,54 @@ Yahoo kapanışıyla çevrilirse resmî rakamla ayrışır. İki küme
 hatlarında EVDS kur kodu kalırsa DÜŞER, dönüşüm hatlarından biri Yahoo'ya
 geçerse de düşer — kural yoruma değil kapıya yazıldı. Dönüşüm hatlarının da
 Yahoo'ya çekilmesi istenirse ayrı karar; bu paragraf o gün güncellenir.
+
+**Kurucu ilke — SAYFANIN ÇAĞIRDIĞI ANAHTAR, ÖZETİYLE BİRLİKTE YAYINA GİRER;
+bir KAPI kopyadan ÖNCE sorulmalıdır; ve BİÇİMLENMİŞ BİR DİZGE YENİDEN
+AYRIŞTIRILMAZ.** 09.09.2026'da altı hattın saat düzeltmesi tek dalda toplandı
+ve yayın kapısı MERGE'DEN ÖNCE koşturuldu. Üç kusur çıktı; üçü de kapı
+olmasa main'e sessizce girecekti.
+
+(1) Kod yeni anahtar üretiyor, YAYIMLANMIŞ ÖZET onu taşımıyor. Üç sayfa
+(dibs · butce · tufex) `ozet.json`da olmayan 18 anahtarı adıyla çağırıyordu:
+MDX ile kod aynı commit'te, ama okurun gördüğü dosya hattın BİR SONRAKİ
+koşusundan geliyor. Yayın kapısı eksik anahtarı ENGEL sayar (doğru: donmuş
+yedek yayımlanmamalı) ve site donardı — 08.09'da tam bu sınıftan bir eksik
+yayını üç kez durdurmuştu. Kural: bir sayfa yeni bir anahtar çağırıyorsa o
+anahtarın ÖZETİ de aynı commit'te gider; özet üreticisi depodaki veriyle
+koşturulur, hem hat klasöründeki hem site kopyası commit edilir, ve yeni
+özetin eskisine göre farkı YAZILIR (yeni 85 · düşen 0 · değişen 36).
+DÜŞEN anahtar olmamalı; açıklanamayan bir değişiklik bir kusurdur.
+
+(2) Tam o farkta bir kusur yakalandı: bütçe özeti ay ADINI biçimlenmiş
+dizgeden yeniden ayrıştırıyordu — `_ay_yaz` çıktısı `08.2026`, ve
+`pd.Timestamp("08.2026")` Ağustos değil OCAK veriyor. Sayfa TÜFE ayını
+yanlış basıyordu ve hiçbir kapı bunu görmezdi: değer de tarih de "geçerli"
+görünüyor. Ad artık HAM değerden türüyor. Bir dizgeyi kendi biçimleyicimizden
+geçirdikten sonra geri okumak, sözleşmeyi iki kez uygulamaktır.
+
+(3) GERİLEME KAPISI KOPYADAN SONRA DURUYORDU. 25.08'de Hazine 448 ihaleyi
+16'ya düşürdüğünde konan kapı "tarihi geri giden hat düşmüş sayılır,
+commit adımı onu dışarıda bırakır" diyordu; o cümle yalnız TAM kip için
+doğruydu (`veri.yml` düşen tam kipi `git checkout` ile geri alır). HAFİF
+kipte kapı ateşleniyor, hat "düştü" görünüyor, ama gerilemiş `ozet.json`
+siteye ÇOKTAN kopyalanmış ve `if: always()` taşıyan commit adımı onu
+yayımlamış oluyordu — 09.09 koşu #143'te ölçüldü (24 dosya commit'lendi).
+Kapı hattın KENDİ ürettiği özeti okuyup kopyadan ÖNCE soruyor. Kaynak
+sözleşmesi bilerek değiştiğinde (USD/TRY'nin valörden işlem gününe geçmesi)
+elle `--gerileme-kabul`; iş akışı o ucu kullanmaz ve duman sınaması
+`veri.yml`de geçmediğini de sınar. Bir sigortanın hangi kipte çalıştığı
+konduğu gün yazılmazsa, sonraki oturum onu her kipte sanır.
+
+Aynı turda dördüncü bir kusur ETİKETTE değil SINIRDA bulundu: yayın
+kapısının "ileri tarih" ölçütü hafta sonunu atlıyor ama RESMÎ TATİLİ
+bilmiyordu. 31.12.2026 perşembe tam iş günü; TCMB o gün ertesi iş gününün
+kurunu ilan eder ve 1 Ocak tatil olduğu için o gün 04.01.2027'dir — tatil
+bilmeyen sınır 01.01.2027 der ve YAYIMLANAN DOĞRU TARİHİ "ileri" sayıp
+siteyi durdurur (04.09'da aynı sınıftan bir yanlış alarm yirmi bir saat
+dondurmuştu). Sabit tarihli yedi tatil tabloya girdi; HAREKETLİ bayramlar
+resmî takvimden OKUNMADAN YAZILMADI — uydurma bir tatil, olmayan bir günde
+sınırı gevşetir ve gerçek bir ileri tarihi kaçırır. Girilmemiş yılda
+davranış bugünküyle birebir aynı, yani tablo hiçbir koşulda YENİ bir yanlış
+alarm üretemez: eklenen her gün sınırı yalnız İLERİ taşır. AÇIK KALAN:
+Ramazan ve Kurban günleri girilmedi; girilene kadar o haftalarda sınır
+yalnız hafta sonunu bilir.
