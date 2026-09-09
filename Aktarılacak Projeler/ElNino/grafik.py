@@ -20,10 +20,18 @@ import pathlib
 
 import plotly.graph_objects as go
 
+from metrik import KURESEL_SEKILLER, sekil_saatleri
+
 PROJE = pathlib.Path(__file__).resolve().parent
 DATA = PROJE / "data"
 CIKTI = PROJE / "cikti"
 CIKTI.mkdir(exist_ok=True)
+
+# Figür → veri ucu (okur yazımı, "Haziran 2026"). main() defteri
+# metrik.sekil_saatleri'nden doldurur; _yaz her figürün alt yazısına basar.
+# Aynı defter ozet_uret.py'de `_sekil_tarih` olur: figürün içindeki damga ile
+# sayfanın altındaki damga TEK kaynaktan gelir, iki liste ayrışamaz.
+SAAT: dict[str, str | None] = {}
 
 INK = "#211b12"; GRID = "#d9d2c2"; CLARET = "#8e1f2f"; TEAL = "#1d5c5c"
 GOLD = "#9a7327"; INDIGO = "#34456e"; PLUM = "#6d3a5d"
@@ -49,6 +57,13 @@ def _duzen(fig, baslik, alt, h=470, y_baslik=""):
 
 
 def _yaz(fig, ad):
+    # Veri ucu figürün KENDİ alt yazısında: okur sayfa damgasına bakmadan
+    # şeklin hangi aya kadar ölçüldüğünü görür. Ölçülemeyen uç (None) basılmaz.
+    damga = SAAT.get(ad)
+    if damga:
+        eski = fig.layout.title.text or ""
+        fig.update_layout(title_text=f"{eski}<br><sup>Veri ucu: {damga}.</sup>",
+                          margin_t=(fig.layout.margin.t or 0) + 26)
     fig.write_html(CIKTI / ad, include_plotlyjs="cdn", full_html=True,
                    config={"responsive": True, "displaylogo": False})
     print(f"  yazıldı: cikti/{ad}")
@@ -69,8 +84,8 @@ def sekil_01(M, oni_tam):
     _duzen(fig, "Oceanic Niño Index — 1950'den bugüne",
            ["Niño 3.4 bölgesi deniz yüzeyi sıcaklık anomalisinin üç aylık kayan "
             "ortalaması (°C). Etiket ortadaki aya karşılık gelir.",
-            f"Son ölçüm {M['oni_son_ay']}: {M['oni_son']:+.2f} °C. "
-            "Kaynak: NOAA Climate Prediction Center."],
+            f"Son ölçüm {M.get('oni_son_ad') or M['oni_son_ay']}: "
+            f"{M['oni_son']:+.2f} °C. Kaynak: NOAA Climate Prediction Center."],
            h=430, y_baslik="°C")
     fig.update_layout(barmode="relative")
     _yaz(fig, "01-oni-tarihce.html")
@@ -168,13 +183,13 @@ def sekil_05(G, oni_tam):
                       yaxis2=dict(title="yıllık %", overlaying="y", side="right",
                                   showgrid=False, zeroline=False))
     _duzen(fig, "El Niño ile küresel gıda emtia fiyatı",
-           ["IMF gıda fiyat endeksi ABD TÜFE'siyle deflate edilmiştir (REEL). "
-            "Nominal ölçmek, arz şokunu ABD'nin",
+           ["Dünya Bankası gıda emtia endeksi ABD TÜFE'siyle deflate edilmiştir "
+            "(REEL). Nominal ölçmek, arz şokunu ABD'nin",
             "kendi enflasyonuyla karıştırırdı. Türkiye ölçümünün tıkandığı yer "
             "burada açılıyor: örneklem "
             f"{G.get('kur_orneklem_bas','')}'de başlıyor ve "
             f"{G.get('kur_olculen','?')} güçlü epizot ölçülebiliyor.",
-            "Kaynak: NOAA CPC (ONI), IMF birincil emtia fiyatları / FRED."],
+            "Kaynak: NOAA CPC (ONI), Dünya Bankası Pink Sheet (emtia), BLS (ABD TÜFE)."],
            h=470)
     _yaz(fig, "05-kuresel-gida.html")
 
@@ -239,8 +254,12 @@ def sekil_07(G, M):
     _duzen(fig, "Aynı cetvel, üç ölçek — ve neden yalnız biri hüküm verebiliyor",
            ["Üç sütunda da AYNI epizot tanımı (ONI ≥ 1,5 °C, en az beş ay) ve AYNI "
             "18 aylık pencere kullanıldı.",
-            "Fark ölçülen EPİZOT SAYISINDA: küresel seriler 1980'de, ABD 1947'de, "
-            "Türkiye alt endeksleri 2006'da başlıyor.",
+            # Örneklem başları VERİDEN: sabit yazılan "1980 / 1947" FRED
+            # dönemindendi ve Pink Sheet + BLS ile örneklem 1961'de başlıyor.
+            "Fark ölçülen EPİZOT SAYISINDA — örneklem başı: küresel "
+            f"{str(G.get('kur_orneklem_bas') or '')[:4]}, ABD "
+            f"{str(G.get('abd_orneklem_bas') or '')[:4]}, Türkiye alt endeksleri "
+            f"{str(M.get('orneklem_bas') or '')[:4]}.",
             "Üçün altında epizotla yön iddia edilmez — Türkiye sütunu bu yüzden "
             "bir bulgu, bir sonuç değildir."],
            h=520, y_baslik="")
@@ -313,9 +332,7 @@ def sekil_09(G):
     _yaz(fig, "09-gecis-profili.html")
 
 
-KURESEL_DOSYALAR = ("05-kuresel-gida.html", "06-urun-kirilimi.html",
-                    "07-uc-olcek.html", "08-fed-patikasi.html",
-                    "09-gecis-profili.html")
+KURESEL_DOSYALAR = KURESEL_SEKILLER
 
 
 def main() -> int:
@@ -324,14 +341,17 @@ def main() -> int:
     oni = pd.read_csv(DATA / "oni.csv", index_col=0, parse_dates=True)["oni"]
     oni_tam = [{"ay": f"{t:%Y-%m}", "oni": None if pd.isna(v) else round(float(v), 2)}
                for t, v in oni.items()]
+    kur_yol = DATA / "kuresel.json"
+    G = json.loads(kur_yol.read_text(encoding="utf-8")) if kur_yol.exists() else None
+    SAAT.clear()
+    SAAT.update(sekil_saatleri(M, G, uzun=True))
     print("── El Niño hattı · grafikler")
     sekil_01(M, oni_tam)
     sekil_02(M)
     sekil_03(M)
     sekil_04(M)
 
-    kur_yol = DATA / "kuresel.json"
-    if not kur_yol.exists():
+    if G is None:
         # Küresel blok düşmüşse ESKİ şekilleri bırakmak, tarihi üstünde
         # yazmayan bayat bir grafiği yayında tutmak olurdu.
         silinen = [a for a in KURESEL_DOSYALAR if (CIKTI / a).exists()]
@@ -342,7 +362,6 @@ def main() -> int:
         else:
             print("  ! küresel blok yok — 05–09 üretilmedi")
         return 0
-    G = json.loads(kur_yol.read_text(encoding="utf-8"))
     sekil_05(G, oni_tam)
     sekil_06(G)
     sekil_07(G, M)
