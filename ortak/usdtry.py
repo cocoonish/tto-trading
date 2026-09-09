@@ -26,8 +26,11 @@ VALÖR YOK. EVDS gösterge kuru VALÖR tarihini taşır (ertesi iş günü) ve r
 tatil öncesinde yarından ileri bir `_tarih` üretirdi; Yahoo barı işlem
 gününü taşır — hattın saati gözlem günüdür.
 
-AĞ: `ortak/sitecustomize` zaman aşımı, yeniden deneme ve devre kesiciyi
-kütüphanenin altına serer; burada yalnız istek kurulur.
+AĞ: birinci yol yfinance (çerez/crumb el sıkışması kütüphanede; bülten aynı
+koşucudan bununla geçiyor), yedek yol çıplak chart isteği — o yol koşucudan
+429 alıyor (09.09.2026 ölçüldü), yalnız yfinance kurulu değilse anlamlı.
+`ortak/sitecustomize` zaman aşımı, yeniden deneme ve devre kesiciyi
+kütüphanenin altına serer.
 """
 
 from __future__ import annotations
@@ -43,7 +46,8 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import bicim as _bicim  # noqa: E402  — sayı yazımı tek sözleşmeden (ortak/bicim)
 
-YAHOO_URL = "https://query1.finance.yahoo.com/v8/finance/chart/USDTRY=X"
+SEMBOL = "USDTRY=X"
+YAHOO_URL = f"https://query1.finance.yahoo.com/v8/finance/chart/{SEMBOL}"
 KAYNAK = "Yahoo Finance (USDTRY=X)"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36")
@@ -73,7 +77,58 @@ class Kur:
 
 
 def _yahoo_cek(bas: dt.date, bit: dt.date) -> pd.Series:
-    """Yahoo chart ucundan günlük kapanış. Ağ hatası istisna olarak döner."""
+    """Günlük kapanış — önce yfinance, düşerse doğrudan chart ucu.
+
+    NEDEN İKİ YOL. Chart ucuna çıplak `requests` ile giden ilk sürüm GitHub
+    koşucusundan 429 (Too Many Requests) aldı ve hat düştü (09.09.2026, koşu
+    #142): Yahoo, çerez ve crumb taşımayan datacenter isteklerini
+    sınırlıyor. Bülten piyasa fotoğrafı aynı koşucudan yıllardır yfinance ile
+    geçiyor — kütüphane çerez/crumb el sıkışmasını ve tarayıcı kimliğini
+    kendisi kurar. Ölçülen yol birinci, çıplak istek yalnız yedek."""
+    hatalar: list[str] = []
+    try:
+        return _yfinance_cek(bas, bit)
+    except Exception as e:  # noqa: BLE001 — yedek yola düşülür, sebep saklanır
+        hatalar.append(f"yfinance: {type(e).__name__}: {e}")
+    try:
+        return _chart_cek(bas, bit)
+    except Exception as e:  # noqa: BLE001
+        hatalar.append(f"chart ucu: {type(e).__name__}: {e}")
+    raise RuntimeError("; ".join(hatalar))
+
+
+def _seri_temizle(kapanis, idx) -> pd.Series:
+    idx = pd.DatetimeIndex(pd.to_datetime(idx))
+    if idx.tz is not None:
+        idx = idx.tz_convert(None)
+    idx = idx.normalize()
+    s = pd.Series(pd.to_numeric(list(kapanis), errors="coerce"), index=idx,
+                  dtype="float64", name="usdtry").dropna()
+    s = s[~s.index.duplicated(keep="last")].sort_index()
+    return s
+
+
+def _yfinance_cek(bas: dt.date, bit: dt.date) -> pd.Series:
+    """yfinance.download — bültenle aynı çağrı biçimi (auto_adjust=False)."""
+    import yfinance as yf
+    ham = yf.download(SEMBOL, start=bas.isoformat(), end=bit.isoformat(), interval="1d",
+                      progress=False, auto_adjust=False, threads=False)
+    if ham is None or len(ham) == 0:
+        raise RuntimeError("yfinance boş çerçeve döndürdü")
+    if isinstance(ham.columns, pd.MultiIndex):
+        # (Price, Ticker) ya da (Ticker, Price) — hangisi olursa olsun 'Close' sütunu
+        if "Close" in ham.columns.get_level_values(0):
+            kap = ham["Close"]
+        else:
+            kap = ham.xs("Close", axis=1, level=-1)
+        kap = kap.iloc[:, 0] if isinstance(kap, pd.DataFrame) else kap
+    else:
+        kap = ham["Close"]
+    return _seri_temizle(kap.values, kap.index)
+
+
+def _chart_cek(bas: dt.date, bit: dt.date) -> pd.Series:
+    """Yahoo chart ucundan günlük kapanış (YEDEK yol). Ağ hatası istisna."""
     import requests
     p1 = int(dt.datetime(bas.year, bas.month, bas.day, tzinfo=dt.timezone.utc).timestamp())
     p2 = int(dt.datetime(bit.year, bit.month, bit.day, tzinfo=dt.timezone.utc).timestamp())
@@ -88,10 +143,8 @@ def _yahoo_cek(bas: dt.date, bit: dt.date) -> pd.Series:
         kapanis = sonuc["indicators"]["quote"][0]["close"]
     except (KeyError, IndexError, TypeError) as e:
         raise RuntimeError(f"Yahoo yanıtı beklenen biçimde değil: {e}") from e
-    idx = pd.to_datetime(zaman, unit="s", utc=True).tz_convert(None).normalize()
-    s = pd.Series(kapanis, index=idx, dtype="float64", name="usdtry").dropna()
-    s = s[~s.index.duplicated(keep="last")].sort_index()
-    return s
+    idx = pd.to_datetime(zaman, unit="s", utc=True)
+    return _seri_temizle(kapanis, idx)
 
 
 def kapanmamis_bari_dusur(s: pd.Series, simdi: dt.datetime | None = None) -> pd.Series:

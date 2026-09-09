@@ -1,7 +1,8 @@
-# USDTRY devalüasyon hattı — EVDS'ten kur, Plotly + matplotlib çıktı
+# USDTRY devalüasyon hattı — kur Yahoo Finance (ortak/usdtry, yfinance), faiz EVDS; Plotly + matplotlib çıktı
 pandas>=2.0.0
 numpy>=1.24.0
 plotly>=5.18.0
 requests>=2.31.0
 matplotlib>=3.7.0
 pillow>=10.0.0
+yfinance>=0.2.30  # USD/TRY — ortak/usdtry (KARAR 09.09.2026)
