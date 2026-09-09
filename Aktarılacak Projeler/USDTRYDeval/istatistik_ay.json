@@ -1,12 +1,12 @@
 {
  "ay_onceki_ad": "Temmuz 2026",
- "ay_onceki_ort": 22.3,
- "ay_onceki_egim": -0.5,
+ "ay_onceki_ort": 22.0,
+ "ay_onceki_egim": 0.2,
  "ay_son_ad": "Ağustos 2026",
- "ay_son_ort": 21.9,
- "ay_son_egim": -0.7,
+ "ay_son_ort": 21.6,
+ "ay_son_egim": -1.7,
  "ay_zirve_ad": "Nisan 2025",
- "ay_zirve_ort": 40.8,
+ "ay_zirve_ort": 42.5,
  "ay_dip_ad": "Aralık 2025",
- "ay_dip_ort": 12.5
+ "ay_dip_ort": 12.3
 }
