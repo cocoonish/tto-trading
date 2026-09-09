@@ -3133,6 +3133,128 @@ sina("ölçülemeyen dolarizasyon anahtarları özette BOŞ olarak duruyor",
      all(a in _L["o"] and _L["o"][a] is None for a in _L["atlanan"]),
      f"silinen {[a for a in _L['atlanan'] if a not in _L['o']]}")
 
+# --- SAYFANIN ADIYLA ÇAĞIRDIĞI ANAHTAR HER KOŞUDA YAZILIR -------------------
+# 08.09.2026'da ölçüldü ve pahalıya mal oldu: DİBS hattı dokuz yıl düğümünü
+# kuramadığı gün `koy()` anahtarı ATLADI, sayfa onu adıyla çağırıyordu, yayın
+# kapısı eksik anahtarı ENGEL saydı ve yayın ÜÇ KEZ düştü — günün bülteni
+# saatlerce çıkmadı. Kusur hattın KENDİ koşusunda doğdu ve o koşu yeşil bitti.
+#
+# Bu hattın duman sınaması o güne kadar SAYFAYI HİÇ OKUMUYORDU. Yukarıdaki
+# `_istege_bagli` ölçütü "atlanan ⊆ ilan edilen" diyor; sorulmayan soru ters
+# yönde: "sayfanın ÇAĞIRDIĞI ⊆ her koşuda YAZILAN". İkisi aynı şey değil —
+# ilki hattın kendi ilanını kendisiyle karşılaştırır, ikincisi hattı SAYFAYA
+# bağlar. Bakılmayan yer, geçen sınavla aynı görünür.
+#
+# ÇIKARICI YAYIN KAPISIYLA AYNI KALIPTIR (`sayfa_sinavi.py`, 1. ölçüt satır
+# 638). Kalıbı oradan içe aktarmanın yolu yok — ölçüt gövde içinde yazılı —
+# ve iki kalıp bir gün ayrışırsa biri gördüğü çağrıyı öteki görmez; kalıp
+# birebir kopyalandı ve sayım ölçütle karşılaştırılabilir olsun diye basılıyor.
+_MDX = (Path(__file__).resolve().parents[2] / "site" / "src" / "content"
+        / "projeler" / "yp-mevduat.mdx")
+
+
+def _sayfa_anahtarlari() -> set[str]:
+    """Proje sayfasının `<Deger>` ile ADIYLA çağırdığı özet anahtarları."""
+    if not _MDX.exists():
+        return set()
+    return {a for p, a in re.findall(
+        r'<Deger\s+proje="([^"]+)"\s+anahtar="([^"]+)"',
+        _MDX.read_text(encoding="utf-8")) if p == "yp-mevduat"}
+
+
+_SAYFA = _sayfa_anahtarlari()
+# BOŞ KÜMEDE SINAMA GEÇMEZ. Sayfa bulunamazsa ölçüt susmaz, DÜŞER: vakumda
+# geçen bir sınama, geçen bir sınamadan ayırt edilemez — ve bu dosya hattın
+# adımlarından önce koşuyor, yani site ağacı her zaman elinin altında.
+sina("proje sayfası okunuyor ve <Deger> çağrıları çıkarılıyor",
+     len(_SAYFA) >= 100, f"{len(_SAYFA)} anahtar · {_MDX}")
+sina("sağlam çerçevede sayfanın çağırdığı her anahtar özette var",
+     bool(_SAYFA) and _SAYFA <= set(_T["o"]),
+     f"eksik {sorted(_SAYFA - set(_T['o']))[:8]}")
+# ASIL KAPI BU: bir bacak ÖLÇÜLEMEZKEN de sayfanın anahtarı düşmemeli. DİBS'te
+# yayını durduran hâl tam buydu — sağlam çerçevede her şey yerindeydi.
+sina("bacak ölçülemezken de sayfanın her anahtarı özette duruyor",
+     bool(_SAYFA) and _SAYFA <= set(_L["o"]),
+     f"düşen {sorted(_SAYFA - set(_L['o']))[:8]}")
+# TUZAK GERÇEK Mİ. Ölçüt yalnız sözleşme KALDIRILDIĞINDA düşüyorsa bir şey
+# söyler; düşmüyorsa "geçti" hükmü hiçbir şey söylemez. Sözleşme burada
+# `istege_bagli` → `koy()` boş yazar zinciridir; kaldırılınca sayfanın
+# anahtarları GERÇEKTEN özetten düşmeli.
+_eski_istege_bagli = ozet_uret.istege_bagli
+try:
+    ozet_uret.istege_bagli = lambda a: False
+    _LX = _kutu(H0.drop(columns=["mevduat_tl", "mevduat_yp_tl"]), sekil=False)
+finally:
+    ozet_uret.istege_bagli = _eski_istege_bagli
+sina("sözleşme kaldırılınca sayfanın anahtarları gerçekten düşüyor (tuzak gerçek)",
+     bool(_SAYFA - set(_LX["o"])),
+     f"düşen {len(_SAYFA - set(_LX['o']))}")
+
+# --- SAAT ANAHTARLARININ YAZIMI --------------------------------------------
+# Biçim sözleşmesi (`ortak/bicim.py` = `site/src/lib/bicim.ts`): günlük saat
+# GG.AA.YYYY, aylık saat AA.YYYY. ISO ("2026-08-28") ve Türkçe ay adı
+# ("28 Ağustos 2026") bir SAAT anahtarında yasaktır — etiket isteniyorsa ayrı
+# anahtara yazılır (`kum_ay_etiket`, `hafta`).
+# Kusur gerçekten yakın: ölçüm katmanı saatleri ISO yazıyor (`stok_tarih:
+# "2026-08-28"`) ve özet katmanı onları çeviriyor. Yarın `m`den doğrudan
+# kopyalanan bir saat sayfaya ISO gider; `Deger.astro`nun bayatlık denetimi
+# ayrıştıramadığı bir saat için hep "sorun yok" der — ayrıştıramayan bir
+# denetim sessizce kapalıdır. 09.09.2026'da ölçüldü: 118 saat anahtarının
+# 118'i sözleşmede, yani ölçüt bugün sıfır tabanla konuyor.
+_SAAT_YAZIM = re.compile(r"^\d{2}\.\d{2}\.\d{4}$|^\d{2}\.\d{4}$")
+
+
+def _saat_ihlali(o: dict) -> list[str]:
+    """Sözleşme dışı yazılmış SAAT anahtarları — `<anahtar>_tarih` ve `_tarih`."""
+    kotu = []
+    for a, d in o.items():
+        if a == "_sekil_tarih":
+            ciftler = [(f"{a}[{k}]", v) for k, v in (d or {}).items()]
+        elif a == "_tarih" or a.endswith("_tarih"):
+            ciftler = [(a, d)]
+        else:
+            continue
+        for ad, v in ciftler:
+            if v is None:               # ölçülemeyen saat BOŞ kalır (kusur değil)
+                continue
+            if not isinstance(v, str) or not _SAAT_YAZIM.match(v):
+                kotu.append(f"{ad}={v!r}")
+    return kotu
+
+
+sina("özetin her saat anahtarı biçim sözleşmesinde (ISO ve ay adı yok)",
+     not _saat_ihlali(_T["o"]) and not _saat_ihlali(_L["o"]),
+     "; ".join(_saat_ihlali(_T["o"]) + _saat_ihlali(_L["o"]))[:200])
+sina("saat yazımı ölçütü ISO ve ay adını GERÇEKTEN yakalıyor (tuzak gerçek)",
+     len(_saat_ihlali({"stok_tarih": "2026-08-28",
+                       "akim_tarih": "28 Ağustos 2026",
+                       "dol_tarih": "28.08.2026",
+                       "_sekil_tarih": {"x.html": "2026-08", "y.html": None}})) == 3)
+# Sayfanın çağırdığı bir anahtarın saati, ya kendi `<anahtar>_tarih`inde ya da
+# hattın ana saatindedir; ikincisi ancak o anahtar bir ÖLÇÜM değilse (yöntem
+# sabiti, koşu kaydı, etiket) doğrudur. Ayrımı `_saatsiz_denetimi` yapıyor ve
+# BOZUK çerçevede de sorulur: bir bacak düştüğünde blok saati yazılmayabilir ve
+# o koşuda saatsiz kalan bir sayı, sayfada hattın ana saatiyle etiketlenir.
+sina("bacak ölçülemezken de özette saatsiz sayı kalmıyor",
+     not _L["saatsiz"], str(_L["saatsiz"]))
+# ÜÇ HÂLLİ BAYRAK, ÜÇ HÂLDE KALIR. Metin alanlarını `metin()` yoluna alırken
+# en yakın tuzak buydu: doğruluk değerine bakan bir yazıcı FALSE'ı da BOŞA
+# çevirir, yani "kimlik SINANDI ve TUTMUYOR" hükmü sayfada "sınanmadı" diye
+# görünürdü — yapılmış bir sınavın sonucunu YOK saymak, yapılmamış bir sınavın
+# sonucunu bildirmek kadar yanlış. Üç hâl birden sınanır, çünkü ikisi geçip
+# üçüncüsü düşen bir yazıcı yazmak kolay.
+_UC_HAL = []
+for _giren, _beklenen in ((True, True), (False, False), (None, None),
+                          ("Kimlik tutuyor.", "Kimlik tutuyor."), ("  ", None)):
+    ozet_uret.O.clear()
+    ozet_uret.metin("_sinama", _giren)
+    _UC_HAL.append((_giren, ozet_uret.O.get("_sinama", "YAZILMADI"), _beklenen))
+ozet_uret.O.clear()
+sina("metin(): üç hâlli bayrak ve boş metin ayırt ediliyor, anahtar hep yazılıyor",
+     all(g is b for _, g, b in _UC_HAL[:3])
+     and _UC_HAL[3][1] == _UC_HAL[3][2] and _UC_HAL[4][1] is None,
+     str(_UC_HAL))
+
 # --- HİÇ YÜKLENEMEYEN SERİ DE BAYATLIK İZİDİR ------------------------------
 # "SERİ YOK" öneki bayat hükmünün baktığı listede yoktu: dört ölçüm anahtarı
 # düşerken sayfa "Veri taze: bütün bacaklar tolerans içinde" diyordu, üstelik
