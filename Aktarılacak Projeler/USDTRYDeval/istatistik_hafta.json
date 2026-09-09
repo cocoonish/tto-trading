@@ -5,5 +5,8 @@
  "hafta_son_ort": 29.97,
  "hafta_son_egim": 49.5,
  "hafta_zirve_bas": "25.05.2026",
- "hafta_zirve_ort": 36.3
+ "hafta_zirve_ort": 36.3,
+ "_sekil_tarih": {
+  "usdtry_weekly.html": "08.09.2026"
+ }
 }
