@@ -1,5 +1,5 @@
 {
- "zaman": "2026-09-08T04:20:53",
+ "zaman": "2026-09-09T04:18:58",
  "veri": [
   {
    "tarih": "2026-09-10",
@@ -247,6 +247,32 @@
    "beklenti_sayi": null,
    "onceki": "",
    "not_": "Haftalık Para ve Banka İstatistikleri "
+  },
+  {
+   "tarih": "2026-09-30",
+   "saat": "10:00",
+   "ulke": "TR",
+   "olay": "TÜİK: Dış ticaret (Ağustos 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "Dış Ticaret İstatistikleri"
+  },
+  {
+   "tarih": "2026-09-30",
+   "saat": "10:00",
+   "ulke": "TR",
+   "olay": "TÜİK: İşgücü (Ağustos 2026)",
+   "onem": 1,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "İşgücü İstatistikleri"
   }
  ]
 }
