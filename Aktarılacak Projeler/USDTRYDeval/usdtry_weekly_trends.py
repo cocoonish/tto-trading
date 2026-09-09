@@ -7,6 +7,7 @@ from datetime import date
 import plotly.graph_objects as go
 import plotly.colors as pc
 from evds_ortak import evds_anahtari, EVDS_ILERI_GUN, EVDS_BASE, usdtry_serisi
+import sekil_saat
 
 # Çıktılar script'in kendi klasörüne yazılır (taşınmaya dayanıklı)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -217,7 +218,7 @@ _hepsi = [(l, a, sw, ws) for (l, a, sw, _, ws) in weekly_summary]
 _tam = [t for t in _hepsi if week_len.get(t[3], 0) >= 5] or _hepsi
 _son = _tam[-1]
 _zirve = max(_hepsi, key=lambda t: t[1])
-_json.dump({
+_ist = {
     "hafta_segment": len(weekly_summary),
     "hafta_yil": int(_son[3].year),
     "hafta_son_bas": _son[3].strftime("%d.%m.%Y"),
@@ -225,7 +226,14 @@ _json.dump({
     "hafta_son_egim": round(float(_son[2]), 1),
     "hafta_zirve_bas": _zirve[3].strftime("%d.%m.%Y"),
     "hafta_zirve_ort": round(float(_zirve[1]), 1),
-}, open(os.path.join(BASE_DIR, "istatistik_hafta.json"), "w"), ensure_ascii=False, indent=1)
+}
+# ŞEKİL SAATİ — bu betiğin ÇİZDİĞİ figürün ucu, çizilen serinin kendisinden.
+# Betik düşerse HTML de saat de eski kalır; bayat figürü başka bir betiğin
+# taze ölçüsüyle damgalamak tam olarak kapatmak istediğimiz kusurdur.
+_ist.update(sekil_saat.kayit(sekil_saat.sekil_saatleri(
+    kur=sekil_saat.seri_sonu(business), dosyalar=(sekil_saat.HAFTALIK,))))
+_json.dump(_ist, open(os.path.join(BASE_DIR, "istatistik_hafta.json"), "w"),
+           ensure_ascii=False, indent=1)
 
 output_html = os.path.join(BASE_DIR, "usdtry_weekly_trends.html")
 fig.write_html(output_html, include_plotlyjs="cdn",

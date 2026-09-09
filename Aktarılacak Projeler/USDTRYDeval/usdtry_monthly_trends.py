@@ -6,6 +6,7 @@ from urllib.parse import urlencode
 from datetime import date
 import plotly.graph_objects as go
 from evds_ortak import evds_anahtari, EVDS_ILERI_GUN, EVDS_BASE, usdtry_serisi
+import sekil_saat
 
 # Çıktılar script'in kendi klasörüne yazılır (taşınmaya dayanıklı)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -224,6 +225,11 @@ if len(_tam) >= 2:
     _z = max(_tam, key=lambda t: t[1]); _d = min(_tam, key=lambda t: t[1])
     _ist["ay_zirve_ad"] = f"{_AY[_z[0].month]} {_z[0].year}"; _ist["ay_zirve_ort"] = round(float(_z[1]), 1)
     _ist["ay_dip_ad"] = f"{_AY[_d[0].month]} {_d[0].year}"; _ist["ay_dip_ort"] = round(float(_d[1]), 1)
+# ŞEKİL SAATİ — bu betiğin ÇİZDİĞİ figürün ucu, çizilen serinin kendisinden.
+# Betik düşerse HTML de saat de eski kalır; bayat figürü başka bir betiğin
+# taze ölçüsüyle damgalamak tam olarak kapatmak istediğimiz kusurdur.
+_ist.update(sekil_saat.kayit(sekil_saat.sekil_saatleri(
+    kur=sekil_saat.seri_sonu(business), dosyalar=(sekil_saat.AYLIK,))))
 _json.dump(_ist, open(os.path.join(BASE_DIR, "istatistik_ay.json"), "w"), ensure_ascii=False, indent=1)
 
 output_html = os.path.join(BASE_DIR, "usdtry_monthly_trends.html")

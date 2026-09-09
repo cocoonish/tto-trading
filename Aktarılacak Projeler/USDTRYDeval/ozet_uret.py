@@ -4,6 +4,7 @@ import json, os, re
 import pandas as pd
 BASE = os.path.dirname(os.path.abspath(__file__))
 from evds_ortak import usdtry_serisi, usdtry_kunye
+import sekil_saat
 # KARAR (09.09.2026): USD/TRY Yahoo Finance'ten (ortak/usdtry.py — kapsam ölçümlü,
 # kapanmamış bar düşürülür). Seri işlem gününü taşır; EVDS gösterge kurundaki
 # valör (ertesi iş günü) kayması ve tatil öncesi yarından ileri `_tarih` yok.
@@ -59,15 +60,13 @@ ozet = {"_tarih": s.index[-1].strftime("%d.%m.%Y"), "kur": round(float(s.iloc[-1
         # baktığını sayfada görmeli, dipnottan çıkarmak zorunda kalmamalı.
         "d1h_ort": deval_ort(5), "d1a_ort": deval_ort(21), "d3a_ort": deval_ort(63),
         "ort_pencere_gun": HAFTA_IS_GUNU}
-# Grafik scriptlerinin yazdığı istatistik sidecar'ları (rejim eğimleri, haftalık ve
-# aylık segment özetleri) sayfa metnine akar. Bunlar grafiklerle AYNI koşudan gelir;
-# eksikse (script koşmadıysa) o anahtarlar düşer, sayfadaki statik yedek görünür.
-for ad in ("istatistik_seg.json", "istatistik_hafta.json", "istatistik_ay.json"):
-    yol = os.path.join(BASE, ad)
-    if os.path.exists(yol):
-        try:
-            ozet.update(json.load(open(yol, encoding="utf-8")))
-        except Exception as e:
-            print(f"{ad} okunamadı: {e}")
+# Grafik scriptlerinin yazdığı yan dosyalar (rejim eğimleri, haftalık ve aylık
+# segment özetleri, ŞEKİL SAAT DEFTERİ) sayfa metnine akar. Bunlar grafiklerle
+# AYNI koşudan gelir; eksikse (script koşmadıysa) o anahtarlar düşer, sayfadaki
+# statik yedek görünür. Birleştirme sekil_saat'te: ağa çıkmayan bir iş ağa çıkan
+# bir betiğin içinde durursa hiçbir kapı onu koşturamaz (duman sınaması ağa
+# çıkmaz), ve tam da orada `_sekil_tarih` sözlüğünün ezilmesi gibi sessiz bir
+# kusur oturuyor.
+ozet = sekil_saat.yan_dosyalari_birlestir(ozet, BASE)
 json.dump(ozet, open(os.path.join(BASE, "ozet.json"), "w"), ensure_ascii=False, indent=1)
 print(json.dumps(ozet, ensure_ascii=False))

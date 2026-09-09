@@ -8,6 +8,7 @@ import plotly.graph_objects as go
 import plotly.io as pio
 from plotly.subplots import make_subplots
 from evds_ortak import evds_anahtari, EVDS_ILERI_GUN, EVDS_BASE, usdtry_serisi
+import sekil_saat
 
 # Çıktılar script'in kendi klasörüne yazılır (taşınmaya dayanıklı)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -87,6 +88,17 @@ print(f"  Son gözlem tarihi: {usdtry.index[-1].date()} (grafik sonu: {display_e
 
 usdtry_full = usdtry.asfreq("D").interpolate(method="time")
 business = usdtry_full[usdtry_full.index.dayofweek < 5]
+
+# ŞEKİL SAATLERİ — bacak uçları çizilen serilerin KENDİSİNDEN okunur ve tek
+# fonksiyondan (sekil_saat.py) damgaya çevrilir. Şekil 01-03'te üç bacak yan
+# yana: kur ve TLREF günlük, banka faizleri haftalık ve ~bir hafta gecikmeli.
+# 09.09.2026'da ölçüldü: kur/TLREF 08.09.2026'da, kredi ve dört mevduat vadesi
+# 28.08.2026'da bitiyordu; sayfa üçünü de hattın ana saatiyle damgalıyordu, yani
+# 11 gün eski bir faiz katmanı "veri 08.09.2026" diye okura gidiyordu.
+KUR_UCU = sekil_saat.seri_sonu(business)
+TLREF_UCU = sekil_saat.seri_sonu(tlref)
+FAIZ_UCU = sekil_saat.bacak_saati(kredi, mev_1m, mev_3m, mev_6m, mev_12m)
+print(f"  Bacak uçları — kur: {KUR_UCU} · TLREF: {TLREF_UCU} · banka faizi: {FAIZ_UCU}")
 
 
 def deval_act365(s: pd.Series, n: int) -> pd.Series:
@@ -475,6 +487,29 @@ for fig, fname in FIG_OUTPUTS:
     fig.write_html(path, include_plotlyjs="cdn",
                    config={"responsive": True, "displaylogo": False})
     print(f"HTML kaydedildi: {path}")
+
+# ŞEKİL SAAT DEFTERİ + BACAK SAATLERİ (ozet_uret.py birleştirir).
+# Bu betiğin ÇİZDİĞİ dört figürün saati burada yazılır; haftalık ve aylık
+# figürler kendi betiklerinde. Bir betik düşerse HTML'i eski kalır ve saati de
+# eski kalır — bayat figürü başka bir betiğin taze ölçüsüyle damgalamayız.
+# `tlref_tarih` ve `faiz_hafta_tarih` ozet.json'a bacak SAATİ olarak da düşer:
+# bunlar olmadan TLREF ya da haftalık faiz serisi donsa hiçbir kapı görmezdi
+# (bulten/denetim `karanlik` `<anahtar>_tarih` alanlarını sorar).
+try:
+    import json as _js
+    _kayit = sekil_saat.kayit(
+        sekil_saat.sekil_saatleri(kur=KUR_UCU, tlref=TLREF_UCU, faiz_hafta=FAIZ_UCU,
+                                  dosyalar=(sekil_saat.DEVAL_1Y, sekil_saat.DEVAL_3A,
+                                            sekil_saat.DEVAL_6A, sekil_saat.SEGMENT)),
+        # Ölçülemeyen bacak ATLANMAZ, boş yazılır: eksik anahtar ile "bugün
+        # ölçülemedi" birbirine benzemez.
+        tlref_tarih=sekil_saat.gun_yaz(TLREF_UCU) or "—",
+        faiz_hafta_tarih=sekil_saat.gun_yaz(FAIZ_UCU) or "—")
+    _js.dump(_kayit, open(os.path.join(BASE_DIR, "istatistik_sekil.json"), "w"),
+             ensure_ascii=False, indent=1)
+    print(f"istatistik_sekil.json: {_kayit}")
+except Exception as _e:
+    print(f"istatistik_sekil.json yazılamadı: {_e}")
 
 # Son değer özeti (log/rapor için)
 last_dt = deval_3m.dropna().index[-1]
