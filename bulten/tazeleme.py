@@ -99,8 +99,19 @@ TETIKLER: tuple[Tetik, ...] = (
           r"Gösterge Niteliğindeki Merkez Bankası Kurları", ("TCMB",), en_gec=4, gecikme_dk=30),
     Tetik("dibs", "TCMB gösterge kurlar + DİBS getirileri (her iş günü)",
           r"Gösterge Niteliğindeki Merkez Bankası Kurları", ("TCMB",), en_gec=6, gecikme_dk=30),
+    # ANA KALIP yalnız ANA saati (APİ/bilanço günü) ilerleten yayımı tutar.
+    # Haftalık iki bacak — banka faizleri (hafta_kisa) ve zorunlu karşılık
+    # tabanı (zk_taban_tarih) — AYRI yayımlardan geliyor ve tarifte hiç
+    # yoktu: sürüm imzası onları görmüyor, geç düşerlerse yeniden deneme
+    # ateşlenmiyordu. Kalıplar takvimin GERÇEK seri adlarından alındı
+    # (08.09.2026 keşfi, 2.780 kayıt): "Kredi/Mevduat Faiz Oranları
+    # (Haftalık Akım)" ve "Zorunlu Karşılığa Tabi Mevduatlar/Katılım
+    # Fonları", ikisi de perşembe 14:30, 36 yayım/yıl. Ek koşu maliyeti yok:
+    # aynı ana yayımlanıyorlar, tetik zaten o pencerede ateşliyor.
     Tetik("fonlama", "TCMB Analitik Bilanço (her iş günü 14:30)",
-          r"TCMB Analitik Bilanço", ("TCMB",), en_gec=6, gecikme_dk=45),
+          r"TCMB Analitik Bilanço", ("TCMB",), en_gec=6, gecikme_dk=45,
+          ek_kaynaklar=((r"Faiz Oranları \(Haftalık Akım\)", ("TCMB",), "hafta_kisa"),
+                        (r"Zorunlu Karşılığa Tabi", ("TCMB",), "zk_taban_tarih"))),
     # Orta Vadeli Program hattının CANLI bacağı kurdur: program tabloları
     # yayımlanmış bir belgenin sabitleri, ama "programın tutması için yıl
     # sonunda kur kaç olmalı" sorusunun cevabı her yeni kotasyonla değişiyor.
@@ -207,9 +218,16 @@ TETIKLER: tuple[Tetik, ...] = (
     # koşucudan doğrulanamadı ve ölü bir kalıp "KALIP ÖLÜ" ile hattı HER koşuda
     # EVDS'e gönderirdi — aylık bir seri için haftada 31 çekim. 30 günde bir
     # koşar; ad doğrulandığında kalıp yazılır ve hat yayım gününe bağlanır.
+    # EMNİYET AĞI 30 → 7. Hattın ulusal takvimde karşılığı yok (bie_fdvy),
+    # yani TEK mekanizma bu ağ; 30 günde bir yoklamak, aylık bir yayımı
+    # ortalama iki hafta geç görmek demekti. "Aylık bir seri için haftada 31
+    # çekim" korkusu ÖLÜ KALIP dalına aitti (her pencerede ateşlenen kalıp),
+    # emniyet ağına değil: ÖLÇÜLDÜ (09.09.2026), hattın bir koşusu TAM İKİ
+    # EVDS isteği yapıyor (46 serilik katalog + 11 kodluk toplu çekim), yani
+    # aylık maliyet ~2 istekten ~8,6 isteğe çıkıyor.
     Tetik("reelfx", "TCMB finansal kesim dışındaki firmaların döviz varlık ve "
-                    "yükümlülükleri (aylık, ~2 ay gecikmeli; takvimsiz, 30 günde bir)",
-          en_gec=30),
+                    "yükümlülükleri (aylık, ~2 ay gecikmeli; takvimsiz, haftada bir yoklanır)",
+          en_gec=7),
 )
 
 TETIK = {t.hat: t for t in TETIKLER}
