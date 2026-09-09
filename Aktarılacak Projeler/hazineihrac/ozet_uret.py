@@ -68,6 +68,30 @@ pl["tahmin"] = pd.to_numeric(pl["Tahmini Gerçekleşme (Milyon TL)"], errors="co
 pl["hedef"] = pd.to_numeric(pl["Aylık Strateji Hedefi (Milyar TL)"], errors="coerce")
 AY_ADI = {1: "Ocak", 2: "Şubat", 3: "Mart", 4: "Nisan", 5: "Mayıs", 6: "Haziran",
           7: "Temmuz", 8: "Ağustos", 9: "Eylül", 10: "Ekim", 11: "Kasım", 12: "Aralık"}
+
+# (b0) TAKVİMİN UÇLARI ve SIRADAKİ İHALE.
+# plan_bas/plan_son takvimin ilk ve son İHRACIDIR (doğrudan satışlar dahil);
+# sayfa onları "takvim şu aralığı kapsar" cümlesinde basıyor ve orada doğru.
+# Bülten tarafında sorulan soru BAŞKA: "sıradaki ihale ne zaman" — ve cevabı
+# plan_bas DEĞİL. Ölçüldü (09.09.2026, takvim arşivi): Ağustos–Ekim takviminde
+# plan_bas 20.08.2026 idi ve o gün bir DOĞRUDAN SATIŞ; ilk ihale 07.09.2026,
+# aradaki fark 18 gün. Hattın ana saatini (`_tarih`) yalnız ihale SONUCU
+# duyurusu ilerlettiği için "veri gecikti mi yoksa daha ihale mi olmadı"
+# kararı ihale gününe bakmalı. Anahtar bu yüzden ayrı yazılıyor.
+#
+# Uçlar satır SIRASINDAN değil tarihten okunuyor: sıra bir varsayım, min/max
+# bir ölçümdür. Takvim okunamazsa anahtar ATLANMAZ, "—" yazılır — sayfa ikisini
+# de adıyla çağırıyor ve eksik anahtar yayın kapısında ENGEL üretir.
+plan_uc = {"plan_bas": "—", "plan_son": "—"}
+_pt_seri = pd.to_datetime(pl["İhale Tarihi"], dayfirst=True, errors="coerce").dropna()
+if len(_pt_seri):
+    plan_uc["plan_bas"] = _pt_seri.min().strftime("%d.%m.%Y")
+    plan_uc["plan_son"] = _pt_seri.max().strftime("%d.%m.%Y")
+_pi_seri = pd.to_datetime(pl_ihale["İhale Tarihi"], dayfirst=True, errors="coerce").dropna()
+if len(_pi_seri):
+    # Takvimde hiç ihale yoksa anahtar yazılmaz: "ihale yok" ile "ölçemedim"
+    # aynı görünmesin diye uydurma bir gün konmuyor.
+    plan_uc["plan_ihale_bas"] = _pi_seri.min().strftime("%d.%m.%Y")
 # İç Borçlanma Stratejisi ÜÇ aylık bir dokümandır; takvim de üç ayı taşır.
 # Sayfa uzun süre yalnız ilk iki ayı bastı, yani her yeni strateji yayımlandığında
 # dokümanın GETİRDİĞİ ay (en uzak ay) sayfada hiç görünmüyordu. Ay sayısı artık
@@ -263,8 +287,7 @@ ozet = {
     "plan_adet": int(len(pl)),
     "plan_ihale_adet": int(len(pl_ihale)),
     "plan_toplam_mlr": round(float(plt.sum()) / 1000, 1),
-    "plan_bas": str(pl["İhale Tarihi"].iloc[0]),
-    "plan_son": str(pl["İhale Tarihi"].iloc[-1]),
+    **plan_uc,
     "backtest_n": int(len(td)),
     "medyan_sapma": round(float(abs(pd.to_numeric(td["Tutar Sapma % (düzeltilmiş)"], errors="coerce")).median()), 1),
     "son12_mape": round(float(abs(pd.to_numeric(td12["Tutar Sapma % (düzeltilmiş)"], errors="coerce")).mean()), 1),
