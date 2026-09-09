@@ -213,142 +213,142 @@
   "n": 45,
   "kalemler": {
    "g3_011": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 0.92,
+     "ramazan": 0.94,
      "bayram": -0.14,
-     "kurban": -0.65
+     "kurban": -0.64
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.616,
+    "mevsimsel_genlik_pp": 1.711,
     "ad": "011. Gıda"
    },
    "g3_012": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 0.13,
-     "bayram": -0.93,
-     "kurban": -0.07
+     "ramazan": 0.11,
+     "bayram": -0.94,
+     "kurban": -0.1
     },
-    "mevsim_p": 0.0257,
+    "mevsim_p": 0.025,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 0.981,
+    "mevsimsel_genlik_pp": 1.005,
     "ad": "012. Alkolsüz İçecekler"
    },
    "g3_021": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -1.2,
+     "ramazan": -1.22,
      "bayram": -0.65,
-     "kurban": -0.13
+     "kurban": -0.15
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.853,
+    "mevsimsel_genlik_pp": 2.719,
     "ad": "021. Alkollü İçecekler"
    },
    "g3_023": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -0.02,
-     "bayram": 0.4,
-     "kurban": 0.84
+     "ramazan": -0.05,
+     "bayram": 0.38,
+     "kurban": 0.8
     },
-    "mevsim_p": 0.0047,
+    "mevsim_p": 0.0054,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.424,
+    "mevsimsel_genlik_pp": 1.463,
     "ad": "023. Tütün Ve Tütün Ürünleri"
    },
    "g3_031": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -0.23,
-     "bayram": -0.08,
-     "kurban": 0.06
+     "ramazan": -0.22,
+     "bayram": -0.07,
+     "kurban": 0.07
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 6.258,
+    "mevsimsel_genlik_pp": 6.288,
     "ad": "031. Giyim"
    },
    "g3_032": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 0.45,
-     "bayram": 0.06,
-     "kurban": 0.14
+     "ramazan": 0.46,
+     "bayram": 0.07,
+     "kurban": 0.16
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.275,
+    "mevsimsel_genlik_pp": 2.313,
     "ad": "032. Ayakkabılar"
    },
    "g3_041": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -0.08,
+     "ramazan": -0.09,
      "bayram": -0.46,
-     "kurban": -0.07
+     "kurban": -0.08
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 0.729,
+    "mevsimsel_genlik_pp": 1.092,
     "ad": "041. Konut İçin Yapılan Gerçek Kira Ödemeleri"
    },
    "g3_043": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 0.02,
+     "ramazan": 0.01,
      "bayram": -0.81,
-     "kurban": -0.44
+     "kurban": -0.45
     },
-    "mevsim_p": 0.8976,
+    "mevsim_p": 0.8937,
     "mevsimsel": false,
     "ad": "043. Konutun Bakımı, Onarımı Ve Güvenliği"
    },
    "g3_044": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -357,15 +357,15 @@
     "tatil_t": {
      "ramazan": -0.54,
      "bayram": -0.65,
-     "kurban": 0.79
+     "kurban": 0.8
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.325,
+    "mevsimsel_genlik_pp": 1.778,
     "ad": "044. Konutla İlgili Su Temini Ve Çeşitli Hizmetler"
    },
    "g3_045": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -376,13 +376,13 @@
      "bayram": -0.75,
      "kurban": 0.38
     },
-    "mevsim_p": 0.0241,
+    "mevsim_p": 0.0215,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.884,
+    "mevsimsel_genlik_pp": 2.938,
     "ad": "045. Elektrik, Gaz Ve Diğer Yakıtlar"
    },
    "g3_051": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -393,13 +393,13 @@
      "bayram": 0.02,
      "kurban": -0.69
     },
-    "mevsim_p": 0.0964,
+    "mevsim_p": 0.0902,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.56,
+    "mevsimsel_genlik_pp": 1.459,
     "ad": "051. Mobilya, Mefruşat Ve Halılar"
    },
    "g3_052": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -410,12 +410,12 @@
      "bayram": -0.42,
      "kurban": -0.26
     },
-    "mevsim_p": 0.8558,
+    "mevsim_p": 0.8704,
     "mevsimsel": false,
     "ad": "052. Ev Tekstilleri"
    },
    "g3_053": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -423,32 +423,32 @@
     },
     "tatil_t": {
      "ramazan": -0.6,
-     "bayram": -0.35,
+     "bayram": -0.36,
      "kurban": -0.52
     },
-    "mevsim_p": 0.0015,
+    "mevsim_p": 0.0014,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 0.958,
+    "mevsimsel_genlik_pp": 0.945,
     "ad": "053. Ev Aletleri"
    },
    "g3_054": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 0.05,
-     "bayram": -0.58,
-     "kurban": -0.26
+     "ramazan": 0.04,
+     "bayram": -0.59,
+     "kurban": -0.28
     },
-    "mevsim_p": 0.5993,
+    "mevsim_p": 0.6,
     "mevsimsel": false,
     "ad": "054. Züccaciye, Yemek Takımı Ve Ev Gereçleri"
    },
    "g3_055": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -456,32 +456,32 @@
     },
     "tatil_t": {
      "ramazan": 0.64,
-     "bayram": -0.93,
-     "kurban": 0.11
+     "bayram": -0.94,
+     "kurban": 0.1
     },
-    "mevsim_p": 0.0118,
+    "mevsim_p": 0.0126,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.114,
+    "mevsimsel_genlik_pp": 1.06,
     "ad": "055. Ev Ve Bahçe Alet Ve Ekipmanları"
    },
    "g3_056": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
-     "ramazan": -1.3832,
+     "ramazan": -1.3878,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -2.27,
-     "bayram": 0.72,
-     "kurban": -0.25
+     "ramazan": -2.28,
+     "bayram": 0.71,
+     "kurban": -0.26
     },
-    "mevsim_p": 0.3428,
+    "mevsim_p": 0.3332,
     "mevsimsel": false,
     "ad": "056. Rutin Ev Bakımı İçin Mal Ve Hizmetler"
    },
    "g3_061": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -489,50 +489,50 @@
     },
     "tatil_t": {
      "ramazan": -0.97,
-     "bayram": -0.39,
+     "bayram": -0.38,
      "kurban": -0.62
     },
-    "mevsim_p": 0.0077,
+    "mevsim_p": 0.0101,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 4.031,
+    "mevsimsel_genlik_pp": 4.016,
     "ad": "061. İlaçlar Ve Sağlık Ürünleri"
    },
    "g3_062": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -1.0,
+     "ramazan": -0.99,
      "bayram": -0.56,
      "kurban": -1.02
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.586,
+    "mevsimsel_genlik_pp": 2.955,
     "ad": "062. Ayaktan Tedavi Hizmetleri"
    },
    "g3_063": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -1.34,
-     "bayram": -0.89,
-     "kurban": -1.48
+     "ramazan": -1.33,
+     "bayram": -0.88,
+     "kurban": -1.47
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.59,
+    "mevsimsel_genlik_pp": 2.589,
     "ad": "063. Yatarak Tedavi Hizmetleri"
    },
    "g3_064": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -545,11 +545,11 @@
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.891,
+    "mevsimsel_genlik_pp": 2.987,
     "ad": "064. Diğer Sağlık Hizmetleri"
    },
    "g3_071": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -560,45 +560,45 @@
      "bayram": -0.57,
      "kurban": -0.18
     },
-    "mevsim_p": 0.8638,
+    "mevsim_p": 0.8558,
     "mevsimsel": false,
     "ad": "071. Araç Satın Alımı"
    },
    "g3_072": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -0.5,
-     "bayram": -0.34,
-     "kurban": -0.74
+     "ramazan": -0.53,
+     "bayram": -0.35,
+     "kurban": -0.77
     },
-    "mevsim_p": 0.1628,
+    "mevsim_p": 0.1594,
     "mevsimsel": false,
     "ad": "072. Kişisel Ulaşım Araçlarının Kullanımı"
    },
    "g3_073": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -0.27,
-     "bayram": 0.8,
-     "kurban": 0.32
+     "ramazan": -0.29,
+     "bayram": 0.79,
+     "kurban": 0.29
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 3.565,
+    "mevsimsel_genlik_pp": 3.64,
     "ad": "073. Yolcu Taşıma Hizmetleri"
    },
    "g3_074": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -607,81 +607,81 @@
     "tatil_t": {
      "ramazan": -0.05,
      "bayram": -0.55,
-     "kurban": 0.89
+     "kurban": 0.9
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.309,
+    "mevsimsel_genlik_pp": 1.23,
     "ad": "074. Posta Ve Mal Taşımacılığı Hizmetleri"
    },
    "g3_081": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -0.81,
+     "ramazan": -0.8,
      "bayram": -0.07,
-     "kurban": 0.34
+     "kurban": 0.35
     },
-    "mevsim_p": 0.1788,
+    "mevsim_p": 0.1517,
     "mevsimsel": false,
     "ad": "081. Bilgi Ve İletişim Ekipmanları"
    },
    "g3_083": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 0.95,
-     "bayram": 0.34,
-     "kurban": 0.73
+     "ramazan": 0.9,
+     "bayram": 0.31,
+     "kurban": 0.67
     },
-    "mevsim_p": 0.005,
+    "mevsim_p": 0.0079,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.457,
+    "mevsimsel_genlik_pp": 1.667,
     "ad": "083. Bilgi Ve İletişim Hizmetleri"
    },
    "g3_092": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 0.34,
+     "ramazan": 0.35,
      "bayram": -1.9,
-     "kurban": -0.25
+     "kurban": -0.24
     },
-    "mevsim_p": 0.8238,
+    "mevsim_p": 0.8243,
     "mevsimsel": false,
     "ad": "092. Diğer Eğlence Malları"
    },
    "g3_093": {
-    "n": 92,
+    "n": 93,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 1.38,
-     "bayram": 0.26,
-     "kurban": -0.22
+     "ramazan": 1.37,
+     "bayram": 0.25,
+     "kurban": -0.24
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 7.143,
+    "mevsimsel_genlik_pp": 7.23,
     "ad": "093. Bahçe Ürünleri Ve Ev Hayvanları"
    },
    "g3_094": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -694,7 +694,7 @@
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.935,
+    "mevsimsel_genlik_pp": 1.957,
     "ad": "094. Eğlence Ve Dinlence Hizmetleri"
    },
    "g3_095": {
@@ -715,7 +715,7 @@
     "ad": "095. Kültürel Mallar"
    },
    "g3_096": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -724,95 +724,95 @@
     "tatil_t": {
      "ramazan": -1.68,
      "bayram": 0.7,
-     "kurban": 0.59
+     "kurban": 0.6
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 0.917,
+    "mevsimsel_genlik_pp": 0.804,
     "ad": "096. Kültürel Hizmetler"
    },
    "g3_097": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 0.11,
+     "ramazan": 0.1,
      "bayram": -0.86,
      "kurban": 0.21
     },
-    "mevsim_p": 0.4323,
+    "mevsim_p": 0.4254,
     "mevsimsel": false,
     "ad": "097. Gazete, Kitap Ve Kırtasiye Malzemeleri"
    },
    "g3_098": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 1.43,
+     "ramazan": 1.44,
      "bayram": 0.83,
      "kurban": -1.52
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.316,
+    "mevsimsel_genlik_pp": 1.206,
     "ad": "098. Paket Turlar Ve Tatiller"
    },
    "g3_101": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
-     "ramazan": 2.9324,
-     "bayram": -10.5427,
+     "ramazan": 2.9356,
+     "bayram": -10.5313,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 3.43,
+     "ramazan": 3.45,
      "bayram": -1.98,
-     "kurban": 0.49
+     "kurban": 0.5
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 4.303,
+    "mevsimsel_genlik_pp": 3.408,
     "ad": "101. Okul Öncesi Ve Temel Eğitim İlkokul"
    },
    "g3_102": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
-     "ramazan": 2.2035,
+     "ramazan": 2.2083,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": 2.53,
+     "ramazan": 2.54,
      "bayram": -1.54,
      "kurban": -0.71
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 3.472,
+    "mevsimsel_genlik_pp": 2.894,
     "ad": "102. Ortaöğretim Eğitimi Ortaokul Ve Lise"
    },
    "g3_104": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -0.39,
-     "bayram": -0.26,
-     "kurban": -0.56
+     "ramazan": -0.43,
+     "bayram": -0.28,
+     "kurban": -0.62
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 7.137,
+    "mevsimsel_genlik_pp": 7.148,
     "ad": "104. Yükseköğretim Eğitimi"
    },
    "g3_105": {
@@ -833,7 +833,7 @@
     "ad": "105. Seviyeye Göre Tanımlanamayan Eğitim"
    },
    "g3_111": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -846,45 +846,45 @@
     },
     "mevsim_p": 0.0005,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 0.853,
+    "mevsimsel_genlik_pp": 0.908,
     "ad": "111. Yiyecek Ve İçecek Sunum Hizmetleri"
    },
    "g3_112": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -1.35,
+     "ramazan": -1.36,
      "bayram": 0.59,
-     "kurban": 1.58
+     "kurban": 1.57
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.964,
+    "mevsimsel_genlik_pp": 2.953,
     "ad": "112. Konaklama Hizmetleri"
    },
    "g3_121": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -1.57,
-     "bayram": 0.89,
-     "kurban": -0.81
+     "ramazan": -1.56,
+     "bayram": 0.9,
+     "kurban": -0.8
     },
-    "mevsim_p": 0.0027,
+    "mevsim_p": 0.0026,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.531,
+    "mevsimsel_genlik_pp": 1.544,
     "ad": "121. Sigorta"
    },
    "g3_122": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -893,48 +893,48 @@
     "tatil_t": {
      "ramazan": 0.06,
      "bayram": 0.06,
-     "kurban": 0.07
+     "kurban": 0.08
     },
-    "mevsim_p": 0.0956,
+    "mevsim_p": 0.0915,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 6.007,
+    "mevsimsel_genlik_pp": 5.924,
     "ad": "122. Finansal Hizmetler"
    },
    "g3_131": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -1.32,
-     "bayram": 0.07,
-     "kurban": -1.08
+     "ramazan": -1.27,
+     "bayram": 0.09,
+     "kurban": -1.02
     },
-    "mevsim_p": 0.0402,
+    "mevsim_p": 0.0418,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 1.699,
+    "mevsimsel_genlik_pp": 1.705,
     "ad": "131. Kişisel Bakım"
    },
    "g3_132": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -0.19,
-     "bayram": 1.25,
-     "kurban": 0.97
+     "ramazan": -0.21,
+     "bayram": 1.24,
+     "kurban": 0.95
     },
-    "mevsim_p": 0.9307,
+    "mevsim_p": 0.9296,
     "mevsimsel": false,
     "ad": "132. Diğer Kişisel Eşyalar"
    },
    "g3_133": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
@@ -947,24 +947,24 @@
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.054,
+    "mevsimsel_genlik_pp": 1.916,
     "ad": "133. Sosyal Koruma"
    },
    "g3_139": {
-    "n": 259,
+    "n": 260,
     "tatil_katsayi": {
      "ramazan": 0.0,
      "bayram": 0.0,
      "kurban": 0.0
     },
     "tatil_t": {
-     "ramazan": -1.15,
-     "bayram": 0.77,
-     "kurban": -1.62
+     "ramazan": -1.18,
+     "bayram": 0.75,
+     "kurban": -1.66
     },
     "mevsim_p": 0.0,
     "mevsimsel": true,
-    "mevsimsel_genlik_pp": 2.333,
+    "mevsimsel_genlik_pp": 2.346,
     "ad": "139. Diğer Hizmetler"
    }
   },
@@ -972,30 +972,30 @@
    "g3_056": {
     "ad": "056. Rutin Ev Bakımı İçin Mal Ve Hizmetler",
     "t": {
-     "ramazan": -2.27
+     "ramazan": -2.28
     },
     "katsayi_pp": {
-     "ramazan": -1.3832
+     "ramazan": -1.3878
     }
    },
    "g3_101": {
     "ad": "101. Okul Öncesi Ve Temel Eğitim İlkokul",
     "t": {
-     "ramazan": 3.43,
+     "ramazan": 3.45,
      "bayram": -1.98
     },
     "katsayi_pp": {
-     "ramazan": 2.9324,
-     "bayram": -10.5427
+     "ramazan": 2.9356,
+     "bayram": -10.5313
     }
    },
    "g3_102": {
     "ad": "102. Ortaöğretim Eğitimi Ortaokul Ve Lise",
     "t": {
-     "ramazan": 2.53
+     "ramazan": 2.54
     },
     "katsayi_pp": {
-     "ramazan": 2.2035
+     "ramazan": 2.2083
     }
    }
   },
@@ -1005,79 +1005,77 @@
    {
     "kod": "g3_043",
     "ad": "043. Konutun Bakımı, Onarımı Ve Güvenliği",
-    "mevsim_p": 0.8976
+    "mevsim_p": 0.8937
    },
    {
     "kod": "g3_052",
     "ad": "052. Ev Tekstilleri",
-    "mevsim_p": 0.8558
+    "mevsim_p": 0.8704
    },
    {
     "kod": "g3_054",
     "ad": "054. Züccaciye, Yemek Takımı Ve Ev Gereçleri",
-    "mevsim_p": 0.5993
+    "mevsim_p": 0.6
    },
    {
     "kod": "g3_056",
     "ad": "056. Rutin Ev Bakımı İçin Mal Ve Hizmetler",
-    "mevsim_p": 0.3428
+    "mevsim_p": 0.3332
    },
    {
     "kod": "g3_071",
     "ad": "071. Araç Satın Alımı",
-    "mevsim_p": 0.8638
+    "mevsim_p": 0.8558
    },
    {
     "kod": "g3_072",
     "ad": "072. Kişisel Ulaşım Araçlarının Kullanımı",
-    "mevsim_p": 0.1628
+    "mevsim_p": 0.1594
    },
    {
     "kod": "g3_081",
     "ad": "081. Bilgi Ve İletişim Ekipmanları",
-    "mevsim_p": 0.1788
+    "mevsim_p": 0.1517
    },
    {
     "kod": "g3_092",
     "ad": "092. Diğer Eğlence Malları",
-    "mevsim_p": 0.8238
+    "mevsim_p": 0.8243
    },
    {
     "kod": "g3_097",
     "ad": "097. Gazete, Kitap Ve Kırtasiye Malzemeleri",
-    "mevsim_p": 0.4323
+    "mevsim_p": 0.4254
    },
    {
     "kod": "g3_132",
     "ad": "132. Diğer Kişisel Eşyalar",
-    "mevsim_p": 0.9307
+    "mevsim_p": 0.9296
    }
   ],
-  "arindirilmayan_agirlik": 19.89,
+  "arindirilmayan_agirlik": 16.48,
   "yogunlasma": {
-   "hhi": 0.0839,
-   "esdeger_kalem": 11.9,
-   "en_buyuk_pay": 22.7,
+   "hhi": 0.0779,
+   "esdeger_kalem": 12.8,
+   "en_buyuk_pay": 22.0,
    "en_buyuk_kod": "g3_011",
    "en_buyuk_ad": "011. Gıda",
-   "ilk3_pay": 38.7
+   "ilk3_pay": 36.4
   },
   "medyan_kalem": {
    "bas": "2021-01",
-   "ay": 60,
+   "ay": 68,
    "en_sik_kod": "g3_011",
    "en_sik_ad": "011. Gıda",
-   "en_sik_n": 12,
-   "en_sik_pay": 20.0,
-   "son_kod": "g3_045",
-   "son_ad": "045. Elektrik, Gaz Ve Diğer Yakıtlar"
+   "en_sik_n": 17,
+   "en_sik_pay": 25.0,
+   "son_kod": "g3_011",
+   "son_ad": "011. Gıda"
   }
  },
  "kosular_arasi": {
-  "var": true,
-  "n": 12,
-  "maks_pp": 0.002,
-  "ort_pp": 0.0,
+  "var": false,
+  "not": "önceki ölçüm aynı veriyle yapılmış — iki ölçüm arasındaki revizyon bu kez ölçülemedi",
   "onceki_kosum": "2026-09-03"
  },
  "vintage": {
