@@ -1,14 +1,27 @@
 {
- "_tarih": "01.08.2026",
+ "_tarih": "08.2026",
  "_ay": "2026-08",
- "oni_son": 1.39,
- "oni_son_ay": "2026-06",
+ "oni_son_ay": "2026-07",
+ "oni_son_ad": "Temmuz 2026",
+ "_uc": {
+  "oni": "2026-07",
+  "tufe": "2026-08"
+ },
+ "oni_son": 1.8,
+ "kaynak_oni_tarih": "07.2026",
+ "kaynak_oni_yas_ay": 1,
+ "kaynak_oni_kapsam": "Ocak 1950 → Temmuz 2026",
+ "kaynak_oni_durum": "güncel",
+ "kaynak_tufe_tarih": "08.2026",
+ "kaynak_tufe_yas_ay": 0,
+ "kaynak_tufe_kapsam": "Ocak 2005 → Ağustos 2026",
+ "kaynak_tufe_durum": "güncel",
  "orneklem_bas": "2006-01",
  "orneklem_son": "2026-08",
  "capraz_tam": [
   {
    "gecikme": 0,
-   "korelasyon": 0.008,
+   "korelasyon": 0.01,
    "n": 247
   },
   {
@@ -140,7 +153,7 @@
  "capraz_modern": [
   {
    "gecikme": 0,
-   "korelasyon": 0.008,
+   "korelasyon": 0.01,
    "n": 247
   },
   {
@@ -314,6 +327,8 @@
    "ay": 19
   }
  ],
+ "epizot_sayisi": 4,
+ "olculen_epizot": 2,
  "epizot_ortalama": -0.93,
  "kosulsuz_ortalama": 2.65,
  "epizot_fark": -3.58,
@@ -1557,7 +1572,7 @@
   },
   {
    "ay": "2026-07",
-   "oni": 1.39,
+   "oni": 1.8,
    "goreceli_gida": 5.77
   },
   {
@@ -1567,7 +1582,32 @@
   }
  ],
  "hukum": "yetersiz",
- "hukum_metin": "Ölçülebilir epizot sayısı 2. Türkiye TÜFE alt endeksleri 2006-01 tarihinde başlıyor ve o tarihten bu yana yalnız bu kadar güçlü El Niño epizodu tamamlandı. Bu örneklemle El Niño'nun Türkiye gıda enflasyonuna YÖNÜ hakkında hüküm kurulamaz; ölçülen fark yönü ne olursa olsun kanıt sayılmaz.",
+ "hukum_metin": "Ölçülebilir epizot sayısı 2. Türkiye TÜFE alt endeksleri Ocak 2006 ayında başlıyor ve o tarihten bu yana yalnız bu kadar güçlü El Niño epizodu tamamlandı. Bu örneklemle El Niño'nun Türkiye gıda enflasyonuna YÖNÜ hakkında hüküm kurulamaz; ölçülen fark yönü ne olursa olsun kanıt sayılmaz.",
+ "oni_son_tarih": "07.2026",
+ "capraz_tam_en_iyi_gecikme_tarih": "07.2026",
+ "capraz_tam_en_iyi_kor_tarih": "07.2026",
+ "capraz_tam_n_tarih": "07.2026",
+ "capraz_tam_ham_en_iyi_gecikme_tarih": "07.2026",
+ "capraz_tam_ham_en_iyi_kor_tarih": "07.2026",
+ "capraz_modern_en_iyi_gecikme_tarih": "07.2026",
+ "capraz_modern_en_iyi_kor_tarih": "07.2026",
+ "capraz_modern_n_tarih": "07.2026",
+ "capraz_modern_ham_en_iyi_gecikme_tarih": "07.2026",
+ "capraz_modern_ham_en_iyi_kor_tarih": "07.2026",
+ "epizot_sayisi_tarih": "07.2026",
+ "olculen_epizot_tarih": "07.2026",
+ "epizot_ortalama_tarih": "07.2026",
+ "kosulsuz_ortalama_tarih": "07.2026",
+ "epizot_fark_tarih": "07.2026",
+ "gecis_beta_tarih": "08.2026",
+ "gecis_r2_tarih": "08.2026",
+ "gecis_n_tarih": "08.2026",
+ "gida_12a_tarih": "08.2026",
+ "tufe_12a_tarih": "08.2026",
+ "goreceli_gida_son_tarih": "08.2026",
+ "hamgida_12a_tarih": "08.2026",
+ "hukum_tarih": "07.2026",
+ "hukum_metin_tarih": "07.2026",
  "uyarilar": [
   "tam ve modern örneklem AYNI (TÜFE alt endeksleri 2006'da başlıyor) — iki ayrı kanıt gibi okunmamalı"
  ],
