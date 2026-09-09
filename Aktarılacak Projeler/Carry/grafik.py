@@ -13,11 +13,24 @@ from pathlib import Path
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 
-from hesap import hesapla
+from hesap import hesapla, tarihe_cevir
 
 BURASI = Path(__file__).resolve().parent
 CFG = {"displayModeBar": False, "responsive": True}
 KIRMIZI, YESIL, GRI, MAVI = "#8e1f2f", "#1d5c5c", "#8a8578", "#9a7327"
+
+
+def eksen_tarihi(okur_tarihi: str) -> str:
+    """Özetin okur tarihini (GG.AA.YYYY) Plotly'nin eksen yazımına (ISO) çevirir.
+
+    Özet okura yazılır (ortak/bicim sözleşmesi); çizim kütüphanesi ISO ister.
+    Okur yazımı doğrudan verilseydi dikey çizgi tarih ekseninde değil, kategori
+    olarak düşer ve şekil sessizce bozulurdu. Çözüm tek tanımdan (bicim).
+    """
+    t = tarihe_cevir(okur_tarihi)
+    if t is None:
+        raise ValueError(f"çözülemeyen tarih: {okur_tarihi!r}")
+    return t.isoformat()
 
 
 def yaz(fig, ad):
@@ -49,7 +62,7 @@ def main():
                            line=dict(color=KIRMIZI, width=1.6)), 1, 1)
     f.add_hline(y=100, line=dict(color=GRI, width=1, dash="dot"), row=1, col=1)
     for x in ozet["kotu_aylar"]:
-        f.add_vline(x=x["tarih"], line=dict(color=GRI, width=1, dash="dot"))
+        f.add_vline(x=eksen_tarihi(x["tarih"]), line=dict(color=GRI, width=1, dash="dot"))
     f.add_trace(go.Scatter(x=e.index, y=e["zirveden"], name="Zirveden düşüş (%)",
                            fill="tozeroy", line=dict(color=YESIL, width=1)), 2, 1)
     f.update_layout(title="Hedge'siz TL taşıma: 1 USD'nin TLREF'te değerlenip USD'ye dönmesi "

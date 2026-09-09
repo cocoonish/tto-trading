@@ -27,10 +27,18 @@ BASİT yıllık ilan edilir; DİBS getirileri BİLEŞİKTİR. Basit faizle hesap
 taşıma yanlış işaret verebilir (26.08.2026'da 2y taşıma bileşikle −8,47,
 basitle +0,61 — işaret bile ters). Bütün kıyaslar bileşiğe çevrilerek yapılır:
 r_bileşik = (1 + r_basit/365)^365 − 1.
+
+Saat sözleşmesi — özetteki HER sayısal anahtar kendi gözlem gününü
+`<anahtar>_tarih` ile taşır (tarihsel ölçüler hariç); hattın ana saati
+(`_tarih`) kurun günüdür ve öbür anahtarların saati değildir. Tarihler okura
+GG.AA.YYYY yazılır (ortak/bicim). Politika faizi iki anahtar: `politika`
+EVDS satırının gözlemi, `politika_ilan` kur gününe taşınmış yürürlükteki
+faiz. Sınama: duman.py (guncelle.py adımlardan önce koşturur).
 """
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -41,8 +49,83 @@ KOK = BURASI.parent.parent
 FONLAMA = KOK / "Aktarılacak Projeler" / "Fonlama" / "data"
 DIBS = KOK / "Aktarılacak Projeler" / "DIBS" / "data"
 
+# Tarih yazımı TEK kaynaktan (ortak/bicim.py = site/src/lib/bicim.ts): günlük
+# saat GG.AA.YYYY. guncelle.py `ortak`ı PYTHONPATH'e koyar; elle koşuda yol
+# buradan eklenir. 09.09.2026'da ölçüldü: çöküş ve en kötü ay tarihleri
+# ISO yazımıyla (yıl-ay-gün) yazılıyordu — okura giden dosyada biçim sözleşmesi
+# dışı (sayfa sınavı 17 "biçim" ailesi ISO tarihi sızıntı sayar).
+try:
+    from bicim import tarih_kisa, tarihe_cevir
+except ImportError:                                   # elle koşu: PYTHONPATH yok
+    sys.path.insert(0, str(KOK / "ortak"))
+    from bicim import tarih_kisa, tarihe_cevir
+
+# Ölçülemeyen değer: sayfanın adıyla çağırdığı anahtar ATLANMAZ, boş yazılır.
+# JSON null Deger bileşeninde statik yedeği bırakır (donmuş sayı); "—" ise
+# okura "ölçülemedi" der.
+OLCULEMEDI = "—"
+
+# Anahtar adından TARİHSEL olduğu anlaşılan ölçüler (Deger.astro ve
+# bulten/ayar.TARIHSEL_ISARET ile aynı kalıp): "o zirve ne zaman yaşandı" gibi;
+# tazelik saati taşımazlar. Kalan her sayısal anahtar KENDİ saatini taşır.
+TARIHSEL = ("maks", "min", "zirve", "dip", "cipa", "bas", "baslangic", "en_derin",
+            "enbuyuk", "encok", "cokus", "rekor", "referans")
+
 # Deval hızı pencereleri (iş günü) — USDTRYDeval hattıyla aynı: 5/21/63.
 PENCERE = {"d1h": 5, "d1a": 21, "d3a": 63}
+
+
+def gun(t) -> str:
+    """pd.Timestamp → "GG.AA.YYYY" — ortak/bicim sözleşmesi, tek tanım."""
+    return tarih_kisa(t)
+
+
+def tarihsel_mi(anahtar: str) -> bool:
+    """Anahtar adı tarihsel bir ölçüyü mü adlandırıyor (saat taşımaz)?"""
+    parcalar = anahtar.strip("_").split("_")
+    return any(p in TARIHSEL for p in parcalar)
+
+
+def son_gozlem(seri: pd.Series) -> tuple[float | None, pd.Timestamp | None]:
+    """Serinin son DOLU gözlemi ve o gözlemin GÜNÜ; seri boşsa (None, None).
+
+    ANAHTAR BAŞINA SAAT. Bu hattın çerçevesi kur gününe hizalıdır ve kur en
+    taze seridir; TLREF bir gün, DİBS taşıma kolonları bir gün geriden gelir.
+    Bir anahtarın değeri hangi satırdan okunuyorsa saati de o satırın günüdür —
+    hattın ana saati (_tarih) değil. 09.09.2026'da ölçüldü: carry_2y_tlref,
+    n2y, f_1y1y, tlref_b, getiri_1y ve zirveden 07.09 satırından okunuyor,
+    kendi saatleri yazılmadığı için sayfa ipucu hattın saatini (08.09)
+    gösteriyordu — bir gün bayat sayı taze görünüyordu.
+    """
+    s = seri.dropna()
+    if s.empty:
+        return None, None
+    return float(s.iloc[-1]), s.index[-1]
+
+
+ILAN_KOLONLARI = ("politika", "koridor_alt", "koridor_ust")
+
+
+def ilan_tasi(d: pd.DataFrame) -> pd.DataFrame:
+    """İlan edilmiş faizleri kur günlerine ileri taşır; GÖZLEMİ ayrı tutar.
+
+    Politika faizi ve koridor ADIM fonksiyonudur: karar değişene kadar
+    geçerlidir. Kur satırı olup faiz satırı olmayan günlerde ileri taşımak veri
+    uydurmak değil, ilan edilmiş faizin tanımıdır. TLREF/AOFM taşınMAZ: onlar
+    her gün yeniden gerçekleşen ölçümlerdir.
+
+    İki kolon, iki saat: `politika` EVDS satırının kendisidir (gözlem, taşınmaz;
+    saati o satırın günü), `politika_ilan` kur gününe taşınmış yürürlükteki
+    faizdir (saati kur günü). 09.09.2026'da ölçüldü: taşınmış değer
+    `politika_tarih` ile KUR gününe (08.09) etiketleniyordu, oysa EVDS satırı
+    07.09'da bitiyor; Fonlama sayfası aynı seriyi 07.09 diye yazıyordu — aynı
+    seri iki sayfada iki gün taşıyordu. PPK günü riski ayrıca duman.py'de.
+    """
+    d = d.copy()
+    d["politika_ilan"] = d["politika"].ffill()
+    for a in ILAN_KOLONLARI[1:]:
+        d[a] = d[a].ffill()
+    return d
 
 
 def gecelik_bilesik(basit: pd.Series) -> pd.Series:
@@ -63,13 +146,7 @@ def yukle() -> pd.DataFrame:
             "carry_2y_aofm", "carry_3a_tlref", "carry_2y_tlref_basit",
             "f_1y1y"]], on="tarih", how="left")
     d = d.sort_values("tarih").set_index("tarih")
-    # Politika faizi ve koridor ADIM fonksiyonudur: karar değişene kadar
-    # geçerlidir. Kur satırı olup faiz satırı olmayan günlerde ileri taşımak
-    # veri uydurmak değil, ilan edilmiş faizin tanımıdır. TLREF/AOFM taşınMAZ:
-    # onlar her gün yeniden gerçekleşen ölçümlerdir.
-    for a in ("politika", "koridor_alt", "koridor_ust"):
-        d[a] = d[a].ffill()
-    return d
+    return ilan_tasi(d)
 
 
 def deval_hizi(kur: pd.Series, gun: int) -> pd.Series:
@@ -101,15 +178,20 @@ def yillik_getiri(endeks: pd.Series, gun: int) -> pd.Series:
     return ((endeks / onceki) ** (365.0 / takvim) - 1) * 100
 
 
-def hesapla() -> tuple[pd.DataFrame, pd.DataFrame, dict]:
-    d = yukle()
-    for ad, gun in PENCERE.items():
-        d[ad] = deval_hizi(d["usdtry"], gun)
+def hesapla(d: pd.DataFrame | None = None) -> tuple[pd.DataFrame, pd.DataFrame, dict]:
+    """Üç katmanı hesaplar ve özeti kurar. `d` verilmezse depodan yüklenir;
+    duman sınaması sentetik çerçeveyi buradan geçirir (ağa çıkmaz)."""
+    if d is None:
+        d = yukle()
+    for ad, gun_ in PENCERE.items():
+        d[ad] = deval_hizi(d["usdtry"], gun_)
 
-    # İleriye bakan makaslar — hepsi BİLEŞİK faizle
+    # İleriye bakan makaslar — hepsi BİLEŞİK faizle. Politika bacağı kur
+    # gününe taşınmış İLAN üzerinden: kur satırı olan her gün için yürürlükteki
+    # faiz budur (gözlem satırı bir gün geride kalsa da).
     d["tlref_b"] = gecelik_bilesik(d["tlref"])
-    d["politika_b"] = gecelik_bilesik(d["politika"])
-    d["makas_politika_d1a"] = d["politika"] - d["d1a"]      # rejim panosuyla aynı tanım
+    d["politika_b"] = gecelik_bilesik(d["politika_ilan"])
+    d["makas_politika_d1a"] = d["politika_ilan"] - d["d1a"]  # rejim panosuyla aynı tanım
     d["makas_tlref_b_d3a"] = d["tlref_b"] - d["d3a"]
     d["makas_tlref_b_d1a"] = d["tlref_b"] - d["d1a"]
 
@@ -118,9 +200,6 @@ def hesapla() -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     d = d.join(e[["endeks", "zirveden", "getiri_1y"]])
 
     son = d.dropna(subset=["usdtry"]).iloc[-1]
-    son_tlref = d.dropna(subset=["tlref"]).iloc[-1]
-    son_dibs = d.dropna(subset=["carry_2y_tlref"]).iloc[-1]
-    son_endeks = d.dropna(subset=["endeks"]).iloc[-1]
 
     # ŞEKİL 03'ÜN KENDİ SAATİ. Hattın ana saati (_tarih) kurun günüdür, çünkü
     # kur en taze seridir: 03.09.2026'da kur o günü doldurmuşken TLREF henüz
@@ -146,7 +225,14 @@ def hesapla() -> tuple[pd.DataFrame, pd.DataFrame, dict]:
     sekil_makas = min(d["makas_politika_d1a"].dropna().index[-1],
                       d["makas_tlref_b_d3a"].dropna().index[-1])
 
-    # Çöküş dönemleri: endeksin zirveden %10'dan derin düştüğü aralıklar
+    # ŞEKİL 04 aynı kuralla: bileşik ve basit konvansiyon izlerinin ESKİSİ.
+    # İkisi aynı DİBS satırından türediği için bugün aynı günde biter; min()
+    # yine yapısal — bir kolon tek başına düşerse damga onu izler.
+    sekil_konvansiyon = min(d["carry_2y_tlref"].dropna().index[-1],
+                            d["carry_2y_tlref_basit"].dropna().index[-1])
+
+    # Çöküş dönemleri: endeksin zirveden %10'dan derin düştüğü aralıklar.
+    # Tarihler okura GG.AA.YYYY (ortak/bicim); süren çöküşün bitişi boş.
     cokusler = []
     seri = e["zirveden"]
     icinde = False
@@ -157,68 +243,89 @@ def hesapla() -> tuple[pd.DataFrame, pd.DataFrame, dict]:
             if v < dip:
                 dip, dip_t = v, t
             if v >= -1:                    # zirveye dönüş sayılır
-                cokusler.append({"bas": f"{bas:%Y-%m-%d}", "dip_tarih": f"{dip_t:%Y-%m-%d}",
-                                 "dip": round(dip, 1), "bitis": f"{t:%Y-%m-%d}"})
+                cokusler.append({"bas": gun(bas), "dip_tarih": gun(dip_t),
+                                 "dip": round(dip, 1), "bitis": gun(t)})
                 icinde = False
     if icinde:
-        cokusler.append({"bas": f"{bas:%Y-%m-%d}", "dip_tarih": f"{dip_t:%Y-%m-%d}",
+        cokusler.append({"bas": gun(bas), "dip_tarih": gun(dip_t),
                          "dip": round(dip, 1), "bitis": ""})
 
     # En kötü 1 aylık pencereler: "carry ne zaman ölür" sorusunun ölçülen
     # cevabı. Tek dev bir zirveden-düşüş aralığından daha okunur, çünkü çöküş
     # dönemleri gerçekte kısa ve şiddetlidir. Aynı krize ait pencereler
-    # (±45 gün) tek kayda indirgenir.
+    # (±45 gün) tek kayda indirgenir. SIRALAMA ZAMAN DAMGASIYLA yapılır, metinle
+    # değil: ISO yazımı sözlük sırasında tesadüfen kronolojikti, "GG.AA.YYYY"
+    # metni güne göre dizilir ("07.04.2020" < "31.03.2021" doğru ama
+    # "09.06.2022" < "21.12.2021" yanlış).
     a1 = e["endeks"].pct_change(21).dropna() * 100
-    kotu = []
+    secilen: list[tuple[pd.Timestamp, float]] = []
     for t, v in a1.sort_values().items():
-        if any(abs((t - pd.Timestamp(x["tarih"])).days) < 45 for x in kotu):
+        if any(abs((t - s_).days) < 45 for s_, _ in secilen):
             continue
-        kotu.append({"tarih": f"{t:%Y-%m-%d}", "getiri_1a": round(float(v), 1)})
-        if len(kotu) == 5:
+        secilen.append((t, float(v)))
+        if len(secilen) == 5:
             break
-    kotu = [{**x, "tarih": x["tarih"]} for x in sorted(kotu, key=lambda x: x["tarih"])]
+    kotu = [{"tarih": gun(t), "getiri_1a": round(v, 1)} for t, v in sorted(secilen)]
 
     getiri = e["endeks"].pct_change().dropna()
     yil = 252
     sharpe3y = (getiri.tail(3 * yil).mean() / getiri.tail(3 * yil).std() * np.sqrt(yil)
                 if len(getiri) > 3 * yil else np.nan)
 
-    def r(x, n=1):
-        return None if pd.isna(x) else round(float(x), n)
+    ozet: dict = {"_tarih": gun(son.name)}
 
-    ozet = {
-        "_tarih": f"{son.name:%d.%m.%Y}",
-        "kur": r(son["usdtry"], 4),
-        "d1a": r(son["d1a"]), "d3a": r(son["d3a"]),
-        "politika": r(son["politika"], 2),
-        "politika_tarih": f"{son.name:%d.%m.%Y}",
-        "tlref": r(son_tlref["tlref"], 2),
-        "tlref_b": r(son_tlref["tlref_b"], 2),
-        "tlref_tarih": f"{son_tlref.name:%d.%m.%Y}",
-        "makas_politika_d1a": r(son["makas_politika_d1a"]),
-        "makas_tlref_b_d3a": r(d["makas_tlref_b_d3a"].dropna().iloc[-1]),
-        "makas_tlref_b_d3a_tarih": f"{d['makas_tlref_b_d3a'].dropna().index[-1]:%d.%m.%Y}",
-        "carry_2y_tlref": r(son_dibs["carry_2y_tlref"], 2),
-        "carry_2y_tlref_basit": r(son_dibs["carry_2y_tlref_basit"], 2),
-        "carry_2y_politika": r(son_dibs["carry_2y_politika"], 2),
-        "carry_3a_tlref": r(son_dibs["carry_3a_tlref"], 2),
-        "carry_tarih": f"{son_dibs.name:%d.%m.%Y}",
-        "nakit_tahvil_tarih": f"{sekil_nakit_tahvil:%d.%m.%Y}",
-        "makas_tarih": f"{sekil_makas:%d.%m.%Y}",
-        "n2y": r(son_dibs["n2y"], 2), "f_1y1y": r(son_dibs["f_1y1y"], 2),
-        "endeks": r(son_endeks["endeks"]),
-        "endeks_tarih": f"{son_endeks.name:%d.%m.%Y}",
-        "endeks_bas": f"{e.index[0]:%d.%m.%Y}",
-        "getiri_1y": r(son_endeks["getiri_1y"]),
-        "zirveden": r(son_endeks["zirveden"]),
-        "sharpe_3y": r(sharpe3y, 2),
-        "cokus_sayisi": len(cokusler),
-        "en_derin_cokus": min((c["dip"] for c in cokusler), default=None),
-        "en_derin_cokus_tarih": next((c["dip_tarih"] for c in cokusler
-                                      if c["dip"] == min(x["dip"] for x in cokusler)), ""),
-        "cokusler": cokusler,
-        "kotu_aylar": kotu,
-    }
+    def koy(ad: str, seri: pd.Series, ondalik: int = 1) -> None:
+        """Değer ve SAATİ birlikte yazılır: değer serinin son dolu gözlemi,
+        saat o gözlemin günü (`<ad>_tarih`). Seri boşsa değer "—", saat yok —
+        anahtar atlanmaz (sayfa onu adıyla çağırıyor)."""
+        v, t = son_gozlem(seri)
+        if v is None:
+            ozet[ad] = OLCULEMEDI
+            return
+        ozet[ad] = round(v, ondalik)
+        ozet[f"{ad}_tarih"] = gun(t)
+
+    # Kur günündeki ölçüler — saatleri ana saatle aynı, yine de açık yazılır:
+    # sözleşme "her sayısal anahtar kendi saatini taşır", istisnası tarihsel
+    # ölçüler (bkz. tarihsel_mi).
+    koy("kur", d["usdtry"], 4)
+    koy("d1a", d["d1a"])
+    koy("d3a", d["d3a"])
+    # Politika faizi: GÖZLEM (EVDS satırı, kendi günü) ve İLAN (kur gününe
+    # taşınmış yürürlükteki faiz). İki saat arasındaki fark taşımanın kendisidir;
+    # okur ipucunda görür, denetim iki tarihi kıyaslayabilir.
+    koy("politika", d["politika"], 2)
+    koy("politika_ilan", d["politika_ilan"], 2)
+    koy("tlref", d["tlref"], 2)
+    koy("tlref_b", d["tlref_b"], 2)
+    koy("makas_politika_d1a", d["makas_politika_d1a"])       # ilan bacağı: kur günü
+    koy("makas_tlref_b_d3a", d["makas_tlref_b_d3a"])
+    # DİBS satırından gelenler: her biri kendi son dolu gününden. Taşıma
+    # kolonları TLREF'e kapılı (bir gün geride), n2y ve 1y1y forward kurun
+    # gününe kadar gelebilir — 08.09.2026'da öyleydi (n2y 40,04 · f_1y1y 41,26
+    # dolu, carry_2y_tlref boş).
+    for ad in ("carry_2y_tlref", "carry_2y_tlref_basit", "carry_2y_politika",
+               "carry_3a_tlref", "n2y", "f_1y1y"):
+        koy(ad, d[ad], 2)
+    # Şekil damgaları: bağlayıcı bacak (en eski). MDX `tarihAnahtari` ile okur.
+    ozet["carry_tarih"] = gun(sekil_konvansiyon)
+    ozet["nakit_tahvil_tarih"] = gun(sekil_nakit_tahvil)
+    ozet["makas_tarih"] = gun(sekil_makas)
+    koy("endeks", d["endeks"])
+    ozet["endeks_bas"] = gun(e.index[0])
+    koy("getiri_1y", d["getiri_1y"])
+    koy("zirveden", d["zirveden"])
+    if pd.isna(sharpe3y):
+        ozet["sharpe_3y"] = OLCULEMEDI
+    else:
+        ozet["sharpe_3y"] = round(float(sharpe3y), 2)
+        ozet["sharpe_3y_tarih"] = gun(getiri.index[-1])
+    ozet["cokus_sayisi"] = len(cokusler)
+    ozet["en_derin_cokus"] = min((c["dip"] for c in cokusler), default=None)
+    ozet["en_derin_cokus_tarih"] = next((c["dip_tarih"] for c in cokusler
+                                         if c["dip"] == min(x["dip"] for x in cokusler)), "")
+    ozet["cokusler"] = cokusler
+    ozet["kotu_aylar"] = kotu
     return d, e, ozet
 
 
@@ -226,7 +333,7 @@ if __name__ == "__main__":
     d, e, ozet = hesapla()
     (BURASI / "ozet.json").write_text(
         json.dumps(ozet, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-    print(f"seri: {d.index[0]:%Y-%m-%d} → {d.index[-1]:%Y-%m-%d}")
+    print(f"seri: {gun(d.index[0])} → {gun(d.index[-1])}")
     for k in ("kur", "d1a", "makas_politika_d1a", "makas_tlref_b_d3a", "carry_2y_tlref",
               "carry_2y_tlref_basit", "endeks", "getiri_1y", "zirveden", "sharpe_3y",
               "cokus_sayisi", "en_derin_cokus", "en_derin_cokus_tarih"):
