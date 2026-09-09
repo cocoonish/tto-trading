@@ -110,8 +110,15 @@ def main() -> int:
     O["_tarih"] = s_h.strftime("%d.%m.%Y")
     O["hafta"] = gun_tr(s_h)
     O["hafta_kisa"] = f"{s_h.day} {AY_KISA[s_h.month]} {s_h.year}"
+    # GÜNLÜK SAAT, BAĞLAYICI BACAKTIR (veri.son_gun — GUNLUK_AILE'ye bak):
+    # bütün günlük ailelerin dolu olduğu son iş günü. Ailelerin kendi günleri
+    # ayrıca yazılır, çünkü kur bacağı ERTESİ iş günü için ilan edilir ve
+    # bağlayıcı günün iki iş günü ilerisinde durur; sayfa ikisini birlikte
+    # söylemezse taze bacağı gizlemiş ya da bayat bacağı taze göstermiş olur.
     O["gun_tarih"] = s_g.strftime("%d.%m.%Y")
     O["gun"] = gun_tr(s_g)
+    for aile, iso in (m.get("son_gun_aile") or {}).items():
+        O[f"gun_{aile}_tarih"] = pd.Timestamp(iso).strftime("%d.%m.%Y")
     O["ay_tarih"] = s_a.strftime("%m.%Y")
     O["ay"] = f"{AY_TR[s_a.month]} {s_a.year}"
     O["ceyrek"] = f"{s_c.year}-Ç{(s_c.month - 1) // 3 + 1}"
@@ -350,9 +357,26 @@ def main() -> int:
         "önce) ve 'kredi − AOFM' makası güncel duruşun ölçüsü değildir; "
         "yerine politika faizi makası okunur.")
     # PKA beklentisinin yaşı — reel faizlerin girdisi sessizce eskiyebilir.
+    # ANKET AYLIKTIR, GÜN DEĞİL. EVDS aylık gözlemi ayın İLK gününe damgalar ve
+    # o damga gün gibi yazıldığında ("01.08.2026") okura o GÜN yapılmış bir
+    # ölçüm gibi görünür; biçim sözleşmesi aylık saati AA.YYYY ister (aynı
+    # dosyada `ay_tarih` ve `kkm_son_tarih` zaten öyle yazılıyordu).
+    # `pka_yas_gun` ay BAŞINDAN sayılmaya devam ediyor ve bu bilerek: anket
+    # ayın ilk yarısında derlenir, yani ay başı yaşın ÜST SINIRIDIR ve sayfa
+    # onu "en çok" diye yazar. Ay SONUNDAN saymak — ölçüldü — bir ay geciken
+    # bir anketi (temmuz anketi, 28.08 çıpası) 58 gün yerine 28 gün gösterir
+    # ve 45 günlük uyarı eşiğini sessizce kapatırdı.
     if m.get("pka_tarih"):
-        O["pka_tarih"] = pd.Timestamp(m["pka_tarih"]).strftime("%d.%m.%Y")
+        O["pka_tarih"] = pd.Timestamp(m["pka_tarih"]).strftime("%m.%Y")
     koy("pka_yas_gun", m.get("pka_yas_gun"), 0)
+
+    # HER ANAHTARIN KENDİ SAATİ (metrik.anahtar_tarih). Kapsam ölçüm
+    # katmanında, sözleşmeden türetiliyor; burada yalnız yazım dönüşümü var —
+    # iki yerde iki liste tutulsaydı biri sessizce ayrışırdı. `setdefault`:
+    # açıkça yazılmış saatler (aofm) kazanır.
+    for anahtar, iso in (m.get("anahtar_tarih") or {}).items():
+        O.setdefault(f"{anahtar}_tarih",
+                     pd.Timestamp(iso).strftime("%d.%m.%Y"))
 
     # --------------------------------------------------------- banka türü
     for a in ("g_kh_toplam_yil", "g_kh_haric_yil", "g_kh_katilim_yil", "katilim_pay"):

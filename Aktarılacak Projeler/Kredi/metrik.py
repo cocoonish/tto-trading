@@ -981,7 +981,11 @@ def kos() -> dict:
 
     o: dict = {
         "son_hafta": s_h.strftime("%Y-%m-%d"),
+        # `son_gun` günlük ailelerin BAĞLAYICI (en eski) günüdür; ailelerin tek
+        # tek günü ayrıca taşınır, yoksa taze kur bacağı sayfadan silinmiş olur
+        # (veri.GUNLUK_AILE — 09.09.2026'da ölçülen iki iş günlük fark).
         "son_gun": s_g.strftime("%Y-%m-%d"),
+        "son_gun_aile": veri.son_gun_aileleri(G),
         "son_ay": s_a.strftime("%Y-%m-%d"),
         "son_ceyrek": s_c.strftime("%Y-%m-%d"),
         "arindirma_yontem": "zincirleme_sepet",
@@ -994,24 +998,26 @@ def kos() -> dict:
         "pencere_hafta": PENCERE,
         "yillik_us": YIL_HAFTA / PENCERE,
     }
-    for kol in ("g_ar_13y", "g_ham_13y", "g_ar_usd_13y", "g_cipa_13y",
-                "g_tl_13y", "g_yp_ar_13y", "kur_etkisi_13y",
-                "g_ar_52", "g_ham_52", "g_tl_52", "g_yp_ar_52",
-                "g_tuketici_13y", "g_ticari_13y", "g_kobi_13y", "g_bkk_13y",
-                "g_konut_13y", "g_tasit_13y", "g_ihtiyac_13y",
-                "g_kurumsal_kart_13y", "g_finansal_13y",
-                "kredi_toplam", "kredi_tl_mlr", "kredi_yp_mlr", "yp_pay",
-                "npl", "npl_tuketici", "npl_ticari", "karsilik_orani",
-                "kredi_mevduat", "cipa_zincir_farki", "usd_sepet_farki_13y",
-                "mevduat_sektor_toplam_mlr"):
+    M_KOL = ("g_ar_13y", "g_ham_13y", "g_ar_usd_13y", "g_cipa_13y",
+             "g_tl_13y", "g_yp_ar_13y", "kur_etkisi_13y",
+             "g_ar_52", "g_ham_52", "g_tl_52", "g_yp_ar_52",
+             "g_tuketici_13y", "g_ticari_13y", "g_kobi_13y", "g_bkk_13y",
+             "g_konut_13y", "g_tasit_13y", "g_ihtiyac_13y",
+             "g_kurumsal_kart_13y", "g_finansal_13y",
+             "kredi_toplam", "kredi_tl_mlr", "kredi_yp_mlr", "yp_pay",
+             "npl", "npl_tuketici", "npl_ticari", "karsilik_orani",
+             "kredi_mevduat", "cipa_zincir_farki", "usd_sepet_farki_13y",
+             "mevduat_sektor_toplam_mlr")
+    for kol in M_KOL:
         o[kol] = _son_deger(M, kol)
-    for kol in ("m1_mlr", "m2_mlr", "m3_mlr", "g_m1_ar_13y", "g_m2_ar_13y",
-                "g_m3_ar_13y", "g_m1_ham_13y", "g_m2_ham_13y", "g_m3_ham_13y",
-                "tcmb_ar_m1_13y", "tcmb_ar_m2_13y", "tcmb_ar_m3_13y",
-                "tcmb_ham_m2_13y", "carpan_m1", "carpan_m2", "carpan_m3",
-                "rezerv_para_mlr", "zk_bloke_mlr", "emisyon_mlr",
-                "serbest_mevduat_mlr", "mb_parasi_mlr", "emisyon_m1",
-                "zk_ima_oran"):
+    P_KOL = ("m1_mlr", "m2_mlr", "m3_mlr", "g_m1_ar_13y", "g_m2_ar_13y",
+             "g_m3_ar_13y", "g_m1_ham_13y", "g_m2_ham_13y", "g_m3_ham_13y",
+             "tcmb_ar_m1_13y", "tcmb_ar_m2_13y", "tcmb_ar_m3_13y",
+             "tcmb_ham_m2_13y", "carpan_m1", "carpan_m2", "carpan_m3",
+             "rezerv_para_mlr", "zk_bloke_mlr", "emisyon_mlr",
+             "serbest_mevduat_mlr", "mb_parasi_mlr", "emisyon_m1",
+             "zk_ima_oran")
+    for kol in P_KOL:
         o[kol] = _son_deger(P, kol)
     # DOLARİZASYON BLOĞU TEK TARİHE ÇIPALANIR (bkz. _blok). ZK tabanı 13 gün
     # gecikmeli olduğu için dth_* serileri bilanço serilerinden bir hafta
@@ -1020,12 +1026,13 @@ def kos() -> dict:
     o.update(_blok(D, ["dth_pay_ham", "dth_pay_ar", "mevduat_tl_mlr",
                        "mevduat_yp_mlr", "mevduat_yp_usd_mia",
                        "bilanco_pay_ham"], "dol"))
-    for kol in ("f_ticari_tl", "f_ihtiyac", "f_konut", "f_tasit", "f_tuketici",
-                "mev_tl", "kat_ticari", "kat_tuketici", "politika", "aofm",
-                "koridor_alt", "koridor_ust", "makas_kredi_mevduat",
-                "spread_politika", "spread_aofm", "pka_12a",
-                "reel_ticari", "reel_tuketici", "reel_mevduat",
-                "reel_ticari_yaklasik", "pka_yas_gun", "aofm_taban_mn_tl"):
+    F_KOL = ("f_ticari_tl", "f_ihtiyac", "f_konut", "f_tasit", "f_tuketici",
+             "mev_tl", "kat_ticari", "kat_tuketici", "politika", "aofm",
+             "koridor_alt", "koridor_ust", "makas_kredi_mevduat",
+             "spread_politika", "spread_aofm", "pka_12a",
+             "reel_ticari", "reel_tuketici", "reel_mevduat",
+             "reel_ticari_yaklasik", "pka_yas_gun", "aofm_taban_mn_tl")
+    for kol in F_KOL:
         o[kol] = _son_deger(F, kol)
     # AOFM'nin VİNTAJI ve GEÇERLİLİĞİ. Sayı haftalık çıpaya geri taşınmış bir
     # iş günü değeridir; tarihi taşınmazsa okur onu haftalık çıpa tarihli sanır.
@@ -1063,6 +1070,34 @@ def kos() -> dict:
     if len(U):
         o["uzun_g_ar_13y"] = _son_deger(U, "g_ar_13y")
         o["uzun_bas"] = U["g_ar_13y"].dropna().index[0].strftime("%Y-%m-%d")
+    # HER ANAHTAR KENDİ SAATİNİ TAŞIR.
+    #  `_son_deger` bir sütunun SON DOLU gözlemini alır; o gözlem haftalık
+    #  çıpadan eski olabilir ve kendi saati olmayan anahtara sayfa hattın ana
+    #  saatini basar (Deger.astro sırası: <anahtar>_tarih → _tarih). Ölçüldü
+    #  (09.09.2026, data/para.csv): `zk_ima_oran` 28.08 satırında BOŞ, son dolu
+    #  gözlem 21.08 — sayfa o sayıyı 28.08 tarihli sanıyordu. Zorunlu karşılık
+    #  tabanı ~13 gün gecikmeli geldiği için bu her hafta tekrarlanan YAPISAL
+    #  bir kayma (12 arşiv sayısının 12'sinde de var).
+    #  Saat YALNIZ geride kalanlara yazılsaydı anahtar, taban yetiştiği hafta
+    #  ozet.json'dan DÜŞERDİ; sayfanın adıyla çağırdığı bir anahtarın koşudan
+    #  koşuya var olup olmaması yayın kapısını düşürür. Bu yüzden ölçü koşulsuz:
+    #  `_son_deger` ile okunan HER anahtar kendi son gözlem gününü yayımlar.
+    #  KAPSAM DIŞI ve ADIYLA yazılı — saati BAŞKA ADLA yayımlananlar. `pka_12a`
+    #  haftalık eksene ileri taşınmış AYLIK bir ankettir: haftalık eksendeki son
+    #  günü çıpaya eşittir ama ölçümün vintajı `pka_tarih`tir. `aofm` ve
+    #  `spread_aofm` geçerlilik süzgecinden geçtiği için kendi saatlerini
+    #  yukarıda ayrıca yazıyor.
+    BASKA_ADLA_SAAT = {"pka_12a", "aofm", "spread_aofm"}
+    anahtar_saati: dict[str, str] = {}
+    for df, kollar in ((M, M_KOL), (P, P_KOL), (F, F_KOL)):
+        for kol in kollar:
+            if o.get(kol) is None or kol in BASKA_ADLA_SAAT:
+                continue
+            st = _son_tarih(df, kol)
+            if st is not None:
+                anahtar_saati[kol] = st
+    o["anahtar_tarih"] = anahtar_saati
+
     # ayrıştırmanın son 13 haftalık toplamı — kur etkisinin BÜYÜKLÜĞÜ (mlr TL)
     if len(AY_):
         son13 = AY_.tail(PENCERE)

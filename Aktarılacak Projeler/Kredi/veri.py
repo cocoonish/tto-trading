@@ -441,6 +441,24 @@ G_FAIZ = {             # bie_pyintbnk — yüzde
     "koridor_ust": "TP.PY.P02.ON",
 }
 
+# GÜNLÜK AİLELER — "günlük" TEK BİR SAAT DEĞİLDİR.
+#  Sayfa "günlük aileler <gün>" diye tek bir gün ilan ediyordu ve o gün YALNIZ
+#  kur sütunundan (`usd`) türüyordu. Ölçüldü (09.09.2026, data/gunluk.csv):
+#  kur 08.09'a kadar dolu, analitik bilanço · APİ fonlaması · faiz kotasyonları
+#  04.09'da bitiyor — İKİ İŞ GÜNÜ fark. Fark yapısaldır, gecikme değil: TCMB
+#  ertesi iş gününün gösterge kurunu bir gün ÖNCEDEN ilan eder (TAZELİK['kur']),
+#  bilanço ise bir gün GECİKMELİ yayımlanır. Yani kur bacağının günü hiçbir
+#  zaman "ölçülmüş bir gün" değildir ve onu bütün günlük ailelerin adına yazmak
+#  okura üç aileyi iki iş günü taze gösterir.
+#  Kaynak TEK: aile tanımı yukarıdaki kod gruplarından türer, elle liste
+#  tutulmaz — yeni bir günlük seri eklendiğinde ailesiyle birlikte gelir.
+GUNLUK_AILE: dict[str, tuple[str, tuple[str, ...]]] = {
+    "kur":     ("döviz kuru", tuple(G_KUR)),
+    "bilanco": ("analitik bilanço", tuple(G_BILANCO)),
+    "api":     ("APİ fonlaması", tuple(G_FONLAMA)),
+    "faiz":    ("TCMB faiz kotasyonları", tuple(G_FAIZ)),
+}
+
 # --- AYLIK ------------------------------------------------------------------
 A_SERI = {
     "kkm_ddkkm":   "TP.KKM.K1",       # milyar USD
@@ -738,12 +756,42 @@ def son_hafta(H: pd.DataFrame | None = None) -> pd.Timestamp:
     return t
 
 
+def son_gun_aileleri(G: pd.DataFrame | None = None) -> dict[str, str]:
+    """Günlük ailelerin AYRI AYRI son dolu günü (ISO).
+
+    Bir aileden hiçbir sütun yüklenememişse aile sözlükte YER ALMAZ — ölçülmemiş
+    bir aileyi bugünün tarihiyle doldurmak, ölçülmemiş şeyi ölçülmüş göstermek
+    olurdu.
+    """
+    if G is None:
+        G = pd.read_csv(VERI / "gunluk.csv", index_col=0, parse_dates=True)
+    out: dict[str, str] = {}
+    for aile, (_, kolonlar) in GUNLUK_AILE.items():
+        var = [k for k in kolonlar if k in G.columns and G[k].notna().any()]
+        if not var:
+            continue
+        out[aile] = _son(G, var).strftime("%Y-%m-%d")
+    return out
+
+
 def son_gun(G: pd.DataFrame | None = None) -> pd.Timestamp:
+    """Günlük ailelerin BAĞLAYICI günü: hepsinin dolu olduğu son iş günü.
+
+    Eskiden yalnız `usd` sütununa bakıyordu; kur bacağı ertesi iş günü için
+    ilan edildiğinden bu, sayfada ilan edilen "günlük aileler" gününü iki iş
+    günü ileri atıyordu (bkz. GUNLUK_AILE). Bağlayıcı bacak EN ESKİSİDİR:
+    figür damgası kuralının aynısı — bir kıyas ancak hepsinin ölçüldüğü güne
+    kadar kurulabilir. Ailelerin tek tek günü `son_gun_aileleri` ile ayrıca
+    yayımlanır, yani taze bacak kaybolmaz, adıyla görünür.
+    """
     if "gun" in _DONEM:
         return pd.Timestamp(_DONEM["gun"])
     if G is None:
         G = pd.read_csv(VERI / "gunluk.csv", index_col=0, parse_dates=True)
-    t = _son(G, ["usd"])
+    aileler = son_gun_aileleri(G)
+    if not aileler:
+        raise RuntimeError("dönem okunamadı: hiçbir günlük aile yüklenemedi")
+    t = min(pd.Timestamp(v) for v in aileler.values())
     _DONEM["gun"] = t.strftime("%Y-%m-%d")
     return t
 
