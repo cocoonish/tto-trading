@@ -190,6 +190,20 @@ try:
         ozet["opt_varlik"] = len(satir)
         ozet["opt_5g"] = sum(1 for t in satir if t[2] == "5d")
         ozet["opt_istisna"] = ", ".join(AD_TR.get(t[0], t[0]) for t in satir if t[2] != "5d") or "—"
+        # KARNENİN SAATİ KALİBRASYON GÜNÜDÜR, HATTIN ANA SAATİ DEĞİL.
+        # `Deger` bir anahtarın kendi `<anahtar>_tarih`i yoksa hattın ana
+        # saatini basar; bu blok haber akışıyla değil ızgara aramasıyla
+        # üretiliyor ve arama günlerce, haftalarca yenilenmiyor. 09.09.2026'da
+        # ölçüldü: kalibrasyon 22.07.2026, ana saat 09.09.2026 — okur 49 gün
+        # önceki bir ölçümü bugünün ölçümü sanıyordu. Aynı kusurun figür
+        # tarafı bu depoda zaten kapatılmış ("bir ŞEKLİN tarihi HATTIN tarihi
+        # değildir"); bu, aynı kuralın DEĞER tarafı.
+        if ozet.get("opt_kalibrasyon"):
+            for _a in ("opt1_ad", "opt1_kor", "opt2_ad", "opt2_kor", "opt3_ad",
+                       "opt3_kor", "opt_varlik", "opt_5g", "opt_istisna",
+                       "opt_kalibrasyon"):
+                if _a in ozet:
+                    ozet[f"{_a}_tarih"] = ozet["opt_kalibrasyon"]
 except Exception as e:
     print(f"optimized_params okunamadı: {e}")
 
