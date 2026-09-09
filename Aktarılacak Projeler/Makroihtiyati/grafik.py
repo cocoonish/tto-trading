@@ -7,7 +7,7 @@ from pathlib import Path
 
 import plotly.graph_objects as go
 
-from hesap import hesapla
+from hesap import SEKILLER, hesapla
 
 BURASI = Path(__file__).resolve().parent
 CFG = {"displayModeBar": False, "responsive": True}
@@ -15,6 +15,12 @@ KIRMIZI, YESIL, GRI, ALTIN = "#8e1f2f", "#1d5c5c", "#8a8578", "#9a7327"
 
 
 def yaz(fig, ad):
+    # YAPISAL KİLİT: defterde olmayan figür yazılamaz. Şekil saat defteri
+    # (hesap.SEKILLER) hangi figürün hangi bacağın saatini taşıdığını söyler;
+    # deftere girmemiş bir figür sayfada hattın ANA saatiyle damgalanır ve
+    # bayat bir bacak taze görünür (09.09.2026'da anket bacağında ölçüldü).
+    if ad not in SEKILLER:
+        raise KeyError(f"{ad} şekil saat defterinde yok (hesap.SEKILLER)")
     # Sabit div kimliği: Plotly rastgele id üretiyor ve veri değişmese de HTML her
     # koşuda değişip commit üretiyordu (01.09: bir günde beş boş commit).
     fig.write_html(BURASI / ad, include_plotlyjs="cdn", config=CFG, div_id=ad.replace(".html", ""))
