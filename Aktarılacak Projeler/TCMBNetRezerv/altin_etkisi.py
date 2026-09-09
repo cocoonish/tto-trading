@@ -254,12 +254,15 @@ BENNET_TANI_ESIK = 0.10
 # yakınken oran anlamsız büyür.
 BENNET_TABAN = 0.05
 
-# Son çapadan sonra miktar serisinin taşınabileceği azami gün. Haftalık altın
-# değeri ~6 gün gecikmeli yayımlanır; eşik 14 günken en hatalı girdiye (miktar
-# serisi) İKİ HAFTA sessiz taşıma izni veriyordu. Yayın ritmi 6 gün olduğuna
-# göre 8 gün, bir yayının atlanmasını yakalayacak kadar dar, tek bir gecikmeyi
-# sahte uyarıya çevirmeyecek kadar geniştir.
-ONS_TASIMA_UYARI_GUN = 8
+# Son çapadan sonra miktar serisinin taşınabileceği azami gün. ÖLÇÜ ÇAPANIN
+# TARİHİNE göre: çapa CUMA tarihlidir ve izleyen hafta (~+6 gün, Perşembe)
+# yayımlanır; yani sağlıklı bir haftada bile çapanın yaşı bir sonraki yayım
+# günü 13 güne çıkar (Cuma 28.08 → Perşembe 10.09'da 28.08 hâlâ son çapa).
+# Eşik 8 iken bu uyarı her hafta Pazar–Çarşamba yanlış alarm veriyordu ve
+# okura basılıyordu (09.09.2026'da ölçüldü). Bir yayının ATLANMASI çapayı
+# 20 güne taşır; 16, sağlıklı haftanın 13'ünü sahte uyarıya çevirmeyecek,
+# atlanan tek yayımı yakalayacak kadar dar.
+ONS_TASIMA_UYARI_GUN = 16
 
 # Fiyat serisinin ARDIŞIK kaç iş günü taşınabileceği (ffill). Ons tarafında
 # ONS_TASIMA_UYARI_GUN vardı, fiyat tarafında karşılığı YOKTU: AGORT03 ve

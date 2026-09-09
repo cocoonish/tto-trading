@@ -83,6 +83,15 @@ def _cache_taze(cpath):
     return _tazelik().taze(cpath, CACHE_TTL_SAAT)
 
 
+# SÜREÇ İÇİ BELLEK (09.09.2026). rapor.py aynı 39 seriyi bir koşuda YİRMİ kez
+# istiyor (her hesap fonksiyonu tabloyu baştan kuruyor); zorlanmış koşuda
+# (TTO_YENILE=1) önbellek "taze değil" sayılınca yirmi kez EVDS'e gidildi —
+# 757 indirme, 15 dakikalık adım tavanı doldu, hat düştü (bulut koşusu #138).
+# Aynı süreçte bir seri bir kez okunur; dönen kopya, çağıranın değişiklikleri
+# belleğe sızmasın diye.
+_BELLEK: dict = {}
+
+
 def evds_cek(kod, start="01-01-2005", end=None, yenile=False):
     """Tek EVDS serisini aylık frekansta çeker; cache'e yazar. Dönen: DatetimeIndex'li Series.
 
@@ -92,10 +101,14 @@ def evds_cek(kod, start="01-01-2005", end=None, yenile=False):
     hiçbir yeni gözlem gelmezdi)."""
     guvenli = kod.replace(".", "_")
     cpath = CACHE / f"evds_{guvenli}.csv"
+    bellek_anahtari = (kod, start, end)
+    if not yenile and bellek_anahtari in _BELLEK:
+        return _BELLEK[bellek_anahtari].copy()
     if cpath.exists() and (_cache_taze(cpath) and not yenile):
         s = pd.read_csv(cpath, index_col=0, parse_dates=True).iloc[:, 0]
         s.name = kod
-        return s
+        _BELLEK[bellek_anahtari] = s
+        return s.copy()
     if end is None:
         end = (pd.Timestamp.today() + pd.DateOffset(months=1)).strftime("01-%m-%Y")
     url = f"{EVDS_BASE}series={kod}&startDate={start}&endDate={end}&type=json"
@@ -109,7 +122,8 @@ def evds_cek(kod, start="01-01-2005", end=None, yenile=False):
                 f"(dosya {cpath.name}, {(datetime.datetime.now().timestamp() - cpath.stat().st_mtime) / 86400:.0f} gün)")
             s = pd.read_csv(cpath, index_col=0, parse_dates=True).iloc[:, 0]
             s.name = kod
-            return s
+            _BELLEK[bellek_anahtari] = s
+            return s.copy()
         raise
     if not items:
         raise RuntimeError(f"EVDS boş döndü: {kod}")
@@ -121,7 +135,8 @@ def evds_cek(kod, start="01-01-2005", end=None, yenile=False):
     s.to_csv(cpath)
     log(f"EVDS indirildi: {kod} ({s.index.min():%Y-%m} → {s.index.max():%Y-%m}, {len(s)} gözlem)")
     time.sleep(0.4)
-    return s
+    _BELLEK[bellek_anahtari] = s
+    return s.copy()
 
 
 # Çekilecek EVDS serileri

@@ -128,11 +128,19 @@ TETIKLER: tuple[Tetik, ...] = (
           r"Haftalık Para ve Banka İstatistikleri", ("TCMB",), en_gec=11),
     Tetik("yabanci", "TCMB Menkul Kıymet İstatistikleri (Perşembe)",
           r"Menkul Kıymet İstatistikleri", ("TCMB",), en_gec=11),
+    # KALIPTAKİ HER YAYIM, HATTIN İZLENEN BİR SAATİNİ İLERLETMELİ (09.09.2026).
+    # Sürüm sayacı yayım tetikli koşuda artar; hattın TÜKETMEDİĞİ bir yayım
+    # kalıptaysa o koşu eli boş döner, sayaç 1 olur, yeniden deneme üç kez daha
+    # (önbelleği atlayarak) koşturur ve ertesi gün "hak doldu" alarmı doğar —
+    # kararlar() ile ölçüldü: 28.09 15:23 H-ÜFE tetiği → 18:37, 05:13, 11:47
+    # yeniden denemeler → 29.09 15:23 alarm. Enflasyon ve marj hatları Hizmet
+    # ÜFE'yi hiç okumuyor (Enflasyon/veri.py'de "hizmet" ÖKTG23 alt grubu,
+    # marj TP.TUKFIY/TP.FG/TUFE1YI/YKKE); Yİ-ÜFE TÜFE ile aynı gün çıkıyor.
     Tetik("enflasyon", "TÜFE / Yİ-ÜFE ve alt endeksler (ayın ilk iş günleri)",
-          r"Tüketici Fiyat Endeksi|Yurt İçi Üretici Fiyat Endeksi|Hizmet Üretici Fiyat Endeksi",
+          r"Tüketici Fiyat Endeksi|Yurt İçi Üretici Fiyat Endeksi",
           ("TÜİK",), en_gec=40, gecikme_dk=90),
-    Tetik("marj", "TÜFE ve Hizmet ÜFE alt kalemleri",
-          r"Tüketici Fiyat Endeksi|Hizmet Üretici Fiyat Endeksi", ("TÜİK",),
+    Tetik("marj", "TÜFE alt kalemleri (Yİ-ÜFE aynı gün)",
+          r"Tüketici Fiyat Endeksi", ("TÜİK",),
           en_gec=45, gecikme_dk=90),
     Tetik("reer", "TCMB Reel Efektif Döviz Kuru (aylık)",
           r"Reel Efektif Döviz Kuru", ("TCMB",), en_gec=40),
@@ -146,15 +154,26 @@ TETIKLER: tuple[Tetik, ...] = (
     # ağıyla korunuyordu; o gün 17 gün geride ölçüldü. Yan kazanç: haftalık
     # tetik eklenince AYLIK bacak da her perşembe yoklanıyor, yani hattın
     # tetiksiz kör penceresi 18 günden ≤7 güne iniyor.
-    Tetik("butce", "Merkezi Yönetim Bütçe Denge Tablosu + Borç Stoku (HMB) "
-                   "+ Menkul Kıymet İstatistikleri (TCMB, haftalık)",
-          r"Merkezi Yönetim Bütçe Denge Tablosu|Merkezi Yönetim Borç Stoku"
-          r"|Bütçe Finansmanı İstatistikleri|Merkezi Yönetim İç Borç", ("HMB",), en_gec=45,
+    # ANA KALIP YALNIZ ANA SAATİ İLERLETEN YAYIM (09.09.2026). Hattın ana
+    # saati gelir + gider + iç borç stokunun ORTAK son ayı ve ayın en geç
+    # gelen parçası Borç Stoku (~20'si); Bütçe Denge Tablosu (~15–17'si)
+    # gelir/gideri ilerletir ama ana saati DEĞİL — ana kalıpta dururken her ay
+    # bir eli boş sayılan koşu + üç yeniden deneme + "kaynak yayımladı, veri
+    # gelmedi" alarmı üretiyordu. Şimdi EK KAYNAK: ilerlettiği saat adıyla
+    # (`akim_tarih`, gelir/giderin son ayı) ilan edilir ve sürüm imzasına
+    # girer. "Bütçe Finansmanı İstatistikleri" ve "Merkezi Yönetim İç Borç"
+    # (çevirme oranı, ortalama vade) hattın okumadığı tablolar — kalıptan
+    # çıktı; finansman tablosu EVDS'te genel bütçe grubunda, Denge ile gelir.
+    Tetik("butce", "Merkezi Yönetim Borç Stoku (HMB, ana saat) + Bütçe Denge "
+                   "Tablosu (HMB, akım bacağı) + Menkul Kıymet İstatistikleri "
+                   "(TCMB, haftalık)",
+          r"Merkezi Yönetim Borç Stoku", ("HMB",), en_gec=45,
           # Kalıp BAŞTAN SONA bağlı: HMB'nin "Kamu Haznedarlığı İstatistikleri
           # (… Mevduat ve Menkul Kıymet İstatistikleri)" serisi kurum süzgeciyle
           # zaten eleniyor, ama serbest bir alt dizge eşleşmesi ileride başka bir
           # TCMB serisinde yanlış tetik açabilirdi.
-          ek_kaynaklar=((r"^\s*Menkul Kıymet İstatistikleri\s*$", ("TCMB",), "_tarih2"),)),
+          ek_kaynaklar=((r"^\s*Menkul Kıymet İstatistikleri\s*$", ("TCMB",), "_tarih2"),
+                        (r"Merkezi Yönetim Bütçe Denge Tablosu", ("HMB",), "akim_tarih"))),
     # Hazine ihaleleri ulusal takvimde yok: hattın kendi ihale planından sürülür.
     # İki ayrı tetik kaynağı, çünkü iki ayrı olay var. İHALE günü sonucu
     # (miktar, faiz, teklif) getirir; STRATEJİ günü önümüzdeki üç ayın
@@ -484,9 +503,50 @@ def hat_surumu(hat: str) -> str:
         return ""
 
 
+def tabani_tohumla(hatlar: "list[str] | None" = None) -> list[str]:
+    """Defterde sürüm tabanı olmayan tarifli hatlara bugünkü sürümü taban yaz.
+
+    Damgaya (`son_kosum`) DOKUNMAZ, sayacı 0 açar. Taban yazılmadan sayaç
+    ölçemez: ilk eli boş koşu "ilerledi" sayılır (bkz. durum_yaz). Sürümü
+    okunamayan hat (ozet.json yok) atlanır. Döndürdüğü liste tohumlananlar."""
+    defter = _defter()
+    s = dict(defter.get("son_surum", {}) or {})
+    n = dict(defter.get("deneme", {}) or {})
+    yazilan: list[str] = []
+    for h in (hatlar if hatlar is not None else sorted(TETIK)):
+        if h not in TETIK or s.get(h):
+            continue
+        surum = hat_surumu(h)
+        if not surum:
+            continue
+        s[h] = surum
+        n.setdefault(h, 0)
+        yazilan.append(h)
+    if yazilan:
+        d = dict(defter.get("son_kosum", {}) or {})
+        DURUM.write_text(
+            json.dumps({"aciklama": defter.get("aciklama", ""),
+                        "son_kosum": dict(sorted(d.items())),
+                        "son_surum": dict(sorted(s.items())),
+                        "deneme": dict(sorted(n.items()))},
+                       ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return yazilan
+
+
 def durum_yaz(hatlar: list[str], simdi: dt.datetime | None = None,
-              sayilan: "set[str] | frozenset[str]" = frozenset()):
+              sayilan: "set[str] | frozenset[str]" = frozenset(),
+              onceki: "dict[str, str] | None" = None):
     """Başarıyla koşan hatların damgasını güncelle (başarısızlar dokunulmaz).
+
+    `onceki`: hat KOŞMADAN ÖNCE okunmuş sürümleri (guncelle.py ölçer). SOĞUK
+    BAŞLANGIÇ tuzağı (09.09.2026'da ölçüldü): defterde tabanı olmayan bir hat
+    ilk sayılan koşusunda eli boş dönerse, o koşunun sürümü tabana yazılıyor
+    ve "sürüm ilerledi" sayılıyordu — sayaç 0, yeniden deneme HİÇ açılmıyor;
+    03.09 kredi arızasının birebir tekrarı, bu kez sigortasız. 18 tarifli
+    hattın 11'i o hâldeydi (kredi · ypmevduat · yabanci · reer · buyume ·
+    hazine · enflasyon · odemeler · elnino · marj · reelfx). Tabanı olmayan
+    hat için kıyas noktası koşu ÖNCESİ sürümdür; o da yoksa eski davranış
+    (taban yazılır, sayaç 0). `tabani_tohumla` defteri bir kerede doldurur.
 
     Damgayla birlikte koşunun NE GETİRDİĞİ de yazılır; kararı asıl o belirler.
 
@@ -519,12 +579,16 @@ def durum_yaz(hatlar: list[str], simdi: dt.datetime | None = None,
             # Sürüm okunamadı: sayacı ne artır ne sıfırla. Ölçülemeyen bir şeye
             # göre karar vermek, ölçülmüş gibi davranmaktır.
             continue
-        if yeni_surum != s.get(h, ""):
+        # Kıyas noktası: defterdeki taban; yoksa koşu öncesi ölçülmüş sürüm.
+        taban = s.get(h) or (onceki or {}).get(h) or ""
+        if yeni_surum != taban:
             s[h] = yeni_surum
             n[h] = 0
         elif h in sayilan:
+            s[h] = yeni_surum
             n[h] = int(n.get(h, 0)) + 1
         else:
+            s[h] = yeni_surum
             n.setdefault(h, 0)
     DURUM.write_text(
         json.dumps({"aciklama": "Her veri hattının en son başarıyla tazelendiği an, "
@@ -759,6 +823,10 @@ def rapor(hatlar: list[str] | None = None, simdi: dt.datetime | None = None) -> 
 
 if __name__ == "__main__":
     import sys
+    if "--tohumla" in sys.argv:
+        yazilan = tabani_tohumla()
+        print("sürüm tabanı tohumlandı: " + (" ".join(yazilan) or "(hepsinin tabanı vardı)"))
+        raise SystemExit(0)
     ONBELLEK.mkdir(exist_ok=True)
     print("Tazeleme takvimi — hangi hat neden koşacak\n")
     print(rapor())

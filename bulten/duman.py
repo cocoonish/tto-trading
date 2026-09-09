@@ -540,7 +540,8 @@ def main() -> int:
         # Yan saat imzada olmasaydı haftalık tetik her hafta "veri gelmedi"
         # sayar ve dört pencerede yanlış alarma varırdı.
         hb = g.HAT["butce"]
-        assert tazeleme.izlenen_saatler("butce", tuple(hb.tarih_anahtarlari)) == ["_tarih", "_tarih2"], \
+        assert tazeleme.izlenen_saatler("butce", tuple(hb.tarih_anahtarlari)) == \
+            ["_tarih", "_tarih2", "akim_tarih"], \
             tazeleme.izlenen_saatler("butce", tuple(hb.tarih_anahtarlari))
         sb = tazeleme.hat_surumu("butce")
         if sb:
@@ -548,6 +549,9 @@ def main() -> int:
             parcalar = sb.split(" · ")
             assert str(d.get("_tarih")) in parcalar and str(d.get("_tarih2")) in parcalar, \
                 f"butce imzası ana saat + haftalık yan saat olmalı: {sb!r}"
+            if d.get("akim_tarih") not in (None, "", "None"):   # hat henüz yazmadıysa ölçülmez
+                assert str(d.get("akim_tarih")) in parcalar, \
+                    f"butce imzasında akım bacağının saati yok: {sb!r}"
             assert str(d.get("_tarih3")) not in parcalar or d.get("_tarih3") in (d.get("_tarih"), d.get("_tarih2")), \
                 f"tetiğe bağlı olmayan çeyreklik saat imzaya sızıyor: {sb!r}"
         # Her ek kaynak bir saat İLAN EDER ve o saat kütükte tanımlıdır.
@@ -646,11 +650,159 @@ def main() -> int:
         assert 'getattr(k, "sayilir", False)' in kaynak, "guncelle Karar.sayilir'i okumuyor"
     sina("tazeleme: sürüm sayacı yalnız yayım tetikli koşuda artar", _sayac_sozlesmesi)
 
+    # SOĞUK BAŞLANGIÇ (09.09.2026). Defterde tabanı olmayan hat ilk sayılan
+    # koşusunda eli boş dönerse, koşu sonrası sürüm tabana yazılıp "ilerledi"
+    # sayılıyordu: sayaç 0, yeniden deneme hiç açılmıyor — 03.09 kredi
+    # arızasının sigortasız tekrarı; 18 tarifli hattın 11'i o hâldeydi.
+    # Kıyas noktası koşu ÖNCESİ sürümdür (guncelle ölçer, durum_yaz `onceki`).
+    def _soguk_baslangic():
+        import json as _json, tempfile as _tf, inspect as _insp
+        from pathlib import Path as _P
+        gercek = (tazeleme._defter, tazeleme.DURUM, tazeleme.hat_surumu)
+        try:
+            tmp = _P(_tf.mkdtemp()) / "durum.json"
+            tmp.write_text(_json.dumps({"son_kosum": {}, "son_surum": {}, "deneme": {}}),
+                           encoding="utf-8")
+            tazeleme.DURUM = tmp
+            surum = {"kredi": "28.08.2026"}
+            tazeleme.hat_surumu = lambda h: surum.get(h, "")
+            an = dt.datetime(2026, 9, 10, 16, 20)
+            # (a) Tabansız + koşu öncesi sürüm aynı + sayılan koşu → deneme 1
+            tazeleme.durum_yaz(["kredi"], an, sayilan={"kredi"}, onceki={"kredi": "28.08.2026"})
+            d = _json.loads(tmp.read_text(encoding="utf-8"))
+            assert d["deneme"]["kredi"] == 1 and d["son_surum"]["kredi"] == "28.08.2026", \
+                f"soğuk başlangıçta eli boş koşu 'ilerledi' sayıldı: {d}"
+            # (b) Sürüm ilerledi → sıfır
+            surum["kredi"] = "04.09.2026"
+            tazeleme.durum_yaz(["kredi"], an, sayilan={"kredi"}, onceki={"kredi": "28.08.2026"})
+            d = _json.loads(tmp.read_text(encoding="utf-8"))
+            assert d["deneme"]["kredi"] == 0 and d["son_surum"]["kredi"] == "04.09.2026", d
+            # (c) `onceki` verilmezse eski davranış: taban yazılır, sayaç 0
+            tmp.write_text(_json.dumps({"son_kosum": {}, "son_surum": {}, "deneme": {}}),
+                           encoding="utf-8")
+            tazeleme.durum_yaz(["kredi"], an, sayilan={"kredi"})
+            d = _json.loads(tmp.read_text(encoding="utf-8"))
+            assert d["deneme"]["kredi"] == 0 and d["son_surum"]["kredi"] == "04.09.2026", d
+            # (d) tabani_tohumla: tabansız tarifli hatlara bugünkü sürüm yazılır,
+            #     damgaya dokunmaz, tabanı olanı ezmez, tarifsizi yazmaz
+            tmp.write_text(_json.dumps({"son_kosum": {"kredi": "2026-09-03T10:00:00"},
+                                        "son_surum": {"dibs": "08.09.2026"}, "deneme": {"dibs": 2}}),
+                           encoding="utf-8")
+            surum.update({"dibs": "09.09.2026", "ypmevduat": "28.08.2026", "makro": "x"})
+            yazilan = tazeleme.tabani_tohumla(["kredi", "dibs", "ypmevduat", "makro", "reer"])
+            d = _json.loads(tmp.read_text(encoding="utf-8"))
+            assert yazilan == ["kredi", "ypmevduat"], yazilan
+            assert d["son_surum"]["dibs"] == "08.09.2026" and d["deneme"]["dibs"] == 2, \
+                f"tohumlama mevcut tabanı ezdi: {d}"
+            assert d["son_surum"]["kredi"] == "04.09.2026" and d["deneme"]["kredi"] == 0
+            assert "makro" not in d["son_surum"] and "reer" not in d["son_surum"], d
+            assert d["son_kosum"] == {"kredi": "2026-09-03T10:00:00"}, "tohumlama damgaya dokundu"
+        finally:
+            tazeleme._defter, tazeleme.DURUM, tazeleme.hat_surumu = gercek
+        # TÜKETİCİ: guncelle koşu öncesi sürümü ölçüp durum_yaz'a veriyor mu.
+        import sys as _s
+        _s.path.insert(0, str(BURASI.parent))
+        import guncelle as g
+        kaynak = _insp.getsource(g)
+        assert "onceki=onceki_surum" in kaynak and "onceki_surum[h.ad] = _tz0.hat_surumu(h.ad)" in kaynak, \
+            "guncelle koşu öncesi sürümü durum_yaz'a geçirmiyor — soğuk başlangıçta yeniden deneme kapalı"
+        # CANLI DEFTER: tarifli her hattın tabanı var mı (bilgi değil ENGEL —
+        # tabansız hat yeniden deneme sigortasından yoksundur; tohumlama ucuz).
+        eksik = sorted(set(tazeleme.TETIK) - set(tazeleme.surum_oku()))
+        eksik = [h for h in eksik if tazeleme.hat_surumu(h)]   # sürümü okunamayan (özet yok) muaf
+        assert not eksik, f"sürüm defterinde tabanı olmayan tarifli hat: {eksik} — python bulten/tazeleme.py --tohumla"
+    sina("tazeleme: soğuk başlangıçta eli boş koşu 'ilerledi' sayılmaz", _soguk_baslangic)
+
     # ÖNBELLEK TAZELİĞİ TEK YERDE. TTO_YENILE bir zamanlar dokuz hattın
     # yalnız BİRİNDE okunuyordu: "koşulsuz tazele" düğmesi kalan sekizde
     # önbelleği hiç atlamıyordu ve koşu yeşil bitiyordu. Kapsam listeden
     # değil sözleşmeden türetilir: dosyada TTL'li bir önbellek varsa
     # tazelik kararı ortak/tazelik'ten geçmelidir.
+    def _kalip_tuketilen_yayim():
+        """Kalıptaki her yayım hattın izlenen bir saatini ilerletir.
+
+        Tüketilmeyen yayım = eli boş sayılan koşu + üç yeniden deneme + alarm
+        (kararlar() ile ölçüldü, 09.09.2026). Kapsam elle: hangi yayımın hangi
+        seriyi ilerlettiğini takvim söylemez, hat söyler."""
+        import re as _re
+        e = tazeleme.TETIK["enflasyon"]; m = tazeleme.TETIK["marj"]; b = tazeleme.TETIK["butce"]
+        for t in (e, m):
+            assert not _re.search("Hizmet Üretici", t.kalip), \
+                f"{t.hat}: Hizmet ÜFE kalıpta ama hat onu okumuyor — her ay dört eli boş koşu + alarm"
+        assert b.kalip.strip() == r"Merkezi Yönetim Borç Stoku", \
+            f"butce ana kalıbı yalnız ana saati ilerleten yayım olmalı: {b.kalip!r}"
+        alanlar = {ek[2] for ek in b.ek_kaynaklar}
+        assert "akim_tarih" in alanlar and "_tarih2" in alanlar, b.ek_kaynaklar
+        assert any("Bütçe Denge" in ek[0] for ek in b.ek_kaynaklar), \
+            "Bütçe Denge Tablosu ek kaynak değil — akım bacağı tetiksiz kalır"
+        for kotu in ("Finansmanı", "İç Borç"):
+            assert kotu not in b.kalip and not any(kotu in ek[0] for ek in b.ek_kaynaklar), \
+                f"butce: hattın okumadığı '{kotu}' yayımı tarifte"
+        import sys as _s
+        _s.path.insert(0, str(BURASI.parent))
+        import guncelle as g
+        assert "akim_tarih" in g.HAT["butce"].tarih_anahtarlari
+        src = (BURASI.parent / "Aktarılacak Projeler" / "Butce" / "ozet_uret.py").read_text(encoding="utf-8")
+        assert 'O["akim_tarih"]' in src, "Butce özet üreticisi akim_tarih yazmıyor"
+        assert tazeleme.izlenen_saatler("butce", tuple(g.HAT["butce"].tarih_anahtarlari)) == \
+            ["_tarih", "_tarih2", "akim_tarih"], \
+            tazeleme.izlenen_saatler("butce", tuple(g.HAT["butce"].tarih_anahtarlari))
+        # Regresyon: H-ÜFE artık enflasyonu tetiklemez (eskiden 4 koşu + alarm).
+        gercek = (tazeleme._yayimlar, tazeleme._defter, tazeleme.hat_surumu)
+        try:
+            # TÜFE kalıbı CANLI (03.09 yayımı damgadan eski) — yoksa "KALIP ÖLÜ"
+            # dalı her pencerede koşturur ve sınama ölçmek istediğini ölçemez.
+            yay = [{"adi": "Tüketici Fiyat Endeksi", "kurum": "TÜİK", "an": "2026-09-03T10:00:00"},
+                   {"adi": "Hizmet Üretici Fiyat Endeksi", "kurum": "TÜİK", "an": "2026-09-28T10:00:00"}]
+            tazeleme._yayimlar = lambda y: (yay, True)
+            defter = {"son_kosum": {"enflasyon": "2026-09-03T13:28:53"},
+                      "son_surum": {"enflasyon": "08.2026"}, "deneme": {"enflasyon": 0}}
+            tazeleme._defter = lambda: defter
+            tazeleme.hat_surumu = lambda h: "08.2026"
+            kosan = 0
+            for an in (dt.datetime(2026, 9, 28, 15, 23), dt.datetime(2026, 9, 28, 18, 37),
+                       dt.datetime(2026, 9, 29, 5, 13), dt.datetime(2026, 9, 29, 11, 47)):
+                k = tazeleme.kararlar(["enflasyon"], simdi=an)[0]
+                if k.kossun:
+                    kosan += 1
+                    defter["son_kosum"]["enflasyon"] = an.isoformat(timespec="seconds")
+                    if k.sayilir:
+                        defter["deneme"]["enflasyon"] += 1
+            assert kosan == 0 and defter["deneme"]["enflasyon"] == 0, \
+                f"H-ÜFE enflasyonu tetikledi: koşu {kosan}, sayaç {defter['deneme']['enflasyon']}"
+        finally:
+            tazeleme._yayimlar, tazeleme._defter, tazeleme.hat_surumu = gercek
+    sina("tazeleme: kalıptaki her yayım hattın bir saatini ilerletir", _kalip_tuketilen_yayim)
+
+    def _kosu_basina_tazele():
+        """TTO_YENILE koşu başına indirir: bu koşuda yazılmış önbellek tazedir."""
+        import os as _os, tempfile as _tf, time as _tm, importlib as _il, inspect as _insp
+        from pathlib import Path as _P
+        import sys as _s
+        _s.path.insert(0, str(BURASI.parent / "ortak"))
+        tz = _il.import_module("tazelik")
+        y = _P(_tf.mkdtemp()) / "seri.csv"; y.write_text("x", encoding="utf-8")
+        eski = dict(_os.environ)
+        try:
+            _os.environ[tz.YENILE_DEGISKENI] = "1"
+            _os.environ.pop(tz.KOSU_BASLANGIC_DEGISKENI, None)
+            assert tz.taze(y, 12) is False, "başlangıç anı yokken TTO_YENILE önbelleği atlamalı"
+            _os.environ[tz.KOSU_BASLANGIC_DEGISKENI] = str(_tm.time() + 60)   # koşu 'ileride' başladı
+            assert tz.taze(y, 12) is False, "koşudan ÖNCE yazılmış dosya zorlanmış koşuda taze sayıldı"
+            _os.environ[tz.KOSU_BASLANGIC_DEGISKENI] = str(y.stat().st_mtime - 1)
+            assert tz.taze(y, 12) is True, "bu koşuda yazılmış dosya yeniden indiriliyor — her adım aynı seriyi çeker"
+            _os.environ[tz.KOSU_BASLANGIC_DEGISKENI] = "bozuk"
+            assert tz.taze(y, 12) is False, "bozuk başlangıç anı sessizce taze saydı"
+            _os.environ.pop(tz.YENILE_DEGISKENI, None)
+            assert tz.taze(y, 12) is True, "TTO_YENILE yokken TTL içindeki dosya taze olmalı"
+        finally:
+            _os.environ.clear(); _os.environ.update(eski)
+        import guncelle as g
+        kaynak = _insp.getsource(g)
+        assert "_COCUK_ENV[_KOSU_BASLANGIC] = str(time.time())" in kaynak, \
+            "guncelle hat başlangıç anını çocuk ortamına yazmıyor — zorlanmış koşu her adımda indirir"
+    sina("tazelik: koşulsuz tazeleme hat başına bir kez indirir", _kosu_basina_tazele)
+
     def _onbellek_tek_tanim():
         kok = BURASI.parent
         adaylar = sorted(
@@ -780,8 +932,8 @@ def main() -> int:
         gercek_y, gercek_d = tazeleme._yayimlar, tazeleme._defter
         # HMB kalıbı CANLI ama tetiklemiyor (damgadan eski) — yoksa "KALIP ÖLÜ"
         # dalı devreye girer ve sınama ölçmek istediği şeyi hiç ölçemez.
-        canli = {"adi": "Merkezi Yönetim Bütçe Denge Tablosu", "kurum": "HMB",
-                 "an": "2026-08-17T17:30:00"}
+        canli = {"adi": "Merkezi Yönetim Borç Stoku", "kurum": "HMB",
+                 "an": "2026-08-20T17:30:00"}
         tazeleme._defter = lambda: {"son_kosum": {"butce": "2026-08-28T17:56:34"}}
 
         def karar(ek):
@@ -800,6 +952,13 @@ def main() -> int:
             assert karar([{"adi": "Merkezi Yönetim Borç Stoku", "kurum": "HMB",
                            "an": "2026-09-03T17:30:00"}]).kossun, \
                 "mevcut aylık tarif bozuldu"
+            # Bütçe Denge Tablosu EK KAYNAK: akım bacağını (akim_tarih) ilerletir,
+            # hattı koşturur; ana kalıpta DEĞİL (ana saati ilerletemez, 09.09.2026).
+            assert karar([{"adi": "Merkezi Yönetim Bütçe Denge Tablosu", "kurum": "HMB",
+                           "an": "2026-09-03T17:30:00"}]).kossun, \
+                "Bütçe Denge Tablosu butce'yi tetiklemiyor — akım bacağı tetiksiz"
+            assert not any("Bütçe Denge" in t for t in [tazeleme.TETIK["butce"].kalip]), \
+                "Bütçe Denge ana kalıpta — her ay eli boş sayılan koşu + yeniden deneme"
         finally:
             tazeleme._yayimlar, tazeleme._defter = gercek_y, gercek_d
     sina("tazeleme: bütçe hattı iki kurumdan besleniyor", _cok_kaynakli_tetik)

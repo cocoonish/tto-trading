@@ -292,6 +292,14 @@ def _agirlik_coz(ust: pd.Series, alt: pd.DataFrame, yil: int,
     if ara not in alt.index or pd.isna(ust.get(ara)):
         return None
     aylar = [t for t in alt.index if t.year == yil and not pd.isna(ust.get(t))]
+    # AÇIK YILDA ÇOCUK KIRILIMI ÜST ENDEKSTEN GEÇ GELİR: TÜİK manşeti ayın
+    # 3'ünde, üç haneli kırılım EVDS'e ≤17 gün sonra düşer. O ay üst seri
+    # doluyken alt tablo BOŞTUR; eskiden o ay da şart koşuluyor, hiçbir çocuk
+    # "tam" çıkmıyor ve yılın ağırlığı hiç çözülmüyordu — 03.09.2026'da kesit
+    # ölçüleri (Şekil 05, medyan/kırpılmış/difüzyon) 07.2026'dan 12.2025'e
+    # GERİLEDİ. Alt tablonun bütünüyle boş olduğu ay çözüme girmez; tek tek
+    # eksik çocuk yine dışarıda kalır (sepete sonradan giren/çıkan kalem).
+    aylar = [t for t in aylar if not alt.loc[t].isna().all()]
     if len(aylar) < 2:
         return None
     tam = [c for c in alt.columns

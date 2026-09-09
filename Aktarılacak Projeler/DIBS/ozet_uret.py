@@ -153,15 +153,27 @@ def main() -> int:
     # Her anahtar KENDİ son dolu gününden okunur; çıpadan uzaksa atlanır.
     def anlik(kaynak_ad: str, hedef_ad: str, ondalik: int = 2,
               tolerans: int = ANLIK_TOLERANS_GUN) -> bool:
+        """Anlık anahtar: kendi son dolu gününden, kendi tarihiyle.
+
+        SAYFANIN ADIYLA ÇAĞIRDIĞI ANAHTAR HER KOŞUDA YAZILIR (08.09.2026 kuralı,
+        kıyas bloğunda kondu, 09.09'da buraya genellendi): ölçülemiyorsa boş
+        (OLCULEMEDI), ATLANMAZ. Atlanan anahtar sayfada yedekteki donmuş sayıyı
+        bırakır ve yayın kapısı eksik anahtarı ENGEL sayıp yayını durdurur —
+        08.09'da dokuz yıl düğümü kurulamayınca tam bu oldu. Bayat olan
+        sayı basılmaz; ölçülemediği okura "—" ile görünür, son dolu gün
+        varsa `_tarih`i onu taşır."""
         v = a.get(kaynak_ad)
         t = a.get(kaynak_ad + "_tarih")
         if v is None or t is None:
-            uyar(f"'{hedef_ad}' ({kaynak_ad}) metrik özetinde yok — atlandı.")
+            uyar(f"'{hedef_ad}' ({kaynak_ad}) metrik özetinde yok — boş yazıldı.")
+            O[hedef_ad] = OLCULEMEDI
             return False
         yas = (s_gun - pd.Timestamp(t)).days
         if yas > tolerans:
             uyar(f"'{hedef_ad}' ({kaynak_ad}) son dolu günü {t}, çıpadan {yas} "
-                 "gün geride — anahtar ATLANDI (bayat sayı basılmasın).")
+                 "gün geride — boş yazıldı (bayat sayı basılmasın).")
+            O[hedef_ad] = OLCULEMEDI
+            O[hedef_ad + "_tarih"] = tr_tarih(t)
             return False
         koy(hedef_ad, v, ondalik)
         O[hedef_ad + "_tarih"] = tr_tarih(t)

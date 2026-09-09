@@ -36,6 +36,14 @@ from pathlib import Path
 # ediyor; iki tarafın ayrı dizge tutması, bir gün sessizce ayrışmaları demek.
 YENILE_DEGISKENI = "TTO_YENILE"
 DOGRU = ("1", "true", "True", "TRUE", "evet")
+# KOŞUNUN BAŞLANGIÇ ANI (epoch saniye; guncelle.py hat başlarken yazar).
+# "Koşulsuz tazele" bir KOŞU için söylenir, her ADIM için değil: marj hattı
+# beş adımdan oluşur ve beşi de aynı 39 EVDS serisini okur. TTO_YENILE tek
+# başına her adımda önbelleği atlatıyor, yani zorlanmış bir koşu aynı seriyi
+# beş kez indiriyordu (09.09.2026'da ölçüldü: yerelde her adım "EVDS
+# erişilemedi" satırlarını baştan yazdı). Bu anın ARDINDAN yazılmış dosya bu
+# koşunun kendi indirmesidir ve tazedir.
+KOSU_BASLANGIC_DEGISKENI = "TTO_KOSU_BASLANGIC"
 
 
 def yenile_istendi() -> bool:
@@ -46,13 +54,29 @@ def yenile_istendi() -> bool:
 def taze(yol: str | os.PathLike[str] | Path, ttl_saat: float) -> bool:
     """Önbellek dosyası hâlâ kullanılabilir mi.
 
-    Yoksa taze değildir; TTO_YENILE verilmişse hiçbir dosya taze değildir."""
-    if yenile_istendi():
-        return False
+    Yoksa taze değildir; TTO_YENILE verilmişse yalnız BU KOŞUDA yazılmış dosya
+    tazedir (bkz. KOSU_BASLANGIC_DEGISKENI) — önceki koşulardan kalan hiçbiri."""
     y = Path(yol)
     if not y.exists():
         return False
+    if yenile_istendi():
+        return _bu_kosuda_yazildi(y)
     return (dt.datetime.now().timestamp() - y.stat().st_mtime) / 3600 < ttl_saat
+
+
+def kosu_baslangici() -> float | None:
+    """Bu koşunun başlangıç anı (epoch sn); guncelle.py dışından koşulunca yok."""
+    ham = (os.environ.get(KOSU_BASLANGIC_DEGISKENI) or "").strip()
+    try:
+        return float(ham) if ham else None
+    except ValueError:
+        return None
+
+
+def _bu_kosuda_yazildi(y: Path) -> bool:
+    """Dosya bu koşunun başlangıcından SONRA yazıldıysa, bu koşunun indirmesidir."""
+    bas = kosu_baslangici()
+    return bas is not None and y.stat().st_mtime >= bas
 
 
 def yas_gun(yol: str | os.PathLike[str] | Path) -> float:

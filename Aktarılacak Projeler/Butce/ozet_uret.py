@@ -30,7 +30,7 @@ import sys
 
 import pandas as pd
 
-from veri import PROJE, VERI, AY_TR, TAZELIK, ay_ad, ceyrek_ad, gun_ad
+from veri import PROJE, VERI, AY_TR, TAZELIK, ay_ad, ceyrek_ad, gun_ad, _son_dolu
 
 O: dict = {}
 
@@ -162,6 +162,16 @@ def main() -> int:
     # çıpalandığı okunabilsin.
     O["_tarih"] = tr_ay(s_ay)
     O["_tarih2"] = tr_tarih(s_hafta)          # haftalık menkul kıymet bacağı
+    # AKIM BACAĞININ KENDİ SAATİ: gelir/giderin son ortak ayı. Bütçe Denge
+    # Tablosu (~15–17'si) bunu ilerletir, ana saati (`_tarih`, Borç Stoku'yla
+    # tamamlanan ortak ay) DEĞİL; tazeleme tarifi Denge yayımını bu saate
+    # bağlar (ek kaynak), yoksa her ay eli boş sayılan koşu + yeniden deneme
+    # zinciri doğardı (09.09.2026).
+    try:
+        _aylik = pd.read_csv(VERI / "aylik.csv", index_col=0, parse_dates=True)
+        O["akim_tarih"] = tr_ay(_son_dolu(_aylik, ["my_gelir", "my_gider"], "akim"))
+    except Exception as _ex:                                   # noqa: BLE001
+        uyar(f"akım bacağının saati ölçülemedi: {_ex}")
     # ÇEYREKLİK SAAT ortak/bicim SÖZLEŞMESİYLE yazılır: çeyreğin SON ayı
     # (`AA.YYYY`), okur etiketi ("2026-Ç1") ayrıca `ceyrek` anahtarında durur.
     # Sebebi ölçüldü (07.09.2026): "2026-Ç1" yazımını ne ortak/bicim ne de

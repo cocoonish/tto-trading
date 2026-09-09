@@ -25,20 +25,42 @@
   },
   "son_surum": {
     "butce": "07.2026 · 28.08.2026",
+    "buyume": "30.06.2026",
     "dibs": "08.09.2026",
+    "elnino": "01.08.2026",
+    "enflasyon": "08.2026",
     "fonlama": "07.09.2026",
     "fx": "2026-09-08 06:28 UTC",
+    "hazine": "18.08.2026",
+    "kredi": "28.08.2026",
+    "marj": "07.2026",
+    "odemeler": "30.06.2026",
     "ovp": "09.09.2026",
+    "reelfx": "06.2026",
+    "reer": "08.2026",
     "tcmb": "07.09.2026",
-    "usdtry": "09.09.2026"
+    "usdtry": "09.09.2026",
+    "yabanci": "28.08.2026",
+    "ypmevduat": "28.08.2026"
   },
   "deneme": {
     "butce": 0,
+    "buyume": 0,
     "dibs": 0,
+    "elnino": 0,
+    "enflasyon": 0,
     "fonlama": 0,
     "fx": 0,
+    "hazine": 0,
+    "kredi": 0,
+    "marj": 0,
+    "odemeler": 0,
     "ovp": 0,
+    "reelfx": 0,
+    "reer": 0,
     "tcmb": 0,
-    "usdtry": 0
+    "usdtry": 0,
+    "yabanci": 0,
+    "ypmevduat": 0
   }
 }

@@ -97,7 +97,10 @@ RITIM = {
     "enflasyon": 40,            # aylık (ayın 3'ü)
     "try-reer": 40,             # aylık
     "yiyecek-hizmetleri-marj": 45,
-    "hazine-ihrac": 12,
+    # İhale ritmi düzensiz: aynı strateji ayında ihaleler arası boşluk üç
+    # haftayı bulur (18.08 → 14.09). 12 günlük eşik 03–08.09 arası altı sayıda
+    # sahte "veri gecikti" bastı (09.09.2026'da ölçüldü).
+    "hazine-ihrac": 25,
     "fx-haber-endeksi": 5,
     "dibs-verim-egrisi": 6,     # iş günü (eğri günlük kurulur)
     "odemeler-dengesi": 45,     # aylık, 6-8 hafta gecikmeli
@@ -163,7 +166,11 @@ RITIM_ALAN = {
     # gerekçesi — o, kaynağın ölçülmüş yayım ritmidir, mekanik türetilemez.
     # Bugünkü ağaca karşı 22 alanın 22'si de eşiğin altında: bu kayıtlar bugün
     # tek bir uyarı üretmiyor, gelecekteki körlüğü kapatıyor.
-    ("kredi-parasal", "gun_tarih"): (4, "günlük kur/bilanço bacağı"),
+    # Günlük bacak HAFTADA BİR yenilenir: hat yalnız Perşembe yayımıyla koşar
+    # (tarif: haftalık/aylık para ve banka), günlük aile o koşunun gününde
+    # kalır. 4 günlük eşik her hafta Çarşamba–Perşembe sahte "gecikti"
+    # üretiyordu (09.09.2026'da ölçüldü); ölçü haftalık döngüye göre.
+    ("kredi-parasal", "gun_tarih"): (11, "günlük kur/bilanço bacağı (haftalık koşuda yenilenir)"),
     ("kredi-parasal", "ay_tarih"): (45, "aylık KKM ve banka türü bacağı"),
     ("fonlama-likidite", "hafta_kisa"): (12, "haftalık fonlama bacağı"),
     # Eşik hattın KENDİ ölçümünden: Fonlama/metrik.py zorunlu karşılık tabanının
@@ -171,11 +178,16 @@ RITIM_ALAN = {
     # hesaplamıyor. İkinci bir sayı uydurmak yerine o sayı buraya alındı.
     ("fonlama-likidite", "zk_taban_tarih"): (21, "zorunlu karşılık tabanı"),
     ("butce-borc", "_tarih2"): (12, "haftalık DİBS/eurobond bacağı"),
-    ("butce-borc", "_tarih3"): (170, "çeyreklik bacak"),
+    # GSYH çeyreği ~91 günde bir ilerler (buyume RITIM 100 ile aynı ölçü);
+    # 170 kaçan çeyreği ~80 gün geç gösterirdi.
+    ("butce-borc", "_tarih3"): (100, "çeyreklik bacak"),
+    # Akım bacağı (gelir/gider) ana saatten 3–5 gün ÖNCE ilerler (Bütçe Denge
+    # Tablosu ~15–17'si, Borç Stoku ~20'si); eşik ana saatle aynı, 45.
+    ("butce-borc", "akim_tarih"): (45, "aylık bütçe akım bacağı (gelir/gider)"),
     ("odemeler-dengesi", "_tarih2"): (75, "aylık ikincil bacak"),
     ("odemeler-dengesi", "_tarih3"): (12, "haftalık dış borç ödeme takvimi"),
     ("dibs-verim-egrisi", "_tarih2"): (45, "aylık bacak"),
-    ("enflasyon", "faiz_gun"): (6, "günlük faiz bacağı"),
+    ("enflasyon", "faiz_gun"): (40, "günlük faiz bacağı"),
     ("yp-mevduat", "stok_tarih"): (11, "haftalık stok bacağı"),
     ("yp-mevduat", "akim_tarih"): (11, "haftalık akım bacağı"),
     ("yp-mevduat", "dol_tarih"): (11, "haftalık dolarizasyon bacağı"),
@@ -186,7 +198,11 @@ RITIM_ALAN = {
     # Üç aylık BKEA ÇEYREĞİN BAŞIYLA damgalanıyor (2. çeyrek anketi 01.04 tarihini
     # taşır ve temmuz ortasında yayımlanır); meşru gecikme tek başına ~135 gün.
     ("makroihtiyati", "bkea_std_isletme_tarih"): (200, "üç aylık BKEA bacağı"),
-    ("reel-sektor-fx", "acik_rezerv_tarih"): (12, "haftalık rezerv bacağı"),
+    # Rezerv bacağı tcmb hattının haftalık dosyasından gelir ama BU hat 30
+    # günde bir koşuyor (takvimsiz): 12 günlük eşik her ayın 16'sından ay
+    # sonuna kadar yapısal "gecikti" basardı. Ölçü hattın koşu ritmine göre;
+    # hat haftalık tetiğe bağlanınca eşik 12'ye döner.
+    ("reel-sektor-fx", "acik_rezerv_tarih"): (37, "haftalık rezerv bacağı (aylık koşuda yenilenir)"),
     ("ovp", "kur_tarih"): (6, "günlük kur bacağı"),
 }
 
@@ -198,7 +214,10 @@ KARANLIK_GUN: dict[str, int] = {
     # Aylık seriler aylık dosyada yan yana: aylık bir kalem, yeni ay yayımlanana
     # kadar bir öncekinin tarihinde durur. 45 gün burada dar kalır.
     "odemeler-dengesi": 75,
-    "butce-borc": 75,
+    # Bütçe: çeyreklik GSYH bacağı (`_tarih3`) aylık ana saatin ~123 gün
+    # gerisine düşebiliyor (Ç3 GSYH 1 Aralık'ta gelene dek `_tarih` 10.2026,
+    # `_tarih3` 06.2026); 75 her çeyrek ~40 gün sahte "donmuş seri" üretirdi.
+    "butce-borc": 140,
     # Banka Kredileri Eğilim Anketi ÜÇ AYLIK ve değeri çeyreğin BAŞI ile
     # damgalanıyor: 2. çeyrek anketi 01.04 tarihiyle durur ve ancak Temmuz
     # ortasında yayımlanır. Meşru gecikme tek başına ~135 güne çıkar.

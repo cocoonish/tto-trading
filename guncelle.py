@@ -67,6 +67,16 @@ _COCUK_ENV = {
 }
 
 
+def _kosu_baslangic_degiskeni() -> str:
+    """ortak/tazelik.KOSU_BASLANGIC_DEGISKENI — ad tek yerde tanımlı."""
+    try:
+        sys.path.insert(0, str(KOK / "ortak"))
+        import tazelik  # noqa: PLC0415
+        return tazelik.KOSU_BASLANGIC_DEGISKENI
+    except Exception:                                          # noqa: BLE001
+        return "TTO_KOSU_BASLANGIC"
+
+
 def _yenile_degiskeni() -> str:
     """Önbellek atlama bayrağının adı — TEK tanım ortak/tazelik'te.
 
@@ -489,7 +499,7 @@ HATLAR: list[Hat] = [
         {"cikti/*.html": "*", "uyarilar.json": "uyarilar.json"},
         # Üç frekans ayrı ayrı donabiliyor: bütçe aylık, dış borç ve GSYH üç
         # aylık, sahiplik haftalık. Tek anahtara bakmak yanıltırdı.
-        tarih_anahtarlari=("_tarih", "_tarih2", "_tarih3")),
+        tarih_anahtarlari=("_tarih", "_tarih2", "_tarih3", "akim_tarih")),
     Hat("buyume", "Büyüme (GSYH)", P / "Buyume", "buyume",
         # veri.py seri kodlarını GÖMMEZ: her EVDS grubunun içeriğini serieList'ten
         # okur, o listeyi çeker (uydurma kod giremez, TÜİK seri eklerse gelir).
@@ -1865,10 +1875,22 @@ def main():
 
     anahtar_uyar(secilen)
     print(f"\n{'═'*64}\n  {len(secilen)} hat · kip: {'TAM' if tam else 'hafif'} · commit: {'evet' if cm else 'hayır'}\n{'═'*64}")
+    # KOŞU ÖNCESİ SÜRÜM: sürüm sayacının kıyas noktası. Defterde tabanı olmayan
+    # hat (soğuk başlangıç) ilk eli boş koşusunda "ilerledi" sayılmasın diye
+    # taban, koşudan ÖNCE okunan sürümdür (bkz. tazeleme.durum_yaz `onceki`).
+    onceki_surum: dict[str, str] = {}
+    _tz0 = tazeleme_modulu()
+    if _tz0 is not None:
+        for h in secilen:
+            try:
+                onceki_surum[h.ad] = _tz0.hat_surumu(h.ad) or ""
+            except Exception:                                  # noqa: BLE001
+                pass
     sonuc = []
     secilen = turevleri_ekle(secilen, atlanan_adlar)
 
     _YENILE = _yenile_degiskeni() if yenile_hatlar else ""
+    _KOSU_BASLANGIC = _kosu_baslangic_degiskeni()
     try:
         for h in secilen:
             print(f"\n▶ {h.baslik}  ({h.klasor})")
@@ -1878,9 +1900,14 @@ def main():
             if atla:
                 print("    (yeniden deneme — seri önbelleği atlanıyor)")
                 _COCUK_ENV[_YENILE] = "1"
+            # Koşunun başlangıç anı: zorlanmış koşuda ortak/tazelik bu andan
+            # sonra yazılmış önbelleği TAZE sayar — "koşulsuz tazele" hattın
+            # her adımında değil, hat başına bir kez indirir.
+            _COCUK_ENV[_KOSU_BASLANGIC] = str(time.time())
             try:
                 ok, mesaj, sn = kos(h, tam, a.gunluk)
             finally:
+                _COCUK_ENV.pop(_KOSU_BASLANGIC, None)
                 if atla:
                     _COCUK_ENV.pop(_YENILE, None)
             sonuc.append((h, ok, mesaj, sn))
@@ -1909,7 +1936,7 @@ def main():
         if _tz is not None:
             basarili = [h.ad for h, ok, _, _ in sonuc if ok]
             if basarili:
-                _tz.durum_yaz(basarili, sayilan=sayilan_hatlar)
+                _tz.durum_yaz(basarili, sayilan=sayilan_hatlar, onceki=onceki_surum)
                 print(f"\n  Tazeleme damgası güncellendi: {' '.join(basarili)}")
 
     print(f"\n{'═'*64}\n  ÖZET\n{'═'*64}")

@@ -118,6 +118,23 @@ def _sayfa_anahtarlari():
 
 sina("kıyas değişimi: çıpa boşsa son dolu gün, kendi tarihiyle", _kiyas_son_dolu_gun)
 sina("kıyas anahtarı atlanmaz, boş yazılır; bitiş damgalanır", _anahtar_atlanmaz)
+
+
+def _anlik_atlanmaz():
+    """anlik(): metrik özetinde olmayan ya da çıpadan uzak anahtar boş yazılır,
+    atlanmaz (08.09 kuralının anlık anahtarlara genellenmesi, 09.09.2026)."""
+    kaynak = (BURASI / "ozet_uret.py").read_text(encoding="utf-8")
+    bas = kaynak.index("    def anlik(")
+    blok = kaynak[bas: kaynak.index("    for kaynak, hedef in (", bas)]
+    assert blok.count("O[hedef_ad] = OLCULEMEDI") == 2, \
+        "anlik(): iki düşme dalının ikisi de anahtarı boş yazmalı (atlamamalı)"
+    assert "atlandı" not in blok.lower().replace("atlanmaz", ""), \
+        "anlik() hâlâ 'atlandı' diyor — anahtar atlanmaz, boş yazılır"
+    # Çıpadan uzak dalda son dolu gün damgalanır; özet dışı dalda damga yok.
+    uzak = blok[blok.index("if yas > tolerans:"):]
+    assert 'O[hedef_ad + "_tarih"] = tr_tarih(t)' in uzak.split("koy(hedef_ad")[0], \
+        "çıpadan uzak anahtarın son dolu günü damgalanmıyor"
+sina("anlık anahtar atlanmaz, boş yazılır; son dolu gün damgalanır", _anlik_atlanmaz)
 sina("sayfanın çağırdığı kıyas anahtarları üretilen kalıpta", _sayfa_anahtarlari)
 
 if __name__ == "__main__":

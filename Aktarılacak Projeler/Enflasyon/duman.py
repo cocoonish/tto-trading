@@ -229,6 +229,38 @@ sina("çizim ve özet katmanı saati aynı fonksiyondan alıyor",
      and "sekil_saatleri" in (veri.PROJE / "ozet_uret.py").read_text(encoding="utf-8"))
 
 # ---------------------------------------------------------------------------
+
+# ── AÇIK YILDA ÇOCUK KIRILIMI GEÇ GELİR (09.09.2026) ─────────────────────────
+# TÜİK manşeti ayın 3'ünde, üç haneli kırılım EVDS'e ≤17 gün sonra düşer. Üst
+# seri dolu, alt tablo boş olan o ay ağırlık çözümünde şart koşulunca hiçbir
+# çocuk "tam" çıkmıyor, yılın ağırlığı hiç çözülmüyor ve kesit ölçüleri
+# (Şekil 05, medyan/kırpılmış/difüzyon) bir önceki yıla GERİLİYORDU
+# (03.09.2026: 07.2026 → 12.2025). Alt tablonun bütünüyle boş olduğu ay
+# çözüme girmez; tek tek eksik çocuk yine dışarıda kalır.
+_ix = pd.date_range("2025-12-01", "2026-08-01", freq="MS")
+# Üç çocuk üç ayrı eğrilikte (doğrusal · kare · karekök): doğrusal üç seri
+# eşdoğrusal olur ve EKK payı tek çözümlü çıkmaz — sınama kodu değil kendi
+# kurgusunu sınamış olurdu.
+_t = np.arange(len(_ix), dtype=float)
+_alt = pd.DataFrame({"a": 100 + 2.0 * _t,
+                     "b": 100 + 0.35 * _t ** 2,
+                     "c": 100 + 6.0 * np.sqrt(_t)}, index=_ix)
+_ust = pd.Series(0.5 * _alt["a"] + 0.3 * _alt["b"] + 0.2 * _alt["c"], index=_ix)
+_alt_bos = _alt.copy(); _alt_bos.loc[_ix[-1]] = np.nan          # Ağustos kırılımı gelmemiş
+_r = metrik._agirlik_coz(_ust, _alt_bos, 2026)
+sina("ağırlık çözümü: alt tablosu boş açık ay çözümü düşürmez", _r is not None,
+     "Ağustos kırılımı gelmeden 2026 ağırlığı çözülmüyor — kesit önceki yıla geriler")
+sina("ağırlık çözümü: boş ay çözüme girmez, dolu aylar girer",
+     _r is not None and _r["n_ay"] == len(_ix) - 2, f"n_ay={_r and _r['n_ay']}")
+sina("ağırlık çözümü: paylar tutuyor (0,5 · 0,3 · 0,2)",
+     _r is not None and np.allclose(_r["paylar"].values, [0.5, 0.3, 0.2], atol=1e-6),
+     str(_r and _r["paylar"].round(4).to_dict()))
+_alt_tek = _alt.copy(); _alt_tek.loc[_ix[-1], "c"] = np.nan       # yalnız bir çocuk eksik
+_r2 = metrik._agirlik_coz(_ust, _alt_tek, 2026)
+sina("ağırlık çözümü: tek tek eksik çocuk yine dışarıda kalır",
+     _r2 is not None and _r2["eksik_cocuk"] == 1 and "c" not in _r2["paylar"].index,
+     str(_r2 and _r2["paylar"].index.tolist()))
+
 print(f"\n{'═' * 70}")
 print(f"  {len(GECTI)} geçti · {len(DUSTU)} düştü")
 if DUSTU:
