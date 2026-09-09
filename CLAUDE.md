@@ -1336,3 +1336,32 @@ düşebilir (bütçe karanlık 75 → 140). Aksi her hafta okura basılan sahte
 "gecikti" satırıdır — hazine RITIM 12, ihaleler arası üç haftada altı sayıda
 bastı; TCMB altın çapası eşiği 8 gün, Cuma tarihli + altı gün yayımlanan bir
 çapa için her hafta Paz–Çar öttü.
+
+**KARAR (09.09.2026, kullanıcı) — USD/TRY her hatta Yahoo Finance'ten gelir;
+TCMB gösterge kuru yalnız DÖNÜŞÜM kurudur.** "usdtry evdsden çekiliyor gibi,
+bu her yerden yahoo finance olmalı." Kurun KONU olduğu her hat — devalüasyon
+panosu, taşıma (fonlama → carry), OVP'nin gerçekleşen kuru, REDK'nin USD/TRY
+bacağı, hazinenin dolar bazlı ihraç grafiği; bülten ve teknik zaten öyleydi —
+tek yükleyiciden okur: `ortak/usdtry.py`. Tek tanım, çünkü aynı seriyi ayrı
+ayrı çeken iki hattan biri kırpık seriyi bir gün fark etmez; bu dosyada
+ölçülmüş hâli yazılı (yfinance altı aylık, seviyesi yıllar geride bir seri
+döndürmüştü ve koşu yeşil bitmişti). Yükleyici üç şeyi SÖZLEŞME olarak sınar:
+KAPSAM (istenen başlangıçtan 45 günden geç başlayan, bugünden 5 günden eski
+biten ya da hafta içi günlerin %90'ından azını taşıyan seri), SEVİYE (eldeki
+önbellekle ortak son günde %20'den fazla ayrışan seri) ve KAPANMAMIŞ BAR
+(günün UTC barı düşürülür — bir ölçüm ancak kapanmış seansı ölçebilir).
+Geçmeyen seri eldeki önbelleğe düşer ve sebebi künyeye yazılır (`kur_uyari`,
+hattın uyarı listesi); önbellek de yoksa hata — kırpık seri ASLA grafiğe
+girmez, koşu yeşil bitip yanlış kurla bölmez. Damga artık İŞLEM GÜNÜDÜR:
+EVDS'in ertesi günün kurunu bir gün önce ilan etmesi (valör) ve tatil öncesi
+ileri tarih sorunu yapısal olarak yok; bültenin `usdtry` saati bu yüzden bir
+gün geri adım attı ve bu bir gerileme değil, doğru etikettir.
+Kapsam dışı ve ADIYLA yazılı: resmî bir istatistiğin TL karşılığını kuran
+DÖNÜŞÜM kuru — TCMB net rezervde swap ve altın stoku, kredide kur etkisi
+arındırması, bütçede borç stoku, ödemeler dengesinde stok bacağı — TCMB
+gösterge kurunda kaldı: o tablolar TCMB'nin kendi kuruyla yayımlanır ve
+Yahoo kapanışıyla çevrilirse resmî rakamla ayrışır. İki küme
+`bulten/duman.py`de KAYNAK METNİNDEN sınanıyor (`_usdtry_tek_kaynak`): konu
+hatlarında EVDS kur kodu kalırsa DÜŞER, dönüşüm hatlarından biri Yahoo'ya
+geçerse de düşer — kural yoruma değil kapıya yazıldı. Dönüşüm hatlarının da
+Yahoo'ya çekilmesi istenirse ayrı karar; bu paragraf o gün güncellenir.

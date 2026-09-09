@@ -40,6 +40,9 @@ from pathlib import Path
 
 import pandas as pd
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import bicim as _bicim  # noqa: E402  — sayı yazımı tek sözleşmeden (ortak/bicim)
+
 YAHOO_URL = "https://query1.finance.yahoo.com/v8/finance/chart/USDTRY=X"
 KAYNAK = "Yahoo Finance (USDTRY=X)"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
@@ -121,8 +124,10 @@ def _kapsam_uyarilari(s: pd.Series, bas: dt.date, bugun: dt.date,
             g = ortak[-1]
             oran = float(s.loc[g]) / float(eski.loc[g]) if float(eski.loc[g]) else 1.0
             if abs(oran - 1.0) > SEVIYE_SINIRI:
-                u.append(f"{g:%d.%m.%Y} günü seviye eldeki seriyle %{abs(oran - 1) * 100:.0f} "
-                         f"ayrışıyor (yeni {float(s.loc[g]):.4f} · eski {float(eski.loc[g]):.4f})")
+                u.append(f"{g:%d.%m.%Y} günü seviye eldeki seriyle "
+                         f"{_bicim.yuzde(abs(oran - 1) * 100, 0)} ayrışıyor "
+                         f"(yeni {_bicim.sayi(float(s.loc[g]), 4)} · "
+                         f"eski {_bicim.sayi(float(eski.loc[g]), 4)})")
     return u
 
 
@@ -167,8 +172,8 @@ def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
         if eski is not None:
             return Kur(eski[eski.index >= pd.Timestamp(bas_t)], ilk=eski.index[0].date(),
                        son=eski.index[-1].date(), n=len(eski), onbellekten=True,
-                       uyarilar=[f"Yahoo Finance erişilemedi ({type(e).__name__}); "
-                                 f"eldeki seri kullanıldı ({eski.index[-1]:%d.%m.%Y})"])
+                       uyarilar=["Yahoo Finance erişilemedi; eldeki seri kullanıldı "
+                                 f"(son gün {eski.index[-1]:%d.%m.%Y})"])
         raise RuntimeError(f"USD/TRY çekilemedi ve önbellek yok: {e}") from e
 
     yeni = kapanmamis_bari_dusur(yeni, simdi)
