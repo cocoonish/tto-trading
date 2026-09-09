@@ -1412,6 +1412,38 @@ def main() -> int:
             _piyasa.datetime = gercek
     sina("piyasa: yerleşmemiş bar düşürülüyor", _yerlesmemis)
 
+    # ÖNBELLEK KORUMASININ KAPSAMI. 31.08.2026'da ölçülen arıza TOPLU kayıptı
+    # (51 seri → 0) ve koruma "eldekinden AZ seri geldiyse yazma" diye yazıldı.
+    # 09.09.2026'da bu genişliğin bedeli ödendi: Yahoo `2YY=F`yi emekliye ayırdı,
+    # çekim 50 seri döndürdü ve koruma sağlıklı 50 seriyi de reddetti — bültenin
+    # elli bir satırının ELLİ BİRİ bir gün önceki fotoğrafın birebir kopyası
+    # olarak yayıma gitti ve koşu yeşil bitti. Kalıcı bir eksik, kalıcı bir donma
+    # demekti. Sınama üç hâli de kusurun kendisine karşı koşturur.
+    def _onbellek_kismi_cekim():
+        import piyasa as _p
+
+        eski = {
+            "A": {"tarih": ["2026-09-04"], "kapanis": [1.0]},
+            "B": {"tarih": ["2026-09-04"], "kapanis": [2.0]},
+        }
+        # (1) Bir sembol dönmedi: kalan seri TAZELENİR, eksik olan devredilir.
+        yeni = {"A": {"tarih": ["2026-09-08"], "kapanis": [9.0]}}
+        d = _p._onbellek_birlestir(yeni, eski)
+        assert d is not None, "kısmi çekim reddedildi — donma kusuru geri geldi"
+        assert d["seri"]["A"]["tarih"] == ["2026-09-08"], "taze seri yazılmadı"
+        assert d["seri"]["B"]["tarih"] == ["2026-09-04"], "eksik sembol devredilmedi"
+        assert d["getirilmeyen"] == ["B"], "getirilmeyen sembol adıyla yazılmadı"
+
+        # (2) Tam çekim: devredilen sembol kalmaz.
+        tam = {k: {"tarih": ["2026-09-08"], "kapanis": [9.0]} for k in eski}
+        assert _p._onbellek_birlestir(tam, eski)["getirilmeyen"] == [], \
+            "tam çekimde boşuna devir yazıldı"
+
+        # (3) BOŞ çekim — ölçülmüş olan arıza: yazma durur, damga ilerlemez.
+        assert _p._onbellek_birlestir({}, eski) is None, \
+            "boş çekim önbelleği ezecekti (31.08.2026 kusuru)"
+    sina("piyasa: kısmi çekim fotoğrafı dondurmuyor", _onbellek_kismi_cekim)
+
     # DENETİMİN SON KAPISI. Ölçüm katmanındaki koruma tek başına yetmiyor: bir
     # zamanlar yalnız beş enerji vadelisini kapsıyordu ve kimse fark etmedi.
     # denetim.yerlesmemis aynı soruyu yayının son kapısında bağımsız sorar; bu
