@@ -8,11 +8,10 @@
   "ALTIN MİKTAR TANISI — 4 TARİHSEL çapada (son 8 çapanın dışında); en büyüğü 17.10.2025, 5,69 mlr USD. Ayrıntı koşu çıktısında.",
   "ALTIN MİKTAR SIÇRAMASI (24.07.2026): iki çapa arasında miktar +1,126 mn ons değişti (%4,7, 4,52 mlr USD; eşikler %4 ve 1,00 mlr USD, kaynak ima). Bu gerçek bir altın alım/satımı mı, yoksa fiyat kaynağının kayması mı — miktar etkisi (Λ) buna göre okunmalı.",
   "ALTIN MİKTAR SIÇRAMASI — 9 TARİHSEL çapada (son 8 çapanın dışında); en büyüğü 27.03.2026, 19,81 mlr USD. Ayrıntı koşu çıktısında.",
-  "ALTIN FİYATI SERİNİN UCUNDA TAŞINIYOR: son gerçek kotasyon 07.09.2026. Fiyatın kımıldayıp kımıldamadığı bilinmediği için fiyat etkisi ve net döviz alımı 07.09.2026 ve sonrası için boş bırakıldı; sıfır yazılmadı.",
   "SWAP ÇAPA KAPSAMI DÜŞÜK: günlük serinin yalnız %33'i haftalık IRFCL çapasına dayanıyor (hedef %50); geri kalanı ay sonu çapasından taşınıyor. Haftalık arşiv doldurulduğunda bu kalemin hatası belirgin şekilde küçülür."
  ],
  "tani": {
-  "zincirleme_dt": -0.561,
+  "zincirleme_dt": 1.603,
   "swap_haftalik_capa_orani": 0.332,
   "son_ons_capa": "2026-08-28",
   "capa_boslugu": -3.06,
