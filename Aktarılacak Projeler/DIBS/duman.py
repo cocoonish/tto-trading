@@ -137,6 +137,214 @@ def _anlik_atlanmaz():
 sina("anlık anahtar atlanmaz, boş yazılır; son dolu gün damgalanır", _anlik_atlanmaz)
 sina("sayfanın çağırdığı kıyas anahtarları üretilen kalıpta", _sayfa_anahtarlari)
 
+# ---------------------------------------------------------------------------
+# 09.09.2026 — DÖRT KUSUR, HEPSİ "SAAT" SINIFINDAN (bütün hatların güncellik
+# denetiminde ölçüldü):
+#  (1) On bir aylık saat anahtarı ("pka_12a_tarih", "tufe_yillik_tarih",
+#      "pka_ort_2y_tarih" …) "Ağustos 2026" diye Türkçe ay adıyla yazılıyordu;
+#      ortak/bicim ile lib/bicim bu yazımı çözmez, yani bileşenin bayatlık
+#      denetimi ve sayfa sınavının saat ölçütleri bu anahtarları hiç görmüyordu.
+#  (2) Şekil saat defteri yoktu: sekiz figürün hepsi hattın ana saatiyle
+#      (08.09) damgalanıyordu — taşıma figürü fonlama bacağıyla 07.09'da
+#      biter, üç figür aylık bacak taşır.
+#  (3) TÜFE günlüğe "ertesi ayın 5'i" kuralıyla yayılıyordu; TÜİK ayın
+#      3'ünde yayımlar. Ağustos 2026 TÜFE'si 03.09 Perşembe çıktı, günlük seri
+#      03.09 ve 04.09'da hâlâ Temmuz'un %31,75'ini taşıdı (Ağustos %31,51 ancak
+#      07.09'da göründü): geriye dönük reel faiz iki gün yanlış paydayla
+#      hesaplanıp sayfada "Ağustos 2026" etiketiyle basıldı.
+#  (4) PKA yayım günü (20) bir varsayım ve sayfa onu ölçülmüş gibi yazıyordu.
+# ---------------------------------------------------------------------------
+def _ortak():
+    """ortak/bicim ve okur_dili — PYTHONPATH'te yoksa depo kökünden."""
+    import importlib
+    try:
+        return importlib.import_module("bicim"), importlib.import_module("okur_dili")
+    except ImportError:
+        sys.path.insert(0, str(KOK / "ortak"))
+        return importlib.import_module("bicim"), importlib.import_module("okur_dili")
+
+
+def _tufe_yayim_gunu():
+    """(3) TÜFE ertesi ayın 3'ünden (hafta sonuysa ilk iş günü); PKA hafta
+    sonuna düşen 20'si de kaydırılır; günlüğe yayma AYNI tanımı kullanır."""
+    import metrik
+    assert metrik.TUFE_YAYIM_GECIKME == 3, \
+        "TÜFE yayım günü 3 değil — TÜİK ayın 3'ünde yayımlar; 5 iki iş günü sahte etiket üretir"
+    assert metrik.PKA_YAYIM_GUN == 20
+    # Ağustos 2026 → 03.09.2026 Perşembe (arızanın kendisi)
+    assert metrik.yayim_gunu("2026-08-01", 3, ay_gecikme=1) == pd.Timestamp("2026-09-03")
+    # Aralık 2025 → 03.01.2026 Cumartesi → 05.01.2026 Pazartesi
+    assert metrik.yayim_gunu("2025-12-01", 3, ay_gecikme=1) == pd.Timestamp("2026-01-05")
+    # PKA Eylül 2026: 20.09 Pazar → 21.09 Pazartesi
+    assert metrik.yayim_gunu("2026-09-01", 20) == pd.Timestamp("2026-09-21")
+    # Günlüğe yayılmış seri 03.09'da AĞUSTOS değerini taşımalı (eskiden 07.09)
+    aylik = pd.Series([31.75, 31.51], index=pd.to_datetime(["2026-07-01", "2026-08-01"]))
+    gun = pd.bdate_range("2026-08-20", "2026-09-08")
+    g = metrik.gunluge_yay(aylik, gun, metrik.TUFE_YAYIM_GECIKME, ay_gecikme=1)
+    assert g.loc["2026-09-02"] == 31.75 and g.loc["2026-09-03"] == 31.51, \
+        f"03.09'da {g.loc['2026-09-03']} — Ağustos TÜFE'si yayım gününde seriye girmiyor"
+    # Şekil 05'in dikey çizgileri de aynı tanımdan
+    yg = metrik.yayim_gunleri(aylik, gun, metrik.TUFE_YAYIM_GECIKME, ay_gecikme=1)
+    assert yg == [pd.Timestamp("2026-09-03")], yg
+    src = (BURASI / "metrik.py").read_text(encoding="utf-8")
+    govde = src[src.index("def gunluge_yay("):src.index("def yayim_gunleri(")]
+    assert "yayim_gunu(" in govde, "gunluge_yay yayım gününü kendi hesaplıyor — tek tanım kırıldı"
+    assert "replace(day=" not in govde
+
+
+def _cerceve_ozet():
+    a = {k + "_tarih": "2026-09-08" for k in
+         ("n2y", "n1y", "reel_ileri", "fisher_basit_fark", "be_2y", "f_1y1y",
+          "kelebek_1_2_5")}
+    a.update({k + "_tarih": "2026-09-07" for k in
+              ("n9y", "egim_2y9y", "carry_2y_tlref", "tlref")})
+    return {"son_gun": "2026-09-08", "son_ay": "2026-08-01",
+            "son_tufe_ay": "2026-08-01", "anlik": a}
+
+
+def _sekil_saat_defteri():
+    """(2) Her figür kendi ucunu taşır; karma figür iki parçalı, defter tek
+    tarih ya da None; iki tüketici aynı fonksiyondan."""
+    import metrik
+    b, od = _ortak()
+    o = _cerceve_ozet()
+    d = metrik.sekil_saatleri(o, bugun="2026-09-09")
+    assert set(d) == set(metrik.SEKIL_DOSYALARI)
+    # grafik.py'nin yazdığı dosya adları defterle birebir
+    gsrc = (BURASI / "grafik.py").read_text(encoding="utf-8")
+    yazilan = set(re.findall(r'\("(\d\d_[a-z_]+\.html)",\s*\d\)', gsrc))
+    assert yazilan == set(d), f"defter ↔ çizilen figürler ayrışmış: {yazilan ^ set(d)}"
+    assert d["04_carry.html"] == "07.09.2026", d["04_carry.html"]      # fonlama bacağı bağlar
+    assert d["03_egim_bukulme.html"] == "07.09.2026"                    # 2y−9y bağlar
+    assert d["02_egri_hareketi.html"] == "08.09.2026"                   # seyrek 9y bağlamaz
+    assert d["01_egri_bugun.html"] == d["08_tani_paneli.html"] == "08.09.2026"
+    assert d["05_reel_faiz.html"] == "eğri 08.09.2026 · anket/TÜFE 08.2026", d["05_reel_faiz.html"]
+    assert d["06_tufex_basabas.html"] == d["07_forward.html"] == "eğri 08.09.2026 · anket 08.2026"
+    # Aylık bacakların EN ESKİSİ bağlar: TÜFE Temmuz'da kalmışsa 07.2026
+    o2 = dict(o, son_tufe_ay="2026-07-01")
+    assert metrik.sekil_saatleri(o2, bugun="2026-09-09")["05_reel_faiz.html"].endswith("07.2026")
+    # min() yapısal: fonlama eğriden İLERİ olsa da eğri bağlar
+    o3 = dict(o, anlik=dict(o["anlik"], carry_2y_tlref_tarih="2026-09-09"))
+    assert metrik.sekil_saatleri(o3, bugun="2026-09-09")["04_carry.html"] == "08.09.2026"
+    # Defter: karma → None + damga_ anahtarı; tek tarih çözülür, ertesi iş
+    # gününden ileri değil (sayfa sınavı 18)
+    defter, birlesik = metrik.defter_ayir(d)
+    assert set(defter) == set(d)
+    assert defter["05_reel_faiz.html"] is None and defter["04_carry.html"] == "07.09.2026"
+    assert set(birlesik) == {"damga_05_reel_faiz", "damga_06_tufex_basabas", "damga_07_forward"}
+    import datetime as _dt
+    sinir = b.sonraki_is_gunu(_dt.date(2026, 9, 9))
+    for v in defter.values():
+        assert v is None or (b.tarihe_cevir(v) is not None and b.tarihe_cevir(v) <= sinir), v
+    # Birleşik damga KIRK karakterin altında: cümle tarayıcı kırk ve üstünü
+    # okur cümlesi sayar ve `AA.YYYY`yi ondalık sanır (ölçüldü: biçim uyarısı)
+    for v in birlesik.values():
+        assert len(v) < od.CUMLE_ESIK, f"damga cümle sayılır: {v!r} ({len(v)})"
+        assert not od.ozet_cumleleri({"x": v}), v
+    # Uzun yazım aynı yapıda, figürün alt başlığı için
+    u = metrik.sekil_saatleri(o, uzun=True, bugun="2026-09-09")
+    assert u["04_carry.html"] == "7 Eylül 2026" and u["06_tufex_basabas.html"].endswith("Ağustos 2026")
+    # KAPANMAMIŞ AY: anket ayı yarına düşerdi; damga yalnız eğri bacağını taşır
+    acik = dict(o, son_ay="2026-09-01", son_tufe_ay="2026-08-01")
+    da = metrik.sekil_saatleri(acik, bugun="2026-09-22")
+    assert da["06_tufex_basabas.html"] == "eğri 08.09.2026", da["06_tufex_basabas.html"]
+    assert da["05_reel_faiz.html"] == "eğri 08.09.2026 · anket/TÜFE 08.2026"   # TÜFE ayı kapalı
+    assert metrik.defter_ayir(da)[1].get("damga_06_tufex_basabas") == "eğri 08.09.2026", \
+        "karma figür tek bacakla çıplak tarihe düşüp deftere kaçmamalı — MDX açık anahtar bekler"
+    # Ölçüm yoksa None, uydurma yok
+    bos = metrik.sekil_saatleri({"anlik": {}}, bugun="2026-09-09")
+    assert all(v is None for v in bos.values()), bos
+    # İki tüketici de AYNI fonksiyondan (kaynak metin)
+    assert "metrik.sekil_saatleri(o, uzun=True)" in gsrc, "grafik.py figür damgasını defterden almıyor"
+    assert "Çıpa: {damga}" in gsrc and gsrc.count("{damga}") == 8, gsrc.count("{damga}")
+    osrc = (BURASI / "ozet_uret.py").read_text(encoding="utf-8")
+    assert "metrik.defter_ayir(metrik.sekil_saatleri(m))" in osrc
+    assert 'O["_sekil_tarih"] = defter' in osrc and "O.update(birlesik)" in osrc
+    # MDX: karma figürler açık anahtarla çağrılır
+    mdx = KOK / "site/src/content/projeler/dibs-verim-egrisi.mdx"
+    if mdx.exists():
+        m = mdx.read_text(encoding="utf-8")
+        for kok in birlesik:
+            assert f'tarihAnahtari="{kok}"' in m, f"MDX {kok} anahtarını çağırmıyor"
+        # tek tarihli figürlere açık anahtar KONMAZ (18c çelişki riski)
+        for dosya, v in defter.items():
+            if v is not None:
+                blok = m[m.index(dosya):m.index("/>", m.index(dosya))]
+                assert "tarihAnahtari" not in blok, dosya
+
+
+def _aylik_saat_anahtarlari():
+    """(1) Aylık saat `AA.YYYY`, okur etiketi ayrı anahtarda (`_ay_ad`)."""
+    import ozet_uret as oz
+    b, od = _ortak()
+    A = pd.DataFrame({"pka_12a": [23.95, 23.69], "pka_24a": [17.83, 18.03],
+                      "pka_5y": [11.5, 11.14], "pka_faiz_12a": [29.44, 29.59],
+                      "pka_faiz_24a": [21.76, 21.89], "pka_12a_n": [59.0, 63.0],
+                      "tufe_2025": [132.31, 134.75]},
+                     index=pd.to_datetime(["2026-07-01", "2026-08-01"]))
+    d = oz.aylik_saatleri(A)
+    on_bir = ("pka_12a", "pka_24a", "pka_5y", "pka_faiz_12a", "pka_faiz_24a",
+              "pka_katilimci", "tufe_yillik", "pka_ort_1y", "pka_ort_2y",
+              "pka_ort_5y", "pka_ort_7y")
+    for k in on_bir:
+        assert d[k + "_tarih"] == "08.2026", (k, d.get(k + "_tarih"))
+        assert d[k + "_ay_ad"] == "Ağustos 2026"
+        assert b.tarihe_cevir(d[k + "_tarih"]) is not None, "saat çözülmüyor"
+    # Türkçe ay adı ve ISO saat anahtarına giremez
+    for k, v in d.items():
+        if k.endswith("_tarih"):
+            assert re.fullmatch(r"\d{2}\.\d{4}", v), (k, v)
+    assert oz.ay_kisa("2026-08-01") == "08.2026"
+    # Kaynak: monthly `_tarih` artık ay_ad ile yazılmıyor
+    src = (BURASI / "ozet_uret.py").read_text(encoding="utf-8")
+    assert '_tarih"] = ay_ad(' not in src, "aylık saat anahtarı Türkçe ay adıyla yazılıyor"
+    assert "O.update(aylik_saatleri(A))" in src
+    # Sayfa etiketi AYRI anahtardan okuyor; saat anahtarı tabloda basılmıyor
+    mdx = KOK / "site/src/content/projeler/dibs-verim-egrisi.mdx"
+    if mdx.exists():
+        m = mdx.read_text(encoding="utf-8")
+        for k in ("pka_12a", "pka_24a", "pka_5y", "pka_ort_2y", "tufe_yillik"):
+            assert f'anahtar="{k}_ay_ad"' in m, f"sayfa {k}_ay_ad çağırmıyor"
+            assert f'anahtar="{k}_tarih"' not in m, f"sayfa {k}_tarih (AA.YYYY) basıyor"
+
+
+def _anket_yayim_varsayimi():
+    """(4) PKA yayım günü varsayımı okura yazılır; ek sayıya bağlı."""
+    import metrik
+    import ozet_uret as oz
+    b, od = _ortak()
+    for n, ek in ((1, "1'inden"), (3, "3'ünden"), (5, "5'inden"), (6, "6'sından"),
+                  (9, "9'undan"), (10, "10'undan"), (20, "20'sinden"), (30, "30'undan")):
+        assert metrik.gun_eki(n) == ek, (n, metrik.gun_eki(n))
+    c = oz.anket_yayim_cumlesi(pd.Timestamp("2026-08-01"), 20)
+    assert "varsayım" in c and "20.08.2026" in c and "Ağustos 2026" in c, c
+    # Hafta sonuna düşen 20 kaydırılır: Eylül 2026 → 21.09.2026
+    assert "21.09.2026" in oz.anket_yayim_cumlesi(pd.Timestamp("2026-09-01"), 20)
+    # Okur dili: cümle kod dili taşımaz (ozet.json'un cümle alanı olarak taranır)
+    bulgu = [x for x in od.kosu_kaydi_tara([c]) if x[1] in od.KOSU_KAYDI_ENGEL]
+    assert not bulgu, bulgu
+    src = (BURASI / "ozet_uret.py").read_text(encoding="utf-8")
+    assert 'O["anket_yayim_cumlesi"]' in src and 'O["pka_yayim_metni"]' in src \
+        and 'O["tufe_yayim_metni"]' in src
+    assert "metrik.yayim_gunu(s_ay" in src, "anket gecikmesi yayım gününü kendi hesaplıyor"
+    assert "replace(day=min(m[\"esik\"]" not in src
+    mdx = KOK / "site/src/content/projeler/dibs-verim-egrisi.mdx"
+    if mdx.exists():
+        m = mdx.read_text(encoding="utf-8")
+        for k in ("anket_yayim_cumlesi", "pka_yayim_metni", "tufe_yayim_metni"):
+            assert f'anahtar="{k}"' in m, f"sayfa {k} çağırmıyor"
+        assert "esik_tufe_yayim_gecikme\" ondalik={0}>5</Deger>'inden" not in m, \
+            "sayfa sayının ardına sabit ek yapıştırıyor (3'inden çıkar)"
+
+
+sina("TÜFE ertesi ayın 3'ünden, hafta sonu ilk iş günü; günlüğe yayma tek tanımdan",
+     _tufe_yayim_gunu)
+sina("şekil saat defteri: bağlayıcı bacak, iki parçalı damga, iki tüketici tek fonksiyon",
+     _sekil_saat_defteri)
+sina("aylık saat anahtarı AA.YYYY, okur etiketi ayrı anahtarda", _aylik_saat_anahtarlari)
+sina("anket yayım günü varsayımı okura yazılır; ek sayıya bağlı", _anket_yayim_varsayimi)
+
+
 if __name__ == "__main__":
     for im, ad in SONUC:
         print(f"  {im} {ad}")

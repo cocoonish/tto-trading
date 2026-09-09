@@ -28,7 +28,7 @@ from plotly.subplots import make_subplots
 
 import metrik
 import veri
-from veri import VERI, AY_KISA, gun_ad
+from veri import VERI, AY_KISA, gun_ad, ay_ad
 
 CIKTI = veri.PROJE / "cikti"
 CIKTI.mkdir(exist_ok=True)
@@ -366,7 +366,7 @@ def sekil_02(M, o, damga):
     pay = pca.get("aciklanan_pay") or [None, None, None]
     kap = o["kapsama"]
     alt = [
-        f"Veri: TCMB EVDS3 · iş günü · Çıpa: {damga}. Düğümler her gün o günün "
+        f"Veri: TCMB EVDS3 · iş günü · Veri ucu: {damga}. Düğümler her gün o günün "
         "sıfır kuponlu noktalarından yeniden kurulur; sabit bir kıymete "
         "bağlanmaz (kıymet vadesi geldikçe eğri kendini yeniler).",
         (f"9 yıllık düğüm {kap['dugum_dolu']['n9y']} günde kurulabildi "
@@ -442,8 +442,9 @@ def sekil_03(M, o, damga):
     ters_gun = int(ters.sum())
     ters_son = t.index[ters][-1] if ters.any() else None
     alt = [
-        f"Veri: TCMB EVDS3 · iş günü · Çıpa: {damga}. Eğim = uzun düğüm − kısa "
-        "düğüm; iki nokta da AYNI GÜNÜN eğrisinden okunur.",
+        f"Veri: TCMB EVDS3 · iş günü · Veri ucu: {damga}. Eğim = uzun düğüm − kısa "
+        "düğüm; iki nokta da AYNI GÜNÜN eğrisinden okunur; 9 yıl düğümü "
+        "kurulamayan günde 2y−9y eğimi de yoktur, uç o gün ilerlemez.",
         ("EVDS'te 10 yıllık bir düğüm ÇOĞU GÜN YOKTUR: aktif sıfır kuponlu "
          "evrenin en uzun noktası ~9 yıl. Uluslararası kıyaslarda '2y−10y' "
          "denen ölçü burada 2y−9y ile VEKİL edilmiştir; vade farkı bir yıl "
@@ -510,9 +511,11 @@ def sekil_04(M, o, damga):
     _c = t["carry_2y_tlref"].dropna()
     neg = int((_c < 0).sum())
     alt = [
-        f"Veri: TCMB EVDS3 · iş günü · Çıpa: {damga}. Taşıma = 2 yıllık spot "
+        f"Veri: TCMB EVDS3 · iş günü · Veri ucu: {damga}. Taşıma = 2 yıllık spot "
         "getiri eksi gecelik fonlama faizi; tahvili gecelikle fonlayan bir "
-        "pozisyonun eğri SABİT KALIRSA kazanacağı taşımadır.",
+        "pozisyonun eğri SABİT KALIRSA kazanacağı taşımadır. Gecelik faizler "
+        "eğriden bir iş günü geride yayımlanır; makas fonlama bacağının "
+        "bittiği günde biter.",
         ("KONVANSİYON UYARISI: TLREF, AOFM ve 1 hafta repo faizi BASİT yıllık "
          "yayımlanır; strip getirisi ise YILLIK BİLEŞİKTİR. Karşılaştırma için "
          "fonlama faizleri bileşiğe çevrilmiştir — gecelik için "
@@ -594,8 +597,10 @@ def sekil_05(M, o, damga, anket_gun):
 
     a = o["anlik"]
     e = o["esik"]
+    anket_ay = ay_ad(o["son_ay"]) if o.get("son_ay") else "—"
+    tufe_ay = ay_ad(o["son_tufe_ay"]) if o.get("son_tufe_ay") else "—"
     alt = [
-        f"Veri: TCMB EVDS3 · Çıpa: {damga}. Reel faiz FISHER kimliğiyle "
+        f"Veri: TCMB EVDS3 · Veri ucu: {damga}. Reel faiz FISHER kimliğiyle "
         "hesaplanır: r = (1+i)/(1+π) − 1. Bu depoda BAĞLAYICI karardır; basit "
         "çıkarma (i − π) yalnız yöntem farkını göstermek için hesaplanır.",
         (f"Çıpa gününde: nominal %{_sayi(a.get('n1y'), 2)}, beklenti "
@@ -604,9 +609,12 @@ def sekil_05(M, o, damga, anket_gun):
          f"%{_sayi(a.get('reel_ileri_basit'), 2)} derdi. Fark "
          f"{_sayi(a.get('fisher_basit_fark'), 2)} puan — enflasyon yükseldikçe "
          "iki yöntem arasındaki makas açılır (panel c)."),
-        ("FREKANS UYUMSUZLUĞU: eğri GÜNLÜK, beklenti AYLIKTIR. PKA ayın "
-         f"{e['pka_yayim_gun']}'sinde, TÜFE ertesi ayın "
-         f"{e['tufe_yayim_gecikme']}'inde yayımlanmış sayılarak günlüğe "
+        ("FREKANS UYUMSUZLUĞU: eğri GÜNLÜK, beklenti AYLIKTIR. Çizilen anket "
+         f"{anket_ay}, gerçekleşen TÜFE {tufe_ay} ayına ait. PKA ayın "
+         f"{metrik.gun_eki(e['pka_yayim_gun'])} (varsayım — anket resmî "
+         "veri takviminde ayrı kalem değil), TÜFE ertesi ayın "
+         f"{metrik.gun_eki(e['tufe_yayim_gecikme'])} (TÜİK yayım günü; hafta "
+         "sonuna denk gelirse ilk iş günü) itibaren geçerli sayılıp günlüğe "
          "basamak olarak yayılır — ay başından yaymak o gün piyasanın "
          "bilmediği bir sayıyı kullanmak, yani GELECEĞE BAKMAK olurdu."),
         ("Panel (b)'deki dikey noktalı çizgiler SON 12 anket yayım günüdür: "
@@ -712,8 +720,9 @@ def sekil_06(M, KR, KE, o, damga):
 
     kap = o["kapsama"]
     zin = o.get("tufe_zinciri") or {}
+    anket_ay = ay_ad(o["son_ay"]) if o.get("son_ay") else "—"
     alt = [
-        f"Veri: TCMB EVDS3 · Çıpa: {damga}. Reel getiri = "
+        f"Veri: TCMB EVDS3 · Veri ucu: {damga}. Reel getiri = "
         "(100 × RefEndeks(t)/RefEndeks(ihraç) ÷ fiyat)^(365/gün) − 1. TÜFEX'in "
         "yayımlanan 'Değer'i ENDEKSLENMİŞ TL fiyatıdır, reel fiyat değildir.",
         ("Referans endeks EVDS'te YOK; Hazine'nin tanımı yeniden kuruluyor: "
@@ -721,8 +730,8 @@ def sekil_06(M, KR, KE, o, damga):
          "2003=100 zinciridir; TÜİK 2025 baz değişikliği sonrası zincir "
          f"katsayısı örtüşme ayından ({zin.get('ortusme_ay', '—')}) her koşuda "
          f"okunur: {_sayi(zin.get('kat'), 4)} — sabit yazılmaz."),
-        ("BAŞABAŞ ≠ BEKLENTİ. Panel (b)'de DOLU baklavalar anketin söylediği, "
-         "kırmızı çizgi piyasanın fiyatladığı enflasyondur. Aradaki fark "
+        (f"BAŞABAŞ ≠ BEKLENTİ. Panel (b)'de DOLU baklavalar anketin ({anket_ay} "
+         "PKA) söylediği, kırmızı çizgi piyasanın fiyatladığı enflasyondur. Aradaki fark "
          "enflasyon risk primi, likidite primi ve TÜFE ölçümüne güvensizliğin "
          f"karışımıdır: 1 yılda {_sayi(a.get('prim_1y'), 1)} puan, 5 yılda "
          f"{_sayi(a.get('prim_5y'), 1)} puan."),
@@ -838,8 +847,9 @@ def sekil_07(M, KE, o, damga):
     fig.update_yaxes(title_text="%", row=1, col=1)
     fig.update_yaxes(title_text="%", row=2, col=1)
 
+    anket_ay = ay_ad(o["son_ay"]) if o.get("son_ay") else "—"
     alt = [
-        f"Veri: TCMB EVDS3 · iş günü · Çıpa: {damga}. İleri oran spot "
+        f"Veri: TCMB EVDS3 · iş günü · Veri ucu: {damga}. İleri oran spot "
         "getirilerden türetilir: f(t₁→t₂) = [(1+s₂)^t₂ / (1+s₁)^t₁]^(1/(t₂−t₁)) − 1. "
         "Yeni bir veri değil, eğrinin kendi içindeki bilginin başka yazılışıdır.",
         (f"Çıpa gününde 1y1y %{_sayi(a.get('f_1y1y'), 2)}, 2y1y "
@@ -848,8 +858,8 @@ def sekil_07(M, KE, o, damga):
          "vadede faiz İNİŞİ fiyatlıyor demektir."),
         ("Panel (b) İMA EDİLEN patikadır, TAHMİN DEĞİLDİR: içinde vade primi "
          "vardır. Vade primi pozitifse ima edilen patika gerçek beklenen "
-         "politika faizinin ÜSTÜNDE kalır — baklava işaretleriyle (PKA anketi) "
-         "arasındaki fark bu primin kaba bir ölçüsüdür."),
+         f"politika faizinin ÜSTÜNDE kalır — baklava işaretleriyle ({anket_ay} "
+         "PKA anketi) arasındaki fark bu primin kaba bir ölçüsüdür."),
         ("KONVANSİYON: ima edilen patika spot getirilerden türediği için "
          "BİLEŞİKTİR; politika faizi ve PKA politika faizi beklentileri ise "
          "BASİT yayımlanır. Dolu baklavalar bileşiğe çevrilmiş, içi boş gri "
@@ -937,7 +947,7 @@ def sekil_08(M, RD, KR, o, damga):
     ytm = o.get("ytm_sinamasi") or {}
     ev = o.get("evren") or {}
     alt = [
-        f"Veri: TCMB EVDS3 · iş günü · Çıpa: {damga}. Bu panel HATTIN KENDİ "
+        f"Veri: TCMB EVDS3 · iş günü · Veri ucu: {damga}. Bu panel HATTIN KENDİ "
         "SAĞLIĞINI ölçer: eğri kaç noktadan kuruluyor, noktalar birbiriyle "
         "tutuyor mu, reel taraf ne kadar dağınık.",
         (f"Çıpa gününde {kap['nokta_son']} nokta (tarihçe medyanı "
@@ -1005,19 +1015,24 @@ def _yukle():
 def kos() -> None:
     M, o, KE, KR, RD, A = _yukle()
     s_gun = pd.Timestamp(o["son_gun"])
-    damga = gun_ad(s_gun)
-    print(f"DİBS verim eğrisi & reel faiz — grafikler · veri {damga}")
+    print(f"DİBS verim eğrisi & reel faiz — grafikler · çıpa {gun_ad(s_gun)}")
     anket_gun = metrik.yayim_gunleri(A["pka_12a"], M.index, o["esik"]["pka_yayim_gun"])
+    # FİGÜR BAŞINA DAMGA, hattın tek saati değil: taşıma figürü fonlama
+    # bacağının bittiği günde biter, üç figür aylık bacak taşır. Aynı defteri
+    # ozet_uret.py sayfanın damgası için okur (metrik.sekil_saatleri) — iki
+    # liste tutulsaydı figürün alt başlığı ile sayfadaki damga ayrışırdı.
+    saat = metrik.sekil_saatleri(o, uzun=True)
+    damga = {ad: (saat.get(ad) or "ucu ölçülemedi") for ad, _ in SEKILLER}
 
     ciktilar = [
-        (sekil_01(KE, M, o, damga), "01_egri_bugun.html"),
-        (sekil_02(M, o, damga), "02_egri_hareketi.html"),
-        (sekil_03(M, o, damga), "03_egim_bukulme.html"),
-        (sekil_04(M, o, damga), "04_carry.html"),
-        (sekil_05(M, o, damga, anket_gun), "05_reel_faiz.html"),
-        (sekil_06(M, KR, KE, o, damga), "06_tufex_basabas.html"),
-        (sekil_07(M, KE, o, damga), "07_forward.html"),
-        (sekil_08(M, RD, KR, o, damga), "08_tani_paneli.html"),
+        (sekil_01(KE, M, o, damga["01_egri_bugun.html"]), "01_egri_bugun.html"),
+        (sekil_02(M, o, damga["02_egri_hareketi.html"]), "02_egri_hareketi.html"),
+        (sekil_03(M, o, damga["03_egim_bukulme.html"]), "03_egim_bukulme.html"),
+        (sekil_04(M, o, damga["04_carry.html"]), "04_carry.html"),
+        (sekil_05(M, o, damga["05_reel_faiz.html"], anket_gun), "05_reel_faiz.html"),
+        (sekil_06(M, KR, KE, o, damga["06_tufex_basabas.html"]), "06_tufex_basabas.html"),
+        (sekil_07(M, KE, o, damga["07_forward.html"]), "07_forward.html"),
+        (sekil_08(M, RD, KR, o, damga["08_tani_paneli.html"]), "08_tani_paneli.html"),
     ]
     n = 0
     for fig, ad in ciktilar:

@@ -135,10 +135,27 @@ SAPMA_MAKS_ESIK = 3.00       # hattı DURDURUR: sınıflandırma bozulmuş demek
 # Anket / TÜİK yayım gecikmesi. Aylık seriler EVDS'te ayın 1'i etiketiyle
 # durur ama o gün YAYIMLANMAMIŞTIR; ileri doldurmayı ay başından yapmak
 # GELECEĞE BAKAR (o tarihte piyasanın bilmediği bir beklentiyle reel faiz
-# hesaplanır). PKA ayın ikinci yarısında, TÜFE ertesi ayın ilk günlerinde
-# açıklanır — seriler bu kadar geciktirilerek günlüğe yayılır.
-PKA_YAYIM_GUN = 20           # ayın 20'sinden itibaren geçerli
-TUFE_YAYIM_GECIKME = 5       # ertesi ayın 5'inden itibaren geçerli
+# hesaplanır). PKA ayın ikinci yarısında, TÜFE ertesi ayın 3'ünde
+# açıklanır — seriler bu kadar geciktirilerek günlüğe yayılır. Yayım günü
+# hafta sonuna denk gelirse ilk iş günü (`yayim_gunu`).
+#
+# TÜFE 5 → 3 (09.09.2026'da ölçüldü): TÜİK aylık TÜFE'yi ayın 3'ünde saat
+# 10:00'da yayımlar (hafta sonuysa ilk iş günü). "Ertesi ayın 5'i" kuralı
+# her ay İKİ İŞ GÜNÜ boyunca etiket ile değeri ayırıyordu: Ağustos 2026
+# TÜFE'si 03.09 Perşembe yayımlandı, hat o gün aylık tabloyu Ağustos'a
+# ilerletti (sayfa "Ağustos 2026" yazdı) ama günlüğe yayılmış seri 03.09 ve
+# 04.09'da hâlâ Temmuz'un %31,75'ini taşıdı; Ağustos'un %31,51'i ancak
+# 07.09 Pazartesi göründü. Geriye dönük reel faiz iki gün yanlış paydayla
+# hesaplandı ve sayfada "Ağustos 2026" etiketiyle basıldı.
+# PKA'nın 20'si bir VARSAYIMDIR (09.09.2026'da ölçüldü): anket ulusal yayım
+# takviminde ayrı bir kalem olarak yer almıyor, EVDS serileri (TP.PKAUO.*)
+# yalnız ay etiketi taşıyor ve hattın kendi kayıtlarında (aylik.csv,
+# veri_durum.json) gerçek bir yayım/gözlem tarihi sütunu YOK — yani gün
+# ölçülemiyor, varsayılıyor. Varsayılan bir gün ölçülmüş gibi basılamaz:
+# sayfaya okur diliyle "varsayım" diye yazılır (ozet_uret
+# `anket_yayim_cumlesi`), yayım günü hesabı ise TEK fonksiyondan geçer.
+PKA_YAYIM_GUN = 20           # ayın 20'sinden itibaren geçerli (VARSAYIM)
+TUFE_YAYIM_GECIKME = 3       # ertesi ayın 3'ünden itibaren geçerli (TÜİK yayım günü)
 
 _UYARI: list[str] = []
 
@@ -427,22 +444,37 @@ def reel_paneli(T: pd.DataFrame, KT: pd.DataFrame, cpi: pd.Series,
 # ===========================================================================
 # (3) BEKLENTİ SERİLERİNİN GÜNLÜĞE YAYILMASI
 # ===========================================================================
+def yayim_gunu(ay_etiketi, yayim_gun: int, ay_gecikme: int = 0) -> pd.Timestamp:
+    """Ay etiketli bir gözlemin YAYIM GÜNÜ: etiket + `ay_gecikme` ay, ayın
+    `yayim_gun`u (ay kısaysa son günü); hafta sonuna denk gelirse İLK İŞ GÜNÜ.
+
+    TEK TANIM: günlüğe yayma (`gunluge_yay`), Şekil 05'in dikey çizgileri
+    (`yayim_gunleri`) ve sayfadaki "anketin varsayılan yayım günü"
+    (ozet_uret) hep buradan okur. Üç yerde ayrı yazılsaydı biri hafta
+    sonunu atlar, öbürü atlamazdı ve hangisinin doğru olduğu kimsenin
+    aklında kalmazdı. Yalnız cumartesi/pazar kaydırılır; resmî tatil
+    takvimi bu hatta yok ve bilinmeyen bir tatil uydurulmaz.
+    """
+    g = pd.Timestamp(ay_etiketi) + pd.DateOffset(months=ay_gecikme)
+    g = g.replace(day=min(yayim_gun, g.days_in_month))
+    while g.weekday() >= 5:                       # 5 = Cmt, 6 = Paz
+        g += pd.Timedelta(days=1)
+    return g
+
+
 def gunluge_yay(aylik: pd.Series, tarih: pd.DatetimeIndex, yayim_gun: int,
                 ay_gecikme: int = 0) -> pd.Series:
     """Aylık anket/enflasyon serisini günlük eksene BASAMAK olarak yayar.
 
     Ay etiketi yayım günü DEĞİLDİR. PKA ayın ikinci yarısında, TÜFE ertesi
-    ayın başında açıklanır; ay başından ileri doldurmak GELECEĞE BAKAR ve
-    reel faiz serisine yapay sıçrama koyar. Değer, yayım gününden itibaren
-    geçerli sayılır.
+    ayın 3'ünde açıklanır; ay başından ileri doldurmak GELECEĞE BAKAR ve
+    reel faiz serisine yapay sıçrama koyar. Değer, yayım gününden
+    (`yayim_gunu`: hafta sonuysa ilk iş günü) itibaren geçerli sayılır.
     """
     s = aylik.dropna()
     if s.empty:
         return pd.Series(np.nan, index=tarih)
-    idx = []
-    for t in s.index:
-        g = pd.Timestamp(t) + pd.DateOffset(months=ay_gecikme)
-        idx.append(g.replace(day=min(yayim_gun, g.days_in_month)))
+    idx = [yayim_gunu(t, yayim_gun, ay_gecikme) for t in s.index]
     yeni = pd.Series(s.to_numpy(), index=pd.DatetimeIndex(idx)).sort_index()
     yeni = yeni[~yeni.index.duplicated(keep="last")]
     return yeni.reindex(yeni.index.union(tarih)).ffill().reindex(tarih)
@@ -450,14 +482,188 @@ def gunluge_yay(aylik: pd.Series, tarih: pd.DatetimeIndex, yayim_gun: int,
 
 def yayim_gunleri(aylik: pd.Series, tarih: pd.DatetimeIndex, yayim_gun: int,
                   ay_gecikme: int = 0) -> list[pd.Timestamp]:
+    """Pencere içindeki yayım günleri (`yayim_gunu` ile aynı tanım)."""
     s = aylik.dropna()
     out = []
     for t in s.index:
-        g = pd.Timestamp(t) + pd.DateOffset(months=ay_gecikme)
-        g = g.replace(day=min(yayim_gun, g.days_in_month))
+        g = yayim_gunu(t, yayim_gun, ay_gecikme)
         if tarih[0] <= g <= tarih[-1]:
             out.append(g)
     return out
+
+
+# ===========================================================================
+# (3c) ŞEKİL SAAT DEFTERİ — bir figürün damgası, HATTIN saati değildir
+# ===========================================================================
+#  Bu hattın sekiz figürü üç ritimde biter ve 09.09.2026'da ölçüldü:
+#    · EĞRİ bacağı (strip'ler) çıpa gününde (08.09) biter;
+#    · FONLAMA bacağı (TLREF, AOFM, politika) bir iş günü geride (07.09)
+#      biter — sabah koşusunda o günün gecelik faizi henüz yayımlanmamıştır;
+#      Şekil 04'ün konusu olan taşıma makası bu yüzden 07.09'da biter, ama
+#      sayfa figürün altına hattın ana saatini (08.09) basıyordu;
+#    · AYLIK bacak (PKA anketi, TÜFE) ay etiketi taşır ve figürde günlüğe
+#      basamak olarak yayılmış hâliyle durur; Şekil 05/06/07 bu bacağı
+#      taşıyor ve tek bir günle dürüst anlatılamıyor — 08.09 yazmak anketi
+#      o günün ölçümü gibi gösterir, 08.2026 yazmak eğriyi bir hafta bayat.
+#  Kural (CLAUDE.md): bağlayıcı bacak EN ESKİSİDİR; bacaklar ritim olarak
+#  kıyas kabul etmiyorsa damga İKİ PARÇALI yazılır ("eğri 08.09.2026 · anket
+#  08.2026") ve MDX'in açık `tarihAnahtari`sine düşer — `_sekil_tarih` defteri
+#  TEK bir tarih ya da None ister (sayfa sınavı 18 çözemediğini ENGEL sayar).
+#  Hangi bacağın bağlayıcı olduğu figürün BAŞLIK serilerinden okunur: son
+#  gözlemi etiketle işaretlenen (`_son_isaret`) seriler figürün sözünü taşır;
+#  seyrek dokuz yıl düğümü Şekil 02'de beş düğüm izinden biridir ve
+#  boşlukları yapısaldır (çizgi kesilir), o figürü bağlamaz — Şekil 03'te ise
+#  2y−9y eğimi figürün kendisidir ve bağlar.
+#
+#  Defter BURADA duruyor çünkü iki tüketicisi var: grafik.py figürün KENDİ
+#  alt başlığına yazar (`uzun=True`), ozet_uret.py sayfa altındaki damga için
+#  ozet.json'a koyar. İki ayrı liste tutulsaydı bir gün sessizce ayrışır ve
+#  hangisinin neyi söylediği kimsenin aklında kalmazdı.
+SEKIL_DOSYALARI = ("01_egri_bugun.html", "02_egri_hareketi.html",
+                   "03_egim_bukulme.html", "04_carry.html", "05_reel_faiz.html",
+                   "06_tufex_basabas.html", "07_forward.html",
+                   "08_tani_paneli.html")
+
+
+def ay_kapandi(ay_etiketi, bugun=None) -> bool:
+    """Ay damgası (`AA.YYYY`) ortak/bicim sözleşmesinde ayın SON gününe
+    demirlenir; ay kapanmadıysa o gün YARINA düşer ve yayına giden damga
+    ölçülmemiş bir günü ilan etmiş olur (sayfa sınavı 18b bunu ENGEL sayar).
+    PKA anketi ait olduğu ayın İÇİNDE yayımlanır, yani her ayın son on günü
+    anket bacağı açık bir aya aittir — o günlerde damga yalnız eğri bacağını
+    taşır, anket ayı figürün kendi alt başlığında adıyla yine görünür."""
+    g = pd.Timestamp(ay_etiketi)
+    son = (g + pd.offsets.MonthEnd(0)).normalize()
+    bugun = pd.Timestamp(bugun).normalize() if bugun is not None \
+        else pd.Timestamp.today().normalize()
+    return son <= bugun
+
+
+def sekil_saatleri(o: dict, uzun: bool = False, bugun=None) -> dict[str, str | None]:
+    """Figür başına veri ucu; `o` = data/metrik_ozet.json.
+
+    Değerler ÖLÇÜMDEN gelir, türetilmez: `anlik.<seri>_tarih` alanları her
+    serinin son dolu günüdür, `son_gun` çıpa, `son_ay` anket ayı,
+    `son_tufe_ay` yıllık TÜFE'nin son ayı. Ölçüm yoksa değer None kalır ve o
+    şeklin altına tarih basılmaz — uydurmaktan iyidir.
+
+    `uzun=True` figürün KENDİ alt başlığının yazımını verir ("7 Eylül 2026" ·
+    "Ağustos 2026"); varsayılan site sözleşmesidir ("07.09.2026" · "08.2026").
+    """
+    b = _bicim()
+    a = o.get("anlik") or {}
+
+    def gun(t):
+        if not t:
+            return None
+        return b.tarih_uzun(str(t)) if uzun else b.tarih_kisa(str(t))
+
+    def ay(t):
+        # AY damgası GÜN gibi yazılmaz ("01.08.2026" okura o GÜNÜN ölçümü gibi
+        # görünür) ve ay kapanmadan yazılmaz (yukarı bak).
+        if not t or not ay_kapandi(t, bugun):
+            return None
+        g = pd.Timestamp(t)
+        return f"{b.AYLAR_TR[g.month - 1]} {g.year}" if uzun else f"{g.month:02d}.{g.year}"
+
+    def en_eski(*seriler):
+        """Figürün başlık serilerinin en eski ucu; hiçbiri ölçülmemişse None.
+        min() YAPISAL yazılır — bugünkü sıralamaya bakmaz."""
+        g = [pd.Timestamp(a[s + "_tarih"]) for s in seriler
+             if a.get(s + "_tarih")]
+        return min(g) if g else None
+
+    def en_eski_ay(*aylar):
+        g = [pd.Timestamp(t) for t in aylar if t]
+        return min(g) if g else None
+
+    def karma(egri, aylik, etiket):
+        """İki parçalı damga: canlı bacak + aylık bacak. Bir parça yoksa
+        öteki TEK BAŞINA ama ETİKETİYLE yazılır — böylece karma bir figürün
+        damgası hiçbir gün çıplak tarih olmaz ve hep MDX'in açık anahtarına
+        düşer; ay kapanınca aylık parça kendiliğinden gelir.
+
+        Yazım KISA tutulur (en uzun hâli otuz altı karakter): ozet.json'un
+        cümle alanlarını tarayan kapılar KIRK karakterden uzun her metin
+        değerini okur cümlesi sayıyor ve `AA.YYYY` orada ondalık sanılıp
+        biçim uyarısı üretiyor — bir damga cümle değildir."""
+        e, p = gun(egri), ay(aylik)
+        if e and p:
+            return f"eğri {e} · {etiket} {p}"
+        if e:
+            return f"eğri {e}"
+        if p:
+            return f"{etiket} {p}"
+        return None
+
+    son_gun = o.get("son_gun")
+    son_ay = o.get("son_ay")
+    tufe_ay = o.get("son_tufe_ay")
+    return {
+        # Çıpa gününün kesiti; dokuz yıl düğümü o gün boşsa çubuğu yoktur,
+        # figürün ucu yine çıpadır.
+        "01_egri_bugun.html": gun(son_gun),
+        # Başlık serisi 2 yıl düğümü; seyrek dokuz yıl bağlamaz (yukarı bak).
+        "02_egri_hareketi.html": gun(en_eski("n2y") or son_gun),
+        # 2y−9y eğimi ve kelebek figürün kendisidir; dokuz yıl boşsa eğim de
+        # boştur ve figür o gün ilerlememiştir.
+        "03_egim_bukulme.html": gun(en_eski("egim_2y9y", "kelebek_1_2_5")),
+        # Taşıma = eğri − fonlama; fonlama bir iş günü geride bittiğinde
+        # makas da orada biter.
+        "04_carry.html": gun(en_eski("n2y", "carry_2y_tlref")),
+        # Nominal + PKA + TÜFE: aylık bacağın bağlayıcısı iki ayın en eskisi.
+        "05_reel_faiz.html": karma(en_eski("n1y", "reel_ileri", "fisher_basit_fark"),
+                                   en_eski_ay(son_ay, tufe_ay), "anket/TÜFE"),
+        # TÜFEX kesiti çıpa gününden, başabaş serileri kendi ucundan, anket
+        # baklavaları ay etiketinden.
+        "06_tufex_basabas.html": karma(en_eski("be_2y") or son_gun, son_ay, "anket"),
+        # İleri oranlar + PKA politika faizi beklentisi.
+        "07_forward.html": karma(en_eski("f_1y1y") or son_gun, son_ay, "anket"),
+        # Nokta sayısı ve kimlik sapması her gün çıpa gününe kadar ölçülür;
+        # TÜFEX kesiti de çıpa günündür.
+        "08_tani_paneli.html": gun(son_gun),
+    }
+
+
+_GUN_EKI = {1: "'inden", 2: "'sinden", 3: "'ünden", 4: "'ünden", 5: "'inden",
+            6: "'sından", 7: "'sinden", 8: "'inden", 9: "'undan"}
+
+
+def gun_eki(n) -> str:
+    """Ayın gününe iyelik + ayrılma eki, okura cümle içinde: 3 → "3'ünden",
+    5 → "5'inden", 20 → "20'sinden". Ek SAYIYA bağlıdır (ünlü uyumu + kaynaştırma);
+    MDX'te sayının ardına sabit bir ek yapıştırmak, sabit 5'ten 3'e çekildiği
+    gün "3'inden" basardı. Onlar basamağı sıfırla bitenlerde 20 "yirmi"
+    (sinden), 10 ve 30 "on/otuz" (undan)."""
+    n = int(n)
+    if n % 10 == 0:
+        return f"{n}'sinden" if n == 20 else f"{n}'undan"
+    return f"{n}{_GUN_EKI[n % 10]}"
+
+
+def defter_ayir(saatler: dict[str, str | None]) -> tuple[dict, dict]:
+    """Şekil saatlerini İKİ tüketiciye MEKANİK olarak dağıtır.
+
+    (defter, birlesik):
+      · defter  → ozet.json `_sekil_tarih`; TEK tarih ya da None. Birleşik
+        damga buraya yazılamaz (sayfa sınavı 18 çözemediğini ENGEL sayar).
+      · birlesik → `damga_<figür kökü>` anahtarları; MDX bunları
+        `tarihAnahtari` ile çağırır ve sayfa sınavı 18b içlerindeki her
+        tarihi ayrı ayrı sınar.
+    Ayrım BURADA, tek yerde yapılır: iki liste elle tutulsaydı bir gün
+    sessizce ayrışır ve figürün alt başlığı ile sayfadaki damga farklı gün
+    söylerdi.
+    """
+    b = _bicim()
+    defter: dict[str, str | None] = {}
+    birlesik: dict[str, str] = {}
+    for dosya, deger in saatler.items():
+        if deger and b.tarihe_cevir(deger) is None:
+            defter[dosya] = None
+            birlesik["damga_" + dosya.split(".")[0]] = deger
+        else:
+            defter[dosya] = deger
+    return defter, birlesik
 
 
 # ===========================================================================
@@ -1024,6 +1230,11 @@ def kos() -> int:
         "son_gun": s_gun.strftime("%Y-%m-%d"),
         "son_ay": (str(A["pka_12a"].dropna().index[-1].date())
                    if A["pka_12a"].notna().any() else None),
+        # Yıllık TÜFE'nin son ayı: Şekil 05'in aylık bacağı (şekil saat
+        # defteri) buradan okur — anket ayı ile aynı olmak zorunda değil,
+        # TÜFE ertesi ayın 3'ünde, anket ayın içinde yayımlanır.
+        "son_tufe_ay": (str(tufe_yillik_ay.dropna().index[-1].date())
+                        if tufe_yillik_ay.notna().any() else None),
         "esik": {
             "min_gun": MIN_GUN, "gun_min_nokta": GUN_MIN_NOKTA,
             "getiri_alt_pct": GETIRI_ALT * 100, "getiri_ust_pct": GETIRI_UST * 100,
