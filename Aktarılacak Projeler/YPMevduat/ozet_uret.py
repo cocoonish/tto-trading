@@ -234,7 +234,7 @@ BLOK_OKUR = veri.BLOK_OKUR
 YAYIM_GUN = 6
 
 
-# YAPISAL OLARAK EKSİK KALABİLEN ANAHTARLAR — sayfaya <Deger> ile BAĞLANMAZ.
+# YAPISAL OLARAK BOŞ KALABİLEN ANAHTARLAR — sayfa onları ÇAĞIRABİLİR.
 #
 # `koy()` ölçülemeyen anahtarı bilinçli olarak ATLIYOR: sayfada statik yedek
 # görünsün, uydurulmuş bir sayı değil. Ama sayfa sınavının birinci ölçütü
@@ -249,9 +249,13 @@ YAYIM_GUN = 6
 # "diğer para birimleri" bacaklarında var — kaynak o kalemi yayımlamayı
 # bırakırsa üç anahtar birden düşer.
 #
-# Bu aileler sayfada CÜMLE ile anlatılır (`dol_cumlesi` gibi, kendisi de
-# isteğe bağlı ve ölçülemediğinde hiç yazılmayan bir alan), sayı olarak
-# <Deger>'e bağlanmaz.
+# BAŞLIKTAKİ KURAL BİR ZAMANLAR "sayfaya bağlanmaz" diyordu ve 09.09.2026'da
+# ölçüldü: sayfa bu ailelerden 49 anahtarı `<Deger>` ile ADIYLA çağırıyor.
+# Kural zaten tutmuyordu; tutması da gerekmiyor — anahtar `null` yazıldığı
+# sürece sayfa sınavının birinci ölçütü onu bulur ve okur yedek metni görür.
+# Aynı yorum çözüm diye `dol_cumlesi`ni gösteriyordu ve TAM O ANAHTAR
+# ölçülemediğinde özetten düşen iki alandan biriydi: metin alanları bu
+# sözleşmenin dışında kalmıştı (bkz. `metin()`).
 ISTEGE_BAGLI = (
     re.compile(r"^(dol_|mevduat_)"),          # payın lira bacakları eksik olabilir
     re.compile(r"_diger_mn(_tarih)?$"),       # kaynak bu bacağı yayımlamayabilir
@@ -271,11 +275,24 @@ ISTEGE_BAGLI = (
     # parite etkisi hiç yayımlanmayan bacak yoksa dilim de yoktur.
     re.compile(r"^sifir_sinir_(dilim|manset)"),
     re.compile(r"^sifir_hukumsuz_hafta$"),
+    # METİN VE BAYRAK ALANLARI (`metin()` ile yazılır). Bunlar ölçümlerin
+    # TÜREVİ: besleyen ölçüm gelmediğinde cümlenin konusu kalmaz ve alan boş
+    # yazılır. Sayfa on üçünü de adıyla çağırıyor, yani ilan edilmeleri
+    # sözleşmenin parçası. `bayat_cumlesi`, `uyari_cumlesi` ve `uyari_metni`
+    # BİLEREK dışarıda: onlar koşunun kendi kaydı ve her koşuda kuruluyor.
+    re.compile(r"^(kimlik|dol|ayrisma|kapsam|sifir(_[a-z]+)?)_cumlesi$"),
+    re.compile(r"^kimlik_(hukum|tutuyor)$"),
+    re.compile(r"^taban_[a-z]+_kod$"),
 )
 
 
 def istege_bagli(anahtar: str) -> bool:
-    """Bu anahtar bir koşuda hiç yazılmayabilir mi?"""
+    """Bu anahtarın değeri bir koşuda BOŞ kalabilir mi?
+
+    Anahtarın KENDİSİ her koşuda yazılır (`koy` ve `metin` `null` bırakır);
+    boş kalabilen şey değeridir. Sayfa böyle bir anahtarı çağırdığında okur o
+    koşuda statik yedeği görür — uydurulmuş bir sayı değil.
+    """
     return any(k.search(anahtar) for k in ISTEGE_BAGLI)
 
 
@@ -360,6 +377,29 @@ def konusuz(anahtar: str, deger, ondalik: int | None = 2) -> None:
         O[anahtar] = None
         return
     koy(anahtar, deger, ondalik)
+
+
+def metin(anahtar: str, deger) -> None:
+    """Bir METİN ya da BAYRAK alanını yazar; ölçülemeyeni BOŞ bırakır, ATLAMAZ.
+
+    Sayı alanlarının sözleşmesi (`koy` → `istege_bagli` → `null`) metin
+    alanlarına uygulanmıyordu: cümleler, hüküm metni, çıpanın uzun yazımı ve
+    taban kodları `if m.get(a): O[a] = str(m[a])` kalıbıyla yazılıyor, ölçüm
+    gelmediğinde anahtar HİÇ YAZILMIYORDU. Sayfa on üçünü de `<Deger>` ile
+    ADIYLA çağırıyor ve sayfa sınavının birinci ölçütünde "isteğe bağlı
+    anahtar" kavramı yok — yani o koşuda SİTENİN TAMAMININ yayını dururdu.
+    09.09.2026'da ölçüldü: lira bacakları yüklenemediğinde `dol_cipa` ile
+    `dol_cumlesi` özetten düşüyor. Aynı sınıftan bir kusur 08.09.2026'da
+    DİBS hattında yayını üç kez durdurdu ve site saatlerce dondu; kusur o gün
+    de hattın kendi koşusunda doğmuş ve koşu YEŞİL bitmişti.
+
+    ATLANAN ÖLÇÜM SAYILMAZ, ve bu ayrım bilinçli: bir cümle kendi başına bir
+    ölçüm değil, ölçümlerin TÜREVİDİR. Cümleyi besleyen ölçüm `koy()` yolunda
+    zaten atlanan sayılmıştır; ikinci kez saymak aynı arızayı iki kez sayar ve
+    bayatlık hükmünü olduğundan ağır gösterir.
+    """
+    O[anahtar] = str(deger) if isinstance(deger, str) and deger.strip() else (
+        bool(deger) if isinstance(deger, bool) else None)
 
 
 def _saatsiz_denetimi() -> list[str]:
@@ -698,10 +738,12 @@ def main() -> int:
     # bu yüzden None döndürüyor ve None burada da atlanıyor. HÜKÜM METNİ de
     # ölçüm katmanında kuruluyor — figürün alt yazısı aynı metni basıyor ve
     # iki yerde ayrı ayrı yazılsaydı bir gün sessizce ayrışırlardı.
-    if m.get("kimlik_tutuyor") is not None:
-        O["kimlik_tutuyor"] = bool(m["kimlik_tutuyor"])
-    if m.get("kimlik_hukum"):
-        O["kimlik_hukum"] = str(m["kimlik_hukum"])
+    # `metin()` üçünü de AYIRT EDER: sınanmamış kimlik `null` kalır (yapılmamış
+    # bir sınavın sonucu bildirilmez), sınanmış olan True/False yazılır — ve
+    # anahtar HER koşuda özette durur.
+    metin("kimlik_tutuyor", None if m.get("kimlik_tutuyor") is None
+          else bool(m["kimlik_tutuyor"]))
+    metin("kimlik_hukum", m.get("kimlik_hukum"))
 
     # ------------------------------------------------------------ dolarizasyon
     for a in ("dol_pay_ham", "dol_pay_ar", "dol_pay_fark"):
@@ -713,9 +755,13 @@ def main() -> int:
     # sanardı; sayfa bileşeni her değerin saatini o değerin anahtarından okuyor
     # ve bu, sözleşmenin tam olarak işe yaradığı yer.
     d_cipa = b.tarihe_cevir(m.get("dol_cipa"))
+    # Çıpanın İKİ yazımı da HER koşuda yazılır (ölçülemezse boş): sayfa uzun
+    # yazımı `<Deger>` ile adıyla çağırıyor ve atlanan anahtar yayın kapısında
+    # ENGEL üretir.
+    metin("dol_cipa", None if d_cipa is None else ad_gun(pd.Timestamp(d_cipa)))
+    metin("dol_cipa_kisa",
+          None if d_cipa is None else pd.Timestamp(d_cipa).strftime("%d.%m.%Y"))
     if d_cipa is not None:
-        O["dol_cipa"] = ad_gun(pd.Timestamp(d_cipa))
-        O["dol_cipa_kisa"] = pd.Timestamp(d_cipa).strftime("%d.%m.%Y")
         olc("dol_pay_cipa", m.get("dol_pay_cipa"), 2,
             saat=O["dol_cipa_kisa"])
     else:
@@ -742,8 +788,7 @@ def main() -> int:
     for a in ("kimlik_cumlesi", "dol_cumlesi", "ayrisma_cumlesi",
               "kapsam_cumlesi", "sifir_cumlesi", "sifir_tanim_cumlesi",
               "sifir_dayanaksiz_cumlesi", "sifir_hukumsuz_cumlesi"):
-        if m.get(a):
-            O[a] = str(m[a])
+        metin(a, m.get(a))
 
     # ÜÇ TABANIN KAYNAK KODU — sözlüğün yerine geçen makine bilgisi.
     # Sayfada üç ayrı taban geçiyor ve hangisinin manşet olduğu okura
@@ -751,8 +796,7 @@ def main() -> int:
     # katalogdan çözülmüş kodu — elle yazılmış bir kod, katalog değiştiği gün
     # sessizce yalan söylerdi.
     for a in ("taban_manset_kod", "taban_genis_kod", "taban_lira_kod"):
-        if m.get(a):
-            O[a] = str(m[a])
+        metin(a, m.get(a))
 
     # İKİ PENCERE — sayılar burada, ayrımın anlatısı sayfada.
     # Tarihçe asimetrik: yalnız değişim tablosundan türeyen ölçümler uzun
