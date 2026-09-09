@@ -40,7 +40,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from metrik import ASGARI_AY, ESIK_GUCLU, UFUK, capraz, epizotlar
+from metrik import (ASGARI_AY, ESIK_GUCLU, UFUK, ay_adi, ay_damga, ay_iso,
+                    capraz, epizotlar, kaynak_kaydi, koy, saatleri_yaz, uc)
 
 PROJE = Path(__file__).resolve().parent
 DATA = PROJE / "data"
@@ -180,46 +181,72 @@ def main() -> int:
     tufe = pd.read_csv(DATA / "tufe.csv", index_col=0, parse_dates=True)
 
     eps = epizotlar(oni, ESIK_GUCLU)
+    # ── SAATLER. Blok dört kaynağı dört ritimde taşıyor (09.09.2026'da
+    # ölçüldü: Pink Sheet ve BIS 2026-08, BLS 2026-07, ECB 2025-12) ve tek
+    # damga ECB'yi sekiz ay taze gösteriyordu. Her ölçü, beslendiği serilerin
+    # EN ESKİ ucuyla damgalanır (metrik.uc); `saat` defteri koşu sonunda
+    # `<anahtar>_tarih` olarak yazılır. Hattın en yeni ayı TÜFE'ninkidir.
+    saat: dict = {}
+    oni_uc, tufe_uc = uc(oni), uc(tufe)
+    dolu = [K[c] for c in K.columns if K[c].notna().any()]
+    K_uc = max(uc(c) for c in dolu) if dolu else None   # tablonun en yeni bacağı
+    abd_tufe = K["abd_tufe"].dropna()
+    abd_uc = uc(K.get("abd_tufe"), K.get("abd_gida"))
     S: dict = {
-        "_tarih": f"{K.index.max():%d.%m.%Y}", "_ay": f"{K.index.max():%Y-%m}",
-        "kur_bas": f"{K.index.min():%Y-%m}", "kur_son": f"{K.index.max():%Y-%m}",
+        # Blok ana saati = en yeni bacak (sözleşme: `_tarih` en yeni canlı
+        # bacak; sayfa sınavı 12 gerideyse uyarır). Anahtar başına saat
+        # aşağıdaki defterden gelir, bu damgadan DEĞİL.
+        "_tarih": ay_damga(K_uc), "_ay": ay_iso(K_uc),
+        "kur_bas": ay_iso(K.index.min()), "kur_son": ay_iso(K_uc),
         "esik": ESIK_GUCLU, "asgari_ay": ASGARI_AY, "ufuk": UFUK,
-        "epizot_sayisi": len(eps),
     }
+    koy(S, saat, "epizot_sayisi", len(eps), oni_uc)
 
     # ── 1. REEL gıda emtiası. Deflatör ABD TÜFE'si: nominal ölçmek, arz şokunu
     # ABD'nin kendi para politikasıyla karıştırırdı.
-    abd_tufe = K["abd_tufe"].dropna()
     reel_gida = (K["emtia_gida"] / abd_tufe * 100.0).dropna()
     reel_gida_y = _yillik(reel_gida).dropna()
-    # Emtia serisinin KENDİ yaşı ayrıca yazılır: birleşik tablonun son ayı
-    # BLS'ten gelebiliyor ve emtia yedi ay geride olsa bile taze görünüyordu.
+    reel_uc = uc(reel_gida_y)          # = min(emtia, ABD TÜFE): deflatör bağlar
     eg = K["emtia_gida"].dropna()
-    S["emtia_bas"] = f"{eg.index.min():%Y-%m}"
-    S["emtia_son"] = f"{eg.index.max():%Y-%m}"
-    S["emtia_yas_ay"] = int(round((K.index.max() - eg.index.max()).days / 30.44))
-    if S["emtia_yas_ay"] >= 3:
-        uyar(f"EMTİA SERİSİ GERİDE: {S['emtia_yas_ay']} ay ({S['emtia_son']}) — "
-             "Pink Sheet dosyası güncellenmemiş olabilir")
-    S["reel_gida_son"] = _r(reel_gida_y.iloc[-1])
-    S["nominal_gida_son"] = _r(_yillik(K["emtia_gida"]).dropna().iloc[-1])
+    emtia_uc = uc(eg)
+    # Emtia serisinin KENDİ yaşı: birleşik tablonun son ayı BLS ya da BIS'ten
+    # gelebiliyor ve emtia geride kalsa bile taze görünüyordu. Yaş hattın en
+    # yeni ayına (TÜFE) göre; aynı ölçü kaynak kaydında da yazılır.
+    S["emtia_bas"] = ay_iso(eg.index.min())
+    S["emtia_son"] = ay_iso(emtia_uc)
+    S["emtia_yas_ay"] = int(max(0, (tufe_uc.year - emtia_uc.year) * 12
+                                  + (tufe_uc.month - emtia_uc.month)))
+    # KAYNAK KAYITLARI — Pink Sheet, BLS, BIS, ECB; her biri kendi yaşıyla.
+    for kod, seri in (("pink", K.get("emtia_gida")), ("bls", K.get("abd_tufe")),
+                      ("bis", K.get("faiz_abd")), ("ecb", K.get("ea_tufe_12a"))):
+        kayit, uy = kaynak_kaydi(kod, seri, tufe_uc)
+        S.update(kayit)
+        if uy:
+            uyar(uy)
+    koy(S, saat, "reel_gida_son", _r(reel_gida_y.iloc[-1]), reel_uc)
+    koy(S, saat, "nominal_gida_son", _r(_yillik(K["emtia_gida"]).dropna().iloc[-1]), emtia_uc)
     ep_kur = epizot_calismasi(reel_gida_y, eps)
     S["kuresel"] = ep_kur
-    for a in ("olculen", "kosulsuz", "epizot_ortalama", "fark", "orneklem_bas", "orneklem_son"):
+    kur_uc = uc(reel_gida_y, oni)      # epizot tanımı ONI'den, ölçü reel seriden
+    for a in ("olculen", "kosulsuz", "epizot_ortalama", "fark"):
+        koy(S, saat, f"kur_{a}", ep_kur.get(a), kur_uc)
+    for a in ("orneklem_bas", "orneklem_son"):        # etiket; saat değil
         S[f"kur_{a}"] = ep_kur.get(a)
     print(f"   küresel reel gıda: örneklem {ep_kur['orneklem_bas']}→{ep_kur['orneklem_son']}, "
           f"ölçülen epizot {ep_kur['olculen']}, epizot ort. {ep_kur.get('epizot_ortalama')} "
           f"vs koşulsuz {ep_kur.get('kosulsuz')} → fark {ep_kur.get('fark')}")
 
     # gecikme profili (kalıcılık yanlısı — yalnız gecikmenin YERİ için)
-    oni_m = oni.reindex(reel_gida_y.index.union(oni.index)).interpolate(limit=1)
+    # Kuyruk doldurulmaz (metrik.py ile aynı kural): yalnız iç boşluk.
+    oni_m = (oni.reindex(reel_gida_y.index.union(oni.index))
+             .interpolate(limit=1, limit_area="inside"))
     c = capraz(oni_m, reel_gida_y, GEC_MAKS)
     if c:
         en = max(c, key=lambda d: abs(d["korelasyon"]))
         S["kur_capraz"] = c
-        S["kur_en_iyi_gecikme"] = en["gecikme"]
-        S["kur_en_iyi_kor"] = en["korelasyon"]
-        S["kur_capraz_n"] = en["n"]
+        koy(S, saat, "kur_en_iyi_gecikme", en["gecikme"], kur_uc)
+        koy(S, saat, "kur_en_iyi_kor", en["korelasyon"], kur_uc)
+        koy(S, saat, "kur_capraz_n", en["n"], kur_uc)
         print(f"   küresel gecikme profili: en güçlü {en['gecikme']} ay, "
               f"r={en['korelasyon']}, n={en['n']}")
 
@@ -227,19 +254,22 @@ def main() -> int:
     tamam = [e for e in eps if not e.get("suruyor")]
     son_ep = tamam[-1] if tamam else None
     if son_ep is not None:
-        S["son_epizot_zirve"] = f"{son_ep['zirve']:%Y-%m}"
-        S["son_epizot_oni"] = _r(son_ep["zirve_deger"])
+        S["son_epizot_zirve"] = ay_iso(son_ep["zirve"])           # etiket
+        koy(S, saat, "son_epizot_oni", _r(son_ep["zirve_deger"]), oni_uc)
     kirilim = []
+    kirilim_uclar = [oni_uc, uc(abd_tufe)]        # her satır reel: deflatör bağlar
     for ad, (baslik, gerekce) in {**URUNLER,
                                   **{k: (v, "") for k, v in TOPLU.items()}}.items():
         if ad not in K.columns:
-            uyar(f"ürün serisi yok, kırılımda atlanıyor: {ad}")
+            # Koşu kaydı okura basılır: sütun adı değil ürünün adı yazılır.
+            uyar(f"{baslik} serisi bu koşuda yok; ürün kırılımında yer almıyor.")
             continue
         reel = (K[ad] / abd_tufe * 100.0).dropna()
+        kirilim_uclar.append(uc(K[ad]))
         e = epizot_calismasi(_yillik(reel).dropna(), eps)
         if e["olculen"] < ASGARI_EPIZOT:
-            uyar(f"{ad}: ölçülebilir epizot {e['olculen']} < {ASGARI_EPIZOT}, "
-                 "kırılımda hüküm yok")
+            uyar(f"{baslik}: ölçülebilir epizot sayısı {e['olculen']} "
+                 f"(en az {ASGARI_EPIZOT} gerekir); kırılımda hüküm yok.")
         # SON EPİZODUN kendi hikâyesi. Basında "kakao %250 arttı" gibi
         # cümleler dolaşıyor; onları alıntılamak yerine KENDİ serimizden
         # ölçüyoruz: son tamamlanmış epizodun zirvesinden sonraki 18 ayda
@@ -258,6 +288,11 @@ def main() -> int:
                         "bas": e.get("orneklem_bas")})
     kirilim.sort(key=lambda d: (d["fark"] is None, -(d["fark"] or 0)))
     S["kirilim"] = kirilim
+    # Kırılım listesinin tek saati: ONI, deflatör ve ürün serilerinin en eskisi.
+    # ozet_uret her satırı `kir_<ürün>_<alan>` anahtarına açar ve bu saati verir.
+    kirilim_uc = min(t for t in kirilim_uclar if t is not None) if any(
+        t is not None for t in kirilim_uclar) else None
+    S["kirilim_tarih"] = ay_damga(kirilim_uc)
     print("   ürün kırılımı (epizot sonrası reel yıllık − koşulsuz, puan):")
     for d in kirilim:
         print(f"     {d['baslik']:<34}{str(d['fark']):>9}  "
@@ -270,8 +305,8 @@ def main() -> int:
         e = epizot_calismasi(gor_emtia, eps)
         S["gor_emtia"] = e
         for a in ("olculen", "kosulsuz", "epizot_ortalama", "fark"):
-            S[f"gor_emtia_{a}"] = e.get(a)
-        S["gor_emtia_son"] = _r(gor_emtia.iloc[-1])
+            koy(S, saat, f"gor_emtia_{a}", e.get(a), uc(gor_emtia, oni))
+        koy(S, saat, "gor_emtia_son", _r(gor_emtia.iloc[-1]), uc(gor_emtia))
         print(f"   gıda−metal (deflatörsüz): epizot ort. {e.get('epizot_ortalama')} "
               f"vs koşulsuz {e.get('kosulsuz')} → fark {e.get('fark')} "
               f"(n_epizot {e['olculen']})")
@@ -283,11 +318,12 @@ def main() -> int:
         abd_gor = (abd_y["abd_gida"] - abd_y["abd_tufe"]).dropna()
         e = epizot_calismasi(abd_gor, eps)
         S["abd"] = e
-        for a in ("olculen", "kosulsuz", "epizot_ortalama", "fark", "orneklem_bas"):
-            S[f"abd_{a}"] = e.get(a)
-        S["abd_goreceli_son"] = _r(abd_gor.iloc[-1])
-        S["abd_gida_12a"] = _r(abd_y["abd_gida"].iloc[-1])
-        S["abd_tufe_12a"] = _r(abd_y["abd_tufe"].iloc[-1])
+        for a in ("olculen", "kosulsuz", "epizot_ortalama", "fark"):
+            koy(S, saat, f"abd_{a}", e.get(a), uc(abd_gor, oni))
+        S["abd_orneklem_bas"] = e.get("orneklem_bas")               # etiket
+        koy(S, saat, "abd_goreceli_son", _r(abd_gor.iloc[-1]), uc(abd_gor))
+        koy(S, saat, "abd_gida_12a", _r(abd_y["abd_gida"].iloc[-1]), uc(abd_y["abd_gida"]))
+        koy(S, saat, "abd_tufe_12a", _r(abd_y["abd_tufe"].iloc[-1]), uc(abd_y["abd_tufe"]))
         print(f"   ABD göreceli gıda: ölçülen epizot {e['olculen']}, "
               f"epizot ort. {e.get('epizot_ortalama')} vs koşulsuz {e.get('kosulsuz')} "
               f"→ fark {e.get('fark')}")
@@ -295,7 +331,8 @@ def main() -> int:
     # geçiş katsayıları: manşet aylık ~ gıda aylık (Türkiye ile aynı denklem)
     g = _regres(_aylik(K["abd_gida"]), _aylik(K["abd_tufe"]))
     if g:
-        S["abd_gecis_beta"], S["abd_gecis_r2"], S["abd_gecis_n"] = g["beta"], g["r2"], g["n"]
+        for a in ("beta", "r2", "n"):
+            koy(S, saat, f"abd_gecis_{a}", g[a], abd_uc)
         print(f"   ABD geçiş katsayısı β={g['beta']} (R²={g['r2']}, n={g['n']})")
 
     # ÜÇ EKONOMİ, TEK DENKLEM: manşet yıllık ~ gıda yıllık. Aylık geçiş
@@ -315,28 +352,23 @@ def main() -> int:
         d = _regres(gx, hy)
         if not d:
             continue
-        S[f"gecis_yillik_{ad}_beta"] = d["beta"]
-        S[f"gecis_yillik_{ad}_r2"] = d["r2"]
-        S[f"gecis_yillik_{ad}_n"] = d["n"]
+        for a in ("beta", "r2", "n"):
+            koy(S, saat, f"gecis_yillik_{ad}_{a}", d[a], uc(gx, hy))
         print(f"   yıllık geçiş [{ad}]: β={d['beta']} (R²={d['r2']}, n={d['n']})")
 
     # şok ÇEKİRDEĞE ulaşıyor mu — iki ülke, aynı denklem
     if "abd_cekirdek" in K.columns:
         cc = _en_iyi_gecikmeli(_aylik(K["abd_gida"]), _aylik(K["abd_cekirdek"]), 12)
         if cc:
-            S["abd_cekirdek_beta"] = cc["beta"]
-            S["abd_cekirdek_r2"] = cc["r2"]
-            S["abd_cekirdek_gecikme"] = cc["gecikme"]
-            S["abd_cekirdek_n"] = cc["n"]
+            for a in ("beta", "r2", "gecikme", "n"):
+                koy(S, saat, f"abd_cekirdek_{a}", cc[a], uc(K["abd_gida"], K["abd_cekirdek"]))
             print(f"   ABD gıda→çekirdek: β={cc['beta']} (R²={cc['r2']}, "
                   f"gecikme {cc['gecikme']} ay, n={cc['n']})")
     if "cekirdek_c" in tufe.columns:
         tc = _en_iyi_gecikmeli(_aylik(tufe["gida"]), _aylik(tufe["cekirdek_c"]), 12)
         if tc:
-            S["tr_cekirdek_beta"] = tc["beta"]
-            S["tr_cekirdek_r2"] = tc["r2"]
-            S["tr_cekirdek_gecikme"] = tc["gecikme"]
-            S["tr_cekirdek_n"] = tc["n"]
+            for a in ("beta", "r2", "gecikme", "n"):
+                koy(S, saat, f"tr_cekirdek_{a}", tc[a], tufe_uc)
             print(f"   TR gıda→çekirdek: β={tc['beta']} (R²={tc['r2']}, "
                   f"gecikme {tc['gecikme']} ay, n={tc['n']})")
 
@@ -346,11 +378,12 @@ def main() -> int:
         ea_gor = (K["ea_gida_12a"] - K["ea_tufe_12a"]).dropna()
         e = epizot_calismasi(ea_gor, eps)
         S["ea"] = e
-        for a in ("olculen", "kosulsuz", "epizot_ortalama", "fark", "orneklem_bas"):
-            S[f"ea_{a}"] = e.get(a)
-        S["ea_goreceli_son"] = _r(ea_gor.iloc[-1])
-        S["ea_gida_son"] = _r(K["ea_gida_12a"].dropna().iloc[-1])
-        S["ea_tufe_son"] = _r(K["ea_tufe_12a"].dropna().iloc[-1])
+        for a in ("olculen", "kosulsuz", "epizot_ortalama", "fark"):
+            koy(S, saat, f"ea_{a}", e.get(a), uc(ea_gor, oni))
+        S["ea_orneklem_bas"] = e.get("orneklem_bas")                # etiket
+        koy(S, saat, "ea_goreceli_son", _r(ea_gor.iloc[-1]), uc(ea_gor))
+        koy(S, saat, "ea_gida_son", _r(K["ea_gida_12a"].dropna().iloc[-1]), uc(K["ea_gida_12a"]))
+        koy(S, saat, "ea_tufe_son", _r(K["ea_tufe_12a"].dropna().iloc[-1]), uc(K["ea_tufe_12a"]))
         print(f"   Euro Bölgesi göreceli gıda: ölçülen epizot {e['olculen']}, "
               f"epizot ort. {e.get('epizot_ortalama')} vs koşulsuz "
               f"{e.get('kosulsuz')} → fark {e.get('fark')}")
@@ -373,7 +406,7 @@ def main() -> int:
                         "degisim": _r(pen.iloc[-1] - pen.iloc[0]),
                         "ay": int(len(pen))})
         S["fed_yol"] = yol
-        S["fed_olculen"] = len(yol)
+        koy(S, saat, "fed_olculen", len(yol), uc(ff, oni))
         print("   Fed patikası (zirve → +18 ay, puan):")
         for d in yol:
             print(f"     {d['zirve']}  {d['faiz_zirve']:>6} → {d['faiz_18ay']:>6}  "
@@ -383,17 +416,17 @@ def main() -> int:
         # pencerelerinin "olağandışı" olup olmadığı ancak buna karşı okunur.
         d18 = (ff.shift(-UFUK) - ff).dropna()
         if len(d18) > 60:
-            S["fed_kosulsuz_18ay"] = _r(d18.mean())
+            koy(S, saat, "fed_kosulsuz_18ay", _r(d18.mean()), uc(ff))
             print(f"     koşulsuz 18 aylık değişim ortalaması: "
                   f"{S['fed_kosulsuz_18ay']:+} puan (n={len(d18)})")
-        S["fed_hukum"] = "nedensel_degil"
-        S["fed_hukum_metin"] = (
+        koy(S, saat, "fed_hukum", "nedensel_degil", uc(ff, oni))
+        koy(S, saat, "fed_hukum_metin", (
             "Bu sayıların ortalaması ALINMAZ. Dört pencerenin her biri El Niño'yla "
             "ilgisi olmayan bir şeyin gölgesindedir: 1983 Volcker dezenflasyonu, "
             "1998 Asya krizi ve LTCM, 2016 faiz artırım döngüsünün ilk adımı, "
             "2024 Kovid sonrası indirim döngüsü. Tablo, El Niño'nun politika "
             "faizini ne yaptığını DEĞİL, epizotların hangi rejimlere denk "
-            "geldiğini gösterir.")
+            "geldiğini gösterir."), uc(ff, oni))
 
     # ── 5. KÜRESEL → YEREL GEÇİŞ (yazının en zayıf halkasıydı, artık ölçülü)
     gec = {}
@@ -401,16 +434,16 @@ def main() -> int:
         d = _en_iyi_gecikmeli(reel_gida_y, abd_y["abd_gida"])
         if d:
             gec["abd"] = d
-            S["gecis_abd_beta"], S["gecis_abd_r2"] = d["beta"], d["r2"]
-            S["gecis_abd_gecikme"], S["gecis_abd_n"] = d["gecikme"], d["n"]
+            for a in ("beta", "r2", "gecikme", "n"):
+                koy(S, saat, f"gecis_abd_{a}", d[a], uc(reel_gida_y, abd_y["abd_gida"]))
             print(f"   küresel→ABD gıda TÜFE'si: β={d['beta']} (R²={d['r2']}, "
                   f"gecikme {d['gecikme']} ay, n={d['n']})")
     tr_gor = (_yillik(tufe["gida"]) - _yillik(tufe["tufe"])).dropna()
     d = _en_iyi_gecikmeli(reel_gida_y, tr_gor)
     if d:
         gec["tr"] = d
-        S["gecis_tr_beta"], S["gecis_tr_r2"] = d["beta"], d["r2"]
-        S["gecis_tr_gecikme"], S["gecis_tr_n"] = d["gecikme"], d["n"]
+        for a in ("beta", "r2", "gecikme", "n"):
+            koy(S, saat, f"gecis_tr_{a}", d[a], uc(reel_gida_y, tr_gor))
         print(f"   küresel→TR göreceli gıda: β={d['beta']} (R²={d['r2']}, "
               f"gecikme {d['gecikme']} ay, n={d['n']})")
     S["gecis"] = gec
@@ -418,18 +451,30 @@ def main() -> int:
     # ── HÜKÜM. Aynı eşik, Türkiye ölçümüyle aynı gerekçe.
     n = S.get("kur_olculen") or 0
     if n >= ASGARI_EPIZOT:
-        S["kur_hukum"] = "olculebilir"
-        S["kur_hukum_metin"] = (
+        hukum, metin = "olculebilir", (
             f"Küresel gıda emtiasında {n} güçlü El Niño epizodu ölçülebiliyor "
-            f"(örneklem {S.get('kur_orneklem_bas')}'den başlıyor). Türkiye'de bu "
-            "sayı ikiydi; hüküm kurulamamasının sebebi kanalın yokluğu değil, "
-            "yerel örneklemin kısalığıydı.")
+            f"(örneklem {ay_adi(reel_gida_y.index.min())} ayında başlıyor). "
+            "Türkiye'de bu sayı ikiydi; hüküm kurulamamasının sebebi kanalın "
+            "yokluğu değil, yerel örneklemin kısalığıydı.")
     else:
-        S["kur_hukum"] = "yetersiz"
-        S["kur_hukum_metin"] = (
+        hukum, metin = "yetersiz", (
             f"Küresel tarafta da yalnız {n} ölçülebilir epizot var; yön hakkında "
             "hüküm kurulmuyor.")
+    koy(S, saat, "kur_hukum", hukum, kur_uc)
+    koy(S, saat, "kur_hukum_metin", metin, kur_uc)
     print(f"   KÜRESEL HÜKÜM: {S['kur_hukum']}")
+
+    # Figür saat defterinin okuduğu uçlar (metrik.sekil_saatleri); etiket,
+    # özete geçmez. Hangi figürün hangi seriden çizildiği grafik.py ile aynı.
+    S["_uc"] = {
+        "emtia": ay_iso(emtia_uc),
+        "abd": ay_iso(abd_uc),
+        "reel_gida": ay_iso(reel_uc),
+        "kirilim": ay_iso(kirilim_uc),
+        "faiz_abd": ay_iso(uc(K.get("faiz_abd"))),
+        "ea": ay_iso(uc(K.get("ea_tufe_12a"), K.get("ea_gida_12a"))),
+    }
+    saatleri_yaz(S, saat)
 
     # grafik tarihçesi (05 numaralı şekil)
     S["reel_gida_tarihce"] = [{"ay": f"{t:%Y-%m}", "deger": _r(v)}
