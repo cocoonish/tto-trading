@@ -828,7 +828,8 @@ def sekil_12(M, o, damga):
 # ===========================================================================
 # ŞEKİL 13 — Net borç ve Hazine nakit varlığı
 # ===========================================================================
-def sekil_13(C, o, damga_c):
+def sekil_13(C, o, damga_fh):
+    """damga_fh: finansal hesaplar bacağının KENDİ çeyreği (GSYH'ninki değil)."""
     if "net_fin_deger_trl" not in C.columns:
         return None
     fig = make_subplots(
@@ -861,7 +862,7 @@ def sekil_13(C, o, damga_c):
         fig.update_yaxes(title_text="trilyon TL", row=r, col=1)
         _tarih_ekseni(fig, r, _pen(C["net_fin_deger_trl"], FIN_BAS).index, "ceyrek")
     d = (o.get("dogrulama") or {}).get("DİBS+eurobond ↔ finansal hesaplar F.3", {})
-    return _duzen(fig, f"Net borç göstergeleri (finansal hesaplar) · veri {damga_c}", [
+    return _duzen(fig, f"Net borç göstergeleri (finansal hesaplar) · veri {damga_fh}", [
         "Finansal hesaplar ÜÇ AYLIKTIR ve bu hattın en gecikmeli ailesidir (yaklaşık iki "
         "çeyrek). Panel bu yüzden aylık serilerden erken biter.",
         "Net finansal değer (BF.9) = finansal varlıklar − yükümlülükler. Negatif olması "
@@ -889,6 +890,14 @@ def kos() -> None:
     s_ceyrek = pd.Timestamp(o["son_ceyrek"])
     s_hafta = pd.Timestamp(o["son_hafta"])
     damga, damga_c, damga_h = ay_ad(s_ay), ceyrek_ad(s_ceyrek), gun_ad(s_hafta)
+    # ŞEKİL 13'ÜN DAMGASI GSYH'NİN DEĞİL, FİNANSAL HESAPLARIN ÇEYREĞİDİR. Figür
+    # "veri 2026-Ç2" diyordu, çizdiği her seri 2026-Ç1'de bitiyordu (09.09.2026'da
+    # ölçüldü): iki kurum aynı çeyreklik dosyada durur ama ayrı takvimle yayımlar.
+    # Uç, çizilen sütunlardan ölçülür (veri.bacak_ucu) — özetin `finhesap_tarih`i
+    # ile aynı listeden, yani sayfadaki damga ile figürün içindeki alt yazı aynı
+    # çeyreği söyler.
+    s_fh = veri.bacak_ucu(C, veri.FH_KOLONLAR)
+    damga_fh = ceyrek_ad(s_fh) if s_fh is not None else "—"
     print(f"Merkezi yönetim bütçesi & borç stoku — grafikler · bütçe {damga}")
 
     ciktilar = [
@@ -904,7 +913,7 @@ def kos() -> None:
         (sekil_10(H, o, damga_h), "10_vade_yapisi.html"),
         (sekil_11(H, o, damga_h), "11_dibs_sahiplik.html"),
         (sekil_12(M, o, damga), "12_cevirme_orani.html"),
-        (sekil_13(C, o, damga_c), "13_net_borc.html"),
+        (sekil_13(C, o, damga_fh), "13_net_borc.html"),
     ]
     n = 0
     for fig, ad in ciktilar:
