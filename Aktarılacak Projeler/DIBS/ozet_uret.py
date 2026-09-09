@@ -23,6 +23,7 @@ import sys
 import numpy as np
 import pandas as pd
 
+import metrik
 from veri import PROJE, VERI, AY_TR, gun_ad, ay_ad, tazelik_tolerans
 
 O: dict = {}
@@ -81,6 +82,63 @@ OLCULEMEDI = "—"
 
 # Okura yazılan vade adları (kıyas uyarıları için).
 VADE_AD = {"2y": "iki yıl", "1y": "bir yıl", "9y": "dokuz yıl"}
+
+
+def ay_kisa(t) -> str:
+    """Aylık SAAT yazımı — ortak/bicim sözleşmesi: `AA.YYYY`. Ayın günü
+    YAZILMAZ ("01.08.2026" okura o günün ölçümü gibi görünür); Türkçe ay adı
+    ("Ağustos 2026") saat anahtarında YASAK — bicim onu çözmez, çözülemeyen
+    saat denetlenmeyen saattir."""
+    t = pd.Timestamp(t)
+    return f"{t.month:02d}.{t.year}"
+
+
+# Aylık kökenli sayfa anahtarları → aylik.csv'de ait oldukları sütun. Saat
+# (`<anahtar>_tarih`) ve okur etiketi (`<anahtar>_ay_ad`) bu eşlemeden yazılır.
+AYLIK_ANAHTARLAR = (("pka_12a", "pka_12a"), ("pka_24a", "pka_24a"),
+                    ("pka_5y", "pka_5y"), ("pka_faiz_12a", "pka_faiz_12a"),
+                    ("pka_faiz_24a", "pka_faiz_24a"), ("pka_katilimci", "pka_12a_n"),
+                    ("tufe_yillik", "tufe_2025"),
+                    # Ortalamaya çevrilmiş anket serileri de ANKET AYINA aittir
+                    # (günlüğe basamak olarak yayılıyorlar).
+                    ("pka_ort_1y", "pka_12a"), ("pka_ort_2y", "pka_12a"),
+                    ("pka_ort_5y", "pka_12a"), ("pka_ort_7y", "pka_12a"))
+
+
+def aylik_saatleri(A: pd.DataFrame, eslesme=AYLIK_ANAHTARLAR) -> dict[str, str]:
+    """Aylık anahtarların saati ve okur etiketi; `A` = data/aylik.csv.
+
+    09.09.2026'da ölçüldü: on bir aylık saat anahtarı ("pka_12a_tarih",
+    "tufe_yillik_tarih", "pka_ort_2y_tarih" …) "Ağustos 2026" diye Türkçe ay
+    adıyla yazılıyordu. ortak/bicim ile lib/bicim bu yazımı ÇÖZMEZ; yani
+    bileşenin bayatlık denetimi ve sayfa sınavının saat ölçütleri bu on bir
+    anahtarı hiç görmüyordu — ayrıştıramayan bir denetim hep "sorun yok" der.
+    Saat `AA.YYYY` yazılır, okura basılan etiket AYRI anahtardadır
+    (`<anahtar>_ay_ad` = "Ağustos 2026") ve sayfa tabloda onu çağırır.
+    """
+    out: dict[str, str] = {}
+    for hedef, kol in eslesme:
+        if kol not in A.columns:
+            continue
+        s = A[kol].dropna()
+        if s.empty:
+            continue
+        out[hedef + "_tarih"] = ay_kisa(s.index[-1])
+        out[hedef + "_ay_ad"] = ay_ad(s.index[-1])
+    return out
+
+
+def anket_yayim_cumlesi(s_ay, yayim_gun: int) -> str:
+    """Anketin yayım gününün VARSAYIM olduğu okura yazılır (09.09.2026'da
+    ölçüldü: Piyasa Katılımcıları Anketi ulusal yayım takviminde ayrı kalem
+    değil, seri yalnız ay etiketi taşıyor, hattın kayıtlarında gerçek yayım
+    tarihi yok). Gün TEK tanımdan (metrik.yayim_gunu) gelir."""
+    g = metrik.yayim_gunu(s_ay, yayim_gun)
+    return ("Anketin yayım günü bir varsayımdır: Piyasa Katılımcıları Anketi "
+            "resmî veri takviminde ayrı bir kalem olarak yer almıyor ve seri "
+            f"yalnız ay etiketi taşıyor. Hat her ayın {metrik.gun_eki(yayim_gun)} "
+            "(hafta sonuna denk gelirse ilk iş gününden) itibaren geçerli sayar — "
+            f"{ay_ad(s_ay)} anketi için {tr_tarih(g)}.")
 
 
 def kiyas_degisim(M: pd.DataFrame, s_gun: pd.Timestamp, g: pd.Timestamp, kol: str,
@@ -144,10 +202,15 @@ def main() -> int:
     if s_ay is not None:
         # Gecikme ay SONUNDAN değil VARSAYILAN YAYIM GÜNÜNDEN ölçülür: PKA ayın
         # ikinci yarısında açıklanıyor, ay sonu referansı içinde bulunduğumuz
-        # ayın anketini "henüz gelmemiş" gösterip eksi gün üretiyordu.
-        yayim = s_ay.replace(day=min(m["esik"]["pka_yayim_gun"], s_ay.days_in_month))
+        # ayın anketini "henüz gelmemiş" gösterip eksi gün üretiyordu. Gün TEK
+        # tanımdan (metrik.yayim_gunu — günlüğe yayma ve Şekil 05'in dikey
+        # çizgileri de oradan): hafta sonuna denk gelirse ilk iş günü; burada
+        # ayrı hesaplanınca 20 Eylül 2026 Pazar'ı yayım günü sayıp seriden bir
+        # gün önce "gelmiş" gösterirdi.
+        yayim = metrik.yayim_gunu(s_ay, m["esik"]["pka_yayim_gun"])
         koy("anket_gecikme_gun", max(0, (bugun - yayim).days), 0)
         O["anket_varsayilan_yayim"] = tr_tarih(yayim)
+        O["anket_yayim_cumlesi"] = anket_yayim_cumlesi(s_ay, m["esik"]["pka_yayim_gun"])
 
     # --- eğri düğümleri ----------------------------------------------------
     # Her anahtar KENDİ son dolu gününden okunur; çıpadan uzaksa atlanır.
@@ -251,22 +314,17 @@ def main() -> int:
     # Aylık kökenli anahtarların "_tarih" alanı yukarıda GÜNLÜK çıpayı
     # gösteriyordu (seri günlüğe basamak olarak yayıldığı için). Bu yanıltıcı:
     # 23,69 sayısı 21.08.2026 günü GEÇERLİDİR ama Ağustos 2026 ANKETİNDEN gelir.
-    # Tarih alanları kaynak aya çevrilir.
+    # Tarih alanları kaynak aya çevrilir — ortalamaya çevrilmiş anket
+    # serileriyle birlikte, aşağıda `aylik_saatleri` ile tek yerden (onların
+    # anlık değeri daha sonra yazılıyor; saat bu yüzden orada güncellenir).
     A = pd.read_csv(VERI / "aylik.csv", index_col=0, parse_dates=True)
-    for hedef, kaynak_kol in (("pka_12a", "pka_12a"), ("pka_24a", "pka_24a"),
-                              ("pka_5y", "pka_5y"),
-                              ("pka_faiz_12a", "pka_faiz_12a"),
-                              ("pka_faiz_24a", "pka_faiz_24a"),
-                              ("pka_katilimci", "pka_12a_n"),
-                              ("tufe_yillik", "tufe_2025")):
-        if hedef not in O or kaynak_kol not in A.columns:
-            continue
-        s = A[kaynak_kol].dropna()
-        if s.empty:
-            continue
-        O[hedef + "_tarih"] = ay_ad(s.index[-1])
-    if "tufe_2025" in A.columns and A["tufe_2025"].notna().any():
-        O["tufe_ay"] = ay_ad(A["tufe_2025"].dropna().index[-1])
+    # Yıllık TÜFE'nin son ayı ölçüm katmanından (Şekil 05'in aylık bacağı da
+    # oradan okur); eski bir ölçüm dosyasında alan yoksa aylık tablodan.
+    tufe_son_ay = m.get("son_tufe_ay")
+    if not tufe_son_ay and "tufe_2025" in A.columns and A["tufe_2025"].notna().any():
+        tufe_son_ay = A["tufe_2025"].dropna().index[-1]
+    if tufe_son_ay:
+        O["tufe_ay"] = ay_ad(tufe_son_ay)
 
     # --- REEL FAİZ (Fisher) ------------------------------------------------
     anlik("reel_ileri", "reel_ileri")
@@ -320,14 +378,12 @@ def main() -> int:
                           ("pka_ort_5y", "pka_ort_5y"),
                           ("pka_ort_7y", "pka_ort_7y")):
         anlik(kaynak, hedef, tolerans=45)
-    # Ortalamaya çevrilmiş anket serileri de ANKET AYINA aittir (günlüğe
-    # basamak olarak yayılıyorlar); tarih alanı günlük çıpayı gösterirse
-    # okur "bu sayı 21 Ağustos'ta ölçüldü" sanır.
-    if "pka_12a" in A.columns and A["pka_12a"].notna().any():
-        _anket_ay = ay_ad(A["pka_12a"].dropna().index[-1])
-        for hedef in ("pka_ort_1y", "pka_ort_2y", "pka_ort_5y", "pka_ort_7y"):
-            if hedef in O:
-                O[hedef + "_tarih"] = _anket_ay
+    # Aylık kökenli on bir anahtarın SAATİ (`AA.YYYY`) ve okur ETİKETİ
+    # (`_ay_ad`, "Ağustos 2026") — tek eşlemeden, bütün anlık değerler
+    # yazıldıktan sonra (anlik() saati günlük çıpayla yazıyor, burada ay
+    # etiketiyle üzerine yazılır). Tarih alanı günlük çıpayı gösterirse okur
+    # "bu sayı 21 Ağustos'ta ölçüldü" sanır.
+    O.update(aylik_saatleri(A))
     if KR is not None and not KR.empty:
         koy("tufex_nokta", len(KR), 0)
         koy("tufex_vade_min", float(KR["vade_yil"].min()), 2)
@@ -464,6 +520,12 @@ def main() -> int:
     koy("esik_min_nokta", e["gun_min_nokta"], 0)
     koy("esik_pka_yayim_gun", e["pka_yayim_gun"], 0)
     koy("esik_tufe_yayim_gecikme", e["tufe_yayim_gecikme"], 0)
+    # Yayım günü okura CÜMLE içinde geçer ("ayın 20'sinden") ve ek SAYIYA
+    # bağlıdır (3'ünden · 5'inden · 20'sinden). Sayfada sayının ardına sabit
+    # bir ek yapıştırılıyordu; TÜFE sabiti 5'ten 3'e çekildiğinde "3'inden"
+    # basardı. Metin burada, tek ek tablosundan kurulur.
+    O["pka_yayim_metni"] = metrik.gun_eki(e["pka_yayim_gun"])
+    O["tufe_yayim_metni"] = metrik.gun_eki(e["tufe_yayim_gecikme"])
 
     # --- kıyas günleri -----------------------------------------------------
     kiyas = m.get("kiyas_gunleri") or {}
@@ -688,6 +750,16 @@ def main() -> int:
     # --- metodoloji notları (sayfaya olduğu gibi basılabilir) --------------
     for ad, metin in (m.get("notlar") or {}).items():
         O[f"not_{ad}"] = metin
+
+    # --- şekil saat defteri ve damga ---------------------------------------
+    # İKİ TÜKETİCİ, TEK DEFTER: aynı fonksiyonu grafik.py figürün KENDİ alt
+    # başlığı için okuyor (metrik.sekil_saatleri). Sekiz figürün hepsi hattın
+    # tek ana saatiyle (08.09) damgalanıyordu; taşıma figürü 07.09'da bitiyor,
+    # üç figür aylık bacak taşıyor (09.09.2026'da ölçüldü). Birleşik damga
+    # defterde duramaz (sayfa sınavı 18 tek bir tarih ister); ayrım MEKANİK.
+    defter, birlesik = metrik.defter_ayir(metrik.sekil_saatleri(m))
+    O["_sekil_tarih"] = defter
+    O.update(birlesik)
 
     yol = PROJE / "ozet.json"
     yol.write_text(json.dumps(O, ensure_ascii=False, indent=1), encoding="utf-8")
