@@ -1286,3 +1286,53 @@ yazılı: analizlere gömülü figürler (`GrafikEmbed`) hattın dosyasıdır ve
 koştukça yenilenmeye DEVAM EDER — metin sabit, figür canlı; bir analiz figürün
 o günkü değerini anlatıyorsa tarihiyle anlatmalı. Figürleri de dondurmak
 (yayım günü kopyası) istenirse ayrı karar.
+
+**Kurucu ilke — bir SAYACIN TABANI koşudan ÖNCE ölçülür; "koşulsuz tazele"
+koşu başına söylenir, adım başına değil; ve KALIPTAKİ HER YAYIM hattın bir
+saatini ilerletmelidir.** 09.09.2026'da bütün hatların güncellik denetimi
+(21 hat, hat hat inceleme, ulusal takvim keşfi, defter ölçümü) üç mekanizma
+kusuru çıkardı ve üçü de "sağlıklı görünen arıza" sınıfından.
+
+(1) SOĞUK BAŞLANGIÇ. Sürüm defterinde 18 tarifli hattın 11'inin tabanı yoktu.
+Tabansız hat ilk sayılan koşusunda eli boş dönerse koşu SONRASI sürüm tabana
+yazılıp "ilerledi" sayılıyor, sayaç 0 kalıyor ve yeniden deneme hiç
+açılmıyordu — 03.09 kredi arızasının sigortasız tekrarı, 10.09 Perşembe için
+kredi · ypmevduat · yabanci hatlarında hazır bekliyordu. Kıyas noktası koşu
+ÖNCESİ sürümdür (`guncelle.py` ölçer, `durum_yaz(onceki=…)`); defter
+`tazeleme.py --tohumla` ile bir kerede dolduruldu ve duman tabansız tarifli
+hattı ENGEL sayıyor. Bir sayaç, ilk ölçümünü hangi noktadan aldığını
+bilmiyorsa ilk arızayı sağlık sanır.
+
+(2) YİRMİ KEZ İNDİRME. `TTO_YENILE=1` her ADIMDA önbelleği atlatıyordu; marj
+hattı beş adımdır ve `rapor.py` aynı 39 seriyi bir koşuda yirmi kez ister
+(her hesap fonksiyonu tabloyu baştan kurar). Zorlanmış koşuda 757 EVDS
+indirmesi, 15 dakikalık adım tavanı doldu, hat düştü, kullanıcıya arıza
+e-postası gitti (bulut #138). Yerel sınama bunu GÖRMEDİ: devre kesici açık
+olduğundan yirmi geçişin her biri anında önbelleğe düşüyor ve zincir "temiz"
+bitiyordu — ağa çıkamayan bir sınama, ağ maliyetini ölçemez. Kural
+`ortak/tazelik`te: koşunun başlangıç anından (`TTO_KOSU_BASLANGIC`, hat
+başında yazılır) SONRA yazılmış önbellek bu koşunun indirmesidir ve tazedir;
+marj ayrıca süreç içi bellek tutar. Aynı koşu düzeltmeyle 1.290 s → 70 s.
+Tavanı büyütmek (kullanıcının sorduğu "15 dk az mı?") çare değildi: sorun
+adımın uzunluğu değil, aynı işin yirmi kez yapılmasıydı.
+
+(3) TÜKETİLMEYEN YAYIM KALIPTA. Sürüm sayacı yayım tetikli koşuda artar; hattın
+OKUMADIĞI bir yayım kalıptaysa tetikli koşu eli boş döner, üç yeniden deneme
+önbelleği atlayarak koşar ve ertesi gün "kaynak yayımladı, veri gelmedi"
+alarmı doğar — `kararlar()` ile ölçüldü (28.09 15:23 → 18:37 · 05:13 · 11:47
+→ 29.09 alarm). Enflasyon ve marj'da Hizmet ÜFE, bütçede Finansman ve İç
+Borç, ödemeler dengesinde KVDB ve UYP böyleydi: her ay bir sahte alarm ve üç
+boş tam çekim. Kural: ana kalıp yalnız ANA saati ilerleten yayımı tutar;
+başka bir saati ilerleten yayım EK KAYNAK olarak, ilerlettiği saat ADIYLA
+girer (bütçede Denge Tablosu → `akim_tarih`), hiçbir saati ilerletmeyen
+yayım tarifte durmaz. Takvim hangi yayımın hangi seriyi ilerlettiğini
+söylemez; hat söyler, duman sorar.
+
+Eşikler de KOŞU RİTMİNE göre yeniden ölçüldü, veri ritmine göre değil:
+günlük bir bacak haftalık koşuda yenileniyorsa (kredi `gun_tarih`) eşik
+haftalıktır, haftalık bir bacak aylık koşuda yenileniyorsa (reelfx rezerv)
+aylıktır; çeyreklik GSYH bacağı aylık ana saatin 123 gün gerisine meşru
+düşebilir (bütçe karanlık 75 → 140). Aksi her hafta okura basılan sahte
+"gecikti" satırıdır — hazine RITIM 12, ihaleler arası üç haftada altı sayıda
+bastı; TCMB altın çapası eşiği 8 gün, Cuma tarihli + altı gün yayımlanan bir
+çapa için her hafta Paz–Çar öttü.
