@@ -99,8 +99,13 @@ RITIM = {
     "yiyecek-hizmetleri-marj": 45,
     # İhale ritmi düzensiz: aynı strateji ayında ihaleler arası boşluk üç
     # haftayı bulur (18.08 → 14.09). 12 günlük eşik 03–08.09 arası altı sayıda
-    # sahte "veri gecikti" bastı (09.09.2026'da ölçüldü).
-    "hazine-ihrac": 25,
+    # sahte "veri gecikti" bastı (09.09.2026'da ölçüldü). 25 de DAR kaldı:
+    # aynı gün ihale defterine karşı ölçüldü (2024-01-01 → 18.08.2026, 961
+    # takvim günü) — "son ihaleden bu yana geçen gün" azamisi 27, eşik 25 ile
+    # 961 günün 13'ünde (%1,4) sahte gecikme çıkıyor, 28/30/32 ile SIFIR.
+    # Doğrusu eşik değil PLANLI TAKVİME bakan bir ölçüdür (hat artık
+    # `plan_ihale_bas` yazıyor); o kurulana kadar eşik ölçülen azaminin üstünde.
+    "hazine-ihrac": 32,
     "fx-haber-endeksi": 5,
     "dibs-verim-egrisi": 6,     # iş günü (eğri günlük kurulur)
     "odemeler-dengesi": 45,     # aylık, 6-8 hafta gecikmeli
@@ -202,6 +207,15 @@ RITIM_ALAN = {
     ("tcmb-net-rezerv", "p_swap_capa_tarih"): (16, "haftalık swap/ons çapası (F+6 yayım)"),
     # Taşıma figürlerinin bağlayıcı bacakları: nakit TLREF'e, tahvil DİBS'e
     # bağlı ve ayrı düşebiliyor; ikisi de günlük ritimde.
+    # USD/TRY panosunun iki faiz bacağı. TLREF izinin ucu kurunkiyle aynı gün
+    # ilerliyor (09.09'da ölçüldü: gecikme 0) — günlük eşik. Haftalık banka
+    # faizi Cuma tarihli ve ~1 hafta gecikmeli yayımlanıyor: 80 haftanın
+    # 80'inde kesintisiz 7 günlük ritim, yapısal en kötü boşluk perşembe 13
+    # gün, tatil payıyla 16. Öbür haftalık bacakların 11–12'lik eşiği burada
+    # HER HAFTA sahte "gecikti" üretirdi, çünkü o hatlar haftalık koşuyor, bu
+    # hat GÜNLÜK.
+    ("usdtry-deval", "tlref_tarih"): (6, "TLREF bacağı"),
+    ("usdtry-deval", "faiz_hafta_tarih"): (16, "haftalık banka faizi bacağı (Cuma tarihli, gecikmeli yayım)"),
     ("tl-tasima", "makas_tarih"): (6, "Şekil 01 bağlayıcı bacağı"),
     ("tl-tasima", "carry_tarih"): (6, "Şekil 04 bağlayıcı bacağı"),
     ("tl-tasima", "endeks_tarih"): (6, "TLREF endeks bacağı"),

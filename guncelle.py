@@ -248,7 +248,11 @@ HATLAR: list[Hat] = [
         ["usdtry_deval_plotly.py", "usdtry_weekly_trends.py", "usdtry_monthly_trends.py", "ozet_uret.py"], [],
         {"usdtry_deval.html": "usdtry_deval.html", "usdtry_deval_3m.html": "usdtry_deval_3m.html",
          "usdtry_deval_6m.html": "usdtry_deval_6m.html", "usdtry_deval_seg.html": "usdtry_deval_seg.html",
-         "usdtry_weekly_trends.html": "usdtry_weekly.html", "usdtry_monthly_trends.html": "usdtry_monthly.html"}),
+         "usdtry_weekly_trends.html": "usdtry_weekly.html", "usdtry_monthly_trends.html": "usdtry_monthly.html"},
+        # Kur bacağı Yahoo Finance'ten, faiz bacakları EVDS'ten geliyor ve AYRI
+        # donabiliyorlar; ilan edilmeyen bir bacağın çözülemeyen değeri ("—",
+        # yani seri çekilemedi) denetime SESSİZ kalıyordu.
+        tarih_anahtarlari=("_tarih", "tlref_tarih", "faiz_hafta_tarih")),
     Hat("reer", "TRY REER", P / "TRYREER", "try-reer",
         ["main.py", "usdtry_reer_analysis.py", "ozet_uret.py"], [],
         {"reer_analysis.html": "reer_analysis.html", "usdtry_regression_10y.html": "redk_degisim_regresyon.html",
