@@ -1339,6 +1339,21 @@ class TreasuryAuctionScraper:
             logger.warning(f"Planlı takvim cache kaydedilemedi: {e}")
 
     @staticmethod
+    def _mevcut_karsilastirma() -> pd.DataFrame:
+        """Diskteki hedef/gerçekleşme tablosu (bir önceki koşunun çıktısı).
+
+        Yeni duyuru ya da strateji gelmeyen koşuda planlı takvim bu tablonun
+        hedefleriyle kurulur; tablo yoksa boş çerçeve döner ve planlı takvim
+        YAZILMAZ (bkz. main: hedefsiz takvim üzerine yazılmaz)."""
+        if not os.path.exists(COMPARISON_CSV):
+            return pd.DataFrame()
+        try:
+            return pd.read_csv(COMPARISON_CSV, encoding='utf-8-sig')
+        except Exception as e:  # noqa: BLE001
+            logger.warning(f"Hedef tablosu okunamadı ({e}); planlı takvim hedefsiz kalacak")
+            return pd.DataFrame()
+
+    @staticmethod
     def _recent_realization_rate(comparison_df: Optional[pd.DataFrame],
                                  n_months: int = 12, default: float = 0.85) -> float:
         """Son n tamamlanmış aydaki toplam gerçekleşen / toplam hedef oranı.
@@ -1805,8 +1820,16 @@ class TreasuryAuctionScraper:
             if not auction_items:
                 logger.warning("Hiç ihale sonucu duyurusu bulunamadı!")
                 if existing_df is not None and not existing_df.empty:
-                    logger.info("Mevcut veriler kullanılacak.")
-                    return existing_df, pd.DataFrame()
+                    # BOŞ KARŞILAŞTIRMA TABLOSU DÖNDÜRÜLMEZ. 06.09.2026'da bu dal
+                    # boş çerçeve döndürdü; build_planned_issuances hedefsiz kaldı
+                    # (targets={}, oran varsayılan 0,85) ve HEDEFSİZ, ÖLÇEKSİZ bir
+                    # planlı takvim CSV'yi ve arşiv kopyasını üzerine yazdı. Sayfanın
+                    # adıyla çağırdığı on anahtar (plan_hedef_*, plan_strateji…) bir
+                    # sonraki özet koşusunda düşecek, yayın kapısı ENGEL verecekti.
+                    # Duyuru gelmemesi hedef tablosunu geçersiz kılmaz: elde olan
+                    # tablo (bir önceki koşunun çıktısı) olduğu gibi döner.
+                    logger.info("Mevcut veriler kullanılacak (hedef tablosu diskten).")
+                    return existing_df, self._mevcut_karsilastirma()
                 return pd.DataFrame(columns=self.fields), pd.DataFrame()
 
             # Cache'deki URL'leri filtrele (inkremental mod)
@@ -2285,6 +2308,14 @@ class TreasuryAuctionScraper:
 # =====================
 # ANA İŞ AKIŞI
 # =====================
+def _hedef_var(planned_df) -> bool:
+    """Planlı takvimin aylık hedef sütununda en az bir dolu hücre var mı."""
+    kol = [c for c in planned_df.columns if str(c).startswith("Aylık Strateji Hedefi")]
+    if not kol:
+        return False
+    return bool(pd.to_numeric(planned_df[kol[0]], errors="coerce").notna().any())
+
+
 def _takvimi_arsivle(planned_df, scraper) -> None:
     """Yürürlükteki takvimi sürümleyerek sakla.
 
@@ -2410,9 +2441,15 @@ def main():
                 comparison_df.to_csv(COMPARISON_CSV, index=False, encoding='utf-8-sig')
             if not wam_df.empty:
                 wam_df.to_csv(WADE_CSV, index=False, encoding='utf-8-sig')
-            if not planned_df.empty:
+            # HEDEFSİZ TAKVİM ÜZERİNE YAZILMAZ. Aylık hedef sütunu bütünüyle boşsa
+            # strateji tablosu bu koşuda kurulamamıştır; depodaki takvim (hedefli)
+            # doğru sürümdür ve arşive de bozuk kopya girmez.
+            if not planned_df.empty and _hedef_var(planned_df):
                 planned_df.to_csv(PLANNED_CSV, index=False, encoding='utf-8-sig')
                 _takvimi_arsivle(planned_df, scraper)
+            elif not planned_df.empty:
+                logger.warning("Planlı takvimde aylık hedef yok — dosya ve arşiv ÜZERİNE YAZILMADI, "
+                               "depodaki hedefli takvim korunuyor.")
 
             # Backtest: geçmiş ihalelerde tahmin vs gerçek (yöntemin isabeti)
             backtest_df = scraper.backtest_forecasts(df, comparison_df)
