@@ -73,5 +73,6 @@
   "(2) Australia and New Zealand, which are not included in the inflation country set as their data are at quarterly frequency, are included in the policy rate analysis. Turkey, which is included in the inflation set, is excluded from the emerging economies set in the policy rate analysis.",
   "(3) In determining the underlying trend of inflation, in addition to approaches based on the \"methods of exclusion\" such as the B and C indices, \"statistical methods\" such as Median and SATRIM inflation are also used. In order to determine the developments in the underlying trend, the seasonally adjusted monthly changes and 3-month moving average changes of these core indicators are closely monitored."
  ],
- "oranlar": []
+ "oranlar": [],
+ "politika": null
 }

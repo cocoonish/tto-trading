@@ -89,11 +89,33 @@ def _tarihe(satir: str) -> str | None:
     return None
 
 
+# PPK KARARININ BAŞLIĞI TAM OLARAK BUDUR. Alt dize araması ("faiz oran")
+# YETMEZ ve bu ölçüldü: 2016–2023 arasında on dokuz "Kredi Kartı İşlemlerinde
+# Uygulanacak AZAMİ FAİZ ORANLARINA İlişkin Basın Duyurusu" karar sanılıp
+# arşive girdi. Hiçbiri para politikası kararı değil; endekse girselerdi kredi
+# kartı duyuruları PPK metni gibi puanlanacaktı ve hiçbir sayı bunu
+# söylemeyecekti — belgeler gerçek, tarihleri gerçek, yalnızca SORU yanlıştı.
+# Bir süzgeç, belgenin ADINDA geçen bir kelimeyi değil belgenin NE OLDUĞUNU
+# sormalı; başlık kalıbı baştan bağlanıyor.
+KARAR_BASLIK = re.compile(
+    r"^\s*(Faiz Oranlar[ıi]na [İIi]li[şs]kin Bas[ıi]n Duyurusu"
+    r"|Press Release on Interest Rates)", re.I)
+# İngilizce özetin başlığı iki biçimde yazılıyor ve İKİSİ DE meşru:
+# "Summary of the Monetary Policy Committee Meeting" (yeni) ve
+# "PRESS RELEASE ON Summary of the Monetary Policy Committee Meeting" (2019 ve
+# öncesi). Önek isteğe bağlı yazılmazsa 43 İngilizce özet arşivden düşüyor —
+# ölçüldü. Kredi kartı duyurusu bu kalıba yine takılmıyor, çünkü onun başlığı
+# "Press Release on THE MAXIMUM Interest Rates for Credit Cards".
+OZET_BASLIK = re.compile(
+    r"^\s*(?:Press Release on\s+)?"
+    r"(Para Politikas[ıi] Kurulu Toplant[ıi] [ÖOo]zeti"
+    r"|Summary of the Monetary Policy Committee Meeting)", re.I)
+
+
 def _tur(baslik: str) -> str:
-    b = baslik.lower()
-    if "faiz oran" in b or "interest rate" in b:
+    if KARAR_BASLIK.match(baslik or ""):
         return "karar"
-    if "toplantı özeti" in b or "summary of the monetary" in b:
+    if OZET_BASLIK.match(baslik or ""):
         return "ozet"
     return "diger"
 
@@ -130,6 +152,49 @@ def ayristir(ham: str) -> dict | None:
     if not govde:
         return None
     return {"tarih": tarih, "paragraflar": govde}
+
+
+# POLİTİKA FAİZİ ÇIPASI. İki dönemin İKİSİNDE de geçen tek ifade budur:
+# 2016'da rate'ler maddeler hâlinde sayılıyordu ("b) Bir hafta vadeli repo
+# ihale faiz oranı yüzde 7,5,"), bugün cümle içinde ("politika faizi olan bir
+# hafta vadeli repo ihale faiz oranının yüzde 37'de sabit tutulmasına").
+# "politika faizi" ifadesini aramak 2016–2017'nin TAMAMINI kaçırıyordu.
+CAPA_POLITIKA = re.compile(r"bir\s+hafta\s+vadeli\s+repo\s+ihale\s+faiz\s+oran", re.I)
+CAPA_POLITIKA_EN = re.compile(r"one[- ]week\s+repo\s+auction\s+rate", re.I)
+YUZDE_TR = re.compile(r"y[üu]zde\s*(\d+(?:[,.]\d+)?)")
+YUZDE_EN = re.compile(r"(\d+(?:[,.]\d+)?)\s*percent")
+
+
+def politika_faizi(paragraflar: list[str], dil: str) -> float | None:
+    """Karar metninden POLİTİKA FAİZİ (bir hafta vadeli repo ihale faizi).
+
+    CÜMLE SINIRI ŞART. Çıpadan sonra sabit uzunlukta bir pencere alınırsa
+    pencere KORİDOR cümlesine taşar ve "son oran" gecelik borçlanma faizi
+    olur — ölçüldü: 2026-01 kararı %37 yerine %35,5, 2025-04 kararı %46
+    yerine %44,5 veriyordu. Pencere ilk noktada kesiliyor.
+
+    Cümlede iki oran varsa YENİSİ sonuncudur ("yüzde 38'den yüzde 37'ye
+    indirilmesine"); tek oran varsa odur ("yüzde 37'de sabit tutulmasına",
+    "oranı yüzde 7,5,"). Sekiz bilinen dönüm noktasına karşı sınandı
+    (2018-09-13 %24 · 2021-09-23 %18 · 2023-06-22 %15 · 2024-03-21 %50 ·
+    2025-04-17 %46 · 2025-09-11 %40,5 · 2026-01-22 %37 · 2026-09-10 %37):
+    sekizi de tutuyor. Çözülemezse None — uydurma yok.
+    """
+    capa = CAPA_POLITIKA_EN if dil == "EN" else CAPA_POLITIKA
+    yuzde = YUZDE_EN if dil == "EN" else YUZDE_TR
+    for p in paragraflar:
+        m = capa.search(p)
+        if not m:
+            continue
+        kuyruk = p[m.end():]
+        nokta = kuyruk.find(". ")
+        if nokta == -1:
+            nokta = kuyruk.find(".")
+        cumle = kuyruk[:nokta] if nokta != -1 else kuyruk
+        bulunan = yuzde.findall(cumle)
+        if bulunan:
+            return float(bulunan[-1].replace(",", "."))
+    return None
 
 
 def oranlari_coz(paragraflar: list[str], dil: str) -> list[float]:
@@ -194,6 +259,7 @@ def indir(yillar: range, yenile: bool = False) -> int:
                 "baslik": baslik, "tarih": coz["tarih"], "adres": adres,
                 "paragraflar": coz["paragraflar"],
                 "oranlar": oranlari_coz(coz["paragraflar"], dil),
+                "politika": politika_faizi(coz["paragraflar"], dil),
             }
             p.parent.mkdir(parents=True, exist_ok=True)
             p.write_text(json.dumps(kayit, ensure_ascii=False, indent=1),
