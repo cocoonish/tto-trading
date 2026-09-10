@@ -1149,14 +1149,14 @@
     }
   },
   {
-    "timestamp": "2026-09-10T06:50:13.053654+00:00",
+    "timestamp": "2026-09-10T16:31:47.926028+00:00",
     "indices": {
       "EURUSD": {
-        "value": -0.1247,
+        "value": -0.2011,
         "category": "Bearish"
       },
       "USDJPY": {
-        "value": -0.182,
+        "value": -0.339,
         "category": "Bearish"
       },
       "USDCHF": {
@@ -1164,19 +1164,19 @@
         "category": "Extremely Bearish"
       },
       "GBPUSD": {
-        "value": 0.0693,
-        "category": "Neutral"
+        "value": 0.1048,
+        "category": "Bullish"
       },
       "AUDUSD": {
-        "value": 0.0464,
+        "value": -0.0025,
         "category": "Neutral"
       },
       "NZDUSD": {
-        "value": -0.3315,
+        "value": -0.2468,
         "category": "Bearish"
       },
       "USDCAD": {
-        "value": -0.6093,
+        "value": -0.6355,
         "category": "Extremely Bearish"
       },
       "USDNOK": {
@@ -1184,35 +1184,35 @@
         "category": "Extremely Bearish"
       },
       "USDSEK": {
-        "value": -1.0,
-        "category": "Extremely Bearish"
-      },
-      "XAUUSD": {
-        "value": 0.0031,
-        "category": "Neutral"
-      },
-      "XAGUSD": {
-        "value": 0.1874,
+        "value": 0.1462,
         "category": "Bullish"
       },
+      "XAUUSD": {
+        "value": -0.224,
+        "category": "Bearish"
+      },
+      "XAGUSD": {
+        "value": 0.0768,
+        "category": "Neutral"
+      },
       "SPX": {
-        "value": -0.141,
+        "value": -0.3687,
         "category": "Bearish"
       },
       "UST2Y": {
-        "value": -0.0035,
-        "category": "Neutral"
-      },
-      "UST10Y": {
-        "value": 0.1991,
+        "value": 0.1994,
         "category": "Bullish"
       },
+      "UST10Y": {
+        "value": -0.0378,
+        "category": "Neutral"
+      },
       "BIST100": {
-        "value": 0.7739,
-        "category": "Extremely Bullish"
+        "value": -0.0066,
+        "category": "Neutral"
       }
     },
-    "veri_sonu": "2026-09-10T06:40:18+00:00",
+    "veri_sonu": "2026-09-10T16:19:00+00:00",
     "regime": {
       "label": "Transitioning",
       "basket_spread": -0.0424,
