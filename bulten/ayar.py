@@ -511,8 +511,14 @@ IZLEMLER: list[Izlem] = [
     #     Hattın kendi hesabı bunu haftalık faiz verisinden kuruyor, yani
     #     tarihçe VAR ve ölçülebilir; ölçülmemiş olması bir eksik, imkânsızlık
     #     değil.
-    #   · reel-sektor-fx/acik_rezerv_orani — hareketinin büyük kısmı zaten
-    #     izlenen rezerv paydasından geliyor; ayrı eşik ikinci kez sayardı.
+    #   · reel-sektor-fx/acik_rezerv_orani — İZLEMDEN TÜMÜYLE ÇIKARILDI, eşiksiz
+    #     bırakmak yetmiyordu. Anahtar İKİ BACAKLI ve damgası bunu ilan ediyor
+    #     ("aylık 06.2026 · haftalık 28.08.2026"), oysa payda olan rezerv aynı
+    #     bültende 08.09 tarihiyle ölçülüyor. Sonuç okurun görebileceği bir
+    #     ÇELİŞKİ: aynı sayıda brüt rezerv 188,6 → 184,7 DÜŞERKEN, ona bağlı
+    #     oran iki hafta eski paydayla "0,2 puan ARTTI" diye basılırdı.
+    #     Hareketinin büyük kısmı da zaten izlenen paydadan geliyor, yani ayrı
+    #     izlem ikinci kez sayardı. Bacaklar aynı güne geldiğinde geri konabilir.
     # Eşiksiz kalanlar yayım bayrağıyla `dikkat` seviyesinde okura ulaşmaya
     # devam ediyor; yalnız `onemli`ye yükselemiyorlar.
     #
@@ -527,8 +533,6 @@ IZLEMLER: list[Izlem] = [
     Izlem("reel-sektor-fx", "net_pozisyon", "Reel sektör net döviz pozisyonu",
           "mlr USD", 1, "delta", None, 13.4, "artis",
           "Şirketler kesiminin kur şokuna açıklığı.", "dis", yayim=True),
-    Izlem("reel-sektor-fx", "acik_rezerv_orani", "Kısa vadeli açık / rezerv oranı",
-          "%", 1, "delta", None, None, "azalis", "", "dis", yayim=True),
     Izlem("buyume", "buyume_yillik", "GSYH yıllık büyüme", "%", 2, "delta",
           None, None, "", "Çeyreklik yayım; faiz alanının talep bacağı.",
           "akim", yayim=True),
