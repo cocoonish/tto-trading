@@ -93,11 +93,18 @@ def _baglam(iz: Izlem, simdi: dict) -> str:
 
 
 def _seviye(buyukluk: float, iz: Izlem) -> str | None:
+    """Olayın seviyesi; None ise olay YOK.
+
+    `yayim` bayrağı taşıyan anahtarda taban `dikkat`tir: takvimli bir
+    istatistikte haber, hareketin büyüklüğü değil YAYIMIN KENDİSİDİR (bkz.
+    ayar.Izlem.yayim). O bayrak yalnız saati İLERLEMİŞ anahtarlara ulaşır —
+    süzgeç `topla`da, çünkü kıyas noktasını yalnız orası biliyor.
+    """
     if iz.onemli is not None and buyukluk >= iz.onemli:
         return "onemli"
     if iz.dikkat is not None and buyukluk >= iz.dikkat:
         return "dikkat"
-    return None
+    return "dikkat" if iz.yayim else None
 
 
 def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
@@ -159,6 +166,13 @@ def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
                     iz.aciklama)
 
     # delta (varsayılan)
+    # SIFIR FARK OLAY DEĞİLDİR. Eşikli anahtarlarda bu zaten sağlanıyordu
+    # (eşik sıfırdan büyük), ama `yayim` bayrağı tabanı `dikkat`e çektiği için
+    # değişmeyen bir sayı da cümleye dönüyordu — ölçüldü: "GSYH yıllık büyüme
+    # 0,00 puan azaldı: %2,32 → %2,32." Yayım olayı yayımı duyurur, DEĞİŞİMİ
+    # anlatır; anlatacak değişim yoksa cümle kurulmaz.
+    if abs(fark) < 5e-3:
+        return None
     sv = _seviye(abs(fark), iz)
     if not sv:
         return None
@@ -195,6 +209,14 @@ def yeni_veri_olaylari(hatlar: list[str], pencere_saat: float = 30.0) -> list[Ol
             continue
         ilk = next((k for k in gozlem.gecmis_oku(hat) if k.get("v") == v), None)
         if not ilk:
+            continue
+        # SAAT GERÇEKTEN İLERLEMELİ. Kıyas dizge eşitsizliğiyle yapılıyordu ve
+        # iki sahte bildirim ölçüldü (10.09.2026 sayısı): Büyüme hattı yalnız
+        # tarih YAZIMI değiştiği için (30.06.2026 → 06.2026, iki sayısı da
+        # birebir aynı) "ilerledi" diye duyuruldu; OVP hattı ise 09.09.2026 →
+        # 08.09.2026 GERİLEMESİNİ "ilerledi" diye bastı. İkisi de okura yeni
+        # veri geldiğini söylüyordu ve gelmemişti.
+        if not gozlem._ileri_gitti(str(onc.get("v")), str(v)):
             continue
         yas = _yas_saat(ilk.get("t", ""))
         if yas is not None and yas <= pencere_saat:
@@ -315,6 +337,23 @@ def topla() -> list[Olay]:
         # kıyaslamak haftalık serinin hareketini bir günde siler.
         for iz in [i for i in IZLEMLER if i.hat == hat]:
             v = gozlem.anahtar_tarihi(simdi, iz.anahtar, iz.tarih_alani)
+            # AYNI VERİ SÜRÜMÜ İKİ KEZ DUYURULMAZ.
+            #
+            # Kıyas noktası "o anahtarın saati BUGÜNKÜNDEN farklı olan en son
+            # görüntü"dür ve kaynak yayımı durdurduğunda bu nokta yerinde
+            # kalır: cümle her sabah yeniden kurulur. Ölçüldü (17 sayı) —
+            # 145 ölçüm cümlesinin 84'ü (%57,9) daha önce AYNI veri tarihiyle
+            # duyurulmuş cümlelerin tekrarıydı; tek başına Hazine hattının üç
+            # cümlesi 18.08 ihalesini 21.07 ile kıyaslayarak 17 sayı boyunca
+            # 48 kez basıldı. Okur 10 Eylül'de 23 gün önceki veriyi "azaldı"
+            # diye okuyordu.
+            #
+            # Kural: bir ölçüm, saati BİR ÖNCEKİ görüntüye göre ilerlediyse
+            # duyurulur. İlerlemediyse yeni bir şey yayımlanmamıştır. Değer
+            # saat ilerlemeden değişmişse bu bir REVİZYONdur ve denetimin
+            # kendi ölçütü onu adıyla listeler.
+            if not gozlem.surum_ilerledi(hat, simdi, iz.anahtar, iz.tarih_alani):
+                continue
             onc = gozlem.onceki_surum_anahtar(hat, iz.anahtar, iz.tarih_alani, v)
             once_d = onc.get("d") if onc else None
             onceki_v = (gozlem.anahtar_tarihi(once_d, iz.anahtar, iz.tarih_alani)

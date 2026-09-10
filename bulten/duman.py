@@ -382,6 +382,66 @@ def butce_bulgulari(metin: str, is_adi: str = "tazele") -> list[str]:
     return bulgular
 
 
+# İZLEMSİZ HATLAR — her biri GEREKÇESİYLE. Bir hattın ölçüm cümlesi
+# üretememesi meşru olabilir, ama SESSİZCE olamaz: gerekçe yazılmazsa bir
+# sonraki oturum unutulmuş bir hat ile bilinçli bir muafiyeti ayırt edemez.
+IZLEMSIZ_GEREKCE = {
+    "fx-haber-endeksi":
+        "kendi olay dalı var (olay.haber_endeksi_olaylari): hat en olağandışı "
+        "üç hareketi kendisi sıralıyor, sabit eşik o endekslerde işlemiyor.",
+    "tl-tasima":
+        "GÜNLÜK seri; yayım bayrağı her gün ateşlerdi, eşik ise ölçülmedi. "
+        "Anahtarlarının altısı (kur, politika, tlref, carry_2y_tlref …) başka "
+        "hattan zaten izleniyor ve değerleri birebir aynı.",
+    "tufex-basabas":
+        "GÜNLÜK seri; aynı gerekçe. Başabaş ve prim ölçüleri rejim panelinden "
+        "okura ulaşıyor.",
+    "el-nino":
+        "yayımladığı manşet anahtarlar MODEL KATSAYISI (geçiş betası, çekirdek "
+        "betası) — yeniden kestirim okura haber değildir; gözlem niteliğindeki "
+        "bir anahtar seçilene kadar izlem yazılmadı.",
+}
+
+
+def _izlem_kapsami():
+    """Her hat ya izlem taşır ya da GEREKÇELİ muaftır.
+
+    Ölçüldü (10.09.2026): 21 hattın 9'unun izlemi hiç yoktu ve altısına
+    bültenin hiçbir ölçüm kanalı dokunmuyordu — 501 sayısal ölçüm yayımlanıyor,
+    bültendeki tek izleri "veri sürümü ilerledi" satırı oluyordu. Kusur listede
+    değil KAPSAMDA: `_hat_adi_kapsami` yeni hattın ADINI soruyordu, izleminin
+    olup olmadığını sormuyordu. Bu ölçüt tersini soruyor.
+    """
+    import ayar
+    izlenen = {iz.hat for iz in ayar.IZLEMLER if iz.hat}
+    acikta = sorted(set(ayar.RITIM) - izlenen - set(IZLEMSIZ_GEREKCE))
+    assert not acikta, (
+        f"izlemi de gerekçesi de olmayan hat: {acikta} — ya ayar.IZLEMLER'e "
+        f"bir satır, ya duman.IZLEMSIZ_GEREKCE'ye bir gerekçe yazılmalı")
+    # Gerekçe listesi de ÖLÜ KALMAMALI: izlemi olan bir hat gerekçede durursa
+    # muafiyet gerçekliğini yitirmiş demektir.
+    olu = sorted(set(IZLEMSIZ_GEREKCE) & izlenen)
+    assert not olu, f"izlemi olduğu hâlde muafiyet gerekçesi taşıyan hat: {olu}"
+    yok = sorted(set(IZLEMSIZ_GEREKCE) - set(ayar.RITIM))
+    assert not yok, f"kütükte olmayan hatta muafiyet gerekçesi: {yok}"
+    # YAYIM BAYRAĞI GÜNLÜK SERİYE KONMAZ: takvimli olmayan bir anahtarda her
+    # gün ateşler ve bülteni boğar.
+    #
+    # Sınır ÖLÇÜLEREK kondu, seçilerek değil: `RITIM` eşikleri iki kümede
+    # toplanıyor ve arada boşluk var — piyasa serileri 4–6 gün (usdtry 4,
+    # fx-haber 5, rezerv/fonlama/dibs/tl-tasima/tufex/ovp 6), takvimli yayımlar
+    # 11 gün ve üzeri (kredi/makroihtiyati/yp-mevduat 11, hazine 32, enflasyon
+    # 40, ödemeler/bütçe/marj 45, reel sektör 75, büyüme 100). 8 bu boşluğun
+    # içinde. İlk yazımda 2 kullanılmıştı ve hiçbir hattı yakalamadığı için
+    # ölçüt TANIMI GEREĞİ hiç düşemezdi; arıza enjeksiyonu bunu gösterdi.
+    GUNLUK_RITIM_GUN = 8
+    gunluk = {h for h, gun in ayar.RITIM.items() if gun < GUNLUK_RITIM_GUN}
+    bogan = sorted({iz.hat for iz in ayar.IZLEMLER if iz.yayim} & gunluk)
+    assert not bogan, (
+        f"günlük ritimli hatta yayım bayrağı: {bogan} — bayrak takvimli "
+        f"yayım içindir, her gün ilerleyen seride her gün ateşler")
+
+
 def _hat_adi_kapsami():
     """Okura slug basılmasın: izlenen ve ritmi ölçülen HER hattın adı olmalı.
 
@@ -3519,6 +3579,8 @@ def main() -> int:
 
     sina("tekrar: iki eksen de ölçülüyor, kapsam sözleşmeden türüyor", _tekrar_eksenleri)
     sina("hat adı: izlenen her hattın okura görünen adı var, kayıt onu taşıyor", _hat_adi_kapsami)
+    sina("izlem kapsamı: her hat ya izlem taşır ya gerekçeli muaf; yayım bayrağı günlük seride yok",
+         _izlem_kapsami)
 
     for ad in gecen:
         print(f"  ✓ {ad}")

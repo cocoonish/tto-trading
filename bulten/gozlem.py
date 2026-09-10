@@ -21,6 +21,9 @@ import json
 import subprocess
 from datetime import datetime
 from pathlib import Path
+import sys as _sys
+_sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ortak"))
+import bicim  # noqa: E402  — tarih ayrıştırma TEK kaynaktan
 
 BURASI = Path(__file__).resolve().parent
 KOK = BURASI.parent
@@ -118,6 +121,48 @@ def anahtar_tarihi(d: dict, anahtar: str, acik: str = "") -> str:
     if alan and d.get(alan):
         return str(d[alan])
     return _tarih_of(d)
+
+
+def _ileri_gitti(eski: str, yeni: str) -> bool:
+    """Saat GERÇEKTEN ilerledi mi — dizge kıyası değil TARİH kıyası.
+
+    İki kusur birden kapatıyor ve ikisi de 10.09.2026 sayısında ölçüldü.
+    (1) YAZIM DEĞİŞİKLİĞİ İLERLEME SAYILIYORDU: Büyüme hattının saati
+    "30.06.2026"dan "06.2026"ya döndü — aynı gün, başka yazım — ve iki sayısı
+    da BİREBİR aynı kaldığı hâlde hat "veri sürümü ilerledi" diye duyuruldu.
+    (2) GERİLEME DE İLERLEME SAYILIYORDU: OVP hattı "09.09.2026 → 08.09.2026"
+    diye, yani bir GERİ adımı "ilerledi" diye bastı.
+
+    Çözülebilen iki tarih varsa kıyas SIKI BÜYÜKTÜR; biri çözülemiyorsa dizge
+    eşitsizliğine düşülür — ayrıştıramayan bir denetim hep "sorun yok" der,
+    o yüzden çözülemeyen hâl susturulmuyor, eski davranışta bırakılıyor."""
+    e, y = bicim.tarihe_cevir(eski), bicim.tarihe_cevir(yeni)
+    if e is None or y is None:
+        return str(eski) != str(yeni)
+    return y > e
+
+
+def surum_ilerledi(hat: str, simdi: dict, anahtar: str, acik: str = "") -> bool:
+    """Bu anahtarın saati BİR ÖNCEKİ SÜRÜME göre ilerledi mi.
+
+    "Önceki sürüm", defterde BUGÜNKÜ görüntüden farklı olan en son kayıttır —
+    sondan ikinci kayıt DEĞİL. Ayrım şart: `kaydet` yalnız içerik değiştiğinde
+    satır yazar, yani hattın dosyası günlerce aynı kaldığında defterin son
+    kaydı bugünkü görüntünün ta kendisidir ve sondan ikinciye bakmak bir sürüm
+    fazla geriye gider. O hâlde ölçüt donmuş bir hattı "ilerledi" sayardı ve
+    düzeltmek istediği tekrarı aynen üretirdi.
+
+    Defterde farklı bir sürüm hiç yoksa ilerlemiş sayılır: ilk gözlem
+    duyurulabilmelidir."""
+    for kayit in reversed(gecmis_oku(hat)):
+        d = kayit.get("d")
+        if not isinstance(d, dict) or anahtar not in d:
+            continue
+        if d == simdi:
+            continue
+        return _ileri_gitti(anahtar_tarihi(d, anahtar, acik),
+                            anahtar_tarihi(simdi, anahtar, acik))
+    return True
 
 
 def onceki_surum_anahtar(hat: str, anahtar: str, acik: str = "",

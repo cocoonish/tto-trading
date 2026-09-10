@@ -55,6 +55,23 @@ class Izlem:
     # HAFTALIK oranın ortalamasını yazmak iki farklı pencereyi aynı cümlede
     # kıyaslamak olurdu. (hattaki anahtar, okura yazılacak etiket)
     baglam: tuple[str, str] | None = None
+    # YAYIM OLAYI — takvimli bir istatistik yayımında BÜYÜKLÜKTEN bağımsız duyur.
+    #
+    # Eşik mantığı piyasa serileri için doğrudur (her gün ilerleyen bir seride
+    # haber, hareketin büyüklüğüdür) ama TAKVİMLİ bir yayımda yanlış cevap
+    # veriyor: haber, yayımın KENDİSİDİR. Ölçüldü — 04.09.2026'da Ağustos TÜFE'si
+    # yayımlandı, yıllık oran %31,75'ten %31,51'e indi ve bültendeki tek izi
+    # "veri sürümü ilerledi" satırı oldu; motor kendi kuralınca doğru sustu,
+    # çünkü 0,24 puanlık hareket 1,0 puanlık eşiğin altında. Okur ayın en çok
+    # beklenen verisinin yayımlandığını bültenden öğrenemedi.
+    #
+    # Bu bayrak taşıyan anahtar, KENDİ saati ilerlediğinde eşiğe bakılmadan
+    # `dikkat` seviyesinde duyurulur; eşikleri de varsa ve aşılıyorsa `onemli`ye
+    # yükselir. Eşiği OLMAYAN bir anahtar da bu yolla bültene girebilir — ve
+    # bu bilerek: ölçülmemiş bir seviyeye eşik konmaz (bkz. CLAUDE.md). Yeni
+    # izlenen hatların tarihçesi bültenin kendi defterinde henüz yok, dolayısıyla
+    # eşikleri ölçülemiyor; tarihçe birikince ölçülüp eklenir.
+    yayim: bool = False
 
 
 # Hatların OKURA görünen adları. Olay cümleleri ("hazine-ihrac: veri gecikti")
@@ -363,16 +380,16 @@ IZLEMLER: list[Izlem] = [
 
     # ─────────────────────────────── enflasyon
     Izlem("enflasyon", "tufe_aylik", "Aylık TÜFE", "%", 2, "delta", 0.5, 1.0, "azalis",
-          "Ayın 3'ünde gelir; bültende sürpriz olarak da ayrıca işlenir.", "enflasyon"),
-    Izlem("enflasyon", "tufe_12a", "Yıllık TÜFE", "%", 2, "delta", 1.0, 2.5, "azalis", "", "enflasyon"),
+          "Ayın 3'ünde gelir; bültende sürpriz olarak da ayrıca işlenir.", "enflasyon", yayim=True),
+    Izlem("enflasyon", "tufe_12a", "Yıllık TÜFE", "%", 2, "delta", 1.0, 2.5, "azalis", "", "enflasyon", yayim=True),
     Izlem("enflasyon", "tufe_3a", "TÜFE 3 aylık yıllıklandırılmış (mevsimsellikten arındırılmış)", "%", 1,
           "delta", 3.0, 6.0, "azalis", "Panonun merkezî momentum ölçüsü.", "enflasyon"),
     Izlem("enflasyon", "tufe_3a_ham", "TÜFE 3 aylık yıllıklandırılmış (ham)", "%", 1, "delta", 3.0, 6.0,
           "azalis", "", "enflasyon"),
     Izlem("enflasyon", "b_12a", "Çekirdek B (yıllık)", "%", 2, "delta", 1.0, 2.5, "azalis", "", "enflasyon"),
-    Izlem("enflasyon", "c_12a", "Çekirdek C (yıllık)", "%", 2, "delta", 1.0, 2.5, "azalis", "", "enflasyon"),
+    Izlem("enflasyon", "c_12a", "Çekirdek C (yıllık)", "%", 2, "delta", 1.0, 2.5, "azalis", "", "enflasyon", yayim=True),
     Izlem("enflasyon", "hizmet_12a", "Hizmet enflasyonu (yıllık)", "%", 1, "delta", 1.0, 2.5, "azalis",
-          "Ataleti en yüksek kalem; dezenflasyonun gerçek sınavı.", "enflasyon"),
+          "Ataleti en yüksek kalem; dezenflasyonun gerçek sınavı.", "enflasyon", yayim=True),
 
     # ─────────────────────────────── kredi ve para
     Izlem("kredi-parasal", "g_ar_13y", "Kur etkisinden arındırılmış kredi büyümesi (13 haftalık yıllıklandırılmış)",
@@ -387,13 +404,13 @@ IZLEMLER: list[Izlem] = [
 
     # ─────────────────────────────── Hazine borçlanması
     Izlem("hazine-ihrac", "maliyet_son", "Son ihale ortalama bileşik maliyeti", "%", 2, "delta", 1.0, 2.5,
-          "azalis", "Hazinenin fiilî borçlanma maliyeti.", "borclanma"),
+          "azalis", "Hazinenin fiilî borçlanma maliyeti.", "borclanma", yayim=True),
     Izlem("hazine-ihrac", "b2c_son", "Son ihale teklif/karşılama oranı", "kat", 2, "delta", 0.4, 0.8, "artis",
           "Talebin gücü; 1,5'in altı zayıf ihale demektir.", "borclanma"),
     Izlem("hazine-ihrac", "n_ihale", "Toplam ihale sayısı", "adet", 0, "delta", 0.5, None, "",
           "Artması yeni ihale sonucu geldiği anlamına gelir.", "borclanma"),
     Izlem("hazine-ihrac", "wam_son", "Yeni ihraçların ağırlıklı ortalama vadesi", "yıl", 2, "delta", 0.5, 1.0,
-          "artis", "", "borclanma"),
+          "artis", "", "borclanma", yayim=True),
 
     # ─────────────────────────────── yabancı akımı
     Izlem("yabanci-pozisyon", "toplam_hafta", "Yabancı haftalık net akım (toplam)", "mn USD", 0, "akim",
@@ -424,20 +441,20 @@ IZLEMLER: list[Izlem] = [
 
     # ─────────────────────────────── ödemeler dengesi ve dış finansman
     Izlem("odemeler-dengesi", "cari12_mia", "Cari denge (12 aylık birikimli)", "mlr USD", 1,
-          "delta", 3.0, 7.0, "artis", "", "dis"),
+          "delta", 3.0, 7.0, "artis", "", "dis", yayim=True),
     Izlem("odemeler-dengesi", "cekirdek12_mia", "Çekirdek cari denge (altın ve enerji hariç)",
           "mlr USD", 1, "delta", 3.0, 7.0, "artis",
           "Dış dengenin yapısal kısmı; enerji ve altın dalgası dışarıda.", "dis"),
     Izlem("odemeler-dengesi", "nhn12_mia", "Net hata noksan (12 aylık)", "mlr USD", 1,
           "delta", 4.0, 9.0, "", "Büyümesi kaynağı belirsiz döviz girişine işaret eder.", "dis"),
     Izlem("odemeler-dengesi", "cari_gsyh", "Cari denge / GSYH", "%", 2, "delta", 0.5, 1.0,
-          "artis", "", "dis"),
+          "artis", "", "dis", yayim=True),
 
     # ─────────────────────────────── bütçe ve borç stoku
     Izlem("butce-borc", "denge_gsyh", "Bütçe dengesi / GSYH (12 aylık)", "%", 2, "delta",
-          0.4, 0.8, "artis", "", "borclanma"),
+          0.4, 0.8, "artis", "", "borclanma", yayim=True),
     Izlem("butce-borc", "fdd_gsyh", "Faiz dışı denge / GSYH (12 aylık)", "%", 2, "delta",
-          0.4, 0.8, "artis", "", "borclanma"),
+          0.4, 0.8, "artis", "", "borclanma", yayim=True),
     Izlem("butce-borc", "faiz_vergi", "Faiz harcaması / vergi geliri", "%", 1, "delta",
           1.5, 3.0, "azalis",
           "Borç servisinin vergi tabanını ne kadar yediğinin ölçüsü.", "borclanma"),
@@ -445,6 +462,44 @@ IZLEMLER: list[Izlem] = [
           "azalis", "Kur şokuna duyarlılığın ölçüsü.", "borclanma"),
     Izlem("butce-borc", "yurt_disi_pay", "Borç stokunda yurt dışı yerleşik payı", "%", 1,
           "delta", 1.5, 3.0, "", "", "borclanma"),
+    # ————————————————————————————————————————————————————————————————
+    # TAKVİMLİ YAYIM HATLARI — 10.09.2026'da eklendi.
+    #
+    # Ölçüldü: 21 hattın 9'unun izlemi HİÇ YOKTU ve bunlardan altısına bültenin
+    # ölçüm katmanının hiçbir kanalı (izlem · gösterge şeridi · rejim paneli ·
+    # grafik verisi) dokunmuyordu. O altı hat 501 sayısal ölçüm yayımlıyor ve
+    # bültendeki tek izleri "veri sürümü ilerledi" satırıydı — yani hangi
+    # hattın yenilendiği yazılıyor, NE değiştiği hiç yazılmıyordu.
+    #
+    # Eşikleri yok ve bu BİLEREK: bu hatların tarihçesi bültenin kendi
+    # defterinde henüz yok (yp-mevduat 2 kayıt, reel-sektor-fx 2), dolayısıyla
+    # "kaç puanlık hareket dikkate değer" sorusu ÖLÇÜLEMİYOR. Ölçülmemiş bir
+    # seviyeye eşik konmaz; onun yerine takvimli yayımın kendisi olay sayılıyor
+    # (`yayim=True`). Tarihçe birikince eşikler ölçülüp eklenir ve o zaman
+    # bir kısmı `onemli`ye yükselebilir.
+    Izlem("yp-mevduat", "stok_toplam_mia", "Yurt içi yerleşiklerin YP mevduatı",
+          "mlr USD", 1, "delta", None, None, "azalis",
+          "Dolarizasyonun stok ölçüsü; parite ve altın etkisinden arındırılmış.",
+          "kur", yayim=True),
+    Izlem("yp-mevduat", "gercek_pay", "YP mevduatta gerçek kişi payı", "%", 2,
+          "delta", None, None, "", "", "kur", yayim=True),
+    Izlem("reel-sektor-fx", "net_pozisyon", "Reel sektör net döviz pozisyonu",
+          "mlr USD", 1, "delta", None, None, "artis",
+          "Şirketler kesiminin kur şokuna açıklığı.", "dis", yayim=True),
+    Izlem("reel-sektor-fx", "acik_rezerv_orani", "Kısa vadeli açık / rezerv oranı",
+          "%", 1, "delta", None, None, "azalis", "", "dis", yayim=True),
+    Izlem("buyume", "buyume_yillik", "GSYH yıllık büyüme", "%", 2, "delta",
+          None, None, "", "Çeyreklik yayım; faiz alanının talep bacağı.",
+          "akim", yayim=True),
+    Izlem("buyume", "buyume_ceyreklik", "GSYH çeyreklik büyüme (mevsimsellikten arındırılmış)",
+          "%", 2, "delta", None, None, "", "", "akim", yayim=True),
+    Izlem("yiyecek-hizmetleri-marj", "oran_ev_yemekleri",
+          "Lokanta fiyatı / ev yemeği maliyeti oranı", "kat", 2, "delta",
+          None, None, "", "Yiyecek hizmetlerinde marj baskısının ölçüsü.",
+          "enflasyon", yayim=True),
+    Izlem("makroihtiyati", "makas_ihtiyac", "İhtiyaç kredisi faiz makası",
+          "puan", 2, "delta", None, None, "azalis",
+          "Makroihtiyati sınırların fiyata yansıması.", "kredi", yayim=True),
 ]
 
 
