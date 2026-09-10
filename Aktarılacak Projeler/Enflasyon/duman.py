@@ -17,6 +17,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
+import inspect as _inspect
 import grafik
 import metrik
 import veri
@@ -142,6 +143,32 @@ sina("ne bekleyen ne karne varsa figür ZORUNLU sayılmaz",
      not grafik.tahmin_figuru_var({"n": 30, "yaris": {}}))
 sina("figür ile kos() aynı koşulu soruyor",
      grafik.tahmin_figuru_var(bp) and grafik.sekil_17(bp, "x") is not None)
+
+# AYNI GÜVENCE 15 VE 16 İÇİN DE (10.09.2026'da ölçüldü). Yukarıdaki madde
+# yalnız Şekil 17'yi sınıyordu; 15 ile 16 bir basamak YUKARIDA, `kos()`un
+# `if bp:` kapısında aynı tuzağa düşüyordu. Örneklem 18 ayın altındayken ölçüm
+# katmanı `{"n": …, "not": "örneklem yetersiz"}` yazar; o sözlük TRUTHY olduğu
+# için ikisi de ZORUNLU çıktı sayılıyordu. Sonuç iki ayrı arıza: Şekil 16 None
+# döner, zorunlu çıktı eksik kalır ve HAT DURUR (çalışan on altı figür de
+# tazelenmez); Şekil 15 ise uydurma katsayıyla çizilir — gerçek panelle
+# ölçüldü, okura "eğim 0,000 · R² 0,000 · artık σ 0,000" basıyordu.
+_yetersiz = {"n": 11, "not": "örneklem yetersiz"}
+sina("yetersiz örneklemde saçılım ZORUNLU sayılmaz",
+     not grafik.sacilim_figuru_var(_yetersiz))
+sina("yetersiz örneklemde yarış ZORUNLU sayılmaz",
+     not grafik.yaris_figuru_var(_yetersiz))
+sina("yetersiz örneklemde saçılım UYDURMA katsayı basmıyor",
+     grafik.sekil_15(_yetersiz, _a, "08.2026") is None)
+sina("yetersiz örneklemde yarış figürü çizilmiyor",
+     grafik.sekil_16(_yetersiz, "08.2026") is None)
+sina("15 ile kos() aynı koşulu soruyor",
+     grafik.sacilim_figuru_var(bp) == (grafik.sekil_15(bp, _a, "x") is not None))
+sina("16 ile kos() aynı koşulu soruyor",
+     grafik.yaris_figuru_var(bp) == (grafik.sekil_16(bp, "x") is not None))
+# YAPISAL KİLİT: kapı `if bp:`e geri dönerse tuzak da geri gelir.
+sina("kos() figürleri `if bp:` ile değil KENDİ koşuluyla alıyor",
+     "if sacilim_figuru_var(bp):" in _inspect.getsource(grafik.kos)
+     and "if yaris_figuru_var(bp):" in _inspect.getsource(grafik.kos))
 
 # DOSYA ADI AY TAŞIMAZ: "17_agustos.html" bir ay sonra yalan söyleyen bir
 # adres bırakıyordu ve sayfadaki gömme bağlantısını kırıyordu.

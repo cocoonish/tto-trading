@@ -1105,7 +1105,7 @@ def sekil_15(bp, a, damga):
     Tablodaki R² soyut kalır; saçılım aynı şeyi göz kararı okunur yapar.
     45° çizgisi de eklenir: nokta bulutu o çizginin ALTINDA toplanıyorsa öncü
     sistematik olarak yukarıda geliyor demektir — kaydırmanın kendisi budur."""
-    if not bp:
+    if not sacilim_figuru_var(bp):
         return None
     try:
         import metrik as _m
@@ -1164,7 +1164,7 @@ def sekil_16(bp, damga):
     Örneklem içi R² iyimserdir; "yarın hangisini kullanayım" sorusunun cevabı
     burada. Üst panel ortalama mutlak hatayı sıralar, alt panel her kuralın
     yanlılığını (sistematik yön hatası) gösterir."""
-    if not bp or not bp.get("yaris"):
+    if not yaris_figuru_var(bp):
         return None
     y = bp["yaris"]
     ad = y["ad"]
@@ -1216,6 +1216,34 @@ def sekil_16(bp, damga):
 # kipi veriden çıkar (bekleyen ay / karne). Dosya adına ay yazmak, bir ay
 # sonra yalan söyleyen bir adres bırakır ve sayfadaki gömme bağlantısını kırar.
 BIR_CIKTI_ADLARI = ["15_sacilim.html", "16_yaris.html", "17_tahmin.html"]
+
+
+def sacilim_figuru_var(bp) -> bool:
+    """15 numaralı figürün çizecek şeyi VAR MI? (tek kaynak — bkz. tahmin_figuru_var)
+
+    Saçılım yalnız noktaları değil, her öncü için UYUM ÇİZGİSİNİ ve künyesini
+    (eğim · R² · artık σ) da basar; bunlar `bp["ito"]` ile `bp["uge"]`
+    bloklarından gelir. Örneklem 18 ayın altındayken ölçüm katmanı
+    `{"n": …, "not": "örneklem yetersiz"}` döndürüyor, o bloklar HİÇ olmuyor ve
+    `m.get(...)` varsayılanları devreye giriyordu: 10.09.2026'da gerçek panelle
+    ölçüldü, figür üretiliyor ve okura "eğim 0,000 · R² 0,000 · artık σ 0,000"
+    yazıyordu. Ölçülmemiş bir şeyi ölçülmüş gibi göstermek, figürü hiç
+    basmamaktan kötüdür.
+    """
+    return bool(bp and bp.get("ito") and bp.get("uge"))
+
+
+def yaris_figuru_var(bp) -> bool:
+    """16 numaralı figürün çizecek şeyi VAR MI? (tek kaynak)
+
+    Koşul `sekil_16`nın kendi gövdesinde zaten vardı ama `kos()` figürü
+    `if bp:` ile ZORUNLU listeye alıyordu — yani iki yerde iki koşul. Yetersiz
+    örneklemde figür None dönüyor, zorunlu çıktı eksik sayılıyor ve HAT
+    DURUYOR; çalışan on altı figür de tazelenmiyor. `tahmin_figuru_var`ın
+    başındaki uyarı tam bu hâli tarif ediyor ve 17'ye uygulanmıştı, 15 ile
+    16'ya uygulanmamıştı.
+    """
+    return bool(bp and bp.get("yaris"))
 
 
 def tahmin_figuru_var(bp) -> bool:
@@ -1416,9 +1444,18 @@ def kos() -> None:
             (veri.KOK / "site/public/projeler/enflasyon" / ad).unlink(missing_ok=True)
     # BİRLEŞİK KANAT: üç seriyi birlikte kullanan ölçüm. Kendi dosyası,
     # kendi koşulu.
-    if bp:
-        ciktilar += [(sekil_15(bp, a, dmg(BIR_CIKTI[0])), BIR_CIKTI[0]),
-                     (sekil_16(bp, dmg(BIR_CIKTI[1])), BIR_CIKTI[1])]
+    # HER FİGÜR KENDİ KOŞULUNU TAŞIR. Eskiden ikisi de `if bp:` ile zorunlu
+    # listeye giriyordu; oysa yetersiz örneklemde ölçüm katmanı `{"n": …,
+    # "not": "örneklem yetersiz"}` döndürüyor, o sözlük TRUTHY ve figürlerin
+    # istediği alanları TAŞIMIYOR. Sonucu 10.09.2026'da ölçüldü: 16 None
+    # döner ve zorunlu çıktı eksik kalıp HATTI DURDURUR, 15 ise uydurma
+    # katsayıyla çizilip okura "eğim 0,000 · R² 0,000" basar. Kardeş yükleyici
+    # `_uge_yukle` bu tuzağı adıyla kapatmıştı ("yarım bir sözlükle çizime
+    # girmek, eksik anahtarda hattı düşürürdü"); bu kanat o düzeltmeyi almadı.
+    if sacilim_figuru_var(bp):
+        ciktilar += [(sekil_15(bp, a, dmg(BIR_CIKTI[0])), BIR_CIKTI[0])]
+    if yaris_figuru_var(bp):
+        ciktilar += [(sekil_16(bp, dmg(BIR_CIKTI[1])), BIR_CIKTI[1])]
         # 17 KENDİ KOŞULUNU TAŞIR: ne bekleyen ay ne karne varsa (yarış daha
         # tek ay bile üretmemişse) figürün çizecek şeyi yoktur. Bu NORMAL bir
         # durumdur, arıza değil — zorunlu figür sayılırsa çalışan on altı figür
