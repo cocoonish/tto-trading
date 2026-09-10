@@ -1568,6 +1568,64 @@ geçerdi. İlk yazımda tam bu tuzağa düşülmüştü: üç maddenin ikisi ayn
 ölçüyordu ve biri tanımı gereği hiç düşemezdi.
 
 
+**Kurucu ilke — HATTIN KENDİ KAPISI, KURALIN MEŞRU ÇIKTISINI KUSUR SAYAMAZ; ve
+BİR FİKSTÜRÜN GİRDİSİ DONMUŞSA ÖLÇÜSÜ DE DONMALIDIR.** 10.09.2026'da TÜFEX
+arızasının aynı sınıftan eşleri altı hatta arandı. Beşi aynı kalıptaydı ve
+hepsi "hattın duman sınaması, hattın kendi kuralının ürettiği çıktıyı ENGEL
+sayıyor" diye okunuyor — duman adımlardan ÖNCE koştuğu için sonuç her seferinde
+aynı: hat komple atlanır, panosu donar, iş akışı kırmızı biter, ve ekrandaki
+teşhis yanlış olduğu için sonraki oturum kusuru yanlış yerde arar.
+
+DİBS'te ölçüt kuralı YENİDEN YAZMIŞTI: sayfanın çağırdığı kıyas anahtarları
+elle yazılmış bir düzenli ifadeyle sınanıyordu ve o kalıp `_degisim_bp_tarih`
+sonekini hiç tanımıyordu — oysa döngü onu her koşuda üretiyor. Kural bir kez
+tanımlanır, ölçüt onu SORAR: kapsam artık döngünün kendi sabitlerinden türüyor
+ve iki yönlü sınanıyor (üretilen her anahtar ilan edilen kümenin içinde mi).
+
+Kredi'de iki kusur birdeydi. Ölçülemeyen bir saat anahtarı ATLANIYORDU ve
+sayfanın adıyla çağırdığı bir anahtar düştüğünde yayın kapısı ENGEL verir —
+08.09'un kuralı ("sayfanın çağırdığı anahtar HER koşuda yazılır; ölçülemiyorsa
+boş") bu hatta uygulanmamıştı. İkincisi daha sinsi: madde deponun O ANKİ
+`ozet.json`una bakıyordu, oysa duman adımlardan ÖNCE koşar ve okuduğu dosya BİR
+ÖNCEKİ koşunun çıktısıdır. Kaynak bir gün düşseydi ertesi koşuda madde düşer,
+hat atlanır ve anahtarı geri getirecek koşu HİÇ BAŞLAMAZDI — onarımın tek yolu
+kapanırdı. Bir sınama, düzeltmesi gereken arızayı kendi eliyle kalıcı
+yapmamalı; doğru soru veride değil SÖZLEŞMEDEDİR ve sahte çerçeveyle sorulur.
+
+Enflasyon'da garanti YARIMDI: "iki tüketici, tek tablo" maddesi iki dosyada
+fonksiyon ADININ geçmesini soruyordu, aynı tabloya aynı GİRDİNİN verildiğini
+değil. Çizim kanatları kabul koşulundan geçiriyor, özet üreticisi süzgeçsiz
+veriyordu; yetersiz bir profilde çizim figürü hiç üretmiyor, özet o figüre
+defterde TARİH yazıyordu — sayfa, üretilmemiş BAYAT bir figürün altına TAZE
+damga basıyordu. Süzgeç tablonun İÇİNE alındı: artık ham kanat veren tüketici
+ile süzülmüş kanat veren aynı defteri alır, ayrışma yapısal olarak imkânsız.
+
+USD/TRY'de ölçüt kuralın ilan ettiği hâli tanımıyordu ve UYARI METNİ DE
+YANLIŞTI ("açık anahtar çözülemezse damga ana saate düşer" — oysa defter
+figürün girdisini `None` olarak taşır ve bileşen zinciri orada keser). Soru
+üçe bölündü: ad kuralın ürettiği adlardan biri mi, figürün defter girdisi var
+mı (ana saate düşüşü engelleyen tek şey bu), ve ölçülebilen bacak varken
+anahtar yazılıyor mu. Anahtarın yokluğu artık ENGEL değil, adıyla NOT.
+
+YPMevduat'ta kusur ölçütün İÇERİĞİNDE değil ZAMANINDAYDI ve o gün hattı
+GERÇEKTEN durdurmuştu: TEMİZ fikstür son haftasını sabit bir güne demirliyor,
+tazelik ölçüsü duvar saatine bakıyordu. Takvim ilerledikçe fikstür
+kendiliğinden bayatladı — 09.09'da yaş tam toleransta, 10.09'da bir gün
+fazlaydı ve üç madde birden çöktü; hattın panosu 09.09'da dondu ve haftalık
+yayım günü olan 10.09 sabahı hiç koşamayacaktı. Duvar saati tek kapıdan
+okunuyor artık (`veri.bugun_ts`) ve fikstür kendi gününü ÇERÇEVEDEN türetiyor;
+üretim yolunda hiçbir şey değişmiyor, "referans duvar saatidir" ilkesi duruyor
+ve çerçeveyi bugüne çıpalayan maddeler bilerek kapının DIŞINDA.
+
+O düzeltmenin kuyruğu ayrıca kayda değer, çünkü ÖLÇÜNÜN KENDİSİNİ ölçtü: saat
+dondurulunca gecikme dalının yalnız TESADÜFEN kapsandığı görüldü — ölçüt
+"tolerans aşımı bayat sayılır mı" diye sormuyor, arızayı takvimin getirmesini
+bekliyordu. Arıza enjeksiyonuyla ölçüldü: dal koddan tamamen çıkarıldığında
+sınama YEŞİL geçiyordu. Bir tesadüfün kapattığı boşluk, tesadüf ortadan
+kalkınca görünür — ve o ana kadar "ölçüt düşmedi" ile "arıza yok" birbirine
+tıpatıp benzer.
+
+
 **Kurucu ilke — BİR ÖLÇÜT, KURALIN İLAN ETTİĞİ HÂLLERE KOŞTURULMADIYSA
 SINANMAMIŞTIR.** 10.09.2026 sabahı veri tazeleme 19,5 dakikada kırmızı bitti
 ve kullanıcıya arıza e-postası gitti. Kusur veride değil KAPIDAYDI.
