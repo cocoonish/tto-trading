@@ -215,9 +215,50 @@ def _bacak_saatleri():
     mdx = KOK / "site/src/content/projeler/usdtry-deval.mdx"
     if mdx.exists():
         m = mdx.read_text(encoding="utf-8")
+        # AÇIK ANAHTAR: KURALIN ÜRETEBİLECEĞİ bir ad olmalı — ama üretilmemiş
+        # olması KUSUR DEĞİLDİR.
+        #
+        # Eski madde "anahtar özette dizge olarak var" diyordu ve kuralın kendi
+        # MEŞRU çıktısını kusur sayıyordu: hiçbir bacak ölçülemediği gün
+        # `damga()` None döner (aynı dosyada üç madde yukarıda bunu DOĞRU
+        # davranış diye sınıyoruz), `defter_ayir` hiç `damga_*` yazmaz ve madde
+        # üç kez düşerdi — duman adımlardan ÖNCE koştuğu için hat komple
+        # atlanır, iş akışı kırmızı biter. TÜFEX'in 10.09 arızasının eşi.
+        # Üstelik uyarı metni de yanlıştı: o hâlde damga ana saate DÜŞMEZ,
+        # çünkü defter figürün girdisini `None` olarak TAŞIR ve bileşen
+        # `hasOwnProperty` gördüğü an zinciri keser (GrafikEmbed.astro).
+        #
+        # Doğru soru üçe bölünür: (a) ad kuralın ürettiği adlardan biri mi,
+        # (b) figürün defter girdisi VAR mı — ana saate düşüşü engelleyen tek
+        # şey bu, (c) ölçülebilen bir bacak varken anahtar gerçekten yazılmış mı.
+        _tum = ss.defter_ayir(ss.sekil_saatleri(
+            kur=dt.date(2026, 9, 8), tlref=dt.date(2026, 9, 5),
+            faiz_hafta=dt.date(2026, 8, 28)))[1]
+        _defter_canli = oz.get("_sekil_tarih") or {}
         for anahtar in re.findall(r'tarihAnahtari="([^"]+)"', m):
-            sina(f"MDX `{anahtar}` özette var", isinstance(oz.get(anahtar), str),
-                 "açık anahtar çözülemezse damga sessizce ana saate düşer")
+            sina(f"MDX `{anahtar}` kuralın ürettiği bir ad", anahtar in _tum,
+                 f"kural şunları üretiyor: {sorted(_tum)}")
+            _dosya = anahtar.removeprefix("damga_") + ".html"
+            sina(f"`{_dosya}` defterde girdi taşıyor (ana saate düşüş yok)",
+                 _dosya in _defter_canli,
+                 "defterde girdi yoksa bileşen hattın ANA saatini basar")
+            if not isinstance(oz.get(anahtar), str):
+                # Ölçülemeyen boş bırakılır ve SEBEBİ yazılır — engel değil.
+                print(f"    not: `{anahtar}` bu sürümde yazılmamış; o gün hiçbir "
+                      "bacak ölçülememiş olabilir (defter girdisi None, sayfa "
+                      "o şeklin altına tarih basmaz).")
+
+        # (c) KURALIN İKİ UCU, sahte çerçeveyle: bacak varken anahtar YAZILIR,
+        #     hiç bacak yokken YAZILMAZ ve defter girdisi yine de DURUR.
+        sina("bacak ölçülebiliyorken MDX'in çağırdığı anahtarlar üretiliyor",
+             set(re.findall(r'tarihAnahtari="([^"]+)"', m)) <= set(_tum))
+        _bos_defter, _bos_birlesik = ss.defter_ayir(ss.sekil_saatleri())
+        sina("hiç bacak yokken damga anahtarı YAZILMIYOR (uydurma yok)",
+             not _bos_birlesik, str(_bos_birlesik))
+        sina("hiç bacak yokken bile karma figürün defter girdisi DURUYOR "
+             "(ana saate düşüş engellenir)",
+             all(x in _bos_defter and _bos_defter[x] is None for x in ss.KARMA),
+             str(_bos_defter))
         # Tek tarihli figüre açık anahtar KONMAZ: defterle çelişirse sayfa
         # sınavı 18c ENGEL üretir (şeklin alt başlığı ile damga ayrışır).
         for dosya, v in (oz.get("_sekil_tarih") or {}).items():
