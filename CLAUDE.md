@@ -1514,3 +1514,43 @@ Yahoo'nun işlem günleri TCMB'nin yayım günleriyle örtüşüyor, yani tetikl
 koşu saati yine ilerletiyor. Ölçüldü: 18 hattın 18'inde yeniden deneme
 sayacı 0. Bir tarifin GEREKÇESİ eskiyebilir; ürettiği DAVRANIŞ eskimemiş
 olabilir.
+
+**Kurucu ilke — BİR ÖLÇÜT, KURALIN İLAN ETTİĞİ HÂLLERE KOŞTURULMADIYSA
+SINANMAMIŞTIR.** 10.09.2026 sabahı veri tazeleme 19,5 dakikada kırmızı bitti
+ve kullanıcıya arıza e-postası gitti. Kusur veride değil KAPIDAYDI.
+
+TÜFEX'in duman sınamasındaki genel madde "her bacağın tarihi damganın İÇİNDE
+geçsin" diyordu. Hattın kendi kuralı ise: bacaklar aynı ritimdeyse ve
+DAMGA_AYRIM_GUN'den (7) yakınsa damga TEK tarihtir — EN ESKİ bacak, çünkü
+kıyas ancak hepsinin ölçüldüğü güne kadar kurulur. İki hüküm aynı dosyada,
+birkaç satır arayla duruyordu ve "1-7 gün ayrık" hâlinde ZIT sonuç veriyordu:
+dosyanın kendi sentetik maddesi (bacaklar 08.09 / 05.09 / 08.09 → damga 05.09)
+genel maddeden geçirildiğinde DÜŞÜYOR. Çelişki iddia değil, ölçüm.
+
+Görünmesi için bacakların ayrılması gerekti ve o gün ayrıldı: 10.09 DİBS
+eğrisinin 3y ve 7y düğümleri kurulamadı, reel bacaklarının 1y ve 2y'si 10.09'a
+geçerken 7y 09.09'da kaldı — bir gün. Son 400 iş gününde ilk kez. Öbür üç
+figür geçti, çünkü onların bacakları yedi günden UZAK ayrık (3y düğümü
+12.06'dan beri yok) ve iki parçalı damga her bacağı adıyla yazıyor. Kusur tam
+da eşiğin ALTINDAKİ dar pencerede doğuyor.
+
+Bedeli kapının yerinden geliyor: duman sınaması adımlardan ÖNCE koşar, o
+yüzden hat komple atlandı ve panosu 09.09'da dondu; iki adım çıkış kodu 1
+verdi, iş akışı kırmızı bitti. Geri kalan her şey normal işledi — commit
+`if: always()` taşıdığı için 73 dosya yayına gitti. Arızanın görüntüsü ile
+sağlığın görüntüsü yine birbirine benziyordu: koşu kırmızı ama site taze.
+
+Yerine konan sözleşme kuralın DÖRT hâlinde de geçerli ve TEK tanımda:
+damganın EN ESKİ tarihi bacakların en eskisidir (bir damga bayat bacağı taze
+gösteremez — ölçünün taşıdığı asıl güvence bu), bacaklar eşikten uzak ayrıksa
+her bacak adıyla geçer (eski maddenin DOĞRU olan yarısı), ve damga özetin
+kendi bacaklarından kuralın ürettiği dizgenin ta kendisidir.
+
+Asıl ders ölçütün içeriğinde değil KOŞTURULDUĞU YERDE: çelişki aylarca
+görünmedi çünkü ölçüt, kuralın kendi ilan ettiği hâllere HİÇ uygulanmamıştı.
+Kuralı sınayan dört sentetik madde vardı ve ölçütü sınayan tek madde yoktu.
+Artık sözleşme o dört hâle de koşuyor; eski madde geri konduğunda nadir bir
+veri hizalanmasını beklemeden, kuralın kendi hâlinde anında düşüyor (ölçüldü:
+iki maddede birden). Bir kuralı sınamak ile o kuralı ÖLÇEN ölçütü sınamak iki
+ayrı iştir; ikincisi yazılmazsa çelişki, ancak veri onu ortaya çıkardığı gün
+ve yayının önünde durarak görünür.
