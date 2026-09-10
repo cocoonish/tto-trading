@@ -36,20 +36,25 @@ INDIRME_SN = 30     # açık çıkan kapıdan içerik indirme
 
 # Aday GİRİŞ adresleri. Hiçbiri duyurunun kendisi değil; hepsi LİSTE sayfası,
 # çünkü duyuru numarası çözülecek, tahmin edilmeyecek.
-ADAYLAR = [
-    ("PPK kararları (TR)",
-     "https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/"
-     "Temel+Faaliyetler/Para+Politikasi/PPK/2026"),
-    ("Basın duyuruları (TR)",
-     "https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/"
-     "Duyurular/Basin/2026"),
-    ("PPK kararları (kök)",
-     "https://www.tcmb.gov.tr/wps/wcm/connect/tr/tcmb+tr/main+menu/"
-     "temel+faaliyetler/para+politikasi/ppk"),
-    ("Press releases (EN)",
-     "https://www.tcmb.gov.tr/wps/wcm/connect/EN/TCMB+EN/Main+Menu/"
-     "Announcements/Press+Releases/2026"),
-]
+def adaylar(yil: int) -> list[tuple[str, str]]:
+    """Bir YILIN aday liste sayfaları. Yıl parametre, çünkü ton ölçüsü tek
+    yıldan kurulamaz: 2026'nın altı toplantısında politika faizi bir kez
+    değişti, yani "hangi metin indirimi getirir" sorusuna tek gözlemle cevap
+    verilemez. Arşiv ne kadar geriye giderse hüküm o kadar sınanabilir."""
+    return [
+        (f"PPK kararları TR {yil}",
+         "https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/"
+         f"Temel+Faaliyetler/Para+Politikasi/PPK/{yil}"),
+        (f"Basın duyuruları TR {yil}",
+         "https://www.tcmb.gov.tr/wps/wcm/connect/TR/TCMB+TR/Main+Menu/"
+         f"Duyurular/Basin/{yil}"),
+        (f"Press releases EN {yil}",
+         "https://www.tcmb.gov.tr/wps/wcm/connect/EN/TCMB+EN/Main+Menu/"
+         f"Announcements/Press+Releases/{yil}"),
+    ]
+
+
+ADAYLAR = adaylar(2026)
 
 ETIKET = re.compile(r"<[^>]+>")
 BOSLUK = re.compile(r"[ \t\r\f\v]+")
@@ -100,7 +105,48 @@ def _duyuru_baglari(html: str, taban: str) -> list[tuple[str, str]]:
     return out
 
 
+def yoklama(yillar: list[int]) -> int:
+    """YOKLAMA KİPİ — arşiv ne kadar geriye gidiyor, yılda kaç karar var.
+
+    Ölçüm hattı kurmadan ÖNCE koşar (CLAUDE.md: "dış kaynak önce YOKLANIR").
+    Tam metinleri indirmez, yalnız SAYAR: hangi yılın liste sayfası açılıyor,
+    kaç faiz kararı ve kaç toplantı özeti bağı var. Çıktı küçük, bir dakikada
+    biter ve "kaç metinlik bir arşiv kurulabilir" sorusunu ölçüyle cevaplar.
+    """
+    print("PPK ARŞİV YOKLAMASI — yıl yıl kapı ve belge sayımı")
+    print("=" * 72)
+    toplam_k = toplam_o = 0
+    for yil in yillar:
+        baglar: dict[str, str] = {}
+        acik_sayfa = 0
+        for ad, url in adaylar(yil):
+            kod, govde = _cek(url, YOKLAMA_SN)
+            if kod != 200:
+                continue
+            acik_sayfa += 1
+            for metin, adres in _duyuru_baglari(govde, url):
+                baglar.setdefault(adres, metin)
+        kararlar = [m for m in baglar.values()
+                    if "faiz oran" in m.lower() or "interest rate" in m.lower()]
+        ozetler = [m for m in baglar.values()
+                   if "toplantı özeti" in m.lower() or "summary of the monetary" in m.lower()]
+        # TR ve EN aynı belgeyi iki kez listeliyor; tekil belge sayısı yarısı.
+        print(f"  {yil}   açık liste sayfası {acik_sayfa}/3 · "
+              f"toplam bağ {len(baglar):3} · faiz kararı {len(kararlar):2} "
+              f"(tekil ~{len(kararlar)//2 or len(kararlar)}) · özet {len(ozetler):2}")
+        toplam_k += len(kararlar)
+        toplam_o += len(ozetler)
+    print(f"\n  TOPLAM faiz kararı bağı {toplam_k} · özet bağı {toplam_o}")
+    print("  (her belge TR ve EN olarak iki kez listeleniyor)")
+    return 0
+
+
 def main() -> int:
+    # Yoklama kipi: `--yokla 2019 2020 …`
+    if "--yokla" in sys.argv:
+        i = sys.argv.index("--yokla")
+        yillar = [int(a) for a in sys.argv[i + 1:] if a.isdigit()]
+        return yoklama(yillar or [2026])
     print("PPK KARAR METNİ KEŞFİ")
     print("=" * 72)
 
