@@ -187,15 +187,41 @@ def ozet_saatleri() -> None:
     sina("açık saat mekanik saatin önünde", o.get("aofm_tarih") == "28.08.2026",
          repr(o.get("aofm_tarih")))
 
-    # SAYFA ↔ ÖZET: sayfanın adıyla çağırdığı saat anahtarı üretilmeli.
+    # SAYFA ↔ ÖZET: sayfanın adıyla çağırdığı saat anahtarı HER koşuda yazılır.
+    #
+    # ESKİ HÂLİ KENDİNİ KİLİTLİYORDU. Madde deponun O ANKİ `ozet.json`una
+    # bakıp "anahtar var mı" diye soruyordu; oysa duman hattın ADIMLARINDAN
+    # ÖNCE koşar, yani okuduğu dosya BİR ÖNCEKİ koşunun çıktısıdır. Kaynak bir
+    # gün düşüp anahtar atlansaydı, ertesi koşuda madde düşer, `guncelle.py`
+    # hattı adımlardan önce atlar ve anahtarı geri getirecek koşu HİÇ
+    # BAŞLAMAZDI — arızayı onaracak tek yol kapatılmış olurdu.
+    #
+    # Doğru soru veride değil SÖZLEŞMEDE: (a) üretici bu anahtarları koşulsuz
+    # yazıyor mu, (b) ilan edilen küme sayfanın gerçekten çağırdığını
+    # kapsıyor mu. İkisi de ağa çıkmadan, sahte çerçeveyle ölçülür.
+    bos_cerceve: dict = {}
+    kalan = ozet_uret.sayfa_saatlerini_tamamla(bos_cerceve)
+    sina("hiçbir saat ölçülemese de anahtarların hepsi yazılıyor (boş, atlanmadan)",
+         set(bos_cerceve) == set(ozet_uret.SAYFA_SAATLERI)
+         and all(v == ozet_uret.OLCULEMEDI for v in bos_cerceve.values()),
+         f"yazılan {sorted(bos_cerceve)} · boş kalan {sorted(kalan)}")
+    dolu = {a: "01.01.2026" for a in ozet_uret.SAYFA_SAATLERI}
+    ozet_uret.sayfa_saatlerini_tamamla(dolu)
+    sina("ölçülebilen saat EZİLMİYOR (tamamlama yalnız boşu doldurur)",
+         all(v == "01.01.2026" for v in dolu.values()), str(dolu))
+    sina("tamamlama ozet_uret.main()'in İÇİNDE değil, ayrı fonksiyonda "
+         "(duman onu gerçek çerçeveyle çağırabilsin)",
+         "sayfa_saatlerini_tamamla(O)" in inspect.getsource(ozet_uret.main))
+
+    # KAPSAM SÖZLEŞMEDEN: sayfa yeni bir saat çağırırsa küme onu taşımalı.
     mdx = (PROJE.parent.parent / "site/src/content/projeler/kredi-parasal.mdx")
     if mdx.exists():
         cagrilan = set(re.findall(r'anahtar="([a-z0-9_]+_tarih)"',
-                                  mdx.read_text(encoding="utf-8")))
-        yeni = {"gun_kur_tarih", "zk_ima_oran_tarih", "pka_tarih"} & cagrilan
-        eksik = sorted(a for a in yeni if a not in o)
-        sina("sayfanın çağırdığı yeni saat anahtarları üretiliyor",
-             not eksik, f"eksik: {eksik}")
+                                  mdx.read_text(encoding="utf-8"))) - {
+            "kosum_tarihi", "yayim_tarihi"}          # koşu künyesi, ölçüm değil
+        disarida = sorted(cagrilan - set(ozet_uret.SAYFA_SAATLERI))
+        sina("ilan edilen küme sayfanın çağırdığı saatlerin HEPSİNİ kapsıyor",
+             not disarida, f"kümede olmayan: {disarida}")
 
 
 def bayat_bayragi() -> None:

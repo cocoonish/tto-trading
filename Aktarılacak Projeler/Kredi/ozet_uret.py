@@ -10,6 +10,12 @@ Bütün değerler data/ altındaki ÜRETİLMİŞ dosyalardan OKUNUR; elle sayı 
 Bir değer kaynakta yoksa anahtar ATLANIR ve stderr'e uyarı basılır — eksik bir
 sayının yerine MDX'teki statik yedek görünür, uydurma bir değer değil.
 
+TEK İSTİSNA — SAYFANIN ADIYLA ÇAĞIRDIĞI SAAT ANAHTARLARI (`SAYFA_SAATLERI`).
+Onlar atlanmaz: ölçülemiyorsa BOŞ ("—") yazılır. Sebep 08.09.2026'da ölçüldü —
+sayfanın adıyla çağırdığı bir anahtar düştüğünde yayın kapısı ENGEL verir ve
+site durur; bir SAAT için donmuş statik yedek zaten yanlış cevaptır, çünkü
+okura ölçülmemiş bir günü ölçülmüş gibi gösterir.
+
 Koşum:  python3 ozet_uret.py   (önce veri.py → metrik.py → grafik.py)
 """
 from __future__ import annotations
@@ -46,6 +52,34 @@ def tr_sayi(v, ondalik: int = 1) -> str:
     # Sayfa tipografisi ASCII tire değil eksi işareti (U+2212) kullanır.
     return (m.replace(",", "\u00a0").replace(".", ",").replace("\u00a0", ".")
              .replace("-", "\u2212"))
+
+
+OLCULEMEDI = "—"
+
+# SAYFANIN ADIYLA ÇAĞIRDIĞI SAAT ANAHTARLARI — HER koşuda yazılır.
+#
+# Ölçüm katmanı bir sütunu yükleyemediğinde o sütunun saatini ATLIYOR
+# (`metrik.anahtar_saati` yalnız dolu anahtarı yazar, `pka_tarih` serisi
+# gelmezse None kalır) ve bu, "uydurma yok" ilkesinin doğru yarısı. Ama
+# 08.09.2026'da DİBS'te ölçülen yarısı eksikti: SAYFANIN ADIYLA ÇAĞIRDIĞI bir
+# anahtar düştüğünde yayın kapısı onu ENGEL sayar (doğru — donmuş bir yedek
+# yayımlanmamalı) ve site durur; o gün yayın ÜÇ KEZ düştü. Kural o gün
+# yazıldı ve burada uygulanıyor: ölçülebiliyorsa kendi tarihiyle,
+# ölçülemiyorsa BOŞ ("—"); atlanmaz.
+#
+# Kapsam elle tutulmuyor: `duman.py` bu kümenin sayfanın gerçekten çağırdığı
+# saat anahtarlarıyla ÖRTÜŞTÜĞÜNÜ sınar — sayfaya yeni bir saat eklenip küme
+# güncellenmezse orada düşer, yayın kapısında değil.
+SAYFA_SAATLERI = ("aofm_tarih", "dol_tarih", "gun_kur_tarih", "pka_tarih",
+                  "spread_aofm_tarih", "zk_ima_oran_tarih")
+
+
+def sayfa_saatlerini_tamamla(O: dict) -> list:
+    """Ölçülemeyen saat anahtarını BOŞ yazar; hangileri boş kaldığını döndürür."""
+    bos = [a for a in SAYFA_SAATLERI if not isinstance(O.get(a), str)]
+    for a in bos:
+        O[a] = OLCULEMEDI
+    return bos
 
 
 def koy(anahtar: str, deger, ondalik: int | None = 2) -> None:
@@ -410,6 +444,10 @@ def main() -> int:
     for anahtar, iso in (m.get("anahtar_tarih") or {}).items():
         O.setdefault(f"{anahtar}_tarih",
                      pd.Timestamp(iso).strftime("%d.%m.%Y"))
+    # Ölçülemeyen saat ATLANMAZ, boş yazılır — sebebi kayda geçer.
+    for _a in sayfa_saatlerini_tamamla(O):
+        uyar(f"'{_a}' bu koşuda ölçülemedi; sayfada boş görünecek "
+             "(donmuş bir sayı basılmasın).")
 
     # --------------------------------------------------------- banka türü
     for a in ("g_kh_toplam_yil", "g_kh_haric_yil", "g_kh_katilim_yil", "katilim_pay"):
