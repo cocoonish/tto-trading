@@ -1515,6 +1515,59 @@ koşu saati yine ilerletiyor. Ölçüldü: 18 hattın 18'inde yeniden deneme
 sayacı 0. Bir tarifin GEREKÇESİ eskiyebilir; ürettiği DAVRANIŞ eskimemiş
 olabilir.
 
+**Kurucu ilke — BİR ÇİZİM KÜTÜPHANESİ DE VERİYİ DOLDURUR; ve bir kapının
+YANLIŞ ALARMI ile ÖLÇTÜĞÜ KUSUR aynı düzeltmeyi istemez.** 10.09.2026'da
+"figürün çizdiği uç ile ilan edilen uç ayrışıyor" diye görünen tek bir bulgu
+söküldü ve altından iki ayrı kusur çıktı; ikincisi YAYIMLANMIŞ bir sayıydı.
+
+(1) ÇİZİM KATMANI SESSİZCE SIFIR ÜRETİYOR. Yığılı alan grafiğinde eksik bir
+gözlem plotly'de öntanımlı olarak SIFIR sayılır (`stackgaps: "infer zero"`) —
+yani kusur veri dosyasına hiç yazılmadan okura gider ve hiçbir veri denetimi
+onu göremez. İki hatta ölçüldü. Fonlama Şekil 03'te `fillna(0)` bunu açıkça
+yapıyordu: M'nin indeksi en HIZLI bacağın (kur) günlerini taşıyor, APİ
+kalemleri bir gün geride bitiyor ve figür o gün A1'i 202.000 → 0, B1'i
+1.040.741 → 0 çiziyordu. Bütçe Şekil 07'de `fillna` YOKTU ve kusur daha
+büyüktü: üç bacak üç ayrı ritimde bitiyor (dış kredi 06.2026 · iç borç 07.2026
+· eurobond 08.2026), her iz KENDİ indeksiyle çiziliyor ve plotly eksik ayları
+sıfırlıyordu — merkezi yönetim borç stoku okura **14,93 → 13,89 → 4,73 trilyon
+TL** diye çıktı, iki ayda 10 trilyon TL'lik sahte bir çöküş, ve o figür
+haftalardır yayındaydı. Sayfanın damgası her iki hatta da DOĞRUYDU (bütçede
+"aylık 06.2026"); yalan söyleyen ÇİZİMDİ. Kural: bir yığılı kompozisyon ancak
+BÜTÜN kalemlerinin ölçüldüğü güne kadar çizilir; sağ uçtaki boşluk "bu kanal
+kullanılmadı" değil "ölçülemedi" demektir. Kapı bütçede çağrı yerine değil her
+figürün ZORUNLU son adımına kondu (`_duzen` → `_yigin_hizala`) ve ortak uç
+yığının KENDİ üyelerinden ölçülüyor: elle tutulan bir kolon listesi olsaydı
+yarın eklenecek yığın sessizce dışarıda kalırdı. Yayılma ölçüldü — sitedeki
+177 figürün 9'u yığınlı, 7 çağrı yerinin 6'sı zaten aynı uçta bitiyordu ve
+dokunulmadı.
+
+Ölçünün CETVELİ de bir kez daha kusuru gizledi: ilk tarama "izin son değeri 0
+iken bir öncekinin sıfırdan farklı olması" diye yazıldı ve Bütçe'yi HİÇ
+göremedi, çünkü orada sıfır veride yok, plotly'nin yığılmasında doğuyor. Aynı
+soruyu "yığındaki izlerin uçları aynı mı" diye sormak onu ilk denemede buldu.
+
+(2) KAPININ YANLIŞ ALARMI AYRI BİR ARIZADIR. Fonlama'nın kapısı ilan edilen uç
+ile çizilen ucun EŞİT olmasını istiyordu. Kural (`_uc`) bir alt kalem geride
+kalınca damgayı DOĞRU biçimde geri çeker; `fillna(0)`lı iz geri gitmediği için
+kapı bu MEŞRU çıktıyı "kolon listesi ayrışmış" diye okuyup istisna
+fırlatıyordu — ölçüldü, on kalemin ALTISI tek başına hattın TAMAMINI
+durduruyordu (Şekil 03-08 hiç yazılmaz, siteye kopyalama olmaz, iş akışı
+kırmızı biter) ve ekrandaki teşhis de yanlış olduğu için sonraki oturum kolon
+listesi arardı. Bir kapının yönü, ölçtüğü GÜVENCEDEN türer: damganın taşıdığı
+söz "bayat bacağı taze gösterme"dir, öyleyse ilan çizilenden İLERİ olamaz;
+GERİDE olması tutuculuktur ve nottur, engel değil. Kardeş hat YPMevduat aynı
+kapıdan bir kez yanmış ve tek yönlüye geçmişti — kural depoda yazılıydı,
+Fonlama'ya uygulanmamıştı ve muafiyetin gerekçesi ("orada defter figürün
+çizdiği sütunlardan ölçülüyor, eşitlik doğal") ölçülmeden kabul edilmişti.
+
+Kapı ağa çıkan `kos()`un İÇİNDEN ayrı bir fonksiyona çıkarıldı, çünkü orada
+duran bir kapıyı hiçbir sınama koşturamaz; duman artık kuralın ilan ettiği
+DÖRT hâle birden koşuyor ve karşılaştırmayı yeniden yazmıyor, KAPININ
+KENDİSİNİ çağırıyor — yeniden yazsaydı kapı geri bozulduğunda da yeşil
+geçerdi. İlk yazımda tam bu tuzağa düşülmüştü: üç maddenin ikisi aynı şeyi
+ölçüyordu ve biri tanımı gereği hiç düşemezdi.
+
+
 **Kurucu ilke — BİR ÖLÇÜT, KURALIN İLAN ETTİĞİ HÂLLERE KOŞTURULMADIYSA
 SINANMAMIŞTIR.** 10.09.2026 sabahı veri tazeleme 19,5 dakikada kırmızı bitti
 ve kullanıcıya arıza e-postası gitti. Kusur veride değil KAPIDAYDI.
