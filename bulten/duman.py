@@ -390,16 +390,19 @@ IZLEMSIZ_GEREKCE = {
         "kendi olay dalı var (olay.haber_endeksi_olaylari): hat en olağandışı "
         "üç hareketi kendisi sıralıyor, sabit eşik o endekslerde işlemiyor.",
     "tl-tasima":
-        "GÜNLÜK seri; yayım bayrağı her gün ateşlerdi, eşik ise ölçülmedi. "
-        "Anahtarlarının altısı (kur, politika, tlref, carry_2y_tlref …) başka "
-        "hattan zaten izleniyor ve değerleri birebir aynı.",
+        "GÜNLÜK seri: yayım bayrağı her gün ateşler, eşik ise ölçülmedi. "
+        "Altı anahtarının DÖRDÜ (d1a, politika, tlref, carry_2y_tlref) başka "
+        "hattan izleniyor ve değerleri aynı; ikisi AYRIŞIYOR (d3a 21,9 ≠ 21,2 "
+        "usdtry-deval'de, kur yuvarlamada) — yani vekil kapsama tam değil ve "
+        "bu adıyla yazılı.",
     "tufex-basabas":
         "GÜNLÜK seri; aynı gerekçe. Başabaş ve prim ölçüleri rejim panelinden "
         "okura ulaşıyor.",
     "el-nino":
-        "yayımladığı manşet anahtarlar MODEL KATSAYISI (geçiş betası, çekirdek "
-        "betası) — yeniden kestirim okura haber değildir; gözlem niteliğindeki "
-        "bir anahtar seçilene kadar izlem yazılmadı.",
+        "AYLIK seri ama eşiği ölçülmedi: yayımladığı manşet anahtarlar emtia "
+        "fark ölçüleri (kir_kakao_fark 18,28 · kir_kahve_fark 13,78) ve bu "
+        "kesitsel farklarda 'kayda değer hareket'in ne olduğu ölçülmeden "
+        "söylenemez.",
 }
 
 
@@ -424,6 +427,18 @@ def _izlem_kapsami():
     assert not olu, f"izlemi olduğu hâlde muafiyet gerekçesi taşıyan hat: {olu}"
     yok = sorted(set(IZLEMSIZ_GEREKCE) - set(ayar.RITIM))
     assert not yok, f"kütükte olmayan hatta muafiyet gerekçesi: {yok}"
+    # `dikkat` EŞİĞİ YAYIM BAYRAĞI ALTINDA ATILDIR — yazılırsa okuyan kişi
+    # davranış değiştirdiğini SANIR. Sebep `olay._seviye`de: bayrak taşıyan bir
+    # anahtar eşiğin altında da "dikkat" döner, yani `dikkat` değerinin hiçbir
+    # etkisi kalmaz (tek gerçek parametre `onemli`). Bu ölçüldü ve ilk yazımda
+    # on izleme atıl bir `dikkat` bırakılmıştı. Bir sayı koda yazıldığında bir
+    # şey yapıyor sayılır; yapmıyorsa yazılmamalı.
+    atil = sorted(f"{iz.hat}/{iz.anahtar}" for iz in ayar.IZLEMLER
+                  if iz.yayim and iz.dikkat is not None)
+    assert not atil, (
+        f"yayım bayraklı izlemde ATIL `dikkat` eşiği: {atil} — bayrak altında "
+        f"taban zaten `dikkat`; yalnız `onemli` anlamlı")
+
     # YAYIM BAYRAĞI GÜNLÜK SERİYE KONMAZ: takvimli olmayan bir anahtarda her
     # gün ateşler ve bülteni boğar.
     #

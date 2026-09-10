@@ -379,16 +379,16 @@ IZLEMLER: list[Izlem] = [
           "Makroihtiyati sıkılaştırmanın sessiz kolu.", "faiz"),
 
     # ─────────────────────────────── enflasyon
-    Izlem("enflasyon", "tufe_aylik", "Aylık TÜFE", "%", 2, "delta", 0.5, 1.0, "azalis",
+    Izlem("enflasyon", "tufe_aylik", "Aylık TÜFE", "%", 2, "delta", None, 1.0, "azalis",
           "Ayın 3'ünde gelir; bültende sürpriz olarak da ayrıca işlenir.", "enflasyon", yayim=True),
-    Izlem("enflasyon", "tufe_12a", "Yıllık TÜFE", "%", 2, "delta", 1.0, 2.5, "azalis", "", "enflasyon", yayim=True),
+    Izlem("enflasyon", "tufe_12a", "Yıllık TÜFE", "%", 2, "delta", None, 2.5, "azalis", "", "enflasyon", yayim=True),
     Izlem("enflasyon", "tufe_3a", "TÜFE 3 aylık yıllıklandırılmış (mevsimsellikten arındırılmış)", "%", 1,
           "delta", 3.0, 6.0, "azalis", "Panonun merkezî momentum ölçüsü.", "enflasyon"),
     Izlem("enflasyon", "tufe_3a_ham", "TÜFE 3 aylık yıllıklandırılmış (ham)", "%", 1, "delta", 3.0, 6.0,
           "azalis", "", "enflasyon"),
     Izlem("enflasyon", "b_12a", "Çekirdek B (yıllık)", "%", 2, "delta", 1.0, 2.5, "azalis", "", "enflasyon"),
-    Izlem("enflasyon", "c_12a", "Çekirdek C (yıllık)", "%", 2, "delta", 1.0, 2.5, "azalis", "", "enflasyon", yayim=True),
-    Izlem("enflasyon", "hizmet_12a", "Hizmet enflasyonu (yıllık)", "%", 1, "delta", 1.0, 2.5, "azalis",
+    Izlem("enflasyon", "c_12a", "Çekirdek C (yıllık)", "%", 2, "delta", None, 2.5, "azalis", "", "enflasyon", yayim=True),
+    Izlem("enflasyon", "hizmet_12a", "Hizmet enflasyonu (yıllık)", "%", 1, "delta", None, 2.5, "azalis",
           "Ataleti en yüksek kalem; dezenflasyonun gerçek sınavı.", "enflasyon", yayim=True),
 
     # ─────────────────────────────── kredi ve para
@@ -403,13 +403,13 @@ IZLEMLER: list[Izlem] = [
     Izlem("kredi-parasal", "kredi_mevduat", "Kredi/mevduat oranı", "%", 1, "delta", 2.0, 4.0, "", "", "kredi"),
 
     # ─────────────────────────────── Hazine borçlanması
-    Izlem("hazine-ihrac", "maliyet_son", "Son ihale ortalama bileşik maliyeti", "%", 2, "delta", 1.0, 2.5,
+    Izlem("hazine-ihrac", "maliyet_son", "Son ihale ortalama bileşik maliyeti", "%", 2, "delta", None, 2.5,
           "azalis", "Hazinenin fiilî borçlanma maliyeti.", "borclanma", yayim=True),
     Izlem("hazine-ihrac", "b2c_son", "Son ihale teklif/karşılama oranı", "kat", 2, "delta", 0.4, 0.8, "artis",
           "Talebin gücü; 1,5'in altı zayıf ihale demektir.", "borclanma"),
     Izlem("hazine-ihrac", "n_ihale", "Toplam ihale sayısı", "adet", 0, "delta", 0.5, None, "",
           "Artması yeni ihale sonucu geldiği anlamına gelir.", "borclanma"),
-    Izlem("hazine-ihrac", "wam_son", "Yeni ihraçların ağırlıklı ortalama vadesi", "yıl", 2, "delta", 0.5, 1.0,
+    Izlem("hazine-ihrac", "wam_son", "Yeni ihraçların ağırlıklı ortalama vadesi", "yıl", 2, "delta", None, 1.0,
           "artis", "", "borclanma", yayim=True),
 
     # ─────────────────────────────── yabancı akımı
@@ -441,20 +441,20 @@ IZLEMLER: list[Izlem] = [
 
     # ─────────────────────────────── ödemeler dengesi ve dış finansman
     Izlem("odemeler-dengesi", "cari12_mia", "Cari denge (12 aylık birikimli)", "mlr USD", 1,
-          "delta", 3.0, 7.0, "artis", "", "dis", yayim=True),
+          "delta", None, 7.0, "artis", "", "dis", yayim=True),
     Izlem("odemeler-dengesi", "cekirdek12_mia", "Çekirdek cari denge (altın ve enerji hariç)",
           "mlr USD", 1, "delta", 3.0, 7.0, "artis",
           "Dış dengenin yapısal kısmı; enerji ve altın dalgası dışarıda.", "dis"),
     Izlem("odemeler-dengesi", "nhn12_mia", "Net hata noksan (12 aylık)", "mlr USD", 1,
           "delta", 4.0, 9.0, "", "Büyümesi kaynağı belirsiz döviz girişine işaret eder.", "dis"),
-    Izlem("odemeler-dengesi", "cari_gsyh", "Cari denge / GSYH", "%", 2, "delta", 0.5, 1.0,
+    Izlem("odemeler-dengesi", "cari_gsyh", "Cari denge / GSYH", "%", 2, "delta", None, 1.0,
           "artis", "", "dis", yayim=True),
 
     # ─────────────────────────────── bütçe ve borç stoku
     Izlem("butce-borc", "denge_gsyh", "Bütçe dengesi / GSYH (12 aylık)", "%", 2, "delta",
-          0.4, 0.8, "artis", "", "borclanma", yayim=True),
+          None, 0.8, "artis", "", "borclanma", yayim=True),
     Izlem("butce-borc", "fdd_gsyh", "Faiz dışı denge / GSYH (12 aylık)", "%", 2, "delta",
-          0.4, 0.8, "artis", "", "borclanma", yayim=True),
+          None, 0.8, "artis", "", "borclanma", yayim=True),
     Izlem("butce-borc", "faiz_vergi", "Faiz harcaması / vergi geliri", "%", 1, "delta",
           1.5, 3.0, "azalis",
           "Borç servisinin vergi tabanını ne kadar yediğinin ölçüsü.", "borclanma"),
