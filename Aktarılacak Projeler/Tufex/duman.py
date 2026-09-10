@@ -59,6 +59,41 @@ _CACHE: dict = {}
 
 GUN_RX = re.compile(r"^\d{2}\.\d{2}\.\d{4}$")
 AY_RX = re.compile(r"^\d{2}\.\d{4}$")
+# Bir damga TEK tarih ya da iki parçalı olabilir; ölçüt ikisini de çözmeli.
+# UZUN yazım alternasyonda ÖNCE gelmek ZORUNDA: "09.09.2026" dizgesinin içinde
+# "09.2026" de duruyor ve kısa kalıp önce denenirse GÜNÜ AYA çevirir.
+DAMGA_RX = re.compile(r"\d{2}\.\d{2}\.\d{4}|\d{2}\.\d{4}")
+
+
+def _damga_gunleri(v) -> list:
+    """Damga dizgesindeki her tarihi çözer; çözülemeyeni düşürür."""
+    if not isinstance(v, str):
+        return []
+    b = _ortak("bicim")
+    return [g for g in (b.tarihe_cevir(p) for p in DAMGA_RX.findall(v)) if g]
+
+
+def _damga_olcutleri(kok: str, damga, bacak: list[str]) -> list[tuple[str, bool, str]]:
+    """Bir damganın taşıması gereken sözleşme — TEK tanım, İKİ çağrı yeri.
+
+    İkinci çağrı yeri (kuralın ilan ettiği sentetik hâller) şart: eski genel
+    madde kuralın ürettiği MEŞRU bir çıktıyı kusur sayıyordu ve bu aylarca
+    görünmedi, çünkü ölçüt kuralın kendi hâllerine HİÇ koşturulmamıştı.
+    """
+    import hesap as _h
+    b = _ortak("bicim")
+    gun_d = sorted(_damga_gunleri(damga))
+    gun_b = sorted(g for g in (b.tarihe_cevir(t) for t in bacak) if g)
+    olcut = [
+        (f"damga_{kok} çözülebilir tarih taşıyor", bool(gun_d), repr(damga)),
+        (f"damga_{kok} en eski bacağı gizlemiyor",
+         bool(gun_d) and bool(gun_b) and gun_d[0] == gun_b[0],
+         f"{damga!r} en eski {gun_d[:1]} ← bacak en eski {gun_b[:1]}"),
+    ]
+    if gun_b and (gun_b[-1] - gun_b[0]).days > _h.DAMGA_AYRIM_GUN:
+        olcut.append((f"damga_{kok}: uzak ayrık bacak adıyla geçiyor",
+                      all(t in damga for t in bacak), f"{damga!r} ← {bacak}"))
+    return olcut
 MDX = KOK / "site" / "src" / "content" / "projeler" / "tufex-basabas.mdx"
 
 
@@ -242,8 +277,31 @@ def bolum_defter() -> None:
         kok = dosya.rsplit(".", 1)[0]
         v = o.get(f"damga_{kok}")
         bacak = [o.get(a) for _, a in hesap.SEKILLER[dosya] if isinstance(o.get(a), str)]
-        sina(f"damga_{kok} her bacağın tarihini taşıyor",
-             isinstance(v, str) and all(t in v for t in bacak), f"{v!r} ← {bacak}")
+        # BİR DAMGA BAĞLAYICI BACAĞI GİZLEYEMEZ (10.09.2026'da ölçüldü).
+        # Burada eskiden "her bacağın tarihi damganın İÇİNDE geçsin" yazıyordu
+        # ve madde hattın KENDİ kuralıyla çelişiyordu: bacaklar aynı ritimde ve
+        # DAMGA_AYRIM_GUN'den yakınsa kural TEK tarih üretir (en eski bacak),
+        # yani daha yeni bacağın tarihi dizgede hiç geçmez. Aşağıdaki sentetik
+        # madde tam o davranışı DOĞRU diye iddia ediyor; dosya kendi içinde
+        # çelişiyordu ve çelişki yalnız bacaklar 1-7 gün ayrıkken görünüyordu.
+        # 10.09'da DİBS eğrisinin 7y düğümü gelmedi, reel bacakları bir gün
+        # ayrıştı, madde öttü ve HAT KOMPLE ATLANDI — duman adımlardan önce
+        # koşuyor. Yayının önünde duran bir denetimin yanlış alarmı arızanın
+        # kendisidir; bir kuralı sınamaya yanlış yazmak onu kalıcı yapar.
+        #
+        # Ölçülen sözleşme iki parçalı ve kuralın DÖRT hâlinde de geçerli:
+        #   (a) damganın EN ESKİ tarihi bacakların en eskisidir — bir damga
+        #       bayat bacağı taze gösteremez; ölçünün taşıdığı asıl güvence bu.
+        #   (b) bacaklar DAMGA_AYRIM_GUN'den UZAK ayrıksa damga iki parçalıdır
+        #       ve her bacak adıyla geçer — eski maddenin DOĞRU olan yarısı.
+        for _ad, _kosul, _ayr in _damga_olcutleri(kok, v, bacak):
+            sina(_ad, _kosul, _ayr)
+        # Özet ile kural AYRIŞMASIN: damga, özetin kendi bacaklarından kuralın
+        # ürettiği dizgenin ta kendisi olmalı. Elle tutulan iki liste bir gün
+        # sessizce ayrışır.
+        sina(f"damga_{kok} kuralın ürettiğiyle aynı",
+             v == hesap.sekil_saatleri(o)[dosya],
+             f"{v!r} ← {hesap.sekil_saatleri(o)[dosya]!r}")
         if defter[dosya] is not None:
             sina(f"{dosya}: defter ile açık damga aynı günü söylüyor", defter[dosya] == v)
     # sentetik: kuralın dört hâli
@@ -263,6 +321,32 @@ def bolum_defter() -> None:
                                   "anket_2y_tarih": "08.2026", "anket_7y_tarih": "08.2026"})["basabas_anket.html"]
     sina("farklı cins bacak (aylık × günlük) iki gün ayrıkken bile iki parçalı",
          karma == "anket 08.2026 · piyasa 02.09.2026", repr(karma))
+
+    # ÖLÇÜT, KURALIN KENDİ İLAN ETTİĞİ HÂLLERDEN DE GEÇMELİ (10.09.2026).
+    # Eski genel madde tam burada kırılmıştı: "birkaç gün ayrık" hâlini kural
+    # DOĞRU üretiyor, madde KUSUR sayıyordu ve iki hüküm aynı dosyada, birkaç
+    # satır arayla duruyordu. Çelişki aylarca görünmedi çünkü ölçüt bu hâllere
+    # hiç koşturulmamıştı; görünmesi için bacakların 1-7 gün ayrılması gerekti
+    # ve o gün (DİBS'in 7y düğümü gelmeyince) hat komple atlandı. Yukarıdaki
+    # dört madde kuralın çıktısını, aşağıdaki dört madde AYNI çıktının ölçütten
+    # geçtiğini sınıyor — biri kuralı, öbürü ölçütü kilitliyor.
+    haller = {
+        "hepsi aynı gün": ({"prim_2y_tarih": "08.09.2026", "prim_3y_tarih": "08.09.2026",
+                            "prim_7y_tarih": "08.09.2026"}, "prim_tarihce.html"),
+        "birkaç gün ayrık": ({"prim_2y_tarih": "08.09.2026", "prim_3y_tarih": "05.09.2026",
+                              "prim_7y_tarih": "08.09.2026"}, "prim_tarihce.html"),
+        "uzak ayrık": ({"prim_2y_tarih": "08.09.2026", "prim_3y_tarih": "12.06.2026",
+                        "prim_7y_tarih": "08.09.2026"}, "prim_tarihce.html"),
+        "aylık × günlük": ({"basabas_2y_tarih": "02.09.2026", "basabas_7y_tarih": "02.09.2026",
+                            "anket_2y_tarih": "08.2026", "anket_7y_tarih": "08.2026"},
+                           "basabas_anket.html"),
+    }
+    for ad, (girdi, dosya) in haller.items():
+        dmg = hesap.sekil_saatleri(girdi)[dosya]
+        bac = [girdi[a] for _, a in hesap.SEKILLER[dosya] if a in girdi]
+        dusen = [o for o, kosul, _ in _damga_olcutleri("sentetik", dmg, bac) if not kosul]
+        sina(f"kuralın '{ad}' hâli ölçütten de geçiyor", not dusen,
+             f"{dmg!r} ← {bac} · düşen: {dusen}")
     bos, bos_d = hesap.defter_ayir(hesap.sekil_saatleri({}))
     sina("hiç bacak yoksa defter null, damga boş işaretli (uydurulmaz)",
          all(v is None for v in bos.values()) and all(v == "—" for v in bos_d.values()))
