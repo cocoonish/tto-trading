@@ -15,6 +15,7 @@ günden ve kendi tarihiyle, ölçülemiyorsa boş ("—") — atlanmaz.
 """
 from __future__ import annotations
 
+import json
 import re
 import sys
 from pathlib import Path
@@ -99,9 +100,20 @@ def _anahtar_atlanmaz():
 
 
 def _sayfa_anahtarlari():
-    """Sayfaların bu hattan adıyla çağırdığı her anahtar, kıyas ailesindeyse
-    döngünün ürettiği kalıba uymalı — sayfa yeni bir kıyas anahtarı çağırırsa
-    burası onu adıyla söyler."""
+    """Sayfaların bu hattan adıyla çağırdığı her kıyas anahtarı, döngünün
+    ÜRETEBİLECEĞİ küme içinde olmalı.
+
+    KÜME DÖNGÜNÜN KENDİ SABİTLERİNDEN GELİR (`ozet_uret.kiyas_anahtarlari`),
+    burada yeniden YAZILMAZ. Eskiden burada elle bir düzenli ifade duruyordu
+    ve `_degisim_bp_tarih` sonekini hiç tanımıyordu; oysa döngü onu her
+    koşuda üretiyor (bugünkü özette bu aileden dokuz anahtar var). Sayfa o
+    anahtarı çağırdığı ilk gün sınama "üretilmemiş anahtar" deyip düşecek,
+    `guncelle.py` hattı adımlardan ÖNCE atlayacak ve hat hiç koşmayacaktı —
+    yayının önünde duran bir denetimin yanlış alarmı arızanın kendisidir.
+    Bir kuralı ÖLÇEN ölçüt kuralı yeniden yazarsa iki taraf sessizce ayrışır.
+    """
+    import ozet_uret as oz
+    uretilen = oz.kiyas_anahtarlari()
     icerik = KOK / "site/src/content"
     if not icerik.exists():
         return
@@ -111,9 +123,22 @@ def _sayfa_anahtarlari():
                               p.read_text(encoding="utf-8")))
     kiyas = sorted(k for k in kul if k.startswith("kiyas_"))
     assert kiyas, "sayfa hiçbir kıyas anahtarı çağırmıyor — sınamanın hedefi değişmiş"
-    kalip = re.compile(r"^kiyas_(1ay|3ay|1yil)(_(2y|1y|9y)(_degisim_bp)?)?$")
-    uymayan = [k for k in kiyas if not kalip.match(k)]
+    uymayan = [k for k in kiyas if k not in uretilen]
     assert not uymayan, f"sayfa, döngünün üretmediği kıyas anahtarı çağırıyor: {uymayan}"
+
+    # KAPSAM İKİ YÖNLÜ SINANIR. Yukarıdaki madde kümeyi ÜST SINIR olarak
+    # kullanıyor; küme döngüden koparsa (biri döngüye yeni bir sonek ekler,
+    # sabitleri güncellemez) madde sessizce gevşer ve bir daha hiçbir şey
+    # yakalamaz. Hattın KENDİ ürettiği özet, o kopmanın ölçüsüdür: üretilen
+    # her kıyas anahtarı ilan edilen kümenin İÇİNDE olmalı.
+    oz_yol = BURASI / "ozet.json"
+    if oz_yol.exists():
+        veri = json.loads(oz_yol.read_text(encoding="utf-8"))
+        disarida = sorted(k for k in veri
+                          if k.startswith("kiyas_") and k not in uretilen)
+        assert not disarida, (
+            "döngü, ilan edilen kümenin dışında kıyas anahtarı üretmiş "
+            f"(ozet_uret.kiyas_anahtarlari eskimiş): {disarida}")
 
 
 def _yukseklik_ay_adindan_bagimsiz() -> None:

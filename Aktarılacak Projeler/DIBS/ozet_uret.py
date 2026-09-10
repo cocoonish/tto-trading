@@ -83,6 +83,38 @@ OLCULEMEDI = "—"
 # Okura yazılan vade adları (kıyas uyarıları için).
 VADE_AD = {"2y": "iki yıl", "1y": "bir yıl", "9y": "dokuz yıl"}
 
+# Kıyas döngüsünün kapsamı — SÖZLEŞME, elle yazılmış bir kalıp DEĞİL.
+KIYAS_DONEM = (("1ay", "kiyas_1ay"), ("3ay", "kiyas_3ay"), ("1yil", "kiyas_1yil"))
+KIYAS_VADE = (("n2y", "2y"), ("n1y", "1y"), ("n9y", "9y"))
+
+
+def kiyas_anahtarlari() -> set:
+    """Kıyas döngüsünün ÜRETEBİLECEĞİ anahtarların tamamı — tek tanım.
+
+    Duman sınaması "sayfa, döngünün üretmediği bir kıyas anahtarı çağırıyor
+    mu" diye sorarken bu kümeyi okur. Eskiden orada elle yazılmış bir düzenli
+    ifade duruyordu ve `_degisim_bp_tarih` sonekini HİÇ tanımıyordu — oysa
+    döngü onu 08.09.2026 kararından beri her koşuda üretiyor (kaydırılmış
+    bitiş günü okura o anahtarla gösterilir). Sayfa o anahtarı çağırdığı ilk
+    gün sınama "üretilmemiş anahtar" deyip düşecek, `guncelle.py` hattı
+    adımlardan ÖNCE atlayacak ve hat hiç koşmayacaktı — TÜFEX'in 10.09
+    arızasının birebir eşi, kaynağı da aynı: bir kuralı ÖLÇEN ölçüt, kuralı
+    yeniden yazarsa iki taraf sessizce ayrışır.
+
+    ÜST KÜME olması tanımın parçası: ölçülemeyen bir kıyasta
+    `_degisim_bp_tarih` yazılmaz. Soru "bugün üretildi mi" değil, "döngü bunu
+    üretebilir mi"dir.
+    """
+    a: set = set()
+    for _, etiket in KIYAS_DONEM:
+        a.add(etiket)
+        for _, sonek in KIYAS_VADE:
+            a.add(f"{etiket}_{sonek}")
+            a.add(f"{etiket}_{sonek}_degisim_bp")
+            a.add(f"{etiket}_{sonek}_degisim_bp_tarih")
+    return a
+
+
 
 def ay_kisa(t) -> str:
     """Aylık SAAT yazımı — ortak/bicim sözleşmesi: `AA.YYYY`. Ayın günü
@@ -529,12 +561,11 @@ def main() -> int:
 
     # --- kıyas günleri -----------------------------------------------------
     kiyas = m.get("kiyas_gunleri") or {}
-    for ad, etiket in (("1ay", "kiyas_1ay"), ("3ay", "kiyas_3ay"),
-                       ("1yil", "kiyas_1yil")):
+    for ad, etiket in KIYAS_DONEM:
         if ad in kiyas:
             O[etiket] = tr_tarih(kiyas[ad])
             g = pd.Timestamp(kiyas[ad])
-            for kol, sonek in (("n2y", "2y"), ("n1y", "1y"), ("n9y", "9y")):
+            for kol, sonek in KIYAS_VADE:
                 # Bu anahtarlar SAYFADA ADIYLA çağrılıyor; ölçülemeyen değer
                 # atlanmaz, boş yazılır (bkz. OLCULEMEDI). Değişimin bitişi
                 # çıpa günü değilse kendi tarihiyle damgalanır.
