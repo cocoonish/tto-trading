@@ -505,6 +505,12 @@ def _cumle_olcusu_denetimi(satirlar=()) -> list[str]:
     return bulgu
 
 
+# Duvar saati TEK TANIMDAN (veri.bugun_ts) okunur; sınama onu dondurunca
+# ölçüm, çerçeve uyarıları ve bayatlık hükmü AYNI günü görür. İki ayrı knob
+# olsaydı biri dondurulup öbürü unutulur, fikstür yarı donmuş kalırdı.
+_bugun_ts = veri.bugun_ts
+
+
 def main() -> int:
     b = _bicim()
     m = json.loads((VERI / "metrik_ozet.json").read_text(encoding="utf-8"))
@@ -569,7 +575,7 @@ def main() -> int:
     # DUVAR SAATİ eksi son gözlem. Verinin kendi ucunu referans almak denetimi
     # kendi kendine referanslı yapar ("son gözlem bugün, demek ki taze") ve
     # donmuş bir seri sonsuza kadar taze görünür.
-    bugun = pd.Timestamp.today().normalize()
+    bugun = _bugun_ts()
     gecikme: dict[str, int] = {}
     for blok, t in _SAAT.items():
         g = int((bugun - t).days)
@@ -592,7 +598,7 @@ def main() -> int:
         # bu hesabı yanıltır ve okur ilan edilen günü ölçülmüş sanmamalı.
         yt = beklenen_yayim_gunu(_SAAT[en_geride])
         O["beklenen_yayim_tarihi"] = yt.strftime("%d.%m.%Y")
-        koy("beklenen_yayim_gecikme_gun", (dt.date.today() - yt).days, 0)
+        koy("beklenen_yayim_gecikme_gun", (_bugun_ts().date() - yt).days, 0)
 
     # ------------------------------------------------------------ stok
     # Manşet BURADA: yurt içi yerleşiklerin toplam yabancı para mevduatı.

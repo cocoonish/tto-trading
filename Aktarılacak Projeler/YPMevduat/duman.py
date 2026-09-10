@@ -2483,7 +2483,36 @@ except ImportError:                                            # site yoksa
     _sekil_metinleri = None                                    # type: ignore
 
 
-def _kutu(H: pd.DataFrame, sekil: bool = True, durum: dict | None = None) -> dict:
+@contextlib.contextmanager
+def _fikstur_saati(H: pd.DataFrame):
+    """Fikstürün çerçevesi donmuşsa ÖLÇÜSÜ de donar.
+
+    Duvar saatinin referans olması ilkesi duruyor (verinin kendi ucunu
+    referans almak denetimi kendi kendine referanslı yapardı) — donan yalnız
+    SINAMANIN gördüğü gün, ve o gün çerçevenin KENDİ son haftasından türüyor.
+    Çerçeveyi bugüne çıpalayan maddeler (`_bugune_cipala`) bu kapının DIŞINDA
+    kalır: onların sorusu tam da duvar saatiyle ölçülen tazeliktir.
+    """
+    eski = veri.BUGUN
+    veri.BUGUN = _fikstur_bugunu(H)
+    try:
+        yield
+    finally:
+        veri.BUGUN = eski
+
+
+def _fikstur_bugunu(H: pd.DataFrame):
+    """Fikstürün "bugün"ü: çerçevenin son haftasını kaynağın YAYIMLAYACAĞI gün.
+
+    Çerçeveden türer, sabit yazılmaz — SON_HAFTA değişirse kendiliğinden kayar.
+    Bayatlık hükmü bu güne göre ölçüldüğünde TEMİZ fikstür her takvim gününde
+    temiz kalır; bayat hâlleri kendi `bugun` argümanlarıyla kurulur.
+    """
+    return ozet_uret.beklenen_yayim_gunu(H.index[-1])
+
+
+def _kutu(H: pd.DataFrame, sekil: bool = True, durum: dict | None = None,
+          bugun=None) -> dict:
     """Ölçüm → çizim → özet zincirini GEÇİCİ dizinde uçtan uca koşturur.
 
     `durum` verilirse veri katmanının koşu kaydı ONUNLA kurulur: kaydın bayat
@@ -2493,8 +2522,16 @@ def _kutu(H: pd.DataFrame, sekil: bool = True, durum: dict | None = None) -> dic
     (kutu / "data").mkdir()
     (kutu / "cikti").mkdir()
     eski = (veri.PROJE, veri.VERI, metrik.PROJE, metrik.VERI,
-            grafik.CIKTI, grafik.VERI, ozet_uret.PROJE, ozet_uret.VERI)
+            grafik.CIKTI, grafik.VERI, ozet_uret.PROJE, ozet_uret.VERI,
+            veri.BUGUN)
     try:
+        # FİKSTÜRÜN GİRDİSİ DONMUŞSA ÖLÇÜSÜ DE DONMALIDIR. Çerçevenin son
+        # haftası sabit (SON_HAFTA) ama bayatlık hükmü duvar saatine bakıyordu:
+        # takvim ilerledikçe TEMİZ fikstür kendiliğinden bayatladı ve 10.09.2026
+        # sabahı üç madde birden düştü — duman adımlardan önce koştuğu için hat
+        # komple atlandı, panosu dondu. "Bugün", çerçevenin kendi son
+        # haftasından türetiliyor: kaynağın o haftayı yayımlayacağı gün.
+        veri.BUGUN = bugun or _fikstur_bugunu(H)
         veri.PROJE = metrik.PROJE = ozet_uret.PROJE = kutu
         veri.VERI = metrik.VERI = grafik.VERI = ozet_uret.VERI = kutu / "data"
         grafik.CIKTI = kutu / "cikti"
@@ -2546,7 +2583,8 @@ def _kutu(H: pd.DataFrame, sekil: bool = True, durum: dict | None = None) -> dic
         return out
     finally:
         (veri.PROJE, veri.VERI, metrik.PROJE, metrik.VERI,
-         grafik.CIKTI, grafik.VERI, ozet_uret.PROJE, ozet_uret.VERI) = eski
+         grafik.CIKTI, grafik.VERI, ozet_uret.PROJE, ozet_uret.VERI,
+         veri.BUGUN) = eski
         veri._SON.pop("hafta", None)
         shutil.rmtree(kutu, ignore_errors=True)
 
@@ -2586,6 +2624,47 @@ sina("özetteki her sayı bir ölçüm bloğuna bağlı (saatsiz sayı yok)",
 sina("temiz koşuda hiçbir ölçüm atlanmıyor ve bayat hükmü düşmüyor",
      not _T["atlanan"] and _T["o"]["bayat"] is False,
      f"atlanan {_T['atlanan']}")
+
+# TOLERANS AŞIMININ KENDİSİ SINANIR — VE BU BOŞLUK ÖLÇÜLEREK BULUNDU.
+#
+# Fikstürün saati donmadan önce bu yol yalnız TESADÜFEN kapsanıyordu: çerçeve
+# sabit bir haftada bittiği için takvim ilerledikçe fikstür kendiliğinden
+# bayatlıyordu — yani ölçüt "gecikme bayat sayılır mı" diye sormuyor, arızayı
+# takvimin getirmesini bekliyordu. Saat dondurulunca boşluk göründü: gecikme
+# dalı koddan tamamen çıkarıldığında sınama YEŞİL geçiyordu (arıza
+# enjeksiyonuyla ölçüldü). "Ölçüt düşmedi" ile "arıza yok" birbirine tıpatıp
+# benzer.
+#
+# Sınır İKİ YÖNLÜ ve gecikmenin PAYI ayrıca ölçülüyor: tolerans günü kapalı,
+# ertesi gün açık, ve o gün hükmü kuran sebeplerden BİRİ gecikmenin kendisi.
+# Sebep sayısından öbür iki sebebin payı düşülüyor — üçüncü bir sebep
+# eklenirse ölçüt yanlış alarm vermesin diye.
+_tol_gun = veri.tazelik_tolerans("haftalik")
+_son_h = H0.index[-1]
+
+
+def _gecikme_payi(kutu: dict) -> int:
+    o = kutu["o"]
+    return (o["bayat_sebep_sayisi"]
+            - (1 if o.get("bayat_tazelik_uyarisi_sayisi") else 0)
+            - (1 if o.get("atlanan_olcum_sayisi") else 0))
+
+
+_SINIR = _kutu(H0, sekil=False, bugun=_son_h + pd.Timedelta(days=_tol_gun))
+sina("tam tolerans gününde bayat hükmü DÜŞMÜYOR",
+     _SINIR["o"]["bayat"] is False,
+     f"gecikme {_SINIR['o'].get('veri_gecikme_gun')} · tolerans {_tol_gun}")
+_ASIM = _kutu(H0, sekil=False, bugun=_son_h + pd.Timedelta(days=_tol_gun + 1))
+sina("toleransın bir gün ötesinde bayat hükmü AÇILIYOR",
+     _ASIM["o"]["bayat"] is True,
+     f"gecikme {_ASIM['o'].get('veri_gecikme_gun')} · tolerans {_tol_gun}")
+sina("tolerans aşımı KENDİ BAŞINA bir bayat sebebi (gecikme dalı canlı)",
+     _gecikme_payi(_ASIM) == 1,
+     f"sebep {_ASIM['o']['bayat_sebep_sayisi']} · "
+     f"tazelik {_ASIM['o'].get('bayat_tazelik_uyarisi_sayisi')} · "
+     f"atlanan {_ASIM['o'].get('atlanan_olcum_sayisi')}")
+sina("temiz koşuda gecikmenin payı SIFIR (ölçüt iki yönlü)",
+     _gecikme_payi(_T) == 0, str(_gecikme_payi(_T)))
 
 # ===========================================================================
 # CÜMLE SÖZLEŞMESİ — koşu kaydı MEKANİK, nüans SAYFAYA ait
@@ -3017,10 +3096,16 @@ sina("kırpma figürün SAĞ ucuna dokunmuyor (damga korunuyor)",
 # yerinde durur, okunur, hata vermez, yalnızca BAŞKA bir çerçeveyi anlatır.
 # Ölçüldü: kayıttaki uyarı listesi BOŞ dururken ölçülen çerçeve kapsam
 # uyarısı gerektiriyordu ve sayfa "bu koşuda uyarı yok" diyordu.
+with _fikstur_saati(H0):
+    # İKİ ÇERÇEVE DE FİKSTÜRÜN; ikisi de fikstürün saatiyle ölçülür. Duvar
+    # saatiyle ölçülünce TEMİZ çerçeve takvim ilerledikçe kendiliğinden
+    # bayatlıyor ve ölçüt bir gün "temizde susmuyor" diye düşüyordu.
+    _uy_kirpik = veri.cerceve_uyarilari(_kirpik_c)
+    _uy_temiz = veri.cerceve_uyarilari(H0)
 sina("çerçeveden türeyen uyarı ÇERÇEVEDEN ölçülüyor, temizde susuyor",
-     any(u.startswith("KAPSAM") for u in veri.cerceve_uyarilari(_kirpik_c))
-     and not veri.cerceve_uyarilari(H0),
-     "; ".join(veri.cerceve_uyarilari(_kirpik_c))[:160])
+     any(u.startswith("KAPSAM") for u in _uy_kirpik) and not _uy_temiz,
+     "kırpık: " + "; ".join(_uy_kirpik)[:100]
+     + " · temiz: " + "; ".join(_uy_temiz)[:100])
 sina("iki katman AYNI fonksiyonu çağırıyor (iki uyarı listesi yok)",
      "veri.cerceve_uyarilari(H)" in _kos_kod
      and "cerceve_uyarilari(H)" in _iz_kaynak("durum_kaydi"),

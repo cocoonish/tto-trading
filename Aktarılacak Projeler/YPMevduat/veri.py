@@ -1287,7 +1287,7 @@ def cek_kume(kodlar: dict[str, Seri], bicim_ad: str, parca_gun: int,
         # Bitiş İLERİ atılır: EVDS aralığın SONUNDAN geriye doldurur, yani
         # bitişi bugüne kesmek — bir gözlem ileri tarihli damgalanmışsa ya da
         # koşucunun saati kayıksa — en yeni gözlemi sessizce düşürür.
-        son = pd.Timestamp.today().normalize() + pd.Timedelta(days=ILERI_GUN)
+        son = bugun_ts() + pd.Timedelta(days=ILERI_GUN)
         for i in range(0, len(eksik), DEMET):
             grup = eksik[i:i + DEMET]
             # YOKLAMA PAYI: katalogdaki başlangıçtan BİR YIL GERİDEN sorulur.
@@ -1517,7 +1517,7 @@ def parca_aritmetigi(bugun: pd.Timestamp | None = None) -> dict:
         yaklaşıldığı, sınırın aşılıp aşılmadığı kadar önemli: pay ölçülmezse
         parçalamanın ilk kez devreye girdiği gün de görünmez.
     """
-    bugun = pd.Timestamp.today().normalize() if bugun is None else bugun
+    bugun = bugun_ts() if bugun is None else bugun
     en_eski = min(pd.Timestamp(s.bas) for s in HAFTALIK.values())
     sorulan = min(sorgu_alt_siniri(s) for s in HAFTALIK.values())
     ritim = AILE_RITIM_GUN["haftalik"]
@@ -1579,7 +1579,7 @@ def bosluk_sag_ucta(tarih, bugun=None) -> bool:
     pencereye düşüp düşmediği de aynı tanımdan sorulur. İkinci bir eşik
     yazılsaydı biri güncellenip öteki unutulurdu.
     """
-    bugun = pd.Timestamp.today().normalize() if bugun is None else pd.Timestamp(bugun)
+    bugun = bugun_ts() if bugun is None else pd.Timestamp(bugun)
     return int((bugun - pd.Timestamp(tarih)).days) <= tazelik_tolerans()
 
 
@@ -1697,6 +1697,31 @@ def kapsam_yeterli(H: pd.DataFrame) -> tuple[bool, str]:
 
 
 # --------------------------------------------------------------------------- tazelik
+# DUVAR SAATİ TEK KAPIDAN OKUNUR — VE SINAMA ONU DONDURABİLİR.
+#
+# ARIZA (ölçülen 10.09.2026): duman sınamasının TEMİZ çerçevesi son haftasını
+# sabit bir güne demirliyor (`SON_HAFTA`), tazelik ölçüsü ise duvar saatine
+# bakıyordu. Takvim ilerledikçe fikstür kendiliğinden bayatladı — 09.09'da yaş
+# tam toleransta (12 gün), 10.09'da 13 gün oldu, tazelik uyarısı düştü, bayat
+# hükmü açıldı ve ÜÇ madde birden çöktü. Duman adımlardan ÖNCE koştuğu için
+# hat komple atlandı: panosu 09.09'da dondu ve haftalık yayım günü olan 10.09
+# sabahı hiç koşamayacaktı. Kusur ne veride ne hükümdeydi — SINAMA KENDİ
+# GİRDİSİNİ DONDURUP ÖLÇÜSÜNÜ DONDURMAMIŞTI.
+#
+# YAYIN YOLUNDA HİÇBİR ŞEY DEĞİŞMEZ: `BUGUN` None kaldığı sürece duvar saati
+# okunur. Yalnız sınama onu doldurur ve `finally` ile geri alır. Referansın
+# duvar saati olması ilkesi de duruyor (verinin kendi ucunu referans almak
+# denetimi kendi kendine referanslı yapardı); değişen yalnız o saatin TEK bir
+# kapıdan okunması.
+BUGUN = None
+
+
+def bugun_ts() -> pd.Timestamp:
+    """Bugünün damgası — hattın HER katmanı buradan okur, sınama dondurabilir."""
+    return (pd.Timestamp.today() if BUGUN is None
+            else pd.Timestamp(BUGUN)).normalize()
+
+
 def tazelik_tolerans(aile: str = "haftalik") -> int:
     """Bir tazelik ailesinin toleransı — denetimle AYNI kaynaktan.
 
@@ -1714,7 +1739,7 @@ def tazelik_olc(H: pd.DataFrame) -> dict:
     referans almak denetimi kendi kendine referanslı yapar ("son gözlem bugün,
     demek ki taze") ve donmuş bir seri sonsuza kadar taze görünür.
     """
-    bugun = pd.Timestamp.today().normalize()
+    bugun = bugun_ts()
     out: dict[str, dict] = {}
     for aile, seriler in TAZELIK_SERI.items():
         tol = AILE_TOLERANS[aile]
