@@ -1777,3 +1777,83 @@ eğri hükmünde: 1 yıl ile politika faizi arasındaki 207 baz puanın ne kadar
 beklenti ne kadarının vade primi olduğu ayrıştırılmadığı için hüküm "piyasa
 artış bekliyor" değil "eğri bir yıla yayılan indirim döngüsü fiyatlamıyor" ile
 sınırlı tutuldu.
+
+**Kurucu ilke — BİR ENDEKSİN ÖRNEKLEM İÇİ İSABETİ, ÇOĞU ZAMAN SIZINTININ
+BÜYÜKLÜĞÜDÜR; ve BİR SÜZGECİN NEYİ SORDUĞUNU BİLMEMESİ, YANLIŞ SORMASINDAN
+DAHA SESSİZDİR.** 10.09.2026'da kullanıcı önceki PPK metinlerinin incelenmesini
+ve bir şahin/güvercin endeksi istedi. Arşiv kuruldu, endeks kuruldu, endeks
+DÜŞTÜ — ve düşmesi kayda değer bir sonuç.
+
+ARŞİV ÖNCE YOKLANDI. On bir yılın on birinde de üç liste sayfası açık ve ~131
+tekil faiz kararı var; hat ancak bu ölçümden sonra kuruldu. Arşiv DEPODA duruyor,
+çünkü yayımlanmış bir duyuru bir daha değişmez ve her ölçümde yeniden indirilen
+bir girdi ölçümü kaynağın o günkü hâline bağımlı kılar. Ham PARAGRAFLARIN
+saklanması ayrıca kendini ödedi: ayrıştırıcı iki kez düzeltildi ve ikisinde de
+kaynak yeniden yüklenmedi.
+
+SÜZGEÇ NEYİ SORDUĞUNU BİLMELİ. Sınıflandırıcı başlıkta "faiz oran" alt dizesini
+arıyordu ve kırk bir "Kredi Kartı İşlemlerinde Uygulanacak AZAMİ FAİZ
+ORANLARINA İlişkin Basın Duyurusu" PPK kararı sayıldı. Belgeler gerçek,
+tarihleri gerçek, yalnızca SORU yanlıştı — endekse girselerdi kredi kartı
+duyuruları PPK metni gibi puanlanacaktı ve hiçbir sayı bunu söylemeyecekti.
+Düzeltmenin KENDİSİ ikinci bir kusur üretti (sıkı kalıp 2019 ve öncesinin
+"PRESS RELEASE ON Summary…" başlıklı İngilizce özetlerini düşürdü); kapsam
+kadar HASSASİYET de denetimin parçası ve son hâlde düşen kırk bir belgenin
+kırk biri de gerçekten kredi kartı duyurusu.
+
+ÇIPA İKİ REJİMİ BİRDEN TUTMALI. "politika faizi" ifadesini aramak 2016–2017'nin
+TAMAMINI kaçırıyordu: o yıllarda oranlar maddeler hâlinde sayılıyordu. İki
+dönemde de bulunan ifade "bir hafta vadeli repo ihale faiz oranı". Çıpanın
+ardındaki pencere de CÜMLEYLE sınırlanmalı — sabit uzunlukta pencere koridor
+cümlesine taşıyor ve "son oran" gecelik borçlanma faizi oluyordu (2026-01 %37
+yerine %35,5). Sekiz bilinen dönüm noktasına karşı sınandı.
+
+ENDEKSİN ÜÇ SIZINTISI VE HER BİRİNİN İŞARETİ AYNI YÖNE BAKIYORDU.
+(1) Tek eşikli bir kural yapısal olarak hiç "sabit" diyemez; 111 kararın 67'si
+sabit olduğu için ölçüt endeksin sinyalini değil KENDİ KUSURUNU ölçüyordu
+(eğitim isabeti %30,6, saf kuralın yarısı). (2) En güçlü "güvercin" kalıp bir
+KURUL ÜYESİ İSİM LİSTESİ çıktı: endeks tonu değil BAŞKAN SABİT ETKİSİNİ
+öğrenmişti — doğru bir gözlem, ama metnin tonu değil ve yeni bir metin hakkında
+hiçbir şey söylemez. (3) Kararın kendi cümlesi girdideydi, yani cevap soruya
+konmuştu; ağırlığı küçüktü (−0,02) ama sızıntı ölçülünce kaldırılır, etkisi
+küçük diye bırakılmaz. Üçü temizlenmeden ÖNCE eğitim isabeti %88,9'du; sonra
+sinyal kalmadı. Aradaki fark endeksin gücü değil, ölçüm kusurunun büyüklüğü.
+
+SAF KIYAS ÖLÇÜTÜ OLMADAN İSABET SAYISI ANLAMSIZDIR. 111 kararın 67'si sabit;
+her toplantıda hiçbir şey demeden "sabit" diyen kural %50–67 isabet tutturur.
+Endeks örneklem dışında bunu geçemedi (eşzamanlı −7,9 puan, öncü −5,4 puan) ve
+yayına GİRMEDİ. Sebep de ölçülebilir: 2016–2022 ile 2023–2026 aynı rejim değil.
+
+YAYINA GİREN, ÖRNEKLEM İÇİ OLDUĞU YAZILARAK GİRDİ. "Adımların büyüklüğü"
+cümlesi 111 kararın beşinde geçiyor ve BEŞİ DE indirim; on bir yılda hiçbir
+sabit kararda ve hiçbir artırımda yok. Ama 21 indirim bu cümle olmadan yapıldı
+(yokluğu indirimi dışlamıyor) ve kalıp 2026 metinlerine BAKILARAK seçildi, yani
+ilişki örneklem içi. İkisi de yazıya kondu ve sınanabilir hâli ileriye dönük
+olarak izleme listesine girdi. Bir gözlem yayımlanabilir; yayımlanamayacak olan,
+onu ölçülmüş bir öngörü gibi sunmaktır.
+
+**Kurucu ilke — 7/24 İŞLEM GÖREN BİR SERİDE "KAPANMIŞ SEANS" BİR SEÇİMDİR ve
+seçimin bedeli ÖLÇÜLEBİLİR.** Kullanıcı "48,46 dünün kuru değil mi, bugün 48,49
+gibi" dedi. Sayı yanlış değildi — analiz "9 Eylül kapanışında" diye yazıyordu ve
+48,4631 o günün kapanışı. Ama gözlem gerçek bir mekanizmayı işaret ediyordu:
+`ortak/usdtry.kapanmamis_bari_dusur` bugüne ait barı gün UTC'de kapanmadan
+seriye almıyor ve FX 7/24 işlediği için UTC günü 00:00'da kapanıyor. İstanbul
+seansı 15:00 UTC'de kapandıktan sonra DOKUZ SAAT daha dünkü kur yayımlanıyor.
+Maliyet ölçüldü (250 iş günü): medyan 0,028 TL (%0,062), p90 0,092 TL, azami
+0,253 TL — ve RASTGELE DEĞİL, 250 günün 201'i artı yönlü, yani bir gün eski kur
+sistematik olarak DÜŞÜK gösteriyor. Sabah bülteni penceresinde iki konvansiyon
+da aynı barı verir; ayrışma yalnız akşam yayımlarında.
+
+KARAR (10.09.2026, kullanıcı): UTC günü KALIYOR, etiket güçleniyor. Gerekçe
+kayda geçsin ki bir sonraki oturum yeniden önermesin — İstanbul kapanışına
+geçmek 14-15 saat tazelik kazandırırdı ama 15:00'te alınan bar FİNAL DEĞİL ve
+bir aylık yıllıklandırılmış hız son gözleme aşırı duyarlı (son değer %0,1
+oynarsa oran 1,5 puan kayar), yani akşam yayımlanan sayı ertesi sabah REVİZE
+olurdu. Yayımlanmış bir sayının revize olmaması, dokuz saatlik tazelikten
+değerli bulundu. Ölçülemeyen de yazıldı: 15:00–24:00 UTC hareketinin gerçek
+dağılımı bu oturumdan ölçülemedi.
+
+Bir yapısal kusur kayda değer ve KALIYOR: kural İKİ yerde yazılı
+(`ortak/usdtry` ve `bulten/piyasa.KAPANIS_UTC`) ve duman fikstürü 12:00 UTC'de
+koştuğu için iki konvansiyonu AYIRT EDEMİYOR — yani bu kural bir gün
+değiştirilirse hiçbir kapı görmez.
