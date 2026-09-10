@@ -84,6 +84,15 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       basılmaz); kap yoksa ENGEL. Proje sayfasında kap OLMAMALI (pano
       canlıdır) — varsa ENGEL. Ölçüt dist/ varsa koşar; yoksa koşmadığını
       söyler.
+  (25) OLAY OKURA ULAŞTI MI — bülten ölçüm katmanının ürettiği her
+      `onemli`/`dikkat` olayın CÜMLESİ derlenmiş sayı sayfasında görünmeli.
+      Ölçüt kaynağa değil ÇIKTIYA bakar, çünkü olayı basan da süzen de bir
+      BİLEŞENDİR: 07.09.2026'da eklenen tekilleştirme süzgeci `notlar`
+      kovasını "yukarıda basılıyor" varsayarak hat hat listesinden atıyordu,
+      oysa o kovanın sayfada bölümü hiç olmamıştı. Ölçüldü (10.09.2026,
+      derlenmiş 17 sayı): 108 dikkat olayının 108'i okura ulaşmıyor, 37
+      önemli olayın 37'si ulaşıyor — kaynak da veri de doğruydu, kusur yalnız
+      çıktıda görünüyordu. Bulunamayan olay ENGEL.
   (23) SOLUK METİN — `color: var(--ink-30)` ENGEL. Kontrast 1,90:1 ve
       global.css'in kendi yorumu "yalnız çizgi ve kenarlıkta" diyor; metin
       için en soluk kabul edilen jeton --ink-60 (4,59:1).
@@ -100,6 +109,7 @@ import re
 import subprocess
 import sys
 import urllib.parse
+from html import unescape
 
 KOK = pathlib.Path(__file__).resolve().parents[2]
 
@@ -522,6 +532,63 @@ def kacan_etiketler(dist: pathlib.Path) -> dict[str, list[str]]:
 
 
 SOLUK_METIN = re.compile(r"(?<!-)\bcolor:\s*var\(--ink-30\)")
+
+
+def _sade_metin(s: str) -> str:
+    """Kıyasın iki tarafına da uygulanan tek süzgeç: boşluk tekleştirme."""
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def _sayfa_metni(html: str) -> str:
+    """Derlenmiş sayfayı arama için sadeleştirir: HTML kaçışları ÇÖZÜLÜR
+    (`&#39;` → `'`, `&amp;` → `&`), boşluklar tekleştirilir. Kaçışları
+    çözmeden aranan bir cümle sayfada dursa da bulunamaz."""
+    return _sade_metin(unescape(html))
+
+
+def olay_okura_ulasti(kok: Path) -> tuple[list[str], int, int]:
+    """(25) OLAY OKURA ULAŞTI MI. Ölçüm katmanının `onemli`/`dikkat` diye
+    işaretlediği her olayın cümlesi, o sayının DERLENMİŞ sayfasında geçmeli.
+
+    Neden çıktıya bakıyor: olayı sayfaya basan da, "bu zaten yukarıda anıldı"
+    deyip süzen de bir bileşendir; ikisi de kaynakta bir olay kovası olarak
+    görünmez. 07.09.2026'da konan tekilleştirme süzgeci `notlar` kovasını
+    basıldığı VARSAYIMIYLA süzüyordu ve o kovanın sayfada bölümü hiç olmadı;
+    JSON doğru, bileşen sözdizimsel olarak doğru, koşu yeşil — ve okur
+    ölçümlerin hiçbirini görmüyordu.
+
+    Kıyas cümlenin ilk `ESLESME_UZUNLUK` karakterinden yapılıyor ve İKİ TARAF
+    DA aynı süzgeçten geçiyor: sayfa metni HTML kaçışları çözülüp boşlukları
+    tekleştirilerek okunuyor. Bu gereklilik ölçülerek görüldü — kaçış çözümü
+    olmadan ölçüt beş olayı KAYIP saydı ve beşi de sayfada duruyordu; ortak
+    yanları kesme işareti (`&#39;`) ve `&` (`&amp;`) taşımalarıydı ("altın
+    haber-duyarlılık endeksi 1 günde +0,04'den…", "S&P 500 …"). Yayının önünde
+    duran bir denetimin yanlış alarmı, ölçtüğü kusurdan pahalıdır: bu ölçüt
+    yayın kapısında duruyor ve beş yanlış alarm siteyi durdururdu."""
+    ESLESME_UZUNLUK = 45
+    veri = kok / "site/src/data/bulten"
+    dist = kok / "site/dist/bulten"
+    bulgu: list[str] = []
+    aranan = bulunan = 0
+    for kaynak in sorted(veri.glob("*.json")):
+        sayfa = dist / kaynak.stem / "index.html"
+        if not sayfa.exists():
+            continue
+        html = _sayfa_metni(sayfa.read_text(encoding="utf-8"))
+        b = json.loads(kaynak.read_text(encoding="utf-8"))
+        for kova in ("one_cikanlar", "notlar"):
+            for o in b.get(kova) or []:
+                metin = (o.get("metin") or "").strip()
+                if len(metin) < ESLESME_UZUNLUK:
+                    continue
+                aranan += 1
+                if _sade_metin(metin)[:ESLESME_UZUNLUK] in html:
+                    bulunan += 1
+                else:
+                    bulgu.append(
+                        f"{kaynak.stem} · {kova} · {o.get('hat')}|{o.get('anahtar')} "
+                        f"— ölçülen olay sayfada YOK: {metin[:70]!r}")
+    return bulgu, aranan, bulunan
 
 
 def sabit_kap_bulgulari(dist: Path) -> list[str]:
@@ -1390,6 +1457,18 @@ def main() -> int:
         for b in sk:
             hata.append(f"sabit kap — {b}")
         print(f"  ihlal {len(sk)}")
+
+    # ------------------------------------------------------------ (25)
+    # OLAY OKURA ULAŞTI MI. Ölçülen her önemli/dikkat olay sayfada görünmeli.
+    print("\n▶ Olay okura ulaştı mı (dist/: her önemli/dikkat olayın cümlesi sayfada)")
+    if not (KOK / "site/dist/bulten").exists():
+        print("  – dist/bulten yok (önce `npm run build`), ÖLÇÜT KOŞMADI")
+        uyari.append("ölçüt 25 (olay okura ulaştı mı) KOŞMADI — dist/bulten yok")
+    else:
+        kayip, aranan, bulundu = olay_okura_ulasti(KOK)
+        for k in kayip:
+            hata.append(f"ulaşmayan olay — {k}")
+        print(f"  aranan {aranan} · sayfada {bulundu} · kayıp {len(kayip)}")
 
     # ------------------------------------------------------------ (23)
     # SOLUK METİN. global.css'in kendi yorumu "--ink-30 metinde kullanılmaz"

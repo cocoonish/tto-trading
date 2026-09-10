@@ -32,6 +32,7 @@ ciplak_sayilar = _mod.ciplak_sayilar
 ORNEK_AC, ORNEK_KAPA = _mod.ORNEK_AC, _mod.ORNEK_KAPA
 MUAF_KALIP = _mod.MUAF_KALIP
 olu_ic_baglar = _mod.olu_ic_baglar
+olay_okura_ulasti = _mod.olay_okura_ulasti
 x_izleri = _mod.x_izleri
 kacan_etiketler = _mod.kacan_etiketler
 sabit_kap_bulgulari = _mod.sabit_kap_bulgulari
@@ -510,6 +511,85 @@ sina("hareketli tatil tablosu girildiğinde etkili",
      _bg.sonraki_is_gunu(_dtg.date(2099, 3, 1)) == _dtg.date(2099, 3, 3),
      f"gelen {_bg.sonraki_is_gunu(_dtg.date(2099, 3, 1))}")
 _bg.HAREKETLI_TATIL.pop(2099, None)
+
+
+# ══════════════════════════════════════════════════════════════════════
+print("\n▶ Olay okura ulaştı mı (25. ölçüt)")
+
+# ÖLÇÜLEN ARIZA (10.09.2026). Bülten JSON'u sekiz `dikkat` olayı taşıyordu ve
+# sayfa hiçbirini basmıyordu: tekilleştirme süzgeci `notlar` kovasını "yukarıda
+# basılıyor" varsayarak hat hat listesinden atıyordu, oysa o kovanın sayfada
+# bölümü HİÇ OLMAMIŞTI. Derlenmiş 17 sayıda ölçüldü — 108 dikkat olayının
+# 108'i yok, kontrol olarak 37 önemli olayın 37'si var. Ölçüt kaynağa değil
+# ÇIKTIYA bakmak zorunda, çünkü olayı basan da süzen de bir BİLEŞEN.
+#
+# Sentetik çerçeve şart: ölçüt deponun O ANKİ dist'ini okusaydı, arıza
+# düzeldiği gün madde ölçtüğü hâle bir daha hiç koşmazdı ve geri bozulduğunda
+# sessiz kalırdı. Bu, depoda adı konmuş bir kusur sınıfı.
+_OLAY_JSON = (
+    '{"one_cikanlar": [{"hat": "h1", "anahtar": "a1", '
+    '"metin": "Politika faizi 1,00 puan azaldı: %38,00 -> %37,00 ve devam."}], '
+    '"notlar": [{"hat": "h2", "anahtar": "a2", '
+    '"metin": "Son ihale bilesik maliyeti 2,07 puan azaldi: %43,11 -> %41,04."}]}'
+)
+_ONEMLI = "Politika faizi 1,00 puan azaldı: %38,00 -> %37,00 ve devam."
+_DIKKAT = "Son ihale bilesik maliyeti 2,07 puan azaldi: %43,11 -> %41,04."
+
+def _bulten_agaci(sayfa_govdesi: str) -> pathlib.Path:
+    return _agac({
+        "site/src/data/bulten/2026-09-10.json": _OLAY_JSON,
+        "site/dist/bulten/2026-09-10/index.html": sayfa_govdesi,
+    })
+
+# (1) ARIZA HÂLİ — yalnız önemli basılıyor, dikkat kovası düşüyor.
+_k = olay_okura_ulasti(_bulten_agaci(f"<ul><li>{_ONEMLI}</li></ul>"))
+sina("basılmayan dikkat olayı ENGEL üretiyor",
+     len(_k[0]) == 1 and "h2|a2" in _k[0][0], f"gelen {_k[0]}")
+
+# (2) SAĞLIK HÂLİ — ikisi de basılıyor.
+_k = olay_okura_ulasti(_bulten_agaci(f"<ul><li>{_ONEMLI}</li><li>{_DIKKAT}</li></ul>"))
+sina("iki olay da basılıyorsa ölçüt susuyor", _k[0] == [] and _k[2] == 2, f"gelen {_k}")
+
+# (3) YANLIŞ ALARM OLMASIN — kaçış. Astro kesme işaretini `&#39;`, `&`yi
+# `&amp;` diye basar; kaçış çözülmeden aranan cümle sayfada DURSA DA
+# bulunamaz. Ölçüldü: bu düzeltme olmadan beş olay kayıp sayılıyordu ve
+# beşi de sayfadaydı — yayın kapısında duran bir ölçüt için beş yanlış alarm,
+# siteyi durdurmak demek.
+_KACISLI = "altın haber-duyarlılık endeksi 1 günde +0,04'den +0,20'ye geçti (S&P kıyas)"
+_kok = _agac({
+    "site/src/data/bulten/2026-09-10.json":
+        '{"one_cikanlar": [], "notlar": [{"hat": "fx", "anahtar": "XAU", '
+        f'"metin": "{_KACISLI}"}}]}}',
+    "site/dist/bulten/2026-09-10/index.html":
+        # SIRA ÖNEMLİ: önce `&`, sonra kesme işareti. Tersi `&#39;`in kendi
+        # `&`ini bir kez daha kaçırır (`&amp;#39;`) ve fikstür GERÇEK bir
+        # sayfayı taklit etmeyi bırakır — ilk yazımda tam bu oldu ve madde
+        # ölçütü değil kendini düşürdü.
+        "<span>" + _KACISLI.replace("&", "&amp;").replace("'", "&#39;") + "</span>",
+})
+sina("HTML kaçışlı cümle yanlış alarm üretmiyor",
+     olay_okura_ulasti(_kok)[0] == [], f"gelen {olay_okura_ulasti(_kok)[0]}")
+
+# (4) YANLIŞ ALARM OLMASIN — satır kaydırma. Derleyici cümleyi satırlara
+# bölebilir; boşluk tekleştirme iki tarafa da uygulanıyor.
+_kok = _agac({
+    "site/src/data/bulten/2026-09-10.json":
+        '{"one_cikanlar": [], "notlar": [{"hat": "h", "anahtar": "a", '
+        f'"metin": "{_DIKKAT}"}}]}}',
+    "site/dist/bulten/2026-09-10/index.html":
+        "<span>" + _DIKKAT.replace(" ", "\n   ") + "</span>",
+})
+sina("satırlara bölünmüş cümle yanlış alarm üretmiyor",
+     olay_okura_ulasti(_kok)[0] == [], f"gelen {olay_okura_ulasti(_kok)[0]}")
+
+# (5) KAPSAM — derlenmemiş bir sayı SESSİZCE atlanır (dist'te sayfası yok),
+# ama ölçüt bunu "geçti" diye SAYMAZ: aranan sayacı artmaz. Koşmamış bir
+# ölçütün "temiz" görünmesi, depoda adı konmuş bir kusur.
+_kok = _agac({"site/src/data/bulten/2026-09-10.json": _OLAY_JSON,
+              "site/dist/bulten/baska/index.html": "<p>x</p>"})
+sina("sayfası derlenmemiş sayı aranan sayısına girmiyor",
+     olay_okura_ulasti(_kok) == ([], 0, 0), f"gelen {olay_okura_ulasti(_kok)}")
+
 
 print(f"\n{'═' * 70}")
 print(f"  {len(GECTI)} geçti · {len(DUSTU)} düştü")
