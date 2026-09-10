@@ -145,31 +145,71 @@ def main() -> int:
             return 1
         return 2
 
-    sirali = sorted(baglar.items(), key=lambda kv: (_puan(kv[1]), kv[0]))
-    print(f"\n    toplam {len(sirali)} benzersiz duyuru:")
-    for adres, metin in sirali[:25]:
-        print(f"      [{_puan(metin)}] {metin[:88]}")
+    # SIRALAMA NUMARAYA GÖRE, ALFABEYE GÖRE DEĞİL. İlk yazımda adrese göre
+    # sıralanmıştı ve "…-01" < "…-12" < "…-17" olduğu için betik yılın EN ESKİ
+    # üç kararını indirdi; aranan BUGÜNKÜ karardı. Duyuru numarası yıl içinde
+    # artıyor, yani en büyük numara en yeni belgedir.
+    def _no(adres: str) -> int:
+        m = re.search(r"(?i)(?:DUY|ANO)20\d\d-(\d+)", adres)
+        return int(m.group(1)) if m else -1
+
+    # Dil de ayrılır: aynı belge TR ve EN olarak iki kez listeleniyor. Okura
+    # yazılacak alıntı TÜRKÇE metinden gelmeli; İngilizcesi kıyas için durur.
+    def _dil(adres: str) -> str:
+        return "EN" if "/EN/" in adres or "ANO" in adres.upper() else "TR"
+
+    sirali = sorted(baglar.items(),
+                    key=lambda kv: (_puan(kv[1]), -_no(kv[0]), kv[0]))
+    print(f"\n    toplam {len(sirali)} benzersiz duyuru (yeniden eskiye):")
+    for adres, metin in sirali[:26]:
+        print(f"      [{_puan(metin)}] no={_no(adres):>3} {_dil(adres)} {metin[:74]}")
 
     # --------------------------------------------------------- 3. METİNLER
-    # İKİ metin indirilir: bu ayın kararı ve BİR ÖNCEKİ. Ton ancak KIYASLA
-    # ölçülür — tek metin "şahin mi güvercin mi" sorusuna cevap veremez.
-    hedef = [(a, m) for a, m in sirali if _puan(m) == 0][:3]
-    if not hedef:
-        hedef = sirali[:3]
-    print(f"\n▶ 3. {len(hedef)} karar metni indiriliyor")
+    # SON İKİ karar indirilir, HER İKİ DİLDE. Ton ancak KIYASLA ölçülür: tek
+    # metin "şahin mi güvercin mi" sorusuna cevap veremez, cevabı veren şey
+    # bir önceki metne göre NEYİN DEĞİŞTİĞİDİR. Toplantı özetinin en yenisi de
+    # eklenir — karar metni kısa, gerekçe orada.
+    kararlar = [(a, m) for a, m in sirali if _puan(m) == 0]
+    ozetler = [(a, m) for a, m in sirali if _puan(m) == 1]
+    nolar = sorted({_no(a) for a, _ in kararlar}, reverse=True)[:2]
+    hedef = [(a, m) for a, m in kararlar if _no(a) in nolar] + ozetler[:2]
+    print(f"\n▶ 3. {len(hedef)} belge indiriliyor "
+          f"(son iki karar no={nolar}, iki dil + son özet)")
+
+    # Sayfanın gövdesi menü gürültüsünün İÇİNDE duruyor; künye satırından
+    # başlayıp adres bloğunda bitiriyoruz. Kesme YAPILMAZSA metin okunmaz,
+    # AŞIRI kesilirse iddia kaybolur — sınır belgenin kendi işaretlerinden.
+    BAS = re.compile(r"^No\s*:\s*(DUY|ANO)?20\d\d-\d+")
+    SON = re.compile(r"(?i)^(Central Bank of the Republic|"
+                     r"T[üu]rkiye Cumhuriyet Merkez Bankas[ıi] .*dare Merkezi)")
     for adres, ad in hedef:
         kod, govde = _cek(adres, INDIRME_SN)
         print("\n" + "=" * 72)
-        print(f"BAŞLIK : {ad}")
+        print(f"BAŞLIK : {ad}  [{_dil(adres)}]  no={_no(adres)}")
         print(f"ADRES  : {adres}")
         print(f"DURUM  : {kod}")
         print("=" * 72)
         if kod != 200:
             print("  (indirilemedi)")
             continue
-        for satir in _metin(govde).split("\n"):
+        satirlar = _metin(govde).split("\n")
+        icinde, basildi = False, 0
+        for satir in satirlar:
+            if not icinde and BAS.match(satir):
+                icinde = True
+            if not icinde:
+                continue
+            if SON.match(satir):
+                break
             if len(satir) > 2:
-                print(satir[:300])
+                print(satir[:2000])
+                basildi += 1
+        if not basildi:
+            # Çıpa tutmadı: SESSİZ geçme, ham metnin başını dök ki bir sonraki
+            # koşu neyin bulunabileceğini bilsin.
+            print("  ! künye çıpası tutmadı — ham metnin ilk 80 satırı:")
+            for satir in satirlar[:80]:
+                print("    " + satir[:200])
     print("\nKEŞİF BİTTİ.")
     return 0
 
