@@ -171,17 +171,30 @@ def main() -> int:
     # eklenir — karar metni kısa, gerekçe orada.
     kararlar = [(a, m) for a, m in sirali if _puan(m) == 0]
     ozetler = [(a, m) for a, m in sirali if _puan(m) == 1]
-    nolar = sorted({_no(a) for a, _ in kararlar}, reverse=True)[:2]
-    hedef = [(a, m) for a, m in kararlar if _no(a) in nolar] + ozetler[:2]
+    # YILIN BÜTÜN karar metinleri iniyor, son iki karar değil. Sebep ölçüldü:
+    # 2026-38 ile 2026-28 yan yana konunca üç paragrafın üçü BİREBİR aynı ve
+    # yalnız teşhis paragrafı değişiyor. Tek kıyas "değişti" der, ama o
+    # değişimin YILIN EĞİLİMİ mi yoksa tek toplantılık salınım mı olduğunu
+    # söyleyemez; altı toplantının altısı elde olmadan "güvercinleşti" cümlesi
+    # kurulamaz. Belgeler kısa (~4 KB), maliyeti bir saniye.
+    hedef = kararlar + ozetler[:4]
     print(f"\n▶ 3. {len(hedef)} belge indiriliyor "
-          f"(son iki karar no={nolar}, iki dil + son özet)")
+          f"(yılın {len(kararlar)//2} kararı iki dilde + son iki özet)")
 
     # Sayfanın gövdesi menü gürültüsünün İÇİNDE duruyor; künye satırından
     # başlayıp adres bloğunda bitiriyoruz. Kesme YAPILMAZSA metin okunmaz,
     # AŞIRI kesilirse iddia kaybolur — sınır belgenin kendi işaretlerinden.
-    BAS = re.compile(r"^No\s*:\s*(DUY|ANO)?20\d\d-\d+")
+    # Çıpa İKİ DİLDE de tutmalı: EN sayfası "No: 2026-38", TR sayfası
+    # "Sayı: 2026-38" yazıyor. İlk yazımda yalnız İngilizcesi vardı ve
+    # Türkçe metinlerin DÖRDÜ DE künye çıpası tutmadan döküldü — alıntı
+    # okura Türkçe gidecek, yani kaybedilen tam da gereken metindi.
+    BAS = re.compile(r"^(No|Say[ıi])\s*:\s*(DUY|ANO)?20\d\d-\d+")
     SON = re.compile(r"(?i)^(Central Bank of the Republic|"
-                     r"T[üu]rkiye Cumhuriyet Merkez Bankas[ıi] .*dare Merkezi)")
+                     r"T[üu]rkiye Cumhuriyet Merkez Bankas[ıi]|"
+                     r"Faiz Oranlar[ıi]na [İIi]li[şs]kin Bas[ıi]n Duyurusu \(|"
+                     r"Para Politikas[ıi] Kurulu Toplant[ıi] [ÖOo]zeti \(|"
+                     r"Press Release on Interest Rates \(|"
+                     r"Summary of the Monetary Policy Committee Meeting \()")
     for adres, ad in hedef:
         kod, govde = _cek(adres, INDIRME_SN)
         print("\n" + "=" * 72)
