@@ -471,20 +471,50 @@ IZLEMLER: list[Izlem] = [
     # bültendeki tek izleri "veri sürümü ilerledi" satırıydı — yani hangi
     # hattın yenilendiği yazılıyor, NE değiştiği hiç yazılmıyordu.
     #
-    # Eşikleri yok ve bu BİLEREK: bu hatların tarihçesi bültenin kendi
-    # defterinde henüz yok (yp-mevduat 2 kayıt, reel-sektor-fx 2), dolayısıyla
-    # "kaç puanlık hareket dikkate değer" sorusu ÖLÇÜLEMİYOR. Ölçülmemiş bir
-    # seviyeye eşik konmaz; onun yerine takvimli yayımın kendisi olay sayılıyor
-    # (`yayim=True`). Tarihçe birikince eşikler ölçülüp eklenir ve o zaman
-    # bir kısmı `onemli`ye yükselebilir.
+    # EŞİKLER — üçü ölçüldü, beşi bilerek BOŞ.
+    #
+    # İlk yazımda hepsi boştu ("bültenin kendi defterinde tarihçe yok"), ama
+    # defter tek tarihçe kaynağı değil: HATLARIN KENDİ veri dosyaları çok daha
+    # uzun seri taşıyor. Ölçüm oradan yapıldı.
+    #
+    # PENCERE: SON 3 YIL (kullanıcı kararı 10.09.2026). Tam örneklem ile son üç
+    # yıl 2,6–3,9 KAT ayrışıyor, çünkü nominal oynaklık büyüdü; tam örneklemden
+    # türeyen eşikler son 12 ayda 2–5 kat fazla ateşliyor. "Tarihsel olarak
+    # kayda değer hareket ne" ile "BUGÜNKÜ REJİMDE kayda değer hareket ne"
+    # farklı sorular ve ikincisi seçildi.
+    #
+    # YÜZDELİK depo konvansiyonundan: mevcut 56 izlemin `onemli` eşiği medyan
+    # p97'de duruyor ve yüzdelik FREKANSA göre değişiyor (haftalık p98 ·
+    # aylık p96 · çeyreklik p80) — mekanik tek bir yüzdelik kopyalanmadı.
+    #
+    # YALNIZ MUTABAKATI SAĞLANAN ANAHTARA EŞİK KONDU. Ölçüm için seri yeniden
+    # kuruldu ve kurulan serinin son değeri hattın YAYIMLADIĞI değerle
+    # karşılaştırıldı; tutmayanda eşik YOK, çünkü tutmuyorsa ölçtüğüm şey
+    # hattın ölçtüğü şey değildir:
+    #   · yp-mevduat/stok_toplam_mia  228,35 ≈ 228,4 ✓  → p98 = 7,2 mlr USD (n=114)
+    #   · yp-mevduat/gercek_pay        64,03 = 64,03 ✓  → p98 = 1,4 puan   (n=114)
+    #   · reel-sektor-fx/net_pozisyon −205,8 = −205,8 ✓ → p96 = 13,4 mlr USD (n=36)
+    #   · buyume/*                      2,56 ≠ 2,32 ✗  → EŞİK YOK; üstelik üç
+    #     yılda yalnız 12 çeyreklik gözlem var, yüzdelik böyle bir örneklemden
+    #     kurulmaz.
+    #   · yiyecek-hizmetleri-marj/oran_ev_yemekleri — kaynak oran dosyasıyla
+    #     mutabakat kurulamadı → EŞİK YOK.
+    #   · makroihtiyati/makas_ihtiyac — tarihçesi ölçülmedi → EŞİK YOK.
+    #   · reel-sektor-fx/acik_rezerv_orani — hareketinin büyük kısmı zaten
+    #     izlenen rezerv paydasından geliyor; ayrı eşik ikinci kez sayardı.
+    # Eşiksiz kalanlar yayım bayrağıyla `dikkat` seviyesinde okura ulaşmaya
+    # devam ediyor; yalnız `onemli`ye yükselemiyorlar.
+    #
+    # `dikkat` ALANI YAZILMAZ: yayım bayrağı altında ATIL (bkz. olay._seviye ve
+    # duman._izlem_kapsami); tek anlamlı parametre `onemli`.
     Izlem("yp-mevduat", "stok_toplam_mia", "Yurt içi yerleşiklerin YP mevduatı",
-          "mlr USD", 1, "delta", None, None, "azalis",
+          "mlr USD", 1, "delta", None, 7.2, "azalis",
           "Dolarizasyonun stok ölçüsü; parite ve altın etkisinden arındırılmış.",
           "kur", yayim=True),
     Izlem("yp-mevduat", "gercek_pay", "YP mevduatta gerçek kişi payı", "%", 2,
-          "delta", None, None, "", "", "kur", yayim=True),
+          "delta", None, 1.4, "", "", "kur", yayim=True),
     Izlem("reel-sektor-fx", "net_pozisyon", "Reel sektör net döviz pozisyonu",
-          "mlr USD", 1, "delta", None, None, "artis",
+          "mlr USD", 1, "delta", None, 13.4, "artis",
           "Şirketler kesiminin kur şokuna açıklığı.", "dis", yayim=True),
     Izlem("reel-sektor-fx", "acik_rezerv_orani", "Kısa vadeli açık / rezerv oranı",
           "%", 1, "delta", None, None, "azalis", "", "dis", yayim=True),
