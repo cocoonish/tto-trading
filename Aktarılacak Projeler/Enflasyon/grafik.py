@@ -658,7 +658,9 @@ def _uge_yukle() -> dict | None:
     # "n" var ama "yaris" yoksa örneklem yetersiz demektir: blok kendi
     # içinde tutarlı ama figürlerin istediği alanları TAŞIMAZ. Yarım bir
     # sözlükle çizime girmek, eksik anahtarda hattı düşürürdü.
-    return d if d.get("n") and d.get("yaris") else None
+    # KOŞUL VERİ KATMANINDA (veri.uge_kanadi_var): defter de aynı süzgeci
+    # uygular, yani çizilmeyen figüre defterde tarih yazılamaz.
+    return d if veri.uge_kanadi_var(d) else None
 
 
 def _ito_yukle() -> dict | None:
@@ -666,7 +668,9 @@ def _ito_yukle() -> dict | None:
     if not y.exists():
         return None
     d = json.loads(y.read_text(encoding="utf-8"))
-    return d if d.get("tablo") else None
+    # KOŞUL VERİ KATMANINDA (veri.ito_kanadi_var): defter de aynı süzgeci
+    # uygular, yani çizilmeyen figüre defterde tarih yazılamaz.
+    return d if veri.ito_kanadi_var(d) else None
 
 
 def sekil_10(ip, damga):
@@ -1096,7 +1100,9 @@ def _birlesik_yukle() -> dict | None:
     if not y.exists():
         return None
     d = json.loads(y.read_text(encoding="utf-8"))
-    return d if d.get("n") else None
+    # KOŞUL VERİ KATMANINDA (veri.birlesik_kanadi_var): defter de aynı süzgeci
+    # uygular, yani çizilmeyen figüre defterde tarih yazılamaz.
+    return d if veri.birlesik_kanadi_var(d) else None
 
 
 def sekil_15(bp, a, damga):
@@ -1217,43 +1223,16 @@ def sekil_16(bp, damga):
 # sonra yalan söyleyen bir adres bırakır ve sayfadaki gömme bağlantısını kırar.
 BIR_CIKTI_ADLARI = ["15_sacilim.html", "16_yaris.html", "17_tahmin.html"]
 
-
-def sacilim_figuru_var(bp) -> bool:
-    """15 numaralı figürün çizecek şeyi VAR MI? (tek kaynak — bkz. tahmin_figuru_var)
-
-    Saçılım yalnız noktaları değil, her öncü için UYUM ÇİZGİSİNİ ve künyesini
-    (eğim · R² · artık σ) da basar; bunlar `bp["ito"]` ile `bp["uge"]`
-    bloklarından gelir. Örneklem 18 ayın altındayken ölçüm katmanı
-    `{"n": …, "not": "örneklem yetersiz"}` döndürüyor, o bloklar HİÇ olmuyor ve
-    `m.get(...)` varsayılanları devreye giriyordu: 10.09.2026'da gerçek panelle
-    ölçüldü, figür üretiliyor ve okura "eğim 0,000 · R² 0,000 · artık σ 0,000"
-    yazıyordu. Ölçülmemiş bir şeyi ölçülmüş gibi göstermek, figürü hiç
-    basmamaktan kötüdür.
-    """
-    return bool(bp and bp.get("ito") and bp.get("uge"))
-
-
-def yaris_figuru_var(bp) -> bool:
-    """16 numaralı figürün çizecek şeyi VAR MI? (tek kaynak)
-
-    Koşul `sekil_16`nın kendi gövdesinde zaten vardı ama `kos()` figürü
-    `if bp:` ile ZORUNLU listeye alıyordu — yani iki yerde iki koşul. Yetersiz
-    örneklemde figür None dönüyor, zorunlu çıktı eksik sayılıyor ve HAT
-    DURUYOR; çalışan on altı figür de tazelenmiyor. `tahmin_figuru_var`ın
-    başındaki uyarı tam bu hâli tarif ediyor ve 17'ye uygulanmıştı, 15 ile
-    16'ya uygulanmamıştı.
-    """
-    return bool(bp and bp.get("yaris"))
-
-
-def tahmin_figuru_var(bp) -> bool:
-    """17 numaralı figürün çizecek şeyi VAR MI?
-
-    Kararı tek yerde tutuyor: hem çizim işlevi hem kos()'un zorunlu figür
-    listesi buradan sorar. İki yerde iki koşul yazılsaydı biri bir gün
-    ayrışır ve figür "zorunlu ama üretilemez" durumuna düşerdi — hattı
-    düşüren tam olarak bu durumdur."""
-    return bool(bp and (bp.get("bekleyen") or bp.get("karne")))
+# FİGÜR KOŞULLARININ TANIMI VERİ KATMANINDA (veri.py). Buradan yalnız adları
+# ödünç alınıyor. Sebep ölçüldü (10.09.2026): koşul çizim katmanında
+# durduğunda `sekil_saatleri` onu SORAMIYOR — özet üreticisi kanatları
+# süzgeçsiz veriyor ve çizilmeyen bir figüre defterde TARİH yazıyordu, yani
+# sayfa o koşuda üretilmemiş BAYAT bir figürün altına TAZE damga basıyordu.
+# Tek tanım: hem "bu figür çiziliyor mu" hem "bu figürün defter girdisi var
+# mı" aynı fonksiyondan sorulur.
+sacilim_figuru_var = veri.sacilim_figuru_var
+yaris_figuru_var = veri.yaris_figuru_var
+tahmin_figuru_var = veri.tahmin_figuru_var
 
 
 def sekil_17(bp, damga):

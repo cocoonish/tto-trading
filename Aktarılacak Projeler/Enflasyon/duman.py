@@ -248,12 +248,60 @@ sina("figür alt başlığı aynı tablodan, uzun yazımla",
                           "dagilim__son_ay": "2025-12"},
                          uzun=True)[_S05] == "Aralık 2025")
 
-# İKİ TÜKETİCİ, TEK TABLO: çizim katmanı da özet üreticisi de saati aynı
-# fonksiyondan almalı. Ayrı iki liste tutulsaydı biri güncellenir, öbürü
-# kalırdı ve hangisinin neyi söylediği kimsenin aklında kalmazdı.
+# İKİ TÜKETİCİ, TEK TABLO — VE TEK GİRDİ.
+#
+# Eski madde iki dosyada `sekil_saatleri` DİZGESİNİN geçmesini soruyordu ve
+# ölçtüğünü sandığı şeyi ölçmüyordu: tablo tekti ama ona verilen KANATLAR iki
+# tüketicide farklıydı. Çizim katmanı kanatları kabul koşulundan geçiriyor
+# (`_uge_yukle` n VE yarış ister), özet üreticisi aynı dosyaları SÜZGEÇSİZ
+# okuyup veriyordu. Bir profil dosyası var ama yetersizse çizim figürü hiç
+# üretmiyor, özet o figüre defterde TARİH yazıyordu — sayfa, o koşuda
+# üretilmemiş BAYAT bir figürün altına TAZE damga basıyordu; defterin
+# önlemek için yazıldığı kusurun ta kendisi.
+#
+# Ölçüt artık GARANTİYİ ölçüyor: figürün defter girdisi ancak figür
+# çiziliyorsa vardır, ve süzgeç TABLONUN İÇİNDE olduğu için ham kanat veren
+# tüketiciyle süzülmüş kanat veren tüketici AYNI defteri alır.
 sina("çizim ve özet katmanı saati aynı fonksiyondan alıyor",
      "sekil_saatleri" in Path(grafik.__file__).read_text(encoding="utf-8")
      and "sekil_saatleri" in (veri.PROJE / "ozet_uret.py").read_text(encoding="utf-8"))
+
+_o_ay = {"son_ay": "2026-08-01"}
+# (a) Yetersiz kanatlar: hiçbiri figür çizemez → hiçbirine defter girdisi yok.
+_yetersiz_ito = {"son_ay": "2026-08"}                       # tablo YOK
+_yetersiz_uge = {"son_ay": "2026-08", "n": 11}              # yaris YOK
+_yetersiz_bir = {"son_ay": "2026-08", "n": 11}              # ito/uge/yaris YOK
+_d = veri.sekil_saatleri(_o_ay, _yetersiz_ito, _yetersiz_uge, _yetersiz_bir)
+sina("yetersiz kanat: çizilmeyen figüre defterde tarih YOK",
+     not ({"10_ito_tufe.html", "11_ito_kural.html", "12_ito_takvim.html",
+           "13_ito_bulut.html", "14_uge_ucler.html", "15_sacilim.html",
+           "16_yaris.html", "17_tahmin.html"} & set(_d)),
+     str(sorted(set(_d) - {f"0{i}_" for i in range(10)})))
+
+# (b) HAM kanat ile SÜZÜLMÜŞ kanat aynı defteri vermeli — iki tüketicinin
+#     girdisi ayrışsa bile. Süzgeç tablonun içinde olduğu için bu yapısal.
+_suzulmus = (_yetersiz_ito if veri.ito_kanadi_var(_yetersiz_ito) else None,
+             _yetersiz_uge if veri.uge_kanadi_var(_yetersiz_uge) else None,
+             _yetersiz_bir if veri.birlesik_kanadi_var(_yetersiz_bir) else None)
+sina("ham kanat veren tüketici ile süzülmüş kanat veren AYNI defteri alıyor",
+     veri.sekil_saatleri(_o_ay, *_suzulmus) == _d)
+
+# (c) Birleşik kanadın üç figürü AYRI sorulur: bir blok eksikse yalnız o
+#     figür düşer, öbürlerinin girdisi kalır.
+_kismi = {"son_ay": "2026-08", "n": 32, "yaris": [1], "karne": {"x": 1}}
+_d2 = veri.sekil_saatleri(_o_ay, None, None, _kismi)
+sina("birleşik kanatta eksik blok yalnız KENDİ figürünü düşürüyor",
+     "15_sacilim.html" not in _d2 and "16_yaris.html" in _d2
+     and "17_tahmin.html" in _d2, str(sorted(_d2)))
+
+# (d) Çizim katmanı koşulu yeniden yazmıyor, veri katmanından alıyor.
+sina("figür koşullarının tanımı veri katmanında (çizim onu ödünç alıyor)",
+     grafik.sacilim_figuru_var is veri.sacilim_figuru_var
+     and grafik.yaris_figuru_var is veri.yaris_figuru_var
+     and grafik.tahmin_figuru_var is veri.tahmin_figuru_var)
+sina("kanat yükleyicileri de aynı koşulu okuyor",
+     all(f"veri.{f}(d)" in Path(grafik.__file__).read_text(encoding="utf-8")
+         for f in ("ito_kanadi_var", "uge_kanadi_var", "birlesik_kanadi_var")))
 
 # ---------------------------------------------------------------------------
 
