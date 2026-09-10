@@ -643,11 +643,36 @@ def bolum_defter() -> None:
          all(v is None or pd.Timestamp(b.tarihe_cevir(v)) <= yarin
              for v in defter.values()))
     # KAPANMAMIŞ AY: yayın günü ölçülmez, damga o parçayı yazmaz.
+    #
+    # AÇIK AY, BUGÜNÜN AYI DEĞİLDİR (10.09.2026'da ölçüldü). Burada eskiden
+    # `acik["yayin_ay"]` BUGÜNÜN AYIYLA dolduruluyordu; oysa kuralın ölçütü ay
+    # eşitliği değil İLERİ TARİHTİR (`veri.yayin_gunu`: `g > dt.date.today()`).
+    # Ayın SON gününde ayın son günü BUGÜNDÜR, ileri değildir: kural doğru
+    # davranıp o günü ölçer, madde ise onu kusur sayardı. İki hüküm aynı
+    # bölümde, bir satır arayla zıttı — üstteki "yarından ileri değil" ölçütü
+    # aynı çıktıda GEÇİYOR. Ateşleme günü de belliydi: her ayın SON günü, ilki
+    # 30.09.2026. O gün hat duman kapısında takılıp hiç koşmaz (guncelle
+    # duman'ı adımlardan ÖNCE koşturur), panosu donar, iş akışı kırmızı biter.
+    # Aynı sınıf TÜFEX'te 10.09'da gerçekten patladı: bir ölçüt, kuralın
+    # ürettiği MEŞRU çıktıyı kusur sayarsa yanlış alarmın kendisi arızadır.
+    #
+    # Açık ay artık takvimden BAĞIMSIZ kuruluyor: sonu kesinlikle ileride olan
+    # bir ay, yani kuralın gerçekten söz verdiği hâl.
     p = veri.program(veri.programlar(), veri.program_kodlari(veri.programlar())[0])
+    bugun = pd.Timestamp.today().normalize()
     acik = json.loads(json.dumps(p))
-    acik["yayin_ay"] = pd.Timestamp.today().strftime("%Y-%m")
+    acik["yayin_ay"] = (bugun.replace(day=28) + pd.Timedelta(days=7)).strftime("%Y-%m")
     sina("kapanmamış ayda yayın günü ÖLÇÜLMEZ", veri.yayin_gunu(acik) is None,
-         "Ayın son gününe demirlenen damga yarına düşerdi.")
+         f"{acik['yayin_ay']}: ayın sonu ileride, damga ölçülmemiş günü ilan edemez")
+    # SINIR ÖLÇÜTÜN KENDİSİ: kural ay eşitliğine değil İLERİ TARİHE bakar, yani
+    # bugünün ayı ancak ayın son gününe VARILMADIYSA ölçüsüzdür. Bu madde her
+    # gün geçerli ve ayın son gününde eski maddenin düştüğü yerde GEÇİYOR.
+    bu_ay = json.loads(json.dumps(p))
+    bu_ay["yayin_ay"] = bugun.strftime("%Y-%m")
+    _sonu = b.tarihe_cevir(bugun.strftime("%m.%Y"))
+    sina("kuralın sınırı ay eşitliği değil ileri tarih",
+         (veri.yayin_gunu(bu_ay) is None) == (_sonu > bugun.date()),
+         f"bugün {bugun.date()} · ayın sonu {_sonu} · kural {veri.yayin_gunu(bu_ay)}")
     kapali = json.loads(json.dumps(p))
     kapali["yayin_ay"] = "2020-01"
     sina("kapanmış ayda yayın günü ölçülüyor",
