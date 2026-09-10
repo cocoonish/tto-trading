@@ -1,0 +1,78 @@
+# PPK duyuru arşivi — yayımlanmış karar metinlerini depoya indirir.
+#
+# NEDEN AYRI BİR İŞ AKIŞI. `kesif.yml` bilerek `contents: read` — keşif ölçer,
+# yazmaz. Bu hat ise YAZMAK zorunda: arşiv depoda durmalı ki ton ölçümü
+# tekrarlanabilir olsun (her ölçümde yeniden indirilen bir girdi, ölçümü
+# kaynağın o günkü hâline bağımlı kılar). `veri.yml`e eklenmedi çünkü o iş
+# günde altı pencerede koşuyor ve bu hattın ritmi TOPLANTI başına: yılda sekiz.
+#
+# İDEMPOTENT. Dosyası olan belge yeniden indirilmez; koşu yalnız yeni
+# toplantının metnini getirir ve değişiklik yoksa commit ATMAZ. Bir toplantının
+# ardından elle tetiklenir; `--yenile` yalnız ayrıştırıcı değiştiğinde.
+#
+# TAVAN. Yoklama ölçtü (10.09.2026): on bir yıl × ~24 belge ≈ 262 istek,
+# istek başına ~0,8 sn + 0,25 sn nezaket beklemesi ≈ 5 dk. İş sınırı 20 dk,
+# yani soğuk kurulum için pay üç kat. Sonraki koşular tek toplantı indirir.
+
+name: PPK arşivi
+
+on:
+  workflow_dispatch:
+    inputs:
+      bas_yil:
+        description: 'Başlangıç yılı'
+        type: string
+        default: '2016'
+      son_yil:
+        description: 'Bitiş yılı'
+        type: string
+        default: '2026'
+      yenile:
+        description: 'Dosyası olan belgeyi de yeniden indir (ayrıştırıcı değiştiyse)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+# İki arşiv koşusu commit yarışına girmesin.
+concurrency:
+  group: ppk-arsiv
+  cancel-in-progress: false
+
+jobs:
+  arsiv:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      # `-u` ŞART: Python stdout'u tty olmayan yere tamponluyor ve uzun bir
+      # indirmede ilerleme hiç görünmez (02.09'da yirmi dakikalık bir koşu tek
+      # satır yazmadan iptal edilmiş ve tamponla birlikte her şey gitmişti).
+      - name: Arşivi indir
+        timeout-minutes: 15
+        run: |
+          python3 -u bulten/ppk_arsiv.py \
+            --yillar "${{ inputs.bas_yil }}" "${{ inputs.son_yil }}" \
+            ${{ inputs.yenile == true && '--yenile' || '' }}
+
+      - name: Commit
+        if: always()
+        run: |
+          git config --global user.name  "tto-veri"
+          git config --global user.email "bot@users.noreply.github.com"
+          git add bulten/veri/ppk || true
+          if git diff --cached --quiet; then
+            echo "arşivde değişiklik yok — commit atılmadı"
+          else
+            n=$(git diff --cached --name-only | wc -l)
+            git commit -m "ppk arşivi: $n belge (otomatik)"
+            for i in 1 2 3 4; do
+              git pull --rebase --autostash && git push && break
+              echo "push denemesi $i düştü, bekleniyor"; sleep $((2 ** i))
+            done
+          fi
