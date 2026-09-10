@@ -1,0 +1,24 @@
+# analiz:ppk-karari-2026-09-10 · 2026-09-10T16:50:30+00:00 · https://x.com/i/status/2098091752523497943
+
+Analiz — 10 Eylül 2026
+PPK Kararı — metnin tonu, eğrinin fiyatladığı ve sonraki adımın koşulu
+
+Karar sürprizsiz, metin ise tek yönlü değil. Para Politikası Kurulu politika faizini %37,0'de, gecelik koridoru %35,5–%40,0'ta sabit tuttu; bu 22 Ocak indiriminden bu yana 231 gün ve üst üste beşinci sabit karar. Duyuru yedi paragraf ve bunların altısı 23 Temmuz metniyle kelimesi kelimesine aynı; değişen tek paragraf teşhis. O paragrafta üç güvercin, bir şahin unsur var: temmuzda ilan edilen "geçici yükseliş" uyarısı kalkmış, yerine 2026'da ilk kez geçen iki ifade gelmiş ("aylık dalgalanmalara karşın", "arz şoklarının yurt içi fiyatlara yansımasının sınırlı kalması"); buna karşılık enerji ilk kez açıkça "yukarı yönlü risk" diye adlandırılmış. Asıl bulgu ise değişmeyen yerde: duruş paragrafı 11 Haziran'dan beri hiç değişmedi, yalnız sıkılaştırmayı koşula bağlıyor ve gevşemeden hiç söz etmiyor.
+
+KARAR NE. Politika faizi %37,0, gecelik borç verme %40,0, gecelik borçlanma %35,5 — üçü de sabit. 22 Ocak'tan bu yana 231 gün, beşinci sabit karar (12 Mart · 22 Nisan · 11 Haziran · 23 Temmuz · 10 Eylül).
+
+METİN GÜVERCİN Mİ ŞAHİN Mİ. Teşhiste güvercin, rehberlikte değişimsiz. Yedi paragrafın altısı önceki metinle birebir aynı; teşhis paragrafında temmuzun "geçici yükselecek" uyarısı kalkmış ve ana eğilimin gerilediği yeniden teyit edilmiş. Enerji ise ilk kez adıyla "yukarı yönlü risk" sayılmış — yumuşama teşhiste, sertlik risk dilinde.
+
+REHBERLİK DEĞİŞTİ Mİ. Hayır. Duruş paragrafı 11 Haziran, 23 Temmuz ve 10 Eylül metinlerinde kelimesi kelimesine aynı. Yalnız sıkılaştırma koşullu ("belirgin ve kalıcı bir bozulma olması durumunda"); gevşeme hiç geçmiyor. Yılın ilk yarısında bu paragraf üç kez değişmişti.
+
+SEKTÖR NEREDE DURUYOR. Ölçülebilen kısmı: Piyasa Katılımcıları Anketi'nde (Ağustos, 63 katılımcı) 12 ay sonrası enflasyon beklentisi %23,69, 24 ay sonrası %18,03 — temmuz anketine göre 12 ay 0,31 puan aşağı, 24 ay 0,23 puan yukarı. Eğri ise indirim fiyatlamıyor.
+
+REEL FAİZ NE SÖYLÜYOR. Deflatöre göre üç ayrı cevap: gerçekleşen 12 aylık TÜFE ile %4,17, üç aylık yıllıklandırılmış ana eğilimle %6,04, piyasa başabaşıyla %7,78, anket beklentisiyle %10,76. İndirim tartışmasının tamamı bu aralıkta geçiyor.
+
+SONRAKİ ADIMIN KOŞULU. Metinde ölçülebilir tek öncü işaret, duruş paragrafına "Adımların büyüklüğü" cümlesinin geri gelmesi. Bu cümle 2026'da yalnız indirimin yapıldığı 22 Ocak metninde vardı ve o gün geri çekildi.
+
+KANITIN GÜCÜ. Metin ölçümü güçlü, fiyat çıkarımı orta. Ton hükmü altı duyurunun tam metnine dayanıyor ve mekanik paragraf kıyasıyla üretildi — yoruma açık yeri yok. Eğri çıkarımı ise vade primi taşıyor: 1 yıl ile politika faizi arasındaki 207 baz puanın ne kadarının beklenti, ne kadarının prim olduğu ayrıştırılmadı.
+
+Kilit ölçümler — politika faizi, 231 gündür sabit: %37,0 · duyuru paragrafı önceki metinle birebir aynı: 6/7 · toplantıdır değişmeyen duruş paragrafı: 3 · 1 yıllık DİBS − politika faizi (10.09): +207 bp · 6 aylık düğüm — eğrinin politika altındaki tek noktası: −12 bp · reel faiz: ankete göre · gerçekleşene göre: %10,76 · %4,17 · PKA 12 ay enflasyon beklentisi (Ağustos, 63 katılımcı): %23,69 · hizmet − mal yıllık enflasyon makası (Ağustos): 24,4 puan
+
+Analizdir; yatırım tavsiyesi değildir.
