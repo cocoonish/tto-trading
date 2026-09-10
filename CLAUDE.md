@@ -1665,3 +1665,115 @@ veri hizalanmasını beklemeden, kuralın kendi hâlinde anında düşüyor (öl
 iki maddede birden). Bir kuralı sınamak ile o kuralı ÖLÇEN ölçütü sınamak iki
 ayrı iştir; ikincisi yazılmazsa çelişki, ancak veri onu ortaya çıkardığı gün
 ve yayının önünde durarak görünür.
+
+**Kurucu ilke — BİR SÜZGECİN DAYANDIĞI VARSAYIM ÖLÇÜLMEZSE SÜZGEÇ KENDİ
+GEREKÇESİNDEN BAĞIMSIZ YAŞAR; ve BİR EŞİK, ÖLÇÜNÜN RİTMİNE GÖRE ANLAM
+DEĞİŞTİRİR.** Kullanıcı "projelerdeki veriler güncellendikçe önemli görülenler
+bültene de gelmeli, okuyucularımızı hep güncel tutmalıyız" dedi. Ölçüm katmanı
+onları ZATEN üretiyordu; kaybeden sayfaydı ve kusur üç katmanda birden çıktı.
+
+(1) OKURA HİÇ ULAŞMAYAN KOVA. 07.09.2026'da konan tekilleştirme süzgeci
+kümesini `one_cikanlar` ARTI `notlar`dan kuruyor ve üstündeki yorum "notlar
+YUKARIDA duruyor" diyordu. `BultenGovde.astro`da `id="notlar"` diye bir bölüm
+HİÇ OLMAMIŞTI; `b.notlar` dosyaya ilk kez o commit'le, yalnız süzgecin İÇİNDE
+girdi. Sonuç iki yönlü ve sessiz: `dikkat` seviyesindeki olaylar hiçbir yerde
+basılmıyor, üstelik basıldıkları VARSAYILARAK hat hat listesinden de
+süzülüyordu. Ölçüldü (derlenmiş 17 sayı): 108 dikkat olayının 108'i sayfada
+yok, kontrol olarak 37 önemli olayın 37'si var. 08.09'dan beri `one_cikanlar`
+boş olduğu için okura ölçüm cümlesi HİÇ ulaşmıyordu — 10.09 sayısı sekiz olay
+ölçmüştü ve "Hat hat değişim" tekilleştirmeden sonra SIFIR madde bırakıyordu;
+okurun elinde yalnız "veri sürümü ilerledi" satırları kalıyordu, yani hangi
+hattın yenilendiği yazılıyor, NE değiştiği hiç yazılmıyordu. Kural: bir süzgeç
+yalnız GERÇEKTEN BASILAN bölümden kurulur ve kapı ÇIKTIYA bakar (sayfa sınavı
+25) — olayı basan da süzen de bir BİLEŞENDİR, ikisi de kaynakta olay kovası
+olarak görünmez. Ölçütün kendi yanlış alarmı da ölçülüp kapatıldı: kaçış
+çözülmeden aranan beş cümle sayfada DURDUĞU HÂLDE kayıp sayılıyordu (`&#39;`,
+`&amp;`); yayın kapısında duran bir ölçüt için beş yanlış alarm siteyi
+durdurmak demektir, kıyasın iki tarafı da aynı süzgeçten geçer.
+
+(2) TAKVİMLİ YAYIMDA HABER, YAYIMIN KENDİSİDİR. Eşik mantığı piyasa serisinde
+doğrudur (her gün ilerleyen bir seride haber hareketin büyüklüğüdür) ama
+takvimli bir istatistikte yanlış cevap verir. Ölçüldü: 04.09'da Ağustos TÜFE'si
+yayımlandı, yıllık oran %31,75'ten %31,51'e indi ve bültendeki tek izi "veri
+sürümü ilerledi" satırı oldu — motor kendi kuralınca DOĞRU sustu, çünkü 0,24
+puanlık hareket 1,0 puanlık eşiğin altında. Okur ayın en çok beklenen verisinin
+yayımlandığını bültenden öğrenemedi. `Izlem.yayim` bayrağı taşıyan anahtar,
+kendi saati ilerlediğinde eşiğe bakılmadan duyurulur. Bayrak GÜNLÜK seriye
+konmaz (her gün ateşler, bülteni boğar) ve bunun sınırı ölçüyle kondu: kütükteki
+ritim eşikleri 4–6 ile 11+ diye iki kümede toplanıyor, sınır aradaki boşlukta.
+
+(3) BİR ÖLÇÜMÜN KIYAS NOKTASI, KAYNAK SUSTUĞUNDA YERİNDE KALIR. Kıyas noktası
+"o anahtarın saati bugünkünden FARKLI olan en son görüntü"ydü; kaynak yayımı
+durdurduğunda bu nokta kımıldamıyor ve cümle her sabah yeniden kuruluyordu.
+Ölçüldü (17 sayı): 145 ölçüm cümlesinin 84'ü (%57,9) daha önce AYNI veri
+tarihiyle duyurulmuş cümlelerin tekrarı; tek başına Hazine hattının üç cümlesi
+18.08 ihalesini 21.07 ile kıyaslayarak 48 kez basıldı ve 10 Eylül'de hâlâ 23
+gün önceki veri "azaldı" diye okunuyordu. Kural: bir ölçüm, saati BİR ÖNCEKİ
+SÜRÜME göre ilerlediyse duyurulur. Yazarken bir tuzağa düşülüp çıkıldı —
+"sondan ikinci kayıt" yanlış kıyas noktasıdır, çünkü defter yalnız içerik
+değiştiğinde satır yazar ve donmuş bir hatta son kayıt bugünkü görüntünün ta
+kendisidir; ölçüt tam da düzeltmek istediği tekrarı üretirdi. Doğrusu "bugünkü
+görüntüden FARKLI olan en son kayıt".
+
+Aynı düzeltme iki sahte bildirimi de kapattı ve ikisi de DİZGE kıyasından
+doğuyordu: Büyüme hattı yalnız tarih YAZIMI değiştiği için (30.06.2026 →
+06.2026, iki sayısı da birebir aynı) "veri sürümü ilerledi" diye
+duyuruluyordu; OVP hattı ise 09.09.2026 → 08.09.2026 GERİLEMESİNİ "ilerledi"
+diye basıyordu. Kıyas artık `ortak/bicim` çözücüsünden geçiyor ve SIKI
+BÜYÜKTÜR; çözülemeyen tarihte eski davranış korunuyor, çünkü ayrıştıramayan bir
+denetim hep "sorun yok" der.
+
+(4) KAPSAM YİNE SÖZLEŞMEDEN TÜRETİLDİ. 21 hattın 9'unun izlemi HİÇ YOKTU ve
+altısına bültenin hiçbir ölçüm kanalı dokunmuyordu — 501 sayısal ölçüm
+yayımlanıyor, tek izleri "veri sürümü ilerledi" satırıydı. Beş takvimli hat
+izleme alındı; kalan dördü GEREKÇESİYLE muaf ve gerekçe KODA yazıldı, çünkü
+gerekçe yazılmazsa bir sonraki oturum unutulmuş bir hat ile bilinçli bir
+muafiyeti ayırt edemez. Duman ölçütü her iki yönü de sorar (izlemsiz hat
+gerekçeli mi, gerekçeli hat gerçekten izlemsiz mi) ve dört arıza enjeksiyonunun
+dördünü de yakalıyor. Mevcut kapı (`_hat_adi_kapsami`) yeni hattın ADINI
+soruyordu, izleminin olup olmadığını sormuyordu — bir denetim eklenirken "bu
+ölçüt doğru mu" kadar "bu ölçüt neyi HİÇ görmüyor" da sorulur.
+
+Yeni izlemlerin eşiği YOK ve bu bilerek: bu hatların tarihçesi bültenin kendi
+defterinde henüz yok (yp-mevduat 2 kayıt), yani "kaç puanlık hareket dikkate
+değer" sorusu ÖLÇÜLEMİYOR. Ölçülmemiş bir seviyeye eşik konmaz; yerine takvimli
+yayımın kendisi olay sayılıyor, tarihçe birikince eşik ölçülüp eklenir.
+
+**Kurucu ilke — BİR MERKEZ BANKASI METNİNİN TONU, DEĞİŞMEYEN PARAGRAFTA
+ÖLÇÜLÜR; ve İKİNCİ ELDEN ÖZET, ÖLÇÜLMEDEN KAYNAK SAYILMAZ.** 10.09.2026 PPK
+kararı üzerine analiz istendi ("sektör ne demiş, dovish mi hawkish mi").
+Elimizdeki tek kanal arama motoruydu ve ÖLÇÜLEREK güvenilmez bulundu:
+döndürdüğü piyasa tepkisi paragrafı USD/TRY'yi 34,85 yazıyordu, hattın kendi
+ölçümü 48,46 — %28 sapma, üstelik aynı özette bozuk sayılar vardı. Bir kaynağın
+güvenilirliği, kullanmadan ÖNCE elimizdeki bir ölçüme karşı sınanabilir; bu
+sınama yapılmasaydı yazının bir paragrafı uydurma olurdu.
+
+Doğru yol depoda zaten vardı: bu oturumlar `www.tcmb.gov.tr`ye çıkamıyor ama
+BULUT KOŞUCUSU çıkabiliyor (dört adresin dördü de 200). `bulten/kesif_ppk.py`
+duyuruları oradan indirip metni olduğu gibi döküyor; yorum yapmıyor, hüküm
+kurmuyor — çıktısı ham girdidir. Duyuru numarası SABİTLENMİYOR, liste
+sayfasından çözülüyor. İki tuzak ölçülerek kapandı: sıralama adrese göre
+yapılınca "…-01" < "…-12" < "…-17" olduğu için yılın EN ESKİ kararları indi
+(numara yıl içinde artar, sıralama numaraya göre olmalı), ve künye çıpası
+yalnız İngilizceyi tanıdığı için ("No:" — Türkçesi "Sayı:") gereken metin tam
+da kaybedildi.
+
+Ton ölçümünün kendisi mekanik: altı duyurunun tam metni paragraflarına ayrılıp
+karşılaştırıldı. 10 Eylül metninin yedi paragrafından ALTISI 23 Temmuz metniyle
+birebir aynı; değişen tek paragraf teşhis. Yıla yayıldığında teşhis 5/5 geçişte
+değişmiş, rehberliği taşıyan duruş paragrafı 11 Haziran'dan beri HİÇ
+değişmemiş. Asıl bulgu KAYIP BİR CÜMLEDE: "Adımların büyüklüğü … gözden
+geçirilmektedir" yılın altı metninde yalnız 22 Ocak'ta — indirimin yapıldığı
+duyuruda — var; bir sonraki toplantıda kaldırıldı ve beş toplantıdır geri
+gelmedi. "Bu metin güvercinleşti" hissi iki okurda iki sonuç verir; hangi
+cümlenin eklendiği ve hangisinin çıkarıldığı tek sonuç verir. Ve bir ifadenin
+"ilk kez geçiyor" hükmü, yılın TAMAMINA karşı taranmadan kurulmaz.
+
+Ölçülemeyen yazılmadı: sektörün YORUMU birincil kaynaktan doğrulanamadığı için
+yazıya hiç girmedi, sektörün duruşu yalnız ölçülebilir iki biçimde verildi
+(TCMB'nin kendi katılımcı anketi ve piyasanın fiyatlaması); sürpriz de karar
+öncesi sayısal beklenti medyanı elde olmadığı için hesaplanmadı. Aynı disiplin
+eğri hükmünde: 1 yıl ile politika faizi arasındaki 207 baz puanın ne kadarının
+beklenti ne kadarının vade primi olduğu ayrıştırılmadığı için hüküm "piyasa
+artış bekliyor" değil "eğri bir yıla yayılan indirim döngüsü fiyatlamıyor" ile
+sınırlı tutuldu.
