@@ -658,6 +658,30 @@ _SWAP_KANAL = ["swap_tcmb_piy", "swap_bist", "swap_gelenek", "swap_miktar",
                "swap_altin_piy"]
 
 
+def api_panel_uclari(M) -> dict:
+    """Şekil 03'ün ÜÇ panelinin ayrı ayrı ucu — hem ÇİZİM hem DAMGA buradan.
+
+    Panel (a) net fonlama TEK bir seridir (TP.APIFON3) ve kendi ucunda biter.
+    Panel (b) ve (c) ise YIĞILI KOMPOZİSYONDUR: bir alt kalem ölçülemediği gün
+    o günün kompozisyonu KURULAMAZ — eksik kalemi sıfır çizmek okura "bu kanal
+    bugün hiç kullanılmadı" der ve yığının toplamını olduğundan küçük gösterir.
+    Ölçüldü (10.09.2026): APİ kalemleri 09.09'da bitmişken M'nin indeksi kur
+    bacağı yüzünden 10.09'a uzuyordu ve figür o gün A1'i 202.000 → 0, B1'i
+    1.040.741 → 0 çiziyordu. SIFIR bir ölçüm sonucudur; ölçülemeyen boş
+    bırakılır — yığın paneli bu yüzden KENDİ ortak ucunda biter.
+
+    Kalemler pencere içinde baştan sona sıfırsa çizilmiyor (`sifir_atla`);
+    çizilmeyen bir kalem panelin ucunu da belirleyemez.
+    """
+    return {
+        "net": _uc(M, ["net_fonlama"], pencere=YAKIN_BAS),
+        "fon": _uc(M, _FON_KALEM, pencere=YAKIN_BAS,
+                   sifir_atla=set(_FON_KALEM)),
+        "ste": _uc(M, _STE_KALEM, pencere=YAKIN_BAS,
+                   sifir_atla=set(_STE_KALEM)),
+    }
+
+
 def zk_panel_saatleri(M, Z, uzun: bool = False) -> dict[str, str | None]:
     """Şekil 05'in DÖRT panelinin ayrı ayrı ucu.
 
@@ -685,8 +709,14 @@ def zk_panel_saatleri(M, Z, uzun: bool = False) -> dict[str, str | None]:
     }
 
 
-def sekil_saatleri(M, Z, H, R, uzun: bool = False) -> dict[str, str | None]:
-    """Figür başına ÇİZİLEN çerçevenin ucu — hattın TEK ana saati değil.
+def sekil_uclari(M, Z, H, R) -> dict:
+    """Figür başına ÇİZİLEN çerçevenin ucu, HAM tarih olarak — tek tanım.
+
+    `sekil_saatleri` bunun yazılmış hâlidir. İki ayrı liste tutulmuyor, çünkü
+    kapı (grafik.kos) uçları KARŞILAŞTIRMAK için ham tarihe ihtiyaç duyuyor ve
+    biçimlenmiş bir dizgeyi geri okumak sözleşmeyi iki kez uygulamak olurdu
+    (bu depoda bir kez ölçüldü: `pd.Timestamp("08.2026")` Ağustos değil OCAK
+    verir).
 
     Bu hat beş ayrı yayım ritmi taşıyor (APİ aynı gün · analitik bilanço bir
     gün · gün başı likidite tablosu bir gün İLERİ · haftalık faizler Cuma ·
@@ -698,19 +728,7 @@ def sekil_saatleri(M, Z, H, R, uzun: bool = False) -> dict[str, str | None]:
     Değer ÖLÇÜLÜR: figürün çizdiği kolonların son dolu gözlemi, hepsinin en
     eskisi. Ölçülemiyorsa None kalır ve o şeklin altına ne figürün kendi alt
     yazısı ne de sayfa tarih basar — yanlış bir tarih, tarihsizlikten kötüdür.
-
-    `uzun=True` figür alt yazısının yazımını verir ("2 Eylül 2026");
-    varsayılan site sözleşmesidir ("02.09.2026").
-
-    İki tüketici var ve ikisi de burayı okur: grafik.py figürün KENDİ alt
-    yazısına, ozet_uret.py sayfa damgası için ozet.json'un şekil saat
-    defterine. İki liste tutulsaydı bir gün sessizce ayrışır ve okur aynı
-    figürün içinde ve altında iki farklı tarih görürdü.
     """
-    def yaz(t):
-        return None if t is None else (gun_ad(t) if uzun
-                                       else pd.Timestamp(t).strftime("%d.%m.%Y"))
-
     # Şekil 08 iki hattın ORTAK iş günlerinde çizilir; ucu da o kesişimden
     # ölçülür, tek başına hiçbir hattınkinden değil.
     m8 = r8 = None
@@ -720,16 +738,18 @@ def sekil_saatleri(M, Z, H, R, uzun: bool = False) -> dict[str, str | None]:
             m8, r8 = M.loc[ortak], R.loc[ortak]
 
     return {
-        "01_koridor_faizler.html": yaz(_uc(M, [
+        "01_koridor_faizler.html": (_uc(M, [
             "koridor_alt", "koridor_ust", "politika", "aofm", "aosm", "tlref",
             "glp_satis", "aofm_ham"])),
-        "02_spreadler.html": yaz(_uc(M, [
+        "02_spreadler.html": (_uc(M, [
             "spread_tlref_politika", "spread_aofm_politika",
             "spread_marjinal_politika", "spread_tlref_aofm"])),
-        "03_net_api_kompozisyon.html": yaz(_uc(
-            M, ["net_fonlama"] + _FON_KALEM + _STE_KALEM, pencere=YAKIN_BAS,
-            sifir_atla=set(_FON_KALEM + _STE_KALEM))),
-        "04_swap_fonlama.html": yaz(_uc(
+        # Üç panelin en eskisi — panel uçlarıyla İKİ AYRI liste tutulmaz:
+        # figürü kesen saat ile damgayı yazan saat aynı fonksiyondan gelir.
+        "03_net_api_kompozisyon.html": (min(
+            [t for t in api_panel_uclari(M).values() if t is not None],
+            default=None)),
+        "04_swap_fonlama.html": (_uc(
             M, _SWAP_KANAL + ["swap_alim_usd", "swap_satim_usd",
                               "swap_alim_tl", "swap_satim_tl", "fon_top",
                               "tcmb_tl_saglama"],
@@ -738,14 +758,14 @@ def sekil_saatleri(M, Z, H, R, uzun: bool = False) -> dict[str, str | None]:
             if "swap_alim_usd" in M.columns else None),
         # Dört panel, dört saat: tek uç seçilemez (bkz. zk_panel_saatleri).
         "05_zk_likidite.html": None,
-        "06_gecirgenlik.html": yaz(_uc(H, [
+        "06_gecirgenlik.html": (_uc(H, [
             "marjinal", "politika_h", "f_ticari_tl", "f_tuketici",
             "f_mevduat_tl", "makas", "kredi_marj", "mevduat_marj",
             "beta_ticari_tl", "beta_mevduat_tl"], pencere=GEC_BAS)),
-        "07_koridor_konumu.html": yaz(_uc(M, [
+        "07_koridor_konumu.html": (_uc(M, [
             "konum_tlref", "konum_aofm", "aofm_koridor_ustu", "koridor_bant",
             "politika", "koridor_alt", "koridor_ust"], pencere=TAM_BAS)),
-        "08_rezerv_capraz.html": yaz(min(
+        "08_rezerv_capraz.html": (min(
             [t for t in (_uc(m8, ["swap_alim_usd", "swap_satim_usd"]),
                          _uc(r8, ["swap_yerli_usd", "net_rezerv_usd",
                                   "swap_haric_net_rezerv_usd",
@@ -753,6 +773,24 @@ def sekil_saatleri(M, Z, H, R, uzun: bool = False) -> dict[str, str | None]:
             default=None) if m8 is not None else None),
     }
 
+
+
+def sekil_saatleri(M, Z, H, R, uzun: bool = False) -> dict:
+    """`sekil_uclari`nın YAZILMIŞ hâli — iki tüketici de burayı okur.
+
+    grafik.py figürün KENDİ alt yazısına, ozet_uret.py sayfa damgası için
+    ozet.json'un şekil saat defterine yazar. İki liste tutulsaydı bir gün
+    sessizce ayrışır ve okur aynı figürün içinde ve altında iki farklı tarih
+    görürdü.
+
+    `uzun=True` figür alt yazısının yazımını verir ("2 Eylül 2026");
+    varsayılan site sözleşmesidir ("02.09.2026").
+    """
+    def yaz(t):
+        return None if t is None else (gun_ad(t) if uzun
+                                       else pd.Timestamp(t).strftime("%d.%m.%Y"))
+
+    return {ad: yaz(t) for ad, t in sekil_uclari(M, Z, H, R).items()}
 
 # --------------------------------------------------------------------------- denetimler
 def tazelik_denetimi(g: pd.DataFrame, h: pd.DataFrame,

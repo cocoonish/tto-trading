@@ -182,6 +182,35 @@ def _panel_veri(damga: str | None, etiket: str = "veri") -> str:
     return f" · {etiket} {damga}" if damga else ""
 
 
+def _kuyruk_kes(df: pd.DataFrame, uc) -> pd.DataFrame:
+    """Kareyi kendi ucunda bitir — SAĞ uçtaki ölçülemeyen kuyruk çizilmez.
+
+    `_pencere` yalnız SOL sınır koyar; kare her zaman M'nin indeksi kadar
+    uzundur ve o indeks en hızlı bacağın (kur) günlerini taşır. Yavaş bir
+    bacağın kuyruğu bu yüzden boş kalır: çizgi izinde zararsız (boşluk
+    çizilmez) ama YIĞILI alanda ölümcül — plotly boşluğu sıfır sayar ve okur
+    kalemin gerçekten sıfırlandığını sanır.
+    """
+    if uc is None or df.empty:
+        return df
+    return df.loc[df.index <= pd.Timestamp(uc)]
+
+
+def _panel_gun(uc, damga: str | None) -> str:
+    """Panel başlığına " · veri <gün>" — YALNIZ panel figürün damgasından
+    ayrıldığında.
+
+    Sağlıklı günde üç panel de aynı günde biter ve başlıklar bugünkü hâliyle
+    kalır; bir bacak geride kaldığında okur hangi panelin nereye kadar
+    çizildiğini panelin ÜSTÜNDE görür. Tek figür çıpası bunu anlatamaz: çıpa
+    en eski bacaktır ve ondan ileri giden paneli olduğundan eski gösterir.
+    """
+    if uc is None:
+        return ""
+    ad = gun_ad(pd.Timestamp(uc))
+    return "" if (damga and ad == damga) else _panel_veri(ad)
+
+
 def _cizili_uc(fig) -> pd.Timestamp | None:
     """Figürün gerçekten ÇİZDİĞİ uç: her izin son dolu gözlemi, en eskisi.
 
@@ -211,6 +240,45 @@ def _cizili_uc(fig) -> pd.Timestamp | None:
         except (TypeError, ValueError):
             continue
     return min(uclar) if uclar else None
+
+
+def _uc_denetimi(ad: str, beyan_t, beyan: str | None, fig) -> None:
+    """İlan edilen uç ile figürün çizdiği uç TEK YÖNLÜ karşılaştırılır.
+
+    DAMGANIN TAŞIDIĞI GÜVENCE: bir damga BAYAT BACAĞI TAZE GÖSTEREMEZ. Yani
+    ilan edilen uç, figürün en eski izinin ucundan İLERİ olamaz; olursa okur
+    ölçülmemiş bir günü ölçülmüş sanır ve hat DURUR — bir figüre iz eklenip
+    saat listesi güncellenmediğinde tam olarak bu olur, ve kapı bunun için
+    yazılmıştı.
+
+    TERS YÖN KUSUR DEĞİLDİR: ilan edilen uç çizilenden GERİDE ise damga
+    tutucudur — okura yalan söylemez, yalnız kendini olduğundan eski gösterir.
+    Eskiden burada EŞİTLİK aranıyordu ve ölçüt kuralın kendi MEŞRU çıktısını
+    kusur sayıyordu: bir APİ alt kalemi bir gün geride kalınca `_uc` damgayı
+    doğru biçimde geri çekiyor, `fillna(0)` ile çizilen iz ise geri gitmiyor,
+    kapı farkı "kolon listesi ayrışmış" diye okuyup HATTIN TAMAMINI
+    durduruyordu (ölçüldü 10.09.2026: on kalemin ALTISI tek başına düşürüyor;
+    Şekil 03-08 hiç yazılmıyor, siteye kopyalama olmuyor). Yayının önünde
+    duran bir denetimin yanlış alarmı arızanın kendisidir — üstelik ekrandaki
+    teşhis de yanlış olduğu için sonraki oturum kolon listesi arardı.
+
+    AYRI FONKSİYON, çünkü ağa çıkan `kos()`un İÇİNDE duran bir kapı hiçbir
+    sınama tarafından koşturulamaz: duman bunu kuralın ilan ettiği dört hâlle
+    doğrudan çağırır.
+    """
+    cizili = _cizili_uc(fig)
+    if beyan_t is None or cizili is None:
+        return
+    beyan_t = pd.Timestamp(beyan_t)
+    if beyan_t > cizili:
+        raise SystemExit(
+            f"DUR: {ad} için ilan edilen uç ({beyan}) figürün en eski izinin "
+            f"ucundan ({gun_ad(cizili)}) İLERİDE. Damga, o figürde ölçülmemiş "
+            "bir günü ilan eder — saat listesi figürün izleriyle ayrışmış.")
+    if beyan_t < cizili:
+        print(f"    not: {ad} — damga {beyan}, figürün en eski izi "
+              f"{gun_ad(cizili)} tarihinde bitiyor; damga tutucu "
+              "(ilan, çizilenden geride).")
 
 
 def _yaz(fig, ad: str) -> pathlib.Path:
@@ -375,16 +443,24 @@ def sekil_02(M, o, damga):
 # ŞEKİL 03 — Net APİ fonlaması (stok) ve kompozisyonu
 # ===========================================================================
 def sekil_03(M, o, damga):
+    # ÜÇ PANEL, ÜÇ UÇ. Yığılı bir kompozisyon ancak BÜTÜN kalemlerinin
+    # ölçüldüğü güne kadar çizilebilir: eksik kalemi sıfır basmak okura "bu
+    # kanal bugün hiç kullanılmadı" der ve toplamı olduğundan küçük gösterir.
+    # Uçlar veri katmanının TEK fonksiyonundan gelir (`api_panel_uclari`);
+    # figürün damgası da onların en eskisi, yani kesim ile damga ayrışamaz.
+    uc = veri.api_panel_uclari(M)
     fig = make_subplots(rows=3, cols=1, vertical_spacing=0.085,
                         subplot_titles=(
                             "a) TCMB net fonlaması (A − B): işaret rejimi "
-                            "belirler",
-                            "b) Fonlama bacağı (A) — yığılı, milyar TL",
-                            "c) Sterilizasyon bacağı (B) — yığılı, milyar TL"))
+                            "belirler" + _panel_gun(uc["net"], damga),
+                            "b) Fonlama bacağı (A) — yığılı, milyar TL"
+                            + _panel_gun(uc["fon"], damga),
+                            "c) Sterilizasyon bacağı (B) — yığılı, milyar TL"
+                            + _panel_gun(uc["ste"], damga)))
     y = _pencere(M, YAKIN_BAS)
-    net = y["net_fonlama"] / 1000.0                      # mn TL → mlr TL
+    net = _kuyruk_kes(y, uc["net"])["net_fonlama"] / 1000.0   # mn TL → mlr TL
     fig.add_trace(go.Scatter(
-        x=y.index, y=net, name="Net fonlama (A − B)", mode="lines",
+        x=net.index, y=net, name="Net fonlama (A − B)", mode="lines",
         line=dict(color=CLARET, width=1.8), fill="tozeroy",
         fillcolor="rgba(142,31,47,0.10)"), row=1, col=1)
     fig.add_hline(y=0, line=dict(color=INK, width=0.9), row=1, col=1)
@@ -394,28 +470,33 @@ def sekil_03(M, o, damga):
            ("fon_kot_depo", "A2b · TL depo", GOLD),
            ("fon_glp", "A2c · geç likidite penceresi", MOR),
            ("fon_kot_diger", "A · diğer/artık", GRI)]
+    yf = _kuyruk_kes(y, uc["fon"])
     for kol, ad, renk in fon:
-        if kol not in y.columns:
+        if kol not in yf.columns:
             continue
-        s = (y[kol].fillna(0) / 1000.0)
+        # fillna(0) yalnız İÇERİDEKİ boşluk için: yığılı alanda ortada bir
+        # boşluk yığını kırar. KUYRUK yukarıda kesildi — sağ uçtaki boşluk
+        # "kanal kullanılmadı" değil "ölçülemedi" demektir.
+        s = (yf[kol].fillna(0) / 1000.0)
         if s.abs().max() < 1e-9:
             continue
         fig.add_trace(go.Scatter(
-            x=y.index, y=s, name=ad, mode="lines", stackgroup="fon",
+            x=yf.index, y=s, name=ad, mode="lines", stackgroup="fon",
             line=dict(color=renk, width=0.6), fillcolor=renk, opacity=0.75),
             row=2, col=1)
     ste = [("ste_ihale", "B1 · ihale yoluyla sterilizasyon", TEAL),
            ("ste_kot", "B2 · kotasyon yoluyla sterilizasyon", GOLD),
            ("ste_liksen", "B3 · likidite senedi", MOR),
            ("ste_diger", "B · diğer/artık", GRI)]
+    ys = _kuyruk_kes(y, uc["ste"])
     for kol, ad, renk in ste:
-        if kol not in y.columns:
+        if kol not in ys.columns:
             continue
-        s = (y[kol].fillna(0) / 1000.0)
+        s = (ys[kol].fillna(0) / 1000.0)
         if s.abs().max() < 1e-9:
             continue
         fig.add_trace(go.Scatter(
-            x=y.index, y=s, name=ad, mode="lines", stackgroup="ste",
+            x=ys.index, y=s, name=ad, mode="lines", stackgroup="ste",
             line=dict(color=renk, width=0.6), fillcolor=renk, opacity=0.75),
             row=3, col=1)
 
@@ -829,7 +910,8 @@ def kos() -> None:
     # "bugün" diye, ZK figürü de dört ayrı günde biten dört paneline tek gün
     # yazarak. Aynı defteri ozet_uret.py sayfa altındaki damga için okur:
     # figürün İÇİNDEKİ ile ALTINDAKİ tarih tek kaynaktan gelsin.
-    saat = veri.sekil_saatleri(M, Z, H, R, uzun=True)
+    uclar = veri.sekil_uclari(M, Z, H, R)          # HAM tarih — kapı bunu okur
+    saat = veri.sekil_saatleri(M, Z, H, R, uzun=True)   # yazılmış hâli
     zk_saat = veri.zk_panel_saatleri(M, Z, uzun=True)
     print(f"TCMB fonlama & likidite — grafikler · günlük bacak "
           f"{gun_ad(pd.Timestamp(o['son_gun']))}")
@@ -849,15 +931,7 @@ def kos() -> None:
         if fig is None:
             print(f"  ATLANDI: {ad} — girdisi üretilemedi (uyarilar.json'a bakın)")
             continue
-        # SAAT LİSTESİ FİGÜRDEN AYRIŞAMAZ. İlan edilen uç ile figürün gerçekten
-        # çizdiği uç karşılaştırılır: bir figüre iz eklenip saat listesi
-        # güncellenmezse damga sessizce kayar ve koşu yeşil biter.
-        beyan, cizili = saat[ad], _cizili_uc(fig)
-        if beyan and cizili is not None and gun_ad(cizili) != beyan:
-            raise SystemExit(
-                f"DUR: {ad} için ilan edilen uç ({beyan}) figürün çizdiği uçtan "
-                f"({gun_ad(cizili)}) farklı. veri.sekil_saatleri'ndeki kolon "
-                "listesi figürün izleriyle ayrışmış — damga yalan söyler.")
+        _uc_denetimi(ad, uclar[ad], saat[ad], fig)
         _yaz(fig, ad)
         n += 1
     (CIKTI / "yukseklikler.json").write_text(json.dumps(

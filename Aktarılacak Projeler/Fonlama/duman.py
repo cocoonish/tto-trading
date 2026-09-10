@@ -212,6 +212,118 @@ sina("bayat kararı sayfanın çağırdığı dört anahtarı da yazıyor",
       "bayat_cumlesi"} <= _ozet_anahtar)
 
 
+# ─────────────────────────────────────────────── 6. Şekil 03: yığın kuyruğu ve damga
+# ARIZA (ölçülen 10.09.2026, İKİ KUSUR BİR ARADA):
+#
+# (a) SAHTE SIFIR — okura giden hâli. M'nin indeksi en HIZLI bacağın (kur)
+#     günlerini taşır; APİ kalemleri 09.09'da bitmişken indeks 10.09'a
+#     uzuyordu ve yığın döngüsü `fillna(0)` ile o günü ÇİZİYORDU: A1 202.000 →
+#     0, B1 1.040.741 → 0, B2 16.321 → 0. Okur bunu "TCMB bugün ihaleyle hiç
+#     fonlama yapmadı" diye okur. Deponun kendi ilkesi bunu yasaklıyor: SIFIR
+#     bir ölçüm sonucudur, ölçülemeyen boş bırakılır. Ölçüldü: düzeltmeden
+#     önce 3 sahte sıfır, sonra 0.
+#
+# (b) YANLIŞ ALARM — hattı durduran hâli. Kapı (grafik.kos) ilan edilen uç ile
+#     figürün çizdiği ucun EŞİT olmasını istiyordu. Kural (`_uc`) ise bir alt
+#     kalem geride kalınca damgayı DOĞRU biçimde geri çeker ("kıyas ancak
+#     hepsinin ölçüldüğü güne kadar kurulabilir"), oysa `fillna(0)`lı iz
+#     geriye gitmediği için kapı farkı "kolon listesi ayrışmış" diye okuyup
+#     İSTİSNA fırlatıyordu. Ölçüldü: on kalemin ALTISI tek başına DUR
+#     üretiyordu (fon_ihale · fon_kot_repo · fon_kot_depo · ste_ihale ·
+#     ste_kot · ste_liksen) ve düşen adım hattın TAMAMINI durduruyor —
+#     Şekil 03-08 hiç yazılmıyor, siteye kopyalama olmuyor. Üstelik ekrandaki
+#     teşhis yanlış olduğu için sonraki oturum kolon listesi arardı.
+#
+# ÖLÇÜT KURALIN İLAN ETTİĞİ HÂLLERE KOŞTURULUR — bir kuralı sınamak ile o
+# kuralı ÖLÇEN kapıyı sınamak iki ayrı iştir. Aşağıdaki dört hâl kuralın kendi
+# ilanıdır: bacaklar aynı gün · bir kalem bir gün geride · bir kalem üç gün
+# geride · net bacak geride.
+def _api_cerceve(son: str, geri: dict[str, int] | None = None) -> pd.DataFrame:
+    """Sahte APİ karesi: kalemler `son` gününde biter, `geri` verilen kalemi
+    o kadar iş günü geriye çeker. M'nin indeksi HER ZAMAN `son`a kadar uzar
+    (kur bacağı gibi hızlı bir bacak yüzünden) — arızanın çekirdeği budur."""
+    ix = pd.bdate_range(pd.Timestamp(son) - pd.Timedelta(days=200),
+                        pd.Timestamp(son))
+    kol = ["net_fonlama", "fon_ihale", "fon_kot_repo", "fon_kot_depo",
+           "fon_glp", "fon_kot_diger", "ste_ihale", "ste_kot", "ste_liksen",
+           "ste_diger"]
+    df = pd.DataFrame(100.0, index=ix, columns=kol)
+    df["net_fonlama"] = -50.0
+    for k, n in (geri or {}).items():
+        if n:
+            df.loc[ix[-n:], k] = float("nan")
+    return df
+
+
+def _sekil03_olc(df: pd.DataFrame) -> dict:
+    """Kuralın ürettiği damga ile figürün gerçekten çizdiği ucu YAN YANA ölçer."""
+    import grafik
+    uc = veri.api_panel_uclari(df)
+    damga_t = min([t for t in uc.values() if t is not None], default=None)
+    o = {"rejim": {"net_negatif_gun": 0, "net_pozitif_gun": 0,
+                   "pencere_gun": 250, "fonlama_sifir_gun": 0},
+         "son_gun": str(df.index[-1].date())}
+    fig = grafik.sekil_03(df, o,
+                          grafik.gun_ad(damga_t) if damga_t is not None else None)
+    cizili = grafik._cizili_uc(fig)
+    # KAPININ KENDİSİ koşturulur — karşılaştırma burada YENİDEN YAZILMAZ.
+    # Yeniden yazılsaydı ölçüt, kapı geri bozulduğunda da yeşil geçerdi:
+    # bir kuralı sınamak ile o kuralı ÖLÇEN kapıyı sınamak iki ayrı iştir.
+    try:
+        grafik._uc_denetimi("03_net_api_kompozisyon.html", damga_t,
+                            grafik.gun_ad(damga_t) if damga_t is not None
+                            else None, fig)
+        dur = False
+    except SystemExit:
+        dur = True
+    sahte = 0
+    for tr in fig.data:
+        ad = str(tr.name)
+        if ad[:1] not in ("A", "B"):
+            continue
+        y = pd.Series(tr.y).astype(float)
+        if len(y) >= 2 and abs(y.iloc[-1]) < 1e-9 and abs(y.iloc[-2]) > 1e-9:
+            sahte += 1
+    return {"damga": damga_t, "cizili": cizili, "sahte": sahte, "dur": dur}
+
+
+_SON = "2026-09-09"
+for _etiket, _geri in (("bacaklar aynı gün", {}),
+                       ("bir kalem bir gün geride", {"fon_ihale": 1}),
+                       ("bir kalem üç gün geride", {"ste_kot": 3}),
+                       ("net bacak geride", {"net_fonlama": 1})):
+    _o = _sekil03_olc(_api_cerceve(_SON, _geri))
+    sina(f"Şekil 03 [{_etiket}]: ölçülemeyen gün SIFIR çizilmiyor",
+         _o["sahte"] == 0, f"{_o['sahte']} sahte sıfır")
+    sina(f"Şekil 03 [{_etiket}]: kuralın kendi damgası KAPIYI düşürmüyor",
+         not _o["dur"],
+         f"damga {_o['damga']} · çizili {_o['cizili']} — kapı DUR verdi")
+    sina(f"Şekil 03 [{_etiket}]: damga bayat bacağı taze göstermiyor",
+         _o["damga"] is None or _o["cizili"] is None
+         or pd.Timestamp(_o["damga"]) <= _o["cizili"],
+         f"damga {_o['damga']} > çizili {_o['cizili']}")
+
+# Kuyruk kesme, damgayı ÜRETEN fonksiyondan okunur: iki ayrı liste bir gün
+# sessizce ayrışır ve figür ile altındaki tarih farklı günü anlatır.
+import grafik as _g
+_kaynak = inspect.getsource(_g.sekil_03)
+sina("Şekil 03 panel uçlarını veri katmanının TEK fonksiyonundan alıyor",
+     "veri.api_panel_uclari(" in _kaynak)
+sina("Şekil 03 yığın kareleri kuyruğunda kesiliyor (sağ uçtaki boşluk çizilmez)",
+     _kaynak.count("_kuyruk_kes(") >= 3, _kaynak.count("_kuyruk_kes("))
+sina("figür damgası panel uçlarının EN ESKİSİ (iki liste tutulmuyor)",
+     "api_panel_uclari(M).values()" in inspect.getsource(veri.sekil_uclari))
+# Kapı TEK YÖNLÜ: ilan çizilenden GERİDEYSE damga tutucudur, kusur değil.
+_kapi = inspect.getsource(_g._uc_denetimi)
+sina("kapı tek yönlü (yalnız ilan çizilenden İLERİDEYSE durur)",
+     "beyan_t > cizili" in _kapi and "!= beyan" not in _kapi)
+# Kapı ağa çıkan kos()'un İÇİNDE kalırsa hiçbir sınama onu koşturamaz.
+_kos = inspect.getsource(_g.kos)
+sina("kapı ayrı fonksiyonda (ağa çıkan kos()'un içinde değil)",
+     "_uc_denetimi(" in _kos and "_cizili_uc(" not in _kos)
+sina("kapı ham tarihi okuyor (biçimlenmiş damga geri ayrıştırılmıyor)",
+     "uclar[ad]" in _kos and "veri.sekil_uclari(" in _kos)
+
 # ---------------------------------------------------------------------------
 print(f"\n{'═' * 70}")
 print(f"  {len(GECTI)} geçti · {len(DUSTU)} düştü")

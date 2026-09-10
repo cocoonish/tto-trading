@@ -118,6 +118,55 @@ def _lejant_satir(fig) -> int:
     return max(1, -(-toplam // 105))
 
 
+def _yigin_hizala(fig) -> None:
+    """Her yığının izleri ORTAK ucunda biter — eksik bacak SIFIR çizilmez.
+
+    ARIZA (ölçülen 10.09.2026, YAYIMLANMIŞ figürde): Şekil 07'nin üç bacağı
+    ayrı ritimde bitiyor (iç borç 07.2026 · eurobond 08.2026 · dış kredi
+    06.2026, çeyreklik ve çeyrek içinde basamak). Her iz KENDİ indeksiyle
+    çiziliyor ve plotly yığında eksik x'i SIFIR sayıyor (`stackgaps` öntanımlı
+    "infer zero"), yani yığının tepesi son iki ayda kendiliğinden çöküyordu:
+    borç stoku okura 14,93 → 13,89 → 4,73 trilyon TL diye çıktı. Sayfanın
+    damgası DOĞRUYDU ("aylık 06.2026"); yalan söyleyen çizimdi.
+
+    ÇÖZÜM YIĞININ KENDİ ÜYELERİNDEN TÜRETİLİR: grubun ortak ucu, üyelerinin
+    son dolu gözlemlerinin EN ESKİSİDİR — bir kompozisyon ancak bütün
+    kalemlerinin ölçüldüğü güne kadar kurulabilir. Elle tutulan bir kolon
+    listesi olsaydı yeni bir yığın eklendiğinde sessizce dışarıda kalırdı.
+
+    KAPI BURADA DURUR, ÇAĞRI YERİNDE DEĞİL: `_duzen` her figürün ZORUNLU son
+    adımı (on üç şeklin on üçü çağırıyor), yani yarın eklenecek bir yığın da
+    kendiliğinden bu kuraldan geçer.
+    """
+    gruplar: dict[str, list] = {}
+    for tr in fig.data:
+        g = getattr(tr, "stackgroup", None)
+        if g:
+            gruplar.setdefault(g, []).append(tr)
+    for izler in gruplar.values():
+        uclar = []
+        for tr in izler:
+            x, y = getattr(tr, "x", None), getattr(tr, "y", None)
+            if x is None or y is None:
+                continue
+            ya = np.asarray(y, dtype="float64")
+            xa = np.asarray(x)
+            n = min(len(xa), len(ya))
+            dolu = np.flatnonzero(np.isfinite(ya[:n]))
+            if len(dolu):
+                uclar.append(pd.Timestamp(str(xa[dolu[-1]])))
+        if len(uclar) < 2:
+            continue
+        uc = min(uclar)
+        if uc == max(uclar):
+            continue                      # bacaklar zaten aynı günde bitiyor
+        for tr in izler:
+            xa = np.asarray(tr.x)
+            tut = np.array([pd.Timestamp(str(v)) <= uc for v in xa])
+            tr.x = xa[tut]
+            tr.y = np.asarray(tr.y, dtype="float64")[:len(tut)][tut]
+
+
 def _duzen(fig, baslik: str, alt: list[str], n_panel: int,
            ek_yukseklik: int = 0, barmode: str = "group") -> go.Figure:
     """Ev stili düzeni.
@@ -128,6 +177,7 @@ def _duzen(fig, baslik: str, alt: list[str], n_panel: int,
     satırları bu yüzden BAŞLIK bloğunda (<sup>) taşınır — ev stili başlıktaki
     her <br> için üst marjı büyütür, çakışma imkânsızdır.
     """
+    _yigin_hizala(fig)
     alt = [parca for satir in alt for parca in _bol(satir)]
     l_satir = _lejant_satir(fig)
     # ÜST MARJ İNCE AYARI: plotly_stil.py margin.t'yi önce koşulsuz 92'ye çeker,

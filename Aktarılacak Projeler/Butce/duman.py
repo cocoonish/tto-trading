@@ -309,6 +309,73 @@ def bolum_sekil13() -> None:
          "FH_KOLONLAR" in inspect.getsource(ozet_uret) and not hasattr(ozet_uret, "FH_KOLONLAR_YEREL"))
 
 
+def bolum_yigin() -> None:
+    """Yığılı panelde eksik bacak SIFIR çizilemez.
+
+    ARIZA (ölçülen 10.09.2026, YAYIMLANMIŞ figürde): Şekil 07'nin üç bacağı
+    ayrı ritimde bitiyor (dış kredi 06.2026 · iç borç 07.2026 · eurobond
+    08.2026). Her iz kendi indeksiyle çizildiği için plotly yığında eksik x'i
+    SIFIR sayıyordu ve borç stoku okura 14,93 → 13,89 → 4,73 trilyon TL diye
+    çıktı — iki ayda 10 trilyon TL'lik sahte bir çöküş. Sayfanın damgası
+    DOĞRUYDU ("aylık 06.2026"); yalan söyleyen çizimdi.
+
+    ÖLÇÜT KURALIN İLAN ETTİĞİ HÂLLERE KOŞTURULUR: hem bugünkü ağaç, hem de
+    bacakların bilerek ayrıldığı sentetik hâl.
+    """
+    print("\n▶ Yığılı panel: eksik bacak sıfır çizilmiyor")
+    import numpy as np
+
+    def uclar(fig) -> dict:
+        g: dict = {}
+        for tr in fig.data:
+            grup = getattr(tr, "stackgroup", None)
+            if not grup:
+                continue
+            x, y = np.asarray(tr.x), np.asarray(tr.y, dtype="float64")
+            dolu = np.flatnonzero(np.isfinite(y))
+            if len(dolu):
+                g.setdefault(grup, set()).add(pd.Timestamp(str(x[dolu[-1]])))
+        return g
+
+    M = pd.read_csv(BURASI / "data" / "aylik_metrik.csv", index_col=0, parse_dates=True)
+    C = pd.read_csv(BURASI / "data" / "ceyreklik_metrik.csv", index_col=0, parse_dates=True)
+    o = json.loads((BURASI / "data" / "metrik_ozet.json").read_text(encoding="utf-8"))
+    S07 = ("ic_borc_trl", "dis_senet_trl", "dis_kredi_trl", "toplam_borc_trl")
+
+    # (1) BUGÜNKÜ AĞAÇ — kural zaten ayrık bir hâl taşıyor.
+    fig = grafik.sekil_07(M, C, o, grafik.ay_ad(pd.Timestamp(o["son_ay"])),
+                          grafik.ceyrek_ad(pd.Timestamp(o["son_ceyrek"])))
+    g = uclar(fig)
+    sina("Şekil 07'nin yığın bacakları ORTAK uçta bitiyor",
+         all(len(u) == 1 for u in g.values()), str({k: sorted(map(str, v)) for k, v in g.items()}))
+    ilan = veri.bacak_ucu(M, S07)
+    ciz = min(next(iter(g.values()))) if g else None
+    sina("çizilen uç sayfanın İLAN ETTİĞİ uçla aynı (damga ile çizim ayrışmıyor)",
+         ilan is not None and ciz == pd.Timestamp(ilan), f"ilan {ilan} · çizilen {ciz}")
+
+    # (2) SENTETİK AYRIŞMA — bir bacak üç ay ileri gitse de yığın ortak uçta biter.
+    M2 = M.copy()
+    son = M2.index[-1]
+    for ek in (1, 2, 3):
+        yeni = son + pd.DateOffset(months=ek)
+        M2.loc[yeni, "dis_senet_trl"] = 5.0
+    M2 = M2.sort_index()
+    fig2 = grafik.sekil_07(M2, C, o, "SINAMA", "SINAMA")
+    g2 = uclar(fig2)
+    sina("bir bacak üç ay ileri gitse de yığın ORTAK uçta bitiyor",
+         all(len(u) == 1 for u in g2.values()),
+         str({k: sorted(map(str, v)) for k, v in g2.items()}))
+    sina("ileri giden bacak yığının ucunu İLERİ çekmiyor (en eski bağlayıcı)",
+         bool(g2) and min(next(iter(g2.values()))) == pd.Timestamp(veri.bacak_ucu(M2, S07)))
+
+    # (3) KAPI ÇAĞRI YERİNDE DEĞİL, ZORUNLU SON ADIMDA: yarın eklenecek bir
+    #     yığın da kendiliğinden bu kuraldan geçsin.
+    sina("hizalama _duzen'in içinde (her figürün zorunlu son adımı)",
+         "_yigin_hizala(fig)" in inspect.getsource(grafik._duzen))
+    sina("hizalama grubun KENDİ üyelerinden ölçüyor (elle kolon listesi yok)",
+         "stackgroup" in inspect.getsource(grafik._yigin_hizala))
+
+
 def bolum_sayfa() -> None:
     print("\n▶ Sayfa ↔ özet: tolerans tek tanım, bayatGun bacağın toleransı")
     cagrilar = _mdx_cagrilar()
@@ -357,7 +424,7 @@ def bolum_kilit() -> None:
 def main() -> int:
     print("Bütçe & borç stoku — duman sınaması (ağa çıkmaz)")
     for b in (bolum_saat, bolum_gecikme, bolum_finhesap, bolum_sekil13,
-              bolum_sayfa, bolum_okur_dili, bolum_kilit):
+              bolum_yigin, bolum_sayfa, bolum_okur_dili, bolum_kilit):
         try:
             b()
         except Exception as ex:                                   # noqa: BLE001
