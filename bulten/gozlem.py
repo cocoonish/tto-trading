@@ -18,6 +18,7 @@ commit'lerden gerçek bir tarihçe çıkarılabilir (`--git` ile).
 from __future__ import annotations
 
 import json
+import re
 import subprocess
 from datetime import datetime
 from pathlib import Path
@@ -123,6 +124,14 @@ def anahtar_tarihi(d: dict, anahtar: str, acik: str = "") -> str:
     return _tarih_of(d)
 
 
+_AY_DAMGASI = re.compile(r"^\s*\d{1,2}[./]\d{4}\s*$")
+
+
+def _ay_hassasiyeti(t: str) -> bool:
+    """Damga AY hassasiyetinde mi (08.2026) yoksa GÜN mü (01.08.2026)."""
+    return bool(_AY_DAMGASI.match(str(t)))
+
+
 def _ileri_gitti(eski: str, yeni: str) -> bool:
     """Saat GERÇEKTEN ilerledi mi — dizge kıyası değil TARİH kıyası.
 
@@ -139,6 +148,17 @@ def _ileri_gitti(eski: str, yeni: str) -> bool:
     e, y = bicim.tarihe_cevir(eski), bicim.tarihe_cevir(yeni)
     if e is None or y is None:
         return str(eski) != str(yeni)
+    # AYNI AYIN İKİ YAZIMI İLERLEME DEĞİLDİR. Ay damgası ortak/bicim
+    # sözleşmesinde ayın SON gününe demirlenir; bu yüzden "01.08.2026 →
+    # 08.2026" çözüldüğünde 01 Ağustos → 31 Ağustos olur ve saf tarih kıyası
+    # otuz günlük sahte bir ilerleme görür. Ay SONU yazımı (30.06.2026 →
+    # 06.2026) tesadüfen aynı güne düştüğü için ilk yazımda bu kaçtı: kural
+    # ayın son gününde doğru, ayın başında yanlış cevap veriyordu ve 10.09.2026
+    # bülteninde el-nino satırında canlıydı. Ölçü GÜN değil, damganın
+    # HASSASİYETİ: biri ay biri gün hassasiyetindeyse ve ikisi aynı aya
+    # düşüyorsa, değişen şey veri değil YAZIMDIR.
+    if (e.year, e.month) == (y.year, y.month) and _ay_hassasiyeti(eski) != _ay_hassasiyeti(yeni):
+        return False
     return y > e
 
 

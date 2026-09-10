@@ -406,6 +406,33 @@ IZLEMSIZ_GEREKCE = {
 }
 
 
+def _surum_ilerlemesi():
+    """Saat kıyası YAZIM DEĞİŞİKLİĞİNİ ilerleme saymamalı — dokuz hâl.
+
+    Ay damgası ortak/bicim sözleşmesinde ayın SON gününe demirlenir, yani saf
+    tarih kıyası "01.08.2026 → 08.2026" geçişinde otuz günlük SAHTE bir
+    ilerleme görür. İlk kural ay SONU yazımında (30.06 → 06.2026) tesadüfen
+    doğru cevap veriyordu; ayın başında yanlış veriyordu ve 10.09.2026
+    bülteninde el-nino satırında canlıydı. Bir tesadüfün kapattığı boşluk,
+    tesadüf ortadan kalkınca görünür.
+    """
+    from gozlem import _ileri_gitti
+    haller = [
+        ("01.08.2026", "08.2026", False),      # ay BAŞI → ay damgası: yazım
+        ("30.06.2026", "06.2026", False),      # ay SONU → ay damgası: yazım
+        ("15.08.2026", "08.2026", False),      # ay ORTASI → ay damgası: yazım
+        ("08.2026", "01.08.2026", False),      # ters yön, aynı ay: yazım
+        ("07.2026", "08.2026", True),          # ay ilerledi
+        ("08.2026", "01.09.2026", True),       # ay → sonraki ayın günü
+        ("08.09.2026", "09.09.2026", True),    # gün ilerledi
+        ("09.09.2026", "08.09.2026", False),   # GERİLEME ilerleme değildir
+        ("abc", "def", True),                  # çözülemeyen: eski davranış
+    ]
+    for e, y, bek in haller:
+        assert _ileri_gitti(e, y) is bek, (
+            f"saat kıyası: {e} → {y} beklenen {bek}, gelen {_ileri_gitti(e, y)}")
+
+
 def _izlem_kapsami():
     """Her hat ya izlem taşır ya da GEREKÇELİ muaftır.
 
@@ -3594,6 +3621,8 @@ def main() -> int:
 
     sina("tekrar: iki eksen de ölçülüyor, kapsam sözleşmeden türüyor", _tekrar_eksenleri)
     sina("hat adı: izlenen her hattın okura görünen adı var, kayıt onu taşıyor", _hat_adi_kapsami)
+    sina("saat kıyası: yazım değişikliği ve gerileme ilerleme sayılmaz (9 hâl)",
+         _surum_ilerlemesi)
     sina("izlem kapsamı: her hat ya izlem taşır ya gerekçeli muaf; yayım bayrağı günlük seride yok",
          _izlem_kapsami)
 

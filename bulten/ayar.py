@@ -494,12 +494,23 @@ IZLEMLER: list[Izlem] = [
     #   · yp-mevduat/stok_toplam_mia  228,35 ≈ 228,4 ✓  → p98 = 7,2 mlr USD (n=114)
     #   · yp-mevduat/gercek_pay        64,03 = 64,03 ✓  → p98 = 1,4 puan   (n=114)
     #   · reel-sektor-fx/net_pozisyon −205,8 = −205,8 ✓ → p96 = 13,4 mlr USD (n=36)
-    #   · buyume/*                      2,56 ≠ 2,32 ✗  → EŞİK YOK; üstelik üç
-    #     yılda yalnız 12 çeyreklik gözlem var, yüzdelik böyle bir örneklemden
-    #     kurulmaz.
-    #   · yiyecek-hizmetleri-marj/oran_ev_yemekleri — kaynak oran dosyasıyla
-    #     mutabakat kurulamadı → EŞİK YOK.
-    #   · makroihtiyati/makas_ihtiyac — tarihçesi ölçülmedi → EŞİK YOK.
+    #   · buyume/buyume_yillik   2,3221 → 2,32 ✓ (uretim_zincir) → yine de
+    #     EŞİK YOK: üç yılda yalnız 12 çeyreklik gözlem var ve yüzdelik böyle
+    #     bir örneklemden kurulmaz. GEREKÇE DÜZELTİLDİ — ilk yazımda "2,56 ≠
+    #     2,32, mutabakat yok" deniyordu; 2,56 harcama tarafından, manşet ise
+    #     ÜRETİM zincirinden geliyor ve birebir oturuyor. Yanlış dosyayı ölçüp
+    #     "seri tutmuyor" demek, ölçülmemiş bir şeyi ölçülmüş gibi göstermenin
+    #     bir başka biçimi.
+    #   · buyume/buyume_ceyreklik  7,17 ≠ 1,12 ✗ → EŞİK YOK: yayımlanan çeyreklik
+    #     mevsimsellikten arındırılmış, elde yeniden kurulan seri değil.
+    #   · yiyecek-hizmetleri-marj/oran_ev_yemekleri  1,28 = 1,28 ✓ ama EŞİK YOK:
+    #     eşleşen kaynak on bir satırlık bir KARŞILAŞTIRMA TABLOSU, zaman serisi
+    #     değil — yüzdelik çıkarılacak tarihçe yok. (İlk yazımda "mutabakat
+    #     kurulamadı" deniyordu; değer tutuyor, eksik olan SERİ.)
+    #   · makroihtiyati/makas_ihtiyac — bu oturumda ölçülmedi → EŞİK YOK.
+    #     Hattın kendi hesabı bunu haftalık faiz verisinden kuruyor, yani
+    #     tarihçe VAR ve ölçülebilir; ölçülmemiş olması bir eksik, imkânsızlık
+    #     değil.
     #   · reel-sektor-fx/acik_rezerv_orani — hareketinin büyük kısmı zaten
     #     izlenen rezerv paydasından geliyor; ayrı eşik ikinci kez sayardı.
     # Eşiksiz kalanlar yayım bayrağıyla `dikkat` seviyesinde okura ulaşmaya
