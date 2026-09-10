@@ -43,6 +43,8 @@ from pathlib import Path
 import pandas as pd
 
 import veri
+import ozet_uret
+import inspect
 
 PROJE = Path(__file__).resolve().parent
 GECTI: list[str] = []
@@ -196,10 +198,55 @@ def ozet_saatleri() -> None:
              not eksik, f"eksik: {eksik}")
 
 
+def bayat_bayragi() -> None:
+    """Bayat bayrağı — SAHTE girdiyle, duvar saatinden ve depo verisinden bağımsız.
+
+    NEDEN BURADA. Hattın uçtan uca bayatlık sınavı (`bayatlik_sinavi.py`) var
+    ama adı `duman.py` olmadığı için `guncelle.py` onu HİÇ görmüyor; üstelik o
+    sınav deponun O GÜNKÜ verisini ve DUVAR SAATİNİ okuyor, yani bayrağın DOĞRU
+    açıldığı her gün "ters yön" maddesiyle düşüyor. 10.09.2026'da ölçüldü:
+    dokunulmamış ağaçta bayat=True (veri katmanı iki tazelik uyarısı basmış) ve
+    sınav "SINAV DÜŞTÜ (ters yön)" veriyor. Bir kapıya bağlansaydı, veriyi
+    tazeleyecek koşuyu tam da bayatlık yüzünden durdururdu — yayının önünde
+    duran bir denetimin yanlış alarmı arızanın kendisidir.
+
+    Kapı bu yüzden BURADA ve kendi çerçevesini kuruyor. Kardeş hat Fonlama'da
+    aynı ayrım 09.09.2026'da yapılmıştı; bu hat o düzeltmeyi almamıştı ve
+    bayrağın hiçbir maddesi yoktu.
+    """
+    print("\n▶ Bayat bayrağı")
+    tol = veri.tazelik_tolerans("haftalik")
+    taze = ozet_uret.bayat_karari(1, [])
+    sina("taze veride bayrak KAPALI ve cümle 'Veri taze' ile başlıyor",
+         taze["bayat"] is False and taze["bayat_cumlesi"].startswith("Veri taze"),
+         str(taze))
+    durmus = ozet_uret.bayat_karari(tol + 30, [])
+    sina("durmuş yayımda bayrak AÇIK ve cümle 'BAYAT VERİ' ile başlıyor",
+         durmus["bayat"] is True
+         and durmus["bayat_cumlesi"].startswith("BAYAT VERİ")
+         and "haftalık bacak" in durmus["bayat_cumlesi"], str(durmus))
+    # Seri TAZE görünürken önbelleğe düşülmüş olabilir: veri katmanının kendi
+    # tazelik uyarısı tek başına bayatlık KANITIDIR.
+    enj = ozet_uret.bayat_karari(1, ["TAZELİK: sınav enjeksiyonu — yayın durmuş olabilir."])
+    sina("veri katmanının tazelik uyarısı tek başına bayrağı AÇIYOR",
+         enj["bayat"] is True and enj["bayat_cumlesi"].startswith("BAYAT VERİ"),
+         str(enj))
+    # SINIR: tam toleransta bayrak KAPALI, bir gün ötesinde AÇIK.
+    sina("eşik sınırı: tolerans günü kapalı, ertesi gün açık",
+         ozet_uret.bayat_karari(tol, [])["bayat"] is False
+         and ozet_uret.bayat_karari(tol + 1, [])["bayat"] is True,
+         f"tolerans {tol}")
+    # YAPISAL KİLİT: karar main()'in içine geri taşınırsa kapı onu koşturamaz.
+    sina("bayat kararı ozet_uret.main()'in İÇİNDE değil, ayrı fonksiyonda",
+         "bayat_sebep" not in inspect.getsource(ozet_uret.main)
+         and "bayat_karari(" in inspect.getsource(ozet_uret.main))
+
+
 def main() -> int:
     print("KREDİ & PARASAL BÜYÜKLÜKLER — DUMAN SINAMASI")
     gunluk_saat()
     ozet_saatleri()
+    bayat_bayragi()
     print(f"\n{len(GECTI)} geçti · {len(DUSTU)} düştü")
     if DUSTU:
         for d in DUSTU:

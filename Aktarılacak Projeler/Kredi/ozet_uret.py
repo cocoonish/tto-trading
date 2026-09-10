@@ -92,6 +92,39 @@ def gun_tr(t: pd.Timestamp) -> str:
     return f"{t.day} {AY_TR[t.month]} {t.year}"
 
 
+def bayat_karari(yayim_gecikme_gun, uyarilar: list[str]) -> dict:
+    """Bayat bayrağı ve okura basılan cümlesi — AĞA ÇIKMAZ, sahte girdiyle koşar.
+
+    Karar `main()`in İÇİNDE duruyordu, yani hiçbir kapı onu koşturamıyordu:
+    tek sınayıcısı `bayatlik_sinavi.py` ve o dosya `duman.py` adını taşımadığı
+    için `guncelle.py` onu HİÇ görmüyor. Üstelik o sınav deponun O GÜNKÜ
+    verisini ve DUVAR SAATİNİ okuduğu için bayrağın DOĞRU açıldığı her gün
+    düşüyordu (10.09.2026'da ölçüldü: bugünkü ağaçta bayat=True ve sınav
+    "SINAV DÜŞTÜ (ters yön)" diyor). Ağa çıkmayan iş ayrı fonksiyona çıkar;
+    duman sınaması onu KENDİ çerçevesiyle çağırır. Kardeş hat Fonlama'da aynı
+    ayrım 09.09.2026'da yapılmıştı; bu hat o düzeltmeyi almamıştı.
+    """
+    tol_hafta = tazelik_tolerans("haftalik")
+    sebep: list[str] = []
+    if (yayim_gecikme_gun or 0) > tol_hafta:
+        sebep.append(f"haftalık bacak yayım tarihinden {yayim_gecikme_gun} gün "
+                     f"geride (tolerans {tol_hafta} gün)")
+    izler = [u for u in uyarilar
+             if u.startswith(("TAZELİK", "ESKİ ÖNBELLEK", "BAYAT"))]
+    if izler:
+        sebep.append(f"veri katmanı {len(izler)} tazelik/önbellek "
+                     "uyarısı bastı")
+    return {
+        "bayat": bool(sebep),
+        "bayat_tolerans_hafta": tol_hafta,
+        "bayat_cumlesi": (
+            "BAYAT VERİ: " + "; ".join(sebep)
+            + ". Sayfadaki sayılar bu koşuda İLERLEMEMİŞ olabilir."
+            if sebep else
+            "Veri taze: yayım gecikmesi tolerans içinde, tazelik uyarısı yok."),
+    }
+
+
 def main() -> int:
     m = json.loads((VERI / "metrik_ozet.json").read_text(encoding="utf-8"))
     uy = json.loads((PROJE / "uyarilar.json").read_text(encoding="utf-8"))
@@ -445,24 +478,7 @@ def main() -> int:
     # Yayım gecikmesi haftalık aile toleransını aşarsa veri BAYATTIR; sayfada
     # görünür bir kutuya bağlanır. Kaynak durduğunda hat yeşil bitse bile
     # okurun gördüğü ilk şey bayatlık olur.
-    tol_hafta = tazelik_tolerans("haftalik")
-    bayat_sebep: list[str] = []
-    if (O.get("yayim_gecikme_gun") or 0) > tol_hafta:
-        bayat_sebep.append(
-            f"haftalık bacak yayım tarihinden {O['yayim_gecikme_gun']} gün "
-            f"geride (tolerans {tol_hafta} gün)")
-    izler = [u for u in uyarilar
-             if u.startswith(("TAZELİK", "ESKİ ÖNBELLEK", "BAYAT"))]
-    if izler:
-        bayat_sebep.append(f"veri katmanı {len(izler)} tazelik/önbellek "
-                           "uyarısı bastı")
-    O["bayat"] = bool(bayat_sebep)
-    O["bayat_tolerans_hafta"] = tol_hafta
-    O["bayat_cumlesi"] = (
-        "BAYAT VERİ: " + "; ".join(bayat_sebep)
-        + ". Sayfadaki sayılar bu koşuda İLERLEMEMİŞ olabilir."
-        if bayat_sebep else
-        "Veri taze: yayım gecikmesi tolerans içinde, tazelik uyarısı yok.")
+    O.update(bayat_karari(O.get("yayim_gecikme_gun"), uyarilar))
 
     O["uyari_sayisi"] = len(uyarilar)
     O["uyari_metni"] = ((O["bayat_cumlesi"] + " · " if O["bayat"] else "")

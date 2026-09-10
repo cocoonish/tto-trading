@@ -80,13 +80,22 @@ def main() -> int:
         # (1) TERS YÖN — dokunulmamış kopyada bayrak KAPALI olmalı
         temiz = _kopyala(kok / "temiz")
         o1 = _ozet_uret(temiz)
+        # TERS YÖN ANCAK VERİ GERÇEKTEN TAZEYKEN ÖLÇÜLEBİLİR (10.09.2026).
+        # Madde "her koşuda alarm veren bayrak işe yaramaz" diye yazıldı ve
+        # doğru; ama depodaki veri o gün MEŞRU olarak bayatsa bayrağın açık
+        # olması bayrağın DOĞRU davranışıdır, kusur değil. Eskiden bu hâlde
+        # "SINAV DÜŞTÜ" deniyordu, yani ölçülemeyen bir şey ölçülmüş gibi
+        # gösteriliyordu — ölçülemeyen boş bırakılır ve SEBEBİ yazılır.
+        # Bayrağın mantığı zaten `duman.py`de sahte girdiyle, duvar saatinden
+        # bağımsız sınanıyor; KAPI odur, bu dosya uçtan uca sürümdür.
         if o1.get("bayat") is not False:
-            raise SystemExit(
-                "SINAV DÜŞTÜ (ters yön): dokunulmamış veride bayat="
-                f"{o1.get('bayat')!r}. Her koşuda alarm veren bir bayrak, hiç "
-                "alarm vermeyen kadar işe yaramaz.")
-        print(f"  ✓ ters yön: taze veride bayat=False "
-              f"({o1.get('bayat_cumlesi', '')[:60]}…)")
+            print("  – ters yön ÖLÇÜLEMEDİ: depodaki veri şu an gerçekten "
+                  f"bayat — {o1.get('bayat_cumlesi', '')[:90]}\n"
+                  "    (bayrağın doğru davranışı bu; hattı tazeleyip yeniden "
+                  "koşturun. Mantık sınaması: duman.py)")
+        else:
+            print(f"  ✓ ters yön: taze veride bayat=False "
+                  f"({o1.get('bayat_cumlesi', '')[:60]}…)")
 
         # (2) ASIL SINAV — eskitilmiş kopyada bayrak AÇIK olmalı
         eski = _kopyala(kok / "eski")
