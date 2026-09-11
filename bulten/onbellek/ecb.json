@@ -1,19 +1,6 @@
 {
- "zaman": "2026-09-10T04:37:44",
+ "zaman": "2026-09-11T04:18:14",
  "veri": [
-  {
-   "tarih": "2026-09-10",
-   "saat": "16:15",
-   "ulke": "EA",
-   "olay": "ECB para politikası kararı",
-   "onem": 1,
-   "kaynak": "ecb.europa.eu",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "Karar TSİ 16:15, basın toplantısı 16:45."
-  },
   {
    "tarih": "2026-10-29",
    "saat": "16:15",

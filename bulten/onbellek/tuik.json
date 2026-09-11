@@ -1,58 +1,6 @@
 {
- "zaman": "2026-09-10T04:37:43",
+ "zaman": "2026-09-11T04:18:13",
  "veri": [
-  {
-   "tarih": "2026-09-10",
-   "saat": "10:00",
-   "ulke": "TR",
-   "olay": "TÜİK: Sanayi üretimi (Temmuz 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "Sanayi Üretim Endeksi"
-  },
-  {
-   "tarih": "2026-09-10",
-   "saat": "14:30",
-   "ulke": "TR",
-   "olay": "TCMB: Menkul kıymet ist. (36. Hafta 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": " Menkul Kıymet İstatistikleri"
-  },
-  {
-   "tarih": "2026-09-10",
-   "saat": "14:30",
-   "ulke": "TR",
-   "olay": "TCMB: Haftalık para-banka (36. Hafta 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "Haftalık Para ve Banka İstatistikleri "
-  },
-  {
-   "tarih": "2026-09-10",
-   "saat": "14:30",
-   "ulke": "TR",
-   "olay": "TCMB: IRFCL rezerv (Ağustos 2026)",
-   "onem": 1,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "Uluslararası Rezervler ve Döviz Likiditesi"
-  },
   {
    "tarih": "2026-09-11",
    "saat": "10:00",
