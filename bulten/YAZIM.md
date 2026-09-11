@@ -42,6 +42,21 @@ Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
    (Günlük bülten)** → commit'ini bekle → `git pull` → `zincir.py`yi yeniden
    koştur. Kod 0 olunca yaz. 27.08'de böyle yapıldı ve bülten zamanında çıktı.
 
+   **AYNI KAPALI AĞ, DENETİMİN BİR UYARISINI SAHTE YAPIYOR — onu arıza sanma.**
+   Yazı katmanının oturumunda `bulten/denetim.py` (ve `bulten/tazeleme.py`)
+   "yayım takvimi okunamadı — 18 hattın TAMAMI kör koşu listesinde" der. Bu bir
+   depo kusuru DEĞİL, bu oturumun kapalı ağının izidir: tazeleme takvimi ağdan
+   çözülüyor, çözülemeyince araç güvenli tarafa düşüp her hattı "kör koşu"
+   sayıyor. 11.09.2026'da ölçüldü — aynı gün aynı ölçüt BULUTTA koştu ve takvimi
+   sorunsuz okudu; oradaki gerçek uyarı çok daha dar çıktı ("bugün tazelenmesi
+   gereken ama tazelenemeyen hatlar: USD/TRY devalüasyon hızı, DİBS verim
+   eğrisi"). Yani yerelde ölçüt 18 hattı birden şişiriyor, bulutta iki hattı
+   adıyla veriyor. **Hangi hattın bugün bayat olduğunu yerelden değil,
+   `bulten.yml` koşusunun kaydından oku**; yerel liste hiçbir şey söylemiyor.
+   Bunu bildirime "arıza" diye yazmak, ölçülmemiş bir şeyi ölçülmüş gibi
+   göstermenin bir biçimi olur — bu depoda bir kez yapıldı ve commit mesajına
+   geçti.
+
    **Zinciri saat değil RUTİN sürükler.** Zincirin en güvenilir halkası
    GitHub'ın zamanlayıcısı değil, seni ateşleyen bulut rutinidir — o her sabah
    koşuyor. Zamanlanmış koşular koşarsa işini azaltır; koşmazsa eksik halkayı
