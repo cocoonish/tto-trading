@@ -125,7 +125,7 @@ macOS/Linux'ta: `python3 panel.py hazine`.
 ## 5c. Siteyi yayına göndermek
 
 Site ayrı bir **public** depoda yayınlanır (`cocoonish/cocoonish.github.io` →
-https://cocoonish.github.io/). Bu depo private kalır.
+https://cocoonish.github.io/). Bu depo ayrı kalır; oraya yalnız `site/` gider.
 
 ```
 yayinla.bat                        REM derle -> kopyala -> commit -> push (~2 dk sonra yayinda)

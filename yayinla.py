@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 """TTO Trading — siteyi yayına gönder (public depo → GitHub Pages).
 
-Bu depo PRIVATE'tır ve öyle kalır: veri hatları, Research/ altındaki masa
-dokümanları ve git geçmişi burada durur. Yayınlanan tek şey `site/` klasörüdür;
+Bu depo hatların kendisini taşır: veri hatları, Research/ ve git geçmişi burada
+durur. Yayınlanan tek şey `site/` klasörüdür;
 o da ayrı bir PUBLIC depoya kopyalanır (varsayılan: cocoonish.github.io) ve
 oradaki GitHub Actions iş akışı derleyip Pages'e koyar.
 
@@ -15,8 +15,19 @@ oradaki GitHub Actions iş akışı derleyip Pages'e koyar.
   python yayinla.py --depo kullanici/repo --klon /yol/klon
 
 Neden kopyalama: iki depo ayrı kalsın diye. Public depoda yalnız sitenin
-kaynağı ve tek doğrusal geçmiş bulunur; bu depodaki commit geçmişi (eski
-anahtar, özel kontrol görselleri) oraya HİÇ gitmez.
+kaynağı ve tek doğrusal geçmiş bulunur; bu deponun commit geçmişi oraya HİÇ
+gitmez.
+
+GİZLİLİK VARSAYIMI YOK. Bu dosya bir zamanlar "depo PRIVATE'tır ve öyle kalır"
+diyordu ve o varsayıma dayanarak iki şey burada tutuluyordu: X refresh
+token'ının şifreli kopyası (31 sürüm) ve bir ekonomistin günlük kontrol
+görselleri (42 dosya, HEAD'den 20.08'de çıkarılmıştı ama geçmişte duruyordu).
+12.09.2026'da tarihçe yeniden yazılarak ikisi de — işveren üstverisi taşıyan
+masa dokümanlarıyla birlikte, toplam 54 dosya, 756 → 741 commit — depodan
+tamamen çıkarıldı. Sebep: bir gizlilik varsayımı deponun görünürlüğü değiştiği
+gün sessizce çöker, ve o gün HEAD'i temizlemek yetmez; geçmiş de temizlenmeli.
+Kural: buraya PUBLIC olduğu varsayımıyla commit edilir. Sırlar GitHub
+secret'larında durur; hiçbir kimlik bilgisi — şifreli olsa bile — depoya girmez.
 """
 from __future__ import annotations
 
