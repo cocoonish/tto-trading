@@ -54,11 +54,11 @@
   }
  },
  "ihrac_usd.html": {
-  "ay_adet": 54,
-  "toplam_usd_mlr": 203.66501763450717,
-  "son_ay_usd_mlr": 7.24842531805663,
-  "son_kur": 48.0732,
-  "kur_kaynak": "EVDS"
+  "ay_adet": 80,
+  "toplam_usd_mlr": 266.74285823722516,
+  "son_ay_usd_mlr": 7.22232951219734,
+  "son_kur": 48.24689865112305,
+  "kur_kaynak": "Yahoo Finance"
  },
  "ihrac_tempo.html": {
   "ceyrek_adet": 27,
