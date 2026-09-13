@@ -123,11 +123,45 @@ def sekil_02_patika() -> None:
     _yaz(fig, "02_patika.html")
 
 
-def _ileri(t1: float, t2: float) -> float:
+def _par(t: float) -> float:
+    """Par getiri eğrisi, düğümler arasında doğrusal."""
+    v = [x for x, _ in ABD_EGRI]
+    g = [y for _, y in ABD_EGRI]
+    for i in range(len(v) - 1):
+        if v[i] <= t <= v[i + 1]:
+            p = (t - v[i]) / (v[i + 1] - v[i])
+            return g[i] + p * (g[i + 1] - g[i])
+    return g[-1] if t > v[-1] else g[0]
+
+
+def _sifir_egri() -> dict[float, float]:
+    """Par eğrisinden bootstrap edilmiş sıfır getiriler (yarım yıllık düğüm, kupon 2/yıl).
+
+    Hazine'nin yayımladığı eğri PAR getiridir; ileri faiz özdeşliği SIFIR getiri
+    ister. Yukarı eğimli bir eğride par'ı doğrudan kullanmak ileri faizi sistematik
+    olarak küçük gösterir — sapma varsayılmaz, burada ölçülür.
+    """
+    dusum, iskonto = [], {}
+    t = 0.5
+    while t <= 30.0 + 1e-9:
+        dusum.append(round(t, 1))
+        t += 0.5
+    for i, t in enumerate(dusum):
+        k = _par(t) / 200                      # yarım dönem kupon
+        onceki = sum(iskonto[dusum[j]] for j in range(i))
+        iskonto[t] = (1 - k * onceki) / (1 + k)
+    return {t: (d ** (-1 / t) - 1) * 100 for t, d in iskonto.items()}
+
+
+SIFIR = _sifir_egri()
+
+
+def _ileri(t1: float, t2: float, taban: str = "par") -> float:
     """t1 ile t2 arası ima edilen ileri faiz (yıllık bileşik özdeşliği)."""
-    g = dict(ABD_EGRI)
-    a = (1 + g[t1] / 100) ** t1
-    b = (1 + g[t2] / 100) ** t2
+    # İlk kupon döneminden kısa vade TEK nakit akışlıdır, yani zaten sıfır getiridir.
+    g = _par if taban == "par" else (lambda t: _par(t) if t < 0.5 else SIFIR[round(t, 1)])
+    a = (1 + g(t1) / 100) ** t1
+    b = (1 + g(t2) / 100) ** t2
     return ((b / a) ** (1 / (t2 - t1)) - 1) * 100
 
 
@@ -137,6 +171,7 @@ def sekil_03_ileri() -> None:
              (2.0, 10.0, "2 yıl → 10 yıl"), (10.0, 30.0, "10 yıl → 30 yıl")]
     orta = [(a + b) / 2 for a, b, _ in donem]
     ileri = [_ileri(a, b) for a, b, _ in donem]
+    sifir = [_ileri(a, b, "sifir") for a, b, _ in donem]
 
     fig = go.Figure()
     fig.add_hrect(y0=4.70, y1=5.02, fillcolor=MAVI, opacity=0.10, line_width=0,
@@ -151,19 +186,26 @@ def sekil_03_ileri() -> None:
         mode="lines+markers", name="spot getiri eğrisi",
         line=dict(color=GRI, width=1.8), marker=dict(size=7)))
     fig.add_trace(go.Scatter(
-        x=orta, y=ileri, mode="lines+markers+text", name="ima edilen ileri faiz",
+        x=orta, y=ileri, mode="lines+markers+text", name="ileri faiz — par getiriden",
         line=dict(color=CLARET, width=2.4), marker=dict(size=10, symbol="diamond"),
         text=[f"%{o:.2f}".replace(".", ",") for o in ileri],
-        textposition="top center", textfont=dict(size=12)))
+        textposition="bottom center", textfont=dict(size=12)))
+    fig.add_trace(go.Scatter(
+        x=orta, y=sifir, mode="lines+markers+text",
+        name="ileri faiz — bootstrap edilmiş sıfır getiriden",
+        line=dict(color=MUREKKEP, width=1.8, dash="dash"),
+        marker=dict(size=9, symbol="diamond-open"),
+        text=[f"%{o:.2f}".replace(".", ",") for o in sifir],
+        textposition="top center", textfont=dict(size=11, color=MUREKKEP)))
     for o, (_, _, ad) in zip(orta, donem):
         fig.add_annotation(x=o, y=3.95, text=ad, showarrow=False,
                            font=dict(size=10, color=MUREKKEP))
     fig.update_xaxes(type="log", tickvals=[v for v, _ in ABD_EGRI], ticktext=ABD_ETIKET,
                      title_text="vade")
-    fig.update_yaxes(title_text="faiz (%)", range=[3.4, 5.9])
+    fig.update_yaxes(title_text="faiz (%)", range=[3.4, 6.35])
     fig.update_layout(title=dict(
         text="Şekil 03 — İma edilen ileri faizler tepe bandının üzerinde"
-             "<br><sub>11 Eylül 2026 · ileri faiz iki getiriden çıkan bir özdeşliktir, patika varsayımı taşımaz</sub>"))
+             "<br><sub>11 Eylül 2026 · patika varsayımı taşımaz · par tabanı yukarı eğimli eğride ileri faizi KÜÇÜK gösterir</sub>"))
     _yaz(fig, "03_ileri.html")
 
 
