@@ -1,0 +1,24 @@
+# analiz:fed-artirim-dongusu-2026-09-13 · 2026-09-13T12:20:43+00:00 · https://x.com/i/status/2099111022250627354
+
+Analiz — 13 Eylül 2026
+Fed Artırım Döngüsü — eğrinin fiyatladığı tepe, ön ucun kalan alanı ve 10 yıllığın vade primi
+
+11 Eylül'de yayımlanan ağustos tüketici enflasyonunda çekirdek aylık %0,3 ile %0,2'lik beklentiyi aştı ve vadeli piyasa 16 Eylül toplantısı için artırım ihtimalini %90'a yaklaştırdı. Ama asıl bilgi tek bir toplantıda değil eğride: 11 Eylül kapanışında 1 yıllık %4,32 ve 2 yıllık %4,63, gecelik çıpanın (SOFR %3,62) sırasıyla 70 ve 101 baz puan üzerinde. Bu iki gözlemden türetilen ima edilen tepe %4,70 ile %5,02 arasında — yani bugünkü 3,50–3,75 bandından dört ila altı çeyrek puanlık artırım. Haziran nokta grafiğinin medyanı 2027 sonu için değişiklik göstermiyordu; komite ile piyasa arasındaki açık, fiyatlanan döngünün kendisinden büyük. Ve fiyatlamanın dayanağı zayıf bir yerde duruyor: çekirdek yıllık %2,4 ile hedefe yakın, manşeti %3,4'e taşıyan şey Brent'i 107,63 dolara çıkaran enerji şoku. Bir merkez bankasının arz şokuna karşı attığı adım, şok geçtiğinde geri alınır.
+
+BU TOPLANTIDA ARTIRIM GELİR Mİ. Piyasa fiyatlamasına göre büyük olasılıkla evet. 11 Eylül enflasyonundan sonra vadeli fiyatlama %90'a yaklaştı; temmuzda komite 9–3 sabit tutmuş, üç muhalif üyenin üçü de artırımdan yana oy kullanmıştı. Kesinlik değil, fiyatlama.
+
+NEREYE KADAR. Eğrinin ima ettiği tepe %4,70–5,02. Alt uç 2 yıllıkta 20 baz puanlık vade primi varsayımıyla, üst uç vade primi sıfır varsayımıyla çıkıyor. Orta nokta %4,85: bugünkü bandın ortasından (%3,625) yaklaşık beş çeyrek puanlık artırım.
+
+NE ZAMAN. Fiyatlama döngüyü öne yüklüyor: 3 aylık bono %4,01 ile gecelik çıpanın 39 baz puan üzerinde, yani ilk üç ayda bir buçuk adım. 1 yıllık ile 2 yıllık arasındaki 31 baz puanlık fark, ikinci yılda yeni adımdan çok tepede kalmanın fiyatlandığını söylüyor.
+
+ÖN UCUN ALANI KALDI MI. Dar ve asimetrik. 2 yıllık %4,63'ten ima edilen tepeye mesafe 34 baz puan; bugünkü politika faizine geri dönüş mesafesi 101 baz puan. Yukarı alan ancak çekirdeğin manşeti takip ettiği ölçülürse açılır — bugün ölçülen çekirdek bunu söylemiyor.
+
+10 YILLIK DAHA YUKARI GİDEBİLİR Mİ. Mekanik olarak evet, ama sürücü artık politika faizi değil vade primi. %4,98'in içinde kabaca 150 baz puanlık vade primi var; bunu büyütecek üç şey ölçülebilir: rehberliğin kaldırılması, Hazine arzı ve enerji şokunun kalıcılığı.
+
+TÜRKİYE'YE ETKİSİ. İki eğri ters yöne bakıyor. ABD ön ucu artırım fiyatlarken TL eğrisi 2y−9y'de −9,09 puan ters eğimli ve anket 12 ay sonrası politika faizini %29,59 görüyor. Fark hem ABD ucundan hem TL ucundan aynı anda daralıyor.
+
+KANITIN GÜCÜ. Orta. Getiri seviyeleri ve türetim resmî eğriden ölçülü; ima edilen tepe ise vade primi varsayımına duyarlı ve patika biçimine göre ±30 baz puan oynuyor. Vadeli fiyatlama olasılıkları tek bir kaynaktan doğrulanamadı.
+
+Kilit ölçümler — eğriden ima edilen politika faizi tepesi: %4,70–5,02 · 2 yıllık ABD getirisi, 11 Eylül: %4,63 · 10 yıllık ABD getirisi — Ekim 2023'ten beri en yüksek: %4,98 · ağustos çekirdek enflasyonu, yıllık: %2,4 · ağustos manşet enflasyonu, yıllık: %3,4 · Brent, 10 Eylül kapanışı: 107,63 $ · 2 yıllık getirinin gecelik çıpaya farkı: 101 bp · TL eğrisinin 2y−9y eğimi: −9,09 puan
+
+Analizdir; yatırım tavsiyesi değildir.
