@@ -1,23 +1,23 @@
 {
- "kosum": "2026-09-03",
- "son_ay": "2026-06-01",
+ "kosum": "2026-09-13",
+ "son_ay": "2026-07-01",
  "son_ceyrek": "2026-06-30",
- "son_hafta": "2026-08-26",
- "son_gun": "2026-09-03",
+ "son_hafta": "2026-09-09",
+ "son_gun": "2026-09-11",
  "gecikme_gun": {
-  "aylik": 65,
-  "ceyrek": 65,
-  "haftalik": 8,
-  "gunluk": 0
+  "aylik": 44,
+  "ceyrek": 75,
+  "haftalik": 4,
+  "gunluk": 2
  },
  "aylik_seri": 91,
- "aylik_gozlem": 552,
+ "aylik_gozlem": 553,
  "haftalik_seri": 4,
- "haftalik_gozlem": 713,
+ "haftalik_gozlem": 715,
  "ceyrek_seri": 1,
  "ceyrek_gozlem": 126,
  "gunluk_seri": 1,
- "gunluk_gozlem": 7995,
+ "gunluk_gozlem": 8001,
  "birim": {
   "bie_odana6": {
    "ad": "Ödemeler Dengesi-Analitik Sunum",
@@ -94,7 +94,7 @@
  },
  "kimlik": {
   "CA + KA + NHN = FA(rezerv hariç) + Rezerv": {
-   "n": 431,
+   "n": 432,
    "maks_fark": 0.0,
    "maks_tarih": "1975-12-01",
    "son_fark": 0.0,
@@ -103,7 +103,7 @@
    "gecti": true
   },
   "köprü: Q101(rezerv dahil) = Q13(rezerv hariç) + Q33": {
-   "n": 422,
+   "n": 423,
    "maks_fark": 0.0,
    "maks_tarih": "1984-12-01",
    "son_fark": 0.0,
@@ -112,7 +112,7 @@
    "gecti": true
   },
   "ayrıntılı: Q1 + Q99 + Q210 = Q101": {
-   "n": 422,
+   "n": 423,
    "maks_fark": 0.0,
    "maks_tarih": "1984-12-01",
    "son_fark": 0.0,
@@ -121,7 +121,7 @@
    "gecti": true
   },
   "Q01 = Q1 (analitik ↔ ayrıntılı cari)": {
-   "n": 422,
+   "n": 423,
    "maks_fark": 0.0,
    "maks_tarih": "1984-12-01",
    "son_fark": 0.0,
@@ -130,7 +130,7 @@
    "gecti": true
   },
   "Q01 = HARICCARIACIK.K1": {
-   "n": 366,
+   "n": 367,
    "maks_fark": 0.0,
    "maks_tarih": "1996-01-01",
    "son_fark": 0.0,
@@ -139,7 +139,7 @@
    "gecti": true
   },
   "Q31 = Q210 (net hata noksan)": {
-   "n": 422,
+   "n": 423,
    "maks_fark": 0.0,
    "maks_tarih": "1984-12-01",
    "son_fark": 0.0,
@@ -148,7 +148,7 @@
    "gecti": true
   },
   "Q33 = Q34 + Q35 + Q36 (rezerv varlıklar kimliği)": {
-   "n": 431,
+   "n": 432,
    "maks_fark": 0.0,
    "maks_tarih": "1975-12-01",
    "son_fark": 0.0,
@@ -157,7 +157,7 @@
    "gecti": true
   },
   "Q204 = Q34 (ayrıntılı sunum rezerv kalemi)": {
-   "n": 422,
+   "n": 423,
    "maks_fark": 0.0,
    "maks_tarih": "1984-12-01",
    "son_fark": 0.0,
@@ -166,7 +166,7 @@
    "gecti": true
   },
   "Q01 = Q04 + (Q05−Q06) + (Q08−Q09) + Q11": {
-   "n": 431,
+   "n": 432,
    "maks_fark": 0.0,
    "maks_tarih": "1975-12-01",
    "son_fark": 0.0,
@@ -175,7 +175,7 @@
    "gecti": true
   },
   "K10 = K1 − K4 − K7 (çekirdek cari köprüsü)": {
-   "n": 366,
+   "n": 367,
    "maks_fark": 0.010000000000388809,
    "maks_tarih": "2014-03-01",
    "son_fark": 0.0,
@@ -184,7 +184,7 @@
    "gecti": true
   },
   "K4 = K2 − K3 (altın net)": {
-   "n": 366,
+   "n": 367,
    "maks_fark": 0.0,
    "maks_tarih": "1996-01-01",
    "son_fark": 0.0,
@@ -193,16 +193,16 @@
    "gecti": true
   },
   "K7 = K5 − K6 (enerji net)": {
-   "n": 366,
+   "n": 367,
    "maks_fark": 0.010000000001127773,
    "maks_tarih": "2024-02-01",
-   "son_fark": 0.009999999999308784,
+   "son_fark": 0.010000000000218279,
    "birim": "mn USD",
    "esik": 1.0,
    "gecti": true
   },
   "Q13 = Σ(varlık − yükümlülük), rezerv HARİÇ": {
-   "n": 150,
+   "n": 151,
    "maks_fark": 0.0,
    "maks_tarih": "2014-01-01",
    "son_fark": 0.0,
@@ -211,7 +211,7 @@
    "gecti": true
   },
   "bankalar UV: net = kullanım − geri ödeme": {
-   "n": 422,
+   "n": 423,
    "maks_fark": 0.0,
    "maks_tarih": "1984-12-01",
    "son_fark": 0.0,
@@ -220,7 +220,7 @@
    "gecti": true
   },
   "diğer sektörler UV: net = kullanım − geri ödeme": {
-   "n": 422,
+   "n": 423,
    "maks_fark": 0.0,
    "maks_tarih": "1984-12-01",
    "son_fark": 0.0,
@@ -229,7 +229,7 @@
    "gecti": true
   },
   "genel hükümet UV: net = kullanım − geri ödeme": {
-   "n": 422,
+   "n": 423,
    "maks_fark": 0.0,
    "maks_tarih": "1984-12-01",
    "son_fark": 0.0,

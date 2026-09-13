@@ -1,17 +1,17 @@
 {
- "kosum": "2026-09-10T18:54:01",
- "son_gun": "2026-09-10",
- "son_ay": "2026-08-01",
+ "kosum": "2026-09-13T07:43:31",
+ "son_gun": "2026-09-11",
+ "son_ay": "2026-09-01",
  "tarihce_bas": "2013-01-01",
- "istek_sayisi": 209,
- "sure_sn": 799.1,
+ "istek_sayisi": 46,
+ "sure_sn": 193.1,
  "evren": {
   "toplam_kiymet": 6190,
   "nominal_sifir_kuponlu": 860,
   "nominal_fiyati_gelen": 860,
   "tufex_anapara": 20,
   "tufex_fiyati_gelen": 20,
-  "aktif_kuponlu_tahvil": 50,
+  "aktif_kuponlu_tahvil": 48,
   "kupon_oran_kardesi_yok": 0,
   "degisken_kupon_atilan": 0
  },

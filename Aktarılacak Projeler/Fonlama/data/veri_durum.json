@@ -1,23 +1,23 @@
 {
- "kosum": "2026-09-10",
- "kosum_an": "2026-09-10T13:20:39+00:00",
- "son_gun": "2026-09-09",
- "son_hafta": "2026-08-28",
+ "kosum": "2026-09-13",
+ "kosum_an": "2026-09-13T07:40:15+00:00",
+ "son_gun": "2026-09-11",
+ "son_hafta": "2026-09-04",
  "gunluk_seri": 54,
- "gunluk_gozlem": 3943,
+ "gunluk_gozlem": 3944,
  "haftalik_seri": 13,
- "haftalik_gozlem": 713,
+ "haftalik_gozlem": 714,
  "aylik_seri": 3,
  "kimlik": {
   "A24/1000 = −APIFON3": {
-   "n": 3942,
+   "n": 3943,
    "n_pencere": 250,
    "maks_fark": 123523.64000000001,
    "maks_tarih": "2021-12-21",
    "pencere_maks_fark": 4030.475999999908,
-   "pencere_maks_bagil": 0.008266837844522791,
-   "pencere_olcek_medyan": 487547.485,
-   "tam_ortalama_mutlak": 4052.1122512430234,
+   "pencere_maks_bagil": 0.008181123043787868,
+   "pencere_olcek_medyan": 492655.59,
+   "tam_ortalama_mutlak": 4051.084578848592,
    "son_fark": 0.0,
    "birim": "mn TL",
    "esik_bagil": 0.01,
@@ -25,17 +25,17 @@
    "not": "artık kapsam farkıdır (bilançonun APİ kalemi işlemiş faizi de taşır); eşik son 250 iş gününe uygulanır"
   },
   "APIFON3 = A − B": {
-   "n": 3942,
+   "n": 3944,
    "maks_fark": 1.1641532182693481e-10,
    "maks_bagil": 3.5492476166748422e-12,
    "maks_tarih": "2016-09-29",
-   "son_fark": 1.1641532182693481e-10,
+   "son_fark": 0.0,
    "birim": "mn TL",
    "esik_bagil": 1e-06,
    "gecti": true
   },
   "A16 = A17+A18+A21+A22": {
-   "n": 3942,
+   "n": 3943,
    "maks_fark": 1.4901161193847656e-08,
    "maks_bagil": 1.9838399662022157e-16,
    "maks_tarih": "2013-01-02",
@@ -45,7 +45,7 @@
    "gecti": true
   },
   "A18 = A19+A20": {
-   "n": 3942,
+   "n": 3943,
    "maks_fark": 1.0,
    "maks_bagil": 5.273360159169584e-10,
    "maks_tarih": "2024-04-22",
@@ -55,7 +55,7 @@
    "gecti": true
   },
   "A15 = A16+A24+A25": {
-   "n": 3942,
+   "n": 3943,
    "maks_fark": 3.0,
    "maks_bagil": 5.552068239804487e-08,
    "maks_tarih": "2016-03-21",

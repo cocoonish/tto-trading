@@ -1,28 +1,28 @@
 {
- "kosum": "2026-09-03",
+ "kosum": "2026-09-13",
  "esik_mn_usd": 1.0,
  "paneller": [
   {
    "panel": "05a finans hesabı kırılımı",
-   "n": 66,
+   "n": 67,
    "maks_fark": 0.0,
-   "maks_tarih": "2010-03-01",
+   "maks_tarih": "2010-01-01",
    "esik": 1.0,
    "gecti": true
   },
   {
    "panel": "11a finansman ihtiyacı",
-   "n": 66,
+   "n": 67,
    "maks_fark": 0.0,
-   "maks_tarih": "2010-03-01",
+   "maks_tarih": "2010-01-01",
    "esik": 1.0,
    "gecti": true
   },
   {
    "panel": "11b kaynak tablosu",
-   "n": 66,
+   "n": 67,
    "maks_fark": 0.0,
-   "maks_tarih": "2010-03-01",
+   "maks_tarih": "2010-01-01",
    "esik": 1.0,
    "gecti": true
   }
