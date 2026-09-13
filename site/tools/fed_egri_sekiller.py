@@ -107,6 +107,20 @@ def _vir(x: float, basamak: int = 2) -> str:
     return f"{x:.{basamak}f}".replace(".", ",")
 
 
+def _xlog(v: float) -> float:
+    """LOG eksende bir açıklamanın x'i, veri değeri değil LOG10'udur.
+
+    Plotly `add_annotation(x=...)` çağrısını eksenin KENDİ birimiyle okur; log
+    eksende bu birim log10'dur. Ham değer verilince x=30 açıklaması 10^30'a
+    gider, eksen onu kapsamak için otomatik genişler ve gerçek veri (0,25–30)
+    sol uca ezilir — figür "kaymış" görünür ama kusur yerleşimde değil BİRİMDE.
+    İzler ham değer alır, açıklamalar buradan geçer; kapısı `_eksen_denetle`.
+    """
+    import math
+
+    return math.log10(v)
+
+
 def _damga_denetle() -> None:
     """Üretilen figürlerde virgülle bozulmuş tarih kaldıysa DÜŞ.
 
@@ -154,6 +168,42 @@ def _damga_denetle() -> None:
     print("  ✓ damga denetimi: bozuk tarih yok · virgül dönüşümü tek yerde")
 
 
+def _eksen_denetle() -> None:
+    """LOG eksende açıklamalar verinin aralığında mı.
+
+    Aralık dışına düşen bir açıklama ekseni otomatik genişletir ve gerçek veriyi
+    bir köşeye ezer — figür üretilir, koşu yeşil biter, hiçbir sayı yanlış
+    değildir ve okur çizilen şeyi göremez. Ölçüt ÇIKTIYA bakar, çağrı yerine
+    değil: kural yarın başka bir figürde yeniden bozulabilir.
+    """
+    import json
+    import math
+    import re
+
+    kusur = []
+    for y in sorted(CIKTI.glob("*.html")):
+        h = y.read_text(encoding="utf-8")
+        m = re.search(r'Plotly\.newPlot\(\s*"[^"]+",\s*(\[.*?\]),\s*(\{.*?\}),\s*\{"displayModeBar"',
+                      h, re.S)
+        if not m:
+            continue
+        veri, yer = json.loads(m.group(1)), json.loads(m.group(2))
+        if yer.get("xaxis", {}).get("type") != "log":
+            continue
+        xs = [v for t in veri for v in t.get("x", []) if isinstance(v, (int, float))]
+        if not xs:
+            continue
+        alt, ust = math.log10(min(xs)), math.log10(max(xs))
+        for a in yer.get("annotations", []):
+            if a.get("xref") not in (None, "x") or not isinstance(a.get("x"), (int, float)):
+                continue
+            if not (alt - 0.35 <= a["x"] <= ust + 0.35):
+                kusur.append(f"{y.name}: x={a['x']} (veri log aralığı {alt:.2f}–{ust:.2f})")
+    if kusur:
+        raise SystemExit("‼ log eksende aralık dışı açıklama:\n    " + "\n    ".join(kusur))
+    print("  ✓ eksen denetimi: log eksende aralık dışı açıklama yok")
+
+
 def _yaz(fig: go.Figure, ad: str, yukseklik: int = 460) -> None:
     fig.update_layout(
         height=yukseklik, margin=dict(l=64, r=28, t=76, b=64),
@@ -187,7 +237,7 @@ def sekil_01_egri() -> None:
         text=[f"%{_vir(g, 2)}" for _, g in ABD_EGRI],
         textposition="top center", textfont=dict(size=12)))
     for (v, g), et in zip(ABD_EGRI, ABD_ETIKET):
-        fig.add_annotation(x=v, y=SOFR, ay=-18, ax=0, showarrow=False,
+        fig.add_annotation(x=_xlog(v), y=SOFR, ay=-18, ax=0, showarrow=False,
                            text=f"+{round((g - SOFR) * 100)} bp", yshift=-22,
                            font=dict(size=11, color=MAVI))
     fig.update_xaxes(type="log", tickvals=x, ticktext=ABD_ETIKET, title_text="vade")
@@ -274,7 +324,7 @@ def sekil_03_ileri() -> None:
 
     fig = go.Figure()
     fig.add_hrect(y0=4.70, y1=5.02, fillcolor=MAVI, opacity=0.10, line_width=0,
-                  annotation_text="eğriden ima edilen tepe bandı %4,70–5,02",
+                  annotation_text="vade primi VARSAYIMIYLA tepe bandı %4,70–5,02 (2. bölüm)",
                   annotation_position="top left",
                   annotation_font=dict(size=11, color=MAVI))
     fig.add_hline(y=SOFR, line=dict(color=GRI, width=1.4, dash="dot"),
@@ -297,7 +347,7 @@ def sekil_03_ileri() -> None:
         text=[f"%{_vir(o, 2)}" for o in sifir],
         textposition="top center", textfont=dict(size=11, color=MUREKKEP)))
     for o, (_, _, ad) in zip(orta, donem):
-        fig.add_annotation(x=o, y=3.95, text=ad, showarrow=False,
+        fig.add_annotation(x=_xlog(o), y=3.95, text=ad, showarrow=False,
                            font=dict(size=10, color=MUREKKEP))
     fig.update_xaxes(type="log", tickvals=[v for v, _ in ABD_EGRI], ticktext=ABD_ETIKET,
                      title_text="vade")
@@ -324,7 +374,7 @@ def sekil_04_fedwatch() -> None:
                       len=0.55, y=0.5, tickvals=[0, 30, 60, 90]),
         hovertemplate="%{x} · %{y:.3f}%<br>olasılık %{z:.1f}%<extra></extra>"))
     fig.add_hrect(y0=FW_BANT[0], y1=FW_BANT[1], line_width=0, fillcolor=MAVI, opacity=0.16,
-                  annotation_text="eğriden türetilen tepe bandı %4,66–4,89",
+                  annotation_text="ÖLÇÜLEN vade primiyle tepe bandı %4,66–4,89 (3. bölüm)",
                   annotation_position="top left", annotation_font=dict(size=11, color=MAVI))
     fig.add_trace(go.Scatter(
         x=g, y=bekl, mode="lines+markers", name="beklenen (olasılık ağırlıklı) faiz",
@@ -357,14 +407,14 @@ def sekil_05_dagilim() -> None:
         textposition="outside", cliponaxis=False,
         hovertemplate="orta nokta %{x}<br>olasılık %{y:.1f}%<extra></extra>"))
     fig.add_vline(x=mod, line=dict(color=CLARET, width=1.2, dash="dot"))
-    fig.add_annotation(x=mod, y=34, showarrow=False, font=dict(size=12, color=CLARET),
-                       text=f"mod: 4 adım<br>%{_vir(FW_ORTA[mod], 3)}")
+    fig.add_annotation(x=mod, y=36.4, showarrow=False, font=dict(size=12, color=CLARET),
+                       text=f"mod: 4 adım · %{_vir(FW_ORTA[mod], 3)}")
     fig.add_annotation(x=1.4, y=26, showarrow=False, font=dict(size=12, color=GRI),
                        text=f"moddan AŞAĞI<br>toplam %{_vir(alt, 1)}")
     fig.add_annotation(x=6.6, y=26, showarrow=False, font=dict(size=12, color=MAVI),
                        text=f"moddan YUKARI<br>toplam %{_vir(ust, 1)}")
     fig.update_xaxes(title_text="hedef aralık orta noktası (%)")
-    fig.update_yaxes(title_text="olasılık (%)", range=[0, 38])
+    fig.update_yaxes(title_text="olasılık (%)", range=[0, 40])
     fig.update_layout(showlegend=False, title=dict(
         text=("Şekil 05 — Zirvedeki dağılım aşağı doğru geniş, yukarı doğru dar"
               f"<br><sub>15 Eylül 2027 toplantısı · CME FedWatch, {FW_TARIH} · "
@@ -467,4 +517,5 @@ if __name__ == "__main__":
     sekil_08_ayristirma()
     sekil_09_tr_abd()
     _damga_denetle()
+    _eksen_denetle()
     print("  9 şekil yazıldı — ev stili için: python3 site/tools/plotly_stil.py <dosyalar>")
