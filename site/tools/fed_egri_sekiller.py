@@ -51,8 +51,107 @@ TL_EGRI = [(0.25, 37.33), (1.0, 39.07), (2.0, 39.97), (5.0, 35.04), (9.0, 30.53)
 TL_ETIKET = ["3 ay", "1 yıl", "2 yıl", "5 yıl", "9 yıl"]
 TL_POLITIKA = 37.0
 
+
+# CME FedWatch koşullu toplantı olasılıkları, 13.09.2026 okuması.
+# Sütun = hedef aralık (bp); hücre = o toplantıda o aralığın olasılığı (%).
+# HAZİNE EĞRİSİ 11.09, FEDWATCH 13.09 — iki gün ayrık, damga iki parçalı yazılır.
+FW_TARIH = "13.09.2026"
+FW_ARALIK = [(350, 375), (375, 400), (400, 425), (425, 450), (450, 475),
+             (475, 500), (500, 525), (525, 550), (550, 575)]
+FW_ORTA = [(a + b) / 200 for a, b in FW_ARALIK]
+FW = [
+    ("16.09.26", [12.7, 87.3,  0.0,  0.0,  0.0,  0.0, None, None, None]),
+    ("28.10.26", [ 6.5, 51.0, 42.5,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0]),
+    ("09.12.26", [ 2.3, 22.1, 48.0, 27.6,  0.0,  0.0,  0.0,  0.0,  0.0]),
+    ("27.01.27", [ 1.4, 14.4, 37.9, 35.6, 10.8,  0.0,  0.0,  0.0,  0.0]),
+    ("17.03.27", [ 0.6,  6.8, 24.2, 36.9, 25.2,  6.3,  0.0,  0.0,  0.0]),
+    ("28.04.27", [ 0.4,  5.1, 19.4, 33.4, 28.5, 11.5,  1.7,  0.0,  0.0]),
+    ("09.06.27", [ 0.3,  3.6, 14.9, 29.0, 30.0, 16.8,  4.8,  0.5,  0.0]),
+    ("28.07.27", [ 0.3,  3.3, 13.7, 27.5, 29.9, 18.2,  6.1,  1.0,  0.1]),
+    ("15.09.27", [ 0.2,  3.1, 13.1, 26.7, 29.7, 18.9,  6.8,  1.3,  0.1]),
+    ("27.10.27", [ 0.2,  3.1, 13.1, 26.7, 29.7, 18.9,  6.8,  1.3,  0.1]),
+    ("08.12.27", [ 0.5,  3.9, 14.2, 26.9, 28.9, 18.0,  6.4,  1.2,  0.1]),
+]
+# Ölçülen vade primiyle yeniden türetilen tepe bandı (bkz. yazının 3. bölümü).
+FW_BANT = (4.66, 4.89)
+
+
+def fw_beklenen() -> list[float]:
+    """Her toplantı için olasılık ağırlıklı beklenen politika faizi."""
+    return [sum(FW_ORTA[i] * (x / 100) for i, x in enumerate(p) if x is not None)
+            for _, p in FW]
+
+
+def fw_dogrula() -> None:
+    """Her satır %100'e toplamalı — transkripsiyon kapısı, uydurma sayı yayına girmesin."""
+    for g, p in FW:
+        t = sum(x for x in p if x is not None)
+        if abs(t - 100) > 0.35:
+            raise ValueError(f"FedWatch {g}: olasılıklar {t:.1f}% — %100'e toplamıyor")
+
+
+fw_dogrula()
+
 # Ev paleti (site/src/styles/global.css).
 MUREKKEP, CLARET, MAVI, GRI = "#1a1a1a", "#8c2f39", "#2f5d8c", "#8a8a8a"
+
+
+def _vir(x: float, basamak: int = 2) -> str:
+    """Ondalık virgül — YALNIZ sayıya uygulanır.
+
+    `f"...{tarih}...{sayi}".replace(".", ",")` kalıbı bir kez tarihi de bozdu
+    (13.09.2026 → 13,09,2026) ve figür o hâliyle yayına gitti: Python örtük
+    dizge birleştirmesinde metot bütün zincire bağlanıyor. Sayı buradan
+    biçimlenir, dizge zincirine replace UYGULANMAZ; kapısı `_damga_denetle`.
+    """
+    return f"{x:.{basamak}f}".replace(".", ",")
+
+
+def _damga_denetle() -> None:
+    """Üretilen figürlerde virgülle bozulmuş tarih kaldıysa DÜŞ.
+
+    Ölçüt çıktıya bakar, kaynağa değil: aynı kalıp bu dosyada on yerde geçiyor
+    ve biri bir gün yeniden tarihi kapsarsa kaynak taraması onu göremez.
+    """
+    import re
+
+    # (a) ÇIKTI: virgülle bozulmuş tarih — tam (13,09,2026) ve kısa (10,09) hâli.
+    #     Kısa hâl parantez içinde aranır; çıplak "10,09" meşru bir ondalık sayı olabilir.
+    bozuk = []
+    for y in sorted(CIKTI.glob("*.html")):
+        h = y.read_text(encoding="utf-8")
+        if re.search(r"\d{2},\d{2},\d{4}", h) or re.search(r"\(\d{2},\d{2}\)", h):
+            bozuk.append(y.name)
+    if bozuk:
+        raise SystemExit(f"‼ virgülle bozulmuş tarih: {', '.join(bozuk)}")
+
+    # (b) KAYNAK: ham nokta→virgül dönüşümü yalnız _vir içinde kalabilir. Çıktı
+    #     taraması kısa tarihi ancak parantez içinde görebiliyor; kalıbın kendisi
+    #     yasaklanmazsa yarın parantezsiz bir yazımda sessizce geri gelir.
+    #     Soru AST'ye sorulur, metne DEĞİL: ilk yazımda düz metin taraması bu
+    #     kuralı ANLATAN belge dizgesini ve yorumu ihlal saydı — bir kapının
+    #     yanlış alarmı, ölçtüğü kusurla aynı sınıftan bir arızadır.
+    import ast
+
+    agac = ast.parse(Path(__file__).read_text(encoding="utf-8"))
+    disarida = []
+    for dugum in ast.walk(agac):
+        if not (isinstance(dugum, ast.Call)
+                and isinstance(dugum.func, ast.Attribute)
+                and dugum.func.attr == "replace"
+                and len(dugum.args) == 2
+                and all(isinstance(a, ast.Constant) for a in dugum.args)
+                and dugum.args[0].value == "." and dugum.args[1].value == ","):
+            continue
+        icinde = next((f.name for f in ast.walk(agac)
+                       if isinstance(f, ast.FunctionDef)
+                       and f.lineno <= dugum.lineno <= (f.end_lineno or f.lineno)), None)
+        if icinde != "_vir":
+            disarida.append(f"satır {dugum.lineno} ({icinde or 'modül düzeyi'})")
+    if disarida:
+        raise SystemExit(f"‼ _vir dışında ham virgül dönüşümü: {', '.join(disarida)}")
+
+    print("  ✓ damga denetimi: bozuk tarih yok · virgül dönüşümü tek yerde")
 
 
 def _yaz(fig: go.Figure, ad: str, yukseklik: int = 460) -> None:
@@ -80,12 +179,12 @@ def sekil_01_egri() -> None:
     fig = go.Figure()
     fig.add_hrect(y0=BANT[0], y1=BANT[1], fillcolor=GRI, opacity=0.14, line_width=0)
     fig.add_hline(y=SOFR, line=dict(color=GRI, width=1.4, dash="dot"),
-                  annotation_text=f"SOFR %{SOFR:.2f} (10.09)".replace(".", ","),
+                  annotation_text=f"SOFR %{_vir(SOFR, 2)} (10.09)",
                   annotation_position="bottom right")
     fig.add_trace(go.Scatter(
         x=x, y=y, mode="lines+markers+text", name="ABD Hazine eğrisi (11.09.2026)",
         line=dict(color=CLARET, width=2.4), marker=dict(size=9),
-        text=[f"%{g:.2f}".replace(".", ",") for _, g in ABD_EGRI],
+        text=[f"%{_vir(g, 2)}" for _, g in ABD_EGRI],
         textposition="top center", textfont=dict(size=12)))
     for (v, g), et in zip(ABD_EGRI, ABD_ETIKET):
         fig.add_annotation(x=v, y=SOFR, ay=-18, ax=0, showarrow=False,
@@ -119,7 +218,7 @@ def sekil_02_patika() -> None:
     fig.update_xaxes(title_text="bugünden itibaren ay", tickvals=[0, 6, 12, 18, 24])
     fig.update_yaxes(title_text="politika faizi (%)", range=[3.3, 5.4])
     fig.update_layout(title=dict(text="Şekil 02 — Eğriden türetilen ima edilen politika patikası"
-                                      "<br><sub>Gri bant bugünkü hedef aralığı 3,50–3,75 · patika doğrusal varsayımıyla</sub>"))
+                                      "<br><sub>11 Eylül 2026 eğrisinden · gri bant bugünkü hedef aralığı 3,50–3,75 · patika doğrusal varsayımıyla</sub>"))
     _yaz(fig, "02_patika.html")
 
 
@@ -179,7 +278,7 @@ def sekil_03_ileri() -> None:
                   annotation_position="top left",
                   annotation_font=dict(size=11, color=MAVI))
     fig.add_hline(y=SOFR, line=dict(color=GRI, width=1.4, dash="dot"),
-                  annotation_text=f"SOFR %{SOFR:.2f}".replace(".", ","),
+                  annotation_text=f"SOFR %{_vir(SOFR, 2)}",
                   annotation_position="bottom right")
     fig.add_trace(go.Scatter(
         x=[v for v, _ in ABD_EGRI], y=[g for _, g in ABD_EGRI],
@@ -188,14 +287,14 @@ def sekil_03_ileri() -> None:
     fig.add_trace(go.Scatter(
         x=orta, y=ileri, mode="lines+markers+text", name="ileri faiz — par getiriden",
         line=dict(color=CLARET, width=2.4), marker=dict(size=10, symbol="diamond"),
-        text=[f"%{o:.2f}".replace(".", ",") for o in ileri],
+        text=[f"%{_vir(o, 2)}" for o in ileri],
         textposition="bottom center", textfont=dict(size=12)))
     fig.add_trace(go.Scatter(
         x=orta, y=sifir, mode="lines+markers+text",
         name="ileri faiz — bootstrap edilmiş sıfır getiriden",
         line=dict(color=MUREKKEP, width=1.8, dash="dash"),
         marker=dict(size=9, symbol="diamond-open"),
-        text=[f"%{o:.2f}".replace(".", ",") for o in sifir],
+        text=[f"%{_vir(o, 2)}" for o in sifir],
         textposition="top center", textfont=dict(size=11, color=MUREKKEP)))
     for o, (_, _, ad) in zip(orta, donem):
         fig.add_annotation(x=o, y=3.95, text=ad, showarrow=False,
@@ -209,7 +308,71 @@ def sekil_03_ileri() -> None:
     _yaz(fig, "03_ileri.html")
 
 
-def sekil_04_tarihce() -> None:
+def sekil_04_fedwatch() -> None:
+    """Vadeli piyasanın kendi dağılımı: olasılık ısı haritası + beklenen patika."""
+    g = [ad for ad, _ in FW]
+    bekl = fw_beklenen()
+    z = [[(p[i] if i < len(p) and p[i] is not None else None) for _, p in FW]
+         for i in range(len(FW_ORTA))]
+
+    fig = go.Figure()
+    fig.add_trace(go.Heatmap(
+        x=g, y=FW_ORTA, z=z, zmin=0, zmax=90,
+        colorscale=[[0, "#ffffff"], [0.12, "#f0e2e4"], [0.4, "#d09aa1"], [1, CLARET]],
+        xgap=2, ygap=2, hoverongaps=False,
+        colorbar=dict(title=dict(text="olasılık<br>(%)", side="top"), thickness=12,
+                      len=0.55, y=0.5, tickvals=[0, 30, 60, 90]),
+        hovertemplate="%{x} · %{y:.3f}%<br>olasılık %{z:.1f}%<extra></extra>"))
+    fig.add_hrect(y0=FW_BANT[0], y1=FW_BANT[1], line_width=0, fillcolor=MAVI, opacity=0.16,
+                  annotation_text="eğriden türetilen tepe bandı %4,66–4,89",
+                  annotation_position="top left", annotation_font=dict(size=11, color=MAVI))
+    fig.add_trace(go.Scatter(
+        x=g, y=bekl, mode="lines+markers", name="beklenen (olasılık ağırlıklı) faiz",
+        line=dict(color=MUREKKEP, width=2.6), marker=dict(size=7, color=MUREKKEP)))
+    fig.add_hline(y=SOFR, line=dict(color=GRI, width=1.4, dash="dot"),
+                  annotation_text="bugünkü gecelik çıpa", annotation_position="bottom right",
+                  annotation_font=dict(size=11, color=GRI))
+    fig.update_xaxes(title_text="FOMC toplantısı", tickangle=-45)
+    fig.update_yaxes(title_text="hedef aralık orta noktası (%)",
+                     tickvals=FW_ORTA, ticktext=[f"%{_vir(v, 3)}" for v in FW_ORTA])
+    fig.update_layout(title=dict(
+        text="Şekil 04 — Vadeli piyasanın fiyatladığı politika faizi dağılımı"
+             f"<br><sub>CME FedWatch, {FW_TARIH} · renk o toplantıda o aralığın olasılığı · "
+             "siyah çizgi olasılık ağırlıklı beklenti</sub>"))
+    _yaz(fig, "04_fedwatch.html", 520)
+
+
+def sekil_05_dagilim() -> None:
+    """Zirvedeki dağılım SOLA çarpık: aşağı alan yukarı alandan geniş."""
+    _, p = FW[8]                                    # 15.09.2027
+    bekl = fw_beklenen()[8]
+    mod = max(range(len(p)), key=lambda i: p[i] if p[i] is not None else -1)
+    alt = sum(x for i, x in enumerate(p) if x and i < mod)
+    ust = sum(x for i, x in enumerate(p) if x and i > mod)
+
+    renk = [GRI if i < mod else (CLARET if i == mod else MAVI) for i in range(len(p))]
+    fig = go.Figure(go.Bar(
+        x=[f"%{_vir(v, 3)}" for v in FW_ORTA], y=p, marker_color=renk,
+        text=[f"%{_vir(x, 1)}" if x else "" for x in p],
+        textposition="outside", cliponaxis=False,
+        hovertemplate="orta nokta %{x}<br>olasılık %{y:.1f}%<extra></extra>"))
+    fig.add_vline(x=mod, line=dict(color=CLARET, width=1.2, dash="dot"))
+    fig.add_annotation(x=mod, y=34, showarrow=False, font=dict(size=12, color=CLARET),
+                       text=f"mod: 4 adım<br>%{_vir(FW_ORTA[mod], 3)}")
+    fig.add_annotation(x=1.4, y=26, showarrow=False, font=dict(size=12, color=GRI),
+                       text=f"moddan AŞAĞI<br>toplam %{_vir(alt, 1)}")
+    fig.add_annotation(x=6.6, y=26, showarrow=False, font=dict(size=12, color=MAVI),
+                       text=f"moddan YUKARI<br>toplam %{_vir(ust, 1)}")
+    fig.update_xaxes(title_text="hedef aralık orta noktası (%)")
+    fig.update_yaxes(title_text="olasılık (%)", range=[0, 38])
+    fig.update_layout(showlegend=False, title=dict(
+        text=("Şekil 05 — Zirvedeki dağılım aşağı doğru geniş, yukarı doğru dar"
+              f"<br><sub>15 Eylül 2027 toplantısı · CME FedWatch, {FW_TARIH} · "
+              f"ortalama %{_vir(bekl)} mod'un altında kalıyor</sub>")))
+    _yaz(fig, "05_dagilim.html", 470)
+
+
+def sekil_06_tarihce() -> None:
     """Ağustos sonundan eylül ortasına eğrinin kayması."""
     g = [t[0] for t in TARIHCE]
     fig = go.Figure()
@@ -221,12 +384,12 @@ def sekil_04_tarihce() -> None:
     fig.update_xaxes(title_text="bülten sayısının günü")
     fig.update_yaxes(title_text="getiri (%)")
     fig.update_layout(title=dict(
-        text="Şekil 04 — Eğri ağustos sonundan bu yana yukarı kaydı"
-             "<br><sub>Ölçüm bir önceki kapanışa aittir · 2 yıllık seri sapmalı olduğu için dışarıda</sub>"))
-    _yaz(fig, "04_tarihce.html")
+        text="Şekil 06 — Eğri ağustos sonundan bu yana yukarı kaydı"
+             "<br><sub>22 Ağustos – 10 Eylül 2026 · ölçüm bir önceki kapanışa aittir · 2 yıllık seri sapmalı olduğu için dışarıda</sub>"))
+    _yaz(fig, "06_tarihce.html")
 
 
-def sekil_05_senaryo() -> None:
+def sekil_07_senaryo() -> None:
     """2 yıllık getirinin senaryo yelpazesi: yukarı dar, aşağı geniş."""
     senaryo = [
         ("Fiyatlama tamamen geri alınır", -93),
@@ -246,12 +409,12 @@ def sekil_05_senaryo() -> None:
     fig.update_xaxes(title_text="2 yıllık getiride değişim (baz puan)", range=[-115, 65])
     fig.update_yaxes(title_text="")
     fig.update_layout(showlegend=False, margin=dict(l=250),
-                      title=dict(text="Şekil 05 — 2 yıllık getirinin senaryo yelpazesi"
+                      title=dict(text="Şekil 07 — 2 yıllık getirinin senaryo yelpazesi"
                                       "<br><sub>Çıpa: %4,63 (11.09.2026) · yukarı alan 7–42 bp, aşağı alan 48–93 bp</sub>"))
-    _yaz(fig, "05_senaryo.html", 440)
+    _yaz(fig, "07_senaryo.html", 440)
 
 
-def sekil_06_ayristirma() -> None:
+def sekil_08_ayristirma() -> None:
     """10 yıllığın içinde politika beklentisi ile vade primi."""
     fig = go.Figure()
     fig.add_trace(go.Bar(x=["10 yıllık getiri"], y=[3.50], name="beklenen ortalama gecelik faiz (~%3,50)",
@@ -259,15 +422,15 @@ def sekil_06_ayristirma() -> None:
     fig.add_trace(go.Bar(x=["10 yıllık getiri"], y=[1.48], name="artık: vade primi (~148 bp)",
                          marker_color=CLARET, text=["148 bp"], textposition="inside"))
     fig.update_layout(barmode="stack", bargap=0.62,
-                      title=dict(text="Şekil 06 — %4,98'in içinde ne var"
-                                      "<br><sub>Nötr faiz %3,00–3,50 varsayımından artık olarak · ±50 bp hata payı</sub>"))
+                      title=dict(text="Şekil 08 — %4,98'in içinde ne var"
+                                      "<br><sub>11 Eylül 2026 · nötr faiz %3,00–3,50 varsayımından artık olarak · ±50 bp hata payı</sub>"))
     fig.update_yaxes(title_text="getiri (%)", range=[0, 5.6])
     fig.add_annotation(x=0, y=4.98, text="%4,98", showarrow=False, yshift=16,
                        font=dict(size=14, color=MUREKKEP))
-    _yaz(fig, "06_ayristirma.html", 440)
+    _yaz(fig, "08_ayristirma.html", 440)
 
 
-def sekil_07_tr_abd() -> None:
+def sekil_09_tr_abd() -> None:
     """İki eğri ters yöne bakıyor."""
     fig = make_subplots(rows=1, cols=2, horizontal_spacing=0.13,
                         subplot_titles=("ABD — yukarı eğimli (artırım fiyatlanıyor)",
@@ -287,9 +450,9 @@ def sekil_07_tr_abd() -> None:
     fig.update_yaxes(title_text="getiri (%)", range=[3.3, 5.7], row=1, col=1)
     fig.update_yaxes(title_text="getiri (%)", range=[28, 42], row=1, col=2)
     fig.update_layout(showlegend=False,
-                      title=dict(text="Şekil 07 — İki eğri ters yöne bakıyor"
+                      title=dict(text="Şekil 09 — İki eğri ters yöne bakıyor"
                                       "<br><sub>ABD 11.09.2026 · TL 10.09.2026 · kesikli çizgiler gecelik çıpa ve politika faizi</sub>"))
-    _yaz(fig, "07_tr_abd.html", 480)
+    _yaz(fig, "09_tr_abd.html", 480)
 
 
 if __name__ == "__main__":
@@ -297,8 +460,11 @@ if __name__ == "__main__":
     sekil_01_egri()
     sekil_02_patika()
     sekil_03_ileri()
-    sekil_04_tarihce()
-    sekil_05_senaryo()
-    sekil_06_ayristirma()
-    sekil_07_tr_abd()
-    print("  7 şekil yazıldı — ev stili için: python3 site/tools/plotly_stil.py <dosyalar>")
+    sekil_04_fedwatch()
+    sekil_05_dagilim()
+    sekil_06_tarihce()
+    sekil_07_senaryo()
+    sekil_08_ayristirma()
+    sekil_09_tr_abd()
+    _damga_denetle()
+    print("  9 şekil yazıldı — ev stili için: python3 site/tools/plotly_stil.py <dosyalar>")
