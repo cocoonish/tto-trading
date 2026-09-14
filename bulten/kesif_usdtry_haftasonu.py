@@ -56,97 +56,147 @@ def cek(bas: dt.date) -> pd.Series:
     raise SystemExit("ENGEL · ölçüm yapılamadı — " + " | ".join(hatalar[-4:]))
 
 
+def yol(ad: str, fn, bas: dt.date) -> pd.Series | None:
+    """Tek bir ucu dener; düşerse None döner — ölçüm öbür yolu kaybetmez."""
+    import time
+    for deneme, bekle in enumerate((0,) + BEKLEME, start=1):
+        if bekle:
+            print(f"    {bekle} sn bekleniyor (deneme {deneme})…")
+            time.sleep(bekle)
+        try:
+            s = fn(bas, BUGUN + dt.timedelta(days=1))
+            print(f"  {ad}: {len(s)} gözlem · {s.index[0].date()} → "
+                  f"{s.index[-1].date()} (deneme {deneme})")
+            return s
+        except Exception as e:  # noqa: BLE001
+            m = f"{type(e).__name__}: {e}"
+            print(f"  {ad} düştü (deneme {deneme}): {m[:150]}")
+            if isinstance(e, ModuleNotFoundError):
+                return None
+    return None
+
+
+def haftasonu(ad: str, s: pd.Series) -> None:
+    hs = s[s.index.dayofweek >= 5]
+    print(f"  {ad}: hafta sonu barı {len(hs)} / {len(s)} "
+          f"({100 * len(hs) / len(s):.2f}%)")
+    if not len(hs):
+        return
+    yil = hs.groupby(hs.index.year).size()
+    print("    yıla göre:", ", ".join(f"{y}:{n}" for y, n in yil.items()))
+    gunad = {5: "Cmt", 6: "Paz"}
+    gun = hs.groupby(hs.index.dayofweek).size()
+    print("    güne göre:", ", ".join(f"{gunad[g]}:{n}" for g, n in gun.items()))
+    ayni = fark = 0
+    farklar = []
+    for t in hs.index:
+        onceki = s.loc[:t].iloc[:-1]
+        if not len(onceki):
+            continue
+        o, y = float(onceki.iloc[-1]), float(s.loc[t])
+        if abs(y - o) < 1e-9:
+            ayni += 1
+        else:
+            fark += 1
+            farklar.append((t.date(), o, y, 100 * (y / o - 1)))
+    print(f"    önceki barla birebir AYNI: {ayni} · FARKLI: {fark}")
+    if farklar:
+        fs = pd.Series([f[3] for f in farklar])
+        print(f"    fark (%): medyan {fs.median():+.4f} · azami "
+              f"|{fs.abs().max():.4f}|")
+    print("    son 12:")
+    for t, v in hs.tail(12).items():
+        print(f"      {t.date()} {gunad[t.dayofweek]}  {v:.4f}")
+
+
 def main() -> int:
     print("=" * 64)
     print(f"USD/TRY hafta sonu barı keşfi · {BUGUN}")
     print("=" * 64)
+    print("\nSORU: yayımlanan sayfa 12.09.2026 (CUMARTESİ) damgası ve 48,55")
+    print("taşıyor; bugünkü koşu 11.09 · 48,59 verdi ve gerileme kapısı düştü.")
+    print("Cumartesi barı hangi UÇTAN geliyor — ve gerçek bir kotasyon mu?\n")
 
-    # (0) HAM seri — yükleyicinin süzgeçlerinden GEÇMEDEN.
-    print("\n[0] Ham seri (2015 →):")
-    s = cek(dt.date(2015, 1, 1))
-    print(f"  kapsam {s.index[0].date()} → {s.index[-1].date()}")
+    bas = dt.date(2015, 1, 1)
+    print("[0] İKİ UÇ AYRI AYRI (üretim chart ucunu kullanıyor, keşif yfinance'i):")
+    a = yol("yfinance ", U._yfinance_cek, bas)
+    b = yol("chart ucu", U._chart_cek, bas)
+    if a is None and b is None:
+        raise SystemExit("ENGEL · iki uç da düştü — ölçüm yapılamadı")
 
-    # (1) Hafta sonu barlarının sayımı ve yıl dağılımı.
-    hs = s[s.index.dayofweek >= 5]
-    print(f"\n[1] Hafta sonu barı: {len(hs)} / {len(s)} "
-          f"({100 * len(hs) / len(s):.2f}%)")
-    if len(hs):
-        yil = hs.groupby(hs.index.year).size()
-        print("  yıla göre:", ", ".join(f"{y}:{n}" for y, n in yil.items()))
-        gun = hs.groupby(hs.index.dayofweek).size()
-        ad = {5: "Cmt", 6: "Paz"}
-        print("  güne göre:", ", ".join(f"{ad[g]}:{n}" for g, n in gun.items()))
-        print("  son 15:")
-        for t, v in hs.tail(15).items():
-            print(f"    {t.date()} {ad[t.dayofweek]}  {v:.4f}")
+    print("\n[1] Hafta sonu barı, UÇ BAŞINA:")
+    for ad, s in (("yfinance ", a), ("chart ucu", b)):
+        if s is None:
+            print(f"  {ad}: ÖLÇÜLEMEDİ (uç düştü)")
+        else:
+            haftasonu(ad, s)
 
-    # (2) Hafta sonu barı önceki iş gününün kapanışıyla AYNI mı?
-    #     Aynıysa bayat tekrar; farklıysa gerçek bir kotasyon penceresi.
-    print("\n[2] Hafta sonu barı önceki barla aynı mı:")
-    if len(hs):
-        ayni = fark = 0
-        farklar = []
-        for t in hs.index:
-            onceki = s.loc[:t].iloc[:-1]
-            if not len(onceki):
-                continue
-            o = float(onceki.iloc[-1])
-            y = float(s.loc[t])
-            if abs(y - o) < 1e-9:
-                ayni += 1
-            else:
-                fark += 1
-                farklar.append((t.date(), o, y, 100 * (y / o - 1)))
-        print(f"  birebir aynı: {ayni} · farklı: {fark}")
-        if farklar:
-            fs = pd.Series([f[3] for f in farklar])
-            print(f"  fark (%): medyan {fs.median():+.4f} · "
-                  f"ortalama {fs.mean():+.4f} · azami |{fs.abs().max():.4f}|")
-            print("  son 10 farklı:")
-            for d, o, y, p in farklar[-10:]:
-                print(f"    {d}  {o:.4f} → {y:.4f}  ({p:+.4f}%)")
-    else:
-        print("  hafta sonu barı yok")
-
-    # (3) Tartışmanın kaynağı: 12.09.2026 barı ŞU AN duruyor mu?
-    print("\n[3] 12.09.2026 (Cumartesi) barı:")
+    print("\n[2] 12.09.2026 (Cumartesi) barı:")
     hedef = pd.Timestamp("2026-09-12")
-    print(f"  şu anki seride: {'VAR ' + format(float(s.loc[hedef]), '.4f') if hedef in s.index else 'YOK'}")
-    print("  son 10 gün:")
-    for t, v in s.tail(10).items():
-        print(f"    {t.date()} {t.strftime('%a')}  {v:.4f}")
+    for ad, s in (("yfinance ", a), ("chart ucu", b)):
+        if s is None:
+            print(f"  {ad}: ÖLÇÜLEMEDİ")
+        elif hedef in s.index:
+            print(f"  {ad}: VAR · {float(s.loc[hedef]):.4f}")
+        else:
+            print(f"  {ad}: YOK")
 
-    # (4) ETKİ: hafta sonu barı yıllıklandırılmış hızı ne kadar oynatır?
-    #     Sayfa 1 aylık ve 3 aylık devalüasyon hızını basıyor.
-    print("\n[4] Hafta sonu barının yıllıklandırılmış hıza etkisi:")
+    print("\n[3] İki uç birbirinden ayrışıyor mu:")
+    if a is not None and b is not None:
+        sadece_a = a.index.difference(b.index)
+        sadece_b = b.index.difference(a.index)
+        print(f"  yalnız yfinance'te: {len(sadece_a)} gün"
+              + (f" → {[str(x.date()) for x in sadece_a[-8:]]}" if len(sadece_a) else ""))
+        print(f"  yalnız chart ucunda: {len(sadece_b)} gün"
+              + (f" → {[str(x.date()) for x in sadece_b[-8:]]}" if len(sadece_b) else ""))
+        ortak = a.index.intersection(b.index)
+        d = (a.loc[ortak] - b.loc[ortak]).abs()
+        buyuk = d[d > 1e-6]
+        print(f"  ortak {len(ortak)} günün {len(buyuk)}'inde değer farklı")
+        for t in buyuk.index[-8:]:
+            print(f"    {t.date()}  yf {float(a.loc[t]):.4f} · chart "
+                  f"{float(b.loc[t]):.4f}")
+    else:
+        print("  iki uç birden ölçülemedi — kıyas YOK")
+
+    print("\n[4] Son 12 gün (uç uca):")
+    for ad, s in (("yfinance ", a), ("chart ucu", b)):
+        if s is None:
+            continue
+        print(f"  {ad}:")
+        for t, v in s.tail(12).items():
+            print(f"    {t.date()} {t.strftime('%a')}  {v:.4f}")
+
+    print("\n[5] Hafta içi kapsam (bir hafta içi süzgeci ne kaybettirir):")
+    for ad, s in (("yfinance ", a), ("chart ucu", b)):
+        if s is None:
+            continue
+        temiz = s[s.index.dayofweek < 5]
+        ilk, son = temiz.index[0].date(), temiz.index[-1].date()
+        bekl = len(pd.bdate_range(ilk, son))
+        print(f"  {ad}: hafta içi {len(temiz)} · düşen {len(s) - len(temiz)} · "
+              f"iş günü {bekl} ({100 * len(temiz) / bekl:.1f}%)")
+
+    print("\n[6] Yıllıklandırılmış hıza etkisi (varsa):")
 
     def hiz(seri: pd.Series, gun: int) -> float:
-        if len(seri) < 2:
-            return float("nan")
         son = seri.index[-1]
-        hedef_gun = son - pd.Timedelta(days=gun)
-        onceki = seri.loc[:hedef_gun]
+        onceki = seri.loc[:son - pd.Timedelta(days=gun)]
         if not len(onceki):
             return float("nan")
         bas_t, bas_v = onceki.index[-1], float(onceki.iloc[-1])
         n = (son - bas_t).days
-        if n <= 0:
-            return float("nan")
-        return 100 * ((float(seri.iloc[-1]) / bas_v) ** (365 / n) - 1)
+        return float("nan") if n <= 0 else \
+            100 * ((float(seri.iloc[-1]) / bas_v) ** (365 / n) - 1)
 
-    temiz = s[s.index.dayofweek < 5]
-    for gun, ad2 in ((30, "1 aylık"), (90, "3 aylık")):
-        a, b = hiz(s, gun), hiz(temiz, gun)
-        print(f"  {ad2}: hafta sonu dahil {a:.2f}% · yalnız hafta içi {b:.2f}% "
-              f"· fark {a - b:+.2f} puan")
-
-    # (5) Süzgecin bedeli: hafta içi barı YANLIŞLIKLA düşürür mü?
-    print("\n[5] Hafta içi kapsam (süzgeç konursa ne kaybedilir):")
-    print(f"  hafta içi gözlem: {len(temiz)} · düşen: {len(s) - len(temiz)}")
-    ilk, son = temiz.index[0].date(), temiz.index[-1].date()
-    bekl = len(pd.bdate_range(ilk, son))
-    print(f"  {ilk} → {son} arası iş günü {bekl}, elde {len(temiz)} "
-          f"({100 * len(temiz) / bekl:.1f}%)")
+    for ad, s in (("yfinance ", a), ("chart ucu", b)):
+        if s is None:
+            continue
+        temiz = s[s.index.dayofweek < 5]
+        for gun, etiket in ((30, "1 aylık"), (90, "3 aylık")):
+            x, y = hiz(s, gun), hiz(temiz, gun)
+            print(f"  {ad} {etiket}: ham {x:.2f}% · hafta içi {y:.2f}% "
+                  f"· fark {x - y:+.2f} puan")
     return 0
 
 
