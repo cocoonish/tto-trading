@@ -356,11 +356,28 @@ def _kucuk_coklu(kay: dict, baslik: str, alt: str, paneller: list[dict],
     """
     n = len(paneller)
     satir = (n + sutun - 1) // sutun
+    # PANEL GENİŞLİKLERİ EŞİTLENİR. Farklı bar sayısı taşıyan paneller aynı
+    # figürde yan yana çizilince çubuk genişliği panelden panele değişir ve
+    # okur bunu VERİ farkı sanar — dar çubuklu panel "daha sıkışık bir piyasa"
+    # gibi görünür. Çıpa korunarak pencere iki yana büyütülür; seri kenarına
+    # dayanınca kalan pay öbür yandan alınır.
+    hedef = max(p["son"] - p["bas"] for p in paneller)
+    for p in paneller:
+        boy = len(kay[p["seri"]].seri)
+        eksik = hedef - (p["son"] - p["bas"])
+        if eksik <= 0:
+            continue
+        sol = min(eksik // 2, p["bas"])
+        sag = eksik - sol
+        p["bas"] -= sol
+        p["son"] += sag
+        if p["son"] > boy:                      # sağa sığmadı, soldan al
+            p["bas"] = max(0, p["bas"] - (p["son"] - boy))
+            p["son"] = boy
     bar = {p["son"] - p["bas"] for p in paneller}
     if len(bar) > 1:
-        # Sessizce farklı genişlik çizmektense adıyla söyle: eşitlenmeli.
-        print(f"  ! panel bar sayıları eşit değil: {sorted(bar)} — çubuk "
-              f"genişliği panelden panele değişecek")
+        # Seri kenarına dayanmış: eşitlenemedi, adıyla söylenir.
+        print(f"  ! panel bar sayıları eşitlenemedi: {sorted(bar)} — seri kenarı")
     fig = make_subplots(
         rows=satir, cols=sutun, vertical_spacing=0.14, horizontal_spacing=0.05,
         subplot_titles=[p["etiket"] for p in paneller])
@@ -1023,6 +1040,463 @@ def sekil_ayni_kurulum(kay: dict, no: str) -> Path:
     return _yaz(fig, f"{no}_ayni_kurulum.html")
 
 
+def sekil_bar_sozlugu(kay: dict, no: str) -> Path:
+    """BAR SÖZLÜĞÜ — dört sınıf, ve sınıfın AYIRT EDEMEDİĞİ şey.
+
+    Bölüm okura üç sayı veriyor (gövde menzilin %50'si · %75'i · %10'u) ve tek
+    bir resim vermiyor; yani eşiği gerçek bir bara uygulanmış hâlde hiç
+    görmüyor. İkinci panel sınıfın SINIRINI gösteriyor: aynı sınıf, aynı gövde
+    oranı, zıt kapanış yeri — etiket bu iki barı ayırt edemiyor.
+    """
+    # ── Panel ①: DÖRT SINIF TEK PENCEREDE ────────────────────────────────
+    # Tek pencere şart: sınıflar ayrı ayrı gösterilse okur ölçek farkını
+    # sınıf farkı sanardı. Aynı pencere, aynı fiyat ekseni, aynı enstrüman.
+    SINIFLAR = ("güçlü trend", "trend", "ara", "doji")
+    medyan: dict[str, float] = {}
+    havuz: dict[str, list[float]] = {s: [] for s in SINIFLAR}
+    for k in kay.values():
+        fp = R.FiyatPaneli(k.seri)
+        for i in range(int(R.SABIT_FH["maUzunluk"]), len(k.seri)):
+            s_ad = fp.sinif(i)
+            if s_ad in havuz:
+                havuz[s_ad].append(fp.govde_orani(i))
+    for s_ad, v in havuz.items():
+        medyan[s_ad] = sorted(v)[len(v) // 2] if v else float("nan")
+
+    PENCERE = 24
+    en_iyi = None
+    for ank, k in kay.items():
+        s = k.seri
+        fp = R.FiyatPaneli(s)
+        bas0 = int(R.SABIT_FH["maUzunluk"])
+        for b in range(bas0, len(s) - PENCERE):
+            pen = range(b, b + PENCERE)
+            temsil: dict[str, tuple[float, int]] = {}
+            for i in pen:
+                s_ad = fp.sinif(i)
+                if s_ad not in SINIFLAR:
+                    continue
+                d = abs(fp.govde_orani(i) - medyan[s_ad])
+                if s_ad not in temsil or d < temsil[s_ad][0]:
+                    temsil[s_ad] = (d, i)
+            if len(temsil) < 4:
+                continue
+            # Sınıfının MEDYANINA en yakın dörtlüyü taşıyan pencere: seçilen
+            # barlar sınıfının sınırında değil ORTASINDA olsun, yoksa okur
+            # eşiği değil bir istisnayı öğrenir.
+            skor = sum(d for d, _ in temsil.values())
+            if en_iyi is None or skor < en_iyi[0]:
+                en_iyi = (skor, ank, b, {a: i for a, (_, i) in temsil.items()})
+    if en_iyi is None:
+        raise SystemExit("ENGEL · dört sınıfı birden taşıyan pencere yok — "
+                         "sözlük bu veriyle tek pencerede kurulamıyor")
+    _, ANK1, b1, sec = en_iyi
+    s1 = kay[ANK1].seri
+    fp1 = R.FiyatPaneli(s1)
+    isaret1 = []
+    for s_ad in SINIFLAR:
+        i = sec[s_ad]
+        renk = MAVI if s1.c[i] > s1.o[i] else CLARET if s1.c[i] < s1.o[i] else GRI
+        isaret1.append((i, f"{s_ad}<br>{B.sayi(fp1.govde_orani(i), 2)}", True, renk))
+
+    # ── Panel ②: AYNI SINIF, AYNI GÖVDE, ZIT KAPANIŞ ────────────────────
+    cift = None
+    for ank, k in kay.items():
+        s = k.seri
+        fp = R.FiyatPaneli(s)
+        menziller = sorted(fp.menzil(i) for i in range(len(s)))
+        med_menzil = menziller[len(menziller) // 2]
+        for i in range(int(R.SABIT_FH["maUzunluk"]) + 1, len(s)):
+            j = i - 1
+            if fp.sinif(i) != fp.sinif(j):
+                continue
+            if (s.c[i] > s.o[i]) != (s.c[j] > s.o[j]):
+                continue                      # aynı YÖN: fark yalnız kapanışta olsun
+            if abs(fp.govde_orani(i) - fp.govde_orani(j)) > 0.03:
+                continue
+            fark = abs(fp.kapanis_yeri(i) - fp.kapanis_yeri(j))
+            if fark < 0.32 or min(fp.menzil(i), fp.menzil(j)) < med_menzil:
+                continue
+            if cift is None or fark > cift[0]:
+                cift = (fark, ank, j, i)
+    if cift is None:
+        raise SystemExit("ENGEL · aynı sınıf + aynı gövde oranı + zıt kapanış yeri "
+                         "taşıyan bitişik çift yok")
+    _, ANK2, j2, i2 = cift
+    s2 = kay[ANK2].seri
+    fp2 = R.FiyatPaneli(s2)
+    isaret2 = [(x, f"kapanış %{B.sayi(100 * fp2.kapanis_yeri(x), 0)}",
+                fp2.kapanis_yeri(x) >= 0.5, CLARET if fp2.kapanis_yeri(x) < 0.5 else MAVI)
+               for x in (j2, i2)]
+
+    ad1 = O.ENSTRUMAN_AD.get(ANK1.rsplit("-", 1)[0], ANK1)
+    ad2 = O.ENSTRUMAN_AD.get(ANK2.rsplit("-", 1)[0], ANK2)
+    paneller = [
+        dict(etiket="① Dört sınıf TEK pencerede — eşik barın kendi oranıdır",
+             seri=ANK1, bas=b1, son=b1 + PENCERE, vurgu=sorted(sec.values()),
+             isaret=isaret1,
+             not_=f"{ad1} · {_an(s1.zaman[b1])} → {_an(s1.zaman[b1 + PENCERE - 1])} — "
+                  "dördü de aynı fiyat ekseninde"),
+        dict(etiket="② Aynı sınıf, aynı gövde oranı — ZIT kapanış yeri",
+             seri=ANK2, bas=i2 - 9, son=i2 + 4, vurgu=[j2, i2], isaret=isaret2,
+             not_=f"{ad2} · {_an(s2.zaman[i2])} — sınıf ikisine de "
+                  f"'{fp2.sinif(i2)}' diyor, gövde oranı farkı "
+                  f"{B.sayi(abs(fp2.govde_orani(i2) - fp2.govde_orani(j2)), 3)}"),
+    ]
+    esik = R.SABIT_FH
+    fig = _kucuk_coklu(
+        kay, f"Şekil {no} · Bar sözlüğü: dört sınıf, ve sınıfın ayırt EDEMEDİĞİ şey",
+        f"Sınıfı belirleyen barın büyüklüğü değil GÖVDE/MENZİL oranı: güçlü trend "
+        f"≥ {B.sayi(esik['gucluGovde'], 2)} · trend ≥ {B.sayi(esik['trendGovde'], 2)} · "
+        f"doji ≤ {B.sayi(esik['dojiGovde'], 2)}, arası 'ara'. Soldaki dört bar sınıfının "
+        "MEDYANINA en yakın olanlar, yani sınırda değil ortasında. Sağdaki panel sınıfın "
+        "sınırını gösteriyor: iki bar aynı etiketi ve neredeyse aynı gövde oranını "
+        "taşıyor, ayıran tek şey kapanışın menzil içindeki yeri — sınıf onları ayırt "
+        "edemiyor, o yüzden indikatör ikisini AYRI satırda yazar",
+        paneller, sutun=2, panel_yuk=300)
+    return _yaz(fig, f"{no}_bar_sozlugu.html")
+
+
+def sekil_bar_sayimi(kay: dict, no: str) -> Path:
+    """GERİ ÇEKİLMEYİ SAYMAK — ve sayacın nerede SIFIRLANDIĞI.
+
+    Sayım bir dizi değil bir DURUM (Pine'da `var int hSayac`) ve bir durumun
+    sıfırlanması düz yazıyla anlatılamaz; barların üstünde görünür. Cevabın
+    yarısı sayının kendisi değil, sayacın ne zaman sıfırlandığıdır.
+    """
+    # Panel A: TAM BİR TUR — H1→H4 ve ardından yeni bacak zirvesiyle sıfır.
+    # Panel B: H4 bir TAVAN — sayaç 4'ün üstüne çıkar, etiket H4'te kalır.
+    A = B_ = None
+    for ank, k in kay.items():
+        s = k.seri
+        fp = R.FiyatPaneli(s)
+        et = fp.bar_sayimi()
+        sayac = fp.bar_sayaci()
+        for i in range(int(R.SABIT_FH["maUzunluk"]) + 6, len(s) - 3):
+            if et[i] != "H4":
+                continue
+            # geriye doğru H3-H2-H1 var mı
+            gerek = ["H3", "H2", "H1"]
+            yer, bul = i - 1, []
+            while yer > 0 and gerek:
+                if et[yer] == gerek[0]:
+                    bul.append(yer)
+                    gerek.pop(0)
+                elif et[yer] in ("H4", "H3", "H2", "H1"):
+                    break
+                yer -= 1
+            if gerek:
+                continue
+            h1 = bul[-1]
+            # A: bu turdan SONRA sayaç sıfırlanıyor mu (yeni bacak zirvesi)
+            sifir = next((j for j in range(i + 1, min(i + 8, len(s)))
+                          if sayac[j] == "H0"), None)
+            if A is None and sifir is not None and h1 - 4 >= 0:
+                A = (ank, h1, i, sifir, bul[::-1])
+            # B: aynı turdan sonra H4 ETİKETİ tekrar ediyor mu (sayaç >4)
+            tekrar = [j for j in range(i + 1, min(i + 10, len(s))) if et[j] == "H4"]
+            if B_ is None and len(tekrar) >= 2:
+                B_ = (ank, h1, i, tekrar)
+        if A and B_:
+            break
+    if A is None:
+        raise SystemExit("ENGEL · H1→H4 turu ve ardından sıfırlanma taşıyan pencere yok")
+    if B_ is None:
+        raise SystemExit("ENGEL · H4 etiketinin tekrar ettiği (sayaç > 4) pencere yok")
+
+    paneller = []
+    ankA, h1A, h4A, sifA, tur = A
+    sA = kay[ankA].seri
+    fpA = R.FiyatPaneli(sA)
+    etA = fpA.bar_sayimi()
+    isA = [(j, etA[j], True, MAVI) for j in tur + [h4A]]
+    isA.append((sifA, "YENİ BACAK ZİRVESİ → sayaç SIFIR", True, CLARET))
+    paneller.append(dict(
+        etiket="A · Tam bir tur: H1 → H2 → H3 → H4, sonra sıfır",
+        seri=ankA, bas=h1A - 5, son=min(sifA + 4, len(sA)), vurgu=[sifA], isaret=isA,
+        not_=f"{O.ENSTRUMAN_AD.get(ankA.rsplit('-', 1)[0], ankA)} · "
+             f"{_an(sA.zaman[h4A])} — sayacı sıfırlayan şey yeni bir bacak zirvesidir"))
+
+    ankB, h1B, h4B, tekB = B_
+    sB = kay[ankB].seri
+    fpB = R.FiyatPaneli(sB)
+    etB, hamB = fpB.bar_sayimi(), fpB.bar_sayaci_ham()
+    isB = [(h4B, f"H4 <span style='color:{GRI}'>(sayaç {abs(hamB[h4B])})</span>", True, MAVI)]
+    for j in tekB:
+        isB.append((j, f"H4 <span style='color:{GRI}'>(sayaç {abs(hamB[j])})</span>",
+                    True, MAVI))
+    paneller.append(dict(
+        etiket="B · H4 bir TAVAN — sayının sonu değil",
+        seri=ankB, bas=h1B - 4, son=min(tekB[-1] + 4, len(sB)), vurgu=tekB, isaret=isB,
+        not_=f"{O.ENSTRUMAN_AD.get(ankB.rsplit('-', 1)[0], ankB)} · "
+             f"{_an(sB.zaman[h4B])} — etiket H4'te durur, iç sayaç saymaya devam eder"))
+
+    fig = _kucuk_coklu(
+        kay, f"Şekil {no} · Geri çekilmeyi saymak: H1'den H4'e, ve sayacın nerede sıfırlandığı",
+        "Sayım bir dizi değil bir DURUMDUR: etiket yalnız bar bir ÖNCEKİNİN zirvesini "
+        "geçtiğinde basılır, eşitlik saymaz, ve yeni bir bacak zirvesi sayacı SIFIRLAR. "
+        "Sağdaki panel ikinci bir inceliği gösteriyor — H4 bir TAVAN: etiket dörtte durur "
+        "ama iç sayaç saymaya devam eder, yani 'arka arkaya iki H4' art arda iki bar demek "
+        "değildir. İndikatörün durum kutusu etiketi değil SAYACI yazar",
+        paneller, sutun=2, panel_yuk=300)
+    return _yaz(fig, f"{no}_bar_sayimi.html")
+
+
+def sekil_donus_kaliplari(kay: dict, no: str) -> Path:
+    """DÖRT KURAL, DÖRT BİÇİM — her panelde eşiğin geçtiği yer görünür.
+
+    Bu dört kural sayfada dört ayrı düz yazı bölümünde duruyor ve dördü de
+    tanımı gereği ŞEKİL: "kabaca eşit gövdeler", "neredeyse aynı dipler",
+    "orta noktanın ötesinde kapanış", "%75 örtüşme". Her panelde kalıbı bir
+    kez SAĞLAYAN ve bir kez SAĞLAMAYAN hâl yan yana.
+    """
+    paneller = []
+    ESIK = R.SABIT_FH["ortusmeEsik"]
+    ESIT = R.TANIM["esitGovdeOran"]
+    MIKRO_TOL = R.TANIM["mikroTolerans"]
+
+    # ① İKİ BARLIK DÖNÜŞ — "kabaca eşit gövde"
+    sec = None
+    for ank, k in kay.items():
+        s = k.seri
+        fp = R.FiyatPaneli(s)
+        for i in range(int(R.SABIT_FH["maUzunluk"]) + 1, len(s) - 3):
+            if not fp.iki_barlik_donus(i):
+                continue
+            g0, g1 = fp.govde(i), fp.govde(i - 1)
+            oran = min(g0, g1) / max(g0, g1) if max(g0, g1) > 0 else 0
+            # Aynı pencerede kuralın TUTMADIĞI zıt yönlü trend bar çifti
+            karsi = next((j for j in range(max(i - 8, 1), min(i + 9, len(s)))
+                          if abs(j - i) > 1 and not fp.iki_barlik_donus(j)
+                          and (fp.guclu_boga(j) or fp.guclu_ayi(j))
+                          and (fp.guclu_boga(j - 1) or fp.guclu_ayi(j - 1))
+                          and (s.c[j] > s.o[j]) != (s.c[j - 1] > s.o[j - 1])), None)
+            if karsi is None:
+                continue
+            if sec is None or abs(oran - ESIT) < abs(sec[0] - ESIT):
+                sec = (oran, ank, i, karsi)
+    if sec is None:
+        raise SystemExit("ENGEL · iki barlık dönüş + aynı pencerede karşı örnek yok")
+    _, a1, i1, k1 = sec
+    s1 = kay[a1].seri
+    fp1 = R.FiyatPaneli(s1)
+    g0, g1 = fp1.govde(i1), fp1.govde(i1 - 1)
+    paneller.append(dict(
+        etiket="① İki barlık dönüş — ölçü GÖVDE, kuyruk değil",
+        seri=a1, bas=min(i1, k1) - 6, son=max(i1, k1) + 5, vurgu=[i1 - 1, i1],
+        cizgi=[(max(s1.h[i1], s1.h[i1 - 1]), MAVI, "dot"),
+               (min(s1.l[i1], s1.l[i1 - 1]), CLARET, "dot")],
+        isaret=[(i1, fp1.iki_barlik_donus(i1), True, MUREKKEP),
+                (k1, "kalıp YOK", True, GRI)],
+        not_=f"{O.ENSTRUMAN_AD.get(a1.rsplit('-', 1)[0], a1)} · {_an(s1.zaman[i1])} — "
+             f"küçük gövde / büyük gövde = {B.sayi(min(g0, g1) / max(g0, g1), 2)} "
+             f"(eşik {B.sayi(ESIT, 2)}); giriş İKİ barın ötesinde"))
+
+    # ② MİKRO ÇİFT — aynı bar çifti bir uçta kalıbı basıyor, öbür uçta basmıyor
+    sec2 = None
+    for ank, k in kay.items():
+        s = k.seri
+        fp = R.FiyatPaneli(s)
+        for i in range(int(R.SABIT_FH["maUzunluk"]) + 1, len(s) - 3):
+            m = fp.mikro_cift(i)
+            if not m:
+                continue
+            dip_f = abs(s.l[i] - s.l[i - 1])
+            tepe_f = abs(s.h[i] - s.h[i - 1])
+            menzil = max(fp.menzil(i), 1e-12)
+            # En öğretici hâl: bir uç TAM eşit, öbür uç toleransın dışında.
+            if "dip" in m:
+                yakin, uzak = dip_f / menzil, tepe_f / menzil
+            else:
+                yakin, uzak = tepe_f / menzil, dip_f / menzil
+            # Öğretici hâl uzak ucun toleransı AZ AŞTIĞI yerdir; farkı
+            # büyütmek, iki barın neredeyse hiç örtüşmediği dejenere bir
+            # örnek bulur ve "tolerans" fikri görünmez olur.
+            if uzak <= MIKRO_TOL:
+                continue
+            if sec2 is None or (uzak - MIKRO_TOL) < sec2[0]:
+                sec2 = (uzak - MIKRO_TOL, ank, i, m, dip_f, tepe_f, menzil)
+    if sec2 is None:
+        raise SystemExit("ENGEL · bir ucu kalıbı basan, öbür ucu basmayan mikro çift yok")
+    _, a2, i2, m2, dipf, tepef, men2 = sec2
+    s2 = kay[a2].seri
+    paneller.append(dict(
+        etiket="② Mikro çift — tolerans BİZİM seçtiğimiz sayı",
+        seri=a2, bas=i2 - 8, son=i2 + 6, vurgu=[i2 - 1, i2],
+        cizgi=[(min(s2.l[i2], s2.l[i2 - 1]), CLARET, "dot"),
+               (max(s2.h[i2], s2.h[i2 - 1]), MAVI, "dot")],
+        isaret=[(i2, m2, True, MUREKKEP)],
+        not_=f"{O.ENSTRUMAN_AD.get(a2.rsplit('-', 1)[0], a2)} · {_an(s2.zaman[i2])} — "
+             f"dip farkı menzilin {B.yuzde(100 * dipf / men2, 1)}'i, tepe farkı "
+             f"{B.yuzde(100 * tepef / men2, 1)}'i — tolerans "
+             f"{B.yuzde(100 * MIKRO_TOL, 0)}: aynı çift bir uçta kalıp, öbüründe değil"))
+
+    # ③ ORTA NOKTA ÖLÇÜTÜ — bitişik iki barda RET ve KABUL
+    sec3 = None
+    for ank, k in kay.items():
+        s = k.seri
+        fp = R.FiyatPaneli(s)
+        for i in range(int(R.SABIT_FH["maUzunluk"]) + 1, len(s) - 2):
+            for boga in (True, False):
+                if fp.orta_nokta_olcutu(i, boga) and not fp.orta_nokta_olcutu(i - 1, boga):
+                    pay = abs(s.c[i] - fp.orta_nokta(i - 1))
+                    if sec3 is None or pay > sec3[0]:
+                        sec3 = (pay, ank, i, boga)
+    if sec3 is None:
+        raise SystemExit("ENGEL · bitişik iki barda orta nokta ölçütünün ret+kabul hâli yok")
+    _, a3, i3, boga3 = sec3
+    s3 = kay[a3].seri
+    fp3 = R.FiyatPaneli(s3)
+    paneller.append(dict(
+        etiket="③ Orta nokta ölçütü — ret ve kabul, bitişik iki barda",
+        seri=a3, bas=i3 - 8, son=i3 + 5, vurgu=[i3 - 1, i3],
+        cizgi=[(fp3.orta_nokta(i3 - 1), MUREKKEP, "dash"),
+               (fp3.orta_nokta(i3 - 2), GRI, "dot")],
+        isaret=[(i3, "GEÇTİ", True, MAVI if boga3 else CLARET),
+                (i3 - 1, "kaldı", False, GRI)],
+        not_=f"{O.ENSTRUMAN_AD.get(a3.rsplit('-', 1)[0], a3)} · {_an(s3.zaman[i3])} — "
+             f"kesikli çizgi önceki barın ORTA NOKTASI; kapanış onun "
+             f"{'üstünde' if boga3 else 'altında'} olmalı"))
+
+    # ④ ÖRTÜŞME — eşiği aşan bar ve aşmayan komşusu
+    sec4 = None
+    for ank, k in kay.items():
+        s = k.seri
+        fp = R.FiyatPaneli(s)
+        for i in range(int(R.SABIT_FH["maUzunluk"]) + 1, len(s) - 3):
+            if fp.ortusme(i) <= ESIK:
+                continue
+            komsu = next((j for j in range(i + 1, min(i + 5, len(s)))
+                          if fp.ortusme(j) < 0.3), None)
+            if komsu is None:
+                continue
+            # Eşiğin hemen ÜSTÜ: %100 örtüşme kuralı anlatmaz, sınırı anlatan
+            # şey eşiği az aşan bardır.
+            if sec4 is None or (fp.ortusme(i) - ESIK) < (sec4[0] - ESIK):
+                sec4 = (fp.ortusme(i), ank, i, komsu)
+    if sec4 is None:
+        raise SystemExit("ENGEL · örtüşme eşiğini aşan bar + düşük örtüşmeli komşu yok")
+    _, a4, i4, k4 = sec4
+    s4 = kay[a4].seri
+    fp4 = R.FiyatPaneli(s4)
+    paneller.append(dict(
+        etiket="④ Örtüşme — tek barı değil İKİ barı okumak",
+        seri=a4, bas=i4 - 7, son=k4 + 4, vurgu=[i4],
+        cizgi=[(min(s4.h[i4], s4.h[i4 - 1]), MUREKKEP, "dot"),
+               (max(s4.l[i4], s4.l[i4 - 1]), MUREKKEP, "dot")],
+        isaret=[(i4, f"örtüşme {B.yuzde(100 * fp4.ortusme(i4), 0)}", True, CLARET),
+                (k4, f"{B.yuzde(100 * fp4.ortusme(k4), 0)}", True, MAVI)],
+        not_=f"{O.ENSTRUMAN_AD.get(a4.rsplit('-', 1)[0], a4)} · {_an(s4.zaman[i4])} — "
+             f"eşik {B.yuzde(100 * ESIK, 0)}; aşıldığında bar REDDEDİLMEZ, "
+             "iki barlık dönüş okunur"))
+
+    fig = _kucuk_coklu(
+        kay, f"Şekil {no} · Dönüş kalıpları: dört kural, dört biçim",
+        "Dördü de tanımı gereği ŞEKİL ve sayfada dört ayrı düz yazı bölümünde duruyor: "
+        "\"kabaca eşit gövdeler\" · \"neredeyse aynı uçlar\" · \"orta noktanın ötesinde "
+        "kapanış\" · \"örtüşme eşiği\". Her panelde ölçülen sayı barın üstünde yazılı, "
+        "yani okur eşiğin nerede geçtiğini gözüyle kalibre ediyor. İkinci paneldeki çift "
+        "kayda değer: AYNI iki bar bir ucunda kalıbı basıyor, öbür ucunda basmıyor — "
+        "tolerans bizim seçtiğimiz bir sayıdır, verinin kendi özelliği değil",
+        paneller, sutun=2, panel_yuk=290)
+    return _yaz(fig, f"{no}_donus_kaliplari.html")
+
+
+def sekil_barbwire(kay: dict, no: str) -> Path:
+    """BARBWIRE — ölçüsü sayısal, tuzağı görsel.
+
+    Dersin en sinsi hatası: "barbwire içindeki bir dönüş barını gerçek dönüş
+    barı sanmak." Dar bantta dönüş barının ters çevirecek BİR ŞEYİ YOKTUR;
+    bir doji gibi davranır. Bölüm bugün dersin sayısal ölçütünü aktarıyor ama
+    tek bir resim vermiyor.
+    """
+    # Panel A: barbwire ÜÇLÜSÜNÜN içinde duran bir sinyal barı ve AKIBETİ.
+    # Panel B: örtüşme koşulu geçen ama doji olmayan üçlü — ölçü "hayır" diyor.
+    A = B_ = None
+    for ank, k in kay.items():
+        s = k.seri
+        fp = R.FiyatPaneli(s)
+        rp = R.RejimPanosu(s)
+        for i in range(int(R.SABIT_FH["maUzunluk"]) + 2, len(s) - 8):
+            bw = rp.barbwire(i)
+            orta = i - 1
+            if bw["var"]:
+                for boga in (True, False):
+                    if not (fp.donus_bari(orta, boga) and fp.kalite(orta, boga) >= 3):
+                        continue
+                    # Sinyalin yönüne göre AKIBET: dönüş barının ucu kırıldı mı?
+                    if boga:
+                        kirildi = min(s.l[orta + 1:orta + 8]) < s.l[orta]
+                        mesafe = s.l[orta] - min(s.l[orta + 1:orta + 8])
+                    else:
+                        kirildi = max(s.h[orta + 1:orta + 8]) > s.h[orta]
+                        mesafe = max(s.h[orta + 1:orta + 8]) - s.h[orta]
+                    if A is None and kirildi:
+                        A = (ank, i, orta, boga, fp.kalite(orta, boga), bw["oran"], mesafe)
+            else:
+                # Karşı örnek: örtüşme GEÇİYOR ama doji yok → barbwire değil
+                om = s.h[i - 1] - s.l[i - 1]
+                if om <= 0:
+                    continue
+                ko = min(s.h[i - 1], s.h[i - 2]) - max(s.l[i - 1], s.l[i - 2])
+                ks = min(s.h[i - 1], s.h[i]) - max(s.l[i - 1], s.l[i])
+                gecti = (max(0.0, ko) / om > R.SABIT_RP["bwOrtaPay"]
+                         and max(0.0, ks) / om > R.SABIT_RP["bwOrtaPay"])
+                if gecti and B_ is None:
+                    B_ = (ank, i, i - 1, bw["oran"])
+        if A and B_:
+            break
+    if A is None:
+        raise SystemExit("ENGEL · içinde 3/4+ sinyal barı taşıyan ve ucu kırılan "
+                         "barbwire üçlüsü yok")
+    if B_ is None:
+        raise SystemExit("ENGEL · örtüşmesi geçen ama doji taşımayan üçlü yok")
+
+    ankA, iA, ortaA, bogaA, kalA, oranA, mesA = A
+    sA = kay[ankA].seri
+    fpA = R.FiyatPaneli(sA)
+    ankB, iB, ortaB, oranB = B_
+    sB = kay[ankB].seri
+
+    n_bw = n_t = 0
+    for k in kay.values():
+        rp = R.RejimPanosu(k.seri)
+        for i in range(2, len(k.seri)):
+            n_t += 1
+            if rp.barbwire(i)["var"]:
+                n_bw += 1
+
+    paneller = [
+        dict(etiket=f"A · Barbwire'ın ortasında {kalA}/4 sinyal barı — ve akıbeti",
+             seri=ankA, bas=iA - 8, son=min(iA + 9, len(sA)),
+             vurgu=[iA - 2, iA - 1, iA],
+             cizgi=[(sA.l[ortaA] if bogaA else sA.h[ortaA], CLARET, "dash")],
+             isaret=[(ortaA, f"{kalA}/4 {'boğa' if bogaA else 'ayı'} — burada OKUNMAZ",
+                      not bogaA, CLARET)],
+             not_=f"{O.ENSTRUMAN_AD.get(ankA.rsplit('-', 1)[0], ankA)} · "
+                  f"{_an(sA.zaman[ortaA])} — ortadaki barın menzilinin "
+                  f"{B.yuzde(100 * oranA, 0)}'i komşularının içinde; dönüş barının ucu "
+                  "sonraki barlarda kırıldı"),
+        dict(etiket="B · Örtüşme GEÇİYOR ama doji yok — barbwire DEĞİL",
+             seri=ankB, bas=iB - 8, son=min(iB + 7, len(sB)),
+             vurgu=[iB - 2, iB - 1, iB],
+             isaret=[(ortaB, "üçü de doji değil", True, GRI)],
+             not_=f"{O.ENSTRUMAN_AD.get(ankB.rsplit('-', 1)[0], ankB)} · "
+                  f"{_an(sB.zaman[ortaB])} — üç bar üst üste DURUYOR, ölçü 'hayır' diyor"),
+    ]
+    fig = _kucuk_coklu(
+        kay, f"Şekil {no} · Barbwire: ölçüsü sayısal, tuzağı görsel",
+        f"Ölçüt dersten ve SAYISAL: ortadaki barın menzilinin yarısından fazlası HEM önceki "
+        f"HEM sonraki barın içindeyse ve üçünden en az biri doji ise barbwire. Ölçüldü: "
+        f"{B.sayi(n_t, 0)} barın {B.sayi(n_bw, 0)}'i ({B.yuzde(100 * n_bw / n_t, 1)}). "
+        "Soldaki panel dersin en sinsi tuzağı — dar bantta bir dönüş barının ters "
+        "çevirecek bir şeyi yoktur, bir doji gibi davranır ve kalite skoru orada okunmaz. "
+        "Sağdaki panel ölçünün seçiciliği: üç bar üst üste duruyor, örtüşme koşulu "
+        "geçiyor, ama doji şartı tutmadığı için kalıp SAYILMIYOR",
+        paneller, sutun=2, panel_yuk=300)
+    return _yaz(fig, f"{no}_barbwire.html")
+
+
 # ŞEKİL NUMARASI BİR KİMLİK DEĞİL, SAYFADAKİ YERDİR. Numara bu listedeki
 # sıradan türer; şekil işlevleri kendi numaralarını BİLMEZ, dışarıdan alır.
 # Sayfada Şekil 01'den sonra Şekil 08 gelmesi okuru şaşırtır ve bu kusur bir
@@ -1030,8 +1504,12 @@ def sekil_ayni_kurulum(kay: dict, no: str) -> Path:
 # numara alıyordu, oysa metnin ORTASINA giriyordu.
 SIRA = [
     ("indikator_gorunumu", lambda: sekil_indikator_gorunumu),
+    ("bar_sozlugu",        lambda: sekil_bar_sozlugu),
+    ("bar_sayimi",         lambda: sekil_bar_sayimi),
     ("kirilim_modu",       lambda: sekil_kirilim_modu),
     ("yon_bilinmez",       lambda: sekil_yon_bilinmez),
+    ("donus_kaliplari",    lambda: sekil_donus_kaliplari),
+    ("barbwire",           lambda: sekil_barbwire),
     ("cevirme_sayaci",     lambda: sekil_cevirme_sayaci),
     ("ne_beklemeli_siklik", lambda: sekil_ne_beklemeli_siklik),
     ("rejim_dagilimi",     lambda: sekil_rejim_dagilimi),
