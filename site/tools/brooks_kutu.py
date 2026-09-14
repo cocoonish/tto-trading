@@ -11,7 +11,7 @@ UYDURMA DEĞİL. Kutunun her satırı `brooks_referans`ın GERÇEK barlarda koş
 çıktısından yazılır — Pine'daki satır sırası, koşulları ve renkleri birebir.
 Elle yazılmış bir ekran görüntüsü, kod değiştiği gün sessizce yalan söylerdi.
 
-ÇIKTI: site/public/indikatorler/08_durum_kutusu.html — saf HTML/CSS parçası.
+ÇIKTI: site/public/indikatorler/durum_kutusu.html — saf HTML/CSS parçası.
 Plotly DEĞİL ve iframe'e de girmiyor: çizilen şey bir grafik değil ARAYÜZ.
 Sabit yükseklikli bir çerçeve onu dar ekranda kendi içinde kaydırır ve okur
 kutunun nerede bittiğini göremez; parça sayfaya doğrudan akar.
@@ -330,7 +330,7 @@ DURUMLAR = [
 def main() -> int:
     kay = _kaynaklar()
     d = [_durum(kay, a, i, b) for a, i, b in DURUMLAR]
-    yol = kutu_figuru(d, CIKTI / "08_durum_kutusu.html")
+    yol = kutu_figuru(d, CIKTI / "durum_kutusu.html")
     print(f"{yol.relative_to(SITE.parent)} · {yol.stat().st_size:,} bayt")
     for (a, i, b), x in zip(DURUMLAR, d):
         kur = [s for s in x["fiyat"] if s[2] == "Kurulum"]

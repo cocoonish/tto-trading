@@ -17,6 +17,7 @@ bakacağını bilemezdi.
 """
 from __future__ import annotations
 
+import math
 import sys
 from pathlib import Path
 
@@ -28,6 +29,7 @@ sys.path.insert(0, str(SITE / "public" / "indikatorler"))
 sys.path.insert(0, str(SITE.parent))
 
 import plotly.graph_objects as go                                # noqa: E402
+from plotly.subplots import make_subplots                         # noqa: E402
 import brooks_ornek as O                                         # noqa: E402
 import brooks_referans as R                                      # noqa: E402
 import plotly_stil                                               # noqa: E402
@@ -81,7 +83,8 @@ def _duzen(fig: go.Figure, baslik: str, alt: str, yuk: int = 560) -> go.Figure:
     return fig
 
 
-def _mum(fig: go.Figure, s: R.Seri, fp: R.FiyatPaneli, bas: int, son: int) -> None:
+def _mum(fig: go.Figure, s: R.Seri, fp: R.FiyatPaneli, bas: int, son: int,
+         row: int | None = None, col: int | None = None) -> None:
     """Barları SINIFINA göre boyar — Pine'daki barcolor ile aynı dil."""
     x = list(range(bas, son))
     renk = []
@@ -89,12 +92,13 @@ def _mum(fig: go.Figure, s: R.Seri, fp: R.FiyatPaneli, bas: int, son: int) -> No
         renk.append(MAVI if fp.guclu_boga(i) else CLARET if fp.guclu_ayi(i)
                     else GRI if fp.sinif(i) == "doji"
                     else "#93b0cd" if s.c[i] > s.o[i] else "#c99aa0")
+    yer = {} if row is None else {"row": row, "col": col}
     for i, c in zip(x, renk):
         fig.add_trace(go.Candlestick(
             x=[i], open=[s.o[i]], high=[s.h[i]], low=[s.l[i]], close=[s.c[i]],
             increasing=dict(line=dict(color=c, width=1), fillcolor=c),
             decreasing=dict(line=dict(color=c, width=1), fillcolor=c),
-            showlegend=False, hoverinfo="skip"))
+            showlegend=False, hoverinfo="skip"), **yer)
 
 
 def _an(iso: str) -> str:
@@ -332,6 +336,67 @@ def sekil_04(kay: dict) -> Path:
     return _yaz(fig, "04_ne_beklemeli_siklik.html")
 
 
+# ═══════════════════════════════════════════════════════════════════════════
+#  KÜÇÜK ÇOKLU — kural atlasının iş atı
+#
+#  Bir kuralı öğreten şey, sağlandığı hâl kadar SAĞLANMADIĞI hâldir; o yüzden
+#  paneller yan yana ve AYNI bar sayısıyla çizilir. Bar sayısı eşit değilse
+#  çubuk genişlikleri panelden panele değişir ve okur farkı biçim sanır.
+# ═══════════════════════════════════════════════════════════════════════════
+def _kucuk_coklu(kay: dict, baslik: str, alt: str, paneller: list[dict],
+                 sutun: int = 3, panel_yuk: int = 250) -> go.Figure:
+    """paneller: [{etiket, seri, bas, son, vurgu?, isaret?, not_?}]
+
+    vurgu  : işaretlenecek bar indeksleri (tarama)
+    isaret : [(i, metin, ust_mu, renk)] — bara ok/etiket
+    not_   : panelin altına düşen tek cümlelik okuma notu
+    """
+    n = len(paneller)
+    satir = (n + sutun - 1) // sutun
+    bar = {p["son"] - p["bas"] for p in paneller}
+    if len(bar) > 1:
+        # Sessizce farklı genişlik çizmektense adıyla söyle: eşitlenmeli.
+        print(f"  ! panel bar sayıları eşit değil: {sorted(bar)} — çubuk "
+              f"genişliği panelden panele değişecek")
+    fig = make_subplots(
+        rows=satir, cols=sutun, vertical_spacing=0.14, horizontal_spacing=0.05,
+        subplot_titles=[p["etiket"] for p in paneller])
+    for k, p in enumerate(paneller):
+        r, c = k // sutun + 1, k % sutun + 1
+        s = kay[p["seri"]].seri
+        fp = R.FiyatPaneli(s)
+        for i in p.get("vurgu", []):
+            fig.add_vrect(x0=i - 0.5, x1=i + 0.5, line_width=0,
+                          fillcolor="#e8c8a8", opacity=0.55, layer="below",
+                          row=r, col=c)
+        _mum(fig, s, fp, p["bas"], p["son"], row=r, col=c)
+        for y, renk, dash in p.get("cizgi", []):
+            fig.add_hline(y=y, line=dict(color=renk, width=1, dash=dash),
+                          row=r, col=c)
+        for i, metin, ust, renk in p.get("isaret", []):
+            fig.add_annotation(
+                x=i, y=s.h[i] if ust else s.l[i], text=metin, showarrow=False,
+                yshift=16 if ust else -16, font=dict(size=10, color=renk),
+                bgcolor="rgba(255,255,255,0.85)", borderpad=2, row=r, col=c)
+        fig.update_xaxes(showticklabels=False, showgrid=False, row=r, col=c,
+                         rangeslider=dict(visible=False))
+        fig.update_yaxes(showticklabels=False, showgrid=False, row=r, col=c)
+        if p.get("not_"):
+            # Notu panelin ALTINA, kâğıt koordinatında yaz: eksen kapalı
+            # olduğu için veri koordinatı burada güvenilir bir çıpa değil.
+            eks = fig.get_subplot(r, c)
+            fig.add_annotation(
+                x=(eks.xaxis.domain[0] + eks.xaxis.domain[1]) / 2,
+                y=eks.yaxis.domain[0] - 0.035, xref="paper", yref="paper",
+                text=p["not_"], showarrow=False, xanchor="center", yanchor="top",
+                font=dict(size=9.5, color=GRI))
+    for a in fig.layout.annotations[:n]:
+        a.font.size = 11
+        a.font.color = MUREKKEP
+    _duzen(fig, baslik, alt, yuk=78 + satir * panel_yuk)
+    return fig
+
+
 def _yaz(fig: go.Figure, ad: str) -> Path:
     yol = CIKTI / ad
     fig.write_html(yol, include_plotlyjs="cdn", config=dict(displayModeBar=False))
@@ -439,12 +504,184 @@ def sekil_07(kay: dict) -> Path:
     return _yaz(fig, "07_cevirme_sayaci.html")
 
 
+def sekil_08(kay: dict) -> Path:
+    """KIRILIM MODU KALIPLARI — beşi de biçimdir, sözle anlatılamaz.
+
+    Her panelde kalıbın kendisi taranmış, iki stop seviyesi çizili ve kalıptan
+    SONRAKİ barlar görünür: ders bu kalıplarda yönün BİLİNMEDİĞİNİ söyler ve
+    iki tarafa da emir koydurur, yani okur sonrasını görmeden kuralı anlayamaz.
+    Son panel aynı kalıbın (ii) zıt sonucudur — kalıp aynı, çıkan yön başka.
+    """
+    # Örnekler TİPİK olana göre seçildi: kalıp yüksekliğinin serinin medyan bar
+    # menziline oranı, o kalıbın medyanına en yakın olan. Mutlak yükseklikle
+    # seçmek farklı fiyat ölçeklerini kıyaslamak olurdu.
+    SEC = [
+        ("ii",  "eurusd-s1", 313, 2),
+        ("iii", "eurusd-s1", 187, 3),
+        ("ioi", "us10y-s1",  137, 3),
+        ("oio", "us10y-s1",  315, 3),
+        ("oo",  "eurusd-s4",  60, 2),
+        ("ii",  "us10y-s1",  319, 2),
+    ]
+    ONCE, SONRA = 8, 7
+    paneller = []
+    for k, (ad, ank, i, n) in enumerate(SEC):
+        s = kay[ank].seri
+        fp = R.FiyatPaneli(s)
+        km = fp.kirilim_modu(i)
+        if km is None or km["kalip"] != ad:
+            raise SystemExit(f"ENGEL · {ank} i={i} artık '{ad}' değil "
+                             f"({km['kalip'] if km else 'kalıp yok'}) — örnek yenilenmeli")
+        # Kırılım yönü ÖLÇÜLÜR, varsayılmaz.
+        yon, bar = "hiçbiri", None
+        for j in range(i + 1, min(i + 1 + 5, len(s))):
+            ust, alt = s.h[j] >= km["alis_stop"], s.l[j] <= km["satis_stop"]
+            if ust and alt:
+                yon, bar = "iki stop da aynı barda", j
+                break
+            if ust or alt:
+                yon, bar = ("yukarı" if ust else "aşağı"), j
+                break
+        son_ek = f" · {bar - i}. barda" if bar else ""
+        paneller.append(dict(
+            etiket=f"{ad}" + ("  (aynı kalıp, başka sonuç)" if k == 5 else ""),
+            seri=ank, bas=i - ONCE, son=i + SONRA + 1,
+            vurgu=list(range(i - n + 1, i + 1)),
+            cizgi=[(km["alis_stop"], MAVI, "dot"), (km["satis_stop"], CLARET, "dot")],
+            isaret=[(bar, yon, True, MUREKKEP)] if bar else [],
+            not_=f"{O.ENSTRUMAN_AD.get(ank.rsplit('-', 1)[0], ank)} · "
+                 f"{_an(s.zaman[i])} — {yon}{son_ek}",
+        ))
+    fig = _kucuk_coklu(
+        kay, "Şekil 08 · Kırılım modu kalıpları: ii · iii · ioi · oio · oo",
+        "Taralı barlar kalıbın kendisi; noktalı çizgiler kalıbın kendi uçlarından türeyen iki stop "
+        "seviyesi (üstte alış, altta satış). Ders bu kalıplarda yönü BİLMEZ ve iki tarafa da emir "
+        "koydurur — panellerin ikisinde iki stop da aynı barda tetiklendi, kuralın en pahalı hâli. "
+        "Ölçülen sıklık: ii 100 · oo 55 · ioi 43 · oio 35 · iii 17 (4.314 bar). "
+        "Bu altı panel ÖRNEKTİR; kuralın 250 oluşumun tamamında sınanmış hâli Şekil 09'dadır",
+        paneller, sutun=3, panel_yuk=255)
+    return _yaz(fig, "08_kirilim_modu.html")
+
+
+def _kirilim_olcusu(kay: dict, ufuk: int = 5) -> dict:
+    """Kırılım modu kalıplarının SONRASINI ölçer — ve TABAN ORANI ile birlikte.
+
+    Ders 'yön bilinmez' diyor. Bu cümle yalnız kalıp barlarına bakılarak
+    SINANAMAZ: örneklem döneminde seriler yukarı eğilimliyse kalıp sonrası
+    yukarı payı da yukarı çıkar ve kalıp haksız yere yön veriyor görünür.
+    Kıyas ölçütü, AYNI braketin (son n barın tepesi/dibi) kalıp OLMAYAN
+    barlara uygulanmış hâlidir; ancak o ölçüldükten sonra kalıba ait bir
+    fark iddia edilebilir.
+
+    Braket genişliği de eşleşmeli: 'iki stop da aynı barda' doğal olarak
+    braket genişledikçe seyrelir, o yüzden n=2 kalıpları n=2 tabanla,
+    n=3 kalıpları n=3 tabanla kıyaslanır — karışık kıyas, braket
+    genişliğinin etkisini kalıba yazar.
+    """
+    def coz(s, i, n):
+        tepe, dip = max(s.h[i - n + 1: i + 1]), min(s.l[i - n + 1: i + 1])
+        for j in range(i + 1, min(i + 1 + ufuk, len(s))):
+            ust, alt = s.h[j] >= tepe, s.l[j] <= dip
+            if ust and alt:
+                return "ikisi"
+            if ust:
+                return "yukari"
+            if alt:
+                return "asagi"
+        return "yok"
+
+    bos = lambda: {"yukari": 0, "asagi": 0, "ikisi": 0, "yok": 0}        # noqa: E731
+    kalip = {2: bos(), 3: bos()}
+    taban = {2: bos(), 3: bos()}
+    for k in kay.values():
+        s = k.seri
+        fp = R.FiyatPaneli(s)
+        for i in range(int(R.SABIT_FH["maUzunluk"]), len(s)):
+            km = fp.kirilim_modu(i)
+            if km is not None:
+                n = 3 if km["kalip"] in ("iii", "ioi", "oio") else 2
+                kalip[n][coz(s, i, n)] += 1
+            else:
+                for n in (2, 3):
+                    taban[n][coz(s, i, n)] += 1
+    return {"kalip": kalip, "taban": taban, "ufuk": ufuk}
+
+
+def _iki_oran_p(x1: int, n1: int, x2: int, n2: int) -> tuple[float, float, float]:
+    """İki oran için havuzlanmış z ve iki yönlü p. (p1, p2, p_degeri)"""
+    p1, p2 = x1 / n1, x2 / n2
+    hav = (x1 + x2) / (n1 + n2)
+    if hav in (0.0, 1.0):
+        return p1, p2, float("nan")
+    z = (p1 - p2) / math.sqrt(hav * (1 - hav) * (1 / n1 + 1 / n2))
+    return p1, p2, math.erfc(abs(z) / math.sqrt(2))
+
+
+def sekil_09(kay: dict) -> Path:
+    """'YÖN BİLİNMEZ' ÖLÇÜLDÜ — ve taban oran olmadan ters sonuç çıkıyordu.
+
+    Kalıp barlarında yukarı payı %58 çıkıyor ve tek başına bakıldığında
+    yazı-turadan ayrışıyor (binom p = 0,021). Ama AYNI braketin kalıp
+    olmayan barlardaki tabanı da %54 — yani sayının neredeyse tamamı
+    örneklemin kendi yukarı eğilimi. Eşleşmiş kıyasla fark ayırt
+    edilemiyor ve ders doğrulanıyor.
+
+    Ayırt edilen tek şey kuralın EN PAHALI hâli: iki stopun aynı barda
+    tetiklenmesi kalıplarda tabanın iki–üç katı.
+    """
+    o = _kirilim_olcusu(kay)
+    et, kal, tab, notlar, yon_p = [], [], [], [], []
+    for n, ad in ((2, "ii · oo<br>(2 barlık braket)"), (3, "iii · ioi · oio<br>(3 barlık braket)")):
+        kd, td = o["kalip"][n], o["taban"][n]
+        for olcu, baslik in (("yon", "kırılım YUKARI"), ("ikisi", "iki stop da AYNI barda")):
+            if olcu == "yon":
+                x1, m1 = kd["yukari"], kd["yukari"] + kd["asagi"]
+                x2, m2 = td["yukari"], td["yukari"] + td["asagi"]
+            else:
+                x1, m1 = kd["ikisi"], sum(kd.values())
+                x2, m2 = td["ikisi"], sum(td.values())
+            p1, p2, pd = _iki_oran_p(x1, m1, x2, m2)
+            et.append(f"{baslik}<br>{ad}")
+            kal.append(100 * p1)
+            tab.append(100 * p2)
+            # Farkın birimi PUAN'dır, yüzde değil: %58'den %54'e inen iki oranın
+            # farkı 4 puandır ve "%4" yazmak başka bir büyüklüğü adlandırır.
+            notlar.append(f"fark {B.sayi(100 * (p1 - p2), 1, isaret=True)} puan · "
+                          f"p = {B.sayi(pd, 3)}" if pd == pd else "p ölçülemedi")
+            if olcu == "yon":
+                yon_p.append(pd)
+    fig = go.Figure()
+    fig.add_trace(go.Bar(x=et, y=kal, name="kalıp barları", marker=dict(color=CLARET),
+                         text=[B.yuzde(v, 1) for v in kal], textposition="outside",
+                         textfont=dict(size=11), hoverinfo="skip"))
+    fig.add_trace(go.Bar(x=et, y=tab, name="aynı braket, kalıp OLMAYAN barlar (taban oran)",
+                         marker=dict(color=GRI), text=[B.yuzde(v, 1) for v in tab],
+                         textposition="outside", textfont=dict(size=11), hoverinfo="skip"))
+    for i, nt in enumerate(notlar):
+        fig.add_annotation(x=i, y=max(kal[i], tab[i]) + 9, text=nt, showarrow=False,
+                           font=dict(size=10, color=MUREKKEP), yanchor="bottom")
+    fig.update_layout(barmode="group")
+    fig.update_yaxes(title="oluşumların yüzdesi", range=[0, 78])
+    fig.update_xaxes(tickfont=dict(size=10))
+    kd2, kd3 = o["kalip"][2], o["kalip"][3]
+    nk = sum(kd2.values()) + sum(kd3.values())
+    _duzen(fig, "Şekil 09 · 'Yön bilinmez' ölçüldü — ve taban oran olmadan TERS sonuç çıkıyor",
+           f"Kalıp sonrası {o['ufuk']} bar içinde hangi stopun önce tetiklendiği, {nk} oluşumda. "
+           "Yalnız sol çubuklara bakan biri 'kalıp yukarı çalışıyor' der; oysa AYNI braket kalıp "
+           "olmayan barlara kurulduğunda da yukarı payı benzer çıkıyor — fark ayırt edilemiyor "
+           f"(p = {B.sayi(yon_p[0], 2)} ve {B.sayi(yon_p[1], 2)}), yani ders haklı. Ayırt edilen "
+           "tek şey kuralın en pahalı hâli: iki stopun aynı barda tetiklenmesi kalıplarda "
+           "tabanın iki–üç katı", 560)
+    return _yaz(fig, "09_yon_bilinmez.html")
+
+
 def main() -> None:
     CIKTI.mkdir(parents=True, exist_ok=True)
     kay = _kaynaklar()
     if not kay:
         raise SystemExit("ENGEL · gövde kapısından geçen seri yok")
-    for fn in (sekil_01, sekil_02, sekil_03, sekil_04, sekil_05, sekil_06, sekil_07):
+    for fn in (sekil_01, sekil_02, sekil_03, sekil_04, sekil_05, sekil_06, sekil_07,
+               sekil_08, sekil_09):
         yol = fn(kay)
         durum = plotly_stil.isle(yol)
         print(f"  {yol.name:34s} {durum}")
