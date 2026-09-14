@@ -1,68 +1,68 @@
 {
  "ozet": {
-  "vp_gecmis_son_ay": "Ağustos 2026",
-  "vp_gecmis_son_aov": 3.82,
-  "vp_gecmis_yuv_son": 3.28,
-  "vp_plan_aov_toplam": 3.78,
-  "vp_eski_takvim": "2026-08-05_Ağustos--Ekim-2026-İç-Borçlanma-Stratejisi",
-  "vp_karsilastirma_metin": "Eylül 2026 2,85 → 3,85 yıl (+1,00) · Ekim 2026 4,34 → 3,77 yıl (−0,57)",
+  "vp_gecmis_son_ay": "Eylül 2026",
+  "vp_gecmis_son_aov": 3.16,
+  "vp_gecmis_yuv_son": 3.73,
+  "vp_plan_aov_toplam": 3.79,
+  "vp_eski_takvim": "2026-09-13_Eylül--Kasım-2026-İç-Borçlanma-Stratejisi",
+  "vp_karsilastirma_metin": "Eylül 2026 3,75 → 5,57 yıl (+1,82) · Ekim 2026 3,61 → 3,61 yıl (+0,00) · Kasım 2026 3,42 → 3,42 yıl (+0,00)",
   "vp_yuv_zirve": 6.87,
   "vp_yuv_zirve_ay": "Eylül 2022",
   "vp_plan_ay1_ad": "Eylül 2026",
-  "vp_plan_ay1_aov": 3.85,
-  "vp_plan_ay1_eski_aov": 2.85,
-  "vp_plan_ay1_fark": 1.0,
-  "vp_plan_ay1_yuv": 3.58,
+  "vp_plan_ay1_aov": 5.57,
+  "vp_plan_ay1_eski_aov": 3.75,
+  "vp_plan_ay1_fark": 1.82,
+  "vp_plan_ay1_yuv": 3.73,
   "vp_plan_ay2_ad": "Ekim 2026",
-  "vp_plan_ay2_aov": 3.77,
-  "vp_plan_ay2_eski_aov": 4.34,
-  "vp_plan_ay2_fark": -0.57,
-  "vp_plan_ay2_yuv": 3.82,
+  "vp_plan_ay2_aov": 3.61,
+  "vp_plan_ay2_eski_aov": 3.61,
+  "vp_plan_ay2_fark": 0.0,
+  "vp_plan_ay2_yuv": 3.99,
   "vp_plan_ay3_ad": "Kasım 2026",
-  "vp_plan_ay3_aov": 3.66,
-  "vp_plan_ay3_yuv": 3.79,
-  "vp_maliyet_sabit_1a": 41.73,
-  "vp_maliyet_sabit_1a_mlr": 231.1,
-  "vp_maliyet_sabit_1_3": 41.5,
-  "vp_maliyet_sabit_1_3_mlr": 198.9,
-  "vp_maliyet_sabit_3_6": 37.87,
-  "vp_maliyet_sabit_3_6_mlr": 130.9,
+  "vp_plan_ay3_aov": 3.42,
+  "vp_plan_ay3_eski_aov": 3.42,
+  "vp_plan_ay3_fark": 0.0,
+  "vp_plan_ay3_yuv": 4.04,
+  "vp_maliyet_sabit_1a": 41.64,
+  "vp_maliyet_sabit_1a_mlr": 207.0,
+  "vp_maliyet_sabit_1_3": 41.26,
+  "vp_maliyet_sabit_1_3_mlr": 198.4,
+  "vp_maliyet_sabit_3_6": 38.29,
+  "vp_maliyet_sabit_3_6_mlr": 84.2,
   "vp_maliyet_sabit_6p": 35.12,
   "vp_maliyet_sabit_6p_mlr": 74.4,
-  "vp_maliyet_degisken_3_6": 43.89,
-  "vp_maliyet_degisken_3_6_mlr": 496.4,
-  "vp_maliyet_reel_3_6": 5.61,
-  "vp_maliyet_reel_3_6_mlr": 26.2,
-  "vp_maliyet_makas_1a_6p": 6.61,
+  "vp_maliyet_degisken_3_6": 43.67,
+  "vp_maliyet_degisken_3_6_mlr": 494.1,
+  "vp_maliyet_reel_3_6": 5.67,
+  "vp_maliyet_reel_3_6_mlr": 17.8,
+  "vp_maliyet_makas_1a_6p": 6.52,
   "vp_maliyet_pencere_ay": 4,
-  "vp_bono_son_ay_mlr": 74.3,
-  "vp_bono_12a_mlr": 475.3,
+  "vp_bono_son_ay_mlr": 0.0,
+  "vp_bono_12a_mlr": 408.3,
   "vp_plan_bono_mlr": 0.0,
   "vp_son_uzun_tarih": "18.08.2026",
   "vp_son_uzun_vade": 9.05,
   "vp_son_uzun_mlr": 74.4,
   "vp_son_uzun_maliyet": 35.12,
   "vp_uzun_onceki_rekor_mlr": 40.1,
-  "vp_plan_uzun_mlr": 32.4,
+  "vp_plan_uzun_mlr": 45.2,
   "vp_plan_uzun_adet": 3,
-  "vp_plan_tlref_pay": 50.6,
-  "vp_plan_sabit_pay": 49.4,
-  "vp_eski_eylul_bono_pay": 25.7,
-  "vp_eski_eylul_bono_vade": 0.67,
-  "vp_reprice_gecmis": 1.99,
+  "vp_plan_tlref_pay": 25.5,
+  "vp_plan_sabit_pay": 74.5,
+  "vp_reprice_gecmis": 1.94,
   "vp_vade_gecmis_ayni_pencere": 3.17,
-  "vp_reprice_plan": 1.92,
+  "vp_reprice_plan": 3.1,
   "vp_reprice_varsayim": 0.25,
   "vp_itfa_zirve_ceyrek": "2030 · Ç1",
   "vp_itfa_zirve_mlr": 544.5,
   "vp_itfa_zirve_adet": 8,
-  "vp_itfa_12a_mlr": 1201.8,
+  "vp_itfa_12a_mlr": 1136.8,
   "vp_bono_pay_24a_ort": 17.0,
-  "vp_bono_pay_son_ay": 21.3,
+  "vp_bono_pay_son_ay": 0.0,
   "vp_bono_sifir_ay_24a": 4,
-  "vp_uzama_3a": 0.51,
-  "vp_uzama_yuzdelik": 42.0,
-  "vp_uzama_n": 77,
+  "vp_uzama_3a": 0.31,
+  "vp_uzama_yuzdelik": 27.0,
+  "vp_uzama_n": 78,
   "vp_rev_n": 82,
   "vp_rev_medyan": -13.7,
   "vp_rev_yukari_pay": 27.0,
@@ -74,15 +74,15 @@
   "vp_rev_ay2_zincir": "235,1 → 229,1",
   "vp_rev_ay2_surum": 2,
   "vp_rev_ay2_ilk": 235.1,
-  "vp_gerc_24a_ort": 92.1,
+  "vp_gerc_24a_ort": 90.9,
   "vp_gerc_24a_medyan": 96.2,
   "vp_gerc_24a_min": 54.0,
   "vp_gerc_24a_maks": 120.3,
-  "vp_gerc_24a_std": 16.7,
+  "vp_gerc_24a_std": 18.3,
   "vp_gerc_alti_pay": 71.0,
-  "vp_plan_maliyet": 41.71,
+  "vp_plan_maliyet": 40.18,
   "vp_plan_maliyet_kapsam": 100.0,
-  "_tarih": "18.08.2026"
+  "_tarih": "14.09.2026"
  },
  "gecmis_aov": {
   "2020-01": 2.89,
@@ -164,16 +164,18 @@
   "2026-05": 3.12,
   "2026-06": 2.84,
   "2026-07": 3.07,
-  "2026-08": 3.82
+  "2026-08": 3.82,
+  "2026-09": 3.16
  },
  "plan_aov": {
-  "2026-09": 3.85,
-  "2026-10": 3.77,
-  "2026-11": 3.66
+  "2026-09": 5.57,
+  "2026-10": 3.61,
+  "2026-11": 3.42
  },
  "eski_aov": {
-  "2026-09": 2.85,
-  "2026-10": 4.34
+  "2026-09": 3.75,
+  "2026-10": 3.61,
+  "2026-11": 3.42
  },
  "yuvarlanan": {
   "2020-01": 2.89,
@@ -256,25 +258,25 @@
   "2026-06": 3.08,
   "2026-07": 2.99,
   "2026-08": 3.28,
-  "2026-09": 3.58,
-  "2026-10": 3.82,
-  "2026-11": 3.79
+  "2026-09": 3.73,
+  "2026-10": 3.99,
+  "2026-11": 4.04
  },
  "maliyet": {
   "sabit|≤1 yıl": {
-   "maliyet": 41.73,
-   "tutar_mlr": 231.1,
-   "n": 4
+   "maliyet": 41.64,
+   "tutar_mlr": 207.0,
+   "n": 3
   },
   "sabit|1-3 yıl": {
-   "maliyet": 41.5,
-   "tutar_mlr": 198.9,
-   "n": 5
+   "maliyet": 41.26,
+   "tutar_mlr": 198.4,
+   "n": 4
   },
   "sabit|3-6 yıl": {
-   "maliyet": 37.87,
-   "tutar_mlr": 130.9,
-   "n": 5
+   "maliyet": 38.29,
+   "tutar_mlr": 84.2,
+   "n": 3
   },
   "sabit|6 yıl+": {
    "maliyet": 35.12,
@@ -282,14 +284,14 @@
    "n": 1
   },
   "degisken|3-6 yıl": {
-   "maliyet": 43.89,
-   "tutar_mlr": 496.4,
+   "maliyet": 43.67,
+   "tutar_mlr": 494.1,
    "n": 6
   },
   "reel|3-6 yıl": {
-   "maliyet": 5.61,
-   "tutar_mlr": 26.2,
-   "n": 3
+   "maliyet": 5.67,
+   "tutar_mlr": 17.8,
+   "n": 2
   }
  },
  "b2c": {
@@ -343,8 +345,8 @@
   },
   "2026Q3": {
    "≤1 yıl": 2.09,
-   "1-3 yıl": 1.79,
-   "3-6 yıl": 2.11,
+   "1-3 yıl": 1.74,
+   "3-6 yıl": 2.24,
    "6 yıl+": 1.63
   }
  }
