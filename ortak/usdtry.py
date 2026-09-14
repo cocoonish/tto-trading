@@ -155,6 +155,41 @@ def kapanmamis_bari_dusur(s: pd.Series, simdi: dt.datetime | None = None) -> pd.
     return s
 
 
+def haftasonu_barini_dusur(s: pd.Series) -> tuple[pd.Series, list[str]]:
+    """Cumartesi/pazara düşen bar seriye girmez — FX'te HAFTA SONU SEANS DEĞİLDİR.
+
+    13.09.2026 PAZAR koşusunda ölçüldü: seriye 12.09 CUMARTESİ barı girdi
+    (48,55 — cumanın 48,5921 kapanışının %0,086 altında, yani bayat tekrar
+    DEĞİL ayrı bir değer), hattın saati oldu ve sayfa cumartesi damgasıyla
+    yayımlandı. Kapanmamış bar kuralı onu göremez: cumartesi barı PAZAR
+    çekildiğinde artık "bugün" değildir. 14.09 pazartesi Yahoo o barı hiç
+    vermedi (gözlem 678 → 677) ve gerileme kapısı öttü, iki pano birden
+    siteye kopyalanamadı.
+
+    İki gerekçe birden: (1) deponun kurucu ilkesi — bir ölçüm ancak KAPANMIŞ
+    bir seansı ölçebilir, ve cumartesi seans değildir; (2) kaynağın kendisi
+    o barı GERİ ÇEKTİ — bugün 3.045 gözlemlik seride (2015 →) hafta sonu barı
+    SIFIR. Kaynağın geri çektiği bir bar hiçbir zaman yerleşmiş bir gözlem
+    değildi.
+
+    SİLMEK DEĞİL İŞARETLEMEK: düşen gün ADIYLA döner ve hattın uyarı
+    listesine (`kur_uyari`) yazılır. Sessiz silme, ölçülmemiş bir şeyi
+    ölçülmüş gibi göstermenin en sessiz biçimidir — ve kaynak bir gün
+    damgalarını kaydırırsa (meşru bir cuma seansı cumartesiye düşerse)
+    sessiz süzgeç gerçek veriyi yok eder, uyarı ise onu adıyla gösterir.
+    """
+    if not len(s):
+        return s, []
+    hs = s.index[s.index.dayofweek >= 5]
+    if not len(hs):
+        return s, []
+    gun = ", ".join(f"{t:%d.%m.%Y}" for t in hs[-5:])
+    fazla = f" (+{len(hs) - 5} gün daha)" if len(hs) > 5 else ""
+    return s[s.index.dayofweek < 5], [
+        f"{len(hs)} hafta sonu barı seriye alınmadı ({gun}{fazla}); "
+        "hafta sonu işlem seansı yok"]
+
+
 def _kapsam_uyarilari(s: pd.Series, bas: dt.date, bugun: dt.date,
                       eski: pd.Series | None) -> list[str]:
     """Gelen serinin kapsamı çıktının ihtiyacına yetiyor mu — yetmiyorsa sebepler."""
@@ -230,6 +265,11 @@ def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
         raise RuntimeError(f"USD/TRY çekilemedi ve önbellek yok: {e}") from e
 
     yeni = kapanmamis_bari_dusur(yeni, simdi)
+    # SIRA ÖNEMLİ: hafta sonu barı kapsam denetiminden ÖNCE düşer. Aksi hâlde
+    # doluluk ölçütü (len(s) ÷ iş günü) hafta sonu barını hafta içi gözlem
+    # sayar ve eksik bir hafta içi gününü maskeler — ölçüt kendi paydasıyla
+    # kandırılır.
+    yeni, hs_uyari = haftasonu_barini_dusur(yeni)
     kusur = _kapsam_uyarilari(yeni, bas_t, bugun, eski)
     if kusur:
         if eski is not None:
@@ -245,7 +285,8 @@ def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
         gecici = yol.with_name(yol.stem + ".tmp.csv")
         yeni.rename("usdtry").to_csv(gecici, index_label="tarih")
         gecici.replace(yol)
-    return Kur(yeni, ilk=yeni.index[0].date(), son=yeni.index[-1].date(), n=len(yeni))
+    return Kur(yeni, ilk=yeni.index[0].date(), son=yeni.index[-1].date(),
+               n=len(yeni), uyarilar=hs_uyari)
 
 
 def kunye(k: Kur) -> dict:

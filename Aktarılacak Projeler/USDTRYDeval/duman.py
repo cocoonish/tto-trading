@@ -123,6 +123,44 @@ def _kapanmamis_bar():
     sina("yükleyici kuralı gerçekten uyguluyor", "kapanmamis_bari_dusur(yeni" in src,
          "fonksiyon var ama seri() çağırmıyorsa kapanmamış bar seriye girer")
 
+    # HAFTA SONU BARI — kapanmamış bar kuralının GÖREMEDİĞİ hâl.
+    # 13.09.2026 PAZAR koşusunda gerçekten oldu: 12.09 cumartesi barı
+    # "bugün" olmadığı için kapanmamış bar süzgecinden geçti, hattın saati
+    # oldu ve sayfa cumartesi damgasıyla yayımlandı. Çerçeve o günün
+    # birebir kendisi.
+    hafta = pd.to_datetime(["2026-09-10", "2026-09-11", "2026-09-12"])
+    hs = pd.Series([48.4873, 48.5921, 48.55], index=hafta)
+    pazar = dt.datetime(2026, 9, 13, 7, 46, tzinfo=dt.timezone.utc)
+    kalan = m.kapanmamis_bari_dusur(hs, pazar)
+    sina("cumartesi barını kapanmamış bar kuralı DÜŞÜREMEZ",
+         len(kalan) == 3 and kalan.index[-1].date() == dt.date(2026, 9, 12),
+         "bu ölçüt, ikinci süzgecin neden gerektiğini sabitler")
+
+    temiz, uyari = m.haftasonu_barini_dusur(kalan)
+    sina("cumartesi barı seriye alınmıyor",
+         len(temiz) == 2 and temiz.index[-1].date() == dt.date(2026, 9, 11),
+         f"{[str(t.date()) for t in temiz.index]}")
+    # SİLMEK DEĞİL İŞARETLEMEK: düşen gün adıyla görünmeli.
+    sina("düşen gün adıyla uyarıya yazılıyor",
+         len(uyari) == 1 and "12.09.2026" in uyari[0],
+         f"{uyari}")
+    # Hafta içi seri DOKUNULMADAN kalmalı — süzgecin yanlış pozitifi yok.
+    ici, bos = m.haftasonu_barini_dusur(hs.iloc[:2])
+    sina("hafta içi seri kırpılmıyor, uyarı üretilmiyor",
+         len(ici) == 2 and bos == [], f"{len(ici)} · {bos}")
+
+    # Ölçünün TÜKETİCİSİ: seri() çağırıyor mu ve uyarıyı künyeye taşıyor mu?
+    sina("yükleyici hafta sonu süzgecini çağırıyor",
+         "haftasonu_barini_dusur(yeni)" in src,
+         "fonksiyon var ama seri() çağırmıyorsa hafta sonu barı seriye girer")
+    sina("hafta sonu uyarısı künyeye ulaşıyor", "uyarilar=hs_uyari" in src,
+         "süzgeç sessiz kalırsa gerçek bir damga kayması da sessiz kalır")
+    # SIRA: doluluk ölçütü paydası iş günü; hafta sonu barı ondan ÖNCE
+    # düşmezse ölçüt kendi paydasıyla kandırılır.
+    sina("hafta sonu süzgeci kapsam denetiminden ÖNCE",
+         src.index("haftasonu_barini_dusur(yeni)") < src.index("kusur = _kapsam_uyarilari"),
+         "sonra gelirse hafta sonu barı hafta içi gözlem sayılır")
+
 
 # ===========================================================================
 # (3) ŞEKİL SAAT DEFTERİ — parçalı damga, tek fonksiyon
