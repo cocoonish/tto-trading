@@ -134,7 +134,7 @@ def _duman() -> None:
 
     # Ve AYNI ÖLÇÜLERİ taşıyor mu. Eşik kapısı bunu göremez: yeni bir eşik
     # getirmeyen bir ölçü Pine'a hiç taşınmadan da o kapıyı geçer.
-    hata += [f"ölçü kapsamı · {x}" for x in R.olcu_kapsami(PINE_FH)]
+    hata += [f"ölçü kapsamı · {x}" for x in R.olcu_kapsami(PINE_FH, PINE_RP)]
 
     # Pine'ın derleyicisi bu depoda YOK; statik denetim onun yerine geçmez
     # ama bu depoda gerçekten yapılmış beş hatayı bir daha yapmayı engeller.

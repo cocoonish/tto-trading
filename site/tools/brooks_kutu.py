@@ -134,8 +134,13 @@ def fiyat_kutusu(d: dict) -> list[tuple]:
                 + (" · TERS İKİ KAPANIŞ" if ters else ""),
                 CLARET if ters else MUREKKEP))
 
+    # SAYAÇ, etiket DEĞİL. Pine satır 598 always-in'in yönü varken HER barda
+    # sayacın o anki değerini basar; `bar_sayimi` ise grafikteki ETİKETİN eşi
+    # ve yalnız yeni zirve/dip yapan barda dolu. İkisi 4.574 barın 2.017'sinde
+    # (%44,1) ayrışıyor — etiketi kutuya basmak, always-in LONG iken "—"
+    # yazmak demekti ve okur sayacın sıfırlandığını sanıyordu.
     sat.append(("satir", "", "Sayım · mikro kanal",
-                f"{d['bar_sayimi']} · {d['mikro_kanal']} bar", MUREKKEP))
+                f"{d['bar_sayaci']} · {d['mikro_kanal']} bar", MUREKKEP))
 
     # ── KALIP · UYARI — yalnız SÖYLEYECEK BİR ŞEY VARKEN ──
     parca = []
@@ -148,6 +153,9 @@ def fiyat_kutusu(d: dict) -> list[tuple]:
     my = d["momentum_yoklugu"]
     if abs(my) >= MOMENTUM_BAR:
         parca.append(f"{abs(my)} bardır {'boğa' if my > 0 else 'ayı'} kapanışı yok")
+    # Pine ayracı momentum parçasında KOŞULSUZ ekliyordu ve satır " · " ile
+    # açılabiliyordu (4.535 barın 137'sinde). Orası düzeltildi; burada
+    # `join` zaten doğru sözleşmeyi üretiyor, yani iki taraf artık aynı.
     kalip_metin = " · ".join(parca)
     iptal = d["iptal"]["iptal"] or "—"
     if kalip_metin or iptal != "—":
@@ -180,6 +188,14 @@ def rejim_kutusu(o: dict) -> list[tuple]:
          "✓" if i["net"] else "—", CLARET if i["net"] else GRI),
         ("satir", "Azami ardışık trend barı", str(o["azami_dizi"]),
          "✓" if i["dizi"] else "—", CLARET if i["dizi"] else GRI),
+        # Panonun DOKUZUNCU satırı. Bant SAYISINA girmez ve bu bir seçim
+        # değil dersin hükmü: barbwire bir rejim ölçüsü değil, tekil bir bar
+        # kalıbıdır. Satır kutuda yoktu — 4.548 barın 563'ünde (%12,4) "VAR"
+        # olan bir uyarıyı okur hiç görmüyordu.
+        ("satir", "Barbwire (4.9) — sayıya girmez",
+         f"{o['barbwire']['oran']:.2f}".replace(".", ","),
+         "VAR ⚠" if o["barbwire"]["var"] else "—",
+         CLARET if o["barbwire"]["var"] else GRI),
     ]
 
 
@@ -300,9 +316,14 @@ def kutu_figuru(durumlar: list[dict], yol: Path) -> Path:
     return yol
 
 
-def _durum(kay: dict, anahtar: str, i: int, baslik: str) -> dict:
+def _durum(kay: dict, anahtar: str, damga: str, baslik: str, kod: str) -> dict:
     s = kay[anahtar].seri
+    i = _cipa(s, damga)
     fp = R.FiyatPaneli(s)
+    gecerli, aciklama = _olcut(fp, R.RejimPanosu(s), i, kod)
+    if not gecerli:
+        raise SystemExit(f"ENGEL · '{baslik}' çıpası {damga} artık o hikâyeyi "
+                         f"anlatmıyor: {aciklama}")
     d = fp.durum(i)
     o = R.RejimPanosu(s).olcu(i)
     ad = O.ENSTRUMAN_AD.get(anahtar.rsplit("-", 1)[0], anahtar)
@@ -315,24 +336,67 @@ def _durum(kay: dict, anahtar: str, i: int, baslik: str) -> dict:
     }
 
 
-# Üç durum GERÇEK barlardan seçildi; indeks ve gün SABİT yazılır, çünkü
-# yayımlanmış bir figür her koşuda başka bir barı anlatmamalı. Seçim ölçütü
-# koda yazılı: A hizalı ve kalite>=3, B kurulum var ama yönle hizasız,
-# C rejim BANT (n>=4). Üçü de aynı enstrümanda, böylece okur kutuyu
-# karşılaştırırken enstrüman değişimini de hesaba katmak zorunda kalmıyor.
+# Üç durum GERÇEK barlardan seçildi ve ZAMAN DAMGASIYLA çıpalanır.
+#
+# Bir zamanlar burada sabit bir İNDİS yazıyordu ve yanındaki yorum "indeks ve
+# gün SABİT yazılır, çünkü yayımlanmış bir figür her koşuda başka bir barı
+# anlatmamalı" diyordu — niyet doğru, mekanizma TERSİ. `teknik/olc.py`
+# pencereleri SABİT UZUNLUKTA kaydırıyor (s1 420 · s4 360 · günlük 260 bar),
+# yani seri her koşuda bir miktar ilerliyor ve sabit bir indis her hafta
+# BAŞKA bir barı gösteriyor. Künye de indisten türediği için tarih sessizce
+# değişir ve panel başlığı ("A · üç katman da evet") artık tutmayan bir barı
+# anlatır. Kusur hiçbir yerde hata vermez.
+#
+# İki kilit birlikte gider: çıpa damgadan ÇÖZÜLÜR (bulunamazsa ENGEL), ve
+# panelin SEÇİM ÖLÇÜTÜ çizim anında YENİDEN SINANIR — çıpa doğru bara
+# otursa bile kutu artık o hikâyeyi anlatmıyorsa figür üretilmez.
 DURUMLAR = [
-    ("xu100-s4", 322, "A · üç katman da evet"),
-    ("xu100-s4", 336, "B · kurulum var, yön VETO ediyor"),
-    ("xu100-s4", 305, "C · rejim BANT"),
+    ("xu100-s4", "2026-08-26T11:30", "A · üç katman da evet", "hizali"),
+    ("xu100-s4", "2026-09-02T07:30", "B · kurulum var, yön VETO ediyor", "hizasiz"),
+    ("xu100-s4", "2026-08-18T14:30", "C · rejim BANT", "bant"),
 ]
+
+
+def _cipa(s, damga: str) -> int:
+    """Zaman damgasından indis. Bulunamazsa ENGEL — sessizce komşu bara
+    kaymak, figürün anlattığı hikâyeyi değiştirir."""
+    try:
+        return s.zaman.index(damga)
+    except ValueError:
+        yakin = [z for z in s.zaman if z[:10] == damga[:10]]
+        raise SystemExit(
+            f"ENGEL · çıpa {damga} seride yok (pencere kaymış olabilir). "
+            f"O günün barları: {yakin or 'gün hiç yok'} — çıpa yenilenmeli")
+
+
+def _olcut(fp, rp, i: int, kod: str) -> tuple[bool, str]:
+    """Panelin ANLATTIĞI hikâye bu barda hâlâ geçerli mi."""
+    yon, _, _ = fp.always_in()
+    kb, ka = fp.kalite(i, True), fp.kalite(i, False)
+    f = fp.yon_filtresi(i)
+    kur_b = fp.donus_bari(i, True) and kb > 0 and f != "yalnız SAT"
+    kur_a = fp.donus_bari(i, False) and ka > 0 and f != "yalnız AL"
+    hizali = (kur_b and yon[i] == 1) or (kur_a and yon[i] == -1)
+    o = rp.olcu(i)
+    n = o["n"] if o else -1
+    if kod == "hizali":
+        return (hizali and max(kb, ka) >= 3 and n <= 1,
+                f"hizalı={hizali} kalite={max(kb, ka)} rejim_n={n} (isteniyor: "
+                "hizalı · kalite>=3 · rejim trend)")
+    if kod == "hizasiz":
+        return ((kur_b or kur_a) and not hizali,
+                f"kurulum={kur_b or kur_a} hizalı={hizali} (isteniyor: kurulum VAR, hizalı DEĞİL)")
+    if kod == "bant":
+        return n >= 4, f"rejim_n={n} (isteniyor: >=4)"
+    raise SystemExit(f"ENGEL · tanınmayan ölçüt kodu '{kod}'")
 
 
 def main() -> int:
     kay = _kaynaklar()
-    d = [_durum(kay, a, i, b) for a, i, b in DURUMLAR]
+    d = [_durum(kay, a, z, b, k) for a, z, b, k in DURUMLAR]
     yol = kutu_figuru(d, CIKTI / "durum_kutusu.html")
     print(f"{yol.relative_to(SITE.parent)} · {yol.stat().st_size:,} bayt")
-    for (a, i, b), x in zip(DURUMLAR, d):
+    for (a, z, b, k), x in zip(DURUMLAR, d):
         kur = [s for s in x["fiyat"] if s[2] == "Kurulum"]
         rej = x["rejim"][0]
         print(f"  {b:36s} {x['kunye']}")
