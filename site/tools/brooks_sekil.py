@@ -119,7 +119,7 @@ def _zaman_ekseni(fig: go.Figure, s: R.Seri, bas: int, son: int, adim: int = 8) 
                      tickfont=dict(size=9))
 
 
-def sekil_01(kay: dict) -> Path:
+def sekil_indikator_gorunumu(kay: dict, no: str) -> Path:
     """İndikatör grafikte NASIL GÖRÜNÜR — bütün katmanlar tek pencerede."""
     k = kay["xu100-s1"]
     s = k.seri
@@ -168,16 +168,16 @@ def sekil_01(kay: dict) -> Path:
         fig.add_trace(go.Scatter(x=[None], y=[None], mode="markers",
                                  marker=dict(color=c, size=8, symbol="square"), name=ad))
     _zaman_ekseni(fig, s, bas, son)
-    _duzen(fig, "Şekil 01 · İndikatör grafikte ne çizer",
+    _duzen(fig, f"Şekil {no} · İndikatör grafikte ne çizer",
            f"BIST 100 · 1 saatlik · {_an(s.zaman[bas])} → {_an(s.zaman[son - 1])} — "
            "bar rengi sınıfı, zemin always-in yönünü, üçgen dönüş barını, "
            "n/4 sinyal kalitesini, H1–H4 geri çekilme sayımını gösterir", 600)
-    yol = CIKTI / "01_indikator_gorunumu.html"
+    yol = CIKTI / f"{no}_indikator_gorunumu.html"
     fig.write_html(yol, include_plotlyjs="cdn", config=dict(displayModeBar=False))
     return yol
 
 
-def sekil_02(kay: dict) -> Path:
+def sekil_okuma_sirasi(kay: dict, no: str) -> Path:
     """OKUMA SIRASI — dört adım, tek karar barında."""
     k = kay["xu100-s1"]
     s = k.seri
@@ -229,15 +229,15 @@ def sekil_02(kay: dict) -> Path:
                            font=dict(size=11, color=MUREKKEP))
     fig.update_yaxes(range=[alt - ad * 0.10, ust + ad * 0.40])
     _zaman_ekseni(fig, s, bas, son)
-    _duzen(fig, "Şekil 02 · Okuma sırası: rejim → yön → yasak → kurulum",
+    _duzen(fig, f"Şekil {no} · Okuma sırası: rejim → yön → yasak → kurulum",
            f"BIST 100 · 1 saatlik · karar barı {_an(s.zaman[hedef])} — "
            "ders bu sırayı dayatır ve kurulumu EN SONA koyar", 620)
-    yol = CIKTI / "02_okuma_sirasi.html"
+    yol = CIKTI / f"{no}_okuma_sirasi.html"
     fig.write_html(yol, include_plotlyjs="cdn", config=dict(displayModeBar=False))
     return yol
 
 
-def sekil_03(kay: dict) -> Path:
+def sekil_islem_mekanigi(kay: dict, no: str) -> Path:
     """İŞLEM MEKANİĞİ — giriş, stop, hedef; hepsi barın kendi sayılarından.
 
     İndikatör emir vermez; bu figür DERSİN emir kuralını gerçek bir bar
@@ -282,16 +282,16 @@ def sekil_03(kay: dict) -> Path:
     sonuc = ("hedefe ulaştı" if ulasti and (not vurdu or ulasti[0] < vurdu[0])
              else "stop oldu" if vurdu else "pencere içinde ikisi de görülmedi")
     _zaman_ekseni(fig, s, bas, son)
-    _duzen(fig, "Şekil 03 · Emir mekaniği: giriş, stop, hedef",
+    _duzen(fig, f"Şekil {no} · Emir mekaniği: giriş, stop, hedef",
            f"BIST 100 · 1 saatlik · sinyal barı {_an(s.zaman[hedef])} — "
            f"risk {B.sayi(risk, 0)} puan · bu pencerede {sonuc}. "
            "İndikatör emir vermez; bu ölçü dersin emir kuralının bar üzerindeki karşılığıdır", 560)
-    yol = CIKTI / "03_islem_mekanigi.html"
+    yol = CIKTI / f"{no}_islem_mekanigi.html"
     fig.write_html(yol, include_plotlyjs="cdn", config=dict(displayModeBar=False))
     return yol
 
 
-def sekil_04(kay: dict) -> Path:
+def sekil_ne_beklemeli_siklik(kay: dict, no: str) -> Path:
     """NE BEKLEMELİ — kalıpların ölçülen sıklığı."""
     import collections
     say = collections.Counter()
@@ -330,10 +330,10 @@ def sekil_04(kay: dict) -> Path:
         textfont=dict(size=10), hoverinfo="skip", showlegend=False))
     fig.update_xaxes(title="barların yüzdesi", range=[0, max(100 * v / bar for _, v in sirali) * 1.45])
     fig.update_yaxes(autorange="reversed")
-    _duzen(fig, "Şekil 04 · Ne beklemeli: kalıpların ölçülen sıklığı",
+    _duzen(fig, f"Şekil {no} · Ne beklemeli: kalıpların ölçülen sıklığı",
            f"13 seri · {B.sayi(bar, 0)} bar · 1 saatlik, 4 saatlik ve günlük — "
            "kırmızı olanlar sistemin EN SEYREK konuştuğu iki hâl", 620)
-    return _yaz(fig, "04_ne_beklemeli_siklik.html")
+    return _yaz(fig, f"{no}_ne_beklemeli_siklik.html")
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -348,7 +348,10 @@ def _kucuk_coklu(kay: dict, baslik: str, alt: str, paneller: list[dict],
     """paneller: [{etiket, seri, bas, son, vurgu?, isaret?, not_?}]
 
     vurgu  : işaretlenecek bar indeksleri (tarama)
+    cizgi  : [(y, renk, dash)] — panele yatay seviye
     isaret : [(i, metin, ust_mu, renk)] — bara ok/etiket
+    ema    : True ise hattın kendi EMA'sı panele çizilir (kural ortalamaya
+             göre tanımlıysa okur ortalamayı GÖRMEDEN kuralı izleyemez)
     not_   : panelin altına düşen tek cümlelik okuma notu
     """
     n = len(paneller)
@@ -365,11 +368,23 @@ def _kucuk_coklu(kay: dict, baslik: str, alt: str, paneller: list[dict],
         r, c = k // sutun + 1, k % sutun + 1
         s = kay[p["seri"]].seri
         fp = R.FiyatPaneli(s)
+        if p.get("ema"):
+            xe = [i for i in range(p["bas"], p["son"]) if fp.ema[i] is not None]
+            fig.add_trace(go.Scatter(
+                x=xe, y=[fp.ema[i] for i in xe], mode="lines",
+                line=dict(color="#c8a36a", width=1.4), showlegend=False,
+                hoverinfo="skip"), row=r, col=c)
+        _mum(fig, s, fp, p["bas"], p["son"], row=r, col=c)
+        # TARAMA İZLERDEN SONRA EKLENİR. plotly 7'de `add_vrect(row=, col=)`
+        # henüz İZ TAŞIMAYAN bir alt panele SESSİZCE düşüyor: istisna yok,
+        # uyarı yok, koşu yeşil biter ve alt yazı okura "taralı barlar kalıbın
+        # kendisi" der ama tarama hiç çizilmez. `add_hline` aynı yerde
+        # çalıştığı için kusur daha da görünmez oluyordu. Aşağıdaki sayım
+        # kapısı sessiz düşmeyi ADIYLA yakalar.
         for i in p.get("vurgu", []):
             fig.add_vrect(x0=i - 0.5, x1=i + 0.5, line_width=0,
                           fillcolor="#e8c8a8", opacity=0.55, layer="below",
                           row=r, col=c)
-        _mum(fig, s, fp, p["bas"], p["son"], row=r, col=c)
         for y, renk, dash in p.get("cizgi", []):
             fig.add_hline(y=y, line=dict(color=renk, width=1, dash=dash),
                           row=r, col=c)
@@ -380,7 +395,23 @@ def _kucuk_coklu(kay: dict, baslik: str, alt: str, paneller: list[dict],
                 bgcolor="rgba(255,255,255,0.85)", borderpad=2, row=r, col=c)
         fig.update_xaxes(showticklabels=False, showgrid=False, row=r, col=c,
                          rangeslider=dict(visible=False))
-        fig.update_yaxes(showticklabels=False, showgrid=False, row=r, col=c)
+        # ÜST BOŞLUK: bara konan etiket barın tepesinden yukarı kayıyor ve
+        # otomatik aralıkta panel BAŞLIĞINA giriyor — iki metin üst üste
+        # binince ikisi de okunmaz olur. Aralık bu yüzden elle kurulur ve
+        # üstte bir etiket boyu pay bırakılır; EMA da menzile dahil, çünkü
+        # ortalama barların dışına çıkabiliyor.
+        dus = [s.l[i] for i in range(p["bas"], p["son"])]
+        yuk = [s.h[i] for i in range(p["bas"], p["son"])]
+        if p.get("ema"):
+            e = [fp.ema[i] for i in range(p["bas"], p["son"]) if fp.ema[i] is not None]
+            dus, yuk = dus + e, yuk + e
+        for y, _, _ in p.get("cizgi", []):
+            dus.append(y)
+            yuk.append(y)
+        alt_u, ust_u = min(dus), max(yuk)
+        pay = (ust_u - alt_u) or 1.0
+        fig.update_yaxes(showticklabels=False, showgrid=False, row=r, col=c,
+                         range=[alt_u - pay * 0.08, ust_u + pay * 0.22])
         if p.get("not_"):
             # Notu panelin ALTINA, kâğıt koordinatında yaz: eksen kapalı
             # olduğu için veri koordinatı burada güvenilir bir çıpa değil.
@@ -390,6 +421,11 @@ def _kucuk_coklu(kay: dict, baslik: str, alt: str, paneller: list[dict],
                 y=eks.yaxis.domain[0] - 0.035, xref="paper", yref="paper",
                 text=p["not_"], showarrow=False, xanchor="center", yanchor="top",
                 font=dict(size=9.5, color=GRI))
+    bekle = sum(len(p.get("vurgu", [])) + len(p.get("cizgi", [])) for p in paneller)
+    if len(fig.layout.shapes) != bekle:
+        raise SystemExit(f"ENGEL · {bekle} şekil (tarama + seviye) isteniyor ama "
+                         f"{len(fig.layout.shapes)} tanesi figüre girdi — sessizce "
+                         "düşen şekil var, alt yazı okura göstermediği bir şeyi anlatır")
     for a in fig.layout.annotations[:n]:
         a.font.size = 11
         a.font.color = MUREKKEP
@@ -403,7 +439,7 @@ def _yaz(fig: go.Figure, ad: str) -> Path:
     return yol
 
 
-def sekil_05(kay: dict) -> Path:
+def sekil_kalite_hizasi(kay: dict, no: str) -> Path:
     """4/4 BİR İŞLEM DEĞİLDİR — en yüksek skorun always-in ile hizası."""
     hiza = {"aynı yönde (hizalı)": 0, "ters yönde": 0, "always-in belirsiz": 0}
     for k in kay.values():
@@ -426,14 +462,14 @@ def sekil_05(kay: dict) -> Path:
         text=[f"{v}" for v in hiza.values()], textposition="outside",
         textfont=dict(size=13), hoverinfo="skip", showlegend=False))
     fig.update_yaxes(title="4/4 sinyal barı sayısı", range=[0, max(hiza.values()) * 1.35])
-    _duzen(fig, "Şekil 05 · Dört üzerinden dört bir işlem DEĞİLDİR",
+    _duzen(fig, f"Şekil {no} · Dört üzerinden dört bir işlem DEĞİLDİR",
            f"Ölçülen {top} adet 4/4 sinyal barından yalnız {hiza['aynı yönde (hizalı)']} tanesi "
            "always-in yönüyle aynı yönde. Puanın yüksekliği, dersin karşı yön yasağını "
            "geçersiz kılmaz", 480)
-    return _yaz(fig, "05_kalite_hizasi.html")
+    return _yaz(fig, f"{no}_kalite_hizasi.html")
 
 
-def sekil_06(kay: dict) -> Path:
+def sekil_rejim_dagilimi(kay: dict, no: str) -> Path:
     """REJİM DAĞILIMI — pano çoğu zaman 'ne o, ne bu' der."""
     ad, bant, ara, trend = [], [], [], []
     for a, k in kay.items():
@@ -456,13 +492,13 @@ def sekil_06(kay: dict) -> Path:
     fig.update_layout(barmode="stack")
     fig.update_xaxes(title="pencerelerin yüzdesi", range=[0, 100])
     fig.update_yaxes(autorange="reversed")
-    _duzen(fig, "Şekil 06 · Rejim panosu çoğu zaman karar vermez",
+    _duzen(fig, f"Şekil {no} · Rejim panosu çoğu zaman karar vermez",
            "Her serinin 70 barlık pencerelerinin rejim dağılımı — "
            "'ara' baskın hâldir ve bu bir kusur değil, ölçünün dürüstlüğüdür", 560)
-    return _yaz(fig, "06_rejim_dagilimi.html")
+    return _yaz(fig, f"{no}_rejim_dagilimi.html")
 
 
-def sekil_07(kay: dict) -> Path:
+def sekil_cevirme_sayaci(kay: dict, no: str) -> Path:
     """ÇEVİRME SAYACI — sinyal var, hüküm yok. Ölçüm bir eşiğin hükmünü çürüttü."""
     hep, flip = [], []
     for k in kay.values():
@@ -495,16 +531,16 @@ def sekil_07(kay: dict) -> Path:
     fig.update_yaxes(title="kendi kümesinin yüzdesi")
     ust = sum(1 for v in hep if v > 15)
     ustf = sum(1 for v in flip if v > 15)
-    _duzen(fig, "Şekil 07 · Sayaçta sinyal var, hüküm yok",
+    _duzen(fig, f"Şekil {no} · Sayaçta sinyal var, hüküm yok",
            f"Dönüş barlarında sayaç belirgin yüksek (medyan {sorted(flip)[len(flip)//2]} "
            f"karşı {sorted(hep)[len(hep)//2]}) — ama '>15 ise always-in çeviren kırılım' "
            f"hükmü tutmuyor: >15 diyen {B.sayi(ust, 0)} barın yalnız {ustf} tanesi dönüş "
            f"barı, kesinlik {B.yuzde(100 * ustf / ust, 2)}, taban oran "
            f"{B.yuzde(100 * len(flip) / len(hep), 2)}", 560)
-    return _yaz(fig, "07_cevirme_sayaci.html")
+    return _yaz(fig, f"{no}_cevirme_sayaci.html")
 
 
-def sekil_08(kay: dict) -> Path:
+def sekil_kirilim_modu(kay: dict, no: str) -> Path:
     """KIRILIM MODU KALIPLARI — beşi de biçimdir, sözle anlatılamaz.
 
     Her panelde kalıbın kendisi taranmış, iki stop seviyesi çizili ve kalıptan
@@ -553,14 +589,15 @@ def sekil_08(kay: dict) -> Path:
                  f"{_an(s.zaman[i])} — {yon}{son_ek}",
         ))
     fig = _kucuk_coklu(
-        kay, "Şekil 08 · Kırılım modu kalıpları: ii · iii · ioi · oio · oo",
+        kay, f"Şekil {no} · Kırılım modu kalıpları: ii · iii · ioi · oio · oo",
         "Taralı barlar kalıbın kendisi; noktalı çizgiler kalıbın kendi uçlarından türeyen iki stop "
         "seviyesi (üstte alış, altta satış). Ders bu kalıplarda yönü BİLMEZ ve iki tarafa da emir "
         "koydurur — panellerin ikisinde iki stop da aynı barda tetiklendi, kuralın en pahalı hâli. "
         "Ölçülen sıklık: ii 100 · oo 55 · ioi 43 · oio 35 · iii 17 (4.314 bar). "
-        "Bu altı panel ÖRNEKTİR; kuralın 250 oluşumun tamamında sınanmış hâli Şekil 09'dadır",
+        "Bu altı panel ÖRNEKTİR; kuralın 250 oluşumun tamamında sınanmış hâli "
+        f"Şekil {_no('yon_bilinmez')}'dadır",
         paneller, sutun=3, panel_yuk=255)
-    return _yaz(fig, "08_kirilim_modu.html")
+    return _yaz(fig, f"{no}_kirilim_modu.html")
 
 
 def _kirilim_olcusu(kay: dict, ufuk: int = 5) -> dict:
@@ -617,7 +654,7 @@ def _iki_oran_p(x1: int, n1: int, x2: int, n2: int) -> tuple[float, float, float
     return p1, p2, math.erfc(abs(z) / math.sqrt(2))
 
 
-def sekil_09(kay: dict) -> Path:
+def sekil_yon_bilinmez(kay: dict, no: str) -> Path:
     """'YÖN BİLİNMEZ' ÖLÇÜLDÜ — ve taban oran olmadan ters sonuç çıkıyordu.
 
     Kalıp barlarında yukarı payı %58 çıkıyor ve tek başına bakıldığında
@@ -665,27 +702,317 @@ def sekil_09(kay: dict) -> Path:
     fig.update_xaxes(tickfont=dict(size=10))
     kd2, kd3 = o["kalip"][2], o["kalip"][3]
     nk = sum(kd2.values()) + sum(kd3.values())
-    _duzen(fig, "Şekil 09 · 'Yön bilinmez' ölçüldü — ve taban oran olmadan TERS sonuç çıkıyor",
+    _duzen(fig, f"Şekil {no} · 'Yön bilinmez' ölçüldü — ve taban oran olmadan TERS sonuç çıkıyor",
            f"Kalıp sonrası {o['ufuk']} bar içinde hangi stopun önce tetiklendiği, {nk} oluşumda. "
            "Yalnız sol çubuklara bakan biri 'kalıp yukarı çalışıyor' der; oysa AYNI braket kalıp "
            "olmayan barlara kurulduğunda da yukarı payı benzer çıkıyor — fark ayırt edilemiyor "
            f"(p = {B.sayi(yon_p[0], 2)} ve {B.sayi(yon_p[1], 2)}), yani ders haklı. Ayırt edilen "
            "tek şey kuralın en pahalı hâli: iki stopun aynı barda tetiklenmesi kalıplarda "
            "tabanın iki–üç katı", 560)
-    return _yaz(fig, "09_yon_bilinmez.html")
+    return _yaz(fig, f"{no}_yon_bilinmez.html")
+
+
+NITELIK_AD = {
+    "n1": "açılış/kapanış yönü",
+    "n2": "kuyruk geometrisi",
+    "n3": "örtüşme sınırı",
+    "n5": "yeni uç",
+}
+
+
+def sekil_kalite_skoru(kay: dict, no: str) -> Path:
+    """KALİTE SKORU BİR BARIN BİÇİMİDİR — 4/4 · 3/4 · 2/4 yan yana.
+
+    Sayfa "3/4 gördüğünüzde ipucundan hangi niteliğin düştüğüne bakın" diyor
+    ama düşen niteliğin NASIL göründüğünü göstermiyor. Üç panel AYNI seansın
+    ardışık üç barı: aynı piyasa, aynı saat, üç farklı skor — yani fark
+    bağlamdan değil BARIN BİÇİMİNDEN doğuyor ve ancak yan yana görülür.
+    """
+    # Barlar ELLE değil ÖLÇÜMLE seçilir: aynı SEANSTA 4/4, 3/4 ve 2/4 veren
+    # üçlü aranır. Elle seçilmiş bir indis veri yenilendiğinde sessizce başka
+    # bir barı gösterir; arama, eşleşme kalmazsa ADIYLA düşer.
+    ISTENEN = (4, 3, 2)
+    en_iyi = None
+    for ank, k in kay.items():
+        s = k.seri
+        fp = R.FiyatPaneli(s)
+        gun: dict[str, dict[int, list[int]]] = {}
+        for i in range(int(R.SABIT_FH["maUzunluk"]), len(s)):
+            for boga in (True, False):
+                if not fp.donus_bari(i, boga):
+                    continue
+                d = gun.setdefault(f"{s.zaman[i][:10]}|{int(boga)}", {})
+                d.setdefault(fp.kalite(i, boga), []).append(i)
+        for anahtar, skor in gun.items():
+            if not all(x in skor for x in ISTENEN):
+                continue
+            sec = [skor[x][0] for x in ISTENEN]
+            yayilim = max(sec) - min(sec)
+            if en_iyi is None or yayilim < en_iyi[0]:
+                en_iyi = (yayilim, ank, anahtar.endswith("|1"), sec)
+    if en_iyi is None:
+        raise SystemExit("ENGEL · aynı seansta 4/4 · 3/4 · 2/4 veren üçlü yok — "
+                         "örnek ölçüyle yenilenmeli")
+    _, ANK, BOGA, SEC = en_iyi
+    s = kay[ANK].seri
+    fp = R.FiyatPaneli(s)
+    paneller = []
+    for i in SEC:
+        n = fp.nitelikler(i, BOGA)
+        k = sum(n.values())
+        dusen = [NITELIK_AD[a] for a, v in n.items() if not v]
+        # Barın SINIFI ile SKORU ayrı şeylerdir; ikisi de yazılır.
+        paneller.append(dict(
+            etiket=f"{k}/4 — " + ("dördü birden tutuyor" if k == 4
+                                  else "düşen: " + " · ".join(dusen)),
+            seri=ANK, bas=i - 7, son=i + 4, vurgu=[i],
+            isaret=[(i, f"{k}/4", True, MUREKKEP if k == 4 else CLARET)],
+            not_=f"{_an(s.zaman[i])} · {fp.sinif(i)} · gövde/menzil "
+                 f"{B.sayi(fp.govde_orani(i), 2)} · örtüşme "
+                 f"{B.yuzde(100 * fp.ortusme(i), 0)}",
+        ))
+    ad = O.ENSTRUMAN_AD.get(ANK.rsplit("-", 1)[0], ANK)
+    skorlar = " · ".join(f"{sum(fp.nitelikler(i, BOGA).values())}/4" for i in SEC)
+    # Skorun HÜKÜM OLMADIĞI sayfanın kendi ölçümü; burada tekrarlanmaz.
+    fig = _kucuk_coklu(
+        kay, f"Şekil {no} · Kalite skoru barın biçimidir: {skorlar}",
+        f"Üçü de {ad} serisinin {_an(s.zaman[SEC[0]])[:10]} seansından, "
+        f"{'boğa' if BOGA else 'ayı'} kurulumu olarak puanlandı — aynı piyasa, aynı gün, üç farklı "
+        "skor. Panel başlığı hangi niteliğin DÜŞTÜĞÜNÜ yazar; skorun kendisi bir işlem izni "
+        "değildir, dördü de tutan bir bar always-in yönüne ters düşüyorsa indikatör etiketi basmaz",
+        paneller, sutun=3, panel_yuk=270)
+    return _yaz(fig, f"{no}_kalite_skoru.html")
+
+
+def sekil_always_in_donusu(kay: dict, no: str) -> Path:
+    """ALWAYS-IN DÖNÜŞÜ — üçgen neden BU barda, bir önceki güçlü barda değil.
+
+    Kural üç parçalı (iki güçlü bar + doğru kapanışlı takip barı) ve sayfada
+    yalnız düz yazı. Üç panel kuralın hangi parçasının nerede düştüğünü
+    gösterir; kuralın MALİYETİ de ölçülü: geç ve seyrek işaretler.
+    """
+    # Seri ELLE seçilmez: kuralın üç hâlini birden taşıyan seri ARANIR.
+    # Elle seçim, veri yenilendiğinde sessizce başka bir olayı gösterir.
+    secim = None
+    for ank, k in kay.items():
+        s = k.seri
+        fp = R.FiyatPaneli(s)
+        yon, donus, onaysiz = fp.always_in()
+        # Sıfırdan KURULMA ile DÖNÜŞ aynı şey değil: `donus` ilk kez yön
+        # alındığı barı da taşır ve ona "döndü" demek olmamış bir olay
+        # anlatmaktır. 13 serinin 13'ünde sıfırdan kurulma var, gerçek
+        # dönüş yalnız 6 seride.
+        gercek = [j for j in donus if yon[j - 1] != 0]
+        if not gercek:
+            continue
+        d = gercek[0]
+        uzak = [j for j in onaysiz if abs(j - d) > 6]
+        if not uzak:
+            continue
+        kurulu = set(donus) | set(onaysiz)
+        tek = next((i for i in range(int(R.SABIT_FH["maUzunluk"]) + 2, len(s))
+                    if not any(abs(i - j) <= 4 for j in kurulu)
+                    and (fp.guclu_boga(i) or fp.guclu_ayi(i))
+                    and not (fp.guclu_boga(i - 1) or fp.guclu_ayi(i - 1))), None)
+        if tek is None:
+            continue
+        secim = (ank, d, uzak[0], tek)
+        break
+    if secim is None:
+        raise SystemExit("ENGEL · kuralın üç hâlini birden taşıyan seri yok — "
+                         "örnek ölçüyle yenilenmeli")
+    ANK, d, o1, tek = secim
+    s = kay[ANK].seri
+    fp = R.FiyatPaneli(s)
+    ad = O.ENSTRUMAN_AD.get(ANK.rsplit("-", 1)[0], ANK)
+    paneller = [
+        dict(etiket="① Onaylandı — iki güçlü bar, takip barı doğru kapandı",
+             seri=ANK, bas=d - 8, son=d + 5, vurgu=[d - 2, d - 1, d],
+             isaret=[(d, "always-in DÖNDÜ", True, MUREKKEP)],
+             not_=f"{_an(s.zaman[d])} · işaret ancak dizinin ÜÇÜNCÜ barında basılıyor"),
+        dict(etiket="② Dizi kuruldu, takip barı ELEDİ",
+             seri=ANK, bas=o1 - 8, son=o1 + 5, vurgu=[o1 - 2, o1 - 1, o1],
+             isaret=[(o1, "onay YOK", True, CLARET)],
+             not_=f"{_an(s.zaman[o1])} · iki güçlü bar var, üçüncü barın kapanışı tutmuyor"),
+        dict(etiket="③ Tek güçlü bar — dizi hiç kurulmuyor",
+             seri=ANK, bas=tek - 8, son=tek + 5, vurgu=[tek],
+             isaret=[(tek, "dizi yok", True, GRI)],
+             not_=f"{_an(s.zaman[tek])} · güçlü bar tek başına always-in'i çevirmez"),
+    ]
+    # Seçiciliğin ölçüsü: OLAY ile DÖNÜŞ ayrı sayılır, çünkü her serinin ilk
+    # olayı sıfırdan kurulmadır ve onu dönüş saymak sayıyı iki katına çıkarır.
+    n_olay = n_donus = n_onaysiz = n_bar = 0
+    for k in kay.values():
+        y, dn, on = R.FiyatPaneli(k.seri).always_in()
+        n_olay += len(dn)
+        n_donus += sum(1 for j in dn if y[j - 1] != 0)
+        n_onaysiz += len(on)
+        n_bar += len(k.seri)
+    fig = _kucuk_coklu(
+        kay, f"Şekil {no} · Always-in dönüşü: üçgen neden bu barda basıldı",
+        "Kural üç parçalı — ardışık iki güçlü trend barı, sonra kapanışı diziyi onaylayan bir takip "
+        f"barı. Üç panel de {ad} serisinden, yani fark enstrümandan değil kuralın hangi parçasının "
+        f"düştüğünden geliyor. Seçicilik ölçülü: {B.sayi(n_bar, 0)} barda {n_olay} olay, bunların "
+        f"{n_donus} tanesi gerçek YÖN DEĞİŞİMİ (kalanı serinin ilk kez yön alması), ve "
+        f"{n_onaysiz} dizi "
+        "takip barında elendi",
+        paneller, sutun=3, panel_yuk=270)
+    return _yaz(fig, f"{no}_always_in_donusu.html")
+
+
+def sekil_gap_yon_filtresi(kay: dict, no: str) -> Path:
+    """GAP SAYACI BİR SİNYAL DEĞİL SAYAÇTIR — aynı eşik, ters iki sonuç.
+
+    Sayfa "gap sayacı 20'yi geçince ⚑ çıkar" diyor ve dersin okumasını
+    aktarıyor; okur ⚑'nin bir sayaç mı sinyal mi olduğunu metinden ayırt
+    edemiyor. İki gerçek örnek bunu çözüyor, üçüncü panel yön filtresinin
+    bir YASAK olduğunu gösteriyor.
+    """
+    ESIK = int(R.SABIT_FH["gapEsik"])
+    aday = []
+    for ank, k in kay.items():
+        s = k.seri
+        fp = R.FiyatPaneli(s)
+        g = fp.gap_sayaci()
+        for i in range(int(R.SABIT_FH["maUzunluk"]), len(s) - 12):
+            if g[i] == ESIK:                       # eşiğin TAM aşıldığı bar
+                # Eşikten sonra trend sürdü mü, yoksa ortalamaya mı döndü?
+                zirve = max(g[i:min(i + 25, len(s))])
+                aday.append((ank, i, zirve))
+    if len(aday) < 2:
+        raise SystemExit(f"ENGEL · gap eşiği ({ESIK}) yeterince örnek vermiyor: {len(aday)}")
+    aday.sort(key=lambda a: -a[2])
+    surdu = aday[0]                                # en uzun koşu
+    kisa = min(aday, key=lambda a: a[2])           # eşikte kalıp hemen dönen
+    paneller = []
+    for et, (ank, i, zirve) in (("A · eşik aşıldı, koşu SÜRDÜ", surdu),
+                                ("B · aynı eşik, ortalamaya HEMEN dönüldü", kisa)):
+        s = kay[ank].seri
+        ad = O.ENSTRUMAN_AD.get(ank.rsplit("-", 1)[0], ank)
+        paneller.append(dict(
+            etiket=f"{et} (tepe {zirve})", seri=ank, bas=i - 6, son=min(i + 16, len(s)),
+            vurgu=[i], ema=True, isaret=[(i, f"gap {ESIK}", True, CLARET)],
+            not_=f"{ad} · {_an(s.zaman[i])} — sayaç aynı eşikte, sonrası başka"))
+    # Üçüncü panel: yön filtresinin YASAK koyduğu bir pencere.
+    yasak = None
+    for ank, k in kay.items():
+        s = k.seri
+        fp = R.FiyatPaneli(s)
+        for i in range(int(R.SABIT_FH["maUzunluk"]) + 12, len(s) - 4):
+            f = fp.yon_filtresi(i)
+            if f != "serbest" and fp.yon_filtresi(i - 1) == "serbest":
+                yasak = (ank, i, f)
+                break
+        if yasak:
+            break
+    if yasak is None:
+        raise SystemExit("ENGEL · yön filtresinin kapandığı bar bulunamadı")
+    ank, i, f = yasak
+    s = kay[ank].seri
+    fp = R.FiyatPaneli(s)
+    pen = int(R.SABIT_FH["yonPencere"])
+    # Yasağı doğuran taraf hangisiyse O sayılır: "yalnız SAT" filtresi
+    # ortalamanın ALTINDA kapanan barlardan doğar; üstteki sayıyı yazmak
+    # okura kuralın tersini anlatır.
+    sat = f == "yalnız SAT"
+    yan = "altında" if sat else "üstünde"
+    ust = sum(1 for j in range(i - pen + 1, i + 1)
+              if (s.c[j] < fp.ema[j] if sat else s.c[j] > fp.ema[j]))
+    paneller.append(dict(
+        etiket=f"C · yön filtresi KAPANDI — {f}", seri=ank, bas=i - pen - 7, son=i + 5,
+        vurgu=list(range(i - pen + 1, i + 1)), ema=True,
+        isaret=[(i, f, True, CLARET)],
+        not_=f"{O.ENSTRUMAN_AD.get(ank.rsplit('-', 1)[0], ank)} · {_an(s.zaman[i])} — "
+             f"son {pen} barın {ust} tanesi ortalamanın {yan} kapandı"))
+    fig = _kucuk_coklu(
+        kay, f"Şekil {no} · Gap sayacı bir sinyal değil sayaçtır; yön filtresi bir yasaktır",
+        f"Sol iki panel AYNI eşikte ({ESIK} bar ortalamaya dokunmadı) ve ters sonuç veriyor — sayaç "
+        "ne olacağını söylemez, ortalamadan ne kadar uzaklaşıldığını sayar. Sağdaki panel yön "
+        "filtresinin kapandığı bar: taralı pencerenin çoğu ortalamanın bir yanında kapandığı için "
+        "indikatör KARŞI yönde etiket basmayı bırakır",
+        paneller, sutun=3, panel_yuk=270)
+    return _yaz(fig, f"{no}_gap_yon_filtresi.html")
+
+
+# ŞEKİL NUMARASI BİR KİMLİK DEĞİL, SAYFADAKİ YERDİR. Numara bu listedeki
+# sıradan türer; şekil işlevleri kendi numaralarını BİLMEZ, dışarıdan alır.
+# Sayfada Şekil 01'den sonra Şekil 08 gelmesi okuru şaşırtır ve bu kusur bir
+# kez elle numaralandırıldığı için doğdu: her yeni figür sıranın SONUNA
+# numara alıyordu, oysa metnin ORTASINA giriyordu.
+SIRA = [
+    ("indikator_gorunumu", lambda: sekil_indikator_gorunumu),
+    ("kirilim_modu",       lambda: sekil_kirilim_modu),
+    ("yon_bilinmez",       lambda: sekil_yon_bilinmez),
+    ("cevirme_sayaci",     lambda: sekil_cevirme_sayaci),
+    ("ne_beklemeli_siklik", lambda: sekil_ne_beklemeli_siklik),
+    ("rejim_dagilimi",     lambda: sekil_rejim_dagilimi),
+    ("always_in_donusu",   lambda: sekil_always_in_donusu),
+    ("kalite_skoru",       lambda: sekil_kalite_skoru),
+    ("kalite_hizasi",      lambda: sekil_kalite_hizasi),
+    ("gap_yon_filtresi",   lambda: sekil_gap_yon_filtresi),
+    ("okuma_sirasi",       lambda: sekil_okuma_sirasi),
+    ("islem_mekanigi",     lambda: sekil_islem_mekanigi),
+]
+
+MDX = SITE / "src" / "content" / "indikatorler" / "brooks-fiyat-hareketi.mdx"
+
+
+def _no(kok: str) -> str:
+    """Bir şeklin numarası — SIRA'daki yerinden. Kardeş şekle atıf veren
+    metinler bunu çağırır, sayı YAZMAZ."""
+    for k, (ad, _) in enumerate(SIRA, 1):
+        if ad == kok:
+            return f"{k:02d}"
+    raise SystemExit(f"ENGEL · SIRA'da '{kok}' yok — atıf çözülemiyor")
+
+
+def mdx_sirasi_sina() -> list[str]:
+    """SAYFANIN gömme sırası ile SIRA aynı mı — ve `no` yerine mi denk geliyor.
+
+    Sözleşme sayfanın kendisinde: okurun gördüğü sıra numaraların kaynağıdır.
+    İki liste elle tutulsaydı bir gün sessizce ayrışır ve okur Şekil 07'yi
+    Şekil 11'den sonra görürdü. Ölçüt iki yönlü: SIRA'daki her şekil sayfada
+    var mı, sayfadaki her şekil SIRA'da mı.
+    """
+    import re
+    if not MDX.exists():
+        return [f"ENGEL · sayfa bulunamadı: {MDX}"]
+    metin = MDX.read_text(encoding="utf-8")
+    gomme = re.findall(r'src="/indikatorler/(\d\d)_([a-z_]+)\.html"[^>]*?no="(\d\d)"', metin)
+    hata = []
+    bekle = [(f"{k:02d}", ad) for k, (ad, _) in enumerate(SIRA, 1)]
+    if len(gomme) != len(bekle):
+        hata.append(f"ENGEL · sayfada {len(gomme)} şekil gömülü, SIRA {len(bekle)} tanım ediyor")
+    for k, ((dosya_no, kok, etiket_no), (bek_no, bek_kok)) in enumerate(zip(gomme, bekle), 1):
+        if kok != bek_kok:
+            hata.append(f"ENGEL · {k}. sırada sayfada '{kok}', SIRA'da '{bek_kok}'")
+        if dosya_no != bek_no or etiket_no != bek_no:
+            hata.append(f"ENGEL · '{kok}' sayfada dosya {dosya_no} · etiket {etiket_no}, "
+                        f"sırası {bek_no}")
+    return hata
 
 
 def main() -> None:
     CIKTI.mkdir(parents=True, exist_ok=True)
+    hata = mdx_sirasi_sina()
+    if hata:
+        raise SystemExit("\n".join(hata))
     kay = _kaynaklar()
     if not kay:
         raise SystemExit("ENGEL · gövde kapısından geçen seri yok")
-    for fn in (sekil_01, sekil_02, sekil_03, sekil_04, sekil_05, sekil_06, sekil_07,
-               sekil_08, sekil_09):
-        yol = fn(kay)
+    for k, (kok, al) in enumerate(SIRA, 1):
+        no = f"{k:02d}"
+        yol = al()(kay, no)
         durum = plotly_stil.isle(yol)
         print(f"  {yol.name:34s} {durum}")
+    # Sıra değiştiğinde eski numaralı dosyalar ARTAKALIR ve sayfa onları
+    # çağırmasa da depoda durur; adıyla söylenir, sessizce bırakılmaz.
+    gecerli = {f"{k:02d}_{kok}.html" for k, (kok, _) in enumerate(SIRA, 1)}
+    artik = sorted(y.name for y in CIKTI.glob("[0-9][0-9]_*.html") if y.name not in gecerli)
+    if artik:
+        print(f"\n  ! artakalan dosya (sayfa çağırmıyor): {', '.join(artik)}")
     print(f"\n{len(kay)} seri · figürler {CIKTI.relative_to(SITE.parent)} altında")
+
 
 
 if __name__ == "__main__":
