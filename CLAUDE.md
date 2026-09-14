@@ -1453,6 +1453,49 @@ anında sapmayı adıyla uyarıyor. DİBS'te aynı sınıfın bir sonraki hâli
 sayısı ay adının uzunluğuna bağlı olabilirdi; 12×12 = 144 ay bileşiminin
 hepsinde satır sayısı 3 çıktı ve bu ölçüm hattın duman sınamasına kilitlendi.
 
+**KARAR (14.09.2026, kullanıcı istedi, ÖLÇÜM cevapladı) — ROT AYRI TAHMİN
+EDİLMİYOR.** Hazine Şekil 11'in ipucu sorulurken ikinci bir soru daha geldi
+("rot tahmini yapıyor muyuz burada") ve ayrı tahmin istendi. Ölçüldü; cevap
+HAYIR ve gerekçe iki katmanlı.
+
+Birincisi CEBİR, ölçüm değil: kestirici kıyasların ORTALAMASI ve ortalama
+DOĞRUSALDIR, yani ort(Toplam) ≡ ort(İhale) + ort(ROT). "İki bacağı ayrı tahmin
+edip toplayalım" önerisinin en düz biçimi mevcut yöntemle AYNI SAYIYI üretiyor
+— 449 ihalenin 449'unda birebir, azami fark 1,5e−11 mn TL. Bir öneri ölçülmeden
+önce, önerinin mevcut hâlden CEBİRSEL OLARAK farklı olup olmadığı sorulur;
+burada değildi ve bu tek başına yarışın yarısını bitirdi.
+
+İkincisi ÖLÇÜM: ayrı tahmini anlamlı kılmak için ROT'u bir PAY olarak
+modelleyip ihale bacağını ona bölen üç kestirici (kıyas payı · kısaltılmış lag
+payı · sabit yarı yarıya) örneklem DIŞI yarıştırıldı (yürüyen pencere, N=457).
+En iyisi MAE'yi 6.953'ten 6.814'e indiriyor (%2,0) ama eşli fark ANLAMSIZ
+(t p=0,384 · Wilcoxon p=0,314), bootstrap %95 güven aralığı sıfırı kapsıyor,
+ihalelerin yalnız %47,3'ünde kazanıyor ve MEDYAN eşli fark mevcut yöntemin
+LEHİNE. Üç saf kıyas ölçütü (genel medyan · tip medyanı · rastgele yürüyüş)
+mevcut yöntemden KESİN olarak kötü (p<1e−12) — yani ölçülen isabet ROT
+ayrıştırmasından değil KIYAS KURALINDAN geliyor.
+
+Kararı asıl veren şey ZİNCİRİN TAMAMINDA ölçülmesiydi. Ham tahmin adımında
+küçük ve anlamsız bir iyileşme gibi görünen kestiriciler, üretimdeki aylık
+hedefe ölçekleme adımıyla BİRLİKTE koşulduğunda ANLAMLI BİÇİMDE KÖTÜLEŞİYOR
+(+168 · Wilcoxon p=0,0069 ve +182 · p=0,0036). Bir adımı tek başına ölçüp
+"biraz daha iyi" demek, o adımın zincirin geri kalanıyla nasıl çarpıştığını
+sormamaktır — burada işaret tam tersine döndü.
+
+Okura düşen kısım YAPILDI, çünkü asıl kusur tahminde değil GÖRÜNÜRLÜKTEYDİ:
+ROT sayfada yalnız bir sütun listesinde geçiyordu, oysa 463 ihalenin medyanında
+toplamın %49,5'i ve SIFIR olduğu tek bir ihale yok. Sözlüğe girdi, tahmin
+bölümüne ölçülmüş payıyla yazıldı, Şekil 11'in ipucu B/C'nin tabanını "ihale +
+ROT" diye söylüyor. Bir büyüklüğü ayrı TAHMİN etmekle ayrı GÖSTERMEK farklı
+şeylerdir; ölçüm birincisini reddetti, ikincisi zaten eksikti.
+
+AÇIK KALAN, adıyla: yarış yalnız Toplam(Gerçekleşme) üzerinde kuruldu —
+zincirin tek doğrusal olmayan adımı olan bid-to-cover tahmini bu ölçüye girmedi
+ve ayrı ölçüm ister. MAE seviyeye bağlı ve seviye altı yılda 12 kat büyüdü;
+deflate edilmiş bir ölçüde sıralama değişebilir, ölçülmedi. En güncel rejimde
+örneklem dar (2026'da N=47) ve o pencerede hiçbir eşli fark anlamlı değil.
+
+
 **Kurucu ilke — BİR ÖLÇÜNÜN CETVELİ ÖLÇÜNÜN PARÇASIDIR; ve bir kuralın
 uygulanmadığı yer, kuralın yazıldığı yerle aynı görünür.** 09.09.2026'da
 denetimin görmediği dört hat (odemeler · fx · marj · ovp) aynı yöntemle

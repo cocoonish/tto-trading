@@ -270,8 +270,29 @@ ihale_ay_ort = round(len(ih) / ih["ay"].nunique(), 1)
 ihale_ham_mape = round(float(abs(pd.to_numeric(
     td["Tutar Sapma % (ham)"], errors="coerce")).mean()), 1)
 
+# ── ROT (rekabetçi olmayan teklif) payı ────────────────────────────────────
+# Sayfadaki her "net satış" sayısı ihale bacağı ARTI ROT'tur; kaynak sütunları
+# Toplam(...) ve ikisini de kapsıyor. ROT okura görünmüyordu, oysa ihalelerin
+# yaklaşık yarısı. Özdeşliği bozan satır ölçünün dışında bırakılır (bir satırda
+# İhale + ROT ile Toplam tutmuyor); ölçülemeyen bir pay uydurulmaz.
+_rot = ih.copy()
+for _c in ("Toplam(Gerçekleşme)", "İhale(Gerçekleşme)", "ROT Toplam(Gerçekleşme)"):
+    _rot[_c] = pd.to_numeric(_rot[_c], errors="coerce")
+_ok = ((_rot["İhale(Gerçekleşme)"] + _rot["ROT Toplam(Gerçekleşme)"]
+        - _rot["Toplam(Gerçekleşme)"]).abs() <= 0.5) & (_rot["Toplam(Gerçekleşme)"] > 0)
+_rot = _rot[_ok]
+_pay = _rot["ROT Toplam(Gerçekleşme)"] / _rot["Toplam(Gerçekleşme)"]
+_son12 = _rot[_rot["t"] >= _rot["t"].max() - pd.Timedelta(days=365)]
+
 ozet = {
     "_tarih": ih["t"].max().strftime("%d.%m.%Y"),
+    "rot_pay_medyan": round(float(_pay.median()) * 100, 1),
+    "rot_pay_alt": round(float(_pay.quantile(0.25)) * 100, 1),
+    "rot_pay_ust": round(float(_pay.quantile(0.75)) * 100, 1),
+    "rot_pay_son12": round(float((_son12["ROT Toplam(Gerçekleşme)"]
+                                  / _son12["Toplam(Gerçekleşme)"]).median()) * 100, 1),
+    "rot_n": int(len(_rot)),
+    "rot_sifir_n": int((_rot["ROT Toplam(Gerçekleşme)"] == 0).sum()),
     "n_ihale": int(len(ih)),
     "toplam_mlr": round(float(ih["Toplam(Gerçekleşme)"].sum()) / 1000, 1),
     "gerceklesme_ort": round(float(pd.to_numeric(gercek["Gerçekleşme Oranı (%)"], errors="coerce").mean()), 1),
