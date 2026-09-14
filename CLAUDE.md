@@ -1496,6 +1496,81 @@ deflate edilmiş bir ölçüde sıralama değişebilir, ölçülmedi. En güncel
 örneklem dar (2026'da N=47) ve o pencerede hiçbir eşli fark anlamlı değil.
 
 
+**Kurucu ilke — BİR KURAL BİR GÜNÜ DEĞİL BİR SEANSI SORMALIDIR; ve bir
+FİKSTÜRÜN girdisi CANLIYSA beklentisi SAYIYA değil SÖZLEŞMEYE bağlanır.**
+14.09.2026'da kullanıcıya gün boyu "veri tazeleme" arıza e-postası gitti ve
+zincir söküldüğünde iki ayrı kusur çıktı; ikisi de "sağlıklı görünen arıza"
+sınıfından ve ikincisi yayımlanmış bir sayıydı.
+
+(1) DONMUŞ BEKLENTİ, CANLI GİRDİ. `veri.yml` dört kez kırmızı bitti çünkü
+`duman.py`nin ihale ölçütü donmuş bir çıpa gününe (07.09) bakıp CANLI plan
+dosyasında "ihale günü sayısı 8" diyordu. O gün 14.09 ihalesi yapıldı,
+takvimden düştü, sayı 7'ye indi ve ölçüt DÜŞTÜ. Bedeli tek bir e-postadan
+büyük: duman adımlardan ÖNCE koşar, düştüğü için EVDS anahtarı, tazeleme
+takvimi ve "Gereken hatları tazele" adımları ATLANDI — veri beş saat hiç
+tazelenmedi ve e-postalar o sessizliğin yan etkisiydi. Aynı kusur 10.09'da
+YPMevduat fikstüründe adıyla ölçülmüştü; kural vardı, bu ölçüte
+uygulanmamıştı. Ölçüt ikiye ayrıldı: sentetik plan dosyası (girdi ve
+beklenti BİRLİKTE donmuş) sözleşmenin dört maddesini sınar — sütun ADIYLA
+sorulur, itfa tarihleri sızmaz, aynı günün iki ihalesi tekilleşir, ufkun
+ötesi düşer — canlı dosyada ise yalnız kaymayan nitelik sorulur ve o yarının
+çıpası BUGÜNDÜR: donmuş çıpa 2027'de meşru bir ihale gününü "itfa sızıntısı"
+sayar, yani kaldırılan kusurun takvime bağlı biçimini geri koyardı.
+
+(2) BİR GÜN, BİR SEANS DEĞİLDİR. Düzeltme zinciri açınca altından ikinci bir
+arıza çıktı: usdtry ve ovp hatları "VERİ GERİLEDİ" (12.09 → 11.09) ile
+durdu. 12.09 bir CUMARTESİ. 13.09 PAZAR koşusu (6d086e1c) seriye 12.09
+cumartesi barını almıştı — `kur_gozlem` 675 → 678, `kur_son` 09.09 → 12.09,
+`kur` 48,46 → 48,55 — ve cuma kapanışı 48,5921 olduğuna göre bu bayat bir
+tekrar DEĞİL, cumanın %0,086 altında ayrı bir değerdi. `kapanmamis_bari_dusur`
+onu göremez, çünkü o kural bir SEANSI değil bir GÜNÜ soruyor: cumartesi barı
+PAZAR çekildiğinde artık "bugün" değildir. Yayımlanan dosya kendi içinde
+çelişiyordu ve kimse bakmamıştı — hattın saati cumartesi, figür damgası
+"kur ve TLREF 11.09.2026", çünkü TLREF iş günü serisi ve birleşik damga en
+eski bacağı alır. Pazartesi Yahoo o barı hiç vermedi (678 → 677), gerileme
+kapısı öttü ve iki pano siteye kopyalanamadı. Kapı DOĞRU davrandı; gerileyen
+şey veri değil, kirli barın kendisiydi.
+
+ÖLÇÜM HİPOTEZİ ÇÜRÜTMEDİ AMA KAPSAMI DÜZELTTİ, ve bu ayrı bir ders. İlk
+keşif koşusu yfinance yolunu ölçtü ("2015 → bugün 3.045 gözlemde hafta sonu
+barı SIFIR, hafta içi doluluk %99,7") — oysa ÜRETİM yfinance kullanmıyor:
+`veri.yml`in hiçbir işi onu kurmuyor, hat chart ucundan besleniyor. Yani
+ölçüm, kusurun doğduğu yola hiç bakmamıştı; "bir denetimin KAPSAMI denetimin
+parçasıdır" kusurunun eşi, üstelik ölçümü yapan tarafta. Yan kanıt aynı
+çıktıdaydı: yayımlanan 48,55 ne 11.09'un 48,5921'ine ne 14.09'un 48,6128'ine
+yuvarlanıyor, yani cumartesi barı ayrı bir gözlem. Hükmü veren şey serinin
+kendisi oldu: 21:01'deki üretim koşusu 3.044 gözlem (→ 11.09) demişti,
+yfinance bugün 3.045 verip kapanmamış barı düşünce BİREBİR aynı — iki uç
+ayrışmıyor ve 12.09 barı bugün hiçbir uçta YOK. Kaynak o barı GERİ ÇEKTİ.
+Kaynağın geri çektiği bir bar hiçbir zaman yerleşmiş bir gözlem değildi.
+
+Süzgeç bu yüzden kondu ve maliyeti ölçüldü: bugünkü seride düşen gözlem 0,
+yıllıklandırılmış hıza etki +0,00 puan. SESSİZ SİLMİYOR — düşen gün ADIYLA
+`kur_uyari`ya yazılıyor, çünkü kaynak bir gün damgalarını kaydırırsa (meşru
+bir cuma seansı cumartesiye düşerse) sessiz bir süzgeç gerçek veriyi yok
+eder, uyarı ise onu adıyla gösterir. SIRA da sözleşmenin parçası: süzgeç
+kapsam denetiminden ÖNCE koşar, çünkü doluluk ölçütü `len(s)`i İŞ GÜNÜ
+sayısıyla kıyaslıyor ve hafta sonu barı paydayı şişirip eksik bir hafta içi
+gününü maskeleyebiliyordu — tek düzeltme iki kusuru birden kapatıyor. Yedi
+ölçüt hattın duman sınamasında, çerçeve o günün birebir kendisi, ve BİRİNCİ
+madde kapanmamış bar kuralının bu hâli DÜŞÜREMEDİĞİNİ sabitliyor: ikinci
+süzgecin neden gerektiği yoruma değil ölçüte yazılı. Beş arıza
+enjeksiyonunun beşi de yakalanıyor.
+
+Üç yan bulgu kayda değer. Birincisi: `429 BİR ÖLÇÜM DEĞİLDİR` — keşif
+betiği tek denemede "Too Many Requests" alıp pes etti ve iki koşu boyunca
+ölçüm HİÇ yapılamadı; bir hız sınırı kaynağın ne döndürdüğü hakkında hiçbir
+şey söylemez. İkincisi: yükleyicinin ilan ettiği sözleşme ("asıl yol
+yfinance, yedek chart ucu") bulutta TERSİNE işliyor, çünkü `veri.yml` hiçbir
+işte yfinance kurmuyor — yani üretimdeki USD/TRY tamamen çerezsiz ve hız
+sınırlı ham uca bağlı. Keşif işine eklendi; TAZELEME işine bilerek
+EKLENMEDİ, çünkü üretimde kur yolunu değiştirmek bir kaynak sözleşmesi
+değişimidir ve gerileme kapısını bir gün öttürür (AÇIK KARAR). Üçüncüsü
+tıkanmanın kendisi: bu arıza her hafta tekrar eder (pazar koşusu kirli damga
+yazar, pazartesi "geriler") ama KENDİLİĞİNDEN AÇILIR — salı sabahı seri
+14.09'u taşıyınca damga 12.09'un ilerisine geçer ve kapı susar; yani
+`--gerileme-kabul` gerekmedi ve kapı gevşetilmedi.
+
 **Kurucu ilke — BİR ÖLÇÜNÜN CETVELİ ÖLÇÜNÜN PARÇASIDIR; ve bir kuralın
 uygulanmadığı yer, kuralın yazıldığı yerle aynı görünür.** 09.09.2026'da
 denetimin görmediği dört hat (odemeler · fx · marj · ovp) aynı yöntemle
