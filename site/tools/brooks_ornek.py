@@ -29,6 +29,7 @@ Kullanım:
 from __future__ import annotations
 
 import argparse
+import collections
 import json
 import math
 import re
@@ -42,6 +43,7 @@ SITE = BURASI.parent
 # yanına bir __pycache__ bırakır ve o dizin de yayına gider — derlenmiş bytecode
 # okura sunulmaz. İçe aktarmadan ÖNCE kapatılır; sonra kapatmak geç kalır.
 sys.dont_write_bytecode = True
+sys.path.insert(0, str(BURASI))
 sys.path.insert(0, str(SITE / "public" / "indikatorler"))
 import brooks_referans as R                                      # noqa: E402
 from brooks_referans import (                                    # noqa: E402
@@ -129,6 +131,12 @@ def _duman() -> None:
 
     # Pine ile Python AYNI eşiklerde mi — iki uygulama sessizce ayrışmasın.
     hata += [f"eşik ayrışması · {x}" for x in R.pine_ile_karsilastir(PINE_FH, PINE_RP)]
+
+    # Pine'ın derleyicisi bu depoda YOK; statik denetim onun yerine geçmez
+    # ama bu depoda gerçekten yapılmış beş hatayı bir daha yapmayı engeller.
+    import pine_denetle                                          # noqa: E402
+    for y in sorted((SITE / "public" / "indikatorler").glob("*.pine")):
+        hata += pine_denetle.denetle(y)
 
     # public/ altında derlenmiş bytecode kalmasın — oradaki her şey yayına gider.
     for art in (SITE / "public").rglob("__pycache__"):
@@ -250,6 +258,54 @@ def ornekleri_ara(kaynaklar: list[Kaynak]) -> dict:
             ent = min(uclar, key=lambda x: (x["n"], -x["net_aralik"]))
             bulgu["rejim"].append({"ad": ad, "dagilim": dagilim,
                                    "pencere": len(uclar), "en_bant": enb, "en_trend": ent})
+
+        # ── Yeni ölçülerin SIKLIĞI — sayfadaki her oran buradan doğrulanır
+        kal = collections.Counter()
+        kad = collections.Counter()
+        oz = collections.Counter()
+        cev_flip: list[int] = []
+        cev_hep: list[int] = []
+        dset = {i for i in donus if i >= 3}
+        for i in range(int(R.SABIT_FH["maUzunluk"]), len(s)):
+            k = fp.kalip(i)
+            if k:
+                kal[k] += 1
+            kad[fp.cevirme_kademesi(i)] += 1
+            c = fp.cevirme(i)["kapanis"]
+            cev_hep.append(c)
+            if i in dset:
+                cev_flip.append(c)
+            if fp.tirasli(i):
+                oz[fp.tirasli(i)] += 1
+            if fp.iki_barlik_donus(i):
+                oz["iki barlık dönüş"] += 1
+            m = fp.mikro_cift(i)
+            if m:
+                oz[m] += 1
+            b = fp.bar_boyu(i)
+            if b:
+                oz[b] += 1
+            if abs(fp.mikro_kanal(i)) >= 5:
+                oz["mikro kanal ≥5"] += 1
+            if fp.iptal_kurali(i)["iptal"]:
+                oz["beş bar iptal"] += 1
+            # Orta nokta ölçütü KOŞULLU ölçülür. Koşulsuz sorulduğunda
+            # barların %99,7'si bir yönde geçiyor — çünkü her bar önceki
+            # barın orta noktasının bir tarafında kapanır. Ölçü ancak "bu
+            # bar bir DÖNÜŞ barı, peki kabul mü ret mi" diye sorulunca
+            # ayırt eder; kuralın sorduğu soru da budur.
+            for yon, ad2 in ((True, "boğa"), (False, "ayı")):
+                if fp.donus_bari(i, yon):
+                    oz[f"dönüş barı ({ad2})"] += 1
+                    if fp.orta_nokta_olcutu(i, yon):
+                        oz[f"orta nokta KABUL ({ad2})"] += 1
+        bulgu.setdefault("yeni_olcu", {})[ad] = {
+            "olculen_bar": len(s) - int(R.SABIT_FH["maUzunluk"]),
+            "kalip": dict(kal), "cevirme_kademesi": dict(kad), "ozellik": dict(oz),
+            "cevirme_medyan_hep": sorted(cev_hep)[len(cev_hep) // 2] if cev_hep else None,
+            "cevirme_medyan_flip": sorted(cev_flip)[len(cev_flip) // 2] if cev_flip else None,
+            "flip_bar": len(cev_flip),
+        }
 
         bulgu["sayim"][ad] = {
             "bar": len(s),
