@@ -6,6 +6,12 @@
    "gecikme_dk": 39.5,
    "sinif": "alarm",
    "darbogaz": "yazı"
+  },
+  "2026-09-14|Günlük bülten": {
+   "an": "2026-09-14T05:28:46+00:00",
+   "gecikme_dk": 17.8,
+   "sinif": "alarm",
+   "darbogaz": "ölçüm"
   }
  }
 }
