@@ -1902,6 +1902,17 @@ alınınca ölçüt iki dosyada da düştü. Bu depoda bir kez daha kayıtlı ol
 kusurun eşi: bir regresyon sınamasının kendisi de yanlış olabilir ve "ölçüt
 düşmedi" ile "arıza yok" birbirine tıpatıp benzer.
 
+Aynı turda üçüncü bir kusur, figürleri üretmek için replikasyonu İLK
+BARDAN çağırınca çıktı: `en_dusuk`/`en_yuksek` boş pencerede istisna
+fırlatıyordu. Pine orada `na` döner ve `na` ile yapılan her karşılaştırma
+`false`'tur; Python'da birebir karşılığı `nan`. Üretim yolu ısınma payıyla
+koştuğu için bu hâl hiçbir kapıda görünmüyordu — ama dosyayı kendi indirip
+koşturan okur onu ilk satırda görürdü. BİR REPLİKASYONUN SADAKATİ, ÜRETİM
+YOLUNUN HİÇ UĞRAMADIĞI BARLARDA DA ÖLÇÜLÜR. Ölçütün kendi teşhisi de
+düzeltildi: ilk yazımda arıza enjekte edilince sınama ÇÖKÜYORDU, yani
+ekrandaki hata sınamanın kendi kusuru gibi görünüyordu; artık adıyla
+bildiriyor.
+
 AÇIK KALAN — bu Pine hiç DERLENMEDİ. `pine_denetle`nin yedi ölçütü bu
 oturumda gerçekten yapılmış yedi hatanın sınıfını kapatıyor; kapatmadığı her
 şey açık. TradingView'e yapıştırılana kadar "derleniyor" cümlesi bir ÖLÇÜM
