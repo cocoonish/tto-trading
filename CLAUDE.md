@@ -1881,7 +1881,7 @@ bizim sözleşmemiz değildir.
 İkincisi TradingView tarafında ve kullanıcı adıyla koydu ("indikatörün
 okunması biraz zor"). Her iki panelin durum kutusu da UYGULAMA sırasına göre
 dizilmişti: fiyat panelinde on dört satır düz akıyordu, alt panelde rejim
-HÜKMÜ (`BANT` · `ARA` · `TREND`) sekiz satırlık tablonun alttan ikincisindeydi
+HÜKMÜ (`BANT` · `ara` · `trend`) sekiz satırlık tablonun alttan ikincisindeydi
 ve beş ham ölçü onun ÜSTÜNDEydi. Oysa okuma sırası dersin dayattığı sıradır ve
 alt panel o sıranın BİRİNCİ adımı: cevabı tek sözcük. Ölçüler hükmün
 gerekçesidir, gerekçe hükmün altına yazılır. İki kutu da yeniden dizildi
