@@ -82,6 +82,12 @@ def ortak_stil(fig: go.Figure, baslik: str, hovermode: str = "x unified") -> Non
         legend=dict(orientation="h", yanchor="top", y=-0.12,
                     xanchor="left", x=0),
         hovermode=hovermode,
+        # SAYI BİÇİMİ ORTAK SÖZLEŞMEDEN. plotly'nin varsayılanı ondalık NOKTA
+        # ve `%{y:.1f}` taşıyan her ipucu onu basıyordu; yanındaki `tr()`
+        # çıktısı ise virgüllü. Aynı cümlede "50.0 milyar TL" ile "87,1 milyar
+        # TL" yan yana duruyordu. İlk karakter ondalık, ikincisi binlik ayracı:
+        # ",." → 1.234,5 (ortak/bicim ile aynı).
+        separators=",.",
         margin=dict(t=72, r=48, b=96, l=64),
     )
     fig.update_xaxes(gridcolor="#efe9dc", linecolor="#d8cfba",
@@ -123,14 +129,27 @@ def planlanan_ihraclar() -> dict:
     )
 
     # --- üst panel: senet tipine göre (aynı günde üst üste yığılı) ---
-    kumule: dict = {}  # tarih -> o güne kadar yığılan toplam
+    #
+    # YIĞIN ELLE KURULMAZ. Bir zamanlar burada `base=` ile elle tutulan bir
+    # taban vardı ve tooltip `%{y}` yazıyordu; plotly `base` DOLU olduğunda
+    # hover etiketini barın KENDİ uzunluğundan değil b+s'ten, yani yığının
+    # TEPESİNDEN kurar (bar/hover.js: `o.base ? ce.b+ce.s : ce.s`). Aynı günde
+    # iki ihale olan barlarda okur, o ihalenin beklenen satışı yerine günün
+    # toplamını görüyordu — 14.09.2026'da 50,0 yerine 185,3. Cümle kendi
+    # içinde de çelişiyordu: yanındaki teklif ve B/C customdata'dan geldiği
+    # için doğru kalıyor, 87,1/185,3 = 0,47 çıkıyor ama B/C 1,74 yazıyordu.
+    # Görsel yükseklik DOĞRUYDU; yalnız etiket yalan söylüyordu, o yüzden
+    # hiçbir veri denetimi onu göremezdi.
+    #
+    # Çözüm yığını plotly'ye bırakmak: `barmode="stack"` ile yükseklikler
+    # birebir aynı kalıyor, hover ise barın kendi değerini basıyor. Alt panel
+    # etkilenmiyor, çünkü oradaki iki iz AYRI offsetgroup taşıyor ve farklı
+    # offsetgroup'lar stack kipinde de yan yana dizilir — ölçüldü, iki kipte
+    # de x0 = −0,4 ve 0. Elle taban tutmak aynı sınıf kusuru geri getirir.
     sira = (ihale.groupby("Senet Tanımı")["beklenen_mlr"].sum()
             .sort_values(ascending=False).index)
     for tip in sira:
         sub = ihale[ihale["Senet Tanımı"] == tip].sort_values("tarih")
-        taban = [kumule.get(t, 0.0) for t in sub["tarih"]]
-        for t, y in zip(sub["tarih"], sub["beklenen_mlr"]):
-            kumule[t] = kumule.get(t, 0.0) + y
         custom = list(zip(
             sub["Senet Tanımı"],
             sub["Vade Terimi"],
@@ -140,7 +159,7 @@ def planlanan_ihraclar() -> dict:
             sub["Kıyas Bazı"],
         ))
         fig.add_trace(go.Bar(
-            x=sub["tarih"], y=sub["beklenen_mlr"], base=taban,
+            x=sub["tarih"], y=sub["beklenen_mlr"],
             offsetgroup="plan", width=86_400_000 * 0.9,
             name=tip, marker_color=TIP_RENK.get(tip, GRI),
             customdata=custom,
@@ -148,7 +167,7 @@ def planlanan_ihraclar() -> dict:
                 "<b>%{customdata[0]}</b> — %{customdata[1]}<br>"
                 "Beklenen net satış: %{y:.1f} milyar TL<br>"
                 "Beklenen teklif: %{customdata[3]} milyar TL "
-                "(B/C ≈ %{customdata[4]})<br>"
+                "(B/C ≈ %{customdata[4]} · ihale + ROT)<br>"
                 "İtfa: %{customdata[2]} · Kıyas: %{customdata[5]}"
                 "<extra></extra>"
             ),
@@ -177,7 +196,9 @@ def planlanan_ihraclar() -> dict:
         "kapsar</sup>"
     )
 
-    fig.update_layout(barmode="group")
+    # Üst panel yığılı, alt panel yan yana — ikisi AYNI figürde, çünkü alt
+    # panelin izleri ayrı offsetgroup taşıyor (yukarıdaki nota bak).
+    fig.update_layout(barmode="stack")
     ortak_stil(fig, "Hazine planlı ihraçlar — beklenen net satış")
     fig.update_yaxes(title_text="Milyar TL", row=1, col=1)
     fig.update_yaxes(title_text="Milyar TL", row=2, col=1)

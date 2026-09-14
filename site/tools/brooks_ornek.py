@@ -149,7 +149,8 @@ def _duman() -> None:
     dist = SITE / "dist" / "indikatorler"
     if dist.exists():
         import hashlib
-        for kaynak in sorted((SITE / "public" / "indikatorler").iterdir()):
+        for kaynak in sorted(y for y in (SITE / "public" / "indikatorler").iterdir()
+                             if y.is_file()):
             hedef = dist / kaynak.name
             if not hedef.exists():
                 hata.append(f"site kopyası eksik: {kaynak.name} — derleme yenilenmeli")
