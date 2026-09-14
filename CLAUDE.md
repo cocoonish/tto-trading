@@ -1857,3 +1857,52 @@ Bir yapısal kusur kayda değer ve KALIYOR: kural İKİ yerde yazılı
 (`ortak/usdtry` ve `bulten/piyasa.KAPANIS_UTC`) ve duman fikstürü 12:00 UTC'de
 koştuğu için iki konvansiyonu AYIRT EDEMİYOR — yani bu kural bir gün
 değiştirilirse hiçbir kapı görmez.
+
+**Kurucu ilke — BİR BAŞLIK KIRPILMAZ, TAŞAR; ve bir HÜKÜM, GEREKÇESİNİN
+ÜSTÜNE yazılır.** Brooks indikatörüne rehber figürleri eklenirken iki kusur
+çıktı ve ikisi de "kaynak doğru, okur eksik görüyor" sınıfından.
+
+Birincisi ölçülebilir ve genel: plotly başlık metnini figür genişliğine
+SIĞDIRMAZ, dışarı taşırır. Alt yazının sağ ucu çizim alanının dışında kalıyor
+ve orada hiçbir şey yokmuş gibi görünüyor — yani cümlenin yarısı okura hiç
+ulaşmıyor, üstelik eksik olduğu da anlaşılmıyor. Yedi figürün ikisinde
+ölçüldü. Sayfa sınavının 19. ölçütü figür alt yazısını okur diliyle tarıyor
+ama UZUNLUĞUNU sormuyor; kural bu yüzden çizim katmanına kondu
+(`brooks_sekil._sar`, 104 karakter) ve üst boşluk satır sayısından türüyor —
+sabit bir üst boşluk, sarılan başlığı çizim alanının içine iterdi.
+Aynı figürlerde iki biçim kusuru daha vardı ve ikisi de sözleşmenin zaten
+yazılı olduğu yerdeydi: sayılar `.2f` ile ondalık NOKTALI, binlik ayraç
+ASCII virgüllü basılıyordu ve yatay eksende okura BAR SIRA NUMARASI
+yazılıyordu ("360") — o sayı bir gözlem değil bizim dizinimiz. Üçü de
+`ortak/bicim` sözleşmesine çekildi. Bir figür ürettiğinizde sayıyı yazan
+kodun hangi sözleşmeden okuduğu sorulur; grafik kütüphanesinin varsayılanı
+bizim sözleşmemiz değildir.
+
+İkincisi TradingView tarafında ve kullanıcı adıyla koydu ("indikatörün
+okunması biraz zor"). Her iki panelin durum kutusu da UYGULAMA sırasına göre
+dizilmişti: fiyat panelinde on dört satır düz akıyordu, alt panelde rejim
+HÜKMÜ (`BANT` · `ARA` · `TREND`) sekiz satırlık tablonun alttan ikincisindeydi
+ve beş ham ölçü onun ÜSTÜNDEydi. Oysa okuma sırası dersin dayattığı sıradır ve
+alt panel o sıranın BİRİNCİ adımı: cevabı tek sözcük. Ölçüler hükmün
+gerekçesidir, gerekçe hükmün altına yazılır. İki kutu da yeniden dizildi
+(① rejim → ② yön → ③ yasak → ④ kurulum; ayrıntı ayrı bölümde, `Özet`
+kipinde gizli) ve kurulum satırı BİLEREK en sonda: gözü ilk oraya giden okur
+kararı çoktan vermiş olur. `asgariKalite` varsayılanı da 0'dan 2'ye çekildi —
+sıfırda her dönüş barı etiketleniyor ve ölçüldüğüne göre barların yarıdan
+fazlası o koşulu sağlıyor, yani varsayılan ayar grafiği okunmaz yapıyordu.
+
+Kutuların fonksiyonlara bölünmesi YENİ bir Pine hata sınıfı açtı: betik
+yukarıdan aşağı derlenir, bir kullanıcı fonksiyonu çağrıldığı satırdan önce
+tanımlanmış olmalıdır. O güne kadar dosyalarda tek bir kullanıcı fonksiyonu
+yoktu; risk kodla birlikte doğdu ve `pine_denetle`ye yedinci ölçüt olarak
+kondu. Ölçüt arızanın kendisine karşı koşturuldu ve İLK enjeksiyon YANLIŞTI:
+tanım birkaç satır aşağı kaydırıldı ama çağrısının hâlâ ÜSTÜNDE kaldı, yani
+arıza hiç üretilmedi ve "ölçüt kör" hükmü verilecekti. Tanım dosyanın SONUNA
+alınınca ölçüt iki dosyada da düştü. Bu depoda bir kez daha kayıtlı olan
+kusurun eşi: bir regresyon sınamasının kendisi de yanlış olabilir ve "ölçüt
+düşmedi" ile "arıza yok" birbirine tıpatıp benzer.
+
+AÇIK KALAN — bu Pine hiç DERLENMEDİ. `pine_denetle`nin yedi ölçütü bu
+oturumda gerçekten yapılmış yedi hatanın sınıfını kapatıyor; kapatmadığı her
+şey açık. TradingView'e yapıştırılana kadar "derleniyor" cümlesi bir ÖLÇÜM
+değil bir beklentidir.

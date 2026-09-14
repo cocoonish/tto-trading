@@ -312,7 +312,8 @@ def main():
     # sessizce kapsam dışı kalır.
     kokler = [Path(__file__).resolve().parents[1] / "public" / "projeler",
               Path(__file__).resolve().parents[1] / "public" / "arastirma",
-              Path(__file__).resolve().parents[1] / "public" / "teknik"]
+              Path(__file__).resolve().parents[1] / "public" / "teknik",
+              Path(__file__).resolve().parents[1] / "public" / "indikatorler"]
     if not argv or argv[0] == "--hepsi":
         dosyalar = sorted(y for k in kokler if k.exists() for y in k.rglob("*.html"))
     elif argv[0] == "--projeler":

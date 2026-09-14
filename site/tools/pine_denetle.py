@@ -156,6 +156,27 @@ def denetle(yol: Path) -> list[str]:
         bulgu.append(f"{ad}: başlık 'hiçbiri uydurulmamıştır' diyor ama dosyada "
                      f"tanım seçimi grubu (gT) var — ilan içerikle çelişiyor")
 
+    # ⑦ KULLANIMDAN SONRA TANIMLANAN FONKSİYON. Pine betiği yukarıdan aşağı
+    #    derlenir: bir kullanıcı fonksiyonu ÇAĞRILDIĞI satırdan önce
+    #    tanımlanmış olmalıdır. Ölçüt durum kutuları fonksiyonlara
+    #    bölündüğünde kondu — o güne kadar dosyada tek bir kullanıcı
+    #    fonksiyonu yoktu, yani risk YENİ. Statik, saniyeler sürüyor ve
+    #    TradingView'e yapıştırmadan soruyor.
+    tanim: dict[str, int] = {}
+    for n, s in satir:
+        m = re.match(r"\s*(?:export\s+)?([A-Za-z_]\w*)\s*\([^)]*\)\s*=>", s)
+        if m and m.group(1) not in tanim:
+            tanim[m.group(1)] = n
+    for fn, tn in tanim.items():
+        for n, s in satir:
+            if n >= tn:
+                break
+            # Kendi tanım satırı ve yorum dışı her çağrı sayılır.
+            if re.search(r"(?<![\w.])" + re.escape(fn) + r"\s*\(", s):
+                bulgu.append(f"{ad}:{n}: '{fn}()' burada çağrılıyor ama "
+                             f"{tn}. satırda tanımlanıyor — Pine yukarıdan aşağı derler")
+                break
+
     return bulgu
 
 
@@ -172,7 +193,7 @@ def main() -> int:
         for h in hepsi:
             print("  ✗", h, file=sys.stderr)
         return 1
-    print(f"pine denetimi · {len(yollar)} dosya · altı ölçüt GEÇTİ")
+    print(f"pine denetimi · {len(yollar)} dosya · yedi ölçüt GEÇTİ")
     return 0
 
 
