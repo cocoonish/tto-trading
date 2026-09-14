@@ -26,15 +26,34 @@ import usdtry as U  # noqa: E402
 BUGUN = dt.date.today()
 
 
+# YENİDEN DENEME, ÇÜNKÜ 429 BİR ÖLÇÜM DEĞİL. İlk keşif koşusu tek
+# denemede "Too Many Requests" aldı ve ölçüm hiç yapılamadı; bir hız
+# sınırı kaynağın ne döndürdüğü hakkında hiçbir şey söylemez. Keşif işi
+# yfinance KURMUYOR (yalnız requests·pandas·numpy), o yüzden chart ucu
+# burada yedek değil ASIL yoldur ve payı ona göre verilir.
+BEKLEME = (10, 30, 60, 120)
+
+
 def cek(bas: dt.date) -> pd.Series:
+    import time
+    hatalar = []
     for ad, fn in (("yfinance", U._yfinance_cek), ("chart ucu", U._chart_cek)):
-        try:
-            s = fn(bas, BUGUN + dt.timedelta(days=1))
-            print(f"  kaynak: {ad} · {len(s)} gözlem")
-            return s
-        except Exception as e:  # noqa: BLE001
-            print(f"  {ad} düştü: {type(e).__name__}: {e}")
-    raise SystemExit("ENGEL · iki uç da düştü — ölçüm yapılamadı")
+        for deneme, bekle in enumerate((0,) + BEKLEME, start=1):
+            if bekle:
+                print(f"    {bekle} sn bekleniyor (deneme {deneme})…")
+                time.sleep(bekle)
+            try:
+                s = fn(bas, BUGUN + dt.timedelta(days=1))
+                print(f"  kaynak: {ad} · {len(s)} gözlem (deneme {deneme})")
+                return s
+            except Exception as e:  # noqa: BLE001
+                m = f"{type(e).__name__}: {e}"
+                print(f"  {ad} düştü (deneme {deneme}): {m[:160]}")
+                hatalar.append(f"{ad}/{deneme}: {m[:80]}")
+                # Kurulu olmayan bir modül yeniden denemeyle gelmez.
+                if isinstance(e, ModuleNotFoundError):
+                    break
+    raise SystemExit("ENGEL · ölçüm yapılamadı — " + " | ".join(hatalar[-4:]))
 
 
 def main() -> int:
