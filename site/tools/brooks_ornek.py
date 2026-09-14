@@ -179,9 +179,12 @@ class FiyatPaneli:
         return max(0.0, kesisim) / onceki
 
     # always-in ------------------------------------------------------------
-    def always_in(self) -> tuple[list[int], list[int]]:
-        """Her barda always-in yönü + dönüş barlarının indeksleri."""
-        ai, yon, donus = 0, [], []
+    def always_in(self) -> tuple[list[int], list[int], list[int]]:
+        """Her barda always-in yönü, dönüş barları ve ONAYLANMAYAN diziler.
+
+        Üçüncü liste kuralın seçiciliğini ölçer: iki ardışık güçlü trend barı
+        geldi ama takip barının YOKLUK ölçütü tutmadı, yani dönüş ateşlemedi."""
+        ai, yon, donus, onaysiz = 0, [], [], []
         for i in range(self.n):
             onceki = ai
             iki_boga = i >= 3 and self.guclu_boga(i - 1) and self.guclu_boga(i - 2)
@@ -190,10 +193,12 @@ class FiyatPaneli:
                 ai = 1
             elif iki_ayi and self.s.c[i] <= self.s.o[i]:
                 ai = -1
+            elif iki_boga or iki_ayi:
+                onaysiz.append(i)
             yon.append(ai)
             if ai != onceki and i > 0:
                 donus.append(i)
-        return yon, donus
+        return yon, donus, onaysiz
 
     # sinyal barı ----------------------------------------------------------
     def nitelikler(self, i: int, boga: bool) -> dict[str, bool]:
@@ -374,16 +379,18 @@ def _duman(p_fh: dict, p_rp: dict) -> None:
     b = [(10, 10.4, 9.6, 10.0), (10, 10.4, 9.6, 10.0),
          (10.0, 11.0, 9.95, 10.95), (11.0, 12.0, 10.95, 11.95),
          (11.95, 12.2, 11.9, 12.10)]
-    yon, donus = FiyatPaneli(seri(b), p_fh).always_in()
+    yon, donus, _ = FiyatPaneli(seri(b), p_fh).always_in()
     if donus != [4] or yon[4] != 1:
         hata.append(f"① always-in long dönüşü 4. barda beklenirdi; dönüş={donus} yön={yon}")
 
     # ② Takip barının ölçütü bir YOKLUKTUR: aynı dizi, takip barı AYI kapanış
     #    → long'a dönüş OLMAZ.
     b2 = b[:4] + [(12.10, 12.2, 11.5, 11.60)]
-    yon2, donus2 = FiyatPaneli(seri(b2), p_fh).always_in()
+    yon2, donus2, onaysiz2 = FiyatPaneli(seri(b2), p_fh).always_in()
     if donus2:
         hata.append(f"② ayı kapanışlı takip barı long dönüşü üretmemeliydi; dönüş={donus2}")
+    if onaysiz2 != [4]:
+        hata.append(f"② onaylanmayan dizi 4. barda sayılmalıydı; {onaysiz2}")
 
     # ③ Tek güçlü trend barı yetmez (ders: bağlamla yeterli olabilir — ölçülemez).
     b3 = [(10, 10.4, 9.6, 10.0)] * 3 + [(10.0, 11.0, 9.95, 10.95), (10.95, 11.1, 10.9, 11.0)]
@@ -449,17 +456,28 @@ DILIM_AD = {"s1": "1 saatlik", "s4": "4 saatlik", "gunluk": "günlük"}
 
 
 def _bar_kunye(fp: FiyatPaneli, i: int, ond: int) -> dict:
+    """Bar künyesi — ORAN, sayfaya basılan YUVARLANMIŞ fiyattan hesaplanır.
+
+    Sayfadaki OHLC yuvarlanmış, oran ham değerden gelirse okur aritmetiği
+    yeniden kurduğunda BAŞKA bir sayı bulur ve hangisinin doğru olduğunu
+    ayırt edemez. Bu depoda bir kez ölçülmüş bir kusur sınıfı: yayımlanan
+    bir sayı, yayımlanan öbür sayılardan yeniden üretilebilmelidir."""
     s = fp.s
-    return {
-        "zaman": s.zaman[i],
-        "o": round(s.o[i], ond),
-        "h": round(s.h[i], ond),
-        "l": round(s.l[i], ond),
-        "c": round(s.c[i], ond),
-        "govde_oran": round(fp.govde_oran(i), 3),
+    o, h, l, c = (round(s.o[i], ond), round(s.h[i], ond),
+                  round(s.l[i], ond), round(s.c[i], ond))
+    menzil = h - l
+    kunye = {
+        "zaman": s.zaman[i], "o": o, "h": h, "l": l, "c": c,
+        "govde_oran": round(abs(c - o) / menzil, 3) if menzil > 0 else 0.0,
         "sinif": fp.sinif(i),
-        "ortusme": round(fp.ortusme(i), 3),
+        "ortusme": 0.0,
     }
+    if i > 0:
+        oh, ol = round(s.h[i - 1], ond), round(s.l[i - 1], ond)
+        onceki = oh - ol
+        if onceki > 0:
+            kunye["ortusme"] = round(max(0.0, min(h, oh) - max(l, ol)) / onceki, 3)
+    return kunye
 
 
 def ornekleri_ara(seriler: list[Seri], p_fh: dict, p_rp: dict) -> dict:
@@ -468,7 +486,7 @@ def ornekleri_ara(seriler: list[Seri], p_fh: dict, p_rp: dict) -> dict:
         ond = 4 if max(s.c) < 10 else 2 if max(s.c) < 1000 else 0
         fp = FiyatPaneli(s, p_fh)
         rp = RejimPanosu(s, p_rp)
-        yon, donus = fp.always_in()
+        yon, donus, onaysiz = fp.always_in()
         gap = fp.gap_sayac()
         ad = f"{ENSTRUMAN_AD.get(s.slug, s.slug)} · {DILIM_AD.get(s.dilim, s.dilim)}"
 
@@ -507,13 +525,21 @@ def ornekleri_ara(seriler: list[Seri], p_fh: dict, p_rp: dict) -> dict:
                 if yasak and k >= 3:
                     bulgu["yasak"].append(kayit)
 
-        # ⑤ rejim pencereleri
+        # ⑤ rejim pencereleri — HEPSİ tutulmaz (binlerce pencere), dağılımı
+        #    sayılır ve yalnız iki UÇ pencere adıyla saklanır.
+        dagilim = {"BANT": 0, "ara": 0, "trend": 0}
+        uclar: list[dict] = []
         for i in range(len(s)):
             o = rp.olcu(i)
             if o is None:
                 continue
-            o = dict(o, ad=ad, zaman=s.zaman[i], bas=s.zaman[i - rp.pencere + 1])
-            bulgu["rejim"].append(o)
+            dagilim[o["rejim"]] += 1
+            uclar.append(dict(o, ad=ad, zaman=s.zaman[i], bas=s.zaman[i - rp.pencere + 1]))
+        if uclar:
+            enb = max(uclar, key=lambda x: (x["n"], -x["net_aralik"]))
+            ent = min(uclar, key=lambda x: (x["n"], -x["net_aralik"]))
+            bulgu["rejim"].append({"ad": ad, "dagilim": dagilim,
+                                   "pencere": len(uclar), "en_bant": enb, "en_trend": ent})
 
         bulgu["sayim"][ad] = {
             "bar": len(s),
@@ -522,7 +548,13 @@ def ornekleri_ara(seriler: list[Seri], p_fh: dict, p_rp: dict) -> dict:
             "flip": len([i for i in donus if i >= 3]),
             "kalite4": len([k for k in bulgu["kalite"] if k["ad"] == ad]),
             "azami_gap": max(gap),
+            "onaysiz_dizi": len(onaysiz),
         }
+    # Kovaların TAMAMI dosyaya girmez; sayısı yazılır, örneği kırpılır —
+    # ölçüm kaydı okunabilir kalmalı ki sayfadaki her sayı buradan doğrulansın.
+    for ad in ("ortusme_reddi", "yasak"):
+        bulgu["sayim"][f"_{ad}_toplam"] = len(bulgu[ad])
+        bulgu[ad] = sorted(bulgu[ad], key=lambda k: (-k["kalite"], -k["bar"]["ortusme"]))[:12]
     return bulgu
 
 
@@ -563,6 +595,8 @@ def main() -> None:
         print(f"  DIŞLANDI · {ad:26s} doji payı {v['doji_payi']:.3f} · medyan gövde/menzil "
               f"{v['medyan_govde']:.3f} — bu besleme gerçek mum gövdesi taşımıyor")
     for ad, s in bulgu["sayim"].items():
+        if not isinstance(s, dict):
+            continue
         print(f"  {ad:34s} {s['bar']:4d} bar  flip {s['flip']:3d}  4/4 {s['kalite4']:3d}  azami gap {s['azami_gap']:3d}")
 
 
