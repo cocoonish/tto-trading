@@ -132,11 +132,30 @@ def _duman() -> None:
     # Pine ile Python AYNI eşiklerde mi — iki uygulama sessizce ayrışmasın.
     hata += [f"eşik ayrışması · {x}" for x in R.pine_ile_karsilastir(PINE_FH, PINE_RP)]
 
+    # Ve AYNI ÖLÇÜLERİ taşıyor mu. Eşik kapısı bunu göremez: yeni bir eşik
+    # getirmeyen bir ölçü Pine'a hiç taşınmadan da o kapıyı geçer.
+    hata += [f"ölçü kapsamı · {x}" for x in R.olcu_kapsami(PINE_FH)]
+
     # Pine'ın derleyicisi bu depoda YOK; statik denetim onun yerine geçmez
     # ama bu depoda gerçekten yapılmış beş hatayı bir daha yapmayı engeller.
     import pine_denetle                                          # noqa: E402
     for y in sorted((SITE / "public" / "indikatorler").glob("*.pine")):
         hata += pine_denetle.denetle(y)
+
+    # SİTEDEKİ KOD ile DEPODAKİ KOD aynı mı. Sayfa kodu `?raw` ile aldığı
+    # için "sayfada görünen" ile "indirilen" yapısal olarak aynıdır; ama
+    # derlenmiş çıktı bir ÖNCEKİ derlemeden kalmış olabilir ve o zaman site
+    # eski sürümü sunar. Kaynak kod değiştiğinde derleme de yenilenmeli.
+    dist = SITE / "dist" / "indikatorler"
+    if dist.exists():
+        import hashlib
+        for kaynak in sorted((SITE / "public" / "indikatorler").iterdir()):
+            hedef = dist / kaynak.name
+            if not hedef.exists():
+                hata.append(f"site kopyası eksik: {kaynak.name} — derleme yenilenmeli")
+            elif hashlib.md5(kaynak.read_bytes()).digest() != hashlib.md5(hedef.read_bytes()).digest():
+                hata.append(f"site kopyası ESKİ: {kaynak.name} — derleme kaynaktan geride, "
+                            f"okur eski sürümü indirir")
 
     # public/ altında derlenmiş bytecode kalmasın — oradaki her şey yayına gider.
     for art in (SITE / "public").rglob("__pycache__"):
