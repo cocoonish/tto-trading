@@ -934,6 +934,95 @@ def sekil_gap_yon_filtresi(kay: dict, no: str) -> Path:
     return _yaz(fig, f"{no}_gap_yon_filtresi.html")
 
 
+def _dort_satir(fp, yon, i: int) -> tuple:
+    """Fiyat panelinin OKUMA SIRASI bölümü — kutuda okura görünen dört satır.
+
+    Kutunun kendi metnini kurar, çünkü figürün iddiası tam olarak budur:
+    iki barda bu DÖRT satır birebir aynı."""
+    kb, ka = fp.kalite(i, True), fp.kalite(i, False)
+    f = fp.yon_filtresi(i)
+    kur_b = fp.donus_bari(i, True) and kb > 0 and f != "yalnız SAT"
+    kur_a = fp.donus_bari(i, False) and ka > 0 and f != "yalnız AL"
+    if kur_b and kur_a:
+        kur = f"iki yönlü — {kb}/4 boğa · {ka}/4 ayı"
+    elif kur_b:
+        kur = f"{kb}/4 boğa"
+    elif kur_a:
+        kur = f"{ka}/4 ayı"
+    else:
+        kur = "kurulum yok"
+    hizali = (kur_b and yon[i] == 1) or (kur_a and yon[i] == -1)
+    ek = " ✓ yönle hizalı" if hizali else ("  ⚠ yönle hizasız" if (kur_b or kur_a) else "")
+    ai = "LONG" if yon[i] == 1 else "SHORT" if yon[i] == -1 else "henüz belirsiz"
+    return (ai, f, kur + ek)
+
+
+def sekil_ayni_kurulum(kay: dict, no: str) -> Path:
+    """AYNI KURULUM, İKİ REJİM — fiyat paneli bu iki barı AYIRAMIYOR.
+
+    Dersin en pahalı hatası "doğru kurulumu yanlış günde almak" ve sayfa bunu
+    bir CÜMLE olarak söylüyor. Gösterilebilir: aynı seride, aynı zaman
+    diliminde, fiyat panelinin DÖRT satırı da birebir aynı olan iki gerçek
+    bar var; ayrışan tek şey alt panel. Okur "neden alt panele bakayım"
+    sorusunun cevabını ancak ikisini yan yana görünce alır.
+
+    Çift ARANIR, elle yazılmaz: veri yenilendiğinde başka bir çift geçerli
+    olabilir ve elle seçilmiş bir indis sessizce başka bir hikâye anlatır.
+    """
+    aday = []
+    for ank, k in kay.items():
+        s = k.seri
+        fp = R.FiyatPaneli(s)
+        rp = R.RejimPanosu(s)
+        yon, _, _ = fp.always_in()
+        kova: dict[tuple, list] = {}
+        for i in range(int(R.SABIT_FH["maUzunluk"]), len(s)):
+            o = rp.olcu(i)
+            if o is None:
+                continue
+            satir = _dort_satir(fp, yon, i)
+            if satir[2] == "kurulum yok":
+                continue          # kurulumu olmayan bar bu soruyu sormaz
+            kova.setdefault(satir, []).append((i, o["n"]))
+        for satir, v in kova.items():
+            bant = [x for x in v if x[1] >= 4]
+            trend = [x for x in v if x[1] <= 1]
+            if bant and trend:
+                # Hizalı kurulum daha güçlü bir örnek: okur "zaten hizasızdı"
+                # diyip geçemez, itiraz YALNIZCA rejimden gelir.
+                aday.append((0 if "hizalı" in satir[2] else 1,
+                             ank, satir, bant[0], trend[0]))
+    if not aday:
+        raise SystemExit("ENGEL · dört satırı aynı, rejimi ZIT olan bar çifti yok — "
+                         "figürün iddiası bu veriyle kurulamıyor")
+    aday.sort(key=lambda a: (a[0], a[1]))
+    _, ANK, satir, (i_bant, n_bant), (i_trend, n_trend) = aday[0]
+    s = kay[ANK].seri
+    ad = O.ENSTRUMAN_AD.get(ANK.rsplit("-", 1)[0], ANK)
+    w = int(R.SABIT_RP["pencere"])
+    paneller = [
+        dict(etiket=f"Alt panel: trend ({n_trend}/5) — geri çekilme kurulumları geçerli",
+             seri=ANK, bas=i_trend - w + 1, son=i_trend + 4, vurgu=[i_trend], ema=True,
+             isaret=[(i_trend, "trend", True, MAVI)],
+             not_=f"{_an(s.zaman[i_trend])} · fade edilmez, bar sayımı geçerli"),
+        dict(etiket=f"Alt panel: BANT ({n_bant}/5) — bar sayımına dayalı stop girişi YOK",
+             seri=ANK, bas=i_bant - w + 1, son=i_bant + 4, vurgu=[i_bant], ema=True,
+             isaret=[(i_bant, "BANT", True, CLARET)],
+             not_=f"{_an(s.zaman[i_bant])} · bandın içinde dönüş barı aranmaz"),
+    ]
+    fig = _kucuk_coklu(
+        kay, f"Şekil {no} · Aynı kurulum, iki rejim: fiyat paneli bu iki barı AYIRAMIYOR",
+        f"İki bar da {ad} serisinden ve fiyat panelinin DÖRT satırı birebir aynı: "
+        f"always-in {satir[0]} · yön filtresi \"{satir[1]}\" · kurulum \"{satir[2]}\". "
+        "Üst panele bakan biri ikisini ayırt edemez. Ayrışan tek şey alt panelin hükmü — "
+        "ve ders bu iki barda ZIT davranmayı söylüyor. \"Doğru kurulumu yanlış günde almak\" "
+        "dersin en pahalı hatasıysa, alt panel onu önleyen tek katmandır. Paneller "
+        f"hükmün ÖLÇÜLDÜĞÜ {w} barlık pencereyi gösteriyor — taralı bar çıpa; dar bir "
+        "pencere hükmün kanıtını figürün dışında bırakırdı",
+        paneller, sutun=2, panel_yuk=300)
+    return _yaz(fig, f"{no}_ayni_kurulum.html")
+
+
 # ŞEKİL NUMARASI BİR KİMLİK DEĞİL, SAYFADAKİ YERDİR. Numara bu listedeki
 # sıradan türer; şekil işlevleri kendi numaralarını BİLMEZ, dışarıdan alır.
 # Sayfada Şekil 01'den sonra Şekil 08 gelmesi okuru şaşırtır ve bu kusur bir
@@ -946,6 +1035,7 @@ SIRA = [
     ("cevirme_sayaci",     lambda: sekil_cevirme_sayaci),
     ("ne_beklemeli_siklik", lambda: sekil_ne_beklemeli_siklik),
     ("rejim_dagilimi",     lambda: sekil_rejim_dagilimi),
+    ("ayni_kurulum",       lambda: sekil_ayni_kurulum),
     ("always_in_donusu",   lambda: sekil_always_in_donusu),
     ("kalite_skoru",       lambda: sekil_kalite_skoru),
     ("kalite_hizasi",      lambda: sekil_kalite_hizasi),
