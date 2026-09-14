@@ -102,7 +102,14 @@ jobs:
           python-version: '3.11'
           cache: pip
       - name: Temel bağımlılıklar
-        run: pip install --quiet requests pandas numpy
+        # yfinance BU İŞE ÖZGÜ. Yahoo'nun ham chart ucu koşuculardan
+        # çerez/crumb olmadan 429 veriyor — 14.09'da beş denemenin beşi de
+        # düştü ve ölçüm HİÇ yapılamadı. yfinance önce çerez alıyor, o
+        # yüzden keşif için asıl yol odur. Tazeleme işine EKLENMEDİ:
+        # üretimde kur yolunu değiştirmek bir kaynak sözleşmesi değişimidir
+        # ve ayrı karar ister (CLAUDE.md — sözleşme değişince gerileme
+        # kapısı bir kez öter ve bu doğrudur).
+        run: pip install --quiet requests pandas numpy yfinance
       # YOL KAPISI: yalnız depodaki bir kesif*.py koşabilir. Girdi serbest metin
       # olduğu için ne koşacağı ölçülmeden kabul edilmez.
       - name: Keşif betiğini koş
