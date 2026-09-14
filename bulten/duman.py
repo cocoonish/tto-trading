@@ -1333,39 +1333,101 @@ def main() -> int:
     # 13.09.2028'den itibaren gerçek tetiğe döner ve okura "Hazine ihalesi
     # 13.09.2028" yazılırdı.
     def _ihale_sutunu():
-        g = tazeleme._ihale_gunleri(dt.date(2026, 9, 7))
-        assert g, "ihale planı okunamadı — sınama kör"
-        assert len(g) == 8, f"ihale günü sayısı 8 değil: {len(g)} ({g[:3]}…)"
-        assert min(g) >= dt.date(2026, 9, 14) and max(g) <= dt.date(2026, 11, 10), \
-            f"ihale günleri plan aralığının dışında: {min(g)}–{max(g)}"
-        # İtfa tarihleri (2028+) sızmamalı — eski kusurun birebir izi.
-        assert not [x for x in g if x.year > 2026], \
-            "itfa tarihleri ihale günü sayılıyor"
-
-        # Sütun yoksa SESSİZ KALINMAZ: dosyanın gerçek sütun adları basılır.
+        # SÖZLEŞME SINANIR, CANLI SAYIM DEĞİL.
+        #
+        # Bu ölçüt bir zamanlar canlı plan dosyasına bakıp "ihale günü sayısı 8"
+        # diyordu ve donmuş bir çıpa tarihi (07.09) kullanıyordu. Girdi CANLI,
+        # beklenti DONMUŞ — ve 14.09.2026'da o günün ihalesi yapılıp plandan
+        # düşünce sayı 8'den 7'ye indi ve ölçüt DÜŞTÜ. Bedeli tek bir
+        # e-postadan büyük: duman adımlardan ÖNCE koşar, düşünce EVDS anahtarı,
+        # tazeleme takvimi ve "Gereken hatları tazele" adımları ATLANIR — veri
+        # beş saat boyunca hiç tazelenmedi ve arıza e-postaları o sessizliğin
+        # yan etkisiydi. Aynı kusur 10.09'da YPMevduat fikstüründe ölçülmüştü:
+        # bir fikstürün girdisi donmuşsa ölçüsü de donmalı; girdisi CANLIYSA
+        # beklentisi SAYIYA değil SÖZLEŞMEYE bağlanmalı.
+        #
+        # Sözleşmenin kendisi üç madde ve üçü de sentetik dosyada sınanıyor:
+        # sütun ADIYLA sorulur (eski kusur: "adında tarih geçen her sütun" —
+        # 20 günün 12'si itfa tarihiydi), ufkun ötesi plan değildir, ve sütun
+        # yoksa dosyanın GERÇEK sütun adları basılır.
         import csv as _csv, io, contextlib, tempfile
         from pathlib import Path as _Path
+
+        CIPA = dt.date(2026, 9, 7)
+        ufuk_disi = CIPA + dt.timedelta(days=tazeleme.IHALE_UFUK_GUN + 30)
         gercek = tazeleme.IHALE_CSV
         with tempfile.TemporaryDirectory() as td:
-            sahte = _Path(td) / "plan.csv"
-            with gercek.open(encoding="utf-8-sig", newline="") as f:
-                satirlar = list(_csv.DictReader(f))
-            alanlar = [a for a in satirlar[0] if a and a != tazeleme.IHALE_SUTUNU]
-            with sahte.open("w", encoding="utf-8-sig", newline="") as f:
+            # (a) SENTETİK DOSYA — beklenti buradan, canlı plandan değil.
+            kur = _Path(td) / "plan.csv"
+            alanlar = [tazeleme.IHALE_SUTUNU, "İtfa Tarihi", "Senet Tanımı"]
+            satirlar = [
+                {tazeleme.IHALE_SUTUNU: "15.09.2026", "İtfa Tarihi": "13.09.2028",
+                 "Senet Tanımı": "Sabit Kuponlu"},
+                {tazeleme.IHALE_SUTUNU: "05.10.2026", "İtfa Tarihi": "11.09.2030",
+                 "Senet Tanımı": "TLREF'e Endeksli"},
+                # Aynı gün iki ihale: küme tekilleştirir.
+                {tazeleme.IHALE_SUTUNU: "05.10.2026", "İtfa Tarihi": "16.04.2031",
+                 "Senet Tanımı": "Sabit Kuponlu"},
+                # Ufkun ÖTESİ: plan değil, düşmeli.
+                {tazeleme.IHALE_SUTUNU: ufuk_disi.strftime("%d.%m.%Y"),
+                 "İtfa Tarihi": "05.11.2031", "Senet Tanımı": "Sabit Kuponlu"},
+                {tazeleme.IHALE_SUTUNU: "", "İtfa Tarihi": "27.09.2034",
+                 "Senet Tanımı": "boş satır"},
+            ]
+            with kur.open("w", encoding="utf-8-sig", newline="") as f:
                 w = _csv.DictWriter(f, fieldnames=alanlar)
                 w.writeheader()
                 for s in satirlar:
-                    w.writerow({a: s.get(a) for a in alanlar})
+                    w.writerow(s)
+            tazeleme.IHALE_CSV = kur
+            try:
+                g = tazeleme._ihale_gunleri(CIPA)
+                assert g == [dt.date(2026, 9, 15), dt.date(2026, 10, 5)], \
+                    f"sentetik planda beklenen iki gün değil: {g}"
+                # İtfa tarihleri (2028+) SIZMAMALI — eski kusurun birebir izi.
+                assert not [x for x in g if x.year > 2026], \
+                    "itfa tarihleri ihale günü sayılıyor"
+            finally:
+                tazeleme.IHALE_CSV = gercek
+
+            # (b) Sütun yoksa SESSİZ KALINMAZ: gerçek sütun adları basılır.
+            sahte = _Path(td) / "sutunsuz.csv"
+            eksik = [a for a in alanlar if a != tazeleme.IHALE_SUTUNU]
+            with sahte.open("w", encoding="utf-8-sig", newline="") as f:
+                w = _csv.DictWriter(f, fieldnames=eksik)
+                w.writeheader()
+                w.writerow({a: "x" for a in eksik})
             tazeleme.IHALE_CSV = sahte
             try:
                 cikti = io.StringIO()
                 with contextlib.redirect_stdout(cikti):
-                    assert tazeleme._ihale_gunleri(dt.date(2026, 9, 7)) == []
+                    assert tazeleme._ihale_gunleri(CIPA) == []
                 metin = cikti.getvalue()
                 assert "İtfa Tarihi" in metin, \
                     "sütun bulunamadığında dosyanın gerçek sütunları yazılmıyor"
             finally:
                 tazeleme.IHALE_CSV = gercek
+
+        # (c) CANLI dosyada yalnız DEĞİŞMEYEN nitelikler sorulur: kaç ihale
+        # kaldığı her ihale günü meşru olarak azalır, o yüzden sayı sorulmaz.
+        # Sütunun ADI ise sözleşmedir ve kaymaz — kaynağın başlığı değişirse
+        # hat sessizce boş döner, o yüzden burada adıyla sorulur.
+        if gercek.exists():
+            with gercek.open(encoding="utf-8-sig", newline="") as f:
+                basliklar = [s for s in (_csv.DictReader(f).fieldnames or []) if s]
+            assert tazeleme.IHALE_SUTUNU in basliklar, (
+                f"canlı planda '{tazeleme.IHALE_SUTUNU}' sütunu yok; "
+                f"dosyadaki sütunlar: {basliklar}")
+        # Canlı dosyanın çıpası BUGÜNDÜR, donmuş bir gün değil: sentetik yarı
+        # donmuş girdiyle donmuş beklentiyi kıyaslar, canlı yarı ise yalnız
+        # bugünden türeyen niteliği sorar. CIPA burada kullanılsaydı ölçüt
+        # 2027'de meşru bir ihale gününü "itfa sızıntısı" sayardı — kaldırılan
+        # kusurun takvime bağlı biçimi.
+        bugun = dt.date.today()
+        ufuk_bugun = bugun + dt.timedelta(days=tazeleme.IHALE_UFUK_GUN)
+        canli = tazeleme._ihale_gunleri(bugun)
+        assert all(x <= ufuk_bugun for x in canli), \
+            f"canlı planda ufkun ötesi gün var: {[x for x in canli if x > ufuk_bugun]}"
     sina("tazeleme: ihale sütunu adıyla sorulur", _ihale_sutunu)
 
     # ── SIGTERM DEFTERİ ÖLDÜRMESİN (07.09.2026)
