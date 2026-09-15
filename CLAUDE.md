@@ -2098,6 +2098,13 @@ isteyince hikâyeleri artık anlatmıyordu; `brooks_kutu.py --ara` adayları
 ARAR, çıpa damgayla çözülür ve hikâye çizim anında yeniden sınanır. Kutu
 Pine'ın paket önceliğini birebir taşır (`paket_sec`), `asgariKalite` bir
 görünüm girdisi olduğu için eşik tablosunda değil Pine dosyasından okunur.
+(f) İKİNCİ GİRİŞ paketi yön yasağına bakmıyordu — dönüş barı ve başarısız dönüş
+bakıyordu, sayfa "kapalı yönde paket basılmaz" diyordu; doğrulama merceği yakaladı,
+Pine · kutu · figür hizalandı (backtest'in tam indikatörü yasağı zaten her pakete
+uyguluyordu, sayılar değişmedi). Aynı mercek alt panel not metinlerinin sayfada
+Pine'dakinden farklı yazıldığını, alarm sayısının 13 olduğunu (10 + 3), kırılım
+modunda 1R/2R çizgisi çizilmediğini ve gövde boşluğunun hesaplanıp hiç
+basılmadığını buldu — hepsi kaynağa karşı satır satır okumadan görünmezdi.
 (e) Yazarken kendi kapılarımıza takıldık ve ikisi kayda değer:
 `brooks_ornek.py`nin duman kapısı dist↔public md5 ister, yani her figür
 yenilemesi derleme ister — ara adımda `cp` ile dist'e kopyalamak meşru (derleme

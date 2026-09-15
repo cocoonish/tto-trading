@@ -197,7 +197,8 @@ def sekil_indikator_gorunumu(kay: dict, no: str) -> Path:
                                showarrow=False, yshift=-22 if boga else 22,
                                font=dict(size=10, color=(MAVI if boga else CLARET) if hizali else GRI))
         e = ku.ikinci_giris(i)
-        if e:
+        if e and not ((e["yon"] == 1 and fp.yon_filtresi(i) == "yalnız SAT")
+                      or (e["yon"] == -1 and fp.yon_filtresi(i) == "yalnız AL")):
             fig.add_annotation(x=i, y=s.l[i] if e["yon"] == 1 else s.h[i], text="H2" if e["yon"] == 1 else "L2",
                                showarrow=False, yshift=-34 if e["yon"] == 1 else 34,
                                font=dict(size=10, color=MAVI if e["yon"] == 1 else CLARET),

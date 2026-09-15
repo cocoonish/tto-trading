@@ -99,7 +99,8 @@ def paket_sec(ku: "R.Kurulumlar", i: int) -> dict | None:
     if bk:
         return {"ad": "bant kenarı · " + ("alış" if bk["yon"] == 1 else "satış"), "cift": False, **bk}
     ik = ku.ikinci_giris(i)
-    if ik:
+    # Pine: ikinciBoga … and not yalnizSat · ikinciAyi … and not yalnizAl
+    if ik and not ((ik["yon"] == 1 and yalniz_sat) or (ik["yon"] == -1 and yalniz_al)):
         return {"ad": "ikinci giriş · " + ("H2" if ik["yon"] == 1 else "L2"), "cift": False, **ik}
     bd = ku.basarisiz_donus(i)
     # Pine: basarisizBoga = aiLong and ayiDonus and kaliteAyi >= asgariKalite
@@ -187,6 +188,8 @@ def fiyat_kutusu(d: dict, paket: dict | None, konum: float, tick: float) -> list
     sinif_metin = sinif + (" · gövde güçlü" if d["govde_gucu"] else "")
     if d["tirasli"]:
         sinif_metin += " · " + d["tirasli"]
+    gb = d["govde_boslugu"]
+    sinif_metin += " · gövde boşluğu ↑" if gb > 0 else " · gövde boşluğu ↓" if gb < 0 else ""
     sat.append(("satir", "", "Sınıf", sinif_metin, MUREKKEP))
 
     ky = d["kapanis_yeri"]
@@ -257,8 +260,9 @@ def rejim_kutusu(o: dict) -> list[tuple]:
     n = o["n"]
     ad = "BANT" if n >= 4 else "trend" if n <= 1 else "ara"
     renk = CLARET if n >= 4 else MAVI if n <= 1 else GRI
-    not_ = ("bar sayımına dayalı stop girişi yok · uçlarda fade" if n >= 4 else
-            "geri çekilme kurulumları geçerli · fade edilmez" if n <= 1 else
+    # Pine rejimNot ile birebir (brooks-rejim-panosu.pine, rejimNot).
+    not_ = ("uçlarda bant kenarı · ortada emir yok · H2/L2 yalnız uçta" if n >= 4 else
+            "geri çekilme kurulumları (H2/L2, dönüş barı) · fade edilmez" if n <= 1 else
             "pano karar vermez · hangi tarafa yakın olduğunu söyler")
     i, s = o["isaret"], o["sira"]
 
