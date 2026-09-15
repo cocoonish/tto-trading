@@ -262,6 +262,18 @@ def ornekleri_ara(kaynaklar: list[Kaynak]) -> dict:
                     bulgu["ortusme_reddi"].append(kayit)
                 if yasak and k >= 3:
                     bulgu["yasak"].append(kayit)
+                # Hangi nitelik en sık bağlıyor? Sayfa "örtüşme en sık bağlayan
+                # niteliktir" gibi bir SIRALAMA cümlesi kuracaksa dört niteliğin
+                # düşme sayısı yan yana ölçülmüş olmalı — tek niteliğin sayısı
+                # sıralama kurmaz. İki kova: kalite ≥ 2 (etiketlenen barlar) ve
+                # tam 3/4 (tek niteliğin bağladığı barlar).
+                for kova, sart in (("nitelik_dusme_k2", k >= 2), ("nitelik_dusme_k3", k == 3)):
+                    if sart:
+                        nd = bulgu["sayim"].setdefault(f"_{kova}", {"toplam": 0, "n1": 0, "n2": 0, "n3": 0, "n5": 0})
+                        nd["toplam"] += 1
+                        for n_ad, n_var in nit.items():
+                            if not n_var:
+                                nd[n_ad] += 1
 
         # ⑤ rejim pencereleri — HEPSİ tutulmaz (binlerce pencere), dağılımı
         #    sayılır ve yalnız iki UÇ pencere adıyla saklanır.
@@ -310,10 +322,13 @@ def ornekleri_ara(kaynaklar: list[Kaynak]) -> dict:
             if fp.iptal_kurali(i)["iptal"]:
                 oz["beş bar iptal"] += 1
             # Orta nokta ölçütü KOŞULLU ölçülür. Koşulsuz sorulduğunda
-            # barların %99,7'si bir yönde geçiyor — çünkü her bar önceki
-            # barın orta noktasının bir tarafında kapanır. Ölçü ancak "bu
-            # bar bir DÖNÜŞ barı, peki kabul mü ret mi" diye sorulunca
-            # ayırt eder; kuralın sorduğu soru da budur.
+            # barların neredeyse tamamı bir yönde geçer — çünkü her bar
+            # önceki barın orta noktasının bir tarafında kapanır. Ölçü ancak
+            # "bu bar bir DÖNÜŞ barı, peki kabul mü ret mi" diye sorulunca
+            # ayırt eder; kuralın sorduğu soru da budur. Koşulsuz pay da
+            # SAYILIR ki sayfadaki oran dosyadan doğrulansın.
+            if fp.orta_nokta_olcutu(i, True) or fp.orta_nokta_olcutu(i, False):
+                oz["orta nokta koşulsuz geçen"] += 1
             for yon, ad2 in ((True, "boğa"), (False, "ayı")):
                 if fp.donus_bari(i, yon):
                     oz[f"dönüş barı ({ad2})"] += 1
@@ -380,7 +395,7 @@ def main() -> None:
         print(f"  DIŞLANDI · {ad:26s} doji payı {v['doji_payi']:.3f} · medyan gövde/menzil "
               f"{v['medyan_govde']:.3f} — bu besleme gerçek mum gövdesi taşımıyor")
     for ad, s in bulgu["sayim"].items():
-        if not isinstance(s, dict):
+        if not isinstance(s, dict) or ad.startswith("_"):
             continue
         print(f"  {ad:34s} {s['bar']:4d} bar  flip {s['flip']:3d}  4/4 {s['kalite4']:3d}  azami gap {s['azami_gap']:3d}")
 

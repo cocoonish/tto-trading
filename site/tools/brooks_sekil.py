@@ -1215,11 +1215,12 @@ def sekil_bar_sozlugu(kay: dict, no: str) -> Path:
 
 
 def sekil_bar_sayimi(kay: dict, no: str) -> Path:
-    """GERİ ÇEKİLMEYİ SAYMAK — dersin sayımı ve eski sayacın nerede yanıldığı.
+    """GERİ ÇEKİLMEYİ SAYMAK — dersin bacak sayımı ile her yükselen barı sayan sayaç.
 
     Sayım bir dizi değil bir DURUMDUR ve iki tanım aynı barlarda farklı
     etiket üretir: dersin sayımı bacakla sayar (iki sayım arasında zirvesi
-    öncekini aşmayan en az bir bar), eski sayaç yükselen her barı sayıyordu.
+    öncekini aşmayan en az bir bar — bu şart sayacın seçimi, ders ardışık
+    H1·H2'yi olası sayar), naif sayaç yükselen her barı sayar.
     Panel A ikisini aynı pencerede yan yana koyar; panel B bir H2'yi paketiyle."""
     A = B_ = None
     for ank, k in kay.items():
@@ -1229,7 +1230,7 @@ def sekil_bar_sayimi(kay: dict, no: str) -> Path:
         tick = R.tick_tahmini(s)
         ku = R.Kurulumlar(s, tick)
         for i in range(int(R.SABIT_FH["maUzunluk"]) + 6, len(s) - 12):
-            # A: aynı pencerede ders H2 demeden eski sayaç H2·H3 demiş olsun
+            # A: aynı pencerede ders H2 demeden naif sayaç H2·H3 demiş olsun
             if A is None and ders[i] == "H1":
                 pen = range(i, min(i + 9, len(s)))
                 if any(eski[j] in ("H2", "H3") and ders[j] == "" for j in pen) and any(ders[j] == "H2" for j in pen):
@@ -1257,12 +1258,12 @@ def sekil_bar_sayimi(kay: dict, no: str) -> Path:
         if dA[j]:
             isA.append((j, f"{dA[j]}", True, MAVI))
         if eA[j] and eA[j] != dA[j]:
-            isA.append((j, f"<span style='color:{GRI}'>eski {eA[j]}</span>", False, GRI))
+            isA.append((j, f"<span style='color:{GRI}'>naif {eA[j]}</span>", False, GRI))
     paneller = [dict(
-        etiket="A · Dersin sayımı (üstte, mavi) ve eski sayaç (altta, gri)",
+        etiket="A · Dersin bacak sayımı (üstte, mavi) ve her yükselen barı sayan sayaç (altta, gri)",
         seri=ankA, bas=max(0, h1 - 5), son=min(len(sA), pen[-1] + 3), vurgu=[j for j in pen if dA[j]], isaret=isA,
         not_=f"{O.ENSTRUMAN_AD.get(ankA.rsplit('-', 1)[0], ankA)} · {_an(sA.zaman[h1])} — ders iki sayım arasında "
-             "aşamayan bir bar ister; eski sayaç ardışık yükselen barı da sayıyordu")]
+             "aşamayan bir bar ister; her yükselen barı sayan sayaç ardışık iki bara da H1·H2 der")]
     ankB, i2, e = B_
     sB = kay[ankB].seri
     risk = e["giris"] - e["stop"]
@@ -1273,10 +1274,11 @@ def sekil_bar_sayimi(kay: dict, no: str) -> Path:
         not_=f"{O.ENSTRUMAN_AD.get(ankB.rsplit('-', 1)[0], ankB)} · {_an(sB.zaman[i2])} — giriş {B.sayi(e['giris'], 2)} · "
              f"stop {B.sayi(e['stop'], 2)} · risk {B.sayi(risk, 2)}"))
     fig = _kucuk_coklu(
-        kay, f"Şekil {no} · Geri çekilmeyi saymak: dersin sayımı, eski sayacın yanılgısı, ve H2 paketi",
+        kay, f"Şekil {no} · Geri çekilmeyi saymak: dersin bacak sayımı, her yükselen barı sayan sayaç ve H2 paketi",
         "H1 geri çekilmede zirvesi öncekini aşan ilk bar; geri çekilme SÜRERSE (aşamayan bir bar daha gelirse) "
-        "aynı olayın bir sonraki gerçekleşmesi H2. Eski sayaç ardışık iki yükselen bara H1·H2 diyordu — ölçüldü, "
-        "1.297 etiketin %88'i tavan H4'tü. Sağda H2 barının ikinci giriş paketi: uç + bir tick giriş, karşı uç − "
+        "aynı olayın bir sonraki gerçekleşmesi H2. Zirvesi öncekini aşan her barı sayan bir sayaç ardışık iki "
+        "yükselen bara H1·H2 der — ölçüldü, 13 seride 1.297 etiketin %88'i tavan H4'e oturuyor. Sağda H2 barının "
+        "ikinci giriş paketi: uç + bir tick giriş, karşı uç − "
         "bir tick stop, 1R ve 2R (gösterim için yükselen ortalamanın üstündeki bir H2 seçildi)", paneller, sutun=2, panel_yuk=310)
     return _yaz(fig, f"{no}_bar_sayimi.html")
 

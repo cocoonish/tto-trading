@@ -2043,9 +2043,10 @@ hep bant diyecek bu şekilde. ayrıca barlar boyandığı için algılaması bir
 … daha fazla trade edilebilecek ve aynı zamanda backtesti yapılmış bir
 indikatör kurmamız gerekiyor. yazıyı da aynı temelle tekrar yaz." Gözlem
 ÖLÇÜLDÜ ve doğruydu: dersin Şekil 30 eşikleri tek seride tek günde ölçülmüş
-SEVİYELERDİR ve enstrümana göre kayıyor — örtüşme işareti 1 saatlik 13 serinin
-9'unda pencerelerin %100'ünde açık, Yahoo 5 dk EUR/USD'de %3, USD/CHF'de %100,
-GBP/USD'de %9; doji işareti 13 seride %0. Sabit bir eşik bir enstrümanda hep
+SEVİYELERDİR ve enstrümana göre kayıyor — örtüşme işareti 13 serinin (1 sa · 4 sa ·
+günlük) 7'sinde pencerelerin %100'ünde, 9'unda %99'un üstünde açık, ABD 10 yıllık
+getirinin 4 saatliğinde %0; Yahoo 5 dk EUR/USD'de %3, USD/CHF'de %100, GBP/USD'de
+%9; doji işareti 13 serinin 13'ünde %0. Sabit bir eşik bir enstrümanda hep
 "bant", öbüründe hiç "bant" der ve ikisi de rejim ölçmez. Öntanımlı kip GÖRELİ
 oldu: her ölçü son 280 bardaki kendi değerlerine göre `ta.percentrank`
 sözleşmesiyle sıralanır, sıra ≥ 0,60 işaret (`RejimPanosu.olcu_goreli`,
@@ -2114,6 +2115,32 @@ tuzağı: keşif koşusu tazelemeyle AYNI `veri` concurrency grubunda ve
 `cancel-in-progress: false`; zamanlanmış tazeleme sürerken tetiklenen keşif 18
 dakika "pending" bekledi. Keşif ve tazeleme aynı deponun aynı dalına yazmıyor,
 grup ayrılabilir — bu oturumda değiştirilmedi.
+
+(g) İKİNCİ DOĞRULAMA TURU sayfayı KAYNAĞA karşı okudu (ders metni · ölçüm
+dosyaları · Pine · replikasyon): 34 ham bulgu, 17'si ilk turda çoktan
+kapanmış çıktı, 17'si ayakta kaldı ve hepsi düzeltildi. Üç sınıf kayda değer.
+Birincisi DERSLE ÇELİŞEN İDDİA: sayfa "kırılım modunda hedef yoktur" diyordu,
+ders kalıbın boyu kadar ölçülmüş hareket verir (4.11 · 5.14) — kalıbın boyu
+risk olduğu için 1R'ye denk düşer; "iki sayım arasında en az bir aşamayan bar"
+şartı DERSİN değil SAYACIN seçimi (Şekil 46 notu ardışık H1·H2'yi olası
+sayar) ve sayfa onu dersin tanımı gibi yazıyordu; ders 18 değil on yedi bölüm
+(0–16, 8A/8B). İkincisi ÖLÇÜM DOSYASINDAN DOĞRULANAMAYAN SAYI: "örtüşme en sık
+bağlayan niteliktir" cümlesinin arkasında yalnız örtüşmenin sayısı vardı,
+öbür üç niteliğin düşme sayısı hiç ölçülmemişti — ölçüldü (`_nitelik_dusme_k2`
+· `_k3`), en sık bağlayan KUYRUK çıktı (2.316 barın 2.101'i), örtüşme
+DÖRDÜNCÜ (268, yalnız 15'i 3/4); "%99,7" orta nokta payı koda yorum olarak
+yazılmış, sayılmamıştı; örtüşme işaretinin "1 saatlik 13 serinin 9'unda %100"
+cümlesi dört yerde (sayfa · Pine · Python · bu dosya) aynı yanlış kapsamı
+taşıyordu — seriler 1 sa/4 sa/günlük, %100 olan 7, %99 üstü 9, biri %0. Bir
+cümle dört yere KOPYALANDIĞINDA dört yerde birden yanlıştır. Üçüncüsü
+KAPININ KENDİ KAPSAMI: ⑩ maddesinin "dar bant" hâli KONUMU da geçmiyordu, yani
+yükseklik şartını hiç sınamıyordu; üç şart (yükseklik · HO süzgeci · yön
+süzgeci) artık öbürleri geçerken TEK BAŞINA bağlanıyor ve üç arıza
+enjeksiyonunun üçü de kendi maddesinde düşüyor; SIĞMA tek başına
+SINANAMAZ (konum ve yükseklik geçerken cebirsel olarak sağlanır) ve öyle
+yazıldı. Yapım dili de iki yerde figürün İÇİNDEYDİ ("eski sayacın
+yanılgısı") — 19. ölçüt onu ENGEL saymıyor, çünkü "eski" tek başına kalıp
+değil; okurun bilmediği bir "eski"yi anlatmak yine yapım dilidir.
 
 AÇIK KALAN, adıyla: Pine hiç DERLENMEDİ (sekiz statik ölçüt, derleyici yok);
 yfinance üretim tazeleme işinde kurulu değil, yalnız keşifte; 5 dk örneklemi
