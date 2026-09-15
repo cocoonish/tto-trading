@@ -37,7 +37,8 @@ import durumKutusu from '../../../public/indikatorler/durum_kutusu.html?raw';
   seride ve 5–15 dakikalık beş FX serisinde hiçbir yapılandırmada maliyet sonrası
   yayımlanabilir bir kenar vermedi. Maliyetsiz artı görünen ortalamalar en küçük riskli
   işlemlerden geliyor ve bir pip gidiş-dönüş maliyet onları yutuyor; yarım pipte sıfırın
-  üstünde kalan tek satır var ve o da tek bir yaz döneminin 867 işlemi. Bu sayfa size
+  üstünde kalan tek paket var (başarısız dönüş; en iyi hâli 2R hedefte +0,10 R) ve o da tek bir
+  yaz döneminin 867 işlemi. Bu sayfa size
   "ne zaman al" demez; <b>neye bakacağınızı, emri nereye koyacağınızı ve sayıların ne
   söyleyip ne söylemediğini</b> anlatır.</p>
 
@@ -309,7 +310,8 @@ ne yapacağı 5.4'te.
 ### 5.1 · Yöntem
 
 **İki veri seti.** Birincisi bu sitenin teknik bültenini besleyen 13 seri: dolar endeksi, EUR/USD,
-USD/CHF, ABD 10 yıllık getirisi ve BIST 100'ün günlük, 4 saatlik ve 1 saatlik barları — **4.574 bar**,
+USD/CHF, ABD 10 yıllık getirisi ve BIST 100'ün günlük, 4 saatlik ve 1 saatlik barları (EUR/USD ve USD/CHF'nin
+günlük barları Ek G'deki besleme kusuru yüzünden dışarıda) — **4.574 bar**,
 kapanmış-bar disiplininden geçmiş. İkincisi dersin kalibrasyon ölçeğine yakın: Yahoo Finance'ten
 EUR/USD, USD/CHF ve GBP/USD 5 dakikalık ile EUR/USD ve USD/JPY 15 dakikalık barlar, 25 Haziran – 15
 Eylül 2026 (59 gün), **61.184 bar**; kapanmamış son bar düşürüldü.
@@ -329,10 +331,11 @@ tek başına: dönüş barı (göreli rejimde, ders kipinde, kalite ≥ 3 ile), 
 (kalite ≥ 1, hiçbir katman yok). Aynı barda birden çok paket geçerliyse öncelik 2. bölümdeki sıra.
 
 **Beş ölçü, her satırda.** N işlem sayısı; kazanma oranı; ortalama R (net kâr, risk birimiyle);
-ortalama R'nin bootstrap **%95 aralığı** (300 yeniden örnekleme); kâr faktörü. **Rastgele yüzdelik:**
+ortalama R'nin bootstrap **%95 aralığı** (1 saatlik ve üstü sette 1.000, 5 dakikalık sette 300
+yeniden örnekleme); kâr faktörü. **Rastgele yüzdelik:**
 aynı seride, aynı sayıda emirle, giriş barı ve yönü rastgele seçilmiş, aynı paket mekaniği ve aynı
-yönetimle 60 koşu — yapılandırmanın ortalama R'si bu 60 koşunun yüzde kaçını geçiyor. 100, altmışını
-da geçti demektir; bu "giriş kuralı rastgeleden bilgi taşıyor" der, "para kazandırır" demez.
+yönetimle koşturulur (1 saatlik ve üstü sette 300, 5 dakikalık sette 60 koşu) — yapılandırmanın
+ortalama R'si bu koşuların yüzde kaçını geçiyor. 100, hepsini geçti demektir; bu "giriş kuralı rastgeleden bilgi taşıyor" der, "para kazandırır" demez.
 **İlk / ikinci yarı:** her serinin işlem listesi zamanda ikiye bölünüp iki yarının ortalama R'si ayrı
 yazılır; bir kenar yalnız bir yarıda varsa örneklem içidir. 5 dakikalık sette ayrıca **maliyet**:
 işlem başına 0,5 · 1 · 2 pip gidiş-dönüş, R'den düşülür (net R = R − maliyet / risk); ve **risk
@@ -342,7 +345,7 @@ o satırlarda rejimi tanımsız bar sayısı kayıtta). Tohum sabit; iki set de 
 
 **Ölçülmeyen, adıyla.** Spread ve kayma sabit pip maliyetinin ötesinde modellenmedi; seans süzgeci
 yok; pozisyon büyüklüğü hep bir birim; 59 günlük 5 dakikalık örneklem tek bir yaz dönemi; 1 saatlik ve
-üstü serilerin her biri 260–420 bar, yani göreli rejim satırlarında işlem sayısı tek haneli–yirmili;
+üstü serilerin her biri 254–420 bar, yani göreli rejim satırlarında işlem sayısı tek haneli–yirmili;
 dersin yönetim kurallarının yorum isteyen kısmı (bağlama göre erken çıkış, ölçülmüş hareket
 hedefi, ikinci giriş bekleme) koşturulmadı.
 
@@ -405,8 +408,9 @@ rastgele bara konan emri geçiyor; yani dersin sinyal barı tanımı gürültü 
 maliyetsiz koşuyor ve onun kendi ortalaması eksi dolayında; "rastgeleden iyi" ile "maliyetten iyi"
 arasındaki mesafe bu tabloda kapanmıyor. Ölçülen en iyi net satır (başarısız dönüş, 0,5 pip) +0,10 R.
 
-**6 · 1 saatlik göreli rejim satırları ince.** 13 serinin her biri 260–420 bar ve göreli tarihçe
-280 bar istiyor; rejimli satırlarda 16–23 işlem kalıyor ve aralıklar sıfırı kapsıyor (tam indikatör
+**6 · 1 saatlik göreli rejim satırları ince.** 13 serinin her biri 254–420 bar ve göreli tarihçe
+280 bar istiyor; rejimli satırlarda 16–23 işlem kalıyor ve aralıklar bir satır dışında sıfırı kapsıyor (dönüş barı ·
+göreli rejim, 1R ders: 19 işlem, alt sınır +0,01 — sıfırın hemen üstünde) (tam indikatör
 göreli rejim 2R: 20 işlem, +0,31 R, [−0,20, +0,82]). O satırlar bir sonuç değil, örneklemin
 sınırıdır; göreli rejimin gerçek ölçümü 5 dakikalık settedir.
 
@@ -730,7 +734,7 @@ kurallarıyla ölçüldü: 13 seri, 4.574 bar. Her örnekteki oranlar, yanında 
 değerlerinden yeniden hesaplanabilir. **Ölçek uyarısı:** ders eşiklerini 5 dakikalık barda kalibre eder;
 buradaki örnekler saatlik ve günlük barlardan. Kurallar ölçek bağımsız kurulmuştur ama kalibrasyon ölçeği
 bu değildir. Rejim örnekleri panonun **ders (mutlak) kipiyle** ölçüldü — göreli kip 280 barlık tarihçe
-ister ve bu seriler 260–420 bar; göreli kipin ölçümü 5 dakikalık sette ve 1. bölümde.
+ister ve bu seriler 254–420 bar; göreli kipin ölçümü 5 dakikalık sette ve 1. bölümde.
 
 ### 1 · Rejim: pano ne zaman "BANT" der (ders kipi)
 
