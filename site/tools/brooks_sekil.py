@@ -1497,6 +1497,196 @@ def sekil_barbwire(kay: dict, no: str) -> Path:
     return _yaz(fig, f"{no}_barbwire.html")
 
 
+def _rejim_penceresi(kay: dict) -> tuple[str, int, int, list]:
+    """ALT PANEL FİGÜRÜNÜN PENCERESİ ARANIR, YAZILMAZ.
+
+    `teknik/olc.py` sabit bar sayısıyla koşar (s1 420 · s4 360 · gün 260) ve
+    dosyalar her pazar yeniden üretilir: elle yazılmış bir bar indeksi her
+    hafta BAŞKA bir bara işaret eder. Pencere bu yüzden ölçüyle seçilir —
+    içinde hem BANT hem trend hükmü GEÇEN, ikisinin en dengeli olduğu yer.
+    Rejim geçişi görünmeyen bir pencere, okura panonun ne işe yaradığını
+    gösteremez."""
+    en = None
+    for ad, k in kay.items():
+        s = k.seri
+        rp = R.RejimPanosu(s)
+        o = [rp.olcu(i) for i in range(len(s))]
+        if sum(1 for x in o if x) < 140:
+            continue
+        for i in range(len(s)):
+            bas = i - 109
+            if bas < 0 or not o[i]:
+                continue
+            p = [o[j]["rejim"] for j in range(bas, i + 1) if o[j]]
+            if len(p) < 100:
+                continue
+            skor = min(p.count("trend"), p.count("BANT"))
+            if en is None or skor > en[0]:
+                en = (skor, ad, bas, i + 1, o)
+    if en is None or en[0] == 0:
+        raise SystemExit("ENGEL · hem BANT hem trend geçen pencere yok — "
+                         "figür rejim geçişini gösteremez")
+    return en[1], en[2], en[3], en[4]
+
+
+def _zit_cift(o: list, bas: int, son: int) -> tuple[int, int] | None:
+    """Örtüşme oranı BİREBİR AYNI olan bir BANT ve bir trend barı.
+
+    Figürün asıl dersi bu çift: claret çizgi aynı yükseklikte dururken hüküm
+    zıt çıkıyor, çünkü hükmü çeviren iki ölçünün (ortalama kesişme ve azami
+    ardışık trend barı) ekranda ÇİZGİSİ YOK. Çift bulunamazsa figür yine
+    çizilir, yalnız o ders yazılmaz — uydurma bir çift kurulmaz."""
+    havuz: dict[float, list[int]] = {}
+    for i in range(bas, son):
+        if o[i]:
+            havuz.setdefault(round(o[i]["ortusme_oran"], 3), []).append(i)
+    aday = []
+    for _, liste in havuz.items():
+        b = [i for i in liste if o[i]["rejim"] == "BANT"]
+        t = [i for i in liste if o[i]["rejim"] == "trend"]
+        if b and t:
+            for x in b:
+                for y in t:
+                    aday.append((abs(x - y), x, y))
+    if not aday:
+        return None
+    aday.sort()
+    return aday[0][1], aday[0][2]
+
+
+def sekil_alt_panel_gorunumu(kay: dict, no: str) -> Path:
+    """ALT PANEL EKRANDA NE ÇİZER — üç çizgi, iki görünmez ölçü.
+
+    Sayfa panonun TABLOSUNU anlatıyordu, GRAFİĞİNİ hiç anlatmıyordu: okur
+    TradingView'de üç eğri, noktalı çizgiler ve grileşen bir zemin görüp
+    hangisinin ne olduğunu hiçbir yerden okuyamıyordu.
+    """
+    ad, bas, son, o = _rejim_penceresi(kay)
+    k = kay[ad]
+    s = k.seri
+    fp = R.FiyatPaneli(s)
+    rp = R.RejimPanosu(s)
+    x = list(range(bas, son))
+
+    fig = make_subplots(
+        rows=3, cols=1, shared_xaxes=True, vertical_spacing=0.055,
+        row_heights=[0.34, 0.44, 0.22],
+        subplot_titles=["Fiyat paneli — aynı barlar",
+                        "Alt panel · rejim panosu — TradingView'de gördüğünüz",
+                        "Bant işareti sayısı — EKRANDA ÇİZGİSİ YOKTUR"])
+
+    # ── 1 · Fiyat ────────────────────────────────────────────────────────
+    _mum(fig, s, fp, bas, son, row=1, col=1)
+
+    # ── 2 · Panonun kendisi ──────────────────────────────────────────────
+    # İZLER ÖNCE. plotly 7'de `add_vrect(row=, col=)` iz taşımayan bir alt
+    # panele SESSİZCE düşüyor (bkz. _kucuk_coklu); zemin izlerden sonra.
+    for anahtar, etiket, renk in (("ortusme_oran", "Örtüşme oranı", CLARET),
+                                  ("doji_oran", "Doji oranı", MAVI),
+                                  ("net_aralik", "Net / aralık", MUREKKEP)):
+        fig.add_trace(go.Scatter(
+            x=x, y=[o[i][anahtar] if o[i] else None for i in x], mode="lines",
+            line=dict(color=renk, width=2), name=etiket,
+            connectgaps=False), row=2, col=1)
+
+    esik = rp.k
+    for y, renk, etiket in ((esik["ortusmePay"], CLARET, "örtüşme eşiği · ÜSTÜ bant"),
+                            (esik["dojiPay"], MAVI, "doji eşiği · ÜSTÜ bant"),
+                            (esik["netEsik"], MUREKKEP, "net/aralık eşiği · ALTI bant")):
+        fig.add_hline(y=y, line=dict(color=renk, width=1, dash="dot"),
+                      opacity=0.55, row=2, col=1)
+
+    # Zemin: pano bar bar boyar. İKİ KOYULUK İKİ AYRI HÂLDİR ve kutunun
+    # hükmüyle aynı şey değil — 3 işarette zemin boyalı ama kutu "ara" der.
+    i = bas
+    while i < son:
+        n = o[i]["n"] if o[i] else -1
+        j = i
+        while j < son and ((o[j]["n"] if o[j] else -1) == n):
+            j += 1
+        if n >= 4:
+            fig.add_vrect(x0=i - 0.5, x1=j - 0.5, line_width=0, fillcolor=GRI,
+                          opacity=0.18, layer="below", row=2, col=1)
+        elif n == 3:
+            fig.add_vrect(x0=i - 0.5, x1=j - 0.5, line_width=0, fillcolor=GRI,
+                          opacity=0.09, layer="below", row=2, col=1)
+        i = j
+
+    bw = [i for i in x if rp.barbwire(i)["var"]]
+    if bw:
+        fig.add_trace(go.Scatter(
+            x=bw, y=[1.02] * len(bw), mode="markers",
+            marker=dict(color=CLARET, symbol="x", size=6),
+            name="barbwire (panelin en üstünde)"), row=2, col=1)
+
+    # ── 3 · Hükmü çeviren sayı ───────────────────────────────────────────
+    fig.add_trace(go.Scatter(
+        x=x, y=[o[i]["n"] if o[i] else None for i in x], mode="lines",
+        line=dict(color=GRI, width=2, shape="hv"), name="bant işareti · n/5",
+        connectgaps=False), row=3, col=1)
+    for y, renk in ((4, CLARET), (2, MAVI)):
+        fig.add_hline(y=y - 0.5, line=dict(color=renk, width=1, dash="dot"),
+                      opacity=0.5, row=3, col=1)
+
+    # ── Dersin kendisi: aynı çizgi yüksekliği, zıt hüküm ─────────────────
+    cift = _zit_cift(o, bas, son)
+    ek = ""
+    if cift:
+        ib, it = cift
+        for i, etiket, renk in ((ib, "BANT", CLARET), (it, "trend", MAVI)):
+            fig.add_vline(x=i, line=dict(color=renk, width=1, dash="dash"),
+                          opacity=0.55, row=1, col=1)
+            fig.add_vline(x=i, line=dict(color=renk, width=1, dash="dash"),
+                          opacity=0.55, row=2, col=1)
+            fig.add_vline(x=i, line=dict(color=renk, width=1, dash="dash"),
+                          opacity=0.55, row=3, col=1)
+            fig.add_annotation(
+                x=i, y=1.055, text=f"<b>{etiket}</b> · {B.sayi(o[i]['n'], 0)}/5",
+                showarrow=False, font=dict(size=10, color=renk),
+                bgcolor="rgba(255,255,255,0.9)", borderpad=2, row=2, col=1)
+        a, b = o[ib], o[it]
+        ek = (f" — Kesikli iki çizgi arasında örtüşme oranı BİREBİR aynı "
+              f"({B.sayi(a['ortusme_oran'], 3)}), hüküm ise zıt: "
+              f"{B.sayi(a['n'], 0)}/5 ile {B.sayi(b['n'], 0)}/5. "
+              f"Çeviren üç ölçüden İKİSİNİN ekranda çizgisi yok — ortalama kesişme "
+              f"{B.sayi(a['kesisme'], 0)} → {B.sayi(b['kesisme'], 0)} ve azami ardışık "
+              f"trend barı {B.sayi(a['azami_dizi'], 0)} → {B.sayi(b['azami_dizi'], 0)}")
+
+    fig.update_yaxes(showticklabels=False, showgrid=False, row=1, col=1)
+    fig.update_yaxes(range=[-0.03, 1.12], row=2, col=1, gridcolor="#ececec",
+                     tickvals=[0, 0.25, 0.5, 0.75, 1],
+                     ticktext=[B.sayi(v, 2) for v in (0, 0.25, 0.5, 0.75, 1)])
+    fig.update_yaxes(range=[-0.4, 5.4], row=3, col=1, gridcolor="#ececec",
+                     tickvals=[0, 1, 2, 3, 4, 5],
+                     ticktext=[B.sayi(v, 0) for v in range(6)])
+    for r in (1, 2):
+        fig.update_xaxes(showticklabels=False, showgrid=False, row=r, col=1,
+                         rangeslider=dict(visible=False))
+    yer = list(range(bas, son, 10))
+    fig.update_xaxes(showgrid=False, row=3, col=1, rangeslider=dict(visible=False),
+                     tickmode="array", tickvals=yer,
+                     ticktext=[_an(s.zaman[i])[:5] for i in yer],
+                     tickfont=dict(size=9))
+
+    _duzen(fig, f"Şekil {no} · Alt panel ekranda ne çizer",
+           f"{O.ENSTRUMAN_AD.get(k.slug, k.slug)} · {O.DILIM_AD.get(k.dilim, k.dilim)} · "
+           f"{_an(s.zaman[bas])} → {_an(s.zaman[son - 1])} — Panoda YALNIZ ÜÇ çizgi vardır; "
+           "hükmü kuran beş ölçünün ikisi (ortalama kesişme, azami ardışık trend barı) hiç "
+           "çizilmez. Noktalı eşiklerin yönü aynı değil: örtüşme ve doji için ÜSTÜ, "
+           "net/aralık için ALTI bant sayılır" + ek, 820)
+    # Zemin + eşik + çift çizgileri sessizce düşmemeli.
+    bekle_hline = 5
+    bekle_vline = 6 if cift else 0
+    zemin = sum(1 for i in range(bas, son) if o[i] and o[i]["n"] >= 3)
+    if len(fig.layout.shapes) < bekle_hline + bekle_vline or (zemin and
+            len(fig.layout.shapes) == bekle_hline + bekle_vline):
+        raise SystemExit(
+            f"ENGEL · {len(fig.layout.shapes)} şekil figüre girdi; {bekle_hline} eşik + "
+            f"{bekle_vline} çift çizgisi + zemin bekleniyordu ({zemin} bar n≥3). "
+            "plotly alt panele sessizce düşen şekil bırakmış olabilir")
+    return _yaz(fig, f"{no}_alt_panel_gorunumu.html")
+
+
 # ŞEKİL NUMARASI BİR KİMLİK DEĞİL, SAYFADAKİ YERDİR. Numara bu listedeki
 # sıradan türer; şekil işlevleri kendi numaralarını BİLMEZ, dışarıdan alır.
 # Sayfada Şekil 01'den sonra Şekil 08 gelmesi okuru şaşırtır ve bu kusur bir
@@ -1504,6 +1694,7 @@ def sekil_barbwire(kay: dict, no: str) -> Path:
 # numara alıyordu, oysa metnin ORTASINA giriyordu.
 SIRA = [
     ("indikator_gorunumu", lambda: sekil_indikator_gorunumu),
+    ("alt_panel_gorunumu", lambda: sekil_alt_panel_gorunumu),
     ("bar_sozlugu",        lambda: sekil_bar_sozlugu),
     ("bar_sayimi",         lambda: sekil_bar_sayimi),
     ("kirilim_modu",       lambda: sekil_kirilim_modu),
