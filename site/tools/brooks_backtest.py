@@ -1,74 +1,75 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""Brooks indikatörünün BACKTEST'i — gerçek barlar, tek işlem kuralı, ablasyon.
+"""Brooks indikatörünün BACKTEST'i — gerçek barlar, dersin emir paketi, ablasyon.
 
-NEDEN VAR. Sayfadaki "işlem mekaniği" bölümü bir emir kuralı anlatıyor ve o
-kuralın hiçbir sayısı ÖLÇÜLMEMİŞTİ: kaç işlem üretir, kaçı kazanır, kenar
-var mı, hangi süzgeç ne katar. Rejim panosunun beş bant işaretinin üçünün
-sabit olduğu ölçüldü (örtüşme %90 açık, doji %0, kesişme %92) ve kullanıcı
-aynı şeyi gözle gördü; "daha fazla işlem üreten" bir indikatör istemeden
-önce mevcut kuralın ne ürettiği sayıyla bilinmeli. Bu araç onu ölçer.
+NEDEN VAR. Sayfadaki emir mekaniğinin hiçbir sayısı ÖLÇÜLMEMİŞTİ: kaç işlem
+üretir, kaçı kazanır, kenar var mı, hangi süzgeç ne katar. Rejim panosunun
+beş bant işaretinin üçünün sabit olduğu ölçüldü ve kullanıcı aynı şeyi gözle
+gördü; "daha fazla işlem üreten" bir indikatör istemeden önce mevcut kuralın
+ne ürettiği sayıyla bilinmeli. Bu araç onu ölçer.
 
 KURALLARIN KENDİSİ BURADA DEĞİL. Sinyal barı, kalite, always-in, yön
-filtresi, rejim ve barbwire `brooks_referans`ten içe aktarılır — Pine
-dosyalarının Python replikasyonu, kendi geleceğe-bakma kapısıyla. Burada
-yalnız EMİR MEKANİĞİ ve ÖLÇÜM var.
+filtresi, rejim, barbwire ve dört emir paketi (`Kurulumlar`) brooks_referans'tan
+içe aktarılır — Pine dosyalarının Python replikasyonu, kendi geleceğe-bakma
+kapısıyla. Burada yalnız EMİR MEKANİĞİ ve ÖLÇÜM var.
 
-İŞLEM KURALI (sayfada yazılı emir mekaniği; burada değiştirilmez):
-  · Sinyal barı i KAPANMIŞ bardır: boğa için `donus_bari(i, True)` ve
-    `kalite(i, True) ≥ K`; ayı aynası.
-  · Süzgeçler, her biri açılıp kapanabilir: (a) rejim ≠ BANT (pencere
-    dolmadıysa bar atlanır) · (b) always-in yönü sinyal yönüyle aynı ·
-    (c) yön filtresi o yönü yasaklamıyor · (d) barbwire yoksa · (e) K.
-  · Giriş: boğada sinyal barının YÜKSEĞİNE stop emri; i+1 barının yükseği
-    sinyal yükseğini KESİN aşarsa dolar, dolum fiyatı sinyal yükseği (kayma
-    yok). Aşmazsa emir iptal. Ayıda ayna.
-  · Stop: sinyal barının karşı ucu. Risk = giriş − stop. Hedef = giriş +
-    R·risk; R ∈ {1, 2} ikisi de ölçülür.
-  · Dolum barından itibaren her bar (dolum barı dahil): düşük ≤ stop → −1R;
-    yüksek ≥ hedef → +R; ikisi aynı barda → KAYIP (tutucu). 100 barda sonuç
-    yoksa 100. barın kapanışından çıkılır, kesirli R yazılır; seri daha önce
-    biterse son kapanıştan çıkılır ve ayrı sayılır.
+EMİR MEKANİĞİ (dersin Bölüm 2.1 · 2.10 · 11.1 · 11.2 paketi; sayılar dersten):
+  · Sinyal barı i KAPANMIŞ bardır. Emir bir bar ömürlüdür: i+1 barında
+    dolmazsa iptal.
+  · Giriş: sinyal ucunun BİR TİCK ötesine stop emri; i+1 barının ucu o
+    seviyeye ulaşırsa dolar, dolum fiyatı emir fiyatı (kayma yok).
+  · Koruyucu stop: karşı ucun bir tick ötesi. Risk = |giriş − stop| = 1R.
+    Hedef = giriş + R·risk; R ∈ {1, 2} — "en az 1R, tercihen 2R".
+  · ALTI TİCK KURALI (11.1): kâr-al limiti ancak fiyat hedefin BİR TİCK
+    ötesine geçince dolmuş sayılır. Girişteki tick zaten emirde.
+  · Dolum barından itibaren her bar (dolum barı dahil): stop görüldü → −1R;
+    hedef+tick görüldü → +R; ikisi aynı barda → KAYIP (tutucu). 100 barda
+    sonuç yoksa 100. barın kapanışından çıkılır (kesirli R); seri biterse son
+    kapanıştan çıkılır ve ayrı sayılır.
+  · YÖNETİM (11.2), açılıp kapanabilir: `sikilastir` — giriş barı işlem
+    yönünde TREND BARIYSA (gövde ≥ menzilin yarısı, Bölüm 1 tanımı) stop
+    giriş barının karşı ucunun bir tick ötesine ÇEKİLİR (yalnız daralır);
+    doji/ters gövdeli giriş barında dokunulmaz. `basabas` — takip barı
+    ölçütü: giriş barından sonraki İKİ barın hiçbiri giriş barının
+    kapanışını işlem yönünde aşmadıysa stop giriş fiyatına çekilir
+    (dersin "başabaş çıkış planı"; iki barlık pencere dersin '1–2 bar'
+    cümlesinden).
+  · KIRILIM MODU (2.5): iki taraflı stop; i+1'de hangi taraf tetiklenirse
+    o pozisyon, öbür seviye koruyucu stop. İkisi aynı barda → emir sayılmaz
+    (belirsiz, ayrıca sayılır).
+  · BAŞARISIZ DÖNÜŞ (2.7): karşı dönüş barının ters tarafından giriş; i+1'de
+    karşı uç da geçildiyse (ayı tarafı önce tetiklenmiş olabilir) sayılmaz.
+  · MALİYET: işlem başına gidiş-dönüş `maliyet` (fiyat birimi, seri başına);
+    net R = R − maliyet/risk. Sıfır maliyet BRÜT'tür ve kenar iddiası
+    taşımaz: 5 dk FX'te ölçüldü (15.09.2026), maliyetsiz +0,10…+0,16 R'nin
+    tamamı medyanı 2,6 pip olan en küçük riskli işlemlerden geliyordu ve
+    yarım pip maliyet on yapılandırmanın onunu da eksiye çeviriyordu.
   · Aynı seride aynı anda TEK pozisyon; pozisyondayken sinyal yok sayılır.
     Çıkış barı kapandıktan sonra o bar yeniden sinyal barı olabilir.
-  · Aynı barda iki yön birden geçerse kalitesi yüksek olan alınır; eşitse
-    bar atlanır ve sayılır (`belirsiz`).
+  · BANT KENARI (4.5/4.6/4.12): rejim BANT iken uç üçte birde dönüş barı,
+    bant ≥ 3 × stop, 1R hedef bandın içinde, HO süzgeci; standart paket.
+  · Aynı barda birden çok paket geçerliyse öncelik: kırılım modu (iki
+    taraflı, yönsüz) > bant kenarı > ikinci giriş > başarısız dönüş > dönüş
+    barı; aynı
+    pakette iki yön birden geçerse kalitesi yüksek olan, eşitse bar atlanır
+    ve sayılır (`belirsiz`).
 
-ÖLÇÜLEN: yapılandırma başına N, kazanma oranı (R > 0 payı), ortalama R,
-ortalama R için bootstrap %95 güven aralığı (1.000 yeniden örnekleme), kâr
-faktörü, R cinsinden azami geri çekilme (işlemler sinyal zamanına göre
-sıralı, bütün seriler tek defterde), çift vuruş sayısı (kaybın kaçı "aynı
-barda ikisi" hükmünden — tutucu kuralın payı), seri bazında dağılım, zaman ayrımı
-(her serinin uygun aralığının ilk / ikinci yarısı) ve RASTGELE TABAN: her
-seride gerçek koşunun EMİR sayısı kadar rastgele bar + rastgele yön, aynı
-mekanik, 300 tekrar → gerçek ortalama R'nin bu dağılımdaki yüzdeliği. Bu
-taban olmadan hiçbir isabet sayısı anlamlı değildir: rastgele girişin de
-bir kazanma oranı vardır.
+ÖLÇÜLEN: yapılandırma başına N, kazanma oranı, ortalama R (brüt ve net),
+bootstrap %95 güven aralığı (1.000 yeniden örnekleme), kâr faktörü, azami
+geri çekilme (R), çift vuruş, seri dağılımı, zaman ayrımı (ilk/ikinci yarı),
+risk büyüklüğü dilimleri ve RASTGELE TABAN: aynı emir sayısı, rastgele bar +
+rastgele yön, AYNI paket ve AYNI yönetim, 300 tekrar → gerçek ortalamanın
+yüzdeliği. Taban olmadan hiçbir isabet sayısı anlamlı değildir.
 
 ÖLÇÜLMEYEN, adıyla:
-  · Kayma, komisyon, spread YOK. Dolum tam sinyal ucundan; stop tam stop
-    fiyatından. Günlük barlarda gece boşluğu stop'un ötesine açılsa da kayıp
-    −1R yazılır — gerçek kayıp daha büyüktür. Kenar varsa bu ölçüm onu
-    olduğundan İYİ gösterir.
-  · Yalnız 1 saatlik, 4 saatlik ve günlük barlar; dersin eşikleri 5
-    dakikalık barda kalibre. Kullanıcının gözlediği 5 dakikalık EUR/USD bu
-    ölçümde YOK.
-  · 13 seri, 4.574 bar; saatlik seriler Ağustos–Eylül 2026'nın üç haftası,
-    günlükler bir yıl. Örneklem DAR ve tek bir rejim penceresi; N küçük
-    kaldığında güven aralığı bunu söyler, sayıya eklenmez.
-  · Ortak başlangıç barı bütün yapılandırmalarda AYNI: rejim penceresinin
-    dolduğu ilk bar. Süzgeç kaldırıldığında örneklem değişmesin diye; bedeli
-    her serinin ilk 88 barının hiçbir yapılandırmada sinyal üretmemesi.
+  · Kayma yok; limit dolumu altı tick kuralıyla, stop dolumu tam fiyattan.
+    Günlük barda gece boşluğu stop'un ötesine açılsa da −1R yazılır.
   · Seans saati, haber takvimi, pozisyon büyüklüğü, portföy etkisi yok.
-    Azami geri çekilme seriler arası zaman sırasına göre tek defterde
-    ölçülür ve bir portföy eğrisinin kaba bir yaklaşımıdır.
-  · Backtest örneklem İÇİDİR: kurallar bu barlara bakılarak seçilmedi ama
-    ablasyon matrisindeki "en iyi" yapılandırmayı seçip yayımlamak, seçimi
-    aynı veride yapmaktır. Sıralama da bir sonuçtur ve örneklem büyüyünce
-    değişebilir.
-
-ÇIKTI: site/src/data/brooks_backtest.json (künye + bütün yapılandırmalar +
-işlem listeleri) ve stdout'ta ortak/bicim ile yazılmış tablo.
+  · Ortak başlangıç barı bütün yapılandırmalarda AYNI (göreli rejim
+    tarihçesi + pencere + EMA); süzgeç kaldırılınca örneklem değişmesin.
+  · Backtest örneklem İÇİDİR: ablasyon matrisinden "en iyi"yi seçip
+    yayımlamak seçimi aynı veride yapmaktır; sıralama bir sonuçtur ve
+    örneklem büyüyünce değişebilir.
 
     python3 site/tools/brooks_backtest.py            # ölçer, JSON yazar
     python3 site/tools/brooks_backtest.py --denetle  # yalnız mekanik sınamaları
@@ -89,130 +90,206 @@ sys.path.insert(0, str(BURASI))
 sys.path.insert(0, str(SITE / "public" / "indikatorler"))
 sys.path.insert(0, str(SITE.parent))
 
-import brooks_ornek as O                                         # noqa: E402
-import brooks_referans as R                                      # noqa: E402
-from brooks_referans import FiyatPaneli, RejimPanosu, Seri       # noqa: E402
-from ortak import bicim as B                                     # noqa: E402
+import brooks_ornek as O                                               # noqa: E402
+import brooks_referans as R                                            # noqa: E402
+from brooks_referans import FiyatPaneli, Kurulumlar, RejimPanosu, Seri  # noqa: E402
+from ortak import bicim as B                                           # noqa: E402
 
 KOK = SITE.parent
 CIKTI = SITE / "src" / "data" / "brooks_backtest.json"
 
-UFUK = 100              # dolumdan sonra en çok bu kadar bar; sonra kapanıştan çıkış
-HEDEFLER = (1, 2)       # R katları — ikisi de ölçülür
+UFUK = 100
+HEDEFLER = (1, 2)
 BOOTSTRAP = 1000
 RASTGELE_TEKRAR = 300
-TOHUM = 20260915        # tekrarlanabilirlik: aynı veri, aynı sayı
+TOHUM = 20260915
+YONETIM_SABIT = dict(sikilastir=False, basabas=False)
+YONETIM_DERS = dict(sikilastir=True, basabas=True)
 
-# Ortak başlangıç: rejim penceresinin dolduğu ilk bar. `RejimPanosu.olcu`
-# i+1 ≥ pencere ve ema[i−pencere+1] tanımlı ister; EMA maUzunluk−1'de başlar.
+# Ortak başlangıç: rejim penceresinin dolduğu ilk bar (pencere + EMA). Her
+# yapılandırma aynı bardan başlar — süzgeç kaldırıldığında örneklem değişmesin.
+# GÖRELİ rejim ayrıca `tarihce` (280) bar ister; o dolana kadar göreli süzgeçli
+# yapılandırmalar emir üretmez ve bu, seri başına `rejim_tanimsiz_bar` olarak
+# YAZILIR. Başlangıcı 368'e çekmek yerel 420 barlık serileri 52 bara indirirdi;
+# 5 dk'lık 16.000 barlık serilerde fark %2'nin altında.
 BAS = int(R.SABIT_RP["pencere"]) + int(R.SABIT_RP["maUzunluk"]) - 2
 
-# Ablasyon matrisi. Sıra sayfadaki tabloya olduğu gibi gider.
+# Ablasyon matrisi. `kurulum`: hangi paketler açık. `rejim`: "goreli" → göreli
+# BANT'ta trend kurulumları kapalı, kırılım modu yalnız BANT'ta; "mutlak" →
+# dersin Şekil 30 eşiği; None → süzgeç yok. Sıra sayfadaki tabloya gider.
 YAPILANDIRMA: list[tuple[str, dict]] = [
-    ("tam sistem · K≥3",        dict(rejim=True,  ai=True,  yon=True,  bw=True,  K=3)),
-    ("tam sistem · K≥2",        dict(rejim=True,  ai=True,  yon=True,  bw=True,  K=2)),
-    ("tam sistem · K=4",        dict(rejim=True,  ai=True,  yon=True,  bw=True,  K=4)),
-    ("−rejim · K≥3",            dict(rejim=False, ai=True,  yon=True,  bw=True,  K=3)),
-    ("−always-in · K≥3",        dict(rejim=True,  ai=False, yon=True,  bw=True,  K=3)),
-    ("−yön filtresi · K≥3",     dict(rejim=True,  ai=True,  yon=False, bw=True,  K=3)),
-    ("−barbwire · K≥3",         dict(rejim=True,  ai=True,  yon=True,  bw=False, K=3)),
-    ("süzgeçsiz · K≥1",         dict(rejim=False, ai=False, yon=False, bw=False, K=1)),
-    ("yalnız always-in · K≥1",  dict(rejim=False, ai=True,  yon=False, bw=False, K=1)),
+    ("tam indikatör · göreli rejim",     dict(kurulum=("donus", "ikinci", "kirilim", "basarisiz", "bant"), rejim="goreli", ai=True, yon=True, bw=True, K=2)),
+    ("tam indikatör · rejim yok",        dict(kurulum=("donus", "ikinci", "kirilim", "basarisiz", "bant"), rejim=None,     ai=True, yon=True, bw=True, K=2)),
+    ("yalnız bant kenarı · BANT'ta",     dict(kurulum=("bant",),     rejim="goreli", ai=False, yon=True, bw=True, K=0)),
+    ("yalnız dönüş barı · göreli rejim", dict(kurulum=("donus",),    rejim="goreli", ai=True, yon=True, bw=True, K=2)),
+    ("yalnız dönüş barı · mutlak rejim", dict(kurulum=("donus",),    rejim="mutlak", ai=True, yon=True, bw=True, K=2)),
+    ("yalnız dönüş barı · K≥3",          dict(kurulum=("donus",),    rejim="goreli", ai=True, yon=True, bw=True, K=3)),
+    ("yalnız ikinci giriş (H2/L2)",      dict(kurulum=("ikinci",),   rejim="goreli", ai=True, yon=True, bw=True, K=0)),
+    ("yalnız kırılım modu · BANT'ta",    dict(kurulum=("kirilim",),  rejim="goreli", ai=False, yon=False, bw=False, K=0)),
+    ("yalnız kırılım modu · her yerde",  dict(kurulum=("kirilim",),  rejim=None,     ai=False, yon=False, bw=False, K=0)),
+    ("yalnız başarısız dönüş",           dict(kurulum=("basarisiz",), rejim="goreli", ai=True, yon=True, bw=True, K=0)),
+    ("süzgeçsiz dönüş barı · K≥1",       dict(kurulum=("donus",),    rejim=None,     ai=False, yon=False, bw=False, K=1)),
 ]
 
 
 # ── Seri başına ölçüm: referans bir kez çağrılır, süzgeçler sonra sorulur ──
 class SeriOlcum:
-    """Bir serinin bar bar sinyal girdileri. Kural katmanı burada ÇAĞRILIR,
-    yeniden yazılmaz: dönüş barı, kalite, always-in, yön filtresi, rejim ve
-    barbwire referanstan gelir."""
+    """Bir serinin bar bar emir girdileri. Kural katmanı burada ÇAĞRILIR,
+    yeniden yazılmaz."""
 
-    def __init__(self, ad: str, s: Seri):
+    def __init__(self, ad: str, s: Seri, tick: float | None = None, maliyet: float = 0.0):
         self.ad, self.s = ad, s
-        fp, rp = FiyatPaneli(s), RejimPanosu(s)
+        self.tick = float(tick) if tick else R.tick_tahmini(s)
+        self.maliyet = float(maliyet)
+        ku = Kurulumlar(s, self.tick)
+        rp = RejimPanosu(s)
+        fp = ku.fp
         n = len(s)
-        self.ai, _, _ = fp.always_in()
-        self.donus = {1: [False] * n, -1: [False] * n}
-        self.kalite = {1: [0] * n, -1: [0] * n}
+        self.ai = ku.ai
+        self.trend_bari = [fp.govde_orani(i) >= fp.k["trendGovde"] for i in range(n)]
         self.yasak = {1: [False] * n, -1: [False] * n}
-        self.rejim: list[str | None] = [None] * n
+        self.rejim_goreli: list[str | None] = [None] * n
+        self.rejim_mutlak: list[str | None] = [None] * n
         self.bw = [False] * n
+        self.paket: dict[str, list] = {k: [None] * n for k in ("donus_boga", "donus_ayi", "ikinci", "kirilim", "basarisiz", "bant")}
         for i in range(1, n):
-            for yon, boga in ((1, True), (-1, False)):
-                if fp.donus_bari(i, boga):
-                    self.donus[yon][i] = True
-                    self.kalite[yon][i] = fp.kalite(i, boga)
             f = fp.yon_filtresi(i)
             self.yasak[-1][i] = f == "yalnız AL"
             self.yasak[1][i] = f == "yalnız SAT"
             o = rp.olcu(i)
-            self.rejim[i] = o["rejim"] if o else None
+            self.rejim_mutlak[i] = o["rejim"] if o else None
+            g = rp.olcu_goreli(i)
+            self.rejim_goreli[i] = g["rejim"] if g else None
             self.bw[i] = rp.barbwire(i)["var"]
+            self.paket["donus_boga"][i] = ku.donus(i, True)
+            self.paket["donus_ayi"][i] = ku.donus(i, False)
+            self.paket["ikinci"][i] = ku.ikinci_giris(i)
+            self.paket["kirilim"][i] = ku.kirilim(i)
+            self.paket["basarisiz"][i] = ku.basarisiz_donus(i)
+            self.paket["bant"][i] = ku.bant_kenari(i)
 
-    def sinyal(self, i: int, ayar: dict) -> tuple[int, bool]:
-        """(yön, belirsiz). Yön 0 = sinyal yok. Belirsiz = iki yön eşit kalite."""
-        if ayar["rejim"]:
-            if self.rejim[i] is None or self.rejim[i] == "BANT":
-                return 0, False
+    def _rejim(self, i: int, ayar: dict) -> str | None:
+        if ayar["rejim"] == "goreli":
+            return self.rejim_goreli[i]
+        if ayar["rejim"] == "mutlak":
+            return self.rejim_mutlak[i]
+        return "serbest"
+
+    def emir(self, i: int, ayar: dict) -> tuple[dict | None, bool]:
+        """(emir, belirsiz). Emir None = bu barda emir yok."""
+        rej = self._rejim(i, ayar)
+        if rej is None:
+            return None, False                       # pencere dolmadı
+        bant = rej == "BANT"
+        kur = ayar["kurulum"]
+        if "kirilim" in kur and self.paket["kirilim"][i] and (ayar["rejim"] is None or bant):
+            return self.paket["kirilim"][i], False
+        if "bant" in kur and self.paket["bant"][i] and (ayar["rejim"] is None or bant):
+            e = self.paket["bant"][i]
+            if not (ayar["yon"] and self.yasak[e["yon"]][i]):
+                return e, False
+        if ayar["rejim"] is not None and bant:
+            return None, False                       # bantta trend kurulumu yok
         if ayar["bw"] and self.bw[i]:
-            return 0, False
-        aday = []
-        for yon in (1, -1):
-            if not self.donus[yon][i] or self.kalite[yon][i] < ayar["K"]:
-                continue
-            if ayar["ai"] and self.ai[i] != yon:
-                continue
-            if ayar["yon"] and self.yasak[yon][i]:
-                continue
-            aday.append((self.kalite[yon][i], yon))
-        if not aday:
-            return 0, False
-        if len(aday) == 2 and aday[0][0] == aday[1][0]:
-            return 0, True
-        return max(aday)[1], False
+            return None, False
+
+        def uygun(e: dict | None) -> bool:
+            if e is None:
+                return False
+            if ayar["ai"] and self.ai[i] != e["yon"]:
+                return False
+            if ayar["yon"] and self.yasak[e["yon"]][i]:
+                return False
+            return True
+
+        if "ikinci" in kur and uygun(self.paket["ikinci"][i]):
+            return self.paket["ikinci"][i], False
+        if "basarisiz" in kur and uygun(self.paket["basarisiz"][i]):
+            return self.paket["basarisiz"][i], False
+        if "donus" in kur:
+            aday = [e for e in (self.paket["donus_boga"][i], self.paket["donus_ayi"][i])
+                    if uygun(e) and e["kalite"] >= ayar["K"]]
+            if not aday:
+                return None, False
+            if len(aday) == 2 and aday[0]["kalite"] == aday[1]["kalite"]:
+                return None, True
+            return max(aday, key=lambda e: e["kalite"]), False
+        return None, False
 
 
 # ── Emir mekaniği ───────────────────────────────────────────────────────────
-def islem_kos(s: Seri, sinyal, hedef_r: float, bas: int = 0, ufuk: int = UFUK) -> dict:
-    """Bir seriyi baştan sona dolaşır; `sinyal(i)` → +1 / −1 / 0.
+def islem_kos(s: Seri, emir, hedef_r: float, bas: int = 0, ufuk: int = UFUK,
+              tick: float = 0.0, maliyet: float = 0.0, yonetim: dict | None = None,
+              trend_bari: list[bool] | None = None) -> dict:
+    """Bir seriyi baştan sona dolaşır; `emir(i)` → paket ya da None.
 
-    Döner: {"islemler": [...], "emir": n, "dolmayan": n}. Her işlem sinyal
-    barı, dolum barı, çıkış barı, çıkış türü ve R taşır."""
+    Döner: {"islemler", "emir", "dolmayan", "sifir_menzil", "cift_belirsiz"}."""
+    y = dict(YONETIM_SABIT, **(yonetim or {}))
     n = len(s)
     islemler: list[dict] = []
-    emir = dolmayan = sifir_menzil = 0
+    emir_say = dolmayan = sifir = cift_belirsiz = 0
     i = max(bas, 1)
     while i <= n - 2:
-        yon = sinyal(i)
-        if not yon:
+        e = emir(i)
+        if not e:
             i += 1
             continue
-        emir += 1
+        emir_say += 1
         j = i + 1
-        if yon == 1:
-            giris, stop, dolu = s.h[i], s.l[i], s.h[j] > s.h[i]
+        if e.get("cift"):
+            alis_dolu, satis_dolu = s.h[j] >= e["alis"], s.l[j] <= e["satis"]
+            if alis_dolu and satis_dolu:
+                cift_belirsiz += 1
+                i = j
+                continue
+            if not (alis_dolu or satis_dolu):
+                dolmayan += 1
+                i = j
+                continue
+            yon = 1 if alis_dolu else -1
+            giris, stop = (e["alis"], e["satis"]) if alis_dolu else (e["satis"], e["alis"])
         else:
-            giris, stop, dolu = s.l[i], s.h[i], s.l[j] < s.l[i]
-        if not dolu:
-            dolmayan += 1
-            i = j
-            continue
+            yon, giris, stop = e["yon"], e["giris"], e["stop"]
+            dolu = s.h[j] >= giris if yon == 1 else s.l[j] <= giris
+            if dolu and e.get("sart_ters_uc"):
+                # 2.7: karşı uç aynı barda geçildiyse önce hangisinin tetiklendiği bilinmez
+                ters = s.l[j] <= stop if yon == 1 else s.h[j] >= stop
+                if ters:
+                    cift_belirsiz += 1
+                    i = j
+                    continue
+            if not dolu:
+                dolmayan += 1
+                i = j
+                continue
         risk = abs(giris - stop)
         if risk <= 0:
-            sifir_menzil += 1
+            sifir += 1
             i = j
             continue
         hedef = giris + yon * hedef_r * risk
         son = min(n, j + ufuk) - 1
         sonuc: tuple[float, str, int] | None = None
-        cift = False                            # aynı barda hem hedef hem stop görüldü mü
+        cift = False
+        stop_cari = stop
         for k in range(j, son + 1):
+            # Yönetim: k barına GİRMEDEN önce, kapanmış barlardan karar.
+            if k == j + 1 and y["sikilastir"] and trend_bari is not None and trend_bari[j] \
+                    and ((yon == 1 and s.c[j] > s.o[j]) or (yon == -1 and s.c[j] < s.o[j])):
+                yeni = s.l[j] - tick if yon == 1 else s.h[j] + tick
+                stop_cari = max(stop_cari, yeni) if yon == 1 else min(stop_cari, yeni)
+            if k == j + 3 and y["basabas"]:
+                takip = (s.c[j + 1] > s.c[j] or s.c[j + 2] > s.c[j]) if yon == 1 \
+                    else (s.c[j + 1] < s.c[j] or s.c[j + 2] < s.c[j])
+                if not takip:
+                    stop_cari = max(stop_cari, giris) if yon == 1 else min(stop_cari, giris)
             if yon == 1:
-                stop_vurdu, hedef_vurdu = s.l[k] <= stop, s.h[k] >= hedef
+                stop_vurdu, hedef_vurdu = s.l[k] <= stop_cari, s.h[k] >= hedef + tick
             else:
-                stop_vurdu, hedef_vurdu = s.h[k] >= stop, s.l[k] <= hedef
-            if stop_vurdu:                      # ikisi aynı barda → kayıp (tutucu)
-                sonuc = (-1.0, "stop", k)
+                stop_vurdu, hedef_vurdu = s.h[k] >= stop_cari, s.l[k] <= hedef - tick
+            if stop_vurdu:
+                r = yon * (stop_cari - giris) / risk
+                sonuc = (r, "stop" if abs(r + 1) < 1e-9 else "stop_cekilmis", k)
                 cift = hedef_vurdu
                 break
             if hedef_vurdu:
@@ -223,10 +300,13 @@ def islem_kos(s: Seri, sinyal, hedef_r: float, bas: int = 0, ufuk: int = UFUK) -
             sonuc = (r, "zaman_asimi" if son == j + ufuk - 1 else "seri_sonu", son)
         islemler.append({
             "sinyal": i, "dolum": j, "cikis": sonuc[2], "yon": yon,
-            "giris": giris, "stop": stop, "tur": sonuc[1], "R": sonuc[0], "cift": cift,
+            "giris": giris, "stop": stop, "risk": risk, "tur": sonuc[1],
+            "R": sonuc[0], "R_net": sonuc[0] - maliyet / risk, "cift": cift,
+            "kurulum": e.get("kurulum", "?"), "kalite": e.get("kalite"),
         })
-        i = sonuc[2]          # çıkış barı kapandı; yeniden sinyal barı olabilir
-    return {"islemler": islemler, "emir": emir, "dolmayan": dolmayan, "sifir_menzil": sifir_menzil}
+        i = sonuc[2]
+    return {"islemler": islemler, "emir": emir_say, "dolmayan": dolmayan,
+            "sifir_menzil": sifir, "cift_belirsiz": cift_belirsiz}
 
 
 # ── Ölçüler ─────────────────────────────────────────────────────────────────
@@ -246,7 +326,7 @@ def kar_faktoru(rs: list[float]) -> float | None:
     kazanc = sum(r for r in rs if r > 0)
     kayip = -sum(r for r in rs if r < 0)
     if kayip == 0:
-        return None            # kayıp yoksa oran tanımsız; sonsuz yazılmaz
+        return None
     return kazanc / kayip
 
 
@@ -262,6 +342,7 @@ def azami_geri_cekilme(rs: list[float]) -> float:
 def ozet(rs: list[float], rng: random.Random | None = None) -> dict:
     n = len(rs)
     ca = bootstrap_ca(rs, rng) if rng is not None else None
+    kf = kar_faktoru(rs) if n else None
     return {
         "n": n,
         "kazanma": round(sum(1 for r in rs if r > 0) / n, 4) if n else None,
@@ -269,28 +350,37 @@ def ozet(rs: list[float], rng: random.Random | None = None) -> dict:
         "ca_alt": round(ca[0], 4) if ca else None,
         "ca_ust": round(ca[1], 4) if ca else None,
         "toplam_R": round(sum(rs), 3),
-        "kar_faktoru": (round(kar_faktoru(rs), 3) if n and kar_faktoru(rs) is not None else None),
+        "kar_faktoru": round(kf, 3) if kf is not None else None,
         "azami_geri_cekilme_R": round(azami_geri_cekilme(rs), 3) if n else None,
     }
 
 
 # ── Rastgele taban ──────────────────────────────────────────────────────────
-def rastgele_kos(s: Seri, m: int, hedef_r: float, rng: random.Random, bas: int = BAS) -> dict:
-    """Gerçek koşunun EMİR sayısı (m) kadar rastgele bar + rastgele yön, aynı
-    mekanik. Pozisyon içine düşen aday emir üretmez; emir sayısı m'ye
-    ulaşana kadar aday eklenir (en çok 20 tur — tam eşitlik şart değil,
-    eşitsizlik kayda yazılır)."""
+def rastgele_kos(so: SeriOlcum, m: int, hedef_r: float, rng: random.Random,
+                 yonetim: dict | None = None, bas: int = BAS) -> dict:
+    """Gerçek koşunun EMİR sayısı (m) kadar rastgele bar + rastgele yön,
+    STANDART paket (uç ± tick), aynı mekanik ve yönetim."""
+    s = so.s
     uygun = list(range(max(bas, 1), len(s) - 1))
     if m == 0 or not uygun:
-        return {"islemler": [], "emir": 0, "dolmayan": 0, "sifir_menzil": 0}
+        return {"islemler": [], "emir": 0, "dolmayan": 0, "sifir_menzil": 0, "cift_belirsiz": 0}
     rng.shuffle(uygun)
     secili: dict[int, int] = {}
     hedef, ptr, son = min(m, len(uygun)), 0, None
+
+    def emir(i):
+        yon = secili.get(i, 0)
+        if not yon:
+            return None
+        return ({"yon": 1, "giris": s.h[i] + so.tick, "stop": s.l[i] - so.tick} if yon == 1
+                else {"yon": -1, "giris": s.l[i] - so.tick, "stop": s.h[i] + so.tick})
+
     for _ in range(20):
         while len(secili) < hedef and ptr < len(uygun):
             secili[uygun[ptr]] = rng.choice((1, -1))
             ptr += 1
-        son = islem_kos(s, lambda i: secili.get(i, 0), hedef_r, bas=bas)
+        son = islem_kos(s, emir, hedef_r, bas=bas, tick=so.tick, maliyet=so.maliyet,
+                        yonetim=yonetim, trend_bari=so.trend_bari)
         if son["emir"] >= m or ptr >= len(uygun):
             break
         hedef += m - son["emir"]
@@ -299,26 +389,30 @@ def rastgele_kos(s: Seri, m: int, hedef_r: float, rng: random.Random, bas: int =
 
 # ── Bir yapılandırmanın tam ölçümü ──────────────────────────────────────────
 def yapilandirma_olc(ad: str, ayar: dict, hedef_r: float, seriler: list[SeriOlcum],
-                     rng: random.Random, tekrar: int = RASTGELE_TEKRAR) -> dict:
+                     rng: random.Random, tekrar: int = RASTGELE_TEKRAR,
+                     yonetim: dict | None = None) -> dict:
+    y = dict(YONETIM_SABIT, **(yonetim or {}))
     islemler: list[dict] = []
     seri_ozet: dict[str, dict] = {}
     emir_seri: dict[str, int] = {}
-    belirsiz = dolmayan = sifir = 0
+    belirsiz = dolmayan = sifir = cift_bel = 0
     ilk: list[float] = []
     ikinci: list[float] = []
     for so in seriler:
         s = so.s
         sayac = {"belirsiz": 0}
 
-        def sinyal(i, so=so, sayac=sayac):
-            yon, b = so.sinyal(i, ayar)
+        def emir(i, so=so, sayac=sayac):
+            e, b = so.emir(i, ayar)
             sayac["belirsiz"] += b
-            return yon
+            return e
 
-        son = islem_kos(s, sinyal, hedef_r, bas=BAS)
+        son = islem_kos(s, emir, hedef_r, bas=BAS, tick=so.tick, maliyet=so.maliyet,
+                        yonetim=y, trend_bari=so.trend_bari)
         belirsiz += sayac["belirsiz"]
         dolmayan += son["dolmayan"]
         sifir += son["sifir_menzil"]
+        cift_bel += son["cift_belirsiz"]
         emir_seri[so.ad] = son["emir"]
         rs = [t["R"] for t in son["islemler"]]
         orta = (BAS + len(s)) // 2
@@ -326,18 +420,19 @@ def yapilandirma_olc(ad: str, ayar: dict, hedef_r: float, seriler: list[SeriOlcu
             (ilk if t["sinyal"] < orta else ikinci).append(t["R"])
             islemler.append(dict(t, seri=so.ad, zaman=s.zaman[t["sinyal"]] if s.zaman else None,
                                  cikis_zaman=s.zaman[t["cikis"]] if s.zaman else None,
-                                 kalite=so.kalite[t["yon"]][t["sinyal"]]))
-        seri_ozet[so.ad] = dict(ozet(rs), emir=son["emir"],
-                                bar=len(s) - BAS - 1,
+                                 risk_tick=round(t["risk"] / so.tick, 1)))
+        tanimsiz = (sum(1 for i in range(BAS, len(s)) if so.rejim_goreli[i] is None) if ayar["rejim"] == "goreli"
+                    else sum(1 for i in range(BAS, len(s)) if so.rejim_mutlak[i] is None) if ayar["rejim"] == "mutlak" else 0)
+        seri_ozet[so.ad] = dict(ozet(rs), emir=son["emir"], bar=len(s) - BAS - 1, rejim_tanimsiz_bar=tanimsiz,
+                                ort_R_net=round(_ort([t["R_net"] for t in son["islemler"]]), 4) if rs else None,
                                 tur={k: sum(1 for t in son["islemler"] if t["tur"] == k)
-                                     for k in ("hedef", "stop", "zaman_asimi", "seri_sonu")})
+                                     for k in ("hedef", "stop", "stop_cekilmis", "zaman_asimi", "seri_sonu")})
 
-    # Defter zaman sırasına dizilir; azami geri çekilme bu sıradan ölçülür.
     islemler.sort(key=lambda t: (t["zaman"] or "", t["seri"]))
     rs = [t["R"] for t in islemler]
+    rs_net = [t["R_net"] for t in islemler]
     toplam_emir = sum(emir_seri.values())
 
-    # Rastgele taban — aynı emir sayısı, aynı mekanik, `tekrar` kez.
     r_ort: list[float] = []
     r_n: list[int] = []
     r_emir: list[int] = []
@@ -345,7 +440,7 @@ def yapilandirma_olc(ad: str, ayar: dict, hedef_r: float, seriler: list[SeriOlcu
         hepsi: list[float] = []
         e = 0
         for so in seriler:
-            son = rastgele_kos(so.s, emir_seri[so.ad], hedef_r, rng)
+            son = rastgele_kos(so, emir_seri[so.ad], hedef_r, rng, yonetim=y)
             hepsi += [t["R"] for t in son["islemler"]]
             e += son["emir"]
         r_ort.append(_ort(hepsi) if hepsi else 0.0)
@@ -369,242 +464,238 @@ def yapilandirma_olc(ad: str, ayar: dict, hedef_r: float, seriler: list[SeriOlcu
         "yuzdelik": yuzdelik,
     }
 
+    # Risk büyüklüğü dilimleri (tick cinsinden, seriler arası karışık — yalnız
+    # "kenar küçük riskte mi toplanıyor" sorusu için).
+    dilim: dict[str, dict] = {}
+    if len(islemler) >= 8:
+        sirali_risk = sorted(t["risk_tick"] for t in islemler)
+        q1, q3 = sirali_risk[len(sirali_risk) // 4], sirali_risk[3 * len(sirali_risk) // 4]
+        for adx, alt_s, ust_s in (("kucuk", 0, q1), ("orta", q1, q3), ("buyuk", q3, float("inf"))):
+            sec = [t for t in islemler if alt_s <= t["risk_tick"] < ust_s]
+            if sec:
+                dilim[adx] = {"n": len(sec), "risk_tick_alt": alt_s, "risk_tick_ust": ust_s if ust_s != float("inf") else None,
+                              "ort_R": round(_ort([t["R"] for t in sec]), 4),
+                              "ort_R_net": round(_ort([t["R_net"] for t in sec]), 4)}
+
     return {
-        "ad": ad, "suzgec": {k: v for k, v in ayar.items() if k != "K"}, "K": ayar["K"],
-        "hedef_R": hedef_r,
+        "ad": ad, "ayar": {k: (list(v) if isinstance(v, tuple) else v) for k, v in ayar.items()},
+        "hedef_R": hedef_r, "yonetim": y,
         **ozet(rs, rng),
-        "emir": toplam_emir, "dolmayan": dolmayan, "belirsiz": belirsiz, "sifir_menzil": sifir,
+        "ort_R_net": round(_ort(rs_net), 4) if rs_net else None,
+        "ca_net": [round(x, 4) for x in bootstrap_ca(rs_net, rng)] if len(rs_net) >= 2 else None,
+        "emir": toplam_emir, "dolmayan": dolmayan, "belirsiz": belirsiz, "cift_belirsiz": cift_bel,
+        "sifir_menzil": sifir,
         "dolum_orani": round(len(rs) / toplam_emir, 3) if toplam_emir else None,
         "tur": {k: sum(1 for t in islemler if t["tur"] == k)
-                for k in ("hedef", "stop", "zaman_asimi", "seri_sonu")},
-        # Tutucu kuralın payı: kaybın kaçı "aynı barda ikisi" hükmünden geldi.
-        # Bu sayı mekaniğin eksi eğiliminin ölçüsüdür; rastgele taban aynı
-        # eğilimi taşır, o yüzden kıyas ona karşı yapılır.
+                for k in ("hedef", "stop", "stop_cekilmis", "zaman_asimi", "seri_sonu")},
+        "kurulum_dagilimi": {k: sum(1 for t in islemler if t["kurulum"] == k)
+                             for k in ("donus", "ikinci", "kirilim", "basarisiz", "bant")},
         "cift_vurus": sum(1 for t in islemler if t.get("cift")),
         "ilk_yari": ozet(ilk, rng),
         "ikinci_yari": ozet(ikinci, rng),
+        "risk_dilimi": dilim,
         "seri": seri_ozet,
         "rastgele": rastgele,
-        "islemler": [{"seri": t["seri"], "zaman": t["zaman"], "yon": t["yon"], "kalite": t["kalite"],
-                      "giris": t["giris"], "stop": t["stop"], "tur": t["tur"], "cift": t["cift"],
-                      "cikis_zaman": t["cikis_zaman"], "R": round(t["R"], 4)} for t in islemler],
+        # İşlem listesi KISA tutulur (44 yapılandırma × yüzlerce işlem): seri,
+        # sinyal zamanı, paket, risk (tick) ve R. Giriş/stop seviyeleri
+        # yeniden üretilebilir; dosya sayfaya derleme zamanında giriyor.
+        "islemler": [{"seri": t["seri"], "zaman": t["zaman"], "yon": t["yon"], "kurulum": t["kurulum"],
+                      "risk_tick": t["risk_tick"], "tur": t["tur"], "R": round(t["R"], 3)} for t in islemler],
     }
 
 
-# ── Kapılar: mekanik sentetik barlarla, rastgelelik kendi dağılımıyla ───────
+# ── Kapılar: mekanik sentetik barlarla ──────────────────────────────────────
 def _seri(b: list[tuple]) -> Seri:
     return Seri([x[0] for x in b], [x[1] for x in b], [x[2] for x in b], [x[3] for x in b])
 
 
 def kendini_sina() -> list[str]:
-    """Kuralın İLAN ETTİĞİ hâllere koşulur. Her madde tek bir mekanik cümle."""
+    """Kuralın İLAN ETTİĞİ hâllere koşulur. Her madde tek bir mekanik cümle.
+    tick = 0,01; sinyal barı H 10,50 · L 10,00 → giriş 10,51 · stop 9,99 ·
+    risk 0,52 · 1R hedef 11,03 (dolum için 11,04 görülmeli)."""
     hata: list[str] = []
-    duz = (10.0, 10.2, 9.8, 10.0)                  # sinyal dışı dolgu barı
-    sinyal = (10.0, 10.5, 10.0, 10.4)              # sinyal barı: giriş 10,5 · stop 10,0 · risk 0,5
-    tek = lambda i: (lambda j: 1 if j == i else 0)   # noqa: E731
+    T = 0.01
+    duz = (10.0, 10.2, 9.8, 10.0)
+    sinyal = (10.0, 10.5, 10.0, 10.4)
+    paket = {"yon": 1, "giris": 10.51, "stop": 9.99}
+    tek = lambda i, p=paket: (lambda j: p if j == i else None)   # noqa: E731
 
-    # ① Bilinen kazanç: dolum barı 10,6'ya çıkar (kesin aşma), hedef R=1 → 11,0 sonraki barda.
-    b = [duz, duz, sinyal, (10.4, 10.6, 10.3, 10.5), (10.5, 11.1, 10.4, 11.0), duz]
-    son = islem_kos(_seri(b), tek(2), 1.0)
-    t = son["islemler"]
-    if len(t) != 1 or t[0]["tur"] != "hedef" or t[0]["R"] != 1.0 or t[0]["giris"] != 10.5 or t[0]["cikis"] != 4:
-        hata.append(f"① bilinen kazanç +1R, çıkış 4. barda beklenirdi; {t}")
+    # ① Bilinen kazanç: dolum 10,6 (≥ 10,51); hedef 11,03, bar 11,05'e çıkar (≥ 11,04) → +1R.
+    b = [duz, duz, sinyal, (10.4, 10.6, 10.3, 10.5), (10.5, 11.05, 10.4, 11.0), duz]
+    t = islem_kos(_seri(b), tek(2), 1.0, tick=T)["islemler"]
+    if len(t) != 1 or t[0]["tur"] != "hedef" or t[0]["R"] != 1.0 or abs(t[0]["giris"] - 10.51) > 1e-9 or t[0]["cikis"] != 4:
+        hata.append(f"① bilinen kazanç +1R, giriş 10,51, çıkış 4. barda beklenirdi; {t}")
 
-    # ② Bilinen kayıp: dolumdan sonra düşük stop'a değer.
-    b2 = [duz, duz, sinyal, (10.4, 10.6, 10.3, 10.5), (10.5, 10.7, 9.9, 10.0), duz]
-    t = islem_kos(_seri(b2), tek(2), 1.0)["islemler"]
+    # ② ALTI TİCK KURALI: bar tam hedefe (11,03) ulaşır ama bir tick ötesine geçmez → dolmaz.
+    b2 = [duz, duz, sinyal, (10.4, 10.6, 10.3, 10.5), (10.5, 11.03, 10.4, 11.0), duz]
+    t = islem_kos(_seri(b2), tek(2), 1.0, tick=T)["islemler"]
+    if len(t) != 1 or t[0]["tur"] == "hedef":
+        hata.append(f"② hedefe tam dokunan bar limiti DOLDURMAMALI (altı tick kuralı); {t}")
+
+    # ③ Bilinen kayıp: dolumdan sonra düşük 9,99'a değer → −1R.
+    b3 = [duz, duz, sinyal, (10.4, 10.6, 10.3, 10.5), (10.5, 10.7, 9.9, 10.0), duz]
+    t = islem_kos(_seri(b3), tek(2), 1.0, tick=T)["islemler"]
     if len(t) != 1 or t[0]["tur"] != "stop" or t[0]["R"] != -1.0:
-        hata.append(f"② bilinen kayıp −1R beklenirdi; {t}")
+        hata.append(f"③ bilinen kayıp −1R beklenirdi; {t}")
 
-    # ③ Aynı barda ikisi: yüksek hedefi, düşük stop'u görür → KAYIP (tutucu).
-    b3 = [duz, duz, sinyal, (10.4, 10.6, 10.3, 10.5), (10.5, 11.2, 9.9, 10.8), duz]
-    t = islem_kos(_seri(b3), tek(2), 1.0)["islemler"]
-    if len(t) != 1 or t[0]["tur"] != "stop" or t[0]["R"] != -1.0:
-        hata.append(f"③ aynı barda hedef+stop kayıp sayılmalıydı; {t}")
+    # ④ Aynı barda ikisi → KAYIP (tutucu), çift işaretli.
+    b4 = [duz, duz, sinyal, (10.4, 10.6, 10.3, 10.5), (10.5, 11.2, 9.9, 10.8), duz]
+    t = islem_kos(_seri(b4), tek(2), 1.0, tick=T)["islemler"]
+    if len(t) != 1 or t[0]["R"] != -1.0 or not t[0]["cift"]:
+        hata.append(f"④ aynı barda hedef+stop → kayıp ve çift beklenirdi; {t}")
 
-    # ④ Dolmayan emir: sonraki barın yükseği sinyal yükseğine EŞİT (aşmıyor) → işlem yok.
-    b4 = [duz, duz, sinyal, (10.4, 10.5, 10.3, 10.45), (10.45, 11.2, 10.4, 11.0), duz]
-    son = islem_kos(_seri(b4), tek(2), 1.0)
+    # ⑤ Dolmayan emir: sonraki bar 10,51'e ulaşmaz → işlem yok, emir 1, dolmayan 1.
+    b5 = [duz, duz, sinyal, (10.4, 10.5, 10.3, 10.45), duz, duz]
+    son = islem_kos(_seri(b5), tek(2), 1.0, tick=T)
     if son["islemler"] or son["emir"] != 1 or son["dolmayan"] != 1:
-        hata.append(f"④ eşit yüksek dolum sayılmamalıydı; {son}")
+        hata.append(f"⑤ dolmayan emir sayılmalı, işlem üretmemeli; {son}")
 
-    # ④b Ayı aynası: dolum barının düşüğü sinyal düşüğünün altına iner, hedef aşağıda.
-    ayi = (10.0, 10.0, 9.5, 9.6)                    # giriş 9,5 · stop 10,0 · R=2 hedef 8,5
-    b5 = [duz, duz, ayi, (9.6, 9.7, 9.4, 9.5), (9.5, 9.6, 8.4, 8.5), duz]
-    t = islem_kos(_seri(b5), lambda j: -1 if j == 2 else 0, 2.0)["islemler"]
-    if len(t) != 1 or t[0]["tur"] != "hedef" or t[0]["R"] != 2.0 or t[0]["giris"] != 9.5:
-        hata.append(f"④b ayı aynası +2R beklenirdi; {t}")
+    # ⑥ Ayı aynası: satış paketi (giriş 9,99 · stop 10,51 · hedef 9,47, dolum için 9,46).
+    ayi = {"yon": -1, "giris": 9.99, "stop": 10.51}
+    b6 = [duz, duz, sinyal, (10.4, 10.45, 9.95, 10.0), (10.0, 10.1, 9.45, 9.5), duz]
+    t = islem_kos(_seri(b6), tek(2, ayi), 1.0, tick=T)["islemler"]
+    if len(t) != 1 or t[0]["tur"] != "hedef" or t[0]["R"] != 1.0 or t[0]["yon"] != -1:
+        hata.append(f"⑥ ayı aynası +1R beklenirdi; {t}")
 
-    # ⑤ Zaman aşımı: 100 barda ne hedef ne stop → kapanıştan çıkış, kesirli R.
-    b6 = [duz, duz, sinyal] + [(10.4, 10.6, 10.3, 10.45)] * 120
-    t = islem_kos(_seri(b6), tek(2), 2.0)["islemler"]
-    beklenen = (10.45 - 10.5) / 0.5
-    if len(t) != 1 or t[0]["tur"] != "zaman_asimi" or abs(t[0]["R"] - beklenen) > 1e-9 or t[0]["cikis"] != 3 + UFUK - 1:
-        hata.append(f"⑤ zaman aşımında kesirli R {beklenen:.2f} beklenirdi; {t}")
+    # ⑦ Sıkılaştırma: giriş barı güçlü boğa trend barı (10,45 → 10,95, menzil 10,4–11,0) → stop 10,39;
+    #    sonraki bar 10,35'e düşer → stop_cekilmis, R = (10,39 − 10,51)/0,52 ≈ −0,23.
+    b7 = [duz, duz, sinyal, (10.45, 11.0, 10.4, 10.95), (10.95, 11.0, 10.35, 10.5), duz]
+    tb = [False, False, False, True, False, False]
+    t = islem_kos(_seri(b7), tek(2), 2.0, tick=T, yonetim=YONETIM_DERS, trend_bari=tb)["islemler"]
+    if len(t) != 1 or t[0]["tur"] != "stop_cekilmis" or abs(t[0]["R"] - (10.39 - 10.51) / 0.52) > 1e-6:
+        hata.append(f"⑦ sıkılaştırılmış stop 10,39 ve kesirli kayıp beklenirdi; {t}")
+    #    Aynı bar doji ise dokunulmaz: −1R.
+    #    Aynı bar doji ise dokunulmaz: 4. bar 10,35'e iner ama 9,99'a değmez, 5. bar (düz, düşük 9,8) stop → −1R.
+    t2 = islem_kos(_seri(b7), tek(2), 2.0, tick=T, yonetim=YONETIM_DERS, trend_bari=[False] * 6)["islemler"]
+    if len(t2) != 1 or t2[0]["tur"] != "stop" or t2[0]["R"] != -1.0 or t2[0]["cikis"] != 5:
+        hata.append(f"⑦b doji giriş barında stop sıkılaştırılmamalı (−1R, 5. bar); {t2}")
 
-    # ⑥ Tek pozisyon: pozisyondayken gelen sinyal emir üretmez, çıkış barı üretebilir.
-    b7 = [duz, duz, sinyal, (10.4, 10.6, 10.3, 10.5), (10.5, 10.6, 10.3, 10.5),
-          (10.5, 11.1, 10.4, 11.0), (11.0, 11.6, 11.0, 11.5), (11.5, 11.7, 11.4, 11.6), duz]
-    son = islem_kos(_seri(b7), lambda j: 1 if j in (2, 3, 4, 5) else 0, 1.0)
-    if son["emir"] != 2 or len(son["islemler"]) != 2 or son["islemler"][1]["sinyal"] != 5:
-        hata.append(f"⑥ pozisyondaki sinyaller (3, 4) atlanmalı, çıkış barı (5) yeni sinyal olmalıydı; {son}")
+    # ⑧ Başabaş: giriş barından sonraki iki bar kapanışı aşamaz → stop girişe; 3. bar girişe değer → R=0.
+    b8 = [duz, duz, sinyal, (10.45, 10.6, 10.4, 10.55), (10.55, 10.6, 10.52, 10.53), (10.53, 10.6, 10.52, 10.54),
+          (10.54, 10.6, 10.5, 10.58), duz]
+    t = islem_kos(_seri(b8), tek(2), 2.0, tick=T, yonetim=dict(basabas=True), trend_bari=[False] * 8)["islemler"]
+    if len(t) != 1 or t[0]["tur"] != "stop_cekilmis" or abs(t[0]["R"]) > 1e-9 or t[0]["cikis"] != 6:
+        hata.append(f"⑧ başabaş stopu 6. barda 0R ile çıkmalıydı; {t}")
 
-    # ⑦ Rastgele taban gerçekten rastgele mi: sürüklenmesiz sentetik seride
-    #    300 tekrarın %95 bandı sıfırı KAPSAMALI. Mekanik simetrik DEĞİL —
-    #    "ikisi aynı barda → kayıp" kuralı eksi eğilim taşır; ölçüldü
-    #    (3.000 barlık sentetik seri, 120 emir, R=1): ortalama −0,17 R, bant
-    #    [−0,43, +0,09]. Eğilim mekaniğin kendisidir ve gerçek sinyaller de
-    #    aynı mekanikten geçer; rastgele tabanın gerekçesi tam olarak budur —
-    #    "sıfırdan iyi" değil "aynı mekanikte rastgeleden iyi" sorulur.
-    s = R._sentetik(3000, tohum=11)
+    # ⑨ Kırılım modu: iki taraflı; alış tarafı dolarsa stop = satış seviyesi; ikisi aynı barda → belirsiz.
+    cift = {"cift": True, "alis": 10.51, "satis": 9.99}
+    b9 = [duz, duz, sinyal, (10.4, 10.6, 10.3, 10.5), (10.5, 11.05, 10.4, 11.0), duz]
+    t = islem_kos(_seri(b9), tek(2, cift), 1.0, tick=T)["islemler"]
+    if len(t) != 1 or t[0]["yon"] != 1 or abs(t[0]["stop"] - 9.99) > 1e-9 or t[0]["tur"] != "hedef":
+        hata.append(f"⑨ kırılım modu alış tarafı dolmalı, stop 9,99; {t}")
+    b9b = [duz, duz, sinyal, (10.4, 10.6, 9.9, 10.5), duz, duz]
+    son = islem_kos(_seri(b9b), tek(2, cift), 1.0, tick=T)
+    if son["islemler"] or son["cift_belirsiz"] != 1:
+        hata.append(f"⑨b iki taraf aynı barda → belirsiz, işlem yok; {son}")
+
+    # ⑩ Maliyet: 0,052 maliyet risk 0,52 → net R = R − 0,1.
+    t = islem_kos(_seri(b), tek(2), 1.0, tick=T, maliyet=0.052)["islemler"]
+    if len(t) != 1 or abs(t[0]["R_net"] - 0.9) > 1e-9:
+        hata.append(f"⑩ net R 0,9 beklenirdi; {t}")
+
+    # ⑪ Tek pozisyon: 3. bardaki sinyal pozisyon içinde yok sayılır; çıkış barı (4) yeniden
+    #    sinyal barı olabilir (emir 4'te, 5. bar 10,51'e ulaşmaz → dolmayan); 5'teki sinyal 6'da dolar.
+    b11 = [duz, duz, sinyal, (10.4, 10.6, 10.3, 10.5), (10.5, 11.05, 10.4, 11.0), sinyal, (10.4, 10.6, 10.3, 10.5), duz]
+    hep = lambda j: paket if j in (2, 3, 4, 5) else None   # noqa: E731
+    son = islem_kos(_seri(b11), hep, 1.0, tick=T)
+    if son["emir"] != 3 or son["dolmayan"] != 1 or len(son["islemler"]) != 2 or son["islemler"][1]["sinyal"] != 5:
+        hata.append(f"⑪ pozisyondayken sinyal yok sayılmalı, çıkış barından sonra yeni emir; {son}")
+
+    # ⑫ Tekrarlanabilirlik: aynı tohum aynı sayı (rastgele taban).
+    sent = R._sentetik(300, tohum=3)
+    so = SeriOlcum("sent", sent, tick=0.0001)
+    a = rastgele_kos(so, 10, 1.0, random.Random(1), bas=1)
+    b_ = rastgele_kos(so, 10, 1.0, random.Random(1), bas=1)
+    if not a["islemler"] or [x["R"] for x in a["islemler"]] != [x["R"] for x in b_["islemler"]]:
+        hata.append("⑫ rastgele taban aynı tohumla aynı (ve boş olmayan) sonucu vermeli")
+
+    # ⑬ Rastgele taban kendi içinde: sentetik sürüklenmesiz seride ortalama R'nin %95 bandı sıfırı kapsamalı.
     rng = random.Random(TOHUM)
     ortalar = []
-    for _ in range(RASTGELE_TEKRAR):
-        rs = [t["R"] for t in rastgele_kos(s, 120, 1.0, rng)["islemler"]]
-        ortalar.append(_ort(rs) or 0.0)
-    sirali = sorted(ortalar)
-    alt, ust = sirali[int(0.025 * len(sirali))], sirali[int(0.975 * len(sirali)) - 1]
-    if not (alt <= 0.0 <= ust):
-        hata.append(f"⑦ rastgele taban sıfırı kapsamalıydı; %95 bant [{alt:.3f}, {ust:.3f}]")
-    # ve yön dağılımı simetrik: iki yönün payı %40–60 arasında.
-    yonler = []
-    rng2 = random.Random(TOHUM + 1)
-    for _ in range(30):
-        yonler += [t["yon"] for t in rastgele_kos(s, 120, 1.0, rng2)["islemler"]]
-    pay = sum(1 for y in yonler if y == 1) / len(yonler)
-    if not 0.40 <= pay <= 0.60:
-        hata.append(f"⑦ rastgele yön payı dengesiz: boğa {pay:.3f}")
+    for _ in range(60):
+        son = rastgele_kos(so, 25, 1.0, rng, bas=1)
+        rs = [x["R"] for x in son["islemler"]]
+        if rs:
+            ortalar.append(sum(rs) / len(rs))
+    ortalar.sort()
+    if not ortalar or not (ortalar[1] <= 0.0 <= ortalar[-2]):
+        hata.append(f"⑬ sürüklenmesiz seride rastgele tabanın bandı sıfırı kapsamalı; {ortalar[:3]}…{ortalar[-3:]}")
 
-    # ⑧ Tekrarlanabilirlik: aynı tohum aynı sonucu vermeli.
-    a = rastgele_kos(s, 50, 1.0, random.Random(5))["islemler"]
-    b = rastgele_kos(s, 50, 1.0, random.Random(5))["islemler"]
-    if a != b:
-        hata.append("⑧ aynı tohumla iki koşu ayrıştı")
-
-    # ⑩ Ayna simetrisi: fiyat −fiyat, yön −yön → R listesi BİREBİR aynı.
-    #    Boğa ve ayı kolu ayrı yazıldığı için biri sessizce ayrışabilir; bu
-    #    madde iki kolu tek ölçüyle bağlar.
-    ayna = Seri([-x for x in s.o], [-x for x in s.l], [-x for x in s.h], [-x for x in s.c])
-    rng3 = random.Random(TOHUM + 2)
-    secili = {i: rng3.choice((1, -1)) for i in rng3.sample(range(BAS, len(s) - 1), 150)}
-    duz_r = [t["R"] for t in islem_kos(s, lambda i: secili.get(i, 0), 2.0, bas=BAS)["islemler"]]
-    ayna_r = [t["R"] for t in islem_kos(ayna, lambda i: -secili.get(i, 0), 2.0, bas=BAS)["islemler"]]
-    if len(duz_r) != len(ayna_r) or any(abs(a - b) > 1e-9 for a, b in zip(duz_r, ayna_r)):
-        hata.append(f"⑩ ayna simetrisi bozuk: {len(duz_r)} ↔ {len(ayna_r)} işlem")
-
-    # ⑨ Ortak başlangıç sözleşmesi: BAS rejim penceresinin dolduğu İLK bar.
-    rp = RejimPanosu(R._sentetik(200))
-    if rp.olcu(BAS) is None or rp.olcu(BAS - 1) is not None:
-        hata.append(f"⑨ BAS={BAS} rejim penceresinin dolduğu ilk bar değil")
-
+    # ⑭ Ayna simetrisi: seri fiyatı yansıtılınca (p → 20 − p) uzun/kısa sonuçlar aynı.
+    sent2 = R._sentetik(200, tohum=5)
+    ayna = Seri([20 - x for x in sent2.o], [20 - x for x in sent2.l], [20 - x for x in sent2.h], [20 - x for x in sent2.c])
+    duzs = islem_kos(sent2, lambda j: {"yon": 1, "giris": sent2.h[j] + T, "stop": sent2.l[j] - T} if j % 7 == 0 else None, 2.0, tick=T)
+    ters = islem_kos(ayna, lambda j: {"yon": -1, "giris": ayna.l[j] - T, "stop": ayna.h[j] + T} if j % 7 == 0 else None, 2.0, tick=T)
+    if [round(x["R"], 6) for x in duzs["islemler"]] != [round(x["R"], 6) for x in ters["islemler"]]:
+        hata.append("⑭ ayna simetrisi bozuk: yansıtılmış seride kısa işlemler uzunları vermeli")
     return hata
 
 
-# ── Okunur tablo ────────────────────────────────────────────────────────────
-def _tablo(yapilar: list[dict]) -> str:
-    bas = (f"{'yapılandırma':26s} {'R':>2s} {'N':>4s} {'kazan':>7s} {'ort R':>7s} "
-           f"{'%95 CA':>16s} {'KF':>6s} {'azGÇ':>6s} {'rast.%':>7s} {'ilk/ikinci':>16s}")
-    satir = [bas, "─" * len(bas)]
-    for y in yapilar:
-        ca = (f"[{B.sayi(y['ca_alt'], 2, True)}, {B.sayi(y['ca_ust'], 2, True)}]"
-              if y["ca_alt"] is not None else "—")
-        ilk, iki = y["ilk_yari"], y["ikinci_yari"]
-        yari = f"{B.sayi(ilk['ort_R'], 2, True)}/{B.sayi(iki['ort_R'], 2, True)}"
-        satir.append(
-            f"{y['ad']:26s} {y['hedef_R']:>2.0f} {y['n']:4d} "
-            f"{B.yuzde((y['kazanma'] or 0) * 100, 1) if y['n'] else '—':>7s} "
-            f"{B.sayi(y['ort_R'], 2, True):>7s} {ca:>16s} "
-            f"{B.sayi(y['kar_faktoru'], 2):>6s} {B.sayi(y['azami_geri_cekilme_R'], 1):>6s} "
-            f"{B.sayi(y['rastgele']['yuzdelik'], 0):>7s} {yari:>16s}")
-    kucuk = [f"{y['ad']} R={y['hedef_R']:.0f} (N={y['n']})" for y in yapilar if y["n"] < 30]
-    if kucuk:
-        satir.append("N < 30 — bu satırlarda hiçbir ölçü hüküm taşımaz: " + " · ".join(kucuk))
-    satir.append("rast.% = gerçek ortalama R'nin, aynı emir sayısıyla rastgele bar + rastgele yönün "
-                 "300 tekrarlık dağılımındaki yüzdeliği; %95 CA sıfırı kapsıyorsa kenar ölçülemedi.")
-    return "\n".join(satir)
+# ── Çalıştırma ──────────────────────────────────────────────────────────────
+def _tablo(satirlar: list[dict]) -> str:
+    bas = f"{'yapılandırma':38s} {'R':>2s} {'yön.':5s} {'N':>5s} {'kaz.':>6s} {'ort R':>7s} {'CA95':>16s} {'KF':>5s} {'rast.%':>6s}"
+    out = [bas, "─" * len(bas)]
+    for y in satirlar:
+        ca = f"[{B.sayi(y['ca_alt'], 2)}, {B.sayi(y['ca_ust'], 2)}]" if y["ca_alt"] is not None else "—"
+        out.append(f"{y['ad']:38s} {int(y['hedef_R']):>2d} {'ders' if y['yonetim']['basabas'] else 'sabit':5s} {y['n']:>5d} "
+                   f"{B.sayi(100 * (y['kazanma'] or 0), 1):>6s} {B.sayi(y['ort_R'] or 0, 3):>7s} {ca:>16s} "
+                   f"{(B.sayi(y['kar_faktoru'], 2) if y['kar_faktoru'] is not None else '—'):>5s} "
+                   f"{(B.sayi(y['rastgele']['yuzdelik'], 0) if y['rastgele']['yuzdelik'] is not None else '—'):>6s}")
+    return "\n".join(out)
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--denetle", action="store_true", help="yalnız mekanik sınamaları koştur")
-    ap.add_argument("--tekrar", type=int, default=RASTGELE_TEKRAR, help="rastgele taban tekrar sayısı")
-    a = ap.parse_args()
+    ap.add_argument("--tekrar", type=int, default=RASTGELE_TEKRAR)
+    args = ap.parse_args()
 
     hata = kendini_sina()
     if hata:
-        print("DENETİM DÜŞTÜ:", file=sys.stderr)
+        print("DENETİM DÜŞTÜ:")
         for h in hata:
-            print("  ✗", h, file=sys.stderr)
-        raise SystemExit(1)
-    print("denetim · 10 madde GEÇTİ (kazanç · kayıp · aynı bar · dolmayan · ayı aynası · "
-          "zaman aşımı · tek pozisyon · rastgele taban · tekrarlanabilirlik · ayna simetrisi)")
-    if a.denetle:
-        return
+            print("  ✗", h)
+        return 1
+    print("denetim · 14 madde GEÇTİ (kazanç · altı tick · kayıp · aynı bar · dolmayan · ayı aynası · "
+          "sıkılaştırma · başabaş · kırılım modu · maliyet · tek pozisyon · tekrarlanabilirlik · "
+          "rastgele taban · ayna simetrisi)")
+    if args.denetle:
+        return 0
 
-    yollar = sorted((SITE / "public" / "teknik").glob("*.html"))
-    hepsi = [O.bar_oku(y) for y in yollar]
-    gecen = [k for k in hepsi if O.govde_kunyesi(k.seri)["gecti"]]
-    dislanan = [k.anahtar for k in hepsi if not O.govde_kunyesi(k.seri)["gecti"]]
-    seriler = [SeriOlcum(k.anahtar, k.seri) for k in gecen]
-    print(f"veri · {len(seriler)} seri, {sum(len(s.s) for s in seriler)} bar, "
-          f"ortak başlangıç barı {BAS}; dışlanan: {', '.join(dislanan) or '—'}")
-
+    kaynaklar = [O.bar_oku(p) for p in sorted((SITE / "public" / "teknik").glob("*.html"))]
+    seriler: list[SeriOlcum] = []
+    dislanan: dict[str, dict] = {}
+    for k in kaynaklar:
+        g = O.govde_kunyesi(k.seri)
+        if not g["gecti"]:
+            dislanan[k.anahtar] = g
+            continue
+        seriler.append(SeriOlcum(k.anahtar, k.seri))
     rng = random.Random(TOHUM)
-    yapilar: list[dict] = []
+    sonuclar: list[dict] = []
     for ad, ayar in YAPILANDIRMA:
-        for hedef_r in HEDEFLER:
-            y = yapilandirma_olc(ad, ayar, float(hedef_r), seriler, rng, a.tekrar)
-            yapilar.append(y)
-            print(f"  ölçüldü · {ad:26s} R={hedef_r}  N={y['n']:4d}  emir={y['emir']:4d}", file=sys.stderr)
-
+        for hr in HEDEFLER:
+            for yon in (YONETIM_SABIT, YONETIM_DERS):
+                y = yapilandirma_olc(ad, ayar, hr, seriler, rng, tekrar=args.tekrar, yonetim=yon)
+                sonuclar.append(y)
+                print(f"  {ad} · R={hr} · {'ders' if yon['basabas'] else 'sabit'} · N={y['n']} · ort {y['ort_R']}")
+    print("\n" + _tablo(sonuclar))
     kunye = {
         "olcum_tarihi": date.today().isoformat(),
         "kaynak": "site/public/teknik/*.html (teknik/olc.py'nin kapanmış-bar disiplininden geçmiş OHLC)",
         "kural_kaynagi": "site/public/indikatorler/brooks_referans.py (Pine replikasyonu)",
-        "seri": len(seriler),
-        "bar": sum(len(s.s) for s in seriler),
-        "seri_listesi": {s.ad: {"bar": len(s.s), "bas": s.s.zaman[0], "son": s.s.zaman[-1],
-                                "uygun_bar": len(s.s) - BAS - 1} for s in seriler},
+        "seri": len(seriler), "bar": sum(len(s.s) for s in seriler),
+        "seri_listesi": {s.ad: {"bar": len(s.s), "tick": s.tick, "bas": s.s.zaman[0] if s.s.zaman else None,
+                                "son": s.s.zaman[-1] if s.s.zaman else None, "uygun_bar": len(s.s) - BAS - 1}
+                         for s in seriler},
         "dislanan": dislanan,
-        "ortak_baslangic_bari": BAS,
-        "ufuk_bar": UFUK,
-        "hedef_R": list(HEDEFLER),
-        "bootstrap": BOOTSTRAP,
-        "rastgele_tekrar": a.tekrar,
-        "tohum": TOHUM,
-        "kural": {
-            "sinyal": "kapanmış bar i: donus_bari(i, yön) ve kalite(i, yön) ≥ K",
-            "giris": "sinyal barının yönündeki ucuna stop emri; i+1 barı o ucu KESİN aşarsa "
-                     "dolar, dolum fiyatı sinyal ucu (kayma yok); aşmazsa iptal",
-            "stop": "sinyal barının karşı ucu; risk = giriş − stop",
-            "hedef": "giriş + R·risk",
-            "cikis": "dolum barından itibaren (dolum barı dahil) stop → −1R, hedef → +R, "
-                     "ikisi aynı barda → kayıp; 100 barda sonuç yoksa kapanıştan kesirli R; "
-                     "seri biterse son kapanıştan (seri_sonu)",
-            "pozisyon": "seri başına tek pozisyon; pozisyondayken sinyal yok sayılır; "
-                        "çıkış barı yeniden sinyal barı olabilir",
-            "belirsiz": "aynı barda iki yön eşit kaliteyle geçerse bar atlanır",
-            "kazanma": "R > 0 payı (kesirli çıkışlar dahil)",
-            "zaman_ayrimi": "her serinin uygun aralığı [BAS, son) ikiye bölünür; sinyal barına göre",
-            "rastgele_taban": "her seride gerçek koşunun emir sayısı kadar rastgele bar + rastgele "
-                              "yön, aynı mekanik; yüzdelik = rastgele ortalama R'lerin gerçek "
-                              "ortalamanın altında kalan payı",
-        },
-        "olculmeyen": [
-            "kayma, komisyon, spread yok; gece boşluğu stop'un ötesine açılsa da kayıp −1R yazılır",
-            "yalnız 1 saatlik ve üstü barlar; dersin eşikleri 5 dakikalıkta kalibre",
-            "13 seri; saatlik seriler Ağustos–Eylül 2026'nın üç haftası — tek rejim penceresi",
-            "her serinin ilk 88 barı hiçbir yapılandırmada sinyal üretmez (ortak başlangıç)",
-            "seans saati, haber takvimi, pozisyon büyüklüğü, portföy etkisi yok",
-            "örneklem içi: ablasyondan 'en iyi'yi seçmek seçimi aynı veride yapmaktır",
-        ],
+        "ortak_baslangic": BAS, "ufuk": UFUK, "bootstrap": BOOTSTRAP, "rastgele_tekrar": args.tekrar,
+        "tohum": TOHUM, "maliyet": "0 (brüt) — yerel serilerde spread ölçülmedi; 5 dk FX maliyet tablosu ayrı koşudan",
     }
-    CIKTI.parent.mkdir(parents=True, exist_ok=True)
-    CIKTI.write_text(json.dumps({"kunye": kunye, "yapilandirma": yapilar},
-                                ensure_ascii=False, indent=1), encoding="utf-8")
-    print(_tablo(yapilar))
-    print(f"\nyazıldı · {CIKTI.relative_to(KOK)}")
+    CIKTI.write_text(json.dumps({"kunye": kunye, "yapilandirma": sonuclar}, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"\nyazıldı → {CIKTI.relative_to(KOK)} ({CIKTI.stat().st_size // 1024} KB)")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
