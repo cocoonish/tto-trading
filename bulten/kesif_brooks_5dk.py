@@ -18,6 +18,17 @@ Kurallar brooks_referans'tan, emir mekaniği brooks_backtest'ten olduğu gibi
   (3) backtest: ablasyon alt kümesi × R∈{1,2} + rastgele taban
   (4) öngörü: ölçü(i) ↔ sonraki 35 barın net/aralık oranı — örtüşmeyen
       pencereler, Spearman, permütasyon p (scipy yok)
+  (5) MALİYET ve RİSK BÜYÜKLÜĞÜ: ilk koşu (15.09 16:07) her yapılandırmada
+      artı ortalama R ve "rastgele tabanın 100. yüzdeliği" verdi — tam da
+      kuşku uyandıracak sonuç. Yahoo 5 dk EUR/USD'de barların %38'i SIFIR
+      gövdeli (açılış = kapanış), yani besleme seyrek tik taşıyor; ve
+      spread yok. Küçük riskli bir işlemde 1R hedef bir-iki pip'tir ve
+      spread onu yutar. Bu koşu her işlem listesini pip cinsinden maliyetle
+      (0 · 0,5 · 1 · 2 pip gidiş-dönüş) ve risk büyüklüğü dilimleriyle
+      yeniden okur; sıfır gövdeli bar payını seri başına yazar.
+  (6) GÖRELİ REJİM: her ölçü kendi trailing tarihçesine (tarihce bar) göre
+      yüzdelik sırasına çevrilir; bileşik hükmün ileri net/aralık'ı ayırt
+      edip etmediği mutlak hükümle yan yana ölçülür.
 
 Bütçe: keşif işi 20 dk. Her aşama ilerleme basar; 15 dk dolunca kalan
 yapılandırmalar ADIYLA atlanır (sessiz kısaltma yok)."""
@@ -48,6 +59,10 @@ YAPI = [y for y in BT.YAPILANDIRMA if y[0] in (
     "tam sistem · K≥3", "tam sistem · K≥2", "−rejim · K≥3", "süzgeçsiz · K≥1", "yalnız always-in · K≥1")]
 RASTGELE = 200
 UFUK_ONGORU = 35
+PIP = {"eurusd": 0.0001, "gbpusd": 0.0001, "usdchf": 0.0001, "usdjpy": 0.01}
+MALIYET_PIP = (0.0, 0.5, 1.0, 2.0)          # gidiş-dönüş toplam, pip
+GORELI_TARIHCE = (280, 560)                  # 5 dk'da ~1 ve ~2 gün
+GORELI_Q = 0.6
 
 
 def gecen() -> float:
@@ -182,6 +197,98 @@ def dagilim(ad: str, s: Seri, rp: RejimPanosu) -> dict:
     return {"n": n, "rejim": rejim_pay}
 
 
+def maliyet_ve_risk(y: dict, rng: random.Random) -> None:
+    """İşlem listesini pip maliyetiyle ve risk dilimleriyle yeniden okur.
+    Net R = (R·risk − maliyet) / risk. Maliyet gidiş-dönüş toplamdır."""
+    islemler = y["islemler"]
+    if not islemler:
+        return
+    riskler = []
+    for t in islemler:
+        pip = PIP[t["seri"].split("-")[0]]
+        t["_risk_pip"] = abs(t["giris"] - t["stop"]) / pip
+        riskler.append(t["_risk_pip"])
+    sirali = sorted(riskler)
+    q1, q2, q3 = sirali[len(sirali) // 4], sirali[len(sirali) // 2], sirali[3 * len(sirali) // 4]
+    print(f"      risk (pip) p25/p50/p75: {q1:.1f} / {q2:.1f} / {q3:.1f}")
+    satir = []
+    for m in MALIYET_PIP:
+        net = [t["R"] - m / t["_risk_pip"] for t in islemler if t["_risk_pip"] > 0]
+        ca = BT.bootstrap_ca(net, rng, 400)
+        satir.append(f"{m:.1f}p: {sum(net) / len(net):+.3f} [{ca[0]:+.2f},{ca[1]:+.2f}]" if ca else f"{m:.1f}p: —")
+    print("      maliyetle ort net R · " + " · ".join(satir))
+    # risk dilimleri (maliyet 1 pip)
+    dilim = []
+    for ad, alt, ust in (("küçük", 0, q1), ("orta", q1, q3), ("büyük", q3, 1e9)):
+        sec = [t for t in islemler if alt <= t["_risk_pip"] < ust and t["_risk_pip"] > 0]
+        if not sec:
+            continue
+        brut = sum(t["R"] for t in sec) / len(sec)
+        net = sum(t["R"] - 1.0 / t["_risk_pip"] for t in sec) / len(sec)
+        dilim.append(f"{ad} n={len(sec)} brüt {brut:+.2f} / 1p net {net:+.2f}")
+    print("      risk dilimi · " + " · ".join(dilim))
+
+
+def goreli_rejim(ad: str, s: Seri, rp: RejimPanosu) -> None:
+    """Göreli eşik: ölçü, kendi trailing tarihçesindeki yüzdelik sırasına göre
+    bant işareti alır (≥-tipi: sıra ≥ q; ≤-tipi: sıra ≤ 1−q). Bileşik hüküm
+    (≥4 BANT · ≤1 trend) ile ileri 35 barın net/aralık'ı: sınıf medyanları
+    ve BANT<trend farkı için permütasyon p. Mutlak hüküm yan yana."""
+    ham = [rp.olcu(i) for i in range(len(s))]
+    tipler = {"ortusme_oran": "ge", "doji_oran": "ge", "kesisme": "ge", "net_aralik": "le", "azami_dizi": "le"}
+    w = int(R.SABIT_RP["pencere"])
+    rng = random.Random(BT.TOHUM)
+    for tarihce in GORELI_TARIHCE:
+        goreli = {"BANT": [], "ara": [], "trend": []}
+        mutlak = {"BANT": [], "ara": [], "trend": []}
+        paylar = {k: 0 for k in tipler}
+        say = 0
+        # sıra hesabı: ölçünün son `tarihce` değeri içinde yüzdelik (O(tarihce) — adım w//2)
+        for i in range(BT.BAS + tarihce, len(s) - UFUK_ONGORU, w // 2):
+            o = ham[i]
+            if o is None:
+                continue
+            n = 0
+            for k, tip in tipler.items():
+                gecmis = [ham[j][k] for j in range(i - tarihce, i, 2) if ham[j] is not None]
+                if not gecmis:
+                    continue
+                v = o[k]
+                sira = (sum(1 for x in gecmis if x <= v) if tip == "ge" else sum(1 for x in gecmis if x >= v)) / len(gecmis)
+                if sira >= GORELI_Q:
+                    n += 1
+                    paylar[k] += 1
+            say += 1
+            rej = "BANT" if n >= 4 else "trend" if n <= 1 else "ara"
+            j = i + UFUK_ONGORU
+            aralik = max(s.h[i + 1:j + 1]) - min(s.l[i + 1:j + 1])
+            yv = abs(s.c[j] - s.c[i]) / aralik if aralik > 0 else 0.0
+            goreli[rej].append(yv)
+            mutlak[o["rejim"]].append(yv)
+
+        def med(x):
+            return sorted(x)[len(x) // 2] if x else float("nan")
+
+        def fark_p(d):
+            a, b = d["BANT"], d["trend"]
+            if len(a) < 5 or len(b) < 5:
+                return float("nan")
+            g = med(b) - med(a)
+            hepsi = a + b
+            sayac = 0
+            for _ in range(500):
+                rng.shuffle(hepsi)
+                if med(hepsi[len(a):]) - med(hepsi[:len(a)]) >= g:
+                    sayac += 1
+            return (sayac + 1) / 501
+
+        print(f"  göreli rejim (tarihçe {tarihce}, q {GORELI_Q}, n={say}): işaret payları "
+              + " · ".join(f"{k} %{100 * v / max(say, 1):.0f}" for k, v in paylar.items()))
+        for adx, d in (("göreli", goreli), ("mutlak", mutlak)):
+            print(f"    {adx}: " + " · ".join(f"{k} n={len(v)} ileri-net med {med(v):.2f}" for k, v in d.items())
+                  + f" · trend−BANT medyan farkı p={fark_p(d):.3f}")
+
+
 def sinyal_sikligi(ad: str, so: BT.SeriOlcum) -> None:
     n = len(so.s) - BT.BAS
     for K in (1, 2, 3):
@@ -203,13 +310,19 @@ def main() -> int:
             continue
         s = seriye(d)
         g = O.govde_kunyesi(s)
+        sifir_menzil = sum(1 for i in range(len(s)) if s.h[i] == s.l[i]) / len(s)
+        menziller = sorted(s.h[i] - s.l[i] for i in range(len(s)))
+        pip = PIP[ad.split("-")[0]]
         print(f"\n=== {ad} · {len(s)} bar · {s.zaman[0]} → {s.zaman[-1]} · gövde {g}")
+        print(f"  sıfır MENZİLLİ bar payı %{100 * sifir_menzil:.1f} · menzil p10/p50/p90 (pip) "
+              f"{menziller[len(menziller) // 10] / pip:.1f} / {menziller[len(menziller) // 2] / pip:.1f} / {menziller[9 * len(menziller) // 10] / pip:.1f}")
         if not g["gecti"]:
             print(f"  {ad}: GÖVDE KAPISINDAN GEÇMEDİ — dışarıda, sebebi yukarıda")
             continue
         t0 = time.time()
         rp = RejimPanosu(s)
         dagilim(ad, s, rp)
+        goreli_rejim(ad, s, rp)
         so = BT.SeriOlcum(ad, s)
         sinyal_sikligi(ad, so)
         seriler.append(so)
@@ -239,6 +352,7 @@ def main() -> int:
                   f"(emir {y['emir']}, dolum {y['dolum_orani']}, çift {y['cift_vurus']}, {time.time() - t0:.0f} s)")
             seri_satir = " · ".join(f"{k} n={v['n']} {(v['ort_R'] if v['ort_R'] is not None else 0):+.2f}" for k, v in y["seri"].items())
             print(f"      seri: {seri_satir}")
+            maliyet_ve_risk(y, rng)
     print(f"\nbitti · {gecen():.0f} s")
     return 0
 
