@@ -177,6 +177,17 @@ def denetle(yol: Path) -> list[str]:
                              f"{tn}. satırda tanımlanıyor — Pine yukarıdan aşağı derler")
                 break
 
+    # ⑧ YEREL KAPSAMDA TANIMLANAN FONKSİYON. Pine bir kullanıcı fonksiyonunu
+    #    yalnız GENEL kapsamda kabul eder; `if` bloğunun ya da başka bir
+    #    fonksiyonun içinde `f(x) =>` yazılırsa derlenmez. Bu hata 15.09'da
+    #    rejim panosunda yapıldı (durum kutusunun `if barstate.islast`
+    #    bloğuna bir yardımcı yazıldı) ve yedinci ölçüt onu görmedi: tanım
+    #    çağrıdan öncedeydi. Girintili bir tanım satırı ENGEL.
+    for n, s in satir:
+        if re.match(r"[ \t]+(?:export\s+)?[A-Za-z_]\w*\s*\([^)]*\)\s*=>", s):
+            bulgu.append(f"{ad}:{n}: fonksiyon yerel kapsamda tanımlanıyor (girintili `=>`) — "
+                         f"Pine fonksiyonu yalnız genel kapsamda kabul eder")
+
     return bulgu
 
 
@@ -193,7 +204,7 @@ def main() -> int:
         for h in hepsi:
             print("  ✗", h, file=sys.stderr)
         return 1
-    print(f"pine denetimi · {len(yollar)} dosya · yedi ölçüt GEÇTİ")
+    print(f"pine denetimi · {len(yollar)} dosya · sekiz ölçüt GEÇTİ")
     return 0
 
 
