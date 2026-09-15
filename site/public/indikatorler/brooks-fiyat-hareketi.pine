@@ -334,9 +334,12 @@ riskPaket = girisBoga - stopBoga
 ikinciBoga = aiLong  and not na(hEtiket) and hEtiket == "H2"
 ikinciAyi  = aiShort and not na(lEtiket) and lEtiket == "L2"
 
-// 2.7 · başarısız dönüş: trend içindeki KARŞI dönüş barının ters tarafından giriş
-basarisizBoga = aiLong  and ayiDonus
-basarisizAyi  = aiShort and bogaDonus
+// 2.7 · başarısız dönüş: trend içindeki KARŞI dönüş barının ters tarafından giriş.
+//  Karşı barın kalitesi asgariKalite'yi geçmeli: süzgeçsiz hâli barların
+//  yarısında ateşler (ölçüldü: 5 dk'da 100 barda 53–57) ve dersin "her barın
+//  ötesine körü körüne stop" yasağına düşer.
+basarisizBoga = aiLong  and ayiDonus  and kaliteAyi  >= asgariKalite
+basarisizAyi  = aiShort and bogaDonus and kaliteBoga >= asgariKalite
 
 // 4.5 / 4.6 / 4.12 · bant kenarı: uç üçte bir · bant ≥ 3 × stop · 1R sığar · HO süzgeci
 bantTavan  = ta.highest(high, pencere)

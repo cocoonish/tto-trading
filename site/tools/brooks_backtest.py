@@ -39,6 +39,8 @@ EMİR MEKANİĞİ (dersin Bölüm 2.1 · 2.10 · 11.1 · 11.2 paketi; sayılar d
     (belirsiz, ayrıca sayılır).
   · BAŞARISIZ DÖNÜŞ (2.7): karşı dönüş barının ters tarafından giriş; i+1'de
     karşı uç da geçildiyse (ayı tarafı önce tetiklenmiş olabilir) sayılmaz.
+    Karşı barın kalitesi K'yi geçmeli (Pine'da asgariKalite): süzgeçsiz hâli
+    barların yarısında ateşler — ölçüldü, 5 dk'da 100 barda 53–57.
   · MALİYET: işlem başına gidiş-dönüş `maliyet` (fiyat birimi, seri başına);
     net R = R − maliyet/risk. Sıfır maliyet BRÜT'tür ve kenar iddiası
     taşımaz: 5 dk FX'te ölçüldü (15.09.2026), maliyetsiz +0,10…+0,16 R'nin
@@ -127,7 +129,7 @@ YAPILANDIRMA: list[tuple[str, dict]] = [
     ("yalnız ikinci giriş (H2/L2)",      dict(kurulum=("ikinci",),   rejim="goreli", ai=True, yon=True, bw=True, K=0)),
     ("yalnız kırılım modu · BANT'ta",    dict(kurulum=("kirilim",),  rejim="goreli", ai=False, yon=False, bw=False, K=0)),
     ("yalnız kırılım modu · her yerde",  dict(kurulum=("kirilim",),  rejim=None,     ai=False, yon=False, bw=False, K=0)),
-    ("yalnız başarısız dönüş",           dict(kurulum=("basarisiz",), rejim="goreli", ai=True, yon=True, bw=True, K=0)),
+    ("yalnız başarısız dönüş · K≥2",     dict(kurulum=("basarisiz",), rejim="goreli", ai=True, yon=True, bw=True, K=2)),
     ("süzgeçsiz dönüş barı · K≥1",       dict(kurulum=("donus",),    rejim=None,     ai=False, yon=False, bw=False, K=1)),
 ]
 
@@ -204,7 +206,10 @@ class SeriOlcum:
 
         if "ikinci" in kur and uygun(self.paket["ikinci"][i]):
             return self.paket["ikinci"][i], False
-        if "basarisiz" in kur and uygun(self.paket["basarisiz"][i]):
+        # Başarısız dönüş: karşı dönüş barının kalitesi K'yi geçmeli — Pine'da
+        # aynı eşik `asgariKalite`. Süzgeçsiz hâli barların yarısında ateşler ve
+        # dersin "her barın ötesine körü körüne stop" yasağına düşer.
+        if "basarisiz" in kur and uygun(self.paket["basarisiz"][i]) and self.paket["basarisiz"][i]["kalite"] >= ayar["K"]:
             return self.paket["basarisiz"][i], False
         if "donus" in kur:
             aday = [e for e in (self.paket["donus_boga"][i], self.paket["donus_ayi"][i])
