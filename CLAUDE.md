@@ -2035,3 +2035,82 @@ AÇIK KALAN — bu Pine hiç DERLENMEDİ. `pine_denetle`nin yedi ölçütü bu
 oturumda gerçekten yapılmış yedi hatanın sınıfını kapatıyor; kapatmadığı her
 şey açık. TradingView'e yapıştırılana kadar "derleniyor" cümlesi bir ÖLÇÜM
 değil bir beklentidir.
+
+**KARAR (15.09.2026, kullanıcı) — İNDİKATÖR v2: GÖRELİ EŞİK, BEŞ EMİR PAKETİ,
+YAYIMLANMIŞ BACKTEST; SAYFA REHBER OLARAK YENİDEN YAZILDI.** Kullanıcı EUR/USD
+5 dakikalık ekran görüntüsüyle geldi: "burada kırmızı hep eşik üstünde değil mi?
+hep bant diyecek bu şekilde. ayrıca barlar boyandığı için algılaması biraz zor.
+… daha fazla trade edilebilecek ve aynı zamanda backtesti yapılmış bir
+indikatör kurmamız gerekiyor. yazıyı da aynı temelle tekrar yaz." Gözlem
+ÖLÇÜLDÜ ve doğruydu: dersin Şekil 30 eşikleri tek seride tek günde ölçülmüş
+SEVİYELERDİR ve enstrümana göre kayıyor — örtüşme işareti 1 saatlik 13 serinin
+9'unda pencerelerin %100'ünde açık, Yahoo 5 dk EUR/USD'de %3, USD/CHF'de %100,
+GBP/USD'de %9; doji işareti 13 seride %0. Sabit bir eşik bir enstrümanda hep
+"bant", öbüründe hiç "bant" der ve ikisi de rejim ölçmez. Öntanımlı kip GÖRELİ
+oldu: her ölçü son 280 bardaki kendi değerlerine göre `ta.percentrank`
+sözleşmesiyle sıralanır, sıra ≥ 0,60 işaret (`RejimPanosu.olcu_goreli`,
+`BANT_YONU`); ders (mutlak) kipi seçenek. Ölçülmüş sınır ADIYLA sayfada:
+göreli hüküm de ileriye dönük bir şey söylemiyor (5 seri × 2 tarihçe, BANT ile
+trend pencerelerinin ileri 35 barlık net/aralık'ı ayrışmıyor, permütasyon p
+0,19–0,94; 30 Spearman sınamasında p<0,05 yalnız 2 ≈ şans) — pano TARİF eder,
+tahmin etmez.
+
+"Daha fazla trade" dersin KENDİ paketleriyle karşılandı, eşik gevşetilerek
+değil: dönüş barı · ikinci giriş (H2/L2) · kırılım modu · başarısız dönüş ·
+bant kenarı (`Kurulumlar`), her biri dersin sayısıyla (uç ± tick stop emri,
+bir bar ömür, karşı uç ± tick koruyucu stop, 1R/2R, altı tick kuralı,
+sıkılaştırma/başabaş). Pine ④ satırı paket adıyla konuşuyor, altında "Emir"
+satırı ve son barın dört çizgisi. Öntanımlılar ölçülerek sadeleşti: bar
+boyama yalnız güçlü trend barı (beş kademe 100 barda 72 renk değişimi),
+`asgariKalite` 2, sayım ve kalıp etiketleri kapalı.
+
+BACKTEST YAYIMLANDI ve HÜKMÜ "KENAR YOK". `site/tools/brooks_backtest.py`
+(1 sa/4 sa/günlük 13 seri, 4.574 bar) ve `bulten/kesif_brooks_5dk.py` (Yahoo
+5/15 dk beş FX serisi, 61.150 bar, 59 gün; bulut #187–#193) 11 bileşim × 2
+hedef × 2 yönetim = 44 satır; her satırda rastgele giriş tabanı (60 koşu, aynı
+emir sayısı, aynı mekanik), bootstrap %95 aralığı, iki yarı, 5 dk'da maliyet
+(0/0,5/1/2 pip) ve risk dilimi. Üç bulgu kayda değer. (1) Brüt artı ortalama
+EN KÜÇÜK RİSKLİ işlemlerden geliyor (küçük dilim brüt +0,24, 1 pip'te −0,51;
+medyan risk 2–3 pip; Yahoo EUR/USD 5 dk barlarının %38'i sıfır gövdeli) —
+bid-ask sıçraması ve kırpık besleme artefaktı; 0,5 pip gidiş-dönüşte
+başarısız dönüş (+0,10, N=867, bir pipte −0,12) dışındaki her satır eksi. (2) Kırılım modu 1 saatlik ve
+üstünde brüt artı (N≈85–97, aralık sıfırın üstünde, rastgele 96–100) ama
+ÖRNEKLEM DIŞI sınandığında 5 dakikalığa TAŞINMADI ve 13 serideki artı iki
+seriden geliyor — tek ölçekte birkaç seride görülen bir kenar kural
+değildir. (3) Kalite ve rejim süzgeçleri isabeti DEĞİŞTİRMİYOR (K≥3 5 dk'da
+−0,01; göreli rejim ile rejimsiz +0,10 / +0,11): süzgeç paket ailesini seçer,
+sonucu ayırmaz. Sayfa bunu manşette söylüyor; tablo bileşeni (`BrooksBacktest`)
+sayıyı dosyadan basar, prose'a elle sayı yazılmadı. Rastgele yüzdelik 100 olan
+satır çok, kenar yok — "rastgeleden iyi" ile "maliyetten iyi" aynı şey değil.
+
+Yol boyunca beş kusur ölçülerek kapandı ve her biri bu dosyada adı olan bir
+sınıfın eşi. (a) BAR SAYACI dersin tanımını taşımıyordu: zirvesi öncekini
+aşan HER barı sayıyor, iki ardışık yükselen bar H1 ve H2 oluyordu — 1.297
+etiketin %88'i tavan H4'tü. Ders bacakla sayar (aşamayan bir bar araya
+girmeden H2 yok); `_sayim_makinesi` o tanımı taşır, eski sayaç yalnız ölçüm
+için duruyor. (b) BANT KENARI paketi yön filtresi serbest değilken trendde
+fade işareti basıyordu (BIST 100 1 sa'da pencerenin dokuz barı "bant"); şart
+Python ve Pine'da birlikte kondu. (c) Pine'da `if` bloğunun İÇİNE yazılan
+fonksiyon derlenmez ve yedinci ölçüt onu görmüyordu (tanım çağrıdan
+öncedeydi) — `pine_denetle` 8. ölçüt, arıza enjeksiyonuyla sınandı.
+(d) Durum kutusunun çıpaları ELLE yazılmıştı ve göreli kip 280 bar tarihçe
+isteyince hikâyeleri artık anlatmıyordu; `brooks_kutu.py --ara` adayları
+ARAR, çıpa damgayla çözülür ve hikâye çizim anında yeniden sınanır. Kutu
+Pine'ın paket önceliğini birebir taşır (`paket_sec`), `asgariKalite` bir
+görünüm girdisi olduğu için eşik tablosunda değil Pine dosyasından okunur.
+(e) Yazarken kendi kapılarımıza takıldık ve ikisi kayda değer:
+`brooks_ornek.py`nin duman kapısı dist↔public md5 ister, yani her figür
+yenilemesi derleme ister — ara adımda `cp` ile dist'e kopyalamak meşru (derleme
+public'i olduğu gibi kopyalar); ve `python3 -c "import brooks_referans"`
+public altına `__pycache__` bırakıp yayın kapısını düşürüyor. Bir de iş akışı
+tuzağı: keşif koşusu tazelemeyle AYNI `veri` concurrency grubunda ve
+`cancel-in-progress: false`; zamanlanmış tazeleme sürerken tetiklenen keşif 18
+dakika "pending" bekledi. Keşif ve tazeleme aynı deponun aynı dalına yazmıyor,
+grup ayrılabilir — bu oturumda değiştirilmedi.
+
+AÇIK KALAN, adıyla: Pine hiç DERLENMEDİ (sekiz statik ölçüt, derleyici yok);
+yfinance üretim tazeleme işinde kurulu değil, yalnız keşifte; 5 dk örneklemi
+tek bir yaz dönemi ve 59 gün; 1 sa+ göreli satırlarda N 16–23; bant kenarı ve
+ikinci giriş 1 sa+ setinde N<10 (ölçülemedi, tabloda gri); tick veriden
+tahmin ediliyor (`tick_tahmini`), TradingView'in `syminfo.mintick`i değil;
+spread ve kayma sabit pip maliyetinin ötesinde modellenmedi.

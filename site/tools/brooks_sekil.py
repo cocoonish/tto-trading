@@ -70,11 +70,17 @@ def _sar(metin: str, en: int = 104) -> str:
 def _duzen(fig: go.Figure, baslik: str, alt: str, yuk: int = 560) -> go.Figure:
     alt = _sar(alt)
     fig.update_layout(
+        # Başlık kabın TEPESİNE çıpalanır (yref container, yanchor top): plotly'nin
+        # öntanımlısı başlığı üst boşluğun ortasına koyar ve üç satırlık bir alt
+        # yazının son satırı çizim alanına taşar — ölçüldü, Şekil 01'de üçüncü
+        # satır eksenin ilk etiketinin üstüne biniyordu. Üst boşluk satır
+        # sayısından türer: başlık 15 px + her alt yazı satırı ~17 px + pay.
         title=dict(text=f"<b>{baslik}</b><br><span style='font-size:12px;color:{GRI}'>{alt}</span>",
-                   x=0, xanchor="left", font=dict(size=15, color=MUREKKEP)),
+                   x=0, xanchor="left", y=1, yanchor="top", yref="container", pad=dict(t=14),
+                   font=dict(size=15, color=MUREKKEP)),
         height=yuk, paper_bgcolor=KAGIT, plot_bgcolor=KAGIT,
         font=dict(family="IBM Plex Mono, ui-monospace, monospace", size=11, color=MUREKKEP),
-        margin=dict(l=56, r=24, t=72 + 18 * alt.count("<br>"), b=48),
+        margin=dict(l=56, r=24, t=48 + 16 * (alt.count("<br>") + 1), b=48),
         legend=dict(orientation="h", yanchor="top", y=-0.12, x=0, font=dict(size=10)),
         xaxis=dict(showgrid=False, linecolor=GRI, rangeslider=dict(visible=False)),
         yaxis=dict(gridcolor="#ececec", zeroline=False, linecolor=GRI),
@@ -1811,7 +1817,7 @@ def sekil_backtest_ozeti(kay: dict, no: str) -> Path:
            f"{B.sayi(yerel['kunye']['bar'], 0)} bar (1 sa · 4 sa · günlük), ortalama R ve bootstrap %95 CA; gri bant aynı "
            "sayıda rastgele emrin %95 bandı. B: Yahoo 5–15 dk beş FX serisi, 59 gün; brüt ortalama R ve 0,5 · 1 · 2 pip "
            "gidiş-dönüş maliyetle net. C: 5 dk işlemleri riskin çeyreklerine göre — brüt kenar en küçük riskli işlemlerde "
-           "toplanıyor, 1 pip maliyet (×) onu eksiye çeviriyor. Ondalık noktası eksen biçiminden; sayılar JSON'dan", 1180)
+           "toplanıyor, 1 pip maliyet (×) onu eksiye çeviriyor. Sayılar iki ölçüm dosyasından, elle yazılmadı", 1180)
     return _yaz(fig, f"{no}_backtest_ozeti.html")
 
 
