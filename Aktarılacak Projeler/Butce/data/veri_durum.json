@@ -1,10 +1,10 @@
 {
- "kosum": "2026-09-15 17:33",
+ "kosum": "2026-09-16 04:27",
  "son_ay": "2026-07-01",
  "son_ceyrek": "2026-06-30",
  "son_dis_ceyrek": "2026-06-30",
  "son_hafta": "2026-09-04",
- "son_gun": "2026-09-15",
+ "son_gun": "2026-09-16",
  "birim": {
   "bie_kbmgel": {
    "kod_kalibi": "^TP\\.KB\\.GEL",
@@ -262,18 +262,18 @@
  "gecikme": {
   "aylik": {
    "son": "2026-08-01",
-   "gecikme_gun": 45
+   "gecikme_gun": 46
   },
   "ceyreklik": {
    "son": "2026-06-30",
-   "gecikme_gun": 77
+   "gecikme_gun": 78
   },
   "haftalik": {
    "son": "2026-09-04",
-   "gecikme_gun": 11
+   "gecikme_gun": 12
   },
   "gunluk": {
-   "son": "2026-09-15",
+   "son": "2026-09-16",
    "gecikme_gun": 0
   }
  },
@@ -291,7 +291,7 @@
    23
   ],
   "gunluk": [
-   5208,
+   5209,
    2
   ]
  },
