@@ -2142,6 +2142,93 @@ yazıldı. Yapım dili de iki yerde figürün İÇİNDEYDİ ("eski sayacın
 yanılgısı") — 19. ölçüt onu ENGEL saymıyor, çünkü "eski" tek başına kalıp
 değil; okurun bilmediği bir "eski"yi anlatmak yine yapım dilidir.
 
+**Kurucu ilke — `barstate.islast` KAPANMIŞLIK DEĞİL, SON OLMA hâlidir; ve bir
+ölçüm aracının GÖSTERDİĞİ karar anı ile ÖLÇTÜĞÜ karar anı aynı olmalıdır.**
+16.09.2026'da kullanıcı sordu: "indikatörde hep kapanan bara göre düşünmemiz
+gerekmez miydi? açık barda baktıkça çok repaint ediyor." Ölçüldü; haklıydı ve
+kusur göründüğünden derindi. İki Pine dosyasında `barstate.isconfirmed` HİÇ
+geçmiyordu — yalnız `barstate.islast` vardı ve o "grafikteki son bar" demek,
+"kapanmış bar" demek DEĞİL. Sonuç: giriş seviyesi canlı barın yürüyen ucundan
+(`girisBoga = high + tick`), dönüş barı ölçütü canlı kapanıştan kuruluyordu;
+on iki etiket, iki üçgen, bar boyaması ve zemin hiçbir onay kapısı taşımıyordu.
+
+KLASİK REPAINT ARANDI VE BULUNAMADI, bu da bir sonuç: `request.security`,
+`lookahead`, negatif `offset` iki dosyada da YOK, yani kapanmış bir barın
+çıktısı sonradan değişmiyor. Yani kusur "geçmişi yeniden boyamak" değil, iki
+ayrı şey: canlı barda hüküm yalpalaması, ve YAYIMLANAN BACKTEST'LE SÖZLEŞME
+AYRIŞMASI. İkincisi asıl olan: `brooks_backtest.py`nin kendi başlığı "sinyal
+barı i KAPANMIŞ bardır, emir i+1'de dolar" diyor ve `Seri`nin docstring'i
+"Kapanmış barlar" — yani ölçülen her sayı kapanmış bar kararıdır. İndikatör
+ise paketi bar hâlâ AÇIKKEN basıyordu. Ekranda dalgalanan seviyeler,
+tablodaki sayıların ölçtüğü seviyeler değildi.
+
+EN PAHALI HÂLİ ÇİZİM KAPISINDAYDI ve tek satırdı: `if barstate.islast`
+çizgileri her barda SİLİP yeniden kuruyordu. Sinyal barı kapandığı an — yani
+emrin ilk kez konulabildiği an — bir sonraki barın ilk tick'i çizgileri
+siliyordu. Emir seviyeleri, emrin geçerli olduğu TEK barda ekranda yoktu.
+
+DÜZELTME VERİYİ DEĞİL ÇİZİM ANINI KAYDIRIR. İlk tasarım bütün kutuyu `[1]`
+ile indekslemekti; yirmi beş değer, iki de seri STRING demekti ve bu dosya
+hiç derlenmediği için her yeni Pine yapısı ölçülmemiş bir risk. Doğrusu çok
+daha küçük çıktı: `cizimBari = bar_index >= last_bar_index - 1 and kapanmis`.
+Kutu ve çizgiler son KAPANMIŞ barda kurulur, canlı barda hiçbir şey yeniden
+yazılmaz, eskisi yerinde durur — ve silme kusuru da kendiliğinden kapanır.
+Bir tasarım, dokunduğu satır sayısıyla da ölçülür.
+
+ALARMLAR GİRDİDEN BAĞIMSIZ OLARAK KAPALI. Disiplin bir girdiyle kapatılabilir
+(`yalnizKapali`, öntanımlı AÇIK) ama on üç alarmın on üçü her koşulda
+`barstate.isconfirmed` ister: gönderilmiş bir alarm geri alınamaz. Kırılım
+modu kalıbı barın ilk tick'inde YAPISAL olarak doğrudur ve gap eşiği bir
+EŞİTLİK sınamasıdır; ikisi de tam olarak "canlı barda doğup kapanışta yok
+olan" biçimdir. Bir girdinin neyi kapsamadığı, kapsadığı kadar yazılır.
+
+KURAL YORUMA YAZILMIŞTI. Alarm bloğunun tam üstünde "Uyarılar — hepsi
+KAPANMIŞ bar üzerinden" diye bir YORUM duruyordu ve altındaki on koşulun
+hiçbirinde kapı yoktu; sayfa da aynı cümleyi okura GEREKÇE diye yazıyordu.
+Bu dosyada adı konmuş kusur sınıfının bir eşi daha: kural yalnız yoruma
+yazıldığında dayatılmaz. `pine_denetle`ye iki ölçüt kondu — ⑨ her
+`alertcondition` kapanış kapısı taşımalı, ⑩ disiplini İLAN EDEN dosyada bar
+başına çizen her çağrı (`label.new` · `plotshape` · `barcolor` · `bgcolor`)
+o kapıdan geçmeli. Kapı adları elle listelenmedi, SÖZLEŞMEDEN türetildi:
+`kapanmis` ve ondan türeyen her ad (`cizimBari`) kapı sayılır, çünkü elle
+tutulan bir ad listesi yeni bir sarmalayıcı eklendiği gün yanlış alarm
+üretirdi. Altı arıza enjeksiyonunun altısı da yakalandı.
+
+VE KAPIYI KOYAN YAMA, KAPATTIĞI KUSURU KENDİ ELİYLE ÜRETTİ. On alarma
+`barstate.isconfirmed and ` öneki MEKANİK olarak eklendi; üçünün koşulu
+`A or B` biçimindeydi ve `and` `or`'dan SIKI bağladığı için sonuç
+`(isconfirmed and A) or B` oldu — ayı tarafı kapının DIŞINDA kaldı. Ölçütün
+ilk hâli bunu GEÇİRDİ, çünkü satırda `barstate.isconfirmed` gerçekten
+geçiyordu: ölçüt varlığı soruyordu, KAPSAMI değil. Kusur kodun kendi gözden
+geçirmesinde çıktı ve iki yere birden yazıldı — Pine'da parantez, ölçütte
+üst düzey `or` araması (`_ilk_arguman`, parantez içi üst düzey sayılmaz).
+Bir kapı, kendi yanlış GEÇİŞİNE karşı da sınanmalıdır; "ölçüt düşmedi" ile
+"arıza yok" bir kez daha birbirine tıpatıp benzedi.
+
+KAPININ KENDİ KAPSAMI DA KUSURLUYDU: `yayin.yml` yalnız iki sınav koşuyordu,
+yani Pine'ın statik denetimi ve replikasyonun kendini sınaması yayına giden
+yolda HİÇ sorulmuyordu — `.pine` dosyaları public depoya hiçbir kapıdan
+geçmeden kopyalanıyordu. Ölçü vardı, tüketicisi yoktu; adım eklendi.
+
+AYNI TUR CANLI BARDAN BAĞIMSIZ İKİ AYRIŞMA DA BULDU. (1) Ortalama kesişmesi:
+Pine önceki kapanışı BUGÜNKÜ ema ile kıyaslıyordu (`close[1] <= ema`),
+replikasyon önceki ema ile — ortalama yürürken Pine sahte kesişme üretiyor ve
+③ ölçüsü, dolayısıyla rejim hükmü ayrışıyordu. Bar kapandıktan sonra da
+duruyordu, yani eşik paritesi kapısının göremediği bir ayrışma: o kapı
+SABİTLERİ karşılaştırır, TANIMLARI değil. (2) Isınma: `hazir` kapısı
+`not goreli or …` diye yazıldığı için ders kipinde bar 0'dan beri KOŞULSUZ
+açıktı; Pine hüküm basarken replikasyon bar 88'e kadar `None` dönüyordu.
+Bir de zemin ile kutu iki ayrı sınır kullanıyordu (zemin 3 işarette de
+boyuyor, kutu "ara" diyor); zemin hükmün sınırına çekildi.
+
+ÇÜRÜTÜLEN BİR BULGU KAYDA DEĞER, çünkü çürütmesi asıl kusuru buldu. "Isınma
+kapısı beş ölçüden yalnız BİRİNE bakıyor ve seçtiği ölçü EMA'ya bağlı olmayan
+TEK ölçü" diye bir bulgu geldi; ölçüldü ve cebirsel olarak TERS çıktı — EMA'ya
+bağlı olan tek ölçü ③'tür, ve beş ölçünün beşi aynı barda non-na olduğu için
+birine bakmak beşine bakmakla ÖZDEŞ. Ama aynı çürütme, aranan boşluğun
+gerçekte nerede olduğunu gösterdi: mutlak kipteki koşulsuz `true`. İkna edici
+bir teşhis sınanmamış bir teşhistir; sınanınca yerini daha iyisine bırakır.
+
 AÇIK KALAN, adıyla: Pine hiç DERLENMEDİ (sekiz statik ölçüt, derleyici yok);
 yfinance üretim tazeleme işinde kurulu değil, yalnız keşifte; 5 dk örneklemi
 tek bir yaz dönemi ve 59 gün; 1 sa+ göreli satırlarda N 16–23; bant kenarı ve

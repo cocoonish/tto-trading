@@ -134,7 +134,9 @@ def fiyat_kutusu(d: dict, paket: dict | None, konum: float, tick: float) -> list
     """(tur, no, ad, deger, renk) — tur: 'baslik' | 'satir'."""
     ai = d["always_in"]
     yf = d["yon_filtresi"]
-    sat: list[tuple] = [("baslik", "", "OKUMA SIRASI", "", GRI)]
+    # Künye Pine ile birebir: kutu KAPANMIŞ bir barı anlatır ve figür de
+    # tanımı gereği kapanmış bar üzerinden çizilir (`Seri` kapanmış barlardır).
+    sat: list[tuple] = [("baslik", "", "OKUMA SIRASI · son kapanmış bar", "", GRI)]
 
     sat.append(("satir", "①", "Rejim", "alt panele bak", GRI))
 

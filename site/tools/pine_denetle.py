@@ -10,8 +10,10 @@ Bir hata yapıldığında sorulacak soru "bunu düzelttim mi" değil, "bu hatay�
 bir daha yapmamı ne engelleyecek"tir.
 
 KAPSAM DAR VE ADIYLA YAZILI. Bu bir Pine derleyicisi değildir ve öyleymiş
-gibi davranmaz: yalnız aşağıdaki altı kusuru arar. Geçmesi "kod derlenir"
-demek DEĞİL, "bu altı kusur yok" demektir.
+gibi davranmaz: yalnız aşağıdaki ON kusuru arar. Geçmesi "kod derlenir"
+demek DEĞİL, "bu on kusur yok" demektir. Son ikisi derleme kusuru değil
+SÖZLEŞME kusurudur: kapanmamış bir bar hakkında konuşan bir betik derlenir,
+yeşil koşar ve okura her tick değişen bir hüküm gösterir.
 
     python3 site/tools/pine_denetle.py
 """
@@ -57,6 +59,35 @@ def _kod_satirlari(metin: str) -> list[tuple[int, str]]:
         s = re.sub(r"//.*$", "", s)                       # yorum atılır
         out.append((n, s))
     return out
+
+
+def _ilk_arguman(s: str) -> str:
+    """`alertcondition(` çağrısının İLK argümanı — üst düzey virgüle kadar.
+
+    Dizge içi virgül ve parantez sayılmaz; ölçüt operatör önceliğini
+    soracaksa argümanın SINIRINI bilmek zorundadır."""
+    i = s.find("alertcondition(")
+    if i < 0:
+        return ""
+    derinlik, tirnak, out = 0, False, []
+    for c in s[i + len("alertcondition("):]:
+        if c == '"':
+            tirnak = not tirnak
+        if tirnak:
+            continue
+        if c in "([":
+            derinlik += 1
+            continue
+        if c in ")]":
+            if derinlik == 0:
+                break
+            derinlik -= 1
+            continue
+        if c == "," and derinlik == 0:
+            break
+        if derinlik == 0:                 # parantez İÇİ üst düzey değildir
+            out.append(c)
+    return "".join(out)
 
 
 def denetle(yol: Path) -> list[str]:
@@ -188,6 +219,65 @@ def denetle(yol: Path) -> list[str]:
             bulgu.append(f"{ad}:{n}: fonksiyon yerel kapsamda tanımlanıyor (girintili `=>`) — "
                          f"Pine fonksiyonu yalnız genel kapsamda kabul eder")
 
+    # ⑨ ALARMIN KAPANIŞ KAPISI. Gönderilmiş bir alarm geri alınamaz. Canlı
+    #    barda doğup kapanışta yok olan bir koşul — kırılım modu kalıbı barın
+    #    ilk tick'inde yapısal olarak DOĞRUDUR, gap eşiği bir EŞİTLİK
+    #    sınamasıdır — okura grafikte karşılığı olmayan bir emir tarif eder.
+    #    16.09.2026'da ölçüldü: iki dosyadaki on üç `alertcondition`ın on üçü
+    #    de kapısızdı ve fiyat panelinde tam üstlerinde "hepsi KAPANMIŞ bar
+    #    üzerinden" yazan bir YORUM duruyordu. Bir kural yalnız yoruma
+    #    yazıldığında dayatılmaz; ölçüt o yorumu koda çevirir.
+    for n, s in satir:
+        if "alertcondition(" not in s:
+            continue
+        if "barstate.isconfirmed" not in s:
+            bulgu.append(f"{ad}:{n}: alertcondition kapanış kapısı taşımıyor — "
+                         f"koşul `barstate.isconfirmed and …` ile kurulmalı")
+        elif " or " in _ilk_arguman(s):
+            # `and` `or`'dan SIKI bağlar: "isconfirmed and A or B" aslında
+            # "(isconfirmed and A) or B"dir ve B tarafı kapının DIŞINDA kalır.
+            # 16.09.2026'da kapıyı KOYAN yama tam bunu yaptı: üç alarmın ayı
+            # tarafı kapısız kaldı ve ölçüt onları GEÇİRDİ, çünkü satırda
+            # `barstate.isconfirmed` GEÇİYORDU. Kapının kendi yanlış geçişi de
+            # bir arızadır; ölçüt artık üst düzey `or` arar.
+            bulgu.append(f"{ad}:{n}: alertcondition koşulunda parantezsiz üst düzey `or` — "
+                         f"`and` sıkı bağlar, kapanış kapısı `or`un sağ tarafını KAPSAMAZ")
+
+    # ⑩ KAPANMAMIŞ BARA ÇİZİM. Bar başına çizen her çağrı (`label.new`,
+    #    `plotshape`, `barcolor`, `bgcolor`) kapanmamış barda da çalışır ve
+    #    bar içinde defalarca doğup kaybolur. Betik `kapanmis` diye bir bar
+    #    disiplini ilan ediyorsa, bu çağrıların HEPSİ ondan geçmelidir —
+    #    ilan edip bir çağrı yerine uygulamamak, kapsamı sessizce daraltır.
+    #    Kapı yalnız disiplini İLAN EDEN dosyada sorulur: ilanı olmayan bir
+    #    dosyaya "eksik" demek, ölçütü yanlış dosyaya koşturmak olurdu.
+    if re.search(r"^kapanmis\s*=", metin, re.M):
+        # Kapı adları SÖZLEŞMEDEN türetilir, elle listelenmez: `kapanmis`in
+        # kendisi ve ondan TÜRETİLEN her ad (ör. `cizimBari = bar_index >=
+        # last_bar_index - 1 and kapanmis`) kapı sayılır. Elle tutulan bir ad
+        # listesi, bir gün yeni bir sarmalayıcı eklendiğinde sessizce
+        # yanlış alarm üretirdi.
+        kapilar = {"kapanmis"}
+        for _, s in satir:
+            m = re.match(r"([A-Za-z_]\w*)\s*=[^=]", s)
+            if m and any(k in s.split("=", 1)[1] for k in kapilar):
+                kapilar.add(m.group(1))
+        gecer = lambda s: any(k in s for k in kapilar)          # noqa: E731
+
+        for n, s in satir:
+            if re.search(r"\b(plotshape|barcolor|bgcolor)\(", s) and not gecer(s):
+                bulgu.append(f"{ad}:{n}: bar başına çizen çağrı `kapanmis` kapısından geçmiyor")
+        # `label.new` bir blok içindedir; kapı onu saran EN YAKIN `if`tedir.
+        acik: list[tuple[int, str]] = []          # (girinti, satır)
+        for n, s in satir:
+            girinti = len(s) - len(s.lstrip())
+            while acik and acik[-1][0] >= girinti:
+                acik.pop()
+            if re.match(r"[ \t]*if\b", s):
+                acik.append((girinti, s))
+            elif "label.new(" in s and not any(gecer(a) for _, a in acik):
+                bulgu.append(f"{ad}:{n}: `label.new` kapanmamış barda da basılıyor — "
+                             f"saran `if` `kapanmis` taşımalı")
+
     return bulgu
 
 
@@ -204,7 +294,7 @@ def main() -> int:
         for h in hepsi:
             print("  ✗", h, file=sys.stderr)
         return 1
-    print(f"pine denetimi · {len(yollar)} dosya · sekiz ölçüt GEÇTİ")
+    print(f"pine denetimi · {len(yollar)} dosya · on ölçüt GEÇTİ")
     return 0
 
 
