@@ -21,8 +21,8 @@
    "tolerans": 6
   },
   "faiz": {
-   "son": "2026-09-14",
-   "gecikme_gun": 2,
+   "son": "2026-09-15",
+   "gecikme_gun": 1,
    "tolerans": 6
   },
   "tufe": {
@@ -404,7 +404,7 @@
   1
  ],
  "faiz": [
-  3946,
+  3947,
   3
  ],
  "tufe": [
