@@ -2313,3 +2313,17 @@ HİÇ uğramıyor, çünkü AOFM bacağı kendi 400 günlük toleransını taş�
 çıpayı dinlemiyor. O dal ancak kendi toleransı da ezilerek ölçülebildi. Bir
 fikstür "hepsini boş yaptım" dediğinde, kendi istisnalarını da ezip ezmediği
 sorulur.
+
+Aynı sınıfın bir eşi TUFEX'te bulundu ve düzeltildi, üstelik kapının KENDİ
+içinde: hattın duman sınaması `float(o["pka_12a"])` diyordu ve ifade `sina`nın
+ARGÜMANINDA durduğu için istisna ölçütün içinde kalmıyor, `duman.py`yi
+düşürüyordu — duman adımlardan ÖNCE koştuğu için hat komple atlanır ve panosu
+donardı. Hat o anahtarı ölçemediğinde "—" yazıyor (sözleşmenin kendisi), yani
+kapı hattın MEŞRU çıktısını çökmeye çeviriyordu. Arıza enjeksiyonuyla ölçüldü
+(`ValueError: could not convert string to float: '—'`). Boş bacakta sorulacak
+soru KIYAS değil TUTARLILIKTIR: aylık kaynak o ayı DOLU verirken günlük bacak
+boşsa kusur vardır, ikisi birlikte boşsa yoktur. İlk enjeksiyon dosyanın
+`ozet.json`unu düzenleyerek yapıldı ve HİÇBİR ŞEY üretmedi — sınama özeti
+diskten değil hattan yeniden hesaplıyor; arıza ancak ÜRETİCİYE enjekte
+edilince göründü. Bir enjeksiyonun yanlış yere yapılması, ölçütün kör
+olduğuyla birebir aynı görünür.

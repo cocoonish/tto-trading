@@ -229,9 +229,23 @@ def bolum_anket() -> None:
         ay = pd.Timestamp(basamak.year, basamak.month, 1)
         sina("aylık kaynakta anket ayı satırı var", ay in A.index, f"{ay:%Y-%m}")
         if ay in A.index:
-            sina("günlük 12a değeri aylık kaynağın aynı ay satırıyla birebir",
-                 abs(float(A.loc[ay, "pka_12a"]) - float(o["pka_12a"])) < 1e-6,
-                 f"aylık {A.loc[ay, 'pka_12a']} · günlük {o['pka_12a']}")
+            # ÖLÇÜLEMEYEN BACAK KIYASA GİRMEZ. Hat anket anahtarını ölçemediğinde
+            # "—" yazıyor (sözleşme) ve `float("—")` bu satırda ValueError verir;
+            # ifade `sina`nın ARGÜMANINDA olduğu için istisna ölçütün içinde
+            # kalmaz, duman.py'yi düşürür — duman adımlardan ÖNCE koştuğu için
+            # hat komple atlanır ve panosu donar. DİBS'te 15.09.2026'da tam bu
+            # oldu, orada `abs("—")` ile. Boş bacakta sorulacak soru kıyas değil
+            # TUTARLILIK: aylık kaynak o ayı DOLU verirken günlük boşsa kusur var.
+            aylik_12a = pd.to_numeric(A.loc[ay, "pka_12a"], errors="coerce")
+            gunluk_12a = o["pka_12a"]
+            if isinstance(gunluk_12a, (int, float)) and not isinstance(gunluk_12a, bool):
+                sina("günlük 12a değeri aylık kaynağın aynı ay satırıyla birebir",
+                     abs(float(aylik_12a) - float(gunluk_12a)) < 1e-6,
+                     f"aylık {A.loc[ay, 'pka_12a']} · günlük {gunluk_12a}")
+            else:
+                sina("günlük 12a ölçülemediyse aylık kaynak da o ayı boş bırakmış",
+                     bool(pd.isna(aylik_12a)),
+                     f"aylık {A.loc[ay, 'pka_12a']} · günlük {gunluk_12a!r}")
             sina("katılımcı sayısı aylık kaynağın aynı ay satırıyla birebir",
                  int(A.loc[ay, "pka_12a_n"]) == o["pka_katilimci"],
                  f"aylık {A.loc[ay, 'pka_12a_n']} · özet {o['pka_katilimci']}")
