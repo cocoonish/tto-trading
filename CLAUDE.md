@@ -2260,3 +2260,56 @@ tek bir yaz dönemi ve 59 gün; 1 sa+ göreli satırlarda N 16–23; bant kenar�
 ikinci giriş 1 sa+ setinde N<10 (ölçülemedi, tabloda gri); tick veriden
 tahmin ediliyor (`tick_tahmini`), TradingView'in `syminfo.mintick`i değil;
 spread ve kayma sabit pip maliyetinin ötesinde modellenmedi.
+
+**Kurucu ilke — BİR KURAL GENELLEŞTİRİLDİĞİNDE TÜKETİCİLERİ DE GENELLEŞİR; ve
+`"x" in O` bir ÖLÇÜM kapısı değildir.** 15.09.2026'dan 16.09'a veri tazeleme
+yedi koşu üst üste kırmızı bitti (#194–#200, son yeşil #193) ve DİBS panosu iki
+gün 14.09'da dondu. Kök 09.09'da atılmıştı: o gün `anlik()` genelleştirildi —
+sayfanın adıyla çağırdığı anahtar ölçülemese de yazılır (OLCULEMEDI), çünkü
+ATLANAN anahtar yayın kapısında ENGEL olur. Kural doğruydu; uygulanmadığı yer
+onu OKUYAN koddu. O günden sonra `"x" in O` tanımı gereği HEP doğrudur ve altı
+türetilmiş anahtarın kapısı sessizce açık kaldı. 15.09'da dokuz yıl düğümünün
+son dolu günü (07.09) yedi günlük toleransı aşınca `abs("—")` hattın DÖRDÜNCÜ
+adımını düşürdü; duman ve ilk üç adım geçtiği için veri çekildi, ölçüldü,
+çizildi — ve siteye hiç kopyalanmadı.
+
+Arızanın görüntüsü yine sağlığın görüntüsüne benziyordu: commit adımı
+`if: always()` taşıdığı için her koşuda 73 dosya yayına gitti, site ayakta
+kaldı, öbür yirmi hat tazelendi; yalnız bir pano dondu. Kırmızı biten iş akışı
+e-posta gönderdi ve kullanıcı onu gördü — yani bu kez alarm çalıştı, ölçüyü
+okuyan yoktu.
+
+Düzeltme üç katmanlı ve üçü de "yer tutucu" sözleşmesinin eksik yarısını
+kapatıyor. (1) Kapı VARLIĞI değil DEĞERİ sorar (`olculdu`). (2) `koy()`
+yer tutucu GİRDİSİNİ yer tutucu ÇIKTISINA çevirir — ölçülemeyen bir bacaktan
+türeyen anahtarın doğru cevabı "—"dir, çökme değil; ama YALNIZ yer tutucu
+böyle geçer, başka bir dizge ADIYLA patlar, sessizce boşa çevrilmez.
+(3) Ölçüm BİÇİMİNDEKİ cümle sayısız kurulmaz: "9 yıllıktan — puan yüksek" ya da
+"Fisher ileri reel faiz %—, geriye dönük %—; makas — puan" bir ölçüm değil,
+ölçüm kılığında bir boşluktur; sayı yoksa cümle sebebini yazar.
+
+TARAMA İKİNCİ BİR HÂLİ BULDU ve o hâl statik kapının GÖREMEYECEĞİ biçimdeydi:
+manşet taşıma anahtarı bir DEĞİŞKENDEN okunuyor (`O[manset_kol]`), yani ad
+kaynakta hiç geçmiyor. Kapısız hâli iki yönde birden kusurluydu — `koy()`'u
+düşürür ya da cümleye `O.get('carry_manset', 0)` üzerinden SAHTE BİR SIFIR
+yazardı ("fonlama maliyetinin 0,00 puan üstünde"), ölçülemeyen bir şeyi
+ölçülmüş göstermenin en sessiz biçimi.
+
+Dört kapı `duman.py`ye kondu ve kapsamı SÖZLEŞMEDEN türüyor: `anlik()`in
+yazdığı anahtarlar kaynaktan çıkarılıyor, elle tutulan bir listeden değil.
+Aritmetik kapısının ilk yazımı GİRİNTİYLE kuruluydu ve kuralın KENDİ ilan
+ettiği iki hâlini göremiyordu — koşulu iki satıra yayılan `if` ile
+`if not olculdu(…): … else:` tersi; ikisinde de DOĞRU kodu kusur sayıyordu.
+Yayının önünde duran bir ölçütün yanlış alarmı arızanın kendisidir; ölçüt
+AĞACA çevrildi (`ast`), dal dal sorar. Dört arıza enjeksiyonunun dördü de
+yakalandı — ama biri dürüstçe kayda geçsin: aritmetik okumayı kapının dışına
+çıkarmak O GÜN çökme üretmedi (iki bacak da ölçülmüştü), YATKIN bir kusur
+ekti. Statik kapının işi tam olarak budur ve "ölçüt düştü" ile "bugün çöktü"
+aynı şey değildir.
+
+EN KÖTÜ HÂL FİKSTÜRÜ DE ANCAK EZDİĞİ TOLERANS KADAR GENİŞ: bütün anlık
+anahtarları ölçülemez saymak (`ANLIK_TOLERANS_GUN = -1`) manşet taşıma dalına
+HİÇ uğramıyor, çünkü AOFM bacağı kendi 400 günlük toleransını taşıyor ve genel
+çıpayı dinlemiyor. O dal ancak kendi toleransı da ezilerek ölçülebildi. Bir
+fikstür "hepsini boş yaptım" dediğinde, kendi istisnalarını da ezip ezmediği
+sorulur.

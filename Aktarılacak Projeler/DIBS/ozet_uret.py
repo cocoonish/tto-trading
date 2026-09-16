@@ -60,6 +60,18 @@ def koy(anahtar: str, deger, ondalik: int | None = 2) -> None:
                                                        or not np.isfinite(deger))):
         uyar(f"'{anahtar}' kaynakta yok — anahtar atlandı.")
         return
+    if ondalik is not None and isinstance(deger, str):
+        # ÖLÇÜLEMEYEN GİRDİ, ÖLÇÜLEMEYEN ÇIKTI verir — çökme değil. Türetilmiş
+        # bir anahtar boş bir bacaktan hesaplanıyorsa doğru cevap "—"dir;
+        # `round(float("—"))` ise hattın adımını düşürür ve panoyu dondurur.
+        # Yalnız YER TUTUCU böyle geçer: başka bir dizge gerçek bir kusurdur
+        # ve ADIYLA patlar — sessizce boşa çevrilmez.
+        if deger != OLCULEMEDI:
+            raise TypeError(f"'{anahtar}' için sayı bekleniyordu, dizge geldi: "
+                            f"{deger!r}")
+        uyar(f"'{anahtar}' ölçülemeyen bir değerden türüyor — boş yazıldı.")
+        O[anahtar] = OLCULEMEDI
+        return
     if ondalik is None:
         O[anahtar] = deger
     elif ondalik == 0:
@@ -79,6 +91,21 @@ def tr_tarih(t) -> str:
 # olsaydı okur statik yedekteki DONMUŞ sayıyı görürdü. Boş bir hücre ikisinden
 # de dürüsttür — bileşen sayı olmayan değeri olduğu gibi basar.
 OLCULEMEDI = "—"
+
+
+def olculdu(*anahtarlar: str) -> bool:
+    """Anahtar(lar) ÖLÇÜLDÜ mü — `"x" in O` bu soruyu ARTIK cevaplamaz.
+
+    09.09.2026'da `anlik()` genelleştirildi: sayfanın adıyla çağırdığı anahtar
+    ölçülemese de yazılır (OLCULEMEDI). Kural doğru, ama TÜKETİCİLERİNE
+    uygulanmadı: o günden sonra `"x" in O` her zaman doğru döner ve türetilmiş
+    anahtarların kapıları sessizce açık kaldı. Bedeli 15.09.2026'da ölçüldü —
+    dokuz yıl düğümü toleransı aşınca `abs("—")` bu dosyayı düşürdü, hat komple
+    atlandı, panosu dondu ve veri tazeleme yedi koşu boyunca kırmızı bitti.
+    Türetilmiş bir anahtarın kapısı VARLIĞI değil DEĞERİ sorar."""
+    return all(isinstance(O.get(a), (int, float)) and not isinstance(O.get(a), bool)
+               for a in anahtarlar)
+
 
 # Okura yazılan vade adları (kıyas uyarıları için).
 VADE_AD = {"2y": "iki yıl", "1y": "bir yıl", "9y": "dokuz yıl"}
@@ -365,22 +392,29 @@ def main() -> int:
     # DERS ÖLÇÜSÜ: paydaya ORTALAMA yerine PKA'nın ham 24 ay NOKTA beklentisi
     # konsaydı reel faiz ne kadar şişerdi? Sözel "yaklaşık üç puan" yazmak
     # yasak — fark koşuda hesaplanır.
-    if "spot_2y" in O and "pka_24a" in O and "reel_ileri_2y" in O:
+    if olculdu("spot_2y", "pka_24a", "reel_ileri_2y"):
         nokta = ((1 + O["spot_2y"] / 100) / (1 + O["pka_24a"] / 100) - 1) * 100
         koy("reel_ileri_2y_nokta", nokta, 2)
         koy("reel_ileri_2y_sisme", nokta - O["reel_ileri_2y"], 2)
+    else:
+        O["reel_ileri_2y_nokta"] = OLCULEMEDI
+        O["reel_ileri_2y_sisme"] = OLCULEMEDI
     anlik("reel_ileri_basit", "reel_ileri_basit")
     anlik("fisher_basit_fark", "fisher_basit_fark")
     anlik("reel_makas", "reel_makas")
     # Fisher dersinin cümlesi de sayıdan TÜRETİLİR: yöntem farkının işareti
     # enflasyon seviyesiyle döner, elle yazılmış bir cümle yanlışa düşer.
-    if "fisher_basit_fark" in O and "reel_ileri" in O:
+    if olculdu("fisher_basit_fark", "reel_ileri"):
         f = O["fisher_basit_fark"]
         O["fisher_cumlesi"] = (
             f"Basit çıkarma reel faizi {tr_sayi(abs(f), 2)} puan "
             + ("YÜKSEK" if f > 0 else "DÜŞÜK") + " gösteriyor: "
             f"%{tr_sayi(O.get('reel_ileri_basit'), 2)} yerine Fisher "
             f"%{tr_sayi(O['reel_ileri'], 2)} veriyor.")
+    else:
+        O["fisher_cumlesi"] = (
+            "İki yöntem arasındaki fark bu koşuda ölçülemedi: reel faiz "
+            "ölçülerinden en az biri tolerans içinde dolu bir gün bulamadı.")
 
     # --- TÜFEX reel eğri ve başabaş ---------------------------------------
     for kaynak, hedef in (("r1y", "reel_egri_1y"), ("r2y", "reel_egri_2y"),
@@ -609,7 +643,13 @@ def main() -> int:
     # ölçüdür); geçersiz AOFM'yi manşete koymak okuru yanıltır.
     manset_kol = "carry_2y_aofm" if O.get("aofm_gecerli") else "carry_2y_tlref"
     O["carry_olcusu"] = "AOFM" if O.get("aofm_gecerli") else "TLREF"
-    koy("carry_manset", O.get(manset_kol), 2)
+    # DOLAYLI OKUMA: anahtar adı değişkenden geliyor, yani kapı `olculdu`ya
+    # o değişkenle sorulur. Kapı olmasaydı boş bir manşet bacağı ya koy()'u
+    # düşürürdü ya da cümleye `O.get(..., 0)` üzerinden SAHTE BİR SIFIR
+    # yazardı ("fonlama maliyetinin 0,00 puan üstünde") — ölçülemeyen bir
+    # şeyi ölçülmüş göstermenin en sessiz biçimi.
+    manset_var = olculdu(manset_kol)
+    koy("carry_manset", O.get(manset_kol) if manset_var else OLCULEMEDI, 2)
     car = M[manset_kol].dropna()
     if len(car):
         koy("carry_negatif_gun", int((car < 0).sum()), 0)
@@ -623,17 +663,20 @@ def main() -> int:
     O["carry_cumlesi"] = (
         f"2 yıllık spot getiri fonlama maliyetinin ({O['carry_olcusu']}, "
         "bileşiğe çevrilmiş) "
-        f"{tr_sayi(abs(O.get('carry_manset', 0)), 2)} "
+        f"{tr_sayi(abs(O['carry_manset']), 2)} "
         + ("PUAN ÜSTÜNDE — taşıma pozitif" if O.get("carry_pozitif_mi")
            else "PUAN ALTINDA — taşıma negatif, pozisyon ancak faiz inişi "
-                "beklentisiyle tutulur") + ".")
+                "beklentisiyle tutulur") + "."
+        if manset_var else
+        f"Manşet taşıma ({O['carry_olcusu']}) bu koşuda ölçülemedi: fonlama "
+        "bacağı tolerans içinde dolu bir gün bulamadı.")
     # Politika faizi ile fiilî maliyet arasındaki sistematik fark: iki canlı
     # sayının arasına SABİT üçüncü bir sayı yazmak yasak (sayfa kuralı).
     # AYNI GÜN ŞARTI: AOFM geçersiz rejimde son geçerli güne ait olduğu için
     # iki taşıma farklı günlerden gelebilir; farkı almak o zaman "faiz
     # makası" değil "gün farkı + faiz makası" olur.
     if (O.get("carry_2y_politika_tarih") == O.get("carry_2y_aofm_tarih")
-            and "carry_2y_politika" in O and "carry_2y_aofm" in O):
+            and olculdu("carry_2y_politika", "carry_2y_aofm")):
         koy("spread_politika_aofm",
             O["carry_2y_politika"] - O["carry_2y_aofm"], 2)
     # AYNI GÜN ŞARTI SAYFAYI DA BAĞLAR. Şart düştüğünde anahtar yazılmıyordu ama
@@ -643,8 +686,13 @@ def main() -> int:
     # tarihler ayrışıyor ve şart MEŞRU biçimde düşüyor. Yani kusur kapıda değil,
     # kapının ardında hiçbir şey yazmamasında. Sayı yoksa SEBEBİ yazılıyor;
     # sayfa her koşuda dolan tek bir metin anahtarı çağırıyor.
-    if (O.get("carry_2y_politika_tarih") == O.get("carry_2y_tlref_tarih")
-            and "carry_2y_politika" in O and "carry_2y_tlref" in O):
+    if not olculdu("carry_2y_politika", "carry_2y_tlref"):
+        # SEBEP AYRI YAZILIR: burada tarihler tutuyor olabilir, ölçünün
+        # kendisi yok. "aynı güne ait değil" demek okura yanlış sebep verir.
+        koy("spread_politika_tlref_metin",
+            "iki taşımadan en az biri bu koşuda ölçülemedi; makas hesaplanmadı",
+            None)
+    elif O.get("carry_2y_politika_tarih") == O.get("carry_2y_tlref_tarih"):
         d = O["carry_2y_politika"] - O["carry_2y_tlref"]
         koy("spread_politika_tlref", d, 2)
         koy("spread_politika_tlref_metin",
@@ -659,21 +707,40 @@ def main() -> int:
     # Prose içinde İŞARETSİZ okunan ("… ondan X puan aşağıda") cümleler için
     # MUTLAK değerli anahtar: negatif sayı işaretiyle basılınca cümle çift
     # olumsuzlamaya düşüyordu ("ondan −10,2 puan aşağıda").
-    if "egim_2y9y" in O:
-        koy("egim_2y9y_mutlak", abs(O["egim_2y9y"]), 2)
-    if "egim_2y5y" in O:
-        koy("egim_2y5y_mutlak", abs(O["egim_2y5y"]), 2)
-    O["egim_cumlesi"] = (
-        "Eğri TERS: 2 yıllık getiri 9 yıllıktan "
-        f"{tr_sayi(abs(O.get('egim_2y9y', 0)), 2)} puan yüksek."
-        if O.get("egri_ters_mi") else
-        "Eğri NORMAL (yukarı eğimli): 9 yıllık getiri 2 yıllıktan "
-        f"{tr_sayi(abs(O.get('egim_2y9y', 0)), 2)} puan yüksek.")
-    O["reel_faiz_cumlesi"] = (
-        f"Fisher ileri reel faiz %{tr_sayi(O.get('reel_ileri'), 2)}, geriye "
-        f"dönük %{tr_sayi(O.get('reel_geriye'), 2)}; makas "
-        f"{tr_sayi(O.get('reel_makas'), 2)} puan.")
-    if "risk_primi_5y" in O and "basabas_5y" in O and "pka_ort_5y" in O:
+    for kaynak_ad, hedef_ad in (("egim_2y9y", "egim_2y9y_mutlak"),
+                                ("egim_2y5y", "egim_2y5y_mutlak")):
+        if olculdu(kaynak_ad):
+            koy(hedef_ad, abs(O[kaynak_ad]), 2)
+        else:
+            O[hedef_ad] = OLCULEMEDI
+    if not olculdu("egim_2y9y"):
+        # Sayı yoksa CÜMLE de kurulmaz: "9 yıllıktan — puan yüksek" bir ölçüm
+        # değil, ölçüm kılığında bir boşluktur. Sebep okura yazılır.
+        O["egim_cumlesi"] = (
+            "2 yıl – 9 yıl eğimi bu koşuda ölçülemedi: dokuz yıl düğümünün son "
+            f"dolu günü {O.get('egim_2y9y_tarih', OLCULEMEDI)}, tolerans dışında "
+            "kaldı — bayat bir sayıyla cümle kurulmuyor.")
+    else:
+        O["egim_cumlesi"] = (
+            "Eğri TERS: 2 yıllık getiri 9 yıllıktan "
+            f"{tr_sayi(abs(O['egim_2y9y']), 2)} puan yüksek."
+            if O.get("egri_ters_mi") else
+            "Eğri NORMAL (yukarı eğimli): 9 yıllık getiri 2 yıllıktan "
+            f"{tr_sayi(abs(O['egim_2y9y']), 2)} puan yüksek.")
+    if olculdu("reel_ileri", "reel_geriye", "reel_makas"):
+        O["reel_faiz_cumlesi"] = (
+            f"Fisher ileri reel faiz %{tr_sayi(O['reel_ileri'], 2)}, geriye "
+            f"dönük %{tr_sayi(O['reel_geriye'], 2)}; makas "
+            f"{tr_sayi(O['reel_makas'], 2)} puan.")
+    else:
+        # "%—, geriye dönük %—; makas — puan" ölçüm KILIĞINDA bir boşluktur:
+        # cümlenin biçimi sayı vaat ediyor, içinde sayı yok. Üç bacaktan biri
+        # bile ölçülemediyse cümle kurulmaz, sebebi yazılır.
+        O["reel_faiz_cumlesi"] = (
+            "Fisher reel faiz bu koşuda ölçülemedi: ileri, geriye dönük ve "
+            "makas ölçülerinden en az biri tolerans içinde dolu bir gün "
+            "bulamadı.")
+    if olculdu("risk_primi_5y", "basabas_5y", "pka_ort_5y"):
         # DİKKAT: kıyas ORTALAMAYA çevrilmiş anket beklentisiyledir. PKA'nın
         # ham 5 yıl serisi "5 YIL SONRASININ yıllık" oranıdır, beş yıllık
         # ortalama değildir; onunla kıyaslamak primi şişirirdi.

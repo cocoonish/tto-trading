@@ -405,6 +405,154 @@ sina("figür yüksekliği ay adından bağımsız (144 bileşimde satır sayıs�
      _yukseklik_ay_adindan_bagimsiz)
 
 
+# ---------------------------------------------------------------------------
+# 15.09.2026 — BİR KURAL GENELLEŞTİRİLDİ, TÜKETİCİLERİNE UYGULANMADI.
+# 09.09'da `anlik()` ölçülemeyen anahtarı ATLAMAYI bırakıp boş ("—") yazmaya
+# başladı. O günden sonra `"x" in O` HER ZAMAN doğru döner; türetilmiş
+# anahtarların altı kapısı eski anlamıyla kaldı ve sessizce açıldı. Dokuz yıl
+# düğümü 15.09'da yedi günlük toleransı aşınca `abs("—")` bu dosyayı düşürdü:
+# hattın DÖRDÜNCÜ adımı öldü, hat komple atlandı, panosu dondu ve veri
+# tazeleme yedi koşu boyunca kırmızı bitti (#194–#200). Arızanın görüntüsü
+# sağlığın görüntüsüne benziyordu — commit adımı yeşil, site ayakta, yalnız
+# DİBS panosu bir haftadır 07.09'da.
+# Kural: türetilmiş bir anahtarın kapısı VARLIĞI değil DEĞERİ sorar.
+# ---------------------------------------------------------------------------
+def _anlik_hedefleri(kaynak: str) -> set[str]:
+    """`anlik()`in yazdığı anahtarlar — KAPSAM SÖZLEŞMEDEN türer, elle tutulan
+    bir listeden değil; yarın eklenecek anahtar da kendiliğinden girer."""
+    hedef = set(re.findall(r'anlik\(\s*"[^"]+"\s*,\s*"([^"]+)"', kaynak))
+    for blok in re.finditer(r"for kaynak, hedef in \((.*?)\):\s*\n\s*anlik\(",
+                            kaynak, re.S):
+        hedef |= {m[1] for m in re.findall(r'\(\s*"([^"]+)"\s*,\s*"([^"]+)"\s*\)',
+                                           blok.group(1))}
+    return hedef
+
+
+def _kapi_degeri_sorar():
+    """`"x" in O` bir ÖLÇÜM kapısı olarak kullanılamaz: anlik() anahtarı
+    ölçülemediğinde de yazar, yani kapı tanımı gereği hep açıktır."""
+    kaynak = (BURASI / "ozet_uret.py").read_text(encoding="utf-8")
+    hedef = _anlik_hedefleri(kaynak)
+    assert len(hedef) > 40, f"anlik() hedefleri çözülemedi ({len(hedef)}) — ölçüt kör"
+    kotu = sorted(a for a in hedef
+                  if f'"{a}" in O' in kaynak or f"'{a}' in O" in kaynak)
+    assert not kotu, (
+        f"{len(kotu)} anahtarın kapısı hâlâ VARLIK soruyor: {kotu[:6]} — "
+        "anlik() ölçülemeyeni de yazdığı için bu kapı hep açık; olculdu() kullanın")
+
+
+def _aritmetik_kapi_altinda():
+    """anlik() anahtarının KÖŞELİ PARANTEZLE okunduğu her yer bir olculdu()
+    kapısının altında olmalı. `.get()` ile okunan değer tr_sayi()'ye gider ve
+    dizgeyi güvenle geçirir; köşeli parantezli okuma aritmetiğe gider.
+
+    Ölçüt AĞAÇTAN sorulur, satırdan değil: ilk yazımında satır girintisiyle
+    kurulmuştu ve kuralın kendi ilan ettiği iki hâli göremiyordu — koşulu iki
+    satıra yayılan `if` ile `if not olculdu(...): … else:` tersi. İkisi de
+    doğru kodu KUSUR sayıyordu; yayının önünde duran bir ölçütün yanlış alarmı
+    arızanın kendisidir."""
+    import ast
+    kaynak = (BURASI / "ozet_uret.py").read_text(encoding="utf-8")
+    hedef = _anlik_hedefleri(kaynak)
+    korumasiz: list[tuple[int, str]] = []
+    sayac = [0]
+
+    def kapi(test) -> tuple[bool, bool]:
+        """(gövde korunuyor mu, else korunuyor mu)"""
+        metin = ast.unparse(test)
+        if "olculdu(" not in metin:
+            return False, False
+        ters = metin.startswith("not olculdu(")
+        return (not ters), ters
+
+    def gez(dugum, korunan: bool) -> None:
+        if isinstance(dugum, ast.If):
+            g, e = kapi(dugum.test)
+            for alt in dugum.body:
+                gez(alt, korunan or g)
+            for alt in dugum.orelse:
+                gez(alt, korunan or e)
+            for alt in ast.walk(dugum.test):
+                bak(alt, korunan)
+            return
+        for alt in ast.iter_child_nodes(dugum):
+            gez(alt, korunan)
+        bak(dugum, korunan, tek=True)
+
+    def bak(dugum, korunan: bool, tek: bool = False) -> None:
+        if not isinstance(dugum, ast.Subscript):
+            return
+        if not (isinstance(dugum.value, ast.Name) and dugum.value.id == "O"):
+            return
+        if not isinstance(dugum.ctx, ast.Load):
+            return                                   # yazma, okuma değil
+        if not (isinstance(dugum.slice, ast.Constant)
+                and dugum.slice.value in hedef):
+            return
+        sayac[0] += 1
+        if not korunan:
+            korumasiz.append((dugum.lineno, dugum.slice.value))
+
+    gez(ast.parse(kaynak), False)
+    # TABAN: ölçüt bir gün eşleşmeyi bırakırsa sessizce yeşil geçmesin.
+    assert sayac[0] >= 8, f"köşeli parantezli okuma sayısı {sayac[0]} — ölçüt kör"
+    assert not korumasiz, (
+        f"{len(korumasiz)} yer anlik() anahtarını olculdu() kapısı OLMADAN "
+        f"köşeli parantezle okuyor: {korumasiz[:4]}")
+
+
+def _olculdu_davranisi():
+    """Kapının kendisi: ölçülemeyen değer ölçülmüş sayılmamalı."""
+    import ozet_uret as oz
+    yedek = dict(oz.O)
+    try:
+        oz.O.clear()
+        oz.O.update({"sayi": 1.5, "tam": 3, "bos": oz.OLCULEMEDI,
+                     "yok": None, "bayrak": True, "metin": "16.09.2026"})
+        assert oz.olculdu("sayi") and oz.olculdu("tam")
+        assert oz.olculdu("sayi", "tam")
+        assert not oz.olculdu("bos"), "boş yer tutucu ölçülmüş sayılıyor"
+        assert not oz.olculdu("yok"), "None ölçülmüş sayılıyor"
+        assert not oz.olculdu("metin"), "tarih dizgesi ölçülmüş sayılıyor"
+        assert not oz.olculdu("bayrak"), "True sayı sayılıyor (koy() onu 1 yazar)"
+        assert not oz.olculdu("hic_yok"), "hiç yazılmamış anahtar ölçülmüş sayılıyor"
+        assert not oz.olculdu("sayi", "bos"), "bir bacak boşken kapı açılıyor"
+    finally:
+        oz.O.clear()
+        oz.O.update(yedek)
+
+
+def _turetilen_anahtar_her_dalda():
+    """Sayfanın ADIYLA çağırdığı türetilmiş anahtar, kapı KAPALIYKEN de
+    yazılır — 08.09.2026 kuralı (eksik anahtar yayın kapısında ENGEL)."""
+    kaynak = (BURASI / "ozet_uret.py").read_text(encoding="utf-8")
+    for anahtar in ("reel_ileri_2y_nokta", "reel_ileri_2y_sisme",
+                    "egim_cumlesi", "fisher_cumlesi", "reel_faiz_cumlesi"):
+        assert kaynak.count(anahtar) >= 2, (
+            f"{anahtar} tek yerde geçiyor — kapı kapalıyken yazılmıyor olabilir")
+    # Mutlak eğim anahtarları DÖNGÜDEN üretiliyor (adları kaynakta bir kez
+    # geçer); kapalı dalı döngünün kendisinde sorulur.
+    bas = kaynak.index('("egim_2y9y", "egim_2y9y_mutlak")')
+    dongu = kaynak[bas: kaynak.index('if not olculdu("egim_2y9y")', bas)]
+    assert '"egim_2y5y_mutlak"' in dongu and "O[hedef_ad] = OLCULEMEDI" in dongu, \
+        "mutlak eğim döngüsü kapı kapalıyken anahtarı yazmıyor"
+    # Ölçülemeyen dalda cümle SAYI TAŞIMAZ: "— puan yüksek" ölçüm kılığında
+    # bir boşluktur.
+    bas = kaynak.index('if not olculdu("egim_2y9y"):')
+    dal = kaynak[bas: kaynak.index("    else:", bas)]
+    assert "ölçülemedi" in dal and "tr_sayi" not in dal, \
+        "ölçülemeyen dalda eğim cümlesi hâlâ sayı basıyor"
+
+
+sina("kapı VARLIK değil DEĞER sorar (`in O` ölçüm kapısı değil)", _kapi_degeri_sorar)
+sina("anlık anahtarın aritmetik okunuşu olculdu() kapısı altında",
+     _aritmetik_kapi_altinda)
+sina("olculdu(): boş yer tutucu, None, dizge ve bayrak ölçülmüş sayılmaz",
+     _olculdu_davranisi)
+sina("türetilmiş anahtar kapı kapalıyken de yazılır; cümle sayı taşımaz",
+     _turetilen_anahtar_her_dalda)
+
+
 
 if __name__ == "__main__":
     for im, ad in SONUC:
