@@ -50,6 +50,26 @@ def _duzen(fig, baslik: str, alt: list[str], h: int = 460, y_baslik: str = ""):
     return fig
 
 
+# Sayfanın "—" ile boş bıraktığı ölçülemeyen değer. Ölçüm katmanı `_r()` ile
+# NaN'ı None'a çeviriyor (doğru: ölçülemeyen sayı uydurulmaz), ama etiketi
+# yazan f-string None'ı biçimleyemez ve ÇİZİM ADIMINI düşürür — hat komple
+# atlanır, panosu donar. DİBS'te 15.09.2026'da aynı sınıftan bir kusur veri
+# tazelemeyi yedi koşu boyunca kırmızı bitirdi; orada yer tutucu "—", burada
+# None, sonuç aynı. Beş çağrı yerinde ölçüldü (bir bileşenin katkısı, artık,
+# ayrıştırma tabanı, son çeyreğin yıllık oranı, bir dayanıklılık kalemi).
+OLCULEMEDI = "—"
+
+
+def _sayi(v, ondalik: int = 1, isaretli: bool = False) -> str:
+    """Etiket metni: ölçülemeyen değer "—" basılır, çizim düşmez.
+
+    Biçim ortak/bicim sözleşmesi: ondalık VİRGÜL, eksi U+2212."""
+    if v is None:
+        return OLCULEMEDI
+    m = f"{v:+.{ondalik}f}" if isaretli else f"{v:.{ondalik}f}"
+    return m.replace(".", ",").replace("-", "\u2212")
+
+
 def _yaz(fig, ad: str):
     fig.write_html(CIKTI / ad, include_plotlyjs="cdn", full_html=True,
                    config={"responsive": True, "displaylogo": False})
@@ -67,7 +87,7 @@ def sekil_01(M):
     son = t[-1]
     fig.add_scatter(x=[son["ceyrek"]], y=[son["yillik"]], mode="markers+text",
                     marker=dict(color=CLARET, size=9), showlegend=False,
-                    text=[f"  %{son['yillik']:.1f}".replace(".", ",")],
+                    text=[f"  %{_sayi(son['yillik'], 1)}"],
                     textposition="middle right", textfont=dict(size=12, color=CLARET))
     _duzen(fig, "Büyüme patikası — yıllık ve çeyreklik",
            ["Yıllık oran takvim etkisinden arındırılmış zincirlenmiş hacim "
@@ -89,17 +109,18 @@ def sekil_02(M):
         v = k[kod]
         fig.add_bar(x=[v["ad"]], y=[v["katki"]], name=v["ad"],
                     marker_color=renk.get(kod, INK),
-                    text=[f"{v['katki']:+.2f}".replace(".", ",")],
+                    text=[_sayi(v["katki"], 2, isaretli=True)],
                     textposition="outside", cliponaxis=False)
     fig.add_bar(x=["Stok + zincirleme artığı"], y=[M["artik"]],
                 name="Stok + zincirleme artığı", marker_color=GRID,
                 marker_line=dict(color=INK, width=1),
-                text=[f"{M['artik']:+.2f}".replace(".", ",")],
+                text=[_sayi(M["artik"], 2, isaretli=True)],
                 textposition="outside", cliponaxis=False)
-    fig.add_hline(y=M["ayristirma_tabani"], line=dict(color=INK, width=1.4, dash="dot"),
-                  annotation_text=f"takvim ar. büyüme %{M['ayristirma_tabani']:.1f}".replace(".", ","),
-                  annotation_position="top right",
-                  annotation_font=dict(size=11, color=INK))
+    if M["ayristirma_tabani"] is not None:
+        fig.add_hline(y=M["ayristirma_tabani"], line=dict(color=INK, width=1.4, dash="dot"),
+                      annotation_text=f"takvim ar. büyüme %{_sayi(M['ayristirma_tabani'], 1)}",
+                      annotation_position="top right",
+                      annotation_font=dict(size=11, color=INK))
     _duzen(fig, f"Yıllık büyümeye katkılar — {M['_ceyrek']}",
            ["Katkı = bileşenin bir yıl önceki CARİ fiyatlı GSYH payı × bileşenin "
             "reel yıllık büyümesi. İthalat kimlikte eksi girer.",
@@ -143,7 +164,7 @@ def sekil_04(M):
     pay = [d[k]["pay"] for k in sira if k in d]
     fig = go.Figure()
     fig.add_bar(x=ad, y=buy, marker_color=[CLARET, GOLD, TEAL, INDIGO][:len(ad)],
-                text=[f"%{b:.1f}".replace(".", ",") for b in buy],
+                text=[f"%{_sayi(b, 1)}" for b in buy],
                 textposition="outside", cliponaxis=False, showlegend=False,
                 customdata=pay,
                 hovertemplate="%{x}<br>nominal büyüme %{y:.1f}%"

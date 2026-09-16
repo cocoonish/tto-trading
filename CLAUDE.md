@@ -2327,3 +2327,28 @@ boşsa kusur vardır, ikisi birlikte boşsa yoktur. İlk enjeksiyon dosyanın
 diskten değil hattan yeniden hesaplıyor; arıza ancak ÜRETİCİYE enjekte
 edilince göründü. Bir enjeksiyonun yanlış yere yapılması, ölçütün kör
 olduğuyla birebir aynı görünür.
+
+ÜÇÜNCÜ EŞ BÜYÜME'DE ÇIKTI ve YER TUTUCUSU "—" DEĞİL `None`: ölçüm katmanı
+NaN'ı None'a çeviriyor (doğru — ölçülemeyen sayı uydurulmaz), ama etiketi yazan
+f-string None'ı biçimleyemiyor ve ÇİZİM ADIMI ölüyor; hattın kalan adımları
+atlanır, panosu donar. Aynı sınıf, başka sentinel, aynı sonuç. Kapsam
+SEZİLMEDİ, ÖLÇÜLDÜ: dört figürün her biri tek tek bozuk bir bacakla koşturuldu
+ve BEŞ çağrı yeri düştü (son çeyreğin yıllık oranı · bir bileşenin katkısı ·
+stok+zincirleme artığı · ayrıştırma tabanı · bir dayanıklılık kalemi), ikisi
+düşmedi. "Hepsini boş yap" sledgehammer'ı üç figürü birden düşürüyordu ama
+hangi çağrı yerinin kusurlu olduğunu SÖYLEMİYORDU — bir ölçünün kaç şey
+kırdığını saymak, hangilerinin kırıldığını söylemez.
+
+Etiket yazımı da sözleşmeye çekildi (ondalık virgül, eksi U+2212): kütüphanenin
+varsayılanı bizim sözleşmemiz değil ve hat negatif bir katkıyı ASCII tire ile
+basıyordu. Duman maddesi altı hâli AYRI AYRI soruyor — tek maddeyle sorulsaydı
+ilk düşme kalanları maskelerdi. Altıdan biri (sektör büyümesi) enjeksiyonda
+DÜŞMÜYOR ve düşmemesi doğru: o değer hiçbir yerde biçimlenmiyor. Madde
+listede KAPSAM olarak duruyor ve bunun bir güvence olmadığı ADIYLA yazıldı —
+yarın oraya bir etiket eklendiğinde kendiliğinden kapıya döner.
+
+Bir de kapının KENDİ kusuru tekrar etti: ilk yazımda `sina(..., grafik._sayi(None, 1) == "—")`
+denmişti ve enjeksiyon altında ifade `sina`nın ARGÜMANINDA patlayıp duman.py'yi
+düşürdü, yani ekrandaki teşhis sınamanın kendi kusuru gibi göründü. Aynı kusur
+aynı gün TÜFEX'te ölçülmüştü; kural bir yerde yazılıp öbür yerde
+uygulanmamıştı — bu dosyanın en sık tekrar eden cümlesi.

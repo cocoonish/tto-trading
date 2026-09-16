@@ -41,6 +41,7 @@ Koşum:  python3 duman.py
 """
 from __future__ import annotations
 
+import copy
 import json
 import pathlib
 import re
@@ -345,6 +346,63 @@ def bolum_figur() -> None:
     sina("figürde İngilizce çeyrek kalıbı yok", not ingilizce, str(ingilizce))
     turkce = [ad for ad, t in metinler if not re.search(r"\d{4}-Ç[1-4]", t)]
     sina("her figür dönemini Türkçe etiketle yazıyor", not turkce, str(turkce))
+
+    # ÖLÇÜLEMEYEN BACAK ÇİZİMİ DÜŞÜRMEZ. Ölçüm katmanı `_r()` ile NaN'ı None'a
+    # çeviriyor (doğru: ölçülemeyen sayı uydurulmaz), ama etiketi yazan
+    # f-string None'ı biçimleyemez ve bütün ADIM ölür — hattın kalan adımları
+    # atlanır ve panosu donar. DİBS'te 15.09.2026'da aynı sınıftan bir kusur
+    # veri tazelemeyi yedi koşu boyunca kırmızı bitirdi; orada yer tutucu "—",
+    # burada None, sonuç aynı. Beş çağrı yeri ölçülerek bulundu ve hepsi
+    # burada ayrı ayrı sınanıyor: tek bir maddeyle sorulsaydı ilk düşme
+    # kalanları maskelerdi.
+    bos_haller = (
+        ("son çeyreğin yıllık oranı", grafik.sekil_01,
+         lambda m: m["tarihce"][-1].__setitem__("yillik", None)),
+        ("bir bileşenin katkısı", grafik.sekil_02,
+         lambda m: m["katkilar"][next(iter(m["katkilar"]))].__setitem__("katki", None)),
+        ("stok + zincirleme artığı", grafik.sekil_02,
+         lambda m: m.__setitem__("artik", None)),
+        ("ayrıştırma tabanı", grafik.sekil_02,
+         lambda m: m.__setitem__("ayristirma_tabani", None)),
+        # KAPSAM MADDESİ, KAPI DEĞİL: sekil_03 bu değeri biçimlemiyor (yalnız
+        # `y=` ve `customdata`ya gidiyor, plotly ikisinde de boşluk bırakır),
+        # yani arıza enjeksiyonunda DÜŞMÜYOR ve düşmemesi doğru. Listede
+        # duruyor ki yarın oraya bir etiket eklendiğinde kendiliğinden kapı
+        # olsun; bugün bir güvence verdiği sanılmasın.
+        ("bir sektörün büyümesi", grafik.sekil_03,
+         lambda m: m["sektorler"][next(iter(m["sektorler"]))].__setitem__("buyume", None)),
+        ("bir dayanıklılık kaleminin büyümesi", grafik.sekil_04,
+         lambda m: m["dayaniklilik"][next(iter(m["dayaniklilik"]))]
+                    .__setitem__("nominal_buyume", None)),
+    )
+    eski = grafik.CIKTI
+    with tempfile.TemporaryDirectory() as td:
+        try:
+            grafik.CIKTI = pathlib.Path(td)
+            for ad, fn, boz in bos_haller:
+                m = copy.deepcopy(fikstur())
+                boz(m)
+                try:
+                    fn(m)
+                    sina(f"ölçülemeyen bacak çizimi düşürmüyor: {ad}", True)
+                except Exception as e:                          # noqa: BLE001
+                    sina(f"ölçülemeyen bacak çizimi düşürmüyor: {ad}", False,
+                         f"{type(e).__name__}: {e}")
+        finally:
+            grafik.CIKTI = eski
+    # Etiket ölçülemeyeni "—" ile basar ve biçim sözleşmesini taşır
+    # (ondalık virgül, eksi U+2212) — grafik kütüphanesinin varsayılanı değil.
+    # İFADE `sina`NIN ARGÜMANINDA DURMAZ: orada patlayan bir istisna ölçütün
+    # içinde kalmaz, duman.py'yi düşürür ve ekrandaki teşhis sınamanın kendi
+    # kusuru gibi görünür. Aynı kusur TÜFEX'te 16.09.2026'da ölçüldü.
+    try:
+        bos_etiket = grafik._sayi(None, 1)
+    except Exception as e:                                      # noqa: BLE001
+        bos_etiket = f"<{type(e).__name__}>"
+    sina("ölçülemeyen etiket boş basılır", bos_etiket == "—", repr(bos_etiket))
+    eksi, duz = grafik._sayi(-0.34, 2, isaretli=True), grafik._sayi(19.73, 1)
+    sina("etiket ondalık virgül ve U+2212 eksi yazıyor",
+         eksi == "\u22120,34" and duz == "19,7", f"{eksi!r} · {duz!r}")
 
 
 def bolum_yapi() -> None:
