@@ -2352,3 +2352,28 @@ denmişti ve enjeksiyon altında ifade `sina`nın ARGÜMANINDA patlayıp duman.p
 düşürdü, yani ekrandaki teşhis sınamanın kendi kusuru gibi göründü. Aynı kusur
 aynı gün TÜFEX'te ölçülmüştü; kural bir yerde yazılıp öbür yerde
 uygulanmamıştı — bu dosyanın en sık tekrar eden cümlesi.
+
+TARAMANIN BIRAKTIĞI İKİ İZ DE ÖLÇÜLDÜ, İKİSİ DE BUGÜN CANLI DEĞİL — ve
+ölçülmeselerdi ikisi de düzeltilecekti.
+
+(1) Enflasyon Şekil'inde kapısız bir `f"{v:.3f}"` etiketi. Aynı kalıp, ama
+ÜRETİCİ oraya None yazmıyor: `mae` `round(float(...), 3)` ile kuruluyor, en
+kötü hâli `nan` — bir FLOAT, yani biçimlenir, çökme üretmez. Kusur sınıfı
+farklı: çökme değil, okura ölçüm gibi görünen "nan". Yayılma tek tek çağrı
+yeri okunarak değil ÇIKTIDAN ölçüldü — sitedeki 177 gömülü figürün etiket ve
+açıklama metinleri tarandı, `nan`·`None`·`undefined` sızıntısı SIFIR. Bir
+biçim kusurunun yayılmasını sormanın en ucuz yolu, okurun gördüğü dosyaya
+bakmaktır.
+
+(2) Büyüme ölçüm katmanındaki ASİMETRİ: dayanıklılık döngüsü ölçülemeyen
+bacak için anahtarı yer tutucuyla yazıyor, on iki satır yukarıdaki katkı
+döngüsü `continue` ile HİÇ yazmıyor. İkisi de savunulabilir, ama hangisinin
+sözleşme olduğu yazılı değil ve 08.09 kuralı ("sayfanın çağırdığı anahtar
+her koşuda yazılır") yer tutucudan yana — yani uyumsuz olan KATKI döngüsü.
+Bedeli ölçüldü ve BUGÜN SIFIR: Büyüme'nin PANOSU YOK (`site/src/content/
+projeler/` altında dosyası yok), tek tüketicisi 08.09 kararıyla DONDURULMUŞ
+bir analiz yazısı — orada eksik anahtar yayını durdurmaz, bilgi satırıdır —
+ve bültenin izlemi yalnız `buyume_yillik` ile `buyume_ceyreklik`i sorar,
+ikisi de o döngünün dışında. AÇIK KALAN ve kullanıcıya SORULACAK: hangi
+davranışın sözleşme olduğu bir KARARDIR, mekanik bir düzeltme değil; bir
+gün Büyüme'ye pano açılırsa bu iz sessiz bir yayın engeline döner.
