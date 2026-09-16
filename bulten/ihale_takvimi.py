@@ -9,9 +9,24 @@ içine gömülseydi kalıbın hassasiyeti ancak tam bir bülten kurarak ölçül
 KAYNAK CANLI PLAN DEĞİL, YÜRÜRLÜKTEKİ STRATEJİ. `hazine_planlanan_ihaleler.csv`
 yalnız bugünden İLERİYİ tutar; oysa iddia dünle de ilgili olabilir ("dün yapılan
 ihalenin sonuçları henüz düşmedi"). Strateji üç ayı kapsar ve arşivde
-sürümleriyle durur (`takvim_arsiv/<tarih>_<ad>.csv`). Pencerenin İÇİNDE bir gün
-için kayıt yoksa o gün ihale YOKTUR — hüküm kesindir. Pencerenin DIŞINDA depo
-bir şey bilmez ve ölçüt susar.
+sürümleriyle durur (`takvim_arsiv/<tarih>_<ad>.csv`); PENCERE oradan gelir.
+Pencerenin DIŞINDA depo bir şey bilmez ve ölçüt susar.
+
+AMA PENCERENİN İÇİNDE HAKEM PLAN DEĞİL GERÇEKLEŞMEDİR. "Kayıt yoksa o gün ihale
+YOKTUR" hükmü bir PLANA dayandırılamaz, çünkü plan iki yönde birden kayar ve
+ikisi de ölçüldü (16.09.2026). İleri yönde: arşivlenen dosya canlı planın
+kopyasıdır ve yapılmış ihaleyi düşürür — aynı Eylül–Kasım stratejisi 13.09'da
+iki eylül günü, 14.09'da bir gün, 15.09'da hiçbiri ile arşivlendi, yani bugünün
+planına sorulunca gerçekleşmiş her ihale "olmayan ihale" çıkar. Geri yönde: 17
+ve 18 Ağustos ihaleleri gerçekten yapıldı ama en eski arşiv sürümünde (05.08) o
+günler hiç YOK — Hazine plandan sapabilir. İkinci kusur, "iddia gününden önceki
+sürüme sor" düzeltmesini de çürüttü: tarihçede 23–30 Ağustos'un altı sayısı
+birden yanlış pozitif verdi.
+
+Bu yüzden kural ÜÇ HÂLLİ ve gerçekleşme tablosunu hakem alır: gerçekleşmiş bir
+gün TEMİZDİR (plan ne derse desin), gerçekleşmemiş ve GEÇMİŞ bir gün ÇELİŞKİDİR,
+gerçekleşmemiş ve İLERİDEKİ bir gün plana sorulur — henüz olmamış bir ihalenin
+tek kaynağı odur. Tablo okunamazsa hüküm plana kalır.
 
 HASSASİYET ÖLÇÜLEREK KURULDU. İlk yazımda çıpa "aynı cümledeki her tarih"ti ve
 13 sayıda 49 bulgu verdi; çoğu aynı cümlede geçen alakasız bir yayımdı
@@ -56,6 +71,7 @@ SUTUN = "İhale Tarihi"
 # için 16.09 sabahı veri hiç tazelenmedi. Aynı sınıfın bir eşi 14.09'da
 # ölçülmüştü: canlı bir dosyada yalnız KAYMAYAN nitelik sorulur.
 OZET = KOK / "site" / "public" / "projeler" / "hazine-ihrac" / "ozet.json"
+TABLOLAR = KOK / "site" / "public" / "projeler" / "hazine-ihrac" / "tablolar.json"
 
 AY = {"ocak": 1, "şubat": 2, "mart": 3, "nisan": 4, "mayıs": 5, "haziran": 6,
       "temmuz": 7, "ağustos": 8, "eylül": 9, "ekim": 10, "kasım": 11, "aralık": 12}
@@ -168,6 +184,24 @@ def pencere_ilani() -> tuple[dt.date, dt.date] | None:
     return pencere_adi(str(d.get("plan_strateji") or ""))
 
 
+def gerceklesen() -> set[dt.date] | None:
+    """Gerçekleşmiş ihale günleri — hattın ihale tablosundan.
+
+    Plan kayar, gerçekleşme kaymaz: bir gün bu kümedeyse o gün ihale YAPILMIŞTIR
+    ve hiçbir plan sürümü bunun aksini söyleyemez. Döner `None`: tablo okunamadı
+    (hüküm plana kalır)."""
+    import json
+    try:
+        d = json.loads(TABLOLAR.read_text(encoding="utf-8"))
+        t = (d.get("tablolar") or {}).get("ihaleler") or {}
+        kol = t["sutunlar"].index(SUTUN)
+    except (OSError, ValueError, KeyError, AttributeError, TypeError):
+        return None
+    gunler = {g for g in (_tarihe(str(s[kol])) for s in t.get("satirlar") or []
+                          if len(s) > kol) if g}
+    return gunler or None
+
+
 def iddialar(b: dict) -> list[dict]:
     """Bültenin düzyazısındaki tarih bağlı ihale iddiaları."""
     try:
@@ -225,6 +259,37 @@ def celiskiler(b: dict, simdi: dt.date | None = None) -> list[dict] | None:
     # düzelten kayıt bu iddiayı kapatmaz.
     duzeltilen = [str(d.get("alan") or "") for d in (b.get("duzeltmeler") or [])
                   if isinstance(d, dict)]
-    return [x for x in iddialar(b)
-            if bas <= x["gun"] <= son and x["gun"] not in gunler
-            and not any(x["etiket"] in a for a in duzeltilen)]
+
+    # GEÇMİŞİN HAKEMİ PLAN DEĞİL GERÇEKLEŞMEDİR.
+    #
+    # Strateji belgesi bir PLANDIR ve iki yönde birden kayar. (1) Arşivlenen
+    # dosya canlı planın kopyasıdır ve YAPILMIŞ ihaleyi düşürür: aynı
+    # Eylül–Kasım stratejisi 13.09'da iki eylül günü (14 · 15), 14.09'da bir gün
+    # (15), 15.09'da HİÇBİRİ ile arşivlendi. Bugünün planına sorulunca
+    # gerçekleşmiş her ihale "olmayan ihale" çıkar — 16.09.2026'da tam bu oldu
+    # ve 15 Eylül'ün iki yeniden ihracını anlatan MEŞRU bir paragraf yayını
+    # durdurdu. (2) Plan geriye doğru da eksiktir: 17 ve 18 Ağustos ihaleleri
+    # gerçekten yapıldı ama en eski arşiv sürümünde (05.08) o günler YOK, yani
+    # "iddia gününden önceki sürüme sor" kuralı da yanlış alarm üretiyor —
+    # ölçüldü, tarihçede 23–30 Ağustos'un altı sayısı birden kusurlu çıktı.
+    # Hazine plandan sapabilir; plan, olmuş bir ihalenin kanıtı değildir.
+    #
+    # Gerçekleşme tablosu ise kesin bilgidir ve hattın kendi çıktısında duruyor.
+    # Kural üç hâlli: gerçekleşmiş bir gün TEMİZDİR (plan ne derse desin);
+    # gerçekleşmemiş ve GEÇMİŞ bir gün ÇELİŞKİDİR; gerçekleşmemiş ve İLERİDEKİ
+    # bir gün plana sorulur, çünkü henüz olmamış bir ihalenin tek kaynağı odur.
+    # Tablo okunamazsa hüküm plana kalır — bilinen davranış, sessiz körlük değil.
+    olan = gerceklesen()
+    bul = []
+    for x in iddialar(b):
+        if not (bas <= x["gun"] <= son):
+            continue
+        if any(x["etiket"] in a for a in duzeltilen):
+            continue
+        if olan is not None and x["gun"] in olan:
+            continue                      # gerçekten yapılmış: hüküm yok
+        if olan is not None and x["gun"] <= bugun:
+            bul.append(x)                 # geçmiş gün, gerçekleşme yok
+        elif x["gun"] not in gunler:
+            bul.append(x)                 # ileriki gün, planda da yok
+    return bul

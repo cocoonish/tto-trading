@@ -1561,9 +1561,8 @@ def main() -> int:
         # (3) HASSASİYET. İlk yazımda çıpa "aynı cümledeki her tarih"ti ve
         # 13 sayıda 49 bulgu verdi; çoğu aynı cümledeki alakasız bir yayımdı.
         # Çıpa, iddianın EN YAKIN tarihi olmak zorunda.
-        def celis(metin, tarih="2026-09-08"):
-            return itk.celiskiler({"tarih": tarih, "gundem": {"x": metin}},
-                                  dt.date(2026, 9, 8))
+        def celis(metin, tarih="2026-09-08", simdi=dt.date(2026, 9, 8)):
+            return itk.celiskiler({"tarih": tarih, "gundem": {"x": metin}}, simdi)
 
         assert celis("Dün yapılan sekiz ay vadeli hazine bonosu ihalesinin "
                      "sonuçları henüz düşmedi."), "gerçek kusur yakalanmıyor"
@@ -1591,6 +1590,39 @@ def main() -> int:
         # (4) PENCERE DIŞINDA HÜKÜM YOK: depo o dönemi bilmiyor, ölçüt susar.
         assert not celis("18 Ağustos'ta Hazine tahvil ihalesi yapmıştı."), \
             "stratejinin kapsamadığı dönem için hüküm veriliyor"
+
+        # (4b) HAKEM GEÇMİŞTE PLAN DEĞİL GERÇEKLEŞMEDİR. Plan iki yönde birden
+        # kayıyor ve ikisi de 16.09.2026'da ölçüldü: arşivlenen dosya YAPILMIŞ
+        # ihaleyi düşürüyor (15.09 sürümünde eylül günü kalmadı) ve en eski
+        # sürüm bile 17–18 Ağustos'u hiç taşımıyor. Kural üç hâlli olmasaydı
+        # gerçekleşmiş her ihale "olmayan ihale" sayılır, meşru bir paragraf
+        # yayını durdururdu — o gün tam bu oldu.
+        # Çerçeve 16.09 OLMAK ZORUNDA: 08.09 sürümünde bu iki gün planda hâlâ
+        # kayıtlı, yani arıza o çerçevede HİÇ ÜRETİLMEZ ve ölçüt kör geçer
+        # (ölçüldü — enjeksiyon 08.09 fikstüründe yakalanmadı). Kusur ancak
+        # ihaleler yapılıp plandan düştükten sonra görünür.
+        _16 = dict(tarih="2026-09-16", simdi=dt.date(2026, 9, 16))
+        assert not celis("15 Eylül'de Hazine sekiz yıl vadeli tahvili yeniden "
+                         "ihraç etti.", **_16), \
+            "GERÇEKLEŞMİŞ ihale çelişki sayılıyor — hakem plana bakıyor"
+        assert not celis("14 Eylül'de Hazine iki yıllık tahvil ihalesi "
+                         "düzenledi.", **_16), \
+            "GERÇEKLEŞMİŞ ihale çelişki sayılıyor (14.09)"
+        # Aynı çerçevede gerçek kusur GÖRÜNMEYE devam etmeli.
+        assert celis("7 Eylül'de Hazine bono ihalesi yaptı.", **_16), \
+            "16.09 çerçevesinde gerçek kusur (07.09) kayboldu"
+        assert itk.gerceklesen(), "gerçekleşme tablosu okunamıyor — ölçüt kör"
+        assert dt.date(2026, 9, 15) in itk.gerceklesen(), \
+            "15.09 ihalesi gerçekleşme tablosunda yok — fikstür bozuk"
+        assert dt.date(2026, 9, 7) not in itk.gerceklesen(), \
+            "kaldırılmış 07.09 ihalesi gerçekleşmiş görünüyor"
+        # İLERİDEKİ bir gün hâlâ PLANA sorulur: henüz olmamış bir ihalenin tek
+        # kaynağı odur, yoksa ölçüt geleceğe dair hiçbir kusur göremez.
+        assert not celis("5 Ekim'de Hazine iki yıllık tahvil ihalesi düzenleyecek."), \
+            "planda KAYITLI ilerideki ihale çelişki sayılıyor"
+        assert [x["etiket"] for x in
+                celis("20 Ekim'de Hazine bono ihalesi düzenleyecek.")] == ["20 Ekim"], \
+            "planda OLMAYAN ilerideki ihale yakalanmıyor"
 
         # (5) STRATEJİ OKUNAMAZSA None — denetim uyarır, ENGEL üretmez.
         gercek = itk.ARSIV
