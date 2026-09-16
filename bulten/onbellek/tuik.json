@@ -1,19 +1,6 @@
 {
- "zaman": "2026-09-15T04:30:58",
+ "zaman": "2026-09-16T04:29:27",
  "veri": [
-  {
-   "tarih": "2026-09-15",
-   "saat": "11:00",
-   "ulke": "TR",
-   "olay": "HMB: Bütçe dengesi (Ağustos 2026)",
-   "onem": 1,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "Merkezi Yönetim Bütçe Denge Tablosu"
-  },
   {
    "tarih": "2026-09-17",
    "saat": "14:30",
