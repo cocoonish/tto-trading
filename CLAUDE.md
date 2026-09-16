@@ -2229,6 +2229,31 @@ birine bakmak beşine bakmakla ÖZDEŞ. Ama aynı çürütme, aranan boşluğun
 gerçekte nerede olduğunu gösterdi: mutlak kipteki koşulsuz `true`. İkna edici
 bir teşhis sınanmamış bir teşhistir; sınanınca yerini daha iyisine bırakır.
 
+BİR DOĞRULAMA TURU, ÖLÇTÜĞÜ AĞAÇ DEĞİŞİRKEN KOŞTURULAMAZ. Ölçüm iş akışı
+2 saat 18 dakika sürdü (86 ajan); düzeltmeler o sürenin ortasında dosyalara
+indi. Sonuç: 80 doğrulamanın 49'u "ÇÜRÜTÜLDÜ" dedi ve gerekçelerinde
+"kaynağın bugünkü hâlinde birebir TERSİ", "KODDA ZATEN YAPILMIŞ" yazıyordu.
+Yani o 49'un çoğu bulguyu çürütmüyor, DÜZELTİLMİŞ OLDUĞUNU doğruluyor —
+ikisi bir rapor tablosunda birbirine tıpatıp benzer ve ayıran tek şey
+okuyucunun dosyayı NE ZAMAN açtığıdır. Kural: uzun bir doğrulama turu
+koşarken kaynak DONDURULUR (ya da doğrulayıcı bir kopyaya/commit'e
+bağlanır); aksi hâlde tur, kendi düzeltmesini ölçer. Bu oturumda hüküm
+ajanların sayımından değil, kendi bağımsız okumamdan kuruldu; yoksa
+düzeltilmiş kusurlar "yanlış bulgu" diye kayda geçecekti.
+
+AÇIK KALAN, ÖLÇÜLDÜ VE KARAR İSTİYOR — BERABERLİK. Bir bar aynı anda geçerli
+bir boğa ve geçerli bir ayı dönüş barıysa ve kaliteleri EŞİTSE, Pine boğa
+paketini basıyor (`kaliteBoga >= kaliteAyi`), backtest ise işlem AÇMIYOR
+(`if len(aday) == 2 and aday[0]["kalite"] == aday[1]["kalite"]: return None,
+True`). Ölçüldü: 1 sa/4 sa/günlük sette 7.973 emirde 171 kez (%2,1),
+5 dakikalık sette 225.795 emirde 5.893 kez (%2,6); tamamı yön ve always-in
+süzgeci KAPALI satırlarda toplanıyor, çünkü süzgeç açıkken iki aday aynı
+anda uygun olamaz. Ders bu hâl için bir şey söylemiyor: backtest'in tercihi
+(işlem yok) tutucu, Pine'ınki (boğa) keyfî. Hangisinin doğru olduğu ÖLÇÜM
+değil EDİTORYAL bir karardır ve kullanıcıya sorulmadan kapatılmadı —
+kapatılırsa ya yayımlanmış backtest sayıları ya indikatörün davranışı
+değişir.
+
 AÇIK KALAN, adıyla: Pine hiç DERLENMEDİ (sekiz statik ölçüt, derleyici yok);
 yfinance üretim tazeleme işinde kurulu değil, yalnız keşifte; 5 dk örneklemi
 tek bir yaz dönemi ve 59 gün; 1 sa+ göreli satırlarda N 16–23; bant kenarı ve
