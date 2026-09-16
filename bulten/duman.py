@@ -19,6 +19,7 @@ Bir TANI aracı DEĞİLDİR: üretim kod yollarını sınar, düşerse iş akı�
 from __future__ import annotations
 
 import datetime as dt
+import inspect
 import json
 import re
 import sys
@@ -1511,6 +1512,42 @@ def main() -> int:
         if ilan:
             assert (bas, son) == ilan, \
                 f"pencere dosya adından {bas}–{son}, hattın ilanından {ilan}"
+
+        # (1b) İLAN KAYMAYAN NİTELİKTEN OKUNMALI. `plan_ay*_ad` ileride kalan
+        # ayları sayar ve takvim ilerledikçe daralır; oradan kurulan bir ilan
+        # çeyreğin ortasında kendiliğinden ayrışır ve bu kapı adımlardan önce
+        # koştuğu için veriyi hiç tazelemeden düşürür (16.09.2026'da oldu).
+        # Sentetik çerçeve: girdi ve beklenti BİRLİKTE donmuş.
+        assert itk.pencere_adi("Eylül – Kasım 2026 İç Borçlanma Stratejisi") \
+            == (dt.date(2026, 9, 1), dt.date(2026, 11, 30)), \
+            "belge başlığından pencere çözülemiyor"
+
+        import tempfile
+        _asil = itk.OZET
+        try:
+            with tempfile.TemporaryDirectory() as _d:
+                _y = Path(_d) / "ozet.json"
+                itk.OZET = _y
+                # Eylül'ün son ihalesi geçmiş: canlı plan İKİ aya düşmüş,
+                # belge hâlâ Eylül–Kasım stratejisi. İlan belgeyi izlemeli.
+                _y.write_text(json.dumps({
+                    "plan_strateji": "Eylül – Kasım 2026 İç Borçlanma Stratejisi",
+                    "plan_ay_adet": 2,
+                    "plan_ay1_ad": "Ekim 2026", "plan_ay2_ad": "Kasım 2026",
+                }, ensure_ascii=False), encoding="utf-8")
+                assert itk.pencere_ilani() == (dt.date(2026, 9, 1), dt.date(2026, 11, 30)), \
+                    ("ilan canlı planın ay listesinden kuruluyor — takvim "
+                     "ilerledikçe dosya adından ayrışır ve kapı veriyi "
+                     "tazelemeden düşürür")
+                # Belge değişirse ilan da değişmeli — ölçüt sabite bağlı değil.
+                _y.write_text(json.dumps({
+                    "plan_strateji": "Ekim – Aralık 2026 İç Borçlanma Stratejisi",
+                    "plan_ay1_ad": "Ekim 2026",
+                }, ensure_ascii=False), encoding="utf-8")
+                assert itk.pencere_ilani() == (dt.date(2026, 10, 1), dt.date(2026, 12, 31)), \
+                    "yeni belge yürürlüğe girdiğinde ilan onu izlemiyor"
+        finally:
+            itk.OZET = _asil
         assert bas <= dt.date(2026, 9, 7) <= son, \
             "07.09 stratejinin penceresinde değil — hüküm verilemez"
         assert dt.date(2026, 9, 7) not in gunler and dt.date(2026, 9, 8) not in gunler, \
@@ -1611,7 +1648,6 @@ def main() -> int:
         # (8) ÖLÇÜNÜN TÜKETİCİSİ VAR MI. Ölçüt yazılıp `kos()` listesine
         # konmazsa hiç koşmaz ve bugünkü gibi bir kusur yine yayına gider —
         # bu depoda bir kez daha ölçülmüş bir kusur sınıfı.
-        import inspect
         kaynak = inspect.getsource(denetim.Denetim.kos)
         assert "self.ihale_iddiasi()" in kaynak, \
             "ihale_iddiasi ölçütü denetim.kos() listesinde YOK — hiç koşmuyor"

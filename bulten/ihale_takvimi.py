@@ -42,10 +42,19 @@ SUTUN = "İhale Tarihi"
 # başlıyordu, yani asıl sorulacak gün (07.09) pencerenin dışında kalıyordu.
 # Ölçüt hüküm veremeden susardı.
 #
-# Doğru kaynak hattın KENDİ İLANI: `ozet.json`daki `plan_ay1_ad` … `plan_ay3_ad`
-# ("Eylül 2026" · "Ekim 2026" · "Kasım 2026") belgenin kapsadığı ayları
+# Doğru kaynak hattın KENDİ İLANI: `ozet.json`daki `plan_strateji` — belgenin
+# BAŞLIĞI ("Eylül – Kasım 2026 İç Borçlanma Stratejisi"), kapsadığı dönemi
 # yılıyla birlikte yazar ve ayrıştırma belirsizlik taşımaz (yıl atlayan bir
 # strateji de doğru okunur).
+#
+# İLAN KAYMAYAN NİTELİKTEN OKUNUR. İlk yazımda çapraz sınama `plan_ay1_ad` …
+# `plan_ay3_ad`dan kuruluyordu ve o alanlar belgenin kapsadığı ayları DEĞİL,
+# canlı planda İLERİDE KALAN ayları sayar — `ozet_uret.py` bunu adıyla yazıyor
+# ("takvimdeki ay sayısı DEĞİŞKEN"). 15.09.2026'da Eylül'ün son ihalesi geçince
+# canlı plan Ekim–Kasım'a düştü, ilan 01.10'da başladı, dosya adı 01.09'da
+# başlamaya devam etti ve duman sınaması DÜŞTÜ — kapı adımlardan önce koştuğu
+# için 16.09 sabahı veri hiç tazelenmedi. Aynı sınıfın bir eşi 14.09'da
+# ölçülmüştü: canlı bir dosyada yalnız KAYMAYAN nitelik sorulur.
 OZET = KOK / "site" / "public" / "projeler" / "hazine-ihrac" / "ozet.json"
 
 AY = {"ocak": 1, "şubat": 2, "mart": 3, "nisan": 4, "mayıs": 5, "haziran": 6,
@@ -144,23 +153,19 @@ def pencere_adi(ad: str) -> tuple[dt.date, dt.date] | None:
 
 
 def pencere_ilani() -> tuple[dt.date, dt.date] | None:
-    """Hattın `ozet.json`daki ilanı (`plan_ay*_ad`) — ÇAPRAZ SINAMA için.
+    """Hattın `ozet.json`daki ilanı (`plan_strateji`) — ÇAPRAZ SINAMA için.
 
-    Dosya adından türetilen pencereyle tutmalı; tutmuyorsa ikisinden biri
-    yanlış ayrıştırıyor demektir ve bunu duman sınaması sorar."""
+    Belge başlığı ile arşiv dosyasının adı hattın İKİ ayrı yerinden gelir ve
+    aynı dönemi söylemek zorundadır; tutmuyorsa biri yanlış ayrıştırıyor
+    demektir ve bunu duman sınaması sorar. Ay listesi (`plan_ay*_ad`) bu
+    soruya CEVAP VEREMEZ: o alanlar ileride kalan ayları sayar ve takvim
+    ilerledikçe daralır (bkz. modül başlığı)."""
     import json
     try:
         d = json.loads(OZET.read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return None
-    aylar = []
-    for i in (1, 2, 3):
-        parca = str(d.get(f"plan_ay{i}_ad") or "").strip().split()
-        if len(parca) == 2 and parca[0].lower() in AY and parca[1].isdigit():
-            aylar.append(dt.date(int(parca[1]), AY[parca[0].lower()], 1))
-    if not aylar:
-        return None
-    return min(aylar), _ay_ekle(max(aylar), 1) - dt.timedelta(days=1)
+    return pencere_adi(str(d.get("plan_strateji") or ""))
 
 
 def iddialar(b: dict) -> list[dict]:
