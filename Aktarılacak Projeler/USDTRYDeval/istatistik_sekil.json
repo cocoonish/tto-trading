@@ -3,11 +3,11 @@
   "usdtry_deval.html": null,
   "usdtry_deval_3m.html": null,
   "usdtry_deval_6m.html": null,
-  "usdtry_deval_seg.html": "15.09.2026"
+  "usdtry_deval_seg.html": "16.09.2026"
  },
- "damga_usdtry_deval": "kur ve TLREF 15.09.2026 · banka faizi 04.09.2026",
- "damga_usdtry_deval_3m": "kur ve TLREF 15.09.2026 · banka faizi 04.09.2026",
- "damga_usdtry_deval_6m": "kur ve TLREF 15.09.2026 · banka faizi 04.09.2026",
+ "damga_usdtry_deval": "kur 16.09.2026 · TLREF 15.09.2026 · banka faizi 04.09.2026",
+ "damga_usdtry_deval_3m": "kur 16.09.2026 · TLREF 15.09.2026 · banka faizi 04.09.2026",
+ "damga_usdtry_deval_6m": "kur 16.09.2026 · TLREF 15.09.2026 · banka faizi 04.09.2026",
  "tlref_tarih": "15.09.2026",
  "faiz_hafta_tarih": "04.09.2026"
 }
