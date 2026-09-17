@@ -2437,3 +2437,22 @@ ileri tarihle 465 ms — yayın kapısına eklemek bedava; ama bomba HAT kapıs�
 Haftalık zamanlanmış bir tarama bu bombayı 29 gün önceden yakalardı; yeni bir
 iş akışı ve yeni bir bağımlılık (`freezegun`) demek, o yüzden tek taraflı
 kurulmadı.
+
+YPMEVDUAT "BOMBASI" ÇÜRÜTÜLDÜ ve çürütmesi harness'ın kör noktasını buldu.
+Tarama YPMevduat'ı YARIN patlayacak diye işaretledi; düşen madde önbellek
+tazeliğiydi ("eski taze False · yeni taze False"). Ölçüldü: `tazelik.taze`
+dosyanın MTIME'ını `datetime.now()` ile kıyaslıyor; freezegun saati ileri
+alıyor ama dosyayı yazan OS saati GERÇEK. Yani ŞİMDİ yazılan bir fikstür
+dosyası +1 günlük sahte saatte 16 saatlik görünüyor ve 12 saatlik TTL'i
+aşıyor. Kusur depoda değil ÖLÇÜMDE. Kör nokta iki yönlü ve tehlikeli yarısı
+ikincisi: o gürültünün arkasında GERÇEK bir bomba da saklanabilirdi. Koşucu
+dosya saatini de kaydıracak biçimde onarıldı (`os.stat` sarmalanıp mtime aynı
+farkla ötelenir), önce bilinen gerçek arızaya karşı yeniden doğrulandı
+(16.09 geçer · 17.09 düşer), sonra YPMevduat beş ileri tarihte 341/0 çıktı —
+arkasında bir şey yokmuş. İkna edici bir teşhis sınanmamış bir teşhistir;
+burada teşhis ölçümün KENDİSİNİ suçlayarak doğrulandı.
+
+Üç kapının "bugün de düşüyor" görüntüsü de ölçüm kusuruydu: Enflasyon yerelde
+`ortak/` PYTHONPATH'te olmadığı için hiç koşamıyor (üretimde kurulu),
+Makroihtiyati (41/0) ve bülten (72/0) doğrudan koşturulunca geçiyor. Bir kapı
+"düştü" dediğinde önce KOŞUP koşmadığı sorulur.
