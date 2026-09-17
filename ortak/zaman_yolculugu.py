@@ -82,8 +82,14 @@ def baslat() -> bool:
     except Exception:                       # noqa: BLE001
         pd = None
 
+    # tick=True ŞART: freezegun varsayılanda saati DONDURUR, ilerletmez —
+    # `time.sleep(0.05)` sonrası geçen süre 0,0000 sn çıkar. O hâlde SÜRE ÖLÇEN
+    # her madde yanlış düşer: bülten kapısının devre kesici ve "asılan adımı
+    # duvar saatiyle kes" maddeleri böyle düştü ve araç onu BOMBA diye
+    # raporladı (17.09.2026, aracın ilk koşusu). Biz saati KAYDIRMAK
+    # istiyoruz, DURDURMAK değil.
     from freezegun import freeze_time
-    freeze_time(hedef).start()
+    freeze_time(hedef, tick=True).start()
 
     if pd is not None:                      # (2) pandas'ın kendi saati
         _T = pd.Timestamp

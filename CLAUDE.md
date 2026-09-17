@@ -2502,3 +2502,17 @@ yapıyordu ve hattın duman sınaması KENDİ KLASÖRÜNDEN hiç koşturulamıyo
 (üretimde PYTHONPATH'te olduğu için görünmüyordu). Elle koşturulamayan bir
 kapı, kimsenin koşturmadığı kapıdır; deponun kendi kalıbı (YPMevduat'ın
 `_bicim` yardımcısı) uygulandı.
+
+VE ARAÇ İLK KOŞUSUNDA KENDİ YANLIŞ ALARMINI ÜRETTİ — altıncı ölçüm kusuru,
+en öğreticisi. `bulten/duman.py` "yarın patlıyor" diye raporlandı; kapı sahte
+saatle BUGÜN de aynı iki maddeyle düşüyordu, yani tarih bombası olamazdı.
+Sebep: freezegun varsayılanda saati DONDURUR, ilerletmez (`time.sleep(0.05)`
+sonrası geçen süre 0,0000 sn) ve düşen iki madde SÜRE ÖLÇÜYOR — devre kesici
+ile "asılan adımı duvar saatiyle kes". Biz saati KAYDIRMAK istiyoruz,
+DURDURMAK değil; `tick=True` kondu. Kural aracın kendisine de uygulandı
+("yayının önünde duran denetimin yanlış alarmı arızanın kendisidir"): haftalık
+bir alarmın yanlış pozitifi kaçırdığı bombadan ucuz değildir — iki kez boş
+öterse üçüncüde kimse bakmaz. `kendini_sina()` artık saatin gerçekten
+İŞLEDİĞİNİ de sınıyor ve arıza enjeksiyonuyla doğrulandı: tick geri
+kaldırılınca araç çıkış 2 ile düşüp bütün "temiz" hükümlerini geçersiz ilan
+ediyor.

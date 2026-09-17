@@ -99,7 +99,20 @@ def kendini_sina() -> bool:
             encoding="utf-8")
         taban = _kos(p, None)
         ileri = _kos(p, (dt.date.today() + dt.timedelta(days=30)).isoformat())
-        return taban == 0 and ileri == 1
+        if not (taban == 0 and ileri == 1):
+            return False
+
+        # SAAT DURMAMALI, KAYMALI. freezegun varsayılanda donduruyor ve o hâlde
+        # SÜRE ÖLÇEN her madde yanlış düşer — bu araç ilk koşusunda bülten
+        # kapısını tam bu yüzden BOMBA diye raporladı. Yanlış alarm, kaçırılan
+        # bombadan ucuz değil: haftalık bir alarm iki kez boş öterse üçüncüde
+        # kimse bakmaz.
+        z = Path(d) / "tik.py"
+        z.write_text(
+            "import time, sys\n"
+            "a = time.time(); time.sleep(0.05); b = time.time()\n"
+            "sys.exit(0 if (b - a) > 0.01 else 1)\n", encoding="utf-8")
+        return _kos(z, (dt.date.today() + dt.timedelta(days=30)).isoformat()) == 0
 
 
 def main() -> int:
