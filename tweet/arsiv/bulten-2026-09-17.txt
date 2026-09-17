@@ -1,0 +1,20 @@
+# bulten:2026-09-17 · 2026-09-17T04:41:47+00:00 · https://x.com/i/status/2100445080758693970
+
+Sabah Notu — 17 Eylül 2026
+
+Günün tek cümlelik okuması şu: Fed üç yılın ilk faiz artırımını yaptığı gün Türkiye'de kırılan şey kur ya da faiz değil, hisse tarafının kendi likidite kanalı oldu — ve bu ikisinin AYNI gün olması bir sebep-sonuç ilişkisi kurmuyor. 16 Eylül kapanışında BIST 100 %5,54 düşüşle 13.123 puana indi. Bu, ölçülen elli bir satır içinde günün açık ara en olağandışı hareketi: endeksin kendi günlük oynaklığı %1,62 ve düşüş onun 3,4 katı. Türk varlıkları topluca kırıldı — banka endeksi %6,38, sanayi endeksi %5,79, BIST 30 %5,58, dolar bazlı iShares Türkiye ETF %6,61 — ve günün en olağandışı altı hareketinden beşi bu kümede toplandı. Asıl bilgi ise kırılmayan yerde. Aynı seansta lira neredeyse hiç kımıldamadı: dolar karşısındaki günlük hareket %0,06, yani kendi oynaklığının 0,4 katı. Gelişen ülke dolar tahvili %0,08 ARTTI, gelişen ülke hisse endeksi %0,06 ile yatay kaldı. Bir ülkenin risk fiyatlaması yeniden kurulduğunda kur, dış borçlanma maliyeti ve hisse birlikte kırılır; burada yalnız biri kırıldı.
+
+Gündem
+Kilit gelişme: Borsa İstanbul'da fon kaynaklı likidite şoku. 16 Eylül'de BIST 100 %5,54 düşüşle 13.123 puana indi; gün içinde endekse bağlı devre kesici çalıştı ve altmışın üzerinde hissede taban fiyat görüldü.
+Türkiye makro: Bugün Türkiye tarafındaki iki yayım da Merkez Bankası'ndan geliyor: Para Politikası Kurulu'nun 10 Eylül toplantısına ait özeti ve saat 14:30'da haftalık para-banka ile menkul kıymet istatistikleri.
+Türkiye politika: Günün düzenleyici gündemi, hisse piyasasındaki satışın kendisinden ayrılamıyor. Sermaye Piyasası Kurulu'nun ağustosta yürürlüğe koyduğu yatırım fonu düzenlemesi, dar hacimli hisse taşıyan fonların likidite bulmasını zorlaştırdı…
+Enerji fiyatının arkasındaki jeopolitik zincir hâlâ açık. Suudi Arabistan'ın Doğu-Batı ham petrol boru hattı 10–11 Eylül'de İrak toprağından gelen insansız hava aracı saldırılarıyla hasar gördü ve tedbir amacıyla kapatıldı.
+Küresel makro: Federal Açık Piyasa Komitesi 16 Eylül'de politika faizini 25 baz puan artırarak %3,75–%4,00 aralığına çıkardı. Karar oybirliğiyle alındı ve 2023 temmuzundan bu yana ilk artırım oldu.
+
+Günün öne çıkanları: iShares Türkiye ETF (USD) −%6,61 · BIST Bankacılık −%6,38 · BIST Sınai −%5,79 · BIST 30 −%5,58 · BIST 100 −%5,54
+
+Pano: USD/TRY 48,66 (+0,04) · 16 Eyl · 1 aylık yıllıklandırılmış deval. hızı %21,7 (−0,5) · 16 Eyl · Net rezerv 65,7 mlr USD (−0,9) · 4 Eyl · Swap hariç net rezerv 53,4 mlr USD (−2,5) · 4 Eyl · Net rezerv (günlük tahmin) 62,4 mlr USD (−1,0) · 15 Eyl
+
+Beklenen: Bugün Türkiye tarafında iki yayım var: TCMB Para Politikası Kurulu'nun 10 Eylül toplantısına ait özeti ve saat 14:30'da haftalık para-banka ile menkul kıymet istatistikleri. Özette aranacak şey faiz kararı değil — politika faizi %37,00'de sabit tutulmuştu — enerji fiyatlarındaki yükselişin enflasyon görünümüne dair hangi dille anıldığı.
+
+Ölçüm ve yorumdur; yatırım tavsiyesi değildir.
