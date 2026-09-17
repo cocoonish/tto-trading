@@ -302,7 +302,12 @@ sina("04.09 vakası: pazartesi damgası cuma günü ENGEL DEĞİL", _pzt <= _sig
 sina("iki hafta ileri tarih HÂLÂ engel", _dt.date(2026, 9, 18) > _sig(_cuma),
      "sınır fazla gevşedi")
 
-e, u = acik("18.09.2026")
+# Girdi DUVAR SAATİNDEN türetilir, sabit yazılmaz. İlk yazımda "18.09.2026"
+# donmuştu ve ölçüt YARIN'a bakıyordu: 04.09'da iki hafta ileriydi, 17.09.2026
+# sabahı YARIN oldu, madde düştü ve yayın kapısının İLK adımı siteyi durdurdu.
+# Fikstürün girdisi canlıysa beklentisi de canlı olmalı (bkz. YPMevduat, 10.09).
+_iki_hafta = (YARIN + _dt.timedelta(days=14)).strftime("%d.%m.%Y")
+e, u = acik(_iki_hafta)
 sina("açık anahtarda iki hafta ileri tarih ENGEL",
      len(e) == 1 and "İLERİ" in e[0], f"engel={e}")
 
