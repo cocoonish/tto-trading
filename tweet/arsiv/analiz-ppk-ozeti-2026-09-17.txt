@@ -1,0 +1,26 @@
+# analiz:ppk-ozeti-2026-09-17 · 2026-09-17T12:45:31+00:00 · https://x.com/i/status/2100566818175824315
+
+Analiz — 17 Eylül 2026
+PPK Toplantı Özeti — dört politika paragrafı aynı, gecelik maliyet 292 baz puan aşağıda
+
+Özet sürprizsiz, para politikası değil. 10 Eylül toplantısının özetindeki otuz paragrafın dördü 30 Temmuz özetiyle kelimesi kelimesine aynı ve o dördü tam olarak "Para Politikası" bölümünün tamamı; duruş paragrafı 18 Haziran'dan beri, üç özettir ve 91 gündür, tek harfi değişmeden tekrarlanıyor. Politika başlığı altına giren tek yeni cümle ise teknik: 1 Mart'ta ara verilen bir hafta vadeli repo ihalelerine 23 Ağustos duyurusuyla yeniden başlandı. O cümle 2026'nın en büyük ikinci gecelik faiz hareketinin kaydıdır — piyasanın lirayı gecelik fonladığı oran 21 Ağustos'ta %39,86 iken 24 Ağustos'ta %36,94'e indi ve 117 iş günü koridor tavanında kaldıktan sonra politika faizine döndü. İlan edilen faiz 22 Ocak'tan beri %37,0'de hiç kımıldamadı; gerçekleşen gecelik oran aynı yıl 3,33 puanlık bant çizdi.
+
+METİN GÜVERCİN Mİ ŞAHİN Mİ. Rehberlikte değişimsiz, teşhiste ılımlı. Politika bölümünün dört paragrafı da temmuz özetiyle birebir aynı; duruş paragrafında yalnız sıkılaştırma koşula bağlı, gevşeme hiç anılmıyor. Teşhiste ise Kurul talebin zayıf seyrinin ana eğilimi sınırladığı hükmünü kuruyor. Enerji tek adı konmuş yukarı yönlü risk.
+
+ASIL HABER NE. Bir hafta vadeli repo ihalelerine 23 Ağustos duyurusuyla yeniden başlandı ve ertesi işlem günü gecelik referans oran 292 baz puan düştü. 2026'nın en büyük iki tek seanslık hareketi bu iki rejim geçişidir — 2 Mart'ta +297, 24 Ağustos'ta −292 baz puan; üçüncüsü yalnız −88 baz puan.
+
+GERÇEKLEŞEN DURUŞ NE KADAR GEVŞEDİ. 2 Mart–21 Ağustos arasında 117 iş günü gecelik oran koridor tavanına demirliydi: ortalama %39,96, politika faizinin 2,96 puan üstünde. 24 Ağustos'tan bu yana politika faizine demirli, ortalama %36,90. Reel gecelik faiz nisandaki %6,90 zirvesinden %4,07'ye indi.
+
+EĞRİ NE FİYATLADI. Kısa uç gevşemeyi aldı, uzun uç almadı. 21 Ağustos'tan 16 Eylül'e 3 ay −297, 6 ay −182, 1 yıl −74 baz puan; buna karşılık 2 yıl +25 ve 1y1y ileri oran +125 baz puan. Karar sonrası haftada dokuz düğümün dokuzu da yükseldi.
+
+KURA ETKİSİ ÖLÇÜLDÜ MÜ. Ölçüldü ve hızlanma YOK: aynı ölçünün beş günlük ortalaması 21 Ağustos'ta %22,1, 16 Eylül'de %21,8. Ters yöndeki emsal de kayda değer — 2 Mart'taki SIKILAŞMADAN sonra aynı hız %14,7'den iki ayda %22'nin üzerine ÇIKMIŞTI. İki gözlem bir kural kurmaz.
+
+BEKLENTİLERDE NE DEĞİŞTİ. Eylül anketi (61 katılımcı) iki yönlü: 12 ay sonrası enflasyon beklentisi %23,70 ile neredeyse yerinde, ama beş yıl sonrası beklenti %11,14'ten %12,09'a çıktı — 2018'den bu yana 105 ayın en büyük dördüncü hareketi. 12 ay sonrası politika faizi beklentisi ise %29,22'ye indi.
+
+ANKET İLE EĞRİ UYUŞUYOR MU. Hayır. Anketin ima ettiği patika 12 ayda 778 baz puanlık indirim; bileşik ortalaması %33,42 eder. 1 yıllık spot oran ise %39,57, yani 615 baz puanla onun üzerinde. Farkın ne kadarının vade primi olduğu AYRIŞTIRILMADI.
+
+KANITIN GÜCÜ. Metin ve fonlama ölçümü güçlü, ileriye dönük çıkarım zayıf. Ton hükmü altı özetin tam metnine dayanıyor. Fonlama rejimi eşiksiz tanımlandı ve 2026 üç bloğa ayrıldı, tek bir kısa blok bile çıkmadı. Buna karşılık iki rejim geçişi bir örneklem değildir.
+
+Kilit ölçümler — gecelik oranın 24 Ağustos'taki tek seanslık düşüşü: −292 bp · temmuz özetiyle birebir aynı paragraf; dördü de politika paragrafı: 4 / 30 · gecelik oranın koridor tavanında kaldığı süre: 117 iş günü · politika faizi sabitken gecelik oranın çizdiği bant: 3,33 puan · 1y1y ileri oranın 21 Ağustos'tan bu yana değişimi: +125 bp · beş yıl sonrası enflasyon beklentisi, bir ayda +0,95 puan: %12,09 · bir aylık devalüasyon hızı, beş günlük ortalama: %21,8
+
+Analizdir; yatırım tavsiyesi değildir.
