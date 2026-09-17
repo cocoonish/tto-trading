@@ -345,6 +345,39 @@ def _analiz_zinciri():
     assert "<" not in t and "Deger" not in t, "etiket sızdı"
 
 
+def _tavan_asiminda_rakam_seridi():
+    """Tavanı AŞAN bir özet: tablo satırları SONDAN düşer, rakam şeridi KALIR.
+
+    17.09.2026'da ölçüldü — `_kapat` gövdeyi tavana kırpıyor, yani `_metin()`
+    tanımı gereği tavanı AŞAMAZ; döngü ölçüyü ondan okuduğu sürece koşulu hiç
+    sağlanmaz ve kısaltma kodu ÖLÜDÜR. O hâlde kırpma sondan yer ve tam da
+    korunmak istenen şerit sessizce gider: gönderi doğru görünür, yalnız en
+    alıntılanabilir bloğu yoktur ve hiçbir kapı bunu sormuyordu. Ölçü artık
+    KIRPILMAMIŞ gövdeden alınır; bu madde onu arızaya karşı sabitler.
+    """
+    import analiz as an
+    import uret as ur
+    dolgu = "Ölçülen sayı bu satırda duruyor ve cümle yeterince uzundur. " * 6
+    satirlar = [(f"Soru {i}", dolgu) for i in range(1, 10)]
+    rakamlar = [(f"%{i},0", f"ölçüm {i}") for i in range(1, 8)]
+    sahte = {"tez": "Tez cümlesi. " * 60, "satirlar": satirlar, "rakamlar": rakamlar}
+    eski = an.yonetici_ozeti
+    an.yonetici_ozeti = lambda _govde: sahte
+    try:
+        t = an.analiz_zinciri({"slug": "sinama-2026-09-17", "govde": "",
+                               "title": "17 Eylül 2026 Sınama — alt başlık",
+                               "pubDate": "2026-09-17"})[0]
+    finally:
+        an.yonetici_ozeti = eski
+    assert len(t) <= ur.TEK_TAVAN, f"tavan aşıldı: {len(t)}"
+    assert "Kilit ölçümler —" in t, "tavan aşımında rakam şeridi DÜŞTÜ — kırpma sondan yemiş"
+    assert t.endswith("Analizdir; yatırım tavsiyesi değildir."), "sorumluluk notu sonda değil"
+    assert "Tez cümlesi." in t, "tez düştü — kısaltma ortadan değil baştan yemiş"
+    # Satırlar SONDAN düşer: ilk satır durur, son satır durmaz.
+    assert "SORU 1." in t, "ilk tablo satırı düştü"
+    assert "SORU 9." not in t, "hiçbir satır düşmemiş — kısaltma hiç çalışmadı"
+
+
 def _denetim():
     """Kalite kapısı: her sigorta kusur geri konarak sınanır."""
     import denetim as dn
@@ -468,6 +501,7 @@ def main() -> int:
     sina("site atfı yok · gündem girdi · öksüz cümle düştü",
          _site_atfi_ve_gundem)
     sina("kırpma cümle sınırında", _kirpma)
+    sina("tavan aşımında satır düşer, rakam şeridi kalır", _tavan_asiminda_rakam_seridi)
     sina("gonder: anahtarsız yeşil, defter mükerrerliği, bayat koruması",
          _gonder_sigortalari)
     sina("jeton kasası: şifreli gidiş-dönüş, yanlış kilit düşer", _jeton_kasasi)

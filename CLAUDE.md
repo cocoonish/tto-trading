@@ -2516,3 +2516,49 @@ bir alarmın yanlış pozitifi kaçırdığı bombadan ucuz değildir — iki ke
 İŞLEDİĞİNİ de sınıyor ve arıza enjeksiyonuyla doğrulandı: tick geri
 kaldırılınca araç çıkış 2 ile düşüp bütün "temiz" hükümlerini geçersiz ilan
 ediyor.
+
+**Kurucu ilke — KIRPILMIŞ BİR METNİN UZUNLUĞU, KISALTMA KARARININ ÖLÇÜSÜ
+OLAMAZ; ve İLAN EDİLEN FAİZ, GERÇEKLEŞEN FAİZ DEĞİLDİR.** 17.09.2026'da PPK
+toplantı özeti (2026-42) üzerine analiz yazıldı ve iki şey birden çıktı.
+
+Birincisi ÖLÇÜNÜN kendisiyle ilgili ve bu dosyada adı konmuş bir sınıfın eşi.
+`tweet/analiz.analiz_zinciri` tavanı aşan bir özette "tablo satırları SONDAN
+düşer, rakam şeridi ve tez KALIR" diye yazılmış bir kısaltma taşıyordu. Kural
+YORUMDA doğruydu, KODDA hiç çalışmıyordu: döngünün ölçüsü `uret._kapat`ın
+çıktısıydı ve o fonksiyon gövdeyi tavana KIRPAR — yani çıktısı tanımı gereği
+tavanı AŞAMAZ, döngünün koşulu hiçbir zaman sağlanmaz ve kod ÖLÜDÜR. Kırpma
+sondan yediği için tam da korunmak istenen blok gidiyordu. Ölçüldü: ham gövde
+4.132 karakter, tavan 3.800, rakam şeridi çıktıda YOK, tez de son üç cümlesi
+kesilmiş hâlde. Gönderi kusursuz görünüyor, yalnız en alıntılanabilir bloğu
+yok ve hiçbir kapı bunu sormuyordu — arızanın görüntüsü ile sağlığın görüntüsü
+bir kez daha aynı. Ölçü KIRPILMAMIŞ gövdeden alınıyor (`_ham()`), pay tek yerde
+hesaplanıyor (`kapasite`), ve duman sınamasına tavanı AŞAN sentetik bir özet
+kondu: şerit kalmalı, ilk satır durmalı, son satır düşmeli. Arıza enjeksiyonuyla
+doğrulandı (ölçü geri kırpılmış metne bağlanınca madde DÜŞÜYOR). Bir kısaltma
+kuralı, kısaltmayı YAPAN fonksiyonun çıktısıyla ölçülemez.
+
+İkincisi yazının kendi bulgusu ve kayda değer. Politika faizi 22.01.2026'dan
+beri %37,0'de sabit; aynı yıl içinde piyasanın lirayı gecelik fonladığı oran
+%36,67 ile %40,00 arasında, 3,33 puanlık bir bantta dolaştı. Rejim EŞİKSİZ
+tanımlandı — her gün TLREF'in EN YAKIN durduğu İLAN EDİLMİŞ orana (politika ·
+koridor üstü · koridor altı) göre sınıflandı, yani eşik seçilmedi, çıpalar
+verili — ve 2026 tek bir kısa blok bile çıkmadan üç bloğa ayrıldı: politika
+faizinde 41 gün, koridor tavanında 117 gün, yine politika faizinde 17 gün. İki
+geçiş, yılın en büyük iki tek seanslık hareketi (+297 bp 02.03, −292 bp 24.08);
+üçüncü en büyük hareket yalnız −88 bp, yani ayrım ölçünün kendisinden geliyor.
+Ölçü `bulten/fonlama_rejim.py`de duruyor ve tüketicisi yazı katmanıdır. Ders:
+bir para politikası duruşunun oynak bileşeni İLAN EDİLEN faiz olmak zorunda
+değil; "faiz sabit" cümlesi, fonlamanın fiyatı sorulmadan kurulamaz.
+
+Yan not, aynı turda ölçüldü ve KAPATILMADI: DİBS hattı anket anahtarlarının
+okur etiketini (`<anahtar>_ay_ad`) ham aylık serinin SON ayından yazıyor, oysa
+değerin kendisi `PKA_YAYIM_GUN = 20` varsayımı yüzünden bir ay geriden geliyor.
+Sonuç: pano %23,69'u "Eylül 2026" diye etiketliyor, oysa o Ağustos anketidir ve
+TCMB'nin kendi özet metni (2026-42 ¶24) bunu birebir doğruluyor. Kardeş hat
+Tufex aynı sayıyı doğru etiketliyor (`pka_ay_ad` = "Ağustos 2026",
+`pka_gecerli_baslangic` = 20.08.2026). Doğru düzeltmenin hangi tarafta olduğu
+ÖLÇÜLEMEDİ: etiket mi bir ay ileri, yoksa varsayım mı bir kaç gün geç —
+EVDS eylül satırını 16.09'da çoktan taşıyordu, yani anket 20'sinden ÖNCE
+yayımlanmış görünüyor. Yayım gününün kendisi bu oturumdan ölçülemediği için
+tek taraflı değiştirilmedi; ölçülmeden yapılan düzeltme, düzelttiğini sandığı
+kusuru yer değiştirir.

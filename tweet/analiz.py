@@ -201,10 +201,24 @@ def analiz_zinciri(a: dict) -> list[str]:
         UYARILAR.append(f"{a['slug']}: yönetici özeti yok — yalnız tez gönderildi")
     # Tavan aşılıyorsa sondan değil ORTADAN kısılır: rakam şeridi ve tez kalır,
     # tablo satırları SONDAN itibaren düşer.
+    #
+    # ÖLÇÜ KIRPILMAMIŞ GÖVDEDEN ALINIR. `_kapat` gövdeyi tavana KIRPAR, yani
+    # çıktısı tanımı gereği tavanı AŞAMAZ; döngü ölçüyü ondan okuduğu sürece
+    # koşulu hiç sağlanmaz ve döngü ÖLÜ KODdur. O hâlde kırpma sondan yer ve
+    # tam da korunmak istenen rakam şeridi sessizce gider — gönderi doğru
+    # görünür, yalnız en alıntılanabilir bloğu yoktur. 17.09.2026'da ölçüldü:
+    # ham gövde 4132, tavan 3800, şerit çıktıda YOK ve hiçbir kapı sormuyordu.
+    def _ham() -> str:
+        return "\n\n".join(b for b in bolumler if b)
+
     def _metin() -> str:
-        return uret._kapat("\n\n".join(b for b in bolumler if b), uret.SORUMLULUK_TEKNIK)
+        return uret._kapat(_ham(), uret.SORUMLULUK_TEKNIK)
+
+    # `_kapat`ın gövdeye bıraktığı pay — sorumluluk notu ve arasındaki boşluk
+    # düşülmüş hâli. Tek yerde tanımlanır; iki ayrı aritmetik bir gün ayrışır.
+    kapasite = GOVDE_SINIR - len(uret.SORUMLULUK_TEKNIK) - 2
     metin = _metin()
-    while len(metin) > GOVDE_SINIR and len(bolumler) > 3:
+    while len(_ham()) > kapasite and len(bolumler) > 3:
         # bolumler: [başlık, tez, satır…, (rakamlar)] — sondan bir önceki satır düşer
         cikar = len(bolumler) - 2 if bolumler[-1].startswith("Kilit ölçümler") else len(bolumler) - 1
         if cikar <= 1:
