@@ -60,7 +60,20 @@ import numpy as np
 import pandas as pd
 from statsmodels.tsa.seasonal import STL
 
-import bicim
+# ortak/ üretimde PYTHONPATH'te (guncelle.py koyar) ama hat KENDİ klasöründen
+# elle koşturulunca olmayabilir; depo kökünden bulunur. Kalıbın kaynağı
+# YPMevduat/metrik.py'nin `_bicim` yardımcısı — orada tembel, burada modül
+# düzeyinde kullanıldığı için içe aktarma anında. Çıplak `import bicim`
+# 17.09.2026'da ölçüldü: hattın duman sınaması elle HİÇ koşturulamıyordu
+# (ModuleNotFoundError) ve elle koşturulamayan bir kapı, kimsenin koşturmadığı
+# kapıdır.
+try:
+    import bicim
+except ImportError:  # pragma: no cover — yalnız elle koşuda
+    import pathlib as _pl
+    import sys as _sys
+    _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2] / "ortak"))
+    import bicim
 import veri
 from veri import VERI, ad_uzun
 

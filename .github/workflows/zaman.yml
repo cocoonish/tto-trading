@@ -1,0 +1,73 @@
+# ZAMAN SINAVI — kapıları İLERİ TARİHLERDE koşturur, saatli bombayı arar.
+#
+# NEDEN VAR. Bu depodaki en sinsi kusur sınıfı "donmuş girdi, canlı ölçü":
+# bir sınama fikstürü sabit bir tarih taşır, ölçüsü duvar saatini okur, ve
+# aradaki mesafe büyüdükçe madde BİR GÜN kendiliğinden düşer. Kapılar
+# adımlardan ÖNCE koştuğu için bedeli ağır — hat komple atlanır, panosu
+# donar, iş akışı her koşuda kırmızı biter — ve takvim ilerlediği için
+# kendiliğinden GEÇMEZ; her sabah yeniden düşer.
+#
+# 17.09.2026 SABAHI TAM BU OLDU: yayın kapısının İLK basamağı düştü, yayın
+# dört koşu boyunca durdu. Madde 04.09'da yazılmıştı ve o gün doğruydu.
+#
+# NEDEN AYRI BİR İŞ AKIŞI. Bu kusurlar BUGÜN yeşil geçer, yani ne kaynak
+# okuyarak ne de normal koşuyla bulunurlar; tek yolu kapıyı ileri bir günde
+# koşturmak. Yayın kapısına konamaz: yirmi kapının tam taraması ölçülü
+# ~20-30 dakika ve yayın her veri koşusundan sonra ateşleniyor. Haftalık
+# koşu, 17.09'da bulunan OVP bombasını 29 gün önceden yakalardı.
+#
+# ONARMAZ, HABER VERİR (nöbetçiyle aynı rol): düşen bir iş akışı depo
+# sahibine e-posta gönderir. Buradan çıkması gereken şey iş değil haber —
+# hangi fikstürün hangi gün patlayacağı ancak o kapıya bakan biri tarafından
+# düzeltilebilir.
+#
+# SAAT KAYDI: bu depoda 02:00–04:30 UTC penceresindeki zamanlanmış koşular
+# sistematik olarak düşüyor, 06:00–16:00 arasındakiler koşuyor (nobetci.yml
+# aynı kayda dayanıyor). Pazar öğlen seçildi — hafta içi pencereleri
+# tazeleme ve yayın kullanıyor, bu tarama uzun ve aceleye ihtiyacı yok.
+
+name: Zaman sınavı (saatli bomba taraması)
+
+on:
+  schedule:
+    - cron: '17 11 * * 0'     # Pazar 14:17 İstanbul
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  # Tazelemeyle YARIŞMAZ ve onu BEKLEMEZ: ayrı grup. Bu tarama depoya hiçbir
+  # şey yazmıyor, yalnız okuyor — aynı gruba konsaydı pazar koşusu tazelemenin
+  # arkasında kuyrukta beklerdi (kesif.yml'de ölçüldü: 18 dakika "pending").
+  group: zaman
+  cancel-in-progress: false
+
+jobs:
+  tara:
+    runs-on: ubuntu-latest
+    # Ölçülen süre ~20-30 dk (20 kapı × 7 ileri gün, altılı paralel).
+    # Tavan onun ÜSTÜNDE: bir işin bütçesi adımlarının toplamını aşmalı.
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Bağımlılıklar
+        # freezegun BU İŞE ÖZGÜ: yalnız zaman sınavı kullanıyor ve üretim
+        # yoluna hiç girmiyor (ortak/zaman_yolculugu TTO_SAHTE_GUN yoksa tek
+        # satır çalıştırmaz). Kalanlar hatların kapılarının istediği taban.
+        run: pip install --quiet freezegun requests pandas numpy plotly openpyxl
+
+      # HARNESS ÖNCE KENDİNİ SINAR ve bu ayrı bir adım olarak duruyor:
+      # bozuk bir harness her kapı için "temiz" der ve o sonuç gerçek temizle
+      # tıpatıp aynı görünür. Bu araç yazılırken ölçümün kendisi BEŞ KEZ
+      # yanıldı (dizin adındaki boşluk, pandas segfault'u, runpy'nin sys.path'i,
+      # dosya mtime'ı, ortak/ gölgelemesi) ve her biri sahte bir hüküm üretti.
+      - name: Harness kendini sınıyor
+        run: python site/tools/zaman_sinav.py --hizli
+
+      - name: Kapıları ileri tarihlerde koştur
+        run: python site/tools/zaman_sinav.py

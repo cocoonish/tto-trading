@@ -2456,3 +2456,49 @@ burada teşhis ölçümün KENDİSİNİ suçlayarak doğrulandı.
 `ortak/` PYTHONPATH'te olmadığı için hiç koşamıyor (üretimde kurulu),
 Makroihtiyati (41/0) ve bülten (72/0) doğrudan koşturulunca geçiyor. Bir kapı
 "düştü" dediğinde önce KOŞUP koşmadığı sorulur.
+
+**Kurucu ilke — BİR KAPIYI YALNIZ İLERİ BİR GÜNDE KOŞTURARAK ÖLÇEBİLİRSİN; ve
+ÖLÇÜM ARACININ KENDİSİ DE ÖLÇÜLMEK ZORUNDADIR.** 17.09.2026'nın iki arızası
+(yayın kapısının ilk basamağı · OVP'nin 16.10'a kurulu bombası) aynı sınıftan
+ve ikisi de KAYNAK OKUNARAK BULUNAMAZ: hepsi BUGÜN yeşil geçer. Bu yüzden
+kalıcı çözüm bir ölçüt değil bir ARAÇ oldu.
+
+ARAÇ ÜÇ PARÇA. `ortak/zaman_yolculugu.py` duvar saatini kaydırır ve ÜÇ SAATİ
+birden kaydırmak zorundadır — üçü de ölçülerek öğrenildi: (1) SIRA — freezegun
+pandas'tan ÖNCE başlatılırsa yorumlayıcı SEGFAULT verir (datetime'ı Python alt
+sınıfıyla değiştiriyor, pandas'ın C uzantısı kabul etmiyor); (2) PANDAS'IN
+KENDİ SAATİ — `pd.Timestamp.today()` C tarafından okunur, freezegun ona
+dokunmaz ve dört hat kapısı saatini oradan alır; (3) DOSYA SAATİ — `tazelik.taze`
+mtime'a bakar, saati ileri alıp mtime'ı bırakmak ŞİMDİ yazılan fikstür
+dosyasını bayat gösterir. Modül `ortak/sitecustomize.py`ye bağlandı (yeni
+mekanizma YOK: guncelle.py zaten her hat alt sürecinde ortak/'ı PYTHONPATH'e
+koyuyor) ve `TTO_SAHTE_GUN` yoksa tek satır çalışmaz.
+
+`site/tools/zaman_sinav.py` kapıları ileri tarihlerde koşturur. ORTAM
+UYDURULMAZ, `guncelle.py`DEN TÜRETİLİR — alt süreç, hattın kendi klasörü,
+üretim PYTHONPATH'i; kendi `runpy` kurulumumuz hatların modüllerini gölgeleyip
+üç kapıda sahte bulgu üretmişti. `.github/workflows/zaman.yml` haftalık koşar,
+ONARMAZ HABER VERİR (nöbetçiyle aynı rol) ve ayrı bir concurrency grubunda —
+tazelemenin arkasında kuyrukta beklemesin.
+
+VE ARAÇ ÖNCE KENDİNİ SINAR, ayrı bir adım olarak. Sebep ölçüldü: bu tarama
+yazılırken ÖLÇÜMÜN KENDİSİ BEŞ KEZ YANILDI ve beşi de gerçek bir hükümle
+tıpatıp aynı göründü. (a) Betik `"Aktarılacak Projeler"` içindeki BOŞLUK
+yüzünden hiçbir dizine giremedi, 19 kapı için ✓ bastı. (b) Elle yazılan
+datetime shim'i pandas'ta segfault verdi, çıkış 139 "sabit" sayıldı.
+(c) `runpy.run_path` betiğin dizinini `sys.path`e koymadı, dokuz kapı
+`ModuleNotFoundError` ile HER tarihte aynı düşüp "sabit" göründü. (d) Dosya
+mtime'ı kaydırılmayınca YPMevduat SAHTE BOMBA verdi. (e) `ortak/`u
+PYTHONPATH'e elle eklemek üç hattın kendi modüllerini gölgeledi. Ayrıca
+`os.stat` sarmalayıcısı NANOSANİYE alanlarını düşürünce `shutil.copystat`
+patladı ve araç, ölçmek istediği kapıyı KENDİ ELİYLE düşürüp her tarihte
+"bomba" dedi. Bir tarama yazıldığında sorulacak ilk soru bulguları değil,
+taramanın gerçekten O DOSYAYA DOKUNUP DOKUNMADIĞIDIR — bu yüzden
+`kendini_sina()` sentetik bir "donmuş girdi, canlı ölçü" bombası kurar ve
+yakalayamazsa araç bütün "temiz" hükümlerini GEÇERSİZ ilan edip düşer.
+
+Yan bulgu, aynı sınıfın bir eşi: Enflasyon `metrik.py` çıplak `import bicim`
+yapıyordu ve hattın duman sınaması KENDİ KLASÖRÜNDEN hiç koşturulamıyordu
+(üretimde PYTHONPATH'te olduğu için görünmüyordu). Elle koşturulamayan bir
+kapı, kimsenin koşturmadığı kapıdır; deponun kendi kalıbı (YPMevduat'ın
+`_bicim` yardımcısı) uygulandı.

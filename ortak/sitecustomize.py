@@ -157,3 +157,23 @@ try:
 except Exception as _e:  # noqa: BLE001 — emniyet, koşuyu asla düşürmez
     print(f"::warning::HTTP emniyeti kurulamadı ({_e!r}) — istekler zaman aşımısız",
           file=sys.stderr, flush=True)
+
+
+# ── ZAMAN YOLCULUĞU — yalnız TTO_SAHTE_GUN verilince ────────────────────────
+# Kapıları ileri bir günde koşturmak için (bkz. ortak/zaman_yolculugu.py).
+# Değişken yoksa TEK SATIR çalışmaz; üretim yolu değişmez. Kurulamazsa
+# SESSİZCE GEÇİLMEZ: ölçülmemiş bir koşu, ölçülüp temiz çıkmışla aynı görünür
+# ve tam bu yüzden bu depoda dört kez sahte temiz üretildi.
+try:
+    import zaman_yolculugu as _zy
+    if _zy.etkin() and not _zy.baslat():
+        raise RuntimeError("saat kaydırılamadı")
+except ImportError:
+    pass
+except Exception as _ze:  # noqa: BLE001
+    import os as _os
+    import sys as _sys
+    if (_os.environ.get("TTO_SAHTE_GUN") or "").strip():
+        print(f"::error::zaman yolculuğu kurulamadı ({_ze!r}) — ölçüm GEÇERSİZ",
+              file=_sys.stderr, flush=True)
+        raise SystemExit(3)
