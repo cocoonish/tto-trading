@@ -2,8 +2,8 @@
  "son_ay": "2026-07-01",
  "son_ceyrek": "2026-06-30",
  "son_dis_ceyrek": "2026-06-30",
- "son_hafta": "2026-09-04",
- "son_gun": "2026-09-16",
+ "son_hafta": "2026-09-11",
+ "son_gun": "2026-09-17",
  "esik": {
   "f3_bant": [
    -0.2,
@@ -79,12 +79,12 @@
   "oran_gecikme_notu": "Oran metrikleri EN SON ORTAK ÇEYREKTE biter. GSYH ve finansal hesaplar akım serilerinden ~2 çeyrek geridedir; GSYH'yi ileri taşıyıp (ffill) daha yeni bir oran üretmek sessiz bayatlamadır."
  },
  "haftalik": {
-  "son_hafta": "2026-09-04",
+  "son_hafta": "2026-09-11",
   "vade_notu": "Ortalama vade EVDS'te YOK. Kısa vade payı (kalan vadesi 1 yıldan az olanın toplama oranı) VEKİL göstergedir ve öyle etiketlenir. Vade ve para birimi tabloları PİYASA değeri üzerindendir.",
   "sahiplik_notu": "Sektör kırılımı İHRAÇÇI değil senedi ELİNDE TUTAN taraftır. Yurt dışı yerleşik payı ForeignHoldings hattıyla çakışır; burada yalnız borç stoku bağlamında verilir.",
   "eb_toplam_farki": {
-   "yazili_mlrusd": 100.76237,
-   "piyasa_mlrusd": 99.4707,
+   "yazili_mlrusd": 100.78278,
+   "piyasa_mlrusd": 98.65202000000001,
    "not": "Eurobond para birimi tablosunun toplamı (C8 ≡ piyasa değeri) yazılı değer toplamından KÜÇÜKTÜR; ikisi birbirinin yerine kullanılamaz."
   }
  },
@@ -97,30 +97,30 @@
   "toplam_trl": 14.927683285248001,
   "doviz_pay": 39.61639077037634,
   "agirlik": {
-   "usd": 0.9163610992985874,
-   "eur": 0.08261779599419729,
-   "jpy": 0.001021004175098798
+   "usd": 0.9160541264132249,
+   "eur": 0.08290230651131117,
+   "jpy": 0.0010436684418626196
   },
   "satirlar": [
    {
     "sok": -0.1,
     "kur": 41.89959,
     "stok_paralel_trl": 14.336302350923201,
-    "stok_yalniz_usd_trl": 14.385764802165902,
+    "stok_yalniz_usd_trl": 14.385946340077659,
     "degisim_paralel_yuzde": -3.9616390770376313,
-    "degisim_yalniz_usd_yuzde": -3.6302919396584485,
+    "degisim_yalniz_usd_yuzde": -3.629075823880214,
     "stok_gsyh_paralel": 19.631118128113172,
-    "stok_gsyh_yalniz_usd": 19.698848509314914
+    "stok_gsyh_yalniz_usd": 19.699097094487243
    },
    {
     "sok": -0.05,
     "kur": 44.227345,
     "stok_paralel_trl": 14.631992818085601,
-    "stok_yalniz_usd_trl": 14.656724043706951,
+    "stok_yalniz_usd_trl": 14.65681481266283,
     "degisim_paralel_yuzde": -1.9808195385188156,
-    "degisim_yalniz_usd_yuzde": -1.8151459698292172,
+    "degisim_yalniz_usd_yuzde": -1.814537911940107,
     "stok_gsyh_paralel": 20.036015733376654,
-    "stok_gsyh_yalniz_usd": 20.069880923977525
+    "stok_gsyh_yalniz_usd": 20.07000521656369
    },
    {
     "sok": 0.0,
@@ -136,41 +136,41 @@
     "sok": 0.05,
     "kur": 48.882855000000006,
     "stok_paralel_trl": 15.223373752410401,
-    "stok_yalniz_usd_trl": 15.198642526789051,
+    "stok_yalniz_usd_trl": 15.198551757833172,
     "degisim_paralel_yuzde": 1.9808195385188014,
-    "degisim_yalniz_usd_yuzde": 1.8151459698292314,
+    "degisim_yalniz_usd_yuzde": 1.814537911940107,
     "stok_gsyh_paralel": 20.84581094390362,
-    "stok_gsyh_yalniz_usd": 20.811945753302748
+    "stok_gsyh_yalniz_usd": 20.811821460716583
    },
    {
     "sok": 0.1,
     "kur": 51.21061000000001,
     "stok_paralel_trl": 15.519064219572801,
-    "stok_yalniz_usd_trl": 15.4696017683301,
+    "stok_yalniz_usd_trl": 15.469420230418342,
     "degisim_paralel_yuzde": 3.9616390770376313,
-    "degisim_yalniz_usd_yuzde": 3.6302919396584485,
+    "degisim_yalniz_usd_yuzde": 3.6290758238801857,
     "stok_gsyh_paralel": 21.2507085491671,
-    "stok_gsyh_yalniz_usd": 21.18297816796536
+    "stok_gsyh_yalniz_usd": 21.18272958279303
    },
    {
     "sok": 0.2,
     "kur": 55.86612,
     "stok_paralel_trl": 16.1104451538976,
-    "stok_yalniz_usd_trl": 16.0115202514122,
+    "stok_yalniz_usd_trl": 16.011157175588686,
     "degisim_paralel_yuzde": 7.923278154075248,
-    "degisim_yalniz_usd_yuzde": 7.260583879316897,
+    "degisim_yalniz_usd_yuzde": 7.258151647760428,
     "stok_gsyh_paralel": 22.06050375969407,
-    "stok_gsyh_yalniz_usd": 21.925042997290582
+    "stok_gsyh_yalniz_usd": 21.924545826945927
    },
    {
     "sok": 0.3,
     "kur": 60.52163000000001,
     "stok_paralel_trl": 16.7018260882224,
-    "stok_yalniz_usd_trl": 16.5534387344943,
+    "stok_yalniz_usd_trl": 16.552894120759028,
     "degisim_paralel_yuzde": 11.884917231112894,
-    "degisim_yalniz_usd_yuzde": 10.890875818975346,
+    "degisim_yalniz_usd_yuzde": 10.887227471640642,
     "stok_gsyh_paralel": 22.870298970221032,
-    "stok_gsyh_yalniz_usd": 22.6671078266158
+    "stok_gsyh_yalniz_usd": 22.666362071098813
    }
   ],
   "not": "Şok yalnız gerçekten döviz cinsi bacağa uygulanır: yurt dışında ihraç edilen senet + dış krediler. Para birimi ağırlıkları eurobond tablosundan alınıp bu bacağın tamamına VEKİL olarak uygulanmıştır; dış kredilerin para kompozisyonu EVDS'te yayımlanmıyor. TL TUTARI ALT SINIRDIR — iç borçtaki döviz cinsi yurt içi ihraçlar ayrıştırılamadığı için şok dışında kaldı. STOK/GSYH ORANI ise ÜST SINIRDIR — GSYH sabit varsayıldı."
@@ -233,7 +233,7 @@
    "aciklama": "MY ≤ genel hükümet ≤ kamu ≤ toplam olmalı."
   },
   "Eurobond para birimi toplamı": {
-   "n": 313,
+   "n": 314,
    "maks_artik_pay": 1.481043749997047e-07,
    "gecti": true,
    "aciklama": "USD+EUR+JPY, piyasa değeri toplamını vermeli."

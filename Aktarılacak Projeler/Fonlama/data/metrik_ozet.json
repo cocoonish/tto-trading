@@ -8,22 +8,23 @@
  },
  "son_hafta": "2026-09-04",
  "rejim": {
-  "pencere_gun": 252,
+  "pencere_gun": 253,
   "net_negatif_gun": 217,
   "net_pozitif_gun": 35,
   "fonlama_sifir_gun": 21,
-  "aofm_gecersiz_gun": 38,
+  "aofm_gecersiz_gun": 39,
   "aofm_gecersizken_dolu_gun": 38,
   "taban_esik_mn_tl": 5000.0,
   "marjinal_kaynak": {
    "AOSM": 217,
-   "AOFM": 35
+   "AOFM": 35,
+   "yok": 1
   },
   "marjinal_kaynak_tam": {
    "AOFM": 3373,
    "AOSM": 409,
    "TLREF (vekil)": 163,
-   "yok": 2
+   "yok": 3
   }
  },
  "bayrak": {
@@ -85,17 +86,17 @@
     "degisim_mn_tl": 19808.929999999935
    }
   ],
-  "taban_birim_bagil_medyan": 8.571901661568041e-09,
-  "taban_birim_bagil_son": 3.6002195457683058e-09,
+  "taban_birim_bagil_medyan": 8.48190067607549e-09,
+  "taban_birim_bagil_son": 3.5336518214320642e-09,
   "taban_birim_bagil_maks": 0.05195177908646532,
   "taban_birim_maks_tarih": "2018-08-17",
-  "taban_birim_n": 712,
+  "taban_birim_n": 713,
   "taban_birim_tekil_gun": 1,
   "taban_kaynak": "TP.TLDTHVADE.KB18 (bin TL → mn TL)",
-  "taban_son_tarih": "2026-08-28",
-  "taban_son_mn_tl": 27262226.29715,
-  "ima_oran_son": 4.346975063895969,
-  "ima_oran_tarih": "2026-09-15",
+  "taban_son_tarih": "2026-09-04",
+  "taban_son_mn_tl": 27090954.08427,
+  "ima_oran_son": 4.374457153903273,
+  "ima_oran_tarih": "2026-09-16",
   "ima_oran_1y_once": 5.279401977609923
  },
  "gecirgenlik": {
@@ -122,23 +123,23 @@
    },
    "mevduat_tl": {
     "korelasyon": {
-     "0": 0.4817,
-     "1": 0.1935,
-     "2": 0.0934,
+     "0": 0.4816,
+     "1": 0.1937,
+     "2": 0.0972,
      "3": 0.1734,
      "4": 0.2161,
      "5": 0.162,
-     "6": 0.127,
+     "6": 0.1271,
      "7": 0.0892,
-     "8": 0.1149
+     "8": 0.115
     },
     "en_iyi_gecikme_hafta": 0,
-    "en_iyi_korelasyon": 0.4817,
-    "tam_beta": 0.4656,
-    "n": 713,
-    "son_beta": 0.4573,
-    "son_beta_tarih": "2026-09-04",
-    "son_r2": 0.3849
+    "en_iyi_korelasyon": 0.4816,
+    "tam_beta": 0.4657,
+    "n": 714,
+    "son_beta": 0.4488,
+    "son_beta_tarih": "2026-09-11",
+    "son_r2": 0.3815
    }
   }
  },
@@ -246,11 +247,11 @@
   },
   "hatlar_arasi_swap": {
    "kaynak": "bu hat (TP.SWAPTEKTAR alım−satım)/1000 ↔ rezerv hattı gunluk.csv · swap_yerli_usd",
-   "n": 929,
+   "n": 930,
    "maks_fark_mlr_usd": 7.105427357601002e-15,
-   "son_biz": -3.97147978,
-   "son_rezerv": -3.97147978,
-   "son_tarih": "2026-09-15",
+   "son_biz": -3.7669945200000003,
+   "son_rezerv": -3.76699452,
+   "son_tarih": "2026-09-16",
    "gecti": true
   },
   "gecelik_repo_aylik": {
