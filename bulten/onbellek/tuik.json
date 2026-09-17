@@ -1,5 +1,5 @@
 {
- "zaman": "2026-09-16T04:58:21",
+ "zaman": "2026-09-17T04:19:52",
  "veri": [
   {
    "tarih": "2026-09-17",
@@ -208,6 +208,58 @@
    "beklenti_sayi": null,
    "onceki": "",
    "not_": "Yurt İçi Üretici Fiyat Endeksi"
+  },
+  {
+   "tarih": "2026-10-08",
+   "saat": "10:00",
+   "ulke": "TR",
+   "olay": "TB: Dış ticaret (4. Çeyrek 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "Dış Ticaret Beklenti Anketi"
+  },
+  {
+   "tarih": "2026-10-08",
+   "saat": "14:30",
+   "ulke": "TR",
+   "olay": "TCMB: Menkul kıymet ist. (40. Hafta 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": " Menkul Kıymet İstatistikleri"
+  },
+  {
+   "tarih": "2026-10-08",
+   "saat": "14:30",
+   "ulke": "TR",
+   "olay": "TCMB: Haftalık para-banka (40. Hafta 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "Haftalık Para ve Banka İstatistikleri "
+  },
+  {
+   "tarih": "2026-10-08",
+   "saat": "14:30",
+   "ulke": "TR",
+   "olay": "TCMB: IRFCL rezerv (Eylül 2026)",
+   "onem": 1,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "Uluslararası Rezervler ve Döviz Likiditesi"
   }
  ]
 }
