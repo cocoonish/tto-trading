@@ -258,7 +258,18 @@ CUMLE_TAVAN, SAYI_TAVAN = 2, 1
 #                   orada tanım gereği yanlış alarm verir.
 #   damga_*       : şekil damgasıdır, cümle değil ("program 09.2025 · kur
 #                   03.09.2026"). İki tarih taşır ve taşımak zorundadır.
-CUMLE_OLCUSU_MUAF = {"uyari_metni", "program_kaynak"}
+#   bayat_cumlesi : TANIYA dayalı bir cümledir ve sayı sayısı VERİDEN gelir,
+#                   yazardan değil: bir bacak toleransını aştığında cümle onu
+#                   ADIYLA, YAŞIYLA ve TOLERANSIYLA anmak zorunda ("gerçekleşen
+#                   TÜFE bacağı 46 gün geride (tolerans 45 gün)") — üçünü de
+#                   yazmak ölçünün kendisidir ("ölçülemeyen boş bırakılır,
+#                   sebebi yazılır"), yani tek sayıyla kurulamaz. Muafiyet
+#                   ÖLÇÜLEREK kondu: canlı sitede makroihtiyati panosu bu
+#                   cümleyi 2 cümle / 3 sayı olarak ZATEN basıyor ve okunuşu
+#                   düzgün; kapı onu görmüyordu, çünkü her hat yalnız KENDİ
+#                   fikstürünü ölçüyor. Kardeşi uyari_metni aynı gerekçeyle
+#                   baştan muaf.
+CUMLE_OLCUSU_MUAF = {"uyari_metni", "program_kaynak", "bayat_cumlesi"}
 CUMLE_OLCUSU_MUAF_ONEK = ("damga_",)
 
 

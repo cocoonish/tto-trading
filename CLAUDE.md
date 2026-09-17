@@ -2377,3 +2377,63 @@ ve bültenin izlemi yalnız `buyume_yillik` ile `buyume_ceyreklik`i sorar,
 ikisi de o döngünün dışında. AÇIK KALAN ve kullanıcıya SORULACAK: hangi
 davranışın sözleşme olduğu bir KARARDIR, mekanik bir düzeltme değil; bir
 gün Büyüme'ye pano açılırsa bu iz sessiz bir yayın engeline döner.
+
+**Kurucu ilke — BİR KAPI ANCAK KOŞTURULDUĞU GÜNDE ÖLÇÜLMÜŞTÜR; ve ölçümün
+kendisi de kör olabilir.** 17.09.2026 sabahı yayın iş akışı dört kez düştü ve
+kusur yayın kapısının İLK basamağındaydı: `duman_sinav.py`nin 18b regresyon
+maddesi girdiyi DONMUŞ (`acik("18.09.2026")`), ölçüyü CANLI (yarın sınırı)
+tutuyordu. Madde 04.09'da yazıldığında 18.09 iki hafta ileriydi; 17.09 sabahı
+YARIN oldu, sınır onu meşru saydı, engel listesi boşaldı ve madde düştü. Kusur
+takvim ilerlediği için kendiliğinden doğdu ve kendiliğinden GEÇMEYECEKTİ.
+Sınıf bu dosyada iki kez adıyla yazılı (YPMevduat 10.09 · ihale ölçütü 14.09);
+kural vardı, bu maddeye uygulanmamıştı.
+
+ASIL DERS DÜZELTMEDE DEĞİL, ARAMADA. "Başka nerede var" sorusu kaynağı okuyarak
+cevaplanamaz: bu kusurların hepsi BUGÜN yeşil geçer. Kapılar İLERİ TARİHLERDE
+koşturuldu (`freezegun` + pandas saatinin yamalanması; pandas kendi C saatini
+okuduğu için yalnız freezegun dört hat kapısını kör bırakıyordu) ve harness
+önce GERÇEK arızaya karşı doğrulandı — düzeltme öncesi sürüm 16.09'da geçiyor,
+17.09'da düşüyor. Doğrulanmamış bir zaman yolculuğu, hiç koşmamakla aynı.
+
+TARAMA BİR BOMBA BULDU: OVP hattı 15.10'a kadar geçiyor, 16.10'dan itibaren
+düşüyor. Fikstürün TÜFE serisi `2026-08-01`'de donmuş, ölçü canlı; o gün
+gerçekleşen bacak 45 günlük toleransı aşıyor ve bayatlık cümlesi üç sayılı bir
+yan cümle kazanıyor ("gerçekleşen TÜFE bacağı 46 gün geride (tolerans 45 gün);
+3 tazelik uyarısı düştü"). Cümle DOĞRU; kapı onu kusur sayıyor — "hattın kendi
+kapısı, kuralın meşru çıktısını kusur sayamaz"ın bir eşi daha. Duman adımlardan
+önce koştuğu için bedeli hattın komple atlanması, panonun donması ve veri
+tazelemenin her koşuda kırmızı bitmesiydi.
+
+YANLIŞ DÜZELTME ÖNCE DENENDİ VE ÖLÇÜM REDDETTİ: fikstürü duvar saatine bağlamak
+bombayı söndürüyor ama YERİNE İKİ YENİSİNİ koyuyor (31.12'de konvansiyon
+ayrışma maddesi düşüyor, 2027'de koşu çöküyor). Fikstürün çoğu bilerek donmuş —
+kapalı çözümü bilinen sentetik patikalar, elle tutulan program tabloları. Kusur
+"fikstür donmuş" değil, DONMUŞ GİRDİYİ CANLI SAATLE ÖLÇEN ALAN. Doğru düzeltme
+o alanı ölçünün dışına almak: `bayat_cumlesi`nin sayı sayısı VERİDEN gelir,
+yazardan değil — bir bacağı ADIYLA, YAŞIYLA ve TOLERANSIYLA anmak ölçünün
+kendisidir ve tek sayıyla kurulamaz. Kardeşi `uyari_metni` aynı gerekçeyle
+baştan muaftı.
+
+MUAFİYET VARSAYILARAK DEĞİL ÖLÇÜLEREK KONDU: canlı sitede makroihtiyati panosu
+bu cümleyi ZATEN 2 cümle / 3 sayı olarak basıyor ve okunuşu düzgün. Kapı onu
+göremiyordu, çünkü her hat yalnız KENDİ fikstürünü ölçüyor — tavanın tutulamaz
+olduğu üretimde çoktan görünmüştü, hiçbir ölçüt oraya bakmıyordu.
+
+VE ÖLÇÜMÜN KENDİ KÖRLÜĞÜ ÜÇ KEZ TEKRARLADI, üçü de "sahte temiz" üretti.
+(1) İlk tarama betiği `"Aktarılacak Projeler"` içindeki BOŞLUK yüzünden hiçbir
+dizine giremedi ve 19 kapı için ✓ bastı. (2) `datetime.date`i Python alt
+sınıfıyla değiştiren shim, pandas içe aktarılınca SEGFAULT veriyor; o yüzden
+pandas'a dokunan kapılar hiç ölçülemedi ve çıkış 139 "sabit" sayıldı.
+(3) `runpy.run_path` betiğin DİZİNİNİ `sys.path`e koymuyor; dokuz kapı
+`ModuleNotFoundError` ile — HER tarihte aynı şekilde — düştü ve tam bu yüzden
+"sabit" göründü. Üçünde de ölçülmemiş bir kapsam, ölçülmüş ve temiz çıkmışla
+BİREBİR AYNI göründü. Bir tarama yazıldığında sorulacak ilk soru bulguları
+değil, taramanın gerçekten O DOSYAYA dokunup dokunmadığıdır.
+
+AÇIK KALAN ve KULLANICIYA SORULACAK: bu bombayı yalnız ileri tarihli koşu
+buldu ve depoda bunu yapan hiçbir kapı yok. `duman_sinav.py` normalde 77 ms,
+ileri tarihle 465 ms — yayın kapısına eklemek bedava; ama bomba HAT kapısında
+çıktı ve 22 hattın tam taraması ~30 dk sürüyor, yani her koşuya konamaz.
+Haftalık zamanlanmış bir tarama bu bombayı 29 gün önceden yakalardı; yeni bir
+iş akışı ve yeni bir bağımlılık (`freezegun`) demek, o yüzden tek taraflı
+kurulmadı.
