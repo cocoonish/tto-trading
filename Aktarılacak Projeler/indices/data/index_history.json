@@ -1519,34 +1519,34 @@
     }
   },
   {
-    "timestamp": "2026-09-18T06:49:25.689876+00:00",
+    "timestamp": "2026-09-18T16:28:22.372414+00:00",
     "indices": {
       "EURUSD": {
-        "value": -0.0774,
+        "value": -0.048,
         "category": "Neutral"
       },
       "USDJPY": {
-        "value": -0.2957,
+        "value": -0.2589,
         "category": "Bearish"
       },
       "USDCHF": {
-        "value": -0.0224,
+        "value": 0.0957,
         "category": "Neutral"
       },
       "GBPUSD": {
-        "value": -0.4528,
+        "value": -0.3722,
         "category": "Bearish"
       },
       "AUDUSD": {
-        "value": -0.0703,
+        "value": -0.0559,
         "category": "Neutral"
       },
       "NZDUSD": {
-        "value": -0.0491,
-        "category": "Neutral"
+        "value": -0.1669,
+        "category": "Bearish"
       },
       "USDCAD": {
-        "value": 0.1952,
+        "value": 0.3505,
         "category": "Bullish"
       },
       "USDNOK": {
@@ -1558,31 +1558,31 @@
         "category": "Extremely Bearish"
       },
       "XAUUSD": {
-        "value": 0.0543,
-        "category": "Neutral"
-      },
-      "XAGUSD": {
-        "value": 0.1078,
+        "value": 0.1316,
         "category": "Bullish"
       },
+      "XAGUSD": {
+        "value": 0.0718,
+        "category": "Neutral"
+      },
       "SPX": {
-        "value": -0.0425,
+        "value": -0.0978,
         "category": "Neutral"
       },
       "UST2Y": {
-        "value": 0.2204,
+        "value": 0.2236,
         "category": "Bullish"
       },
       "UST10Y": {
-        "value": -0.0186,
+        "value": -0.077,
         "category": "Neutral"
       },
       "BIST100": {
-        "value": -0.2859,
+        "value": -0.431,
         "category": "Bearish"
       }
     },
-    "veri_sonu": "2026-09-18T06:35:19+00:00",
+    "veri_sonu": "2026-09-18T16:09:01+00:00",
     "regime": {
       "label": "Transitioning",
       "basket_spread": 0.0393,
