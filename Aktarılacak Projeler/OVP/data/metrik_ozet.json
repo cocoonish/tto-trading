@@ -1,10 +1,10 @@
 {
  "bu_yil": 2026,
  "kur_tarih": "2026-09-17",
- "faiz_tarih": "2026-09-16",
+ "faiz_tarih": "2026-09-17",
  "tufe_tarih": "2026-08-01",
  "program_eski_yayin": "2025-09-30",
- "carry_tarih": "2026-09-16",
+ "carry_tarih": "2026-09-17",
  "program_yeni": {
   "kod": "ovp2027",
   "kisa": "OVP 2027–2029",
@@ -338,20 +338,20 @@
  "carry": {
   "gerceklesen": {
    "yil": 2026,
-   "tl_yuzde": 31.327290548027253,
+   "tl_yuzde": 31.459878009105037,
    "tl_yol": "endeks",
-   "ortalama_gecelik": 38.994742045454544,
+   "ortalama_gecelik": 38.98262598870056,
    "kur_yuzde": 13.195566277238214,
-   "net_yuzde": 16.018051649108656,
+   "net_yuzde": 16.13518296921095,
    "gun": 258,
-   "n_faiz": 176,
+   "n_faiz": 177,
    "bas_gun": "2026-01-02",
    "son_gun": "2026-09-17",
-   "faiz_son_gun": "2026-09-16",
-   "yillik_yuzde": 23.391763622387906
+   "faiz_son_gun": "2026-09-17",
+   "yillik_yuzde": 23.56804145174958
   },
   "faiz_varsayimi": 37.0,
-  "faiz_varsayimi_gun": "2026-09-16",
+  "faiz_varsayimi_gun": "2026-09-17",
   "ileri": [
    {
     "yil": 2026,
