@@ -2562,3 +2562,77 @@ EVDS eylül satırını 16.09'da çoktan taşıyordu, yani anket 20'sinden ÖNCE
 yayımlanmış görünüyor. Yayım gününün kendisi bu oturumdan ölçülemediği için
 tek taraflı değiştirilmedi; ölçülmeden yapılan düzeltme, düzelttiğini sandığı
 kusuru yer değiştirir.
+
+**Kurucu ilke — YAYIMLANAN BİR SAYININ ARŞİVİ DEPODA DURUR; GERİYE ÖLÇEKLENMİŞ
+BİR SERİDEN CRACK SPREAD HESAPLANMAZ; ve VADE DEVRİ GÜNÜ, AYNI SERİNİN İKİ
+İNDİRMESİNİN AYRIŞTIĞI TEK GÜNDÜR.** 20.09.2026'da Hürmüz ve Rusya-Ukrayna
+analizi yazıldı; yayın öncesi doğrulama turu yazının SEKİZ ayrı sayı ailesini
+birden düzeltti ve dördü aynı sınıftan.
+
+(1) ÜÇ YILLIK DAĞILIM YALNIZ KOŞU KAYDINDAYDI. Medyan, zirve, yüzdelik ve
+uçlara mesafe bulut keşif koşusunun ekran çıktısından alınmıştı; depoda
+karşılığı YOKTU, yani hiçbir kapı onları bir daha soramazdı ve yerel doğrulama
+"kaynak bulunamadı" diyordu. Analizler canlı değer taşımaz (karar 08.09.2026),
+yani sayıları MDX'e ELLE yazılır — bu, arşivin depoda durmasını tercih değil
+ZORUNLULUK yapar. Üç parça kondu: `veri/defter.json` (keşif koşusunun tam
+hassasiyetli arşivi — 754 günlük ham enerji serisi, 28 darboğazın yuvarlanmamış
+ortalamaları, kapsam), `olcum.py` (sayıyı üreten TEK yer; figür de metin de
+oradan), `dogrula.py` (yayımlanan metni ölçüme karşı sınayan kapı). Kapı
+beklenen değerleri KENDİ İÇİNE yazmıyor, yayımlanan MDX tablolarını AYRIŞTIRIP
+okuyor: iki liste bir gün sessizce ayrışır. 240 ölçüt, dört arıza
+enjeksiyonunun dördü de yakalandı.
+
+(2) CRACK SPREAD GERİYE ÖLÇEKLENMİŞ SERİDEN HESAPLANAMAZ. Bültenin serisi vade
+devrini geriye ölçekleyerek arındırıyor ve bu bir getiri serisi için DOĞRU.
+Ama ölçekleme üç bacağı FARKLI oranla çarpıyor — 18.09 devrinde HO 0,956 ·
+CL 0,954 · RB 0,926 — ve 42×HO − CL aritmetiği o farkı spread'in kendisi kadar
+büyütüyor. Ölçüldü: 02.02.2026 distilat crack düzeltilmiş seride 35,47, kote
+edilmiş fiyatlarla 36,97; Brent 63,21 yerine 66,30. Yazının "14 Eylül'de Brent
+100,75" cümlesi aynı paragraftaki "Brent 108 doları gördü" haberiyle
+ÇELİŞİYORDU ve çelişkinin sebebi haber değil bizim serimizdi (gerçek kapanış
+105,68). Bir crack, aynı gün gerçekten kote edilmiş üç fiyatın aritmetiğidir;
+bir seviye cümlesi de kote edilmiş fiyattır. Yan bulgu: yazının üç yıllık
+dağılımı HAM seriden, gün tablosu DÜZELTİLMİŞ seriden geliyordu — aynı
+büyüklüğün iki ayrı bacağı iki ayrı sözleşmedeydi ve "1 yıllık zirve 112,94 ·
+3 yıllık zirve 117,92" ikisi de AYNI günün (16.09) zirvesiydi.
+
+(3) DEVİR GÜNÜ BİR YAYIN GÜNÜ DEĞİLDİR. Aynı serinin iki bağımsız indirmesi
+250 örtüşen günün 249'unda dört ondalığa kadar BİREBİR aynı; ayrıştıkları tek
+gün 18.09 — devir günü (Brent 99,29 ↔ 103,87, %4,6). Hangisinin "o günün ön
+vadesi" olduğu bu oturumdan çözülemedi ve çözülmesi de gerekmedi: yazının veri
+günü 17 Eylül'e çekildi, yani iki kaynağın birebir örtüştüğü son güne. Bir
+sayının doğruluğu tek bir indirmeyle değil, iki bağımsız indirmenin
+örtüşmesiyle de kurulabilir; örtüşmediği gün yayına girmez.
+
+(4) BİR KONTROL GRUBUNUN TABANI MEVSİMİ DE KONTROL ETMELİDİR. Taban yedi yılın
+tamamıydı (2019-01 → 2026-03), "şimdi" ise üç haftalık bir dilim — ve bu fark
+mevsimi değişime yazıyordu. Ölçüldü: Bering Boğazı ham kıyasla +%328, aynı
+TAKVİM penceresinin yıl yıl ortalamasıyla +%56,7 (yaz rotası). Savaş
+bölgelerinde iki ölçü birbirine çok yakın (Hürmüz −%94,8 ↔ −%95,3), yani
+oradaki düşüş mevsimden gelmiyor — ama bunu SÖYLEYEBİLMEK için mevsimin
+ölçülmüş olması gerekiyordu. Kapsam da düzeldi: kaynak 28 darboğaz sayıyor,
+yazı on ikisini ELLE saymıştı ve ikisinin adı kaynaktakiyle tutmuyordu
+("Bosphorus"/"Bosporus", "Strait of Gibraltar"/"Gibraltar Strait") — İstanbul
+Boğazı ile Cebelitarık sessizce DÜŞTÜ, kontrol grubu altı yerine beş
+darboğazla ölçüldü ve yazı yine de "on kontrol darboğazı" diyordu. Kontrol
+grubu artık ÇIKARMA ile kuruluyor (savaş rotasında olmayan her darboğaz: 22) ve
+hüküm ortalamayla değil MEDYANLA veriliyor, çünkü tek bir mevsimsel uç
+ortalamayı +%2,8'den +%17,7'ye taşıyor.
+
+(5) ÖLÇÜT YAZILDI VE KAPIYA KONDU. `sayfa_sinavi.py` 26. ölçüt: "Aktarılacak
+Projeler/*/dogrula.py" deseniyle bulunan her yazı doğrulayıcısı koşturulur,
+düşerse yayın DURUR. Kapsam elle tutulan bir listeden değil desenden geliyor —
+yeni bir yazı kendi doğrulayıcısını yazdığı gün kendiliğinden kapıya girer.
+Ölçüt ağa çıkmaz, duvar saati okumaz (girdisi depodaki arşiv), saniyeler sürer
+ve tarih bombası taşıyamaz.
+
+İki yan bulgu kayda değer. Birincisi bu dosyanın en sık tekrar eden cümlesinin
+bir eşi: ölçüt 26'nın ilk arıza enjeksiyonu HİÇBİR ŞEY üretmedi ve "ölçüt kör"
+hükmü verilecekti — `sed` kalıbı tabloda KALIN yazılmış satıra uymamıştı, yani
+arıza hiç enjekte edilmemişti. Enjeksiyon hedefi artık `assert` ile sınanıyor;
+bir enjeksiyonun yanlış yere yapılması, ölçütün kör olduğuyla birebir aynı
+görünür. İkincisi ağ tarafında: beş vadeli kodu PARALEL istemek yfinance'in
+SQLite önbelleğini kilitliyor ("database is locked") ve düşen kod BOŞ SERİ
+olarak dönüyor — bir bacağın sessizce kaybolması crack aritmetiğini eksik
+bırakır; kodlar sırayla isteniyor ve boş dönen kod üç denemeden sonra ADIYLA
+hata veriyor.

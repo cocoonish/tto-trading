@@ -644,6 +644,31 @@ def soluk_metin(kok: pathlib.Path) -> list[str]:
     return bulgu
 
 
+# ---------------------------------------------------------------- (26)
+# YAZININ KENDİ DOĞRULAYICISI. Analizler yayımlandıkları günün metnidir ve
+# canlı değer taşımaz (karar 08.09.2026): sayıları MDX'e ELLE yazılır ve
+# hiçbir kapı onları sormaz. Bir yazının ölçüm katmanı `dogrula.py` yazmışsa
+# o kapı koşturulur — ölçü var, tüketicisi yoksa ölçülmemiştir.
+#
+# KAPSAM ELLE TUTULMUYOR: "Aktarılacak Projeler/*/dogrula.py" deseni
+# sözleşmenin kendisi. Yeni bir yazı kendi doğrulayıcısını yazdığı gün
+# kendiliğinden kapıya girer.
+#
+# Ağa çıkmaz, duvar saati okumaz (girdisi depodaki arşiv), saniyeler sürer.
+def yazi_dogrulayicilari(kok: Path) -> list[tuple[str, int, str]]:
+    out = []
+    for yol in sorted((kok / "Aktarılacak Projeler").glob("*/dogrula.py")):
+        try:
+            s = subprocess.run([sys.executable, str(yol)], capture_output=True,
+                               text=True, timeout=180, cwd=str(yol.parent))
+            son = [x for x in (s.stdout + s.stderr).strip().split("\n") if x.strip()]
+            out.append((yol.parent.name, s.returncode,
+                        son[-1] if son else "çıktı yok"))
+        except Exception as ex:                                   # noqa: BLE001
+            out.append((yol.parent.name, 2, repr(ex)))
+    return out
+
+
 def main() -> int:
     hata: list[str] = []
 
@@ -1480,6 +1505,19 @@ def main() -> int:
                     f"(AA gövde 4,5:1). global.css: '--ink-30 yalnız çizgi ve "
                     f"kenarlıkta'. Metin için --ink-60 (4,59:1).")
     print(f"  ihlal {len(sol)}")
+
+    # ------------------------------------------------------------ (26)
+    # YAZININ KENDİ DOĞRULAYICISI — yayımlanan sayı ile onu üreten ölçüm.
+    print("\n▶ Yazının kendi doğrulayıcısı (Aktarılacak Projeler/*/dogrula.py)")
+    dog = yazi_dogrulayicilari(KOK)
+    if not dog:
+        print("  – doğrulayıcı yazan yazı yok")
+    for ad, kod, son in dog:
+        if kod == 0:
+            print(f"  ✓ {ad}: {son}")
+        else:
+            hata.append(f"yazı doğrulayıcısı DÜŞTÜ — {ad} (çıkış {kod}): {son}")
+            print(f"  ✗ {ad}: {son}")
 
     print()
     for u in uyari:
