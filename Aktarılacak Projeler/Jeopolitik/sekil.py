@@ -97,8 +97,8 @@ def sekil_01(g, E):
     f.add_vline(x="2026-03-02", line=dict(color=MUREKKEP, width=1, dash="dash"))
     f.add_annotation(x="2026-03-02", y=max(E["distilat"]) * 0.97, text=" 2 Mart",
                      showarrow=False, xanchor="left", font=dict(size=10, color=MUREKKEP))
-    _duzen(f, "Rafineri marjları bir yılda üçe katlandı",
-           "Ham petrolden ürün üretmenin varil başına getirisi · kaynak: vadeli kapanışlar",
+    _duzen(f, "Distilat marjı üç yıllık medyanın 3,4 katında",
+           "Ham petrolden ürün üretmenin varil başına getirisi · ham ön vade kapanışları",
            "USD/varil")
     _yaz(f, "01_crack.html")
 
@@ -112,7 +112,7 @@ def sekil_02(g, E):
                            line=dict(width=0), fillcolor="#e4b9c6"))
     f.add_trace(go.Scatter(x=g, y=E["ho_urun"], name="Distilat ürün fiyatı",
                            line=dict(color=MUREKKEP, width=1.8)))
-    _duzen(f, "Motorinin pahalılaşmasının dörtte üçü ham petrolden değil, rafineriden",
+    _duzen(f, "Haziran'dan bu yana motorindeki artışın %72'si rafineri marjından",
            "Distilat ürün fiyatı = ham petrol + rafineri marjı · 1 varil = 42 galon",
            "USD/varil")
     _yaz(f, "02_ayristirma.html")
@@ -178,7 +178,7 @@ def sekil_05(g, E):
         f.add_trace(go.Scatter(x=g[i0:], y=[v / taban * 100 for v in E[anah][i0:]],
                                name=ad, line=dict(color=renk, width=2)))
     f.add_hline(y=100, line=dict(color=ACIK, width=1))
-    _duzen(f, "Şubat başı = 100: marj ham petrolün üç katı hızla açıldı",
+    _duzen(f, "Şubat başı = 100: marj ham petrolün üç buçuk katı hızla açıldı",
            "Aynı tabana göre endekslenmiş seyir", "endeks (2 Şubat 2026 = 100)")
     _yaz(f, "05_endeks.html")
 
