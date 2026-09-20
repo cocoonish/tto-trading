@@ -42,6 +42,8 @@ KAT = ("https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/"
 # Taban = enerji fiyatlarındaki rejim kırılmasından ÖNCESİ (ölçüldü: 02.03.2026).
 KIRILMA = "2026-03-02"
 SIMDI_BAS = "2026-08-20"
+# "Şimdi" penceresinin sonu: darboğaz verisinin son kaydı.
+PENCERE_SON = "2026-09-13"
 # Yazının veri günü. Bugüne kadar çekip burada kesmek, koşu hangi gün
 # tekrarlanırsa tekrarlansın aynı defteri üretir.
 SON_GUN = "2026-09-18"
@@ -74,6 +76,29 @@ def cek(nerede: str) -> list[tuple[str, dict]]:
             break
         ofs += len(ozl)
     return sorted(((gun(a), a) for a in out), key=lambda z: z[0])
+
+
+
+def _pencere_yillik(seri: list[tuple[str, dict]]) -> dict[str, dict]:
+    """Aynı TAKVİM penceresinin yıl yıl ortalaması (20 Ağustos – 13 Eylül).
+
+    Taban yedi yılın tamamı, "şimdi" üç haftalık bir dilim: ikisini doğrudan
+    kıyaslamak mevsimi değişime yazar. Bering Boğazı'nın +%328'i tam olarak
+    bu — yaz rotası. Pencerenin kendisi yıl yıl kıyaslanınca confounder
+    ölçülebilir hâle gelir."""
+    out: dict[str, dict] = {}
+    kova = defaultdict(lambda: defaultdict(list))
+    for t, a in seri:
+        if SIMDI_BAS[5:] <= t[5:] <= PENCERE_SON[5:]:
+            for alan in ("n_total", "n_tanker"):
+                v = a.get(alan)
+                if v is not None:
+                    kova[t[:4]][alan].append(float(v))
+    for y in sorted(kova):
+        d = kova[y]
+        out[y] = {"gemi": ist.mean(d["n_total"]), "tanker": ist.mean(d["n_tanker"]),
+                  "gun": len(d["n_total"])}
+    return out
 
 
 def ort(kayit: list[dict], alan: str) -> float | None:
@@ -171,6 +196,7 @@ def darbogaz() -> dict:
             kayit[f"{etiket}_taban"] = a0
             kayit[f"{etiket}_simdi"] = a1
             kayit[f"{etiket}_degisim"] = (a1 / a0 * 100 - 100) if a0 else None
+        kayit["pencere_yillik"] = _pencere_yillik(seri)
         out[ad] = kayit
         print(f"  {ad:<26} {kayit['gemi_taban']:8.3f} → {kayit['gemi_simdi']:7.3f} "
               f"({kayit['gemi_degisim']:+7.3f}%)  tanker {kayit['tanker_degisim']:+8.3f}%")
