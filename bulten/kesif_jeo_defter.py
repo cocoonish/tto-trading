@@ -81,15 +81,38 @@ def ort(kayit: list[dict], alan: str) -> float | None:
     return ist.mean(v) if v else None
 
 
-def enerji() -> dict:
+def _indir(kod: str, kac: int = 3) -> dict[str, float]:
+    """TEK TEK ve SIRAYLA. Beş kodu paralel istemek yfinance'in SQLite
+    önbelleğini kilitliyor ("database is locked") ve DÜŞEN kod boş seri
+    olarak dönüyor — yani bir bacak sessizce kaybolup crack'i eksik
+    bırakabilir. Boş dönen kod ADIYLA hata verir, sessizce atlanmaz."""
+    import time
+
     import yfinance as yf
-    ham = yf.download(KODLAR, period="3y", interval="1d", progress=False,
-                      auto_adjust=False, group_by="ticker", threads=True)
+    son = None
+    for deneme in range(1, kac + 1):
+        try:
+            ham = yf.download(kod, period="3y", interval="1d", progress=False,
+                              auto_adjust=False, threads=False)
+            c = ham["Close"].dropna()
+            if hasattr(c, "columns"):
+                c = c.iloc[:, 0]
+            d = {str(x.date()): float(v) for x, v in zip(c.index, c.values)
+                 if str(x.date()) <= SON_GUN}
+            if d:
+                return d
+            son = "boş seri"
+        except Exception as ex:                                   # noqa: BLE001
+            son = repr(ex)
+        print(f"    {kod}: {deneme}. deneme düştü ({son})")
+        time.sleep(3 * deneme)
+    raise RuntimeError(f"{kod} indirilemedi: {son}")
+
+
+def enerji() -> dict:
     seri: dict[str, dict[str, float]] = {}
     for k in KODLAR:
-        c = ham[k]["Close"].dropna()
-        seri[k] = {str(x.date()): float(v) for x, v in zip(c.index, c.values)
-                   if str(x.date()) <= SON_GUN}
+        seri[k] = _indir(k)
         print(f"  {k}: {len(seri[k])} gün  {min(seri[k])} → {max(seri[k])}")
 
     # KAPSAM: crack üç bacağın AYNI gününü ister; ortak günler alınır ve
