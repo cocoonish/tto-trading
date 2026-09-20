@@ -35,20 +35,27 @@ KAT = ("https://services9.arcgis.com/weJ1QsnbMYJlCHdG/arcgis/rest/services/"
        "Daily_Chokepoints_Data/FeatureServer/0")
 
 
-def cek(nerede: str, kac: int = 6000) -> list[dict]:
-    """Bir darboğazın bütün günlük kayıtları (sayfalı)."""
+def cek(nerede: str, kac: int = 12000) -> list[dict]:
+    """Bir darboğazın bütün günlük kayıtları (sayfalı).
+
+    SAYFA BOYU VARSAYILMAZ, ÖLÇÜLÜR. İlk yazımda döngü istek başına 2000
+    kayıt bekliyordu; servis 1000 veriyor ve `len < 2000` koşulu İLK
+    sayfada kırıldı — 2019-2021 penceresi gelip 2026 HİÇ GELMEDİ, üstelik
+    çıktı kusursuz görünüyordu. Dönen kayıt sayısı kadar ilerlenir ve
+    servisin kendi `exceededTransferLimit` bayrağı sorulur.
+    """
     out, ofs = [], 0
     while True:
         r = requests.get(KAT + "/query", timeout=60, headers=B, params={
             "where": f"portname='{nerede}'", "outFields": "*", "f": "json",
             "orderByFields": "date ASC", "resultOffset": ofs,
-            "resultRecordCount": 2000})
+            "resultRecordCount": 1000})
         js = r.json()
         ozl = js.get("features", [])
         out += [f["attributes"] for f in ozl]
-        if len(ozl) < 2000 or len(out) >= kac:
+        if not ozl or len(out) >= kac or not js.get("exceededTransferLimit"):
             break
-        ofs += 2000
+        ofs += len(ozl)
     return out
 
 
@@ -95,6 +102,17 @@ def ozetle(ad: str, kayit: list[dict]) -> dict | None:
             cik[alan] = (o_t, o_s, (o_s / o_t - 1) * 100 if o_t else float("nan"))
             print(f"     {alan:<11} taban(→02.2026) {o_t:8.2f}  son(20.08→) {o_s:8.2f}  "
                   f"{cik[alan][2]:+7.1f}%   n={len(tb)}/{len(sm)}")
+    # SAĞ UÇ DENETİMİ. Bir veri kümesinin son günleri eksik doldurulmuş
+    # olabilir ve bu "trafik çöktü" ile BİREBİR aynı görünür. Son 30 günün
+    # kaç gününde kayıt var, ve seri hangi güne kadar geliyor.
+    from datetime import date, timedelta
+    bugun = date.today()
+    son_gun = seri[-1][0]
+    gunler = {t for t, _ in seri}
+    son30 = sum(1 for i in range(30)
+                if (bugun - timedelta(days=i)).strftime("%Y-%m-%d") in gunler)
+    print(f"     KAPSAM: son kayıt {son_gun} ({(bugun - date.fromisoformat(son_gun)).days} "
+          f"gün önce) · son 30 takvim gününün {son30}'unda kayıt var")
     return cik
 
 
@@ -125,34 +143,15 @@ def hurmuz_ve_kontrol():
             print(f"  {ad}: düştü {ex!r}")
 
 
-def gdelt():
-    print()
-    print("=" * 78)
-    print("3. GDELT — haber hacmi (ilk koşuda zaman aşımı; uzun süreyle yeniden)")
-    print("=" * 78)
-    for etiket, q in (("Hürmüz", '"strait of hormuz"'),
-                      ("İran savaşı", '"iran war"'),
-                      ("rafineri saldırısı", '"refinery strike" OR "refinery attack"'),
-                      ("ateşkes", '"ceasefire"')):
-        u = ("https://api.gdeltproject.org/api/v2/doc/doc?query="
-             + requests.utils.quote(q) + "&mode=timelinevol&timespan=12m&format=json")
-        try:
-            r = requests.get(u, timeout=90, headers=B)
-            seri = r.json()["timeline"][0]["data"]
-            d = [p["value"] for p in seri]
-            z = max(range(len(d)), key=lambda i: d[i])
-            print(f"  {etiket:<20} n={len(seri)}  son {seri[-1]['date'][:8]} {d[-1]:.4f}"
-                  f"  zirve {seri[z]['date'][:8]} {d[z]:.4f}  son/zirve {d[-1]/d[z]*100:.0f}%")
-            k = max(1, len(seri)//30)
-            print("      " + " ".join(f"{p['date'][4:8]}:{p['value']:.2f}" for p in seri[::k][-16:]))
-        except Exception as ex:                                  # noqa: BLE001
-            print(f"  {etiket:<20} düştü: {type(ex).__name__}")
+# GDELT KALDIRILDI. İki ayrı koşuda ölçüldü: birincisinde zaman aşımı
+# (devre kesici açıldı), ikincisinde 90 sn beklemeye rağmen JSON değil
+# döndü. Deponun kendi haber arşivi zaten ölçülmüş bir kayıt; çalışmayan
+# bir çağrıyı listede tutmak, her koşuda dört satır gürültü demek.
 
 
 def main() -> int:
     print(f"HÜRMÜZ KEŞFİ · {datetime.now(timezone.utc):%Y-%m-%d %H:%M} UTC\n")
     hurmuz_ve_kontrol()
-    gdelt()
     print("\nBİTTİ")
     return 0
 
