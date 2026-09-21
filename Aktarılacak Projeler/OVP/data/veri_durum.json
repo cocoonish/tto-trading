@@ -1,5 +1,5 @@
 {
- "kosum": "2026-09-20",
+ "kosum": "2026-09-21",
  "son_gun": "2026-09-18",
  "kapsam": {
   "n": 3049,
@@ -17,17 +17,17 @@
  "tazelik": {
   "kur": {
    "son": "2026-09-18",
-   "gecikme_gun": 2,
+   "gecikme_gun": 3,
    "tolerans": 6
   },
   "faiz": {
-   "son": "2026-09-17",
+   "son": "2026-09-18",
    "gecikme_gun": 3,
    "tolerans": 6
   },
   "tufe": {
    "son": "2026-08-31",
-   "gecikme_gun": 20,
+   "gecikme_gun": 21,
    "tolerans": 45
   }
  },
@@ -404,7 +404,7 @@
   1
  ],
  "faiz": [
-  3949,
+  3950,
   3
  ],
  "tufe": [
