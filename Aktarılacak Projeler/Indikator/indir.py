@@ -81,8 +81,17 @@ def kapanmamis_dusur(d: pd.DataFrame, aralik: str) -> pd.DataFrame:
     return d
 
 
+def epoch_sn(idx: pd.DatetimeIndex) -> pd.Index:
+    """Epoch saniye — ÇÖZÜNÜRLÜKTEN BAĞIMSIZ. pandas 3'te bir DatetimeIndex
+    ns, us ya da s çözünürlükte gelebilir ve `view('int64') // 10**9` buna
+    göre üç ayrı sayı verir: ilk bulut koşusu (#1) saniye çözünürlüklü
+    indeksle 617 bin barın HEPSİNE t=1 yazdı, arşiv zaman damgasız çıktı.
+    Birim önce saniyeye sabitlenir, sonra tam sayı alınır."""
+    return pd.Index(idx.as_unit("s").asi8, dtype="int64")
+
+
 def tablo(d: pd.DataFrame) -> pd.DataFrame:
-    return pd.DataFrame({"t": (d.index.view("int64") // 10**9).astype("int64"),
+    return pd.DataFrame({"t": epoch_sn(d.index),
                          "o": d["open"].values, "h": d["high"].values,
                          "l": d["low"].values, "c": d["close"].values,
                          "v": d["volume"].fillna(0).astype("int64").values})
