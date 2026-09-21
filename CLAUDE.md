@@ -2650,10 +2650,23 @@ replikasyonu (`Aktarılacak Projeler/Indikator/yapi_referans.py`), backtest
 (`backtest.py` → `site/src/data/yapi_backtest.json`), on figür (`sekil.py`),
 sayfa (`site/src/content/indikatorler/tto-yapi-momentum.mdx`, bileşen
 `YapiBacktest.astro`) ve kapı (`dogrula.py` → sayfa sınavı 26 kendiliğinden
-koşturur; `duman.py` on madde: geleceğe bakma bar bar, dersin Gartley örneği
-40,43–40,51, Pine input ↔ SABIT, tablo ↔ Pine dizileri, harmonik bantlar ↔
-f_klasik, olasılık bloğu ↔ JSON, pine_denetle, emir mekaniği altı hâl, BOS
-yalnız onaylı swing'e, künye).
+koşturur; `duman.py` on bir madde: geleceğe bakma bar bar, dersin Gartley
+örneği 40,43–40,51, Pine input ↔ SABIT, tablo ↔ Pine dizileri, harmonik
+bantlar ↔ f_klasik, olasılık bloğu ↔ JSON, pine_denetle, emir mekaniği altı
+hâl, BOS yalnız onaylı swing'e, künye, ve kapının KENDİ bağımlılığı).
+
+KAPININ BAĞIMLILIĞI KOŞUCUDA ÖLÇÜLÜR. İlk yayın koşusu (#600) sayfa sınavı
+26'da düştü: `dogrula.py` figür sırasını sormak için `sekil`i içe aktarıyor,
+`sekil` en tepede plotly istiyor ve yayın koşucusunda plotly KURULU DEĞİL.
+Yerel `npm run sinav` geçmişti — yerelde plotly var. Bir yayın kapısının
+okuduğu modül, koşucuda olmayan bir kütüphaneyi tepeden isteyemez; çizim
+kütüphanesi çizim yolunun bağımlılığıdır, kapı yolunun değil. `sekil` plotly
+yoksa `None`a düşer (çizim `main` adıyla reddeder), `duman` ⑪ kapı yolunu
+plotly ENGELLENMİŞ alt süreçte koşturur (kos() çağrılmaz — madde kendini
+çağırırdı). Arıza enjeksiyonuyla sınandı. Yan tuzak: düzeltme yalnız
+`Aktarılacak Projeler/` altına dokunduğu için `yayin.yml`in `site/**` yol
+süzgeci ateşlemedi; yayın elle dispatch edildi (#601 yeşil). Bir kapıyı
+düzelten commit siteye çıkmayan bir dizindeyse, yayını kendisi tetiklemez.
 
 VERİ YOLU. Bu koşucu Yahoo'ya çıkamıyor; bulut çıkıyor. İlk yol (koşu
 kaydına base64 basıp ayrıştırmak) İKİ kez tıkalı çıktı: kayıt aracı 95 bin
