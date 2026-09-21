@@ -464,6 +464,29 @@ def paket_kos(s: Seri, y: Y.Yapi, m: Y.Momentum, paket: str, hedef_R: float, spr
         if rast:
             oz["rastgele_ort_R"] = round(st.mean(rast), 3)
             oz["rastgele_yuzdelik"] = round(100 * sum(1 for v in rast if v < oz["ort_R"]) / len(rast), 1)
+        # EŞLEŞTİRİLMİŞ RASTGELE SEVİYE (SMC 15.4 · MPM yöntemi): limit paketlerinde
+        # asıl soru YER'dir — "OB'ye geri çekilmeyi almak" mı kazandırıyor, yoksa
+        # "herhangi bir geri çekilmeyi aynı derinlikte almak" mı? Her emrin
+        # geometrisi (sinyal kapanışından limite mesafe, risk, hedef R, yön)
+        # rastgele bir bara taşınır ve aynı limit mekaniğiyle koşturulur.
+        if any(e["limit"] for e in emirler):
+            geom = [(abs(s.c[e["bar"]] - e["giris"]), abs(e["giris"] - e["stop"]), e["yon"],
+                     abs(e["hedef"] - e["giris"]) / abs(e["giris"] - e["stop"]))
+                    for e in emirler if e["limit"] and abs(e["giris"] - e["stop"]) >= asgari * (y.atr[e["bar"]] or 0) > 0]
+            rs = []
+            for _ in range(RASTGELE):
+                rr = []
+                for d, risk, yon, hr in geom:
+                    b = rng.choice(adaylar)
+                    g = s.c[b] - yon * d
+                    x = islem(s, b, yon, g, g - yon * risk, g + yon * hr * risk, True, UFUK)
+                    if x is not None:
+                        rr.append(x["R"])
+                if rr:
+                    rs.append(st.mean(rr))
+            if rs:
+                oz["rastgele_seviye_ort_R"] = round(st.mean(rs), 3)
+                oz["rastgele_seviye_yuzdelik"] = round(100 * sum(1 for v in rs if v < oz["ort_R"]) / len(rs), 1)
     return oz
 
 
@@ -542,6 +565,9 @@ def main() -> int:
                                          "ort_R": round(sum(p["ort_R"] * p["n"] for p in sat) / n, 3),
                                          "net_ort_R": round(sum((p["net_ort_R"] or 0) * p["n"] for p in sat) / n, 3),
                                          "rastgele_ort_R": round(sum((p.get("rastgele_ort_R") or 0) * p["n"] for p in sat) / n, 3),
+                                         "rastgele_seviye_ort_R": round(sum((p.get("rastgele_seviye_ort_R") or 0) * p["n"] for p in sat) / n, 3) if any(p.get("rastgele_seviye_ort_R") is not None for p in sat) else None,
+                                         "seri_ustu_rastgele_seviye": sum(1 for p in sat if (p.get("rastgele_seviye_yuzdelik") or 0) >= 95),
+                                         "risk_atr_p50": round(st.median(p["risk_atr_p50"] for p in sat if p.get("risk_atr_p50") is not None), 2) if any(p.get("risk_atr_p50") is not None for p in sat) else None,
                                          "ilk_yari_ort_R": round(sum((p["ilk_yari_ort_R"] or 0) * p["n"] for p in sat) / n, 3),
                                          "ikinci_yari_ort_R": round(sum((p["ikinci_yari_ort_R"] or 0) * p["n"] for p in sat) / n, 3),
                                          "seri_ustu_rastgele": sum(1 for p in sat if (p.get("rastgele_yuzdelik") or 0) >= 95)})
