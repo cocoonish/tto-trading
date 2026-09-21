@@ -3,7 +3,7 @@
 """TTO · Yapı ve Momentum — DUMAN SINAMASI (ağa çıkmaz, saniyeler sürer).
 
 Her madde bu depoda gerçekten yapılmış bir kusurun sınıfından; hiçbiri
-varsayımsal değil. Düşen madde ENGEL'dir: yayın kapısı (sayfa sınavı 27)
+varsayımsal değil. Düşen madde ENGEL'dir: yayın kapısı (sayfa sınavı 26)
 bu dosyayı koşturur.
 
   ① Geleceğe bakma: seri i'de kırpılınca i'deki ilan değişmez (bar bar).
@@ -19,6 +19,10 @@ bu dosyayı koşturur.
   ⑨ BOS yalnız onaylı swing'e karşı: koşan uçta kırılım olayı üretilmez.
   ⑩ Backtest JSON'un künyesi kural kaynağını ve spread varsayımını taşır;
      her TF için beş paket satırı var.
+  ⑪ Yayın kapısı (dogrula.py) PLOTLY OLMADAN koşar: yayın koşucusunda plotly
+     kurulu değil ve ilk yayın koşusu `import sekil` satırında düştü
+     (21.09.2026). Alt süreç plotly'yi engelleyerek dogrula.py'yi koşturur;
+     kapının okuduğu modül koşucuda olmayan bir kütüphane isteyemez.
 """
 from __future__ import annotations
 
@@ -168,6 +172,15 @@ def kos() -> list[str]:
         for tf in B.ZAMAN_DILIMLERI:
             pk = {p["paket"] for p in d["paket_toplam"] if p["tf"] == tf}
             _sina(hata, set(B.PAKETLER) <= pk, f"⑩ {tf}: paket satırları eksik {set(B.PAKETLER) - pk}")
+    # ⑪ yayın kapısı plotly'siz: dogrula.py'nin İÇE AKTARMA yolu (sekil dahil) ve
+    #    figür sırası kapısı, plotly engellenmiş bir alt süreçte çalışmalı.
+    #    kos() çağrılmaz (yoksa bu madde kendini çağırırdı); düşen yol koşucudakiyle aynı.
+    kod = ("import sys; sys.modules['plotly'] = None; sys.dont_write_bytecode = True; "
+           f"sys.path.insert(0, {str(KOK)!r}); import dogrula; "
+           "h = dogrula.sekil.mdx_sirasi_sina(); print('kapi-yolu-tamam' if not h else h)")
+    r11 = subprocess.run([sys.executable, "-c", kod], capture_output=True, text=True, cwd=str(KOK))
+    _sina(hata, r11.returncode == 0 and "kapi-yolu-tamam" in r11.stdout,
+          "⑪ yayın kapısı plotly'siz koşamıyor: " + (r11.stdout + r11.stderr)[-400:])
     return hata
 
 
@@ -178,4 +191,4 @@ if __name__ == "__main__":
         for x in h:
             print(" ·", x)
         sys.exit(1)
-    print("duman: on madde geçti")
+    print("duman: on bir madde geçti")

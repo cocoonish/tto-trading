@@ -22,8 +22,16 @@ SITE = DEPO / "site"
 sys.path.insert(0, str(KOK))
 sys.path.insert(0, str(SITE / "tools"))
 sys.path.insert(0, str(DEPO))
-import plotly.graph_objects as go                                # noqa: E402
-from plotly.subplots import make_subplots                         # noqa: E402
+# plotly yalnız ÇİZİM için gerekir. Yayın kapısı (`dogrula.py` → sayfa sınavı)
+# bu modülden yalnız `mdx_sirasi_sina()`yı ister ve yayın koşucusunda plotly
+# KURULU DEĞİL — ilk yayın koşusu tam bu satırda düştü (ModuleNotFoundError).
+# Kütüphane yoksa çizim yolu adıyla reddedilir, kapı yolu çalışır;
+# `duman.py` ⑪ maddesi kapı yolunu plotly'siz koşturarak sınar.
+try:
+    import plotly.graph_objects as go                            # noqa: E402
+    from plotly.subplots import make_subplots                     # noqa: E402
+except ImportError:                                              # pragma: no cover
+    go = make_subplots = None
 import plotly_stil                                               # noqa: E402
 import veri                                                      # noqa: E402
 import yapi_referans as Y                                        # noqa: E402
@@ -424,6 +432,8 @@ def main() -> int:
         h = mdx_sirasi_sina()
         print("\n".join(h) if h else "figür sırası ve dosyalar tamam")
         return 1 if h else 0
+    if go is None:
+        raise SystemExit("ENGEL · figür üretimi plotly ister ve kurulu değil (kapı yolu `--denetle` onsuz çalışır)")
     d = json.loads(JSON.read_text(encoding="utf-8"))
     S = BT.seriler_tf()
     s = S["1h"]["eurusd"]; y = Y.Yapi(s); m = Y.Momentum(s)
