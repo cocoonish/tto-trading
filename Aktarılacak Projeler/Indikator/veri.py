@@ -67,6 +67,30 @@ def oku(ad: str) -> Seri:
     return Seri(o, h, l, c, z)
 
 
+def yeniden_ornekle(s: Seri, dakika: int) -> Seri:
+    """Kapanmış barlardan daha uzun bar kurar (1 sa → 4 sa; FX'te 1 sa → günlük).
+
+    Kova sınırı UTC gece yarısından sayılır (4 sa: 00·04·08·12·16·20). Bir
+    kovanın barı, kovanın SON alt barı arşivde yoksa (hafta sonu, seans
+    kapanışı) yine kapanmış sayılır — kova zamanı geçmiştir; yalnız arşivin
+    SON kovası düşürülür, çünkü onun kalan alt barları henüz gelmemiş olabilir.
+    Neden gerekli: Yahoo'nun FX GÜNLÜK barlarında gövde yok (gövde/menzil
+    medyanı 0,02 — açılış kapanışa yapışık), yani bar anatomisi okunamaz;
+    günlük FX bu yüzden saatlikten kurulur ve iki yıl geriye gider."""
+    if s.zaman is None:
+        raise ValueError("yeniden örnekleme zaman damgası ister")
+    adim = dakika * 60
+    kova, o, h, l, c, z = None, [], [], [], [], []
+    for i, t in enumerate(s.zaman):
+        k = (int(t) // adim) * adim
+        if k != kova:
+            kova = k
+            o.append(s.o[i]); h.append(s.h[i]); l.append(s.l[i]); c.append(s.c[i]); z.append(k)
+        else:
+            h[-1] = max(h[-1], s.h[i]); l[-1] = min(l[-1], s.l[i]); c[-1] = s.c[i]
+    return Seri(o[:-1], h[:-1], l[:-1], c[:-1], z[:-1])
+
+
 def enstruman(ad: str) -> str:
     return ad.rsplit("-", 1)[0]
 
