@@ -1,0 +1,487 @@
+{
+ "_kosu": {
+  "eksik": [],
+  "toplam_bar": 617035,
+  "zaman": "2026-09-21 18:19 UTC"
+ },
+ "audusd-15m": {
+  "bar": 5672,
+  "sha256": "ca671117304a979cd7cf5807404a82ca5b5433508e57eeafa5266db31b836634",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "audusd-1d": {
+  "bar": 5292,
+  "sha256": "682231ab624e9a4d2c6979bff2cbf3b5db7b80c5525e3e8d5bc037668f6d39aa",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "audusd-1h": {
+  "bar": 17330,
+  "sha256": "f239c288505fe7e7ed558ce0368c256b0c11b88613409302a1404608fbd8a0cc",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "audusd-5m": {
+  "bar": 17010,
+  "sha256": "63280efa6ecd3cdc9a9e445b642f95b32670c7e2d5ad92668aeee2bdb7898dc2",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "dxy-15m": {
+  "bar": 4500,
+  "sha256": "ba27e8041b7fad060f59787a764c17e86738fddb601b297db5039775d2798f1d",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "dxy-1d": {
+  "bar": 14146,
+  "sha256": "9cae67aa536a0847cf8895427191a129885af1f68734af0e2f53b59fbde29c94",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "dxy-1h": {
+  "bar": 14298,
+  "sha256": "a3fbf56460e85b74b81c7afedaa500140527ac47d19c17e6b0454bfd9eb3b6ae",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "dxy-5m": {
+  "bar": 13390,
+  "sha256": "c1a06d7f827a950d97f8ed3ea9a679c93f0b77b451d83c6adeed087df9e2ba39",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "eurchf-15m": {
+  "bar": 5670,
+  "sha256": "e31b67e9bd5e2d1a217bc67c858f2aeee72f2e56f77f6124ad9a0954a139e584",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "eurchf-1d": {
+  "bar": 6139,
+  "sha256": "558785090d9e10418c4a4560ea8a8d9a6a51551c13acf98571722efdefb2d372",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "eurchf-1h": {
+  "bar": 17244,
+  "sha256": "43f46b370ea7f42ede0aa9bdcd37bcd44eaeb37fead5a0b9b6248439c8ed6f0c",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "eurchf-5m": {
+  "bar": 17007,
+  "sha256": "b9b26878aaa51eecc6af9e6a9fad3880085c5ee55fc1b853647811e2737e3be3",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "eurgbp-15m": {
+  "bar": 5672,
+  "sha256": "ef55ddf22e5f92c8f31c0581c9e9851ac8d52a5d236a4c948e4e431de7822766",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "eurgbp-1d": {
+  "bar": 7216,
+  "sha256": "da3409933f045653c181328a8821fff804ae866bf4299add035cf96c8202194c",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "eurgbp-1h": {
+  "bar": 17261,
+  "sha256": "004ea7d2d9627416e24493154d6b7d516165e792bb8fa39d9d56fda0737ebfdf",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "eurgbp-5m": {
+  "bar": 17013,
+  "sha256": "d18e7648122113e5ea348602d2c8a195b0d0ab2346d8b9eec7bb96ccbd83542c",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "eurusd-15m": {
+  "bar": 5669,
+  "sha256": "6ad9b330d42686f21b02bf0318fd6032cc85e7e40d4e27ddf65ce60be6931f0b",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "eurusd-1d": {
+  "bar": 5916,
+  "sha256": "e6d85c22a1b81ef90edc34a84adbc5bb778833e461a330740510665ddaf60a40",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "eurusd-1h": {
+  "bar": 17235,
+  "sha256": "46c22428f40c0de2f5d0602b4cb448b1a9a26476ea86c4d84371cf1a1ee1e4df",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "eurusd-5m": {
+  "bar": 17007,
+  "sha256": "4321612d5e31e9e1eb309344c59e7236fb3ff1a94449117b3a83b0e0168fbec7",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "gbpusd-15m": {
+  "bar": 5669,
+  "sha256": "4e76daadfb6b1caff1780e77912e479c8419afa6da0461ee1c712828a796084e",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "gbpusd-1d": {
+  "bar": 5928,
+  "sha256": "091eb399a8b176d61df9cbd81fa359b94640a21383f4d4267cd71b3b120f0b1a",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "gbpusd-1h": {
+  "bar": 17237,
+  "sha256": "119ad4e588c83ac8f0a2477d49b5ac00ddd0f1514506ae5a447ab8671e264928",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "gbpusd-5m": {
+  "bar": 17007,
+  "sha256": "0f0bdc424b1c422db4c82b1cbf68652063bb15ba33094dde57add6590f23f045",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "ndx-15m": {
+  "bar": 1553,
+  "sha256": "6d49246edc73b10d4e3202b41cdf614daa7c99cf86457fa211bd1c3d26388778",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "ndx-1d": {
+  "bar": 10321,
+  "sha256": "183cb083a8d0132eff405d4ed00fa27e1d31546439e249ae49f6bbe86bd9c6b8",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "ndx-1h": {
+  "bar": 5070,
+  "sha256": "8460bb3c5071deadb7a836417a5d46410c8446c2b61cf8379111e56ce309c212",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "ndx-5m": {
+  "bar": 4659,
+  "sha256": "b7cd7ada864d6407748f951821cdef4f3d9ac97502c8f364d72cc8436d68cd5c",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "nzdusd-15m": {
+  "bar": 5672,
+  "sha256": "558ddb14e950710a75201a74d683d9dd4c13e50af82c9acd0232f79d6b5ad737",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "nzdusd-1d": {
+  "bar": 5917,
+  "sha256": "48f34685ddf0c1ce171367f5e9abfdbe27651333ef94ab3575b9ee2536624176",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "nzdusd-1h": {
+  "bar": 17326,
+  "sha256": "de710e5848bb8186bd8a6df65df957c08c4c6240f102e6a36b7f3ce5dc4c17d2",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "nzdusd-5m": {
+  "bar": 17012,
+  "sha256": "7ac54138b06b7af9f5e9219d76cb16b5af1831e782f7b12c7f95fc91f8f711ca",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "spx-15m": {
+  "bar": 1553,
+  "sha256": "a11ddaa8c7874d7c8dd6c899a009050fa5955b80bed8a960908b4159c6a5f83f",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "spx-1d": {
+  "bar": 24796,
+  "sha256": "4e07a0292538d8a0cd03ed582c681f2ba20e0701a3179fd0cf9fe7f0f5c33243",
+  "bas": "1969-12-31 23:59",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "spx-1h": {
+  "bar": 5070,
+  "sha256": "ed44f166793fc5a8d3dcd4a554875ba3f4cfe05d04f33e08ea96ab3938b63184",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "spx-5m": {
+  "bar": 4658,
+  "sha256": "bb3f0f0603f69325893865985ef3c8361382116051ddf355bdfcf9a12f83b12f",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "usdcad-15m": {
+  "bar": 5663,
+  "sha256": "592b236cbc87eaec743701279a0c84855ae8a11777cbc1da4c7794f669017e18",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "usdcad-1d": {
+  "bar": 5984,
+  "sha256": "487c59556c41d2e4afeafe4cc07964905725b285bf224099eeb6f074c9ba558a",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "usdcad-1h": {
+  "bar": 17333,
+  "sha256": "ea0250c03372a99817dcc0e8aa7d11ab175bcd31ecb01766c42661fab80e12d2",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "usdcad-5m": {
+  "bar": 16955,
+  "sha256": "94f15c5e42f5a48f3dc2c2a913344c832f2afab4cb5ec040b84eecf9a8eb9a71",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "usdchf-15m": {
+  "bar": 5649,
+  "sha256": "1c96c344f6732ce24acaa5c4762589e912bf7112a49798a99554699a3753b379",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "usdchf-1d": {
+  "bar": 5982,
+  "sha256": "8cecbf2c09eda7f771ace6660c3644683c85654efaa0a96c5a7ce66fc9f34ed0",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "usdchf-1h": {
+  "bar": 17174,
+  "sha256": "18c2cf3f680fbb8284f16771e1fc113e14389218162916a15adefa5685e91e18",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "usdchf-5m": {
+  "bar": 16939,
+  "sha256": "e694d9a544080689532142c4bdd0a639d1e8c668582753e95d50afba2796398e",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "usdjpy-15m": {
+  "bar": 5649,
+  "sha256": "d21c83b354381404c459996f9e4e6d6e5ab60b45e05aa3561af3210b96c866c4",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "usdjpy-1d": {
+  "bar": 7750,
+  "sha256": "11053f4ba6a2552497e4f1a9ed742f47422a0441c0ffa1d0df679fd63f019cfc",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "usdjpy-1h": {
+  "bar": 17138,
+  "sha256": "de3f5f6c5fe957683dea675e41b45b07b3954ec6443dfbe3bc10b9802b767153",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "usdjpy-5m": {
+  "bar": 16939,
+  "sha256": "4c10411d726c56a6ca77e3079558c4b2698f582d00ef5cfb2264d83ca19c4d78",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:18 UTC"
+ },
+ "wti-15m": {
+  "bar": 4542,
+  "sha256": "4d53885311b5d049d7abe90d52c3cdf35c4eab7df6f93e90f092e10d394101a8",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "wti-1d": {
+  "bar": 6546,
+  "sha256": "32d12ff7d01df8df4bc4bdd5021e428070a1e90e272d7315ec7ed6c3fe6d5113",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "wti-1h": {
+  "bar": 13543,
+  "sha256": "56c0174bc80e4a8ad02a8e4b1a0580cfd1eae07c733a60326e305237dc9a4968",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "wti-5m": {
+  "bar": 13599,
+  "sha256": "b47b12cf7a75d30688435a9398f7d5e84f26205c7857571a99c9c78e83fff091",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "xau-15m": {
+  "bar": 4543,
+  "sha256": "ef87fc8d598eeaa88749c69d27594411110e54f365c814f097d5e40b5ed8758b",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "xau-1d": {
+  "bar": 6538,
+  "sha256": "ccc2cc09812acda886a4450b2099aabaae062fe6c8814d6ca40e35e1b15759ec",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "xau-1h": {
+  "bar": 13728,
+  "sha256": "165b36053eb0a1c4254cc289093ed189afb90962f2c9b90bf060cdcc17a90ab8",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "xau-5m": {
+  "bar": 13600,
+  "sha256": "efd500b93caf2a030218d45677ddd8a3ca0f957f9014b5d745f2e727ceb896c1",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "xu100-15m": {
+  "bar": 1946,
+  "sha256": "8dcbf04d909cfd77181e83e2f67c55a897e8248a7e486c3f7dddf1f774ba149a",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "xu100-1d": {
+  "bar": 7297,
+  "sha256": "95ef4d250cacb396096eb2be3beeb80b422039e8db6922a005ab037c1830eb45",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "xu100-1h": {
+  "bar": 6146,
+  "sha256": "3f31dbcf3911d5f23f9a05c4aec6ca395df0caba3e9bdbc9959d1d56bdb5e8d5",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ },
+ "xu100-5m": {
+  "bar": 5717,
+  "sha256": "48484e9475c0f5caa22865972a3427bc7df6191029509d722d03ceecc4f5f50b",
+  "bas": "1970-01-01 00:00",
+  "son": "1970-01-01 00:00",
+  "kaynak": "Yahoo Finance (yfinance), kapanmamış son bar düşürüldü, koşular üst üste biriktirilir",
+  "son_kosu": "indikator-veri.yml #1, commit 4204aa1b, 2026-09-21 18:19 UTC"
+ }
+}
