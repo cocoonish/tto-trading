@@ -882,14 +882,15 @@ if kapanmis
 //  Sıra: 5m · 15m · 1h · 4h · 1d. −1 = ölçüm yok.
 // ─────────────────────────────────────────────────────────────────────────
 // OLASILIK-BAŞI
-var olBosT1    = array.from(-1.0, -1.0, -1.0, -1.0, -1.0)
-var olMssDevam = array.from(-1.0, -1.0, -1.0, -1.0, -1.0)
-var olSweep    = array.from(-1.0, -1.0, -1.0, -1.0, -1.0)
-var olFvgTepki = array.from(-1.0, -1.0, -1.0, -1.0, -1.0)
-var olObTepki  = array.from(-1.0, -1.0, -1.0, -1.0, -1.0)
-var olPrzT1    = array.from(-1.0, -1.0, -1.0, -1.0, -1.0)
-var olDivIsabet = array.from(-1.0, -1.0, -1.0, -1.0, -1.0)
-var olN        = array.from(0, 0, 0, 0, 0)
+var olBosT1    = array.from(0.285, 0.292, 0.334, 0.347, 0.371)
+var olMssDevam = array.from(0.460, 0.494, 0.473, 0.530, 0.476)
+var olSweep    = array.from(0.467, 0.485, 0.491, 0.493, 0.501)
+var olFvgTepki = array.from(0.461, 0.480, 0.476, 0.488, 0.500)
+var olObTepki  = array.from(0.531, 0.556, 0.568, 0.569, 0.519)
+var olPrzT1    = array.from(0.660, 0.687, 0.701, 0.718, 0.567)
+var olDivIsabet = array.from(0.461, 0.466, 0.446, 0.471, 0.442)
+var olN         = array.from(208528, 69622, 213532, 56785, 11714)
+// ölçüm 2026-09-21 · bar sayısı zaman dilimine göre olN'de · N<30 hücre −1
 // OLASILIK-SON
 
 f_tfIdx() =>

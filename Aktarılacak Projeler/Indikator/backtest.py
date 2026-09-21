@@ -98,6 +98,11 @@ def islem(s: Seri, bas: int, yon: int, giris: float, stop: float, hedef: float,
     """bas: sinyal barı (kapanmış). Emir bas+1'den itibaren. Limit emirde doluş
     fiyatın seviyeye gelmesiyle (ufuk içinde gelmezse None). Döner: R (hedef
     → +hedefR, stop → −1), 'belirsiz' bayrağı (aynı barda ikisi), doluş barı."""
+    # R, PLANLANAN riske göre yazılır (giriş planı − stop): doluş boşlukla
+    # daha iyi gelirse kazanç R'ye eklenir, ama payda küçülmez. İlk yazım
+    # paydayı doluştan yeniden kuruyordu ve hafta sonu boşluğunda limitin
+    # ötesinde açılan bir bar riski sıfıra yaklaştırıp tek işlemde onlarca R
+    # üretiyordu (1 sa OB tabanında ortalama +2,9 R — artefakt).
     risk = abs(giris - stop)
     if risk <= 0:
         return None
@@ -111,8 +116,7 @@ def islem(s: Seri, bas: int, yon: int, giris: float, stop: float, hedef: float,
                 # doluş barında açılış boşlukla seviyeyi geçtiyse daha iyi fiyattan dolar
                 if (yon > 0 and s.o[i] < giris) or (yon < 0 and s.o[i] > giris):
                     giris = s.o[i]
-                    risk = abs(giris - stop)
-                    if risk <= 0:
+                    if (giris - stop) * yon <= 0:
                         return None
                 break
             i += 1
@@ -123,18 +127,18 @@ def islem(s: Seri, bas: int, yon: int, giris: float, stop: float, hedef: float,
             return None
         dolus = i
         giris = s.o[i]                      # piyasa emri: sonraki barın açılışı
-        risk = abs(giris - stop)
-        if risk <= 0:
+        if (giris - stop) * yon <= 0:
             return None
-    hedef_r = abs(hedef - giris) / risk
+    hedef_r = (hedef - giris) * yon / risk
+    stop_r = -(giris - stop) * yon / risk    # planlanan riskle −1; boşlukla dolduysa daha az
     j = dolus
     while j < n and j <= dolus + ufuk:
         stop_vur = s.l[j] <= stop if yon > 0 else s.h[j] >= stop
         hedef_vur = s.h[j] >= hedef if yon > 0 else s.l[j] <= hedef
         if stop_vur and hedef_vur:
-            return {"R": -1.0, "belirsiz": True, "dolus": dolus, "cikis": j, "risk": risk, "giris": giris}
+            return {"R": stop_r, "belirsiz": True, "dolus": dolus, "cikis": j, "risk": risk, "giris": giris}
         if stop_vur:
-            return {"R": -1.0, "belirsiz": False, "dolus": dolus, "cikis": j, "risk": risk, "giris": giris}
+            return {"R": stop_r, "belirsiz": False, "dolus": dolus, "cikis": j, "risk": risk, "giris": giris}
         if hedef_vur:
             return {"R": hedef_r, "belirsiz": False, "dolus": dolus, "cikis": j, "risk": risk, "giris": giris}
         j += 1
