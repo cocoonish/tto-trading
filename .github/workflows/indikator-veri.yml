@@ -1,0 +1,69 @@
+# İndikatör OHLC arşivi — Yahoo'dan indirir, dala COMMIT eder.
+#
+# Neden ayrı bir iş akışı: bu oturumların koşucusu Yahoo'ya çıkamıyor ve
+# koşu kaydı aracı yalnız son 5.000 satırı veriyor (21.09.2026 #230'da 95 bin
+# satırlık kaydın 5 bini geldi, 500 bin bar kayboldu; kaydın tam indirmesi de
+# koşucu depolamasına çıkamıyor). Veri koşu kaydından DEĞİL, deponun kendi
+# kalıbıyla (veri.yml Commit adımı) dala yazılır: yayımlanan her backtest
+# sayısının arşivi depoda durur ve ölçüm ağa çıkmadan yeniden üretilebilir.
+#
+# Kısa aralıklar (5/15 dk) Yahoo'da 60 günle sınırlı; betik eldeki arşivle
+# birleştirir, hiçbir eski bar silinmez. Haftada bir koşarsa arşiv kesintisiz
+# birikir — şimdilik yalnız elle tetiklenir (cron bilerek yok: birikimin
+# okuru olmadan zamanlanmış koşu, ölçüsü olmayan bir veri demek).
+
+name: İndikatör verisi
+
+on:
+  workflow_dispatch:
+
+# veri.yml ile aynı dala commit eder; iki commit yarışmasın.
+concurrency:
+  group: veri
+  cancel-in-progress: false
+
+jobs:
+  indir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Bağımlılıklar
+        run: pip install --quiet pandas numpy yfinance
+      - name: İndir
+        # -u: tamponsuz çıktı; ilerleme görünsün (CLAUDE.md keşif dersi).
+        # Betiğin kendi bütçesi 22 dk; adım 28, iş 35 — adım tavanı adımların
+        # toplamının üstünde (CLAUDE.md: bir işin bütçesi adımlarının
+        # toplamının üstünde durmalıdır).
+        timeout-minutes: 28
+        run: python3 -u "Aktarılacak Projeler/Indikator/indir.py"
+      - name: Commit
+        if: always()
+        run: |
+          git config --global user.name  "tto-veri"
+          git config --global user.email "bot@users.noreply.github.com"
+          git add "Aktarılacak Projeler/Indikator/veri" || true
+          if git diff --cached --quiet; then
+            echo "arşiv değişmedi — commit yok"
+          else
+            git commit -m "indikatör: $(date -u +'%Y-%m-%d %H:%M') OHLC arşivi (otomatik)"
+            for deneme in 1 2 3 4 5; do
+              git pull --rebase --autostash -X theirs || true
+              if git push; then
+                echo "push tamam (deneme $deneme)"
+                break
+              fi
+              if [ "$deneme" = "5" ]; then
+                echo "::error::push beş denemede de reddedildi."
+                exit 1
+              fi
+              echo "::warning::push reddedildi (deneme $deneme) — yeniden deneniyor."
+              sleep $((deneme * 5))
+            done
+          fi

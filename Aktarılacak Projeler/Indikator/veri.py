@@ -29,10 +29,12 @@ from brooks_referans import Seri  # noqa: E402
 # karşılığı). Yahoo ilan etmez; burada enstrümanın piyasa konvansiyonu
 # yazılıdır, brooks_referans.tick_tahmini yalnız yedektir.
 TICK = {"eurusd": 0.00001, "gbpusd": 0.00001, "usdjpy": 0.001, "usdchf": 0.00001,
-        "audusd": 0.00001, "usdtry": 0.0001, "altin": 0.1, "btcusd": 1.0,
-        "dxy": 0.001, "sp500": 0.25, "bist100": 0.01, "wti": 0.01}
+        "audusd": 0.00001, "usdcad": 0.00001, "nzdusd": 0.00001, "eurgbp": 0.00001,
+        "eurchf": 0.00001, "dxy": 0.001, "xu100": 0.01, "spx": 0.01, "ndx": 0.01,
+        "wti": 0.01, "xau": 0.1}
 PIP = {"eurusd": 0.0001, "gbpusd": 0.0001, "usdjpy": 0.01, "usdchf": 0.0001,
-       "audusd": 0.0001, "usdtry": 0.0001}
+       "audusd": 0.0001, "usdcad": 0.0001, "nzdusd": 0.0001, "eurgbp": 0.0001,
+       "eurchf": 0.0001}
 
 
 def kunye() -> dict:
