@@ -50,6 +50,7 @@ from pathlib import Path
 
 KOK = Path(__file__).resolve().parent
 DEPO = KOK.parents[1]
+sys.dont_write_bytecode = True   # public altına __pycache__ bırakma: yayın kapısı düşer
 sys.path.insert(0, str(DEPO / "site" / "public" / "indikatorler"))
 from brooks_referans import Seri  # noqa: E402
 

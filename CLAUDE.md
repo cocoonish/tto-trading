@@ -2636,3 +2636,70 @@ SQLite önbelleğini kilitliyor ("database is locked") ve düşen kod BOŞ SERİ
 olarak dönüyor — bir bacağın sessizce kaybolması crack aritmetiğini eksik
 bırakır; kodlar sırayla isteniyor ve boş dönen kod üç denemeden sonra ADIYLA
 hata veriyor.
+
+**KARAR (21.09.2026, kullanıcı) — İKİ PANELLİ "TTO · YAPI VE MOMENTUM": SMC +
+HARMONİK + KULLANICI DİVERJANS TABLOSU; ARŞİV DEPOYA COMMIT EDİLİR; KENAR YOK.**
+Kullanıcı Brooks indikatörünü yetersiz buldu ve kendi "TTO All-in-1" Pine'ını
+verdi (RTF'te iki kez yapıştırılmış, ikinci kopya tam; `Aktarılacak
+Projeler/Indikator/gelen/`): SMC ve harmonik dersleriyle harmanlanmış, alt ve
+üst panelli, olasılık yazan, backtest'li bir indikatör istedi; evren yedi FX
+majörü, EUR/GBP, EUR/CHF, DXY, XU100, SPX, NDX, WTI, XAU (USD/TRY YOK); ana
+dilim 5 dk, bağlam 1 sa/4 sa/günlük. Nihai ürün iki Pine v6 dosyası
+(`site/public/indikatorler/tto-yapi.pine`, `tto-momentum.pine`), Python
+replikasyonu (`Aktarılacak Projeler/Indikator/yapi_referans.py`), backtest
+(`backtest.py` → `site/src/data/yapi_backtest.json`), on figür (`sekil.py`),
+sayfa (`site/src/content/indikatorler/tto-yapi-momentum.mdx`, bileşen
+`YapiBacktest.astro`) ve kapı (`dogrula.py` → sayfa sınavı 26 kendiliğinden
+koşturur; `duman.py` on madde: geleceğe bakma bar bar, dersin Gartley örneği
+40,43–40,51, Pine input ↔ SABIT, tablo ↔ Pine dizileri, harmonik bantlar ↔
+f_klasik, olasılık bloğu ↔ JSON, pine_denetle, emir mekaniği altı hâl, BOS
+yalnız onaylı swing'e, künye).
+
+VERİ YOLU. Bu koşucu Yahoo'ya çıkamıyor; bulut çıkıyor. İlk yol (koşu
+kaydına base64 basıp ayrıştırmak) İKİ kez tıkalı çıktı: kayıt aracı 95 bin
+satırın SON 5 binini veriyor ve kaydın tam indirmesi koşucu depolamasına
+(Azure blob) çıkamıyor — kurum politikası, retry yok. Doğru yol deponun kendi
+kalıbı: `indikator-veri.yml` (workflow_dispatch, `contents: write`, veri
+concurrency grubu) `indir.py`yi koşturup arşivi DALA COMMIT eder; 15 enstrüman
+× 4 aralık = 60 csv.gz + `kunye.json` (sha256; `veri.py` okurken sınar).
+Kısa aralıklar (5/15 dk) Yahoo'da 60 günle sınırlı ve koşular ÜST ÜSTE
+BİRİKTİRİLİR; cron bilerek yok. Yeni iş akışı dalda dispatch EDİLEMİYOR
+(404): dosya önce main'e girmeli, sonra ref olarak dal verilebilir. İki
+tuzak ölçüldü: (1) pandas 3'te `DatetimeIndex.view('int64') // 10**9`
+çözünürlüğe bağlı — bulutta indeks SANİYE çözünürlüğünde geldi, 617 bin
+barın hepsine t=1 yazıldı; `as_unit("s").asi8` ile sabitlendi. (2) Yahoo'nun
+FX GÜNLÜK barında gövde yok (gövde/menzil medyanı 0,02); günlük ve 4 sa
+saatlikten kurulur (`veri.yeniden_ornekle`, UTC gece yarısı kova, son kova
+düşer). Yahoo 5 dk EUR/USD, AUD/USD, NZD/USD barlarının üçte biri gövdesiz
+(kaba kotasyon) — yapı/havuz ölçüleri sağlam, bar anatomisi zayıf.
+
+ÖLÇÜM (560 bin kapanmış bar, 75 seri, 5 dilim). Taban oranlar okumayı
+değiştiriyor: BOS'tan sonra ±0,618·aralık hedefi kırılım geri alınmadan
+%28–37; CHoCH/MSS sonrası yeni yönde BOS %46–53; sweep sonrası 1 ATR dönüş
+%47–50 (yazı tura); FVG 50 barda CE %79–83, tam dolum %70–76, ters %33–39;
+OB ilk dokunuşta 1 ATR tepki %52–57; eşit tepe/dip 50 barda sweep %31–33 ·
+run %38–52 · test yok %23–30; PRZ'ye gelme %31–42, gelenin teyidi %61–72,
+teyitten T1 %57–72. PAKETLER: beş paketin hiçbiri maliyet sonrası
+yayımlanabilir kenar vermedi. OB retest her dilimde rastgele GİRİŞİ yeniyor
+(brüt +0,20…+0,27 R, iki yarı tutarlı) ama aynı derinlikteki rastgele LİMİT
+(eşleştirilmiş rastgele seviye, SMC 15.4) aynı sayıyı veriyor — kenar yerin
+değil geri çekilmeyi limitle almanın; risk medyanı 0,6 ATR, spread 5/15
+dk'da eksiye çeviriyor. Diverjans tablosunun en iyi satırı (iddia %63,6)
+%26–28 ölçüldü; satırların çoğu %50 civarı, iddia sırasıyla ölçülen sıra
+ilişkisiz. Konum/trend/itki süzgeçleri paket ortalamasını değiştirmiyor.
+
+ÜÇ ÖLÇÜM TUZAĞI KAYDA DEĞER. (1) R'nin paydası PLANLANAN risktir: boşlukla
+dolan limitte payda doluştan kurulunca hafta sonu boşluğu riski sıfıra
+yaklaştırıp tek işlemde onlarca R üretti (1 sa OB tabanı +2,9 R — artefakt).
+(2) Rastgele tabanın girişi de sinyal kapanışından değil DOLUŞ fiyatından
+kurulur; aksi 34 emirde +0,79 R sahte taban verdi. (3) BOS yalnız ONAYLI
+swing'e karşı sorulur; koşan uca karşı sorulunca 823 sahte BOS çıktı.
+Harmonik PRZ bant UÇLARINDAN değil İDEAL üç sayıdan kurulur: uçlar bölgeyi
+şişirip Gartley'nin B bandını paylaşan Crab'i aynı C'de sahte aday yaptı.
+
+PARİTE KAPISININ GÖREMEDİĞİ İKİ FARK ADIYLA: Pine `ta.pivothigh`in eşitlik
+davranışı derlenmeden doğrulanamaz (replikasyon kesin eşitsizlik); PDH/PDL
+Pine'da borsa günü, Python'da UTC gün. Pine hiç derlenmedi (on statik ölçüt).
+AÇIK: kill zone/seans süzgeci ölçülmedi (arşiv saat damgalı, ölçülebilir);
+5-0 · Three Drives · Nen Star tanınmıyor; SMT/COT yok; sayfa sınavı 19
+indikatorler/ HTML figürlerini taramıyor (yalnız projeler/).

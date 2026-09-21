@@ -3,9 +3,9 @@
 """İki panelli indikatörün OHLC ARŞİVİ — tek yükleyici.
 
 Arşiv `veri/<ad>-<aralik>.csv.gz` dosyalarında durur (t epoch sn UTC,
-o,h,l,c,v); bulut keşif koşusundan (`bulten/kesif_indikator_veri.py`)
-ayrıştırılıp buraya yazılır ve `veri/kunye.json` her serinin kaynağını,
-koşu numarasını, bar sayısını, kapsamını ve sha256'sını taşır. Yayımlanan
+o,h,l,c,v); bulut iş akışı (`.github/workflows/indikator-veri.yml` →
+`indir.py`) onu dala commit eder ve `veri/kunye.json` her serinin kaynağını,
+koşu künyesini, bar sayısını, kapsamını ve sha256'sını taşır. Yayımlanan
 her backtest sayısı bu dosyalardan yeniden üretilebilir; ağa çıkmaz.
 
 Tek sözleşme: dönen Seri KAPANMIŞ barlardır (indirme anında kapanmamış
@@ -22,6 +22,7 @@ from pathlib import Path
 KOK = Path(__file__).resolve().parent
 VERI = KOK / "veri"
 DEPO = KOK.parents[1]
+sys.dont_write_bytecode = True   # public altına __pycache__ bırakma: yayın kapısı düşer
 sys.path.insert(0, str(DEPO / "site" / "public" / "indikatorler"))
 from brooks_referans import Seri  # noqa: E402
 
