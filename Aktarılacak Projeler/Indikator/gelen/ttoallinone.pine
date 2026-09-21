@@ -1,0 +1,691 @@
+//@version=5
+indicator('TTO All-in-1', overlay=true, max_lines_count=500, max_labels_count=500, max_boxes_count=500)
+
+// === PARAMETRELER ===
+swingLeftBars = input.int(1, 'Sol Bar Sayısı', minval=1, maxval=10, group='Swing Noktaları')
+swingRightBars = input.int(1, 'Sağ Bar Sayısı', minval=1, maxval=10, group='Swing Noktaları')
+confirmationBars = input.int(1, 'Kırılım Onay Bar Sayısı', minval=1, maxval=5, group='Piyasa Yapısı')
+showBosChoch = input.bool(true, 'BOS/ChoCh Göster', group='Görüntüleme')
+bosToShow = input.int(2, "Gösterilecek BOS/ChoCh Sayısı", minval=1, maxval=10, group='Görüntüleme')
+showMtfTrend = input.bool(true, "Üst Zaman Dilimi Trendini Göster", group='Görüntüleme')
+showSupertrend = input.bool(true, 'Supertrend Göster', group='Supertrend')
+atrPeriod = input.int(10, 'ATR Periyodu', minval=1, group='Supertrend')
+atrMultiplier = input.float(3.0, 'ATR Çarpanı', minval=0.1, step=0.1, group='Supertrend')
+showSwingPoints = input.bool(true, 'Swing Noktalarını Göster', group='Görüntüleme')
+showSupportResistance = input.bool(true, 'Mevcut Destek/Direnç', group='Görüntüleme')
+showFibonacci = input.bool(true, 'Fibonacci Seviyeleri', group='Görüntüleme')
+showBB = input.bool(false, 'Bollinger Bands Göster', group='Görüntüleme')
+showEma1 = input.bool(true, 'EMA 1 Göster', group='EMA')
+emaLength1 = input.int(20, 'EMA 1 Periyodu', minval=1, maxval=500, group='EMA')
+showEma2 = input.bool(false, 'EMA 2 Göster', group='EMA')
+emaLength2 = input.int(50, 'EMA 2 Periyodu', minval=1, maxval=500, group='EMA')
+showEma3 = input.bool(false, 'EMA 3 Göster', group='EMA')
+emaLength3 = input.int(200, 'EMA 3 Periyodu', minval=1, maxval=500, group='EMA')
+showBosTargets = input.bool(true, 'BOS Hedeflerini Göster', group='Görüntüleme')
+showPotentialTargets = input.bool(true, 'Potansiyel Hedefleri Göster', group='Görüntüleme')
+
+// === FVG PARAMETRELERI ===
+showFVG = input.bool(false, 'FVG Göster', group='Fair Value Gap')
+fvgAtrMult = input.float(3.0, 'FVG ATR Çarpanı (Gövde Filtresi)', minval=0.5, step=0.5, group='Fair Value Gap')
+fvgAtrPeriod = input.int(14, 'FVG ATR Periyodu', minval=1, group='Fair Value Gap')
+fvgMaxShow = input.int(5, 'Max FVG Sayısı', minval=1, maxval=50, group='Fair Value Gap')
+
+// === HTF SEVİYELER ===
+showDailyHL = input.bool(false, 'Daily High/Low', group='HTF Seviyeler')
+showWeeklyHL = input.bool(false, 'Weekly High/Low', group='HTF Seviyeler')
+showMonthlyHL = input.bool(false, 'Monthly High/Low', group='HTF Seviyeler')
+
+// === FX SESSIONS ===
+showAsianSession = input.bool(false, 'Asian Session (00-08 UTC)', group='FX Sessions')
+showLondonSession = input.bool(false, 'London Session (08-16 UTC)', group='FX Sessions')
+showNYSession = input.bool(false, 'NY Session (13-22 UTC)', group='FX Sessions')
+
+// === RSI DIVERGENCE PARAMETRELERI ===
+showRsiDivergence = input.bool(true, 'RSI Divergence Göster', group='RSI Divergence')
+rsiPeriod = input.int(14, 'RSI Periyodu', minval=2, group='RSI Divergence')
+bbPeriod = input.int(20, 'BB Periyodu', minval=5, group='RSI Divergence')
+bbMult = input.float(2.0, 'BB Çarpanı', minval=0.5, step=0.5, group='RSI Divergence')
+showDivLines = input.bool(true, 'Divergence Çizgilerini Göster', group='RSI Divergence')
+
+// === SWING NOKTASI YÖNETİMİ ===
+leftB = swingLeftBars
+rightB = swingRightBars
+
+swingHigh = ta.pivothigh(high, leftB, rightB)
+swingLow = ta.pivotlow(low, leftB, rightB)
+
+plot(showSwingPoints ? swingHigh : na, "Swing High", color.new(color.red, 25), 2, plot.style_cross, offset = -rightB)
+plot(showSwingPoints ? swingLow : na, "Swing Low", color.new(color.lime, 25), 2, plot.style_cross, offset = -rightB)
+
+var swingPoints = array.new<float>()
+var swingBars = array.new<int>()
+var swingTypes = array.new<string>()
+
+if not na(swingHigh)
+    bool canAddNewHigh = array.size(swingTypes) == 0 ? true : array.get(swingTypes, array.size(swingTypes) - 1) == 'L'
+    if canAddNewHigh
+        array.push(swingPoints, swingHigh)
+        array.push(swingBars, bar_index - rightB)
+        array.push(swingTypes, 'H')
+    else
+        lastIdx = array.size(swingPoints) - 1
+        if swingHigh > array.get(swingPoints, lastIdx)
+            array.set(swingPoints, lastIdx, swingHigh)
+            array.set(swingBars, lastIdx, bar_index - rightB)
+
+if not na(swingLow)
+    bool canAddNewLow = array.size(swingTypes) == 0 ? true : array.get(swingTypes, array.size(swingTypes) - 1) == 'H'
+    if canAddNewLow
+        array.push(swingPoints, swingLow)
+        array.push(swingBars, bar_index - rightB)
+        array.push(swingTypes, 'L')
+    else
+        lastIdx = array.size(swingPoints) - 1
+        if swingLow < array.get(swingPoints, lastIdx)
+            array.set(swingPoints, lastIdx, swingLow)
+            array.set(swingBars, lastIdx, bar_index - rightB)
+
+// === RSI DIVERGENCE - GÖSTERGELER ===
+rsi_val = ta.rsi(close, rsiPeriod)
+ema50_div = ta.ema(close, 50)
+bb_basis = ta.sma(close, bbPeriod)
+bb_std = ta.stdev(close, bbPeriod)
+bb_upper = bb_basis + bbMult * bb_std
+bb_lower = bb_basis - bbMult * bb_std
+bb_half = (bb_upper - bb_lower) / 2.0
+bb_pos = bb_half > 0 ? (close - bb_basis) / bb_half : 0.0
+is_uptrend = close > ema50_div
+atr_val_div = ta.atr(14)
+
+// === RSI DIVERGENCE - SEGMENT SINIFLANDIRMA ===
+get_bb_seg(bb) =>
+    bb < -1.0 ? 1 : bb < -0.5 ? 2 : bb < 0.0 ? 3 : bb < 0.5 ? 4 : bb < 1.0 ? 5 : 6
+
+get_rsi_seg(r) =>
+    r < 30.0 ? 1 : r < 40.0 ? 2 : r < 50.0 ? 3 : r < 60.0 ? 4 : r < 70.0 ? 5 : 6
+
+// === RSI DIVERGENCE - 25 TRADE ET KOŞUL TABLOSU ===
+NUM_CONDITIONS = 25
+
+var int[]   c_dt  = array.new_int(NUM_CONDITIONS, 0)
+var int[]   c_bb  = array.new_int(NUM_CONDITIONS, 0)
+var int[]   c_rsi = array.new_int(NUM_CONDITIONS, 0)
+var int[]   c_tr  = array.new_int(NUM_CONDITIONS, 0)
+var float[] c_sl  = array.new_float(NUM_CONDITIONS, 0.0)
+var float[] c_tp  = array.new_float(NUM_CONDITIONS, 0.0)
+
+set_cond(idx, dt, bb, rs, tr, sl, tp) =>
+    array.set(c_dt,  idx, dt)
+    array.set(c_bb,  idx, bb)
+    array.set(c_rsi, idx, rs)
+    array.set(c_tr,  idx, tr)
+    array.set(c_sl,  idx, sl)
+    array.set(c_tp,  idx, tp)
+
+if barstate.isfirst
+    set_cond( 0, 3, 5, 6, 1, 2.0, 6.0)  // Hid Bull  [0.5,1)   >=70     Up    63.6%
+    set_cond( 1, 1, 1, 1, 2, 3.0, 3.0)  // Reg Bull  <-1       <30      Down  62.5%
+    set_cond( 2, 2, 3, 4, 2, 3.0, 6.0)  // Reg Bear  [-0.5,0)  [50,60)  Down  61.5%
+    set_cond( 3, 1, 6, 5, 1, 2.5, 2.5)  // Reg Bull  >=1       [60,70)  Up    60.7%
+    set_cond( 4, 1, 1, 2, 2, 2.5, 2.5)  // Reg Bull  <-1       [30,40)  Down  60.7%
+    set_cond( 5, 4, 3, 4, 1, 3.0, 3.0)  // Hid Bear  [-0.5,0)  [50,60)  Up    60.0%
+    set_cond( 6, 2, 5, 5, 0, 3.0, 6.0)  // Reg Bear  [0.5,1)   [60,70)  Any   60.0%
+    set_cond( 7, 1, 3, 2, 0, 2.0, 3.0)  // Reg Bull  [-0.5,0)  [30,40)  Any   60.0%
+    set_cond( 8, 2, 2, 4, 1, 3.0, 3.0)  // Reg Bear  [-1,-0.5) [50,60)  Up    57.9%
+    set_cond( 9, 2, 5, 4, 2, 3.0, 3.0)  // Reg Bear  [0.5,1)   [50,60)  Down  55.7%
+    set_cond(10, 1, 5, 4, 2, 2.0, 2.0)  // Reg Bull  [0.5,1)   [50,60)  Down  54.5%
+    set_cond(11, 1, 4, 3, 1, 2.0, 6.0)  // Reg Bull  [0,0.5)   [40,50)  Up    54.5%
+    set_cond(12, 1, 2, 2, 2, 2.5, 2.5)  // Reg Bull  [-1,-0.5) [30,40)  Down  54.1%
+    set_cond(13, 4, 3, 3, 1, 2.5, 3.0)  // Hid Bear  [-0.5,0)  [40,50)  Up    53.7%
+    set_cond(14, 1, 2, 1, 2, 2.0, 2.0)  // Reg Bull  [-1,-0.5) <30      Down  53.5%
+    set_cond(15, 3, 2, 4, 1, 2.0, 2.0)  // Hid Bull  [-1,-0.5) [50,60)  Up    52.6%
+    set_cond(16, 4, 1, 2, 2, 2.5, 2.5)  // Hid Bear  <-1       [30,40)  Down  52.4%
+    set_cond(17, 3, 4, 4, 1, 2.5, 2.5)  // Hid Bull  [0,0.5)   [50,60)  Up    52.2%
+    set_cond(18, 2, 4, 3, 1, 2.5, 3.0)  // Reg Bear  [0,0.5)   [40,50)  Up    51.7%
+    set_cond(19, 1, 3, 3, 1, 2.0, 2.0)  // Reg Bull  [-0.5,0)  [40,50)  Up    51.5%
+    set_cond(20, 1, 6, 6, 1, 2.5, 4.0)  // Reg Bull  >=1       >=70     Up    51.2%
+    set_cond(21, 1, 2, 3, 2, 2.5, 2.5)  // Reg Bull  [-1,-0.5) [40,50)  Down  51.0%
+    set_cond(22, 4, 6, 5, 1, 2.0, 6.0)  // Hid Bear  >=1       [60,70)  Up    50.0%
+    set_cond(23, 3, 3, 4, 2, 3.0, 5.0)  // Hid Bull  [-0.5,0)  [50,60)  Down  50.0%
+    set_cond(24, 4, 1, 1, 2, 2.0, 2.0)  // Hid Bear  <-1       <30      Down  50.0%
+
+// === RSI DIVERGENCE - KOŞUL EŞLEŞTİRİCİ ===
+match_condition(div_type, bb_seg, rsi_seg, trend_up) =>
+    result = -1
+    trend_val = trend_up ? 1 : 2
+    for i = 0 to NUM_CONDITIONS - 1
+        if result == -1
+            if array.get(c_dt, i) == div_type and array.get(c_bb, i) == bb_seg and array.get(c_rsi, i) == rsi_seg
+                tr = array.get(c_tr, i)
+                if tr == 0 or tr == trend_val
+                    result := i
+    result
+
+// === RSI DIVERGENCE - SWING POINT RSI TAKİBİ ===
+var float prev_sl_price = na
+var float prev_sl_rsi   = na
+var int   prev_sl_bar   = na
+var float curr_sl_price = na
+var float curr_sl_rsi   = na
+var int   curr_sl_bar   = na
+
+var float prev_sh_price = na
+var float prev_sh_rsi   = na
+var int   prev_sh_bar   = na
+var float curr_sh_price = na
+var float curr_sh_rsi   = na
+var int   curr_sh_bar   = na
+
+if not na(swingLow)
+    prev_sl_price := curr_sl_price
+    prev_sl_rsi   := curr_sl_rsi
+    prev_sl_bar   := curr_sl_bar
+    curr_sl_price := low[rightB]
+    curr_sl_rsi   := rsi_val[rightB]
+    curr_sl_bar   := bar_index - rightB
+
+if not na(swingHigh)
+    prev_sh_price := curr_sh_price
+    prev_sh_rsi   := curr_sh_rsi
+    prev_sh_bar   := curr_sh_bar
+    curr_sh_price := high[rightB]
+    curr_sh_rsi   := rsi_val[rightB]
+    curr_sh_bar   := bar_index - rightB
+
+// === RSI DIVERGENCE - TESPİT ===
+new_swing_low  = not na(swingLow) and not na(prev_sl_price)
+new_swing_high = not na(swingHigh) and not na(prev_sh_price)
+
+// Regular Bullish: fiyat lower low + RSI higher low
+reg_bull_div = new_swing_low and curr_sl_price < prev_sl_price and curr_sl_rsi > prev_sl_rsi
+// Hidden Bullish: fiyat higher low + RSI lower low
+hid_bull_div = new_swing_low and curr_sl_price > prev_sl_price and curr_sl_rsi < prev_sl_rsi
+// Regular Bearish: fiyat higher high + RSI lower high
+reg_bear_div = new_swing_high and curr_sh_price > prev_sh_price and curr_sh_rsi < prev_sh_rsi
+// Hidden Bearish: fiyat lower high + RSI higher high
+hid_bear_div = new_swing_high and curr_sh_price < prev_sh_price and curr_sh_rsi > prev_sh_rsi
+
+// === RSI DIVERGENCE - GÖRSELLEŞTİRME ===
+bb_seg  = get_bb_seg(bb_pos)
+rsi_seg = get_rsi_seg(rsi_val)
+
+if showRsiDivergence and reg_bull_div
+    matched = match_condition(1, bb_seg, rsi_seg, is_uptrend)
+    bool isTradeEt = matched >= 0
+    color lbl_color = isTradeEt ? color.green : color.new(color.green, 70)
+    label.new(curr_sl_bar, curr_sl_price, "Regular", color=color.new(color.black, 100), style=label.style_label_up, size=isTradeEt ? size.normal : size.tiny, textcolor=lbl_color)
+    if showDivLines
+        line.new(prev_sl_bar, prev_sl_price, curr_sl_bar, curr_sl_price, color=lbl_color, width=isTradeEt ? 3 : 1, style=isTradeEt ? line.style_solid : line.style_dashed)
+
+if showRsiDivergence and hid_bull_div
+    matched = match_condition(3, bb_seg, rsi_seg, is_uptrend)
+    bool isTradeEt = matched >= 0
+    color lbl_color = isTradeEt ? color.lime : color.new(color.lime, 70)
+    label.new(curr_sl_bar, curr_sl_price, "Hidden", color=color.new(color.black, 100), style=label.style_label_up, size=isTradeEt ? size.normal : size.tiny, textcolor=lbl_color)
+    if showDivLines
+        line.new(prev_sl_bar, prev_sl_price, curr_sl_bar, curr_sl_price, color=lbl_color, width=isTradeEt ? 3 : 1, style=isTradeEt ? line.style_solid : line.style_dashed)
+
+if showRsiDivergence and reg_bear_div
+    matched = match_condition(2, bb_seg, rsi_seg, is_uptrend)
+    bool isTradeEt = matched >= 0
+    color lbl_color = isTradeEt ? color.red : color.new(color.red, 70)
+    label.new(curr_sh_bar, curr_sh_price, "Regular", color=color.new(color.black, 100), style=label.style_label_down, size=isTradeEt ? size.normal : size.tiny, textcolor=lbl_color)
+    if showDivLines
+        line.new(prev_sh_bar, prev_sh_price, curr_sh_bar, curr_sh_price, color=lbl_color, width=isTradeEt ? 3 : 1, style=isTradeEt ? line.style_solid : line.style_dashed)
+
+if showRsiDivergence and hid_bear_div
+    matched = match_condition(4, bb_seg, rsi_seg, is_uptrend)
+    bool isTradeEt = matched >= 0
+    color lbl_color = isTradeEt ? color.orange : color.new(color.orange, 70)
+    label.new(curr_sh_bar, curr_sh_price, "Hidden", color=color.new(color.black, 100), style=label.style_label_down, size=isTradeEt ? size.normal : size.tiny, textcolor=lbl_color)
+    if showDivLines
+        line.new(prev_sh_bar, prev_sh_price, curr_sh_bar, curr_sh_price, color=lbl_color, width=isTradeEt ? 3 : 1, style=isTradeEt ? line.style_solid : line.style_dashed)
+
+// === PİYASA YAPISI (MARKET STRUCTURE) ===
+var string marketState = 'NEUTRAL'
+var float protectedHigh = na
+var float protectedLow = na
+var int protectedHighBar = na
+var int protectedLowBar = na
+var int fibonacciBar = na
+var label lastBosLabel = na
+
+var bosLines = array.new_line()
+var bosLabels = array.new_label()
+
+var float bosTarget1 = na
+var float bosTarget2 = na
+var int targetLineBar = na
+
+draw_breakout(bar1, y1, bar2, isBos, isRepaintable) =>
+    label lbl = na
+    if showBosChoch
+        color breakoutColor = isBos ? color.white : color.orange
+        string breakoutText = isBos ? "BOS" : "ChoCh"
+        line l = line.new(bar1, y1, bar2, y1, color=color.new(breakoutColor, 40), width=1, style=line.style_dashed)
+        lbl := label.new(bar2, y1, breakoutText, color=color.new(color.black, 100), style=label.style_label_left, size=size.small, textcolor=breakoutColor)
+
+        if not isRepaintable
+            array.push(bosLines, l)
+            array.push(bosLabels, lbl)
+            if array.size(bosLines) > bosToShow
+                line.delete(array.shift(bosLines))
+                label.delete(array.shift(bosLabels))
+    lbl
+
+barsSinceCloseBelow = ta.barssince(close <= protectedHigh)
+barsSinceCloseAbove = ta.barssince(close >= protectedLow)
+
+if array.size(swingPoints) > 2
+    bool bullBosCondition = high > protectedHigh and barsSinceCloseBelow >= confirmationBars
+    bool bullChChCondition = low < protectedLow and barsSinceCloseAbove >= confirmationBars
+    bool bearBosCondition = low < protectedLow and barsSinceCloseAbove >= confirmationBars
+    bool bearChChCondition = high > protectedHigh and barsSinceCloseBelow >= confirmationBars
+
+    if marketState == 'NEUTRAL'
+        if array.get(swingTypes, array.size(swingTypes) - 1) == 'H' and array.get(swingTypes, array.size(swingTypes) - 2) == 'L'
+            marketState := 'BULLISH_TREND'
+            protectedHigh := array.get(swingPoints, array.size(swingPoints) - 1)
+            protectedHighBar := array.get(swingBars, array.size(swingPoints) - 1)
+            protectedLow := array.get(swingPoints, array.size(swingPoints) - 2)
+            protectedLowBar := array.get(swingBars, array.size(swingPoints) - 2)
+        else if array.get(swingTypes, array.size(swingTypes) - 1) == 'L' and array.get(swingTypes, array.size(swingTypes) - 2) == 'H'
+            marketState := 'BEARISH_TREND'
+            protectedHigh := array.get(swingPoints, array.size(swingPoints) - 2)
+            protectedHighBar := array.get(swingBars, array.size(swingPoints) - 2)
+            protectedLow := array.get(swingPoints, array.size(swingPoints) - 1)
+            protectedLowBar := array.get(swingBars, array.size(swingPoints) - 1)
+
+    else if marketState == 'BULLISH_TREND'
+        if bullBosCondition
+            if array.get(swingTypes, array.size(swingTypes) - 1) == 'H' and array.get(swingPoints, array.size(swingPoints) - 1) > protectedHigh
+                label.delete(lastBosLabel)
+                lastBosLabel := draw_breakout(protectedHighBar, protectedHigh, bar_index - rightB, true, true)
+
+                float priceRange = protectedHigh - protectedLow
+                bosTarget1 := protectedHigh + priceRange * 0.618
+                bosTarget2 := protectedHigh + priceRange * 1.0
+                targetLineBar := bar_index - rightB
+
+                protectedHigh := array.get(swingPoints, array.size(swingPoints) - 1)
+                protectedHighBar := array.get(swingBars, array.size(swingPoints) - 1)
+                float newLow = na
+                int newLowBar = na
+                for i = array.size(swingPoints) - 2 to 0
+                    if array.get(swingTypes, i) == 'L'
+                        newLow := array.get(swingPoints, i)
+                        newLowBar := array.get(swingBars, i)
+                        break
+                if not na(newLow)
+                    protectedLow := newLow
+                    protectedLowBar := newLowBar
+
+        else if bullChChCondition
+            if array.get(swingTypes, array.size(swingTypes) - 1) == 'L' and array.get(swingPoints, array.size(swingPoints) - 1) < protectedLow
+                label.delete(lastBosLabel)
+                lastBosLabel := na
+                draw_breakout(protectedLowBar, protectedLow, bar_index - rightB, false, false)
+
+                float priceRange = protectedHigh - protectedLow
+                bosTarget1 := protectedLow - priceRange * 0.618
+                bosTarget2 := protectedLow - priceRange * 1.0
+                targetLineBar := bar_index - rightB
+
+                marketState := 'BEARISH_TREND'
+                protectedLow := array.get(swingPoints, array.size(swingPoints) - 1)
+                protectedLowBar := array.get(swingBars, array.size(swingPoints) - 1)
+                float newHigh = na
+                int newHighBar = na
+                for i = array.size(swingPoints) - 2 to 0
+                    if array.get(swingTypes, i) == 'H'
+                        newHigh := array.get(swingPoints, i)
+                        newHighBar := array.get(swingBars, i)
+                        break
+                if not na(newHigh)
+                    protectedHigh := newHigh
+                    protectedHighBar := newHighBar
+
+    else if marketState == 'BEARISH_TREND'
+        if bearBosCondition
+            if array.get(swingTypes, array.size(swingTypes) - 1) == 'L' and array.get(swingPoints, array.size(swingPoints) - 1) < protectedLow
+                label.delete(lastBosLabel)
+                lastBosLabel := draw_breakout(protectedLowBar, protectedLow, bar_index - rightB, true, true)
+
+                float priceRange = protectedHigh - protectedLow
+                bosTarget1 := protectedLow - priceRange * 0.618
+                bosTarget2 := protectedLow - priceRange * 1.0
+                targetLineBar := bar_index - rightB
+
+                protectedLow := array.get(swingPoints, array.size(swingPoints) - 1)
+                protectedLowBar := array.get(swingBars, array.size(swingPoints) - 1)
+                float newHigh = na
+                int newHighBar = na
+                for i = array.size(swingPoints) - 2 to 0
+                    if array.get(swingTypes, i) == 'H'
+                        newHigh := array.get(swingPoints, i)
+                        newHighBar := array.get(swingBars, i)
+                        break
+                if not na(newHigh)
+                    protectedHigh := newHigh
+                    protectedHighBar := newHighBar
+
+        else if bearChChCondition
+            if array.get(swingTypes, array.size(swingTypes) - 1) == 'H' and array.get(swingPoints, array.size(swingPoints) - 1) > protectedHigh
+                label.delete(lastBosLabel)
+                lastBosLabel := na
+                draw_breakout(protectedHighBar, protectedHigh, bar_index - rightB, false, false)
+
+                float priceRange = protectedHigh - protectedLow
+                bosTarget1 := protectedHigh + priceRange * 0.618
+                bosTarget2 := protectedHigh + priceRange * 1.0
+                targetLineBar := bar_index - rightB
+
+                marketState := 'BULLISH_TREND'
+                protectedHigh := array.get(swingPoints, array.size(swingPoints) - 1)
+                protectedHighBar := array.get(swingBars, array.size(swingPoints) - 1)
+                float newLow = na
+                int newLowBar = na
+                for i = array.size(swingPoints) - 2 to 0
+                    if array.get(swingTypes, i) == 'L'
+                        newLow := array.get(swingPoints, i)
+                        newLowBar := array.get(swingBars, i)
+                        break
+                if not na(newLow)
+                    protectedLow := newLow
+                    protectedLowBar := newLowBar
+
+// === ÇİZİM VE GÖRSELLEŞTİRME ===
+var line supportLine = na
+var line resistanceLine = na
+var label supportLabel = na
+var label resistanceLabel = na
+
+if showSupportResistance and not na(protectedLow) and not na(protectedHigh) and barstate.islast
+    line.delete(supportLine)
+    line.delete(resistanceLine)
+    label.delete(supportLabel)
+    label.delete(resistanceLabel)
+    supportLine := line.new(protectedLowBar, protectedLow, bar_index + 22, protectedLow, color=color.new(color.white, 1), style=line.style_dashed)
+    resistanceLine := line.new(protectedHighBar, protectedHigh, bar_index + 22, protectedHigh, color=color.new(color.white, 1), style=line.style_dashed)
+    supportLabel := label.new(bar_index + 22, protectedLow, 'Low', color=color.new(color.black, 100), style=label.style_label_left, size=size.small, textcolor=color.white)
+    resistanceLabel := label.new(bar_index + 22, protectedHigh, 'High', color=color.new(color.black, 100), style=label.style_label_left, size=size.small, textcolor=color.white)
+
+if showFibonacci and not na(protectedLow) and not na(protectedHigh) and barstate.islast
+    var fibLines = array.new_line()
+    var fibLabels = array.new_label()
+    while array.size(fibLines) > 0
+        line.delete(array.pop(fibLines))
+    while array.size(fibLabels) > 0
+        label.delete(array.pop(fibLabels))
+    float fibPriceRange = math.abs(protectedHigh - protectedLow)
+    float fib50 = marketState == 'BULLISH_TREND' ? protectedHigh - fibPriceRange * 0.5 : protectedLow + fibPriceRange * 0.5
+    float fib618 = marketState == 'BULLISH_TREND' ? protectedHigh - fibPriceRange * 0.618 : protectedLow + fibPriceRange * 0.618
+    float fib786 = marketState == 'BULLISH_TREND' ? protectedHigh - fibPriceRange * 0.786 : protectedLow + fibPriceRange * 0.786
+    fibonacciBar := math.abs(bar_index - protectedHighBar) < math.abs(bar_index - protectedLowBar) ? protectedHighBar : protectedLowBar
+    array.push(fibLines, line.new(fibonacciBar, fib50, bar_index + 22, fib50, color=color.new(color.white, 50), width=1, style=line.style_dashed))
+    array.push(fibLines, line.new(fibonacciBar, fib618, bar_index + 22, fib618, color=color.new(color.white, 50), width=1, style=line.style_dashed))
+    array.push(fibLines, line.new(fibonacciBar, fib786, bar_index + 22, fib786, color=color.new(color.white, 50), width=1, style=line.style_dashed))
+    array.push(fibLabels, label.new(bar_index + 22, fib50, '0.500', color=color.new(color.black, 100), style=label.style_label_left, size=size.tiny, textcolor=color.white))
+    array.push(fibLabels, label.new(bar_index + 22, fib618, '0.618', color=color.new(color.black, 100), style=label.style_label_left, size=size.tiny, textcolor=color.white))
+    array.push(fibLabels, label.new(bar_index + 22, fib786, '0.786', color=color.new(color.black, 100), style=label.style_label_left, size=size.tiny, textcolor=color.white))
+
+// Onaylanmış BOS Hedeflerini Çizdirme
+var bosTargetLines = array.new_line()
+var bosTargetLabels = array.new_label()
+
+if barstate.islast
+    while array.size(bosTargetLines) > 0
+        line.delete(array.pop(bosTargetLines))
+    while array.size(bosTargetLabels) > 0
+        label.delete(array.pop(bosTargetLabels))
+
+    if showBosTargets and not na(bosTarget1)
+        color targetColor = color.new(color.orange, 30)
+        array.push(bosTargetLines, line.new(targetLineBar, bosTarget1, bar_index + 22, bosTarget1, color=targetColor, width=1, style=line.style_dashed))
+        array.push(bosTargetLabels, label.new(bar_index + 22, bosTarget1, 'Target 1 [-0.618]', color=color.new(color.black, 100), style=label.style_label_left, size=size.tiny, textcolor=targetColor))
+
+        array.push(bosTargetLines, line.new(targetLineBar, bosTarget2, bar_index + 22, bosTarget2, color=targetColor, width=1, style=line.style_dashed))
+        array.push(bosTargetLabels, label.new(bar_index + 22, bosTarget2, 'Target 2 [-1.000]', color=color.new(color.black, 100), style=label.style_label_left, size=size.tiny, textcolor=targetColor))
+
+// === Potansiyel Hedefleri Çizdirme ===
+var potTargetLines = array.new_line()
+var potTargetLabels = array.new_label()
+
+if barstate.islast
+    while array.size(potTargetLines) > 0
+        line.delete(array.pop(potTargetLines))
+    while array.size(potTargetLabels) > 0
+        label.delete(array.pop(potTargetLabels))
+
+    if showPotentialTargets and not na(protectedHigh) and not na(protectedLow)
+        float potPriceRange = protectedHigh - protectedLow
+        float potTarget1 = na
+        float potTarget2 = na
+
+        if marketState == 'BULLISH_TREND'
+            potTarget1 := protectedHigh + potPriceRange * 0.618
+            potTarget2 := protectedHigh + potPriceRange * 1.0
+        else if marketState == 'BEARISH_TREND'
+            potTarget1 := protectedLow - potPriceRange * 0.618
+            potTarget2 := protectedLow - potPriceRange * 1.0
+
+        if not na(potTarget1)
+            color potTargetColor = color.new(color.aqua, 40)
+            int startBar = marketState == 'BULLISH_TREND' ? protectedHighBar : protectedLowBar
+
+            array.push(potTargetLines, line.new(startBar, potTarget1, bar_index + 22, potTarget1, color=potTargetColor, width=1, style=line.style_dotted))
+            array.push(potTargetLabels, label.new(bar_index + 22, potTarget1, 'Pot. Target 1', color=color.new(color.black, 100), style=label.style_label_left, size=size.tiny, textcolor=potTargetColor))
+
+            array.push(potTargetLines, line.new(startBar, potTarget2, bar_index + 22, potTarget2, color=potTargetColor, width=1, style=line.style_dotted))
+            array.push(potTargetLabels, label.new(bar_index + 22, potTarget2, 'Pot. Target 2', color=color.new(color.black, 100), style=label.style_label_left, size=size.tiny, textcolor=potTargetColor))
+
+
+// === FAIR VALUE GAP (FVG) ===
+fvg_atr = ta.atr(fvgAtrPeriod)
+
+var box[] fvgBoxes = array.new_box()
+var int[] fvgTypes = array.new_int()     // 1=bullish, -1=bearish
+var float[] fvgTops = array.new_float()
+var float[] fvgBottoms = array.new_float()
+var int[] fvgBars = array.new_int()      // oluşturulduğu bar
+
+if showFVG
+    // Önce mitigation kontrolü (yeni eklenenler etkilenmesin)
+    if array.size(fvgBoxes) > 0
+        for i = array.size(fvgBoxes) - 1 to 0
+            fType = array.get(fvgTypes, i)
+            fTop = array.get(fvgTops, i)
+            fBottom = array.get(fvgBottoms, i)
+            fBar = array.get(fvgBars, i)
+            // Oluşturulduğu bar'da mitigation yapma
+            if bar_index > fBar
+                bool mitigated = fType == 1 ? low <= fBottom : high >= fTop
+                if mitigated
+                    box.delete(array.get(fvgBoxes, i))
+                    array.remove(fvgBoxes, i)
+                    array.remove(fvgTypes, i)
+                    array.remove(fvgTops, i)
+                    array.remove(fvgBottoms, i)
+                    array.remove(fvgBars, i)
+
+    // Bullish FVG: low > high[2], ortadaki mum gövdesi >= fvgAtrMult * ATR
+    bool bullFVG = low > high[2] and math.abs(close[1] - open[1]) >= fvgAtrMult * nz(fvg_atr[1])
+    // Bearish FVG: high < low[2]
+    bool bearFVG = high < low[2] and math.abs(close[1] - open[1]) >= fvgAtrMult * nz(fvg_atr[1])
+
+    if bullFVG
+        float fTop = low
+        float fBot = high[2]
+        b = box.new(bar_index - 2, fTop, bar_index, fBot, bgcolor=color.new(color.green, 85), border_color=color.new(color.green, 70), border_width=1)
+        array.push(fvgBoxes, b)
+        array.push(fvgTypes, 1)
+        array.push(fvgTops, fTop)
+        array.push(fvgBottoms, fBot)
+        array.push(fvgBars, bar_index)
+
+    if bearFVG
+        float fTop = low[2]
+        float fBot = high
+        b = box.new(bar_index - 2, fTop, bar_index, fBot, bgcolor=color.new(color.red, 85), border_color=color.new(color.red, 70), border_width=1)
+        array.push(fvgBoxes, b)
+        array.push(fvgTypes, -1)
+        array.push(fvgTops, fTop)
+        array.push(fvgBottoms, fBot)
+        array.push(fvgBars, bar_index)
+
+    // Açık FVG kutularını sağa uzat
+    if array.size(fvgBoxes) > 0
+        for i = 0 to array.size(fvgBoxes) - 1
+            box.set_right(array.get(fvgBoxes, i), bar_index)
+
+    // Max sayı kontrolü
+    while array.size(fvgBoxes) > fvgMaxShow
+        box.delete(array.shift(fvgBoxes))
+        array.shift(fvgTypes)
+        array.shift(fvgTops)
+        array.shift(fvgBottoms)
+        array.shift(fvgBars)
+
+// === DAILY / WEEKLY / MONTHLY HIGH-LOW ===
+[prevDayHigh, prevDayLow] = request.security(syminfo.tickerid, "D", [high[1], low[1]], lookahead=barmerge.lookahead_on)
+[prevWeekHigh, prevWeekLow] = request.security(syminfo.tickerid, "W", [high[1], low[1]], lookahead=barmerge.lookahead_on)
+[prevMonthHigh, prevMonthLow] = request.security(syminfo.tickerid, "M", [high[1], low[1]], lookahead=barmerge.lookahead_on)
+
+var line dlh = na
+var line dll = na
+var label dlhLbl = na
+var label dllLbl = na
+var line wlh = na
+var line wll = na
+var label wlhLbl = na
+var label wllLbl = na
+var line mlh = na
+var line mll = na
+var label mlhLbl = na
+var label mllLbl = na
+
+if barstate.islast
+    if showDailyHL and not na(prevDayHigh)
+        line.delete(dlh)
+        line.delete(dll)
+        label.delete(dlhLbl)
+        label.delete(dllLbl)
+        color dColor = color.new(color.yellow, 30)
+        dlh := line.new(bar_index - 20, prevDayHigh, bar_index + 22, prevDayHigh, color=dColor, style=line.style_dashed, width=1)
+        dll := line.new(bar_index - 20, prevDayLow, bar_index + 22, prevDayLow, color=dColor, style=line.style_dashed, width=1)
+        dlhLbl := label.new(bar_index + 22, prevDayHigh, 'PDH', color=color.new(color.black, 100), style=label.style_label_left, size=size.tiny, textcolor=dColor)
+        dllLbl := label.new(bar_index + 22, prevDayLow, 'PDL', color=color.new(color.black, 100), style=label.style_label_left, size=size.tiny, textcolor=dColor)
+
+    if showWeeklyHL and not na(prevWeekHigh)
+        line.delete(wlh)
+        line.delete(wll)
+        label.delete(wlhLbl)
+        label.delete(wllLbl)
+        color wColor = color.new(color.orange, 30)
+        wlh := line.new(bar_index - 20, prevWeekHigh, bar_index + 22, prevWeekHigh, color=wColor, style=line.style_dashed, width=1)
+        wll := line.new(bar_index - 20, prevWeekLow, bar_index + 22, prevWeekLow, color=wColor, style=line.style_dashed, width=1)
+        wlhLbl := label.new(bar_index + 22, prevWeekHigh, 'PWH', color=color.new(color.black, 100), style=label.style_label_left, size=size.tiny, textcolor=wColor)
+        wllLbl := label.new(bar_index + 22, prevWeekLow, 'PWL', color=color.new(color.black, 100), style=label.style_label_left, size=size.tiny, textcolor=wColor)
+
+    if showMonthlyHL and not na(prevMonthHigh)
+        line.delete(mlh)
+        line.delete(mll)
+        label.delete(mlhLbl)
+        label.delete(mllLbl)
+        color mColor = color.new(color.red, 30)
+        mlh := line.new(bar_index - 20, prevMonthHigh, bar_index + 22, prevMonthHigh, color=mColor, style=line.style_dashed, width=1)
+        mll := line.new(bar_index - 20, prevMonthLow, bar_index + 22, prevMonthLow, color=mColor, style=line.style_dashed, width=1)
+        mlhLbl := label.new(bar_index + 22, prevMonthHigh, 'PMH', color=color.new(color.black, 100), style=label.style_label_left, size=size.tiny, textcolor=mColor)
+        mllLbl := label.new(bar_index + 22, prevMonthLow, 'PML', color=color.new(color.black, 100), style=label.style_label_left, size=size.tiny, textcolor=mColor)
+
+// === FX SESSIONS (Dikey Kesikli Çizgi) ===
+// 15dk ve altı timeframe'lerde göster
+isSesTimeframe = timeframe.in_seconds() <= 900
+
+utcHour = hour(time, "UTC")
+prevUtcHour = hour(time[1], "UTC")
+
+bool asianStart = isSesTimeframe and showAsianSession and utcHour == 0 and (prevUtcHour != 0 or na(time[1]))
+bool londonStart = isSesTimeframe and showLondonSession and utcHour == 8 and (prevUtcHour != 8 or na(time[1]))
+bool nyStart = isSesTimeframe and showNYSession and utcHour == 13 and (prevUtcHour != 13 or na(time[1]))
+
+bool asianEnd = isSesTimeframe and showAsianSession and utcHour == 8 and (prevUtcHour != 8 or na(time[1]))
+bool londonEnd = isSesTimeframe and showLondonSession and utcHour == 16 and (prevUtcHour != 16 or na(time[1]))
+bool nyEnd = isSesTimeframe and showNYSession and utcHour == 22 and (prevUtcHour != 22 or na(time[1]))
+
+var line _asL = na
+var line _asLE = na
+var line _loL = na
+var line _loLE = na
+var line _nyL = na
+var line _nyLE = na
+
+sesTopY = ta.highest(high, 50) + ta.atr(14) * 1.5
+
+if asianStart
+    line.delete(_asL)
+    _asL := line.new(bar_index, low - syminfo.mintick, bar_index, high + syminfo.mintick, xloc=xloc.bar_index, color=color.new(color.purple, 70), style=line.style_dashed, width=1, extend=extend.both)
+    label.new(bar_index, sesTopY, 'Asian Open', color=color.new(color.black, 100), style=label.style_label_down, size=size.small, textcolor=color.new(color.purple, 30))
+
+if asianEnd
+    line.delete(_asLE)
+    _asLE := line.new(bar_index, low - syminfo.mintick, bar_index, high + syminfo.mintick, xloc=xloc.bar_index, color=color.new(color.purple, 70), style=line.style_dashed, width=1, extend=extend.both)
+    label.new(bar_index, sesTopY, 'Asian Close', color=color.new(color.black, 100), style=label.style_label_down, size=size.small, textcolor=color.new(color.purple, 30))
+
+if londonStart
+    line.delete(_loL)
+    _loL := line.new(bar_index, low - syminfo.mintick, bar_index, high + syminfo.mintick, xloc=xloc.bar_index, color=color.new(color.blue, 70), style=line.style_dashed, width=1, extend=extend.both)
+    label.new(bar_index, sesTopY, 'London Open', color=color.new(color.black, 100), style=label.style_label_down, size=size.small, textcolor=color.new(color.blue, 30))
+
+if londonEnd
+    line.delete(_loLE)
+    _loLE := line.new(bar_index, low - syminfo.mintick, bar_index, high + syminfo.mintick, xloc=xloc.bar_index, color=color.new(color.blue, 70), style=line.style_dashed, width=1, extend=extend.both)
+    label.new(bar_index, sesTopY, 'London Close', color=color.new(color.black, 100), style=label.style_label_down, size=size.small, textcolor=color.new(color.blue, 30))
+
+if nyStart
+    line.delete(_nyL)
+    _nyL := line.new(bar_index, low - syminfo.mintick, bar_index, high + syminfo.mintick, xloc=xloc.bar_index, color=color.new(color.orange, 70), style=line.style_dashed, width=1, extend=extend.both)
+    label.new(bar_index, sesTopY, 'NY Open', color=color.new(color.black, 100), style=label.style_label_down, size=size.small, textcolor=color.new(color.orange, 30))
+
+if nyEnd
+    line.delete(_nyLE)
+    _nyLE := line.new(bar_index, low - syminfo.mintick, bar_index, high + syminfo.mintick, xloc=xloc.bar_index, color=color.new(color.orange, 70), style=line.style_dashed, width=1, extend=extend.both)
+    label.new(bar_index, sesTopY, 'NY Close', color=color.new(color.black, 100), style=label.style_label_down, size=size.small, textcolor=color.new(color.orange, 30))
+
+// === DİĞER İNDİKATÖRLER VE BİLGİ PANELİ ===
+[supertrend, direction] = ta.supertrend(atrMultiplier, atrPeriod)
+plot(showSupertrend and direction > 0 ? supertrend : na, color=color.new(color.red, 0), linewidth=2, title='Supertrend Up', style=plot.style_linebr)
+plot(showSupertrend and direction < 0 ? supertrend : na, color=color.new(color.green, 0), linewidth=2, title='Supertrend Down', style=plot.style_linebr)
+
+// Bollinger Bands
+p_bb_upper = plot(showBB ? bb_upper : na, "BB Upper", color=color.new(color.gray, 60))
+p_bb_lower = plot(showBB ? bb_lower : na, "BB Lower", color=color.new(color.gray, 60))
+fill(p_bb_upper, p_bb_lower, color=color.new(color.gray, 92))
+
+// EMA'lar
+ema1 = ta.ema(close, emaLength1)
+ema2 = ta.ema(close, emaLength2)
+ema3 = ta.ema(close, emaLength3)
+plot(showEma1 ? ema1 : na, 'EMA 1', color=color.new(color.aqua, 40), linewidth=1)
+plot(showEma2 ? ema2 : na, 'EMA 2', color=color.new(color.yellow, 40), linewidth=1)
+plot(showEma3 ? ema3 : na, 'EMA 3', color=color.new(color.white, 40), linewidth=1)
+
+f_getMtfTrend(tf) =>
+    [_, mtfDirection] = request.security(syminfo.tickerid, tf, ta.supertrend(atrMultiplier, atrPeriod))
+    mtfDirection > 0 ? 1 : mtfDirection < 0 ? -1 : 0
+dailyTrend = showMtfTrend ? f_getMtfTrend("D") : 0
+weeklyTrend = showMtfTrend ? f_getMtfTrend("W") : 0
+
+var table infoTable = table.new(position.top_right, 2, 6, bgcolor=color.new(color.black, 80), border_width=1)
+if barstate.islast
+    table.cell(infoTable, 0, 0, 'Market State:', text_color=color.gray, text_size=size.small)
+    table.cell(infoTable, 1, 0, str.replace(marketState, '_', ' '), text_color=marketState == 'BULLISH_TREND' ? color.green : marketState == 'BEARISH_TREND' ? color.red : color.gray, text_size=size.small)
+    table.cell(infoTable, 0, 1, 'High:', text_color=color.gray, text_size=size.small)
+    table.cell(infoTable, 1, 1, str.tostring(protectedHigh, format.mintick), text_color=color.red, text_size=size.small)
+    table.cell(infoTable, 0, 2, 'Low:', text_color=color.gray, text_size=size.small)
+    table.cell(infoTable, 1, 2, str.tostring(protectedLow, format.mintick), text_color=color.green, text_size=size.small)
+    if showMtfTrend
+        table.cell(infoTable, 0, 4, 'Daily Supertrend:', text_color=color.gray, text_size=size.small)
+        table.cell(infoTable, 1, 4, dailyTrend == 1 ? "Bearish" : dailyTrend == -1 ? "Bullish" : "Neutral", text_color=dailyTrend == 1 ? color.red : dailyTrend == -1 ? color.green : color.gray, text_size=size.small)
+        table.cell(infoTable, 0, 5, 'Weekly Supertrend:', text_color=color.gray, text_size=size.small)
+        table.cell(infoTable, 1, 5, weeklyTrend == 1 ? "Bearish" : weeklyTrend == -1 ? "Bullish" : "Neutral", text_color=weeklyTrend == 1 ? color.red : dailyTrend == -1 ? color.green : color.gray, text_size=size.small)
