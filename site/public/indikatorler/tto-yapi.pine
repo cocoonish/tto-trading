@@ -128,7 +128,7 @@ kutuKip      = input.string("Özet", "Kurulum kutusu", options = ["Tam", "Özet"
 kutuYeri     = input.string("Sağ üst", "Kutunun yeri", options = ["Sağ üst", "Sağ alt", "Sol üst", "Sol alt"], group = g4)
 seviyeGoster = input.bool(true, "Son kurulumun seviyeleri (giriş · stop · hedef)", group = g4)
 kzGoster     = input.bool(false, "Kill zone gölgesi (Londra 02:00–05:00 · NY AM 07:00–10:00, New York saati)", group = g4, tooltip = "Ders 5.2 pencereleri; yalnız gün içi dilimlerde (≤ 1 sa) çizilir. Bu bir SÜZGEÇ değil okuma yardımıdır: ölçümde kill zone'daki sinyal barının paketlerin ortalamasını tutarlı bir yöne oynatmadığı görüldü (sayfadaki seans tablosu). Öntanımlı kapalı.")
-azamiKutu    = input.int(40, "Defterde tutulan azami FVG/OB", minval = 2, maxval = 100, group = g4, tooltip = "Görünüm değil KURAL defteri: dolunca en eski kayıt kutusuyla birlikte düşer ve bir daha sorulmaz. Replikasyon sınırsız tutar; sınır ancak defter dolarsa ayrışma yaratır.")
+azamiKutu    = input.int(40, "Defterde tutulan azami FVG / OB / PRZ (tür başına)", minval = 2, maxval = 100, group = g4, tooltip = "Görünüm değil KURAL defteri: dolunca en eski kayıt kutusuyla birlikte düşer ve bir daha sorulmaz. Replikasyon sınırsız tutar; sınır ancak defter dolarsa ayrışma yaratır.")
 olaySon      = input.int(2, "Gösterilen yapı olayı (son N)", minval = 1, maxval = 50, group = g4, tooltip = "Kullanıcı dosyası bosToShow = 2. Eski olayın çizgisi ve etiketi silinir — görünüm, defter değil.")
 kutuSon      = input.int(3, "Görünen canlı FVG / OB / PRZ (tür başına son N)", minval = 1, maxval = 40, group = g4, tooltip = "Defter azamiKutu'ya kadar tutulur ve ölçüm oradan okur; ekranda yalnız canlı olanların en yenileri.")
 gecmisGoster = input.bool(false, "Dolmuş FVG · biten OB · düşen PRZ'yi soluk göster", group = g4)
@@ -708,6 +708,7 @@ if kapanmis and atr > 0
                 if bitti
                     box.set_right(bx, bar_index)
                     array.set(obCanli, j, false)
+                    array.set(obTz, j, false)   // uzak kenarı geçen kapanış tanım gereği dokunuştur; biten OB "taze" sayılmaz
                 else
                     box.set_right(bx, bar_index + 1)
                     dokundu = yon > 0 ? low <= ust : high >= alt
@@ -758,7 +759,8 @@ f_przEkle(string ad, int yon, float lo, float hi, float stop, float t1, float t2
         array.push(pzX, xBar)
         array.push(pzTb, -1)
         array.push(pzKutu, box.new(bar_index, hi, bar_index + 30, lo, border_color = przGoster ? cAltin : na, bgcolor = przGoster ? color.new(cAltin, 85) : na, text = przGoster ? ad : "", text_size = size.tiny, text_color = cAltin, text_halign = text.align_left))
-        if array.size(pzAd) > 40
+        // PRZ defteri de aynı tavanı okur: tek sayı iki yere yazılınca ikinci yer sessizce ayrışır
+        if array.size(pzAd) > azamiKutu
             box.delete(array.shift(pzKutu))
             array.shift(pzAd)
             array.shift(pzY)
@@ -915,7 +917,7 @@ if kapanmis
 
 // ─────────────────────────────────────────────────────────────────────────
 //  Görünürlük — SADE görünüm. Defter (kural) dokunulmaz; yalnız renk: CANLI
-//  kutular tür başına son kutuSon; dolmuş FVG · biten OB · düşen PRZ gizli
+//  kutular tür başına son kutuSon; dolmuş FVG · biten OB · geçersiz/kaçan PRZ gizli
 //  (gecmisGoster soluk kenarlık). Bütün kutuların rengi TEK yerden yazılır.
 // ─────────────────────────────────────────────────────────────────────────
 f_kutuRenk(box bx, bool canli, bool icinde, bool turGoster, color dolu, color kenar) =>
@@ -950,7 +952,8 @@ if kapanmis
     if nP > 0
         sayP = 0
         for j = nP - 1 to 0
-            canliP = array.get(pzD, j) <= 1
+            // teyit edilen PRZ (2) de görünür kalır — kurulum ilan edildiği barda sebebi ekrandan çekilmemeli; yalnız geçersiz (3) ve kaçan (4) gizli
+            canliP = array.get(pzD, j) <= 2
             if canliP
                 sayP += 1
             gorunurP = przGoster and canliP and sayP <= kutuSon
@@ -1174,8 +1177,9 @@ bgcolor(kapanmis and kzGoster and (kzLondra or kzNyAm) ? color.new(cAltin, 92) :
 // ─────────────────────────────────────────────────────────────────────────
 //  Kurulum kutusu
 // ─────────────────────────────────────────────────────────────────────────
-// Kutunun yeri GENEL kapsamda, girdiden seçilir: table.new `simple string`
-// ister ve bir kullanıcı fonksiyonunun dönüş niteleyicisi derleyiciye kalır
+// Kutunun yeri girdiden seçilir. table.new'in position parametresi v6 referansında
+// `series string`tir; genel kapsamda ve `var` ile tek kez kurulması derleyici şartı
+// değil, tablonun bir kez yaratılması içindir.
 kutuPos = kutuYeri == "Sağ üst" ? position.top_right : kutuYeri == "Sağ alt" ? position.bottom_right : kutuYeri == "Sol üst" ? position.top_left : position.bottom_left
 var table kutu = table.new(kutuPos, 2, 13, border_width = 1, frame_color = color.new(cGri, 60), border_color = color.new(cGri, 85), bgcolor = color.new(cZemin, 15))
 

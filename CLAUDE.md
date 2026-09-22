@@ -3039,6 +3039,24 @@ OB retest ve BOS devam emirlerinin %98–100'ünü bırakıyor: o paketler zaten
 kapanışın EMA'nın doğru tarafında kurulur, süzgeç yeni bilgi eklemez. Kutu
 satırı bağlamdır, kapı değil; sayfa (6. bölüm) sayılarıyla yazıyor.
 
+Yama derlenmeden yayına gitmedi: donmuş kopyaya karşı yedi ajanlı derleme ·
+çalışma · sözleşme turu koşturuldu (bu koşucu iki ajanı eşzamanlı; ~1,5 sa).
+Derleme hatası bulunmadı; dört sözleşme bulgusu düzeltildi ve dördü de
+"yeni kural, uygulanmadığı yer" sınıfından: PRZ defterinin tavanı literal
+40'tı, FVG/OB `azamiKutu` okuyordu — tek girdi; biten OB'nin `taze` bayrağı
+yeni `obCanli` kapısı yüzünden bir daha hiç düşmüyordu ve "Tam" kipi biten
+OB'yi taze sayardı (uzak kenarı geçen kapanış tanım gereği dokunuştur); TEYİT
+edilen PRZ (durum 2) "canlı" sayılmadığı için kutusu tam kurulumun ilan
+edildiği barda gizleniyordu — okur kurulumu gördüğü anda sebebini
+göremezdi; momentum kutusu iki bacağı hâlâ TEK kapıdan geçiriyordu, oysa
+aynı dosyanın başlığı sabah "iki bacak ayrı kapıda" diye yazılmıştı (başlık
+koda, kod başlığa uymalı — satırlar bacak başına, ölçülemeyen bacak adıyla
+boş). Bir de yanlış gerekçe: iki dosyadaki yorum table.new'in konumu için
+"simple string ister" diyordu, referans `series string` diyor — kod
+doğruydu, gerekçesi değil; yanlış gerekçe bir sonraki oturuma gerçek bir
+kısıtı yok saydırabilir. `str.tostring` niteliği üç ajanda yeniden "açık"
+diye geldi ve üçünde de düşük güvenle: derleme ölçümü onları kapatıyor.
+
 Kayda değer yan nokta: kullanıcının "eksik kalmış" dediği iki gösterge
 kaynak dosyada başından beri vardı ve sayfa onları GEREKÇESİYLE dışarıda
 bırakmıştı. Gerekçe doğruydu (repaint), sonuç yanlıştı (kaldırmak): doğru
