@@ -1,7 +1,7 @@
 {
  "kosum": "2026-09-22",
- "kosum_an": "2026-09-22T13:52:21+00:00",
- "son_gun": "2026-09-21",
+ "kosum_an": "2026-09-22T17:08:18+00:00",
+ "son_gun": "2026-09-22",
  "son_hafta": "2026-09-11",
  "gunluk_seri": 54,
  "gunluk_gozlem": 3951,
@@ -25,7 +25,7 @@
    "not": "artık kapsam farkıdır (bilançonun APİ kalemi işlemiş faizi de taşır); eşik son 250 iş gününe uygulanır"
   },
   "APIFON3 = A − B": {
-   "n": 3950,
+   "n": 3951,
    "maks_fark": 1.1641532182693481e-10,
    "maks_bagil": 3.5492476166748422e-12,
    "maks_tarih": "2016-09-29",
