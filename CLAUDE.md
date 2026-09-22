@@ -2712,9 +2712,10 @@ Harmonik PRZ bant UÇLARINDAN değil İDEAL üç sayıdan kurulur: uçlar bölge
 
 PARİTE KAPISININ GÖREMEDİĞİ FARKLAR ADIYLA: Pine `ta.pivothigh`in eşitlik
 davranışı derlenmeden doğrulanamaz (replikasyon kesin eşitsizlik); PDH/PDL
-Pine'da borsa günü, Python'da UTC gün; `ta.percentrank`in pencerede na varken
-ne döndürdüğü bilinmiyor (replikasyon sıra üretmez, ilk ~15 bar ayrışabilir);
-aynı barda dip ve tepe pivotu onaylanırsa Pine tepe diverjansını gösterir,
+Pine'da borsa günü, Python'da UTC gün; `ta.percentrank` sorusu 22.09.2026'da
+BELGEDEN kapandı — referans "na değerler hesaba dahildir ve sonuç na olur"
+diyor, replikasyon da pencerede eksik değer varken sıra üretmiyor, yani ısınma
+davranışı aynı; aynı barda dip ve tepe pivotu onaylanırsa Pine tepe diverjansını gösterir,
 ölçüm ikisini de sayar; Pine'ın kural defterleri sınırlı (havuz 200 · PRZ 40
 · FVG/OB girdisi, öntanımlı 40), replikasyonunki sınırsız. Pine hiç derlenmedi
 (on bir statik ölçüt). AÇIK: 5-0 · Three Drives · Nen Star tanınmıyor; SMT/COT
