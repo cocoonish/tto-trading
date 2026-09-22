@@ -73,6 +73,8 @@ SABIT: dict[str, float | int] = {
     "tarihce": 280,          # göreli sıra penceresi (Brooks v2 ile aynı)
     "harmonik_tol": 0.0,     # bantlar dersin tarayıcı bantları; ek tolerans yok
     "prz_azami_xa": 0.10,    # PRZ yayılımı ≤ %10 XA (ders: ≤%3 sıkı · %5–8 kabul · üstü gevşek; 10 son sınır)
+    "prz_bekleme": 12,       # PRZ'ye girdikten sonra teyit beklenen bar (Pine: przBekleme)
+    "tampon_atr": 0.25,      # stop tamponu, ATR14 katı (SMC 7.1 alt ucu; Pine: tamponAtr)
 }
 
 # ── Harmonik kalıp bantları — ders 9.3 (satır 992) tarayıcı bantları ────────
@@ -362,15 +364,19 @@ class Yapi:
             # 1) Gün/hafta kapanışı → PDH/PDL/PWH/PWL havuzları (kapanmış dönem)
             if s.zaman is not None:
                 g, w = self._gun(i), self._hafta(i)
+                # Dönem havuzu yeni dönemin İLK barından itibaren bilinir ve o
+                # barda sorulur (ilk bar dünün tepesini süpürebilir); `bar`
+                # bu yüzden i−1 — akıbet döngüsündeki `hv.bar >= i` kapısı bu
+                # barı düşürmesin (Pine htfD ile aynı sözleşme).
                 if gun_onceki is not None and g != gun_onceki:
                     self._kapat_havuz("PDH", "PDL")
-                    self.havuzlar.append(Havuz("PDH", gun_h, +1, i))
-                    self.havuzlar.append(Havuz("PDL", gun_l, -1, i))
+                    self.havuzlar.append(Havuz("PDH", gun_h, +1, i - 1))
+                    self.havuzlar.append(Havuz("PDL", gun_l, -1, i - 1))
                     gun_h, gun_l = None, None
                 if hafta_onceki is not None and w != hafta_onceki:
                     self._kapat_havuz("PWH", "PWL")
-                    self.havuzlar.append(Havuz("PWH", hafta_h, +1, i))
-                    self.havuzlar.append(Havuz("PWL", hafta_l, -1, i))
+                    self.havuzlar.append(Havuz("PWH", hafta_h, +1, i - 1))
+                    self.havuzlar.append(Havuz("PWL", hafta_l, -1, i - 1))
                     hafta_h, hafta_l = None, None
                 gun_h = s.h[i] if gun_h is None else max(gun_h, s.h[i])
                 gun_l = s.l[i] if gun_l is None else min(gun_l, s.l[i])
@@ -578,9 +584,12 @@ class Yapi:
             tur = "MSS"
         ol = Olay(i, tur, yon, kirilan.fiyat, kirilan.bar, disp, sweep_once)
         self.olaylar.append(ol)
-        # OB: bacakta displacement'tan önceki son zıt renkli mum
+        # OB: bacakta displacement'tan önceki son zıt renkli mum — bacağın
+        # BAŞLANGIÇ barı (swing mumu) dahil, çünkü ders 4.4'ün tipik OB'si
+        # dibi/tepeyi yapan mumun kendisidir; en çok 200 bar geriye (Pine
+        # f_obEkle ile aynı sınır — max_bars_back)
         ob_bar = None
-        for j in range(i, bas, -1):
+        for j in range(i, max(bas, i - 200) - 1, -1):
             zit = (s.c[j] < s.o[j]) if yon > 0 else (s.c[j] > s.o[j])
             if zit:
                 ob_bar = j
@@ -709,8 +718,8 @@ class Yapi:
                     pz.durum, pz.durum_bar = "gecersiz", i
                 elif self._donus_mumu(i, pz.yon):
                     pz.durum, pz.durum_bar = "teyit", i
-                elif i - pz.tamam_bar > 12:
-                    pz.durum, pz.durum_bar = "kacti", i    # 12 barda teyit gelmedi (ders: zaman penceresi)
+                elif i - pz.tamam_bar > int(self.p["prz_bekleme"]):
+                    pz.durum, pz.durum_bar = "kacti", i    # bekleme penceresinde teyit gelmedi (ders: zaman penceresi)
 
     def _donus_mumu(self, i: int, yon: int) -> bool:
         """Ders 6.1 teyit: PRZ içinde/sonrasında yön lehine gövdeli kapanış —

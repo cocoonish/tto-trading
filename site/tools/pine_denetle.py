@@ -10,10 +10,12 @@ Bir hata yapıldığında sorulacak soru "bunu düzelttim mi" değil, "bu hatay�
 bir daha yapmamı ne engelleyecek"tir.
 
 KAPSAM DAR VE ADIYLA YAZILI. Bu bir Pine derleyicisi değildir ve öyleymiş
-gibi davranmaz: yalnız aşağıdaki ON kusuru arar. Geçmesi "kod derlenir"
-demek DEĞİL, "bu on kusur yok" demektir. Son ikisi derleme kusuru değil
-SÖZLEŞME kusurudur: kapanmamış bir bar hakkında konuşan bir betik derlenir,
-yeşil koşar ve okura her tick değişen bir hüküm gösterir.
+gibi davranmaz: yalnız aşağıdaki ON BİR kusuru arar. Geçmesi "kod derlenir"
+demek DEĞİL, "bu on bir kusur yok" demektir. Dokuz ve on derleme kusuru
+değil SÖZLEŞME kusurudur: kapanmamış bir bar hakkında konuşan bir betik
+derlenir, yeşil koşar ve okura her tick değişen bir hüküm gösterir. On
+birincisi Pine'ın en yaygın derleme hatalarından biridir: bir kullanıcı
+fonksiyonunun genel değişkeni `:=` ile değiştirmesi.
 
     python3 site/tools/pine_denetle.py
 """
@@ -278,6 +280,46 @@ def denetle(yol: Path) -> list[str]:
                 bulgu.append(f"{ad}:{n}: `label.new` kapanmamış barda da basılıyor — "
                              f"saran `if` `kapanmis` taşımalı")
 
+    # ⑪ FONKSİYON İÇİNDEN GENEL DEĞİŞKENE ATAMA. Pine, bir kullanıcı
+    #    fonksiyonunun GENEL kapsamdaki değişkeni `:=` ile değiştirmesine izin
+    #    vermez ("Cannot modify global variable 'x' in function"); fonksiyondan
+    #    yalnız dizi/harita/nesne İÇERİĞİ (array.set, box.set_*) değiştirilir.
+    #    21.09.2026'da yapıldı: fiyat panelinin olay fonksiyonu sekiz genel
+    #    değişkene yazıyordu, on ölçüt geçiyordu, dosya derlenmiyordu. Genel
+    #    adlar GİRİNTİSİZ bildirimlerden türer (`x = …`, `var T x = …`,
+    #    `[a, b] = …`); fonksiyon gövdesinde `x :=` görülür, `x` genelse ve
+    #    gövdede daha önce `x = …` ile YEREL bildirilmemişse ENGEL. Parametre
+    #    adı da yereldir.
+    genel: set[str] = set()
+    for _, s in satir:
+        m = re.match(r"^(?:var\s+|varip\s+)?(?:(?:simple|series|const)\s+)?(?:[A-Za-z_][\w.<>]*\s+)?([A-Za-z_]\w*)\s*=(?!=|>)", s)
+        if m:
+            genel.add(m.group(1))
+        m = re.match(r"^\[([^\]]+)\]\s*=(?!=)", s)
+        if m:
+            genel |= {a.strip() for a in m.group(1).split(",") if a.strip()}
+    icinde, yerel = None, set()
+    for n, s in satir:
+        bas = re.match(r"^(\w+)\s*\(([^)]*)\)\s*=>", s)
+        if bas:
+            icinde = bas.group(1)
+            yerel = {re.sub(r"^\s*(?:simple |series |const )?\w+\s+", "", a).strip()
+                     for a in bas.group(2).split(",") if a.strip()}
+            continue
+        if icinde and s.strip() and not s.startswith((" ", "\t")):
+            icinde, yerel = None, set()
+            continue
+        if not icinde:
+            continue
+        m = re.match(r"\s+(?:\[([^\]]+)\]|([A-Za-z_]\w*))\s*=(?!=|>)", s)
+        if m:
+            yerel |= {a.strip() for a in m.group(1).split(",")} if m.group(1) else {m.group(2)}
+        for m in re.finditer(r"(?<![\w.])([A-Za-z_]\w*)\s*:=", s):
+            isim = m.group(1)
+            if isim in genel and isim not in yerel:
+                bulgu.append(f"{ad}:{n}: '{isim}' genel kapsamda bildirilmiş ve `{icinde}()` içinden "
+                             f"`:=` ile değiştiriliyor — Pine izin vermez; hükmü döndür, çağrı yerinde yaz")
+
     return bulgu
 
 
@@ -294,7 +336,7 @@ def main() -> int:
         for h in hepsi:
             print("  ✗", h, file=sys.stderr)
         return 1
-    print(f"pine denetimi · {len(yollar)} dosya · on ölçüt GEÇTİ")
+    print(f"pine denetimi · {len(yollar)} dosya · on bir ölçüt GEÇTİ")
     return 0
 
 

@@ -2688,13 +2688,13 @@ düşer). Yahoo 5 dk EUR/USD, AUD/USD, NZD/USD barlarının üçte biri gövdesi
 
 ÖLÇÜM (560 bin kapanmış bar, 75 seri, 5 dilim). Taban oranlar okumayı
 değiştiriyor: BOS'tan sonra ±0,618·aralık hedefi kırılım geri alınmadan
-%28–37; CHoCH/MSS sonrası yeni yönde BOS %46–53; sweep sonrası 1 ATR dönüş
+%28–37; CHoCH/MSS sonrası yeni yönde BOS %46–54; sweep sonrası 1 ATR dönüş
 %47–50 (yazı tura); FVG 50 barda CE %79–83, tam dolum %70–76, ters %33–39;
 OB ilk dokunuşta 1 ATR tepki %52–57; eşit tepe/dip 50 barda sweep %31–33 ·
 run %38–52 · test yok %23–30; PRZ'ye gelme %31–42, gelenin teyidi %61–72,
 teyitten T1 %57–72. PAKETLER: beş paketin hiçbiri maliyet sonrası
 yayımlanabilir kenar vermedi. OB retest her dilimde rastgele GİRİŞİ yeniyor
-(brüt +0,20…+0,27 R, iki yarı tutarlı) ama aynı derinlikteki rastgele LİMİT
+(brüt +0,18…+0,27 R, iki yarı tutarlı) ama aynı derinlikteki rastgele LİMİT
 (eşleştirilmiş rastgele seviye, SMC 15.4) aynı sayıyı veriyor — kenar yerin
 değil geri çekilmeyi limitle almanın; risk medyanı 0,6 ATR, spread 5/15
 dk'da eksiye çeviriyor. Diverjans tablosunun en iyi satırı (iddia %63,6)
@@ -2710,12 +2710,16 @@ swing'e karşı sorulur; koşan uca karşı sorulunca 823 sahte BOS çıktı.
 Harmonik PRZ bant UÇLARINDAN değil İDEAL üç sayıdan kurulur: uçlar bölgeyi
 şişirip Gartley'nin B bandını paylaşan Crab'i aynı C'de sahte aday yaptı.
 
-PARİTE KAPISININ GÖREMEDİĞİ İKİ FARK ADIYLA: Pine `ta.pivothigh`in eşitlik
+PARİTE KAPISININ GÖREMEDİĞİ FARKLAR ADIYLA: Pine `ta.pivothigh`in eşitlik
 davranışı derlenmeden doğrulanamaz (replikasyon kesin eşitsizlik); PDH/PDL
-Pine'da borsa günü, Python'da UTC gün. Pine hiç derlenmedi (on statik ölçüt).
-AÇIK: kill zone/seans süzgeci ölçülmedi (arşiv saat damgalı, ölçülebilir);
-5-0 · Three Drives · Nen Star tanınmıyor; SMT/COT yok; sayfa sınavı 19
-indikatorler/ HTML figürlerini taramıyor (yalnız projeler/).
+Pine'da borsa günü, Python'da UTC gün; `ta.percentrank`in pencerede na varken
+ne döndürdüğü bilinmiyor (replikasyon sıra üretmez, ilk ~15 bar ayrışabilir);
+aynı barda dip ve tepe pivotu onaylanırsa Pine tepe diverjansını gösterir,
+ölçüm ikisini de sayar; Pine'ın kural defterleri sınırlı (havuz 200 · PRZ 40
+· FVG/OB girdisi, öntanımlı 40), replikasyonunki sınırsız. Pine hiç derlenmedi
+(on bir statik ölçüt). AÇIK: kill zone/seans süzgeci ölçülmedi (arşiv saat
+damgalı, ölçülebilir); 5-0 · Three Drives · Nen Star tanınmıyor; SMT/COT yok;
+sayfa sınavı 19 indikatorler/ HTML figürlerini taramıyor (yalnız projeler/).
 
 **Kurucu ilke — BİR ALT DİZE ARAMASI SÖZCÜK SINIRINI SORMUYORSA ER GEÇ BAŞKA
 BİR SÖZCÜĞÜN İÇİNE DÜŞER; ve bir MUAFİYET, DERLENMİŞ ÇIKTIYA karşı
@@ -2777,3 +2781,63 @@ damgasında ay biçimli bacak var ve ayrımı yapan şey KAYNAĞIN RİTMİ — T
 kredi, GSYH gibi yayımlar ay kapandıktan SONRA geldiği için bacakları yapısal
 olarak kapalı; anket dateli olduğu ayın İÇİNDE yayımlanıyor, bu yüzden açık
 olan iki hat onu okuyan DİBS ile Tufex'ti ve DİBS zaten korunuyordu.
+
+**Kurucu ilke — DERLEYİCİSİ OLMAYAN BİR DİLDE "GEÇTİ" YALNIZ SORULAN KUSURLAR
+İÇİN GEÇERLİDİR; ve BİR ÖLÇÜM ARACININ GÖSTERDİĞİ KURAL, ÖLÇTÜĞÜ KURALIN
+KENDİSİ OLMALIDIR.** 22.09.2026'da iki Pine dosyası üç mercekle (derleme ·
+çalışma zamanı · sözleşme) adversaryal incelendi; 31 + 22 ham bulgu.
+Doğrulama ajanlarının çoğu oturum limitine takıldı, hüküm kaynağa karşı
+kendi okumamla kuruldu.
+
+KESİN DERLEME HATASI: `f_olay` bir kullanıcı fonksiyonuydu ve gövdesinde
+SEKİZ genel değişkene `:=` yazıyordu — Pine "Cannot modify global variable …
+in function" der, dosya DERLENMEZ; kutu, alarm ve kurulum zinciri hiç
+çalışmazdı. On statik ölçüt bu sınıfı sormuyordu, duman ⑦ yeşildi. Hüküm artık
+DÖNDÜRÜLÜYOR, dört çağrı yeri genel kapsamda yazıyor. `pine_denetle` ⑪:
+girintisiz bildirimlerden genel ad kümesi türer, fonksiyon gövdesinde o ada
+`:=` (yerel bildirim ya da parametre değilse) ENGEL. Üç enjeksiyon: `var`lı
+genel ve `var`sız genel yakalandı, yerel gölge yanlış alarm ÜRETMEDİ; dört
+Pine dosyası da geçiyor. İki olası derleme riski de kapatıldı: table.new'in
+`simple string` isteyen konumu artık genel kapsamda seçiliyor (kullanıcı
+fonksiyonunun dönüş niteleyicisi derleyiciye kalıyordu); `?:` dalındaki
+`array.get(…, −1)` `if` bloğuna alındı (seçilmeyen dalın değerlendirilip
+değerlendirilmediği belgede açık değil).
+
+SÖZLEŞME AYRIŞMALARI — yayımlanan sayı ile indikatörün gösterdiği kural yedi
+yerde aynı değildi; hangi tarafın haklı olduğu tek tek karara bağlandı. Python
+düzeltildi (ders haklı, yeniden ölçüldü): OB araması bacağın başlangıç barını
+(dibi/tepeyi yapan mumun kendisi, SMC 4.4'ün tipik OB'si) DAHİL eder ve 200
+bar sınırı Pine'la aynıdır; dönem havuzu (PDH/PDL/PWH/PWL) yeni dönemin İLK
+barında sorulur — o bar dünün tepesini süpürebilir. Pine düzeltildi (ölçüm
+haklı): MSS'nin "kırılımdan önce ters yönde sweep" şartı yöne göre ayrı
+tutulan son sweep'le sorulur (pencerede o yönde bir sweep varsa o yönün son
+sweep'i de penceredir — replikasyonun `any(...)`sine denk); Sweep → MSS → FVG
+paketi bacaktaki EN ESKİ FVG'ye limit koyar ve stopu sweep barından kırılıma
+kadar bacağın ucundan alır; PRZ kaçış penceresi C ve X PİVOT barlarından
+ölçülür (çizim barı C'den kSwing bar ileridedir); eşit tepe/dip eskiden yeniye
+ilk tutan; kurulum zinciri MSS'de FVG bulamazsa alttaki paketlere iner ve OB
+retest MSS bacağının OB'sini de kurar (ölçüm bütün OB'leri sayıyordu). İki
+girdi (`przBekleme`, `tamponAtr`) Python'da gömülü sabitti ve parite kapısının
+dışındaydı; SABIT'e girdi. Yeniden ölçüm 106 sn: taban oranlar bir puanın
+altında kaydı (MSS devamı 4 saatlikte %53 → %54, OB retest brüt +0,18…+0,27 R,
+eşleşmiş rastgele seviye +0,20…+0,26 R, seviye kıyasında 95. yüzdeliği geçen
+seri en çok 1); hüküm değişmedi, sayfadaki elle yazılı aralıklar dosyadan
+yeniden türetilip düzeltildi.
+
+Yan bulgular: PDH akıbeti `pdh != pdh[1]` DEĞER kıyasıyla sıfırlanıyordu (iki
+günün tepesi birebir aynıysa yeni gün hiç sorulmazdı) → `timeframe.change`;
+haftalık/aylık grafikte "D"/"W" isteği düşük dilim olur → havuzlar orada
+kapalı (`havuzAktif`); `line.new` 10.000 bardan geriye çizemez → çıpa
+kırpılır; kutu başlığı grafik dilimini yazıyor, ölçüm beş kovaya yuvarlanıyordu
+→ kovanın adı; kutudaki sayılar ondalık NOKTAYLA basılıyordu (Pine'da yerel
+ayar yok) → `f_sayi` virgüle çevirir; başlık "on üç alarm" diyordu, dokuz var;
+`runBu`, `swA`, `obB`, `sonFvg*`, `sonOlayDisp/Sweep` yazılıp hiç okunmuyordu
+(ölü defter, "bu ölçülüyor" izi) → silindi. Kapının kendi tuzağı bir kez daha:
+`duman.pine_diziler` her `var … array.from` dizisini sayıya çeviriyordu ve
+yeni dizge dizisi (`tfAd`) kapıyı düşürdü — hattın meşru çıktısını çökme sayan
+ayrıştırıcı; sayısal olmayan dizi artık atlanıyor.
+
+AÇIK KALAN, adıyla: Pine yine derlenmedi; ölçüm ile indikatör arasında kalan
+farklar yukarıda; beraberlik (aynı barda eşit kaliteli boğa ve ayı dönüş
+barı) hâlâ editoryal karar bekliyor; kullanıcının kendi Pine kaynağı
+(`Indikator/gelen/`) public depoda duruyor ve kaldırılması sorulmalı.

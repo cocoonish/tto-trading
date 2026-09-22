@@ -52,7 +52,7 @@ PINE_ESLEME = {
     "bbN": "bb_n", "bbK": "bb_k", "dispGovde": "disp_govde", "dispKat": "disp_kat",
     "dispPencere": "disp_pencere", "fvgAtr": "fvg_atr", "esitAtr": "esit_atr", "asimAtr": "asim_atr",
     "sweepPencere": "sweep_pencere", "oteAlt": "ote_alt", "oteUst": "ote_ust", "przAzami": "prz_azami_xa",
-    "tarihce": "tarihce",
+    "tarihce": "tarihce", "przBekleme": "prz_bekleme", "tamponAtr": "tampon_atr",
 }
 
 
@@ -88,9 +88,15 @@ def pine_inputlar(yol: Path) -> dict[str, float]:
 
 
 def pine_diziler(yol: Path) -> dict[str, list[float]]:
+    """Pine'daki SAYISAL `var x = array.from(...)` dizileri. Dizge dizileri
+    (ör. zaman dilimi kovası adları) sözleşmenin parçası değil; onları
+    sayıya çevirmeye kalkmak kapıyı hattın meşru çıktısıyla düşürürdü."""
     out = {}
     for m in re.finditer(r"^var\s+(\w+)\s*=\s*array\.from\(([^\)]*)\)", yol.read_text(encoding="utf-8"), re.M):
-        out[m.group(1)] = [float(x) for x in m.group(2).split(",")]
+        try:
+            out[m.group(1)] = [float(x) for x in m.group(2).split(",")]
+        except ValueError:
+            continue
     return out
 
 

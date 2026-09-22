@@ -74,7 +74,7 @@ SPREAD = {"eurusd": 0.00012, "gbpusd": 0.00015, "usdjpy": 0.012, "usdchf": 0.000
           "usdcad": 0.00016, "nzdusd": 0.00018, "eurgbp": 0.00015, "eurchf": 0.00018, "dxy": 0.02,
           "xu100": 3.0, "spx": 0.5, "ndx": 1.5, "wti": 0.04, "xau": 0.35}
 UFUK = 50
-TAMPON_ATR = 0.25
+TAMPON_ATR = float(Y.SABIT["tampon_atr"])     # tek tanım: Pine tamponAtr ↔ SABIT (duman ③)
 RASTGELE = 30
 ZAMAN_DILIMLERI = ("5m", "15m", "1h", "4h", "1d")
 
