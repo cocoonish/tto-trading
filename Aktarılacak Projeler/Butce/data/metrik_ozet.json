@@ -1,5 +1,5 @@
 {
- "son_ay": "2026-07-01",
+ "son_ay": "2026-08-01",
  "son_ceyrek": "2026-06-30",
  "son_dis_ceyrek": "2026-06-30",
  "son_hafta": "2026-09-11",
@@ -26,15 +26,15 @@
   ]
  },
  "butce": {
-  "deflator_taban_ay": "2026-07",
-  "deflator_taban_endeks": 132.31,
+  "deflator_taban_ay": "2026-08",
+  "deflator_taban_endeks": 134.75,
   "tufe_son_ay": "2026-08",
-  "kapsam_farki_24ay": 0.059217226040942476,
+  "kapsam_farki_24ay": 0.059125758699284485,
   "kapsam_esik": 0.35,
   "fisher": {
-   "carpimsal_artik_maks_pp": 4.440892098500626e-14,
+   "carpimsal_artik_maks_pp": 3.3306690738754696e-14,
    "basit_cikarma_farki_maks_pp": 17.838421429468653,
-   "basit_cikarma_farki_son_pp": 2.600005588908161,
+   "basit_cikarma_farki_son_pp": 1.5641743969827981,
    "not": "Reel değişim çarpımsal (Fisher) konvansiyonla hesaplanır: (1+nominal)/(1+deflatör) − 1. Basit çıkarma bu depoda yasak."
   }
  },
@@ -59,9 +59,9 @@
   "fisher_ima_faiz_fark_son_pp": 3.354344742518853,
   "fisher_ima_faiz_notu": "İma edilen reel faiz Fisher konvansiyonuyla hesaplanır: (1+i)/(1+π) − 1. Basit çıkarma (i − π) yüksek enflasyonda aynı veriden puanlarca farklı bir sayı üretir; bu depoda kullanılmaz.",
   "cevirme": {
-   "son": 174.96535551520063,
-   "son_faiz_dahil": 95.9489060133712,
-   "bant_5y_min": 112.50722811233697,
+   "son": 160.95358862267452,
+   "son_faiz_dahil": 92.92518413915012,
+   "bant_5y_min": 115.8730424617668,
    "bant_5y_max": 593.2720271323681,
    "not": "İç borç ÇEVİRME oranı finansman tablosundan (satış/ödeme) hesaplanır ve Hazine İhraç hattındaki İHALE bazlı karşılama oranıyla AYNI ŞEY DEĞİLDİR. 12 aylık birikimli zorunlu: itfasız aylarda payda sıfıra yaklaşır ve aylık oran patlar."
   },

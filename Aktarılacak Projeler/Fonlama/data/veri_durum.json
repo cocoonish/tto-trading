@@ -1,23 +1,23 @@
 {
- "kosum": "2026-09-21",
- "kosum_an": "2026-09-21T15:31:48+00:00",
+ "kosum": "2026-09-22",
+ "kosum_an": "2026-09-22T13:52:21+00:00",
  "son_gun": "2026-09-21",
  "son_hafta": "2026-09-11",
  "gunluk_seri": 54,
- "gunluk_gozlem": 3950,
+ "gunluk_gozlem": 3951,
  "haftalik_seri": 13,
  "haftalik_gozlem": 715,
  "aylik_seri": 3,
  "kimlik": {
   "A24/1000 = −APIFON3": {
-   "n": 3949,
+   "n": 3950,
    "n_pencere": 250,
    "maks_fark": 123523.64000000001,
    "maks_tarih": "2021-12-21",
    "pencere_maks_fark": 4030.475999999908,
-   "pencere_maks_bagil": 0.0078452343296249,
-   "pencere_olcek_medyan": 513748.32550000004,
-   "tam_ortalama_mutlak": 4044.9294743985815,
+   "pencere_maks_bagil": 0.007828329349664816,
+   "pencere_olcek_medyan": 514857.74549999996,
+   "tam_ortalama_mutlak": 4043.9054416202525,
    "son_fark": 0.0,
    "birim": "mn TL",
    "esik_bagil": 0.01,
@@ -35,7 +35,7 @@
    "gecti": true
   },
   "A16 = A17+A18+A21+A22": {
-   "n": 3949,
+   "n": 3950,
    "maks_fark": 1.4901161193847656e-08,
    "maks_bagil": 1.9838399662022157e-16,
    "maks_tarih": "2013-01-02",
@@ -45,17 +45,17 @@
    "gecti": true
   },
   "A18 = A19+A20": {
-   "n": 3949,
+   "n": 3950,
    "maks_fark": 1.0,
    "maks_bagil": 5.273360159169584e-10,
    "maks_tarih": "2024-04-22",
-   "son_fark": 1.0,
+   "son_fark": 0.0,
    "birim": "bin TL",
    "esik_bagil": 1e-06,
    "gecti": true
   },
   "A15 = A16+A24+A25": {
-   "n": 3949,
+   "n": 3950,
    "maks_fark": 3.0,
    "maks_bagil": 5.552068239804487e-08,
    "maks_tarih": "2016-03-21",
