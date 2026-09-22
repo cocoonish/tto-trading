@@ -2716,3 +2716,64 @@ Pine'da borsa günü, Python'da UTC gün. Pine hiç derlenmedi (on statik ölç�
 AÇIK: kill zone/seans süzgeci ölçülmedi (arşiv saat damgalı, ölçülebilir);
 5-0 · Three Drives · Nen Star tanınmıyor; SMT/COT yok; sayfa sınavı 19
 indikatorler/ HTML figürlerini taramıyor (yalnız projeler/).
+
+**Kurucu ilke — BİR ALT DİZE ARAMASI SÖZCÜK SINIRINI SORMUYORSA ER GEÇ BAŞKA
+BİR SÖZCÜĞÜN İÇİNE DÜŞER; ve bir MUAFİYET, DERLENMİŞ ÇIKTIYA karşı
+koşturulmadıysa konmuş sayılmaz.** 22.09.2026 sabahı aynı kusur sınıfı ÜÇ ayrı
+yerde çıktı ve üçü de "kapsam kadar HASSASİYET de denetimin parçasıdır"
+ailesinden. (1) Tweet kapısı gönderiye giden cümleleri site atfı taşıyorlarsa
+düşürüyor; arama ham alt dizeydi ve `"sitede"` izi **"kapasitede"** sözcüğünün
+İÇİNDE geçiyor — kapasite kullanım oranını anlatan meşru bir cümle sessizce
+gönderiden düştü. Kapasite bu bültende her ay geçen bir makro terim, yani kusur
+tek seferlik değil YAPISAL; aynı çift `"sitemiz"` ↔ "kapasitemiz" ve
+`"sitede"` ↔ "üniversitede" için de var. (2) Aynı gün Tufex'e yazılan yeni bir
+ölçüt `"09.2026"` alt dizesini aradı ve o dizge `"09.09.2026"` GÜN damgasının
+içinde de geçtiği için ölçüt DOĞRU çıktıyı kusur saydı. (3) Sayfa sınavının
+21. ölçütü `X hesab` arıyor ve bulduğu şey bizim cümlemiz değil, TARANAN HABER
+LİSTESİNDEKİ bir özetti — bir partinin ekonomi başkanlığının X hesabından
+paylaşım yaptığını söyleyen bir haber. Kararın (07.09.2026) koruduğu şey KENDİ
+hesabımız ve KENDİ gönderimizdir; bir haberin içindeki üçüncü tarafın hesabı
+değil. Bedeli en ağır olan buydu: bülten yazılmış, denetimden 0 engelle geçmiş,
+main'e girmişti — ve yayın kapısı düştüğü için site dondu, günün bülteni okura
+çıkmadı. Sol sözcük sınırı şartı çözümün tamamı değil, yalnız (1) için
+geçerli; (3) sınırla çözülmez, çünkü sorun eşleşmenin biçimi değil METNİN
+KİMİN OLDUĞU. Haber listesi tümüyle dış kaynaktan gelir ve makine doldurur,
+o yüzden YAZI ailesi o bloğa bakmaz; BAĞ ailesi daraltılmaz — listedeki bir
+x.com ADRESİ hâlâ engeldir, çünkü orası okura tıklanacak bir bağ verir.
+Muafiyetin kuralı boşaltmadığı ayrıca sınanıyor: listenin DIŞINDA geçen bir
+öz-atıf yakalanmaya devam ediyor.
+
+İkinci yarısı daha pahalıya mal oldu ve asıl ders o. Muafiyet ilk yazımda
+`<ul class="haber-liste">` diye SABİT yazıldı; Astro her etikete kendi kapsam
+niteliğini ekliyor (`data-astro-cid-…`), yani kalıp DERLENMİŞ çıktıda HİÇ
+tutmadı. Duman sınaması yeşil geçti — çünkü fikstür ideal biçimi taşıyordu —
+ve sayfa sınavı düşmeye DEVAM ETTİ. İki yeşil arasında site hâlâ donuktu.
+Bir muafiyetin çalıştığı, onu fikstüre karşı değil GERÇEK ÇIKTIYA karşı
+koşturarak bilinir: site derlenip ölçüt canlı `dist/`e karşı koşuldu ve ancak
+ondan sonra "geçti" denebildi. Fikstür artık derlenmiş biçimin kendisini
+taşıyor (nitelikleriyle birlikte). "Ölçüt geçti" ile "arıza yok" bu depoda
+bir kez daha birbirine tıpatıp benzedi — bu sefer benzeten şey fikstürün
+gerçeği taşımamasıydı.
+
+**Kurucu ilke — HATTIN KAPISI DÜŞTÜĞÜNDE PANO DONAR VE BU SESSİZDİR.**
+18.09–22.09 arası Butce ile Tufex'in duman sınamaları düşüyordu; duman
+adımlardan ÖNCE koştuğu için iki hat komple atlandı, panoları dört gün
+18.09'da dondu ve veri tazeleme her koşuda kırmızı bitti (#229, #231–#234).
+Arızanın görüntüsü sağlığın görüntüsüne benziyordu: commit `if: always()`
+taşıdığı için öbür hatlar yayına gidiyor, site ayakta kalıyor, yalnız iki pano
+donuyordu. İkisi de bu dosyanın en sık tekrar eden cümlesinin eşi — kural bir
+yerde yazılıp öbür yerde uygulanmamıştı. Butce'de "eksi bir yaş yayımlanmaz"
+kuralı `veri.gecikme_gun`da adıyla yazılı ama yalnız "butce" ailesine
+uygulanmıştı; haftalık menkul kıymet bacağı çıpanın üç gün ilerisinde
+tarihlenince okur cümlesi "son gözlemden bu yana -3 gün" oldu (hem anlamsız,
+hem ASCII tire). Negatif yaş ATILMADI, ÇEVRİLDİ — ölçü olduğu gibi kalıyor
+(`negatif_muaf` tam bu hâl için var), değişen yalnız cümlenin yazımı.
+Tufex'te "kapanmamış ay damgaya girmez" kuralı OVP'de yazılı, DİBS'te
+`ay_kapandi` yardımcısına kadar götürülmüş — Tufex ise AYNI anketi okuyan
+ÜÇÜNCÜ tüketici ve kural ona uygulanmamıştı. Arıza TAKVİME BAĞLI VE TEKRAR
+EDER: anket her ay yayımlandığı günden ayın sonuna kadar aynı hâli üretir,
+yani ayda bir hafta hattı kapatırdı. Kapsam sezilmedi ÖLÇÜLDÜ: sekiz hattın
+damgasında ay biçimli bacak var ve ayrımı yapan şey KAYNAĞIN RİTMİ — TÜFE,
+kredi, GSYH gibi yayımlar ay kapandıktan SONRA geldiği için bacakları yapısal
+olarak kapalı; anket dateli olduğu ayın İÇİNDE yayımlanıyor, bu yüzden açık
+olan iki hat onu okuyan DİBS ile Tufex'ti ve DİBS zaten korunuyordu.
