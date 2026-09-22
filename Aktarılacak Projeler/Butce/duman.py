@@ -409,6 +409,24 @@ def bolum_okur_dili() -> None:
             bulgu.append((ad, aile, esl))
     sina("özetin cümle alanları temiz", not bulgu, str(bulgu[:5]))
 
+    # EKSİ BİR YAŞ OKURA "-3 gün" DİYE ÇIKMAZ. Kural (veri.gecikme_gun) yalnız
+    # "butce" ailesine uygulanmıştı; öbür aileler ham farkı taşıyordu ve
+    # 22.09.2026'da haftalık menkul kıymet bacağı çıpanın üç gün ilerisinde
+    # tarihlenince cümle "son gözlemden bu yana -3 gün" oldu — hem anlamsız,
+    # hem ASCII tire (sözleşme U+2212 ister). Ölçü olduğu gibi kalır; değişen
+    # cümlenin yazımı. Çerçeveden bağımsız sınanır: fikstürün o gün negatif
+    # üretmesine bel bağlamak, ölçütü takvimin insafına bırakmak olurdu.
+    sina("negatif yaş okur cümlesine eksi işaretiyle girmiyor",
+         ozet_uret._yas_yaz(-3, "son gözlemden") == "gözlem 3 gün ileri tarihli"
+         and "-" not in ozet_uret._yas_yaz(-3, "son gözlemden")
+         and "\u2212" not in ozet_uret._yas_yaz(-3, "son gözlemden"),
+         ozet_uret._yas_yaz(-3, "son gözlemden"))
+    sina("pozitif yaş çıpasını adıyla taşıyor; ölçülemeyen yaş uydurulmuyor",
+         ozet_uret._yas_yaz(19, "son gözlemden") == "son gözlemden bu yana 19 gün"
+         and ozet_uret._yas_yaz(0, "çeyrek sonundan") == "çeyrek sonundan bu yana 0 gün"
+         and "ölçülemedi" in ozet_uret._yas_yaz(None, "son gözlemden"),
+         ozet_uret._yas_yaz(None, "son gözlemden"))
+
 
 def bolum_kilit() -> None:
     print("\n▶ Yapısal kilitler")

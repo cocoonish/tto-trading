@@ -391,6 +391,31 @@ def bolum_sinav() -> None:
         bulgu += e2 + u2
     sina("18b/18c: açık damgalar çözülüyor ve defterle çelişmiyor", not bulgu, " | ".join(bulgu[:4]))
 
+    # KAPANMAMIŞ AY DAMGAYA GİRMEZ — ve bu ölçüt TAKVİMDEN BAĞIMSIZ sorulur.
+    # Arıza 22.09.2026'da gerçekleşti: anket bacağı eylüle geçince damga
+    # "anket 09.2026" oldu, ortak/bicim onu ayın SON gününe (30.09) demirledi,
+    # gün ertesi iş gününü aştı ve hattın duman sınaması düştü — duman
+    # adımlardan önce koştuğu için hat komple atlandı, pano dört gün dondu.
+    # Takvime bağlı ve TEKRAR EDEN bir arıza: anket her ay yayımlandığı günden
+    # ayın sonuna kadar aynı hâli üretir. Çerçeve bu yüzden DONDURULUR; canlı
+    # saate bırakılsaydı ölçüt ancak ayın o dar penceresinde anlam taşırdı ve
+    # kuralın kaldırıldığı bir sürüm ayın geri kalanında yeşil geçerdi.
+    _cerceve = {"basabas_2y_tarih": "09.09.2026", "basabas_7y_tarih": "21.09.2026",
+                "anket_2y_tarih": "09.2026", "anket_7y_tarih": "09.2026"}
+    _acik = hesap.sekil_saatleri(_cerceve, dt.date(2026, 9, 22))["basabas_anket.html"]
+    _kapali = hesap.sekil_saatleri(_cerceve, dt.date(2026, 10, 1))["basabas_anket.html"]
+    _agustos = hesap.sekil_saatleri(dict(_cerceve, anket_2y_tarih="08.2026",
+                                         anket_7y_tarih="08.2026"),
+                                    dt.date(2026, 9, 22))["basabas_anket.html"]
+    # Ölçüt "09.2026" alt dizesini ARAMAZ: o dizge "09.09.2026" gün damgasının
+    # İÇİNDE de geçiyor ve ilk yazımda ölçüt tam bu yüzden doğru çıktıyı kusur
+    # saydı. Sorulacak şey anket BACAĞININ damgada olup olmadığı.
+    sina("kapanmamış ay damgadan düşer, ay kapanınca kendiliğinden döner",
+         _acik is not None and "anket" not in _acik
+         and _kapali is not None and "anket 09.2026" in _kapali
+         and _agustos is not None and "anket 08.2026" in _agustos,
+         f"açık={_acik!r} kapalı={_kapali!r} ağustos={_agustos!r}")
+
 
 # ── 7. okur dili ─────────────────────────────────────────────────────────────
 def bolum_okur_dili() -> None:

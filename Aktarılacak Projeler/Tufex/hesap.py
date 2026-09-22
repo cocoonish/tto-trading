@@ -215,7 +215,7 @@ def _liste(etiketler: list[str]) -> str:
     return ", ".join(e[:-1]) + " ve " + e[-1]
 
 
-def sekil_saatleri(ozet: dict) -> dict[str, str | None]:
+def sekil_saatleri(ozet: dict, bugun=None) -> dict[str, str | None]:
     """Figür → damga: tek çözülebilir tarih ya da iki parçalı dizge ya da None.
 
     · bütün bacaklar aynı ritimde ve en eski ile en yeni arasında en çok
@@ -224,14 +224,36 @@ def sekil_saatleri(ozet: dict) -> dict[str, str | None]:
     · bacaklar farklı cinsteyse (AA.YYYY × GG.AA.YYYY) ya da daha uzaksa →
       "etiketler tarih · etiketler tarih" (eskiden yeniye), her grup adıyla;
     · hiçbir bacağın saati yoksa → None (uydurulmaz).
+
+    KAPANMAMIŞ AY DAMGAYA GİRMEZ. Bir ay damgası ortak/bicim sözleşmesinde ayın
+    SON gününe demirlenir ("09.2026" → 30.09.2026); ay henüz kapanmadıysa o gün
+    İLERİDEDİR ve yayına giden bir damga ölçülmemiş bir günü ilan eder. Kural
+    OVP hattında yazılmıştı, buraya uygulanmamıştı — ve 22.09.2026'da bu hattı
+    durdurdu: anket bacağı eylüle geçince damga "anket 09.2026" oldu, çözülen
+    gün 30.09 ertesi iş gününü aştı ve hattın duman sınaması DÜŞTÜ. Duman
+    adımlardan ÖNCE koştuğu için hat komple atlandı ve pano 18.09'da dondu.
+    Arıza takvime bağlı ve TEKRAR EDER: anket her ay yayımlandığı günden ayın
+    sonuna kadar aynı hâli üretir, yani ayda bir hafta hattı kapatırdı.
+
+    İleri tarihli bacak damgadan DÜŞER, ölçüden düşmez: anketin ayı figürün
+    kendi lejantında okura görünmeye devam eder (bu dosyanın kendi ölçütü onu
+    ayrıca sınıyor) ve ay kapandığı gün bacak damgaya kendiliğinden geri gelir.
+    `bugun` argümanı çerçeveyi dondurmak için var; üretimde duvar saati.
     """
+    import datetime as _dt
     b = _bicim()
+    _bg = bugun or _dt.date.today()
+    _bg = _bg.date() if hasattr(_bg, "date") and not isinstance(_bg, _dt.date) else _bg
+    sinir = b.sonraki_is_gunu(_bg)
     out: dict[str, str | None] = {}
     for dosya, bacaklar in SEKILLER.items():
         gruplar: dict[str, list[str]] = {}
         for etiket, anahtar in bacaklar:
             t = ozet.get(anahtar)
-            if isinstance(t, str) and b.tarihe_cevir(t) is not None:
+            cz = b.tarihe_cevir(t) if isinstance(t, str) else None
+            if cz is not None and cz > sinir:
+                continue                      # kapanmamış ay / ileri tarih: damgaya girmez
+            if isinstance(t, str) and cz is not None:
                 if etiket not in gruplar.setdefault(t, []):
                     gruplar[t].append(etiket)
         if not gruplar:

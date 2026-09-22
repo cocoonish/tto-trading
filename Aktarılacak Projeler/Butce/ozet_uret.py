@@ -127,6 +127,33 @@ def koy(anahtar: str, deger, ondalik: int | None = 2) -> None:
         O[anahtar] = round(float(deger), ondalik)
 
 
+def _yas_yaz(gec, cipa: str) -> str:
+    """Bir bacağın yaşını OKUR cümlesi olarak yazar — negatif yaş dahil.
+
+    "eksi bir yaş yayımlanmaz" kuralı bu depoda zaten yazılı (veri.gecikme_gun)
+    ama yalnız "butce" ailesine uygulanmıştı: o aile çıpasını beklenen yayım
+    gününden aldığı için max(0, …) ile kırpılıyor, ÖBÜR aileler ham farkı
+    taşıyordu. 22.09.2026'da ölçüldü — haftalık menkul kıymet bacağı çıpanın
+    ÜÇ GÜN İLERİSİNDE tarihliydi ve cümle okura "son gözlemden bu yana -3 gün"
+    diye çıktı. İki kusur bir arada: eksi bir yaş okura anlamsızdır, ve eksi
+    işareti f-string'den ASCII tire olarak geliyordu (sözleşme U+2212 ister).
+
+    Negatif yaş ATILMAZ, ÇEVRİLİR: gözlem çıpanın ilerisindeyse okura
+    söylenecek şey "kaç gün geçti" değil, gözlemin ileri tarihli OLDUĞUDUR —
+    valörlü bir kur ya da hafta sonunu kapsayan bir yayım bunu meşru biçimde
+    üretebilir (TAZELIK tablosunda `negatif_muaf` tam bu hâl için var). Ölçü
+    olduğu gibi kalır; değişen yalnız cümlenin yazımı.
+    """
+    if not isinstance(gec, (int, float)) or isinstance(gec, bool):
+        return "yaşı bu koşuda ölçülemedi"
+    g = int(gec)
+    if g < 0:
+        # Çıpa adı BİLEREK düşer: "son gözlemden gözlem 3 gün ileri tarihli"
+        # gibi bir cümle kurmamak için negatif hâl kendi cümlesini yazar.
+        return f"gözlem {abs(g)} gün ileri tarihli"
+    return f"{cipa} bu yana {g} gün"
+
+
 def son(s: pd.Series):
     s = pd.Series(s).dropna()
     return (float(s.iloc[-1]), s.index[-1]) if len(s) else (None, None)
@@ -760,7 +787,7 @@ def main(bugun=None) -> int:
             continue
         if gec > tol:
             cipa = ("beklenen yayım gününden" if aile == "butce" else "geride")
-            bayat_sebep.append(f"{etiket} {gec} gün {cipa} (tolerans {tol} gün)")
+            bayat_sebep.append(f"{etiket} {int(gec)} gün {cipa} (tolerans {tol} gün)")
     izler = [u for u in uyarilar
              if u.startswith(("TAZELİK", "ESKİ ÖNBELLEK", "BAYAT", "SERİ YOK"))]
     if izler:
@@ -783,16 +810,18 @@ def main(bugun=None) -> int:
     # BACAK KENDİ ÇIPASINI SÖYLER: bütçe için yayım günü, öbürleri için gözlemin
     # kendi tarihi — iki farklı ölçü tek "geriden geliyor" kalıbına sokulunca
     # okur hangisinin ne olduğunu göremiyordu.
+    _y_butce = f"beklenen yayım gününden ({O['beklenen_yayim_stok']})"
     O["gecikme_cumlesi"] = (
-        f"Bütçe gerçekleşmeleri ve iç borç stoku ({ay_ad(s_ay)}): beklenen yayım "
-        f"gününden ({O['beklenen_yayim_stok']}) bu yana {O.get('gecikme_butce_gun')} gün. "
-        f"Brüt dış borç ({ceyrek_ad(s_dis)}): çeyrek sonundan bu yana "
-        f"{O.get('gecikme_dis_gun')} gün. Haftalık menkul kıymet istatistikleri "
-        f"({tr_tarih(s_hafta)}): son gözlemden bu yana {O.get('gecikme_hafta_gun')} gün. GSYH "
-        f"({ceyrek_ad(s_ceyrek)}): çeyrek sonundan bu yana "
-        f"{O.get('gecikme_ceyrek_gun')} gün. Finansal hesaplar "
-        f"({O['finhesap_ceyrek']}): çeyrek sonundan bu yana "
-        f"{O['gecikme_finhesap_gun']} gün.")
+        f"Bütçe gerçekleşmeleri ve iç borç stoku ({ay_ad(s_ay)}): "
+        f"{_yas_yaz(O.get('gecikme_butce_gun'), _y_butce)}. "
+        f"Brüt dış borç ({ceyrek_ad(s_dis)}): "
+        f"{_yas_yaz(O.get('gecikme_dis_gun'), 'çeyrek sonundan')}. "
+        f"Haftalık menkul kıymet istatistikleri ({tr_tarih(s_hafta)}): "
+        f"{_yas_yaz(O.get('gecikme_hafta_gun'), 'son gözlemden')}. "
+        f"GSYH ({ceyrek_ad(s_ceyrek)}): "
+        f"{_yas_yaz(O.get('gecikme_ceyrek_gun'), 'çeyrek sonundan')}. "
+        f"Finansal hesaplar ({O['finhesap_ceyrek']}): "
+        f"{_yas_yaz(O.get('gecikme_finhesap_gun'), 'çeyrek sonundan')}.")
 
     O["uyari_sayisi"] = len(uyarilar)
     O["uyari_metni"] = ((O["bayat_cumlesi"] + " · " if O["bayat"] else "")
