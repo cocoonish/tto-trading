@@ -79,6 +79,10 @@ SABIT: dict[str, float | int] = {
     "prz_azami_xa": 0.10,    # PRZ yayılımı ≤ %10 XA (ders: ≤%3 sıkı · %5–8 kabul · üstü gevşek; 10 son sınır)
     "prz_bekleme": 12,       # PRZ'ye girdikten sonra teyit beklenen bar (Pine: przBekleme)
     "tampon_atr": 0.25,      # stop tamponu, ATR14 katı (SMC 7.1 alt ucu; Pine: tamponAtr)
+    # Trend bağlamı — kullanıcı dosyası (Supertrend ATR 10 · çarpan 3; EMA 20 açık, 50 · 200 kapalı).
+    # Pine'da GÖSTERİM; backtest'te `st` ve `ema` süzgeçleri olarak ÖLÇÜLÜR (kural konmadan önce).
+    "st_atr": 10, "st_kat": 3.0,
+    "ema1_n": 20, "ema2_n": 50, "ema3_n": 200,
 }
 
 # ── Seanslar — SMC dersi 5.2 tablosu, NEW YORK saati (ICT özgün pencereler) ──
@@ -175,6 +179,41 @@ def atr(s: Seri, n: int) -> list[float | None]:
     tr = [s.h[0] - s.l[0]] + [max(s.h[i] - s.l[i], abs(s.h[i] - s.c[i - 1]), abs(s.l[i] - s.c[i - 1]))
                               for i in range(1, len(s))]
     return rma(tr, n)
+
+
+def supertrend(s: Seri, kat: float, n: int) -> tuple[list[float | None], list[int | None]]:
+    """Pine `ta.supertrend(factor, atrPeriod)` — referansın açık yazdığı algoritma:
+    hl2 ± kat·ATR (RMA) bantları izler; yön Pine işaretiyle: 1 = DÜŞÜŞ, −1 = YÜKSELİŞ.
+    ATR na iken (ısınma) bant ve yön na; ATR'nin ilk dolu barında yön 1 (Pine:
+    `na(atr[1]) → 1`), önceki bant yok sayılır (Pine `nz` → 0, fiyat pozitif)."""
+    a = atr(s, n)
+    m = len(s)
+    st: list[float | None] = [None] * m
+    yon: list[int | None] = [None] * m
+    alt_o: float | None = None
+    ust_o: float | None = None
+    for i in range(m):
+        if a[i] is None:
+            continue
+        src = (s.h[i] + s.l[i]) / 2
+        alt = src - kat * a[i]
+        ust = src + kat * a[i]
+        if alt_o is not None:
+            c1 = s.c[i - 1]
+            if not (alt > alt_o or c1 < alt_o):
+                alt = alt_o
+            if not (ust < ust_o or c1 > ust_o):
+                ust = ust_o
+        if i == 0 or a[i - 1] is None:
+            d = 1
+        elif st[i - 1] == ust_o:
+            d = -1 if s.c[i] > ust else 1
+        else:
+            d = 1 if s.c[i] < alt else -1
+        st[i] = alt if d == -1 else ust
+        yon[i] = d
+        alt_o, ust_o = alt, ust
+    return st, yon
 
 
 def rsi(c: list[float], n: int) -> list[float | None]:
@@ -840,6 +879,9 @@ class Momentum:
         self.itki: list[float | None] = [None if self.atr[i] in (None, 0) else abs(s.c[i] - s.o[i]) / self.atr[i] for i in range(n)]
         self.itki_sira: list[float | None] = [percentrank(self.itki, i, int(self.p["tarihce"])) for i in range(n)]
         self.rsi_sira: list[float | None] = [percentrank(self.rsi, i, int(self.p["tarihce"])) for i in range(n)]
+        # trend bağlamı (kullanıcı dosyası): Pine ile aynı tanım, backtest süzgeçleri `st` · `ema`
+        self.ema1 = ema(s.c, int(self.p["ema1_n"]))
+        self.st, self.st_yon = supertrend(s, float(self.p["st_kat"]), int(self.p["st_atr"]))
         self.diverjanslar: list[Diverjans] = []
         self._diverjans()
 

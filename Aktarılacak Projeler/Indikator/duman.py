@@ -57,6 +57,7 @@ PINE_ESLEME = {
     "dispPencere": "disp_pencere", "fvgAtr": "fvg_atr", "esitAtr": "esit_atr", "asimAtr": "asim_atr",
     "sweepPencere": "sweep_pencere", "oteAlt": "ote_alt", "oteUst": "ote_ust", "przAzami": "prz_azami_xa",
     "tarihce": "tarihce", "przBekleme": "prz_bekleme", "tamponAtr": "tampon_atr",
+    "stAtr": "st_atr", "stKat": "st_kat", "ema1N": "ema1_n", "ema2N": "ema2_n", "ema3N": "ema3_n",
 }
 
 
@@ -187,6 +188,10 @@ def kos() -> list[str]:
         for tf in B.ZAMAN_DILIMLERI:
             pk = {p["paket"] for p in d["paket_toplam"] if p["tf"] == tf}
             _sina(hata, set(B.PAKETLER) <= pk, f"⑩ {tf}: paket satırları eksik {set(B.PAKETLER) - pk}")
+            # her süzgeç her dilimde ölçülmüş olmalı (kz yalnız gün içi): sayfanın "ölçüldü" dediği satır dosyada dursun
+            sz = {p["suzgec"] for p in d["paket_toplam"] if p["tf"] == tf}
+            bekl_sz = set(B.SUZGECLER) - ({"kz"} if tf not in B.GUN_ICI else set())
+            _sina(hata, bekl_sz <= sz, f"⑩ {tf}: süzgeç satırları eksik {bekl_sz - sz}")
     # ⑪ yayın kapısı plotly'siz: dogrula.py'nin İÇE AKTARMA yolu (sekil dahil) ve
     #    figür sırası kapısı, plotly engellenmiş bir alt süreçte çalışmalı.
     #    kos() çağrılmaz (yoksa bu madde kendini çağırırdı); düşen yol koşucudakiyle aynı.

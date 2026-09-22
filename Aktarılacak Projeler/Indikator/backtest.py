@@ -485,6 +485,10 @@ def paket_kos(s: Seri, y: Y.Yapi, m: Y.Momentum, paket: str, hedef_R: float, spr
         emirler = [e for e in emirler if m.itki_sira[e["bar"]] is not None and m.itki_sira[e["bar"]] >= 50]
     elif suzgec == "kz":     # dersin kapısı: SİNYAL BARI Londra ya da NY AM kill zone'unda (NY saati)
         emirler = [e for e in emirler if Y.seans(s.zaman[e["bar"]]) in Y.KZ]
+    elif suzgec == "st":     # Supertrend yönüyle hizalı (Pine işareti: −1 yükseliş → alış)
+        emirler = [e for e in emirler if m.st_yon[e["bar"]] is not None and (m.st_yon[e["bar"]] < 0) == (e["yon"] > 0)]
+    elif suzgec == "ema":    # kapanış EMA1'in (öntanımlı 20) doğru tarafında
+        emirler = [e for e in emirler if m.ema1[e["bar"]] is not None and (s.c[e["bar"]] > m.ema1[e["bar"]]) == (e["yon"] > 0)]
     R, R_net, belirsiz, dolmayan, dar = [], [], 0, 0, 0
     riskler, yonler = [], []
     seans_kayit: list[tuple[str, float, float]] = []
@@ -556,7 +560,7 @@ def paket_kos(s: Seri, y: Y.Yapi, m: Y.Momentum, paket: str, hedef_R: float, spr
 
 
 PAKETLER = ["sweep_mss_fvg", "ob_retest", "prz", "diverjans", "bos_devam"]
-SUZGECLER = ["yok", "konum", "trend", "itki", "kz"]   # kz yalnız GUN_ICI dilimlerinde koşar
+SUZGECLER = ["yok", "konum", "trend", "itki", "kz", "st", "ema"]   # kz yalnız GUN_ICI dilimlerinde koşar; st/ema: kullanıcı dosyasının trend bağlamı
 
 
 def birlestir_oran(satirlar: list[dict]) -> dict:

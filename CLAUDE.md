@@ -2959,12 +2959,13 @@ Belgeden bu turda doğrulanan üç dil gerçeği (Context7 üzerinden, engel
 konmadan önce): `for i = a to b` b<a iken GERİYE sayar, sıfır kez koşmaz —
 dosyadaki her döngü `if n > 0` korumalı; v6'da int/int bölme kesirli float;
 `ta.percentrank` na içeren pencerede na (replikasyonla ısınma aynı).
-DOĞRULANAMAYAN, adıyla: `str.tostring(value, format)`ın `format` niteliği —
-`f_sayi` biçimi fonksiyon PARAMETRESİYLE (series string) geçiriyor; referans
-"series string" derse sorun yok (hafızam öyle), "simple/const" derse
-`f_sayi` derlenmez ve her çağrı yeri onunla düşer. TradingView ve Context7
-turun ortasında egress vekilinde engellendi; iki çürütücü de belgeye
-ulaşamadı. AÇIK.
+`str.tostring(value, format)`ın `format` niteliği turun ortasında
+doğrulanamadı (TradingView ve Context7 egress vekilinde engellendi) — aynı
+gün öğleden sonra iki yoldan KAPANDI: kullanıcının ekran görüntüsü dosyayı
+TradingView'de derlenmiş ve çalışır gösterdi (`f_sayi` biçimi series string
+parametreyle geçiriyor ve derlendi), Context7 yeniden açılınca referansın
+`str.tostring(value, format) → series string` aşırı yüklemesini listelediği
+görüldü (APIDOC bloğu "const string" yazar; derleme ölçümü ağır basar).
 
 İki tarama BEYANI kayda değer, çünkü "temiz" ancak sorulan soru için
 geçerlidir: iki dosyada da bildirimden önce kullanım, genel adı gölgeleyen
@@ -2975,3 +2976,72 @@ kusur diye bildirdi — 16.09'da canlı dosya düzeltmeyi "çürütme" yapmışt
 bu kez donmuş kopya düzeltmeyi "kusur" yaptı. İki tuzak birbirinin aynası
 ve ayıran tek şey okuyucunun dosyayı hangi anda açtığı; hüküm her seferinde
 kaynağın O ANKİ hâline karşı, elle verildi.
+
+**KARAR (22.09.2026 öğleden sonra, kullanıcı ekran görüntüsüyle) — PINE
+DERLENDİ; SADE GÖRÜNÜM, TEMA UYUMU, SUPERTREND + EMA (görünüm, süzgeç değil).**
+Kullanıcı USDJPY günlük grafiğin koyu temalı ekran görüntüsünü gönderdi: "Çok
+karışık anlaşılmıyor, ayrıca supertrend ve ema eksik kalmış. Ayrıca dark mode
+için de görünür olmalı paneller." Görüntü önce bir ÖLÇÜM verdi: kutu
+"Ölçülen (günlük kovası · N ≈ 12 bin bar)" yazıyor — o satır yalnız aynı
+sabahki a59d92c9 commit'inde var, yani en son Pine TradingView'de derlenmiş
+ve çalışıyor. Bu dosyanın on gündür "Pine hiç DERLENMEDİ" diye taşıdığı
+AÇIK madde kapandı; `str.tostring` niteliği sorusu da onunla birlikte
+(yukarıda). Kapanmayan: bu yamadan SONRA eklenen kod yine derlenmedi — her
+yeni yapı ölçülmemiş risktir; iş akışı turu snapshot'a karşı koşturuldu.
+
+Üç şikâyet üç ayrı kusur sınıfıydı ve üçü de görüntüde ölçülebiliyordu.
+(1) KARIŞIKLIK, DEFTER İLE GÖSTERİMİN AYNI ŞEY SAYILMASINDAN geliyordu:
+defter 40 FVG + 40 OB + 40 PRZ tutuyor (kural; ölçüm oradan okur) ve ekran
+defterin TAMAMINI çiziyordu — dolmuş FVG gri, biten OB gri kenarlı, düşen
+PRZ gri; yapı olayı çizgi/etiketleri hiç silinmiyordu; premium/discount
+zemini bütün grafiği boyuyordu; günlük grafikte PDH/PDL "bir önceki barın
+yüksek/düşüğü" olarak her bara basamak çiziyordu. Kullanıcının kendi
+dosyası tam tersini yapıyordu: `bosToShow = 2`, FVG kapalı, HTF seviyeleri
+kapalı. Defter değişmedi; GÖSTERİM defterden ayrıldı: yalnız CANLI kutular,
+tür başına son `kutuSon` (3); dolmuş/biten/düşen kutu gizli (`gecmisGoster`
+soluk); olay çizgi/etiketleri kuyrukta (`olaySon` = 2 — kullanıcı
+öntanımlısı; kuyruk çizim tavanı sorusunu da kapatır); zemin kapalı; PDH/PDL
+yalnız gün içi; kutu öntanımlı "Özet" (Bar satırı her kipte). Bütün
+kutuların rengi TEK geçişte yazılıyor (`f_kutuRenk`): üç durum döngüsünden
+dokuz renk çağrısı kalktı — renk üç yerde yazılınca üçü bir gün ayrışırdı ve
+sabahki turda tam bu sınıftan dokuz kusur bulunmuştu. Biten OB bir daha
+sorulmuyor (`obCanli`): eski döngü biten kutuyu fiyat geri girince yeniden
+uzatıyordu.
+(2) KOYU TEMADA KUTU OKUNMUYORDU, çünkü palet SİTENİN beyaz zeminine göre
+yazılmıştı (`#1a1a1a` mürekkep) ve TradingView'in temasını sormuyordu.
+Mürekkep artık `chart.fg_color`, kutu zemini `chart.bg_color` (iki dosya);
+mürekkep DOLGULU etiketin yazısı arka plan rengiyle — ön plan rengiyle
+dolu etiketin üstüne beyaz yazı koyu temada görünmezdi, iki tema için tek
+kural. Momentum panelinin itki sütunları soluk, yalnız eşik üstü dolu.
+(3) SUPERTREND VE EMA kullanıcının dosyasındaydı (ATR 10 · çarpan 3; EMA
+20 açık, 50 · 200 kapalı; günlük ve haftalık yön bilgi tablosunda) ve sayfa
+onları "ofsetsiz istendiği için repaint ediyor" diye bilerek dışarıda
+bırakmıştı. Doğrusu dışarıda bırakmak değil, PDH/PDL için zaten kullanılan
+deyimle almaktı: `request.security(…, f_stYon()[1], lookahead_on)` —
+KAPANMIŞ önceki günün/haftanın yönü, repaint yok; haftalık/aylık grafikte
+`havuzAktif` kapatır. Kutuya "Trend" satırı girdi (Supertrend yönü · EMA 20
+tarafı · günlük · haftalık).
+
+GÖRÜNÜM, SÜZGEÇ DEĞİL — ve bu ÖLÇÜLEREK söylendi, varsayılarak değil.
+"Bir süzgeç maliyeti ve faydası ölçülmeden indikatöre konmaz" kuralı gereği
+Supertrend replikasyonu (`yapi_referans.supertrend`, referansın açık
+algoritması: hl2 ± kat·ATR, tek yönlü bant, `na(atr[1]) → 1`; sentetik
+seride bant tek yönlü ve fiyatın doğru tarafında) ve EMA 20 backtest'e `st` ·
+`ema` süzgeci olarak girdi; SABIT'e beş anahtar, duman ③ Pine girdileriyle
+kıyaslar, duman ⑩ her süzgecin her dilimde satırı olduğunu sorar. Sonuç
+(281 satır, eski 192 satır BİREBİR aynı — tohumlu taban): iki yanda N ≥ 300
+olan 24 karşılaştırmada Supertrend'in ortalama R'ye etkisi en çok 0,059 R
+(14 artı · 10 eksi), EMA'nın en çok 0,037 R (6 artı · 7 eksi · 11 sıfır).
+Süzgecin yaptığı emir sayısını değiştirmek: Supertrend OB retest'in %72'sini,
+BOS devamın %93'ünü bırakıyor, PRZ'nin yalnız %9'unu — PRZ dönüş kalıbıdır,
+tanımı gereği trendin karşısında kurulur, süzgeç paketi yok eder. EMA 20 ise
+OB retest ve BOS devam emirlerinin %98–100'ünü bırakıyor: o paketler zaten
+kapanışın EMA'nın doğru tarafında kurulur, süzgeç yeni bilgi eklemez. Kutu
+satırı bağlamdır, kapı değil; sayfa (6. bölüm) sayılarıyla yazıyor.
+
+Kayda değer yan nokta: kullanıcının "eksik kalmış" dediği iki gösterge
+kaynak dosyada başından beri vardı ve sayfa onları GEREKÇESİYLE dışarıda
+bırakmıştı. Gerekçe doğruydu (repaint), sonuç yanlıştı (kaldırmak): doğru
+cevap, kusuru gideren deyimle almaktı ve o deyim aynı dosyada zaten
+duruyordu. Bir kusurun "kaldırılması" ile "giderilmesi" arasındaki fark,
+okurun ekranında eksik bir gösterge olarak görünür.
