@@ -399,6 +399,35 @@ sina("rss.xml de taranıyor", len(x_izleri(kok)) == 1, f"gelen {sorted(x_izleri(
 kok = _agac({"s/index.html": "<p>Bülten, teknik analiz ve analiz yazıları RSS ile izlenir.</p>"})
 sina("temiz sayfa temiz geçiyor", x_izleri(kok) == {}, f"gelen {sorted(x_izleri(kok))}")
 
+# ÖLÇÜLEN ARIZA (22.09.2026): taranan haber listesi DIŞ KAYNAĞIN metnidir ve
+# orada geçen "X hesabı" ÜÇÜNCÜ BİR TARAFIN hesabıdır. Bir parti başkanlığının
+# X hesabından paylaşım yaptığını söyleyen bir haber özeti yayını DURDURDU —
+# bülten yazılmıştı, site dondu. Kararın koruduğu şey KENDİ hesabımız.
+kok = _agac({"bulten/2026-09-22/index.html":
+             '<div class="gundem-metin"><p>Petrol geriledi.</p></div>'
+             '<ul class="haber-liste" data-astro-cid-vzeo3fk4><li><a href="https://ornek.com/a" data-astro-cid-vzeo3fk4>SPK duyurusu</a>'
+             '<span class="h-ozet" data-astro-cid-vzeo3fk4>Bakanlığın X hesabından SPK\'ya yönelik bir '
+             'paylaşım yapıldı.</span></li></ul>'})
+sina("haber listesindeki üçüncü taraf X hesabı yanlış alarm üretmiyor",
+     x_izleri(kok) == {}, f"gelen {sorted(x_izleri(kok))}")
+
+# AMA MUAFİYET YALNIZ YAZI AİLESİNE: haber listesindeki bir x.com ADRESİ hâlâ
+# kusurdur — orası okura tıklanacak bir bağ verir.
+kok = _agac({"bulten/2026-09-22/index.html":
+             '<ul class="haber-liste" data-astro-cid-vzeo3fk4><li><a href="https://x.com/biri/status/5">Haber</a>'
+             '</li></ul>'})
+sina("haber listesindeki x.com adresi hâlâ ENGEL",
+     any("x.com" in k for k in x_izleri(kok)), f"gelen {sorted(x_izleri(kok))}")
+
+# VE MUAFİYET KENDİ CÜMLEMİZİ KAPSAMAZ: aynı sayfada, liste DIŞINDA geçen bir
+# öz-atıf yakalanmaya devam etmeli — yoksa daraltma kuralı boşaltır.
+kok = _agac({"bulten/2026-09-22/index.html":
+             '<div class="gundem-metin"><p>Bu yazı X\'te de özetiyle paylaşılır.</p></div>'
+             '<ul class="haber-liste" data-astro-cid-vzeo3fk4><li><span class="h-ozet">Bakanlığın X hesabından.'
+             '</span></li></ul>'})
+sina("liste dışındaki öz-atıf muafiyete rağmen yakalanıyor",
+     len(x_izleri(kok)) == 1, f"gelen {sorted(x_izleri(kok))}")
+
 # HASSASİYET, KAPSAM KADAR ÖLÇÜTÜN PARÇASI. Kalıp genişletildi (hesap anışı,
 # Twitter yazımı, X'ten/X'te paylaşım) ve sol harf sınırı ile lokatif şartı
 # ölçülerek kondu: sitede "VIX'te", "TÜFEX'te", "FX'te", "MDX'te" ve bir

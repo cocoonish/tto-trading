@@ -469,6 +469,17 @@ X_YAZI = re.compile(
     rf"|(?<![{_HARF}])X['’][td][ae]n\s+paylaş")
 
 
+# Taranan haber listesi: başlık, özet ve yayın adı DIŞ KAYNAKTAN gelir ve
+# makine doldurur. Yazı ailesi bu bloğa bakmaz (bkz. x_izleri).
+# Nitelikler ESNEK eşleşir: derleyici her etikete kendi kapsam niteliğini
+# ekliyor (`data-astro-cid-…`) ve ilk yazımda kalıp `<ul class="haber-liste">`
+# diye SABİT yazıldığı için DERLENMİŞ çıktıda hiç tutmadı — fikstür ideal
+# biçimi taşıyordu, gerçek sayfa taşımıyordu ve ölçüt "geçti" görünürken
+# yayın kapısı düşmeye devam etti. Fikstür derlenmiş biçimin kendisini taşır.
+HABER_LISTE = re.compile(
+    r'<ul[^>]*class="[^"]*\bhaber-liste\b[^"]*"[^>]*>.*?</ul>', re.S)
+
+
 def x_izleri(dist: pathlib.Path) -> dict[str, list[str]]:
     """Derlenmiş çıktıda X/Twitter izi: bulgu → onu basan sayfalar.
 
@@ -493,9 +504,20 @@ def x_izleri(dist: pathlib.Path) -> dict[str, list[str]]:
     for h in sorted(list(dist.rglob("*.html")) + list(dist.rglob("*.xml"))):
         metin = h.read_text(encoding="utf-8", errors="ignore")
         sayfa = h.relative_to(dist).as_posix()
-        for kalip in (X_BAG, X_YAZI):
-            for m in kalip.finditer(metin):
-                bulgu.setdefault(m.group(0), []).append(sayfa)
+        # YAZI ailesi BİZİM cümlemizi arar; taranan haber listesi BAŞKASININ
+        # metnidir. Liste tümüyle dış kaynaktan gelir (başlık, özet, yayın adı)
+        # ve makine doldurur — orada geçen "X hesabı" bir ÜÇÜNCÜ TARAFIN hesabı
+        # olabilir. 22.09.2026'da tam bu oldu: bir partinin ekonomi başkanlığının
+        # X hesabından SPK'ya yönelik paylaşım yaptığını söyleyen bir haber
+        # özeti ölçütü düşürdü ve YAYIN DURDU — bülten yazılmış, site donmuştu.
+        # Kararın (07.09.2026) koruduğu şey KENDİ hesabımız ve KENDİ
+        # gönderimizdir; bir haberin içindeki başkasının hesabı değil.
+        # BAĞ ailesi daraltılmaz: x.com adresi haber listesinde de kusurdur,
+        # çünkü orası okura tıklanacak bir adres verir.
+        for m in X_BAG.finditer(metin):
+            bulgu.setdefault(m.group(0), []).append(sayfa)
+        for m in X_YAZI.finditer(HABER_LISTE.sub(" ", metin)):
+            bulgu.setdefault(m.group(0), []).append(sayfa)
     return bulgu
 
 
