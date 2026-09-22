@@ -64,7 +64,9 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
   (19) ŞEKİL METNİNDE OKUR DİLİ — gömülü Plotly başlık/alt yazı/lejant metni de
       okura basılır ve 9 · 9b · 17 ölçütlerinin hiçbiri oraya bakmıyordu.
       Yapım dili ENGEL (taban sıfır), kod dili tek satırda toplanan UYARI
-      (taban yetmiş altı), anahtar adı ve biçim yalnız sayılır.
+      (taban yetmiş altı), anahtar adı ve biçim yalnız sayılır. Kapsam
+      `site/public` altındaki HER figür (pano · ders · indikatör · teknik ·
+      analiz), `sekil_dosyalari()`; 22.09.2026'ya kadar yalnız `projeler/`.
   (9b) OKUR DİLİ, derlenmiş çıktıda (uyarı) — bileşen dizgeleri de kapıya girer.
   (20) ÖLÜ İÇ BAĞ — dist/ içindeki her `href="/…"` bir dosyaya, sayfaya ya da
       varlığa çözülmeli. Silinen bir sayfaya bağlanan başka bir sayfa hiçbir
@@ -305,6 +307,33 @@ def acik_saat_bulgulari(nerede: str, ozet: dict, anahtar: str, defter_deger,
 # lejant adı ve hover şablonu sayfada okunur; veri dizileri okunmaz.
 SEKIL_METIN = re.compile(r'"(?:text|title|name|hovertemplate)":"((?:[^"\\]|\\.){4,8000})"')
 SEKIL_ETIKET = re.compile(r"<[^>]{1,40}>")
+
+
+SEKIL_KOK = "site/public"   # okurun gördüğü her gömülü figür bu kökün altından sunulur
+
+
+def sekil_dosyalari(kok=None):
+    """(19) Taranacak figürler: `site/public` altındaki HER Plotly HTML'i, (yol, ham).
+
+    Kapsam bir dizin listesi DEĞİL, sözleşmenin kendisi: okurun gördüğü her
+    figür bu kökün altından sunulur ve hangi koleksiyona gömülü olduğu fark
+    etmez. Ölçüt 03.09'dan 22.09.2026'ya yalnız `projeler/` altına bakıyordu;
+    indikatör sayfalarının otuz figürü, derslerin 246'sı, teknik bültenin
+    16'sı ve analizlerin 5'i görüş alanının dışındaydı — bakılmayan yer
+    geçen sınavla aynı görünür. Genişleme ÖLÇÜLEREK yapıldı (22.09.2026):
+    yapım dili hiçbir yerde yok (ENGEL sıfır), kod dili tek uyarı satırına
+    derslerden dört dosya adı ekliyor. Ham metin bir kez okunur ve çağırana
+    verilir; bir figür dosyası megabaytlarca ve iki kez okunmaz.
+    Kapsamın kendisi `duman_sinav.py` ile sınanır: HTML taşıyan her üst dizin
+    listede olmalı — elle tutulan bir liste bir gün sessizce eksik kalır.
+    """
+    kok = KOK if kok is None else kok
+    cikti = []
+    for hp in sorted((kok / SEKIL_KOK).rglob("*.html")):
+        ham = hp.read_text(encoding="utf-8", errors="ignore")
+        if "Plotly" in ham:
+            cikti.append((hp, ham))
+    return cikti
 
 
 def sekil_metinleri(ham: str) -> list[str]:
@@ -1366,10 +1395,7 @@ def main() -> int:
     n_sek = 0
     kod_bulgu: dict[str, set[str]] = {}
     aile_sayim: dict[str, int] = {}
-    for hp in sorted((KOK / "site/public/projeler").rglob("*.html")):
-        ham = hp.read_text(encoding="utf-8", errors="ignore")
-        if "Plotly" not in ham:
-            continue
+    for hp, ham in sekil_dosyalari():
         n_sek += 1
         nerede = f"{hp.parent.name}/{hp.name}"
         e_, u_, say_ = sekil_okur_dili(sekil_metinleri(ham), nerede)

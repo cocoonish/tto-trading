@@ -58,6 +58,7 @@ SIRA = [
     ("tto_08_paketler.html", "Kurulum paketlerinin backtest sonucu"),
     ("tto_09_ob_rastgele_seviye.html", "OB retest ile aynı derinlikte rastgele limit"),
     ("tto_10_diverjans.html", "Diverjans tablosu: kaynak iddiası ve ölçülen"),
+    ("tto_11_seans_profili.html", "Seans profili: kill zone'daki kurulum ayrışıyor mu"),
 ]
 
 
@@ -408,6 +409,54 @@ def sekil_diverjans(d: dict, ad: str) -> Path:
     return _yaz(fig, ad)
 
 
+# ── 11 · seans profili ─────────────────────────────────────────────────────
+def seans_ozet_cumlesi(d: dict) -> str:
+    """Kill zone ile dışı arasındaki ayrışmayı VERİDEN yazar: kıyaslanabilen
+    satır sayısı, |t| ≥ 2 olan satır sayısı ve işaretleri, en büyük fark (hedef
+    2R, diverjans kendi hedefi). Alt yazıya elle sayı girmez."""
+    sat = [p for p in d["seans_toplam"] if (p["hedef_R"] == 2.0 or p["paket"] == "diverjans") and p.get("kz_fark")]
+    if not sat:
+        return "Kill zone ile dışı N ≥ 30 ile kıyaslanabilen paket yok."
+    anlamli = [p for p in sat if p["kz_fark"]["t"] is not None and abs(p["kz_fark"]["t"]) >= 2]
+    arti = sum(1 for p in anlamli if p["kz_fark"]["fark"] > 0)
+    en = max(sat, key=lambda p: abs(p["kz_fark"]["fark"]))
+    kz, dis, f = en["seans"]["kz"], en["seans"]["kz_disi"], en["kz_fark"]
+    # Sayıya ek getirilmez ("3'ünde" / "4'ünde" ek sayıya göre değişir); cümle sayıyı ekten ayırır.
+    return (f"Kıyaslanabilir satır {B.sayi(len(sat), 0)}; |t| ≥ 2 olan {B.sayi(len(anlamli), 0)} ({B.sayi(arti, 0)} kill zone lehine, "
+            f"{B.sayi(len(anlamli) - arti, 0)} aleyhine). En büyük fark {B.sayi(f['fark'], 2, True)} R, t {B.sayi(f['t'], 1, True)} "
+            f"({PAKET_AD[en['paket']]}, {TF_AD[en['tf']]}: kill zone {B.sayi(kz['ort_R'], 2, True)} R · n {B.sayi(kz['n'], 0)}, "
+            f"dışı {B.sayi(dis['ort_R'], 2, True)} R · n {B.sayi(dis['n'], 0)}).")
+
+
+def sekil_seans(d: dict, ad: str) -> Path:
+    tfs = list(BT.GUN_ICI)
+    kovalar = [a for a, _, _ in Y.SEANSLAR] + ["diger"]
+    renk = {"sweep_mss_fvg": MAVI, "ob_retest": MOR, "prz": ALTIN, "diverjans": GRI, "bos_devam": CLARET}
+    fig = make_subplots(rows=1, cols=3, subplot_titles=[TF_AD[t] for t in tfs], shared_yaxes=True, horizontal_spacing=0.03)
+    for c, tf in enumerate(tfs, start=1):
+        for paket in BT.PAKETLER:
+            sat = next((p for p in d["seans_toplam"] if p["tf"] == tf and p["paket"] == paket
+                        and (p["hedef_R"] == 2.0 or paket == "diverjans")), None)
+            if not sat:
+                continue
+            pr = sat["seans"]
+            n = [pr.get(k, {}).get("n", 0) for k in kovalar]
+            y = [pr[k]["ort_R"] if nn else None for k, nn in zip(kovalar, n)]
+            fig.add_trace(go.Bar(name=PAKET_AD[paket], x=[Y.SEANS_AD[k] for k in kovalar], y=y,
+                                 marker=dict(color=renk[paket], opacity=[1.0 if nn >= 30 else 0.35 for nn in n]),
+                                 customdata=n, hovertemplate="%{x} · " + PAKET_AD[paket] + ": %{y:.2f} R · n=%{customdata}<extra></extra>",
+                                 showlegend=c == 1), row=1, col=c)
+        # kill zone kovaları (Londra, NY AM) gölgeli — kategori ekseninde 1 ve 2. sıra
+        fig.add_vrect(x0=0.5, x1=2.5, fillcolor=ALTIN, opacity=0.08, line_width=0, row=1, col=c)
+        fig.add_hline(y=0, line=dict(color=GRI, width=1), row=1, col=c)
+    _duzen(fig, "Seans profili: kill zone'daki kurulum ayrışıyor mu",
+           "Süzgeçsiz paketlerin işlemleri sinyal barının New York seansına kovalandı (ders 5.2 tablosu; gölgeli iki kova kill zone). "
+           "Çubuk brüt ortalama R, hedef 2R; soluk çubuk n < 30. " + seans_ozet_cumlesi(d), 560)
+    fig.update_layout(barmode="group", yaxis_title="ortalama R", margin=dict(b=120))
+    fig.update_xaxes(tickangle=-30, tickfont=dict(size=9))
+    return _yaz(fig, ad)
+
+
 def mdx_sirasi_sina() -> list[str]:
     if not MDX.exists():
         return [f"{MDX.name} yok"]
@@ -449,6 +498,7 @@ def main() -> int:
     sekil_paketler(d, SIRA[7][0])
     sekil_ob(d, SIRA[8][0])
     sekil_diverjans(d, SIRA[9][0])
+    sekil_seans(d, SIRA[10][0])
     print(f"{len(SIRA)} figür → {CIKTI}")
     return 0
 

@@ -109,9 +109,13 @@ def paket_sec(ku: "R.Kurulumlar", i: int) -> dict | None:
             return {"ad": "başarısız dönüş · alış", "cift": False, **bd}
         if bd["yon"] == -1 and not yalniz_al:
             return {"ad": "başarısız dönüş · satış", "cift": False, **bd}
-    if fp.donus_bari(i, True) and kb >= ASGARI_KALITE and not yalniz_sat and (kb >= ka or yalniz_al):
+    # Pine donusAdayBoga/donusAdayAyi → donusBogaSec/donusAyiSec; backtest'in
+    # kuralı: iki aday aynı kalitedeyse EMİR YOK (eski hâl boğayı seçiyordu).
+    aday_b = fp.donus_bari(i, True) and kb >= ASGARI_KALITE and not yalniz_sat
+    aday_a = fp.donus_bari(i, False) and ka >= ASGARI_KALITE and not yalniz_al
+    if aday_b and (not aday_a or kb > ka):
         return {"ad": f"dönüş barı · alış {kb}/4", "cift": False, **ku.donus(i, True)}
-    if fp.donus_bari(i, False) and ka >= ASGARI_KALITE and not yalniz_al:
+    if aday_a and (not aday_b or ka > kb):
         return {"ad": f"dönüş barı · satış {ka}/4", "cift": False, **ku.donus(i, False)}
     return None
 

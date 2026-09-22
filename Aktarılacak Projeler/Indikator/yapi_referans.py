@@ -46,7 +46,9 @@ from __future__ import annotations
 import math
 import sys
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 KOK = Path(__file__).resolve().parent
 DEPO = KOK.parents[1]
@@ -76,6 +78,46 @@ SABIT: dict[str, float | int] = {
     "prz_bekleme": 12,       # PRZ'ye girdikten sonra teyit beklenen bar (Pine: przBekleme)
     "tampon_atr": 0.25,      # stop tamponu, ATR14 katı (SMC 7.1 alt ucu; Pine: tamponAtr)
 }
+
+# ── Seanslar — SMC dersi 5.2 tablosu, NEW YORK saati (ICT özgün pencereler) ──
+# "Kill zone içinde mi?" dersin geçerlilik listelerinin sabit maddesidir (MSS ·
+# sweep · FVG · OTE). Pencereler NY yerel saatiyle yazılır, yaz/kış saati
+# zoneinfo'dan gelir, TSİ'ye çevrilmez ("grafiği NY saatinde tutun", ders 5).
+# Bir bar hangi seanstaysa AÇILIŞ dakikasıyla oradadır — arşivin damgası
+# açılıştır (veri.py). Soru yalnız GÜN İÇİ dilimlerde anlamlı (5 dk · 15 dk ·
+# 1 sa): 4 saatlik bar birden çok seansa yayılır ve sorulmaz. Pine karşılığı
+# time(timeframe.period, "0200-0500", "America/New_York"); duman ⑫ iki tarafı
+# aynı tablodan karşılaştırır — pencere iki yerde elle yazılırsa bir gün ayrışır.
+NY_SAAT = "America/New_York"
+SEANSLAR: tuple[tuple[str, int, int], ...] = (      # (ad, başlangıç dk, bitiş dk) NY
+    ("asya",           20 * 60, 24 * 60),            # 20:00–00:00
+    ("londra",          2 * 60,  5 * 60),            # 02:00–05:00  kill zone
+    ("ny_am",           7 * 60, 10 * 60),            # 07:00–10:00  kill zone (ICT özgün)
+    ("londra_kapanis", 10 * 60, 12 * 60),            # 10:00–12:00
+    ("ny_ogle",        12 * 60, 13 * 60 + 30),       # 12:00–13:30  (ders: kaçınılır)
+    ("ny_pm",          13 * 60 + 30, 16 * 60),       # 13:30–16:00
+)
+KZ = ("londra", "ny_am")                              # dersin "kill zone" kapısı
+SEANS_AD = {"asya": "Asya", "londra": "Londra KZ", "ny_am": "NY AM KZ", "londra_kapanis": "Londra kapanış",
+            "ny_ogle": "NY öğle", "ny_pm": "NY PM", "diger": "diğer saatler"}
+
+
+def seans(t_epoch) -> str:
+    """Barın açılış damgasının (epoch sn, UTC) NY seansı; tabloda yoksa "diger"
+    (00:00–02:00 · 05:00–07:00 · 16:00–20:00 NY)."""
+    d = datetime.fromtimestamp(int(t_epoch), tz=timezone.utc).astimezone(ZoneInfo(NY_SAAT))
+    dk = d.hour * 60 + d.minute
+    for ad, a, b in SEANSLAR:
+        if a <= dk < b:
+            return ad
+    return "diger"
+
+
+def seans_pine_dizgesi(ad: str) -> str:
+    """Pine `time()` seans dizgesi ("0200-0500"); 24:00 Pine'da "0000" yazılır."""
+    a, b = next((a, b) for x, a, b in SEANSLAR if x == ad)
+    return f"{a // 60:02d}{a % 60:02d}-{(b // 60) % 24:02d}{b % 60:02d}"
+
 
 # ── Harmonik kalıp bantları — ders 9.3 (satır 992) tarayıcı bantları ────────
 # (B = |AB|/|XA| · D = |AD|/|XA| · BC = |CD|/|BC|); C bandı hepsinde 0,382–0,886

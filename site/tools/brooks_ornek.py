@@ -142,6 +142,21 @@ def _duman() -> None:
     for y in sorted((SITE / "public" / "indikatorler").glob("*.pine")):
         hata += pine_denetle.denetle(y)
 
+    # BERABERLİK SÖZLEŞMESİ (22.09.2026). Aynı barda eşit kaliteli boğa ve ayı
+    # dönüş barı adayı varsa üç uygulama da "paket yok" der: backtest öteden
+    # beri öyleydi (yayımlanan sayılar o kuralla ölçüldü), Pine boğayı seçiyor
+    # ve kutu Pine'ı kopyalıyordu. Kural üç dosyada elle duruyor ve KAYNAK
+    # METNİNDEN sınanır — bir kapı olmasa biri bir gün sessizce ">="e döner.
+    pine_m = PINE_FH.read_text(encoding="utf-8")
+    if "kaliteBoga >= kaliteAyi" in pine_m or "donusBeraber" not in pine_m:
+        hata.append("beraberlik · Pine eşit kalitede boğayı seçiyor ya da beraberliği adlandırmıyor")
+    kutu_m = (SITE / "tools" / "brooks_kutu.py").read_text(encoding="utf-8")
+    if "kb >= ka" in kutu_m or "kb > ka" not in kutu_m or "ka > kb" not in kutu_m:
+        hata.append("beraberlik · brooks_kutu.paket_sec eşit kaliteyi çözmüyor")
+    bt_m = (SITE / "tools" / "brooks_backtest.py").read_text(encoding="utf-8")
+    if 'aday[0]["kalite"] == aday[1]["kalite"]' not in bt_m:
+        hata.append("beraberlik · brooks_backtest eşit kaliteli iki adayda emir açmama kuralını taşımıyor")
+
     # SİTEDEKİ KOD ile DEPODAKİ KOD aynı mı. Sayfa kodu `?raw` ile aldığı
     # için "sayfada görünen" ile "indirilen" yapısal olarak aynıdır; ama
     # derlenmiş çıktı bir ÖNCEKİ derlemeden kalmış olabilir ve o zaman site

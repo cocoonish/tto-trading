@@ -3,7 +3,7 @@
 """TTO · Yapı ve Momentum — yayın kapısı (sayfa sınavı 26 bu dosyayı koşturur).
 
 Üç kapıyı birden sorar ve biri düşerse yayın durur:
-  · duman.kos()            — replikasyon, Pine paritesi, emir mekaniği (on bir madde)
+  · duman.kos()            — replikasyon, Pine paritesi, emir mekaniği, seanslar (on iki madde)
   · pine_sabit.denetle()   — Pine'daki olasılık bloğu JSON'la aynı mı
   · sekil.mdx_sirasi_sina()— sayfadaki figürler üretilmiş ve sırada mı
 Ağa çıkmaz, duvar saati okumaz; girdisi depodaki arşiv ve ölçüm dosyası."""
@@ -24,4 +24,4 @@ if __name__ == "__main__":
             print(" ·", h)
         print(f"ENGEL · TTO Yapı ve Momentum doğrulaması: {len(hata)} kusur")
         sys.exit(1)
-    print("TTO Yapı ve Momentum doğrulaması: duman on bir madde, olasılık bloğu ve figür sırası tamam")
+    print("TTO Yapı ve Momentum doğrulaması: duman on iki madde, olasılık bloğu ve figür sırası tamam")

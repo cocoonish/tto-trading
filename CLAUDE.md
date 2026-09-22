@@ -2717,9 +2717,9 @@ ne döndürdüğü bilinmiyor (replikasyon sıra üretmez, ilk ~15 bar ayrışab
 aynı barda dip ve tepe pivotu onaylanırsa Pine tepe diverjansını gösterir,
 ölçüm ikisini de sayar; Pine'ın kural defterleri sınırlı (havuz 200 · PRZ 40
 · FVG/OB girdisi, öntanımlı 40), replikasyonunki sınırsız. Pine hiç derlenmedi
-(on bir statik ölçüt). AÇIK: kill zone/seans süzgeci ölçülmedi (arşiv saat
-damgalı, ölçülebilir); 5-0 · Three Drives · Nen Star tanınmıyor; SMT/COT yok;
-sayfa sınavı 19 indikatorler/ HTML figürlerini taramıyor (yalnız projeler/).
+(on bir statik ölçüt). AÇIK: 5-0 · Three Drives · Nen Star tanınmıyor; SMT/COT
+yok. Kill zone/seans süzgeci ve sayfa sınavı 19'un kapsamı 22.09.2026'da
+ölçülüp kapatıldı (aşağıda, "DELEGE EDİLEN KARAR").
 
 **Kurucu ilke — BİR ALT DİZE ARAMASI SÖZCÜK SINIRINI SORMUYORSA ER GEÇ BAŞKA
 BİR SÖZCÜĞÜN İÇİNE DÜŞER; ve bir MUAFİYET, DERLENMİŞ ÇIKTIYA karşı
@@ -2838,6 +2838,78 @@ yeni dizge dizisi (`tfAd`) kapıyı düşürdü — hattın meşru çıktısın�
 ayrıştırıcı; sayısal olmayan dizi artık atlanıyor.
 
 AÇIK KALAN, adıyla: Pine yine derlenmedi; ölçüm ile indikatör arasında kalan
-farklar yukarıda; beraberlik (aynı barda eşit kaliteli boğa ve ayı dönüş
-barı) hâlâ editoryal karar bekliyor; kullanıcının kendi Pine kaynağı
-(`Indikator/gelen/`) public depoda duruyor ve kaldırılması sorulmalı.
+farklar yukarıda. Beraberlik ve `Indikator/gelen/` aynı gün karara bağlandı
+(aşağıda).
+
+**DELEGE EDİLEN KARAR (22.09.2026, kullanıcı: "gereken ve doğru olan her şeyi
+yap") — açık maddeler deponun kendi ilkeleriyle kapatıldı; ve BİR SÜZGEÇ,
+MALİYETİ VE FAYDASI ÖLÇÜLMEDEN İNDİKATÖRE KONMAZ.** Dört iş birden yapıldı ve
+her biri bu dosyada adı olan bir sınıfın eşi.
+
+(1) SAYFA SINAVI 19'UN KAPSAMI SÖZLEŞMEDEN TÜRETİLDİ. Ölçüt "siteye kopyalanmış
+her gömülü figür" diyordu ve yalnız `site/public/projeler/` tarıyordu:
+indikatör sayfalarının 30, derslerin 246, teknik bültenin 16 ve analizlerin 5
+figürü on dokuz gün boyunca görüş alanının dışındaydı — bakılmayan yer geçen
+sınavla aynı göründü. Genişleme ÖNCE ÖLÇÜLDÜ, sonra kondu: `site/public`
+altındaki 474 Plotly figüründe yapım dili SIFIR (ENGEL üretmez), kod dili tek
+uyarı satırına derslerden dört dosya adı ekliyor. Kapsam artık bir dizin adı
+değil kökün kendisi (`sekil_dosyalari`), ham metin bir kez okunuyor (dosyalar
+megabaytlarca), ve `duman_sinav.py` beklentiyi AĞAÇTAN bağımsız türetiyor:
+Plotly taşıyan HTML'i olan her üst dizin taramada olmalı — elle tutulan bir
+beklenti listesi bir gün sessizce eksik kalırdı. Maddenin İLK yazımı arıza
+enjeksiyonunda GEÇTİ: beklentinin kökü sınanan modülün `SEKIL_KOK`undan
+okunuyordu, kapsam `projeler/`e daraltılınca beklenti de daraldı ve iki taraf
+yine eşit çıktı. Bir regresyon sınamasının beklentisi sınadığı değişkeni
+paylaşamaz; kök artık sözleşmeden yazılı (`site/public`, Astro'nun okura
+sunduğu dizin) ve daraltma maddeyi düşürüyor.
+
+(2) BROOKS BERABERLİĞİ ÖLÇÜLEN KURALA HİZALANDI. Aynı barda eşit kaliteli boğa
+ve ayı dönüş barı adayında backtest emir açmıyordu (yayımlanan sayılar o
+kuralla ölçüldü), Pine boğayı seçiyordu, kutu Pine'ı kopyalıyordu. Ders bu hâl
+için bir şey söylemez; karar "bir ölçüm aracının GÖSTERDİĞİ kural ölçtüğü
+kuralın kendisi olmalıdır" ilkesinden türedi: Pine ve `brooks_kutu.paket_sec`
+artık iki adayda kalitesi yüksek olanı seçer, eşitse paket YOK ve kutu ④ bunu
+adıyla yazar ("eşit kalite → emir yok"). Kural üç dosyada elle duruyor ve
+`brooks_ornek._duman` üçünü KAYNAK METNİNDEN sınıyor. Yayımlanan durum kutusu
+figürünün üç çıpası ölçüldü: hiçbiri beraberlik değil (2/1 · 1/2 · 2/1), yani
+figür yeni kuralla birebir aynı ve yeniden çizilmedi. Çizilmek istense
+çizilemezdi ve bu AYRI, ÖNCEDEN VAR OLAN bir arıza: teknik bültenin veri
+penceresi kaydı ve "B" çıpasında göreli rejim artık tanımsız (tarihçe
+dolmamış) — çıpa mekanizması tam tasarlandığı gibi ENGEL verdi. Yeniden
+çıpalama figürün anlattığı hikâyeleri değiştirir; dokunulmadı, adıyla açık.
+Aynı koşuda `brooks_ornek.json` da yeniden üretildi ve 1.081/1.012 satır
+değişti — hepsi teknik verinin tazelenmesi, beraberlikle ilgisiz; GERİ ALINDI
+(bu commit tek bir şeyi anlatmalı). Brooks örnek defterinin teknik veriye göre
+bayat olduğu da böylece ölçüldü ve AÇIK.
+
+(3) KILL ZONE ÖLÇÜLDÜ, SÜZGEÇ OLARAK KONMADI, GÖLGE OLARAK KONDU. Dersin 5.2
+tablosu (New York saati; Asya 20–00 · Londra KZ 02–05 · NY AM KZ 07–10 · Londra
+kapanış 10–12 · NY öğle 12–13:30 · NY PM 13:30–16) TEK tabloda duruyor
+(`yapi_referans.SEANSLAR`), yaz/kış saati zoneinfo'dan, bar AÇILIŞ dakikasıyla
+kovalanır, soru yalnız gün içi dilimlerde (4 sa barı birden çok seansa yayılır).
+Pine'daki `time(…, "0200-0500", "America/New_York")` dizgeleri o tablodan
+türetilen dizgeyle karşılaştırılıyor (duman ⑫) — pencere iki yerde elle
+yazılırsa bir gün ayrışır; `seans()` yaz/kış saatinin iki yakasında ve pencere
+ucunda (05:00 dışlayıcı) sınanıyor. İki ölçü birden yayımlandı: `kz` SÜZGECİ
+(sinyal barı kill zone'da) paket tablosunun beşinci süzgeci, ve SEANS PROFİLİ
+(`seans_toplam`: kova başına n · kazanma · ort R · sd; kill zone ile dışının
+farkı ve Welch t'si). Sonuç: on dört kıyaslanabilir satırın üçünde |t| ≥ 2 ve
+İŞARETLER KARIŞIK — OB retest 1 sa kill zone lehine +0,09 R (t 2,97), BOS devam
+15 dk +0,08 (t 2,41), harmonik PRZ 5 dk aleyhine −0,23 (t −2,18); kalan on
+birinde |t| < 1,5 ve en büyük farklar küçük örneklemli sweep satırlarında.
+Süzgeçle koşulunca OB retest 5 ve 15 dk'da spread sonrası eksi kalıyor. Yön
+tutarlı olmayan bir ayrışma kural değildir: indikatöre süzgeç konmadı, yalnız
+öntanımlı KAPALI bir gölge kondu (okuma yardımı, karar vermez) ve sayfa
+sonucu sayısıyla yazıyor. Ölçümün kendisi de kontrol edildi: eski süzgeç
+satırları ve olasılıklar yeni koşuda BİREBİR aynı (tohumlu rastgele taban),
+yani seans eklemesi hiçbir yayımlanmış sayıyı oynatmadı. Alt yazı sayıya EK
+GETİRMEZ ("3'inde" — ek sayıya göre değişir, üretici bilemez); cümle sayıyı
+ekten ayırır. Bileşen kova adlarını ölçüm dosyasının künyesinden okur; ikinci
+liste tutulmadı. Yan bulgu: sayfa "FVG ve OB kutularının sayısı (öntanımlı
+12)" diyordu, girdi bir gün önce 40 olmuştu — bir sayı iki yere yazıldığında
+ikinci yer sessizce eskir; düzeltildi, gölge girdisi de aynı cümleye girdi.
+
+(4) `Indikator/gelen/` KALIYOR: kullanıcının kendi betiği, dosyada üçüncü
+taraf telif/lisans izi yok, replikasyonun kurulduğu GİRDİ arşividir
+("yayımlanan bir sayının arşivi depoda durur" ilkesinin girdi tarafı).
+Kaldırılması yalnız sahibinin isteğiyle olur.

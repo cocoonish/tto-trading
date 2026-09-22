@@ -43,6 +43,10 @@ arşivinden (`veri.py`) beslenir; ağa çıkmaz.
     iki yarı, maliyet (gidiş-dönüş spread VARSAYIMI, `SPREAD`; ölçülmedi).
     Doluş kuralı: sinyal barı KAPANMIŞ bardır, emir i+1'den itibaren; aynı
     barda stop ve hedef → stop (tutucu; sayısı 'belirsiz' olarak yazılır).
+    Süzgeçler: konum · trend · itki · kz (sinyal barı Londra ya da NY AM kill
+    zone'unda, NY saati — ders 5.2; yalnız gün içi dilimler). Ayrıca SEANS
+    PROFİLİ: süzgeçsiz satırın işlemleri sinyal barının seansına kovalanır
+    (`seans_toplam`) — "kill zone'daki kurulum daha iyi mi" sorusunun ölçüsü.
 
 Çıktı: site/src/data/yapi_backtest.json — sayfa bileşeni yalnız buradan okur.
 Zaman dilimleri: 5m · 15m · 1h (arşiv) · 4h ve günlük (saatlikten kurulur;
@@ -77,6 +81,7 @@ UFUK = 50
 TAMPON_ATR = float(Y.SABIT["tampon_atr"])     # tek tanım: Pine tamponAtr ↔ SABIT (duman ③)
 RASTGELE = 30
 ZAMAN_DILIMLERI = ("5m", "15m", "1h", "4h", "1d")
+GUN_ICI = ("5m", "15m", "1h")     # seans sorusu yalnız burada: 4 sa barı birden çok seansa yayılır
 
 
 def seriler_tf() -> dict[str, dict[str, Seri]]:
@@ -422,8 +427,55 @@ def paket_emirleri(s: Seri, y: Y.Yapi, m: Y.Momentum, paket: str, hedef_R: float
     return E
 
 
+def seans_profili(kayit: list[tuple[str, float, float]]) -> dict:
+    """[(seans, R, R_net)] → seans başına n · kazanma · ort_R · net_ort_R; ayrıca
+    kill zone toplamı (`kz` = Londra + NY AM) ve dışı (`kz_disi`). Boş kova
+    {"n": 0} kalır — ölçülmemiş kova sıfırla doldurulmaz."""
+    def oz(satir):
+        if not satir:
+            return {"n": 0}
+        R = [r for _, r, _ in satir]
+        Rn = [rn for _, _, rn in satir]
+        return {"n": len(R), "kazanma": round(sum(1 for r in R if r > 0) / len(R), 3),
+                "ort_R": round(st.mean(R), 3), "net_ort_R": round(st.mean(Rn), 3),
+                "sd": round(st.pstdev(R), 3) if len(R) > 1 else 0.0}
+    prof = {ad: oz([k for k in kayit if k[0] == ad]) for ad in [a for a, _, _ in Y.SEANSLAR] + ["diger"]}
+    prof["kz"] = oz([k for k in kayit if k[0] in Y.KZ])
+    prof["kz_disi"] = oz([k for k in kayit if k[0] not in Y.KZ])
+    return prof
+
+
+def seans_birlestir(profiller: list[dict]) -> dict:
+    """Enstrüman profillerini kova kova N ağırlıklı birleştirir."""
+    out = {}
+    for k in sorted(set(k for p in profiller for k in p)):
+        sat = [p[k] for p in profiller if p.get(k, {}).get("n")]
+        n = sum(x["n"] for x in sat)
+        if not n:
+            out[k] = {"n": 0}
+            continue
+        ort = sum(x["ort_R"] * x["n"] for x in sat) / n
+        # birleşik sd: grup içi + grup ortalamalarının dağılımı (toplam varyans)
+        var = sum(x["n"] * (x.get("sd", 0.0) ** 2 + (x["ort_R"] - ort) ** 2) for x in sat) / n
+        out[k] = {"n": n, "kazanma": round(sum(x["kazanma"] * x["n"] for x in sat) / n, 3),
+                  "ort_R": round(ort, 3), "net_ort_R": round(sum(x["net_ort_R"] * x["n"] for x in sat) / n, 3),
+                  "sd": round(math.sqrt(var), 3)}
+    return out
+
+
+def kz_farki(prof: dict) -> dict | None:
+    """Kill zone ile dışı arasındaki ortalama R farkı ve Welch t'si (N ≥ 30 ikisinde de);
+    yoksa None — ölçülemeyen fark sıfır diye yazılmaz."""
+    kz, dis = prof.get("kz", {}), prof.get("kz_disi", {})
+    if kz.get("n", 0) < 30 or dis.get("n", 0) < 30:
+        return None
+    se = math.sqrt(kz["sd"] ** 2 / kz["n"] + dis["sd"] ** 2 / dis["n"])
+    fark = kz["ort_R"] - dis["ort_R"]
+    return {"fark": round(fark, 3), "t": round(fark / se, 2) if se > 0 else None, "n_kz": kz["n"], "n_disi": dis["n"]}
+
+
 def paket_kos(s: Seri, y: Y.Yapi, m: Y.Momentum, paket: str, hedef_R: float, spread: float,
-              suzgec: str = "yok") -> dict:
+              suzgec: str = "yok", seans_profil: bool = False) -> dict:
     emirler = paket_emirleri(s, y, m, paket, hedef_R)
     if suzgec == "konum":   # discount'ta alış, premium'da satış
         emirler = [e for e in emirler if y.konum[e["bar"]] is not None and ((e["yon"] > 0 and y.konum[e["bar"]] < 50) or (e["yon"] < 0 and y.konum[e["bar"]] > 50))]
@@ -431,8 +483,11 @@ def paket_kos(s: Seri, y: Y.Yapi, m: Y.Momentum, paket: str, hedef_R: float, spr
         emirler = [e for e in emirler if y.trend[e["bar"]] == e["yon"]]
     elif suzgec == "itki":   # sinyal barının itkisi göreli üst yarıda
         emirler = [e for e in emirler if m.itki_sira[e["bar"]] is not None and m.itki_sira[e["bar"]] >= 50]
+    elif suzgec == "kz":     # dersin kapısı: SİNYAL BARI Londra ya da NY AM kill zone'unda (NY saati)
+        emirler = [e for e in emirler if Y.seans(s.zaman[e["bar"]]) in Y.KZ]
     R, R_net, belirsiz, dolmayan, dar = [], [], 0, 0, 0
     riskler, yonler = [], []
+    seans_kayit: list[tuple[str, float, float]] = []
     asgari = 0.3
     for e in emirler:
         a = y.atr[e["bar"]] or 0
@@ -445,9 +500,15 @@ def paket_kos(s: Seri, y: Y.Yapi, m: Y.Momentum, paket: str, hedef_R: float, spr
             continue
         R.append(r["R"]); R_net.append(r["R"] - spread / r["risk"])
         belirsiz += r["belirsiz"]; riskler.append(r["risk"]); yonler.append(e["yon"])
+        if seans_profil and s.zaman is not None:
+            seans_kayit.append((Y.seans(s.zaman[e["bar"]]), r["R"], r["R"] - spread / r["risk"]))
     oz = ozet_r(R)
     oz["net_ort_R"] = round(st.mean(R_net), 3) if R_net else None
     oz["emir"] = len(emirler); oz["dolmayan"] = dolmayan; oz["belirsiz"] = belirsiz; oz["dar"] = dar
+    if seans_profil and s.zaman is not None:
+        # Aynı işlemler sinyal barının NY seansına göre kovalanır; süzgeç
+        # değil PROFİL — bir kovanın ortalaması öbürlerinden ayrışıyor mu?
+        oz["seans"] = seans_profili(seans_kayit)
     # rastgele giriş tabanı: aynı sayıda emir, aynı yön, aynı risk (ATR oranı), aynı hedef R
     oz["risk_atr_p50"] = round(st.median(r / (y.atr[e["bar"]] or 1) for r, e in zip(riskler, emirler) if y.atr[e["bar"]]), 2) if riskler else None
     if R and riskler and suzgec == "yok":
@@ -495,7 +556,7 @@ def paket_kos(s: Seri, y: Y.Yapi, m: Y.Momentum, paket: str, hedef_R: float, spr
 
 
 PAKETLER = ["sweep_mss_fvg", "ob_retest", "prz", "diverjans", "bos_devam"]
-SUZGECLER = ["yok", "konum", "trend", "itki"]
+SUZGECLER = ["yok", "konum", "trend", "itki", "kz"]   # kz yalnız GUN_ICI dilimlerinde koşar
 
 
 def birlestir_oran(satirlar: list[dict]) -> dict:
@@ -530,7 +591,10 @@ def main() -> int:
                     if paket == "diverjans" and hedef_R == 2.0:
                         continue      # hedef tablodan gelir
                     for sz in SUZGECLER:
-                        oz = paket_kos(s, y, m, paket, hedef_R, SPREAD.get(ens, 0.0), sz)
+                        if sz == "kz" and tf not in GUN_ICI:
+                            continue          # 4 sa / günlük barı birden çok seansa yayılır; seans sorusu yok
+                        oz = paket_kos(s, y, m, paket, hedef_R, SPREAD.get(ens, 0.0), sz,
+                                       seans_profil=(sz == "yok" and tf in GUN_ICI))
                         oz.update({"tf": tf, "enstruman": ens, "paket": paket, "hedef_R": hedef_R, "suzgec": sz})
                         paketler.append(oz)
             print(f"  {ens}-{tf}: {len(s)} bar · olay {len(y.olaylar)} · prz {len(y.przler)} · {time.time()-t0:.0f} sn", flush=True)
@@ -575,10 +639,27 @@ def main() -> int:
                                          "ilk_yari_ort_R": round(sum((p["ilk_yari_ort_R"] or 0) * p["n"] for p in sat) / n, 3),
                                          "ikinci_yari_ort_R": round(sum((p["ikinci_yari_ort_R"] or 0) * p["n"] for p in sat) / n, 3),
                                          "seri_ustu_rastgele": sum(1 for p in sat if (p.get("rastgele_yuzdelik") or 0) >= 95)})
+    # seans profili (TF × paket × hedef; yalnız gün içi, süzgeçsiz satırın işlemleri)
+    seans_toplam = []
+    for tf in GUN_ICI:
+        for paket in PAKETLER:
+            for hedef_R in (1.0, 2.0):
+                sat = [p["seans"] for p in paketler if p["tf"] == tf and p["paket"] == paket
+                       and p["hedef_R"] == hedef_R and p["suzgec"] == "yok" and p.get("seans")]
+                if sat:
+                    prof = seans_birlestir(sat)
+                    seans_toplam.append({"tf": tf, "paket": paket, "hedef_R": hedef_R, "seri": len(sat),
+                                         "seans": prof, "kz_fark": kz_farki(prof)})
+    kunye["seanslar"] = {ad: f"{a // 60:02d}:{a % 60:02d}–{(b // 60) % 24:02d}:{b % 60:02d}" for ad, a, b in Y.SEANSLAR}
+    kunye["seans_ad"] = dict(Y.SEANS_AD)          # sayfa bileşeni kova adlarını buradan okur; ikinci liste tutmaz
+    kunye["seans_saat_dilimi"] = Y.NY_SAAT
+    kunye["kill_zone"] = list(Y.KZ)
+    kunye["seans_olcusu"] = "sinyal barının açılış dakikası; yalnız 5 dk · 15 dk · 1 sa"
     kunye["sure_sn"] = round(time.time() - t0)
     CIKTI.parent.mkdir(parents=True, exist_ok=True)
     CIKTI.write_text(json.dumps({"kunye": kunye, "olasilik": olasilik, "diverjans": div_tf,
-                                 "paket_toplam": toplam_paket, "paket": paketler}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+                                 "paket_toplam": toplam_paket, "seans_toplam": seans_toplam,
+                                 "paket": paketler}, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
     print(f"→ {CIKTI} ({kunye['sure_sn']} sn)")
     return 0
 

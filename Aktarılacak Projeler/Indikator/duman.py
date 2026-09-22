@@ -12,7 +12,7 @@ bu dosyayı koşturur.
   ④ Diverjans tablosu Pine dizileri = DIV_TABLO (iki dosya, 25 satır).
   ⑤ Harmonik bantlar Pine f_klasik çağrıları = HARMONIK (altı kalıp).
   ⑥ Olasılık bloğu = JSON'dan türetilen (pine_sabit --denetle).
-  ⑦ pine_denetle on ölçüt iki dosyada geçer.
+  ⑦ pine_denetle on bir ölçüt iki dosyada geçer.
   ⑧ Emir mekaniği: hedef → +R · stop → −1 · aynı bar → stop+belirsiz ·
      dolmayan limit → None · ufuk dolunca R (−1, hedefR) içinde ·
      boşlukla doluşta payda PLANLANAN risk.
@@ -23,6 +23,10 @@ bu dosyayı koşturur.
      kurulu değil ve ilk yayın koşusu `import sekil` satırında düştü
      (21.09.2026). Alt süreç plotly'yi engelleyerek dogrula.py'yi koşturur;
      kapının okuduğu modül koşucuda olmayan bir kütüphane isteyemez.
+  ⑫ Seanslar: Pine'daki kill zone dizgeleri SEANSLAR tablosundan türeyenle
+     aynı (pencere iki yerde elle yazılırsa bir gün ayrışır); seans() yaz/kış
+     saatinin iki yakasında NY dakikasını doğru okur ve pencere ucu dışlayıcı;
+     JSON seans profili gün içi üç dilimi ve künye tabloyu taşır.
 """
 from __future__ import annotations
 
@@ -187,6 +191,24 @@ def kos() -> list[str]:
     r11 = subprocess.run([sys.executable, "-c", kod], capture_output=True, text=True, cwd=str(KOK))
     _sina(hata, r11.returncode == 0 and "kapi-yolu-tamam" in r11.stdout,
           "⑪ yayın kapısı plotly'siz koşamıyor: " + (r11.stdout + r11.stderr)[-400:])
+    # ⑫ seanslar: Pine dizgeleri ↔ SEANSLAR, seans() DST iki yakası, JSON profili
+    for ad in Y.KZ:
+        dizge = f'"{Y.seans_pine_dizgesi(ad)}", "{Y.NY_SAAT}"'
+        _sina(hata, dizge in metin, f"⑫ Pine'da {ad} penceresi yok: time(timeframe.period, {dizge})")
+    import datetime as _dt
+
+    def _ep(y_, m_, d_, hh, mm):
+        return int(_dt.datetime(y_, m_, d_, hh, mm, tzinfo=_dt.timezone.utc).timestamp())
+    _sina(hata, Y.seans(_ep(2026, 7, 1, 11, 30)) == "ny_am" and Y.seans(_ep(2026, 1, 15, 12, 30)) == "ny_am",
+          "⑫ seans(): 07:30 NY yaz (11:30 UTC) ya da kış (12:30 UTC) saatinde ny_am okunmadı")
+    _sina(hata, Y.seans(_ep(2026, 7, 1, 6, 0)) == "londra" and Y.seans(_ep(2026, 7, 1, 9, 0)) == "diger",
+          "⑫ seans(): 02:00 NY londra değil ya da 05:00 NY (pencere ucu, dışlayıcı) londra sayıldı")
+    if JSON.exists():
+        d12 = json.loads(JSON.read_text(encoding="utf-8"))
+        _sina(hata, {p["tf"] for p in d12.get("seans_toplam", [])} == set(B.GUN_ICI),
+              "⑫ seans profili gün içi üç dilimi taşımıyor")
+        _sina(hata, set(d12["kunye"].get("seanslar", {})) == {a for a, _, _ in Y.SEANSLAR},
+              "⑫ künye seans tablosu SEANSLAR ile aynı değil")
     return hata
 
 
@@ -197,4 +219,4 @@ if __name__ == "__main__":
         for x in h:
             print(" ·", x)
         sys.exit(1)
-    print("duman: on bir madde geçti")
+    print("duman: on iki madde geçti")

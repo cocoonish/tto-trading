@@ -268,6 +268,23 @@ e2, u2, _ = sekil_okur_dili(metinler + metinler, "x/y.html")
 sina("aynı kusur iki kez geçse tek kez bildiriliyor",
      len(e2) == 1 and len(u2) == 1, f"engel={e2} uyari={u2}")
 
+# KAPSAM SÖZLEŞMEDEN. 03.09'dan 22.09.2026'ya ölçüt yalnız `projeler/` tarıyordu;
+# indikatör (30), ders (246), teknik (16) ve analiz (5) figürleri görüş alanının
+# dışındaydı ve bakılmayan yer geçen sınavla aynı görünüyordu. Beklenti elle
+# yazılmaz, AĞAÇTAN bağımsız olarak yeniden türetilir: Plotly taşıyan HTML'i
+# olan her üst dizin taramada olmalı. Kök burada SÖZLEŞMEDEN yazılır
+# (`site/public` — okurun gördüğü her dosya Astro'nun bu dizininden sunulur),
+# sınanan modülün SEKIL_KOK'undan OKUNMAZ: ilk yazımda okunuyordu ve kapsam
+# `projeler/`e daraltılınca beklenti de daralıp madde YEŞİL geçti — bir
+# regresyon sınamasının beklentisi sınadığı değişkeni paylaşamaz.
+_pub = _mod.KOK / "site/public"
+_taranan = {hp.relative_to(_pub).parts[0] for hp, _ in _mod.sekil_dosyalari()}
+_plotly_olan = {p.relative_to(_pub).parts[0] for p in _pub.rglob("*.html")
+                if "Plotly" in p.read_text(encoding="utf-8", errors="ignore")}
+sina("figür taraması Plotly taşıyan her üst dizini kapsıyor (kapsam ağaçtan türer)",
+     _plotly_olan == _taranan and len(_taranan) >= 2,
+     f"taranan={sorted(_taranan)} plotly_olan={sorted(_plotly_olan)}")
+
 sina("veri dizileri metin sayılmıyor",
      not any(t.startswith("2026-08-21") for t in metinler), f"{metinler}")
 
