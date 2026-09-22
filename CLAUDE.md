@@ -2914,3 +2914,64 @@ ikinci yer sessizce eskir; düzeltildi, gölge girdisi de aynı cümleye girdi.
 taraf telif/lisans izi yok, replikasyonun kurulduğu GİRDİ arşividir
 ("yayımlanan bir sayının arşivi depoda durur" ilkesinin girdi tarafı).
 Kaldırılması yalnız sahibinin isteğiyle olur.
+
+(5) İKİNCİ PINE TURU — derleme · çalışma zamanı · sözleşme mercekleri, DONMUŞ
+kopyaya karşı. İş akışının kapsamı Brooks dosyalarından tto dosyalarına
+DARALTILDI (bu koşucu iki ajanı eşzamanlı koşturuyor, ajan başına ~11 dk;
+Brooks 16.09'da iki turdan geçmişti) ve çürütme evresi KALDIRILDI: hüküm
+`yapi_referans.py`ye ve backtest'e karşı kendi okumamla — 16.09'da ajan
+hakemler kaynağın canlı hâlini ölçme tuzağına düşmüştü. Kesin derleme
+hatası SIFIR: 29 ham bulgu (23 sözleşme · 4 çalışma · 2 "derleme" — ikisi de
+yazarının kendi eliyle "hata DEĞİL" ya da "doğrulanamadı" diye işaretli).
+İlk on bir sözleşme iddiasının ALTISI kodun değil YORUMUN kusuru çıktı (EQ
+penceresi, CHoCH'un korunan uca karşı sorulması, FVG durum sırası, MSS
+displacement taramasının sweepPencere tavanı): kod replikasyonla birebir,
+yorum koda hizalandı. Gerçek düzeltmeler: FVG/OB/PRZ kutularının DURUM
+renkleri görünürlük girdisini atlıyordu (dokuz çağrı yeri; girdi kapalıyken
+kutu ilk durum değişikliğinde geri görünür oluyordu), kurulum çizgileri
+kutu ④ "yok" derken ekranda kalıyordu (silme yeniden çizimin koşulundan
+ayrıldı), `f_donusMumu` `close[1]` taşıyıp yalnız bir `if` dalında
+çağrılıyordu (her barda koşulsuz), yüzde işareti iki dosyada beş yerde
+sayının ARKASINDAYDI (biçim sözleşmesi öne alır), `f_klasik`in on sekiz
+parametresinden biri hiç okunmuyordu (Xf; 17'ye indi), `olN` dizisi
+üreticiden yazılıp hiç okunmuyordu (kutu artık kovanın N'sini "bin bar"
+olarak basıyor — "ölçü var, tüketici yok"un Pine eşi), diverjans tablosu
+döngüsünün elle yazılı üst sınırı (24) dizi boyundan türedi (iki dosya).
+Bir de iki yerde elle duran sabit: Sweep→MSS→FVG penceresi Pine'da literal
+10, backtest'te literal 10 ve `sweepPencere` girdisinden bağımsız — girdi
+değiştirilse MSS 20 barlık bacaktan ilan edilir, FVG son 10 barda aranır ve
+paket sessizce alttakine düşerdi. `SABIT["mss_fvg_pencere"]` tek tanım,
+backtest oradan okur, duman ③b Pine literal'ini onunla kıyaslar (arıza
+enjeksiyonu: 10→12 yakalandı). Çizim tavanı BAŞLIĞA yazıldı: yapı olayı
+çizgi/etiketleri ve diverjans etiketleri silinmez, 500 (Pine'ın üst sınırı)
+aşılınca en eskisi kendiliğinden düşer — kural değil sınır; kuyruk tutmak
+davranışı değiştirmezdi. Momentum panelinde ayrıca: `tarihce` ipucu
+"altında" diyordu, `ta.percentrank` "küçük ya da EŞİT" sayar (replikasyon
+`≤` yazıyor) — gövdesiz barda itki 0 ve sırası sıfır değil, önceki gövdesiz
+barların payı; ısınma satırı 280 diyordu, sıra ancak RSI/ATR'nin kendi
+ısınması pencereden çıkınca doğar (`tarihce + max(rsiN, atrN)`); `f_sayi`
+eksiyi ASCII tire bırakıyordu (U+2212, iki dosya); ve iki bacak TEK
+hazırlık kapısındaydı — itki penceresine tek bir na girse RSI sırası 280
+bar karanlığa düşerdi; replikasyonda ortak kapı yok, Pine'da da bacak
+başına ayrıldı (ölçülemeyen bacak adıyla yazılır).
+
+Belgeden bu turda doğrulanan üç dil gerçeği (Context7 üzerinden, engel
+konmadan önce): `for i = a to b` b<a iken GERİYE sayar, sıfır kez koşmaz —
+dosyadaki her döngü `if n > 0` korumalı; v6'da int/int bölme kesirli float;
+`ta.percentrank` na içeren pencerede na (replikasyonla ısınma aynı).
+DOĞRULANAMAYAN, adıyla: `str.tostring(value, format)`ın `format` niteliği —
+`f_sayi` biçimi fonksiyon PARAMETRESİYLE (series string) geçiriyor; referans
+"series string" derse sorun yok (hafızam öyle), "simple/const" derse
+`f_sayi` derlenmez ve her çağrı yeri onunla düşer. TradingView ve Context7
+turun ortasında egress vekilinde engellendi; iki çürütücü de belgeye
+ulaşamadı. AÇIK.
+
+İki tarama BEYANI kayda değer, çünkü "temiz" ancak sorulan soru için
+geçerlidir: iki dosyada da bildirimden önce kullanım, genel adı gölgeleyen
+yerel bildirim, aynı kapsamda ikinci bildirim ve tanımsız ad SIFIR; çizim
+çağrısı toplamı 14 ve 8 (sınır 64). Ve donmuş kopyanın tersten tuzağı:
+tur, canlı dosyada ÇOKTAN düzeltilmiş bir başlığı (percentrank "ölçülemez")
+kusur diye bildirdi — 16.09'da canlı dosya düzeltmeyi "çürütme" yapmıştı,
+bu kez donmuş kopya düzeltmeyi "kusur" yaptı. İki tuzak birbirinin aynası
+ve ayıran tek şey okuyucunun dosyayı hangi anda açtığı; hüküm her seferinde
+kaynağın O ANKİ hâline karşı, elle verildi.

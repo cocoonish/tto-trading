@@ -71,6 +71,8 @@ SABIT: dict[str, float | int] = {
     "esit_atr": 0.15,        # EQH/EQL toleransı (ATR14 katı)
     "asim_atr": 0.10,        # sweep için asgari fitil aşımı (ATR14 katı)
     "sweep_pencere": 10,     # MSS için: kırılımdan önce kaç barda sweep aranır
+    "mss_fvg_pencere": 10,   # Sweep→MSS→FVG paketi: MSS barından geriye kaç barda FVG aranır
+                             #   (Pine'da INPUT DEĞİL, sabit; duman ③ literal'i bu değerle kıyaslar)
     "ote_alt": 0.62, "ote_ust": 0.79, "ote_orta": 0.705,
     "tarihce": 280,          # göreli sıra penceresi (Brooks v2 ile aynı)
     "harmonik_tol": 0.0,     # bantlar dersin tarayıcı bantları; ek tolerans yok

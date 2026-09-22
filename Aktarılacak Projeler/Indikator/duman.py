@@ -122,6 +122,11 @@ def kos() -> list[str]:
             if pad in inp:
                 _sina(hata, abs(inp[pad] - float(Y.SABIT[sab])) < 1e-9, f"③ {yol.name}: {pad}={inp[pad]} ≠ SABIT[{sab}]={Y.SABIT[sab]}")
         _sina(hata, "kSwing" in inp or yol is PINE_MOM, f"③ {yol.name}: kSwing girdisi yok")
+    # ③b Pine'da input olmayan sabit: Sweep→MSS→FVG penceresi literal yazılı, backtest SABIT'ten okur;
+    #    iki yer bir gün ayrışırsa ölçülen paket ile gösterilen paket farklı FVG'yi seçer
+    m3 = re.search(r"array\.get\(fB, j\) >= bar_index - (\d+)", PINE_YAPI.read_text(encoding="utf-8"))
+    _sina(hata, m3 is not None and int(m3.group(1)) == int(Y.SABIT["mss_fvg_pencere"]),
+          f"③ tto-yapi.pine: MSS→FVG penceresi {m3.group(1) if m3 else 'YOK'} ≠ SABIT[mss_fvg_pencere]={Y.SABIT['mss_fvg_pencere']}")
     # ④ diverjans tablosu
     for yol in (PINE_YAPI, PINE_MOM):
         dz = pine_diziler(yol)

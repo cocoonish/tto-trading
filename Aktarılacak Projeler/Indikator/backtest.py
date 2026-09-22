@@ -364,7 +364,7 @@ def paket_emirleri(s: Seri, y: Y.Yapi, m: Y.Momentum, paket: str, hedef_R: float
         for o in y.olaylar:
             if o.tur != "MSS":
                 continue
-            fvg = next((f for f in y.fvgler if f.yon == o.yon and o.bar - 10 <= f.bar <= o.bar), None)
+            fvg = next((f for f in y.fvgler if f.yon == o.yon and o.bar - int(Y.SABIT["mss_fvg_pencere"]) <= f.bar <= o.bar), None)
             sw = next((b for b, ad, sev, yon in reversed(y.sweepler) if b < o.bar and yon == -o.yon and b >= o.bar - int(Y.SABIT["sweep_pencere"])), None)
             if fvg is None or sw is None:
                 continue
