@@ -1,71 +1,6 @@
 {
- "zaman": "2026-09-21T04:17:58",
+ "zaman": "2026-09-22T04:22:28",
  "veri": [
-  {
-   "tarih": "2026-09-21",
-   "saat": "10:00",
-   "ulke": "TR",
-   "olay": "TCMB: Kapasite kullanımı (Eylül 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "İmalat Sanayi Kapasite Kullanım Oranı"
-  },
-  {
-   "tarih": "2026-09-21",
-   "saat": "10:00",
-   "ulke": "TR",
-   "olay": "TCMB: Reel kesim güveni (Eylül 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "İktisadi Yönelim İstatistikleri ve Reel Kesim Güven Endeksi"
-  },
-  {
-   "tarih": "2026-09-21",
-   "saat": "17:30",
-   "ulke": "TR",
-   "olay": "HMB: Bütçe dengesi (Ağustos 2026)",
-   "onem": 1,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "Konsolide Kamu Sektörü Gerçekleşmeleri (Merkezi Yönetim Bütçesi Program Tanımlı Faiz Dışı Dengesi)"
-  },
-  {
-   "tarih": "2026-09-21",
-   "saat": "17:30",
-   "ulke": "TR",
-   "olay": "HMB: Bütçe dengesi (Ağustos 2026)",
-   "onem": 1,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "Bütçe Finansmanı İstatistikleri (Genel Bütçe Dengesi ve Finansmanı, Merkezi Yönetim Bütçe Dengesi ve Finansmanı)"
-  },
-  {
-   "tarih": "2026-09-21",
-   "saat": "17:30",
-   "ulke": "TR",
-   "olay": "HMB: Borç stoku (Ağustos 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "Merkezi Yönetim Borç Stoku İstatistikleri (Merkezi Yönetim Borç Stoku Enstrüman Dağılımı, Döviz-Faiz Yapısı, Vadeye Kalan Ortalama Süre)"
-  },
   {
    "tarih": "2026-09-22",
    "saat": "10:00",
@@ -247,6 +182,32 @@
    "beklenti_sayi": null,
    "onceki": "",
    "not_": "Sanayi Üretim Endeksi"
+  },
+  {
+   "tarih": "2026-10-13",
+   "saat": "10:00",
+   "ulke": "TR",
+   "olay": "TÜİK: Dış ticaret (Ağustos 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "Dış Ticaret Endeksleri"
+  },
+  {
+   "tarih": "2026-10-13",
+   "saat": "10:00",
+   "ulke": "TR",
+   "olay": "TCMB: Ödemeler dengesi (Ağustos 2026)",
+   "onem": 1,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "Ödemeler Dengesi İstatistikleri   "
   }
  ]
 }
