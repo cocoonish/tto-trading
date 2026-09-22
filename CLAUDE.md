@@ -3056,6 +3056,18 @@ boş). Bir de yanlış gerekçe: iki dosyadaki yorum table.new'in konumu için
 doğruydu, gerekçesi değil; yanlış gerekçe bir sonraki oturuma gerçek bir
 kısıtı yok saydırabilir. `str.tostring` niteliği üç ajanda yeniden "açık"
 diye geldi ve üçünde de düşük güvenle: derleme ölçümü onları kapatıyor.
+Çapraz referans (sekizinci ajan, 1 sa 43 dk) altı sistematik soruda temiz
+çıktı — bildirimden önce kullanım 0, genel adı gölgeleyen yerel 0, ikinci
+bildirim 0, plot ailesi 20 (sınır 64), `request.security` 4 (sınır 40),
+paralel dizi paritesi tam (ob* 8↔8 · f* 7↔7 · pz* 13↔13 · olay 2↔2).
+DERLEYİCİ TEYİDİ OLMAYAN İKİ YAPI, adıyla: `f_stYon()[1]` — referansın `[]`
+örneği yalnız yerleşik çağrı üzerinde, kullanıcı fonksiyonu sonucu da series
+olduğu için aynı kural varsayıldı; ve `color.new(cMor, <series int>)` —
+özet yalnız const imzayı gösteriyor, bugün derlenen dosyada series color
+argümanı kullanıldığı için series aşırı yüklemesinin transp'ı da kapsadığı
+varsayıldı. Kullanıcı yapıştırınca derleme hatası gelirse önce bu iki satır
+bakılacak yerdir (Supertrend/security bloğu ve görünürlük geçişi ayrı ayrı
+yapıştırılınca hangisinde olduğu tek adımda görünür).
 
 Kayda değer yan nokta: kullanıcının "eksik kalmış" dediği iki gösterge
 kaynak dosyada başından beri vardı ve sayfa onları GEREKÇESİYLE dışarıda
