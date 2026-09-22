@@ -492,6 +492,29 @@ def _ozel_anahtar():
         assert "analiz:<slug>" in str(ex)
 
 
+def _site_izi_hassasiyeti() -> None:
+    """İz sözcük ORTASINDA yakalanmaz, sözcük BAŞINDA yakalanır.
+
+    22.09.2026'da ölçüldü: "sitede" izi "kapasitede" sözcüğünün içinde geçiyor
+    ve kapasite kullanım oranını anlatan meşru bir cümle gönderiden sessizce
+    düşüyordu. Bir denetimin yanlış pozitifi, kaçırdığı kusur kadar pahalıdır —
+    burada bedeli, yazarın cümlesinin okura hiç ulaşmaması. İki yön de sınanır:
+    gevşetme gerçek izleri kaçırmamalı.
+    """
+    temiz = ("kapasitede sınırlı bir toparlanma var",
+             "kapasitemiz arttı",
+             "üniversitede okudu")
+    for c in temiz:
+        assert not uret._site_izi_var(c), f"yanlış pozitif: {c!r}"
+    dusmeli = ("Bu bültenin okuması şudur", "Bu sayfadaki tabloda görünüyor",
+               "Panoda iki satır çelişiyor", "Rejim panosunun iki satırı",
+               "Sitede ayrıntısı var", "Sitemiz bunu yazdı",
+               "Piyasa fotoğrafında yok", "Ayrıntısı jeopolitik bölümünde",
+               "Bültende anlatıldı", "Yukarıdaki tabloda duruyor")
+    for c in dusmeli:
+        assert uret._site_izi_var(c), f"gerçek iz kaçtı: {c!r}"
+
+
 def main() -> int:
     print("tweet duman sınaması:")
     sina("analiz gönderisi: yönetici özeti, SABİT <Deger>, atıf düşer, not sonda", _analiz_zinciri)
@@ -500,6 +523,8 @@ def main() -> int:
     sina("zincirler: uzunluk, HTML sızıntısı, link, yapı bayrağı", _zincirler)
     sina("site atfı yok · gündem girdi · öksüz cümle düştü",
          _site_atfi_ve_gundem)
+    sina("site izi sözcük ortasında yakalanmaz (kapasitede ≠ sitede)",
+         _site_izi_hassasiyeti)
     sina("kırpma cümle sınırında", _kirpma)
     sina("tavan aşımında satır düşer, rakam şeridi kalır", _tavan_asiminda_rakam_seridi)
     sina("gonder: anahtarsız yeşil, defter mükerrerliği, bayat koruması",

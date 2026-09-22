@@ -68,9 +68,23 @@ SITE_IZ_KALIPLARI = (
 )
 
 
+# İZ SOL SÖZCÜK SINIRINDA ARANIR. Ham alt dize araması bir izi BAŞKA bir
+# sözcüğün ortasında yakalıyordu: "sitede" izi "kapasitede" sözcüğünün içinde
+# geçiyor ve kapasite kullanım oranını anlatan MEŞRU bir cümle her ay sessizce
+# düşüyordu (22.09.2026'da ölçüldü — "kapasitede sınırlı bir toparlanma"
+# cümlesi bu yüzden gönderiye hiç girmedi). Aynı kusur "sitemiz" ↔
+# "kapasitemiz" ve "sitede" ↔ "üniversitede" çiftlerinde de var. İzlerin
+# TAMAMI sözcük başında duran ifadeler ("sayfadaki", "bültende", "panoda"),
+# yani sol sınır şartı hiçbir gerçek izi düşürmez — yalnız sözcük ortasındaki
+# tesadüfi eşleşmeyi keser. Sağ tarafa sınır KONMAZ: Türkçe ekli yazımı
+# ("bültenin", "panosunda") tam da yakalanmak istenen biçimdir.
+_SITE_IZ_RE = re.compile(
+    r"(?<![0-9A-Za-zÇĞİIÖŞÜçğıiöşü])(?:" + "|".join(re.escape(i) for i in SITE_IZLERI) + ")")
+
+
 def _site_izi_var(cumle: str) -> bool:
     alt = cumle.lower()
-    return any(iz in alt for iz in SITE_IZLERI) or any(k.search(cumle) for k in SITE_IZ_KALIPLARI)
+    return bool(_SITE_IZ_RE.search(alt)) or any(k.search(cumle) for k in SITE_IZ_KALIPLARI)
 
 # Cümle sınırı: nokta TEK BAŞINA yetmez. Türkçede sıra sayısı da noktayla
 # yazılır ("12. ayını doldurdu") ve binlik ayracı da noktadır; ham (?<=[.!?])\s+
