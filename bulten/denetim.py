@@ -999,6 +999,46 @@ class Denetim:
         else:
             self._ok(f"piyasa seansı etiketli: {etiket}")
 
+    def piyasa_seans_boslugu(self):
+        """Satır satır: kaynağın BOŞ verdiği tamamlanmış seans var mı?
+
+        `piyasa_seansi` yalnız anlık görüntünün EN TAZE tarihine bakar. 23.09.2026
+        sabahı elli bir satırın yirmi üçü bir seans geride yayımlandı (Yahoo 22.09
+        barını boş vermişti) ve o ölçüt YEŞİL geçti, çünkü en taze satır 22.09'du.
+        Bakılmayan yer, geçen sınavla aynı göründü.
+
+        Kanıt ölçüm katmanının KENDİSİNDEN gelir (piyasa.seans_ozeti): kaynağın
+        satır açıp kapanışını boş bıraktığı gün. Tatil kaynakta satır açmaz,
+        burada hiçbir şey üretmez — yani ölçüt borsa takvimi bilmeden de tatili
+        kusur saymaz. UYARI, ENGEL DEĞİL: satır kendi tarihini doğru taşır ve
+        okura adıyla söylenir; bu yüzden yayını durdurmak ölçtüğü kusurdan pahalı
+        olurdu (yayının önünde duran denetimin yanlış alarmı arızanın kendisidir).
+        """
+        p = self.b.get("piyasa") or {}
+        oz = p.get("seans_ozeti")
+        if oz is None:
+            return          # ölçüm katmanı alanı yazmadan önceki sayılar
+        bos = oz.get("kaynak_bos") or []
+        if bos:
+            self.uyari.append(
+                "Kaynak şu satırların tamamlanmış seansını BOŞ verdi ve kapanış "
+                "kurulamadı (piyasa ölçüm anında açıktı ya da vadeli): "
+                + " · ".join(f"{x['ad']} ({', '.join(x['gunler'])}; satır {x['tarih']})"
+                             for x in bos)
+                + ". Satırlar kendi tarihiyle duruyor; yazıda bu satırların "
+                  "hareketi o seansa ait sayılmamalı.")
+        onarilan = oz.get("son_islemden") or []
+        if onarilan:
+            self._ok(f"kaynağın boş verdiği kapanış son işlem fiyatından kuruldu: "
+                     + " · ".join(f"{x['ad']} {x['gun']}" for x in onarilan))
+        sinanamadi = p.get("seans_sinanamadi") or []
+        if sinanamadi:
+            self.uyari.append(
+                f"Boş seans denetimi {len(sinanamadi)} sembolde yapılamadı (kaynağın "
+                f"meta alanı alınamadı): {' · '.join(sinanamadi[:12])}")
+        if not bos and not sinanamadi:
+            self._ok("hiçbir satırda kaynağın boş verdiği seans yok")
+
     def devir(self):
         """Devir düzeltmesi kurulamamış vadeli seri var mı.
 
@@ -1733,7 +1773,8 @@ class Denetim:
         self.yazi(); self.veri(); self.atif(); self.sayi(); self.nabiz(); self.tekrar()
         self.tema(); self.izleme(); self.dil(); self.tazelik(); self.tazeleme_atlandi()
         self.karanlik(); self.olu_kalip(); self.ihale_iddiasi()
-        self.yerlesmemis(); self.piyasa_seansi(); self.revizyon(); self.duzeltme()
+        self.yerlesmemis(); self.piyasa_seansi(); self.piyasa_seans_boslugu()
+        self.revizyon(); self.duzeltme()
         self.devir(); self.haber_tonu(); self.bicim()
         self.olagandisilik_penceresi()
         tur = self.b.get("tur", "gunluk")

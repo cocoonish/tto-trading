@@ -486,6 +486,15 @@ aynı güne aittir demek değildir: bülten 26 Ağustos kapanışlarıyla 27 Ağ
 kapanmış bir Asya seansını aynı sayfada taşıyabilir. Hangi satırın hangi güne ait
 olduğunu METİNDE söyle.
 
+Geride kalan bir satırın SEBEBİNİ tahmin etme; ölçüm katmanı yazıyor
+(`piyasa.seans_ozeti`, 23.09.2026'dan beri). `kaynak_bos`: kaynak o tamamlanmış
+seansı boş verdi ve kurulamadı — satırın "1 gün"ü o seansa ait değildir, hareketi
+o güne yazma. `son_islemden`: kaynağın günlük barı boştu, kapanış kaynağın aynı
+günkü son işlem fiyatından kuruldu — sayı o günün kapanışıdır, kullanılabilir.
+Listede olmayan geride kalmış satır tatildir (kaynak o gün satır açmadı). TLREF
+artık bir önceki seansı taşır (Borsa İstanbul aynı gün yayımlıyor, EVDS ertesi
+gün); taşımıyorsa hattın uyarısı sebebini söyler.
+
 **Bir düzeltme yaptıysan GENELLEŞTİR.** Bu, 27.08.2026'nın asıl dersi. O sabahki
 metin enerjide bir ölçü hatası fark etti, doğru teşhis etti ve düzgün bir geri
 alma yazdı — sonra aynı paragrafın devamında, aynı hatayı taşıyan metal

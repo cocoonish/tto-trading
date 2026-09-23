@@ -877,6 +877,22 @@ def kos(yenile: bool = False) -> dict:
 
     # --- (4) referans / beklenti serileri ---------------------------------
     G = cek_kume(GUNLUK, "gun", PARCA_GUN, yenile, etiket="referans faizler")
+    # TLREF'in aynı gün uzantısı — EVDS bir iş günü geriden veriyor; yöneticinin
+    # (Borsa İstanbul) dosyası aynı gün. Yalnız EVDS'in son gününden SONRASI
+    # eklenir, örtüşen her günde birebirlik yeniden sınanır (ortak/tlref.py).
+    # Taşıma (TLREF'e karşı) ölçüsü bu sütundan kurulur; fonlama hattıyla aynı
+    # günü taşımazsa bülten aynı sabah iki farklı TLREF günü basar.
+    try:
+        import tlref as _tlref
+    except ImportError:
+        sys.path.insert(0, str(KOK / "ortak"))
+        import tlref as _tlref
+    G, _tl_uy, _tl_bilgi = _tlref.cerceveye_ekle(G, {"tlref": "oran"})
+    for _u in _tl_uy:
+        uyar(_u)
+    if (_tl_bilgi.get("tlref") or {}).get("durum") == "uzatildi":
+        print(f"  TLREF uzantısı: {', '.join(_tl_bilgi['tlref']['gunler'])} "
+              f"({_tl_bilgi['tlref']['ortusen']} örtüşen günde EVDS ile birebir)")
     A = cek_kume(AYLIK, "ay", 20000, yenile, etiket="beklenti / enflasyon")
 
     # BÜYÜKLÜK MERTEBESİ DENETİMİ — EVDS3'te birim alanı yok.

@@ -3075,3 +3075,61 @@ bırakmıştı. Gerekçe doğruydu (repaint), sonuç yanlıştı (kaldırmak): d
 cevap, kusuru gideren deyimle almaktı ve o deyim aynı dosyada zaten
 duruyordu. Bir kusurun "kaldırılması" ile "giderilmesi" arasındaki fark,
 okurun ekranında eksik bir gösterge olarak görünür.
+
+Derleme teyidi (22.09.2026 akşamı, kullanıcı: "Derlendi. Kutu okunur
+durumda."): yukarıdaki iki yapı derleyiciden geçti; bu yamanın bütün yeni
+Pine kodu artık DERLENMİŞ kod sayılır. Bundan sonra eklenen her satır yine
+derlenmemiş sayılır.
+
+**Kurucu ilke — BİR SATIRIN BOŞ OLMASI İLE HİÇ OLMAMASI AYRI ŞEYLERDİR; ve
+BİR KAYNAĞIN AYNASI, KAYNAĞIN KENDİSİNDEN GEÇ GELİR.** 23.09.2026 sabah
+bülteninde BIST 100 ve TLREF 21 Eylül'de kaldı; kullanıcı "salı kapanışları
+neden güncellenmemiş" diye sordu. İki bağımsız sebep vardı ve ikisi de bulut
+keşifleriyle (bulten/kesif_piyasa_bosluk*.py · kesif_tlref_bist*.py) ölçüldü.
+
+(1) PİYASA: Yahoo 22.09 için SATIR AÇIP KAPANIŞI BOŞ verdi — 51 satırın 23'ünde
+(bütün nakit hisse endeksleri, ETF'ler, DXY, MOVE, Bitcoin). `dropna()` o satırı
+attı; satırlar kendi tarihini doğru taşıdı, başlık "22.09.2026 Salı kapanışı"
+dedi ve denetim YEŞİL geçti, çünkü `piyasa_seansi` yalnız EN TAZE satıra
+bakıyordu. Bitcoin'de aynı boşluk neredeyse HER sabah vardı ve kimse
+görmemişti. Kaynak yayımlanmış bir barı GERİ de çekiyor: ABD getirileri ve
+VIX 04:20'de dolu, 06:47'de boştu. Onarım yolu ölçülerek seçildi: piyasa
+KAPALIYKEN meta `regularMarketPrice` o günün kapanışıdır (dolu günlerde fark
+0,00 bp; XU100'ün boş 22.09'u için 13198,84 — haberlere geçen kapanışın
+kendisi). Reddedilenler de ölçüldü: gün içi son bar (BIST medyan 9, azami 63
+bp — kapanış seansı gün içi barlarda yok) ve `chartPreviousClose` (etkilenen
+sembollerde son DOLU günü veriyor, dövizde ±36 bp sapıyor). Piyasası ölçüm
+anında AÇIK olan sembolün (Bitcoin 7/24, sabah Hang Seng/Şanghay, akşam
+seansındaki DXY) dünkü boş kapanışı bu kaynaktan KURULAMAZ; o satır onarılmaz,
+kendi tarihiyle kalır ve ADIYLA söylenir. Vadeliler onarılmaz (meta başka
+kontrat verebilir). Kanıt kaynağın KENDİSİDİR: tatil kaynakta satır açmaz,
+yani ölçüt borsa takvimi bilmeden tatili kusur saymaz (Nikkei'nin 21–22.09
+tatili tam böyle göründü). Denetime satır satır ölçüt kondu
+(`piyasa_seans_boslugu`, UYARI — satır doğru etiketli olduğu için yayını
+durdurmak kusurdan pahalı olurdu), sayfa karma seansı ve sebebini söylüyor.
+
+(2) TLREF: bütün hatlar onu EVDS'ten okuyor ve EVDS T gününü T+1 öğlene doğru
+veriyor — 04:20 bülteni bir önceki seansın TLREF'ini HİÇBİR GÜN taşıyamıyordu.
+TLREF'in yöneticisi Borsa İstanbul aynı günü 16:00 TSİ'de yayımlıyor; tarihsel
+dosya EVDS ile örtüşen 1.911 günün 1.911'inde oran olarak birebir (|Δ| 0),
+endeks olarak 1.799 günün 1.799'unda 0,00009'dan yakın. EVDS bir AYNADIR.
+`ortak/tlref.py` EVDS'i birincil bırakır, yalnız SON gününden SONRASINI ekler
+ve örtüşen her günde birebirliği HER KOŞUDA yeniden sınar — ayrışırsa uzatmaz.
+Fonlama, DİBS ve USD/TRY devalüasyon hatları kullanıyor; taşıma ve OVP fonlama
+çerçevesinden okuduğu için kendiliğinden alıyor. Enflasyon TLREF'i yalnız
+aylık yedek olarak okuyor, bilerek dışarıda.
+
+Arıza enjeksiyonu iki kez ölçütün KÖRLÜĞÜNÜ değil FİKSTÜRÜN körlüğünü buldu:
+açık piyasa kapısı bütün hâllerde UTC kapanış kuralıyla da korunuyordu (yerel
+günü UTC'nin gerisinde işlem gören DXY hâli eklenince ayrıştı), ve endeks
+fikstürü kapanış/en düşük/en yüksek sütunlarına aynı sayıyı yazdığı için
+yanlış sütunu seçen ayrıştırıcı geçiyordu — gerçek dosyada da üçü aynı, yani
+kusur bugün zararsız ama görünmez olurdu. İki onarım kodu değil fikstürü
+değiştirdi; on dört enjeksiyonun on dördü yakalanıyor.
+
+23.09 sayısının kendisi DEĞİŞTİRİLMEDİ: yazı katmanı "hisse satırları 21 Eylül
+Pazartesi kapanışını taşıyor, 22 Eylül kapanışları bu sabahki okumaya henüz
+düşmemişti" diye doğru yazmıştı ve yazılmış bir sayının altındaki ölçüm
+değiştirilmez. AÇIK: Yahoo'nun boş bar sıklığı ölçülmedi (yalnız Bitcoin'de
+her sabah, hisselerde 23.09'da görüldü); ilk sabah koşularının `seans_ozeti`
+satırları bu ölçüyü biriktirecek.

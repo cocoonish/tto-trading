@@ -2014,6 +2014,160 @@ def main() -> int:
 
     sina("denetim: piyasa seansı etiketli ve bayat değil", _denetim_piyasa_seansi)
 
+    # KAYNAĞIN BOŞ VERDİĞİ SEANS (23.09.2026). Yahoo 22.09 barını 23 sembolde
+    # SATIR AÇIP KAPANIŞI BOŞ bırakarak verdi; dropna o satırı attı, bütün nakit
+    # hisse satırları 21.09'da kaldı ve başlık "22.09.2026 Salı kapanışı" dedi.
+    # Sahte chart cevapları bulut keşfinin (bulten/kesif_piyasa_bosluk.py) o
+    # sabah döktüğü biçimi taşır; altı hâl ayrı ayrı sorulur, çünkü tek maddede
+    # sorulsaydı ilk düşme kalanları maskelerdi.
+    def _bos_seans():
+        from datetime import datetime as _dt, timezone as _tz
+        import piyasa as _p
+
+        def _ts(g, saat="00:00"):
+            return int(_dt.fromisoformat(f"{g}T{saat}:00+00:00").timestamp())
+
+        def _cevap(gmt, satirlar, rmt, fiyat, seans):
+            return {"meta": {"gmtoffset": gmt, "regularMarketTime": _ts(*rmt),
+                             "regularMarketPrice": fiyat,
+                             "currentTradingPeriod": {"regular": {
+                                 "start": _ts(*seans[0]), "end": _ts(*seans[1])}}},
+                    "timestamp": [_ts(g, s) for g, s, _ in satirlar],
+                    "indicators": {"quote": [{"close": [c for _, _, c in satirlar]}]}}
+
+        def _gecmis(son, n=25):
+            import pandas as _pd
+            ix = [d.strftime("%Y-%m-%d") for d in _pd.bdate_range(end=son, periods=n)]
+            return {"tarih": ix, "kapanis": [100.0 + i for i in range(n)]}
+
+        sabah = _dt(2026, 9, 23, 4, 20, tzinfo=_tz.utc)
+        cevap = {
+            # Borsa kapalı (açılış 06:30Z); son işlem 22.09 15:10Z → onarılır.
+            "XU100.IS": _cevap(10800, [("2026-09-18", "06:30", 13284.4),
+                                       ("2026-09-21", "06:30", 13337.7),
+                                       ("2026-09-22", "06:30", None),
+                                       ("2026-09-23", "06:30", None)],
+                               ("2026-09-22", "15:10"), 13198.84,
+                               (("2026-09-23", "06:30"), ("2026-09-23", "15:00"))),
+            # 7/24: meta fiyatı CANLI, dünün kapanışı kurulamaz → işaretlenir.
+            "BTC-USD": _cevap(0, [("2026-09-20", "00:00", 81142.6),
+                                  ("2026-09-21", "00:00", 86602.9),
+                                  ("2026-09-22", "00:00", None),
+                                  ("2026-09-23", "00:00", 86520.07)],
+                              ("2026-09-23", "04:20"), 86520.07,
+                              (("2026-09-23", "00:00"), ("2026-09-23", "23:59"))),
+            # Tatil: kaynak 21–22.09 için SATIR AÇMIYOR → hiçbir şey üretilmez.
+            "^N225": _cevap(32400, [("2026-09-17", "00:00", 64136.25),
+                                    ("2026-09-18", "00:00", 65018.95)],
+                            ("2026-09-18", "06:45"), 65018.95,
+                            (("2026-09-18", "00:00"), ("2026-09-18", "06:30"))),
+            # Vadeli: piyasa KAPALI ve son işlem boş günde olsa bile meta fiyatıyla
+            # DOLDURULMAZ (meta çoğu zaman başka kontrat), yalnız işaretlenir.
+            "GC=F": _cevap(-14400, [("2026-09-21", "04:00", 4383.9),
+                                    ("2026-09-22", "04:00", None)],
+                           ("2026-09-22", "21:00"), 4376.4,
+                           (("2026-09-23", "12:00"), ("2026-09-23", "20:00"))),
+            # Kaynak dün DOLU verdiği barı bugün boş verdi: eski değer yerinde kalır.
+            "HYG": _cevap(-14400, [("2026-09-21", "13:30", 78.68),
+                                   ("2026-09-22", "13:30", None)],
+                          ("2026-09-22", "20:00"), 78.67,
+                          (("2026-09-23", "13:30"), ("2026-09-23", "20:00"))),
+        }
+        metalar = {k: _p._meta_ozet(v, sabah) for k, v in cevap.items()}
+        assert metalar["XU100.IS"]["son_islem_gun"] == "2026-09-22" \
+            and not metalar["XU100.IS"]["acik"], metalar["XU100.IS"]
+        assert metalar["BTC-USD"]["acik"] and "2026-09-22" in metalar["BTC-USD"]["bos"]
+        seri = {
+            "XU100.IS": _gecmis("2026-09-21"), "BTC-USD": _gecmis("2026-09-21"),
+            "^N225": _gecmis("2026-09-18"), "GC=F": _gecmis("2026-09-21"),
+            "HYG": _gecmis("2026-09-21"),
+        }
+        eski = {"HYG": {"tarih": ["2026-09-21", "2026-09-22"], "kapanis": [78.68, 78.67]}}
+        _p._bos_seans_onar(seri, metalar, eski, sabah)
+
+        x = seri["XU100.IS"]
+        assert x["tarih"][-1] == "2026-09-22" and x["kapanis"][-1] == 13198.84 \
+            and x["onarim"] == {"gun": "2026-09-22", "kaynak": "son_islem"} \
+            and not x.get("eksik_seans"), f"BIST 100 onarılmadı: {x['tarih'][-2:]}, {x.get('onarim')}"
+        b = seri["BTC-USD"]
+        assert b["tarih"][-1] == "2026-09-21" and not b.get("onarim") \
+            and b["eksik_seans"] == ["2026-09-22"], \
+            f"açık piyasanın boş günü CANLI fiyatla dolduruldu ya da işaretlenmedi: {b}"
+        n = seri["^N225"]
+        assert n["tarih"][-1] == "2026-09-18" and not n.get("onarim") \
+            and not n.get("eksik_seans"), f"tatil kusur sayıldı: {n}"
+        g = seri["GC=F"]
+        assert g["tarih"][-1] == "2026-09-21" and not g.get("onarim") \
+            and g["eksik_seans"] == ["2026-09-22"], f"vadeli meta fiyatıyla dolduruldu: {g}"
+        h = seri["HYG"]
+        assert h["tarih"][-1] == "2026-09-22" and h["kapanis"][-1] == 78.67 \
+            and h["devredilen"] == ["2026-09-22"] and not h.get("onarim"), \
+            f"kaynağın geri çektiği bar önbellekten devredilmedi: {h}"
+
+        # Aynı gün, seans AÇIKKEN ve kapanıştan hemen sonra UTC eşiği dolmadan:
+        # canlı ya da yerleşmemiş bir fiyat kapanış diye yazılmamalı.
+        for saat, acik in (("15:00", True), ("20:30", False)):
+            simdi = _dt.fromisoformat(f"2026-09-22T{saat}:00+00:00")
+            c = _cevap(-14400, [("2026-09-21", "13:30", 7764.7),
+                                ("2026-09-22", "13:30", None)],
+                       ("2026-09-22", "14:59" if acik else "20:05"), 7700.0,
+                       (("2026-09-22", "13:30"), ("2026-09-22", "20:00")))
+            s = {"^GSPC": _gecmis("2026-09-21")}
+            _p._bos_seans_onar(s, {"^GSPC": _p._meta_ozet(c, simdi)}, {}, simdi)
+            assert s["^GSPC"]["tarih"][-1] == "2026-09-21" and not s["^GSPC"].get("onarim") \
+                and not s["^GSPC"].get("eksik_seans"), \
+                f"{saat} UTC: kapanmamış seans kapanış diye yazıldı: {s['^GSPC']}"
+        # YEREL GÜN UTC'NİN GERİSİNDEYKEN AÇIK PİYASA. DXY (ICE, New York saati)
+        # 02:00 UTC'de işlem görüyor ve yerel günü hâlâ 22.09: UTC kapanış kuralı
+        # burada hiç devreye girmez (22.09 < 23.09), canlı fiyatı kapanış diye
+        # yazmayı engelleyen TEK kapı "piyasa şu an açık mı" sorusudur. İlk arıza
+        # enjeksiyonu o kapıyı kaldırdığında sınama YEŞİL kaldı — bütün hâller
+        # UTC kuralıyla da korunuyordu; bu hâl ikisini ayırır.
+        gece2 = _dt.fromisoformat("2026-09-23T02:00:00+00:00")
+        c = _cevap(-14400, [("2026-09-21", "04:00", 100.43), ("2026-09-22", "04:00", None)],
+                   ("2026-09-23", "01:59"), 100.61,
+                   (("2026-09-22", "04:00"), ("2026-09-23", "03:59")))
+        s = {"DX-Y.NYB": _gecmis("2026-09-21")}
+        _p._bos_seans_onar(s, {"DX-Y.NYB": _p._meta_ozet(c, gece2)}, {}, gece2)
+        assert s["DX-Y.NYB"]["tarih"][-1] == "2026-09-21" and not s["DX-Y.NYB"].get("onarim"), \
+            f"açık piyasanın canlı fiyatı kapanış diye yazıldı: {s['DX-Y.NYB']['tarih'][-2:]}"
+        # Karşı yön: UTC eşiği geçtikten sonra aynı günün boş kapanışı KURULMALI,
+        # yoksa onarım yalnız ertesi sabah çalışan bir sigorta olurdu.
+        gece = _dt.fromisoformat("2026-09-22T22:30:00+00:00")
+        c = _cevap(-14400, [("2026-09-21", "13:30", 7764.7), ("2026-09-22", "13:30", None)],
+                   ("2026-09-22", "20:05"), 7700.0,
+                   (("2026-09-22", "13:30"), ("2026-09-22", "20:00")))
+        s = {"^GSPC": _gecmis("2026-09-21")}
+        _p._bos_seans_onar(s, {"^GSPC": _p._meta_ozet(c, gece)}, {}, gece)
+        assert s["^GSPC"]["tarih"][-1] == "2026-09-22" and s["^GSPC"]["kapanis"][-1] == 7700.0, \
+            f"22:30 UTC: kapanmış seansın boş kapanışı kurulmadı: {s['^GSPC']['tarih'][-2:]}"
+
+        # Özet ve denetim: sebep adıyla taşınıyor, tatil sessiz.
+        ad = {v.kod: v for v in _p.VARLIKLAR}
+        gruplar = [{"satirlar": [_p.satir(ad[k], seri) for k in seri if k in ad]}]
+        oz = _p.seans_ozeti(gruplar)
+        assert [x["kod"] for x in oz["kaynak_bos"]] == ["BTC-USD", "GC=F"], oz["kaynak_bos"]
+        assert [x["kod"] for x in oz["son_islemden"]] == ["XU100.IS"], oz["son_islemden"]
+        import denetim as _den
+        d = _den.Denetim({"tarih": "2026-09-23", "piyasa": {"seans_ozeti": oz}})
+        d.piyasa_seans_boslugu()
+        assert d.uyari and "Bitcoin" in d.uyari[0] and not d.engel, (d.uyari, d.engel)
+        d2 = _den.Denetim({"tarih": "2026-09-23", "piyasa": {}})
+        d2.piyasa_seans_boslugu()
+        assert not d2.uyari and not d2.engel, "alanı taşımayan eski sayı şikâyet üretti"
+
+        # ÖLÇÜ VAR, TÜKETİCİ YOK olmasın: onarım üretim yolunda ve doğru sırada.
+        import inspect as _i
+        kaynak = _i.getsource(_p._ham_veri)
+        i_bar, i_onar, i_roll = (kaynak.index("_yerlesmemis_dus(seri)"),
+                                 kaynak.index("_bos_seans_onar(seri"),
+                                 kaynak.index("_roll_duzelt(seri)"))
+        assert i_bar < i_onar < i_roll, "boş seans onarımı yanlış yerde ya da yok"
+        assert "seans_ozeti(gruplar)" in _i.getsource(_p.topla), "özet anlık görüntüye yazılmıyor"
+        assert "piyasa_seans_boslugu()" in _i.getsource(_den.Denetim.kos), \
+            "denetim ölçütü kos() listesinde değil — yazılıp hiç koşmaz"
+    sina("piyasa: kaynağın boş verdiği seans onarılıyor ya da adıyla işaretleniyor", _bos_seans)
+
     # HAFTA SONU BOŞLUĞU σ'YI ŞİŞİRMİYOR — ölçülen olgu koda bağlanıyor.
     # Sezgi "pazartesi hareketi üç takvim günü kapsar, günlük σ ile kıyaslamak
     # onu olağandışı gösterir" der. Ölçüm bunun tersini söyledi (σ3/σ1 medyanı

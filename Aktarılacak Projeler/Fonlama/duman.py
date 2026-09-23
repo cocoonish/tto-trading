@@ -325,6 +325,119 @@ sina("kapı ham tarihi okuyor (biçimlenmiş damga geri ayrıştırılmıyor)",
      "uclar[ad]" in _kos and "veri.sekil_uclari(" in _kos)
 
 # ---------------------------------------------------------------------------
+# TLREF'İN AYNI GÜN UZANTISI (ortak/tlref.py). EVDS TLREF'i bir iş günü geriden
+# veriyor; 23.09.2026 sabah bülteni bu yüzden "TLREF 21 Eylül itibarıyla" yazdı,
+# oysa 22.09'un değeri Borsa İstanbul'da 22.09 13:00 GMT'den beri yayımlıydı.
+# Uzantı yalnız EVDS'in son gününden SONRASINI ekler ve örtüşen her günde
+# birebirliği yeniden sınar. Sahte dosya gerçek dosyanın biçimini taşır:
+# UTF-16 + BOM, ';' ayraç, iki dilli başlık, dipnot satırları, binlik virgüllü
+# hacim sütunu — 23.09 keşfinde ikinci betik tam bu biçimi okuyamamıştı.
+print("\nTLREF aynı gün uzantısı")
+import io as _io
+import zipfile as _zip
+try:
+    import tlref as _tl
+except ImportError:
+    sys.path.insert(0, str(veri.KOK / "ortak"))
+    import tlref as _tl
+
+
+def _bist_zip(gunler: dict, endeks: bool = False) -> bytes:
+    if endeks:
+        bas = ("Tarih (GG.AA.YYYY) / Date (DD.MM.YYYY);Endeks Kodu / Index Code;"
+               "Endeksler / Index Names In Turkish;Endekslerin İngilizce İsimleri;"
+               "Kur Türü / Cur Code;Seans No / Session;Kapanış Değeri / Closing Value;"
+               "En Düşük Değer / Lowest Value;En Yüksek Değer / Highest Value")
+        # En düşük / en yüksek KASITLI olarak kapanıştan farklı: gerçek dosyada
+        # üçü aynı gün aynı sayıdır (günde tek sabitleme), yani yanlış sütunu
+        # seçen bir ayrıştırıcı bugün zararsız ama GÖRÜNMEZ olurdu — ilk arıza
+        # enjeksiyonu tam bu yüzden kaçtı.
+        sat = [f"{g:%d.%m.%Y};BISTTLREF;BIST TLREF ENDEKSI;BIST TLREF INDEX;TL;1;{v};{v - 1};{v + 1}"
+               for g, v in gunler.items()]
+    else:
+        bas = ("TARIH/DATE;AD/NAME;INGILIZCE ADI/NAME IN ENGLISH;KOD/CODE;ISIN/ISIN;"
+               "DEGER/VALUE;REPO AOF /VWAP REPO RATE;ISLEM HACMI/TRADED VOLUME")
+        sat = [f"{g:%d/%m/%Y};TURK LIRASI GECELIK REFERANS;TURKISH LIRA OVERNIGHT;"
+               f"TLREF;TRIXIST00015;{v};{v};15,145,000,000" for g, v in gunler.items()]
+    sat += ["HESAPLAMAYA DAHIL  AKTIF;Kendinden kendine işlemler hariç",
+            "ILK %15'LIK HACIME KARSI;Hesaplamaya Dahil işlemler"]
+    b = _io.BytesIO()
+    with _zip.ZipFile(b, "w") as z:
+        z.writestr("TLREFORANI_D.csv", ("\n".join([bas] + sat)).encode("utf-16"))
+    return b.getvalue()
+
+
+_ix = pd.bdate_range("2026-09-01", "2026-09-21")
+_evds = pd.Series([36.0 + i / 100 for i in range(len(_ix))], index=_ix)
+_bist = {g.date(): float(v) for g, v in _evds.items()}
+_bist[dt.date(2026, 9, 22)] = 36.5477
+_oku = _tl.ayristir(_bist_zip(_bist), "oran")
+sina("UTF-16 + dipnotlu BIST dosyası ayrıştırılıyor (tarih/değer ADIYLA)",
+     len(_oku) == len(_bist) and _oku[dt.date(2026, 9, 22)] == 36.5477,
+     f"{len(_oku)} gün")
+_s, _b = _tl.uzat(_evds, _oku, "oran", bugun=dt.date(2026, 9, 23))
+sina("EVDS'in son gününden SONRAKİ gün eklendi (21.09 → 22.09)",
+     _b["durum"] == "uzatildi" and _b["gunler"] == ["2026-09-22"]
+     and float(_s.iloc[-1]) == 36.5477, str(_b))
+sina("uzantı EVDS'in kendi günlerine DOKUNMUYOR",
+     _s.loc[_ix].equals(_evds))
+_bozuk = dict(_oku)
+_bozuk[dt.date(2026, 9, 15)] += 0.01
+_s2, _b2 = _tl.uzat(_evds, _bozuk, "oran", bugun=dt.date(2026, 9, 23))
+sina("örtüşen bir günde ayrışma → uzantı YAPILMIYOR, seri dokunulmadan dönüyor",
+     _b2["durum"] == "ayrisma" and _s2.equals(_evds), str(_b2))
+_s3, _b3 = _tl.uzat(_evds.iloc[:3], _oku, "oran", bugun=dt.date(2026, 9, 23))
+sina("örtüşme yetersizken sözleşme sınanmış SAYILMIYOR (uzantı yok)",
+     _b3["durum"] == "ortusme_yetersiz" and _s3.equals(_evds.iloc[:3]), str(_b3))
+_ileri = dict(_oku)
+_ileri[dt.date(2026, 9, 26)] = 36.6          # cumartesi
+_ileri[dt.date(2026, 9, 30)] = 36.7          # yarından ileri
+_s4, _b4 = _tl.uzat(_evds, _ileri, "oran", bugun=dt.date(2026, 9, 23))
+sina("hafta sonu ve yarından ileri tarih eklenmiyor",
+     _b4["gunler"] == ["2026-09-22"], str(_b4))
+_s5, _b5 = _tl.uzat(_evds, {g: v for g, v in _oku.items() if g <= dt.date(2026, 9, 21)},
+                    "oran", bugun=dt.date(2026, 9, 23))
+sina("BIST de aynı günde bitiyorsa uzantı 'gerek yok' der, seri aynı",
+     _b5["durum"] == "gerek_yok" and _s5.equals(_evds), str(_b5))
+_e = _tl.ayristir(_bist_zip({g: 6700 + i for i, g in enumerate(_bist)}, endeks=True), "endeks")
+sina("endeks dosyası da ADIYLA ayrıştırılıyor (kapanış sütunu, en düşük/en yüksek değil)",
+     len(_e) == len(_bist) and _e[dt.date(2026, 9, 22)] == 6700 + len(_bist) - 1)
+
+# Çerçeve yolu: ağ yerine sahte `indir`. Ana saat (APİ çekirdeği) KAYMAMALI.
+_gercek_indir = _tl.indir
+try:
+    _bist_end = {g: v + 6000 for g, v in _bist.items()}
+    _tl.indir = lambda tur, zaman_asimi=30: (_bist_zip(_bist_end, endeks=True) if tur == "endeks"
+                                             else _bist_zip(_bist))
+    _G = pd.DataFrame({"net_fonlama": 1.0, "fon_top": 1.0, "ste_top": 1.0, "politika": 37.0,
+                       "koridor_alt": 35.5, "koridor_ust": 40.0, "tlref": _evds,
+                       "tlref_endeks": _evds + 6000}, index=_ix)
+    veri._SON.pop("gun", None)
+    _G2 = veri.tlref_uzantisi(_G)
+    sina("hat çerçevesinde TLREF oranı ve endeksi ilerliyor (22.09)",
+         _G2["tlref"].dropna().index[-1] == pd.Timestamp("2026-09-22")
+         and _G2["tlref_endeks"].dropna().index[-1] == pd.Timestamp("2026-09-22"),
+         str(veri._TLREF_BILGI))
+    veri._SON.pop("gun", None)
+    sina("ana saat (APİ çekirdeği) uzantıyla KAYMIYOR",
+         veri.son_gun(_G2) == pd.Timestamp("2026-09-21"))
+    veri._SON.pop("gun", None)
+
+    def _dusen(tur, zaman_asimi=30):
+        raise TimeoutError("ağ yok")
+    _tl.indir = _dusen
+    _once = len(veri._UYARI)
+    _G3 = veri.tlref_uzantisi(_G)
+    sina("kaynağa ulaşılamazsa hat DÜŞMÜYOR, çerçeve aynı, uyarı okur dilinde",
+         _G3["tlref"].equals(_G["tlref"]) and len(veri._UYARI) > _once
+         and "Borsa İstanbul" in veri._UYARI[-1] and ".zip" not in veri._UYARI[-1])
+finally:
+    _tl.indir = _gercek_indir
+    veri._SON.pop("gun", None)
+sina("uzantı kos()'ta EVDS çekiminin hemen ardında (tüketicisi var)",
+     "tlref_uzantisi(g)" in inspect.getsource(veri.kos))
+
+# ---------------------------------------------------------------------------
 print(f"\n{'═' * 70}")
 print(f"  {len(GECTI)} geçti · {len(DUSTU)} düştü")
 if DUSTU:

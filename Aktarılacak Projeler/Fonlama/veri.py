@@ -982,11 +982,43 @@ def usdtry_sutunu(g: pd.DataFrame, yenile: bool = False) -> pd.DataFrame:
     return g
 
 
+_TLREF_BILGI: dict = {}
+
+
+def tlref_uzantisi(g: pd.DataFrame) -> pd.DataFrame:
+    """TLREF oranı ve endeksi, EVDS'in son gününden sonrası için Borsa İstanbul'dan.
+
+    EVDS bu iki seriyi bir iş günü geriden veriyor; sabah bülteni bu yüzden bir
+    önceki seansın TLREF'ini hiç taşıyamıyordu (23.09.2026: bülten 21.09 yazdı,
+    22.09'un değeri 22.09 13:00 GMT'den beri yayımlıydı). Uzantı yalnız EVDS'in
+    son gününden SONRASINI ekler ve her koşuda örtüşen bütün günlerde
+    birebirliği yeniden sınar; ayrışırsa uzatmaz (ortak/tlref.py). Çekirdek
+    saati (son_gun) APİ serilerinden kurulduğu için bu uzantı ana saati
+    kaydıramaz — TLREF'in KENDİ saati ilerler.
+    """
+    try:
+        import tlref as _t
+    except ImportError:
+        sys.path.insert(0, str(KOK / "ortak"))
+        import tlref as _t
+    g, uy, bilgi = _t.cerceveye_ekle(g, {"tlref": "oran", "tlref_endeks": "endeks"})
+    for u in uy:
+        uyar(u)
+    _TLREF_BILGI.clear()
+    _TLREF_BILGI.update(bilgi)
+    for kolon, b in bilgi.items():
+        if b.get("durum") == "uzatildi":
+            print(f"  TLREF uzantısı · {kolon}: {', '.join(b['gunler'])} "
+                  f"({b['kaynak']}; {b['ortusen']} örtüşen günde EVDS ile birebir)")
+    return g
+
+
 def kos(yenile: bool = False) -> dict:
     print("EVDS3 → TCMB fonlama & likidite veri katmanı")
     print(f"  anahtar: {'ortam değişkeni' if os.environ.get('TTO_EVDS_KEY') else 'dosya'}")
 
     g = cek_kume(GUNLUK, "gun", PARCA_GUN, yenile, etiket="iş günü")
+    g = tlref_uzantisi(g)
     g = usdtry_sutunu(g, yenile)
     h = cek_kume(HAFTALIK, "gun", PARCA_HAFTA_GUN, yenile, etiket="haftalık")
     a = cek_kume(AYLIK, "ay", 20000, yenile, etiket="aylık (doğrulama)")
@@ -1024,6 +1056,9 @@ def kos(yenile: bool = False) -> dict:
         "haftalik_seri": int(h.shape[1]), "haftalik_gozlem": int(h.shape[0]),
         "aylik_seri": int(a.shape[1]),
         "kimlik": kim_rapor,
+        # TLREF'in aynı gün uzantısı: hangi günler Borsa İstanbul dosyasından
+        # geldi, sözleşme kaç örtüşen günde sınandı (ortak/tlref.py).
+        "tlref_bist": dict(_TLREF_BILGI),
         "uyarilar": list(_UYARI),
     }
     (VERI / "veri_durum.json").write_text(

@@ -208,6 +208,163 @@ def _onbellek_birlestir(yeni: dict, eski: dict) -> dict | None:
     }
 
 
+# ─────────────────────────── kaynağın BOŞ verdiği seans
+#
+# ÖLÇÜLDÜ (23.09.2026, bulut keşfi bulten/kesif_piyasa_bosluk*.py). 04:20 UTC
+# koşusunda 51 satırın 23'ü 22.09 Salı kapanışını taşımıyordu: bütün nakit hisse
+# endeksleri, ETF'ler, DXY, MOVE ve Bitcoin. Kusur bizim kodumuzda DEĞİLDİ —
+# Yahoo'nun günlük geçmişi 22.09 için bir SATIR açıyor ama kapanışını BOŞ (null)
+# veriyordu ve `dropna()` o satırı atıyordu. Yahoo aynı sabah 04:20'de dolu
+# verdiği ABD getiri ve VIX barlarını 06:47'de boşalttı; yani kaynak yayımlanmış
+# bir barı da geri çekebiliyor. Bitcoin'de aynı boşluk neredeyse HER sabah var.
+# Görüntü sağlığın görüntüsüyle aynıydı: koşu yeşil, satırlar kendi tarihini
+# doğru taşıyor, başlık "22.09.2026 Salı kapanışı" diyor ve denetim — yalnız EN
+# TAZE tarihe baktığı için — hiçbir şey görmüyordu.
+#
+# Onarımın yolu da ölçüldü. Piyasa KAPALIYKEN chart ucunun meta alanı
+# `regularMarketPrice`, `regularMarketTime` gününün kapanışıdır: günlük satırı
+# dolu olan altı sembolde fark 0,00 bp, ve XU100'ün boş gelen 22.09'u için
+# 13198,84 — o günün haberlere geçen kapanışının kendisi. Reddedilen iki yol:
+# gün içi SON BAR (BIST'te medyan 9, azami 63 bp; kapanış seansı gün içi
+# barlarda yok) ve `chartPreviousClose` (etkilenen sembollerde son DOLU günü,
+# yani 21.09'u veriyor; dövizde ±36 bp, vadelide yüzlerce bp sapıyor). Yani
+# piyasası ŞU AN AÇIK olan bir sembolün (Bitcoin 7/24, sabah Hang Seng ve
+# Şanghay, DXY) dünkü boş kapanışı bu kaynaktan KURULAMAZ; o satır onarılmaz,
+# kendi tarihiyle kalır ve ADIYLA bildirilir.
+#
+# Vadeli sözleşmeler onarılmaz: meta fiyatı çoğu zaman en aktif kontratı verir,
+# geçmiş ise ön ayı izler (devir düzeltmesinin notu) — boş günü meta fiyatıyla
+# doldurmak sahte bir devir yazmak olurdu. Boşlukları yine bildirilir.
+CHART_UCU = "https://query2.finance.yahoo.com/v8/finance/chart/{}"
+
+
+def _vadeli_mi(kod: str) -> bool:
+    return kod in VADELI_KOK or kod.endswith("=F")
+
+
+def _meta_ozet(sonuc: dict, simdi: datetime) -> dict | None:
+    """Chart ucunun tek sembollük cevabından onarımın ihtiyaç duyduğu alanlar.
+
+    AĞA ÇIKMAZ: cevabı ağdan alan `_meta_topla`dır; bu fonksiyon duman
+    sınamasında gerçek cevabın biçimiyle kurulan sahte girdiyle koşar. Bütün
+    tarihler BORSANIN yerel günüdür — yfinance'in günlük serisi de öyle
+    etiketlenir, kıyas aynı takvimde yapılmalı.
+    """
+    if not sonuc:
+        return None
+    m = sonuc.get("meta") or {}
+    off = timedelta(seconds=int(m.get("gmtoffset") or 0))
+    yerel_bugun = (simdi + off).date().isoformat()
+    ts = sonuc.get("timestamp") or []
+    q = (((sonuc.get("indicators") or {}).get("quote")) or [{}])[0]
+    kap = q.get("close") or [None] * len(ts)
+    bos = sorted({(datetime.fromtimestamp(t, timezone.utc) + off).date().isoformat()
+                  for t, c in zip(ts, kap) if c is None})
+    rmt, fiyat = m.get("regularMarketTime"), m.get("regularMarketPrice")
+    son_gun = ((datetime.fromtimestamp(rmt, timezone.utc) + off).date().isoformat()
+               if rmt else None)
+    reg = (m.get("currentTradingPeriod") or {}).get("regular") or {}
+    acik = bool(reg.get("start") and reg.get("end")
+                and reg["start"] <= simdi.timestamp() < reg["end"])
+    return {"yerel_bugun": yerel_bugun, "bos": bos, "son_islem_gun": son_gun,
+            "fiyat": float(fiyat) if isinstance(fiyat, (int, float)) else None,
+            "acik": acik}
+
+
+def _meta_topla(kodlar: list[str], simdi: datetime) -> tuple[dict, list[str]]:
+    """Her sembol için chart ucundan son beş günlük geçmiş ve meta. Ağa çıkar.
+
+    Düşen sembol onarımı kaybeder ama ölçümü düşürmez; adı ikinci listede döner
+    (bir sembolün sınanamadığı, sınanıp temiz çıktığıyla aynı görünmesin).
+    """
+    try:
+        from yfinance.data import YfData
+        veri = YfData()
+    except Exception:
+        return {}, list(kodlar)
+    out, olmadi = {}, []
+    ust_uste = 0
+    for k in kodlar:
+        # DEVRE KESİCİ. Ağ kapalıyken her sembol kendi zaman aşımını beklerse
+        # elli bir sembol on yedi dakika yakar ve bülten iş akışının bütçesini
+        # bitirir. Üç ardışık düşüş kalan sembolleri denemeden "sınanamadı"
+        # sayar; onarım bir iyileştirmedir, ölçümün önüne geçemez.
+        if ust_uste >= 3:
+            olmadi.append(k)
+            continue
+        try:
+            r = veri.get(CHART_UCU.format(k), timeout=20,
+                         params={"range": "5d", "interval": "1d", "includePrePost": "false"})
+            sonuc = (((r.json() or {}).get("chart") or {}).get("result") or [None])[0] \
+                if r.status_code == 200 else None
+            oz = _meta_ozet(sonuc, simdi)
+            if oz is None:
+                olmadi.append(k)
+                ust_uste += 1
+            else:
+                out[k] = oz
+                ust_uste = 0
+        except Exception:
+            olmadi.append(k)
+            ust_uste += 1
+    return out, olmadi
+
+
+def _bos_seans_onar(seri: dict, metalar: dict, eski: dict, simdi: datetime) -> dict:
+    """Kaynağın boş verdiği tamamlanmış seansları onar ya da ADIYLA işaretle.
+
+    AĞA ÇIKMAZ. Sırayla üç adım, her biri yalnız VADELİ OLMAYAN seriye:
+      1. Önbellekten devir — kaynak bugün boş verdiği bir günü daha önce dolu
+         vermişse (bir sonraki sabah geri çekilen bar), eski değer yerinde
+         kalır. Aksi hâlde "1 gün" değişimi sessizce iki seansı kapsardı.
+      2. Son işlem fiyatı — boş gün kaynağın son işlem günüyse ve o seans
+         BİTMİŞSE (borsa günü geride kaldı, ya da piyasa şu an kapalı ve UTC
+         kapanış saati geçti) kapanış meta fiyatıdır.
+      3. Kalan boş günler serinin son gününden sonraysa `eksik_seans` olarak
+         seride durur; satır onu okura adıyla söyler, denetim uyarı verir.
+    Kanıt kaynağın KENDİSİDİR (boş satır ya da son işlem günü): tatil günü
+    kaynakta hiç satır açmaz ve burada hiçbir şey üretmez — Nikkei'nin 21–22.09
+    tatili ölçümde tam böyle göründü.
+    """
+    gruplar = {v.kod: v.grup for v in VARLIKLAR}
+    bugun_utc = simdi.date().isoformat()
+    for k, m in (metalar or {}).items():
+        s = seri.get(k)
+        if not s or not s.get("tarih") or not m:
+            continue
+        for alan in ("onarim", "eksik_seans", "devredilen"):
+            s.pop(alan, None)
+        bos = [g for g in m.get("bos") or [] if g < m["yerel_bugun"]]
+        vadeli = _vadeli_mi(k)
+        if not vadeli:
+            # (1) önbellekten devir
+            e = (eski or {}).get(k) or {}
+            eski_deger = dict(zip(e.get("tarih") or [], e.get("kapanis") or []))
+            for g in bos:
+                if g in s["tarih"] or g not in eski_deger:
+                    continue
+                i = sum(1 for t in s["tarih"] if t < g)
+                s["tarih"].insert(i, g)
+                s["kapanis"].insert(i, float(eski_deger[g]))
+                s.setdefault("devredilen", []).append(g)
+            # (2) son işlem fiyatı
+            d, fiyat = m.get("son_islem_gun"), m.get("fiyat")
+            if d and fiyat and fiyat > 0 and d > s["tarih"][-1] and d <= bugun_utc:
+                bitti = d < m["yerel_bugun"] or not m.get("acik")
+                if d == bugun_utc and simdi.hour < KAPANIS_UTC.get(gruplar.get(k, ""),
+                                                                    VARSAYILAN_KAPANIS):
+                    bitti = False
+                if bitti:
+                    s["tarih"].append(d)
+                    s["kapanis"].append(float(fiyat))
+                    s["onarim"] = {"gun": d, "kaynak": "son_islem"}
+        # (3) kalan boş günler
+        kalan = [g for g in bos if g > s["tarih"][-1]]
+        if kalan:
+            s["eksik_seans"] = kalan
+    return seri
+
+
 def _ham_veri(tazele: bool = False) -> dict:
     """Tüm enstrümanların günlük kapanış serisi. Önbellek TTL'li."""
     if HAM.exists() and not tazele:
@@ -254,6 +411,18 @@ def _ham_veri(tazele: bool = False) -> dict:
     # düzeltme yalnız kapanmış barlarla eşleştirme yapar ve bugüne devir
     # yazamaz.
     seri = _yerlesmemis_dus(seri)
+    eski = {}
+    try:
+        eski = (json.loads(HAM.read_text(encoding="utf-8")) or {}).get("seri") or {}
+    except Exception:
+        pass
+    # BOŞ SEANS ONARIMI — yerleşmemiş bar düştükten SONRA (onarım kapanmamış bir
+    # günü asla kurmaz, ama elindeki seri de kapanmamış bar taşımamalı) ve devir
+    # düzeltmesinden ÖNCE (vadeliler zaten onarılmaz; sıra yalnız okunurluk için).
+    simdi = datetime.now(timezone.utc)
+    # Toplu çekim BOŞ döndüyse ağ kapalıdır; meta istekleri de düşer.
+    metalar, meta_yok = _meta_topla(kodlar, simdi) if seri else ({}, list(kodlar))
+    seri = _bos_seans_onar(seri, metalar, eski, simdi)
     try:
         seri = _roll_duzelt(seri)
     except Exception:
@@ -286,12 +455,8 @@ def _ham_veri(tazele: bool = False) -> dict:
     # yani devredilen bir sembol taze görünmez — sayfada 04.09 yazar, öbürleri
     # 08.09. Yalnız çekimin HİÇBİR şey döndürmediği hâl — ölçülmüş olan arıza —
     # yazmayı büsbütün durdurur; o durumda damga da ilerlemez, çünkü ilerlerse
-    # bayat bir fotoğraf kendini taze ilan eder.
-    eski = {}
-    try:
-        eski = (json.loads(HAM.read_text(encoding="utf-8")) or {}).get("seri") or {}
-    except Exception:
-        pass
+    # bayat bir fotoğraf kendini taze ilan eder. (`eski` yukarıda, boş seans
+    # onarımından önce okundu — onarımın önbellekten devir adımı da onu okur.)
     d = _onbellek_birlestir(seri, eski)
     if d is None:
         print(f"  ! piyasa çekimi BOŞ döndü — önbellek yazılmadı, "
@@ -308,6 +473,19 @@ def _ham_veri(tazele: bool = False) -> dict:
         print("  ! piyasa çekimi şu sembolleri döndürmedi — önbellekteki seri "
               "devredildi, satır KENDİ bar tarihiyle yayımlanacak: "
               + " · ".join(_kunye))
+    # Boş seans onarımının sınayamadığı semboller de adıyla: meta çekilemediyse
+    # o sembolün boş günü ne onarılabildi ne de işaretlenebildi.
+    d["meta_olculemedi"] = sorted(meta_yok)
+    if meta_yok:
+        print(f"  ! boş seans denetimi {len(meta_yok)} sembolde yapılamadı "
+              f"(chart ucu cevap vermedi): {' · '.join(sorted(meta_yok)[:12])}")
+    _onarilan = [f"{k} {s['onarim']['gun']}" for k, s in d["seri"].items() if s.get("onarim")]
+    _eksik = [f"{k} {','.join(s['eksik_seans'])}" for k, s in d["seri"].items() if s.get("eksik_seans")]
+    if _onarilan:
+        print("  · kaynağın boş verdiği kapanış son işlem fiyatından kuruldu: " + " · ".join(_onarilan))
+    if _eksik:
+        print("  ! kaynağın boş verdiği seans kurulamadı (piyasa açık ya da vadeli): "
+              + " · ".join(_eksik))
     HAM.write_text(json.dumps(d, ensure_ascii=False), encoding="utf-8")
     return d
 
@@ -650,6 +828,14 @@ def satir(v: Varlik, seri: dict) -> dict | None:
         # önceki yayımla kıyaslanabilir değildir; denetim bunu uyarıya çevirir.
         "roll_bilinmiyor": bool(s.get("roll_bilinmiyor")),
         "son": round(son, v.ondalik), "tarih": t[-1],
+        # Kaynağın boş verdiği seansın izi (bkz. _bos_seans_onar). `onarim`:
+        # son kapanış kaynağın o günkü son işlem fiyatından kuruldu. `eksik_seans`:
+        # kaynak bu tamamlanmış seansları boş verdi ve kurulamadı — satır kendi
+        # (eski) tarihiyle duruyor. `devredilen`: kaynak bugün boş verdiği bir
+        # günü daha önce dolu vermişti, eski değer yerinde bırakıldı.
+        "onarim": s.get("onarim"),
+        "eksik_seans": s.get("eksik_seans") or [],
+        "devredilen": s.get("devredilen") or [],
         # d1'in kapsadığı TAKVİM günü. Pazartesi kapanışı Cuma'ya göre üç
         # takvim günü geride ama BİR seans ilerideymiş gibi ölçülür — ve bu
         # DOĞRUDUR: kapanıştan kapanışa hareket, arada kaç takvim günü olursa
@@ -910,6 +1096,33 @@ def tr_faizleri() -> list[dict]:
     return out
 
 
+def seans_ozeti(gruplar: list[dict]) -> dict:
+    """Anlık görüntünün satırları hangi seanslara dağılıyor ve NEDEN.
+
+    `kapanis_seansi` en TAZE satırın seansını söyler; 23.09.2026'da elli bir
+    satırın yirmi üçü bir seans geride olduğu hâlde başlık "22.09.2026 Salı
+    kapanışı" diyordu ve denetim yalnız o alana baktığı için hiçbir şey
+    görmedi. Bu özet dağılımı ve sebebi AYRI AYRI taşır: tatil (kaynak o gün
+    satır açmadı — burada iz bırakmaz), kaynağın boş verdiği ve kurulamayan
+    seans, kaynağın son işlem fiyatından kurulan kapanış. AĞA ÇIKMAZ.
+    """
+    satirlar = [s for g in gruplar for s in g.get("satirlar") or [] if s.get("tarih")]
+    say: dict[str, int] = {}
+    for s in satirlar:
+        say[s["tarih"]] = say.get(s["tarih"], 0) + 1
+    return {
+        "dagilim": [{"tarih": t, "satir": n} for t, n in sorted(say.items(), reverse=True)],
+        "satir": len(satirlar),
+        "kaynak_bos": [{"ad": s["ad"], "kod": s["kod"], "tarih": s["tarih"],
+                        "gunler": s["eksik_seans"]}
+                       for s in satirlar if s.get("eksik_seans")],
+        "son_islemden": [{"ad": s["ad"], "kod": s["kod"], "gun": s["onarim"]["gun"]}
+                         for s in satirlar if s.get("onarim")],
+        "devredilen": [{"ad": s["ad"], "kod": s["kod"], "gunler": s["devredilen"]}
+                       for s in satirlar if s.get("devredilen")],
+    }
+
+
 def topla(tazele: bool = False, haftalik: bool = False) -> dict:
     ham = _ham_veri(tazele)
     seri = ham["seri"]
@@ -931,6 +1144,10 @@ def topla(tazele: bool = False, haftalik: bool = False) -> dict:
         "kapanis_tarih": _tarihler[-1] if _tarihler else None,
         "kapanis_en_eski": _tarihler[0] if _tarihler else None,
         "kapanis_seansi": _seans_metni(_tarihler[-1]) if _tarihler else None,
+        "seans_ozeti": seans_ozeti(gruplar),
+        # Boş seans denetiminin chart ucuna ulaşamadığı semboller: o satırların
+        # boş günü ne onarıldı ne işaretlendi; "temiz" sanılmasın.
+        "seans_sinanamadi": ham.get("meta_olculemedi") or [],
         "gruplar": gruplar,
         "turetilmis": turetilmis(seri),
         "tr_faizleri": tr_faizleri(),

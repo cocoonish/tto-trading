@@ -71,6 +71,24 @@ print(f"Veri aralığı: {fetch_start} – {fetch_end} (bugün: {today})")
 print("EVDS'den veriler cekiliyor...")
 usdtry = usdtry_serisi(fetch_start)
 tlref = fetch_evds_opt("TP.BISTTLREF.ORAN", fetch_start, fetch_end)
+# TLREF'in aynı gün uzantısı (ortak/tlref.py): EVDS bir iş günü geriden
+# veriyor; yöneticinin dosyası aynı gün. Yalnız EVDS'in son gününden sonrası
+# eklenir ve örtüşen her günde birebirlik sınanır; düşerse çizgi EVDS'le kalır.
+if tlref is not None:
+    try:
+        try:
+            import tlref as _tlref
+        except ImportError:
+            import sys as _sys, pathlib as _pl
+            _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2] / "ortak"))
+            import tlref as _tlref
+        tlref, _tl = _tlref.uzat(tlref, _tlref.ayristir(_tlref.indir("oran"), "oran"), "oran")
+        if _tl["durum"] == "uzatildi":
+            print(f"  TLREF uzantısı: {', '.join(_tl['gunler'])} ({_tl['ortusen']} örtüşen günde birebir)")
+        elif _tl["durum"] == "ayrisma":
+            print(f"  UYARI: TLREF Borsa İstanbul dosyası EVDS ile {_tl['gun']} gününde ayrışıyor; uzantı yapılmadı.")
+    except Exception as e:  # uzantı bir iyileştirmedir, grafiği düşürmez
+        print(f"  UYARI: TLREF aynı gün uzantısı yapılamadı ({type(e).__name__}); çizgi EVDS'le kaldı.")
 kredi = fetch_evds_opt("TP.KTF101", fetch_start, fetch_end)
 mev_1m = fetch_evds_opt("TP.TRYTAS.MT01", fetch_start, fetch_end)
 mev_3m = fetch_evds_opt("TP.TRYTAS.MT02", fetch_start, fetch_end)
