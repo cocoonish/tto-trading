@@ -3133,3 +3133,36 @@ düşmemişti" diye doğru yazmıştı ve yazılmış bir sayının altındaki �
 değiştirilmez. AÇIK: Yahoo'nun boş bar sıklığı ölçülmedi (yalnız Bitcoin'de
 her sabah, hisselerde 23.09'da görüldü); ilk sabah koşularının `seans_ozeti`
 satırları bu ölçüyü biriktirecek.
+
+Aynı günün kuyruğu, "ağa çıkmayan sınama ağ yolunu ölçemez"in bir eşi: TLREF
+uzantısının ilk bulut koşusu dosyayı İKİ türde de indiremedi. İstek başlığı
+Türkçe bir harf taşıyordu ("veri hattı") ve http.client başlığı latin-1 ile
+kodlarken istek AĞA ÇIKMADAN `UnicodeEncodeError` verdi; duman maddeleri
+`indir`i sahteyle değiştirdiği için o satır hiç koşmamıştı ve 55/55 yeşildi.
+Uzantı kendi tasarımı gereği düşmedi, uyardı — yani bu hâlde de yalnız EVDS
+kalırdı ve kusur sessizce kalıcı olurdu. Başlık ASCII'ye çekildi (keşif
+koşularında 200 alan başlığın kendisi) ve GERÇEK `indir` artık 127.0.0.1'deki
+bir sunucuya karşı koşturuluyor: ağa çıkmaz ama istek kurulumu, başlık
+kodlaması ve yanıt okuma üretimle aynı yoldan geçer; eski başlık geri
+konunca madde bulutun hatasını birebir üretiyor. Bulutta yeniden ölçüldü:
+iki dosya da iniyor, 42 örtüşen günde EVDS ile birebir.
+
+**Kurucu ilke — BİR REHBERİN GİRDİSİ, KAYAN BİR PENCEREDEN OKUNAMAZ.** Brooks
+rehberinin dört çıktısı (durum kutusu, yirmi figür, örnek defteri, backtest
+tablosu) barlarını teknik bültenin CANLI figürlerinden okuyordu ve o figürler
+her pazar yeniden yazılıp sabit uzunlukta kayıyor. Sonuç iki kez "açık"
+olarak kayda geçmişti ve ikisi aynı kusurun görüntüsüydü: durum kutusunun "B"
+çıpası göreli tarihçenin dışına düştü (figür ENGEL verdi), örnek defteri
+"teknik veriye göre bayat" göründü. Yayımlanmış hiçbir sayı yanlış değildi;
+yalnızca hiçbiri YENİDEN ÜRETİLEMİYORDU. Girdi ÖLÇÜLEREK bulundu: 13 Eylül
+haftalık ölçümünün figürleri (37b290a3) dört çıktıyı BİREBİR üretiyor —
+durum kutusu bayt bayt, figürler Plotly'nin rastgele eleman kimliği dışında,
+iki ölçüm dosyası künye dışında. O pencere `site/tools/brooks_veri/`de
+donduruldu (seri başına içerik özü, okunurken yeniden hesaplanır), dört araç
+yalnız `brooks_ornek.kaynaklar()`dan okur ve `--denetle` üç arızayı sorar:
+bir okuyucunun canlı figürlere dönmesi, öz kapısının körleşmesi, sayaç
+tutarsızlığı — üç enjeksiyonun üçü yakalandı. Rehber yayımlandığı günün
+ölçümüdür (karar 08.09.2026); yeni bir pencere YENİ bir arşiv dosyasıdır
+(`--arsivle` var olanın üzerine yazmaz) ve sayfanın sayıları onunla birlikte
+yeniden yazılır. "Çıpa yenilenmeli" bir onarım değildi: çıpayı yenilemek,
+figürün anlattığı hikâyeyi her hafta başka bir bara taşımak olurdu.

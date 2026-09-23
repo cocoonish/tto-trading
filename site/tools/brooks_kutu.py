@@ -68,7 +68,7 @@ PENCERE = int(R.SABIT_FH["pencere"])
 
 
 def _kaynaklar() -> dict:
-    kay = [O.bar_oku(y) for y in sorted((SITE / "public" / "teknik").glob("*.html"))]
+    kay = O.kaynaklar()
     return {k.anahtar: k for k in kay if O.govde_kunyesi(k.seri)["gecti"]}
 
 
@@ -459,7 +459,13 @@ def _durum(kay: dict, anahtar: str, damga: str, baslik: str, kod: str) -> dict:
 # panelin SEÇİM ÖLÇÜTÜ çizim anında YENİDEN SINANIR — çıpa doğru bara
 # otursa bile kutu artık o hikâyeyi anlatmıyorsa figür üretilmez. Adaylar
 # `--ara` ile listelenir; göreli kip 280 barlık tarihçe istediği için aday
-# yalnız serinin son kısmındadır ve pencere kaydıkça çıpa yenilenmelidir.
+# yalnız serinin son kısmındadır.
+#
+# Pencere artık KAYMIYOR (23.09.2026): barlar teknik bültenin canlı
+# figürlerinden değil `brooks_ornek.ARSIV`den okunur — 13 Eylül ölçümü, bu
+# kutuyu birebir üreten girdi. Kayan pencerede "B" çıpası bir hafta sonra
+# göreli tarihçenin dışına düşmüştü; çıpalar ancak yeni bir arşivle birlikte
+# yenilenir.
 DURUMLAR = [
     ("us10y-s1", "2026-09-11T13:20", "A · dört katman da evet", "hizali"),
     ("us10y-s1", "2026-09-04T13:20", "B · paket var, yön VETO ediyor", "hizasiz"),

@@ -667,7 +667,7 @@ def main() -> int:
     if args.denetle:
         return 0
 
-    kaynaklar = [O.bar_oku(p) for p in sorted((SITE / "public" / "teknik").glob("*.html"))]
+    kaynaklar = O.kaynaklar()
     seriler: list[SeriOlcum] = []
     dislanan: dict[str, dict] = {}
     for k in kaynaklar:
@@ -687,7 +687,7 @@ def main() -> int:
     print("\n" + _tablo(sonuclar))
     kunye = {
         "olcum_tarihi": date.today().isoformat(),
-        "kaynak": "site/public/teknik/*.html (teknik/olc.py'nin kapanmış-bar disiplininden geçmiş OHLC)",
+        "kaynak": O.kaynak_kunyesi(),
         "kural_kaynagi": "site/public/indikatorler/brooks_referans.py (Pine replikasyonu)",
         "seri": len(seriler), "bar": sum(len(s.s) for s in seriler),
         "seri_listesi": {s.ad: {"bar": len(s.s), "tick": s.tick, "bas": s.s.zaman[0] if s.s.zaman else None,

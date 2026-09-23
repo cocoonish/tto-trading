@@ -14,9 +14,22 @@ sessizce ayrışır. Referansın kendi kapısı da eşikleri `.pine` dosyalarıy
 karşılaştırır, yani zincir üç ucundan da bağlı.
 
 VERİ KAYNAĞI. Bu oturumlardan Yahoo'ya çıkılamıyor (proxy 403). Barlar
-depodaki teknik bülten figürlerinin İÇİNDEN okunuyor: site/public/teknik/
-altındaki Plotly HTML'leri mum grafiğinin OHLC dizilerini gömülü taşır ve
-o diziler teknik/olc.py'nin kapanmış-bar disiplininden geçmiştir.
+teknik bülten figürlerinin İÇİNDEN okundu: site/public/teknik/ altındaki
+Plotly HTML'leri mum grafiğinin OHLC dizilerini gömülü taşır ve o diziler
+teknik/olc.py'nin kapanmış-bar disiplininden geçmiştir.
+
+GİRDİ ARŞİVİ (23.09.2026). O figürler her pazar YENİDEN yazılır ve pencereleri
+sabit uzunlukta kayar (1 sa 420 · 4 sa 360 · günlük 260 bar). Araçlar onları
+doğrudan okuduğu sürece sayfadaki hiçbir sayı yeniden üretilemiyordu: durum
+kutusunun "B" çıpası (04.09) bir hafta sonra göreli tarihçenin dışına düştü ve
+figür ENGEL verdi, örnek defteri de "teknik veriye göre bayat" göründü. Ölçüldü:
+13 Eylül haftalık ölçümünün figürleri (commit 37b290a3) yayımlanan dört çıktıyı
+— durum kutusu, yirmi figür, örnek defteri, backtest tablosu — BİREBİR yeniden
+üretiyor. O pencere `brooks_veri/`de donduruldu ve dört araç yalnız onu okur
+(`kaynaklar()`); rehber yayımlandığı günün ölçümüdür (karar 08.09.2026: yalnız
+panolar canlıdır). Yeni bir pencereyle ölçmek YENİ bir arşiv dosyası demektir
+(`--arsivle`, var olanın üzerine yazmaz) ve sayfanın sayıları onunla birlikte
+yeniden yazılır.
 
 KAPSAM. Kurallar ölçek bağımsız kurulur; dersin eşikleri 5 dakikalık barda
 kalibre edilmiştir. Burada ölçülen barlar 1 saatlik, 4 saatlik ve günlüktür
@@ -25,6 +38,8 @@ ve bu çıktının künyesine YAZILIR — örnek, dersin kalibrasyon ölçeği d
 Kullanım:
     python3 site/tools/brooks_ornek.py            # ölçer, JSON yazar
     python3 site/tools/brooks_ornek.py --denetle  # yalnız kapıları koşturur
+    python3 site/tools/brooks_ornek.py --arsivle DİZİN --gun YYYY-AA-GG --not "…"
+                                                  # teknik figürlerinden YENİ arşiv
 """
 from __future__ import annotations
 
@@ -51,7 +66,6 @@ from brooks_referans import (                                    # noqa: E402
     gelecege_bakma_sinamasi, pine_sabitleri,
 )
 KOK = SITE.parent
-TEKNIK = SITE / "public" / "teknik"
 PINE_FH = SITE / "public" / "indikatorler" / "brooks-fiyat-hareketi.pine"
 PINE_RP = SITE / "public" / "indikatorler" / "brooks-rejim-panosu.pine"
 CIKTI = SITE / "src" / "data" / "brooks_ornek.json"
@@ -89,6 +103,77 @@ def bar_oku(yol: Path) -> Kaynak:
         if any(v is None or (isinstance(v, float) and math.isnan(v)) for v in dizi):
             raise SystemExit(f"ENGEL · {yol.name} · {ad} dizisinde boş gözlem var.")
     return Kaynak(slug, dilim, seri)
+
+
+# ── Girdi arşivi: rehberin ölçtüğü pencere donar ────────────────────────────
+ARSIV_DIZIN = BURASI / "brooks_veri"
+# Yayımlanan dört çıktının girdisi. Adındaki gün teknik bültenin ölçüm günüdür;
+# ikinci bir arşiv eklenirse bu sabit ona çevrilir ve sayfa onunla yeniden yazılır.
+ARSIV = ARSIV_DIZIN / "teknik-2026-09-13.json.gz"
+
+
+def _seri_ozu(s: Seri) -> str:
+    """Bir serinin içerik parmak izi — arşiv okunurken yeniden hesaplanır."""
+    import hashlib
+    govde = json.dumps([s.o, s.h, s.l, s.c, s.zaman], separators=(",", ":"))
+    return hashlib.sha256(govde.encode("utf-8")).hexdigest()
+
+
+def arsiv_yaz(yollar: list[Path], hedef: Path, gun: str, notu: str) -> Path:
+    """Teknik figürlerinden arşiv kurar. VAR OLAN ARŞİVİN ÜZERİNE YAZMAZ:
+    arşiv yayımlanmış sayıların girdisidir, değiştirmek onları sessizce
+    değiştirmek olurdu. Yeni pencere = yeni dosya."""
+    import gzip
+    import hashlib
+    if hedef.exists():
+        raise SystemExit(f"ENGEL · {hedef.name} zaten var — yeni pencere yeni bir arşiv dosyası ister.")
+    seriler = {}
+    for y in yollar:
+        k = bar_oku(y)
+        seriler[k.anahtar] = {
+            "o": k.seri.o, "h": k.seri.h, "l": k.seri.l, "c": k.seri.c, "zaman": k.seri.zaman,
+            "oz": _seri_ozu(k.seri),
+            "kaynak_dosya": y.name,
+            "kaynak_sha256": hashlib.sha256(y.read_bytes()).hexdigest(),
+        }
+    if not seriler:
+        raise SystemExit("ENGEL · arşivlenecek figür yok.")
+    govde = {"kunye": {"teknik_olcum_gunu": gun, "not": notu, "seri": len(seriler),
+                       "bar": sum(len(v["c"]) for v in seriler.values())},
+             "seriler": seriler}
+    hedef.parent.mkdir(parents=True, exist_ok=True)
+    # mtime=0: aynı girdi aynı baytları üretsin (dosya kendi tarihini taşımasın).
+    with gzip.GzipFile(hedef, "wb", mtime=0) as f:
+        f.write(json.dumps(govde, ensure_ascii=False, separators=(",", ":")).encode("utf-8"))
+    return hedef
+
+
+def arsiv_oku(yol: Path = ARSIV) -> tuple[dict, list[Kaynak]]:
+    """Arşivi okur, her serinin içerik özünü YENİDEN hesaplar. Tutmazsa ENGEL —
+    elle düzenlenmiş ya da bozulmuş bir girdi, yayımlanmış sayıyı üretmez."""
+    import gzip
+    if not yol.exists():
+        raise SystemExit(f"ENGEL · girdi arşivi yok: {yol.relative_to(KOK)}")
+    govde = json.loads(gzip.decompress(yol.read_bytes()).decode("utf-8"))
+    kaynaklar = []
+    for anahtar, v in sorted(govde["seriler"].items()):
+        slug, _, dilim = anahtar.partition("-")
+        s = Seri(v["o"], v["h"], v["l"], v["c"], v["zaman"])
+        if _seri_ozu(s) != v["oz"]:
+            raise SystemExit(f"ENGEL · arşivde {anahtar} serisinin özü tutmuyor — girdi değişmiş.")
+        kaynaklar.append(Kaynak(slug, dilim, s))
+    return govde["kunye"], kaynaklar
+
+
+def kaynaklar() -> list[Kaynak]:
+    """Dört aracın (örnek · kutu · figür · backtest) TEK girdi kapısı."""
+    return arsiv_oku()[1]
+
+
+def kaynak_kunyesi() -> str:
+    k = arsiv_oku()[0]
+    return (f"{ARSIV.relative_to(KOK)} — teknik bültenin {k['teknik_olcum_gunu']} haftalık "
+            f"ölçümünün figürlerinden (teknik/olc.py'nin kapanmış-bar disiplininden geçmiş OHLC)")
 
 
 # ── Gövde kapısı: bir seri GERÇEK mum taşımıyorsa örneğe giremez ────────────
@@ -156,6 +241,45 @@ def _duman() -> None:
     bt_m = (SITE / "tools" / "brooks_backtest.py").read_text(encoding="utf-8")
     if 'aday[0]["kalite"] == aday[1]["kalite"]' not in bt_m:
         hata.append("beraberlik · brooks_backtest eşit kaliteli iki adayda emir açmama kuralını taşımıyor")
+
+    # GİRDİ ARŞİVİ (23.09.2026). Dört araç yalnız donmuş pencereyi okur; biri
+    # teknik bültenin CANLI figürlerine dönerse sayfanın sayıları her pazar
+    # sessizce kayar ve çıpalar tarihçenin dışına düşer. Kaynak metninden
+    # sorulur, çünkü dönüş hiçbir yerde hata vermez — araç yeşil koşar.
+    import inspect
+    okuyucular = {"brooks_kutu.py": "_kaynaklar", "brooks_sekil.py": "_kaynaklar",
+                  "brooks_backtest.py": "main"}
+    for ad, fn in okuyucular.items():
+        metin = (BURASI / ad).read_text(encoding="utf-8")
+        if "bar_oku(" in metin or '"public" / "teknik"' in metin:
+            hata.append(f"girdi arşivi · {ad} teknik bültenin canlı figürlerini okuyor")
+        m = re.search(rf"^def {fn}\(.*?(?=^def |\Z)", metin, re.S | re.M)
+        if not m or "O.kaynaklar()" not in m.group(0):
+            hata.append(f"girdi arşivi · {ad}.{fn} barlarını O.kaynaklar()'dan almıyor")
+    if "kaynaklar()" not in inspect.getsource(main) or "bar_oku(" in inspect.getsource(main):
+        hata.append("girdi arşivi · brooks_ornek.main barlarını arşivden almıyor")
+    try:
+        _kunye, _kay = arsiv_oku()
+        if len(_kay) != _kunye.get("seri") or sum(len(k.seri) for k in _kay) != _kunye.get("bar"):
+            hata.append("girdi arşivi · künyedeki seri/bar sayısı içerikle tutmuyor")
+    except SystemExit as ex:
+        hata.append(f"girdi arşivi okunamadı · {ex}")
+    else:
+        # Öz kapısı ilan ettiği hâlde düşmeli: tek bir kapanışı değiştirilmiş
+        # bir kopya ENGEL vermeli (bir kapı kendi yanlış GEÇİŞİNE karşı da sınanır).
+        import gzip
+        import tempfile
+        govde = json.loads(gzip.decompress(ARSIV.read_bytes()).decode("utf-8"))
+        ilk = next(iter(govde["seriler"].values()))
+        ilk["c"][-1] = ilk["c"][-1] * 1.001
+        with tempfile.TemporaryDirectory() as d:
+            bozuk = Path(d) / "bozuk.json.gz"
+            bozuk.write_bytes(gzip.compress(json.dumps(govde).encode("utf-8")))
+            try:
+                arsiv_oku(bozuk)
+                hata.append("girdi arşivi · öz kapısı değiştirilmiş kapanışı geçirdi")
+            except SystemExit:
+                pass
 
     # SİTEDEKİ KOD ile DEPODAKİ KOD aynı mı. Sayfa kodu `?raw` ile aldığı
     # için "sayfada görünen" ile "indirilen" yapısal olarak aynıdır; ama
@@ -377,16 +501,24 @@ def ornekleri_ara(kaynaklar: list[Kaynak]) -> dict:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--denetle", action="store_true", help="yalnız kapıları koştur")
+    ap.add_argument("--arsivle", type=Path, help="bu dizindeki teknik figürlerinden YENİ girdi arşivi kur")
+    ap.add_argument("--gun", help="--arsivle ile: teknik ölçüm günü (YYYY-AA-GG)")
+    ap.add_argument("--not", dest="notu", default="", help="--arsivle ile: kaynak notu")
     a = ap.parse_args()
+
+    if a.arsivle:
+        if not a.gun:
+            raise SystemExit("ENGEL · --arsivle ölçüm gününü ister (--gun).")
+        yol = arsiv_yaz(sorted(a.arsivle.glob("*.html")),
+                        ARSIV_DIZIN / f"teknik-{a.gun}.json.gz", a.gun, a.notu)
+        print(f"yazıldı · {yol.relative_to(KOK)} · {yol.stat().st_size:,} bayt")
+        return
 
     _duman()
     if a.denetle:
         return
 
-    yollar = sorted(TEKNIK.glob("*.html"))
-    if not yollar:
-        raise SystemExit(f"ENGEL · {TEKNIK} altında figür yok.")
-    hepsi = [bar_oku(y) for y in yollar]
+    hepsi = kaynaklar()
     govde = {k.anahtar: govde_kunyesi(k.seri) for k in hepsi}
     gecen = [k for k in hepsi if govde[k.anahtar]["gecti"]]
     dislanan = {k: v for k, v in govde.items() if not v["gecti"]}
@@ -394,7 +526,7 @@ def main() -> None:
         raise SystemExit("ENGEL · gövde kapısından geçen seri kalmadı.")
     bulgu = ornekleri_ara(gecen)
     bulgu["kunye"] = {
-        "kaynak": "site/public/teknik/*.html (teknik/olc.py'nin kapanmış-bar disiplininden geçmiş OHLC)",
+        "kaynak": kaynak_kunyesi(),
         "esik_kaynagi": {PINE_FH.name: pine_sabitleri(PINE_FH),
                          PINE_RP.name: pine_sabitleri(PINE_RP)},
         "govde_kapisi": GOVDE_KAPISI,

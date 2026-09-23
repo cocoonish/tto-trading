@@ -47,7 +47,7 @@ KAGIT = "#ffffff"
 
 
 def _kaynaklar() -> dict[str, O.Kaynak]:
-    kay = [O.bar_oku(y) for y in sorted((SITE / "public" / "teknik").glob("*.html"))]
+    kay = O.kaynaklar()
     return {k.anahtar: k for k in kay if O.govde_kunyesi(k.seri)["gecti"]}
 
 
