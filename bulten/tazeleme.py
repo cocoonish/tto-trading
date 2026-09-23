@@ -108,8 +108,15 @@ TETIKLER: tuple[Tetik, ...] = (
     # (Haftalık Akım)" ve "Zorunlu Karşılığa Tabi Mevduatlar/Katılım
     # Fonları", ikisi de perşembe 14:30, 36 yayım/yıl. Ek koşu maliyeti yok:
     # aynı ana yayımlanıyorlar, tetik zaten o pencerede ateşliyor.
+    # GECİKME 100 DK, 45 DEĞİL (23.09.2026). Hattın TLREF sütunu EVDS'in son
+    # gününden sonrasını Borsa İstanbul'un GÜNLÜK dosyasından alır ve o dosya
+    # 13:00 UTC'de yayımlanır (ortak/tlref.py). 11:30 + 45 dk hattı 12:23
+    # penceresinde koşturuyordu; çekirdek T o koşuda gelince sürüm ilerliyor,
+    # yeniden deneme açılmıyor ve TLREF T hiç yazılmıyordu — ertesi sabahın
+    # bülteni yine bir seans geride. 11:30 + 100 dk = 13:10 → 13:17 penceresi,
+    # günlük dosyadan SONRA. Bedeli: pano öğleden sonra bir pencere geç tazelenir.
     Tetik("fonlama", "TCMB Analitik Bilanço (her iş günü 14:30)",
-          r"TCMB Analitik Bilanço", ("TCMB",), en_gec=6, gecikme_dk=45,
+          r"TCMB Analitik Bilanço", ("TCMB",), en_gec=6, gecikme_dk=100,
           ek_kaynaklar=((r"Faiz Oranları \(Haftalık Akım\)", ("TCMB",), "hafta_kisa"),
                         (r"Zorunlu Karşılığa Tabi", ("TCMB",), "zk_taban_tarih"))),
     # Orta Vadeli Program hattının CANLI bacağı kurdur: program tabloları

@@ -82,11 +82,15 @@ if tlref is not None:
             import sys as _sys, pathlib as _pl
             _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2] / "ortak"))
             import tlref as _tlref
-        tlref, _tl = _tlref.uzat(tlref, _tlref.ayristir(_tlref.indir("oran"), "oran"), "oran")
+        import pathlib as _pl2
+        _bist, _kay = _tlref.bist_serisi(
+            "oran", onbellek=_pl2.Path(__file__).resolve().parent / "data" / "cache")
+        tlref, _tl = _tlref.uzat(tlref, _bist, "oran")
+        print(f"  TLREF Borsa İstanbul dosyaları: {_kay['nereden']}")
         if _tl["durum"] == "uzatildi":
             print(f"  TLREF uzantısı: {', '.join(_tl['gunler'])} ({_tl['ortusen']} örtüşen günde birebir)")
-        elif _tl["durum"] == "ayrisma":
-            print(f"  UYARI: TLREF Borsa İstanbul dosyası EVDS ile {_tl['gun']} gününde ayrışıyor; uzantı yapılmadı.")
+        elif _tl["durum"] in ("ayrisma", "evds_geride", "ortusme_yetersiz"):
+            print(f"  UYARI: TLREF uzantısı yapılmadı ({_tl['durum']}): {_tl}")
     except Exception as e:  # uzantı bir iyileştirmedir, grafiği düşürmez
         print(f"  UYARI: TLREF aynı gün uzantısı yapılamadı ({type(e).__name__}); çizgi EVDS'le kaldı.")
 kredi = fetch_evds_opt("TP.KTF101", fetch_start, fetch_end)

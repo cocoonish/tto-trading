@@ -3166,3 +3166,33 @@ tutarsızlığı — üç enjeksiyonun üçü yakalandı. Rehber yayımlandığ�
 (`--arsivle` var olanın üzerine yazmaz) ve sayfanın sayıları onunla birlikte
 yeniden yazılır. "Çıpa yenilenmeli" bir onarım değildi: çıpayı yenilemek,
 figürün anlattığı hikâyeyi her hafta başka bir bara taşımak olurdu.
+
+İNCELEME TURU (23.09.2026, üç mercek, 8 bulgu doğrulandı, 0 çürütüldü) iki
+düzeltmenin de ilk hâlini ölçtü ve en ağır bulgu kendi hedefimizi vurdu:
+uzantı yalnız TARİHSEL zip'i okuyordu, o dosya 16:34 UTC'de güncelleniyor ve
+Fonlama'nın günün son koşusu çoğu gün daha erken bitiyor — uzantı "gerek yok"
+deyip hiçbir şey eklemiyordu, yani düzelttiğini söylediği kusur ertesi sabah
+aynen dönecekti. Üç parça birlikte gitti: GÜNLÜK dosya da okunuyor (13:00 UTC,
+biçimi keşifle ölçüldü; aynı günü iki dosya ayrı verirse uzantı yok), Fonlama
+tetiğinin gecikmesi 45 → 100 dk (12:23 penceresi günlük dosyadan ÖNCEYDİ ve
+çekirdek o koşuda gelince yeniden deneme hiç açılmıyordu; duman şimdi tetik
+sırasını BIST saatine karşı sınıyor), ve uzantı çerçeveye SATIR EKLEMİYOR —
+eklenen bir gün TLREF dışında boştu, marjinal faiz kuralı onu "TLREF (vekil)"
+diye yayımlıyor, birleştirme dizin adını düşürüp iki türev hattı çökertiyordu.
+Kalanlar: son iyi kopya `data/cache`te (ulaşılamayan bir sonraki koşu tarihi
+geri çekip gerileme kapısını öttürmesin), EVDS'in gerisinde en çok iki iş günü
+(ayna donarsa BIST'le doldurmak birincil kaynağın ölümünü gizlerdi), biçim
+hatası "ulaşılamadı" yazmıyor, `urllib` (DİBS .venv'i requests taşımıyor).
+Piyasa tarafında altı bulgu: onarım son günü eklerken ORTADAKİ boş günün
+işaretini siliyordu (işaret artık satırın son aralığına bakıyor); 03:23 UTC'de
+New York'un kapanmış seansı "bugün" sayılıp sorulmuyordu; dönem bittikten
+sonraki canlı işlem kapanış yazılabiliyordu (tolerans 15 dk, sürekli işlem
+gören sembol hiç onarılmaz); önbellekten devredilen sembol önceki koşunun
+hükmünü taşıyordu; alanın YOKLUĞU "sınandı, temiz" sayılıyordu; yaz saati
+geçişi barı bir gün kaydırıyordu (saat dilimi adıyla çevriliyor); meta turunun
+toplam bütçesi yoktu (150 sn). On dört yeni arıza enjeksiyonunun on dördü
+yakalanıyor. İki şey kayda değer: fikstürün gerçek biçimi taşıması yetmedi,
+duman ilk yazımda hattın GERÇEK önbellek dizinine sahte dosya bıraktı ve
+sonraki madde o kopyayla "geçti" — bir sınama kendi yazdığını okuyorsa kendi
+kendini doğrular. Ve tur, dosyalar DEĞİŞMEDEN önce belirli bir commit'e karşı
+koşturuldu: 16.09'un "kaynağı canlıyken ölçme" tuzağı bu kez kurulmadı.

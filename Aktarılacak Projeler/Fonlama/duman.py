@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import datetime as dt
 import inspect
+import pathlib
 import sys
 
 import pandas as pd
@@ -403,40 +404,141 @@ _e = _tl.ayristir(_bist_zip({g: 6700 + i for i, g in enumerate(_bist)}, endeks=T
 sina("endeks dosyası da ADIYLA ayrıştırılıyor (kapanış sütunu, en düşük/en yüksek değil)",
      len(_e) == len(_bist) and _e[dt.date(2026, 9, 22)] == 6700 + len(_bist) - 1)
 
-# Çerçeve yolu: ağ yerine sahte `indir`. Ana saat (APİ çekirdeği) KAYMAMALI.
+# GÜNLÜK DOSYA (13:00 GMT) — gerçek biçim: düz ASCII, iki başlık satırı (Türkçe ·
+# İngilizce), tek veri satırı. Tarihsel zip 16:30'da güncellendiği için
+# Fonlama'nın öğleden sonraki koşusu T'yi ancak buradan alır (inceleme bulgusu).
+def _gunluk_csv(g: dt.date, v: float, endeks: bool = False) -> bytes:
+    if endeks:
+        s = ["KAYIT SIRA;ENDEKS KODU;ENDEKSLER;ENDEKSLERIN INGILIZCE ISIMLERI;KUR TURU;"
+             "TARIH;KAPANIS;ACILIS;EN DUSUK;EN YUKSEK",
+             "ORDER;INDEX CODE;INDEX NAMES IN TURKISH;INDICES;CURRENCY TYPE;DATE;"
+             "CLOSING VALUE;OPEN VALUE;LOWEST VALUE;HIGHEST VALUE",
+             f"1;BISTTLREF;BIST TLREF ENDEKSI;BIST TLREF INDEX;TRY;{g:%d/%m/%Y};{v};{v + 2};{v - 1};{v + 1}"]
+    else:
+        s = ["TARIH;AD;INGILIZCE ADI;KOD;ISIN;DEGER",
+             "DATE;NAME;NAME IN ENGLISH;CODE;ISIN;VALUE",
+             f"{g:%d/%m/%Y};TURK LIRASI GECELIK REFERANS FAIZ ORANI;TURKISH LIRA OVERNIGHT "
+             f"REFERENCE RATE;TLREF;TRIXIST00015;{v}"]
+    return ("\r\n".join(s) + "\r\n").encode("ascii")
+
+
+_g22 = dt.date(2026, 9, 22)
+sina("günlük dosyalar (oran · endeks) gerçek biçimleriyle ayrıştırılıyor",
+     _tl.ayristir(_gunluk_csv(_g22, 36.5477), "oran") == {_g22: 36.5477}
+     and _tl.ayristir(_gunluk_csv(_g22, 6789.09772, True), "endeks") == {_g22: 6789.09772})
+
+# Sahte ağ: (tür, cins) → bayt. Tarihsel dosya 21.09'da biter (16:30 öncesi
+# koşu), 22.09 yalnız günlük dosyada — gerçek öğleden sonra hâli.
+_bist21 = {g: v for g, v in _bist.items() if g <= dt.date(2026, 9, 21)}
+_AG = {
+    ("oran", "tarihsel"): _bist_zip(_bist21),
+    ("oran", "gunluk"): _gunluk_csv(_g22, 36.5477),
+    ("endeks", "tarihsel"): _bist_zip({g: v + 6000 for g, v in _bist21.items()}, endeks=True),
+    ("endeks", "gunluk"): _gunluk_csv(_g22, 6789.09772, True),
+}
+_DUSEN: set = set()
+
+
+def _sahte_indir(tur, cins="tarihsel", zaman_asimi=30):
+    if (tur, cins) in _DUSEN:
+        raise TimeoutError("ağ yok")
+    return _AG[(tur, cins)]
+
+
+import tempfile as _tmp  # noqa: E402
 _gercek_indir = _tl.indir
+_kopya = pathlib.Path(_tmp.mkdtemp())
+# Hattın GERÇEK önbellek dizini sahte dosyalarla kirlenmemeli: tlref_uzantisi
+# son iyi kopyayı veri.CACHE'e yazar ve oradan okur.
+_gercek_cache = veri.CACHE
 try:
-    _bist_end = {g: v + 6000 for g, v in _bist.items()}
-    _tl.indir = lambda tur, zaman_asimi=30: (_bist_zip(_bist_end, endeks=True) if tur == "endeks"
-                                             else _bist_zip(_bist))
+    veri.CACHE = pathlib.Path(_tmp.mkdtemp())
+    _tl.indir = _sahte_indir
+    _s6, _k6 = _tl.bist_serisi("oran", _kopya)
+    sina("tarihsel dosya T'yi henüz taşımıyorken günlük dosya T'yi getiriyor",
+         _s6.get(_g22) == 36.5477 and max(_s6) == _g22
+         and _k6["nereden"] == {"tarihsel": "canlı", "gunluk": "canlı"}, str(_k6))
+    _AG[("oran", "gunluk")] = _gunluk_csv(dt.date(2026, 9, 21), float(_bist21[dt.date(2026, 9, 21)]) + 0.01)
+    try:
+        _tl.bist_serisi("oran", None)
+        _catis = False
+    except ValueError:
+        _catis = True
+    sina("günlük ile tarihsel aynı günde ayrışırsa uzantı yapılmıyor (hangisi doğru bilinemez)", _catis)
+    _AG[("oran", "gunluk")] = _gunluk_csv(_g22, 36.5477)
+
+    # Ana saat (APİ çekirdeği) KAYMAMALI; çerçeve dizin adını taşır (cek_kume'nin
+    # yazdığı gibi) — Carry ve Makroihtiyati CSV'yi 'tarih' sütun adıyla okur.
+    _ix22 = pd.bdate_range("2026-09-01", "2026-09-22", name="tarih")
+    _ev = _evds.reindex(_ix22)                     # EVDS TLREF 21.09'da bitiyor
     _G = pd.DataFrame({"net_fonlama": 1.0, "fon_top": 1.0, "ste_top": 1.0, "politika": 37.0,
-                       "koridor_alt": 35.5, "koridor_ust": 40.0, "tlref": _evds,
-                       "tlref_endeks": _evds + 6000}, index=_ix)
+                       "koridor_alt": 35.5, "koridor_ust": 40.0, "tlref": _ev,
+                       "tlref_endeks": _ev + 6000}, index=_ix22)
     veri._SON.pop("gun", None)
     _G2 = veri.tlref_uzantisi(_G)
-    sina("hat çerçevesinde TLREF oranı ve endeksi ilerliyor (22.09)",
+    sina("hat çerçevesinde TLREF oranı ve endeksi ilerliyor (22.09, günlük dosyadan)",
          _G2["tlref"].dropna().index[-1] == pd.Timestamp("2026-09-22")
-         and _G2["tlref_endeks"].dropna().index[-1] == pd.Timestamp("2026-09-22"),
+         and float(_G2["tlref"].iloc[-1]) == 36.5477
+         and float(_G2["tlref_endeks"].iloc[-1]) == 6789.09772,
          str(veri._TLREF_BILGI))
+    sina("çerçeve dizin adını ('tarih') koruyor, satır sayısı değişmiyor",
+         _G2.index.name == "tarih" and len(_G2) == len(_G))
     veri._SON.pop("gun", None)
     sina("ana saat (APİ çekirdeği) uzantıyla KAYMIYOR",
-         veri.son_gun(_G2) == pd.Timestamp("2026-09-21"))
+         veri.son_gun(_G2) == pd.Timestamp("2026-09-22"))
     veri._SON.pop("gun", None)
 
-    def _dusen(tur, zaman_asimi=30):
-        raise TimeoutError("ağ yok")
-    _tl.indir = _dusen
+    # İNCELEME BULGUSU: çekirdek T'yi henüz vermediyse (çerçeve 21.09'da bitiyor)
+    # T satırı EKLENMEZ — eklenseydi TLREF'ten başka her sütunu boş bir gün doğar,
+    # marjinal faiz kuralı onu "TLREF (vekil)" diye yayımlar.
+    _G21 = _G.loc[:"2026-09-21"]
+    _, _u7, _b7 = _tl.cerceveye_ekle(_G21, {"tlref": "oran"}, onbellek=_kopya)
+    _G7, _, _ = _tl.cerceveye_ekle(_G21, {"tlref": "oran"}, onbellek=_kopya)
+    sina("çerçevenin satırı olmayan gün EKLENMİYOR (satır_yok, okura uyarı yok)",
+         len(_G7) == len(_G21) and _G7.index.name == "tarih"
+         and _b7["tlref"]["durum"] == "satir_yok" and _b7["tlref"]["satirsiz"] == ["2026-09-22"]
+         and not _u7, str(_b7))
+
+    # İNCELEME BULGUSU: bir koşuda uzanan tarih, BIST'e ulaşılamayan sonraki
+    # koşuda GERİ çekilmemeli (gerileme kapısı hattı durdururdu) → son iyi kopya.
+    _DUSEN.update(_AG)
+    _G8, _u8, _b8 = _tl.cerceveye_ekle(_G, {"tlref": "oran"}, onbellek=_kopya)
+    veri.CACHE = pathlib.Path(_tmp.mkdtemp())      # kopyası olmayan hat
+    sina("indirme düşünce son iyi kopya kullanılıyor, tarih geri çekilmiyor",
+         float(_G8["tlref"].iloc[-1]) == 36.5477 and not _u8
+         and "son iyi kopya" in _b8["tlref"]["nereden"]["tarihsel"], str(_b8))
+    # Kopya da yoksa: hat DÜŞMEZ, çerçeve aynı, TEK okur cümlesi.
     _once = len(veri._UYARI)
     _G3 = veri.tlref_uzantisi(_G)
-    sina("kaynağa ulaşılamazsa hat DÜŞMÜYOR, çerçeve aynı, uyarı okur dilinde",
+    sina("kaynağa ulaşılamazsa (kopya yok) hat DÜŞMÜYOR, çerçeve aynı, uyarı okur dilinde",
          _G3["tlref"].equals(_G["tlref"]) and len(veri._UYARI) > _once
-         and "Borsa İstanbul" in veri._UYARI[-1] and ".zip" not in veri._UYARI[-1])
+         and "ulaşılamadı" in veri._UYARI[-1] and ".zip" not in veri._UYARI[-1])
     _, _uy2, _bi2 = _tl.cerceveye_ekle(_G, {"tlref": "oran", "tlref_endeks": "endeks"})
     sina("iki dosya birden düşünce okura TEK cümle gider, hangisinin düştüğü bilgide adıyla",
          len(_uy2) == 1 and set(_bi2) == {"tlref", "tlref_endeks"}
          and all(b["durum"] == "indirilemedi" for b in _bi2.values()), str(_uy2))
+    _DUSEN.clear()
+
+    # İNCELEME BULGUSU: biçim değişikliği "ulaşılamadı" diye yazılmamalı.
+    _AG[("oran", "tarihsel")] = "TARIH/DATE;ORAN/RATE\n22/09/2026;36.5\n".encode("ascii")
+    _, _u9, _b9 = _tl.cerceveye_ekle(_G, {"tlref": "oran"})
+    sina("biçimi değişen dosya 'biçim tanınmadı' der, gerçek başlıklar kayıtta",
+         _u9 and "biçimi tanınmadı" in _u9[0]
+         and any("oran/rate" in x for x in _b9["tlref"].get("bicim", [])), str((_u9, _b9)))
+    _AG[("oran", "tarihsel")] = _bist_zip(_bist21)
+
+    # İNCELEME BULGUSU: ayna DONARSA doldurulmaz, adıyla söylenir.
+    _eski = _G.copy()
+    _eski.loc["2026-09-17":, "tlref"] = float("nan")          # EVDS 16.09'da duruyor
+    _AG[("oran", "tarihsel")] = _bist_zip(_bist)
+    _G10, _u10, _b10 = _tl.cerceveye_ekle(_eski, {"tlref": "oran"})
+    sina("EVDS tavanın ötesinde gerideyse uzantı yapılmıyor ve okura söyleniyor",
+         _b10["tlref"]["durum"] == "evds_geride" and _G10["tlref"].equals(_eski["tlref"])
+         and _u10 and "donmuş" in _u10[0], str((_u10, _b10)))
+    _AG[("oran", "tarihsel")] = _bist_zip(_bist21)
 finally:
     _tl.indir = _gercek_indir
+    veri.CACHE = _gercek_cache
     veri._SON.pop("gun", None)
 
 # Yukarıdaki maddeler `indir`i SAHTEYLE değiştiriyor, yani ağ yolunun kendisini
@@ -454,7 +556,10 @@ _GELEN: dict = {}
 class _Sunucu(_hs.BaseHTTPRequestHandler):
     def do_GET(self):  # noqa: N802
         _GELEN["ua"] = self.headers.get("User-Agent")
-        govde = _bist_zip(_bist, endeks=self.path.endswith("endeks.zip"))
+        anahtar = {"/oran.zip": ("oran", "tarihsel"), "/oran.csv": ("oran", "gunluk"),
+                   "/endeks.zip": ("endeks", "tarihsel"),
+                   "/endeks.csv": ("endeks", "gunluk")}[self.path]
+        govde = _AG[anahtar]
         self.send_response(200)
         self.send_header("Content-Length", str(len(govde)))
         self.end_headers()
@@ -468,16 +573,20 @@ _srv = _hs.HTTPServer(("127.0.0.1", 0), _Sunucu)
 _th.Thread(target=_srv.serve_forever, daemon=True).start()
 _gercek_adres = dict(_tl.ADRES)
 try:
-    _tl.ADRES["oran"] = f"http://127.0.0.1:{_srv.server_port}/oran.zip"
-    _tl.ADRES["endeks"] = f"http://127.0.0.1:{_srv.server_port}/endeks.zip"
+    _yol = f"http://127.0.0.1:{_srv.server_port}"
+    _tl.ADRES.update({("oran", "tarihsel"): _yol + "/oran.zip", ("oran", "gunluk"): _yol + "/oran.csv",
+                      ("endeks", "tarihsel"): _yol + "/endeks.zip",
+                      ("endeks", "gunluk"): _yol + "/endeks.csv"})
     try:
-        _yerel = _tl.ayristir(_tl.indir("oran", zaman_asimi=10), "oran")
+        _yerel, _yk = _tl.bist_serisi("oran")
         _hata = ""
     except Exception as ex:  # maddenin kendisi düşmesin; hata adıyla yazılsın
-        _yerel, _hata = {}, f"{type(ex).__name__}: {ex}"
-    sina("GERÇEK indir (yerel sunucu): başlık kodlanıyor, istek gidiyor, dosya ayrışıyor",
-         _yerel == _oku and bool(_GELEN.get("ua")), _hata or str(_GELEN))
+        _yerel, _yk, _hata = {}, {}, f"{type(ex).__name__}: {ex}"
+    sina("GERÇEK indir (yerel sunucu): başlık kodlanıyor, iki dosya iniyor, ayrışıyor",
+         _yerel.get(_g22) == 36.5477 and len(_yerel) == len(_bist21) + 1
+         and bool(_GELEN.get("ua")), _hata or str((_yk, _GELEN)))
 finally:
+    _tl.ADRES.clear()
     _tl.ADRES.update(_gercek_adres)
     _srv.shutdown()
 sina("uzantı kos()'ta EVDS çekiminin hemen ardında (tüketicisi var)",

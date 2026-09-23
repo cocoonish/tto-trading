@@ -887,7 +887,7 @@ def kos(yenile: bool = False) -> dict:
     except ImportError:
         sys.path.insert(0, str(KOK / "ortak"))
         import tlref as _tlref
-    G, _tl_uy, _tl_bilgi = _tlref.cerceveye_ekle(G, {"tlref": "oran"})
+    G, _tl_uy, _tl_bilgi = _tlref.cerceveye_ekle(G, {"tlref": "oran"}, onbellek=CACHE)
     for _u in _tl_uy:
         uyar(_u)
     if (_tl_bilgi.get("tlref") or {}).get("durum") == "uzatildi":

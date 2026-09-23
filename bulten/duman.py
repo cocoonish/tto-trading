@@ -2027,11 +2027,14 @@ def main() -> int:
         def _ts(g, saat="00:00"):
             return int(_dt.fromisoformat(f"{g}T{saat}:00+00:00").timestamp())
 
-        def _cevap(gmt, satirlar, rmt, fiyat, seans):
-            return {"meta": {"gmtoffset": gmt, "regularMarketTime": _ts(*rmt),
-                             "regularMarketPrice": fiyat,
-                             "currentTradingPeriod": {"regular": {
-                                 "start": _ts(*seans[0]), "end": _ts(*seans[1])}}},
+        def _cevap(gmt, satirlar, rmt, fiyat, seans, tz=None):
+            meta = {"gmtoffset": gmt, "regularMarketTime": _ts(*rmt),
+                    "regularMarketPrice": fiyat,
+                    "currentTradingPeriod": {"regular": {
+                        "start": _ts(*seans[0]), "end": _ts(*seans[1])}}}
+            if tz:
+                meta["exchangeTimezoneName"] = tz
+            return {"meta": meta,
                     "timestamp": [_ts(g, s) for g, s, _ in satirlar],
                     "indicators": {"quote": [{"close": [c for _, _, c in satirlar]}]}}
 
@@ -2142,6 +2145,88 @@ def main() -> int:
         assert s["^GSPC"]["tarih"][-1] == "2026-09-22" and s["^GSPC"]["kapanis"][-1] == 7700.0, \
             f"22:30 UTC: kapanmış seansın boş kapanışı kurulmadı: {s['^GSPC']['tarih'][-2:]}"
 
+        # ── İnceleme turunun altı bulgusu (23.09.2026), her biri kendi hâliyle.
+        # (a) ORTADA KALAN BOŞ GÜN. 21 ve 22.09 ikisi de boş; onarım 22.09'u
+        # ekler ve "1 gün" değişimi 18.09 → 22.09 olur. İşaret silinmemeli.
+        c = _cevap(10800, [("2026-09-18", "06:30", 13284.4), ("2026-09-21", "06:30", None),
+                           ("2026-09-22", "06:30", None), ("2026-09-23", "06:30", None)],
+                   ("2026-09-22", "15:10"), 13198.84,
+                   (("2026-09-23", "06:30"), ("2026-09-23", "15:00")))
+        s = {"XU100.IS": _gecmis("2026-09-18")}
+        _p._bos_seans_onar(s, {"XU100.IS": _p._meta_ozet(c, sabah)}, {}, sabah)
+        x = s["XU100.IS"]
+        assert x["tarih"][-2:] == ["2026-09-18", "2026-09-22"] and x.get("onarim") \
+            and x.get("eksik_seans") == ["2026-09-21"], \
+            f"onarım ortadaki boş günün işaretini sildi: {x['tarih'][-2:]} {x.get('eksik_seans')}"
+        # (b) YEREL GÜN UTC'NİN GERİSİNDE, SEANS KAPANMIŞ. 03:23 UTC'de New York
+        # hâlâ 22.09'da; o günün seansı bitmiş ve kapanışı boş: sorulmalı ve
+        # kapanış fiyatıyla kurulmalı (son işlem düzenli dönemin içinde).
+        erken = _dt.fromisoformat("2026-09-23T03:23:00+00:00")
+        c = _cevap(-14400, [("2026-09-21", "13:30", 7764.7), ("2026-09-22", "13:30", None)],
+                   ("2026-09-22", "20:04"), 7710.0,
+                   (("2026-09-22", "13:30"), ("2026-09-22", "20:00")), tz="America/New_York")
+        s = {"^GSPC": _gecmis("2026-09-21")}
+        _p._bos_seans_onar(s, {"^GSPC": _p._meta_ozet(c, erken)}, {}, erken)
+        assert s["^GSPC"]["tarih"][-1] == "2026-09-22" and s["^GSPC"]["kapanis"][-1] == 7710.0, \
+            f"03:23 UTC: New York'un kapanmış seansı sorulmadı: {s['^GSPC']}"
+        # (c) Aynı saat, DÖNEMİN BİTİŞİNDEN SONRA işlem: yeni seansın canlı
+        # kotasyonu kapanış yazılmaz, boş gün ADIYLA işaretlenir.
+        c = _cevap(-14400, [("2026-09-21", "04:00", 100.43), ("2026-09-22", "04:00", None)],
+                   ("2026-09-23", "03:22"), 100.61,
+                   (("2026-09-22", "13:20"), ("2026-09-23", "03:00")), tz="America/New_York")
+        s = {"DX-Y.NYB": _gecmis("2026-09-21")}
+        _p._bos_seans_onar(s, {"DX-Y.NYB": _p._meta_ozet(c, erken)}, {}, erken)
+        assert s["DX-Y.NYB"]["tarih"][-1] == "2026-09-21" and not s["DX-Y.NYB"].get("onarim") \
+            and s["DX-Y.NYB"].get("eksik_seans") == ["2026-09-22"], \
+            f"dönem bittikten sonraki canlı fiyat kapanış yazıldı ya da boşluk işaretlenmedi: {s['DX-Y.NYB']}"
+        # (d) ESKİ İZ. Bu koşuda meta'sı alınamayan sembol önceki koşunun
+        # hükmünü taşımamalı; hükmü "sınanamadı"dır.
+        s = {"BTC-USD": dict(_gecmis("2026-09-21"), eksik_seans=["2026-09-22"],
+                             onarim={"gun": "x", "kaynak": "son_islem"})}
+        _p._bos_seans_onar(s, {}, {}, sabah)
+        assert not any(a in s["BTC-USD"] for a in _p.SEANS_ALANLARI), s["BTC-USD"]
+        d = _p._onbellek_birlestir({"A": {"tarih": ["x"], "kapanis": [1.0]}},
+                                   {"B": {"tarih": ["x"], "kapanis": [1.0], "eksik_seans": ["y"]}},
+                                   meta_yok=["C"])
+        assert "eksik_seans" not in d["seri"]["B"] and d["meta_olculemedi"] == ["B", "C"], d
+        g = _p._eski_goruntu({"seri": {"B": {"tarih": ["x"], "onarim": {}}}}, ["A", "B"])
+        assert "onarim" not in g["seri"]["B"] and g["meta_olculemedi"] == ["A", "B"], g
+        assert _p.seans_sinanamadi({}) == sorted(v.kod for v in _p.VARLIKLAR) \
+            and _p.seans_sinanamadi({"meta_olculemedi": []}) == [], \
+            "alanı olmayan anlık görüntü 'sınandı, temiz' sayıldı"
+        # (e) YAZ SAATİ. 26.10.2026 sabahı Londra GMT'de (fark 0); Cuma 23.10 barı
+        # BST gece yarısında, yani 22.10 23:00Z damgalı. Şu anki fark bütün
+        # pencereye uygulanırsa bar 22.10'a kayar ve boşluk görünmez.
+        pzt = _dt.fromisoformat("2026-10-26T04:20:00+00:00")
+        c = _cevap(0, [("2026-10-21", "23:00", 1.16), ("2026-10-22", "23:00", None)],
+                   ("2026-10-23", "21:00"), 1.1612,
+                   (("2026-10-26", "00:00"), ("2026-10-26", "23:59")), tz="Europe/London")
+        oz = _p._meta_ozet(c, pzt)
+        assert oz["bos"] == ["2026-10-23"], f"yaz saati geçişi barı kaydırdı: {oz['bos']}"
+        # (f) TOPLAM BÜTÇE. Dönüşümlü düşen istekler devre kesiciyi hiç açmaz;
+        # toplam süre sınırı yine de kalan sembolleri "sınanamadı" saymalı.
+        class _Saat:
+            t = 0.0
+            def __call__(self):
+                return self.t
+        saat = _Saat()
+        class _Veri:
+            n = 0
+            def get(self, *a, **k):
+                self.n += 1
+                saat.t += 20.0
+                if self.n % 2:
+                    raise TimeoutError("yok")
+                class R:
+                    status_code = 200
+                    def json(self_):
+                        return {"chart": {"result": [c]}}
+                return R()
+        kodlar = [f"K{i}" for i in range(51)]
+        out, olmadi = _p._meta_topla(kodlar, pzt, veri=_Veri(), butce=150, saat=saat)
+        assert len(out) + len(olmadi) == 51 and len(olmadi) >= 40 and saat.t <= 200, \
+            (len(out), len(olmadi), saat.t)
+
         # Özet ve denetim: sebep adıyla taşınıyor, tatil sessiz.
         ad = {v.kod: v for v in _p.VARLIKLAR}
         gruplar = [{"satirlar": [_p.satir(ad[k], seri) for k in seri if k in ad]}]
@@ -2167,6 +2252,24 @@ def main() -> int:
         assert "piyasa_seans_boslugu()" in _i.getsource(_den.Denetim.kos), \
             "denetim ölçütü kos() listesinde değil — yazılıp hiç koşmaz"
     sina("piyasa: kaynağın boş verdiği seans onarılıyor ya da adıyla işaretleniyor", _bos_seans)
+
+    # TLREF'İ OKUYAN HATLAR BIST'İN GÜNLÜK DOSYASINDAN SONRA KOŞMALI. Uzantı
+    # (ortak/tlref.py) T gününü Borsa İstanbul'un 13:00 UTC'de yayımlanan günlük
+    # dosyasından alır; tetiği bundan önce ateşlenen hat T'yi hiç yazamaz ve
+    # sürüm ilerlediği için yeniden deneme de açılmaz. Fonlama 45 dk gecikmeyle
+    # 12:23 penceresinde koşuyordu (inceleme bulgusu, 23.09.2026). Yayım saatleri
+    # tetiğin kendi tarifinden (TSİ, UTC+3): Analitik Bilanço 14:30, kur 15:30.
+    def _tlref_tetik_sirasi():
+        import tazeleme as _tz
+        bist_gunluk = 13 * 60                            # UTC dakika
+        yayim_utc = {"fonlama": 11 * 60 + 30, "dibs": 12 * 60 + 30, "usdtry": 12 * 60 + 30}
+        tetik = {t.hat: t for t in _tz.TETIKLER}
+        for hat, yayim in yayim_utc.items():
+            assert hat in tetik, f"{hat} tetiği bulunamadı"
+            assert yayim + tetik[hat].gecikme_dk >= bist_gunluk, \
+                (f"{hat}: tetik {yayim + tetik[hat].gecikme_dk} UTC dk'da hazır, BIST günlük "
+                 f"TLREF dosyası {bist_gunluk}'de — hat T gününün TLREF'ini yazamaz")
+    sina("TLREF okuyan hatların tetiği BIST günlük dosyasından sonra", _tlref_tetik_sirasi)
 
     # HAFTA SONU BOŞLUĞU σ'YI ŞİŞİRMİYOR — ölçülen olgu koda bağlanıyor.
     # Sezgi "pazartesi hareketi üç takvim günü kapsar, günlük σ ile kıyaslamak

@@ -1022,7 +1022,8 @@ class Denetim:
         if bos:
             self.uyari.append(
                 "Kaynak şu satırların tamamlanmış seansını BOŞ verdi ve kapanış "
-                "kurulamadı (piyasa ölçüm anında açıktı ya da vadeli): "
+                "kurulamadı (piyasa ölçüm anında açıktı, vadeli, ya da boş gün "
+                "satırın son aralığının içinde kaldı): "
                 + " · ".join(f"{x['ad']} ({', '.join(x['gunler'])}; satır {x['tarih']})"
                              for x in bos)
                 + ". Satırlar kendi tarihiyle duruyor; yazıda bu satırların "
@@ -1035,7 +1036,8 @@ class Denetim:
         if sinanamadi:
             self.uyari.append(
                 f"Boş seans denetimi {len(sinanamadi)} sembolde yapılamadı (kaynağın "
-                f"meta alanı alınamadı): {' · '.join(sinanamadi[:12])}")
+                f"meta alanı alınamadı, sembol çekimden dönmedi ya da anlık görüntü "
+                f"bu denetimden önce yazıldı): {' · '.join(sinanamadi[:12])}")
         if not bos and not sinanamadi:
             self._ok("hiçbir satırda kaynağın boş verdiği seans yok")
 

@@ -491,9 +491,17 @@ Geride kalan bir satırın SEBEBİNİ tahmin etme; ölçüm katmanı yazıyor
 seansı boş verdi ve kurulamadı — satırın "1 gün"ü o seansa ait değildir, hareketi
 o güne yazma. `son_islemden`: kaynağın günlük barı boştu, kapanış kaynağın aynı
 günkü son işlem fiyatından kuruldu — sayı o günün kapanışıdır, kullanılabilir.
-Listede olmayan geride kalmış satır tatildir (kaynak o gün satır açmadı). TLREF
-artık bir önceki seansı taşır (Borsa İstanbul aynı gün yayımlıyor, EVDS ertesi
-gün); taşımıyorsa hattın uyarısı sebebini söyler.
+`kaynak_bos`da bir satır "satırın son aralığının içinde kalan" boş gün de
+taşıyabilir: satır bugüne kurulmuş ama aradaki bir seans kaynakta boştu, yani
+"1 gün" değişimi İKİ seansı kapsıyor — tek günlük hareket diye yazma.
+Geride kalmış bir satır ancak HİÇBİR listede yoksa tatil sayılabilir; önce
+`seans_sinanamadi`ye bak: oradaysa o sembol bu koşuda SINANMADI (meta alınamadı,
+çekimden dönmedi ya da anlık görüntü bu denetimden önce yazıldı) ve sebebi
+bilinmiyor — sebep YAZMA, yalnız satırın hangi günü taşıdığını söyle. TLREF
+satırı kendi gününü taşır ve o güne BAK, varsayma: Borsa İstanbul T'yi aynı gün
+13:00 UTC'de yayımlar ve fonlama hattı onu günlük dosyadan alır, EVDS ertesi
+sabah; hat o gün BIST'e ulaşamadıysa (ya da EVDS donduysa) satır bir seans
+geride kalır ve hattın uyarısı sebebini söyler.
 
 **Bir düzeltme yaptıysan GENELLEŞTİR.** Bu, 27.08.2026'nın asıl dersi. O sabahki
 metin enerjide bir ölçü hatası fark etti, doğru teşhis etti ve düzgün bir geri

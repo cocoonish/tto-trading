@@ -1001,7 +1001,8 @@ def tlref_uzantisi(g: pd.DataFrame) -> pd.DataFrame:
     except ImportError:
         sys.path.insert(0, str(KOK / "ortak"))
         import tlref as _t
-    g, uy, bilgi = _t.cerceveye_ekle(g, {"tlref": "oran", "tlref_endeks": "endeks"})
+    g, uy, bilgi = _t.cerceveye_ekle(g, {"tlref": "oran", "tlref_endeks": "endeks"},
+                                     onbellek=CACHE)
     for u in uy:
         uyar(u)
     _TLREF_BILGI.clear()
@@ -1010,6 +1011,13 @@ def tlref_uzantisi(g: pd.DataFrame) -> pd.DataFrame:
         if b.get("durum") == "uzatildi":
             print(f"  TLREF uzantısı · {kolon}: {', '.join(b['gunler'])} "
                   f"({b['kaynak']}; {b['ortusen']} örtüşen günde EVDS ile birebir)")
+        else:
+            # Koşu kaydına: uzantının neden yapılmadığı ve dosyaların nereden
+            # geldiği (canlı · son iyi kopya · yok). "Gerek yok" ile "satır yok"
+            # sağlıklı hâllerdir; ayırt edilmeleri için adıyla yazılır.
+            print(f"  TLREF uzantısı · {kolon}: {b.get('durum')} · "
+                  f"dosyalar {b.get('nereden')}"
+                  + (f" · satırı olmayan gün {b['satirsiz']}" if b.get("satirsiz") else ""))
     return g
 
 

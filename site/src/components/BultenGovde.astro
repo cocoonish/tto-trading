@@ -772,7 +772,8 @@ const bolumler = [
         {kaynakBos.length > 0 && (
           <> Kaynak {adlar(kaynakBos)} için {gunler(kaynakBos.flatMap((x) => x.gunler))} kapanışını
           bu ölçüm anında vermedi; bu satırlar kendi tarihiyle duruyor ve “1 gün” değişimleri
-          o seansa ait değil.</>
+          tek bir seansın hareketi değil — satır ya o seansın gerisinde kalıyor ya da değişim
+          o seansı da içine alıyor.</>
         )}
       </p>
 
