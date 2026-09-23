@@ -2179,6 +2179,32 @@ def main() -> int:
         assert s["DX-Y.NYB"]["tarih"][-1] == "2026-09-21" and not s["DX-Y.NYB"].get("onarim") \
             and s["DX-Y.NYB"].get("eksik_seans") == ["2026-09-22"], \
             f"dönem bittikten sonraki canlı fiyat kapanış yazıldı ya da boşluk işaretlenmedi: {s['DX-Y.NYB']}"
+        # (c2) HAFTA SONU SATIRI. Bulutta ölçüldü (23.09 08:03 UTC): DXY'nin
+        # cevabı Pazar 20.09 için boş bir satır açıyor; son aralık kuralı onu
+        # kayıp seans saydı. Hafta sonu işlem görmeyen sembolde boş Pazar seans
+        # değildir; hafta sonu kapanışı taşıyan (Bitcoin) sembolde boş Cumartesi
+        # gerçek bir boşluktur.
+        on = _dt.fromisoformat("2026-09-23T08:03:00+00:00")
+        # Bulutun gördüğü hâl birebir: seri 21.09'da bitiyor (22.09 boş, piyasa
+        # açık), yani son aralık 18.09 → 21.09 ve boş Pazar tam içinde.
+        c = _cevap(-14400, [("2026-09-18", "04:00", 99.9), ("2026-09-20", "22:00", None),
+                            ("2026-09-21", "04:00", 100.43), ("2026-09-22", "04:00", None)],
+                   ("2026-09-23", "08:02"), 100.61,
+                   (("2026-09-22", "22:00"), ("2026-09-23", "21:00")), tz="America/New_York")
+        s = {"DX-Y.NYB": _gecmis("2026-09-21")}
+        _p._bos_seans_onar(s, {"DX-Y.NYB": _p._meta_ozet(c, on)}, {}, on)
+        assert s["DX-Y.NYB"].get("eksik_seans") == ["2026-09-22"], \
+            f"hafta sonu işlem görmeyen sembolün boş Pazar satırı kayıp seans sayıldı: {s['DX-Y.NYB'].get('eksik_seans')}"
+        # Seri 18 → 20.09 (hafta sonu kapanışlarıyla); boş 19.09 son aralıkta.
+        s = {"BTC-USD": {"tarih": [f"2026-09-{g:02d}" for g in range(1, 21) if g != 19],
+                         "kapanis": [80000.0 + g for g in range(1, 21) if g != 19]}}
+        c = _cevap(0, [("2026-09-18", "00:00", 80000.0), ("2026-09-19", "00:00", None),
+                       ("2026-09-20", "00:00", 81142.6)],
+                   ("2026-09-23", "08:02"), 86520.0,
+                   (("2026-09-23", "00:00"), ("2026-09-23", "23:59")))
+        _p._bos_seans_onar(s, {"BTC-USD": _p._meta_ozet(c, on)}, {}, on)
+        assert s["BTC-USD"].get("eksik_seans") == ["2026-09-19"], \
+            f"hafta sonu işlem gören sembolün boş Cumartesi'si işaretlenmedi: {s['BTC-USD'].get('eksik_seans')}"
         # (d) ESKİ İZ. Bu koşuda meta'sı alınamayan sembol önceki koşunun
         # hükmünü taşımamalı; hükmü "sınanamadı"dır.
         s = {"BTC-USD": dict(_gecmis("2026-09-21"), eksik_seans=["2026-09-22"],

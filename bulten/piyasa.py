@@ -22,7 +22,7 @@ from __future__ import annotations
 import json
 import warnings
 from dataclasses import dataclass, asdict, field
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 warnings.filterwarnings("ignore")
@@ -444,6 +444,15 @@ def _bos_seans_onar(seri: dict, metalar: dict, eski: dict, simdi: datetime) -> d
         bos = [g for g in m.get("bos") or []
                if g < yb or (g == yb and m.get("bugun_bitti")
                              and (g < bugun_utc or simdi.hour >= esik))]
+        # HAFTA SONU SATIRI SEANS DEĞİLDİR — sembol hafta sonu işlem görmüyorsa.
+        # Bulutta ölçüldü (23.09.2026 08:03 UTC): DXY'nin beş günlük cevabı Pazar
+        # 20.09 için boş bir satır açıyor (ICE seansı Pazar akşamı başlar ve
+        # Pazartesi'ye aittir) ve "satırın son aralığı" kuralı onu kayıp seans
+        # saydı. Sembolün hafta sonu işlem görüp görmediği KENDİ serisinden
+        # okunur: Bitcoin'in serisi hafta sonu kapanışı taşır, onda boş bir
+        # Cumartesi gerçek bir boşluktur.
+        if not any(date.fromisoformat(t).weekday() >= 5 for t in s["tarih"][-40:]):
+            bos = [g for g in bos if date.fromisoformat(g).weekday() < 5]
         vadeli = _vadeli_mi(k)
         if not vadeli:
             # (1) önbellekten devir
