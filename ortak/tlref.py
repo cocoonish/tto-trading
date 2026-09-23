@@ -123,11 +123,20 @@ def ayristir(ham: bytes, tur: str) -> dict[_dt.date, float]:
     return out
 
 
+# İstek başlığı. HTTP başlıkları latin-1 ile kodlanır: Türkçe bir harf
+# ("hattı") isteği daha AĞA ÇIKMADAN UnicodeEncodeError ile düşürür — 23.09.2026
+# uçtan uca koşusu tam bunu ölçtü, duman ise `indir`i sahteyle değiştirdiği için
+# görmedi. Değer, keşif koşularında Borsa İstanbul'dan 200 alan başlığın kendisi;
+# duman sınaması kodlanabilirliğini ayrıca sorar.
+BASLIK = {"User-Agent": ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                         "AppleWebKit/537.36 (KHTML, like Gecko) "
+                         "Chrome/148.0.0.0 Safari/537.36")}
+
+
 def indir(tur: str, zaman_asimi: int = 30) -> bytes:
     """Ağa çıkar. requests; zaman aşımı açık (ortak/sitecustomize de dayatır)."""
     import requests
-    r = requests.get(ADRES[tur], timeout=zaman_asimi,
-                     headers={"User-Agent": "Mozilla/5.0 (tto-trading veri hattı)"})
+    r = requests.get(ADRES[tur], timeout=zaman_asimi, headers=BASLIK)
     r.raise_for_status()
     return r.content
 
@@ -184,8 +193,12 @@ def cerceveye_ekle(df, kolonlar: dict[str, str], bugun: _dt.date | None = None):
             bist = ayristir(indir(tur), tur)
         except Exception as ex:  # ağ, biçim — uzantı bir iyileştirmedir, ölçümü düşürmez
             bilgi[kolon] = {"durum": "indirilemedi", "hata": f"{type(ex).__name__}"}
-            uyarilar.append(f"TLREF: Borsa İstanbul dosyasına ulaşılamadı; son gün "
-                            f"EVDS'in verdiği gün olarak kaldı.")
+            # Okura bir kez: oran ve endeks aynı yayımcının iki dosyası, iki satır
+            # aynı cümleyi tekrarlar. Hangi dosyanın düştüğü `bilgi`de adıyla durur.
+            u = ("TLREF: Borsa İstanbul dosyasına ulaşılamadı; son gün "
+                 "EVDS'in verdiği gün olarak kaldı.")
+            if u not in uyarilar:
+                uyarilar.append(u)
             continue
         yeni, b = uzat(df[kolon], bist, tur, bugun)
         bilgi[kolon] = b

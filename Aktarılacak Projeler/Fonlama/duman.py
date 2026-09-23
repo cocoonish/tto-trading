@@ -431,9 +431,55 @@ try:
     sina("kaynağa ulaşılamazsa hat DÜŞMÜYOR, çerçeve aynı, uyarı okur dilinde",
          _G3["tlref"].equals(_G["tlref"]) and len(veri._UYARI) > _once
          and "Borsa İstanbul" in veri._UYARI[-1] and ".zip" not in veri._UYARI[-1])
+    _, _uy2, _bi2 = _tl.cerceveye_ekle(_G, {"tlref": "oran", "tlref_endeks": "endeks"})
+    sina("iki dosya birden düşünce okura TEK cümle gider, hangisinin düştüğü bilgide adıyla",
+         len(_uy2) == 1 and set(_bi2) == {"tlref", "tlref_endeks"}
+         and all(b["durum"] == "indirilemedi" for b in _bi2.values()), str(_uy2))
 finally:
     _tl.indir = _gercek_indir
     veri._SON.pop("gun", None)
+
+# Yukarıdaki maddeler `indir`i SAHTEYLE değiştiriyor, yani ağ yolunun kendisini
+# hiç koşturmuyor. 23.09.2026 uçtan uca koşusu tam orada düştü: istek başlığında
+# Türkçe bir harf vardı ve http.client başlığı latin-1 ile kodlarken istek AĞA
+# ÇIKMADAN UnicodeEncodeError verdi. GERÇEK `indir` bu yüzden yerel bir sunucuya
+# karşı koşturulur — ağa çıkmaz, ama istek kurulumu, başlık kodlaması ve yanıtın
+# okunması üretimle aynı yoldan geçer.
+import http.server as _hs  # noqa: E402
+import threading as _th  # noqa: E402
+
+_GELEN: dict = {}
+
+
+class _Sunucu(_hs.BaseHTTPRequestHandler):
+    def do_GET(self):  # noqa: N802
+        _GELEN["ua"] = self.headers.get("User-Agent")
+        govde = _bist_zip(_bist, endeks=self.path.endswith("endeks.zip"))
+        self.send_response(200)
+        self.send_header("Content-Length", str(len(govde)))
+        self.end_headers()
+        self.wfile.write(govde)
+
+    def log_message(self, *a):  # koşu kaydını kirletmesin
+        pass
+
+
+_srv = _hs.HTTPServer(("127.0.0.1", 0), _Sunucu)
+_th.Thread(target=_srv.serve_forever, daemon=True).start()
+_gercek_adres = dict(_tl.ADRES)
+try:
+    _tl.ADRES["oran"] = f"http://127.0.0.1:{_srv.server_port}/oran.zip"
+    _tl.ADRES["endeks"] = f"http://127.0.0.1:{_srv.server_port}/endeks.zip"
+    try:
+        _yerel = _tl.ayristir(_tl.indir("oran", zaman_asimi=10), "oran")
+        _hata = ""
+    except Exception as ex:  # maddenin kendisi düşmesin; hata adıyla yazılsın
+        _yerel, _hata = {}, f"{type(ex).__name__}: {ex}"
+    sina("GERÇEK indir (yerel sunucu): başlık kodlanıyor, istek gidiyor, dosya ayrışıyor",
+         _yerel == _oku and bool(_GELEN.get("ua")), _hata or str(_GELEN))
+finally:
+    _tl.ADRES.update(_gercek_adres)
+    _srv.shutdown()
 sina("uzantı kos()'ta EVDS çekiminin hemen ardında (tüketicisi var)",
      "tlref_uzantisi(g)" in inspect.getsource(veri.kos))
 
