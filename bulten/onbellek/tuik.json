@@ -1,5 +1,5 @@
 {
- "zaman": "2026-09-23T04:20:37",
+ "zaman": "2026-09-24T04:21:35",
  "veri": [
   {
    "tarih": "2026-09-24",
@@ -208,6 +208,45 @@
    "beklenti_sayi": null,
    "onceki": "",
    "not_": "Kamu Haznedarlığı İstatistikleri (Kamu Haznedarlığı Yönetmeliği Kapsamındaki Kurumların Mevduat ve Menkul Kıymet İstatistikleri)"
+  },
+  {
+   "tarih": "2026-10-15",
+   "saat": "11:00",
+   "ulke": "TR",
+   "olay": "HMB: Bütçe dengesi (Eylül 2026)",
+   "onem": 1,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "Merkezi Yönetim Bütçe Denge Tablosu"
+  },
+  {
+   "tarih": "2026-10-15",
+   "saat": "14:30",
+   "ulke": "TR",
+   "olay": "TCMB: Menkul kıymet ist. (41. Hafta 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": " Menkul Kıymet İstatistikleri"
+  },
+  {
+   "tarih": "2026-10-15",
+   "saat": "14:30",
+   "ulke": "TR",
+   "olay": "TCMB: Haftalık para-banka (41. Hafta 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "Haftalık Para ve Banka İstatistikleri "
   }
  ]
 }
