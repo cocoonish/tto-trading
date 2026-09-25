@@ -1889,34 +1889,34 @@
     }
   },
   {
-    "timestamp": "2026-09-25T06:49:10.438593+00:00",
+    "timestamp": "2026-09-25T17:15:27.855688+00:00",
     "indices": {
       "EURUSD": {
-        "value": -0.1692,
+        "value": -0.2115,
         "category": "Bearish"
       },
       "USDJPY": {
-        "value": -0.0441,
-        "category": "Neutral"
+        "value": -0.1655,
+        "category": "Bearish"
       },
       "USDCHF": {
-        "value": 0.6749,
+        "value": 0.6317,
         "category": "Extremely Bullish"
       },
       "GBPUSD": {
-        "value": -0.3499,
+        "value": -0.2894,
         "category": "Bearish"
       },
       "AUDUSD": {
-        "value": -0.047,
+        "value": -0.0934,
         "category": "Neutral"
       },
       "NZDUSD": {
-        "value": -0.313,
+        "value": -0.4393,
         "category": "Bearish"
       },
       "USDCAD": {
-        "value": 0.6058,
+        "value": 0.5381,
         "category": "Extremely Bullish"
       },
       "USDNOK": {
@@ -1928,31 +1928,31 @@
         "category": "Neutral"
       },
       "XAUUSD": {
-        "value": -0.0678,
+        "value": 0.0755,
         "category": "Neutral"
       },
       "XAGUSD": {
-        "value": -0.2413,
-        "category": "Bearish"
-      },
-      "SPX": {
-        "value": -0.1823,
-        "category": "Bearish"
-      },
-      "UST2Y": {
-        "value": 0.0417,
+        "value": 0.0298,
         "category": "Neutral"
       },
+      "SPX": {
+        "value": -0.0496,
+        "category": "Neutral"
+      },
+      "UST2Y": {
+        "value": -0.1048,
+        "category": "Bearish"
+      },
       "UST10Y": {
-        "value": 0.1005,
-        "category": "Bullish"
+        "value": -0.0954,
+        "category": "Neutral"
       },
       "BIST100": {
-        "value": -0.5386,
-        "category": "Extremely Bearish"
+        "value": -0.3264,
+        "category": "Bearish"
       }
     },
-    "veri_sonu": "2026-09-25T06:31:19+00:00",
+    "veri_sonu": "2026-09-25T17:11:00+00:00",
     "regime": {
       "label": "Transitioning",
       "basket_spread": 0.0334,
