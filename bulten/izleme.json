@@ -1,6 +1,6 @@
 {
   "_aciklama": "İZLEME DEFTERİ — bültenin verdiği sözlerin kaydı. Bülten 'şunu izleyeceğiz', 'yarın belli olacak', 'sebebi anlaşılmıyor' dediği an buraya bir kayıt düşülür. Her koşuda yazı katmanı önce bu defteri açar: vadesi gelen ya da gelişme olan her kayıt için bültende doğal bir yerde hesap verilir — 'dün şuna bakacağız demiştik, işte olan bu' tonunda, madde listesi olarak değil. Cevabı bulunan kayıt kapatılır (durum: kapandı + sonuç), gelişme olmayan kayıt açık kalır ve zorla anılmaz. Bu defter bülteni birbirini takip eden bir yazı dizisi yapar; yazarı kısıtlamak için değil, unutmasın diye vardır.",
-  "_son_guncelleme": "2026-09-20",
+  "_son_guncelleme": "2026-09-25",
   "kayitlar": [
     {
       "konu": "RBOB benzinin tek günde %10,59 düşüşünün sebebi",
@@ -410,12 +410,12 @@
     {
       "konu": "Fon krizinin bedeli kurda değil rezervde ödendi",
       "acilis": "2026-09-20",
-      "durum": "acik",
+      "durum": "kapandi",
       "soz": "17 Eylül'de günlük net rezerv tahmini tek günde 5,5 milyar dolar azalarak 64,4 milyar dolardan 58,9 milyar dolara indi; bir hafta öncesine göre düşüş 7,2 milyar dolar. Aynı hafta dolar/lira yalnız %0,38 arttı — yüzde küçük, ama bu kurun kendi haftalık oynaklığı %0,19 olduğu için 2,0 standart sapma, yani ölçtüğümüz elli bir enstrümanın haftalık listesinde üçüncü en olağandışı hareket. Borsa aynı hafta %8,18 düştü. Diyoruz ki kurdaki sakinlik bir denge değil bir FİNANSMAN kararıdır: hisse tarafındaki şok kura geçirilmedi, faturası rezervde birikti. Bu tercih sürdürülebilirse kur sakin kalır ve rezerv kalitesi (%27,9) aşınır; sürdürülemezse sakinlik önce kurda kırılır.",
       "ne_bakilacak": "24 Eylül'de yayımlanacak 18 Eylül haftasının resmî rezerv serisi: brüt rezervin 179,1 milyar dolardan ve swap hariç net rezervin 50,0 milyar dolardan ne kadar gerilediği; rezerv kalitesinin %27,9'un altına inip inmediği; dolar/liranın haftalık standart sapmasının 2,0'nin altına dönüp dönmediği. Rezerv yerinde kalır ve kur da sakin kalırsa satışın büyüklüğü hakkındaki hükmümüz çürür.",
       "vade": "2026-10-01",
-      "sonuc": "",
-      "isabet": ""
+      "sonuc": "18 Eylül haftasının resmî serisi 24 Eylül'de yayımlandı ve kaydın sorduğu üç ölçünün üçü de aynı yöne çıktı. Brüt rezerv 179,1 milyar dolardan 174,8 milyar dolara, swap hariç net rezerv 50,0 milyar dolardan 43,1 milyar dolara, net rezerv 62,3 milyar dolardan 55,8 milyar dolara indi. Rezerv kalitesi — swap hariç net rezervin brüt rezerve oranı — %27,9'dan %24,7'ye geriledi, yani kaydın eşiğinin 3,2 puan altına. Aynı hafta dolar/lira %0,38 arttı ve sakin kaldı. Hüküm tuttu: hisse tarafındaki şok kura değil rezerve yazıldı ve bu bir denge değil bir finansman tercihiydi. Resmî seri günlük tahminin işaret ettiği büyüklüğü de doğruladı; haftalık düşüşün 6,9 milyar dolarlık kısmı rezervin borçlanılmamış bacağından geldi. Açık kalan soru tercihin ne kadar sürdürülebileceğidir ve o ayrı bir kaydın konusudur.",
+      "isabet": "tuttu"
     },
     {
       "konu": "Enerjide risk ham petrolden ürüne kaydı",
