@@ -1,0 +1,20 @@
+# bulten:2026-09-25 · 2026-09-25T04:42:52+00:00 · https://x.com/i/status/2103344454505492647
+
+Sabah Notu — 25 Eylül 2026
+
+Ölçülen elli bir satırın ellisi 24 Eylül Perşembe kapanışını taşıyor; yalnız Bitcoin satırı 23 Eylül'de duruyor, çünkü kaynak perşembe barını boş verdi. O ellinin içinde günün Türkiye hikâyesi tek bir yerde toplanıyor ve o yer kur değil: dolar/lira yalnız %0,03 artarak 48,8509'a geldi, buna karşılık BIST 100 %2,74 düşerek 12.888'e, banka endeksi %3,06, sanayi endeksi %2,26, dolar bazlı Türkiye endeksi %2,8 geriledi. Bir ülkenin hisse tarafı bu hızda satılırken parasının kımıldamaması bir denge değil, bir tercihtir — ve dün öğleden sonra yayımlanan resmî seri o tercihin fiyatını verdi. 18 Eylül haftasının TCMB verisi üç ölçüyü birden aşağı taşıdı: brüt rezerv 179,1 milyar dolardan 174,8 milyar dolara, net rezerv 62,3 milyar dolardan 55,8 milyar dolara, swap hariç net rezerv 50,0 milyar dolardan 43,1 milyar dolara indi. Sonuncusunun düşüşü tek haftada 6,9 milyar dolar. Bunun anlamı miktardan çok bileşimde: rezerv kalitesi — swap hariç net rezervin brüt rezerve oranı — %24,7'ye geriledi, yani brüt rezervin yalnız dörtte biri borçlanılmamış ve swap'a bağlı olmayan kısım. Aynı brüt rezervin %63,1'i altın ve altın dün %0,47 düşerek elli iki haftalık aralığının %34'üne indi.
+
+Gündem
+Kilit gelişme: Rezerv verisi geldi ve büyüklük tahmini doğruladı. TCMB'nin 24 Eylül 14:30'da yayımladığı 18 Eylül haftası verisinde brüt rezerv 4,3 milyar dolar azalarak 174,8 milyar dolara, net rezerv 6,5 milyar dolar azalarak 55,8 milyar dolara…
+Türkiye makro: Haftalık para ve banka istatistiklerinin kredi bacağı freni değil gevşemeyi gösterdi.
+Türkiye politika: Fon piyasasındaki düzenleyici sürecin takvimi uzadı ve bu, borsadaki satışın neden bitmediğini açıklayan tek maddedir.
+Jeopolitik: Ortadoğu'da gün iki zıt haberle geçti ve petrol ikisini de fiyatladı. Önce üst düzey bir İran askerî yetkilisinin, saldırıya uğraması hâlinde çatışmayı Hint Okyanusu'na kadar genişletebileceğini söylemesi…
+Küresel makro: Federal Rezerv cephesinden gelen iki konuşma aynı yöne bastı. New York Fed Başkanı Williams bu yıl bir faiz artırımı daha görülmesinin makul olduğunu söyledi…
+
+Günün öne çıkanları: MOVE (tahvil oynaklığı) +%9,57 · Doğal gaz (Henry Hub) +%9,06 · Brent +%3,41 · VIX +%3,23 · BIST Bankacılık −%3,06
+
+Pano: USD/TRY 48,85 (+0,01) · 24 Eyl · 1 aylık yıllıklandırılmış deval. hızı %21,2 (−0,6) · 24 Eyl · Net rezerv 55,8 mlr USD (−6,5) · 18 Eyl · Swap hariç net rezerv 43,1 mlr USD (−6,9) · 18 Eyl · Net rezerv (günlük tahmin) 59,7 mlr USD (+0,9) · 23 Eyl
+
+Beklenen: Bugün takvimde Türkiye yayımı yok; hafta pozisyon günüyle kapanıyor. Önümüzdeki hafta 30 Eylül'de ağustos işgücü ve dış ticaret geliyor — Brent'in yılbaşından bu yana %75,18 arttığı bir yılda dış ticaret bacağı, temmuzda 40,7 milyar dolara genişleyen on iki aylık cari açığın yönünü belirliyor. 1 Ekim 14:30'da TCMB haftalık para-banka istatistikleri 25 Eylül haftasını verecek ve rezerv erimesinin sürüp sürmediğini, kredi büyümesinin %26,6'dan hangi yöne gittiğini aynı yayımda ölçecek.
+
+Ölçüm ve yorumdur; yatırım tavsiyesi değildir.
