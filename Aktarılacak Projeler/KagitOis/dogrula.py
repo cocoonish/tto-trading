@@ -413,7 +413,7 @@ def metin(o: dict) -> None:
                           sayi(x["donus_gurultu_3ay"], 2)], "katalog")
     satir_sina(t, "2 yıllık getiri", [None, sayi(kt["2y"]["yari_omur_ay"], 1) + " ay", None, None, None,
                                       sayi(kt["2y"]["donus_gurultu_3ay"], 2)], "katalog")
-    metinde(m, f"PCA fly'da bu oran {sayi(kt['2y5y7y_pca']['donus_gurultu_3ay'], 2)}", "PCA fly oranı")
+    metinde(m, f"PCA fly'ın 4,1 aylık yarı ömrüyle {sayi(kt['2y5y7y_pca']['donus_gurultu_3ay'], 2)} verir", "PCA fly oranı")
 
     # 3.5 ağırlıklar
     kl = o["kalicilik"]
@@ -730,9 +730,11 @@ def kontrol_w3(o, m, tl):
                           f"{yz(a['forward'])} · {yz(b['forward'])}"], "W3 ufuk tablosu")
         iddia(abs(a["getiri_Th"] + a["basabas_bp"] / 100 - a["forward"]) <= 0.015 and
               abs(b["getiri_Th"] + b["basabas_bp"] / 100 - b["forward"]) <= 0.015, f"özdeşlik satırı {s}")
-    for k, ad in (("5", "5 yılda"), ("2", "2 yılda")):
-        metinde(m, f"{ad} {sayi(h91[k]['basabas_bp'] / h30[k]['basabas_bp'], 1)} katı", "W3 ufuk oranı")
-    metinde(m, f"{sayi(h91['1']['basabas_bp'] / h30['1']['basabas_bp'], 1)} katı** ({bp(h30['1']['basabas_bp'])}'ye karşı "
+    metinde(m, f"gün oranı 91/30 = {sayi(91 / 30, 2)}", "W3 gün oranı")
+    for k in ("0.5", "3", "5", "7"):
+        iddia(abs(h91[k]["basabas_bp"] / h30[k]["basabas_bp"] - 3.1) < 0.1, f"{k} yılda başabaş oranı ≈ 3,1")
+    metinde(m, f"2 yılda {sayi(h91['2']['basabas_bp'] / h30['2']['basabas_bp'], 1)} kat", "W3 ufuk oranı")
+    metinde(m, f"{sayi(h91['1']['basabas_bp'] / h30['1']['basabas_bp'], 1)} kat** ({bp(h30['1']['basabas_bp'])}'ye karşı "
                f"{bp(h91['1']['basabas_bp'])})", "W3 ufuk oranı 1y")
     metinde(m, f"{sayi(h91['1']['tasima'] / h30['1']['tasima'], 1)} kat büyür", "W3 1y taşıma oranı")
     metinde(m, f"({yz(h30['1']['tasima'], arti=True)}'den {yz(h91['1']['tasima'], arti=True)}'ya)", "W3 1y taşıma")
@@ -846,7 +848,7 @@ def kontrol_w3(o, m, tl):
     metinde(m, f"2 yıllık roll {bp(orh['2y']['roll_bp'])}. 2 yıl", "W3 eğrinin şekli")
 
     # ───────────────────────── 3.4 ayrışma
-    metinde(m, f"({ta['ilk']} – {ta['son']} arası {ta['n_pencere']} ay sonu", "W3 pencere tanımı")
+    metinde(m, f"({ay(ta['ilk'])} – {ay(ta['son'])} arası {ta['n_pencere']} ay sonu", "W3 pencere tanımı")
     t = tablo(tl, "Vade (uzun kâğıt, 162 pencere, 3 ay)")
     for k, s in V5:
         v = ta["vade"][k]
@@ -1008,10 +1010,10 @@ def kontrol_w3(o, m, tl):
                           f"{sayi(H['ort'], 1, True)} · {sayi(H['t'], 1, True)}",
                           " · ".join(sayi(ff[f]["gecikme"][g]["tasima"], 1, True) for g in ("1", "5", "10", "21"))],
                    "W3 fly taşıması")
-    metinde(m, f"{ff['2y5y7y']['tasima']['n']} pencere (2016-02'den)", "W3 fly kapsamı")
+    metinde(m, f"{ff['2y5y7y']['tasima']['n']} pencere (02.2016'dan)", "W3 fly kapsamı")
     iddia(ff["2y5y7y"]["tasima"]["yarilar"]["2013_2019"]["n"] == 47, "örneklem dışı ilk yarı 2016-02 – 2019-12 (47 ay)")
     T1 = ff["1y2y5y"]["tasima"]
-    metinde(m, f"{bp(T1['ort'], True, 1)}, t {sayi(T1['t'], 1)}, iki yarıda da artı "
+    metinde(m, f"{bp(T1['ort'], True, 1)}, t {sayi(T1['t'], 1)}, iki yarıda da artı\n  "
                f"({sayi(T1['yarilar']['2013_2019']['ort'], 1, True)} · {sayi(T1['yarilar']['2020_2026']['ort'], 1, True)})",
             "W3 1y2y5y kenarı")
     iddia(T1["t"] >= 2 and all(abs(ff[f]["tasima"]["t"]) < 2 for f in ("2y5y7y", "3y5y7y", "2y3y5y")),
@@ -1050,8 +1052,14 @@ def kontrol_w3(o, m, tl):
                [f"{st['n']} pencere, DV01-nötr", f"{bp(et['ort'], True, 1)}, t {sayi(et['t'], 1)}; iki yarıda artı", None],
                "W3 özet")
     satir_sina(t, "(iv) Fly taşıması",
-               [f"{len(ff)} fly, {T1['n']} pencere, örneklem dışı", f"yalnız 1y2y5y: {bp(T1['ort'], True, 1)}, t {sayi(T1['t'], 1)}",
-                None], "W3 özet")
+               [f"{len(ff)} fly, {T1['n']} pencere, örneklem dışı",
+                f"yalnız 1y2y5y: {bp(T1['ort'], True, 1)}, t {sayi(T1['t'], 1)}; hep short {bp(-ff['1y2y5y']['hep_long']['ort'], True, 1)}",
+                f"hep short'a üstünlüğü {sayi(T1['ort'] + ff['1y2y5y']['hep_long']['ort'], 1)} bp; tek fly'da ve hızlı icrayla; gecikmede eriyor"],
+               "W3 özet")
+    # (iv) metni: doğru kıyas hep short (trendle kazanan taraf)
+    hl = ff['1y2y5y']['hep_long']
+    metinde(m, f"her ay short 1y2y5y durmak {bp(-hl['ort'], True, 1)} verirdi (t {sayi(-hl['t'], 1)})", "W3 hep short")
+    metinde(m, f"üstünlüğü çeyrekte yalnız {sayi(T1['ort'] + hl['ort'], 1)} bp", "W3 hep short farkı")
     satir_sina(t, "(v) Taşıma süzgeç olarak", [f"{len(ff)} fly, dönüş işlemleri", None, None], "W3 özet")
 
     # ───────────────────────── 3.7 fonlama rejimi
@@ -1076,7 +1084,7 @@ def kontrol_w3(o, m, tl):
     metinde(m, f"dönem dilinde sırasıyla {yz(kf['F_temsili'])}, {yz(kf['F_politika'])} ve {yz(kf['F_bugun'])}", "W3 dönem dili")
     t = tablo(tl, "Vade (temsili OIS receive, fixing taşıması, bp)")
     metinde(m, f"Fixing {yz(fx['temsili'])} (temsili, tavan) | Fixing {yz(fx['politika'])} (politika faizi) | "
-               f"Fixing {yz(fx['bugun'])} (22.09.2026)", "W3 fixing başlıkları")
+               f"Fixing {yz(fx['bugun'])} (21.09.2026)", "W3 fixing başlıkları")
     for k, s in (("3m", "3 ay"), ("6m", "6 ay"), ("1y", "1 yıl"), ("2y", "2 yıl"), ("5y", "5 yıl"), ("10y", "10 yıl")):
         x = kf[k]
         satir_sina(t, s, [yz(x["K"]), n0(x["temsili"]), n0(x["politika"]), n0(x["bugun"])], "W3 fixing taşıması")
@@ -1160,9 +1168,13 @@ def kontrol_w3(o, m, tl):
     kyr = rj["kuyruk"]
     metinde(m, f"50:50'de {bp(kyr['2y5y7y_long50']['satis']['hareket'])} (satış), PCA'da "
                f"{bp(kyr['2y5y7y_longpca']['ralli']['hareket'])}", "W3 fly kuyruğu")
-    metinde(m, f"ortalama {bp(rj['faz']['2y5y7y_long50']['artırım']['toplam'])}, taşıma dahil", "W3 fly artırım")
-    metinde(m, f"(500 mn TL'lik 1 yıllık receive'de {sayi(orn['carry_tavan'], 2, True)} yerine "
-               f"{sayi(orn['carry_tavan_basit'], 2, True)} mn", "W3 tuzak basit fixing")
+    metinde(m, f"ortalama {bp(rj['faz']['2y5y7y_long50']['artırım']['toplam'])}, şahin sürpriz kovasında\n"
+               f"{bp(rj['kova']['2y5y7y_long50']['sahin']['toplam'])}, taşıma dahil", "W3 fly artırım")
+    metinde(m, f"güvercin sürpriz kovasında {bp(rj['kova']['2y5y7y_long50']['guvercin']['toplam'], True)}", "W3 fly K9 lehte")
+    iddia(rj["kova"]["2y5y7y_long50"]["guvercin"]["toplam"] > 0 > rj["kova"]["2y5y7y_long50"]["sahin"]["toplam"],
+          "long 2y5y7y güvercin kovada kazanır, şahinde kaybeder")
+    metinde(m, f"(500 mn TL'lik 1 yıllık receive gerçekte {sayi(orn['carry_tavan'], 2, True)} mn öder, kısayol\n   "
+               f"{sayi(orn['carry_tavan_basit'], 2, True)} mn gösterir", "W3 tuzak basit fixing")
     iddia(0.28 < (orn["carry_tavan"] - orn["carry_tavan_basit"]) / orn["carry_tavan"] < 0.36, "basit fixing ≈ üçte bir")
     metinde(m, f"aylığın {sayi(h91['1']['basabas_bp'] / h30['1']['basabas_bp'], 1)} katıdır", "W3 tuzak ufuk")
     metinde(m, f"tavanda\n   {sayi(kf['3m']['temsili'])}, bugünkü fixingle {bp(kf['3m']['bugun'], True)}", "W3 tuzak fonlama")
@@ -1268,7 +1280,7 @@ def kontrol_w4(o: dict, m: str, tl: list) -> None:
         if any(abs(a + b) > 0.5 for a, b in zip(fm[k], fm[eski])):
             hatalar.append(f"W4 faktör: {k} {eski}'nin aynası değil")
     x = fm["2s7s_yassi_dv01"]
-    metinde(mn, f"seviye yükselişinde {sayi(-x[0], 0)} TL, aynı DV01'lük 2 yıllık uzun kâğıdın seviye riskinin "
+    metinde(mn, f"seviye yükselişinde {sayi(-x[0], 0)} TL, aynı DV01'lik 2 yıllık uzun kâğıdın seviye riskinin "
                 f"yaklaşık {yz(100 * x[0] / -fm['2y_uzun'][0], 0)}'si", "W4 faktör dikleştirici")
     metinde(mn, f"dikleştiriciye {sayi(x[2] / 1e6, 1)} mn TL kaybettirir", "W4 faktör dikleştirici")
     metinde(mn, f"yükselişinde {sayi(fm['fly50_long'][0], 0)} TL yazar", "W4 long fly")
@@ -1510,10 +1522,13 @@ def kontrol_w4(o: dict, m: str, tl: list) -> None:
                 f"{bp(ys['2s7s_diklestirici_bp'], True)} toplar",
                 f"güvercin: 2s5s {ti(d5['guvercin'])} · 2s7s {ti(d7['guvercin'])}", None], "W4 beklenti")
     satir_sina(t, "K2 · Gevşeme fiyatlanandan yavaş ya da duraklama",
-               [None, None, None, None, f"2s5s yassılaştırıcı {bp(ys['2s5s_yassilastirici_bp'], True)} öder",
-                f"şahin: 2s5s dikleştirici {ti(d5['sahin'])} · orta: {ti(d5['orta'])}",
-                f"fiyatlanan indirim gelir; olay tarihine bağla — taşıma çeyrekte {sayi(-ys['2s5s_yassilastirici_bp'])} "
-                f"bp yataylaşma ister"], "W4 beklenti")
+               [None, None, None, None,
+                f"2 yıllık pay {bp(-o['bugun']['tasima']['2']['basabas_bp'], True)} toplar · "
+                f"2s5s yassılaştırıcı {bp(ys['2s5s_yassilastirici_bp'], True)} öder",
+                f"orta kova: 2s5s dikleştirici tarihte {sayi(d5['orta']['toplam'], 0, True)} · %{sayi(d5['orta']['isabet'])}, "
+                f"bugünkü taşımayla {sayi(o['senaryo_matrisi']['2s5s_diklestirici']['orta']['ort'], 0, True)} · sabit faz: "
+                f"{sayi(o['senaryo_matrisi']['2s5s_diklestirici']['sabit']['ort'], 0, True)} — yassılaştırıcı ikisinde de "
+                f"ortalamada kaybeder (6.3)", None], "W4 beklenti")
     satir_sina(t, "K3 · Sıkılaşma, artırım döngüsü",
                [None, None, None, None, f"2s7s yassılaştırıcı {bp(ys['2s7s_yassilastirici_bp'], True)} öder",
                 f"artırım fazı: 2s7s dikleştirici {ti(ag['2s7s_diklestirici']['artırım'])} · artırım ayları: 2s7s "
@@ -1541,7 +1556,7 @@ def kontrol_w4(o: dict, m: str, tl: list) -> None:
                [None, f"2y receive · 7y pay ({W7} kat DV01)", f"2 yıllığı al · 7 yıllığı sat ({W7} kat DV01)",
                 f"regresyon {W7}: DV01-nötr hâl satışta seviye bacağıyla kaybeder",
                 f"regresyon ağırlıklı 2s7s dikleştirici {bp(c7r, True)} toplar",
-                f"ayı dikleşme ayların {yz(kd['pay']['ayı dikleşme'], 1)}'ı · {gun(d21['tarih'])}: bir ayda 5y "
+                f"ayı dikleşme ayların {yz(kd['pay']['ayı dikleşme'], 1)}'si · {gun(d21['tarih'])}: bir ayda 5y "
                 f"{sayi(d21['hareket']['1a']['5y'], 0, True)}, 2s7s {sayi(d21['hareket']['1a']['2s7s'], 0, True)}",
                 f"kısa uç da satılır (ayı yataylaşma, ayların {yz(kd['pay']['ayı yataylaşma'], 1)}'i); beta kayar"],
                "W4 beklenti")
@@ -1780,7 +1795,7 @@ def kontrol_w5(o, m, tl):
     D = 2 * bk["5050"]["kanat_dv01"][0]
     iddia(abs(D - pv * 1e6 * bb["mod_dur"]["5y"] * 1e-4) < 10, "gövde DV01'i = piyasa değeri × durasyon")
     iddia(abs(sum(bk["nakit"]["kanat_dv01"]) - D) <= 2, "nakit + durasyon nötr: kanat DV01 toplamı = gövde")
-    M(f"(piyasa değeri {sayi(pv, 1)} mn TL, DV01'i {sayi(D)} TL/bp)", "5.1 gövde")
+    M(f"(piyasa değeri {sayi(pv, 1)} mn TL, DV01'i {sayi(pv * 1e6 * 5 / (1 + o['bugun']['egri']['n5y'] / 100) * 1e-4)} TL/bp)", "5.1 gövde")
     t = tablo(tl, "Long 2y5y7y kâğıtta: kural (100 mn TL 5 yıllık gövde satılır)")
     for k, s in (("nakit", "Nakit + durasyon nötr"), ("5050", "50:50 DV01"), ("pca", "PCA-nötr")):
         x = bk[k]
@@ -2111,7 +2126,7 @@ def kontrol_w5(o, m, tl):
     M(f"(z {sayi(F['1y3y5y_pca']['z36'], 2, True)}, {sayi(F['1y3y7y_pca']['z36'], 2, True)}, "
       f"{sayi(F['1y5y7y_pca']['z36'], 2, True)})", "5.4 PCA z")
     iddia(F["2y5y7y_50"]["sinyal"] == "yok" and round(F["2y5y7y_50"]["z36"], 2) == 1.0, "2y5y7y 50:50 z sınırda")
-    M(f"z'si {sayi(F['2y5y7y_50']['z36'], 2)}'dır", "5.4 2y5y7y z")
+    M(f"z'si {sayi(F['2y5y7y_50']['z36'], 2)}'dir", "5.4 2y5y7y z")
     buyuk = [k for k in F if abs(F[k]["z36"]) >= 0.5]
     ters = [k for k in buyuk if (F[k]["z36"] > 0) == (F[k]["tasima_long_bp"] > 0)]
     iddia(len(buyuk) == 14 and len(ters) == 13, "mutlak z ≥ 0,5 olan 14 yapının 13'ünde yön ters")
@@ -2142,7 +2157,8 @@ def kontrol_w5(o, m, tl):
     M(f"DV01 başına {bp(o['ois_roll_haritasi']['2y']['roll_bp'])}, kâğıtta {bp(rb['n2y'], True)}", "5.4 2 yıllık roll")
 
     # seçim yanlılığı ve masa
-    M(f"({bp(t1['ort'], True, 1)}, t {sayi(t1['t'], 1)}) ve o kenar sinyal 21 gün gecikince "
+    M(f"({bp(t1['ort'], True, 1)}, t {sayi(t1['t'], 1)}) — ama hep short 1y2y5y'ye üstünlüğü yalnız "
+      f"{sayi(t1['ort'] + ff['1y2y5y']['hep_long']['ort'], 1)} bp — ve sinyal 21 gün gecikince "
       f"{bp(ff['1y2y5y']['gecikme']['21']['tasima'], True, 1)}'ye eridi", "5.4 gecikme")
     M(f"çeyrekte {bp(ff['2y5y7y']['tasima']['ort'], b=1)} (t {sayi(ff['2y5y7y']['tasima']['t'], 1)})", "5.4 2y5y7y kuralı")
     M(f"ortalama {sayi(tm['ort_sure_ay']['n2y'], 1)} ay kaldı (3.2); bugünkü tepe {tm['bugun_sure_ay']} aydır",
@@ -2276,9 +2292,12 @@ def kontrol_w6(o, m, tl):
     dn = {e["tarih"]: e for e in o["donum_noktalari"]}
     ind = [e for e in o["donum_noktalari"] if e["yon"] == "indirim"]
     kaz = [sayi(e["hareket"]["3a"]["2y5y7y_pca"], 0, True) for e in ind if e["hareket"]["3a"]["2y5y7y_pca"] > 20]
-    metinde(m, f"({kaz[0]},\n{kaz[1]}, {kaz[2]})", "dönüm: 2y5y7y indirim")
+    metinde(m, f"\n({kaz[0]}, {kaz[1]}, {kaz[2]})", "dönüm: 2y5y7y indirim")
+    sayac["metin"] += 1
+    if not all(e["hareket"]["3a"]["2y5y7y_pca"] > 0 for e in ind):
+        hatalar.append("W6: 'indirim dönüşlerinin dördünde de long 2y5y7y PCA kazandı' tutmuyor")
     e21 = dn["2021-09-23"]
-    metinde(m, f"{bp(e21['hareket']['3a']['2y'], True)} yükseldiği\n{gun(e21['tarih'])} indirimidir "
+    metinde(m, f"{bp(e21['hareket']['3a']['2y'], True)}\nyükseldiği {gun(e21['tarih'])} indirimindedir "
                f"({sayi(e21['hareket']['3a']['2y5y7y_pca'], 0, True)})", "dönüm: 2021")
     e25 = dn["2025-04-17"]
     metinde(m, f"long 2y5y7y PCA {sayi(e25['hareket']['3a']['2y5y7y_pca'], 0, True)}\nbp kazandı ve aynı üç ayda 2 yıllık "
@@ -2523,7 +2542,8 @@ def kontrol_w6(o, m, tl):
               f"{sayi(fb['fly']['1y5y7y_50']['z36'], 2, True)}",
               f"1y3y5y PCA z {sayi(fb['fly']['1y3y5y_pca']['z36'], 2)}; 50:50 yüzdeliği {sayi(fb['fly']['1y3y5y_50']['yuzdelik'])}, "
               f"PCA yüzdeliği\n{sayi(fb['fly']['1y3y5y_pca']['yuzdelik'])}",
-              f"için {sayi(o['tasima_oynaklik']['5y_receive']['oran'], 2)})",
+              f"5 yıllık pay {sayi(-o['tasima_oynaklik']['5y_receive']['oran'], 2, True)}, long 2y5y7y PCA "
+              f"{sayi(o['tasima_oynaklik']['2y5y7y_longpca']['oran'], 2, True)}",
               f"taşıma/oynaklık oranı {sayi(H['2y5y7y_pca']['tasima_sigma'], 2, True)}",
               f"= {sayi(-(fb['basabas_bp']['n2y'] - 0.5 * fb['basabas_bp']['n1y'] - 0.5 * fb['basabas_bp']['n5y']), 0)}$ bp".replace("−", "-"),
               f"çeyrekte **{sayi(fb['basabas_bp']['n2y'] - 0.5 * fb['basabas_bp']['n1y'] - 0.5 * fb['basabas_bp']['n5y'], 0, True)} bp** toplar",
@@ -2779,7 +2799,7 @@ def kontrol_w7(o, m, tl):
             "W7 K7")
     rl = ar["ralli"]
     metinde(m, f"{rl['n']} ralli ayında 2", "W7 K7 aylık")
-    metinde(m, f"ortalama {bp(rl['2y'])}, 7 yıllık {bp(rl['7y'])}, 2s7s {bp(rl['2s7s'], True)}", "W7 K7 aylık")
+    metinde(m, f"ortalama {bp(rl['2y'])},\n  7 yıllık {bp(rl['7y'])}, 2s7s {bp(rl['2s7s'], True)}", "W7 K7 aylık")
     metinde(m, f"ayların yalnız {yz(o['kadran']['pay']['boğa yataylaşma'], 1)}'i", "W7 K7 kadran")
     metinde(m, f"long 1y2y5y (50:50) {rb(ku['1y2y5y_long50']['ralli'], False)}", "W7 K7 fly")
     metinde(m, f"receive {bp(orh['1y']['toplam_bp'])}, 5 yıllık {bp(orh['5y']['toplam_bp'])}, 7 yıllık "
@@ -3017,8 +3037,9 @@ def kontrol_w7(o, m, tl):
     metinde(m, f"en büyük aylık\ndüşüşü {bp(y5['en_buyuk_dusus'][0])} ({ay(y5['en_buyuk_dusus'][1])})", "W7 pratik 5")
     metinde(m, f"son 36 aylık aylık σ {sayi(y5['sigma36'])} bp", "W7 pratik 5")
     i2p = ie["2y"]["pca"]
-    metinde(m, f"önce {bp(i2p['once_ort'], True, 1)} (t = {sayi(i2p['once_t'], 2)}), sonra "
-               f"{bp(i2p['sonra_ort'], False, 1)}", "W7 pratik 6")
+    metinde(m, f"PCA {bp(i2p['once_ort'], True, 1)}; t de aynı ({sayi(ie['2y']['50']['once_t'], 2)} · "
+               f"{sayi(i2p['once_t'], 2)})", "W7 pratik 6")
+    metinde(m, f"PCA {bp(i2p['sonra_ort'], False, 1)} — 50:50'nin", "W7 pratik 6")
     metinde(m, f"sapması {sayi(i2['taban_sd'])} bp", "W7 pratik 6")
     metinde(m, f"fly {bp(i2['sonra_ort'], True, 1)} (t = {sayi(i2['sonra_t'], 2)})", "W7 pratik 6")
     metinde(m, f"50:50 kotasyonda {bp(fh['1y2y3y_50']['seviye_bp'], True)} (yüzdelik "

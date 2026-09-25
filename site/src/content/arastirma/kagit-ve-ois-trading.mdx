@@ -21,9 +21,11 @@ import BarbellBulletHesaplayici from '../../components/BarbellBulletHesaplayici.
 Bir faiz pozisyonu para kazanmak için üç yoldan birini kullanır. **Taşıma**: pozisyon kendi
 sabit oranıyla ya da getirisiyle tahakkuk ederken fonlaması ya da yüzen bacağı işler; fark
 beklerken kazanılan ya da ödenen kiradır. **Roll-down**: eğri kımıldamasa da vade kısalır ve
-pozisyon eğrinin başka bir noktasına kayar. **Hareket**: eğri, piyasanın zaten fiyatladığı
-patikadan — forward'lardan — saparsa pozisyon bu sapmayı kazanır ya da kaybeder. İlk ikisinin
-toplamı eğri yerinde kalırsa kesin olarak elde edilen getiridir; üçüncüsü görüştür.
+pozisyon eğrinin başka bir noktasına kayar. **Hareket**: eğrinin bugünkü yerinden
+kımıldamasının P&L'idir. Eğri tam forward'ların — piyasanın zaten fiyatladığı patikanın —
+söylediği yere giderse hareket taşıma ile roll'u birebir geri alır ve toplam sıfırdır. İlk
+ikisinin toplamı eğri yerinde kalırsa kesin olarak elde edilen getiridir; eğrinin forward'lara
+göre nereye düşeceği görüştür.
 
 Bir görüşü pozisyona çevirmek dört soruyla yapılır. **Hangi hareketi bekliyorum** — eğrinin
 seviyesi mi değişecek, eğimi mi, bükümü mü, yoksa fonlama rejimi mi? **Piyasanın
@@ -39,8 +41,8 @@ faizi ödemek ya da almak kararının anatomisi. Ardından **taşıma ve roll-do
 tam tanımı, Türkiye eğrisinde 2013–2026 arasında gerçekte ne getirdikleri ve hangi kuralla
 para kazandırdıkları — ya da kazandırmadıkları. Sonra eğrinin şekli: **spread** (eğim) ve en
 uzun bölüm olarak **fly** (büküm). En sonda **oyun kitabı**: "şu beklentideysem, şu durumda ne
-yaparım" sorusunun on beş kartlık, her kartı ölçülmüş kanıtla ve bugünkü taşımayla yazılmış
-cevabı.
+yaparım" sorusunun on beş kartlık, her kartı kanıtının gücüyle (ölçülmüş, eğilim ya da
+ölçülemedi) ve bugünkü taşımayla yazılmış cevabı.
 
 <div class="not gezinme">
   <span class="etiket">Ders planı — yaklaşık dört buçuk saat</span>
@@ -325,8 +327,9 @@ Tablo aynı hesabın sayısal hâli:
    tarafta: vade kısaldıkça daha yüksek getirili noktaya kayar, roll kaybettirir. 5 yıllıkta
    roll, taşıma kadar büyüktür.
 3. **Başabaş vadeyle doğrusal değildir.** 2 yıllığın üç aylık yükü yalnız 27 bp'lik bir
-   getiri düşüşüyle kapanıyor; 5 yıllık 85 bp istiyor. Durasyonun "fiyatı" en ucuz
-   tümseğin tepesinde, en pahalı tümseğin inen yamacında.
+   getiri düşüşüyle kapanıyor; 5 yıllık 85 bp istiyor. 1 yıl ve ötesinde durasyonun
+   "fiyatı" en ucuz tümseğin tepesinde, en pahalı tümseğin inen yamacında (6 aylığın −370
+   bp'lik başabaşı durasyonunun küçüklüğünden gelir: 0,36).
 
 #### Uçtan uca örnek: 5 yıllık kâğıdı üç ay tutmak
 
@@ -413,8 +416,9 @@ karşı sıfır kuponluda −85 bp. Sebep durasyondur — aynı yüzde taşıma,
 bölünür. Kural: taşımayı karşılaştırırken birim fiyatın yüzdesi değil **DV01 başına bp**'dir;
 aynı "5 yıllık" etiketli iki kâğıdın beklerken ödediği kira, risk başına yaklaşık 1,4 kat
 farklı olabilir. Bir aylık başabaş üç aylığın kabaca üçte biridir (−38'e karşı −119 bp); bu
-vadede başabaş ufukla yaklaşık doğrusal ölçeklenir, ama roll'un ağır olduğu vadelerde belirgin
-sapar (3.2).
+vadede başabaş ufukla yaklaşık doğrusal ölçeklenir. Taşıma ile roll'un zıt işaretli olduğu ve
+birbirini neredeyse götürdüğü vadelerde ise belirgin sapar: bugün 1 yılda üç aylık başabaş bir
+aylığın 5,6 katıdır (3.2).
 
 ### 1.3 Ne zaman durasyon alınır: forward eşiği ve onu aşmanın gerekçeleri (≈11 dk)
 
@@ -549,8 +553,9 @@ Tabloyu okurken dört şeyi aklınızda tutun:
 - **Taşıma + roll işaretinin ayrımı kararsız.** Doğrusal ilişkinin eğimi tüm örneklemde
   1'e yakın ve istatistiksel olarak anlamlı görünüyor (dönemlerin çakışmasına dayanıklı
   t değeri 3,83), ama yarılara bölünce 5 yıllıkta 2013–2019'da **−1,07**, 2020–2026'da
-  **+1,19**. Yani "taşıma ne kadar yüksekse getiri o kadar yüksek" bir kural değil, son
-  altı yılın rejimi. Taşımayı bir tahmin aracı olarak değil, bir **eşik** olarak kullanın.
+  **+1,19** (7 yıllıkta −1,43 · +1,38). Yani 5 ve 7 yılda "taşıma ne kadar yüksekse getiri
+  o kadar yüksek" bir kural değil, son altı yılın rejimi; 2 yılda eğim iki yarıda da artı
+  (+1,10 · +0,88). Taşımayı bir tahmin aracı olarak değil, bir **eşik** olarak kullanın.
 - **Kazanma oranı düşük, kazanç büyük.** En iyi koşulda bile kazandıran dönem payı %50'nin
   altında. Durasyon, Türkiye'de yüksek isabetli bir işlem değil; kazandığında büyük
   kazandıran bir işlemdir — boyut ve stop disiplini (1.4) bu yüzden kararın kendisi kadar
@@ -559,9 +564,12 @@ Tabloyu okurken dört şeyi aklınızda tutun:
 <div class="not">
   <span class="etiket">Tek cümlelik kural</span>
   Durasyon, forward'ın altında bir gerçekleşme için elinizde piyasada olmayan bir
-  gerekçe varken alınır; taşıma negatifse gerekçe güçlü olmalı ve zaman ufku kısa olmalı,
-  taşıma pozitifse görüşsüz de beklenebilir. Eğri tersken alınan durasyon, bu
-  örneklemde, en pahalı durasyondur.
+  gerekçe varken alınır; taşıma negatifse gerekçe güçlü olmalı ve zaman ufku kısa olmalı.
+  Taşıma pozitif olsa da görüşsüz outright durasyon tutulmaz: bu örneklemde sinyal artıyken
+  uzun kâğıt yalnız kıl payı kazandı (5 yılda +%0,08, 2 yılda −%0,06); görüşsüz taşımanın
+  sınanmış biçimi eğri ticaretidir (3.6). Eğri tersken alınan 5 ve 7 yıllık durasyon,
+  bu örneklemde, en pahalı durasyondur (2 yılda taşıma + roll'un negatif başlaması daha
+  pahalıydı: −%2,84'e karşı −%2,16).
 </div>
 
 #### Tablonun içi: taşıma mı kaybettirdi, hareket mi?
@@ -777,8 +785,14 @@ durasyon 1,42, DV01 **7.225 TL/bp**. 5 yıllık: fiyat 21,64, mod. durasyon 3,68
 | Ölçekleme | 5y nominali | 5y DV01 | Net DV01 | Nakit | Taşıma+roll farkı (3 ay) | Başabaş |
 |---|---|---|---|---|---|---|
 | DV01-nötr | 90,7 mn | 7.225 | 0 | 31,1 mn serbest | −0,42 mn | −58 bp |
-| Beta-ağırlıklı (β 0,69) | 131,5 mn | 10.471 | +3.246 | 22,3 mn serbest | −0,70 mn | −66 bp |
+| Beta-ağırlıklı (β 0,69) | 131,5 mn | 10.471 | +3.246 | 22,3 mn serbest | −0,70 mn | −67 bp |
 | Nakit-nötr | 234,4 mn | 18.673 | +11.448 | 0 | −1,39 mn | −75 bp |
+
+<div class="not">
+  <span class="etiket">Düzeltme · 25.09.2026 — yuvarlama</span>
+  Beta-ağırlıklı satırın başabaşı −66 bp'den −67 bp'ye düzeltildi: taşıma + roll farkı 5
+  yıllık bacağın DV01'ine bölününce −66,6 bp eder. Öbür satırlar ve okuma değişmedi.
+</div>
 
 Okuma:
 
@@ -1008,8 +1022,8 @@ makası) ve **boyut sınırı** (kâğıdın günlük işlem hacminin küçük b
 |---|---|---|
 | Görüş forward'ın altında, taşıma pozitif | durasyon al, sabırlı ol | kâğıt ya da OIS receive |
 | Görüş forward'ın altında, taşıma negatif | durasyon al ama ufku kısa tut, gerekçe olayına bağla | OIS receive (fonlama bazından kaçmak için) ya da kâğıt |
-| Görüş yok, taşıma pozitif | küçük durasyon taşınabilir | kâğıt |
-| Görüş yok, taşıma negatif | durasyonu azalt ya da değişken faizliye geç | sabit → değişken switch'i |
+| Görüş yok, taşıma pozitif | outright pozisyon yok; taşıma defteri (6.4, K13) — pozitif taşıma için tutulan durasyon forward'ın gerçekleşmeyeceğine bahistir ve dosyaya görüş olarak yazılır | DV01-nötr spread ya da fly (eğri ticareti, 3.6) |
+| Görüş yok, taşıma negatif | elde tutulan sabit durasyonu azalt ya da değişken faizliye geç; bu bir bekleme bedelini kesmektir, yön bahsi değil | sabit → değişken switch'i |
 | Görüş eğimde (kısa uç önde düşer) | kısaltma switch'i, DV01-nötr ya da beta-ağırlıklı | kâğıt switch'i ya da OIS spread (Bölüm 4) |
 | Görüş enflasyonda (başabaştan yüksek) | endeksliye geç | başabaş switch'i |
 | Görüş kâğıdın primindedir | asset swap | kâğıt + pay OIS |
@@ -1112,8 +1126,9 @@ getiri oynaklığı 163 bp; başabaşı üç aylık oynaklığa oranlayın. (c) 
 (b) Üç aylık oynaklık $163 \times \sqrt{3} \approx 282$ bp. Oran $75 / 282 \approx 0{,}27$.
 
 (c) Başabaş, olası hareketin dörtte biri kadar: taşıma, 7 yıllık durasyonun sonucunu
-belirleyen şey değil. Karar görüşe bağlıdır; ama görüş yoksa pozisyon her çeyrek beklenen
-olarak %3,92 kaybeder — görüşsüz durasyonun bu eğrideki bedeli budur.
+belirleyen şey değil. Karar görüşe bağlıdır; ama görüş yoksa pozisyon, eğri yerinde kalırsa
+her çeyrek %3,92 kaybeder (forward'lar gerçekleşirse ≈ 0) — görüşsüz durasyonun bu eğrideki
+eşiği budur.
 
 </details>
 
@@ -1125,7 +1140,7 @@ Amacınız "kısa uç önde düşecek, ama genel bir ralliye de açık kalmak is
 <summary>Çözüm</summary>
 
 Görüş, 2s5s'in **dikleşmesidir** (kısa uç önde düşer). Bu bir **kısaltma** görüşüdür:
-doğru switch 5 yıllığı satıp 2 yıllığı almaktır — sorudaki yön (2y → 5y) görüşe tersdir.
+doğru switch 5 yıllığı satıp 2 yıllığı almaktır — sorudaki yön (2y → 5y) görüşe terstir.
 Yön düzeltildikten sonra ölçekleme sorusu: Türkiye'de 5 yıllık, 2 yıllığın hareketinin
 ortalama 0,69'u kadar hareket eder. DV01-nötr kısaltma switch'i paralel kaymaya nötrdür
 ama tipik bir rallide (kısa uç önde) **aynı yönde** kazanır — yani genel ralliye de açıktır.
@@ -1194,9 +1209,9 @@ başabaş görüşünü ayrıca ifade etmek için bir miktar **nominalden endeks
 kaybettirir: **sabitten değişken faizliye** geçin ya da durasyonu azaltın. Pozitif
 taşımalı bir eğride aynı cümle kâğıtta kalmayı savunurdu.
 
-(c) Bir **gösterge switch'i**: eski göstergeyi likidite göçünden önce satın; uzun süre
-elde tutacaksanız yenisine geçin ya da eski göstergeyi ucuzlaması bittikten sonra geri
-alın. Maliyet/beklenti oranını yazmadan işlem yapmayın.
+(c) Bir **gösterge switch'i**: eski göstergeyi likidite göçünden önce satın; likiditeye
+ihtiyacınız varsa yenisine geçin (primi ödeyerek), uzun süre elde tutacaksanız eski
+göstergeyi ucuzlaması bittikten sonra geri alın (1.7 c). Maliyet/beklenti oranını yazmadan işlem yapmayın.
 
 </details>
 
@@ -1450,7 +1465,7 @@ Masada sık kullanılan kısayol $(K - r)\cdot h/365\cdot N$, yani fixingi bile�
 çıkarmaktır. Düşük faizde zararsızdır; %40'ta değildir. %39,95 fixing 92 günde dönem
 dilinde %42,01 eder: kısayol yüzen bacağı **206 bp** eksik sayar. 500 mn TL'lik 1 yıllık
 receive için üç aylık fixing taşıması kısayolla −5,92 mn, doğrusu **−8,52 mn** — fark
-çeyrekte 2,60 mn TL, taşımanın %44'ü. Kural 1.2'dekiyle aynıdır: **fixing, dönemin
+çeyrekte 2,60 mn TL, yani doğru taşımanın yaklaşık üçte biri (%31). Kural 1.2'dekiyle aynıdır: **fixing, dönemin
 diline çevrilmeden sabit oranla kıyaslanmaz.**
 
 Aşağıdaki araç üç bileşeni ayrıştırır, yüzen bacağı bileşikler ve başabaşı verir.
@@ -1730,8 +1745,9 @@ vadede daha küçük bir hata payıyla ifade etmek genellikle daha iyidir.
 Bir yıllık swap iki swap'ın toplamıdır: önümüzdeki üç ayın fixinglerini taşıyan 3 aylık
 bir swap ve 3 ay sonra başlayıp 9 ay süren **forward başlangıçlı** bir swap (3m×1y). Temsili
 eğride forward başlangıçlı swap'ın oranı %33,80 (2.1'deki bootstrap). Aynı nominalle kurulan
-iki bacak birlikte bir yıllık swap'ın DV01'ini verir; 500 mn TL'de 3 aylık bacağın DV01'i
-11.391 TL/bp, forward bacağınki 29.039 TL/bp — riskin %28'i ilk bacakta.
+iki bacak birlikte yaklaşık bir yıllık swap'ın DV01'ini verir; 500 mn TL'de 3 aylık bacağın
+DV01'i 11.391 TL/bp, forward bacağınki 29.039 TL/bp (toplam 40.430; çeyrekleri 0,25 yıl
+sayan yaklaşımla — gün sayımlı 1 yıllık DV01 40.990) — riskin %28'i ilk bacakta.
 
 Bu ayrışma bir outright görüşünü iki parçaya bölmenin aracıdır:
 
@@ -1876,7 +1892,7 @@ yavaş mı?" sorusuyla biter.
 | Fonlama rejimi uzar (tavan) | payer toplar | kısa vadede pay | 1–3 ay |
 | Fonlama rejimi biter, politika sabit | receiver'ın fixing yükü azalır | kısa vadede receive | 1–3 ay |
 | Dezenflasyon kalıcı, risk primi düşer | uzun uçta taşıma küçük | uzun vadede receive | 5–10 yıl |
-| Görüş yok | ters eğride payer toplar | pozisyonsuzluk ya da küçük pay | — |
+| Görüş yok | ters eğride payer toplar, ama pay tutmak bir görüştür (K2) | outright'ta pozisyon yok; taşıma defteri (6.4) | — |
 
 #### Girmeden önce yedi soru
 
@@ -2078,11 +2094,13 @@ $$
 
 $$
 \text{roll}_h \;=\; \frac{P\big(T-h;\,y_{T-h}\big)}{P\big(T;\,y_T\big)} - (1+y_T)^{h}
-\;\approx\; D\,\big(y_T - y_{T-h}\big)
+\;\approx\; (1+y_T)^{h}\,D_{T-h}\,\big(y_T - y_{T-h}\big)
 $$
 
-Burada $P(\tau; y) = (1+y)^{-\tau}$, $y_{T-h}$ **bugünkü** eğrinin $T-h$ noktası ve
-$D = T/(1+y_T)$ modifiye durasyondur. Taşımanın ilk terimi kâğıdın kendi getirisiyle
+Burada $P(\tau; y) = (1+y)^{-\tau}$, $y_{T-h}$ **bugünkü** eğrinin $T-h$ noktası,
+$D = T/(1+y_T)$ modifiye durasyon ve $D_{T-h} = (T-h)/(1+y_{T-h})$ kısalmış vadenin
+durasyonudur. Uzun vadede $(1+y_T)^h D_{T-h} \approx D$ alınabilir; kısa vadede alınamaz
+(1 yılda üç aylık roll %0,58, $D$ ile hesaplanırsa %0,71; 3.2). Taşımanın ilk terimi kâğıdın kendi getirisiyle
 tahakkukudur, ikincisi fonlamanın günlük bileşiği (1.2'deki konvansiyon tuzağı tam
 buradadır). Roll, kâğıt eğrinin **yükselen** yamacındaysa ($y_T > y_{T-h}$) artı, **inen**
 yamacındaysa eksidir. İkisinin toplamı getiri diline çevrilince **başabaş** olur:
@@ -2245,8 +2263,12 @@ roll 2y +22 · 5y −42 · 7y −34 bp:
   tümseğin inen yamacında roll öder, 2 yıllık kanat yükselen yamaçta roll toplar.
 
 (Yuvarlamayla parçaların toplamı +35 bp.) PCA fly'da taşıma parçası 0, roll parçası +25 bp.
-**Bugünkü long 2y5y7y'nin taşıması neredeyse tamamen roll'dur**: yani bir tümsek bahsidir.
-Tümsek yerinde kalırsa toplanır; tümsek çökerse — 2 yıl kanatlara göre pahalılaşırsa — gider.
+**Bugünkü long 2y5y7y'nin taşıması neredeyse tamamen roll'dur**: eğri kımıldamazsa çeyrek
+çeyrek toplanır. Taşıma ile fiyat riskini ayırın. Tümsek çökerse — 2 yıl 1 ve 5 yıla göre
+pahalılaşırsa — gelecek çeyreklerin roll'u küçülür; ama 2 yılda receive olduğunuz için o
+hareketin kendisi fly'ı yükseltir ve pozisyona kazandırır. Bu fly'ın fiyat riski tümseğin
+çökmesi değil **büyümesidir** — 2 yıl ucuzlar, 5 yıl kanatlara göre pahalılaşır: long
+2y5y7y bir "tümsek büyümez" bahsidir (5.1, 6.5).
 
 <div class="not sinav-ornek">
   <span class="etiket">Varsayımsal boyut — sayılar gösterim içindir</span>
@@ -2284,16 +2306,17 @@ Sol panelin sayısal hâli, forward'la birlikte:
 Her satırda forward = kısalmış vadenin bugünkü getirisi + başabaş (yuvarlama payıyla): 3.1'in
 özdeşliği tablonun kendisidir.
 
-#### Başabaş ufukla doğrusal büyümez
+#### Başabaş her vadede ufukla doğrusal büyümez
 
-Üç aylık başabaş bir aylığın üç katı değildir: 5 yılda 3,1 katı, 2 yılda 3,4 katı, **1 yılda
-5,6 katı** (−7 bp'ye karşı −39 bp). İki sebep var:
+Üç aylık başabaş çoğu vadede bir aylığın yaklaşık üç katıdır (gün oranı 91/30 = 3,03; 6 ay,
+3, 5 ve 7 yılda 3,1 kat). Taşıma ile roll'un zıt işaretli olduğu vadelerde doğrusallık
+bozulur: 2 yılda 3,4 kat, **1 yılda 5,6 kat** (−7 bp'ye karşı −39 bp). İki sebep var:
 
-- **Roll eğrinin yerel eğimidir.** Bir ayda vade eğrinin bir parçası boyunca, üç ayda başka
-  ve daha uzun bir parçası boyunca kayar; eğri doğru değil, tümsekli olduğu için kayılan
-  eğim ufukla değişir. Kısa vadede bir etki daha eklenir: ufuk sonunda fiyatı belirleyen,
-  **kısalmış** vadenin durasyonudur. 1 yıllıkta taşıma bir aydan üç aya 3,2 kat büyür
-  (−%0,27'den −%0,86'ya), roll yalnız 2,6 kat (+%0,22'den +%0,58'e).
+- **Roll, kısalmış vadenin durasyonuyla ölçeklenir.** 1 yıllıkta vade iki ufukta da eğrinin
+  aynı parçası (6 ay–1 yıl) boyunca kayar: kısalmış vadenin getirisi bir ayda 33 bp, üç ayda
+  99 bp düşer — tam gün oranı kadar. Ama ufuk sonunda fiyatı belirleyen, **kısalmış** vadenin
+  durasyonudur ve üç ayda daha kısadır (9 aya karşı 11 ay). 1 yıllıkta taşıma bir aydan üç
+  aya 3,2 kat büyür (−%0,27'den −%0,86'ya), roll yalnız 2,6 kat (+%0,22'den +%0,58'e).
 - **Net sayı, iki büyük ve zıt işaretli parçanın farkıdır.** 1 yıllıkta bir aylık taşıma ve
   roll birbirini neredeyse götürür (−%0,27 ile +%0,22); küçük bir farkın oranı büyük oynar.
 
@@ -2330,7 +2353,8 @@ Dört okuma:
 2. **Ortadaki tepe kısa yaşar.** 2 yıllık tepe ortalama 1,4 ay yerinde kaldı; bugünkü 2
    yıllık tepe 3 aydır yerinde. Uçtaki tepeler daha kalıcıdır (7 yılda 4,8 ay).
 3. **Roll'un artı olduğu pencere payı** 1 yılda %62, 2 yılda %40, 3–7 yılda %34–36. Tümseğin
-   yükselen yamacında durmak tarihte en sık 1 yılda işe yaradı.
+   yükselen yamacı tarihte en sık 1 yılda kaldı; ama roll'un artı olması kazancı garanti
+   etmez — 1 yıllık kâğıt pencerelerin yalnız %43'ünde kazandırdı.
 4. **Roll-down işlemi, tümseğin yerinde kalma bahsidir.** Bugünkü haritaya dayanan bir
    çeyreklik işlem — 2 yıllık kâğıdı roll için tutmak, long 2y5y7y fly'ın +34 bp'si —
    tarihsel olarak ortalama 1,4 ay yaşamış bir şeklin üç ay daha yaşamasına oynar. Bu yüzden
@@ -2403,10 +2427,10 @@ gövde DV01'i başına P&L biriminde.)
 
 Okuma kuralı:
 
-1. **İşaret tarafı seçer.** Bugün taşıyanlar: dikleştiriciler (2s5s +58 bp, 2s7s +48 bp),
-   gövdesi tümseğin inen yamacında olan long fly'lar (2y5y7y, 2y3y5y, 3y5y7y) ve outright'ta
-   pay (kâğıt kısa). Ödeyenler: bütün receive'ler ve gövdesi tepede (2 yıl) olan long
-   fly'lar (1y2y3y, 1y2y5y). Gövde tepedeyse fly öder, inen yamaçtaysa toplar.
+1. **İşaret tarafı seçer.** Bugün taşıyanlar: 2s5s ve 2s7s dikleştiricileri (+58 bp,
+   +48 bp), gövdesi tümseğin inen yamacında olan long fly'lar (2y5y7y, 2y3y5y, 3y5y7y) ve
+   outright'ta pay (kâğıt kısa). Ödeyenler: bütün receive'ler, 1y2y ve 5s7s dikleştiricileri
+   (−12 ve −10 bp) ve gövdesi tepede (2 yıl) olan long fly'lar (1y2y3y, 1y2y5y). Gövde tepedeyse long fly öder (short fly toplar), inen yamaçtaysa long fly toplar.
 2. **Oran bedelin büyüklüğünü söyler.** 1 ve 2 yıllık receive'de −0,06 ve −0,05: taşıma
    tipik üç aylık hareketin yirmide biri; burada **görüş karar verir**, taşıma bir dipnottur.
    5 ve 7 yıllık receive'de −0,25 ve −0,26, fly'larda 0,12–0,27: taşıma, ters yöndeki bir
@@ -2459,7 +2483,7 @@ OIS'ten kâğıda taşınmaz.
 
 Bugünkü taşıma bir ex-ante hesaptır. Tarih şu soruyu cevaplar: gerçekleşen getiride taşıma,
 roll ve eğrinin hareketi ne kadar yer tuttu? Her ay sonu sıfır kuponlu bir kâğıt alınıp
-gecelik fonlamayla üç ay tutulsun (2013-01 – 2026-06 arası 162 ay sonu girişi; pencereler
+gecelik fonlamayla üç ay tutulsun (01.2013 – 06.2026 arası 162 ay sonu girişi; pencereler
 üst üste biner, yani bağımsız gözlem değildir). Gerçekleşen fonlama üstü getiri üç parçaya
 ayrılır, fiyatın %'si olarak:
 
@@ -2609,12 +2633,12 @@ kısa" kendi başına kazandı**. Bir taşıma kuralı ancak bu kıyası geçers
 <GrafikEmbed src="/arastirma/kagit-ve-ois-trading/06_tasima_kurallari.html" baslik="Taşımadan para kazanmanın iki kuralı: taşıma işaretiyle zamanlama ve eğri ticareti" no="06" kaynak="TCMB DİBS gösterge değerleri · TLREF · TCMB fonlama" genis />
 
 **Şekil 06 nasıl hesaplanıyor.** Sol panel: her vade için üç kuralın ortalama üç aylık
-fonlama üstü getirisi (fiyatın %'si, 2013-01 – 2026-06, 162 pencere) — taşıma + roll artıysa
+fonlama üstü getirisi (fiyatın %'si, 01.2013 – 06.2026, 162 pencere) — taşıma + roll artıysa
 kâğıt uzun, eksiyse kısa (taşıma işaretiyle); her pencerede kısa; her pencerede uzun. Kısa
 pozisyonun getirisi uzununkinin eksisidir (kâğıdı ödünç alıp satmak ya da OIS'te pay). Sağ
 panel: eğri ticaretinin (aşağıda, iii) DV01 başına ortalaması — sinyal 1, 5, 10 ve 21 iş günü
 önceki eğriden; iki yarı (2015–2019, 2020–2026); ve kıyas olarak sabit 1s7s ve 2s7s
-dikleştiricileri (gri). Oynaklık yalnız girişten önceki 36 aydan; 2015-01 – 2026-06, 138
+dikleştiricileri (gri). Oynaklık yalnız girişten önceki 36 aydan; 01.2015 – 06.2026, 138
 pencere.
 
 #### (i) Taşımanın işaretiyle zamanlama: trendi ölçüyor
@@ -2720,7 +2744,7 @@ okunmalı:
 
 Kural: her ay long fly'ın (gövdede pay) taşıması artıysa long, eksiyse short fly tutulur.
 PCA ağırlıkları yalnız bir önceki ay sonuna kadarki veriden kurulur (örneklem dışı); P&L
-gövde DV01'i başına bp, üç ay, 125 pencere (2016-02'den).
+gövde DV01'i başına bp, üç ay, 125 pencere (02.2016'dan).
 
 | Fly ailesi (örneklem dışı PCA, taşıma işaretiyle, bp) | Pencere | Ortalama | Medyan | İsabet | t | 2016–2019 · 2020–2026 | Hep long: ortalama · t | Sinyal 1 · 5 · 10 · 21 gün önce |
 |---|---|---|---|---|---|---|---|---|
@@ -2729,9 +2753,12 @@ gövde DV01'i başına bp, üç ay, 125 pencere (2016-02'den).
 | 3y5y7y | 125 | +2,2 | +2,9 | %55 | +0,4 | −5,0 · +6,4 | −2,6 · −0,4 | +4,2 · +2,2 · +1,3 · +3,5 |
 | 2y3y5y | 125 | +5,9 | +2,4 | %53 | +1,0 | +6,5 · +5,5 | −4,1 · −0,5 | +7,7 · +5,9 · +5,4 · +12,0 |
 
-- **Yalnız 1y2y5y'de bir kenar var:** +28,2 bp, t 2,4, iki yarıda da artı (+26,6 · +29,2);
-  aynı fly'ı hep long tutmak −20,5 bp. 2y5y7y (−1,9 bp, t −0,2), 3y5y7y (+2,2, t 0,4) ve
-  2y3y5y (+5,9, t 1,0) taşıma işaretiyle kenar vermedi.
+- **Yalnız 1y2y5y'de taşıma kolu sıfırdan ayrılıyor:** +28,2 bp, t 2,4, iki yarıda da artı
+  (+26,6 · +29,2). Ama bu bölümün kıyası kaybeden taraf değil, trendle kazanan taraftır: aynı
+  fly'ı hep long tutmak −20,5 bp, yani her ay short 1y2y5y durmak +20,5 bp verirdi (t 1,4).
+  Kuralın hep short'a üstünlüğü çeyrekte yalnız 7,7 bp ve neredeyse tamamı 2016–2019'dan
+  geliyor (+17,3 bp); 2020–2026'da fark +2,0 bp. 2y5y7y (−1,9 bp, t −0,2),
+  3y5y7y (+2,2, t 0,4) ve 2y3y5y (+5,9, t 1,0) taşıma işaretiyle kenar vermedi.
 - **1y2y5y'nin kenarı gecikmeye duyarlı:** sinyal 1 gün önceki eğriden +43,4, 5 günden
   +28,2, 10 günden +13,4, 21 günden +7,8 bp: bir ay geç giren, 1 günlük gecikmedeki kenarın
   beşte birinden azını tutar. Kısa gecikmedeki büyüklüğün bir kısmı ölçüm gürültüsünün geri
@@ -2758,7 +2785,7 @@ değildir; ayrıntı ve sınama 5.9'da.
 | (i) Taşıma işaretiyle outright zamanlama | 5 vade, 162 pencere, fiyatın %'si | 5 yılda +%3,0; hep kısa +%3,0 | örneklemin trendini ölçüyor; kural değil |
 | (ii) En iyi taşıyan vadeyi uzun tutmak | 138 pencere, DV01 başına | −89,8 bp; iki yarıda eksi | seviye ezdi; çalışmadı |
 | (iii) Eğri ticareti | 138 pencere, DV01-nötr | +79,2 bp, t 2,6; iki yarıda artı | en sağlam bulgu; çok işlemde ve küçük boyla |
-| (iv) Fly taşıması | 4 fly, 125 pencere, örneklem dışı | yalnız 1y2y5y: +28,2 bp, t 2,4 | tek fly'da ve hızlı icrayla; gecikmede eriyor |
+| (iv) Fly taşıması | 4 fly, 125 pencere, örneklem dışı | yalnız 1y2y5y: +28,2 bp, t 2,4; hep short +20,5 bp | hep short'a üstünlüğü 7,7 bp; tek fly'da ve hızlı icrayla; gecikmede eriyor |
 | (v) Taşıma süzgeç olarak | 4 fly, dönüş işlemleri | uyumlu her fly'da önde; yarıların yarısında ters | yardımcı süzgeç; tek başına gerekçe değil |
 
 ### 3.7 Fonlama rejimi taşımanın işaretini değiştirir (≈4 dk)
@@ -2798,7 +2825,7 @@ değil.
 Temsili OIS eğrisinde receive'in üç aylık **fixing taşıması**, üç fixing varsayımıyla (DV01
 başına bp; dönem dilinde sırasıyla %42,01, %38,76 ve %38,20):
 
-| Vade (temsili OIS receive, fixing taşıması, bp) | Sabit oran $K$ | Fixing %39,95 (temsili, tavan) | Fixing %37,00 (politika faizi) | Fixing %36,49 (22.09.2026) |
+| Vade (temsili OIS receive, fixing taşıması, bp) | Sabit oran $K$ | Fixing %39,95 (temsili, tavan) | Fixing %37,00 (politika faizi) | Fixing %36,49 (21.09.2026) |
 |---|---|---|---|---|
 | 3 ay | %38,95 | −338 | +21 | +83 |
 | 6 ay | %37,50 | −259 | −72 | −40 |
@@ -2885,15 +2912,20 @@ Pay ve dikleştiriciler bir **seviye** kuyruğunu satar: DV01-nötr dikleştiric
 pozisyonudur (Türkiye'de seviye kısa uç ağırlıklıdır, 4.3). Long 2y5y7y'nin taşıması bir
 seviye kuyruğu satmıyor: aleyhe kuyruktaki hareketi 50:50'de −17 bp (satış), PCA'da −16 bp
 (ralli) — bir çeyreklik taşımanın yarısı kadar. Onun riski seviyede değil bükümdedir:
-tümseğin çökmesi (K9) ve artırım fazları (50:50 long 2y5y7y artırım pencerelerinde çeyrekte
-ortalama −64 bp, taşıma dahil; 5.5).
+tümseğin büyümesi — gövdenin (5 yıl) kanatlara göre pahalılaşması —, yani artırım fazları ve
+şahin sürprizler
+(50:50 long 2y5y7y artırım pencerelerinde çeyrekte ortalama −64 bp, şahin sürpriz kovasında
+−40 bp, taşıma dahil; 5.5). Tümseğin çökmesi (K9) bu fly'ın aleyhine değil lehinedir: 2 yılda
+receive olduğu için 2 yılın pahalılaşması fly'ı yükseltir (güvercin sürpriz kovasında +35 bp);
+kaybolan yalnız sonraki çeyreklerin roll'unun bir kısmıdır.
 
 #### Diğer tuzaklar
 
-1. **Basit fixing.** Yüzen bacağı bileşiklemeden çıkarmak, %40 fixingde taşımanın yaklaşık
-   üçte birini kaybettirir (500 mn TL'lik 1 yıllık receive'de −8,52 yerine −5,92 mn; 2.3).
-2. **Yanlış ufuk.** Başabaş ufukla doğrusal büyümez; 1 yıllıkta üç aylık başabaş bir
-   aylığın 5,6 katıdır (3.2). Bekleme bedeli pozisyonun gerçek ufkuyla hesaplanır.
+1. **Basit fixing.** Yüzen bacağı bileşiklemeden çıkarmak, %40 fixingde taşımayı yaklaşık
+   üçte bir eksik yazar (500 mn TL'lik 1 yıllık receive gerçekte −8,52 mn öder, kısayol
+   −5,92 mn gösterir; 2.3).
+2. **Yanlış ufuk.** Başabaş her vadede ufukla doğrusal büyümez; 1 yıllıkta üç aylık başabaş
+   bir aylığın 5,6 katıdır (3.2). Bekleme bedeli pozisyonun gerçek ufkuyla hesaplanır.
 3. **Fonlama rejimi.** OIS'te taşımanın işareti fixinge bağlıdır: 3 aylık receive tavanda
    −338, bugünkü fixingle +83 bp (3.7). Her taşıma sayısının yanına fixing varsayımı yazılır.
 4. **İki eğri.** Aynı yapı kâğıt eğrisinde ve temsili OIS'te ters işaretle taşır (3.3).
@@ -2922,8 +2954,9 @@ ortalama −64 bp, taşıma dahil; 5.5).
 - **Taşımayı doğru dilde hesaplayın:** işlem yapılan eğride, işlem günü, bileşik fixingle ve
   pozisyonun gerçek ufkuyla. Fixing varsayımını sayının yanına yazın.
 - **Roll haritasını her ay yeniden çıkarın.** Bir kâğıdın roll'u işaret değiştirdiğinde yeri
-  de değişir; tümseğin tepesindeki gövdeyi long fly'da pay etmek, tepe yer değiştirince
-  toplamaktan ödemeye döner.
+  de değişir: gövdesi tümseğin tepesinde olan long fly bugün öder (long 1y2y5y 50:50 −35,
+  PCA −53 bp) ve tepe gövdeden uzaklaşırsa ödemekten toplamaya döner; gövdesi inen yamaçta
+  olan long fly (bugün 2y5y7y, +34 bp) ise tepe gövdeye kayarsa toplamaktan ödemeye döner.
 - **Taşımayı oynaklığa oranlayın.** Oran yirmide bir civarındaysa (bugün 1–2 yıllık outright)
   görüş karar verir; bugün 5–7 yıllık outright'ta ve fly'larda olduğu gibi 0,12–0,27
   aralığındaysa taşıma, görüşün aşması gereken eşiğin kayda değer bir parçasıdır.
@@ -2935,8 +2968,11 @@ ortalama −64 bp, taşıma dahil; 5.5).
   yapılarını o sinyalde küçültün. Tavandan dönüşün eğriye etkisi ise tutarlı değildi.
 - **Asansörü yazın:** taşıyan her yapı için aleyhe kuyruğun kaç çeyreklik taşımayı sildiğini
   dosyaya koyun; stop ve boyut o sayıya göre kurulur.
-- **Tümsek bahsini adıyla yazın (K9).** Long 2y5y7y'nin bugünkü +34 bp'si neredeyse tamamen
-  roll'dur: tümsek çökerse taşıma da gider.
+- **Taşımanın kaynağını adıyla yazın.** Long 2y5y7y'nin bugünkü +34 bp'sinin neredeyse
+  tamamı roll'dur (roll +36, taşıma −1) ve 2–5–7 yıl bölümünün bugünkü şekline bağlıdır:
+  şekil değişirse gelecek çeyreklerin taşıması da değişir. Tümseğin çökmesi (K9) bu fly'a
+  kanatta receive olduğu için fiyat olarak yarar; asıl risk tümseğin büyümesi, yani 5
+  yıllığın kanatlara göre pahalılaşmasıdır (artırım fazı −64, şahin sürpriz −40 bp).
 - **Forward'lara katılıyorsanız (K14) işlem yapmayın.** Taşıma tek başına bir gerekçe değildir;
   forward'ın yanlış olduğunu söyleyen bir görüş ya da sınanmış bir kural gerekir.
 
@@ -2958,8 +2994,11 @@ neden üç katı değil? (c) Üç aylık forward nedir?
 Üç ay: $(-0{,}86 + 0{,}58)/0{,}72 = -0{,}28/0{,}72 \approx -0{,}389$ puan ⇒ **−39 bp**.
 
 (b) $39/7 \approx$ **5,6 kat**. Taşıma yaklaşık doğrusal büyür ($0{,}86/0{,}27 \approx 3{,}2$
-kat), roll büyümez ($0{,}58/0{,}22 \approx 2{,}6$ kat): roll eğrinin yerel eğimidir ve üç
-ayda vade eğrinin başka bir parçasına kayar. Bir ayda iki parça birbirini neredeyse götürür;
+kat), roll daha yavaş büyür ($0{,}58/0{,}22 \approx 2{,}6$ kat). Vade iki ufukta da eğrinin
+aynı parçası (6 ay–1 yıl) boyunca kayar ve getiri düşüşü gün sayısıyla orantılıdır (33 ve
+99 bp); ama roll'u fiyata çeviren kısalmış vadenin durasyonudur ve üç ayda kısalmış vade
+(9 ay) bir aylıktakinden (11 ay) kısadır: $3 \times 0{,}75/0{,}92 \approx 2{,}6$. Bir ayda
+iki parça birbirini neredeyse götürür;
 küçük bir net sayının oranı büyük oynar. Üç aylık bedeli üçe bölüp bir aylığı bulmak
 (−13 bp) gerçek bedelin (−7 bp) neredeyse iki katını verir.
 
@@ -3229,9 +3268,9 @@ arındırılmış ölçüye göre ucuz ucunda. Hangisinin doğru olduğu 5.3'ün
 faizin %6'dan %40'a çıktığı bir örneklemde 50:50 fly'ın yüzdeliği büyük ölçüde **seviyenin**
 yüzdeliğidir.
 
-7 yıllık getiri örneklemin **en yüksek** ay sonu değerinde; 2 yıllık zirvesinin (Nisan
-2025) 523 bp altında. Eğri hâlâ ters ama son üç yılın en az ters hâlinde: Mart 2024'te 2s7s
-−1.939 bp'ydi. Mart 2025'ten bu yana 3 aylık getiri 12 puan inerken 7 yıllık 2,6 puan
+7 yıllık getiri örneklemin **en yüksek** ay sonu değerinde; 2 yıllık getiri ise kendi
+zirvesinin (Nisan 2025) 523 bp altında. Eğri hâlâ ters ama son üç yılın en az ters hâllerinden birinde (2s7s son 36 ayın 92.,
+2s5s 89. yüzdeliğinde): Mart 2024'te 2s7s −1.939 bp'ydi. Mart 2025'ten bu yana 3 aylık getiri 12 puan inerken 7 yıllık 2,6 puan
 yükseldi — kısa uçtan ralli, uzun uçtan satış. Bu, bir eğim hikâyesidir ve bir sonraki alt
 bölümün diliyle bir **boğa dikleşmesi ile uzun uçta ayı dikleşmesinin** toplamıdır. Spread'ler
 için bir sonuç daha çıkıyor: 2s5s ve 2s7s tam örneklemde 21. yüzdelikte ama son 36 ayda 89. ve
@@ -3442,8 +3481,10 @@ değil, **soru farkıdır**:
   1,75 katı uzun uç tutulur.
 - **"Kısa uçtaki pozisyonumu uzun uçla en az varyansla nasıl hedge ederim?"** →
   $\beta_{\text{kısa}\mid \text{uzun}}$. Hedge eden bir portföy yöneticisinin sorusudur;
-  Türkiye'de 1'e yakın çıkıyor (0,97), çünkü uzun uçtaki hareketlerin neredeyse tamamı
-  kısa uçta da görülür, tersi doğru değildir.
+  Türkiye'de 1'e yakın çıkıyor (0,97), çünkü iki vade güçlü ilişkilidir (R² 0,55) ve 2
+  yıllığın aylık oynaklığı 7 yıllığınkinden büyüktür (243'e karşı 187 bp):
+  $\beta_{\text{kısa}\mid \text{uzun}} = \rho\,\sigma_{2y}/\sigma_{7y} \approx 0{,}74 \times 1{,}30$.
+  Tersi aynı korelasyonla küçük çıkar: $0{,}74 \times 187/243 \approx 0{,}57$.
 - **"İki vadenin ortak hareketine nötr olmak istiyorum"** → simetrik ya da PCA oranı.
 
 Regresyonun yönü seçimdir, çünkü iki değişkenin de gürültüsü vardır: kısa ucu uzun uca
@@ -3497,11 +3538,11 @@ Sebep eğim bileşeninin şeklinde: 2 yıl ve ötesinde yükler neredeyse düz (
 bileşenin bütün hareketi 3 ay ile 1 yıl arasındadır. 2s5s'i ve 2s7s'i hareket ettiren iki
 kuvvet vardır: **seviyenin kısa uç ağırlığı** (2 yıllık 5 ve 7 yıllıktan fazla hareket eder)
 ve **tümsek** (2 yıl büküm bileşeninde yukarı, 5–7 yıl aşağı yüklü). Asıl eğim işlemi
-3a1y'dir: eğim maruziyeti 2,7 mn TL. Aynı sonuç 5.2'deki katalogda korelasyon olarak
-görünüyor: 2s5s'in eğim bileşeniyle korelasyonu 0,09, 3a1y'ninki 0,89.
+3a1y'dir: eğim maruziyeti 2,7 mn TL. Aynı sonuç korelasyonda da görünüyor (ay sonu
+değişimleri, 2013–2026): 2s5s'in eğim bileşeniyle korelasyonu 0,09, 3a1y'ninki 0,89.
 
 Dikleştiricinin satırı yassılaştırıcınınkinin aynasıdır: DV01-nötr 2s7s dikleştirici 1σ'lık
-seviye yükselişinde −900.500 TL, aynı DV01'lük 2 yıllık uzun kâğıdın seviye riskinin yaklaşık
+seviye yükselişinde −900.500 TL, aynı DV01'lik 2 yıllık uzun kâğıdın seviye riskinin yaklaşık
 %42'si (900.500 / 2.144.200). Tümsek de ters çalışır: büküm şoku (6 ay – 2 yıl kanatlara göre
 yükselir) dikleştiriciye 1,0 mn TL kaybettirir, tümseğin çökmesi kazandırır.
 
@@ -3636,14 +3677,15 @@ aynı haritanın fly satırları 5.5'te okunuyor.
 
 <GrafikEmbed src="/arastirma/kagit-ve-ois-trading/11_rejim_haritasi.html" baslik="Hangi dünyada hangi yapı kazandı: rejimlere göre üç aylık P&L, DV01 başına bp (2013–2026)" no="11" kaynak="TCMB DİBS gösterge değerleri · TCMB PPK karar metinleri · Borsa İstanbul TLREF" genis />
 
-**Şekil 11 nasıl hesaplanıyor.** 2013-01 ile 2026-06 arasındaki her ay sonunda bir pozisyon
+**Şekil 11 nasıl hesaplanıyor.** 01.2013 ile 06.2026 arasındaki her ay sonunda bir pozisyon
 açılır ve üç ay sonraki ay sonunda kapanır: 162 pencere, üst üste binerek. Her yapının P&L'i
 ana bacağın (spread'de iki bacağın, DV01-nötr; fly'da gövdenin) DV01'i başına bp'dir ve iki
 parçadır: **girişteki taşıma + roll** (her bacağın giriş eğrisi ve girişteki fonlamayla
 başabaşı, DV01 ağırlığıyla toplanır) ve **hareket** (her bacağın kısalmış vadesindeki getiri
 değişiminin DV01 ağırlıklı eksi toplamı). Satırlar 2, 5 ve 7 yılda receive, 2s5s ve 2s7s
 dikleştirici (kısa vadede receive, uzun vadede pay) ve long fly'lardır (gövdede pay, kanatlarda
-receive; ağırlıklar tam örneklem PCA'sı). Sütunlar üç rejim tanımıdır. **PPK fazı**: penceredeki
+receive; 1y2y5y ve 2y5y7y hem 50:50 hem tam örneklem PCA ağırlığıyla, öbür fly'lar tam
+örneklem PCA ağırlığıyla). Sütunlar üç rejim tanımıdır. **PPK fazı**: penceredeki
 kararların toplam faiz değişimi — indirim, sabit, artırım; karar arşivi 2016'da başladığı için
 126 pencere. **Sürpriz**: üç ay sonraki 1 yıllık getiri eksi girişte fiyatlanan, üç ay sonra
 başlayan 1 yıllık forward (artı = piyasanın beklediğinden şahin); 162 pencere eşit üç kovaya
@@ -3734,9 +3776,11 @@ Dört sonuç:
    pencerelerin bir kısmında indirim zaten fiyatlanmıştı ya da fiyatlanandan az yapıldı: yön
    doğru, sürpriz yanlış. Aynı fark dikleştiricilerde daha küçük ama aynı yönde: 2s5s
    %80'e %66, 2s7s %83'e %73.
-2. **Forward'a yakın bir gerçekleşmede kazanan yok.** Orta kovada 2 yıllık receive −66 bp
-   (%20), dikleştiriciler −18 ve −17 bp. Forward'lar gerçekleşirse taşıma ile hareket birbirini
-   götürür (3.1); orta kovanın hafif şahin sapması (+50 bp) sonucu eksiye çevirdi. Görüşünüz
+2. **Forward'a yakın bir gerçekleşmede receive ve dikleştirici kazanmadı.** Orta kovada 2
+   yıllık receive −66 bp (%20), dikleştiriciler −18 ve −17 bp; aynaları (2 yıllık pay,
+   yassılaştırıcılar) aynı sayıları kazandı. Forward'lar gerçekleşirse taşıma ile hareket
+   birbirini götürür (3.1); orta kovanın hafif şahin sapması (+50 bp) sonucu pay tarafına
+   çevirdi. Görüşünüz
    forward'lara katılıyorsa işlem yoktur (K14).
 3. **Şahin sürpriz ve artırım, indirimin aynası değil, büyütülmüş hâlidir.** 2s7s dikleştirici
    güvercin kovada +137, şahin kovada −254 bp; artırım fazında hareketin alt çeyreği −416 bp.
@@ -3768,7 +3812,7 @@ aynı sınıflama; stres ve ralli ayları seviyenin 200 bp'den fazla oynadığı
   2s7s +57 bp dikleşti; artırım aylarında −98 ve −101 bp yataylaştı.
 - **Büyük aylarda simetri.** Stres aylarında 2 yıllık +437 bp yükselirken 2s7s −124 bp
   yataylaştı; ralli aylarında 2 yıllık −429 bp düşerken 2s7s +125 bp dikleşti. DV01-nötr 2s7s
-  dikleştirici büyük aylarda aynı DV01'lük 2 yıllık receive'in hareketinin kabaca %28–29'unu
+  dikleştirici büyük aylarda aynı DV01'lik 2 yıllık receive'in hareketinin kabaca %28–29'unu
   taşıdı (124 / 437, 125 / 429) — gizli boğanın aylık yüzü.
 - **Stres ayları bir döneme ait değil.** 21 stres ayı 2013'ten 2026'ya dağılıyor ve yedisi
   2023'te; son üçü 03.2025, 03.2026 ve 07.2026. Ralli aylarının son üçü 05.2025, 12.2025 ve
@@ -3873,22 +3917,23 @@ tarihteki +167 bp yerine +66 bp kazanır.
 | Beklenti (kart) → spread | Yapı | OIS bacakları | Kâğıt bacakları | Ağırlık | Bugünkü taşıma + roll (3 ay, DV01 başına) | Kanıt (2013–2026) | Geçersizleşme |
 |---|---|---|---|---|---|---|---|
 | K1 · Gevşeme fiyatlanandan hızlı (güvercin sürpriz) | 2s5s ya da 2s7s dikleştirici | 2y receive · 5y ya da 7y pay | 2 yıllığı al · 5 ya da 7 yıllığı sat | DV01-nötr: gizli boğa görüşle aynı yönde | 2s5s dikleştirici +58 bp toplar · 2s7s dikleştirici +48 bp toplar | güvercin: 2s5s +103 · %80 · 2s7s +137 · %83 | 1 yıllık getiri 3 ay sonra başlayan forward'ın üstüne yerleşir; kur, CDS ve uzun uç primi bozulur (gevşeme güven kaybeder) |
-| K2 · Gevşeme fiyatlanandan yavaş ya da duraklama | 2s5s yassılaştırıcı | 2y pay · 5y receive | 2 yıllığı sat · 5 yıllığı al | DV01-nötr: gizli ayı görüşle aynı yönde | 2s5s yassılaştırıcı −58 bp öder | şahin: 2s5s dikleştirici −167 · %24 · orta: −18 · %44 | fiyatlanan indirim gelir; olay tarihine bağla — taşıma çeyrekte 58 bp yataylaşma ister |
+| K2 · Gevşeme fiyatlanandan yavaş ya da duraklama | spread aracı değil — en temiz ifade 2 yıllık pay | 1 yıl–18 ay pay | 2 yıllığı sat | outright; yavaş gevşeme eğimi değil seviyeyi taşır | 2 yıllık pay +27 bp toplar · 2s5s yassılaştırıcı −58 bp öder | orta kova: 2s5s dikleştirici tarihte −18 · %44, bugünkü taşımayla +44 · sabit faz: +51 — yassılaştırıcı ikisinde de ortalamada kaybeder (6.3) | 1 yıllık kotasyon forward'ın altına iner |
 | K3 · Sıkılaşma, artırım döngüsü | 2s7s yassılaştırıcı | 2y pay · 7y receive | 2 yıllığı sat · 7 yıllığı al | DV01-nötr: gizli ayı lehte | 2s7s yassılaştırıcı −48 bp öder | artırım fazı: 2s7s dikleştirici −233 · %27 · artırım ayları: 2s7s −101 | artırım karardan önce fiyatlanmış (17.04.2025 sonrası üç ayda 2s7s +488) |
 | K4 · Kur ya da risk şoku (satış kuyruğu) | 2s7s yassılaştırıcı | 2y pay · 7y receive | 2 yıllığı sat · 7 yıllığı al | DV01-nötr: gizli ayı istenen bacak | 2s7s yassılaştırıcı −48 bp öder | satış kuyruğu: 2s7s dikleştirici −312 · %24 · stres ayları: 2s7s −124 | fonlama tavana yerleşti; yassılaşmanın çoğu geçişte yaşanır, rejimin içinde 2s7s dikleştirici +37 |
 | K7 · Kalıcı dezenflasyon, ralli — kısa uç önde (tipik) | 2s7s dikleştirici | 2y receive · 7y pay | 2 yıllığı al · 7 yıllığı sat | DV01-nötr: gizli boğa lehte | 2s7s dikleştirici +48 bp toplar | ralli kuyruğu: 2s7s dikleştirici +230 · %88 · ralli ayları: 2s7s +125 | ralli uzun uçtan gelir (boğa yataylaşma) |
 | K7 · Kalıcı dezenflasyon — uzun uç risk primi önde düşer | 2s7s yassılaştırıcı | 2y pay · 7y receive (1,75 kat DV01) | 2 yıllığı sat · 7 yıllığı al (1,75 kat DV01) | regresyon 1,75: seviyeden arındırılmış | regresyon ağırlıklı 2s7s yassılaştırıcı −104 bp öder | boğa yataylaşma ayların %16,5'i — en seyrek kadran | uzun uç güncel betanın dışına çıkmaz; beta kayar (son üç yılda 0,42) |
-| K8 · Vade primi, mali risk yükselir (uzun uç önde satılır) | 2s7s dikleştirici | 2y receive · 7y pay (1,75 kat DV01) | 2 yıllığı al · 7 yıllığı sat (1,75 kat DV01) | regresyon 1,75: DV01-nötr hâl satışta seviye bacağıyla kaybeder | regresyon ağırlıklı 2s7s dikleştirici +104 bp toplar | ayı dikleşme ayların %22,0'ı · 23.09.2021: bir ayda 5y +229, 2s7s +209 | kısa uç da satılır (ayı yataylaşma, ayların %34,1'i); beta kayar |
+| K8 · Vade primi, mali risk yükselir (uzun uç önde satılır) | 2s7s dikleştirici | 2y receive · 7y pay (1,75 kat DV01) | 2 yıllığı al · 7 yıllığı sat (1,75 kat DV01) | regresyon 1,75: DV01-nötr hâl satışta seviye bacağıyla kaybeder | regresyon ağırlıklı 2s7s dikleştirici +104 bp toplar | ayı dikleşme ayların %22,0'si · 23.09.2021: bir ayda 5y +229, 2s7s +209 | kısa uç da satılır (ayı yataylaşma, ayların %34,1'i); beta kayar |
 
 Tablonun üç satırı ayrıca okunmayı hak ediyor:
 
 - **K1'de iki aday, bir asimetri.** Güvercin sürprizde bugünkü taşımayla 2s7s dikleştirici +202
   bp, 2s5s +168 bp; satış kuyruğunda 2s7s −208 bp, 2s5s −87 bp. 2s7s görüş doğruysa biraz fazla
   kazanır, kuyrukta iki katından fazla kaybeder. Bugünkü eğride güvercin görüşünün daha verimli
-  ifadesi 2s5s'tir; bedeli 2s5s'in tümseğe maruziyetidir (4.3: büküm şoku dikleştiriciye seviye
-  şokundan fazla kaybettirir).
-- **K2 ve K3–K4 yassılaştırıcıyı olay tarihine bağlar.** Yassılaştırıcı bugün çeyrekte 48–58 bp
-  öder; görüş belirli bir karara, bir fonlama adımına ya da bir şoka dayanmalı ve olay geçince
+  ifadesi 2s5s'tir; bedeli, 2s5s'in P&L'inde tümseğin seviyeye göre daha ağır basmasıdır
+  (4.3: 2s5s'te büküm maruziyeti seviyeninkinin ≈ 1,5 katı, 2s7s'te ≈ 1,1 katı; mutlak büküm
+  riski 2s7s'te biraz daha büyüktür).
+- **K3–K4 yassılaştırıcıyı olay tarihine bağlar; K2'de yassılaştırıcı araç değildir.**
+  Yassılaştırıcı bugün çeyrekte 48–58 bp öder; görüş belirli bir karara, bir fonlama adımına ya da bir şoka dayanmalı ve olay geçince
   yapı kapatılmalıdır. Açık uçlu bir "sıkılaşma gelir" yassılaştırıcısı her çeyrek taşımasını
   ödeyerek bekler.
 - **K7'nin iki okuması iki ters yapı verir.** Türkiye'de rallinin tipik biçimi kısa ucun önde
@@ -3900,7 +3945,7 @@ Tablonun üç satırı ayrıca okunmayı hak ediyor:
 #### Ağırlık: gizli boğayı ve gizli ayıyı bilinçli seçmek
 
 Tablonun "ağırlık" sütunu bir tercih değil, görüşün kendisidir. DV01-nötr bir 2s7s dikleştirici,
-aynı DV01'lük 2 yıllık uzun kâğıdın 1σ seviye riskinin yaklaşık %42'sini taşır (4.3). Görüşünüz
+aynı DV01'lik 2 yıllık uzun kâğıdın 1σ seviye riskinin yaklaşık %42'sini taşır (4.3). Görüşünüz
 seviyeyle aynı yöndeyse (K1 için dikleştirici, K3–K4 için yassılaştırıcı) bu risk istenen bir
 bacaktır; değilse (K7'nin uzun uç okuması, K8) temizlenir. Seviyeden arındırılmış eğim için uzun
 bacak regresyon oranıyla büyütülür (4.3): 2s5s'te 1,45, 2s7s'te 1,75.
@@ -3919,7 +3964,7 @@ $-(0{,}3926 - 1{,}75 \times 0{,}2277) \times 546{,}2 \times 10.000 \approx +32$ 
 için bütün sayılar eksi işaretle okunur.)
 
 - **Bugünkü eğride seviyeyi temizlemek taşımayı artırıyor.** 2s7s dikleştiricinin taşıması
-  +48'den +104 bp'ye çıkıyor, çünkü eklenen 0,75 DV01'lük 7 yıllık pay bugün kendi başına
+  +48'den +104 bp'ye çıkıyor, çünkü eklenen 0,75 DV01'lik 7 yıllık pay bugün kendi başına
   taşıyan bir pozisyon: 7 yılda receive DV01 başına −75 bp öder, pay aynı 75 bp'yi toplar (3.3).
   Aynı hesap K7'nin uzun uç okuması için pahalıdır: regresyon ağırlıklı 2s7s yassılaştırıcı
   çeyrekte −104 bp öder.
@@ -3987,7 +4032,8 @@ Dört sonuç stopu ve boyutu kurar:
 - **Kuyruğu işlem dosyasına yazın.** Dikleştiricinin satış kuyruğundaki kaybı kaç çeyreklik taşıma
   ediyor (2s7s'te beş çeyreği aşıyor, 3.8), en kötü ay kaç çeyrek — boyut o sayıdan kurulur.
 - **Fonlama sinyalini izleyin.** Fixing tavana çıktığında kısa uç önde satıldı; o sinyalde
-  dikleştiricileri küçültün, ama rejim yerleştikten sonra yassılaştırıcıyı taşımak ödemedi.
+  dikleştiricileri küçültün, ama rejim yerleştikten sonra yassılaştırıcı tutmak kaybettirdi
+  (tavan içinde kurulan 2s7s dikleştirici +37 bp kazandı).
 - **Karar günlerinde boyutu indirin.** 2s7s'in karar günü kuyruğu 2 yıllık getirinin
   kuyruğundan büyük; seviye-nötr bir spread olay-nötr değildir.
 - **OIS'te net yüzen bacağı yazın.** DV01-nötr 2s5s dikleştirici net olarak 51,3 mn TL
@@ -3998,7 +4044,7 @@ Bu bölümün beklenti kartları: K1, K2, K3, K4, K7, K8 (Bölüm 6.3).
 <div class="pratik">
   <span class="etiket">Pratik — Bölüm 4 · Spread</span>
 
-**1. Doğrudan uygulama — hedge oranı.** 2 yıllık kâğıtta 100.000 TL/bp DV01'lük bir
+**1. Doğrudan uygulama — hedge oranı.** 2 yıllık kâğıtta 100.000 TL/bp DV01'lik bir
 pozisyonunuz var ve 7 yıllıkla hedge etmek istiyorsunuz. (a) En küçük varyanslı hedge
 için 7 yıllık DV01'i ne olmalı? (b) "2 yıllık hareket ettiğinde ortalamada nötr kalayım"
 isteseydiniz? (c) İki oran neden bu kadar farklı?
@@ -4010,9 +4056,9 @@ isteseydiniz? (c) İki oran neden bu kadar farklı?
 
 (b) $1/\beta_{7y\mid 2y} = 1/0{,}57 = 1{,}75$ ⇒ **≈ 175.000 TL/bp**.
 
-(c) İki soru farklı. (a) toplam varyansı en küçükler: 7 yıllığın hareketlerinin neredeyse
-tamamı 2 yıllıkta da görüldüğü için 7 yıllık 2 yıllığın iyi bir "açıklayıcısı"dır ve
-oran 1'e yakın çıkar. (b) 2 yıllık hareket ettiğinde 7 yıllığın ortalama tepkisini
+(c) İki soru farklı. (a) toplam varyansı en küçükler: iki vade güçlü ilişkilidir
+(R² 0,55) ve 2 yıllığın oynaklığı 7 yıllığınkinden büyüktür (243'e karşı 187 bp), bu yüzden
+oran 1'e yakın çıkar ($\approx 0{,}74 \times 1{,}30$). (b) 2 yıllık hareket ettiğinde 7 yıllığın ortalama tepkisini
 nötrler; 7 yıllık 2 yıllığın hareketinin yalnız %57'sini yaptığı için daha fazla 7 yıllık
 gerekir. Hangisinin doğru olduğu, hedge'in amacına bağlıdır ve işlem dosyasına yazılır.
 
@@ -4202,7 +4248,7 @@ z-skorları için kullanılır.
 #### Bacak anatomisi: kâğıtta long fly
 
 Kâğıtta long 2y5y7y fly 5 yıllık gövdeyi satıp 2 ve 7 yıllık kanatları almaktır. 100 mn TL
-nominal 5 yıllık sıfır kuponlu gövdenin (piyasa değeri 21,6 mn TL, DV01'i 7.966 TL/bp)
+nominal 5 yıllık sıfır kuponlu gövdenin (piyasa değeri 21,6 mn TL, DV01'i 7.965 TL/bp)
 karşısında üç ağırlık kuralı üç ayrı long fly kurar; 1σ sütunları bir standart sapmalık aylık
 faktör şokunun P&L'idir:
 
@@ -4217,7 +4263,7 @@ toplar. Gövde DV01'ine bölününce 50:50'nin +0,27 mn'u ≈ +34 bp, PCA'nın +
 eder: 5.4'teki haritanın sayıları. Ama üçü üç ayrı risk taşır:
 
 - **Nakit + durasyon nötr** (klasik barbell) net nakit istemez ve konveksitesi en yüksektir
-  (+0,05 mn); ama DV01'ünün büyük kısmını 7 yıla koyduğu için **gizli bir ayıdır**: 1σ seviye
+  (+0,05 mn); ama DV01'inin büyük kısmını 7 yıla koyduğu için **gizli bir ayıdır**: 1σ seviye
   şokunda +0,13 mn, taşımasının neredeyse tamamı kadar.
 - **50:50 DV01** en çok taşır (+0,27 mn) ve 13,9 mn net nakit ister; **gizli bir boğadır**
   (−0,12 mn) ve bu eğride konveksitesi bile eksidir (−0,02 mn). 2 yıllık kanadın durasyon
@@ -4328,7 +4374,8 @@ belly) denen pozisyon short fly'dır. Birim ve P&L cebiri 5.1'de.
 
 1. **Spread'lerin spread'i.** $\text{fly} = (y_{\text{gövde}} - y_{\text{kısa}}) -
    (y_{\text{uzun}} - y_{\text{gövde}})$: kısa kanat–gövde spread'i eksi gövde–uzun kanat
-   spread'i. Fly eğrinin **ikinci türevidir**; eğimin vadeyle nasıl değiştiğini ölçer.
+   spread'i. Fly, eğrinin **ikinci türevinin eksi işaretlisidir** (bükülme ölçüsü: tümsekli,
+   içbükey bir eğride fly artıdır); eğimin vadeyle nasıl değiştiğini ölçer.
    Long fly, ön spread'in (gövde − kısa kanat) dikleşmesine ve arka spread'in (uzun kanat −
    gövde) yataylaşmasına aynı anda bahistir.
 2. **Gövde ile kirişin farkı.** Gövdenin getirisi, iki kanadı birleştiren doğrunun (kiriş)
@@ -4491,7 +4538,8 @@ Kısa uç satırları politika patikasının mekaniğidir: toplam gevşeme aynı
 birkaç ay gecikirse 6 aylık vadenin ortalama faizi kanatlarının ortalamasından fazla yükselir —
 3 aylık vade gecikmenin yalnız başını görür, 1 yıllık vade onu uzun bir döneme yayar. Bu
 davranış bu dersin verisiyle sınanamaz (kısa uç kotasyon serisi yok; K15); orta ve uzun uç
-satırlarının ölçümü 5.5 ve 5.10'da.
+satırlarından 1y2y5y ve 2y3y5y 5.5'te, arz gerekçesinin kâğıttaki vekili (3y5y7y) 5.10'da
+ölçülüyor; 10 yıllık düğüm taşıyan 2y5y10y ve 5y7y10y bu veriyle ölçülemez (5.6).
 
 Kısa uç fly'ları (3m6m1y, 6m1y2y) **politika takviminin** işlemleridir: toplam gevşeme
 görüşünüz olmasa da "adım ekimde değil aralıkta gelir" görüşünü taşırlar. Orta ve uzun uç
@@ -4535,8 +4583,10 @@ Tablo üç şey öğretir:
   kurulur; yarı ömrü bir haftaya inen bir yapı, bir ölçüm yapaylığının imzasıdır. Kısa uç
   fly'larının gerçek davranışı işlem gören OIS kotasyonlarıyla ölçülür.
 - **Orta ve uzun uç fly'ları gerçek bir hafıza taşır.** 2y5y7y ve 3y5y7y'nin yarı ömrü
-  5–8 ay, dönüş oranı 0,36–0,47: spread'lerin (0,29–0,30) ve seviyenin (0,15) açıkça
-  üstünde. Fly, eğrinin en hızlı dönen ve en az oynak yapısıdır.
+  5–8 ay, dönüş oranı 0,36–0,47: seviyenin (0,15) ve aynı vadeleri kapsayan 2s5s ile 2s7s
+  spread'lerinin (0,29–0,30) açıkça üstünde, 1y2y (0,43) ve 5s7s (0,41) spread'leriyle aynı
+  bantta. Fly'ı bu spread'lerden ayıran dönüş hızı değil, seviyeden arındırılabilmesidir:
+  PCA ağırlığıyla 2y5y7y'nin yarı ömrü 7,9 aydan 4,1 aya iner (5.3).
 - **"Fly" adı nötrlüğü garanti etmez.** 1y2y5y'nin seviyeyle korelasyonu +0,27, 2y5y7y'ninki
   −0,24: 50:50 ağırlıklı fly'lar seviyeye karşı açık kalır. Bir sonraki alt bölüm bunu
   düzeltir.
@@ -4941,7 +4991,7 @@ yalnız üçü sinyal veriyor ve üçü de 50:50 kotasyonunda, kısa kanadı 1 y
 1y3y5y (z +1,19), 1y3y7y (+1,08), 1y5y7y (+1,24). Üçü de short fly ister — ve üçünde de long
 fly taşır (+13, +18, +28 bp), yani short aleyhte taşır. Aynı üç fly'ın PCA hâlleri sinyal
 vermiyor (z −0,51, +0,29, +0,75): 50:50 sinyalinin arkasında seviyenin ve kısa ucun son 36
-aydaki hareketi olabilir, bükümün kendisi değil. 2y5y7y 50:50'nin z'si 1,00'dır; eşiğin
+aydaki hareketi olabilir, bükümün kendisi değil. 2y5y7y 50:50'nin z'si 1,00'dir; eşiğin
 sınırındadır ve yuvarlanmamış değeri eşiğin altında kalır: sinyal yok.
 
 Tablo daha genel bir şey de söylüyor: **bugünkü eğride ortalamaya dönüş ile taşıma çoğu fly'da
@@ -4972,8 +5022,9 @@ haritası OIS fly'ına taşınmaz ve kâğıt PCA ağırlıklarının OIS'e akta
 Harita yirmi yapıyı yan yana koyar ve en yüksek taşıma/oynaklık oranını seçmek cazip gelir.
 Bu, örneklem dışında sınanmamış bir seçimdir. Yirmi yapıdan birinin tesadüfen iyi görünmesi
 beklenir; oran bir **sıralama ölçüsüdür**, beklenen getiri değil. Aynı soru geçmişte dört fly
-için örneklem dışı soruldu (3.6): taşımanın işaretiyle fly tutmak yalnız 1y2y5y'de kenar verdi
-(+28,2 bp, t 2,4) ve o kenar sinyal 21 gün gecikince +7,8 bp'ye eridi. 2y5y7y'de aynı kural
+için örneklem dışı soruldu (3.6): taşımanın işaretiyle fly tutmak yalnız 1y2y5y'de sıfırdan
+ayrıldı (+28,2 bp, t 2,4) — ama hep short 1y2y5y'ye üstünlüğü yalnız 7,7 bp — ve sinyal 21
+gün gecikince +7,8 bp'ye eridi. 2y5y7y'de aynı kural
 çeyrekte −1,9 bp (t −0,2) getirdi. Yani bugün haritanın long tarafında en üstte duran 2y5y7y,
 taşıma kuralının geçmişte kenar vermediği fly'dır; short tarafında öne çıkan 1y2y5y ise
 verdiği tek fly. Üç uyarı daha: yarı ömürler örneklem içidir; oynaklık tam örneklemdendir ve
@@ -5059,13 +5110,14 @@ rejim görüşü almak mümkündür; ama o zaman kurulan şey bir fly değil, k�
 pozisyonudur ve risk bütçesine öyle yazılır.
 
 **2. PCA hâlleri rejimlerde küçük kalır.** Long 2y5y7y PCA üç sürpriz kovasında +12, −7 ve
-+2; long 1y2y5y PCA −18, +5 ve −6. PPK fazında büyüklükler yarıya iner (long 2y5y7y PCA
-+17 · +10 · −25). İki istisna var; ikisi de yönlüdür, büyük değildir:
++2; long 1y2y5y PCA −18, +5 ve −6. PPK fazının uç hâllerinde PCA hâli 50:50'nin kabaca
+yarısıdır (long 2y5y7y indirimde +33 → +17, artırımda −64 → −25; sabit fazda +10). İki istisna var; ikisi de yönlüdür, büyük değildir:
 
 - **İndirim fazında long 1y2y5y PCA −27 bp** (isabet %37). Tersinden okunursa short 1y2y5y
   (2 yılda receive, 1 ve 5 yılda pay) indirim pencerelerinin çoğunda kazandı: tümsek indirim
-  döngüsünde çöker. Bu seviyeden değil bükümden gelir, çünkü 50:50 hâli de aynı işareti
-  taşır (−23).
+  döngüsünde çöker. Bu kayıp seviyeden gelmez, çünkü PCA ağırlıkları seviye duyarlılığını
+  tanım gereği sıfırlar. 50:50 hâlinin aynı işareti (−23) ayrıca bir kanıt değildir: long
+  1y2y5y 50:50 gizli bir ayıdır ve indirimde seviyeden de kaybeder.
 - **Satış kuyruğunda long 2y5y7y PCA +16 bp** (isabet %82, 17 pencere): büyük satışlarda
   5 yıl kanatlarına göre ucuzladı.
 
@@ -5094,11 +5146,13 @@ Seçilmiş hücreler bir rejim ortalamasının ne kadar "temiz" olduğunu göste
 çeyrekler arası aralığı sıfırı kapsıyorsa (long 2y5y7y PCA artırımda −62 ile +37, long
 1y2y5y PCA indirimde −93 ile +40) ortalamayı birkaç büyük pencere taşır ve rejim yalnız bir
 eğilimdir. Kapsamıyorsa (long 1y2y5y 50:50 satış kuyruğunda +61 ile +150, long 2y5y7y
-50:50 indirimde +2 ile +87, long 2y3y5y 50:50 satış kuyruğunda +27 ile +78) rejim fly'ın
-tarafını gerçekten belirlemiştir. Bu üç temiz hücrenin üçü de 50:50'dir, yani seviyenin
-katkısını taşır. Taşıma sütunu ayrıca hatırlatır: rejim pencerelerinde taşıma + roll
-hareketin yanında küçüktür (−14 ile +7 bp) — rejim görüşüyle kurulan fly'ı hareket öder ya
-da kaybettirir.
+50:50 indirimde +2 ile +87, long 2y3y5y 50:50 satış kuyruğunda +27 ile +78, long 2y5y7y PCA
+satış kuyruğunda +6 ile +69) rejim fly'ın tarafını gerçekten belirlemiştir. Bu dört temiz
+hücrenin üçü 50:50'dir, yani seviyenin katkısını taşır; seviyeden arındırılmış tek temiz hücre,
+büyük satışlarda 5 yılın kanatlarına göre ucuzlamasıdır (long 2y5y7y PCA, isabet %82) ve
+hareketi küçüktür (ortalama +23 bp). Taşıma sütunu ayrıca hatırlatır: rejim pencerelerinde taşıma + roll
+hareketin yanında küçüktür (−14 ile +7 bp) — rejim görüşüyle kurulan fly'ı hareket kazandırır
+ya da kaybettirir.
 
 #### Aylık ölçü: PPK ayı, stres ayı, ralli ayı
 
@@ -5167,9 +5221,9 @@ DV01'i biriminde; artı = fly yükseldi = long fly kazandı:
 
 Sekiz olay bir istatistik değil, bir vaka listesidir; ilk satır PPK arşivinin ilk faiz
 değişimidir ve öncesi bilinmediği için bir dönüş olduğu kesin değildir. Yine de iki şey
-okunur. İndirim döngüsünü açan dört kararın üçünde long 2y5y7y PCA üç ayda kazandı (+33,
-+87, +109); dördüncüsü, 2 yıllık getirinin karardan sonraki üç ayda +665 bp yükseldiği
-23.09.2021 indirimidir (+5). Aynı dört kararın üçünde long 1y2y5y PCA üç ayda kaybetti
+okunur. İndirim döngüsünü açan dört kararın dördünde de long 2y5y7y PCA üç ayda kazandı
+(+33, +87, +109); en küçük kazanç, 2 yıllık getirinin karardan sonraki üç ayda +665 bp
+yükseldiği 23.09.2021 indirimindedir (+5) ve gürültüden ayırt edilemez. Aynı dört kararın üçünde long 1y2y5y PCA üç ayda kaybetti
 (−24, −289, −92), yani short 1y2y5y — tümseğin çökmesi — kazandı. Artırım döngüsünü açan
 kararlarda tablo karışıktır: 17.04.2025 artırımından sonraki üç ayda long 2y5y7y PCA +150
 bp kazandı ve aynı üç ayda 2 yıllık getiri −670 bp düştü; eğri bu kararı bir sıkılaşmanın
@@ -5327,8 +5381,10 @@ PPK günü medyan 15 bp (diğer günler 9), 90. yüzdelik 96 (79): politika habe
 gecikmeye duyarlıdır: sinyal bir ay geç okunursa büyük kısmı kaybolur.
 
 **Tetik ve geçersizleşme.** Tetik: PPK rehberliği, TÜFE, beklenti anketinin politika faizi
-patikası. Geçersizleşme (short için): rehberliğin "sıkı duruş sürecek" yönüne dönmesi ya da
-fonlamanın koridor tavanına çıkması; seviye stopu PCA ile son 36 ayla 2σ = 290 bp; zaman
+patikası. Geçersizleşme (short için): rehberliğin "sıkı duruş sürecek" yönüne dönmesi.
+Fonlamanın koridor tavanına çıkması görüşü yeniden sınatır ama bir fiyat stopu değildir: PCA
+fly o rejimde short lehine hareket etti (long −50 bp, 26 pencere). Seviye stopu PCA ile son
+36 ayla 2σ = 290 bp; zaman
 stopu yarı ömrün bir–iki katı (2–3 ay). **Bugünkü hüküm:** "tümsek çöker" görüşü olan için
 short 1y2y5y taşımayla aynı yönde; gerekçe istatistik değil politika patikası olmak zorunda,
 çünkü PCA ölçüsünde gövde zaten pahalı.
@@ -5413,14 +5469,14 @@ komşularına göre pahalılaşacak; artırım (long 50:50 −64, PCA −25), ar
 (long fly'ın 50:50 parçaları: taşıma −1, roll +36). 5 yıllık gövde tümseğin inen yamacındadır ve tek başına
 roll'da kaybeder (−42); long fly o kaybı karşı tarafa bırakır, kanatlarda ise 2 yılın artı
 roll'u (+22) 7 yılın eksi roll'unu (−34) büyük ölçüde karşılar. 50:50
-z'si +1,00'a yuvarlanır ama eşiğin hemen altındadır; PCA z'si +0,84: göreli değer sinyali
+z'si +1,00'e yuvarlanır ama eşiğin hemen altındadır; PCA z'si +0,84: göreli değer sinyali
 yok, olsaydı short tarafı gösterirdi — bugün taşıma long, hafif sapma short tarafta. **Temsili
 OIS eğrisinde işaret döner:** long 2y5y7y 50:50 −41, PCA −14 bp öder (5.7).
 
 **Rejim.** 50:50 hâli bir boğa hedge'idir (indirimde +33, güvercin sürprizde +35; artırımda
 −64). PCA hâli indirimde +17, artırımda −25, satış kuyruğunda +16; fonlama koridor
 üstündeyken +27, koridor altındayken −101 (10 pencere). İndirim döngüsünü açan dört kararın
-üçünde long 2y5y7y PCA üç ayda kazandı.
+dördünde de long 2y5y7y PCA üç ayda kazandı (en küçüğü, 23.09.2021'de, +5 bp).
 
 **Stres ve PPK.** PCA aylık σ 46 bp (son 36 ay 68), en büyük hareketler 04.2024 (+168) ve
 02.2024 (−179), 95. yüzdelik 94 bp. PPK günü medyan 10 bp (diğer günler 6), ama 90.
@@ -5430,8 +5486,12 @@ yüzdelik 36 bp ile diğer günlerin (41) altında: büyük hareketleri PPK dı�
 değişimi, PPK patikası. Geçersizleşme: taşımanın işaret değiştirmesi (tümsek kayarsa roll
 gider), gerçekleşen seviye korelasyonunun sıfırdan uzaklaşması (ağırlık eskidi), seviye
 stopu PCA ile son 36 ayla 2σ = 136 bp; zaman stopu yarı ömrün bir–iki katı (4–8 ay). **Bugünkü
-hüküm:** taşıma defterinin baş adayı; PCA ölçüsünde beşin en uzun yarı ömrü (4,1 ay), yani
-hızlı dönüşün gürültü olma ihtimalinin en düşük olduğu fly.
+hüküm:** taşıma bugün long tarafta ve oynaklığa oranı yüksek (tam örneklem σ'sıyla +0,32,
+son 36 ayın σ'sıyla 0,21); PCA ölçüsünde beşin en uzun yarı ömrü de bu fly'da (4,1 ay,
+örneklem içi). Ama taşımanın işaretiyle bu fly'ı tutmak örneklem dışında çeyrekte −1,9 bp
+(t −0,2) getirdi (5.9): burada taşıma bir süzgeç ve başabaş eşiğidir, tek başına gerekçe
+değildir. Pozisyon bir arz ya da patika gerekçesiyle kurulur; taşıma o gerekçenin lehte olan
+bedelidir.
 
 #### Kart 5 · 3y5y7y — uzun ucun kıvrımı
 
@@ -5536,7 +5596,8 @@ büyüklükte nominal gerekir. Pay bacağı yüzen alır, receive bacakları yü
 42 mn TL'lik bir yüzen bacak **ödenir**. PCA ağırlıkla 20,4 mn, long 1y2y5y'de 14,6 ve
 15,5 mn TL.
 
-**2. Long fly'ın kısa kanadı receive olduğu için tavan rejiminde net fixing öder.** TLREF
+**2. Long fly'ın iki kanadı da receive olduğu ve kanat nominallerinin toplamı gövdeninkini
+aştığı için long fly net fixing öder; fonlama tavana yapıştığında bu ödeme büyür.** TLREF
 100 bp yükselirse long 2y5y7y 50:50'nin çeyreklik taşıması −117 bin TL, PCA hâlininki −57
 bin TL değişir. Fixing duyarlılığı fly'ın kendi riskine göre küçüktür (fly'da 10 bp = 304
 bin TL) ama tek yönlüdür ve 2.4'teki TLREF–politika bazının fly'daki izidir: fonlama
@@ -5672,7 +5733,7 @@ standart sapmalık aylık şokun P&L'i; bütün satırlar long fly, yani barbell
 
 Klasik barbell'in en büyük riski büküm değil **seviyedir**: 1σ'lık aylık seviye şokunda
 +0,13 mn TL — üç aylık taşıma avantajının neredeyse tamamı kadar, ve bükümün altı katı.
-Sebep ağırlıklarda: barbell durasyonu eşitlemek için DV01'ünün büyük kısmını 7 yıla koyar
+Sebep ağırlıklarda: barbell durasyonu eşitlemek için DV01'inin büyük kısmını 7 yıla koyar
 (6.698'e karşı 1.267 TL/bp) ve 7 yıllık, seviye şokunda 5 yıllıktan az hareket eder
 (124'e karşı 155 bp). Sonuç: klasik barbell faiz yükselince kazanan, düşünce kaybeden
 gizli bir **ayı** pozisyonudur. 50:50 ağırlık tersine gizli bir boğadır (−0,12 mn).
@@ -5782,8 +5843,8 @@ $50 \times (1 - 0{,}5^{3/\tau_{1/2}})$:
 50 bp'lik bir sapma PCA fly için anlamlı (oynaklığının bir katından fazla), 2s7s için
 gürültüdür. Doğru kıyas sapmayı her yapının kendi dağılımıyla ölçmektir: 5.2'deki son
 sütun, bir standart sapmalık sapmanın üç aylık beklenen dönüşünü aynı üç ayın öngörülemeyen
-hareketine oranlıyordu — PCA fly'da bu oran 0,50, 50:50 fly'da 0,36, 2s7s'te 0,29, 2 yıllık
-seviyede 0,15.
+hareketine oranlıyordu: 50:50 fly'da 0,36, 2s7s'te 0,29, 2 yıllık seviyede 0,15. Aynı ölçü
+PCA fly'ın 4,1 aylık yarı ömrüyle 0,50 verir.
 
 Bu oranlar küçüktür ve bu bir uyarıdır: **en iyi dönen yapıda bile tek bir işlemin
 sonucu büyük ölçüde gürültüdür.** Ortalamaya dönüş işlemleri tek tek değil, çok sayıda
@@ -6007,8 +6068,8 @@ bacakların **ayrı ayrı** stres hareketleriyle ve ağırlıkların eskimesi se
 - **Zaman stopu:** yarı ömrün bir ile iki katı. PCA 2y5y7y'de yarı ömür 4,1 ay; sekiz ay
   içinde dönmeyen bir sapma ya bir rejim değişikliğidir ya da tanımlanmamış bir özellik.
   PCA 1y2y5y'de 1,6 ay: iki–üç ayda dönmeyen tümsek işlemi yeniden savunulmalıdır.
-- **Taşıma stopu:** taşıma gerekçesiyle kurulan bir fly'da taşıma haritası (5.4) her hafta
-  yeniden hesaplanır; long fly'ın taşıması işaret değiştirirse gerekçe ortadan kalkmıştır.
+- **Taşıma stopu:** taşıma gerekçesiyle kurulan bir fly'da taşıma haritası (5.4) her ay
+  yeniden kurulur, taşıması sıfıra yakın yapılarda her hafta kontrol edilir; long fly'ın taşıması işaret değiştirirse gerekçe ortadan kalkmıştır.
   Long 2y5y7y'nin bugünkü taşıması neredeyse tamamen roll'dan gelir: tümsek kayarsa roll ve
   onunla gerekçe gider.
 - **Hedef:** sapmanın kapanması ya da beklenen kalan dönüşün taşıma ve makası karşılamaz
@@ -6035,8 +6096,9 @@ Spread ve fly'lar **paket** olarak işlem görür. OIS'te piyasa yapıcıları 2
 için doğrudan paket kotasyonu verir; bacakları tek tek işlemek, her bacakta ayrı alış–satış
 makası ödemek ve bacaklar arasında fiyat hareketine (bacak riski) açık kalmak demektir.
 Kâğıtta paket kotasyonu daha seyrektir; o zaman kural şudur: **önce en az likit bacak**
-işlenir, sonra likit bacaklarla hedge tamamlanır. Çıkışta sıra tersine döner: likit
-bacaklar önce çözülmez, çünkü en sona kalan sığ bacak çıkışın bütün fiyatını belirler.
+işlenir, sonra likit bacaklarla hedge tamamlanır. Çıkışta da sıra aynıdır: önce sığ bacak
+çözülür, likit bacaklar sonra gelir, çünkü en sona kalan sığ bacak çıkışın bütün fiyatını
+belirler.
 Fly'ın alış–satış maliyeti gövde DV01'i cinsinden hesaplanır ve beklenen dönüşle
 kıyaslanır — Trade Pratiği'nin B.6.5 bölümündeki "3× maliyet testi" bu kıyasın masa
 kuralıdır. Kotasyonu doğru okumak da icranın parçasıdır: "long fly" gövdede pay demektir ve
@@ -6097,6 +6159,7 @@ uzundur. Kurulmadan önce her satır doldurulur:
 |---|---|---|
 | Yön | 5 yılda pay, 2 ve 7 yılda receive; kâğıtta 5 yıllığı sat, 2 ve 7 yıllığı al | 2 yılda receive, 1 ve 5 yılda pay; kâğıtta 2 yıllığı al, 1 ve 5 yıllığı sat |
 | Gerekçe | taşıma hasadı (5.2'nin altıncı gerekçesi) | politika patikası (5.2'nin ikinci gerekçesi) |
+| Kanıt | taşıma işaretiyle tutma kuralı örneklem dışında −1,9 bp, t −0,2 (5.9): kenar yok, taşıma burada yalnız başabaşı düşürür | taşıma işaretiyle tutma kuralı +28,2 bp, t 2,4, ama hep short'a üstünlüğü 7,7 bp; 21 gün gecikmede +7,8 bp'ye eriyor |
 | Ağırlık | 0,324 · 0,685 | 0,441 · 0,736 |
 | Taşıma + roll (kâğıt, 3 ay) | +25 bp toplar, neredeyse tamamı roll | +53 bp toplar (short taraf) |
 | Göreli değer | seviye +4 bp, yüzdelik 80, z +0,84: hafif sapma short tarafı gösteriyor, sinyal yok | seviye −337 bp, yüzdelik 11: gövde tarihsel olarak zaten pahalı; gerekçe istatistik olamaz |
@@ -6174,9 +6237,9 @@ Bugünkü eğride (22.09.2026) fly masasının sırası:
 4. **OIS'te kuruyorsanız taşımayı OIS eğrisinde yeniden hesaplayın** (5.7): temsili eğride
    işaret dönüyor ve long fly net yüzen bacak ödüyor.
 5. **Boyutu son 36 ayın σ'sıyla, stopu 2σ ile, zaman stopunu yarı ömürle koyun; taşıma
-   haritasını her hafta yeniden hesaplayın.**
+   haritasını her ay yeniden kurun, taşıması sıfıra yakın yapılarda haftalık kontrol edin.**
 
-Bu bölümün beklenti kartları: K7, K9, K10, K11, K12, K13.
+Bu bölümün beklenti kartları (Bölüm 6.3): K1, K3, K7, K9, K10, K11, K12, K13.
 
 <div class="pratik">
   <span class="etiket">Pratik — Bölüm 5 · Fly</span>
@@ -6222,7 +6285,9 @@ diyen bir meslektaşınıza ne dersiniz?
 Türkiye'nin tipik hareketi paralel değil, kısa uç ağırlıklıdır ve klasik barbell gizli bir
 ayı pozisyonudur: 1σ'lık aylık bir **seviye düşüşünde** (ralli) 100 mn gövde başına
 −0,13 mn TL kaybeder. Üç aylık taşıma + konveksite avantajı (+0,14 + 0,05 = +0,19 mn)
-tek bir seviye şokunu ancak karşılar. İkinci kaybettiren senaryo bükümdür: 5 yıllık
+tek bir 1σ seviye şokunu karşılar (0,19 > 0,13); barbell bullet'ın gerisine ancak yaklaşık
+1,5σ'dan büyük bir rallide (0,19 / 0,13) ya da art arda ralli aylarında düşer. İkinci
+kaybettiren senaryo bükümdür: 5 yıllık
 kanatlara göre pahalılaşırsa (fly düşerse — short fly'ın kazandığı yön) bullet kazanır.
 
 (b) Klasik ağırlıkla barbell'i seçen iki görüş taşır: **faizler hızla düşmez** (gizli ayı
@@ -6370,9 +6435,10 @@ verilir, çünkü 50:50 seviye taşır (5.3). PCA z'si +0,84: sinyal yok.
 
 (d) Çeyreklik taşıma, aynı üç ayın tipik hareketinin (σ√3; aylık 46 bp ile ≈ 80 bp) yaklaşık
 üçte biridir. Tek başına bir kenar değildir — tek işlemin sonucu yine gürültüdür — ama
-fly'da kararı belirleyecek büyüklüktedir. Outright'larda aynı oran eksidir (5 yıllık receive
-için −0,25): bugünkü kâğıt eğrisinde taşıma defteri outright'ta değil, eğrinin şeklinde
-(fly ve dikleştirici) kurulur.
+fly'da kararı belirleyecek büyüklüktedir. Outright'ta oranın büyüklüğü benzerdir (son 36
+ayın σ'sıyla 5 yıllık pay +0,25, long 2y5y7y PCA +0,21); taşıma defterinin outright'ta
+kurulmamasının sebebi oran değil 3.6'nın kanıtıdır: outright'ta taşıma kuralı trendden
+ayrılmadı, eğri ticareti ise iki yarıda da kazandırdı.
 
 </details>
 
@@ -6520,8 +6586,8 @@ sabit, 33'ü artırım. **Sürpriz kovası**: 6.1'deki $s$'nin üçte birlikleri
 sınırlar −72 bp ve +157 bp, kova ortalamaları −347 bp, +50 bp ve +561 bp. **Kuyruk**:
 pencerenin seviye hareketinin — 2 ve 7 yıllık getirinin ortalamasının değişimi — en alt ve
 en üst %10'u, 17'şer pencere; sınırlar −278 bp ve +486 bp, ortalamalar −533 bp ve +762 bp.
-Fly ağırlıkları tam örneklem PCA'sındandır (rejimi betimlemek için; örneklem dışı sınama
-5.9'da). Yapılar receive, dikleştirici ve long fly yönündedir; ters yönün hücresi aynı
+Fly'lar tam örneklem PCA ağırlığıyla, 1y2y5y ve 2y5y7y ayrıca 50:50 ağırlıkla yer alır
+(rejimi betimlemek için; örneklem dışı sınama 5.9'da). Yapılar receive, dikleştirici ve long fly yönündedir; ters yönün hücresi aynı
 sayının eksisidir.
 
 Tablo aynı hücrelerin sayısal hâli; her hücre rejimin **ortalamasıdır**:
@@ -6579,12 +6645,15 @@ Haritanın dört dersi kartların omurgasıdır:
 - **Yön değil sürpriz kazandırır.** 2y receive indirim fazında +166 bp, güvercin kovasında
   +304 bp; indirim fazının çeyreklerinin dörtte birinde yine kaybetti (p25 −68 bp). Karar
   PPK'nın ne yaptığına değil, yaptığının fiyatlanana göre yerine bağlıdır (K1–K3).
-- **Dikleştirici bu eğride dört dünyada artıda başlar** (indirim, sabit, güvercin, orta);
-  kaybettiği dünyalar sıkılaşma ve satış — DV01-nötr dikleştiricinin gizli boğa yüzü (4.3).
+- **Dikleştirici bu eğride beş dünyada artıda başlar** (indirim, sabit, güvercin, orta,
+  ralli); kaybettiği dünyalar artırım, şahin sürpriz ve satış kuyruğu — DV01-nötr
+  dikleştiricinin gizli boğa yüzü (4.3).
 - **Long 1y2y5y (50:50) bir ayı sigortasıdır, fly değil:** yalnız artırım, şahin ve satış
   sütunlarında artıda; PCA hâli sekiz sütunun sekizinde eksi.
-- **Long 2y5y7y (PCA) bugün neredeyse her dünyada öder:** çeyrekler arası aralığın alt ucu
-  beş sütunda sıfırın üstünde. Bu bir görüş değil, **taşıma** işlemidir (K13).
+- **Long 2y5y7y (PCA) bugün neredeyse her dünyada kazandırır:** sekiz sütunun yedisinde
+  ortalama artı (tek eksi artırım, −7 bp); çeyrekler arası aralığın alt ucu beş sütunda
+  sıfırın üstünde. Bu bir görüş değil, **taşıma** işlemidir — ama taşımanın işaretiyle bu
+  fly'ı tutmak örneklem dışında kenar vermedi (çeyrekte −1,9 bp, t −0,2; 3.6).
 
 ### 6.3 Beklenti kartları (≈14 dk)
 
@@ -6601,13 +6670,13 @@ On beş kart aynı iskeletle yazılır: **görüş** (forward'a göre yazılmı�
 | K4 Kur ya da risk şoku | durasyonu hızla azalt | 3 ay–1 yıl pay | 2s7s yassılaştırıcı | long 2y3y5y (50:50) sigorta | evet: 2 yıllık pay +27 bp | ölçülmüş (outright), eğilim (fly) |
 | K5 Fonlama tavana çıkar | kaldıraçlı taşımayı küçült | 1 yıl pay | yassılaştırıcı | aracı yok | evet: 2 yıllık kısa kâğıt +27 bp | eğilim (n = 4) |
 | K6 Fonlama politikaya döner | repo maliyeti düşer | 3 ay receive (hızlıysa) | aracı yok | aracı yok | — | eğilim (n = 4, karışık) |
-| K7 Kalıcı dezenflasyon, ralli | 2 yıllık al | receive, forward başlangıçlı | 2s7s dikleştirici | short 1y2y5y | hayır: 2 yıllık −27 bp, 7 yıllık −75 bp | ölçülmüş (ralli), eğilim (uzun uç önde) |
+| K7 Kalıcı dezenflasyon, ralli | 2 yıllık al | receive, forward başlangıçlı | 2s7s dikleştirici (kısa uç önde) · regresyon ağırlıklı 2s7s yassılaştırıcı (uzun uç primi) | short 1y2y5y | hayır: 2 yıllık −27 bp, 7 yıllık −75 bp | ölçülmüş (ralli), eğilim (uzun uç önde) |
 | K8 Vade primi yükselir | 7 yıllığı sat | 5–7 yıl pay | dikleştirici, regresyonla | aracı değil | evet: 7 yıllık pay +75 bp | eğilim |
 | K9 Tümsek çöker | 2 yıllığı al, 1 ve 5 yıllığı sat | 2 yıl receive | 2s5s dikleştirici | short 1y2y5y (PCA) | evet: short 1y2y5y (PCA) +53 bp | ölçülmüş |
 | K10 Göreli değer | kâğıt switch'i | — | — | PCA fly, taşıma yönünde | bugün sinyal yok | eğilim (karışık) |
 | K11 Arz bir vadeye yığılır | ihale switch'i | — | — | long 2y5y7y (PCA) | evet: long 2y5y7y (PCA) +25 bp | eğilim (t < 2) |
 | K12 Oynaklık artar | barbell | — | — | long 2y5y7y (PCA) | long 2y5y7y (PCA) +25 bp, oynaklıktan değil taşımadan | ölçüldü, kazanmadı |
-| K13 Görüş yok | sabit kâğıt tutma | — | 2s7s dikleştirici | long 2y5y7y, short 1y2y5y (PCA) | tanım gereği evet | ölçülmüş |
+| K13 Görüş yok | sabit kâğıt tutma | — | 2s7s dikleştirici | short 1y2y5y (PCA); long 2y5y7y (PCA) yalnız sınanmamış taşıma satırı | tanım gereği evet | ölçülmüş (eğri ticareti, 1y2y5y) |
 | K14 Forward'lara katılıyorum | işlem yok | işlem yok | işlem yok | işlem yok | — | ölçülmüş |
 | K15 PPK adımı bir toplantı gecikir | aracı yok | 1m–2m switch | kısa uç spread'i | kısa uç fly'ı | — | ölçülemedi |
 
@@ -6655,7 +6724,7 @@ On beş kart aynı iskeletle yazılır: **görüş** (forward'a göre yazılmı�
   taşımayla +168 bp). Seviye stopu 2s5s'in bir aylık σ'sı. Gerekçe stopu: PPK metni
   rehberliği sertleştirir ya da fonlama tavana döner. Zaman stopu bir çeyrek.
 - **Geçersizleşme.** Fonlamanın koridor tavanına dönmesi (K5); kurda kopuş (K4); 1 yıllık
-  kotasyonun forward'ın üstüne çıkması; 2s5s'in 2 yıllıkla birlikte düşmesi (ayı
+  kotasyonun forward'ın üstüne çıkması; 2 yıllık getiri yükselirken 2s5s'in düşmesi (ayı
   yataylaşma imzası).
 
 <div class="not sinav-ornek">
@@ -6726,7 +6795,8 @@ On beş kart aynı iskeletle yazılır: **görüş** (forward'a göre yazılmı�
   +23 bp) ama −35 bp öder. **Long 2y3y5y (50:50)** (3 yılda pay, 2 ve 5 yılda receive;
   kâğıtta 3 yıllığı sat, 2 ve 5 yıllığı al) şahin kovasında bugünkü taşımayla +40 bp ve
   taşıması +19 bp lehte. İkisi de saf fly değil, ucuz taşımalı ayı pozisyonudur ve öyle
-  raporlanır. PCA hâlleri bu görüşte kazanmıyor (long 1y2y5y PCA şahin −49 bp).
+  raporlanır. PCA hâlleri bu görüşte ayrışır: long 1y2y5y PCA şahinde −49 bp, long 2y3y5y
+  PCA +20 bp — ama o artının +14'ü bugünkü taşımadır.
 - **En temiz ifade: 2 yıllık pay.** Şahin kovasında 2y receive'in isabeti %0: pay tarafı 54
   pencerenin her birinde kazandı; taşıma lehte.
 - **Ağırlık ve boyut.** Outright; pay'in kuyruğu rallidir, stres tavanı 2 yıllığın en
@@ -6769,8 +6839,9 @@ On beş kart aynı iskeletle yazılır: **görüş** (forward'a göre yazılmı�
   1y2y5y (50:50) kuyrukta daha büyük kazanır (+101 bp) ama −35 bp öder. Long 2y5y7y (PCA)
   +48 bp ve +25 bp taşır.
 - **En temiz ifade: 2 yıllık pay.** Görüş şokun kendisiyse kısa uç önde satılır ve pay
-  taşır. Sigorta istenen başka bir işlemdir: long 2y3y5y (50:50), beklerken ödemeyen tek
-  kuyruk koruması.
+  taşır. Sigorta istenen başka bir işlemdir: beklerken taşıyan iki kuyruk koruması var,
+  long 2y3y5y (50:50; satışta +83 bp, taşıma +19) ve long 2y5y7y (PCA; satışta +48 bp,
+  taşıma +25).
 - **Ağırlık ve boyut.** Outright stres bütçesiyle; stres gününde bacak likiditesi
   kaybolur, en ince bacak boyutu belirler (5.11). Sigortada 50:50 **bilerek** seçilir:
   seviye yükü istenir.
@@ -6883,9 +6954,12 @@ On beş kart aynı iskeletle yazılır: **görüş** (forward'a göre yazılmı�
 - **OIS outright.** Receive; görüş yalnız uzun ucun primiyse forward başlangıçlı receive
   (ilk yılın PPK fiyatlaması soyulur, 2.5). Temsili eğride kira uzadıkça hafifler: 1 yıllık
   receive −282 bp, 5 yıllık −178 bp, 7 yıllık −139 bp.
-- **Spread.** 2s7s dikleştirici: Türkiye'de ralli kısa uçtan gelir. 14 ralli ayında 2
-  yıllık ortalama −429 bp, 7 yıllık −304 bp, 2s7s +125 bp. "Uzun uç önde ralli" (boğa
-  yataylaşma) ayların yalnız %16,5'i — dört kadranın en seyreği (4.2).
+- **Spread.** İki okuma, iki ters yapı (4.5); hangisinin taşındığı işlem kurulmadan yazılır.
+  Ralli kısa uçtan gelirse (Türkiye'de tipik biçim: boğa dikleşme, ayların %27,4'ü) yapı
+  DV01-nötr 2s7s dikleştiricidir, +48 bp toplar: 14 ralli ayında 2 yıllık ortalama −429 bp,
+  7 yıllık −304 bp, 2s7s +125 bp. Görüş uzun ucun priminin önde düşmesiyse yapı tersidir:
+  regresyon ağırlıklı (1,75) 2s7s yassılaştırıcı, çeyrekte −104 bp öder ve "uzun uç önde
+  ralli" (boğa yataylaşma) ayların yalnız %16,5'i — dört kadranın en seyreği (4.2).
 - **Fly.** Short 1y2y5y: tümsek erir. Ralli kuyruğunda long 1y2y5y (50:50) −99 bp; short
   tarafı pencerelerin yaklaşık %65'inde kazandı.
 - **En temiz ifade: 2 yıllık kâğıt uzun.** Ralli kuyruğunda üç outright'ın kazancı üç
@@ -6902,7 +6976,10 @@ On beş kart aynı iskeletle yazılır: **görüş** (forward'a göre yazılmı�
   −0,16: forward'lar uzun uçta da gerçekleşmedi (3.5).
 - **Hedef, stop ve zaman stopu.** Hedef ralli ortalaması. Gerekçe stopu: hizmet
   enflasyonunun yapışması, başabaş enflasyonun yükselmesi. Zaman stopu bir çeyrek.
-- **Geçersizleşme.** Ayı dikleşme: uzun uçta vade primi artarken kısa ucun inmesi (K8).
+- **Geçersizleşme.** Ayı dikleşme: uzun uçta vade primi artar, uzun uç kısa uçtan fazla
+  yükselir (K8) — uzun uç okumasını ve 5–7 yıllık receive'ı geçersizleştirir. Hizmet
+  enflasyonunun yapışması ve 1 yıllık getirinin forward'ın üstüne çıkması seviye okumasını
+  geçersizleştirir.
 
 <div class="not sinav-ornek">
   <span class="etiket">Varsayımsal boyut — K7</span>
@@ -6924,8 +7001,8 @@ On beş kart aynı iskeletle yazılır: **görüş** (forward'a göre yazılmı�
 - **En temiz ifade: 7 yıllık pay** (kâğıtta 7 yıllığı satmak). Taşıması lehte.
 - **Ağırlık ve boyut.** 7 yıllığın son 36 aylık aylık oynaklığı 163 bp; kuyruk: en büyük
   aylık düşüş −666 bp (05.2023).
-- **Bugünkü taşıma.** 7 yıllık pay +75 bp, 5 yıllık pay +85 bp toplar; 2s7s dikleştirici
-  +48 bp toplar.
+- **Bugünkü taşıma.** 7 yıllık pay +75 bp, 5 yıllık pay +85 bp toplar; regresyon ağırlıklı
+  (1,75) 2s7s dikleştirici +104 bp toplar (DV01-nötr hâli +48 bp).
 - **Kanıt (eğilim).** Ayı dikleşme ayların %22,0'sidir. Seviyenin yükseldiği 11 indirim
   ayının 8'i ayı dikleşmedir (2020 ve 2021 gevşemeleri, 09–10.2025): indirim yapılıp
   seviyenin yükseldiği aylarda uzun uç çoğunlukla kısa uçtan fazla satıldı. 23.09.2021 indiriminden sonraki bir ayda 5 yıllık +229 bp, 2s7s +209 bp
@@ -6970,7 +7047,11 @@ On beş kart aynı iskeletle yazılır: **görüş** (forward'a göre yazılmı�
 - **Hedef, stop ve zaman stopu.** Seviye stopu fly'ın bir aylık σ'sı; zaman stopu yarı
   ömrün bir–iki katı (2–3 ay); gerekçe stopu: gevşemenin fiyatlanandan yavaş gelmesi (K2).
 - **Geçersizleşme.** 2 yıllık ihale arzının yoğunlaşması (ihale haftası gövdeyi
-  ucuzlatabilir, K11); satış kuyruğu (long 1y2y5y 50:50 orada kazanır, K4).
+  ucuzlatabilir, K11) ve gevşemenin fiyatlanandan yavaş gelmesi (K2). Satış kuyruğu PCA
+  ağırlıklı short için aleyhte değildir: long 1y2y5y (PCA) satış kuyruğunda −12 bp, yani
+  short taraf hafif artı. Aynı fly 50:50 kurulursa gizli bir ayı taşır ve satış kuyruğunda
+  short kaybeder (long 1y2y5y 50:50 orada +122 bp; K4) — kâğıt hâli bu yüzden PCA
+  ağırlığıyla kurulur.
 
 <div class="not sinav-ornek">
   <span class="etiket">Varsayımsal boyut — K9</span>
@@ -6990,8 +7071,8 @@ On beş kart aynı iskeletle yazılır: **görüş** (forward'a göre yazılmı�
 - **Fly.** Gövde ucuzsa (z ≥ +1) short PCA fly (gövdede receive; kâğıtta gövdeyi al,
   kanatları sat); pahalıysa (z ≤ −1) long PCA fly.
 - **En temiz ifade: PCA fly, taşımayla aynı yönde olduğunda.**
-- **Ağırlık ve boyut.** PCA, genişleyen pencere, aylık yenileme; boyut yapının kendi
-  σ'sıyla (2y5y7y PCA tam örneklemde 46 bp).
+- **Ağırlık ve boyut.** PCA, genişleyen pencere, aylık yenileme; boyut yapının kendi son
+  36 aylık σ'sıyla (2y5y7y PCA 68 bp; tam örneklemde 46 bp).
 - **Bugünkü taşıma.** Bugün hiçbir PCA fly'da |z| ≥ 1 yok. 50:50 kotasyonunda 1y3y5y
   (z +1,19), 1y3y7y (+1,08) ve 1y5y7y (+1,24) short sinyali veriyor; üçünde de long fly
   taşır (+13, +18, +28 bp), yani short aleyhte taşır — ve 50:50 kotasyonu seviye yükü
@@ -7027,7 +7108,8 @@ On beş kart aynı iskeletle yazılır: **görüş** (forward'a göre yazılmı�
   önceki beş günde ortalama +3,0 bp (medyan +0,5, t = 0,49), sonraki beş günde −4,9 bp
   (t = −0,95): yön hipotezle tutarlı, büyüklük gürültünün içinde (beş günlük değişimlerin
   standart sapması 40 bp). 2 yıllık ihalelerde 1y2y3y 50:50 önceki beş günde +21,7 bp
-  (medyan +10,1, t = 1,73). Kural değildir (5.10).
+  (medyan +10,1, t = 1,73). Ölçülen fly 3y5y7y'dir; kartın yapısı olan 2y5y7y'nin ihale
+  haftası tepkisi ayrıca ölçülmedi. Kural değildir (5.10).
 - **Hedef, stop ve zaman stopu.** Gerekçe stopu: ihale takvimden çıkar ya da tutarı düşer;
   güçlü teklif/satış. Zaman stopu: son ihaleden beş iş günü sonra.
 - **Geçersizleşme.** Piyasa yapıcıların ihale sonrası kâğıdı elde tutması; stratejide 5
@@ -7072,15 +7154,21 @@ On beş kart aynı iskeletle yazılır: **görüş** (forward'a göre yazılmı�
 - **OIS outright.** Ters eğride küçük pay taşır, ama o bir görüştür (K2), görüşsüzlük
   değil.
 - **Spread.** Eğri ticaretinin bugünkü seçimi: 2s7s dikleştirici.
-- **Fly.** Long 2y5y7y (PCA), short 1y2y5y (PCA).
-- **En temiz ifade: üç yapılı küçük defter** (6.4, Vaka D) — üçünün de aynı bükümü
-  taşıdığı bilinerek (6.5).
+- **Fly.** Short 1y2y5y (PCA): fly taşıma kuralının bugünkü seçimi ve kuralın sıfırdan
+  ayrıldığı tek fly (+28,2 bp, t = 2,4; 5.9) — hep short'a üstünlüğü küçük olsa da. Long
+  2y5y7y (PCA) bugün +25 bp taşır, ama aynı kural bu fly'da kenar vermedi (−1,9 bp,
+  t = −0,2). Deftere girerse sınanmamış bir taşıma satırıdır: küçük boyla ve ilk kesilen.
+- **En temiz ifade: küçük taşıma defteri** (6.4, Vaka D): 2s7s dikleştirici ve short 1y2y5y
+  (PCA); long 2y5y7y (PCA) ancak sınanmamış satır olarak eklenir. Yapıların aynı bükümü
+  taşıdığı bilinir (6.5).
 - **Ağırlık ve boyut.** Yapı başına bütçenin üçte biri; defterin toplam faktör
   maruziyeti yazılır.
 - **Bugünkü taşıma.** 2s7s dikleştirici +48 bp, long 2y5y7y (PCA) +25 bp, short 1y2y5y
   (PCA) +53 bp toplar.
 - **Kanıt (ölçülmüş).** Eğri ticareti çeyrekte DV01 başına +79,2 bp, t = 2,6, iki yarıda da
-  artı (3.6) — tek işlemin standart sapması 312 bp: kural çok işlemde çalışır.
+  artı (3.6) — tek işlemin standart sapması 312 bp: kural çok işlemde çalışır. Fly taşıma
+  kuralı 1y2y5y'de +28,2 bp (t = 2,4), 2y5y7y'de −1,9 bp (t = −0,2): long 2y5y7y bacağının
+  ölçülmüş kanıtı yok.
 - **Hedef, stop ve zaman stopu.** Taşıma işaret değiştirince çıkılır; fonlama rejimi
   değişince yeniden hesaplanır; aylık yenileme.
 - **Geçersizleşme.** Tümseğin büyümesi (büküm +1σ); satış kuyruğu (dikleştirici bacağı).
@@ -7171,8 +7259,9 @@ rejiminde aynı pay her çeyrek öder — ve o rejim bu veriyle ölçülemiyor (
   2 yılı uzun (taşıma/σ −0,05), 7 yılı kısa (−0,26) seçiyor: **2s7s dikleştirici, +48 bp.**
   Tek işlemin standart sapması 312 bp — kural çok işlemde çalışır, tek çeyrek gürültüdür.
 - **Fly taşıması** (5.9): "her ay taşımanın işareti yönünde" kuralı 1y2y5y'de +28,2 bp
-  (t = 2,4) ama 2y5y7y'de −1,9 bp (t = −0,2), 3y5y7y'de +2,2 bp, 2y3y5y'de +5,9 bp. Tek
-  sağlam fly 1y2y5y ve kenarı gecikmeye duyarlı (K9). Bugün kural short 1y2y5y diyor.
+  (t = 2,4) ama 2y5y7y'de −1,9 bp (t = −0,2), 3y5y7y'de +2,2 bp, 2y3y5y'de +5,9 bp. Sıfırdan
+  ayrılan tek fly 1y2y5y; hep short'a üstünlüğü yalnız 7,7 bp (2020–2026'da 2,0) ve kenarı
+  gecikmeye duyarlı (K9). Bugün kural short 1y2y5y diyor.
 
 **Kuyruk riski.** Görüşsüz defter, kuyruğu satan defterdir; hangi kuyruğu sattığı yazılır.
 Satış kuyruğunda (17 pencere) 2s7s dikleştirici −312 bp (isabet %24), ralli kuyruğunda
@@ -7391,9 +7480,10 @@ küçültülür ya da kısa vadeli pay onları da hedge edecek büyüklükte se�
   1 yıllık OIS pay ≈ 5.500 TL/bp (≈ 66 mn TL nominal). Eğri sabit, fixing %36,49 ≈
   **+0,91 mn TL**; forward'lar gerçekleşir ≈ 0; tavan bütün çeyrek sürerse fixing ve roll
   ≈ +1,55 mn TL, kısa ucun yeniden fiyatlanması ayrıca. Tavan 2026 bloğundaki gibi politika
-  faizinin 296 bp üstüne çıkarsa defterdeki iki yapının (temsili 2s5s dikleştirici ve long
-  2y5y7y fly) çeyreklik taşımasından birlikte ≈ (143 + 117) bin TL × 2,96 ≈ 0,77 mn TL
-  silinir — doğrusal bir yaklaşım. Stop: 1 yıllık kotasyon 366 bp aleyhe (−2,0 mn TL).
+  faizinin 296 bp üstüne çıkarsa fixing %36,49'dan %39,95'e, yani 346 bp yükselir;
+  defterdeki iki yapının (temsili 2s5s dikleştirici ve long 2y5y7y fly) çeyreklik
+  taşımasından birlikte ≈ (143 + 117) bin TL × 3,46 ≈ 0,90 mn TL silinir — doğrusal bir
+  yaklaşım. Stop: 1 yıllık kotasyon 366 bp aleyhe (−2,0 mn TL).
   Gerekçe stopu: bir hafta vadeli repo ihalesinin yeniden açılması. Zaman stopu: bir ay
   içinde tavan gelmezse kapat.
 </div>
@@ -7439,10 +7529,12 @@ tutmak, hangisinin çalıştığını görmemektir.
 <div class="not sinav-ornek">
   <span class="etiket">Varsayımsal defter — sayılar gösterim içindir, yükler ve taşımalar ölçülmüş</span>
 
-  6.4'ün kurallarıyla üç yapı, her birine aylık bütçenin üçte biri (≈ 0,67 mn TL):
-  eğri ticaretinin bugünkü seçimi 2s7s dikleştirici (0,67 mn / 237 ≈ 2.800 TL/bp), long
-  2y5y7y (PCA) (0,67 mn / 68 ≈ 9.800 TL/bp gövde), short 1y2y5y (PCA) (0,67 mn / 145 ≈
-  4.600 TL/bp gövde). Taşıma ve +1σ faktör şokları, mn TL:
+  Üç yapı, her birine aylık bütçenin üçte biri (≈ 0,67 mn TL). İkisi 6.4'ün sınanmış
+  kurallarının bugünkü seçimi: eğri ticaretinden 2s7s dikleştirici (0,67 mn / 237 ≈ 2.800
+  TL/bp), fly taşıma kuralından short 1y2y5y (PCA) (0,67 mn / 145 ≈ 4.600 TL/bp gövde).
+  Üçüncüsü long 2y5y7y (PCA) (0,67 mn / 68 ≈ 9.800 TL/bp gövde): bugün taşıma toplar, ama
+  taşıma kuralı bu fly'da örneklem dışında kenar vermedi (−1,9 bp, t −0,2; 5.4) — defterde
+  sınanmamış taşıma satırı olarak durur ve önce o kesilir. Taşıma ve +1σ faktör şokları, mn TL:
 
   | Vaka D defteri (mn TL) | Taşıma + roll (3 ay) | Seviye +1σ | Eğim +1σ | Büküm +1σ |
   |---|---|---|---|---|
@@ -7471,10 +7563,12 @@ tutmak, hangisinin çalıştığını görmemektir.
 **Ders.** Bugünkü eğride "görüşsüz" defter, bir büküm görüşüdür: tümsek büyümez. Bu kötü
 bir bahis değildir — 2 yıllık tepe blokları tarihte ortalama 1,4 ay sürdü ve bugünkü tümsek
 3 aydır yerinde — ama bir bahistir ve öyle yazılır. Defteri çeşitlendirmek, büküm yükü ters
-işaretli bir yapı eklemeyi ister. Bugün o yapıların çoğu öder (yassılaştırıcılar, long
-1y2y5y, short 2y5y7y) ya da büyük bir seviye riski getirir (2 yıllık pay); taşıyan tek
-istisna long 2y3y5y (PCA), onun da riski çoğunlukla bükümden değil 3 yıllık düğümün kendi
-hareketinden gelir (6.5). Görüşsüzlüğün bedeli budur.
+işaretli bir yapı eklemeyi ister. Bugün o yapıların çoğu öder (2s5s ve 2s7s
+yassılaştırıcıları, long 1y2y5y, short 2y5y7y) ya da büyük bir seviye riski getirir (2 yıllık
+pay). Taşıyan istisnalar üç tane: long 2y3y5y (PCA) çeyrekte +14 bp toplar, ama riski
+çoğunlukla bükümden değil 3 yıllık düğümün kendi hareketinden gelir (6.5); 1y2y ve 5s7s
+yassılaştırıcıları +12 ve +10 bp toplar (3.3), ama bu taşıma aylık oynaklıklarının yanında
+küçüktür. Görüşsüzlüğün bedeli budur.
 
 ### 6.7 Masanın günü, haftası, ayı (≈1 dk)
 
@@ -7546,11 +7640,14 @@ ne?
 
 (b) En yüksek oran 5 yıllık pay'indir, ama bir faiz görüşüdür (K2, K8): forward'ın
 gerçekleşmeyeceğine bahistir ve bu örneklemde hep-kısa olarak kazandı; taşıma işaretiyle
-zamanlama hep kısadan ayrılmadı (6.4). Görüşsüz defter long 2y5y7y (PCA) ve 2s5s
-dikleştiriciden kurulur; ikincisi seviye riski de taşır (gizli boğa).
+zamanlama hep kısadan ayrılmadı (6.4). 2s5s dikleştirici taşıma toplar ama kendi biçimiyle
+girmez: defterin spread bacağını eğri ticareti kuralı seçer ve bugün 2 yılı uzun, 7 yılı kısa
+tutarak 2s7s dikleştiriciyi seçer (sabit bir dikleştiriciyi hep tutmak örneklemde
+kaybettirdi); dikleştirici hangisi olursa olsun seviye riski de taşır (gizli boğa). Long
+2y5y7y (PCA) ancak sınanmamış bir taşıma satırı olarak girer (K13).
 
-(c) İkisi de büküm sütununda eksi yüklüdür (2s5s dikleştirici −874.200, long 2y5y7y PCA
-−187.000 TL, 10.000 TL/bp başına): tümsek büyürse ikisi birden kaybeder.
+(c) Üçü de büküm sütununda eksi yüklüdür (10.000 TL/bp başına 2s5s dikleştirici −874.200,
+5 yıllık pay ≈ −560.000, long 2y5y7y PCA −187.000 TL): tümsek büyürse üçü birden kaybeder.
 
 </details>
 
@@ -7622,9 +7719,10 @@ yani yüzen öder) uzun bacaktan büyüktür; long fly'da kanatlarda receive (y�
 nominallerin toplamı gövdede pay (yüzen alır) edilen nominalden büyüktür. Fark fixinge
 açıktır.
 
-(b) Toplam etki 100 bp başına $143 + 117 + 43 = 303$ bin TL. 296 bp'lik bir baz için
-yaklaşık $303 \times 2{,}96 \approx$ **0,90 mn TL** çeyreklik taşıma kaybı — doğrusal bir
-yaklaşım.
+(b) Toplam etki 100 bp başına $143 + 117 + 43 = 303$ bin TL. Tavan politika faizinin 296 bp
+üstüne gelirse fixing %36,49'dan %39,95'e, yani 346 bp çıkar (fixing bugün politika faizinin
+51 bp altında): yaklaşık $303 \times 3{,}46 \approx$ **1,05 mn TL** çeyreklik taşıma kaybı —
+doğrusal bir yaklaşım.
 
 (c) Tavan görüşünüz yoksa bu bir kuyruk riskidir: defterin net yüzen bacağı kadar kısa
 vadeli (1–3 ay) pay ile fixing riski nötrlenir. Tavan görüşünüz varsa (K5) kısa vadeli pay
@@ -7643,7 +7741,8 @@ taşımasına denk? (b) En kötü ay? (c) Bu asimetri ne söylüyor?
 
 (a) $68 / 25 \approx$ **2,7 çeyrek**; 2σ'lık stop $136 / 25 \approx$ 5,4 çeyrek.
 
-(b) $179 / 25 \approx$ **7,2 çeyrek**: en kötü tek ay, bir buçuk yılın taşımasını götürdü.
+(b) $179 / 25 \approx$ **7,2 çeyrek**: en kötü tek ay, yaklaşık iki yılın (yedi çeyreğin)
+taşımasını götürdü.
 
 (c) Taşıma işlemi yüksek olasılıkla küçük, düşük olasılıkla büyük sonuç verir. Boyut
 taşımaya değil kuyruğa göre ayarlanır; stop, taşımanın kaç çeyreğini feda ettiğinizi
@@ -7665,12 +7764,15 @@ Kararınız?
 — sonuç birkaç büyük gözlemden geliyor. **Gürültü:** 50:50 kotasyonun beş günlük
 değişimlerinin standart sapması 131 bp; +21,7 bp bunun altıda biri. **Geri dönüş:**
 ihaleden sonraki beş günde fly +9,9 bp (t = 0,88) — hipotezin istediği toparlanma yok.
-**Ağırlık:** PCA hâlinde önce +10,8 bp (t = 1,67), sonra −2,8 bp: 50:50 sonucunun bir
-kısmı seviyedir.
+**Ağırlık:** aynı birimde (gövde DV01'i başına) ihaleden önceki hareket iki ağırlıkta da
+aynıdır: 50:50 +10,85 bp (kotasyonda +21,7), PCA +10,8 bp; t de aynı (1,73 · 1,67). Ayrışma
+ihaleden sonradır: 50:50 +5,0 bp (kotasyonda +9,9), PCA −2,8 bp — 50:50'nin ihaleden sonra
+toparlanmamasının bir kısmı seviyedir.
 
 (b) Long 1y2y3y (50:50) çeyrekte gövde DV01'i başına −30 bp öder; beş iş günü çeyreğin
-yaklaşık 5/63'ü olduğundan her ihale haftası ≈ −2,4 bp. Küçük, ama beklenen kazancın
-medyanının dörtte biri.
+yaklaşık 5/63'ü olduğundan her ihale haftası ≈ −2,4 bp (gövde DV01'i başına). Küçük, ama
+aynı birimde beklenen kazancın medyanı +10,1 / 2 ≈ +5,1 bp olduğundan (50:50 kotasyonun 1
+bp'si gövde DV01'inin yarısı kadar P&L yazar) taşıma bu medyanın yarısına yakınını yer.
 
 (c) Büyük boy yok. Kural değil eğilimdir (5.10): küçük boyla, maliyeti gerçek fiyatlarla
 kaydederek izlenir; kanıt bir yıl birikince yeniden okunur. Arz görüşünün asıl ölçüsü bu
@@ -7700,7 +7802,7 @@ Dört enstrüman ailesi, tek bir disiplin:
    kötü taşıyan noktası arasındaki göreli işlem ise iki yarıda da kazandırdı. Taşıma,
    gerekçeli bir işlemin yönünü, vadesini ve ne kadar bekleyebileceğinizi seçer.
 5. **Neye nötr olduğunu seç ve yaz.** DV01-nötr bir yassılaştırıcı gizli bir ayıdır, 50:50
-   bir fly bir yön aracıdır, nakit-nötr bir switch gizli bir durasyon alımıdır, klasik
+   bir fly bir yön aracıdır, nakit-nötr bir uzatma switch'i gizli bir durasyon alımıdır, klasik
    barbell gizli bir ayıdır. Long fly gövdede pay'dir ve barbell'dir; hangi ağırlıkla
    kurulduğu, hangi riski taşımak istemediğinizin cevabıdır.
 6. **Türkiye eğrisi kısa uçtan ve fonlamadan hareket eder.** Seviye bileşeni kısa uç

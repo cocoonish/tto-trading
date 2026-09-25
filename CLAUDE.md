@@ -3293,3 +3293,57 @@ figürün elle yazılmış sayısı silindi; kalan elle yazılmış yükseklikle
 zararsız alt sınırlar. AÇIK: dokuz gömmede sayfa figürden uzun ilan ediyor (FX
 haber endeksi beş, USD/TRY devalüasyon dört; 40–100 piksel boşluk) —
 kozmetik, düzeltilmedi.
+
+**Kurucu ilke — BİR TAŞIMA KURALI, GÖRÜŞSÜZ KIYASINI GEÇMEDİKÇE KURAL DEĞİLDİR;
+TAŞIMANIN KAYNAĞI FİYAT RİSKİ DEĞİLDİR; ve AYRI YAZILAN BÖLÜMLERİN ÇELİŞKİSİNİ
+SAYI KAPISI GÖREMEZ.** 25.09.2026'da Kâğıt ve OIS dersi dört buçuk saate
+genişletildi (kullanıcı: "taşıma ve roll-down tam olarak nedir, bunlardan nasıl
+para kazanılır; fly'da ayrıntı; hangi beklentide ne yapılır; long fly = gövdede
+pay"): taşıma/roll bölümü, 70 dakikalık fly bölümü, on beş kartlı oyun kitabı,
+yirmi yeni ölçü, sekiz yeni figür. Bölümler bir şartnameyle paralel yazıldı,
+doğrulayıcı 2.782 tablo hücresini ve 985 metin parçasını ölçüme karşı sınıyor —
+ve yayından önce DONMUŞ bir kopyaya karşı sekiz mercekli bir inceleme koşuldu:
+141 bulgu, doğrulamaya giren 63'ün 63'ü de gerçek çıktı. Dördü kayda değer.
+
+(1) "TAŞIMADAN PARA KAZANILIR MI" SORUSUNUN CEVABI KIYASTADIR. 5 yıllıkta "taşıma
+artıysa uzun, eksiyse kısa" kuralı çeyrekte +%3,0 kazandırdı; hiç bakmadan hep
+kısa durmak da +%3,0 (faiz %6'dan %40'a çıkan bir örneklemde trendin kendisi).
+Aynı tuzak fly'da daha sinsiydi ve ilk yazımda düşülmüştü: 1y2y5y'de taşıma
+kuralı +28,2 bp, t 2,4 — ve kıyas olarak KAYBEDEN taraf (hep long −20,5) yazıldı.
+Doğru kıyas trendle kazanan taraftır: hep short +20,5, kuralın üstünlüğü 7,7 bp,
+2020–2026'da 2,0. Sınanmış tek görüşsüz kural DV01-nötr eğri ticareti (iki yarıda
+da artı). Kural: bir taşıma kuralı, aynı pencerede aynı mekanikle koşturulan
+"görüşsüz" kıyasıyla (hep kısa, hep short, sabit yapı) yan yana yayımlanır;
+sıfıra karşı t, kurala karşı t değildir.
+
+(2) TAŞIMA ile FİYAT RİSKİ AYRI SORULUR. Ders üç yerde long 2y5y7y'nin riskini
+"tümseğin çökmesi" diye yazıyordu, çünkü bugünkü taşımasının neredeyse tamamı
+2 yıllık tümseğin yarattığı roll'dur. Ama 2 yıl bu fly'da receive edilen
+kanattır: tümsek çökerse gelecek çeyreklerin roll'u erir, hareketin kendisi ise
+pozisyona KAZANDIRIR (güvercin sürpriz kovasında +35 bp). Fiyat riski tümseğin
+büyümesidir. Bir pozisyonun taşımasını üreten eğri şekli, o pozisyonun kaybettiği
+hareketle aynı şey olmak zorunda değildir; ikisi ayrı satırda yazılır.
+
+(3) BİRİM KARIŞMASI ÜÇ KEZ DAHA ÇIKTI. 50:50 kotasyonun 1 bp'si gövde DV01'inin
+yarısı kadar P&L yazar; ölçüm katmanı ihale etkisini kotasyonda, taşımayı gövde
+biriminde verdiği için "taşıma medyanın dörtte biri" (doğrusu yarısı) ve
+"50:50 sonucunun bir kısmı seviyedir" (aynı birimde ihale öncesi hareket iki
+ağırlıkta birebir aynı) hükümleri kuruldu. Aynı sınıf "fixing %36,49'dan tavana
+296 bp" hesabında da vardı: 296 bp tavanın POLİTİKA faizine uzaklığıdır, fixing
+politikanın 51 bp altındaydı ve hareket 346 bp. Bir farkın tabanı, farkı alınan
+iki sayının ikisi de adıyla yazılmadan hesaplanmaz.
+
+(4) PARALEL YAZIMIN KUSURU BÖLÜMLER ARASINDADIR ve sayı kapısı onu göremez.
+Doğrulayıcı her sayıyı ölçümle tutarlı buldu; ama aynı kart (K2) Bölüm 4'te
+yassılaştırıcı, Bölüm 6'da "yassılaştırıcı bu görüşün aracı değildir" diyordu;
+K7'nin iki okuması bir bölümde iki ters yapı, öbüründe tek yapı veriyordu;
+görüşsüz defter, örneklem dışı sınamada kenar vermeyen bir fly'ı "sınanmış kural"
+diye taşıyordu. Hepsi sayı olarak doğru, hüküm olarak çelişkili. Ayrıca sayım
+hükümleri ("dört kararın üçünde") tablonun kendisiyle çelişiyordu (+5 bp da bir
+kazançtır). Doğrulayıcıya nitel hükümler için `iddia` ölçütleri kondu (işaret,
+sayım, sıralama); bölümler arası çelişki ise ancak AYNI hükmü iki yerde arayan
+bir okumayla bulunur — inceleme mercekleri bunun için ayrıldı (bütünlük,
+kullanıcı isteği) ve en ağır bulguları onlar verdi. İnceleme donmuş kopyaya
+karşı koştu; ilk iş akışının düzeltmeleri canlı dosyaya uygulanırken öbür üçü
+donmuş kopyayı okumaya devam etti (16.09'daki "kaynak canlıyken ölçme" tuzağı
+kurulmadı).
