@@ -348,6 +348,12 @@ def yapi_tasima(bg: dict, a: float, b: float) -> dict:
         "fly50_govde_al_bp_govde_dv01": round(be["5"] - 0.5 * be["2"] - 0.5 * be["7"], 0),
         "fly50_govde_al_bp_fly": round(2 * (be["5"] - 0.5 * be["2"] - 0.5 * be["7"]), 0),
         "flyPCA_govde_al_bp": round(be["5"] - a * be["2"] - b * be["7"], 0),
+        # LONG fly (gövdede pay, kanatlarda receive) — yukarıdakilerin tam tersi işaret
+        "fly50_long_bp_govde_dv01": round(-(be["5"] - 0.5 * be["2"] - 0.5 * be["7"]), 0),
+        "fly50_long_bp_fly": round(-2 * (be["5"] - 0.5 * be["2"] - 0.5 * be["7"]), 0),
+        "flyPCA_long_bp": round(-(be["5"] - a * be["2"] - b * be["7"]), 0),
+        "2s5s_diklestirici_bp": round(be["2"] - be["5"], 0),
+        "2s7s_diklestirici_bp": round(be["2"] - be["7"], 0),
     }
 
 
@@ -363,6 +369,9 @@ def faktor_maruziyet(V: np.ndarray, sigma: list[float], a: float, b: float) -> d
         "3a1y_dik_dv01": {"n3a": 1.0, "n1y": -1.0},
         "fly50_govde_al": {"n5y": 1.0, "n2y": -0.5, "n7y": -0.5},
         "flyPCA_govde_al": {"n5y": 1.0, "n2y": -a, "n7y": -b},
+        # long fly = gövdede pay (kâğıtta gövdeyi sat), kanatlarda receive (kanatları al)
+        "fly50_long": {"n5y": -1.0, "n2y": 0.5, "n7y": 0.5},
+        "flyPCA_long": {"n5y": -1.0, "n2y": a, "n7y": b},
     }
     out = {}
     for ad, w in yapilar.items():
@@ -985,6 +994,1007 @@ def ihale_ozet(ih: pd.DataFrame) -> dict:
     return out
 
 
+# ─────────────────────────────────────────────────────────────── taşıma, roll ve rejimler
+# Bu bölümün vadeleri 1–7 yıldır. 3 ve 6 aylık düğümler BİLİLEREK dışarıda: kısa uçta
+# bono getirisi TLREF'in belirgin altında işler (bono–TLREF bazı) ve kâğıdın fonlama
+# üstü taşıması o bazı ölçer, eğrinin kendisini değil — 3a1y dikleştiricisi indirim
+# pencerelerinde bile −260 bp çıkıyordu. Kısa ucun taşıma mantığı OIS'le anlatılır.
+TENOR = {"n1y": 1.0, "n2y": 2.0, "n3y": 3.0, "n5y": 5.0, "n7y": 7.0}
+GECIKMELER = (1, 5, 10, 21)   # gecikme profili: sinyal kaç iş günü önceki eğriden
+YARILAR = (("2013_2019", "2013-01-01", "2020-01-01"), ("2020_2026", "2020-01-01", "2100-01-01"))
+
+
+def _ay_son_gunleri(N: pd.DataFrame) -> list:
+    return N.groupby(N.index.to_period("M")).apply(lambda x: x.index[-1]).tolist()
+
+
+def _basabas(row: pd.Series, r_on: float, hgun: int, T: float) -> float:
+    """Taşıma + roll'un başabaş getiri değişimi (bp): eğri sabitken h günlük fonlama
+    üstü getirinin modifiye durasyona bölümü. DV01 başına P&L budur."""
+    return taşıma_roll(row, r_on, hgun, T) / (T / (1 + _y(row, T))) * 1e4
+
+
+def _basabas_parca(row: pd.Series, r_on: float, hgun: int, T: float) -> tuple[float, float]:
+    """Başabaşın (bp) taşıma ve roll parçaları: taşıma = kendi getirisiyle tahakkuk eksi
+    fonlama, roll = geri kalanı; ikisi de modifiye durasyona bölünür."""
+    y = _y(row, T)
+    D = T / (1 + y)
+    tas = (1 + y) ** (hgun / 365) - 1 - ((1 + r_on / 100 / 365) ** hgun - 1)
+    top = taşıma_roll(row, r_on, hgun, T)
+    return tas / D * 1e4, (top - tas) / D * 1e4
+
+
+def _bugun_basabas(egri: pd.DataFrame, fon: pd.DataFrame) -> dict:
+    """Çıpa eğrisinde 1–7 yıllık düğümlerin 3 aylık başabaşı (bp), YUVARLANMAMIŞ: bugünkü
+    taşımayı yazan bütün tablolar aynı sayıdan beslenir."""
+    row = egri[DUGUM].dropna().iloc[-1]
+    tl = float(fon["tlref"].dropna().iloc[-1])
+    return {d: _basabas(row, tl, UFUK_GUN, T) for d, T in TENOR.items()}
+
+
+def pencereler(egri: pd.DataFrame, on: pd.Series, ppk: pd.DataFrame, cipa_gun: pd.Series | None = None,
+               k: int = 3) -> pd.DataFrame:
+    """Üst üste binen üç aylık pencereler (her ay sonu bir giriş). Her pencere ve vade
+    için gerçekleşen fonlama üstü getirinin ÜÇ PARÇASI (fiyatın yüzdesi):
+      taşıma = (1 + y₀)^h − 1 − f           kendi getirisiyle tahakkuk eksi fonlama
+      roll   = P(T−h; t₀ eğrisi)/P₀ − (1 + y₀)^h   eğri kımıldamasa vadenin kısalmasının getirisi
+      fiyat  = [P₁ − P(T−h; t₀ eğrisi)]/P₀        eğrinin kendisinin hareketi
+    f gerçekleşen gecelik fonlamanın bileşiğidir. Aynı pencerenin DV01 başına dili:
+    be (başabaş, bp; giriş eğrisi ve giriş fonlamasıyla) ve dy (kısalmış vadenin
+    getirisindeki değişim, bp) — DV01 başına P&L ≈ be − dy. Sinyal sütunları (be_sinyal)
+    beş iş günü önceki eğriden. Pencere düzeyinde: PPK fazı (penceredeki kararların
+    toplamı) ve sürpriz = t₁'deki 1 yıllık getiri − t₀'da fiyatlanan, 3 ay sonra
+    başlayan 1 yıllık forward (bp; artı = piyasanın beklediğinden şahin).
+
+    Ek sütunlar: fonlama sürprizi (girişteki fixing sabit kalsaydı taşıma − gerçekleşen
+    taşıma; artı = fonlama beklenenden pahalı çıktı), sinyal gününün fonlama çıpası,
+    penceredeki seviye hareketi (Δ(2y + 7y)/2, bp), forward'ın ima ettiği değişim
+    fd = f(h, T−h) − y(T−h) (sinyal eğrisinden, bp) ve sinyalin 1 · 10 · 21 iş günü
+    gecikmeli sürümleri (gecikme profili için)."""
+    N = egri[DUGUM].dropna()
+    son = _ay_son_gunleri(N)
+    deg = ppk["politika"].diff()
+    deg.iloc[0] = np.nan
+    ppk_bas = ppk.index.min()
+    satir = []
+    for i, t0 in enumerate(son):
+        if i + k >= len(son):
+            break
+        t1 = son[i + k]
+        j = N.index.get_loc(t0)
+        if j < GECIKME:
+            continue
+        ts = N.index[j - GECIKME]
+        r0, r1, rs = N.loc[t0], N.loc[t1], N.loc[ts]
+        hg = (t1 - t0).days
+        h = hg / 365
+        r = on.loc[t0:t1 - pd.Timedelta(days=1)] / 100
+        f = float(np.prod(1 + r / 365) - 1)
+        on0, ons = float(on.loc[:t0].iloc[-1]), float(on.loc[:ts].iloc[-1])
+        f_on = (1 + on0 / 100 / 365) ** hg - 1          # girişteki fixing sabit kalsaydı
+        if t0 < ppk_bas:
+            faz = None
+        else:
+            s = deg.loc[t0 + pd.Timedelta(days=1):t1].dropna().sum()
+            faz = "indirim" if s < 0 else ("artırım" if s > 0 else "sabit")
+        yh, y1h = _y(r0, h), _y(r0, 1 + h)
+        fwd = (1 + y1h) ** (1 + h) / (1 + yh) ** h - 1
+        surpriz = (_y(r1, 1.0) - fwd) * 1e4
+        cp = None
+        if cipa_gun is not None and ts >= cipa_gun.index.min():
+            cp = cipa_gun.loc[:ts].iloc[-1]
+        seviye = ((r1.n2y + r1.n7y) - (r0.n2y + r0.n7y)) / 2 * 100
+        gec = {}
+        for L in GECIKMELER:
+            if j - L >= 0:
+                tL = N.index[j - L]
+                gec[L] = (N.loc[tL], float(on.loc[:tL].iloc[-1]))
+        for d, T in TENOR.items():
+            y0 = _y(r0, T)
+            p0 = (1 + y0) ** (-T)
+            ps = (1 + _y(r0, T - h)) ** (-(T - h))
+            p1 = (1 + _y(r1, T - h)) ** (-(T - h))
+            tas = (1 + y0) ** h - 1 - f
+            roll = ps / p0 - (1 + y0) ** h
+            fiyat = (p1 - ps) / p0
+            ysT, ysh = _y(rs, T), _y(rs, h)
+            fwd_s = ((1 + ysT) ** T / (1 + ysh) ** h) ** (1 / (T - h)) - 1
+            satir.append({
+                "t0": t0, "d": d, "T": T, "faz": faz, "surpriz": surpriz, "cipa": cp, "seviye": seviye,
+                "tasima": tas * 100, "roll": roll * 100, "fiyat": fiyat * 100,
+                "toplam": (tas + roll + fiyat) * 100,
+                "fon_surpriz": (f - f_on) * 100,
+                "be": _basabas(r0, on0, hg, T), "be_sinyal": _basabas(rs, ons, hg, T),
+                **{f"be_g{L}": (_basabas(gec[L][0], gec[L][1], hg, T) if L in gec else np.nan)
+                   for L in GECIKMELER},
+                "dy": (_y(r1, T - h) - _y(r0, T - h)) * 1e4,
+                "fd": (fwd_s - _y(rs, T - h)) * 1e4,
+            })
+    return pd.DataFrame(satir)
+
+
+def _nw_t(x: pd.Series, L: int = 2) -> float:
+    """Üst üste binen pencerelerin ortalaması için Newey–West (Bartlett) t."""
+    y = x.dropna().to_numpy()
+    u = y - y.mean()
+    n = len(y)
+    s = (u @ u) / n
+    for l in range(1, L + 1):
+        s += 2 * (1 - l / (L + 1)) * (u[l:] @ u[:-l]) / n
+    return float(y.mean() / math.sqrt(s / n))
+
+
+def _oz(x: pd.Series) -> dict:
+    return {"n": int(len(x)), "ort": round(float(x.mean()), 1), "medyan": round(float(x.median()), 1),
+            "isabet": round(float((x > 0).mean()) * 100, 0)}
+
+
+def _yarilar(d: pd.DataFrame, kol: str, zaman: str = "t0") -> dict:
+    out = {}
+    for ad, bas, son in YARILAR:
+        x = d[(d[zaman] >= bas) & (d[zaman] < son)][kol]
+        out[ad] = {"n": int(len(x)), "ort": round(float(x.mean()), 1),
+                   "isabet": round(float((x > 0).mean()) * 100, 0)}
+    return out
+
+
+# Üç dönem: düşük faizli 2013–2019, pozitif taşımalı 2020–2022, sıkılaşma sonrası.
+UC_DONEM = (("2013_2019", "2013-01-01", "2020-01-01"), ("2020_2022", "2020-01-01", "2023-01-01"),
+            ("2023_2026", "2023-01-01", "2100-01-01"))
+
+
+def tasima_ayristirma(P: pd.DataFrame) -> dict:
+    """Gerçekleşen üç aylık fonlama üstü getirinin parçaları (fiyatın %'si), vade vade:
+    ortalama, standart sapma, varyans payı [cov(parça, toplam)/var(toplam)]; fonlama
+    sürprizi; PPK fazına ve üç döneme göre. Ardından TAŞIMA İŞARETİYLE ZAMANLAMA: sinyal
+    anındaki taşıma + roll artıysa uzun, eksiyse kısa (kısa = kâğıdı ödünç alıp satmak ya
+    da OIS'te pay; getirisi toplamın eksisi). Zamanlamanın katkısı ancak HEP KISA ve HEP
+    UZUN kıyaslarıyla okunur: faizin yükseldiği bir örneklemde kısa durmak kendi başına
+    kazandırır. t: üst üste binen pencereler için Newey–West (L = 2). Gecikme profili:
+    sinyal 1 · 5 · 10 · 21 iş günü önceki eğriden."""
+    out = {"n_pencere": int(P.t0.nunique()), "ilk": str(P.t0.min().date())[:7],
+           "son": str(P.t0.max().date())[:7], "vade": {}, "faz": {}, "donem": {}, "zamanlama": {}}
+    for d in TENOR:
+        x = P[P.d == d]
+        v = x.toplam.var()
+        out["vade"][d] = {
+            **{k: round(float(x[k].mean()), 2) for k in ("tasima", "roll", "fiyat", "toplam")},
+            "toplam_medyan": round(float(x.toplam.median()), 2),
+            "sd": {k: round(float(x[k].std()), 2) for k in ("tasima", "roll", "fiyat", "toplam")},
+            "pay": {k: round(float(np.cov(x[k], x.toplam)[0, 1] / v) * 100, 0) for k in ("tasima", "roll", "fiyat")},
+            "fon_surpriz": round(float(x.fon_surpriz.mean()), 2),
+            "pozitif": round(float((x.toplam > 0).mean()) * 100, 0),
+            "tasima_pozitif": round(float((x.tasima > 0).mean()) * 100, 0),
+            "roll_pozitif": round(float((x.roll > 0).mean()) * 100, 0),
+            "be_pozitif": round(float((x.be_sinyal > 0).mean()) * 100, 0),
+        }
+        yon = np.sign(x.be_sinyal)
+        z = yon * x.toplam
+        zz = x.assign(z=z, kisa=-x.toplam)
+        blok = {"zamanlama": {**_oz(z), "t": round(_nw_t(z), 1), "yarilar": _yarilar(zz, "z")},
+                "hep_uzun": {**_oz(x.toplam), "t": round(_nw_t(x.toplam), 1)},
+                "hep_kisa": {**_oz(-x.toplam), "t": round(_nw_t(-x.toplam), 1), "yarilar": _yarilar(zz, "kisa")},
+                "arti": {"n": int((yon > 0).sum()), "ort": round(float(x.toplam[yon > 0].mean()), 2),
+                         "pozitif": round(float((x.toplam[yon > 0] > 0).mean()) * 100, 0)},
+                "eksi": {"n": int((yon <= 0).sum()), "ort": round(float(x.toplam[yon <= 0].mean()), 2),
+                         "pozitif": round(float((x.toplam[yon <= 0] > 0).mean()) * 100, 0)},
+                "gecikme": {}}
+        for L in GECIKMELER:
+            y = x.dropna(subset=[f"be_g{L}"])
+            blok["gecikme"][str(L)] = round(float((np.sign(y[f"be_g{L}"]) * y.toplam).mean()), 2)
+        out["zamanlama"][d] = blok
+    for f in ("indirim", "sabit", "artırım"):
+        x = P[P.faz == f]
+        out["faz"][f] = {"n": int(x.t0.nunique())}
+        for d in TENOR:
+            y = x[x.d == d]
+            out["faz"][f][d] = {k: round(float(y[k].mean()), 2) for k in ("tasima", "roll", "fiyat", "toplam")}
+    for ad, bas, son in UC_DONEM:
+        x = P[(P.t0 >= bas) & (P.t0 < son)]
+        out["donem"][ad] = {"n": int(x.t0.nunique())}
+        for d in TENOR:
+            y = x[x.d == d]
+            out["donem"][ad][d] = {**{k: round(float(y[k].mean()), 2) for k in ("tasima", "roll", "fiyat", "toplam")},
+                                   "fon_surpriz": round(float(y.fon_surpriz.mean()), 2),
+                                   "tasima_pozitif": round(float((y.tasima > 0).mean()) * 100, 0)}
+    return out
+
+
+def forward_gerceklesme(P: pd.DataFrame) -> dict:
+    """Forward'lar gerçekleşiyor mu? Kısalmış vadenin gerçekleşen değişimi (dy) forward'ın
+    ima ettiği değişime (fd = f − y, sinyal eğrisinden) regresse edilir: dy = α + β·fd.
+    β = 1 → forward ortalamada gerçekleşiyor, taşıma + roll kazanılmaz; β = 0 → eğri
+    sabit kalıyor, taşıma + roll olduğu gibi kazanılır. HAC (L = 2) standart hata."""
+    out = {}
+    for d in TENOR:
+        x = P[P.d == d]
+        b, t, r2 = _hac(x.fd.to_numpy(), x.dy.to_numpy(), 2)
+        se = b / t if t else float("nan")
+        blok = {"n": int(len(x)), "beta": round(b, 2), "t0": round(t, 1), "t1": round((b - 1) / se, 1),
+                "r2": round(r2, 2), "fd_ort": round(float(x.fd.mean()), 0), "dy_ort": round(float(x.dy.mean()), 0),
+                "yarilar": {}}
+        for ad, bas, son in YARILAR:
+            y = x[(x.t0 >= bas) & (x.t0 < son)]
+            blok["yarilar"][ad] = round(float(np.polyfit(y.fd, y.dy, 1)[0]), 2)
+        out[d] = blok
+    return out
+
+
+# Eğri yapıları, DV01 ağırlıklarıyla. İşaret: artı = kâğıt uzun / OIS'te receive.
+# Long fly = GÖVDEDE PAY (kâğıtta gövdeyi sat), kanatlarda receive: fly yükselince kazanır.
+def _yapilar(V: np.ndarray) -> dict:
+    a, b = fly_agirlik(V, "n2y", "n5y", "n7y")
+    a2, b2 = fly_agirlik(V, "n1y", "n2y", "n5y")
+    a3, b3 = fly_agirlik(V, "n2y", "n3y", "n5y")
+    a4, b4 = fly_agirlik(V, "n3y", "n5y", "n7y")
+    a5, b5 = fly_agirlik(V, "n1y", "n2y", "n3y")
+    return {
+        "2y_receive": {"n2y": 1.0},
+        "5y_receive": {"n5y": 1.0},
+        "7y_receive": {"n7y": 1.0},
+        "2s5s_diklestirici": {"n2y": 1.0, "n5y": -1.0},
+        "2s7s_diklestirici": {"n2y": 1.0, "n7y": -1.0},
+        "1y2y3y_long50": {"n2y": -1.0, "n1y": 0.5, "n3y": 0.5},
+        "1y2y3y_longpca": {"n2y": -1.0, "n1y": a5, "n3y": b5},
+        "1y2y5y_long50": {"n2y": -1.0, "n1y": 0.5, "n5y": 0.5},
+        "1y2y5y_longpca": {"n2y": -1.0, "n1y": a2, "n5y": b2},
+        "2y3y5y_long50": {"n3y": -1.0, "n2y": 0.5, "n5y": 0.5},
+        "2y3y5y_longpca": {"n3y": -1.0, "n2y": a3, "n5y": b3},
+        "2y5y7y_long50": {"n5y": -1.0, "n2y": 0.5, "n7y": 0.5},
+        "2y5y7y_longpca": {"n5y": -1.0, "n2y": a, "n7y": b},
+        "3y5y7y_long50": {"n5y": -1.0, "n3y": 0.5, "n7y": 0.5},
+        "3y5y7y_longpca": {"n5y": -1.0, "n3y": a4, "n7y": b4},
+    }
+
+
+def _yapi_pencere(P: pd.DataFrame, V: np.ndarray) -> pd.DataFrame:
+    """Her pencere ve yapı için DV01 başına üç aylık P&L (bp; gövde ya da ana bacak
+    DV01'i başına): taşıma+roll = Σ w·be, hareket = −Σ w·dy, toplam = ikisinin toplamı."""
+    Y = _yapilar(V)
+    be = P.pivot(index="t0", columns="d", values="be")
+    dy = P.pivot(index="t0", columns="d", values="dy")
+    ust = P.groupby("t0")[["faz", "surpriz", "cipa", "seviye"]].first()
+    satir = []
+    for ad, w in Y.items():
+        c = sum(wi * be[d] for d, wi in w.items())
+        m = -sum(wi * dy[d] for d, wi in w.items())
+        satir.append(pd.DataFrame({"t0": be.index, "yapi": ad, "tasima": c.to_numpy(), "hareket": m.to_numpy(),
+                                   "toplam": (c + m).to_numpy(), "faz": ust.faz.to_numpy(),
+                                   "surpriz": ust.surpriz.to_numpy(), "cipa": ust.cipa.to_numpy(),
+                                   "seviye": ust.seviye.to_numpy()}))
+    return pd.concat(satir, ignore_index=True)
+
+
+def _rejim_blok(y: pd.DataFrame) -> dict:
+    return {"n": int(len(y)), "toplam": round(float(y.toplam.mean()), 0),
+            "tasima": round(float(y.tasima.mean()), 0), "hareket": round(float(y.hareket.mean()), 0),
+            "hareket_p25": round(float(y.hareket.quantile(0.25)), 0),
+            "hareket_p75": round(float(y.hareket.quantile(0.75)), 0),
+            "isabet": round(float((y.toplam > 0).mean()) * 100, 0)}
+
+
+def rejim_yapi(P: pd.DataFrame, V: np.ndarray) -> tuple[dict, pd.DataFrame]:
+    """Yapıların üç aylık P&L'i (DV01 başına bp) dört rejim tanımıyla:
+    (1) GERÇEKLEŞEN PPK fazı (penceredeki kararların toplamı);
+    (2) piyasanın fiyatladığına göre SÜRPRİZ — t₁'deki 1 yıllık getiri eksi t₀'da fiyatlanan,
+        3 ay sonra başlayan 1 yıllık forward; üç eşit kovaya bölünür. Trader'ın asıl sorusu
+        budur: yön değil, forward'a göre sapma para kazandırır;
+    (3) sinyal gününün FONLAMA ÇIPASI (TLREF 2018 sonundan);
+    (4) KUYRUK: penceredeki seviye hareketinin en üst ve en alt %10'u (satış · ralli).
+    Fly ağırlıkları tam örneklem PCA'sı — rejim betimlemesi için; ticaret sınaması
+    örneklem dışı ayrıca yapılır. Pencereler üst üste biner."""
+    Y = _yapi_pencere(P, V)
+    ust = Y.drop_duplicates("t0").set_index("t0")
+    kova = pd.qcut(ust.surpriz, 3, labels=["guvercin", "orta", "sahin"])
+    Y["kova"] = Y.t0.map(kova)
+    q10, q90 = ust.seviye.quantile(0.1), ust.seviye.quantile(0.9)
+    kuyruk = pd.Series(np.where(ust.seviye >= q90, "satis", np.where(ust.seviye <= q10, "ralli", "")),
+                       index=ust.index)
+    Y["kuyruk"] = Y.t0.map(kuyruk)
+    sinir = [float(x) for x in ust.surpriz.quantile([1 / 3, 2 / 3])]
+    out = {"n_pencere": int(len(ust)), "faz_n": {}, "kova_n": {}, "kova_surpriz": {}, "cipa_n": {},
+           "kova_sinir_bp": [round(s, 0) for s in sinir],
+           "surpriz_ort": round(float(ust.surpriz.mean()), 0),
+           "surpriz_medyan": round(float(ust.surpriz.median()), 0),
+           "kuyruk_sinir_bp": [round(float(q10), 0), round(float(q90), 0)],
+           "kuyruk_seviye": {"satis": round(float(ust.seviye[kuyruk == "satis"].mean()), 0),
+                             "ralli": round(float(ust.seviye[kuyruk == "ralli"].mean()), 0)},
+           "faz": {}, "kova": {}, "cipa": {}, "kuyruk": {}}
+    for f in ("indirim", "sabit", "artırım"):
+        out["faz_n"][f] = int((ust.faz == f).sum())
+    for kv in ("guvercin", "orta", "sahin"):
+        m = kova == kv
+        out["kova_n"][kv] = int(m.sum())
+        out["kova_surpriz"][kv] = round(float(ust.surpriz[m].mean()), 0)
+    for c in CIPALAR:
+        out["cipa_n"][c] = int((ust.cipa == c).sum())
+    for ad in Y.yapi.unique():
+        y = Y[Y.yapi == ad]
+        out["faz"][ad] = {f: _rejim_blok(y[y.faz == f]) for f in ("indirim", "sabit", "artırım")}
+        out["kova"][ad] = {kv: _rejim_blok(y[y.kova == kv]) for kv in ("guvercin", "orta", "sahin")}
+        out["cipa"][ad] = {c: _rejim_blok(y[y.cipa == c]) for c in CIPALAR if (y.cipa == c).sum() >= 5}
+        out["kuyruk"][ad] = {k: _rejim_blok(y[y.kuyruk == k]) for k in ("satis", "ralli")}
+    return out, Y
+
+
+def aylik_rejim(A: pd.DataFrame, V: np.ndarray, faz: pd.Series) -> dict:
+    """Aylık (ay sonu) getiri ve yapı hareketleri (bp): PPK ayı fazına göre ortalama, ve
+    seviyenin 200 bp'den fazla arttığı (stres) ya da düştüğü (ralli) aylar."""
+    a, b = fly_agirlik(V, "n2y", "n5y", "n7y")
+    a2, b2 = fly_agirlik(V, "n1y", "n2y", "n5y")
+    S = A * 100
+    Yd = pd.DataFrame({"2y": S.n2y, "5y": S.n5y, "7y": S.n7y, "2s5s": S.n5y - S.n2y, "2s7s": S.n7y - S.n2y,
+                       "1y2y5y": 2 * S.n2y - S.n1y - S.n5y, "1y2y5y_pca": S.n2y - a2 * S.n1y - b2 * S.n5y,
+                       "2y5y7y": 2 * S.n5y - S.n2y - S.n7y,
+                       "2y5y7y_pca": S.n5y - a * S.n2y - b * S.n7y}).diff().dropna()
+    f = faz.reindex(Yd.index)
+    out = {"faz": {}}
+    for ad in ("indirim", "sabit", "artırım", "toplantı yok"):
+        x = Yd[f == ad]
+        out["faz"][ad] = {"n": int(len(x)), **{k: round(float(x[k].mean()), 0) for k in Yd.columns}}
+    sev = (Yd["2y"] + Yd["7y"]) / 2
+    for ad, m in (("stres", sev > 200), ("ralli", sev < -200)):
+        x = Yd[m]
+        out[ad] = {"n": int(len(x)), **{k: round(float(x[k].mean()), 0) for k in Yd.columns},
+                   "aylar": [str(t.date())[:7] for t in x.index]}
+    return out
+
+
+def tasima_stratejileri(P: pd.DataFrame, A: pd.DataFrame) -> dict:
+    """Taşımadan para kazanmanın eğri kuralları, DV01 başına bp, üç aylık tutma:
+    (1) EN İYİ TAŞIMALI VADEYİ UZUN TUT: her ay sonu, beş iş günü önceki eğrinin
+        taşıma + roll başabaşının son 36 ayın gerçekleşen oynaklığına oranı en yüksek
+        vade alınır. Seviye riskini tümüyle taşır.
+    (2) EĞRİ TİCARETİ: aynı oranın en yüksek olduğu vade alınır, en düşük olduğu vade
+        satılır (DV01-nötr). Seviye riski büyük ölçüde düşer; kalan, eğrinin hangi
+        bölgesinin bekleme bedelini fazla ödediğidir. Kıyaslar: sabit 1s7s ve 2s7s
+        dikleştiricisi (kısa vade uzun, uzun vade kısa) ve pencerenin seviye hareketiyle
+        korelasyon — kural gizlice bir eğim ya da seviye bahsine dönüşmüş mü?
+    Oynaklık yalnız girişten önceki 36 aydan; oranın paydası σ·√3 (üç aylık)."""
+    Dm = A.diff() * 100
+    satir = []
+    for t0, g in P.groupby("t0"):
+        gecmis = Dm.loc[:t0 - pd.Timedelta(days=1)].iloc[-36:]
+        if len(gecmis) < 24:
+            continue
+        g = g.set_index("d")
+        sig = {d: gecmis[d].std() * math.sqrt(3) for d in TENOR}
+        pnl = {d: g.loc[d, "be"] - g.loc[d, "dy"] for d in TENOR}
+        rec = {"t0": t0, "seviye": float(g.seviye.iloc[0]),
+               "dik17": pnl["n1y"] - pnl["n7y"], "dik27": pnl["n2y"] - pnl["n7y"],
+               "esit": float(np.mean(list(pnl.values())))}
+        for L in GECIKMELER:
+            kol = "be_sinyal" if L == GECIKME else f"be_g{L}"
+            if g[kol].isna().any():
+                continue
+            oran = {d: g.loc[d, kol] / sig[d] for d in TENOR}
+            hi, lo = max(oran, key=oran.get), min(oran, key=oran.get)
+            rec[f"ls{L}"] = pnl[hi] - pnl[lo]
+            if L == GECIKME:
+                rec.update({"hi": hi, "lo": lo, "ls": pnl[hi] - pnl[lo], "uzun": pnl[hi],
+                            "dik": TENOR[hi] < TENOR[lo]})
+        satir.append(rec)
+    R = pd.DataFrame(satir)
+    return {"n": int(len(R)), "ilk": str(R.t0.min().date())[:7], "son": str(R.t0.max().date())[:7],
+            "egri_ticareti": {**_oz(R.ls), "sd": round(float(R.ls.std()), 0), "t": round(_nw_t(R.ls), 1),
+                              "yarilar": _yarilar(R, "ls"),
+                              "seviye_korelasyon": round(float(np.corrcoef(R.ls, R.seviye)[0, 1]), 2),
+                              "diklestirici_pay": round(float(R.dik.mean()) * 100, 0),
+                              "gecikme": {str(L): round(float(R[f"ls{L}"].dropna().mean()), 1) for L in GECIKMELER}},
+            "en_iyi_uzun": {**_oz(R.uzun), "yarilar": _yarilar(R, "uzun")},
+            "esit_uzun": {**_oz(R.esit), "yarilar": _yarilar(R, "esit")},
+            "sabit_1s7s_dik": {**_oz(R.dik17), "yarilar": _yarilar(R, "dik17")},
+            "sabit_2s7s_dik": {**_oz(R.dik27), "yarilar": _yarilar(R, "dik27")},
+            "secim_uzun": {d: int((R.hi == d).sum()) for d in TENOR},
+            "secim_kisa": {d: int((R.lo == d).sum()) for d in TENOR}}
+
+
+def fonlama_gecis(egri: pd.DataFrame, tb_tablo: pd.DataFrame) -> dict:
+    """TLREF'in çıpası (politika · koridor üstü · koridor altı) değiştiğinde eğri ne yaptı.
+    En az on iş günü süren çıpa blokları arasındaki geçişler; geçişten önceki kapanıştan
+    20 iş günü sonrasına ve — geçişi fark edip beş gün sonra girene — 5. günden 25.
+    güne getiri değişimi (bp)."""
+    c = tb_tablo["cipa"].dropna()
+    blok = (c != c.shift()).cumsum()
+    bl = [(x.iloc[0], x.index[0], len(x)) for _, x in c.groupby(blok)]
+    tut = [b for b in bl if b[2] >= 10]
+    N = egri[DUGUM].dropna() * 100
+    olay = []
+    for p, q in zip(tut, tut[1:]):
+        if p[0] == q[0]:
+            continue
+        j = N.index.searchsorted(q[1])
+        if j - 1 < 0 or j + 25 >= len(N):
+            continue
+        d20 = N.iloc[j + 20] - N.iloc[j - 1]
+        d525 = N.iloc[j + 25] - N.iloc[j + 5]
+        olay.append({"t": str(q[1].date()), "gecis": f"{p[0]}>{q[0]}", "gun": int(q[2]),
+                     **{f"d20_{k}": float(d20[k]) for k in DUGUM},
+                     **{f"d525_{k}": float(d525[k]) for k in DUGUM}})
+    E = pd.DataFrame(olay)
+    out = {"n": int(len(E)), "blok_n": int(len(tut)), "gecis": {}}
+    for g, x in E.groupby("gecis"):
+        out["gecis"][g] = {"n": int(len(x)), "tarih": list(x.t),
+                           "d20": {k: round(float(x[f"d20_{k}"].mean()), 0) for k in DUGUM},
+                           "d525": {k: round(float(x[f"d525_{k}"].mean()), 0) for k in DUGUM},
+                           "d20_2y_isaret": int((x["d20_n2y"] > 0).sum())}
+    return out
+
+
+def fly_tasima_haritasi(A: pd.DataFrame, V: np.ndarray, egri: pd.DataFrame, fon: pd.DataFrame) -> dict:
+    """Çıpa eğrisinde 1–7 yıllık düğümlerden kurulabilen on fly, iki ağırlıkla. Her biri
+    için: kotasyon seviyesi (50:50 → 2·gövde − kanatlar; PCA → gövde − a·kanat₁ −
+    b·kanat₂), tarihsel yüzdeliği ve son 36 ay sonuna göre z'si, LONG fly'ın (gövdede
+    pay, kanatlarda receive) üç aylık taşıma + roll'u GÖVDE DV01'İ BAŞINA bp, aylık
+    oynaklık (aynı P&L biriminde), taşıma/üç aylık oynaklık ve yarı ömür. Sinyal: z ≥ +1
+    → fly pahalı (gövde ucuz) → short fly; z ≤ −1 → long fly."""
+    import itertools
+    row = egri[DUGUM].dropna().iloc[-1]
+    tl = float(fon["tlref"].dropna().iloc[-1])
+    be = {d: _basabas(row, tl, UFUK_GUN, T) for d, T in TENOR.items()}
+    parca = {d: _basabas_parca(row, tl, UFUK_GUN, T) for d, T in TENOR.items()}
+    S = A * 100
+    out = {}
+    for k1, g, k2 in itertools.combinations(list(TENOR), 3):
+        a, b = fly_agirlik(V, k1, g, k2)
+        ad = f"{k1[1:]}{g[1:]}{k2[1:]}"
+        for w, (wa, wb) in (("50", (0.5, 0.5)), ("pca", (a, b))):
+            P_ = S[g] - wa * S[k1] - wb * S[k2]                 # P&L birimi: gövde DV01'i başına
+            kot = 2 * P_ if w == "50" else P_
+            sig = float(P_.diff().std())
+            tas = -(be[g] - wa * be[k1] - wb * be[k2])
+            g36 = kot.iloc[-37:-1]
+            z = (float(kot.iloc[-1]) - g36.mean()) / g36.std()
+            sinyal = "short" if z >= 1 else ("long" if z <= -1 else "yok")
+            out[f"{ad}_{w}"] = {
+                "a": round(wa, 3), "b": round(wb, 3), "seviye_bp": round(float(kot.iloc[-1]), 0),
+                "yuzdelik": round(float((kot < kot.iloc[-1]).mean()) * 100, 0), "z36": round(float(z), 2),
+                "tasima_long_bp": round(tas, 0), "sigma_bp_ay": round(sig, 0),
+                "tasima_parca_bp": round(-(parca[g][0] - wa * parca[k1][0] - wb * parca[k2][0]), 0),
+                "roll_parca_bp": round(-(parca[g][1] - wa * parca[k1][1] - wb * parca[k2][1]), 0),
+                "tasima_sigma": round(tas / (sig * math.sqrt(3)), 2),
+                "yari_omur_ay": round(yari_omur(P_), 1), "sinyal": sinyal,
+                "tasima_uyumlu": None if sinyal == "yok" else bool((tas > 0) == (sinyal == "long")),
+            }
+    return {"gun": str(row.name.date()), "basabas_bp": {d: round(x, 0) for d, x in be.items()},
+            "tasima_bp": {d: round(p[0], 0) for d, p in parca.items()},
+            "roll_bp": {d: round(p[1], 0) for d, p in parca.items()}, "fly": out}
+
+
+FILTRE_FLY = (("n2y", "n5y", "n7y"), ("n1y", "n2y", "n5y"), ("n3y", "n5y", "n7y"), ("n2y", "n3y", "n5y"))
+
+
+def fly_tasima_filtresi(egri: pd.DataFrame, on: pd.Series) -> dict:
+    """Ortalamaya dönüş kuralının (fly_orneklem_disi, PCA) TAŞIMA ile birleşimi, dört
+    fly'da örneklem dışı. P&L gövde DV01'i başına bp, 3 ay. Kollar:
+      dönüş        |z| ≥ 1, ortalamaya doğru
+      uyumlu       dönüş işlemi, sinyal anındaki taşıması aynı yönde olanlar
+      ters         dönüş işlemi, taşıması ters yönde olanlar
+      taşıma       her ay, taşımanın işareti yönünde (z'ye bakmadan)
+      hep long     her ay long fly (gövdede pay) — kıyas
+    Ağırlık ve z geçmişi bir önceki ay sonuna kadar; sinyal eğrisi beş iş günü önce.
+    Gecikme profili: aynı kurallar 1 · 5 · 10 · 21 iş günü önceki eğriyle."""
+    A = ay_sonu(egri)
+    D = A.diff().dropna() * 100
+    N = egri[DUGUM].dropna()
+    idx = A.index
+    out = {}
+    for k1, g, k2 in FILTRE_FLY:
+        rec = []
+        for i in range(37, len(idx) - 3):
+            t, tp = idx[i], idx[i - 1]
+            _, Vt = pca(D.loc[:tp].to_numpy())
+            a, b = fly_agirlik(Vt, k1, g, k2)
+            giris = N.loc[:t].index[-1]
+            jg = N.index.get_loc(giris)
+            re = N.loc[giris]
+            one = float(on.loc[:giris].iloc[-1])
+            bg_ = {d: _basabas(re, one, UFUK_GUN, TENOR[d]) for d in (k1, g, k2)}
+            F = (A[g] - a * A[k1] - b * A[k2]) * 100
+            gec = F.loc[:tp].iloc[-36:]
+            r = {"t0": t, "long": F.iloc[i + 3] - F.loc[t] - (bg_[g] - a * bg_[k1] - b * bg_[k2])}
+            for L in GECIKMELER:
+                sig = N.index[jg - L]
+                rs = N.loc[sig]
+                ons = float(on.loc[:sig].iloc[-1])
+                bs = {d: _basabas(rs, ons, UFUK_GUN, TENOR[d]) for d in (k1, g, k2)}
+                r[f"z{L}"] = (float((rs[g] - a * rs[k1] - b * rs[k2]) * 100) - gec.mean()) / gec.std()
+                r[f"c{L}"] = -(bs[g] - a * bs[k1] - b * bs[k2])
+            rec.append(r)
+        R = pd.DataFrame(rec)
+
+        def kollar(L: int) -> dict:
+            z, c = R[f"z{L}"], R[f"c{L}"]
+            mr = R[z.abs() >= 1].copy()
+            yon = -np.sign(z[z.abs() >= 1])
+            mr["pnl"] = yon * mr.long
+            uy = mr[np.sign(c[z.abs() >= 1]) == yon]
+            te = mr[np.sign(c[z.abs() >= 1]) != yon]
+            ta = R.assign(pnl=np.sign(c) * R.long)
+            return {"donus": mr, "uyumlu": uy, "ters": te, "tasima": ta}
+
+        K = kollar(GECIKME)
+        blok = {k: {**_oz(v.pnl), "yarilar": _yarilar(v, "pnl")} for k, v in K.items()}
+        blok["tasima"]["t"] = round(_nw_t(K["tasima"].pnl), 1)
+        blok["hep_long"] = {**_oz(R.long), "t": round(_nw_t(R.long), 1), "yarilar": _yarilar(R, "long")}
+        blok["gecikme"] = {}
+        for L in GECIKMELER:
+            KL = kollar(L)
+            blok["gecikme"][str(L)] = {k: round(float(KL[k].pnl.mean()), 1) for k in ("donus", "uyumlu", "ters", "tasima")}
+        out[f"{k1[1:]}{g[1:]}{k2[1:]}"] = blok
+    return out
+
+
+def fly_pnl_ayrisimi(A: pd.DataFrame, V: np.ndarray) -> dict:
+    """Long fly'ın aylık hareketi (gövde DV01'i başına bp; 50:50'de gövde − ½·kanatlar)
+    faktörlere ayrılır: ΔF = Σ_k c_k·s_k + ε, c_k = v_{k,g} − a·v_{k,1} − b·v_{k,2},
+    s_k k'nıncı bileşenin aylık skoru. Varyans payı = cov(parça, ΔF)/var(ΔF). Tam örneklem
+    PCA'sında PCA fly'ın seviye ve eğim payı TANIM GEREĞİ sıfırdır; asıl bilgi, ağırlığı
+    yalnız GEÇMİŞ 60 aydan kurulan fly'ın gerçekleşen sızıntısıdır (seviye ve eğim
+    skoruyla korelasyon)."""
+    D = A.diff().dropna() * 100
+    s = D.to_numpy() @ V[:, :3]
+    idx = {d: j for j, d in enumerate(DUGUM)}
+    out = {}
+    for k1, g, k2 in (("n2y", "n5y", "n7y"), ("n1y", "n2y", "n5y")):
+        a, b = fly_agirlik(V, k1, g, k2)
+        ad = f"{k1[1:]}{g[1:]}{k2[1:]}"
+        for w, (wa, wb) in (("50", (0.5, 0.5)), ("pca", (a, b))):
+            dF = (D[g] - wa * D[k1] - wb * D[k2]).to_numpy()
+            c = [V[idx[g], k] - wa * V[idx[k1], k] - wb * V[idx[k2], k] for k in range(3)]
+            parca = {n: c[k] * s[:, k] for k, n in enumerate(("seviye", "egim", "bukum"))}
+            parca["artik"] = dF - sum(parca.values())
+            v = dF.var(ddof=1)
+            out[f"{ad}_{w}"] = {
+                "sigma": round(float(dF.std(ddof=1)), 0),
+                "pay": {n: round(float(np.cov(p, dF)[0, 1] / v) * 100, 0) for n, p in parca.items()},
+                "sd": {n: round(float(p.std(ddof=1)), 0) for n, p in parca.items()},
+                "c": [round(x, 3) for x in c],
+            }
+        # geçmiş 60 aylık ağırlıkla kurulan fly'ın gerçekleşen sızıntısı
+        dfs, s1, s2, ag = [], [], [], []
+        for i in range(60, len(D)):
+            _, Vt = pca(D.iloc[i - 60:i].to_numpy())
+            aa, bb = fly_agirlik(Vt, k1, g, k2)
+            ag.append((aa, bb))
+            dfs.append(D[g].iloc[i] - aa * D[k1].iloc[i] - bb * D[k2].iloc[i])
+            s1.append(s[i, 0])
+            s2.append(s[i, 1])
+        aa_, bb_ = np.array([x[0] for x in ag]), np.array([x[1] for x in ag])
+        out[f"{ad}_pca60"] = {"n": len(dfs),
+                              "korelasyon_seviye": round(float(np.corrcoef(dfs, s1)[0, 1]), 2),
+                              "korelasyon_egim": round(float(np.corrcoef(dfs, s2)[0, 1]), 2),
+                              "a_aralik": [round(float(aa_.min()), 2), round(float(aa_.max()), 2)],
+                              "b_aralik": [round(float(bb_.min()), 2), round(float(bb_.max()), 2)],
+                              "son": [round(float(aa_[-1]), 3), round(float(bb_[-1]), 3)],
+                              "a_aylik_degisim_medyan": round(float(np.median(np.abs(np.diff(aa_)))), 3)}
+        for w, (wa, wb) in (("50", (0.5, 0.5)), ("pca", (a, b))):
+            dF = (D[g] - wa * D[k1] - wb * D[k2]).to_numpy()[60:]
+            out[f"{ad}_{w}"]["korelasyon_seviye_60"] = round(float(np.corrcoef(dF, s1)[0, 1]), 2)
+            out[f"{ad}_{w}"]["korelasyon_egim_60"] = round(float(np.corrcoef(dF, s2)[0, 1]), 2)
+    return out
+
+
+def donum_noktalari(egri: pd.DataFrame, ppk: pd.DataFrame, V: np.ndarray) -> list[dict]:
+    """PPK döngüsünün dönüm noktaları: faiz değişiminin işaretinin tersine döndüğü kararlar
+    (arşivdeki ilk değişim, öncesi bilinmediği için işaretli). Karardan önceki kapanıştan
+    1 · 3 · 6 ay (21 · 63 · 126 iş günü) sonrasına yapı hareketleri, bp. Yedi olay: istatistik
+    değil vaka."""
+    a, b = fly_agirlik(V, "n2y", "n5y", "n7y")
+    a2, b2 = fly_agirlik(V, "n1y", "n2y", "n5y")
+    N = egri[DUGUM].dropna() * 100
+    Y = pd.DataFrame({"2y": N.n2y, "5y": N.n5y, "2s5s": N.n5y - N.n2y, "2s7s": N.n7y - N.n2y,
+                      "2y5y7y_pca": N.n5y - a * N.n2y - b * N.n7y,
+                      "1y2y5y_pca": N.n2y - a2 * N.n1y - b2 * N.n5y})
+    d = ppk["politika"].diff()
+    d = d[d.notna() & (d != 0)]
+    isaret = np.sign(d)
+    donus = isaret[isaret != isaret.shift()]
+    out = []
+    for t, s in donus.items():
+        j = Y.index.searchsorted(t)
+        if j - 1 < 0:
+            continue
+        rec = {"tarih": str(t.date()), "yon": "artırım" if s > 0 else "indirim",
+               "adim_bp": round(float(d[t]) * 100, 0), "arsiv_basi": bool(t == d.index[0]), "hareket": {}}
+        for ad, n in (("1a", 21), ("3a", 63), ("6a", 126)):
+            if j + n < len(Y):
+                rec["hareket"][ad] = {k: round(float(Y[k].iloc[j + n] - Y[k].iloc[j - 1]), 0) for k in Y.columns}
+        out.append(rec)
+    return out
+
+
+def tumsek_konumu(A: pd.DataFrame, P: pd.DataFrame) -> dict:
+    """Eğrinin tepesi (ay sonu en yüksek getirili düğüm) nerede ve ne kadar kalıyor.
+    Roll-down işlemi 'tümsek yerinde kalır' bahsidir: tepenin tarihsel yeri, sürelerinin
+    ortalaması (ardışık ay bloğu) ve her vadede roll'un pozitif olduğu pencere payı."""
+    tepe = A[DUGUM].idxmax(axis=1)
+    blok = (tepe != tepe.shift()).cumsum()
+    sure = tepe.groupby(blok).agg(["first", "size"])
+    son36 = tepe.iloc[-36:]
+    return {"n": int(len(tepe)),
+            "pay": {d: round(float((tepe == d).mean()) * 100, 0) for d in DUGUM},
+            "pay_son36": {d: round(float((son36 == d).mean()) * 100, 0) for d in DUGUM},
+            "ort_sure_ay": {d: round(float(sure[sure["first"] == d]["size"].mean()), 1)
+                            for d in DUGUM if (sure["first"] == d).any()},
+            "bugun": str(tepe.iloc[-1]),
+            "bugun_sure_ay": int(sure["size"].iloc[-1]),
+            "roll_pozitif": {d: round(float((P[P.d == d].roll > 0).mean()) * 100, 0) for d in TENOR}}
+
+
+def senaryo_matrisi(rj: dict, be: dict, V: np.ndarray) -> dict:
+    """Bugünkü taşıma + roll (çıpa eğrisi, TLREF sabit, 3 ay) ile her rejimde ölçülmüş
+    eğri HAREKETİNİN toplamı: 'bu beklentideysem bu yapı ne getirir'. Hareket bileşeni
+    tarihseldir (rejimin ortalaması, çeyrekler arası aralığıyla), taşıma bileşeni
+    bugünündür — ikisi ayrı yazılır, çünkü tarihsel pencerelerin taşıması bugünkünden
+    farklıydı. DV01 başına bp. Tahmin değildir; görüş doğruysa ne olduğunun ölçüsüdür."""
+    Y = _yapilar(V)
+    out = {}
+    for ad, w in Y.items():
+        tas = sum(wi * be[d] for d, wi in w.items())
+        s = {"tasima_bugun": round(tas, 0)}
+        for grup, anahtar in (("faz", ("indirim", "sabit", "artırım")), ("kova", ("guvercin", "orta", "sahin")),
+                              ("kuyruk", ("satis", "ralli"))):
+            for k in anahtar:
+                h = rj[grup][ad][k]
+                s[k] = {"ort": round(tas + h["hareket"], 0), "p25": round(tas + h["hareket_p25"], 0),
+                        "p75": round(tas + h["hareket_p75"], 0)}
+        out[ad] = s
+    return out
+
+
+def ois_fly(bg: dict, V: np.ndarray) -> dict:
+    """Temsili OIS eğrisinde LONG fly'lar: gövdede 100 mn TL PAY, kanatlarda RECEIVE.
+    Aracın yöntemiyle (doğrusal ara değer, çeyreklik annüite, iskonto 1/(1 + z·t)); ufuk
+    92 gün, fixing sabit. Her bacak için nominal, DV01, taşıma ve roll; net yüzen bacak
+    (receive edilen yüzen − ödenen yüzen) ve TLREF'in 100 bp yükselmesinin çeyreklik
+    taşımaya etkisi. Taşıma iki fixingle: temsili eğrinin kendi fixingi ve 22.09.2026
+    fixingi (eğri aynı; yalnız fixing bacağı değişir)."""
+    T_ = TEMSILI_OIS
+    h = 92
+
+    def F(r: float) -> float:
+        return ((1 + r / 100 / 365) ** h - 1) * 365 / h * 100
+
+    def bacak(T: float, N: float, yon: int, r: float) -> dict:
+        """yon +1 receive (sabit al), −1 pay."""
+        K = _arac_oran(T)
+        Th = max(T - h / 365, 1 / 365)
+        A_T, A_Th, S = _arac_annuite(T), _arac_annuite(Th), _arac_oran(Th)
+        return {"K": K, "S_Th": round(S, 2), "dv01": A_T * N * 1e-4,
+                "tasima": yon * (K - F(r)) / 100 * h / 365 * N, "roll": yon * (K - S) / 100 * A_Th * N}
+
+    Nb = 100e6
+    out = {"cipa": T_["cipa"], "tlref": T_["tlref"], "tlref_bugun": bg["tlref"], "gun": h, "govde_nominal_mn": 100}
+    for k1, g, k2 in (("2y", "5y", "7y"), ("1y", "2y", "5y")):
+        T1, Tg, T2 = (float(x[:-1]) for x in (k1, g, k2))
+        dvb = _arac_annuite(Tg) * Nb * 1e-4
+        a, b = fly_agirlik(V, f"n{k1}", f"n{g}", f"n{k2}")
+        blok = {"govde_dv01": round(dvb, 0), "fly_10bp_bin": round(10 * dvb / 1e3, 0)}
+        for kural, (wa, wb) in (("5050", (0.5, 0.5)), ("pca", (a, b))):
+            N1 = wa * dvb / (_arac_annuite(T1) * 1e-4)
+            N2 = wb * dvb / (_arac_annuite(T2) * 1e-4)
+            L = {k1: bacak(T1, N1, +1, T_["tlref"]), g: bacak(Tg, Nb, -1, T_["tlref"]), k2: bacak(T2, N2, +1, T_["tlref"])}
+            Lb = {k1: bacak(T1, N1, +1, bg["tlref"]), g: bacak(Tg, Nb, -1, bg["tlref"]), k2: bacak(T2, N2, +1, bg["tlref"])}
+            Lu = {k1: bacak(T1, N1, +1, T_["tlref"] + 1), g: bacak(Tg, Nb, -1, T_["tlref"] + 1),
+                  k2: bacak(T2, N2, +1, T_["tlref"] + 1)}
+            tas = sum(x["tasima"] for x in L.values())
+            rol = sum(x["roll"] for x in L.values())
+            tas_b = sum(x["tasima"] for x in Lb.values())
+            tas_u = sum(x["tasima"] for x in Lu.values())
+            blok[kural] = {
+                "agirlik": [round(wa, 3), round(wb, 3)],
+                "nominal_mn": {k1: round(N1 / 1e6, 1), g: 100.0, k2: round(N2 / 1e6, 1)},
+                "K": {k: round(v["K"], 2) for k, v in L.items()},
+                "S_Th": {k: v["S_Th"] for k, v in L.items()},
+                "tasima_bin": {k: round(v["tasima"] / 1e3, 0) for k, v in L.items()},
+                "roll_bin": {k: round(v["roll"] / 1e3, 0) for k, v in L.items()},
+                "tasima_mn": round(tas / 1e6, 2), "roll_mn": round(rol / 1e6, 2),
+                "toplam_mn": round((tas + rol) / 1e6, 2), "toplam_bp_govde": round((tas + rol) / dvb, 0),
+                "tasima_bugun_mn": round(tas_b / 1e6, 2), "toplam_bugun_mn": round((tas_b + rol) / 1e6, 2),
+                "toplam_bugun_bp_govde": round((tas_b + rol) / dvb, 0),
+                "net_yuzen_mn": round((Nb - N1 - N2) / 1e6, 1),
+                "tlref_100_etkisi_bin": round((tas_u - tas) / 1e3, 0),
+            }
+        out[f"{k1}{g}{k2}"] = blok
+    return out
+
+
+def ois_roll_haritasi() -> dict:
+    """Temsili OIS eğrisinde receive pozisyonunun üç aylık taşıma ve roll'u, vade vade,
+    DV01 başına bp (aracın yöntemi; fixing temsili TLREF'te sabit). Ters eğride receive
+    her iki bileşeni de öder; pay her ikisini de kazanır."""
+    T_ = TEMSILI_OIS
+    h, N = 92, 100e6
+
+    def F(r: float) -> float:
+        return ((1 + r / 100 / 365) ** h - 1) * 365 / h * 100
+
+    out = {}
+    for v, T in (("6m", 0.5), ("9m", 0.75), ("1y", 1.0), ("18m", 1.5), ("2y", 2.0), ("3y", 3.0),
+                 ("4y", 4.0), ("5y", 5.0), ("7y", 7.0), ("10y", 10.0)):
+        K = _arac_oran(T)
+        Th = max(T - h / 365, 1 / 365)
+        dv = _arac_annuite(T) * N * 1e-4
+        tas = (K - F(T_["tlref"])) / 100 * h / 365 * N
+        rol = (K - _arac_oran(Th)) / 100 * _arac_annuite(Th) * N
+        out[v] = {"K": round(K, 2), "S_Th": round(_arac_oran(Th), 2), "dv01": round(dv, 0),
+                  "tasima_bp": round(tas / dv, 0), "roll_bp": round(rol / dv, 0),
+                  "toplam_bp": round((tas + rol) / dv, 0)}
+    return out
+
+
+def ihale_etkisi(egri: pd.DataFrame, ih: pd.DataFrame, V: np.ndarray) -> dict:
+    """Sabit kuponlu ihale günlerinde ihale edilen vadenin gövde olduğu fly: ihaleden
+    önceki beş iş günü ve sonraki beş iş günü değişimi (bp), ortalama, medyan ve t.
+    Hipotez (arz gövdeyi ucuzlatır, ihaleden sonra geri döner) ancak işaret, büyüklük ve
+    ortalama–medyan birlikte tutarsa bir kuraldır."""
+    N = egri[DUGUM].dropna() * 100
+    sab = ih[ih["tur"].str.contains("Sabit")]
+    out = {}
+    for ad, (lo, hi), (k1, g, k2) in (("2y", (1.5, 2.5), ("n1y", "n2y", "n3y")),
+                                      ("5y", (4.3, 5.7), ("n3y", "n5y", "n7y"))):
+        gun = sorted(set(sab[(sab.vade_yil >= lo) & (sab.vade_yil <= hi)].index))
+        a, b = fly_agirlik(V, k1, g, k2)
+        blok = {}
+        for w, (wa, wb) in (("50", (0.5, 0.5)), ("pca", (a, b))):
+            F = N[g] - wa * N[k1] - wb * N[k2]
+            if w == "50":
+                F = 2 * F
+            once, sonra = [], []
+            for t in gun:
+                j = F.index.searchsorted(t)
+                if j - 5 < 0 or j + 5 >= len(F):
+                    continue
+                once.append(F.iloc[j] - F.iloc[j - 5])
+                sonra.append(F.iloc[j + 5] - F.iloc[j])
+            o_, s_ = np.array(once), np.array(sonra)
+            taban = F.diff(5).dropna().loc["2020":]
+            blok[w] = {"n": int(len(o_)),
+                       "once_ort": round(float(o_.mean()), 1), "once_medyan": round(float(np.median(o_)), 1),
+                       "once_t": round(float(o_.mean() / (o_.std(ddof=1) / math.sqrt(len(o_)))), 2),
+                       "sonra_ort": round(float(s_.mean()), 1), "sonra_medyan": round(float(np.median(s_)), 1),
+                       "sonra_t": round(float(s_.mean() / (s_.std(ddof=1) / math.sqrt(len(s_)))), 2),
+                       "taban_sd": round(float(taban.std()), 0)}
+        out[ad] = {"fly": f"{k1[1:]}{g[1:]}{k2[1:]}", **blok}
+    return out
+
+
+def tasima_ufuk(egri: pd.DataFrame, fon: pd.DataFrame) -> dict:
+    """Çıpa eğrisinde taşıma + roll'un iki ufukta (1 ay = 30 gün, 3 ay = 91 gün) ölçüsü:
+    taşıma, roll, toplam (fiyatın %'si) ve başabaş (bp). Başabaş ufukla doğrusal
+    büyümez: roll eğrinin YEREL eğimidir ve ufuk uzadıkça eğrinin başka bir parçasına
+    kayılır. Ayrıca ufuk sonunda başabaşı sağlayan FORWARD getiri: T − h vadenin t₀
+    eğrisindeki getirisine başabaş eklenir (eğri o forward'a gelirse fazla getiri sıfır)."""
+    t = egri[DUGUM].dropna().index[-1]
+    row = egri.loc[t]
+    tl = float(fon["tlref"].dropna().iloc[-1])
+    out = {"gun": str(t.date()), "tlref": tl}
+    for hg in (30, 91):
+        blok = {}
+        for T in (0.5, 1.0, 2.0, 3.0, 5.0, 7.0):
+            y = _y(row, T)
+            D = T / (1 + y)
+            cr = taşıma_roll(row, tl, hg, T) * 100
+            tas = ((1 + y) ** (hg / 365) - 1 - ((1 + tl / 100 / 365) ** hg - 1)) * 100
+            be = cr / D * 100
+            yTh = _y(row, T - hg / 365) * 100
+            blok[f"{T:g}"] = {"tasima": round(tas, 2), "roll": round(cr - tas, 2), "toplam": round(cr, 2),
+                              "basabas_bp": round(be, 0), "getiri_Th": round(yTh, 2),
+                              "forward": round(yTh + be / 100, 2)}
+        out[f"h{hg}"] = blok
+    return out
+
+
+def kuponlu_tasima(bg: dict, egri: pd.DataFrame) -> dict:
+    """Kuponlu 5 yıllık kâğıdın (yıllık kupon %35, altı ayda bir) taşıması üç parça ve
+    roll: 100 TL nominal başına, 1 ve 3 aylık ufuk, çıpa eğrisi, fonlama TLREF (bileşik).
+      kupon tahakkuku  = kupon × gün/365
+      fiyat çekimi     = aynı getiride vadenin kısalmasının temiz fiyata etkisi (primli
+                         kâğıtta eksi — kâğıt par'a doğru çekilir)
+      fonlama          = kirli fiyat × fonlamanın bileşiği
+      roll             = getiri eğri boyunca kısalmış vadenin getirisine kaydığında fiyat farkı
+    Kâğıt çıpada ihraç edilmiş sayılır (birikmiş faiz sıfır). Nakit akışları tek getiriyle
+    yıllık bileşik iskonto edilir (1.2'deki durasyon tablosuyla aynı kural)."""
+    y5 = bg["egri"]["n5y"] / 100
+    row = egri[DUGUM].dropna().iloc[-1]
+    tl = bg["tlref_tam"]
+    kupon = 0.35
+
+    def fiyat(y: float, kalan: float) -> float:
+        """Kalan vadesi `kalan` yıl, altı ayda bir kupon; kirli fiyat."""
+        ak = []
+        x = kalan
+        while x > 1e-9:
+            ak.append(x)
+            x -= 0.5
+        return sum((kupon / 2 * 100 + (100 if abs(tt - kalan) < 1e-9 else 0)) * (1 + y) ** (-tt) for tt in ak)
+
+    P0 = fiyat(y5, 5.0)
+    kalan0 = [5.0 - 0.5 * i for i in range(10)]
+    mac = sum(tt * (kupon / 2 * 100 + (100 if i == 0 else 0)) * (1 + y5) ** (-tt)
+              for i, tt in enumerate(kalan0)) / P0
+    Dm = mac / (1 + y5)
+    out = {"kupon": 35, "getiri": round(y5 * 100, 2), "fiyat": round(P0, 2), "mod_dur": round(Dm, 2)}
+    for hg in (30, 91):
+        h = hg / 365
+        # vade kısalınca kalan akışlar: t − h; kupon tarihi geçmediği için hepsi korunur
+        kalan = [5.0 - 0.5 * i for i in range(10)]
+        ak = [x - h for x in kalan]
+        P_ayni = sum((kupon / 2 * 100 + (100 if i == 0 else 0)) * (1 + y5) ** (-tt) for i, tt in enumerate(ak))
+        y_roll = _y(row, 5.0 - h)
+        P_roll = sum((kupon / 2 * 100 + (100 if i == 0 else 0)) * (1 + y_roll) ** (-tt) for i, tt in enumerate(ak))
+        birikmis = kupon * 100 * h
+        tahakkuk = birikmis
+        cekim = (P_ayni - birikmis) - P0          # temiz fiyatın değişimi, getiri sabit
+        fonlama = P0 * ((1 + tl / 100 / 365) ** hg - 1)
+        roll = P_roll - P_ayni
+        out[f"h{hg}"] = {"kupon_tahakkuku": round(tahakkuk, 3), "fiyat_cekimi": round(cekim, 3),
+                         "fonlama": round(-fonlama, 3), "tasima": round(tahakkuk + cekim - fonlama, 3),
+                         "roll": round(roll, 3), "toplam": round(tahakkuk + cekim - fonlama + roll, 3),
+                         "getiri_tahakkuku": round(P0 * ((1 + y5) ** h - 1), 3),
+                         "tasima_yuzde": round((tahakkuk + cekim - fonlama) / P0 * 100, 2),
+                         "roll_yuzde": round(roll / P0 * 100, 2),
+                         "toplam_yuzde": round((tahakkuk + cekim - fonlama + roll) / P0 * 100, 2),
+                         "basabas_bp": round((tahakkuk + cekim - fonlama + roll) / P0 / Dm * 1e4, 0)}
+    return out
+
+
+def tasima_oynaklik(egri: pd.DataFrame, fon: pd.DataFrame, A: pd.DataFrame, V: np.ndarray) -> dict:
+    """Çıpa eğrisinde yapıların üç aylık taşıma + roll'u (yapının kendi P&L biriminde:
+    DV01 başına bp) ile son 36 ayın aylık oynaklığının oranı. Outright uzun (receive),
+    spread dikleştirici yönünde (kısa vade uzun / uzun vade kısa, DV01-nötr), fly long
+    yönde (gövdede pay). Oran = taşıma / (σ·√3); short yönün oranı aynı sayının eksisidir."""
+    row = egri[DUGUM].dropna().iloc[-1]
+    tl = float(fon["tlref"].dropna().iloc[-1])
+    be = {d: _basabas(row, tl, UFUK_GUN, T) for d, T in TENOR.items()}
+    S = A * 100
+    Y = {}
+    for d in TENOR:
+        Y[f"{d[1:]}_receive"] = ({d: 1.0}, S[d])
+    for k, u in (("n1y", "n2y"), ("n2y", "n5y"), ("n2y", "n7y"), ("n5y", "n7y")):
+        Y[f"{k[1:]}{u[1:]}_diklestirici"] = ({k: 1.0, u: -1.0}, S[u] - S[k])
+    for k1, g, k2 in (("n1y", "n2y", "n3y"), ("n1y", "n2y", "n5y"), ("n2y", "n3y", "n5y"),
+                      ("n2y", "n5y", "n7y"), ("n3y", "n5y", "n7y")):
+        a, b = fly_agirlik(V, k1, g, k2)
+        ad = f"{k1[1:]}{g[1:]}{k2[1:]}"
+        for w, (wa, wb) in (("50", (0.5, 0.5)), ("pca", (a, b))):
+            Y[f"{ad}_long{w}"] = ({g: -1.0, k1: wa, k2: wb}, S[g] - wa * S[k1] - wb * S[k2])
+    out = {"gun": str(row.name.date())}
+    for ad, (w, seri) in Y.items():
+        tas = sum(wi * be[d] for d, wi in w.items())
+        # P&L serisi: receive/dikleştirici/long fly yönünde getiri düşüşü kazançtır;
+        # oynaklık için işaret önemsiz
+        s36 = float(seri.diff().iloc[-36:].std())
+        out[ad] = {"tasima_bp": round(tas, 0), "sigma36_bp_ay": round(s36, 0),
+                   "oran": round(tas / (s36 * math.sqrt(3)), 2)}
+    return out
+
+
+def yapi_stres(A: pd.DataFrame, V: np.ndarray) -> dict:
+    """Yapıların aylık hareketinin uçları (bp, P&L birimi: spread'de uzun − kısa, fly'da
+    gövde DV01'i başına): tam örneklem ve son 36 ay σ'sı, en büyük aylık yükseliş ve
+    düşüş, mutlak hareketin 95. yüzdeliği. Stop ve boyut bu dağılımdan kalibre edilir."""
+    S = A * 100
+    Y = {"1y2y": S.n2y - S.n1y, "2s5s": S.n5y - S.n2y, "2s7s": S.n7y - S.n2y, "5s7s": S.n7y - S.n5y}
+    for k1, g, k2 in (("n1y", "n2y", "n3y"), ("n1y", "n2y", "n5y"), ("n2y", "n3y", "n5y"),
+                      ("n2y", "n5y", "n7y"), ("n3y", "n5y", "n7y")):
+        a, b = fly_agirlik(V, k1, g, k2)
+        ad = f"{k1[1:]}{g[1:]}{k2[1:]}"
+        Y[f"{ad}_50"] = S[g] - 0.5 * S[k1] - 0.5 * S[k2]
+        Y[f"{ad}_pca"] = S[g] - a * S[k1] - b * S[k2]
+    out = {}
+    for ad, s in Y.items():
+        d = s.diff().dropna()
+        out[ad] = {"sigma": round(float(d.std()), 0), "sigma36": round(float(d.iloc[-36:].std()), 0),
+                   "en_buyuk_artis": [round(float(d.max()), 0), str(d.idxmax().date())[:7]],
+                   "en_buyuk_dusus": [round(float(d.min()), 0), str(d.idxmin().date())[:7]],
+                   "p95": round(float(d.abs().quantile(0.95)), 0)}
+    return out
+
+
+def ppk_gunu_yapi(egri: pd.DataFrame, ppk: pd.DataFrame, V: np.ndarray) -> dict:
+    """PPK karar günlerinde spread ve fly'ların iki günlük hareketi (ppk_gunu ile aynı
+    pencere), diğer günlerle kıyaslı: mutlak hareketin medyanı ve 90. yüzdeliği (bp)."""
+    N = egri[DUGUM].dropna() * 100
+    Y = {"2s5s": N.n5y - N.n2y, "2s7s": N.n7y - N.n2y}
+    for k1, g, k2 in (("n1y", "n2y", "n3y"), ("n1y", "n2y", "n5y"), ("n2y", "n5y", "n7y"), ("n3y", "n5y", "n7y")):
+        a, b = fly_agirlik(V, k1, g, k2)
+        Y[f"{k1[1:]}{g[1:]}{k2[1:]}_pca"] = N[g] - a * N[k1] - b * N[k2]
+    gun = [t for t in ppk.index if t in N.index]
+    m = N.index.isin(gun)
+    out = {}
+    for ad, s in Y.items():
+        d2 = s.diff(2).shift(-1)
+        a_, b_ = d2[m].abs().dropna(), d2[~m].abs().dropna()
+        out[ad] = {"ppk_medyan": round(float(a_.median()), 0), "ppk_p90": round(float(a_.quantile(0.9)), 0),
+                   "diger_medyan": round(float(b_.median()), 0), "diger_p90": round(float(b_.quantile(0.9)), 0)}
+    return out
+
+
+def oynaklik_barbell(egri: pd.DataFrame, Y: pd.DataFrame) -> dict:
+    """Long fly = barbell = uzun konveksite: üç aylık pencereleri penceredeki GERÇEKLEŞEN
+    seviye oynaklığına (günlük (2y + 7y)/2 değişimlerinin standart sapması) göre üçe
+    bölüp long 2y5y7y'nin (50:50 ve PCA) P&L'i. Konveksitenin bu vadelerde küçük
+    olduğu metinde sayıyla var; bu ölçü oynaklık görüşünün fly'da ne kadar para ettiğini
+    gerçek pencerelerde sorar."""
+    N = egri[DUGUM].dropna() * 100
+    sev = (N.n2y + N.n7y) / 2
+    son = _ay_son_gunleri(egri[DUGUM].dropna())
+    oyn = {}
+    for i, t0 in enumerate(son[:-3]):
+        t1 = son[i + 3]
+        oyn[t0] = float(sev.loc[t0:t1].diff().dropna().std())
+    o = pd.Series(oyn)
+    out = {}
+    for ad in ("2y5y7y_long50", "2y5y7y_longpca"):
+        y = Y[Y.yapi == ad].set_index("t0")
+        y = y.join(o.rename("oyn"), how="inner")
+        kova = pd.qcut(y.oyn, 3, labels=["dusuk", "orta", "yuksek"])
+        out[ad] = {k: {"n": int((kova == k).sum()), "toplam": round(float(y.toplam[kova == k].mean()), 0),
+                       "tasima": round(float(y.tasima[kova == k].mean()), 0),
+                       "oynaklik_bp_gun": round(float(y.oyn[kova == k].mean()), 0)} for k in ("dusuk", "orta", "yuksek")}
+    return out
+
+
+def ois_yapilar(bg: dict) -> dict:
+    """Temsili OIS eğrisinde DV01-nötr dikleştiriciler (kısa vadede receive, uzun vadede
+    pay; kısa bacak 100 mn TL): nominaller, net yüzen nominal, üç aylık taşıma ve roll,
+    TLREF'in 100 bp yükselmesinin taşımaya etkisi. DV01-nötr bir OIS yapısı nominal-nötr
+    DEĞİLDİR: kısa bacağın nominali uzun bacağınkinden büyüktür ve fark fixinge açıktır."""
+    T_ = TEMSILI_OIS
+    h = 92
+
+    def F(r: float) -> float:
+        return ((1 + r / 100 / 365) ** h - 1) * 365 / h * 100
+
+    def bacak(T: float, N: float, yon: int, r: float) -> tuple[float, float]:
+        K = _arac_oran(T)
+        Th = max(T - h / 365, 1 / 365)
+        return (yon * (K - F(r)) / 100 * h / 365 * N, yon * (K - _arac_oran(Th)) / 100 * _arac_annuite(Th) * N)
+
+    out = {}
+    for k, u in ((1.0, 2.0), (2.0, 5.0), (2.0, 10.0)):
+        Nk = 100e6
+        dvk = _arac_annuite(k) * Nk * 1e-4
+        Nu = dvk / (_arac_annuite(u) * 1e-4)
+        t1, r1 = bacak(k, Nk, +1, T_["tlref"])
+        t2, r2 = bacak(u, Nu, -1, T_["tlref"])
+        t1b, _ = bacak(k, Nk, +1, bg["tlref"])
+        t2b, _ = bacak(u, Nu, -1, bg["tlref"])
+        t1u, _ = bacak(k, Nk, +1, T_["tlref"] + 1)
+        t2u, _ = bacak(u, Nu, -1, T_["tlref"] + 1)
+        out[f"{k:g}y{u:g}y"] = {"dv01": round(dvk, 0), "nominal_uzun_mn": round(Nu / 1e6, 1),
+                                "net_yuzen_mn": round((Nu - Nk) / 1e6, 1),
+                                "tasima_mn": round((t1 + t2) / 1e6, 2), "roll_mn": round((r1 + r2) / 1e6, 2),
+                                "toplam_mn": round((t1 + t2 + r1 + r2) / 1e6, 2),
+                                "toplam_bp": round((t1 + t2 + r1 + r2) / dvk, 0),
+                                "tasima_bugun_mn": round((t1b + t2b) / 1e6, 2),
+                                "tlref_100_etkisi_bin": round((t1u + t2u - t1 - t2) / 1e3, 0)}
+    return out
+
+
+def ois_kira_fixing(bg: dict) -> dict:
+    """Temsili OIS eğrisinde receive'in üç aylık fixing taşıması üç fixing varsayımıyla
+    (temsili eğrinin fixingi · politika faizi düzeyi · 22.09.2026 fixingi), DV01 başına
+    bp. Roll fixingden bağımsızdır (ois_roll_haritasi)."""
+    T_ = TEMSILI_OIS
+    h, N = 92, 100e6
+
+    def F(r: float) -> float:
+        return ((1 + r / 100 / 365) ** h - 1) * 365 / h * 100
+
+    out = {"fixing": {"temsili": T_["tlref"], "politika": bg["politika"], "bugun": bg["tlref"]}}
+    for v, T in (("3m", 0.25), ("6m", 0.5), ("1y", 1.0), ("2y", 2.0), ("5y", 5.0), ("10y", 10.0)):
+        K = _arac_oran(T)
+        dv = _arac_annuite(T) * N * 1e-4
+        out[v] = {"K": round(K, 2), **{ad: round((K - F(r)) / 100 * h / 365 * N / dv, 0)
+                                       for ad, r in out["fixing"].items()}}
+    for ad, r in out["fixing"].items():
+        out[f"F_{ad}"] = round(F(r), 2)
+    return out
+
+
 # ─────────────────────────────────────────────────────────────── hepsi
 def hesapla() -> tuple[dict, dict]:
     v = yukle()
@@ -1036,8 +2046,36 @@ def hesapla() -> tuple[dict, dict]:
             bg["sigma36"]["n5y"]),
         "temsili_ois": temsili_ois(bg),
     }
+    P = pencereler(egri, on, ppk, tb_tablo["cipa"].dropna())
+    rj, rj_tablo = rejim_yapi(P, V)
+    ozet.update({
+        "tasima_ayristirma": tasima_ayristirma(P),
+        "forward_gerceklesme": forward_gerceklesme(P),
+        "tasima_stratejileri": tasima_stratejileri(P, A),
+        "tumsek": tumsek_konumu(A, P),
+        "rejim_yapi": rj,
+        "aylik_rejim": aylik_rejim(A, V, kad_tablo["faz"]),
+        "senaryo_matrisi": senaryo_matrisi(rj, _bugun_basabas(egri, fon), V),
+        "fonlama_gecis": fonlama_gecis(egri, tb_tablo),
+        "donum_noktalari": donum_noktalari(egri, ppk, V),
+        "fly_tasima_haritasi": fly_tasima_haritasi(A, V, egri, fon),
+        "fly_tasima_filtresi": fly_tasima_filtresi(egri, on),
+        "fly_pnl_ayrisimi": fly_pnl_ayrisimi(A, V),
+        "ois_fly": ois_fly(bg, V),
+        "ois_roll_haritasi": ois_roll_haritasi(),
+        "ihale_etkisi": ihale_etkisi(egri, v["ihale"], V),
+        "tasima_ufuk": tasima_ufuk(egri, fon),
+        "kuponlu_tasima": kuponlu_tasima(bg, egri),
+        "tasima_oynaklik": tasima_oynaklik(egri, fon, A, V),
+        "yapi_stres": yapi_stres(A, V),
+        "ppk_gunu_yapi": ppk_gunu_yapi(egri, ppk, V),
+        "oynaklik_barbell": oynaklik_barbell(egri, rj_tablo),
+        "ois_yapilar": ois_yapilar(bg),
+        "ois_kira_fixing": ois_kira_fixing(bg),
+    })
     seriler = {"A": A, "V": V, "pay": pay, "kadran": kad_tablo, "fly": fly_seri,
-               "durasyon": dur_tablo, "tlref": tb_tablo, "egri": egri}
+               "durasyon": dur_tablo, "tlref": tb_tablo, "egri": egri,
+               "pencere": P, "rejim_yapi": rj_tablo}
     return ozet, seriler
 
 
