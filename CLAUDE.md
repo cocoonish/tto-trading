@@ -3251,3 +3251,45 @@ soran bir kapı YOK; tarama elle koşturuldu. Ayrıca AÇIK: dersin JS hesap
 araçlarının çıktısı kapıda değil — Python eşleri (`temsili_ois`,
 `barbell_kurallar`) doğrulayıcıda sınanıyor, JS araçları başsız tarayıcıda elle
 ölçüldü ve metindeki doğrulama satırları o ölçümden.
+
+**Kurucu ilke — BİR SAYININ ELLE YAZILMIŞ İKİNCİ KOPYASI, BİR GÜN EŞİTLİK
+KAPISINI DÜŞÜRÜR; ve kapı kusurun VEKİLİNİ değil kendisini sormalıdır.**
+25.09.2026 14:28 otomatik veri commit'inden sonra yayın iş akışı kırmızı bitti
+(#677) ve site 08:11 verisinde dondu. İki engel vardı, ikisi de veriden doğdu.
+(1) DİBS sayfasındaki "100/99,98 gibi bir oran" örneği, tazelenen gösterge
+fiyatla (99,979) tesadüfen çakıştı — bu dosyada iki kez kayıtlı sınıf; reçete
+de kayıtlıydı (`sinav-ornek`), uygulandı. (2) Fonlama Şekil 04'ün alt yazısı
+alım yönlü swap stoku SIFIRKEN bir cümle daha basıyor; stok 0'dan 400 mn USD'ye
+çıkınca cümle kalktı, figür 1159'dan 1133 piksele kısaldı, sayfa 1159 ilan
+ediyordu ve yayın kapısının 3. ölçütü EŞİTLİK istediği için yayını durdurdu.
+Kök yapısaldı: hatlar figür yüksekliğini alt yazının satır sayısından
+hesaplıyor, satır sayısı veriye bağlı, MDX ise o sayının ELLE yazılmış ikinci
+bir kopyasıydı ve bileşende "elle yazılan KAZANIR" kuralı vardı. Eşitlik,
+kırpılmanın VEKİLİYDİ ve vekil iki yönde birden yanlıştı: hiçbir şeyi
+kırpmayan bir kısalma siteyi donduruyordu, gerçek kırpılmaları ise görmüyordu.
+Derlenmiş sitenin 483 gömmesi ölçüldü: ikisi canlı sitede kırpılıyordu (FX
+haber endeksi Şekil 10 · 430 piksel — o hattın yükseklik defteri yok; YP
+mevduat Şekil 05 · 26 piksel — o hat bu ölçütte yalnız "bilgi"ydi). Bu olay
+09.09'daki fonlama Şekil 07 arızasının ta kendisi; o gün kopyalama anına bir
+UYARI konmuş, kopya kaldırılmamıştı.
+
+Kural değişti: elle yazılan yükseklik bir ALT SINIRDIR, figürün kendi ilanı
+onu aşarsa ilan geçer — figür yüksekliğini ilan ettiği sürece kırpılma
+yapısal olarak imkânsız, figür küçülürse fark yalnız boşluk. Kural iki dilde
+tek tanım: `site/src/lib/grafikOlcu.ts` (bileşen, derleme anı) ↔
+`ortak/figur_olcu.py` (yayın kapısı ve `guncelle.py` uyarıları); duman ikisinin
+sabitlerini ve önceliğini kaynak metninden kıyaslıyor. Ayrıştırma figürün
+DÜZENİNDEN yapılıyor, çünkü dosyadaki ilk "height" bir tablo izinin hücresi
+olabilir (bütçe Şekil 09: ilk eşleşme 24, düzeninki 1227); tavan 1600'den
+2600'e çıktı (13 gömülü figür 1600'ü aşıyor, en uzunu 2300). Kapının 3. ölçütü
+artık yalnız KIRPILMAYI ve hiçbir sayfada gömülü olmayan üretim figürünü ENGEL
+sayıyor, figürün HER gömmesini soruyor (eski ölçüt ilk bulduğunda duruyordu) ve
+aramayı gömme bloğuyla sınırlıyor (eski kalıp 400 karakterlik pencereyle
+komşu gömmenin sayısını okuyabilirdi); eskimiş elle yazılan sayı bilgi satırı.
+Etkisi önce ölçüldü: 563 derlenmiş çerçevenin tam 3'ü değişti — iki kırpılma
+kalktı, Şekil 04 figürü izliyor; kalan 560 birebir aynı. On bir duman maddesi,
+beş arıza enjeksiyonunun beşi de yakalandı. Veriye göre boyu değişen iki
+figürün elle yazılmış sayısı silindi; kalan elle yazılmış yükseklikler artık
+zararsız alt sınırlar. AÇIK: dokuz gömmede sayfa figürden uzun ilan ediyor (FX
+haber endeksi beş, USD/TRY devalüasyon dört; 40–100 piksel boşluk) —
+kozmetik, düzeltilmedi.

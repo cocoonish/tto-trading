@@ -15,8 +15,11 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       TAM SAYI (sayım) yalnız kendi yazımıyla aranır ve bulgusu uyarıdır,
       eksi işareti sayının parçası sayılır. Üçü de sentetik örneklerle
       sınanıyor: site/tools/duman_sinav.py.
-  (3) Şekil yüksekliği — MDX'teki yukseklik={} değeri, üretimin
-      cikti/yukseklikler.json'daki gerçek script height'i ile aynı mı?
+  (3) Şekil yüksekliği — çerçeve figürü KIRPIYOR mu? MDX'teki yukseklik={}
+      bir alt sınırdır, figürün kendi ilanı onu aşarsa ilan geçer
+      (ortak/figur_olcu.py ↔ lib/grafikOlcu.ts). Kırpılan gömme ve hiçbir
+      sayfada gömülü olmayan üretim figürü ENGEL; üretimden farklı ama
+      kırpmayan elle yazılmış sayı bilgi.
   (4) Dosya kümesi — üretimdeki figürler siteye birebir kopyalanmış mı ve
       hepsinde ev stili bloğu var mı?
   (5) Panel düzeni — paneller ALT ALTA mı? (yan yana panel yasak)
@@ -178,6 +181,75 @@ ORNEK_BLOK = re.compile(
     r"\{/\*\s*sinav-ornek:[\s\S]*?\*/\}[\s\S]*?\{/\*\s*/sinav-ornek\s*\*/\}")
 ORNEK_AC = re.compile(r"\{/\*\s*sinav-ornek:")
 ORNEK_KAPA = re.compile(r"\{/\*\s*/sinav-ornek\s*\*/\}")
+
+
+GOMME = re.compile(r"<GrafikEmbed\b[\s\S]*?/>")
+
+
+def _figur_olcu():
+    """Çerçeve kuralının tek Python tanımı (ortak/figur_olcu.py)."""
+    if str(KOK / "ortak") not in sys.path:
+        sys.path.insert(0, str(KOK / "ortak"))
+    import figur_olcu
+    return figur_olcu
+
+
+def yukseklik_denetle(slug: str, uretim: dict, metinler: list[tuple[str, str]],
+                      site_dizini: pathlib.Path) -> tuple[list[str], list[str]]:
+    """(3) Şekil yüksekliği: çerçeve figürü KIRPACAK mı? → (engel, bilgi).
+
+    Çerçeveyi bileşen kurar (lib/grafikOlcu.ts) ve kural ortak/figur_olcu.py'de
+    tek tanımdır: MDX'teki `yukseklik` ALT SINIR, figürün ilanı onu aşarsa ilan.
+    Engel iki hâlde: üretilen figür hiçbir sayfada gömülü değil, ya da çerçeve
+    figürden kısa kalıyor (figür yüksekliğini ilan etmiyor ve elle yazılan sayı
+    üretimin altında). Elle yazılan sayı üretimden FARKLI ama kırpmıyorsa
+    bilgi: kopya eskimiş, fark figürün altında boşluk olarak görünür.
+
+    Önceki ölçüt "MDX = üretim" eşitliğini engel sayıyordu. Hatlar yüksekliği
+    alt yazının satır sayısından türetiyor ve satır sayısı veriye bağlı, yani
+    bir alt yazı bir satır kısaldığında yayın düşüp site donuyordu (fonlama
+    Şekil 07 · 09.09.2026, Şekil 04 · 25.09.2026: alım yönlü swap stoku sıfırdan
+    çıkınca bir cümle kalktı). Eşitlik kırpılmanın VEKİLİYDİ; ölçüt artık
+    vekili değil kırpılmanın kendisini sorar. Ve vekil kör noktası da vardı:
+    kapının yalnız bilgi olarak baktığı YP mevduat Şekil 05 canlı sitede 26
+    piksel kırpılıyordu.
+
+    `metinler`: (nerede, MDX metni). Bir figür birden çok sayfada gömülü
+    olabilir (pano + analiz) ve HER gömme ayrı sorulur — eski ölçüt ilk
+    bulduğunda duruyordu. Arama gömme bloğu içindedir: eski kalıp `src` ile
+    `yukseklik` arasına 400 karakter tanıyordu ve yüksekliği yazılmamış bir
+    gömmede SONRAKİ gömmenin sayısını okuyabilirdi.
+    """
+    fo = _figur_olcu()
+    engel: list[str] = []
+    bilgi: list[str] = []
+    for dosya, h in uretim.items():
+        src = f'src="/projeler/{slug}/{dosya}"'
+        gommeler = []
+        for nerede, metin in metinler:
+            for blok in GOMME.findall(metin):
+                if src in blok:
+                    m = re.search(r"yukseklik=\{(\d+)\}", blok)
+                    gommeler.append((nerede, int(m.group(1)) if m else None))
+        if not gommeler:
+            engel.append(f"{dosya}: hiçbir sayfada gömülü değil")
+            continue
+        try:
+            ilan = fo.ilan_edilen_yukseklik(
+                (site_dizini / dosya).read_text(encoding="utf-8", errors="replace"))
+        except OSError:
+            ilan = None
+        hedef = ilan if ilan is not None else int(h)
+        for nerede, acik in gommeler:
+            cerceve = fo.cerceve_yuksekligi(acik, ilan)
+            if cerceve < hedef:
+                engel.append(f"{dosya}: {nerede}'de çerçeve {cerceve} < figür {hedef} "
+                             "— figür kırpılır")
+            elif acik is not None and acik != int(h):
+                bilgi.append(f"{dosya}: {nerede}'de elle yazılan {acik} ≠ üretim {int(h)} "
+                             f"(çerçeve {cerceve}, kırpılmaz; elle yazılan sayı "
+                             "kaldırılabilir)")
+    return engel, bilgi
 
 
 def deger_disi(mdx: str) -> str:
@@ -822,36 +894,26 @@ def main() -> int:
         print(f"  (2b) statik yedek sapması (bilgi): {len(set(sapan_yedek))}"
               + ("" if not sapan_yedek else "  → " + ", ".join(sorted(set(sapan_yedek))[:6])))
 
-        # (3) şekil yüksekliği
+        # (3) şekil yüksekliği — çerçeve figürü kırpıyor mu (yukseklik_denetle)
         # BİR HATTIN FİGÜRÜ PROJE SAYFASINDA DURMAK ZORUNDA DEĞİL. İTO kanadının
         # üç figürü Enflasyon hattı tarafından üretiliyor ama analiz yazısında
         # gömülü; ölçüt yalnız projeler/<slug>.mdx'e baktığı için üçünü birden
-        # "MDX'te bulunamadı" diye düşürüyordu. Aranan şey figürün hangi
-        # dosyada olduğu değil, SİTEDE gömülü olduğu yerdeki yüksekliğin
-        # üretimdekiyle aynı olması. Arama bu yüzden bütün içerik ağacında.
+        # "MDX'te bulunamadı" diye düşürüyordu. Arama bu yüzden bütün içerik
+        # ağacında ve figürün HER gömmesinde.
         yj = proje / "cikti/yukseklikler.json"
         if yj.exists():
             y = json.loads(yj.read_text(encoding="utf-8"))
-            sapan = []
-            for dosya, h in y.items():
-                kalip = re.compile(r'src="/projeler/' + re.escape(slug) + "/"
-                                   + re.escape(dosya)
-                                   + r'"[\s\S]{0,400}?yukseklik=\{(\d+)\}')
-                m = kalip.search(mdx)
-                nerede = f"projeler/{slug}"
-                if not m:
-                    for baska in TUM_MDX:
-                        m = kalip.search(baska.read_text(encoding="utf-8"))
-                        if m:
-                            nerede = f"{baska.parent.name}/{baska.stem}"
-                            break
-                if not m:
-                    sapan.append(f"{dosya}: hiçbir sayfada gömülü değil")
-                elif int(m.group(1)) != h:
-                    sapan.append(f"{dosya}: {nerede}'de {m.group(1)} ≠ üretim {h}")
-            if sapan:
-                bulgu(slug, f"{slug}: yükseklik sapması → " + " · ".join(sapan))
-            print(f"  (3) yükseklik: {len(y)} figür · sapma {len(sapan)}")
+            metinler = [(f"projeler/{slug}", mdx)] + [
+                (f"{p.parent.name}/{p.stem}", p.read_text(encoding="utf-8"))
+                for p in TUM_MDX if p != mp]
+            engel_y, bilgi_y = yukseklik_denetle(
+                slug, y, metinler, KOK / "site/public/projeler" / slug)
+            if engel_y:
+                bulgu(slug, f"{slug}: yükseklik → " + " · ".join(engel_y))
+            for b in bilgi_y:
+                print(f"  (bilgi, kapı değil) {slug}: {b}")
+            print(f"  (3) yükseklik: {len(y)} figür · kırpılan {len(engel_y)}"
+                  f" · eskimiş elle yazılan {len(bilgi_y)}")
 
         # (4) dosya kümesi + ev stili
         uret = {p.name for p in (proje / "cikti").glob("*.html")}

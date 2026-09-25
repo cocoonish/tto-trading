@@ -750,41 +750,73 @@ def okur_dili_bulgulari(hedef: Path) -> list[str]:
             for k, m in satirlar for _i, aile, esl in okur_dili.kosu_kaydi_tara([m])]
 
 
-def yukseklik_bulgulari(h: "Hat") -> list[str]:
-    """Hattın ürettiği figür yüksekliği ile sayfanın İLAN ETTİĞİ yükseklik ayrıştı mı.
+def _yukseklik_gommeleri(h: "Hat") -> tuple[dict, list[tuple[str, str, int | None, int | None]]]:
+    """(üretim yükseklikleri, [(figür, sayfa, elle yazılan, figürün ilanı)]).
 
-    Yükseklik alt yazının SATIR SAYISINDAN türüyor; bir alt yazı uzayınca ya da
-    kısalınca figür 26 piksel oynuyor ve sayfa eski sayıyı ilan etmeye devam
-    ediyor. Sapma yayın kapısında (sayfa sınavı 3) ENGEL — yani kusur hattın
-    KENDİ koşusunda değil, saatler sonra yayın durduğunda görünüyor. 09.09.2026'da
-    ölçüldü: fonlama Şekil 07'nin alt yazısı kısaldı, hat yeşil bitti, yayın
-    iş akışı düştü ve site o sürümde dondu. Bu satır aynı soruyu kopyalama
-    anında sorar. UYARIDIR: hattı düşürmez (düşürmek hattın öbür figürlerini de
-    dondurmak olurdu) ama koşunun çıktısında adıyla görünür."""
+    Figürün ilanı hattın ÜRETTİĞİ dosyadan okunur — kopyalanacak olan odur.
+    Çerçeve kuralının tek Python tanımı ortak/figur_olcu.py (bileşendeki eşi
+    site/src/lib/grafikOlcu.ts); yayın kapısı (sayfa sınavı 3) aynı modülü
+    kullanır, yani burada görülen uyarı kapının vereceği hükmün kendisidir."""
     icerik = SITE.parent.parent / "src" / "content"
     yj = KOK / h.klasor / "cikti" / "yukseklikler.json"
     if not yj.exists() or not icerik.exists():
-        return []
+        return {}, []
     try:
         uretim = json.loads(yj.read_text(encoding="utf-8"))
     except (OSError, ValueError):
+        return {}, []
+    if _ORTAK not in sys.path:
+        sys.path.insert(0, _ORTAK)
+    import figur_olcu
+    metinler = []
+    for mdx in sorted(icerik.rglob("*.mdx")):
+        try:
+            metinler.append((f"{mdx.parent.name}/{mdx.stem}", mdx.read_text(encoding="utf-8")))
+        except OSError:
+            continue
+    gommeler = []
+    for ad in uretim:
+        src = f'src="/projeler/{h.slug}/{ad}"'
+        try:
+            ilan = figur_olcu.ilan_edilen_yukseklik(
+                (KOK / h.klasor / "cikti" / ad).read_text(encoding="utf-8", errors="replace"))
+        except OSError:
+            ilan = None
+        for nerede, metin in metinler:
+            for blok in re.findall(r"<GrafikEmbed\b[\s\S]*?/>", metin):
+                if src in blok:
+                    m = re.search(r"yukseklik=\{(\d+)\}", blok)
+                    gommeler.append((ad, nerede, int(m.group(1)) if m else None, ilan))
+    return uretim, gommeler
+
+
+def yukseklik_bulgulari(h: "Hat") -> list[str]:
+    """Sayfanın çerçevesi hattın yeni figürünü KIRPACAK mı.
+
+    Yükseklik alt yazının SATIR SAYISINDAN türüyor; bir alt yazı uzayınca ya da
+    kısalınca figür 26 piksel oynuyor. Sayfadaki `yukseklik` artık bir ALT
+    SINIR (figürün ilanı onu aşarsa ilan geçer), yani figür yüksekliğini ilan
+    ettiği sürece kırpılma yapısal olarak imkânsız ve bu satır susar. Konuştuğu
+    tek hâl: figür yüksekliğini ilan etmiyor ve elle yazılan sayı üretimin
+    altında — yayın kapısı (sayfa sınavı 3) bunu ENGEL sayar ve kusur hattın
+    koşusunda değil saatler sonra yayın durduğunda görünürdü (fonlama Şekil 07
+    · 09.09.2026, o zamanki kural eşitlik istiyordu). UYARIDIR: hattı düşürmez
+    (düşürmek hattın öbür figürlerini de dondurmak olurdu)."""
+    uretim, gommeler = _yukseklik_gommeleri(h)
+    if not uretim:
         return []
+    if _ORTAK not in sys.path:
+        sys.path.insert(0, _ORTAK)
+    import figur_olcu
     sapan = []
-    for ad, px in uretim.items():
-        kalip = re.compile(r'src="/projeler/' + re.escape(h.slug) + "/" + re.escape(ad)
-                           + r'"[\s\S]{0,400}?yukseklik=\{(\d+)\}')
-        for mdx in icerik.rglob("*.mdx"):
-            try:
-                m = kalip.search(mdx.read_text(encoding="utf-8"))
-            except OSError:
-                continue
-            if m and int(m.group(1)) != int(px):
-                sapan.append(f"{ad}: sayfa {m.group(1)} ilan ediyor, üretim {px}")
-            if m:
-                break
+    for ad, nerede, acik, ilan in gommeler:
+        cerceve = figur_olcu.cerceve_yuksekligi(acik, ilan)
+        hedef = ilan if ilan is not None else int(uretim[ad])
+        if cerceve < hedef:
+            sapan.append(f"{ad}: {nerede} çerçevesi {cerceve}, figür {hedef}")
     if not sapan:
         return []
-    return [f"figür yüksekliği sayfayla ayrıştı ({len(sapan)}): " + " · ".join(sapan[:4])
+    return [f"figür sayfada KIRPILACAK ({len(sapan)}): " + " · ".join(sapan[:4])
             + " — yayın kapısı bunu ENGEL sayar"]
 
 
@@ -852,38 +884,44 @@ def duman_kos(h: "Hat") -> str | None:
 
 
 def yukseklik_denetimi(h: "Hat") -> str | None:
-    """cikti/yukseklikler.json ↔ MDX'teki GrafikEmbed yukseklik={} uyuşuyor mu?
+    """Sayfanın ELLE YAZDIĞI yükseklik hattın figürüyle ayrışmış mı (kırpmadan)?
 
     Grafik yüksekliği panel sayısı, alt başlık satırı ve lejant satırından
-    türetiliyor; dipnot bir satır uzayınca figür yükselir ama MDX'teki sayı elle
-    yazıldığı için sessizce ayrışır ve iframe içinde grafik kırpılır. Bu denetim
-    o ayrışmayı GÖRÜNÜR yapar.
+    türetiliyor; bir dipnot bir satır uzayınca figür 26 piksel oynuyor. Elle
+    yazılan sayı bir ALT SINIRDIR: figür büyürse figürün ilanı geçer (kırpılma
+    yok — o hâli `yukseklik_bulgulari` sorar), küçülürse aradaki fark figürün
+    altında boşluk kalır. Ayrışma bir kusur değil, ESKİMİŞ BİR KOPYA: hattın
+    kendi yüksekliğini ilan ettiği figürde sayı kaldırılabilir. Ayrıca: hattın
+    sayfasında elle yükseklikle gömülü olup üretimde olmayan figür.
     """
-    import json, re
-    y = KOK / h.klasor / "cikti" / "yukseklikler.json"
+    uretim, gommeler = _yukseklik_gommeleri(h)
+    if not uretim:
+        return None
+    if _ORTAK not in sys.path:
+        sys.path.insert(0, _ORTAK)
+    import figur_olcu
+    eski = []
+    for ad, nerede, acik, ilan in gommeler:
+        hedef = ilan if ilan is not None else int(uretim[ad])
+        if (acik is not None and acik != int(uretim[ad])
+                and figur_olcu.cerceve_yuksekligi(acik, ilan) >= hedef):
+            eski.append(f"{ad}: {nerede} {acik} ≠ üretim {int(uretim[ad])}")
+    yok = []
     mdx = KOK / "site" / "src" / "content" / "projeler" / f"{h.slug}.mdx"
-    if not y.exists() or not mdx.exists():
-        return None
-    try:
-        bek = json.loads(y.read_text(encoding="utf-8"))
-        met = mdx.read_text(encoding="utf-8")
-    except Exception:
-        return None
-    sapan, yok = [], []
-    for blok in re.findall(r"<GrafikEmbed[^>]*?/>", met, re.S):
-        m_src = re.search(r'src="/projeler/[^/]+/([^"]+)"', blok)
-        m_yuk = re.search(r"yukseklik=\{(\d+)\}", blok)
-        if not m_src or not m_yuk:
-            continue
-        dosya, gercek = m_src.group(1), int(m_yuk.group(1))
-        if dosya not in bek:
-            yok.append(dosya)
-        elif int(bek[dosya]) != gercek:
-            sapan.append(f"{dosya}: MDX {gercek} ≠ üretim {int(bek[dosya])}")
-    if sapan or yok:
+    if mdx.exists():
+        try:
+            met = mdx.read_text(encoding="utf-8")
+        except OSError:
+            met = ""
+        for blok in re.findall(r"<GrafikEmbed\b[\s\S]*?/>", met):
+            m_src = re.search(r'src="/projeler/' + re.escape(h.slug) + r'/([^"]+)"', blok)
+            if m_src and re.search(r"yukseklik=\{\d+\}", blok) and m_src.group(1) not in uretim:
+                yok.append(m_src.group(1))
+    if eski or yok:
         p = []
-        if sapan:
-            p.append("yükseklik SAPMASI — " + "; ".join(sapan))
+        if eski:
+            p.append("elle yazılan yükseklik eskidi (kırpmıyor; fark boşluk, sayı "
+                     "kaldırılabilir) — " + "; ".join(eski))
         if yok:
             p.append("MDX'te var, üretimde yok: " + ", ".join(yok))
         return " · ".join(p)

@@ -642,6 +642,95 @@ sina("sayfası derlenmemiş sayı aranan sayısına girmiyor",
      olay_okura_ulasti(_kok) == ([], 0, 0), f"gelen {olay_okura_ulasti(_kok)}")
 
 
+# ---------------------------------------------------------------------------
+print("\n▶ Şekil yüksekliği (3): çerçeve figürü kırpıyor mu")
+# ÖLÇÜLEN ARIZA (25.09.2026): fonlama Şekil 04'ün alt yazısındaki koşullu
+# cümle (alım yönlü swap stoku sıfırken basılıyor) kalktı, figür 1159'dan
+# 1133'e kısaldı, sayfa 1159 ilan ediyordu ve eski EŞİTLİK ölçütü yayını
+# durdurdu. Aynı gün YP mevduat Şekil 05 ters yönde ayrışmıştı (sayfa 1165,
+# figür 1191) ve canlı sitede 26 piksel kırpılıyordu — o hat bu ölçütte yalnız
+# bilgiydi. Kural artık: elle yazılan yükseklik ALT SINIR, figürün ilanı onu
+# aşarsa ilan (ortak/figur_olcu.py ↔ site/src/lib/grafikOlcu.ts).
+yukseklik_denetle = _mod.yukseklik_denetle
+fo = _mod._figur_olcu()
+
+
+def _figur(h: int | None, onde_tablo: bool = False) -> str:
+    """Plotly çıktısının biçimi: newPlot("kimlik", [izler], {düzen}, {ayar}).
+    Dizgelerde } ] ve kaçışlı tırnak — tarayıcı onlarda şaşmamalı."""
+    iz = ('{"type":"table","cells":{"height":24},"header":{"height":42}}' if onde_tablo
+          else '{"type":"scatter","name":"a ] } \\" b","y":[1,2]}')
+    duzen = '{"margin":{"t":80},' + (f'"height":{h},' if h is not None else "") \
+            + '"title":{"text":"x } y ] \\" z"}}'
+    return ('<div id="x"></div><script>window.PLOTLYENV={};Plotly.newPlot(\n  "x",\n  ['
+            + iz + '],\n  ' + duzen + ',\n  {"responsive": true})</script>')
+
+
+sina("düzenin yüksekliği okunuyor, tablo hücresininki değil (bütçe Şekil 09)",
+     fo.ilan_edilen_yukseklik(_figur(1227, onde_tablo=True)) == 1227,
+     f"gelen {fo.ilan_edilen_yukseklik(_figur(1227, onde_tablo=True))}")
+sina("düzeninde yükseklik olmayan figür ilan etmiyor sayılır",
+     fo.ilan_edilen_yukseklik(_figur(None, onde_tablo=True)) is None,
+     f"gelen {fo.ilan_edilen_yukseklik(_figur(None, onde_tablo=True))}")
+sina("2.300 piksellik meşru figür okunuyor, tavan dışı yükseklik okunmuyor",
+     fo.ilan_edilen_yukseklik(_figur(2300)) == 2300
+     and fo.ilan_edilen_yukseklik(_figur(9000)) is None)
+sina("çerçeve kuralı: elle yazılan alt sınır, ilan onu aşarsa ilan",
+     (fo.cerceve_yuksekligi(1159, 1133), fo.cerceve_yuksekligi(1165, 1191),
+      fo.cerceve_yuksekligi(None, 1133), fo.cerceve_yuksekligi(None, None))
+     == (1159, 1191, 1133, 540))
+
+
+def _gomme(src: str, yuk: int | None = None) -> str:
+    return (f'<GrafikEmbed\n  src="{src}"\n  baslik="b"\n  no="01"\n'
+            + (f"  yukseklik={{{yuk}}}\n" if yuk is not None else "") + "/>\n")
+
+
+_site = _agac({"04.html": _figur(1133), "05.html": _figur(1191),
+               "07.html": _figur(None), "08.html": _figur(None)})
+e, b = yukseklik_denetle("fon", {"04.html": 1133},
+                         [("projeler/fon", _gomme("/projeler/fon/04.html", 1159))], _site)
+sina("25.09 vakası: figür kısaldı, sayfa eski sayıyı ilan ediyor → ENGEL DEĞİL, bilgi",
+     e == [] and len(b) == 1, f"engel {e} · bilgi {b}")
+e, b = yukseklik_denetle("fon", {"05.html": 1191},
+                         [("projeler/fon", _gomme("/projeler/fon/05.html", 1165))], _site)
+sina("figür büyüdü, sayfa eski sayıyı ilan ediyor → çerçeve figürü izler, kırpılmaz",
+     e == [], f"engel {e}")
+e, b = yukseklik_denetle("fon", {"07.html": 1999},
+                         [("projeler/fon", _gomme("/projeler/fon/07.html", 1973))], _site)
+sina("yüksekliğini ilan etmeyen figürde elle yazılan sayı üretimin altında → ENGEL",
+     len(e) == 1 and "kırpılır" in e[0], f"engel {e}")
+e, b = yukseklik_denetle("fon", {"04.html": 1133},
+                         [("projeler/fon", _gomme("/projeler/fon/05.html", 1191))], _site)
+sina("üretilen ama hiçbir sayfada gömülü olmayan figür → ENGEL",
+     e == ["04.html: hiçbir sayfada gömülü değil"], f"engel {e}")
+# Eski kalıp `src` ile `yukseklik` arasına 400 karakter tanıyordu: yüksekliği
+# yazılmamış bir gömmede SONRAKİ gömmenin sayısını okurdu (burada 1200 → geçerdi).
+e, b = yukseklik_denetle("fon", {"08.html": 1100},
+                         [("projeler/fon", _gomme("/projeler/fon/08.html")
+                           + _gomme("/projeler/fon/04.html", 1200))], _site)
+sina("gömme bloğu dışına taşılmıyor: komşu gömmenin yüksekliği okunmaz",
+     len(e) == 1 and "çerçeve 540" in e[0], f"engel {e}")
+# Eski ölçüt ilk bulduğu gömmede duruyordu: panodaki doğru sayı analizdeki
+# kırpan sayıyı gizlerdi.
+e, b = yukseklik_denetle("fon", {"08.html": 1100},
+                         [("projeler/fon", _gomme("/projeler/fon/08.html", 1100)),
+                          ("analiz/yazi", _gomme("/projeler/fon/08.html", 900))], _site)
+sina("figürün HER gömmesi sorulur: analizdeki kırpan gömme ENGEL",
+     len(e) == 1 and "analiz/yazi" in e[0], f"engel {e}")
+
+# İki dilde tek kural: sabitler ve öncelik iki kaynakta aynı kalmalı. Bileşen
+# derleme anında TS'ten, kapılar Python'dan okur; biri sessizce değişirse
+# kapı, sayfanın kurmadığı bir çerçeveyi sınar.
+_ts = (pathlib.Path(__file__).resolve().parents[1] / "src/lib/grafikOlcu.ts").read_text(encoding="utf-8")
+_ts_sabit = {ad: int(m.group(1)) for ad in ("ONTANIMLI", "EN_AZ", "EN_COK")
+             if (m := __import__("re").search(rf"const {ad} = (\d+);", _ts))}
+sina("grafikOlcu.ts ↔ figur_olcu.py: sabitler ve öncelik aynı",
+     _ts_sabit == {"ONTANIMLI": fo.ONTANIMLI, "EN_AZ": fo.EN_AZ, "EN_COK": fo.EN_COK}
+     and "Math.max(acik, ilan)" in _ts and "Plotly.newPlot(" in _ts,
+     f"TS {_ts_sabit} · Python {fo.ONTANIMLI, fo.EN_AZ, fo.EN_COK}")
+
+
 print(f"\n{'═' * 70}")
 print(f"  {len(GECTI)} geçti · {len(DUSTU)} düştü")
 if DUSTU:
