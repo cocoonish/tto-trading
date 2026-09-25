@@ -1,18 +1,9 @@
 {
  "_aciklama": "Veri iş akışının koşu defteri. Üst düzeydeki veri_kosusu/sonuc alanları EN SON kaydın kopyasıdır (denetim.py ve zincir.py onları okur); kosular listesi son 60 koşuyu tutar, en eski başta. Tek kayıt tutulduğu sürece 'sabah veri penceresi ateşlendi mi' sorusu geriye dönük cevapsızdı.",
- "veri_kosusu": "2026-09-25T14:28:31+00:00",
+ "veri_kosusu": "2026-09-25T17:22:22+00:00",
  "sonuc": "success",
  "kaynak": "veri.yml",
  "kosular": [
-  {
-   "zaman": "2026-09-15T14:33:42+00:00",
-   "sonuc": "failure",
-   "tetik": "schedule",
-   "cron": "47 8 * * 1-5",
-   "takvim_alindi": true,
-   "kor_kosu": false,
-   "kosan_hat": 9
-  },
   {
    "zaman": "2026-09-15T17:34:38+00:00",
    "sonuc": "failure",
@@ -527,6 +518,15 @@
    "takvim_alindi": true,
    "kor_kosu": false,
    "kosan_hat": 8
+  },
+  {
+   "zaman": "2026-09-25T17:22:22+00:00",
+   "sonuc": "success",
+   "tetik": "schedule",
+   "cron": "23 12 * * 1-5",
+   "takvim_alindi": true,
+   "kor_kosu": false,
+   "kosan_hat": 4
   }
  ]
 }
