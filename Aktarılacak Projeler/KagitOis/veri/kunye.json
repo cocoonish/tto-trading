@@ -1,0 +1,30 @@
+{
+ "cipa": "2026-09-22",
+ "not": "Ders girdisi. Eğri: TCMB DİBS gösterge değerlerinden sıfır kuponlu spot getiriler (yıllık bileşik, ACT/365; düğümler strip getirilerinin vade ekseninde doğrusal ara değeri). Fonlama: TLREF (basit, ACT/365), politika faizi, koridor ve AOFM. PPK: depodaki karar arşivi. İhale: Hazine ihale sonuçları (2020 → çıpa).",
+ "dosyalar": {
+  "egri_gunluk.csv.gz": {
+   "sha256": "fc89c896f8f4cf50515e25905890aa3858a887521fde14a7f28b8648cbc7876e",
+   "satir": 3580,
+   "ilk": "2013-01-01",
+   "son": "2026-09-22"
+  },
+  "fonlama_gunluk.csv.gz": {
+   "sha256": "22c9c55810e4b6579bd73e14bc5616804cc599e19baad322ed6e1e80b1226e36",
+   "satir": 3444,
+   "ilk": "2013-01-02",
+   "son": "2026-09-21"
+  },
+  "ppk_kararlari.csv.gz": {
+   "sha256": "d2251b8ae043366fb54437d32386a4f474a5a844aa5bc13dfd3cd5ca7befc8a9",
+   "satir": 111,
+   "ilk": "2016-01-19",
+   "son": "2026-09-10"
+  },
+  "ihale.csv.gz": {
+   "sha256": "e8886f03bb5b3111eb3fcc5875b252e4de27dddad88edfa73fb1d948fadf4ff6",
+   "satir": 466,
+   "ilk": "2020-01-14",
+   "son": "2026-09-15"
+  }
+ }
+}

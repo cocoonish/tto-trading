@@ -3196,3 +3196,58 @@ duman ilk yazımda hattın GERÇEK önbellek dizinine sahte dosya bıraktı ve
 sonraki madde o kopyayla "geçti" — bir sınama kendi yazdığını okuyorsa kendi
 kendini doğrular. Ve tur, dosyalar DEĞİŞMEDEN önce belirli bir commit'e karşı
 koşturuldu: 16.09'un "kaynağı canlıyken ölçme" tuzağı bu kez kurulmadı.
+
+**Kurucu ilke — BİR ARACI, O ARAÇLA YAZILMIŞ BİR METNE KARŞI DOĞRULAMAK
+DAİRESELDİR; ve SABİT ORAN İLE GECELİK FİXİNG AYNI DİLE ÇEVRİLMEDEN
+KIYASLANMAZ.** 25.09.2026'da "Kâğıt ve TRY OIS Trading" dersi yazılırken
+(`site/src/content/arastirma/kagit-ve-ois-trading.mdx`; kâğıt 40 dk · OIS
+outright 30 dk · spread ve fly 50 dk) OIS taşıma aracının kendi hesabı ölçüldü
+ve yanlış çıktı. Araç taşımayı (K − TLREF)·h/365 diye BASİT yazıyordu; oysa
+yüzen bacak dönem içinde GÜNLÜK BİLEŞİKLENİR: %39,95 gecelik fixing 92 günde
+dönem dilinde %42,01 eder (F = [(1 + r/365)^h − 1]·365/h). Basit yazım yüzen
+oranı ~206 bp eksik sayıyordu ve taşıma −8,5 yerine −5,9 mn TL çıkıyordu —
+%30 eksik. Kusuru görünmez yapan aracın KENDİ doğrulama yorumuydu: "rehber
+değerleri −5,9 / −3,0 / −9,0 — birebir eşleşiyor". Eşleşiyordu, çünkü rehberin
+sayıları aynı araçla, aynı konvansiyonla yazılmıştı; bir aracı çıktısından
+yazılmış bir metne karşı sınamak hiçbir şey ölçmez. Doğrulama bağımsız bir
+türetmeye (dersin ölçüm katmanındaki çeyreklik bootstrap ve bileşik yüzen
+bacak) karşı yapıldı ve yayımlanmış sayılar okura TARİHLİ bir notla (eski ve
+yeni değer) düzeltildi: Trade Pratiği B.2.3 (taşıma −5,9 → −8,5 · toplam
+−9,0 → −11,6 · günlük −64 → −93 bin TL · başabaş %33,4 → %32,6), B.2 pratik
+bloğunun üçüncü alıştırması, B.7 vaka 1 ve TL Taşıma sayfası. Aynı alıştırmada
+bağımsız ikinci bir kusur vardı: başabaş 2,85/(0,23 × 300 × 10⁻⁴) ≈ 413 bp
+eder, metin "≈ 41 bp" yazıyordu — on kat. Bir sayıyı yeniden hesaplamak,
+yanındaki sayıyı da yeniden hesaplamaktır.
+
+Ders bu dosyanın kalıbıyla kuruldu: girdiler dondurulmuş arşivde
+(`Aktarılacak Projeler/KagitOis/veri/`, künyede sha256), her sayı tek bir ölçüm
+dosyasından (`olcum.py`), yayımlanan tabloları AYRIŞTIRIP ölçümle kıyaslayan
+bir doğrulayıcı (`dogrula.py` → sayfa sınavı 26; 593 tablo hücresi · 62 metin
+parçası · 9 figür; üç arıza enjeksiyonunun üçü de yakalandı). İki ölçüm tuzağı
+kayda değer. (1) Fly'ın ÖRNEKLEM DIŞI sınaması ilk yazımda sinyali ve girişi
+AYNI ay sonu gözleminden kuruyordu: PCA artığı ölçüm gürültüsü taşıyor,
+gürültü ertesi gözlemde kendiliğinden geri döndüğü için ortalamaya dönüş gibi
+görünüyor ve PCA fly'ı işlem başına net +36,9 bp veriyordu. Sinyal girişten
+beş iş günü önce, ağırlıklar bir önceki ay sonuna kadarki veriden okununca
++13,8 bp (2020–2026'da +5,7). Ders ikisini de basıyor ve farkın gürültü
+olduğunu söylüyor: bir artık-dönüş sınamasında sinyalin okunduğu gözlem,
+girişin yapıldığı gözlemden AYRI olmalıdır. (2) Klasik barbell (nakit ve
+durasyon nötr) sezgisel olarak bir eğrilik işlemidir; faktör maruziyeti
+ölçülünce 100 mn TL gövde başına 1σ'lık aylık seviye şokunda +0,13 mn TL,
+büküm şokunda −0,02 — gizli bir AYI pozisyonu, çünkü Türkiye'de seviye
+hareketi kısa uç ağırlıklıdır ve barbell DV01'ünün çoğunu 7 yıla koyar. Ders
+onu böyle anlatıyor ve PCA-nötr ağırlığı veriyor.
+
+Üçüncüsü sitenin kendisindeydi ve "kural yalnız yoruma yazıldığında
+dayatılmaz"ın bir eşi: `GrafikEmbed`in kaynak etiketi `white-space: nowrap`
+taşıyordu ve bileşenin belgesi "kısa kaynak adı" diyordu — hiçbir şey onu
+sormuyordu. 390 piksel ekranda dersin sayfası 537, OVP analizi 887, Brooks
+rehberi 467 piksele taştı. Etiket artık boşlukta kırılıyor (masaüstü düzeni
+aynı). Tarama derlenmiş 88 sayfanın tamamında yapıldı ve BAŞKA sebepli yedi
+taşma daha buldu; bu commit'te DÜZELTİLMEDİ ve sebepleri teşhis edilmedi, AÇIK:
+Enstrüman Fiyatlama'nın forward hesap aracı (488), SMC dersi (465), teknik
+bülten dizini ve dört sayısı (468–484). Telefon genişliğinde yatay taşmayı
+soran bir kapı YOK; tarama elle koşturuldu. Ayrıca AÇIK: dersin JS hesap
+araçlarının çıktısı kapıda değil — Python eşleri (`temsili_ois`,
+`barbell_kurallar`) doğrulayıcıda sınanıyor, JS araçları başsız tarayıcıda elle
+ölçüldü ve metindeki doğrulama satırları o ölçümden.
