@@ -1,23 +1,23 @@
 {
- "kosum": "2026-09-24",
- "kosum_an": "2026-09-24T14:01:35+00:00",
- "son_gun": "2026-09-23",
+ "kosum": "2026-09-25",
+ "kosum_an": "2026-09-25T14:23:40+00:00",
+ "son_gun": "2026-09-24",
  "son_hafta": "2026-09-18",
  "gunluk_seri": 54,
- "gunluk_gozlem": 3953,
+ "gunluk_gozlem": 3954,
  "haftalik_seri": 13,
  "haftalik_gozlem": 716,
  "aylik_seri": 3,
  "kimlik": {
   "A24/1000 = −APIFON3": {
-   "n": 3952,
+   "n": 3953,
    "n_pencere": 250,
    "maks_fark": 123523.64000000001,
    "maks_tarih": "2021-12-21",
    "pencere_maks_fark": 4030.475999999908,
-   "pencere_maks_bagil": 0.007724868642814333,
-   "pencere_olcek_medyan": 521753.338,
-   "tam_ortalama_mutlak": 4041.8589307692305,
+   "pencere_maks_bagil": 0.007617464619106396,
+   "pencere_olcek_medyan": 529109.9075,
+   "tam_ortalama_mutlak": 4040.8364519099414,
    "son_fark": 0.0,
    "birim": "mn TL",
    "esik_bagil": 0.01,
@@ -25,17 +25,17 @@
    "not": "artık kapsam farkıdır (bilançonun APİ kalemi işlemiş faizi de taşır); eşik son 250 iş gününe uygulanır"
   },
   "APIFON3 = A − B": {
-   "n": 3952,
+   "n": 3953,
    "maks_fark": 1.1641532182693481e-10,
    "maks_bagil": 3.5492476166748422e-12,
    "maks_tarih": "2016-09-29",
-   "son_fark": 1.1641532182693481e-10,
+   "son_fark": 0.0,
    "birim": "mn TL",
    "esik_bagil": 1e-06,
    "gecti": true
   },
   "A16 = A17+A18+A21+A22": {
-   "n": 3952,
+   "n": 3953,
    "maks_fark": 1.4901161193847656e-08,
    "maks_bagil": 1.9838399662022157e-16,
    "maks_tarih": "2013-01-02",
@@ -45,7 +45,7 @@
    "gecti": true
   },
   "A18 = A19+A20": {
-   "n": 3952,
+   "n": 3953,
    "maks_fark": 1.0,
    "maks_bagil": 5.273360159169584e-10,
    "maks_tarih": "2024-04-22",
@@ -55,11 +55,11 @@
    "gecti": true
   },
   "A15 = A16+A24+A25": {
-   "n": 3952,
+   "n": 3953,
    "maks_fark": 3.0,
    "maks_bagil": 5.552068239804487e-08,
    "maks_tarih": "2016-03-21",
-   "son_fark": 1.0,
+   "son_fark": 0.0,
    "birim": "bin TL",
    "esik_bagil": 1e-06,
    "gecti": true
@@ -69,9 +69,9 @@
   "tlref": {
    "durum": "uzatildi",
    "gunler": [
-    "2026-09-24"
+    "2026-09-25"
    ],
-   "ortusen": 1915,
+   "ortusen": 1916,
    "kaynak": "Borsa İstanbul TLREF dosyası",
    "nereden": {
     "tarihsel": "canlı",
@@ -82,9 +82,9 @@
   "tlref_endeks": {
    "durum": "uzatildi",
    "gunler": [
-    "2026-09-24"
+    "2026-09-25"
    ],
-   "ortusen": 1801,
+   "ortusen": 1802,
    "kaynak": "Borsa İstanbul TLREF dosyası",
    "nereden": {
     "tarihsel": "canlı",
