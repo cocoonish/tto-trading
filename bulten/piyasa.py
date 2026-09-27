@@ -529,6 +529,9 @@ def _ham_veri(tazele: bool = False) -> dict:
     # Doğru sıra: önce kapanmamış barı düş, SONRA devri hesapla. Böylece
     # düzeltme yalnız kapanmış barlarla eşleştirme yapar ve bugüne devir
     # yazamaz.
+    # Hafta sonu artığı, YERLEŞMEMİŞ BAR kuralından önce düşer: o kural bir
+    # günü sorar, bu bir seansı.
+    seri = hafta_sonu_bari_dus(seri)
     seri = _yerlesmemis_dus(seri)
     eski = {}
     try:
@@ -768,6 +771,51 @@ KAPANIS_UTC = {
     "kripto": 24,                # 7/24
 }
 VARSAYILAN_KAPANIS = 24
+
+
+# Hafta sonu işlem gören bir seride hafta sonu barı GERÇEK bir gözlemdir; işlem
+# görmeyen bir seride ise kaynağın artığıdır. Ayrımı SEMBOLÜN KENDİ SERİSİ verir
+# ve eşik ölçülerek kondu (27.09.2026, depodaki anlık görüntü, 51 sembol):
+# Bitcoin'in 365 barının 105'i hafta sonu (%28,77 — 7/24 bir seride beklenen
+# 2/7), EUR/USD'nin 261 barının BİRİ (%0,38) ve o tek bar serinin son barıydı;
+# kalan 49 sembolde hafta sonu barı SIFIR. İki küme arasında hiçbir şey yok,
+# yani eşik geniş bir boşluğa konuyor.
+#
+# Kusur 14.09.2026'da USD/TRY'de ölçülmüş ve `ortak/usdtry.py`ye kapatılmıştı:
+# pazar koşusu cumartesi barını alıyor, hattın saati cumartesiye kayıyor ve
+# pazartesi kaynak o barı geri çektiğinde gerileme kapısı ötüyordu. Kural bir
+# yerde yazılıp piyasa fotoğrafına uygulanmamıştı; 27.09.2026'da EUR/USD satırı
+# 26.09 cumartesi damgasıyla yayımlandı ve bültenin başlığı elli bir satırın
+# kırk sekizi cuma kapanışı taşırken "Cumartesi kapanışı" dedi.
+#
+# SIRA da sözleşmenin parçası: süzgeç yerleşmemiş bar kuralından ÖNCE koşar,
+# çünkü o kural bir GÜNÜ sorar (bugünün barı kapandı mı) ve cumartesi barı
+# PAZAR çekildiğinde artık "bugün" değildir — yani ikinci süzgeç onu göremez.
+#
+# SESSİZ SİLMEZ: düşen gün serinin üstüne adıyla yazılır, çünkü kaynak bir gün
+# damgalarını kaydırırsa (meşru bir cuma seansı cumartesiye düşerse) sessiz bir
+# süzgeç gerçek veriyi yok eder, adıyla yazan süzgeç onu görünür kılar.
+HAFTA_SONU_PAY = 0.10        # bu payın üstü: sembol hafta sonu işlem görüyor
+HAFTA_SONU_ASGARI_BAR = 60   # altında oran ölçülemez; süzgeç çalışmaz
+
+
+def hafta_sonu_bari_dus(seri: dict) -> dict:
+    """Hafta sonu işlem görmeyen sembollerin hafta sonu barlarını düşür."""
+    for k in list(seri):
+        s = seri[k]
+        t = s.get("tarih") or []
+        if len(t) < HAFTA_SONU_ASGARI_BAR:
+            continue
+        hs = [i for i, g in enumerate(t) if date.fromisoformat(g).weekday() >= 5]
+        if not hs or len(hs) / len(t) >= HAFTA_SONU_PAY:
+            continue                       # ya hiç yok ya da 7/24 işlem görüyor
+        tut = [i for i in range(len(t)) if i not in set(hs)]
+        s["tarih"] = [t[i] for i in tut]
+        s["kapanis"] = [s["kapanis"][i] for i in tut]
+        if s.get("kapanis_ham"):
+            s["kapanis_ham"] = [s["kapanis_ham"][i] for i in tut]
+        s["hafta_sonu_dusen"] = [t[i] for i in hs]
+    return seri
 
 
 def _yerlesmemis_dus(seri: dict) -> dict:

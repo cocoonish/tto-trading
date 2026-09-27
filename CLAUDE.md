@@ -3347,3 +3347,22 @@ kullanıcı isteği) ve en ağır bulguları onlar verdi. İnceleme donmuş kopy
 karşı koştu; ilk iş akışının düzeltmeleri canlı dosyaya uygulanırken öbür üçü
 donmuş kopyayı okumaya devam etti (16.09'daki "kaynak canlıyken ölçme" tuzağı
 kurulmadı).
+
+**Kurucu ilke — BİR KURALIN UYGULANMADIĞI YER, UYGULANDIĞI YERLE AYNI GÖRÜNÜR;
+ve HAFTA SONU BARININ GERÇEK Mİ ARTIK MI OLDUĞUNU SEMBOLÜN KENDİ SERİSİ
+SÖYLER.** 14.09.2026'da ölçülen kusur — kaynağın verdiği cumartesi barının
+seriye girmesi — `ortak/usdtry.py`ye kapatılmıştı; aynı kural piyasa
+fotoğrafına uygulanmamıştı. 27.09.2026 haftalık bülteninde EUR/USD satırı
+26.09 CUMARTESİ damgasıyla yayımlandı ve bültenin başlığı, elli bir satırın
+kırk sekizi 25 Eylül cuma kapanışı taşırken "Cumartesi kapanışı" dedi; o
+satırın "günlük değişim"i de bir seansa karşılık gelmiyordu. Ayrımı yapan ölçü
+sembolün KENDİ tarihçesidir ve eşik ölçülerek kondu (depodaki anlık görüntü,
+51 sembol): Bitcoin'in 365 barının 105'i hafta sonu (%28,77 — 7/24 bir seride
+beklenen 2/7), EUR/USD'nin 261 barının BİRİ (%0,38, üstelik serinin SON barı),
+kalan 49 sembolde SIFIR. İki küme arasında hiçbir şey yok; eşik (%10) geniş bir
+boşluğa konuyor ve bugünkü ağaçta tek bir barı düşürüyor. SIRA sözleşmenin
+parçası: süzgeç "yerleşmemiş bar" kuralından ÖNCE koşar, çünkü o kural bir
+GÜNÜ sorar (bugünün barı kapandı mı) ve cumartesi barı PAZAR çekildiğinde artık
+"bugün" değildir. Süzgeç SESSİZ SİLMEZ — düşen gün adıyla yazılır, çünkü kaynak
+bir gün damgalarını kaydırırsa sessiz bir süzgeç gerçek veriyi yok eder. Dört
+hâl `bulten/duman.py`de ve üç arıza enjeksiyonunun üçü de yakalanıyor.

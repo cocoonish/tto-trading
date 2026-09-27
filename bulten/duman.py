@@ -507,6 +507,59 @@ def _hat_adi_kapsami():
     assert '"hat_ad": ayar.HAT_ADI' in kaynak, "uret.dk() okura görünen adı kayda yazmıyor"
 
 
+def _hafta_sonu_bari():
+    """Hafta sonu artığı düşer, 7/24 seri dokunulmaz, süzgeç sırası yerinde.
+
+    Kusur 27.09.2026'da EUR/USD satırında ölçüldü: kaynak bir cumartesi barı
+    verdi, satır o günün damgasıyla yayımlandı ve bültenin başlığı elli bir
+    satırın kırk sekizi cuma kapanışı taşırken 'Cumartesi kapanışı' dedi. Aynı
+    kusur 14.09'da USD/TRY'de ölçülüp `ortak/usdtry.py`ye kapatılmıştı; kural
+    bir yerde yazılıp piyasa fotoğrafına uygulanmamıştı.
+    """
+    import piyasa
+    from datetime import date, timedelta
+
+    def _seri(gun: int, hafta_sonu_dahil: bool) -> dict:
+        t, g = [], date(2026, 1, 5)          # pazartesi
+        while len(t) < gun:
+            if hafta_sonu_dahil or g.weekday() < 5:
+                t.append(g.isoformat())
+            g += timedelta(days=1)
+        return {"tarih": t, "kapanis": [100.0 + i for i in range(len(t))]}
+
+    # (1) HAFTA İÇİ SERİYE DÜŞEN TEK CUMARTESİ BARI — düşer ve adıyla yazılır.
+    s = _seri(200, False)
+    i = sum(1 for x in s["tarih"] if x < "2026-06-06")
+    s["tarih"].insert(i, "2026-06-06")       # cumartesi
+    s["kapanis"].insert(i, 999.0)
+    out = piyasa.hafta_sonu_bari_dus({"X": s})["X"]
+    assert "2026-06-06" not in out["tarih"], "cumartesi artığı düşmedi"
+    assert out["hafta_sonu_dusen"] == ["2026-06-06"], "düşen gün adıyla yazılmadı"
+    assert 999.0 not in out["kapanis"], "kapanış dizisi tarihle birlikte kırpılmadı"
+
+    # (2) 7/24 SERİ — dokunulmaz. Bitcoin'in ölçülen payı %28,77.
+    s = _seri(200, True)
+    n = len(s["tarih"])
+    out = piyasa.hafta_sonu_bari_dus({"X": s})["X"]
+    assert len(out["tarih"]) == n, "7/24 seriden bar düştü"
+    assert "hafta_sonu_dusen" not in out, "7/24 seri için düşen gün yazıldı"
+
+    # (3) KISA SERİ — oran ölçülemez, süzgeç çalışmaz.
+    s = _seri(HAFTA_SONU_KISA := 30, False)
+    s["tarih"].append("2026-02-21")
+    s["kapanis"].append(1.0)
+    out = piyasa.hafta_sonu_bari_dus({"X": s})["X"]
+    assert "2026-02-21" in out["tarih"], "ölçülemeyen oranda süzgeç çalıştı"
+
+    # (4) SIRA — süzgeç yerleşmemiş bar kuralından ÖNCE çağrılmalı. Cumartesi
+    # barı PAZAR çekildiğinde 'bugün' değildir, yani ikinci kural onu göremez.
+    kaynak = inspect.getsource(piyasa)
+    a = kaynak.find("seri = hafta_sonu_bari_dus(seri)")
+    b = kaynak.find("seri = _yerlesmemis_dus(seri)")
+    assert a > 0, "hafta sonu süzgeci çağrı yerinde yok"
+    assert b > a, "hafta sonu süzgeci yerleşmemiş bar kuralından sonra koşuyor"
+
+
 def main() -> int:
     import ayar, denetim, gozlem, grafik_veri, olay, rejim, soz, surpriz, tazeleme, uret
 
@@ -4034,6 +4087,8 @@ def main() -> int:
 
     sina("tekrar: iki eksen de ölçülüyor, kapsam sözleşmeden türüyor", _tekrar_eksenleri)
     sina("hat adı: izlenen her hattın okura görünen adı var, kayıt onu taşıyor", _hat_adi_kapsami)
+    sina("piyasa: hafta sonu artığı düşer, 7/24 seri dokunulmaz (4 hâl)",
+         _hafta_sonu_bari)
     sina("saat kıyası: yazım değişikliği ve gerileme ilerleme sayılmaz (9 hâl)",
          _surum_ilerlemesi)
     sina("izlem kapsamı: her hat ya izlem taşır ya gerekçeli muaf; yayım bayrağı günlük seride yok",
