@@ -1963,76 +1963,76 @@
     }
   },
   {
-    "timestamp": "2026-09-28T07:52:42.162778+00:00",
+    "timestamp": "2026-09-28T17:10:08.326423+00:00",
     "indices": {
       "EURUSD": {
-        "value": 0.041,
-        "category": "Neutral"
+        "value": 0.2381,
+        "category": "Bullish"
       },
       "USDJPY": {
-        "value": -0.3093,
+        "value": -0.4873,
         "category": "Bearish"
       },
       "USDCHF": {
-        "value": 0.751,
+        "value": 0.7233,
         "category": "Extremely Bullish"
       },
       "GBPUSD": {
-        "value": -0.0972,
-        "category": "Neutral"
+        "value": 0.1605,
+        "category": "Bullish"
       },
       "AUDUSD": {
-        "value": 0.1459,
-        "category": "Bullish"
+        "value": -0.0067,
+        "category": "Neutral"
       },
       "NZDUSD": {
-        "value": 0.1957,
-        "category": "Bullish"
+        "value": 0.5017,
+        "category": "Extremely Bullish"
       },
       "USDCAD": {
-        "value": 0.6772,
+        "value": 0.6185,
         "category": "Extremely Bullish"
       },
       "USDNOK": {
-        "value": 0.2592,
+        "value": 0.3647,
         "category": "Bullish"
       },
       "USDSEK": {
-        "value": -0.1239,
+        "value": -0.4391,
         "category": "Bearish"
       },
       "XAUUSD": {
-        "value": 0.1002,
-        "category": "Bullish"
+        "value": -0.1996,
+        "category": "Bearish"
       },
       "XAGUSD": {
-        "value": -0.081,
-        "category": "Neutral"
+        "value": -0.3014,
+        "category": "Bearish"
       },
       "SPX": {
-        "value": -0.0783,
+        "value": -0.0967,
         "category": "Neutral"
       },
       "UST2Y": {
-        "value": -0.0269,
+        "value": -0.0703,
         "category": "Neutral"
       },
       "UST10Y": {
-        "value": -0.2277,
+        "value": -0.2397,
         "category": "Bearish"
       },
       "BIST100": {
-        "value": -0.6483,
+        "value": -0.594,
         "category": "Extremely Bearish"
       }
     },
-    "veri_sonu": "2026-09-28T07:48:26+00:00",
+    "veri_sonu": "2026-09-28T17:03:59+00:00",
     "regime": {
       "label": "Transitioning",
-      "basket_spread": 0.0334,
-      "avg_correlation": 0.0638,
-      "pc1_share": 0.2693,
-      "as_of": "2026-09-20",
+      "basket_spread": 0.0033,
+      "avg_correlation": 0.0694,
+      "pc1_share": 0.2609,
+      "as_of": "2026-09-27",
       "n_assets": 15
     }
   }
