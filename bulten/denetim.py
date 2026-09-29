@@ -359,6 +359,22 @@ ANAHTAR_KELIME = {
             "AUD/USD": ["aud usd", "avustralya dolar"], "NZD/USD": ["nzd usd", "yeni zelanda"],
             "USD/CAD": ["usd cad", "kanada dolar"],
             "USD/NOK": ["usd nok", "norveç kron"], "USD/SEK": ["usd sek", "isveç kron"],
+            # KREDİ SATIRLARININ HİÇ KARŞILIĞI YOKTU ve kusur MOVE ile dolar/TL
+            # ailesinin bir eşi: ölçülen adlar kısaltma taşıyor ("GOÜ dolar
+            # tahvili (EMB)") ve eşleştirici karşılık bulamayınca adın İLK
+            # sözcüğüne düşüyor — "gou". Hiçbir doğal Türkçe cümle onu
+            # içermez, yani doğru yazılmış bir metin ("gelişen ülke dolar
+            # tahvili %0,91 geriledi") ATIFSIZ görünüyordu ve uyarı hiçbir
+            # yazımla kapanamıyordu (29.09.2026). HYG ile LQD tesadüfen
+            # geçiyordu, çünkü ilk sözcükleri "abd" ve o dizge her bültende
+            # bir yerde bulunur — yani ölçüt orada da soruyu sormuyordu.
+            "ABD yüksek getirili tahvil (HYG)": ["hyg", "yüksek getirili tahvil"],
+            "ABD yatırım yapılabilir tahvil (LQD)": ["lqd",
+                                                     "yatırım yapılabilir tahvil"],
+            "GOÜ dolar tahvili (EMB)": ["emb", "gelişen ülke dolar tahvili",
+                                        "gou dolar tahvili"],
+            "GOÜ hisse (EEM)": ["eem", "gelişen ülke hisse",
+                                "gou hisse"],
             "altın": ["altın"], "gümüş": ["gümüş"],
         }
 

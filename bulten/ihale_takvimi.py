@@ -80,8 +80,15 @@ _AYK = "|".join(AY)
 # Çıpa ile iddia arasında BAŞKA TARİH OLAMAZ (bkz. modül başlığı).
 _ARA = (r"(?:(?!\d{1,2}\s+(?:" + _AYK + r")|\bBugün\b|\bDün\b|\bYarın\b)[^.!?]){0,70}?")
 _KIYMET = r"(?:Hazine|bono|tahvil|kira sertifika|altın tahvil)"
+# ÇIPADA SÖZCÜK SINIRI ZORUNLU. İlk yazımda göreli gün çıpası sınırsızdı
+# ("Bugün|Dün|Yarın") ve alt dize olarak BAŞKA sözcüklerin içine düştü:
+# "dünyanın en büyük tahvil ihraççılarından biri" cümlesi "dün" + "tahvil" +
+# "ihraç" diye okunup ÇELİŞKİ üretti ve yayını durdurdu (29.09.2026). Aynı
+# asimetri gözden kaçmıştı, çünkü _ARA'nın negatif ileri bakışı sınırı ZATEN
+# kullanıyor (\bDün\b) — kural bir yerde yazılıp öbür yerde uygulanmamıştı.
+# Yayının önünde duran bir ölçütün yanlış alarmı arızanın kendisidir.
 KALIP = re.compile(
-    r"(?:(Bugün|Dün|Yarın)|(\d{1,2})\s+(" + _AYK + r"))"
+    r"(?:\b(Bugün|Dün|Yarın)\b|(\d{1,2})\s+(" + _AYK + r"))"
     + _ARA + _KIYMET + _ARA + r"(?:ihale|ihra[cç])", re.I)
 # Olumsuz ya da ölçülemezlik bildiren cümle iddia değildir.
 OLUMSUZ = re.compile(r"\b(yok|bulunmuyor|boş|yapılmıyor|planlanmıyor|iptal|"

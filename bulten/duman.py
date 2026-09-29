@@ -1626,6 +1626,19 @@ def main() -> int:
             "olumsuz cümle iddia sayılıyor"
         assert not celis("14 Eylül'de Hazine iki yıllık tahvil ihalesi düzenliyor."), \
             "takvimde OLAN bir ihale çelişki sayılıyor"
+        # (3a) ÇIPA SÖZCÜK SINIRI SORMALI. 29.09.2026'da "dünyanın en büyük
+        #      tahvil ihraççılarından biri" cümlesi "dün" çıpasıyla eşleşip
+        #      yayını durdurdu; çıpa alt dize olarak başka bir sözcüğün içine
+        #      düşmüşti. Sağdaki iki eş de aynı sınıftan (dünkü/bugünkü ayrı
+        #      sözcüktür, dünya değil).
+        assert not celis("Japonya, dünyanın en büyük tahvil ihraççılarından "
+                         "biri olarak arzı kısmayı tartışıyor."), \
+            "çıpa sözcük sınırı sormuyor — 'dünyanın' içindeki 'dün' eşleşiyor"
+        assert not celis("Bugünkü fiyatlamada dünyevi bir tahvil ihracı yok."), \
+            "olumsuz cümle ya da sınırsız çıpa iddia üretiyor"
+        # Sınır eklenirken GERÇEK çıpa kaybedilmemeli.
+        assert celis("Dün'kü ihalede Hazine iki yıllık tahvil ihraç etti."), \
+            "kesme işaretiyle ayrılan gerçek çıpa artık yakalanmıyor"
         # (3b) YAYIMLANMIŞ DÜZELTME iddiayı kapatır — aynı etiketi taşıyan
         #      kayıt; başka tarihi düzelten kayıt kapatmaz.
         iddia = "7 Eylül'de sekiz aylık hazine bonosunun ilk ihracı var."
@@ -2395,6 +2408,32 @@ def main() -> int:
             d3 = _den.Denetim(ok); d3.olagandisilik_penceresi()
             assert not d3.engel, f"doğru kip ({kip}) boşuna engellendi"
     sina("denetim: olağandışılık penceresi bültenin kipini izliyor", _denetim_sigma_penceresi)
+
+    # BİR SATIRIN ADI OKUR YAZIMIYLA DA EŞLEŞMELİ. Atıf ölçütü ölçülen adı
+    # arıyor; kredi satırlarının adı kısaltma taşıdığı için ("GOÜ dolar
+    # tahvili (EMB)") eşleştirici adın ilk sözcüğüne düşüyordu ve "gou"
+    # hiçbir doğal Türkçe cümlede geçmiyor — uyarı hiçbir yazımla
+    # KAPANAMIYORDU. Aynı sınıfın iki eşi (MOVE, dolar/TL) kütükte adıyla
+    # yazılı. Kapsam kadar hassasiyet de sınanıyor: alakasız bir cümle
+    # bu satırları anılmış saymamalı.
+    def _atif_kredi_yazimi():
+        import denetim as _den
+        metin = _den._sade(
+            "ABD yüksek getirili tahvili %0,41, yatırım yapılabilir tahvil "
+            "%0,72, gelişen ülke dolar tahvili %0,91 geriledi; gelişen ülke "
+            "hissesi %1,15 düştü.")
+        for ad in ("ABD yüksek getirili tahvil (HYG)",
+                   "ABD yatırım yapılabilir tahvil (LQD)",
+                   "GOÜ dolar tahvili (EMB)", "GOÜ hisse (EEM)"):
+            assert _den.anilmi(ad, metin), \
+                f"okur yazımıyla anılan {ad} atıfsız görünüyor"
+        alakasiz = _den._sade("Brent petrol yükseldi, altın ve gümüş geriledi.")
+        for ad in ("ABD yüksek getirili tahvil (HYG)",
+                   "ABD yatırım yapılabilir tahvil (LQD)",
+                   "GOÜ dolar tahvili (EMB)", "GOÜ hisse (EEM)"):
+            assert not _den.anilmi(ad, alakasiz), \
+                f"{ad} alakasız cümlede anılmış sayılıyor"
+    sina("denetim: kredi satırları okur yazımıyla anılabilir", _atif_kredi_yazimi)
 
     # SAYFADAKİ TEMA METNİ DEFTERDEKİNDEN ESKİ OLABİLİR. Tema bölümü bültene
     # ÖLÇÜM anında işleniyor, yazı katmanı defteri ondan SONRA güncelliyor;
