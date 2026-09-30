@@ -796,6 +796,40 @@ def soluk_metin(kok: pathlib.Path) -> list[str]:
 # ---------------------------------------------------------------- (27)
 _G_FARK = re.compile(r'<span class="g-fark[^"]*"[^>]*>\s*([^<]*)</span>')
 _TH = re.compile(r"<th\b[^>]*>(.*?)</th>", re.S)
+_TAKVIM_TABLO = re.compile(r'<table class="takvim"[^>]*>(.*?)</table>', re.S)
+_TR = re.compile(r"<tr\b[^>]*>(.*?)</tr>", re.S)
+
+
+def _hucre(tr: str, sinif: str) -> str | None:
+    m = re.search(r'<td class="' + sinif + r'"[^>]*>(.*?)</td>', tr, re.S)
+    return None if m is None else m.group(1)
+
+
+def takvim_tekrari(m: str) -> list[str]:
+    """Aynı takvim tablosunda aynı (gün, saat, olay) iki kez basılmış mı.
+
+    Kaynak bir yayımı alt tablolarıyla ayrı ayrı sayar; bileşen onları tek
+    satıra toplar. Tarih hücresi aynı günün ikinci satırında boş basılır, o
+    yüzden gün yukarıdan taşınır. Olay adı hücrenin ilk metin düğümüdür
+    (beklenti ve dipnot ayrı öğelerde)."""
+    out = []
+    for tablo in _TAKVIM_TABLO.findall(m):
+        gun, gorulen = "", set()
+        for tr in _TR.findall(tablo):
+            olay = _hucre(tr, "t-olay")
+            if olay is None:
+                continue
+            t = _hucre(tr, "t-tarih")
+            if t is not None and re.sub(r"<[^>]+>", "", t).strip():
+                gun = unescape(re.sub(r"<[^>]+>", " ", t)).split()[0:3]
+                gun = " ".join(gun)
+            saat = unescape(re.sub(r"<[^>]+>", "", _hucre(tr, "t-saat") or "")).strip()
+            ad = unescape(olay.split("<", 1)[0]).strip()
+            a = (gun, saat, ad)
+            if a in gorulen:
+                out.append(f"{gun} {saat} {ad}")
+            gorulen.add(a)
+    return out
 
 
 def basim_bulgulari(dosyalar: list[tuple[str, str]]) -> list[str]:
@@ -813,6 +847,8 @@ def basim_bulgulari(dosyalar: list[tuple[str, str]]) -> list[str]:
         for th in _TH.findall(m):
             if "Σ" in unescape(re.sub(r"<[^>]+>", "", th)):
                 bulgu.append(f"{rel}: tablo başlığında Σ {re.sub(r'<[^>]+>', '', th).strip()!r}")
+        for t in takvim_tekrari(m):
+            bulgu.append(f"{rel}: takvimde aynı yayım iki satır ({t}) — alt tablolar tek satırda toplanır")
     return bulgu
 
 

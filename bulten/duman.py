@@ -4191,6 +4191,100 @@ def main() -> int:
         assert "self.buyuk_harf()" in _i.getsource(denetim.Denetim.kos) and \
             "self.manset()" in _i.getsource(denetim.Denetim.kos), "yeni ölçütler kos() listesinde yok"
     sina("dizgeler: haber tonu, veri günlüğü, büyük harf, manşet", _okura_giden_dizgeler)
+
+    def _eksi_denge_fiili():
+        """Eksi bir dengede fiil okurun dilinde (ayar.Izlem.eksi_ad).
+
+        "Cari denge 1,8 mlr USD azaldı: −38,9 → −40,7" aritmetik olarak doğru,
+        okunuşu ters: açık GENİŞLEDİ. Dört hâl: iki uç eksi (genişledi ·
+        daraldı), işaret değişimi, iki uç artı (eski cümle), ve adı olmayan
+        anahtar (eski cümle — kural yalnız ilan edildiği yerde değişir).
+        Cümle izlem_olayi'nin KENDİSİNDEN okunur, yardımcıdan değil: yardımcı
+        doğru olup çağrı yeri eski kalıbı kurarsa madde düşmeli."""
+        import olay as _o
+        iz = next(i for i in ayar.IZLEMLER if i.anahtar == "cari12_mia")
+        assert iz.eksi_ad, "cari denge eksi adını taşımıyor"
+
+        def cum(e, y, i=iz):
+            o = _o.izlem_olayi(i, {i.anahtar: y}, {i.anahtar: e}, "30.09.2026", "31.08.2026")
+            assert o is not None, f"olay kurulmadı: {e} → {y}"
+            return o.metin
+        m = cum(-38.9, -40.7)
+        assert m.startswith("Cari açık") and "genişledi" in m and "38,9" in m and "−" not in m, m
+        m = cum(-40.7, -38.9)
+        assert "daraldı" in m and "−" not in m, m
+        m = cum(1.2, -8.5)
+        assert "artıdan eksiye döndü" in m and "−8,5" in m, m
+        m = cum(10.0, 18.0)
+        assert "arttı" in m and "Cari denge" in m, m
+        adsiz = next(i for i in ayar.IZLEMLER if i.birim == "mlr USD" and i.tip == "delta"
+                     and not i.eksi_ad and (i.onemli or 0) > 0)
+        m = cum(-50.0, -50.0 - 2 * adsiz.onemli, adsiz)
+        assert "azaldı" in m and "genişledi" not in m, m
+    sina("olay: eksi dengede fiil okurun dilinde (genişledi · daraldı · işaret)", _eksi_denge_fiili)
+
+    def _takvim_adlari():
+        """Takvim adları okurun cümlesiyle ve ayırt edici.
+
+        (1) Üç ayrı HMB yayımı (denge tablosu · konsolide kamu · finansman)
+            aynı "Bütçe dengesi" adıyla basılıyordu; ilk eşleşen kazandığı
+            için ayırt edici kalıp önde olmalı. (2) Hazine plan satırı kaynağın
+            ham dizgesiyle ("2Yıl /707 Gün — İhale / Yeniden ihraç") geliyordu.
+            (3) Tanınmayan vade yazımı uydurulmaz, eski biçimde kalır."""
+        import takvim as _t
+        adlar = {_t._tuik_onem(b)[1] for b in (
+            "Merkezi Yönetim Bütçe Denge Tablosu",
+            "Konsolide Kamu Sektörü Gerçekleşmeleri (Merkezi Yönetim Bütçesi Program "
+            "Tanımlı Faiz Dışı Dengesi)",
+            "Bütçe Finansmanı İstatistikleri (Genel Bütçe Dengesi ve Finansmanı, "
+            "Merkezi Yönetim Bütçe Dengesi ve Finansmanı)")}
+        assert len(adlar) == 3 and None not in adlar, f"HMB yayımları ayrışmıyor: {adlar}"
+        assert _t._tuik_onem("Merkezi Yönetim Bütçe Denge Tablosu")[1] == "Bütçe dengesi"
+        # Kısa ad kurumun adını tekrar etmez ("BDDK: BDDK bankacılık").
+        for kalip, _, kisa in ayar.TAKVIM_KURALLARI:
+            for kurum in ("BDDK", "TCMB", "TÜİK", "HMB", "SPK"):
+                assert not kisa.startswith(kurum + " "), f"kısa ad kurumu tekrar ediyor: {kisa}"
+        a = _t.hazine_ad("Sabit Kuponlu Devlet Tahvili", "2Yıl /707 Gün", "İhale / Yeniden ihraç")
+        assert a == "Hazine: 2 yıl (707 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)", a
+        a = _t.hazine_ad("TLREF'e Endeksli Devlet Tahvili", "4Yıl /1435 Gün", "İhale / İlk ihraç")
+        assert "TLREF'e endeksli" in a and a.endswith("ihalesi (ilk ihraç)"), a
+        a = _t.hazine_ad("Hazine Bonosu", "8Ay /245 Gün", "İhale / İlk ihraç")
+        assert a.startswith("Hazine: 8 ay (245 gün) hazine bonosu"), a
+        assert _t.hazine_ad("Kira Sertifikası", "2Yıl /728 Gün", "Doğrudan Satış").endswith(
+            "kira sertifikası doğrudan satışı")
+        a = _t.hazine_ad("X Tahvili", "tanımsız", "Başka")
+        assert a == "Hazine: X Tahvili (tanımsız) — Başka", a
+    sina("takvim: HMB yayımları ayrı adla, Hazine ihalesi okur cümlesiyle", _takvim_adlari)
+
+    def _olcum_durumu_kalici():
+        """Ölçüm koşusunun yazdığı DURUM dosyası, o koşunun commit kapsamında.
+
+        Takvim arşivi her sabah yazılıyordu ve bulten.yml'in `git add`
+        listesinde yoktu: bulutta koşunun sonunda çöpe gidiyordu, arşiv 26.08'den
+        sonra ilerlemedi ve "geçen yayımların sonucu" bölümü 25.09'dan itibaren
+        her sayıda boş çıktı — koşu yeşil. Yollar modüllerin KENDİ sabitlerinden
+        okunur, iş akışı listesi dosyanın kendisinden ayrıştırılır."""
+        import re as _re, shlex as _sh
+        import surpriz as _s, gozlem as _g, piyasa as _p, takvim as _t, haber as _h
+        kok = BURASI.parent
+        yml = (kok / ".github/workflows/bulten.yml").read_text(encoding="utf-8")
+        eklenen = []
+        for satir in yml.splitlines():
+            m = _re.match(r"\s*git add (.+)$", satir)
+            if not m:
+                continue
+            govde = _re.split(r"\s*(?:\|\||2>)", m.group(1))[0]
+            eklenen += [x.rstrip("/") for x in _sh.split(govde)]
+        yazilan = {"takvim arşivi": _s.ARSIV, "gözlem deposu": _g.GECMIS,
+                   "piyasa önbelleği": _p.ONBELLEK, "takvim önbelleği": _t.ONBELLEK,
+                   "haber özet önbelleği": _h.OZET_ONBELLEK}
+        eksik = []
+        for ad, yol in yazilan.items():
+            g = yol.resolve().relative_to(kok.resolve()).as_posix()
+            if not any(g == e or g.startswith(e + "/") for e in eklenen):
+                eksik.append(f"{ad} ({g})")
+        assert not eksik, "bulten.yml commit etmiyor: " + ", ".join(eksik)
+    sina("bulten.yml: ölçüm koşusunun yazdığı durum dosyaları commit kapsamında", _olcum_durumu_kalici)
     sina("hat adı: izlenen her hattın okura görünen adı var, kayıt onu taşıyor", _hat_adi_kapsami)
     sina("piyasa: hafta sonu artığı düşer, 7/24 seri dokunulmaz (4 hâl)",
          _hafta_sonu_bari)

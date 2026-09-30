@@ -144,6 +144,12 @@ jobs:
           git config --global user.name  "tto-bulten"
           git config --global user.email "bot@users.noreply.github.com"
           git add site/src/data/bulten bulten/gecmis bulten/onbellek site/public/projeler || true
+          # TAKVİM ARŞİVİ AYRI SATIRDA: ölçüm koşusu onu her sabah yazıyor ama
+          # listede yoktu — arşiv 26.08'den sonra hiç ilerlemedi ve "geçen
+          # yayımların sonucu" bölümü 25.09'dan itibaren her sayıda boş çıktı.
+          # Ayrı satır, çünkü git tek komuttaki yollardan biri bile yoksa
+          # komutun tamamını reddeder.
+          git add bulten/takvim_arsiv.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "değişiklik yok"
           else

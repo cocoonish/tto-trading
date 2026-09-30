@@ -1,6 +1,6 @@
 {
  "_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' sorusunun cevabı o gün yayımladığımız beklentidir; sonradan güncellenen bir anket değil. Kayıtlar ezilmez.",
- "_son_guncelleme": "2026-08-26",
+ "_son_guncelleme": "2026-09-30",
  "kayitlar": {
   "2026-08-24|TCMB: Sektörel güven (Ağustos 2026)": {
    "tarih": "2026-08-24",
@@ -162,25 +162,25 @@
    "beklenti_sayi": null,
    "gorulme": "2026-08-26"
   },
-  "2026-09-07|Hazine: Hazine Bonosu (8Ay /245 Gün) — İhale / İlk ihraç": {
+  "2026-09-07|Hazine: 8 ay (245 gün) hazine bonosu ihalesi (ilk ihraç)": {
    "tarih": "2026-09-07",
-   "olay": "Hazine: Hazine Bonosu (8Ay /245 Gün) — İhale / İlk ihraç",
+   "olay": "Hazine: 8 ay (245 gün) hazine bonosu ihalesi (ilk ihraç)",
    "saat": "",
    "ulke": "TR",
    "onem": 1,
    "beklenti": "model: 130.4 mlr TL gerçekleşme, teklif/karşılama 2.09",
    "beklenti_sayi": null,
-   "gorulme": "2026-08-26"
+   "gorulme": "2026-08-23"
   },
-  "2026-09-08|Hazine: Kira Sertifikası (2Yıl /728 Gün) — Doğrudan Satış": {
+  "2026-09-08|Hazine: 2 yıl (728 gün) kira sertifikası doğrudan satışı": {
    "tarih": "2026-09-08",
-   "olay": "Hazine: Kira Sertifikası (2Yıl /728 Gün) — Doğrudan Satış",
+   "olay": "Hazine: 2 yıl (728 gün) kira sertifikası doğrudan satışı",
    "saat": "",
    "ulke": "TR",
    "onem": 2,
    "beklenti": "doğrudan satış — ihale tahmini yok",
    "beklenti_sayi": null,
-   "gorulme": "2026-08-26"
+   "gorulme": "2026-08-23"
   },
   "2026-09-09|ABD Hazinesi: uzun vadeli geri alım (buyback) operasyon büyüklüğü ikiye katlanıyor": {
    "tarih": "2026-09-09",
@@ -312,25 +312,25 @@
    "beklenti_sayi": null,
    "gorulme": "2026-08-26"
   },
-  "2026-09-14|Hazine: Sabit Kuponlu Devlet Tahvili (2Yıl /728 Gün) — İhale / İlk ihraç": {
+  "2026-09-14|Hazine: 2 yıl (728 gün) sabit kuponlu devlet tahvili ihalesi (ilk ihraç)": {
    "tarih": "2026-09-14",
-   "olay": "Hazine: Sabit Kuponlu Devlet Tahvili (2Yıl /728 Gün) — İhale / İlk ihraç",
+   "olay": "Hazine: 2 yıl (728 gün) sabit kuponlu devlet tahvili ihalesi (ilk ihraç)",
    "saat": "",
    "ulke": "TR",
    "onem": 1,
    "beklenti": "model: 7.9 mlr TL gerçekleşme, teklif/karşılama 1.68",
    "beklenti_sayi": null,
-   "gorulme": "2026-08-26"
+   "gorulme": "2026-08-24"
   },
-  "2026-09-14|Hazine: TLREF'e Endeksli Devlet Tahvili (4Yıl /1456 Gün) — İhale / İlk ihraç": {
+  "2026-09-14|Hazine: 4 yıl (1456 gün) TLREF'e endeksli devlet tahvili ihalesi (ilk ihraç)": {
    "tarih": "2026-09-14",
-   "olay": "Hazine: TLREF'e Endeksli Devlet Tahvili (4Yıl /1456 Gün) — İhale / İlk ihraç",
+   "olay": "Hazine: 4 yıl (1456 gün) TLREF'e endeksli devlet tahvili ihalesi (ilk ihraç)",
    "saat": "",
    "ulke": "TR",
    "onem": 1,
    "beklenti": "model: 24.2 mlr TL gerçekleşme, teklif/karşılama 1.44",
    "beklenti_sayi": null,
-   "gorulme": "2026-08-26"
+   "gorulme": "2026-08-24"
   },
   "2026-09-14|TÜİK: Dış ticaret (Temmuz 2026)": {
    "tarih": "2026-09-14",
@@ -352,15 +352,45 @@
    "beklenti_sayi": null,
    "gorulme": "2026-08-26"
   },
-  "2026-09-15|Hazine: Sabit Kuponlu Devlet Tahvili (5Yıl /1673 Gün) — İhale / Yeniden ihraç": {
+  "2026-09-15|Hazine: 2 yıl (728 gün) kira sertifikası doğrudan satışı": {
    "tarih": "2026-09-15",
-   "olay": "Hazine: Sabit Kuponlu Devlet Tahvili (5Yıl /1673 Gün) — İhale / Yeniden ihraç",
+   "olay": "Hazine: 2 yıl (728 gün) kira sertifikası doğrudan satışı",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "doğrudan satış — ihale tahmini yok",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-01"
+  },
+  "2026-09-15|Hazine: 5 yıl (1673 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)": {
+   "tarih": "2026-09-15",
+   "olay": "Hazine: 5 yıl (1673 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)",
    "saat": "",
    "ulke": "TR",
    "onem": 1,
    "beklenti": "model: 53.1 mlr TL gerçekleşme, teklif/karşılama 1.51",
    "beklenti_sayi": null,
-   "gorulme": "2026-08-26"
+   "gorulme": "2026-08-25"
+  },
+  "2026-09-15|Hazine: 8 yıl (2933 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)": {
+   "tarih": "2026-09-15",
+   "olay": "Hazine: 8 yıl (2933 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "model: 12.1 mlr TL gerçekleşme, teklif/karşılama 2.54",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-01"
+  },
+  "2026-09-15|TÜİK: Tarım ÜFE (Ağustos 2026)": {
+   "tarih": "2026-09-15",
+   "olay": "TÜİK: Tarım ÜFE (Ağustos 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-08-30"
   },
   "2026-09-16|Fed (FOMC) faiz kararı": {
    "tarih": "2026-09-16",
@@ -371,6 +401,536 @@
    "beklenti": "mevcut politika faizi %37,00 · anket: 12 ay sonrası politika faizi %29,59",
    "beklenti_sayi": null,
    "gorulme": "2026-08-26"
+  },
+  "2026-09-17|BDDK: BDDK bankacılık (37. Hafta 2026)": {
+   "tarih": "2026-09-17",
+   "olay": "BDDK: BDDK bankacılık (37. Hafta 2026)",
+   "saat": "14:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-08-30"
+  },
+  "2026-09-17|TCMB PPK toplantı özeti": {
+   "tarih": "2026-09-17",
+   "olay": "TCMB PPK toplantı özeti",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "mevcut politika faizi %37,00 · anket: 12 ay sonrası politika faizi %29,59",
+   "beklenti_sayi": "",
+   "gorulme": "2026-08-27"
+  },
+  "2026-09-17|TCMB: Haftalık para-banka (37. Hafta 2026)": {
+   "tarih": "2026-09-17",
+   "olay": "TCMB: Haftalık para-banka (37. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-08-27"
+  },
+  "2026-09-17|TCMB: Menkul kıymet ist. (37. Hafta 2026)": {
+   "tarih": "2026-09-17",
+   "olay": "TCMB: Menkul kıymet ist. (37. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-08-27"
+  },
+  "2026-09-21|HMB: Borç stoku (Ağustos 2026)": {
+   "tarih": "2026-09-21",
+   "olay": "HMB: Borç stoku (Ağustos 2026)",
+   "saat": "17:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-08-31"
+  },
+  "2026-09-21|HMB: Bütçe finansmanı (Ağustos 2026)": {
+   "tarih": "2026-09-21",
+   "olay": "HMB: Bütçe finansmanı (Ağustos 2026)",
+   "saat": "17:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-08-31"
+  },
+  "2026-09-21|HMB: Konsolide kamu dengesi (Ağustos 2026)": {
+   "tarih": "2026-09-21",
+   "olay": "HMB: Konsolide kamu dengesi (Ağustos 2026)",
+   "saat": "17:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-08-31"
+  },
+  "2026-09-21|TCMB: Kapasite kullanımı (Eylül 2026)": {
+   "tarih": "2026-09-21",
+   "olay": "TCMB: Kapasite kullanımı (Eylül 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-08-31"
+  },
+  "2026-09-21|TCMB: Reel kesim güveni (Eylül 2026)": {
+   "tarih": "2026-09-21",
+   "olay": "TCMB: Reel kesim güveni (Eylül 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-08-31"
+  },
+  "2026-09-21|TÜİK: YD-ÜFE (Ağustos 2026)": {
+   "tarih": "2026-09-21",
+   "olay": "TÜİK: YD-ÜFE (Ağustos 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-06"
+  },
+  "2026-09-22|TÜİK: Tüketici güveni (Eylül 2026)": {
+   "tarih": "2026-09-22",
+   "olay": "TÜİK: Tüketici güveni (Eylül 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-01"
+  },
+  "2026-09-23|TCMB: Sektörel güven (Eylül 2026)": {
+   "tarih": "2026-09-23",
+   "olay": "TCMB: Sektörel güven (Eylül 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-06"
+  },
+  "2026-09-24|BDDK: BDDK bankacılık (38. Hafta 2026)": {
+   "tarih": "2026-09-24",
+   "olay": "BDDK: BDDK bankacılık (38. Hafta 2026)",
+   "saat": "14:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-06"
+  },
+  "2026-09-24|TCMB: Haftalık para-banka (38. Hafta 2026)": {
+   "tarih": "2026-09-24",
+   "olay": "TCMB: Haftalık para-banka (38. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-03"
+  },
+  "2026-09-24|TCMB: Menkul kıymet ist. (38. Hafta 2026)": {
+   "tarih": "2026-09-24",
+   "olay": "TCMB: Menkul kıymet ist. (38. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-03"
+  },
+  "2026-09-24|TÜİK: Sektörel güven (Eylül 2026)": {
+   "tarih": "2026-09-24",
+   "olay": "TÜİK: Sektörel güven (Eylül 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-06"
+  },
+  "2026-09-29|BDDK: BDDK bankacılık (Ağustos 2026)": {
+   "tarih": "2026-09-29",
+   "olay": "BDDK: BDDK bankacılık (Ağustos 2026)",
+   "saat": "14:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-13"
+  },
+  "2026-09-30|TÜİK: Dış ticaret (Ağustos 2026)": {
+   "tarih": "2026-09-30",
+   "olay": "TÜİK: Dış ticaret (Ağustos 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-09"
+  },
+  "2026-09-30|TÜİK: İşgücü (Ağustos 2026)": {
+   "tarih": "2026-09-30",
+   "olay": "TÜİK: İşgücü (Ağustos 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-09"
+  },
+  "2026-10-01|BDDK: BDDK bankacılık (39. Hafta 2026)": {
+   "tarih": "2026-10-01",
+   "olay": "BDDK: BDDK bankacılık (39. Hafta 2026)",
+   "saat": "14:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-13"
+  },
+  "2026-10-01|TCMB: Haftalık para-banka (39. Hafta 2026)": {
+   "tarih": "2026-10-01",
+   "olay": "TCMB: Haftalık para-banka (39. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-10"
+  },
+  "2026-10-01|TCMB: Menkul kıymet ist. (39. Hafta 2026)": {
+   "tarih": "2026-10-01",
+   "olay": "TCMB: Menkul kıymet ist. (39. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-10"
+  },
+  "2026-10-02|ABD tarım dışı istihdam (Eylül)": {
+   "tarih": "2026-10-02",
+   "olay": "ABD tarım dışı istihdam (Eylül)",
+   "saat": "15:30",
+   "ulke": "ABD",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-11"
+  },
+  "2026-10-05|Hazine: 2 yıl (707 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)": {
+   "tarih": "2026-10-05",
+   "olay": "Hazine: 2 yıl (707 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "model: 43,8 mlr TL gerçekleşme, teklif/karşılama 1,74",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-14"
+  },
+  "2026-10-05|TÜİK: TÜFE (Eylül 2026)": {
+   "tarih": "2026-10-05",
+   "olay": "TÜİK: TÜFE (Eylül 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "anket (PKA, 63 katılımcı): yıl sonu %29,43 · 12 ay sonrası %23,69 · kendi baz etkisi modelimiz: momentum senaryosu %32,95, tekrar senaryosu %31,51",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-14"
+  },
+  "2026-10-05|TÜİK: Yİ-ÜFE (Eylül 2026)": {
+   "tarih": "2026-10-05",
+   "olay": "TÜİK: Yİ-ÜFE (Eylül 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-14"
+  },
+  "2026-10-06|Hazine: 2 yıl (728 gün) altın tahvili doğrudan satışı": {
+   "tarih": "2026-10-06",
+   "olay": "Hazine: 2 yıl (728 gün) altın tahvili doğrudan satışı",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "doğrudan satış — ihale tahmini yok",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-15"
+  },
+  "2026-10-06|Hazine: 2 yıl (728 gün) altına dayalı kira sertifikası doğrudan satışı": {
+   "tarih": "2026-10-06",
+   "olay": "Hazine: 2 yıl (728 gün) altına dayalı kira sertifikası doğrudan satışı",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "doğrudan satış — ihale tahmini yok",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-15"
+  },
+  "2026-10-08|BDDK: BDDK bankacılık (40. Hafta 2026)": {
+   "tarih": "2026-10-08",
+   "olay": "BDDK: BDDK bankacılık (40. Hafta 2026)",
+   "saat": "14:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-20"
+  },
+  "2026-10-08|TB: Dış ticaret (4. Çeyrek 2026)": {
+   "tarih": "2026-10-08",
+   "olay": "TB: Dış ticaret (4. Çeyrek 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-17"
+  },
+  "2026-10-08|TCMB: Haftalık para-banka (40. Hafta 2026)": {
+   "tarih": "2026-10-08",
+   "olay": "TCMB: Haftalık para-banka (40. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-17"
+  },
+  "2026-10-08|TCMB: IRFCL rezerv (Eylül 2026)": {
+   "tarih": "2026-10-08",
+   "olay": "TCMB: IRFCL rezerv (Eylül 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-17"
+  },
+  "2026-10-08|TCMB: Menkul kıymet ist. (40. Hafta 2026)": {
+   "tarih": "2026-10-08",
+   "olay": "TCMB: Menkul kıymet ist. (40. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-17"
+  },
+  "2026-10-09|TÜİK: Sanayi üretimi (Ağustos 2026)": {
+   "tarih": "2026-10-09",
+   "olay": "TÜİK: Sanayi üretimi (Ağustos 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-18"
+  },
+  "2026-10-12|Hazine: 4 yıl (1428 gün) TLREF'e endeksli devlet tahvili ihalesi (yeniden ihraç)": {
+   "tarih": "2026-10-12",
+   "olay": "Hazine: 4 yıl (1428 gün) TLREF'e endeksli devlet tahvili ihalesi (yeniden ihraç)",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "model: 84,4 mlr TL gerçekleşme, teklif/karşılama 2,71",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-21"
+  },
+  "2026-10-12|Hazine: 5 yıl (1645 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)": {
+   "tarih": "2026-10-12",
+   "olay": "Hazine: 5 yıl (1645 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "model: 40,2 mlr TL gerçekleşme, teklif/karşılama 1,54",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-21"
+  },
+  "2026-10-12|TÜİK: Ciro endeksleri (Ağustos 2026)": {
+   "tarih": "2026-10-12",
+   "olay": "TÜİK: Ciro endeksleri (Ağustos 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-27"
+  },
+  "2026-10-13|Hazine: 5 yıl (1820 gün) kira sertifikası doğrudan satışı": {
+   "tarih": "2026-10-13",
+   "olay": "Hazine: 5 yıl (1820 gün) kira sertifikası doğrudan satışı",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "doğrudan satış — ihale tahmini yok",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-22"
+  },
+  "2026-10-13|Hazine: 8 yıl (2905 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)": {
+   "tarih": "2026-10-13",
+   "olay": "Hazine: 8 yıl (2905 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "model: 26,3 mlr TL gerçekleşme, teklif/karşılama 2,34",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-22"
+  },
+  "2026-10-13|TCMB: Ödemeler dengesi (Ağustos 2026)": {
+   "tarih": "2026-10-13",
+   "olay": "TCMB: Ödemeler dengesi (Ağustos 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-22"
+  },
+  "2026-10-13|TÜİK: Dış ticaret (Ağustos 2026)": {
+   "tarih": "2026-10-13",
+   "olay": "TÜİK: Dış ticaret (Ağustos 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-22"
+  },
+  "2026-10-14|ABD TÜFE (Eylül)": {
+   "tarih": "2026-10-14",
+   "olay": "ABD TÜFE (Eylül)",
+   "saat": "15:30",
+   "ulke": "ABD",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-23"
+  },
+  "2026-10-14|HMB: Menkul kıymet ist. (Eylül 2026)": {
+   "tarih": "2026-10-14",
+   "olay": "HMB: Menkul kıymet ist. (Eylül 2026)",
+   "saat": "17:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-23"
+  },
+  "2026-10-14|TÜİK: Tarım ÜFE (Eylül 2026)": {
+   "tarih": "2026-10-14",
+   "olay": "TÜİK: Tarım ÜFE (Eylül 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-27"
+  },
+  "2026-10-15|BDDK: BDDK bankacılık (41. Hafta 2026)": {
+   "tarih": "2026-10-15",
+   "olay": "BDDK: BDDK bankacılık (41. Hafta 2026)",
+   "saat": "14:00",
+   "ulke": "TR",
+   "onem": 3,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-27"
+  },
+  "2026-10-15|HMB: Bütçe dengesi (Eylül 2026)": {
+   "tarih": "2026-10-15",
+   "olay": "HMB: Bütçe dengesi (Eylül 2026)",
+   "saat": "11:00",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-24"
+  },
+  "2026-10-15|TCMB: Haftalık para-banka (41. Hafta 2026)": {
+   "tarih": "2026-10-15",
+   "olay": "TCMB: Haftalık para-banka (41. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-24"
+  },
+  "2026-10-15|TCMB: Menkul kıymet ist. (41. Hafta 2026)": {
+   "tarih": "2026-10-15",
+   "olay": "TCMB: Menkul kıymet ist. (41. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-24"
+  },
+  "2026-10-20|HMB: Borç stoku (Eylül 2026)": {
+   "tarih": "2026-10-20",
+   "olay": "HMB: Borç stoku (Eylül 2026)",
+   "saat": "17:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-29"
+  },
+  "2026-10-20|HMB: Bütçe finansmanı (Eylül 2026)": {
+   "tarih": "2026-10-20",
+   "olay": "HMB: Bütçe finansmanı (Eylül 2026)",
+   "saat": "17:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-29"
+  },
+  "2026-10-20|HMB: Konsolide kamu dengesi (Eylül 2026)": {
+   "tarih": "2026-10-20",
+   "olay": "HMB: Konsolide kamu dengesi (Eylül 2026)",
+   "saat": "17:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-29"
+  },
+  "2026-10-21|TCMB: Kapasite kullanımı (Ekim 2026)": {
+   "tarih": "2026-10-21",
+   "olay": "TCMB: Kapasite kullanımı (Ekim 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-30"
+  },
+  "2026-10-21|TCMB: Reel kesim güveni (Ekim 2026)": {
+   "tarih": "2026-10-21",
+   "olay": "TCMB: Reel kesim güveni (Ekim 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-09-30"
   }
  }
 }

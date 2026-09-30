@@ -72,6 +72,15 @@ class Izlem:
     # izlenen hatların tarihçesi bültenin kendi defterinde henüz yok, dolayısıyla
     # eşikleri ölçülemiyor; tarihçe birikince ölçülüp eklenir.
     yayim: bool = False
+    # EKSİ ADI — değeri eksi olan bir dengenin okurun kullandığı adı.
+    #
+    # "Cari denge 1,8 mlr USD azaldı: −38,9 → −40,7" cümlesi aritmetik olarak
+    # doğru ve okurun diliyle TERS: bir piyasa okuru eksi bir dengenin
+    # büyümesini "açık genişledi" diye okur, "azaldı" diye değil. İki uç da
+    # eksiyse cümle bu adla ve MUTLAK değerlerle kurulur ("Cari açık 1,8 mlr
+    # USD genişledi: 38,9 → 40,7 mlr USD"); işaret değişirse fiil işaretin
+    # kendisini söyler. Boş bırakılırsa cümle değişmez.
+    eksi_ad: str = ""
 
 
 # Hatların OKURA görünen adları. Olay cümleleri ("hazine-ihrac: veri gecikti")
@@ -441,20 +450,24 @@ IZLEMLER: list[Izlem] = [
 
     # ─────────────────────────────── ödemeler dengesi ve dış finansman
     Izlem("odemeler-dengesi", "cari12_mia", "Cari denge (12 aylık birikimli)", "mlr USD", 1,
-          "delta", None, 7.0, "artis", "", "dis", yayim=True),
+          "delta", None, 7.0, "artis", "", "dis", yayim=True,
+          eksi_ad="Cari açık (12 aylık birikimli)"),
     Izlem("odemeler-dengesi", "cekirdek12_mia", "Çekirdek cari denge (altın ve enerji hariç)",
           "mlr USD", 1, "delta", 3.0, 7.0, "artis",
-          "Dış dengenin yapısal kısmı; enerji ve altın dalgası dışarıda.", "dis"),
+          "Dış dengenin yapısal kısmı; enerji ve altın dalgası dışarıda.", "dis",
+          eksi_ad="Çekirdek cari açık (altın ve enerji hariç)"),
     Izlem("odemeler-dengesi", "nhn12_mia", "Net hata noksan (12 aylık)", "mlr USD", 1,
           "delta", 4.0, 9.0, "", "Büyümesi kaynağı belirsiz döviz girişine işaret eder.", "dis"),
     Izlem("odemeler-dengesi", "cari_gsyh", "Cari denge / GSYH", "%", 2, "delta", None, 1.0,
-          "artis", "", "dis", yayim=True),
+          "artis", "", "dis", yayim=True, eksi_ad="Cari açık / GSYH"),
 
     # ─────────────────────────────── bütçe ve borç stoku
     Izlem("butce-borc", "denge_gsyh", "Bütçe dengesi / GSYH (12 aylık)", "%", 2, "delta",
-          None, 0.8, "artis", "", "borclanma", yayim=True),
+          None, 0.8, "artis", "", "borclanma", yayim=True,
+          eksi_ad="Bütçe açığı / GSYH (12 aylık)"),
     Izlem("butce-borc", "fdd_gsyh", "Faiz dışı denge / GSYH (12 aylık)", "%", 2, "delta",
-          None, 0.8, "artis", "", "borclanma", yayim=True),
+          None, 0.8, "artis", "", "borclanma", yayim=True,
+          eksi_ad="Faiz dışı açık / GSYH (12 aylık)"),
     Izlem("butce-borc", "faiz_vergi", "Faiz harcaması / vergi geliri", "%", 1, "delta",
           1.5, 3.0, "azalis",
           "Borç servisinin vergi tabanını ne kadar yediğinin ölçüsü.", "borclanma"),
@@ -532,7 +545,8 @@ IZLEMLER: list[Izlem] = [
           "delta", None, 1.4, "", "", "kur", yayim=True),
     Izlem("reel-sektor-fx", "net_pozisyon", "Reel sektör net döviz pozisyonu",
           "mlr USD", 1, "delta", None, 13.4, "artis",
-          "Şirketler kesiminin kur şokuna açıklığı.", "dis", yayim=True),
+          "Şirketler kesiminin kur şokuna açıklığı.", "dis", yayim=True,
+          eksi_ad="Reel sektör net döviz açık pozisyonu"),
     Izlem("buyume", "buyume_yillik", "GSYH yıllık büyüme", "%", 2, "delta",
           None, None, "", "Çeyreklik yayım; faiz alanının talep bacağı.",
           "akim", yayim=True),
@@ -768,6 +782,12 @@ TAKVIM_KURALLARI: list[tuple[str, int, str]] = [
     (r"Tüketici Fiyat Endeksi", 1, "TÜFE"),
     (r"Yurt İçi Üretici Fiyat", 1, "Yİ-ÜFE"),
     (r"Ödemeler Dengesi", 1, "Ödemeler dengesi"),
+    # Üç ayrı HMB yayımı "Merkezi Yönetim Bütçe" ifadesini taşıyor (denge
+    # tablosu · konsolide kamu · bütçe finansmanı) ve üçü de "Bütçe dengesi"
+    # adıyla basılıyordu — 30.09 takviminde aynı ad aynı gün iki kez. İlk
+    # eşleşen kazandığı için ayırt edici kalıplar ÖNCE gelir.
+    (r"Konsolide Kamu", 2, "Konsolide kamu dengesi"),
+    (r"Bütçe Finansmanı", 2, "Bütçe finansmanı"),
     (r"Merkezi Yönetim Bütçe", 1, "Bütçe dengesi"),
     (r"Gayrisafi Yurt İçi Hasıla", 1, "GSYH"),
     (r"İşgücü İstatistikleri", 1, "İşgücü"),
@@ -783,7 +803,9 @@ TAKVIM_KURALLARI: list[tuple[str, int, str]] = [
     (r"Konut Satış", 3, "Konut satışları"),
     (r"Hizmet.*Güven|Perakende.*Güven", 3, "Sektörel güven"),
     (r"Finansal Hizmetler", 3, "Finansal hizmetler"),
-    (r"Bankacılık Sektörü", 3, "BDDK bankacılık"),
+    # Kısa ad kurumun adını tekrar etmez: kayıt "BDDK: " önekiyle basılıyor ve
+    # "BDDK: BDDK bankacılık" çıkıyordu.
+    (r"Bankacılık Sektörü", 3, "Bankacılık sektörü"),
     (r"Tarım Ürünleri Üretici", 3, "Tarım ÜFE"),
     (r"Yurt Dışı Üretici Fiyat", 3, "YD-ÜFE"),
     (r"Ciro Endeks", 3, "Ciro endeksleri"),

@@ -765,6 +765,25 @@ sina("tablo başlığında σ geçer",
      not basim([("b/index.html", f'<th class="sag" scope="col"{_cid}>1 gün σ</th>')]))
 sina("başlık DIŞINDAKİ Σ (formül metni) taranmaz",
      not basim([("d/index.html", "<p>Σ w·v / Σ w</p>")]))
+# Takvimde aynı yayım (gün · saat · olay) iki satır: BDDK'nın on bir alt tablosu
+# on bir satır basılıyordu. Aynı günün ikinci satırında tarih hücresi boştur.
+def _tk(*satirlar):
+    govde = "".join(f'<tr{_cid}> <td class="t-tarih"{_cid}>{t}</td> <td class="t-saat"{_cid}>{sa}</td> '
+                    f'<td class="t-ulke"{_cid}>TR</td> <td class="t-olay"{_cid}> {o} <span class="dipnot"{_cid}>not</span></td> </tr>'
+                    for t, sa, o in satirlar)
+    return f'<table class="takvim"{_cid}><tbody{_cid}>{govde}</tbody></table>'
+_gun = '29 Eylül 2026<span class="t-gun"' + _cid + '>Salı</span>'
+sina("takvimde aynı yayım iki satır ENGEL (tarih boş ikinci satır dahil)",
+     len(basim([("bulten/x/index.html", _tk((_gun, "14:00", "BDDK: Bankacılık sektörü (Ağustos 2026)"),
+                                             ("", "14:00", "BDDK: Bankacılık sektörü (Ağustos 2026)")))])) == 1)
+sina("aynı gün farklı saat ya da farklı olay geçer",
+     not basim([("bulten/x/index.html", _tk((_gun, "10:00", "TÜİK: İşgücü (Ağustos 2026)"),
+                                            ("", "10:00", "TÜİK: Dış ticaret (Ağustos 2026)"),
+                                            ("", "14:00", "TÜİK: İşgücü (Ağustos 2026)")))]))
+sina("aynı olay farklı günde geçer",
+     not basim([("bulten/x/index.html", _tk((_gun, "14:00", "BDDK: Bankacılık sektörü (39. Hafta 2026)"),
+                                            ('1 Ekim 2026<span class="t-gun"' + _cid + '>Perşembe</span>', "14:00",
+                                             "BDDK: Bankacılık sektörü (39. Hafta 2026)")))]))
 
 
 print(f"\n{'═' * 70}")

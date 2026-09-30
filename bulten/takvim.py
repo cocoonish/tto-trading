@@ -98,6 +98,43 @@ def _getir(url: str, zaman_asimi=25) -> str | None:
 
 
 # ────────────────────────────────────────────────────────── Hazine (kendi hattımız)
+def _kucuk(sozcuk: str) -> str:
+    """Başlık yazımını cümle yazımına çevirir; kısaltma ve özel ad KALIR.
+
+    "Sabit Kuponlu Devlet Tahvili" → "sabit kuponlu devlet tahvili", ama
+    "TLREF'e", "ABD" olduğu gibi: tamamı büyük harfli bir kök kısaltmadır.
+    "Hazine Bonosu" bir kâğıdın türüdür, kurumun adı değil: "hazine bonosu"."""
+    kok = sozcuk.split("'")[0]
+    if kok.isupper():
+        return sozcuk
+    return sozcuk.replace("I", "ı").replace("İ", "i").lower()
+
+
+def hazine_ad(senet: str, vade: str, yontem: str) -> str:
+    """Hazine plan satırının okura yazılan adı.
+
+    Plan dosyası kaynağın kendi dizgesini taşır ("Sabit Kuponlu Devlet Tahvili",
+    "2Yıl /707 Gün", "İhale / Yeniden ihraç") ve takvim onu olduğu gibi
+    basıyordu: "Hazine: Sabit Kuponlu Devlet Tahvili (2Yıl /707 Gün) — İhale /
+    Yeniden ihraç". Aynı bilgi okurun cümlesiyle: "Hazine: 2 yıl (707 gün)
+    sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)". Tanımadığı bir
+    yazımı UYDURMAZ, olduğu gibi bırakır."""
+    m = re.match(r"^\s*(\d+)\s*(Yıl|Ay|Gün)\s*/\s*(\d+)\s*Gün\s*$", str(vade or ""))
+    if not m:
+        return f"Hazine: {senet} ({vade}) — {yontem}"
+    vade_y = f"{m.group(1)} {_kucuk(m.group(2))} ({m.group(3)} gün)"
+    senet_y = " ".join(_kucuk(w) for w in str(senet or "").split())
+    y = str(yontem or "").strip()
+    m = re.match(r"^İhale\s*/\s*(.+)$", y)
+    if m:
+        eylem = f"ihalesi ({_kucuk(m.group(1).strip())})"
+    elif y == "Doğrudan Satış":
+        eylem = "doğrudan satışı"
+    else:
+        eylem = f"— {y}" if y else ""
+    return " ".join(x for x in ("Hazine:", vade_y, senet_y, eylem) if x)
+
+
 def hazine(ufuk_gun: int = 21) -> list[Kayit]:
     y = KOK / "Aktarılacak Projeler" / "hazineihrac" / "tablolar.json"
     if not y.exists():
@@ -129,7 +166,7 @@ def hazine(ufuk_gun: int = 21) -> list[Kayit]:
         elif "Doğrudan" in yontem:
             bek = "doğrudan satış — ihale tahmini yok"
         out.append(Kayit(g.isoformat(), "", "TR",
-                         f"Hazine: {senet} ({vade}) — {yontem}",
+                         hazine_ad(senet, vade, yontem),
                          onem=1 if "İhale" in yontem else 2,
                          kaynak="Hazine ihale programı (kendi hattımız)",
                          kesinlik="kesin", beklenti=bek))

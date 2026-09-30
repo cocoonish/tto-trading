@@ -282,6 +282,67 @@ const kunye = [
 // "BUGÜN NE VAR" TEK YERDE CEVAPLANIR. Geri sayım yalnız birinci derece
 // verileri taşıdığı için aynı sabahın olayları iki listeye bölünüyordu: 10:00'daki
 // İşgücü geri sayımda, aynı saatteki Dış ticaret alttaki haftalık tabloda. Bugünün
+// ── AYNI YAYIMIN ALT TABLOLARI TEK SATIRDIR
+// Kaynak takvim bir yayımı alt tablolarıyla ayrı ayrı sayıyor (BDDK aylık
+// bankacılık verisi on bir, haftalık verisi altı tablo) ve sayfa her birini
+// ayrı satır basıyordu: 27.09 sayısının 69 takvim satırının 37'si aynı
+// (gün, saat, olay) üçlüsünün tekrarıydı. Satır bir kez basılır; alt
+// tabloların adları ortak baş ve son ekleri ayıklanarak dipnotta durur —
+// kayıt kaybolmaz, yalnız bir kez okunur.
+const ortakBas = (xs: string[]): string => {
+  let n = 0;
+  while (xs.every((x) => x.length > n && x[n] === xs[0][n])) n++;
+  const b = xs[0].slice(0, n);
+  return b.includes(' ') && n < Math.min(...xs.map((x) => x.length)) ? b.slice(0, b.lastIndexOf(' ') + 1) : '';
+};
+const ortakSon = (xs: string[]): string => {
+  const ters = ortakBas(xs.map((x) => [...x].reverse().join('')));
+  return [...ters].reverse().join('');
+};
+const tekYayim = (liste: any[]): any[] => {
+  const sira: any[] = [];
+  const grup = new Map<string, any>();
+  for (const k of liste) {
+    const a = `${k.tarih}|${k.saat ?? ''}|${k.olay}`;
+    const g = grup.get(a);
+    if (g) { g._notlar.push(String(k.not_ ?? '').trim()); if ((k.onem ?? 9) < (g.onem ?? 9)) g.onem = k.onem; continue; }
+    const yeni = { ...k, _notlar: [String(k.not_ ?? '').trim()] };
+    grup.set(a, yeni);
+    sira.push(yeni);
+  }
+  for (const k of sira) {
+    const notlar = [...new Set(k._notlar.filter(Boolean))] as string[];
+    if (k._notlar.length > 1) {
+      const bas = notlar.length > 1 ? ortakBas(notlar) : '';
+      const son = notlar.length > 1 ? ortakSon(notlar.map((x) => x.slice(bas.length))) : '';
+      const parca = notlar.map((x) => x.slice(bas.length, x.length - son.length).trim()).filter(Boolean);
+      const cerceve = [bas.trim(), son.trim()].filter(Boolean).join(' … ');
+      k.not_ = `${cerceve ? `${cerceve} — ` : ''}${k._notlar.length} tablo${parca.length ? `: ${parca.join(' · ')}` : ''}`;
+    }
+    delete k._notlar;
+  }
+  return sira;
+};
+
+// ── PAZAR DÜZENİ ("Haftaya bakış")
+// Pazar sayısı günlükten yalnız etiketleriyle ayrılıyordu: aynı sıra, haftanın
+// hareketi sayfanın ortasında altı satırlık bir listede, önümüzdeki haftanın
+// takvimi altıncı ekranda. Haftalık okurun ilk iki sorusu "hafta ne getirdi"
+// ve "önümüzdeki hafta ne var"; ikisi de gösterge şeridinin hemen altına çıkar.
+// YENİ SAYI ÜRETİLMEZ: tablo ölçüm katmanının satır alanlarından (h1 ·
+// sigma_hafta · h1_sigma) olağandışılık listesinin KENDİ kuralıyla kurulur
+// (bulten/piyasa.en_cok_hareket: σ taşıyan her satır, |σ|'ya göre) — o liste
+// bu tablonun ilk altı satırıdır, tablo onun yerini alır. Alanları taşımayan
+// eski sayılar günlük sırayla basılmaya devam eder.
+const HAFTA_HAREKET_AZAMI = 15;
+const haftaHareket: any[] = b.haftalik && b.piyasa?.en_cok_hareket?.sigma_kip === 'haftalik'
+  ? (b.piyasa?.gruplar ?? [])
+      .flatMap((g: any) => (g.satirlar ?? []).map((s: any) => ({ ...s, grupBaslik: g.baslik })))
+      .filter((s: any) => typeof s.h1_sigma === 'number' && typeof s.h1 === 'number')
+      .sort((x: any, y: any) => Math.abs(y.h1_sigma) - Math.abs(x.h1_sigma))
+      .slice(0, HAFTA_HAREKET_AZAMI)
+  : [];
+const pazarDuzeni = haftaHareket.length > 0;
 // BÜTÜN kayıtları (derecesi ne olursa olsun) önce ve saat sırasıyla basılır;
 // geri sayım ve haftalık tablolar bugünü tekrar etmez.
 const takvimAnahtar = (k: any) => `${k.olay}|${k.tr_tarih}|${k.saat ?? ''}|${k.not_ ?? ''}`;
@@ -301,14 +362,29 @@ const bugunKayitlar: any[] = [];
     || (x.onem ?? 9) - (y.onem ?? 9));
 }
 const bugunAnahtar = new Set(bugunKayitlar.map(takvimAnahtar));
+// Önümüzdeki haftanın BÜTÜN kayıtları (birinci derece dahil) tek listede ve
+// gün gün; geri sayım ve haftalık tablolar onları tekrar etmez.
+const ilkHaftaBaslik = /^Önümüzdeki hafta/i;
+const onumuzdekiHafta: any[] = pazarDuzeni
+  ? ((b.takvim ?? []).find((t: any) => ilkHaftaBaslik.test(String(t.baslik ?? '')))?.kayitlar ?? [])
+      .filter((k: any) => !bugunAnahtar.has(takvimAnahtar(k)))
+      .slice()
+      .sort((x: any, y: any) => String(x.tarih).localeCompare(String(y.tarih))
+        || String(x.saat || '99:99').localeCompare(String(y.saat || '99:99')))
+  : [];
+// Anahtar kümesi TOPLAMADAN önce kurulur: geri sayım ve haftalık tablolar ham
+// kayıtla eşleşir, toplanmış satırın dipnotu anahtarı değiştirir.
+const onumuzdekiAnahtar = new Set(onumuzdekiHafta.map(takvimAnahtar));
+const onumuzdekiSatirlar = tekYayim(onumuzdekiHafta);
 // Günlük sayıda geri sayım iki haftayla sınırlı; daha ötesi haftalık
 // tablolarda kalır (kayıt kaybolmaz). Pazar sayısı ufku olduğu gibi basar.
 const KRITIK_UFUK_GUN = 14;
 const kritikler = (b.kritik_takvim ?? []).filter((k: any) =>
-  !bugunAnahtar.has(takvimAnahtar(k))
+  !bugunAnahtar.has(takvimAnahtar(k)) && !onumuzdekiAnahtar.has(takvimAnahtar(k))
   && (b.haftalik || typeof k.kalan_gun !== 'number' || k.kalan_gun <= KRITIK_UFUK_GUN));
 const kritikAnahtar = new Set(kritikler.map((k: any) => `${k.olay}|${k.tr_tarih}`));
 const takvimGruplari = (b.takvim ?? [])
+  .filter((t: any) => !(onumuzdekiHafta.length > 0 && ilkHaftaBaslik.test(String(t.baslik ?? ''))))
   .map((t: any) => ({
     ...t,
     kayitlar: t.kayitlar.filter((k: any) =>
@@ -364,15 +440,22 @@ const sigmaHaftalik = b.piyasa?.en_cok_hareket?.sigma_kip === 'haftalik';
 const sigmaBaslik = sigmaBasligi(
   (b.piyasa?.en_cok_hareket?.sigma ?? []).map((x: any) => Number(x?.sigma) || 0), sigmaHaftalik);
 
+// On beş satırın çoğu olağandışı DEĞİLDİR: başlık tabloyu anlatır, kaç satırın
+// eşiği aştığını alt not söyler (sigmaBasligi'nin "olağandışı" sözü burada
+// eşiği aşmayan satırları da kapsardı).
+const haftaBaslik = 'Haftanın hareketleri';
+const haftaAsan = haftaHareket.filter((x: any) => Math.abs(x.h1_sigma) >= OLAGANDISI_SIGMA).length;
 const bolumler = [
   b.duzeltmeler?.length > 0 && { id: 'duzeltmeler', ad: 'Düzeltmeler' },
   b.ozet && (b.ozet.ne_oldu || b.ozet.ne_bekleniyor) &&
     { id: 'ozet', ad: b.haftalik ? 'Geçen hafta / önümüzdeki hafta' : 'Ne oldu / ne bekleniyor' },
   b.gostergeler?.length > 0 && { id: 'gostergeler', ad: 'Gösterge şeridi' },
   bugunKayitlar.length > 0 && { id: 'bugun', ad: 'Bugün' },
+  pazarDuzeni && { id: 'hafta-hareket', ad: haftaBaslik },
+  onumuzdekiHafta.length > 0 && { id: 'onumuzdeki-hafta', ad: 'Önümüzdeki hafta' },
   b.yorum && { id: 'yorum', ad: b.haftalik ? 'Haftanın okuması' : 'Günün okuması' },
   b.rejim?.length > 0 && { id: 'rejim', ad: 'Rejim panosu' },
-  b.piyasa?.en_cok_hareket?.sigma?.length > 0 &&
+  !pazarDuzeni && b.piyasa?.en_cok_hareket?.sigma?.length > 0 &&
     { id: 'olagandisi', ad: sigmaBaslik },
   b.one_cikanlar?.length > 0 && { id: 'one-cikanlar', ad: 'Öne çıkanlar' },
   b.sonuclar?.length > 0 && { id: 'sonuclar', ad: 'Ne bekleniyordu, ne geldi' },
@@ -508,7 +591,7 @@ const bolumler = [
       içinde, altıncı bölümde kalıyordu. */}
   {bugunKayitlar.length > 0 && (
     <section class="blok kritik-blok" id="bugun">
-      <h2>Bugün <span class="adet">{bugunKayitlar.length} kayıt · saatler TSİ</span></h2>
+      <h2>Bugün <span class="adet">{tekYayim(bugunKayitlar).length} yayım · saatler TSİ</span></h2>
       {bugunKayitlar.length > 0 && (
         <div class="takvim-blok bugun-blok">
           <table class="takvim">
@@ -518,7 +601,7 @@ const bolumler = [
               <tr><th scope="col">saat</th><th scope="col">ülke</th><th scope="col">olay</th></tr>
             </thead>
             <tbody>
-              {bugunKayitlar.map((k: any) => (
+              {tekYayim(bugunKayitlar).map((k: any) => (
                 <tr class:list={[{ kritik: k.onem === 1 }]}>
                   <td class="t-saat">{k.saat || '—'}</td>
                   <td class="t-ulke">{k.ulke}</td>
@@ -534,6 +617,75 @@ const bolumler = [
           </table>
         </div>
       )}
+    </section>
+  )}
+
+  {pazarDuzeni && (
+    <section class="blok sigma-blok" id="hafta-hareket">
+      <h2>{haftaBaslik}</h2>
+      <p class="alt-not">Haftalık değişim, her enstrümanın kendi son yirmi haftalık
+      oynaklığına (σ) bölünerek sıralandı (en büyük {haftaHareket.length} hareket).
+      {haftaAsan > 0
+        ? <><strong>{haftaAsan}</strong> satır {sayi(OLAGANDISI_SIGMA, 0)}σ eşiğini aşıyor ve işaretli.</>
+        : <>Hiçbir satır {sayi(OLAGANDISI_SIGMA, 0)}σ eşiğini aşmıyor: hafta, oynaklığına göre sıradan.</>}
+      {b.piyasa.kapanis_seansi && <> Ölçülen seans: <strong>{anaSeans ? seansEtiketi(anaSeans) : b.piyasa.kapanis_seansi}</strong>.</>}</p>
+      <div class="p-kaydir" tabindex="0" role="region" aria-label="Kaydırılabilir tablo">
+        <table class="p-tablo">
+          <caption class="gorunmez">Haftanın hareketleri: son değer, haftalık değişim, haftalık σ ve kaç σ</caption>
+          <thead>
+            <tr><th scope="col">Enstrüman</th><th class="sag" scope="col">Son</th><th class="sag" scope="col">1 hafta</th><th class="sag" scope="col">Haftalık σ</th><th class="sag" scope="col">Kaç σ</th></tr>
+          </thead>
+          <tbody>
+            {haftaHareket.map((r: any) => (
+              <tr>
+                <td class="p-ad">
+                  {r.ad}
+                  <span class="p-not">{r.grupBaslik}{r.tarih !== anaSeans && r.tarih ? ` · ${tz(r.tarih)}` : ''}</span>
+                </td>
+                <td class="sag p-son">{sonYaz(r).govde}{sonYaz(r).birim && <span class="p-birim">{sonYaz(r).birim}</span>}</td>
+                <td class:list={['sag', 'p-degisim', { arti: r.h1 > 0, eksi: r.h1 < 0 }]}>
+                  {degisimli(r.h1, r.degisim_birim)}
+                </td>
+                <td class="sag p-son">{birimli(r.sigma_hafta, r.degisim_birim, OYNAKLIK_HANE)}</td>
+                <td class:list={['sag', 'p-sigma', { olagandisi: Math.abs(r.h1_sigma) >= OLAGANDISI_SIGMA }]}>
+                  {sigmaYaz(r.h1_sigma)}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  )}
+
+  {onumuzdekiHafta.length > 0 && (
+    <section class="blok kritik-blok" id="onumuzdeki-hafta">
+      <h2>Önümüzdeki hafta <span class="adet">{onumuzdekiSatirlar.length} yayım · saatler TSİ</span></h2>
+      <div class="takvim-blok">
+        <table class="takvim">
+          <caption class="gorunmez">Önümüzdeki hafta: tarih, saat, ülke ve olay</caption>
+          <colgroup><col class="c-tarih" /><col class="c-saat" /><col class="c-ulke" /><col /></colgroup>
+          <thead class="gorunmez">
+            <tr><th scope="col">tarih</th><th scope="col">saat</th><th scope="col">ülke</th><th scope="col">olay</th></tr>
+          </thead>
+          <tbody>
+            {onumuzdekiSatirlar.map((k: any, i: number) => (
+              <tr class:list={[{ kritik: k.onem === 1, 'gun-bas': i === 0 || onumuzdekiSatirlar[i - 1].tarih !== k.tarih }]}>
+                <td class="t-tarih">{i === 0 || onumuzdekiSatirlar[i - 1].tarih !== k.tarih
+                  ? <>{k.tr_tarih}<span class="t-gun">{k.gun}</span></> : ''}</td>
+                <td class="t-saat">{k.saat || '—'}</td>
+                <td class="t-ulke">{k.ulke}</td>
+                <td class="t-olay">
+                  {k.olay}
+                  {k.kesinlik && k.kesinlik !== 'kesin' && <span class="damga">tarih kesinleşmedi</span>}
+                  {k.beklenti && <span class="beklenti">{k.beklenti}</span>}
+                  {k.not_ && <span class="dipnot">{k.not_}</span>}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   )}
 
@@ -575,7 +727,7 @@ const bolumler = [
     </section>
   )}
 
-  {b.piyasa.en_cok_hareket?.sigma?.length > 0 && (
+  {!pazarDuzeni && b.piyasa.en_cok_hareket?.sigma?.length > 0 && (
     <section class="blok sigma-blok" id="olagandisi">
         <h2>{sigmaBaslik}</h2>
         {/* Sıralama eşiksizdir; başlık eşiği aşan hareket olup olmadığını
@@ -939,7 +1091,7 @@ const bolumler = [
         <div class="takvim-blok">
           <h3>Birinci derece veriler — geri sayım{!b.haftalik && ' (iki hafta)'}</h3>
           <ol class="kritik">
-            {kritikler.map((k: any) => (
+            {tekYayim(kritikler).map((k: any) => (
               <li>
                 <span class="k-sayac">{k.kalan_gun === 0 ? 'bugün' : `+${k.kalan_gun} gün`}</span>
                 <span class="k-govde">
@@ -956,7 +1108,7 @@ const bolumler = [
 
       {takvimGruplari.map((t: any) => (
         <div class="takvim-blok">
-          <h3>{t.baslik} <span class="adet">{t.kayitlar.length}</span></h3>
+          <h3>{t.baslik} <span class="adet">{tekYayim(t.kayitlar).length}</span></h3>
           <table class="takvim">
             <caption class="gorunmez">{t.baslik}: tarih, saat, ülke ve olay</caption>
             <colgroup><col class="c-tarih" /><col class="c-saat" /><col class="c-ulke" /><col /></colgroup>
@@ -964,7 +1116,7 @@ const bolumler = [
               <tr><th scope="col">tarih</th><th scope="col">saat</th><th scope="col">ülke</th><th scope="col">olay</th></tr>
             </thead>
             <tbody>
-              {t.kayitlar.map((k: any) => (
+              {tekYayim(t.kayitlar).map((k: any) => (
                 <tr class:list={[{ kritik: k.onem === 1 }]}>
                   <td class="t-tarih">{k.tr_tarih}<span class="t-gun">{k.gun}</span></td>
                   <td class="t-saat">{k.saat || '—'}</td>
@@ -1336,6 +1488,9 @@ const bolumler = [
   table.takvim col.c-saat { width: 3.6rem; }
   table.takvim col.c-ulke { width: 3.4rem; }
   table.takvim td.t-olay { overflow-wrap: break-word; }
+  /* Pazar sayısının önümüzdeki hafta listesi gün gün okunur: günün ilk satırı
+     bir çizgiyle ayrılır, tarih yalnız orada basılır. */
+  table.takvim tr.gun-bas:not(:first-child) td { border-top: 1px solid var(--ink-30); }
   @media (max-width: 640px) {
     table.takvim col.c-tarih { width: 5.4rem; }
     table.takvim col.c-saat { width: 3rem; }

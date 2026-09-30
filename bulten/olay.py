@@ -78,6 +78,26 @@ def _fark_yaz(v: float, birim: str, ondalik: int) -> str:
     return f"{_sayi(v, ondalik)} {b}".strip()
 
 
+def _delta_cumlesi(iz: Izlem, eski: float, yeni: float, fark: float) -> str:
+    """Delta olayının cümlesi (sonundaki nokta ve bağlam hariç).
+
+    Eksi bir dengede "azaldı" aritmetik olarak doğru, okurun diliyle TERSTİR
+    (bkz. ayar.Izlem.eksi_ad): iki uç da eksiyse cümle açığın adıyla ve mutlak
+    değerlerle kurulur; işaret değişirse fiil işaretin kendisini söyler.
+    Sayılar Olay kaydında işaretleriyle durur — değişen yalnız okunuş."""
+    fy = _fark_yaz(abs(fark), iz.birim, iz.ondalik)
+    if iz.eksi_ad and eski < 0 and yeni < 0:
+        fiil = "genişledi" if yeni < eski else "daraldı"
+        return (f"{iz.eksi_ad} {fy} {fiil}: "
+                f"{_sev(abs(eski), iz.birim, iz.ondalik)} → {_sev(abs(yeni), iz.birim, iz.ondalik)}")
+    if iz.eksi_ad and (eski < 0) != (yeni < 0):
+        fiil = "artıdan eksiye döndü" if yeni < 0 else "eksiden artıya döndü"
+        return (f"{iz.ad} {fiil}: "
+                f"{_sev(eski, iz.birim, iz.ondalik)} → {_sev(yeni, iz.birim, iz.ondalik)}")
+    return (f"{iz.ad} {fy} {_yon(fark)}: "
+            f"{_sev(eski, iz.birim, iz.ondalik)} → {_sev(yeni, iz.birim, iz.ondalik)}")
+
+
 def _baglam(iz: Izlem, simdi: dict) -> str:
     """Tek günlük okumanın yanına yazılan ikinci ölçü (bkz. ayar.Izlem.baglam).
 
@@ -181,8 +201,7 @@ def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
     # yanıltıcılığı ancak arayan için görünür olurdu.
     ek = _baglam(iz, simdi)
     return Olay(iz.grup, sv, iz.ad,
-                f"{iz.ad} {_fark_yaz(abs(fark), iz.birim, iz.ondalik)} {_yon(fark)}: "
-                f"{_sev(eski, iz.birim, iz.ondalik)} → {_sev(yeni, iz.birim, iz.ondalik)}"
+                _delta_cumlesi(iz, eski, yeni, fark)
                 + (f" ({ek.strip()})." if ek else "."),
                 iz.hat, iz.anahtar, yeni, eski, fark, iz.birim, tarih, onceki_tarih,
                 iz.aciklama)
