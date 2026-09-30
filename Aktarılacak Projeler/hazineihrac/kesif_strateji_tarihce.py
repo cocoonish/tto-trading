@@ -47,6 +47,11 @@ def kur() -> None:
 
 
 def getir(url: str, zaman: int = 60, deneme: int = 3) -> bytes:
+    # 2019–2020 belgelerinin adresi Türkçe harf taşıyor ("İç-Borçlanma");
+    # http.client istek satırını ASCII ile kodladığı için bu adresler ağa
+    # çıkmadan UnicodeEncodeError veriyordu (ilk koşuda 87 belgenin 16'sı).
+    # Yol yüzde kodlanır; zaten kodlanmış kısımlar (%) olduğu gibi kalır.
+    url = urllib.parse.quote(url, safe=":/?&=%#+,;@")
     son = None
     for i in range(deneme):
         try:
