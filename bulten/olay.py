@@ -196,6 +196,17 @@ def _yas_saat(zaman_metni: str) -> float | None:
     return (datetime.now() - t).total_seconds() / 3600
 
 
+def _surum_yaz(v) -> str:
+    """Veri sürümünün okura yazımı. ISO damga ("2026-09-28 19:31 UTC") sitenin
+    tarih sözleşmesine (GG.AA.YYYY) çevrilir; saat düşer — okura giden bilgi
+    hangi GÜNÜN verisi olduğudur. GG.AA.YYYY ve aylık AA.YYYY yazımı olduğu gibi
+    kalır: aylık bir sürümü güne çevirmek o ayın son gününü ilan etmek olurdu."""
+    import re as _re
+    t = str(v or "")
+    m = _re.match(r"^(\d{4})-(\d{2})-(\d{2})", t)
+    return f"{m.group(3)}.{m.group(2)}.{m.group(1)}" if m else t
+
+
 def yeni_veri_olaylari(hatlar: list[str], pencere_saat: float = 30.0) -> list[Olay]:
     """Hangi hattın verisi son koşuda ilerledi? Bülten 'bugün ne yayımlandı' der."""
     out = []
@@ -220,8 +231,12 @@ def yeni_veri_olaylari(hatlar: list[str], pencere_saat: float = 30.0) -> list[Ol
             continue
         yas = _yas_saat(ilk.get("t", ""))
         if yas is not None and yas <= pencere_saat:
-            out.append(Olay("diger", "bilgi", f"{hat}: yeni veri",
-                            f"{HAT_ADI.get(hat, hat)}: veri sürümü ilerledi ({onc.get('v')} → {v}).",
+            # Okur dili: "veri sürümü ilerledi" iç defterin adıydı ve bir satırda
+            # ISO tarih ile UTC saati basıyordu. Satır NE geldiğini söyler.
+            yeni, eski = _surum_yaz(v), _surum_yaz(onc.get("v"))
+            metin = (f"{HAT_ADI.get(hat, hat)}: yeni veri, {yeni}"
+                     + (f" (önceki {eski})." if eski and eski != yeni else "."))
+            out.append(Olay("diger", "bilgi", f"{hat}: yeni veri", metin,
                             hat=hat, tarih=v, onceki_tarih=str(onc.get("v"))))
     return out
 
@@ -305,10 +320,15 @@ def haber_endeksi_olaylari() -> list[Olay]:
         olaylar.append(Olay(
             grup="haber", seviye="dikkat",
             baslik=f"Haber tonu — {m['ad']}",
+            # Ok gösterimi, öbür olay cümleleriyle aynı: sayıya sabit yazılan
+            # ek ("'den … 'ye") sayının okunuşuna uymuyordu ("−0,10'ye",
+            # "+0,39'ye"). Cümlenin sonundaki "Sebebini haber akışından bul."
+            # yazara verilmiş bir talimattı ve okura basılıyordu; talimat
+            # bulten/YAZIM.md'de duruyor.
             metin=(f"{m['ad']} haber-duyarlılık endeksi {ne_kadar} "
-                   f"{_s(m['onceki'], 2, True)}'den {_s(m['deger'], 2, True)}'ye geçti "
+                   f"{_s(m['onceki'], 2, True)} → {_s(m['deger'], 2, True)} "
                    f"({_s(m['fark'], 2, True)}{kat}; {olcu}; {m.get('makale', '?')} makale, "
-                   f"kıyas {kiyas}). Sebebini haber akışından bul."),
+                   f"kıyas {kiyas})."),
             hat="fx-haber-endeksi", anahtar=m["kod"],
             deger=m["deger"], onceki=m["onceki"], fark=m["fark"],
             tarih=str(d.get("_tarih", ""))[:10], onceki_tarih=kiyas,

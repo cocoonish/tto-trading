@@ -44,7 +44,10 @@ BURASI = Path(__file__).resolve().parent
 KOK = BURASI.parent
 BULTEN = KOK / "site" / "src" / "data" / "bulten"
 
-YAZILABILIR = ("yorum", "ozet", "gundem", "duzeltmeler")
+# `manset`: sayının başlığı — günün tezi, tek cümle (bkz. YAZIM.md). Bülten
+# sayfasının h1'i yalnız tarihti ve tez ancak üçüncü ekranda başlıyordu.
+YAZILABILIR = ("yorum", "ozet", "gundem", "duzeltmeler", "manset")
+MANSET_AZAMI = 110
 DUZELTME_ZORUNLU = ("alan", "eski", "yeni")
 
 
@@ -104,6 +107,18 @@ def uygula(hedef: Path, yama: dict) -> tuple[dict, list[str]]:
             b["yorum"] = y
             b["yorum_zamani"] = date.today().isoformat()
             degisen.append(f"yorum ({len(str(y).split())} kelime)")
+
+    if "manset" in yama:
+        m = yama["manset"]
+        if m is None:
+            b["manset"] = None
+            degisen.append("manşet silindi")
+        elif str(m).strip():
+            # Başlık DÜZ METİNDİR: h1 etiket taşımaz, etiketle gelirse soyulur.
+            import re as _re
+            t = _re.sub(r"\s+", " ", _re.sub(r"<[^>]+>", " ", str(m))).strip()
+            b["manset"] = t
+            degisen.append(f"manset ({len(t)} karakter)")
 
     if "ozet" in yama and isinstance(yama["ozet"], dict):
         mevcut = b.get("ozet") or {}

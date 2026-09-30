@@ -745,6 +745,28 @@ sina("grafikOlcu.ts ↔ figur_olcu.py: sabitler ve öncelik aynı",
      f"TS {_ts_sabit} · Python {fo.ONTANIMLI, fo.EN_AZ, fo.EN_COK}")
 
 
+# ── (27) BASIM SÖZLEŞMESİ ─────────────────────────────────────────────────
+# Üç kusur 30.09.2026'da canlı sitede ölçüldü; ölçüt derlenmiş biçime karşı
+# sınanır (Astro kapsam nitelikleri dahil) — fikstür gerçeği taşımazsa geçer
+# ama canlı çıktıda tutmaz (22.09.2026 dersi).
+basim = _mod.basim_bulgulari
+_cid = ' data-astro-cid-abc123'
+sina("marka 'TRADİNG' ENGEL", len(basim([("a/index.html", "<span>TTO TRADİNG</span>")])) == 1)
+sina("doğru marka yazımı geçer", not basim([("a/index.html", '<span lang="en">TTO Trading</span>')]))
+sina("gösterge farkı '−%0,24' ENGEL",
+     len(basim([("b/index.html", f'<span class="g-fark eksi"{_cid}>−%0,24</span>')])) == 1)
+sina("gösterge farkı '−0,24 puan' geçer",
+     not basim([("b/index.html", f'<span class="g-fark eksi"{_cid}>−0,24 puan</span>')]))
+sina("bp birimli fark geçer ('−6,5 bp')",
+     not basim([("b/index.html", f'<span class="g-fark eksi"{_cid}>−6,5 bp</span>')]))
+sina("tablo başlığında Σ ENGEL",
+     len(basim([("b/index.html", f'<th class="sag" scope="col"{_cid}>1 gün Σ</th>')])) == 1)
+sina("tablo başlığında σ geçer",
+     not basim([("b/index.html", f'<th class="sag" scope="col"{_cid}>1 gün σ</th>')]))
+sina("başlık DIŞINDAKİ Σ (formül metni) taranmaz",
+     not basim([("d/index.html", "<p>Σ w·v / Σ w</p>")]))
+
+
 print(f"\n{'═' * 70}")
 print(f"  {len(GECTI)} geçti · {len(DUSTU)} düştü")
 if DUSTU:

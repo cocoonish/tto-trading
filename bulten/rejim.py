@@ -204,7 +204,7 @@ def panosu() -> list[dict]:
     if brut and swap_haric is not None:
         v = 100 * swap_haric / brut
         aciklama = ("Brüt rezervin ne kadarının borçlanılmamış ve swap'a bağlı olmayan "
-                    "kısım olduğu — rezervin miktarı değil KALİTESİ.")
+                    "kısım olduğu — rezervin miktarı değil kalitesi.")
         if altin_pay is not None:
             aciklama += f" Brüt rezervin {_yuzde(altin_pay, 1)}'i altın."
         s.append(Satir("Rezerv kalitesi", round(v, 1), "%",

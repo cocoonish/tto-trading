@@ -42,7 +42,7 @@ const sonTeknik = teknikler()[0];
     </div>
     <div class="baslik-satir">
       <a href="/" class="marka" aria-label={`${SITE_TITLE} — ana sayfa`}>
-        <span class="marka-ad">{SITE_TITLE}</span>
+        <span class="marka-ad" lang="en">{SITE_TITLE}</span>
         <span class="marka-alt">{SITE_TAGLINE}</span>
       </a>
       <nav aria-label="Bölümler">
@@ -194,6 +194,17 @@ const sonTeknik = teknikler()[0];
     }
     .nav-no {
       display: none;
+    }
+  }
+  /* Dar ekranda menü SARAR, kaymaz: kaydırma çubuğu gizli olduğu için
+     390 pikselde sekiz bağlantının üçü (İndikatörler, Hakkında, Arama)
+     görünür alanın dışında kalıyor ve var olduğu anlaşılmıyordu. Bedeli bir
+     satır (~34 px). */
+  @media (max-width: 900px) {
+    nav {
+      flex-wrap: wrap;
+      row-gap: 0.55rem;
+      overflow-x: visible;
     }
   }
 </style>

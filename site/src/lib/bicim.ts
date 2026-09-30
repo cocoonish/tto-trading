@@ -67,6 +67,18 @@ export function degisim(v: number, birim: string, ondalik = 2): string {
 }
 
 /**
+ * Birimli seviye: birim "%" ise yüzde ÖNDE ("%30,19"), değilse sayı ve arkada
+ * birim ("82,6 endeks", "+36 mn $"). Ana sayfa hat tablosu ile proje
+ * sayfasının veri durumu şeridi aynı yazımı buradan alır; ikisi "30,19 %"
+ * basıyordu.
+ */
+export function olcuYaz(v: number, birim: string, ondalik = 1, isaret = false): string {
+  const b = (birim || '').trim();
+  if (b === '%') return yuzde(v, ondalik, isaret);
+  return `${sayi(v, ondalik, isaret)}${b ? ` ${b}` : ''}`;
+}
+
+/**
  * Hatların tarih yazımı üç biçimde geliyor: "GG.AA.YYYY", "AA.YYYY" (aylık
  * seri) ve ISO ("YYYY-MM-DD", "YYYY-MM-DD HH:MM UTC", "YYYY-MM-DDTHH:MM:SS").
  * Ayrıştırılamayan biçim null döner — uydurulmuş bir tarih, çirkin bir

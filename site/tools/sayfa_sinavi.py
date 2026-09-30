@@ -98,6 +98,12 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       derlenmiş 17 sayı): 108 dikkat olayının 108'i okura ulaşmıyor, 37
       önemli olayın 37'si ulaşıyor — kaynak da veri de doğruydu, kusur yalnız
       çıktıda görünüyordu. Bulunamayan olay ENGEL.
+  (27) BASIM SÖZLEŞMESİ — derlenmiş çıktıda üç kusur ENGEL: marka "TRADİNG"
+      (lang="tr" altında büyük harf dönüşümü İngilizce adı bozuyordu), gösterge
+      şeridinde yüzde birimli bir seviyenin farkının yüzde diye basılması
+      ("−%0,24"; bir oranın farkı PUANDIR) ve tablo başlığında Σ (büyük harf
+      dönüşümü σ'yı "toplam" işaretine çeviriyordu). Üçü de 30.09.2026'da
+      canlı sitede ölçüldü; kaynakta düzeltildi, kural bu ölçütte kalıcı.
   (23) SOLUK METİN — `color: var(--ink-30)` ENGEL. Kontrast 1,90:1 ve
       global.css'in kendi yorumu "yalnız çizgi ve kenarlıkta" diyor; metin
       için en soluk kabul edilen jeton --ink-60 (4,59:1).
@@ -784,6 +790,29 @@ def soluk_metin(kok: pathlib.Path) -> list[str]:
         for i, sat in enumerate(f.read_text(encoding="utf-8").splitlines(), 1):
             if SOLUK_METIN.search(sat):
                 bulgu.append(f"{f.relative_to(kok / 'site/src').as_posix()}:{i}")
+    return bulgu
+
+
+# ---------------------------------------------------------------- (27)
+_G_FARK = re.compile(r'<span class="g-fark[^"]*"[^>]*>\s*([^<]*)</span>')
+_TH = re.compile(r"<th\b[^>]*>(.*?)</th>", re.S)
+
+
+def basim_bulgulari(dosyalar: list[tuple[str, str]]) -> list[str]:
+    """(27) BASIM SÖZLEŞMESİ. Girdi (göreli yol, derlenmiş HTML) çiftleri.
+
+    Kaynağa değil ÇIKTIYA bakılır: üç kusurun üçü de bir bileşenin ya da CSS
+    kuralının ürünüydü ve kaynak metinde görünmüyordu."""
+    bulgu: list[str] = []
+    for rel, m in dosyalar:
+        if "TRADİNG" in m:
+            bulgu.append(f"{rel}: marka 'TRADİNG' (lang=\"en\" eksik)")
+        for f in _G_FARK.findall(m):
+            if re.match(r"[+−-]?%", unescape(f).strip()):
+                bulgu.append(f"{rel}: gösterge farkı yüzde basılmış {f.strip()!r} — oranın farkı puandır")
+        for th in _TH.findall(m):
+            if "Σ" in unescape(re.sub(r"<[^>]+>", "", th)):
+                bulgu.append(f"{rel}: tablo başlığında Σ {re.sub(r'<[^>]+>', '', th).strip()!r}")
     return bulgu
 
 
@@ -1635,6 +1664,27 @@ def main() -> int:
                     f"(AA gövde 4,5:1). global.css: '--ink-30 yalnız çizgi ve "
                     f"kenarlıkta'. Metin için --ink-60 (4,59:1).")
     print(f"  ihlal {len(sol)}")
+
+    # ------------------------------------------------------------ (27)
+    # BASIM SÖZLEŞMESİ — marka yazımı, gösterge farkının birimi, başlıkta Σ.
+    print("\n▶ Basım sözleşmesi (dist/: TRADİNG · gösterge farkı yüzde · başlıkta Σ)")
+    if not (KOK / "site/dist").exists():
+        print("  – dist/ yok (önce `npm run build`), ÖLÇÜT KOŞMADI")
+        uyari.append("ölçüt 27 (basım sözleşmesi) KOŞMADI — dist/ yok")
+    else:
+        dist = KOK / "site/dist"
+        ciftler = []
+        # Yalnız derlenmiş SAYFALAR (index.html); gömülü figür dosyaları
+        # megabaytlarca ve bu kusurların hiçbirini taşımaz.
+        for h in sorted(dist.rglob("index.html")):
+            try:
+                ciftler.append((h.relative_to(dist).as_posix(), h.read_text(encoding="utf-8")))
+            except (OSError, UnicodeDecodeError):
+                continue
+        bs = basim_bulgulari(ciftler)
+        for x in bs:
+            hata.append(f"basım — {x}")
+        print(f"  sayfa {len(ciftler)} · ihlal {len(bs)}")
 
     # ------------------------------------------------------------ (26)
     # YAZININ KENDİ DOĞRULAYICISI — yayımlanan sayı ile onu üreten ölçüm.

@@ -61,8 +61,13 @@ const DILIMLER = [
 const sayi = (x: number | null | undefined, ondalik = 2) =>
   x === null || x === undefined ? '—' : bicimSayi(x, Math.min(Math.max(ondalik, 0), 4));
 
+// Hane birimin sözleşmesinden: yüzde değişim iki, baz puan bir hane (bülten
+// tablolarıyla aynı). Baz puan iki haneyle "+8,40 bp" basılıyordu.
 const isaretli = (x: number | null | undefined, birim: string) =>
-  x === null || x === undefined ? '—' : degisim(x, birim.trim(), 2);
+  x === null || x === undefined ? '—' : degisim(x, birim.trim(), birim.trim() === 'bp' ? 1 : 2);
+/** Son değer: yüzde birimi ÖNDE ("%4,500"); öbür birimler arkada küçük. */
+const sonYaz = (e: any) =>
+  String(e?.birim ?? '').trim() === '%' ? (typeof e?.son === 'number' ? yuzde(e.son, e.ondalik ?? 2) : '—') : sayi(e?.son, e?.ondalik);
 
 const tarihTr = (t: string | null) => (t ? tarihUzun(t) : '—');
 
@@ -117,8 +122,8 @@ const kisaZaman = (t: string | null) => {
         <div class="baslik">
           <h2>{e.ad}</h2>
           <span class="son">
-            {sayi(e.son, e.ondalik)}
-            {e.birim && <small> {e.birim}</small>}
+            {sonYaz(e)}
+            {e.birim && String(e.birim).trim() !== '%' && <small> {e.birim}</small>}
             <small class="bar-tarih"> · {tarihTr(e.bar_tarihi)}</small>
           </span>
         </div>
@@ -126,17 +131,36 @@ const kisaZaman = (t: string | null) => {
         {/* Şema toleransı: 30.08 dağıtımında eski (tek dilimli) yazılmış JSON
             ile yeni bileşen çakıştı ve BÜTÜN site derlemesi düştü. Alan
             eksikse satır atlanır; bir sayının yokluğu siteyi indiremez. */}
-        <p class="degisim etiket">
-          1 hafta {isaretli(e.degisim?.h1, e.tip === 'getiri' ? 'bp' : '%')} · 1 ay{' '}
-          {isaretli(e.degisim?.a1, e.tip === 'getiri' ? 'bp' : '%')} · 3 ay{' '}
-          {isaretli(e.degisim?.a3, e.tip === 'getiri' ? 'bp' : '%')} · yılbaşından{' '}
-          {isaretli(e.degisim?.ybb, e.tip === 'getiri' ? 'bp' : '%')} · 52 haftalık aralık{' '}
-          {sayi(e.aralik52?.dusuk, e.ondalik)}–{sayi(e.aralik52?.yuksek, e.ondalik)}
-          {e.aralik52?.konum_pct !== undefined && e.aralik52?.konum_pct !== null && ` (konum ${yuzde(e.aralik52.konum_pct, 0)})`}
-          {e.haftalik?.h10 && ` · haftalık ortalamalar: 10 haftalık ${sayi(e.haftalik.h10, e.ondalik)} · 40 haftalık ${sayi(e.haftalik.h40, e.ondalik)} · haftalık RSI ${sayi(e.haftalik.rsi14, 1)}`}
-        </p>
+        {/* Değişim bilgisi tek bir büyük harfli dizgeydi ("1 HAFTA +8,40 BP ·
+            1 AY …"): baz puan "BP"ye dönüyor, sayılar taranamıyordu. Artık
+            etiketli küçük hücreler; büyük harf dönüşümü yok. */}
+        <ul class="degisim">
+          {[['1 hafta', e.degisim?.h1], ['1 ay', e.degisim?.a1], ['3 ay', e.degisim?.a3], ['yılbaşından', e.degisim?.ybb]].map(([ad, v]) => (
+            <li>
+              <span class="dg-ad">{ad}</span>
+              <span class:list={['dg-deger', { arti: typeof v === 'number' && v > 0, eksi: typeof v === 'number' && v < 0 }]}>
+                {isaretli(v as number | null | undefined, e.tip === 'getiri' ? 'bp' : '%')}
+              </span>
+            </li>
+          ))}
+          <li>
+            <span class="dg-ad">52 haftalık aralık</span>
+            <span class="dg-deger">
+              {sayi(e.aralik52?.dusuk, e.ondalik)}–{sayi(e.aralik52?.yuksek, e.ondalik)}
+              {e.aralik52?.konum_pct !== undefined && e.aralik52?.konum_pct !== null && <small> · konum {yuzde(e.aralik52.konum_pct, 0)}</small>}
+            </span>
+          </li>
+          {e.haftalik?.h10 && (
+            <li>
+              <span class="dg-ad">haftalık ortalama · RSI</span>
+              <span class="dg-deger">
+                10h {sayi(e.haftalik.h10, e.ondalik)} · 40h {sayi(e.haftalik.h40, e.ondalik)} · RSI {sayi(e.haftalik.rsi14, 1)}
+              </span>
+            </li>
+          )}
+        </ul>
 
-        <div class="tablo-sar">
+        <div class="tablo-sar" tabindex="0" role="region" aria-label="Kaydırılabilir tablo">
           <table class="olcum">
             <caption class="gorunmez">{e.ad} — üç zaman diliminde göstergeler, oynaklık, kanal ve yapı</caption>
             <thead>
@@ -154,7 +178,10 @@ const kisaZaman = (t: string | null) => {
               </tr>
             </thead>
             <tbody>
-              {DILIMLER.map((d) => {
+              {/* Ölçülemeyen dilim tabloda satır AÇMAZ; sebebi tablonun altında tek
+                  notta yazılır. Tam genişlik boş satırlar tablonun başını işgal
+                  ediyordu. */}
+              {DILIMLER.filter((d) => e.dilimler?.[d.kod] && !e.dilimler[d.kod].eksik).map((d) => {
                 const m = e.dilimler?.[d.kod];
                 return m && !m.eksik ? (
                   <tr>
@@ -191,13 +218,19 @@ const kisaZaman = (t: string | null) => {
             </tbody>
           </table>
         </div>
+        {DILIMLER.some((d) => !e.dilimler?.[d.kod] || e.dilimler[d.kod].eksik) && (
+          <p class="eksik-not">
+            {DILIMLER.filter((d) => !e.dilimler?.[d.kod] || e.dilimler[d.kod].eksik)
+              .map((d) => `${d.ad}: ${e.dilimler?.[d.kod]?.eksik ?? 'ölçülmedi'}`).join(' · ')}
+          </p>
+        )}
 
-        <div class="tablo-sar">
+        <div class="tablo-sar" tabindex="0" role="region" aria-label="Kaydırılabilir tablo">
           <table class="seviyeler">
             <caption class="gorunmez">{e.ad} — dilim başına destek ve direnç bölgeleri (dokunuş sayısı ve son dokunuş) ile 52 haftalık Fibonacci seviyeleri</caption>
             <thead>
               <tr>
-                {DILIMLER.map((d) => (
+                {DILIMLER.filter((d) => e.dilimler?.[d.kod] && !e.dilimler[d.kod].eksik).map((d) => (
                   <th scope="col">{d.ad} seviyeler</th>
                 ))}
                 <th scope="col">Fibonacci (52 hafta)</th>
@@ -205,7 +238,7 @@ const kisaZaman = (t: string | null) => {
             </thead>
             <tbody>
               <tr>
-                {DILIMLER.map((d) => {
+                {DILIMLER.filter((d) => e.dilimler?.[d.kod] && !e.dilimler[d.kod].eksik).map((d) => {
                   const m = e.dilimler?.[d.kod];
                   return (
                     <td>
@@ -291,8 +324,22 @@ const kisaZaman = (t: string | null) => {
   .baslik h2 { font-family: var(--font-display); margin: 0; }
   .son { font-family: var(--font-mono); font-size: 1.25rem; }
   .son .bar-tarih { color: var(--ink-70); font-size: 0.75rem; }
-  .degisim { margin: 0.3rem 0 0.8rem; }
-  .tablo-sar { overflow-x: auto; margin: 0.9rem 0; }
+  .degisim {
+    list-style: none; margin: 0.4rem 0 0.9rem; padding: 0;
+    display: flex; flex-wrap: wrap; gap: 0.35rem 1.4rem;
+  }
+  .degisim li { display: grid; gap: 0.05rem; }
+  .dg-ad { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-60); letter-spacing: 0.02em; }
+  .dg-deger { font-family: var(--font-mono); font-size: 0.88rem; font-variant-numeric: tabular-nums; }
+  .dg-deger small { color: var(--ink-70); font-size: 0.8em; }
+  .dg-deger.arti { color: var(--pozitif); }
+  .dg-deger.eksi { color: var(--claret); }
+  .tablo-sar { overflow-x: auto; position: relative; margin: 0.9rem 0; }
+  .tablo-sar:focus-visible { outline: 2px solid var(--claret); outline-offset: 2px; }
+  /* position: relative ŞART: içindeki görünmez başlık (position: absolute) en
+     yakın konumlu ataya göre yerleşir; kap konumsuzken sayfanın kendisine
+     göre yerleşiyor ve telefonda sayfayı yana kaydırıyordu (teknik bülten
+     390 px'te 484 px). */
   table { border-collapse: collapse; font-family: var(--font-mono); font-size: 0.8rem; min-width: 40rem; }
   th, td { text-align: left; padding: 0.32rem 0.85rem 0.32rem 0; vertical-align: top; white-space: nowrap; }
   thead th { border-bottom: 1px solid var(--ink-30); color: var(--ink-70); font-weight: 500; }
@@ -300,6 +347,7 @@ const kisaZaman = (t: string | null) => {
   .alt-zaman { display: block; font-weight: 400; color: var(--ink-70); font-size: 0.68rem; }
   .yapi { white-space: normal; max-width: 16rem; }
   .eksik { color: var(--ink-70); font-style: italic; }
+  .eksik-not { margin: -0.4rem 0 0.9rem; font-size: 0.78rem; font-style: italic; color: var(--ink-70); }
   .seviyeler .direnc { color: var(--negatif); }
   .seviyeler .destek { color: var(--pozitif); }
   .seviyeler .yon { font-size: 0.7em; margin-right: 0.25rem; }

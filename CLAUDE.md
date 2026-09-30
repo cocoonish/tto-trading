@@ -3477,3 +3477,71 @@ DÜZELTME KAYDINI düzyazı gibi tarıyordu — kaydın "yeni" değeri tanımı 
 bugünkü özete eşit olduğu için, düzeltme yapılan her TAM_SINAV panosu kendi
 düzeltmesi yüzünden yayını durdururdu (düzeltme bloğu artık taranmıyor, ön
 bilginin geri kalanı taranıyor; üç regresyon maddesi duman sınavında).
+
+Aynı gün ikinci bir kör nokta bu düzeltmenin YAYINLANMASINI durdurdu ve bu
+dosyada iki kez adıyla yazılmış sınıftandı: `bulten/duman.py`nin ihale
+penceresi çapraz sınaması hattın CANLI ilanını (`ozet.json` → `plan_strateji`)
+08.09'da yürürlükte olan DONMUŞ arşivle kıyaslıyordu. Hazine 30.09'da Ekim–Aralık
+stratejisini yayımlayınca ilan kaydı, donmuş gün Eylül–Kasım'da kaldı, kapı
+düştü ve adımlardan önce koştuğu için veri iki koşu boyunca hiç tazelenmedi.
+Soru takvimden koparıldı: hattın ilan ettiği strateji arşivde AYNI pencereyle
+duruyor mu. Başlık yanlış ayrıştırılırsa kümede karşılık bulunmaz; site kopyası
+bir koşu geride kalırsa eski strateji de arşivde olduğu için kapı geçer.
+
+**Kurucu ilke — BİR SABAH NOTU OKURA BASILIR, KENDİ YAPIMINA DEĞİL; ve bir
+basım kuralı, CANLI ÇIKTIYA karşı ölçülmeden konmuş sayılmaz.** 30.09.2026'da
+ana sayfa ve bültenler dört mercekle (editoryal · yerleşim · mobil · veri)
+incelendi: 115 ham bulgu, 61 madde, 6'sı kaynağa karşı atıldı. En pahalı
+kusurlar sayı değil BASIMDI ve hiçbir kapı onları sormuyordu, çünkü kaynak da
+veri de doğruydu: (1) gösterge şeridi yüzde birimli bir seviyenin farkını
+YÜZDE basıyordu ("TÜFE %31,51 · −%0,24"; bir oranın farkı PUANDIR, aynı
+sayfanın olay cümlesi doğru yazıyordu) — yanlış okunan bir sayı; (2) tablo
+başlıklarındaki `text-transform: uppercase` küçük sigmayı (σ, standart sapma)
+büyük sigmaya (Σ, toplam) çeviriyordu; (3) `lang="tr"` altında büyük harf
+dönüşümü markayı "TTO TRADİNG" yapıyordu; (4) hane sütunun sözleşmesinden
+değil sayının metin temsilinden sayılıyordu (`ondalikSay`) ve aynı sütunda
+"−%2,99 · −%2,4 · +%3" basılıyordu; (5) künye tarihi karakter ortasından
+bölüyordu ("29.09.202 / 6"); (6) `.gorunmez` başlık konumsuz bir kaydırma
+kabında sayfaya göre yerleşiyor ve teknik bülteni telefonda yana
+kaydırıyordu (390 px'te 484). Üçü artık sayfa sınavının 27. ölçütü (derlenmiş
+96 sayfada 0 ihlal, sekiz regresyon maddesi), kalanı kaynakta çözüldü; tek
+tanım `lib/bicim` (`olcuYaz`) ve bileşenin HANE tablosu (`%` 2 · `bp` 1 · σ 1).
+
+Bülten yeniden dizildi: bileşenin kendi belgesi "önce sayılar" diyordu, basım
+~980 sözcük düzyazıyı gösterge şeridinin önüne koyuyordu. Sıra artık ne oldu /
+ne bekleniyor → gösterge şeridi → BUGÜN (takvimin bugünkü bütün kayıtları,
+derecesi ne olursa olsun) → günün okuması → rejim → olağandışı → piyasa
+fotoğrafı → … → gündem; geniş ekranda sağda yapışık içindekiler, dar ekranda
+üstte yapışık bölüm şeridi. Her gün aynı basılan yöntem paragrafları, o sayıda
+güncellenmeyen tema anlatıları ve ham haber listeleri KATLANIR (metin DOM'da
+kalır; sayfa sınavı 25 onu orada arar). Ölçüldü: 30.09 sayısı 1360 px'te
+45.588 → 34.557, 390 px'te 63.569 → 47.164 px; gösterge şeridi 4.136 →
+1.427 px'te, piyasa fotoğrafı 38.586 → 5.898 px'te başlıyor. Yazı katmanına
+isteğe bağlı `manset` alanı eklendi (yaz.py · denetim UYARI >110 karakter ·
+YAZIM.md): varsa bülten başlığı günün tezi olur, yoksa tarih — ana sayfanın
+manşeti ise yalnız ölçülen katmandan kurulmaya devam eder ve artık HAREKETİ
+yazar ("+9,0 → +9,2 puan"; etiketi değişen satır öne çıkar); iki hafta boyunca
+kelimesi kelimesine aynı kalan cümle 19 günün 13'ünde değişiyor.
+
+İnceleme bir ölçüm kusuru da buldu ve o "fikstür gerçeği taşımıyor" sınıfından:
+`tekrar.bolumler()` temaları LİSTE diye dolaşıyordu, bülten JSON'unda alan bir
+SÖZLÜK — temalar aylarca hiçbir tekrar ölçüsüne girmedi (günler arası örtüşme
+%92'ydi) ve duman maddesi yeşil geçti, çünkü fikstür liste şeklini taşıyordu.
+Düz düzeltme 13 sayının 4'ünü sahte ENGEL'e sokacaktı (iç yoğunluk 17,8 > 12):
+tema da özet ailesindendir (gövdeden süzer), iç ölçüden muaf, günler arası
+ölçüye yalnız o sayıda güncellendiyse girer. Ölçüm katmanında üç dizge okur
+diline çekildi: haber tonu cümlesi yazara talimatla bitiyordu ("Sebebini haber
+akışından bul.") ve sayıya sabit ek yazıyordu ("−0,10'ye"; artık ok), veri
+günlüğü ISO tarih ve UTC saat basıyordu, kapsam dışı kaydı okura veri hattının
+yapılacaklar listesini ("çekme ve önbellek yolu yazılacak") taşıyordu.
+Denetime `buyuk_harf` UYARISI kondu: yazı katmanı vurguyu büyük harfle
+yapıyordu ("YATAYLAŞTIRIR"); ölçüldü, büyük harfli sözcüklerin çoğu kısaltma
+ve ayrım ünlü sayısıyla yapılıyor.
+
+AÇIK, kullanıcı kararı bekliyor: (a) yazı katmanının uzunluk kuralları yalnız
+ALT sınır koyuyor ve kısa bölüm ENGEL alıyor — sayfa ~13.800 sözcük, gündem
+tek başına ≥2.800; aralığa çevrilmesi kullanıcının koyduğu bir standardı
+değiştirir. (b) FX haber endeksinin kat adları ("Alıcı", "Aşırı Alıcı")
+tavsiye gibi okunuyor. (c) Gösterge şeridinde yön rengi. (d) Telefon taşması
+kapısı Playwright ister ve yayın koşucusunda yok; ayrı iş akışı mı, kurulum
+mu. Pazar sayısının ayrı düzeni (haftalık değişim tablosu üstte) yapılmadı.

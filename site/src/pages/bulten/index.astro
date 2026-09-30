@@ -42,7 +42,7 @@ const arsiv = hepsi.slice(1, 12);
         <a href="/bulten/rss.xml" class="nav-oge rss-link" title="RSS beslemesi">RSS</a>
         <a href="/bulten/arsiv/" class="nav-oge arsiv-link">Tüm arşiv ({hepsi.length})</a>
       </nav>
-      <BultenGovde b={son.b} kayit={son} hatSayfa={hatSayfa} />
+      <BultenGovde b={son.b} kayit={son} hatSayfa={hatSayfa} oncekiB={hepsi[1]?.b ?? null} />
       <section class="arsiv">
         <h2>Önceki sayılar <a class="tumu" href="/bulten/arsiv/">tümü →</a></h2>
         {arsiv.length > 0 ? (

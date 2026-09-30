@@ -2,9 +2,9 @@
 
 Bu dosya, günlük ve haftalık bülteni **yazan** katmanın görev tarifidir. Bültenin
 ölçülen kısmı (piyasa fotoğrafı, takvim, göstergeler, hat hat değişim) otomatik
-koşudan gelir ve yazan taraf ona **dokunmaz**. Yazan taraf dört alanı doldurur:
-`yorum`, `ozet`, `gundem` ve — yalnız yayımlanmış bir sayı düzeltiliyorsa —
-`duzeltmeler`.
+koşudan gelir ve yazan taraf ona **dokunmaz**. Yazan taraf şu alanları doldurur:
+`manset`, `yorum`, `ozet`, `gundem` ve — yalnız yayımlanmış bir sayı
+düzeltiliyorsa — `duzeltmeler`.
 
 Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
 
@@ -117,7 +117,16 @@ Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
 
 ## Doldurulacak alanlar
 
-Dört alan: `yorum`, `ozet`, `gundem` ve — yalnız gerektiğinde — `duzeltmeler`.
+Beş alan: `manset`, `yorum`, `ozet`, `gundem` ve — yalnız gerektiğinde — `duzeltmeler`.
+
+### `manset` — sayının başlığı
+Tek cümle, **en çok 110 karakter**, düz metin (etiket soyulur). Günün tezidir,
+bir olayın adı değil: özneli ve fiilli bir cümle ("Brent düşerken ABD uzun ucu
+yükseldi: petrol–faiz kanalı koptu"). Sayı taşıyabilir; sayı ölçülen katmandan
+gelir ve sayfadaki yazımıyla yazılır. Sayfa bu cümleyi başlık (h1) yapar, tarih
+üstteki etikete iner; alan yoksa başlık yalnız tarihtir. Ana sayfanın manşeti
+bundan kurulmaz — ana sayfa yalnız ölçülen katmandan okur. Denetim 110
+karakteri aşan manşeti UYARI olarak listeler.
 
 ### `yorum` — "Günün / Haftanın okuması"
 Bültenin tepesindeki okuma. Günlükte **en az 350**, haftalıkta **en az 600**
@@ -383,6 +392,17 @@ Metni baştan bağlamsız yazmak, cümleni kurtarmanın tek yolu.
 girmez: dosya adı, alan adı, "eşikler ayar.py içinde", "itp_b_sabit" gibi.
 Denetim bunu ölçer ve engeller (`ortak/okur_dili.py`, tek tanım). "Koşu" ve
 "veri tarihi" okura verilen kayıt adlarıdır, yasak değildir.
+
+**Vurgu büyük harfle yapılmaz.** "Eğriyi YATAYLAŞTIRIR", "FİNANSMAN kararıdır"
+gibi yazımlar kurumsal bir notta bağırma gibi okunur ve aynı sayfadaki
+`<strong>` vurgusuyla tutarsızdır. Vurgu gerekiyorsa `<strong>`, paragraf başına
+en çok bir kez. Kısaltmalar (TCMB, TÜFE, BIST) elbette büyük harfle kalır.
+Denetim büyük harfli Türkçe sözcüğü UYARI olarak listeler (`buyuk_harf`).
+
+**Aynı sayıyı iki bölümde anlatma.** "Ne oldu" günün hareketlerini sayısıyla
+kısaca verir; "Günün okuması" o sayıları tekrar sıralamaz, aralarındaki
+ilişkiyi kurar. Aynı rakam iki bölümde geçiyorsa birinde kalır — okur ikincisinde
+yeni bir şey öğrenmiyor.
 
 **Tavsiye dili yasak.** "Alın", "satın", "hedef fiyat", "pozisyon açın"
 yazılmaz. Site analiz yayımlar, yatırım tavsiyesi vermez.

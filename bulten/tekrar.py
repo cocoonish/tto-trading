@@ -63,7 +63,11 @@ def _ozet_mi(ad: str) -> bool:
     asıl bakılacak yerdir: gövdeye değmesi meşru, kendini her gün yeniden
     basması değil.
     """
-    return ad in OZET_BOLUMLER or ad.startswith("ozet.") or ad == "soz_defteri"
+    # Tema da bu ailedendir: günün gelişmesini gövdeden süzer. Muafiyet
+    # olmadan 13 sayının 4'ünde iç yoğunluk ENGEL eşiğini aşıyordu (17,8 > 12;
+    # ölçüldü 30.09.2026) ve hiçbiri gerçek kusur değildi.
+    return (ad in OZET_BOLUMLER or ad.startswith("ozet.") or ad == "soz_defteri"
+            or ad.startswith("tema."))
 
 # Ölçüm dışı kalıplar: kaçınılmaz ve anlamlı tekrar eden teknik ifadeler.
 MUAF = re.compile(
@@ -97,8 +101,23 @@ def bolumler(b: dict) -> dict[str, str]:
     for k, v in (b.get("ozet") or {}).items():
         if _duz(v):
             out[f"ozet.{k}"] = _duz(v)
-    for i, t in enumerate(b.get("temalar") or []):
+    # TEMALAR HİÇ ÖLÇÜLMÜYORDU. Bülten JSON'unda alan bir sözlük
+    # (`{"temalar": [...], "_son_guncelleme": …}`) ve döngü onu liste gibi
+    # dolaşıyordu: anahtar adları dizge çıktı, `isinstance(t, dict)` hep yanlış
+    # oldu ve temaların hepsi sessizce atlandı — belge kapsadığını söylerken
+    # (30.09.2026'da ölçüldü; günler arası tema örtüşmesi %92'ydi ve hiçbir
+    # ölçü onu görmüyordu). İki şekil de kabul edilir.
+    #
+    # Yalnız BU SAYIDA güncellenen tema girer. Güncellenmeyen tema sayfada
+    # katlı basılır ve metni tanımı gereği önceki sayınınkiyle aynıdır; onu
+    # saymak her sabah öten bir uyarı olurdu (söz defterinin duran kaydı gibi).
+    tm = b.get("temalar") or []
+    liste = tm.get("temalar") if isinstance(tm, dict) else tm
+    for i, t in enumerate(liste or []):
         if not isinstance(t, dict):
+            continue
+        sg, gun = str(t.get("son_guncelleme") or ""), str(b.get("tarih") or "")
+        if sg and gun and sg < gun:
             continue
         metin = _duz(" ".join(str(t.get(a) or "") for a in ("tez", "gelisme", "son_gozlem")))
         if metin:

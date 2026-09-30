@@ -326,7 +326,7 @@ IZLEMLER: list[Izlem] = [
     Izlem("usdtry-deval", "kur", "USD/TRY", "", 2, "yuzde", 0.6, 1.2, "",
           "Günlük yüzde değişim; %1,2 üstü TL varlıklarda gün içi fiyatlamayı değiştirir.", "kur"),
     Izlem("usdtry-deval", "d1a", "1 aylık yıllıklandırılmış devalüasyon hızı", "%", 1, "delta", 4, 8,
-          "azalis", "Kurun seviyesi değil HIZI; TCMB'nin patika yönetimini bu gösterir. "
+          "azalis", "Kurun seviyesi değil hızı; TCMB'nin patika yönetimini bu gösterir. "
           "Tek günlük okuma valör farkına duyarlıdır; son beş iş gününün ortalaması "
           "yanında verilir.", "kur",
           baglam=("d1a_ort", "son beş iş günü ortalaması")),
@@ -414,7 +414,7 @@ IZLEMLER: list[Izlem] = [
 
     # ─────────────────────────────── yabancı akımı
     Izlem("yabanci-pozisyon", "toplam_hafta", "Yabancı haftalık net akım (toplam)", "mn USD", 0, "akim",
-          500, 1000, "artis", "Hisse + DİBS; stok değil AKIM (fiyat/kur etkisinden arındırılmış).", "akim"),
+          500, 1000, "artis", "Hisse + DİBS; stok değil akım (fiyat/kur etkisinden arındırılmış).", "akim"),
     Izlem("yabanci-pozisyon", "dibs_hafta", "Yabancı haftalık net akım (DİBS)", "mn USD", 0, "akim",
           400, 800, "artis", "", "akim"),
     Izlem("yabanci-pozisyon", "hisse_hafta", "Yabancı haftalık net akım (hisse)", "mn USD", 0, "akim",

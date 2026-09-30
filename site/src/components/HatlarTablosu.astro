@@ -34,14 +34,14 @@ const satirlar = hatlar
   .sort((a, b) => (a.yas ?? 9e9) - (b.yas ?? 9e9));
 ---
 
-<div class="ht-sarici">
+<div class="ht-sarici" tabindex="0" role="region" aria-label="Kaydırılabilir tablo">
   <table class="ht-tablo">
     <caption class="gorunmez">Veri hatları: manşet büyüklüğü, değeri ve o değerin kendi tarihi</caption>
     <thead>
       <tr>
         <th class="ht-hat" scope="col">Hat</th>
         <th class="ht-olcu" scope="col">Manşet büyüklüğü</th>
-        <th class="ht-deger" scope="col">Değer</th>
+        <th class="ht-deger sag" scope="col">Değer</th>
         <th class="ht-tarih" scope="col">Veri tarihi</th>
       </tr>
     </thead>
@@ -52,11 +52,12 @@ const satirlar = hatlar
             <td class="ht-hat">
               <a href={`/projeler/${h.slug}/`}>{h.baslik}</a>
               {h.durum === 'taslak' && <span class="ht-rozet">taslak</span>}
+              {/* Telefonda ölçü sütunu yok; değerin NEYİN değeri olduğu adın altında kalır. */}
+              <span class="ht-olcu-ic">{h.olcu}</span>
             </td>
             <td class="ht-olcu">{h.olcu}</td>
             <td class="ht-deger">
-              {h.deger ?? <span class="ht-yok">veri yok</span>}
-              {h.deger && h.birim && <span class="ht-birim">{h.birim}</span>}
+              {h.metin ?? <span class="ht-yok">veri yok</span>}
             </td>
             <td class="ht-tarih">
               {h.tarih || '—'}
@@ -73,8 +74,10 @@ const satirlar = hatlar
   /* Dar ekranda tablo SAYFAYI değil kendini kaydırır. */
   .ht-sarici {
     overflow-x: auto;
+    position: relative;
     border-top: 1px solid var(--ink);
   }
+  .ht-sarici:focus-visible { outline: 2px solid var(--claret); outline-offset: 2px; }
   .ht-tablo {
     width: 100%;
     border-collapse: collapse;
@@ -128,18 +131,17 @@ const satirlar = hatlar
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
+  /* Değer ve birim TEK hücrede ve sözleşmeyle yazılır ("%30,19", "82,6
+     endeks"); başlık da değerle aynı yana yaslanır. Başlık sola, değer sağa
+     yaslıyken sütun taranamıyordu. */
   .ht-deger {
     text-align: right;
     font-size: 1rem;
     font-weight: 500;
     padding-right: 1.4rem;
   }
-  .ht-birim {
-    font-size: 0.64rem;
-    color: var(--ink-50);
-    margin-left: 0.35rem;
-    letter-spacing: 0.04em;
-  }
+  thead th.sag { text-align: right; padding-right: 1.4rem; }
+  .ht-olcu-ic { display: none; }
   .ht-yok {
     font-size: 0.7rem;
     color: var(--ink-50);
@@ -159,9 +161,19 @@ const satirlar = hatlar
 
   /* Telefonda üç sütun da kırılmaz olunca değer ekran dışına düşüyordu;
      kaydırma son çare, önce hat adı kırılır ve tarih küçülür. */
+  /* 768 pikselde kırılmayan hat adı tabloyu kabından 28 piksel taşırıyor ve
+     tarih "29.09.202" diye kesiliyordu. */
+  @media (max-width: 900px) {
+    .ht-hat a { white-space: normal; }
+  }
   @media (max-width: 640px) {
     .ht-olcu { display: none; }
+    .ht-olcu-ic {
+      display: block; margin-top: 0.15rem;
+      font-size: 0.78rem; line-height: 1.3; color: var(--ink-70);
+    }
     .ht-hat a { white-space: normal; }
+    thead th.sag { padding-right: 0.8rem; }
     .ht-deger { padding-right: 0.8rem; font-size: 0.92rem; }
     .ht-tarih { font-size: 0.72rem; }
   }

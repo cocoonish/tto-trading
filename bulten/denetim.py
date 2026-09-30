@@ -69,7 +69,7 @@ from tavsiye_dili import TAVSIYE  # noqa: E402
 # duruyor ve ölçütün kapsamı buradan okunuyor; yeni bir yazı alanı eklendiğinde
 # buraya da eklenmezse dil denetimi onu göremez.
 YAZI_ALANLARI = ("gundem", "yorum", "temalar", "notlar", "one_cikanlar",
-                 "ozet", "sonuclar", "veri_gunlugu")
+                 "ozet", "sonuclar", "veri_gunlugu", "manset")
 
 
 # Okurun GÖRMEDİĞİ makine alanları: hat/anahtar/kod adları burada durur ve
@@ -1255,6 +1255,48 @@ class Denetim:
         if not eksi and not nokta and not ters:
             self._ok("sayı yazımı: eksi U+2212, ondalık virgül, yüzde önde")
 
+    # BÜYÜK HARFLE VURGU. Yazı katmanı vurguyu tümüyle büyük harfle yapıyordu
+    # ("YATAYLAŞTIRIR", "FİNANSMAN kararıdır"); kurumsal bir notta bu bağırma
+    # gibi okunur ve aynı sayfada <strong> ile yapılan vurguyla tutarsızdır.
+    # Ölçüldü (34 yazılı sayı): büyük harfli ≥4 harfli sözcüklerin çoğu
+    # kısaltma (BIST 221, TCMB 105, TLREF 75); vurgu olanlar iki ya da daha
+    # çok ünlü taşıyan Türkçe sözcükler. Ünlüsü ikiden az olan sözcük kısaltma
+    # sayılır; iki ünlülü kısaltmalar adıyla muaf. UYARI: yanlış pozitifin
+    # bedeli bir satır, yayını durdurmak kusurun kendisinden pahalı olurdu.
+    BUYUK_SOZCUK = re.compile(r"(?<![\w&])[A-ZÇĞİÖŞÜÂ]{4,}(?![\w&])")
+    KISALTMA = frozenset({
+        "TÜİK", "TÜFE", "TÜFEX", "MOVE", "OPEC", "OFAC", "CENTCOM", "UKMTO", "MODAFL",
+        "AOFM", "KOSGEB", "DEİK", "NASDAQ", "OECD", "EUROSTAT", "TOKİ", "BOTAŞ",
+        "ASELSAN", "NATO", "IOSCO", "EUREX", "EIOPA", "ESMA", "BOJ", "PBOC",
+    })
+
+    def manset(self):
+        """Sayının başlığı (isteğe bağlı): tek cümle, en çok 110 karakter.
+        Yokluğu kusur değildir — sayfa o zaman tarihi başlık yapar."""
+        m = str(self.b.get("manset") or "").strip()
+        if not m:
+            return
+        if len(m) > 110:
+            self.uyari.append(f"manşet {len(m)} karakter (en çok 110): {m[:60]!r}…")
+        else:
+            self._ok(f"manşet {len(m)} karakter")
+
+    def buyuk_harf(self):
+        yazi = [self.b.get("manset") or "", self.b.get("yorum") or ""]
+        oz = self.b.get("ozet") or {}
+        yazi += [str(v) for v in oz.values()] if isinstance(oz, dict) else [str(oz)]
+        yazi += [str(v) for v in (self.b.get("gundem") or {}).values()]
+        metin = _duz(" ".join(yazi))
+        unlu = set("AEIİOÖUÜÂ")
+        vurgu = [w for w in self.BUYUK_SOZCUK.findall(metin)
+                 if w not in self.KISALTMA and sum(ch in unlu for ch in w) >= 2]
+        if vurgu:
+            self.uyari.append(
+                f"{len(vurgu)} yerde büyük harfle vurgu (yalnız <strong>, paragraf başına en çok bir): "
+                + ", ".join(repr(w) for w in vurgu[:5]))
+        else:
+            self._ok("yazıda büyük harfle vurgu yok")
+
     def duzeltme(self):
         """Düzeltme kaydı biçimce tam mı; ve 'yayımlanan sayı değişti' uyarısı
         varsa yazan taraf hesabını vermiş mi.
@@ -1793,7 +1835,7 @@ class Denetim:
         self.karanlik(); self.olu_kalip(); self.ihale_iddiasi()
         self.yerlesmemis(); self.piyasa_seansi(); self.piyasa_seans_boslugu()
         self.revizyon(); self.duzeltme()
-        self.devir(); self.haber_tonu(); self.bicim()
+        self.devir(); self.haber_tonu(); self.bicim(); self.buyuk_harf(); self.manset()
         self.olagandisilik_penceresi()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")

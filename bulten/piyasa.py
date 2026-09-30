@@ -1225,7 +1225,7 @@ def tr_faizleri() -> list[dict]:
     # yok" diye yazdı — oysa ölçü hattın içinde duruyordu. AOSM bu çalışmanın
     # TÜRETMESİDİR, TCMB serisi değildir; satır bunu kendi üstünde söylüyor.
     al("fonlama-likidite", "aosm", "Ağırlıklı ort. sterilizasyon maliyeti",
-       aciklama="bu çalışmanın türetmesi, TCMB serisi DEĞİL; fazla likidite "
+       aciklama="bu çalışmanın türetmesi, TCMB serisi değil; fazla likidite "
                 "rejiminde marjinal TCMB faizi")
     al("fonlama-likidite", "marjinal", "Marjinal TCMB faizi",
        aciklama="rejime göre fonlama ya da sterilizasyon fiyatı")
@@ -1325,7 +1325,11 @@ def topla(tazele: bool = False, haftalik: bool = False) -> dict:
         # Satırları anlık görüntüde durur ama kendi (eski) bar tarihiyle durur;
         # alan, "bu satır bugün ölçülmedi" sorusunun tek yerden cevabıdır.
         "getirilmeyen": ham.get("getirilmeyen") or [],
-        "kaynak_yok": KAYNAK_YOK,
+        # Okura yalnız ad ve neden gider. "aday" ve "engel" veri hattının
+        # yapılacaklar listesidir ("çekme ve önbellek yolu yazılacak") ve her
+        # sayıda okura basılıyordu; kayıt bu dosyada, iç not olarak kalır.
+        "kaynak_yok": [{k: v for k, v in x.items() if k in ("ad", "neden")}
+                       if isinstance(x, dict) else x for x in KAYNAK_YOK],
     }
 
 

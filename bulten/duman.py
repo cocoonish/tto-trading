@@ -4106,6 +4106,19 @@ def main() -> int:
         for beklenen in ("kilit", "yorum", "ozet.ne_oldu", "tema.t", "soz_defteri"):
             assert beklenen in bl, f"kapsam dışı kalan alan: {beklenen} — gelen {sorted(bl)}"
 
+        # (1b) GERÇEK ŞEKİL: bülten JSON'unda temalar bir SÖZLÜK
+        #      ({"temalar": [...], "_son_guncelleme": …}). Fikstür yalnız liste
+        #      şeklini taşıdığı için ölçü temaları aylarca hiç görmedi ve bu
+        #      madde yeşil geçti (30.09.2026). Güncellenmeyen tema ölçüye girmez:
+        #      sayfada katlı basılır, metni tanımı gereği öncekiyle aynıdır.
+        bs = dict(b, tarih="2026-09-30", temalar={"_son_guncelleme": "2026-09-30", "temalar": [
+            {"ad": "yeni", "tez": "dört", "gelisme": "beş", "son_gozlem": "altı", "son_guncelleme": "2026-09-30"},
+            {"ad": "eski", "tez": "yedi", "gelisme": "sekiz", "son_gozlem": "dokuz", "son_guncelleme": "2026-09-27"}]})
+        bls = _t.bolumler(bs)
+        assert "tema.yeni" in bls, f"sözlük şeklindeki temalar ölçüye girmiyor: {sorted(bls)}"
+        assert "tema.eski" not in bls, "bu sayıda güncellenmeyen tema günler arası ölçüye giriyor"
+        assert _t._ozet_mi("tema.yeni"), "tema iç tekrar ölçüsünden muaf değil — 13 sayının 4'ü sahte ENGEL"
+
         # (2) DURAN kayıt ölçüye TAM METNİYLE girmez: sayfada da basılmıyor.
         b2 = dict(b)
         b2["izleme"] = {"acik": [{"konu": "k", "soz": "çok uzun bir söz metni burada",
@@ -4138,6 +4151,46 @@ def main() -> int:
             assert o2["karne"]["kiyas_var"] is True, "kıyas varken kiyas_var False"
 
     sina("tekrar: iki eksen de ölçülüyor, kapsam sözleşmeden türüyor", _tekrar_eksenleri)
+
+    def _okura_giden_dizgeler():
+        """Ölçüm katmanının okura bastığı dizgeler ve yazı katmanının yeni
+        uyarıları (30.09.2026 ana sayfa/bülten incelemesi).
+
+        (1) Haber tonu cümlesi yazara talimat vermez ("Sebebini haber
+            akışından bul.") ve sayıya sabit ek yazmaz ("−0,10'ye"); geçiş ok
+            ile yazılır. (2) Veri günlüğü ISO tarih ve UTC saat basmaz; aylık
+            sürüm güne çevrilmez. (3) Büyük harfle vurgu UYARI, kısaltma değil.
+            (4) Manşet 110 karakteri aşarsa UYARI; yaz.py alanı kabul eder.
+        """
+        import inspect as _i
+        import olay as _o
+        # Yorum satırları sayılmaz: eski cümle, neden kaldırıldığını anlatan
+        # yorumda adıyla duruyor.
+        kaynak = "\n".join(l for l in _i.getsource(_o.haber_endeksi_olaylari).splitlines()
+                           if not l.strip().startswith("#"))
+        assert "haber akışından bul" not in kaynak, "olay cümlesi yazara talimat veriyor"
+        assert "'den {" not in kaynak and "'ye geçti" not in kaynak, "olay cümlesinde sayıya sabit ek"
+        assert _o._surum_yaz("2026-09-28 19:31 UTC") == "28.09.2026", "ISO sürüm okura çevrilmiyor"
+        assert _o._surum_yaz("08.2026") == "08.2026", "aylık sürüm güne çevriliyor"
+        assert _o._surum_yaz("29.09.2026") == "29.09.2026"
+
+        d = denetim.Denetim.__new__(denetim.Denetim)
+        d.uyari, d.engel, d.gecti = [], [], []
+        d._ok = lambda m: d.gecti.append(m)
+        d.b = {"yorum": "<p>TCMB ve TÜİK verisi eğriyi YATAYLAŞTIRIR; BIST geriledi.</p>"}
+        d.buyuk_harf()
+        assert d.uyari and "YATAYLAŞTIRIR" in d.uyari[0], f"büyük harf vurgusu yakalanmıyor: {d.uyari}"
+        assert "TCMB" not in d.uyari[0] and "TÜİK" not in d.uyari[0] and "BIST" not in d.uyari[0], \
+            f"kısaltma vurgu sayılıyor: {d.uyari[0]}"
+        d.uyari = []
+        d.b = {"manset": "x" * 111}
+        d.manset()
+        assert d.uyari, "110 karakteri aşan manşet uyarılmıyor"
+        import yaz as _y
+        assert "manset" in _y.YAZILABILIR, "yazı kapısı manşet alanını kabul etmiyor"
+        assert "self.buyuk_harf()" in _i.getsource(denetim.Denetim.kos) and \
+            "self.manset()" in _i.getsource(denetim.Denetim.kos), "yeni ölçütler kos() listesinde yok"
+    sina("dizgeler: haber tonu, veri günlüğü, büyük harf, manşet", _okura_giden_dizgeler)
     sina("hat adı: izlenen her hattın okura görünen adı var, kayıt onu taşıyor", _hat_adi_kapsami)
     sina("piyasa: hafta sonu artığı düşer, 7/24 seri dokunulmaz (4 hâl)",
          _hafta_sonu_bari)
