@@ -1874,8 +1874,8 @@
     }
   },
   "Ekim 2026": {
-    "target": 229.1,
-    "source": "Eylül – Kasım 2026 İç Borçlanma Stratejisi",
+    "target": 194.8,
+    "source": "Ekim – Aralık 2026 İç Borçlanma Stratejisi",
     "parser": 2,
     "history": [
       {
@@ -1885,26 +1885,49 @@
       {
         "target": 229.1,
         "source": "Eylül – Kasım 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 194.8,
+        "source": "Ekim – Aralık 2026 İç Borçlanma Stratejisi"
       }
     ],
     "servis": {
-      "ic": 409.1,
-      "dis": 178.1
+      "ic": 436.6,
+      "dis": 178.7
     }
   },
   "Kasım 2026": {
-    "target": 85.4,
-    "source": "Eylül – Kasım 2026 İç Borçlanma Stratejisi",
+    "target": 90.4,
+    "source": "Ekim – Aralık 2026 İç Borçlanma Stratejisi",
     "parser": 2,
     "history": [
       {
         "target": 85.4,
         "source": "Eylül – Kasım 2026 İç Borçlanma Stratejisi"
+      },
+      {
+        "target": 90.4,
+        "source": "Ekim – Aralık 2026 İç Borçlanma Stratejisi"
       }
     ],
     "servis": {
       "ic": 122.7,
       "dis": 41.9
+    }
+  },
+  "Aralık 2026": {
+    "target": 105.5,
+    "source": "Ekim – Aralık 2026 İç Borçlanma Stratejisi",
+    "parser": 2,
+    "history": [
+      {
+        "target": 105.5,
+        "source": "Ekim – Aralık 2026 İç Borçlanma Stratejisi"
+      }
+    ],
+    "servis": {
+      "ic": 117.3,
+      "dis": 20.6
     }
   }
 }

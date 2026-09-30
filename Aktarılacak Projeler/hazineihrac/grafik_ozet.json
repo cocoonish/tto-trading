@@ -1,23 +1,28 @@
 {
  "planlanan_ihraclar.html": {
-  "ihale_adet": 7,
-  "dogrudan_adet": 4,
-  "toplam_beklenen_mlr": 289.34,
+  "ihale_adet": 11,
+  "dogrudan_adet": 5,
+  "toplam_beklenen_mlr": 359.444,
   "aylik": [
    [
     "Ekim 2026",
-    210.772,
-    229.1
+    179.215,
+    194.8
    ],
    [
     "Kasım 2026",
-    78.568,
-    85.4
+    83.168,
+    90.4
+   ],
+   [
+    "Aralık 2026",
+    97.061,
+    105.5
    ]
   ],
   "donem": [
    "05.10.2026",
-   "10.11.2026"
+   "08.12.2026"
   ]
  },
  "tahmin_dogrulama.html": {
@@ -50,9 +55,9 @@
  },
  "ihrac_usd.html": {
   "ay_adet": 81,
-  "toplam_usd_mlr": 272.0925456710614,
-  "son_ay_usd_mlr": 5.34968743383621,
-  "son_kur": 48.94940185546875,
+  "toplam_usd_mlr": 272.08743591873707,
+  "son_ay_usd_mlr": 5.344577681511921,
+  "son_kur": 48.99620056152344,
   "kur_kaynak": "Yahoo Finance"
  },
  "ihrac_tempo.html": {
@@ -87,10 +92,10 @@
   "ort_vade": 4.5660215053763435
  },
  "strateji_revizyon.html": {
-  "revizyonlu_ay": 84,
-  "toplam_hedef_mlr": 8529.0,
+  "revizyonlu_ay": 85,
+  "toplam_hedef_mlr": 8605.199999999999,
   "toplam_gercek_mlr": 7705.64,
-  "gerceklesme_orani": 90.34634775471919
+  "gerceklesme_orani": 89.54632082926604
  },
  "tahmin_aylik.html": {
   "ay_adet": 80,
