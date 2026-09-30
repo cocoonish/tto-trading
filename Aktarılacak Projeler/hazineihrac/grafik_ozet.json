@@ -26,36 +26,36 @@
   ]
  },
  "tahmin_dogrulama.html": {
-  "n": 460,
-  "mae_mlr": 6.829473913043478,
-  "mape": 59.39847826086957,
-  "mape_medyan": 35.25,
+  "n": 465,
+  "mae_mlr": 6.686451612903227,
+  "mape": 58.13870967741936,
+  "mape_medyan": 35.2,
   "son12ay_n": 63,
-  "son12ay_mae_mlr": 16.537777777777777,
-  "son12ay_mape": 48.86666666666667,
-  "mape_ham": 64.51347826086956,
-  "mape_strateji": 65.11434782608696,
+  "son12ay_mae_mlr": 15.971238095238096,
+  "son12ay_mape": 47.43333333333334,
+  "mape_ham": 64.16344086021505,
+  "mape_strateji": 63.71483870967742,
   "donem": "Şub 2020 – Eyl 2026"
  },
  "ihrac_hacmi.html": {
-  "ihale_adet": 466,
+  "ihale_adet": 471,
   "donem": [
    "14.01.2020",
    "15.09.2026"
   ],
-  "toplam_mlr": 7705.6379990000005,
+  "toplam_mlr": 7728.325000000001,
   "tip_pay": {
    "Değişken Faizli Devlet Tahvili": 6.6,
    "Hazine Bonosu": 9.2,
-   "Kuponsuz Devlet Tahvili": 1.6,
-   "Sabit Kuponlu Devlet Tahvili": 49.1,
+   "Kuponsuz Devlet Tahvili": 1.7,
+   "Sabit Kuponlu Devlet Tahvili": 49.0,
    "TLREF'e Endeksli Devlet Tahvili": 24.4,
-   "TÜFE'ye Endeksli Devlet Tahvili": 9.1
+   "TÜFE'ye Endeksli Devlet Tahvili": 9.2
   }
  },
  "ihrac_usd.html": {
   "ay_adet": 81,
-  "toplam_usd_mlr": 272.08743591873707,
+  "toplam_usd_mlr": 275.1154073285699,
   "son_ay_usd_mlr": 5.344577681511921,
   "son_kur": 48.99620056152344,
   "kur_kaynak": "Yahoo Finance"
@@ -66,7 +66,7 @@
    "2026Q3",
    895.953
   ],
-  "aylik_ort_ihale": 5.753086419753086
+  "aylik_ort_ihale": 5.814814814814815
  },
  "faiz_gelisimi.html": {
   "son_ay": "2026-09",
@@ -78,7 +78,7 @@
   "b2c_son_ay": 1.88620810802554,
   "b2c_son12_ort": 2.08982325715293,
   "kabul_son_ay": 61.900000000000006,
-  "kabul_tum_ort": 69.3832618025751
+  "kabul_tum_ort": 47.319957537154984
  },
  "fiyat_araligi.html": {
   "n": 50,
@@ -89,20 +89,20 @@
  },
  "vade_dagilimi.html": {
   "yil_adet": 7,
-  "ort_vade": 4.5660215053763435
+  "ort_vade": 4.571024203821655
  },
  "strateji_revizyon.html": {
   "revizyonlu_ay": 85,
   "toplam_hedef_mlr": 8605.199999999999,
-  "toplam_gercek_mlr": 7705.64,
-  "gerceklesme_orani": 89.54632082926604
+  "toplam_gercek_mlr": 7728.339999999999,
+  "gerceklesme_orani": 89.81011481429833
  },
  "tahmin_aylik.html": {
   "ay_adet": 80,
   "aylik_mape": {
-   "ham": 25.830362985829343,
-   "duzeltilmis": 19.917989353614985,
-   "strateji": 22.24348687159921
+   "ham": 25.281248080300855,
+   "duzeltilmis": 18.90308827328408,
+   "strateji": 21.1410243312258
   }
  }
 }
