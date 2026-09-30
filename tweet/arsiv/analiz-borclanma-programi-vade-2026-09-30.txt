@@ -1,0 +1,28 @@
+# analiz:borclanma-programi-vade-2026-09-30 · 2026-09-30T16:39:09+00:00 · https://x.com/i/status/2105336656555639207
+
+Analiz — 30 Eylül 2026
+Yeni Borçlanma Programı — Ekim Tek Haftada, Vade Belgede Değil İhalelerde Uzuyor
+
+Hazine'nin yeni programında iki şey değişti, bir şey değişmedi. Değişen zamanlama ile kaynak: Ekim'in dört ihalesi 5–6 Ekim'de, çeyreğin en büyük ödeme gününün arifesinde toplandı ve ayın iç borçlanmasının %53,0'ı ihale dışından programlandı. Değişmeyen kâğıt listesi: Ekim'in dört ihale kâğıdı eski takvimdekilerin aynısı ve planlı vade 3,97'den 3,98 yıla gidiyor. Vade belgede değil ihalelerde uzuyor: gerçekleşen vade Temmuz'da 3,07, Eylül'de 4,49 yıl; TLREF payı %55,1'den %32,2'ye indi, faiz riskinin vadesi 1,01'den 3,28 yıla çıktı.
+
+NE DEĞİŞTİ. 12–13 Ekim ihaleleri 5–6 Ekim'e alındı, Ekim'in bütün ihraçları 7 Ekim valörlü. Ekim'in ihale ve kamuya satış hedefi 229,1'den 194,8 milyar TL'ye (−%15,0), doğrudan satış 180,0'dan 220,0'a. Kasım'da yeni 5 yıllık açılmıyor; Aralık'ta 16 aylık kuponsuz tahvil ilk kez ihraç ediliyor.
+
+NEDEN TEK HAFTA. Belge sebebini söylemiyor. 7 Ekim ödemesi 251,8 milyar TL, ayın iç borç servisinin %57,7'si; ihale ve doğrudan satış programı (400,8 milyar TL) o gün valörlü. 83 kesin aylık takvimde ayın son ihalesinin ilk yedi günde bittiği yalnız bir ay daha var; 6 Ekim'den sonraki ihaleye 34 gün.
+
+BORÇLANMANIN YARISI NEREDEN. Doğrudan satış 220,0 milyar TL: altın tahvili ve altına dayalı kira sertifikası (7 Ekim'de itfa olan Ekim 2024 ihraçlarının yerine), TLREFK'ye endeksli kira sertifikası, 1 yıllık ABD doları cinsi tahvil. 2026'nın ilk dokuz ayının ortalaması 201,1 milyar TL; istisna 20,0 ile Eylül'dü.
+
+VADE NE KADAR UZUYOR. Planda neredeyse hiç: aynı yöntemle Ekim +0,01 yıl (valörün yedi gün öne alınması), Kasım −0,18. İhalelerde çok: Temmuz 3,07, Ağustos 3,82, Eylül 4,49 yıl; Eylül için 31 Ağustos tahminimiz 3,85 yıldı.
+
+FAİZ RİSKİ. TLREF payı Temmuz'da %55,1, Ağustos'ta %29,2, Eylül'de %32,2; yeniden fiyatlama vadesi 1,01'den 2,78 ve 3,28 yıla. Planın aynı ay kıyasında kayma yok (Ekim 2,50 → 2,51 yıl); kayma ihale masasında.
+
+EYLÜL'DE NE OLDU. 15 Eylül'ün iki ihalesi hedefin kalanını, 117,9 milyar TL'yi tam sattı (ay %99,98). 5 ve 8 yıllık sabit kuponda rekabetçi teklifin %75,4 ve %73,5'i kabul edildi, 2025–2026'nın en yükseği; TLREF'teki %44,2 olağandı (medyan %43,4).
+
+KISA UÇ. Bono Eylül'den Aralık'a dört ay yok (arşivin en uzun bonosuz dönemi 12 ay). Aralık'taki 16 aylık kuponsuz (483 gün) arşivin en uzun kuponsuzu; beklenen satış 12,3 milyar TL, planın %3,4'ü.
+
+FAİZE ETKİSİ. Ekim'in ihale arzı iki günde: 5 Ekim'de 2 ve 5 yıllık sabit kupon, Eylül TÜFE'sinin açıklandığı gün; 6 Ekim'de TLREF ve 8 yıllık. Sonra 33 gün ihale yok, PPK (22 Ekim) o pencerede. Eylül'de eğrinin 3–7 yıl bölgesi 150–190 baz puan satıldı; arzın bunda payı ölçülmedi.
+
+KANITIN GÜCÜ. Güçlü: belge sayıları belgenin metninden, tarihsel karşılaştırmalar 83 belgeden, gerçekleşen vade ihale sonuçlarından. Orta: planlı vade ve TLREF payı kıyas tahminimize bağlı; Hazine kâğıt başına tutar yayımlamıyor. Zayıf: tek haftanın gerekçesi ve arzın fiyat etkisi.
+
+Kilit ölçümler — Ekim iç borçlanmasının doğrudan satış payı: %53,0 · 6 Ekim'den bir sonraki ihaleye: 34 gün · Ekim'in planlı vadesi (önceki takvim 3,97): 3,98 yıl · Eylül'ün gerçekleşen vadesi (Temmuz 3,07): 4,49 yıl · Eylül'ün TLREF payı (Temmuz %55,1): %32,2 · 15 Eylül'de 5 ve 8 yıllıktan satılan: 117,9 milyar TL · Aralık'taki kuponsuz tahvilin vadesi: 483 gün
+
+Analizdir; yatırım tavsiyesi değildir.
