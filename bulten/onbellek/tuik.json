@@ -1,5 +1,5 @@
 {
- "zaman": "2026-09-29T04:21:27",
+ "zaman": "2026-09-30T04:20:15",
  "veri": [
   {
    "tarih": "2026-09-30",
@@ -260,6 +260,32 @@
    "beklenti_sayi": null,
    "onceki": "",
    "not_": "Merkezi Yönetim Borç Stoku İstatistikleri (Merkezi Yönetim Borç Stoku Enstrüman Dağılımı, Döviz-Faiz Yapısı, Vadeye Kalan Ortalama Süre)"
+  },
+  {
+   "tarih": "2026-10-21",
+   "saat": "10:00",
+   "ulke": "TR",
+   "olay": "TCMB: Kapasite kullanımı (Ekim 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "İmalat Sanayi Kapasite Kullanım Oranı"
+  },
+  {
+   "tarih": "2026-10-21",
+   "saat": "10:00",
+   "ulke": "TR",
+   "olay": "TCMB: Reel kesim güveni (Ekim 2026)",
+   "onem": 2,
+   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
+   "kesinlik": "kesin",
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "onceki": "",
+   "not_": "İktisadi Yönelim İstatistikleri ve Reel Kesim Güven Endeksi"
   }
  ]
 }
