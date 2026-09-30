@@ -1558,13 +1558,26 @@ def main() -> int:
         # (1) PENCERE İKİ KAYNAKTAN AYNI ÇIKMALI. Günleri arşiv dosyasından,
         # pencereyi hattın ilanından almak tarihçede tutarsız hüküm üretir;
         # ikisinin ayrışması ayrıştırıcılardan birinin bozulduğu demektir.
+        #
+        # İLAN CANLI, ARŞİV GÜNÜ DONMUŞ OLAMAZ. İlk yazımda ilan (canlı
+        # `ozet.json`) 08.09'da yürürlükte olan arşivle kıyaslanıyordu; Hazine
+        # 30.09.2026'da Ekim–Aralık stratejisini yayımlayınca ilan kaydı, donmuş
+        # gün Eylül–Kasım'da kaldı ve kapı DÜŞTÜ — adımlardan önce koştuğu için
+        # veri hiç tazelenmedi (14.09 ve 16.09'da adıyla ölçülmüş sınıf). Soru
+        # takvime bağlı değil: hattın ilan ettiği strateji arşivde AYNI
+        # pencereyle duruyor mu. Başlık ile dosya adı iki ayrı yazımdır ve biri
+        # yanlış ayrıştırılırsa kümede karşılık bulunmaz. Arşivin günü sorulmaz:
+        # site kopyası bir koşu geride kalabilir (gerileme kapısı), eski
+        # strateji de arşivde durduğu için kapı yine geçer.
         ilan = itk.pencere_ilani()
+        if ilan:
+            arsivdekiler = {itk.pencere_adi(y.name) for y in itk.ARSIV.glob("*.csv")}
+            assert ilan in arsivdekiler, \
+                (f"hattın ilanı {ilan} arşivdeki hiçbir stratejinin penceresi "
+                 f"değil: {sorted(p for p in arsivdekiler if p)}")
         t = itk.yururlukteki(dt.date(2026, 9, 8))
         assert t is not None, "yürürlükteki strateji okunamadı — ölçüt kör"
         gunler, bas, son = t
-        if ilan:
-            assert (bas, son) == ilan, \
-                f"pencere dosya adından {bas}–{son}, hattın ilanından {ilan}"
 
         # (1b) İLAN KAYMAYAN NİTELİKTEN OKUNMALI. `plan_ay*_ad` ileride kalan
         # ayları sayar ve takvim ilerledikçe daralır; oradan kurulan bir ilan
