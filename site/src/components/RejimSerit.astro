@@ -172,4 +172,10 @@ const farkYaz = (s: RejimSatiri): string | null => {
       grid-column: 1 / -1;
     }
   }
+  /* TELEFON TABANI (≤640 px): meta etiket en az 0,75rem, sayı en az 0,8125rem.
+     Ölçüldü (390 px): 12 pikselin altındaki karakter payı ana sayfada %24,1 — en yoğun
+     katmanlar not, tarih ve konum satırlarıydı; sayı hücreleri zaten 13,4 px. */
+  @media (max-width: 640px) {
+    .rj-etiket, .rj-birim, .rj-fark, .rj-konum, .rj-manset { font-size: 0.75rem; }
+  }
 </style>

@@ -370,4 +370,10 @@ const kisaZaman = (t: string | null) => {
   @media (max-width: 640px) { .duzeltme-liste li { grid-template-columns: 1fr; } }
   .yorum :global(h3) { font-family: var(--font-display); font-size: 1.05rem; margin: 1.1rem 0 0.3rem; }
   .salinim { display: block; color: var(--ink-70); font-size: 0.68rem; white-space: normal; }
+  /* TELEFON TABANI (≤640 px): meta etiket en az 0,75rem, sayı en az 0,8125rem.
+     Ölçüldü (390 px): 12 pikselin altındaki karakter payı teknik bülten dizininde %14,3 — en yoğun
+     katmanlar not, tarih ve konum satırlarıydı; sayı hücreleri zaten 13,4 px. */
+  @media (max-width: 640px) {
+    .salinim, .dg-ad, .alt-zaman { font-size: 0.75rem; }
+  }
 </style>

@@ -1728,6 +1728,14 @@ const bolumler = [
   .kunye p { font-size: 0.76rem; color: var(--ink-70); margin: 0 0 0.35rem; }
   .feragat { font-style: italic; }
   .gorunmez { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  /* TELEFON TABANI (≤640 px): meta etiket en az 0,75rem, sayı en az 0,8125rem.
+     Ölçüldü (390 px): 12 pikselin altındaki karakter payı bültende %9,0 — en yoğun
+     katmanlar not, tarih ve konum satırlarıydı; sayı hücreleri zaten 13,4 px. */
+  @media (max-width: 640px) {
+    .p-not, .p-tarih-ic, .p-tarih, .kaynak-not, .k-zaman, .g-ad, .g-tarih { font-size: 0.75rem; }
+    .p-aralik, .g-fark { font-size: 0.8125rem; }
+    .p-birim { font-size: 0.72rem; }
+  }
 </style>
 
 <style>

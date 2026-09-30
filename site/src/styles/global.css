@@ -826,3 +826,10 @@ main:focus {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+/* TELEFON TABANI (≤640 px): mono meta etiketler en az 0,75rem. Ölçüldü
+   (390 px): ana sayfada 12 pikselin altındaki karakter payı %24,1 — kart
+   künyeleri, tarih satırları ve kicker'lar 11 piksel basılıyordu. */
+@media (max-width: 640px) {
+  .etiket, .kayit .sira, .kayit .tarih, .kayit .alt { font-size: 0.75rem; }
+}

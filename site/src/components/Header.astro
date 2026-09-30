@@ -20,19 +20,24 @@ const yol = Astro.url.pathname;
 const linkler = BOLUMLER.filter((b) => b.gezinme);
 const son = bultenler()[0];
 const sonTeknik = teknikler()[0];
+// Okur zaten o sayıdaysa "Son bülten" bağı bulunduğu sayfayı tekrar eder.
+const burada = (href: string) => yol.replace(/\/+$/, '') === href.replace(/\/+$/, '');
 ---
 
 <header class="masthead">
   <div class="sarici">
     <div class="dateline etiket">
-      <span data-bugun hidden></span>
-      <span class="orta">İstanbul</span>
+      {/* Saat dilimi tarihin YANINDA: ortada tek başına duran "İstanbul" hangi
+          bilgiye ait olduğunu söylemiyordu. */}
+      <span class="gun-yer"><span data-bugun hidden></span><span class="orta">İstanbul</span></span>
       {son ? (
         <span class="son-yayinlar">
-          <a class="son-bulten" href={son.href}>
-            {son.haftalik ? 'Son haftaya bakış' : 'Son bülten'} · {son.trTarih}
-          </a>
-          {sonTeknik && (
+          {!burada(son.href) && (
+            <a class="son-bulten" href={son.href}>
+              {son.haftalik ? 'Son haftaya bakış' : 'Son bülten'} · {son.trTarih}
+            </a>
+          )}
+          {sonTeknik && !burada(sonTeknik.href) && (
             <a class="son-bulten son-teknik" href={sonTeknik.href}>Son teknik · {sonTeknik.trTarih}</a>
           )}
         </span>
@@ -93,6 +98,7 @@ const sonTeknik = teknikler()[0];
   .dateline .orta {
     color: var(--claret);
   }
+  .gun-yer { display: inline-flex; gap: 0.7rem; }
   .son-bulten {
     text-decoration: none;
     color: var(--ink-70);
