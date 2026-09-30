@@ -3395,7 +3395,85 @@ anlatmıştı; anahtar manşet TÜFE'den kuruluyor (Enflasyon `baz_patikasi`:
 üstünde), ama yayımlanmış bir tanım yanlıştı ve düzeltme notuyla kayda geçti.
 Bir anahtarın adı onu ÜRETEN kodun okuduğu seriden okunur, anahtarın adından ya
 da önceki bir yazının cümlesinden değil. Aynı turda iki gün sayımı da tek
-sözleşmeye çekildi: gerçekleşen ve plan vadesi valörden itfaya gün/365; Hazine
-İhraç hattının vade defteri /365,25 kullanıyor ve 10.04.2023 TLREF ihalesini
-(vadesi boş) düşürüyor — AÇIK, hattın kendisinde düzeltilmedi; yazı kendi
-serisini ihale veri setinden kuruyor.
+sözleşmeye çekildi: gerçekleşen ve plan vadesi valörden itfaya gün/365. Hazine
+İhraç hattı aynı gün aynı sözleşmeye çekildi (aşağıda).
+
+**Kurucu ilke — BİR AYRIŞTIRICI, KAYNAĞIN BÜTÜN YAZIMLARINA KARŞI YENİDEN
+KOŞTURULMADAN DÜZELTİLMİŞ SAYILMAZ; ve "İŞLENDİ" DEFTERİ İŞ BİTMEDEN YAZILAMAZ.**
+30.09.2026'da Hazine İhraç panosunun iki bilinen kusuru düzeltilirken (vade
+gün/365,25; 10.04.2023 TLREF ihalesinin boş vadesi) ikincisinin sebebi TAHMİN
+EDİLMEDİ, ölçüldü: bütün sonuç duyuruları (286 PDF, 471 ihale) hattın KENDİ
+ayrıştırıcısıyla bulutta yeniden okundu ve depoyla alan alan kıyaslandı
+(`hazineihrac/kesif_valor.py`, keşif #23–#25). Tek boş hücrenin arkasından beş
+kusur çıktı. (1) Duyuru "İhraç (Valör ) Tarihi" diye boşlukla yazılmıştı (471'de
+1); kalıp boşluğu tanımıyordu, valör boş kaldı, vade hesaplanmadı ve Nisan 2023
+ortalaması 14,8 milyar TL'lik ihaleyi sessizce düşürüp 7,94 yıl yayımladı (doğrusu
+6,86). (2) 06.04.2020 duyurusu tarihleri "06/04/2020" yazıyordu; ihale tarihi
+okunamayınca iki satır "parse artığı" sayılıp atıldı. (3) Aynı dosya ve 21.01.2020
+duyurusu sayıları İNGİLİZCE biçimde yazıyordu ("7,602" binlik virgül, "87.460"
+ondalık nokta); Türkçe varsayımla okununca bono 1.999 milyon TL yerine 1,999 milyon
+TL, fiyatı 97,736 yerine 97.736 yayımlandı. Biçim artık blok başına FAİZ SATIRINDAN
+okunuyor (faizler her zaman iki ondalıklı), Türkçe yol birebir aynı. (4) 23.03.2021
+ve 13.12.2021 duyuruları "işlendi" defterinde vardı ama satırları YOKTU: kazıyıcı
+duyuruyu PDF'i okunmadan ÖNCE işlendi sayıyordu, o an düşen bir indirme ihaleyi
+kalıcı olarak kaybettiriyordu ve hiçbir koşu onu bir daha denemiyordu. Defter
+artık tarihli satır veren PDF'in duyurusunu yazar. Kural: bir "bitti" defteri
+işin SONUCUNDAN yazılır, BAŞLANGICINDAN değil — yoksa geçici bir arıza kalıcı bir
+veri kaybına döner ve kayıp, "zaten işlendi" diye kendini gizler. (5) Beşinci
+kusur ölçünün kendisindeydi: vade tablosunun üç aylık ortalaması YUVARLANMIŞ aylık
+ortalamalardan kuruluyordu ve vade projeksiyonu aynı büyüklüğü AYRI bir kodla,
+yine yuvarlanmış değerlerden kuruyordu; tek cetvele geçince ikisi ayrıştı (3,77 ·
+3,78). Tek tanım `main.aylik_vade_toplamlari` (Σ vade·tutar / Σ tutar, takvim ayı
+penceresi) ve iki tüketici de oradan okur; 81 ayın 81'inde birebir.
+
+Veri setine giren satırlar ayrıştırıcının kaynağın kendi duyurusundan okuduğu
+tam çıktıdır (keşif kaydında SATIR_JSON), her biri Toplam = ROT + İhale
+özdeşliğini iki tarafta tutturuyor ve kazıyıcının kendi birleştirme kuralıyla
+uygulandı; strateji belgesinden valör DOLDURULMADI — duyuru okunabildiği için
+birincil kaynak oydu (strateji takvimi aynı 1785 günü yazıyor, bağımsız teyit).
+Doğrulama keşfi (#25) bitişi ölçtü: depo 471 = kaynak 471, alan farkı 0, vade
+471'de gün/365. Yeniden koşturmanın kendi kapsamı da yazılı: 2019 sonundaki tek
+.docx duyuru okunamıyor ve veri seti 2020'de başladığı için kapsam dışı.
+
+İki yan bulgu. Canlı tahminin "benzer vade" hedefi takvimin YIL ETİKETİNDEN
+("5 Yıl") okunuyordu, backtest ise ihalenin kendi gün/365 vadesini kullanıyordu —
+yayımlanan isabet, canlı tahminin kuralını ölçmüyordu; hedef artık takvimin gün
+sayısından (`plan_vade_yil`) ve bugünkü takvimin 11 ihalesinin 11'inde sonuç
+değişmedi. Ve pano notunda "Temmuz 2026'da WAM 4,13'ten 3,07'ye indi" yazıyordu,
+seri Haziran 2,85 → Temmuz 3,07 diyordu: canlı bir sayfadaki STATİK bir sayı,
+verisi yenilendiği gün yanlışa döner. Yayımlanmış sayıların eski/yeni değerleri
+panonun düzeltme kaydına girdi (proje koleksiyonu artık analizle aynı düzeltme
+şemasını taşıyor, /duzeltmeler/ ikisini birlikte listeler). Hafif kip vade
+tablosunu artık ihale verisinden KURUYOR (eskiden yalnız tam kip yazıyordu ve üç
+hafif adım onu okuyordu — ölü bağımlılık ilkesinin bir eşi).
+
+Donmuş kopyaya karşı koşan beş mercekli inceleme, düzeltmenin KENDİSİNİN açtığı
+dört yolu buldu ve dördü de "düzeltme genelleştirilmeden tamamlanmaz"ın eşi.
+(a) Birikim önce git'e girmeyen EXCEL'den okunuyordu (bulutta yok, yerelde her
+tam koşu yazıyor): CSV'ye yapılan göç Excel'de yoktu ve yerel bir tam koşu onu
+sessizce geri alacaktı. Önce İZLENEN CSV; çıpa da aynı sırayla. (b) İşlendi
+defteri kazıma bitince, CSV'den ÖNCE kaydediliyordu ve main() her istisnayı
+yutup SIFIRLA çıkıyordu — arada düşen bir adım duyuruyu satırsız "işlendi"
+bırakır, guncelle.py hattı sağlam sayar, iş akışının geri alması hiç devreye
+girmezdi. Defter artık CSV yazıldıktan sonra, istisna çıkış 1. (c) İnceleme
+depoda kaynağın KENDİ hatasını buldu: 24.08.2020 duyurusu ikinci sayfadaki
+değişken faizli tahvilin (TRT050527T17) itfasını birinci sayfadaki tahvilin
+tarihiyle (24.07.2024) basıyor — ayrıştırıcı doğru okuyordu, keşif #26 sayfa
+metnini döktü. İki bağımsız teyit birlikte tuttuğu için düzeltildi: ISIN'in
+kendi vade kodu (GGAAYY) ve aynı tahvilin öbür beş ihalesi 05.05.2027 diyor;
+tek başına ISIN yetmez (`itfa_celiski_duzelt`, 471 satırda tek çelişki).
+Ağustos 2020 ortalaması 3,56 → 4,06 yıl, düzeltme kaydında. (d) Vade
+projeksiyonu, gerçekleşen ile planın ÇAKIŞTIĞI ayda (iki günlük ihale çiftinin
+arasında koşan tam kip) planın kalanını gerçekleşenin ÜSTÜNE yazıyordu; ayın
+değeri artık ikisinin toplamı, "gerçekleşen son 3 ay" yalnız gerçekleşenden.
+İnceleme bir kez de bu dosyaya yazılan bir sayıyı düşürdü: düzeltme kaydındaki
+"otuz üç ay" veri düzeltmesi olan ayları da sayıyordu (doğrusu 75 ayın 28'i,
+en çok 0,01 yıl). Dokuz yeni duman maddesinin dokuzu da arıza enjeksiyonuyla
+kendi maddesinde düşüyor. İki yan bulgu önceden vardı: pano tablosu vade
+tablosunun ISO tarihlerini (2023-04-01) `dayfirst=True` ile okuyup günü 12'yi
+aşmayan her ayda gün ile ayı yer değiştiriyordu (81 ayın 74'ü; tarih artık
+biçimiyle okunuyor), ve sayfa sınavının çıplak oynak sayı ölçütü ön bilgideki
+DÜZELTME KAYDINI düzyazı gibi tarıyordu — kaydın "yeni" değeri tanımı gereği
+bugünkü özete eşit olduğu için, düzeltme yapılan her TAM_SINAV panosu kendi
+düzeltmesi yüzünden yayını durdururdu (düzeltme bloğu artık taranmıyor, ön
+bilginin geri kalanı taranıyor; üç regresyon maddesi duman sınavında).

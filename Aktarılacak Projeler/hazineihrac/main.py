@@ -216,11 +216,164 @@ def _normalize_date_str(d: str) -> str:
         return d
 
 
+# =====================
+# VADE — TEK TANIM
+# =====================
+# Vade, valörden itfaya TAKVİM GÜNÜDÜR ve yıla 365 ile çevrilir. Strateji
+# belgesinin ihraç takvimi vadeyi "5 Yıl / 1785 Gün" diye gün olarak yazar ve
+# planın vadesi (vade_proj._vade_yil) o günden gün/365 okunur; gerçekleşen
+# taraf 365,25'e bölünseydi plan ile gerçekleşen İKİ AYRI CETVELLE ölçülürdü
+# (fark 10 yıllıkta 0,007 yıl — küçük ama bir kıyasın iki bacağı aynı cetveli
+# taşımalıdır). Sütun dört ondalıkla yazılır: bir günün yıl karşılığı 0,0027
+# olduğu için gün sayısı değerden birebir geri okunur ve ağırlıklı ortalama
+# yuvarlanmış vadelerden kurulmaz. Gösterim iki ondalık, saklama dört.
+VADE_GUN_YIL = 365
+VADE_ONDALIK = 4
+
+
+def vade_yil(valor, itfa) -> Optional[float]:
+    """Valörden itfaya gün / 365, dört ondalık. Tarih okunamazsa ya da itfa
+    valörden geri değilse None (ölçülemeyen vade boş kalır, uydurulmaz)."""
+    v = pd.to_datetime(valor, format='%d.%m.%Y', errors='coerce')
+    i = pd.to_datetime(itfa, format='%d.%m.%Y', errors='coerce')
+    if pd.isna(v) or pd.isna(i):
+        return None
+    gun = (i - v).days
+    if gun <= 0:
+        return None
+    return round(gun / VADE_GUN_YIL, VADE_ONDALIK)
+
+
+def plan_vade_yil(terim: str) -> Optional[float]:
+    """Takvimin vade terimi → yıl, AYNI cetvelle: '5Yıl /1673 Gün' → 1673/365.
+
+    Gün varsa gün kullanılır: '2Yıl /707 Gün' 1,94'tür, 2,00 değil — yeniden
+    ihraçta kalan vade yıl etiketinden kısadır. Takvimdeki gün sayısı valörden
+    itfaya gündür, yani bu değer `vade_yil(valör, itfa)` ile özdeştir. Gün
+    yazılmamışsa etiket (Yıl · Ay/12) — yalnız yedek. Tek tanım: vade_proj
+    buradan okur."""
+    s = str(terim)
+    # Takvim satırını yakalayan kalıp (ISSUANCE_ROW_RE) büyük/küçük harfe
+    # duyarsız; bu kalıp da öyle olmalı — "707 gün" sessizce etikete düşmesin.
+    m = re.search(r"/\s*(\d[\d.]*)\s*gün", s, re.IGNORECASE)
+    if m:
+        gun = int(m.group(1).replace('.', ''))
+        return round(gun / VADE_GUN_YIL, VADE_ONDALIK) if gun > 0 else None
+    if re.search(r"gün", s, re.IGNORECASE):
+        logger.warning(f"Vade teriminde gün sayısı okunamadı, etikete düşülüyor: {s!r}")
+    m = re.match(r"\s*(\d+)\s*yıl", s, re.IGNORECASE)
+    if m:
+        return float(m.group(1))
+    m = re.match(r"\s*(\d+)\s*ay", s, re.IGNORECASE)
+    return float(m.group(1)) / 12.0 if m else None
+
+
+def aylik_vade_toplamlari(df: pd.DataFrame) -> pd.DataFrame:
+    """Ay başına Σ vade·tutar (vw), Σ tutar (w) ve ihale sayısı (n) — YUVARLANMADAN.
+
+    Ağırlıklı ortalama vadenin TEK tanımı: aylık değer vw/w, üç aylık değer üç
+    takvim ayının Σvw/Σw'si. Vade tablosu (calculate_weighted_average_maturity)
+    ve vade projeksiyonu (vade_proj) ikisi de buradan okur; ayrı kurulduklarında
+    biri yuvarlanmış aylık ortalamalardan hesaplıyordu ve aynı büyüklük panonun
+    iki yerinde iki ayrı sayı çıkıyordu (30.09.2026: 3,77 · 3,78). Vadesi ya da
+    tutarı ölçülemeyen satır girmez; tutarı sıfır satır sayılır, ağırlık taşımaz.
+    Dizin: aylık Period."""
+    d = vade_normalize(df)
+    d['_d'] = pd.to_datetime(d['İhale Tarihi'], format='%d.%m.%Y', errors='coerce')
+    d['_w'] = pd.to_numeric(d['Toplam(Gerçekleşme)'], errors='coerce')
+    d = d.dropna(subset=['_d', 'Vade (Yıl)', '_w'])
+    d['_ay'] = d['_d'].dt.to_period('M')
+    d['_vw'] = d['Vade (Yıl)'] * d['_w']
+    t = (d.groupby('_ay').agg(vw=('_vw', 'sum'), w=('_w', 'sum'), n=('_w', 'size'))
+         .sort_index())
+    return t[t['w'] > 0]
+
+
+def isin_vadesi(isin) -> Optional[str]:
+    """DİBS ISIN'i vadeyi GGAAYY olarak taşır: TRT050527T17 → '05.05.2027'."""
+    m = re.match(r'TR[A-Z](\d{2})(\d{2})(\d{2})', str(isin or ''))
+    if not m:
+        return None
+    g = f"{m.group(1)}.{m.group(2)}.20{m.group(3)}"
+    return g if pd.notna(pd.to_datetime(g, format='%d.%m.%Y', errors='coerce')) else None
+
+
+def itfa_celiski_duzelt(df: pd.DataFrame) -> pd.DataFrame:
+    """İtfa tarihi ISIN'in taşıdığı vadeyle çelişen satırı KAYNAĞIN KENDİ
+    verisiyle düzeltir — tahmin etmez.
+
+    24.08.2020 duyurusu (iki sayfa, iki tahvil) ikinci sayfadaki değişken
+    faizli TRT050527T17 için de birinci sayfadaki tahvilin itfasını (24.07.2024)
+    yazıyor; ayrıştırıcı duyuruyu DOĞRU okuyordu, hata duyurunun kendisinde.
+    O satırın vadesi 3,91 yerine 6,69 yıl çıkıyor ve Ağustos 2020 ortalamasını
+    0,50 yıl aşağı çekiyordu. İki bağımsız kaynak aynı cevabı veriyor: ISIN
+    kodunun kendisi (050527) ve aynı tahvilin öbür ihaleleri. Kural bu yüzden
+    ikisinin BİRLİKTE tuttuğu hâlle sınırlı: itfa ISIN'le çelişiyor VE aynı
+    ISIN'in en az bir başka ihalesi var VE o ihalelerin hepsinin itfası ISIN'in
+    vadesine eşit → o itfa yazılır ve satır adıyla uyarılır. Aksi hâlde satıra
+    dokunulmaz, yalnız uyarılır (ölçülemeyen boş bırakılmaz, ama uydurulmaz da).
+    """
+    if df is None or df.empty or not {'ISIN', 'İtfa Tarihi'} <= set(df.columns):
+        return df
+    df = df.copy()
+    beklenen = df['ISIN'].map(isin_vadesi)
+    itfa = df['İtfa Tarihi'].astype(str).str.strip()
+    celisen = beklenen.notna() & (itfa != beklenen)
+    for i in df.index[celisen]:
+        isin, dogru = df.at[i, 'ISIN'], beklenen.at[i]
+        kardes = df[(df['ISIN'] == isin) & (df.index != i)]
+        tutan = kardes['İtfa Tarihi'].astype(str).str.strip() == dogru
+        ihale = df.at[i, 'İhale Tarihi'] if 'İhale Tarihi' in df.columns else '?'
+        if len(kardes) and tutan.all():
+            logger.warning(f"İtfa ISIN'le çelişiyordu ve düzeltildi — {isin} {ihale}: "
+                           f"duyuru {itfa.at[i]} yazıyor, ISIN kodu ve aynı tahvilin "
+                           f"{len(kardes)} başka ihalesi {dogru}")
+            df.at[i, 'İtfa Tarihi'] = dogru
+        else:
+            logger.warning(f"İtfa ISIN'le çelişiyor, kaynak teyidi yok, DOKUNULMADI — "
+                           f"{isin} {ihale}: {itfa.at[i]} ↔ ISIN {dogru}")
+    return df
+
+
+def vade_normalize(df: pd.DataFrame) -> pd.DataFrame:
+    """Birikmiş ihale tablosunu TEK vade tanımına çeker.
+
+    Önce itfa tarihi ISIN'in taşıdığı vadeyle sınanır (`itfa_celiski_duzelt`),
+    sonra 'Vade (Yıl)' sütunu BÜTÜN satırlarda tarihlerden yeniden kurulur. Sütun
+    türetilmiş bir alandır, kaynağı tarihlerdir: eski bir koşunun başka
+    konvansiyonla yazdığı değer birikimde kalamaz — artımlı tarama eski
+    duyuruları bir daha okumadığı için yalnız ayrıştırıcıyı düzeltmek geçmiş
+    satırları eski cetvelde bırakırdı. Tarihi okunamayan satırın vadesi BOŞ
+    kalır ve adıyla uyarılır; hiçbir tarih başka bir kaynaktan tahmin edilmez.
+    Ağa çıkmaz; `duman.py` gerçek çerçeveyle çağırır.
+    """
+    if df is None or df.empty or 'Valör Tarihi' not in df.columns:
+        return df
+    df = itfa_celiski_duzelt(df)
+    eski = pd.to_numeric(df.get('Vade (Yıl)'), errors='coerce') if 'Vade (Yıl)' in df.columns else None
+    df['Vade (Yıl)'] = [vade_yil(v, i) for v, i in zip(df['Valör Tarihi'], df['İtfa Tarihi'])]
+    df['Vade (Yıl)'] = pd.to_numeric(df['Vade (Yıl)'], errors='coerce')
+    if eski is not None:
+        yeni = df['Vade (Yıl)']
+        ayni = ((eski - yeni).abs() < 1e-9) | (eski.isna() & yeni.isna())
+        degisen = int((~ayni).sum())
+        if degisen:
+            logger.info(f"Vade tek tanıma çekildi (gün/{VADE_GUN_YIL}): {degisen} satır yeniden yazıldı")
+    bos = int(df['Vade (Yıl)'].isna().sum())
+    if bos:
+        logger.warning(f"Vadesi ölçülemeyen {bos} satır (valör ya da itfa okunamadı) — "
+                       f"ağırlıklı ortalama vade bu satırları taşımaz")
+    return df
+
+
 def birikmis_son_ihale(klasor: Optional[str] = None) -> Optional[pd.Timestamp]:
     """Depoda birikmiş verideki EN YENİ ihale tarihi — artımlı taramanın ÇIPASI.
 
-    Önce Excel, YOKSA CSV. Sıra kasıtlı: Excel yerelde daha zengin (ham sayfa),
-    CSV ise depoda İZLENEN sürümdür.
+    Önce İZLENEN CSV, YOKSA Excel. Sıra 30.09.2026'da tersine çevrildi: Excel
+    .gitignore'da ve yalnız o makinenin son tam koşusunu taşıyor; CSV'ye yapılan
+    bir düzeltme (o gün beş kayıp ihale, iki satır, bir valör) Excel'de yoktu
+    ve Excel önce okunduğu için yerel bir tam koşu düzeltmeyi sessizce geri
+    alacaktı. Depoda duran sürüm CSV'dir; Excel yalnız CSV yoksa yedektir.
 
     Kusurun ölçülmüş hâli (09.09.2026): çıpa yalnız `EXCEL_OUTPUT`'tan
     okunuyordu ve o dosya .gitignore'da — yani BULUTTA taze checkout'ta hiç yok.
@@ -241,10 +394,10 @@ def birikmis_son_ihale(klasor: Optional[str] = None) -> Optional[pd.Timestamp]:
     Ağa çıkmaz; `duman.py` gerçek çerçeveyle çağırır.
     """
     kok = klasor or os.getcwd()
-    for yol, oku in ((os.path.join(kok, EXCEL_OUTPUT),
-                      lambda f: pd.read_excel(f, sheet_name='İhale Verileri')),
-                     (os.path.join(kok, CSV_OUTPUT),
-                      lambda f: pd.read_csv(f, encoding='utf-8-sig'))):
+    for yol, oku in ((os.path.join(kok, CSV_OUTPUT),
+                      lambda f: pd.read_csv(f, encoding='utf-8-sig')),
+                     (os.path.join(kok, EXCEL_OUTPUT),
+                      lambda f: pd.read_excel(f, sheet_name='İhale Verileri'))):
         if not os.path.exists(yol):
             continue
         try:
@@ -904,37 +1057,84 @@ class TreasuryAuctionScraper:
         
         return auction_data
 
+    # İhale sonucu duyurusunun YAZIMI tek biçim değildir; 30.09.2026'da bütün
+    # sonuç duyuruları (286 PDF, 471 ihale) hattın bu ayrıştırıcısıyla yeniden
+    # okundu (kesif_valor.py) ve üç sapma ölçüldü:
+    #   · "İhraç (Valör ) Tarihi" — parantezden önce boşluk (10.04.2023 TLREF).
+    #     Eski kalıp boşluğu tanımıyordu; valör boş kaldı, vade hesaplanmadı ve
+    #     ağırlıklı ortalama vade o ihaleyi SESSİZCE düşürdü.
+    #   · tarihler "06/04/2020" biçiminde — ihale tarihi okunamayınca satır
+    #     "parse artığı" sayılıp atıldı: iki ihale veri setine HİÇ girmedi.
+    #   · sayılar İngilizce biçimde ("5,801" binlik virgül, "87.460" ondalık
+    #     nokta). Türkçe varsayımla okununca tutar bin kat küçük, fiyat bin kat
+    #     büyük çıkıyordu (21.01.2020 bonosu: 1.999 milyon TL yerine 1,999).
+    # Biçim BLOK BAŞINA faiz satırından okunur: faizler duyuruda her zaman iki
+    # ondalıklıdır ("gösterimsel olarak 2 haneye yuvarlanmıştır"), yani
+    # "13,93" Türkçe, "12.22" İngilizce biçimdir. Türkçe yolu eskisiyle birebir.
+    _TARIH = r'(\d{2}[./]\d{2}[./]\d{4})'
+    # Faiz satırı: "Ortalama Yıllık Basit : 13,93 13,62". Satırın İLK iki
+    # ondalıklı sayısı aranır, işaret ve '-' dahil: TÜFE'ye endeksli tahvilde
+    # reel faiz eksi olabilir ya da Teklif sütunu '-' taşıyabilir; ikisi de
+    # biçimi söyleyen sayıyı kaçırmamalı. Üç ondalıklı fiyatlar (90,773)
+    # eşleşmez.
+    _FAIZ_SATIR_RX = re.compile(r'Yıllık\s+(?:Basit|Bileşik)\s*:([^\n]*)', re.IGNORECASE)
+    _FAIZ_SAYI_RX = re.compile(r'(?<![\d.,])[-−]?\d+([.,])\d{2}(?![\d.,])')
+
+    @classmethod
+    def _sayi_bicimi(cls, block_text: str) -> str:
+        """Bloğun ondalık ayracı: ',' (Türkçe) ya da '.' (İngilizce). Faiz
+        satırı yoksa Türkçe varsayılır (eski davranış); faiz satırı olduğu
+        hâlde biçim çözülemezse varsayılan ADIYLA yazılır."""
+        satirlar = cls._FAIZ_SATIR_RX.findall(block_text or '')
+        for sat in satirlar:
+            m = cls._FAIZ_SAYI_RX.search(sat)
+            if m:
+                return m.group(1)
+        if satirlar:
+            logger.warning("Faiz satırı var ama sayı biçimi çözülemedi — Türkçe varsayıldı: "
+                           f"{satirlar[0][:60]!r}")
+        return ','
+
+    @staticmethod
+    def _sayi_metni(token: str, ondalik: str) -> str:
+        """Duyurudaki sayı sözcüğü → '.' ondalıklı, binliksiz metin. '-' gibi
+        sayı olmayan sözcük olduğu gibi döner (sonra sayıya çevrilirken boşalır)."""
+        if ondalik == ',':
+            return token.replace('.', '').replace(',', '.')
+        return token.replace(',', '')
+
     def _extract_auction_details(self, block_text: str, auction_data: Dict):
         """Blok metinden ihale detaylarını çıkarır"""
         patterns = {
             'Senet Tanımı': r'Senet Tanımı\s*:\s*(.+?)(?:Ortalama|$)',
-            'İhale Tarihi': r'İhale Tarihi\s*:\s*(\d{2}\.\d{2}\.\d{4})',
-            'Valör Tarihi': r'(?:İhraç|Valör)\s*\(?Valör\)?\s*Tarihi\s*:\s*(\d{2}\.\d{2}\.\d{4})',
-            'İtfa Tarihi': r'(?:Vade|İtfa)\s*Tarihi\s*:\s*(\d{2}\.\d{2}\.\d{4})'
+            'İhale Tarihi': r'İhale Tarihi\s*:\s*' + self._TARIH,
+            'Valör Tarihi': r'(?:İhraç|Valör)\s*\(?\s*Valör\s*\)?\s*Tarihi\s*:\s*' + self._TARIH,
+            'İtfa Tarihi': r'(?:Vade|İtfa)\s*Tarihi\s*:\s*' + self._TARIH,
         }
-        
+
         for field, pattern in patterns.items():
             match = re.search(pattern, block_text, re.IGNORECASE | re.DOTALL)
             if match:
                 value = match.group(1).strip().replace('\n', ' ')
                 if field == 'Senet Tanımı':
                     value = re.sub(r'(Ortalama|En Düşük|En Yüksek).*', '', value).strip()
+                else:
+                    value = value.replace('/', '.')
                 auction_data[field] = value
         
-        # Vade hesaplama
-        if auction_data.get('Valör Tarihi') and auction_data.get('İtfa Tarihi'):
-            try:
-                valor_date = pd.to_datetime(auction_data['Valör Tarihi'], format='%d.%m.%Y')
-                maturity_date = pd.to_datetime(auction_data['İtfa Tarihi'], format='%d.%m.%Y')
-                days_diff = (maturity_date - valor_date).days
-                auction_data['Vade (Yıl)'] = round(days_diff / 365.25, 2)
-            except:
-                auction_data['Vade (Yıl)'] = ''
+        # Vade — tek tanım (`vade_yil`: gün/365); okunamazsa boş kalır ve
+        # birleşimdeki `vade_normalize` kaynaklı düzeltmeyi dener.
+        v = vade_yil(auction_data.get('Valör Tarihi'), auction_data.get('İtfa Tarihi'))
+        auction_data['Vade (Yıl)'] = v if v is not None else ''
         
         self._extract_numeric_values(block_text, auction_data)
 
     def _extract_numeric_values(self, block_text: str, auction_data: Dict):
-        """Blok metinden sayısal değerleri çıkarır"""
+        """Blok metinden sayısal değerleri çıkarır. Tutar ve fiyatlar bloğun
+        KENDİ sayı biçimiyle okunur (`_sayi_bicimi`); faizler iki biçimde de
+        yalnız ondalık taşıdığı için virgül → nokta yeterlidir."""
+        ondalik = self._sayi_bicimi(block_text)
+        sayi = lambda t: self._sayi_metni(t, ondalik)  # noqa: E731
         miktar_section = re.search(
             r'Miktar \(Net, Milyon TL\)(.*?)(?:Faiz Oranları|Fiyatlar|İhraç Sonrası|$)', 
             block_text, re.DOTALL | re.IGNORECASE
@@ -946,21 +1146,21 @@ class TreasuryAuctionScraper:
             # ROT değerleri
             rot_match = re.search(r'ROT\s*:\s*([\d.,-]+)\s+([\d.,-]+)', miktar_text)
             if rot_match:
-                auction_data['ROT Toplam(Teklif)'] = rot_match.group(1).replace('.', '').replace(',', '.')
-                auction_data['ROT Toplam(Gerçekleşme)'] = rot_match.group(2).replace('.', '').replace(',', '.')
+                auction_data['ROT Toplam(Teklif)'] = sayi(rot_match.group(1))
+                auction_data['ROT Toplam(Gerçekleşme)'] = sayi(rot_match.group(2))
             
             # ROT Kamu değerleri
             rot_kamu_match = re.search(r'Kamu Kurumları\s*:\s*([\d.,-]+)\s+([\d.,-]+)', miktar_text)
             if rot_kamu_match:
-                auction_data['ROT Kamu(Teklif)'] = rot_kamu_match.group(1).replace('.', '').replace(',', '.')
-                auction_data['ROT Kamu(Gerçekleşme)'] = rot_kamu_match.group(2).replace('.', '').replace(',', '.')
+                auction_data['ROT Kamu(Teklif)'] = sayi(rot_kamu_match.group(1))
+                auction_data['ROT Kamu(Gerçekleşme)'] = sayi(rot_kamu_match.group(2))
             
             # ROT Piyasa Yapıcılar
             rot_piyasa_pattern = r'(?:ROT.*?)?Piyasa Yapıcılar\s*:\s*([\d.,-]+)\s+([\d.,-]+)'
             rot_piyasa_matches = re.findall(rot_piyasa_pattern, miktar_text)
             if rot_piyasa_matches:
-                auction_data['ROT Piyasa Yapıcılar(Teklif)'] = rot_piyasa_matches[0][0].replace('.', '').replace(',', '.')
-                auction_data['ROT Piyasa Yapıcılar(Gerçekleşme)'] = rot_piyasa_matches[0][1].replace('.', '').replace(',', '.')
+                auction_data['ROT Piyasa Yapıcılar(Teklif)'] = sayi(rot_piyasa_matches[0][0])
+                auction_data['ROT Piyasa Yapıcılar(Gerçekleşme)'] = sayi(rot_piyasa_matches[0][1])
                 try:
                     teklif = float(auction_data['ROT Piyasa Yapıcılar(Teklif)'])
                     gerceklesme = float(auction_data['ROT Piyasa Yapıcılar(Gerçekleşme)'])
@@ -972,8 +1172,8 @@ class TreasuryAuctionScraper:
             # İhale değerleri
             ihale_match = re.search(r'İhale\s*:\s*([\d.,-]+)\s+([\d.,-]+)', miktar_text)
             if ihale_match:
-                auction_data['İhale(Teklif)'] = ihale_match.group(1).replace('.', '').replace(',', '.')
-                auction_data['İhale(Gerçekleşme)'] = ihale_match.group(2).replace('.', '').replace(',', '.')
+                auction_data['İhale(Teklif)'] = sayi(ihale_match.group(1))
+                auction_data['İhale(Gerçekleşme)'] = sayi(ihale_match.group(2))
                 try:
                     teklif = float(auction_data['İhale(Teklif)'])
                     gerceklesme = float(auction_data['İhale(Gerçekleşme)'])
@@ -985,8 +1185,8 @@ class TreasuryAuctionScraper:
             # Toplam değerleri
             toplam_match = re.search(r'Toplam\s*:\s*([\d.,-]+)\s+([\d.,-]+)', miktar_text)
             if toplam_match:
-                auction_data['Toplam(Teklif)'] = toplam_match.group(1).replace('.', '').replace(',', '.')
-                auction_data['Toplam(Gerçekleşme)'] = toplam_match.group(2).replace('.', '').replace(',', '.')
+                auction_data['Toplam(Teklif)'] = sayi(toplam_match.group(1))
+                auction_data['Toplam(Gerçekleşme)'] = sayi(toplam_match.group(2))
         
         # Faiz oranları
         faiz_patterns = {
@@ -1012,8 +1212,8 @@ class TreasuryAuctionScraper:
         for field_base, pattern in fiyat_patterns.items():
             match = re.search(pattern, block_text, re.IGNORECASE)
             if match:
-                auction_data[f'{field_base}(Teklif)'] = match.group(1).replace('.', '').replace(',', '.')
-                auction_data[f'{field_base}(Gerçekleşme)'] = match.group(2).replace('.', '').replace(',', '.')
+                auction_data[f'{field_base}(Teklif)'] = sayi(match.group(1))
+                auction_data[f'{field_base}(Gerçekleşme)'] = sayi(match.group(2))
 
     def extract_strategy_data(self, pdf_url: str) -> Dict[str, float]:
         """
@@ -1217,13 +1417,27 @@ class TreasuryAuctionScraper:
             logger.error(f"Strateji PDF'si işlenirken hata: {str(e)}")
             return {}
 
+    @staticmethod
+    def gecerli_satir_sayisi(rows: List[Dict]) -> int:
+        """Bir PDF'in verdiği satırlardan İHALE TARİHİ okunabilenlerin sayısı.
+        Duyuru ancak bu sayı sıfırdan büyükse işlendi sayılır (bkz.
+        scrape_all_auctions); tarihsiz satır birleşimde zaten atılıyor."""
+        return sum(1 for r in rows
+                   if pd.notna(pd.to_datetime(r.get('İhale Tarihi'), format='%d.%m.%Y', errors='coerce')))
+
     def _process_pdf_batch_parallel(self, pdf_urls: List[str]) -> List[Dict]:
         """
         PDF'leri paralel olarak işler (ThreadPoolExecutor ile)
-        
-        Bu metot, performans için kritik - birden fazla PDF'i aynı anda indirir ve parse eder
+
+        Bu metot, performans için kritik - birden fazla PDF'i aynı anda indirir ve parse eder.
+        Her PDF'in geçerli satır sayısı `self.pdf_gecerli`ye yazılır: indirilemeyen
+        ya da tarihi okunamayan PDF 0 alır ve duyurusu işlendi SAYILMAZ.
         """
         all_auction_data = []
+        self.pdf_gecerli = {url: 0 for url in pdf_urls}
+
+        def _say(url, rows):
+            self.pdf_gecerli[url] = self.pdf_gecerli.get(url, 0) + self.gecerli_satir_sayisi(rows)
         
         if USE_ASYNC:
             # Async versiyon (en hızlı)
@@ -1246,15 +1460,20 @@ class TreasuryAuctionScraper:
                         try:
                             result = future.result()
                             all_auction_data.extend(result)
+                            _say(url, result)
                             logger.info(f"✓ {url} işlendi: {len(result)} ihale")
                         except Exception as e:
                             logger.error(f"PDF parse hatası ({url}): {str(e)}")
-                            
+
             except Exception as e:
                 logger.error(f"Async indirme hatası: {str(e)}")
                 # Fallback: senkron işleme
+                all_auction_data = []
+                self.pdf_gecerli = {url: 0 for url in pdf_urls}
                 for url in pdf_urls:
-                    all_auction_data.extend(self.extract_data_from_pdf_sync(url))
+                    result = self.extract_data_from_pdf_sync(url)
+                    all_auction_data.extend(result)
+                    _say(url, result)
         else:
             # Thread pool versiyon
             logger.info(f"ThreadPool ile {len(pdf_urls)} PDF işleniyor...")
@@ -1266,6 +1485,7 @@ class TreasuryAuctionScraper:
                     try:
                         result = future.result()
                         all_auction_data.extend(result)
+                        _say(url, result)
                         logger.info(f"✓ {url} işlendi: {len(result)} ihale")
                     except Exception as e:
                         logger.error(f"PDF işleme hatası ({url}): {str(e)}")
@@ -1634,9 +1854,11 @@ class TreasuryAuctionScraper:
             empty['Kıyas Bazı'] = 'Doğrudan satış — ihale tahmini yok'
             return empty
 
-        ym = re.match(r'(\d+)\s*Yıl', item['vade_terimi'])
-        mm = re.match(r'(\d+)\s*Ay', item['vade_terimi'])
-        target_years = float(ym.group(1)) if ym else (float(mm.group(1)) / 12 if mm else None)
+        # Kıyasın "benzer vade" penceresi geçmişin vadesini (valörden itfaya
+        # gün/365) hedefle kıyaslar; hedef de AYNI cetvelden okunur — takvimin
+        # gün sayısından. Etiket ("5 Yıl") kullanılsaydı canlı tahmin, backtest'in
+        # sınadığı kuraldan (hedef = ihalenin kendi gün/365 vadesi) ayrışırdı.
+        target_years = plan_vade_yil(item['vade_terimi'])
 
         res = self._forecast_from_comparables(item['senet_tanimi'], item['itfa_tarihi'],
                                               target_years, hist, yeniden=yeniden)
@@ -1822,6 +2044,13 @@ class TreasuryAuctionScraper:
         valid = pd.to_datetime(df['İhale Tarihi'], format='%d.%m.%Y', errors='coerce').notna()
         dropped = int((~valid).sum())
         if dropped:
+            # Tutar taşıyan tarihsiz satır bir artık DEĞİL, okunamamış bir
+            # ihaledir ("06/04/2020" vakası): sessizce atılmaz, adıyla uyarılır.
+            tutar = pd.to_numeric(df.get('Toplam(Gerçekleşme)'), errors='coerce') if 'Toplam(Gerçekleşme)' in df.columns else None
+            ihale = (~valid) & (tutar.fillna(0) > 0) if tutar is not None else (~valid) & False
+            if ihale.any():
+                logger.warning(f"Tarihi okunamayan {int(ihale.sum())} İHALE satırı atıldı (tutar taşıyor): "
+                               f"{', '.join(df.loc[ihale, 'ISIN'].astype(str))}")
             logger.info(f"Geçersiz tarihli {dropped} satır temizlendi (parse artığı)")
         return df[valid].reset_index(drop=True)
 
@@ -1836,7 +2065,8 @@ class TreasuryAuctionScraper:
         """
         existing_isins = set()
         existing_df = None
-        # BİRİKMİŞ GEÇMİŞ: önce Excel, YOKSA CSV.
+        # BİRİKMİŞ GEÇMİŞ: önce İZLENEN CSV, YOKSA Excel (sıra 30.09.2026'da
+        # çevrildi — gerekçe birikmis_son_ihale'de).
         #
         # Excel .gitignore'da — depo yalnız CSV'yi taşıyor. Yerelde Excel hep
         # elde olduğu için bu hiç görünmedi; BULUTTA ise taze checkout'ta Excel
@@ -1849,8 +2079,8 @@ class TreasuryAuctionScraper:
         # Yani kusur artımlı taramada değil, birikimin YANLIŞ DOSYADAN
         # okunmasındaydı: depoda duran sürüm CSV'dir, doğrusu odur.
         if not FORCE_ALL_FETCH:
-            for yol, oku in ((EXCEL_OUTPUT, lambda f: pd.read_excel(f, sheet_name='İhale Verileri')),
-                             (CSV_OUTPUT, lambda f: pd.read_csv(f, encoding='utf-8-sig'))):
+            for yol, oku in ((CSV_OUTPUT, lambda f: pd.read_csv(f, encoding='utf-8-sig')),
+                             (EXCEL_OUTPUT, lambda f: pd.read_excel(f, sheet_name='İhale Verileri'))):
                 if not os.path.exists(yol):
                     continue
                 try:
@@ -1871,6 +2101,10 @@ class TreasuryAuctionScraper:
 
         all_auction_data = []
         comparison_df = pd.DataFrame()
+        # try'ın başında bir istisna olursa (ör. API beklenmeyen biçim döndürürse)
+        # aşağıdaki "yeni veri yok" dalı bu adı okur; atanmamış kalırsa
+        # UnboundLocalError hattı sessizce düşürüyordu.
+        strategy_data: Dict[str, float] = {}
 
         try:
             logger.info("İhale verisi çekme işlemi başlatılıyor...")
@@ -1896,7 +2130,7 @@ class TreasuryAuctionScraper:
                     # Duyuru gelmemesi hedef tablosunu geçersiz kılmaz: elde olan
                     # tablo (bir önceki koşunun çıktısı) olduğu gibi döner.
                     logger.info("Mevcut veriler kullanılacak (hedef tablosu diskten).")
-                    return existing_df, self._mevcut_karsilastirma()
+                    return vade_normalize(existing_df), self._mevcut_karsilastirma()
                 return pd.DataFrame(columns=self.fields), pd.DataFrame()
 
             # Cache'deki URL'leri filtrele (inkremental mod)
@@ -2012,10 +2246,19 @@ class TreasuryAuctionScraper:
 
             # PDF linkleri zaten API içeriğinden geldi — doğrudan topla
             # (artık duyuru başına ayrı sayfa ziyareti / Selenium gerekmiyor)
-            pdf_urls_to_process = []
-            for announcement_url, pdf_url in auction_items:
-                pdf_urls_to_process.append(pdf_url)
-                self.processed_urls.add(announcement_url)
+            #
+            # DUYURU, PDF'İ OKUNMADAN İŞLENDİ SAYILMAZ. Eskiden defter PDF
+            # indirilmeden ÖNCE yazılıyordu: indirme o an düşse ya da tarih
+            # okunamasa duyuru bir daha hiç denenmiyor, ihale veri setine
+            # kalıcı olarak girmiyordu. 30.09.2026'da bütün sonuç duyuruları
+            # yeniden okununca beş ihalenin böyle kaybolduğu ölçüldü (23.03.2021
+            # ×2, 13.12.2021 — defterde var, satırı yok; 06.04.2020 ×2 — tarih
+            # "06/04/2020" yazıldığı için okunamamış). Defter artık geçerli
+            # satır veren PDF'in duyurusunu yazar; gerisi, erken durma
+            # penceresinde (taramanın geri döndüğü son sayfalar) kaldıkça
+            # sıradaki tam koşularda yeniden denenir — pencereden çıkan eski bir
+            # duyuru bir daha toplanmaz, bu yüzden uyarı ADIYLA yazılır.
+            pdf_urls_to_process = [pdf_url for _, pdf_url in auction_items]
 
             # PDF'leri paralel olarak işle
             if pdf_urls_to_process:
@@ -2024,6 +2267,13 @@ class TreasuryAuctionScraper:
                 logger.info(f"{'='*60}")
 
                 all_auction_data = self._process_pdf_batch_parallel(pdf_urls_to_process)
+                for announcement_url, pdf_url in auction_items:
+                    if self.pdf_gecerli.get(pdf_url, 0) > 0:
+                        self.processed_urls.add(announcement_url)
+                    else:
+                        logger.warning(f"Duyuru işlendi SAYILMADI (PDF'ten tarihli ihale satırı "
+                                       f"okunamadı) — erken durma penceresinde kaldıkça sıradaki "
+                                       f"tam koşularda yeniden denenir: {announcement_url}")
 
                 # ISIN+Tarih kontrolü (mevcut verilerle çakışmayı önle)
                 # NOT: Sadece ISIN kontrolü yanlış, çünkü aynı ISIN farklı tarihlerde tekrar ihraç edilebilir (ROT)
@@ -2040,8 +2290,12 @@ class TreasuryAuctionScraper:
                     if skipped > 0:
                         logger.info(f"ISIN+Tarih dedup: {skipped} mevcut kayıt atlandı")
 
-            # URL cache'i kaydet
-            self._save_url_cache()
+            # DEFTER BURADA DİSKE YAZILMAZ. Veri CSV'ye main()'de, bu fonksiyon
+            # döndükten ve grafik/takvim/backtest adımlarından SONRA yazılıyor;
+            # defter burada kaydedilseydi aradaki bir istisna (ya da küçülme
+            # kapısının yazmayı reddetmesi) duyuruyu satırı olmadan "işlendi"
+            # bırakırdı — kaybın kendini gizleyen biçimi. Kayıt main()'de,
+            # CSV yazıldıktan sonra.
 
             elapsed = time.time() - start_time
             logger.info(f"\nToplam süre: {elapsed:.1f} saniye")
@@ -2076,8 +2330,9 @@ class TreasuryAuctionScraper:
                 logger.info(f"✓ Toplam {len(df)} ihale verisi çekildi")
                 logger.info(f"{'='*60}")
 
-            # Geçersiz tarihli parse artıklarını temizle
-            df = self._drop_invalid_date_rows(df)
+            # Geçersiz tarihli parse artıklarını temizle; vade TEK tanıma çekilir
+            # (birikimin eski satırları dahil — bkz. vade_normalize)
+            df = vade_normalize(self._drop_invalid_date_rows(df))
 
             if strategy_data and self.analyze_strategy:
                 logger.info(f"Strateji verisi mevcut: {len(strategy_data)} ay")
@@ -2087,7 +2342,7 @@ class TreasuryAuctionScraper:
 
         elif existing_df is not None and not existing_df.empty:
             logger.info("Yeni veri yok, mevcut veriler korunuyor.")
-            df = self._drop_invalid_date_rows(existing_df)
+            df = vade_normalize(self._drop_invalid_date_rows(existing_df))
             if strategy_data and self.analyze_strategy:
                 comparison_df = self.analyze_borrowing_performance(df, strategy_data)
             return df, comparison_df
@@ -2096,55 +2351,39 @@ class TreasuryAuctionScraper:
             return pd.DataFrame(columns=self.fields), pd.DataFrame()
 
     def calculate_weighted_average_maturity(self, df: pd.DataFrame) -> pd.DataFrame:
-        """Ağırlıklı ortalama vade hesaplar"""
+        """Aylık ve üç aylık gerçekleşme ağırlıklı ortalama vade.
+
+        İki kural, ikisi de aynı sayının iki kez yuvarlanmaması için:
+          · vade tarihlerden yeniden kurulur (`vade_normalize`) — tablo hangi
+            koşudan gelirse gelsin tek cetvel;
+          · üç aylık ortalama YUVARLANMIŞ aylık ortalamalardan değil, üç ayın
+            Σ vade·tutar / Σ tutar toplamlarından kurulur ve pencere TAKVİM
+            ayıdır (satır sırası değil: ihalesiz bir ay araya girerse pencere
+            dört aya yayılmasın).
+        Tutarı sıfır/boş satır ağırlık taşımaz; vadesi ölçülemeyen satır
+        (valör ya da itfa okunamadı) ortalamaya girmez ve `vade_normalize`
+        sayısını uyarır. `self` kullanılmaz: grafik_yenile.py ağa çıkmadan
+        çağırır.
+        """
         if df.empty or 'İhale Tarihi' not in df.columns:
             return pd.DataFrame()
-        
-        df_copy = df.copy()
-        df_copy['İhale Tarihi'] = pd.to_datetime(df_copy['İhale Tarihi'], format='%d.%m.%Y', errors='coerce')
-        df_copy.dropna(subset=['İhale Tarihi', 'Vade (Yıl)', 'Toplam(Gerçekleşme)'], inplace=True)
-        
-        if df_copy.empty:
+
+        ay = aylik_vade_toplamlari(df)
+        if ay.empty:
             return pd.DataFrame()
-        
-        df_copy['Yıl-Ay'] = df_copy['İhale Tarihi'].dt.to_period('M')
-        
-        monthly_wam = []
-        for period in df_copy['Yıl-Ay'].unique():
-            if pd.notna(period):
-                month_data = df_copy[df_copy['Yıl-Ay'] == period]
-                total_realized = month_data['Toplam(Gerçekleşme)'].sum()
-                
-                if total_realized > 0:
-                    weighted_sum = (month_data['Vade (Yıl)'] * month_data['Toplam(Gerçekleşme)']).sum()
-                    wam = weighted_sum / total_realized
-                    
-                    monthly_wam.append({
-                        'Dönem': period,
-                        'Tarih': period.to_timestamp(),
-                        'Ağırlıklı Ortalama Vade (Yıl)': round(wam, 2),
-                        'Toplam İhraç (Milyon TL)': round(total_realized, 2),
-                        'İhale Sayısı': len(month_data)
-                    })
-        
-        if not monthly_wam:
-            return pd.DataFrame()
-        
-        wam_df = pd.DataFrame(monthly_wam).sort_values('Tarih')
-        
-        # 3 Aylık Ağırlıklı Ortalama Vade
-        weighted_3mo = []
-        for i in range(len(wam_df)):
-            sub = wam_df.iloc[max(0, i-2):i+1]
-            total_ihrac = sub['Toplam İhraç (Milyon TL)'].sum()
-            if total_ihrac > 0:
-                weighted_avg = (sub['Ağırlıklı Ortalama Vade (Yıl)'] * sub['Toplam İhraç (Milyon TL)']).sum() / total_ihrac
-                weighted_3mo.append(round(weighted_avg, 2))
-            else:
-                weighted_3mo.append(None)
-        
-        wam_df['3 Aylık Ağırlıklı Ortalama Vade'] = weighted_3mo
-        return wam_df
+
+        satirlar = []
+        for period, r in ay.iterrows():
+            pencere = ay[(ay.index >= period - 2) & (ay.index <= period)]
+            satirlar.append({
+                'Dönem': period,
+                'Tarih': period.to_timestamp(),
+                'Ağırlıklı Ortalama Vade (Yıl)': round(r['vw'] / r['w'], 2),
+                'Toplam İhraç (Milyon TL)': round(r['w'], 2),
+                'İhale Sayısı': int(r['n']),
+                '3 Aylık Ağırlıklı Ortalama Vade': round(pencere['vw'].sum() / pencere['w'].sum(), 2),
+            })
+        return pd.DataFrame(satirlar)
 
     def create_maturity_charts(self, wam_df: pd.DataFrame, output_file: str = "vade_analizi.html"):
         """Vade analizi grafiklerini oluşturur.
@@ -2503,6 +2742,10 @@ def main():
                         f"depodaki dosya korunuyor.")
             scraper.save_to_excel(df, comparison_df, wam_df, filename=EXCEL_OUTPUT)
             df.to_csv(CSV_OUTPUT, index=False, encoding='utf-8-sig')
+            # İşlendi defteri ANCAK veri yazıldıktan sonra kalıcılaşır (bkz.
+            # scrape_all_auctions): yazma reddedilir ya da bir istisna olursa
+            # defter de eski hâlinde kalır ve duyurular yeniden denenir.
+            scraper._save_url_cache()
 
             if not comparison_df.empty:
                 comparison_df.to_csv(COMPARISON_CSV, index=False, encoding='utf-8-sig')
@@ -2558,6 +2801,10 @@ def main():
         print(f"{'='*60}")
         import traceback
         traceback.print_exc()
+        # SIFIRLA ÇIKILMAZ: guncelle.py hattı yalnız sıfırdan farklı çıkış
+        # koduyla düşmüş sayar ve veri.yml'in tam kip geri alması ancak o zaman
+        # devreye girer. Yutulan bir istisna koşuyu "tazelendi" gösteriyordu.
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":

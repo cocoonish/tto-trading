@@ -27,6 +27,18 @@ KAYNAKLAR = {
 }
 
 
+def _tarih(sutun: pd.Series) -> pd.Series:
+    """Tarih sütununu BİÇİMİ AÇIKÇA söylenerek okur. `dayfirst=True` ISO
+    yazımı (vade tablosunun "Tarih" sütunu, 2023-04-01) da gün-önce yorumluyor
+    ve günü 12'yi aşmayan her ayda gün ile ayı yer değiştiriyordu: 81 ayın
+    74'ünde okura yanlış tarih (Nisan 2023 → 04.01.2023) basılıyordu. ISO
+    görünen değer ISO, gerisi GG.AA.YYYY okunur; ikisine de uymayan boş kalır."""
+    m = sutun.astype(str).str.strip()
+    iso = m.str.match(r"^\d{4}-\d{2}-\d{2}")
+    out = pd.to_datetime(m.where(iso), format="%Y-%m-%d", errors="coerce")
+    return out.fillna(pd.to_datetime(m.where(~iso), format="%d.%m.%Y", errors="coerce"))
+
+
 def _temiz(v):
     """JSON'a güvenli değer: NaN → None, Timestamp → 'GG.AA.YYYY', numpy → python."""
     if v is None or v is pd.NaT: return None
@@ -44,9 +56,14 @@ def main():
         if not os.path.exists(yol):
             print(f"  atlandı (yok): {dosya}"); continue
         d = pd.read_csv(yol, encoding="utf-8-sig")
+        # Vade dört ondalıkla SAKLANIR (gün sayısı değerden geri okunsun,
+        # ortalama yuvarlanmış vadeden kurulmasın) ama okura iki ondalıkla
+        # GÖSTERİLİR — aylık tablo ve sayfa metniyle aynı hassasiyet.
+        if "Vade (Yıl)" in d.columns:
+            d["Vade (Yıl)"] = pd.to_numeric(d["Vade (Yıl)"], errors="coerce").round(2)
         for t in tarihler:
             if t in d.columns:
-                d[t] = pd.to_datetime(d[t], dayfirst=True, errors="coerce")
+                d[t] = _tarih(d[t])
         # tarih sütunları GG.AA.YYYY, ama sıralama için ISO da tut (istemci kullanır)
         satirlar = []
         for _, r in d.iterrows():

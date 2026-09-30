@@ -36,7 +36,8 @@ import plotly.graph_objects as go
 
 KOK = Path(__file__).resolve().parent
 sys.path.insert(0, str(KOK))
-from main import TreasuryAuctionScraper as T          # noqa: E402
+from main import (TreasuryAuctionScraper as T, aylik_vade_toplamlari,   # noqa: E402
+                  plan_vade_yil, vade_normalize)
 from web_cikti_tahmin import (                        # noqa: E402
     CLARET, CLARET_KOYU, TEAL, GOLD, SLATE, INK, GRI, TIP_RENK, AYLAR,
     ortak_stil, tr,
@@ -58,22 +59,14 @@ MALIYET_PENCERE_AY = 4        # "güncel maliyet" penceresi
 
 
 def _vade_yil(terim: str) -> float | None:
-    """'5Yıl /1673 Gün' → 4.58. GÜN varsa gün kullanılır: '2Yıl /707 Gün' 1,94'tür,
-    2,00 değil — yeniden ihraçta kalan vade yıl etiketinden kısadır ve AOV'yi
-    yıl etiketiyle hesaplamak vadeyi sistematik olarak UZUN gösterir."""
-    s = str(terim)
-    m = re.search(r"/\s*(\d+)\s*Gün", s)
-    if m:
-        return int(m.group(1)) / 365.0
-    m = re.match(r"(\d+)\s*Yıl", s)
-    if m:
-        return float(m.group(1))
-    m = re.match(r"(\d+)\s*Ay", s)
-    return float(m.group(1)) / 12.0 if m else None
+    """'5Yıl /1673 Gün' → 1673/365. Tek tanım main.plan_vade_yil'dadır (gün
+    varsa gün — yeniden ihraçta kalan vade yıl etiketinden kısadır; gerçekleşen
+    vade de valörden itfaya gün/365, iki bacak aynı cetvel)."""
+    return plan_vade_yil(terim)
 
 
 def _gecmis() -> pd.DataFrame:
-    h = pd.read_csv(KOK / "hazine_ihale_verileri.csv", encoding="utf-8-sig")
+    h = vade_normalize(pd.read_csv(KOK / "hazine_ihale_verileri.csv", encoding="utf-8-sig"))
     for c in ("Toplam(Gerçekleşme)", "Toplam(Teklif)", "Vade (Yıl)",
               "Ortalama Yıllık Bileşik(Gerçekleşme)"):
         h[c] = pd.to_numeric(h[c], errors="coerce")
@@ -90,8 +83,7 @@ def _takvim_aov(yol: Path, hist: pd.DataFrame) -> pd.DataFrame:
     for _, r in d.iterrows():
         yf = str(r["Yöntem"]).lower().replace("̇", "").replace("ı", "i")
         yen = True if "yeniden" in yf else (False if "ilk" in yf else None)
-        ym = re.match(r"(\d+)\s*Yıl", str(r["Vade Terimi"]))
-        ty = float(ym.group(1)) if ym else None
+        ty = _vade_yil(r["Vade Terimi"])      # canlı tahminle aynı hedef (gün/365)
         res = T._forecast_from_comparables(r["Senet Tanımı"], r["İtfa Tarihi"],
                                            ty, hist, yeniden=yen)
         ham.append(res["raw_amt"] if res else None)
@@ -101,10 +93,13 @@ def _takvim_aov(yol: Path, hist: pd.DataFrame) -> pd.DataFrame:
     return d.dropna(subset=["ham", "v"])
 
 
-def _aov_ay(d: pd.DataFrame) -> dict:
+def _aov_ay(d: pd.DataFrame, ondalik: int | None = 2) -> dict:
+    """Takvimin ay başına AOV'si. `ondalik=None` yuvarlamaz — üç aylık ortalama
+    yuvarlanmış aylık değerlerden kurulmaz."""
     out = {}
     for ay, g in d.groupby("ay"):
-        out[str(ay)] = round(float((g["v"] * g["ham"]).sum() / g["ham"].sum()), 2)
+        v = float((g["v"] * g["ham"]).sum() / g["ham"].sum())
+        out[str(ay)] = round(v, ondalik) if ondalik is not None else v
     return out
 
 
@@ -133,6 +128,7 @@ def main() -> int:
 
     yeni = _takvim_aov(yeni_yol, hist)
     aov_yeni = _aov_ay(yeni)
+    aov_yeni_ham = _aov_ay(yeni, ondalik=None)
     aov_eski, eski_ad = {}, ""
     if eski_yol is not None:
         eski = _takvim_aov(eski_yol, hist)
@@ -140,13 +136,13 @@ def main() -> int:
         eski_ad = eski_yol.stem
 
     # ── 1) TARİHSEL AOV + PROJEKSİYON ────────────────────────────────────────
-    va = pd.read_csv(KOK / "hazine_vade_analizi.csv", encoding="utf-8-sig")
-    va["ay"] = pd.PeriodIndex(va["Dönem"], freq="M")
-    va = va.sort_values("ay")
-    gecmis_aov = {str(r["ay"]): round(float(r["Ağırlıklı Ortalama Vade (Yıl)"]), 2)
-                  for _, r in va.iterrows()}
-    gecmis_hacim = {str(r["ay"]): float(r["Toplam İhraç (Milyon TL)"])
-                    for _, r in va.iterrows()}
+    # Gerçekleşen aylar ihale verisinden, vade tablosuyla AYNI tanımdan
+    # (main.aylik_vade_toplamlari: gün/365, Σ vade·tutar / Σ tutar) ve
+    # yuvarlanmadan; gösterilen aylık değer tablodakiyle birebir aynıdır.
+    ay_top = aylik_vade_toplamlari(hist)
+    gecmis_aov = {str(a): round(float(r["vw"] / r["w"]), 2) for a, r in ay_top.iterrows()}
+    gecmis_hacim = {str(a): float(r["w"]) for a, r in ay_top.iterrows()}
+    gecmis_vw = {str(a): float(r["vw"]) for a, r in ay_top.iterrows()}
 
     # Plan aylarının hacmi: ozet.json'daki ölçekli tahmin (hedefe tutarlı)
     plan = pd.read_csv(yeni_yol, encoding="utf-8-sig")
@@ -158,15 +154,34 @@ def main() -> int:
     # Hazine'nin kendi raporladığı ölçüt bu; tek ay çok oynak (Kasım 2025'te
     # 1,62 yıl, bir sonraki ay 2,33) ve tek aya bakarak "vade uzadı" demek
     # gürültüyü eğilim sanmaktır.
-    seri_aov = dict(gecmis_aov); seri_aov.update(aov_yeni)
-    seri_hac = dict(gecmis_hacim); seri_hac.update(plan_hacim)
-    aylar = sorted(seri_aov, key=lambda s: pd.Period(s, freq="M"))
-    yuv = {}
-    for i, a in enumerate(aylar):
-        pencere = aylar[max(0, i - 2): i + 1]
-        w = sum(seri_hac.get(x, 0) for x in pencere)
-        if w > 0:
-            yuv[a] = round(sum(seri_aov[x] * seri_hac.get(x, 0) for x in pencere) / w, 2)
+    # Pencere TAKVİM ayıdır ve toplamlardan kurulur (Σvw/Σw) — vade tablosunun
+    # "3 Aylık" sütunuyla aynı tanım; plan ayında vw = planın AOV'si × hacmi.
+    #
+    # GERÇEKLEŞEN İLE PLANIN ÇAKIŞTIĞI AY TOPLANIR, EZİLMEZ. Tam kip iki günlük
+    # bir ihale çiftinin arasında koşarsa ayın ilk günü gerçekleşmiş, ikinci
+    # günü planda durur (plan tahmini "hedef − gerçekleşen" kalanıdır). Planın
+    # değeri gerçekleşeni EZSEYDİ o ayın gerçekleşen ihaleleri pencereden
+    # düşerdi. Ayın değeri = gerçekleşen + planın kalanı.
+    aylar = sorted(set(gecmis_aov) | set(aov_yeni), key=lambda s: pd.Period(s, freq="M"))
+    seri_hac = {a: gecmis_hacim.get(a, 0.0) + plan_hacim.get(a, 0.0) for a in aylar}
+    seri_vw = {a: gecmis_vw.get(a, 0.0) + aov_yeni_ham.get(a, 0.0) * plan_hacim.get(a, 0.0)
+               for a in aylar}
+
+    def _yuv(vw: dict, hac: dict, anahtarlar) -> dict:
+        out = {}
+        for a in anahtarlar:
+            p = pd.Period(a, freq="M")
+            pencere = [x for x in anahtarlar if p - 2 <= pd.Period(x, freq="M") <= p]
+            w = sum(hac.get(x, 0.0) for x in pencere)
+            if w > 0:
+                out[a] = round(sum(vw.get(x, 0.0) for x in pencere) / w, 2)
+        return out
+
+    yuv = _yuv(seri_vw, seri_hac, aylar)
+    # "Gerçekleşen son 3 ay" YALNIZ gerçekleşenden: vade tablosunun 3 aylık
+    # sütunuyla birebir (plan ayı araya giremez).
+    gecmis_aylar = sorted(gecmis_aov, key=lambda s: pd.Period(s, freq="M"))
+    yuv_gercek = _yuv(gecmis_vw, gecmis_hacim, gecmis_aylar)
 
     # ── 2) TÜR KOMPOZİSYONU ──────────────────────────────────────────────────
     hist["ay"] = hist["_d"].dt.to_period("M")
@@ -209,7 +224,7 @@ def main() -> int:
     oz = {
         "vp_gecmis_son_ay": ay_ad(aylar[len(gecmis_aov) - 1]),
         "vp_gecmis_son_aov": gecmis_aov[sorted(gecmis_aov, key=lambda s: pd.Period(s, freq='M'))[-1]],
-        "vp_gecmis_yuv_son": yuv[sorted(gecmis_aov, key=lambda s: pd.Period(s, freq='M'))[-1]],
+        "vp_gecmis_yuv_son": yuv_gercek[gecmis_aylar[-1]],
         "vp_plan_aov_toplam": round(float((yeni["v"] * yeni["ham"]).sum() / yeni["ham"].sum()), 2),
         "vp_eski_takvim": eski_ad,
         "vp_karsilastirma_metin": "",
@@ -338,7 +353,7 @@ def main() -> int:
     # olağan mı, olağandışı mı? "Vade uzadı" cümlesi ancak bu dağılıma göre
     # anlam kazanır.
     ys = pd.Series({pd.Period(k, freq="M"): v for k, v in yuv.items()}).sort_index()
-    gecmis_yuv = ys[ys.index <= pd.Period(sorted(gecmis_aov, key=lambda s: pd.Period(s, freq='M'))[-1], freq="M")]
+    gecmis_yuv = pd.Series({pd.Period(k, freq="M"): v for k, v in yuv_gercek.items()}).sort_index()
     d3 = gecmis_yuv.diff(3).dropna()
     plan_d3 = float(ys.get(pd.Period(sorted(aov_yeni)[-1], freq="M"), float("nan"))) - float(gecmis_yuv.iloc[-1])
     oz["vp_uzama_3a"] = round(plan_d3, 2)
