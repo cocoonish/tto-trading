@@ -3366,3 +3366,36 @@ GÜNÜ sorar (bugünün barı kapandı mı) ve cumartesi barı PAZAR çekildiği
 "bugün" değildir. Süzgeç SESSİZ SİLMEZ — düşen gün adıyla yazılır, çünkü kaynak
 bir gün damgalarını kaydırırsa sessiz bir süzgeç gerçek veriyi yok eder. Dört
 hâl `bulten/duman.py`de ve üç arıza enjeksiyonunun üçü de yakalanıyor.
+
+**Kurucu ilke — KÂĞIT LİSTESİ AYNI OLAN İKİ PLANIN KARŞI OLGUSU YAPISI GEREĞİ
+"DEĞİŞMEDİ" DER; ve BİR ÖLÇÜNÜN ADI, ONU ÜRETEN SERİDEN OKUNUR.** 30.09.2026'da
+Ekim–Aralık İç Borçlanma Stratejisi sökülürken yazının ilk tezi ("vadeyi
+uzatan karar Eylül ihalelerinde") yayından önce yeniden kuruldu, çünkü
+ölçünün ne SORABİLDİĞİ sorulmamıştı. Strateji belgesi kâğıdın adını ve gününü
+verir, TUTARINI VERMEZ; kâğıt bazında her "beklenen" tutar bizim kıyas
+tahminimizdir. Ekim'in dört ihale kâğıdı iki takvimde aynı olduğu için kıyas
+tahminleri de aynı, hedefe ölçeklemeden sonra göreli ağırlıklar da aynı —
+planlı vadedeki +0,01 yılın tamamı valörün yedi gün öne alınmasının
+aritmetiği. Karşı olgu doğru soruya doğru cevap veriyor ("takvim vadeyi
+değiştirdi mi": hayır), ama Hazine'nin ne yapacağı hakkında hiçbir şey
+söyleyemez. Vadenin gerçekten nerede uzadığını GERÇEKLEŞEN seri gösterdi:
+Temmuz 3,07 → Ağustos 3,82 → Eylül 4,49 yıl, TLREF payı %55,1 → %29,2 →
+%32,2. Ve o uzamanın da bir kısmı mekanikti: Eylül hedefi son gün kalanı
+birebir satılarak doldu (%99,98; 81 ayda yarım puan yakınında tek ay), 31
+Ağustos tahmini hedefin %87'sine ölçekliydi, 8 yıllığın kıyası on dört ay
+önceki bir satıştı; TLREF'teki %44,2'lik kabul ise 2025–2026'nın medyanıydı
+(%43,4) — "TLREF'i kıstı" hükmü taban oran sorulunca düştü. Bir tahmini
+gerçekleşenle kıyaslarken ayrılacak iki şey: tahminin KENDİ yanlılığı ve
+karşı tarafın taban oranı.
+
+İkinci yarısı kaynağın adıyla ilgili. 31 Ağustos yazısı `baz_momentum_aylik`
+anahtarını "çekirdek (C) enflasyonun arındırılmış aylık momentumu" diye
+anlatmıştı; anahtar manşet TÜFE'den kuruluyor (Enflasyon `baz_patikasi`:
+`a["tufe"]`, `SA["tufe"]`). Sonuç eşik karşısında değişmedi (iki ölçü de %1,9'un
+üstünde), ama yayımlanmış bir tanım yanlıştı ve düzeltme notuyla kayda geçti.
+Bir anahtarın adı onu ÜRETEN kodun okuduğu seriden okunur, anahtarın adından ya
+da önceki bir yazının cümlesinden değil. Aynı turda iki gün sayımı da tek
+sözleşmeye çekildi: gerçekleşen ve plan vadesi valörden itfaya gün/365; Hazine
+İhraç hattının vade defteri /365,25 kullanıyor ve 10.04.2023 TLREF ihalesini
+(vadesi boş) düşürüyor — AÇIK, hattın kendisinde düzeltilmedi; yazı kendi
+serisini ihale veri setinden kuruyor.

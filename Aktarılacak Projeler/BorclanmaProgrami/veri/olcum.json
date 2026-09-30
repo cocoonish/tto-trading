@@ -1,0 +1,5116 @@
+{
+ "cipa": "2026-09-30",
+ "belge": {
+  "yeni": {
+   "baslik": "Ekim – Aralık 2026 İç Borçlanma Stratejisi",
+   "duyuru": "2026-09-30",
+   "sha256": "0f640d82741dfa04eb2f99e93a64b4853d44539ae05b37cf001fb587f0d32071",
+   "donem": [
+    "2026-10",
+    "2026-12"
+   ]
+  },
+  "eski": {
+   "baslik": "Eylül – Kasım 2026 İç Borçlanma Stratejisi",
+   "duyuru": "2026-08-31",
+   "sha256": "5717af990491065a44456805e086e315808f04eae26f21b67a6ea62024ad26ae",
+   "donem": [
+    "2026-09",
+    "2026-11"
+   ]
+  },
+  "arsiv_belge": 87,
+  "arsiv_metinli": 83,
+  "indirilemeyen": [
+   "Kasım 2019 – Ocak 2020 İç Borçlanma Stratejisi",
+   "Ekim – Aralık 2019 İç Borçlanma Stratejisi",
+   "Eylül – Kasım 2019 İç Borçlanma Stratejisi",
+   "Ağustos – Ekim 2019 İç Borçlanma Stratejisi"
+  ]
+ },
+ "program": {
+  "yeni": {
+   "2026-10": {
+    "odemeler": 615.3,
+    "ic_servis": 436.6,
+    "ic_anapara": 188.8,
+    "ic_faiz": 247.8,
+    "dis_servis": 178.7,
+    "dis_anapara": 153.2,
+    "dis_faiz": 25.5,
+    "finansman": 615.3,
+    "borclanma_disi": 200.5,
+    "borclanma": 414.8,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 414.8,
+    "ihale": 180.8,
+    "dogrudan": 220.0,
+    "kamu": 14.0,
+    "hedef": 194.8,
+    "cevirme": 95.0,
+    "dogrudan_pay": 53.0,
+    "ihale_pay": 43.6,
+    "kamu_pay": 3.4,
+    "faiz_pay": 56.8,
+    "bdk_pay": 32.6
+   },
+   "2026-11": {
+    "odemeler": 164.6,
+    "ic_servis": 122.7,
+    "ic_anapara": 29.6,
+    "ic_faiz": 93.1,
+    "dis_servis": 41.9,
+    "dis_anapara": 12.2,
+    "dis_faiz": 29.7,
+    "finansman": 164.6,
+    "borclanma_disi": 54.2,
+    "borclanma": 110.4,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 110.4,
+    "ihale": 50.4,
+    "dogrudan": 20.0,
+    "kamu": 40.0,
+    "hedef": 90.4,
+    "cevirme": 90.0,
+    "dogrudan_pay": 18.1,
+    "ihale_pay": 45.7,
+    "kamu_pay": 36.2,
+    "faiz_pay": 75.9,
+    "bdk_pay": 32.9
+   },
+   "2026-12": {
+    "odemeler": 137.9,
+    "ic_servis": 117.3,
+    "ic_anapara": 1.5,
+    "ic_faiz": 115.8,
+    "dis_servis": 20.6,
+    "dis_anapara": 9.1,
+    "dis_faiz": 11.5,
+    "finansman": 137.9,
+    "borclanma_disi": 32.3,
+    "borclanma": 105.5,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 105.5,
+    "ihale": 90.5,
+    "dogrudan": 0.0,
+    "kamu": 15.0,
+    "hedef": 105.5,
+    "cevirme": 89.9,
+    "dogrudan_pay": 0.0,
+    "ihale_pay": 85.8,
+    "kamu_pay": 14.2,
+    "faiz_pay": 98.7,
+    "bdk_pay": 23.4
+   }
+  },
+  "eski": {
+   "2026-09": {
+    "odemeler": 343.1,
+    "ic_servis": 296.7,
+    "ic_anapara": 56.6,
+    "ic_faiz": 240.1,
+    "dis_servis": 46.3,
+    "dis_anapara": 7.3,
+    "dis_faiz": 39.1,
+    "finansman": 343.1,
+    "borclanma_disi": 61.2,
+    "borclanma": 281.9,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 281.9,
+    "ihale": 216.9,
+    "dogrudan": 20.0,
+    "kamu": 45.0,
+    "hedef": 261.9,
+    "cevirme": 95.0,
+    "dogrudan_pay": 7.1,
+    "ihale_pay": 76.9,
+    "kamu_pay": 16.0,
+    "faiz_pay": 80.9,
+    "bdk_pay": 17.8
+   },
+   "2026-10": {
+    "odemeler": 587.2,
+    "ic_servis": 409.1,
+    "ic_anapara": 178.9,
+    "ic_faiz": 230.2,
+    "dis_servis": 178.1,
+    "dis_anapara": 152.9,
+    "dis_faiz": 25.2,
+    "finansman": 587.2,
+    "borclanma_disi": 178.1,
+    "borclanma": 409.1,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 409.1,
+    "ihale": 199.1,
+    "dogrudan": 180.0,
+    "kamu": 30.0,
+    "hedef": 229.1,
+    "cevirme": 100.0,
+    "dogrudan_pay": 44.0,
+    "ihale_pay": 48.7,
+    "kamu_pay": 7.3,
+    "faiz_pay": 56.3,
+    "bdk_pay": 30.3
+   },
+   "2026-11": {
+    "odemeler": 164.6,
+    "ic_servis": 122.7,
+    "ic_anapara": 29.6,
+    "ic_faiz": 93.1,
+    "dis_servis": 41.9,
+    "dis_anapara": 12.4,
+    "dis_faiz": 29.5,
+    "finansman": 164.6,
+    "borclanma_disi": 54.2,
+    "borclanma": 110.4,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 110.4,
+    "ihale": 75.4,
+    "dogrudan": 25.0,
+    "kamu": 10.0,
+    "hedef": 85.4,
+    "cevirme": 90.0,
+    "dogrudan_pay": 22.6,
+    "ihale_pay": 68.3,
+    "kamu_pay": 9.1,
+    "faiz_pay": 75.9,
+    "bdk_pay": 32.9
+   }
+  },
+  "fark": {
+   "2026-10": {
+    "ihale": -18.3,
+    "dogrudan": 40.0,
+    "kamu": -16.0,
+    "hedef": -34.3,
+    "ic_borclanma": 5.7,
+    "ic_servis": 27.5,
+    "ic_anapara": 9.9,
+    "ic_faiz": 17.6,
+    "dis_servis": 0.6,
+    "borclanma_disi": 22.4,
+    "odemeler": 28.1,
+    "hedef_yuzde": -15.0
+   },
+   "2026-11": {
+    "ihale": -25.0,
+    "dogrudan": -5.0,
+    "kamu": 30.0,
+    "hedef": 5.0,
+    "ic_borclanma": 0.0,
+    "ic_servis": 0.0,
+    "ic_anapara": 0.0,
+    "ic_faiz": 0.0,
+    "dis_servis": 0.0,
+    "borclanma_disi": 0.0,
+    "odemeler": 0.0,
+    "hedef_yuzde": 5.9
+   }
+  },
+  "ceyrek": {
+   "ihale": 321.7,
+   "dogrudan": 240.0,
+   "kamu": 69.0,
+   "hedef": 390.7,
+   "ic_borclanma": 630.7,
+   "ic_servis": 676.6,
+   "ic_anapara": 219.9,
+   "ic_faiz": 456.7,
+   "dis_servis": 241.2,
+   "dis_anapara": 174.5,
+   "dis_faiz": 66.7,
+   "borclanma_disi": 287.0,
+   "odemeler": 917.8,
+   "cevirme": 93.2,
+   "faiz_pay": 67.5,
+   "dogrudan_pay": 38.1,
+   "ihale_pay": 51.0,
+   "kamu_pay": 10.9,
+   "bdk_pay": 31.3
+  }
+ },
+ "odeme": {
+  "ekim_diger_gunler_mlr": 184.8,
+  "ekim_7_program_mlr": 400.8,
+  "ekim_7_fazla_mlr": 149.0,
+  "yeni_gunler": [
+   {
+    "gun": "2026-10-07",
+    "toplam": 251.8
+   },
+   {
+    "gun": "2026-10-14",
+    "toplam": 114.8
+   },
+   {
+    "gun": "2026-10-21",
+    "toplam": 69.9
+   },
+   {
+    "gun": "2026-11-04",
+    "toplam": 49.9
+   },
+   {
+    "gun": "2026-11-11",
+    "toplam": 50.4
+   },
+   {
+    "gun": "2026-11-18",
+    "toplam": 21.7
+   },
+   {
+    "gun": "2026-11-20",
+    "toplam": 0.7
+   },
+   {
+    "gun": "2026-12-02",
+    "toplam": 9.2
+   },
+   {
+    "gun": "2026-12-09",
+    "toplam": 70.0
+   },
+   {
+    "gun": "2026-12-11",
+    "toplam": 0.3
+   },
+   {
+    "gun": "2026-12-16",
+    "toplam": 28.8
+   },
+   {
+    "gun": "2026-12-25",
+    "toplam": 4.2
+   },
+   {
+    "gun": "2026-12-30",
+    "toplam": 4.8
+   }
+  ],
+  "ekim": [
+   {
+    "gun": "2026-10-07",
+    "yeni": 251.8,
+    "eski": 234.5,
+    "fark": 17.3
+   },
+   {
+    "gun": "2026-10-14",
+    "yeni": 114.8,
+    "eski": 114.8,
+    "fark": 0.0
+   },
+   {
+    "gun": "2026-10-21",
+    "yeni": 69.9,
+    "eski": 59.8,
+    "fark": 10.1
+   }
+  ],
+  "aylar": {
+   "2026-10": {
+    "toplam": 436.6,
+    "piyasa": 400.2,
+    "kamu": 36.4,
+    "gun": 3
+   },
+   "2026-11": {
+    "toplam": 122.7,
+    "piyasa": 112.8,
+    "kamu": 9.9,
+    "gun": 4
+   },
+   "2026-12": {
+    "toplam": 117.3,
+    "piyasa": 103.2,
+    "kamu": 14.1,
+    "gun": 6
+   }
+  },
+  "en_buyuk_gun": "2026-10-07",
+  "en_buyuk_mlr": 251.8,
+  "en_buyuk_pay_ekim": 57.7
+ },
+ "takvim": {
+  "satirlar": [
+   {
+    "ay": "2026-10",
+    "senet": "Altın Tahvili",
+    "itfa": "2028-10-04",
+    "durum": "kaydı",
+    "eski_gun": "2026-10-06",
+    "yeni_gun": "2026-10-05",
+    "eski_terim": "2 Yıl / 728 Gün",
+    "yeni_terim": "2 Yıl / 728 Gün",
+    "yontem": "Doğrudan Satış",
+    "dogrudan": true
+   },
+   {
+    "ay": "2026-10",
+    "senet": "Altına Dayalı Kira Sertifikası",
+    "itfa": "2028-10-04",
+    "durum": "kaydı",
+    "eski_gun": "2026-10-06",
+    "yeni_gun": "2026-10-05",
+    "eski_terim": "2 Yıl / 728 Gün",
+    "yeni_terim": "2 Yıl / 728 Gün",
+    "yontem": "Doğrudan Satış",
+    "dogrudan": true
+   },
+   {
+    "ay": "2026-10",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "itfa": "2028-09-13",
+    "durum": "aynı",
+    "eski_gun": "2026-10-05",
+    "yeni_gun": "2026-10-05",
+    "eski_terim": "2 Yıl / 707 Gün",
+    "yeni_terim": "2 Yıl / 707 Gün",
+    "yontem": "İhale / Yeniden ihraç",
+    "dogrudan": false
+   },
+   {
+    "ay": "2026-10",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "itfa": "2031-04-16",
+    "durum": "kaydı",
+    "eski_gun": "2026-10-12",
+    "yeni_gun": "2026-10-05",
+    "eski_terim": "5 Yıl / 1645 Gün",
+    "yeni_terim": "5 Yıl / 1652 Gün",
+    "yontem": "İhale / Yeniden ihraç",
+    "dogrudan": false
+   },
+   {
+    "ay": "2026-10",
+    "senet": "TLREFK'ye Endeksli Kira Sertifikası",
+    "itfa": "2028-10-04",
+    "durum": "eklendi",
+    "eski_gun": null,
+    "yeni_gun": "2026-10-05",
+    "eski_terim": null,
+    "yeni_terim": "2 Yıl / 728 Gün",
+    "yontem": "Doğrudan Satış",
+    "dogrudan": true
+   },
+   {
+    "ay": "2026-10",
+    "senet": "ABD Doları Cinsi Devlet Tahvili",
+    "itfa": "2027-10-06",
+    "durum": "eklendi",
+    "eski_gun": null,
+    "yeni_gun": "2026-10-06",
+    "eski_terim": null,
+    "yeni_terim": "1 Yıl / 364 Gün",
+    "yontem": "Doğrudan Satış",
+    "dogrudan": true
+   },
+   {
+    "ay": "2026-10",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "itfa": "2034-09-27",
+    "durum": "kaydı",
+    "eski_gun": "2026-10-13",
+    "yeni_gun": "2026-10-06",
+    "eski_terim": "8 Yıl / 2905 Gün",
+    "yeni_terim": "8 Yıl / 2912 Gün",
+    "yontem": "İhale / Yeniden ihraç",
+    "dogrudan": false
+   },
+   {
+    "ay": "2026-10",
+    "senet": "TLREF'e Endeksli Devlet Tahvili",
+    "itfa": "2030-09-11",
+    "durum": "kaydı",
+    "eski_gun": "2026-10-12",
+    "yeni_gun": "2026-10-06",
+    "eski_terim": "4 Yıl / 1428 Gün",
+    "yeni_terim": "4 Yıl / 1435 Gün",
+    "yontem": "İhale / Yeniden ihraç",
+    "dogrudan": false
+   },
+   {
+    "ay": "2026-10",
+    "senet": "Kira Sertifikası",
+    "itfa": "2031-10-08",
+    "durum": "çıktı",
+    "eski_gun": "2026-10-13",
+    "yeni_gun": null,
+    "eski_terim": "5 Yıl / 1820 Gün",
+    "yeni_terim": null,
+    "yontem": "Doğrudan Satış",
+    "dogrudan": true
+   },
+   {
+    "ay": "2026-11",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "itfa": "2028-09-13",
+    "durum": "aynı",
+    "eski_gun": "2026-11-09",
+    "yeni_gun": "2026-11-09",
+    "eski_terim": "2 Yıl / 672 Gün",
+    "yeni_terim": "2 Yıl / 672 Gün",
+    "yontem": "İhale / Yeniden ihraç",
+    "dogrudan": false
+   },
+   {
+    "ay": "2026-11",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "itfa": "2031-04-16",
+    "durum": "eklendi",
+    "eski_gun": null,
+    "yeni_gun": "2026-11-09",
+    "eski_terim": null,
+    "yeni_terim": "4 Yıl / 1617 Gün",
+    "yontem": "İhale / Yeniden ihraç",
+    "dogrudan": false
+   },
+   {
+    "ay": "2026-11",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "itfa": "2031-11-05",
+    "durum": "çıktı",
+    "eski_gun": "2026-11-09",
+    "yeni_gun": null,
+    "eski_terim": "5 Yıl / 1820 Gün",
+    "yeni_terim": null,
+    "yontem": "İhale / İlk ihraç",
+    "dogrudan": false
+   },
+   {
+    "ay": "2026-11",
+    "senet": "Kira Sertifikası",
+    "itfa": "2031-11-05",
+    "durum": "eklendi",
+    "eski_gun": null,
+    "yeni_gun": "2026-11-10",
+    "eski_terim": null,
+    "yeni_terim": "5 Yıl / 1820 Gün",
+    "yontem": "Doğrudan Satış",
+    "dogrudan": true
+   },
+   {
+    "ay": "2026-11",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "itfa": "2034-09-27",
+    "durum": "aynı",
+    "eski_gun": "2026-11-10",
+    "yeni_gun": "2026-11-10",
+    "eski_terim": "8 Yıl / 2877 Gün",
+    "yeni_terim": "8 Yıl / 2877 Gün",
+    "yontem": "İhale / Yeniden ihraç",
+    "dogrudan": false
+   },
+   {
+    "ay": "2026-11",
+    "senet": "TLREFK'ye Endeksli Kira Sertifikası",
+    "itfa": "2028-11-08",
+    "durum": "çıktı",
+    "eski_gun": "2026-11-10",
+    "yeni_gun": null,
+    "eski_terim": "2 Yıl / 728 Gün",
+    "yeni_terim": null,
+    "yontem": "Doğrudan Satış",
+    "dogrudan": true
+   }
+  ],
+  "aralik": [
+   {
+    "ihale": "2026-12-07",
+    "valor": "2026-12-09",
+    "itfa": "2028-04-05",
+    "senet": "Kuponsuz Devlet Tahvili",
+    "terim": "16 Ay / 483 Gün",
+    "vade": 1.3232876712328767,
+    "yontem": "İhale / İlk ihraç",
+    "dogrudan": false
+   },
+   {
+    "ihale": "2026-12-07",
+    "valor": "2026-12-09",
+    "itfa": "2031-04-16",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "terim": "4 Yıl / 1589 Gün",
+    "vade": 4.353424657534247,
+    "yontem": "İhale / Yeniden ihraç",
+    "dogrudan": false
+   },
+   {
+    "ihale": "2026-12-08",
+    "valor": "2026-12-09",
+    "itfa": "2030-09-11",
+    "senet": "TLREF'e Endeksli Devlet Tahvili",
+    "terim": "4 Yıl / 1372 Gün",
+    "vade": 3.758904109589041,
+    "yontem": "İhale / Yeniden ihraç",
+    "dogrudan": false
+   },
+   {
+    "ihale": "2026-12-08",
+    "valor": "2026-12-09",
+    "itfa": "2034-09-27",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "terim": "8 Yıl / 2849 Gün",
+    "vade": 7.8054794520547945,
+    "yontem": "İhale / Yeniden ihraç",
+    "dogrudan": false
+   }
+  ],
+  "ekim_ihale_gunleri": [
+   "2026-10-05",
+   "2026-10-06"
+  ],
+  "ekim_valor": [
+   "2026-10-07"
+  ],
+  "eski_ekim_valor": [
+   "2026-10-07",
+   "2026-10-14"
+  ],
+  "eski_ekim_ihale_gunleri": [
+   "2026-10-05",
+   "2026-10-12",
+   "2026-10-13"
+  ],
+  "valor_aylik": {
+   "2026-10": [
+    "2026-10-07"
+   ],
+   "2026-11": [
+    "2026-11-11"
+   ],
+   "2026-12": [
+    "2026-12-09"
+   ]
+  },
+  "yeni_satir": 16,
+  "yeni_ihale": 11,
+  "yeni_dogrudan": 5
+ },
+ "takvim_tarihce": {
+  "kayit": [
+   {
+    "ay": "2019-12",
+    "gun_sayisi": 2,
+    "ilk": 10,
+    "son": 17,
+    "bosluk": 28
+   },
+   {
+    "ay": "2020-01",
+    "gun_sayisi": 4,
+    "ilk": 14,
+    "son": 28,
+    "bosluk": 6
+   },
+   {
+    "ay": "2020-02",
+    "gun_sayisi": 5,
+    "ilk": 3,
+    "son": 25,
+    "bosluk": 13
+   },
+   {
+    "ay": "2020-03",
+    "gun_sayisi": 4,
+    "ilk": 9,
+    "son": 24,
+    "bosluk": 13
+   },
+   {
+    "ay": "2020-04",
+    "gun_sayisi": 5,
+    "ilk": 6,
+    "son": 28,
+    "bosluk": 6
+   },
+   {
+    "ay": "2020-05",
+    "gun_sayisi": 5,
+    "ilk": 4,
+    "son": 22,
+    "bosluk": 17
+   },
+   {
+    "ay": "2020-06",
+    "gun_sayisi": 4,
+    "ilk": 8,
+    "son": 23,
+    "bosluk": 13
+   },
+   {
+    "ay": "2020-07",
+    "gun_sayisi": 4,
+    "ilk": 6,
+    "son": 21,
+    "bosluk": 20
+   },
+   {
+    "ay": "2020-08",
+    "gun_sayisi": 3,
+    "ilk": 10,
+    "son": 24,
+    "bosluk": 21
+   },
+   {
+    "ay": "2020-09",
+    "gun_sayisi": 3,
+    "ilk": 14,
+    "son": 22,
+    "bosluk": 14
+   },
+   {
+    "ay": "2020-10",
+    "gun_sayisi": 2,
+    "ilk": 6,
+    "son": 20,
+    "bosluk": 21
+   },
+   {
+    "ay": "2020-11",
+    "gun_sayisi": 2,
+    "ilk": 10,
+    "son": 24,
+    "bosluk": 13
+   },
+   {
+    "ay": "2020-12",
+    "gun_sayisi": 2,
+    "ilk": 7,
+    "son": 8,
+    "bosluk": 27
+   },
+   {
+    "ay": "2021-01",
+    "gun_sayisi": 3,
+    "ilk": 4,
+    "son": 19,
+    "bosluk": 27
+   },
+   {
+    "ay": "2021-02",
+    "gun_sayisi": 4,
+    "ilk": 15,
+    "son": 23,
+    "bosluk": 20
+   },
+   {
+    "ay": "2021-03",
+    "gun_sayisi": 3,
+    "ilk": 15,
+    "son": 23,
+    "bosluk": 20
+   },
+   {
+    "ay": "2021-04",
+    "gun_sayisi": 3,
+    "ilk": 12,
+    "son": 20,
+    "bosluk": 13
+   },
+   {
+    "ay": "2021-05",
+    "gun_sayisi": 4,
+    "ilk": 3,
+    "son": 25,
+    "bosluk": 13
+   },
+   {
+    "ay": "2021-06",
+    "gun_sayisi": 3,
+    "ilk": 7,
+    "son": 22,
+    "bosluk": 20
+   },
+   {
+    "ay": "2021-07",
+    "gun_sayisi": 4,
+    "ilk": 12,
+    "son": 27,
+    "bosluk": 20
+   },
+   {
+    "ay": "2021-08",
+    "gun_sayisi": 2,
+    "ilk": 16,
+    "son": 17,
+    "bosluk": 20
+   },
+   {
+    "ay": "2021-09",
+    "gun_sayisi": 4,
+    "ilk": 6,
+    "son": 21,
+    "bosluk": 13
+   },
+   {
+    "ay": "2021-10",
+    "gun_sayisi": 4,
+    "ilk": 4,
+    "son": 19,
+    "bosluk": 20
+   },
+   {
+    "ay": "2021-11",
+    "gun_sayisi": 3,
+    "ilk": 8,
+    "son": 23,
+    "bosluk": 14
+   },
+   {
+    "ay": "2021-12",
+    "gun_sayisi": 3,
+    "ilk": 7,
+    "son": 14,
+    "bosluk": 27
+   },
+   {
+    "ay": "2022-01",
+    "gun_sayisi": 3,
+    "ilk": 10,
+    "son": 24,
+    "bosluk": 21
+   },
+   {
+    "ay": "2022-02",
+    "gun_sayisi": 4,
+    "ilk": 14,
+    "son": 22,
+    "bosluk": 14
+   },
+   {
+    "ay": "2022-03",
+    "gun_sayisi": 3,
+    "ilk": 8,
+    "son": 22,
+    "bosluk": 21
+   },
+   {
+    "ay": "2022-04",
+    "gun_sayisi": 3,
+    "ilk": 12,
+    "son": 19,
+    "bosluk": 20
+   },
+   {
+    "ay": "2022-05",
+    "gun_sayisi": 4,
+    "ilk": 9,
+    "son": 24,
+    "bosluk": 13
+   },
+   {
+    "ay": "2022-06",
+    "gun_sayisi": 4,
+    "ilk": 6,
+    "son": 14,
+    "bosluk": 20
+   },
+   {
+    "ay": "2022-07",
+    "gun_sayisi": 2,
+    "ilk": 4,
+    "son": 5,
+    "bosluk": 34
+   },
+   {
+    "ay": "2022-08",
+    "gun_sayisi": 4,
+    "ilk": 8,
+    "son": 16,
+    "bosluk": 27
+   },
+   {
+    "ay": "2022-09",
+    "gun_sayisi": 4,
+    "ilk": 12,
+    "son": 20,
+    "bosluk": 20
+   },
+   {
+    "ay": "2022-10",
+    "gun_sayisi": 4,
+    "ilk": 10,
+    "son": 25,
+    "bosluk": 13
+   },
+   {
+    "ay": "2022-11",
+    "gun_sayisi": 4,
+    "ilk": 7,
+    "son": 22,
+    "bosluk": 13
+   },
+   {
+    "ay": "2022-12",
+    "gun_sayisi": 4,
+    "ilk": 5,
+    "son": 13,
+    "bosluk": 34
+   },
+   {
+    "ay": "2023-01",
+    "gun_sayisi": 4,
+    "ilk": 16,
+    "son": 24,
+    "bosluk": 13
+   },
+   {
+    "ay": "2023-02",
+    "gun_sayisi": 4,
+    "ilk": 6,
+    "son": 21,
+    "bosluk": 13
+   },
+   {
+    "ay": "2023-03",
+    "gun_sayisi": 4,
+    "ilk": 6,
+    "son": 21,
+    "bosluk": 20
+   },
+   {
+    "ay": "2023-04",
+    "gun_sayisi": 4,
+    "ilk": 10,
+    "son": 18,
+    "bosluk": 14
+   },
+   {
+    "ay": "2023-05",
+    "gun_sayisi": 3,
+    "ilk": 2,
+    "son": 9,
+    "bosluk": 34
+   },
+   {
+    "ay": "2023-06",
+    "gun_sayisi": 4,
+    "ilk": 12,
+    "son": 20,
+    "bosluk": 27
+   },
+   {
+    "ay": "2023-07",
+    "gun_sayisi": 4,
+    "ilk": 17,
+    "son": 25,
+    "bosluk": 13
+   },
+   {
+    "ay": "2023-08",
+    "gun_sayisi": 4,
+    "ilk": 7,
+    "son": 15,
+    "bosluk": 27
+   },
+   {
+    "ay": "2023-09",
+    "gun_sayisi": 4,
+    "ilk": 11,
+    "son": 19,
+    "bosluk": 27
+   },
+   {
+    "ay": "2023-10",
+    "gun_sayisi": 4,
+    "ilk": 16,
+    "son": 24,
+    "bosluk": 13
+   },
+   {
+    "ay": "2023-11",
+    "gun_sayisi": 4,
+    "ilk": 6,
+    "son": 14,
+    "bosluk": 20
+   },
+   {
+    "ay": "2023-12",
+    "gun_sayisi": 4,
+    "ilk": 4,
+    "son": 12,
+    "bosluk": 27
+   },
+   {
+    "ay": "2024-01",
+    "gun_sayisi": 4,
+    "ilk": 8,
+    "son": 23,
+    "bosluk": 20
+   },
+   {
+    "ay": "2024-02",
+    "gun_sayisi": 4,
+    "ilk": 12,
+    "son": 20,
+    "bosluk": 20
+   },
+   {
+    "ay": "2024-03",
+    "gun_sayisi": 4,
+    "ilk": 11,
+    "son": 19,
+    "bosluk": 27
+   },
+   {
+    "ay": "2024-04",
+    "gun_sayisi": 3,
+    "ilk": 15,
+    "son": 22,
+    "bosluk": 14
+   },
+   {
+    "ay": "2024-05",
+    "gun_sayisi": 4,
+    "ilk": 6,
+    "son": 21,
+    "bosluk": 13
+   },
+   {
+    "ay": "2024-06",
+    "gun_sayisi": 4,
+    "ilk": 3,
+    "son": 11,
+    "bosluk": 27
+   },
+   {
+    "ay": "2024-07",
+    "gun_sayisi": 4,
+    "ilk": 8,
+    "son": 23,
+    "bosluk": 20
+   },
+   {
+    "ay": "2024-08",
+    "gun_sayisi": 4,
+    "ilk": 12,
+    "son": 20,
+    "bosluk": 20
+   },
+   {
+    "ay": "2024-09",
+    "gun_sayisi": 4,
+    "ilk": 9,
+    "son": 17,
+    "bosluk": 20
+   },
+   {
+    "ay": "2024-10",
+    "gun_sayisi": 4,
+    "ilk": 7,
+    "son": 15,
+    "bosluk": 20
+   },
+   {
+    "ay": "2024-11",
+    "gun_sayisi": 4,
+    "ilk": 4,
+    "son": 12,
+    "bosluk": 27
+   },
+   {
+    "ay": "2024-12",
+    "gun_sayisi": 4,
+    "ilk": 9,
+    "son": 17,
+    "bosluk": 27
+   },
+   {
+    "ay": "2025-01",
+    "gun_sayisi": 4,
+    "ilk": 13,
+    "son": 21,
+    "bosluk": 20
+   },
+   {
+    "ay": "2025-02",
+    "gun_sayisi": 4,
+    "ilk": 10,
+    "son": 18,
+    "bosluk": 21
+   },
+   {
+    "ay": "2025-03",
+    "gun_sayisi": 3,
+    "ilk": 11,
+    "son": 18,
+    "bosluk": 20
+   },
+   {
+    "ay": "2025-04",
+    "gun_sayisi": 4,
+    "ilk": 7,
+    "son": 15,
+    "bosluk": 21
+   },
+   {
+    "ay": "2025-05",
+    "gun_sayisi": 2,
+    "ilk": 6,
+    "son": 13,
+    "bosluk": 28
+   },
+   {
+    "ay": "2025-06",
+    "gun_sayisi": 3,
+    "ilk": 10,
+    "son": 17,
+    "bosluk": 20
+   },
+   {
+    "ay": "2025-07",
+    "gun_sayisi": 3,
+    "ilk": 7,
+    "son": 14,
+    "bosluk": 28
+   },
+   {
+    "ay": "2025-08",
+    "gun_sayisi": 4,
+    "ilk": 11,
+    "son": 19,
+    "bosluk": 20
+   },
+   {
+    "ay": "2025-09",
+    "gun_sayisi": 3,
+    "ilk": 8,
+    "son": 16,
+    "bosluk": 20
+   },
+   {
+    "ay": "2025-10",
+    "gun_sayisi": 4,
+    "ilk": 6,
+    "son": 14,
+    "bosluk": 27
+   },
+   {
+    "ay": "2025-11",
+    "gun_sayisi": 2,
+    "ilk": 10,
+    "son": 11,
+    "bosluk": 27
+   },
+   {
+    "ay": "2025-12",
+    "gun_sayisi": 3,
+    "ilk": 8,
+    "son": 16,
+    "bosluk": 20
+   },
+   {
+    "ay": "2026-01",
+    "gun_sayisi": 4,
+    "ilk": 5,
+    "son": 13,
+    "bosluk": 27
+   },
+   {
+    "ay": "2026-02",
+    "gun_sayisi": 3,
+    "ilk": 9,
+    "son": 16,
+    "bosluk": 22
+   },
+   {
+    "ay": "2026-03",
+    "gun_sayisi": 3,
+    "ilk": 10,
+    "son": 17,
+    "bosluk": 20
+   },
+   {
+    "ay": "2026-04",
+    "gun_sayisi": 3,
+    "ilk": 6,
+    "son": 21,
+    "bosluk": 14
+   },
+   {
+    "ay": "2026-05",
+    "gun_sayisi": 3,
+    "ilk": 5,
+    "son": 12,
+    "bosluk": 27
+   },
+   {
+    "ay": "2026-06",
+    "gun_sayisi": 4,
+    "ilk": 8,
+    "son": 16,
+    "bosluk": 21
+   },
+   {
+    "ay": "2026-07",
+    "gun_sayisi": 2,
+    "ilk": 7,
+    "son": 21,
+    "bosluk": 20
+   },
+   {
+    "ay": "2026-08",
+    "gun_sayisi": 4,
+    "ilk": 10,
+    "son": 18,
+    "bosluk": 27
+   },
+   {
+    "ay": "2026-09",
+    "gun_sayisi": 2,
+    "ilk": 14,
+    "son": 15,
+    "bosluk": 20
+   },
+   {
+    "ay": "2026-10",
+    "gun_sayisi": 2,
+    "ilk": 5,
+    "son": 6,
+    "bosluk": 34
+   },
+   {
+    "ay": "2026-11",
+    "gun_sayisi": 2,
+    "ilk": 9,
+    "son": 10,
+    "bosluk": 27
+   },
+   {
+    "ay": "2026-12",
+    "gun_sayisi": 2,
+    "ilk": 7,
+    "son": 8,
+    "bosluk": null
+   }
+  ],
+  "kesin_ay_sayisi": 83,
+  "bosluk_medyan": 20.0,
+  "bosluk_maks": 34,
+  "bosluk_n": 82,
+  "bosluk_maks_aylar": [
+   "2022-07",
+   "2022-12",
+   "2023-05"
+  ],
+  "bosluk_ekim_ve_ustu": 3,
+  "ekim_bosluk": 34,
+  "ekim_son": 6,
+  "ilk_haftada_biten": [
+   "2022-07",
+   "2026-10"
+  ],
+  "bonosuz_kosu": {
+   "2026-01": 1,
+   "2026-02": 0,
+   "2026-03": 0,
+   "2026-04": 0,
+   "2026-05": 0,
+   "2026-06": 0,
+   "2026-07": 0,
+   "2026-08": 0,
+   "2026-09": 1,
+   "2026-10": 2,
+   "2026-11": 3,
+   "2026-12": 4
+  },
+  "bonosuz_en_uzun": {
+   "bitis": "2021-06",
+   "ay": 12
+  },
+  "kuponsuz": [
+   {
+    "ay": "2020-01",
+    "terim": "15 Ay / 455 Gün",
+    "gun": 455,
+    "yontem": "İhale / İlk ihraç",
+    "bono_ayni_ay": true
+   },
+   {
+    "ay": "2020-02",
+    "terim": "14 Ay / 434 Gün",
+    "gun": 434,
+    "yontem": "İhale / Yeniden ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2020-03",
+    "terim": "15 Ay / 455 Gün",
+    "gun": 455,
+    "yontem": "İhale / İlk ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2020-04",
+    "terim": "14 Ay / 427 Gün",
+    "gun": 427,
+    "yontem": "İhale / Yeniden ihraç",
+    "bono_ayni_ay": true
+   },
+   {
+    "ay": "2020-05",
+    "terim": "13 Ay / 399 Gün",
+    "gun": 399,
+    "yontem": "İhale / Yeniden ihraç",
+    "bono_ayni_ay": true
+   },
+   {
+    "ay": "2020-06",
+    "terim": "12 Ay / 364 Gün",
+    "gun": 364,
+    "yontem": "İhale / Yeniden ihraç",
+    "bono_ayni_ay": true
+   },
+   {
+    "ay": "2020-07",
+    "terim": "13 Ay / 392 Gün",
+    "gun": 392,
+    "yontem": "İhale / İlk ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2021-01",
+    "terim": "15 Ay / 448 Gün",
+    "gun": 448,
+    "yontem": "İhale / İlk ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2021-02",
+    "terim": "14 Ay / 413 Gün",
+    "gun": 413,
+    "yontem": "İhale / Yeniden ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2021-05",
+    "terim": "13 Ay / 406 Gün",
+    "gun": 406,
+    "yontem": "İhale / İlk ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2021-06",
+    "terim": "12 Ay / 371 Gün",
+    "gun": 371,
+    "yontem": "İhale / Yeniden ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2021-11",
+    "terim": "13 Ay / 392 Gün",
+    "gun": 392,
+    "yontem": "İhale / İlk ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2022-01",
+    "terim": "12 Ay / 378 Gün",
+    "gun": 378,
+    "yontem": "İhale / İlk ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2022-09",
+    "terim": "13 Ay / 385 Gün",
+    "gun": 385,
+    "yontem": "İhale / İlk ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2022-11",
+    "terim": "13 Ay / 399 Gün",
+    "gun": 399,
+    "yontem": "İhale / İlk ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2023-07",
+    "terim": "15 Ay / 455 Gün",
+    "gun": 455,
+    "yontem": "İhale / İlk ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2023-10",
+    "terim": "12 Ay / 364 Gün",
+    "gun": 364,
+    "yontem": "İhale / Yeniden ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2024-01",
+    "terim": "15 Ay / 455 Gün",
+    "gun": 455,
+    "yontem": "İhale / İlk ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2024-02",
+    "terim": "14 Ay / 420 Gün",
+    "gun": 420,
+    "yontem": "İhale / Yeniden ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2024-03",
+    "terim": "13 Ay / 392 Gün",
+    "gun": 392,
+    "yontem": "İhale / Yeniden ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2024-08",
+    "terim": "13 Ay / 385 Gün",
+    "gun": 385,
+    "yontem": "İhale / İlk ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2024-09",
+    "terim": "12 Ay / 364 Gün",
+    "gun": 364,
+    "yontem": "İhale / Yeniden ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2026-01",
+    "terim": "12 Ay / 364 Gün",
+    "gun": 364,
+    "yontem": "İhale / İlk ihraç",
+    "bono_ayni_ay": false
+   },
+   {
+    "ay": "2026-12",
+    "terim": "16 Ay / 483 Gün",
+    "gun": 483,
+    "yontem": "İhale / İlk ihraç",
+    "bono_ayni_ay": false
+   }
+  ],
+  "kuponsuz_n_onceki": 23,
+  "kuponsuz_maks_gun_onceki": 455,
+  "kuponsuz_bonosuz_ay": 19,
+  "doviz_altin": {
+   "2024-01": [],
+   "2024-02": [
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası",
+    "Avro Cinsi Devlet Tahvili",
+    "Avro Cinsi Kira Sertifikası"
+   ],
+   "2024-03": [
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası"
+   ],
+   "2024-04": [
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası"
+   ],
+   "2024-05": [
+    "Avro Cinsi Devlet Tahvili",
+    "Avro Cinsi Kira Sertifikası"
+   ],
+   "2024-06": [
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası"
+   ],
+   "2024-07": [
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası"
+   ],
+   "2024-08": [
+    "ABD Doları Cinsi Devlet Tahvili"
+   ],
+   "2024-09": [],
+   "2024-10": [
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası"
+   ],
+   "2024-11": [
+    "ABD Doları Cinsi Devlet Tahvili",
+    "ABD Doları Cinsi Kira Sertifikası"
+   ],
+   "2024-12": [],
+   "2025-01": [
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası"
+   ],
+   "2025-02": [],
+   "2025-03": [],
+   "2025-04": [
+    "ABD Doları Cinsi Devlet Tahvili",
+    "ABD Doları Cinsi Kira Sertifikası"
+   ],
+   "2025-05": [
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası"
+   ],
+   "2025-06": [],
+   "2025-07": [
+    "ABD Doları Cinsi Devlet Tahvili",
+    "ABD Doları Cinsi Kira Sertifikası"
+   ],
+   "2025-08": [
+    "ABD Doları Cinsi Devlet Tahvili",
+    "ABD Doları Cinsi Kira Sertifikası"
+   ],
+   "2025-09": [],
+   "2025-10": [],
+   "2025-11": [
+    "ABD Doları Cinsi Devlet Tahvili",
+    "ABD Doları Cinsi Kira Sertifikası"
+   ],
+   "2025-12": [],
+   "2026-01": [
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası"
+   ],
+   "2026-02": [
+    "ABD Doları Cinsi Devlet Tahvili",
+    "ABD Doları Cinsi Kira Sertifikası",
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası"
+   ],
+   "2026-03": [
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası",
+    "Avro Cinsi Devlet Tahvili"
+   ],
+   "2026-04": [
+    "ABD Doları Cinsi Devlet Tahvili",
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası"
+   ],
+   "2026-05": [
+    "ABD Doları Cinsi Devlet Tahvili",
+    "ABD Doları Cinsi Kira Sertifikası",
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası"
+   ],
+   "2026-06": [
+    "ABD Doları Cinsi Devlet Tahvili",
+    "ABD Doları Cinsi Kira Sertifikası",
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası"
+   ],
+   "2026-07": [
+    "ABD Doları Cinsi Devlet Tahvili",
+    "ABD Doları Cinsi Kira Sertifikası",
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası"
+   ],
+   "2026-08": [
+    "ABD Doları Cinsi Devlet Tahvili",
+    "ABD Doları Cinsi Kira Sertifikası"
+   ],
+   "2026-09": [],
+   "2026-10": [
+    "ABD Doları Cinsi Devlet Tahvili",
+    "Altın Tahvili",
+    "Altına Dayalı Kira Sertifikası"
+   ],
+   "2026-11": [],
+   "2026-12": []
+  },
+  "usd_tahvil_aylari": [
+   "2021-07",
+   "2022-08",
+   "2023-07",
+   "2023-08",
+   "2024-08",
+   "2024-11",
+   "2025-04",
+   "2025-07",
+   "2025-08",
+   "2025-11",
+   "2026-02",
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-10"
+  ],
+  "ekim_itfa_dogrudan": [
+   {
+    "ihale": "2024-10-07",
+    "valor": "2024-10-09",
+    "itfa": "2026-10-07",
+    "senet": "Altın Tahvili",
+    "terim": "2 Yıl / 728 Gün"
+   },
+   {
+    "ihale": "2024-10-07",
+    "valor": "2024-10-09",
+    "itfa": "2026-10-07",
+    "senet": "Altına Dayalı Kira Sertifikası",
+    "terim": "2 Yıl / 728 Gün"
+   },
+   {
+    "ihale": "2024-10-15",
+    "valor": "2024-10-16",
+    "itfa": "2026-10-14",
+    "senet": "Kira Sertifikası",
+    "terim": "2 Yıl / 728 Gün"
+   },
+   {
+    "ihale": "2024-10-22",
+    "valor": "2024-10-23",
+    "itfa": "2026-10-21",
+    "senet": "Kira Sertifikası",
+    "terim": "2 Yıl / 728 Gün"
+   }
+  ],
+  "doviz_altin_2026_ay": 8,
+  "doviz_altin_2026_bos": [
+   "2026-09"
+  ],
+  "ilk_gun_gecis": {
+   "n": 82,
+   "ayni": 68,
+   "bir_gun": 9,
+   "bir_hafta": 5,
+   "one_cekilen": 2,
+   "diger": 0
+  },
+  "son_gun_10_ve_once": [
+   "2020-12",
+   "2022-07",
+   "2023-05",
+   "2026-10"
+  ],
+  "kuponsuz_bonolu_ay": 4,
+  "bonosuz_ay_pay": {
+   "n": 73,
+   "bonosuz": 41,
+   "bas": "2020-01",
+   "son": "2026-01"
+  }
+ },
+ "finansman_tarihce": {
+  "seri": {
+   "2019-12": {
+    "odemeler": 14.0,
+    "ic_servis": 11.7,
+    "ic_anapara": 8.2,
+    "ic_faiz": 3.5,
+    "dis_servis": 2.3,
+    "dis_anapara": 1.1,
+    "dis_faiz": 1.2,
+    "finansman": 14.0,
+    "borclanma_disi": 2.8,
+    "borclanma": 11.2,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 11.2,
+    "ihale": 8.2,
+    "dogrudan": 1.0,
+    "kamu": 2.0,
+    "hedef": 10.2,
+    "cevirme": 95.7,
+    "dogrudan_pay": 8.9,
+    "ihale_pay": 73.2,
+    "kamu_pay": 17.9,
+    "faiz_pay": 29.9,
+    "bdk_pay": 20.0
+   },
+   "2020-01": {
+    "odemeler": 25.1,
+    "ic_servis": 23.6,
+    "ic_anapara": 17.3,
+    "ic_faiz": 6.2,
+    "dis_servis": 1.6,
+    "dis_anapara": 0.3,
+    "dis_faiz": 1.2,
+    "finansman": 25.1,
+    "borclanma_disi": 10.1,
+    "borclanma": 15.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 15.0,
+    "ihale": 10.7,
+    "dogrudan": 1.0,
+    "kamu": 3.3,
+    "hedef": 14.0,
+    "cevirme": 63.6,
+    "dogrudan_pay": 6.7,
+    "ihale_pay": 71.3,
+    "kamu_pay": 22.0,
+    "faiz_pay": 26.3,
+    "bdk_pay": 40.2
+   },
+   "2020-02": {
+    "odemeler": 29.3,
+    "ic_servis": 25.5,
+    "ic_anapara": 15.9,
+    "ic_faiz": 9.6,
+    "dis_servis": 3.8,
+    "dis_anapara": 0.3,
+    "dis_faiz": 3.5,
+    "finansman": 29.3,
+    "borclanma_disi": 8.3,
+    "borclanma": 21.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 21.0,
+    "ihale": 12.8,
+    "dogrudan": 2.1,
+    "kamu": 6.1,
+    "hedef": 18.9,
+    "cevirme": 82.4,
+    "dogrudan_pay": 10.0,
+    "ihale_pay": 61.0,
+    "kamu_pay": 29.0,
+    "faiz_pay": 37.6,
+    "bdk_pay": 28.3
+   },
+   "2020-03": {
+    "odemeler": 30.3,
+    "ic_servis": 26.0,
+    "ic_anapara": 18.9,
+    "ic_faiz": 7.1,
+    "dis_servis": 4.3,
+    "dis_anapara": 0.7,
+    "dis_faiz": 3.7,
+    "finansman": 30.3,
+    "borclanma_disi": 10.3,
+    "borclanma": 20.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 20.0,
+    "ihale": 10.9,
+    "dogrudan": 1.5,
+    "kamu": 7.6,
+    "hedef": 18.5,
+    "cevirme": 76.9,
+    "dogrudan_pay": 7.5,
+    "ihale_pay": 54.5,
+    "kamu_pay": 38.0,
+    "faiz_pay": 27.3,
+    "bdk_pay": 34.0
+   },
+   "2020-04": {
+    "odemeler": 24.0,
+    "ic_servis": 20.6,
+    "ic_anapara": 6.9,
+    "ic_faiz": 13.7,
+    "dis_servis": 3.5,
+    "dis_anapara": 0.7,
+    "dis_faiz": 2.8,
+    "finansman": 24.0,
+    "borclanma_disi": -6.0,
+    "borclanma": 30.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 30.0,
+    "ihale": 26.8,
+    "dogrudan": 1.4,
+    "kamu": 1.8,
+    "hedef": 28.6,
+    "cevirme": 145.6,
+    "dogrudan_pay": 4.7,
+    "ihale_pay": 89.3,
+    "kamu_pay": 6.0,
+    "faiz_pay": 66.5,
+    "bdk_pay": -25.0
+   },
+   "2020-05": {
+    "odemeler": 37.4,
+    "ic_servis": 19.6,
+    "ic_anapara": 13.1,
+    "ic_faiz": 6.5,
+    "dis_servis": 17.8,
+    "dis_anapara": 15.2,
+    "dis_faiz": 2.6,
+    "finansman": 37.4,
+    "borclanma_disi": -2.6,
+    "borclanma": 40.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 40.0,
+    "ihale": 38.5,
+    "dogrudan": 1.1,
+    "kamu": 0.4,
+    "hedef": 38.9,
+    "cevirme": 204.1,
+    "dogrudan_pay": 2.8,
+    "ihale_pay": 96.2,
+    "kamu_pay": 1.0,
+    "faiz_pay": 33.2,
+    "bdk_pay": -7.0
+   },
+   "2020-06": {
+    "odemeler": 29.1,
+    "ic_servis": 12.4,
+    "ic_anapara": 7.9,
+    "ic_faiz": 4.5,
+    "dis_servis": 16.7,
+    "dis_anapara": 15.1,
+    "dis_faiz": 1.7,
+    "finansman": 29.1,
+    "borclanma_disi": 2.1,
+    "borclanma": 27.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 27.0,
+    "ihale": 25.9,
+    "dogrudan": 0.0,
+    "kamu": 1.2,
+    "hedef": 27.1,
+    "cevirme": 217.7,
+    "dogrudan_pay": 0.0,
+    "ihale_pay": 95.9,
+    "kamu_pay": 4.4,
+    "faiz_pay": 36.3,
+    "bdk_pay": 7.2
+   },
+   "2020-07": {
+    "odemeler": 23.3,
+    "ic_servis": 20.7,
+    "ic_anapara": 14.9,
+    "ic_faiz": 5.8,
+    "dis_servis": 2.6,
+    "dis_anapara": 0.4,
+    "dis_faiz": 2.2,
+    "finansman": 23.3,
+    "borclanma_disi": -3.7,
+    "borclanma": 27.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 27.0,
+    "ihale": 24.5,
+    "dogrudan": 1.0,
+    "kamu": 1.6,
+    "hedef": 26.1,
+    "cevirme": 130.4,
+    "dogrudan_pay": 3.7,
+    "ihale_pay": 90.7,
+    "kamu_pay": 5.9,
+    "faiz_pay": 28.0,
+    "bdk_pay": -15.9
+   },
+   "2020-08": {
+    "odemeler": 31.4,
+    "ic_servis": 28.1,
+    "ic_anapara": 19.6,
+    "ic_faiz": 8.5,
+    "dis_servis": 3.3,
+    "dis_anapara": 0.7,
+    "dis_faiz": 2.5,
+    "finansman": 31.4,
+    "borclanma_disi": 12.4,
+    "borclanma": 19.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 19.0,
+    "ihale": 14.4,
+    "dogrudan": 1.2,
+    "kamu": 3.4,
+    "hedef": 17.8,
+    "cevirme": 67.6,
+    "dogrudan_pay": 6.3,
+    "ihale_pay": 75.8,
+    "kamu_pay": 17.9,
+    "faiz_pay": 30.2,
+    "bdk_pay": 39.5
+   },
+   "2020-09": {
+    "odemeler": 31.5,
+    "ic_servis": 25.7,
+    "ic_anapara": 15.6,
+    "ic_faiz": 10.1,
+    "dis_servis": 5.8,
+    "dis_anapara": 0.9,
+    "dis_faiz": 4.9,
+    "finansman": 31.5,
+    "borclanma_disi": 21.5,
+    "borclanma": 10.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 10.0,
+    "ihale": 7.3,
+    "dogrudan": 1.1,
+    "kamu": 1.6,
+    "hedef": 8.9,
+    "cevirme": 38.9,
+    "dogrudan_pay": 11.0,
+    "ihale_pay": 73.0,
+    "kamu_pay": 16.0,
+    "faiz_pay": 39.3,
+    "bdk_pay": 68.3
+   },
+   "2020-10": {
+    "odemeler": 47.7,
+    "ic_servis": 43.7,
+    "ic_anapara": 35.7,
+    "ic_faiz": 8.0,
+    "dis_servis": 4.0,
+    "dis_anapara": 0.9,
+    "dis_faiz": 3.1,
+    "finansman": 47.7,
+    "borclanma_disi": 27.7,
+    "borclanma": 20.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 20.0,
+    "ihale": 18.9,
+    "dogrudan": 0.0,
+    "kamu": 1.1,
+    "hedef": 20.0,
+    "cevirme": 45.8,
+    "dogrudan_pay": 0.0,
+    "ihale_pay": 94.5,
+    "kamu_pay": 5.5,
+    "faiz_pay": 18.3,
+    "bdk_pay": 58.1
+   },
+   "2020-11": {
+    "odemeler": 33.3,
+    "ic_servis": 29.2,
+    "ic_anapara": 23.2,
+    "ic_faiz": 6.0,
+    "dis_servis": 4.1,
+    "dis_anapara": 1.4,
+    "dis_faiz": 2.7,
+    "finansman": 33.3,
+    "borclanma_disi": 23.3,
+    "borclanma": 10.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 10.0,
+    "ihale": 8.3,
+    "dogrudan": 0.0,
+    "kamu": 1.7,
+    "hedef": 10.0,
+    "cevirme": 34.2,
+    "dogrudan_pay": 0.0,
+    "ihale_pay": 83.0,
+    "kamu_pay": 17.0,
+    "faiz_pay": 20.5,
+    "bdk_pay": 70.0
+   },
+   "2020-12": {
+    "odemeler": 19.3,
+    "ic_servis": 12.7,
+    "ic_anapara": 9.6,
+    "ic_faiz": 3.1,
+    "dis_servis": 6.5,
+    "dis_anapara": 5.5,
+    "dis_faiz": 1.1,
+    "finansman": 19.3,
+    "borclanma_disi": -8.3,
+    "borclanma": 27.6,
+    "dis_borclanma": 17.6,
+    "ic_borclanma": 10.0,
+    "ihale": 7.8,
+    "dogrudan": 0.7,
+    "kamu": 1.5,
+    "hedef": 9.3,
+    "cevirme": 78.7,
+    "dogrudan_pay": 7.0,
+    "ihale_pay": 78.0,
+    "kamu_pay": 15.0,
+    "faiz_pay": 24.4,
+    "bdk_pay": -43.0
+   },
+   "2021-01": {
+    "odemeler": 39.1,
+    "ic_servis": 37.2,
+    "ic_anapara": 17.5,
+    "ic_faiz": 19.7,
+    "dis_servis": 1.9,
+    "dis_anapara": 0.4,
+    "dis_faiz": 1.5,
+    "finansman": 39.1,
+    "borclanma_disi": 13.8,
+    "borclanma": 25.4,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 25.4,
+    "ihale": 24.4,
+    "dogrudan": 0.0,
+    "kamu": 1.0,
+    "hedef": 25.4,
+    "cevirme": 68.3,
+    "dogrudan_pay": 0.0,
+    "ihale_pay": 96.1,
+    "kamu_pay": 3.9,
+    "faiz_pay": 53.0,
+    "bdk_pay": 35.3
+   },
+   "2021-02": {
+    "odemeler": 50.4,
+    "ic_servis": 45.0,
+    "ic_anapara": 37.4,
+    "ic_faiz": 7.5,
+    "dis_servis": 5.4,
+    "dis_anapara": 1.1,
+    "dis_faiz": 4.3,
+    "finansman": 50.4,
+    "borclanma_disi": 5.0,
+    "borclanma": 45.4,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 45.4,
+    "ihale": 28.3,
+    "dogrudan": 16.0,
+    "kamu": 1.1,
+    "hedef": 29.4,
+    "cevirme": 100.9,
+    "dogrudan_pay": 35.2,
+    "ihale_pay": 62.3,
+    "kamu_pay": 2.4,
+    "faiz_pay": 16.7,
+    "bdk_pay": 9.9
+   },
+   "2021-03": {
+    "odemeler": 61.8,
+    "ic_servis": 29.0,
+    "ic_anapara": 21.9,
+    "ic_faiz": 7.1,
+    "dis_servis": 32.7,
+    "dis_anapara": 27.6,
+    "dis_faiz": 5.2,
+    "finansman": 61.8,
+    "borclanma_disi": 30.6,
+    "borclanma": 31.2,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 31.2,
+    "ihale": 23.5,
+    "dogrudan": 6.4,
+    "kamu": 1.3,
+    "hedef": 24.8,
+    "cevirme": 107.6,
+    "dogrudan_pay": 20.5,
+    "ihale_pay": 75.3,
+    "kamu_pay": 4.2,
+    "faiz_pay": 24.5,
+    "bdk_pay": 49.5
+   },
+   "2021-04": {
+    "odemeler": 42.4,
+    "ic_servis": 37.3,
+    "ic_anapara": 28.5,
+    "ic_faiz": 8.7,
+    "dis_servis": 5.2,
+    "dis_anapara": 0.9,
+    "dis_faiz": 4.3,
+    "finansman": 42.4,
+    "borclanma_disi": 9.4,
+    "borclanma": 33.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 33.0,
+    "ihale": 16.5,
+    "dogrudan": 8.4,
+    "kamu": 8.1,
+    "hedef": 24.6,
+    "cevirme": 88.5,
+    "dogrudan_pay": 25.5,
+    "ihale_pay": 50.0,
+    "kamu_pay": 24.5,
+    "faiz_pay": 23.3,
+    "bdk_pay": 22.2
+   },
+   "2021-05": {
+    "odemeler": 58.8,
+    "ic_servis": 55.1,
+    "ic_anapara": 46.3,
+    "ic_faiz": 8.8,
+    "dis_servis": 3.6,
+    "dis_anapara": 1.3,
+    "dis_faiz": 2.4,
+    "finansman": 58.8,
+    "borclanma_disi": 14.8,
+    "borclanma": 44.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 44.0,
+    "ihale": 18.7,
+    "dogrudan": 23.4,
+    "kamu": 1.9,
+    "hedef": 20.6,
+    "cevirme": 79.9,
+    "dogrudan_pay": 53.2,
+    "ihale_pay": 42.5,
+    "kamu_pay": 4.3,
+    "faiz_pay": 16.0,
+    "bdk_pay": 25.2
+   },
+   "2021-06": {
+    "odemeler": 42.8,
+    "ic_servis": 31.7,
+    "ic_anapara": 25.5,
+    "ic_faiz": 6.1,
+    "dis_servis": 11.1,
+    "dis_anapara": 9.4,
+    "dis_faiz": 1.7,
+    "finansman": 42.8,
+    "borclanma_disi": 14.8,
+    "borclanma": 28.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 28.0,
+    "ihale": 18.2,
+    "dogrudan": 6.8,
+    "kamu": 3.0,
+    "hedef": 21.2,
+    "cevirme": 88.3,
+    "dogrudan_pay": 24.3,
+    "ihale_pay": 65.0,
+    "kamu_pay": 10.7,
+    "faiz_pay": 19.2,
+    "bdk_pay": 34.6
+   },
+   "2021-07": {
+    "odemeler": 57.9,
+    "ic_servis": 54.7,
+    "ic_anapara": 35.7,
+    "ic_faiz": 19.0,
+    "dis_servis": 3.3,
+    "dis_anapara": 0.4,
+    "dis_faiz": 2.8,
+    "finansman": 57.9,
+    "borclanma_disi": 5.9,
+    "borclanma": 52.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 52.0,
+    "ihale": 26.1,
+    "dogrudan": 21.8,
+    "kamu": 4.1,
+    "hedef": 30.2,
+    "cevirme": 95.1,
+    "dogrudan_pay": 41.9,
+    "ihale_pay": 50.2,
+    "kamu_pay": 7.9,
+    "faiz_pay": 34.7,
+    "bdk_pay": 10.2
+   },
+   "2021-08": {
+    "odemeler": 16.5,
+    "ic_servis": 10.9,
+    "ic_anapara": 2.4,
+    "ic_faiz": 8.5,
+    "dis_servis": 5.6,
+    "dis_anapara": 1.3,
+    "dis_faiz": 4.3,
+    "finansman": 16.5,
+    "borclanma_disi": 0.5,
+    "borclanma": 16.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 16.0,
+    "ihale": 13.7,
+    "dogrudan": 1.0,
+    "kamu": 1.3,
+    "hedef": 15.0,
+    "cevirme": 146.8,
+    "dogrudan_pay": 6.2,
+    "ihale_pay": 85.6,
+    "kamu_pay": 8.1,
+    "faiz_pay": 78.0,
+    "bdk_pay": 3.0
+   },
+   "2021-09": {
+    "odemeler": 42.2,
+    "ic_servis": 35.9,
+    "ic_anapara": 27.8,
+    "ic_faiz": 8.2,
+    "dis_servis": 6.2,
+    "dis_anapara": 1.3,
+    "dis_faiz": 5.0,
+    "finansman": 42.2,
+    "borclanma_disi": 2.2,
+    "borclanma": 40.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 40.0,
+    "ihale": 28.3,
+    "dogrudan": 2.0,
+    "kamu": 9.7,
+    "hedef": 38.0,
+    "cevirme": 111.4,
+    "dogrudan_pay": 5.0,
+    "ihale_pay": 70.8,
+    "kamu_pay": 24.2,
+    "faiz_pay": 22.8,
+    "bdk_pay": 5.2
+   },
+   "2021-10": {
+    "odemeler": 51.1,
+    "ic_servis": 46.2,
+    "ic_anapara": 37.3,
+    "ic_faiz": 9.0,
+    "dis_servis": 4.8,
+    "dis_anapara": 0.3,
+    "dis_faiz": 4.5,
+    "finansman": 51.1,
+    "borclanma_disi": 11.1,
+    "borclanma": 40.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 40.0,
+    "ihale": 23.1,
+    "dogrudan": 7.0,
+    "kamu": 9.9,
+    "hedef": 33.0,
+    "cevirme": 86.6,
+    "dogrudan_pay": 17.5,
+    "ihale_pay": 57.8,
+    "kamu_pay": 24.8,
+    "faiz_pay": 19.5,
+    "bdk_pay": 21.7
+   },
+   "2021-11": {
+    "odemeler": 29.2,
+    "ic_servis": 11.1,
+    "ic_anapara": 0.0,
+    "ic_faiz": 11.1,
+    "dis_servis": 18.1,
+    "dis_anapara": 14.9,
+    "dis_faiz": 3.2,
+    "finansman": 29.2,
+    "borclanma_disi": 14.2,
+    "borclanma": 15.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 15.0,
+    "ihale": 10.7,
+    "dogrudan": 0.0,
+    "kamu": 4.4,
+    "hedef": 15.1,
+    "cevirme": 135.1,
+    "dogrudan_pay": 0.0,
+    "ihale_pay": 71.3,
+    "kamu_pay": 29.3,
+    "faiz_pay": 100.0,
+    "bdk_pay": 48.6
+   },
+   "2021-12": {
+    "odemeler": 25.0,
+    "ic_servis": 21.5,
+    "ic_anapara": 16.3,
+    "ic_faiz": 5.2,
+    "dis_servis": 3.5,
+    "dis_anapara": 1.3,
+    "dis_faiz": 2.2,
+    "finansman": 25.0,
+    "borclanma_disi": 15.0,
+    "borclanma": 10.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 10.0,
+    "ihale": 4.7,
+    "dogrudan": 1.8,
+    "kamu": 3.5,
+    "hedef": 8.2,
+    "cevirme": 46.5,
+    "dogrudan_pay": 18.0,
+    "ihale_pay": 47.0,
+    "kamu_pay": 35.0,
+    "faiz_pay": 24.2,
+    "bdk_pay": 60.0
+   },
+   "2022-01": {
+    "odemeler": 53.9,
+    "ic_servis": 49.2,
+    "ic_anapara": 40.5,
+    "ic_faiz": 8.7,
+    "dis_servis": 4.6,
+    "dis_anapara": 1.0,
+    "dis_faiz": 3.7,
+    "finansman": 53.9,
+    "borclanma_disi": 8.1,
+    "borclanma": 45.8,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 45.8,
+    "ihale": 22.0,
+    "dogrudan": 19.8,
+    "kamu": 4.1,
+    "hedef": 26.1,
+    "cevirme": 93.1,
+    "dogrudan_pay": 43.2,
+    "ihale_pay": 48.0,
+    "kamu_pay": 9.0,
+    "faiz_pay": 17.7,
+    "bdk_pay": 15.0
+   },
+   "2022-02": {
+    "odemeler": 101.7,
+    "ic_servis": 64.1,
+    "ic_anapara": 30.2,
+    "ic_faiz": 33.8,
+    "dis_servis": 37.7,
+    "dis_anapara": 29.7,
+    "dis_faiz": 7.9,
+    "finansman": 101.7,
+    "borclanma_disi": 52.7,
+    "borclanma": 49.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 49.0,
+    "ihale": 36.9,
+    "dogrudan": 2.9,
+    "kamu": 9.2,
+    "hedef": 46.1,
+    "cevirme": 76.4,
+    "dogrudan_pay": 5.9,
+    "ihale_pay": 75.3,
+    "kamu_pay": 18.8,
+    "faiz_pay": 52.7,
+    "bdk_pay": 51.8
+   },
+   "2022-03": {
+    "odemeler": 67.1,
+    "ic_servis": 31.0,
+    "ic_anapara": 17.4,
+    "ic_faiz": 13.6,
+    "dis_servis": 36.1,
+    "dis_anapara": 26.3,
+    "dis_faiz": 9.8,
+    "finansman": 67.1,
+    "borclanma_disi": 33.6,
+    "borclanma": 33.5,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 33.5,
+    "ihale": 24.1,
+    "dogrudan": 2.3,
+    "kamu": 7.1,
+    "hedef": 31.2,
+    "cevirme": 108.1,
+    "dogrudan_pay": 6.9,
+    "ihale_pay": 71.9,
+    "kamu_pay": 21.2,
+    "faiz_pay": 43.9,
+    "bdk_pay": 50.1
+   },
+   "2022-04": {
+    "odemeler": 31.5,
+    "ic_servis": 22.6,
+    "ic_anapara": 14.7,
+    "ic_faiz": 7.9,
+    "dis_servis": 8.8,
+    "dis_anapara": 0.6,
+    "dis_faiz": 8.2,
+    "finansman": 31.5,
+    "borclanma_disi": 4.5,
+    "borclanma": 27.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 27.0,
+    "ihale": 18.9,
+    "dogrudan": 3.0,
+    "kamu": 5.1,
+    "hedef": 24.0,
+    "cevirme": 119.5,
+    "dogrudan_pay": 11.1,
+    "ihale_pay": 70.0,
+    "kamu_pay": 18.9,
+    "faiz_pay": 35.0,
+    "bdk_pay": 14.3
+   },
+   "2022-05": {
+    "odemeler": 60.5,
+    "ic_servis": 53.0,
+    "ic_anapara": 41.3,
+    "ic_faiz": 11.7,
+    "dis_servis": 7.6,
+    "dis_anapara": 3.0,
+    "dis_faiz": 4.6,
+    "finansman": 60.5,
+    "borclanma_disi": 1.5,
+    "borclanma": 59.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 59.0,
+    "ihale": 36.8,
+    "dogrudan": 18.5,
+    "kamu": 3.7,
+    "hedef": 40.5,
+    "cevirme": 111.3,
+    "dogrudan_pay": 31.4,
+    "ihale_pay": 62.4,
+    "kamu_pay": 6.3,
+    "faiz_pay": 22.1,
+    "bdk_pay": 2.5
+   },
+   "2022-06": {
+    "odemeler": 24.9,
+    "ic_servis": 19.2,
+    "ic_anapara": 11.6,
+    "ic_faiz": 7.6,
+    "dis_servis": 5.7,
+    "dis_anapara": 1.8,
+    "dis_faiz": 3.9,
+    "finansman": 24.9,
+    "borclanma_disi": -3.1,
+    "borclanma": 28.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 28.0,
+    "ihale": 22.1,
+    "dogrudan": 0.0,
+    "kamu": 5.9,
+    "hedef": 28.0,
+    "cevirme": 145.8,
+    "dogrudan_pay": 0.0,
+    "ihale_pay": 78.9,
+    "kamu_pay": 21.1,
+    "faiz_pay": 39.6,
+    "bdk_pay": -12.4
+   },
+   "2022-07": {
+    "odemeler": 18.6,
+    "ic_servis": 11.0,
+    "ic_anapara": 1.1,
+    "ic_faiz": 9.9,
+    "dis_servis": 7.6,
+    "dis_anapara": 1.2,
+    "dis_faiz": 6.4,
+    "finansman": 18.6,
+    "borclanma_disi": -6.4,
+    "borclanma": 25.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 25.0,
+    "ihale": 21.7,
+    "dogrudan": 1.1,
+    "kamu": 2.2,
+    "hedef": 23.9,
+    "cevirme": 227.3,
+    "dogrudan_pay": 4.4,
+    "ihale_pay": 86.8,
+    "kamu_pay": 8.8,
+    "faiz_pay": 90.0,
+    "bdk_pay": -34.4
+   },
+   "2022-08": {
+    "odemeler": 92.5,
+    "ic_servis": 80.9,
+    "ic_anapara": 69.3,
+    "ic_faiz": 11.7,
+    "dis_servis": 11.6,
+    "dis_anapara": 2.3,
+    "dis_faiz": 9.3,
+    "finansman": 92.5,
+    "borclanma_disi": 23.3,
+    "borclanma": 69.2,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 69.2,
+    "ihale": 32.9,
+    "dogrudan": 30.2,
+    "kamu": 6.1,
+    "hedef": 39.0,
+    "cevirme": 85.5,
+    "dogrudan_pay": 43.6,
+    "ihale_pay": 47.5,
+    "kamu_pay": 8.8,
+    "faiz_pay": 14.5,
+    "bdk_pay": 25.2
+   },
+   "2022-09": {
+    "odemeler": 90.2,
+    "ic_servis": 30.2,
+    "ic_anapara": 10.8,
+    "ic_faiz": 19.5,
+    "dis_servis": 60.0,
+    "dis_anapara": 47.4,
+    "dis_faiz": 12.6,
+    "finansman": 90.2,
+    "borclanma_disi": 40.2,
+    "borclanma": 50.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 50.0,
+    "ihale": 40.0,
+    "dogrudan": 3.0,
+    "kamu": 7.0,
+    "hedef": 47.0,
+    "cevirme": 165.6,
+    "dogrudan_pay": 6.0,
+    "ihale_pay": 80.0,
+    "kamu_pay": 14.0,
+    "faiz_pay": 64.6,
+    "bdk_pay": 44.6
+   },
+   "2022-10": {
+    "odemeler": 71.7,
+    "ic_servis": 61.6,
+    "ic_anapara": 10.9,
+    "ic_faiz": 50.7,
+    "dis_servis": 10.1,
+    "dis_anapara": 0.7,
+    "dis_faiz": 9.5,
+    "finansman": 71.7,
+    "borclanma_disi": 9.9,
+    "borclanma": 61.8,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 61.8,
+    "ihale": 53.7,
+    "dogrudan": 5.0,
+    "kamu": 3.2,
+    "hedef": 56.9,
+    "cevirme": 100.3,
+    "dogrudan_pay": 8.1,
+    "ihale_pay": 86.9,
+    "kamu_pay": 5.2,
+    "faiz_pay": 82.3,
+    "bdk_pay": 13.8
+   },
+   "2022-11": {
+    "odemeler": 39.3,
+    "ic_servis": 31.2,
+    "ic_anapara": 14.1,
+    "ic_faiz": 17.1,
+    "dis_servis": 8.1,
+    "dis_anapara": 2.7,
+    "dis_faiz": 5.4,
+    "finansman": 39.3,
+    "borclanma_disi": -17.7,
+    "borclanma": 57.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 57.0,
+    "ihale": 49.6,
+    "dogrudan": 3.4,
+    "kamu": 3.9,
+    "hedef": 53.5,
+    "cevirme": 182.7,
+    "dogrudan_pay": 6.0,
+    "ihale_pay": 87.0,
+    "kamu_pay": 6.8,
+    "faiz_pay": 54.8,
+    "bdk_pay": -45.0
+   },
+   "2022-12": {
+    "odemeler": 30.7,
+    "ic_servis": 24.0,
+    "ic_anapara": 10.8,
+    "ic_faiz": 13.3,
+    "dis_servis": 6.6,
+    "dis_anapara": 2.2,
+    "dis_faiz": 4.4,
+    "finansman": 30.7,
+    "borclanma_disi": -14.3,
+    "borclanma": 45.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 45.0,
+    "ihale": 40.8,
+    "dogrudan": 0.0,
+    "kamu": 4.2,
+    "hedef": 45.0,
+    "cevirme": 187.5,
+    "dogrudan_pay": 0.0,
+    "ihale_pay": 90.7,
+    "kamu_pay": 9.3,
+    "faiz_pay": 55.4,
+    "bdk_pay": -46.6
+   },
+   "2023-01": {
+    "odemeler": 54.8,
+    "ic_servis": 46.3,
+    "ic_anapara": 32.3,
+    "ic_faiz": 14.0,
+    "dis_servis": 8.5,
+    "dis_anapara": 2.2,
+    "dis_faiz": 6.3,
+    "finansman": 54.8,
+    "borclanma_disi": -0.2,
+    "borclanma": 55.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 55.0,
+    "ihale": 49.1,
+    "dogrudan": 2.6,
+    "kamu": 3.3,
+    "hedef": 52.4,
+    "cevirme": 118.8,
+    "dogrudan_pay": 4.7,
+    "ihale_pay": 89.3,
+    "kamu_pay": 6.0,
+    "faiz_pay": 30.2,
+    "bdk_pay": -0.4
+   },
+   "2023-02": {
+    "odemeler": 50.0,
+    "ic_servis": 34.9,
+    "ic_anapara": 15.1,
+    "ic_faiz": 19.8,
+    "dis_servis": 15.1,
+    "dis_anapara": 2.7,
+    "dis_faiz": 12.4,
+    "finansman": 50.0,
+    "borclanma_disi": -5.0,
+    "borclanma": 55.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 55.0,
+    "ihale": 49.6,
+    "dogrudan": 3.0,
+    "kamu": 2.4,
+    "hedef": 52.0,
+    "cevirme": 157.6,
+    "dogrudan_pay": 5.5,
+    "ihale_pay": 90.2,
+    "kamu_pay": 4.4,
+    "faiz_pay": 56.7,
+    "bdk_pay": -10.0
+   },
+   "2023-03": {
+    "odemeler": 86.1,
+    "ic_servis": 41.9,
+    "ic_anapara": 17.0,
+    "ic_faiz": 24.9,
+    "dis_servis": 44.1,
+    "dis_anapara": 31.0,
+    "dis_faiz": 13.2,
+    "finansman": 86.1,
+    "borclanma_disi": 26.1,
+    "borclanma": 60.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 60.0,
+    "ihale": 56.0,
+    "dogrudan": 2.5,
+    "kamu": 1.5,
+    "hedef": 57.5,
+    "cevirme": 143.2,
+    "dogrudan_pay": 4.2,
+    "ihale_pay": 93.3,
+    "kamu_pay": 2.5,
+    "faiz_pay": 59.4,
+    "bdk_pay": 30.3
+   },
+   "2023-04": {
+    "odemeler": 72.8,
+    "ic_servis": 16.3,
+    "ic_anapara": 0.0,
+    "ic_faiz": 16.3,
+    "dis_servis": 56.6,
+    "dis_anapara": 45.9,
+    "dis_faiz": 10.7,
+    "finansman": 72.8,
+    "borclanma_disi": 42.8,
+    "borclanma": 30.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 30.0,
+    "ihale": 30.0,
+    "dogrudan": 0.0,
+    "kamu": 0.0,
+    "hedef": 30.0,
+    "cevirme": 184.0,
+    "dogrudan_pay": 0.0,
+    "ihale_pay": 100.0,
+    "kamu_pay": 0.0,
+    "faiz_pay": 100.0,
+    "bdk_pay": 58.8
+   },
+   "2023-05": {
+    "odemeler": 115.1,
+    "ic_servis": 103.1,
+    "ic_anapara": 15.3,
+    "ic_faiz": 87.8,
+    "dis_servis": 12.0,
+    "dis_anapara": 3.3,
+    "dis_faiz": 8.7,
+    "finansman": 115.1,
+    "borclanma_disi": 65.1,
+    "borclanma": 50.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 50.0,
+    "ihale": 45.5,
+    "dogrudan": 0.0,
+    "kamu": 4.5,
+    "hedef": 50.0,
+    "cevirme": 48.5,
+    "dogrudan_pay": 0.0,
+    "ihale_pay": 91.0,
+    "kamu_pay": 9.0,
+    "faiz_pay": 85.2,
+    "bdk_pay": 56.6
+   },
+   "2023-06": {
+    "odemeler": 64.8,
+    "ic_servis": 57.0,
+    "ic_anapara": 41.7,
+    "ic_faiz": 15.2,
+    "dis_servis": 7.8,
+    "dis_anapara": 2.6,
+    "dis_faiz": 5.2,
+    "finansman": 64.8,
+    "borclanma_disi": 14.8,
+    "borclanma": 50.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 50.0,
+    "ihale": 46.0,
+    "dogrudan": 2.0,
+    "kamu": 2.0,
+    "hedef": 48.0,
+    "cevirme": 87.7,
+    "dogrudan_pay": 4.0,
+    "ihale_pay": 92.0,
+    "kamu_pay": 4.0,
+    "faiz_pay": 26.7,
+    "bdk_pay": 22.8
+   },
+   "2023-07": {
+    "odemeler": 164.5,
+    "ic_servis": 141.7,
+    "ic_anapara": 129.6,
+    "ic_faiz": 12.2,
+    "dis_servis": 22.8,
+    "dis_anapara": 2.6,
+    "dis_faiz": 20.1,
+    "finansman": 164.5,
+    "borclanma_disi": 70.5,
+    "borclanma": 94.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 94.0,
+    "ihale": 33.0,
+    "dogrudan": 60.0,
+    "kamu": 1.0,
+    "hedef": 34.0,
+    "cevirme": 66.3,
+    "dogrudan_pay": 63.8,
+    "ihale_pay": 35.1,
+    "kamu_pay": 1.1,
+    "faiz_pay": 8.6,
+    "bdk_pay": 42.9
+   },
+   "2023-08": {
+    "odemeler": 172.7,
+    "ic_servis": 152.8,
+    "ic_anapara": 91.6,
+    "ic_faiz": 61.1,
+    "dis_servis": 20.0,
+    "dis_anapara": 3.9,
+    "dis_faiz": 16.1,
+    "finansman": 172.7,
+    "borclanma_disi": 36.7,
+    "borclanma": 136.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 136.0,
+    "ihale": 79.0,
+    "dogrudan": 56.0,
+    "kamu": 1.0,
+    "hedef": 80.0,
+    "cevirme": 89.0,
+    "dogrudan_pay": 41.2,
+    "ihale_pay": 58.1,
+    "kamu_pay": 0.7,
+    "faiz_pay": 40.0,
+    "bdk_pay": 21.3
+   },
+   "2023-09": {
+    "odemeler": 97.5,
+    "ic_servis": 74.2,
+    "ic_anapara": 45.6,
+    "ic_faiz": 28.5,
+    "dis_servis": 23.3,
+    "dis_anapara": 3.1,
+    "dis_faiz": 20.2,
+    "finansman": 97.5,
+    "borclanma_disi": -12.5,
+    "borclanma": 110.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 110.0,
+    "ihale": 103.6,
+    "dogrudan": 3.0,
+    "kamu": 3.4,
+    "hedef": 107.0,
+    "cevirme": 148.2,
+    "dogrudan_pay": 2.7,
+    "ihale_pay": 94.2,
+    "kamu_pay": 3.1,
+    "faiz_pay": 38.4,
+    "bdk_pay": -12.8
+   },
+   "2023-10": {
+    "odemeler": 81.4,
+    "ic_servis": 66.5,
+    "ic_anapara": 22.5,
+    "ic_faiz": 44.0,
+    "dis_servis": 14.9,
+    "dis_anapara": 1.1,
+    "dis_faiz": 13.8,
+    "finansman": 81.4,
+    "borclanma_disi": 13.4,
+    "borclanma": 68.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 68.0,
+    "ihale": 63.6,
+    "dogrudan": 2.5,
+    "kamu": 1.9,
+    "hedef": 65.5,
+    "cevirme": 102.3,
+    "dogrudan_pay": 3.7,
+    "ihale_pay": 93.5,
+    "kamu_pay": 2.8,
+    "faiz_pay": 66.2,
+    "bdk_pay": 16.5
+   },
+   "2023-11": {
+    "odemeler": 95.9,
+    "ic_servis": 78.4,
+    "ic_anapara": 8.5,
+    "ic_faiz": 69.9,
+    "dis_servis": 17.4,
+    "dis_anapara": 4.7,
+    "dis_faiz": 12.7,
+    "finansman": 95.9,
+    "borclanma_disi": 17.9,
+    "borclanma": 78.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 78.0,
+    "ihale": 71.5,
+    "dogrudan": 1.5,
+    "kamu": 5.0,
+    "hedef": 76.5,
+    "cevirme": 99.5,
+    "dogrudan_pay": 1.9,
+    "ihale_pay": 91.7,
+    "kamu_pay": 6.4,
+    "faiz_pay": 89.2,
+    "bdk_pay": 18.7
+   },
+   "2023-12": {
+    "odemeler": 113.1,
+    "ic_servis": 43.0,
+    "ic_anapara": 16.4,
+    "ic_faiz": 26.5,
+    "dis_servis": 70.1,
+    "dis_anapara": 62.8,
+    "dis_faiz": 7.3,
+    "finansman": 113.1,
+    "borclanma_disi": 68.1,
+    "borclanma": 45.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 45.0,
+    "ihale": 41.0,
+    "dogrudan": 2.0,
+    "kamu": 2.0,
+    "hedef": 43.0,
+    "cevirme": 104.7,
+    "dogrudan_pay": 4.4,
+    "ihale_pay": 91.1,
+    "kamu_pay": 4.4,
+    "faiz_pay": 61.6,
+    "bdk_pay": 60.2
+   },
+   "2024-01": {
+    "odemeler": 127.3,
+    "ic_servis": 97.8,
+    "ic_anapara": 13.0,
+    "ic_faiz": 84.8,
+    "dis_servis": 29.5,
+    "dis_anapara": 4.0,
+    "dis_faiz": 25.5,
+    "finansman": 127.3,
+    "borclanma_disi": 6.3,
+    "borclanma": 121.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 121.0,
+    "ihale": 110.0,
+    "dogrudan": 2.0,
+    "kamu": 9.0,
+    "hedef": 119.0,
+    "cevirme": 123.7,
+    "dogrudan_pay": 1.7,
+    "ihale_pay": 90.9,
+    "kamu_pay": 7.4,
+    "faiz_pay": 86.7,
+    "bdk_pay": 4.9
+   },
+   "2024-02": {
+    "odemeler": 226.2,
+    "ic_servis": 200.0,
+    "ic_anapara": 165.1,
+    "ic_faiz": 34.9,
+    "dis_servis": 26.1,
+    "dis_anapara": 4.7,
+    "dis_faiz": 21.4,
+    "finansman": 226.2,
+    "borclanma_disi": -24.0,
+    "borclanma": 250.2,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 250.2,
+    "ihale": 83.5,
+    "dogrudan": 158.7,
+    "kamu": 8.0,
+    "hedef": 91.5,
+    "cevirme": 125.1,
+    "dogrudan_pay": 63.4,
+    "ihale_pay": 33.4,
+    "kamu_pay": 3.2,
+    "faiz_pay": 17.4,
+    "bdk_pay": -10.6
+   },
+   "2024-03": {
+    "odemeler": 201.6,
+    "ic_servis": 94.6,
+    "ic_anapara": 55.5,
+    "ic_faiz": 39.0,
+    "dis_servis": 107.0,
+    "dis_anapara": 82.1,
+    "dis_faiz": 25.0,
+    "finansman": 201.6,
+    "borclanma_disi": 69.8,
+    "borclanma": 131.8,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 131.8,
+    "ihale": 87.1,
+    "dogrudan": 42.7,
+    "kamu": 2.0,
+    "hedef": 89.1,
+    "cevirme": 139.3,
+    "dogrudan_pay": 32.4,
+    "ihale_pay": 66.1,
+    "kamu_pay": 1.5,
+    "faiz_pay": 41.2,
+    "bdk_pay": 34.6
+   },
+   "2024-04": {
+    "odemeler": 302.0,
+    "ic_servis": 284.1,
+    "ic_anapara": 196.4,
+    "ic_faiz": 87.6,
+    "dis_servis": 17.9,
+    "dis_anapara": 1.4,
+    "dis_faiz": 16.5,
+    "finansman": 302.0,
+    "borclanma_disi": 132.5,
+    "borclanma": 169.5,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 169.5,
+    "ihale": 113.9,
+    "dogrudan": 43.6,
+    "kamu": 12.0,
+    "hedef": 125.9,
+    "cevirme": 59.7,
+    "dogrudan_pay": 25.7,
+    "ihale_pay": 67.2,
+    "kamu_pay": 7.1,
+    "faiz_pay": 30.8,
+    "bdk_pay": 43.9
+   },
+   "2024-05": {
+    "odemeler": 168.2,
+    "ic_servis": 146.1,
+    "ic_anapara": 58.3,
+    "ic_faiz": 87.8,
+    "dis_servis": 22.1,
+    "dis_anapara": 5.7,
+    "dis_faiz": 16.4,
+    "finansman": 168.2,
+    "borclanma_disi": -42.1,
+    "borclanma": 210.4,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 210.4,
+    "ihale": 140.7,
+    "dogrudan": 50.3,
+    "kamu": 19.3,
+    "hedef": 160.0,
+    "cevirme": 144.0,
+    "dogrudan_pay": 23.9,
+    "ihale_pay": 66.9,
+    "kamu_pay": 9.2,
+    "faiz_pay": 60.1,
+    "bdk_pay": -25.0
+   },
+   "2024-06": {
+    "odemeler": 161.9,
+    "ic_servis": 151.2,
+    "ic_anapara": 61.2,
+    "ic_faiz": 90.0,
+    "dis_servis": 10.7,
+    "dis_anapara": 4.1,
+    "dis_faiz": 6.6,
+    "finansman": 161.9,
+    "borclanma_disi": -92.2,
+    "borclanma": 254.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 254.0,
+    "ihale": 188.6,
+    "dogrudan": 51.5,
+    "kamu": 14.0,
+    "hedef": 202.6,
+    "cevirme": 168.0,
+    "dogrudan_pay": 20.3,
+    "ihale_pay": 74.3,
+    "kamu_pay": 5.5,
+    "faiz_pay": 59.5,
+    "bdk_pay": -56.9
+   },
+   "2024-07": {
+    "odemeler": 154.5,
+    "ic_servis": 116.6,
+    "ic_anapara": 60.0,
+    "ic_faiz": 56.6,
+    "dis_servis": 37.9,
+    "dis_anapara": 4.8,
+    "dis_faiz": 33.0,
+    "finansman": 154.5,
+    "borclanma_disi": -20.4,
+    "borclanma": 174.9,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 174.9,
+    "ihale": 135.4,
+    "dogrudan": 31.5,
+    "kamu": 8.0,
+    "hedef": 143.4,
+    "cevirme": 150.0,
+    "dogrudan_pay": 18.0,
+    "ihale_pay": 77.4,
+    "kamu_pay": 4.6,
+    "faiz_pay": 48.5,
+    "bdk_pay": -13.2
+   },
+   "2024-08": {
+    "odemeler": 225.6,
+    "ic_servis": 123.2,
+    "ic_anapara": 54.9,
+    "ic_faiz": 68.3,
+    "dis_servis": 102.4,
+    "dis_anapara": 82.9,
+    "dis_faiz": 19.6,
+    "finansman": 225.6,
+    "borclanma_disi": 43.3,
+    "borclanma": 182.3,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 182.3,
+    "ihale": 135.0,
+    "dogrudan": 34.4,
+    "kamu": 13.0,
+    "hedef": 148.0,
+    "cevirme": 148.0,
+    "dogrudan_pay": 18.9,
+    "ihale_pay": 74.1,
+    "kamu_pay": 7.1,
+    "faiz_pay": 55.4,
+    "bdk_pay": 19.2
+   },
+   "2024-09": {
+    "odemeler": 177.6,
+    "ic_servis": 126.8,
+    "ic_anapara": 8.1,
+    "ic_faiz": 118.7,
+    "dis_servis": 50.8,
+    "dis_anapara": 27.9,
+    "dis_faiz": 22.9,
+    "finansman": 177.6,
+    "borclanma_disi": 0.0,
+    "borclanma": 177.6,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 177.6,
+    "ihale": 155.0,
+    "dogrudan": 3.6,
+    "kamu": 19.0,
+    "hedef": 174.0,
+    "cevirme": 140.1,
+    "dogrudan_pay": 2.0,
+    "ihale_pay": 87.3,
+    "kamu_pay": 10.7,
+    "faiz_pay": 93.6,
+    "bdk_pay": 0.0
+   },
+   "2024-10": {
+    "odemeler": 167.0,
+    "ic_servis": 147.2,
+    "ic_anapara": 38.9,
+    "ic_faiz": 108.3,
+    "dis_servis": 19.8,
+    "dis_anapara": 1.6,
+    "dis_faiz": 18.3,
+    "finansman": 167.0,
+    "borclanma_disi": -45.7,
+    "borclanma": 212.8,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 212.8,
+    "ihale": 165.3,
+    "dogrudan": 36.5,
+    "kamu": 11.0,
+    "hedef": 176.3,
+    "cevirme": 144.6,
+    "dogrudan_pay": 17.2,
+    "ihale_pay": 77.7,
+    "kamu_pay": 5.2,
+    "faiz_pay": 73.6,
+    "bdk_pay": -27.4
+   },
+   "2024-11": {
+    "odemeler": 272.6,
+    "ic_servis": 119.8,
+    "ic_anapara": 7.1,
+    "ic_faiz": 112.7,
+    "dis_servis": 152.8,
+    "dis_anapara": 132.9,
+    "dis_faiz": 19.9,
+    "finansman": 272.6,
+    "borclanma_disi": 47.3,
+    "borclanma": 225.2,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 225.2,
+    "ihale": 155.6,
+    "dogrudan": 47.6,
+    "kamu": 22.0,
+    "hedef": 177.6,
+    "cevirme": 188.0,
+    "dogrudan_pay": 21.1,
+    "ihale_pay": 69.1,
+    "kamu_pay": 9.8,
+    "faiz_pay": 94.1,
+    "bdk_pay": 17.4
+   },
+   "2024-12": {
+    "odemeler": 84.1,
+    "ic_servis": 71.4,
+    "ic_anapara": 8.2,
+    "ic_faiz": 63.2,
+    "dis_servis": 12.7,
+    "dis_anapara": 4.8,
+    "dis_faiz": 7.9,
+    "finansman": 84.1,
+    "borclanma_disi": -47.9,
+    "borclanma": 132.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 132.0,
+    "ihale": 108.8,
+    "dogrudan": 5.3,
+    "kamu": 18.0,
+    "hedef": 126.8,
+    "cevirme": 184.9,
+    "dogrudan_pay": 4.0,
+    "ihale_pay": 82.4,
+    "kamu_pay": 13.6,
+    "faiz_pay": 88.5,
+    "bdk_pay": -57.0
+   },
+   "2025-01": {
+    "odemeler": 265.2,
+    "ic_servis": 225.4,
+    "ic_anapara": 106.5,
+    "ic_faiz": 118.9,
+    "dis_servis": 39.8,
+    "dis_anapara": 5.7,
+    "dis_faiz": 34.1,
+    "finansman": 265.2,
+    "borclanma_disi": -28.6,
+    "borclanma": 293.8,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 293.8,
+    "ihale": 189.5,
+    "dogrudan": 92.3,
+    "kamu": 12.0,
+    "hedef": 201.5,
+    "cevirme": 130.3,
+    "dogrudan_pay": 31.4,
+    "ihale_pay": 64.5,
+    "kamu_pay": 4.1,
+    "faiz_pay": 52.8,
+    "bdk_pay": -10.8
+   },
+   "2025-02": {
+    "odemeler": 248.1,
+    "ic_servis": 117.8,
+    "ic_anapara": 0.0,
+    "ic_faiz": 117.8,
+    "dis_servis": 130.4,
+    "dis_anapara": 108.7,
+    "dis_faiz": 21.7,
+    "finansman": 248.1,
+    "borclanma_disi": 68.0,
+    "borclanma": 180.1,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 180.1,
+    "ihale": 155.9,
+    "dogrudan": 4.2,
+    "kamu": 20.0,
+    "hedef": 175.9,
+    "cevirme": 152.9,
+    "dogrudan_pay": 2.3,
+    "ihale_pay": 86.6,
+    "kamu_pay": 11.1,
+    "faiz_pay": 100.0,
+    "bdk_pay": 27.4
+   },
+   "2025-03": {
+    "odemeler": 274.0,
+    "ic_servis": 124.7,
+    "ic_anapara": 14.8,
+    "ic_faiz": 110.0,
+    "dis_servis": 149.3,
+    "dis_anapara": 122.0,
+    "dis_faiz": 27.3,
+    "finansman": 274.0,
+    "borclanma_disi": 72.8,
+    "borclanma": 201.2,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 201.2,
+    "ihale": 183.2,
+    "dogrudan": 0.0,
+    "kamu": 18.0,
+    "hedef": 201.2,
+    "cevirme": 161.3,
+    "dogrudan_pay": 0.0,
+    "ihale_pay": 91.1,
+    "kamu_pay": 8.9,
+    "faiz_pay": 88.2,
+    "bdk_pay": 26.6
+   },
+   "2025-04": {
+    "odemeler": 317.6,
+    "ic_servis": 293.3,
+    "ic_anapara": 57.0,
+    "ic_faiz": 236.3,
+    "dis_servis": 24.3,
+    "dis_anapara": 1.5,
+    "dis_faiz": 22.7,
+    "finansman": 317.6,
+    "borclanma_disi": -11.9,
+    "borclanma": 329.5,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 329.5,
+    "ihale": 232.1,
+    "dogrudan": 28.4,
+    "kamu": 69.0,
+    "hedef": 301.1,
+    "cevirme": 112.3,
+    "dogrudan_pay": 8.6,
+    "ihale_pay": 70.4,
+    "kamu_pay": 20.9,
+    "faiz_pay": 80.6,
+    "bdk_pay": -3.7
+   },
+   "2025-05": {
+    "odemeler": 190.0,
+    "ic_servis": 160.7,
+    "ic_anapara": 83.1,
+    "ic_faiz": 77.6,
+    "dis_servis": 29.2,
+    "dis_anapara": 5.8,
+    "dis_faiz": 23.4,
+    "finansman": 190.0,
+    "borclanma_disi": 2.5,
+    "borclanma": 187.5,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 187.5,
+    "ihale": 90.1,
+    "dogrudan": 82.4,
+    "kamu": 15.0,
+    "hedef": 105.1,
+    "cevirme": 116.7,
+    "dogrudan_pay": 43.9,
+    "ihale_pay": 48.1,
+    "kamu_pay": 8.0,
+    "faiz_pay": 48.3,
+    "bdk_pay": 1.3
+   },
+   "2025-06": {
+    "odemeler": 320.3,
+    "ic_servis": 265.6,
+    "ic_anapara": 25.0,
+    "ic_faiz": 240.7,
+    "dis_servis": 54.6,
+    "dis_anapara": 46.9,
+    "dis_faiz": 7.7,
+    "finansman": 320.3,
+    "borclanma_disi": 41.3,
+    "borclanma": 278.9,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 278.9,
+    "ihale": 247.0,
+    "dogrudan": 13.9,
+    "kamu": 18.0,
+    "hedef": 265.0,
+    "cevirme": 105.0,
+    "dogrudan_pay": 5.0,
+    "ihale_pay": 88.6,
+    "kamu_pay": 6.5,
+    "faiz_pay": 90.6,
+    "bdk_pay": 12.9
+   },
+   "2025-07": {
+    "odemeler": 373.3,
+    "ic_servis": 316.6,
+    "ic_anapara": 235.9,
+    "ic_faiz": 80.7,
+    "dis_servis": 56.8,
+    "dis_anapara": 7.7,
+    "dis_faiz": 49.1,
+    "finansman": 373.3,
+    "borclanma_disi": -3.0,
+    "borclanma": 376.4,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 376.4,
+    "ihale": 167.9,
+    "dogrudan": 180.5,
+    "kamu": 28.0,
+    "hedef": 195.9,
+    "cevirme": 118.9,
+    "dogrudan_pay": 48.0,
+    "ihale_pay": 44.6,
+    "kamu_pay": 7.4,
+    "faiz_pay": 25.5,
+    "bdk_pay": -0.8
+   },
+   "2025-08": {
+    "odemeler": 363.2,
+    "ic_servis": 339.1,
+    "ic_anapara": 187.2,
+    "ic_faiz": 151.8,
+    "dis_servis": 24.2,
+    "dis_anapara": 8.0,
+    "dis_faiz": 16.2,
+    "finansman": 363.2,
+    "borclanma_disi": -77.5,
+    "borclanma": 440.8,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 440.8,
+    "ihale": 210.8,
+    "dogrudan": 190.0,
+    "kamu": 40.0,
+    "hedef": 250.8,
+    "cevirme": 130.0,
+    "dogrudan_pay": 43.1,
+    "ihale_pay": 47.8,
+    "kamu_pay": 9.1,
+    "faiz_pay": 44.8,
+    "bdk_pay": -21.3
+   },
+   "2025-09": {
+    "odemeler": 290.1,
+    "ic_servis": 255.7,
+    "ic_anapara": 54.3,
+    "ic_faiz": 201.5,
+    "dis_servis": 34.4,
+    "dis_anapara": 6.1,
+    "dis_faiz": 28.3,
+    "finansman": 290.1,
+    "borclanma_disi": -55.9,
+    "borclanma": 346.0,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 346.0,
+    "ihale": 274.0,
+    "dogrudan": 25.0,
+    "kamu": 47.0,
+    "hedef": 321.0,
+    "cevirme": 135.3,
+    "dogrudan_pay": 7.2,
+    "ihale_pay": 79.2,
+    "kamu_pay": 13.6,
+    "faiz_pay": 78.8,
+    "bdk_pay": -19.3
+   },
+   "2025-10": {
+    "odemeler": 373.2,
+    "ic_servis": 263.6,
+    "ic_anapara": 126.4,
+    "ic_faiz": 137.2,
+    "dis_servis": 109.5,
+    "dis_anapara": 84.5,
+    "dis_faiz": 25.0,
+    "finansman": 373.2,
+    "borclanma_disi": 83.1,
+    "borclanma": 290.1,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 290.1,
+    "ihale": 210.1,
+    "dogrudan": 35.0,
+    "kamu": 45.0,
+    "hedef": 255.1,
+    "cevirme": 110.1,
+    "dogrudan_pay": 12.1,
+    "ihale_pay": 72.4,
+    "kamu_pay": 15.5,
+    "faiz_pay": 52.0,
+    "bdk_pay": 22.3
+   },
+   "2025-11": {
+    "odemeler": 232.6,
+    "ic_servis": 95.0,
+    "ic_anapara": 0.0,
+    "ic_faiz": 95.0,
+    "dis_servis": 137.6,
+    "dis_anapara": 114.7,
+    "dis_faiz": 22.9,
+    "finansman": 232.6,
+    "borclanma_disi": 104.3,
+    "borclanma": 128.3,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 128.3,
+    "ihale": 48.3,
+    "dogrudan": 60.0,
+    "kamu": 20.0,
+    "hedef": 68.3,
+    "cevirme": 135.1,
+    "dogrudan_pay": 46.8,
+    "ihale_pay": 37.6,
+    "kamu_pay": 15.6,
+    "faiz_pay": 100.0,
+    "bdk_pay": 44.8
+   },
+   "2025-12": {
+    "odemeler": 124.2,
+    "ic_servis": 109.6,
+    "ic_anapara": 0.5,
+    "ic_faiz": 109.1,
+    "dis_servis": 14.6,
+    "dis_anapara": 7.6,
+    "dis_faiz": 7.0,
+    "finansman": 124.2,
+    "borclanma_disi": 0.0,
+    "borclanma": 124.2,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 124.2,
+    "ihale": 79.2,
+    "dogrudan": 15.0,
+    "kamu": 30.0,
+    "hedef": 109.2,
+    "cevirme": 113.3,
+    "dogrudan_pay": 12.1,
+    "ihale_pay": 63.8,
+    "kamu_pay": 24.2,
+    "faiz_pay": 99.5,
+    "bdk_pay": 0.0
+   },
+   "2026-01": {
+    "odemeler": 744.8,
+    "ic_servis": 613.3,
+    "ic_anapara": 204.4,
+    "ic_faiz": 408.9,
+    "dis_servis": 131.5,
+    "dis_anapara": 85.4,
+    "dis_faiz": 46.1,
+    "finansman": 744.8,
+    "borclanma_disi": 257.2,
+    "borclanma": 487.7,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 487.7,
+    "ihale": 255.7,
+    "dogrudan": 160.0,
+    "kamu": 72.0,
+    "hedef": 327.7,
+    "cevirme": 79.5,
+    "dogrudan_pay": 32.8,
+    "ihale_pay": 52.4,
+    "kamu_pay": 14.8,
+    "faiz_pay": 66.7,
+    "bdk_pay": 34.5
+   },
+   "2026-02": {
+    "odemeler": 773.3,
+    "ic_servis": 656.6,
+    "ic_anapara": 501.8,
+    "ic_faiz": 154.8,
+    "dis_servis": 116.8,
+    "dis_anapara": 87.8,
+    "dis_faiz": 28.9,
+    "finansman": 773.3,
+    "borclanma_disi": 248.1,
+    "borclanma": 525.3,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 525.3,
+    "ihale": 181.3,
+    "dogrudan": 300.0,
+    "kamu": 44.0,
+    "hedef": 225.3,
+    "cevirme": 80.0,
+    "dogrudan_pay": 57.1,
+    "ihale_pay": 34.5,
+    "kamu_pay": 8.4,
+    "faiz_pay": 23.6,
+    "bdk_pay": 32.1
+   },
+   "2026-03": {
+    "odemeler": 430.2,
+    "ic_servis": 394.3,
+    "ic_anapara": 192.7,
+    "ic_faiz": 201.6,
+    "dis_servis": 35.8,
+    "dis_anapara": 6.1,
+    "dis_faiz": 29.7,
+    "finansman": 430.2,
+    "borclanma_disi": 114.7,
+    "borclanma": 315.5,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 315.5,
+    "ihale": 127.5,
+    "dogrudan": 145.0,
+    "kamu": 43.0,
+    "hedef": 170.5,
+    "cevirme": 80.0,
+    "dogrudan_pay": 46.0,
+    "ihale_pay": 40.4,
+    "kamu_pay": 13.6,
+    "faiz_pay": 51.1,
+    "bdk_pay": 26.7
+   },
+   "2026-04": {
+    "odemeler": 602.1,
+    "ic_servis": 505.4,
+    "ic_anapara": 282.3,
+    "ic_faiz": 223.1,
+    "dis_servis": 96.7,
+    "dis_anapara": 69.7,
+    "dis_faiz": 27.0,
+    "finansman": 602.1,
+    "borclanma_disi": 122.0,
+    "borclanma": 480.1,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 480.1,
+    "ihale": 214.1,
+    "dogrudan": 230.0,
+    "kamu": 36.0,
+    "hedef": 250.1,
+    "cevirme": 95.0,
+    "dogrudan_pay": 47.9,
+    "ihale_pay": 44.6,
+    "kamu_pay": 7.5,
+    "faiz_pay": 44.1,
+    "bdk_pay": 20.3
+   },
+   "2026-05": {
+    "odemeler": 382.8,
+    "ic_servis": 347.0,
+    "ic_anapara": 248.4,
+    "ic_faiz": 98.7,
+    "dis_servis": 35.7,
+    "dis_anapara": 10.8,
+    "dis_faiz": 24.9,
+    "finansman": 382.8,
+    "borclanma_disi": 1.0,
+    "borclanma": 381.7,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 381.7,
+    "ihale": 141.7,
+    "dogrudan": 220.0,
+    "kamu": 20.0,
+    "hedef": 161.7,
+    "cevirme": 110.0,
+    "dogrudan_pay": 57.6,
+    "ihale_pay": 37.1,
+    "kamu_pay": 5.2,
+    "faiz_pay": 28.4,
+    "bdk_pay": 0.3
+   },
+   "2026-06": {
+    "odemeler": 686.6,
+    "ic_servis": 554.9,
+    "ic_anapara": 373.5,
+    "ic_faiz": 181.4,
+    "dis_servis": 131.7,
+    "dis_anapara": 123.4,
+    "dis_faiz": 8.3,
+    "finansman": 686.6,
+    "borclanma_disi": 142.8,
+    "borclanma": 543.8,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 543.8,
+    "ihale": 233.8,
+    "dogrudan": 240.0,
+    "kamu": 70.0,
+    "hedef": 303.8,
+    "cevirme": 98.0,
+    "dogrudan_pay": 44.1,
+    "ihale_pay": 43.0,
+    "kamu_pay": 12.9,
+    "faiz_pay": 32.7,
+    "bdk_pay": 20.8
+   },
+   "2026-07": {
+    "odemeler": 703.8,
+    "ic_servis": 638.7,
+    "ic_anapara": 365.9,
+    "ic_faiz": 272.8,
+    "dis_servis": 65.1,
+    "dis_anapara": 11.2,
+    "dis_faiz": 53.9,
+    "finansman": 703.8,
+    "borclanma_disi": 97.0,
+    "borclanma": 606.8,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 606.8,
+    "ihale": 256.8,
+    "dogrudan": 330.0,
+    "kamu": 20.0,
+    "hedef": 276.8,
+    "cevirme": 95.0,
+    "dogrudan_pay": 54.4,
+    "ihale_pay": 42.3,
+    "kamu_pay": 3.3,
+    "faiz_pay": 42.7,
+    "bdk_pay": 13.8
+   },
+   "2026-08": {
+    "odemeler": 644.9,
+    "ic_servis": 596.3,
+    "ic_anapara": 468.3,
+    "ic_faiz": 128.0,
+    "dis_servis": 48.6,
+    "dis_anapara": 16.7,
+    "dis_faiz": 31.8,
+    "finansman": 644.9,
+    "borclanma_disi": 108.2,
+    "borclanma": 536.7,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 536.7,
+    "ihale": 334.7,
+    "dogrudan": 165.0,
+    "kamu": 37.0,
+    "hedef": 371.7,
+    "cevirme": 90.0,
+    "dogrudan_pay": 30.7,
+    "ihale_pay": 62.4,
+    "kamu_pay": 6.9,
+    "faiz_pay": 21.5,
+    "bdk_pay": 16.8
+   },
+   "2026-09": {
+    "odemeler": 343.1,
+    "ic_servis": 296.7,
+    "ic_anapara": 56.6,
+    "ic_faiz": 240.1,
+    "dis_servis": 46.3,
+    "dis_anapara": 7.3,
+    "dis_faiz": 39.1,
+    "finansman": 343.1,
+    "borclanma_disi": 61.2,
+    "borclanma": 281.9,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 281.9,
+    "ihale": 216.9,
+    "dogrudan": 20.0,
+    "kamu": 45.0,
+    "hedef": 261.9,
+    "cevirme": 95.0,
+    "dogrudan_pay": 7.1,
+    "ihale_pay": 76.9,
+    "kamu_pay": 16.0,
+    "faiz_pay": 80.9,
+    "bdk_pay": 17.8
+   },
+   "2026-10": {
+    "odemeler": 615.3,
+    "ic_servis": 436.6,
+    "ic_anapara": 188.8,
+    "ic_faiz": 247.8,
+    "dis_servis": 178.7,
+    "dis_anapara": 153.2,
+    "dis_faiz": 25.5,
+    "finansman": 615.3,
+    "borclanma_disi": 200.5,
+    "borclanma": 414.8,
+    "dis_borclanma": 0.0,
+    "ic_borclanma": 414.8,
+    "ihale": 180.8,
+    "dogrudan": 220.0,
+    "kamu": 14.0,
+    "hedef": 194.8,
+    "cevirme": 95.0,
+    "dogrudan_pay": 53.0,
+    "ihale_pay": 43.6,
+    "kamu_pay": 3.4,
+    "faiz_pay": 56.8,
+    "bdk_pay": 32.6
+   }
+  },
+  "ilk": "2019-12",
+  "son": "2026-10",
+  "n": 83,
+  "ceyrek": {
+   "2020-Ç1": {
+    "ic_servis": 75.1,
+    "ic_faiz": 22.9,
+    "ic_anapara": 52.1,
+    "ic_borclanma": 56.0,
+    "dogrudan": 4.6,
+    "ay": 3,
+    "faiz_pay": 30.5
+   },
+   "2020-Ç2": {
+    "ic_servis": 52.6,
+    "ic_faiz": 24.7,
+    "ic_anapara": 27.9,
+    "ic_borclanma": 97.0,
+    "dogrudan": 2.5,
+    "ay": 3,
+    "faiz_pay": 47.0
+   },
+   "2020-Ç3": {
+    "ic_servis": 74.5,
+    "ic_faiz": 24.4,
+    "ic_anapara": 50.1,
+    "ic_borclanma": 56.0,
+    "dogrudan": 3.3,
+    "ay": 3,
+    "faiz_pay": 32.8
+   },
+   "2020-Ç4": {
+    "ic_servis": 85.6,
+    "ic_faiz": 17.1,
+    "ic_anapara": 68.5,
+    "ic_borclanma": 40.0,
+    "dogrudan": 0.7,
+    "ay": 3,
+    "faiz_pay": 20.0
+   },
+   "2021-Ç1": {
+    "ic_servis": 111.2,
+    "ic_faiz": 34.3,
+    "ic_anapara": 76.8,
+    "ic_borclanma": 102.0,
+    "dogrudan": 22.4,
+    "ay": 3,
+    "faiz_pay": 30.8
+   },
+   "2021-Ç2": {
+    "ic_servis": 124.1,
+    "ic_faiz": 23.6,
+    "ic_anapara": 100.3,
+    "ic_borclanma": 105.0,
+    "dogrudan": 38.6,
+    "ay": 3,
+    "faiz_pay": 19.0
+   },
+   "2021-Ç3": {
+    "ic_servis": 101.5,
+    "ic_faiz": 35.7,
+    "ic_anapara": 65.9,
+    "ic_borclanma": 108.0,
+    "dogrudan": 24.8,
+    "ay": 3,
+    "faiz_pay": 35.2
+   },
+   "2021-Ç4": {
+    "ic_servis": 78.8,
+    "ic_faiz": 25.3,
+    "ic_anapara": 53.6,
+    "ic_borclanma": 65.0,
+    "dogrudan": 8.8,
+    "ay": 3,
+    "faiz_pay": 32.1
+   },
+   "2022-Ç1": {
+    "ic_servis": 144.3,
+    "ic_faiz": 56.1,
+    "ic_anapara": 88.1,
+    "ic_borclanma": 128.3,
+    "dogrudan": 25.0,
+    "ay": 3,
+    "faiz_pay": 38.9
+   },
+   "2022-Ç2": {
+    "ic_servis": 94.8,
+    "ic_faiz": 27.2,
+    "ic_anapara": 67.6,
+    "ic_borclanma": 114.0,
+    "dogrudan": 21.5,
+    "ay": 3,
+    "faiz_pay": 28.7
+   },
+   "2022-Ç3": {
+    "ic_servis": 122.1,
+    "ic_faiz": 41.1,
+    "ic_anapara": 81.2,
+    "ic_borclanma": 144.2,
+    "dogrudan": 34.3,
+    "ay": 3,
+    "faiz_pay": 33.7
+   },
+   "2022-Ç4": {
+    "ic_servis": 116.8,
+    "ic_faiz": 81.1,
+    "ic_anapara": 35.8,
+    "ic_borclanma": 163.8,
+    "dogrudan": 8.4,
+    "ay": 3,
+    "faiz_pay": 69.4
+   },
+   "2023-Ç1": {
+    "ic_servis": 123.1,
+    "ic_faiz": 58.7,
+    "ic_anapara": 64.4,
+    "ic_borclanma": 170.0,
+    "dogrudan": 8.1,
+    "ay": 3,
+    "faiz_pay": 47.7
+   },
+   "2023-Ç2": {
+    "ic_servis": 176.4,
+    "ic_faiz": 119.3,
+    "ic_anapara": 57.0,
+    "ic_borclanma": 130.0,
+    "dogrudan": 2.0,
+    "ay": 3,
+    "faiz_pay": 67.6
+   },
+   "2023-Ç3": {
+    "ic_servis": 368.7,
+    "ic_faiz": 101.8,
+    "ic_anapara": 266.8,
+    "ic_borclanma": 340.0,
+    "dogrudan": 119.0,
+    "ay": 3,
+    "faiz_pay": 27.6
+   },
+   "2023-Ç4": {
+    "ic_servis": 187.9,
+    "ic_faiz": 140.4,
+    "ic_anapara": 47.4,
+    "ic_borclanma": 191.0,
+    "dogrudan": 6.0,
+    "ay": 3,
+    "faiz_pay": 74.7
+   },
+   "2024-Ç1": {
+    "ic_servis": 392.4,
+    "ic_faiz": 158.7,
+    "ic_anapara": 233.6,
+    "ic_borclanma": 503.0,
+    "dogrudan": 203.4,
+    "ay": 3,
+    "faiz_pay": 40.4
+   },
+   "2024-Ç2": {
+    "ic_servis": 581.4,
+    "ic_faiz": 265.4,
+    "ic_anapara": 315.9,
+    "ic_borclanma": 633.9,
+    "dogrudan": 145.4,
+    "ay": 3,
+    "faiz_pay": 45.6
+   },
+   "2024-Ç3": {
+    "ic_servis": 366.6,
+    "ic_faiz": 243.6,
+    "ic_anapara": 123.0,
+    "ic_borclanma": 534.8,
+    "dogrudan": 69.5,
+    "ay": 3,
+    "faiz_pay": 66.4
+   },
+   "2024-Ç4": {
+    "ic_servis": 338.4,
+    "ic_faiz": 284.2,
+    "ic_anapara": 54.2,
+    "ic_borclanma": 570.0,
+    "dogrudan": 89.4,
+    "ay": 3,
+    "faiz_pay": 84.0
+   },
+   "2025-Ç1": {
+    "ic_servis": 467.9,
+    "ic_faiz": 346.7,
+    "ic_anapara": 121.3,
+    "ic_borclanma": 675.1,
+    "dogrudan": 96.5,
+    "ay": 3,
+    "faiz_pay": 74.1
+   },
+   "2025-Ç2": {
+    "ic_servis": 719.6,
+    "ic_faiz": 554.6,
+    "ic_anapara": 165.1,
+    "ic_borclanma": 795.9,
+    "dogrudan": 124.7,
+    "ay": 3,
+    "faiz_pay": 77.1
+   },
+   "2025-Ç3": {
+    "ic_servis": 911.4,
+    "ic_faiz": 434.0,
+    "ic_anapara": 477.4,
+    "ic_borclanma": 1163.2,
+    "dogrudan": 395.5,
+    "ay": 3,
+    "faiz_pay": 47.6
+   },
+   "2025-Ç4": {
+    "ic_servis": 468.2,
+    "ic_faiz": 341.3,
+    "ic_anapara": 126.9,
+    "ic_borclanma": 542.6,
+    "dogrudan": 110.0,
+    "ay": 3,
+    "faiz_pay": 72.9
+   },
+   "2026-Ç1": {
+    "ic_servis": 1664.2,
+    "ic_faiz": 765.3,
+    "ic_anapara": 898.9,
+    "ic_borclanma": 1328.5,
+    "dogrudan": 605.0,
+    "ay": 3,
+    "faiz_pay": 46.0
+   },
+   "2026-Ç2": {
+    "ic_servis": 1407.3,
+    "ic_faiz": 503.2,
+    "ic_anapara": 904.2,
+    "ic_borclanma": 1405.6,
+    "dogrudan": 690.0,
+    "ay": 3,
+    "faiz_pay": 35.8
+   },
+   "2026-Ç3": {
+    "ic_servis": 1531.7,
+    "ic_faiz": 640.9,
+    "ic_anapara": 890.8,
+    "ic_borclanma": 1425.4,
+    "dogrudan": 515.0,
+    "ay": 3,
+    "faiz_pay": 41.8
+   },
+   "2026-Ç4": {
+    "ic_servis": 676.6,
+    "ic_faiz": 456.7,
+    "ic_anapara": 219.9,
+    "ic_borclanma": 630.7,
+    "dogrudan": 240.0,
+    "ay": 3,
+    "faiz_pay": 67.5
+   }
+  },
+  "q4": {
+   "2020-Ç4": {
+    "ic_servis": 85.6,
+    "ic_faiz": 17.1,
+    "ic_anapara": 68.5,
+    "ic_borclanma": 40.0,
+    "dogrudan": 0.7,
+    "ay": 3,
+    "faiz_pay": 20.0
+   },
+   "2021-Ç4": {
+    "ic_servis": 78.8,
+    "ic_faiz": 25.3,
+    "ic_anapara": 53.6,
+    "ic_borclanma": 65.0,
+    "dogrudan": 8.8,
+    "ay": 3,
+    "faiz_pay": 32.1
+   },
+   "2022-Ç4": {
+    "ic_servis": 116.8,
+    "ic_faiz": 81.1,
+    "ic_anapara": 35.8,
+    "ic_borclanma": 163.8,
+    "dogrudan": 8.4,
+    "ay": 3,
+    "faiz_pay": 69.4
+   },
+   "2023-Ç4": {
+    "ic_servis": 187.9,
+    "ic_faiz": 140.4,
+    "ic_anapara": 47.4,
+    "ic_borclanma": 191.0,
+    "dogrudan": 6.0,
+    "ay": 3,
+    "faiz_pay": 74.7
+   },
+   "2024-Ç4": {
+    "ic_servis": 338.4,
+    "ic_faiz": 284.2,
+    "ic_anapara": 54.2,
+    "ic_borclanma": 570.0,
+    "dogrudan": 89.4,
+    "ay": 3,
+    "faiz_pay": 84.0
+   },
+   "2025-Ç4": {
+    "ic_servis": 468.2,
+    "ic_faiz": 341.3,
+    "ic_anapara": 126.9,
+    "ic_borclanma": 542.6,
+    "dogrudan": 110.0,
+    "ay": 3,
+    "faiz_pay": 72.9
+   },
+   "2026-Ç4": {
+    "ic_servis": 676.6,
+    "ic_faiz": 456.7,
+    "ic_anapara": 219.9,
+    "ic_borclanma": 630.7,
+    "dogrudan": 240.0,
+    "ay": 3,
+    "faiz_pay": 67.5
+   }
+  },
+  "q4_servis_artis_yuzde": 44.5,
+  "q4_faiz_artis_yuzde": 33.8,
+  "ekim_sira": {
+   "dogrudan": {
+    "deger": 220.0,
+    "buyukten_sira": 5,
+    "n": 83,
+    "yuzdelik": 95.0
+   },
+   "dogrudan_pay": {
+    "deger": 53.0,
+    "buyukten_sira": 7,
+    "n": 83,
+    "yuzdelik": 93.0
+   },
+   "borclanma_disi": {
+    "deger": 200.5,
+    "buyukten_sira": 3,
+    "n": 83,
+    "yuzdelik": 98.0
+   },
+   "ic_servis": {
+    "deger": 436.6,
+    "buyukten_sira": 7,
+    "n": 83,
+    "yuzdelik": 93.0
+   },
+   "ic_borclanma": {
+    "deger": 414.8,
+    "buyukten_sira": 8,
+    "n": 83,
+    "yuzdelik": 92.0
+   },
+   "cevirme": {
+    "deger": 95.0,
+    "buyukten_sira": 54,
+    "n": 83,
+    "yuzdelik": 36.0
+   }
+  },
+  "yil26": {
+   "dogrudan": 201.1,
+   "dogrudan_pay": 42.0,
+   "cevirme": 91.4,
+   "borclanma_disi": 128.0
+  },
+  "yil26_aylar": {
+   "2026-01": {
+    "dogrudan": 160.0,
+    "dogrudan_pay": 32.8,
+    "cevirme": 79.5
+   },
+   "2026-02": {
+    "dogrudan": 300.0,
+    "dogrudan_pay": 57.1,
+    "cevirme": 80.0
+   },
+   "2026-03": {
+    "dogrudan": 145.0,
+    "dogrudan_pay": 46.0,
+    "cevirme": 80.0
+   },
+   "2026-04": {
+    "dogrudan": 230.0,
+    "dogrudan_pay": 47.9,
+    "cevirme": 95.0
+   },
+   "2026-05": {
+    "dogrudan": 220.0,
+    "dogrudan_pay": 57.6,
+    "cevirme": 110.0
+   },
+   "2026-06": {
+    "dogrudan": 240.0,
+    "dogrudan_pay": 44.1,
+    "cevirme": 98.0
+   },
+   "2026-07": {
+    "dogrudan": 330.0,
+    "dogrudan_pay": 54.4,
+    "cevirme": 95.0
+   },
+   "2026-08": {
+    "dogrudan": 165.0,
+    "dogrudan_pay": 30.7,
+    "cevirme": 90.0
+   },
+   "2026-09": {
+    "dogrudan": 20.0,
+    "dogrudan_pay": 7.1,
+    "cevirme": 95.0
+   }
+  },
+  "yil26_dogrudan_min": [
+   20.0,
+   "2026-09"
+  ],
+  "yil26_dogrudan_maks": [
+   330.0,
+   "2026-07"
+  ],
+  "yil25_dogrudan_ort": 60.6,
+  "yil24_dogrudan_ort": 42.3,
+  "dogrudan_revizyon": {
+   "ikinci_kesin": {
+    "n": 81,
+    "yukari": 52,
+    "asagi": 13,
+    "ayni": 16
+   },
+   "asagi_sonra": {
+    "n": 21,
+    "yukari": 12
+   },
+   "sifirdan": {
+    "n": 26,
+    "yukari": 19,
+    "yukari_medyan": 3.0
+   },
+   "n": 82,
+   "yukari": 56,
+   "asagi": 14,
+   "ayni": 12,
+   "medyan_fark": 3.0,
+   "zincir": {
+    "2026-09": [
+     10.0,
+     10.0,
+     20.0
+    ],
+    "2026-10": [
+     170.0,
+     180.0,
+     220.0
+    ],
+    "2026-11": [
+     25.0,
+     20.0
+    ],
+    "2026-12": [
+     0.0
+    ]
+   },
+   "dusuk_ilk_2026": [
+    [
+     "2026-01",
+     25.0,
+     160.0
+    ],
+    [
+     "2026-02",
+     20.0,
+     300.0
+    ],
+    [
+     "2026-09",
+     10.0,
+     20.0
+    ]
+   ],
+   "dusuk_ilk_2026_yukari": 3
+  },
+  "q4_faiz_reel_yuzde": 1.7,
+  "q4_faiz_reel_tufe": 31.51
+ },
+ "vade": {
+  "aylik": {
+   "2026-10": {
+    "aov": 3.98,
+    "reprice": 2.51,
+    "tlref_pay": 40.1,
+    "plan_mlr": 179.2,
+    "hedef": 194.8,
+    "aov_karsi": 3.97,
+    "reprice_karsi": 2.5,
+    "tlref_pay_karsi": 40.1,
+    "plan_mlr_karsi": 210.8,
+    "hedef_karsi": 229.1,
+    "aov_fark": 0.01
+   },
+   "2026-11": {
+    "aov": 3.92,
+    "reprice": 3.92,
+    "tlref_pay": 0.0,
+    "plan_mlr": 83.2,
+    "hedef": 90.4,
+    "aov_karsi": 4.1,
+    "reprice_karsi": 4.1,
+    "tlref_pay_karsi": 0.0,
+    "plan_mlr_karsi": 78.6,
+    "hedef_karsi": 85.4,
+    "aov_fark": -0.18
+   },
+   "2026-12": {
+    "aov": 4.2,
+    "reprice": 2.49,
+    "tlref_pay": 48.8,
+    "plan_mlr": 97.1,
+    "hedef": 105.5
+   }
+  },
+  "plan_aov": 4.03,
+  "plan_aov_ham": 4.04,
+  "reprice_duyarlilik_05": {
+   "plan": 2.91,
+   "gecmis_13a": 2.2,
+   "ekim": 2.61,
+   "ekim_karsi": 2.6
+  },
+  "gercek_aylik": {
+   "2025-09": {
+    "aov": 2.424,
+    "aov_bonosuz": 3.467,
+    "reprice": 2.424,
+    "tlref_pay": 0.0,
+    "sabit_pay": 90.568,
+    "bono_pay": 38.652,
+    "toplam": 173355.0,
+    "n": 5
+   },
+   "2025-10": {
+    "aov": 3.467,
+    "aov_bonosuz": 4.459,
+    "reprice": 3.467,
+    "tlref_pay": 0.0,
+    "sabit_pay": 90.404,
+    "bono_pay": 26.321,
+    "toplam": 161127.0,
+    "n": 5
+   },
+   "2025-11": {
+    "aov": 1.624,
+    "aov_bonosuz": 2.363,
+    "reprice": 1.624,
+    "tlref_pay": 0.0,
+    "sabit_pay": 100.0,
+    "bono_pay": 41.79,
+    "toplam": 81639.0,
+    "n": 3
+   },
+   "2025-12": {
+    "aov": 2.33,
+    "aov_bonosuz": 3.198,
+    "reprice": 2.33,
+    "tlref_pay": 0.0,
+    "sabit_pay": 93.619,
+    "bono_pay": 32.374,
+    "toplam": 104637.0,
+    "n": 4
+   },
+   "2026-01": {
+    "aov": 3.67,
+    "aov_bonosuz": 3.67,
+    "reprice": 2.42,
+    "tlref_pay": 33.43,
+    "sabit_pay": 59.427,
+    "bono_pay": 0.0,
+    "toplam": 317081.0,
+    "n": 7
+   },
+   "2026-02": {
+    "aov": 3.144,
+    "aov_bonosuz": 3.333,
+    "reprice": 2.019,
+    "tlref_pay": 30.713,
+    "sabit_pay": 62.967,
+    "bono_pay": 7.773,
+    "toplam": 201529.0,
+    "n": 5
+   },
+   "2026-03": {
+    "aov": 3.175,
+    "aov_bonosuz": 3.886,
+    "reprice": 1.961,
+    "tlref_pay": 34.044,
+    "sabit_pay": 56.667,
+    "bono_pay": 23.235,
+    "toplam": 140226.0,
+    "n": 6
+   },
+   "2026-04": {
+    "aov": 3.429,
+    "aov_bonosuz": 3.695,
+    "reprice": 1.601,
+    "tlref_pay": 52.076,
+    "sabit_pay": 39.972,
+    "bono_pay": 9.68,
+    "toplam": 191675.0,
+    "n": 5
+   },
+   "2026-05": {
+    "aov": 3.122,
+    "aov_bonosuz": 3.5,
+    "reprice": 1.361,
+    "tlref_pay": 51.586,
+    "sabit_pay": 43.457,
+    "bono_pay": 14.328,
+    "toplam": 167661.0,
+    "n": 5
+   },
+   "2026-06": {
+    "aov": 2.848,
+    "aov_bonosuz": 3.546,
+    "reprice": 1.129,
+    "tlref_pay": 50.65,
+    "sabit_pay": 44.925,
+    "bono_pay": 24.12,
+    "toplam": 297997.0,
+    "n": 6
+   },
+   "2026-07": {
+    "aov": 3.066,
+    "aov_bonosuz": 3.745,
+    "reprice": 1.007,
+    "tlref_pay": 55.062,
+    "sabit_pay": 44.938,
+    "bono_pay": 21.295,
+    "toplam": 285634.0,
+    "n": 4
+   },
+   "2026-08": {
+    "aov": 3.817,
+    "aov_bonosuz": 4.717,
+    "reprice": 2.779,
+    "tlref_pay": 29.178,
+    "sabit_pay": 69.487,
+    "bono_pay": 21.335,
+    "toplam": 348455.0,
+    "n": 7
+   },
+   "2026-09": {
+    "aov": 4.487,
+    "aov_bonosuz": 4.487,
+    "reprice": 3.284,
+    "tlref_pay": 32.174,
+    "sabit_pay": 67.826,
+    "bono_pay": 0.0,
+    "toplam": 261864.0,
+    "n": 4
+   }
+  },
+  "plan_reprice": 2.83,
+  "plan_tlref_pay": 33.2,
+  "plan_sabit_pay": 66.8,
+  "gecmis_son_ay": "2026-09",
+  "gecmis_son_aov": 4.49,
+  "yuvarlanan": {
+   "2025-09": 3.44,
+   "2025-10": 3.17,
+   "2025-11": 2.67,
+   "2025-12": 2.69,
+   "2026-01": 3.06,
+   "2026-02": 3.27,
+   "2026-03": 3.4,
+   "2026-04": 3.25,
+   "2026-05": 3.25,
+   "2026-06": 3.09,
+   "2026-07": 2.99,
+   "2026-08": 3.28,
+   "2026-09": 3.77,
+   "2026-10": 4.08,
+   "2026-11": 4.22,
+   "2026-12": 4.03
+  },
+  "yuvarlanan_karsi": {
+   "2026-10": 4.07,
+   "2026-11": 4.23
+  },
+  "uzama_3a": 0.26,
+  "uzama_n": 78,
+  "uzama_yuzdelik": 26.0,
+  "gecmis_12a_reprice": 2.12,
+  "gecmis_12a_aov": 3.3,
+  "gerceklesme_varsayimi": 92.0,
+  "satirlar": [
+   {
+    "gun": "05.10.2026",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "terim": "2Yıl /707 Gün",
+    "itfa": "13.09.2028",
+    "yontem": "İhale / Yeniden ihraç",
+    "v": 1.94,
+    "g_mlr": 50.9,
+    "ham_mlr": 59.7,
+    "kiyas": "Aynı tahvil (itfa + tür eşleşmesi)",
+    "n": 1.0,
+    "btc": 1.65
+   },
+   {
+    "gun": "05.10.2026",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "terim": "5Yıl /1652 Gün",
+    "itfa": "16.04.2031",
+    "yontem": "İhale / Yeniden ihraç",
+    "v": 4.53,
+    "g_mlr": 34.2,
+    "ham_mlr": 40.1,
+    "kiyas": "Aynı tahvil (itfa + tür eşleşmesi)",
+    "n": 6.0,
+    "btc": 1.54
+   },
+   {
+    "gun": "06.10.2026",
+    "senet": "TLREF'e Endeksli Devlet Tahvili",
+    "terim": "4Yıl /1435 Gün",
+    "itfa": "11.09.2030",
+    "yontem": "İhale / Yeniden ihraç",
+    "v": 3.93,
+    "g_mlr": 71.8,
+    "ham_mlr": 84.3,
+    "kiyas": "Aynı tahvil (itfa + tür eşleşmesi)",
+    "n": 1.0,
+    "btc": 2.71
+   },
+   {
+    "gun": "06.10.2026",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "terim": "8Yıl /2912 Gün",
+    "itfa": "27.09.2034",
+    "yontem": "İhale / Yeniden ihraç",
+    "v": 7.98,
+    "g_mlr": 22.3,
+    "ham_mlr": 26.2,
+    "kiyas": "Aynı tahvil (itfa + tür eşleşmesi)",
+    "n": 7.0,
+    "btc": 2.34
+   },
+   {
+    "gun": "09.11.2026",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "terim": "2Yıl /672 Gün",
+    "itfa": "13.09.2028",
+    "yontem": "İhale / Yeniden ihraç",
+    "v": 1.84,
+    "g_mlr": 39.4,
+    "ham_mlr": 59.7,
+    "kiyas": "Aynı tahvil (itfa + tür eşleşmesi)",
+    "n": 1.0,
+    "btc": 1.65
+   },
+   {
+    "gun": "09.11.2026",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "terim": "4Yıl /1617 Gün",
+    "itfa": "16.04.2031",
+    "yontem": "İhale / Yeniden ihraç",
+    "v": 4.43,
+    "g_mlr": 26.5,
+    "ham_mlr": 40.1,
+    "kiyas": "Aynı tahvil (itfa + tür eşleşmesi)",
+    "n": 6.0,
+    "btc": 1.54
+   },
+   {
+    "gun": "10.11.2026",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "terim": "8Yıl /2877 Gün",
+    "itfa": "27.09.2034",
+    "yontem": "İhale / Yeniden ihraç",
+    "v": 7.88,
+    "g_mlr": 17.3,
+    "ham_mlr": 26.2,
+    "kiyas": "Aynı tahvil (itfa + tür eşleşmesi)",
+    "n": 7.0,
+    "btc": 2.34
+   },
+   {
+    "gun": "07.12.2026",
+    "senet": "Kuponsuz Devlet Tahvili",
+    "terim": "16Ay /483 Gün",
+    "itfa": "05.04.2028",
+    "yontem": "İhale / İlk ihraç",
+    "v": 1.32,
+    "g_mlr": 12.3,
+    "ham_mlr": 21.9,
+    "kiyas": "Aynı tip + benzer vade",
+    "n": 22.0,
+    "btc": 2.25
+   },
+   {
+    "gun": "07.12.2026",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "terim": "4Yıl /1589 Gün",
+    "itfa": "16.04.2031",
+    "yontem": "İhale / Yeniden ihraç",
+    "v": 4.35,
+    "g_mlr": 22.6,
+    "ham_mlr": 40.1,
+    "kiyas": "Aynı tahvil (itfa + tür eşleşmesi)",
+    "n": 6.0,
+    "btc": 1.54
+   },
+   {
+    "gun": "08.12.2026",
+    "senet": "TLREF'e Endeksli Devlet Tahvili",
+    "terim": "4Yıl /1372 Gün",
+    "itfa": "11.09.2030",
+    "yontem": "İhale / Yeniden ihraç",
+    "v": 3.76,
+    "g_mlr": 47.4,
+    "ham_mlr": 84.3,
+    "kiyas": "Aynı tahvil (itfa + tür eşleşmesi)",
+    "n": 1.0,
+    "btc": 2.71
+   },
+   {
+    "gun": "08.12.2026",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "terim": "8Yıl /2849 Gün",
+    "itfa": "27.09.2034",
+    "yontem": "İhale / Yeniden ihraç",
+    "v": 7.81,
+    "g_mlr": 14.7,
+    "ham_mlr": 26.2,
+    "kiyas": "Aynı tahvil (itfa + tür eşleşmesi)",
+    "n": 7.0,
+    "btc": 2.34
+   }
+  ]
+ },
+ "eylul": {
+  "satirlar": [
+   {
+    "gun": "14.09.2026",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "itfa": "13.09.2028",
+    "v": 1.99,
+    "plan_mlr": 50.0,
+    "gerc_mlr": 59.7,
+    "kat": 1.19,
+    "teklif_mlr": 98.4,
+    "btc": 1.65,
+    "bilesik": 39.98,
+    "rot_mlr": 25.2,
+    "rot_kamu_mlr": 15.8,
+    "rot_py_mlr": 9.5,
+    "rekabetci_mlr": 34.5,
+    "rekabetci_teklif_mlr": 63.3,
+    "rekabetci_kabul": 54.5,
+    "rot_py_teklif_mlr": 19.4,
+    "rot_py_kabul": 49.0,
+    "plan_btc": 1.74
+   },
+   {
+    "gun": "14.09.2026",
+    "senet": "TLREF'e Endeksli Devlet Tahvili",
+    "itfa": "11.09.2030",
+    "v": 3.99,
+    "plan_mlr": 135.2,
+    "gerc_mlr": 84.3,
+    "kat": 0.62,
+    "teklif_mlr": 228.1,
+    "btc": 2.71,
+    "bilesik": 40.76,
+    "rot_mlr": 35.4,
+    "rot_kamu_mlr": 5.4,
+    "rot_py_mlr": 30.0,
+    "rekabetci_mlr": 48.9,
+    "rekabetci_teklif_mlr": 110.5,
+    "rekabetci_kabul": 44.2,
+    "rot_py_teklif_mlr": 112.3,
+    "rot_py_kabul": 26.7,
+    "plan_btc": 2.23
+   },
+   {
+    "gun": "15.09.2026",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "itfa": "16.04.2031",
+    "v": 4.58,
+    "plan_mlr": 30.4,
+    "gerc_mlr": 66.0,
+    "kat": 2.17,
+    "teklif_mlr": 91.6,
+    "btc": 1.39,
+    "bilesik": 38.73,
+    "rot_mlr": 42.2,
+    "rot_kamu_mlr": 15.2,
+    "rot_py_mlr": 27.0,
+    "rekabetci_mlr": 23.7,
+    "rekabetci_teklif_mlr": 31.4,
+    "rekabetci_kabul": 75.4,
+    "rot_py_teklif_mlr": 44.9,
+    "rot_py_kabul": 60.1,
+    "plan_btc": 1.51
+   },
+   {
+    "gun": "15.09.2026",
+    "senet": "Sabit Kuponlu Devlet Tahvili",
+    "itfa": "27.09.2034",
+    "v": 8.04,
+    "plan_mlr": 12.1,
+    "gerc_mlr": 51.9,
+    "kat": 4.29,
+    "teklif_mlr": 75.8,
+    "btc": 1.46,
+    "bilesik": 35.19,
+    "rot_mlr": 27.0,
+    "rot_kamu_mlr": 5.0,
+    "rot_py_mlr": 22.0,
+    "rekabetci_mlr": 24.9,
+    "rekabetci_teklif_mlr": 33.9,
+    "rekabetci_kabul": 73.5,
+    "rot_py_teklif_mlr": 36.8,
+    "rot_py_kabul": 59.7,
+    "plan_btc": 2.54
+   }
+  ],
+  "gerc_mlr": 261.9,
+  "plan_mlr": 227.8,
+  "yazi_aov": {
+   "Eylül": {
+    "karsi": 2.85,
+    "plan": 3.85
+   },
+   "Ekim": {
+    "karsi": 4.34,
+    "plan": 3.77
+   },
+   "Kasım": {
+    "karsi": null,
+    "plan": 3.66
+   }
+  },
+  "hedef": 261.9,
+  "gerceklesme_orani": 100.0,
+  "aov_gerc": 4.49,
+  "aov_plan_yazi": 3.85,
+  "reprice_gerc": 3.28,
+  "tlref_pay_gerc": 32.2,
+  "tlref_pay_plan": 59.4,
+  "reprice_plan": 1.63,
+  "ekim_tlref_pay_0831": 59.4,
+  "rot_pay_gerc": 49.6,
+  "uzun_sabit_gerc_mlr": 117.9,
+  "uzun_sabit_plan_mlr": 42.5,
+  "t160431_aylar_2026": [
+   "2026-04",
+   "2026-05",
+   "2026-06",
+   "2026-07",
+   "2026-08",
+   "2026-09"
+  ],
+  "sabit_pay_gerc": 67.8,
+  "maliyet_gerc": 38.97,
+  "uzun_agu": {
+   "gun": "18.08.2026",
+   "v": 9.05,
+   "gerc_mlr": 74.4,
+   "teklif_mlr": 121.1,
+   "btc": 1.63,
+   "bilesik": 35.12
+  },
+  "uzun_eyl": {
+   "gun": "15.09.2026",
+   "v": 8.04,
+   "gerc_mlr": 51.9,
+   "teklif_mlr": 75.8,
+   "btc": 1.46,
+   "bilesik": 35.19,
+   "kabul_teklif_orani": 68.6
+  },
+  "uzun_rekor_oncesi": 40.1,
+  "onceki": {
+   "vp_plan_ay1_aov": null,
+   "vp_plan_ay1_yuv": "3,58",
+   "vp_plan_ay2_yuv": "3,82",
+   "vp_plan_ay3_yuv": "3,79",
+   "vp_gecmis_yuv_son": "3,28",
+   "vp_plan_tlref_pay": "50,6",
+   "vp_plan_sabit_pay": "49,4",
+   "vp_reprice_plan": "1,92",
+   "vp_plan_maliyet": "41,71",
+   "vp_plan_aov_toplam": "3,78",
+   "vp_rev_ay2_zincir": "235,1 → 229,1",
+   "vp_son_uzun_mlr": "74,4"
+  },
+  "tlref_kabul": {
+   "eylul": 44.2,
+   "diger_n": 16,
+   "diger_medyan": 43.4,
+   "diger_50_alti": 9,
+   "onceki_gun": "17.08.2026",
+   "onceki_kabul": 25.1,
+   "py_kabul_eylul": 26.7,
+   "py_sira_kucukten": 2,
+   "py_n": 17,
+   "py_teklif_mlr": 112.3,
+   "py_mlr": 30.0
+  },
+  "sabit4_kabul": {
+   "diger_n": 27,
+   "diger_maks": 71.1,
+   "diger_medyan": 50.1,
+   "eylul_5y": 75.4,
+   "eylul_8y": 73.5
+  },
+  "fiyat": {
+   "tlref_red_ort": 41.6,
+   "tlref_red_mlr": 61.6,
+   "kuyruk": {
+    "13.09.2028": {
+     "kesme": 40.14,
+     "en_pahali_teklif": 45.79,
+     "fark_bp": 565.0,
+     "rekabetci_btc": 1.84
+    },
+    "11.09.2030": {
+     "kesme": 41.08,
+     "en_pahali_teklif": 44.1,
+     "fark_bp": 302.0,
+     "rekabetci_btc": 2.26
+    },
+    "16.04.2031": {
+     "kesme": 38.89,
+     "en_pahali_teklif": 39.18,
+     "fark_bp": 29.0,
+     "rekabetci_btc": 1.33
+    },
+    "27.09.2034": {
+     "kesme": 35.4,
+     "en_pahali_teklif": 35.66,
+     "fark_bp": 26.0,
+     "rekabetci_btc": 1.36
+    }
+   }
+  },
+  "hedef_doldurma": {
+   "hedef": 261.9,
+   "gun14_mlr": 144.0,
+   "kalan_mlr": 117.9,
+   "gun15_mlr": 117.9,
+   "oran_ham": 99.98,
+   "ay_n": 81,
+   "yarim_puan_ici": 1,
+   "bir_puan_ici": 2
+  },
+  "btc_rekabetci": {
+   "tlref": 2.26,
+   "y8": 1.36,
+   "agu9": 1.64
+  },
+  "tahmin_0831": {
+   "varsayim": 87.0,
+   "tlref_kiyas_mlr": 124.9,
+   "tlref_son3": [
+    {
+     "gun": "09.06.2026",
+     "mlr": 129.2
+    },
+    {
+     "gun": "07.07.2026",
+     "mlr": 157.3
+    },
+    {
+     "gun": "17.08.2026",
+     "mlr": 88.3
+    }
+   ],
+   "y8_son_ihale": "08.07.2025"
+  },
+  "y8_son3": [
+   {
+    "gun": "17.06.2025",
+    "mlr": 12.3
+   },
+   {
+    "gun": "08.07.2025",
+    "mlr": 14.3
+   },
+   {
+    "gun": "15.09.2026",
+    "mlr": 51.9
+   }
+  ],
+  "gercek_seri": {
+   "2026-04": {
+    "aov": 3.43,
+    "aov_bonosuz": 3.7,
+    "reprice": 1.6,
+    "tlref_pay": 52.08,
+    "sabit_pay": 39.97,
+    "bono_pay": 9.68,
+    "toplam": 191675.0,
+    "n": 5
+   },
+   "2026-05": {
+    "aov": 3.12,
+    "aov_bonosuz": 3.5,
+    "reprice": 1.36,
+    "tlref_pay": 51.59,
+    "sabit_pay": 43.46,
+    "bono_pay": 14.33,
+    "toplam": 167661.0,
+    "n": 5
+   },
+   "2026-06": {
+    "aov": 2.85,
+    "aov_bonosuz": 3.55,
+    "reprice": 1.13,
+    "tlref_pay": 50.65,
+    "sabit_pay": 44.93,
+    "bono_pay": 24.12,
+    "toplam": 297997.0,
+    "n": 6
+   },
+   "2026-07": {
+    "aov": 3.07,
+    "aov_bonosuz": 3.75,
+    "reprice": 1.01,
+    "tlref_pay": 55.06,
+    "sabit_pay": 44.94,
+    "bono_pay": 21.29,
+    "toplam": 285634.0,
+    "n": 4
+   },
+   "2026-08": {
+    "aov": 3.82,
+    "aov_bonosuz": 4.72,
+    "reprice": 2.78,
+    "tlref_pay": 29.18,
+    "sabit_pay": 69.49,
+    "bono_pay": 21.34,
+    "toplam": 348455.0,
+    "n": 7
+   },
+   "2026-09": {
+    "aov": 4.49,
+    "aov_bonosuz": 4.49,
+    "reprice": 3.28,
+    "tlref_pay": 32.17,
+    "sabit_pay": 67.83,
+    "bono_pay": 0.0,
+    "toplam": 261864.0,
+    "n": 4
+   }
+  },
+  "anket_24a_bilesik": 25.08,
+  "y8_anket_fark": 10.1
+ },
+ "maliyet": {
+  "pencere_bas": "2026-05-15",
+  "veri_sonu": "2026-09-15",
+  "kova": {
+   "sabit|1–3 yıl": {
+    "maliyet": 41.26,
+    "mlr": 198.4,
+    "n": 4
+   },
+   "sabit|3–6 yıl": {
+    "maliyet": 38.49,
+    "mlr": 150.2,
+    "n": 4
+   },
+   "sabit|6 yıl+": {
+    "maliyet": 35.15,
+    "mlr": 126.4,
+    "n": 2
+   },
+   "sabit|≤1 yıl": {
+    "maliyet": 41.64,
+    "mlr": 207.0,
+    "n": 3
+   },
+   "degisken|3–6 yıl": {
+    "maliyet": 43.67,
+    "mlr": 494.1,
+    "n": 6
+   },
+   "reel|3–6 yıl": {
+    "maliyet": 5.67,
+    "mlr": 17.8,
+    "n": 2
+   }
+  },
+  "plan": 40.49,
+  "kapsam": 100.0,
+  "plan_eylul_fiyat": 39.27,
+  "plan_eylul_ihale_pay": 96.6,
+  "makas_1a_6p": 6.49
+ },
+ "hedef": {
+  "rev_n": 82,
+  "rev_ilk": "2020-01",
+  "rev_son": "2026-10",
+  "rev_medyan": -14.4,
+  "rev_yukari_pay": 27.0,
+  "rev_mutlak_ort": 26.6,
+  "rev_surum_ort": 3.0,
+  "aralik": {
+   "2020-12": -22.5,
+   "2021-12": -58.6,
+   "2022-12": 86.0,
+   "2023-12": 7.5,
+   "2024-12": 15.3,
+   "2025-12": -9.6
+  },
+  "aralik_yukari": 3,
+  "aralik_asagi": 3,
+  "zincir": {
+   "2026-09": [
+    294.2,
+    247.9,
+    261.9
+   ],
+   "2026-10": [
+    235.1,
+    229.1,
+    194.8
+   ],
+   "2026-11": [
+    85.4,
+    90.4
+   ],
+   "2026-12": [
+    105.5
+   ]
+  },
+  "ekim_ilk_fark_yuzde": -17.1,
+  "kasim_fark_yuzde": 5.9,
+  "gerc_24a": {
+   "ort": 92.8,
+   "medyan": 96.7,
+   "min": 54.0,
+   "maks": 120.3,
+   "std": 16.7,
+   "alti_n": 17,
+   "n": 24,
+   "alti_pay": 71.0
+  }
+ },
+ "arz": {
+  "uzun_mlr": 54.3,
+  "uzun_adet": 3,
+  "kuponsuz_mlr": 12.3,
+  "kuponsuz_pay": 3.4,
+  "tek_kiyas_satir": 4,
+  "tek_kiyas_pay": 58.3,
+  "kuponsuz_aralik_pay": 12.7,
+  "uzun_satirlar": [
+   {
+    "gun": "06.10.2026",
+    "g_mlr": 22.3
+   },
+   {
+    "gun": "10.11.2026",
+    "g_mlr": 17.3
+   },
+   {
+    "gun": "08.12.2026",
+    "g_mlr": 14.7
+   }
+  ],
+  "gun_toplam": {
+   "05.10.2026": 85.1,
+   "06.10.2026": 94.1,
+   "07.12.2026": 34.9,
+   "08.12.2026": 62.1,
+   "09.11.2026": 65.9,
+   "10.11.2026": 17.3
+  },
+  "kova_pay": {
+   "1–3 yıl": 28.5,
+   "3–6 yıl": 56.3,
+   "6 yıl+": 15.1
+  },
+  "toplam_mlr": 359.4
+ },
+ "kisa_uc": {
+  "son_bono": {
+   "gun": "11.08.2026",
+   "mlr": 74.3
+  },
+  "son_kuponsuz": {
+   "gun": "05.01.2026",
+   "itfa": "06.01.2027",
+   "v": 1.0,
+   "mlr": 46.3,
+   "bilesik": 36.64
+  },
+  "kuponsuz_n": 22,
+  "kisa_pay_24a": {
+   "2024-10": 9.7,
+   "2024-11": 4.5,
+   "2024-12": 7.4,
+   "2025-01": 14.1,
+   "2025-02": 11.5,
+   "2025-03": 0.0,
+   "2025-04": 3.3,
+   "2025-05": 0.0,
+   "2025-06": 5.6,
+   "2025-07": 8.3,
+   "2025-08": 14.3,
+   "2025-09": 38.7,
+   "2025-10": 26.3,
+   "2025-11": 41.8,
+   "2025-12": 32.4,
+   "2026-01": 14.6,
+   "2026-02": 7.8,
+   "2026-03": 23.2,
+   "2026-04": 9.7,
+   "2026-05": 14.3,
+   "2026-06": 24.1,
+   "2026-07": 21.3,
+   "2026-08": 21.3,
+   "2026-09": 0.0
+  },
+  "bono_pay_24a_ort": 14.1,
+  "bono_12a_mlr": 408.3
+ },
+ "piyasa": {
+  "guncel": {
+   "dibs-verim-egrisi": {
+    "_tarih": "29.09.2026",
+    "spot_3a": 38.07,
+    "spot_6a": 38.17,
+    "spot_1y": 39.89,
+    "spot_2y": 40.76,
+    "spot_3y": 39.93,
+    "spot_5y": 36.55,
+    "spot_7y": 33.44,
+    "spot_9y": "—",
+    "spot_9y_tarih": "07.09.2026",
+    "egim_2y5y": -4.22,
+    "forward_1y1y": 41.64,
+    "forward_2y1y": 38.27,
+    "forward_2y3y": 33.81,
+    "pka_12a": 23.7,
+    "pka_24a": 18.32,
+    "pka_5y": 12.09,
+    "pka_faiz_12a": 29.22,
+    "pka_faiz_24a": 22.43,
+    "anket_ay": "Eylül 2026",
+    "basabas_5y": 31.77,
+    "risk_primi_5y": 14.95
+   },
+   "fonlama-likidite": {
+    "_tarih": "29.09.2026",
+    "politika": 37.0,
+    "tlref": 36.87,
+    "koridor_ust": 40.0,
+    "koridor_alt": 35.5
+   },
+   "enflasyon": {
+    "_tarih": "08.2026",
+    "baz_momentum_aylik": 2.16,
+    "c_3a": 30.03,
+    "c_12a": 30.07,
+    "tufe_12a": 31.51
+   },
+   "butce-borc": {
+    "_tarih": "08.2026",
+    "faiz_12a": 2.62,
+    "faiz_vergi": 19.4,
+    "faiz_gsyh": 3.3
+   }
+  },
+  "onceki": {
+   "spot_3a": 38.2,
+   "spot_6a": 37.8,
+   "spot_1y": 39.88,
+   "spot_2y": 39.97,
+   "spot_3y": 38.3,
+   "spot_5y": 34.67,
+   "spot_7y": 31.92,
+   "forward_1y1y": 40.07,
+   "forward_2y1y": 35.03,
+   "forward_2y3y": 31.25,
+   "risk_primi_5y": 13.72,
+   "basabas_5y": 30.03,
+   "pka_faiz_12a": 29.59,
+   "pka_12a": 23.69
+  },
+  "fark_bp": {
+   "spot_3a": -13.0,
+   "spot_6a": 37.0,
+   "spot_1y": 1.0,
+   "spot_2y": 79.0,
+   "spot_3y": 163.0,
+   "spot_5y": 188.0,
+   "spot_7y": 152.0,
+   "forward_1y1y": 157.0,
+   "forward_2y1y": 324.0,
+   "forward_2y3y": 256.0,
+   "risk_primi_5y": 123.0,
+   "basabas_5y": 174.0,
+   "pka_faiz_12a": -37.0,
+   "pka_12a": 1.0
+  },
+  "egim_2y5y_once": -5.3,
+  "egim_2y5y": -4.21,
+  "reel_pka": 10.8,
+  "cekirdek_aylik_esdeger": 2.21
+ },
+ "karne": [
+  {
+   "no": 1,
+   "beklenti": "3 aylık yuvarlanan vade Ekim'de ~3,8 yılda tepe yapar, sonra plato",
+   "olculen": {
+    "eylul_yuv": 3.77,
+    "ekim_yuv": 4.08,
+    "kasim_yuv": 4.22,
+    "aralik_yuv": 4.03,
+    "yazi_eylul_yuv": 3.58,
+    "yazi_ekim_yuv": 3.82
+   },
+   "hukum": "Henüz sınanmadı"
+  },
+  {
+   "no": 2,
+   "beklenti": "Bono kalıcı olarak çıkmaz; Ekim–Aralık belgesi asıl test",
+   "olculen": {
+    "bonosuz_ardisik": 4,
+    "aralik_kuponsuz_gun": 483
+   },
+   "hukum": "Tutmadı"
+  },
+  {
+   "no": 3,
+   "beklenti": "Hedefler yeniden revize edilir; Kasım'ın 85,4'ü değişir",
+   "olculen": {
+    "ekim": [
+     235.1,
+     229.1,
+     194.8
+    ],
+    "kasim": [
+     85.4,
+     90.4
+    ]
+   },
+   "hukum": "Tuttu"
+  },
+  {
+   "no": 4,
+   "beklenti": "13.10'un teklif oranı Ağustos'un 1,63'ünün altına düşerse talep zayıflıyor",
+   "olculen": {
+    "eylul_8y_btc": 1.46,
+    "agustos_btc": 1.63,
+    "eylul_8y_teklif": 75.8,
+    "agustos_teklif": 121.1
+   },
+   "hukum": "Henüz sınanmadı"
+  },
+  {
+   "no": 5,
+   "beklenti": "Faiz gideri indirime hızlı tepki verir",
+   "olculen": {
+    "politika": 37.0
+   },
+   "hukum": "Koşulu oluşmadı"
+  },
+  {
+   "no": 6,
+   "beklenti": "Eğrinin tersliği azalmadan vade uzaması sürmez; terslik kapanırsa Hazine kısaya döner",
+   "olculen": {
+    "egim_2y5y_once": -5.3,
+    "egim_2y5y": -4.21,
+    "plan_aov": 4.03
+   },
+   "hukum": "Koşulu oluşmadı"
+  }
+ ],
+ "karne_tez": {
+  "beklenti": "Vade uzuyor, faiz riski uzamıyor",
+  "olculen": {
+   "reprice_gecmis": 1.99,
+   "reprice_plan": 1.92,
+   "eylul_reprice": 3.28,
+   "eylul_aov": 4.49,
+   "eylul_karsi": 2.85,
+   "eylul_plan": 3.85
+  },
+  "hukum": "Vade kısmı tuttu, faiz riski kısmı tutmadı"
+ },
+ "karne_senaryo": {
+  "esik": 1.9,
+  "cekirdek": 2.21,
+  "manset": 2.16,
+  "kol": "kırılmaz",
+  "satirlar": [
+   {
+    "ad": "2y",
+    "hukum": "Tuttu"
+   },
+   {
+    "ad": "9y",
+    "hukum": "Ölçülemedi"
+   },
+   {
+    "ad": "terslik",
+    "hukum": "Tutmadı (vekil ölçüyle)"
+   },
+   {
+    "ad": "risk_primi",
+    "hukum": "Tuttu"
+   },
+   {
+    "ad": "sabit_pay",
+    "hukum": "Belgede değil, ihalede tuttu"
+   },
+   {
+    "ad": "ois",
+    "hukum": "Ölçülemedi"
+   }
+  ]
+ }
+}

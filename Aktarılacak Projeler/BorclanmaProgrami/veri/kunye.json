@@ -1,0 +1,51 @@
+{
+ "cipa": "2026-09-30",
+ "dosyalar": {
+  "strateji_arsivi.json.gz": {
+   "sha256": "c2ff7a49aba0c400447c06f0e46672953c237fb594ab6aa73a54322927b5ca0e",
+   "bayt": 700769
+  },
+  "ihale.csv.gz": {
+   "sha256": "326e880656049a7e654199f04eb9398ce57f46d19642e997a6d2e8319846f85f",
+   "bayt": 114769
+  },
+  "takvim_yeni.csv.gz": {
+   "sha256": "5b922ceaaa27c881cdb5e86a79276e7937809cfb18d2ffa42c2bfc72a74ea0eb",
+   "bayt": 3023
+  },
+  "takvim_karsi.csv.gz": {
+   "sha256": "f54fba1a955b0ce2e48b0d7eb6d86f02b18c62fe0cb60928a7a0cc7aac34a628",
+   "bayt": 2143
+  },
+  "takvim_0831.csv.gz": {
+   "sha256": "64e5864bddbb3b06543521c675d8310ecd055188bd454a1efca0530057185e3c",
+   "bayt": 2941
+  },
+  "strateji_gecmisi.json.gz": {
+   "sha256": "def9b76e23e2aee441d9509425b80d9bb9287f11f969908de80a82521952ddd5",
+   "bayt": 46018
+  },
+  "hedef_gerceklesme.csv.gz": {
+   "sha256": "bd62b3452ced457bdab98568995bbed891d2f9a68a0ccb4087816e3fd0e4b0bd",
+   "bayt": 3126
+  },
+  "vade_analizi.csv.gz": {
+   "sha256": "14a27501693bb4fc3d35f5342adb2d9114c2f80b1432717f110e5e44f5484b8d",
+   "bayt": 3302
+  },
+  "kiyas.json.gz": {
+   "sha256": "3c2f3c307ca3087d74c6cab89dfa7d3697f86a8dcf130033578ff21b9effe749",
+   "bayt": 7414
+  },
+  "piyasa.json.gz": {
+   "sha256": "e7413caad4e08d047637fde13651327c8df0bb6626f88d0e0e9f8d7af3dac03f",
+   "bayt": 900
+  }
+ },
+ "kaynak": {
+  "strateji_arsivi": "HMB duyuru akışı (hmb.gov.tr portal/v2/posts, kamu-finansmani); bulut keşif koşusu 36728396074, 30.09.2026",
+  "ihale": "Hazine İhraç hattı ihale veri seti (HMB ihale sonuç duyuruları)",
+  "takvim": "Hazine İhraç hattının takvim arşivi",
+  "piyasa": "DİBS Verim Eğrisi, Fonlama ve Likidite, Enflasyon, Bütçe ve Borç hatları"
+ }
+}
