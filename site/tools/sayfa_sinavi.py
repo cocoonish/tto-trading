@@ -252,10 +252,30 @@ def yukseklik_denetle(slug: str, uretim: dict, metinler: list[tuple[str, str]],
     return engel, bilgi
 
 
+# Ön bilgideki DÜZELTME KAYDI tarihli bir kayıttır, canlı düzyazı değildir:
+# "yayımlanan 7,94 yerine 6,86" sayıları bir günün yayımlanmış değerini ve onun
+# doğrusunu yazar ve bugünkü ozet.json değerine EŞİT olmaları beklenir (yeni
+# değer tam olarak odur). Taranırsa düzeltme yapılan her TAM_SINAV panosu,
+# düzeltmesinin kendisi yüzünden yayını durdururdu (30.09.2026 incelemesi).
+# Yalnız `duzeltmeler:` bloğu çıkarılır; ön bilginin geri kalanı taranmaya
+# devam eder.
+ON_BILGI = re.compile(r"\A---\n([\s\S]*?)\n---\n")
+DUZELTME_BLOK = re.compile(r"^duzeltmeler:[^\n]*\n(?:[ \t]+[^\n]*\n|[ \t]*\n)*", re.M)
+
+
+def _duzeltmesiz(mdx: str) -> str:
+    m = ON_BILGI.match(mdx)
+    if not m:
+        return mdx
+    on = DUZELTME_BLOK.sub("", m.group(1) + "\n")
+    return f"---\n{on}---\n" + mdx[m.end():]
+
+
 def deger_disi(mdx: str) -> str:
-    """MDX'ten <Deger …>…</Deger> bloklarını, örnek bloklarını, kod bloklarını
-    ve satır içi kodu çıkar — geriye kalan, gerçekten çıplak duran metindir."""
-    s = ORNEK_BLOK.sub(" ", mdx)
+    """MDX'ten <Deger …>…</Deger> bloklarını, örnek bloklarını, kod bloklarını,
+    satır içi kodu ve ön bilgideki düzeltme kaydını çıkar — geriye kalan,
+    gerçekten çıplak duran metindir."""
+    s = ORNEK_BLOK.sub(" ", _duzeltmesiz(mdx))
     s = re.sub(r"<Deger\b[\s\S]*?</Deger>", " ", s)
     s = re.sub(r"```[\s\S]*?```", " ", s)
     s = re.sub(r"`[^`]*`", " ", s)

@@ -81,6 +81,20 @@ sina("kapanmayan blok dengesizlik olarak görünüyor",
      and len(ORNEK_KAPA.findall("{/* sinav-ornek: x */} ...")) == 0)
 
 # ---------------------------------------------------------------------------
+print("\n▶ Ön bilgideki düzeltme kaydı (tarihli kayıt, düzyazı değil)")
+
+DUZ = ("---\ntitle: 'Pano'\nduzeltmeler:\n  - tarih: '2026-09-30'\n"
+       "    alan: 'Eylül vadesi'\n    eski: '4,48 yıl'\n    yeni: '4,49 yıl'\n"
+       "    sebep: 'Gün sayımı tek cetvele çekildi.'\ndurum: 'aktif'\n---\n\nGövde.\n")
+e, u = tara(DUZ, {"wam_son": 4.49})
+sina("düzeltme kaydının 'yeni' değeri canlı değere eşit olsa da taranmıyor",
+     not e and not u, f"gelen engel={e} uyari={u}")
+e, u = tara(DUZ.replace("Gövde.", "Gövde bugün 4,49 diyor."), {"wam_son": 4.49})
+sina("düzeltme bloğu gövdeyi körleştirmiyor", e == ["wam_son=4,49"], f"gelen {e}")
+e, u = tara(DUZ.replace("durum: 'aktif'", "description: 'Son ay 4,49 yıl'\ndurum: 'aktif'"), {"wam_son": 4.49})
+sina("ön bilginin geri kalanı taranmaya devam ediyor", e == ["wam_son=4,49"], f"gelen {e}")
+
+# ---------------------------------------------------------------------------
 print("\n▶ Tam sayı ile ondalıklı ölçü ayrımı")
 
 # 2026-09-02'yi düşüren tam çarpışma: sayım 51, metinde fiyat varsayımı 51,00 TL
