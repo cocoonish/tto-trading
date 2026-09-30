@@ -66,8 +66,9 @@ def _ozet_mi(ad: str) -> bool:
     # Tema da bu ailedendir: günün gelişmesini gövdeden süzer. Muafiyet
     # olmadan 13 sayının 4'ünde iç yoğunluk ENGEL eşiğini aşıyordu (17,8 > 12;
     # ölçüldü 30.09.2026) ve hiçbiri gerçek kusur değildi.
+    # Manşet de: günün tezi tek cümledir ve gövdeden süzülür.
     return (ad in OZET_BOLUMLER or ad.startswith("ozet.") or ad == "soz_defteri"
-            or ad.startswith("tema."))
+            or ad.startswith("tema.") or ad == "manset")
 
 # Ölçüm dışı kalıplar: kaçınılmaz ve anlamlı tekrar eden teknik ifadeler.
 MUAF = re.compile(
@@ -83,8 +84,14 @@ def _kelimeler(t: str) -> list[str]:
     return re.findall(r"\w+", t.lower())
 
 
-def bolumler(b: dict) -> dict[str, str]:
+def bolumler(b: dict, bayat_tema: bool = False) -> dict[str, str]:
     """Bültenin ölçülecek yazı bölümleri — düz metin.
+
+    `bayat_tema=True` o sayıda güncellenmeyen temaları da katar: günler arası
+    kıyasın ÖNCEKİ tarafı içindir. Temalar haftada bir yazılır; önceki sayıda
+    hepsi bayat olduğu için kıyas kümesine hiç girmiyor, bugünün yeni tema
+    metni hiçbir şeyle kıyaslanmıyordu (27.09'da %0,0; sayfada katlı basılan
+    20.09 sürümüyle %8–20).
 
     KAPSAM BİR LİSTEDEN DEĞİL SÖZLEŞMEDEN TÜRER: okura DÜZYAZI olarak basılan
     her yazı-katmanı alanı ölçüye girer. Kural bir kez elle tutulan listeye
@@ -95,6 +102,12 @@ def bolumler(b: dict) -> dict[str, str]:
     sınavla aynı görünür.
     """
     out = {k: _duz(v) for k, v in (b.get("gundem") or {}).items() if _duz(v)}
+    # MANŞET sayfanın h1'i ve RSS önizlemesidir; ihale iddiası ve uydurma sayı
+    # denetimleri metni buradan okur ve manşete yazılan bir iddia ikisini de
+    # aşıyordu (30.09.2026'da sınandı).
+    m = _duz(b.get("manset") or "")
+    if m:
+        out["manset"] = m
     y = _duz(b.get("yorum") or "")
     if y:
         out["yorum"] = y
@@ -117,7 +130,7 @@ def bolumler(b: dict) -> dict[str, str]:
         if not isinstance(t, dict):
             continue
         sg, gun = str(t.get("son_guncelleme") or ""), str(b.get("tarih") or "")
-        if sg and gun and sg < gun:
+        if sg and gun and sg < gun and not bayat_tema:
             continue
         metin = _duz(" ".join(str(t.get(a) or "") for a in ("tez", "gelisme", "son_gozlem")))
         if metin:
@@ -174,7 +187,9 @@ def sayi_tekrari(bol: dict[str, str]) -> list[tuple[str, list[str]]]:
         for m in re.finditer(r"%?\d[\d.,]*\s?(?:baz puan|puan|bp|dolar|lira|"
                              r"milyar|mlr|euro|%)?", t):
             s = m.group(0).strip()
-            if len(re.sub(r"\D", "", s)) >= 3:          # yıl/tek hane gürültüsü dışarıda
+            if re.fullmatch(r"(?:19|20)\d\d", s):       # birimsiz yıl sayı değil etikettir
+                continue
+            if len(re.sub(r"\D", "", s)) >= 3:          # tek/iki hane gürültüsü dışarıda
                 say[s].append(k)
     out = [(s, sorted(set(y))) for s, y in say.items()
            if len(set(y)) >= SAYI_BOLUM_ESIK]
@@ -190,7 +205,12 @@ def olc(b: dict) -> dict:
     # Özet bölümlerinin (kilit/yorum) diğerlerine değmesi tanımı gereği; ağır
     # ihlal, ÖZET OLMAYAN iki bölümün birbirini tekrar etmesidir.
     agir = [(s, y) for s, y in ifade if len([x for x in y if not _ozet_mi(x)]) >= 2]
-    kelime = sum(len(t.split()) for t in bol.values()) or 1
+    # Payda: tema ve manşet ölçüye 30.09.2026'da girdi ve ikisi de ağır
+    # tekrardan muaf; paydaya girselerdi yoğunluk %13–18 seyrelir, eşikler
+    # (7 uyarı · 12 engel) sessizce gevşerdi — 17.09'un "8,0 ağır tekrar"
+    # uyarısı 6,9'a inip kayboluyordu. Eşiklerin kalibre edildiği kapsam korunur.
+    kelime = sum(len(t.split()) for k, t in bol.items()
+                 if not (k.startswith("tema.") or k == "manset")) or 1
     return {"bolum_sayisi": len(bol), "kelime": kelime,
             "ifade": ifade, "agir": agir, "sayi": sayi,
             "yogunluk": round(len(agir) / kelime * 1000, 1)}

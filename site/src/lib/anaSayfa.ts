@@ -205,13 +205,23 @@ export function rejimHane(s: Pick<RejimSatiri, 'ad' | 'birim'>): number {
   return s.birim === 'puan' && s.ad.includes('eğim') ? 2 : 1;
 }
 
-/** Önceki ölçüme göre fark, ekrandaki haneye yuvarlanmış; ölçülemiyorsa null. */
+/**
+ * Önceki ölçüme göre fark — EKRANDAKİ iki değerin farkı; ölçülemiyorsa null.
+ * Yuvarlama sayi()nin kuralıyla aynı olmalı: Math.round yarımı +∞'a
+ * yuvarlıyor (−4,85 → −4,8), ekran ise sıfırdan uzağa ("−4,9"), ve eksi
+ * satırlarda fark ekranda görünen hareketle çelişebiliyordu ("−20,0 → −20,0
+ * puan"). toFixed ile Intl'in halfExpand'i aynı kuraldır: ikisi de double'ın
+ * tam değerini yuvarlar, eşitlikte sıfırdan uzağa gider.
+ */
 export function rejimFark(s: RejimSatiri): number | null {
   if (s.deger === null || typeof s.onceki !== 'number') return null;
-  const k = 10 ** rejimHane(s);
-  const f = Math.round(s.deger * k) / k - Math.round(s.onceki * k) / k;
-  return Math.abs(f) < 1 / (2 * k) ? 0 : f;
+  const n = rejimHane(s);
+  const f = Number((Number(s.deger.toFixed(n)) - Number(s.onceki.toFixed(n))).toFixed(n));
+  return f === 0 ? 0 : f;
 }
+
+/** Farkın birimi: bir oranın ve bir endeksin farkı PUANDIR. */
+export const REJIM_FARK_BIRIMI: Record<string, string> = { '%': 'puan', puan: 'puan', endeks: 'puan' };
 
 /** Değer + birim: "+13,3 puan", "%29,5", "104,6 endeks". */
 function birimYaz(s: RejimSatiri): string {
@@ -305,8 +315,10 @@ const HAT_MANSET: Record<
   // Aylık akım milyon dolarla yazılır: milyar ve tek hanede 36 mn $'lık bir
   // fazla "0,0 mlr $" görünüyor, okur veriyi eksik sanıyordu.
   'odemeler-dengesi': { anahtar: 'cari_ay_mn', olcu: 'Aylık cari denge', birim: 'mn USD', ondalik: 0, isaret: true },
-  'butce-borc': { anahtar: 'denge_gsyh', olcu: 'Bütçe dengesi', birim: '% GSYH', ondalik: 2, isaret: true },
-  makroihtiyati: { anahtar: 'ayrisma', olcu: 'Makroihtiyati ayrışma', birim: 'puan', ondalik: 1 },
+  // Oran birimi '%' ve GSYH ölçü adında: '% GSYH' birimi yüzdeyi sayının
+  // ARKASINA düşürüyordu ("−2,41 % GSYH"); yüzde önde yazılır ("−%2,41").
+  'butce-borc': { anahtar: 'denge_gsyh', olcu: 'Bütçe dengesi / GSYH', birim: '%', ondalik: 2, isaret: true },
+  makroihtiyati: { anahtar: 'ayrisma', olcu: 'Makroihtiyati ayrışma', birim: 'puan', ondalik: 1, isaret: true },
   'tl-tasima': { anahtar: 'endeks', olcu: 'TL taşıma endeksi', birim: '', ondalik: 1 },
   'tufex-basabas': { anahtar: 'basabas_2y', olcu: '2 yıllık başabaş enflasyon', birim: '%', ondalik: 2 },
   'reel-sektor-fx': { anahtar: 'net_pozisyon', olcu: 'Net döviz pozisyonu', birim: 'mlr USD', ondalik: 1, isaret: true },

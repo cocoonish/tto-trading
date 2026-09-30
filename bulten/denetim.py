@@ -646,8 +646,14 @@ class Denetim:
         if self.b.get("gundem_kaynagi") != "yazili":
             return                      # kural tabanlı taban zaten ölçülenden türüyor
         g = self.b.get("gundem") or {}
+        oz = self.b.get("ozet") or {}
+        # Manşet ve özet de taranır: manşet sayfanın h1'i ve RSS önizlemesi,
+        # özet ilk ekran; ikisine yazılan uydurma bir seviye bu ölçütü
+        # aşıyordu (30.09.2026'da sınandı).
         ham = _duz(" ".join([_duz(v) for v in g.values()]) + " " +
-                   _duz(self.b.get("yorum") or ""))
+                   _duz(self.b.get("yorum") or "") + " " +
+                   _duz(self.b.get("manset") or "") + " " +
+                   " ".join(_duz(str(v)) for v in (oz.values() if isinstance(oz, dict) else [oz])))
         kucuk = _kucult(ham)
         degerler, adlar = self._olculen_degerler()
         if not degerler or not adlar:
@@ -1268,6 +1274,7 @@ class Denetim:
         "TÜİK", "TÜFE", "TÜFEX", "MOVE", "OPEC", "OFAC", "CENTCOM", "UKMTO", "MODAFL",
         "AOFM", "KOSGEB", "DEİK", "NASDAQ", "OECD", "EUROSTAT", "TOKİ", "BOTAŞ",
         "ASELSAN", "NATO", "IOSCO", "EUREX", "EIOPA", "ESMA", "BOJ", "PBOC",
+        "KOBİ",
     })
 
     def manset(self):
@@ -1276,17 +1283,18 @@ class Denetim:
         m = str(self.b.get("manset") or "").strip()
         if not m:
             return
-        if len(m) > 110:
-            self.uyari.append(f"manşet {len(m)} karakter (en çok 110): {m[:60]!r}…")
+        import yaz as _yaz          # tavan tek tanım: yazma kapısının kendisi
+        if len(m) > _yaz.MANSET_AZAMI:
+            self.uyari.append(f"manşet {len(m)} karakter (en çok {_yaz.MANSET_AZAMI}): {m[:60]!r}…")
         else:
             self._ok(f"manşet {len(m)} karakter")
 
     def buyuk_harf(self):
-        yazi = [self.b.get("manset") or "", self.b.get("yorum") or ""]
-        oz = self.b.get("ozet") or {}
-        yazi += [str(v) for v in oz.values()] if isinstance(oz, dict) else [str(oz)]
-        yazi += [str(v) for v in (self.b.get("gundem") or {}).values()]
-        metin = _duz(" ".join(yazi))
+        # Kapsam YAZI_ALANLARI'ndan türer (temalar dahil). Elle tutulan
+        # manşet+yorum+özet+gündem listesi temaları görmüyordu: 30.09.2026'da
+        # beş sayı "vurgu yok" geçerken sayfanın tema anlatısında 12–17
+        # büyük harfli vurgu basılıydı.
+        metin = _duz(" ".join(_metinler(self.b)))
         unlu = set("AEIİOÖUÜÂ")
         vurgu = [w for w in self.BUYUK_SOZCUK.findall(metin)
                  if w not in self.KISALTMA and sum(ch in unlu for ch in w) >= 2]
@@ -1639,7 +1647,7 @@ class Denetim:
             b = _j.loads(onceki[-1].read_text(encoding="utf-8"))
         except Exception:                                      # noqa: BLE001
             return None
-        bl = _t.bolumler(b or {})
+        bl = _t.bolumler(b or {}, bayat_tema=True)
         return bl or None
 
     def tema(self):

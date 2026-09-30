@@ -13,7 +13,7 @@
  * gerilim görünür kalır — sayfanın asıl anlattığı şey o gerilim.
  */
 import type { RejimSatiri } from '../lib/anaSayfa';
-import { rejimHane, rejimFark } from '../lib/anaSayfa';
+import { rejimHane, rejimFark, REJIM_FARK_BIRIMI } from '../lib/anaSayfa';
 import { sayi, yuzde } from '../lib/bicim';
 
 interface Props {
@@ -34,10 +34,14 @@ const bicim = (s: RejimSatiri) => {
 // altında "değişmedi" yazmak, hareket eden satırı kalabalıkta gizliyordu.
 // Bir oranın farkı PUANDIR; değerin kendi birimiyle okunur. Önceki ölçüm
 // yoksa fark uydurulmaz.
+// Birim tablodan türer (REJIM_FARK_BIRIMI): "%24,7" altında çıplak "−3,2"
+// "−%3,2" diye okunuyordu; farkın ne olduğu yalnız title'daydı (dokunmatikte ve
+// ekran okuyucuda görünmez), o yüzden görünmez bir önek de basılır.
 const farkYaz = (s: RejimSatiri): string | null => {
   const f = rejimFark(s);
   if (f === null || f === 0) return null;
-  return sayi(f, rejimHane(s), true);
+  const b = REJIM_FARK_BIRIMI[s.birim] ?? s.birim;
+  return `${sayi(f, rejimHane(s), true)}${b ? ` ${b}` : ''}`;
 };
 ---
 
@@ -55,7 +59,7 @@ const farkYaz = (s: RejimSatiri): string | null => {
           {bicim(s)}
           {s.birim !== '%' && s.deger !== null && <span class="rj-birim">{s.birim}</span>}
           {farkYaz(s) && (
-            <span class="rj-fark" title="Bir önceki ölçüme göre">{farkYaz(s)}</span>
+            <span class="rj-fark" title="Bir önceki ölçüme göre"><span class="gorunmez">önceki ölçüme göre </span>{farkYaz(s)}</span>
           )}
         </span>
         <span class="rj-etiket">{s.etiket}</span>

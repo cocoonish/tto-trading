@@ -147,6 +147,12 @@ main:focus {
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
+/* BÜYÜK HARF DÖNÜŞÜMÜNDEN KORUNAN METİN. Küçük Yunan harfi büyüğüne dönünce
+   başka bir büyüklüğün adı olur (σ standart sapma → Σ toplam, β → Β); KaTeX
+   çıktısı da aynı dönüşümü devralıyordu. Sarma işi src/lib/harf.mjs'de (MDX
+   gövdesi rehype eklentisinden geçer, bileşenler kabı kendi basar); kapı
+   sayfa sınavının 27. ölçütü. Yabancı özel ad `lang="en"` ile korunur. */
+.harf-koru, .katex { text-transform: none; }
 
 .rozet {
   font-family: var(--font-mono);

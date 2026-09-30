@@ -32,9 +32,18 @@ const satirlar = hatlar
   // girmez; boş bir satır, olmayan bir satırdan daha kötü bilgi verir.
   .filter((h) => h.olcu)
   .sort((a, b) => (a.yas ?? 9e9) - (b.yas ?? 9e9));
+
+// Değer ile birim ayrı öğe: telefonda birim değerin ALTINA iner. Tek nowrap
+// dizge ("230,8 mlr USD") 390 pikselde değer sütununu 142 piksele çıkarıyor,
+// tarih sütunu kabın dışına düşüp "29.09.202" diye kesiliyordu (320 px'te
+// 98 piksel gizli). olcuYaz sayıyı boşluksuz yazar; ilk boşluk birimi ayırır.
+const parca = (m: string) => {
+  const i = m.indexOf(' ');
+  return i < 0 ? { sayi: m, birim: '' } : { sayi: m.slice(0, i), birim: m.slice(i + 1) };
+};
 ---
 
-<div class="ht-sarici" tabindex="0" role="region" aria-label="Kaydırılabilir tablo">
+<div class="ht-sarici" tabindex="0" role="region" aria-label="Kaydırılabilir tablo" data-kaydir>
   <table class="ht-tablo">
     <caption class="gorunmez">Veri hatları: manşet büyüklüğü, değeri ve o değerin kendi tarihi</caption>
     <thead>
@@ -57,7 +66,9 @@ const satirlar = hatlar
             </td>
             <td class="ht-olcu">{h.olcu}</td>
             <td class="ht-deger">
-              {h.metin ?? <span class="ht-yok">veri yok</span>}
+              {h.metin
+                ? <>{parca(h.metin).sayi}{parca(h.metin).birim && <span class="ht-birim"> {parca(h.metin).birim}</span>}</>
+                : <span class="ht-yok">veri yok</span>}
             </td>
             <td class="ht-tarih">
               {h.tarih || '—'}
@@ -175,6 +186,7 @@ const satirlar = hatlar
     .ht-hat a { white-space: normal; }
     thead th.sag { padding-right: 0.8rem; }
     .ht-deger { padding-right: 0.8rem; font-size: 0.92rem; }
+    .ht-birim { display: block; font-size: 0.75rem; color: var(--ink-70); line-height: 1.2; }
     .ht-tarih { font-size: 0.72rem; }
   }
   /* TELEFON TABANI (≤640 px): meta etiket en az 0,75rem, sayı en az 0,8125rem.

@@ -2,9 +2,8 @@
 import Base from '../../layouts/Base.astro';
 import BultenGovde from '../../components/BultenGovde.astro';
 import SayiGezinme from '../../components/SayiGezinme.astro';
-import { bultenler, teknikler, type BultenKaydi } from '../../lib/yayinlar';
-import { getCollection } from 'astro:content';
-import { isoGun } from '../../lib/bicim';
+import { bultenler, type BultenKaydi } from '../../lib/yayinlar';
+import { ayniGunYayimlar } from '../../lib/ayniGun';
 import { hatSayfalari } from '../../lib/hatSayfa';
 
 export async function getStaticPaths() {
@@ -31,14 +30,7 @@ const hatSayfa = await hatSayfalari();
 const tur = kayit.haftalik ? 'Haftaya bakış' : 'Günlük bülten';
 // AYNI GÜN yayımlananlar: 30.09 bülteni aynı gün çıkan borçlanma analizine,
 // pazar sayısı aynı günün teknik sayısına gövdede hiç bağ vermiyordu.
-const ayniGun = [
-  ...(await getCollection('analiz'))
-    .filter((y) => isoGun(y.data.pubDate) === kayit.tarih && y.data.durum !== 'taslak')
-    .map((y) => ({ tur: 'Analiz', ad: y.data.title, href: `/analiz/${y.id}/` })),
-  ...teknikler()
-    .filter((t) => t.tarih === kayit.tarih)
-    .map((t) => ({ tur: 'Haftalık teknik analiz', ad: `Sayı ${t.sayiNo}`, href: t.href })),
-];
+const ayniGun = await ayniGunYayimlar(kayit.tarih);
 ---
 
 <Base

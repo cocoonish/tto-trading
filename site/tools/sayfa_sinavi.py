@@ -98,12 +98,15 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       derlenmiş 17 sayı): 108 dikkat olayının 108'i okura ulaşmıyor, 37
       önemli olayın 37'si ulaşıyor — kaynak da veri de doğruydu, kusur yalnız
       çıktıda görünüyordu. Bulunamayan olay ENGEL.
-  (27) BASIM SÖZLEŞMESİ — derlenmiş çıktıda üç kusur ENGEL: marka "TRADİNG"
-      (lang="tr" altında büyük harf dönüşümü İngilizce adı bozuyordu), gösterge
-      şeridinde yüzde birimli bir seviyenin farkının yüzde diye basılması
-      ("−%0,24"; bir oranın farkı PUANDIR) ve tablo başlığında Σ (büyük harf
-      dönüşümü σ'yı "toplam" işaretine çeviriyordu). Üçü de 30.09.2026'da
-      canlı sitede ölçüldü; kaynakta düzeltildi, kural bu ölçütte kalıcı.
+  (27) BASIM SÖZLEŞMESİ — derlenmiş çıktıda ENGEL: gösterge şeridinde yüzde
+      birimli bir seviyenin farkının yüzde diye basılması ("−%0,24"; bir
+      oranın farkı PUANDIR), takvimde aynı yayımın iki satırı, ve BÜYÜK HARF
+      DÖNÜŞÜMÜNÜN bozduğu metin: `text-transform: uppercase` bağlamında küçük
+      Yunan harfi (σ → Σ "toplam", β → Β) ya da lang="tr" altında büyük harfe
+      dönen İngilizce özel ad ("TRADİNGVİEW", "PİNE"). Sonuncusu HTML'de
+      görünmez; bağlam derlenmiş CSS'ten hesaplanır (buyuk_harf_baglam.py).
+      İlk hâli ham HTML'de "Σ" ve "TRADİNG" arıyordu ve tanımı gereği sıfır
+      buluyordu — 30.09.2026'da 16 sayfada 152 kusur dururken "0 ihlal".
   (23) SOLUK METİN — `color: var(--ink-30)` ENGEL. Kontrast 1,90:1 ve
       global.css'in kendi yorumu "yalnız çizgi ve kenarlıkta" diyor; metin
       için en soluk kabul edilen jeton --ink-60 (4,59:1).
@@ -123,6 +126,8 @@ import urllib.parse
 from html import unescape
 
 KOK = pathlib.Path(__file__).resolve().parents[2]
+if str(pathlib.Path(__file__).resolve().parent) not in sys.path:
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 
 # (sayfa slug'ı, proje klasörü)
 # HAT LİSTESİ ELLE TUTULMAZ, guncelle.py'nin kendi kütüğünden TÜRETİLİR.
@@ -740,6 +745,87 @@ def olay_okura_ulasti(kok: Path) -> tuple[list[str], int, int]:
     return bulgu, aranan, bulunan
 
 
+def _etiketsiz(html: str) -> str:
+    """Etiketler BOŞLUKSUZ sökülür: sayfa sayıları `<span class="nb">` ile
+    sarıyor ("%5<span>'e"), boşlukla sökmek iki tarafı ayırırdı."""
+    return _sade_metin(unescape(re.sub(r"<[^>]+>", "", html)))
+
+
+def yazi_okura_ulasti(kok: Path) -> tuple[list[str], int, int]:
+    """(25b) YAZI OKURA ULAŞTI MI. Yazı katmanının her metin alanı (özet,
+    günün okuması, manşet, gündem bölümleri) o sayının derlenmiş sayfasında
+    geçmeli.
+
+    Gündem metni bölüm başlığıyla basılıyor ve başlık yalnız o gün haber
+    maddesi olan bölümler için yazılıyordu: `kurum_global` metni maddesiz
+    günlerde başlıksız kaldı ve 17 sayıda hiç basılmadı (~2.200 karakter,
+    yazılmış, denetimden geçmiş, sayfada yok). Olay ölçütüyle aynı sınıf —
+    basan da süzen de bileşen — ve aynı süzgeç iki tarafa uygulanıyor."""
+    ESLESME_UZUNLUK = 45
+    veri = kok / "site/src/data/bulten"
+    dist = kok / "site/dist/bulten"
+    bulgu: list[str] = []
+    aranan = bulunan = 0
+    for kaynak in sorted(veri.glob("*.json")):
+        sayfa = dist / kaynak.stem / "index.html"
+        if not sayfa.exists():
+            continue
+        metin_sayfa = _etiketsiz(sayfa.read_text(encoding="utf-8"))
+        b = json.loads(kaynak.read_text(encoding="utf-8"))
+        alanlar = [("manset", b.get("manset")), ("yorum", b.get("yorum"))]
+        oz = b.get("ozet") if isinstance(b.get("ozet"), dict) else {}
+        alanlar += [(f"ozet.{k}", oz.get(k)) for k in ("ne_oldu", "ne_bekleniyor")]
+        gd = b.get("gundem") if isinstance(b.get("gundem"), dict) else {}
+        alanlar += [(f"gundem.{k}", v) for k, v in gd.items()]
+        for ad, v in alanlar:
+            if not isinstance(v, str):
+                continue
+            t = _etiketsiz(v)
+            if len(t) < ESLESME_UZUNLUK:
+                continue
+            aranan += 1
+            if t[:ESLESME_UZUNLUK] in metin_sayfa:
+                bulunan += 1
+            else:
+                bulgu.append(f"{kaynak.stem} · {ad} — yazılmış metin sayfada YOK: {t[:70]!r}")
+    return bulgu, aranan, bulunan
+
+
+def haber_okura_ulasti(kok: Path) -> tuple[list[str], int, int]:
+    """(25c) HABER OKURA ULAŞTI MI. Ölçüm katmanının seçtiği her haber
+    maddesinin başlığı (yayıncı soneki ayrılmış) sayfada geçmeli.
+
+    Tekilleştirme anahtarı bağlantıydı ve Resmî Gazete maddelerinin hepsi
+    sitenin kök adresini taşıyor: aynı günün üç ayrı maddesinden ikisi "aynı
+    haber" sayılıp düşüyordu (arşivde üç madde, iki sayı). Başlık, bölümler
+    arası tekilleştirmede aynı kalan tek alan olduğu için ölçü odur."""
+    ESLESME = 40
+    veri = kok / "site/src/data/bulten"
+    dist = kok / "site/dist/bulten"
+    bulgu: list[str] = []
+    aranan = bulunan = 0
+    for kaynak in sorted(veri.glob("*.json")):
+        sayfa = dist / kaynak.stem / "index.html"
+        if not sayfa.exists():
+            continue
+        metin_sayfa = _etiketsiz(sayfa.read_text(encoding="utf-8"))
+        b = json.loads(kaynak.read_text(encoding="utf-8"))
+        gorulen = set()
+        for bol in (b.get("haberler") or {}).get("bolumler") or []:
+            for m in bol.get("maddeler") or []:
+                t = _sade_metin(str(m.get("baslik") or ""))
+                t = re.split(r"\s+[-–—]\s+(?=(?:(?!\s[-–—]\s).){2,60}$)", t)[0]
+                if len(t) < 20 or t in gorulen:
+                    continue
+                gorulen.add(t)
+                aranan += 1
+                if _sade_metin(t)[:ESLESME] in metin_sayfa:
+                    bulunan += 1
+                else:
+                    bulgu.append(f"{kaynak.stem} · {bol.get('id')} — haber sayfada YOK: {t[:70]!r}")
+    return bulgu, aranan, bulunan
+
+
 def sabit_kap_bulgulari(dist: Path) -> list[str]:
     """(24) SABİT KAP. Karar 08.09.2026: yalnız panolar canlıdır. Derlenmiş
     çıktıda analiz/ ve arastirma/ sayfalarında `canli-deger` alanı varsa gövde
@@ -796,6 +882,8 @@ def soluk_metin(kok: pathlib.Path) -> list[str]:
 # ---------------------------------------------------------------- (27)
 _G_FARK = re.compile(r'<span class="g-fark[^"]*"[^>]*>\s*([^<]*)</span>')
 _TH = re.compile(r"<th\b[^>]*>(.*?)</th>", re.S)
+# Rejim şeridinin farkı: "%24,7" altında çıplak "−3,2" yüzde gibi okunuyordu.
+_RJ_FARK = re.compile(r'<span class="rj-fark"[^>]*>(.*?)</span>\s*</span>', re.S)
 _TAKVIM_TABLO = re.compile(r'<table class="takvim"[^>]*>(.*?)</table>', re.S)
 _TR = re.compile(r"<tr\b[^>]*>(.*?)</tr>", re.S)
 
@@ -832,24 +920,89 @@ def takvim_tekrari(m: str) -> list[str]:
     return out
 
 
-def basim_bulgulari(dosyalar: list[tuple[str, str]]) -> list[str]:
-    """(27) BASIM SÖZLEŞMESİ. Girdi (göreli yol, derlenmiş HTML) çiftleri.
+def basim_bulgulari(dosyalar: list[tuple[str, str]], css_oku=None) -> list[str]:
+    """(27) BASIM SÖZLEŞMESİ. Girdi (göreli yol, derlenmiş HTML) çiftleri;
+    `css_oku(href)` sayfanın bağladığı derlenmiş CSS'i döndürür (yoksa yalnız
+    satır içi <style> okunur).
 
-    Kaynağa değil ÇIKTIYA bakılır: üç kusurun üçü de bir bileşenin ya da CSS
-    kuralının ürünüydü ve kaynak metinde görünmüyordu."""
+    Kaynağa değil ÇIKTIYA bakılır: kusurların hepsi bir bileşenin ya da CSS
+    kuralının ürünüydü ve kaynak metinde görünmüyordu. Büyük harf dönüşümünün
+    bozduğu metin (σ → Σ, "TRADİNGVİEW") HTML'de de görünmez; o soru derlenmiş
+    CSS'ten hesaplanır (buyuk_harf_baglam.py). Önceki ölçüt ham HTML'de "Σ" ve
+    "TRADİNG" arıyordu ve o dizgeler hiç oluşmadığı için tanımı gereği sıfır
+    buluyordu."""
+    import buyuk_harf_baglam as _bh
     bulgu: list[str] = []
     for rel, m in dosyalar:
-        if "TRADİNG" in m:
-            bulgu.append(f"{rel}: marka 'TRADİNG' (lang=\"en\" eksik)")
         for f in _G_FARK.findall(m):
             if re.match(r"[+−-]?%", unescape(f).strip()):
                 bulgu.append(f"{rel}: gösterge farkı yüzde basılmış {f.strip()!r} — oranın farkı puandır")
-        for th in _TH.findall(m):
-            if "Σ" in unescape(re.sub(r"<[^>]+>", "", th)):
-                bulgu.append(f"{rel}: tablo başlığında Σ {re.sub(r'<[^>]+>', '', th).strip()!r}")
+        for f in _RJ_FARK.findall(m):
+            g = unescape(re.sub(r"<[^>]+>", "", re.sub(r'<span class="gorunmez"[^>]*>.*?</span>', "", f))).strip()
+            if re.fullmatch(r"[+−-]?[\d.,]+", g) or re.match(r"[+−-]?%", g):
+                bulgu.append(f"{rel}: rejim farkı birimsiz ya da yüzde basılmış {g!r} — oranın farkı puandır")
         for t in takvim_tekrari(m):
             bulgu.append(f"{rel}: takvimde aynı yayım iki satır ({t}) — alt tablolar tek satırda toplanır")
+        css = _bh.sayfa_css(m, css_oku or (lambda _h: ""))
+        if 'class="bulten-izgara' in m:
+            g = genis_ekran_bulgusu(css)
+            if g:
+                bulgu.append(f"{rel}: {g}")
+        bh, atlanan = _bh.bulgular(m, css)
+        for x in bh:
+            bulgu.append(f"{rel}: {x}")
+        if atlanan:
+            BASIM_ATLANAN.add(atlanan)
     return bulgu
+
+
+def genis_ekran_bulgusu(css: str, genislik: int = 1440) -> str | None:
+    """Bülten ızgarası geniş ekranda AÇILIYOR mu: `genislik` pikselde `.bulten`
+    öğesine uygulanan SON `max-width` bildirimi "none" olmalı.
+
+    İki <style> bloğu Astro'nun derlenmiş CSS'inde ters sırayla yazılıyordu;
+    `@media (min-width:1200px) { .bulten { max-width: none } }` aynı
+    özgüllükteki temel `.bulten { max-width: 46rem }`e yeniliyor, ızgara hiç
+    açılmıyor ve yan sütun kabından 224 piksel taşıyordu (30.09.2026, 1200 ·
+    1440 · 1920 px'te ölçüldü). Kaynakta her iki kural da doğru görünür; kusur
+    yalnız derlenmiş SIRADA durur."""
+    son = None
+
+    def yuru(t: str, gecerli: bool) -> None:
+        nonlocal son
+        i = 0
+        while i < len(t):
+            j = t.find("{", i)
+            if j < 0:
+                return
+            bas = t[i:j].strip().split(";")[-1].strip()
+            d, k = 1, j + 1
+            while k < len(t) and d:
+                d += (t[k] == "{") - (t[k] == "}")
+                k += 1
+            govde = t[j + 1:k - 1]
+            if bas.startswith("@media"):
+                mn = re.search(r"min-width:\s*(\d+)px", bas)
+                mx = re.search(r"max-width:\s*(\d+)px", bas)
+                uyar = (not mn or int(mn.group(1)) <= genislik) and (not mx or int(mx.group(1)) >= genislik)
+                yuru(govde, gecerli and uyar)
+            elif not bas.startswith("@"):
+                if gecerli and any(re.fullmatch(r"\.bulten(\[data-astro-cid-[\w-]+\])?", x.strip())
+                                   for x in bas.split(",")):
+                    m = re.search(r"max-width\s*:\s*([^;}]+)", govde)
+                    if m:
+                        son = m.group(1).strip()
+            i = k
+
+    yuru(re.sub(r"/\*.*?\*/", "", css, flags=re.S), True)
+    if son is None or son == "none":
+        return None
+    return f"bülten ızgarası {genislik} px'te açılmıyor: `.bulten` son max-width {son!r} (geniş ekran kuralı temel kuraldan ÖNCE yazılmış)"
+
+
+# Büyük harf ölçütünün desteklemediği seçici sayıları (sessizce "temiz"
+# sayılmasın diye sınav çıktısına basılır).
+BASIM_ATLANAN: set[int] = set()
 
 
 # ---------------------------------------------------------------- (26)
@@ -1689,6 +1842,14 @@ def main() -> int:
         for k in kayip:
             hata.append(f"ulaşmayan olay — {k}")
         print(f"  aranan {aranan} · sayfada {bulundu} · kayıp {len(kayip)}")
+        ykayip, yaranan, ybulundu = yazi_okura_ulasti(KOK)
+        for k in ykayip:
+            hata.append(f"ulaşmayan yazı — {k}")
+        print(f"  yazı katmanı: aranan {yaranan} · sayfada {ybulundu} · kayıp {len(ykayip)}")
+        hkayip, haranan, hbulundu = haber_okura_ulasti(KOK)
+        for k in hkayip:
+            hata.append(f"ulaşmayan haber — {k}")
+        print(f"  haber: aranan {haranan} · sayfada {hbulundu} · kayıp {len(hkayip)}")
 
     # ------------------------------------------------------------ (23)
     # SOLUK METİN. global.css'in kendi yorumu "--ink-30 metinde kullanılmaz"
@@ -1702,8 +1863,8 @@ def main() -> int:
     print(f"  ihlal {len(sol)}")
 
     # ------------------------------------------------------------ (27)
-    # BASIM SÖZLEŞMESİ — marka yazımı, gösterge farkının birimi, başlıkta Σ.
-    print("\n▶ Basım sözleşmesi (dist/: TRADİNG · gösterge farkı yüzde · başlıkta Σ)")
+    # BASIM SÖZLEŞMESİ — büyük harf bağlamı, gösterge farkının birimi, takvim tekrarı.
+    print("\n▶ Basım sözleşmesi (dist/: büyük harf bağlamı σ/yabancı ad · gösterge farkı yüzde · takvim tekrarı)")
     if not (KOK / "site/dist").exists():
         print("  – dist/ yok (önce `npm run build`), ÖLÇÜT KOŞMADI")
         uyari.append("ölçüt 27 (basım sözleşmesi) KOŞMADI — dist/ yok")
@@ -1717,10 +1878,18 @@ def main() -> int:
                 ciftler.append((h.relative_to(dist).as_posix(), h.read_text(encoding="utf-8")))
             except (OSError, UnicodeDecodeError):
                 continue
-        bs = basim_bulgulari(ciftler)
+        def _css_oku(href: str) -> str:
+            y = dist / urllib.parse.unquote(href.split("?")[0]).lstrip("/")
+            try:
+                return y.read_text(encoding="utf-8")
+            except OSError:
+                return ""
+        bs = basim_bulgulari(ciftler, _css_oku)
         for x in bs:
             hata.append(f"basım — {x}")
         print(f"  sayfa {len(ciftler)} · ihlal {len(bs)}")
+        if BASIM_ATLANAN:
+            print(f"  ! büyük harf ölçütü desteklemediği seçicileri atladı (sayfa başına {sorted(BASIM_ATLANAN)})")
 
     # ------------------------------------------------------------ (26)
     # YAZININ KENDİ DOĞRULAYICISI — yayımlanan sayı ile onu üreten ölçüm.

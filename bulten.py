@@ -118,7 +118,7 @@ def main() -> int:
             print("  Yazının altındaki ölçüyü değiştirmek, sayfayı ölçmediğimiz")
             print("  sayıları anlatır hale getirir. Ölçüm gerçekten yenilenecekse")
             print("  --yeniden-olc ver ve ARDINDAN metni güncel ölçüye göre")
-            print("  gözden geçir (yalnız yorum/özet/gündem korunur).")
+            print("  gözden geçir (yazı katmanının alanları — yorum, özet, gündem, manşet, düzeltmeler — korunur).")
             return 0
 
     b = uret.uret(haber_tara=not a.habersiz, takvim_ufku=a.ufuk, tur=tur)

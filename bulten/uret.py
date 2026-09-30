@@ -493,6 +493,11 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
             "kurum": [h for h in haberler if h.get("kurum")],
             "haber": [h for h in haberler if not h.get("kurum")],
             "okunamayan": okunamayan,
+            # Bütün bölümlerin adı — o gün maddesi olmayan bölüm de. Yazı
+            # katmanı gündem metnini bölüm kimliğiyle yazar; başlık yalnız
+            # maddesi olan bölümde durunca metin başlıksız kalıp hiç
+            # basılmıyordu (kurum_global, 17 sayı).
+            "bolum_adlari": {bid: baslik for bid, baslik, _b, _a in ayar.HABER_BOLUMLERI},
         },
         # Gündem yazısı: bölüm bölüm ayrıntılı metin. Kural tabanlı koşu buraya
         # başlıkları cümleye çevirerek bir TABAN koyar; yorum katmanı kaynakları
@@ -550,6 +555,18 @@ def yaz(b: dict) -> Path:
             eski = json.loads(y.read_text(encoding="utf-8"))
             if eski.get("yorum"):
                 b["yorum"], b["yorum_zamani"] = eski["yorum"], eski.get("yorum_zamani")
+            # Yazı katmanının öbür alanları ve damgaları da KORUNUR; kapsam
+            # yazma kapısının kendi listesinden (yaz.YAZILABILIR) türer. Liste
+            # elle tutulduğu için yeniden ölçüm (--yeniden-olc) manşeti ve
+            # yayımlanmış DÜZELTME kayıtlarını siliyordu: sayfanın başlığı
+            # sessizce tarihe dönüyor, düzeltme /duzeltmeler/ listesinden
+            # düşüyordu. Yorum, gündem ve özetin kendi kuralı yukarıda/aşağıda.
+            import yaz as _yaz
+            for alan in (*_yaz.YAZILABILIR, "yazi_zamani", "ilk_yazi_zamani"):
+                if alan in ("yorum", "gundem", "ozet"):
+                    continue
+                if eski.get(alan) and not b.get(alan):
+                    b[alan] = eski[alan]
             # Yorum katmanının yazdığı ayrıntılı gündem metni, sonraki
             # deterministik koşularda TABAN metinle ezilmemeli.
             if eski.get("gundem_kaynagi") == "yazili" and eski.get("gundem"):

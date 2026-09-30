@@ -751,20 +751,80 @@ sina("grafikOlcu.ts ↔ figur_olcu.py: sabitler ve öncelik aynı",
 # ama canlı çıktıda tutmaz (22.09.2026 dersi).
 basim = _mod.basim_bulgulari
 _cid = ' data-astro-cid-abc123'
-sina("marka 'TRADİNG' ENGEL", len(basim([("a/index.html", "<span>TTO TRADİNG</span>")])) == 1)
-sina("doğru marka yazımı geçer", not basim([("a/index.html", '<span lang="en">TTO Trading</span>')]))
+# Büyük harf bağlamı: kusur HTML'de görünmez ("σ" durur, çizimde "Σ" çıkar),
+# bağlam derlenmiş CSS'ten hesaplanır. Fikstür derlenmiş biçimi taşır —
+# global kural (`.prose thead th`), Astro kapsamlı kural
+# (`thead[data-astro-cid-…] th[data-astro-cid-…]`) ve koruma kuralı
+# (`.harf-koru, .katex`). İlk ölçüt ham HTML'de "Σ" arıyordu ve bu
+# fikstürlerin hiçbirinde tutmazdı.
+_CSS = ('<style>.etiket{font-size:.7rem;text-transform:uppercase}'
+        '.prose thead th{text-transform:uppercase;letter-spacing:.1em}'
+        '.harf-koru,.katex{text-transform:none}'
+        f'thead[data-astro-cid-abc123] th[data-astro-cid-abc123]{{text-transform:uppercase}}'
+        'table.p-tablo th{text-transform:none}'
+        '.kicker:hover{text-transform:uppercase}'
+        '@media (max-width:640px){.dar > b{text-transform:uppercase}}</style>')
+def _bh(govde, css=_CSS, lang="tr"):
+    return basim([("x/index.html", f'<!doctype html><html lang="{lang}"><head>{css}</head><body>{govde}</body></html>')])
+sina("büyük harf: tablo başlığında σ (global kural) ENGEL",
+     len(_bh('<div class="prose"><table><thead><tr><th>Artık σ</th></tr></thead></table></div>')) == 1)
+sina("büyük harf: Astro kapsamlı başlıkta β ENGEL",
+     len(_bh(f'<table{_cid}><thead{_cid}><tr{_cid}><th{_cid}>yıllık β</th></tr></thead></table>')) == 1)
+sina("büyük harf: .harf-koru içindeki σ geçer",
+     not _bh('<div class="prose"><table><thead><tr><th>1<span class="harf-koru">σ</span> aylık</th></tr></thead></table></div>'))
+sina("büyük harf: KaTeX çıktısı geçer",
+     not _bh('<p class="etiket"><span class="katex"><span class="mord mathnormal">σ</span></span></p>'))
+sina("büyük harf: özgül 'none' kuralı ezer (bülten tablosu)",
+     not _bh('<table class="p-tablo"><thead><tr><th>1 gün σ</th></tr></thead></table>'))
+sina("büyük harf: dönüşümsüz bağlamda σ geçer", not _bh('<p>Günlük σ 1,2</p>'))
+sina("büyük harf: yalnız :hover kuralı sayılmaz", not _bh('<p class="kicker">σ</p>'))
+sina("büyük harf: @media içindeki çocuk kuralı sayılır",
+     len(_bh('<div class="dar"><b>τ</b></div>')) == 1 and not _bh('<div class="dar"><i><b>τ</b></i></div>'))
+sina("büyük harf: lang=tr altında 'TradingView' ENGEL",
+     len(_bh('<p class="etiket">pine script · tradingview</p>')) == 3)
+sina("büyük harf: lang=en ile korunan ad ve büyük harfli 'OIS' geçer",
+     not _bh('<p class="etiket"><span lang="en">pine</span> · OIS iskonto</p>'))
+sina("büyük harf: İngilizce sayfada ad taranmaz", not _bh('<p class="etiket">tradingview</p>', lang="en"))
+sina("büyük harf: bağlı CSS dosyası okunur",
+     len(basim([("x/index.html", '<html lang="tr"><head><link rel="stylesheet" href="/_astro/a.css"></head>'
+                                 '<body><span class="etiket">Vol σ</span></body></html>')],
+               lambda h: ".etiket{text-transform:uppercase}" if h == "/_astro/a.css" else "")) == 1)
+# Bülten ızgarası geniş ekranda açılıyor: derlenmiş SIRA sorulur (Astro iki
+# <style> bloğunu ters yazınca geniş ekran kuralı temel kurala yeniliyordu).
+_gb = _mod.genis_ekran_bulgusu
+sina("geniş ekran: temel kuraldan SONRA gelen 'none' geçer",
+     _gb(".bulten[data-astro-cid-a]{max-width:46rem}@media (min-width:1200px){.bulten[data-astro-cid-a]{max-width:none}}") is None)
+sina("geniş ekran: temel kuraldan ÖNCE gelen 'none' ENGEL",
+     _gb("@media (min-width:1200px){.bulten[data-astro-cid-a]{max-width:none}}.bulten[data-astro-cid-a]{max-width:46rem}") is not None)
+sina("geniş ekran: yalnız dar ekran kuralı 1440'ı bağlamaz",
+     _gb(".bulten{max-width:none}@media (max-width:640px){.bulten{max-width:30rem}}") is None)
+sina("geniş ekran: bağlı CSS ile sayfa sınavında ENGEL",
+     any("ızgarası" in x for x in basim([("bulten/x/index.html",
+         '<html lang="tr"><head><style>@media (min-width:1200px){.bulten{max-width:none}}.bulten{max-width:46rem}</style></head>'
+         '<body><article class="bulten"><div class="bulten-izgara"></div></article></body></html>')])))
+# Liste tek tanım: site tarafı (harf.mjs) ile kapı aynı adları taşır; eklenti
+# KaTeX'ten SONRA kayıtlı (önce koşsa KaTeX'in ürettiği metni sarmaz ama
+# KaTeX'e giden ham metni böler).
+import buyuk_harf_baglam as _bhm
+_SITE = pathlib.Path(__file__).resolve().parents[1]
+_hm = (_SITE / "src/lib/harf.mjs").read_text(encoding="utf-8")
+_hm_liste = __import__("re").search(r"export const YABANCI = \[(.*?)\];", _hm, __import__("re").S)
+_ac = (_SITE / "astro.config.mjs").read_text(encoding="utf-8")
+sina("harf.mjs ↔ buyuk_harf_baglam.py: yabancı ad listesi aynı; eklenti KaTeX'ten sonra",
+     _hm_liste is not None
+     and sorted(__import__("re").findall(r"'([^']+)'", _hm_liste.group(1))) == sorted(_bhm.YABANCI)
+     and __import__("re").search(r"rehypeKatex,[^\]]*\],\s*rehypeHarfKoru", _ac) is not None,
+     f"harf.mjs {_hm_liste.group(1) if _hm_liste else None} · py {_bhm.YABANCI}")
 sina("gösterge farkı '−%0,24' ENGEL",
      len(basim([("b/index.html", f'<span class="g-fark eksi"{_cid}>−%0,24</span>')])) == 1)
 sina("gösterge farkı '−0,24 puan' geçer",
      not basim([("b/index.html", f'<span class="g-fark eksi"{_cid}>−0,24 puan</span>')]))
+sina("rejim farkı birimsiz ('−3,2') ENGEL",
+     len(basim([("b/index.html", f'<span class="rj-deger"{_cid}> %24,7 <span class="rj-fark" title="x"{_cid}>−3,2</span> </span>')])) == 1)
+sina("rejim farkı '−3,2 puan' (görünmez önekle) geçer",
+     not basim([("b/index.html", f'<span class="rj-deger"{_cid}> %24,7 <span class="rj-fark" title="x"{_cid}><span class="gorunmez"{_cid}>önceki ölçüme göre </span>−3,2 puan</span> </span>')]))
 sina("bp birimli fark geçer ('−6,5 bp')",
      not basim([("b/index.html", f'<span class="g-fark eksi"{_cid}>−6,5 bp</span>')]))
-sina("tablo başlığında Σ ENGEL",
-     len(basim([("b/index.html", f'<th class="sag" scope="col"{_cid}>1 gün Σ</th>')])) == 1)
-sina("tablo başlığında σ geçer",
-     not basim([("b/index.html", f'<th class="sag" scope="col"{_cid}>1 gün σ</th>')]))
-sina("başlık DIŞINDAKİ Σ (formül metni) taranmaz",
-     not basim([("d/index.html", "<p>Σ w·v / Σ w</p>")]))
 # Takvimde aynı yayım (gün · saat · olay) iki satır: BDDK'nın on bir alt tablosu
 # on bir satır basılıyordu. Aynı günün ikinci satırında tarih hücresi boştur.
 def _tk(*satirlar):

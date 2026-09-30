@@ -16,7 +16,7 @@ import SigmaSerit from './SigmaSerit.astro';
 import Kunye from './Kunye.astro';
 import RejimSerit from './RejimSerit.astro';
 import { OLAGANDISI_SIGMA, sigmaBasligi } from '../lib/anaSayfa';
-import { sayi, yuzde, degisim, ondalikSay, istanbulSaat, tarihUzun, tarihYaz, gunAdi, duzMetin } from '../lib/bicim';
+import { sayi, yuzde, degisim, ondalikSay, istanbulSaat, istanbulIsoGun, tarihUzun, tarihYaz, gunAdi, duzMetin } from '../lib/bicim';
 import type { BultenKaydi } from '../lib/yayinlar';
 import { FERAGAT } from '../consts';
 import type { HatSayfa } from '../lib/hatSayfa';
@@ -116,7 +116,9 @@ const haberAyir = (m: any): { baslik: string; kaynak: string; lang?: string } =>
   const t = String(m?.baslik ?? '');
   const ek = k.match(/\s*\(\+\d+ kaynak\)$/)?.[0] ?? '';
   let baslik = t, kaynak = k;
-  const mm = t.match(/^(.*\S)\s+[-–—]\s+([^-–—]{2,60})$/);
+  // Ayırıcı BOŞLUKLU tiredir ve en sağdaki alınır: yayıncı adı boşluksuz tire
+  // taşıyabilir ("CNBC-e", "Star-Advertiser", "cyprus-mail.com").
+  const mm = t.match(/^(.*\S)\s+[-–—]\s+((?:(?!\s[-–—]\s).){2,60})$/);
   if (k.startsWith('Arama')) {
     baslik = mm ? mm[1] : t;
     kaynak = (mm ? mm[2].trim() : 'haber taraması') + ek;
@@ -134,20 +136,51 @@ const haberAyir = (m: any): { baslik: string; kaynak: string; lang?: string } =>
 };
 // AYNI HABER BİR KEZ. Bir haber birden çok bölümün süzgecine takılabiliyor
 // (30.09'da üç madde iki bölümde birden); yalnız ilk geçtiği bölümde basılır.
-// Anahtar bağlantı, yoksa sadeleştirilmiş başlık.
+// Anahtar bağlantı; bağlantı yalnız alan köküyse (Resmî Gazete maddelerinin
+// hepsi https://www.resmigazete.gov.tr/ taşıyor) ya da yoksa sadeleştirilmiş
+// başlık — kök adresle kurulan anahtar aynı günün üç ayrı Resmî Gazete
+// maddesinden ikisini düşürüyordu.
+const haberAnahtar = (m: any): string => {
+  const u = String(m?.baglanti || '').replace(/[?#].*$/, '');
+  const yolVar = /^[a-z]+:\/\/[^/]+\/[^/]/i.test(u);
+  return yolVar ? u : String(m?.baslik || '').toLocaleLowerCase('tr').replace(/\W+/g, ' ').trim();
+};
 const haberBolumleri = (() => {
   const gorulen = new Set<string>();
   return (b.haberler?.bolumler ?? []).map((bol: any) => ({
     ...bol,
     maddeler: (bol.maddeler ?? []).filter((m: any) => {
-      const a = String(m?.baglanti || '').replace(/[?#].*$/, '')
-        || String(m?.baslik || '').toLocaleLowerCase('tr').replace(/\W+/g, ' ').trim();
+      const a = haberAnahtar(m);
       if (!a || gorulen.has(a)) return !a;
       gorulen.add(a);
       return true;
     }),
   })).filter((bol: any) => bol.maddeler.length > 0 || (b.gundem && b.gundem[bol.id]));
 })();
+// YAZILMIŞ GÜNDEM METNİ BAŞLIKSIZ KALMAZ. Metin bölüm başlığıyla basılıyor ve
+// başlık yalnız o gün haber maddesi olan bölümler için yazılıyordu:
+// `kurum_global` maddesiz günlerde başlıksız kaldı ve 17 sayıda hiç basılmadı
+// (sayfa sınavı 25b). Başlık ölçüm katmanının ilanından (`bolum_adlari`,
+// tek tanım bulten/ayar.HABER_BOLUMLERI); o alanı taşımayan eski sayılarda
+// aynı tablonun kopyası — duman ikisini kaynak metninden kıyaslar.
+const GUNDEM_ADLARI: Record<string, string> = {
+  kilit: 'Kilit gelişmeler',
+  kurum: 'Kurum duyuruları — Türkiye',
+  kurum_global: 'Kurum duyuruları — ABD Hazinesi ve borç yönetimi',
+  tr_makro: 'Türkiye — makro ve veri',
+  tr_politika: 'Türkiye — politika ve düzenleme',
+  tr_piyasa: 'Türkiye — piyasa',
+  global_makro: 'Global — makro ve merkez bankaları',
+  global_politika: 'Global — jeopolitik ve ticaret',
+  global_piyasa: 'Global — piyasa ve emtia',
+};
+const gundemBasilan = new Set<string>([
+  ...haberBolumleri.map((x: any) => x.id),
+  ...(b.gundem_yazi_bolumleri ?? []).map((x: any) => x.id),
+]);
+const gundemYetim = Object.keys(b.gundem ?? {})
+  .filter((id) => !gundemBasilan.has(id) && String(b.gundem[id] ?? '').trim())
+  .map((id) => ({ id, baslik: b.haberler?.bolum_adlari?.[id] ?? GUNDEM_ADLARI[id] ?? 'Gündem notu' }));
 // Kipe bağlı etiketler tek yerde: günlük ve haftaya bakış farklı sözcükler kullanır.
 const kip = b.haftalik
   ? { gundemNot: 'Geçen haftanın öne çıkanları: Türkiye ve global taraf, makro ve politika ayrımıyla.' }
@@ -251,6 +284,21 @@ const sonIslemden: any[] = b?.piyasa?.seans_ozeti?.son_islemden ?? [];
 const adlar = (xs: any[]) => xs.map((x) => x.ad).join(', ');
 const gunler = (xs: string[]) => [...new Set(xs)].map((g) => tarihYaz(g)).join(', ');
 const manset = duzMetin(String(b.manset ?? '')).trim();
+// YAZI SAATİ İLK YAZIMDIR ve yalnız saat taşıyan bir damgadan okunur.
+// `ilk_yazi_zamani` yoksa `yazi_zamani` sonraki bir düzeltmenin anı olabilir:
+// 31.08 sayısının künyesi 8 Eylül'deki düzeltmenin saatini ("22:41") yazı
+// saati diye basıyordu. O hâlde yalnız sayının kendi günündeki damga yazı
+// sayılır. İlk yazım ertesi güne kaldıysa (geç sayı) saat günüyle basılır.
+const yaziDamga: string | null = (b.ilk_yazi_zamani && istanbulSaat(b.ilk_yazi_zamani))
+  ? b.ilk_yazi_zamani
+  : [b.yazi_zamani, b.yorum_zamani].find((z: any) =>
+      z && istanbulSaat(z) && istanbulIsoGun(z) === String(b.tarih)) ?? null;
+const yaziBaskaGun = !!yaziDamga && istanbulIsoGun(yaziDamga) !== String(b.tarih);
+// Sonraki bir düzeltmenin anı ayrıca ve adıyla yazılır: yazı saati sayılmaz,
+// ama sayının sonradan düzenlendiği bilgisi okurdan saklanmaz.
+const sonDuzenleme: string | null = b.yazi_zamani && istanbulSaat(b.yazi_zamani)
+  && (!yaziDamga || (b.yazi_zamani > yaziDamga
+    && istanbulSaat(b.yazi_zamani, 'tam') !== istanbulSaat(yaziDamga, 'tam'))) ? b.yazi_zamani : null;
 const kunye = [
   // Tek adlandırma: "Sayı 34" (kicker da öyle yazar); künye "No 34" diyordu.
   kayit ? { deger: String(kayit.sayiNo), etiket: 'Sayı', vurgu: true } : null,
@@ -258,8 +306,9 @@ const kunye = [
   // Yazı hücresi SAATİ verir: tarih başlıkta zaten yazıyor ve künye aynı günü
   // ikinci kez basıyordu. Saat çözülemezse tarih kalır.
   (b.yazi_zamani || b.yorum_zamani) ? {
-    deger: istanbulSaat(b.ilk_yazi_zamani ?? b.yazi_zamani ?? b.yorum_zamani) || tarihUzun(b.yorum_zamani),
-    etiket: 'Yazı', alt: 'İstanbul saati',
+    deger: yaziDamga ? istanbulSaat(yaziDamga) : tarihYaz(istanbulIsoGun(b.yorum_zamani ?? b.yazi_zamani)),
+    etiket: 'Yazı',
+    alt: yaziDamga ? (yaziBaskaGun ? tarihYaz(istanbulIsoGun(yaziDamga)) : 'İstanbul saati') : undefined,
   } : null,
   { deger: String(enstruman), etiket: 'Enstrüman' },
   haberSayisi ? { deger: String(haberSayisi), etiket: 'Taranan haber' } : null,
@@ -448,7 +497,7 @@ const haftaAsan = haftaHareket.filter((x: any) => Math.abs(x.h1_sigma) >= OLAGAN
 const bolumler = [
   b.duzeltmeler?.length > 0 && { id: 'duzeltmeler', ad: 'Düzeltmeler' },
   b.ozet && (b.ozet.ne_oldu || b.ozet.ne_bekleniyor) &&
-    { id: 'ozet', ad: b.haftalik ? 'Geçen hafta / önümüzdeki hafta' : 'Ne oldu / ne bekleniyor' },
+    { id: 'ozet', ad: b.haftalik ? 'Geçen hafta / önümüzdeki hafta' : 'Ne oldu / ne bekleniyor', kisa: 'Özet' },
   b.gostergeler?.length > 0 && { id: 'gostergeler', ad: 'Gösterge şeridi' },
   bugunKayitlar.length > 0 && { id: 'bugun', ad: 'Bugün' },
   pazarDuzeni && { id: 'hafta-hareket', ad: haftaBaslik },
@@ -456,7 +505,7 @@ const bolumler = [
   b.yorum && { id: 'yorum', ad: b.haftalik ? 'Haftanın okuması' : 'Günün okuması' },
   b.rejim?.length > 0 && { id: 'rejim', ad: 'Rejim panosu' },
   !pazarDuzeni && b.piyasa?.en_cok_hareket?.sigma?.length > 0 &&
-    { id: 'olagandisi', ad: sigmaBaslik },
+    { id: 'olagandisi', ad: sigmaBaslik, kisa: 'En büyük hareketler' },
   b.one_cikanlar?.length > 0 && { id: 'one-cikanlar', ad: 'Öne çıkanlar' },
   b.sonuclar?.length > 0 && { id: 'sonuclar', ad: 'Ne bekleniyordu, ne geldi' },
   b.piyasa?.gruplar?.length > 0 && { id: 'piyasa', ad: 'Piyasa fotoğrafı' },
@@ -467,7 +516,11 @@ const bolumler = [
   b.temalar?.temalar?.length > 0 && { id: 'temalar', ad: 'İzlenen temalar' },
   b.haberler?.bolumler?.length > 0 && { id: 'gundem', ad: 'Gündem' },
   b.veri_gunlugu?.length > 0 && { id: 'veri-gunlugu', ad: 'Veri günlüğü' },
-].filter(Boolean) as { id: string; ad: string }[];
+].filter(Boolean) as { id: string; ad: string; kisa?: string }[];
+// `kisa`: dar ekranın bölüm ŞERİDİNDE basılan ad. 320 pikselde uzun başlık
+// (328 px) şeride (284 px) sığmıyor, etkin bölüm hiçbir kaydırma konumunda
+// tam görünmüyordu. Tam ad yan sütunda ve bölümün kendi başlığında durur.
+
 ---
 
 <article class="bulten">
@@ -507,7 +560,9 @@ const bolumler = [
       <p class="ic-baslik">Bu sayıda</p>
       <ol>
         {bolumler.map((x) => (
-          <li><a href={`#${x.id}`}>{x.ad}</a></li>
+          <li><a href={`#${x.id}`}>{x.kisa
+            ? <><span class="ic-tam">{x.ad}</span><span class="ic-kisa">{x.kisa}</span></>
+            : x.ad}</a></li>
         ))}
       </ol>
     </nav>
@@ -629,7 +684,7 @@ const bolumler = [
         ? <><strong>{haftaAsan}</strong> satır {sayi(OLAGANDISI_SIGMA, 0)}σ eşiğini aşıyor ve işaretli.</>
         : <>Hiçbir satır {sayi(OLAGANDISI_SIGMA, 0)}σ eşiğini aşmıyor: hafta, oynaklığına göre sıradan.</>}
       {b.piyasa.kapanis_seansi && <> Ölçülen seans: <strong>{anaSeans ? seansEtiketi(anaSeans) : b.piyasa.kapanis_seansi}</strong>.</>}</p>
-      <div class="p-kaydir" tabindex="0" role="region" aria-label="Kaydırılabilir tablo">
+      <div class="p-kaydir" tabindex="0" role="region" aria-label="Kaydırılabilir tablo" data-kaydir>
         <table class="p-tablo">
           <caption class="gorunmez">Haftanın hareketleri: son değer, haftalık değişim, haftalık σ ve kaç σ</caption>
           <thead>
@@ -747,7 +802,7 @@ const bolumler = [
         </details>
         <SigmaSerit hareketler={b.piyasa.en_cok_hareket.sigma} esik={OLAGANDISI_SIGMA}
                     kip={b.piyasa.en_cok_hareket.sigma_kip} />
-        <div class="p-kaydir" tabindex="0" role="region" aria-label="Kaydırılabilir tablo">
+        <div class="p-kaydir" tabindex="0" role="region" aria-label="Kaydırılabilir tablo" data-kaydir>
           <table class="p-tablo">
             <caption class="gorunmez">En çok hareket edenler: değişim, oynaklık ve kaç standart sapma</caption>
             <thead>
@@ -880,7 +935,7 @@ const bolumler = [
         <div class="p-grup">
           <h3>Türk lirası faizleri ve DİBS eğrisi{tlAnaTarih && <span class="adet"> · veri {tz(tlAnaTarih)}</span>}</h3>
           {b.grafikler?.egri && <EgriGrafik egri={b.grafikler.egri} />}
-          <div class="p-kaydir" tabindex="0" role="region" aria-label="Kaydırılabilir tablo">
+          <div class="p-kaydir" tabindex="0" role="region" aria-label="Kaydırılabilir tablo" data-kaydir>
           <table class="p-tablo tl">
             <caption class="gorunmez">Türk lirası faizleri ve DİBS eğrisi: büyüklük, değer, veri tarihi</caption>
             <thead>
@@ -909,7 +964,7 @@ const bolumler = [
       {b.piyasa.gruplar.map((g: any) => (
         <div class="p-grup">
           <h3>{g.baslik}</h3>
-          <div class="p-kaydir" tabindex="0" role="region" aria-label="Kaydırılabilir tablo">
+          <div class="p-kaydir" tabindex="0" role="region" aria-label="Kaydırılabilir tablo" data-kaydir>
             <table class="p-tablo p-piyasa">
               <caption class="gorunmez">{g.baslik}: son değer ve dönemsel değişimler</caption>
               <colgroup>
@@ -966,7 +1021,7 @@ const bolumler = [
       {b.piyasa.turetilmis && b.piyasa.turetilmis.length > 0 && (
         <div class="p-grup">
           <h3>Türev büyüklükler — eğri eğimleri, rafineri marjları, oranlar</h3>
-          <div class="p-kaydir" tabindex="0" role="region" aria-label="Kaydırılabilir tablo">
+          <div class="p-kaydir" tabindex="0" role="region" aria-label="Kaydırılabilir tablo" data-kaydir>
           <table class="p-tablo">
             <caption class="gorunmez">Türev büyüklükler: değer ve bir günlük değişim</caption>
             <thead>
@@ -978,7 +1033,7 @@ const bolumler = [
                   <td class="p-ad">{t.ad}<span class="p-not">{t.aciklama}</span></td>
                   <td class="sag p-son">{tr(t.deger, typeof t.ondalik === 'number' ? t.ondalik : undefined)}<span class="p-birim">{t.birim}</span></td>
                   <td class:list={['sag', 'p-degisim', { arti: (t.d1 ?? 0) > 0, eksi: (t.d1 ?? 0) < 0 }]}>
-                    {t.d1 === null || t.d1 === undefined ? '—' : degisimli(t.d1, t.degisim_birim ?? t.birim, 1)}
+                    {t.d1 === null || t.d1 === undefined ? '—' : t.degisim_birim ? degisimli(t.d1, t.degisim_birim, 1) : isaretli(t.d1)}
                   </td>
                 </tr>
               ))}
@@ -1177,7 +1232,7 @@ const bolumler = [
             </details>
           )}
           {t.olculer && t.olculer.length > 0 && (
-            <div class="p-kaydir" tabindex="0" role="region" aria-label="Kaydırılabilir tablo">
+            <div class="p-kaydir" tabindex="0" role="region" aria-label="Kaydırılabilir tablo" data-kaydir>
               <table class="p-tablo p-tema">
                 <caption class="gorunmez">{t.baslik ?? 'Tema'} ölçüleri: son değer, 1 hafta ve yılbaşından değişim</caption>
                 <thead>
@@ -1272,6 +1327,12 @@ const bolumler = [
           )}
         </div>
       ))}
+      {gundemYetim.map((g) => (
+        <div class="gundem-bolum yazi-bolum">
+          <h3>{g.baslik}</h3>
+          <div class="gundem-metin" set:html={sayiBag(String(b.gundem[g.id]))} />
+        </div>
+      ))}
       {b.gundem_yazi_bolumleri && b.gundem_yazi_bolumleri.map((bol: any) => (
         b.gundem && b.gundem[bol.id] ? (
           <div class="gundem-bolum yazi-bolum">
@@ -1345,7 +1406,8 @@ const bolumler = [
   <footer class="kunye">
     <p>
       Ölçüm {istanbulSaat(b.olusturma, 'tam')} İstanbul
-      {(b.yazi_zamani || b.yorum_zamani) && ` · yazı ${istanbulSaat(b.yazi_zamani ?? b.yorum_zamani, 'tam') || tarihUzun(b.yorum_zamani)}`}
+      {(b.yazi_zamani || b.yorum_zamani) && ` · yazı ${yaziDamga ? istanbulSaat(yaziDamga, 'tam') : tarihUzun(istanbulIsoGun(b.yorum_zamani ?? b.yazi_zamani))}`}
+      {sonDuzenleme && ` · son düzenleme ${istanbulSaat(sonDuzenleme, 'tam')}`}
       {kayit && ` · Sayı ${kayit.sayiNo}`}
     </p>
     <p class="feragat">
@@ -1654,7 +1716,14 @@ const bolumler = [
   table.p-piyasa col.c-deg { width: 10.5%; }
   table.p-piyasa col.c-konum { width: 7.5%; }
   table.p-piyasa col.c-sigma { width: 7.5%; }
-  table.p-piyasa td.p-ad { min-width: 0; overflow-wrap: break-word; }
+  /* Ad hücresi SARAR: `table.p-tablo td { white-space: nowrap }` özgüllükle
+     `.p-ad { white-space: normal }`ı eziyordu; sabit düzende uzun ad ve
+     "… kaynakta boş" notu komşu sütunun altına akıyordu. Birim değerin
+     ALTINDA: "7.670,84 puan" ve "2,9933 USD/galon" %13'lük sütuna sığmıyor,
+     değer sütunun sağ kenarını 15 piksele kadar aşıp "1 gün" hücresine
+     biniyordu (34 sayıda 645 hücre). */
+  table.p-piyasa td.p-ad { min-width: 0; overflow-wrap: break-word; white-space: normal; }
+  table.p-piyasa .p-son .p-birim { display: block; margin-left: 0; line-height: 1.2; }
   /* Tema tabloları dört sütun: telefonda da sığmalı. Piyasa tablolarının
      12rem'lik ad sütunu burada 'yılbaşından' sütununu yarısından kesiyordu. */
   table.p-tema td.p-ad { min-width: 0; white-space: normal; }
@@ -1736,9 +1805,13 @@ const bolumler = [
     .p-aralik, .g-fark { font-size: 0.8125rem; }
     .p-birim { font-size: 0.72rem; }
   }
-</style>
 
-<style>
+  /* TEK <style> BLOĞU. İçindekiler ve geniş ekran kuralları eskiden ikinci
+     bir blokta duruyordu ve Astro o bloğu derlenmiş CSS'te birincinin ÖNÜNE
+     yazıyordu: `@media (min-width:1200px) { .bulten { max-width: none } }`
+     aynı özgüllükteki `.bulten { max-width: 46rem }`e yeniliyor, ızgara hiç
+     açılmıyor, yan sütun her genişlikte 11rem'e sıkışıp kabından taşıyordu.
+     Sıra ancak tek blokta korunur. */
   /* İçindekiler: bülten uzun ve okur çoğu sabah tek bir bölümü arıyor.
      Bağlantılar yalnız GERÇEKTEN basılan bölümleri gösterir.
 
@@ -1775,6 +1848,7 @@ const bolumler = [
     text-decoration: none; border-bottom: 1px solid transparent;
   }
   .icindekiler a:hover { border-bottom-color: var(--claret); color: var(--claret); }
+  .icindekiler .ic-tam { display: none; }
   .icindekiler a[aria-current='true'] { color: var(--claret); border-bottom-color: var(--claret); }
 
   /* Çıpayla gelince başlık yapışık şeridin altında kalmasın. */
@@ -1804,6 +1878,8 @@ const bolumler = [
       background: none;
     }
     .ic-baslik { display: block; }
+    .icindekiler .ic-tam { display: inline; }
+    .icindekiler .ic-kisa { display: none; }
     .icindekiler ol { flex-direction: column; flex-wrap: nowrap; gap: 0.45rem; white-space: normal; }
     .icindekiler li { line-height: 1.3; }
     .icindekiler a { font-size: 0.78rem; line-height: 1.3; }

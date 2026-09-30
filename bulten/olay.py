@@ -275,7 +275,7 @@ def _gecikme(hat: str, sg: tuple[str, str] | None, azami_gun: int,
     hat_adi = HAT_ADI.get(hat, hat)      # okura slug değil ad
     etiket = f"{hat_adi} — {ad}" if ad else hat_adi
     return Olay("diger", "dikkat", f"{etiket}: veri gecikti",
-                f"{etiket}: son veri sürümü {surum}; {gun} gündür yenilenmedi "
+                f"{etiket}: son veri {_surum_yaz(surum)}; {gun} gündür yenilenmedi "
                 f"(beklenen ritim ≤ {azami_gun} gün).",
                 hat=hat, tarih=surum,
                 aciklama="Kaynak yayımlamamış olabilir; sayfadaki sayılar bu "

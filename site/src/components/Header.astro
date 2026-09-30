@@ -202,15 +202,15 @@ const burada = (href: string) => yol.replace(/\/+$/, '') === href.replace(/\/+$/
       display: none;
     }
   }
-  /* Dar ekranda menü SARAR, kaymaz: kaydırma çubuğu gizli olduğu için
-     390 pikselde sekiz bağlantının üçü (İndikatörler, Hakkında, Arama)
-     görünür alanın dışında kalıyor ve var olduğu anlaşılmıyordu. Bedeli bir
-     satır (~34 px). */
-  @media (max-width: 900px) {
-    nav {
-      flex-wrap: wrap;
-      row-gap: 0.55rem;
-      overflow-x: visible;
-    }
+  /* Menü SARAR, kaymaz — HER genişlikte: kaydırma çubuğu gizli olduğu için
+     390 pikselde sekiz bağlantının üçü görünür alanın dışında kalıyordu.
+     Sarma önce ≤900 px'e konmuştu; menünün doğal genişliği ölçülünce 901–926
+     px arasında son bağlantının ("Arama") 25 piksele kadar kırpıldığı
+     görüldü. Kırılma noktası bir tahmindir, sarma bir sözleşme: sığan menü
+     sarmaz, sığmayan bir satır (~34 px) aşağı iner. */
+  nav {
+    flex-wrap: wrap;
+    row-gap: 0.55rem;
+    overflow-x: visible;
   }
 </style>

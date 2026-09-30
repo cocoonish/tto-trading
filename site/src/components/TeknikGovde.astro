@@ -68,6 +68,11 @@ const isaretli = (x: number | null | undefined, birim: string) =>
 /** Son değer: yüzde birimi ÖNDE ("%4,500"); öbür birimler arkada küçük. */
 const sonYaz = (e: any) =>
   String(e?.birim ?? '').trim() === '%' ? (typeof e?.son === 'number' ? yuzde(e.son, e.ondalik ?? 2) : '—') : sayi(e?.son, e?.ondalik);
+// Kartın içindeki HER SEVİYE (aralık, ortalama, bant, destek/direnç, fib)
+// son değerle aynı birimle yazılır: getiri kartında son değer "%5,184",
+// 52 haftalık aralık ve ortalamalar yüzdesiz basılıyordu.
+const sv = (e: any, v: number | null | undefined) =>
+  String(e?.birim ?? '').trim() === '%' && typeof v === 'number' ? yuzde(v, e.ondalik ?? 2) : sayi(v, e?.ondalik);
 
 const tarihTr = (t: string | null) => (t ? tarihUzun(t) : '—');
 
@@ -146,7 +151,7 @@ const kisaZaman = (t: string | null) => {
           <li>
             <span class="dg-ad">52 haftalık aralık</span>
             <span class="dg-deger">
-              {sayi(e.aralik52?.dusuk, e.ondalik)}–{sayi(e.aralik52?.yuksek, e.ondalik)}
+              {sv(e, e.aralik52?.dusuk)}–{sv(e, e.aralik52?.yuksek)}
               {e.aralik52?.konum_pct !== undefined && e.aralik52?.konum_pct !== null && <small> · konum {yuzde(e.aralik52.konum_pct, 0)}</small>}
             </span>
           </li>
@@ -154,13 +159,13 @@ const kisaZaman = (t: string | null) => {
             <li>
               <span class="dg-ad">haftalık ortalama · RSI</span>
               <span class="dg-deger">
-                10h {sayi(e.haftalik.h10, e.ondalik)} · 40h {sayi(e.haftalik.h40, e.ondalik)} · RSI {sayi(e.haftalik.rsi14, 1)}
+                10h {sv(e, e.haftalik.h10)} · 40h {sv(e, e.haftalik.h40)} · RSI {sayi(e.haftalik.rsi14, 1)}
               </span>
             </li>
           )}
         </ul>
 
-        <div class="tablo-sar" tabindex="0" role="region" aria-label="Kaydırılabilir tablo">
+        <div class="tablo-sar" tabindex="0" role="region" aria-label="Kaydırılabilir tablo" data-kaydir>
           <table class="olcum">
             <caption class="gorunmez">{e.ad} — üç zaman diliminde göstergeler, oynaklık, kanal ve yapı</caption>
             <thead>
@@ -186,24 +191,24 @@ const kisaZaman = (t: string | null) => {
                 return m && !m.eksik ? (
                   <tr>
                     <th scope="row">{d.ad}<small class="alt-zaman">{kisaZaman(m.bar_zamani)}</small></th>
-                    <td>{sayi(m.son, e.ondalik)}</td>
+                    <td>{sv(e, m.son)}</td>
                     <td>{sayi(m.momentum?.rsi14, 1)}</td>
                     <td>{sayi(m.momentum?.macd_hist, e.ondalik + 1)}</td>
-                    <td>{sayi(m.hareketli?.g50, e.ondalik)}</td>
-                    <td>{sayi(m.hareketli?.g200, e.ondalik)}</td>
+                    <td>{sv(e, m.hareketli?.g50)}</td>
+                    <td>{sv(e, m.hareketli?.g200)}</td>
                     <td>{m.oynaklik?.atr14_pct !== undefined ? yuzde(m.oynaklik.atr14_pct, 2) : '—'}</td>
-                    <td>{m.bant ? `${sayi(m.bant.alt, e.ondalik)}–${sayi(m.bant.ust, e.ondalik)}` : '—'}</td>
-                    <td>{m.kanal ? `${sayi(m.kanal.alt, e.ondalik)}–${sayi(m.kanal.ust, e.ondalik)} · ${yuzde(m.kanal.konum_pct, 0)}` : '—'}</td>
+                    <td>{m.bant ? `${sv(e, m.bant.alt)}–${sv(e, m.bant.ust)}` : '—'}</td>
+                    <td>{m.kanal ? `${sv(e, m.kanal.alt)}–${sv(e, m.kanal.ust)} · ${yuzde(m.kanal.konum_pct, 0)}` : '—'}</td>
                     <td class="yapi">
                       {m.yapi?.karakter ?? '—'}
-                      {m.yapi?.cift_tepe && ` · çift tepe ${sayi(m.yapi.cift_tepe.seviye, e.ondalik)}`}
-                      {m.yapi?.cift_dip && ` · çift dip ${sayi(m.yapi.cift_dip.seviye, e.ondalik)}`}
+                      {m.yapi?.cift_tepe && ` · çift tepe ${sv(e, m.yapi.cift_tepe.seviye)}`}
+                      {m.yapi?.cift_dip && ` · çift dip ${sv(e, m.yapi.cift_dip.seviye)}`}
                       {m.yapi?.sikisma && ' · sıkışma'}
                       {(m.yapi?.tepeler?.length || m.yapi?.dipler?.length) ? (
                         <small class="salinim">
-                          {m.yapi.tepeler?.slice(-2).map((t: any) => `tepe ${sayi(t.seviye, e.ondalik)} (${kisaZaman(t.zaman)})`).join(' · ')}
+                          {m.yapi.tepeler?.slice(-2).map((t: any) => `tepe ${sv(e, t.seviye)} (${kisaZaman(t.zaman)})`).join(' · ')}
                           {m.yapi.tepeler?.length && m.yapi.dipler?.length ? ' · ' : ''}
-                          {m.yapi.dipler?.slice(-2).map((t: any) => `dip ${sayi(t.seviye, e.ondalik)} (${kisaZaman(t.zaman)})`).join(' · ')}
+                          {m.yapi.dipler?.slice(-2).map((t: any) => `dip ${sv(e, t.seviye)} (${kisaZaman(t.zaman)})`).join(' · ')}
                         </small>
                       ) : null}
                     </td>
@@ -225,7 +230,7 @@ const kisaZaman = (t: string | null) => {
           </p>
         )}
 
-        <div class="tablo-sar" tabindex="0" role="region" aria-label="Kaydırılabilir tablo">
+        <div class="tablo-sar" tabindex="0" role="region" aria-label="Kaydırılabilir tablo" data-kaydir>
           <table class="seviyeler">
             <caption class="gorunmez">{e.ad} — dilim başına destek ve direnç bölgeleri (dokunuş sayısı ve son dokunuş) ile 52 haftalık Fibonacci seviyeleri</caption>
             <thead>
@@ -247,14 +252,14 @@ const kisaZaman = (t: string | null) => {
                           {m.seviyeler.direnc.map((s: any) => (
                             <div class="direnc" title={s.son_dokunus ? `son dokunuş ${kisaZaman(s.son_dokunus)}` : undefined}>
                               <span class="yon" aria-hidden="true">▲</span><span class="gorunmez">direnç </span>
-                              {sayi(s.seviye, e.ondalik)} <small>({s.dokunus}×{s.son_dokunus ? ` · ${kisaZaman(s.son_dokunus)}` : ''})</small>
+                              {sv(e, s.seviye)} <small>({s.dokunus}×{s.son_dokunus ? ` · ${kisaZaman(s.son_dokunus)}` : ''})</small>
                             </div>
                           ))}
-                          <div class="simdi"><span aria-label="son kapanış">◈</span> {sayi(m.son, e.ondalik)}</div>
+                          <div class="simdi"><span aria-label="son kapanış">◈</span> {sv(e, m.son)}</div>
                           {m.seviyeler.destek.map((s: any) => (
                             <div class="destek" title={s.son_dokunus ? `son dokunuş ${kisaZaman(s.son_dokunus)}` : undefined}>
                               <span class="yon" aria-hidden="true">▼</span><span class="gorunmez">destek </span>
-                              {sayi(s.seviye, e.ondalik)} <small>({s.dokunus}×{s.son_dokunus ? ` · ${kisaZaman(s.son_dokunus)}` : ''})</small>
+                              {sv(e, s.seviye)} <small>({s.dokunus}×{s.son_dokunus ? ` · ${kisaZaman(s.son_dokunus)}` : ''})</small>
                             </div>
                           ))}
                         </>
@@ -265,9 +270,9 @@ const kisaZaman = (t: string | null) => {
                   );
                 })}
                 <td>
-                  <div>%38,2 → {sayi(e.fib?.s382, e.ondalik)}</div>
-                  <div>%50 → {sayi(e.fib?.s500, e.ondalik)}</div>
-                  <div>%61,8 → {sayi(e.fib?.s618, e.ondalik)}</div>
+                  <div>%38,2 → {sv(e, e.fib?.s382)}</div>
+                  <div>%50 → {sv(e, e.fib?.s500)}</div>
+                  <div>%61,8 → {sv(e, e.fib?.s618)}</div>
                 </td>
               </tr>
             </tbody>

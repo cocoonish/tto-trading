@@ -1938,6 +1938,9 @@ def main() -> int:
                 "yorum": "<p>yazı katmanının yorumu</p>", "yorum_zamani": "2026-01-02",
                 "gundem": {"kilit": "<p>yazılı gündem</p>"},
                 "ozet": {"ne_oldu": "<p>yazılı özet</p>", "ne_bekleniyor": "<p>ileriye</p>"},
+                "manset": "Brent düşerken uzun uç yükseldi",
+                "duzeltmeler": [{"alan": "yorum", "eski": "1", "yeni": "2", "sebep": "s"}],
+                "yazi_zamani": "2026-01-02T05:10:00+00:00", "ilk_yazi_zamani": "2026-01-02T04:40:00+00:00",
             }
             (_uret.CIKTI / "2026-01-02.json").write_text(
                 json.dumps(yazili, ensure_ascii=False), encoding="utf-8")
@@ -1951,9 +1954,14 @@ def main() -> int:
             assert son["gundem"] == yazili["gundem"], "gündem ezildi"
             assert son["ozet"] == yazili["ozet"], "ÖZET EZİLDİ"
             assert son["gundem_kaynagi"] == "yazili", "yayın kapısı düştü"
+            # Yazı katmanının öbür alanları (yaz.YAZILABILIR) ve damgaları da
+            # yeniden ölçümde korunur: manşet ve yayımlanmış düzeltme kaydı
+            # --yeniden-olc ile siliniyordu.
+            for alan in ("manset", "duzeltmeler", "yazi_zamani", "ilk_yazi_zamani"):
+                assert son.get(alan) == yazili[alan], f"{alan} yeniden ölçümde silindi"
         finally:
             _uret.CIKTI = eski_cikti
-    sina("uret.yaz: yazılmış bülten korunuyor", _koruma)
+    sina("uret.yaz: yazılmış bülten korunuyor (manşet, düzeltmeler, damgalar dahil)", _koruma)
 
     # YERLEŞMEMİŞ BAR. 27.08 bülteni 04:21 UTC'de koştu ve 51 enstrümanın 21'i
     # o anda HENÜZ AÇIK olan günün barını taşıyordu; kapanışa göre değişimleri
@@ -4118,6 +4126,26 @@ def main() -> int:
         assert "tema.yeni" in bls, f"sözlük şeklindeki temalar ölçüye girmiyor: {sorted(bls)}"
         assert "tema.eski" not in bls, "bu sayıda güncellenmeyen tema günler arası ölçüye giriyor"
         assert _t._ozet_mi("tema.yeni"), "tema iç tekrar ölçüsünden muaf değil — 13 sayının 4'ü sahte ENGEL"
+        # Günler arası kıyasın ÖNCEKİ tarafı bayat temaları da taşır: temalar
+        # haftada bir yazılır, önceki sayıda hepsi bayattır ve bugünün yeni
+        # tema metni hiçbir şeyle kıyaslanmıyordu.
+        assert "tema.eski" in _t.bolumler(bs, bayat_tema=True), "önceki tarafta bayat tema kıyasa girmiyor"
+        import inspect as _ins
+        assert "bayat_tema=True" in _ins.getsource(denetim.Denetim._onceki_yazi), \
+            "denetim önceki sayıyı bayat temasız okuyor"
+        # MANŞET ölçüye girer (ihale iddiası ve uydurma sayı denetimleri metni
+        # buradan okur) ve özet ailesindendir; paydaya ise tema ve manşet girmez
+        # — eşiklerin kalibre edildiği kapsam korunur.
+        bm = dict(b, manset="Hazine 3 Ekim'de bono ihalesi yapacak")
+        assert _t.bolumler(bm).get("manset"), "manşet ölçü kapsamında değil"
+        assert _t._ozet_mi("manset"), "manşet iç tekrar ölçüsünden muaf değil"
+        tb = {"gundem": {"a": "<p>" + "bir iki üç dört beş altı yedi sekiz " * 10 + "</p>"},
+              "temalar": [{"ad": "u", "gelisme": "on bir " * 400}]}
+        assert _t.olc(tb)["kelime"] == len(_t.bolumler(tb)["a"].split()), "tema sözcükleri paydayı seyreltiyor"
+        # Birimsiz yıl sayı değildir: "2026 (7 bölüm)" uyarıların başına çıkıyordu.
+        ys = {f"b{i}": "2026 yılında 1.250 puan" for i in range(6)}
+        yst = [x for x, _y in _t.sayi_tekrari(ys)]
+        assert "2026" not in yst and any(x.startswith("1.250") for x in yst), f"yıl sayı tekrarı sayılıyor: {yst}"
 
         # (2) DURAN kayıt ölçüye TAM METNİYLE girmez: sayfada da basılmıyor.
         b2 = dict(b)
@@ -4173,6 +4201,11 @@ def main() -> int:
         assert _o._surum_yaz("2026-09-28 19:31 UTC") == "28.09.2026", "ISO sürüm okura çevrilmiyor"
         assert _o._surum_yaz("08.2026") == "08.2026", "aylık sürüm güne çevriliyor"
         assert _o._surum_yaz("29.09.2026") == "29.09.2026"
+        # Gecikme satırı da aynı yazımla: "son veri sürümü 2026-09-22 17:11 UTC"
+        # okura ISO tarih ve UTC saat basıyordu.
+        _gk = _o._gecikme("fx-haber-endeksi", ("2026-09-22 17:11 UTC", "2026-09-01T00:00:00"), 5)
+        assert _gk and "22.09.2026" in _gk.metin and "UTC" not in _gk.metin and "sürüm" not in _gk.metin, \
+            f"gecikme satırı okur dilinde değil: {_gk.metin if _gk else None}"
 
         d = denetim.Denetim.__new__(denetim.Denetim)
         d.uyari, d.engel, d.gecti = [], [], []
@@ -4182,6 +4215,13 @@ def main() -> int:
         assert d.uyari and "YATAYLAŞTIRIR" in d.uyari[0], f"büyük harf vurgusu yakalanmıyor: {d.uyari}"
         assert "TCMB" not in d.uyari[0] and "TÜİK" not in d.uyari[0] and "BIST" not in d.uyari[0], \
             f"kısaltma vurgu sayılıyor: {d.uyari[0]}"
+        # Kapsam YAZI_ALANLARI'ndan: tema anlatısındaki vurgu da görünür,
+        # iki ünlülü kısaltma KOBİ vurgu sayılmaz.
+        d.uyari = []
+        d.b = {"temalar": {"temalar": [{"ad": "T", "gelisme": "<p>Veri tezi AÇIKÇA çürütüyor; KOBİ kredileri.</p>"}]}}
+        d.buyuk_harf()
+        assert d.uyari and "AÇIKÇA" in d.uyari[0] and "KOBİ" not in d.uyari[0], \
+            f"tema vurgusu görünmüyor ya da KOBİ vurgu sayılıyor: {d.uyari}"
         d.uyari = []
         d.b = {"manset": "x" * 111}
         d.manset()
@@ -4285,6 +4325,21 @@ def main() -> int:
                 eksik.append(f"{ad} ({g})")
         assert not eksik, "bulten.yml commit etmiyor: " + ", ".join(eksik)
     sina("bulten.yml: ölçüm koşusunun yazdığı durum dosyaları commit kapsamında", _olcum_durumu_kalici)
+    def _gundem_adlari():
+        """Gündem bölüm adları tek tanımdan: bileşenin yedek tablosu (bölüm adı
+        ilanını taşımayan eski sayılar için) ayar.HABER_BOLUMLERI ile birebir.
+        İki liste bir gün sessizce ayrışırsa eski sayıda metin yanlış başlıkla
+        basılır; ölçüm katmanı ilanı her sayıya yazar."""
+        import re as _re
+        govde = (BURASI.parent / "site/src/components/BultenGovde.astro").read_text(encoding="utf-8")
+        m = _re.search(r"const GUNDEM_ADLARI[^=]*=\s*\{(.*?)\};", govde, _re.S)
+        assert m, "BultenGovde'de GUNDEM_ADLARI tablosu yok"
+        ts = dict(_re.findall(r"(\w+):\s*'([^']*)'", m.group(1)))
+        py = {bid: baslik for bid, baslik, _b, _a in ayar.HABER_BOLUMLERI}
+        assert ts == py, f"bölüm adları ayrışmış: TS−PY {set(ts.items()) - set(py.items())} · PY−TS {set(py.items()) - set(ts.items())}"
+        import inspect as _i, uret as _u
+        assert '"bolum_adlari"' in _i.getsource(_u), "uret bölüm adlarını bülten verisine yazmıyor"
+    sina("gündem: bölüm adları tek tanımdan, ölçüm katmanı her sayıya yazıyor", _gundem_adlari)
     sina("hat adı: izlenen her hattın okura görünen adı var, kayıt onu taşıyor", _hat_adi_kapsami)
     sina("piyasa: hafta sonu artığı düşer, 7/24 seri dokunulmaz (4 hâl)",
          _hafta_sonu_bari)
