@@ -142,6 +142,13 @@ def seviye_ozeti() -> dict:
         t, v = _once(s, gun)
         out[f"seviye_{ad}"], out[f"tarih_{ad}"], out[f"degisim_{ad}"] = v, t, son - v
     out["son_gorulme"] = _son_gorulme(s)
+    us = df["us10y"].dropna()
+    out["us10_son"], out["us10_onceki"] = float(us.iloc[-1]), float(us.iloc[-2])
+    out["us10_onceki_gun"] = str(us.index[-2].date())
+    # 100 bp eşiği: 2026'da ilk aşıldığı gün ve ondan önce en son aşıldığı gün.
+    y100 = s[(s.index >= "2026-01-01") & (s >= 100)]
+    out["ilk_100"] = str(y100.index[0].date())
+    out["onceki_100"] = str(s[(s >= 100) & (s.index < y100.index[0])].index[-1].date())
     out["yuzdelik_2000"] = float((s < son).mean() * 100)
     out["tarihi_zirve"], out["tarihi_zirve_gun"] = float(s.max()), str(s.idxmax().date())
     yil = s[s.index >= "2026-01-01"]
@@ -402,6 +409,157 @@ def epizot_atfi(bas: str = "2026-08-26", kesim: str = "2026-06-30", egitim_bas: 
             "katsayi": o}
 
 
+BACAK_PENCERE = ("2026-02-25", "2026-06-30", "2026-08-31", "2026-09-28")
+
+
+def bacaklar() -> list[dict]:
+    """Farkın açılması hangi bacaktan: OAT mı yükseldi, Bund mu düştü? Aynı
+    pencerede ABD 10 yıllığı ve İtalya farkı küresel ve bölgesel kıyas."""
+    df = gunluk()
+    out = []
+    for bas in BACAK_PENCERE:
+        a = df.loc[:bas].dropna(subset=["fr10y", "de10y"]).iloc[-1]
+        b = df.dropna(subset=["fr10y", "de10y"]).iloc[-1]
+        us = df["us10y"].dropna()
+        out.append({"bas": str(df.loc[:bas].dropna(subset=["fr10y", "de10y"]).index[-1].date()),
+                    "fr_bp": float((b["fr10y"] - a["fr10y"]) * 100), "de_bp": float((b["de10y"] - a["de10y"]) * 100),
+                    "spr_bp": float(((b["fr10y"] - b["de10y"]) - (a["fr10y"] - a["de10y"])) * 100),
+                    "it_spr_bp": float(((b["it10y"] - b["de10y"]) - (a["it10y"] - a["de10y"])) * 100),
+                    "us10_bp": float((us.iloc[-1] - _once(us, bas)[1]) * 100)})
+    return out
+
+
+BUYUK_GUNLER = ("2026-09-10", "2026-09-18", "2026-09-21", "2026-09-23", "2026-09-29", "2026-09-30", "2026-10-01")
+
+
+def buyuk_gunler() -> list[dict]:
+    """Eylül'ün büyük günleri: farkın ve bacaklarının günlük değişimi, aynı gün
+    ABD 10 yıllığı, İtalya farkı, faiz farkı ve kur. Kur ECB 14:15 kuru — getiri
+    barı 17:30, yani aynı günün kuru hareketin bir kısmını henüz görmemiştir
+    (1 Ekim'de bunun büyüklüğü gün içi ölçüyle ayrıca yazılır)."""
+    df = gunluk()
+    fx = oku("eurusd_ecb.csv.gz")["eurusd_ecb"].dropna()
+    out = []
+    for g in BUYUK_GUNLER:
+        i = df.index.get_loc(pd.Timestamp(g))
+        a, b = df.iloc[i - 1], df.iloc[i]
+        fi = fx.index.get_loc(pd.Timestamp(g))
+        out.append({"gun": g, "onceki": str(df.index[i - 1].date()),
+                    "spr": float(((b["fr10y"] - b["de10y"]) - (a["fr10y"] - a["de10y"])) * 100),
+                    "spr_seviye": float((b["fr10y"] - b["de10y"]) * 100),
+                    "fr": float((b["fr10y"] - a["fr10y"]) * 100), "de": float((b["de10y"] - a["de10y"]) * 100),
+                    "us10": float((b["us10y"] - a["us10y"]) * 100),
+                    "it_spr": float(((b["it10y"] - b["de10y"]) - (a["it10y"] - a["de10y"])) * 100),
+                    "rd": float(((b["us2y"] - b["de2y"]) - (a["us2y"] - a["de2y"])) * 100),
+                    "fx": float(100 * (np.log(fx.iloc[fi]) - np.log(fx.iloc[fi - 1])))})
+    return out
+
+
+# (tür, ad, önceki kapanış, ilk tepki kapanışı). Akşam/hafta sonu açıklanan
+# kararlar için önceki = açıklama günü, tepki = ilk işlem günü. Olay günleri
+# kaynakla doğrulanmış ya da kayıtlı tarihtir; değişim veriden ölçülür.
+OLAY_TEPKI = [
+    ("not", "S&P: Fransa AAA → AA+", "2012-01-13", "2012-01-16"),
+    ("not", "S&P: AA → AA−", "2024-05-31", "2024-06-03"),
+    ("not", "Moody's: Aa2 → Aa3", "2024-12-13", "2024-12-16"),
+    ("not", "Fitch: AA− → A+", "2025-09-12", "2025-09-15"),
+    ("not", "S&P: AA− → A+", "2025-10-17", "2025-10-20"),
+    ("not", "Moody's: görünüm negatife", "2025-10-24", "2025-10-27"),
+    ("not", "Fitch: A+ teyit", "2026-08-28", "2026-08-31"),
+    ("not", "Scope: AA− → A+; DBRS: eğilim negatife", "2026-09-18", "2026-09-21"),
+    ("ecb", "ECB: üç yıllık LTRO", "2011-12-07", "2011-12-08"),
+    ("ecb", "Draghi: \"ne gerekiyorsa\"", "2012-07-25", "2012-07-26"),
+    ("ecb", "ECB: OMT'nin ayrıntıları", "2012-09-05", "2012-09-06"),
+    ("siyaset", "2017 ilk tur: Macron–Le Pen", "2017-04-21", "2017-04-24"),
+    ("siyaset", "2024: meclisin feshi", "2024-06-07", "2024-06-10"),
+    ("siyaset", "2024: Barnier gensoruyla düştü", "2024-12-04", "2024-12-05"),
+    ("siyaset", "2025: Bayrou hükümeti düştü", "2025-09-08", "2025-09-09"),
+    ("siyaset", "2025: Lecornu istifa etti", "2025-10-03", "2025-10-06"),
+    ("siyaset", "2026: Le Pen istinaf kararı", "2026-07-06", "2026-07-07"),
+    ("siyaset", "2026: 54 mlr € çaba açıklandı", "2026-09-16", "2026-09-17"),
+    ("siyaset", "2026: 2027 bütçe tasarısı", "2026-09-30", "2026-10-01"),
+]
+
+
+def ayrisma_ornekleri() -> dict:
+    """Farkla kurun ayrıştığı iki dönem ve fesih priminin kalıcılığı."""
+    s = spread()
+    fx = oku("eurusd_ecb.csv.gz")["eurusd_ecb"].dropna()
+    a, b = "2025-01-31", "2025-06-30"
+    sonra = s[s.index > "2024-06-07"]
+    return {"y2025": {"bas": a, "son": b, "fx": float(100 * (_once(fx, b)[1] / _once(fx, a)[1] - 1)),
+                      "spr_bas": _once(s, a)[1], "spr_son": _once(s, b)[1]},
+            "fesih_once": _once(s, "2024-06-07")[1], "fesih_sonrasi_dip": float(sonra.min()),
+            "fesih_sonrasi_dip_gun": str(sonra.idxmin().date())}
+
+
+def olay_tepkileri() -> list[dict]:
+    s, it = spread("fr"), spread("it")
+    fx = oku("eurusd_ecb.csv.gz")["eurusd_ecb"].dropna()
+    out = []
+    for tur, ad, a, b in OLAY_TEPKI:
+        ta, va = _once(s, a)
+        tb, vb = _once(s, b)
+        if tb != b or ta != a:
+            raise ArsivHatasi(f"olay günü veride yok: {ad} {a}→{b} ({ta}→{tb})")
+        out.append({"tur": tur, "ad": ad, "once": a, "sonra": b, "spr_once": va, "spr": vb - va,
+                    "it": _once(it, b)[1] - _once(it, a)[1],
+                    "fx": float(100 * (np.log(_once(fx, b)[1]) - np.log(_once(fx, a)[1])))})
+    return out
+
+
+BETA_DONEM = [("2013–2019", "2013-01-01", "2019-12-31"), ("2020–2023", "2020-01-01", "2023-12-31"),
+              ("2024–2025", "2024-01-01", "2025-12-31"), ("2026 Ocak–Ağustos", "2026-01-01", "2026-08-31"),
+              ("2026 Eylül", "2026-09-01", "2026-10-01")]
+
+
+def beta() -> dict:
+    """Fransa ve İtalya 10 yıllığının Bund'a duyarlılığı (günlük değişimler):
+    ΔX = a + b·ΔBund. b > 1 → Bund yükselirken fark da açılır (yüksek beta,
+    'çevre ülke gibi'); b < 1 → Bund yükselirken fark daralır ('çekirdek gibi').
+    Günlük: kısa pencerede (Eylül, 22 gün) haftalık örneklem yetmez."""
+    df = gunluk()
+    d = (df[["fr10y", "de10y", "it10y"]].diff() * 100).dropna()
+    out = {"donemler": []}
+    for ad, a, b in BETA_DONEM:
+        dd = d[(d.index >= a) & (d.index <= b)]
+        r = {"ad": ad, "n": int(len(dd))}
+        for u in ("fr", "it"):
+            o = ols(dd, f"{u}10y", ["de10y"], nw=2)
+            r[f"{u}_b"], r[f"{u}_t"] = o["b"]["de10y"], o["t"]["de10y"]
+        out["donemler"].append(r)
+    # Eylül'ün iki evresi: 31.08 → 28.09 küresel satış, 28.09 → 01.10 ayrışma.
+    a, m, b = (df.loc[:g].dropna(subset=["fr10y", "de10y"]).iloc[-1] for g in ("2026-08-31", "2026-09-28", SON_GUN))
+    us = df["us10y"].dropna()
+    out["evre1"] = {"bas": "2026-08-31", "son": "2026-09-28", "fr": float((m["fr10y"] - a["fr10y"]) * 100),
+                    "de": float((m["de10y"] - a["de10y"]) * 100), "us10": float((_once(us, "2026-09-28")[1] - _once(us, "2026-08-31")[1]) * 100)}
+    out["evre1"]["spr"] = out["evre1"]["fr"] - out["evre1"]["de"]
+    out["evre2"] = {"bas": "2026-09-28", "son": SON_GUN, "fr": float((b["fr10y"] - m["fr10y"]) * 100),
+                    "de": float((b["de10y"] - m["de10y"]) * 100), "us10": float((us.iloc[-1] - _once(us, "2026-09-28")[1]) * 100)}
+    out["evre2"]["spr"] = out["evre2"]["fr"] - out["evre2"]["de"]
+    # Evre 1'de beta'nın açıkladığı kısım: (b−1)·ΔBund, Ocak–Ağustos betasıyla.
+    b_once = out["donemler"][3]["fr_b"]
+    out["evre1"]["beta_payi"] = (b_once - 1) * out["evre1"]["de"]
+    out["evre1"]["beta_kullanilan"] = b_once
+    return out
+
+
+def atif_duyarlilik(bas: str = "2026-08-26") -> list[dict]:
+    """Kanal atfı, katsayıların tahmin edildiği pencereye ne kadar bağlı?"""
+    out = []
+    for eg_bas, kesim in (("2024-01-01", "2026-06-30"), ("2004-01-01", "2023-12-31"),
+                          ("2013-01-01", "2023-12-31"), ("2004-01-01", "2026-06-30")):
+        a = epizot_atfi(bas=bas, kesim=kesim, egitim_bas=eg_bas)
+        out.append({"egitim": f"{a['katsayi']['bas']}–{a['katsayi']['son']}", "n": a["katsayi"]["n"],
+                    "b_spr": a["katsayi"]["b"]["spr"], "b_rd": a["katsayi"]["b"]["rd"],
+                    "spread_payi": a["spread_payi"], "faiz_payi": a["faiz_payi"], "sabit_payi": a["sabit_payi"],
+                    "artik": a["artik"], "kur_gercek": a["kur_gercek"]})
+    return out
+
+
+GOSTERGE_SICRAMA = ("2017-10-09", "2022-11-28", "2022-11-30")
+
+
 def hiz(vadeler=(10, 2)) -> dict:
     """Pencereli açılma (5 · 22 · 66 iş günü) ve bu büyüklüğün en son ne zaman
     görüldüğü. Pencereli ölçü tek günlük gösterge kaydırmalarına dayanıklıdır
@@ -417,7 +575,25 @@ def hiz(vadeler=(10, 2)) -> dict:
             once = g[g.index < g.index[-1] - pd.Timedelta(days=max(3, int(n * 1.5)))]
             ust = once[once >= son]
             out[f"{v}y_{n}"] = {"degisim": son, "son_gorulme": str(ust.index[-1].date()) if len(ust) else None}
+    # Tek günlük ölçü gösterge değişimine karşı korumasız: bu günlerde Fransa
+    # 10y bacağı sıçrarken aynı ülkenin 5 ve 30 yıllığı ile Almanya bacağı ters
+    # yönde ya da çok az hareket ediyor (09.10.2017: 10y +13,5 bp, 5y −4,7, 30y
+    # −1,9, Almanya −1,7 — yeni gösterge kâğıdı; 28.11.2022 +16,2, iki gün sonra
+    # −15,6). Bu günler dışarıda bırakılarak "bugünkü kadar büyük tek günlük
+    # açılma en son ne zaman" sorulur ve imza her koşuda yeniden sınanır.
     df = gunluk()
+    s = spread("fr", 10)
+    d = s.diff().dropna()
+    for g in GOSTERGE_SICRAMA:
+        i = df.index.get_loc(pd.Timestamp(g))
+        f10 = (df["fr10y"].iloc[i] - df["fr10y"].iloc[i - 1]) * 100
+        f30 = (df["fr30y"].iloc[i] - df["fr30y"].iloc[i - 1]) * 100
+        if abs(f10) < 10 or abs(f30) > abs(f10) / 2:
+            raise ArsivHatasi(f"gösterge sıçraması imzası tutmuyor: {g} 10y {f10:.1f} 30y {f30:.1f}")
+    temiz = d.drop(pd.to_datetime(GOSTERGE_SICRAMA), errors="ignore")
+    ust = temiz[(temiz.index < temiz.index[-1]) & (temiz >= temiz.iloc[-1])]
+    out["10y_1_gercek"] = {"degisim": float(temiz.iloc[-1]), "son_gorulme": str(ust.index[-1].date()),
+                           "ayiklanan": list(GOSTERGE_SICRAMA)}
     rd = ((df["us2y"] - df["de2y"]) * 100).dropna()
     out["rd_son"] = float(rd.iloc[-1])
     out["rd_agustos26"] = _once(rd, "2026-08-26")[1]
@@ -660,6 +836,12 @@ def hepsi() -> dict:
         "fransa_italya": fransa_italya(),
         "egri": egri(),
         "hiz": hiz(),
+        "bacaklar": bacaklar(),
+        "buyuk_gunler": buyuk_gunler(),
+        "atif_duyarlilik": atif_duyarlilik(),
+        "beta": beta(),
+        "olay_tepkileri": olay_tepkileri(),
+        "ayrisma": ayrisma_ornekleri(),
         "epizotlar": epizotlar(),
         "duyarlilik": D,
         "kanallar": kanallar(),

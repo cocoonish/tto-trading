@@ -39,8 +39,8 @@ CIKTI = KOK / "site" / "public" / "analiz" / SLUG
 PLOTLY_JS = "/js/plotly-4.0.0.min.js"
 MUREKKEP, CLARET, MAVI, KEHRIBAR, GRI, ACIK = (
     "#1a1a1a", "#a8304f", "#2766b0", "#a8741a", "#8a8a8a", "#d8d4cc")
-SEKILLER = ["01_tarihce", "02_yil", "03_akranlar", "04_egri", "05_epizotlar",
-            "06_kayan", "07_atif", "08_gun_ici", "09_ileri"]
+SEKILLER = ["01_tarihce", "02_yil", "03_akranlar", "04_egri", "05_kayan",
+            "06_atif", "07_gun_ici", "08_epizotlar", "09_ileri"]
 SATIR = 100
 AYLAR = ["", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos",
          "Eylül", "Ekim", "Kasım", "Aralık"]
@@ -239,7 +239,7 @@ def sekil04(o: dict) -> None:
 VURGU = {"2026": CLARET, "2011 euro bölgesi borç krizi": MAVI, "2024 meclisin feshi": KEHRIBAR}
 
 
-def sekil05(o: dict) -> None:
+def sekil08(o: dict) -> None:
     y = o["seriler"]["epizot_yollari"]
     f = go.Figure()
     for ad, yol in y.items():
@@ -252,14 +252,14 @@ def sekil05(o: dict) -> None:
     f.update_xaxes(title="başlangıçtan bu yana iş günü")
     f.update_yaxes(title="başlangıca göre fark değişimi, baz puan")
     f.update_layout(legend=dict(y=-0.24))
-    _baslik(f, "05", "Bu epizot 2011'den bu yana en büyük açılma",
+    _baslik(f, "08", "Bu epizot 2011'den bu yana en büyük açılma",
             "Fransa–Almanya 10 yıllık farkının epizot başlangıcına göre değişimi, baz puan · başlangıç günleri "
             "metindeki epizot tablosundan · 160 iş günü.")
-    _yaz(f, "05_epizotlar", 580)
+    _yaz(f, "08_epizotlar", 580)
 
 
 # ─────────────────────────────────────────────────────────────── 06
-def sekil06(o: dict) -> None:
+def sekil05(o: dict) -> None:
     k = o["seriler"]["kayan"]
     f = go.Figure()
     f.add_trace(go.Scatter(x=k["t"] + k["t"][::-1], y=k["ust"] + k["alt"][::-1], fill="toself",
@@ -271,18 +271,18 @@ def sekil06(o: dict) -> None:
     f.add_hline(y=0, line=dict(color=MUREKKEP, width=1))
     kk = o["kayan"]
     f.update_yaxes(title="EUR/USD'de haftalık değişim, %", ticksuffix="")
-    _baslik(f, "06", f"Euronun Fransa farkına duyarlılığı bugün 10 bp başına {yuz(kk['son'])}",
+    _baslik(f, "05", f"Euronun Fransa farkına duyarlılığı bugün 10 bp başına {yuz(kk['son'])}",
             "104 haftalık kayan pencere: haftalık EUR/USD log değişimi (ECB 14:15 kuru) = sabit + "
             "b₁·Δ(ABD−Almanya 2y) + b₂·Δ(OAT–Bund 10y); çizgi b₂×10 · gölge Newey–West ±2 s.h. · "
             f"2013–2019 ortalaması {yuz(kk['ort_2013_2019'])}, 2024 sonrası {yuz(kk['ort_2024_sonra'])}.")
-    _yaz(f, "06_kayan", 470)
+    _yaz(f, "05_kayan", 470)
 
 
 # ─────────────────────────────────────────────────────────────── 07
 ATIF_PENCERE = ["2026-02-25", "2026-06-30", "2026-08-26"]
 
 
-def sekil07(o: dict) -> None:
+def sekil06(o: dict) -> None:
     adlar = ["Ölçülen", "Fark kanalı", "Faiz kanalı", "Sabit", "Kalan"]
     renk = [MUREKKEP, CLARET, MAVI, GRI, ACIK]
     pen = [o["atif"][b] for b in ATIF_PENCERE]
@@ -302,16 +302,16 @@ def sekil07(o: dict) -> None:
     f.update_yaxes(title_text="EUR/USD değişimi, %", row=1, col=1)
     f.update_xaxes(tickangle=-35, tickfont=dict(size=11))
     k = pen[0]["katsayi"]
-    _baslik(f, "07", "Hangi pencereden bakıldığına göre: eylül bacağı neredeyse tam açıklanıyor, yaz açıklanmıyor",
+    _baslik(f, "06", "Hangi pencereden bakıldığına göre: eylül bacağı neredeyse tam açıklanıyor, yaz açıklanmıyor",
             f"EUR/USD (ECB 14:15) log değişimi ve kanallara atfı, üç başlangıç günü · katsayılar epizottan ÖNCE "
             f"tahmin edildi ({tarih(k['bas'])}–{tarih(k['son'])}, {k['n']} hafta): 10 bp fark "
             f"{yuz(k['b']['spr'] * 10)}, 10 bp faiz farkı {yuz(k['b']['rd'] * 10)} · kalan = ölçülen − kanallar − "
             "sabit · istatistiksel atıf, nedensellik değil.")
-    _yaz(f, "07_atif", 540, ek_ust=34)
+    _yaz(f, "06_atif", 540, ek_ust=34)
 
 
 # ─────────────────────────────────────────────────────────────── 08
-def sekil08(o: dict) -> None:
+def sekil07(o: dict) -> None:
     g = o["seriler"]["gun_ici"]
     f = make_subplots(rows=2, cols=1, shared_xaxes=True, vertical_spacing=0.08, row_heights=[0.58, 0.42])
     f.add_trace(go.Scatter(x=g["t"], y=g["spr"], name="Fransa − Almanya 10y", line=dict(color=CLARET, width=2),
@@ -330,14 +330,14 @@ def sekil08(o: dict) -> None:
     f.update_yaxes(title_text="EUR/USD", row=2, col=1)
     f.update_xaxes(title_text="Paris saati", row=2, col=1, nticks=12)
     p = o["gun_ici_pencere"]
-    _baslik(f, "08", f"{tarih(o['son_gun'])}: {p['bas']}'dan sonra fark {vir(p['spr']['degisim'])} bp açıldı, "
+    _baslik(f, "07", f"{tarih(o['son_gun'])}: {p['bas']}'dan sonra fark {vir(p['spr']['degisim'])} bp açıldı, "
             f"faiz farkı {vir(p['rd']['degisim'])} bp oynarken euro {yuz(abs(p['eurusd']['degisim_yuzde']))} düştü",
             f"15 dakikalık son kotasyonlar · üst: Fransa 10y ve İtalya 2y farkı (baz puan), alt: EUR/USD · "
             f"{p['bas']} → {p['son']}: Fransa 10y {vir(p['spr']['bas'])} → {vir(p['spr']['son'])} bp, İtalya 2y "
             f"{vir(p['ispr2']['bas'])} → {vir(p['ispr2']['son'])} bp, ABD–Almanya 2y {vir(p['rd']['bas'])} → "
             f"{vir(p['rd']['son'])} bp, kur {vir(p['eurusd']['bas'], 4)} → {vir(p['eurusd']['son'], 4)} · "
             "pencere veriye bakılarak seçildi, betimlemedir.")
-    _yaz(f, "08_gun_ici", 580)
+    _yaz(f, "07_gun_ici", 580)
 
 
 # ─────────────────────────────────────────────────────────────── 09
