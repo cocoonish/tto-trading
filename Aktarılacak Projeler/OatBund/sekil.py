@@ -66,6 +66,22 @@ def yuz(x: float, b: int = 2, isaret: bool = False) -> str:
 TR_AY_KISA = ["", "Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"]
 
 
+_EK = {"1": "den", "2": "den", "3": "ten", "4": "ten", "5": "ten", "6": "dan", "7": "den", "8": "den",
+       "9": "dan"}
+_EK_ONLAR = {"1": "dan", "2": "den", "3": "dan", "4": "tan", "5": "den", "6": "tan", "7": "ten", "8": "den",
+             "9": "dan"}
+
+
+def ek_dan(sayi: str) -> str:
+    """Ayrılma eki, sayının OKUNUŞUNA göre: 2026'dan · 2012'den · 2011'den · 2030'dan · 2000'den."""
+    d = sayi.lstrip("0") or "0"
+    if d[-1] != "0":
+        return _EK[d[-1]]
+    if len(d) >= 2 and d[-2] != "0":
+        return _EK_ONLAR[d[-2]]
+    return "den"   # yüz · bin: yüzden · binden
+
+
 def tarih(t: str) -> str:
     return f"{int(t[8:10])} {AYLAR[int(t[5:7])]} {t[:4]}"
 
@@ -91,10 +107,10 @@ def _baslik(fig, no: str, metin: str, alt: str) -> None:
     fig.update_layout(title=dict(text=f"{_sar(f'Şekil {no} — {metin}', 90)}<br><sub>{alt_s}</sub>"))
 
 
-def _yaz(fig, ad: str, yukseklik: int = 480) -> None:
+def _yaz(fig, ad: str, yukseklik: int = 480, ek_ust: int = 0) -> None:
     satir = (fig.layout.title.text or "").count("<br>") + 1
     fig.update_layout(
-        height=yukseklik, margin=dict(l=64, r=28, t=40 + 21 * satir, b=74), separators=",.",
+        height=yukseklik, margin=dict(l=64, r=28, t=40 + 21 * satir + ek_ust, b=74), separators=",.",
         plot_bgcolor="white", paper_bgcolor="white",
         font=dict(family="Newsreader, Georgia, serif", size=13, color=MUREKKEP),
         title=dict(x=0, xanchor="left", font=dict(size=15)),
@@ -126,7 +142,7 @@ def sekil01(o: dict) -> None:
                      bgcolor="white")
     f.update_yaxes(title="baz puan", range=[-20, 420])
     f.update_xaxes(tickformat="%Y")
-    _baslik(f, "01", f"Fransa'nın 10 yıllık farkı {tarih(sv['son_gorulme'])}'den beri en yüksek",
+    _baslik(f, "01", f"Fransa'nın 10 yıllık farkı {tarih(sv['son_gorulme'])}'{ek_dan(sv['son_gorulme'][:4])} beri en yüksek",
             "Fransa ve İtalya 10 yıllık gösterge getirisinin Almanya'nınkinden farkı, baz puan · "
             "günlük Avrupa kapanışı (Paris 17:30) · 2000–2026 · İtalya'nın 2011–12 zirvesi ölçeği "
             "kırpmasın diye eksen 420 bp'de kesildi.")
@@ -134,7 +150,18 @@ def sekil01(o: dict) -> None:
 
 
 # ─────────────────────────────────────────────────────────────── 02
-OLAYLAR = []  # (gün, kısa etiket) — doğrulanmış olgu defterinden yazıyla birlikte doldurulur
+# (gün, kısa etiket). Yalnız birincil kaynakta ya da iki bağımsız yayıncıda
+# DOĞRULANMIŞ olaylar (keşif #33–#34); yazının olay takvimi tablosuyla aynı
+# liste (dogrula.py ikisini karşılaştırır).
+OLAYLAR = [
+    ("2026-02-02", "2026 bütçesi kabul"),
+    ("2026-03-02", "Hürmüz şoku"),
+    ("2026-06-11", "ECB +25 bp"),
+    ("2026-07-07", "Le Pen kararı"),
+    ("2026-09-10", "ECB +25 bp"),
+    ("2026-09-17", "54 mlr € çaba"),
+    ("2026-10-01", "2027 bütçe tasarısı"),
+]
 
 
 def sekil02(o: dict) -> None:
@@ -150,13 +177,17 @@ def sekil02(o: dict) -> None:
     ust = max(b for _, b in st) * 1.12
     for i, (gun, etiket) in enumerate(OLAYLAR):
         f.add_vline(x=gun, line=dict(color=ACIK, width=1, dash="dot"))
-        f.add_annotation(x=gun, y=ust * (0.98 if i % 2 == 0 else 0.90), text=etiket, showarrow=False,
-                         xanchor="left", font=dict(size=10, color="#555"))
+        # Eylül'ün iki olayı ve 1 Ekim birbirine yakın: etiketler üç kademede,
+        # sağ uçtaki sola yaslanır ki çizim alanından taşmasın.
+        sag = gun >= "2026-09-01"
+        f.add_annotation(x=gun, y=ust * (0.985 - 0.075 * (i % 3)), text=etiket, showarrow=False,
+                         xanchor="right" if sag else "left", font=dict(size=10, color="#555"),
+                         bgcolor="rgba(255,255,255,0.85)")
     fi = o["fransa_italya"]
     aylar = [f"2026-{m:02d}-01" for m in range(1, 11)]
     f.update_xaxes(tickvals=aylar, ticktext=[TR_AY_KISA[int(a[5:7])] for a in aylar])
     f.update_yaxes(title="baz puan", range=[0, ust])
-    _baslik(f, "02", f"2026: Fransa {tarih(fi['kesintisiz_bas'])}'ten beri İtalya'dan pahalı borçlanıyor",
+    _baslik(f, "02", f"2026: Fransa {tarih(fi['kesintisiz_bas'])}'{ek_dan(fi['kesintisiz_bas'][:4])} beri İtalya'dan pahalı borçlanıyor",
             "10 yıllık gösterge getirisinin Almanya'ya farkı, baz puan · günlük Avrupa kapanışı · "
             f"1 Ocak – {tarih(o['son_gun'])} · kesikli çizgiler metindeki olay takvimi.")
     _yaz(f, "02_yil", 500)
@@ -248,22 +279,35 @@ def sekil06(o: dict) -> None:
 
 
 # ─────────────────────────────────────────────────────────────── 07
+ATIF_PENCERE = ["2026-02-25", "2026-06-30", "2026-08-26"]
+
+
 def sekil07(o: dict) -> None:
-    a = o["atif"]["2026-08-26"]
-    adlar = ["Ölçülen", "OAT–Bund kanalı", "Faiz farkı kanalı", "Sabit", "Açıklanamayan"]
-    deg = [a["kur_gercek"], a["spread_payi"], a["faiz_payi"], a["sabit_payi"], a["artik"]]
+    adlar = ["Ölçülen", "Fark kanalı", "Faiz kanalı", "Sabit", "Kalan"]
     renk = [MUREKKEP, CLARET, MAVI, GRI, ACIK]
-    f = go.Figure(go.Bar(x=adlar, y=deg, marker_color=renk, text=[yuz(v, 2, True) for v in deg],
-                         textposition="outside", hovertemplate="%{x}: %{y:+,.2f} (yüzde)<extra></extra>"))
-    f.add_hline(y=0, line=dict(color=MUREKKEP, width=1))
-    k = a["katsayi"]
-    f.update_yaxes(title="EUR/USD değişimi, %")
-    _baslik(f, "07", f"{tarih(a['bas'])} – {tarih(a['son'])}: kurun düşüşünün büyük kısmı fark kanalında",
-            f"EUR/USD (ECB 14:15) log değişimi ve kanallara atfı · katsayılar epizottan ÖNCE tahmin edildi "
-            f"({tarih(k['bas'])}–{tarih(k['son'])}, {k['n']} hafta): 10 bp fark {yuz(k['b']['spr'] * 10)}, "
-            f"10 bp faiz farkı {yuz(k['b']['rd'] * 10)} · fark +{vir(a['spr_toplam'])} bp, faiz farkı "
-            f"{vir(a['rd_toplam'], 1, True)} bp · istatistiksel atıf, nedensellik değil.")
-    _yaz(f, "07_atif", 470)
+    pen = [o["atif"][b] for b in ATIF_PENCERE]
+    f = make_subplots(rows=1, cols=3, shared_yaxes=True, horizontal_spacing=0.04,
+                      subplot_titles=[f"{tarih(a['bas'])} → {tarih(a['son'])}" for a in pen])
+    for j, a in enumerate(pen, 1):
+        deg = [a["kur_gercek"], a["spread_payi"], a["faiz_payi"], a["sabit_payi"], a["artik"]]
+        f.add_trace(go.Bar(x=adlar, y=deg, marker_color=renk, text=[yuz(v, 2, True) for v in deg],
+                           textposition="outside", cliponaxis=False, showlegend=False,
+                           hovertemplate="%{x}: %{y:+,.2f} (yüzde)<extra></extra>"), row=1, col=j)
+        f.add_hline(y=0, line=dict(color=MUREKKEP, width=1), row=1, col=j)
+    for an in f.layout.annotations:
+        an.font = dict(size=12)
+    lo = min(min(a["kur_gercek"], a["spread_payi"], a["artik"]) for a in pen)
+    hi = max(max(a["artik"], a["sabit_payi"], 0) for a in pen)
+    f.update_yaxes(range=[lo * 1.25, hi + 1.2])
+    f.update_yaxes(title_text="EUR/USD değişimi, %", row=1, col=1)
+    f.update_xaxes(tickangle=-35, tickfont=dict(size=11))
+    k = pen[0]["katsayi"]
+    _baslik(f, "07", "Hangi pencereden bakıldığına göre: eylül bacağı neredeyse tam açıklanıyor, yaz açıklanmıyor",
+            f"EUR/USD (ECB 14:15) log değişimi ve kanallara atfı, üç başlangıç günü · katsayılar epizottan ÖNCE "
+            f"tahmin edildi ({tarih(k['bas'])}–{tarih(k['son'])}, {k['n']} hafta): 10 bp fark "
+            f"{yuz(k['b']['spr'] * 10)}, 10 bp faiz farkı {yuz(k['b']['rd'] * 10)} · kalan = ölçülen − kanallar − "
+            "sabit · istatistiksel atıf, nedensellik değil.")
+    _yaz(f, "07_atif", 540, ek_ust=34)
 
 
 # ─────────────────────────────────────────────────────────────── 08
@@ -276,20 +320,24 @@ def sekil08(o: dict) -> None:
                            hovertemplate="%{x}: %{y:,.1f} bp<extra>İtalya 2y</extra>"), row=1, col=1)
     f.add_trace(go.Scatter(x=g["t"], y=g["eurusd"], name="EUR/USD", line=dict(color=MUREKKEP, width=1.6),
                            hovertemplate="%{x}: %{y:.4f}<extra>EUR/USD</extra>"), row=2, col=1)
-    for s_, et in (("14:15", "ECB kuru 14:15"), ("17:30", "kapanış 17:30")):
+    for s_, et, yasla in (("14:15", "ECB kuru 14:15", "right"), ("15:30", "15:30", "left"),
+                          ("17:30", "kapanış 17:30", "right")):
         if s_ in g["t"]:
             f.add_vline(x=s_, line=dict(color=GRI, width=1, dash="dot"))
-            f.add_annotation(x=s_, y=1.0, yref="paper", text=et, showarrow=False, xanchor="left",
+            f.add_annotation(x=s_, y=1.0, yref="paper", text=et, showarrow=False, xanchor=yasla,
                              yanchor="bottom", font=dict(size=10, color="#555"))
     f.update_yaxes(title_text="baz puan", row=1, col=1)
     f.update_yaxes(title_text="EUR/USD", row=2, col=1)
     f.update_xaxes(title_text="Paris saati", row=2, col=1, nticks=12)
-    gi = o["gun_ici"]
-    _baslik(f, "08", f"{tarih(o['son_gun'])}: açılma 14:15'ten sonra geldi, euro onunla düştü",
-            f"15 dakikalık son kotasyonlar · üst: fark (baz puan), alt: EUR/USD · kesikli: 14:15 (ECB kuru) ve "
-            f"17:30 (kapanış) · fark 14:15'te {vir(gi['14:15']['spr'])}, 17:30'da {vir(gi['17:30']['spr'])} bp; "
-            f"kur {vir(gi['14:15']['eurusd'], 4)} → {vir(gi['17:30']['eurusd'], 4)}.")
-    _yaz(f, "08_gun_ici", 560)
+    p = o["gun_ici_pencere"]
+    _baslik(f, "08", f"{tarih(o['son_gun'])}: {p['bas']}'dan sonra fark {vir(p['spr']['degisim'])} bp açıldı, "
+            f"faiz farkı {vir(p['rd']['degisim'])} bp oynarken euro {yuz(abs(p['eurusd']['degisim_yuzde']))} düştü",
+            f"15 dakikalık son kotasyonlar · üst: Fransa 10y ve İtalya 2y farkı (baz puan), alt: EUR/USD · "
+            f"{p['bas']} → {p['son']}: Fransa 10y {vir(p['spr']['bas'])} → {vir(p['spr']['son'])} bp, İtalya 2y "
+            f"{vir(p['ispr2']['bas'])} → {vir(p['ispr2']['son'])} bp, ABD–Almanya 2y {vir(p['rd']['bas'])} → "
+            f"{vir(p['rd']['son'])} bp, kur {vir(p['eurusd']['bas'], 4)} → {vir(p['eurusd']['son'], 4)} · "
+            "pencere veriye bakılarak seçildi, betimlemedir.")
+    _yaz(f, "08_gun_ici", 580)
 
 
 # ─────────────────────────────────────────────────────────────── 09

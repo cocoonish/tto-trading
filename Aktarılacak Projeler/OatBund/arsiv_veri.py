@@ -347,7 +347,14 @@ def cnbc_gun_ici() -> None:
         parca[_ad(sem)] = pd.Series(d, dtype=float)
         print(f"  · CNBC gün içi {sem}: {len(d)} bar", flush=True)
     if parca:
-        gz_yaz(pd.DataFrame(parca), "cnbc_gun_ici.csv.gz", "CNBC (Tullett Prebon), 5D grafik ucu",
+        yeni = pd.DataFrame(parca)
+        # Kaynak yalnız son beş günü tutar: yeniden indirme eski günleri SİLMEMELİ.
+        # Arşivdeki dosya varsa birleştirilir; çakışan dakikada yeni kotasyon kazanır.
+        eski_yol = VERI / "cnbc_gun_ici.csv.gz"
+        if eski_yol.exists():
+            eski = pd.read_csv(eski_yol, index_col=0, parse_dates=True)
+            yeni = yeni.combine_first(eski).sort_index()
+        gz_yaz(yeni, "cnbc_gun_ici.csv.gz", "CNBC (Tullett Prebon), 5D grafik ucu",
                "Dakikalık son kotasyon; tarih UTC; son beş işlem günü (kaynak daha eskisini tutmaz)",
                gunluk=False)
 
