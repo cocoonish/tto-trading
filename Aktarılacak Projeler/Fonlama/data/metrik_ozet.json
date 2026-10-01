@@ -1,12 +1,12 @@
 {
- "son_gun": "2026-09-30",
+ "son_gun": "2026-10-01",
  "esik": {
   "aofm_taban_mn_tl": 5000.0,
   "koridor_ustu_pay_pp": 0.05,
   "donem_min_gun": 5,
   "gecis_pencere_hafta": 52
  },
- "son_hafta": "2026-09-18",
+ "son_hafta": "2026-09-25",
  "rejim": {
   "pencere_gun": 252,
   "net_negatif_gun": 219,
@@ -21,7 +21,7 @@
   },
   "marjinal_kaynak_tam": {
    "AOFM": 3373,
-   "AOSM": 419,
+   "AOSM": 420,
    "TLREF (vekil)": 163,
    "yok": 2
   }
@@ -85,17 +85,17 @@
     "degisim_mn_tl": -21944.928000000073
    }
   ],
-  "taban_birim_bagil_medyan": 8.571901661568041e-09,
-  "taban_birim_bagil_son": 1.4345322754376566e-08,
+  "taban_birim_bagil_medyan": 8.661902647060592e-09,
+  "taban_birim_bagil_son": 1.2208659495689406e-08,
   "taban_birim_bagil_maks": 0.05195177908646532,
   "taban_birim_maks_tarih": "2018-08-17",
-  "taban_birim_n": 714,
+  "taban_birim_n": 715,
   "taban_birim_tekil_gun": 1,
   "taban_kaynak": "TP.TLDTHVADE.KB18 (bin TL → mn TL)",
-  "taban_son_tarih": "2026-09-11",
-  "taban_son_mn_tl": 27008803.41055,
-  "ima_oran_son": 4.306511596680595,
-  "ima_oran_tarih": "2026-09-29",
+  "taban_son_tarih": "2026-09-18",
+  "taban_son_mn_tl": 27594347.86789,
+  "ima_oran_son": 4.215128607382231,
+  "ima_oran_tarih": "2026-09-30",
   "ima_oran_1y_once": 5.057081942409707
  },
  "gecirgenlik": {
@@ -103,30 +103,30 @@
    "ticari_tl": {
     "korelasyon": {
      "0": 0.2603,
-     "1": 0.1893,
+     "1": 0.1894,
      "2": -0.002,
-     "3": 0.0241,
-     "4": 0.1634,
-     "5": 0.0878,
+     "3": 0.0242,
+     "4": 0.1638,
+     "5": 0.0879,
      "6": 0.034,
      "7": 0.0378,
      "8": 0.0538
     },
     "en_iyi_gecikme_hafta": 0,
     "en_iyi_korelasyon": 0.2603,
-    "tam_beta": 0.5823,
-    "n": 715,
-    "son_beta": 0.8915,
-    "son_beta_tarih": "2026-09-18",
-    "son_r2": 0.0647
+    "tam_beta": 0.5824,
+    "n": 716,
+    "son_beta": 0.8919,
+    "son_beta_tarih": "2026-09-25",
+    "son_r2": 0.0648
    },
    "mevduat_tl": {
     "korelasyon": {
      "0": 0.4815,
      "1": 0.1937,
-     "2": 0.0973,
-     "3": 0.1747,
-     "4": 0.2161,
+     "2": 0.0974,
+     "3": 0.1748,
+     "4": 0.2156,
      "5": 0.162,
      "6": 0.1271,
      "7": 0.0893,
@@ -135,10 +135,10 @@
     "en_iyi_gecikme_hafta": 0,
     "en_iyi_korelasyon": 0.4815,
     "tam_beta": 0.4658,
-    "n": 715,
-    "son_beta": 0.4848,
-    "son_beta_tarih": "2026-09-18",
-    "son_r2": 0.3747
+    "n": 716,
+    "son_beta": 0.4826,
+    "son_beta_tarih": "2026-09-25",
+    "son_r2": 0.3801
    }
   }
  },
@@ -208,20 +208,20 @@
  "dogrulama": {
   "net_fonlama": {
    "kaynak": "TP.APIFON1.TOP − TP.APIFON2.TOP ↔ TP.APIFON3",
-   "n": 3957,
+   "n": 3958,
    "maks_fark_mn_tl": 1.1641532182693481e-10,
    "esik_mn_tl": 1e-06,
-   "son_biz": -631885.1000000001,
-   "son_evds": -631885.1,
+   "son_biz": -579056.53,
+   "son_evds": -579056.53,
    "gecti": true
   },
   "politika": {
    "kaynak": "TP.PY.P02.1H (ay sonu) ↔ TP.BISPOLFAIZ.TUR (aylık)",
-   "n": 95,
+   "n": 96,
    "maks_fark_pp": 0.0,
    "ort_fark_pp": 0.0,
    "esik_pp": 0.01,
-   "evds_son_ay": "2026-07",
+   "evds_son_ay": "2026-08",
    "son_biz": 37.0,
    "son_evds": 37.0,
    "gecti": true
@@ -239,18 +239,18 @@
   },
   "aosm_taban": {
    "kaynak": "(TP.APIFON2.IHA − ONI) / günlük 1HI tutarı ≈ 5 iş günü",
-   "n": 326,
-   "medyan_kat": 5.280887857142858,
+   "n": 327,
+   "medyan_kat": 5.289990000000002,
    "negatif_kalan_gun": 0,
    "not": "kalan bacağın tamamı haftalık depo alım ihalesi (1HI) varsayılıyor; oran 5'ten belirgin saparsa varsayım zayıflar"
   },
   "hatlar_arasi_swap": {
    "kaynak": "bu hat (TP.SWAPTEKTAR alım−satım)/1000 ↔ rezerv hattı gunluk.csv · swap_yerli_usd",
-   "n": 939,
+   "n": 940,
    "maks_fark_mlr_usd": 7.105427357601002e-15,
-   "son_biz": -1.45041883,
-   "son_rezerv": -1.45041883,
-   "son_tarih": "2026-09-29",
+   "son_biz": 0.0006066999999998188,
+   "son_rezerv": 0.0006066999999998,
+   "son_tarih": "2026-09-30",
    "gecti": true
   },
   "gecelik_repo_aylik": {
@@ -262,12 +262,12 @@
   },
   "aofm_kompozisyon": {
    "kaynak": "(ihale×politika + kotasyon repo×koridor tavanı + GLP×GLP satış) / toplam ↔ TP.APIFON4",
-   "n": 3875,
-   "medyan_fark_pp": 0.41999999999999993,
+   "n": 3876,
+   "medyan_fark_pp": 0.41881586975370144,
    "p95_fark_pp": 8.75,
    "maks_fark_pp": 17.77,
    "son250_medyan_pp": 0.0,
-   "son_gun": "2026-09-30",
+   "son_gun": "2026-10-01",
    "son_fark_pp": 0.0,
    "esik_pp": 0.05,
    "not": "Uç sapmalar geç likidite penceresi dönemlerinde ve kompozisyon geçişlerinde yoğunlaşır; kalibrasyon sabiti KULLANILMAZ.",
@@ -275,7 +275,7 @@
   },
   "aofm_bant": {
    "kaynak": "AOFM ∈ [koridor tabanı, GLP satış (yoksa tavan)]",
-   "n": 3876,
+   "n": 3877,
    "alt_ihlal_gun": 31,
    "ust_ihlal_gun": 1,
    "alt_ihlal_son": "2024-03-21",
