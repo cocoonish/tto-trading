@@ -483,7 +483,29 @@ def gun_ici() -> pd.DataFrame:
     g["ispr"] = (g["it10y"] - g["de10y"]) * 100
     g["spr2"] = (g["fr2y"] - g["de2y"]) * 100
     g["ispr2"] = (g["it2y"] - g["de2y"]) * 100
+    g["rd"] = (g["us2y"] - g["de2y"]) * 100
     return g
+
+
+def gun_ici_pencere(gun: str = SON_GUN, bas: str = "15:30", son: str = "17:30") -> dict:
+    """Bir gün içi pencerede farkların, faiz farkının ve kurun değişimi.
+
+    Pencere VERİYE BAKILARAK seçildi (1 Ekim'de açılmanın başladığı saat →
+    Avrupa kapanışı): bu bir sınama değil, bir olayın betimlemesidir. Faiz
+    farkının kımıldamadığı bir pencerede kurun hareketi, faiz kanalına
+    atfedilemeyecek kısmı GÖRÜNÜR kılar; büyüklüğü tek bir günden genellenmez."""
+    g = gun_ici()
+    gg = g[g.index.date == pd.Timestamp(gun).date()].between_time("08:00", "17:30")
+    a = gg[gg.index.strftime("%H:%M") <= bas].iloc[-1]
+    b = gg[gg.index.strftime("%H:%M") <= son].iloc[-1]
+    out = {"gun": gun, "bas": bas, "son": son}
+    for k in ("spr", "ispr", "spr2", "ispr2", "rd"):
+        out[k] = {"bas": float(a[k]), "son": float(b[k]), "degisim": float(b[k] - a[k])}
+    for k in ("de2y", "us2y", "de10y", "fr10y", "it2y"):
+        out[k] = {"bas": float(a[k]), "son": float(b[k]), "degisim_bp": float((b[k] - a[k]) * 100)}
+    out["eurusd"] = {"bas": float(a["eurusd"]), "son": float(b["eurusd"]),
+                     "degisim_yuzde": float(100 * (np.log(b["eurusd"]) - np.log(a["eurusd"])))}
+    return out
 
 
 def gun_ici_ozet(gun: str = SON_GUN, saatler=("09:00", "14:15", "17:30")) -> dict:
@@ -495,7 +517,8 @@ def gun_ici_ozet(gun: str = SON_GUN, saatler=("09:00", "14:15", "17:30")) -> dic
     out = {"gun": gun, "dakika": int(len(gg))}
     for s in saatler:
         r = gg[gg.index.strftime("%H:%M") <= s].iloc[-1]
-        out[s] = {k: float(r[k]) for k in ("spr", "ispr", "spr2", "ispr2", "eurusd", "de10y", "fr10y", "de2y")}
+        out[s] = {k: float(r[k]) for k in ("spr", "ispr", "spr2", "ispr2", "eurusd", "de10y", "fr10y", "de2y",
+                                           "us2y", "rd")}
     zt = gg["spr"].idxmax()
     out["zirve"] = {"saat": zt.strftime("%H:%M"), "spr": float(gg["spr"].max())}
     on5 = gg.resample("15min").last().dropna(subset=["spr", "eurusd"])
@@ -649,6 +672,7 @@ def hepsi() -> dict:
                   ileri_dagilim(50, 22, 22)],
         "oynaklik": oynaklik_bandi(),
         "gun_ici": gun_ici_ozet(),
+        "gun_ici_pencere": gun_ici_pencere(),
         "gun_ici_bes_gun": gun_ici_bes_gun(),
         "piyasalar": piyasalar(),
         "kur": kur_ozeti(),
