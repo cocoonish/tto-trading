@@ -1,6 +1,6 @@
 {
- "olusturma": "2026-10-01T20:58:28Z",
- "sure_sn": 119.6,
+ "olusturma": "2026-10-01T21:04:08Z",
+ "sure_sn": 69.0,
  "dosyalar": {
   "bund_gunluk.csv.gz": {
    "sha256": "79fc50a87f46eb189451f4fdca712a73d13e642324d698cc23e5f27b73fa4111",
@@ -401,10 +401,10 @@
    }
   },
   "yahoo_gunluk.csv.gz": {
-   "sha256": "1bbe8d76dde4278d2f06b02939b1d26591c91f28eb981856fe4255319e8d4f1c",
-   "satir": 14356,
+   "sha256": "2b288fdd35e14dde4be7c98bcd4431c93bd46b995066872c4308b313384ce351",
+   "satir": 14376,
    "kaynak": "Yahoo Finance (yfinance), günlük kapanış",
-   "aciklama": "EUR/USD, DXY, EUR/CHF kapanış (tarih: Yahoo işlem günü)",
+   "aciklama": "Kapanış (tarih: Yahoo işlem günü; döviz barı ölçüldü: Yahoo D ≈ CNBC D−1)",
    "kapsam": {
     "eurusd": {
      "n": 5925,
@@ -423,11 +423,65 @@
      "ilk": "2003-01-23",
      "son": "2026-10-01",
      "is_gunu_dolulugu": 0.9947
+    },
+    "eurgbp": {
+     "n": 7225,
+     "ilk": "1999-01-04",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9981
+    },
+    "eurjpy": {
+     "n": 6150,
+     "ilk": "2003-01-23",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.995
+    },
+    "vix": {
+     "n": 9257,
+     "ilk": "1990-01-02",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9655
+    },
+    "sx5e": {
+     "n": 4890,
+     "ilk": "2007-03-30",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9607
+    },
+    "cac": {
+     "n": 9293,
+     "ilk": "1990-03-01",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9735
+    },
+    "dax": {
+     "n": 9801,
+     "ilk": "1987-12-30",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9692
+    },
+    "bnp": {
+     "n": 8493,
+     "ilk": "1993-10-18",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9877
+    },
+    "socgen": {
+     "n": 6873,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9848
+    },
+    "cagri": {
+     "n": 6364,
+     "ilk": "2001-12-14",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9836
     }
    }
   },
   "cnbc_gunluk.csv.gz": {
-   "sha256": "f6b9ba9926a2ca0c3356159e58b08b10b30e05f65fe391b490ca9ddbdbb56701",
+   "sha256": "2fc4ee4c62a7730e00b4351fd860b60da59e7662d26fcc69c49d214c6b5164d5",
    "satir": 8026,
    "kaynak": "CNBC (Tullett Prebon), günlük bar ucu",
    "aciklama": "Gösterge (benchmark) devlet tahvili getirisi, %; eurusd = EUR/USD; günlük kapanış, tarih CNBC işlem günü (New York saati); hafta sonu barları kaynakta cumanın kopyası",
@@ -484,7 +538,7 @@
      "n": 3267,
      "ilk": "2014-11-25",
      "son": "2026-09-30",
-     "is_gunu_dolulugu": 0.9806
+     "is_gunu_dolulugu": 0.9803
     },
     "fr2y": {
      "n": 7449,
@@ -499,16 +553,16 @@
      "is_gunu_dolulugu": 0.9693
     },
     "it2y": {
-     "n": 7396,
+     "n": 7395,
      "ilk": "2000-01-03",
      "son": "2026-10-01",
-     "is_gunu_dolulugu": 0.967
+     "is_gunu_dolulugu": 0.9669
     },
     "es2y": {
-     "n": 3732,
+     "n": 3731,
      "ilk": "2014-11-25",
      "son": "2026-10-01",
-     "is_gunu_dolulugu": 0.9942
+     "is_gunu_dolulugu": 0.9939
     },
     "fr5y": {
      "n": 7382,
@@ -555,25 +609,25 @@
    }
   },
   "cnbc_aylik.csv.gz": {
-   "sha256": "85ee0cac6a807a63b02d86c7cf9d3124261078ed93c43cc5ae48a8865ecccd37",
+   "sha256": "c073e73d7e5c2c1fae6b4ad7efc675930863116a6fe43f871bd2a3868e253524",
    "satir": 188,
    "kaynak": "CNBC (Tullett Prebon), ALL grafik ucu",
    "aciklama": "Gösterge devlet tahvili getirisi, aylık kapanış, %",
    "kapsam": {
     "fr10y": {
-     "n": 130,
+     "n": 131,
      "ilk": "1994-01-01",
-     "son": "2026-07-01"
+     "son": "2026-10-01"
     },
     "de10y": {
-     "n": 141,
+     "n": 142,
      "ilk": "1990-07-01",
-     "son": "2026-07-01"
+     "son": "2026-10-01"
     },
     "it10y": {
-     "n": 110,
+     "n": 111,
      "ilk": "1999-01-01",
-     "son": "2026-07-01"
+     "son": "2026-10-01"
     },
     "es10y": {
      "n": 131,
@@ -636,9 +690,9 @@
      "son": "2026-10-01"
     },
     "fr30y": {
-     "n": 110,
+     "n": 111,
      "ilk": "1999-01-01",
-     "son": "2026-07-01"
+     "son": "2026-10-01"
     },
     "de30y": {
      "n": 129,
@@ -665,6 +719,7 @@
  },
  "uyarilar": [
   "bund_gunluk.csv.gz:de30_par beklenenden geç başlıyor (2000-08-01 > 1999-02-01)",
+  "yahoo_gunluk.csv.gz:sx5e beklenenden geç başlıyor (2007-03-30 > 2004-01-01)",
   "cnbc_gunluk.csv.gz:nl10y beklenenden geç başlıyor (2014-11-25 > 2000-01-10)",
   "cnbc_gunluk.csv.gz:pt10y beklenenden geç başlıyor (2011-09-20 > 2000-01-10)",
   "cnbc_gunluk.csv.gz:gr10y beklenenden geç başlıyor (2014-11-25 > 2000-01-10)",
