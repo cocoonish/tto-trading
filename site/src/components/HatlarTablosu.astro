@@ -196,4 +196,10 @@ const parca = (m: string) => {
     .ht-tarih { font-size: 0.8125rem; }
     .ht-yas, .ht-olcu-ic, .ht-rozet { font-size: 0.75rem; }
   }
+  /* En dar telefonlar (≤360 px): sütun arası boşluk yarıya iner. 320
+     pikselde tarih sütunu kabın 33 piksel dışında kalıyordu. */
+  @media (max-width: 360px) {
+    thead th, tbody td { padding-right: 0.5rem; }
+    thead th.sag, .ht-deger { padding-right: 0.5rem; }
+  }
 </style>
