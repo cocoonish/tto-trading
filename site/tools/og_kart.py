@@ -34,7 +34,7 @@ FONT = SITE / "node_modules"
 KARTLAR = {
     "genel": ("Türkiye makro & piyasa araştırmaları",
               "Türkiye makrosunu ölçülmüş verilerle okumak.",
-              "Günlük bülten · haftalık teknik analiz · analiz yazıları · veri panoları · dersler"),
+              "Günlük bülten · haftaya bakış · analiz yazıları · veri panoları · dersler"),
     "bulten": ("Bülten",
                "Hafta içi her sabah günlük, pazar akşamı haftaya bakış.",
                "51 enstrüman · rejim panosu · takvim · günün okuması · her sayı kendi tarihiyle"),
@@ -67,7 +67,9 @@ def chromium_bul(verilen: str | None) -> str | None:
 def ciz(chromium: str, ad: str, baslik: str, alt: str, dip: str) -> Path:
     html = SABLON.read_text(encoding="utf-8")
     html = (html.replace("{{FONT}}", FONT.as_uri())
-                .replace("{{BOLUM}}", ad if ad != "genel" else "cocoonish.github.io")
+                # Adres bir alan adıdır: sayfa lang="tr" ve büyük harf dönüşümü
+                # Türkçe kuralla "COCOONİSH.GİTHUB.İO" yazıyordu (marka ile aynı kusur).
+                .replace("{{BOLUM}}", ad if ad != "genel" else '<span lang="en">cocoonish.github.io</span>')
                 .replace("{{BASLIK}}", baslik)
                 .replace("{{ALT}}", alt)
                 .replace("{{DIP}}", dip))

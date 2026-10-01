@@ -307,7 +307,8 @@ def main():
     # public/arastirma altında olduğu için sessizce kapsam dışında kalıyordu.
     # Brooks dersinin 94 figürü bu yüzden ev stiline girmemişti (yol elle verilerek
     # kurtarıldı). Artık iki kök de taranır.
-    # public/teknik: haftalık teknik analiz grafikleri (teknik/olc.py üretir).
+    # public/teknik: haftalık teknik analiz ARŞİVİNİN grafikleri (yayın 27.09.2026
+    # sayısıyla sona erdi; üreten ölçüm kodu kaldırıldı, dosyalar arşivde duruyor).
     # Yeni bir grafik kökü eklerken bu listeye girmesi ŞART — Brooks dersi gibi
     # sessizce kapsam dışı kalır.
     kokler = [Path(__file__).resolve().parents[1] / "public" / "projeler",

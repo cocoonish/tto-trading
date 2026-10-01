@@ -79,8 +79,10 @@ GUNLER = {"hafta içi": (0, 1, 2, 3, 4), "pazar": (6,)}
 KAYNAK = {
     "Günlük bülten": ("bulten", "bulten"),
     "Haftaya bakış": ("bulten", "bulten"),
-    "Haftalık teknik analiz": ("teknik", "teknik"),
 }
+# "Haftalık teknik analiz" 01.10.2026'da çıkarıldı: yayın 27.09.2026 sayısıyla
+# sona erdi ve takvimden silindi (kullanıcı kararı). Takvimde yeniden belirirse
+# satırı "kaydı tanımlı değil" diye üretilir, sessizce atlanmaz.
 
 # Tekrar koşulu: son beş YAYIN gününün en az üçü uyarı/alarm.
 # YÖNTEMSEL SEÇİM, ölçüm değil — "bir iş haftası". Yirmi gözlem birikince
@@ -215,7 +217,7 @@ def _gerceklesen(kok: Path, yayin: str, gun: dt.date) -> dict:
         d["olculmedi"] = "bu yayının gerçekleşme kaydı tanımlı değil"
         return d
 
-    if tur == "bulten":
+    if tur == "bulten":  # şimdilik tek kayıt türü; yeni tür buraya dal olarak girer
         b = _json(kok / "site" / "src" / "data" / "bulten" / f"{gun.isoformat()}.json")
         if b is None:
             d["olculmedi"] = "o güne ait ölçüm dosyası yok"
@@ -226,17 +228,6 @@ def _gerceklesen(kok: Path, yayin: str, gun: dt.date) -> dict:
             if d["yazi"] is None and b.get("gundem_kaynagi") == "yazili":
                 # Yazılmış ama yazı anı kaydedilmemiş (03.09 öncesi). Ölçüm
                 # damgası ALT SINIRDIR: gerçek yazı ondan sonradır.
-                d["yazi"], d["alt_sinir"] = d["olcum"], True
-                d["olculmedi"] = ("yazı anı kaydedilmemiş; ölçüm damgası ALT SINIR "
-                                  "olarak kullanıldı")
-    else:
-        b = _json(kok / "site" / "src" / "data" / "teknik" / f"{gun.isoformat()}.json")
-        if b is None:
-            d["olculmedi"] = "o güne ait ölçüm dosyası yok"
-        else:
-            d["dosya_var"] = True
-            d["olcum"] = _an(b.get("olcum_zamani"))
-            if b.get("yazili"):
                 d["yazi"], d["alt_sinir"] = d["olcum"], True
                 d["olculmedi"] = ("yazı anı kaydedilmemiş; ölçüm damgası ALT SINIR "
                                   "olarak kullanıldı")
@@ -450,7 +441,7 @@ def tekrar(defter: Path | None = None, bugun: dt.date | None = None) -> tuple[bo
 # 08-27, 08-28 ve 09-04 alarm; 08-31, 09-01, 09-02, 09-03 temiz. Altı alarmın
 # altısı da deponun kendi kaydında arıza geçen günler — YANLIŞ POZİTİF YOK.
 #
-# Pazarın (Haftaya bakış + Haftalık teknik analiz) elde iki gözlemi var
+# Pazarın (o gün Haftaya bakış ile Haftalık teknik analiz) elde iki gözlemi var
 # (23.08 alarm, 30.08 uyarı ve payı 2,7 dakika) ve iki gözlemle eşik açılmaz.
 # Pazar yayınları bu yüzden KAYIT-ONLY: defterde ölçülürler, e-posta
 # göndermezler; yokluklarını cron'lu nöbetçi sormaya devam ediyor. Kapsam
@@ -585,7 +576,7 @@ def gecmis(kok: Path) -> list[dict]:
     """Kayıtlı bütün günleri yeniden oynat — eşik SINANABİLİR olsun diye."""
     kok = Path(kok)
     gunler = set()
-    for alt in ("bulten", "teknik"):
+    for alt in ("bulten",):
         d = kok / "site" / "src" / "data" / alt
         if d.exists():
             for f in d.glob("*.json"):

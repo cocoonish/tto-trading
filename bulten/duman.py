@@ -3862,11 +3862,10 @@ def main() -> int:
         import tempfile
         import gecikme as gk
 
-        def kur(td, bultenler=None, teknikler=None, tweetler=None, nabiz_an=None,
+        def kur(td, bultenler=None, tweetler=None, nabiz_an=None,
                 takvim_duzelt=None):
             k = Path(td)
             (k / "site" / "src" / "data" / "bulten").mkdir(parents=True, exist_ok=True)
-            (k / "site" / "src" / "data" / "teknik").mkdir(parents=True, exist_ok=True)
             (k / "tweet").mkdir(parents=True, exist_ok=True)
             (k / "bulten").mkdir(parents=True, exist_ok=True)
             tk = _j.loads((BURASI.parent / "site" / "src" / "data" /
@@ -3877,9 +3876,6 @@ def main() -> int:
                 _j.dumps(tk, ensure_ascii=False), encoding="utf-8")
             for g, b in (bultenler or {}).items():
                 (k / "site" / "src" / "data" / "bulten" / f"{g}.json").write_text(
-                    _j.dumps(b, ensure_ascii=False), encoding="utf-8")
-            for g, b in (teknikler or {}).items():
-                (k / "site" / "src" / "data" / "teknik" / f"{g}.json").write_text(
                     _j.dumps(b, ensure_ascii=False), encoding="utf-8")
             (k / "tweet").mkdir(parents=True, exist_ok=True)
             (k / "tweet" / "defter.json").write_text(
@@ -3978,17 +3974,17 @@ def main() -> int:
             sonra = gk.olc(k, cuma, _dt.datetime(2026, 9, 4, 5, 12, tzinfo=_dt.timezone.utc))[0]
             assert sonra["sinif"] == "alarm" and sonra["darbogaz"] == "ölçüm", sonra
 
-        # (e) PAZAR İKİ YAYIN — ayrı satır, ayrı gerçekleşme kaydı
+        # (e) PAZAR TEK YAYIN — haftalık teknik analiz 27.09.2026 sayısıyla sona
+        #     erdi ve takvimden silindi (01.10.2026, kullanıcı kararı). Pazar
+        #     satırları takvimden türer; teknik satırı geri gelirse takvim de
+        #     geri gelmiş demektir ve bu madde onu adıyla söyler.
         with tempfile.TemporaryDirectory() as td:
             k = kur(td,
                     bultenler={"2026-08-30": {"tarih": "2026-08-30", "tur": "haftalik",
                                               "gundem_kaynagi": "yazili",
-                                              "olusturma": "2026-08-30T15:38:18"}},
-                    teknikler={"2026-08-30": {"tarih": "2026-08-30", "yazili": True,
-                                              "olcum_zamani": "2026-08-30T16:28:20+00:00"}})
+                                              "olusturma": "2026-08-30T15:38:18"}})
             r = gk.olc(k, pazar, _dt.datetime(2026, 8, 30, 20, 0, tzinfo=_dt.timezone.utc))
-            assert len(r) == 2, [x["yayin"] for x in r]
-            assert {x["yayin"] for x in r} == {"Haftaya bakış", "Haftalık teknik analiz"}
+            assert [x["yayin"] for x in r] == ["Haftaya bakış"], [x["yayin"] for x in r]
             # ALT SINIR etiketlenir: yazı anı kaydedilmemiş, ölçüm damgası kullanıldı
             assert all(x["alt_sinir"] and x["olculmedi"] for x in r), r
 
@@ -4058,7 +4054,6 @@ def main() -> int:
         with tempfile.TemporaryDirectory() as td:
             k = Path(td)
             (k / "site" / "src" / "data" / "bulten").mkdir(parents=True)
-            (k / "site" / "src" / "data" / "teknik").mkdir(parents=True)
             (k / "tweet").mkdir(parents=True)
             (k / "bulten").mkdir(parents=True)
             import shutil as _sh
@@ -4264,7 +4259,6 @@ def main() -> int:
         import subprocess as _sp
         k = td / "depo"
         bd = k / "site" / "src" / "data" / "bulten"; bd.mkdir(parents=True)
-        (k / "site" / "src" / "data" / "teknik").mkdir(parents=True)
         (k / "tweet").mkdir(parents=True); (k / "bulten").mkdir(parents=True)
         import shutil as _sh
         _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
@@ -4358,14 +4352,11 @@ def main() -> int:
                 "2026-09-04": ("gunluk", "2026-09-04T05:39:02+00:00",
                                "2026-09-04T05:50:32+00:00"),
             },
-            # 23.08'in teknik ölçümü depoda HİÇ YOK; o satırın alarmı bir
-            # gecikme değil YOKLUK ölçüsüdür ve fikstür onu da böyle taşır.
-            "teknik": {"2026-08-30": "2026-08-30T16:28:20+00:00"},
         }
 
         def _fikstur_deposu(td):
             k = Path(td)
-            for alt in ("bulten", "teknik", "tweet"):
+            for alt in ("bulten", "tweet"):
                 (k / "site" / "src" / "data" / alt).mkdir(parents=True, exist_ok=True)
             (k / "bulten").mkdir(parents=True, exist_ok=True)
             _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
@@ -4380,10 +4371,6 @@ def main() -> int:
                     b["ilk_yazi_zamani"] = ilk
                 (k / "site" / "src" / "data" / "bulten" / f"{g}.json").write_text(
                     _j.dumps(b, ensure_ascii=False), encoding="utf-8")
-            for g, olcum in OLCULEN_GIRDI["teknik"].items():
-                (k / "site" / "src" / "data" / "teknik" / f"{g}.json").write_text(
-                    _j.dumps({"olcum_zamani": olcum, "yazili": True},
-                             ensure_ascii=False), encoding="utf-8")
             return k
 
         # (tarih, yayın) → (sınıf, yazı anı ALT SINIRDAN mı)
@@ -4403,11 +4390,11 @@ def main() -> int:
         # onları da üretiyor ve ölçü onlar için de kuruluyor. İki gözlemle eşik
         # açılmadığı için e-posta kanalının KAPSAMI DIŞINDALAR (aşağıdaki
         # sınama bunu ayrıca doğruluyor), ama ölçüldükleri görünmeli.
+        # Haftalık teknik analizin iki satırı (23.08 ve 30.08 alarm) 01.10.2026'da
+        # çıktı: yayın sona erdi, takvimden silindi, oynatma onu artık üretmiyor.
         PAZAR = {
             ("2026-08-23", "Haftaya bakış"): "alarm",
-            ("2026-08-23", "Haftalık teknik analiz"): "alarm",
             ("2026-08-30", "Haftaya bakış"): "uyari",
-            ("2026-08-30", "Haftalık teknik analiz"): "alarm",
         }
 
         # Oynatma dondurulmuş girdi üzerinde koşar. `gecmis()` düz sözlük
@@ -4428,6 +4415,8 @@ def main() -> int:
             s = satirlar.get(anahtar)
             assert s is not None, f"pazar satırı oynatmada yok: {anahtar}"
             assert s["sinif"] == sinif, (anahtar, s["sinif"], "beklenen", sinif)
+        assert not [a for a in satirlar if a[1] == "Haftalık teknik analiz"], \
+            "sona eren teknik bülten oynatmada yeniden satır üretiyor"
 
         alarm = [k for k, (s, _) in HAFTA_ICI.items() if s == "alarm"]
         temiz = [k for k, (s, _) in HAFTA_ICI.items() if s == "zamaninda"]
@@ -4468,7 +4457,7 @@ def main() -> int:
                     "ilk_yazi_zamani": "2026-09-04T05:50:32+00:00"}
         with tempfile.TemporaryDirectory() as td:
             k = Path(td)
-            for alt in ("bulten", "teknik", "tweet"):
+            for alt in ("bulten", "tweet"):
                 (k / "site" / "src" / "data" / alt).mkdir(parents=True, exist_ok=True)
             (k / "bulten").mkdir(parents=True, exist_ok=True)
             _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
@@ -4528,9 +4517,9 @@ def main() -> int:
         import tempfile
         import gecikme as gk
 
-        def kur(td, bultenler=None, teknikler=None):
+        def kur(td, bultenler=None):
             k = Path(td)
-            for alt in ("bulten", "teknik", "tweet"):
+            for alt in ("bulten", "tweet"):
                 (k / "site" / "src" / "data" / alt).mkdir(parents=True, exist_ok=True)
             (k / "bulten").mkdir(parents=True, exist_ok=True)
             _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
@@ -4538,10 +4527,9 @@ def main() -> int:
             (k / "tweet").mkdir(parents=True, exist_ok=True)
             (k / "tweet" / "defter.json").write_text(
                 "{}", encoding="utf-8")
-            for alt, kayit in (("bulten", bultenler or {}), ("teknik", teknikler or {})):
-                for g, b in kayit.items():
-                    (k / "site" / "src" / "data" / alt / f"{g}.json").write_text(
-                        _j.dumps(b, ensure_ascii=False), encoding="utf-8")
+            for g, b in (bultenler or {}).items():
+                (k / "site" / "src" / "data" / "bulten" / f"{g}.json").write_text(
+                    _j.dumps(b, ensure_ascii=False), encoding="utf-8")
             return k
 
         gec = {"tarih": "2026-09-04", "tur": "gunluk", "gundem_kaynagi": "yazili",
@@ -4678,8 +4666,7 @@ def main() -> int:
         for beklenen in ("workflow_run:", "requested", "completed", "workflow_dispatch:",
                          "push:", "sinama_gun"):
             assert beklenen in govde, f"gecikme.yml'de {beklenen} yok"
-        for is_akisi in ("Veri tazeleme", "Günlük bülten", "Siteyi yayınla",
-                         "Haftalık teknik analiz"):
+        for is_akisi in ("Veri tazeleme", "Günlük bülten", "Siteyi yayınla"):
             assert is_akisi in govde, f"gecikme.yml {is_akisi} koşusunu dinlemiyor"
         # SIRA KRİTİK: önce kayıt yazılıp push edilir, SONRA alarm verilir.
         # Tersi, her uyanmada mükerrer e-posta demek.
@@ -4696,19 +4683,24 @@ def main() -> int:
 
         # NÖBETÇİ SİLİNMEDİ, ROLÜ DEĞİŞTİ: cron'ları ve mevcut adımları AYNEN
         # duruyor; yeni adım yalnız tekrar koşulunda düşer ve yalnız bülten
-        # YAZILMIŞKEN (zincir kodu 2/4) koşar — yoksa yokluk alarmıyla ÇİFT
+        # YAZILMIŞKEN (zincir kodu 2) koşar — yoksa yokluk alarmıyla ÇİFT
         # alarm üretirdi.
+        import re as _re_n
         n = (BURASI.parent / ".github" / "workflows" / "nobetci.yml").read_text(encoding="utf-8")
         for cron in ("37 6 * * 1-5", "7 8 * * 1-5", "37 10 * * 1-5",
                      "31 16 * * 0", "1 18 * * 0"):
             assert f"'{cron}'" in n, f"nöbetçinin cron'u değişmiş: {cron}"
-        for adim in ("Bülten çıktı mı", "Site bugünün sayısını gösteriyor mu",
-                     "Teknik bülten çıktı mı (yalnız pazar)"):
+        for adim in ("Bülten çıktı mı", "Site bugünün sayısını gösteriyor mu"):
             assert adim in n, f"nöbetçinin mevcut adımı düşmüş: {adim}"
+        # Pazar teknik adımı 01.10.2026'da çıktı (yayın sona erdi); kalsaydı her
+        # pazar var olmayan bir dosya için iki alarm e-postası gelirdi.
+        assert "Teknik bülten çıktı mı" not in n, \
+            "nöbetçi sona eren teknik bülteni hâlâ soruyor — her pazar sahte alarm"
         assert "Gecikme tekrar ediyor mu (yedek kanal)" in n, "nöbetçi yedeği eklenmemiş"
         yedek = n.split("Gecikme tekrar ediyor mu (yedek kanal)")[1]
         assert "gecikme.tekrar()" in yedek, "yedek kanal kendi eşiğini kurmuş"
-        assert "2|4)" in yedek, "yedek kanal bülten yazılmamışken de koşuyor — çift alarm"
+        assert _re_n.search(r"^\s*2\) ;;", yedek, _re_n.M), \
+            "yedek kanal bülten yazılmamışken de koşuyor — çift alarm"
     sina("alarm taşıyıcısı: gecikme.yml cron'suz, nöbetçi yedeğe döndü", _gecikme_yml)
 
     # ── ZİNCİR RAPORU SAYIYI BASAR, ÇIKIŞ KODUNU DEĞİŞTİRMEZ. Rutinin sabah
@@ -4733,7 +4725,6 @@ def main() -> int:
         def kur(td, b, defter_gelisme):
             k = Path(td)
             (k / "site" / "src" / "data" / "bulten").mkdir(parents=True, exist_ok=True)
-            (k / "site" / "src" / "data" / "teknik").mkdir(parents=True, exist_ok=True)
             (k / "tweet").mkdir(parents=True, exist_ok=True)
             (k / "bulten").mkdir(parents=True, exist_ok=True)
             _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
@@ -4753,13 +4744,12 @@ def main() -> int:
                               "atlanan_butce": ["tcmb", "dibs"]}]}), encoding="utf-8")
             return k
 
-        asil = (zincir.KOK, zincir.BURASI, zincir.BULTENLER, zincir.TEKNIKLER)
+        asil = (zincir.KOK, zincir.BURASI, zincir.BULTENLER)
 
         def calistir(k, gun):
             zincir.KOK = k
             zincir.BURASI = k / "bulten"
             zincir.BULTENLER = k / "site" / "src" / "data" / "bulten"
-            zincir.TEKNIKLER = k / "site" / "src" / "data" / "teknik"
             tampon = _io.StringIO()
             with contextlib.redirect_stdout(tampon):
                 kod, _ = zincir.durum(gun)
@@ -4813,10 +4803,87 @@ def main() -> int:
                     assert "gecikme bloğu okunamadı" in cikti, cikti[-400:]
                 finally:
                     zincir._gecikme_blogu = gercek
+
+            # (f) PAZAR KODU 4 YOK (01.10.2026, kullanıcı kararı: teknik bülten
+            #     27.09 sayısıyla sona erdi). Yazılmış haftalık sayı ve hiç
+            #     teknik dosyası olmayan bir pazar → 2. Kod 4 geri gelirse rutin
+            #     her pazar var olmayan bir iş akışını tetiklemeye yönelir.
+            with tempfile.TemporaryDirectory() as td:
+                paz = dict(gec, tarih="2026-09-06", tur="haftalik",
+                           olusturma="2026-09-06T14:03:00+00:00",
+                           ilk_yazi_zamani="2026-09-06T15:10:00+00:00")
+                k = kur(td, paz, "eski")
+                kod, cikti = calistir(k, dt.date(2026, 9, 6))
+                assert kod == 2, f"pazar kodu {kod} — teknik halkası geri gelmiş"
+                assert "TEKNİK" not in cikti and "teknik.yml" not in cikti, cikti[-400:]
         finally:
-            zincir.KOK, zincir.BURASI, zincir.BULTENLER, zincir.TEKNIKLER = asil
+            zincir.KOK, zincir.BURASI, zincir.BULTENLER = asil
     sina("zincir: gecikme dakikası ve tema kıyası raporda, çıkış kodu değişmiyor",
          _zincir_ek_bloklar)
+
+    # ── TEKNİK ANALİZ ARŞİVİ: yalnız düzeltme yazılır. Yayın 27.09.2026 sayısıyla
+    # sona erdi (01.10.2026, kullanıcı kararı) ve ölçüm iş akışı kaldırıldı; geriye
+    # kalan tek kapı arşiv sayısına düzeltme kaydı yazan teknik/yaz.py. Onu koşturan
+    # bir iş akışı artık yok — bu yüzden sınaması BURADA, her veri/bülten koşusunun
+    # önünde: koşturulmayan bir kapı, bulten/yaz.py imzası değiştiği gün sessizce
+    # bozulur ve bunu ancak düzeltme gerektiği gün öğreniriz.
+    def _teknik_arsiv_kapisi():
+        import importlib.util
+        import json as _j
+        import tempfile
+        spec = importlib.util.spec_from_file_location(
+            "teknik_yaz", BURASI.parent / "teknik" / "yaz.py")
+        ty = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(ty)
+        with tempfile.TemporaryDirectory() as td:
+            eski = ty.VERI
+            ty.VERI = Path(td)
+            try:
+                b = {"tarih": "2026-09-27", "yazili": True, "giris": "<p>x</p>",
+                     "yorum_zamani": "2026-09-27T15:10:00+00:00",
+                     "enstrumanlar": [{"slug": "dxy", "yorum": "<p>y</p>"}],
+                     "duzeltmeler": [{"tarih": "2026-09-28", "alan": "a",
+                                      "eski": "1", "yeni": "2", "sebep": ""}]}
+                hedef = Path(td) / "2026-09-27.json"
+                hedef.write_text(_j.dumps(b, ensure_ascii=False), encoding="utf-8")
+                (Path(td) / "2026-09-20.json").write_text(
+                    _j.dumps({**b, "yazili": False}), encoding="utf-8")
+                yama = Path(td) / "yama.json"
+
+                def kos(icerik, tarih="2026-09-27"):
+                    yama.write_text(_j.dumps(icerik, ensure_ascii=False), encoding="utf-8")
+                    eski_argv, sys.argv = sys.argv, ["yaz.py", str(yama), "--tarih", tarih]
+                    try:
+                        ty.main()
+                        return 0
+                    except SystemExit as e:
+                        return 0 if e.code in (0, None) else 1
+                    finally:
+                        sys.argv = eski_argv
+
+                gecerli = {"duzeltmeler": [{"alan": "DXY günlük kapanış", "eski": "97,12",
+                                            "yeni": "97,21", "sebep": "kaynak düzeltti"}]}
+                assert kos({"yorum": {"dxy": "<p>yeni</p>"}}) == 1, "arşive yeni yorum yazıldı"
+                assert kos({"giris": "<p>yeni</p>"}) == 1, "arşive yeni giriş yazıldı"
+                assert kos({"duzeltmeler": [{"alan": "x", "eski": "1"}]}) == 1, \
+                    "yarım düzeltme kaydı kabul edildi"
+                assert kos({"duzeltmeler": [{"alan": "DXY", "eski": "1", "yeni": "2",
+                                             "sebep": "değer ozet.json'dan okunur"}]}) == 1, \
+                    "düzeltmede okur dili kapısı yok"
+                assert kos(gecerli, "2026-09-20") == 1, "yayımlanmamış ölçüme düzeltme yazıldı"
+                assert kos(gecerli, "2026-10-04") == 1, "arşivde olmayan sayıya düzeltme yazıldı"
+                assert kos(gecerli) == 0, "geçerli düzeltme reddedildi"
+                son = _j.loads(hedef.read_text(encoding="utf-8"))
+                assert len(son["duzeltmeler"]) == 2 and son["duzeltmeler"][0]["alan"] == "a", \
+                    "eski düzeltme kaydı silindi — kayıtlar üstüne eklenir"
+                assert son["yorum_zamani"] == b["yorum_zamani"], \
+                    "düzeltme yayım damgasını değiştirdi — künye sayıyı yeni yayımlanmış gösterir"
+                assert son["enstrumanlar"][0]["yorum"] == "<p>y</p>" and son["giris"] == "<p>x</p>", \
+                    "düzeltme yayımlanmış metne dokundu"
+            finally:
+                ty.VERI = eski
+    sina("teknik arşivi: yalnız düzeltme yazılır, yayımlanmış metin ve damga korunur",
+         _teknik_arsiv_kapisi)
 
     sina("bicim: sayı yazımı tek kaynak · REDK konumu yön okur · denetim sızıntıyı görür", _bicim)
     sina("okur dili: koşu kaydı satırları muafiyetsiz taranır (kod, biçim)", _kosu_kaydi_dili)

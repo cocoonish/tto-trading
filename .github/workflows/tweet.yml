@@ -1,15 +1,15 @@
 # Tweet zinciri — yazılmış bültenleri X'e gönderir.
 #
-# İçerik yalnız YAYIMLANMIŞ katmandan gelir (yazı kapısından geçmiş bülten,
-# yorum kapısından geçmiş teknik analiz); zincir metnini tweet/uret.py kurar,
+# İçerik yalnız YAYIMLANMIŞ katmandan gelir (yazı kapısından geçmiş bülten ve
+# analiz yazısı); zincir metnini tweet/uret.py kurar,
 # gönderimi tweet/gonder.py yapar. Sigortalar araçta: defter aynı içeriği iki
 # kez göndermez, bayat koruması dünkü bülteni bugünmüş gibi atmaz, TW_*
 # anahtarları yoksa koşu KURU geçer (zincir loga basılır, hiçbir şey
 # gönderilmez, iş yeşil biter) — yani bu iş akışı anahtarlar eklenmeden de
 # zararsızca çalışır.
 #
-# Tetikler: yazı katmanının push'u (bülten/teknik JSON'ları ya da bir analiz
-# yazısı değişince) + yedek cron'lar (zamanlanmış tetikleyicinin sicili gereği)
+# Tetikler: yazı katmanının push'u (bülten JSON'u ya da bir analiz yazısı
+# değişince) + yedek cron'lar (zamanlanmış tetikleyicinin sicili gereği)
 # + elle. Her gönderi tweet/denetim.py kapısından geçer: tavsiye dili, link,
 # HTML kalıntısı, site atfı, sayı ortasında kesik cümle, sorumluluk notu.
 # Gönderilen metin tweet/arsiv/ altında saklanır. Site tarafına HİÇBİR ŞEY
@@ -22,7 +22,6 @@ on:
     branches: [main]
     paths:
       - 'site/src/data/bulten/**'
-      - 'site/src/data/teknik/**'
       # Analiz yazıları: yayın günü pubDate'i bugün olan yazı, yönetici
       # özetinden kurulan gönderiyle X'e çıkar (tweet/analiz.py). Elle yazılan
       # özel gönderim (tweet-ozel.yml) istisna içindir, kural bu.
@@ -31,7 +30,7 @@ on:
     - cron: '35 5 * * *'      # 08:35 İstanbul — sabah bülteninin yazısından sonra;
                               # HER GÜN: cumartesi bülten yok ama gece push edilen
                               # bir analiz yazısı ertesi sabah çıkabilsin
-    - cron: '25 15 * * 0'     # 18:25 İstanbul — pazar haftalık + teknik sonrası
+    - cron: '25 15 * * 0'     # 18:25 İstanbul — pazar haftaya bakış sonrası
     - cron: '25 18 * * 0'     # 21:25 İstanbul — pazar yedeği
   workflow_dispatch:
     inputs:

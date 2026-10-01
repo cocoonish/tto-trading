@@ -4,7 +4,7 @@
 
     python3 tweet/gonder.py                # bugünün yazılmış içeriğini gönder
     python3 tweet/gonder.py --kuru         # göndermeden zinciri bas
-    python3 tweet/gonder.py --tarih 2026-08-30 --tur teknik
+    python3 tweet/gonder.py --tarih 2026-08-30 --tur bulten
 
 Sigortalar (araçta, rutin metninde değil):
 
@@ -234,7 +234,7 @@ def kapidan_gecir(is_listesi: list[tuple[str, list[str], list]]) -> tuple[list, 
 
 def main() -> int:
     p = argparse.ArgumentParser()
-    p.add_argument("--tur", choices=("bulten", "teknik", "analiz", "hepsi"), default="hepsi")
+    p.add_argument("--tur", choices=("bulten", "analiz", "hepsi"), default="hepsi")
     p.add_argument("--tarih", help="varsayılan: bugün (UTC); bayat koruması "
                                    "yalnız varsayılanda uygulanır")
     p.add_argument("--kuru", action="store_true", help="gönderme, yalnız bas")
@@ -264,11 +264,8 @@ def main() -> int:
         if b and f"bulten:{tarih}" not in defter:
             z = uret.bulten_zinciri(b)
             is_listesi.append((f"bulten:{tarih}", z, list(uret.DUSEN)))
-    if a.tur in ("teknik", "hepsi"):
-        t = uret.yazilmis_teknik(tarih)
-        if t and f"teknik:{tarih}" not in defter:
-            z = uret.teknik_zinciri(t)
-            is_listesi.append((f"teknik:{tarih}", z, list(uret.DUSEN)))
+    # Teknik kanalı 01.10.2026'da kapandı (yayın 27.09.2026 sayısıyla sona erdi);
+    # defterdeki teknik:<gün> kayıtları tarihçe olarak duruyor.
     # ANALİZ KANALI. Yayın günü pubDate'i bugün olan her analiz yazısı, kendi
     # yönetici özetinden kurulan gönderiyle X'e çıkar. Pencere iki gün: gece
     # yarısından sonra push edilen ya da tetikleyicisi düşen yazı ertesi sabah

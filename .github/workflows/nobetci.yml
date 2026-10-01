@@ -87,9 +87,7 @@ jobs:
           set -e
           echo
           case "$kod" in
-            # 4 = pazar: bülten yazılmış, teknik bekliyor — BU sorunun cevabı
-            # "bülten yerinde"; teknik sorusunu aşağıdaki ayrı adım soruyor.
-            2|3|4)
+            2|3)
               echo "✓ Bülten yerinde — nöbetçi sessiz geçiyor." ;;
             0)
               echo "::error::BÜLTEN YAZILMAMIŞ — ölçüm hazır ama yazı katmanı koşmamış ya da push edememiş. Sayfa dünkü bülteni gösteriyor."
@@ -111,7 +109,7 @@ jobs:
           set +e
           python bulten/zincir.py >/dev/null 2>&1; kod=$?
           set -e
-          case "$kod" in 2|4) ;; *) echo "bülten yazılmamış ya da cumartesi — site denetimi atlandı"; exit 0;; esac
+          case "$kod" in 2) ;; *) echo "bülten yazılmamış ya da cumartesi — site denetimi atlandı"; exit 0;; esac
           bugun=$(date -u +%Y-%m-%d)
           besleme=$(curl -fsS --max-time 30 https://cocoonish.github.io/bulten/rss.xml || true)
           if [ -z "$besleme" ]; then
@@ -123,34 +121,6 @@ jobs:
             *"/bulten/$bugun/"*) echo "✓ Site bugünün sayısını gösteriyor: $ilk" ;;
             *) echo "::error::SİTE BUGÜNÜN SAYISINI GÖSTERMİYOR — beslemenin ilk maddesi: $ilk (beklenen /bulten/$bugun/). Yayın iş akışı düşmüş ya da tetiklenmemiş olabilir."; exit 1 ;;
           esac
-
-      # Pazar günleri ikinci soru: HAFTALIK TEKNİK ANALİZ yazıldı mı?
-      # Teknik bülteni de rutin yazar (bkz. bulten/YAZIM.md) ve rutin metnine
-      # güvenilmez — sigorta araca konur. Ölçüm var ama yorum yoksa ya da
-      # ölçüm hiç koşmadıysa alarm; sayfa yayın kapısı gereği eski sayıyı
-      # göstermeye devam eder ve bunu başka hiçbir katman fark edemez.
-      - name: Teknik bülten çıktı mı (yalnız pazar)
-        run: |
-          if [ "$(date -u +%u)" != "7" ]; then
-            echo "hafta içi — teknik bülten pazar işi, atlandı"
-            exit 0
-          fi
-          python - <<'PY'
-          import json, sys, datetime as dt
-          from pathlib import Path
-          bugun = dt.datetime.now(dt.timezone.utc).date().isoformat()
-          yol = Path(f"site/src/data/teknik/{bugun}.json")
-          if not yol.exists():
-              print(f"::error::TEKNİK ÖLÇÜM YOK — {yol} üretilmemiş; "
-                    "'Haftalık teknik analiz' iş akışı koşmamış.")
-              sys.exit(1)
-          b = json.loads(yol.read_text(encoding="utf-8"))
-          if not b.get("yazili"):
-              print("::error::TEKNİK BÜLTEN YAZILMAMIŞ — ölçüm hazır ama yorum "
-                    "katmanı koşmamış ya da push edememiş. Sayfa eski sayıyı gösteriyor.")
-              sys.exit(1)
-          print("✓ Teknik bülten yerinde.")
-          PY
 
       # YEDEK GECİKME ALARMI — aynı ölçü, ikinci taşıyıcı.
       #
@@ -169,7 +139,7 @@ jobs:
       # ("bir iş haftası") ve kodda adıyla durur; yirmi gözlem birikince
       # gecikme dağılımından yeniden türetilmeli.
       #
-      # YALNIZ BÜLTEN YAZILMIŞKEN koşar (zincir kodu 2 ya da 4). Yazılmamışsa
+      # YALNIZ BÜLTEN YAZILMIŞKEN koşar (zincir kodu 2). Yazılmamışsa
       # yukarıdaki yokluk alarmı zaten ötüyor; ikisi birden ötseydi tek arıza
       # iki e-posta üretirdi.
       - name: Gecikme tekrar ediyor mu (yedek kanal)
@@ -179,7 +149,7 @@ jobs:
           python bulten/zincir.py >/dev/null 2>&1; kod=$?
           set -e
           case "$kod" in
-            2|4) ;;
+            2) ;;
             *) echo "bülten yazılmamış ya da yayın günü değil — gecikme yedeği atlandı"; exit 0;;
           esac
           python - <<'PY'

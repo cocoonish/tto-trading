@@ -171,8 +171,8 @@ def main() -> int:
     if not anahtar:
         anahtar = anahtar_turet(Path(a.metin), ilk, tur, a.gonder)
         print(f"· anahtar: {anahtar}")
-    if not re.match(r"^(analiz|ozel|bulten|teknik):", anahtar):
-        raise SystemExit(f"anahtar 'bulten:', 'teknik:', 'analiz:' ya da 'ozel:' ile başlar: {anahtar!r}")
+    if not re.match(r"^(analiz|ozel|bulten):", anahtar):
+        raise SystemExit(f"anahtar 'bulten:', 'analiz:' ya da 'ozel:' ile başlar: {anahtar!r}")
     defter = gonder._defter_oku(gonder.DEFTER)
     if anahtar and (defter.get(anahtar) or {}).get("idler") and not a.zorla:
         raise SystemExit(f"{anahtar} defterde kimlikli — zaten gönderildi "

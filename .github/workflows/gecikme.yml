@@ -60,7 +60,6 @@ on:
       - "Veri tazeleme"
       - "Günlük bülten"
       - "Siteyi yayınla"
-      - "Haftalık teknik analiz"
     # requested: koşu İSTENDİĞİNDE uyan — bitişini bekleme.
     # completed:  koşu bittiğinde bir kez daha bak (uzun koşuda söz o arada geçer).
     types: [requested, completed]

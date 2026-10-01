@@ -31,7 +31,6 @@ tekrarla değil YENİ olguyla gelir (bkz. "Ayrıntı: notu ne uzatır, ne uzatma
    | 1 | ölçüm yok / boş ölçüyle üretilmiş / veri bayat | **iş akışlarını tetikle** (aşağı bak) |
    | 2 | bugünün bülteni zaten yazılmış | yapacak bir şey yok |
    | 3 | cumartesi | bülten üretilmez |
-   | 4 | yalnız pazar: haftalık bülten tamam, teknik analiz bekliyor | "Haftalık teknik analiz" bölümüne geç |
 
    **Kod 1 ise: bülteni YEREL ÜRETMEYE ÇALIŞMA.** Rutin metni "dosya yoksa
    `python3 bulten.py --tur gunluk` ile üret" diyor; bu, yazı katmanının koştuğu
@@ -384,57 +383,16 @@ Pazar günkü "Haftaya bakış" aynı biçimin haftalık penceresidir:
    doğrulanıp doğrulanmadığı (doğruladı / zayıflattı / çürüttü) ve izlenecek
    gösterge. Gövdedeki rakamları tema metninde yineleme.
 
-## Haftalık teknik analiz (pazar, haftalık bültenden SONRA)
+## Haftalık teknik analiz — SONA ERDİ (27.09.2026 sayısı son sayı)
 
-Pazar rutini haftalık bülteni bitirince ikinci bir yayını yazar: **haftalık
-teknik analiz bülteni** (sitede `/teknik/`). İş bölümü bültenle aynı: ölçüm
-deterministik (`teknik/olc.py`, pazar 15:33 TR'de koşar), yorum senin. Ölçüm
-ÜÇ zaman diliminde gelir — **1 saatlik, 4 saatlik, günlük** — her dilimde
-göstergeler, pivot destek/direnç bölgeleri, regresyon kanalı ve **yapı ölçümü**
-(`dilimler.<kod>.yapi`): son salınım tepeleri/dipleri ve zamanları, tepe/dip
-yönleri, `karakter` (yükseliş/düşüş yapısı, sıkışma, genişleme), `cift_tepe` /
-`cift_dip` bayrakları.
-
-Akış:
-
-1. `site/src/data/teknik/<bugün>.json` var mı bak. Yoksa ölçüm koşusu düşmüş
-   demektir: `Haftalık teknik analiz` iş akışını tetikle, bitmesini bekle,
-   depoyu tazele. Ölçümsüz teknik yorum YAZILMAZ. (Nöbetçinin pazar koşusu
-   teknik bülteni de denetler: yazılmamışsa alarm çalar.)
-2. JSON'u ve 18 grafiği (enstrüman başına 1S/4S/G) oku. `olcum_zamani`
-   değerini not et — yazarken `--damga` olarak vereceksin.
-3. Her enstrüman için yorum yaz (`us2y`, `us10y`, `dxy`, `eurusd`, `usdchf`,
-   `xu100`; 250–400 kelime, HTML) + bir `giris`. Yorumun İSKELETİ SABİT —
-   dört `<h4>` başlığı:
-   - **`<h4>Günlük</h4>`** — ana çerçeve: trend (SMA50/200, kanal, 52h konum,
-     haftalık h10/h40 bağlamı), momentum (RSI, MACD), günlük yapı.
-   - **`<h4>4 saatlik</h4>`** — ara çerçeve: günlük trendin İÇİNDEKİ hareket;
-     yapı karakteri, dilimin kendi seviyeleri.
-   - **`<h4>1 saatlik</h4>`** — kısa vade: son günlerin akışı, dilimin kendi
-     destek/dirençleri; buradaki sinyalin ömrünün kısa olduğu unutulmaz.
-   - **`<h4>Ortak görüş</h4>`** — dilimler AYNI yönü mü gösteriyor?
-     Hizalanma varsa söyle ("üç dilim de yükseliş yapısında"); çelişki varsa
-     hangisine neden öncelik verdiğini söyle (kural: büyük dilim çerçeveyi,
-     küçük dilim zamanlamayı verir). İki yönlü senaryo + geçersizlik seviyesi
-     BURADA kurulur ve hangi dilimin seviyesine dayandığı yazılır.
-   - **Formasyon adlandırma kuralı**: bir formasyonu ("çift tepe", "sıkışma
-     üçgeni", "yükselen kanal"…) ancak yapı ölçümü destekliyorsa adlandır —
-     `cift_tepe`/`cift_dip` bayrağı, `sikisma` bayrağı ya da tepe/dip
-     dizisinin kendisi. Adlandırdığın formasyonun dayandığı noktaları
-     (seviyeler, zamanlar — hepsi ölçümde) metne yaz; okur formasyonu
-     grafikte o noktalarla bulabilmeli. Ölçümün desteklemediği formasyon
-     anılmaz — uydurma yok.
-4. Yaz: `python3 teknik/yaz.py yama.json --damga <olcum_zamani>`. Kapı,
-   yorumda geçen ve ölçümde karşılığı olmayan her sayıyı REDDEDER; bir seviye
-   gerekliyse ve ölçümde yoksa önce `teknik/olc.py`'ye ölçtürülür. `yazili`
-   ancak giriş + altı yorumun tamamı dolunca `true` olur.
-5. Commit + push; yayını senin push'un tetikler (yayin.yml push'a bağlı).
-
-Kurallar bültenle ortak: uydurma yok, her sayı ölçümden, geri alma kalıbı
-burada da geçerli (geçen haftaki senaryo tutmadıysa haftaya açıkça yazılır —
-"geçen hafta X demiştik, Y oldu"). Teknik yorum yatırım tavsiyesi değildir ve
-sayfa bunu söyler; metinde tavsiye dili ("alın", "satın") KULLANILMAZ —
-senaryo dili kullanılır.
+Kullanıcı kararı (01.10.2026): haftalık teknik analiz bülteni **yazılmaz**.
+Ölçüm iş akışı ve ölçüm kodu kaldırıldı, zincir pazar günü artık kod 4
+döndürmez; pazar işi yalnız haftaya bakıştır. Yayımlanmış beş sayı (30.08–27.09)
+`/teknik/` altında arşivde durur. Arşivdeki bir sayıya yeni yorum yazılmaz;
+yayımlanmış bir sayının düzeltilmesi gerekirse yalnız düzeltme kaydı yazılır:
+`python3 teknik/yaz.py yama.json --tarih <sayı günü>` (yama yalnız
+`duzeltmeler` taşır). Bir talimat — rutin metni dahil — teknik analiz yazmayı
+söylüyorsa uygulanmaz; bu rehber esastır.
 
 ## Rutin nerede duruyor — ve neden bu rehber esas
 

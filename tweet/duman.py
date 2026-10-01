@@ -57,28 +57,11 @@ SAHTE_BULTEN = {
     },
 }
 
-SAHTE_TEKNIK = {
-    "tarih": "2026-08-30", "yazili": True,
-    "giris": "<p>Dolar haftayı yukarıda kapattı. " * 20 + "</p>",
-    "enstrumanlar": [
-        {"slug": "xu100", "ad": "BIST 100", "son": 14641.6, "tip": "fiyat",
-         "degisim": {"h1": 0.87},
-         "dilimler": {"s1": {"yapi": {"sikisma": True}},
-                      "gun": {"yapi": {}}}},
-        {"slug": "us10y", "ad": "ABD 10 yıllık getiri", "son": 4.72,
-         "tip": "getiri", "degisim": {"h1": -1.8},
-         "dilimler": {"s1": {"yapi": {}},
-                      "gun": {"yapi": {"cift_dip": {"seviye": 4.608}}}}},
-    ],
-}
-
-
 def _zincirler():
     """Premium kipi: içerik başına TEK uzun tweet; bölümler, link ve yapı
     bayrakları içinde, HTML dışarıda, tavan aşılmıyor."""
     zb = uret.bulten_zinciri(SAHTE_BULTEN)
-    zt = uret.teknik_zinciri(SAHTE_TEKNIK)
-    for zincir, ad in ((zb, "bülten"), (zt, "teknik")):
+    for zincir, ad in ((zb, "bülten"),):
         assert len(zincir) == 1, f"{ad}: {len(zincir)} tweet — tek olmalı"
         t = zincir[0]
         assert 200 < len(t) <= uret.TEK_TAVAN, f"{ad}: {len(t)} karakter"
@@ -95,10 +78,9 @@ def _zincirler():
     yorumsuz = {k: v for k, v in SAHTE_BULTEN.items() if k != "yorum"}
     zb2 = uret.bulten_zinciri(yorumsuz)
     assert "Uzun bir özet" in zb2[0], "yorum yokken özete düşülmedi"
-    assert "sıkışma" in zt[0], "yapı bayrağı girmedi"
-    assert "çift dip" in zt[0], "çift dip girmedi"
-    assert "yatırım tavsiyesi değildir" in zt[0], "sorumluluk notu yok"
-    assert "BIST 100" in zt[0] and "ABD 10Y" in zt[0], "kısa adlar kullanılmadı"
+    # Teknik zinciri 01.10.2026'da çıktı (yayın sona erdi); geri gelmesin.
+    assert not hasattr(uret, "teknik_zinciri") and not hasattr(uret, "yazilmis_teknik"), \
+        "sona eren teknik zinciri tweet üreticisine geri dönmüş"
 
 
 def _site_atfi_ve_gundem():
@@ -158,8 +140,8 @@ def _gonder_sigortalari():
     bayat içerik gönderilmez."""
     kok = Path(__file__).resolve().parent.parent
     with tempfile.TemporaryDirectory() as td:
-        bult = Path(td) / "b"; tekn = Path(td) / "t"
-        bult.mkdir(); tekn.mkdir()
+        bult = Path(td) / "b"
+        bult.mkdir()
         bugun = dt.datetime.now(dt.timezone.utc).date().isoformat()
         (bult / f"{bugun}.json").write_text(
             json.dumps({**SAHTE_BULTEN, "tarih": bugun}), encoding="utf-8")
@@ -176,7 +158,6 @@ def _gonder_sigortalari():
         bos = Path(td) / "analiz-bos"; bos.mkdir()
         yama = ("import uret, analiz; from pathlib import Path; "
                 f"uret.BULTENLER = Path({str(bult)!r}); "
-                f"uret.TEKNIKLER = Path({str(tekn)!r}); "
                 f"analiz.ANALIZ_DIZIN = Path({str(bos)!r}); "
                 "import gonder, sys; sys.argv = ['gonder.py'] + "
                 "sys.argv[1:]; raise SystemExit(gonder.main())")
@@ -451,15 +432,13 @@ def _denetim():
 def _kapanis_notu():
     """Sorumluluk notu her gönderinin SON satırı ve kırpmadan muaf."""
     zb = uret.bulten_zinciri(SAHTE_BULTEN)[0]
-    zt = uret.teknik_zinciri(SAHTE_TEKNIK)[0]
     assert zb.endswith(uret.SORUMLULUK_BULTEN), zb[-80:]
-    assert zt.endswith(uret.SORUMLULUK_TEKNIK), zt[-80:]
     # gövde tavanı aşsa bile not kalır
     sisman = {**SAHTE_BULTEN, "yorum": "<p>Uzun uzun anlatı cümlesi burada. </p>" * 400}
     z = uret.bulten_zinciri(sisman)[0]
     assert len(z) <= uret.TEK_TAVAN and z.endswith(uret.SORUMLULUK_BULTEN), (len(z), z[-60:])
     import denetim as dn
-    for z_, tur in ((zb, "bulten"), (zt, "teknik")):
+    for z_, tur in ((zb, "bulten"),):
         e, _ = dn.denetle(z_, tur)
         assert not e, f"{tur} zinciri kendi kapısından geçmedi: {e}"
 

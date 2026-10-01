@@ -16,7 +16,7 @@ tweet metni üzerinde koşan bir denetim görür.
   UYARI  loga yazılır, gönderim sürer (tekrar eden cümle, ASCII eksi, çift boşluk)
 
 Kullanım:
-    engel, uyari = denetle(metin, tur)      # tur: bulten | teknik | analiz
+    engel, uyari = denetle(metin, tur)      # tur: bulten | analiz
     python3 tweet/denetim.py dosya.txt      # tek metni sına, çıkış 1 = engel
 
 Kalıplar tek yerde durur: okur dili ortak/okur_dili.py'den, tavsiye dili
@@ -51,7 +51,7 @@ except Exception:                                              # noqa: BLE001
 
 # İlk satır türe göre bir başlık taşır — okur akışta hangi yayının geldiğini
 # ilk bakışta görür. Bülten: "Sabah Notu — 1 Eylül 2026" / "Haftaya Bakış — …";
-# analiz: "Analiz — 1 Eylül 2026". Teknik başlığı uret'in kendi kalıbından gelir.
+# analiz: "Analiz — 1 Eylül 2026".
 ILK_SATIR = {
     "bulten": re.compile(r"^(Sabah Notu|Haftaya Bakış) — \d{1,2} [A-ZÇĞİÖŞÜ][a-zçğıöşü]+ \d{4}"),
     "analiz": re.compile(r"^Analiz — \d{1,2} [A-ZÇĞİÖŞÜ][a-zçğıöşü]+ \d{4}"),
@@ -310,7 +310,7 @@ def main() -> int:
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("dosya", help="tweet metni (düz metin dosyası, '-' = stdin)")
-    p.add_argument("--tur", choices=("bulten", "teknik", "analiz"), default="analiz")
+    p.add_argument("--tur", choices=("bulten", "analiz"), default="analiz")
     a = p.parse_args()
     metin = sys.stdin.read() if a.dosya == "-" else Path(a.dosya).read_text(encoding="utf-8")
     engel, uyari = denetle(metin, a.tur)

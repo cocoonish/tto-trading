@@ -20,9 +20,9 @@ TTO Trading/
 │   ├── OVP/                     # Orta Vadeli Program: ima edilen kur (GSYH_TL/GSYH_USD),
 │   │                            #   program tabloları programlar.json'da ELLE tutulur
 │   └── indices/                 # FX haber-duyarlılık endeksi (üç kip: hafif/günlük/tam)
-├── teknik/                      # Haftalık teknik analiz bülteni (olc.py ölçer,
-│                                #   yaz.py yorum kapısı — her sayı ölçümden; pazar koşusu)
-├── tweet/                       # X gönderileri: uret.py bülten/teknik, analiz.py analiz
+├── teknik/                      # Haftalık teknik analiz ARŞİVİ — yayın 27.09.2026 sayısıyla
+│                                #   sona erdi; yaz.py yalnız arşiv sayısına düzeltme yazar
+├── tweet/                       # X gönderileri: uret.py bülten, analiz.py analiz
 │                                #   yazısını yönetici özetinden kurar; denetim.py KALİTE
 │                                #   KAPISI; gonder.py defterli/bayat-korumalı gönderir,
 │                                #   metni arsiv/'e yazar; siteye HİÇBİR ŞEY yazmaz
@@ -3770,3 +3770,36 @@ toplam tavanı), metnin güncellenmesi kullanıcının işi. (ii) DİBS kartlar�
 olay eşikleri 02.10 ölçümüyle görünür; 01.10'un ölçülen katmanı yazılmış bir
 sayının altında olduğu için yeniden üretilmedi. (iii) ABD 2 yıllık kaynağı hâlâ
 bayat vadeli kotasyon; bulut keşfi bekliyor.
+
+**KARAR (01.10.2026, kullanıcı) — HAFTALIK TEKNİK ANALİZ BÜLTENİ YAZILMAZ;
+ARŞİV KALIR.** "Bundan sonra teknik analiz bülteni hiç yazmayalım." Son sayı
+27.09.2026. Üretim dört yerden sürüyordu ve dördü TEK commit'te kapandı, çünkü
+parçalı iniş bu dosyada kayıtlı arızayı doğururdu (duman adımlardan önce koşar,
+veri · bülten · FX birlikte durur): `teknik.yml` (pazar cron'ları) ve
+`teknik/olc.py` silindi; zincirin pazar kodu 4'ü kaldırıldı (numara yeniden
+kullanılmaz); nöbetçinin pazar teknik adımı silindi; YAZIM.md'nin teknik bölümü
+"sona erdi" notuna indi. Takvim girdisi `okura: false` YAPILMADI, SİLİNDİ:
+`karsilastir()` o alanı okumaz, iş akışı ya da cron'u olmayan bir adımı ENGEL
+sayar ve bu ENGEL hem `bulten/duman.py`de hem sayfa sınavı 16'da düşer.
+`tweet.yml` ile `yayin.yml`in pazar cron'larına dokunulmadı — haftaya bakışın
+adımları onlar (cron_no kayarsa aynı ENGEL doğar). Gecikme ölçüsü takvimden
+sürdüğü için teknik satırı kendiliğinden kalktı; fikstürler canlı takvimi
+kopyaladığı için beklentileri aynı commit'te tek pazar yayınına indi.
+Kalan tek kapı ARŞİV DÜZELTMESİ: `teknik/yaz.py` yalnız `duzeltmeler` yazar
+(yayımlanmış metin ve yayım damgası değişmez, eski kayıt silinmez); onu koşturan
+iş akışı artık olmadığı için sınaması `bulten/duman.py`de — koşturulmayan bir
+kapı, bağımlı olduğu imza değiştiği gün sessizce bozulur. Site: bölüm
+gezinmeden ve besleme listesinden çıktı (`arsiv: true`), numaralar boşluksuz
+yeniden dizildi, alt bilgide "Kaynaklar"a geçti; başlık ve ana sayfa
+tanıtımları kalktı; genel önizleme kartı yeniden çizildi.
+Arşivin kendisi de bir kusur taşıyordu ve üretim durunca KALICI olacaktı: figür
+dosyaları tarihsizdi (`/teknik/<enstrüman>-<dilim>.html`), her pazar üzerine
+yazılıyordu, yani 30.08–20.09 sayıları 27.09'un grafiklerini gösteriyordu —
+"bir ŞEKLİN tarihi" sınıfının arşivdeki hâli. Her sayının figürleri kendi ölçüm
+commit'inden (f9249ae4 · c7cc93a3 · 37b290a3 · c73f7d6e · 90cb0fb3; ölçüm
+damgalarıyla saniyesine eşleşiyor) geri alınıp `/teknik/<tarih>/` altına
+donduruldu; kayıttaki yol ölçülen katman olduğu için değişmedi, çeviri
+bileşende. Ölçüldü: her sayının figürü kendi cumasında bitiyor (28.08 · 04.09 ·
+11.09 · 18.09 · 25.09). Dokuz arıza enjeksiyonunun dokuzu kendi maddesinde
+yakalandı; biri ilk denemede GEÇTİ ve sebep yine MUTASYONDU — yeni kapıda yorum
+yazan bir yol olmadığı için "yorumu da kabul et" mutasyonu arızayı üretmiyordu.

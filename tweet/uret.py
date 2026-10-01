@@ -3,8 +3,9 @@
 """Tweet zinciri ÜRETİMİ — yazılmış bültenlerden, deterministik.
 
 Zincir metni yalnız YAYIMLANMIŞ içerikten kurulur: günlük/haftalık bültenin
-yazı katmanından geçmiş JSON'u ile teknik analizin yorum kapısından geçmiş
-JSON'u. Burada yeni hüküm ÜRETİLMEZ — özet cümleleri yazı katmanının kendi
+yazı katmanından geçmiş JSON'u (analiz gönderisi tweet/analiz.py'de). Haftalık
+teknik analiz 27.09.2026 sayısıyla sona erdi; onun zinciri 01.10.2026'da
+çıkarıldı (kullanıcı kararı), defterdeki ve arşivdeki kayıtları duruyor. Burada yeni hüküm ÜRETİLMEZ — özet cümleleri yazı katmanının kendi
 cümleleridir, sayılar ölçümün kendi sayılarıdır. Uydurma yok, sosyal medyada
 da yok.
 
@@ -20,7 +21,6 @@ from pathlib import Path
 BURASI = Path(__file__).resolve().parent
 KOK = BURASI.parent
 BULTENLER = KOK / "site" / "src" / "data" / "bulten"
-TEKNIKLER = KOK / "site" / "src" / "data" / "teknik"
 
 # Hesap X Premium: 280 sınırı yok, içerik TEK tweet olarak atılır (zincir
 # değil). Sınırlar teknik değil editoryal: bölüm başına kırpma + toplam tavan.
@@ -38,7 +38,6 @@ MADDE_SINIR = 330           # "Bu sabah" maddesi başına
 BU_SABAH_SINIR = 1250       # "Bu sabah" bloğunun tamamı
 OKUMA_SINIR_3 = 650         # biçim 3'te okuma
 GUNDEM_SINIR_3 = 800        # biçim 3'te konu bölümleri
-GIRIS_SINIR = 700           # teknik giriş bölümü
 
 AYLAR = ["", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz",
          "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
@@ -240,6 +239,8 @@ def _tipografi(metin: str) -> str:
 # kırpılır; not her koşulda yerinde kalır. Bültende "bülten" sözcüğü
 # kullanılmaz — o sözcük site atfı izidir ve tweet kendi başına durur.
 SORUMLULUK_BULTEN = "Ölçüm ve yorumdur; yatırım tavsiyesi değildir."
+# Analiz gönderisinin kapanışı (tweet/analiz.py). Adı teknik zincirinden kalma;
+# değiştirilirse analiz.py ile birlikte değişir.
 SORUMLULUK_TEKNIK = "Analizdir; yatırım tavsiyesi değildir."
 
 
@@ -251,15 +252,6 @@ def _kapat(govde: str, not_: str, tavan: int = TEK_TAVAN) -> str:
 def _tr_sayi(x: float, ondalik: int = 2) -> str:
     s = f"{x:+,.{ondalik}f}"
     return s.replace(",", "@").replace(".", ",").replace("@", ".")
-
-
-def _fiyat(x, ondalik: int = 2) -> str:
-    """İşaretsiz Türkçe sayı: 14641.6 → '14.641,6'."""
-    if x is None:
-        return "—"
-    nd = max(int(2 if ondalik is None else ondalik), 1)
-    s = f"{float(x):,.{nd}f}".replace(",", "@").replace(".", ",").replace("@", ".")
-    return s.rstrip("0").rstrip(",") if "," in s else s
 
 
 def _degisim_metni(x: float, birim: str) -> str:
@@ -431,57 +423,6 @@ def bulten_zinciri(b: dict) -> list[str]:
     return [_kapat("\n\n".join(bolumler), SORUMLULUK_BULTEN)]
 
 
-# ── teknik zinciri ───────────────────────────────────────────────────────────
-
-KISA_AD = {"us2y": "ABD 2Y", "us10y": "ABD 10Y", "dxy": "DXY",
-           "eurusd": "EUR/USD", "usdchf": "USD/CHF", "xu100": "BIST 100"}
-
-
-def _teknik_satir(e: dict) -> str | None:
-    d1 = (e.get("degisim") or {}).get("h1")
-    ondalik = e.get("ondalik")
-    birim = " bp" if e.get("tip") == "getiri" else "%"
-    ad = KISA_AD.get(e.get("slug"), e.get("ad", "?"))
-    parca = f"{ad} {_fiyat(e.get('son'), ondalik)}"
-    if d1 is not None:
-        parca += f" — hafta {_degisim_metni(d1, birim)}"
-    # yapı bayrağı: en bilgilendirici olanı tek kelimeyle
-    gun = (e.get("dilimler") or {}).get("gun") or {}
-    s1 = (e.get("dilimler") or {}).get("s1") or {}
-    for kaynak, ad_ in ((s1, "1s"), (gun, "günlük")):
-        y = kaynak.get("yapi") or {}
-        if y.get("sikisma"):
-            return parca + f"; {ad_} grafikte sıkışma"
-        if y.get("cift_tepe"):
-            return parca + f"; {ad_} çift tepe {_fiyat(y['cift_tepe']['seviye'], ondalik)}"
-        if y.get("cift_dip"):
-            return parca + f"; {ad_} çift dip {_fiyat(y['cift_dip']['seviye'], ondalik)}"
-    return parca
-
-
-
-
-def teknik_zinciri(t: dict) -> list[str]:
-    """Haftalık teknik analizden TEK uzun tweet (hesap Premium).
-
-    Biçim: link yok, emoji yok; enstrüman satırları sade, kapanışta kısa
-    sorumluluk notu (analizdir, tavsiye değildir)."""
-    tarih = _tr_tarih(t["tarih"])
-    DUSEN.clear()
-    giris = _site_disi(_duz(t.get("giris") or ""), "giris")
-    if not giris:
-        raise SystemExit("teknik giriş boş — tweet kurulamaz")
-    bolumler = [f"Haftalık Teknik Analiz — {tarih}", _kirp(giris, GIRIS_SINIR)]
-
-    satirlar = [s for s in (_teknik_satir(e) for e in t.get("enstrumanlar") or [])
-                if s]
-    if satirlar:
-        bolumler.append("1 saatlik, 4 saatlik ve günlük grafiklerden özet:\n"
-                        + "\n".join(satirlar))
-
-    return [_kapat("\n\n".join(bolumler), SORUMLULUK_TEKNIK)]
-
-
 # ── kaynak seçimi ────────────────────────────────────────────────────────────
 
 def yazilmis_bulten(tarih: str) -> dict | None:
@@ -490,11 +431,3 @@ def yazilmis_bulten(tarih: str) -> dict | None:
         return None
     b = json.loads(yol.read_text(encoding="utf-8"))
     return b if b.get("gundem_kaynagi") == "yazili" else None
-
-
-def yazilmis_teknik(tarih: str) -> dict | None:
-    yol = TEKNIKLER / f"{tarih}.json"
-    if not yol.exists():
-        return None
-    t = json.loads(yol.read_text(encoding="utf-8"))
-    return t if t.get("yazili") else None
