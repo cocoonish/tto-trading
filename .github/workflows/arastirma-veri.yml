@@ -1,0 +1,103 @@
+# Araştırma verisi — bir analizin GİRDİ ARŞİVİNİ bulutta indirir ve dala COMMIT eder.
+#
+# NEDEN VAR. Analizin sayıları SABİTTİR (karar 08.09.2026) ve yayımlanan her
+# sayının arşivi depoda durmalıdır ("YAYIMLANAN BİR SAYININ ARŞİVİ DEPODA
+# DURUR"). Bu oturumların koşucusu veri kaynaklarına çıkamıyor; bulut çıkıyor.
+# Şimdiye kadar iki yol vardı ve ikisi de kusurluydu: (1) keşif koşusunun
+# kaydına veri basıp elle aktarmak — kayıt aracı son 5.000 satırı veriyor ve
+# aktarım elle yapıldığı için hataya açık; (2) her analiz için ayrı bir iş
+# akışı yazmak (`indikator-veri.yml`, `ppk-arsiv.yml`) — her biri önce main'e
+# girmek zorunda, çünkü yeni bir iş akışı dalda tetiklenemiyor (21.09.2026'da
+# ölçüldü: 404). Bu iş akışı ikisinin GENEL hâlidir: herhangi bir hattın
+# `arsiv*.py` betiğini koşturur ve YALNIZ o hattın `veri/` dizinini commit eder.
+#
+# YOL KAPISI. Girdi serbest metin olduğu için ne koşacağı ölçülmeden kabul
+# edilmez: betik `Aktarılacak Projeler/<hat>/arsiv*.py` biçiminde olmalı ve
+# depoda bulunmalı; commit kapsamı betiğin yanındaki `veri/` dizinidir, başka
+# hiçbir yol sahnelenmez. Girdiler kabuğa `${{ }}` ile değil ortam
+# değişkeniyle geçer (kabuk enjeksiyonu yok).
+#
+# DAL. Tetiklendiği dala yazar. Analiz dalında koşturulur; arşiv analizle
+# birlikte main'e girer. concurrency grubu dala özgü: veri.yml'in main'e
+# yazdığı otomatik commit'lerle yarışmaz.
+#
+# BÜTÇE (CLAUDE.md — bir işin bütçesi adımlarının toplamının üstünde durur):
+# kurulum 3 + betik 22 + commit 2 = 27 ≤ 30. Betiğin içindeki `timeout 21m`
+# adım sınırından önce keser, böylece Commit adımı her durumda koşar.
+
+name: Araştırma verisi
+
+on:
+  workflow_dispatch:
+    inputs:
+      betik:
+        description: 'Arşiv betiği (Aktarılacak Projeler/<hat>/arsiv*.py)'
+        type: string
+        required: true
+      paketler:
+        description: 'Ek pip paketleri (boşlukla ayrık; ör. yfinance)'
+        type: string
+        default: ''
+
+concurrency:
+  group: arastirma-veri-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  arsiv:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    env:
+      BETIK: ${{ inputs.betik }}
+      PAKETLER: ${{ inputs.paketler }}
+      PYTHONPATH: ${{ github.workspace }}/ortak
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Yol kapısı
+        run: |
+          case "$BETIK" in
+            "Aktarılacak Projeler/"*/arsiv*.py) ;;
+            *) echo "::error::Yalnız 'Aktarılacak Projeler/<hat>/arsiv*.py' koşulabilir: $BETIK"; exit 1;;
+          esac
+          case "$BETIK" in
+            *..*) echo "::error::Yolda '..' olamaz: $BETIK"; exit 1;;
+          esac
+          if [ ! -f "$BETIK" ]; then echo "::error::Betik yok: $BETIK"; exit 1; fi
+          if ! printf '%s' "$PAKETLER" | grep -Eq '^[A-Za-z0-9._=<> -]*$'; then
+            echo "::error::Paket listesinde izin verilmeyen karakter: $PAKETLER"; exit 1
+          fi
+      - name: Bağımlılıklar
+        timeout-minutes: 3
+        run: pip install --quiet requests pandas numpy $PAKETLER
+      # -u ŞART: Python stdout'u tty olmayan yere tamponluyor; uzun bir
+      # indirmede ilerleme görünmez ve iptalle birlikte tampon da gider.
+      - name: Arşivi indir
+        timeout-minutes: 22
+        run: |
+          cd "$(dirname "$BETIK")"
+          timeout 21m python3 -u "$(basename "$BETIK")"
+      - name: Commit
+        if: always()
+        timeout-minutes: 2
+        run: |
+          VERI="$(dirname "$BETIK")/veri"
+          git config --global user.name  "tto-veri"
+          git config --global user.email "bot@users.noreply.github.com"
+          git add -- "$VERI" || true
+          if git diff --cached --quiet; then
+            echo "arşiv değişmedi — commit yok"
+            exit 0
+          fi
+          git commit -m "araştırma verisi: $(basename "$(dirname "$BETIK")") $(date -u +'%Y-%m-%d %H:%M') arşivi (otomatik)"
+          for deneme in 1 2 3 4 5; do
+            git pull --rebase --autostash || true
+            if git push; then echo "push tamam (deneme $deneme)"; break; fi
+            if [ "$deneme" = "5" ]; then echo "::error::push beş denemede de reddedildi."; exit 1; fi
+            echo "::warning::push reddedildi (deneme $deneme) — yeniden deneniyor."
+            sleep $((deneme * 5))
+          done
