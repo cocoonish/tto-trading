@@ -160,7 +160,7 @@ def panosu() -> list[dict]:
                      "REDK'in uzun dönem ortalamasının üstünde olması TL'nin reel "
                      "olarak değerli, yani dış dengeye baskı yapan tarafta olduğunu "
                      "söyler.") if sapma10 is not None else ("", "")
-        s.append(Satir("Reel efektif kur", round(redk, 1), "endeks",
+        s.append(Satir("Reel efektif kur", round(redk, 1), "",
                        "TÜFE bazlı REDK", e, a,
                        konum=redk_konum(sapma10), tarih=g_redk, ondalik=1))
 
@@ -206,7 +206,9 @@ def panosu() -> list[dict]:
         aciklama = ("Brüt rezervin ne kadarının borçlanılmamış ve swap'a bağlı olmayan "
                     "kısım olduğu — rezervin miktarı değil kalitesi.")
         if altin_pay is not None:
-            aciklama += f" Brüt rezervin {_yuzde(altin_pay, 1)}'i altın."
+            # Sayıya sabit ek yazılmaz ("%63,2'i" — doğrusu "%63,2'si"); ekin
+            # sayının okunuşuna uyması gerekmeyen kuruluş seçilir.
+            aciklama += f" Brüt rezervde altın payı {_yuzde(altin_pay, 1)}."
         s.append(Satir("Rezerv kalitesi", round(v, 1), "%",
                        "swap hariç net rezerv / brüt rezerv", "", aciklama, tarih=g_rezerv, ondalik=1))
 

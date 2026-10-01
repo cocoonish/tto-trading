@@ -68,6 +68,8 @@ from tavsiye_dili import TAVSIYE  # noqa: E402
 # Bültenin OKURA GÖRÜNEN yazı alanları. Liste elle tutuluyor ama tek yerde
 # duruyor ve ölçütün kapsamı buradan okunuyor; yeni bir yazı alanı eklendiğinde
 # buraya da eklenmezse dil denetimi onu göremez.
+SOZ_AZAMI_KELIME = 80      # biçim 3: bugün açılan söz kaydının `soz` alanı (UYARI)
+
 YAZI_ALANLARI = ("gundem", "yorum", "temalar", "notlar", "one_cikanlar",
                  "ozet", "sonuclar", "veri_gunlugu", "manset")
 
@@ -1969,6 +1971,17 @@ class Denetim:
             return
         self._karne(defter)
         bugun = str(self.b.get("tarih") or "")
+        # SÖZ KISA YAZILIR (biçim 3): kayıt sayfada tam metniyle basılıyor ve
+        # 01.10.2026 önizlemesinde bugün açılan tek bir kaydın sözü 160
+        # kelimeydi — yazının olgularını ikinci kez anlatıyordu. Tez, ölçüt,
+        # vade; ayrıntı yazıda. UYARI, yalnız bugün açılan kayda.
+        if int(self.b.get("surum") or 2) >= 3:
+            uzun = [(k.get("konu", ""), _kelime(k.get("soz", "")))
+                    for k in defter.get("kayitlar", [])
+                    if str(k.get("acilis", ""))[:10] == bugun and _kelime(k.get("soz", "")) > SOZ_AZAMI_KELIME]
+            for konu, n in uzun:
+                self.uyari.append(f"Söz kaydı uzun: '{konu[:60]}' {n} kelime (en çok {SOZ_AZAMI_KELIME}) — "
+                                  "tez, çürütme ölçütü ve vade; olgular yazıda kalır.")
         acik = [k for k in defter.get("kayitlar", []) if k.get("durum") == "acik"]
         vadeli = [k for k in acik if str(k.get("vade", "9999")) <= bugun]
         if not vadeli:

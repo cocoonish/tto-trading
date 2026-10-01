@@ -62,6 +62,9 @@ def _pano_baglam() -> dict[tuple[str, str], tuple[str, str]]:
 # de, farkın kıyas noktası da bu saatten okunur — yoksa haftalık bir seri,
 # hattın günlük saati ilerlediği için her gün "değişmedi" görünür.
 GOSTERGELER = [
+    # Farkı YÜZDE (bkz. GOSTERGE_YUZDE_FARK): şerit "49,00 +0,03" (kuruş),
+    # piyasa tablosu "+%0,06" basıyordu. Hassasiyet hattın yazdığı kadar (iki
+    # hane): dört hane yazmak "49,0100" gibi sahte bir hassasiyet ilan ederdi.
     ("usdtry-deval", "kur", "USD/TRY", "", 2, ""),
     ("usdtry-deval", "d1a", "1 aylık yıllıklandırılmış deval. hızı", "%", 1, ""),
     ("tcmb-net-rezerv", "h_net", "Net rezerv", "mlr USD", 1, "h_tarih"),
@@ -81,18 +84,20 @@ GOSTERGELER = [
     ("kredi-parasal", "g_ar_13y", "Kredi büyümesi (13h yıl., kur arınd.)", "%", 1, ""),
     ("hazine-ihrac", "maliyet_son", "Son ihale maliyeti", "%", 2, ""),
     ("yabanci-pozisyon", "toplam_4h", "Yabancı 4 haftalık net akım", "mn USD", 0, ""),
-    ("try-reer", "redk", "Reel efektif kur", "endeks", 1, ""),
-    # FX haber-duyarlılık endeksi — sepet spread'i (güvenli liman tonu eksi
-    # risk varlığı tonu). Hattın tek TEMİZ sayısal ölçüsü budur; uçlar
-    # (`ust1_deger`, `alt1_deger`) panoya GİRMEZ, çünkü her gün başka bir
-    # varlığa aittir ve sürüm kıyası dünkü gümüşle bugünkü altını kıyaslardı.
-    # Saati kendi alanından okunur: spread GDELT haftalık arşivinden gelir ve
-    # hattın günlük `_tarih`inden birkaç gün geridedir.
-    ("fx-haber-endeksi", "spread", "FX haber endeksi — sepet spread'i", "", 3, "spread_tarih"),
+    # Endeks birimsizdir ("103,9 endeks · −0,7 endeks" okunmuyordu).
+    ("try-reer", "redk", "Reel efektif kur", "", 1, ""),
+    # FX haber endeksinin sepet spread'i 01.10.2026'da şeritten ÇIKTI: birimsiz
+    # ve ölçeksiz bir sayı ("0,003 −0,030") bir trader için okunmuyordu. Haber
+    # tonunun olağandışı hareketi (|z| ≥ 2) olağandışı bölümünde cümleyle,
+    # endeksin kendisi panosunda duruyor.
 ]
 
+# Farkı YÜZDE yazılan göstergeler (fiyat seviyeleri): bir kurun farkı kuruş
+# değil yüzdedir. Fark önceki değere bölünerek hesaplanır.
+GOSTERGE_YUZDE_FARK = {("usdtry-deval", "kur")}
 
-def gostergeler(haftalik: bool = False) -> list[dict]:
+
+def gostergeler(haftalik: bool = False, esik: datetime | None = None) -> list[dict]:
     """Sabah panosu. Haftalıkta kıyas noktası bir HAFTA öncesidir.
 
     Haftalık bülten "geçen hafta bu saatte neredeydik" diye sorar; sürüm kıyası
@@ -121,6 +126,16 @@ def gostergeler(haftalik: bool = False) -> list[dict]:
                 kiyas = "son yayım (bir haftalık tarihçe yok)"
         eski = (onc or {}).get("d", {}).get(anahtar) if onc else None
         fark = (v - eski) if isinstance(eski, (int, float)) else None
+        yuzde_fark = (hat, anahtar) in GOSTERGE_YUZDE_FARK
+        if yuzde_fark and fark is not None:
+            fark = (v / eski - 1) * 100 if eski else None
+        fond = 2 if yuzde_fark else ond
+        # BUGÜN İLERLEDİ Mİ (01.10.2026): 30.09 şeridindeki 17 göstergenin 10'u
+        # bir önceki sayıdakiyle birebir aynıydı (değer, fark, tarih) ve 18.09
+        # tarihli "net rezerv −6,5" beş sayıdır bugünün haberi gibi kırmızı
+        # basılıyordu. Fark değişmedi; sayfa ilerlemeyen göstergeyi soluk ve
+        # farksız basar. Haftalık sayının kıyası zaten bir hafta öncesidir.
+        bugun_yeni = True if haftalik else gozlem.bugun_yeni(hat, d, anahtar, tarih_alani, esik)
         # BAĞLAM: ölçülemiyorsa alan HİÇ yazılmaz (uydurma ortalama yok).
         b_ad, b_metin = "", ""
         b = _pano_baglam().get((hat, anahtar))
@@ -135,9 +150,12 @@ def gostergeler(haftalik: bool = False) -> list[dict]:
                     "metin": olay_m._s(float(v), ond),
                     # Yuvarlamadan sonra sıfır kalan fark "−0,00" diye görünüyordu;
                     # değişmemiş bir seriyi değişmiş gibi göstermek bültenin işi değil.
-                    "fark": round(float(fark), ond) if fark is not None else None,
-                    "fark_metin": (("+" if fark > 0 else "−") + olay_m._s(abs(fark), ond))
-                                  if (fark is not None and round(abs(float(fark)), ond) > 0) else "",
+                    "fark": round(float(fark), fond) if fark is not None else None,
+                    "fark_metin": (("+" if fark > 0 else "−") + olay_m._s(abs(fark), fond))
+                                  if (fark is not None and round(abs(float(fark)), fond) > 0) else "",
+                    # Farkın birimi: "%" yalnız yüzde farklı göstergede (kur).
+                    **({"fark_birim": "%"} if yuzde_fark else {}),
+                    "bugun_yeni": bool(bugun_yeni),
                     "veri_tarihi": v_tarih,
                     "kiyas": kiyas,
                     "kiyas_tarihi": (gozlem.anahtar_tarihi(onc.get("d", {}), anahtar,
@@ -363,6 +381,25 @@ def temalar() -> dict:
     return d
 
 
+def onceki_olcum_ani(tarih: date, haftalik: bool = False) -> datetime | None:
+    """Bir önceki sayının ölçüm anı (UTC naif) — bugünün olaylarının kıyas
+    çizgisi. Haftalık sayı bir önceki HAFTALIK sayıya bakar: haftanın
+    yayımlarını anlatır. Okunamayan dosya atlanır; hiç sayı yoksa None (ilk
+    sayı, eski davranış)."""
+    for p in sorted((p for p in CIKTI.glob("????-??-??.json") if p.stem < tarih.isoformat()),
+                    reverse=True):
+        try:
+            b = json.loads(p.read_text(encoding="utf-8"))
+        except Exception:                                      # noqa: BLE001
+            continue
+        if haftalik and not b.get("haftalik"):
+            continue
+        an = gozlem._an(b.get("olusturma") or "")
+        if an is not None:
+            return an
+    return None
+
+
 def uret(tarih: date | None = None, haber_tara: bool = True,
          takvim_ufku: int | None = None, tur: str = "gunluk") -> dict:
     """tur: "gunluk" (hafta içi sabah) | "haftalik" (pazar akşamı, haftaya bakış)."""
@@ -376,8 +413,10 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         if d and gozlem.kaydet(hat, d):
             yazilan.append(hat)
 
-    # 2) olaylar
-    olaylar = olay_m.topla()
+    # 2) olaylar — "yeni" bir önceki sayının ölçüm anına göre (bkz. gozlem.bugun_yeni)
+    haftalik = tur == "haftalik"
+    esik = onceki_olcum_ani(tarih, haftalik)
+    olaylar = olay_m.topla(esik=esik, haftalik=haftalik)
     grup_adi = dict(ayar.GRUPLAR)
 
     def dk(o):
@@ -392,14 +431,22 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
     gunluk = [dk(o) for o in olaylar if o.seviye == "bilgi" or
               (o.seviye == "dikkat" and o.grup == "diger")]
 
+    # "Dünden bu yana gelen veriler" (eski "Hat hat değişim") yalnız VERİ
+    # yayımlarını taşır. İki grup dışarıda (01.10.2026): `diger` (gecikme
+    # satırı — boru hattının durumu; veri günlüğünde zaten var ve aynı satır
+    # sayfada iki kez basılıyordu) ve `haber` (haber tonu — piyasa duyarlılığı,
+    # yayım değil; sayfa onu olağandışı hareketlerin yanında basar).
+    GRUP_DISI = {"diger", "haber"}
     gruplar = []
     for gid, gbaslik in ayar.GRUPLAR:
+        if gid in GRUP_DISI:
+            continue
         icerik = [dk(o) for o in olaylar if o.grup == gid and o.seviye in ("onemli", "dikkat")]
         if icerik:
             gruplar.append({"id": gid, "baslik": gbaslik, "olaylar": icerik})
+    haber_tonu = [dk(o) for o in olaylar if o.grup == "haber" and o.seviye in ("onemli", "dikkat")]
 
     # 3) takvim — haftalık bültende kapsam genişler
-    haftalik = tur == "haftalik"
     asgari = ayar.TAKVIM_HAFTALIK_ASGARI_ONEM if haftalik else ayar.TAKVIM_ASGARI_ONEM
     kayitlar = takvim_m.topla(ufuk, asgari)
     beklenti_iliştir(kayitlar)
@@ -446,7 +493,7 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
             # kilit_gelismeler()'i ikinci kez çağırmak zenginleştirilmiş metinle
             # yeniden puanlıyor, üst düzey listede eski puan kalıyor ve aynı
             # haber aynı dosyada iki ayrı önem puanıyla yazılıyordu.
-            bolumler, kilit = haber_m.bolumle(h)
+            bolumler, kilit = haber_m.bolumle(h, onceki_kilit=_onceki_kilit(tarih.isoformat()))
             haberler = [asdict(x) for x in h]
         except Exception as e:                                  # noqa: BLE001
             okunamayan = [f"haber taraması düştü: {type(e).__name__}"]
@@ -458,7 +505,7 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         # DİLİMLİ damga. Koşucu UTC'de çalışıyor ve eski dilimsiz damga sayfada
         # İstanbul saati gibi basılıyordu ("04:30" — 07:30'un UTC hâli).
         "olusturma": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "gostergeler": gostergeler(haftalik),
+        "gostergeler": gostergeler(haftalik, esik),
         # Rejim panosu: gösterge şeridi seviyeyi verir, bu pano seviyelerin
         # BİRLİKTE ne anlama geldiğini. Her satır iki ölçülen büyüklüğün farkı
         # ve o farkın işareti rejimi tarif ediyor.
@@ -468,6 +515,8 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         "one_cikanlar": one_cikan,
         "notlar": notlar,
         "gruplar": gruplar,
+        # Haber tonunun ≥2σ hareketleri (biçim 3 sayfası olağandışı blokta basar).
+        "haber_tonu": haber_tonu,
         "veri_gunlugu": gunluk,
         # Söz defteri: bültenin verdiği sözlerin okura görünen hâli. Defter
         # zaten tutuluyordu ama yalnız yazı katmanı ve denetim görüyordu;
@@ -641,6 +690,23 @@ def ozet_yaz(b: dict) -> str:
         satir.append(f"    · {o['metin']}")
     return "\n".join(satir)
 
+
+
+def _onceki_kilit(bugun: str) -> set[str]:
+    """Bir önceki sayının kilit haberlerinin kimlikleri (haber.kilit_imza)."""
+    import haber as _h
+    try:
+        onceki = [d for d in sorted(CIKTI.glob("????-??-??.json")) if d.stem < str(bugun)]
+        if not onceki:
+            return set()
+        b = json.loads(onceki[-1].read_text(encoding="utf-8")) or {}
+    except Exception:                                          # noqa: BLE001
+        return set()
+    out: set[str] = set()
+    for m in ((b.get("haberler") or {}).get("kilit") or []):
+        if isinstance(m, dict):
+            out |= _h.kilit_imza(m.get("baslik", ""), m.get("baglanti", ""))
+    return out
 
 
 def _onceki_izleme(bugun: str) -> dict | None:

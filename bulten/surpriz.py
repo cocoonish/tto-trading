@@ -175,8 +175,28 @@ def _tepki(piyasa: dict, adlar: tuple[str, ...], yas: int) -> dict:
     return {"pencere": etiket, "kalemler": kalemler} if kalemler else {}
 
 
+def _saati_gelmedi(k, g: date, simdi: datetime | None = None) -> bool:
+    """Bugünün olayının SAATİ henüz gelmedi mi (İstanbul saati).
+
+    01.10.2026'da ölçüldü: 14:30'da yayımlanacak iki TCMB yayımı 07:47'deki
+    ölçümde "vakti geçmiş olay" listesine girdi ve "yayımlandı; sayı bu ölçüme
+    henüz girmedi" diye basıldı — yayım olmamıştı. Saati gelmemiş olay
+    sonuç listesine girmez; "Bugün" takviminde zaten duruyor. Saati
+    bilinmeyen bugünkü olay listede kalır (gün içinde ne zaman olduğu
+    bilinmiyor; "henüz yok" doğru cevaptır)."""
+    from zoneinfo import ZoneInfo
+    simdi = simdi or datetime.now(ZoneInfo("Europe/Istanbul"))
+    if g != simdi.date():
+        return False
+    saat = str((getattr(k, "saat", None) if not isinstance(k, dict) else k.get("saat")) or "")
+    m = re.match(r"^(\d{1,2}):(\d{2})$", saat.strip())
+    if not m:
+        return False
+    return (simdi.hour, simdi.minute) < (int(m.group(1)), int(m.group(2)))
+
+
 def gecmis_olaylar(kayitlar: list, piyasa: dict, bugun: date | None = None,
-                   geri_gun: int = 7) -> list[dict]:
+                   geri_gun: int = 7, simdi: datetime | None = None) -> list[dict]:
     """Son `geri_gun` içinde vakti geçmiş olaylar için sonuç satırı.
 
     Girdi olarak bu koşunun takvimi verilir; önce arşive eklenir, sonra geriye
@@ -189,6 +209,8 @@ def gecmis_olaylar(kayitlar: list, piyasa: dict, bugun: date | None = None,
     for k in arsiv_oku().values():
         g = _gun(getattr(k, "tarih", None) or (k.get("tarih") if isinstance(k, dict) else None))
         if g is None or not (0 <= (bugun - g).days <= geri_gun):
+            continue
+        if _saati_gelmedi(k, g, simdi):
             continue
         olay = getattr(k, "olay", None) or (k.get("olay") if isinstance(k, dict) else "")
         beklenti = getattr(k, "beklenti", "") or (k.get("beklenti", "") if isinstance(k, dict) else "")
@@ -238,7 +260,9 @@ def gecmis_olaylar(kayitlar: list, piyasa: dict, bugun: date | None = None,
             elif not geldi:
                 # Yayım oldu ama bizim hattımıza henüz düşmedi. Hattın elindeki
                 # eski sayıyı "gerçekleşme" diye yazmak yanlış olurdu.
-                satir["durum"] = "veri henüz hatta düşmedi"
+                # Okur dili (01.10.2026): "hatta düşmedi" bizim boru hattımızın
+                # adıydı. Okura söylenen: yayım oldu, sayısı bu ölçümde yok.
+                satir["durum"] = "yayımlandı; sayı bu ölçüme henüz girmedi"
                 satir["veri_tarihi"] = v_tarih
             else:
                 onc = gozlem.onceki_surum_anahtar(t.hat, t.anahtar, t.tarih_alani, v_tarih)
@@ -255,10 +279,12 @@ def gecmis_olaylar(kayitlar: list, piyasa: dict, bugun: date | None = None,
                 tp = _tepki(piyasa, t.tepki, yas)
                 if tp:
                     satir["tepki"] = tp
-        # Takip edilmeyen ve beklentisi de olmayan olay bültende yer kaplamaz:
-        # "şu veri çıktı, hakkında söyleyecek bir şeyimiz yok" satırı okura bir
-        # şey vermez. Takip edilen ya da beklenti yayımlanmış olanlar kalır.
-        if satir["durum"] != "takip dışı" or beklenti:
+        # Sonuç veremeyen satır bültende yer kaplamaz (01.10.2026): "takip
+        # dışı" ve "hat bu büyüklüğü üretmiyor" okura bir sonuç vermiyordu ve
+        # arşivdeki 155 satırın 74'ü buydu ("Fed (FOMC) faiz kararı — takip
+        # dışı" 6 sayıda basıldı). Beklentisi olsa da kalmaz: beklentinin
+        # gerçekleşmeyle kıyası yapılamıyorsa satır bir şey söylemez.
+        if satir["durum"] not in ("takip dışı", "hat bu büyüklüğü üretmiyor"):
             out.append(satir)
     out.sort(key=lambda s: s["tarih"], reverse=True)
     return out

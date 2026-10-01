@@ -82,6 +82,8 @@ def _kayit(k: dict, bugun: date) -> dict:
         "durum": k.get("durum", ""),
         "acilis": k.get("acilis", ""),
         "vade": k.get("vade", ""),
+        # Kapanış günü (yazı katmanı kaydı kapatırken yazar; eski kayıtlarda yok).
+        "kapanis": k.get("kapanis", ""),
         "isabet": ISABET.get(str(k.get("isabet", "")).lower(), ""),
         # Negatif = vadesi geçmiş. Okurun "bu söz gecikti mi" sorusu bu tek sayıda.
         "gun_kalan": (vade - bugun).days if vade else None,
@@ -146,7 +148,18 @@ def ozet(bugun_metni: str = "", onceki_izleme: dict | None = None) -> dict:
                 kapanan.append(k)
 
     # DEĞİŞEN / DURAN ayrımı. Üç ölçüt veriden türer, dördüncüsü önceki sayıdan.
-    degisen_konu = _degisenler(kayitlar, onceki_izleme)
+    #
+    # KIYAS NORMALİZE KAYITLA YAPILIR (01.10.2026). `_degisenler` HAM defter
+    # kaydını önceki sayının BASILMIŞ (normalize) kaydıyla kıyaslıyordu: ham
+    # isabet "tutmadi", basılan "tutmadı" — imza her gün farklı çıktı ve
+    # kapanmış iki kayıt (437 kelime) 28–30.09'da her sabah "değişen" diye
+    # tam metniyle basıldı. İki taraf da aynı süzgeçten (`_kayit`) geçer.
+    degisen_konu = _degisenler([_kayit(h, bugun) for h in kayitlar], onceki_izleme)
+    # Önceki sayıda zaten KAPALI basılan kayıtlar: "bugün kapandı" ölçüsünün
+    # veriden türeyen tabanı (kapanış günü yazılmamış eski kayıtlar için).
+    onceki_kapali = ({str(k.get("konu")) for k in (onceki_izleme.get("kapanan") or [])
+                      if isinstance(k, dict)}
+                     if isinstance(onceki_izleme, dict) else None)
     for k in acik + kapanan:
         metin_degisti = str(k.get("konu") or "") in degisen_konu
         kalan = k.get("gun_kalan")
@@ -156,7 +169,19 @@ def ozet(bugun_metni: str = "", onceki_izleme: dict | None = None) -> dict:
             # yapmıyordu ve 17 kapanan kaydın 16'sını "değişen" sayıyordu,
             # yani tekrarın büyük kısmı yerinde kalıyordu. Kapanan kayıt
             # yalnız YENİ kapandıysa ya da metni değiştiyse öne çıkar.
-            yeni_mi = kalan is not None and -kalan <= YENI_PENCERE
+            #
+            # "YENİ KAPANDI" KAPANIŞ GÜNÜNDEN TÜRER, VADEDEN DEĞİL (01.10.2026):
+            # vadesinden ÖNCE kapanan bir kayıt ("Fon krizinin bedeli…", vade
+            # 01.10) vade gelene kadar her gün `-kalan <= 1` ile "yeni" sayıldı.
+            # Sıra: kayıttaki kapanış günü → önceki sayıda kapalı mıydı → yoksa
+            # "yeni" denmez (ölçemediğimiz bir değişikliği işaretlemeyiz).
+            kap = _gun(k.get("kapanis", ""))
+            if kap is not None:
+                yeni_mi = 0 <= (bugun - kap).days <= YENI_PENCERE
+            elif onceki_kapali is not None:
+                yeni_mi = str(k.get("konu") or "") not in onceki_kapali
+            else:
+                yeni_mi = False
             vade_yakin = False
         else:
             yeni_mi = (k.get("yas_gun") is not None and k["yas_gun"] <= YENI_PENCERE)

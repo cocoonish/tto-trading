@@ -173,6 +173,20 @@ RITIM = {
     "el-nino": 35,              # aylık ONI + aylık TÜFE
 }
 
+# GÜNLÜK RİTİMLİ HAT sınırı (gün). RITIM eşikleri iki kümede toplanıyor (4–6
+# günlük seriler · 11+ haftalık ve seyrek yayımlar) ve sınır aradaki boşlukta
+# ölçülerek kondu (duman `_izlem_kapsami`). İki tüketicisi var: yayım bayrağı
+# günlük seriye konmaz, ve "yeni veri" satırı günlük hat için yazılmaz — her
+# iş günü ilerleyen bir hattın "yeni veri" satırı haber değildir (son 12 sayıda
+# 108 veri günlüğü satırının 95'i bu sekiz hattandı; "Orta Vadeli Program:
+# yeni veri" her sabah basılıyordu).
+GUNLUK_RITIM_GUN = 8
+
+# Aylık yazımla (AA.YYYY) damgalanan ama ÇEYREKLİK yayımlanan hatlar: dönem
+# okura "2026 Ç2" diye yazılır, çeyreğin son ayının adıyla değil ("Haz" yazmak
+# ikinci çeyrek büyümesini haziran verisi gibi gösterirdi).
+CEYREKLIK_HAT = {"buyume"}
+
 # Bir hattın ozet.json'u birden fazla SAAT taşıyabilir: aynı dosyada günlük bir
 # seri ile haftalık bir seri yan yana durur. RITIM yalnız ana saati (`_tarih`)
 # denetler; ana saat her iş günü ilerlediği için içindeki haftalık serinin
@@ -416,8 +430,10 @@ IZLEMLER: list[Izlem] = [
           "azalis", "Hazinenin fiilî borçlanma maliyeti.", "borclanma", yayim=True),
     Izlem("hazine-ihrac", "b2c_son", "Son ihale teklif/karşılama oranı", "kat", 2, "delta", 0.4, 0.8, "artis",
           "Talebin gücü; 1,5'in altı zayıf ihale demektir.", "borclanma"),
-    Izlem("hazine-ihrac", "n_ihale", "Toplam ihale sayısı", "adet", 0, "delta", 0.5, None, "",
-          "Artması yeni ihale sonucu geldiği anlamına gelir.", "borclanma"),
+    # "Toplam ihale sayısı" izlemi 01.10.2026'da KALDIRILDI: bizim ihale veri
+    # setimizin satır sayısıydı, ekonomik bir büyüklük değil ("464 adet → 466
+    # adet" bir sayaçtı) ve 16–27.09 arasında 10 sayıda basıldı. İhalenin
+    # kendisi maliyet, vade ve teklif/karşılama satırlarıyla duyuruluyor.
     Izlem("hazine-ihrac", "wam_son", "Yeni ihraçların ağırlıklı ortalama vadesi", "yıl", 2, "delta", None, 1.0,
           "artis", "", "borclanma", yayim=True),
 

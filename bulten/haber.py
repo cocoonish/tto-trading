@@ -379,16 +379,31 @@ def onem_puani(h: Haber) -> float:
     return round(puan, 2)
 
 
-def kilit_gelismeler(haberler: list[Haber]) -> list[Haber]:
-    """Eşiği aşan, bültenin başında ayrıntılı işlenecek maddeler."""
+def kilit_imza(baslik: str, baglanti: str = "") -> set[str]:
+    """Bir haberin kimlikleri: bağlantısı ve sadeleştirilmiş başlığı."""
+    sade = re.sub(r"[^0-9a-zçğıöşü]+", " ", str(baslik or "").lower()).strip()
+    return {x for x in (str(baglanti or "").strip(), sade) if x}
+
+
+def kilit_gelismeler(haberler: list[Haber], onceki: set[str] | None = None) -> list[Haber]:
+    """Eşiği aşan, bültenin başında ayrıntılı işlenecek maddeler.
+
+    ÖNCEKİ SAYININ KİLİT HABERİ YENİDEN SEÇİLMEZ (01.10.2026): tarama penceresi
+    72 saat olduğu için aynı haber üç sabah üst üste kilit listesine giriyordu
+    (28–30.09'da aynı Bitcoin ETF başlığı). `onceki`: bir önceki sayının kilit
+    listesinin kimlikleri (bkz. kilit_imza) — haber yine bölümünde durur,
+    yalnız "kilit" sayılmaz."""
     for h in haberler:
         h.onem = onem_puani(h)
-    aday = [h for h in haberler if h.onem >= KILIT_ESIK]
+    onceki = onceki or set()
+    aday = [h for h in haberler if h.onem >= KILIT_ESIK
+            and not (kilit_imza(h.baslik, h.baglanti) & onceki)]
     aday.sort(key=lambda h: (h.onem, h.zaman or ""), reverse=True)
     return aday[:KILIT_SINIRI]
 
 
-def bolumle(haberler: list[Haber], zengin: int = 26) -> tuple[list[dict], list[dict]]:
+def bolumle(haberler: list[Haber], zengin: int = 26,
+            onceki_kilit: set[str] | None = None) -> tuple[list[dict], list[dict]]:
     """Haberleri sayfadaki bölümlere dağıt, sonra GÖRÜNECEK olanları zenginleştir.
 
     Sıra önemli: önce zenginleştirip sonra seçmek, kaynağından okunan özetlerin
@@ -396,7 +411,7 @@ def bolumle(haberler: list[Haber], zengin: int = 26) -> tuple[list[dict], list[d
     maddelerin görüneceği belli oluyor, istek yalnız onlar için yapılıyor.
     """
     out, gorunen = [], []
-    kilit = kilit_gelismeler(haberler)
+    kilit = kilit_gelismeler(haberler, onceki_kilit)
     kilit_kimlik = {id(h) for h in kilit}
     for bid, baslik, bolge, alan in HABER_BOLUMLERI:
         if alan == "kilit":

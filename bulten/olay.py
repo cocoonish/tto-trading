@@ -15,12 +15,17 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
-from ayar import IZLEMLER, RITIM, RITIM_ALAN, GRUPLAR, Izlem, HAT_ADI
+from ayar import IZLEMLER, RITIM, RITIM_ALAN, GRUPLAR, Izlem, HAT_ADI, GUNLUK_RITIM_GUN
 import gozlem
 import sys as _sys
 from pathlib import Path as _Path
 _sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "ortak"))
 from bicim import sayi as _sayi, yuzde as _yuzde  # noqa: E402  — sayı yazımı TEK yerden (ortak/bicim.py)
+
+# Haber tonu olayının σ tabanı: denetimin anılma zorunluluğuyla AYNI eşik
+# (denetim.OLAGANDISI_SIGMA, biçim 3). İki ayrı sayı bir gün ayrışırsa
+# yazar sayfada görmediği bir hareketi anmaya zorlanır ya da tersi.
+HABER_TONU_SIGMA = 2.0
 
 
 @dataclass
@@ -78,24 +83,83 @@ def _fark_yaz(v: float, birim: str, ondalik: int) -> str:
     return f"{_sayi(v, ondalik)} {b}".strip()
 
 
-def _delta_cumlesi(iz: Izlem, eski: float, yeni: float, fark: float) -> str:
-    """Delta olayının cümlesi (sonundaki nokta ve bağlam hariç).
+# VERİ NOTU KALIBI (01.10.2026): "{ad} ({dönem}): {seviye} (önceki {x}; {±fark})".
+#
+# Eski kalıp önce farkı, sonra iki seviyeyi yazıyordu ve birimi üç kez
+# basıyordu ("YP mevduatı 2,7 mlr USD arttı: 228,1 mlr USD → 230,8 mlr USD");
+# 143 ölçüm cümlesinin 105'i böyleydi ve HİÇBİRİ verinin hangi döneme ait
+# olduğunu söylemiyordu — 30.09'da okur 18.09 haftasının verisini bugünün
+# değişimi sanıyordu. Bir piyasa notunda seviye önce gelir, kıyas parantezde,
+# dönem adın yanında; birim bir kez yazılır (yüzde seviyenin farkı puandır).
+AY_KISA = ("Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara")
+
+
+def donem_yaz(t: str, hat: str = "", bugun: datetime | None = None) -> str:
+    """Veri tarihinin okura yazımı: aylık "Ağu" · çeyreklik "2026 Ç2" ·
+    günlük/haftalık "18.09". Yıl, bültenin yılından farklıysa yazılır.
+    Tanınmayan yazım olduğu gibi kalır (uydurma dönem yazılmaz)."""
+    import re as _re
+    from ayar import CEYREKLIK_HAT
+    yil_simdi = (bugun or datetime.now()).year
+    t = str(t or "").strip()
+    m = _re.match(r"^(\d{2})\.(\d{4})$", t)
+    if m:
+        ay, yil = int(m.group(1)), int(m.group(2))
+        if not 1 <= ay <= 12:
+            return t
+        if hat in CEYREKLIK_HAT:
+            return f"{yil} Ç{(ay - 1) // 3 + 1}"
+        return AY_KISA[ay - 1] + ("" if yil == yil_simdi else f" {yil}")
+    m = _re.match(r"^(\d{2})\.(\d{2})\.(\d{4})$", t)
+    if m:
+        return f"{m.group(1)}.{m.group(2)}" + ("" if int(m.group(3)) == yil_simdi else f".{m.group(3)}")
+    return _surum_yaz(t)
+
+
+def _ad_donem(ad: str, donem: str) -> str:
+    """"Cari açık (12 aylık birikimli)" + "Tem" → "Cari açık (12 aylık birikimli, Tem)":
+    iki parantez yan yana okunmaz."""
+    if not donem:
+        return ad
+    if ad.endswith(")") and "(" in ad:
+        return f"{ad[:-1]}, {donem})"
+    return f"{ad} ({donem})"
+
+
+def _kiyas_sayi(v: float, birim: str, ondalik: int) -> str:
+    """Parantez içindeki önceki değer: yüzde işaretini taşır (sayının
+    parçası), öbür birimler seviyede bir kez yazıldığı için tekrarlanmaz."""
+    return _yuzde(v, ondalik) if birim == "%" else _sayi(v, ondalik)
+
+
+def _fark_isaretli(fark: float, birim: str, ondalik: int) -> str:
+    """İşaretli fark: yüzde seviyenin farkı PUAN, öbürleri birimsiz."""
+    s = _sayi(fark, ondalik, True)
+    return f"{s} puan" if birim == "%" else s
+
+
+def _delta_cumlesi(iz: Izlem, eski: float, yeni: float, fark: float,
+                   donem: str = "", ek: str = "") -> str:
+    """Delta olayının cümlesi (sonundaki nokta hariç).
 
     Eksi bir dengede "azaldı" aritmetik olarak doğru, okurun diliyle TERSTİR
     (bkz. ayar.Izlem.eksi_ad): iki uç da eksiyse cümle açığın adıyla ve mutlak
     değerlerle kurulur; işaret değişirse fiil işaretin kendisini söyler.
-    Sayılar Olay kaydında işaretleriyle durur — değişen yalnız okunuş."""
-    fy = _fark_yaz(abs(fark), iz.birim, iz.ondalik)
+    Sayılar Olay kaydında işaretleriyle durur — değişen yalnız okunuş.
+    `ek` (bağlam ölçüsü) parantezin İÇİNE girer: tek günlük okumayı okuyan
+    biri ortalamayı aynı satırda görmeli."""
+    b, o = iz.birim, iz.ondalik
+    son = f"; {ek}" if ek else ""
     if iz.eksi_ad and eski < 0 and yeni < 0:
         fiil = "genişledi" if yeni < eski else "daraldı"
-        return (f"{iz.eksi_ad} {fy} {fiil}: "
-                f"{_sev(abs(eski), iz.birim, iz.ondalik)} → {_sev(abs(yeni), iz.birim, iz.ondalik)}")
+        return (f"{_ad_donem(iz.eksi_ad, donem)}: {_sev(abs(yeni), b, o)} "
+                f"(önceki {_kiyas_sayi(abs(eski), b, o)}; {_fark_yaz(abs(fark), b, o)} {fiil}{son})")
     if iz.eksi_ad and (eski < 0) != (yeni < 0):
         fiil = "artıdan eksiye döndü" if yeni < 0 else "eksiden artıya döndü"
-        return (f"{iz.ad} {fiil}: "
-                f"{_sev(eski, iz.birim, iz.ondalik)} → {_sev(yeni, iz.birim, iz.ondalik)}")
-    return (f"{iz.ad} {fy} {_yon(fark)}: "
-            f"{_sev(eski, iz.birim, iz.ondalik)} → {_sev(yeni, iz.birim, iz.ondalik)}")
+        return (f"{_ad_donem(iz.ad, donem)}: {_sev(yeni, b, o)} "
+                f"(önceki {_kiyas_sayi(eski, b, o)}; {fiil}{son})")
+    return (f"{_ad_donem(iz.ad, donem)}: {_sev(yeni, b, o)} "
+            f"(önceki {_kiyas_sayi(eski, b, o)}; {_fark_isaretli(fark, b, o)}{son})")
 
 
 def _baglam(iz: Izlem, simdi: dict) -> str:
@@ -132,6 +196,7 @@ def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
     yeni = simdi.get(iz.anahtar)
     if yeni is None or isinstance(yeni, bool) or not isinstance(yeni, (int, float)):
         return None
+    donem = donem_yaz(tarih, iz.hat)
 
     # AKIM: değerin kendisi olaydır (haftalık net akım gibi); kıyas gerekmez.
     if iz.tip == "akim":
@@ -140,7 +205,7 @@ def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
             return None
         yon = "giriş" if yeni > 0 else "çıkış"
         return Olay(iz.grup, sv, iz.ad,
-                    f"{iz.ad}: {_sev(abs(yeni), iz.birim, iz.ondalik)} net {yon}.",
+                    f"{_ad_donem(iz.ad, donem)}: {_sev(abs(yeni), iz.birim, iz.ondalik)} net {yon}.",
                     iz.hat, iz.anahtar, yeni, None, None, iz.birim, tarih, onceki_tarih,
                     iz.aciklama)
 
@@ -150,7 +215,7 @@ def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
         if not sv:
             return None
         return Olay(iz.grup, sv, iz.ad,
-                    f"{iz.ad}: {_sev(yeni, iz.birim, iz.ondalik)}.",
+                    f"{_ad_donem(iz.ad, donem)}: {_sev(yeni, iz.birim, iz.ondalik)}.",
                     iz.hat, iz.anahtar, yeni, None, None, iz.birim, tarih, onceki_tarih,
                     iz.aciklama)
 
@@ -164,11 +229,8 @@ def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
     if iz.tip == "degisim":
         if abs(fark) < 1e-12:
             return None
-        isaret = "+" if fark > 0 else "−"
         return Olay(iz.grup, "onemli", iz.ad,
-                    f"{iz.ad} değişti: {_sev(eski, iz.birim, iz.ondalik)} → "
-                    f"{_sev(yeni, iz.birim, iz.ondalik)} "
-                    f"({isaret}{_fark_yaz(abs(fark), iz.birim, iz.ondalik)}).",
+                    _delta_cumlesi(iz, eski, yeni, fark, donem) + ".",
                     iz.hat, iz.anahtar, yeni, eski, fark, iz.birim, tarih, onceki_tarih,
                     iz.aciklama)
 
@@ -180,8 +242,8 @@ def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
         if not sv:
             return None
         return Olay(iz.grup, sv, iz.ad,
-                    f"{iz.ad} %{_s(abs(oran), 2)} {_yon(oran, 'yükseldi', 'geriledi')}: "
-                    f"{_s(eski, iz.ondalik)} → {_s(yeni, iz.ondalik)}.",
+                    f"{_ad_donem(iz.ad, donem)}: {_s(yeni, iz.ondalik)} "
+                    f"(önceki {_s(eski, iz.ondalik)}; {_yuzde(oran, 2, True)}).",
                     iz.hat, iz.anahtar, yeni, eski, oran, "%", tarih, onceki_tarih,
                     iz.aciklama)
 
@@ -199,10 +261,9 @@ def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
     # BAĞLAM CÜMLENİN İÇİNDE, DİPNOTTA DEĞİL. Tek günlük sıçramayı okuyan biri
     # ortalamayı da aynı satırda görmeli; ayrı bir yere yazılsaydı sıçramanın
     # yanıltıcılığı ancak arayan için görünür olurdu.
-    ek = _baglam(iz, simdi)
+    ek = _baglam(iz, simdi).strip()
     return Olay(iz.grup, sv, iz.ad,
-                _delta_cumlesi(iz, eski, yeni, fark)
-                + (f" ({ek.strip()})." if ek else "."),
+                _delta_cumlesi(iz, eski, yeni, fark, donem, ek) + ".",
                 iz.hat, iz.anahtar, yeni, eski, fark, iz.birim, tarih, onceki_tarih,
                 iz.aciklama)
 
@@ -226,10 +287,19 @@ def _surum_yaz(v) -> str:
     return f"{m.group(3)}.{m.group(2)}.{m.group(1)}" if m else t
 
 
-def yeni_veri_olaylari(hatlar: list[str], pencere_saat: float = 30.0) -> list[Olay]:
-    """Hangi hattın verisi son koşuda ilerledi? Bülten 'bugün ne yayımlandı' der."""
+def yeni_veri_olaylari(hatlar: list[str], pencere_saat: float = 30.0,
+                       esik: datetime | None = None) -> list[Olay]:
+    """Hangi hattın verisi bir önceki sayıdan bu yana ilerledi?
+
+    İki süzgeç (01.10.2026): (1) GÜNLÜK ritimli hat yazılmaz — her iş günü
+    ilerleyen bir hattın "yeni veri" satırı haber değildir ve son 12 sayıda
+    veri günlüğünün 108 satırının 95'i bu sekiz hattandı (sınır
+    ayar.GUNLUK_RITIM_GUN). (2) Pencere bir önceki sayının ölçüm anıdır
+    (`esik`); yoksa eski 30 saatlik pencere sürer."""
     out = []
     for hat in hatlar:
+        if RITIM.get(hat, 99) < GUNLUK_RITIM_GUN:
+            continue
         simdi = gozlem.anlik(hat)
         if not simdi:
             continue
@@ -248,21 +318,37 @@ def yeni_veri_olaylari(hatlar: list[str], pencere_saat: float = 30.0) -> list[Ol
         # veri geldiğini söylüyordu ve gelmemişti.
         if not gozlem._ileri_gitti(str(onc.get("v")), str(v)):
             continue
-        yas = _yas_saat(ilk.get("t", ""))
-        if yas is not None and yas <= pencere_saat:
-            # Okur dili: "veri sürümü ilerledi" iç defterin adıydı ve bir satırda
-            # ISO tarih ile UTC saati basıyordu. Satır NE geldiğini söyler.
-            yeni, eski = _surum_yaz(v), _surum_yaz(onc.get("v"))
-            metin = (f"{HAT_ADI.get(hat, hat)}: yeni veri, {yeni}"
-                     + (f" (önceki {eski})." if eski and eski != yeni else "."))
-            out.append(Olay("diger", "bilgi", f"{hat}: yeni veri", metin,
-                            hat=hat, tarih=v, onceki_tarih=str(onc.get("v"))))
+        if esik is not None:
+            an = gozlem._an(ilk.get("t", ""))
+            if an is not None and an <= esik:
+                continue
+        else:
+            yas = _yas_saat(ilk.get("t", ""))
+            if yas is None or yas > pencere_saat:
+                continue
+        # Okur dili: "veri sürümü ilerledi" iç defterin adıydı ve bir satırda
+        # ISO tarih ile UTC saati basıyordu. Satır NE geldiğini söyler.
+        yeni, eski = _surum_yaz(v), _surum_yaz(onc.get("v"))
+        metin = (f"{HAT_ADI.get(hat, hat)}: yeni veri, {yeni}"
+                 + (f" (önceki {eski})." if eski and eski != yeni else "."))
+        out.append(Olay("diger", "bilgi", f"{hat}: yeni veri", metin,
+                        hat=hat, tarih=v, onceki_tarih=str(onc.get("v"))))
     return out
 
 
+HATIRLATMA_GUN = 7     # süren gecikme ilk gün ve sonra haftada bir yazılır
+
+
 def _gecikme(hat: str, sg: tuple[str, str] | None, azami_gun: int,
-             ad: str = "") -> Olay | None:
-    """Bir saatin donukluk süresi ritmi aşıyorsa olay üret."""
+             ad: str = "", esik: datetime | None = None,
+             simdi_an: datetime | None = None) -> Olay | None:
+    """Bir saatin donukluk süresi ritmi aşıyorsa olay üret.
+
+    SIKLIK (01.10.2026): satır her sabah yeniden basılıyordu ve yalnız sayacı
+    değişiyordu ("14 gündür · 15 gündür · 16 gündür"). Aynı gecikme İLK
+    sayıda ve sonra HAFTADA BİR yazılır: eşik aşıldığı an (`ilk` + azami+1
+    gün) ile bir önceki sayının ölçüm anı (`esik`) arasında bir hatırlatma
+    sınırı geçildiyse. `esik` yoksa her gün yazılır (eski davranış)."""
     if not sg:
         return None
     surum, ilk = sg
@@ -272,17 +358,27 @@ def _gecikme(hat: str, sg: tuple[str, str] | None, azami_gun: int,
     gun = int(yas // 24)
     if gun <= azami_gun:
         return None
+    if esik is not None:
+        ilk_an = gozlem._an(ilk)
+        simdi = simdi_an or datetime.now()
+        if ilk_an is not None:
+            asim = ilk_an + timedelta(days=azami_gun + 1)
+            hafta = timedelta(days=HATIRLATMA_GUN)
+            n_simdi = (simdi - asim) // hafta
+            n_esik = (esik - asim) // hafta if esik >= asim else -1
+            if n_simdi <= n_esik:
+                return None
     hat_adi = HAT_ADI.get(hat, hat)      # okura slug değil ad
     etiket = f"{hat_adi} — {ad}" if ad else hat_adi
+    tarih = _surum_yaz(surum)
     return Olay("diger", "dikkat", f"{etiket}: veri gecikti",
-                f"{etiket}: son veri {_surum_yaz(surum)}; {gun} gündür yenilenmedi "
-                f"(beklenen ritim ≤ {azami_gun} gün).",
+                f"{etiket}: son yayım {tarih}; o günden beri yeni yayım yok "
+                f"({gun} gün; olağan aralık en çok {azami_gun} gün).",
                 hat=hat, tarih=surum,
-                aciklama="Kaynak yayımlamamış olabilir; sayfadaki sayılar bu "
-                         "sürümde donmuş demektir.")
+                aciklama=f"Bu verinin panodaki sayıları {tarih} tarihlidir.")
 
 
-def gecikme_olaylari() -> list[Olay]:
+def gecikme_olaylari(esik: datetime | None = None) -> list[Olay]:
     """Bir hattın verisi beklenen ritmin ötesinde sessizse söyle.
 
     'Sessiz bayatlama' denetiminin bültendeki karşılığı: kaynak yayımlamadıysa
@@ -295,17 +391,17 @@ def gecikme_olaylari() -> list[Olay]:
     """
     out = []
     for hat, azami_gun in RITIM.items():
-        o = _gecikme(hat, gozlem.son_gorulme(hat), azami_gun)
+        o = _gecikme(hat, gozlem.son_gorulme(hat), azami_gun, esik=esik)
         if o:
             out.append(o)
     for (hat, alan), (azami_gun, ad) in RITIM_ALAN.items():
-        o = _gecikme(hat, gozlem.alan_son_gorulme(hat, alan), azami_gun, ad)
+        o = _gecikme(hat, gozlem.alan_son_gorulme(hat, alan), azami_gun, ad, esik=esik)
         if o:
             out.append(o)
     return out
 
 
-def haber_endeksi_olaylari() -> list[Olay]:
+def haber_endeksi_olaylari(esik_sigma: float = 0.0) -> list[Olay]:
     """FX haber-duyarlılık endeksinde günün en olağandışı hareketleri.
 
     EŞİK DEĞİL SIRALAMA. Sabit bir eşik burada işlemiyor: gerçek tarihçeyle
@@ -315,9 +411,14 @@ def haber_endeksi_olaylari() -> list[Olay]:
     ÜÇ hareketi kendisi sıralayıp `hareket` alanında veriyor; burada yalnız
     cümleye çevriliyor.
 
-    Kıyas noktası cümlede AÇIKÇA yazar: snapshot'lar arası mesafe sabit değil
-    (hat günlük koşmaya yeni geçti, tarihçedeki eski aralıklar haftalarca).
-    "Endeks döndü" demek, ne kadar sürede döndüğünü söylemeden yanıltır.
+    SIRALAMANIN ÜSTÜNE σ TABANI (01.10.2026, `esik_sigma`): sıralama her gün
+    üç hareket verir ve arşivdeki 72 σ'lı cümlenin 62'si 2σ'nın altındaydı
+    (medyan 1,3σ) — 1σ'lık bir ton oynaması her sabah "olağandışı" diye
+    basılıyordu. Ölçüm katmanı tabanı ölçer; σ'sı ölçülemeyen hareket tabanı
+    geçmiş sayılmaz. Kategori etiketi ("Alıcı", "Satıcı") cümleye girmez:
+    bülten satırında tavsiye diliyle okunuyordu, σ hareketi zaten söylüyor.
+    Fark yuvarlanmış uçlardan hesaplanır: görünen iki sayının farkı görünen
+    farka eşit olmalı (87 cümlenin 20'sinde değildi).
     """
     d = gozlem.anlik("fx-haber-endeksi")
     if not d:
@@ -325,47 +426,38 @@ def haber_endeksi_olaylari() -> list[Olay]:
     hareketler = d.get("hareket") or []
     if not hareketler:
         return []
-    gun = d.get("hareket_gun")
-    kiyas = d.get("hareket_kiyas_tarih") or "önceki okuma"
-    ne_kadar = (f"{gun} günde" if isinstance(gun, int) and gun > 0 else "önceki okumaya göre")
+    kiyas = d.get("hareket_kiyas_tarih") or ""
+    tarih = str(d.get("_tarih", ""))[:10]
     olaylar = []
     for m in hareketler:
         z = m.get("z")
-        olcu = (f"{_s(z, 1, True)} standart sapma" if z is not None
-                else "hattın oynaklık tarihçesi henüz σ için yetmiyor")
-        kat = ""
-        if m.get("kat") and m.get("onceki_kat") and m["kat"] != m["onceki_kat"]:
-            kat = f", {m['onceki_kat']} → {m['kat']}"
+        if esik_sigma > 0 and not (isinstance(z, (int, float)) and abs(z) >= esik_sigma):
+            continue
+        ad = str(m.get("ad") or "")
+        ad = ad[:1].upper() + ad[1:]
+        once_r, deger_r = round(float(m["onceki"]), 2), round(float(m["deger"]), 2)
+        parca = [f"önceki {_s(once_r, 2, True)}" + (f" ({_surum_yaz(kiyas)})" if kiyas else ""),
+                 _s(deger_r - once_r, 2, True)]
+        if z is not None:
+            parca.append(f"{_s(z, 1, True)}σ")
+        if m.get("makale"):
+            parca.append(f"{m['makale']} makale")
         olaylar.append(Olay(
             grup="haber", seviye="dikkat",
-            baslik=f"Haber tonu — {m['ad']}",
-            # Ok gösterimi, öbür olay cümleleriyle aynı: sayıya sabit yazılan
-            # ek ("'den … 'ye") sayının okunuşuna uymuyordu ("−0,10'ye",
-            # "+0,39'ye"). Cümlenin sonundaki "Sebebini haber akışından bul."
-            # yazara verilmiş bir talimattı ve okura basılıyordu; talimat
-            # bulten/YAZIM.md'de duruyor.
-            metin=(f"{m['ad']} haber-duyarlılık endeksi {ne_kadar} "
-                   f"{_s(m['onceki'], 2, True)} → {_s(m['deger'], 2, True)} "
-                   f"({_s(m['fark'], 2, True)}{kat}; {olcu}; {m.get('makale', '?')} makale, "
-                   f"kıyas {kiyas})."),
+            baslik=f"Haber tonu — {ad}",
+            metin=(f"Haber tonu, {ad} ({donem_yaz(_surum_yaz(tarih))}): "
+                   f"{_s(deger_r, 2, True)} ({'; '.join(parca)})."),
             hat="fx-haber-endeksi", anahtar=m["kod"],
             deger=m["deger"], onceki=m["onceki"], fark=m["fark"],
-            tarih=str(d.get("_tarih", ""))[:10], onceki_tarih=kiyas,
-        ))
-    elenen = d.get("hareket_elenen") or 0
-    if elenen:
-        olaylar.append(Olay(
-            grup="haber", seviye="bilgi",
-            baslik="Haber tonu — kapsamı zayıf varlıklar",
-            metin=(f"{elenen} varlık az makaleli olduğu için olağandışılık "
-                   "sıralamasına girmedi: o endekslerde tek bir haber okumayı "
-                   "savurabilir, hareketleri gürültüden ayrılamaz."),
-            hat="fx-haber-endeksi",
+            tarih=tarih, onceki_tarih=kiyas,
         ))
     return olaylar
 
 
-def topla() -> list[Olay]:
+def topla(esik: datetime | None = None, haftalik: bool = False) -> list[Olay]:
+    """Bültenin olayları. `esik`: bir önceki sayının ölçüm anı (UTC naif) —
+    yalnız ondan SONRA ilk kez görülen sürüm bugünün olayıdır (bkz.
+    gozlem.bugun_yeni). Haber tonu yalnız |z| ≥ 2 hareketi olaya çevirir."""
     olaylar: list[Olay] = []
     for hat in sorted({iz.hat for iz in IZLEMLER}):
         simdi = gozlem.anlik(hat)
@@ -378,20 +470,16 @@ def topla() -> list[Olay]:
             v = gozlem.anahtar_tarihi(simdi, iz.anahtar, iz.tarih_alani)
             # AYNI VERİ SÜRÜMÜ İKİ KEZ DUYURULMAZ.
             #
-            # Kıyas noktası "o anahtarın saati BUGÜNKÜNDEN farklı olan en son
-            # görüntü"dür ve kaynak yayımı durdurduğunda bu nokta yerinde
-            # kalır: cümle her sabah yeniden kurulur. Ölçüldü (17 sayı) —
-            # 145 ölçüm cümlesinin 84'ü (%57,9) daha önce AYNI veri tarihiyle
-            # duyurulmuş cümlelerin tekrarıydı; tek başına Hazine hattının üç
-            # cümlesi 18.08 ihalesini 21.07 ile kıyaslayarak 17 sayı boyunca
-            # 48 kez basıldı. Okur 10 Eylül'de 23 gün önceki veriyi "azaldı"
-            # diye okuyordu.
-            #
-            # Kural: bir ölçüm, saati BİR ÖNCEKİ görüntüye göre ilerlediyse
-            # duyurulur. İlerlemediyse yeni bir şey yayımlanmamıştır. Değer
-            # saat ilerlemeden değişmişse bu bir REVİZYONdur ve denetimin
+            # 10.09.2026: kıyas noktası "saati bugünkünden farklı olan en son
+            # görüntü" oldu ve bir ölçüm "saati önceki SÜRÜME göre ilerlediyse"
+            # duyuruldu. 01.10.2026'da ölçüldü: bu soru bir kez ilerlemiş sürüm
+            # için her gün evettir — 143 ölçüm cümlesinin 106'sı (%74,1) daha
+            # önce aynı veri tarihiyle basılmıştı, "Lokanta / ev yemeği oranı"
+            # 17 sayı üst üste çıktı. Eksik olan zaman sorusuydu: sürüm ayrıca
+            # bir önceki SAYININ ölçüm anından sonra ilk kez görülmüş olmalı.
+            # Değer saat ilerlemeden değişmişse bu bir REVİZYONdur ve denetimin
             # kendi ölçütü onu adıyla listeler.
-            if not gozlem.surum_ilerledi(hat, simdi, iz.anahtar, iz.tarih_alani):
+            if not gozlem.bugun_yeni(hat, simdi, iz.anahtar, iz.tarih_alani, esik):
                 continue
             onc = gozlem.onceki_surum_anahtar(hat, iz.anahtar, iz.tarih_alani, v)
             once_d = onc.get("d") if onc else None
@@ -400,9 +488,9 @@ def topla() -> list[Olay]:
             o = izlem_olayi(iz, simdi, once_d, v, onceki_v)
             if o:
                 olaylar.append(o)
-    olaylar += yeni_veri_olaylari(list(RITIM))
-    olaylar += gecikme_olaylari()
-    olaylar += haber_endeksi_olaylari()
+    olaylar += yeni_veri_olaylari(list(RITIM), esik=esik)
+    olaylar += gecikme_olaylari(esik)
+    olaylar += haber_endeksi_olaylari(HABER_TONU_SIGMA)
     sira = {g: i for i, (g, _) in enumerate(GRUPLAR)}
     onem = {"onemli": 0, "dikkat": 1, "bilgi": 2}
     olaylar.sort(key=lambda o: (onem.get(o.seviye, 3), sira.get(o.grup, 99), o.baslik))

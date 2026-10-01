@@ -477,7 +477,9 @@ def _izlem_kapsami():
     # 40, ödemeler/bütçe/marj 45, reel sektör 75, büyüme 100). 8 bu boşluğun
     # içinde. İlk yazımda 2 kullanılmıştı ve hiçbir hattı yakalamadığı için
     # ölçüt TANIMI GEREĞİ hiç düşemezdi; arıza enjeksiyonu bunu gösterdi.
-    GUNLUK_RITIM_GUN = 8
+    # Sınır tek tanımda (ayar.GUNLUK_RITIM_GUN): "yeni veri" satırı da onu okur.
+    GUNLUK_RITIM_GUN = ayar.GUNLUK_RITIM_GUN
+    assert GUNLUK_RITIM_GUN == 8, f"günlük ritim sınırı ölçülmüş boşluğun dışına kaydı: {GUNLUK_RITIM_GUN}"
     gunluk = {h for h, gun in ayar.RITIM.items() if gun < GUNLUK_RITIM_GUN}
     bogan = sorted({iz.hat for iz in ayar.IZLEMLER if iz.yayim} & gunluk)
     assert not bogan, (
@@ -878,6 +880,208 @@ def _bicim3_gonderi_ve_birlestirme():
         o.write_text(_j.dumps({"gundem_kaynagi": "otomatik", "yorum": "x " * 5000}), encoding="utf-8")
         _bl._bulten_coz("", str(a), str(o))
         assert _j.loads(a.read_text(encoding="utf-8"))["gundem_kaynagi"] == "yazili"
+
+
+# ── MAKİNE KATMANI (01.10.2026) — "yeni"nin tanımı ve veri notu kalıbı ──────
+
+def _yeni_zaman_kapisi():
+    """Bir ölçüm ancak şimdiki sürümü bir önceki sayının ölçüm anından SONRA
+    ilk kez görüldüyse bugünün olayıdır. 11.09–30.09 arasında 143 ölçüm
+    cümlesinin 106'sı (%74,1) daha önce aynı veri tarihiyle basılmıştı:
+    `surum_ilerledi` bir kez ilerlemiş sürüm için her gün evet diyordu."""
+    import gozlem as _g
+    from datetime import datetime as _dt
+    once = {"x": 1.0, "_tarih": "07.2026"}
+    simdi = {"x": 2.0, "_tarih": "08.2026"}
+    defter = [{"t": "2026-09-01T04:00:00", "v": "07.2026", "d": once},
+              {"t": "2026-09-10T04:37:38", "v": "08.2026", "d": simdi}]
+    gercek = _g.gecmis_oku
+    try:
+        _g.gecmis_oku = lambda hat: list(defter)
+        assert _g.surum_ilerledi("h", simdi, "x"), "fikstür: sürüm ilerlemiş olmalı"
+        # Donmuş hat ertesi günler: sürüm 10.09'da görüldü, önceki sayı 11.09'da ölçüldü.
+        assert not _g.bugun_yeni("h", simdi, "x", "", _dt(2026, 9, 11, 4, 20)), \
+            "donmuş hat her sabah yeniden 'yeni' sayılıyor"
+        # Sürümün ilk görüldüğü gün: önceki sayı 09.09'da ölçüldü → yeni.
+        assert _g.bugun_yeni("h", simdi, "x", "", _dt(2026, 9, 9, 4, 20)), "yeni sürüm duyurulmuyor"
+        # Kıyas çizgisi yoksa (ilk sayı) eski davranış.
+        assert _g.bugun_yeni("h", simdi, "x", "", None)
+        # Dilimli damga UTC'ye çevrilir (git önyüklemesi "+03:00" yazıyordu).
+        assert _g._an("2026-08-18T22:51:05+03:00") == _dt(2026, 8, 18, 19, 51, 5)
+        # Ölçüm katmanı kıyas çizgisini bir önceki sayıdan alıyor.
+        import inspect as _i, olay as _o, uret as _u
+        assert "bugun_yeni(" in _i.getsource(_o.topla), "topla zaman kapısını çağırmıyor"
+        assert "onceki_olcum_ani(" in _i.getsource(_u.uret), "uret kıyas çizgisini kurmuyor"
+    finally:
+        _g.gecmis_oku = gercek
+
+
+def _veri_notu_kalibi():
+    """'{ad} ({dönem}): {seviye} (önceki x; ±fark)' — dönem adın yanında, birim
+    bir kez, yüzde seviyenin farkı puan; bağlam parantezin içinde."""
+    import olay as _o, ayar as _a
+    from datetime import datetime as _dt
+    b = _dt(2026, 10, 1)
+    assert _o.donem_yaz("08.2026", "enflasyon", b) == "Ağu"
+    assert _o.donem_yaz("12.2025", "enflasyon", b) == "Ara 2025"
+    assert _o.donem_yaz("06.2026", "buyume", b) == "2026 Ç2", "çeyreklik hat ay adıyla yazılıyor"
+    assert _o.donem_yaz("18.09.2026", "kredi-parasal", b) == "18.09"
+    assert _o.donem_yaz("tanımsız", "", b) == "tanımsız", "tanınmayan dönem uyduruldu"
+    tufe = next(i for i in _a.IZLEMLER if i.anahtar == "tufe_12a")
+    o = _o.izlem_olayi(tufe, {"tufe_12a": 31.51}, {"tufe_12a": 31.75}, "08.2026", "07.2026")
+    assert o is not None, "TÜFE yayımı olay üretmedi (yayım bayrağı)"
+    if o is not None:
+        assert o.metin.startswith(f"{tufe.ad} (") and "%31,51 (önceki %31,75; −0,24 puan)" in o.metin, o.metin
+    yp = next(i for i in _a.IZLEMLER if i.birim == "mlr USD" and i.tip == "delta" and not i.eksi_ad
+              and i.dikkat is not None)
+    o = _o.izlem_olayi(yp, {yp.anahtar: 230.8}, {yp.anahtar: 228.1 - 10 * (yp.dikkat or 0)}, "18.09.2026", "11.09.2026")
+    assert o and o.metin.count("mlr USD") == 1, f"birim birden çok kez yazılıyor: {o.metin if o else None}"
+    assert "(18.09" in o.metin or "18.09)" in o.metin, f"dönem yok: {o.metin}"
+    # İç içe parantez birleşir.
+    assert _o._ad_donem("Cari açık (12 aylık birikimli)", "Tem") == "Cari açık (12 aylık birikimli, Tem)"
+    # Bağlam parantezin içinde.
+    d1a = next((i for i in _a.IZLEMLER if i.baglam), None)
+    if d1a:
+        o = _o.izlem_olayi(d1a, {d1a.anahtar: 21.4, d1a.baglam[0]: 23.0},
+                           {d1a.anahtar: 21.4 + 100}, "29.09.2026", "28.09.2026")
+        assert o and o.metin.endswith(f"; {d1a.baglam[1]} %23,0).") , o.metin if o else None
+    # Toplam ihale sayısı (veri setinin satır sayısı) olay değildir.
+    assert not any(i.anahtar == "n_ihale" for i in _a.IZLEMLER), "sayaç izlemi geri geldi"
+
+
+def _gecikme_sikligi_ve_yeni_veri():
+    """Gecikme ilk sayıda ve sonra haftada bir; günlük ritimli hattın 'yeni
+    veri' satırı yazılmaz."""
+    import olay as _o, ayar as _a, gozlem as _g
+    from datetime import datetime as _dt
+    sg = ("09.09.2026", "2026-09-09T04:20:00")
+    asim = _dt(2026, 9, 9, 4, 20) + _o.timedelta(days=12 + 1)          # 22.09 04:20
+    gercek = _o.datetime
+    class _Saat(_dt):
+        simdi = _dt(2026, 9, 22, 6, 0)
+        @classmethod
+        def now(cls, tz=None):
+            return cls.simdi
+    try:
+        _o.datetime = _Saat
+        # İlk sayı: önceki ölçüm aşımdan önce → yazılır.
+        assert _o._gecikme("h", sg, 12, esik=_dt(2026, 9, 21, 4, 20), simdi_an=_Saat.simdi)
+        # Ertesi gün: aşım önceki ölçümden önce, hafta dolmadı → yazılmaz.
+        _Saat.simdi = _dt(2026, 9, 23, 6, 0)
+        assert _o._gecikme("h", sg, 12, esik=_dt(2026, 9, 22, 6, 0), simdi_an=_Saat.simdi) is None, \
+            "süren gecikme her sabah yeniden basılıyor"
+        # Bir hafta sonra hatırlatma.
+        _Saat.simdi = asim + _o.timedelta(days=7, hours=2)
+        assert _o._gecikme("h", sg, 12, esik=asim + _o.timedelta(days=6), simdi_an=_Saat.simdi), \
+            "haftalık hatırlatma yazılmadı"
+        # Okur dili: kod/yapım sözcüğü yok.
+        o = _o._gecikme("odemeler-dengesi", sg, 12)
+        assert o and "son yayım 09.09.2026" in o.metin and "sürüm" not in o.metin and "ritim" not in o.metin, o.metin
+    finally:
+        _o.datetime = gercek
+    gunluk = [h for h, g in _a.RITIM.items() if g < _a.GUNLUK_RITIM_GUN]
+    assert gunluk, "günlük ritimli hat yok — sınama kör"
+    assert _o.yeni_veri_olaylari(gunluk, esik=None) == [], "günlük hat için 'yeni veri' satırı yazıldı"
+
+
+def _haber_tonu_tabani():
+    """Haber tonu olayı yalnız |z| ≥ 2; fark yuvarlanmış uçlardan; ad büyük
+    harfle; kategori etiketi (al/sat dili) cümlede yok."""
+    import olay as _o, gozlem as _g
+    gercek = _g.anlik
+    try:
+        _g.anlik = lambda hat: {"_tarih": "2026-09-30", "hareket_kiyas_tarih": "2026-09-29", "hareket": [
+            {"ad": "altın", "kod": "XAU", "onceki": -0.084, "deger": 0.274, "fark": 0.358, "z": 2.1,
+             "makale": 248, "kat": "Alıcı", "onceki_kat": "Nötr"},
+            {"ad": "USD/JPY", "kod": "JPY", "onceki": 0.1, "deger": 0.0, "fark": -0.1, "z": -1.0}]}
+        ol = _o.haber_endeksi_olaylari(_o.HABER_TONU_SIGMA)
+        assert len(ol) == 1, f"2σ altı hareket olaya girdi: {[o.metin for o in ol]}"
+        m = ol[0].metin
+        assert "Altın" in m and "Alıcı" not in m and "Nötr" not in m, m
+        assert "+0,27" in m and "−0,08" in m and "+0,35" in m, f"görünen fark görünen uçların farkı değil: {m}"
+    finally:
+        _g.anlik = gercek
+    import ayar as _a, denetim as _d
+    assert _o.HABER_TONU_SIGMA == _d.OLAGANDISI_SIGMA, "olay tabanı ile denetimin anılma eşiği ayrıştı"
+
+
+def _soz_degisen_normalize():
+    """Kapanmış kayıt: imza normalize kayıtla; 'yeni kapandı' kapanış gününden
+    ya da önceki sayıda kapalı olmamasından — vadeden değil."""
+    import soz as _s
+    defter = {"kayitlar": [
+        {"konu": "A", "soz": "s", "durum": "kapandi", "isabet": "tutmadi", "vade": "2026-10-02",
+         "acilis": "2026-09-20"},
+        {"konu": "B", "soz": "s", "durum": "kapandi", "isabet": "kismen", "vade": "2026-09-25",
+         "acilis": "2026-09-10", "kapanis": "2026-10-01"},
+        {"konu": "C", "soz": "s", "durum": "kapandi", "isabet": "tuttu", "vade": "2026-09-30",
+         "acilis": "2026-09-20"}]}
+    gercek = _s.oku
+    try:
+        _s.oku = lambda: defter
+        ilk = _s.ozet("2026-09-30", {"acik": [], "kapanan": []})
+        basilan = {"acik": ilk["acik"], "kapanan": ilk["kapanan"]}
+        o = _s.ozet("2026-10-01", basilan)
+        k = {x["konu"]: x for x in o["kapanan"]}
+        assert not k["A"]["degisti"], "önceki sayıda kapalı basılan kayıt 'değişen' (normalize kıyas yok)"
+        assert k["B"]["degisti"] and k["B"]["degisim_sebebi"] == "yeni", "bugün kapanan kayıt yeni sayılmadı"
+        assert not k["C"]["degisti"], "vadesi dün dolan ama önceden kapalı kayıt 'yeni' sayıldı"
+        # Önceki sayı yoksa 'yeni kapandı' denmez (ölçemediğimiz değişiklik işaretlenmez).
+        o2 = _s.ozet("2026-10-01", None)
+        assert not {x["konu"]: x for x in o2["kapanan"]}["A"]["degisti"]
+    finally:
+        _s.oku = gercek
+
+
+def _soz_uzunlugu():
+    """Biçim 3: bugün açılan söz kaydı 80 kelimeyi aşarsa UYARI; dünkü kayıt ve
+    biçim 2 sayısı ölçülmez."""
+    import denetim as _d, tempfile, json as _j
+    gercek = _d.BURASI
+    with tempfile.TemporaryDirectory() as td:
+        (Path(td) / "izleme.json").write_text(_j.dumps({"kayitlar": [
+            {"konu": "Uzun", "soz": "kelime " * 120, "durum": "acik", "acilis": "2026-10-01", "vade": "2026-11-01"},
+            {"konu": "Dünkü", "soz": "kelime " * 120, "durum": "acik", "acilis": "2026-09-30", "vade": "2026-11-01"},
+            {"konu": "Kısa", "soz": "kelime " * 40, "durum": "acik", "acilis": "2026-10-01", "vade": "2026-11-01"}]}),
+            encoding="utf-8")
+        try:
+            _d.BURASI = Path(td)
+            d = _d.Denetim({"tarih": "2026-10-01", "surum": 3}); d.izleme()
+            u = [x for x in d.uyari if "Söz kaydı uzun" in x]
+            assert len(u) == 1 and "Uzun" in u[0], u
+            d2 = _d.Denetim({"tarih": "2026-10-01", "surum": 2}); d2.izleme()
+            assert not [x for x in d2.uyari if "Söz kaydı uzun" in x], "arşiv biçiminde ölçüldü"
+        finally:
+            _d.BURASI = gercek
+
+
+def _takvim_ve_serit():
+    """Takvim dipnotu resmî adı tekrar etmez; gösterge şeridi bugün ilerlemeyeni
+    işaretler, kurun farkı yüzde; okunamayan haber spread'i şeritte yok;
+    gruplar boru hattı ve haber tonunu taşımaz; kilit haber tekrar seçilmez."""
+    import inspect as _i, takvim as _t, uret as _u, haber as _h
+    src = _i.getsource(_t)
+    assert 'resmi_ad=ad if kisa and kisa != ad else ""' in src, "TÜİK resmî adı dipnota yazılıyor"
+    assert '" (önbellekten; takvim servisi okunamadı)"' not in src, "boru hattı durumu okura dipnot olarak yazılıyor"
+    assert "ihale tahmini yok" not in "\n".join(l for l in src.splitlines() if not l.strip().startswith("#")), \
+        "model kapsamı okura yazılıyor"
+    assert all(g[1] != "spread" for g in _u.GOSTERGELER), "haber spread'i şeride geri geldi"
+    assert ("usdtry-deval", "kur") in _u.GOSTERGE_YUZDE_FARK
+    gs = _i.getsource(_u.gostergeler)
+    assert "bugun_yeni" in gs and "fark_birim" in gs
+    us = _i.getsource(_u.uret)
+    assert 'GRUP_DISI = {"diger", "haber"}' in us and '"haber_tonu": haber_tonu' in us
+    # Kilit haber: önceki sayının kilidi dışlanır, haber bölümünde kalır.
+    a = _h.Haber("Bitcoin ETFs Attract $5.3 Billion", "https://x.y/a", "Kaynak", kaynak_sayisi=9)
+    b = _h.Haber("Fed hikes again", "https://x.y/b", "Kaynak", kaynak_sayisi=9)
+    _h.onem_puani_gercek = _h.onem_puani
+    try:
+        _h.onem_puani = lambda h: 100.0
+        sec = _h.kilit_gelismeler([a, b], _h.kilit_imza(a.baslik, a.baglanti))
+        assert [x.baslik for x in sec] == ["Fed hikes again"], [x.baslik for x in sec]
+        assert len(_h.kilit_gelismeler([a, b], set())) == 2
+    finally:
+        _h.onem_puani = _h.onem_puani_gercek
 
 
 def main() -> int:
@@ -2993,9 +3197,34 @@ def main() -> int:
             _g.son_gorulme = lambda hat: ("14.08.2026", "2026-08-20T13:09:00")
             _g.anlik = lambda hat: {"g_ar_13y": 25.9, "_tarih": "14.08.2026"}
             r = _s.gecmis_olaylar([], piyasa=None, bugun=_dt.date(2026, 8, 28))
-            assert r and r[0]["durum"] == "veri henüz hatta düşmedi", \
+            assert r and r[0]["durum"].startswith("yayımlandı; sayı bu ölçüme"), \
                 f"bayat sürüm 'geldi' sayıldı: {r[0]['durum'] if r else 'boş'}"
             assert r[0]["gerceklesme"] is None, "gelmemiş veri için gerçekleşme yazıldı"
+
+            # (c) SONUÇ VEREMEYEN SATIR BASILMAZ (01.10.2026): takip dışı olay
+            #     beklentisi olsa da, hattın üretmediği büyüklük de listeye girmez.
+            _s.arsiv_oku = lambda: {
+                "x": {"tarih": "2026-08-27", "olay": "Fed (FOMC) faiz kararı",
+                      "beklenti": "piyasa sabit bekliyor", "beklenti_sayi": None},
+                "y": {"tarih": "2026-08-27", "olay": "TCMB: Haftalık para-banka (34. Hafta)",
+                      "beklenti": "", "beklenti_sayi": None}}
+            _g.anlik = lambda hat: {"_tarih": "14.08.2026"}
+            r = _s.gecmis_olaylar([], piyasa=None, bugun=_dt.date(2026, 8, 28))
+            assert r == [], f"sonuç veremeyen satır basılıyor: {[x['durum'] for x in r]}"
+
+            # (d) SAATİ GELMEMİŞ BUGÜNKÜ OLAY sonuç listesine girmez (01.10.2026:
+            #     14:30 yayımı 07:47 ölçümünde "yayımlandı" diye basıldı).
+            from zoneinfo import ZoneInfo as _Z
+            _g.anlik = lambda hat: {"g_ar_13y": 25.9, "_tarih": "14.08.2026"}
+            _s.arsiv_oku = lambda: {"y": {"tarih": "2026-08-28", "saat": "14:30",
+                                          "olay": "TCMB: Haftalık para-banka (35. Hafta)",
+                                          "beklenti": "", "beklenti_sayi": None}}
+            sabah = _dt.datetime(2026, 8, 28, 7, 47, tzinfo=_Z("Europe/Istanbul"))
+            r = _s.gecmis_olaylar([], piyasa=None, bugun=_dt.date(2026, 8, 28), simdi=sabah)
+            assert r == [], f"saati gelmemiş olay sonuç listesinde: {[x['olay'] for x in r]}"
+            aksam = _dt.datetime(2026, 8, 28, 15, 0, tzinfo=_Z("Europe/Istanbul"))
+            r = _s.gecmis_olaylar([], piyasa=None, bugun=_dt.date(2026, 8, 28), simdi=aksam)
+            assert len(r) == 1, "saati geçmiş bugünkü olay listeye girmedi"
         finally:
             _g.anlik, _g.son_gorulme, _g.onceki_surum_anahtar = g_anlik, g_son, g_onceki
             _s.arsivle, _s.arsiv_oku = s_arsivle, s_oku
@@ -4576,11 +4805,12 @@ def main() -> int:
         m = cum(1.2, -8.5)
         assert "artıdan eksiye döndü" in m and "−8,5" in m, m
         m = cum(10.0, 18.0)
-        assert "arttı" in m and "Cari denge" in m, m
+        # Veri notu kalıbı (01.10.2026): fiil yerine işaretli fark.
+        assert m.startswith("Cari denge") and "önceki 10,0" in m and "+8,0" in m, m
         adsiz = next(i for i in ayar.IZLEMLER if i.birim == "mlr USD" and i.tip == "delta"
                      and not i.eksi_ad and (i.onemli or 0) > 0)
         m = cum(-50.0, -50.0 - 2 * adsiz.onemli, adsiz)
-        assert "azaldı" in m and "genişledi" not in m, m
+        assert "genişledi" not in m and "(önceki −50" in m, m
     sina("olay: eksi dengede fiil okurun dilinde (genişledi · daraldı · işaret)", _eksi_denge_fiili)
 
     def _takvim_adlari():
@@ -4676,6 +4906,13 @@ def main() -> int:
     sina("biçim 3: olgu tekrarı, özet∩okuma, kronik olgu, açılış örtüşmesi", _bicim3_tekrar)
     sina("biçim 3: atıf penceresi sayının kipi, haber tonunda yalnız |z|≥2", _bicim3_atif_ve_ton)
     sina("biçim 3: gönderi kayıt defterinden, birleştirmede yeni yazım kazanır", _bicim3_gonderi_ve_birlestirme)
+    sina("makine: 'yeni' bir önceki sayının ölçüm anına bağlı (donmuş hat ertesi gün susar)", _yeni_zaman_kapisi)
+    sina("makine: veri notu kalıbı — dönem, birim bir kez, puan farkı, bağlam parantezde", _veri_notu_kalibi)
+    sina("makine: gecikme ilk gün + haftada bir; günlük hatta 'yeni veri' yok", _gecikme_sikligi_ve_yeni_veri)
+    sina("makine: haber tonu |z|≥2, yuvarlanmış fark, kategori etiketi yok", _haber_tonu_tabani)
+    sina("makine: söz defteri normalize kıyas, 'yeni kapandı' kapanıştan", _soz_degisen_normalize)
+    sina("makine: takvim dipnotu, gösterge şeridi, olay kovaları, kilit haber tekrarı", _takvim_ve_serit)
+    sina("biçim 3: bugün açılan uzun söz kaydı uyarılır", _soz_uzunlugu)
 
     for ad in gecen:
         print(f"  ✓ {ad}")

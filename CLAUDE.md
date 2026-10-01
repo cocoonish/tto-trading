@@ -133,6 +133,8 @@ taslak; repo GitHub'a bağlanınca aktifleştirilecek).
 | `rejim.py` | reel faiz, taşıma, reel kredi, REDK sapması, eğri, rezerv kalitesi, **enflasyon risk primi, makroihtiyati ayrışma** |
 | `grafik_veri.py` | satır içi SVG grafiklerin verisi (Plotly bültene girmez) |
 | `denetim.py` | 40 ölçüt; engel varsa bülten yayına gitmez. `karanlik`: donan seri · `yerlesmemis`: kapanmamış seansın barı · `revizyon`: yayımlanan sayı sonradan değişti mi · `haber_tonu`: haber endeksinin olağandışı hareketi anılmış mı |
+| `uslup.py` | biçim 3 yazı katmanının üslup ölçütü: öz-atıf ve süreç dili ENGEL, bütçeli kalıplar ve cümle uzunluğu UYARI |
+| `tekrar.py` | iç ve günler arası tekrar; biçim 3'te **olgu** düzeyinde (aynı ondalık 3+ bölümde · özet∩okuma · kronik) |
 | `tazeleme.py` | hangi hattın koşacağına resmî yayım takvimi karar verir |
 | `zincir.py` | veri→ölçüm→yazı zincirinin durumu; eksik halkayı ve çıkış koduyla ne yapılacağını söyler |
 | `yaz.py` | yazı katmanının yazma kapısı: `yorum`, `ozet`, `gundem` ve **`duzeltmeler`** (yayımlanmış sayının yapısal düzeltme kaydı — sayfa "Düzeltmeler" bölümü ve `/duzeltmeler/` listesi buradan) |
@@ -3545,3 +3547,90 @@ değiştirir. (b) FX haber endeksinin kat adları ("Alıcı", "Aşırı Alıcı"
 tavsiye gibi okunuyor. (c) Gösterge şeridinde yön rengi. (d) Telefon taşması
 kapısı Playwright ister ve yayın koşucusunda yok; ayrı iş akışı mı, kurulum
 mu. Pazar sayısının ayrı düzeni (haftalık değişim tablosu üstte) yapılmadı.
+
+**KARAR (01.10.2026, kullanıcı onayladı) — BÜLTEN BİR SABAH NOTUDUR (biçim 3);
+ve "YENİ", BİR ÖNCEKİ SAYININ ÖLÇÜM ANINA BAĞLIDIR.** Kullanıcı: "Bültenler
+gerçek bir piyasa profesyoneli tarafından yazılmış gibi değil. Çok tekrar var ve
+düzeni yeterince iyi değil." Yukarıdaki açık (a) bu kararla kapandı. Beş
+mercekli teşhis üç kök buldu ve üçü de KURALDAN doğuyordu, yazardan değil.
+
+(1) UZUNLUK KURALI TEKRARI ÜRETİYORDU. On iki bölüm, her biri ASGARİ
+uzunlukla zorunluydu (okuma ≥350 · sekiz haber bölümü ≥200 · dört yazı bölümü
+≥300); günlük düzyazı 4.000–5.400 kelimeye çıktı. Tekrar birebir değil
+PARAFRAZDI: 7'li öbek ölçüsü %2–4 gösteriyordu, oysa "Ne oldu"nun
+ondalıklarının %53–88'i "Günün okuması"nda yeniden sayılıyordu. Bir ölçü
+kusuru göremiyorsa kusur ölçünün biçimindedir: olgu imi ONDALIKLI SAYIDIR ve
+ölçü artık olgu düzeyinde (`tekrar.olgu_tekrari` · özet∩okuma · kronik olgu ·
+açılış örtüşmesi; hepsi UYARI). Biçim 3: manşet, 3–5 madde, tek okuma ve konu
+başına TEK ev (Türkiye · Küresel · Emtia · Takvim · Risk); uzunluk ARALIK,
+yalnız toplam tavan ENGEL. Tanım TEK yerde (`ayar.YAZI_BOLUMLERI_3`): rehber
+tablosu, yazma kapısı, denetim, gönderi ve sayfa oradan türer, duman rehber
+tablosunu kayıtla kıyaslar.
+
+(2) "METİNDE SÖYLE" KURALLARI TESİSATI DÜZYAZIYA TAŞIYORDU. 30.09'da
+cümlelerin %13'ü okura kendi ölçüm altyapımızı anlatıyordu ("elli bir satırın…",
+"kaydımızın çürütme ölçütü", "hüküm kurulmadı"); öz-atıf bin kelimede ağustos
+sonunda 0–0,4 iken 25–30.09'da 3,1–6,6. Rehber düzeltildi, `bulten/uslup.py`
+geri gelmesini ölçer (öz-atıf ve süreç dili ENGEL, bütçeli kalıplar ve cümle
+uzunluğu UYARI). Kalıplar ilk yazımda büyük/küçük harfe duyarlıydı ve cümle
+başı hâli ("Hüküm kurulmadı", "Kaydımız") ENGEL'den kaçıyordu; duman fikstürü
+yakaladı, 34 sayıda eklenen 19 eşleşmenin 19'u aynı kalıbın cümle başı hâli.
+
+(3) "AYNI SÜRÜM İKİ KEZ DUYURULMAZ" KURALI DONMUŞ HATTA TERSİNE İŞLİYORDU.
+`surum_ilerledi` "önceki sürüme göre ilerledi mi" diye soruyordu — bir kez
+ilerlemiş bir sürüm için bu soru SONSUZA KADAR evettir. 11.09–30.09 arasında
+143 ölçüm cümlesinin 106'sı (%74,1) daha önce aynı veri tarihiyle basılmıştı;
+"Lokanta / ev yemeği oranı 1,27 → 1,28" 17 sayı üst üste çıktı ve bayat olay
+yazı katmanına da sızdı (18.09 YP mevduatı üç sabah anlatıldı). 10.09'un kuralı
+kendi ölçtüğü oranı %57,9'dan %74,1'e çıkarmıştı. Eksik olan ZAMAN sorusuydu:
+yeni olan, bir önceki sayının görmediği sürümdür (`gozlem.bugun_yeni`,
+çizgi `uret.onceki_olcum_ani`; haftalık sayı bir önceki haftalığa bakar).
+01.10 defterine karşı ölçüldü: altı bayat cümleden yalnız gerçekten yeni olan
+TCMB net fonlaması kaldı. Aynı çizgi gösterge şeridine (`bugun_yeni`: ilerlemeyen
+kart soluk ve farksız; 30.09'da 17 kartın 10'u birebir dünküydü), gecikme
+satırına (ilk gün + haftada bir), "yeni veri" satırına (günlük ritimli hat
+yazılmaz — 108 satırın 95'i bunlardı) ve kilit habere (önceki sayının kilidi
+yeniden seçilmez) uygulandı. Olay cümlesi veri notu kalıbında: "{ad}
+({dönem}): {seviye} (önceki x; ±fark)" — 143 cümlenin 0'ı dönem taşıyordu,
+105'i birimi üç kez yazıyordu. Haber tonu yalnız |z| ≥ 2 (72 σ'lı cümlenin
+62'si altındaydı), kategori etiketi ("Alıcı") cümleye girmez.
+
+BİÇİM SAYININ KENDİSİNDE DURUR (`surum`): arşiv sayısı kendi kurallarıyla
+ölçülür ve basılır, yeniden ölçüm yazılmış sayının biçimini değiştirmez,
+birleştirme sürücüsünde ikisi de yazılıysa DAHA YENİ yazım kazanır (biçim 3
+bilerek kısadır; "dolu olan kazanır" bir düzeltmeyi eski uzun metinle ezerdi).
+
+RUTİN METNİ ESKİ: iki rutin de hâlâ "on iki bölümü yaz, en az 200/300/350
+kelime" diyor ve aracı onu değiştiremez (27.08 ilkesi). Sigorta araçta:
+`yaz.py` biçim 3 sayıda beyan dışı kimliği ve `ne_bekleniyor`u reddeder ve
+mesajı ESKİ TALİMATI ADIYLA anar ("rehber esastır"); `denetim` toplam tavanı
+ENGEL sayar. Rutin metninin claude.ai arayüzünden güncellenmesi AÇIK ve
+kullanıcının işi; önerilen metin oturum raporunda.
+
+Sayfa sabah notu sırasına dizildi (manşet → Bu sabah → gösterge → dünden bu
+yana gelen veriler → sonuçlar → bugün → okuma → konu bölümleri → rejim →
+olağandışı → piyasa → söz → takvim → temalar → haber akışı). 01.10 önizlemesi
+ölçüldü: 1440'ta 34.557 → 18.036 px, 390'da 47.164 → 22.988 px, görünür metin
+~9.900 → ~4.000 kelime, yazı katmanı 792 kelime, denetim 0 ENGEL.
+
+Önizleme dört kusuru yayından ÖNCE yakaladı ve dördü de bu dosyada adı olan
+sınıfların eşi. (a) "Ne bekleniyordu, ne geldi" saati gelmemiş BUGÜNKÜ iki
+yayımı (14:30) 07:47 ölçümünde listeye aldı; yeni okur dili "yayımlandı; sayı
+bu ölçüme henüz girmedi" bunu yalana çevirecekti — saati gelmemiş olay listeye
+girmez (`surpriz._saati_gelmedi`). Bir dizgeyi okur diline çevirmek, dizgenin
+hangi hâllerde basıldığını sormadan yapılamaz. (b) Yeni bir duman maddesi
+`uret.BULTEN`i sardı, modül `CIKTI` kullanıyordu: sınama GERÇEK 30.09 sayısını
+yeniden yazdı (git'ten geri alındı); madde artık sardığı adı varlığıyla sınar
+ve yazılan yolu doğrular. (c) Arıza enjeksiyonu "250 → 260" gibi AYNI BOYUTLU
+bir mutasyonu aynı saniyede geri yazınca Python'un .pyc önbelleği mutasyonu
+tuttu ve sonraki koşu SAHTE düşüş verdi; koşucu artık bayt kodu yazmıyor.
+(d) Olgu kalıbı ondalığı izleyen yan cümle virgülünü ("%40,50, koridor…")
+sayı devamı sanıp olguyu hiç saymıyordu.
+
+AÇIK: (i) ölçü kaynaklı bir sıçrama (01.10'da ABD 2 yıllık +33,7 bp, 4σ —
+veri sağlayıcının gecikmesi kapandı) olağandışı listesinin başında gerçek
+hareket gibi duruyor; ölçüm katmanı bunu işaretlemiyor, yazı katmanı
+"Düzeltmeler" ve tek cümleyle söylüyor. (ii) Rejim panosunun hesap sütunu her
+gün aynı basılıyor (ana sayfayla ortak bileşen; dokunulmadı). (iii) İlk gerçek
+biçim 3 sayısı 02.10 sabahı yazılacak; rutinin eski metinle reddi ilk kez o
+gün görülecek.

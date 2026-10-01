@@ -912,7 +912,13 @@ def takvim_tekrari(m: str) -> list[str]:
                 gun = unescape(re.sub(r"<[^>]+>", " ", t)).split()[0:3]
                 gun = " ".join(gun)
             saat = unescape(re.sub(r"<[^>]+>", "", _hucre(tr, "t-saat") or "")).strip()
-            ad = unescape(olay.split("<", 1)[0]).strip()
+            # Ad, hücrenin beklenti/dipnot/damga öğeleri DIŞINDAKİ metnidir.
+            # İlk yazımda "ilk etikete kadar olan metin" alınıyordu; ad bir
+            # ipucu öğesine sarılınca (resmî tablo adı, 01.10.2026) her satırın
+            # adı boş okundu ve aynı saatteki farklı yayımlar 233 sahte
+            # "tekrar" verdi — ölçütün kendi körlüğü, sayfanın değil.
+            ad_html = re.sub(r'<span class="(?:beklenti|dipnot|damga)"[^>]*>.*?</span>', "", olay, flags=re.S)
+            ad = unescape(re.sub(r"<[^>]+>", "", ad_html)).strip()
             a = (gun, saat, ad)
             if a in gorulen:
                 out.append(f"{gun} {saat} {ad}")

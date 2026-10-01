@@ -1,7 +1,7 @@
 # Bülten yazım rehberi
 
 Bu dosya, günlük ve haftalık bülteni **yazan** katmanın görev tarifidir. Bültenin
-ölçülen kısmı (piyasa fotoğrafı, takvim, göstergeler, hat hat değişim) otomatik
+ölçülen kısmı (piyasa fotoğrafı, takvim, göstergeler, dünden bu yana gelen veriler) otomatik
 koşudan gelir ve yazan taraf ona **dokunmaz**. Yazan taraf şu alanları doldurur:
 `manset`, `ozet.ne_oldu`, `yorum`, `gundem` (Türkiye · Küresel · Emtia ·
 Bugün ve önümüzdeki günler · Risk) ve — yalnız yayımlanmış bir sayı
@@ -82,7 +82,7 @@ değildir; okurun beş–yedi dakikası vardır.
    `haberler.haber`), kilit gelişmeler (`haberler.kilit`), izlenen temalar
    (`temalar`), rejim panosu (`rejim`), olağandışılık sıralaması
    (`piyasa.en_cok_hareket.sigma`), söz defteri (`izleme`), "ne bekleniyordu,
-   ne geldi" (`sonuclar`) ve hat hat değişim. **`olusturma` alanını hemen
+   ne geldi" (`sonuclar`) ve dünden bu yana gelen veriler (`gruplar`). **`olusturma` alanını hemen
    kaydet** — yamayı uygularken bu damgayı vereceksin; ölçüm sen yazarken
    yenilenirse yama reddedilir ve metni güncel ölçüye göre gözden geçirirsin
    (26.08.2026'da bu kaza gerçekten oldu: yazı 04:31'de yazıldı, ölçüm 05:01'de
@@ -520,19 +520,17 @@ Panonun iki yeni satırı, geri kalanının SORAMADIĞI soruyu soruyor:
   olabilir; freni toplam kredi büyümesinden okumak yanıltır.
 
 **Söz kapatırken not düş.** Bir izleme kaydını kapatıyorsan `isabet` alanını
-doldur (tuttu | tutmadi | kismen); ölçülemeyen kayıtlar notsuz kapanabilir ama
-bunu bilinçli seç. `sonuclar` bölümünde "geldi" görünen her satırın sürprizini
+doldur (tuttu | tutmadi | kismen) ve `kapanis` alanına kapattığın günü yaz
+(`YYYY-AA-GG`); ölçülemeyen kayıtlar notsuz kapanabilir ama bunu bilinçli seç.
+Kapanış günü yazılmazsa sayfa "bugün kapandı"yı önceki sayıdan türetir. `sonuclar` bölümünde "geldi" görünen her satırın sürprizini
 metinde yorumla — tablo ne olduğunu söyler, neden olduğunu sen söylersin.
 
 **FX haber endeksi bültenden ÖNCE tazelenir — bak.** Hat hafta içi her sabah
-04:53'te koşuyor, yani ölçümden 90 dakika önce; panodaki "FX haber endeksi —
-sepet spread'i" satırı o koşudan gelir. Panoda yalnız spread var, çünkü hattın
-uçları (en alıcı / en satıcı varlık) her gün başka bir varlığa ait ve sürüm
-kıyası anlamsız olurdu. Günün haber tonunda anlatmaya değer bir şey olup
-olmadığını görmek için proje sayfasına bak: hangi varlık uçta, kaç makaleyle,
-bir önceki okumaya göre ne kadar döndü. **Spread'in saati ayrıdır**: o GDELT
-haftalık arşivinden gelir ve hattın günlük tarihinden birkaç gün geridedir —
-panoda kendi tarihiyle yazar, o tarihle anlat.
+04:53'te koşuyor, yani ölçümden 90 dakika önce. Sepet spread'i 01.10.2026'dan
+beri gösterge şeridinde YOK (birimsiz ve ölçeksiz bir sayıydı); haber tonunun
+2σ'yı aşan hareketleri sayfanın olağandışı bölümünde cümleyle basılır. Günün
+tonunda anlatmaya değer bir şey olup olmadığını görmek için proje sayfasına
+bak: hangi varlık uçta, kaç makaleyle, bir önceki okumaya göre ne kadar döndü.
 
 **Haber tonunda 2σ'yı aşan hareket ANILMAK ZORUNDA.** Ölçüm katmanı FX haber
 endeksinin günün en büyük üç hareketini sıralayıp sayfada basar; denetim
@@ -567,7 +565,7 @@ CANLILIĞINI de ölçüyor: veri iş akışı her koşuda nabzını atıyor ve d
 damganın yaşına bakıyor. İki uyarı doğrudan sana:
 
 - *"Veri iş akışı N saattir koşmadı"* — ölçüm katmanı bayat olabilir. Yazmadan
-  önce hatların veri tarihlerini (pano ve "hat hat değişim") gözden geçir;
+  önce hatların veri tarihlerini (pano ve "dünden bu yana gelen veriler") gözden geçir;
   bayat bir hattın sayısını günün haberi gibi anlatma.
 - *"Son veri koşusunun tazeleme adımı 'failure' ile bitti"* — bazı hatlar
   çekilememiş. Hangilerinin eski kaldığını veri tarihlerinden bul ve metinde
@@ -700,7 +698,9 @@ OLMADIĞINI ya da sürprizin ölçülemeyeceğini metinde anlatma; tablo "—" b
 sayfada "Söz defteri" bölümü olarak basılıyor: açık sözler vadeleriyle, yakın
 zamanda kapananlar sonuçlarıyla. İki sonucu var. Birincisi, bir kaydın `soz` ve
 `ne_bakilacak` alanları artık iç not değil **yayımlanan metindir** — okurun tek
-başına anlayacağı şekilde yazılır. İkincisi, bir kaydı kapatırken `isabet`
+başına anlayacağı şekilde yazılır — ve **kısa** (biçim 3: `soz` en çok 80
+kelime; tez, çürütme ölçütü, vade; olgular yazıda kalır, denetim uzun kaydı
+uyarır). İkincisi, bir kaydı kapatırken `isabet`
 alanı doldurulur:
 
 | değer | ne zaman |

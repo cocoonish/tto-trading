@@ -54,6 +54,10 @@ class Kayit:
     beklenti_sayi: float | None = None
     onceki: str = ""          # varsa: bir önceki gerçekleşme
     not_: str = ""
+    # Yayımın RESMÎ adı (TÜİK takvimindeki tablo adı). Dipnot olarak basılmaz:
+    # 30.09'da 22 takvim dipnotunun 22'si olayın resmî adının tekrarıydı ve
+    # okura yeni bir bilgi vermiyordu. Sayfa onu olay adının ipucunda taşır.
+    resmi_ad: str = ""
 
     def gun_adi(self) -> str:
         return GUNLER_TR[datetime.strptime(self.tarih, "%Y-%m-%d").weekday()]
@@ -163,8 +167,9 @@ def hazine(ufuk_gun: int = 21) -> list[Kayit]:
             bek = f"model: {_sayi(tahmin / 1000, 1)} mlr TL gerçekleşme"
             if b2c:
                 bek += f", teklif/karşılama {_sayi(b2c, 2)}"
-        elif "Doğrudan" in yontem:
-            bek = "doğrudan satış — ihale tahmini yok"
+        # Doğrudan satışın tahmini yoktur ve bunu satıra yazmak (eski "doğrudan
+        # satış — ihale tahmini yok") okura kendi modelimizin kapsamını
+        # anlatıyordu; beklenti yoksa alan boş kalır, tablo "—" basar.
         out.append(Kayit(g.isoformat(), "", "TR",
                          hazine_ad(senet, vade, yontem),
                          onem=1 if "İhale" in yontem else 2,
@@ -211,7 +216,12 @@ def tuik(ufuk_gun: int = 21, asgari_onem: int = 2) -> list[Kayit]:
             return []
         kayitlar = [Kayit(**k) for k in veri]
         for k in kayitlar:
-            k.not_ = (k.not_ + " (önbellekten; takvim servisi okunamadı)").strip()
+            # Eski önbellek resmî adı dipnotta taşıyordu: yerine taşınır. Takvim
+            # servisinin okunamadığı OKURA yazılmaz (boru hattının durumu);
+            # kaynak alanında işaretlenir.
+            if k.not_ and not k.resmi_ad:
+                k.resmi_ad, k.not_ = k.not_, ""
+            k.kaynak = (k.kaynak + " (önbellek)").strip()
         return [k for k in kayitlar if bugun.isoformat() <= k.tarih <= son.isoformat()]
 
     out: list[Kayit] = []
@@ -233,7 +243,7 @@ def tuik(ufuk_gun: int = 21, asgari_onem: int = 2) -> list[Kayit]:
         donem = x.get("donemi") or ""
         out.append(Kayit(g, saat, "TR", f"{kurum}: {kisa or ad}" + (f" ({donem})" if donem else ""),
                          onem=onem, kaynak="TÜİK Ulusal Veri Yayımlama Takvimi",
-                         kesinlik="kesin", not_=ad if kisa and kisa != ad else ""))
+                         kesinlik="kesin", resmi_ad=ad if kisa and kisa != ad else ""))
     if out:
         _onbellege_yaz("tuik", [asdict(k) for k in out])
     return out

@@ -20,7 +20,7 @@ from __future__ import annotations
 import json
 import re
 import subprocess
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 import sys as _sys
 _sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "ortak"))
@@ -183,6 +183,54 @@ def surum_ilerledi(hat: str, simdi: dict, anahtar: str, acik: str = "") -> bool:
         return _ileri_gitti(anahtar_tarihi(d, anahtar, acik),
                             anahtar_tarihi(simdi, anahtar, acik))
     return True
+
+
+def _an(t: str) -> datetime | None:
+    """Defter damgası → UTC naif an. Dilimli damga (git önyüklemesi "+03:00")
+    UTC'ye çevrilir; dilimsiz damga koşucunun saatidir ve koşucu UTC'dedir."""
+    try:
+        d = datetime.fromisoformat(str(t).replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return None
+    if d.tzinfo is not None:
+        d = d.astimezone(timezone.utc).replace(tzinfo=None)
+    return d
+
+
+def anahtar_ilk_gorulme(hat: str, anahtar: str, acik: str = "") -> datetime | None:
+    """Bu anahtarın ŞİMDİKİ saatine defterde ilk geçildiği an (UTC naif).
+
+    Sondaki kesintisiz dizinin başı (`_dizi_basi`): revizyonla eski bir saate
+    dönülürse en son geçişi verir."""
+    kayitlar = [{**k, "_deger": anahtar_tarihi(k["d"], anahtar, acik)}
+                for k in gecmis_oku(hat)
+                if isinstance(k.get("d"), dict) and anahtar in k["d"]]
+    if not kayitlar:
+        return None
+    return _an(_dizi_basi(kayitlar, kayitlar[-1]["_deger"]).get("t", ""))
+
+
+def bugun_yeni(hat: str, simdi: dict, anahtar: str, acik: str = "",
+               esik: datetime | None = None) -> bool:
+    """Bu ölçüm BUGÜNÜN olayı mı: saati önceki sürüme göre ilerlemiş VE şimdiki
+    saatine bir önceki sayının ölçüm anından (`esik`) SONRA geçilmiş.
+
+    KUSUR (01.10.2026 ölçüldü): `surum_ilerledi` yalnız "önceki sürüme göre
+    ilerledi mi" diye soruyordu — bu soru bir kez ilerlemiş bir sürüm için
+    SONSUZA KADAR evettir. Dosyası donan hat her sabah yeniden duyuruldu:
+    11.09–30.09 arasında 143 ölçüm cümlesinin 106'sı (%74,1) daha önce aynı
+    veri tarihiyle basılmıştı; "Lokanta / ev yemeği oranı 1,27 → 1,28" 17 sayı
+    üst üste çıktı. Eksik olan ZAMAN sorusuydu: yeni olan, bir önceki sayının
+    görmediği sürümdür. `esik` yoksa (ilk sayı) eski davranış sürer."""
+    if not surum_ilerledi(hat, simdi, anahtar, acik):
+        return False
+    if esik is None:
+        return True
+    ilk = anahtar_ilk_gorulme(hat, anahtar, acik)
+    # Ölçülemeyen damga (defter yok/bozuk) sessizce "yeni" sayılmaz ve
+    # sessizce düşmez: eski davranış sürer, çünkü ölçülmüş bir sürümü okurdan
+    # saklamak sahte tekrardan pahalıdır.
+    return True if ilk is None else ilk > esik
 
 
 def onceki_surum_anahtar(hat: str, anahtar: str, acik: str = "",

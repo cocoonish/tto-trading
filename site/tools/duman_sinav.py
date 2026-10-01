@@ -840,6 +840,21 @@ sina("aynı gün farklı saat ya da farklı olay geçer",
      not basim([("bulten/x/index.html", _tk((_gun, "10:00", "TÜİK: İşgücü (Ağustos 2026)"),
                                             ("", "10:00", "TÜİK: Dış ticaret (Ağustos 2026)"),
                                             ("", "14:00", "TÜİK: İşgücü (Ağustos 2026)")))]))
+# GERÇEK BİÇİM (01.10.2026): olay adı resmî adı ipucunda taşıyan bir öğeye
+# sarılı ve önünde bir etiket var. İlk ölçüt adı "ilk etikete kadar" okuyordu,
+# her satır boş adla "aynı" çıktı ve derlenmiş sitede 233 sahte bulgu verdi.
+def _tk_sarili(*satirlar):
+    govde = "".join(f'<tr{_cid}> <td class="t-tarih"{_cid}>{t}</td> <td class="t-saat"{_cid}>{sa}</td> '
+                    f'<td class="t-ulke"{_cid}>TR</td> <td class="t-olay"{_cid}> <span title="Resmî ad"{_cid}>{o}</span>'
+                    f' <span class="beklenti"{_cid}>model: 50,9</span></td> </tr>'
+                    for t, sa, o in satirlar)
+    return f'<table class="takvim"{_cid}><tbody{_cid}>{govde}</tbody></table>'
+sina("ipucuna sarılı farklı adlar aynı saatte geçer",
+     not basim([("bulten/x/index.html", _tk_sarili((_gun, "14:30", "TCMB: Menkul kıymet ist. (39. Hafta 2026)"),
+                                                   ("", "14:30", "TCMB: Haftalık para-banka (39. Hafta 2026)")))]))
+sina("ipucuna sarılı aynı ad iki satır ENGEL",
+     len(basim([("bulten/x/index.html", _tk_sarili((_gun, "14:30", "TCMB: Haftalık para-banka (39. Hafta 2026)"),
+                                                   ("", "14:30", "TCMB: Haftalık para-banka (39. Hafta 2026)")))])) == 1)
 sina("aynı olay farklı günde geçer",
      not basim([("bulten/x/index.html", _tk((_gun, "14:00", "BDDK: Bankacılık sektörü (39. Hafta 2026)"),
                                             ('1 Ekim 2026<span class="t-gun"' + _cid + '>Perşembe</span>', "14:00",
