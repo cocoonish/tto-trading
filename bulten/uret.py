@@ -187,21 +187,29 @@ def _beklenti_metni(olay: str, ulke: str = "TR") -> str:
     fon = gozlem.anlik("fonlama-likidite") or {}
     s = olay.lower()
     p = []
+    # ANKET AYI ve MODELİN DÖNEMİ yazılır (01.10.2026 incelemesi): aynı sayfada
+    # piyasa tablosu DİBS hattından bir sonraki ayın anketini basabiliyor (Ağustos
+    # 29,59 · Eylül 29,22) ve ay yazılmazsa aynı büyüklük iki değerle görünüyordu;
+    # model sayısı da Aralık yıllık oranıydı ama "TÜFE (Eylül)" satırında
+    # dönemsiz durunca Eylül baskısının tahmini gibi okunuyordu.
+    import re as _re
+    m = _re.match(r"^(\d{2})\.(\d{4})$", str(enf.get("pka_tarih") or ""))
+    anket = f"PKA {olay_m._AYLAR_TR[int(m.group(1)) - 1]}" if m and 1 <= int(m.group(1)) <= 12 else "PKA"
     if "tüfe" in s:
         if enf.get("bek_yilsonu") is not None:
-            p.append(f"anket (PKA, {enf.get('bek_n', '?')} katılımcı): yıl sonu "
+            p.append(f"anket ({anket}, {enf.get('bek_n', '?')} katılımcı): yıl sonu "
                      f"%{olay_m._s(enf['bek_yilsonu'], 2)}")
         if enf.get("bek_12a") is not None:
             p.append(f"12 ay sonrası %{olay_m._s(enf['bek_12a'], 2)}")
         if enf.get("baz_momentum_yilsonu") is not None and enf.get("baz_tekrar_yilsonu") is not None:
-            p.append(f"kendi baz etkisi modelimiz: momentum senaryosu "
+            p.append(f"baz etkisi modelimiz, yıl sonu: momentum senaryosu "
                      f"%{olay_m._s(enf['baz_momentum_yilsonu'], 2)}, tekrar senaryosu "
                      f"%{olay_m._s(enf['baz_tekrar_yilsonu'], 2)}")
     if "ppk" in s or "faiz kararı" in s:
         if fon.get("politika") is not None:
             p.append(f"mevcut politika faizi %{olay_m._s(fon['politika'], 2)}")
         if enf.get("bek_faiz_12a") is not None:
-            p.append(f"anket: 12 ay sonrası politika faizi %{olay_m._s(enf['bek_faiz_12a'], 2)}")
+            p.append(f"anket ({anket}): 12 ay sonrası politika faizi %{olay_m._s(enf['bek_faiz_12a'], 2)}")
     if "ödemeler dengesi" in s:
         pass  # ödemeler dengesi hattı kurulunca buraya beklenti bağlanacak
     return " · ".join(p)
@@ -382,10 +390,12 @@ def temalar() -> dict:
 
 
 def onceki_olcum_ani(tarih: date, haftalik: bool = False) -> datetime | None:
-    """Bir önceki sayının ölçüm anı (UTC naif) — bugünün olaylarının kıyas
-    çizgisi. Haftalık sayı bir önceki HAFTALIK sayıya bakar: haftanın
-    yayımlarını anlatır. Okunamayan dosya atlanır; hiç sayı yoksa None (ilk
-    sayı, eski davranış)."""
+    """Bir önceki YAYIMLANMIŞ sayının ölçüm anı (UTC naif) — bugünün olaylarının
+    kıyas çizgisi. Haftalık sayı bir önceki HAFTALIK sayıya bakar: haftanın
+    yayımlarını anlatır. Yalnız yazılmış sayı sayılır (site yalnız onu basar,
+    `yayinlar.ts` bultenYazilmis): yazılmamış bir sayının ilk gördüğü yayım
+    hiçbir okura ulaşmamıştır ve çizgi o olsaydı bir sonraki sayıdan da düşerdi.
+    Okunamayan dosya atlanır; hiç sayı yoksa None (ilk sayı, eski davranış)."""
     for p in sorted((p for p in CIKTI.glob("????-??-??.json") if p.stem < tarih.isoformat()),
                     reverse=True):
         try:
@@ -393,6 +403,8 @@ def onceki_olcum_ani(tarih: date, haftalik: bool = False) -> datetime | None:
         except Exception:                                      # noqa: BLE001
             continue
         if haftalik and not b.get("haftalik"):
+            continue
+        if b.get("gundem_kaynagi") != "yazili":
             continue
         an = gozlem._an(b.get("olusturma") or "")
         if an is not None:

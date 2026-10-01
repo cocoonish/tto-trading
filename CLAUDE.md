@@ -3634,3 +3634,75 @@ hareket gibi duruyor; ölçüm katmanı bunu işaretlemiyor, yazı katmanı
 gün aynı basılıyor (ana sayfayla ortak bileşen; dokunulmadı). (iii) İlk gerçek
 biçim 3 sayısı 02.10 sabahı yazılacak; rutinin eski metinle reddi ilk kez o
 gün görülecek.
+
+**İnceleme (01.10.2026, beş mercek, donmuş kopya 695df41) — BİR BİÇİM
+DEĞİŞİKLİĞİNİN ASIL KUSURLARI TÜKETİCİLERDE VE KAPILARDADIR.** 40 ham bulgu;
+doğrulananların hepsi düzeltildi, biri çürütüldü. Yeni kodun kendi mantığında
+çıkan kusur az; ağırlık, biçimin dokunmadığı sanılan yerlerdeydi.
+
+(1) ARA GÖRÜNTÜ İLERLEMEYİ YUTAR. `bugun_yeni`nin ilk yazımı önce
+`surum_ilerledi`yi soruyordu, yani "bir önceki FARKLI görüntüye göre". İki sayı
+arasında birden çok görüntü varsa (haftalık sayı · aynı sabah iki ölçüm)
+ilerlemeyi aradaki görüntü yutuyordu: beş haftalık sayının beşinde haftanın net
+rezerv yayımı düşüyordu. Kıyas artık çizgi ANINDA güncel olan kayıtla
+(`gozlem.esikteki`). Aynı turda çizginin kendisi de düzeldi: yalnız YAZILMIŞ
+sayı çizgi olur (yazılmamış otomatik sayının gördüğü yayım hiçbir yayımlanmış
+sayıya girmiyordu), defter damgası dilimli UTC (dilimsiz yerel damga UTC
+sayılıyordu) ve haber tonu da aynı kapıdan geçer (aynı ≥2σ hareket pazar ile
+pazartesi birebir basılmıştı).
+
+(2) YAYININ ÖNÜNDE DURAN KAPI YENİ İSTİSNAYI BİLMİYORDU. Kurun farkı bilerek
+yüzde basılıyor (`GOSTERGE_YUZDE_FARK`); sayfa sınavı 27 ise "gösterge farkı
+yüzde" kusurunu birimi sormadan arıyordu — biçim 3'ün İLK sayısı siteyi
+durduracaktı. "Oranın farkı puandır" SEVİYESİ yüzde olan kartın kuralıdır;
+ölçüt artık kartın seviyesini okuyor. Kusur ancak kapı yeni biçimin
+ÖNİZLEMESİNE karşı koşturulunca göründü: duman fikstürü eski biçimi taşıyordu.
+Bir sözleşmeye istisna konduğu commit, o sözleşmeyi dayatan kapıyı da
+değiştirmelidir.
+
+(3) KOVA ile BÖLÜM ARASINDAKİ BAĞ DÜZENLE KOPAR. Haber tonu "Dünden bu yana"
+listesinden çıkıp kendi alanına taşındı ve yalnız olağandışı bölümünde
+basıldı; pazar düzeninde o bölüm yok. Olay `notlar` kovasında durduğu için
+ölçüt 25 onu sayfada arar — ilk pazar site donacaktı. Gerçek bir biçim 3 pazar
+sayısı henüz yok; kilit yapısal (`duman_sinav`: hafta hareketi bölümü haber
+tonunu basar).
+
+(4) BİÇİM DEĞİŞİNCE TÜKETİCİLER DE DEĞİŞİR. Gönderi gövdesini `yorum`dan
+kuruyordu; biçim 3'te okuma olguları bilerek yeniden saymaz ve önizleme
+gönderisinde TMSF, ÖTV, PCE rakamı hiç geçmiyordu — kapı "temiz" dedi. Gönderi
+artık manşet ve `ne_oldu` maddeleriyle açılır, öne çıkanlar maddelerin
+saydığını yinelemez, pano farkı sayfanın kuralıyla (kur yüzde · oran puan ·
+ilerlemeyen gösterge farksız; 18.09 tarihli "Net rezerv (−6,5)" altı gönderide
+tekrar etmişti). Arama endeksi de manşeti ve maddeleri almıyordu. Yeni duman
+maddesi gizli bir yol kusurunu da çıkardı: kayıt defterini okumak için
+`bulten/` `sys.path`in BAŞINA ekleniyordu ve tweet sürecinde sonraki `import
+denetim` bültenin aynı adlı modülüne düşüyordu — üretim yalnız içe aktarma
+SIRASI sayesinde güvendeydi. Defter dosya yolundan yüklenir.
+
+(5) `toFixed` İLE `Intl` AYNI KURAL DEĞİLDİR. Rejim farkı toFixed'le, ekran
+Intl'le yuvarlanıyordu ve kodun yorumu ikisini "aynı kural" diye yazıyordu:
+200 bin değerde 766'sı ayrıştı, manşet "+9,2 → +9,0" yazarken şerit "−0,3
+puan" bastı. Fark artık ekranın kendi biçimleyicisinden geçen iki değerden.
+
+(6) EDİTÖR MERCEĞİ okurun gördüğünü sordu; on üç bulgunun yalnız biri (ABD
+2 yıllık) bir sayının kendisiyle ilgiliydi, kalanı ad, etiket, seçim ve basım: HMB'nin haznedarlık yayımı TCMB'nin "Menkul kıymet
+ist." adını alıp sonuç satırında TCMB'nin yabancı akımına bağlanıyordu; dış
+ticaret anketi ve endeksleri ana yayımla aynı adı alıyordu; takvim satırı
+anket AYINI ve modelin DÖNEMİNİ yazmıyordu (aynı sayfada iki ayın anketi,
+Aralık tahmini Eylül satırında); itibarı sıfır iki kaynak kilit habere girdi;
+eğrinin dünkü serisi "bugün" diye etiketliydi ve uç etiketleri üst üste
+biniyordu; künye her sabah yalnız Bitcoin yüzünden "seans karma" diyordu;
+tema anlatısı aynı rakamları iki kez basıyordu; sayıyı geçersiz kılan satır
+notu ("vade geçişi denetlenemedi") katın içinde kalıyordu; saati gelmemiş
+yayımın altına önceki seansın hareketi "tepki" diye basılıyordu.
+
+AÇIK: (i) ABD 2 yıllık satırı (`2YY=F`) bayat vadeli kotasyon taşıyor —
+haftalarca birebir aynı kapanışlar, 30.09'da +33,7 bp "sıçrama"; devir
+denetimi yalnız beş enerji vadelisini kapsıyor. Kaynak değişikliği önce bulut
+keşfiyle yoklanmalı (aday: ABD Hazinesi günlük getiri eğrisi); o güne kadar
+satır σ listesine girebilir. (ii) Takvimin anket bacağı Enflasyon hattından,
+piyasa tablosununki DİBS hattından geliyor ve ikisi ayın yarısında farklı
+ankettir; artık ikisi de ayını yazıyor, tek kaynağa bağlamak 17.09'da açık
+bırakılan DİBS etiket sorusunun cevabını ister. (iii) Önizleme de donmuş
+durumun parçasıdır: inceleme koşarken önizleme bir kez yeniden derlendi;
+bulgular etkilenmedi ama kural, kaynağın yanında önizlemeyi de dondurur.

@@ -515,8 +515,53 @@ def _site_izi_hassasiyeti() -> None:
         assert uret._site_izi_var(c), f"gerçek iz kaçtı: {c!r}"
 
 
+def _bicim3_govde():
+    """Biçim 3 (01.10.2026 incelemesi): olguların TEK evi `ne_oldu` maddeleridir;
+    gönderi onlarla açılır. Gövde yalnız okumadan kurulunca TMSF, ÖTV ve PCE
+    rakamı gönderide hiç geçmiyordu. Pano farkı sayfanın kuralıyla: kur yüzde,
+    oran puan, bugün ilerlemeyen gösterge farksız. Öne çıkanlar maddelerin
+    saydığı hareketi yinelemez."""
+    b3 = {
+        "tarih": "2026-10-01", "haftalik": False, "surum": 3, "gundem_kaynagi": "yazili",
+        "manset": "PCE yumuşak geldi, uzun uç yine satıldı",
+        "yorum": "<p>Bankacılık endeksindeki kayıp belirsizliği fiyatlıyor. " * 30 + "</p>",
+        "ozet": {"ne_oldu": "<ul><li><strong>Bankalar.</strong> BDDK beş kuruluşu TMSF'ye devretti; "
+                            "bankacılık endeksi −%4,58.</li>"
+                            "<li><strong>ABD.</strong> Çekirdek PCE yıllık %3,0 geldi.</li></ul>"},
+        "gundem": {"turkiye": "<p>SPK bir aracı kurumun faaliyetlerini durdurdu.</p>",
+                   "takvim": "<p>Bugün 14:30 haftalık para-banka.</p>"},
+        "piyasa": {"en_cok_hareket": {"sigma_kip": "gunluk", "gunluk": [
+            {"ad": "BIST Bankacılık", "deger": -4.58, "birim": "%"},
+            {"ad": "MOVE", "deger": 3.61, "birim": "%"}]}},
+        "gostergeler": [
+            {"ad": "USD/TRY", "metin": "49,01", "birim": "", "fark_metin": "+0,02", "fark_birim": "%",
+             "bugun_yeni": True, "veri_tarihi": "30.09.2026"},
+            {"ad": "TÜFE", "metin": "31,51", "birim": "%", "fark_metin": "−0,24", "bugun_yeni": True,
+             "veri_tarihi": "09.2026"},
+            {"ad": "Net rezerv", "metin": "55,8", "birim": "mlr USD", "fark_metin": "−6,5",
+             "bugun_yeni": False, "veri_tarihi": "18.09.2026"}],
+    }
+    t = uret.bulten_zinciri(b3)[0]
+    assert "TMSF" in t and "%3,0" in t, "maddelerin olguları gönderide yok"
+    assert t.index("TMSF") < t.index("belirsizliği fiyatlıyor"), "maddeler okumadan sonra"
+    assert "PCE yumuşak geldi" in t.split("\n\n")[0], "manşet başlıkta değil"
+    assert "USD/TRY 49,01 (+%0,02)" in t, "kur farkı yüzde basılmadı"
+    assert "TÜFE %31,51 (−0,24 puan)" in t, "oranın farkı puan değil"
+    assert "Net rezerv 55,8 mlr USD (" not in t, "ilerlemeyen göstergenin farkı basıldı"
+    assert "Bankacılık −%4,58" not in t.split("Günün öne çıkanları")[-1].split("\n")[0], \
+        "maddelerin saydığı hareket öne çıkanlarda yinelendi"
+    assert "MOVE +%3,61" in t, "maddelerde olmayan hareket düştü"
+    assert t.count("14:30") == 1, "takvim iki kez girdi"
+    yazisiz = uret.bulten_zinciri({**b3, "yorum": ""})[0]
+    assert "TMSF" in yazisiz, "okuma yokken maddeler düştü"
+    # Kayıt defteri okunurken bulten/ yola girmez: girerse sonraki `import
+    # denetim` / `import uret` bültenin aynı adlı modülüne düşer.
+    assert str(uret.KOK / "bulten") not in sys.path, "bulten/ sys.path'e girdi"
+
+
 def main() -> int:
     print("tweet duman sınaması:")
+    sina("biçim 3: maddelerle açılır · pano sayfanın kuralıyla · öne çıkanlar yinelenmez", _bicim3_govde)
     sina("analiz gönderisi: yönetici özeti, SABİT <Deger>, atıf düşer, not sonda", _analiz_zinciri)
     sina("kalite kapısı: tavsiye · link · HTML · atıf · kesik · boş etiket · dil · uzunluk", _denetim)
     sina("sorumluluk notu her gönderide, kırpmadan muaf", _kapanis_notu)

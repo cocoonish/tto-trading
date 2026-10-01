@@ -152,17 +152,18 @@ profesyoneli tarafından yazılmış gibi değil; çok tekrar var".
 | `gundem.risk` | Risk haritası | ≤180 · ≤300 | isteğe bağlı |
 | `duzeltmeler` | Düzeltmeler | — | yalnız yayımlanmış bir sayı düzeltilirken |
 
-**Toplam yazı (manşet + madde + okuma + gündem): günlük 700–1.600 kelime,
-haftalık 1.300–2.800.** Günlükte 2.200, haftalıkta 3.600 kelimeyi aşan yazı
-denetimde ENGEL alır. Aralığın altı ve bölüm üst sınırının üstü yalnız
-UYARI'dır: söyleyecek az şey varsa az yaz. Boş zorunlu bölüm ENGEL'dir.
+**Toplam yazı (manşet + madde + okuma + gündem): günlük hedef 700–1.300
+kelime, haftalık 1.300–2.400.** Günlükte 1.600, haftalıkta 2.800 kelimeyi aşan
+yazı denetimde ENGEL alır; bir bölüm kendi üst sınırının 1,5 katını aşarsa o da
+ENGEL'dir. Aralığın altı ve üst sınırla 1,5 katı arası yalnız UYARI'dır:
+söyleyecek az şey varsa az yaz. Boş zorunlu bölüm ENGEL'dir.
 `ozet.ne_bekleniyor` biçim 3'te YOKTUR (ileriye bakış `gundem.takvim`dedir);
 yazma kapısı onu reddeder.
 
 ### `manset` — günün tezi
 Tek cümle, düz metin, özneli ve yüklemli bir HÜKÜM; olayın adı değil.
-En çok iki sayı; Türkiye'ye etkisi varsa aynı satırda. Örnek: *"Uzun uç
-petrolden koptu: Brent −%2,6 iken ABD 30 yıllık %5,59'a çıktı; BIST −%2,4,
+En çok iki ölçüm sayısı; Türkiye'ye etkisi varsa aynı satırda. Örnek: *"Uzun uç
+petrolden koptu: Brent −%2,6 iken ABD 30 yıllık %5,59'a çıktı;
 TL kımıldamadı."*
 
 ### `ozet.ne_oldu` — Bu sabah (3–5 madde)
@@ -234,7 +235,7 @@ sınar: süreç dili ENGEL, bütçeli kalıplar UYARI.
    bir satır", "X satırı", "kaydın çürütme ölçütü", "kurduğumuz kayıt", "bir
    ölçü uyarısı / kısıtı / boşluğu", "dürüstçe kayda geçsin", "hüküm
    kurulmadı", "beklenti elimizde yok / sürpriz ölçülmeyecek", "hattımız",
-   "defterde", "sürümünde donmuş", "kapanışını taşıyor", "barını boş verdi",
+   "söz defterinde", "sürümünde donmuş", "kapanışını taşıyor", "barını boş verdi",
    "beş ayrı kaynakta yer buldu". Veri kısıtı (bir satırın hangi seansa ait
    olduğu, boş bar, vade devri, bayat seri) **sayfanın kendi dipnotunda**
    durur; düzyazıya girmez. Güvenilmez bir seri kullanılmaz ve neden
@@ -245,9 +246,10 @@ sınar: süreç dili ENGEL, bütçeli kalıplar UYARI.
 3. **Değişmeyeni yazma.** Önceki sayıdan beri değişmemiş bir değer (politika
    faizi seti, ÖTV takvimi, cari açık, ihale modeli) düzyazıya yalnız olay
    günü ya da değiştiği gün girer. Bugün ve önceki iki sayının üçünde de
-   yazılmış değerler denetimde "kronik olgu" diye listelenir.
+   yazılmış değerler üçten fazlaysa denetim onları "kronik olgu" diye listeler.
 4. **Okuma her gün yeni bir cümleyle açılır.** Dünün açılışını yeniden kurma.
-5. **Cümle kısa.** En çok ~30 kelime (ortalama 14–18), cümle başına en çok dört
+5. **Cümle kısa.** Ortalama en çok 22 kelime ve 35 kelimeyi aşan cümle en çok
+   %8 (denetimin eşiği; hedef ortalama 14–18), cümle başına en çok dört
    ölçüm sayısı, en çok bir uzun tire. Etken çatı. "yani" bağlacı 300 kelimede
    en çok bir; "bir X değil bir Y" kalıbı sayı başına en çok iki;
    "İkincisi/Üçüncüsü" yerine madde.
@@ -391,7 +393,7 @@ Kalıcı çözüm rutin metnini claude.ai arayüzünden düzeltmektir.
 | "Dosya yoksa `python3 bulten.py --tur gunluk` ile üret" | Üretme — o oturumda ağ kapalı, 0 enstrümanlık fotoğraf çıkar ve önbellek kirlenir; iş akışlarını tetikle | **Araçla kapatıldı**: `bulten.py` 40 enstrümanın altında dosyayı YAZMIYOR (çıkış 4) |
 | `python3 bulten/yaz.py yama.json` (damgasız) | `--damga "<olusturma>"` ver | Araçla kapatıldı: damga verilmese de yama dosyasının zamanı ölçümle kıyaslanıyor |
 | `zincir.py` hiç geçmiyor | 0. adım zincire bakmaktır | **Araçla ÖLÇÜLDÜ**: `yaz.py` gecikmeyi zincir raporundan bağımsız kaydeder ve `gecikme.yml` alarmı zincir raporuna hiç bakmadan verir. Dayatılamıyor, ama artık görünmüyor da değil |
-| "Rehberdeki on iki bölümü yaz. Haber bölümleri en az 200, yazı bölümleri en az 300, günlük yorum en az 350 kelime" (01.10.2026'da okundu) | Sayı biçim 3'teyse beş bölüm, uzunluk ARALIK (bkz. "Doldurulacak alanlar (biçim 3)"); toplam tavanın üstü ENGEL | **Araçla kapatıldı**: `yaz.py` biçim 3 sayıda beyan dışı bölüm kimliğini reddeder ve mesajı bu satırı adıyla anar; `denetim.py` toplam tavanı ENGEL sayar |
+| "Rehberdeki on iki bölümü yaz. Haber bölümleri en az 200, yazı bölümleri en az 300, günlük yorum en az 350 kelime" (01.10.2026'da okundu) | Sayı biçim 3'teyse beş bölüm, uzunluk ARALIK (bkz. "Doldurulacak alanlar (biçim 3)"); toplam tavanın ve bölüm üst sınırının 1,5 katının üstü ENGEL | **Araçla kapatıldı**: `yaz.py` biçim 3 sayıda beyan dışı bölüm kimliğini reddeder ve mesajı bu satırı adıyla anar; eski asgarilerle doğru kimliklere yazılan not (~1.700 kelime) günlük 1.600 tavanında ve bölüm 1,5 kat sınırında ENGEL alır |
 | Haftalık: "`ozet.ne_bekleniyor` önümüzdeki haftayı anlatır; takvimi `beklenti` bölümünde tek tek işle" | Biçim 3'te ileriye bakış `gundem.takvim` (haftalık başlığı "Önümüzdeki hafta"); özet yalnız `ne_oldu` | **Araçla kapatıldı**: `yaz.py` biçim 3'te `ne_bekleniyor`u ve `beklenti` kimliğini reddeder |
 
 **Silip yeniden kurmak da çözüm değil.** 27.08.2026'da denendi: aracının
@@ -457,14 +459,20 @@ altında.
 **Atıf disiplini.** Sayının penceresinde (günlükte günün, haftalıkta haftanın)
 en büyük üç hareketi `%1,5`'i aşıyorsa ve 2σ'yı aşan her hareket metinde BİR
 KEZ anılır ve sebebi yazılır — bir madde de sayılır, aynı hareketi ikinci bir
-bölümde yeniden anlatma. Sebebi bilinmiyorsa bir kez "sebebi netleşmedi" yaz —
+bölümde yeniden anlatma. Biçim 3'te yüzdesi büyük ama kendi oynaklığına göre
+sıradan (|σ| < 1) hareket anılmak zorunda değildir (kural 6: 1σ altı
+düzyazıya girmez). Sebebi bilinmiyorsa bir kez "sebebi netleşmedi" yaz —
 en görünür manşeti sürücü diye göstermek en kötü seçenek. (2026-08-17 haftasında ABD Hazinesi'nin
 tahvil geri alımı USD ve faizlerdeki asıl sürücüydü ve bülten bunu tamamen
 atlamıştı; `onem_puani` ve ABD Hazine kaynağı bu yüzden eklendi.)
 
 **Metin kendi ayakları üstünde dursun.** Yazdığın `yorum` ve `gundem`
 bölümleri yalnız sitede okunmuyor: aynı metin X'e tek gönderi olarak da çıkıyor
-ve orada ne sayfa, ne tablo, ne de başka bir bölüm var. Gönderi
+ve orada ne sayfa, ne tablo, ne de başka bir bölüm var. Biçim 3'te gönderi
+başlığın altında `manset` ile, sonra `ozet.ne_oldu` maddeleriyle açılır (madde
+başına ~330 karakter), okuma ondan sonra ve kısaltılmış gelir; "öne çıkanlar"
+satırı maddelerin saydığı hareketi yinelemez. Maddeler gönderinin gövdesidir:
+olgu ve rakam oradadır, okuma onları yeniden saymaz. Gönderi
 `tweet/denetim.py` kapısından geçer (tavsiye dili, link — tweetlerde HİÇ link
 kullanılmaz, çıplak alan adı dahil —, HTML kalıntısı, site
 atfı, sayı ortasında kesik cümle, sorumluluk notu); kapı düşerse gönderim
@@ -614,7 +622,8 @@ taşıyabilir: satır bugüne kurulmuş ama aradaki bir seans kaynakta boştu, y
 Geride kalmış bir satır ancak HİÇBİR listede yoksa tatil sayılabilir; önce
 `seans_sinanamadi`ye bak: oradaysa o sembol bu koşuda SINANMADI (meta alınamadı,
 çekimden dönmedi ya da anlık görüntü bu denetimden önce yazıldı) ve sebebi
-bilinmiyor — sebep YAZMA, yalnız satırın hangi günü taşıdığını söyle. TLREF
+bilinmiyor — sebep YAZMA; varlığın gününü cümlenin kendisinde ver ("Nikkei
+29 Eylül'de …"), "satırı … kapanışını taşıyor" diye değil (üslup ENGEL). TLREF
 satırı kendi gününü taşır ve o güne BAK, varsayma: Borsa İstanbul T'yi aynı gün
 13:00 UTC'de yayımlar ve fonlama hattı onu günlük dosyadan alır, EVDS ertesi
 sabah; hat o gün BIST'e ulaşamadıysa (ya da EVDS donduysa) satır bir seans
@@ -656,8 +665,8 @@ ikisi de ancak ölçünün kendi içindeki tutarlılığa bakılarak ayrıldı:
   olmalıdır (EUR %57,6 · JPY %13,6 · GBP %11,9 · CAD %9,1 · SEK %4,2 · CHF %3,6; euro ve
   sterlin ters işaretle). O sabah endeks %0,54 yükselmişken çaprazların ima ettiği hareket
   ≈ %0,00'dı; pazar günkü ölçüde ise ≈ %0,44 ile tutarlıydı. Yani BUGÜNKÜ çapraz okumaları
-  açık seansın etkisini taşıyordu. Çaprazların günlük değişimi üzerinden hüküm kurulmadı ve
-  bunun sebebi metinde yazıldı.
+  açık seansın etkisini taşıyordu. Dolar tarafı çaprazlarla değil endeksin kendisiyle
+  anlatıldı; gerekçe düzyazıya değil sayfanın dipnotuna aittir.
 - **Günlük ve haftalık kayma AYNI büyüklükte mi?** Bir satırda `d1` ile `h1` aynı miktarda
   kaydıysa değişen şey kıyas barı değil SON FİYATTIR. Metallerde ikisi de birebir aynı
   kaydı (altın −1,12 puan, gümüş −1,14, bakır −1,48); yani pazar günkü kapanış eksikti,

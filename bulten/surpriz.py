@@ -68,7 +68,8 @@ TAKIPLER: tuple[Takip, ...] = (
           "Aylık Yİ-ÜFE", "%", 2),
     Takip(r"Ödemeler dengesi", "odemeler-dengesi", "cari12_mia",
           "Cari denge (12 aylık birikimli)", "mlr USD", 1, tepki=("USD/TRY",)),
-    Takip(r"Menkul kıymet ist\.", "yabanci-pozisyon", "toplam_hafta",
+    # Kurum önekine bağlı: aynı kısa ad başka kurumda başka yayımdır (HMB).
+    Takip(r"^TCMB: Menkul kıymet ist\.", "yabanci-pozisyon", "toplam_hafta",
           "Yabancı haftalık net akım", "mn USD", 0, tepki=("BIST 100",)),
     Takip(r"Bütçe dengesi|Merkezi Yönetim Bütçe", "butce-borc", "butce_ay",
           "Aylık bütçe dengesi", "mlr TL", 1),

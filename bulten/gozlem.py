@@ -75,7 +75,11 @@ def kaydet(hat: str, ozet: dict, zaman: str | None = None) -> bool:
     onceki = gecmis_oku(hat)
     if onceki and onceki[-1].get("d") == ozet:
         return False
-    kayit = {"t": zaman or datetime.now().isoformat(timespec="seconds"),
+    # Damga DİLİMLİ UTC (01.10.2026): dilimsiz yerel damga, bülten damgasıyla
+    # (UTC) kıyaslanınca UTC olmayan bir makinede saatlerce kayıyordu ve
+    # "yeni"nin zaman kapısı yanlış sürümü duyururdu. Eski dilimsiz damgalar
+    # `_an`da UTC sayılır (bulut koşucusu UTC'dedir).
+    kayit = {"t": zaman or datetime.now(timezone.utc).isoformat(timespec="seconds"),
              "v": _tarih_of(ozet), "d": ozet}
     with open(GECMIS / f"{hat}.jsonl", "a", encoding="utf-8") as f:
         f.write(json.dumps(kayit, ensure_ascii=False) + "\n")
@@ -197,6 +201,25 @@ def _an(t: str) -> datetime | None:
     return d
 
 
+def simdi_utc() -> datetime:
+    """Şimdi, UTC naif — `_an`ın döndürdüğü anlarla kıyaslanabilir tek "şimdi"."""
+    return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
+def esikteki(hat: str, esik: datetime, anahtar: str | None = None) -> dict | None:
+    """Kıyas çizgisi anında (`esik`) defterde güncel olan kayıt: damgası
+    esik'ten sonra olmayan SON kayıt (anahtar verilirse onu taşıyan)."""
+    aday = None
+    for k in gecmis_oku(hat):
+        d = k.get("d")
+        if not isinstance(d, dict) or (anahtar is not None and anahtar not in d):
+            continue
+        an = _an(k.get("t", ""))
+        if an is not None and an <= esik:
+            aday = k
+    return aday
+
+
 def anahtar_ilk_gorulme(hat: str, anahtar: str, acik: str = "") -> datetime | None:
     """Bu anahtarın ŞİMDİKİ saatine defterde ilk geçildiği an (UTC naif).
 
@@ -212,25 +235,30 @@ def anahtar_ilk_gorulme(hat: str, anahtar: str, acik: str = "") -> datetime | No
 
 def bugun_yeni(hat: str, simdi: dict, anahtar: str, acik: str = "",
                esik: datetime | None = None) -> bool:
-    """Bu ölçüm BUGÜNÜN olayı mı: saati önceki sürüme göre ilerlemiş VE şimdiki
-    saatine bir önceki sayının ölçüm anından (`esik`) SONRA geçilmiş.
+    """Bu ölçüm BUGÜNÜN olayı mı: anahtarın saati, bir önceki sayının ölçüm
+    anında (`esik`) defterde güncel olan görüntüye göre İLERLEDİ mi.
 
     KUSUR (01.10.2026 ölçüldü): `surum_ilerledi` yalnız "önceki sürüme göre
     ilerledi mi" diye soruyordu — bu soru bir kez ilerlemiş bir sürüm için
     SONSUZA KADAR evettir. Dosyası donan hat her sabah yeniden duyuruldu:
     11.09–30.09 arasında 143 ölçüm cümlesinin 106'sı (%74,1) daha önce aynı
-    veri tarihiyle basılmıştı; "Lokanta / ev yemeği oranı 1,27 → 1,28" 17 sayı
-    üst üste çıktı. Eksik olan ZAMAN sorusuydu: yeni olan, bir önceki sayının
-    görmediği sürümdür. `esik` yoksa (ilk sayı) eski davranış sürer."""
-    if not surum_ilerledi(hat, simdi, anahtar, acik):
-        return False
+    veri tarihiyle basılmıştı.
+
+    KIYAS ESİK ANINDAKİ GÖRÜNTÜYEDİR, "bir önceki farklı görüntüye" değil:
+    ilk düzeltme önce `surum_ilerledi`yi soruyordu ve iki sayı arasında birden
+    çok görüntü varsa (haftalık sayı; aynı sabah iki ölçüm) ilerlemeyi ARADAKİ
+    görüntü yutuyordu — incelemede ölçüldü, beş haftalık sayının beşinde haftanın
+    net rezerv yayımı düşüyordu. `esik` yoksa (ilk sayı) eski davranış sürer."""
     if esik is None:
-        return True
-    ilk = anahtar_ilk_gorulme(hat, anahtar, acik)
-    # Ölçülemeyen damga (defter yok/bozuk) sessizce "yeni" sayılmaz ve
-    # sessizce düşmez: eski davranış sürer, çünkü ölçülmüş bir sürümü okurdan
-    # saklamak sahte tekrardan pahalıdır.
-    return True if ilk is None else ilk > esik
+        return surum_ilerledi(hat, simdi, anahtar, acik)
+    k = esikteki(hat, esik, anahtar)
+    if k is None:
+        # Esik anında bu anahtar defterde yoktu: ilk kez görülüyor. Ölçülemeyen
+        # damga sessizce "yeni" sayılmaz ve sessizce düşmez — eski davranış.
+        ilk = anahtar_ilk_gorulme(hat, anahtar, acik)
+        return True if ilk is None else ilk > esik
+    return _ileri_gitti(anahtar_tarihi(k["d"], anahtar, acik),
+                        anahtar_tarihi(simdi, anahtar, acik))
 
 
 def onceki_surum_anahtar(hat: str, anahtar: str, acik: str = "",
@@ -300,17 +328,15 @@ def anahtar_hafta_once(hat: str, anahtar: str, acik: str = "",
     Tarihçe yetmezse None döner: uydurma kıyas yerine günlük kıyasa düşülür ve
     bülten hangisini kullandığını yazar.
     """
-    from datetime import datetime, timedelta
-    sinir = datetime.now() - timedelta(days=gun)
+    from datetime import timedelta
+    sinir = simdi_utc() - timedelta(days=gun)
     aday = None
     for kayit in gecmis_oku(hat):
         d = kayit.get("d")
         if not isinstance(d, dict) or anahtar not in d:
             continue
-        try:
-            t = datetime.fromisoformat(str(kayit.get("t", "")).replace("Z", "+00:00")
-                                       ).replace(tzinfo=None)
-        except (ValueError, TypeError):
+        t = _an(kayit.get("t", ""))
+        if t is None:
             continue
         if t <= sinir:
             aday = kayit
@@ -324,13 +350,12 @@ def gun_once(hat: str, gun: int = 7) -> dict | None:
     "geçen hafta bu saatte neredeydik" sorusunu sorar. İkisi farklı sorulardır:
     haftalık seride birincisi tek bir yayımı, ikincisi tüm haftayı kapsar.
     """
-    from datetime import datetime, timedelta
-    sinir = datetime.now() - timedelta(days=gun)
+    from datetime import timedelta
+    sinir = simdi_utc() - timedelta(days=gun)
     aday = None
     for kayit in gecmis_oku(hat):
-        try:
-            t = datetime.fromisoformat(str(kayit.get("t", "")).replace("Z", "+00:00")).replace(tzinfo=None)
-        except Exception:
+        t = _an(kayit.get("t", ""))
+        if t is None:
             continue
         if t <= sinir:
             aday = kayit

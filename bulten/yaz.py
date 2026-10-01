@@ -3,12 +3,16 @@
 """Yazı katmanının bülten dosyasına güvenle yazması için ara katman.
 
 Yazı katmanı (bir Claude oturumu) bültenin ÖLÇÜLEN kısmına dokunmamalı: piyasa
-fotoğrafı, takvim, göstergeler ve hat hat değişim hep deterministik koşudan
-gelir. Yazan taraf yalnız dört alana dokunur:
+fotoğrafı, takvim, göstergeler ve gelen veriler hep deterministik koşudan
+gelir. Yazan taraf yalnız şu alanlara dokunur (biçim sayının `surum`
+beyanından; biçim 3 = sabah notu, bkz. bulten/YAZIM.md):
 
+    manset       günün tezi, tek cümle (≤110 karakter)
     yorum        "Günün/Haftanın okuması" — HTML paragraflar
-    ozet         {"ne_oldu": "...", "ne_bekleniyor": "..."}
-    gundem       bölüm kimliği → HTML metin (bkz. ayar.GUNDEM_YAZI_BOLUMLERI)
+    ozet         biçim 3: {"ne_oldu": "<ul><li>…</li></ul>"} (3–5 madde)
+                 biçim 2 (arşiv): {"ne_oldu": "...", "ne_bekleniyor": "..."}
+    gundem       bölüm kimliği → HTML metin; kimlikler sayının
+                 `gundem_yazi_bolumleri` alanından (biçim 3: ayar.YAZI_BOLUMLERI_3)
     duzeltmeler  [{"alan": "...", "eski": "...", "yeni": "...", "sebep": "...",
                    "tarih": "YYYY-MM-DD"}] — daha önce YAYIMLANMIŞ bir sayının
                  düzeltme kaydı. Metindeki "yayımlanan X yerine gerçek değer Y"
@@ -314,7 +318,16 @@ def main() -> int:
 
     ilk_yazim = ilk_yazim_mi(json.loads(hedef.read_text(encoding='utf-8')))
 
-    b, degisen = uygula(hedef, yama)
+    # Girdi reddi BELGELENEN koddan döner (2): `uygula` reddi dizgeli
+    # SystemExit ile bildirir ve Python onu 1 diye bitiriyordu (incelemede
+    # ölçüldü) — rutin "çıkış 2 = girdi hatası" diye okur.
+    try:
+        b, degisen = uygula(hedef, yama)
+    except SystemExit as e:
+        if isinstance(e.code, str):
+            print(e.code, file=sys.stderr)
+            return 2
+        raise
     if not degisen:
         print("yamada yazılacak içerik yok")
         return 0

@@ -30,6 +30,14 @@ YORUM_SINIR = 1200          # anlatı gövdesi (bültenin 'okuması'ndan)
 GUNDEM_PARCA = 260          # gündem bölümü başına
 GUNDEM_SINIR = 1250         # gündem bloğunun tamamı
 BEKLENTI_SINIR = 600        # ne_bekleniyor bölümü
+# Biçim 3 (sabah notu): olguların TEK evi `ozet.ne_oldu` maddeleridir ve okuma
+# onları yeniden saymaz — gönderi maddelerle açılır, okuma ondan sonra ve daha
+# kısa gelir (01.10.2026 incelemesi: gövde yalnız okumadan kurulunca gönderide
+# TMSF, ÖTV ve PCE rakamı hiç geçmiyordu).
+MADDE_SINIR = 330           # "Bu sabah" maddesi başına
+BU_SABAH_SINIR = 1250       # "Bu sabah" bloğunun tamamı
+OKUMA_SINIR_3 = 650         # biçim 3'te okuma
+GUNDEM_SINIR_3 = 800        # biçim 3'te konu bölümleri
 GIRIS_SINIR = 700           # teknik giriş bölümü
 
 AYLAR = ["", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz",
@@ -141,11 +149,25 @@ def _bicim3_bolumleri() -> tuple[tuple[str, str], ...]:
     """Biçim 3: gündem satırları bülten kayıt defterinden (bulten/ayar.py,
     YAZI_BOLUMLERI_3 → `tweet` etiketi). İleriye bakış (`takvim`) ayrı satırda
     "Beklenen:" olarak girer."""
-    import sys as _sys
-    _sys.path.insert(0, str(KOK / "bulten"))
-    import ayar as _ayar
-    return tuple((y.id, y.tweet) for y in _ayar.YAZI_BOLUMLERI_3
+    return tuple((y.id, y.tweet) for y in _bulten_ayar().YAZI_BOLUMLERI_3
                  if y.tweet and y.id != "takvim")
+
+
+def _bulten_ayar():
+    """bulten/ayar.py DOSYA YOLUNDAN yüklenir, sys.path'e bulten/ EKLENMEZ.
+    İlk yazım bulten/'ü yolun başına koyuyordu: tweet sürecinde sonradan
+    yapılan `import denetim` (ve `import uret`) bültenin aynı adlı modülüne
+    düşüyordu — duman sınaması bunu "denetim.denetle yok" diye gösterdi
+    (01.10.2026). tweet/denetim.py aynı tuzağı yol sırasıyla adıyla anar."""
+    import importlib.util as _iu
+    import sys as _sys
+    ad = "_tto_bulten_ayar"
+    if ad not in _sys.modules:
+        spec = _iu.spec_from_file_location(ad, KOK / "bulten" / "ayar.py")
+        mod = _iu.module_from_spec(spec)
+        _sys.modules[ad] = mod          # dataclass çözümü modülü sys.modules'ta arar
+        spec.loader.exec_module(mod)
+    return _sys.modules[ad]
 
 
 def gundem_bolumleri(b: dict) -> tuple[tuple[str, str], ...]:
@@ -273,6 +295,32 @@ def _tr_kisa_tarih(t: str) -> str:
 
 # ── bülten zinciri ───────────────────────────────────────────────────────────
 
+def _maddeler(html: str) -> list[str]:
+    """`ozet.ne_oldu` maddeleri: <li> öğeleri; liste değilse metnin tamamı tek madde."""
+    li = re.findall(r"<li\b[^>]*>(.*?)</li>", html or "", re.S)
+    return li if li else ([html] if _duz(html) else [])
+
+
+def _pano_fark(g: dict) -> str:
+    """Gösterge farkı SAYFANIN kuralıyla (BultenGovde.gostergeFark'ın eşi).
+    Bir oranın farkı puandır; kurun farkı bilerek yüzdedir (`fark_birim`);
+    bugün ilerlemeyen göstergenin farkı yazılmaz (`bugun_yeni: false`) —
+    18.09 tarihli "Net rezerv (−6,5)" altı gönderide birebir tekrar etmişti."""
+    if g.get("bugun_yeni") is False:
+        return ""
+    f = str(g.get("fark_metin") or "").strip()
+    if not f:
+        return ""
+    f = re.sub(r"(^|[\s(])-(?=\d)", r"\1−", f)
+    if str(g.get("fark_birim") or "").strip() == "%":
+        return f"{f[0]}%{f[1:]}" if f[:1] in "+−" else f"%{f}"
+    birim = str(g.get("birim") or "").strip()
+    if birim == "%":
+        return f"{f} puan"
+    return f
+
+
+
 def bulten_zinciri(b: dict) -> list[str]:
     """Günlük/haftalık bültenden TEK uzun tweet (hesap Premium).
 
@@ -286,10 +334,34 @@ def bulten_zinciri(b: dict) -> list[str]:
 
     oz = b.get("ozet") or {}
     DUSEN.clear()
-    anlati = _site_disi(_duz(b.get("yorum") or ""), "yorum") or _site_disi(_duz(oz.get("ne_oldu") or ""), "ne_oldu")
-    if not anlati:
-        raise SystemExit("bültenin okuması da özeti de boş — tweet kurulamaz")
-    bolumler = [f"{baslik} — {tarih}", _kirp(anlati, YORUM_SINIR)]
+    bicim3 = int(b.get("surum") or 2) >= 3
+    if bicim3:
+        bolumler = [f"{baslik} — {tarih}"]
+        manset = _site_disi(_duz(b.get("manset") or ""), "manset")
+        if manset:
+            bolumler[0] += "\n" + manset
+        maddeler, toplam = [], 0
+        for m in _maddeler(oz.get("ne_oldu") or ""):
+            m = _site_disi(_duz(m), "ne_oldu")
+            if not m:
+                continue
+            satir = "· " + _kirp(m, MADDE_SINIR)
+            if toplam + len(satir) > BU_SABAH_SINIR:
+                break
+            maddeler.append(satir)
+            toplam += len(satir) + 1
+        okuma = _site_disi(_duz(b.get("yorum") or ""), "yorum")
+        if not maddeler and not okuma:
+            raise SystemExit("bültenin maddeleri de okuması da boş — tweet kurulamaz")
+        if maddeler:
+            bolumler.append("\n".join(maddeler))
+        if okuma:
+            bolumler.append(_kirp(okuma, OKUMA_SINIR_3))
+    else:
+        anlati = _site_disi(_duz(b.get("yorum") or ""), "yorum") or _site_disi(_duz(oz.get("ne_oldu") or ""), "ne_oldu")
+        if not anlati:
+            raise SystemExit("bültenin okuması da özeti de boş — tweet kurulamaz")
+        bolumler = [f"{baslik} — {tarih}", _kirp(anlati, YORUM_SINIR)]
 
     # GÜNDEM. Bültenin en zengin katmanı tweete hiç girmiyordu (31.08 geri
     # bildirimi: "daha çok gündem verilmeli"). Her bölümün girişi alınır —
@@ -301,7 +373,7 @@ def bulten_zinciri(b: dict) -> list[str]:
         if not parca:
             continue
         satir = _etiketle(etiket, _kirp(parca, GUNDEM_PARCA))
-        if toplam + len(satir) > GUNDEM_SINIR:
+        if toplam + len(satir) > (GUNDEM_SINIR_3 if bicim3 else GUNDEM_SINIR):
             break
         satirlar.append(satir)
         toplam += len(satir) + 1
@@ -314,9 +386,14 @@ def bulten_zinciri(b: dict) -> list[str]:
     if liste:
         etiket = ("Haftanın öne çıkanları" if kip == "haftalik"
                   else "Günün öne çıkanları")
+        # Biçim 3'te olgu TEK yerde: maddelerin zaten saydığı hareket bu satırda
+        # yinelenmez (01.10 önizlemesi: %2,79 · %4,58 · %4,87 iki kez geçiyordu).
+        anilan = "\n".join(bolumler[1:]) if bicim3 else ""
         parcalar = [f"{h['ad']} {_degisim_metni(h['deger'], h.get('birim', ''))}"
-                    for h in liste[:5] if h.get("deger") is not None]
-        bolumler.append(f"{etiket}: " + " · ".join(parcalar))
+                    for h in liste[:5] if h.get("deger") is not None
+                    and not (anilan and _tr_sayi(abs(h["deger"])).lstrip("+") in anilan)]
+        if parcalar:
+            bolumler.append(f"{etiket}: " + " · ".join(parcalar))
 
     # PANO: birim ve veri tarihi de yazılır. "Net rezerv 66,9 (−0,2)" 1 Eylül
     # gönderisinde 21 Ağustos'un haftalık serisiydi ve okur bunu bilemezdi;
@@ -328,7 +405,8 @@ def bulten_zinciri(b: dict) -> list[str]:
             continue
         birim = (g.get("birim") or "").strip()
         deger = f"%{g['metin']}" if birim == "%" else (f"{g['metin']} {birim}" if birim else g["metin"])
-        fark = f" ({g['fark_metin']})" if g.get("fark_metin") else ""
+        fark = _pano_fark(g)
+        fark = f" ({fark})" if fark else ""
         tarih = ""
         vt = str(g.get("veri_tarihi") or "")
         if vt and vt[:10] != b["tarih"] and _tr_kisa_tarih(vt) and _tr_kisa_tarih(vt) != _tr_kisa_tarih(b["tarih"]):

@@ -486,6 +486,8 @@ class Denetim:
             alt, ust = _a.YAZI_ARALIK_3["ozet"][kip]
             if n > ust:
                 self.uyari.append(f"Özet uzun: {n} kelime (aralık {alt}–{ust}) — madde başına bir olgu")
+            elif n < alt:
+                self.uyari.append(f"Özet kısa: {n} kelime (aralık {alt}–{ust}) — her madde bir olgu ve anlamı")
             else:
                 self._ok(f"özet: {madde} madde, {n} kelime")
         ny = _kelime(b.get("yorum") or "")
@@ -505,11 +507,17 @@ class Denetim:
                 if y.zorunlu:
                     self.engel.append(f"Bölüm BOŞ: {y.id} ({y.baslik}) — zorunlu bölüm")
                 continue
-            if n < alt or n > ust:
+            if n > _a.BOLUM_ENGEL_KAT * ust:
+                self.engel.append(f"BÖLÜM UZUN: {y.id} ({y.baslik}) {n} kelime — üst sınır {ust}, "
+                                  f"{_a.BOLUM_ENGEL_KAT:g} katı ENGEL. Konu evinde tam anlatılır ama kısadır; "
+                                  "tabloda duranı yeniden sayma.")
+            elif n < alt or n > ust:
                 self.uyari.append(f"Bölüm {y.id} {n} kelime (aralık {alt}–{ust})")
             else:
                 self._ok(f"{y.id}: {n} kelime")
-        _alt, uyari_t, engel_t = _a.YAZI_ARALIK_3["toplam"][kip]
+        alt_t, uyari_t, engel_t = _a.YAZI_ARALIK_3["toplam"][kip]
+        if toplam < alt_t:
+            self.uyari.append(f"Yazı kısa: toplam {toplam} kelime (hedef {alt_t}–{uyari_t})")
         if toplam > engel_t:
             self.engel.append(
                 f"YAZI UZUN: toplam {toplam} kelime (tavan {engel_t}; hedef ≤{uyari_t}). "
@@ -580,6 +588,15 @@ class Denetim:
                      _duz(self.b.get("yorum") or "") + " " +
                      _duz(self.b.get("manset") or "") + " " + ozm)
 
+    def _sigma_of(self, ad: str, kip: str) -> float | None:
+        """Piyasa satırının kendi σ'sı (günlük: d1_sigma · haftalık: h1_sigma)."""
+        alan = "h1_sigma" if kip == "haftalik" else "d1_sigma"
+        for g in ((self.b.get("piyasa") or {}).get("gruplar") or []):
+            for r in g.get("satirlar") or []:
+                if r.get("ad") == ad and isinstance(r.get(alan), (int, float)):
+                    return float(r[alan])
+        return None
+
     def atif(self):
         metin = self._metin()
         p = self.b.get("piyasa") or {}
@@ -595,9 +612,19 @@ class Denetim:
         if int(self.b.get("surum") or 2) >= 3:
             pencereler = ((("haftalik", "haftanın"),) if self.b.get("haftalik")
                           else (("gunluk", "günün"),))
+        bicim3 = int(self.b.get("surum") or 2) >= 3
         for kip, etiket in pencereler:
             for x in (hareket.get(kip) or [])[:3]:
                 if x.get("deger") is None or abs(x["deger"]) < BUYUK_HAREKET_ESIGI:
+                    continue
+                # BİÇİM 3: yüzdesi büyük ama kendi oynaklığına göre SIRADAN
+                # (|σ| < 1) hareket anılmak zorunda değil — rehberin kuralı
+                # (1σ altı düzyazıya girmez) ile kapı çelişiyordu: 26.08–01.10
+                # arasında 87 zorunlu atfın 18'i 1σ'nın altındaydı. σ'sı
+                # ölçülemeyen hareket eski kuralla kalır.
+                z = self._sigma_of(x["ad"], kip)
+                if bicim3 and z is not None and abs(z) < 1.0:
+                    self._ok(f"{x['ad']} (%{x['deger']}, {z:+.1f}σ) sıradan — anılma zorunlu değil")
                     continue
                 if not anilmis(x["ad"]):
                     self.engel.append(
@@ -868,11 +895,10 @@ class Denetim:
         for hat, sg, azami, ad in saatler:
             if not sg:
                 continue
-            try:
-                t = datetime.fromisoformat(sg[1].replace("Z", "+00:00")).replace(tzinfo=None)
-            except Exception:
+            t = gozlem._an(sg[1])
+            if t is None:
                 continue
-            gun = (datetime.now() - t).days
+            gun = (gozlem.simdi_utc() - t).days
             if gun > azami:
                 gecikmis.append(f"{hat}{f' — {ad}' if ad else ''} ({gun}g)")
         if gecikmis:
@@ -1197,6 +1223,25 @@ class Denetim:
         """
         if self._arsiv_sayisi():
             self._ok("haber tonu: arşiv sayısı, bugünün endeks hareketiyle kıyaslanmaz")
+            return
+        # BİÇİM 3: zorunluluk sayfanın KENDİ listesinden (`haber_tonu`, ölçüm
+        # katmanının |z| ≥ 2 ve zaman kapısından geçirdiği hareketler). Canlı
+        # endeksten okunsaydı endeksin ilerlemediği günde dünkü hareket yazara
+        # dayatılırdı ve sayfa onu basmazdı (01.10.2026 incelemesi).
+        if int(self.b.get("surum") or 2) >= 3 and "haber_tonu" in self.b:
+            liste = [o for o in (self.b.get("haber_tonu") or []) if isinstance(o, dict)]
+            if not liste:
+                self._ok("haber tonu: bu sayıda olağandışı hareket yok — anılma zorunluluğu yok")
+                return
+            metin = _sade(self._metin())
+            adlar = [str(o.get("baslik", "")).split("—", 1)[-1].strip() for o in liste]
+            anilmayan = [a for a in adlar if a and not anilmi(a, metin)]
+            if anilmayan:
+                self.engel.append("HABER TONU ANILMAMIŞ — " + ", ".join(anilmayan)
+                                  + ". Sayfa bu hareketleri olağandışı diye basıyor; metinde anıl ve "
+                                  "sebebini yaz. Sebep netleşmiyorsa 'sebebi netleşmedi' de.")
+            else:
+                self._ok(f"haber tonu: {len(liste)} olağandışı hareket anılmış")
             return
         try:
             sys.path.insert(0, str(BURASI))

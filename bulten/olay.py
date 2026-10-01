@@ -20,7 +20,7 @@ import gozlem
 import sys as _sys
 from pathlib import Path as _Path
 _sys.path.insert(0, str(_Path(__file__).resolve().parents[1] / "ortak"))
-from bicim import sayi as _sayi, yuzde as _yuzde  # noqa: E402  — sayı yazımı TEK yerden (ortak/bicim.py)
+from bicim import sayi as _sayi, yuzde as _yuzde, AYLAR_TR as _AYLAR_TR  # noqa: E402  — sayı yazımı TEK yerden (ortak/bicim.py)
 
 # Haber tonu olayının σ tabanı: denetimin anılma zorunluluğuyla AYNI eşik
 # (denetim.OLAGANDISI_SIGMA, biçim 3). İki ayrı sayı bir gün ayrışırsa
@@ -269,11 +269,17 @@ def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
 
 
 def _yas_saat(zaman_metni: str) -> float | None:
-    try:
-        t = datetime.fromisoformat(zaman_metni.replace("Z", "+00:00")).replace(tzinfo=None)
-    except Exception:
+    """Damganın yaşı (saat). Damga ve şimdi aynı cetvelde: UTC (gozlem._an)."""
+    t = gozlem._an(zaman_metni)
+    if t is None:
         return None
-    return (datetime.now() - t).total_seconds() / 3600
+    return (_simdi() - t).total_seconds() / 3600
+
+
+def _simdi() -> datetime:
+    """UTC naif şimdi; sınamalar `datetime`i sarabilsin diye modülün adından okunur."""
+    from datetime import timezone as _tz
+    return datetime.now(_tz.utc).replace(tzinfo=None)
 
 
 def _surum_yaz(v) -> str:
@@ -360,7 +366,7 @@ def _gecikme(hat: str, sg: tuple[str, str] | None, azami_gun: int,
         return None
     if esik is not None:
         ilk_an = gozlem._an(ilk)
-        simdi = simdi_an or datetime.now()
+        simdi = simdi_an or _simdi()
         if ilk_an is not None:
             asim = ilk_an + timedelta(days=azami_gun + 1)
             hafta = timedelta(days=HATIRLATMA_GUN)
@@ -401,7 +407,7 @@ def gecikme_olaylari(esik: datetime | None = None) -> list[Olay]:
     return out
 
 
-def haber_endeksi_olaylari(esik_sigma: float = 0.0) -> list[Olay]:
+def haber_endeksi_olaylari(esik_sigma: float = 0.0, esik: datetime | None = None) -> list[Olay]:
     """FX haber-duyarlılık endeksinde günün en olağandışı hareketleri.
 
     EŞİK DEĞİL SIRALAMA. Sabit bir eşik burada işlemiyor: gerçek tarihçeyle
@@ -425,6 +431,13 @@ def haber_endeksi_olaylari(esik_sigma: float = 0.0) -> list[Olay]:
         return []
     hareketler = d.get("hareket") or []
     if not hareketler:
+        return []
+    # ZAMAN KAPISI (01.10.2026, inceleme): endeks hafta sonu ve bazı günler
+    # ilerlemiyor; ilerlemediği günde aynı ≥2σ hareket ikinci, üçüncü sayıda
+    # yeniden "olağandışı" basılıyordu (11–14.09'da aynı altın hareketi üç
+    # sayıda). Hareket ancak endeksin saati bir önceki sayıdan sonra
+    # ilerlediyse bugünün olayıdır.
+    if esik is not None and not gozlem.bugun_yeni("fx-haber-endeksi", d, "hareket", "_tarih", esik):
         return []
     kiyas = d.get("hareket_kiyas_tarih") or ""
     tarih = str(d.get("_tarih", ""))[:10]
@@ -481,7 +494,12 @@ def topla(esik: datetime | None = None, haftalik: bool = False) -> list[Olay]:
             # kendi ölçütü onu adıyla listeler.
             if not gozlem.bugun_yeni(hat, simdi, iz.anahtar, iz.tarih_alani, esik):
                 continue
-            onc = gozlem.onceki_surum_anahtar(hat, iz.anahtar, iz.tarih_alani, v)
+            # KIYAS NOKTASI bir önceki sayının anındaki görüntüdür: okur "bir
+            # önceki sayıdan bu yana ne değişti"yi okur (haftalık sayıda haftanın
+            # farkı). Esik yoksa ya da o anda anahtar yoksa eski kıyas noktası.
+            onc = gozlem.esikteki(hat, esik, iz.anahtar) if esik is not None else None
+            if onc is None or gozlem.anahtar_tarihi(onc["d"], iz.anahtar, iz.tarih_alani) == v:
+                onc = gozlem.onceki_surum_anahtar(hat, iz.anahtar, iz.tarih_alani, v)
             once_d = onc.get("d") if onc else None
             onceki_v = (gozlem.anahtar_tarihi(once_d, iz.anahtar, iz.tarih_alani)
                         if once_d else "")
@@ -490,7 +508,7 @@ def topla(esik: datetime | None = None, haftalik: bool = False) -> list[Olay]:
                 olaylar.append(o)
     olaylar += yeni_veri_olaylari(list(RITIM), esik=esik)
     olaylar += gecikme_olaylari(esik)
-    olaylar += haber_endeksi_olaylari(HABER_TONU_SIGMA)
+    olaylar += haber_endeksi_olaylari(HABER_TONU_SIGMA, esik)
     sira = {g: i for i, (g, _) in enumerate(GRUPLAR)}
     onem = {"onemli": 0, "dikkat": 1, "bilgi": 2}
     olaylar.sort(key=lambda o: (onem.get(o.seviye, 3), sira.get(o.grup, 99), o.baslik))

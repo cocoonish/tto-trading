@@ -55,10 +55,14 @@ KALIPLAR: tuple[Kalip, ...] = (
              r"(?:kurduğumuz|açtığımız)\s+(?:bir\s+)?kay[ıi]t\w*|vadeli\s+(?:yeni\s+)?(?:bir\s+)?kay[ıi]t\w*|"
              r"kaydımız\w*)"),
           None, "geçmiş çağrı söz defterinde durur; düzyazıda en çok bir kez '(20.09 notu)'"),
+    # Daraltma (01.10.2026 incelemesi): "dürüstçe" ve "şimdiden söyleniyor"
+    # meşru piyasa cümlelerinde de geçiyor ("Powell dürüstçe kabul etti",
+    # "kulislerde şimdiden söyleniyor"); öz-atıf yalnız birinci tekil/çoğul
+    # yazar bağlamında aranır.
     Kalip("Y04", "ölçü uyarısı / meta not",
           _k(r"\b(?:ölçü(?:nün)?|okuma)\s+(?:bir\s+)?(?:uyarısı|kısıtı|boşluğu)\b"
-             r"|\bbir\s+(?:ölçü|okuma)\s+(?:uyarısı|kısıtı|boşluğu)|kayda\s+geçsin|dürüstçe|"
-             r"şimdiden\s+(?:yazılıyor|söyleniyor|yazmak)|not\s+olarak\s+yazılmalı|"
+             r"|\bbir\s+(?:ölçü|okuma)\s+(?:uyarısı|kısıtı|boşluğu)|kayda\s+geçsin|"
+             r"dürüstçe\s+(?:söyle|yaz|belirt)\w*|şimdiden\s+(?:yazılıyor|yazmak)|not\s+olarak\s+yazılmalı|"
              r"önce\s+ölçünün\s+kendisi|veri\s+yaşı\s+notu", re.I),
           None, "veri kısıtını sayfa (dipnot) söyler; düzyazıya taşıma"),
     Kalip("Y05", "'hüküm kurulmadı'",
@@ -66,13 +70,19 @@ KALIPLAR: tuple[Kalip, ...] = (
              r"hiçbir\s+hükm(?:ünde|e)\s+(?:kullanılmadı|girmedi)"),
           None, "kullanmadığın seriyi anlatma; yalnız kullandığını yaz"),
     Kalip("Y06", "beklenti yokluğunu anlatma",
-          _k(r"sürpriz(?:\s+ölçü(?:mü|sü)?)?\s+(?:ölçülmeyecek|hesaplanmayacak|yapılmayacak|kurulmaz)"
+          # "sürpriz yapılmayacak" bir merkez bankası mesajı da olabilir
+          # (Lagarde); kalıp yalnız ÖLÇÜNÜN yokluğunu arar.
+          _k(r"sürpriz\s+(?:ölçü(?:mü|sü)?\s+)?(?:ölçülmeyecek|hesaplanmayacak|kurulmaz)"
+             r"|sürpriz\s+ölçü(?:mü|sü)?\s+yapılmayacak"
              r"|beklenti(?:si|miz)?\s+elimizde\s+(?:yok|olmadığı)|beklentimiz\s+olmadığı|"
              r"beklenti\s+(?:alanı\s+boş|yayımlanmadığı)", re.I),
           None, "beklenti yoksa tablo '—' basar; yokluğu düzyazıda anlatma"),
     Kalip("Y07", "kod/süreç sözlüğü",
-          _k(r"\b(?:hattımız\w*|vekilimiz\w*|defterde|hat\s+hat\s+değişim\w*|sürümünde\s+donmuş|"
-             r"hattının\s+haftalık)\b"),
+          # "defterde" (muhasebe: "itfa edilmiş maliyetle defterde") ve "hattının
+          # haftalık" (boru hattı) meşru piyasa dilinde de geçiyor; kalıp
+          # yalnız BİZİM tesisatımızın adlarını arar.
+          _k(r"\b(?:hattımız\w*|vekilimiz\w*|defterimiz\w*|söz\s+defterinde|hat\s+hat\s+değişim\w*|"
+             r"sürümünde\s+donmuş|ölçüm\s+hattı\w*)\b"),
           None, "hat, defter, sürüm okurun sözcüğü değil"),
     Kalip("Y08", "önemi kaynak sayısıyla gerekçeleme",
           _k(r"(?:en\s+çok|beş\s+ayrı|birden\s+çok)\s+kaynakta\s+(?:birden\s+)?yer\s+bul\w*", re.I),

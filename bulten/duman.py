@@ -1033,6 +1033,141 @@ def _soz_degisen_normalize():
         _s.oku = gercek
 
 
+def _inceleme_duzeltmeleri():
+    """01.10.2026 donmuş kopya incelemesinin bulguları — her biri kendi maddesi."""
+    import gozlem as _g, olay as _o, uret as _u, denetim as _d, tekrar as _t, uslup as _us, ayar as _a
+    import tempfile, json as _j, subprocess as _sp
+    from datetime import datetime as _dt
+
+    # (1) ARA GÖRÜNTÜ ilerlemeyi yutmaz: haftalık anahtar esik'ten sonra ilerledi,
+    #     ardından yalnız günlük saat değişen ikinci bir görüntü geldi.
+    A = {"h": 1.0, "h_tarih": "11.09.2026", "_tarih": "19.09.2026"}
+    B = {"h": 2.0, "h_tarih": "18.09.2026", "_tarih": "24.09.2026"}
+    C = {"h": 2.0, "h_tarih": "18.09.2026", "_tarih": "25.09.2026"}
+    defter = [{"t": "2026-09-19T04:00:00", "v": "19.09.2026", "d": A},
+              {"t": "2026-09-24T04:00:00", "v": "24.09.2026", "d": B},
+              {"t": "2026-09-25T04:00:00+00:00", "v": "25.09.2026", "d": C}]
+    gercek = _g.gecmis_oku
+    try:
+        _g.gecmis_oku = lambda hat: list(defter)
+        esik = _dt(2026, 9, 20, 15, 0)                        # önceki haftalık sayı
+        assert _g.bugun_yeni("h", C, "h", "h_tarih", esik), "ara görüntü haftalık yayımı yuttu"
+        assert not _g.bugun_yeni("h", C, "h", "h_tarih", _dt(2026, 9, 24, 12, 0)), \
+            "önceki sayının gördüğü sürüm yeniden yeni sayıldı"
+        assert _g.esikteki("h", esik, "h")["d"] is A
+    finally:
+        _g.gecmis_oku = gercek
+
+    # (2) Kıyas çizgisi yalnız YAZILMIŞ sayıdan.
+    gercek_c = _u.CIKTI
+    with tempfile.TemporaryDirectory() as td:
+        Path(td, "2026-09-29.json").write_text(_j.dumps({"olusturma": "2026-09-29T04:20:00+00:00",
+                                                         "gundem_kaynagi": "yazili"}), encoding="utf-8")
+        Path(td, "2026-09-30.json").write_text(_j.dumps({"olusturma": "2026-09-30T04:20:00+00:00",
+                                                         "gundem_kaynagi": "otomatik"}), encoding="utf-8")
+        try:
+            _u.CIKTI = Path(td)
+            assert _u.onceki_olcum_ani(_dt(2026, 10, 1).date()) == _dt(2026, 9, 29, 4, 20), \
+                "yazılmamış sayı kıyas çizgisi sayıldı"
+        finally:
+            _u.CIKTI = gercek_c
+
+    # (3) Haber tonu: endeks esik'ten sonra ilerlemediyse olay yok.
+    g_anlik, g_gecmis = _g.anlik, _g.gecmis_oku
+    try:
+        d = {"_tarih": "2026-09-10 16:19", "hareket_kiyas_tarih": "2026-09-09",
+             "hareket": [{"ad": "altın", "kod": "XAU", "onceki": 0.1, "deger": -0.4, "fark": -0.5, "z": -2.1}]}
+        _g.anlik = lambda hat: d
+        _g.gecmis_oku = lambda hat: [{"t": "2026-09-10T17:00:00+00:00", "v": d["_tarih"], "d": d}]
+        assert _o.haber_endeksi_olaylari(2.0, _dt(2026, 9, 10, 4, 0)), "ilerleyen endeksin hareketi düştü"
+        assert _o.haber_endeksi_olaylari(2.0, _dt(2026, 9, 14, 4, 0)) == [], "dünkü ton hareketi yeniden basıldı"
+    finally:
+        _g.anlik, _g.gecmis_oku = g_anlik, g_gecmis
+
+    # (4) Denetim biçim 3'te haber tonunu SAYFANIN listesinden sorar.
+    bugun = dt.date.today().isoformat()
+    dd = _d.Denetim({"tarih": bugun, "surum": 3, "haber_tonu": [], "gundem": {"x": "<p>yok</p>"}})
+    dd.haber_tonu()
+    assert not dd.engel, f"sayfada olmayan ton hareketi dayatıldı: {dd.engel}"
+    dd = _d.Denetim({"tarih": bugun, "surum": 3, "gundem": {"x": "<p>yok</p>"},
+                     "haber_tonu": [{"baslik": "Haber tonu — Altın", "metin": "…"}]})
+    dd.haber_tonu()
+    assert dd.engel and "Altın" in dd.engel[0], dd.engel
+
+    # (5) Atıf: biçim 3'te |σ|<1 hareket zorunlu değil, σ ≥ 1 zorunlu.
+    piy = {"en_cok_hareket": {"gunluk": [{"ad": "MOVE", "deger": 3.61}, {"ad": "RBOB", "deger": 4.87}], "sigma": []},
+           "gruplar": [{"satirlar": [{"ad": "MOVE", "d1_sigma": 0.5}, {"ad": "RBOB", "d1_sigma": 1.9}]}]}
+    dd = _d.Denetim({"tarih": "2026-10-02", "surum": 3, "piyasa": piy, "gundem": {"x": "<p>hiçbiri</p>"}})
+    dd.atif()
+    assert any("RBOB" in e for e in dd.engel) and not any("MOVE" in e for e in dd.engel), dd.engel
+    dd = _d.Denetim({"tarih": "2026-10-02", "surum": 2, "piyasa": piy, "gundem": {"x": "<p>hiçbiri</p>"}})
+    dd.atif()
+    assert any("MOVE" in e for e in dd.engel), "biçim 2'de σ tabanı uygulandı"
+
+    # (6) Bölüm üst sınırının 1,5 katı ENGEL; toplam tavan rehberin aralığı.
+    risk_ust = next(y for y in _a.YAZI_BOLUMLERI_3 if y.id == "risk").gunluk[1]
+    b6 = _b3_sayi(gundem=dict(_b3_sayi()["gundem"], risk=_b3_metin(int(risk_ust * 1.6))))
+    d6 = _d.Denetim(b6); d6.yazi()
+    assert any("BÖLÜM UZUN" in e for e in d6.engel), d6.engel
+    assert _a.YAZI_ARALIK_3["toplam"]["gunluk"][2] <= 1600, "toplam tavan eski asgarileri geçirir"
+
+    # (7) Meşru piyasa cümleleri üslup ENGEL'ine düşmez.
+    for c in ("Bloomberg'e göre CPC boru hattının haftalık ihracatı 1,2 milyon varile indi.",
+              "Moody's, bankaların itfa edilmiş maliyetle defterde tuttuğu DİBS'lerin zararı gizlediğini yazdı.",
+              "Lagarde basın toplantısında ekimde sürpriz yapılmayacak mesajını verdi.",
+              "Aralık indirimi kulislerde şimdiden söyleniyor; OIS 75 bp fiyatlıyor.",
+              "Powell belirsizliğin yüksek olduğunu dürüstçe kabul etti."):
+        assert not _us.olc({"x": c})["engel"], f"meşru cümle ENGEL: {c}"
+
+    # (8) Defter damgası dilimli UTC.
+    import inspect as _i
+    assert "datetime.now(timezone.utc)" in _i.getsource(_g.kaydet), "defter damgası dilimsiz yerel"
+
+    # (9) Biçim 3 iç tekrar paydası söz defterini saymaz.
+    gov = {"yorum": "<p>" + "a b c d e f g h " * 20 + "</p>", "gundem": {"turkiye": "<p>x y z</p>"},
+           "surum": 3, "izleme": {"acik": [{"konu": "k", "soz": "uzun " * 500, "degisti": True}], "kapanan": []}}
+    assert _t.olc(gov)["kelime"] == _t.olc(dict(gov, izleme={}))["kelime"], "söz defteri paydaya giriyor"
+
+    # (10) yaz.py girdi reddi çıkış 2.
+    with tempfile.TemporaryDirectory() as td:
+        Path(td, "2026-01-05.json").write_text(_j.dumps({"tarih": "2026-01-05", "olusturma": "2026-01-05T04:00:00+00:00",
+            "surum": 3, "gundem_kaynagi": "otomatik", "gundem": {},
+            "gundem_yazi_bolumleri": [{"id": "turkiye", "baslik": "Türkiye"}]}), encoding="utf-8")
+        y = Path(td, "y.json"); y.write_text(_j.dumps({"gundem": {"kilit": "<p>x</p>"}}), encoding="utf-8")
+        kod = _sp.run([sys.executable, "-c",
+                       f"import sys; sys.path.insert(0, {str(BURASI)!r}); import yaz; "
+                       f"yaz.BULTEN = __import__('pathlib').Path({td!r}); "
+                       f"sys.argv = ['yaz.py', {str(y)!r}, '--tarih', '2026-01-05', '--damgasiz']; "
+                       "raise SystemExit(yaz.main())"], capture_output=True, text=True).returncode
+        assert kod == 2, f"girdi reddi çıkış {kod}"
+
+
+def _editor_bulgulari():
+    """01.10.2026 editör merceği: kilit haber kaynak dayanağı ister; takvim
+    beklentisi anket ayını ve modelin dönemini yazar; eğri serisinin adı "son"."""
+    import haber as _h, uret as _u, gozlem as _g, inspect as _i, grafik_veri as _gv
+    zayif = _h.Haber(baslik="Bessent Treasury Buyback Sparks Bond Alarm", baglanti="u1",
+                     kaynak="Coin Gabbar", ozet="Buyback bond alarm.")
+    guclu = _h.Haber(baslik="Treasury buyback expanded, Reuters reports", baglanti="u2",
+                     kaynak="Reuters", ozet="Treasury buyback.")
+    yayilan = _h.Haber(baslik="Treasury buyback widens", baglanti="u3", kaynak="blog x",
+                       ozet="Buyback.", kaynak_sayisi=3)
+    k = _h.kilit_gelismeler([zayif, guclu, yayilan])
+    assert zayif.onem >= _h.KILIT_ESIK, "fikstür eşiği aşmıyor — madde arızayı üretmez"
+    assert zayif not in k and guclu in k and yayilan in k, [x.kaynak for x in k]
+    gercek = _g.anlik
+    try:
+        _g.anlik = lambda hat: {"pka_tarih": "08.2026", "bek_n": 63, "bek_yilsonu": 29.43, "bek_12a": 23.69,
+                                "baz_momentum_yilsonu": 32.95, "baz_tekrar_yilsonu": 31.51,
+                                "bek_faiz_12a": 29.59} if hat == "enflasyon" else {"politika": 37.0}
+        m = _u._beklenti_metni("TÜİK: TÜFE (Eylül 2026)")
+        assert "PKA Ağustos" in m and "yıl sonu: momentum" in m, m
+        assert "PKA Ağustos" in _u._beklenti_metni("TCMB: PPK faiz kararı")
+    finally:
+        _g.anlik = gercek
+    assert '"ad": "bugün"' not in _i.getsource(_gv.egri), "eğri serisi yine 'bugün' adını taşıyor"
+
+
 def _soz_uzunlugu():
     """Biçim 3: bugün açılan söz kaydı 80 kelimeyi aşarsa UYARI; dünkü kayıt ve
     biçim 2 sayısı ölçülmez."""
@@ -4830,6 +4965,17 @@ def main() -> int:
             "Merkezi Yönetim Bütçe Dengesi ve Finansmanı)")}
         assert len(adlar) == 3 and None not in adlar, f"HMB yayımları ayrışmıyor: {adlar}"
         assert _t._tuik_onem("Merkezi Yönetim Bütçe Denge Tablosu")[1] == "Bütçe dengesi"
+        # HMB haznedarlık yayımı TCMB'nin menkul kıymet adını almaz; dış ticaretin
+        # anketi ve endeksleri ana yayımla aynı adı almaz (01.10.2026).
+        assert _t._tuik_onem("Kamu Haznedarlığı İstatistikleri (Kamu Haznedarlığı Yönetmeliği "
+                             "Kapsamındaki Kurumların Mevduat ve Menkul Kıymet İstatistikleri)")[1] \
+            != "Menkul kıymet ist."
+        dt_adlar = {_t._tuik_onem(x)[1] for x in ("Dış Ticaret İstatistikleri",
+                    "Dış Ticaret Beklenti Anketi", "Dış Ticaret Endeksleri")}
+        assert len(dt_adlar) == 3, f"dış ticaret yayımları ayrışmıyor: {dt_adlar}"
+        import surpriz as _sp
+        assert _sp._takip("HMB: Menkul kıymet ist. (Ağustos 2026)") is None, "HMB yayımı TCMB akımına bağlandı"
+        assert _sp._takip("TCMB: Menkul kıymet ist. (39. Hafta 2026)") is not None
         # Kısa ad kurumun adını tekrar etmez ("BDDK: BDDK bankacılık").
         for kalip, _, kisa in ayar.TAKVIM_KURALLARI:
             for kurum in ("BDDK", "TCMB", "TÜİK", "HMB", "SPK"):
@@ -4913,6 +5059,10 @@ def main() -> int:
     sina("makine: söz defteri normalize kıyas, 'yeni kapandı' kapanıştan", _soz_degisen_normalize)
     sina("makine: takvim dipnotu, gösterge şeridi, olay kovaları, kilit haber tekrarı", _takvim_ve_serit)
     sina("biçim 3: bugün açılan uzun söz kaydı uyarılır", _soz_uzunlugu)
+    sina("inceleme 01.10: ara görüntü · yazılmış çizgi · ton zaman kapısı · σ tabanı · bölüm tavanı · üslup · UTC · payda · çıkış 2",
+         _inceleme_duzeltmeleri)
+    sina("editör 01.10: kilit kaynak dayanağı · anket ayı ve model dönemi · eğri serisi 'son'",
+         _editor_bulgulari)
 
     for ad in gecen:
         print(f"  ✓ {ad}")

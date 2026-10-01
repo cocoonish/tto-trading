@@ -991,6 +991,10 @@ def satir(v: Varlik, seri: dict) -> dict | None:
         "kod": v.kod, "ad": v.ad, "grup": v.grup, "birim": v.birim,
         "ondalik": v.ondalik, "tip": v.tip,
         "not": "; ".join(x for x in (v.not_, ek_not) if x),
+        # Satırın SAYISINI niteleyen not (devir denetlenemedi · değişim
+        # yaklaşık) tanım notundan ayrı taşınır: sayfa tanımları katlar, bunu
+        # satırda açık basar — katlanınca okur sayıyı temiz sanıyordu.
+        "not_uyari": ek_not.split("; ", 1)[-1] if ek_not else "",
         "vade_gecisi": s.get("devir_gunleri") or [],
         # Devir düzeltmesi kurulamadıysa SEVİYE ham kontrat kapanışıdır ve
         # önceki yayımla kıyaslanabilir değildir; denetim bunu uyarıya çevirir.

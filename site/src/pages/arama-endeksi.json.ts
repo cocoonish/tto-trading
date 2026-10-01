@@ -52,7 +52,10 @@ export async function GET() {
     title: `${k.haftalik ? 'Haftaya bakış' : 'Günlük bülten'} — ${k.trTarih}`,
     description: k.aciklama,
     tags: [k.haftalik ? 'haftaya bakış' : 'günlük'],
-    govde: duzMetin([k.b.yorum, ...Object.values(k.b.gundem ?? {})].join(' ')).slice(0, 6000),
+    // Biçim 3'te olguların TEK evi manşet ve `ozet.ne_oldu`dur; okuma onları
+    // yeniden saymaz — dışarıda kalınca TMSF/ÖTV aramada hiçbir sayfa bulmuyordu.
+    govde: duzMetin([k.b.manset, k.b.ozet?.ne_oldu, k.b.ozet?.ne_bekleniyor, k.b.yorum,
+                     ...Object.values(k.b.gundem ?? {})].filter(Boolean).join(' ')).slice(0, 6000),
   }));
   const teknikKayitlari = teknikler().map((k) => ({
     tur: 'teknik',

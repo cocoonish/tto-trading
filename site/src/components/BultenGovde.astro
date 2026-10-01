@@ -118,12 +118,17 @@ const sozKayitlari = [...(b.izleme.acik ?? []), ...(b.izleme.kapanan ?? [])];
 const sozAyrimVar = sozKayitlari.some((k: any) => k && 'degisti' in k);
 const sozDegisen = sozAyrimVar ? sozKayitlari.filter((k: any) => k?.degisti) : sozKayitlari;
 const sozDuran = sozAyrimVar ? sozKayitlari.filter((k: any) => !k?.degisti) : [];
+// Rozet neyi saydığını söyler: "4 gün" açılış tarihinin yanında kaydın yaşı
+// gibi okunuyordu, oysa vadeye kalan gündü (01.10.2026 incelemesi).
 const sozVade = (k: any) =>
   k.durum === 'kapandi' ? (k.isabet || 'kapandı')
   : k.gun_kalan === null ? 'vadesiz'
-  : k.gun_kalan < 0 ? `${-k.gun_kalan} gün gecikti`
-  : k.gun_kalan === 0 ? 'bugün'
-  : `${k.gun_kalan} gün`;
+  : k.gun_kalan < 0 ? `vadesi ${-k.gun_kalan} gün geçti`
+  : k.gun_kalan === 0 ? 'vadesi bugün'
+  : `vadeye ${k.gun_kalan} gün`;
+// Kapanmış kayıtta vade anlamsızdır: "gecikti" rengi yalnız açık kayda verilir
+// (kapanmış "tuttu" turuncu basılıyordu — renk "gecikti" diyordu).
+const sozGecikti = (k: any): boolean => k?.durum !== 'kapandi' && k?.gun_kalan !== null && k?.gun_kalan < 0;
 const tz = (t: unknown) => (typeof t === 'string' ? tarihYaz(t) : '');
 // HABER KAYNAĞI OKURA YAYINCIYLA YAZILIR. Haber taramasının arama akışından
 // gelen maddelerde kaynak alanı iç sorgunun adını taşıyor ("Arama — Fed ve
@@ -275,7 +280,9 @@ const birimli = (v: number | null | undefined, birim: string | null | undefined,
 const sonYaz = (r: any): { govde: string; birim: string } => {
   const b = String(r?.birim ?? '').trim();
   if (typeof r?.son !== 'number') return { govde: '—', birim: '' };
-  const n = typeof r.ondalik === 'number' ? r.ondalik : ondalikSay(r.son);
+  // Hane sütunun sözleşmesinden (HANE): `ondalik` taşımayan satır (tema
+  // tablosundaki TL faizi) "%37" basıyordu, piyasa fotoğrafı aynı değeri "%37,00".
+  const n = typeof r.ondalik === 'number' ? r.ondalik : hane(r.son, b);
   return b === '%' ? { govde: yuzde(r.son, n), birim: '' } : { govde: sayi(r.son, n), birim: b };
 };
 
@@ -291,7 +298,11 @@ const olcumSaati = kayit?.olcumSaati || istanbulSaat(b.olusturma);
 // satırların kendi tarihinden sayılır — alanı taşımayan eski sayılarda da.
 // Sebep (kaynağın boş verdiği seans · son işlem fiyatından kurulan kapanış)
 // yalnız ölçüm katmanı onu yazdıysa söylenir; tahmin edilmez.
-const pSatirlar: any[] = (b?.piyasa?.gruplar ?? []).flatMap((g: any) => g?.satirlar ?? []).filter((s: any) => s?.tarih);
+// 7/24 işlem gören satır (kripto) seans sayımına girmez: farklı tarihi bir
+// seans ayrışması değildir ve künye her sabah yalnız Bitcoin yüzünden "50 / 51
+// satır · satırlar aynı seansa ait değil" diyordu. Satırın tarih rozeti kalır.
+const pSatirlar: any[] = (b?.piyasa?.gruplar ?? []).filter((g: any) => g?.id !== 'kripto')
+  .flatMap((g: any) => g?.satirlar ?? []).filter((s: any) => s?.tarih);
 const seansSay: [string, number][] = Object.entries(
   pSatirlar.reduce((a: Record<string, number>, s: any) => ((a[s.tarih] = (a[s.tarih] ?? 0) + 1), a), {}),
 ).sort((x, y) => y[0].localeCompare(x[0])) as [string, number][];
@@ -327,6 +338,16 @@ const kaynakBos: any[] = (b?.piyasa?.seans_ozeti?.kaynak_bos ?? [])
 // Satırda yalnız † işareti kalır, metin grubun "Satır notları" katında.
 const satirNotlari = (satirlar: any[], alan: string): { ad: string; not: string }[] =>
   (satirlar ?? []).filter((r: any) => String(r?.[alan] ?? '').trim()).map((r: any) => ({ ad: r.ad, not: String(r[alan]) }));
+// SAYIYI NİTELEYEN NOT KATLANMAZ (01.10.2026 incelemesi): "vade geçişi
+// denetlenemedi" ve "değişim yaklaşıktır" satırdaki sayının temiz olmadığını
+// söyleyen tek yerdi ve katın içinde görünmez kalıyordu (27.08 Brent/WTI/RBOB).
+// Ölçüm katmanı bunu `not_uyari` alanına yazar; alanı taşımayan eski sayılarda
+// notun ilgili parçası aynı ölçütle ayrılır.
+const NOT_UYARI = /denetlenemedi|yaklaşıktır/;
+const notUyari = (r: any): string => {
+  if (typeof r?.not_uyari === 'string') return r.not_uyari;
+  return String(r?.not ?? '').split('; ').filter((x) => NOT_UYARI.test(x)).join('; ');
+};
 const sonIslemden: any[] = b?.piyasa?.seans_ozeti?.son_islemden ?? [];
 const adlar = (xs: any[]) => xs.map((x) => x.ad).join(', ');
 const gunler = (xs: string[]) => [...new Set(xs)].map((g) => tarihYaz(g)).join(', ');
@@ -412,8 +433,13 @@ const tekYayim = (liste: any[]): any[] => {
     sira.push(yeni);
   }
   for (const k of sira) {
-    const notlar = [...new Set(k._notlar.filter(Boolean))] as string[];
-    k.resmi_ad = [...new Set(k._resmi.filter(Boolean))].join(' · ');
+    const resmi = [...new Set(k._resmi.filter(Boolean))] as string[];
+    // Dipnot alt tabloları sayar; TÜİK kaydında adlar `resmi_ad`a taşındığı için
+    // not boşsa adlar oradan okunur — yoksa "N tablo" yalnız title niteliğinde
+    // kalıyor, dokunmatik ekranda ve ekran okuyucuda görünmüyordu.
+    const notlarHam = [...new Set(k._notlar.filter(Boolean))] as string[];
+    const notlar = notlarHam.length > 0 ? notlarHam : (k._notlar.length > 1 ? resmi : []);
+    k.resmi_ad = resmi.join(' · ');
     delete k._resmi;
     if (k._notlar.length > 1 && notlar.length > 0) {
       const bas = notlar.length > 1 ? ortakBas(notlar) : '';
@@ -543,6 +569,19 @@ const sonucGoster: any[] = (b.sonuclar ?? []).filter((x: any) => !SONUCSUZ.has(S
 // "yayımlandı" denemez, yalnız sayının ölçümde olmadığı söylenir.
 const durumYaz = (d: unknown): string =>
   String(d ?? '') === 'veri henüz hatta düşmedi' ? 'sayı bu ölçümde yok' : String(d ?? '');
+// Etiket durumla birlikte seçilir: "Henüz yok. yayımlandı; sayı bu ölçüme henüz
+// girmedi" iki kez "henüz" diyor ve ikinci cümle küçük harfle başlıyordu.
+const durumParca = (d: unknown): { etiket: string; metin: string } => {
+  const t = durumYaz(d);
+  const m = /^yayımlandı;\s*(.*)$/.exec(t);
+  return m ? { etiket: 'Yayımlandı.', metin: m[1] ? m[1][0].toLocaleUpperCase('tr-TR') + m[1].slice(1) : '' }
+           : { etiket: 'Henüz yok.', metin: t ? t[0].toLocaleUpperCase('tr-TR') + t.slice(1) : '' };
+};
+// Sayısı gelmemiş BUGÜNKÜ olayın "tepkisi" önceki seansın hareketidir, olayın
+// değil: 03.09'da 10:00 TÜFE'nin altına 07:31 ölçümünde dünkü BIST −%1,25
+// "Piyasa (1 gün)" diye basılmıştı (arşivde 16 satırın 16'sı).
+const tepkiGoster = (x: any): boolean =>
+  x?.tepki?.kalemler?.length > 0 && !(x.durum !== 'geldi' && Number(x.yas_gun) === 0);
 // İçindekiler: yalnız GERÇEKTEN basılan bölümler listelenir. Koşulları
 // bölümlerin kendi koşullarıyla birebir aynı tutmak şart — yoksa boşa çıkan
 // bir bağlantı okuru hiçbir yere götürmez.
@@ -824,22 +863,22 @@ const bolumler = [
             {x.beklenti && <p class="sonuc-beklenti"><strong>Bekleniyordu.</strong> {x.beklenti}</p>}
             {x.durum === 'geldi' ? (
               <p class="sonuc-geldi">
-                <strong>Geldi.</strong> {x.ad}: <span class="sonuc-sayi">{tr(x.gerceklesme)}{x.birim && ` ${x.birim}`}</span>
-                {x.onceki !== null && x.onceki !== undefined && ` (önceki ${tr(x.onceki)})`}
+                <strong>Geldi.</strong> {x.ad}: <span class="sonuc-sayi">{birimli(x.gerceklesme, x.birim)}</span>
+                {x.onceki !== null && x.onceki !== undefined && ` (önceki ${birimli(x.onceki, x.birim)})`}
                 {x.surpriz !== null && x.surpriz !== undefined && (
                   <span class:list={['sonuc-surpriz', { arti: x.surpriz > 0, eksi: x.surpriz < 0 }]}>
-                    {` sürpriz ${isaretli(x.surpriz)}`}
+                    {` sürpriz ${isaretli(x.surpriz)}${String(x.birim ?? '').trim() === '%' ? ' puan' : ''}`}
                   </span>
                 )}
                 <span class="kaynak-not"> · veri {tz(x.veri_tarihi)}</span>
               </p>
             ) : (
               <p class="sonuc-bekliyor">
-                <strong>Henüz yok.</strong> {durumYaz(x.durum)}
+                <strong>{durumParca(x.durum).etiket}</strong> {durumParca(x.durum).metin}
                 {x.veri_tarihi && ` — elimizdeki son veri ${tz(x.veri_tarihi)}`}
               </p>
             )}
-            {x.tepki?.kalemler?.length > 0 && (
+            {tepkiGoster(x) && (
               <p class="sonuc-tepki">
                 <strong>Piyasa ({x.tepki.pencere}).</strong>{' '}
                 {x.tepki.kalemler.map((t: any, i: number) => (
@@ -928,6 +967,18 @@ const bolumler = [
           </tbody>
         </table>
       </div>
+      {/* Pazar düzeninde olağandışı bölümü yok; haber tonu burada basılır —
+          yoksa ölçülen olay sayfaya ulaşmaz (ölçüt 25 ENGEL, 01.10.2026 incelemesi). */}
+      {haberTonu.length > 0 && (
+        <>
+          <h3>Haber tonu</h3>
+          <ul class="olay-liste">
+            {haberTonu.map((o: any) => (
+              <li class:list={[o.seviye]}><span class="metin">{o.metin}</span></li>
+            ))}
+          </ul>
+        </>
+      )}
     </section>
   )}
 
@@ -1127,7 +1178,7 @@ const bolumler = [
                 <tr class:list={[{ gecersiz: t.gecerli === false }]}>
                   <td class="p-ad">
                     {t.ad}
-                    {t.aciklama && <sup class="p-isaret" aria-hidden="true">†</sup>}
+                    {t.aciklama && <sup class="p-isaret" title="Satır notu tablonun altında"><span aria-hidden="true">†</span><span class="gorunmez">satır notu var</span></sup>}
                     {t.gecerli === false && <span class="p-bayrak">güncel değil</span>}
                   </td>
                   <td class="sag p-son">{String(t.birim ?? '').trim() === '%'
@@ -1169,7 +1220,8 @@ const bolumler = [
                 {g.satirlar.map((r: any) => (
                   <tr>
                     <td class="p-ad">
-                      {r.ad}{r.not && <sup class="p-isaret" aria-hidden="true">†</sup>}
+                      {r.ad}{r.not && <sup class="p-isaret" title="Satır notu tablonun altında"><span aria-hidden="true">†</span><span class="gorunmez">satır notu var</span></sup>}
+                      {notUyari(r) && <span class="p-not p-not-uyari">{notUyari(r)}</span>}
                       {(r.tarih !== anaSeans || r.onarim || r.eksik_seans?.length > 0) && (
                         <span class="p-tarih-ic">
                           {tz(r.tarih)}
@@ -1220,7 +1272,7 @@ const bolumler = [
             <tbody>
               {b.piyasa.turetilmis.map((t: any) => (
                 <tr>
-                  <td class="p-ad">{t.ad}{t.aciklama && <sup class="p-isaret" aria-hidden="true">†</sup>}</td>
+                  <td class="p-ad">{t.ad}{t.aciklama && <sup class="p-isaret" title="Satır notu tablonun altında"><span aria-hidden="true">†</span><span class="gorunmez">satır notu var</span></sup>}</td>
                   <td class="sag p-son">{tr(t.deger, typeof t.ondalik === 'number' ? t.ondalik : undefined)}<span class="p-birim">{t.birim}</span></td>
                   <td class:list={['sag', 'p-degisim', { arti: (t.d1 ?? 0) > 0, eksi: (t.d1 ?? 0) < 0 }]}>
                     {t.d1 === null || t.d1 === undefined ? '—' : t.degisim_birim ? degisimli(t.d1, t.degisim_birim, 1) : isaretli(t.d1)}
@@ -1271,8 +1323,7 @@ const bolumler = [
           <h3>{sozAyrimVar ? 'Bu sayıda değişenler' : 'Söz kayıtları'}</h3>
           <ul class="soz-liste">
             {sozDegisen.map((k: any) => (
-              <li class:list={{ gecikti: k.gun_kalan !== null && k.gun_kalan < 0,
-                                kapali: k.durum === 'kapandi' }}>
+              <li class:list={{ gecikti: sozGecikti(k), kapali: k.durum === 'kapandi' }}>
                 <span class="soz-vade">{sozVade(k)}</span>
                 <span class="soz-govde">
                   <strong class="soz-konu">{k.konu}</strong>
@@ -1309,7 +1360,7 @@ const bolumler = [
           </p>
           <ul class="soz-duran">
             {sozDuran.map((k: any) => (
-              <li class:list={{ gecikti: k.gun_kalan !== null && k.gun_kalan < 0 }}>
+              <li class:list={{ gecikti: sozGecikti(k) }}>
                 <span class="soz-vade">{sozVade(k)}</span>
                 <span class="soz-konu">{k.konu}</span>
                 <span class="kaynak-not">açılış {tz(k.acilis)}</span>
@@ -1424,11 +1475,14 @@ const bolumler = [
           <>
             {t.gelisme && (
               <div class="tema-gelisme">
-                <span class="etiket">{guncel ? 'Bu bültende' : `Son güncelleme · ${tz(t.son_guncelleme)}`}</span>
+                {/* Katlı hâlde tarih özet satırında yazar; içeride ikinci kez basılmaz. */}
+                {guncel && <span class="etiket">Bu bültende</span>}
                 <div set:html={t.gelisme} />
               </div>
             )}
-            {t.son_gozlem && <p class="tema-gozlem"><strong>Son durum.</strong> {t.son_gozlem}</p>}
+            {/* "Son durum" gelişmenin yedeğidir: ikisi aynı rakamları taşıyordu
+                (27.09'da dört temanın dördünde). */}
+            {!t.gelisme && t.son_gozlem && <p class="tema-gozlem"><strong>Son durum.</strong> {t.son_gozlem}</p>}
           </>
         );
         // GÜNCELLENMEYEN TEMA GÜNLÜK SAYIDA TEK SATIR (01.10.2026): tez, ölçü
@@ -1580,9 +1634,8 @@ const bolumler = [
           </div>
         ) : null
       ))}
-      {b.haberler.okunamayan.length > 0 && (
-        <p class="uyari">Okunamayan kaynak: {b.haberler.okunamayan.join(', ')}</p>
-      )}
+      {/* "Okunamayan kaynak: …" taramanın beslemesinin durumudur, okurun kararını
+          değiştirmez; denetim uyarısında kalır (01.10.2026 incelemesi). */}
     </section>
   )}
 
@@ -1819,6 +1872,11 @@ const bolumler = [
   .olay-liste li { display: grid; gap: 0.15rem; padding-left: 0.9rem; border-left: 2px solid var(--ink-30); }
   .olay-liste.onemli li { border-left-color: var(--claret); }
   .olay-liste li.dikkat { border-left-color: var(--uyari); }
+  /* Biçim 3'te "Öne çıkanlar" yok; önemli olay veri listesinde satırın kendi
+     sınıfıyla ayrışır — kural yoktu ve önemli satır bilgi satırından ayırt
+     edilemiyordu, dikkat satırı ise öne çıkıyordu (01.10.2026 incelemesi). */
+  .olay-liste li.onemli { border-left-color: var(--claret); }
+  .olay-liste li.onemli .metin { font-weight: 600; }
   .olay-liste .metin { line-height: 1.45; max-width: var(--olcu-metin); }
   .olay-liste.kucuk .metin { font-size: 0.86rem; color: var(--ink-70); }
   .dipnot { font-size: 0.78rem; color: var(--ink-70); font-style: italic; }
@@ -2035,6 +2093,7 @@ const bolumler = [
   }
   .p-ad { white-space: normal; min-width: 12rem; }
   .p-not { display: block; font-size: 0.7rem; color: var(--ink-70); font-style: italic; white-space: normal; }
+  .p-not-uyari { color: var(--uyari); font-style: normal; }
   .p-tarih-ic, .p-tarih { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-60); }
   .p-tarih-ic { display: block; }
   .p-son { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }

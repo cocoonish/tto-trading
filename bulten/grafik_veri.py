@@ -35,11 +35,10 @@ def _nokta(d: dict) -> list[float | None]:
 
 
 def _yas(t: str) -> int | None:
-    try:
-        an = datetime.fromisoformat(str(t).replace("Z", "+00:00")).replace(tzinfo=None)
-    except (ValueError, TypeError):
+    an = gozlem._an(t)
+    if an is None:
         return None
-    return (datetime.now() - an).days
+    return (gozlem.simdi_utc() - an).days
 
 
 def egri() -> dict:
@@ -53,7 +52,8 @@ def egri() -> dict:
 
     kayitlar = gozlem.gecmis_oku("dibs-verim-egrisi")
     simdiki_v = gozlem._tarih_of(simdi)
-    seriler = [{"ad": "bugün", "tarih": simdiki_v, "yas": 0, "deger": bugun}]
+    # Son ölçümün adı "son": "bugün" bir önceki iş gününün kapanışını taşıyordu.
+    seriler = [{"ad": "son", "tarih": simdiki_v, "yas": 0, "deger": bugun}]
     kullanilan = {simdiki_v}
     for ufuk in KIYAS_UFUK:
         aday = None
@@ -71,7 +71,7 @@ def egri() -> dict:
         if sum(x is not None for x in nokta) < 3:
             continue
         kullanilan.add(k.get("v"))
-        seriler.append({"ad": f"{yas} gün önce" if yas else "bugün",
+        seriler.append({"ad": f"{yas} gün önce" if yas else "son",
                         "tarih": str(k.get("v")), "yas": yas, "deger": nokta})
 
     return {

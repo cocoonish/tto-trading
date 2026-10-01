@@ -880,12 +880,18 @@ def soluk_metin(kok: pathlib.Path) -> list[str]:
 
 
 # ---------------------------------------------------------------- (27)
-_G_FARK = re.compile(r'<span class="g-fark[^"]*"[^>]*>\s*([^<]*)</span>')
+# Kart: seviye (iç içe g-birim taşıyabilir) ve fark — fark seviyeye göre sorulur.
+_G_KART = re.compile(r'<span class="g-deger[^"]*"[^>]*>(.*?)<span class="g-fark[^"]*"[^>]*>\s*([^<]*)</span>', re.S)
 _TH = re.compile(r"<th\b[^>]*>(.*?)</th>", re.S)
 # Rejim şeridinin farkı: "%24,7" altında çıplak "−3,2" yüzde gibi okunuyordu.
 _RJ_FARK = re.compile(r'<span class="rj-fark"[^>]*>(.*?)</span>\s*</span>', re.S)
 _TAKVIM_TABLO = re.compile(r'<table class="takvim"[^>]*>(.*?)</table>', re.S)
 _TR = re.compile(r"<tr\b[^>]*>(.*?)</tr>", re.S)
+# Biçim 3 günlük sayıda haftanın takvimi katlı SIKIŞIK listedir (tablo değil);
+# ölçüt yalnız tabloyu okuyunca 20 satırın 20'sine kördü (01.10.2026 incelemesi).
+_TAKVIM_LISTE = re.compile(r'<ul class="takvim-sikisik"[^>]*>(.*?)</ul>', re.S)
+_LI = re.compile(r"<li\b[^>]*>(.*?)</li>", re.S)
+_TS_ZAMAN = re.compile(r'<span class="ts-zaman"[^>]*>(.*?)</span>', re.S)
 
 
 def _hucre(tr: str, sinif: str) -> str | None:
@@ -923,6 +929,20 @@ def takvim_tekrari(m: str) -> list[str]:
             if a in gorulen:
                 out.append(f"{gun} {saat} {ad}")
             gorulen.add(a)
+    for liste in _TAKVIM_LISTE.findall(m):
+        gorulen = set()
+        for li in _LI.findall(liste):
+            z = _TS_ZAMAN.search(li)
+            if not z:
+                continue
+            zaman = " ".join(unescape(re.sub(r"<[^>]+>", " ", z.group(1))).split())
+            govde = _TS_ZAMAN.sub("", li, count=1)
+            govde = re.sub(r'<span class="(?:beklenti|dipnot|damga)"[^>]*>.*?</span>', "", govde, flags=re.S)
+            ad = " ".join(unescape(re.sub(r"<[^>]+>", " ", govde)).split())
+            a = (zaman, ad)
+            if a in gorulen:
+                out.append(f"{zaman} {ad}")
+            gorulen.add(a)
     return out
 
 
@@ -940,8 +960,13 @@ def basim_bulgulari(dosyalar: list[tuple[str, str]], css_oku=None) -> list[str]:
     import buyuk_harf_baglam as _bh
     bulgu: list[str] = []
     for rel, m in dosyalar:
-        for f in _G_FARK.findall(m):
-            if re.match(r"[+−-]?%", unescape(f).strip()):
+        # "Oranın farkı puandır" yalnız SEVİYESİ yüzde olan kartta geçerlidir:
+        # kurun farkı bilerek yüzde yazılır (seviye 49,01, fark +%0,02). İlk
+        # yazım birime bakmadan her farkı soruyordu ve kurun doğru basımını
+        # ENGEL sayıp her yeni sayıda yayını durduracaktı (01.10.2026 incelemesi).
+        for deger, f in _G_KART.findall(m):
+            dg = unescape(re.sub(r"<[^>]+>", "", deger)).strip()
+            if re.match(r"[+−-]?%", dg) and re.match(r"[+−-]?%", unescape(f).strip()):
                 bulgu.append(f"{rel}: gösterge farkı yüzde basılmış {f.strip()!r} — oranın farkı puandır")
         for f in _RJ_FARK.findall(m):
             g = unescape(re.sub(r"<[^>]+>", "", re.sub(r'<span class="gorunmez"[^>]*>.*?</span>', "", f))).strip()

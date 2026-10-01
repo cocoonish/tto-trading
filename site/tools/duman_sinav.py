@@ -815,16 +815,23 @@ sina("harf.mjs ↔ buyuk_harf_baglam.py: yabancı ad listesi aynı; eklenti KaTe
      and sorted(__import__("re").findall(r"'([^']+)'", _hm_liste.group(1))) == sorted(_bhm.YABANCI)
      and __import__("re").search(r"rehypeKatex,[^\]]*\],\s*rehypeHarfKoru", _ac) is not None,
      f"harf.mjs {_hm_liste.group(1) if _hm_liste else None} · py {_bhm.YABANCI}")
-sina("gösterge farkı '−%0,24' ENGEL",
-     len(basim([("b/index.html", f'<span class="g-fark eksi"{_cid}>−%0,24</span>')])) == 1)
+def _gk(deger, fark):
+    # Derlenmiş kartın birebir biçimi (01.10.2026 önizlemesi): seviye iç içe
+    # g-birim taşıyabilir, fark ondan sonra gelir.
+    return (f'<div class="gosterge"{_cid}> <span class="g-ad"{_cid}>x</span> <span class="g-deger"{_cid}> {deger} </span> '
+            f'<span class="g-fark eksi"{_cid}> {fark} </span> </div>')
+sina("gösterge farkı '−%0,24' ENGEL (seviye yüzde)",
+     len(basim([("b/index.html", _gk("%31,51", "−%0,24"))])) == 1)
 sina("gösterge farkı '−0,24 puan' geçer",
-     not basim([("b/index.html", f'<span class="g-fark eksi"{_cid}>−0,24 puan</span>')]))
+     not basim([("b/index.html", _gk("%31,51", "−0,24 puan"))]))
+sina("kurun yüzde farkı geçer (seviye yüzde değil: '49,01' · '+%0,02')",
+     not basim([("b/index.html", _gk(f'49,01<span class="g-birim"{_cid}></span>', "+%0,02"))]))
 sina("rejim farkı birimsiz ('−3,2') ENGEL",
      len(basim([("b/index.html", f'<span class="rj-deger"{_cid}> %24,7 <span class="rj-fark" title="x"{_cid}>−3,2</span> </span>')])) == 1)
 sina("rejim farkı '−3,2 puan' (görünmez önekle) geçer",
      not basim([("b/index.html", f'<span class="rj-deger"{_cid}> %24,7 <span class="rj-fark" title="x"{_cid}><span class="gorunmez"{_cid}>önceki ölçüme göre </span>−3,2 puan</span> </span>')]))
 sina("bp birimli fark geçer ('−6,5 bp')",
-     not basim([("b/index.html", f'<span class="g-fark eksi"{_cid}>−6,5 bp</span>')]))
+     not basim([("b/index.html", _gk("%40,50", "−6,5 bp"))]))
 # Takvimde aynı yayım (gün · saat · olay) iki satır: BDDK'nın on bir alt tablosu
 # on bir satır basılıyordu. Aynı günün ikinci satırında tarih hücresi boştur.
 def _tk(*satirlar):
@@ -859,6 +866,28 @@ sina("aynı olay farklı günde geçer",
      not basim([("bulten/x/index.html", _tk((_gun, "14:00", "BDDK: Bankacılık sektörü (39. Hafta 2026)"),
                                             ('1 Ekim 2026<span class="t-gun"' + _cid + '>Perşembe</span>', "14:00",
                                              "BDDK: Bankacılık sektörü (39. Hafta 2026)")))]))
+# Biçim 3 günlük sayının katlı SIKIŞIK takvim listesi (derlenmiş biçim): ölçüt
+# yalnız tabloyu okuyordu ve bu listede tekrar YAKALANMIYORDU.
+def _ts(*satirlar):
+    li = "".join(f'<li{_cid}> <span class="ts-zaman"{_cid}>{z}</span> <span title="Resmî ad"{_cid}>{o}</span> '
+                 f'<span class="dipnot"{_cid}>not</span> </li>' for z, o in satirlar)
+    return f'<ul class="takvim-sikisik"{_cid}>{li}</ul>'
+sina("sıkışık takvim listesinde aynı yayım iki satır ENGEL",
+     len(basim([("bulten/x/index.html", _ts(("02.10.2026 Cuma · 10:00 · TR", "TÜİK: Dış ticaret (Ağustos 2026)"),
+                                             ("02.10.2026 Cuma · 10:00 · TR", "TÜİK: Dış ticaret (Ağustos 2026)")))])) == 1)
+sina("sıkışık listede aynı ad farklı saatte geçer",
+     not basim([("bulten/x/index.html", _ts(("02.10.2026 Cuma · 10:00 · TR", "TÜİK: Dış ticaret (Ağustos 2026)"),
+                                            ("02.10.2026 Cuma · 11:00 · TR", "TÜİK: Dış ticaret (Ağustos 2026)")))]))
+
+
+# PAZAR DÜZENİNDE HABER TONU (01.10.2026 incelemesi): pazar sayısında olağandışı
+# bölümü basılmıyor; haber tonu olayı `notlar` kovasında olduğu için ölçüt 25
+# onu sayfada arar — bölüm onu basmazsa site o pazar donar. Gerçek bir biçim 3
+# pazar sayısı yokken yapısal kilit: hafta hareketi bölümü haber tonunu basar.
+_bg = (_SITE / "src/components/BultenGovde.astro").read_text(encoding="utf-8")
+_hh = _bg[_bg.find('id="hafta-hareket"'):]
+_hh = _hh[:_hh.find("</section>")]
+sina("pazar düzeni haber tonunu basar (ölçüt 25'in aradığı olay)", "haberTonu.map" in _hh)
 
 
 print(f"\n{'═' * 70}")

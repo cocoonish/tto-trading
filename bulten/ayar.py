@@ -790,14 +790,21 @@ YAZI_BOLUMLERI_3 = (
     YaziBolumu("risk", "Risk haritası", (0, 180), (0, 300), False, None),
 )
 # Okuma ve özetin aralıkları; TOPLAM yazı katmanı (manşet + özet + okuma +
-# gündem) için (alt, uyarı tavanı, ENGEL tavanı). ENGEL tavanı cömerttir: eski
-# 4.000+ kelimelik düzene dönüşü durdurur, sınırda bir yanlış alarm üretmez.
+# gündem) için (alt, uyarı tavanı, ENGEL tavanı).
+#
+# ENGEL tavanı ilk yazımda 2.200'dü ve incelemede ölçüldü: rutinin ESKİ
+# asgarileriyle (okuma 350, bölüm başına 200–300) doğru beş kimliğe yazılan
+# not ~1.700 kelimede kalıyor ve çıkış 0 ile geçiyordu — yani eski talimatın
+# uzunluk yarısı araçla dayatılmıyordu. Tavan rehberin ilan ettiği aralığın
+# üst ucudur; ayrıca bölüm üst sınırının BOLUM_ENGEL_KAT katını aşan tek bölüm
+# ENGEL'dir (eski 300 kelimelik "Riskler" 180'lik bölümde 1,8 kat).
 YAZI_ARALIK_3 = {
     "yorum": {"gunluk": (250, 500), "haftalik": (500, 900)},
     "ozet": {"gunluk": (50, 180), "haftalik": (80, 260)},
     "ozet_madde": (3, 5),
-    "toplam": {"gunluk": (700, 1600, 2200), "haftalik": (1300, 2800, 3600)},
+    "toplam": {"gunluk": (700, 1300, 1600), "haftalik": (1300, 2400, 2800)},
 }
+BOLUM_ENGEL_KAT = 1.5
 
 
 def yazi_bolumleri(b: dict) -> list[dict]:
@@ -867,8 +874,17 @@ TAKVIM_KURALLARI: list[tuple[str, int, str]] = [
     (r"İşgücü İstatistikleri", 1, "İşgücü"),
     (r"Uluslararası Rezervler ve Döviz Likiditesi", 1, "IRFCL rezerv"),
     (r"Haftalık Para ve Banka", 2, "Haftalık para-banka"),
+    # HMB'nin "Kamu Haznedarlığı İstatistikleri (… Mevduat ve Menkul Kıymet
+    # İstatistikleri)" yayımı TCMB'nin haftalık menkul kıymet adıyla basılıyor
+    # ve sonuç satırında TCMB'nin yabancı akımına bağlanıyordu; "Dış Ticaret"
+    # kalıbı da beklenti anketini ve endeksleri ana yayımla aynı ada çeviriyordu
+    # ("TB: Dış ticaret (4. Çeyrek 2026)"). Bütçe kalıplarındaki gibi ayırt edici
+    # kalıp ÖNCE gelir (01.10.2026 incelemesi).
+    (r"Kamu Haznedarlığı", 3, "Kamu haznedarlığı ist."),
     (r"Menkul Kıymet İstatistikleri", 2, "Menkul kıymet ist."),
     (r"Sanayi Üretim", 2, "Sanayi üretimi"),
+    (r"Dış Ticaret Beklenti", 3, "Dış ticaret beklenti anketi"),
+    (r"Dış Ticaret Endeks", 3, "Dış ticaret endeksleri"),
     (r"Dış Ticaret", 2, "Dış ticaret"),
     (r"Kapasite Kullanım", 2, "Kapasite kullanımı"),
     (r"Reel Kesim Güven|İktisadi Yönelim", 2, "Reel kesim güveni"),

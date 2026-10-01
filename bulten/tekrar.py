@@ -218,8 +218,13 @@ def olc(b: dict) -> dict:
     # tekrardan muaf; paydaya girselerdi yoğunluk %13–18 seyrelir, eşikler
     # (7 uyarı · 12 engel) sessizce gevşerdi — 17.09'un "8,0 ağır tekrar"
     # uyarısı 6,9'a inip kayboluyordu. Eşiklerin kalibre edildiği kapsam korunur.
-    kelime = sum(len(t.split()) for k, t in bol.items()
-                 if not (k.startswith("tema.") or k == "manset")) or 1
+    # BİÇİM 3: söz defteri de paydadan çıkar. Defteri ölçüm katmanı basar ve
+    # yazar onu denetlemez; paydada kalsaydı aynı yazı sakin bir sabahta
+    # (değişmeyen kayıtlar tek satır) ENGEL, kalabalık bir sabahta UYARI
+    # alırdı — 01.10.2026 incelemesinde ölçüldü (yoğunluk 18,8 ↔ 9,6).
+    haric = (lambda k: k.startswith("tema.") or k == "manset" or k == "soz_defteri") if bicim >= 3 \
+        else (lambda k: k.startswith("tema.") or k == "manset")
+    kelime = sum(len(t.split()) for k, t in bol.items() if not haric(k)) or 1
     return {"bolum_sayisi": len(bol), "kelime": kelime,
             "ifade": ifade, "agir": agir, "sayi": sayi,
             "yogunluk": round(len(agir) / kelime * 1000, 1)}

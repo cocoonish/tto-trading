@@ -210,13 +210,18 @@ export function rejimHane(s: Pick<RejimSatiri, 'ad' | 'birim'>): number {
  * Yuvarlama sayi()nin kuralıyla aynı olmalı: Math.round yarımı +∞'a
  * yuvarlıyor (−4,85 → −4,8), ekran ise sıfırdan uzağa ("−4,9"), ve eksi
  * satırlarda fark ekranda görünen hareketle çelişebiliyordu ("−20,0 → −20,0
- * puan"). toFixed ile Intl'in halfExpand'i aynı kuraldır: ikisi de double'ın
- * tam değerini yuvarlar, eşitlikte sıfırdan uzağa gider.
+ * puan"). Fark bu yüzden ekranın KENDİ biçimleyicisinden (sayi) geçen iki
+ * değerden okunur — toFixed ile Intl aynı kural DEĞİLDİR (aşağıda).
  */
 export function rejimFark(s: RejimSatiri): number | null {
   if (s.deger === null || typeof s.onceki !== 'number') return null;
   const n = rejimHane(s);
-  const f = Number((Number(s.deger.toFixed(n)) - Number(s.onceki.toFixed(n))).toFixed(n));
+  // Fark EKRANDA basılan iki değerden okunur: toFixed ikili tam değeri
+  // yuvarlar (8,95 → "8,9"), Intl en kısa ondalık gösterimi (8,95 → "9,0");
+  // 200 bin rastgele değerde 766'sı ayrıştı ve manşet "+9,2 → +9,0" yazarken
+  // şerit "−0,3 puan" basıyordu (01.10.2026 incelemesi).
+  const ekran = (v: number) => Number(sayi(v, n).replace(/\./g, '').replace(',', '.').replace('−', '-'));
+  const f = Number((ekran(s.deger) - ekran(s.onceki)).toFixed(n));
   return f === 0 ? 0 : f;
 }
 
