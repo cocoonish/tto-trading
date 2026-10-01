@@ -3636,8 +3636,8 @@ biçim 3 sayısı 02.10 sabahı yazılacak; rutinin eski metinle reddi ilk kez o
 gün görülecek.
 
 **İnceleme (01.10.2026, beş mercek, donmuş kopya 695df41) — BİR BİÇİM
-DEĞİŞİKLİĞİNİN ASIL KUSURLARI TÜKETİCİLERDE VE KAPILARDADIR.** 40 ham bulgu;
-doğrulananların hepsi düzeltildi, biri çürütüldü. Yeni kodun kendi mantığında
+DEĞİŞİKLİĞİNİN ASIL KUSURLARI TÜKETİCİLERDE VE KAPILARDADIR.** 40 ham bulgu,
+36'sı doğrulandı ve düzeltildi, 4'ü çürütüldü. Yeni kodun kendi mantığında
 çıkan kusur az; ağırlık, biçimin dokunmadığı sanılan yerlerdeydi.
 
 (1) ARA GÖRÜNTÜ İLERLEMEYİ YUTAR. `bugun_yeni`nin ilk yazımı önce
@@ -3689,13 +3689,23 @@ puan" bastı. Fark artık ekranın kendi biçimleyicisinden geçen iki değerden
 ist." adını alıp sonuç satırında TCMB'nin yabancı akımına bağlanıyordu; dış
 ticaret anketi ve endeksleri ana yayımla aynı adı alıyordu; takvim satırı
 anket AYINI ve modelin DÖNEMİNİ yazmıyordu (aynı sayfada iki ayın anketi,
-Aralık tahmini Eylül satırında); itibarı sıfır iki kaynak kilit habere girdi;
-eğrinin dünkü serisi "bugün" diye etiketliydi ve uç etiketleri üst üste
+Aralık tahmini Eylül satırında); eğrinin dünkü serisi "bugün" diye etiketliydi ve uç etiketleri üst üste
 biniyordu; künye her sabah yalnız Bitcoin yüzünden "seans karma" diyordu;
 tema anlatısı aynı rakamları iki kez basıyordu; sayıyı geçersiz kılan satır
 notu ("vade geçişi denetlenemedi") katın içinde kalıyordu; saati gelmemiş
 yayımın altına önceki seansın hareketi "tepki" diye basılıyordu.
 
+ÇÜRÜTÜLENLERDEN biri koda girmişti ve geri alındı: "itibarı sıfır kaynak
+(Coin Gabbar) kilit habere giriyor" bulgusuna bir itibar şartı kondu; doğrulayıcı
+bunun BELGELİ bir tasarımı tersine çevirdiğini gösterdi — en üst konu kademesi
+eşiğe bilerek eşit tutulmuş, çünkü 17.08 haftasında ABD Hazinesi'nin geri alımı
+tam bu yüzden kaçmıştı. Kod belgelediği şeyi yapıyordu; kilit artık duman
+sınamasında. Bir bulguyu doğrulanmadan uygulamak, doğrulamanın değerini de
+uygulamış olur: inceleme bitmeden yapılan düzeltme, inceleme bitince yeniden
+sorulur. Öbür iki çürütme ("seans karma" yalnız Bitcoin yüzünden · "Okunamayan
+kaynak" satırı) çıktının DOĞRU olduğunu söylüyordu, kusur olmadığını değil;
+ikisi bu turun önceki kararlarının eşi (7/24 satırı için tarih rozeti yeter ·
+boru hattının durumu okura gitmez) olarak kaldı.
 AÇIK: (i) ABD 2 yıllık satırı (`2YY=F`) bayat vadeli kotasyon taşıyor —
 haftalarca birebir aynı kapanışlar, 30.09'da +33,7 bp "sıçrama"; devir
 denetimi yalnız beş enerji vadelisini kapsıyor. Kaynak değişikliği önce bulut

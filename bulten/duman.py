@@ -1143,18 +1143,15 @@ def _inceleme_duzeltmeleri():
 
 
 def _editor_bulgulari():
-    """01.10.2026 editör merceği: kilit haber kaynak dayanağı ister; takvim
-    beklentisi anket ayını ve modelin dönemini yazar; eğri serisinin adı "son"."""
+    """01.10.2026 editör merceği: takvim beklentisi anket ayını ve modelin
+    dönemini yazar; eğri serisinin adı "son". Ve bir TASARIM KİLİDİ: en üst konu
+    kademesi (geri alım) kaynağı ne olursa olsun kilide çıkar — itibar şartı
+    önerildi, 17.08'in kaçan geri alımı gerekçesiyle reddedildi."""
     import haber as _h, uret as _u, gozlem as _g, inspect as _i, grafik_veri as _gv
     zayif = _h.Haber(baslik="Bessent Treasury Buyback Sparks Bond Alarm", baglanti="u1",
                      kaynak="Coin Gabbar", ozet="Buyback bond alarm.")
-    guclu = _h.Haber(baslik="Treasury buyback expanded, Reuters reports", baglanti="u2",
-                     kaynak="Reuters", ozet="Treasury buyback.")
-    yayilan = _h.Haber(baslik="Treasury buyback widens", baglanti="u3", kaynak="blog x",
-                       ozet="Buyback.", kaynak_sayisi=3)
-    k = _h.kilit_gelismeler([zayif, guclu, yayilan])
-    assert zayif.onem >= _h.KILIT_ESIK, "fikstür eşiği aşmıyor — madde arızayı üretmez"
-    assert zayif not in k and guclu in k and yayilan in k, [x.kaynak for x in k]
+    k = _h.kilit_gelismeler([zayif])
+    assert zayif.onem >= _h.KILIT_ESIK and zayif in k, "geri alım konusu itibarsız kaynakta kilide çıkmadı"
     gercek = _g.anlik
     try:
         _g.anlik = lambda hat: {"pka_tarih": "08.2026", "bek_n": 63, "bek_yilsonu": 29.43, "bek_12a": 23.69,
@@ -5061,7 +5058,7 @@ def main() -> int:
     sina("biçim 3: bugün açılan uzun söz kaydı uyarılır", _soz_uzunlugu)
     sina("inceleme 01.10: ara görüntü · yazılmış çizgi · ton zaman kapısı · σ tabanı · bölüm tavanı · üslup · UTC · payda · çıkış 2",
          _inceleme_duzeltmeleri)
-    sina("editör 01.10: kilit kaynak dayanağı · anket ayı ve model dönemi · eğri serisi 'son'",
+    sina("editör 01.10: anket ayı ve model dönemi · eğri serisi 'son' · geri alım konusu kilide çıkar",
          _editor_bulgulari)
 
     for ad in gecen:

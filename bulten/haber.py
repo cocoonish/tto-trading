@@ -396,13 +396,12 @@ def kilit_gelismeler(haberler: list[Haber], onceki: set[str] | None = None) -> l
     for h in haberler:
         h.onem = onem_puani(h)
     onceki = onceki or set()
-    # KİLİT BİR KAYNAK DAYANAĞI İSTER (01.10.2026 incelemesi): ağırlığı 6 olan
-    # konu kalıbı ("buyback") eşiği tek başına karşılıyordu ve itibarı sıfır iki
-    # kaynak (Coin Gabbar, stonex.com) Reuters'ın yanında kilit listesine girdi.
-    # Birincil kurum, itibar listesindeki bir kaynak ya da birden çok kaynak şart;
-    # haber yine bölümünde durur.
+    # KAYNAK İTİBARI ŞART DEĞİL, bilerek: en üst konu kademesi (geri alım,
+    # müdahale, temerrüt, kur çapası) eşiğe EŞİT tutuldu ki bu konular kaynağı ne
+    # olursa olsun kilide çıksın — 17.08 haftasında ABD Hazinesi'nin geri alımı
+    # gözden kaçmıştı. 01.10.2026 incelemesinde itibar şartı önerildi ve bu
+    # gerekçeyle geri alındı; liste okura hüküm değil yazara araştırma girdisidir.
     aday = [h for h in haberler if h.onem >= KILIT_ESIK
-            and (h.kurum or _kaynak_puani(h) > 0 or h.kaynak_sayisi > 1)
             and not (kilit_imza(h.baslik, h.baglanti) & onceki)]
     aday.sort(key=lambda h: (h.onem, h.zaman or ""), reverse=True)
     return aday[:KILIT_SINIRI]
