@@ -3716,3 +3716,57 @@ ankettir; artık ikisi de ayını yazıyor, tek kaynağa bağlamak 17.09'da aç�
 bırakılan DİBS etiket sorusunun cevabını ister. (iii) Önizleme de donmuş
 durumun parçasıdır: inceleme koşarken önizleme bir kez yeniden derlendi;
 bulgular etkilenmedi ama kural, kaynağın yanında önizlemeyi de dondurur.
+
+**KARAR (01.10.2026 akşamı, kullanıcı) — BİÇİM 3 KISA KALDI; AYRINTI TEKRARLA
+DEĞİL YENİ OLGUYLA GELİR.** Kullanıcı: "Önceye göre çok beğendim ama biraz kısa;
+tekrara kaçmadan daha fazla ayrıntı vermemiz lazım." İki şikâyet iki ayrı
+eksendir ve ikisi de ölçüldü: aynı günün biçim 2 metni 173 tekil olguyu (ondalık)
+%37 tekrarla taşıyordu, ilk biçim 3 metni 36 tekil olguyu %3 tekrarla. Biçim 2'nin
+267 cümlesi tek tek sınıflandı ve YALNIZ 16'sı biçim 3'te kaybolmuş gerçek
+ayrıntı çıktı (107'si zaten vardı, 39'u tablodaki sayıyı yeniden okuyordu, 32'si
+kronik, 28'i dolgu, 21'i süreç dili, 12'si güvenilmez, 12'si kendi içinde tekrar).
+Yani ayrıntı eski metni geri getirerek ARTMAZ; iki biçimin de yazmadığı türlerle
+artar — aktör ve ölçek, karşı mekanizma, alt kırılım, çok günlü birikim, çapraz
+varlık bağı (havlamayan köpek dahil), eksik varlık sınıfı, bu sabah katmanı,
+takvimde iki yönlü sonuç. Standart `bulten/YAZIM.md` "Ayrıntı" bölümünde; aralıklar
+`ayar.YAZI_BOLUMLERI_3`te genişledi (günlük 1.000–1.700, ENGEL 2.100; madde 4–6) ve
+tekrar ölçüleri DEĞİŞMEDİ: ayrıntı artarken tekrar oranı aynı kalmalıdır. Denetimin
+bilgi satırı her sayının tekil olgu sayısını ve tekrar oranını yazar; eşik yok,
+bilerek. 01.10 yeniden yazıldı: 774 → 1.699 kelime, 36 → 92 tekil olgu, tekrar %1.
+
+Genişleme ölçülen katmanın iki boşluğunu da gösterdi. TL faizinin günlük hareketi
+sayfaya hiç düşmüyordu: DİBS gösterge ve başabaş olay eşiği (0,75 · 1,0 puan) 25
+günlük farkın ölçülen en büyüğünün (0,66 · 0,65) bile üstündeydi, yani kanal hiç
+olay üretmiyordu; eşikler ölçüden kuruldu (≈1,5σ · 2,5σ) ve gösterge şeridine üç
+DİBS kartı girdi (gönderinin ilk beş kartı bilerek aynı). Ve kronik olgu ölçüsü
+yanlış alarm veriyordu: biçim 3 olağandışılığı "(1,5σ)" diye yazar ve σ
+katsayıları başka serilerde günden güne tesadüfen aynı çıkar — 01.10'da uyarının
+beş değerinden üçü buydu. σ katsayısı artık olgu anahtarında ayrı tutulur ve
+kronik ölçüye girmez; iki arıza enjeksiyonu da duman sınamasında yakalanıyor.
+
+Donmuş kopyaya karşı koşan dört mercekli inceleme (sayı · iddia ve zamanlama ·
+editör · standart) yeni metinde 40'tan fazla bulgu verdi ve doğrulanmış olanların
+hepsi uygulandı; dördü kayda değer, çünkü hepsi ayrıntı eklerken doğan kusur
+sınıfları. (1) BİR AYRIŞTIRMA, BACAĞIN KENDİSİ SINANMADAN KURULAMAZ: "düşüşün tamamı
+başabaştan geldi" hükmü doğru bir aritmetikti ama TÜFEX sığ işlem görüyor — 2
+yıllık reel getiri 21 Ağustos'tan beri yalnız 7 bp kaydı, nominal 2 yıllık aynı
+sürede 174 bp'lik bir bantta oynarken. Başabaşın hareketi o günlerde nominalin
+aynasıdır; ayrı bir enflasyon okuması kurulmaz. İlk düzeltme süreyi "dört gün"
+yazmıştı, yani kanıtı olduğundan zayıf gösteriyordu. (2) BİR YAYIMIN KAPSAMI
+ADIYLA YAZILIR: bugünkü haftalık menkul kıymet verisi 25 Eylül'de biten haftayı
+kapsar ve günün tezinin konusu olan 30 Eylül banka satışını GÖREMEZ; metin onu
+"satışın kaynağını söyleyecek" diye sınav ilan etmişti. (3) ÖLÇÜLMEYEN BİR
+GÖSTERGE KANIT OLAMAZ: ilk metin ayrımı "kur ve dış borçlanma fiyatı" ile kuruyordu
+ve Türkiye'nin dış borçlanma fiyatı ölçülen katmanda yok (EMBI bir küresel
+endekstir); yerine rezerv verisinden tahmin edilen döviz akımı kondu. (4) BİR
+DÜZELTME KAYDININ YENİ DEĞERİ DE KAYNAK İSTER: 2 yıllık ABD getirisinin "gerçek
+%4,891"i yazı katmanının adı verilmeyen bir okumasıydı ve doğrulanamadı; kayıt
+"doğrulanmış kapanış yok" diye yeniden yazıldı. Bir yan bulgu dünkü sayıdaydı ve
+o sayıya düzeltme kaydıyla girdi: motorin vergisinin ekim adımı 1 Ekim'de yürürlüğe
+girdiği için eylül TÜFE'sinde görünemez.
+
+AÇIK: (i) Rutinin metni hâlâ eski aralıkları söylüyor; sigorta araçta (yaz.py ve
+toplam tavanı), metnin güncellenmesi kullanıcının işi. (ii) DİBS kartları ve yeni
+olay eşikleri 02.10 ölçümüyle görünür; 01.10'un ölçülen katmanı yazılmış bir
+sayının altında olduğu için yeniden üretilmedi. (iii) ABD 2 yıllık kaynağı hâlâ
+bayat vadeli kotasyon; bulut keşfi bekliyor.

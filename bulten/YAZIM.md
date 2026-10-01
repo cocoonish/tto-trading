@@ -250,8 +250,9 @@ de yazmadığı türlerdi.
    birlikte; iki kalemin aynı birimde kıyası (benzinde pompaya 4,15 TL,
    motorinde 3,60 TL); bir primdeki düşüşün hangi bacaktan geldiği. Bacağın
    kendisi de sınanır: başabaş nominal ile reel getirinin farkıdır ve TÜFEX
-   sığ işlem görür — 2 yıllık reel getiri 25–30.09 arasında dört gün %8,1'de
-   durdu, yani o günlerde başabaşın her hareketi nominal hareketin aynasıydı.
+   sığ işlem görür — 2 yıllık reel getiri 21.08–30.09 arasında yalnız 7 bp
+   kaydı (%8,18 → %8,11), nominal 2 yıllık aynı sürede 174 bp'lik bir bantta
+   oynarken; o günlerde başabaşın hareketi nominal hareketin aynasıydı.
    "Düşüşün tamamı başabaştan geldi" demeden önce reel bacağın kıpırdayıp
    kıpırdamadığına bakılır; kıpırdamıyorsa ayrı bir enflasyon okuması kurulmaz.
 4. **Çok günlü birikim.** Bir olaydan ya da bir notun açıldığı günden beri
