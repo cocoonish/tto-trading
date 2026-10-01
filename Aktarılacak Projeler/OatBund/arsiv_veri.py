@@ -231,7 +231,14 @@ def yahoo() -> None:
         UYARILAR.append(f"yfinance yok: {e!r}")
         return
     parca = {}
-    for kod, ad in (("EURUSD=X", "eurusd"), ("DX-Y.NYB", "dxy"), ("EURCHF=X", "eurchf")):
+    # Ortak risk iştahını ayırmak için kontroller (VIX, hisse endeksleri), Avrupa
+    # içi güvenli liman (EUR/CHF), bölgesel ayrışma (CAC 40 − DAX) ve egemen–banka
+    # bağı (Fransız bankaları). Vadeli emtia BİLEREK yok: ön vade devri seviyeyi
+    # bozar (CLAUDE.md — geriye ölçeklenmiş seriden aritmetik kurulmaz).
+    for kod, ad in (("EURUSD=X", "eurusd"), ("DX-Y.NYB", "dxy"), ("EURCHF=X", "eurchf"),
+                    ("EURGBP=X", "eurgbp"), ("EURJPY=X", "eurjpy"), ("^VIX", "vix"),
+                    ("^STOXX50E", "sx5e"), ("^FCHI", "cac"), ("^GDAXI", "dax"),
+                    ("BNP.PA", "bnp"), ("GLE.PA", "socgen"), ("ACA.PA", "cagri")):
         h = yf.Ticker(kod).history(period="max", interval="1d", auto_adjust=False)
         if h.empty:
             UYARILAR.append(f"Yahoo {kod} boş")
@@ -241,13 +248,15 @@ def yahoo() -> None:
         parca[ad] = s
     if parca:
         gz_yaz(pd.DataFrame(parca), "yahoo_gunluk.csv.gz", "Yahoo Finance (yfinance), günlük kapanış",
-               "EUR/USD, DXY, EUR/CHF kapanış (tarih: Yahoo işlem günü)", beklenen_ilk="2004-01-01")
+               "Kapanış (tarih: Yahoo işlem günü; döviz barı ölçüldü: Yahoo D ≈ CNBC D−1)", beklenen_ilk="2004-01-01")
 
 
 # ── CNBC ──────────────────────────────────────────────────────────────────
 # Yoklama (keşif #31, 01.10.2026) ölçtü: tarih aralıklı bar ucu 2000'den bugüne
-# GÜNLÜK bar veriyor (FR10Y 7.248, DE10Y 7.387 bar tek istekte) ve HAFTA SONU
-# barları cumanın kopyası olarak geliyor (26–27.09.2026 = 25.09 kapanışı).
+# GÜNLÜK bar veriyor (FR10Y 7.248, DE10Y 7.387 bar tek istekte). Hafta içi barı
+# AVRUPA kapanışıdır (ECB AAA eğrisiyle aynı gün korelasyonu 0,87–0,90, ertesi
+# günle 0,08–0,10); hafta sonu barları cumanın KOPYASI DEĞİL — 564 cuma–cumartesi
+# çiftinin 550'sinde cumartesi farklı, yani cuma New York'taki son kotasyon.
 # Arşiv kaynağın döndürdüğünü OLDUĞU GİBİ saklar; hafta sonu ve tatil ayıklaması
 # ölçüm katmanında, kuralıyla ve sayımıyla yapılır.
 # Uzun aralık tek istekte kırpılabilir (CLAUDE.md — EVDS 2000–2026'yı sessizce
