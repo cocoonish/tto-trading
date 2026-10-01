@@ -317,6 +317,41 @@ def cnbc() -> None:
                "Gösterge devlet tahvili getirisi, aylık kapanış, %", gunluk=False)
 
 
+# ── CNBC gün içi ───────────────────────────────────────────────────────────
+# Yoklama (keşif #32, 01.10.2026) ölçtü: CNBC'nin GÜNLÜK barı Paris 17:30
+# kotasyonudur (DE2Y 01.10: gün içi 17:30 = 3,0535 = günlük kapanış; DE10Y
+# 3,5203 ↔ 3,5191; FR10Y 4,9256 ↔ 4,9282). Gün içi uç (`5D`) yalnız SON BEŞ
+# işlem gününü tutar ve dakikalık bar verir — kalıcı değildir, o yüzden
+# arşivlenir. Döviz barları New York 17:00 kapanışıdır (EUR= 30.09 = 1,1328 =
+# 16:59 NY), Avrupa kapanışı değil.
+GUN_ICI_SEM = ["FR10Y-FR", "DE10Y-DE", "IT10Y-IT", "FR2Y-FR", "DE2Y-DE", "IT2Y-IT",
+               "US2Y", "US10Y", "EUR="]
+
+
+def cnbc_gun_ici() -> None:
+    parca = {}
+    for sem in GUN_ICI_SEM:
+        try:
+            js = json.loads(al("https://ts-api.cnbc.com/harmony/app/charts/5D.json?symbol="
+                               + urllib.request.quote(sem), sn=30, deneme=2))
+        except Exception as e:  # noqa: BLE001
+            UYARILAR.append(f"CNBC gün içi {sem}: {e!r}")
+            continue
+        d = {}
+        for b in js.get("barData", {}).get("priceBars", []) or []:
+            try:
+                t = pd.Timestamp(int(b["tradeTimeinMills"]), unit="ms", tz="UTC").tz_localize(None)
+                d[t] = float(b["close"])
+            except (KeyError, ValueError, TypeError):
+                continue
+        parca[_ad(sem)] = pd.Series(d, dtype=float)
+        print(f"  · CNBC gün içi {sem}: {len(d)} bar", flush=True)
+    if parca:
+        gz_yaz(pd.DataFrame(parca), "cnbc_gun_ici.csv.gz", "CNBC (Tullett Prebon), 5D grafik ucu",
+               "Dakikalık son kotasyon; tarih UTC; son beş işlem günü (kaynak daha eskisini tutmaz)",
+               gunluk=False)
+
+
 # ── ECB politika faizi ─────────────────────────────────────────────────────
 def ecb_faiz() -> None:
     try:
@@ -333,7 +368,7 @@ def main() -> int:
     t0 = time.monotonic()
     for ad, f in (("Bundesbank", bundesbank), ("ABD Hazinesi", hazine), ("ECB", ecb),
                   ("ECB faiz", ecb_faiz), ("Eurostat", eurostat), ("Yahoo", yahoo),
-                  ("CNBC", cnbc)):
+                  ("CNBC", cnbc), ("CNBC gün içi", cnbc_gun_ici)):
         print(f"── {ad}", flush=True)
         try:
             f()
