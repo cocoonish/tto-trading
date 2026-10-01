@@ -9,7 +9,7 @@ beyanından; biçim 3 = sabah notu, bkz. bulten/YAZIM.md):
 
     manset       günün tezi, tek cümle (≤110 karakter)
     yorum        "Günün/Haftanın okuması" — HTML paragraflar
-    ozet         biçim 3: {"ne_oldu": "<ul><li>…</li></ul>"} (3–5 madde)
+    ozet         biçim 3: {"ne_oldu": "<ul><li>…</li></ul>"} (madde sayısı: ayar.YAZI_ARALIK_3)
                  biçim 2 (arşiv): {"ne_oldu": "...", "ne_bekleniyor": "..."}
     gundem       bölüm kimliği → HTML metin; kimlikler sayının
                  `gundem_yazi_bolumleri` alanından (biçim 3: ayar.YAZI_BOLUMLERI_3)
@@ -130,7 +130,7 @@ def uygula(hedef: Path, yama: dict) -> tuple[dict, list[str]]:
 
     # BİÇİM 3 (sayının `surum` beyanı): gündem kimlikleri sayının kendi
     # bölüm listesinden; ileriye bakış `gundem.takvim`dedir, özet yalnız
-    # `ne_oldu` taşır (3–5 madde). Beyan dışı kimlik REDDEDİLİR — yazılsa
+    # `ne_oldu` taşır (madde aralığı ayar.YAZI_ARALIK_3). Beyan dışı kimlik REDDEDİLİR — yazılsa
     # sayfada başlıksız kalır, denetim onu hiçbir aralıkla ölçmez.
     bicim3 = int(b.get("surum") or 2) >= 3
     if bicim3:
@@ -150,10 +150,11 @@ def uygula(hedef: Path, yama: dict) -> tuple[dict, list[str]]:
                     "talimatları biçim 2'ye (arşiv) aittir; bulten/YAZIM.md esastır "
                     "('Doldurulacak alanlar (biçim 3)').")
         if isinstance(yama.get("ozet"), dict) and str(yama["ozet"].get("ne_bekleniyor") or "").strip():
+            amin, amax = _ayar.YAZI_ARALIK_3["ozet_madde"]
             raise SystemExit(
                 "bu sayı biçim 3'te (sabah notu): ileriye bakış `ozet.ne_bekleniyor`a "
                 "değil `gundem.takvim` bölümüne yazılır; özet yalnız `ne_oldu` "
-                "(3–5 madde). Rutin metnindeki ne_bekleniyor talimatı biçim 2'ye "
+                f"({amin}–{amax} madde). Rutin metnindeki ne_bekleniyor talimatı biçim 2'ye "
                 "aittir; bulten/YAZIM.md esastır.")
 
     if "ozet" in yama and isinstance(yama["ozet"], dict):

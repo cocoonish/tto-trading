@@ -8,9 +8,10 @@ Bugün ve önümüzdeki günler · Risk) ve — yalnız yayımlanmış bir sayı
 düzeltiliyorsa — `duzeltmeler`.
 
 Hedef kitle profesyonel trader ve portföy yöneticisi. Yazdığın şey bir **sabah
-notudur**: kısa, hükümle açılan, her olguyu bir kez söyleyen, ne fiyatlandığını
-ve riskin hangi yöne asimetrik olduğunu söyleyen bir not. Uzunluk değer
-değildir; okurun beş–yedi dakikası vardır.
+notudur**: hükümle açılan, her olguyu bir kez söyleyen, ne fiyatlandığını ve
+riskin hangi yöne asimetrik olduğunu söyleyen bir not. Okurun yedi–on dakikası
+var. Uzunluk kendi başına değer değildir; **ayrıntı** değerdir — ama ayrıntı
+tekrarla değil YENİ olguyla gelir (bkz. "Ayrıntı: notu ne uzatır, ne uzatmaz").
 
 ---
 
@@ -143,20 +144,28 @@ profesyoneli tarafından yazılmış gibi değil; çok tekrar var".
 | alan | sayfadaki adı | uzunluk (günlük · haftalık) | zorunlu |
 |---|---|---|---|
 | `manset` | başlık (h1) | tek cümle, ≤110 karakter | evet |
-| `ozet.ne_oldu` | Bu sabah | 3–5 madde · 50–180 · 80–260 kelime | evet |
-| `yorum` | Günün / Haftanın okuması | 250–500 · 500–900 | evet |
-| `gundem.turkiye` | Türkiye | 100–350 · 150–450 | evet |
-| `gundem.kuresel` | Küresel | 100–350 · 150–450 | evet |
-| `gundem.emtia` | Emtia ve enerji | ≤200 · ≤300 | yalnız söyleyecek bir şey varsa |
-| `gundem.takvim` | Bugün ve önümüzdeki günler · Önümüzdeki hafta | 60–250 · 150–450 | evet |
-| `gundem.risk` | Risk haritası | ≤180 · ≤300 | isteğe bağlı |
+| `ozet.ne_oldu` | Bu sabah | 4–6 madde · 90–240 · 120–320 kelime | evet |
+| `yorum` | Günün / Haftanın okuması | 300–550 · 550–950 | evet |
+| `gundem.turkiye` | Türkiye | 200–450 · 250–550 | evet |
+| `gundem.kuresel` | Küresel | 180–420 · 250–550 | evet |
+| `gundem.emtia` | Emtia ve enerji | 60–250 · 100–350 | yalnız söyleyecek bir şey varsa |
+| `gundem.takvim` | Bugün ve önümüzdeki günler · Önümüzdeki hafta | 120–320 · 250–550 | evet |
+| `gundem.risk` | Risk haritası | ≤220 · ≤320 | isteğe bağlı |
 | `duzeltmeler` | Düzeltmeler | — | yalnız yayımlanmış bir sayı düzeltilirken |
 
-**Toplam yazı (manşet + madde + okuma + gündem): günlük hedef 700–1.300
-kelime, haftalık 1.300–2.400.** Günlükte 1.600, haftalıkta 2.800 kelimeyi aşan
+**Toplam yazı (manşet + madde + okuma + gündem): günlük hedef 1.000–1.700
+kelime, haftalık 1.800–3.000.** Günlükte 2.100, haftalıkta 3.600 kelimeyi aşan
 yazı denetimde ENGEL alır; bir bölüm kendi üst sınırının 1,5 katını aşarsa o da
 ENGEL'dir. Aralığın altı ve üst sınırla 1,5 katı arası yalnız UYARI'dır:
 söyleyecek az şey varsa az yaz. Boş zorunlu bölüm ENGEL'dir.
+
+Aralık 01.10.2026 akşamı genişledi (okur: "önceye göre çok beğendim ama biraz
+kısa; tekrara kaçmadan daha fazla ayrıntı"). Genişleyen yer tekrar değil
+ayrıntıdır: denetimin bilgi satırı her sayının **tekil olgu** sayısını ve
+**tekrar oranını** yazar ("ayrıntı: 36 tekil olgu, 37 geçiş (tekrar %3)").
+İlk biçim 3 sayısı 36 tekil olgu taşıyordu, aynı günün eski düzendeki metni
+173 tekil olguyu %37 tekrarla. Hedef: tekil olgu artar, oran %10'un altında
+kalır.
 `ozet.ne_bekleniyor` biçim 3'te YOKTUR (ileriye bakış `gundem.takvim`dedir);
 yazma kapısı onu reddeder.
 
@@ -166,10 +175,10 @@ En çok iki ölçüm sayısı; Türkiye'ye etkisi varsa aynı satırda. Örnek: 
 petrolden koptu: Brent −%2,6 iken ABD 30 yıllık %5,59'a çıktı;
 TL kımıldamadı."*
 
-### `ozet.ne_oldu` — Bu sabah (3–5 madde)
+### `ozet.ne_oldu` — Bu sabah (4–6 madde)
 `<ul><li>…</li></ul>`. **Günün rakamlarının TEK evi.** Ters piramit: ilk
-madde en büyük olgu + sayı + kıyası; her madde bir olgu ve onun anlamı (en
-çok ~35 kelime). Türkiye ilk iki maddede. Tabloda zaten basılı her rakamı
+madde en büyük olgu + sayı + kıyası; her madde bir olgu, onun ölçeği ve anlamı
+(en çok ~45 kelime). Türkiye ilk iki maddede. Tabloda zaten basılı her rakamı
 buraya taşıma — yalnız argümanı taşıyanı.
 
 ### `yorum` — Günün okuması
@@ -194,14 +203,86 @@ Bir konu kendi evinde tam anlatılır; başka bölümde en çok TEK cümleyle an
 Bölüm günün özetiyle açılmaz; kendi konusundaki yeni bilgiyle açılır. Piyasa
 etkisi olmayan haber yazılmaz (bir ülkenin BM'deki talebi, dijital ruble).
 
+Bölümler kısa, kalın başlıklı paragraflardan kurulur (`<p><strong>Başlık.</strong>
+…</p>`); her paragraf bir alt konudur ve şu sırayla ilerler: **yeni bilgi →
+ölçek ve aktör → mekanizma (karşı mekanizma dahil) → türetilmiş ölçü ya da
+fiyatlama → izlenecek ölçü**. Hepsini her paragrafta yazmak zorunlu değil;
+sıralama zorunlu. Bölümlerin alt konuları:
+
+| bölüm | alt konular (o gün söyleyecek bir şey olanlar) |
+|---|---|
+| `turkiye` | **TL faizi ve DİBS** (TLREF−politika, gösterge ve eğri, başabaş ayrıştırması) · **kur** · **hisse ve kredi** (sektör kırılımı) · **politika ve düzenleme** (kurum, kuruluş adları, tutar, tavan) · **dünden bu yana yayımlanan Türkiye verisi** (sonuç, önceki değer, anlamı — yalnız kaynaklıysa) |
+| `kuresel` | **ABD faizi** (eğri şekli, çok günlü birikim) · **dolar ve G10** (Türkiye'ye geçişi: euro/TL) · **hisse ve kredi** · **Avrupa ve Asya** · **politika ve jeopolitik** · **bu sabah** (Asya kapanışı, vadeliler — adlı kaynakla) |
+| `emtia` | **ham petrol ve ürün** (marjlar, arz/talep sürücüsü) · **değerli metaller** (adlı katalizör) · **Türkiye'ye geçiş** (pompa, TÜFE kalemi) |
+| `takvim` | Türkiye takvimi önce; her yayım için önceki değer ve **iki yönlü sonuç → anlam** ("güçlü gelirse X, zayıf gelirse Y"); planı değişen takvim ("ne değişti": yeni ihale takvimi, ertelenen yayım) |
+| `risk` | 2–4 madde: tetik · etki yönü · olasılığını artıran ölçü ve onun eşiği |
+
 `takvim`: her yayım için **hangi sonuç neyi değiştirir** — beklenti sayısını
-yineleme, tablo basıyor. Haftalık sayıda önümüzdeki haftanın her takvim maddesi
+yineleme, tablo basıyor; ÖNCEKİ değer kıyas için yazılabilir (tablo onu her
+zaman basmaz). Haftalık sayıda önümüzdeki haftanın her takvim maddesi
 burada tek tek işlenir ve sayısal beklentisi olan her maddenin takvim kaydında
 `beklenti_sayi` alanının dolu olduğunu doğrula (sürpriz ölçümü o alanla çalışır;
 serbest metinden sayı türetilmez). Beklenti yoksa yokluğunu YAZMA — tablo "—"
 basar.
 
-`risk`: 2–3 madde, her biri: tetik · etki yönü · olasılığını artıran ölçü.
+`risk`: 2–4 madde, her biri: tetik · etki yönü · olasılığını artıran ölçü.
+
+### Ayrıntı: notu ne uzatır, ne uzatmaz
+
+01.10.2026'da aynı günün iki metni cümle cümle karşılaştırıldı: eski düzenin
+267 cümlesinin yalnız **16'sı** yeni notta eksik kalan gerçek ayrıntıydı;
+107'si yeni notta zaten vardı, 39'u tabloda basılı sayıyı yeniden okuyordu,
+32'si kronik, 28'i dolgu, 21'i süreç dili, 12'si güvenilmez, 12'si kendi içinde
+tekrar. Yani ayrıntı eski metni geri getirerek ARTMAZ. Asıl eksik, iki metnin
+de yazmadığı türlerdi.
+
+**Notu uzatan ayrıntı** (her biri ölçülmüş ya da adlı kaynaklı):
+
+1. **Aktör ve ölçek.** Kuruluşun, kişinin, fonun adı; tutar, tavan, kaç
+   kuruluş. "BDDK beş kuruluşun yönetimini devretti" yerine Tera, Destek ve
+   Hedef yatırım bankaları ile Destek ve Tera faktoring; ara ödemenin tavanı
+   1 milyon TL. Ad ve ölçek "nereye uzanır" sorusunu sayıyla daraltır.
+2. **Karşı mekanizma.** Riskin öbür yönü: tasfiyede ara ödemenin başlaması
+   satış baskısını öne çeker AMA belirsizliği de azaltır; TMSF devri bir el
+   koyma değil yönetim devridir ve devredilenler mevduat bankası değildir.
+   Tek yönlü kurulmuş bir asimetri hükmü eksik bir hükümdür.
+3. **Alt kırılım.** Manşet rakamın altındaki bileşen: aylık ve yıllık okuma
+   birlikte; iki kalemin aynı birimde kıyası (benzinde pompaya 4,15 TL,
+   motorinde 3,60 TL); bir primdeki düşüşün hangi bacaktan geldiği. Bacağın
+   kendisi de sınanır: başabaş nominal ile reel getirinin farkıdır ve TÜFEX
+   sığ işlem görür — 2 yıllık reel getiri 25–30.09 arasında dört gün %8,1'de
+   durdu, yani o günlerde başabaşın her hareketi nominal hareketin aynasıydı.
+   "Düşüşün tamamı başabaştan geldi" demeden önce reel bacağın kıpırdayıp
+   kıpırdamadığına bakılır; kıpırdamıyorsa ayrı bir enflasyon okuması kurulmaz.
+4. **Çok günlü birikim.** Bir olaydan ya da bir notun açıldığı günden beri
+   kaç seansta nereden nereye ("25.09'dan beri 5s30s 50 → 55 bp"); bir eşiğe
+   kalan uzaklık. Tablo günlük farkı basar, birikimi basmaz.
+5. **Çapraz varlık bağı.** Bir hareketin başka bir varlıkta neye karşılık
+   geldiği: EUR/USD yılın dibindeyken euro/TL'nin düşüşü; Türkiye ETF'i
+   −%2,73 iken gelişen ülke hisseleri −%0,91. **Havlamayan köpek** de bir
+   ölçüdür: bankalar −%4,58 iken TL tahvilinin SATILMAMASI, tezin karşı
+   kanıtıdır — 1σ altı bir hareket kendi başına haber değildir ama bir tezin
+   sınavı olarak tek cümleyle yazılır (bkz. kural 6).
+6. **Eksik varlık sınıfı.** Gün sakin geçse bile dolar ve G10, değerli metaller,
+   TL faizi notta en az bir cümle bulur; sakinliği ölçüsüyle söylenir.
+7. **Bu sabah katmanı.** Kapanış tablosunun veremediği: Asya'nın açılışı,
+   vadeliler, gece gelen haber — adlı kaynakla. Dünkü kapanışa göre kurulmuş
+   bir hüküm bu sabah eskimişse ("Japon getirisi geri çekildi" — FT 07:17:
+   yeniden sıçradı) güncel hâli yazılır.
+8. **Takvimde iki yönlü sonuç ve "ne değişti".** Bir yayımın iki olası
+   sonucunun ne anlama geldiği; planı değişen takvim (yeni stratejiyle ihale
+   günü ve modelin tahmini).
+
+**Notu uzatmayan:** tablodaki seviyeyi cümleye çevirmek; değişmeyen değeri
+yeniden yazmak (kronik); aynı rakamı ikinci bölümde saymak; süreç dili;
+geçiş ve özet cümleleri ("Günün resmi şu"); kaynağı haber akışında olmayan
+iddia.
+
+**Her ayrıntı doğrulanır, zamanlaması dahil.** Bir nedensellik iddiası
+haberin DAMGASINA karşı sınanır: 01.10 notu "kaybın tamamı devir kararının
+duyurulduğu saatlerde oluştu" yazdı — karar 18:51'de, borsa kapandıktan
+SONRA duyurulmuştu. Kapanış tablosundaki bir hareketi ancak seans içinde
+bilinen bir olay açıklayabilir.
 
 ### `duzeltmeler` — yayımlanmış bir sayının düzeltme kaydı
 
@@ -247,6 +328,8 @@ sınar: süreç dili ENGEL, bütçeli kalıplar UYARI.
    faizi seti, ÖTV takvimi, cari açık, ihale modeli) düzyazıya yalnız olay
    günü ya da değiştiği gün girer. Bugün ve önceki iki sayının üçünde de
    yazılmış değerler üçten fazlaysa denetim onları "kronik olgu" diye listeler.
+   σ katsayıları ("1,5σ") bu ölçüye girmez: seviye değil oynaklığa bölünmüş
+   harekettir ve günden güne başka serilerde tesadüfen aynı çıkar.
 4. **Okuma her gün yeni bir cümleyle açılır.** Dünün açılışını yeniden kurma.
 5. **Cümle kısa.** Ortalama en çok 22 kelime ve 35 kelimeyi aşan cümle en çok
    %8 (denetimin eşiği; hedef ortalama 14–18), cümle başına en çok dört
@@ -254,7 +337,9 @@ sınar: süreç dili ENGEL, bütçeli kalıplar UYARI.
    en çok bir; "bir X değil bir Y" kalıbı sayı başına en çok iki;
    "İkincisi/Üçüncüsü" yerine madde.
 6. **σ disiplini.** Olağandışılık "(1,5σ)" biçiminde yazılır. 1σ altındaki
-   hareket düzyazıya girmez (tablo zaten basıyor); 2σ ve üstü sebebiyle girer,
+   hareket HABER olarak düzyazıya girmez (tablo zaten basıyor); tek istisnası
+   bir tezin sınavıdır — "bankalar −%4,58 iken TL tahvili satılmadı" gibi,
+   beklenen hareketin OLMAMASI tek cümleyle yazılır; 2σ ve üstü sebebiyle girer,
    sebep netleşmediyse bir kez "sebebi netleşmedi" denir. 1σ altı tek günlük
    hareketten rejim hükmü kurulmaz; "kesin / kanıt / ta kendisi" yalnız 2σ ve
    üstünde ya da çok günlü birikimde.
@@ -393,7 +478,7 @@ Kalıcı çözüm rutin metnini claude.ai arayüzünden düzeltmektir.
 | "Dosya yoksa `python3 bulten.py --tur gunluk` ile üret" | Üretme — o oturumda ağ kapalı, 0 enstrümanlık fotoğraf çıkar ve önbellek kirlenir; iş akışlarını tetikle | **Araçla kapatıldı**: `bulten.py` 40 enstrümanın altında dosyayı YAZMIYOR (çıkış 4) |
 | `python3 bulten/yaz.py yama.json` (damgasız) | `--damga "<olusturma>"` ver | Araçla kapatıldı: damga verilmese de yama dosyasının zamanı ölçümle kıyaslanıyor |
 | `zincir.py` hiç geçmiyor | 0. adım zincire bakmaktır | **Araçla ÖLÇÜLDÜ**: `yaz.py` gecikmeyi zincir raporundan bağımsız kaydeder ve `gecikme.yml` alarmı zincir raporuna hiç bakmadan verir. Dayatılamıyor, ama artık görünmüyor da değil |
-| "Rehberdeki on iki bölümü yaz. Haber bölümleri en az 200, yazı bölümleri en az 300, günlük yorum en az 350 kelime" (01.10.2026'da okundu) | Sayı biçim 3'teyse beş bölüm, uzunluk ARALIK (bkz. "Doldurulacak alanlar (biçim 3)"); toplam tavanın ve bölüm üst sınırının 1,5 katının üstü ENGEL | **Araçla kapatıldı**: `yaz.py` biçim 3 sayıda beyan dışı bölüm kimliğini reddeder ve mesajı bu satırı adıyla anar; eski asgarilerle doğru kimliklere yazılan not (~1.700 kelime) günlük 1.600 tavanında ve bölüm 1,5 kat sınırında ENGEL alır |
+| "Rehberdeki on iki bölümü yaz. Haber bölümleri en az 200, yazı bölümleri en az 300, günlük yorum en az 350 kelime" (01.10.2026'da okundu) | Sayı biçim 3'teyse beş bölüm, uzunluk ARALIK (bkz. "Doldurulacak alanlar (biçim 3)"); toplam tavanın ve bölüm üst sınırının 1,5 katının üstü ENGEL | **Araçla kapatıldı**: `yaz.py` biçim 3 sayıda beyan dışı bölüm kimliğini reddeder ve mesajı bu satırı adıyla anar. Eski asgarilerle doğru kimliklere yazılan ~1.700 kelimelik not 01.10.2026 akşamından beri yeni hedef aralığın (1.000–1.700) içinde kalır; tekrarı olgu ölçüleri yakalar, toplam tavan (2.100) eski 4.000+ kelimelik düzene dönüşü durdurur |
 | Haftalık: "`ozet.ne_bekleniyor` önümüzdeki haftayı anlatır; takvimi `beklenti` bölümünde tek tek işle" | Biçim 3'te ileriye bakış `gundem.takvim` (haftalık başlığı "Önümüzdeki hafta"); özet yalnız `ne_oldu` | **Araçla kapatıldı**: `yaz.py` biçim 3'te `ne_bekleniyor`u ve `beklenti` kimliğini reddeder |
 
 **Silip yeniden kurmak da çözüm değil.** 27.08.2026'da denendi: aracının

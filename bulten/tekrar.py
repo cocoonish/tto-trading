@@ -321,8 +321,18 @@ def olgu_anahtari(s: str) -> str:
     return re.sub(r"[^\d,]", "", s)
 
 
+# σ katsayısı bir SEVİYE değil, kendi oynaklığına bölünmüş bir harekettir:
+# "1,5σ" ile "%1,5" ayrı olgudur ve σ katsayıları günden güne tesadüfen
+# çakışır (01.10.2026: kronik uyarısının beş değerinden üçü 1,5σ · 1,9σ ·
+# 2,4σ idi, öncekiler başka seriler). Anahtar σ'yı taşır; kronik ölçü onu
+# saymaz.
+SIGMA_EKI = re.compile(r"\s?σ")
+
+
 def olgular(metin: str) -> set[str]:
-    return {olgu_anahtari(m.group(0)) for m in OLGU.finditer(metin or "")}
+    metin = metin or ""
+    return {olgu_anahtari(m.group(0)) + ("σ" if SIGMA_EKI.match(metin, m.end()) else "")
+            for m in OLGU.finditer(metin)}
 
 
 def yazi_govdesi(b: dict) -> dict[str, str]:
@@ -353,6 +363,22 @@ def olgu_tekrari(govde: dict[str, str]) -> list[tuple[str, list[str]]]:
     return out
 
 
+def ayrinti(govde: dict[str, str]) -> tuple[int, int]:
+    """(tekil olgu, olgu geçişi). Biçim 3'ün iki şikâyeti iki ayrı eksendir:
+    "çok tekrar" geçişin tekile oranıyla, "kısa" tekil olgunun kendisiyle
+    ölçülür. 01.10.2026'da aynı günün biçim 2 metni 173 tekil olgu ve %37
+    tekrar, ilk biçim 3 metni 36 tekil olgu ve %3 tekrar taşıyordu; hedef
+    tekili artırırken oranı tutmaktır. Eşik YOK, bilerek: ölçülmeyen bir
+    seviyeye eşik konmaz — ölçü denetimin bilgi satırında birikir."""
+    tekil: set[str] = set()
+    gecis = 0
+    for t in govde.values():
+        o = olgular(t)
+        gecis += len(o)
+        tekil |= o
+    return len(tekil), gecis
+
+
 def ozet_okuma_ortak(govde: dict[str, str]) -> set[str]:
     return olgular(govde.get("ozet.ne_oldu", "")) & olgular(govde.get("yorum", ""))
 
@@ -366,7 +392,8 @@ def kronik_olgular(bugun: dict[str, str], onceki: list[dict[str, str]]) -> set[s
     # Sıfırla başlayan küçük ondalıklar (0,10 · 0,3) çoğunlukla günlük
     # DEĞİŞİMDİR ve iki ayrı olgu tesadüfen aynı yazılabilir; kronik ölçü
     # seviyelere bakar.
-    k = {o for o in set().union(*(olgular(t) for t in bugun.values())) if not o.startswith("0,")}
+    k = {o for o in set().union(*(olgular(t) for t in bugun.values()))
+         if not o.startswith("0,") and not o.endswith("σ")}
     for g in onceki[:2]:
         k &= set().union(*(olgular(t) for t in g.values())) if g else set()
     return k

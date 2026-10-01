@@ -472,8 +472,9 @@ class Denetim:
         toplam = len(manset.split())
         oz = b.get("ozet") or {}
         if oz.get("ne_bekleniyor") or not str(oz.get("ne_oldu") or "").strip():
+            amin, amax = _a.YAZI_ARALIK_3["ozet_madde"]
             self.engel.append("Madde özeti (ozet.ne_oldu) yazılmamış — sayfada ölçüm katmanının "
-                              "makine özeti duruyor. Biçim 3'te özet 3–5 maddedir "
+                              f"makine özeti duruyor. Biçim 3'te özet {amin}–{amax} maddedir "
                               "(<ul><li>…</li></ul>); ileriye bakış gundem.takvim'de.")
         else:
             no = str(oz.get("ne_oldu"))
@@ -1823,6 +1824,10 @@ class Denetim:
 
     def _olgu_tekrari(self, _t) -> None:
         govde = _t.yazi_govdesi(self.b)
+        tekil, gecis = _t.ayrinti(govde)
+        if gecis:
+            self._ok(f"ayrıntı: {tekil} tekil olgu, {gecis} geçiş "
+                     f"(tekrar %{100 * (1 - tekil / gecis):.0f})")
         yayilan = _t.olgu_tekrari(govde)
         if yayilan:
             ornek = ", ".join(f"{o} ({'+'.join(y)})" for o, y in yayilan[:5])

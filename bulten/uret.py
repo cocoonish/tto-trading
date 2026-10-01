@@ -78,6 +78,17 @@ GOSTERGELER = [
     ("fonlama-likidite", "politika", "Politika faizi", "%", 2, ""),
     ("fonlama-likidite", "tlref", "TLREF", "%", 2, ""),
     ("fonlama-likidite", "aofm", "Ağırlıklı ort. fonlama maliyeti", "%", 2, ""),
+    # TL TAHVİLİ (01.10.2026): sayfa TL faizinin günlük hareketini HİÇBİR yerde
+    # basmıyordu — TL faiz seti yalnız seviye, eğri grafiği 7 ve 30 günlük kıyas
+    # taşıyor. 30.09'da bankacılık endeksi −%4,58 iken gösterge getirisi 26 bp
+    # geriledi ve düşüşün tamamı başabaştan geldi; okur bunu sayfadan
+    # okuyamıyordu. Üç kart düzeyi (gösterge, 1,96 yıl), eğriyi (5 yıl) ve
+    # ayrıştırmayı (2 yıllık başabaş; reel bacak Fisher ilişkisinden,
+    # (1 + nominal) / (1 + başabaş) − 1 — 30.09'da %8,11) verir.
+    # Gönderinin pano satırı ilk BEŞ kartı aldığı için bunlar onu değiştirmez.
+    ("dibs-verim-egrisi", "gosterge_ytm", "DİBS gösterge getirisi (2 yıl)", "%", 2, ""),
+    ("dibs-verim-egrisi", "spot_5y", "DİBS 5 yıllık getiri", "%", 2, ""),
+    ("dibs-verim-egrisi", "basabas_2y", "2 yıllık başabaş enflasyon", "%", 2, ""),
     ("enflasyon", "tufe_12a", "TÜFE (yıllık)", "%", 2, ""),
     ("enflasyon", "tufe_3a", "TÜFE 3a yıllıklandırılmış (arındırılmış)", "%", 1, ""),
     ("enflasyon", "tufe_3a_ham", "TÜFE 3a yıllıklandırılmış (ham)", "%", 1, ""),

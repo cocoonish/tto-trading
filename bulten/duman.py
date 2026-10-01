@@ -691,14 +691,23 @@ def _b3_metin(n: int, tohum: str = "deger") -> str:
 
 
 def _b3_sayi(**ek):
+    """İyi biçimli günlük sabah notu. Boyutlar KAYITTAN türer (aralığın orta
+    noktası): sabit kelime sayıları aralık her değiştiğinde fikstürü sessizce
+    aralık dışına iterdi (01.10.2026 akşamı genişlemesinde iki madde böyle
+    düştü)."""
     import ayar as _a
-    g = {"turkiye": _b3_metin(200), "kuresel": _b3_metin(180), "emtia": _b3_metin(90),
-         "takvim": _b3_metin(120), "risk": _b3_metin(80)}
+    def orta(au):
+        return (au[0] + au[1]) // 2
+    g = {y.id: _b3_metin(orta(y.gunluk)) for y in _a.YAZI_BOLUMLERI_3}
+    r = _a.YAZI_ARALIK_3
+    n_madde = orta(r["ozet_madde"])
+    madde_k = orta(r["ozet"]["gunluk"]) // n_madde
     b = {"tarih": "2026-10-02", "tur": "gunluk", "surum": 3, "haftalik": False,
          "gundem_kaynagi": "yazili", "manset": "Faiz yukarı, kur sakin: uzun uç petrolden koptu",
          "gundem_yazi_bolumleri": _a.yazi_bolumleri({"surum": 3}), "gundem": g,
-         "ozet": {"ne_oldu": "<ul>" + "".join(f"<li>{_b3_metin(25)[3:-4]}</li>" for _ in range(4)) + "</ul>"},
-         "yorum": _b3_metin(380)}
+         "ozet": {"ne_oldu": "<ul>" + "".join(f"<li>{_b3_metin(madde_k)[3:-4]}</li>"
+                                               for _ in range(n_madde)) + "</ul>"},
+         "yorum": _b3_metin(orta(r["yorum"]["gunluk"]))}
     b.update(ek)
     return b
 
@@ -732,7 +741,7 @@ def _bicim3_denetim():
     d = kos(_b3_sayi(yorum=_b3_metin(120),
                      ozet={"ne_oldu": "<ul><li>a b c</li><li>d e f</li></ul>"}))
     assert not d.engel and len(d.uyari) >= 2, (d.engel, d.uyari)
-    # Haftalık sayı haftalık aralıklarla ölçülür: 380 kelimelik okuma haftalıkta kısa.
+    # Haftalık sayı haftalık aralıklarla ölçülür: günlük orta boy okuma haftalıkta kısa.
     d = kos(_b3_sayi(haftalik=True))
     assert any("Okuma" in u for u in d.uyari), f"haftalık aralık uygulanmıyor: {d.uyari}"
     # Biçim 2 sayısı eski yoldan ölçülür (beş bölümlü metin orada ENGEL alır).
@@ -787,6 +796,11 @@ def _bicim3_tekrar():
     onceki = [{"a": "Politika faizi %40,50, değişim 0,25"}, {"b": "%40,50 ve 0,25"}]
     assert _t.kronik_olgular({"x": "faiz %40,50 · 0,25"}, onceki) == {"40,50"}
     assert _t.kronik_olgular({"x": "%40,50"}, onceki[:1]) == set(), "iki önceki sayı yokken kronik hüküm"
+    # σ katsayısı seviye değildir: "1,5σ" ile "%1,5" ayrı olgu, ve σ
+    # katsayılarının günler arası çakışması kronik sayılmaz (01.10.2026).
+    assert _t.olgular("Nikkei %1,5 (1,5σ) · EMB −2,4 σ") == {"1,5", "1,5σ", "2,4σ"}
+    sig = [{"a": "Nikkei 1,5σ yükseldi, petrol 1,9σ"}, {"b": "benzin 1,5σ · 1,9σ"}]
+    assert _t.kronik_olgular({"x": "NOK 1,5σ · benzin 1,9σ"}, sig) == set(), "σ çakışması kronik sayıldı"
     assert _t.acilis_ortusme("Bu sabah piyasa faiz tarafından yönleniyor ve kur sakin.",
                              "Bu sabah piyasa faiz tarafından yönleniyor ve kur sakin.") == 1.0
     # Biçim 3'te okuma ÖZET AİLESİ DEĞİL; biçim 2'de hâlâ öyle.
@@ -1106,10 +1120,16 @@ def _inceleme_duzeltmeleri():
 
     # (6) Bölüm üst sınırının 1,5 katı ENGEL; toplam tavan rehberin aralığı.
     risk_ust = next(y for y in _a.YAZI_BOLUMLERI_3 if y.id == "risk").gunluk[1]
-    b6 = _b3_sayi(gundem=dict(_b3_sayi()["gundem"], risk=_b3_metin(int(risk_ust * 1.6))))
+    b6 = _b3_sayi(gundem=dict(_b3_sayi()["gundem"], risk=_b3_metin(int(risk_ust * 1.8))))
     d6 = _d.Denetim(b6); d6.yazi()
     assert any("BÖLÜM UZUN" in e for e in d6.engel), d6.engel
-    assert _a.YAZI_ARALIK_3["toplam"]["gunluk"][2] <= 1600, "toplam tavan eski asgarileri geçirir"
+    # Tavanın işi biçim 2'nin 4.000+ kelimelik düzenine dönüşü durdurmak
+    # (01.10.2026 akşamı aralık genişledi; eski talimata karşı asıl sigorta
+    # yaz.py'nin kimlik reddi). 2.400 eski düzenin en kısa sayısının (4.029)
+    # yaklaşık yarısıdır.
+    assert _a.YAZI_ARALIK_3["toplam"]["gunluk"][2] <= 2400, "toplam tavan eski düzene dönüşü geçirir"
+    assert _a.YAZI_ARALIK_3["toplam"]["gunluk"][0] < _a.YAZI_ARALIK_3["toplam"]["gunluk"][1] \
+        < _a.YAZI_ARALIK_3["toplam"]["gunluk"][2], "toplam aralığı sırasız"
 
     # (7) Meşru piyasa cümleleri üslup ENGEL'ine düşmez.
     for c in ("Bloomberg'e göre CPC boru hattının haftalık ihracatı 1,2 milyon varile indi.",
@@ -1140,6 +1160,37 @@ def _inceleme_duzeltmeleri():
                        f"sys.argv = ['yaz.py', {str(y)!r}, '--tarih', '2026-01-05', '--damgasiz']; "
                        "raise SystemExit(yaz.main())"], capture_output=True, text=True).returncode
         assert kod == 2, f"girdi reddi çıkış {kod}"
+
+
+def _ayrinti_genislemesi():
+    """01.10.2026 akşamı: ayrıntı ölçüsü, TL tahvil kartları, DİBS olay eşiği."""
+    import tekrar as _t, uret as _u, ayar as _a
+    # (1) Ayrıntı ölçüsü: tekil olgu ve geçiş — işaret, yüzde ve binlik düşer.
+    g = {"ozet.ne_oldu": "BIST −%2,79; bankalar %4,58 düştü.",
+         "yorum": "Bankalardaki %4,58 kayıp kanalı açtı; kur 49,01.",
+         "turkiye": "Gösterge %40,26; kur 49,01."}
+    tekil, gecis = _t.ayrinti(g)
+    assert (tekil, gecis) == (4, 6), (tekil, gecis)
+    assert _t.ayrinti({}) == (0, 0)
+
+    # (2) TL tahvil kartları şeritte; gönderinin pano satırı ilk BEŞ kartı
+    # alır ve onlar değişmedi (gönderi sözleşmesi).
+    anah = [(h, a) for h, a, *_ in _u.GOSTERGELER]
+    for k in (("dibs-verim-egrisi", "gosterge_ytm"), ("dibs-verim-egrisi", "spot_5y"),
+              ("dibs-verim-egrisi", "basabas_2y")):
+        assert k in anah, f"TL tahvil kartı şeritte yok: {k}"
+    assert anah[:5] == [("usdtry-deval", "kur"), ("usdtry-deval", "d1a"),
+                        ("tcmb-net-rezerv", "h_net"), ("tcmb-net-rezerv", "h_swap_haric"),
+                        ("tcmb-net-rezerv", "g_net")], f"şeridin ilk beş kartı değişti: {anah[:5]}"
+
+    # (3) DİBS olay eşiği ölçülen dağılımın İÇİNDE: 25 günlük farkta gösterge
+    # ve başabaşın azamisi 0,65–0,66 puandı. Eşik 0,75'e dönerse kanal hiç
+    # olay üretmez ve TL faizinin günlük hareketi sayfaya düşmez.
+    iz = {(i.hat, i.anahtar): i for i in _a.IZLEMLER}
+    for k in (("dibs-verim-egrisi", "gosterge_ytm"), ("dibs-verim-egrisi", "basabas_2y")):
+        i = iz[k]
+        assert i.dikkat is not None and i.dikkat < 0.65 and i.dikkat < i.onemli, \
+            f"{k}: dikkat eşiği ölçülen azaminin üstünde ({i.dikkat})"
 
 
 def _editor_bulgulari():
@@ -5060,6 +5111,8 @@ def main() -> int:
          _inceleme_duzeltmeleri)
     sina("editör 01.10: anket ayı ve model dönemi · eğri serisi 'son' · geri alım konusu kilide çıkar",
          _editor_bulgulari)
+    sina("ayrıntı 01.10: tekil olgu ölçüsü · TL tahvil kartları (gönderinin beşi aynı) · DİBS olay eşiği",
+         _ayrinti_genislemesi)
 
     for ad in gecen:
         print(f"  ✓ {ad}")

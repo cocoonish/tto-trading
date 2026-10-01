@@ -446,8 +446,15 @@ IZLEMLER: list[Izlem] = [
           400, 800, "artis", "", "akim"),
 
     # ─────────────────────────────── DİBS verim eğrisi
+    # Eşikler 01.10.2026'da ÖLÇÜLDÜ (gözlem defteri, 25 günlük fark): gösterge
+    # σ 0,30 puan · |Δ| medyan 0,20 · p90 0,43 · azami 0,66. Eski 0,75'lik
+    # dikkat eşiği ölçülen en büyük günlük hareketin bile üstündeydi, yani bu
+    # kanal hiç olay üretmiyordu ve TL faizinin günlük hareketi sayfaya hiç
+    # düşmüyordu. Yeni eşik ≈1,5σ (dikkat) ve ≈2,5σ (önemli). 2 yıllık spot ile
+    # gösterge (1,96 yıl) neredeyse aynı kâğıttır: olay kanalı GÖSTERGEDE açık,
+    # spot eski eşikte — aynı hareket aynı sabah iki cümle olmasın.
     Izlem("dibs-verim-egrisi", "gosterge_ytm", "Gösterge tahvil bileşik getirisi", "%", 2,
-          "delta", 0.75, 1.75, "azalis",
+          "delta", 0.45, 0.75, "azalis",
           "En likit DİBS'in vadeye kadar getirisi; TL faizinin manşet fiyatı.", "faiz"),
     Izlem("dibs-verim-egrisi", "spot_2y", "DİBS 2 yıllık spot getiri", "%", 2, "delta",
           0.75, 1.75, "azalis", "", "faiz"),
@@ -458,8 +465,9 @@ IZLEMLER: list[Izlem] = [
     Izlem("dibs-verim-egrisi", "carry_2y_tlref", "2 yıllık taşıma (TLREF, bileşik)", "puan", 2,
           "delta", 1.5, 3.0, "artis",
           "Tahvili gecelikten fonlamanın maliyeti; negatifse pozisyon taşımak pahalıdır.", "faiz"),
+    # Başabaş: σ 0,31 · p90 0,48 · azami 0,65 (aynı ölçüm) — eski 1,0 hiç ateşlenmezdi.
     Izlem("dibs-verim-egrisi", "basabas_2y", "2 yıllık başabaş enflasyon", "%", 2, "delta",
-          1.0, 2.5, "azalis",
+          0.45, 0.75, "azalis",
           "Nominal ile enflasyona endeksli tahvilin ima ettiği enflasyon.", "enflasyon"),
     Izlem("dibs-verim-egrisi", "reel_egri_2y", "2 yıllık reel getiri", "%", 2, "delta",
           1.0, 2.0, "", "", "faiz"),
@@ -781,28 +789,42 @@ class YaziBolumu:
 
 
 YAZI_BICIMI = 3                      # yeni ölçülen sayıların beyan ettiği biçim
+# ARALIKLAR (01.10.2026 akşamı yeniden kuruldu, kullanıcı: "önceye göre çok
+# beğendim ama biraz kısa; tekrara kaçmadan daha fazla ayrıntı vermemiz lazım").
+# Ölçüldü: aynı günün biçim 2 metni 4.986 kelimede 173 tekil olgu (ondalık)
+# taşıyordu ve geçişlerin %33–42'si tekrardı; ilk biçim 3 metni 788 kelimede 36
+# tekil olgu, tekrar %3. Biçim 2'nin 267 cümlesi tek tek sınıflandı: 107'si
+# biçim 3'te zaten vardı, 39'u tabloda basılı sayıyı yeniden okuyordu, 32'si
+# kronik, 28'i dolgu, 21'i süreç dili, 12'si güvenilmez, 12'si kendi içinde
+# tekrar — YALNIZ 16'sı gerçekten kaybolmuş ayrıntıydı. Yani ayrıntı eski metni
+# geri getirerek değil, İKİ biçimin de yazmadığı türlerle artar (aktör ve
+# ölçek, karşı mekanizma, alt kırılım, çok günlü birikim, çapraz varlık bağı,
+# döviz ve değerli metaller, takvimde iki yönlü sonuç; bkz. YAZIM.md "Ayrıntı").
+# Aralıklar o türlere yer açacak kadar genişledi; tekrar ölçüleri (olgu,
+# kronik, açılış) değişmedi — ayrıntı artarken tekrar oranı aynı kalmalıdır.
 YAZI_BOLUMLERI_3 = (
-    YaziBolumu("turkiye", "Türkiye", (100, 350), (150, 450), True, "Türkiye"),
-    YaziBolumu("kuresel", "Küresel", (100, 350), (150, 450), True, "Küresel"),
-    YaziBolumu("emtia", "Emtia ve enerji", (0, 200), (0, 300), False, "Emtia"),
-    YaziBolumu("takvim", "Bugün ve önümüzdeki günler", (60, 250), (150, 450), True,
+    YaziBolumu("turkiye", "Türkiye", (200, 450), (250, 550), True, "Türkiye"),
+    YaziBolumu("kuresel", "Küresel", (180, 420), (250, 550), True, "Küresel"),
+    YaziBolumu("emtia", "Emtia ve enerji", (60, 250), (100, 350), False, "Emtia"),
+    YaziBolumu("takvim", "Bugün ve önümüzdeki günler", (120, 320), (250, 550), True,
                "İzlenecek", haftalik_baslik="Önümüzdeki hafta"),
-    YaziBolumu("risk", "Risk haritası", (0, 180), (0, 300), False, None),
+    YaziBolumu("risk", "Risk haritası", (0, 220), (0, 320), False, None),
 )
 # Okuma ve özetin aralıkları; TOPLAM yazı katmanı (manşet + özet + okuma +
 # gündem) için (alt, uyarı tavanı, ENGEL tavanı).
 #
-# ENGEL tavanı ilk yazımda 2.200'dü ve incelemede ölçüldü: rutinin ESKİ
-# asgarileriyle (okuma 350, bölüm başına 200–300) doğru beş kimliğe yazılan
-# not ~1.700 kelimede kalıyor ve çıkış 0 ile geçiyordu — yani eski talimatın
-# uzunluk yarısı araçla dayatılmıyordu. Tavan rehberin ilan ettiği aralığın
-# üst ucudur; ayrıca bölüm üst sınırının BOLUM_ENGEL_KAT katını aşan tek bölüm
-# ENGEL'dir (eski 300 kelimelik "Riskler" 180'lik bölümde 1,8 kat).
+# ENGEL tavanı ilk yazımda 1.600'dü ve gerekçesi rutinin ESKİ asgarileriyle
+# (okuma 350, bölüm başına 200–300) doğru beş kimliğe yazılan ~1.700 kelimelik
+# notu durdurmaktı. Yeni hedef aralık o uzunluğu kapsıyor; eski talimata karşı
+# asıl sigorta zaten başka yerde: `yaz.py` beyan dışı bölüm kimliğini ve
+# `ne_bekleniyor`u reddeder, tekrar ölçüleri parafrazı olgu düzeyinde yakalar.
+# Tavanın işi artık biçim 2'nin 4.000+ kelimelik düzenine dönüşü durdurmak;
+# bölüm üst sınırının BOLUM_ENGEL_KAT katını aşan tek bölüm de ENGEL'dir.
 YAZI_ARALIK_3 = {
-    "yorum": {"gunluk": (250, 500), "haftalik": (500, 900)},
-    "ozet": {"gunluk": (50, 180), "haftalik": (80, 260)},
-    "ozet_madde": (3, 5),
-    "toplam": {"gunluk": (700, 1300, 1600), "haftalik": (1300, 2400, 2800)},
+    "yorum": {"gunluk": (300, 550), "haftalik": (550, 950)},
+    "ozet": {"gunluk": (90, 240), "haftalik": (120, 320)},
+    "ozet_madde": (4, 6),
+    "toplam": {"gunluk": (1000, 1700, 2100), "haftalik": (1800, 3000, 3600)},
 }
 BOLUM_ENGEL_KAT = 1.5
 
