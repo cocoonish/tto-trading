@@ -411,6 +411,8 @@ class Denetim:
 
     # ────────────────────────────────────────────── bölümler ve uzunluk
     def yazi(self):
+        if int(self.b.get("surum") or 2) >= 3:
+            return self._yazi_bicim3()
         b = self.b
         tur = b.get("tur", "gunluk")
         g = b.get("gundem") or {}
@@ -446,6 +448,74 @@ class Denetim:
         oz = b.get("ozet") or {}
         if not oz.get("ne_oldu") or not oz.get("ne_bekleniyor"):
             self.uyari.append("Kural tabanlı özet ('ne oldu / ne bekleniyor') eksik")
+
+    def _yazi_bicim3(self):
+        """Biçim 3 (sabah notu): uzunluk ARALIKTIR, asgari ENGEL değil.
+
+        Zorunlu bölüm boşsa ENGEL; alt sınırın altı ve bölüm üst sınırının üstü
+        UYARI; yazı katmanının TOPLAMI ENGEL tavanını aşarsa ENGEL (eski 4.000+
+        kelimelik düzene dönüşü durdurur). Manşet ve madde özeti zorunlu: sayfa
+        manşeti h1, maddeleri ilk ekran yapar. Aralıklar ayar.YAZI_*_3'te."""
+        import ayar as _a
+        b = self.b
+        kip = "haftalik" if b.get("haftalik") else "gunluk"
+        g = b.get("gundem") or {}
+        if b.get("gundem_kaynagi") != "yazili":
+            self.engel.append("Gündem yazısı YAZILMAMIŞ — sayı yazı katmanından geçmemiş "
+                              "(gundem_kaynagi 'yazili' değil).")
+        manset = str(b.get("manset") or "").strip()
+        if not manset:
+            self.engel.append("Manşet YOK — biçim 3'te sayının başlığı günün tezidir "
+                              "(tek cümle, en çok 110 karakter).")
+        toplam = len(manset.split())
+        oz = b.get("ozet") or {}
+        if oz.get("ne_bekleniyor") or not str(oz.get("ne_oldu") or "").strip():
+            self.engel.append("Madde özeti (ozet.ne_oldu) yazılmamış — sayfada ölçüm katmanının "
+                              "makine özeti duruyor. Biçim 3'te özet 3–5 maddedir "
+                              "(<ul><li>…</li></ul>); ileriye bakış gundem.takvim'de.")
+        else:
+            no = str(oz.get("ne_oldu"))
+            n = _kelime(no)
+            toplam += n
+            madde = len(re.findall(r"<li\b", no, re.I))
+            amin, amax = _a.YAZI_ARALIK_3["ozet_madde"]
+            if not amin <= madde <= amax:
+                self.uyari.append(f"Özet {madde} madde (hedef {amin}–{amax}, <ul><li>)")
+            alt, ust = _a.YAZI_ARALIK_3["ozet"][kip]
+            if n > ust:
+                self.uyari.append(f"Özet uzun: {n} kelime (aralık {alt}–{ust}) — madde başına bir olgu")
+            else:
+                self._ok(f"özet: {madde} madde, {n} kelime")
+        ny = _kelime(b.get("yorum") or "")
+        toplam += ny
+        alt, ust = _a.YAZI_ARALIK_3["yorum"][kip]
+        if ny == 0:
+            self.engel.append("Okuma yazısı (yorum) YOK")
+        elif ny < alt or ny > ust:
+            self.uyari.append(f"Okuma {ny} kelime (aralık {alt}–{ust})")
+        else:
+            self._ok(f"okuma: {ny} kelime")
+        for y in _a.YAZI_BOLUMLERI_3:
+            n = _kelime(g.get(y.id, ""))
+            toplam += n
+            alt, ust = getattr(y, kip)
+            if n == 0:
+                if y.zorunlu:
+                    self.engel.append(f"Bölüm BOŞ: {y.id} ({y.baslik}) — zorunlu bölüm")
+                continue
+            if n < alt or n > ust:
+                self.uyari.append(f"Bölüm {y.id} {n} kelime (aralık {alt}–{ust})")
+            else:
+                self._ok(f"{y.id}: {n} kelime")
+        _alt, uyari_t, engel_t = _a.YAZI_ARALIK_3["toplam"][kip]
+        if toplam > engel_t:
+            self.engel.append(
+                f"YAZI UZUN: toplam {toplam} kelime (tavan {engel_t}; hedef ≤{uyari_t}). "
+                "Sabah notu kısadır: her olgu tek yerde, tabloda duranı yeniden sayma.")
+        elif toplam > uyari_t:
+            self.uyari.append(f"Yazı {toplam} kelime (hedef ≤{uyari_t})")
+        else:
+            self._ok(f"yazı toplamı {toplam} kelime")
 
     # ────────────────────────────────────────────── veri katmanları
     def veri(self):
@@ -498,9 +568,15 @@ class Denetim:
 
     # ────────────────────────────────────────────── atıf: hareket ve kilit haber
     def _metin(self) -> str:
+        # Manşet ve özet de yazıdır: "bir olgu tek yerde" kuralıyla bir hareket
+        # yalnız maddede anılabilir; ölçüt maddeyi okumazsa kural ile kapı
+        # çelişir ve yazar aynı olguyu ikinci bir bölümde yeniden anlatır.
         g = self.b.get("gundem") or {}
+        oz = self.b.get("ozet") or {}
+        ozm = " ".join(_duz(str(v)) for v in oz.values()) if isinstance(oz, dict) else _duz(str(oz))
         return _sade(" ".join([_duz(v) for v in g.values()]) + " " +
-                     _duz(self.b.get("yorum") or ""))
+                     _duz(self.b.get("yorum") or "") + " " +
+                     _duz(self.b.get("manset") or "") + " " + ozm)
 
     def atif(self):
         metin = self._metin()
@@ -509,7 +585,15 @@ class Denetim:
         def anilmis(ad: str) -> bool:
             return anilmi(ad, metin)
 
-        for kip, etiket in (("gunluk", "günün"), ("haftalik", "haftanın")):
+        # Biçim 3: sayı kendi penceresini anlatır. Günlük sayıda haftalık
+        # pencerenin atfı zorunlu anılmaların yarısıydı ve aynı haftalık hareketi
+        # her sabah yeniden anlattırıyordu (28 günlük sayıda 84 zorunlu atfın
+        # 40'ı bir önceki sayının haftalık listesinin aynısı).
+        pencereler = (("gunluk", "günün"), ("haftalik", "haftanın"))
+        if int(self.b.get("surum") or 2) >= 3:
+            pencereler = ((("haftalik", "haftanın"),) if self.b.get("haftalik")
+                          else (("gunluk", "günün"),))
+        for kip, etiket in pencereler:
             for x in (hareket.get(kip) or [])[:3]:
                 if x.get("deger") is None or abs(x["deger"]) < BUYUK_HAREKET_ESIGI:
                     continue
@@ -1124,6 +1208,16 @@ class Denetim:
         if not hareketler:
             self._ok("haber tonu: sıralanacak hareket yok")
             return
+        # Biçim 3: yalnız |z| ≥ 2 hareket anılmak ZORUNDA. Sıralama her gün üç
+        # hareket verir ve arşivdeki 72 σ'lı cümlenin 62'si 2σ altındaydı
+        # (medyan 1,3σ) — 1σ'lık bir ton oynaması her sabah düzyazıya zorla
+        # giriyordu. Ölçülen katman hareketleri sayfada zaten basıyor.
+        if int(self.b.get("surum") or 2) >= 3:
+            hareketler = [m for m in hareketler
+                          if isinstance(m.get("z"), (int, float)) and abs(m["z"]) >= OLAGANDISI_SIGMA]
+            if not hareketler:
+                self._ok("haber tonu: 2σ'yı aşan hareket yok — anılma zorunluluğu yok")
+                return
         metin = _sade(self._metin())
         anilmayan = [m for m in hareketler if not anilmi(m.get("ad", ""), metin)]
         if anilmayan:
@@ -1276,6 +1370,38 @@ class Denetim:
         "ASELSAN", "NATO", "IOSCO", "EUREX", "EIOPA", "ESMA", "BOJ", "PBOC",
         "KOBİ",
     })
+
+    def yazi_alanlari(self) -> dict[str, str]:
+        """Yazı katmanının okura giden düz metinleri: manşet, özet, okuma,
+        gündem. Tema ve söz defteri ayrı defterlerdir; burada yoklar."""
+        b = self.b
+        out = {}
+        if b.get("manset"):
+            out["manset"] = _duz(str(b["manset"]))
+        oz = b.get("ozet") or {}
+        if isinstance(oz, dict):
+            for k, v in oz.items():
+                if str(v or "").strip():
+                    out[f"ozet.{k}"] = _duz(str(v))
+        if b.get("yorum"):
+            out["yorum"] = _duz(str(b["yorum"]))
+        for k, v in (b.get("gundem") or {}).items():
+            if str(v or "").strip():
+                out[f"gundem.{k}"] = _duz(str(v))
+        return out
+
+    def uslup(self):
+        """Biçim 3 üslup ölçütü (bulten/uslup.py): öz-atıf ve süreç dili ENGEL,
+        bütçeli kalıplar ve cümle uzunluğu UYARI. Biçim 2 sayısında koşmaz —
+        arşiv o kurallarla yazılmadı."""
+        if int(self.b.get("surum") or 2) < 3:
+            return
+        import uslup as _u
+        r = _u.olc(self.yazi_alanlari())
+        self.engel += r["engel"]
+        self.uyari += r["uyari"]
+        if not r["engel"] and not r["uyari"]:
+            self._ok(f"üslup temiz (cümle ort. {r['sayim'].get('cumle_ort', '—')} kelime)")
 
     def manset(self):
         """Sayının başlığı (isteğe bağlı): tek cümle, en çok 110 karakter.
@@ -1609,6 +1735,12 @@ class Denetim:
                 f"{len(r['sayi'])} sayı {_t.SAYI_BOLUM_ESIK}+ bölümde tekrarlanıyor — "
                 f"her tekrarda üzerine yeni bir işlem yapılmıyorsa kes: {en}")
 
+        # OLGU TEKRARI (biçim 3): birebir cümle değil, aynı ondalıklı olgunun
+        # bölümden bölüme ve günden güne yeniden sayılması — tekrarın asıl
+        # biçimi (bkz. tekrar.py "OLGU TEKRARI").
+        if int(self.b.get("surum") or 2) >= 3:
+            self._olgu_tekrari(_t)
+
         # GÜNLER ARASI TEKRAR. Yukarıdaki ölçü bir sayının KENDİ içine bakar;
         # okurun asıl şikâyeti "her gün aynı şeyleri söylemeyelim"di ve o
         # eksen hiç ölçülmüyordu. Ölçüm ENGEL DEĞİL UYARI: sakin bir haftada
@@ -1627,6 +1759,48 @@ class Denetim:
                     + " Bir sayı önceki sayıyı özetlemez; değişeni anlat.")
             else:
                 self._ok(f"günler arası tekrar düşük: %{g['oran']:.1f}")
+
+    def _onceki_sayilar(self, n: int = 2) -> list[dict]:
+        """Bu sayıdan önceki en yakın n sayının JSON'u (yeniden eskiye)."""
+        try:
+            dosyalar = sorted(d for d in BULTEN.glob("*.json") if d.stem < str(self.b.get("tarih")))
+        except Exception:                                      # noqa: BLE001
+            return []
+        out = []
+        for d in reversed(dosyalar[-n:]):
+            try:
+                out.append(json.loads(d.read_text(encoding="utf-8")) or {})
+            except Exception:                                  # noqa: BLE001
+                out.append({})
+        return out
+
+    def _olgu_tekrari(self, _t) -> None:
+        govde = _t.yazi_govdesi(self.b)
+        yayilan = _t.olgu_tekrari(govde)
+        if yayilan:
+            ornek = ", ".join(f"{o} ({'+'.join(y)})" for o, y in yayilan[:5])
+            self.uyari.append(
+                f"OLGU TEKRARI — {len(yayilan)} ondalıklı olgu {_t.OLGU_BOLUM_ESIK}+ bölümde geçiyor: "
+                f"{ornek}. Bir olgu tek yerde tam anlatılır; başka yerde en çok tek cümleyle anılır.")
+        else:
+            self._ok("olgu tekrarı yok: hiçbir ondalık 3+ bölümde değil")
+        ortak = _t.ozet_okuma_ortak(govde)
+        if len(ortak) > _t.OZET_OKUMA_ORTAK:
+            self.uyari.append(
+                f"Özet ile okuma {len(ortak)} olguyu paylaşıyor (en çok {_t.OZET_OKUMA_ORTAK}): "
+                f"{', '.join(sorted(ortak)[:6])}. Okuma maddedeki rakamları yeniden saymaz; "
+                "aralarındaki ilişkiyi kurar.")
+        onceki = self._onceki_sayilar(2)
+        kronik = _t.kronik_olgular(govde, [_t.yazi_govdesi(o) for o in onceki])
+        if len(kronik) > _t.KRONIK_ADET:
+            self.uyari.append(
+                f"KRONİK OLGU — {len(kronik)} değer bugün ve önceki iki sayının ikisinde de "
+                f"yazılmış: {', '.join(sorted(kronik)[:8])}. Değişmeyeni yazma: kalıcı bir değer "
+                "(politika faizi, cari açık, takvim) yalnız değiştiği ya da olay günü anılır.")
+        if onceki:
+            ort = _t.acilis_ortusme(_duz(self.b.get("yorum") or ""), _duz(onceki[0].get("yorum") or ""))
+            if ort >= _t.ACILIS_ORTUSME:
+                self.uyari.append(f"Okuma önceki sayıyla aynı cümleyle açılıyor (5'li öbek örtüşmesi %{ort*100:.0f}).")
 
     def _onceki_yazi(self):
         """Bir önceki sayının yazı bölümleri — günler arası kıyasın noktası.
@@ -1844,7 +2018,7 @@ class Denetim:
         self.yerlesmemis(); self.piyasa_seansi(); self.piyasa_seans_boslugu()
         self.revizyon(); self.duzeltme()
         self.devir(); self.haber_tonu(); self.bicim(); self.buyuk_harf(); self.manset()
-        self.olagandisilik_penceresi()
+        self.olagandisilik_penceresi(); self.uslup()
         tur = self.b.get("tur", "gunluk")
         print(f"{'═' * 74}")
         print(f"  BÜLTEN DENETİMİ · {self.b.get('tr_tarih', self.b.get('tarih'))} "

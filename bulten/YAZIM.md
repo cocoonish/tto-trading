@@ -3,10 +3,14 @@
 Bu dosya, günlük ve haftalık bülteni **yazan** katmanın görev tarifidir. Bültenin
 ölçülen kısmı (piyasa fotoğrafı, takvim, göstergeler, hat hat değişim) otomatik
 koşudan gelir ve yazan taraf ona **dokunmaz**. Yazan taraf şu alanları doldurur:
-`manset`, `yorum`, `ozet`, `gundem` ve — yalnız yayımlanmış bir sayı
+`manset`, `ozet.ne_oldu`, `yorum`, `gundem` (Türkiye · Küresel · Emtia ·
+Bugün ve önümüzdeki günler · Risk) ve — yalnız yayımlanmış bir sayı
 düzeltiliyorsa — `duzeltmeler`.
 
-Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
+Hedef kitle profesyonel trader ve portföy yöneticisi. Yazdığın şey bir **sabah
+notudur**: kısa, hükümle açılan, her olguyu bir kez söyleyen, ne fiyatlandığını
+ve riskin hangi yöne asimetrik olduğunu söyleyen bir not. Uzunluk değer
+değildir; okurun beş–yedi dakikası vardır.
 
 ---
 
@@ -115,51 +119,88 @@ Hedef kitle profesyonel trader. Jargon açıklanır ama seviye düşürülmez.
 
 ---
 
-## Doldurulacak alanlar
+## Biçim: sayının kendisi söyler
 
-Beş alan: `manset`, `yorum`, `ozet`, `gundem` ve — yalnız gerektiğinde — `duzeltmeler`.
+Her ölçülen sayı yazı biçimini beyan eder: `surum` alanı. **`surum: 3` (1 Ekim
+2026'dan sonra ölçülen her sayı) bir SABAH NOTUDUR** ve bu bölüm onun tarifidir.
+`surum: 2` arşivdir (12 bölümlü eski düzen); arşiv sayısına yalnız düzeltme
+yazılır ve onu kendi kuralları ölçer. Gündem bölüm kimliklerini **sayının
+`gundem_yazi_bolumleri` alanından** oku; yazma kapısı (`yaz.py`) beyan dışı
+kimliği reddeder.
 
-### `manset` — sayının başlığı
-Tek cümle, **en çok 110 karakter**, düz metin (etiket soyulur). Günün tezidir,
-bir olayın adı değil: özneli ve fiilli bir cümle ("Brent düşerken ABD uzun ucu
-yükseldi: petrol–faiz kanalı koptu"). Sayı taşıyabilir; sayı ölçülen katmandan
-gelir ve sayfadaki yazımıyla yazılır. Sayfa bu cümleyi başlık (h1) yapar, tarih
-üstteki etikete iner; alan yoksa başlık yalnız tarihtir. Ana sayfanın manşeti
-bundan kurulmaz — ana sayfa yalnız ölçülen katmandan okur. Denetim 110
-karakteri aşan manşeti UYARI olarak listeler.
+Neden: eski düzen her gün 12 bölümü asgari uzunlukla zorunlu kılıyordu (yorum
+≥350 · 8 haber bölümü ≥200 · 4 yazı bölümü ≥300 kelime). Günlük düzyazı
+4.000–5.400 kelimeye çıktı ve aynı olgu 3–7 bölümde yeniden anlatıldı: "Ne
+oldu"nun rakamlarının %53–88'i "Günün okuması"nda yeniden sayılıyordu, aynı
+sabit rakamlar (politika faizi seti, ÖTV takvimi, cari açık) iki haftanın
+10–13 sabahında yeniden basılıyordu. Okurun hükmü: "gerçek bir piyasa
+profesyoneli tarafından yazılmış gibi değil; çok tekrar var".
 
-### `yorum` — "Günün / Haftanın okuması"
-Bültenin tepesindeki okuma. Günlükte **en az 350**, haftalıkta **en az 600**
-kelime. Günü tek bir teze bağla: ne oldu, neden oldu, ne değişti. HTML
-paragraflar (`<p>…</p>`).
+---
 
-### `ozet`
-- `ne_oldu` — geçmişe bakan özet (haftalıkta "geçen hafta").
-- `ne_bekleniyor` — ileriye bakan özet (haftalıkta "önümüzdeki hafta").
+## Doldurulacak alanlar (biçim 3)
 
-### `gundem` — bölüm kimliği → HTML metin
+| alan | sayfadaki adı | uzunluk (günlük · haftalık) | zorunlu |
+|---|---|---|---|
+| `manset` | başlık (h1) | tek cümle, ≤110 karakter | evet |
+| `ozet.ne_oldu` | Bu sabah | 3–5 madde · 50–180 · 80–260 kelime | evet |
+| `yorum` | Günün / Haftanın okuması | 250–500 · 500–900 | evet |
+| `gundem.turkiye` | Türkiye | 100–350 · 150–450 | evet |
+| `gundem.kuresel` | Küresel | 100–350 · 150–450 | evet |
+| `gundem.emtia` | Emtia ve enerji | ≤200 · ≤300 | yalnız söyleyecek bir şey varsa |
+| `gundem.takvim` | Bugün ve önümüzdeki günler · Önümüzdeki hafta | 60–250 · 150–450 | evet |
+| `gundem.risk` | Risk haritası | ≤180 · ≤300 | isteğe bağlı |
+| `duzeltmeler` | Düzeltmeler | — | yalnız yayımlanmış bir sayı düzeltilirken |
 
-Haber bölümleri, **her biri en az 200 kelime**:
+**Toplam yazı (manşet + madde + okuma + gündem): günlük 700–1.600 kelime,
+haftalık 1.300–2.800.** Günlükte 2.200, haftalıkta 3.600 kelimeyi aşan yazı
+denetimde ENGEL alır. Aralığın altı ve bölüm üst sınırının üstü yalnız
+UYARI'dır: söyleyecek az şey varsa az yaz. Boş zorunlu bölüm ENGEL'dir.
+`ozet.ne_bekleniyor` biçim 3'te YOKTUR (ileriye bakış `gundem.takvim`dedir);
+yazma kapısı onu reddeder.
 
-| kimlik | içerik |
+### `manset` — günün tezi
+Tek cümle, düz metin, özneli ve yüklemli bir HÜKÜM; olayın adı değil.
+En çok iki sayı; Türkiye'ye etkisi varsa aynı satırda. Örnek: *"Uzun uç
+petrolden koptu: Brent −%2,6 iken ABD 30 yıllık %5,59'a çıktı; BIST −%2,4,
+TL kımıldamadı."*
+
+### `ozet.ne_oldu` — Bu sabah (3–5 madde)
+`<ul><li>…</li></ul>`. **Günün rakamlarının TEK evi.** Ters piramit: ilk
+madde en büyük olgu + sayı + kıyası; her madde bir olgu ve onun anlamı (en
+çok ~35 kelime). Türkiye ilk iki maddede. Tabloda zaten basılı her rakamı
+buraya taşıma — yalnız argümanı taşıyanı.
+
+### `yorum` — Günün okuması
+Tek tez, dört adım: **tez** (bir cümle) → **mekanizma** (neden oldu) →
+**fiyatlanan ve risk asimetrisi** ("piyasa X fiyatlıyor; risk Y yönünde
+asimetrik, çünkü …" — tavsiye dili yok) → **görüşü ne değiştirir** (bugün ya da
+bu hafta hangi veri/seviye). Maddelerdeki rakamları yeniden saymaz; en çok iki
+çapa rakamla ilişki kurar ve kendi sayıları TÜRETİLMİŞ ölçülerdir (makas,
+oran, σ, bileşim). Her paragraf bir hükümle biter, çıplak bir haber cümlesiyle
+değil. Türkiye ilk iki paragrafta.
+
+### `gundem` bölümleri — her konunun tek evi
+| konu | ev |
 |---|---|
-| `kilit` | Günün/haftanın kilit gelişmeleri, sürücü sırasıyla |
-| `tr_makro` | Türkiye makro verisi ve TCMB |
-| `tr_politika` | Türkiye politika ve düzenleme |
-| `tr_piyasa` | BIST, TL faizler, DİBS, TL varlıklar |
-| `global_makro` | Fed, ECB, ABD/AB verisi |
-| `global_politika` | Jeopolitika, ticaret, seçim |
-| `global_piyasa` | US/EU hisse, G10 FX, tahvil, emtia |
-| `kurum_global` | Kurumsal duyurular (Hazine, IMF, merkez bankaları) |
+| TCMB, Türkiye makro verisi, politika/düzenleme, USD/TRY, TLREF, DİBS, BIST | `turkiye` |
+| Fed, ECB, BoJ, ABD/AB verisi, jeopolitik, G10 faiz ve döviz, küresel hisse | `kuresel` |
+| Brent/WTI, ürün marjları, altın ve metaller | `emtia` |
+| bugünün ve yakın günlerin yayımları, ihaleler, toplantılar | `takvim` |
+| tetik → etki yönü → izlenecek ölçü (2–3 madde) | `risk` |
 
-Yazı bölümleri, **her biri en az 300 kelime**:
+Bir konu kendi evinde tam anlatılır; başka bölümde en çok TEK cümleyle anılır.
+Bölüm günün özetiyle açılmaz; kendi konusundaki yeni bilgiyle açılır. Piyasa
+etkisi olmayan haber yazılmaz (bir ülkenin BM'deki talebi, dijital ruble).
 
-| kimlik | içerik |
-|---|---|
-| `faiz_fx_surucu` | Faiz ve döviz piyasasının sürücüleri |
-| `emtia_surucu` | Emtia ve enerji: fiyat hareketinin sebebi (crack spread dahil) |
-| `risk_firsat` | Riskler ve fırsatlar |
-| `beklenti` | Yaklaşan veriler: beklentiler ve ne izlenmeli |
+`takvim`: her yayım için **hangi sonuç neyi değiştirir** — beklenti sayısını
+yineleme, tablo basıyor. Haftalık sayıda önümüzdeki haftanın her takvim maddesi
+burada tek tek işlenir ve sayısal beklentisi olan her maddenin takvim kaydında
+`beklenti_sayi` alanının dolu olduğunu doğrula (sürpriz ölçümü o alanla çalışır;
+serbest metinden sayı türetilmez). Beklenti yoksa yokluğunu YAZMA — tablo "—"
+basar.
+
+`risk`: 2–3 madde, her biri: tetik · etki yönü · olasılığını artıran ölçü.
 
 ### `duzeltmeler` — yayımlanmış bir sayının düzeltme kaydı
 
@@ -184,34 +225,76 @@ Sebep okur diliyle yazılır: "ölçü kusuru" değil, kusurun ne olduğu.
 
 ---
 
+## Yazım kuralları — sabah notu
+
+Denetimin üslup ölçütü (`bulten/uslup.py`) bunların ölçülebilir olanlarını
+sınar: süreç dili ENGEL, bütçeli kalıplar UYARI.
+
+1. **Süreç dili yok (ENGEL).** Okura ölçüm tesisatını anlatma: "ölçülen elli
+   bir satır", "X satırı", "kaydın çürütme ölçütü", "kurduğumuz kayıt", "bir
+   ölçü uyarısı / kısıtı / boşluğu", "dürüstçe kayda geçsin", "hüküm
+   kurulmadı", "beklenti elimizde yok / sürpriz ölçülmeyecek", "hattımız",
+   "defterde", "sürümünde donmuş", "kapanışını taşıyor", "barını boş verdi",
+   "beş ayrı kaynakta yer buldu". Veri kısıtı (bir satırın hangi seansa ait
+   olduğu, boş bar, vade devri, bayat seri) **sayfanın kendi dipnotunda**
+   durur; düzyazıya girmez. Güvenilmez bir seri kullanılmaz ve neden
+   kullanılmadığı da anlatılmaz.
+2. **Bir olgu bir kez.** Rakam maddede durur; okuma ve bölümler onu yeniden
+   saymaz. Aynı ondalık üç bölümde geçerse denetim uyarır; madde ile okuma en
+   çok iki rakam paylaşır.
+3. **Değişmeyeni yazma.** Önceki sayıdan beri değişmemiş bir değer (politika
+   faizi seti, ÖTV takvimi, cari açık, ihale modeli) düzyazıya yalnız olay
+   günü ya da değiştiği gün girer. Bugün ve önceki iki sayının üçünde de
+   yazılmış değerler denetimde "kronik olgu" diye listelenir.
+4. **Okuma her gün yeni bir cümleyle açılır.** Dünün açılışını yeniden kurma.
+5. **Cümle kısa.** En çok ~30 kelime (ortalama 14–18), cümle başına en çok dört
+   ölçüm sayısı, en çok bir uzun tire. Etken çatı. "yani" bağlacı 300 kelimede
+   en çok bir; "bir X değil bir Y" kalıbı sayı başına en çok iki;
+   "İkincisi/Üçüncüsü" yerine madde.
+6. **σ disiplini.** Olağandışılık "(1,5σ)" biçiminde yazılır. 1σ altındaki
+   hareket düzyazıya girmez (tablo zaten basıyor); 2σ ve üstü sebebiyle girer,
+   sebep netleşmediyse bir kez "sebebi netleşmedi" denir. 1σ altı tek günlük
+   hareketten rejim hükmü kurulmaz; "kesin / kanıt / ta kendisi" yalnız 2σ ve
+   üstünde ya da çok günlü birikimde.
+7. **52 hafta konumu** yalnız uçlarda (%95 ve üstü, %5 ve altı) ve sayı başına
+   en çok üç kez; tablo içi sıralama ("haftanın en büyük beşinci hareketi")
+   yazılmaz.
+8. **Standart adlar.** MOVE, VIX, WTI, HY, IG, EMBI, TLREF, 2s10s, 5s30s, bp —
+   "tahvil oynaklığı ölçüsü" değil MOVE. Tanım her gün yeniden yapılmaz
+   ("kur arındırılmış on üç haftalık yıllıklandırılmış kredi büyümesi" →
+   "kredi büyümesi (13h)").
+9. **Kaynak ve kişi adıyla.** Her dış iddia adlı kaynakla (Reuters, FT,
+   Bloomberg, kurumun adı) ve kişinin adıyla: "bir yatırım bankası", "bir
+   bölge başkanı… bir diğeri", "haber akışına göre" yazılmaz.
+10. **Geçmiş çağrılar** söz defterinde durur; düzyazıda sayı başına en çok bir
+    atıf, "(20.09 notu)" biçiminde.
+11. **Fiyatlama dili serbest, tavsiye dili yasak.** "Piyasa X'i fiyatlıyor;
+    risk Y yönünde asimetrik" yazılır; al/sat/hedef/pozisyon yazılmaz.
+12. **Sayılar rakamla** ("52 haftalık", "17 Eylül"); vurgu büyük harfle değil
+    `<strong>` ile, paragraf başına en çok bir.
+
+---
+
 ## Haftalık bültene özgü görevler
 
-Pazar günkü "haftaya bakış" günlük akışın üstüne üç iş ekler:
+Pazar günkü "Haftaya bakış" aynı biçimin haftalık penceresidir:
 
-1. **Haftanın karnesi.** Hafta içinde kapanan TÜM izleme kayıtlarını gözden
-   geçir: notsuz kapanmış olan varsa `isabet` notunu düş ya da neden
-   ölçülemez olduğunu kayda yaz. Haftalık yorum, karnenin o haftaki dökümünü
-   bir paragrafla verir — kaç çağrı tuttu, kaçı tutmadı, en öğretici yanılgı
-   hangisiydi. Okur haftalık bültende hesap görmek ister.
-2. **Kıyas penceresi haftalıktır.** "Geçen hafta bu saatte neredeydik" sorusu
-   günlük "son yayımdan bu yana"dan farklıdır; haftalık değişim kolonlarını
-   (`h1`) ve rejim panosunun hafta içindeki yönünü kullan. Bir günlük gürültüyü
-   haftanın hikâyesi yapma.
-3. **Önümüzdeki haftanın her takvim maddesi `beklenti` bölümünde tek tek
-   işlenir** ve sayısal beklentisi olan her madde için takvim kaydının
-   `beklenti_sayi` alanının dolu olduğunu doğrula — sürpriz ölçümü ancak o
-   alanla çalışır; serbest metinden sayı türetilmez.
-4. **Olağandışılık da haftalık okunur.** Bölümün adı haftaya bakışta
-   "Haftanın olağandışı hareketleri"dir ve sıralama haftalık hareketi
-   HAFTALIK oynaklığa böler. Denetim bunu ölçer ve karışmışsa ENGEL üretir.
-   Buradaki asıl bilgi çoğu zaman ham listeyle σ listesinin AYRIŞMASIDIR:
-   30.08.2026'da haftanın en büyük ham hareketi BIST Bankacılık'ın %5,98'iydi
-   ama o endeksin kendi haftalık oynaklığı %5,9 olduğu için yalnız 1,0σ —
-   yani manşet büyük, hareket sıradan. Büyük olanı olağandışı sanmak, haftanın
-   hikâyesini yanlış yere kurar.
-5. **Tema metinleri haftalık kesitle yazılır.** "Bugünkü kesitte", "bugün
-   sınanacak" gibi günlük dili haftaya bakışta kullanma; hafta içinde
-   gerçekleşmiş bir olayı "yarın olacak" diye bırakma.
+1. **Pencere haftalıktır.** Haftalık değişim kolonlarını (`h1`) ve rejim
+   panosunun hafta içindeki yönünü kullan; bir günlük gürültüyü haftanın
+   hikâyesi yapma. "Bugün sınanacak" gibi günlük dil kullanma.
+2. **Haftanın karnesi söz defterindedir.** Hafta içinde kapanan TÜM izleme
+   kayıtlarını gözden geçir: notsuz kapanmış olan varsa `isabet` notunu düş ya
+   da neden ölçülemez olduğunu kayda yaz. Karne düzyazıya taşınmaz; okuma
+   gerekirse en öğretici tek yanılgıyı bir cümleyle anar.
+3. **`takvim` = önümüzdeki hafta:** her takvim maddesi tek tek, "hangi sonuç
+   neyi değiştirir" diliyle.
+4. **Olağandışılık haftalık okunur.** Sıralama haftalık hareketi HAFTALIK
+   oynaklığa böler; asıl bilgi çoğu zaman ham listeyle σ listesinin
+   AYRIŞMASIDIR (haftanın en büyük ham hareketi kendi oynaklığına göre sıradan
+   olabilir).
+5. **Tema metinleri haftalık kesitle** ve TEK alanda yazılır: tezin bu hafta
+   doğrulanıp doğrulanmadığı (doğruladı / zayıflattı / çürüttü) ve izlenecek
+   gösterge. Gövdedeki rakamları tema metninde yineleme.
 
 ## Haftalık teknik analiz (pazar, haftalık bültenden SONRA)
 
@@ -308,6 +391,8 @@ Kalıcı çözüm rutin metnini claude.ai arayüzünden düzeltmektir.
 | "Dosya yoksa `python3 bulten.py --tur gunluk` ile üret" | Üretme — o oturumda ağ kapalı, 0 enstrümanlık fotoğraf çıkar ve önbellek kirlenir; iş akışlarını tetikle | **Araçla kapatıldı**: `bulten.py` 40 enstrümanın altında dosyayı YAZMIYOR (çıkış 4) |
 | `python3 bulten/yaz.py yama.json` (damgasız) | `--damga "<olusturma>"` ver | Araçla kapatıldı: damga verilmese de yama dosyasının zamanı ölçümle kıyaslanıyor |
 | `zincir.py` hiç geçmiyor | 0. adım zincire bakmaktır | **Araçla ÖLÇÜLDÜ**: `yaz.py` gecikmeyi zincir raporundan bağımsız kaydeder ve `gecikme.yml` alarmı zincir raporuna hiç bakmadan verir. Dayatılamıyor, ama artık görünmüyor da değil |
+| "Rehberdeki on iki bölümü yaz. Haber bölümleri en az 200, yazı bölümleri en az 300, günlük yorum en az 350 kelime" (01.10.2026'da okundu) | Sayı biçim 3'teyse beş bölüm, uzunluk ARALIK (bkz. "Doldurulacak alanlar (biçim 3)"); toplam tavanın üstü ENGEL | **Araçla kapatıldı**: `yaz.py` biçim 3 sayıda beyan dışı bölüm kimliğini reddeder ve mesajı bu satırı adıyla anar; `denetim.py` toplam tavanı ENGEL sayar |
+| Haftalık: "`ozet.ne_bekleniyor` önümüzdeki haftayı anlatır; takvimi `beklenti` bölümünde tek tek işle" | Biçim 3'te ileriye bakış `gundem.takvim` (haftalık başlığı "Önümüzdeki hafta"); özet yalnız `ne_oldu` | **Araçla kapatıldı**: `yaz.py` biçim 3'te `ne_bekleniyor`u ve `beklenti` kimliğini reddeder |
 
 **Silip yeniden kurmak da çözüm değil.** 27.08.2026'da denendi: aracının
 kurduğu bir rutin ateşlendiğinde depoya erişemiyor (sınama koşusu 24 saniyede,
@@ -336,11 +421,17 @@ yoksa yeni kural buraya yazılır ve rutin onu okuyarak öğrenir.
 
 ## Tekrar — iki eksen
 
-Bültenin tekrarı iki ayrı yerde ölçülür ve ikisi ayrı kusurdur.
+Bültenin tekrarı iki ayrı yerde ölçülür ve ikisi ayrı kusurdur. Tekrar çoğu
+zaman birebir cümlede değil OLGUDADIR: aynı rakamın başka sözcüklerle yeniden
+sayılması. Denetim (biçim 3) bunu olgu düzeyinde ölçer: aynı ondalık üç
+bölümde, madde ile okumanın ikiden fazla ortak rakamı, bugün ve önceki iki
+sayının üçünde de yazılmış değerler ("kronik olgu") ve dünkü okumayla aynı
+açılış cümlesi — hepsi UYARI, adıyla listelenir.
 
-**Sayı içi.** Aynı olgu birden çok bölümde yeniden ANLATILMAZ. Bir olgu bir kez
-tam anlatılır; ikinci geçişinde ya üzerine yeni bir işlem yapılır (aynı faiz
-taşıma hesabına girer) ya da tek cümleyle anılıp geçilir.
+**Sayı içi.** Aynı olgu birden çok bölümde yeniden ANLATILMAZ. Bir olgu kendi
+evinde (bkz. "her konunun tek evi") bir kez tam anlatılır; ikinci geçişinde ya
+üzerine yeni bir işlem yapılır (aynı faiz taşıma hesabına girer) ya da tek
+cümleyle anılıp geçilir.
 
 **Günler arası.** *Bir sayı, önceki sayıyı özetlemez.* Okur dünkü bülteni
 okudu; bugünkü sayı DEĞİŞENİ anlatır. Ölçüldü (07.09.2026, 13 sayı): senin
@@ -363,9 +454,11 @@ altında.
 
 ## Kurallar
 
-**Atıf disiplini.** `%1,5`'i aşan her hareket metinde **anılmalı** ve sebebi
-yazılmalı. Sebebi bilinmiyorsa "sebebi netleşmedi" yaz — en görünür manşeti
-sürücü diye göstermek en kötü seçenek. (2026-08-17 haftasında ABD Hazinesi'nin
+**Atıf disiplini.** Sayının penceresinde (günlükte günün, haftalıkta haftanın)
+en büyük üç hareketi `%1,5`'i aşıyorsa ve 2σ'yı aşan her hareket metinde BİR
+KEZ anılır ve sebebi yazılır — bir madde de sayılır, aynı hareketi ikinci bir
+bölümde yeniden anlatma. Sebebi bilinmiyorsa bir kez "sebebi netleşmedi" yaz —
+en görünür manşeti sürücü diye göstermek en kötü seçenek. (2026-08-17 haftasında ABD Hazinesi'nin
 tahvil geri alımı USD ve faizlerdeki asıl sürücüydü ve bülten bunu tamamen
 atlamıştı; `onem_puani` ve ABD Hazine kaynağı bu yüzden eklendi.)
 
@@ -379,9 +472,9 @@ durur ve o sabah X'te hiçbir şey çıkmaz — yani metnin tweete uygunluğu se
 sorumluluğun. Gönderiyi önceden görmek için: `python3 tweet/gonder.py --kuru`. Bu yüzden sayfa
 mobilyasına atıf yapma — "bu sayfadaki piyasa fotoğrafında", "yukarıdaki pano",
 "ayrıntısı jeopolitik bölümünde", "bu bültenin takip ettiği" gibi ifadeler
-kullanma. Söylemek istediğin şeyi kendi cümlesi içinde tamamla: "fotoğrafta
-yok" yerine "51 satırın tamamı 28 Ağustos kapanışına ait", "jeopolitik
-bölümünde" yerine gelişmeyi orada bir cümleyle söyle.
+kullanma. Söylemek istediğin şeyi kendi cümlesi içinde tamamla: "jeopolitik
+bölümünde" yerine gelişmeyi orada bir cümleyle söyle; "fotoğraftaki satır"
+yerine varlığın adını ve hareketini yaz.
 
 Sigorta araçta: `tweet/uret.py` bu izleri taşıyan CÜMLEYİ düşürür (ve
 göndergesi silindiği için öksüz kalan devamını da). Yani kural çiğnendiğinde
@@ -441,11 +534,12 @@ bir önceki okumaya göre ne kadar döndü. **Spread'in saati ayrıdır**: o GDE
 haftalık arşivinden gelir ve hattın günlük tarihinden birkaç gün geridedir —
 panoda kendi tarihiyle yazar, o tarihle anlat.
 
-**Haber tonundaki olağandışı hareketler ANILMAK ZORUNDA.** Ölçüm katmanı FX
-haber endeksinin günün en olağandışı üç hareketini sıralayıp bülteninin "Haber
-tonu" grubuna basar; denetim bunları metinde ARAR ve bulamazsa ENGEL üretir.
-Sebebini haber akışından bul; netleşmiyorsa "sebebi netleşmedi" yaz — ama
-sessiz geçme.
+**Haber tonunda 2σ'yı aşan hareket ANILMAK ZORUNDA.** Ölçüm katmanı FX haber
+endeksinin günün en büyük üç hareketini sıralayıp sayfada basar; denetim
+(biçim 3) yalnız |z| ≥ 2 olanları metinde ARAR ve bulamazsa ENGEL üretir.
+2σ'nın altındaki ton oynaması yazılmaz — sayfa onu zaten gösteriyor, 1σ'lık
+bir oynamayı her sabah düzyazıya taşımak dolgudur. 2σ'yı aşanın sebebini
+haber akışından bul; netleşmiyorsa bir kez "sebebi netleşmedi" yaz.
 
 Üç şeye dikkat: (1) **Kıyas penceresi sabit değil.** Hat günlük koşmaya yeni
 geçti; tarihçedeki eski aralıklar haftalarca. Olay cümlesi kaç günlük dönüş
@@ -458,8 +552,9 @@ oynaklık tarihçesi standart sapma için yetene kadar sıralama ham büyüklü�
 yapılır ve olay cümlesi bunu söyler; o hâlde "olağandışı" değil "en büyük" diye
 yaz.
 
-**Temalara bağla.** `temalar` defterindeki canlı temalara atıf yap: günün
-gelişmesi hangi tezi doğruladı, hangisini çürüttü.
+**Temalara bağla — sınandıysa.** Günün gelişmesi `temalar` defterindeki canlı
+bir tezi doğruladı ya da zayıflattıysa bunu bir cümleyle söyle; tema her gün
+anılmak zorunda değildir.
 
 **Kıyas noktası.** Her sayının yanında neye göre değiştiği yazar: bir gün mü,
 bir hafta mı, yıl başından beri mi.
@@ -479,9 +574,10 @@ damganın yaşına bakıyor. İki uyarı doğrudan sana:
   o hatlara dayanan hüküm kurma.
 - *"Bugün tazelenmesi gereken ama tazelenemeyen hatlar: …"* — bu hatların
   sayısı dünkü sürümde. Günün haberini onların üstüne kurma; kullanacaksan
-  kendi tarihiyle kullan ("kredi verisi 3 Eylül'de kaldı"). Bültende yazılacak
-  şey hattın BAYATLIĞIDIR; koşunun geciktiği, hangi iş akışının düştüğü okuru
-  ilgilendirmez ve okur diline girmez.
+  kendi tarihiyle kullan ("kredi büyümesi 18 Eylül haftasında %20,1").
+  Koşunun geciktiği, hangi iş akışının düştüğü ya da bir serinin "donduğu"
+  okuru ilgilendirmez ve okur diline girmez: bayat bir değeri ya kendi
+  tarihiyle kullan ya hiç kullanma.
 
 Üçüncü uyarı seri düzeyinde:
 
@@ -503,8 +599,11 @@ piyasa kapandıysa kullanılabilir; kapanmadıysa o satırın "günlük değişi
 seansı değil geceliği ölçer ve işareti dünküyle ters olabilir. Denetim bunu artık
 ENGEL sayıyor (`kapanmamış seansın barı`), ama engelin çıkmaması satırların hepsi
 aynı güne aittir demek değildir: bülten 26 Ağustos kapanışlarıyla 27 Ağustos'ta
-kapanmış bir Asya seansını aynı sayfada taşıyabilir. Hangi satırın hangi güne ait
-olduğunu METİNDE söyle.
+kapanmış bir Asya seansını aynı sayfada taşıyabilir. Sayfa her satırın tarihini
+ve karma seansı kendisi basar; sen yalnız TEZİN dayandığı satırı doğru güne
+yaz ("Bitcoin pazartesi kapanışında %2 düştü"). Tesisatı anlatma: "satır X
+kapanışını taşıyor", "kaynak barı boş verdi" türü cümleler yazılmaz (üslup
+ölçütü ENGEL).
 
 Geride kalan bir satırın SEBEBİNİ tahmin etme; ölçüm katmanı yazıyor
 (`piyasa.seans_ozeti`, 23.09.2026'dan beri). `kaynak_bos`: kaynak o tamamlanmış
@@ -593,8 +692,9 @@ bunu bilemiyordu; bu ölçütler o boşluğu kapatıyor.
   "veri henüz hatta düşmedi" der. Elimizdeki eski sayıyı yeni yayım diye sunmak
   bu bölümün var oluş sebebine aykırıdır.
 
-Bölüm otomatik dolar; yazan tarafın işi sürprizi METİNDE yorumlamaktır — tablo
-ne olduğunu söyler, neden olduğunu söylemez.
+Bölüm otomatik dolar; yazan tarafın işi GELEN bir yayının sürprizini metinde
+yorumlamaktır — tablo ne olduğunu söyler, neden olduğunu söylemez. Beklentinin
+OLMADIĞINI ya da sürprizin ölçülemeyeceğini metinde anlatma; tablo "—" basar.
 
 **Söz defteri artık okura açık.** `izleme.json` bültenin JSON'una giriyor ve
 sayfada "Söz defteri" bölümü olarak basılıyor: açık sözler vadeleriyle, yakın

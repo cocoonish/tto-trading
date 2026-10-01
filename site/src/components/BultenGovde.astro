@@ -181,6 +181,15 @@ const gundemBasilan = new Set<string>([
 const gundemYetim = Object.keys(b.gundem ?? {})
   .filter((id) => !gundemBasilan.has(id) && String(b.gundem[id] ?? '').trim())
   .map((id) => ({ id, baslik: b.haberler?.bolum_adlari?.[id] ?? GUNDEM_ADLARI[id] ?? 'Gündem notu' }));
+// BİÇİM 3 (sayının `surum` beyanı, bulten/ayar.YAZI_BOLUMLERI_3): sabah notu.
+// Madde özeti ("Bu sabah"), tek okuma ve konu başına TEK ev — Türkiye ·
+// Küresel · Emtia · Bugün ve önümüzdeki günler · Risk — okumadan hemen sonra
+// kendi bölümleri olarak basılır; haber listeleri yazıdan ayrılıp sonda katlı
+// "Haber akışı"na iner. Biçim 2 (arşiv) sayıları eski düzenle basılır.
+const bicim3 = Number(b.surum ?? 2) >= 3;
+const yaziBolumleri = bicim3
+  ? (b.gundem_yazi_bolumleri ?? []).filter((x: any) => String(b.gundem?.[x.id] ?? '').trim())
+  : [];
 // Kipe bağlı etiketler tek yerde: günlük ve haftaya bakış farklı sözcükler kullanır.
 const kip = b.haftalik
   ? { gundemNot: 'Geçen haftanın öne çıkanları: Türkiye ve global taraf, makro ve politika ayrımıyla.' }
@@ -497,12 +506,15 @@ const haftaAsan = haftaHareket.filter((x: any) => Math.abs(x.h1_sigma) >= OLAGAN
 const bolumler = [
   b.duzeltmeler?.length > 0 && { id: 'duzeltmeler', ad: 'Düzeltmeler' },
   b.ozet && (b.ozet.ne_oldu || b.ozet.ne_bekleniyor) &&
-    { id: 'ozet', ad: b.haftalik ? 'Geçen hafta / önümüzdeki hafta' : 'Ne oldu / ne bekleniyor', kisa: 'Özet' },
+    (bicim3
+      ? { id: 'ozet', ad: b.haftalik ? 'Haftanın özeti' : 'Bu sabah' }
+      : { id: 'ozet', ad: b.haftalik ? 'Geçen hafta / önümüzdeki hafta' : 'Ne oldu / ne bekleniyor', kisa: 'Özet' }),
   b.gostergeler?.length > 0 && { id: 'gostergeler', ad: 'Gösterge şeridi' },
   bugunKayitlar.length > 0 && { id: 'bugun', ad: 'Bugün' },
   pazarDuzeni && { id: 'hafta-hareket', ad: haftaBaslik },
   onumuzdekiHafta.length > 0 && { id: 'onumuzdeki-hafta', ad: 'Önümüzdeki hafta' },
   b.yorum && { id: 'yorum', ad: b.haftalik ? 'Haftanın okuması' : 'Günün okuması' },
+  ...yaziBolumleri.map((x: any) => ({ id: `y-${x.id}`, ad: x.baslik })),
   b.rejim?.length > 0 && { id: 'rejim', ad: 'Rejim panosu' },
   !pazarDuzeni && b.piyasa?.en_cok_hareket?.sigma?.length > 0 &&
     { id: 'olagandisi', ad: sigmaBaslik, kisa: 'En büyük hareketler' },
@@ -514,7 +526,7 @@ const bolumler = [
     { id: 'soz-defteri', ad: 'Söz defteri' },
   takvimVar && { id: 'takvim', ad: 'Takvim' },
   b.temalar?.temalar?.length > 0 && { id: 'temalar', ad: 'İzlenen temalar' },
-  b.haberler?.bolumler?.length > 0 && { id: 'gundem', ad: 'Gündem' },
+  b.haberler?.bolumler?.length > 0 && { id: 'gundem', ad: bicim3 ? 'Haber akışı' : 'Gündem' },
   b.veri_gunlugu?.length > 0 && { id: 'veri-gunlugu', ad: 'Veri günlüğü' },
 ].filter(Boolean) as { id: string; ad: string; kisa?: string }[];
 // `kisa`: dar ekranın bölüm ŞERİDİNDE basılan ad. 320 pikselde uzun başlık
@@ -593,7 +605,13 @@ const bolumler = [
     </section>
   )}
 
-  {b.ozet && (b.ozet.ne_oldu || b.ozet.ne_bekleniyor) && (
+  {bicim3 && b.ozet?.ne_oldu && (
+    <section class="ozet ozet-maddeler" id="ozet">
+      <h2>{b.haftalik ? 'Haftanın özeti' : 'Bu sabah'}</h2>
+      <div class="ozet-metin" set:html={yaziMetni(b.ozet.ne_oldu)} />
+    </section>
+  )}
+  {!bicim3 && b.ozet && (b.ozet.ne_oldu || b.ozet.ne_bekleniyor) && (
     <section class="ozet" id="ozet">
       {b.ozet.ne_oldu && (
         <div class="ozet-parca">
@@ -752,6 +770,13 @@ const bolumler = [
       <div set:html={sayiBag(String(b.yorum))} />
     </section>
   )}
+
+  {yaziBolumleri.map((x: any) => (
+    <section class:list={['blok', 'yazi-bolumu', `yb-${x.id}`]} id={`y-${x.id}`}>
+      <h2>{x.baslik}</h2>
+      <div class="gundem-metin" set:html={sayiBag(String(b.gundem[x.id]))} />
+    </section>
+  ))}
 
   {b.rejim?.length > 0 && (
     <section class="blok rejim" id="rejim">
@@ -1281,12 +1306,14 @@ const bolumler = [
 
   {b.haberler.bolumler && b.haberler.bolumler.length > 0 && (
     <section class="blok gundem" id="gundem">
-      <h2>Gündem</h2>
-      <p class="alt-not">{kip.gundemNot}</p>
+      <h2>{bicim3 ? 'Haber akışı' : 'Gündem'}</h2>
+      <p class="alt-not">{bicim3
+        ? 'Yazının dayandığı kaynak haberler, konuya göre; başlıklar kaynağın kendi dilinde.'
+        : kip.gundemNot}</p>
       {haberBolumleri.map((bol: any) => (
         <div class:list={['gundem-bolum', { kilit: bol.id === 'kilit' }]}>
           <h3>{bol.baslik}</h3>
-          {bol.id === 'kilit' && (
+          {bol.id === 'kilit' && !bicim3 && (
             <p class="kilit-not">
               Piyasayı fiilen hareket ettiren gelişmeler: konu ağırlığı, kaynak itibarı
               ve kaç yayının haberi taşıdığı birlikte değerlendirilerek seçildi.
@@ -1298,7 +1325,7 @@ const bolumler = [
           {/* KAYNAK HABERLER KATLANIR. Gündem sayfanın yarısına yakınıydı (390
               pikselde %45) ve bunun çoğu ham haber listesiydi; bölümün yazılı
               özeti zaten o listeden kuruluyor. Kilit gelişmeler açık kalır. */}
-          {bol.id === 'kilit' ? (
+          {bol.id === 'kilit' && !bicim3 ? (
             <ul class="haber-liste">
               {bol.maddeler.map((m: any) => (
                 <li lang={haberAyir(m).lang}>
@@ -1312,7 +1339,7 @@ const bolumler = [
               ))}
             </ul>
           ) : bol.maddeler.length > 0 && (
-            <details class="haber-kat" open={!(b.gundem && b.gundem[bol.id])}>
+            <details class="haber-kat" open={!bicim3 && !(b.gundem && b.gundem[bol.id])}>
               <summary>Kaynak haberler · {bol.maddeler.length}</summary>
               <ul class="haber-liste">
                 {bol.maddeler.map((m: any) => (
@@ -1327,13 +1354,13 @@ const bolumler = [
           )}
         </div>
       ))}
-      {gundemYetim.map((g) => (
+      {!bicim3 && gundemYetim.map((g) => (
         <div class="gundem-bolum yazi-bolum">
           <h3>{g.baslik}</h3>
           <div class="gundem-metin" set:html={sayiBag(String(b.gundem[g.id]))} />
         </div>
       ))}
-      {b.gundem_yazi_bolumleri && b.gundem_yazi_bolumleri.map((bol: any) => (
+      {!bicim3 && b.gundem_yazi_bolumleri && b.gundem_yazi_bolumleri.map((bol: any) => (
         b.gundem && b.gundem[bol.id] ? (
           <div class="gundem-bolum yazi-bolum">
             <h3>{bol.baslik}</h3>
@@ -1453,7 +1480,12 @@ const bolumler = [
     background: color-mix(in srgb, var(--claret) 4%, transparent);
   }
   .yorum .etiket { color: var(--claret); margin: 0 0 0.4rem; }
-  .yorum-baslik { font-size: 0.72rem; font-weight: 500; line-height: 1.3; }
+  /* Sayfanın en önemli yazısının başlığı en küçük h2'ydi (11,5 px, mono
+     etiket). Öbür bölüm başlıklarıyla aynı ölçekte, bordo. */
+  .yorum-baslik {
+    font-family: var(--font-display); font-size: 1.35rem; font-weight: 600; line-height: 1.25;
+    letter-spacing: 0; text-transform: none;
+  }
   .bulten :global(.nb) { white-space: nowrap; }
   .yorum :global(p) { max-width: var(--olcu-metin); }
 
@@ -1469,6 +1501,20 @@ const bolumler = [
   }
   .ozet-parca :global(p) { margin: 0 0 0.7rem; line-height: 1.62; max-width: var(--olcu-metin); }
   .ozet-parca :global(p:last-child) { margin-bottom: 0; }
+  /* BİÇİM 3 — "Bu sabah": günün rakamlarının tek evi, 3–5 madde. */
+  .ozet.ozet-maddeler { display: block; margin: 0 0 2rem; }
+  .ozet-maddeler h2 { font-family: var(--font-display); font-size: 1.12rem; margin: 0 0 0.5rem; }
+  .ozet-maddeler :global(ul) {
+    margin: 0; padding-left: 1.15rem; display: grid; gap: 0.5rem; max-width: var(--olcu-metin);
+  }
+  .ozet-maddeler :global(li) { line-height: 1.5; }
+  .ozet-maddeler :global(li::marker) { color: var(--claret); }
+  .ozet-maddeler :global(p) { margin: 0 0 0.5rem; line-height: 1.55; max-width: var(--olcu-metin); }
+  /* Biçim 3'ün konu bölümleri okumanın hemen ardında, kendi başlıklarıyla. */
+  .yazi-bolumu { margin: 2.2rem 0; }
+  .yazi-bolumu .gundem-metin { max-width: var(--olcu-metin); }
+  .yazi-bolumu .gundem-metin :global(p) { margin: 0 0 0.65rem; line-height: 1.6; }
+  .yazi-bolumu .gundem-metin :global(ul) { margin: 0 0 0.65rem; padding-left: 1.15rem; display: grid; gap: 0.35rem; }
 
   /* Ayraç çizgisi hücrenin KENDİ kenarı: ızgara boşluğundan görünen zemin
      rengiyle çizildiğinde son satırın boş hücresi koyu gri bir dolgu olarak

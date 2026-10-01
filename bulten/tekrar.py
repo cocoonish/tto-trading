@@ -50,7 +50,7 @@ SAYI_ADET_ESIK = 6
 OZET_BOLUMLER = {"kilit", "yorum"}
 
 
-def _ozet_mi(ad: str) -> bool:
+def _ozet_mi(ad: str, bicim: int = 2) -> bool:
     """Bu bölüm 'başka bölümlere değmesi TANIMI GEREĞİ meşru' ailesinden mi?
 
     Kapsam sözleşmeye genişletilince (özet, temalar, söz defteri) İÇ tekrar
@@ -67,6 +67,14 @@ def _ozet_mi(ad: str) -> bool:
     # olmadan 13 sayının 4'ünde iç yoğunluk ENGEL eşiğini aşıyordu (17,8 > 12;
     # ölçüldü 30.09.2026) ve hiçbiri gerçek kusur değildi.
     # Manşet de: günün tezi tek cümledir ve gövdeden süzülür.
+    # BİÇİM 3'te "Günün okuması" özet DEĞİLDİR: sayının ana yazısıdır ve
+    # Türkiye/Küresel bölümleriyle aynı olguyu yeniden anlatması tam da
+    # kullanıcının şikâyet ettiği tekrardır (yorum ↔ gündem öbekleri 01.10.2026
+    # teşhisinde sayımın dışında kalıyordu). Özet ailesi: manşet, madde özeti,
+    # söz defteri, temalar.
+    if bicim >= 3:
+        return (ad == "manset" or ad.startswith("ozet.") or ad == "soz_defteri"
+                or ad.startswith("tema."))
     return (ad in OZET_BOLUMLER or ad.startswith("ozet.") or ad == "soz_defteri"
             or ad.startswith("tema.") or ad == "manset")
 
@@ -204,7 +212,8 @@ def olc(b: dict) -> dict:
     sayi = sayi_tekrari(bol)
     # Özet bölümlerinin (kilit/yorum) diğerlerine değmesi tanımı gereği; ağır
     # ihlal, ÖZET OLMAYAN iki bölümün birbirini tekrar etmesidir.
-    agir = [(s, y) for s, y in ifade if len([x for x in y if not _ozet_mi(x)]) >= 2]
+    bicim = int(b.get("surum") or 2)
+    agir = [(s, y) for s, y in ifade if len([x for x in y if not _ozet_mi(x, bicim)]) >= 2]
     # Payda: tema ve manşet ölçüye 30.09.2026'da girdi ve ikisi de ağır
     # tekrardan muaf; paydaya girselerdi yoğunluk %13–18 seyrelir, eşikler
     # (7 uyarı · 12 engel) sessizce gevşerdi — 17.09'un "8,0 ağır tekrar"
@@ -274,3 +283,100 @@ def gunler_arasi(bugun: dict[str, str], onceki: dict[str, str]) -> dict:
                   key=lambda a: -bolum_orani[a])
     return {"oran": oran, "bolum": bolum_orani, "agir": agir,
             "uyari": oran >= GUNLER_ARASI_UYARI or bool(agir)}
+
+
+# ── OLGU TEKRARI (biçim 3) ────────────────────────────────────────────────
+#
+# 01.10.2026 teşhisi: birebir cümle tekrarı yalnız %2–4 çıktı — tekrar
+# PARAFRAZDAYDI. Aynı ondalıklı olgu (ör. "%5,594", "102,59") sayı başına
+# 26–39 kez üç ya da daha çok bölümde geçiyordu; "Ne oldu"nun ondalıklarının
+# %53–88'i "Günün okuması"nda yeniden sayılıyordu; politika faizi seti, ÖTV
+# takvimi ve 40,7 milyar dolarlık cari açık iki haftanın 10–13 sabahında
+# yeniden basılıyordu. 7'li öbek ölçüsü bunların hiçbirini görmez. Olgu imi
+# ONDALIKLI sayıdır: tam sayılar yıl, gün, endeks adı (BIST 100) ve süre
+# taşır, ondalık neredeyse her zaman bir ölçümdür.
+#
+# Eşikler KURALIN KENDİSİDİR, kalibre edilmiş bir seviye değil: "bir olgu
+# tek yerde tam anlatılır, başka yerde en çok tek cümleyle anılır" → üç
+# bölüm kuralın ihlalidir; "Ne oldu ile okuma en çok iki çapa rakam
+# paylaşır" → üçüncüsü ihlaldir. Hepsi UYARI.
+
+# Sağ sınır "rakam ya da VİRGÜL+RAKAM gelmez": Türkçe düzyazıda ondalığın
+# ardından yan cümle virgülü gelir ("%40,50, koridor …") ve eski sınır
+# `(?![\d,])` o olguyu hiç saymıyordu (duman fikstürü yakaladı).
+OLGU = re.compile(r"(?<![\d,.])[−\-+]?%?\d{1,3}(?:\.\d{3})*,\d+(?!\d)(?!,\d)")
+OLGU_BOLUM_ESIK = 3          # bir olgu bu kadar bölümde → ihlal
+OZET_OKUMA_ORTAK = 2         # madde özeti ile okumanın paylaşabileceği olgu
+KRONIK_ADET = 3              # dün ve evvelki gün de yazılmış olgu sayısı (UYARI üstü)
+ACILIS_ORTUSME = 0.5         # okumanın ilk cümlesi önceki sayınınkiyle 5'li öbek örtüşmesi
+
+
+def olgu_anahtari(s: str) -> str:
+    """İşaret, yüzde ve binlik ayracı düşer: "−%2,56" ile "%2,56" aynı olgu."""
+    return re.sub(r"[^\d,]", "", s)
+
+
+def olgular(metin: str) -> set[str]:
+    return {olgu_anahtari(m.group(0)) for m in OLGU.finditer(metin or "")}
+
+
+def yazi_govdesi(b: dict) -> dict[str, str]:
+    """Olgu ölçüsünün bölümleri: madde özeti, okuma ve gündem (manşet hariç —
+    başlık maddedeki rakamı taşıyabilir; tema ve söz ayrı defterdir)."""
+    out: dict[str, str] = {}
+    oz = b.get("ozet") or {}
+    if isinstance(oz, dict):
+        for k, v in oz.items():
+            if _duz(str(v or "")):
+                out[f"ozet.{k}"] = _duz(str(v))
+    if _duz(b.get("yorum") or ""):
+        out["yorum"] = _duz(b.get("yorum") or "")
+    for k, v in (b.get("gundem") or {}).items():
+        if _duz(str(v or "")):
+            out[k] = _duz(str(v))
+    return out
+
+
+def olgu_tekrari(govde: dict[str, str]) -> list[tuple[str, list[str]]]:
+    """OLGU_BOLUM_ESIK ya da daha çok bölümde geçen olgular, en yaygını önce."""
+    yer: dict[str, set[str]] = defaultdict(set)
+    for ad, t in govde.items():
+        for o in olgular(t):
+            yer[o].add(ad)
+    out = [(o, sorted(y)) for o, y in yer.items() if len(y) >= OLGU_BOLUM_ESIK]
+    out.sort(key=lambda x: (-len(x[1]), x[0]))
+    return out
+
+
+def ozet_okuma_ortak(govde: dict[str, str]) -> set[str]:
+    return olgular(govde.get("ozet.ne_oldu", "")) & olgular(govde.get("yorum", ""))
+
+
+def kronik_olgular(bugun: dict[str, str], onceki: list[dict[str, str]]) -> set[str]:
+    """Bugün yazılan ve ÖNCEKİ iki sayının ikisinde de yazılmış olgular —
+    değişmeyen bir değerin her sabah yeniden basılması (politika faizi seti,
+    cari açık, ihale modeli). Değişen bir seri her gün başka değer taşır."""
+    if len(onceki) < 2:
+        return set()
+    # Sıfırla başlayan küçük ondalıklar (0,10 · 0,3) çoğunlukla günlük
+    # DEĞİŞİMDİR ve iki ayrı olgu tesadüfen aynı yazılabilir; kronik ölçü
+    # seviyelere bakar.
+    k = {o for o in set().union(*(olgular(t) for t in bugun.values())) if not o.startswith("0,")}
+    for g in onceki[:2]:
+        k &= set().union(*(olgular(t) for t in g.values())) if g else set()
+    return k
+
+
+def _ilk_cumle(metin: str) -> str:
+    m = re.split(r"(?<=[.!?])\s+", (metin or "").strip(), maxsplit=1)
+    return m[0] if m else ""
+
+
+def acilis_ortusme(bugun_yorum: str, onceki_yorum: str) -> float:
+    """İki okumanın ilk cümlesinin 5'li öbek örtüşmesi (bugünün öbeklerinin payı).
+    29.09 ve 30.09 okumaları birebir aynı cümleyle açılıyordu."""
+    def ob(t):
+        k = _kelimeler(t)
+        return {tuple(k[i:i + 5]) for i in range(len(k) - 4)}
+    a, b = ob(_ilk_cumle(bugun_yorum)), ob(_ilk_cumle(onceki_yorum))
+    return round(len(a & b) / len(a), 2) if a else 0.0

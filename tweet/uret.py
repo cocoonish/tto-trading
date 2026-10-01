@@ -126,7 +126,8 @@ def _site_disi(metin: str, bolum: str = "") -> str:
     return re.sub(r"\s+", " ", " ".join(kalan)).strip()
 
 
-# Gündem katmanı bültende 12 bölüm; tweete haber değeri en yüksek beşi girer.
+# Biçim 2 (arşiv): gündem katmanı 12 bölüm; tweete haber değeri en yüksek beşi
+# girer.
 GUNDEM_BOLUMLERI = (
     ("kilit", "Kilit gelişme"),
     ("tr_makro", "Türkiye makro"),
@@ -134,6 +135,21 @@ GUNDEM_BOLUMLERI = (
     ("global_politika", "Jeopolitik"),
     ("global_makro", "Küresel makro"),
 )
+
+
+def _bicim3_bolumleri() -> tuple[tuple[str, str], ...]:
+    """Biçim 3: gündem satırları bülten kayıt defterinden (bulten/ayar.py,
+    YAZI_BOLUMLERI_3 → `tweet` etiketi). İleriye bakış (`takvim`) ayrı satırda
+    "Beklenen:" olarak girer."""
+    import sys as _sys
+    _sys.path.insert(0, str(KOK / "bulten"))
+    import ayar as _ayar
+    return tuple((y.id, y.tweet) for y in _ayar.YAZI_BOLUMLERI_3
+                 if y.tweet and y.id != "takvim")
+
+
+def gundem_bolumleri(b: dict) -> tuple[tuple[str, str], ...]:
+    return _bicim3_bolumleri() if int(b.get("surum") or 2) >= 3 else GUNDEM_BOLUMLERI
 
 
 # Kelime kırpmasının sonunda kalamayacak sözcükler: bağlaç, edat, sayı.
@@ -280,7 +296,7 @@ def bulten_zinciri(b: dict) -> list[str]:
     # özetlenmez, kırpılır; özetlemek uydurma olurdu.
     gundem = b.get("gundem") or {}
     satirlar, toplam = [], 0
-    for anahtar, etiket in GUNDEM_BOLUMLERI:
+    for anahtar, etiket in gundem_bolumleri(b):
         parca = _site_disi(_duz(gundem.get(anahtar) or ""), anahtar)
         if not parca:
             continue
@@ -321,7 +337,11 @@ def bulten_zinciri(b: dict) -> list[str]:
     if parcalar:
         bolumler.append("Pano: " + " · ".join(parcalar))
 
-    ne_bek = _site_disi(_duz(oz.get("ne_bekleniyor") or ""), "ne_bekleniyor")
+    # Biçim 3'te ileriye bakış yazı katmanının `takvim` bölümündedir.
+    if int(b.get("surum") or 2) >= 3:
+        ne_bek = _site_disi(_duz((b.get("gundem") or {}).get("takvim") or ""), "takvim")
+    else:
+        ne_bek = _site_disi(_duz(oz.get("ne_bekleniyor") or ""), "ne_bekleniyor")
     if ne_bek:
         etiket = "Önümüzdeki hafta: " if haftalik else "Beklenen: "
         # Metin zaten etiketle başlıyorsa ikilenmesin ("Önümüzdeki hafta:

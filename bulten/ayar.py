@@ -735,6 +735,64 @@ GUNDEM_YAZI_BOLUMLERI = [
     ("beklenti", "Yaklaşan veriler: beklentiler ve ne izlenmeli"),
 ]
 
+
+# ─────────────────────────── YAZI BİÇİMLERİ — tek kayıt defteri
+# Bültenin yazı katmanının BİÇİMİ sayının kendisinde durur (`surum`) ve kurallar
+# o beyandan seçilir; kodun o anki ayarından değil. Biçim 2 (≤ 30.09.2026):
+# 12 gündem bölümü, her biri ASGARİ uzunlukla zorunlu (yorum ≥350 · 8 haber
+# bölümü ≥200 · 4 yazı bölümü ≥300 kelime) — günlük düzyazı 4.000–5.400 kelime
+# oldu ve aynı olgu 3–7 bölümde yeniden anlatıldı (01.10.2026 teşhisi: özetin
+# ondalıklarının %53–88'i "Günün okuması"nda yeniden sayılıyordu). Kullanıcı:
+# "Bültenler gerçek bir piyasa profesyoneli tarafından yazılmış gibi değil. Çok
+# tekrar var." Biçim 3 bir sabah notudur: manşet, kısa maddeler, tek okuma ve
+# konu başına TEK ev; uzunluk ASGARİ değil ARALIK (alt sınırın altı UYARI,
+# toplam tavanın üstü ENGEL). Biçim 2 sabitleri arşiv içindir ve DONDURULMUŞTUR
+# (denetim.py: HABER_BOLUM_ASGARI …); arşiv sayısına sonradan yazılan bir
+# düzeltme kendi biçiminin kurallarıyla ölçülür.
+#
+# Bölüm tanımı bir yerde: denetim (zorunlu/aralık), uret (gundem_yazi_bolumleri),
+# yaz.py (kabul edilen kimlikler), tweet (gündem satırları) ve YAZIM.md tablosu
+# buradan türer; duman sınaması rehber tablosunu bu tanıma karşı kıyaslar.
+@dataclass(frozen=True)
+class YaziBolumu:
+    id: str
+    baslik: str
+    gunluk: tuple[int, int]          # (alt, üst) kelime — alt UYARI, üst UYARI
+    haftalik: tuple[int, int]
+    zorunlu: bool                    # boş zorunlu bölüm ENGEL
+    tweet: str | None = None         # gönderinin gündem satırındaki etiket
+    haftalik_baslik: str | None = None
+
+
+YAZI_BICIMI = 3                      # yeni ölçülen sayıların beyan ettiği biçim
+YAZI_BOLUMLERI_3 = (
+    YaziBolumu("turkiye", "Türkiye", (100, 350), (150, 450), True, "Türkiye"),
+    YaziBolumu("kuresel", "Küresel", (100, 350), (150, 450), True, "Küresel"),
+    YaziBolumu("emtia", "Emtia ve enerji", (0, 200), (0, 300), False, "Emtia"),
+    YaziBolumu("takvim", "Bugün ve önümüzdeki günler", (60, 250), (150, 450), True,
+               "İzlenecek", haftalik_baslik="Önümüzdeki hafta"),
+    YaziBolumu("risk", "Risk haritası", (0, 180), (0, 300), False, None),
+)
+# Okuma ve özetin aralıkları; TOPLAM yazı katmanı (manşet + özet + okuma +
+# gündem) için (alt, uyarı tavanı, ENGEL tavanı). ENGEL tavanı cömerttir: eski
+# 4.000+ kelimelik düzene dönüşü durdurur, sınırda bir yanlış alarm üretmez.
+YAZI_ARALIK_3 = {
+    "yorum": {"gunluk": (250, 500), "haftalik": (500, 900)},
+    "ozet": {"gunluk": (50, 180), "haftalik": (80, 260)},
+    "ozet_madde": (3, 5),
+    "toplam": {"gunluk": (700, 1600, 2200), "haftalik": (1300, 2800, 3600)},
+}
+
+
+def yazi_bolumleri(b: dict) -> list[dict]:
+    """Ölçülen bir sayının beyan ettiği yazı bölümleri — sayfa ve yazma kapısı
+    bunu okur. Biçim 3'te haftalık başlık ayrıdır."""
+    if int(b.get("surum") or 2) >= 3:
+        haftalik = bool(b.get("haftalik"))
+        return [{"id": y.id, "baslik": (y.haftalik_baslik if haftalik and y.haftalik_baslik
+                                         else y.baslik)} for y in YAZI_BOLUMLERI_3]
+    return [{"id": i, "baslik": t} for i, t in GUNDEM_YAZI_BOLUMLERI]
+
 # ─────────────────────────── alaka ve gürültü süzgeçleri
 # BAŞLIKTA bu terimlerden biri geçmelidir. Özette geçmesi yetmez: özet çoğu akışta
 # haberin ilk cümlesidir ve "ekonomi" gibi bir kelime rastgele düşebilir; başlık ise

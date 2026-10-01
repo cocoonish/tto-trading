@@ -70,17 +70,24 @@ def _oku(p: str) -> dict | None:
         return None
 
 
-def _agirlik(b: dict) -> tuple[int, int]:
-    """Bülteni sırala: (yazılı mı, kaç kelime). Büyük olan kazanır."""
+def _agirlik(b: dict) -> tuple[int, str, int]:
+    """Bülteni sırala: (yazılı mı, son yazım damgası, kaç kelime). Büyük olan kazanır.
+
+    İkisi de yazılıysa DAHA YENİ YAZIM kazanır, uzun olan değil: bir düzeltme
+    metni kısaltabilir ve biçim 3 (sabah notu) bilerek kısadır — "dolu olan
+    kazanır" kuralı yazılmış bir düzeltmeyi eski uzun metinle ezerdi. Damga
+    `yaz.py`nin yazdığı ISO UTC dizgesidir; sözlük sırası zaman sırasıdır.
+    Damgasız (eski) sayılarda davranış öncekiyle aynı: kelime sayısı."""
     yazili = 1 if b.get("gundem_kaynagi") == "yazili" else 0
+    damga = str(b.get("yazi_zamani") or "") if yazili else ""
     kelime = len(str(b.get("yorum", "")).split())
     for v in (b.get("gundem") or {}).values():
         kelime += len(str(v).split())
-    return yazili, kelime
+    return yazili, damga, kelime
 
 
 def _bulten_coz(o: str, a: str, b: str) -> int:
-    """Bülten JSON'u: yazılı sürüm kazanır; ikisi de yazılıysa dolu olan."""
+    """Bülten JSON'u: yazılı sürüm kazanır; ikisi de yazılıysa daha yeni yazım."""
     bizim, onlarin = _oku(a), _oku(b)
     if bizim is None or onlarin is None:
         return 1                      # JSON okunamıyorsa elle çözülsün

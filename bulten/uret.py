@@ -499,19 +499,26 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
             # basılmıyordu (kurum_global, 17 sayı).
             "bolum_adlari": {bid: baslik for bid, baslik, _b, _a in ayar.HABER_BOLUMLERI},
         },
-        # Gündem yazısı: bölüm bölüm ayrıntılı metin. Kural tabanlı koşu buraya
-        # başlıkları cümleye çevirerek bir TABAN koyar; yorum katmanı kaynakları
-        # açıp okuyarak bu metni ZENGİNLEŞTİRİR ve yerine geçer.
+        # Gündem yazısı: yazı katmanının bölüm bölüm metni (biçim 3'te
+        # Türkiye · Küresel · Emtia · Bugün ve önümüzdeki günler · Risk).
         "gundem": {},
-        # Yazı-özel bölümlerin sırası ve başlıkları (haber listesi olmayanlar)
-        "gundem_yazi_bolumleri": [{"id": i, "baslik": t} for i, t in ayar.GUNDEM_YAZI_BOLUMLERI],
         "yorum": None,
         "yorum_zamani": None,
         "tur": tur,
-        "surum": 2,
+        # YAZI BİÇİMİ sayının kendisinde: denetim, yazma kapısı, sayfa ve
+        # gönderi kurallarını bu beyandan seçer (bkz. ayar.YAZI_BOLUMLERI_3).
+        "surum": ayar.YAZI_BICIMI,
     }
+    # Yazı-özel bölümlerin sırası ve başlıkları — sayının beyanından.
+    b["gundem_yazi_bolumleri"] = ayar.yazi_bolumleri(b)
     b["ozet"] = piyasa_ozeti(b, haftalik=haftalik)
-    b["gundem"] = gundem_tabani(b)
+    # TABAN METİN YALNIZ BİÇİM 2'de: biçim 3'te haber başlıklarından kurulmuş
+    # bir taban `gundem`e YAZILMAZ. Yazılmamış sayı zaten yayımlanmıyor
+    # (sayfa yalnız 'yazili' sayıyı basar); taban metnin tek etkisi, yazı
+    # katmanı yeni bölüm kimlikleriyle yazdığında eski kimliklerde kalıp
+    # ~1.900 kelimelik başlık listesini sayfaya ve gönderiye taşımaktı
+    # (01.10.2026 teşhisinde 30.09 üzerinde simüle edildi).
+    b["gundem"] = gundem_tabani(b) if int(b["surum"]) < 3 else {}
     b["gundem_kaynagi"] = "otomatik"        # yorum katmanı yazınca "yazili" olur
     return b
 
@@ -555,6 +562,13 @@ def yaz(b: dict) -> Path:
             eski = json.loads(y.read_text(encoding="utf-8"))
             if eski.get("yorum"):
                 b["yorum"], b["yorum_zamani"] = eski["yorum"], eski.get("yorum_zamani")
+            # Yazılmış bir sayının BİÇİMİ yazıldığı gün sabitlenir: yeniden
+            # ölçüm (--yeniden-olc) biçim 2'de yazılmış bir sayıya biçim 3
+            # bölüm listesi basarsa eski metin başlıksız kalır ve denetim
+            # yanlış kuralla ölçer.
+            if eski.get("gundem_kaynagi") == "yazili":
+                b["surum"] = eski.get("surum", 2)
+                b["gundem_yazi_bolumleri"] = eski.get("gundem_yazi_bolumleri") or ayar.yazi_bolumleri(b)
             # Yazı katmanının öbür alanları ve damgaları da KORUNUR; kapsam
             # yazma kapısının kendi listesinden (yaz.YAZILABILIR) türer. Liste
             # elle tutulduğu için yeniden ölçüm (--yeniden-olc) manşeti ve

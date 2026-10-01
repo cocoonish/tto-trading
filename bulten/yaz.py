@@ -27,6 +27,10 @@ Kullanım — yama dosyası ya da borudan JSON:
 Çıkış kodları: 0 yazıldı · 2 girdi hatası · 3 damga uyuşmadı · 5 denetim ENGEL
 (dosyaya yazılmadı).
 
+Biçim 3 sayılarda (ölçülen sayının `surum` alanı) gündem kimlikleri sayının
+`gundem_yazi_bolumleri` alanındakilerdir (turkiye · kuresel · emtia · takvim ·
+risk) ve özet yalnız `ne_oldu` taşır; beyan dışı kimlik reddedilir (çıkış 2).
+
 Yama, mevcut içeriğin ÜZERİNE yazar ama dosyadaki diğer her şeyi korur; bir
 bölümü boş göndermek onu silmez (kazara boşaltmaya karşı). Silmek gerekirse
 alanın değeri olarak açıkça null verilir.
@@ -120,13 +124,46 @@ def uygula(hedef: Path, yama: dict) -> tuple[dict, list[str]]:
             b["manset"] = t
             degisen.append(f"manset ({len(t)} karakter)")
 
+    # BİÇİM 3 (sayının `surum` beyanı): gündem kimlikleri sayının kendi
+    # bölüm listesinden; ileriye bakış `gundem.takvim`dedir, özet yalnız
+    # `ne_oldu` taşır (3–5 madde). Beyan dışı kimlik REDDEDİLİR — yazılsa
+    # sayfada başlıksız kalır, denetim onu hiçbir aralıkla ölçmez.
+    bicim3 = int(b.get("surum") or 2) >= 3
+    if bicim3:
+        import ayar as _ayar
+        izinli = [x["id"] for x in (b.get("gundem_yazi_bolumleri") or _ayar.yazi_bolumleri(b))]
+        if isinstance(yama.get("gundem"), dict):
+            disari = [k for k in yama["gundem"] if k not in izinli]
+            # Mesaj ESKİ TALİMATI adıyla anar: rutin metni claude.ai ayarlarında
+            # durur, aracı onu değiştiremez ve 01.10.2026'da hâlâ "on iki bölüm,
+            # en az 200/300 kelime" diyordu. Rutin "rehber esastır" der; kapı
+            # da çelişkiyi rehbere yönlendirerek çözer.
+            if disari:
+                raise SystemExit(
+                    f"bu sayı biçim 3'te (sabah notu): gündem kimlikleri yalnız "
+                    f"{', '.join(izinli)} — tanınmayan: {', '.join(disari)}.\n"
+                    "Rutin metnindeki 'on iki bölüm' ve 'en az 200/300/350 kelime' "
+                    "talimatları biçim 2'ye (arşiv) aittir; bulten/YAZIM.md esastır "
+                    "('Doldurulacak alanlar (biçim 3)').")
+        if isinstance(yama.get("ozet"), dict) and str(yama["ozet"].get("ne_bekleniyor") or "").strip():
+            raise SystemExit(
+                "bu sayı biçim 3'te (sabah notu): ileriye bakış `ozet.ne_bekleniyor`a "
+                "değil `gundem.takvim` bölümüne yazılır; özet yalnız `ne_oldu` "
+                "(3–5 madde). Rutin metnindeki ne_bekleniyor talimatı biçim 2'ye "
+                "aittir; bulten/YAZIM.md esastır.")
+
     if "ozet" in yama and isinstance(yama["ozet"], dict):
-        mevcut = b.get("ozet") or {}
-        for k in ("ne_oldu", "ne_bekleniyor"):
+        # Biçim 3'te ölçüm katmanının makine özeti (ne_oldu + ne_bekleniyor)
+        # yazı katmanının özetiyle DEĞİŞİR, birleşmez: makinenin ileriye
+        # bakış paragrafı kalsaydı sayfada yazının `takvim` bölümünü ikinci
+        # kez söylerdi.
+        mevcut = {} if bicim3 else (b.get("ozet") or {})
+        for k in (("ne_oldu",) if bicim3 else ("ne_oldu", "ne_bekleniyor")):
             if k in yama["ozet"] and str(yama["ozet"][k] or "").strip():
                 mevcut[k] = yama["ozet"][k]
                 degisen.append(f"ozet.{k}")
-        b["ozet"] = mevcut
+        if mevcut:
+            b["ozet"] = mevcut
 
     if "gundem" in yama and isinstance(yama["gundem"], dict):
         mevcut = b.get("gundem") or {}

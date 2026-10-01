@@ -560,6 +560,326 @@ def _hafta_sonu_bari():
     assert b > a, "hafta sonu süzgeci yerleşmemiş bar kuralından sonra koşuyor"
 
 
+# ── BİÇİM 3 (sabah notu) — 01.10.2026 ─────────────────────────────────────
+# Kullanıcı: "Bültenler gerçek bir piyasa profesyoneli tarafından yazılmış gibi
+# değil. Çok tekrar var." Teşhis: 12 bölümün her biri ASGARİ uzunlukla
+# zorunluydu, aynı olgu 3–7 bölümde yeniden anlatılıyordu ve metin okura kendi
+# ölçüm tesisatını anlatıyordu. Biçim sayının kendisinde (`surum`) durur ve
+# kuralların hepsi o beyandan seçilir. Bu sınamalar kuralın TANIM yerlerini
+# (kayıt defteri · rehber tablosu · yazma kapısı · denetim · tekrar · üslup ·
+# gönderi · birleştirme sürücüsü) birbirine bağlar: biri kayarsa düşer.
+
+def _bicim3_kayit_defteri():
+    """Rehber tablosu ↔ kayıt defteri; sayının beyanı ↔ bölüm listesi."""
+    import ayar as _a
+    import uret as _u
+    rehber = (BURASI / "YAZIM.md").read_text(encoding="utf-8")
+    tablo = {}
+    for m in re.finditer(r"^\| `gundem\.(\w+)` \| ([^|]+) \| ([^|]+) \| ([^|]+) \|$", rehber, re.M):
+        tablo[m.group(1)] = (m.group(2).strip(), m.group(3).strip(), m.group(4).strip())
+    ids = [y.id for y in _a.YAZI_BOLUMLERI_3]
+    assert list(tablo) == ids, f"YAZIM.md bölüm tablosu kayıt defteriyle ayrışmış: {list(tablo)} ↔ {ids}"
+
+    def _ar(alt_ust):
+        a, u = alt_ust
+        return f"≤{u}" if a == 0 else f"{a}–{u}"
+    for y in _a.YAZI_BOLUMLERI_3:
+        ad, uz, zor = tablo[y.id]
+        assert ad.split(" · ")[0] == y.baslik, f"{y.id}: rehber başlığı {ad!r} ↔ {y.baslik!r}"
+        if y.haftalik_baslik:
+            assert y.haftalik_baslik in ad, f"{y.id}: haftalık başlık rehberde yok ({ad!r})"
+        beklenen = f"{_ar(y.gunluk)} · {_ar(y.haftalik)}"
+        assert uz == beklenen, f"{y.id}: rehber aralığı {uz!r} ↔ kayıt {beklenen!r}"
+        assert (zor == "evet") == y.zorunlu, f"{y.id}: zorunluluk ayrışmış ({zor!r} ↔ {y.zorunlu})"
+    # Yorum ve özet aralıkları da tabloda.
+    r = _a.YAZI_ARALIK_3
+    assert f"| `yorum` | Günün / Haftanın okuması | {_ar(r['yorum']['gunluk'])} · {_ar(r['yorum']['haftalik'])} |" in rehber, \
+        "rehberde okuma aralığı kayıtla ayrışmış"
+    oz = f"{r['ozet_madde'][0]}–{r['ozet_madde'][1]} madde · {_ar(r['ozet']['gunluk'])} · {_ar(r['ozet']['haftalik'])} kelime"
+    assert oz in rehber, f"rehberde özet aralığı kayıtla ayrışmış (beklenen {oz!r})"
+    t = r["toplam"]
+    for kip, ad in (("gunluk", "günlük"), ("haftalik", "haftalık")):
+        alt, uy, en = t[kip]
+        assert f"{alt:,}".replace(",", ".") in rehber or str(alt) in rehber, f"toplam alt sınırı ({kip}) rehberde yok"
+        assert f"{en:,}".replace(",", ".") in rehber, f"toplam ENGEL tavanı ({kip}: {en}) rehberde yok"
+
+    # Sayının beyanı: biçim 3 → kayıt defteri; biçim 2 → arşiv listesi.
+    g3 = _a.yazi_bolumleri({"surum": 3, "haftalik": False})
+    h3 = _a.yazi_bolumleri({"surum": 3, "haftalik": True})
+    g2 = _a.yazi_bolumleri({"surum": 2})
+    assert [x["id"] for x in g3] == ids
+    assert next(x for x in h3 if x["id"] == "takvim")["baslik"] == "Önümüzdeki hafta"
+    assert [x["id"] for x in g2] == [i for i, _t in _a.GUNDEM_YAZI_BOLUMLERI], "arşiv bölüm listesi değişti"
+    # Ölçüm katmanı yeni sayıyı biçim 3 beyanıyla ve TABAN METİNSİZ kurar.
+    src = inspect.getsource(_u.uret)
+    assert '"surum": ayar.YAZI_BICIMI' in src, "uret biçimi kayıt defterinden okumuyor"
+    assert _a.YAZI_BICIMI >= 3
+    assert re.search(r'b\["gundem"\]\s*=\s*gundem_tabani\(b\)\s*if\s*int\(b\["surum"\]\)\s*<\s*3\s*else\s*\{\}', src), \
+        "biçim 3 sayıya haber başlıklarından taban metin yazılıyor"
+
+
+def _bicim3_yeniden_olcum():
+    """Yazılmış bir sayının biçimi YAZILDIĞI günün beyanıdır: yeniden ölçüm
+    (--yeniden-olc) biçim 2 sayısına biçim 3 bölüm listesi basmaz."""
+    import tempfile, json as _j
+    import uret as _u, ayar as _a
+    # Çıktı dizini modülün KENDİ sabitinden sarılır; ad yanlış olursa sınama
+    # gerçek bülten dosyasına yazar (ilk yazımda `BULTEN` sarıldı, `uret`
+    # `CIKTI` kullanıyor ve 30.09 sayısı yeniden yazıldı — git'ten geri alındı).
+    assert hasattr(_u, "CIKTI"), "uret.CIKTI yok — sınama çıktı dizinini saramaz"
+    gercek = _u.CIKTI
+    with tempfile.TemporaryDirectory() as td:
+        eski = {"tarih": "2026-09-30", "gundem_kaynagi": "yazili", "surum": 2,
+                "gundem_yazi_bolumleri": [{"id": "beklenti", "baslik": "Yaklaşan veriler"}],
+                "gundem": {"kilit": "<p>x</p>"}, "yorum": "<p>y</p>", "manset": "m"}
+        (Path(td) / "2026-09-30.json").write_text(_j.dumps(eski), encoding="utf-8")
+        yeni = {"tarih": "2026-09-30", "surum": _a.YAZI_BICIMI, "haftalik": False,
+                "gundem_yazi_bolumleri": _a.yazi_bolumleri({"surum": 3}),
+                "gundem": {}, "gundem_kaynagi": "otomatik"}
+        try:
+            _u.CIKTI = Path(td)
+            yol = _u.yaz(yeni)
+            assert Path(yol).parent == Path(td), f"uret.yaz sarılan dizine yazmadı: {yol}"
+            sonuc = _j.loads((Path(td) / "2026-09-30.json").read_text(encoding="utf-8"))
+        finally:
+            _u.CIKTI = gercek
+    assert sonuc.get("surum") == 2, f"yeniden ölçüm yazılmış sayının biçimini değiştirdi: {sonuc.get('surum')}"
+    assert [x["id"] for x in sonuc["gundem_yazi_bolumleri"]] == ["beklenti"], "eski bölüm listesi ezildi"
+    assert sonuc.get("gundem") == {"kilit": "<p>x</p>"} and sonuc.get("manset") == "m", "yazı korunmadı"
+
+
+def _bicim3_yazma_kapisi():
+    """yaz.py: beyan dışı kimlik ve ne_bekleniyor REDDEDİLİR (mesaj rutin
+    metninin eski talimatını adıyla anar); özet makine özetinin YERİNE geçer."""
+    import tempfile, json as _j
+    import yaz as _y, ayar as _a
+    with tempfile.TemporaryDirectory() as td:
+        hedef = Path(td) / "2026-10-02.json"
+        b0 = {"tarih": "2026-10-02", "olusturma": "2026-10-02T03:30:00+00:00", "surum": 3,
+              "haftalik": False, "gundem_kaynagi": "otomatik", "gundem": {},
+              "gundem_yazi_bolumleri": _a.yazi_bolumleri({"surum": 3}),
+              "ozet": {"ne_oldu": "<p>makine özeti</p>", "ne_bekleniyor": "<p>makine ileriye bakışı</p>"}}
+        hedef.write_text(_j.dumps(b0), encoding="utf-8")
+        for yama, aranan in (({"gundem": {"kilit": "<p>x</p>"}}, "on iki bölüm"),
+                             ({"gundem": {"beklenti": "<p>x</p>"}}, "on iki bölüm"),
+                             ({"ozet": {"ne_oldu": "<ul><li>a</li></ul>", "ne_bekleniyor": "<p>b</p>"}},
+                              "gundem.takvim")):
+            try:
+                _y.uygula(hedef, yama)
+            except SystemExit as e:
+                assert aranan in str(e) and "YAZIM.md" in str(e), f"red mesajı rehbere yönlendirmiyor: {e}"
+            else:
+                raise AssertionError(f"biçim 3 sayıda kabul edildi: {yama}")
+        b, d = _y.uygula(hedef, {"ozet": {"ne_oldu": "<ul><li>a</li></ul>"},
+                                 "gundem": {"turkiye": "<p>t</p>", "takvim": "<p>k</p>"}})
+        assert b["ozet"] == {"ne_oldu": "<ul><li>a</li></ul>"}, f"makine özeti yazıyla birleşti: {b['ozet']}"
+        assert set(b["gundem"]) == {"turkiye", "takvim"} and b["gundem_kaynagi"] == "yazili"
+        # Biçim 2 (arşiv) sayısında eski kimlikler ve ne_bekleniyor GEÇERLİ.
+        b2 = dict(b0, surum=2, gundem_yazi_bolumleri=_a.yazi_bolumleri({"surum": 2}))
+        hedef.write_text(_j.dumps(b2), encoding="utf-8")
+        b, _ = _y.uygula(hedef, {"gundem": {"kilit": "<p>x</p>"}, "ozet": {"ne_bekleniyor": "<p>y</p>"}})
+        assert b["ozet"]["ne_oldu"] == "<p>makine özeti</p>" and b["ozet"]["ne_bekleniyor"] == "<p>y</p>", \
+            "arşiv sayısında özet birleşmesi bozuldu"
+
+
+def _b3_metin(n: int, tohum: str = "deger") -> str:
+    """n kelimelik, üslup kalıbı taşımayan sentetik paragraf."""
+    s = ("Piyasa bu sabah yönünü faiz tarafından alıyor ve kur sakin seyrediyor. " * (n // 12 + 1)).split()
+    return "<p>" + " ".join(s[:n]) + "</p>"
+
+
+def _b3_sayi(**ek):
+    import ayar as _a
+    g = {"turkiye": _b3_metin(200), "kuresel": _b3_metin(180), "emtia": _b3_metin(90),
+         "takvim": _b3_metin(120), "risk": _b3_metin(80)}
+    b = {"tarih": "2026-10-02", "tur": "gunluk", "surum": 3, "haftalik": False,
+         "gundem_kaynagi": "yazili", "manset": "Faiz yukarı, kur sakin: uzun uç petrolden koptu",
+         "gundem_yazi_bolumleri": _a.yazi_bolumleri({"surum": 3}), "gundem": g,
+         "ozet": {"ne_oldu": "<ul>" + "".join(f"<li>{_b3_metin(25)[3:-4]}</li>" for _ in range(4)) + "</ul>"},
+         "yorum": _b3_metin(380)}
+    b.update(ek)
+    return b
+
+
+def _bicim3_denetim():
+    """_yazi_bicim3: ENGEL yalnız yapısal eksikte ve toplam tavanında; aralık dışı UYARI."""
+    import denetim as _den, ayar as _a
+
+    def kos(b):
+        d = _den.Denetim(b)
+        d.yazi()
+        return d
+    d = kos(_b3_sayi())
+    assert not d.engel, f"iyi biçimli sabah notu ENGEL aldı: {d.engel}"
+    assert not d.uyari, f"iyi biçimli sabah notu UYARI aldı: {d.uyari}"
+    vaka = {
+        "manşetsiz": _b3_sayi(manset=""),
+        "makine özeti": _b3_sayi(ozet={"ne_oldu": "<p>x</p>", "ne_bekleniyor": "<p>y</p>"}),
+        "okumasız": _b3_sayi(yorum=""),
+        "zorunlu bölüm boş": _b3_sayi(gundem=dict(_b3_sayi()["gundem"], takvim="")),
+        "yazılmamış": _b3_sayi(gundem_kaynagi="otomatik"),
+        "toplam tavan": _b3_sayi(yorum=_b3_metin(_a.YAZI_ARALIK_3["toplam"]["gunluk"][2])),
+    }
+    for ad, b in vaka.items():
+        assert kos(b).engel, f"{ad}: ENGEL üretmedi"
+    # İsteğe bağlı bölüm boş: ENGEL değil.
+    g = dict(_b3_sayi()["gundem"]); g.pop("emtia"); g.pop("risk")
+    d = kos(_b3_sayi(gundem=g))
+    assert not d.engel, f"isteğe bağlı bölümün yokluğu ENGEL: {d.engel}"
+    # Kısa okuma ve iki maddelik özet UYARI, ENGEL değil.
+    d = kos(_b3_sayi(yorum=_b3_metin(120),
+                     ozet={"ne_oldu": "<ul><li>a b c</li><li>d e f</li></ul>"}))
+    assert not d.engel and len(d.uyari) >= 2, (d.engel, d.uyari)
+    # Haftalık sayı haftalık aralıklarla ölçülür: 380 kelimelik okuma haftalıkta kısa.
+    d = kos(_b3_sayi(haftalik=True))
+    assert any("Okuma" in u for u in d.uyari), f"haftalık aralık uygulanmıyor: {d.uyari}"
+    # Biçim 2 sayısı eski yoldan ölçülür (beş bölümlü metin orada ENGEL alır).
+    d = kos(_b3_sayi(surum=2))
+    assert d.engel, "biçim 2 sayısı biçim 3 kurallarıyla ölçüldü"
+
+
+def _bicim3_uslup():
+    """Üslup ölçütü: öz-atıf ve süreç dili ENGEL; temiz piyasa metni temiz."""
+    import uslup as _u, denetim as _den
+    kotu = {
+        "yorum": "Ölçülen elli bir satırın çoğu cuma kapanışını taşıyor. Bitcoin satırı boş kaldı. "
+                 "Bu bir ölçü uyarısı olarak kayda geçsin. Hüküm kurulmadı. Kaydımız tutmadı.",
+        "gundem.takvim": "Beklentimiz olmadığı için sürpriz ölçülmeyecek. Hattımız bu veriyi defterde tutuyor.",
+    }
+    r = _u.olc(kotu)
+    kodlar = {e.split()[1] for e in r["engel"]}
+    for k in ("Y01", "Y02", "Y04", "Y05", "Y06", "Y07", "Y09"):
+        assert k in kodlar, f"{k} yakalanmadı: {sorted(kodlar)}"
+    iyi = {"yorum": "BIST 100 %2,79 düştü; bankacılık endeksi %4,58 geriledi. TMSF'ye devredilen "
+                    "kurumlar sistemin %0,3'ü kadar. ABD 10 yıllık getiri %5,29'a çıktı ve MOVE 110'u aştı.",
+           "gundem.kuresel": "Çekirdek PCE yıllık %3,0 geldi, beklenti %3,3'tü. Fed fiyatlaması değişmedi."}
+    r = _u.olc(iyi)
+    assert not r["engel"] and not r["uyari"], f"temiz metin işaretlendi: {r}"
+    # Uzun cümle uyarısı
+    uzun = {"yorum": " ".join(["kelime"] * 40) + ". " + " ".join(["öbür"] * 40) + "."}
+    assert any("Cümleler uzun" in u for u in _u.olc(uzun)["uyari"]), "uzun cümle ölçülmüyor"
+    # Denetim zinciri: yalnız biçim 3'te koşar ve kos() listesinde.
+    d = _den.Denetim(_b3_sayi(yorum="<p>" + kotu["yorum"] + "</p>"))
+    d.uslup()
+    assert any(e.startswith("ÜSLUP") for e in d.engel), "üslup ENGEL denetime geçmiyor"
+    d2 = _den.Denetim(_b3_sayi(surum=2, yorum="<p>" + kotu["yorum"] + "</p>"))
+    d2.uslup()
+    assert not d2.engel, "üslup ölçütü arşiv (biçim 2) sayısında koşuyor"
+    assert "self.uslup()" in inspect.getsource(_den.Denetim.kos), "üslup ölçütü kos() listesinde yok"
+    # Kapsam: manşet ve özet de yazıdır.
+    al = _den.Denetim(_b3_sayi()).yazi_alanlari()
+    assert {"manset", "ozet.ne_oldu", "yorum", "gundem.turkiye"} <= set(al), sorted(al)
+
+
+def _bicim3_tekrar():
+    """Olgu tekrarı: aynı ondalık 3+ bölümde · özet∩okuma > 2 · kronik · açılış."""
+    import tekrar as _t, denetim as _den
+    g = {"ozet.ne_oldu": "BIST %2,79 düştü; Brent 103,53; bankalar %4,58; TLREF %36,92",
+         "yorum": "Düşüş %2,79 ile sınırlı değil, bankalar %4,58; Brent 103,53 ve TLREF %36,92 aynı gün.",
+         "turkiye": "Endeks −%2,79 kapandı.", "kuresel": "Getiri %5,29."}
+    yay = dict(_t.olgu_tekrari(g))
+    assert "2,79" in yay and len(yay["2,79"]) == 3, f"3 bölümlü olgu bulunmadı: {yay}"
+    assert "5,29" not in yay
+    assert _t.ozet_okuma_ortak(g) == {"2,79", "103,53", "4,58", "36,92"}
+    # Kronik: seviye bugün + iki önceki sayıda; küçük değişim (0,…) sayılmaz.
+    onceki = [{"a": "Politika faizi %40,50, değişim 0,25"}, {"b": "%40,50 ve 0,25"}]
+    assert _t.kronik_olgular({"x": "faiz %40,50 · 0,25"}, onceki) == {"40,50"}
+    assert _t.kronik_olgular({"x": "%40,50"}, onceki[:1]) == set(), "iki önceki sayı yokken kronik hüküm"
+    assert _t.acilis_ortusme("Bu sabah piyasa faiz tarafından yönleniyor ve kur sakin.",
+                             "Bu sabah piyasa faiz tarafından yönleniyor ve kur sakin.") == 1.0
+    # Biçim 3'te okuma ÖZET AİLESİ DEĞİL; biçim 2'de hâlâ öyle.
+    assert not _t._ozet_mi("yorum", 3) and _t._ozet_mi("yorum", 2) and _t._ozet_mi("manset", 3)
+    # Denetim zinciri yalnız biçim 3'te olgu ölçüsünü koşar.
+    src = inspect.getsource(_den.Denetim.tekrar)
+    assert "_olgu_tekrari" in src and ">= 3" in src, "olgu tekrarı denetime bağlı değil"
+    b = _b3_sayi(ozet={"ne_oldu": "<ul><li>BIST %2,79; Brent 103,53; %4,58</li></ul>"},
+                 yorum="<p>%2,79 · 103,53 · %4,58 · ve bir şey daha.</p>",
+                 gundem=dict(_b3_sayi()["gundem"], turkiye="<p>BIST %2,79 düştü.</p>"))
+    d = _den.Denetim(b)
+    d._onceki_sayilar = lambda n=2: []
+    d._olgu_tekrari(_t)
+    assert any("OLGU TEKRARI" in u for u in d.uyari) and any("Özet ile okuma" in u for u in d.uyari), d.uyari
+    assert not d.engel, "olgu tekrarı ENGEL üretiyor — ölçü UYARI olmalı"
+
+
+def _bicim3_atif_ve_ton():
+    """Biçim 3: günlük sayı haftalık hareketleri anmak zorunda değil; haber tonunda
+    yalnız |z| ≥ 2 zorunlu. Biçim 2'de eski davranış korunur."""
+    import denetim as _den, gozlem as _gz
+    hareket = {"gunluk": [{"ad": "BIST 100", "deger": -2.79}],
+               "haftalik": [{"ad": "Nikkei 225", "deger": 4.1}], "sigma": []}
+    metin = {"turkiye": "<p>BIST 100 sert düştü.</p>"}
+    for surum, hafta_engeli in ((3, False), (2, True)):
+        d = _den.Denetim({"tarih": "2026-10-02", "surum": surum, "haftalik": False,
+                          "piyasa": {"en_cok_hareket": hareket}, "gundem": metin})
+        d.atif()
+        h = any("Nikkei" in e for e in d.engel)
+        assert h == hafta_engeli, f"biçim {surum}: haftalık hareket atfı {'yok' if hafta_engeli else 'var'}: {d.engel}"
+        assert not any("BIST 100" in e for e in d.engel)
+    # Haftalık sayı haftalık pencereyi anar.
+    d = _den.Denetim({"tarih": "2026-10-04", "surum": 3, "haftalik": True,
+                      "piyasa": {"en_cok_hareket": hareket}, "gundem": metin})
+    d.atif()
+    assert any("Nikkei" in e for e in d.engel) and not any("BIST" in e for e in d.engel), d.engel
+
+    gercek = _gz.anlik
+    bugun = dt.date.today().isoformat()
+    try:
+        _gz.anlik = lambda hat: ({"hareket": [{"ad": "AUD/USD", "onceki": -0.18, "deger": 0.03, "z": 1.3},
+                                              {"ad": "USD/SEK", "onceki": 0.1, "deger": 0.9, "z": -2.4}]}
+                                 if hat == "fx-haber-endeksi" else {})
+        d = _den.Denetim({"tarih": bugun, "surum": 3, "gundem": {"x": "<p>Hiçbirini anmıyor.</p>"}})
+        d.haber_tonu()
+        assert d.engel and "USD/SEK" in d.engel[0] and "AUD/USD" not in d.engel[0], d.engel
+        d = _den.Denetim({"tarih": bugun, "surum": 3, "gundem": {"x": "<p>USD/SEK sıçradı.</p>"}})
+        d.haber_tonu()
+        assert not d.engel, d.engel
+        d = _den.Denetim({"tarih": bugun, "surum": 2, "gundem": {"x": "<p>USD/SEK sıçradı.</p>"}})
+        d.haber_tonu()
+        assert d.engel and "AUD/USD" in d.engel[0], "biçim 2'de 1σ hareketin anılma zorunluluğu kalktı"
+        # Özet de metindir: hareket yalnız maddede anılabilir.
+        d = _den.Denetim({"tarih": bugun, "surum": 3, "gundem": {},
+                          "ozet": {"ne_oldu": "<ul><li>USD/SEK 2,4σ sıçradı.</li></ul>"}})
+        d.haber_tonu()
+        assert not d.engel, f"özetteki anılma görülmüyor: {d.engel}"
+    finally:
+        _gz.anlik = gercek
+
+
+def _bicim3_gonderi_ve_birlestirme():
+    """Gönderi biçim 3 bölümlerini kayıt defterinden okur, ileriye bakışı
+    takvimden alır; birleştirme sürücüsünde daha yeni yazım kazanır."""
+    import importlib.util as _iu
+    kok = BURASI.parent
+    spec = _iu.spec_from_file_location("tweet_uret_b3", kok / "tweet" / "uret.py")
+    tu = _iu.module_from_spec(spec)
+    spec.loader.exec_module(tu)
+    import ayar as _a
+    b3 = tu.gundem_bolumleri({"surum": 3})
+    assert [i for i, _ in b3] == [y.id for y in _a.YAZI_BOLUMLERI_3 if y.tweet and y.id != "takvim"], b3
+    assert tu.gundem_bolumleri({"surum": 2}) == tu.GUNDEM_BOLUMLERI
+    src = inspect.getsource(tu.bulten_zinciri)
+    assert 'get("takvim")' in src and "gundem_bolumleri(b)" in src, "gönderi biçim 3 beyanını okumuyor"
+
+    import birlestir as _bl, tempfile, json as _j
+    with tempfile.TemporaryDirectory() as td:
+        a, o = Path(td) / "a.json", Path(td) / "b.json"
+        uzun_eski = {"gundem_kaynagi": "yazili", "yazi_zamani": "2026-10-02T04:30:00+00:00",
+                     "yorum": "eski " * 900, "gundem": {}}
+        kisa_yeni = {"gundem_kaynagi": "yazili", "yazi_zamani": "2026-10-02T09:10:00+00:00",
+                     "yorum": "yeni " * 300, "gundem": {}}
+        a.write_text(_j.dumps(uzun_eski), encoding="utf-8")
+        o.write_text(_j.dumps(kisa_yeni), encoding="utf-8")
+        assert _bl._bulten_coz("", str(a), str(o)) == 0
+        assert _j.loads(a.read_text(encoding="utf-8"))["yazi_zamani"] == kisa_yeni["yazi_zamani"], \
+            "kısaltılmış yeni yazı eski uzun yazıyla ezildi"
+        # Otomatik ölçüm yazılı sayıyı yine yenemez.
+        a.write_text(_j.dumps(dict(kisa_yeni)), encoding="utf-8")
+        o.write_text(_j.dumps({"gundem_kaynagi": "otomatik", "yorum": "x " * 5000}), encoding="utf-8")
+        _bl._bulten_coz("", str(a), str(o))
+        assert _j.loads(a.read_text(encoding="utf-8"))["gundem_kaynagi"] == "yazili"
+
+
 def main() -> int:
     import ayar, denetim, gozlem, grafik_veri, olay, rejim, soz, surpriz, tazeleme, uret
 
@@ -4347,6 +4667,15 @@ def main() -> int:
          _surum_ilerlemesi)
     sina("izlem kapsamı: her hat ya izlem taşır ya gerekçeli muaf; yayım bayrağı günlük seride yok",
          _izlem_kapsami)
+    sina("biçim 3: rehber tablosu ↔ kayıt defteri, sayının beyanı, taban metin yok", _bicim3_kayit_defteri)
+    sina("biçim 3: yeniden ölçüm yazılmış sayının biçimini korur", _bicim3_yeniden_olcum)
+    sina("biçim 3: yazma kapısı eski kimlikleri ve ne_bekleniyor'u reddeder, özet makineninkinin yerine geçer",
+         _bicim3_yazma_kapisi)
+    sina("biçim 3: denetim aralık/ENGEL sınırları (6 ENGEL hâli, UYARI hâlleri, haftalık, arşiv)", _bicim3_denetim)
+    sina("biçim 3: üslup ölçütü (7 ENGEL kalıbı, temiz metin, cümle uzunluğu, kapsam)", _bicim3_uslup)
+    sina("biçim 3: olgu tekrarı, özet∩okuma, kronik olgu, açılış örtüşmesi", _bicim3_tekrar)
+    sina("biçim 3: atıf penceresi sayının kipi, haber tonunda yalnız |z|≥2", _bicim3_atif_ve_ton)
+    sina("biçim 3: gönderi kayıt defterinden, birleştirmede yeni yazım kazanır", _bicim3_gonderi_ve_birlestirme)
 
     for ad in gecen:
         print(f"  ✓ {ad}")
