@@ -1,0 +1,673 @@
+{
+ "olusturma": "2026-10-01T20:58:28Z",
+ "sure_sn": 119.6,
+ "dosyalar": {
+  "bund_gunluk.csv.gz": {
+   "sha256": "79fc50a87f46eb189451f4fdca712a73d13e642324d698cc23e5f27b73fa4111",
+   "satir": 7049,
+   "kaynak": "Deutsche Bundesbank, BBSIS",
+   "aciklama": "Bund getirileri, %; _par = kupon ödemeli (yıllık kupon) getiri, _sifir = sıfır kuponlu Svensson; kalan vade 2/10/30 yıl",
+   "kapsam": {
+    "de10_par": {
+     "n": 7049,
+     "ilk": "1999-01-04",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9738
+    },
+    "de2_par": {
+     "n": 7049,
+     "ilk": "1999-01-04",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9738
+    },
+    "de30_par": {
+     "n": 6648,
+     "ilk": "2000-08-01",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9736
+    },
+    "de10_sifir": {
+     "n": 7049,
+     "ilk": "1999-01-04",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9738
+    }
+   }
+  },
+  "abd_gunluk.csv.gz": {
+   "sha256": "f6b2b9d111dbab614b055f228cf4a0633bace504cde5060875d5c34de656944b",
+   "satir": 6943,
+   "kaynak": "ABD Hazinesi, Daily Treasury Par Yield Curve",
+   "aciklama": "ABD Hazine par getirisi, %; 2 ve 10 yıl",
+   "kapsam": {
+    "us2": {
+     "n": 6942,
+     "ilk": "1999-01-04",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.959
+    },
+    "us10": {
+     "n": 6942,
+     "ilk": "1999-01-04",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.959
+    }
+   }
+  },
+  "eurusd_ecb.csv.gz": {
+   "sha256": "a0acbe08cd943ca6cc3b789232e1a06a8a507de3230e607b4277f2f03fb0b828",
+   "satir": 7167,
+   "kaynak": "ECB, EXR.D.USD.EUR.SP00.A",
+   "aciklama": "EUR/USD referans kuru (14:15 CET)",
+   "kapsam": {
+    "eurusd_ecb": {
+     "n": 7105,
+     "ilk": "1999-01-04",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9815
+    }
+   }
+  },
+  "irs_aylik.csv.gz": {
+   "sha256": "bbea9f66a437291fc151d1670b440036bb56feea5421ebbf4f4467a41f68d7b2",
+   "satir": 332,
+   "kaynak": "ECB, IRS.M.<ülke>.L.L40.CI.0000.EUR.N.Z",
+   "aciklama": "Maastricht ölçütü uzun vadeli (10 yıl) devlet tahvili getirisi, aylık ortalama, %; tarih ayın son günü",
+   "kapsam": {
+    "AT": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "BE": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "BG": {
+     "n": 284,
+     "ilk": "2003-01-31",
+     "son": "2026-08-31"
+    },
+    "CY": {
+     "n": 308,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "DE": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "EE": {
+     "n": 75,
+     "ilk": "2020-06-30",
+     "son": "2026-08-31"
+    },
+    "ES": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "FI": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "FR": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "GR": {
+     "n": 331,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "HR": {
+     "n": 249,
+     "ilk": "2005-12-31",
+     "son": "2026-08-31"
+    },
+    "I10": {
+     "n": 284,
+     "ilk": "2003-01-31",
+     "son": "2026-08-31"
+    },
+    "I9": {
+     "n": 305,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "IE": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "IT": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "LT": {
+     "n": 308,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "LU": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "LV": {
+     "n": 308,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "MT": {
+     "n": 308,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "NL": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "PT": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "SI": {
+     "n": 294,
+     "ilk": "2002-03-31",
+     "son": "2026-08-31"
+    },
+    "SK": {
+     "n": 308,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "U2": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    }
+   }
+  },
+  "ecb_egri.csv.gz": {
+   "sha256": "895ba6ede87e1b817d88cfa5630b2d9698ec6a67e8b29f8825221c3e76a0d77f",
+   "satir": 5642,
+   "kaynak": "ECB, YC.B.U2.EUR.4F.<G_N_A|G_N_C>.SV_C_YM.SR_<2Y|10Y>",
+   "aciklama": "Euro alanı devlet tahvili spot (sıfır kuponlu) getirisi, %; aaa = AAA notlu ihraççılar, tum = bütün ihraççılar",
+   "kapsam": {
+    "aaa_2y": {
+     "n": 5642,
+     "ilk": "2004-09-06",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9799
+    },
+    "tum_2y": {
+     "n": 5642,
+     "ilk": "2004-09-06",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9799
+    },
+    "aaa_10y": {
+     "n": 5642,
+     "ilk": "2004-09-06",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9799
+    },
+    "tum_10y": {
+     "n": 5642,
+     "ilk": "2004-09-06",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9799
+    }
+   }
+  },
+  "ecb_dfr.csv.gz": {
+   "sha256": "c629d129ebaeace065b63ae4e01b45a5c65c0abe98c78224b5ae4d033dfce162",
+   "satir": 10136,
+   "kaynak": "ECB, FM.D.U2.EUR.4F.KR.DFR.LEV",
+   "aciklama": "ECB mevduat imkânı faizi, %, günlük (takvim günü)",
+   "kapsam": {
+    "dfr": {
+     "n": 10136,
+     "ilk": "1999-01-01",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 1.0
+    }
+   }
+  },
+  "eurostat_aylik.csv.gz": {
+   "sha256": "fa2063950e56420f399dfd4d5b7830d0bff6f2980c8ebc6a453623729d10b6c1",
+   "satir": 332,
+   "kaynak": "Eurostat, irt_lt_mcby_m",
+   "aciklama": "AB yakınsama ölçütü uzun vadeli faiz, aylık, %; tarih ayın son günü",
+   "kapsam": {
+    "AT": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "BE": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "BG": {
+     "n": 284,
+     "ilk": "2003-01-31",
+     "son": "2026-08-31"
+    },
+    "CY": {
+     "n": 308,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "CZ": {
+     "n": 317,
+     "ilk": "2000-04-30",
+     "son": "2026-08-31"
+    },
+    "DE": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "DK": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "EA": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "EE": {
+     "n": 75,
+     "ilk": "2020-06-30",
+     "son": "2026-08-31"
+    },
+    "EL": {
+     "n": 331,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "ES": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "EU27_2020": {
+     "n": 308,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "FI": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "FR": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "HR": {
+     "n": 249,
+     "ilk": "2005-12-31",
+     "son": "2026-08-31"
+    },
+    "HU": {
+     "n": 308,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "IE": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "IT": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "LT": {
+     "n": 308,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "LU": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "LV": {
+     "n": 308,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "MT": {
+     "n": 308,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "NL": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "PL": {
+     "n": 308,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "PT": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "RO": {
+     "n": 257,
+     "ilk": "2005-04-30",
+     "son": "2026-08-31"
+    },
+    "SE": {
+     "n": 332,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "SI": {
+     "n": 294,
+     "ilk": "2002-03-31",
+     "son": "2026-08-31"
+    },
+    "SK": {
+     "n": 308,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "UK": {
+     "n": 316,
+     "ilk": "1999-01-31",
+     "son": "2025-04-30"
+    }
+   }
+  },
+  "yahoo_gunluk.csv.gz": {
+   "sha256": "1bbe8d76dde4278d2f06b02939b1d26591c91f28eb981856fe4255319e8d4f1c",
+   "satir": 14356,
+   "kaynak": "Yahoo Finance (yfinance), günlük kapanış",
+   "aciklama": "EUR/USD, DXY, EUR/CHF kapanış (tarih: Yahoo işlem günü)",
+   "kapsam": {
+    "eurusd": {
+     "n": 5925,
+     "ilk": "2003-12-01",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9943
+    },
+    "dxy": {
+     "n": 14155,
+     "ilk": "1971-01-04",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9733
+    },
+    "eurchf": {
+     "n": 6148,
+     "ilk": "2003-01-23",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9947
+    }
+   }
+  },
+  "cnbc_gunluk.csv.gz": {
+   "sha256": "f6b9ba9926a2ca0c3356159e58b08b10b30e05f65fe391b490ca9ddbdbb56701",
+   "satir": 8026,
+   "kaynak": "CNBC (Tullett Prebon), günlük bar ucu",
+   "aciklama": "Gösterge (benchmark) devlet tahvili getirisi, %; eurusd = EUR/USD; günlük kapanış, tarih CNBC işlem günü (New York saati); hafta sonu barları kaynakta cumanın kopyası",
+   "kapsam": {
+    "fr10y": {
+     "n": 7248,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9728
+    },
+    "de10y": {
+     "n": 7388,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9792
+    },
+    "it10y": {
+     "n": 7356,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9683
+    },
+    "es10y": {
+     "n": 7392,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9721
+    },
+    "be10y": {
+     "n": 7415,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9736
+    },
+    "nl10y": {
+     "n": 3632,
+     "ilk": "2014-11-25",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9932
+    },
+    "at10y": {
+     "n": 6998,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9143
+    },
+    "pt10y": {
+     "n": 3886,
+     "ilk": "2011-09-20",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9314
+    },
+    "gr10y": {
+     "n": 3267,
+     "ilk": "2014-11-25",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9806
+    },
+    "fr2y": {
+     "n": 7449,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9719
+    },
+    "de2y": {
+     "n": 7385,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9693
+    },
+    "it2y": {
+     "n": 7396,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.967
+    },
+    "es2y": {
+     "n": 3732,
+     "ilk": "2014-11-25",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9942
+    },
+    "fr5y": {
+     "n": 7382,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9702
+    },
+    "de5y": {
+     "n": 7369,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9703
+    },
+    "fr30y": {
+     "n": 7385,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9719
+    },
+    "de30y": {
+     "n": 7413,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9678
+    },
+    "us2y": {
+     "n": 6624,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.949
+    },
+    "us10y": {
+     "n": 6792,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9586
+    },
+    "eurusd": {
+     "n": 7319,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9996
+    }
+   }
+  },
+  "cnbc_aylik.csv.gz": {
+   "sha256": "85ee0cac6a807a63b02d86c7cf9d3124261078ed93c43cc5ae48a8865ecccd37",
+   "satir": 188,
+   "kaynak": "CNBC (Tullett Prebon), ALL grafik ucu",
+   "aciklama": "Gösterge devlet tahvili getirisi, aylık kapanış, %",
+   "kapsam": {
+    "fr10y": {
+     "n": 130,
+     "ilk": "1994-01-01",
+     "son": "2026-07-01"
+    },
+    "de10y": {
+     "n": 141,
+     "ilk": "1990-07-01",
+     "son": "2026-07-01"
+    },
+    "it10y": {
+     "n": 110,
+     "ilk": "1999-01-01",
+     "son": "2026-07-01"
+    },
+    "es10y": {
+     "n": 131,
+     "ilk": "1994-01-01",
+     "son": "2026-10-01"
+    },
+    "be10y": {
+     "n": 132,
+     "ilk": "1993-10-01",
+     "son": "2026-10-01"
+    },
+    "nl10y": {
+     "n": 49,
+     "ilk": "2014-10-01",
+     "son": "2026-10-01"
+    },
+    "at10y": {
+     "n": 127,
+     "ilk": "1994-01-01",
+     "son": "2026-10-01"
+    },
+    "pt10y": {
+     "n": 58,
+     "ilk": "2011-07-01",
+     "son": "2026-07-01"
+    },
+    "gr10y": {
+     "n": 48,
+     "ilk": "2014-10-01",
+     "son": "2026-07-01"
+    },
+    "fr2y": {
+     "n": 131,
+     "ilk": "1994-01-01",
+     "son": "2026-10-01"
+    },
+    "de2y": {
+     "n": 131,
+     "ilk": "1994-01-01",
+     "son": "2026-10-01"
+    },
+    "it2y": {
+     "n": 111,
+     "ilk": "1999-01-01",
+     "son": "2026-10-01"
+    },
+    "es2y": {
+     "n": 49,
+     "ilk": "2014-10-01",
+     "son": "2026-10-01"
+    },
+    "fr5y": {
+     "n": 111,
+     "ilk": "1999-01-01",
+     "son": "2026-10-01"
+    },
+    "de5y": {
+     "n": 131,
+     "ilk": "1994-01-01",
+     "son": "2026-10-01"
+    },
+    "fr30y": {
+     "n": 110,
+     "ilk": "1999-01-01",
+     "son": "2026-07-01"
+    },
+    "de30y": {
+     "n": 129,
+     "ilk": "1994-01-01",
+     "son": "2026-10-01"
+    },
+    "us2y": {
+     "n": 151,
+     "ilk": "1989-01-01",
+     "son": "2026-07-01"
+    },
+    "us10y": {
+     "n": 183,
+     "ilk": "1980-01-01",
+     "son": "2026-07-01"
+    },
+    "eurusd": {
+     "n": 187,
+     "ilk": "1980-01-01",
+     "son": "2026-07-01"
+    }
+   }
+  }
+ },
+ "uyarilar": [
+  "bund_gunluk.csv.gz:de30_par beklenenden geç başlıyor (2000-08-01 > 1999-02-01)",
+  "cnbc_gunluk.csv.gz:nl10y beklenenden geç başlıyor (2014-11-25 > 2000-01-10)",
+  "cnbc_gunluk.csv.gz:pt10y beklenenden geç başlıyor (2011-09-20 > 2000-01-10)",
+  "cnbc_gunluk.csv.gz:gr10y beklenenden geç başlıyor (2014-11-25 > 2000-01-10)",
+  "cnbc_gunluk.csv.gz:es2y beklenenden geç başlıyor (2014-11-25 > 2000-01-10)"
+ ]
+}
