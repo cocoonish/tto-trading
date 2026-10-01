@@ -162,9 +162,10 @@ günlük sayıda onları reddeder). Haftalık sayının bölüm sırası ve alt 
 
 **Toplam yazı (manşet + madde + okuma + gündem): günlük hedef 1.000–1.700
 kelime, haftalık 6.000–9.000.** Günlükte 2.100, haftalıkta 10.800 kelimeyi aşan
-yazı denetimde ENGEL alır; bir bölüm kendi üst sınırının 1,5 katını aşarsa o da
-ENGEL'dir. Aralığın altı ve üst sınırla 1,5 katı arası yalnız UYARI'dır:
-söyleyecek az şey varsa az yaz. Boş zorunlu bölüm ENGEL'dir.
+yazı ve haftalıkta 4.500 kelimenin altında kalan yazı denetimde ENGEL alır; bir
+bölüm kendi üst sınırının 1,5 katını aşarsa o da ENGEL'dir. Bunların dışında
+aralığın altı ve üst sınırla 1,5 katı arası yalnız UYARI'dır: söyleyecek az şey
+varsa az yaz (haftalıkta 4.500 tabanına kadar). Boş zorunlu bölüm ENGEL'dir.
 
 Aralık 01.10.2026 akşamı genişledi (okur: "önceye göre çok beğendim ama biraz
 kısa; tekrara kaçmadan daha fazla ayrıntı"). Genişleyen yer tekrar değil
@@ -225,8 +226,8 @@ sıralama zorunlu. Bölümlerin alt konuları:
 | `risk` | 2–4 madde: tetik · etki yönü · olasılığını artıran ölçü ve onun eşiği |
 
 `takvim`: her yayım için **hangi sonuç neyi değiştirir** — beklenti sayısını
-yineleme, tablo basıyor; ÖNCEKİ değer kıyas için yazılabilir (tablo onu her
-zaman basmaz). Haftalık sayıda önümüzdeki haftanın her takvim maddesi
+yineleme, tablo basıyor; ÖNCEKİ değer kıyas için yazılabilir (tablo onu
+basmaz). Haftalık sayıda önümüzdeki haftanın her takvim maddesi
 burada tek tek işlenir ve sayısal beklentisi olan her maddenin takvim kaydında
 `beklenti_sayi` alanının dolu olduğunu doğrula (sürpriz ölçümü o alanla çalışır;
 serbest metinden sayı türetilmez). Beklenti yoksa yokluğunu YAZMA — tablo "—"
@@ -363,7 +364,8 @@ sınar: süreç dili ENGEL, bütçeli kalıplar UYARI.
    bölge başkanı… bir diğeri", "haber akışına göre" yazılmaz.
 10. **Geçmiş çağrılar** söz defterinde durur. Günlük sayıda düzyazıda sayı
     başına en çok bir atıf, "(20.09 notu)" biçiminde; haftalık sayıda atıf
-    YALNIZ karne bölümündedir ve kapanan kayıt sayısı kadardır (öbür bölümlerde
+    YALNIZ karne bölümündedir ve hesabı verilen (kapanan ya da vadesi geçen)
+    kayıt sayısı kadardır, en az bir (öbür bölümlerde
     sıfır; bkz. "Haftaya bakış").
 11. **Fiyatlama dili serbest, tavsiye dili yasak.** "Piyasa X'i fiyatlıyor;
     risk Y yönünde asimetrik" yazılır; al/sat/hedef/pozisyon yazılmaz.
@@ -438,7 +440,7 @@ birikimin kaçta kaçı olduğuyla anılır.
 `<h3>` (ör. "Ana senaryo: …", "Alternatif: …", "Kuyruk: …"); ana senaryo İLK
 alt bölümdür, çünkü gönderi bölümün ilk paragrafını "Ana senaryo:" diye alır.
 Her patika üç parçadan kurulur:
-- **tetik** — adıyla bir yayım ya da bir seviye ve eşiği ("PPK 23 Ekim'de
+- **tetik** — adıyla bir yayım ya da bir seviye ve eşiği ("PPK 22 Ekim'de
   koridoru daraltırsa", "USD/TRY haftalık %0,5'i aşarsa");
 - **varlık etkisi** — TL faizi ve DİBS eğrisi, USD/TRY ve taşıma, BIST, ABD uzun
   ucu, altın ya da petrol: hangi yönde ve hangi mekanizmayla;
@@ -454,14 +456,19 @@ yapısal olarak "tutmadı" çıkar ve isabet oranı ölçtüğü şeyi değil se
 SAYISINI ölçerdi. Kaydın tezi ana senaryonun tezidir; teyit ölçüsü kaydın
 `ne_bakilacak` alanına, alternatifin tetiği ise aynı alana "şu olursa düşer"
 diye yazılır. **Vade tetiğin tarihidir** (PPK 22 Ekim'deyse vade 22 Ekim);
-tetik tarihsiz bir seviyeyse vade bir sonraki pazardır. Karne böylece ölçülen
+tetik tarihsiz bir seviyeyse vade bir sonraki pazardır. **Aynı tetiğe bağlı AÇIK
+bir ana senaryo kaydı varsa yeni kayıt açılmaz**: tez değiştiyse o kayıt
+güncellenir, değişmediyse dokunulmaz — aynı sonucu haftalar boyunca ayrı
+kayıtlarla saymak isabeti hafta sayısıyla ağırlıklandırırdı. Karne böylece ölçülen
 katmandan, tek kayıtla kurulur.
 
 **4. Önümüzdeki hafta — gün gün.** Her gün bir paragraf:
 `<p><strong>Pazartesi 5 Ekim.</strong> …</p>`. Günün içinde Türkiye önce.
-Önceki değer, anket beklentisi ve modelin tahmini (Hazine ihaleleri dahil)
-sayfanın ölçülen **"Haftanın takvimi"** tablosundadır; düzyazı o sayıları
-YİNELEMEZ, yalnız **iki yönlü sonuç → anlam** ("beklentinin üstünde gelirse
+Anket beklentisi ve modelin tahmini (Hazine ihaleleri dahil) sayfanın ölçülen
+**"Haftanın takvimi"** tablosundadır; düzyazı o sayıları YİNELEMEZ. **Önceki
+değer tabloda YOKTUR**: kıyas için gün paragrafında bir kez yazılır (sayfanın
+başka bir tablosunda — gösterge şeridi, haftalık değişim tablosu — zaten
+duruyorsa yinelenmez). Düzyazının asıl işi **iki yönlü sonuç → anlam** ("beklentinin üstünde gelirse
 X, altında gelirse Y") ve beklentiden ya da modelden sapmanın neyi
 değiştireceğini yazar. Merkez bankası toplantıları ve konuşmacılar adıyla;
 planı değişen takvim ("ne değişti"). Senaryo bölümü bir yayımı ancak tetik
@@ -469,20 +476,31 @@ olarak adıyla anar; aynı sonucu ikinci kez anlatmaz.
 
 **5. Haftanın karnesi.** Sayfa ölçülen karneyi bölümün başında **dizin**
 olarak basar: bu hafta kapanan (tuttu/kısmen/tutmadı sayımıyla), açılan, vadesi
-önümüzdeki haftaya düşen ve vadesi geçip hesabı verilmemiş sözler, her biri
+önümüzdeki haftaya düşen ve vadesi geçip açık kalan sözler, her biri
 konu ve tarihiyle; her konu, sözün tam metnine (söz, sonuç, ne bakılacak)
 sayfanın aşağısındaki söz defterinde bağlanır. Tam metin yalnız orada basılır.
 Yazı SAYIM YAPMAZ ve sözü yeniden yazmaz: neyin NEDEN tuttuğunu ya da
-tutmadığını ve geçen haftanın ana senaryosunun gerçekleşip gerçekleşmediğini
-yazar. Haftanın gelen verilerinin sonucu ÖZETİN evidir; karne bir veriyi ancak
+tutmadığını ve vadesi bu hafta dolan ana senaryonun gerçekleşip
+gerçekleşmediğini yazar; vadesi gelmemiş açık ana senaryo, teyit ölçüsünün
+bugünkü durumuyla tek cümleyle anılır. Haftanın gelen verilerinin sonucu ÖZETİN evidir; karne bir veriyi ancak
 bir sözün sonucunu belirlediyse ve rakamı yinelemeden anar. Geçmiş çağrı atfı
-("(27.09 notu)") yalnız bu bölümde ve kapanan kayıt sayısı kadar; öbür
+("(27.09 notu)") yalnız bu bölümde ve hesabı verilen kayıt sayısı kadar; öbür
 bölümlerde sıfır. Vadesi geçen bir söz bu bölümde hesabıyla kapanır ya da
-neden ölçülemediği kayda yazılır. Kapanmamış ama tezi sarsılmış bir kayıt
+neden ölçülemediği kayda yazılır.
+
+**SIRA KURALI — karnede kapatılacak her kayıt ÖLÇÜMDEN ÖNCE deftere
+işlenir.** Dizin ölçüm anında kurulur: bu bölümde kapatılan ya da notlanan
+kayıt (isabet, kapanış, sonuç) önce `izleme.json`a işlenir ve push edilir,
+sonra ölçüm `bulten.yml`'in `yeniden_olc` girdisiyle (`--yeniden-olc`) yeniden kurulur, sonra yazılır
+(temalardaki kuralın aynısı; bkz. "Defteri düzeltmek SAYFAYI düzeltmez").
+Sıra atlanırsa kayıt aynı sayfada "açık kalan" görünür ve bir sonraki pazarın
+"Bu hafta kapanan" listesine kayar. Kapanmamış ama tezi sarsılmış bir kayıt
 varsa kaydın kendisi güncellenir (izleme.json), burada tek cümleyle anılır.
 Okurun cümlesiyle yazılır, defterin diliyle değil: "27.09 notu TLREF'in hafta
 içinde koridor tavanına döneceğini söylemişti; döndü, çünkü …" — "kaydın tezi",
-"kurduğumuz kayıt", "çürütme ölçütü" gibi defter dili üslup kapısında ENGEL'dir.
+"kurduğumuz kayıt", "çürütme ölçütü" gibi defter dili üslup kapısında ENGEL'dir;
+birinci çoğul "demiştik" de okur dili kapısında yapım dilidir (her alanda ENGEL),
+izinli biçimler "(27.09 notu)" ve üçüncü tekil "27.09 notu … söylemişti".
 
 **6. Türkiye: piyasalar.** Haftalık hareketin kendisi (USD/TRY'nin, 2 ve 10
 yıllığın haftalık farkı ve σ'sı) özetin evidir; bu bölüm onun üzerine YENİ bir
@@ -627,6 +645,7 @@ Kalıcı çözüm rutin metnini claude.ai arayüzünden düzeltmektir.
 | "Rehberdeki on iki bölümü yaz. Haber bölümleri en az 200, yazı bölümleri en az 300, günlük yorum en az 350 kelime" (01.10.2026'da okundu) | Sayı biçim 3'teyse beş bölüm, uzunluk ARALIK (bkz. "Doldurulacak alanlar (biçim 3)"); toplam tavanın ve bölüm üst sınırının 1,5 katının üstü ENGEL | **Araçla kapatıldı**: `yaz.py` biçim 3 sayıda beyan dışı bölüm kimliğini reddeder ve mesajı bu satırı adıyla anar. Eski asgarilerle doğru kimliklere yazılan ~1.700 kelimelik not 01.10.2026 akşamından beri yeni hedef aralığın (1.000–1.700) içinde kalır; tekrarı olgu ölçüleri yakalar, toplam tavan (2.100) eski 4.000+ kelimelik düzene dönüşü durdurur |
 | Haftalık: "`ozet.ne_bekleniyor` önümüzdeki haftayı anlatır; takvimi `beklenti` bölümünde tek tek işle" | Biçim 3'te ileriye bakış `gundem.takvim` (haftalık başlığı "Önümüzdeki hafta — gün gün"); özet yalnız `ne_oldu` | **Araçla kapatıldı**: `yaz.py` biçim 3'te `ne_bekleniyor`u ve `beklenti` kimliğini reddeder |
 | Haftalık: "on iki bölüm, haftalık yorum en az 600 kelime" (01.10.2026'da okundu) | Haftalık sayının kendi dokuz alanı ve 6.000–9.000 kelimelik hedefi (bkz. "Haftaya bakış (haftalık kip)") | **Araçla kapatıldı**: `yaz.py` sayının beyanındaki kimlikler dışını reddeder ve mesajı haftalık kipi adıyla anar; denetim haftalık aralıkları ve alt bölüm sayısını ölçer (UYARI), 10.800 kelimenin üstünü ve **4.500 kelimenin altını** ENGEL sayar — eski talimatla doğru kimliklere yazılan ~2.800 kelimelik bir sayı artık yayına gitmez |
+| Haftalık 7. adım: "Haftalık yorum, karnenin o haftaki dökümünü bir paragrafla verir: kaç çağrı tuttu, kaçı tutmadı, en öğretici yanılgı" (01.10.2026'da okundu) | `yorum` Haftanın okumasıdır (tek tez, beş adım). Sayımı sayfanın ölçülen karne dizini basar; `gundem.karne` sayım yapmaz, yalnız neden tuttuğunu ya da tutmadığını yazar. Geçmiş çağrı atfı yalnız karnede; kapatılacak kayıt ölçümden önce deftere işlenir (karne SIRA KURALI) | **Kısmen araçla**: üslup Y03 haftalık sayıda karne dışındaki her geçmiş çağrı atfını ("yazmıştık", "(27.09 notu)") UYARI'yla sayar; okumadaki sayım paragrafı ölçülmüyor |
 
 **Silip yeniden kurmak da çözüm değil.** 27.08.2026'da denendi: aracının
 kurduğu bir rutin ateşlendiğinde depoya erişemiyor (sınama koşusu 24 saniyede,

@@ -231,15 +231,34 @@ def ozet(bugun_metni: str = "", onceki_izleme: dict | None = None,
         return {}
     bugun = _gun(bugun_metni) or date.today()
 
+    # HAFTALIK SAYIDA "YENİ" KARNENİN KENDİ LİSTESİDİR (01.10.2026): iki ucu
+    # dahil yedi günlük pencere, bir önceki pazar "yeni" basılmış kaydı bu pazar
+    # yine "yeni" sayıyordu, karne ise listelemiyordu — aynı sayfada iki blok
+    # çelişti. Tanım tek: `hafta_karnesi`. Kapanan süzgecinden ÖNCE kurulur:
+    # karnenin saydığı her kapanış söz defterinde de basılmalıdır.
+    hafta = (hafta_karnesi([_kayit(h, bugun) for h in kayitlar], onceki_izleme, bugun,
+                           _gun(onceki_gun))
+             if haftalik else None)
+    karne_yeni = ({str(k.get("konu")) for k in hafta["kapanan"] + hafta["acilan"]}
+                  if hafta is not None and hafta["kiyas_var"] else None)
+    karne_kapanan = ({str(k.get("konu")) for k in hafta["kapanan"]} if hafta is not None else set())
+
     acik, kapanan = [], []
     for ham in kayitlar:
         k = _kayit(ham, bugun)
         if k["durum"] == "acik":
             acik.append(k)
         elif k["durum"] == "kapandi":
-            # Kapanan kayıt yalnız bir süre gösterilir; vadesi yoksa açılışına bakılır.
-            yas = k["yas_gun"] if k["gun_kalan"] is None else -k["gun_kalan"]
-            if yas is not None and yas <= KAPANAN_PENCERE:
+            # Kapanan kayıt yalnız bir süre gösterilir. YAŞ KAPANIŞ GÜNÜNDEN
+            # ölçülür (01.10.2026 inceleme): vadeden ölçülünce vadesinden on
+            # günden fazla sonra kapanan bir söz — tam da karnenin "vadesi geçen
+            # söz hesabıyla kapanır" dediği kayıt — hiçbir sayıda sonucuyla
+            # basılmıyordu, karne ise onu sayıyordu. Kapanış günü yoksa vadeden,
+            # o da yoksa açılıştan.
+            kap = _gun(k.get("kapanis", ""))
+            yas = ((bugun - kap).days if kap is not None
+                   else k["yas_gun"] if k["gun_kalan"] is None else -k["gun_kalan"])
+            if (yas is not None and yas <= KAPANAN_PENCERE) or str(k.get("konu") or "") in karne_kapanan:
                 kapanan.append(k)
 
     # DEĞİŞEN / DURAN ayrımı. Üç ölçüt veriden türer, dördüncüsü önceki sayıdan.
@@ -250,15 +269,17 @@ def ozet(bugun_metni: str = "", onceki_izleme: dict | None = None,
     # kapanmış iki kayıt (437 kelime) 28–30.09'da her sabah "değişen" diye
     # tam metniyle basıldı. İki taraf da aynı süzgeçten (`_kayit`) geçer.
     degisen_konu = _degisenler([_kayit(h, bugun) for h in kayitlar], onceki_izleme)
-    # HAFTALIK SAYIDA "YENİ" KARNENİN KENDİ LİSTESİDİR (01.10.2026): iki ucu
-    # dahil yedi günlük pencere, bir önceki pazar "yeni" basılmış kaydı bu pazar
-    # yine "yeni" sayıyordu, karne ise listelemiyordu — aynı sayfada iki blok
-    # çelişti. Tanım tek: `hafta_karnesi`.
-    hafta = (hafta_karnesi([_kayit(h, bugun) for h in kayitlar], onceki_izleme, bugun,
-                           _gun(onceki_gun))
-             if haftalik else None)
-    karne_yeni = ({str(k.get("konu")) for k in hafta["kapanan"] + hafta["acilan"]}
-                  if hafta is not None and hafta["kiyas_var"] else None)
+    # GÜNLÜK SAYIDA DA "YENİ" ÖNCEKİ SAYININ BASILI LİSTELERİNDEN TÜRER
+    # (01.10.2026 inceleme). Takvim penceresi (`0 <= gün <= 1`) iki ucu dahil iki
+    # gündü: yazar kaydı ölçümden sonra açıp sayıyı yeniden ölçünce kayıt D
+    # günü "yeni" basılıyor, D+1'de yaşı 1 olduğu için yine "yeni" sayılıyordu
+    # (11 günlük çiftin 3'ünde, 02.10'da üç kayıt, 671 kelime). Önceki sayının
+    # açık listesi defterin tamamıdır: orada olmayan açık kayıt okur için
+    # yenidir, orada kapalı basılmamış kapalı kayıt yeni kapanmıştır. Önceki
+    # sayı yoksa (ya da defteri boş basılmışsa) pencere yedek olarak kalır.
+    gunluk_kiyas = (not haftalik and isinstance(onceki_izleme, dict) and "acik" in onceki_izleme)
+    onceki_acik_g = ({str(k.get("konu")) for k in (onceki_izleme.get("acik") or []) if isinstance(k, dict)}
+                     if gunluk_kiyas else set())
     # Önceki sayıda zaten KAPALI basılan kayıtlar: "bugün kapandı" ölçüsünün
     # veriden türeyen tabanı (kapanış günü yazılmamış eski kayıtlar için).
     onceki_kapali = ({str(k.get("konu")) for k in (onceki_izleme.get("kapanan") or [])
@@ -282,6 +303,8 @@ def ozet(bugun_metni: str = "", onceki_izleme: dict | None = None,
             kap = _gun(k.get("kapanis", ""))
             if karne_yeni is not None:
                 yeni_mi = str(k.get("konu") or "") in karne_yeni
+            elif gunluk_kiyas:
+                yeni_mi = str(k.get("konu") or "") not in (onceki_kapali or set())
             elif kap is not None:
                 yeni_mi = 0 <= (bugun - kap).days <= yeni_pencere
             elif onceki_kapali is not None:
@@ -290,8 +313,13 @@ def ozet(bugun_metni: str = "", onceki_izleme: dict | None = None,
                 yeni_mi = False
             vade_yakin = False
         else:
-            yeni_mi = (str(k.get("konu") or "") in karne_yeni if karne_yeni is not None
-                       else (k.get("yas_gun") is not None and k["yas_gun"] <= yeni_pencere))
+            konu = str(k.get("konu") or "")
+            if karne_yeni is not None:
+                yeni_mi = konu in karne_yeni
+            elif gunluk_kiyas:
+                yeni_mi = konu not in onceki_acik_g and konu not in (onceki_kapali or set())
+            else:
+                yeni_mi = k.get("yas_gun") is not None and k["yas_gun"] <= yeni_pencere
             # Vadesi GELEN ya da GEÇEN açık söz öne çıkar: bülten önce kendi
             # gecikmesini gösterir.
             vade_yakin = kalan is not None and kalan <= vade_yakin_gun

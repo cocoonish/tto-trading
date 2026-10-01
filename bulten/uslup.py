@@ -38,10 +38,14 @@ class Kalip:
     # standart adlar) ÖLÇEKLENMEZ: bir sayıda hiç geçmemesi gerekeni uzunluk
     # meşrulaştırmaz.
     olcekli: bool = False
-    # Kalıbın SAYILMADIĞI alanlar (yazi_alanlari adlarıyla). Haftalık karne
-    # bölümünün görevi geçmiş çağrıyı anlatmaktır; "demiştik" orada bütçeye
-    # girmez, öbür bölümlerde girer (rehber: "geçmiş çağrı atfı yalnız karnede").
+    # Kalıbın genel bütçeyle SAYILMADIĞI alanlar (yazi_alanlari adlarıyla).
+    # Haftalık karne bölümünün görevi geçmiş çağrıyı anlatmaktır; atıf orada
+    # genel bütçeye girmez — kendi bütçesi çağırandan gelir (`olc(muaf_butce=)`:
+    # karnede kapanan kayıt sayısı kadar), verilmezse sınırsız.
     muaf: tuple[str, ...] = ()
+    # Haftalık sayıda muaf alanların DIŞINDAKİ bütçe (None → `butce`). Rehber
+    # kural 10: haftalıkta geçmiş çağrı atfı karne dışında SIFIR.
+    haftalik_butce: int | None = None
 
 
 def _k(desen: str, bayrak=0) -> re.Pattern:
@@ -105,10 +109,17 @@ KALIPLAR: tuple[Kalip, ...] = (
     # ÖLÇEKLENMEZ (01.10.2026, inceleme): ilk yazım bütçeyi uzunlukla büyütüyordu
     # ve 9.000 kelimelik haftalıkta beş atfı her bölüme yaymaya izin veriyordu;
     # rehber ise haftalıkta atfı karneye hapseder. Karne muaf, kalanı bir.
-    Kalip("Y03", "'yazmıştık' ailesi",
-          _k(r"\b(?:yazmıştık|söylemiştik|demiştik|koymuştuk|beklemiştik|sormuştuk)\b"),
-          1, "geçmişe atıf sayı başına en çok bir kez (haftalıkta yalnız karne bölümünde)",
-          muaf=("gundem.karne",)),
+    # İKİ BİÇİM TEK SAYIM (01.10.2026 inceleme): kuralın kendi önerdiği biçim
+    # "(27.09 notu)" hiç sayılmıyordu; atıf fiilleri ile not atfı aynı bütçeyi
+    # paylaşır. "demiştik" BU AİLEDE YOK: okur dili kapısı (ortak/okur_dili
+    # YAPIM_DILI) onu her alanda ENGEL sayıyor; burada da bulunsaydı karne
+    # muafiyeti yazarı ENGEL'e götürürdü — tek tanım okur_dili'ndedir.
+    Kalip("Y03", "geçmiş çağrı atfı ('yazmıştık', '27.09 notu')",
+          _k(r"\b(?:yazmıştık|söylemiştik|koymuştuk|beklemiştik|sormuştuk)\b"
+             r"|\b\d{1,2}\.\d{2}(?:\.\d{4})?\s+not(?:u|unun|una|unda|undaki|unu)\b"),
+          1, "geçmiş çağrı atfı günlük sayıda en çok bir kez; haftalıkta yalnız karne bölümünde "
+             "(kapanan kayıt sayısı kadar), '(27.09 notu)' ya da üçüncü tekille ('27.09 notu … söylemişti')",
+          muaf=("gundem.karne",), haftalik_butce=0),
     Kalip("Y10", "σ yerine uzun tanım",
           _k(r"kendi\s+(?:günlük\s+|haftalık\s+)?oynaklığ\w+\s+(?:\([^)]*\)\s+)?(?:göre\s+)?[\d,]+\s+(?:kat|standart)"),
           1, "olağandışılığı '(1,5σ)' biçiminde yaz", True),
@@ -157,8 +168,12 @@ def _cumleler(metin: str) -> list[str]:
     return [p for p in parca if len(p.split()) >= 3]
 
 
-def olc(alanlar: dict[str, str]) -> dict:
-    """alanlar: alan adı → düz metin. Dönüş: {engel: [...], uyari: [...], sayim: {...}}."""
+def olc(alanlar: dict[str, str], haftalik: bool = False,
+        muaf_butce: dict[str, int] | None = None) -> dict:
+    """alanlar: alan adı → düz metin. Dönüş: {engel: [...], uyari: [...], sayim: {...}}.
+
+    `haftalik`: kalıbın `haftalik_butce`si geçerli. `muaf_butce`: muaf alanların
+    kendi bütçesi (alan → sayı); verilmeyen muaf alan sayılmaz."""
     engel, uyari, sayim = [], [], {}
     tum = " \n".join(alanlar.values())
     # Ölçek: her ~1.700 kelime bir sabah notu payı (günlük sayıda 1).
@@ -167,6 +182,12 @@ def olc(alanlar: dict[str, str]) -> dict:
         bulunan = []
         for ad, t in alanlar.items():
             if ad in k.muaf:
+                mb = (muaf_butce or {}).get(ad)
+                if mb is not None and k.butce is not None:
+                    muafta = [m.group(0) for m in k.desen.finditer(t)]
+                    if len(muafta) > mb:
+                        uyari.append(f"Üslup {k.kod} ({k.ad}) [{ad}] {len(muafta)} kez (bütçe {mb}): "
+                                     f"“{'”, “'.join(muafta[:3])}”. {k.oneri}.")
                 continue
             for m in k.desen.finditer(t):
                 bulunan.append((ad, m.group(0)))
@@ -176,7 +197,8 @@ def olc(alanlar: dict[str, str]) -> dict:
         ornek = "; ".join(f"[{a}] “{g}”" for a, g in bulunan[:3])
         if k.butce is None:
             engel.append(f"ÜSLUP {k.kod} ({k.ad}) — {len(bulunan)} yerde: {ornek}. {k.oneri}.")
-        elif len(bulunan) > (butce := k.butce * (kat if k.olcekli else 1)):
+        elif len(bulunan) > (butce := (k.haftalik_butce if haftalik and k.haftalik_butce is not None
+                                       else k.butce * (kat if k.olcekli else 1))):
             uyari.append(f"Üslup {k.kod} ({k.ad}) {len(bulunan)} kez (bütçe {butce}): {ornek}. {k.oneri}.")
     kelime = len(tum.split())
     yani = len(YANI.findall(tum))

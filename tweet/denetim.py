@@ -212,7 +212,14 @@ def denetle(metin: str, tur: str = "bulten") -> tuple[list[str], list[str]]:
     # gönderimi durdurmaz, kayda düşer ve yazan kişi kararını kendisi verir.
     alt = m.lower()
     belirsiz = {"yukarıda", "aşağıda"}
-    izler = [iz for iz in _site_izleri() if iz in alt]
+    # Sol sözcük sınırı üreticiyle TEK tanım (uret.SOL_SINIR): "kapasitede"
+    # içindeki "sitede" bir site atfı değildir.
+    try:
+        import uret as _ur
+        sol = _ur.SOL_SINIR
+    except Exception:                                          # noqa: BLE001
+        sol = r"(?<![0-9A-Za-zÇĞİIÖŞÜçğıiöşü])"
+    izler = [iz for iz in _site_izleri() if re.search(sol + re.escape(iz), alt)]
     kesin = [iz for iz in izler if iz not in belirsiz]
     if kesin:
         engel.append("siteye/bültene atıf var: " + ", ".join(repr(i) for i in kesin[:4]))

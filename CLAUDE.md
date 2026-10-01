@@ -3831,12 +3831,13 @@ olan söz defteri, kilit haber, tekrar ölçüleri, rejim farkı ve gösterge
 şeridi. Pazar adımları bir saat ileri alındı; gönderi tavanı (3.800) kaldı,
 haftalık kipe ayrı bütçe ve ANA SENARYO girdi.
 
-Tabloya giren kalemlerin üçü ölçülerek ÇIKARILDI ve gerekçeleri `ayar.py`de
+Tabloya giren kalemlerin ikisi ölçülerek ÇIKARILDI ve gerekçeleri `ayar.py`de
 adıyla durur: 1 yıllık TÜFEX düğümü vade kaydığında tek günde kuruluş
 sıçraması yapıyor (28.09: reel getiri 9,06 → 6,42) ve eşiksiz tabloda
-"haftanın farkı" gibi basılırdı; TCMB sterilizasyonunun saati özette yazılmıyor
-ve dönemi bilinmeyen bir sayı dönemiyle basılamaz; döviz akımının "ay başından"
-birikimi ay sınırında başka bir ayın birikimiyle yan yana basılıyordu. İki
+"haftanın farkı" gibi basılırdı; döviz akımının "ay başından" birikimi ay
+sınırında başka bir ayın birikimiyle yan yana basılıyordu. Üçüncüsü
+(sterilizasyon) ilk turda yanlış bir gerekçeyle çıkarıldı ve ikinci turda geri
+kondu — aşağıda. İki
 saat de düzeldi: GSYH'ye oranlar çeyreklik bir ALANA bağlıdır (`CEYREKLIK_ALAN`;
 ödemeler dengesinde 04.09'daki çeyrek yayımı hiç duyurulmamış, 13.09'da ana
 saat temmuza geçince aynı değer "Tem" gözlemi gibi basılmıştı) ve bütçenin
@@ -3913,5 +3914,49 @@ sınırlarının toplamı (2.450) toplam ENGEL'inin (2.100) üstünde; haftalık
 kapatılan tutarsızlığın günlük eşi, kullanıcının aynı gün koyduğu günlük
 aralığa dokunmamak için bırakıldı. (iv) Bülten dumanının SIGTERM maddesi bu
 oturumda dört koşunun birinde rastgele düştü (önceden var; bu turun
-koşularında düşmedi). (v) TCMB sterilizasyonu haftalık tabloya ancak hat onun
-saatini yazınca döner.
+koşularında düşmedi).
+
+İKİNCİ İNCELEME TURU (donmuş ca1c186b, beş mercek, 27 bulgu: 25 doğrulandı, 2
+çürütüldü) ilk turun düzeltmelerinin kendisini ölçtü ve en değerli bulguları
+"bir düzeltme genelleştirilmeden tamamlanmaz" sınıfından çıktı. (1) İLK TURUN BİR
+DÜZELTMESİ YANLIŞ BİR ÖLÇÜME DAYANIYORDU: sterilizasyon "APİ tablosu ana saatin
+bir gün gerisinde bitebiliyor" diye çıkarılmıştı; hattın ana saati
+(`Fonlama/veri.son_gun`) tanımı gereği APİ çekirdeğinin (ste_top dahil) tam
+olduğu son gündür ve 39 özet sürümünün 39'unda ste_top = net_fonlama = _tarih.
+Bir düzeltme de bir iddiadır; gerekçesi ölçülmeden uygulanırsa kusuru başka yere
+taşır. (2) HAFTALIK KİPE YAPILAN DÜZELTME GÜNLÜĞE GENELLEŞTİRİLMEMİŞTİ ve
+yarınki sayıyı vuracaktı: söz defterinin günlük "yeni" penceresi iki ucu dahil
+iki gündü, yazar kaydı ölçümden sonra açıp yeniden ölçünce kayıt D'de ve D+1'de
+iki kez tam metinle basılıyordu (02.10'da üç kayıt, 671 kelime; 11 günlük çiftin
+3'ünde). Günlükte de "yeni" önceki YAZILMIŞ sayının basılı listelerinden türer;
+pazar sayısı yazılmadığında pazartesinin söz ve kilit kıyası artık okura hiç
+çıkmamış pazara değil cumaya bakar — dört kıyas noktası tek tanımdan
+(`uret._onceki_yazili`). (3) BİR KAPI YENİ DÜZENİN TÜKETİCİSİNİ GÖRMÜYORDU:
+gönderim kapısı site izini ham alt dizeyle arıyordu ("kapasitede" ⊃ "sitede"),
+üretici aynı cümleyi sözcük sınırıyla meşru sayıyordu — haftalık gönderiye giren
+emtia ve makro satırları bu kusuru tetikleyecek metni taşıyor; ve haftalık dar
+satırlar `_kirp`ın yan tümce kademesinde sayıyla biten kesimi sıklaştırıp
+gönderiyi "sayının ortasında kesik" ENGEL'ine sokuyordu (gerçek paragrafların
+%2,3'ü; gönderi başına ≈ %12). Aynı sınamanın kendi fikstürü `_kirp`ın üçüncü
+bir kusurunu da gösterdi: cümle kademesi sıra sayısındaki noktayı ("3. gün")
+cümle sonu sayıyordu. Üç düzeltme de kırpmanın kendisinde. (4) YIL SINIRI İKİ
+YERDE DAHA: OVP'nin üç izlemi program yılı değişince 2027 kurunu 2026'nınkiyle
+kıyaslayıp "önemli" sahte hareket basacaktı, yılbaşından birikim yeni yılın ilk
+haftasında önceki yılın toplamıyla yan yana duracaktı — ay sınırında kapatılan
+kusurun yıllık eşi. Genel çözüm `Izlem.donem_alani`: kıyas noktası başka dönemin
+ölçümüyse olay yok, tablo "—". (5) Kural ile kod iki yerde ayrışmıştı: rehber
+haftalıkta karne dışı atfı SIFIR diyordu, kod BİR sayıyordu ve kuralın kendi
+biçimi "(27.09 notu)" hiç sayılmıyordu; "demiştik" üslup kapısında karnede serbest,
+okur dili kapısında her yerde ENGEL'di. Y03 artık iki biçimi tek sayımla, kipe
+bağlı bütçeyle sayıyor ve "demiştik"in tek tanımı okur dili kapısında. Ayrıca
+GSYH büyümesi "Yabancı akımı" başlığı altında basılacaktı (grup kayması), karne
+vadesinden on gün sonra kapanan bir sözü sayıp sonucunu hiçbir yerde basmıyordu
+(yaş artık kapanış gününden) ve rehber tabloda olmayan bir sütuna ("önceki değer")
+havale ediyordu. ÇÜRÜTÜLEN iki bulgudan biri aynı kaydın hem "açılan" hem
+"vadesi yaklaşan" listesinde durmasını kusur sayıyordu (iki ayrı olgu, bilerek);
+öbürü karnenin "bir hafta geç kapattığı"nı söylüyordu — yazar kaydı ölçümden
+önce deftere işleyip yeniden ölçünce karne aynı gün doğru — git geçmişinde dört pazarın dördünde yazarın defter commit'inden ~70
+saniye sonra yeni bir ölçüm commit'i var. Kural rehbere SIRA KURALI olarak
+yazıldı ve sayfanın başlığı ölçüm anında doğru kalan olguya çekildi ("vadesi
+geçmiş, açık kalan"). AÇIK: izleme görüntüsünü defterle kıyaslayan bir ENGEL yok
+(temalarda var); sıra atlanırsa sayfa eski karneyi basar.

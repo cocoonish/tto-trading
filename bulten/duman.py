@@ -1127,10 +1127,18 @@ def _soz_degisen_normalize():
          "acilis": "2026-09-10", "kapanis": "2026-10-01"},
         {"konu": "C", "soz": "s", "durum": "kapandi", "isabet": "tuttu", "vade": "2026-09-30",
          "acilis": "2026-09-20"}]}
+    # 30.09 sayısının BASTIĞI defter: B o gün henüz AÇIK (kapanışı 01.10).
+    # Kapanış günü gelecekte olan bir kayıt fikstürün kendi tutarsızlığıydı;
+    # basılı listelerden türeyen "yeni" kuralı onu doğru biçimde reddeder.
+    defter_30 = {"kayitlar": [dict(defter["kayitlar"][0]),
+                              {"konu": "B", "soz": "s", "durum": "acik", "vade": "2026-09-25",
+                               "acilis": "2026-09-10"},
+                              dict(defter["kayitlar"][2])]}
     gercek = _s.oku
     try:
-        _s.oku = lambda: defter
+        _s.oku = lambda: defter_30
         ilk = _s.ozet("2026-09-30", {"acik": [], "kapanan": []})
+        _s.oku = lambda: defter
         basilan = {"acik": ilk["acik"], "kapanan": ilk["kapanan"]}
         o = _s.ozet("2026-10-01", basilan)
         k = {x["konu"]: x for x in o["kapanan"]}
@@ -1142,6 +1150,127 @@ def _soz_degisen_normalize():
         assert not {x["konu"]: x for x in o2["kapanan"]}["A"]["degisti"]
     finally:
         _s.oku = gercek
+
+
+def _inceleme_tur2():
+    """01.10.2026 ikinci inceleme turu (donmuş ca1c186b) — her bulgu kendi maddesi."""
+    import soz as _s, olay as _o, gozlem as _g, uret as _u, ayar as _a
+    import tempfile, json as _j
+    from datetime import datetime as _dt
+
+    # (1) GÜNLÜK "YENİ" önceki YAZILMIŞ sayının basılı listelerinden: yazar
+    #     kaydı ölçümden sonra açıp yeniden ölçtüyse D günü yeni basıldı, D+1'de
+    #     yine "yeni" OLMAZ; yeniden ölçülmediyse D+1'de yenidir.
+    defter = {"kayitlar": [
+        {"konu": "N", "soz": "s", "durum": "acik", "acilis": "2026-10-01", "vade": "2026-11-03"},
+        {"konu": "R", "soz": "s", "durum": "kapandi", "isabet": "tuttu", "acilis": "2026-09-20",
+         "vade": "2026-10-01", "kapanis": "2026-10-01"}]}
+    gercek = _s.oku
+    try:
+        _s.oku = lambda: defter
+        # 01.10'un yeniden ölçülmüş sayısının BASTIĞI defter (normalize kayıtlar).
+        o1 = _s.ozet("2026-10-01", {"acik": [], "kapanan": []})
+        basti = {"acik": o1["acik"], "kapanan": o1["kapanan"]}
+        assert {k["konu"] for k in o1["acik"] + o1["kapanan"] if k["degisim_sebebi"] == "yeni"} == {"N", "R"}
+        o = _s.ozet("2026-10-02", basti)
+        assert not any(k["degisti"] for k in o["acik"] + o["kapanan"]), \
+            "önceki sayıda basılmış kayıt ertesi gün yine 'yeni' (iki uçlu pencere)"
+        o = _s.ozet("2026-10-02", {"acik": [], "kapanan": []})
+        d = {k["konu"]: k["degisim_sebebi"] for k in o["acik"] + o["kapanan"]}
+        assert d == {"N": "yeni", "R": "yeni"}, f"önceki sayının görmediği kayıt yeni sayılmadı: {d}"
+        # Önceki sayı yoksa pencere yedek olarak kalır.
+        assert {k["konu"] for k in _s.ozet("2026-10-02", None)["acik"] if k["degisti"]} == {"N"}
+
+        # (2) KARNENİN SAYDIĞI KAPANIŞ SÖZ DEFTERİNDE DE BASILIR: vadesinden on
+        #     günden fazla sonra kapanan söz sonucuyla okura ulaşmalı.
+        _s.oku = lambda: {"kayitlar": [
+            {"konu": "V", "soz": "s", "durum": "kapandi", "isabet": "kismen", "acilis": "2026-09-01",
+             "vade": "2026-09-20", "kapanis": "2026-10-02", "sonuc": "kısmen"}]}
+        o = _s.ozet("2026-10-04", {"acik": [{"konu": "V"}], "kapanan": []}, haftalik=True,
+                    onceki_gun="2026-09-27")
+        karne = {k["konu"] for k in o["hafta"]["kapanan"]}
+        assert karne == {"V"} and karne <= {k["konu"] for k in o["kapanan"]}, \
+            f"karnenin saydığı kapanış söz defterinde yok: karne {karne}, defter {[k['konu'] for k in o['kapanan']]}"
+        # Kapanış günü YOK, vadesi 19 gün önce: yaş vadeden ölçülür ve pencerenin
+        # dışında kalır — ama önceki pazar açık basıldığı için karne onu sayar;
+        # söz defteri de basmalı (karne ⊆ defter, kuralın kendisi).
+        _s.oku = lambda: {"kayitlar": [
+            {"konu": "W", "soz": "s", "durum": "kapandi", "isabet": "tuttu", "acilis": "2026-08-20",
+             "vade": "2026-09-15", "sonuc": "tuttu"}]}
+        o = _s.ozet("2026-10-04", {"acik": [{"konu": "W"}], "kapanan": []}, haftalik=True,
+                    onceki_gun="2026-09-27")
+        assert [k["konu"] for k in o["hafta"]["kapanan"]] == ["W"] and [k["konu"] for k in o["kapanan"]] == ["W"], \
+            "karnenin saydığı (tarihsiz) kapanış söz defterinde basılmıyor"
+        _s.oku = lambda: {"kayitlar": [
+            {"konu": "V", "soz": "s", "durum": "kapandi", "isabet": "kismen", "acilis": "2026-09-01",
+             "vade": "2026-09-20", "kapanis": "2026-10-02", "sonuc": "kısmen"}]}
+        # Günlükte de yaş kapanış gününden: 12 gün önceki vade, 2 gün önceki kapanış.
+        assert [k["konu"] for k in _s.ozet("2026-10-04", None)["kapanan"]] == ["V"], \
+            "vadesinden geç kapanan söz günlük söz defterine girmedi"
+    finally:
+        _s.oku = gercek
+
+    # (3) KIYAS NOKTASI TEK TANIM: günlükte de son YAZILMIŞ sayı. Pazar sayısı
+    #     yazılmadıysa pazartesi cumaya bakar (söz defteri ve kilit haber).
+    gercek_c = _u.CIKTI
+    with tempfile.TemporaryDirectory() as td:
+        Path(td, "2026-10-02.json").write_text(_j.dumps(
+            {"tarih": "2026-10-02", "gundem_kaynagi": "yazili", "izleme": {"acik": [{"konu": "CUMA"}]},
+             "haberler": {"kilit": [{"baslik": "Cuma kilidi", "baglanti": "https://a.b/c"}]}}), encoding="utf-8")
+        Path(td, "2026-10-04.json").write_text(_j.dumps(
+            {"tarih": "2026-10-04", "haftalik": True, "gundem_kaynagi": "otomatik",
+             "izleme": {"acik": [{"konu": "PAZAR"}]},
+             "haberler": {"kilit": [{"baslik": "Pazar kilidi", "baglanti": "https://a.b/d"}]}}), encoding="utf-8")
+        try:
+            _u.CIKTI = Path(td)
+            iz = _u._onceki_izleme("2026-10-05", False)
+            assert iz and iz["acik"][0]["konu"] == "CUMA", f"söz kıyası yazılmamış pazara bakıyor: {iz}"
+            import haber as _h
+            assert _u._onceki_kilit("2026-10-05", False) == _h.kilit_imza("Cuma kilidi", "https://a.b/c"), \
+                "kilit haber kıyası yazılmamış pazara bakıyor"
+            assert _u._onceki_haftalik("2026-10-11") is None, "yazılmamış pazar haftalık kıyas noktası sayıldı"
+        finally:
+            _u.CIKTI = gercek_c
+
+    # (4) DÖNEM ALANI: başka dönemin ölçümü kıyas değildir — yıl sınırında OVP
+    #     programın 2027 kurunu 2026'nınkiyle kıyaslamaz; aynı yılda kıyaslar.
+    iz = next(i for i in _a.IZLEMLER if i.hat == "ovp" and i.anahtar == "yil_sonu_ustel")
+    assert iz.donem_alani == "bu_yil"
+    assert all(i.donem_alani == "bu_yil" for i in _a.IZLEMLER if i.hat == "ovp" and i.anahtar in
+               ("yil_sonu_ustel", "sapma_bu_yil", "gereken_ort"))
+    bugun = _dt(2027, 1, 4)
+    assert _o.izlem_olayi(iz, {"yil_sonu_ustel": 56.3, "bu_yil": "2027"},
+                          {"yil_sonu_ustel": 51.0, "bu_yil": "2026"}, "04.01.2027", "31.12.2026", bugun) is None, \
+        "yıl sınırında program yılı değişti, fark hareket diye basıldı"
+    o = _o.izlem_olayi(iz, {"yil_sonu_ustel": 56.3, "bu_yil": "2026"},
+                       {"yil_sonu_ustel": 51.0, "bu_yil": "2026"}, "30.12.2026", "29.12.2026", bugun)
+    assert o is not None and o.seviye == "onemli", "aynı yıl içindeki hareket artık ölçülmüyor (kapı körleşti)"
+    # Tablo: yılbaşından birikim yeni yılda önceki yılın toplamıyla yan yana basılmaz.
+    kalem = next(i for i in _a.HAFTALIK_KALEMLER if i.anahtar == "toplam_ytd")
+    assert kalem.donem_alani == "yil", "yılbaşından birikimin dönem alanı yok"
+    eski = {"_tarih": "25.12.2026", "toplam_ytd": 12450.0, "yil": "2026"}
+    yeni = {"_tarih": "01.01.2027", "toplam_ytd": 310.0, "yil": "2027"}
+    led = [{"t": "2026-12-31T04:00:00", "v": "25.12.2026", "d": eski},
+           {"t": "2027-01-07T04:00:00", "v": "01.01.2027", "d": yeni}]
+    g_anlik, g_gecmis = _g.anlik, _g.gecmis_oku
+    try:
+        _g.anlik = lambda hat: yeni if hat == "yabanci-pozisyon" else None
+        _g.gecmis_oku = lambda hat: list(led) if hat == "yabanci-pozisyon" else []
+        satir = {r["anahtar"]: r for g in _o.hafta_tablosu(_dt(2027, 1, 3, 14, 3), _dt(2027, 1, 10))
+                 for r in g["satirlar"]}
+        r = satir.get("toplam_ytd")
+        assert r and r["onceki"] == "—" and r["onceki_donem"] == "", \
+            f"yılbaşından birikim önceki yılın toplamıyla yan yana basıldı: {r}"
+    finally:
+        _g.anlik, _g.gecmis_oku = g_anlik, g_gecmis
+
+    # (5) GRUP KAPSAMI: "Yabancı akımı" başlığı yalnız yabancı pozisyon hattını
+    #     taşır; GSYH büyümesi kendi grubunda (ilk yazımda akım başlığındaydı).
+    gruplar = {g for g, _ in _a.GRUPLAR}
+    for i in list(_a.IZLEMLER) + list(_a.HAFTALIK_KALEMLER):
+        assert i.grup in gruplar or i.grup == "", f"tanımsız grup: {i.hat}/{i.anahtar} → {i.grup}"
+    assert all(i.hat == "yabanci-pozisyon" for i in _a.IZLEMLER if i.grup == "akim"), \
+        [f"{i.hat}/{i.anahtar}" for i in _a.IZLEMLER if i.grup == "akim" and i.hat != "yabanci-pozisyon"]
 
 
 def _haftalik_olcum():
@@ -1342,12 +1471,28 @@ def _haftalik_olcum():
     # (5) ÜSLUP: yoğunluk bütçesi uzun sayıda ölçeklenir, mutlak kural ölçeklenmez.
     import uslup as _us
     dolgu = " kelime" * 6000
-    # Geçmiş çağrı atfı ÖLÇEKLENMEZ ve haftalık karnede sayılmaz (rehber: atıf
-    # yalnız karnede); karne dışında uzun sayıda da bütçe bir.
-    r = _us.olc({"gundem.kuresel": "Demiştik. Söylemiştik." + dolgu})
-    assert any("Y03" in u for u in r["uyari"]), "uzun sayıda karne dışına yayılan atıf bütçe kazandı"
-    r = _us.olc({"gundem.karne": "Demiştik. Söylemiştik. Beklemiştik." + dolgu})
-    assert not any("Y03" in u for u in r["uyari"]), "karne bölümünün geçmiş atfı uyarıldı"
+    # Geçmiş çağrı atfı ÖLÇEKLENMEZ; günlükte bütçe bir, haftalıkta karne
+    # dışında SIFIR, karnede çağıranın verdiği bütçe (rehber kural 10).
+    y03 = lambda r: any("Y03" in u for u in r["uyari"])
+    assert y03(_us.olc({"gundem.kuresel": "Yazmıştık. Söylemiştik." + dolgu})), \
+        "uzun sayıda karne dışına yayılan atıf bütçe kazandı"
+    assert not y03(_us.olc({"gundem.kuresel": "Yazmıştık." + dolgu})), "günlükte tek atıf uyarıldı"
+    assert y03(_us.olc({"gundem.kuresel": "Yazmıştık." + dolgu}, haftalik=True)), \
+        "haftalıkta karne dışındaki tek atıf sessiz geçti"
+    # Kuralın kendi biçimi de sayılır.
+    assert y03(_us.olc({"yorum": "TLREF tavana döndü (27.09 notu). Kur durdu (30.09 notu)."})), \
+        "'(27.09 notu)' biçimi sayılmıyor"
+    karne = "Yazmıştık. Söylemiştik. Beklemiştik." + dolgu
+    assert not y03(_us.olc({"gundem.karne": karne}, haftalik=True, muaf_butce={"gundem.karne": 3})), \
+        "karne bölümünün bütçe içi geçmiş atfı uyarıldı"
+    assert y03(_us.olc({"gundem.karne": karne}, haftalik=True, muaf_butce={"gundem.karne": 1})), \
+        "karne bölümünün bütçesi aşıldığı hâlde uyarı yok"
+    # Kabul edilen karne metni OKUR DİLİ kapısından da geçmeli: "demiştik"
+    # okur_dili'nde yapım dilidir ve bu aileye bilerek alınmaz.
+    import okur_dili as _od
+    assert not _od.tara(karne), f"karnenin kabul fikstürü okur dili kapısına takılıyor: {_od.tara(karne)[:2]}"
+    assert not _us.KALIPLAR[[k.kod for k in _us.KALIPLAR].index("Y03")].desen.search("demiştik"), \
+        "'demiştik' Y03'e geri girdi: okur dili kapısı onu ENGEL sayıyor, iki hüküm ayrışır"
     r = _us.olc({"a": "Bir yatırım bankası böyle düşünüyor." + dolgu})
     assert any("Y17" in u for u in r["uyari"]), "adsız kaynak uzun sayıda bütçe kazandı"
 
@@ -5549,6 +5694,8 @@ def main() -> int:
          _ayrinti_genislemesi)
     sina("haftalık 01.10: karne · eşik altı tablo · kıyas önceki haftalık · haftalık yazma kapısı · üslup ölçeği",
          _haftalik_olcum)
+    sina("inceleme 01.10 (2. tur): günlük 'yeni' basılı listeden · karne ⊆ söz defteri · yazılmış kıyas · dönem alanı · grup kapsamı",
+         _inceleme_tur2)
 
     for ad in gecen:
         print(f"  ✓ {ad}")

@@ -95,8 +95,13 @@ SITE_IZ_KALIPLARI = (
 # yani sol sınır şartı hiçbir gerçek izi düşürmez — yalnız sözcük ortasındaki
 # tesadüfi eşleşmeyi keser. Sağ tarafa sınır KONMAZ: Türkçe ekli yazımı
 # ("bültenin", "panosunda") tam da yakalanmak istenen biçimdir.
+# SOL SINIR TEK TANIM: gönderim kapısı (tweet/denetim) aynı sınırı kullanır.
+# Kapı izleri ham alt dizeyle arıyordu ve "kapasitede", "üniversitede",
+# "kapasitemiz" geçen meşru bir gönderiyi ENGEL'le durduruyordu — üretici aynı
+# cümleyi sözcük sınırıyla meşru sayıp gönderiye koyduğu hâlde (01.10.2026).
+SOL_SINIR = r"(?<![0-9A-Za-zÇĞİIÖŞÜçğıiöşü])"
 _SITE_IZ_RE = re.compile(
-    r"(?<![0-9A-Za-zÇĞİIÖŞÜçğıiöşü])(?:" + "|".join(re.escape(i) for i in SITE_IZLERI) + ")")
+    SOL_SINIR + r"(?:" + "|".join(re.escape(i) for i in SITE_IZLERI) + ")")
 
 
 def _site_izi_var(cumle: str) -> bool:
@@ -199,6 +204,9 @@ _ASILI = {"ve", "ile", "ama", "veya", "ya", "da", "de", "ki", "için", "gibi", "
 _ASILI_SON = re.compile(r"(?:\d|%|[(,;:—–-])$")
 
 
+_KIRP_CUMLE = re.compile(r"(?<![0-9])[.!?](?=\s+[A-ZÇĞİÖŞÜ\"«(])")
+
+
 def _kirp(metin: str, sinir: int) -> str:
     """Sınıra sığdırır — üç kademede, en okunurundan başlayarak.
 
@@ -216,16 +224,27 @@ def _kirp(metin: str, sinir: int) -> str:
     m = metin.strip()
     if len(m) <= sinir:
         return m
+    # Cümle sonu `_CUMLE` ile AYNI kuralla: noktadan önce rakam yok, sonra büyük
+    # harf. Ham ". " araması sıra sayısında ("3. gün", "12. ayını") ve binlik
+    # ayracında keserek satırı "…yükseldi 3." diye bitiriyordu.
     kes = -1
-    for isaret in (". ", "! ", "? "):
-        i = m.rfind(isaret, 0, sinir)
-        kes = max(kes, i + 1 if i > 0 else -1)
+    for c in _KIRP_CUMLE.finditer(m, 0, sinir):
+        kes = c.end()
     if kes >= 80:
         return m[:kes].strip()
+    # Yan tümce sınırında da sözcük ASILI kalmamalı: virgülle sıralanan rakam
+    # listesinde (BIST 30 %5,58 düşüşle 15.716, sanayi …) ilk aday sayıyla biter
+    # ve kalite kapısı onu "sayının ortasında kesik" diye ENGEL sayar — haftalık
+    # gönderinin dar satırlarında ölçüldü (gerçek paragrafların %2,3'ü). Aynı
+    # ayracın daha önceki adayına geri yürünür; hiçbiri uymazsa 3. kademe.
     for isaret in ("; ", ": ", " — ", " – ", ", "):
         i = m.rfind(isaret, 0, sinir - 1)
-        if i >= 80:
-            return m[:i].rstrip(" ,;:—–") + "…"
+        while i >= 80:
+            sol = m[:i].rstrip(" ,;:—–")
+            son = sol.rsplit(" ", 1)[-1]
+            if not (son.lower().strip("\"'()") in _ASILI or _ASILI_SON.search(son)):
+                return sol + "…"
+            i = m.rfind(isaret, 0, i)
     i = m.rfind(" ", 0, sinir - 1)
     govde = (m[:i] if i > 0 else m[:sinir - 1]).rstrip(" ,;:·(—–-")
     sozcukler = govde.split(" ")
@@ -238,7 +257,9 @@ def _kirp(metin: str, sinir: int) -> str:
 def _etiketle(etiket: str, metin: str) -> str:
     """'Kilit gelişme: Günün kilit gelişmesi …' ikilemesini önler: cümlenin ilk
     altı sözcüğü etiketin kök sözcüklerini taşıyorsa etiket düşer."""
-    kokler = {k[:5].lower() for k in etiket.split() if len(k) > 3}
+    # Üç harfli sözcük de kök sayılır ("Ana senaryo": {"ana", "senar"}); aksi
+    # hâlde "Bu senaryoda …" diye açılan paragraf etiketi yutuyordu.
+    kokler = {k[:5].lower() for k in etiket.split() if len(k) >= 3}
     bas = [w.strip('"\'(),;:.').lower()[:5] for w in metin.split()[:6]]
     if kokler and kokler <= set(bas):
         return metin
@@ -384,11 +405,19 @@ def bulten_zinciri(b: dict) -> list[str]:
     satirlar, toplam = [], 0
     blok = ((GUNDEM_SINIR_HAFTA if haftalik else GUNDEM_SINIR_3) if bicim3 else GUNDEM_SINIR)
     dolu = [(a, e) for a, e in gundem_bolumleri(b) if str(gundem.get(a) or "").strip()]
-    # Satır bütçesi etiket sayısına bölünür: dolu her etiketli bölüm sığar.
+    # Haftalıkta satır bütçesi etiket sayısına bölünür: dolu her etiketli bölüm
+    # sığar. GÜNLÜKTE BÖLÜNMEZ: üç satır 260 karakterle her durumda zaten sığıyor
+    # ve bölme günlükte yalnız içerik kaybettiriyordu (104 varyasyonda 22 satır).
     parca_sinir = (min(GUNDEM_PARCA, max(120, blok // max(1, len(dolu)) - 20))
-                   if bicim3 else GUNDEM_PARCA)
+                   if bicim3 and haftalik else GUNDEM_PARCA)
     for anahtar, etiket in dolu:
-        parca = _site_disi(_duz(ALT_BASLIK.sub(" ", str(gundem.get(anahtar) or ""))), anahtar)
+        ham = str(gundem.get(anahtar) or "")
+        # ANA SENARYO yalnız risk bölümünün İLK alt bölümünün gövdesidir: h3
+        # silinince alternatifin cümlesi aynı etiketle basılabiliyordu.
+        if haftalik and anahtar == "risk":
+            m_ = re.search(r"</h3>(.*?)(?=<h3\b|$)", ham, re.I | re.S)
+            ham = m_.group(1) if m_ else ham
+        parca = _site_disi(_duz(ALT_BASLIK.sub(" ", ham)), anahtar)
         if not parca:
             continue
         satir = _etiketle(etiket, _kirp(parca, parca_sinir))
@@ -435,18 +464,30 @@ def bulten_zinciri(b: dict) -> list[str]:
         bolumler.append("Pano: " + " · ".join(parcalar))
 
     # Biçim 3'te ileriye bakış yazı katmanının `takvim` bölümündedir.
+    gun_etiketleri: list[str] = []
     if int(b.get("surum") or 2) >= 3:
-        ne_bek = _site_disi(_duz((b.get("gundem") or {}).get("takvim") or ""), "takvim")
+        ham_takvim = str((b.get("gundem") or {}).get("takvim") or "")
+        ne_bek = _site_disi(_duz(ham_takvim), "takvim")
+        gun_etiketleri = [_duz(e).strip() for e in
+                          re.findall(r"<p\b[^>]*>\s*<strong>(.*?)</strong>", ham_takvim, re.I | re.S)]
     else:
         ne_bek = _site_disi(_duz(oz.get("ne_bekleniyor") or ""), "ne_bekleniyor")
     if ne_bek:
         etiket = "Önümüzdeki hafta: " if haftalik else "Beklenen: "
         # Metin zaten etiketle başlıyorsa ikilenmesin ("Önümüzdeki hafta:
         # Önümüzdeki hafta takvimde..." — 30.08 taslağında görüldü).
+        govde = _kirp(ne_bek, BEKLENTI_SINIR)
+        # Gün gün takvimde gün etiketi ("Salı 6 Ekim.") cümle sayılır; kırpma
+        # bir sonraki günün etiketinden hemen sonra keserse gönderi içeriksiz
+        # bir gün başlığıyla biter. Sondaki yalnız etiket düşer (baştaki kalır).
+        for e in gun_etiketleri:
+            if e and govde.endswith(" " + e):
+                govde = govde[: -len(e)].rstrip()
+                break
         if ne_bek.lower().startswith(etiket.split(":")[0].lower()):
-            bolumler.append(_kirp(ne_bek, BEKLENTI_SINIR))
+            bolumler.append(govde)
         else:
-            bolumler.append(etiket + _kirp(ne_bek, BEKLENTI_SINIR))
+            bolumler.append(etiket + govde)
     return [_kapat("\n\n".join(bolumler), SORUMLULUK_BULTEN)]
 
 

@@ -81,6 +81,14 @@ class Izlem:
     # USD genişledi: 38,9 → 40,7 mlr USD"); işaret değişirse fiil işaretin
     # kendisini söyler. Boş bırakılırsa cümle değişmez.
     eksi_ad: str = ""
+    # DÖNEM ALANI — değerin hangi DÖNEME ait olduğunu söyleyen hat alanı
+    # (ör. "bu_yil": "2026"). Kıyas noktasının dönemi bugünkünden farklıysa iki
+    # değer aynı büyüklüğün iki ölçümü değildir: yıl sınırında OVP'nin üç izlemi
+    # 2027'nin program kurunu 2026'nınkiyle kıyaslayıp "önemli" sahte hareket
+    # basardı, yılbaşından birikim yeni yılın ilk haftasında önceki yılın tam
+    # toplamıyla yan yana dururdu (01.10.2026 inceleme). O hâlde olay üretilmez
+    # ve tablo önceki değeri "—" basar. Boş bırakılırsa davranış değişmez.
+    donem_alani: str = ""
 
 
 # Hatların OKURA görünen adları. Olay cümleleri ("hazine-ihrac: veri gecikti")
@@ -342,6 +350,7 @@ GRUPLAR = [
     ("kredi", "Kredi ve para"),
     ("borclanma", "Hazine borçlanması ve borç stoku"),
     ("dis", "Dış denge ve finansman"),
+    ("buyume", "Büyüme ve faaliyet"),
     ("akim", "Yabancı akımı"),
     ("haber", "Haber tonu"),
     ("diger", "Diğer"),
@@ -378,15 +387,15 @@ IZLEMLER: list[Izlem] = [
     Izlem("ovp", "yil_sonu_ustel", "Programın ima ettiği yıl sonu kuru", "TL/$", 2,
           "delta", 0.5, 1.0, "",
           "Yıl ortalaması programın ima ettiğine eşitlenirse kurun yıl sonunda "
-          "geleceği seviye; gerçekleşen ortalama kaydıkça oynar.", "kur"),
+          "geleceği seviye; gerçekleşen ortalama kaydıkça oynar.", "kur", donem_alani="bu_yil"),
     Izlem("ovp", "sapma_bu_yil", "Yıl içi ortalamanın programdan sapması", "%", 1,
           "delta", 0.5, 1.0, "",
           "Eksi değer, gerçekleşen ortalamanın programın ima ettiğinin altında "
-          "kaldığını söyler.", "kur"),
+          "kaldığını söyler.", "kur", donem_alani="bu_yil"),
     Izlem("ovp", "gereken_ort", "Kalan günlerin tutturması gereken ortalama", "TL/$", 2,
           "delta", 0.5, 1.5, "",
           "Programın yıl ortalaması tutsun diye kalan işlem günlerinin ortalaması; "
-          "yıl sonuna yaklaştıkça tek bir günün etkisi büyür.", "kur"),
+          "yıl sonuna yaklaştıkça tek bir günün etkisi büyür.", "kur", donem_alani="bu_yil"),
 
     # ─────────────────────────────── faiz, fonlama, likidite
     Izlem("fonlama-likidite", "politika", "Politika faizi", "%", 2, "degisim", None, None, "",
@@ -585,11 +594,13 @@ IZLEMLER: list[Izlem] = [
           "mlr USD", 1, "delta", None, 13.4, "artis",
           "Şirketler kesiminin kur şokuna açıklığı.", "dis", yayim=True,
           eksi_ad="Reel sektör net döviz açık pozisyonu"),
+    # Grup "buyume": ilk yazımda "akim" (Yabancı akımı) idi ve çeyreğin manşet
+    # büyüme verisi yabancı portföy akımının başlığı altında basılacaktı.
     Izlem("buyume", "buyume_yillik", "GSYH yıllık büyüme", "%", 2, "delta",
           None, None, "", "Çeyreklik yayım; faiz alanının talep bacağı.",
-          "akim", yayim=True),
+          "buyume", yayim=True),
     Izlem("buyume", "buyume_ceyreklik", "GSYH çeyreklik büyüme (mevsimsellikten arındırılmış)",
-          "%", 2, "delta", None, None, "", "", "akim", yayim=True),
+          "%", 2, "delta", None, None, "", "", "buyume", yayim=True),
     Izlem("yiyecek-hizmetleri-marj", "oran_ev_yemekleri",
           "Lokanta fiyatı / ev yemeği maliyeti oranı", "kat", 2, "delta",
           None, None, "", "Yiyecek hizmetlerinde marj baskısının ölçüsü.",
@@ -629,9 +640,13 @@ HAFTALIK_KALEMLER: list[Izlem] = [
           "puan", 2, grup="enflasyon"),
     # ── para piyasası ve banka faizleri
     Izlem("fonlama-likidite", "bist_on", "BIST gecelik repo", "%", 2, grup="faiz"),
-    # Sterilizasyon BİLEREK yok: APİ tablosunun kendi saati özette yazılmıyor
-    # (ana saatin bir gün gerisinde bitebiliyor) ve dönemi bilinmeyen bir sayı
-    # tabloya dönemiyle basılamaz. Swap stoku kendi saatini taşır.
+    # APİ üçlüsü (sterilizasyon, net fonlama, swap) ANA SAATİ taşır: hattın ana
+    # saati `veri.son_gun`, APİ çekirdeğinin (ste_top dahil) tam olduğu son
+    # gündür — 39 özet sürümünün 39'unda ste_top = net_fonlama = _tarih. Önde
+    # biten seriler (serbest mevduat, gün başı likidite) kendi `_mlr_tarih`
+    # alanını taşır. Satır 01.10'da yanlış bir gerekçeyle çıkarılmıştı; geri
+    # kondu. Swap stoku kendi saatini taşır.
+    Izlem("fonlama-likidite", "sterilizasyon_mlr", "TCMB sterilizasyonu", "mlr TL", 1, grup="faiz"),
     Izlem("fonlama-likidite", "swap_alim_mn_usd", "TCMB alım yönlü swap stoku", "mn USD", 0, grup="faiz",
           tarih_alani="swap_alim_tarih"),
     Izlem("fonlama-likidite", "kredi_ticari", "Ticari kredi faizi (haftalık)", "%", 2, grup="faiz",
@@ -654,7 +669,9 @@ HAFTALIK_KALEMLER: list[Izlem] = [
     # ── yabancı akımının birikimi
     Izlem("yabanci-pozisyon", "toplam_4h", "Yabancı net alımı (son 4 hafta)", "mn USD", 0, "akim", grup="akim"),
     Izlem("yabanci-pozisyon", "toplam_13h", "Yabancı net alımı (son 13 hafta)", "mn USD", 0, "akim", grup="akim"),
-    Izlem("yabanci-pozisyon", "toplam_ytd", "Yabancı net alımı (yılbaşından)", "mn USD", 0, "akim", grup="akim"),
+    # Yılbaşından birikim yıl sınırında sıfırlanır: dönemi hattın `yil` alanı.
+    Izlem("yabanci-pozisyon", "toplam_ytd", "Yabancı net alımı (yılbaşından)", "mn USD", 0, "akim", grup="akim",
+          donem_alani="yil"),
     # ── kredi ve para alt kırılımı
     Izlem("kredi-parasal", "g_ihtiyac_13y", "İhtiyaç kredisi büyümesi (13 hafta, yıllık)", "%", 2, grup="kredi"),
     Izlem("kredi-parasal", "g_konut_13y", "Konut kredisi büyümesi (13 hafta, yıllık)", "%", 2, grup="kredi"),

@@ -202,6 +202,15 @@ def _seviye(buyukluk: float, iz: Izlem) -> str | None:
     return "dikkat" if iz.yayim else None
 
 
+def _ayni_donem(iz: Izlem, simdi: dict | None, once: dict | None) -> bool:
+    """İki görüntü aynı dönemin ölçümü mü (`Izlem.donem_alani`)? Alan tanımlı
+    değilse ya da iki tarafta da yoksa evet — davranış değişmez."""
+    if not iz.donem_alani or not isinstance(once, dict) or not isinstance(simdi, dict):
+        return True
+    a, b = simdi.get(iz.donem_alani), once.get(iz.donem_alani)
+    return a is None or b is None or str(a) == str(b)
+
+
 def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
                 tarih: str, onceki_tarih: str, bugun: datetime | date | None = None) -> Olay | None:
     """`bugun`: bültenin günü — dönem yazımının yılı ondan okunur (duvar saati
@@ -210,6 +219,10 @@ def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
     if yeni is None or isinstance(yeni, bool) or not isinstance(yeni, (int, float)):
         return None
     donem = _donem(iz, tarih, bugun)
+    # Kıyas noktası BAŞKA bir dönemin ölçümüyse (program yılı, yılbaşından
+    # birikim) fark bir hareket değildir: kıyas yokmuş gibi davranılır.
+    if not _ayni_donem(iz, simdi, once):
+        once = None
 
     # AKIM: değerin kendisi olaydır (haftalık net akım gibi); kıyas gerekmez.
     if iz.tip == "akim":
@@ -528,6 +541,8 @@ def hafta_tablosu(esik: datetime | None, bugun: datetime | date | None = None) -
         yeni = float(simdi[iz.anahtar])
         eski = once_d.get(iz.anahtar) if isinstance(once_d, dict) else None
         eski = float(eski) if _sayi_mi(eski) else None
+        if not _ayni_donem(iz, simdi, once_d):          # başka dönemin ölçümü
+            eski, onceki_v = None, ""
         b, od = iz.birim, iz.ondalik
         fark = ""
         if eski is not None and iz.tip not in ("akim", "seviye"):

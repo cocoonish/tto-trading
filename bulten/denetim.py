@@ -1470,7 +1470,13 @@ class Denetim:
         if int(self.b.get("surum") or 2) < 3:
             return
         import uslup as _u
-        r = _u.olc(self.yazi_alanlari())
+        # Haftalıkta geçmiş çağrı atfının evi karnedir; bütçesi o sayının
+        # hesabını verdiği kayıt sayısı kadar (kapanan + vadesi geçen, en az bir).
+        haftalik = bool(self.b.get("haftalik"))
+        hk = ((self.b.get("izleme") or {}).get("hafta") or {}) if haftalik else {}
+        karne_butce = max(1, len(hk.get("kapanan") or []) + len(hk.get("gecikmis") or []))
+        r = _u.olc(self.yazi_alanlari(), haftalik=haftalik,
+                   muaf_butce={"gundem.karne": karne_butce} if haftalik else None)
         self.engel += r["engel"]
         self.uyari += r["uyari"]
         if not r["engel"] and not r["uyari"]:
@@ -2130,7 +2136,7 @@ class Denetim:
                     if str(k.get("acilis", ""))[:10] == bugun and _kelime(k.get("soz", "")) > SOZ_AZAMI_KELIME]
             for konu, n in uzun:
                 self.uyari.append(f"Söz kaydı uzun: '{konu[:60]}' {n} kelime (en çok {SOZ_AZAMI_KELIME}) — "
-                                  "tez, çürütme ölçütü ve vade; olgular yazıda kalır.")
+                                  "tez, teyit ölçüsü ve vade; olgular yazıda kalır.")
         acik = [k for k in defter.get("kayitlar", []) if k.get("durum") == "acik"]
         vadeli = [k for k in acik if str(k.get("vade", "9999")) <= bugun]
         if not vadeli:

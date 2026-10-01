@@ -735,19 +735,34 @@ def ozet_yaz(b: dict) -> str:
 
 
 
-def _onceki_haftalik(bugun: str) -> dict | None:
-    """Bir önceki YAZILMIŞ haftalık sayı (yoksa None). Haftaya bakışın kıyas
-    noktası bir önceki pazardır, cuma günlüğü değil: söz defteri ve kilit
-    haber kıyası cumaya bakınca haftanın pazartesi–perşembesi hiç sayılmıyor,
-    haftanın asıl sürücüsü cuma günü kilitse haftalıktan düşüyordu."""
+def _onceki_yazili(bugun: str, haftalik: bool = False) -> dict | None:
+    """Bir önceki YAZILMIŞ sayı (haftalıkta bir önceki yazılmış HAFTALIK sayı);
+    yoksa None. Söz defterinin, kilit haberin ve olay çizgisinin
+    (`onceki_olcum_ani`) kıyas noktası AYNI tanımdır: yazılmamış (rutini
+    düşmüş) bir sayı okura hiç çıkmadı. Günlük dal ilk yazımda "son dosya"yı
+    alıyordu: pazar sayısı yazılmadığında pazartesinin söz defteri okura hiç
+    çıkmamış pazar sayısına, olay çizgisi ise cumaya kıyaslanıyordu ve cuma
+    ölçümünden sonra kapanan bir söz hiçbir sayfada tam metniyle basılmıyordu
+    (01.10.2026 inceleme)."""
     for p in sorted((p for p in CIKTI.glob("????-??-??.json") if p.stem < str(bugun)), reverse=True):
         try:
             b = json.loads(p.read_text(encoding="utf-8")) or {}
         except Exception:                                      # noqa: BLE001
             continue
-        if b.get("haftalik") and b.get("gundem_kaynagi") == "yazili":
-            return b
+        if b.get("gundem_kaynagi") != "yazili":
+            continue
+        if haftalik and not b.get("haftalik"):
+            continue
+        return b
     return None
+
+
+def _onceki_haftalik(bugun: str) -> dict | None:
+    """Bir önceki YAZILMIŞ haftalık sayı (yoksa None). Haftaya bakışın kıyas
+    noktası bir önceki pazardır, cuma günlüğü değil: söz defteri ve kilit
+    haber kıyası cumaya bakınca haftanın pazartesi–perşembesi hiç sayılmıyor,
+    haftanın asıl sürücüsü cuma günü kilitse haftalıktan düşüyordu."""
+    return _onceki_yazili(bugun, True)
 
 
 def _onceki_kilit(bugun: str, haftalik: bool = False) -> set[str]:
@@ -755,13 +770,7 @@ def _onceki_kilit(bugun: str, haftalik: bool = False) -> set[str]:
     haftalık sayıda bir önceki HAFTALIK sayınınkiler."""
     import haber as _h
     try:
-        if haftalik:
-            b = _onceki_haftalik(bugun) or {}
-        else:
-            onceki = [d for d in sorted(CIKTI.glob("????-??-??.json")) if d.stem < str(bugun)]
-            if not onceki:
-                return set()
-            b = json.loads(onceki[-1].read_text(encoding="utf-8")) or {}
+        b = _onceki_yazili(bugun, haftalik) or {}
     except Exception:                                          # noqa: BLE001
         return set()
     out: set[str] = set()
@@ -779,20 +788,11 @@ def _onceki_izleme(bugun: str, haftalik: bool = False) -> dict | None:
     Ölçemediğimiz bir değişikliği "değişmedi" saymak, kaydı sessizce
     gizlemek olurdu.
     """
-    if haftalik:
-        b = _onceki_haftalik(bugun)
-        return b.get("izleme") if b else None
     try:
-        dosyalar = sorted(CIKTI.glob("*.json"))
+        b = _onceki_yazili(bugun, haftalik)
     except Exception:                                          # noqa: BLE001
         return None
-    onceki = [d for d in dosyalar if d.stem < str(bugun)]
-    if not onceki:
-        return None
-    try:
-        return (json.loads(onceki[-1].read_text(encoding="utf-8")) or {}).get("izleme")
-    except Exception:                                          # noqa: BLE001
-        return None
+    return b.get("izleme") if b else None
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__,

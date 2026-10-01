@@ -409,6 +409,10 @@ const kunye = [
 const kelimeSay = (h: unknown) => String(h ?? '').replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
 const DAKIKA_KELIME = 200;
 const haftaYolu = Boolean(b.haftalik) && bicim3;
+// Ölçülen takvim tablosunun ADI tek sabitte: başlık, içindekiler (ve dar ekranın
+// bölüm şeridi) ve kısa yol aynı adı okur. Haftalıkta yazı katmanının kendi
+// "Önümüzdeki hafta — gün gün" bölümü var; tablo orada "Haftanın takvimi"dir.
+const onumuzdekiAd = haftaYolu ? 'Haftanın takvimi' : 'Önümüzdeki hafta';
 const KISA_YOL_ID = ['risk', 'takvim'];
 const kisaYol: { id: string; ad: string; n: number }[] = haftaYolu
   ? [
@@ -661,7 +665,7 @@ const bolumler = [
   sonucGoster.length > 0 && { id: 'sonuclar', ad: 'Ne bekleniyordu, ne geldi', kisa: 'Sonuçlar' },
   bugunKayitlar.length > 0 && { id: 'bugun', ad: 'Bugün' },
   pazarDuzeni && { id: 'hafta-hareket', ad: haftaBaslik },
-  onumuzdekiHafta.length > 0 && { id: 'onumuzdeki-hafta', ad: 'Önümüzdeki hafta' },
+  onumuzdekiHafta.length > 0 && { id: 'onumuzdeki-hafta', ad: onumuzdekiAd },
   b.yorum && { id: 'yorum', ad: b.haftalik ? 'Haftanın okuması' : 'Günün okuması' },
   ...yaziBolumleri.map((x: any) => ({ id: `y-${x.id}`, ad: x.baslik })),
   b.rejim?.length > 0 && { id: 'rejim', ad: 'Rejim panosu' },
@@ -704,7 +708,7 @@ const bolumler = [
         {kisaYol.map((x, i) => <>{i > 0 && ' · '}<a href={`#${x.id}`}>{x.ad}</a></>)}
         {/* Gün gün bölümün beklenti sayıları ölçülen takvim tablosundadır;
             kısa yol onu da gösterir (tablo okuma süresine girmez). */}
-        {onumuzdekiSatirlar.length > 0 && <> · <a href="#onumuzdeki-hafta">Haftanın takvimi</a></>}
+        {onumuzdekiSatirlar.length > 0 && <> · <a href="#onumuzdeki-hafta">{onumuzdekiAd}</a></>}
       </p>
     )}
     {ayniGun.length > 0 && (
@@ -1073,7 +1077,7 @@ const bolumler = [
     <section class="blok kritik-blok" id="onumuzdeki-hafta">
       {/* Biçim 3 haftalık sayıda yazı katmanının "Önümüzdeki hafta — gün gün"
           bölümü de var: iki başlık aynı adı taşımasın (ölçülen tablo takvimdir). */}
-      <h2>{haftaYolu ? 'Haftanın takvimi' : 'Önümüzdeki hafta'} <span class="adet">{onumuzdekiSatirlar.length} yayım · saatler TSİ</span></h2>
+      <h2>{onumuzdekiAd} <span class="adet">{onumuzdekiSatirlar.length} yayım · saatler TSİ</span></h2>
       <div class="takvim-blok">
         <table class="takvim">
           <caption class="gorunmez">Önümüzdeki hafta: tarih, saat, ülke ve olay</caption>
@@ -1157,7 +1161,7 @@ const bolumler = [
           )}
           {haftaKarne.gecikmis?.length > 0 && (
             <>
-              <h3 class="hk-baslik">Vadesi geçen, hesabı verilmemiş sözler</h3>
+              <h3 class="hk-baslik">Vadesi geçmiş, açık kalan sözler</h3>
               <ul class="hk-liste">
                 {haftaKarne.gecikmis.map((k: any) => (
                   <li>{sozGorunen.has(String(k.konu)) ? <a class="hk-konu" href={`#${sozKimlik(k.konu)}`}>{k.konu}</a> : <span class="hk-konu">{k.konu}</span>}{k.vade && <span class="hk-tarih gecikti">vade {tarihYaz(k.vade)}{typeof k.gun_kalan === 'number' ? ` · ${-k.gun_kalan} gün geçti` : ''}</span>}</li>
@@ -1500,8 +1504,8 @@ const bolumler = [
           <h3>Değişmeden duranlar</h3>
           <p class="alt-not">
             {b.haftalik && bicim3
-              ? 'Bir önceki haftalık sayıdan bu yana değişmedi; tam metinleri o sayıda duruyor.'
-              : 'Bir önceki sayıdan bu yana değişmedi; tam metinleri o sayıda duruyor.'}
+              ? 'Bir önceki haftalık sayıdan bu yana değişmedi; tam metinleri en son değiştikleri sayıda duruyor.'
+              : 'Bir önceki sayıdan bu yana değişmedi; tam metinleri en son değiştikleri sayıda duruyor.'}
           </p>
           <ul class="soz-duran">
             {sozDuran.map((k: any) => (

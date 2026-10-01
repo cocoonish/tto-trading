@@ -492,6 +492,15 @@ def _site_izi_hassasiyeti() -> None:
                "Bültende anlatıldı", "Yukarıdaki tabloda duruyor")
     for c in dusmeli:
         assert uret._site_izi_var(c), f"gerçek iz kaçtı: {c!r}"
+    # GÖNDERİM KAPISI da aynı sınırla arar (01.10.2026 inceleme): üretici meşru
+    # sayıp gönderiye koyduğu cümleyi kapı ham alt dizeyle ENGEL'liyordu.
+    import denetim as _dn
+    for c in temiz:
+        g = f"Haftaya Bakış — 4 Ekim 2026\nABD rafinerileri %93 {c}.\n\n{uret.SORUMLULUK_BULTEN}"
+        e = [x for x in _dn.denetle(g, "bulten")[0] if "atıf" in x]
+        assert not e, f"kapı sözcük ortasındaki izi site atfı saydı: {c!r} → {e}"
+    g = f"Haftaya Bakış — 4 Ekim 2026\nSitede ayrıntısı var.\n\n{uret.SORUMLULUK_BULTEN}"
+    assert any("atıf" in x for x in _dn.denetle(g, "bulten")[0]), "kapı gerçek site atfını kaçırdı"
 
 
 def _bicim3_govde():
@@ -538,6 +547,61 @@ def _bicim3_govde():
     assert str(uret.KOK / "bulten") not in sys.path, "bulten/ sys.path'e girdi"
 
 
+def _haftalik_gonderi_tur2():
+    """İkinci inceleme turu (01.10.2026): kırpma sayıyla bitmez · günlük gündem
+    satırı bölünmez · gün gün takvim içeriksiz gün başlığıyla bitmez · ana
+    senaryo satırı yalnız ilk alt bölümün gövdesidir ve etiketi düşmez."""
+    import denetim as _dn
+    # (1) Virgülle sıralanan rakam listesi dar satırda: yan tümce adayı sayıyla
+    #     bitiyorsa daha önceki ayraca geri yürünür, kapı ENGEL vermez.
+    liste = ("16 Eylül kapanışında BIST 100 %5,54 düşüşle 13.123, BIST 30 %5,58 düşüşle 15.716, "
+             "sanayi endeksi %5,79 düşüşle 18.325, banka endeksi %6,38 düşüşle 15.150 puana indi, "
+             "holding endeksi %4,12 düşüşle 9.871 ve hizmetler %3,05 düşüşle 11.204 puanda kapattı")
+    assert len(liste) > 190, "fikstür kırpılmıyor: sınama hiçbir şeyi ölçmez"
+    # 150'de son yan tümce adayı bir sayıdan sonra düşer: geri yürüme ölçülür.
+    for sinir in (190, 150):
+        k = uret._kirp(liste, sinir)
+        assert not re.search(r"\d…$", k), f"kırpma sayıyla bitti ({sinir}): {k!r}"
+    k = uret._kirp(liste, 190)
+    g = f"Haftaya Bakış — 4 Ekim 2026\nTürkiye: {k}\n\n{uret.SORUMLULUK_BULTEN}"
+    assert not [x for x in _dn.denetle(g, "bulten")[0] if "kırpma" in x], k
+    # (2) Günlük gündem satırı bölünmez (her etiketli bölüm 260'a kadar).
+    # Üç cümle 3·84+2 ≈ 254 karakter: 260'lık satıra sığar, 246'lıkta düşerdi.
+    cum = ["Kısa uç gevşedi ve uzun uç ABD getirileriyle birlikte çok {} yükseldi bugün sabah.",
+           "Kur sakin kaldı ve taşıma makası çok {} genişledi, fonlama ise tavanda durdu yine.",
+           "Hisse tarafında bankalar çok {} geriledi, sanayi endeksi ise yatay kapattı seansı."]
+    def uzun(r):
+        return "<p>" + " ".join(c.format(r) for c in cum * 2) + "</p>"
+    gb = {"tarih": "2026-10-02", "haftalik": False, "surum": 3, "gundem_kaynagi": "yazili",
+          "ozet": {"ne_oldu": "<ul><li>Madde bir.</li></ul>"},
+          "gundem": {"turkiye": uzun("hızla"), "kuresel": uzun("sert"), "emtia": uzun("ağır")}}
+    t = uret.bulten_zinciri(gb)[0]
+    sat = [l for l in t.split("\n") if l.startswith(("Türkiye:", "Küresel:", "Emtia:"))]
+    assert len(sat) == 3 and min(l.count(". ") + 1 for l in sat) == 3, \
+        f"günlük gündem satırı haftalık bütçeyle bölündü: {[len(l) for l in sat]}"
+    # Sıra sayısındaki nokta cümle sonu değildir.
+    k = uret._kirp("Piyasa bugün sakin kaldı ve kısa uç 3. gün de yatay seyretti, fonlama tavanda "
+                   "durdu. " * 4, 150)
+    assert not re.search(r"\d\.$", k), f"kırpma sıra sayısında kesti: {k!r}"
+    # (3) Gün gün takvim: sondaki içeriksiz gün başlığı düşer.
+    hb = {"tarih": "2026-10-04", "haftalik": True, "surum": 3, "gundem_kaynagi": "yazili",
+          "ozet": {"ne_oldu": "<ul><li>Madde bir.</li></ul>"},
+          "gundem": {"takvim": "<p><strong>Pazartesi 5 Ekim.</strong> TÜİK eylül TÜFE'sini yayımlıyor. "
+                               "Çekirdek hız fiyatlamayı belirler.</p><p><strong>Salı 6 Ekim.</strong> "
+                               + "Uzun bir cümle " * 60 + ".</p>",
+                     "risk": "<h3>Ana senaryo: kısa uç gevşer</h3><p>Bu senaryoda TÜFE aylık %1,5'in "
+                             "altında gelir ve kısa uç gevşer.</p><h3>Alternatif: kur baskısı</h3>"
+                             "<p>Kur haftalık %0,5'i aşarsa fonlama tavana çıkar.</p>"}}
+    t = uret.bulten_zinciri(hb)[0]
+    ileri = next(p for p in t.split("\n\n") if p.startswith("Önümüzdeki hafta"))
+    assert not ileri.rstrip().endswith("Salı 6 Ekim."), f"takvim içeriksiz gün başlığıyla bitti: {ileri[-60:]!r}"
+    assert "Pazartesi 5 Ekim." in ileri, "baştaki gün etiketi de düştü"
+    # (4) Ana senaryo: etiket "Bu senaryoda …" açılışında düşmez, alternatif girmez.
+    ana = next(l for l in t.split("\n") if "senaryo" in l.lower() and "TÜFE aylık" in l)
+    assert ana.startswith("Ana senaryo:"), f"ana senaryo etiketi düştü: {ana!r}"
+    assert "fonlama tavana" not in t, "alternatif patika ana senaryo satırına girdi"
+
+
 def main() -> int:
     print("tweet duman sınaması:")
     sina("biçim 3: maddelerle açılır · pano sayfanın kuralıyla · öne çıkanlar yinelenmez", _bicim3_govde)
@@ -550,6 +614,8 @@ def main() -> int:
     sina("site izi sözcük ortasında yakalanmaz (kapasitede ≠ sitede)",
          _site_izi_hassasiyeti)
     sina("kırpma cümle sınırında", _kirpma)
+    sina("haftalık gönderi (2. tur): kırpma sayıyla bitmez · günlük satır bölünmez · gün başlığı · ana senaryo",
+         _haftalik_gonderi_tur2)
     sina("tavan aşımında satır düşer, rakam şeridi kalır", _tavan_asiminda_rakam_seridi)
     sina("gonder: anahtarsız yeşil, defter mükerrerliği, bayat koruması",
          _gonder_sigortalari)
