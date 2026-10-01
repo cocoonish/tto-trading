@@ -1,6 +1,6 @@
 {
- "olusturma": "2026-10-01T21:04:08Z",
- "sure_sn": 69.0,
+ "olusturma": "2026-10-01T21:11:49Z",
+ "sure_sn": 82.9,
  "dosyalar": {
   "bund_gunluk.csv.gz": {
    "sha256": "79fc50a87f46eb189451f4fdca712a73d13e642324d698cc23e5f27b73fa4111",
@@ -401,7 +401,7 @@
    }
   },
   "yahoo_gunluk.csv.gz": {
-   "sha256": "2b288fdd35e14dde4be7c98bcd4431c93bd46b995066872c4308b313384ce351",
+   "sha256": "6b3736837224b3fb368754932095afe771f96b1622cc78f275b2b1e5e11713e1",
    "satir": 14376,
    "kaynak": "Yahoo Finance (yfinance), günlük kapanış",
    "aciklama": "Kapanış (tarih: Yahoo işlem günü; döviz barı ölçüldü: Yahoo D ≈ CNBC D−1)",
@@ -481,16 +481,16 @@
    }
   },
   "cnbc_gunluk.csv.gz": {
-   "sha256": "2fc4ee4c62a7730e00b4351fd860b60da59e7662d26fcc69c49d214c6b5164d5",
+   "sha256": "81d4aa320d9e66a71f3f62cbbc058d4329becf01b3e194f2175ecce0d46e3501",
    "satir": 8026,
    "kaynak": "CNBC (Tullett Prebon), günlük bar ucu",
    "aciklama": "Gösterge (benchmark) devlet tahvili getirisi, %; eurusd = EUR/USD; günlük kapanış, tarih CNBC işlem günü (New York saati); hafta sonu barları kaynakta cumanın kopyası",
    "kapsam": {
     "fr10y": {
-     "n": 7248,
+     "n": 7249,
      "ilk": "2000-01-03",
      "son": "2026-10-01",
-     "is_gunu_dolulugu": 0.9728
+     "is_gunu_dolulugu": 0.9729
     },
     "de10y": {
      "n": 7388,
@@ -511,10 +511,10 @@
      "is_gunu_dolulugu": 0.9721
     },
     "be10y": {
-     "n": 7415,
+     "n": 7416,
      "ilk": "2000-01-03",
      "son": "2026-10-01",
-     "is_gunu_dolulugu": 0.9736
+     "is_gunu_dolulugu": 0.9738
     },
     "nl10y": {
      "n": 3632,
@@ -538,7 +538,7 @@
      "n": 3267,
      "ilk": "2014-11-25",
      "son": "2026-09-30",
-     "is_gunu_dolulugu": 0.9803
+     "is_gunu_dolulugu": 0.9806
     },
     "fr2y": {
      "n": 7449,
@@ -547,22 +547,22 @@
      "is_gunu_dolulugu": 0.9719
     },
     "de2y": {
-     "n": 7385,
+     "n": 7386,
      "ilk": "2000-01-03",
      "son": "2026-10-01",
-     "is_gunu_dolulugu": 0.9693
+     "is_gunu_dolulugu": 0.9695
     },
     "it2y": {
-     "n": 7395,
+     "n": 7396,
      "ilk": "2000-01-03",
      "son": "2026-10-01",
-     "is_gunu_dolulugu": 0.9669
+     "is_gunu_dolulugu": 0.967
     },
     "es2y": {
-     "n": 3731,
+     "n": 3732,
      "ilk": "2014-11-25",
      "son": "2026-10-01",
-     "is_gunu_dolulugu": 0.9939
+     "is_gunu_dolulugu": 0.9942
     },
     "fr5y": {
      "n": 7382,
@@ -609,7 +609,7 @@
    }
   },
   "cnbc_aylik.csv.gz": {
-   "sha256": "c073e73d7e5c2c1fae6b4ad7efc675930863116a6fe43f871bd2a3868e253524",
+   "sha256": "9b79c0df47209971a49a4fd9882f9a6654521d03c870fffcf093b3fefa4c4980",
    "satir": 188,
    "kaynak": "CNBC (Tullett Prebon), ALL grafik ucu",
    "aciklama": "Gösterge devlet tahvili getirisi, aylık kapanış, %",
@@ -625,9 +625,9 @@
      "son": "2026-10-01"
     },
     "it10y": {
-     "n": 111,
+     "n": 110,
      "ilk": "1999-01-01",
-     "son": "2026-10-01"
+     "son": "2026-07-01"
     },
     "es10y": {
      "n": 131,
@@ -690,9 +690,9 @@
      "son": "2026-10-01"
     },
     "fr30y": {
-     "n": 111,
+     "n": 110,
      "ilk": "1999-01-01",
-     "son": "2026-10-01"
+     "son": "2026-07-01"
     },
     "de30y": {
      "n": 129,
@@ -713,6 +713,59 @@
      "n": 187,
      "ilk": "1980-01-01",
      "son": "2026-07-01"
+    }
+   }
+  },
+  "cnbc_gun_ici.csv.gz": {
+   "sha256": "f6a5b5d47f2ba057eb5271eacbc59337d650d66865676416e786425ca521cdc2",
+   "satir": 4229,
+   "kaynak": "CNBC (Tullett Prebon), 5D grafik ucu",
+   "aciklama": "Dakikalık son kotasyon; tarih UTC; son beş işlem günü (kaynak daha eskisini tutmaz)",
+   "kapsam": {
+    "fr10y": {
+     "n": 1143,
+     "ilk": "2026-09-22",
+     "son": "2026-10-01"
+    },
+    "de10y": {
+     "n": 1109,
+     "ilk": "2026-09-22",
+     "son": "2026-10-01"
+    },
+    "it10y": {
+     "n": 1068,
+     "ilk": "2026-09-22",
+     "son": "2026-10-01"
+    },
+    "fr2y": {
+     "n": 1291,
+     "ilk": "2026-09-22",
+     "son": "2026-10-01"
+    },
+    "de2y": {
+     "n": 1299,
+     "ilk": "2026-09-22",
+     "son": "2026-10-01"
+    },
+    "it2y": {
+     "n": 1081,
+     "ilk": "2026-09-22",
+     "son": "2026-10-01"
+    },
+    "us2y": {
+     "n": 1917,
+     "ilk": "2026-09-21",
+     "son": "2026-10-01"
+    },
+    "us10y": {
+     "n": 1922,
+     "ilk": "2026-09-21",
+     "son": "2026-10-01"
+    },
+    "eurusd": {
+     "n": 2307,
+     "ilk": "2026-09-21",
+     "son": "2026-10-01"
     }
    }
   }
