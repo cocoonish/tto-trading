@@ -129,6 +129,15 @@ const sozVade = (k: any) =>
 // Kapanmış kayıtta vade anlamsızdır: "gecikti" rengi yalnız açık kayda verilir
 // (kapanmış "tuttu" turuncu basılıyordu — renk "gecikti" diyordu).
 const sozGecikti = (k: any): boolean => k?.durum !== 'kapandi' && k?.gun_kalan !== null && k?.gun_kalan < 0;
+// Söz kaydının sayfa içi çapası. Konu defterde tekildir; Türkçe harfler ASCII'ye
+// indirilir (ı NFKD ile ayrışmaz, elle çevrilir). Haftanın karnesi kaydı bu
+// çapayla söz defterindeki tam metnine bağlar — yalnız kayıt sayfada BASILIYORSA:
+// pencere dışında kalan bir kapanışa bağ, ölü bir çapa olurdu.
+const sozKimlik = (konu: unknown): string =>
+  'soz-' + String(konu ?? '').toLocaleLowerCase('tr-TR').replace(/ı/g, 'i')
+    .normalize('NFKD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+const sozGorunen = new Set(sozKayitlari.map((k: any) => String(k?.konu ?? '')));
 const tz = (t: unknown) => (typeof t === 'string' ? tarihYaz(t) : '');
 // HABER KAYNAĞI OKURA YAYINCIYLA YAZILIR. Haber taramasının arama akışından
 // gelen maddelerde kaynak alanı iç sorgunun adını taşıyor ("Arama — Fed ve
@@ -394,10 +403,11 @@ const kunye = [
 // HAFTAYA BAKIŞIN KISA YOLU (01.10.2026). Haftalık sayı 6.000–9.000 kelimedir
 // (30–45 dakikalık okuma); uzunluk ancak kısa yol açık tutulursa okunur:
 // özet, okuma, senaryolar ve önümüzdeki hafta. Süre yazı katmanının kelime
-// sayısından, dakikada ~220 kelime VARSAYIMIYLA hesaplanır (ölçülmedi; künye
-// bunu "tahmini" diye yazar). Ölçülen tablolar süreye girmez.
+// sayısından, dakikada ~200 kelime VARSAYIMIYLA hesaplanır (ölçülmedi; künye
+// bunu "tahmini" diye yazar) — rehberin ve hakkında sayfasının "6.000–9.000
+// kelime, 30–45 dakika" sözüyle aynı oran. Ölçülen tablolar süreye girmez.
 const kelimeSay = (h: unknown) => String(h ?? '').replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
-const DAKIKA_KELIME = 220;
+const DAKIKA_KELIME = 200;
 const haftaYolu = Boolean(b.haftalik) && bicim3;
 const KISA_YOL_ID = ['risk', 'takvim'];
 const kisaYol: { id: string; ad: string; n: number }[] = haftaYolu
@@ -692,6 +702,9 @@ const bolumler = [
       <p class="kisa-yol">
         <span class="ky-etiket">Kısa yol (~{dakika(kisaYol.reduce((n, x) => n + x.n, 0))} dk)</span>
         {kisaYol.map((x, i) => <>{i > 0 && ' · '}<a href={`#${x.id}`}>{x.ad}</a></>)}
+        {/* Gün gün bölümün beklenti sayıları ölçülen takvim tablosundadır;
+            kısa yol onu da gösterir (tablo okuma süresine girmez). */}
+        {onumuzdekiSatirlar.length > 0 && <> · <a href="#onumuzdeki-hafta">Haftanın takvimi</a></>}
       </p>
     )}
     {ayniGun.length > 0 && (
@@ -861,8 +874,10 @@ const bolumler = [
       <h2>{bicim3 ? (b.haftalik ? 'Bu hafta gelen veriler' : 'Dünden bu yana gelen veriler') : 'Hat hat değişim'}</h2>
       {gruplarKalan.length === 0 && (
         <p class="alt-not">{haftaTabloSatir > 0
-          ? 'Bir önceki haftalık sayıdan bu yana eşiği aşan bir değişim yok; güncellenen seriler aşağıdaki tabloda.'
-          : 'Bir önceki sayıdan bu yana izlenen göstergelerde duyurulacak bir yayım yok.'}</p>
+          ? 'Bir önceki haftalık sayıdan bu yana cümleye dönüşen bir değişim yok; güncellenen seriler aşağıdaki tabloda.'
+          : b.haftalik
+            ? 'Bir önceki haftalık sayıdan bu yana izlenen göstergelerde duyurulacak bir yayım yok.'
+            : 'Bir önceki sayıdan bu yana izlenen göstergelerde duyurulacak bir yayım yok.'}</p>
       )}
       {gruplarKalan.map((g: any) => (
         <div class="grup">
@@ -885,15 +900,16 @@ const bolumler = [
       ))}
       {haftaTabloSatir > 0 && (
         <details class="hafta-tablo">
-          <summary>Eşiğin altında kalan güncellemeler ({haftaTabloSatir} seri)</summary>
-          <p class="alt-not">Bir önceki haftalık sayıdan bu yana verisi ilerleyen ve yukarıdaki
-          cümlelere girmeyen seriler. Önceki değer, o sayının ölçüldüğü andaki değerdir; her satır
-          kendi dönemini taşır.</p>
+          <summary>Bu hafta güncellenen öbür seriler ({haftaTabloSatir})</summary>
+          <p class="alt-not">Bir önceki haftalık sayıdan bu yana verisi ilerleyen ve yukarıda
+          cümle olarak yazılmayan seriler. Önceki değer, o sayının ölçüldüğü andaki değerdir; her
+          satır kendi dönemini taşır.</p>
           {haftaTablosu.map((g: any) => (
             <div class="ht-grup">
               <h3>{g.baslik}</h3>
-              <div class="p-kaydir" tabindex="0" role="region" aria-label="Kaydırılabilir tablo" data-kaydir>
+              <div class="p-kaydir" tabindex="0" role="region" aria-label={`${g.baslik}: kaydırılabilir tablo`} data-kaydir>
                 <table class="ht">
+                  <caption class="gorunmez">{g.baslik}: seri, dönem, değer, önceki değer ve fark</caption>
                   <thead><tr><th scope="col">Seri</th><th scope="col">Dönem</th><th scope="col" class="say">Değer</th><th scope="col" class="say">Önceki</th><th scope="col" class="say">Fark</th></tr></thead>
                   <tbody>
                     {g.satirlar.map((r: any) => (
@@ -1055,7 +1071,9 @@ const bolumler = [
 
   {onumuzdekiHafta.length > 0 && (
     <section class="blok kritik-blok" id="onumuzdeki-hafta">
-      <h2>Önümüzdeki hafta <span class="adet">{onumuzdekiSatirlar.length} yayım · saatler TSİ</span></h2>
+      {/* Biçim 3 haftalık sayıda yazı katmanının "Önümüzdeki hafta — gün gün"
+          bölümü de var: iki başlık aynı adı taşımasın (ölçülen tablo takvimdir). */}
+      <h2>{haftaYolu ? 'Haftanın takvimi' : 'Önümüzdeki hafta'} <span class="adet">{onumuzdekiSatirlar.length} yayım · saatler TSİ</span></h2>
       <div class="takvim-blok">
         <table class="takvim">
           <caption class="gorunmez">Önümüzdeki hafta: tarih, saat, ülke ve olay</caption>
@@ -1096,17 +1114,21 @@ const bolumler = [
   {yaziBolumleri.map((x: any) => (
     <section class:list={['blok', 'yazi-bolumu', `yb-${x.id}`]} id={`y-${x.id}`}>
       <h2>{x.baslik}</h2>
-      {x.id === 'karne' && haftaKarne && (haftaKarne.kapanan?.length > 0 || haftaKarne.acilan?.length > 0 || haftaKarne.yaklasan?.length > 0) && (
+      {x.id === 'karne' && haftaKarne && (haftaKarne.kapanan?.length > 0 || haftaKarne.acilan?.length > 0
+        || haftaKarne.yaklasan?.length > 0 || haftaKarne.gecikmis?.length > 0) && (
         <div class="hafta-karne">
+          {/* Karne bloğu söz defterinin DİZİNİDİR: konu ve tarih; tam metin
+              (söz, sonuç, ne bakılacak) aşağıdaki Söz defteri bölümünde, bağla. */}
+          <p class="alt-not">Bir önceki haftalık sayıdan bu yana. Sözlerin tam metni <a href="#soz-defteri">söz defterinde</a>.</p>
           {haftaKarne.kapanan?.length > 0 && (
             <>
-              <p class="hk-baslik">Bu hafta kapanan sözler
-                <span class="hk-sayim">{haftaKarne.tuttu} tuttu · {haftaKarne.kismen} kısmen · {haftaKarne.tutmadi} tutmadı{haftaKarne.notsuz ? ` · ${haftaKarne.notsuz} notsuz` : ''}</span></p>
+              <h3 class="hk-baslik">Bu hafta kapanan sözler
+                <span class="hk-sayim">{haftaKarne.tuttu} tuttu · {haftaKarne.kismen} kısmen · {haftaKarne.tutmadi} tutmadı{haftaKarne.notsuz ? ` · ${haftaKarne.notsuz} notsuz` : ''}</span></h3>
               <ul class="hk-liste">
                 {haftaKarne.kapanan.map((k: any) => (
                   <li>
                     {k.isabet && <span class:list={['isabet', ISABET_SINIF[k.isabet] ?? '']}>{k.isabet}</span>}
-                    <span class="hk-konu">{k.konu}</span>
+                    {sozGorunen.has(String(k.konu)) ? <a class="hk-konu" href={`#${sozKimlik(k.konu)}`}>{k.konu}</a> : <span class="hk-konu">{k.konu}</span>}
                     {k.acilis && <span class="hk-tarih">açılış {tarihYaz(k.acilis)}</span>}
                   </li>
                 ))}
@@ -1115,20 +1137,30 @@ const bolumler = [
           )}
           {haftaKarne.acilan?.length > 0 && (
             <>
-              <p class="hk-baslik">Bu hafta açılan sözler</p>
+              <h3 class="hk-baslik">Bu hafta açılan sözler</h3>
               <ul class="hk-liste">
                 {haftaKarne.acilan.map((k: any) => (
-                  <li><span class="hk-konu">{k.konu}</span>{k.vade && <span class="hk-tarih">vade {tarihYaz(k.vade)}</span>}</li>
+                  <li>{sozGorunen.has(String(k.konu)) ? <a class="hk-konu" href={`#${sozKimlik(k.konu)}`}>{k.konu}</a> : <span class="hk-konu">{k.konu}</span>}{k.vade && <span class="hk-tarih">vade {tarihYaz(k.vade)}</span>}</li>
                 ))}
               </ul>
             </>
           )}
           {haftaKarne.yaklasan?.length > 0 && (
             <>
-              <p class="hk-baslik">Vadesi önümüzdeki haftaya düşenler</p>
+              <h3 class="hk-baslik">Vadesi önümüzdeki haftaya düşenler</h3>
               <ul class="hk-liste">
                 {haftaKarne.yaklasan.map((k: any) => (
-                  <li><span class="hk-konu">{k.konu}</span>{k.vade && <span class="hk-tarih">vade {tarihYaz(k.vade)}</span>}</li>
+                  <li>{sozGorunen.has(String(k.konu)) ? <a class="hk-konu" href={`#${sozKimlik(k.konu)}`}>{k.konu}</a> : <span class="hk-konu">{k.konu}</span>}{k.vade && <span class="hk-tarih">vade {tarihYaz(k.vade)}</span>}</li>
+                ))}
+              </ul>
+            </>
+          )}
+          {haftaKarne.gecikmis?.length > 0 && (
+            <>
+              <h3 class="hk-baslik">Vadesi geçen, hesabı verilmemiş sözler</h3>
+              <ul class="hk-liste">
+                {haftaKarne.gecikmis.map((k: any) => (
+                  <li>{sozGorunen.has(String(k.konu)) ? <a class="hk-konu" href={`#${sozKimlik(k.konu)}`}>{k.konu}</a> : <span class="hk-konu">{k.konu}</span>}{k.vade && <span class="hk-tarih gecikti">vade {tarihYaz(k.vade)}{typeof k.gun_kalan === 'number' ? ` · ${-k.gun_kalan} gün geçti` : ''}</span>}</li>
                 ))}
               </ul>
             </>
@@ -1434,7 +1466,7 @@ const bolumler = [
           <h3>{sozAyrimVar ? 'Bu sayıda değişenler' : 'Söz kayıtları'}</h3>
           <ul class="soz-liste">
             {sozDegisen.map((k: any) => (
-              <li class:list={{ gecikti: sozGecikti(k), kapali: k.durum === 'kapandi' }}>
+              <li id={sozKimlik(k.konu)} class:list={{ gecikti: sozGecikti(k), kapali: k.durum === 'kapandi' }}>
                 <span class="soz-vade">{sozVade(k)}</span>
                 <span class="soz-govde">
                   <strong class="soz-konu">{k.konu}</strong>
@@ -1467,11 +1499,13 @@ const bolumler = [
         <>
           <h3>Değişmeden duranlar</h3>
           <p class="alt-not">
-            Bir önceki sayıdan bu yana değişmedi; tam metinleri o sayıda duruyor.
+            {b.haftalik && bicim3
+              ? 'Bir önceki haftalık sayıdan bu yana değişmedi; tam metinleri o sayıda duruyor.'
+              : 'Bir önceki sayıdan bu yana değişmedi; tam metinleri o sayıda duruyor.'}
           </p>
           <ul class="soz-duran">
             {sozDuran.map((k: any) => (
-              <li class:list={{ gecikti: sozGecikti(k) }}>
+              <li id={sozKimlik(k.konu)} class:list={{ gecikti: sozGecikti(k) }}>
                 <span class="soz-vade">{sozVade(k)}</span>
                 <span class="soz-konu">{k.konu}</span>
                 <span class="kaynak-not">açılış {tz(k.acilis)}</span>
@@ -1897,7 +1931,9 @@ const bolumler = [
   /* Biçim 3'ün konu bölümleri okumanın hemen ardında, kendi başlıklarıyla. */
   .yazi-bolumu { margin: 2.2rem 0; }
   /* Haftalık varlık bölümleri alt bölümlerden kurulur (<h3>). */
-  .yazi-bolumu .gundem-metin :global(h3) { font-size: 1.02rem; margin: 1.4rem 0 0.45rem; }
+  /* Alt başlık gövde metninden ve kalın paragraf başlarından BÜYÜK basılır:
+     okur 30–45 dakikalık sayıda alt bölümleri başlıktan bulur. */
+  .yazi-bolumu .gundem-metin :global(h3) { font-size: 1.22rem; line-height: 1.3; margin: 1.6rem 0 0.5rem; }
   .kisa-yol { margin: 0.6rem 0 0; font-size: 0.92rem; color: var(--ink-70); }
   .kisa-yol .ky-etiket { font-family: var(--font-mono); font-size: 0.78rem;
     text-transform: uppercase; letter-spacing: 0.06em; margin-right: 0.5rem; color: var(--ink-60); }
@@ -1906,11 +1942,14 @@ const bolumler = [
   .ht-grup h3 { font-size: 0.95rem; margin: 1rem 0 0.35rem; }
   table.ht { border-collapse: collapse; width: 100%; font-size: 0.86rem; }
   table.ht th, table.ht td { padding: 0.22rem 0.5rem; border-bottom: 1px solid var(--ink-30); text-align: left; vertical-align: top; }
-  table.ht th[scope="row"] { font-weight: 400; }
+  table.ht th[scope="row"] { font-weight: 400; min-width: 12rem; }
+  /* Dar ekranda tablo sıkışmaz, kabında yana kayar (p-kaydir). */
+  table.ht { min-width: 34rem; }
   table.ht .say { text-align: right; font-variant-numeric: tabular-nums; }
   table.ht .ht-donem { color: var(--ink-60); }
   .hafta-karne { margin: 0 0 1rem; max-width: var(--olcu-metin); }
-  .hk-baslik { font-weight: 600; margin: 0.8rem 0 0.3rem; }
+  .hk-baslik { font-weight: 600; font-size: 1rem; margin: 0.8rem 0 0.3rem; }
+  .hk-tarih.gecikti { color: var(--uyari); }
   .hk-sayim { font-weight: 400; color: var(--ink-60); margin-left: 0.5rem; font-size: 0.88rem; }
   .hk-liste { margin: 0 0 0.6rem; padding-left: 1.1rem; display: grid; gap: 0.3rem; font-size: 0.92rem; }
   .hk-tarih { color: var(--ink-60); margin-left: 0.4rem; font-size: 0.85rem; }

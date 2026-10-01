@@ -512,9 +512,11 @@ class Denetim:
             n = _kelime(metin)
             toplam += n
             alt, ust = getattr(y, kip)
+            # Mesaj sayfanın basacağı başlığı yazar (haftalıkta haftalık başlık).
+            ad = (y.haftalik_baslik or y.baslik) if kip == "haftalik" else y.baslik
             if n == 0:
                 if y.zorunlu_mu(kip):
-                    self.engel.append(f"Bölüm BOŞ: {y.id} ({y.baslik}) — zorunlu bölüm")
+                    self.engel.append(f"Bölüm BOŞ: {y.id} ({ad}) — zorunlu bölüm")
                 continue
             if kip == "haftalik" and y.haftalik_alt:
                 n_alt = len(re.findall(r"<h3\b", str(metin), re.I))
@@ -523,7 +525,7 @@ class Denetim:
                         f"Bölüm {y.id}: {n_alt} alt başlık (<h3>) — haftalık sayıda en az "
                         f"{y.haftalik_alt}; alt bölümler rehberde (YAZIM.md 'Haftaya bakış')")
             if n > _a.BOLUM_ENGEL_KAT * ust:
-                self.engel.append(f"BÖLÜM UZUN: {y.id} ({y.baslik}) {n} kelime — üst sınır {ust}, "
+                self.engel.append(f"BÖLÜM UZUN: {y.id} ({ad}) {n} kelime — üst sınır {ust}, "
                                   f"{_a.BOLUM_ENGEL_KAT:g} katı ENGEL. Konu evinde tam anlatılır ama kısadır; "
                                   "tabloda duranı yeniden sayma.")
             elif n < alt or n > ust:
@@ -531,7 +533,14 @@ class Denetim:
             else:
                 self._ok(f"{y.id}: {n} kelime")
         alt_t, uyari_t, engel_t = _a.YAZI_ARALIK_3["toplam"][kip]
-        if toplam < alt_t:
+        if kip == "haftalik" and toplam < _a.HAFTALIK_TABAN:
+            self.engel.append(
+                f"HAFTALIK SAYI KISA: toplam {toplam} kelime (taban {_a.HAFTALIK_TABAN}, hedef "
+                f"{alt_t}–{uyari_t}). Haftaya bakış 30–45 dakikalık bir rapordur; bölümler ve "
+                "alt bölümleri bulten/YAZIM.md 'Haftaya bakış (haftalık kip)' bölümünde. Rutin "
+                "metnindeki 'yorum en az 600, bölümler en az 200/300 kelime' biçim 2'ye (arşiv) "
+                "aittir; uzunluk tekrardan değil yeni olgudan gelir.")
+        elif toplam < alt_t:
             self.uyari.append(f"Yazı kısa: toplam {toplam} kelime (hedef {alt_t}–{uyari_t})")
         if toplam > engel_t:
             self.engel.append(
@@ -1824,15 +1833,57 @@ class Denetim:
             else:
                 self._ok(f"günler arası tekrar düşük: %{g['oran']:.1f}")
 
+        # HAFTANIN GÜNLÜKLERİ (biçim 3 haftalık, rehber kural 8): haftalık sayı
+        # haftanın OLGULARINI taşır ama günlük notların CÜMLELERİNİ taşımaz.
+        # Ölçü günler arası tekrarın kendisidir (birebir 7'li öbek, aynı eşik);
+        # olgu ölçüleri bilerek bakmaz — haftanın olguları haftalıkta meşrudur.
+        if int(self.b.get("surum") or 2) >= 3 and self.b.get("haftalik"):
+            gunlukler = self._haftanin_gunlukleri()
+            if gunlukler:
+                birlesik: dict[str, str] = {}
+                for gb in gunlukler:
+                    for ad, t in _t.bolumler(gb).items():
+                        birlesik[f"{gb.get('tarih')}:{ad}"] = t
+                g = _t.gunler_arasi(_t.bolumler(self.b), birlesik)
+                if g["oran"] >= _t.GUNLER_ARASI_UYARI or g["agir"]:
+                    agir = ", ".join(f"{a} %{g['bolum'][a]:.0f}" for a in g["agir"][:3])
+                    self.uyari.append(
+                        f"Haftanın günlükleriyle tekrar %{g['oran']:.1f} (hedef <%{_t.GUNLER_ARASI_UYARI:.0f}): "
+                        f"bu sayının düzyazısının bu kadarı haftanın {len(gunlukler)} günlüğünde AYNEN var."
+                        + (f" Sürükleyen bölüm: {agir}." if agir else "")
+                        + " Haftalık sayı günlük notların cümlelerini taşımaz; olguyu haftalık "
+                          "bağlamla (birikim, sonuç, sonraki sınav) yeniden kur.")
+                else:
+                    self._ok(f"haftanın günlükleriyle tekrar düşük: %{g['oran']:.1f} "
+                             f"({len(gunlukler)} günlük)")
+
     def _onceki_sayilar(self, n: int = 2) -> list[dict]:
         """Bu sayıdan önceki en yakın n sayının JSON'u (yeniden eskiye).
 
-        HAFTALIK SAYI önceki HAFTALIK sayılarla kıyaslanır (01.10.2026). Cuma
-        ve perşembe günlüklerine bakınca haftanın özeti — tanımı gereği o
-        günlerin olgularını toplayan metin — yapısal bir sahte tekrar
-        üretiyordu (27.09'da 17 "kronik" değer; önceki iki haftalığa karşı
-        gerçek kronik 5), asıl soru olan "geçen pazarı mı yeniden yazdık" ise
-        hiç sorulmuyordu."""
+        BİÇİM 3'TE KIYAS NOKTASI YAZILMIŞ SAYIDIR ve HAFTALIK SAYI önceki
+        HAFTALIK sayılarla kıyaslanır (01.10.2026) — ölçüm katmanının çizgisiyle
+        (uret.onceki_olcum_ani · _onceki_haftalik) aynı tanım. Cuma ve perşembe
+        günlüklerine bakınca haftanın özeti — tanımı gereği o günlerin olgularını
+        toplayan metin — yapısal bir sahte tekrar üretiyordu (27.09'da 17
+        "kronik" değer; önceki iki haftalığa karşı gerçek kronik 5). Yazılmamış
+        (rutini düşmüş) bir sayı okura hiç çıkmadı: ona kıyaslamak kronik ve
+        açılış ölçülerini boş kümeye düşürür, tam kaçırılan haftadan sonra
+        "geçen pazarı mı yeniden yazdık" sorusu sorulamaz.
+
+        BİÇİM 2 ARŞİVİ kendi kuralıyla ölçülür: bir önceki dosya, süzgeçsiz
+        (arşiv sayısının ölçümü yeniden koşunca değişmesin)."""
+        if int(self.b.get("surum") or 2) < 3:
+            try:
+                dosyalar = sorted(d for d in BULTEN.glob("*.json") if d.stem < str(self.b.get("tarih")))
+            except Exception:                                  # noqa: BLE001
+                return []
+            out = []
+            for d in reversed(dosyalar[-n:]):
+                try:
+                    out.append(json.loads(d.read_text(encoding="utf-8")) or {})
+                except Exception:                              # noqa: BLE001
+                    out.append({})
+            return out
         try:
             dosyalar = sorted(d for d in BULTEN.glob("????-??-??.json") if d.stem < str(self.b.get("tarih")))
         except Exception:                                      # noqa: BLE001
@@ -1845,10 +1896,36 @@ class Denetim:
             try:
                 b = json.loads(d.read_text(encoding="utf-8")) or {}
             except Exception:                                  # noqa: BLE001
-                b = {}
+                continue
+            if b.get("gundem_kaynagi") != "yazili":
+                continue
             if haftalik and not b.get("haftalik"):
                 continue
             out.append(b)
+        return out
+
+    def _haftanin_gunlukleri(self) -> list[dict]:
+        """Haftalık sayının kapsadığı haftanın YAZILMIŞ günlükleri (bir önceki
+        haftalık sayıdan bu yana). Rehberin 8. kuralının ("haftanın günlüklerini
+        yeniden yazma") ölçüsü bunlara bakar."""
+        try:
+            bugun = date.fromisoformat(str(self.b.get("tarih")))
+        except Exception:                                      # noqa: BLE001
+            return []
+        out = []
+        for d in sorted(BULTEN.glob("????-??-??.json")):
+            try:
+                g = date.fromisoformat(d.stem)
+            except ValueError:
+                continue
+            if not (bugun - timedelta(days=7) < g < bugun):
+                continue
+            try:
+                b = json.loads(d.read_text(encoding="utf-8")) or {}
+            except Exception:                                  # noqa: BLE001
+                continue
+            if b.get("gundem_kaynagi") == "yazili" and not b.get("haftalik"):
+                out.append(b)
         return out
 
     def _olgu_tekrari(self, _t) -> None:

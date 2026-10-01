@@ -32,6 +32,7 @@ ciplak_sayilar = _mod.ciplak_sayilar
 ORNEK_AC, ORNEK_KAPA = _mod.ORNEK_AC, _mod.ORNEK_KAPA
 MUAF_KALIP = _mod.MUAF_KALIP
 olu_ic_baglar = _mod.olu_ic_baglar
+olu_capalar = _mod.olu_capalar
 olay_okura_ulasti = _mod.olay_okura_ulasti
 x_izleri = _mod.x_izleri
 kacan_etiketler = _mod.kacan_etiketler
@@ -390,6 +391,21 @@ sina("varlık · çapa · sorgu · dış adres yanlış alarm üretmiyor",
 kok = _agac({"s/index.html": '<a href="/og/yok.png">kart</a>'})
 sina("hedefsiz varlık bağı da yakalanıyor",
      list(olu_ic_baglar(kok)) == ["/og/yok.png"], f"gelen {list(olu_ic_baglar(kok))}")
+
+# (20b) SAYFA İÇİ ÇAPA. Karne söz defterine çapayla bağlar; kayıt basılmazsa
+# bağ boşa düşer. Hedef varsa, kodlanmış Türkçe kimlik ve çıplak "#" sessiz.
+kok = _agac({
+    "b/index.html": ('<a href="#soz-a">a</a><a href="#soz-yok">yok</a><a href="#">üst</a>'
+                     '<a href="#%C3%B6zet">özet</a><a href="#y-risk">risk</a>'
+                     '<li id="soz-a"></li><section id="özet"></section>'
+                     '<section data-x id="y-risk"></section>'),
+    "c/index.html": '<a href="#n">n</a><a name="n"></a>',
+})
+c = olu_capalar(kok)
+sina("hedefsiz sayfa içi çapa yakalanıyor (yalnız o)",
+     c == {"b/index.html": ["soz-yok"]}, f"gelen {c}")
+(kok / "b/index.html").write_text('<a href="#soz-yok">x</a><p id="soz-yok"></p>', encoding="utf-8")
+sina("hedef konunca çapa sessiz", olu_capalar(kok) == {}, f"gelen {olu_capalar(kok)}")
 
 
 # ---------------------------------------------------------------------------

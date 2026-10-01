@@ -361,8 +361,10 @@ sınar: süreç dili ENGEL, bütçeli kalıplar UYARI.
 9. **Kaynak ve kişi adıyla.** Her dış iddia adlı kaynakla (Reuters, FT,
    Bloomberg, kurumun adı) ve kişinin adıyla: "bir yatırım bankası", "bir
    bölge başkanı… bir diğeri", "haber akışına göre" yazılmaz.
-10. **Geçmiş çağrılar** söz defterinde durur; düzyazıda sayı başına en çok bir
-    atıf, "(20.09 notu)" biçiminde.
+10. **Geçmiş çağrılar** söz defterinde durur. Günlük sayıda düzyazıda sayı
+    başına en çok bir atıf, "(20.09 notu)" biçiminde; haftalık sayıda atıf
+    YALNIZ karne bölümündedir ve kapanan kayıt sayısı kadardır (öbür bölümlerde
+    sıfır; bkz. "Haftaya bakış").
 11. **Fiyatlama dili serbest, tavsiye dili yasak.** "Piyasa X'i fiyatlıyor;
     risk Y yönünde asimetrik" yazılır; al/sat/hedef/pozisyon yazılmaz.
 12. **Sayılar rakamla** ("52 haftalık", "17 Eylül"); vurgu büyük harfle değil
@@ -383,7 +385,9 @@ alt bölümleri. Tekrar ölçüleri günlükle aynıdır; hedef en az 200 tekil 
 %10'un altında tekrar (denetimin bilgi satırı yazar, eşik değildir).
 
 Okurun kısa yolu açık tutulur: **özet → okuma → senaryolar → önümüzdeki hafta**
-(~1.800–3.000 kelime). Sayfa künyesi tahmini okuma süresini ve kısa yolu basar;
+(~2.600–4.200 kelime, dakikada 200 kelimeyle 13–21 dakika; aralık aşağıdaki dört
+bölümün aralıklarının toplamıdır). Sayfa künyesi tahmini okuma süresini ve kısa
+yolu AYNI hızla (dakikada 200 kelime) basar;
 bu dört bölüm kendi başına okunduğunda haftanın tezi, mekanizması ve önümüzdeki
 haftanın sınavı eksiksiz anlaşılmalıdır. Ayrıntı bölümleri onu derinleştirir,
 tekrar etmez.
@@ -405,6 +409,10 @@ Sayfa bölümleri bu sırayla basar (sayının beyanı, `gundem_yazi_bolumleri`)
 | 9 | `gundem.emtia` | Emtia ve enerji | 450–800 | en az 2 |
 
 Hepsi haftalık sayıda **zorunludur**; alt bölümü az olan bölüm UYARI alır.
+Aralıklar YÖNERGEDİR (bölüm aralık dışına düşerse UYARI); iki şey ENGEL'dir:
+toplamın 10.800 kelimeyi aşması ve **4.500 kelimenin altında kalması** — eski
+rutin talimatıyla yazılmış ~2.800 kelimelik bir pazar sayısı bölüm bölüm yalnız
+uyarı alıp yayına gidiyordu; taban, haftalık kipin sözleşmesinin kendisidir.
 Alt bölüm `<h3>Başlık</h3>` ile açılır ve altında günlükteki kalın başlıklı
 paragraf düzeni sürer. Ayrı bir "kilit gelişmeler" bölümü YOKTUR (biçim 2'nin
 tekrarının ana taşıyıcısı oydu: başka bölümlerin hikâyelerini önceden anlatıyordu).
@@ -417,65 +425,96 @@ hareket (`h1`) ya da yayımlanan veri + kıyası + anlamı; olağandışılık h
 (karşı mekanizma dahil) → **rejim panosunun hafta içindeki gerilimi** (hangi iki
 satır çelişiyor, hangisi önce kırılır; pano haftalık sayıda farkı bir önceki
 haftalık sayıya göre basar) → **ne fiyatlanıyor ve risk hangi yönde asimetrik**
-→ **görüşü önümüzdeki hafta hangi yayım ya da seviye değiştirir**. Maddelerdeki
+→ **görüşü değiştirecek tek tetik**, adıyla ve bir cümleyle; koşulun kendisi
+(ne olursa ne olur) senaryo bölümünün evidir. İleriye bakışın İKİ evi vardır:
+senaryolar (koşullu patika) ve gün gün takvim (yayım yayım sonuç → anlam);
+varlık alt bölümleri haftalık kipte "izlenecek ölçü" cümlesiyle KAPANMAZ —
+günlük bölüm anatomisinin o parçası haftalıkta senaryoya taşınır. Maddelerdeki
 rakamları yeniden saymaz (özetle en çok iki ortak olgu); geçen pazarın açılış
 cümlesini tekrar etmez. Tek günlük bir hareket ancak TARİHİYLE ve haftalık
 birikimin kaçta kaçı olduğuyla anılır.
 
 **3. Senaryolar ve risk haritası.** İki ya da üç BİRLEŞİK patika, her biri bir
-`<h3>` (ör. "Ana senaryo: …", "Alternatif: …", "Kuyruk: …"). Her patika üç
-parçadan kurulur:
+`<h3>` (ör. "Ana senaryo: …", "Alternatif: …", "Kuyruk: …"); ana senaryo İLK
+alt bölümdür, çünkü gönderi bölümün ilk paragrafını "Ana senaryo:" diye alır.
+Her patika üç parçadan kurulur:
 - **tetik** — adıyla bir yayım ya da bir seviye ve eşiği ("PPK 23 Ekim'de
   koridoru daraltırsa", "USD/TRY haftalık %0,5'i aşarsa");
 - **varlık etkisi** — TL faizi ve DİBS eğrisi, USD/TRY ve taşıma, BIST, ABD uzun
   ucu, altın ya da petrol: hangi yönde ve hangi mekanizmayla;
-- **teyit ya da çürütme ölçüsü** — hangi seri, hangi değeri görürse patika
+- **teyit ölçüsü** (metinde bu adla; "çürütme ölçütü" üslup kapısında ENGEL
+  kalıbıdır) — hangi seri, hangi değeri görürse patika
   doğrulanmış ya da düşmüş sayılır.
 Olasılık rakamı UYDURULMAZ; adlı bir piyasa fiyatlaması varsa o yazılır (ör.
-vadeli faiz sözleşmelerinin ima ettiği artırım ihtimali, kaynağıyla). Her
-patika söz defterine kısa bir kayıt olarak girer ve vadesi bir sonraki pazardır;
-karne böylece ölçülen katmandan kurulur.
+vadeli faiz sözleşmelerinin ima ettiği artırım ihtimali, kaynağıyla).
+
+**Söz defterine YALNIZ ana senaryo girer.** Alternatif ve kuyruk patikaları
+birbirini dışlar; hepsi ayrı söz olarak kaydedilseydi her hafta en az biri
+yapısal olarak "tutmadı" çıkar ve isabet oranı ölçtüğü şeyi değil senaryo
+SAYISINI ölçerdi. Kaydın tezi ana senaryonun tezidir; teyit ölçüsü kaydın
+`ne_bakilacak` alanına, alternatifin tetiği ise aynı alana "şu olursa düşer"
+diye yazılır. **Vade tetiğin tarihidir** (PPK 22 Ekim'deyse vade 22 Ekim);
+tetik tarihsiz bir seviyeyse vade bir sonraki pazardır. Karne böylece ölçülen
+katmandan, tek kayıtla kurulur.
 
 **4. Önümüzdeki hafta — gün gün.** Her gün bir paragraf:
-`<p><strong>Pazartesi 5 Ekim.</strong> …</p>`. Günün içinde Türkiye önce. Her
-yayım için önceki değer ve **iki yönlü sonuç → anlam** ("güçlü gelirse X,
-zayıf gelirse Y"); Hazine ihaleleri modelin tahminiyle; merkez bankası
-toplantıları ve konuşmacılar adıyla; planı değişen takvim ("ne değişti").
-Sayfa ölçülen takvim tablosunu basar: beklenti sayısını yineleme. Senaryo
-bölümü bir yayımı ancak tetik olarak adıyla anar; aynı sonucu ikinci kez
-anlatmaz.
+`<p><strong>Pazartesi 5 Ekim.</strong> …</p>`. Günün içinde Türkiye önce.
+Önceki değer, anket beklentisi ve modelin tahmini (Hazine ihaleleri dahil)
+sayfanın ölçülen **"Haftanın takvimi"** tablosundadır; düzyazı o sayıları
+YİNELEMEZ, yalnız **iki yönlü sonuç → anlam** ("beklentinin üstünde gelirse
+X, altında gelirse Y") ve beklentiden ya da modelden sapmanın neyi
+değiştireceğini yazar. Merkez bankası toplantıları ve konuşmacılar adıyla;
+planı değişen takvim ("ne değişti"). Senaryo bölümü bir yayımı ancak tetik
+olarak adıyla anar; aynı sonucu ikinci kez anlatmaz.
 
-**5. Haftanın karnesi.** Sayfa ölçülen karneyi (bu hafta kapanan, açılan ve
-vadesi önümüzdeki haftaya düşen sözler; tuttu/kısmen/tutmadı sayımı) bölümün
-başında basar. Yazı SAYIM YAPMAZ: neyin NEDEN tuttuğunu ya da tutmadığını,
-geçen haftanın senaryolarından hangisinin gerçekleştiğini ve haftanın gelen
-verilerinin beklentiye göre ne söylediğini yazar. Geçmiş çağrı atfı
+**5. Haftanın karnesi.** Sayfa ölçülen karneyi bölümün başında **dizin**
+olarak basar: bu hafta kapanan (tuttu/kısmen/tutmadı sayımıyla), açılan, vadesi
+önümüzdeki haftaya düşen ve vadesi geçip hesabı verilmemiş sözler, her biri
+konu ve tarihiyle; her konu, sözün tam metnine (söz, sonuç, ne bakılacak)
+sayfanın aşağısındaki söz defterinde bağlanır. Tam metin yalnız orada basılır.
+Yazı SAYIM YAPMAZ ve sözü yeniden yazmaz: neyin NEDEN tuttuğunu ya da
+tutmadığını ve geçen haftanın ana senaryosunun gerçekleşip gerçekleşmediğini
+yazar. Haftanın gelen verilerinin sonucu ÖZETİN evidir; karne bir veriyi ancak
+bir sözün sonucunu belirlediyse ve rakamı yinelemeden anar. Geçmiş çağrı atfı
 ("(27.09 notu)") yalnız bu bölümde ve kapanan kayıt sayısı kadar; öbür
-bölümlerde sıfır. Kapanmamış ama tezi sarsılmış bir kayıt varsa kaydın kendisi
-güncellenir (izleme.json), burada tek cümleyle anılır.
+bölümlerde sıfır. Vadesi geçen bir söz bu bölümde hesabıyla kapanır ya da
+neden ölçülemediği kayda yazılır. Kapanmamış ama tezi sarsılmış bir kayıt
+varsa kaydın kendisi güncellenir (izleme.json), burada tek cümleyle anılır.
+Okurun cümlesiyle yazılır, defterin diliyle değil: "27.09 notu TLREF'in hafta
+içinde koridor tavanına döneceğini söylemişti; döndü, çünkü …" — "kaydın tezi",
+"kurduğumuz kayıt", "çürütme ölçütü" gibi defter dili üslup kapısında ENGEL'dir.
 
-**6. Türkiye: piyasalar.** Alt bölümler: **TL faizi ve DİBS** (haftalık bp
-farkı vade vade, eğim ve forward; başabaş ile reel bacağın ayrıştırması, TÜFEX
-sığlığı varsa "kayda değer işlem görmedi" diye) · **Kur ve taşıma** (USD/TRY
-haftalık hareket ve σ, euro/TL ve sepet, devalüasyon hızı beş günlük
-ortalamasıyla, taşıma makası) · **Akımlar** (yabancının haftalık, 4 ve 13
-haftalık net alımı; YP mevduatı gerçek ve tüzel kişi, parite arındırılmış;
-TCMB'nin tahmini döviz akımı) · **BIST** (sektör kırılımı, dolar bazlı hareket,
-bankalar). Kaynak: sayfanın "Bu hafta gelen veriler" bloğu ve onun katlı
-tablosu (eşiğin altında kalan güncellemeler), `grafikler.egri`nin 7 gün önceki
-eğrisi, piyasa satırlarının `h1`/`h1_sigma` alanları.
+**6. Türkiye: piyasalar.** Haftalık hareketin kendisi (USD/TRY'nin, 2 ve 10
+yıllığın haftalık farkı ve σ'sı) özetin evidir; bu bölüm onun üzerine YENİ bir
+işlem yapar. Alt bölümler: **TL faizi ve DİBS** (eğimin ve forward'ın değişimi,
+vade vade dağılımın biçimi; başabaş ile reel bacağın ayrıştırması, TÜFEX
+sığlığı varsa "kayda değer işlem görmedi" diye; Hazine ihale faizinin ikincil
+piyasaya geçişi tek cümleyle) · **Kur ve taşıma** (euro/TL ve sepet — euro/TL'nin
+TEK evi burasıdır —, devalüasyon hızı beş günlük ortalamasıyla, taşıma makası,
+çok günlü birikim) · **Akımlar** (yabancının haftalık, 4 ve 13 haftalık net
+alımı; YP mevduatı gerçek ve tüzel kişi, parite arındırılmış) · **BIST**
+(sektör kırılımı, dolar bazlı hareket, bankalar). Kaynak: sayfanın "Bu hafta
+gelen veriler" bloğu ve onun katlı tablosu ("Bu hafta güncellenen öbür
+seriler"), `grafikler.egri`nin 7 gün önceki eğrisi, piyasa satırlarının
+`h1`/`h1_sigma` alanları.
 
-**7. Türkiye: makro, politika ve maliye.** Alt bölümler: **Haftanın verileri**
-(yayımlanan her veri: sonuç, önceki değer, anlam — kaynağıyla) · **TCMB bilançosu
-ve rezerv** (resmî haftalık seri ile günlük bilanço tahmini ayrı) · **Kredi ve
-makroihtiyati** (büyüme alt kırılımı, faizler, makas) · **Maliye ve Hazine**
-(bütçe, ihale sonucu modelle kıyaslı, strateji) · **Düzenleme** (kurum adı,
-ölçek, tavan, yürürlük tarihi). Piyasa fiyatlaması bölüm 6'nın evidir; burada
-yalnız verinin piyasaya geçiş mekanizması tek cümleyle anılır.
+**7. Türkiye: makro, politika ve maliye.** Yayımlanan verinin SONUCU (sayı,
+önceki değer, kıyas) özetin evidir; bu bölüm aynı rakamı yinelemez, onun alt
+kırılımını ve mekanizmasını yazar. Alt bölümler: **Haftanın verileri** (alt
+kırılım, çekirdek–manşet ayrışması, beklentiden sapmanın kaynağı — kaynağıyla)
+· **Para politikası** (PPK kararı ve metni, TCMB iletişimi; kararın piyasa
+fiyatlaması bölüm 6'dadır) · **TCMB bilançosu, rezerv ve döviz akımı** (resmî
+haftalık seri, günlük bilanço tahmini ve tahmini döviz akımı TEK alt bölümde) ·
+**Kredi ve makroihtiyati** (büyüme alt kırılımı, faizler, makas) · **Maliye ve
+Hazine** (bütçe; ihale sonucu — tutar, faiz, modelle kıyas — ve strateji) ·
+**Düzenleme** (kurum adı, ölçek, tavan, yürürlük tarihi). Piyasa fiyatlaması
+bölüm 6'nın evidir; burada yalnız verinin piyasaya geçiş mekanizması tek
+cümleyle anılır.
 
 **8. Küresel.** Alt bölümler: **ABD faizi ve Fed** (eğri şekli, çok günlü
 birikim, konuşmacılar adıyla) · **Öbür merkez bankaları** (ECB, BoJ, BoE ve
-gelişen piyasalar) · **Dolar ve G10** (Türkiye'ye geçişi: euro/TL) · **Hisse ve
+gelişen piyasalar) · **Dolar ve G10** (EUR/USD ve G10; euro/TL bölüm 6'nın
+evidir, burada yalnız geçiş mekanizması) · **Hisse ve
 kredi** (HY, IG ve EMBI ayrışması; Avrupa ve Asya) · **Jeopolitik ve ticaret**.
 Pazar akşamı yazılır: "bu sabah" alt konusu haftalıkta yoktur.
 
@@ -488,14 +527,14 @@ düzyazı söylemez) · **Doğal gaz** · **Değerli ve sanayi metalleri** ·
 
 | konu | ev |
 |---|---|
-| haftanın rakamları | `ozet.ne_oldu` |
-| TL faizi, DİBS, kur, taşıma, akımlar, BIST | `turkiye` |
-| yayımlanan Türkiye verisi, TCMB bilançosu ve rezerv, kredi ve makroihtiyati, bütçe ve Hazine, düzenleme | `turkiye_makro` |
-| Fed, ECB, BoJ, G10, küresel hisse ve kredi, jeopolitik | `kuresel` |
+| haftanın rakamları: haftalık hareket ve σ, yayımlanan verinin sonucu ve kıyası | `ozet.ne_oldu` |
+| TL faizinin ve DİBS eğrisinin biçimi, euro/TL ve sepet, taşıma, akımlar, BIST, ihale faizinin ikincil piyasaya geçişi | `turkiye` |
+| verinin alt kırılımı ve mekanizması, PPK kararı ve TCMB iletişimi, TCMB bilançosu, rezerv ve döviz akımı, kredi ve makroihtiyati, bütçe, ihale sonucu ve strateji, düzenleme | `turkiye_makro` |
+| Fed, ECB, BoJ, EUR/USD ve G10, küresel hisse ve kredi, jeopolitik | `kuresel` |
 | petrol, gaz, metaller | `emtia` |
-| gelecek yayım, ihale, toplantı | `takvim` |
-| birleşik patika | `risk` |
-| geçmiş çağrı | `karne` |
+| gelecek yayım, ihale, toplantı: yayım yayım sonuç → anlam | `takvim` |
+| birleşik patika, koşul (ne olursa ne olur) | `risk` |
+| geçmiş çağrının hesabı | `karne` |
 
 Bir konu kendi evinde tam anlatılır; başka bölümde en çok tek cümleyle anılır.
 Hürmüz'ün yeri `kuresel`dir, `emtia` onun fiyat etkisini tek cümleyle anar.
@@ -506,9 +545,10 @@ Bir bölüm, bir madde rakamını ancak üzerinde YENİ bir işlem yapıyorsa an
 
 1. **Pencere haftalıktır.** Haftalık değişim (`h1`), haftalık σ ve haftalık
    birikim; "bugün sınanacak" gibi günlük dil yok.
-2. **Kıyas noktası bir önceki pazardır.** Söz defteri, rejim farkı, eşiğin
-   altında kalan güncellemeler tablosu ve tekrar ölçüleri (günler arası,
-   kronik olgu, açılış) bir önceki HAFTALIK sayıyla kıyaslanır.
+2. **Kıyas noktası bir önceki pazardır.** Söz defteri, rejim farkı, gösterge
+   şeridi, "Bu hafta güncellenen öbür seriler" tablosu ve tekrar ölçüleri
+   (günler arası, kronik olgu, açılış) bir önceki YAZILMIŞ haftalık sayıyla
+   kıyaslanır; "bu hafta yeni" o sayının ölçüm anından sonra gelen sürümdür.
 3. **Olağandışılık haftalık okunur.** Asıl bilgi çoğu zaman ham listeyle σ
    listesinin ayrışmasıdır.
 4. **Veri kısıtı dipnottadır** (vade devri, bayat seri, boş bar); düzyazıya
@@ -521,7 +561,14 @@ Bir bölüm, bir madde rakamını ancak üzerinde YENİ bir işlem yapıyorsa an
    sona erdi; haftaya bakış teknik içeriği devralmaz.
 8. **Haftanın günlüklerini yeniden yazma.** Haftalık sayı haftanın olgularını
    taşır, ama günlük notların cümlelerini taşımaz: aynı olgu haftalık bağlamla
-   (birikim, sonuç, sonraki sınav) yeniden kurulur.
+   (birikim, sonuç, sonraki sınav) yeniden kurulur. Denetim haftalık sayıyı
+   haftanın yazılmış günlükleriyle ayrıca kıyaslar; örtüşme günler arası
+   eşiği aşarsa UYARI verir.
+9. **X gönderisi sayfadan kurulur.** Haftalık gönderi manşeti, özetin
+   maddelerini (haftalık bütçeyle), okumanın başını ve ANA SENARYOYU taşır;
+   alternatif ve kuyruk gönderiye girmez. Ana senaryonun ilk cümlesi tetiği ve
+   etkisini tek başına söyleyecek biçimde yazılır — gönderide kesildiği yer
+   orasıdır.
 
 ## Haftalık teknik analiz — SONA ERDİ (27.09.2026 sayısı son sayı)
 
@@ -579,7 +626,7 @@ Kalıcı çözüm rutin metnini claude.ai arayüzünden düzeltmektir.
 | `zincir.py` hiç geçmiyor | 0. adım zincire bakmaktır | **Araçla ÖLÇÜLDÜ**: `yaz.py` gecikmeyi zincir raporundan bağımsız kaydeder ve `gecikme.yml` alarmı zincir raporuna hiç bakmadan verir. Dayatılamıyor, ama artık görünmüyor da değil |
 | "Rehberdeki on iki bölümü yaz. Haber bölümleri en az 200, yazı bölümleri en az 300, günlük yorum en az 350 kelime" (01.10.2026'da okundu) | Sayı biçim 3'teyse beş bölüm, uzunluk ARALIK (bkz. "Doldurulacak alanlar (biçim 3)"); toplam tavanın ve bölüm üst sınırının 1,5 katının üstü ENGEL | **Araçla kapatıldı**: `yaz.py` biçim 3 sayıda beyan dışı bölüm kimliğini reddeder ve mesajı bu satırı adıyla anar. Eski asgarilerle doğru kimliklere yazılan ~1.700 kelimelik not 01.10.2026 akşamından beri yeni hedef aralığın (1.000–1.700) içinde kalır; tekrarı olgu ölçüleri yakalar, toplam tavan (2.100) eski 4.000+ kelimelik düzene dönüşü durdurur |
 | Haftalık: "`ozet.ne_bekleniyor` önümüzdeki haftayı anlatır; takvimi `beklenti` bölümünde tek tek işle" | Biçim 3'te ileriye bakış `gundem.takvim` (haftalık başlığı "Önümüzdeki hafta — gün gün"); özet yalnız `ne_oldu` | **Araçla kapatıldı**: `yaz.py` biçim 3'te `ne_bekleniyor`u ve `beklenti` kimliğini reddeder |
-| Haftalık: "on iki bölüm, haftalık yorum en az 600 kelime" (01.10.2026'da okundu) | Haftalık sayının kendi dokuz alanı ve 6.000–9.000 kelimelik hedefi (bkz. "Haftaya bakış (haftalık kip)") | **Araçla kapatıldı**: `yaz.py` sayının beyanındaki kimlikler dışını reddeder; denetim haftalık aralıkları ve alt bölüm sayısını ölçer, 10.800 kelimenin üstünü ENGEL sayar |
+| Haftalık: "on iki bölüm, haftalık yorum en az 600 kelime" (01.10.2026'da okundu) | Haftalık sayının kendi dokuz alanı ve 6.000–9.000 kelimelik hedefi (bkz. "Haftaya bakış (haftalık kip)") | **Araçla kapatıldı**: `yaz.py` sayının beyanındaki kimlikler dışını reddeder ve mesajı haftalık kipi adıyla anar; denetim haftalık aralıkları ve alt bölüm sayısını ölçer (UYARI), 10.800 kelimenin üstünü ve **4.500 kelimenin altını** ENGEL sayar — eski talimatla doğru kimliklere yazılan ~2.800 kelimelik bir sayı artık yayına gitmez |
 
 **Silip yeniden kurmak da çözüm değil.** 27.08.2026'da denendi: aracının
 kurduğu bir rutin ateşlendiğinde depoya erişemiyor (sınama koşusu 24 saniyede,
@@ -893,7 +940,7 @@ sayfada "Söz defteri" bölümü olarak basılıyor: açık sözler vadeleriyle,
 zamanda kapananlar sonuçlarıyla. İki sonucu var. Birincisi, bir kaydın `soz` ve
 `ne_bakilacak` alanları artık iç not değil **yayımlanan metindir** — okurun tek
 başına anlayacağı şekilde yazılır — ve **kısa** (biçim 3: `soz` en çok 80
-kelime; tez, çürütme ölçütü, vade; olgular yazıda kalır, denetim uzun kaydı
+kelime; tez, teyit ölçüsü, vade; olgular yazıda kalır, denetim uzun kaydı
 uyarır). İkincisi, bir kaydı kapatırken `isabet`
 alanı doldurulur:
 

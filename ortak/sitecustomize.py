@@ -164,12 +164,21 @@ except Exception as _e:  # noqa: BLE001 — emniyet, koşuyu asla düşürmez
 # Değişken yoksa TEK SATIR çalışmaz; üretim yolu değişmez. Kurulamazsa
 # SESSİZCE GEÇİLMEZ: ölçülmemiş bir koşu, ölçülüp temiz çıkmışla aynı görünür
 # ve tam bu yüzden bu depoda dört kez sahte temiz üretildi.
+#
+# İÇE AKTARMA İLE KURULUM AYRI DENENİR (01.10.2026). İkisi tek `try`daydı ve
+# `except ImportError: pass` modülün YOKLUĞU için yazılmıştı; ama `baslat()`
+# freezegun'u kendi içinde içe aktarıyor ve kütüphane kurulu değilse onun
+# ImportError'ı da aynı dala düşüyordu: TTO_SAHTE_GUN verilmiş, koşu çıkış 0,
+# saat BUGÜNDE — bu oturumda haftalık kipin yıl başı bombasını ilk denemede
+# "temiz" gösteren tam buydu. Modül yoksa sessiz; kurulum düşerse değişken
+# verilmişken GÜRÜLTÜLÜ.
 try:
     import zaman_yolculugu as _zy
-    if _zy.etkin() and not _zy.baslat():
-        raise RuntimeError("saat kaydırılamadı")
 except ImportError:
-    pass
+    _zy = None
+try:
+    if _zy is not None and _zy.etkin() and not _zy.baslat():
+        raise RuntimeError("saat kaydırılamadı")
 except Exception as _ze:  # noqa: BLE001
     import os as _os
     import sys as _sys

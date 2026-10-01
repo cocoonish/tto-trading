@@ -61,7 +61,7 @@ const farkYaz = (s: RejimSatiri): string | null => {
           {bicim(s)}
           {s.birim !== '%' && s.deger !== null && <span class="rj-birim">{s.birim}</span>}
           {farkYaz(s) && (
-            <span class="rj-fark" title={kiyas[0].toLocaleUpperCase('tr-TR') + kiyas.slice(1)}><span class="gorunmez">{kiyas} </span>{farkYaz(s)}</span>
+            <span class="rj-fark" title={'Bir ' + kiyas}><span class="gorunmez">{kiyas} </span>{farkYaz(s)}</span>
           )}
         </span>
         <span class="rj-etiket">{s.etiket}</span>

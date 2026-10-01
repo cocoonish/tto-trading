@@ -75,6 +75,10 @@ bölüm var; her biri düzenin bir kuralına karşılık gelir:
       varlığa çözülmeli. Silinen bir sayfaya bağlanan başka bir sayfa hiçbir
       yerde hata vermez; bağı kuran çoğu zaman bir bileşendir ve kaynakta
       adres diye geçmez, o yüzden ölçüt kaynağa değil ÇIKTIYA bakar.
+  (20b) SAYFA İÇİ ÖLÜ ÇAPA (uyarı) — derlenmiş her sayfada `href="#x"` aynı
+      sayfanın bir `id="x"`ine çözülmeli. Haftanın karnesi kaydı söz defterine
+      çapayla bağlar (01.10.2026); kayıt basılmadığı gün bağ hiçbir yerde hata
+      vermeden boşa düşer. Yönlendirme kusurudur, yanlış sayı değil: UYARI.
   (21) X İZİ — derlenmiş çıktıda x.com/twitter.com adresi ve "X gönderisi"
       yazısı YOK (kullanıcı kararı: site gönderiyi okura göstermez, hesap
       hiçbir yere yazılmaz). twitter:card meta'sı ve Türkçe "paylaşım"
@@ -584,6 +588,33 @@ def olu_ic_baglar(dist: pathlib.Path) -> dict[str, list[str]]:
                 continue
             kirik.setdefault(yol, []).append(h.relative_to(dist).as_posix())
     return kirik
+
+
+CAPA_BAG = re.compile(r'\bhref="#([^"]+)"')
+CAPA_HEDEF = re.compile(r'\b(?:id|name)="([^"]+)"')
+
+
+def olu_capalar(dist: pathlib.Path) -> dict[str, list[str]]:
+    """(20b) Sayfa içi HEDEFSİZ çapalar: sayfa → hedefi olmayan çapalar.
+
+    Yalnız derlenmiş SAYFALAR (index.html): gömülü figür dosyaları
+    megabaytlarca ve çapa taşımaz. Çapa ile hedef iki yazımda da kıyaslanır
+    (HTML kaçışı çözülmüş ve yüzde kodlaması açılmış), çünkü derleyici Türkçe
+    harfli bir kimliği bağda kodlayıp nitelikte kodlamadan basabilir.
+    """
+    olu: dict[str, list[str]] = {}
+    for h in sorted(dist.rglob("index.html")):
+        try:
+            m = h.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            continue
+        hedef = {unescape(x) for x in CAPA_HEDEF.findall(m)}
+        eksik = sorted({c for c in CAPA_BAG.findall(m)
+                        if unescape(c) not in hedef
+                        and urllib.parse.unquote(unescape(c)) not in hedef})
+        if eksik:
+            olu[h.relative_to(dist).as_posix()] = eksik
+    return olu
 
 
 X_BAG = re.compile(r'https?://(?:www\.)?(?:x|twitter)\.com/[^"\'\s<)]*')
@@ -1820,6 +1851,12 @@ def main() -> int:
             hata.append(f"ölü iç bağ {yol} — {len(sayfalar)} sayfada, ör. "
                         f"{sayfalar[0]}")
         print(f"  hedefsiz adres {len(kirik)}")
+        # (20b) sayfa içi çapa — yönlendirme kusuru, UYARI.
+        capa = olu_capalar(KOK / "site/dist")
+        for sayfa, cs in sorted(capa.items()):
+            uyari.append(f"ölü çapa — {sayfa}: {', '.join('#' + c for c in cs[:5])}"
+                         f"{' …' if len(cs) > 5 else ''} (sayfada bu kimlik yok)")
+        print(f"  sayfa içi ölü çapa {sum(len(v) for v in capa.values())} ({len(capa)} sayfa)")
 
     # ------------------------------------------------------------ (21)
     # X İZİ. Site X gönderisini okura göstermiyor (kullanıcı kararı); bağı

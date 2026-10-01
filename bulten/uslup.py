@@ -38,6 +38,10 @@ class Kalip:
     # standart adlar) ÖLÇEKLENMEZ: bir sayıda hiç geçmemesi gerekeni uzunluk
     # meşrulaştırmaz.
     olcekli: bool = False
+    # Kalıbın SAYILMADIĞI alanlar (yazi_alanlari adlarıyla). Haftalık karne
+    # bölümünün görevi geçmiş çağrıyı anlatmaktır; "demiştik" orada bütçeye
+    # girmez, öbür bölümlerde girer (rehber: "geçmiş çağrı atfı yalnız karnede").
+    muaf: tuple[str, ...] = ()
 
 
 def _k(desen: str, bayrak=0) -> re.Pattern:
@@ -60,7 +64,8 @@ KALIPLAR: tuple[Kalip, ...] = (
           _k(r"\b(?:çürüt(?:me|ücü)\s+ölçüt\w*|kaydın\s+(?:kendi\s+)?(?:çürüt|doğrula|iddia|vade|tez)\w*|"
              r"(?:kurduğumuz|açtığımız)\s+(?:bir\s+)?kay[ıi]t\w*|vadeli\s+(?:yeni\s+)?(?:bir\s+)?kay[ıi]t\w*|"
              r"kaydımız\w*)"),
-          None, "geçmiş çağrı söz defterinde durur; düzyazıda en çok bir kez '(20.09 notu)'"),
+          None, "geçmiş çağrı söz defterinde durur; düzyazıda '(20.09 notu)' diye an, "
+                "tezini okur cümlesiyle yaz ('20.09 notunun tezi — TLREF tavana döner — tuttu')"),
     # Daraltma (01.10.2026 incelemesi): "dürüstçe" ve "şimdiden söyleniyor"
     # meşru piyasa cümlelerinde de geçiyor ("Powell dürüstçe kabul etti",
     # "kulislerde şimdiden söyleniyor"); öz-atıf yalnız birinci tekil/çoğul
@@ -97,9 +102,13 @@ KALIPLAR: tuple[Kalip, ...] = (
           _k(r"kapanışını\s+taşıyor|(?:barını|seansını)\s+boş\s+verdi"),
           None, "satırın tarihi sayfada yazar; düzyazıya taşıma"),
     # ── UYARI (bütçeli): tek tek meşru, yoğunluğu kusur
+    # ÖLÇEKLENMEZ (01.10.2026, inceleme): ilk yazım bütçeyi uzunlukla büyütüyordu
+    # ve 9.000 kelimelik haftalıkta beş atfı her bölüme yaymaya izin veriyordu;
+    # rehber ise haftalıkta atfı karneye hapseder. Karne muaf, kalanı bir.
     Kalip("Y03", "'yazmıştık' ailesi",
           _k(r"\b(?:yazmıştık|söylemiştik|demiştik|koymuştuk|beklemiştik|sormuştuk)\b"),
-          1, "geçmişe atıf sayı başına en çok bir kez", True),
+          1, "geçmişe atıf sayı başına en çok bir kez (haftalıkta yalnız karne bölümünde)",
+          muaf=("gundem.karne",)),
     Kalip("Y10", "σ yerine uzun tanım",
           _k(r"kendi\s+(?:günlük\s+|haftalık\s+)?oynaklığ\w+\s+(?:\([^)]*\)\s+)?(?:göre\s+)?[\d,]+\s+(?:kat|standart)"),
           1, "olağandışılığı '(1,5σ)' biçiminde yaz", True),
@@ -157,6 +166,8 @@ def olc(alanlar: dict[str, str]) -> dict:
     for k in KALIPLAR:
         bulunan = []
         for ad, t in alanlar.items():
+            if ad in k.muaf:
+                continue
             for m in k.desen.finditer(t):
                 bulunan.append((ad, m.group(0)))
         sayim[k.kod] = len(bulunan)

@@ -13,7 +13,7 @@ Böylece bültende uydurma rakam bulunamaz.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 from ayar import IZLEMLER, RITIM, RITIM_ALAN, GRUPLAR, Izlem, HAT_ADI, GUNLUK_RITIM_GUN
 import gozlem
@@ -94,26 +94,37 @@ def _fark_yaz(v: float, birim: str, ondalik: int) -> str:
 AY_KISA = ("Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara")
 
 
-def donem_yaz(t: str, hat: str = "", bugun: datetime | None = None) -> str:
+def donem_yaz(t: str, hat: str = "", bugun: datetime | date | None = None,
+              ceyreklik: bool | None = None) -> str:
     """Veri tarihinin okura yazımı: aylık "Ağu" · çeyreklik "2026 Ç2" ·
     günlük/haftalık "18.09". Yıl, bültenin yılından farklıysa yazılır.
-    Tanınmayan yazım olduğu gibi kalır (uydurma dönem yazılmaz)."""
+    Tanınmayan yazım olduğu gibi kalır (uydurma dönem yazılmaz).
+    `ceyreklik` verilmezse hattan okunur (CEYREKLIK_HAT); bir izlemin saati
+    hattın çeyreklik ALANIysa çağıran söyler (bkz. `_donem`)."""
     import re as _re
     from ayar import CEYREKLIK_HAT
     yil_simdi = (bugun or datetime.now()).year
+    ceyrek = (hat in CEYREKLIK_HAT) if ceyreklik is None else ceyreklik
     t = str(t or "").strip()
     m = _re.match(r"^(\d{2})\.(\d{4})$", t)
     if m:
         ay, yil = int(m.group(1)), int(m.group(2))
         if not 1 <= ay <= 12:
             return t
-        if hat in CEYREKLIK_HAT:
+        if ceyrek:
             return f"{yil} Ç{(ay - 1) // 3 + 1}"
         return AY_KISA[ay - 1] + ("" if yil == yil_simdi else f" {yil}")
     m = _re.match(r"^(\d{2})\.(\d{2})\.(\d{4})$", t)
     if m:
         return f"{m.group(1)}.{m.group(2)}" + ("" if int(m.group(3)) == yil_simdi else f".{m.group(3)}")
     return _surum_yaz(t)
+
+
+def _donem(iz: Izlem, t: str, bugun: datetime | date | None = None) -> str:
+    """Bir izlemin dönem yazımı: çeyreklik hat YA DA çeyreklik saat alanı."""
+    from ayar import CEYREKLIK_ALAN, CEYREKLIK_HAT
+    return donem_yaz(t, iz.hat, bugun,
+                     ceyreklik=iz.hat in CEYREKLIK_HAT or (iz.hat, iz.tarih_alani) in CEYREKLIK_ALAN)
 
 
 def _ad_donem(ad: str, donem: str) -> str:
@@ -192,11 +203,13 @@ def _seviye(buyukluk: float, iz: Izlem) -> str | None:
 
 
 def izlem_olayi(iz: Izlem, simdi: dict, once: dict | None,
-                tarih: str, onceki_tarih: str) -> Olay | None:
+                tarih: str, onceki_tarih: str, bugun: datetime | date | None = None) -> Olay | None:
+    """`bugun`: bültenin günü — dönem yazımının yılı ondan okunur (duvar saati
+    yalnız yedektir; donmuş bir fikstür yıl dönünce başka bir dönem yazmasın)."""
     yeni = simdi.get(iz.anahtar)
     if yeni is None or isinstance(yeni, bool) or not isinstance(yeni, (int, float)):
         return None
-    donem = donem_yaz(tarih, iz.hat)
+    donem = _donem(iz, tarih, bugun)
 
     # AKIM: değerin kendisi olaydır (haftalık net akım gibi); kıyas gerekmez.
     if iz.tip == "akim":
@@ -407,7 +420,8 @@ def gecikme_olaylari(esik: datetime | None = None) -> list[Olay]:
     return out
 
 
-def haber_endeksi_olaylari(esik_sigma: float = 0.0, esik: datetime | None = None) -> list[Olay]:
+def haber_endeksi_olaylari(esik_sigma: float = 0.0, esik: datetime | None = None,
+                           bugun: datetime | date | None = None) -> list[Olay]:
     """FX haber-duyarlılık endeksinde günün en olağandışı hareketleri.
 
     EŞİK DEĞİL SIRALAMA. Sabit bir eşik burada işlemiyor: gerçek tarihçeyle
@@ -458,7 +472,7 @@ def haber_endeksi_olaylari(esik_sigma: float = 0.0, esik: datetime | None = None
         olaylar.append(Olay(
             grup="haber", seviye="dikkat",
             baslik=f"Haber tonu — {ad}",
-            metin=(f"Haber tonu, {ad} ({donem_yaz(_surum_yaz(tarih))}): "
+            metin=(f"Haber tonu, {ad} ({donem_yaz(_surum_yaz(tarih), '', bugun)}): "
                    f"{_s(deger_r, 2, True)} ({'; '.join(parca)})."),
             hat="fx-haber-endeksi", anahtar=m["kod"],
             deger=m["deger"], onceki=m["onceki"], fark=m["fark"],
@@ -471,7 +485,7 @@ def _sayi_mi(v) -> bool:
     return v is not None and not isinstance(v, bool) and isinstance(v, (int, float))
 
 
-def hafta_tablosu(esik: datetime | None) -> list[dict]:
+def hafta_tablosu(esik: datetime | None, bugun: datetime | date | None = None) -> list[dict]:
     """HAFTAYA BAKIŞIN "bu hafta güncellenen öbür seriler" tablosu — EŞİKSİZ.
 
     Kapsam: izlemler + ayar.HAFTALIK_KALEMLER. Satır, anahtarın saati bir önceki
@@ -508,7 +522,7 @@ def hafta_tablosu(esik: datetime | None) -> list[dict]:
         once_d = onc.get("d") if onc else None
         onceki_v = gozlem.anahtar_tarihi(once_d, iz.anahtar, iz.tarih_alani) if once_d else ""
         if izlem_mi:
-            o = izlem_olayi(iz, simdi, once_d, v, onceki_v)
+            o = izlem_olayi(iz, simdi, once_d, v, onceki_v, bugun)
             if o is not None and o.seviye in ("onemli", "dikkat"):
                 continue
         yeni = float(simdi[iz.anahtar])
@@ -523,8 +537,8 @@ def hafta_tablosu(esik: datetime | None) -> list[dict]:
                 fark = _fark_isaretli(yeni - eski, b, od)
         satirlar.setdefault(iz.grup, []).append({
             "hat": iz.hat, "hat_ad": HAT_ADI.get(iz.hat, ""), "anahtar": iz.anahtar,
-            "ad": iz.ad, "donem": donem_yaz(v, iz.hat),
-            "onceki_donem": donem_yaz(onceki_v, iz.hat) if onceki_v else "",
+            "ad": iz.ad, "donem": _donem(iz, v, bugun),
+            "onceki_donem": _donem(iz, onceki_v, bugun) if onceki_v else "",
             "deger": _sev(yeni, b, od),
             "onceki": _sev(eski, b, od) if eski is not None else "—",
             "fark": fark,
@@ -533,7 +547,8 @@ def hafta_tablosu(esik: datetime | None) -> list[dict]:
             for gid, gbaslik in GRUPLAR if satirlar.get(gid)]
 
 
-def topla(esik: datetime | None = None, haftalik: bool = False) -> list[Olay]:
+def topla(esik: datetime | None = None, haftalik: bool = False,
+          bugun: datetime | date | None = None) -> list[Olay]:
     """Bültenin olayları. `esik`: bir önceki sayının ölçüm anı (UTC naif) —
     yalnız ondan SONRA ilk kez görülen sürüm bugünün olayıdır (bkz.
     gozlem.bugun_yeni). Haber tonu yalnız |z| ≥ 2 hareketi olaya çevirir."""
@@ -569,12 +584,12 @@ def topla(esik: datetime | None = None, haftalik: bool = False) -> list[Olay]:
             once_d = onc.get("d") if onc else None
             onceki_v = (gozlem.anahtar_tarihi(once_d, iz.anahtar, iz.tarih_alani)
                         if once_d else "")
-            o = izlem_olayi(iz, simdi, once_d, v, onceki_v)
+            o = izlem_olayi(iz, simdi, once_d, v, onceki_v, bugun)
             if o:
                 olaylar.append(o)
     olaylar += yeni_veri_olaylari(list(RITIM), esik=esik)
     olaylar += gecikme_olaylari(esik)
-    olaylar += haber_endeksi_olaylari(HABER_TONU_SIGMA, esik)
+    olaylar += haber_endeksi_olaylari(HABER_TONU_SIGMA, esik, bugun)
     sira = {g: i for i, (g, _) in enumerate(GRUPLAR)}
     onem = {"onemli": 0, "dikkat": 1, "bilgi": 2}
     olaylar.sort(key=lambda o: (onem.get(o.seviye, 3), sira.get(o.grup, 99), o.baslik))

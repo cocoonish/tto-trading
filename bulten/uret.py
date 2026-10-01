@@ -127,7 +127,18 @@ def gostergeler(haftalik: bool = False, esik: datetime | None = None) -> list[di
             continue
         v_tarih = gozlem.anahtar_tarihi(d, anahtar, tarih_alani)
         onc, kiyas = None, "son yayım"
-        if haftalik:
+        # HAFTALIK KIYAS NOKTASI bir önceki haftalık sayının ÖLÇÜM ANIDIR
+        # (01.10.2026) — eşik altı tablo, olay cümlesi ve rejim panosu ile AYNI
+        # nokta. "Duvar saatinden yedi gün önce" ölçümün kaç dakika geç
+        # başladığına bağlıydı: 14:03'te koşan ölçüm önceki pazarın 15:05
+        # görüntüsünden ÖNCEKİ kaydı alıyordu ve aynı sayfada aynı seri iki ayrı
+        # "haftalık fark" taşıyordu (kur şeritte +%0,33, tabloda +%0,12).
+        # Önceki haftalık sayı yoksa (ilk sayı) eski yedek: bir hafta önce.
+        if haftalik and esik is not None:
+            onc = gozlem.esikteki(hat, esik, anahtar)
+            if onc is not None:
+                kiyas = "önceki haftalık sayı"
+        elif haftalik:
             onc = gozlem.anahtar_hafta_once(hat, anahtar, tarih_alani)
             if onc:
                 kiyas = "bir hafta önce"
@@ -146,7 +157,10 @@ def gostergeler(haftalik: bool = False, esik: datetime | None = None) -> list[di
         # tarihli "net rezerv −6,5" beş sayıdır bugünün haberi gibi kırmızı
         # basılıyordu. Fark değişmedi; sayfa ilerlemeyen göstergeyi soluk ve
         # farksız basar. Haftalık sayının kıyası zaten bir hafta öncesidir.
-        bugun_yeni = True if haftalik else gozlem.bugun_yeni(hat, d, anahtar, tarih_alani, esik)
+        # Haftalıkta da aynı kural: önceki haftalık sayıdan bu yana ilerlemeyen
+        # gösterge soluk ve farksız (ilk haftalık sayıda çizgi yoksa hepsi yeni).
+        bugun_yeni = (gozlem.bugun_yeni(hat, d, anahtar, tarih_alani, esik)
+                      if (esik is not None or not haftalik) else True)
         # BAĞLAM: ölçülemiyorsa alan HİÇ yazılmaz (uydurma ortalama yok).
         b_ad, b_metin = "", ""
         b = _pano_baglam().get((hat, anahtar))
@@ -439,7 +453,7 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
     # 2) olaylar — "yeni" bir önceki sayının ölçüm anına göre (bkz. gozlem.bugun_yeni)
     haftalik = tur == "haftalik"
     esik = onceki_olcum_ani(tarih, haftalik)
-    olaylar = olay_m.topla(esik=esik, haftalik=haftalik)
+    olaylar = olay_m.topla(esik=esik, haftalik=haftalik, bugun=tarih)
     grup_adi = dict(ayar.GRUPLAR)
 
     def dk(o):
@@ -542,7 +556,7 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         "haber_tonu": haber_tonu,
         # Haftaya bakış: bir önceki haftalık sayıdan bu yana güncellenen ve
         # eşiğin altında kalan seriler — eşiksiz tablo (bkz. olay.hafta_tablosu).
-        **({"hafta_tablosu": olay_m.hafta_tablosu(esik)} if haftalik else {}),
+        **({"hafta_tablosu": olay_m.hafta_tablosu(esik, tarih)} if haftalik else {}),
         "veri_gunlugu": gunluk,
         # Söz defteri: bültenin verdiği sözlerin okura görünen hâli. Defter
         # zaten tutuluyordu ama yalnız yazı katmanı ve denetim görüyordu;
@@ -552,7 +566,9 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         # soz.py'deki not — ardışık iki sayı arasında %91,4 birebir örtüşme
         # ölçüldü). Önceki sayı yoksa kıyas koşmaz ve karne bunu söyler.
         "izleme": soz_m.ozet(tarih.isoformat(), _onceki_izleme(tarih.isoformat(), haftalik),
-                             haftalik=haftalik),
+                             haftalik=haftalik,
+                             onceki_gun=(((_onceki_haftalik(tarih.isoformat()) or {}).get("tarih") or "")
+                                         if haftalik else "")),
         # Sayfadaki satır içi SVG'lerin verisi. Plotly bültene girmez: gömülü
         # kütüphane tek grafikte 4,6 MB ve sabah notu o ağırlığı kaldırmaz.
         "grafikler": grafik_m.hazirla(),

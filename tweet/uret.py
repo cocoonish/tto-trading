@@ -38,6 +38,16 @@ MADDE_SINIR = 330           # "Bu sabah" maddesi başına
 BU_SABAH_SINIR = 1250       # "Bu sabah" bloğunun tamamı
 OKUMA_SINIR_3 = 650         # biçim 3'te okuma
 GUNDEM_SINIR_3 = 800        # biçim 3'te konu bölümleri
+# HAFTALIK KİP (01.10.2026): haftalık sayının 7–10 maddesi ve dört konu bölümü
+# (+ ana senaryo) var; günlük bütçelerle maddelerin yalnız ilk üçü girdi (Türkiye
+# ilk üçte olduğu için küresel madde HİÇ girmedi) ve gündem döngüsü ilk taşan
+# satırda durduğu için haftalıkta zorunlu Emtia hiç çıkmadı. Tavan (3.800) aynı;
+# bütçe kipin içeriğine bölünür ve gündem satırı etiket sayısına göre kısalır —
+# her etiketli bölüm görünür.
+MADDE_SINIR_HAFTA = 250     # "Bu hafta" maddesi başına
+BU_HAFTA_SINIR = 1500       # maddelerin tamamı
+OKUMA_SINIR_HAFTA = 420     # haftanın okuması
+GUNDEM_SINIR_HAFTA = 1050   # konu bölümleri + ana senaryo
 
 AYLAR = ["", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz",
          "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
@@ -148,8 +158,10 @@ def _bicim3_bolumleri(kip: str = "gunluk") -> tuple[tuple[str, str], ...]:
     """Biçim 3: gündem satırları bülten kayıt defterinden (bulten/ayar.py,
     YAZI_BOLUMLERI_3 → `tweet` etiketi), kipin okuma sırasıyla. İleriye bakış
     (`takvim`) ayrı satırda "Beklenen:" olarak girer."""
-    return tuple((y.id, y.tweet) for y in _bulten_ayar().kip_bolumleri(kip)
-                 if y.tweet and y.id != "takvim")
+    def etiket(y):
+        return (y.haftalik_tweet or y.tweet) if kip == "haftalik" else y.tweet
+    return tuple((y.id, etiket(y)) for y in _bulten_ayar().kip_bolumleri(kip)
+                 if etiket(y) and y.id != "takvim")
 
 
 def _bulten_ayar():
@@ -340,13 +352,15 @@ def bulten_zinciri(b: dict) -> list[str]:
         manset = _site_disi(_duz(b.get("manset") or ""), "manset")
         if manset:
             bolumler[0] += "\n" + manset
+        madde_sinir, blok_sinir = ((MADDE_SINIR_HAFTA, BU_HAFTA_SINIR) if haftalik
+                                   else (MADDE_SINIR, BU_SABAH_SINIR))
         maddeler, toplam = [], 0
         for m in _maddeler(oz.get("ne_oldu") or ""):
             m = _site_disi(_duz(m), "ne_oldu")
             if not m:
                 continue
-            satir = "· " + _kirp(m, MADDE_SINIR)
-            if toplam + len(satir) > BU_SABAH_SINIR:
+            satir = "· " + _kirp(m, madde_sinir)
+            if toplam + len(satir) > blok_sinir:
                 break
             maddeler.append(satir)
             toplam += len(satir) + 1
@@ -356,7 +370,7 @@ def bulten_zinciri(b: dict) -> list[str]:
         if maddeler:
             bolumler.append("\n".join(maddeler))
         if okuma:
-            bolumler.append(_kirp(okuma, OKUMA_SINIR_3))
+            bolumler.append(_kirp(okuma, OKUMA_SINIR_HAFTA if haftalik else OKUMA_SINIR_3))
     else:
         anlati = _site_disi(_duz(b.get("yorum") or ""), "yorum") or _site_disi(_duz(oz.get("ne_oldu") or ""), "ne_oldu")
         if not anlati:
@@ -368,12 +382,17 @@ def bulten_zinciri(b: dict) -> list[str]:
     # özetlenmez, kırpılır; özetlemek uydurma olurdu.
     gundem = b.get("gundem") or {}
     satirlar, toplam = [], 0
-    for anahtar, etiket in gundem_bolumleri(b):
+    blok = ((GUNDEM_SINIR_HAFTA if haftalik else GUNDEM_SINIR_3) if bicim3 else GUNDEM_SINIR)
+    dolu = [(a, e) for a, e in gundem_bolumleri(b) if str(gundem.get(a) or "").strip()]
+    # Satır bütçesi etiket sayısına bölünür: dolu her etiketli bölüm sığar.
+    parca_sinir = (min(GUNDEM_PARCA, max(120, blok // max(1, len(dolu)) - 20))
+                   if bicim3 else GUNDEM_PARCA)
+    for anahtar, etiket in dolu:
         parca = _site_disi(_duz(ALT_BASLIK.sub(" ", str(gundem.get(anahtar) or ""))), anahtar)
         if not parca:
             continue
-        satir = _etiketle(etiket, _kirp(parca, GUNDEM_PARCA))
-        if toplam + len(satir) > (GUNDEM_SINIR_3 if bicim3 else GUNDEM_SINIR):
+        satir = _etiketle(etiket, _kirp(parca, parca_sinir))
+        if toplam + len(satir) > blok:
             break
         satirlar.append(satir)
         toplam += len(satir) + 1

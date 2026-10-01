@@ -3803,3 +3803,115 @@ bileşende. Ölçüldü: her sayının figürü kendi cumasında bitiyor (28.08 
 11.09 · 18.09 · 25.09). Dokuz arıza enjeksiyonunun dokuzu kendi maddesinde
 yakalandı; biri ilk denemede GEÇTİ ve sebep yine MUTASYONDU — yeni kapıda yorum
 yazan bir yol olmadığı için "yorumu da kabul et" mutasyonu arızayı üretmiyordu.
+
+**KARAR (01.10.2026, kullanıcı) — HAFTAYA BAKIŞ 6.000–9.000 KELİMELİK BİR
+RAPORDUR; UZUNLUK TEKRARDAN DEĞİL YENİ BLOKLARDAN GELİR; ve haftalık sayının
+"yeni"si bir önceki YAZILMIŞ haftalık sayının ölçüm anına bağlıdır.** "Haftalık
+bültene de bir el atalım. Onun çok daha detaylı ve uzun olması gerekli";
+aralık kullanıcıya soruldu, 6.000–9.000 seçildi (30–45 dakika). Son biçim 2
+pazar sayısı (27.09) 5.438 kelimeydi, 161 tekil olgu taşıyordu ve geçişlerinin
+%41,2'si tekrardı; senaryo bölümü yoktu, karne düzyazıda sayılıyordu. Yani
+istenen uzunluk eski düzeni büyütmekle gelemezdi: biçim 3'ün haftalık KİPİ
+kendi dokuz alanını taşır (özet · okuma · senaryolar · gün gün takvim · karne ·
+Türkiye piyasaları · Türkiye makrosu · küresel · emtia) ve her olgunun tek evi
+`bulten/YAZIM.md`deki ev tablosundadır. Aralıklar yönergedir; iki şey ENGEL:
+10.800'ün üstü ve 4.500'ün altı. Üst sınır bölüm üst sınırlarının toplamının
+(9.475) üstünde, çünkü bölümlerin hepsini kendi aralığında yazan sayı ENGEL
+almamalı — ilk aralıklar 3.604 > 3.600 ile kurala uyan sayıyı durduruyordu.
+Taban ise rutin metni yüzünden var: pazar rutini hâlâ biçim 2'nin asgarilerini
+söylüyor ve o asgarilerle doğru kimliklere yazılan bir sayı ~2.800 kelimede,
+bölüm bölüm yalnız UYARI alıp yayına gidiyordu; kullanıcının bu değişiklikten
+istediği tek şey uzunluktu. Sigorta rutin metnine değil araca kondu.
+Ölçülen katmanın haftalık parçaları: önceki haftalık sayıdan bu yana ilerleyen
+ama olay eşiğini aşmayan seriler kendi dönemiyle ("Bu hafta güncellenen öbür
+seriler" — ilk adı okura kendi eşiğimizi anlatan "eşiğin altında kalan
+güncellemeler"di), haftanın söz karnesi (kapanan · açılan · vadesi önümüzdeki
+haftaya düşen · vadesi geçmiş), ve kıyas noktası bir önceki haftalık sayı
+olan söz defteri, kilit haber, tekrar ölçüleri, rejim farkı ve gösterge
+şeridi. Pazar adımları bir saat ileri alındı; gönderi tavanı (3.800) kaldı,
+haftalık kipe ayrı bütçe ve ANA SENARYO girdi.
+
+Tabloya giren kalemlerin üçü ölçülerek ÇIKARILDI ve gerekçeleri `ayar.py`de
+adıyla durur: 1 yıllık TÜFEX düğümü vade kaydığında tek günde kuruluş
+sıçraması yapıyor (28.09: reel getiri 9,06 → 6,42) ve eşiksiz tabloda
+"haftanın farkı" gibi basılırdı; TCMB sterilizasyonunun saati özette yazılmıyor
+ve dönemi bilinmeyen bir sayı dönemiyle basılamaz; döviz akımının "ay başından"
+birikimi ay sınırında başka bir ayın birikimiyle yan yana basılıyordu. İki
+saat de düzeldi: GSYH'ye oranlar çeyreklik bir ALANA bağlıdır (`CEYREKLIK_ALAN`;
+ödemeler dengesinde 04.09'daki çeyrek yayımı hiç duyurulmamış, 13.09'da ana
+saat temmuza geçince aynı değer "Tem" gözlemi gibi basılmıştı) ve bütçenin
+aylık akımları akım bacağının saatini taşır; aylık akım bir SEVİYEDİR —
+ağustos açığı ile temmuz açığının farkı mevsimselliği ölçer, haberi değil.
+
+Donmuş kopyaya (862b8ecb) karşı koşan beş mercekli inceleme 47 ham bulgu
+verdi; yinelenenler birleştirildi, biri doğrulamada düştü, kalanı kaynakta
+karşılığı ölçülerek düzeltildi. Dört ders kayda değer.
+
+(1) BİR PENCERE TAKVİMDEN DEĞİL OKURUN GÖRDÜĞÜNDEN TÜRER. Karne ilk yazımda
+(bugün−7, bugün] takvim penceresini kullanıyordu; ölçüm pazar 14:03'te, yazı
+ondan SONRA koştuğu için pazar günü açılan bir senaryo sözü hiçbir haftanın
+"açılan"ına, pazar günü kapanan hiçbir haftanın "kapanan"ına girmiyordu —
+"karne ölçülen katmandan kurulur" sözü tam da senaryo sözleri için tutmuyordu.
+Aynı sayfadaki söz defteri iki ucu dahil yedi günlük pencereyle "yeni" diyordu
+ve iki blok çelişiyordu. Kıyas noktası artık önceki haftalık sayının BASTIĞI
+defterdir ve defterin haftalık "yeni"si karnenin kendi listesidir. Arıza
+enjeksiyonu bu kuralın iki parçasında KAÇTI ve sebep ölçütün körlüğü değil
+FİKSTÜRÜN kuralın koruduğu hâli hiç kurmamasıydı (aynı pazar açılıp kapanan
+söz · geçen pazar basılmış sözün yeniden "yeni" sayılması); iki madde eklendi,
+on dört enjeksiyonun on dördü yakalanıyor.
+
+(2) BİR KIYAS NOKTASI DUVAR SAATİNE BAĞLANAMAZ. Gösterge şeridinin haftalık
+farkı "yedi gün önceki kayıt"tan kuruluyordu; ölçüm 14:03'te koşunca önceki
+pazarın 15:05 görüntüsünden ÖNCEKİ kayıt alınıyordu ve aynı sayfada aynı seri
+iki ayrı haftalık fark taşıyordu (kur şeritte +%0,33, tabloda +%0,12). Şerit
+artık tabloyla ve olay cümlesiyle aynı noktayı okur: önceki haftalık sayının
+ölçüm anı. Ölçüm anı oynasa da fark aynı kalır ve duman bunu iki ayrı saatle
+sınar.
+
+(3) ZAMAN YOLCULUĞU ARACI SESSİZCE ATIL KALABİLİYORDU — ve bunu bir yıl başı
+bombası gösterdi. `olay.donem_yaz` "bugün"ü duvar saatinden okuyordu ve
+dönemi yılsız yazmaya oradan karar veriyordu; donmuş fikstür 2027'nin ilk
+pazartesisinde düşer (donmuş kopyada 2027-01-04: 99 geçti · 2 düştü; düzeltme
+sonrası 101 · 0, beş ileri günde de). Ama ilk koşu bunu GÖSTERMEDİ: bu
+koşucuda freezegun kurulu değildi ve `sitecustomize`nin "modül yoksa sessiz
+geç" dalı (`except ImportError: pass`) `baslat()`ın içinden yükselen
+kütüphane hatasını da yutuyordu — TTO_SAHTE_GUN verilmiş, çıkış 0, saat
+BUGÜNDE. Yani araç tam da kendi başlığındaki "ölçülmemiş bir koşu, ölçülüp
+temiz çıkmışla aynı görünür" cümlesini kendi eliyle üretiyordu. Haftalık iş
+akışı kütüphaneyi kurduğu için üretim ölçümü etkilenmemişti; etkilenen elle
+koşturulan her ölçümdü. İçe aktarma ile kurulum artık ayrı denenir ve
+`zaman_sinav.kendini_sina` kütüphaneyi bir gölge paketle kırıp koşunun
+DÜŞTÜĞÜNÜ sınıyor; eski kodla araç çıkış 2 verip bütün hükümlerini geçersiz
+ilan ediyor. Fikstürler ayrıca ölçtükleri günü açıkça geçirir (`bugun`). Ve
+operatör hatası da kayda geçsin: araç yalnız GÜN kabul ediyor
+("2026-10-04T14:03" reddedildi ve gürültülü düştü — doğru davranış).
+
+(4) KIYAS YALNIZ YAZILMIŞ SAYIYLA. Denetimin tekrar ölçüsü haftalık sayıyı
+cuma günlüğüyle kıyaslıyordu ve yazılmamış bir pazarı (otomatik ölçüm) kıyas
+noktası sayıyordu; ölçüm katmanının tanımıyla aynı olmalıydı: yalnız
+YAZILMIŞ, ve haftalık sayı yalnız haftalık sayıyla. Kuralın 8. maddesi
+("haftanın günlüklerini yeniden yazma") ayrıca ölçülüyor: haftalık sayı
+haftanın yazılmış günlükleriyle birebir öbek düzeyinde kıyaslanır, örtüşme
+günler arası eşiği aşarsa UYARI. Biçim 2 arşivi kendi kuralıyla ölçülür.
+
+Sayfada karne bir DİZİNDİR: konu ve tarih, her konu söz defterindeki tam
+metne çapayla bağlı; tam metin tek yerde basılır (önceki hâlde aynı kayıt
+karnede, defterde ve yazıda üç kez okunuyordu). Bağ yalnız kayıt sayfada
+basılıyorsa kurulur, ve sayfa sınavının 20. ölçütü artık sayfa içi çapaları da
+soruyor (20b, UYARI — yönlendirme kusurudur, yanlış sayı değil): sitenin
+tamamında ölü çapa sıfır, söz kimlikleri bozulunca iki sayfada on dört bağ
+adıyla görünüyor. Arama endeksinde haftalık sayının sınırı 12.000 karakter
+(6.000'de senaryolar hiç aranamıyordu; günlük 6.000 kaldı).
+
+AÇIK: (i) Pazar rutininin metni hâlâ biçim 2'nin talimatını söylüyor ve bir
+aracı onu değiştiremez (27.08 ilkesi); önerilen metin kullanıcıya verildi,
+güncellenene kadar sigorta `yaz.py` (beyan dışı kimlik, `ne_bekleniyor`) ve
+denetimin 4.500 tabanıdır. (ii) Haftalık aralıklar ilk gerçek pazar sayısı
+yazılana kadar ÖLÇÜLMEMİŞ yönergedir; ilk sayılar tekil olgu ve tekrar
+oranıyla ölçülüp gerekirse yeniden kurulur. (iii) Günlük kipte bölüm üst
+sınırlarının toplamı (2.450) toplam ENGEL'inin (2.100) üstünde; haftalıkta
+kapatılan tutarsızlığın günlük eşi, kullanıcının aynı gün koyduğu günlük
+aralığa dokunmamak için bırakıldı. (iv) Bülten dumanının SIGTERM maddesi bu
+oturumda dört koşunun birinde rastgele düştü (önceden var; bu turun
+koşularında düşmedi). (v) TCMB sterilizasyonu haftalık tabloya ancak hat onun
+saatini yazınca döner.

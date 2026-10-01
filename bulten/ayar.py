@@ -186,6 +186,9 @@ GUNLUK_RITIM_GUN = 8
 # okura "2026 Ç2" diye yazılır, çeyreğin son ayının adıyla değil ("Haz" yazmak
 # ikinci çeyrek büyümesini haziran verisi gibi gösterirdi).
 CEYREKLIK_HAT = {"buyume"}
+# Hattın ana saati aylık ama bir ALANI çeyreklik olan saatler (GSYH'ye oranlar):
+# o alana bağlı izlemin dönemi "2026 Ç2" diye yazılır (01.10.2026).
+CEYREKLIK_ALAN = {("butce-borc", "_tarih3"), ("odemeler-dengesi", "_tarih2")}
 
 # Bir hattın ozet.json'u birden fazla SAAT taşıyabilir: aynı dosyada günlük bir
 # seri ile haftalık bir seri yan yana durur. RITIM yalnız ana saati (`_tarih`)
@@ -482,8 +485,11 @@ IZLEMLER: list[Izlem] = [
           eksi_ad="Çekirdek cari açık (altın ve enerji hariç)"),
     Izlem("odemeler-dengesi", "nhn12_mia", "Net hata noksan (12 aylık)", "mlr USD", 1,
           "delta", 4.0, 9.0, "", "Büyümesi kaynağı belirsiz döviz girişine işaret eder.", "dis"),
+    # Çeyreklik oran (`_tarih2`, üç aylık GSYH bacağı): ana saate bağlıyken
+    # 04.09'daki çeyrek yayımı (−%2,44 → −%2,29) hiç duyurulmadı, 13.09'da ana
+    # saat temmuza geçince aynı değer "Tem" gözlemi gibi basıldı (01.10.2026).
     Izlem("odemeler-dengesi", "cari_gsyh", "Cari denge / GSYH", "%", 2, "delta", None, 1.0,
-          "artis", "", "dis", yayim=True, eksi_ad="Cari açık / GSYH"),
+          "artis", "", "dis", yayim=True, eksi_ad="Cari açık / GSYH", tarih_alani="_tarih2"),
 
     # ─────────────────────────────── bütçe ve borç stoku
     # SAAT ALANI AÇIKÇA (01.10.2026): GSYH'ye oranlar ÇEYREKLİK çerçeveden gelir
@@ -501,7 +507,8 @@ IZLEMLER: list[Izlem] = [
           eksi_ad="Faiz dışı açık / GSYH (12 aylık)", tarih_alani="_tarih3"),
     Izlem("butce-borc", "faiz_vergi", "Faiz harcaması / vergi geliri", "%", 1, "delta",
           1.5, 3.0, "azalis",
-          "Borç servisinin vergi tabanını ne kadar yediğinin ölçüsü.", "borclanma"),
+          "Borç servisinin vergi tabanını ne kadar yediğinin ölçüsü.", "borclanma",
+          tarih_alani="akim_tarih"),
     Izlem("butce-borc", "doviz_pay", "Borç stokunda döviz payı", "%", 1, "delta", 1.5, 3.0,
           "azalis", "Kur şokuna duyarlılığın ölçüsü.", "borclanma", tarih_alani="stok_son_ay"),
     Izlem("butce-borc", "yurt_disi_pay", "Borç stokunda yurt dışı yerleşik payı", "%", 1,
@@ -613,16 +620,20 @@ HAFTALIK_KALEMLER: list[Izlem] = [
     Izlem("dibs-verim-egrisi", "forward_1y1y", "1 yıl sonrası 1 yıllık forward", "%", 2, grup="faiz"),
     Izlem("dibs-verim-egrisi", "forward_2y1y", "2 yıl sonrası 1 yıllık forward", "%", 2, grup="faiz"),
     Izlem("dibs-verim-egrisi", "egim_2y5y", "Eğri eğimi (5 yıl − 2 yıl)", "puan", 2, grup="faiz"),
-    Izlem("dibs-verim-egrisi", "reel_egri_1y", "Reel getiri 1 yıllık (TÜFEX)", "%", 2, grup="faiz"),
+    # 1 yıllık TÜFEX düğümü (reel getiri ve başabaş) BİLEREK yok: düğüm vade
+    # kaydığında tek günde kuruluş sıçraması yapıyor (28.09: reel 9,06 → 6,42,
+    # başabaş 27,85 → 30,98) ve eşiksiz tabloda "haftanın farkı" gibi basılırdı.
     Izlem("dibs-verim-egrisi", "reel_egri_5y", "Reel getiri 5 yıllık (TÜFEX)", "%", 2, grup="faiz"),
-    Izlem("dibs-verim-egrisi", "basabas_1y", "Başabaş enflasyon 1 yıllık", "%", 2, grup="enflasyon"),
     Izlem("dibs-verim-egrisi", "basabas_5y", "Başabaş enflasyon 5 yıllık", "%", 2, grup="enflasyon"),
     Izlem("dibs-verim-egrisi", "risk_primi_2y", "Enflasyon risk primi 2 yıllık (başabaş − anket)",
           "puan", 2, grup="enflasyon"),
     # ── para piyasası ve banka faizleri
     Izlem("fonlama-likidite", "bist_on", "BIST gecelik repo", "%", 2, grup="faiz"),
-    Izlem("fonlama-likidite", "sterilizasyon_mlr", "TCMB sterilizasyonu", "mlr TL", 1, grup="faiz"),
-    Izlem("fonlama-likidite", "swap_alim_mn_usd", "TCMB alım yönlü swap stoku", "mn USD", 0, grup="faiz"),
+    # Sterilizasyon BİLEREK yok: APİ tablosunun kendi saati özette yazılmıyor
+    # (ana saatin bir gün gerisinde bitebiliyor) ve dönemi bilinmeyen bir sayı
+    # tabloya dönemiyle basılamaz. Swap stoku kendi saatini taşır.
+    Izlem("fonlama-likidite", "swap_alim_mn_usd", "TCMB alım yönlü swap stoku", "mn USD", 0, grup="faiz",
+          tarih_alani="swap_alim_tarih"),
     Izlem("fonlama-likidite", "kredi_ticari", "Ticari kredi faizi (haftalık)", "%", 2, grup="faiz",
           tarih_alani="hafta_kisa"),
     Izlem("fonlama-likidite", "kredi_ihtiyac", "İhtiyaç kredisi faizi (haftalık)", "%", 2, grup="faiz",
@@ -634,8 +645,8 @@ HAFTALIK_KALEMLER: list[Izlem] = [
     # ── döviz akımı ve mevduat
     Izlem("tcmb-net-rezerv", "ak_son5", "TCMB tahmini döviz akımı (son beş iş günü)", "mlr USD", 1,
           "akim", grup="kur", tarih_alani="ak_tarih"),
-    Izlem("tcmb-net-rezerv", "ak_ay", "TCMB tahmini döviz akımı (ay başından)", "mlr USD", 1,
-          "akim", grup="kur", tarih_alani="ak_tarih"),
+    # "Ay başından" birikim BİLEREK yok: ay sınırında başka bir ayın birikimiyle
+    # yan yana basılıyordu (04.10'da iki günlük ekim, 27 günlük eylülle).
     Izlem("yp-mevduat", "ar_gercek_mn", "YP mevduatı, parite arındırılmış akım: gerçek kişi",
           "mn USD", 0, "akim", grup="kur"),
     Izlem("yp-mevduat", "ar_tuzel_mn", "YP mevduatı, parite arındırılmış akım: tüzel kişi",
@@ -651,11 +662,18 @@ HAFTALIK_KALEMLER: list[Izlem] = [
           grup="kredi"),
     Izlem("kredi-parasal", "g_m2_ar_13y", "M2 büyümesi (13 hafta, yıllık, kur arındırılmış)", "%", 2,
           grup="kredi"),
-    # ── bütçe (aylık)
-    Izlem("butce-borc", "denge_ay", "Merkezi yönetim bütçe dengesi (aylık)", "mlr TL", 1, grup="borclanma"),
-    Izlem("butce-borc", "fdd_ay", "Faiz dışı denge (aylık)", "mlr TL", 1, grup="borclanma"),
-    Izlem("butce-borc", "faiz_ay", "Faiz gideri (aylık)", "mlr TL", 1, grup="borclanma"),
-    Izlem("butce-borc", "vergi_reel_yy", "Vergi geliri, reel yıllık değişim", "%", 1, grup="borclanma"),
+    # ── bütçe (aylık) — saat AKIM bacağınındır (`akim_tarih`), ana saat borç
+    # stokunun ayıdır. Aylık akım "seviye"dir: ardışık iki ayın akım farkı
+    # (ağustos açığı − temmuz açığı) mevsimselliği ölçer, haberi değil; tablo
+    # önceki ayın değerini gösterir, fark yazmaz.
+    Izlem("butce-borc", "denge_ay", "Merkezi yönetim bütçe dengesi (aylık)", "mlr TL", 1, "seviye",
+          grup="borclanma", tarih_alani="akim_tarih"),
+    Izlem("butce-borc", "fdd_ay", "Faiz dışı denge (aylık)", "mlr TL", 1, "seviye", grup="borclanma",
+          tarih_alani="akim_tarih"),
+    Izlem("butce-borc", "faiz_ay", "Faiz gideri (aylık)", "mlr TL", 1, "seviye", grup="borclanma",
+          tarih_alani="akim_tarih"),
+    Izlem("butce-borc", "vergi_reel_yy", "Vergi geliri, reel yıllık değişim", "%", 1, grup="borclanma",
+          tarih_alani="akim_tarih"),
 ]
 
 
@@ -859,6 +877,9 @@ class YaziBolumu:
     zorunlu: bool                    # boş zorunlu bölüm ENGEL (günlükte; haftalıkta `haftalik_zorunlu`)
     tweet: str | None = None         # gönderinin gündem satırındaki etiket
     haftalik_baslik: str | None = None
+    # Haftalık gönderide etiket farklıysa (risk: günlükte gönderiye girmez,
+    # haftalıkta ana senaryo girer). None → `tweet`.
+    haftalik_tweet: str | None = None
     haftalik_zorunlu: bool | None = None   # None → `zorunlu`
     # Haftalık sayıda bölüm kalın başlıklı ALT BÖLÜMLERDEN kurulur (<h3>); denetim
     # en az bu kadarını ister (UYARI). Adlar rehberdedir (YAZIM.md "Haftaya bakış").
@@ -915,7 +936,7 @@ YAZI_BOLUMLERI_3 = (
                "İzlenecek", haftalik_baslik="Önümüzdeki hafta — gün gün"),
     YaziBolumu("risk", "Risk haritası", (0, 220), (600, 1000), False, None,
                haftalik_baslik="Senaryolar ve risk haritası", haftalik_zorunlu=True,
-               haftalik_alt=2),
+               haftalik_alt=2, haftalik_tweet="Ana senaryo"),
     YaziBolumu("karne", "Haftanın karnesi", None, (250, 500), True, None),
     YaziBolumu("turkiye_makro", "Türkiye: makro, politika ve maliye", None, (700, 1100),
                True, "Türkiye makro", haftalik_alt=3),
@@ -945,6 +966,14 @@ YAZI_ARALIK_3 = {
     "ozet_madde": {"gunluk": (4, 6), "haftalik": (7, 10)},
     "toplam": {"gunluk": (1000, 1700, 2100), "haftalik": (6000, 9000, 10800)},
 }
+# HAFTALIK TABAN (01.10.2026, inceleme): haftalık uzunluğun ALT sınırı da ENGEL'dir
+# — günlükte değil. Sebep rutin metni: pazar rutini hâlâ biçim 2'nin asgarilerini
+# ("yorum en az 600, bölümler 200/300") söylüyor ve o asgarilerle yazılan yedi
+# bölümlü bir sayı ~2.800 kelimede, biçim 2 pazar sayılarından (4.901–5.438) bile
+# kısa çıkıyor ve UYARI'yla yayımlanıyordu; kullanıcının bu değişiklikten
+# istediği tek şey uzunluktu. Taban hedefin dörtte üçü: sakin bir haftaya pay
+# bırakır, eski asgarileri durdurur. Sigorta rutin metnine değil araca konur.
+HAFTALIK_TABAN = 4500
 BOLUM_ENGEL_KAT = 1.5
 
 

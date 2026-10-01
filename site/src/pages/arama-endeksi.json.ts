@@ -54,8 +54,13 @@ export async function GET() {
     tags: [k.haftalik ? 'haftaya bakış' : 'günlük'],
     // Biçim 3'te olguların TEK evi manşet ve `ozet.ne_oldu`dur; okuma onları
     // yeniden saymaz — dışarıda kalınca TMSF/ÖTV aramada hiçbir sayfa bulmuyordu.
+    // Haftalık sayının sınırı ayrı (01.10.2026): 6–9 bin kelimelik haftaya bakış
+    // ~50 bin karakter; 6.000 karakter yalnız manşeti, maddeleri ve okumanın
+    // başını taşıyordu, senaryolar hiç aranamıyordu. 12.000 okumayı ve risk
+    // haritasının başını kapsar; endeks yılda ~300 KB büyür (günlükler aynı).
     govde: duzMetin([k.b.manset, k.b.ozet?.ne_oldu, k.b.ozet?.ne_bekleniyor, k.b.yorum,
-                     ...Object.values(k.b.gundem ?? {})].filter(Boolean).join(' ')).slice(0, 6000),
+                     ...Object.values(k.b.gundem ?? {})].filter(Boolean).join(' '))
+      .slice(0, k.haftalik ? 12000 : 6000),
   }));
   const teknikKayitlari = teknikler().map((k) => ({
     tur: 'teknik',

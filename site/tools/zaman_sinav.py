@@ -59,10 +59,11 @@ def kapilar() -> list[Path]:
     return y
 
 
-def _kos(yol: Path, gun: str | None) -> int:
+def _kos(yol: Path, gun: str | None, ek_yol: str | None = None) -> int:
     env = {**os.environ, "PYTHONIOENCODING": "utf-8", "PYTHONUTF8": "1",
            "PYTHONPATH": os.pathsep.join(
-               [str(ORTAK)] + ([p] if (p := os.environ.get("PYTHONPATH")) else []))}
+               [str(ORTAK)] + ([ek_yol] if ek_yol else [])
+               + ([p] if (p := os.environ.get("PYTHONPATH")) else []))}
     if gun:
         env["TTO_SAHTE_GUN"] = gun
     else:
@@ -112,7 +113,19 @@ def kendini_sina() -> bool:
             "import time, sys\n"
             "a = time.time(); time.sleep(0.05); b = time.time()\n"
             "sys.exit(0 if (b - a) > 0.01 else 1)\n", encoding="utf-8")
-        return _kos(z, (dt.date.today() + dt.timedelta(days=30)).isoformat()) == 0
+        if _kos(z, (dt.date.today() + dt.timedelta(days=30)).isoformat()) != 0:
+            return False
+
+        # KURULUM DÜŞERSE SESSİZ GEÇMEZ (01.10.2026). freezegun kurulu değilken
+        # saat kaymıyor ve koşu çıkış 0 veriyordu, çünkü sitecustomize'ın
+        # "modül yok" dalı kütüphanenin ImportError'ını da yutuyordu. Kütüphane
+        # bir gölge paketle kırılır; değişken verilmişken koşu DÜŞMELİDİR.
+        g = Path(d) / "golge" / "freezegun"
+        g.mkdir(parents=True)
+        (g / "__init__.py").write_text('raise ImportError("sınama: kütüphane yok")\n',
+                                       encoding="utf-8")
+        return _kos(z, (dt.date.today() + dt.timedelta(days=30)).isoformat(),
+                    ek_yol=str(g.parent)) != 0
 
 
 def main() -> int:
@@ -124,10 +137,11 @@ def main() -> int:
 
     print("▶ ZAMAN SINAVI — harness önce KENDİNİ sınar")
     if not kendini_sina():
-        print("  ✗ harness sentetik bombayı YAKALAYAMADI — ölçüm GEÇERSİZ")
+        print("  ✗ harness kendi sınamasını geçemedi (sentetik bomba · saatin işlemesi · "
+              "kurulumun gürültülü düşmesi) — ölçüm GEÇERSİZ")
         print("    (bu araç 'temiz' dese de hiçbir hükmü geçerli değil)")
         return 2
-    print("  ✓ sentetik bomba yakalandı; ölçüm geçerli")
+    print("  ✓ sentetik bomba yakalandı, saat işliyor, kurulum arızası gürültülü; ölçüm geçerli")
     if n.hizli:
         return 0
 

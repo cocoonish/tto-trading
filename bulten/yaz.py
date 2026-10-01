@@ -32,8 +32,10 @@ Kullanım — yama dosyası ya da borudan JSON:
 (dosyaya yazılmadı).
 
 Biçim 3 sayılarda (ölçülen sayının `surum` alanı) gündem kimlikleri sayının
-`gundem_yazi_bolumleri` alanındakilerdir (turkiye · kuresel · emtia · takvim ·
-risk) ve özet yalnız `ne_oldu` taşır; beyan dışı kimlik reddedilir (çıkış 2).
+`gundem_yazi_bolumleri` alanındakilerdir (günlük: turkiye · kuresel · emtia ·
+takvim · risk; haftalık: risk · takvim · karne · turkiye · turkiye_makro ·
+kuresel · emtia) ve özet yalnız `ne_oldu` taşır; beyan dışı kimlik reddedilir
+(çıkış 2).
 
 Yama, mevcut içeriğin ÜZERİNE yazar ama dosyadaki diğer her şeyi korur; bir
 bölümü boş göndermek onu silmez (kazara boşaltmaya karşı). Silmek gerekirse
@@ -148,8 +150,9 @@ def uygula(hedef: Path, yama: dict) -> tuple[dict, list[str]]:
                     f"gündem kimlikleri yalnız "
                     f"{', '.join(izinli)} — tanınmayan: {', '.join(disari)}.\n"
                     "Rutin metnindeki 'on iki bölüm' ve 'en az 200/300/350 kelime' "
-                    "talimatları biçim 2'ye (arşiv) aittir; bulten/YAZIM.md esastır "
-                    "('Doldurulacak alanlar (biçim 3)').")
+                    "talimatları biçim 2'ye (arşiv) aittir; bulten/YAZIM.md esastır ("
+                    + ("'Haftaya bakış (haftalık kip)': yedi bölüm, toplam 6.000–9.000 kelime"
+                       if b.get("haftalik") else "'Doldurulacak alanlar (biçim 3)'") + ").")
         if isinstance(yama.get("ozet"), dict) and str(yama["ozet"].get("ne_bekleniyor") or "").strip():
             amin, amax = _ayar.YAZI_ARALIK_3["ozet_madde"][_ayar.yazi_kipi(b)]
             raise SystemExit(
