@@ -472,7 +472,7 @@ class Denetim:
         toplam = len(manset.split())
         oz = b.get("ozet") or {}
         if oz.get("ne_bekleniyor") or not str(oz.get("ne_oldu") or "").strip():
-            amin, amax = _a.YAZI_ARALIK_3["ozet_madde"]
+            amin, amax = _a.YAZI_ARALIK_3["ozet_madde"][kip]
             self.engel.append("Madde özeti (ozet.ne_oldu) yazılmamış — sayfada ölçüm katmanının "
                               f"makine özeti duruyor. Biçim 3'te özet {amin}–{amax} maddedir "
                               "(<ul><li>…</li></ul>); ileriye bakış gundem.takvim'de.")
@@ -481,7 +481,7 @@ class Denetim:
             n = _kelime(no)
             toplam += n
             madde = len(re.findall(r"<li\b", no, re.I))
-            amin, amax = _a.YAZI_ARALIK_3["ozet_madde"]
+            amin, amax = _a.YAZI_ARALIK_3["ozet_madde"][kip]
             if not amin <= madde <= amax:
                 self.uyari.append(f"Özet {madde} madde (hedef {amin}–{amax}, <ul><li>)")
             alt, ust = _a.YAZI_ARALIK_3["ozet"][kip]
@@ -500,14 +500,28 @@ class Denetim:
             self.uyari.append(f"Okuma {ny} kelime (aralık {alt}–{ust})")
         else:
             self._ok(f"okuma: {ny} kelime")
-        for y in _a.YAZI_BOLUMLERI_3:
-            n = _kelime(g.get(y.id, ""))
+        # Bölümler SAYININ BEYANINDAN okunur (ölçüldüğü günün kaydı), kayıt
+        # defterinin tamamından değil: yalnız haftalık bir bölüm günlük sayıda
+        # "boş zorunlu bölüm" sayılırdı. Beyan yoksa kipin kayıttaki seti.
+        kayit = {y.id: y for y in _a.YAZI_BOLUMLERI_3}
+        beyan = [x.get("id") for x in (b.get("gundem_yazi_bolumleri") or []) if isinstance(x, dict)]
+        bolumler = ([kayit[i] for i in beyan if i in kayit and getattr(kayit[i], kip) is not None]
+                    or _a.kip_bolumleri(kip))
+        for y in bolumler:
+            metin = g.get(y.id, "")
+            n = _kelime(metin)
             toplam += n
             alt, ust = getattr(y, kip)
             if n == 0:
-                if y.zorunlu:
+                if y.zorunlu_mu(kip):
                     self.engel.append(f"Bölüm BOŞ: {y.id} ({y.baslik}) — zorunlu bölüm")
                 continue
+            if kip == "haftalik" and y.haftalik_alt:
+                n_alt = len(re.findall(r"<h3\b", str(metin), re.I))
+                if n_alt < y.haftalik_alt:
+                    self.uyari.append(
+                        f"Bölüm {y.id}: {n_alt} alt başlık (<h3>) — haftalık sayıda en az "
+                        f"{y.haftalik_alt}; alt bölümler rehberde (YAZIM.md 'Haftaya bakış')")
             if n > _a.BOLUM_ENGEL_KAT * ust:
                 self.engel.append(f"BÖLÜM UZUN: {y.id} ({y.baslik}) {n} kelime — üst sınır {ust}, "
                                   f"{_a.BOLUM_ENGEL_KAT:g} katı ENGEL. Konu evinde tam anlatılır ama kısadır; "
@@ -522,7 +536,9 @@ class Denetim:
         if toplam > engel_t:
             self.engel.append(
                 f"YAZI UZUN: toplam {toplam} kelime (tavan {engel_t}; hedef ≤{uyari_t}). "
-                "Sabah notu kısadır: her olgu tek yerde, tabloda duranı yeniden sayma.")
+                + ("Haftalık sayı ayrıntılıdır ama her olgu tek evinde anlatılır; tabloda duranı yeniden sayma."
+                   if kip == "haftalik" else
+                   "Sabah notu kısadır: her olgu tek yerde, tabloda duranı yeniden sayma."))
         elif toplam > uyari_t:
             self.uyari.append(f"Yazı {toplam} kelime (hedef ≤{uyari_t})")
         else:
@@ -1809,17 +1825,30 @@ class Denetim:
                 self._ok(f"günler arası tekrar düşük: %{g['oran']:.1f}")
 
     def _onceki_sayilar(self, n: int = 2) -> list[dict]:
-        """Bu sayıdan önceki en yakın n sayının JSON'u (yeniden eskiye)."""
+        """Bu sayıdan önceki en yakın n sayının JSON'u (yeniden eskiye).
+
+        HAFTALIK SAYI önceki HAFTALIK sayılarla kıyaslanır (01.10.2026). Cuma
+        ve perşembe günlüklerine bakınca haftanın özeti — tanımı gereği o
+        günlerin olgularını toplayan metin — yapısal bir sahte tekrar
+        üretiyordu (27.09'da 17 "kronik" değer; önceki iki haftalığa karşı
+        gerçek kronik 5), asıl soru olan "geçen pazarı mı yeniden yazdık" ise
+        hiç sorulmuyordu."""
         try:
-            dosyalar = sorted(d for d in BULTEN.glob("*.json") if d.stem < str(self.b.get("tarih")))
+            dosyalar = sorted(d for d in BULTEN.glob("????-??-??.json") if d.stem < str(self.b.get("tarih")))
         except Exception:                                      # noqa: BLE001
             return []
+        haftalik = bool(self.b.get("haftalik"))
         out = []
-        for d in reversed(dosyalar[-n:]):
+        for d in reversed(dosyalar):
+            if len(out) >= n:
+                break
             try:
-                out.append(json.loads(d.read_text(encoding="utf-8")) or {})
+                b = json.loads(d.read_text(encoding="utf-8")) or {}
             except Exception:                                  # noqa: BLE001
-                out.append({})
+                b = {}
+            if haftalik and not b.get("haftalik"):
+                continue
+            out.append(b)
         return out
 
     def _olgu_tekrari(self, _t) -> None:
@@ -1861,19 +1890,12 @@ class Denetim:
         saymak olurdu.
         """
         import tekrar as _t
-        try:
-            dosyalar = sorted(BULTEN.glob("*.json"))
-        except Exception:                                      # noqa: BLE001
+        # Haftalık sayının günler arası kıyası bir önceki HAFTALIK sayıdır
+        # (bkz. _onceki_sayilar).
+        onceki = self._onceki_sayilar(1)
+        if not onceki or not onceki[0]:
             return None
-        onceki = [d for d in dosyalar if d.stem < str(self.b.get("tarih"))]
-        if not onceki:
-            return None
-        try:
-            import json as _j
-            b = _j.loads(onceki[-1].read_text(encoding="utf-8"))
-        except Exception:                                      # noqa: BLE001
-            return None
-        bl = _t.bolumler(b or {}, bayat_tema=True)
+        bl = _t.bolumler(onceki[0], bayat_tema=True)
         return bl or None
 
     def tema(self):

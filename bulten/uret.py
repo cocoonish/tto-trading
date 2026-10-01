@@ -516,7 +516,7 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
             # kilit_gelismeler()'i ikinci kez çağırmak zenginleştirilmiş metinle
             # yeniden puanlıyor, üst düzey listede eski puan kalıyor ve aynı
             # haber aynı dosyada iki ayrı önem puanıyla yazılıyordu.
-            bolumler, kilit = haber_m.bolumle(h, onceki_kilit=_onceki_kilit(tarih.isoformat()))
+            bolumler, kilit = haber_m.bolumle(h, onceki_kilit=_onceki_kilit(tarih.isoformat(), haftalik))
             haberler = [asdict(x) for x in h]
         except Exception as e:                                  # noqa: BLE001
             okunamayan = [f"haber taraması düştü: {type(e).__name__}"]
@@ -540,6 +540,9 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         "gruplar": gruplar,
         # Haber tonunun ≥2σ hareketleri (biçim 3 sayfası olağandışı blokta basar).
         "haber_tonu": haber_tonu,
+        # Haftaya bakış: bir önceki haftalık sayıdan bu yana güncellenen ve
+        # eşiğin altında kalan seriler — eşiksiz tablo (bkz. olay.hafta_tablosu).
+        **({"hafta_tablosu": olay_m.hafta_tablosu(esik)} if haftalik else {}),
         "veri_gunlugu": gunluk,
         # Söz defteri: bültenin verdiği sözlerin okura görünen hâli. Defter
         # zaten tutuluyordu ama yalnız yazı katmanı ve denetim görüyordu;
@@ -548,7 +551,8 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         # baştan basılmasın, yalnız DEĞİŞENİ tam metinle göstersin (bkz.
         # soz.py'deki not — ardışık iki sayı arasında %91,4 birebir örtüşme
         # ölçüldü). Önceki sayı yoksa kıyas koşmaz ve karne bunu söyler.
-        "izleme": soz_m.ozet(tarih.isoformat(), _onceki_izleme(tarih.isoformat())),
+        "izleme": soz_m.ozet(tarih.isoformat(), _onceki_izleme(tarih.isoformat(), haftalik),
+                             haftalik=haftalik),
         # Sayfadaki satır içi SVG'lerin verisi. Plotly bültene girmez: gömülü
         # kütüphane tek grafikte 4,6 MB ve sabah notu o ağırlığı kaldırmaz.
         "grafikler": grafik_m.hazirla(),
@@ -701,7 +705,7 @@ def yaz(b: dict) -> Path:
 
 def ozet_yaz(b: dict) -> str:
     """Terminal özeti."""
-    satir = [f"{b['tr_tarih']} {b['gun']} — TTO günlük bülten"]
+    satir = [f"{b['tr_tarih']} {b['gun']} — TTO {'haftaya bakış' if b.get('haftalik') else 'günlük bülten'}"]
     satir.append(f"  gösterge: " + " · ".join(
         f"{g['ad'].split('(')[0].strip()} {g['metin']}{g['birim']}" for g in b["gostergeler"][:5]))
     satir.append(f"  öne çıkan: {len(b['one_cikanlar'])} · not: {len(b['notlar'])} · "
@@ -715,14 +719,33 @@ def ozet_yaz(b: dict) -> str:
 
 
 
-def _onceki_kilit(bugun: str) -> set[str]:
-    """Bir önceki sayının kilit haberlerinin kimlikleri (haber.kilit_imza)."""
+def _onceki_haftalik(bugun: str) -> dict | None:
+    """Bir önceki YAZILMIŞ haftalık sayı (yoksa None). Haftaya bakışın kıyas
+    noktası bir önceki pazardır, cuma günlüğü değil: söz defteri ve kilit
+    haber kıyası cumaya bakınca haftanın pazartesi–perşembesi hiç sayılmıyor,
+    haftanın asıl sürücüsü cuma günü kilitse haftalıktan düşüyordu."""
+    for p in sorted((p for p in CIKTI.glob("????-??-??.json") if p.stem < str(bugun)), reverse=True):
+        try:
+            b = json.loads(p.read_text(encoding="utf-8")) or {}
+        except Exception:                                      # noqa: BLE001
+            continue
+        if b.get("haftalik") and b.get("gundem_kaynagi") == "yazili":
+            return b
+    return None
+
+
+def _onceki_kilit(bugun: str, haftalik: bool = False) -> set[str]:
+    """Bir önceki sayının kilit haberlerinin kimlikleri (haber.kilit_imza);
+    haftalık sayıda bir önceki HAFTALIK sayınınkiler."""
     import haber as _h
     try:
-        onceki = [d for d in sorted(CIKTI.glob("????-??-??.json")) if d.stem < str(bugun)]
-        if not onceki:
-            return set()
-        b = json.loads(onceki[-1].read_text(encoding="utf-8")) or {}
+        if haftalik:
+            b = _onceki_haftalik(bugun) or {}
+        else:
+            onceki = [d for d in sorted(CIKTI.glob("????-??-??.json")) if d.stem < str(bugun)]
+            if not onceki:
+                return set()
+            b = json.loads(onceki[-1].read_text(encoding="utf-8")) or {}
     except Exception:                                          # noqa: BLE001
         return set()
     out: set[str] = set()
@@ -732,13 +755,17 @@ def _onceki_kilit(bugun: str) -> set[str]:
     return out
 
 
-def _onceki_izleme(bugun: str) -> dict | None:
-    """Bir önceki sayının `izleme` bloğu — söz defterinin kıyas noktası.
+def _onceki_izleme(bugun: str, haftalik: bool = False) -> dict | None:
+    """Bir önceki sayının `izleme` bloğu — söz defterinin kıyas noktası
+    (haftalık sayıda bir önceki HAFTALIK sayınınki).
 
     Bulunamazsa None döner: kıyas KOŞMAZ ve karne `kiyas_var: False` yazar.
     Ölçemediğimiz bir değişikliği "değişmedi" saymak, kaydı sessizce
     gizlemek olurdu.
     """
+    if haftalik:
+        b = _onceki_haftalik(bugun)
+        return b.get("izleme") if b else None
     try:
         dosyalar = sorted(CIKTI.glob("*.json"))
     except Exception:                                          # noqa: BLE001

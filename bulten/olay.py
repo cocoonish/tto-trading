@@ -467,6 +467,72 @@ def haber_endeksi_olaylari(esik_sigma: float = 0.0, esik: datetime | None = None
     return olaylar
 
 
+def _sayi_mi(v) -> bool:
+    return v is not None and not isinstance(v, bool) and isinstance(v, (int, float))
+
+
+def hafta_tablosu(esik: datetime | None) -> list[dict]:
+    """HAFTAYA BAKIŞIN "bu hafta güncellenen öbür seriler" tablosu — EŞİKSİZ.
+
+    Kapsam: izlemler + ayar.HAFTALIK_KALEMLER. Satır, anahtarın saati bir önceki
+    HAFTALIK sayının ölçüm anına (`esik`) göre İLERLEDİYSE yazılır (olaylarla
+    aynı kural: gozlem.bugun_yeni) ve kıyas o anda güncel olan görüntüdür, yani
+    fark HAFTANIN farkıdır. Eşiği aşıp olay cümlesine dönüşen izlem tabloya
+    GİRMEZ: o sayfada "Bu hafta gelen veriler" bölümünde zaten cümle olarak
+    duruyor ve aynı sayı iki yerde basılmaz.
+
+    Ölçülemeyen boş bırakılır: kıyas noktası bulunamayan satır önceki değeri
+    "—" ile taşır, fark yazılmaz; esik yoksa (ilk haftalık sayı) tablo YOK —
+    "haftanın farkı" o zaman tanımsızdır.
+    """
+    if esik is None:
+        return []
+    from ayar import HAFTALIK_KALEMLER
+    kalemler = [(iz, True) for iz in IZLEMLER] + [(iz, False) for iz in HAFTALIK_KALEMLER]
+    satirlar: dict[str, list[dict]] = {}
+    anlik: dict[str, dict | None] = {}
+    for iz, izlem_mi in kalemler:
+        if iz.grup in ("haber", "diger"):
+            continue
+        if iz.hat not in anlik:
+            anlik[iz.hat] = gozlem.anlik(iz.hat)
+        simdi = anlik[iz.hat]
+        if not simdi or not _sayi_mi(simdi.get(iz.anahtar)):
+            continue
+        v = gozlem.anahtar_tarihi(simdi, iz.anahtar, iz.tarih_alani)
+        if not gozlem.bugun_yeni(iz.hat, simdi, iz.anahtar, iz.tarih_alani, esik):
+            continue
+        onc = gozlem.esikteki(iz.hat, esik, iz.anahtar)
+        if onc is None or gozlem.anahtar_tarihi(onc["d"], iz.anahtar, iz.tarih_alani) == v:
+            onc = gozlem.onceki_surum_anahtar(iz.hat, iz.anahtar, iz.tarih_alani, v)
+        once_d = onc.get("d") if onc else None
+        onceki_v = gozlem.anahtar_tarihi(once_d, iz.anahtar, iz.tarih_alani) if once_d else ""
+        if izlem_mi:
+            o = izlem_olayi(iz, simdi, once_d, v, onceki_v)
+            if o is not None and o.seviye in ("onemli", "dikkat"):
+                continue
+        yeni = float(simdi[iz.anahtar])
+        eski = once_d.get(iz.anahtar) if isinstance(once_d, dict) else None
+        eski = float(eski) if _sayi_mi(eski) else None
+        b, od = iz.birim, iz.ondalik
+        fark = ""
+        if eski is not None and iz.tip not in ("akim", "seviye"):
+            if iz.tip == "yuzde":
+                fark = _yuzde((yeni / eski - 1) * 100, 2, True) if eski else ""
+            else:
+                fark = _fark_isaretli(yeni - eski, b, od)
+        satirlar.setdefault(iz.grup, []).append({
+            "hat": iz.hat, "hat_ad": HAT_ADI.get(iz.hat, ""), "anahtar": iz.anahtar,
+            "ad": iz.ad, "donem": donem_yaz(v, iz.hat),
+            "onceki_donem": donem_yaz(onceki_v, iz.hat) if onceki_v else "",
+            "deger": _sev(yeni, b, od),
+            "onceki": _sev(eski, b, od) if eski is not None else "—",
+            "fark": fark,
+        })
+    return [{"id": gid, "baslik": gbaslik, "satirlar": satirlar[gid]}
+            for gid, gbaslik in GRUPLAR if satirlar.get(gid)]
+
+
 def topla(esik: datetime | None = None, haftalik: bool = False) -> list[Olay]:
     """Bültenin olayları. `esik`: bir önceki sayının ölçüm anı (UTC naif) —
     yalnız ondan SONRA ilk kez görülen sürüm bugünün olayıdır (bkz.

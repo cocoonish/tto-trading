@@ -59,7 +59,8 @@ on:
   schedule:
     - cron: '11 5 * * 1-5'    # 08:11 İstanbul — sabah bülteninin yazısından sonra
     - cron: '11 16 * * 1-5'   # 19:11 İstanbul — günün son veri koşusundan sonra
-    - cron: '41 15 * * 0'     # 18:41 İstanbul — pazar haftalık yazısından sonra
+    - cron: '41 16 * * 0'     # 19:41 İstanbul — pazar haftalık yazısından sonra (01.10.2026'da
+                              # bir saat ileri alındı: haftalık sayı uzadı)
   workflow_dispatch: {}
 
 permissions:

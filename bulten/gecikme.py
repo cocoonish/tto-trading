@@ -162,7 +162,7 @@ def pay(kok: Path, yayin: str) -> int:
 
     Uydurma bir sayı değil, takvimin KENDİ tüketici aralığı: içerik son
     tüketici adımına kadar yerindeyse okura verilen sözlerin tamamı hâlâ
-    tutulabilir. Hafta içi 24 dk (08:11 → 08:35), pazar 16 dk (18:25 → 18:41).
+    tutulabilir. Hafta içi 24 dk (08:11 → 08:35), pazar 16 dk (19:25 → 19:41).
     """
     saatler = _tuketici_saatler(kok, yayin)
     return saatler[-1][1] - saatler[0][1]

@@ -30,7 +30,8 @@ on:
     - cron: '35 5 * * *'      # 08:35 İstanbul — sabah bülteninin yazısından sonra;
                               # HER GÜN: cumartesi bülten yok ama gece push edilen
                               # bir analiz yazısı ertesi sabah çıkabilsin
-    - cron: '25 15 * * 0'     # 18:25 İstanbul — pazar haftaya bakış sonrası
+    - cron: '25 16 * * 0'     # 19:25 İstanbul — pazar haftaya bakış sonrası (haftalık sayı
+                              # 6.000–9.000 kelime; 01.10.2026'da bir saat ileri alındı)
     - cron: '25 18 * * 0'     # 21:25 İstanbul — pazar yedeği
   workflow_dispatch:
     inputs:

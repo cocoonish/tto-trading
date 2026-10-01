@@ -144,15 +144,16 @@ def uygula(hedef: Path, yama: dict) -> tuple[dict, list[str]]:
             # da çelişkiyi rehbere yönlendirerek çözer.
             if disari:
                 raise SystemExit(
-                    f"bu sayı biçim 3'te (sabah notu): gündem kimlikleri yalnız "
+                    f"bu sayı biçim 3'te ({'haftaya bakış' if b.get('haftalik') else 'sabah notu'}): "
+                    f"gündem kimlikleri yalnız "
                     f"{', '.join(izinli)} — tanınmayan: {', '.join(disari)}.\n"
                     "Rutin metnindeki 'on iki bölüm' ve 'en az 200/300/350 kelime' "
                     "talimatları biçim 2'ye (arşiv) aittir; bulten/YAZIM.md esastır "
                     "('Doldurulacak alanlar (biçim 3)').")
         if isinstance(yama.get("ozet"), dict) and str(yama["ozet"].get("ne_bekleniyor") or "").strip():
-            amin, amax = _ayar.YAZI_ARALIK_3["ozet_madde"]
+            amin, amax = _ayar.YAZI_ARALIK_3["ozet_madde"][_ayar.yazi_kipi(b)]
             raise SystemExit(
-                "bu sayı biçim 3'te (sabah notu): ileriye bakış `ozet.ne_bekleniyor`a "
+                "bu sayı biçim 3'te: ileriye bakış `ozet.ne_bekleniyor`a "
                 "değil `gundem.takvim` bölümüne yazılır; özet yalnız `ne_oldu` "
                 f"({amin}–{amax} madde). Rutin metnindeki ne_bekleniyor talimatı biçim 2'ye "
                 "aittir; bulten/YAZIM.md esastır.")

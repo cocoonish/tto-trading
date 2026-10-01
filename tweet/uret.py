@@ -144,11 +144,11 @@ GUNDEM_BOLUMLERI = (
 )
 
 
-def _bicim3_bolumleri() -> tuple[tuple[str, str], ...]:
+def _bicim3_bolumleri(kip: str = "gunluk") -> tuple[tuple[str, str], ...]:
     """Biçim 3: gündem satırları bülten kayıt defterinden (bulten/ayar.py,
-    YAZI_BOLUMLERI_3 → `tweet` etiketi). İleriye bakış (`takvim`) ayrı satırda
-    "Beklenen:" olarak girer."""
-    return tuple((y.id, y.tweet) for y in _bulten_ayar().YAZI_BOLUMLERI_3
+    YAZI_BOLUMLERI_3 → `tweet` etiketi), kipin okuma sırasıyla. İleriye bakış
+    (`takvim`) ayrı satırda "Beklenen:" olarak girer."""
+    return tuple((y.id, y.tweet) for y in _bulten_ayar().kip_bolumleri(kip)
                  if y.tweet and y.id != "takvim")
 
 
@@ -170,7 +170,15 @@ def _bulten_ayar():
 
 
 def gundem_bolumleri(b: dict) -> tuple[tuple[str, str], ...]:
-    return _bicim3_bolumleri() if int(b.get("surum") or 2) >= 3 else GUNDEM_BOLUMLERI
+    if int(b.get("surum") or 2) >= 3:
+        return _bicim3_bolumleri("haftalik" if b.get("haftalik") else "gunluk")
+    return GUNDEM_BOLUMLERI
+
+
+# Haftalık bölümler kalın başlıklı ALT BÖLÜMLERDEN kurulur (<h3>); gönderi
+# satırı bölümün girişini kırptığı için başlık metni cümleye yapışırdı
+# ("TL faizi ve DİBS Gösterge getiri …"). Alt başlık gönderiye girmez.
+ALT_BASLIK = re.compile(r"<h3\b[^>]*>.*?</h3>", re.I | re.S)
 
 
 # Kelime kırpmasının sonunda kalamayacak sözcükler: bağlaç, edat, sayı.
@@ -361,7 +369,7 @@ def bulten_zinciri(b: dict) -> list[str]:
     gundem = b.get("gundem") or {}
     satirlar, toplam = [], 0
     for anahtar, etiket in gundem_bolumleri(b):
-        parca = _site_disi(_duz(gundem.get(anahtar) or ""), anahtar)
+        parca = _site_disi(_duz(ALT_BASLIK.sub(" ", str(gundem.get(anahtar) or ""))), anahtar)
         if not parca:
             continue
         satir = _etiketle(etiket, _kirp(parca, GUNDEM_PARCA))

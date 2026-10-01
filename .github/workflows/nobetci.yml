@@ -58,7 +58,8 @@ on:
     # içinde yeşil biter, mükerrer alarm üretmez.
     - cron: '7 8 * * 1-5'     # 11:07 İstanbul — birinci yedek
     - cron: '37 10 * * 1-5'   # 13:37 İstanbul — ikinci yedek
-    - cron: '31 16 * * 0'     # 19:31 İstanbul — pazar "haftaya bakış" için
+    - cron: '31 17 * * 0'     # 20:31 İstanbul — pazar "haftaya bakış" için (sayı uzadı;
+                              # 01.10.2026'da bir saat ileri: erken yoklama sahte alarm verirdi)
     - cron: '1 18 * * 0'      # 21:01 İstanbul — pazar yedeği
   workflow_dispatch: {}
 

@@ -486,19 +486,26 @@ IZLEMLER: list[Izlem] = [
           "artis", "", "dis", yayim=True, eksi_ad="Cari açık / GSYH"),
 
     # ─────────────────────────────── bütçe ve borç stoku
+    # SAAT ALANI AÇIKÇA (01.10.2026): GSYH'ye oranlar ÇEYREKLİK çerçeveden gelir
+    # (Butce/ozet_uret, `C` çerçevesi; saati `_tarih3`, çeyreğin son ayı) ve borç
+    # stoku payları stok bloğundan (`stok_son_ay`). Alan verilmediğinde ikisi de
+    # hattın AYLIK ana saatine düşüyordu: her ay "ilerledi" sayılıyor, değer
+    # kımıldamadığı için olay üretmiyordu ama haftalık tabloya "Ağu −%2,41
+    # (önceki −%2,41 Tem)" diye, çeyreklik bir oranı aylık gözlem gibi
+    # gösteren bir satır basıyordu. Dönem artık değerin KENDİ dönemidir.
     Izlem("butce-borc", "denge_gsyh", "Bütçe dengesi / GSYH (12 aylık)", "%", 2, "delta",
           None, 0.8, "artis", "", "borclanma", yayim=True,
-          eksi_ad="Bütçe açığı / GSYH (12 aylık)"),
+          eksi_ad="Bütçe açığı / GSYH (12 aylık)", tarih_alani="_tarih3"),
     Izlem("butce-borc", "fdd_gsyh", "Faiz dışı denge / GSYH (12 aylık)", "%", 2, "delta",
           None, 0.8, "artis", "", "borclanma", yayim=True,
-          eksi_ad="Faiz dışı açık / GSYH (12 aylık)"),
+          eksi_ad="Faiz dışı açık / GSYH (12 aylık)", tarih_alani="_tarih3"),
     Izlem("butce-borc", "faiz_vergi", "Faiz harcaması / vergi geliri", "%", 1, "delta",
           1.5, 3.0, "azalis",
           "Borç servisinin vergi tabanını ne kadar yediğinin ölçüsü.", "borclanma"),
     Izlem("butce-borc", "doviz_pay", "Borç stokunda döviz payı", "%", 1, "delta", 1.5, 3.0,
-          "azalis", "Kur şokuna duyarlılığın ölçüsü.", "borclanma"),
+          "azalis", "Kur şokuna duyarlılığın ölçüsü.", "borclanma", tarih_alani="stok_son_ay"),
     Izlem("butce-borc", "yurt_disi_pay", "Borç stokunda yurt dışı yerleşik payı", "%", 1,
-          "delta", 1.5, 3.0, "", "", "borclanma"),
+          "delta", 1.5, 3.0, "", "", "borclanma", tarih_alani="stok_son_ay"),
     # ————————————————————————————————————————————————————————————————
     # TAKVİMLİ YAYIM HATLARI — 10.09.2026'da eklendi.
     #
@@ -583,6 +590,72 @@ IZLEMLER: list[Izlem] = [
     Izlem("makroihtiyati", "makas_ihtiyac", "İhtiyaç kredisi faiz makası",
           "puan", 2, "delta", None, None, "azalis",
           "Makroihtiyati sınırların fiyata yansıması.", "kredi", yayim=True),
+]
+
+
+# HAFTALIK KALEMLER — haftaya bakışın "bu hafta güncellenen öbür seriler"
+# tablosuna İZLEMLERİN YANINDA giren seriler. Eşikleri YOKTUR ve olay üretmezler:
+# işleri bir önceki haftalık sayıdan bu yana ilerleyen her serinin farkını ve
+# dönemini okura (ve yazara) TABLO olarak vermek. Ölçüldü (01.10.2026, 20–27.09
+# penceresi): 21 hattın 14'ünde veri ilerledi, 62 izlemin 42'sinin saati ilerledi
+# ve bunların yalnız 11'i olaya dönüştü; TL eğrisinin haftalık farkı (3 ay −81 bp,
+# 2 yıl −88 bp, 7 yıl +32 bp), net fonlama (−765 → −1.123,5 mlr TL), TCMB'nin
+# tahmini döviz akımı ve yabancı akımın birikimi hiçbir tabloda yoktu. Seçim
+# ölçülen hatların ZATEN yazdığı anahtarlardan; hiçbiri yeni bir hesap değildir.
+# Saati gelenekten farklı olan anahtar `tarih_alani`nı açıkça taşır (fonlama
+# hattının haftalık kredi faizleri ana saate değil haftaya bağlıdır).
+HAFTALIK_KALEMLER: list[Izlem] = [
+    # ── TL faizi ve eğri
+    Izlem("dibs-verim-egrisi", "spot_3a", "DİBS 3 aylık spot getiri", "%", 2, grup="faiz"),
+    Izlem("dibs-verim-egrisi", "spot_1y", "DİBS 1 yıllık spot getiri", "%", 2, grup="faiz"),
+    Izlem("dibs-verim-egrisi", "spot_5y", "DİBS 5 yıllık spot getiri", "%", 2, grup="faiz"),
+    Izlem("dibs-verim-egrisi", "spot_7y", "DİBS 7 yıllık spot getiri", "%", 2, grup="faiz"),
+    Izlem("dibs-verim-egrisi", "forward_1y1y", "1 yıl sonrası 1 yıllık forward", "%", 2, grup="faiz"),
+    Izlem("dibs-verim-egrisi", "forward_2y1y", "2 yıl sonrası 1 yıllık forward", "%", 2, grup="faiz"),
+    Izlem("dibs-verim-egrisi", "egim_2y5y", "Eğri eğimi (5 yıl − 2 yıl)", "puan", 2, grup="faiz"),
+    Izlem("dibs-verim-egrisi", "reel_egri_1y", "Reel getiri 1 yıllık (TÜFEX)", "%", 2, grup="faiz"),
+    Izlem("dibs-verim-egrisi", "reel_egri_5y", "Reel getiri 5 yıllık (TÜFEX)", "%", 2, grup="faiz"),
+    Izlem("dibs-verim-egrisi", "basabas_1y", "Başabaş enflasyon 1 yıllık", "%", 2, grup="enflasyon"),
+    Izlem("dibs-verim-egrisi", "basabas_5y", "Başabaş enflasyon 5 yıllık", "%", 2, grup="enflasyon"),
+    Izlem("dibs-verim-egrisi", "risk_primi_2y", "Enflasyon risk primi 2 yıllık (başabaş − anket)",
+          "puan", 2, grup="enflasyon"),
+    # ── para piyasası ve banka faizleri
+    Izlem("fonlama-likidite", "bist_on", "BIST gecelik repo", "%", 2, grup="faiz"),
+    Izlem("fonlama-likidite", "sterilizasyon_mlr", "TCMB sterilizasyonu", "mlr TL", 1, grup="faiz"),
+    Izlem("fonlama-likidite", "swap_alim_mn_usd", "TCMB alım yönlü swap stoku", "mn USD", 0, grup="faiz"),
+    Izlem("fonlama-likidite", "kredi_ticari", "Ticari kredi faizi (haftalık)", "%", 2, grup="faiz",
+          tarih_alani="hafta_kisa"),
+    Izlem("fonlama-likidite", "kredi_ihtiyac", "İhtiyaç kredisi faizi (haftalık)", "%", 2, grup="faiz",
+          tarih_alani="hafta_kisa"),
+    Izlem("fonlama-likidite", "kredi_konut", "Konut kredisi faizi (haftalık)", "%", 2, grup="faiz",
+          tarih_alani="hafta_kisa"),
+    Izlem("fonlama-likidite", "mevduat_tl", "TL mevduat faizi (haftalık)", "%", 2, grup="faiz",
+          tarih_alani="hafta_kisa"),
+    # ── döviz akımı ve mevduat
+    Izlem("tcmb-net-rezerv", "ak_son5", "TCMB tahmini döviz akımı (son beş iş günü)", "mlr USD", 1,
+          "akim", grup="kur", tarih_alani="ak_tarih"),
+    Izlem("tcmb-net-rezerv", "ak_ay", "TCMB tahmini döviz akımı (ay başından)", "mlr USD", 1,
+          "akim", grup="kur", tarih_alani="ak_tarih"),
+    Izlem("yp-mevduat", "ar_gercek_mn", "YP mevduatı, parite arındırılmış akım: gerçek kişi",
+          "mn USD", 0, "akim", grup="kur"),
+    Izlem("yp-mevduat", "ar_tuzel_mn", "YP mevduatı, parite arındırılmış akım: tüzel kişi",
+          "mn USD", 0, "akim", grup="kur"),
+    # ── yabancı akımının birikimi
+    Izlem("yabanci-pozisyon", "toplam_4h", "Yabancı net alımı (son 4 hafta)", "mn USD", 0, "akim", grup="akim"),
+    Izlem("yabanci-pozisyon", "toplam_13h", "Yabancı net alımı (son 13 hafta)", "mn USD", 0, "akim", grup="akim"),
+    Izlem("yabanci-pozisyon", "toplam_ytd", "Yabancı net alımı (yılbaşından)", "mn USD", 0, "akim", grup="akim"),
+    # ── kredi ve para alt kırılımı
+    Izlem("kredi-parasal", "g_ihtiyac_13y", "İhtiyaç kredisi büyümesi (13 hafta, yıllık)", "%", 2, grup="kredi"),
+    Izlem("kredi-parasal", "g_konut_13y", "Konut kredisi büyümesi (13 hafta, yıllık)", "%", 2, grup="kredi"),
+    Izlem("kredi-parasal", "g_kurumsal_kart_13y", "Kurumsal kart büyümesi (13 hafta, yıllık)", "%", 2,
+          grup="kredi"),
+    Izlem("kredi-parasal", "g_m2_ar_13y", "M2 büyümesi (13 hafta, yıllık, kur arındırılmış)", "%", 2,
+          grup="kredi"),
+    # ── bütçe (aylık)
+    Izlem("butce-borc", "denge_ay", "Merkezi yönetim bütçe dengesi (aylık)", "mlr TL", 1, grup="borclanma"),
+    Izlem("butce-borc", "fdd_ay", "Faiz dışı denge (aylık)", "mlr TL", 1, grup="borclanma"),
+    Izlem("butce-borc", "faiz_ay", "Faiz gideri (aylık)", "mlr TL", 1, grup="borclanma"),
+    Izlem("butce-borc", "vergi_reel_yy", "Vergi geliri, reel yıllık değişim", "%", 1, grup="borclanma"),
 ]
 
 
@@ -781,11 +854,24 @@ GUNDEM_YAZI_BOLUMLERI = [
 class YaziBolumu:
     id: str
     baslik: str
-    gunluk: tuple[int, int]          # (alt, üst) kelime — alt UYARI, üst UYARI
-    haftalik: tuple[int, int]
-    zorunlu: bool                    # boş zorunlu bölüm ENGEL
+    gunluk: tuple[int, int] | None   # (alt, üst) kelime — alt UYARI, üst UYARI; None = bu kipte yok
+    haftalik: tuple[int, int] | None
+    zorunlu: bool                    # boş zorunlu bölüm ENGEL (günlükte; haftalıkta `haftalik_zorunlu`)
     tweet: str | None = None         # gönderinin gündem satırındaki etiket
     haftalik_baslik: str | None = None
+    haftalik_zorunlu: bool | None = None   # None → `zorunlu`
+    # Haftalık sayıda bölüm kalın başlıklı ALT BÖLÜMLERDEN kurulur (<h3>); denetim
+    # en az bu kadarını ister (UYARI). Adlar rehberdedir (YAZIM.md "Haftaya bakış").
+    haftalik_alt: int = 0
+
+    @property
+    def kipler(self) -> tuple[str, ...]:
+        return tuple(k for k in ("gunluk", "haftalik") if getattr(self, k) is not None)
+
+    def zorunlu_mu(self, kip: str) -> bool:
+        if kip == "haftalik" and self.haftalik_zorunlu is not None:
+            return self.haftalik_zorunlu
+        return self.zorunlu
 
 
 YAZI_BICIMI = 3                      # yeni ölçülen sayıların beyan ettiği biçim
@@ -802,14 +888,45 @@ YAZI_BICIMI = 3                      # yeni ölçülen sayıların beyan ettiği
 # döviz ve değerli metaller, takvimde iki yönlü sonuç; bkz. YAZIM.md "Ayrıntı").
 # Aralıklar o türlere yer açacak kadar genişledi; tekrar ölçüleri (olgu,
 # kronik, açılış) değişmedi — ayrıntı artarken tekrar oranı aynı kalmalıdır.
+#
+# HAFTALIK KİP (01.10.2026, kullanıcı: "haftalık bülten çok daha detaylı ve uzun
+# olmalı", hedef 6.000–9.000 kelime — 30–45 dakikalık okuma). Ölçüldü: biçim 3'ün
+# haftalık tavanı 3.600 kelimeydi ve son üç pazar sayısı (biçim 2) 4.901–5.438
+# kelimeydi; yani yeni biçim pazar sayısını kısaltıyordu, üstelik her bölüm kendi
+# üst sınırında yazılınca toplam 3.604 ile ENGEL alıyordu (aralıklar kendi içinde
+# tutarsızdı). Haftalık sayı artık kendi bölüm setini taşır: iki bölüm YALNIZ
+# haftalıktır (karne, Türkiye makro), üç bölümün haftalık adı ve zorunluluğu
+# başkadır (senaryolar, gün gün takvim, emtia), varlık bölümleri kalın başlıklı
+# alt bölümlerden kurulur. Uzunluk eski düzenin TEKRARIYLA değil, biçim 2'nin hiç
+# yazmadığı bloklarla gelir: senaryolar (tetik → varlık etkisi → teyit), gün gün
+# takvim, karne, Türkiye'nin iki ayrı evi, her varlık sınıfının alt bölümleri.
+# Bölüm alt sınırlarının toplamı 6.020, üst sınırlarınınki 9.450 kelime; her bölüm
+# kendi üst sınırında yazılsa toplam UYARI alır, ENGEL almaz (tutarlılık duman
+# sınamasında). Aralıklar ölçülmüş eşik değil REHBER HEDEFİDİR: biçim 3'te yazılmış
+# haftalık sayı yok, ilki 04.10.2026; üç-dört pazar birikince yeniden ölçülür.
 YAZI_BOLUMLERI_3 = (
-    YaziBolumu("turkiye", "Türkiye", (200, 450), (250, 550), True, "Türkiye"),
-    YaziBolumu("kuresel", "Küresel", (180, 420), (250, 550), True, "Küresel"),
-    YaziBolumu("emtia", "Emtia ve enerji", (60, 250), (100, 350), False, "Emtia"),
-    YaziBolumu("takvim", "Bugün ve önümüzdeki günler", (120, 320), (250, 550), True,
-               "İzlenecek", haftalik_baslik="Önümüzdeki hafta"),
-    YaziBolumu("risk", "Risk haritası", (0, 220), (0, 320), False, None),
+    YaziBolumu("turkiye", "Türkiye", (200, 450), (950, 1400), True, "Türkiye",
+               haftalik_baslik="Türkiye: piyasalar", haftalik_alt=3),
+    YaziBolumu("kuresel", "Küresel", (180, 420), (1050, 1500), True, "Küresel",
+               haftalik_alt=4),
+    YaziBolumu("emtia", "Emtia ve enerji", (60, 250), (450, 800), False, "Emtia",
+               haftalik_zorunlu=True, haftalik_alt=2),
+    YaziBolumu("takvim", "Bugün ve önümüzdeki günler", (120, 320), (700, 1100), True,
+               "İzlenecek", haftalik_baslik="Önümüzdeki hafta — gün gün"),
+    YaziBolumu("risk", "Risk haritası", (0, 220), (600, 1000), False, None,
+               haftalik_baslik="Senaryolar ve risk haritası", haftalik_zorunlu=True,
+               haftalik_alt=2),
+    YaziBolumu("karne", "Haftanın karnesi", None, (250, 500), True, None),
+    YaziBolumu("turkiye_makro", "Türkiye: makro, politika ve maliye", None, (700, 1100),
+               True, "Türkiye makro", haftalik_alt=3),
 )
+# Okuma sırası kipe göre: haftalıkta kısa yol (senaryolar, gün gün takvim) önce,
+# ayrıntı (karne, Türkiye ×2, küresel, emtia) sonra. Kayıttaki her kimlik kendi
+# kiplerinin sırasında TAM BİR KEZ geçer (duman sınaması).
+YAZI_SIRASI_3 = {
+    "gunluk": ("turkiye", "kuresel", "emtia", "takvim", "risk"),
+    "haftalik": ("risk", "takvim", "karne", "turkiye", "turkiye_makro", "kuresel", "emtia"),
+}
 # Okuma ve özetin aralıkları; TOPLAM yazı katmanı (manşet + özet + okuma +
 # gündem) için (alt, uyarı tavanı, ENGEL tavanı).
 #
@@ -820,22 +937,35 @@ YAZI_BOLUMLERI_3 = (
 # `ne_bekleniyor`u reddeder, tekrar ölçüleri parafrazı olgu düzeyinde yakalar.
 # Tavanın işi artık biçim 2'nin 4.000+ kelimelik düzenine dönüşü durdurmak;
 # bölüm üst sınırının BOLUM_ENGEL_KAT katını aşan tek bölüm de ENGEL'dir.
+# Haftalık tavan (10.800) bölüm üst sınırlarının toplamının (9.450) üstündedir:
+# tavanın işi kuralsız uzamayı durdurmak, kurala uyan sayıyı değil.
 YAZI_ARALIK_3 = {
-    "yorum": {"gunluk": (300, 550), "haftalik": (550, 950)},
-    "ozet": {"gunluk": (90, 240), "haftalik": (120, 320)},
-    "ozet_madde": (4, 6),
-    "toplam": {"gunluk": (1000, 1700, 2100), "haftalik": (1800, 3000, 3600)},
+    "yorum": {"gunluk": (300, 550), "haftalik": (1000, 1500)},
+    "ozet": {"gunluk": (90, 240), "haftalik": (320, 550)},
+    "ozet_madde": {"gunluk": (4, 6), "haftalik": (7, 10)},
+    "toplam": {"gunluk": (1000, 1700, 2100), "haftalik": (6000, 9000, 10800)},
 }
 BOLUM_ENGEL_KAT = 1.5
 
 
+def yazi_kipi(b: dict) -> str:
+    return "haftalik" if b.get("haftalik") else "gunluk"
+
+
+def kip_bolumleri(kip: str) -> list[YaziBolumu]:
+    """Bir kipin bölümleri, o kipin okuma sırasıyla."""
+    kayit = {y.id: y for y in YAZI_BOLUMLERI_3}
+    return [kayit[i] for i in YAZI_SIRASI_3[kip]]
+
+
 def yazi_bolumleri(b: dict) -> list[dict]:
     """Ölçülen bir sayının beyan ettiği yazı bölümleri — sayfa ve yazma kapısı
-    bunu okur. Biçim 3'te haftalık başlık ayrıdır."""
+    bunu okur. Biçim 3'te haftalık sayının bölüm seti, sırası ve başlıkları
+    ayrıdır."""
     if int(b.get("surum") or 2) >= 3:
-        haftalik = bool(b.get("haftalik"))
-        return [{"id": y.id, "baslik": (y.haftalik_baslik if haftalik and y.haftalik_baslik
-                                         else y.baslik)} for y in YAZI_BOLUMLERI_3]
+        kip = yazi_kipi(b)
+        return [{"id": y.id, "baslik": (y.haftalik_baslik if kip == "haftalik" and y.haftalik_baslik
+                                         else y.baslik)} for y in kip_bolumleri(kip)]
     return [{"id": i, "baslik": t} for i, t in GUNDEM_YAZI_BOLUMLERI]
 
 # ─────────────────────────── alaka ve gürültü süzgeçleri

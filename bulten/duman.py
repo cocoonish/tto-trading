@@ -583,6 +583,8 @@ def _bicim3_kayit_defteri():
     assert list(tablo) == ids, f"YAZIM.md bölüm tablosu kayıt defteriyle ayrışmış: {list(tablo)} ↔ {ids}"
 
     def _ar(alt_ust):
+        if alt_ust is None:
+            return "—"
         a, u = alt_ust
         return f"≤{u}" if a == 0 else f"{a}–{u}"
     for y in _a.YAZI_BOLUMLERI_3:
@@ -593,12 +595,31 @@ def _bicim3_kayit_defteri():
         beklenen = f"{_ar(y.gunluk)} · {_ar(y.haftalik)}"
         assert uz == beklenen, f"{y.id}: rehber aralığı {uz!r} ↔ kayıt {beklenen!r}"
         assert (zor == "evet") == y.zorunlu, f"{y.id}: zorunluluk ayrışmış ({zor!r} ↔ {y.zorunlu})"
+        if not y.zorunlu and y.zorunlu_mu("haftalik"):
+            assert zor.startswith("haftalıkta evet"), f"{y.id}: haftalık zorunluluk rehberde yok ({zor!r})"
+    # Kip sırası kaydın kendisiyle tutarlı: her kimlik kendi kiplerinin
+    # sırasında TAM BİR KEZ, başka kipte HİÇ.
+    for kip, sira in _a.YAZI_SIRASI_3.items():
+        assert len(sira) == len(set(sira)), f"{kip} sırasında tekrar eden kimlik: {sira}"
+        assert set(sira) == {y.id for y in _a.YAZI_BOLUMLERI_3 if kip in y.kipler}, \
+            f"{kip} sırası kayıtla ayrışmış: {sira}"
     # Yorum ve özet aralıkları da tabloda.
     r = _a.YAZI_ARALIK_3
     assert f"| `yorum` | Günün / Haftanın okuması | {_ar(r['yorum']['gunluk'])} · {_ar(r['yorum']['haftalik'])} |" in rehber, \
         "rehberde okuma aralığı kayıtla ayrışmış"
-    oz = f"{r['ozet_madde'][0]}–{r['ozet_madde'][1]} madde · {_ar(r['ozet']['gunluk'])} · {_ar(r['ozet']['haftalik'])} kelime"
+    mg, mh = r["ozet_madde"]["gunluk"], r["ozet_madde"]["haftalik"]
+    oz = (f"{mg[0]}–{mg[1]} · {mh[0]}–{mh[1]} madde · {_ar(r['ozet']['gunluk'])} · "
+          f"{_ar(r['ozet']['haftalik'])} kelime")
     assert oz in rehber, f"rehberde özet aralığı kayıtla ayrışmış (beklenen {oz!r})"
+    # TUTARLILIK: bütün bölümler (okuma ve özet dahil) kendi üst sınırında
+    # yazılsa toplam ENGEL almamalı. 01.10.2026'da haftalık aralıklar bu
+    # ölçüte göre tutarsızdı (3.604 > 3.600): kurala uyan sayı durdurulurdu.
+    # Günlük kip ölçülerek kurulmuş ve bilerek dar (bkz. ayar); bu ölçüt
+    # haftalık kipin sözleşmesidir.
+    ust_toplam = (sum(y.haftalik[1] for y in _a.kip_bolumleri("haftalik"))
+                  + r["yorum"]["haftalik"][1] + r["ozet"]["haftalik"][1] + 25)
+    assert ust_toplam < r["toplam"]["haftalik"][2], \
+        f"haftalık aralıklar tutarsız: bütün bölümler üst sınırda {ust_toplam} ≥ ENGEL {r['toplam']['haftalik'][2]}"
     t = r["toplam"]
     for kip, ad in (("gunluk", "günlük"), ("haftalik", "haftalık")):
         alt, uy, en = t[kip]
@@ -609,8 +630,10 @@ def _bicim3_kayit_defteri():
     g3 = _a.yazi_bolumleri({"surum": 3, "haftalik": False})
     h3 = _a.yazi_bolumleri({"surum": 3, "haftalik": True})
     g2 = _a.yazi_bolumleri({"surum": 2})
-    assert [x["id"] for x in g3] == ids
-    assert next(x for x in h3 if x["id"] == "takvim")["baslik"] == "Önümüzdeki hafta"
+    assert [x["id"] for x in g3] == list(_a.YAZI_SIRASI_3["gunluk"])
+    assert [x["id"] for x in h3] == list(_a.YAZI_SIRASI_3["haftalik"])
+    assert not {"karne", "turkiye_makro"} & {x["id"] for x in g3}, "yalnız haftalık bölüm günlük beyana sızdı"
+    assert next(x for x in h3 if x["id"] == "takvim")["baslik"].startswith("Önümüzdeki hafta")
     assert [x["id"] for x in g2] == [i for i, _t in _a.GUNDEM_YAZI_BOLUMLERI], "arşiv bölüm listesi değişti"
     # Ölçüm katmanı yeni sayıyı biçim 3 beyanıyla ve TABAN METİNSİZ kurar.
     src = inspect.getsource(_u.uret)
@@ -690,24 +713,37 @@ def _b3_metin(n: int, tohum: str = "deger") -> str:
     return "<p>" + " ".join(s[:n]) + "</p>"
 
 
+def _b3_alt(n: int, k: int) -> str:
+    """n kelimelik, k alt başlıklı (<h3>) sentetik bölüm — haftalık varlık bölümleri."""
+    if k <= 0:
+        return _b3_metin(n)
+    parca = max(n - 2 * k, k) // k
+    return "".join(f"<h3>Alt bölüm</h3>{_b3_metin(parca)}" for _ in range(k))
+
+
 def _b3_sayi(**ek):
-    """İyi biçimli günlük sabah notu. Boyutlar KAYITTAN türer (aralığın orta
-    noktası): sabit kelime sayıları aralık her değiştiğinde fikstürü sessizce
-    aralık dışına iterdi (01.10.2026 akşamı genişlemesinde iki madde böyle
-    düştü)."""
+    """İyi biçimli sayı (varsayılan günlük sabah notu; `haftalik=True` haftaya
+    bakış). Boyutlar KAYITTAN türer (aralığın orta noktası): sabit kelime
+    sayıları aralık her değiştiğinde fikstürü sessizce aralık dışına iterdi
+    (01.10.2026 akşamı genişlemesinde iki madde böyle düştü). Haftalık fikstür
+    kipin KENDİ bölüm setini ve alt başlık sayısını taşır."""
     import ayar as _a
     def orta(au):
         return (au[0] + au[1]) // 2
-    g = {y.id: _b3_metin(orta(y.gunluk)) for y in _a.YAZI_BOLUMLERI_3}
+    kip = "haftalik" if ek.get("haftalik") else "gunluk"
+    g = {y.id: (_b3_alt(orta(getattr(y, kip)), y.haftalik_alt) if kip == "haftalik"
+                else _b3_metin(orta(y.gunluk)))
+         for y in _a.kip_bolumleri(kip)}
     r = _a.YAZI_ARALIK_3
-    n_madde = orta(r["ozet_madde"])
-    madde_k = orta(r["ozet"]["gunluk"]) // n_madde
-    b = {"tarih": "2026-10-02", "tur": "gunluk", "surum": 3, "haftalik": False,
+    n_madde = orta(r["ozet_madde"][kip])
+    madde_k = orta(r["ozet"][kip]) // n_madde
+    b = {"tarih": "2026-10-02", "tur": kip, "surum": 3, "haftalik": kip == "haftalik",
          "gundem_kaynagi": "yazili", "manset": "Faiz yukarı, kur sakin: uzun uç petrolden koptu",
-         "gundem_yazi_bolumleri": _a.yazi_bolumleri({"surum": 3}), "gundem": g,
+         "gundem_yazi_bolumleri": _a.yazi_bolumleri({"surum": 3, "haftalik": kip == "haftalik"}),
+         "gundem": g,
          "ozet": {"ne_oldu": "<ul>" + "".join(f"<li>{_b3_metin(madde_k)[3:-4]}</li>"
                                                for _ in range(n_madde)) + "</ul>"},
-         "yorum": _b3_metin(orta(r["yorum"]["gunluk"]))}
+         "yorum": _b3_metin(orta(r["yorum"][kip]))}
     b.update(ek)
     return b
 
@@ -715,6 +751,9 @@ def _b3_sayi(**ek):
 def _bicim3_denetim():
     """_yazi_bicim3: ENGEL yalnız yapısal eksikte ve toplam tavanında; aralık dışı UYARI."""
     import denetim as _den, ayar as _a
+
+    def orta3(au):
+        return (au[0] + au[1]) // 2
 
     def kos(b):
         d = _den.Denetim(b)
@@ -742,8 +781,35 @@ def _bicim3_denetim():
                      ozet={"ne_oldu": "<ul><li>a b c</li><li>d e f</li></ul>"}))
     assert not d.engel and len(d.uyari) >= 2, (d.engel, d.uyari)
     # Haftalık sayı haftalık aralıklarla ölçülür: günlük orta boy okuma haftalıkta kısa.
-    d = kos(_b3_sayi(haftalik=True))
+    d = kos(_b3_sayi(haftalik=True, yorum=_b3_metin(orta3(_a.YAZI_ARALIK_3["yorum"]["gunluk"]))))
     assert any("Okuma" in u for u in d.uyari), f"haftalık aralık uygulanmıyor: {d.uyari}"
+
+    # HAFTALIK KİP (01.10.2026, hedef 6.000–9.000 kelime). İyi biçimli haftalık
+    # orta noktada TEMİZ geçer; bütün bölümler üst sınırdayken ENGEL ALMAZ
+    # (eski aralıklar bu hâli 3.604 > 3.600 ile durduruyordu).
+    h = _b3_sayi(haftalik=True)
+    d = kos(h)
+    assert not d.engel and not d.uyari, f"iyi biçimli haftalık sayı: {d.engel} {d.uyari}"
+    ust = _b3_sayi(haftalik=True,
+                   gundem={y.id: _b3_alt(y.haftalik[1], y.haftalik_alt) for y in _a.kip_bolumleri("haftalik")},
+                   yorum=_b3_metin(_a.YAZI_ARALIK_3["yorum"]["haftalik"][1]))
+    d = kos(ust)
+    assert not d.engel, f"kurala uyan en uzun haftalık sayı ENGEL aldı: {d.engel}"
+    # Haftalıkta zorunlu olan bölümler (günlükte isteğe bağlı olanlar dahil).
+    for bid in ("karne", "turkiye_makro", "risk", "emtia"):
+        g = dict(h["gundem"]); g.pop(bid)
+        assert any(bid in e for e in kos(dict(h, gundem=g)).engel), f"haftalıkta boş {bid} ENGEL değil"
+    # Alt bölümsüz varlık bölümü UYARI (ENGEL değil).
+    g = dict(h["gundem"], turkiye=_b3_metin(1100))
+    d = kos(dict(h, gundem=g))
+    assert not d.engel and any("alt başlık" in u for u in d.uyari), (d.engel, d.uyari)
+    # Toplam ENGEL tavanı haftalıkta da çalışıyor.
+    d = kos(dict(h, yorum=_b3_metin(_a.YAZI_ARALIK_3["toplam"]["haftalik"][2])))
+    assert any("YAZI UZUN" in e for e in d.engel), "haftalık toplam tavanı ENGEL üretmedi"
+    # Günlük sayı yalnız haftalık bölümü ölçmez (beyan dışı): günlük fikstürde
+    # karne yokluğu ENGEL değildir.
+    d = kos(_b3_sayi())
+    assert not any("karne" in e or "turkiye_makro" in e for e in d.engel), d.engel
     # Biçim 2 sayısı eski yoldan ölçülür (beş bölümlü metin orada ENGEL alır).
     d = kos(_b3_sayi(surum=2))
     assert d.engel, "biçim 2 sayısı biçim 3 kurallarıyla ölçüldü"
@@ -872,7 +938,11 @@ def _bicim3_gonderi_ve_birlestirme():
     spec.loader.exec_module(tu)
     import ayar as _a
     b3 = tu.gundem_bolumleri({"surum": 3})
-    assert [i for i, _ in b3] == [y.id for y in _a.YAZI_BOLUMLERI_3 if y.tweet and y.id != "takvim"], b3
+    assert [i for i, _ in b3] == [y.id for y in _a.kip_bolumleri("gunluk") if y.tweet and y.id != "takvim"], b3
+    h3 = tu.gundem_bolumleri({"surum": 3, "haftalik": True})
+    assert [i for i, _ in h3] == [y.id for y in _a.kip_bolumleri("haftalik") if y.tweet and y.id != "takvim"], h3
+    assert "turkiye_makro" in [i for i, _ in h3] and "turkiye_makro" not in [i for i, _ in b3], \
+        "yalnız haftalık bölüm günlük gönderiye sızıyor ya da haftalıktan düşüyor"
     assert tu.gundem_bolumleri({"surum": 2}) == tu.GUNDEM_BOLUMLERI
     src = inspect.getsource(tu.bulten_zinciri)
     assert 'get("takvim")' in src and "gundem_bolumleri(b)" in src, "gönderi biçim 3 beyanını okumuyor"
@@ -1045,6 +1115,133 @@ def _soz_degisen_normalize():
         assert not {x["konu"]: x for x in o2["kapanan"]}["A"]["degisti"]
     finally:
         _s.oku = gercek
+
+
+def _haftalik_olcum():
+    """Haftaya bakışın ölçülen katmanı (01.10.2026): haftalık karne, eşik altı
+    tablo, kıyas noktası bir önceki HAFTALIK sayı, haftalık yazma kapısı."""
+    import soz as _s, olay as _o, gozlem as _g, uret as _u, denetim as _d, yaz as _y, ayar as _a
+    import ayar as _ayar
+    import tempfile, json as _j
+    from datetime import datetime as _dt
+
+    # (1) HAFTALIK KARNE — kapanış günü varsa ondan; yoksa önceki haftalıkta
+    #     açık basılmış olmaktan; o da yoksa hafta içinde açılıp kapanmaktan.
+    #     Bunların hiçbiri tutmayan kapalı kayıt bu haftaya ATANMAZ.
+    defter = {"kayitlar": [
+        {"konu": "K1", "soz": "s", "durum": "kapandi", "isabet": "tuttu", "acilis": "2026-09-20",
+         "kapanis": "2026-10-02"},
+        {"konu": "K2", "soz": "s", "durum": "kapandi", "isabet": "tutmadi", "acilis": "2026-09-15"},
+        {"konu": "K3", "soz": "s", "durum": "kapandi", "isabet": "kismen", "acilis": "2026-09-30"},
+        {"konu": "K4", "soz": "s", "durum": "kapandi", "isabet": "tuttu", "acilis": "2026-08-01"},
+        {"konu": "A1", "soz": "s", "durum": "acik", "acilis": "2026-10-01", "vade": "2026-11-01"},
+        {"konu": "A2", "soz": "s", "durum": "acik", "acilis": "2026-09-01", "vade": "2026-10-08"}]}
+    onceki = {"acik": [{"konu": "K2"}, {"konu": "A2"}], "kapanan": []}
+    gercek = _s.oku
+    try:
+        _s.oku = lambda: defter
+        h = _s.ozet("2026-10-04", onceki, haftalik=True)["hafta"]
+        kap = {k["konu"] for k in h["kapanan"]}
+        assert kap == {"K1", "K2", "K3"}, f"haftanın kapananları yanlış: {kap}"
+        assert (h["tuttu"], h["kismen"], h["tutmadi"]) == (1, 1, 1), h
+        assert [k["konu"] for k in h["acilan"]] == ["A1"], h["acilan"]
+        assert [k["konu"] for k in h["yaklasan"]] == ["A2"], h["yaklasan"]
+        assert "hafta" not in _s.ozet("2026-10-04", onceki), "günlük sayıya haftalık karne yazıldı"
+        # Önceki sayı yoksa yalnız kapanış günü olan kayıt sayılır.
+        h0 = _s.ozet("2026-10-04", None, haftalik=True)["hafta"]
+        assert {k["konu"] for k in h0["kapanan"]} == {"K1"} and h0["kiyas_var"] is False, h0
+    finally:
+        _s.oku = gercek
+
+    # (2) EŞİK ALTI TABLO — saati ilerleyen her seri; eşiği aşıp olay olan izlem
+    #     tabloya girmez (aynı sayı iki yerde basılmaz); esik yoksa tablo YOK.
+    assert _o.hafta_tablosu(None) == [], "ilk haftalık sayıda (kıyas yok) tablo uyduruldu"
+    iz_esikli = next(i for i in _ayar.IZLEMLER if i.hat == "fonlama-likidite" and i.anahtar == "tlref")
+    kalem = next(i for i in _ayar.HAFTALIK_KALEMLER if i.hat == "fonlama-likidite" and i.anahtar == "kredi_ticari")
+    esik = _dt(2026, 9, 27, 15, 0)
+    eski = {"_tarih": "25.09.2026", "tlref": 36.85, "kredi_ticari": 53.64, "hafta_kisa": "18.09.2026"}
+    yeni = {"_tarih": "02.10.2026", "tlref": 36.92, "kredi_ticari": 52.85, "hafta_kisa": "25.09.2026"}
+    led = [{"t": "2026-09-26T04:00:00", "v": "25.09.2026", "d": eski},
+           {"t": "2026-10-03T04:00:00", "v": "02.10.2026", "d": yeni}]
+    g_anlik, g_gecmis = _g.anlik, _g.gecmis_oku
+    try:
+        _g.anlik = lambda hat: yeni if hat == "fonlama-likidite" else None
+        _g.gecmis_oku = lambda hat: list(led) if hat == "fonlama-likidite" else []
+        t = _o.hafta_tablosu(esik)
+        satir = {r["anahtar"]: r for g in t for r in g["satirlar"]}
+        assert "kredi_ticari" in satir, f"eşiksiz kalem tabloda yok: {list(satir)}"
+        r = satir["kredi_ticari"]
+        assert r["donem"] == "25.09" and r["onceki_donem"] == "18.09", ("dönem saat alanından değil", r)
+        assert r["fark"] == "−0,79 puan" and r["deger"] == "%52,85", r
+        # Eşiği aşmayan izlem (TLREF +7 bp) tabloda; eşiği aşan izlem tabloda YOK.
+        assert "tlref" in satir, "eşiği aşmayan izlem tablodan düştü"
+        yeni2 = dict(yeni, tlref=38.5)
+        _g.anlik = lambda hat: yeni2 if hat == "fonlama-likidite" else None
+        led[-1]["d"] = yeni2
+        satir2 = {r["anahtar"] for g in _o.hafta_tablosu(esik) for r in g["satirlar"]}
+        assert iz_esikli.dikkat is not None and "tlref" not in satir2, \
+            "olay cümlesine dönüşen izlem tabloda ikinci kez basıldı"
+        # Saati ilerlemeyen kalem tabloya girmez.
+        yeni3 = dict(yeni, hafta_kisa="18.09.2026", kredi_ticari=53.64)
+        _g.anlik = lambda hat: yeni3 if hat == "fonlama-likidite" else None
+        led[-1]["d"] = yeni3
+        assert "kredi_ticari" not in {r["anahtar"] for g in _o.hafta_tablosu(esik) for r in g["satirlar"]}, \
+            "dönemi ilerlemeyen seri 'bu hafta güncellendi' sayıldı"
+    finally:
+        _g.anlik, _g.gecmis_oku = g_anlik, g_gecmis
+    # Kalem listesi kayıtla tutarlı: her kalem kendi hattının izlenen bir grubunda,
+    # eşiksiz ve izlemlerle çakışmıyor.
+    gruplar = {g for g, _ in _ayar.GRUPLAR}
+    izk = {(i.hat, i.anahtar) for i in _ayar.IZLEMLER}
+    for i in _ayar.HAFTALIK_KALEMLER:
+        assert i.grup in gruplar and i.grup not in ("haber", "diger"), (i.anahtar, i.grup)
+        assert i.dikkat is None and i.onemli is None, f"haftalık kalem eşik taşıyor: {i.anahtar}"
+        assert (i.hat, i.anahtar) not in izk, f"kalem izlemle çakışıyor: {i.anahtar}"
+
+    # (3) KIYAS NOKTASI — haftalık sayı önceki HAFTALIK sayılara bakar (söz
+    #     defteri, kilit haber, tekrar ölçüleri), günlük sayı bir önceki sayıya.
+    gercek_c, gercek_b = _u.CIKTI, _d.BULTEN
+    with tempfile.TemporaryDirectory() as td:
+        for g, hf, iz in (("2026-09-27", True, "H"), ("2026-10-01", False, "G1"), ("2026-10-02", False, "G2")):
+            Path(td, f"{g}.json").write_text(_j.dumps(
+                {"tarih": g, "haftalik": hf, "gundem_kaynagi": "yazili", "izleme": {"acik": [{"konu": iz}]},
+                 "yorum": f"<p>{iz}</p>"}), encoding="utf-8")
+        try:
+            _u.CIKTI = _d.BULTEN = Path(td)
+            assert _u._onceki_izleme("2026-10-04", True)["acik"][0]["konu"] == "H"
+            assert _u._onceki_izleme("2026-10-04", False)["acik"][0]["konu"] == "G2"
+            dh = _d.Denetim({"tarih": "2026-10-04", "haftalik": True})
+            assert [b.get("tarih") for b in dh._onceki_sayilar(2)] == ["2026-09-27"], \
+                "haftalık sayının tekrar kıyası cuma günlüğüne bakıyor"
+            dg = _d.Denetim({"tarih": "2026-10-03", "haftalik": False})
+            assert [b.get("tarih") for b in dg._onceki_sayilar(2)] == ["2026-10-02", "2026-10-01"]
+        finally:
+            _u.CIKTI, _d.BULTEN = gercek_c, gercek_b
+
+    # (4) YAZMA KAPISI — haftalık sayı kendi bölüm setini kabul eder, günlük
+    #     sayı yalnız haftalık bölümü (karne, turkiye_makro) REDDEDER.
+    with tempfile.TemporaryDirectory() as td:
+        hedef = Path(td) / "2026-10-04.json"
+        for haftalik, kabul in ((True, True), (False, False)):
+            b0 = {"tarih": "2026-10-04", "olusturma": "2026-10-04T14:03:00+00:00", "surum": 3,
+                  "haftalik": haftalik, "gundem_kaynagi": "otomatik", "gundem": {},
+                  "gundem_yazi_bolumleri": _a.yazi_bolumleri({"surum": 3, "haftalik": haftalik}),
+                  "ozet": {"ne_oldu": "<p>m</p>"}}
+            hedef.write_text(_j.dumps(b0), encoding="utf-8")
+            try:
+                _y.uygula(hedef, {"gundem": {"karne": "<p>k</p>", "turkiye_makro": "<p>t</p>"}})
+                kabul_edildi = True
+            except SystemExit:
+                kabul_edildi = False
+            assert kabul_edildi is kabul, f"haftalik={haftalik}: yalnız haftalık bölümler {'reddedildi' if kabul else 'kabul edildi'}"
+
+    # (5) ÜSLUP: yoğunluk bütçesi uzun sayıda ölçeklenir, mutlak kural ölçeklenmez.
+    import uslup as _us
+    dolgu = " kelime" * 6000
+    r = _us.olc({"a": "Demiştik. Söylemiştik." + dolgu})
+    assert not any("Y03" in u for u in r["uyari"]), "9.000 kelimelik sayıda iki geçmiş atfı uyarıldı"
+    r = _us.olc({"a": "Bir yatırım bankası böyle düşünüyor." + dolgu})
+    assert any("Y17" in u for u in r["uyari"]), "adsız kaynak uzun sayıda bütçe kazandı"
 
 
 def _inceleme_duzeltmeleri():
@@ -3852,6 +4049,24 @@ def main() -> int:
     sina("guncelle: hat süresi ölçülüp deftere yazılıyor (budama, kip, bozuk dosya)",
          _hat_suresi)
 
+    # DONMUŞ TAKVİM (01.10.2026). Gecikme fikstürlerinin girdisi (ölçüm ve yazı
+    # damgaları) 04.09.2026'da depodan okunup DONDURULDU; o günlerin sözü de o
+    # günün takvimidir. Fikstür canlı takvimi kopyalıyordu: pazar sözleri bir
+    # saat ileri alınınca 30.08'in "uyarı"sı "zamanında"ya döndü ve madde düştü —
+    # kural değişmemişti, yalnız ölçünün girdisi kaymıştı. Girdi donmuşsa ölçüt
+    # de donar; canlı takvimin cron'larla tutarlılığını ayrı madde sorar.
+    TAKVIM_0409 = {"yayinlar": [
+        {"yayin": "Günlük bülten", "gunler": "hafta içi", "adimlar": [
+            {"ad": "ölçüm", "is_akisi": "bulten.yml", "cron_no": 0, "istanbul": "06:23"},
+            {"ad": "sitede", "is_akisi": "yayin.yml", "cron_no": 0, "istanbul": "08:11"},
+            {"ad": "X gönderisi", "is_akisi": "tweet.yml", "cron_no": 0, "istanbul": "08:35", "okura": False},
+            {"ad": "nöbetçi yoklaması", "is_akisi": "nobetci.yml", "cron_no": 0, "istanbul": "09:37", "okura": False}]},
+        {"yayin": "Haftaya bakış", "gunler": "pazar", "adimlar": [
+            {"ad": "ölçüm", "is_akisi": "bulten.yml", "cron_no": 2, "istanbul": "17:03"},
+            {"ad": "X gönderisi", "is_akisi": "tweet.yml", "cron_no": 1, "istanbul": "18:25", "okura": False},
+            {"ad": "sitede", "is_akisi": "yayin.yml", "cron_no": 2, "istanbul": "18:41"}]},
+    ]}
+
     # ── GECİKME: söz ile gerçekleşenin TEK karşılaştırması, ve ENGEL sınıfının
     # HİÇ TANIMLANMAMASI. Bu ikinci madde yapısal bir kilittir: gecikme ölçüsü
     # ileride bir yayın kapısına bağlanmak istenirse bu sınama düşer. Geç kalmış
@@ -3868,8 +4083,7 @@ def main() -> int:
             (k / "site" / "src" / "data" / "bulten").mkdir(parents=True, exist_ok=True)
             (k / "tweet").mkdir(parents=True, exist_ok=True)
             (k / "bulten").mkdir(parents=True, exist_ok=True)
-            tk = _j.loads((BURASI.parent / "site" / "src" / "data" /
-                           "yayin_takvimi.json").read_text(encoding="utf-8"))
+            tk = _j.loads(_j.dumps(TAKVIM_0409))
             if takvim_duzelt:
                 takvim_duzelt(tk)
             (k / "site" / "src" / "data" / "yayin_takvimi.json").write_text(
@@ -4359,8 +4573,8 @@ def main() -> int:
             for alt in ("bulten", "tweet"):
                 (k / "site" / "src" / "data" / alt).mkdir(parents=True, exist_ok=True)
             (k / "bulten").mkdir(parents=True, exist_ok=True)
-            _sh.copy2(BURASI.parent / "site" / "src" / "data" / "yayin_takvimi.json",
-                      k / "site" / "src" / "data" / "yayin_takvimi.json")
+            (k / "site" / "src" / "data" / "yayin_takvimi.json").write_text(
+                _j.dumps(TAKVIM_0409, ensure_ascii=False), encoding="utf-8")
             (k / "tweet").mkdir(parents=True, exist_ok=True)
             (k / "tweet" / "defter.json").write_text(
                 "{}", encoding="utf-8")
@@ -4435,7 +4649,20 @@ def main() -> int:
         # aynı görünür". Ayrışma adıyla basılır, hükmü ona bakan biri verir.
         beklenen = {k: s for k, (s, _) in HAFTA_ICI.items()}
         beklenen.update(PAZAR)
-        canli = {(s["tarih"], s["yayin"]): s for s in gk.gecmis(BURASI.parent)}
+        # Canlı VERİ, donmuş TAKVİM: depo verisi bağlantıyla geçici bir ağaca
+        # alınır, takvim ölçüldüğü günündür. Canlı takvimle oynatmak söz kaydığı
+        # her gün (pazar sözü 01.10.2026'da bir saat ileri alındı) sahte bir
+        # "sapma" basardı — değişen veri değil sözdür.
+        with tempfile.TemporaryDirectory() as _td2:
+            kc = Path(_td2)
+            (kc / "site" / "src" / "data").mkdir(parents=True)
+            (kc / "site" / "src" / "data" / "bulten").symlink_to(
+                BURASI.parent / "site" / "src" / "data" / "bulten")
+            (kc / "site" / "src" / "data" / "yayin_takvimi.json").write_text(
+                _j.dumps(TAKVIM_0409, ensure_ascii=False), encoding="utf-8")
+            (kc / "tweet").symlink_to(BURASI.parent / "tweet")
+            (kc / "bulten").symlink_to(BURASI.parent / "bulten")
+            canli = {(s["tarih"], s["yayin"]): s for s in gk.gecmis(kc)}
         for anahtar, sinif in sorted(beklenen.items()):
             c = canli.get(anahtar)
             if c is None:
@@ -4688,7 +4915,7 @@ def main() -> int:
         import re as _re_n
         n = (BURASI.parent / ".github" / "workflows" / "nobetci.yml").read_text(encoding="utf-8")
         for cron in ("37 6 * * 1-5", "7 8 * * 1-5", "37 10 * * 1-5",
-                     "31 16 * * 0", "1 18 * * 0"):
+                     "31 17 * * 0", "1 18 * * 0"):
             assert f"'{cron}'" in n, f"nöbetçinin cron'u değişmiş: {cron}"
         for adim in ("Bülten çıktı mı", "Site bugünün sayısını gösteriyor mu"):
             assert adim in n, f"nöbetçinin mevcut adımı düşmüş: {adim}"
@@ -5180,6 +5407,8 @@ def main() -> int:
          _editor_bulgulari)
     sina("ayrıntı 01.10: tekil olgu ölçüsü · TL tahvil kartları (gönderinin beşi aynı) · DİBS olay eşiği",
          _ayrinti_genislemesi)
+    sina("haftalık 01.10: karne · eşik altı tablo · kıyas önceki haftalık · haftalık yazma kapısı · üslup ölçeği",
+         _haftalik_olcum)
 
     for ad in gecen:
         print(f"  ✓ {ad}")

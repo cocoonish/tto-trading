@@ -53,6 +53,11 @@ ISABET = {"tuttu": "tuttu", "tutmadi": "tutmadı", "kismen": "kısmen"}
 # bilebiliriz — `ozet()` o yüzden önceki sayının defterini argüman alır.
 VADE_YAKIN = 1          # kalan gün ≤ bu ise kayıt "değişen" sayılır
 YENI_PENCERE = 1        # bu kadar gün içinde açılan kayıt "yeni"
+# HAFTALIK KİP (01.10.2026): pazar sayısı bir önceki PAZAR sayısıyla kıyaslanır
+# ve pencereler bir haftadır. Günlük pencerelerle (1 gün) hafta içinde açılıp
+# kapanan kayıtlar pazar sayısında "değişmeden duran" altında tek satır
+# basılıyordu — oysa haftalık okurun asıl sorusu "bu hafta hangi söz kapandı".
+HAFTA_PENCERE = 7
 
 
 def _gun(metin: str) -> date | None:
@@ -123,13 +128,74 @@ def _degisenler(kayitlar: list[dict], onceki_izleme: dict | None) -> set[str]:
     return out
 
 
-def ozet(bugun_metni: str = "", onceki_izleme: dict | None = None) -> dict:
+def hafta_karnesi(kayitlar: list[dict], onceki_izleme: dict | None, bugun: date) -> dict:
+    """HAFTANIN KARNESİ — bir önceki haftalık sayıdan bu yana defterde ne oldu.
+
+    Kapanan: kapanış günü pencerede olan kayıt; kapanış günü yazılmamışsa
+    önceki haftalık sayıda AÇIK basılmış ve şimdi kapalı olan kayıt; o da
+    yoksa (önceki sayıda hiç yoksa) açılışı da pencerede olan kayıt (hafta
+    içinde açılıp kapanmış). Bunların hiçbiri tutmuyorsa kayıt bu haftaya
+    ATANMAZ — kapanış gününü bilmediğimiz bir kaydı "bu hafta kapandı" saymak
+    karneyi şişirirdi. Önceki sayı yoksa yalnız kapanış günü olan kayıtlar
+    sayılır ve `kiyas_var: False` yazılır.
+    Karne SAYIMDIR, oran değil: oran zaten bütün defter için `karne`de durur.
+    """
+    pencere_bas = bugun.toordinal() - HAFTA_PENCERE
+    onceki_acik = ({str(k.get("konu")) for k in (onceki_izleme.get("acik") or []) if isinstance(k, dict)}
+                   if isinstance(onceki_izleme, dict) else set())
+    onceki_hepsi = (onceki_acik | {str(k.get("konu")) for k in (onceki_izleme.get("kapanan") or [])
+                                   if isinstance(k, dict)}
+                    if isinstance(onceki_izleme, dict) else set())
+
+    def pencerede(g: date | None) -> bool:
+        return g is not None and pencere_bas < g.toordinal() <= bugun.toordinal()
+
+    kapanan, acilan, yaklasan = [], [], []
+    for k in kayitlar:
+        konu = str(k.get("konu") or "")
+        acilis = _gun(k.get("acilis", ""))
+        if k.get("durum") == "kapandi":
+            kap = _gun(k.get("kapanis", ""))
+            if kap is not None:
+                bu_hafta = pencerede(kap)
+            elif isinstance(onceki_izleme, dict):
+                bu_hafta = konu in onceki_acik or (konu not in onceki_hepsi and pencerede(acilis))
+            else:
+                bu_hafta = False
+            if bu_hafta:
+                kapanan.append(k)
+        elif k.get("durum") == "acik":
+            if pencerede(acilis):
+                acilan.append(k)
+            kalan = k.get("gun_kalan")
+            if kalan is not None and kalan <= HAFTA_PENCERE:
+                yaklasan.append(k)
+    say = lambda n: sum(1 for k in kapanan if k.get("isabet") == n)  # noqa: E731
+    return {
+        "kiyas_var": isinstance(onceki_izleme, dict),
+        "pencere_gun": HAFTA_PENCERE,
+        "kapanan": [{a: k.get(a) for a in ("konu", "soz", "sonuc", "isabet", "acilis", "kapanis", "vade")}
+                    for k in kapanan],
+        "acilan": [{a: k.get(a) for a in ("konu", "soz", "acilis", "vade")} for k in acilan],
+        "yaklasan": [{a: k.get(a) for a in ("konu", "soz", "vade", "gun_kalan")}
+                     for k in sorted(yaklasan, key=lambda x: x.get("gun_kalan") or 0)],
+        "tuttu": say("tuttu"), "kismen": say("kısmen"), "tutmadi": say("tutmadı"),
+        "notsuz": sum(1 for k in kapanan if not k.get("isabet")),
+    }
+
+
+def ozet(bugun_metni: str = "", onceki_izleme: dict | None = None,
+         haftalik: bool = False) -> dict:
     """Bültene girecek söz defteri kesiti: açık sözler, yeni kapananlar, karne.
 
     `onceki_izleme` bir önceki sayının `izleme` bloğudur; verilirse metni
     değişmemiş kayıtlar `duran: True` ile işaretlenir ve sayfa onları tek
-    satırda basar (bkz. yukarıdaki not).
+    satırda basar (bkz. yukarıdaki not). Haftalık sayıda önceki sayı bir
+    önceki HAFTALIK sayıdır, pencereler bir hafta ve `hafta` alanı haftanın
+    karnesini taşır.
     """
+    yeni_pencere = HAFTA_PENCERE if haftalik else YENI_PENCERE
+    vade_yakin_gun = HAFTA_PENCERE if haftalik else VADE_YAKIN
     defter = oku()
     kayitlar = defter.get("kayitlar", [])
     if not kayitlar:
@@ -177,17 +243,17 @@ def ozet(bugun_metni: str = "", onceki_izleme: dict | None = None) -> dict:
             # "yeni" denmez (ölçemediğimiz bir değişikliği işaretlemeyiz).
             kap = _gun(k.get("kapanis", ""))
             if kap is not None:
-                yeni_mi = 0 <= (bugun - kap).days <= YENI_PENCERE
+                yeni_mi = 0 <= (bugun - kap).days <= yeni_pencere
             elif onceki_kapali is not None:
                 yeni_mi = str(k.get("konu") or "") not in onceki_kapali
             else:
                 yeni_mi = False
             vade_yakin = False
         else:
-            yeni_mi = (k.get("yas_gun") is not None and k["yas_gun"] <= YENI_PENCERE)
+            yeni_mi = (k.get("yas_gun") is not None and k["yas_gun"] <= yeni_pencere)
             # Vadesi GELEN ya da GEÇEN açık söz öne çıkar: bülten önce kendi
             # gecikmesini gösterir.
-            vade_yakin = kalan is not None and kalan <= VADE_YAKIN
+            vade_yakin = kalan is not None and kalan <= vade_yakin_gun
         k["degisti"] = bool(yeni_mi or vade_yakin or metin_degisti)
         k["duran"] = not k["degisti"]
         # SEBEBİ de yazılır: okur "bu neden burada" diye sormasın, ve bir
@@ -204,7 +270,10 @@ def ozet(bugun_metni: str = "", onceki_izleme: dict | None = None) -> dict:
     tuttu = sum(1 for k in notlu if str(k["isabet"]).lower() == "tuttu")
     kismen = sum(1 for k in notlu if str(k["isabet"]).lower() == "kismen")
 
+    hafta = (hafta_karnesi([_kayit(h, bugun) for h in kayitlar], onceki_izleme, bugun)
+             if haftalik else None)
     return {
+        **({"hafta": hafta} if hafta is not None else {}),
         "acik": acik,
         "kapanan": kapanan,
         "karne": {

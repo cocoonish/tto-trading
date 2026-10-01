@@ -32,6 +32,12 @@ class Kalip:
     desen: re.Pattern
     butce: int | None        # None → ENGEL (hiç geçmez); sayı → UYARI eşiği (sayı başına)
     oneri: str
+    # YOĞUNLUK kalıbı mı: bütçe ~1.700 kelimelik sabah notuna göre konmuştur
+    # ve uzun sayıda (haftaya bakış, 6.000–9.000 kelime) kelime sayısıyla
+    # ölçeklenir. Mutlak kurallar (adsız kaynak, rakamla yazım, 52 hafta konumu,
+    # standart adlar) ÖLÇEKLENMEZ: bir sayıda hiç geçmemesi gerekeni uzunluk
+    # meşrulaştırmaz.
+    olcekli: bool = False
 
 
 def _k(desen: str, bayrak=0) -> re.Pattern:
@@ -93,10 +99,10 @@ KALIPLAR: tuple[Kalip, ...] = (
     # ── UYARI (bütçeli): tek tek meşru, yoğunluğu kusur
     Kalip("Y03", "'yazmıştık' ailesi",
           _k(r"\b(?:yazmıştık|söylemiştik|demiştik|koymuştuk|beklemiştik|sormuştuk)\b"),
-          1, "geçmişe atıf sayı başına en çok bir kez"),
+          1, "geçmişe atıf sayı başına en çok bir kez", True),
     Kalip("Y10", "σ yerine uzun tanım",
           _k(r"kendi\s+(?:günlük\s+|haftalık\s+)?oynaklığ\w+\s+(?:\([^)]*\)\s+)?(?:göre\s+)?[\d,]+\s+(?:kat|standart)"),
-          1, "olağandışılığı '(1,5σ)' biçiminde yaz"),
+          1, "olağandışılığı '(1,5σ)' biçiminde yaz", True),
     Kalip("Y11", "MOVE/VIX yerine dolaylama",
           _k(r"(?:[Tt]ahvil|[Hh]isse)\s+oynaklığı\s+ölçüsü"),
           0, "standart adı kullan: MOVE, VIX"),
@@ -105,14 +111,14 @@ KALIPLAR: tuple[Kalip, ...] = (
              r"yıllıklandırma\s+tek\s+günlük|valör\s+(?:farkı\s+ya\s+da|ve)\s+tatil|"
              r"getiri\s+ödemeyen\s+madeni\s+taşıma|ülke\s+riski\s+(?:yeniden\s+)?fiyatlaması\s+"
              r"(?:önce\s+)?(?:bankalarda|kurda)|tahvili\s+gecelik\s+fonlamayla\s+taşı\w*", re.I),
-          1, "tanım sözlükte durur; metinde kısa adı kullan"),
+          1, "tanım sözlükte durur; metinde kısa adı kullan", True),
     Kalip("Y14", "52 hafta konumu",
           _k(r"(?:52|elli\s+iki)\s+haftalık\s+aralığ\w*\s+(?:tam\s+)?(?:yalnız\s+)?(?:%\d+|tepe|dib|en\s+dib)"),
           3, "52 hafta konumunu yalnız uçlarda an"),
     Kalip("Y15", "tablo içi sıralama",
           _k(r"(?:günün|haftanın)\s+en\s+(?:büyük|olağandışı)\s+(?:(?:ikinci|üçüncü|dördüncü|beşinci|altıncı)\s+)?"
              r"(?:\w+\s+)?hareket\w*|listes\w*\s+(?:en|üçüncü)"),
-          2, "sıralamayı tablo söyler; düzyazıda yalnız en büyüğü"),
+          2, "sıralamayı tablo söyler; düzyazıda yalnız en büyüğü", True),
     Kalip("Y17", "adsız kaynak",
           _k(r"\b(?:[Bb]ir\s+(?:kaynağa|değerlendirmeye)\s+göre|[Hh]aber\s+akış(?:ına\s+göre|ında)|"
              r"[Bb]ir\s+(?:küresel\s+)?(?:yatırım\s+bankası|finans\s+yayını|yatırım\s+stratejisti|"
@@ -124,9 +130,10 @@ KALIPLAR: tuple[Kalip, ...] = (
           0, "sayılar rakamla: '52 haftalık', '17 Eylül'"),
     Kalip("Y19", "'bir X değil bir Y' antitezi",
           _k(r"\bbir\s+\w+(?:\s+\w+)?\s+değil,?\s+bir\s+\w+"),
-          2, "antitez kalıbını seyrek kullan"),
+          2, "antitez kalıbını seyrek kullan", True),
 )
 
+OLCEK_KELIME = 1700          # yoğunluk bütçelerinin konduğu sayının uzunluğu (biçim 3 günlük üst sınırı)
 YANI = re.compile(r"\byani\b", re.I)
 YANI_KELIME = 300            # 300 kelimede en çok bir "yani"
 CUMLE_ORT_UST = 22           # ortalama cümle (kelime)
@@ -145,6 +152,8 @@ def olc(alanlar: dict[str, str]) -> dict:
     """alanlar: alan adı → düz metin. Dönüş: {engel: [...], uyari: [...], sayim: {...}}."""
     engel, uyari, sayim = [], [], {}
     tum = " \n".join(alanlar.values())
+    # Ölçek: her ~1.700 kelime bir sabah notu payı (günlük sayıda 1).
+    kat = max(1, len(tum.split()) // OLCEK_KELIME)
     for k in KALIPLAR:
         bulunan = []
         for ad, t in alanlar.items():
@@ -156,8 +165,8 @@ def olc(alanlar: dict[str, str]) -> dict:
         ornek = "; ".join(f"[{a}] “{g}”" for a, g in bulunan[:3])
         if k.butce is None:
             engel.append(f"ÜSLUP {k.kod} ({k.ad}) — {len(bulunan)} yerde: {ornek}. {k.oneri}.")
-        elif len(bulunan) > k.butce:
-            uyari.append(f"Üslup {k.kod} ({k.ad}) {len(bulunan)} kez (bütçe {k.butce}): {ornek}. {k.oneri}.")
+        elif len(bulunan) > (butce := k.butce * (kat if k.olcekli else 1)):
+            uyari.append(f"Üslup {k.kod} ({k.ad}) {len(bulunan)} kez (bütçe {butce}): {ornek}. {k.oneri}.")
     kelime = len(tum.split())
     yani = len(YANI.findall(tum))
     sayim["yani"] = yani
