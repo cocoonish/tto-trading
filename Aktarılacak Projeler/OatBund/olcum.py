@@ -126,17 +126,28 @@ YAHOO_KAYMA_BAS = "2010-08-04"
 
 @lru_cache(maxsize=None)
 def kur_ny() -> pd.Series:
-    """EUR/USD, New York 17:00 kapanışı. Veri gününün barı CNBC'de henüz yok;
-    o gün dakikalık arşivin Paris 23:00'e kadarki son kotasyonu kullanılır."""
+    """EUR/USD, New York 17:00 kapanışı. Ana arşiv (01.10.2026 akşamı) veri
+    gününün barını henüz taşımıyordu; o bar ek kur arşivinden (aynı CNBC ucu,
+    02.10.2026) gelir. Ek arşivin EUR/USD'si ana arşivle ortak geçmişte BİREBİR
+    aynı olmalıdır (`kur_kaynak_sinamasi`)."""
     s = oku("cnbc_gunluk.csv.gz")["eurusd"].dropna()
     s = s[(s.index.dayofweek < 5) & (s.index <= SON_GUN)].copy()
     if pd.Timestamp(SON_GUN) not in s.index:
-        g = gun_ici()["eurusd"].dropna()
-        g = g[(g.index.date == pd.Timestamp(SON_GUN).date()) & (g.index.strftime("%H:%M") <= "23:00")]
-        if g.empty:
+        ek = kur_capraz("eur")
+        if pd.Timestamp(SON_GUN) not in ek.index:
             raise ArsivHatasi("veri gününün New York kapanışı arşivde yok")
-        s.loc[pd.Timestamp(SON_GUN)] = float(g.iloc[-1])
+        s.loc[pd.Timestamp(SON_GUN)] = float(ek.loc[SON_GUN])
     return s.sort_index()
+
+
+@lru_cache(maxsize=None)
+def kur_capraz(kod: str) -> pd.Series:
+    """Ek kur arşivi (CNBC, New York 17:00 kapanışı, EUR/USD ile aynı uç):
+    eurgbp · eurchf · eurjpy (euro çaprazları), gbp · aud (XXX/USD), chf · jpy
+    · cad (USD/XXX), eur (EUR/USD, yalnız sınama ve veri günü). Hafta sonu
+    barları kaynakta cumanın kopyasıdır ve atılır."""
+    s = oku("cnbc_kur_gunluk.csv.gz")[kod].dropna()
+    return s[(s.index.dayofweek < 5) & (s.index <= SON_GUN)].sort_index()
 
 
 @lru_cache(maxsize=None)
@@ -155,22 +166,47 @@ def yahoo_ny(kod: str) -> pd.Series:
     return out.sort_index()
 
 
-def _yahoo_hiza() -> dict:
-    """Hizalanmış Yahoo EUR/USD ile CNBC New York kapanışı aynı mı? Kural
-    bozulursa (Yahoo etiket sözleşmesini değiştirirse) ölçüm DÜŞER."""
-    ny, ya = kur_ny(), yahoo_ny("eurusd")
+GUN_AD = ("pazartesi", "salı", "çarşamba", "perşembe", "cuma")
+
+
+def kur_kaynak_sinamasi() -> dict:
+    """Ek kur arşivi ana arşivle tutarlı mı, ve çaprazları Yahoo'dan almak
+    neden bırakıldı — ölçülür, yazılır; tutarlılık bozulursa ölçüm DÜŞER.
+
+    (1) Ek arşivin EUR/USD'si ana arşivin EUR/USD'siyle ortak geçmişte birebir
+    aynı (aynı uç, iki ayrı indirme). (2) Veri gününün günlük barı ile gün içi
+    arşivin 23:00 Paris kotasyonu. (3) Özdeşlik sınaması: EUR/USD ÷ EUR/GBP ile
+    kaynağın kendi GBP/USD'si (ayrı seri, aynı saat) — dolar bacağının
+    türetildiği kural BAĞIMSIZ bir seriye karşı. (4) Yahoo: D etiketli bar
+    D−1'in New York kapanışını taşır; bir iş günü geri kaydırma pazartesi barını
+    CUMAYA yazar, o bar ise hafta sonu açılışından sonraki fiyattır — sapma
+    cumada öbür günlerin iki katı."""
     out = {}
-    for ad, a, b in (("2004–2010", "2004-01-01", "2010-07-30"), ("2010–2026", "2010-08-16", SON_GUN)):
-        j = pd.concat([ny.rename("n"), ya.rename("y")], axis=1, sort=True).dropna()
-        j = j[(j.index >= a) & (j.index <= b)]
-        out[ad] = {"n": int(len(j)), "medyan_fark": float((j["n"] - j["y"]).abs().median())}
-        if out[ad]["medyan_fark"] > 0.0015:
-            raise ArsivHatasi(f"Yahoo döviz hizası tutmuyor ({ad}): medyan fark {out[ad]['medyan_fark']:.4f}")
-    # Kıyas: kaydırılmamış Yahoo barı 2010 sonrasında aynı günün NY kapanışına ne kadar uzak?
-    ham = oku("yahoo_gunluk.csv.gz")["eurusd"].dropna()
-    j = pd.concat([ny.rename("n"), ham.rename("y")], axis=1, sort=True).dropna()
-    j = j[(j.index >= "2010-08-16") & (j.index < SON_GUN)]
-    out["kaydirmasiz_2010_2026"] = {"n": int(len(j)), "medyan_fark": float((j["n"] - j["y"]).abs().median())}
+    eski = oku("cnbc_gunluk.csv.gz")["eurusd"].dropna()
+    ek = kur_capraz("eur")
+    j = pd.concat([eski.rename("a"), ek.rename("b")], axis=1, sort=True).dropna()
+    out["eurusd_ortak_gun"] = int(len(j))
+    out["eurusd_azami_fark"] = float((j["a"] - j["b"]).abs().max())
+    if out["eurusd_azami_fark"] > 1e-9:
+        raise ArsivHatasi(f"ek kur arşivinin EUR/USD'si ana arşivden ayrışıyor: {out['eurusd_azami_fark']}")
+    g = gun_ici()["eurusd"].dropna()
+    g = g[(g.index.date == pd.Timestamp(SON_GUN).date()) & (g.index.strftime("%H:%M") <= "23:00")]
+    out["veri_gunu_bar"], out["veri_gunu_gun_ici_2300"] = float(ek.loc[SON_GUN]), float(g.iloc[-1])
+    t = pd.DataFrame({"eur": ek, "eurgbp": kur_capraz("eurgbp"), "gbp": kur_capraz("gbp"),
+                      "eurchf": kur_capraz("eurchf"), "chf": kur_capraz("chf")}).dropna()
+    out["gbp_ozdeslik_medyan_bp"] = float(((t["eur"] / t["eurgbp"] / t["gbp"] - 1).abs() * 1e4).median())
+    out["gbp_ozdeslik_p99_bp"] = float(((t["eur"] / t["eurgbp"] / t["gbp"] - 1).abs() * 1e4).quantile(0.99))
+    out["chf_ozdeslik_medyan_bp"] = float(((t["eur"] * t["chf"] / t["eurchf"] - 1).abs() * 1e4).median())
+    out["ozdeslik_gun"] = int(len(t))
+    ya = yahoo_ny("eurgbp")
+    jj = pd.concat([ya.rename("y"), kur_capraz("eurgbp").rename("c")], axis=1, sort=True).dropna()
+    jj = jj[(jj.index >= "2010-08-16") & (jj.index < SON_GUN)]
+    dd = (np.log(jj["y"]) - np.log(jj["c"])).abs() * 100
+    med = dd.groupby(jj.index.dayofweek).median()
+    out["yahoo_eurgbp_gun_medyan_yuzde"] = {GUN_AD[i]: float(med.loc[i]) for i in range(5)}
+    a, b = "2017-04-21", "2017-04-24"
+    out["ornek_2017"] = {"cnbc": float(100 * np.log(kur_capraz("eurgbp").loc[b] / kur_capraz("eurgbp").loc[a])),
+                         "yahoo_kaydirilmis": _tam_degisim(ya, a, b)}
     return out
 
 
@@ -222,6 +258,14 @@ def seviye_ozeti() -> dict:
     yil = s[s.index >= "2026-01-01"]
     out["yil_dibi"], out["yil_dibi_gun"] = float(yil.min()), str(yil.idxmin().date())
     out["epizot_degisim"] = son - out["yil_dibi"]
+    # Yılın dibinden bu yana açılmanın içinde 15.06.2026'nın gösterge değişimi var:
+    # o günün fark sıçraması bir ölçüm değil, seviye kaymasıdır.
+    gecis = [g for g in GOSTERGE_SICRAMA if out["yil_dibi_gun"] < g <= out["gun"]]
+    sic = sum(float(s.loc[g] - s.shift(1).loc[g]) for g in gecis)
+    out["epizot_gosterge_gunleri"], out["epizot_gosterge_payi"] = gecis, sic
+    out["epizot_degisim_gostergesiz"] = out["epizot_degisim"] - sic
+    out["epizot_kat"] = son / out["yil_dibi"]
+    out["epizot_kat_gostergesiz"] = (son - sic) / out["yil_dibi"]
     # Yılın dibi epizodun tanımıdır; sabit yazılan EPIZOT_BAS ölçüyle tutmalı.
     out["epizot_bas_tutarli"] = out["yil_dibi_gun"] == EPIZOT_BAS
     # Bacakların payı: Haziran sonundan bu yana spread artışının ne kadarı OAT'tan.
@@ -245,13 +289,27 @@ def kaynak_sinamasi() -> dict:
         resmi = (irs[u.upper()] - irs["DE"]) * 100
         j = pd.concat([cn.rename("c"), resmi.rename("r")], axis=1, sort=True).dropna()
         f = j["c"] - j["r"]
-        out[u] = {"ay": int(len(j)), "korelasyon": float(j.corr().iloc[0, 1]),
+        # Bacak bacak: ortalama farkın hangi ülkenin serisinden geldiği.
+        bacak = {}
+        for k, kol in ((u, f"{u}10y"), ("de", "de10y")):
+            cb = (gunluk()[kol].dropna() * 100).resample("ME").mean()
+            jb = pd.concat([cb.rename("c"), (irs[k.upper()] * 100).rename("r")], axis=1, sort=True).dropna()
+            jb = jb[jb.index.isin(j.index)]
+            bacak[k] = {"ort_fark": float((jb["c"] - jb["r"]).mean()),
+                        "medyan_fark": float((jb["c"] - jb["r"]).median())}
+        out[u] = {"ay": int(len(j)), "korelasyon": float(j.corr().iloc[0, 1]), "bacak": bacak,
                   "degisim_korelasyonu": float(j.diff().dropna().corr().iloc[0, 1]),
                   "yillik_fark_min": float(f.groupby(f.index.year).mean().min()),
                   "yillik_fark_maks": float(f.groupby(f.index.year).mean().max()),
                   "ort_fark": float(f.mean()), "mutlak_medyan": float(f.abs().median()),
                   "son_ay": str(j.index[-1].date()), "son_ay_resmi": float(j["r"].iloc[-1]),
                   "son_ay_cnbc": float(j["c"].iloc[-1])}
+    # 2017 gösterge değişimi resmî seride de görülüyor mu? (Görülüyorsa resmî
+    # seri de aynı gösterge kâğıdını izliyor; sınama gösterge seçiminden bağımsız değil.)
+    cn = spread("fr").resample("ME").mean()
+    resmi = (irs["FR"] - irs["DE"]) * 100
+    out["fr"]["ekim_2017"] = [{"ay": str(t.date())[:7], "resmi": float(resmi.loc[t]), "cnbc": float(cn.loc[t])}
+                              for t in pd.to_datetime(["2017-09-30", "2017-10-31", "2017-11-30"])]
     return out
 
 
@@ -350,7 +408,7 @@ def _isgunu(a: str, b: str) -> int:
 def epizotlar() -> list[dict]:
     s, it = spread("fr"), spread("it")
     fx = kur_ny()
-    gb = yahoo_ny("eurgbp")
+    gb, ch = kur_capraz("eurgbp"), kur_capraz("eurchf")
     df = gunluk()
     rd = ((df["us2y"] - df["de2y"]) * 100).dropna()
     out = []
@@ -363,13 +421,51 @@ def epizotlar() -> list[dict]:
              "arama_son": b, "acilma": z - v0, "is_gunu": _isgunu(t0, str(tz.date())),
              "eurusd_yuzde": float(100 * (np.log(_once(fx, str(tz.date()))[1]) - np.log(_once(fx, t0)[1]))),
              "eurgbp_yuzde": _tam_degisim(gb, t0, str(tz.date())),
+             "eurchf_yuzde": _tam_degisim(ch, t0, str(tz.date())),
              "rd_bp": _once(rd, str(tz.date()))[1] - _once(rd, t0)[1],
              "it_bp": _once(it, str(tz.date()))[1] - _once(it, t0)[1]}
         for m in (1, 3, 6):
             t = tz + pd.DateOffset(months=m)
             r[f"sonra_{m}a"] = (_once(s, str(t.date()))[1] - z) if t <= s.index[-1] else None
+        # Pencereler 1 ile 156 iş günü arasında: ham yüzdeler kıyaslanamaz.
+        # Ölçek: epizottan önceki bir yılın günlük log değişim σ'sı × √iş günü.
+        for k, ser in (("eurgbp", gb), ("eurchf", ch)):
+            gun_d = np.log(ser).diff().dropna() * 100
+            sig = float(gun_d[(gun_d.index < t0) & (gun_d.index >= pd.Timestamp(t0) - pd.DateOffset(years=1))].std())
+            v = r[f"{k}_yuzde"]
+            r[f"{k}_z"] = (v / (sig * np.sqrt(max(1, r["is_gunu"])))) if v is not None else None
         out.append(r)
     return out
+
+
+def evre2_olcek(a: str = "2026-09-28", b: str = SON_GUN, bas: str = "2024-01-01") -> dict:
+    """İkinci evrenin euroya özgü kaybı olağan oynaklığa göre ne kadar büyük?
+    Aynı uzunluktaki (iş günü) bütün pencerelerin log değişimleriyle kıyas,
+    2024'ten bu yana."""
+    n = _isgunu(a, b)
+    out = {"bas": a, "son": b, "is_gunu": n}
+    for k in ("eurgbp", "eurchf"):
+        x = np.log(kur_capraz(k)) * 100
+        x = x[x.index >= bas]
+        d = (x - x.shift(n)).dropna()
+        v = float(x.loc[b] - x.loc[a])
+        out[k] = {"degisim": v, "sigma": float(d.std()), "z": v / float(d.std()),
+                  "daha_kotu_payi": float((d < v).mean() * 100), "pencere": int(len(d))}
+    return out
+
+
+def donus_2011(a: str = "2011-11-15", b: str = "2012-01-06") -> dict:
+    """Kasım 2011 zirvesinden sonraki ilk geri dönüş: en büyük daralma günleri ve
+    ECB'nin 8 Aralık kararı. Geri dönüşün kaynağı veride ayrılamaz; günler yazılır."""
+    s = spread()
+    p = s[(s.index >= a) & (s.index <= b)]
+    d = p.diff().dropna()
+    dip = p[p.index <= "2011-12-07"]
+    return {"zirve": float(p.iloc[0]), "zirve_gun": str(p.index[0].date()),
+            "dip": float(dip.min()), "dip_gun": str(dip.idxmin().date()),
+            "dip_is_gunu": _isgunu(str(p.index[0].date()), str(dip.idxmin().date())),
+            "en_buyuk_daralma": [(str(t.date()), float(v)) for t, v in d.sort_values().head(3).items()],
+            "son": float(p.iloc[-1]), "son_gun": str(p.index[-1].date())}
 
 
 # ── 5. EUR/USD duyarlılığı ────────────────────────────────────────────────
@@ -378,7 +474,7 @@ def _gunluk_kur() -> pd.DataFrame:
     """Günlük çerçeve: farklar (Paris 17:30), faiz farkı, New York kapanışlı
     EUR/USD, ECB kuru, hizalanmış çaprazlar. GBP/USD ve CHF/USD özdeşlikten
     (EUR/USD ÷ çapraz) kurulur: dolar bacağı + euro bacağı = EUR/USD, birebir."""
-    _yahoo_hiza()
+    kur_kaynak_sinamasi()
     df = gunluk()
     t = pd.DataFrame({"spr": (df["fr10y"] - df["de10y"]) * 100, "ispr": (df["it10y"] - df["de10y"]) * 100,
                       "rd": (df["us2y"] - df["de2y"]) * 100, "de2": df["de2y"] * 100,
@@ -389,9 +485,13 @@ def _gunluk_kur() -> pd.DataFrame:
     t = t.join(kur_ny().rename("fx"), how="left")
     t = t.join(oku("eurusd_ecb.csv.gz")["eurusd_ecb"].rename("fx_ecb"), how="left")
     for k in ("eurgbp", "eurchf", "eurjpy"):
-        t = t.join(yahoo_ny(k).rename(k), how="left")
+        t = t.join(kur_capraz(k).rename(k), how="left")
     t["gbpusd"] = t["fx"] / t["eurgbp"]
     t["chfusd"] = t["fx"] / t["eurchf"]
+    # Avrupa DIŞI dolar sepeti: doların yen, Kanada doları ve Avustralya
+    # doları karşısındaki değeri (yükseliş = dolar güçlendi).
+    t = t.join(kur_capraz("jpy").rename("usdjpy"), how="left").join(kur_capraz("cad").rename("usdcad"), how="left")
+    t = t.join((1 / kur_capraz("aud")).rename("usdaud"), how="left")
     y = oku("yahoo_gunluk.csv.gz")
     t = t.join(y["vix"].rename("vix"), how="left").join(y["dxy"].rename("dxy"), how="left")
     return t
@@ -460,6 +560,67 @@ def duyarlilik() -> dict:
     for ad, a, b in DONEMLER:
         dd = d[(d.index >= a) & (d.index <= b)]
         out[ad] = {m: ols(dd, y, xs) for m, y, xs in MODELLER}
+    return out
+
+
+# İsviçre Merkez Bankası'nın kuru doğrudan oynattığı haftalar ve 1,20 tabanı
+# (6 Eylül 2011 – 15 Ocak 2015): frank kıyası bu haftalarda euro ya da Fransa
+# hakkında değil SNB hakkında konuşur. Haftalık örnekte günler çarşamba
+# kovasının bitişidir.
+SNB_HAFTA = ("2011-08-10", "2011-08-17", "2011-09-07", "2015-01-21")
+SNB_TABAN = ("2011-09-07", "2015-01-21")
+
+
+def _tek_hafta(dd: pd.DataFrame, y: str, xs: list[str]) -> dict:
+    """Her haftayı tek tek çıkarıp Fransa katsayısını yeniden tahmin eder:
+    bir hücrenin anlamlılığı tek bir haftaya mı dayanıyor?"""
+    b, t, gun = [], [], []
+    for g in dd.index:
+        o = ols(dd.drop(g), y, xs)
+        b.append(o["b"]["spr"] * 10)
+        t.append(o["t"]["spr"])
+        gun.append(str(g.date()))
+    b, t = np.array(b), np.array(t)
+    i_min_t = int(np.argmin(np.abs(t)))
+    return {"b_min": float(b.min()), "b_maks": float(b.max()), "t_en_zayif": float(t[i_min_t]),
+            "en_zayif_hafta": gun[i_min_t]}
+
+
+def saglamlik() -> dict:
+    """Haftalık tablonun hücreleri tek bir haftaya ya da SNB'ye dayanıyor mu?"""
+    d = haftalik()
+    out = {}
+    sec = (("2013–2019", "2013-01-01", "2019-12-31"), ("2020–2023", "2020-01-01", "2023-12-31"),
+           ("2024–2026", "2024-01-01", "2026-12-31"))
+    for ad, a, b in sec:
+        dd = d[(d.index >= a) & (d.index <= b)]
+        out[ad] = {y: _tek_hafta(dd, y, ["rd", "spr"]) for y in ("fx", "gbpusd", "eurgbp", "eurchf")}
+    # 2020–2023: salgın haftası (18.03.2020) çıkarılınca.
+    dd = d[(d.index >= "2020-01-01") & (d.index <= "2023-12-31")].drop(pd.Timestamp("2020-03-18"))
+    out["2020–2023_salgin_haric"] = {y: ols(dd, y, ["rd", "spr"]) for y in ("fx", "gbpusd", "eurgbp", "eurchf")}
+    h = d.loc["2020-03-18"]
+    out["salgin_haftasi"] = {k: float(h[k]) for k in ("spr", "rd", "fx", "gbpusd", "eurgbp", "eurchf")}
+    # Frank: SNB haftaları ve taban dönemi.
+    snb = pd.to_datetime(SNB_HAFTA)
+    taban = (d.index >= SNB_TABAN[0]) & (d.index <= SNB_TABAN[1])
+    fr = {}
+    for ad, a, b in DONEMLER:
+        dd = d[(d.index >= a) & (d.index <= b)]
+        r = {"tam": ols(dd, "eurchf", ["rd", "spr"]),
+             "snb_haric": ols(dd.drop(snb, errors="ignore"), "eurchf", ["rd", "spr"]),
+             "snb_haric_vix": ols(dd.drop(snb, errors="ignore"), "eurchf", ["rd", "spr", "vix"]),
+             "taban_haric": ols(dd[~taban[(d.index >= a) & (d.index <= b)]], "eurchf", ["rd", "spr"])
+             if (~taban[(d.index >= a) & (d.index <= b)]).sum() > 30 else None,
+             "it_snb_haric": ols(dd.drop(snb, errors="ignore"), "eurchf", ["rd", "spr", "ispr"]),
+             "vix": ols(dd, "eurchf", ["rd", "spr", "vix"]),
+             "gbp_vix": ols(dd, "eurgbp", ["rd", "spr", "vix"])}
+        fr[ad] = r
+    out["frank"] = fr
+    h = d.loc["2015-01-21"]
+    out["snb_2015"] = {"eurchf": float(h["eurchf"]), "spr": float(h["spr"])}
+    sd = d["eurchf"]
+    out["eurchf_sd"] = {"taban_oncesi": float(sd[(sd.index >= "2004-01-01") & (sd.index < SNB_TABAN[0])].std()),
+                        "taban": float(sd[(sd.index >= SNB_TABAN[0]) & (sd.index <= "2015-01-14")].std())}
     return out
 
 
@@ -551,7 +712,7 @@ def atif_duyarlilik(bas: str = ATIF_BAS, son: str = SON_GUN, y: str = "fx") -> l
 # düşer. Dolar bacağı = Δln EUR/USD − euro bacağı. Pencereler: yılın dibi,
 # yaz, eylülün iki evresi, eylülün tamamı.
 CAPRAZ_PENCERE = (("2026-02-25", SON_GUN), ("2026-06-30", "2026-08-31"), ("2026-08-31", "2026-09-28"),
-                  ("2026-09-28", SON_GUN), ("2026-08-31", SON_GUN), ("2026-09-29", SON_GUN))
+                  ("2026-09-28", SON_GUN), ("2026-08-31", SON_GUN), ("2026-09-29", SON_GUN), ("2026-09-30", SON_GUN))
 
 
 def capraz_ayrisma() -> list[dict]:
@@ -568,9 +729,14 @@ def capraz_ayrisma() -> list[dict]:
             return _once(s, b)[1] - _once(s, a)[1]
         r = {"bas": a, "son": b, "fx": L("fx"), "eurgbp": L("eurgbp"), "eurchf": L("eurchf"),
              "eurjpy": L("eurjpy"), "dxy": L("dxy"), "fx_ecb": L("fx_ecb"),
+             "usdjpy": L("usdjpy"), "usdcad": L("usdcad"), "usdaud": L("usdaud"),
              "spr": D("spr"), "ispr": D("ispr"), "rd": D("rd"), "us2": D("us2"), "de2": D("de2")}
         r["dolar_gbp"] = r["fx"] - r["eurgbp"]
         r["dolar_chf"] = r["fx"] - r["eurchf"]
+        # Doların Avrupa dışı üç paraya karşı ortalama değişimi (artı = dolar
+        # güçlendi) ve Avrupa paralarına (sterlin, frank) karşı ortalaması.
+        r["dolar_avrupa_disi"] = (r["usdjpy"] + r["usdcad"] + r["usdaud"]) / 3
+        r["dolar_avrupa"] = -(r["dolar_gbp"] + r["dolar_chf"]) / 2
         r["euro_payi_gbp"] = r["eurgbp"] / r["fx"] if r["fx"] else None
         r["euro_payi_chf"] = r["eurchf"] / r["fx"] if r["fx"] else None
         out.append(r)
@@ -649,32 +815,51 @@ def buyuk_gunler() -> list[dict]:
     return out
 
 
-# (tür, ad, önceki kapanış, ilk tepki kapanışı). Akşam/hafta sonu açıklanan
-# kararlar için önceki = açıklama günü, tepki = ilk işlem günü. Olay günleri
-# kaynakla doğrulanmış ya da kayıtlı tarihtir; değişim veriden ölçülür.
+# (tür, ad, önceki kapanış, ilk tepki kapanışı, zaman). Fark Avrupa
+# kapanışından (Paris 17:30), kur New York kapanışından (Paris 23:00) okunur;
+# pencereler olayın SAATİNE göre kurulur:
+#   gun       Avrupa seansında: fark ve kur önceki gün → olay günü.
+#   aksam     Avrupa kapanışından SONRA (Paris 17:30'dan sonra; not kararları
+#             cuma akşamı, gensoru ve güven oylamaları akşam): fark olay günü
+#             → ertesi iş günü; kur bir ÖNCEKİ iş gününden ertesi iş gününe —
+#             açıklama New York kapanışından önce de sonra da gelmiş olabilir
+#             ve olay gününün kapanışı tepkinin bir kısmını zaten taşıyabilir.
+#   haftasonu cumartesi/pazar: cuma → pazartesi, ikisi için de.
+# Olay günleri kaynakla doğrulanmış ya da kayıtlı tarihtir; değişim veriden.
+# 2012'nin AAA kaybı SEANS İÇİNDE sızdı (13 Ocak); ilk tepki o gündür, resmî
+# karardan sonraki ilk işlem gününün geri dönüşü ayrıca ölçülür (`aaa_2012`).
 OLAY_TEPKI = [
-    ("not", "S&P: Fransa AAA → AA+", "2012-01-13", "2012-01-16"),
-    ("not", "S&P: AA → AA−", "2024-05-31", "2024-06-03"),
-    ("not", "Moody's: Aa2 → Aa3", "2024-12-13", "2024-12-16"),
-    ("not", "Fitch: AA− → A+", "2025-09-12", "2025-09-15"),
-    ("not", "S&P: AA− → A+", "2025-10-17", "2025-10-20"),
-    ("not", "Moody's: görünüm negatife", "2025-10-24", "2025-10-27"),
-    ("not", "Moody's: Aa3 teyit, görünüm negatif", "2026-04-10", "2026-04-13"),
-    ("not", "S&P: A+ teyit", "2026-05-29", "2026-06-01"),
-    ("not", "Fitch: A+ teyit", "2026-08-28", "2026-08-31"),
-    ("not", "Scope: AA− → A+; DBRS: eğilim negatife", "2026-09-18", "2026-09-21"),
-    ("ecb", "ECB: üç yıllık LTRO", "2011-12-07", "2011-12-08"),
-    ("ecb", "Draghi: \"ne gerekiyorsa\"", "2012-07-25", "2012-07-26"),
-    ("ecb", "ECB: OMT'nin ayrıntıları", "2012-09-05", "2012-09-06"),
-    ("siyaset", "2017 ilk tur: Macron–Le Pen", "2017-04-21", "2017-04-24"),
-    ("siyaset", "2024: meclisin feshi", "2024-06-07", "2024-06-10"),
-    ("siyaset", "2024: Barnier gensoruyla düştü", "2024-12-04", "2024-12-05"),
-    ("siyaset", "2025: Bayrou hükümeti düştü", "2025-09-08", "2025-09-09"),
-    ("siyaset", "2025: Lecornu istifa etti", "2025-10-03", "2025-10-06"),
-    ("siyaset", "2026: Le Pen istinaf kararı", "2026-07-06", "2026-07-07"),
-    ("siyaset", "2026: 54 mlr € çaba açıklandı", "2026-09-16", "2026-09-17"),
-    ("siyaset", "2026: 2027 bütçe tasarısı", "2026-09-30", "2026-10-01"),
+    ("not", "S&P: Fransa AAA → AA+ (haber seans içinde sızdı)", "2012-01-12", "2012-01-13", "gun"),
+    ("not", "S&P: AA → AA−", "2024-05-31", "2024-06-03", "aksam"),
+    ("not", "Fitch: AA− teyit, görünüm negatife", "2024-10-11", "2024-10-14", "aksam"),
+    ("not", "Moody's: Aa2 teyit, görünüm negatife", "2024-10-25", "2024-10-28", "aksam"),
+    ("not", "S&P: AA− teyit", "2024-11-29", "2024-12-02", "aksam"),
+    ("not", "Moody's: Aa2 → Aa3", "2024-12-13", "2024-12-16", "aksam"),
+    ("not", "S&P: AA− teyit, görünüm negatife", "2025-02-28", "2025-03-03", "aksam"),
+    ("not", "Fitch: AA− teyit", "2025-03-14", "2025-03-17", "aksam"),
+    ("not", "Fitch: AA− → A+", "2025-09-12", "2025-09-15", "aksam"),
+    ("not", "S&P: AA− → A+", "2025-10-17", "2025-10-20", "aksam"),
+    ("not", "Moody's: görünüm negatife", "2025-10-24", "2025-10-27", "aksam"),
+    ("not", "Fitch: A+ teyit (mart)", "2026-03-06", "2026-03-09", "aksam"),
+    ("not", "Moody's: Aa3 teyit, görünüm negatif", "2026-04-10", "2026-04-13", "aksam"),
+    ("not", "S&P: A+ teyit", "2026-05-29", "2026-06-01", "aksam"),
+    ("not", "Fitch: A+ teyit (ağustos)", "2026-08-28", "2026-08-31", "aksam"),
+    ("not", "Scope: AA− → A+; DBRS: eğilim negatife", "2026-09-18", "2026-09-21", "aksam"),
+    ("ecb", "ECB: üç yıllık LTRO", "2011-12-07", "2011-12-08", "gun"),
+    ("ecb", "Draghi: \"ne gerekiyorsa\"", "2012-07-25", "2012-07-26", "gun"),
+    ("ecb", "ECB: OMT'nin ayrıntıları", "2012-09-05", "2012-09-06", "gun"),
+    ("siyaset", "2017 ilk tur: Macron–Le Pen", "2017-04-21", "2017-04-24", "haftasonu"),
+    ("siyaset", "2024: meclisin feshi", "2024-06-07", "2024-06-10", "haftasonu"),
+    ("siyaset", "2024: Barnier gensoruyla düştü", "2024-12-04", "2024-12-05", "aksam"),
+    ("siyaset", "2025: Bayrou hükümeti düştü", "2025-09-08", "2025-09-09", "aksam"),
+    ("siyaset", "2025: Lecornu istifa etti", "2025-10-03", "2025-10-06", "gun"),
+    ("siyaset", "2026: Le Pen istinaf kararı", "2026-07-06", "2026-07-07", "gun"),
+    ("siyaset", "2026: 54 mlr € çaba açıklandı", "2026-09-17", "2026-09-18", "aksam"),
+    ("siyaset", "2026: 2027 bütçe tasarısı", "2026-09-30", "2026-10-01", "gun"),
 ]
+# 2024'ten bu yana not kararlarının tepkisini KARIŞTIRAN olay: S&P'nin 29.11.2024
+# teyidinden sonraki ilk işlem günü (02.12) Barnier 49.3'e başvurdu.
+OLAY_KARISIK = {"S&P: AA− teyit": "aynı gün Barnier 49.3'e başvurdu"}
 
 
 def ayrisma_ornekleri() -> dict:
@@ -691,20 +876,46 @@ def ayrisma_ornekleri() -> dict:
 
 def olay_tepkileri() -> list[dict]:
     """Olay günlerinde fark, İtalya farkı, EUR/USD ve EUR/GBP (ikisi de New
-    York kapanışı: ECB'nin 14:30 CET basın toplantıları ve öğleden sonraki
-    hareket kurun içinde). EUR/GBP sütunu euroya özgü tepkidir."""
+    York kapanışı, aynı CNBC ucu). Kur penceresi olayın saatine göre kurulur
+    (bkz. OLAY_TEPKI). EUR/GBP sütunu euroya özgü tepkidir."""
     s, it = spread("fr"), spread("it")
-    fx, gb = kur_ny(), yahoo_ny("eurgbp")
+    fx, gb = kur_ny(), kur_capraz("eurgbp")
     out = []
-    for tur, ad, a, b in OLAY_TEPKI:
+    for tur, ad, a, b, zaman in OLAY_TEPKI:
         ta, va = _once(s, a)
         tb, vb = _once(s, b)
         if tb != b or ta != a:
             raise ArsivHatasi(f"olay günü veride yok: {ad} {a}→{b} ({ta}→{tb})")
-        out.append({"tur": tur, "ad": ad, "once": a, "sonra": b, "spr_once": va, "spr": vb - va,
-                    "it": _once(it, b)[1] - _once(it, a)[1],
-                    "fx": float(100 * (np.log(_once(fx, b)[1]) - np.log(_once(fx, a)[1]))),
-                    "eurgbp": _tam_degisim(gb, a, b)})
+        if zaman not in ("gun", "aksam", "haftasonu"):
+            raise ArsivHatasi(f"olay zamanı tanımsız: {ad} {zaman}")
+        if zaman == "haftasonu" and not (pd.Timestamp(a).dayofweek == 4 and pd.Timestamp(b).dayofweek == 0):
+            raise ArsivHatasi(f"hafta sonu olayı cuma → pazartesi değil: {ad}")
+        ka = str((pd.Timestamp(a) - pd.tseries.offsets.BDay(1)).date()) if zaman == "aksam" else a
+        out.append({"tur": tur, "ad": ad, "zaman": zaman, "once": a, "sonra": b, "kur_once": ka,
+                    "spr_once": va, "spr": vb - va, "it": _once(it, b)[1] - _once(it, a)[1],
+                    "fx": _tam_degisim(fx, ka, b), "eurgbp": _tam_degisim(gb, ka, b),
+                    "karisik": OLAY_KARISIK.get(ad)})
+    return out
+
+
+def aaa_2012() -> dict:
+    """2012'nin AAA kaybı: haber 13 Ocak seansında sızdı, resmî karar o akşam
+    geldi. Sızma günü (12 → 13 Ocak) ve resmî karardan sonraki ilk işlem günü
+    (13 → 16 Ocak); aynı gün öbür euro farkları (S&P o akşam dokuz ülkenin
+    notunu düşürdü — sızma günü çok ülkeli bir harekettir)."""
+    out = {}
+    for ad, a, b in (("sizma", "2012-01-12", "2012-01-13"), ("pazartesi", "2012-01-13", "2012-01-16")):
+        r = {"once": a, "sonra": b}
+        for u in ("fr", "it", "es", "be", "at"):
+            sp = spread(u)
+            r[u] = _once(sp, b)[1] - _once(sp, a)[1]
+        r["fx"] = _tam_degisim(kur_ny(), a, b)
+        r["eurgbp"] = _tam_degisim(kur_capraz("eurgbp"), a, b)
+        df = gunluk()
+        for k in ("fr2y", "fr5y", "fr10y", "de10y"):
+            x = df[k].dropna()
+            r[f"{k}_bp"] = (_once(x, b)[1] - _once(x, a)[1]) * 100
+        out[ad] = r
     return out
 
 
@@ -719,10 +930,18 @@ def _tam_degisim(s: pd.Series, a: str, b: str) -> float | None:
     # Bayat bar: uç değer bir önceki barın BİREBİR aynısıysa kaynak o gün
     # kotasyon taşımamıştır (Yahoo çaprazlarında barların ~%0,9'u; 08.12.2011
     # EUR/GBP). Beş haneli bir kurda gerçek sıfır değişim bundan ayırt edilemez.
+    # Dört haneli bir kurda gerçek sıfır değişim de olur (EUR/GBP barlarının
+    # ~%1,5'i); bayatlık bu yüzden yalnız döviz piyasasının fiilen kapalı olduğu
+    # günlerde (24–26 Aralık, 31 Aralık – 2 Ocak) ya da İKİ gün üst üste aynı
+    # değerde varsayılır.
     for t_ in (ta, tb):
         i = s.index.get_loc(pd.Timestamp(t_))
         if i > 0 and float(s.iloc[i]) == float(s.iloc[i - 1]):
-            return None
+            t = pd.Timestamp(t_)
+            tatil = (t.month == 12 and t.day >= 24 and t.day <= 26) or (t.month == 12 and t.day == 31) or \
+                    (t.month == 1 and t.day <= 2)
+            if tatil or (i > 1 and float(s.iloc[i - 1]) == float(s.iloc[i - 2])):
+                return None
     return float(100 * (np.log(vb) - np.log(va)))
 
 
@@ -744,13 +963,23 @@ def beta() -> dict:
     (Bund −6, OAT +8,6) betayı tek başına 0,24 düşürüyordu."""
     df = gunluk()
     d = df[[f"{u}10y" for u in BETA_ULKE] + ["de10y"]].diff() * 100
-    out = {"donemler": []}
+    # Gösterge kâğıt değişimi günleri bir günlük değişim değildir (Fransa
+    # bacağında seviye kayması): betaya girmez.
+    d = d.drop(pd.to_datetime(GOSTERGE_SICRAMA), errors="ignore")
+    # Fransa iki ucun hangisine yakın? Fark betaları: Δ(FR−AT) ve Δ(IT−FR)
+    # ΔBund üzerine; ikisi de sıfırdan ayrışıyorsa Fransa ikisinin ARASINDADIR.
+    d["fr_at"] = d["fr10y"] - d["at10y"]
+    d["it_fr"] = d["it10y"] - d["fr10y"]
+    out = {"donemler": [], "gosterge_ayiklanan": list(GOSTERGE_SICRAMA)}
     for ad, a, b in BETA_DONEM:
         dd = d[(d.index >= a) & (d.index <= b)]
         r = {"ad": ad, "n": int(len(dd.dropna(subset=["fr10y", "de10y"])))}
         for u in BETA_ULKE:
             o = ols(dd, f"{u}10y", ["de10y"], nw=2)
             r[f"{u}_b"], r[f"{u}_t"] = o["b"]["de10y"], o["t"]["de10y"]
+        for k in ("fr_at", "it_fr"):
+            o = ols(dd, k, ["de10y"], nw=2)
+            r[f"{k}_b"], r[f"{k}_t"] = o["b"]["de10y"], o["t"]["de10y"]
         out["donemler"].append(r)
     dd = d[(d.index >= "2026-09-01") & (d.index <= SON_GUN)]
     o = ols(dd, "fr10y", ["de10y"], nw=2)
@@ -771,7 +1000,30 @@ def beta() -> dict:
     return out
 
 
-GOSTERGE_SICRAMA = ("2017-10-09", "2022-11-28", "2022-11-30")
+# Gösterge kâğıt değişimi günleri. İmza GÖRELİDİR: Fransa 10 yıllığı, aynı
+# ülkenin 5 ve 30 yıllığının ortalamasından ≥ 10 bp ayrışır. Mutlak eşik
+# (|Δ10y| ≥ 10) 15.06.2026'yı kaçırıyordu: yeni kâğıda (OAT Kasım 2036) geçiş
+# bütün getirilerin düştüğü bir güne denk geldi — 10y +5,6 iken 5y −6,1, 30y
+# −3,5, fark +10,3 bp ve kalıcı (02.10.2026 incelemesi). Liste ÖLÇÜLEREK
+# tutulur, tarama değildir: göreli imza 2000'den bu yana 11 günde 10 bp'yi
+# aşıyor ve çoğu 5 yıllığın kendi gösterge değişimi ya da kriz günü.
+GOSTERGE_SICRAMA = ("2017-10-09", "2022-11-28", "2022-11-30", "2026-06-15")
+
+
+def _gosterge_imza(g: str) -> dict:
+    df = gunluk()
+    i = df.index.get_loc(pd.Timestamp(g))
+    d = {k: float((df[k].iloc[i] - df[k].iloc[i - 1]) * 100) for k in ("fr10y", "fr5y", "fr30y", "de10y")}
+    d["goreli"] = d["fr10y"] - (d["fr5y"] + d["fr30y"]) / 2
+    s = spread()
+    j = s.index.get_loc(pd.Timestamp(g))
+    d["spr"] = float(s.iloc[j] - s.iloc[j - 1])
+    d["spr_once"], d["spr_gun"] = float(s.iloc[j - 1]), float(s.iloc[j])
+    for v in (5, 30):
+        sv = spread("fr", v)
+        k = sv.index.get_loc(pd.Timestamp(g))
+        d[f"spr{v}"] = float(sv.iloc[k] - sv.iloc[k - 1])
+    return d
 
 
 def hiz(vadeler=(10, 2)) -> dict:
@@ -798,12 +1050,12 @@ def hiz(vadeler=(10, 2)) -> dict:
     df = gunluk()
     s = spread("fr", 10)
     d = s.diff().dropna()
+    imza = {}
     for g in GOSTERGE_SICRAMA:
-        i = df.index.get_loc(pd.Timestamp(g))
-        f10 = (df["fr10y"].iloc[i] - df["fr10y"].iloc[i - 1]) * 100
-        f30 = (df["fr30y"].iloc[i] - df["fr30y"].iloc[i - 1]) * 100
-        if abs(f10) < 10 or abs(f30) > abs(f10) / 2:
-            raise ArsivHatasi(f"gösterge sıçraması imzası tutmuyor: {g} 10y {f10:.1f} 30y {f30:.1f}")
+        imza[g] = _gosterge_imza(g)
+        if abs(imza[g]["goreli"]) < 10:
+            raise ArsivHatasi(f"gösterge sıçraması imzası tutmuyor: {g} göreli {imza[g]['goreli']:.1f}")
+    out["gosterge_imza"] = imza
     temiz = d.drop(pd.to_datetime(GOSTERGE_SICRAMA), errors="ignore")
     ust = temiz[(temiz.index < temiz.index[-1]) & (temiz >= temiz.iloc[-1])]
     out["10y_1_gercek"] = {"degisim": float(temiz.iloc[-1]), "son_gorulme": str(ust.index[-1].date()),
@@ -814,6 +1066,11 @@ def hiz(vadeler=(10, 2)) -> dict:
                            "on_gun_sonra_tarih": str(s.index[i + 9].date())}
     k = s.index.get_loc(pd.Timestamp("2022-11-28"))
     out["sicrama_2022"] = {"once": float(s.iloc[k - 1]), "sonra": float(s.iloc[k + 2])}
+    # 2026 gösterge değişimi de kalıcı: sonraki on iş gününün aralığı.
+    k = s.index.get_loc(pd.Timestamp("2026-06-15"))
+    out["sicrama_2026"] = {"once": float(s.iloc[k - 1]), "gun": float(s.iloc[k]),
+                           "sonraki_on_min": float(s.iloc[k + 1:k + 11].min()),
+                           "sonraki_on_maks": float(s.iloc[k + 1:k + 11].max())}
     rd = ((df["us2y"] - df["de2y"]) * 100).dropna()
     out["rd_son"] = float(rd.iloc[-1])
     out["rd_atif_bas"] = _once(rd, ATIF_BAS)[1]
@@ -846,6 +1103,13 @@ def ileri_dagilim(esik: float = 30.0, pencere: int = 22, ufuk: int = 22) -> dict
     return {"esik": esik, "pencere": pencere, "ufuk": ufuk, "gozlem": int(len(sec)), "epizot": len(kume),
             "kumeler": kume,
             "daha_acildi_payi": float((sec["i"] > 0).mean() * 100) if len(sec) else None,
+            # "Daha açıldı" sıfırın hemen üstünü de sayar: 1 bp'den fazla açılanlar ayrıca.
+            "daha_acildi_1bp_payi": float((sec["i"] > 1).mean() * 100) if len(sec) else None,
+            "daha_acilan_gozlem": [(str(t.date()), float(v)) for t, v in sec["i"][sec["i"] > 0].items()],
+            # Gösterge değişimi gününü içeren pencere: açılmanın bir kısmı seviye kayması.
+            "gosterge_pencereli": int(sum(1 for t in sec.index
+                                          if any(s.index[max(0, s.index.get_loc(t) - pencere)] < pd.Timestamp(g) <= t
+                                                 for g in GOSTERGE_SICRAMA))),
             "daha_acilan_kume": int(sum(1 for c in kume if c["daha_acilan"] > 0)),
             "medyani_artida_kume": int(sum(1 for c in kume if c["ileri_medyan"] > 0)),
             "kriz_disi_gozlem": int(((sec.index < "2011-01-01") | (sec.index > "2012-12-31")).sum()),
@@ -898,7 +1162,10 @@ def veri_bosluklari() -> dict:
                 tatil.append(t_)
     kalan = [t_ for t_ in tatil if t_ in s.index]
     dd = s.diff()
-    return {"eksik_is_gunu_2014": int(len(y2014)), "eksik_is_gunu_toplam": int(len(eksik)),
+    # İki uzun boşluğun 2014'e düşen iş günleri (kalan eksikler tek tek tatil günleri).
+    uzun = [g for g in y2014 if any(pd.Timestamp(gec[b]["onceki"]) < g < pd.Timestamp(b) for b in BOSLUK_GECIS)]
+    return {"eksik_is_gunu_2014": int(len(y2014)), "uzun_bosluk_2014": int(len(uzun)),
+            "eksik_is_gunu_toplam": int(len(eksik)),
             "gecis": gec, "target_tatil": len(tatil), "target_tatil_seride": len(kalan),
             "target_tatil_mutlak_medyan": float(dd.reindex(kalan).abs().median()),
             "target_tatil_mutlak_maks": float(dd.reindex(kalan).abs().max())}
@@ -999,6 +1266,41 @@ def gun_ici_ozet(gun: str = SON_GUN, saatler=("09:00", "14:15", "17:30")) -> dic
     return out
 
 
+def gun_ici_kotasyon(gun: str = SON_GUN, saat: str = "17:30") -> dict:
+    """Ham (doldurulmamış) gün içi arşivde her bacağın kotasyon ızgarası ve
+    `saat`e kadarki SON kotasyonun dakikası. Arşiv beş dakikalıktır ve
+    bacaklar aynı dakikaya düşmez (Avrupa :01/:06, ABD :00/:05): "17:30"
+    noktası her bacağın o dakikaya kadarki son kotasyonudur."""
+    g = oku("cnbc_gun_ici.csv.gz").copy()
+    g.index = g.index.tz_localize("UTC").tz_convert(PARIS)
+    g = g[g.index.date == pd.Timestamp(gun).date()].sort_index()
+    out = {}
+    for k in ("fr10y", "de10y", "it10y", "fr2y", "de2y", "it2y", "us2y", "eurusd"):
+        x = g[k].dropna()
+        x = x[x.index.strftime("%H:%M") <= saat] if k != "eurusd" else x
+        aralik = x.index.to_series().diff().dt.total_seconds().div(60).dropna()
+        out[k] = {"son": x.index[-1].strftime("%H:%M"), "n": int(len(x)),
+                  "aralik_medyan_dk": float(aralik.median()) if len(aralik) else None,
+                  "dakika_kalan": sorted({int(m) % 5 for m in x.index.minute})}
+    return out
+
+
+def ism_kotasyon(gun: str = SON_GUN, saatler=("15:45", "15:55", "16:00", "16:05", "16:15")) -> dict:
+    """ABD ISM verisi (16:00 Paris) çevresinde ham kotasyonlar: ABD 2 yıllığı ve
+    Almanya 2 yıllığı, her saatte o dakikaya kadarki son kotasyon ve dakikası."""
+    g = oku("cnbc_gun_ici.csv.gz").copy()
+    g.index = g.index.tz_localize("UTC").tz_convert(PARIS)
+    g = g[g.index.date == pd.Timestamp(gun).date()].sort_index()
+    out = {}
+    for k in ("us2y", "de2y"):
+        x = g[k].dropna()
+        out[k] = {}
+        for sa in saatler:
+            y = x[x.index.strftime("%H:%M") <= sa]
+            out[k][sa] = {"deger": float(y.iloc[-1]), "dakika": y.index[-1].strftime("%H:%M")}
+    return out
+
+
 def gun_ici_bes_gun() -> dict:
     """Arşivdeki beş günün tamamında 15 dakikalık değişimlerin eş hareketi
     (Avrupa seansı); her gün ayrı ve birleşik."""
@@ -1078,25 +1380,27 @@ PIYASA = [("eurchf", "EUR/CHF"), ("eurjpy", "EUR/JPY"), ("eurgbp", "EUR/GBP"), (
 
 
 DOVIZ = ("eurchf", "eurjpy", "eurgbp")
+LOG_KOD = DOVIZ + ("dxy",)
 
 
 def piyasalar(bas: str = ATIF_BAS) -> list[dict]:
-    """Eylül penceresinde öbür piyasalar (Yahoo). Döviz çaprazları New York
-    kapanışına hizalanır ve LOG değişimle yazılır (EUR/USD ile aynı sözleşme);
-    öbürleri basit yüzde değişim."""
+    """Eylül penceresinde öbür piyasalar. Döviz çaprazları CNBC New York
+    kapanışı, dolar endeksi Yahoo; ikisi de LOG değişimle yazılır (EUR/USD ile
+    aynı sözleşme). Hisse endeksleri ve VIX Yahoo, basit yüzde değişim."""
     y = oku("yahoo_gunluk.csv.gz")
     out = []
     for k, ad in PIYASA:
         if k not in y:
             continue
         if k in DOVIZ:
-            s = yahoo_ny(k)
+            s = kur_capraz(k)
             deg = lambda a, b: float(100 * (np.log(b) - np.log(a)))
         else:
             s = y[k].dropna()
             s = s[s.index <= SON_GUN]
-            deg = lambda a, b: float(100 * (b / a - 1))
-        out.append({"kod": k, "ad": ad, "log": k in DOVIZ, "son": float(s.iloc[-1]),
+            deg = ((lambda a, b: float(100 * (np.log(b) - np.log(a)))) if k in LOG_KOD
+                   else (lambda a, b: float(100 * (b / a - 1))))
+        out.append({"kod": k, "ad": ad, "log": k in LOG_KOD, "son": float(s.iloc[-1]),
                     "son_gun": str(s.index[-1].date()), "bas_gun": _once(s, bas)[0],
                     "degisim": deg(_once(s, bas)[1], float(s.iloc[-1])),
                     "degisim_haziran": deg(_once(s, "2026-06-30")[1], float(s.iloc[-1]))})
@@ -1157,7 +1461,9 @@ def hepsi() -> dict:
     kg = kayan_katsayi(y="gbpusd")
     ke = kayan_katsayi(y="eurgbp")
     gi = gun_ici()
-    gg = gi[gi.index.date == pd.Timestamp(SON_GUN).date()].between_time("07:30", "19:00")
+    # Figür ölçümün kendi penceresinde (Avrupa seansı) kesilir: 17:30 sonrasının
+    # ince işlemi günlük kapanış barının ötesindedir.
+    gg = gi[gi.index.date == pd.Timestamp(SON_GUN).date()].between_time("08:00", "17:30")
     gg15 = on_bes(gg)
     hz = hiz()
     bugun_hiz = hz["10y_22"]["degisim"]
@@ -1165,6 +1471,10 @@ def hepsi() -> dict:
         "son_gun": SON_GUN,
         "arsiv": {ad: v["sha256"] for ad, v in kunye()["dosyalar"].items()},
         "arsiv_olusturma": kunye()["olusturma"],
+        # Ölçümün KODU da ölçümün parçasıdır: bir sabit (olay günü, pencere,
+        # gösterge değişimi listesi) değişip ölçüm yeniden koşulmazsa kapı eski
+        # sayılarla geçerdi. Kapı bu özü olcum.py'nin bugünkü özüyle kıyaslar.
+        "olcum_py_oz": hashlib.sha256((BURASI / "olcum.py").read_bytes()).hexdigest(),
         "temizlik": temizlik_sayimi(),
         "bosluk": veri_bosluklari(),
         "bar_saati": gunluk_bar_saati(),
@@ -1174,7 +1484,11 @@ def hepsi() -> dict:
         "fransa_italya": fransa_italya(),
         "egri": egri(),
         "hiz": hz,
-        "yahoo_hiza": _yahoo_hiza(),
+        "kur_kaynak": kur_kaynak_sinamasi(),
+        "saglamlik": saglamlik(),
+        "aaa_2012": aaa_2012(),
+        "evre2_olcek": evre2_olcek(),
+        "donus_2011": donus_2011(),
         "capraz": capraz_ayrisma(),
         "evreler": evreler(),
         "bacaklar": bacaklar(),
@@ -1200,6 +1514,11 @@ def hepsi() -> dict:
         "gun_ici_pencere": gun_ici_pencere(),
         "gun_ici_pencere_1600": gun_ici_pencere(bas="16:00"),
         "gun_ici_ism": gun_ici_pencere(bas="15:45", son="16:00"),
+        "gun_ici_1530_1545": gun_ici_pencere(bas="15:30", son="15:45"),
+        "gun_ici_1545_1615": gun_ici_pencere(bas="15:45", son="16:15"),
+        "gun_ici_1615": gun_ici_pencere(bas="16:15"),
+        "gun_ici_kotasyon": gun_ici_kotasyon(),
+        "ism_kotasyon": ism_kotasyon(),
         "gun_ici_bes_gun": gun_ici_bes_gun(),
         "piyasalar": piyasalar(),
         "kur": kur_ozeti(),
@@ -1211,7 +1530,12 @@ def hepsi() -> dict:
                   "gbp_son": float(kg["spr"].iloc[-1]), "gbp_son_alt": float(kg["alt"].iloc[-1]),
                   "gbp_son_ust": float(kg["ust"].iloc[-1]),
                   "eurgbp_son": float(ke["spr"].iloc[-1]), "eurgbp_son_alt": float(ke["alt"].iloc[-1]),
-                  "eurgbp_son_ust": float(ke["ust"].iloc[-1])},
+                  "eurgbp_son_ust": float(ke["ust"].iloc[-1]),
+                  # Salgın haftası (18.03.2020) 104 haftalık pencereye girer ve iki yıl sonra çıkar.
+                  "salgin_giris": {k: (float(x["spr"].loc[:"2020-03-11"].iloc[-1]), float(x["spr"].loc["2020-03-18"]))
+                                   for k, x in (("fx", kk), ("eurgbp", ke))},
+                  "salgin_cikis": {k: (float(x["spr"].loc[:"2022-03-09"].iloc[-1]), float(x["spr"].loc["2022-03-16"]))
+                                   for k, x in (("fx", kk), ("eurgbp", ke))}},
         "seriler": {
             "spread": _seri(s, 2),
             "spread_it": _seri(spread("it"), 2),
