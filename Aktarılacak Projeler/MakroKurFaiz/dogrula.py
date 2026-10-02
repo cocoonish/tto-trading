@@ -36,7 +36,8 @@ SORULAR:
    bileşenlerdeki formüllerle aynı mı (kaynak metninden).
 7. KAYNAKLAR — metinde anılan her kaynak anahtarı doğrulanmış listede mi.
 
-Koşum:  python3 dogrula.py
+Koşum:  python3 dogrula.py                (bütün ders)
+        python3 dogrula.py --parca b03    (tek bölüm: metin/b03.mdx + veri/sayilar/b03.json)
 """
 from __future__ import annotations
 
@@ -118,6 +119,7 @@ def _ek_sil(s: str) -> str:
 def _norm(s: str) -> str:
     s = s.replace("{,}", ",").replace("\\%", "%").replace("\\,", " ").replace("~", " ")
     s = s.replace("’", "'")
+    s = re.sub(r"(?<![\w.,)\]])-(?=\d)", "−", s)   # KaTeX içindeki ASCII eksi (biçim sınaması formülü taramaz)
     return _ek_sil(re.sub(r"\s+", " ", s))
 
 
@@ -309,8 +311,8 @@ def deger(o: dict, d: dict, arac: dict):
     return v
 
 
-def yan_dosya(o: dict, arac: dict, kaynaklar: dict) -> None:
-    yollar = sorted((VERI / "sayilar").glob("*.json"))
+def yan_dosya(o: dict, arac: dict, kaynaklar: dict, yollar: list | None = None) -> None:
+    yollar = sorted((VERI / "sayilar").glob("*.json")) if yollar is None else yollar
     if not yollar:
         hatalar.append("yan dosya yok: veri/sayilar/*.json")
     for yp in yollar:
@@ -508,7 +510,49 @@ def kaynak_listesi() -> dict:
     return out
 
 
+def parca_figurler(govde: str) -> None:
+    """Parça kipinde figür sırası sınanmaz (bütün ders birleşince sınanır); yalnız
+    gömme biçimi ve numara–dosya öneki eşliği."""
+    for ad, on, no in re.findall(r'<GrafikEmbed src="/arastirma/' + SLUG + r'/((\d\d)_[a-z0-9_]+)\.html"[^>]*no="(\d\d)"', govde):
+        sayac["figur"] += 1
+        if on != no:
+            hatalar.append(f"figür dosyasının öneki gömme numarasıyla aynı değil: {ad} · no {no}")
+    for x in re.findall(r"<GrafikEmbed[^>]*/>", govde):
+        if f'src="/arastirma/{SLUG}/' not in x or 'no="' not in x:
+            hatalar.append(f"gömme biçimi tanınmıyor: {x[:120]}")
+
+
+def parca(ad: str) -> int:
+    """Bir bölüm parçasını tek başına sınar: `metin/<ad>.mdx` + `veri/sayilar/<ad>.json`.
+    Yazar bölümünü bitirince bunu koşturur; bütün ders `python3 dogrula.py` ile sınanır."""
+    o = arsiv()
+    arac = json.loads(ARAC.read_text(encoding="utf-8")) if ARAC.exists() else {}
+    kaynaklar = kaynak_listesi()
+    mdx = BURASI / "metin" / f"{ad}.mdx"
+    yan = VERI / "sayilar" / f"{ad}.json"
+    if not mdx.exists() or not yan.exists():
+        hatalar.append(f"parça ya da yan dosyası yok: {mdx.relative_to(BURASI)} · {yan.relative_to(BURASI)}")
+        return rapor()
+    govde = mdx.read_text(encoding="utf-8")
+    duz = duz_metin(govde)
+    for s in duz.splitlines():
+        if s.strip().startswith("|") and s.strip().endswith("|") and not set(s.replace("|", "").strip()) <= set("-: "):
+            SATIRLAR.append(s)
+            SATIR_KAPSAM.append([False] * len(s.strip()[1:-1].split("|")))
+    duz_tablosuz = "\n".join(s for s in duz.splitlines() if not (s.strip().startswith("|") and s.strip().endswith("|")))
+    ALAN["govde"] = Alan("gövde", duz_tablosuz)
+    for k, ad_ in (("description", "açıklama"), ("ozet", "kart özeti"), ("title", "başlık")):
+        ALAN[k] = Alan(ad_, "")
+    yan_dosya(o, arac, kaynaklar, [yan])
+    envanter()
+    bicim_sina(govde)
+    parca_figurler(govde)
+    return rapor()
+
+
 def main() -> int:
+    if len(sys.argv) == 3 and sys.argv[1] == "--parca":
+        return parca(sys.argv[2])
     o = arsiv()
     arac = json.loads(ARAC.read_text(encoding="utf-8")) if ARAC.exists() else {}
     if not arac:
@@ -518,6 +562,13 @@ def main() -> int:
         hatalar.append(f"ders metni yok: {MDX.relative_to(KOK)}")
         return rapor()
     m = MDX.read_text(encoding="utf-8")
+    sys.path.insert(0, str(BURASI))
+    import birlestir  # noqa: E402 — ders metni bölüm parçalarından kurulur, elle düzenlenmez
+    try:
+        if birlestir.kur() != m:
+            hatalar.append("ders metni bölüm parçalarıyla aynı değil (birlestir.py yeniden koşulmalı)")
+    except SystemExit as e:
+        hatalar.append(str(e))
     on, govde = bolumler(m)
     duz = duz_metin(govde)
     for s in duz.splitlines():

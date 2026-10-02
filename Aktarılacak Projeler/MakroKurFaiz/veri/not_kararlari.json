@@ -1,0 +1,335 @@
+{
+ "_aciklama": "Türkiye'nin yabancı para kredi notu kararları, 2012–2024: yalnız günü kaynakta yazan kararlar. ilan_gunu ve ilan_saati İSTANBUL saatiyle, haberin ilk arşiv damgasından (kaynaklar.json'daki notlar); saati bilinmeyen kararda null. Kaynakların her biri veri/kaynaklar.json'da adresiyle; 'kismen' kararlar yalnız ikincil kaynakla (piyasa paylaşımları) doğrulanmıştır ve olay çalışmasında ayrı satırda raporlanır. Dışarıda kalanlar: günü doğrulanamayan kararlar (Fitch Ağustos 2016, Moody's Haziran 2018 incelemesi, Fitch ve S&P Aralık 2021, 2023 ve 2024'ün ilk yarısındaki görünüm ve not kararları, Moody's 2025) ve yabancı para notunu değiştirmeyen S&P 01.04.2022 yerel para kararı. 2025–2026 kararları doğrulanamadı.",
+ "kararlar": [
+  {
+   "anahtar": "sp_20120501",
+   "kurum": "S&P",
+   "ilan_gunu": "2012-05-01",
+   "ilan_saati": "12:44",
+   "tur": "gorunum",
+   "yon": -1,
+   "durum": "dogrulandi",
+   "ozet": "S&P 1 Mayıs 2012'de Türkiye'nin BB notunu korudu, görünümü pozitiften durağana indirdi."
+  },
+  {
+   "anahtar": "moodys_20120620",
+   "kurum": "Moody's",
+   "ilan_gunu": "2012-06-20",
+   "ilan_saati": "08:40",
+   "tur": "not",
+   "yon": 1,
+   "durum": "dogrulandi",
+   "ozet": "Moody's 20 Haziran 2012'de Türkiye'nin notunu Ba2'den Ba1'e yükseltti, pozitif görünümü korudu."
+  },
+  {
+   "anahtar": "fitch_20121105",
+   "kurum": "Fitch",
+   "ilan_gunu": "2012-11-05",
+   "ilan_saati": "12:51",
+   "tur": "not",
+   "yon": 1,
+   "durum": "dogrulandi",
+   "ozet": "Fitch 5 Kasım 2012'de Türkiye'nin uzun vadeli yabancı para notunu BB+'dan BBB-'ye yükseltti, görünüm durağan."
+  },
+  {
+   "anahtar": "sp_20130327",
+   "kurum": "S&P",
+   "ilan_gunu": "2013-03-27",
+   "ilan_saati": "19:38",
+   "tur": "not",
+   "yon": 1,
+   "durum": "dogrulandi",
+   "ozet": "S&P 27 Mart 2013'te Türkiye'nin notunu BB'den BB+'ya yükseltti; görünüm durağan."
+  },
+  {
+   "anahtar": "moodys_20130516",
+   "kurum": "Moody's",
+   "ilan_gunu": "2013-05-17",
+   "ilan_saati": "00:30",
+   "tur": "not",
+   "yon": 1,
+   "durum": "kismen",
+   "ozet": "Moody's 16 Mayıs 2013'te Türkiye'nin notunu Ba1'den Baa3'e (yatırım yapılabilir) yükseltti."
+  },
+  {
+   "anahtar": "sp_20140207",
+   "kurum": "S&P",
+   "ilan_gunu": "2014-02-07",
+   "ilan_saati": "20:37",
+   "tur": "gorunum",
+   "yon": -1,
+   "durum": "dogrulandi",
+   "ozet": "S&P 7 Şubat 2014'te Türkiye'nin BB+ notunun görünümünü durağandan negatife çevirdi."
+  },
+  {
+   "anahtar": "moodys_20140410",
+   "kurum": "Moody's",
+   "ilan_gunu": "2014-04-11",
+   "ilan_saati": "03:28",
+   "tur": "gorunum",
+   "yon": -1,
+   "durum": "dogrulandi",
+   "ozet": "Moody's Türkiye'nin Baa3 notunun görünümünü negatife çevirdi (10 Nisan New York akşamı / 11 Nisan 2014 İstanbul)."
+  },
+  {
+   "anahtar": "sp_20160506",
+   "kurum": "S&P",
+   "ilan_gunu": "2016-05-06",
+   "ilan_saati": null,
+   "tur": "gorunum",
+   "yon": 1,
+   "durum": "dogrulandi",
+   "ozet": "S&P 6 Mayıs 2016'da Türkiye'nin BB+ notunun görünümünü negatiften durağana çevirdi."
+  },
+  {
+   "anahtar": "moodys_20160718",
+   "kurum": "Moody's",
+   "ilan_gunu": "2016-07-18",
+   "ilan_saati": null,
+   "tur": "inceleme",
+   "yon": -1,
+   "durum": "dogrulandi",
+   "ozet": "Moody's 18 Temmuz 2016'da Türkiye'nin Baa3 notunu indirim yönünde incelemeye aldı."
+  },
+  {
+   "anahtar": "sp_20160720",
+   "kurum": "S&P",
+   "ilan_gunu": "2016-07-20",
+   "ilan_saati": "23:42",
+   "tur": "not",
+   "yon": -1,
+   "durum": "dogrulandi",
+   "ozet": "S&P 20 Temmuz 2016'da Türkiye'nin yabancı para notunu BB+'dan BB'ye indirdi, görünüm negatif."
+  },
+  {
+   "anahtar": "moodys_20160923",
+   "kurum": "Moody's",
+   "ilan_gunu": "2016-09-24",
+   "ilan_saati": "00:58",
+   "tur": "not",
+   "yon": -1,
+   "durum": "dogrulandi",
+   "ozet": "Moody's 23 Eylül 2016'da Türkiye'nin notunu Baa3'ten Ba1'e (yatırım yapılabilir seviyenin altına) indirdi; görünüm durağan."
+  },
+  {
+   "anahtar": "sp_20161104",
+   "kurum": "S&P",
+   "ilan_gunu": "2016-11-04",
+   "ilan_saati": "20:03",
+   "tur": "gorunum",
+   "yon": 1,
+   "durum": "kismen",
+   "ozet": "S&P 4 Kasım 2016'da Türkiye'nin BB notunu korudu, görünümü negatiften durağana çevirdi."
+  },
+  {
+   "anahtar": "fitch_20170127",
+   "kurum": "Fitch",
+   "ilan_gunu": "2017-01-27",
+   "ilan_saati": null,
+   "tur": "not",
+   "yon": -1,
+   "durum": "dogrulandi",
+   "ozet": "Fitch 27 Ocak 2017'de Türkiye'nin notunu BBB-'den BB+'ya indirdi; görünüm durağan."
+  },
+  {
+   "anahtar": "sp_20170127",
+   "kurum": "S&P",
+   "ilan_gunu": "2017-01-27",
+   "ilan_saati": "20:07",
+   "tur": "gorunum",
+   "yon": -1,
+   "durum": "dogrulandi",
+   "ozet": "S&P 27 Ocak 2017'de, takvim dışında, Türkiye'nin BB notunun görünümünü durağandan negatife çevirdi."
+  },
+  {
+   "anahtar": "moodys_20170317",
+   "kurum": "Moody's",
+   "ilan_gunu": "2017-03-18",
+   "ilan_saati": null,
+   "tur": "gorunum",
+   "yon": -1,
+   "durum": "kismen",
+   "ozet": "Moody's 17 Mart 2017'de Türkiye'nin Ba1 notunun görünümünü durağandan negatife çevirdi."
+  },
+  {
+   "anahtar": "moodys_20180307",
+   "kurum": "Moody's",
+   "ilan_gunu": "2018-03-08",
+   "ilan_saati": "01:29",
+   "tur": "not",
+   "yon": -1,
+   "durum": "kismen",
+   "ozet": "Moody's 7 Mart 2018'de Türkiye'nin notunu Ba1'den Ba2'ye indirdi; görünüm negatiften durağana."
+  },
+  {
+   "anahtar": "sp_20180501",
+   "kurum": "S&P",
+   "ilan_gunu": "2018-05-01",
+   "ilan_saati": "23:58",
+   "tur": "not",
+   "yon": -1,
+   "durum": "dogrulandi",
+   "ozet": "S&P 1 Mayıs 2018'de Türkiye'nin yabancı para notunu BB'den BB-'ye indirdi; görünüm negatiften durağana."
+  },
+  {
+   "anahtar": "fitch_20180713",
+   "kurum": "Fitch",
+   "ilan_gunu": "2018-07-13",
+   "ilan_saati": "23:19",
+   "tur": "not",
+   "yon": -1,
+   "durum": "dogrulandi",
+   "ozet": "Fitch 13 Temmuz 2018'de Türkiye'nin notunu BB+'dan BB'ye indirdi; görünüm durağandan negatife."
+  },
+  {
+   "anahtar": "sp_20180817",
+   "kurum": "S&P",
+   "ilan_gunu": "2018-08-17",
+   "ilan_saati": "23:45",
+   "tur": "not",
+   "yon": -1,
+   "durum": "dogrulandi",
+   "ozet": "S&P 17 Ağustos 2018'de Türkiye'nin yabancı para notunu BB-'den B+'ya indirdi; görünüm durağan."
+  },
+  {
+   "anahtar": "moodys_20180817",
+   "kurum": "Moody's",
+   "ilan_gunu": "2018-08-17",
+   "ilan_saati": null,
+   "tur": "not",
+   "yon": -1,
+   "durum": "dogrulandi",
+   "ozet": "Moody's 17 Ağustos 2018'de Türkiye'nin notunu Ba2'den Ba3'e indirdi; görünüm negatif."
+  },
+  {
+   "anahtar": "moodys_20190614",
+   "kurum": "Moody's",
+   "ilan_gunu": "2019-06-15",
+   "ilan_saati": "00:04",
+   "tur": "not",
+   "yon": -1,
+   "durum": "kismen",
+   "ozet": "Moody's 14 Haziran 2019'da Türkiye'nin notunu Ba3'ten B1'e indirdi; görünüm negatif kaldı."
+  },
+  {
+   "anahtar": "fitch_20190712",
+   "kurum": "Fitch",
+   "ilan_gunu": "2019-07-12",
+   "ilan_saati": "23:11",
+   "tur": "not",
+   "yon": -1,
+   "durum": "dogrulandi",
+   "ozet": "Fitch 12 Temmuz 2019'da Türkiye'nin notunu BB'den BB-'ye indirdi; görünüm negatif."
+  },
+  {
+   "anahtar": "fitch_20191101",
+   "kurum": "Fitch",
+   "ilan_gunu": "2019-11-01",
+   "ilan_saati": null,
+   "tur": "gorunum",
+   "yon": 1,
+   "durum": "kismen",
+   "ozet": "Fitch 1 Kasım 2019'da Türkiye'nin BB- notunu teyit etti, görünümü negatiften durağana çevirdi."
+  },
+  {
+   "anahtar": "fitch_20200821",
+   "kurum": "Fitch",
+   "ilan_gunu": "2020-08-22",
+   "ilan_saati": "00:05",
+   "tur": "gorunum",
+   "yon": -1,
+   "durum": "kismen",
+   "ozet": "Fitch 21 Ağustos 2020'de Türkiye'nin BB- notunu teyit etti, görünümü durağandan negatife çevirdi."
+  },
+  {
+   "anahtar": "moodys_20200911",
+   "kurum": "Moody's",
+   "ilan_gunu": "2020-09-12",
+   "ilan_saati": "00:50",
+   "tur": "not",
+   "yon": -1,
+   "durum": "dogrulandi",
+   "ozet": "Moody's 11 Eylül 2020'de Türkiye'nin notunu B1'den B2'ye indirdi; negatif görünümü korudu."
+  },
+  {
+   "anahtar": "fitch_20210219",
+   "kurum": "Fitch",
+   "ilan_gunu": "2021-02-20",
+   "ilan_saati": "00:09",
+   "tur": "gorunum",
+   "yon": 1,
+   "durum": "kismen",
+   "ozet": "Fitch 19 Şubat 2021'de Türkiye'nin BB- notunu teyit etti, görünümü negatiften durağana çevirdi."
+  },
+  {
+   "anahtar": "fitch_20220211",
+   "kurum": "Fitch",
+   "ilan_gunu": "2022-02-11",
+   "ilan_saati": null,
+   "tur": "not",
+   "yon": -1,
+   "durum": "kismen",
+   "ozet": "Fitch 11 Şubat 2022'de Türkiye'nin notunu BB-'den B+'ya indirdi; görünüm negatif."
+  },
+  {
+   "anahtar": "fitch_20220708",
+   "kurum": "Fitch",
+   "ilan_gunu": "2022-07-09",
+   "ilan_saati": "00:22",
+   "tur": "not",
+   "yon": -1,
+   "durum": "kismen",
+   "ozet": "Fitch 8 Temmuz 2022'de Türkiye'nin notunu B+'dan B'ye indirdi; görünüm negatif."
+  },
+  {
+   "anahtar": "moodys_20220812",
+   "kurum": "Moody's",
+   "ilan_gunu": "2022-08-13",
+   "ilan_saati": "00:21",
+   "tur": "not",
+   "yon": -1,
+   "durum": "kismen",
+   "ozet": "Moody's 12 Ağustos 2022'de Türkiye'nin notunu B2'den B3'e indirdi; görünüm negatiften durağana."
+  },
+  {
+   "anahtar": "sp_20220930",
+   "kurum": "S&P",
+   "ilan_gunu": "2022-09-30",
+   "ilan_saati": "23:46",
+   "tur": "not",
+   "yon": -1,
+   "durum": "kismen",
+   "ozet": "S&P 30 Eylül 2022'de Türkiye'nin notunu B+'dan B'ye indirdi; görünüm durağan."
+  },
+  {
+   "anahtar": "moodys_20240719",
+   "kurum": "Moody's",
+   "ilan_gunu": "2024-07-19",
+   "ilan_saati": null,
+   "tur": "not",
+   "yon": 1,
+   "durum": "dogrulandi",
+   "ozet": "Moody's 19 Temmuz 2024'te Türkiye'nin notunu iki basamak, B3'ten B1'e yükseltti; görünüm pozitif."
+  },
+  {
+   "anahtar": "fitch_20240906",
+   "kurum": "Fitch",
+   "ilan_gunu": "2024-09-06",
+   "ilan_saati": null,
+   "tur": "not",
+   "yon": 1,
+   "durum": "dogrulandi",
+   "ozet": "Fitch 6 Eylül 2024'te Türkiye'nin notunu B+'dan BB-'ye yükseltti; görünüm pozitiften durağana."
+  },
+  {
+   "anahtar": "sp_20241101",
+   "kurum": "S&P",
+   "ilan_gunu": "2024-11-01",
+   "ilan_saati": null,
+   "tur": "not",
+   "yon": 1,
+   "durum": "kismen",
+   "ozet": "S&P 1 Kasım 2024'te Türkiye'nin notunu B+'dan BB-'ye yükseltti; görünüm durağan."
+  }
+ ]
+}
