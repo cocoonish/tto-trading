@@ -1,0 +1,2626 @@
+{
+ "acm/ACMTermPremium.xls.gz": {
+  "url": "https://www.newyorkfed.org/medialibrary/media/research/data_indicators/ACMTermPremium.xls",
+  "durum": 200,
+  "bayt": 10153472,
+  "sha256": "f174cbddc004be85e10aa9ffb72b025f76cbfe7e1c0c8735533e031a963583ce",
+  "an": "2026-10-02T10:52:48+00:00",
+  "not": ""
+ },
+ "bis/WS_CBPOL_M.csv.gz": {
+  "url": "https://stats.bis.org/api/v2/data/dataflow/BIS/WS_CBPOL/1.0/M.TR+US+XM+JP+GB+CH+AU+CA+NO+SE+BR+MX+ZA+IN+ID+PL+HU+CL+KR?format=csv&startPeriod=1990-01",
+  "durum": 200,
+  "bayt": 3939435,
+  "sha256": "a95da61841480fc2d5565f877d3caf5fe76ced572ea6c815f589d13192ae4815",
+  "an": "2026-10-02T10:51:29+00:00",
+  "not": ""
+ },
+ "bis/WS_EER_MNB.csv.gz": {
+  "url": "https://stats.bis.org/api/v2/data/dataflow/BIS/WS_EER/1.0/M.N.B.TR+US+XM+JP+GB+CH+AU+CA+NO+SE+BR+MX+ZA+IN+ID+PL+HU+CL+KR?format=csv&startPeriod=1994-01",
+  "durum": 200,
+  "bayt": 575463,
+  "sha256": "9f8f600d828de443c9e8919bc5c0da840c3bbcb899c2a0d7e4e7f1b7b99fd296",
+  "an": "2026-10-02T10:51:26+00:00",
+  "not": ""
+ },
+ "bis/WS_EER_MRB.csv.gz": {
+  "url": "https://stats.bis.org/api/v2/data/dataflow/BIS/WS_EER/1.0/M.R.B.TR+US+XM+JP+GB+CH+AU+CA+NO+SE+BR+MX+ZA+IN+ID+PL+HU+CL+KR?format=csv&startPeriod=1994-01",
+  "durum": 200,
+  "bayt": 553120,
+  "sha256": "11aa986964443adcb9b11a7d40cd4e42f9adea3914445744c7611e390a31dd9c",
+  "an": "2026-10-02T10:51:16+00:00",
+  "not": ""
+ },
+ "bls/cpi.htm.gz": {
+  "url": "https://www.bls.gov/bls/news-release/cpi.htm",
+  "durum": 403,
+  "bayt": 1325,
+  "sha256": "abedcd9934be0ca3928775ba2ff39c7e28e0987e2ac5fc93ec4314ee616bd320",
+  "an": "2026-10-02T10:51:11+00:00",
+  "not": ""
+ },
+ "bls/empsit.htm.gz": {
+  "url": "https://www.bls.gov/bls/news-release/empsit.htm",
+  "durum": 403,
+  "bayt": 1325,
+  "sha256": "41dafae6de56533711f8c54fe3bf038002d25c882f973a782a876304b84b8b30",
+  "an": "2026-10-02T10:51:11+00:00",
+  "not": ""
+ },
+ "boe/iadb_par.csv.gz": {
+  "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2020&Dateto=now&SeriesCodes=IUDSNPY,IUDMNPY,IUDLNPY&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+  "durum": 200,
+  "bayt": 57488,
+  "sha256": "c22405d20e74c179dd3ed00f35549609f9f56a7d15b1827f5b2ee74d67a2c979",
+  "an": "2026-10-02T10:52:49+00:00",
+  "not": ""
+ },
+ "cnbc/GB10Y_GB_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB10Y-GB/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 159234,
+  "sha256": "98779ca3dc045dbeda58e707fe46c6a8cff14dc83bd289afae19ddbde8020429",
+  "an": "2026-10-02T10:52:53+00:00",
+  "not": ""
+ },
+ "cnbc/GB10Y_GB_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB10Y-GB/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 193428,
+  "sha256": "2ddbbb57f6ebc53ca6acfa8e6df499a545e92a5592a9f7700f75905f8fcc6010",
+  "an": "2026-10-02T10:52:53+00:00",
+  "not": ""
+ },
+ "cnbc/GB10Y_GB_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB10Y-GB/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 226927,
+  "sha256": "f078a914d0e67dec332c1506794ab182f6a7c645521421dca1270180586f7aaa",
+  "an": "2026-10-02T10:52:54+00:00",
+  "not": ""
+ },
+ "cnbc/GB10Y_GB_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB10Y-GB/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 74027,
+  "sha256": "1e17fe34b8b96a671fbb84c217d757686a5bdd48188dc24309b0e97e58606d99",
+  "an": "2026-10-02T10:52:54+00:00",
+  "not": ""
+ },
+ "cnbc/GB2Y_GB_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 159510,
+  "sha256": "14544123ef3cdc717e74e72d7f2293fecb7445829511f566923ca7154704bb22",
+  "an": "2026-10-02T10:52:50+00:00",
+  "not": ""
+ },
+ "cnbc/GB2Y_GB_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 209967,
+  "sha256": "7647420992124a0088a7ccd935c743079d75ddcbe34c31e8d418038135d1ec11",
+  "an": "2026-10-02T10:52:51+00:00",
+  "not": ""
+ },
+ "cnbc/GB2Y_GB_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 234573,
+  "sha256": "eceb7f971fbb97cfa0f2acaeffc5d2ed5b07e6a2e9d08874e31203c000212670",
+  "an": "2026-10-02T10:52:51+00:00",
+  "not": ""
+ },
+ "cnbc/GB2Y_GB_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 86813,
+  "sha256": "d6baeeaa4d08f512d28f588a586392fed09722265f4901f407118bf3b8ad82c2",
+  "an": "2026-10-02T10:52:52+00:00",
+  "not": ""
+ },
+ "cnbc/GB30Y_GB_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB30Y-GB/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 159373,
+  "sha256": "79bb354709cfb522376da3673079124990f3407ee5cdb1ee65c8bf97362bc6ba",
+  "an": "2026-10-02T10:52:55+00:00",
+  "not": ""
+ },
+ "cnbc/GB30Y_GB_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB30Y-GB/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 203714,
+  "sha256": "0952063f79e0b58f962729231d4096d465042ff8dd95e274af1c34408a551df0",
+  "an": "2026-10-02T10:52:55+00:00",
+  "not": ""
+ },
+ "cnbc/GB30Y_GB_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB30Y-GB/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 222062,
+  "sha256": "4323b16975602cc4aea519ab01d083fdf846ad1dda01cc65d0268e2aeb674412",
+  "an": "2026-10-02T10:52:56+00:00",
+  "not": ""
+ },
+ "cnbc/GB30Y_GB_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GB30Y-GB/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 85842,
+  "sha256": "e56983bd0e5265571aa7cc474b1afce8cf16d0b627a7cabeef1ca52d127764ce",
+  "an": "2026-10-02T10:52:56+00:00",
+  "not": ""
+ },
+ "cnbc/GBP_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 181317,
+  "sha256": "7e8700493a52cb69166848fa2916a1d14ddeb8be5353729e5d400c3a3827a6c7",
+  "an": "2026-10-02T10:52:57+00:00",
+  "not": ""
+ },
+ "cnbc/GBP_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 202364,
+  "sha256": "ad900f894a255d72ef8031c86f80057b2ffdf32a81f4b6ee1f086ff45e4eb0c8",
+  "an": "2026-10-02T10:52:57+00:00",
+  "not": ""
+ },
+ "cnbc/GBP_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 216432,
+  "sha256": "c5c9b612cc7ca9feef7ad0ae6eb168ea3e106ffb42a2c7a35a7e2c1fecb6c806",
+  "an": "2026-10-02T10:52:58+00:00",
+  "not": ""
+ },
+ "cnbc/GBP_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 67976,
+  "sha256": "9cb5dc07ffda0703d657bd29d73d86eb1c9047e272ee8064fcec7d38221c9800",
+  "an": "2026-10-02T10:52:58+00:00",
+  "not": ""
+ },
+ "cnbc/US1Y_2010.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/US1Y/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 159926,
+  "sha256": "e27c30758c7f00ebe3bb5c76041df90a5372a427d2e34f05b7a4a9766934dec0",
+  "an": "2026-10-02T10:52:58+00:00",
+  "not": ""
+ },
+ "cnbc/US1Y_2015.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/US1Y/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 174938,
+  "sha256": "bfbd77ad8b5a0ffe488b1b79c09dff0935a32e28652793565935622f44310a16",
+  "an": "2026-10-02T10:52:59+00:00",
+  "not": ""
+ },
+ "cnbc/US1Y_2020.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/US1Y/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 175077,
+  "sha256": "6f4e6733e766a1ebf9c9ba835a8f2716fe95c7ef95ef40bba7c627ca86ed8c8f",
+  "an": "2026-10-02T10:53:00+00:00",
+  "not": ""
+ },
+ "cnbc/US1Y_2025.json.gz": {
+  "url": "https://ts-api.cnbc.com/harmony/app/bars/US1Y/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+  "durum": 200,
+  "bayt": 66101,
+  "sha256": "ee3adaa2a35f5b0bc9647d13c5441c323fca4ffb2e9f3e2baa618a0619d4d9d0",
+  "an": "2026-10-02T10:53:00+00:00",
+  "not": ""
+ },
+ "ecb/exr_AUD.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.AUD.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1599615,
+  "sha256": "09b2e12d6f9d99c4a7d7ec3bcdfc0ba4f2ac3ca6563c6d9c35a70d8f15f0bda6",
+  "an": "2026-10-02T10:51:41+00:00",
+  "not": ""
+ },
+ "ecb/exr_BRL.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.BRL.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1529137,
+  "sha256": "62e3c2ebdbfad173d603d6129a7cbd6347f47b10ae8424ac445ebb52a9dd665e",
+  "an": "2026-10-02T10:51:48+00:00",
+  "not": ""
+ },
+ "ecb/exr_CAD.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.CAD.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1571022,
+  "sha256": "a2c2425f48870bbb64723d3b3cf6321d828e05a5b0b7e32426db06f2cf1fdb29",
+  "an": "2026-10-02T10:51:39+00:00",
+  "not": ""
+ },
+ "ecb/exr_CHF.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.CHF.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1513676,
+  "sha256": "ff2b86da2bc23e710302621a1458c1e4b0d551ce6093f2fc666bed158a8ad84c",
+  "an": "2026-10-02T10:51:37+00:00",
+  "not": ""
+ },
+ "ecb/exr_GBP.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.GBP.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1559709,
+  "sha256": "b1c46ec0ac1d006320c4af551ce91364ba773de2f5413be664876b68aec51f80",
+  "an": "2026-10-02T10:51:35+00:00",
+  "not": ""
+ },
+ "ecb/exr_HUF.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.HUF.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1584722,
+  "sha256": "f30c1e1f0353a1cc1a431d269db08f283a65a5ba84e0d57bab95a9b413a4e6f5",
+  "an": "2026-10-02T10:52:00+00:00",
+  "not": ""
+ },
+ "ecb/exr_IDR.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.IDR.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1612355,
+  "sha256": "252a3a8888a073af59029bcda226911137ff2813a8d75bad08cb6902bc24a042",
+  "an": "2026-10-02T10:51:54+00:00",
+  "not": ""
+ },
+ "ecb/exr_INR.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.INR.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1507769,
+  "sha256": "ee04623fc6e9f1126d148002f17aef74f2d1d3abdf5f12613b026274b7024d91",
+  "an": "2026-10-02T10:51:52+00:00",
+  "not": ""
+ },
+ "ecb/exr_JPY.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.JPY.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1527736,
+  "sha256": "b8b489fdfb3e641cc398c6ce652681188fd3fbd6c82808072e8b62ea89686b9d",
+  "an": "2026-10-02T10:51:33+00:00",
+  "not": ""
+ },
+ "ecb/exr_KRW.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.KRW.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1592286,
+  "sha256": "d2fd437e1fbf971b6acc8b01af6a9d5a07d84bad89b9064b0389a68e4cc9c076",
+  "an": "2026-10-02T10:52:02+00:00",
+  "not": ""
+ },
+ "ecb/exr_MXN.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.MXN.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1568715,
+  "sha256": "9a55fe918c4ca0b4e6b6a3052344d96c59d1f1fbe7730e7b437980ad669fd97e",
+  "an": "2026-10-02T10:51:56+00:00",
+  "not": ""
+ },
+ "ecb/exr_NOK.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.NOK.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1569759,
+  "sha256": "36e9deab16c53e9134e8a0913e7baa8bba95f41c61a98972c69c6b2596069452",
+  "an": "2026-10-02T10:51:45+00:00",
+  "not": ""
+ },
+ "ecb/exr_PLN.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.PLN.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1527363,
+  "sha256": "a6b02418eb310e5ab9b076cb9bfa25fee81579bae605b2fc279d123f6b69e8a0",
+  "an": "2026-10-02T10:51:58+00:00",
+  "not": ""
+ },
+ "ecb/exr_SEK.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1543334,
+  "sha256": "45281159583da6c4f5e569b76427b8b25d76b26dd75bf7dc77e646807be40a53",
+  "an": "2026-10-02T10:51:43+00:00",
+  "not": ""
+ },
+ "ecb/exr_TRY.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.TRY.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 2035625,
+  "sha256": "bc2a9e29807e8ec3cc4b5207fcc4b75b8daf73d5b2d34de554b471083fbfc9ac",
+  "an": "2026-10-02T10:52:05+00:00",
+  "not": ""
+ },
+ "ecb/exr_USD.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1485037,
+  "sha256": "698c99dac86e289159598ea4dea8c93f726c5bd3385fc6070ba03bfe6749b968",
+  "an": "2026-10-02T10:51:31+00:00",
+  "not": ""
+ },
+ "ecb/exr_ZAR.csv.gz": {
+  "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.ZAR.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+  "durum": 200,
+  "bayt": 1618223,
+  "sha256": "5c70f195b9d3507948656e9cb48c90adcd3c37481291d2e42e2a7b1776ba6f78",
+  "an": "2026-10-02T10:51:50+00:00",
+  "not": ""
+ },
+ "eurostat/gov_10dd_edpt1.json.gz": {
+  "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10dd_edpt1?format=JSON&lang=EN&freq=A&unit=PC_GDP&sector=S13&na_item=B9&na_item=GD&geo=DE&geo=FR&geo=IT&geo=ES&geo=PT&geo=EL&geo=IE&geo=NL&geo=BE&geo=AT&geo=FI&geo=EA20&geo=EU27_2020&geo=HU&geo=PL&geo=CZ&geo=RO",
+  "durum": 200,
+  "bayt": 15485,
+  "sha256": "b4a507fc8cfef45cfab47185e3dfbf533e0fe9c7331452eec1e9e3dc952ad826",
+  "an": "2026-10-02T10:52:06+00:00",
+  "not": ""
+ },
+ "eurostat/gov_10q_ggdebt.json.gz": {
+  "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10q_ggdebt?format=JSON&lang=EN&freq=Q&unit=PC_GDP&sector=S13&na_item=GD&geo=DE&geo=FR&geo=IT&geo=ES&geo=PT&geo=EL&geo=IE&geo=NL&geo=BE&geo=AT&geo=FI&geo=EA20&geo=EU27_2020&geo=HU&geo=PL&geo=CZ&geo=RO",
+  "durum": 200,
+  "bayt": 30258,
+  "sha256": "0e2628ce9b5d7a57c7b13ce8b74c6c8cc377f5b3b6441f9c71aa3475ab5fd788",
+  "an": "2026-10-02T10:52:07+00:00",
+  "not": ""
+ },
+ "evds/categories.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/categories/type=json",
+  "durum": 200,
+  "bayt": 26775,
+  "sha256": "3b2fc24cc0123abd36de5f96bccca8d13cf3ff91057f860c3d88142685eba29e",
+  "an": "2026-10-02T10:43:02+00:00",
+  "not": ""
+ },
+ "evds/datagroups.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/datagroups/mode=0&type=json",
+  "durum": 200,
+  "bayt": 802698,
+  "sha256": "ff76d2fc61b2ac80f7937c936d12fb9a8f28d1dc70d21e05170558b27d3bd42e",
+  "an": "2026-10-02T10:43:06+00:00",
+  "not": ""
+ },
+ "evds/seri/bie_bekodtufe_000.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT1-TP.BEKODTUFE.BT2-TP.BEKODTUFE.BT3-TP.BEKODTUFE.BT4-TP.BEKODTUFE.BT5-TP.BEKODTUFE.BT6&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 88783,
+  "sha256": "afb91d1e0d6dad798a066d7f985c2e6f83dc98920afd9a4b98cdb6b8bd844148",
+  "an": "2026-10-02T10:46:47+00:00",
+  "not": "TP.BEKODTUFE.BT1,TP.BEKODTUFE.BT2,TP.BEKODTUFE.BT3,TP.BEKODTUFE.BT4,TP.BEKODTUFE.BT5,TP.BEKODTUFE.BT6"
+ },
+ "evds/seri/bie_bekodtufe_001.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT7-TP.BEKODTUFE.BT8-TP.BEKODTUFE.BT9-TP.BEKODTUFE.BT10-TP.BEKODTUFE.BT11-TP.BEKODTUFE.BT12&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 90026,
+  "sha256": "8a4bafba8847dab3f7275b1762683f4a935d76cbacac2b8eebac7b53df98dd96",
+  "an": "2026-10-02T10:46:49+00:00",
+  "not": "TP.BEKODTUFE.BT7,TP.BEKODTUFE.BT8,TP.BEKODTUFE.BT9,TP.BEKODTUFE.BT10,TP.BEKODTUFE.BT11,TP.BEKODTUFE.BT12"
+ },
+ "evds/seri/bie_bekodtufe_002.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT13-TP.BEKODTUFE.BT14-TP.BEKODTUFE.BT15-TP.BEKODTUFE.BT16-TP.BEKODTUFE.BT17-TP.BEKODTUFE.BT18&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 91255,
+  "sha256": "cdfce593810a9175f6164b0a54f3dfce05193f3fcb9ab3603897d99b4750039e",
+  "an": "2026-10-02T10:46:51+00:00",
+  "not": "TP.BEKODTUFE.BT13,TP.BEKODTUFE.BT14,TP.BEKODTUFE.BT15,TP.BEKODTUFE.BT16,TP.BEKODTUFE.BT17,TP.BEKODTUFE.BT18"
+ },
+ "evds/seri/bie_bekodtufe_003.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT19-TP.BEKODTUFE.BT20-TP.BEKODTUFE.BT21-TP.BEKODTUFE.BT22-TP.BEKODTUFE.BT23-TP.BEKODTUFE.BT24&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 91142,
+  "sha256": "df5f987e57470c98081fbb2aeb8eb268754327415a8c3baf82c5c754fb23daf2",
+  "an": "2026-10-02T10:46:53+00:00",
+  "not": "TP.BEKODTUFE.BT19,TP.BEKODTUFE.BT20,TP.BEKODTUFE.BT21,TP.BEKODTUFE.BT22,TP.BEKODTUFE.BT23,TP.BEKODTUFE.BT24"
+ },
+ "evds/seri/bie_bekodtufe_004.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT25-TP.BEKODTUFE.BT26-TP.BEKODTUFE.BT27-TP.BEKODTUFE.BT28-TP.BEKODTUFE.BT29-TP.BEKODTUFE.BT30&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 91128,
+  "sha256": "8ad8f72cdb88b7438bf6c4a25d18259e67aed484ac5bfe45a125246ed64b0402",
+  "an": "2026-10-02T10:46:55+00:00",
+  "not": "TP.BEKODTUFE.BT25,TP.BEKODTUFE.BT26,TP.BEKODTUFE.BT27,TP.BEKODTUFE.BT28,TP.BEKODTUFE.BT29,TP.BEKODTUFE.BT30"
+ },
+ "evds/seri/bie_bekodtufe_005.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT31-TP.BEKODTUFE.BT32-TP.BEKODTUFE.BT33-TP.BEKODTUFE.BT34-TP.BEKODTUFE.BT35-TP.BEKODTUFE.BT36&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 91101,
+  "sha256": "9b5dde5b79cd36443ec5186850b4bc0f05dd9e9ca6f145fa0dd3e2709542eaaa",
+  "an": "2026-10-02T10:46:57+00:00",
+  "not": "TP.BEKODTUFE.BT31,TP.BEKODTUFE.BT32,TP.BEKODTUFE.BT33,TP.BEKODTUFE.BT34,TP.BEKODTUFE.BT35,TP.BEKODTUFE.BT36"
+ },
+ "evds/seri/bie_bekodtufe_006.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT37-TP.BEKODTUFE.BT75-TP.BEKODTUFE.BT76-TP.BEKODTUFE.BT77-TP.BEKODTUFE.BT78-TP.BEKODTUFE.BT79&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 91099,
+  "sha256": "d56b773a3c8d40daa80f0ee4c9e11fd97e9dfb56c749f6c0a79e2a9468ec9172",
+  "an": "2026-10-02T10:46:59+00:00",
+  "not": "TP.BEKODTUFE.BT37,TP.BEKODTUFE.BT75,TP.BEKODTUFE.BT76,TP.BEKODTUFE.BT77,TP.BEKODTUFE.BT78,TP.BEKODTUFE.BT79"
+ },
+ "evds/seri/bie_bekodtufe_007.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT80-TP.BEKODTUFE.BT81-TP.BEKODTUFE.BT82-TP.BEKODTUFE.BT83-TP.BEKODTUFE.BT84-TP.BEKODTUFE.BT85&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 91099,
+  "sha256": "e31bd76880164c5aec734586b8b55f49344a6f804212ad3b1eb6cf6f302f539d",
+  "an": "2026-10-02T10:47:01+00:00",
+  "not": "TP.BEKODTUFE.BT80,TP.BEKODTUFE.BT81,TP.BEKODTUFE.BT82,TP.BEKODTUFE.BT83,TP.BEKODTUFE.BT84,TP.BEKODTUFE.BT85"
+ },
+ "evds/seri/bie_bekodtufe_008.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT86-TP.BEKODTUFE.BT87-TP.BEKODTUFE.BT88-TP.BEKODTUFE.BT89-TP.BEKODTUFE.BT90-TP.BEKODTUFE.BT91&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 91099,
+  "sha256": "36cd238cb37114f05895998d9c4c5177a0bf34723fcdb17819de6fd48a0c9024",
+  "an": "2026-10-02T10:47:03+00:00",
+  "not": "TP.BEKODTUFE.BT86,TP.BEKODTUFE.BT87,TP.BEKODTUFE.BT88,TP.BEKODTUFE.BT89,TP.BEKODTUFE.BT90,TP.BEKODTUFE.BT91"
+ },
+ "evds/seri/bie_bekodtufe_009.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT92-TP.BEKODTUFE.BT93-TP.BEKODTUFE.BT94-TP.BEKODTUFE.BT95-TP.BEKODTUFE.BT96-TP.BEKODTUFE.BT97&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 91099,
+  "sha256": "5bc8b31a5a3d5657c880fa43d588ae3803dea1d093c9df464194f5b12e31f29e",
+  "an": "2026-10-02T10:47:05+00:00",
+  "not": "TP.BEKODTUFE.BT92,TP.BEKODTUFE.BT93,TP.BEKODTUFE.BT94,TP.BEKODTUFE.BT95,TP.BEKODTUFE.BT96,TP.BEKODTUFE.BT97"
+ },
+ "evds/seri/bie_bekodtufe_010.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT98-TP.BEKODTUFE.BT99-TP.BEKODTUFE.BT100-TP.BEKODTUFE.BT101-TP.BEKODTUFE.BT102-TP.BEKODTUFE.BT103&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92727,
+  "sha256": "4e2a0b6c130cb98303f0f2df42e9198c107c960f3f57579bf8d378fa3e918f6d",
+  "an": "2026-10-02T10:47:07+00:00",
+  "not": "TP.BEKODTUFE.BT98,TP.BEKODTUFE.BT99,TP.BEKODTUFE.BT100,TP.BEKODTUFE.BT101,TP.BEKODTUFE.BT102,TP.BEKODTUFE.BT103"
+ },
+ "evds/seri/bie_bekodtufe_011.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT104-TP.BEKODTUFE.BT105-TP.BEKODTUFE.BT106-TP.BEKODTUFE.BT107-TP.BEKODTUFE.BT108-TP.BEKODTUFE.BT109&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 93541,
+  "sha256": "042d1c2337009d515f1ff39cce1f3e170b80ddc917746833cd9507f3090c71e0",
+  "an": "2026-10-02T10:47:08+00:00",
+  "not": "TP.BEKODTUFE.BT104,TP.BEKODTUFE.BT105,TP.BEKODTUFE.BT106,TP.BEKODTUFE.BT107,TP.BEKODTUFE.BT108,TP.BEKODTUFE.BT109"
+ },
+ "evds/seri/bie_bekodtufe_012.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT110-TP.BEKODTUFE.BT111-TP.BEKODTUFE.BT112-TP.BEKODTUFE.BT113-TP.BEKODTUFE.BT114-TP.BEKODTUFE.BT38&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92800,
+  "sha256": "0450da449ac92b7e85f9769fb0c86c3748c10c338bafb373d4d98e2e0c0fdeee",
+  "an": "2026-10-02T10:47:10+00:00",
+  "not": "TP.BEKODTUFE.BT110,TP.BEKODTUFE.BT111,TP.BEKODTUFE.BT112,TP.BEKODTUFE.BT113,TP.BEKODTUFE.BT114,TP.BEKODTUFE.BT38"
+ },
+ "evds/seri/bie_bekodtufe_013.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT39-TP.BEKODTUFE.BT40-TP.BEKODTUFE.BT41-TP.BEKODTUFE.BT42-TP.BEKODTUFE.BT43-TP.BEKODTUFE.BT44&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 88555,
+  "sha256": "8ceba6e7b9710b8f8ab401f0f75eba0996422b4d96473392eb71f7432428bbd0",
+  "an": "2026-10-02T10:47:12+00:00",
+  "not": "TP.BEKODTUFE.BT39,TP.BEKODTUFE.BT40,TP.BEKODTUFE.BT41,TP.BEKODTUFE.BT42,TP.BEKODTUFE.BT43,TP.BEKODTUFE.BT44"
+ },
+ "evds/seri/bie_bekodtufe_014.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT45-TP.BEKODTUFE.BT46-TP.BEKODTUFE.BT47-TP.BEKODTUFE.BT48-TP.BEKODTUFE.BT49-TP.BEKODTUFE.BT50&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 88589,
+  "sha256": "156160ee7898f672a688677d74dd228cab067257d9992e1e197c8f88bb351a9b",
+  "an": "2026-10-02T10:47:14+00:00",
+  "not": "TP.BEKODTUFE.BT45,TP.BEKODTUFE.BT46,TP.BEKODTUFE.BT47,TP.BEKODTUFE.BT48,TP.BEKODTUFE.BT49,TP.BEKODTUFE.BT50"
+ },
+ "evds/seri/bie_bekodtufe_015.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT51-TP.BEKODTUFE.BT52-TP.BEKODTUFE.BT53-TP.BEKODTUFE.BT54-TP.BEKODTUFE.BT55-TP.BEKODTUFE.BT56&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 88678,
+  "sha256": "786dab09964e7b22d35bc29dd5f4e27e148271299d65271624a90ee949ee14ca",
+  "an": "2026-10-02T10:47:16+00:00",
+  "not": "TP.BEKODTUFE.BT51,TP.BEKODTUFE.BT52,TP.BEKODTUFE.BT53,TP.BEKODTUFE.BT54,TP.BEKODTUFE.BT55,TP.BEKODTUFE.BT56"
+ },
+ "evds/seri/bie_bekodtufe_016.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT57-TP.BEKODTUFE.BT58-TP.BEKODTUFE.BT59-TP.BEKODTUFE.BT60-TP.BEKODTUFE.BT61-TP.BEKODTUFE.BT62&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 88566,
+  "sha256": "1769b6cb48bb03f70cdd44636722acb864b1f4a6875b5c1a1e327b0c7ef6bddd",
+  "an": "2026-10-02T10:47:18+00:00",
+  "not": "TP.BEKODTUFE.BT57,TP.BEKODTUFE.BT58,TP.BEKODTUFE.BT59,TP.BEKODTUFE.BT60,TP.BEKODTUFE.BT61,TP.BEKODTUFE.BT62"
+ },
+ "evds/seri/bie_bekodtufe_017.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT63-TP.BEKODTUFE.BT64-TP.BEKODTUFE.BT65-TP.BEKODTUFE.BT66-TP.BEKODTUFE.BT67-TP.BEKODTUFE.BT68&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 88555,
+  "sha256": "5ca9def6cfb996d3621f8a401b29fc0413d2e5a56807696bfaf02db2ee199bc0",
+  "an": "2026-10-02T10:47:20+00:00",
+  "not": "TP.BEKODTUFE.BT63,TP.BEKODTUFE.BT64,TP.BEKODTUFE.BT65,TP.BEKODTUFE.BT66,TP.BEKODTUFE.BT67,TP.BEKODTUFE.BT68"
+ },
+ "evds/seri/bie_bekodtufe_018.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT69-TP.BEKODTUFE.BT70-TP.BEKODTUFE.BT71-TP.BEKODTUFE.BT72-TP.BEKODTUFE.BT73-TP.BEKODTUFE.BT74&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 88558,
+  "sha256": "4cd3dd0c0358903f78d699df66c8097cdab9c8a4355e3d5a6c081e89301a87db",
+  "an": "2026-10-02T10:47:21+00:00",
+  "not": "TP.BEKODTUFE.BT69,TP.BEKODTUFE.BT70,TP.BEKODTUFE.BT71,TP.BEKODTUFE.BT72,TP.BEKODTUFE.BT73,TP.BEKODTUFE.BT74"
+ },
+ "evds/seri/bie_bekodtufe_019.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT115-TP.BEKODTUFE.BT116-TP.BEKODTUFE.BT117-TP.BEKODTUFE.BT118-TP.BEKODTUFE.BT119-TP.BEKODTUFE.BT120&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 90997,
+  "sha256": "fd32a58eb99e7e5eaeccfa30135c3af3d0bca3e4d4043e8af687b6a6f7e26dc8",
+  "an": "2026-10-02T10:47:23+00:00",
+  "not": "TP.BEKODTUFE.BT115,TP.BEKODTUFE.BT116,TP.BEKODTUFE.BT117,TP.BEKODTUFE.BT118,TP.BEKODTUFE.BT119,TP.BEKODTUFE.BT120"
+ },
+ "evds/seri/bie_bekodtufe_020.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT121-TP.BEKODTUFE.BT122-TP.BEKODTUFE.BT123-TP.BEKODTUFE.BT124-TP.BEKODTUFE.BT125-TP.BEKODTUFE.BT126&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 90997,
+  "sha256": "2e8a1cf1d023370c667255633127f4530951a70f2670db920fb78effe335dcbc",
+  "an": "2026-10-02T10:47:25+00:00",
+  "not": "TP.BEKODTUFE.BT121,TP.BEKODTUFE.BT122,TP.BEKODTUFE.BT123,TP.BEKODTUFE.BT124,TP.BEKODTUFE.BT125,TP.BEKODTUFE.BT126"
+ },
+ "evds/seri/bie_bekodtufe_021.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT127-TP.BEKODTUFE.BT128-TP.BEKODTUFE.BT129-TP.BEKODTUFE.BT130-TP.BEKODTUFE.BT131-TP.BEKODTUFE.BT132&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 90997,
+  "sha256": "3b5a10dc018b45019ced16c2eaff8178092df75e87ee5e692a48c2d72862e0fe",
+  "an": "2026-10-02T10:47:27+00:00",
+  "not": "TP.BEKODTUFE.BT127,TP.BEKODTUFE.BT128,TP.BEKODTUFE.BT129,TP.BEKODTUFE.BT130,TP.BEKODTUFE.BT131,TP.BEKODTUFE.BT132"
+ },
+ "evds/seri/bie_bekodtufe_022.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT133-TP.BEKODTUFE.BT134-TP.BEKODTUFE.BT135-TP.BEKODTUFE.BT136-TP.BEKODTUFE.BT137-TP.BEKODTUFE.BT138&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 90997,
+  "sha256": "25a879f2e943280aa2e59991835a042709fd721f9fe09b56d80cf56a86ba611f",
+  "an": "2026-10-02T10:47:29+00:00",
+  "not": "TP.BEKODTUFE.BT133,TP.BEKODTUFE.BT134,TP.BEKODTUFE.BT135,TP.BEKODTUFE.BT136,TP.BEKODTUFE.BT137,TP.BEKODTUFE.BT138"
+ },
+ "evds/seri/bie_bekodtufe_023.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT139-TP.BEKODTUFE.BT140-TP.BEKODTUFE.BT141-TP.BEKODTUFE.BT142-TP.BEKODTUFE.BT143-TP.BEKODTUFE.BT144&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 90997,
+  "sha256": "043641f4c1512a3ef3285b4b5bd10b4e7de1e0a5566e2de0f29dafaac253c978",
+  "an": "2026-10-02T10:47:31+00:00",
+  "not": "TP.BEKODTUFE.BT139,TP.BEKODTUFE.BT140,TP.BEKODTUFE.BT141,TP.BEKODTUFE.BT142,TP.BEKODTUFE.BT143,TP.BEKODTUFE.BT144"
+ },
+ "evds/seri/bie_bekodtufe_024.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT145-TP.BEKODTUFE.BT146-TP.BEKODTUFE.BT147-TP.BEKODTUFE.BT148-TP.BEKODTUFE.BT149-TP.BEKODTUFE.BT150&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 90997,
+  "sha256": "611ff0ce6f9229637f3e5bf19cb5febad404a993a26e09bbc9674789752659d6",
+  "an": "2026-10-02T10:47:33+00:00",
+  "not": "TP.BEKODTUFE.BT145,TP.BEKODTUFE.BT146,TP.BEKODTUFE.BT147,TP.BEKODTUFE.BT148,TP.BEKODTUFE.BT149,TP.BEKODTUFE.BT150"
+ },
+ "evds/seri/bie_bekodtufe_025.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFE.BT151-TP.BEKODTUFE.BT152-TP.BEKODTUFE.BT153-TP.BEKODTUFE.BT154&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 68665,
+  "sha256": "ec356296448803f9e4b03582ff17d6bef16d6ffb159a89fc96e6f23d5ec40dfb",
+  "an": "2026-10-02T10:47:34+00:00",
+  "not": "TP.BEKODTUFE.BT151,TP.BEKODTUFE.BT152,TP.BEKODTUFE.BT153,TP.BEKODTUFE.BT154"
+ },
+ "evds/seri/bie_bekodtufeyeni_000.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT1-TP.BEKODTUFEYENI.BT2-TP.BEKODTUFEYENI.BT3-TP.BEKODTUFEYENI.BT4-TP.BEKODTUFEYENI.BT5-TP.BEKODTUFEYENI.BT6&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 102895,
+  "sha256": "48e2f0b0413064b8518589fe8a588e113142ad018f045550257959b6dee8ed06",
+  "an": "2026-10-02T10:46:15+00:00",
+  "not": "TP.BEKODTUFEYENI.BT1,TP.BEKODTUFEYENI.BT2,TP.BEKODTUFEYENI.BT3,TP.BEKODTUFEYENI.BT4,TP.BEKODTUFEYENI.BT5,TP.BEKODTUFEYENI.BT6"
+ },
+ "evds/seri/bie_bekodtufeyeni_001.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT7-TP.BEKODTUFEYENI.BT8-TP.BEKODTUFEYENI.BT9-TP.BEKODTUFEYENI.BT10-TP.BEKODTUFEYENI.BT11-TP.BEKODTUFEYENI.BT12&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 104161,
+  "sha256": "646af1a24e9a1697f9023f3d7a39174d116ac968a67f4e6607851e0d45909485",
+  "an": "2026-10-02T10:46:17+00:00",
+  "not": "TP.BEKODTUFEYENI.BT7,TP.BEKODTUFEYENI.BT8,TP.BEKODTUFEYENI.BT9,TP.BEKODTUFEYENI.BT10,TP.BEKODTUFEYENI.BT11,TP.BEKODTUFEYENI.BT12"
+ },
+ "evds/seri/bie_bekodtufeyeni_002.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT13-TP.BEKODTUFEYENI.BT14-TP.BEKODTUFEYENI.BT15-TP.BEKODTUFEYENI.BT16-TP.BEKODTUFEYENI.BT17-TP.BEKODTUFEYENI.BT18&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 105484,
+  "sha256": "f73d4994595c64979a91ff1212141010579f1a04f96ecc71bbbf33cd44135c18",
+  "an": "2026-10-02T10:46:19+00:00",
+  "not": "TP.BEKODTUFEYENI.BT13,TP.BEKODTUFEYENI.BT14,TP.BEKODTUFEYENI.BT15,TP.BEKODTUFEYENI.BT16,TP.BEKODTUFEYENI.BT17,TP.BEKODTUFEYENI.BT18"
+ },
+ "evds/seri/bie_bekodtufeyeni_003.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT19-TP.BEKODTUFEYENI.BT20-TP.BEKODTUFEYENI.BT21-TP.BEKODTUFEYENI.BT22-TP.BEKODTUFEYENI.BT23-TP.BEKODTUFEYENI.BT24&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 105549,
+  "sha256": "088fef08874bc54dab8df702d5e866261110c7441e216b01f7064e65f01572d1",
+  "an": "2026-10-02T10:46:21+00:00",
+  "not": "TP.BEKODTUFEYENI.BT19,TP.BEKODTUFEYENI.BT20,TP.BEKODTUFEYENI.BT21,TP.BEKODTUFEYENI.BT22,TP.BEKODTUFEYENI.BT23,TP.BEKODTUFEYENI.BT24"
+ },
+ "evds/seri/bie_bekodtufeyeni_004.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT25-TP.BEKODTUFEYENI.BT26-TP.BEKODTUFEYENI.BT27-TP.BEKODTUFEYENI.BT28-TP.BEKODTUFEYENI.BT29-TP.BEKODTUFEYENI.BT30&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 105531,
+  "sha256": "20eb6da2c01d9a036dad13cdcc92d9b905d316dc4cf086fb04fa5036ef39f48a",
+  "an": "2026-10-02T10:46:23+00:00",
+  "not": "TP.BEKODTUFEYENI.BT25,TP.BEKODTUFEYENI.BT26,TP.BEKODTUFEYENI.BT27,TP.BEKODTUFEYENI.BT28,TP.BEKODTUFEYENI.BT29,TP.BEKODTUFEYENI.BT30"
+ },
+ "evds/seri/bie_bekodtufeyeni_005.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT31-TP.BEKODTUFEYENI.BT32-TP.BEKODTUFEYENI.BT33-TP.BEKODTUFEYENI.BT34-TP.BEKODTUFEYENI.BT35-TP.BEKODTUFEYENI.BT36&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 105496,
+  "sha256": "7f700e362140be863097431e72630f2d4ab9b53e6bdb4611cbbfec75faaee783",
+  "an": "2026-10-02T10:46:25+00:00",
+  "not": "TP.BEKODTUFEYENI.BT31,TP.BEKODTUFEYENI.BT32,TP.BEKODTUFEYENI.BT33,TP.BEKODTUFEYENI.BT34,TP.BEKODTUFEYENI.BT35,TP.BEKODTUFEYENI.BT36"
+ },
+ "evds/seri/bie_bekodtufeyeni_006.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT37-TP.BEKODTUFEYENI.BT38-TP.BEKODTUFEYENI.BT39-TP.BEKODTUFEYENI.BT40-TP.BEKODTUFEYENI.BT41-TP.BEKODTUFEYENI.BT42&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 105505,
+  "sha256": "66aa1a8bc4170c85c9f3126024cbbafdb0619a76a5dd15a1c21709c60ea7849a",
+  "an": "2026-10-02T10:46:26+00:00",
+  "not": "TP.BEKODTUFEYENI.BT37,TP.BEKODTUFEYENI.BT38,TP.BEKODTUFEYENI.BT39,TP.BEKODTUFEYENI.BT40,TP.BEKODTUFEYENI.BT41,TP.BEKODTUFEYENI.BT42"
+ },
+ "evds/seri/bie_bekodtufeyeni_007.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT43-TP.BEKODTUFEYENI.BT44-TP.BEKODTUFEYENI.BT45-TP.BEKODTUFEYENI.BT46-TP.BEKODTUFEYENI.BT47-TP.BEKODTUFEYENI.BT48&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 105493,
+  "sha256": "46179ed8f94be79b9d4f6187877650d13a55dd5c24365c49955049f28d9e0d3a",
+  "an": "2026-10-02T10:46:28+00:00",
+  "not": "TP.BEKODTUFEYENI.BT43,TP.BEKODTUFEYENI.BT44,TP.BEKODTUFEYENI.BT45,TP.BEKODTUFEYENI.BT46,TP.BEKODTUFEYENI.BT47,TP.BEKODTUFEYENI.BT48"
+ },
+ "evds/seri/bie_bekodtufeyeni_008.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT49-TP.BEKODTUFEYENI.BT50-TP.BEKODTUFEYENI.BT51-TP.BEKODTUFEYENI.BT52-TP.BEKODTUFEYENI.BT53-TP.BEKODTUFEYENI.BT54&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 105484,
+  "sha256": "735ddb6766dc631e0828f741b4a87ada0e6c844eb22dd6f5c06241c3c8b6f8d2",
+  "an": "2026-10-02T10:46:30+00:00",
+  "not": "TP.BEKODTUFEYENI.BT49,TP.BEKODTUFEYENI.BT50,TP.BEKODTUFEYENI.BT51,TP.BEKODTUFEYENI.BT52,TP.BEKODTUFEYENI.BT53,TP.BEKODTUFEYENI.BT54"
+ },
+ "evds/seri/bie_bekodtufeyeni_009.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT55-TP.BEKODTUFEYENI.BT56-TP.BEKODTUFEYENI.BT57-TP.BEKODTUFEYENI.BT58-TP.BEKODTUFEYENI.BT59-TP.BEKODTUFEYENI.BT60&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 105485,
+  "sha256": "bfc539f7cf6f5596daf8c02101c69d84793d8471fce81b68c197d700a6a79163",
+  "an": "2026-10-02T10:46:32+00:00",
+  "not": "TP.BEKODTUFEYENI.BT55,TP.BEKODTUFEYENI.BT56,TP.BEKODTUFEYENI.BT57,TP.BEKODTUFEYENI.BT58,TP.BEKODTUFEYENI.BT59,TP.BEKODTUFEYENI.BT60"
+ },
+ "evds/seri/bie_bekodtufeyeni_010.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT61-TP.BEKODTUFEYENI.BT62-TP.BEKODTUFEYENI.BT63-TP.BEKODTUFEYENI.BT64-TP.BEKODTUFEYENI.BT65-TP.BEKODTUFEYENI.BT66&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 105541,
+  "sha256": "6ed369522164ab4480e446a0f344ff99d2e29c756bcdd464a5cc318d89d79a1b",
+  "an": "2026-10-02T10:46:34+00:00",
+  "not": "TP.BEKODTUFEYENI.BT61,TP.BEKODTUFEYENI.BT62,TP.BEKODTUFEYENI.BT63,TP.BEKODTUFEYENI.BT64,TP.BEKODTUFEYENI.BT65,TP.BEKODTUFEYENI.BT66"
+ },
+ "evds/seri/bie_bekodtufeyeni_011.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT67-TP.BEKODTUFEYENI.BT68-TP.BEKODTUFEYENI.BT69-TP.BEKODTUFEYENI.BT70-TP.BEKODTUFEYENI.BT71-TP.BEKODTUFEYENI.BT72&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 105486,
+  "sha256": "cf525c84f7c6e662d8b98a6766bdeecdd910fcde1e9b6f83df875fbc3fe76744",
+  "an": "2026-10-02T10:46:36+00:00",
+  "not": "TP.BEKODTUFEYENI.BT67,TP.BEKODTUFEYENI.BT68,TP.BEKODTUFEYENI.BT69,TP.BEKODTUFEYENI.BT70,TP.BEKODTUFEYENI.BT71,TP.BEKODTUFEYENI.BT72"
+ },
+ "evds/seri/bie_bekodtufeyeni_012.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT73-TP.BEKODTUFEYENI.BT74-TP.BEKODTUFEYENI.BT75-TP.BEKODTUFEYENI.BT76-TP.BEKODTUFEYENI.BT77-TP.BEKODTUFEYENI.BT78&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 105560,
+  "sha256": "4e2bb48a8b3ee5355feff1b0d23d88e0bd46f55965813dcd1d138956b6cd6de5",
+  "an": "2026-10-02T10:46:38+00:00",
+  "not": "TP.BEKODTUFEYENI.BT73,TP.BEKODTUFEYENI.BT74,TP.BEKODTUFEYENI.BT75,TP.BEKODTUFEYENI.BT76,TP.BEKODTUFEYENI.BT77,TP.BEKODTUFEYENI.BT78"
+ },
+ "evds/seri/bie_bekodtufeyeni_013.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT79-TP.BEKODTUFEYENI.BT80-TP.BEKODTUFEYENI.BT81-TP.BEKODTUFEYENI.BT82-TP.BEKODTUFEYENI.BT83-TP.BEKODTUFEYENI.BT84&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 105552,
+  "sha256": "65c154985356ac4364d8d24940e6674744830691c1c94a4bda767103d97fcf88",
+  "an": "2026-10-02T10:46:40+00:00",
+  "not": "TP.BEKODTUFEYENI.BT79,TP.BEKODTUFEYENI.BT80,TP.BEKODTUFEYENI.BT81,TP.BEKODTUFEYENI.BT82,TP.BEKODTUFEYENI.BT83,TP.BEKODTUFEYENI.BT84"
+ },
+ "evds/seri/bie_bekodtufeyeni_014.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT85-TP.BEKODTUFEYENI.BT86-TP.BEKODTUFEYENI.BT87-TP.BEKODTUFEYENI.BT88-TP.BEKODTUFEYENI.BT89-TP.BEKODTUFEYENI.BT90&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 105488,
+  "sha256": "8b6f75d74580e538e4515690ef3cdd4ab48cbcdee91da7458e92b5d891904983",
+  "an": "2026-10-02T10:46:42+00:00",
+  "not": "TP.BEKODTUFEYENI.BT85,TP.BEKODTUFEYENI.BT86,TP.BEKODTUFEYENI.BT87,TP.BEKODTUFEYENI.BT88,TP.BEKODTUFEYENI.BT89,TP.BEKODTUFEYENI.BT90"
+ },
+ "evds/seri/bie_bekodtufeyeni_015.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT91-TP.BEKODTUFEYENI.BT92-TP.BEKODTUFEYENI.BT93-TP.BEKODTUFEYENI.BT94-TP.BEKODTUFEYENI.BT95-TP.BEKODTUFEYENI.BT96&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 105484,
+  "sha256": "341b6f0efd71419ed1d9889e03e70f69d63bf571b7805573d13e4b7cfb483394",
+  "an": "2026-10-02T10:46:44+00:00",
+  "not": "TP.BEKODTUFEYENI.BT91,TP.BEKODTUFEYENI.BT92,TP.BEKODTUFEYENI.BT93,TP.BEKODTUFEYENI.BT94,TP.BEKODTUFEYENI.BT95,TP.BEKODTUFEYENI.BT96"
+ },
+ "evds/seri/bie_bekodtufeyeni_016.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKODTUFEYENI.BT97-TP.BEKODTUFEYENI.BT98-TP.BEKODTUFEYENI.BT99-TP.BEKODTUFEYENI.BT100&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 79435,
+  "sha256": "17e249ce9f69b15bdd3796bc45ee05276c13b0c5da7a070b98646cd15bdbfba6",
+  "an": "2026-10-02T10:46:46+00:00",
+  "not": "TP.BEKODTUFEYENI.BT97,TP.BEKODTUFEYENI.BT98,TP.BEKODTUFEYENI.BT99,TP.BEKODTUFEYENI.BT100"
+ },
+ "evds/seri/bie_pkauo_000.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S01.A.U-TP.PKAUO.S01.B.U-TP.PKAUO.S01.C.U-TP.PKAUO.S01.D.U-TP.PKAUO.S01.E.U-TP.PKAUO.S01.I.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 96863,
+  "sha256": "bbea849d6813aacba64599623b59ac128a326ae532bf4e49f37ac730b2fcd3a6",
+  "an": "2026-10-02T10:44:18+00:00",
+  "not": "TP.PKAUO.S01.A.U,TP.PKAUO.S01.B.U,TP.PKAUO.S01.C.U,TP.PKAUO.S01.D.U,TP.PKAUO.S01.E.U,TP.PKAUO.S01.I.U"
+ },
+ "evds/seri/bie_pkauo_001.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S01.F.U-TP.PKAUO.S01.G.U-TP.PKAUO.S03.A.U-TP.PKAUO.S04.A.U-TP.PKAUO.S04.B.U-TP.PKAUO.S04.C.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 95930,
+  "sha256": "c59ba48f437d514f6f6b8651b07dddc0aa32799df97b860a9f2850acefc02a36",
+  "an": "2026-10-02T10:44:20+00:00",
+  "not": "TP.PKAUO.S01.F.U,TP.PKAUO.S01.G.U,TP.PKAUO.S03.A.U,TP.PKAUO.S04.A.U,TP.PKAUO.S04.B.U,TP.PKAUO.S04.C.U"
+ },
+ "evds/seri/bie_pkauo_002.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S04.F.U-TP.PKAUO.S04.G.U-TP.PKAUO.S04.H.U-TP.PKAUO.S04.D.U-TP.PKAUO.S04.I.U-TP.PKAUO.S04.E.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92914,
+  "sha256": "7cdaeee7bd408c00a1e1ce54b6886a940fcb3552819f54cd5c01078fb99e04fd",
+  "an": "2026-10-02T10:44:22+00:00",
+  "not": "TP.PKAUO.S04.F.U,TP.PKAUO.S04.G.U,TP.PKAUO.S04.H.U,TP.PKAUO.S04.D.U,TP.PKAUO.S04.I.U,TP.PKAUO.S04.E.U"
+ },
+ "evds/seri/bie_pkauo_003.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S05.A.U-TP.PKAUO.S05.B.U-TP.PKAUO.S05.C.U-TP.PKAUO.S06.A.U-TP.PKAUO.S06.B.U-TP.PKAUO.S07.A.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 99258,
+  "sha256": "d638c48f3b66b0b268de453a9e16fd11b542db1b35f6bba07187298bfe03a000",
+  "an": "2026-10-02T10:44:24+00:00",
+  "not": "TP.PKAUO.S05.A.U,TP.PKAUO.S05.B.U,TP.PKAUO.S05.C.U,TP.PKAUO.S06.A.U,TP.PKAUO.S06.B.U,TP.PKAUO.S07.A.U"
+ },
+ "evds/seri/bie_pkauo_004.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S07.B.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 37918,
+  "sha256": "f05f7cc442075b572b9a470934368d3b1308597079934e113ff51ee5b3fde5be",
+  "an": "2026-10-02T10:44:25+00:00",
+  "not": "TP.PKAUO.S07.B.U"
+ },
+ "evds/seri/bie_urbek_000.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S01.A.A-TP.BEK.S01.A.B-TP.BEK.S01.A.D-TP.BEK.S01.A.K-TP.BEK.S01.A.M-TP.BEK.S01.A.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92191,
+  "sha256": "2686ffefd2df812a20a42cde4c2273d5f48cda5b08916c125c0eb56a39f7042f",
+  "an": "2026-10-02T10:44:27+00:00",
+  "not": "TP.BEK.S01.A.A,TP.BEK.S01.A.B,TP.BEK.S01.A.D,TP.BEK.S01.A.K,TP.BEK.S01.A.M,TP.BEK.S01.A.S"
+ },
+ "evds/seri/bie_urbek_001.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S01.A.U-TP.BEK.S01.A.X-TP.BEK.S01.B.A-TP.BEK.S01.B.B-TP.BEK.S01.B.D-TP.BEK.S01.B.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92352,
+  "sha256": "854b8e802d95c6c163a349d0a13216d16d215dab62059811bef5d7bd116b93fd",
+  "an": "2026-10-02T10:44:29+00:00",
+  "not": "TP.BEK.S01.A.U,TP.BEK.S01.A.X,TP.BEK.S01.B.A,TP.BEK.S01.B.B,TP.BEK.S01.B.D,TP.BEK.S01.B.K"
+ },
+ "evds/seri/bie_urbek_002.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S01.B.M-TP.BEK.S01.B.S-TP.BEK.S01.B.U-TP.BEK.S01.B.X-TP.BEK.S01.C.A-TP.BEK.S01.C.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92314,
+  "sha256": "c66e726fe25a49dcb7a40d0d67bc3015b3d9efb794443512613d7f804dc331ab",
+  "an": "2026-10-02T10:44:31+00:00",
+  "not": "TP.BEK.S01.B.M,TP.BEK.S01.B.S,TP.BEK.S01.B.U,TP.BEK.S01.B.X,TP.BEK.S01.C.A,TP.BEK.S01.C.B"
+ },
+ "evds/seri/bie_urbek_003.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S01.C.D-TP.BEK.S01.C.K-TP.BEK.S01.C.M-TP.BEK.S01.C.S-TP.BEK.S01.C.U-TP.BEK.S01.C.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92349,
+  "sha256": "aeeca01a637311a6310c0cb7d95f63ee1932dafebc9af0ca22178140b6845a1e",
+  "an": "2026-10-02T10:44:33+00:00",
+  "not": "TP.BEK.S01.C.D,TP.BEK.S01.C.K,TP.BEK.S01.C.M,TP.BEK.S01.C.S,TP.BEK.S01.C.U,TP.BEK.S01.C.X"
+ },
+ "evds/seri/bie_urbek_004.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S01.D.A-TP.BEK.S01.D.B-TP.BEK.S01.D.D-TP.BEK.S01.D.K-TP.BEK.S01.D.M-TP.BEK.S01.D.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92661,
+  "sha256": "2c56e8602d844351b61e5eba42a5a57cd203c5ac218e01a3e8e23bbd44ca1cc4",
+  "an": "2026-10-02T10:44:35+00:00",
+  "not": "TP.BEK.S01.D.A,TP.BEK.S01.D.B,TP.BEK.S01.D.D,TP.BEK.S01.D.K,TP.BEK.S01.D.M,TP.BEK.S01.D.S"
+ },
+ "evds/seri/bie_urbek_005.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S01.D.U-TP.BEK.S01.D.X-TP.BEK.S01.E.A-TP.BEK.S01.E.B-TP.BEK.S01.E.D-TP.BEK.S01.E.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92787,
+  "sha256": "46c12bee98d2d0cd45fb89a5a3f34875ceae452249803352aec5aa78354bf91e",
+  "an": "2026-10-02T10:44:37+00:00",
+  "not": "TP.BEK.S01.D.U,TP.BEK.S01.D.X,TP.BEK.S01.E.A,TP.BEK.S01.E.B,TP.BEK.S01.E.D,TP.BEK.S01.E.K"
+ },
+ "evds/seri/bie_urbek_006.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S01.E.M-TP.BEK.S01.E.S-TP.BEK.S01.E.U-TP.BEK.S01.E.X-TP.BEK.S01.I.A-TP.BEK.S01.I.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 90958,
+  "sha256": "b4b092fb3eda365edb3f7caa28a5017d93b8f7c6954f32d26d1d9461b7ef7539",
+  "an": "2026-10-02T10:44:38+00:00",
+  "not": "TP.BEK.S01.E.M,TP.BEK.S01.E.S,TP.BEK.S01.E.U,TP.BEK.S01.E.X,TP.BEK.S01.I.A,TP.BEK.S01.I.B"
+ },
+ "evds/seri/bie_urbek_007.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S01.I.D-TP.BEK.S01.I.K-TP.BEK.S01.I.M-TP.BEK.S01.I.S-TP.BEK.S01.I.U-TP.BEK.S01.I.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 87448,
+  "sha256": "8306f9112d1fe8684d7a4548196b41d21793472c46dfd536c8eb3ec8adcf28ac",
+  "an": "2026-10-02T10:44:40+00:00",
+  "not": "TP.BEK.S01.I.D,TP.BEK.S01.I.K,TP.BEK.S01.I.M,TP.BEK.S01.I.S,TP.BEK.S01.I.U,TP.BEK.S01.I.X"
+ },
+ "evds/seri/bie_urbek_008.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S01.F.A-TP.BEK.S01.F.B-TP.BEK.S01.F.D-TP.BEK.S01.F.K-TP.BEK.S01.F.M-TP.BEK.S01.F.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92530,
+  "sha256": "34acf8f118121220278b8eeb37ac9aed0a205b344b5d985b0370a4c7cf09aee1",
+  "an": "2026-10-02T10:44:42+00:00",
+  "not": "TP.BEK.S01.F.A,TP.BEK.S01.F.B,TP.BEK.S01.F.D,TP.BEK.S01.F.K,TP.BEK.S01.F.M,TP.BEK.S01.F.S"
+ },
+ "evds/seri/bie_urbek_009.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S01.F.U-TP.BEK.S01.F.X-TP.BEK.S01.G.X-TP.BEK.S01.G.K-TP.BEK.S01.G.B-TP.BEK.S01.G.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 90734,
+  "sha256": "714bc9f07fd85f1ac0a7991f782800d249ea5ff81e1dc2b0e86a6cd489a297d6",
+  "an": "2026-10-02T10:44:44+00:00",
+  "not": "TP.BEK.S01.F.U,TP.BEK.S01.F.X,TP.BEK.S01.G.X,TP.BEK.S01.G.K,TP.BEK.S01.G.B,TP.BEK.S01.G.S"
+ },
+ "evds/seri/bie_urbek_010.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S01.G.A-TP.BEK.S01.G.M-TP.BEK.S01.G.D-TP.BEK.S01.G.U-TP.BEK.S01.H.X-TP.BEK.S01.H.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 88586,
+  "sha256": "c18ee9cef889d923efa9460a147ae29dc639324a4c6c2bef49765ed6723f6447",
+  "an": "2026-10-02T10:44:46+00:00",
+  "not": "TP.BEK.S01.G.A,TP.BEK.S01.G.M,TP.BEK.S01.G.D,TP.BEK.S01.G.U,TP.BEK.S01.H.X,TP.BEK.S01.H.K"
+ },
+ "evds/seri/bie_urbek_011.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S01.H.B-TP.BEK.S01.H.S-TP.BEK.S01.H.A-TP.BEK.S01.H.M-TP.BEK.S01.H.D-TP.BEK.S01.H.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 74557,
+  "sha256": "633f2ba9cf25f1ce175d20b0a12d2f4db3326cc3577f8e0cc36eb7d2fdb4e452",
+  "an": "2026-10-02T10:44:48+00:00",
+  "not": "TP.BEK.S01.H.B,TP.BEK.S01.H.S,TP.BEK.S01.H.A,TP.BEK.S01.H.M,TP.BEK.S01.H.D,TP.BEK.S01.H.U"
+ },
+ "evds/seri/bie_urbek_012.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.A.A-TP.BEK.S02.A.B-TP.BEK.S02.A.D-TP.BEK.S02.A.K-TP.BEK.S02.A.M-TP.BEK.S02.A.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 400,
+  "bayt": 47,
+  "sha256": "2cadd1b38f702835def3145e06375a363ce46e584ea378b0157deb4e59843191",
+  "an": "2026-10-02T10:44:49+00:00",
+  "not": "TP.BEK.S02.A.A,TP.BEK.S02.A.B,TP.BEK.S02.A.D,TP.BEK.S02.A.K,TP.BEK.S02.A.M,TP.BEK.S02.A.S"
+ },
+ "evds/seri/bie_urbek_013.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.A.U-TP.BEK.S02.A.X-TP.BEK.S02.B.A-TP.BEK.S02.B.B-TP.BEK.S02.B.D-TP.BEK.S02.B.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 400,
+  "bayt": 47,
+  "sha256": "2cadd1b38f702835def3145e06375a363ce46e584ea378b0157deb4e59843191",
+  "an": "2026-10-02T10:44:50+00:00",
+  "not": "TP.BEK.S02.A.U,TP.BEK.S02.A.X,TP.BEK.S02.B.A,TP.BEK.S02.B.B,TP.BEK.S02.B.D,TP.BEK.S02.B.K"
+ },
+ "evds/seri/bie_urbek_014.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.B.M-TP.BEK.S02.B.S-TP.BEK.S02.B.U-TP.BEK.S02.B.X-TP.BEK.S02.C.A-TP.BEK.S02.C.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 400,
+  "bayt": 47,
+  "sha256": "2cadd1b38f702835def3145e06375a363ce46e584ea378b0157deb4e59843191",
+  "an": "2026-10-02T10:44:50+00:00",
+  "not": "TP.BEK.S02.B.M,TP.BEK.S02.B.S,TP.BEK.S02.B.U,TP.BEK.S02.B.X,TP.BEK.S02.C.A,TP.BEK.S02.C.B"
+ },
+ "evds/seri/bie_urbek_015.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.C.D-TP.BEK.S02.C.K-TP.BEK.S02.C.M-TP.BEK.S02.C.S-TP.BEK.S02.C.U-TP.BEK.S02.C.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 400,
+  "bayt": 47,
+  "sha256": "2cadd1b38f702835def3145e06375a363ce46e584ea378b0157deb4e59843191",
+  "an": "2026-10-02T10:44:51+00:00",
+  "not": "TP.BEK.S02.C.D,TP.BEK.S02.C.K,TP.BEK.S02.C.M,TP.BEK.S02.C.S,TP.BEK.S02.C.U,TP.BEK.S02.C.X"
+ },
+ "evds/seri/bie_urbek_016.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.D.A-TP.BEK.S02.D.B-TP.BEK.S02.D.D-TP.BEK.S02.D.K-TP.BEK.S02.D.M-TP.BEK.S02.D.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 400,
+  "bayt": 47,
+  "sha256": "2cadd1b38f702835def3145e06375a363ce46e584ea378b0157deb4e59843191",
+  "an": "2026-10-02T10:44:52+00:00",
+  "not": "TP.BEK.S02.D.A,TP.BEK.S02.D.B,TP.BEK.S02.D.D,TP.BEK.S02.D.K,TP.BEK.S02.D.M,TP.BEK.S02.D.S"
+ },
+ "evds/seri/bie_urbek_017.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.D.U-TP.BEK.S02.D.X-TP.BEK.S02.E.A-TP.BEK.S02.E.B-TP.BEK.S02.E.D-TP.BEK.S02.E.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 400,
+  "bayt": 47,
+  "sha256": "2cadd1b38f702835def3145e06375a363ce46e584ea378b0157deb4e59843191",
+  "an": "2026-10-02T10:44:53+00:00",
+  "not": "TP.BEK.S02.D.U,TP.BEK.S02.D.X,TP.BEK.S02.E.A,TP.BEK.S02.E.B,TP.BEK.S02.E.D,TP.BEK.S02.E.K"
+ },
+ "evds/seri/bie_urbek_018.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.E.M-TP.BEK.S02.E.S-TP.BEK.S02.E.U-TP.BEK.S02.E.X-TP.BEK.S02.F.A-TP.BEK.S02.F.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 74176,
+  "sha256": "c9df7b3de1e22fa6bdb8ccc00303e1f9968d01342491958680574aabf1e1faff",
+  "an": "2026-10-02T10:44:55+00:00",
+  "not": "TP.BEK.S02.E.M,TP.BEK.S02.E.S,TP.BEK.S02.E.U,TP.BEK.S02.E.X,TP.BEK.S02.F.A,TP.BEK.S02.F.B"
+ },
+ "evds/seri/bie_urbek_019.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.F.D-TP.BEK.S02.F.K-TP.BEK.S02.F.M-TP.BEK.S02.F.S-TP.BEK.S02.F.U-TP.BEK.S02.F.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 77650,
+  "sha256": "f9a5e2e3623d1437af9763e79e04a4d7a19898b4f5a68c26e339b72376036c31",
+  "an": "2026-10-02T10:44:56+00:00",
+  "not": "TP.BEK.S02.F.D,TP.BEK.S02.F.K,TP.BEK.S02.F.M,TP.BEK.S02.F.S,TP.BEK.S02.F.U,TP.BEK.S02.F.X"
+ },
+ "evds/seri/bie_urbek_020.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.G.A-TP.BEK.S02.G.B-TP.BEK.S02.G.D-TP.BEK.S02.G.K-TP.BEK.S02.G.M-TP.BEK.S02.G.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 77624,
+  "sha256": "605f7dcbc8d692b37c08ba21b9936eb59ea97d33df034192d276e94a0c423d2d",
+  "an": "2026-10-02T10:44:58+00:00",
+  "not": "TP.BEK.S02.G.A,TP.BEK.S02.G.B,TP.BEK.S02.G.D,TP.BEK.S02.G.K,TP.BEK.S02.G.M,TP.BEK.S02.G.S"
+ },
+ "evds/seri/bie_urbek_021.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.G.U-TP.BEK.S02.G.X-TP.BEK.S02.H.A-TP.BEK.S02.H.B-TP.BEK.S02.H.D-TP.BEK.S02.H.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 77715,
+  "sha256": "a917880817b353945d891b9188fd1f3f6e0e269ad6f8091db827ed1b87d1bc57",
+  "an": "2026-10-02T10:45:00+00:00",
+  "not": "TP.BEK.S02.G.U,TP.BEK.S02.G.X,TP.BEK.S02.H.A,TP.BEK.S02.H.B,TP.BEK.S02.H.D,TP.BEK.S02.H.K"
+ },
+ "evds/seri/bie_urbek_022.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.H.M-TP.BEK.S02.H.S-TP.BEK.S02.H.U-TP.BEK.S02.H.X-TP.BEK.S02.I.A-TP.BEK.S02.I.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 77682,
+  "sha256": "d5d44a2c54eb40cbcbb4e7f67d69b51ff117ceb7e07dfc23888b75c62eeab9ca",
+  "an": "2026-10-02T10:45:02+00:00",
+  "not": "TP.BEK.S02.H.M,TP.BEK.S02.H.S,TP.BEK.S02.H.U,TP.BEK.S02.H.X,TP.BEK.S02.I.A,TP.BEK.S02.I.B"
+ },
+ "evds/seri/bie_urbek_023.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.I.D-TP.BEK.S02.I.K-TP.BEK.S02.I.M-TP.BEK.S02.I.S-TP.BEK.S02.I.U-TP.BEK.S02.I.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 77632,
+  "sha256": "b79cbb2387106f66507770df8f8f295b566bd7c141dcc89772bcd33cb9f5bc5b",
+  "an": "2026-10-02T10:45:03+00:00",
+  "not": "TP.BEK.S02.I.D,TP.BEK.S02.I.K,TP.BEK.S02.I.M,TP.BEK.S02.I.S,TP.BEK.S02.I.U,TP.BEK.S02.I.X"
+ },
+ "evds/seri/bie_urbek_024.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.J.A-TP.BEK.S02.J.B-TP.BEK.S02.J.D-TP.BEK.S02.J.K-TP.BEK.S02.J.M-TP.BEK.S02.J.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 77607,
+  "sha256": "dd40e102a6d381c5fc5a716198bafeee38f0e6267471bc1f014040403cf1636c",
+  "an": "2026-10-02T10:45:05+00:00",
+  "not": "TP.BEK.S02.J.A,TP.BEK.S02.J.B,TP.BEK.S02.J.D,TP.BEK.S02.J.K,TP.BEK.S02.J.M,TP.BEK.S02.J.S"
+ },
+ "evds/seri/bie_urbek_025.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.J.U-TP.BEK.S02.J.X-TP.BEK.S02.K.A-TP.BEK.S02.K.B-TP.BEK.S02.K.D-TP.BEK.S02.K.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 77716,
+  "sha256": "737450638e044506667a9ba5d643abf17d898fdd319df55d1b5c77f28be37834",
+  "an": "2026-10-02T10:45:07+00:00",
+  "not": "TP.BEK.S02.J.U,TP.BEK.S02.J.X,TP.BEK.S02.K.A,TP.BEK.S02.K.B,TP.BEK.S02.K.D,TP.BEK.S02.K.K"
+ },
+ "evds/seri/bie_urbek_026.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.K.M-TP.BEK.S02.K.S-TP.BEK.S02.K.U-TP.BEK.S02.K.X-TP.BEK.S02.L.A-TP.BEK.S02.L.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 77679,
+  "sha256": "29ef165563339cf3b874b2154d8f4330b2f9186529e505e44e814e8df36d65d5",
+  "an": "2026-10-02T10:45:09+00:00",
+  "not": "TP.BEK.S02.K.M,TP.BEK.S02.K.S,TP.BEK.S02.K.U,TP.BEK.S02.K.X,TP.BEK.S02.L.A,TP.BEK.S02.L.B"
+ },
+ "evds/seri/bie_urbek_027.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.L.D-TP.BEK.S02.L.K-TP.BEK.S02.L.M-TP.BEK.S02.L.S-TP.BEK.S02.L.U-TP.BEK.S02.L.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 77582,
+  "sha256": "a283b82299de9c5bd81c19f14c59c815438e4a930cb522bda2eb2209c8742d2a",
+  "an": "2026-10-02T10:45:10+00:00",
+  "not": "TP.BEK.S02.L.D,TP.BEK.S02.L.K,TP.BEK.S02.L.M,TP.BEK.S02.L.S,TP.BEK.S02.L.U,TP.BEK.S02.L.X"
+ },
+ "evds/seri/bie_urbek_028.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.M.A-TP.BEK.S02.M.B-TP.BEK.S02.M.D-TP.BEK.S02.M.K-TP.BEK.S02.M.M-TP.BEK.S02.M.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 77650,
+  "sha256": "27a75cf58edc0a10f63f275e129587ed50519d07513871b2a35c5b36d326634a",
+  "an": "2026-10-02T10:45:12+00:00",
+  "not": "TP.BEK.S02.M.A,TP.BEK.S02.M.B,TP.BEK.S02.M.D,TP.BEK.S02.M.K,TP.BEK.S02.M.M,TP.BEK.S02.M.S"
+ },
+ "evds/seri/bie_urbek_029.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S02.M.U-TP.BEK.S02.M.X-TP.BEK.S03.A.A-TP.BEK.S03.A.B-TP.BEK.S03.A.D-TP.BEK.S03.A.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 91812,
+  "sha256": "615363b00fb4165786d750eca1b13d58fa2a78a517cf96e83a1c10f2f3ee0bca",
+  "an": "2026-10-02T10:45:14+00:00",
+  "not": "TP.BEK.S02.M.U,TP.BEK.S02.M.X,TP.BEK.S03.A.A,TP.BEK.S03.A.B,TP.BEK.S03.A.D,TP.BEK.S03.A.K"
+ },
+ "evds/seri/bie_urbek_030.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S03.A.M-TP.BEK.S03.A.S-TP.BEK.S03.A.U-TP.BEK.S03.A.X-TP.BEK.S03.B.A-TP.BEK.S03.B.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 89917,
+  "sha256": "375580413f3abfc8845e49fa663f02af84eaebe75c1fe4d60bccf56894ae836c",
+  "an": "2026-10-02T10:45:16+00:00",
+  "not": "TP.BEK.S03.A.M,TP.BEK.S03.A.S,TP.BEK.S03.A.U,TP.BEK.S03.A.X,TP.BEK.S03.B.A,TP.BEK.S03.B.B"
+ },
+ "evds/seri/bie_urbek_031.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S03.B.D-TP.BEK.S03.B.K-TP.BEK.S03.B.M-TP.BEK.S03.B.S-TP.BEK.S03.B.U-TP.BEK.S03.B.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 400,
+  "bayt": 47,
+  "sha256": "2cadd1b38f702835def3145e06375a363ce46e584ea378b0157deb4e59843191",
+  "an": "2026-10-02T10:45:17+00:00",
+  "not": "TP.BEK.S03.B.D,TP.BEK.S03.B.K,TP.BEK.S03.B.M,TP.BEK.S03.B.S,TP.BEK.S03.B.U,TP.BEK.S03.B.X"
+ },
+ "evds/seri/bie_urbek_032.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S03.C.A-TP.BEK.S03.C.B-TP.BEK.S03.C.D-TP.BEK.S03.C.K-TP.BEK.S03.C.M-TP.BEK.S03.C.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 400,
+  "bayt": 47,
+  "sha256": "2cadd1b38f702835def3145e06375a363ce46e584ea378b0157deb4e59843191",
+  "an": "2026-10-02T10:45:18+00:00",
+  "not": "TP.BEK.S03.C.A,TP.BEK.S03.C.B,TP.BEK.S03.C.D,TP.BEK.S03.C.K,TP.BEK.S03.C.M,TP.BEK.S03.C.S"
+ },
+ "evds/seri/bie_urbek_033.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S03.C.U-TP.BEK.S03.C.X-TP.BEK.S03.D.A-TP.BEK.S03.D.B-TP.BEK.S03.D.D-TP.BEK.S03.D.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 400,
+  "bayt": 47,
+  "sha256": "2cadd1b38f702835def3145e06375a363ce46e584ea378b0157deb4e59843191",
+  "an": "2026-10-02T10:45:19+00:00",
+  "not": "TP.BEK.S03.C.U,TP.BEK.S03.C.X,TP.BEK.S03.D.A,TP.BEK.S03.D.B,TP.BEK.S03.D.D,TP.BEK.S03.D.K"
+ },
+ "evds/seri/bie_urbek_034.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S03.D.M-TP.BEK.S03.D.S-TP.BEK.S03.D.U-TP.BEK.S03.D.X-TP.BEK.S04.A.A-TP.BEK.S04.A.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 83710,
+  "sha256": "7db390b0a342dfbfabd227139b1f1bb591ee4e286ee1679604dd97d07bfd6b0b",
+  "an": "2026-10-02T10:45:21+00:00",
+  "not": "TP.BEK.S03.D.M,TP.BEK.S03.D.S,TP.BEK.S03.D.U,TP.BEK.S03.D.X,TP.BEK.S04.A.A,TP.BEK.S04.A.B"
+ },
+ "evds/seri/bie_urbek_035.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S04.A.D-TP.BEK.S04.A.K-TP.BEK.S04.A.M-TP.BEK.S04.A.S-TP.BEK.S04.A.U-TP.BEK.S04.A.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 88762,
+  "sha256": "558eef8bce2d494c26a83c354dd870c4869bad73d33b8899704f0b3049a18ca7",
+  "an": "2026-10-02T10:45:23+00:00",
+  "not": "TP.BEK.S04.A.D,TP.BEK.S04.A.K,TP.BEK.S04.A.M,TP.BEK.S04.A.S,TP.BEK.S04.A.U,TP.BEK.S04.A.X"
+ },
+ "evds/seri/bie_urbek_036.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S04.B.A-TP.BEK.S04.B.B-TP.BEK.S04.B.D-TP.BEK.S04.B.K-TP.BEK.S04.B.M-TP.BEK.S04.B.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 88704,
+  "sha256": "5f444a4ee6e4b4d103e692e99628d222c6e55d8d2945e55483f9623b9ccc8136",
+  "an": "2026-10-02T10:45:25+00:00",
+  "not": "TP.BEK.S04.B.A,TP.BEK.S04.B.B,TP.BEK.S04.B.D,TP.BEK.S04.B.K,TP.BEK.S04.B.M,TP.BEK.S04.B.S"
+ },
+ "evds/seri/bie_urbek_037.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S04.B.U-TP.BEK.S04.B.X-TP.BEK.S04.C.A-TP.BEK.S04.C.B-TP.BEK.S04.C.D-TP.BEK.S04.C.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 87226,
+  "sha256": "7a8d72a75bf46a68b61e3143c2991016fc74c7040fc69ef238c15920b4994ca0",
+  "an": "2026-10-02T10:45:27+00:00",
+  "not": "TP.BEK.S04.B.U,TP.BEK.S04.B.X,TP.BEK.S04.C.A,TP.BEK.S04.C.B,TP.BEK.S04.C.D,TP.BEK.S04.C.K"
+ },
+ "evds/seri/bie_urbek_038.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S04.C.M-TP.BEK.S04.C.S-TP.BEK.S04.C.U-TP.BEK.S04.C.X-TP.BEK.S04.F.A-TP.BEK.S04.F.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 87980,
+  "sha256": "e942edb1f63358b8f13007803dd5ceec091d73850483d09b261be327042aafac",
+  "an": "2026-10-02T10:45:29+00:00",
+  "not": "TP.BEK.S04.C.M,TP.BEK.S04.C.S,TP.BEK.S04.C.U,TP.BEK.S04.C.X,TP.BEK.S04.F.A,TP.BEK.S04.F.B"
+ },
+ "evds/seri/bie_urbek_039.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S04.F.D-TP.BEK.S04.F.K-TP.BEK.S04.F.M-TP.BEK.S04.F.S-TP.BEK.S04.F.U-TP.BEK.S04.F.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 85074,
+  "sha256": "26b9f6bef7f6594fb3aefcddadf7ac0c9a7ad637d61512fd4ea468c23eca1823",
+  "an": "2026-10-02T10:45:31+00:00",
+  "not": "TP.BEK.S04.F.D,TP.BEK.S04.F.K,TP.BEK.S04.F.M,TP.BEK.S04.F.S,TP.BEK.S04.F.U,TP.BEK.S04.F.X"
+ },
+ "evds/seri/bie_urbek_040.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S04.G.A-TP.BEK.S04.G.B-TP.BEK.S04.G.D-TP.BEK.S04.G.K-TP.BEK.S04.G.M-TP.BEK.S04.G.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 85074,
+  "sha256": "52586296a9b08022a1273229968f4ff9ad2f20d3e27878bd18f043cae9ec8747",
+  "an": "2026-10-02T10:45:33+00:00",
+  "not": "TP.BEK.S04.G.A,TP.BEK.S04.G.B,TP.BEK.S04.G.D,TP.BEK.S04.G.K,TP.BEK.S04.G.M,TP.BEK.S04.G.S"
+ },
+ "evds/seri/bie_urbek_041.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S04.G.U-TP.BEK.S04.G.X-TP.BEK.S04.H.A-TP.BEK.S04.H.B-TP.BEK.S04.H.D-TP.BEK.S04.H.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 85090,
+  "sha256": "220b132a29f975137e8229a77dec520afe1f93275849efc8377c2a4c06627281",
+  "an": "2026-10-02T10:45:35+00:00",
+  "not": "TP.BEK.S04.G.U,TP.BEK.S04.G.X,TP.BEK.S04.H.A,TP.BEK.S04.H.B,TP.BEK.S04.H.D,TP.BEK.S04.H.K"
+ },
+ "evds/seri/bie_urbek_042.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S04.H.M-TP.BEK.S04.H.S-TP.BEK.S04.H.U-TP.BEK.S04.H.X-TP.BEK.S04.K.A-TP.BEK.S04.K.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 85074,
+  "sha256": "6075c4ba2332f94dd00ed8f64e3ed4ea2ca7c75efd74b6ffaf42e3757e1d136e",
+  "an": "2026-10-02T10:45:37+00:00",
+  "not": "TP.BEK.S04.H.M,TP.BEK.S04.H.S,TP.BEK.S04.H.U,TP.BEK.S04.H.X,TP.BEK.S04.K.A,TP.BEK.S04.K.B"
+ },
+ "evds/seri/bie_urbek_043.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S04.K.D-TP.BEK.S04.K.K-TP.BEK.S04.K.M-TP.BEK.S04.K.S-TP.BEK.S04.K.U-TP.BEK.S04.K.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 85074,
+  "sha256": "0e6b68d4e4eaf417bf008ff44e79a60723510d993313ae9c4517d89f60f95dd7",
+  "an": "2026-10-02T10:45:39+00:00",
+  "not": "TP.BEK.S04.K.D,TP.BEK.S04.K.K,TP.BEK.S04.K.M,TP.BEK.S04.K.S,TP.BEK.S04.K.U,TP.BEK.S04.K.X"
+ },
+ "evds/seri/bie_urbek_044.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S04.D.A-TP.BEK.S04.D.B-TP.BEK.S04.D.D-TP.BEK.S04.D.K-TP.BEK.S04.D.M-TP.BEK.S04.D.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92632,
+  "sha256": "802a82dbdd7633699ccc103ffc8d3aa18e2d687821b7f0bb41dc77860acab241",
+  "an": "2026-10-02T10:45:40+00:00",
+  "not": "TP.BEK.S04.D.A,TP.BEK.S04.D.B,TP.BEK.S04.D.D,TP.BEK.S04.D.K,TP.BEK.S04.D.M,TP.BEK.S04.D.S"
+ },
+ "evds/seri/bie_urbek_045.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S04.D.U-TP.BEK.S04.D.X-TP.BEK.S04.L.A-TP.BEK.S04.L.B-TP.BEK.S04.L.D-TP.BEK.S04.L.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 87698,
+  "sha256": "264279e030f2ee0b45bee9ad037e8941c490c63880fecdda1f6663772fc3018f",
+  "an": "2026-10-02T10:45:42+00:00",
+  "not": "TP.BEK.S04.D.U,TP.BEK.S04.D.X,TP.BEK.S04.L.A,TP.BEK.S04.L.B,TP.BEK.S04.L.D,TP.BEK.S04.L.K"
+ },
+ "evds/seri/bie_urbek_046.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S04.L.M-TP.BEK.S04.L.S-TP.BEK.S04.L.U-TP.BEK.S04.L.X-TP.BEK.S04.E.A-TP.BEK.S04.E.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 87664,
+  "sha256": "055d36b3c866ccfd3072489086648eedda17f1d4a68e7c001d8fa1f262a3561f",
+  "an": "2026-10-02T10:45:44+00:00",
+  "not": "TP.BEK.S04.L.M,TP.BEK.S04.L.S,TP.BEK.S04.L.U,TP.BEK.S04.L.X,TP.BEK.S04.E.A,TP.BEK.S04.E.B"
+ },
+ "evds/seri/bie_urbek_047.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S04.E.D-TP.BEK.S04.E.K-TP.BEK.S04.E.M-TP.BEK.S04.E.S-TP.BEK.S04.E.U-TP.BEK.S04.E.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92618,
+  "sha256": "0493959b219703e9c9b6ec4d291ff5c3bcbe45a4af0215eb52af4e8648433f0d",
+  "an": "2026-10-02T10:45:47+00:00",
+  "not": "TP.BEK.S04.E.D,TP.BEK.S04.E.K,TP.BEK.S04.E.M,TP.BEK.S04.E.S,TP.BEK.S04.E.U,TP.BEK.S04.E.X"
+ },
+ "evds/seri/bie_urbek_048.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S05.A.A-TP.BEK.S05.A.B-TP.BEK.S05.A.D-TP.BEK.S05.A.K-TP.BEK.S05.A.M-TP.BEK.S05.A.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92437,
+  "sha256": "0c7637cdbfca4a83b9a700789b376e80c7e7d13aee52d4a269f4215130bbffce",
+  "an": "2026-10-02T10:45:49+00:00",
+  "not": "TP.BEK.S05.A.A,TP.BEK.S05.A.B,TP.BEK.S05.A.D,TP.BEK.S05.A.K,TP.BEK.S05.A.M,TP.BEK.S05.A.S"
+ },
+ "evds/seri/bie_urbek_049.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S05.A.U-TP.BEK.S05.A.X-TP.BEK.S05.B.A-TP.BEK.S05.B.B-TP.BEK.S05.B.D-TP.BEK.S05.B.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92604,
+  "sha256": "ca91afbb4b810153fe99b39132e5c65111c0727576aa76c69c192e77a99fb9b0",
+  "an": "2026-10-02T10:45:51+00:00",
+  "not": "TP.BEK.S05.A.U,TP.BEK.S05.A.X,TP.BEK.S05.B.A,TP.BEK.S05.B.B,TP.BEK.S05.B.D,TP.BEK.S05.B.K"
+ },
+ "evds/seri/bie_urbek_050.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S05.B.M-TP.BEK.S05.B.S-TP.BEK.S05.B.U-TP.BEK.S05.B.X-TP.BEK.S05.C.A-TP.BEK.S05.C.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92555,
+  "sha256": "7c7ed39c5a9e541f78f65a811e81bcd1550d7ed73b2f9d9c02e5821b42e59568",
+  "an": "2026-10-02T10:45:52+00:00",
+  "not": "TP.BEK.S05.B.M,TP.BEK.S05.B.S,TP.BEK.S05.B.U,TP.BEK.S05.B.X,TP.BEK.S05.C.A,TP.BEK.S05.C.B"
+ },
+ "evds/seri/bie_urbek_051.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S05.C.D-TP.BEK.S05.C.K-TP.BEK.S05.C.M-TP.BEK.S05.C.S-TP.BEK.S05.C.U-TP.BEK.S05.C.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92545,
+  "sha256": "90440ba893bfda21c0450425bff9802a7d21571d0f6dd4f8b8872b13774b84d1",
+  "an": "2026-10-02T10:45:54+00:00",
+  "not": "TP.BEK.S05.C.D,TP.BEK.S05.C.K,TP.BEK.S05.C.M,TP.BEK.S05.C.S,TP.BEK.S05.C.U,TP.BEK.S05.C.X"
+ },
+ "evds/seri/bie_urbek_052.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S06.A.A-TP.BEK.S06.A.B-TP.BEK.S06.A.D-TP.BEK.S06.A.K-TP.BEK.S06.A.M-TP.BEK.S06.A.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 96603,
+  "sha256": "ce2aa675d05091e2c1c69adc81c729bfbb6007cf94aed6bdb3f0d93dcf1d5511",
+  "an": "2026-10-02T10:45:56+00:00",
+  "not": "TP.BEK.S06.A.A,TP.BEK.S06.A.B,TP.BEK.S06.A.D,TP.BEK.S06.A.K,TP.BEK.S06.A.M,TP.BEK.S06.A.S"
+ },
+ "evds/seri/bie_urbek_053.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S06.A.U-TP.BEK.S06.A.X-TP.BEK.S06.B.A-TP.BEK.S06.B.B-TP.BEK.S06.B.D-TP.BEK.S06.B.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 96284,
+  "sha256": "7ffb4d73dc3c57a6b1b74446398e6b75970d7870dfd3c2caf598c4b4d80536ce",
+  "an": "2026-10-02T10:45:58+00:00",
+  "not": "TP.BEK.S06.A.U,TP.BEK.S06.A.X,TP.BEK.S06.B.A,TP.BEK.S06.B.B,TP.BEK.S06.B.D,TP.BEK.S06.B.K"
+ },
+ "evds/seri/bie_urbek_054.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S06.B.M-TP.BEK.S06.B.S-TP.BEK.S06.B.U-TP.BEK.S06.B.X-TP.BEK.S07.A.A-TP.BEK.S07.A.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 94477,
+  "sha256": "4646256f2ae4f00aa455e8e11474e7351cdee8d96b45083615d71e5f2d3255fb",
+  "an": "2026-10-02T10:46:00+00:00",
+  "not": "TP.BEK.S06.B.M,TP.BEK.S06.B.S,TP.BEK.S06.B.U,TP.BEK.S06.B.X,TP.BEK.S07.A.A,TP.BEK.S07.A.B"
+ },
+ "evds/seri/bie_urbek_055.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S07.A.D-TP.BEK.S07.A.K-TP.BEK.S07.A.M-TP.BEK.S07.A.S-TP.BEK.S07.A.U-TP.BEK.S07.A.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92364,
+  "sha256": "20753c3ede25d9d71440baa7cd15e0cf1a92b3cd0437491067521a265cae208c",
+  "an": "2026-10-02T10:46:02+00:00",
+  "not": "TP.BEK.S07.A.D,TP.BEK.S07.A.K,TP.BEK.S07.A.M,TP.BEK.S07.A.S,TP.BEK.S07.A.U,TP.BEK.S07.A.X"
+ },
+ "evds/seri/bie_urbek_056.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S07.B.A-TP.BEK.S07.B.B-TP.BEK.S07.B.D-TP.BEK.S07.B.K-TP.BEK.S07.B.M-TP.BEK.S07.B.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 92155,
+  "sha256": "83bb6b6d40f6645391015f186b1f39479d467118331daccc11d9992ac0207fe4",
+  "an": "2026-10-02T10:46:04+00:00",
+  "not": "TP.BEK.S07.B.A,TP.BEK.S07.B.B,TP.BEK.S07.B.D,TP.BEK.S07.B.K,TP.BEK.S07.B.M,TP.BEK.S07.B.S"
+ },
+ "evds/seri/bie_urbek_057.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S07.B.U-TP.BEK.S07.B.X-TP.BEK.S08.A.A-TP.BEK.S08.A.B-TP.BEK.S08.A.D-TP.BEK.S08.A.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 90548,
+  "sha256": "2ad1dc492f1497a53da6ee604fda6702e633c51dc8c62c47dfc7fc672f028699",
+  "an": "2026-10-02T10:46:06+00:00",
+  "not": "TP.BEK.S07.B.U,TP.BEK.S07.B.X,TP.BEK.S08.A.A,TP.BEK.S08.A.B,TP.BEK.S08.A.D,TP.BEK.S08.A.K"
+ },
+ "evds/seri/bie_urbek_058.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S08.A.M-TP.BEK.S08.A.S-TP.BEK.S08.A.U-TP.BEK.S08.A.X-TP.BEK.S08.B.A-TP.BEK.S08.B.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 76676,
+  "sha256": "f5173c678c90173965b4389397010771d8e893205b398f397b7fec41477121cf",
+  "an": "2026-10-02T10:46:08+00:00",
+  "not": "TP.BEK.S08.A.M,TP.BEK.S08.A.S,TP.BEK.S08.A.U,TP.BEK.S08.A.X,TP.BEK.S08.B.A,TP.BEK.S08.B.B"
+ },
+ "evds/seri/bie_urbek_059.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S08.B.D-TP.BEK.S08.B.K-TP.BEK.S08.B.M-TP.BEK.S08.B.S-TP.BEK.S08.B.U-TP.BEK.S08.B.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 74730,
+  "sha256": "d7f063723d462fc05bfb89ed4400f0e105af05b78562e1001ff8b2c26d03b32e",
+  "an": "2026-10-02T10:46:10+00:00",
+  "not": "TP.BEK.S08.B.D,TP.BEK.S08.B.K,TP.BEK.S08.B.M,TP.BEK.S08.B.S,TP.BEK.S08.B.U,TP.BEK.S08.B.X"
+ },
+ "evds/seri/bie_urbek_060.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S08.C.A-TP.BEK.S08.C.B-TP.BEK.S08.C.D-TP.BEK.S08.C.K-TP.BEK.S08.C.M-TP.BEK.S08.C.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 74716,
+  "sha256": "151faf82569a3ae65a08a677a789f274a214af7b5acd0e224f7e91f6437126dc",
+  "an": "2026-10-02T10:46:11+00:00",
+  "not": "TP.BEK.S08.C.A,TP.BEK.S08.C.B,TP.BEK.S08.C.D,TP.BEK.S08.C.K,TP.BEK.S08.C.M,TP.BEK.S08.C.S"
+ },
+ "evds/seri/bie_urbek_061.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEK.S08.C.U-TP.BEK.S08.C.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 39819,
+  "sha256": "58c42b166222e1653b42c1ea94a8921cc90371d415f311fc04b114973caef3ee",
+  "an": "2026-10-02T10:46:13+00:00",
+  "not": "TP.BEK.S08.C.U,TP.BEK.S08.C.X"
+ },
+ "evds/seri/bie_urbeka_000.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S01.A.A-TP.BEKA.S01.A.B-TP.BEKA.S01.A.D-TP.BEKA.S01.A.K-TP.BEKA.S01.A.M-TP.BEKA.S01.A.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 123958,
+  "sha256": "64530d00057411be5f92033a1ee4f1c6676680df39e3eb94b40d9978ca93e77c",
+  "an": "2026-10-02T10:47:37+00:00",
+  "not": "TP.BEKA.S01.A.A,TP.BEKA.S01.A.B,TP.BEKA.S01.A.D,TP.BEKA.S01.A.K,TP.BEKA.S01.A.M,TP.BEKA.S01.A.S"
+ },
+ "evds/seri/bie_urbeka_001.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S01.A.U-TP.BEKA.S01.A.X-TP.BEKA.S01.B.A-TP.BEKA.S01.B.B-TP.BEKA.S01.B.D-TP.BEKA.S01.B.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 120618,
+  "sha256": "46b96957beeee9436d98910bae7985a63fa9a132cfe92f0d6a9dd64721dddda2",
+  "an": "2026-10-02T10:47:38+00:00",
+  "not": "TP.BEKA.S01.A.U,TP.BEKA.S01.A.X,TP.BEKA.S01.B.A,TP.BEKA.S01.B.B,TP.BEKA.S01.B.D,TP.BEKA.S01.B.K"
+ },
+ "evds/seri/bie_urbeka_002.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S01.B.M-TP.BEKA.S01.B.S-TP.BEKA.S01.B.U-TP.BEKA.S01.B.X-TP.BEKA.S01.C.A-TP.BEKA.S01.C.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 120433,
+  "sha256": "f57d657fac35b6034c8c968dc22a317f7d4237c3bbe6d8b1af65df7f6b21bc6a",
+  "an": "2026-10-02T10:47:41+00:00",
+  "not": "TP.BEKA.S01.B.M,TP.BEKA.S01.B.S,TP.BEKA.S01.B.U,TP.BEKA.S01.B.X,TP.BEKA.S01.C.A,TP.BEKA.S01.C.B"
+ },
+ "evds/seri/bie_urbeka_003.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S01.C.D-TP.BEKA.S01.C.K-TP.BEKA.S01.C.M-TP.BEKA.S01.C.S-TP.BEKA.S01.C.U-TP.BEKA.S01.C.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 124245,
+  "sha256": "fd777509f637009d6201c3c981b4bc0bd940d62e3c9a5ba824301377cad94f41",
+  "an": "2026-10-02T10:47:42+00:00",
+  "not": "TP.BEKA.S01.C.D,TP.BEKA.S01.C.K,TP.BEKA.S01.C.M,TP.BEKA.S01.C.S,TP.BEKA.S01.C.U,TP.BEKA.S01.C.X"
+ },
+ "evds/seri/bie_urbeka_004.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S01.D.A-TP.BEKA.S01.D.B-TP.BEKA.S01.D.D-TP.BEKA.S01.D.K-TP.BEKA.S01.D.M-TP.BEKA.S01.D.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 124404,
+  "sha256": "50175cb0c416123faa6a9fea69befccab831c7e2f4865ee766009f8dafa08b40",
+  "an": "2026-10-02T10:47:44+00:00",
+  "not": "TP.BEKA.S01.D.A,TP.BEKA.S01.D.B,TP.BEKA.S01.D.D,TP.BEKA.S01.D.K,TP.BEKA.S01.D.M,TP.BEKA.S01.D.S"
+ },
+ "evds/seri/bie_urbeka_005.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S01.D.U-TP.BEKA.S01.D.X-TP.BEKA.S01.E.A-TP.BEKA.S01.E.B-TP.BEKA.S01.E.D-TP.BEKA.S01.E.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 124614,
+  "sha256": "1e01f77728317b3d0bdfb8855c1b93f44d89993de5bcbe8e71ef28d68ccb0069",
+  "an": "2026-10-02T10:47:46+00:00",
+  "not": "TP.BEKA.S01.D.U,TP.BEKA.S01.D.X,TP.BEKA.S01.E.A,TP.BEKA.S01.E.B,TP.BEKA.S01.E.D,TP.BEKA.S01.E.K"
+ },
+ "evds/seri/bie_urbeka_006.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S01.E.M-TP.BEKA.S01.E.S-TP.BEKA.S01.E.U-TP.BEKA.S01.E.X-TP.BEKA.S01.F.A-TP.BEKA.S01.F.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 122567,
+  "sha256": "d73806cbf3a31dd45243dc297511ad73c9fe98105d653702cc16030e0b323ac4",
+  "an": "2026-10-02T10:47:48+00:00",
+  "not": "TP.BEKA.S01.E.M,TP.BEKA.S01.E.S,TP.BEKA.S01.E.U,TP.BEKA.S01.E.X,TP.BEKA.S01.F.A,TP.BEKA.S01.F.B"
+ },
+ "evds/seri/bie_urbeka_007.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S01.F.D-TP.BEKA.S01.F.K-TP.BEKA.S01.F.M-TP.BEKA.S01.F.S-TP.BEKA.S01.F.U-TP.BEKA.S01.F.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 118638,
+  "sha256": "099f0c536c0b63012233890c044b3b2bed3a6cc226cd8fb5cd04a2086aacc76d",
+  "an": "2026-10-02T10:47:50+00:00",
+  "not": "TP.BEKA.S01.F.D,TP.BEKA.S01.F.K,TP.BEKA.S01.F.M,TP.BEKA.S01.F.S,TP.BEKA.S01.F.U,TP.BEKA.S01.F.X"
+ },
+ "evds/seri/bie_urbeka_008.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S02.A.A-TP.BEKA.S02.A.B-TP.BEKA.S02.A.D-TP.BEKA.S02.A.K-TP.BEKA.S02.A.M-TP.BEKA.S02.A.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 84076,
+  "sha256": "56bc8a1dfc622f9ea1ebac40fc36579cfeda512b44914776794281d66194059e",
+  "an": "2026-10-02T10:47:52+00:00",
+  "not": "TP.BEKA.S02.A.A,TP.BEKA.S02.A.B,TP.BEKA.S02.A.D,TP.BEKA.S02.A.K,TP.BEKA.S02.A.M,TP.BEKA.S02.A.S"
+ },
+ "evds/seri/bie_urbeka_009.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S02.A.U-TP.BEKA.S02.A.X-TP.BEKA.S02.B.A-TP.BEKA.S02.B.B-TP.BEKA.S02.B.D-TP.BEKA.S02.B.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 84177,
+  "sha256": "1bb8ca59f66bd830a07741f1d7b21aa2f5fb3109783f192871e8ea3c23783363",
+  "an": "2026-10-02T10:47:54+00:00",
+  "not": "TP.BEKA.S02.A.U,TP.BEKA.S02.A.X,TP.BEKA.S02.B.A,TP.BEKA.S02.B.B,TP.BEKA.S02.B.D,TP.BEKA.S02.B.K"
+ },
+ "evds/seri/bie_urbeka_010.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S02.B.M-TP.BEKA.S02.B.S-TP.BEKA.S02.B.U-TP.BEKA.S02.B.X-TP.BEKA.S02.C.A-TP.BEKA.S02.C.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 117418,
+  "sha256": "bb77cf90dc67ab156b5a4b3c4454342a4d7d7073c7e7cc94075dd2e0f8e035c7",
+  "an": "2026-10-02T10:47:55+00:00",
+  "not": "TP.BEKA.S02.B.M,TP.BEKA.S02.B.S,TP.BEKA.S02.B.U,TP.BEKA.S02.B.X,TP.BEKA.S02.C.A,TP.BEKA.S02.C.B"
+ },
+ "evds/seri/bie_urbeka_011.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S02.C.D-TP.BEKA.S02.C.K-TP.BEKA.S02.C.M-TP.BEKA.S02.C.S-TP.BEKA.S02.C.U-TP.BEKA.S02.C.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 118963,
+  "sha256": "e0c395c5b800611ee905d6f1c4b1dee28407883c184487fbb2b28d7682aba9e6",
+  "an": "2026-10-02T10:47:57+00:00",
+  "not": "TP.BEKA.S02.C.D,TP.BEKA.S02.C.K,TP.BEKA.S02.C.M,TP.BEKA.S02.C.S,TP.BEKA.S02.C.U,TP.BEKA.S02.C.X"
+ },
+ "evds/seri/bie_urbeka_012.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S02.D.A-TP.BEKA.S02.D.B-TP.BEKA.S02.D.D-TP.BEKA.S02.D.K-TP.BEKA.S02.D.M-TP.BEKA.S02.D.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 118944,
+  "sha256": "070c008b72afdb8ac6795fddbd7e68a6c2a9351476af060980d08ffce8401931",
+  "an": "2026-10-02T10:48:00+00:00",
+  "not": "TP.BEKA.S02.D.A,TP.BEKA.S02.D.B,TP.BEKA.S02.D.D,TP.BEKA.S02.D.K,TP.BEKA.S02.D.M,TP.BEKA.S02.D.S"
+ },
+ "evds/seri/bie_urbeka_013.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S02.D.U-TP.BEKA.S02.D.X-TP.BEKA.S02.E.A-TP.BEKA.S02.E.B-TP.BEKA.S02.E.D-TP.BEKA.S02.E.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 117613,
+  "sha256": "c83c94b241c4d30badeac6ef9aa7f32fc713f31c4e6de5d2aa69fed000b11088",
+  "an": "2026-10-02T10:48:02+00:00",
+  "not": "TP.BEKA.S02.D.U,TP.BEKA.S02.D.X,TP.BEKA.S02.E.A,TP.BEKA.S02.E.B,TP.BEKA.S02.E.D,TP.BEKA.S02.E.K"
+ },
+ "evds/seri/bie_urbeka_014.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S02.E.M-TP.BEKA.S02.E.S-TP.BEKA.S02.E.U-TP.BEKA.S02.E.X-TP.BEKA.S02.F.A-TP.BEKA.S02.F.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 117559,
+  "sha256": "32d83af6b79a31d6874a87ca993d0f6ac41af429081d350d66933b7787d48c1f",
+  "an": "2026-10-02T10:48:04+00:00",
+  "not": "TP.BEKA.S02.E.M,TP.BEKA.S02.E.S,TP.BEKA.S02.E.U,TP.BEKA.S02.E.X,TP.BEKA.S02.F.A,TP.BEKA.S02.F.B"
+ },
+ "evds/seri/bie_urbeka_015.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S02.F.D-TP.BEKA.S02.F.K-TP.BEKA.S02.F.M-TP.BEKA.S02.F.S-TP.BEKA.S02.F.U-TP.BEKA.S02.F.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 119048,
+  "sha256": "6f5704ce09b6d333d86f2b9e242e4ee5380ad7d84d8dc5a66dc018b31a3c3c5e",
+  "an": "2026-10-02T10:48:06+00:00",
+  "not": "TP.BEKA.S02.F.D,TP.BEKA.S02.F.K,TP.BEKA.S02.F.M,TP.BEKA.S02.F.S,TP.BEKA.S02.F.U,TP.BEKA.S02.F.X"
+ },
+ "evds/seri/bie_urbeka_016.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S03.A.A-TP.BEKA.S03.A.B-TP.BEKA.S03.A.D-TP.BEKA.S03.A.K-TP.BEKA.S03.A.M-TP.BEKA.S03.A.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 124820,
+  "sha256": "d484fa9f71554544f0e8f43463c10a5b69cb943d15328c3845ce81d99dd918d7",
+  "an": "2026-10-02T10:48:08+00:00",
+  "not": "TP.BEKA.S03.A.A,TP.BEKA.S03.A.B,TP.BEKA.S03.A.D,TP.BEKA.S03.A.K,TP.BEKA.S03.A.M,TP.BEKA.S03.A.S"
+ },
+ "evds/seri/bie_urbeka_017.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S03.A.U-TP.BEKA.S03.A.X-TP.BEKA.S03.B.A-TP.BEKA.S03.B.B-TP.BEKA.S03.B.D-TP.BEKA.S03.B.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 119535,
+  "sha256": "24f9a0a8030b18afe856166e175ad33c6508209fcfdcd82acdddda39b9225a23",
+  "an": "2026-10-02T10:48:10+00:00",
+  "not": "TP.BEKA.S03.A.U,TP.BEKA.S03.A.X,TP.BEKA.S03.B.A,TP.BEKA.S03.B.B,TP.BEKA.S03.B.D,TP.BEKA.S03.B.K"
+ },
+ "evds/seri/bie_urbeka_018.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S03.B.M-TP.BEKA.S03.B.S-TP.BEKA.S03.B.U-TP.BEKA.S03.B.X-TP.BEKA.S03.C.A-TP.BEKA.S03.C.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 107213,
+  "sha256": "698bfe44de84040d0a4ad5a57d729f20165eeb426b93b98984b4b7f868d0462c",
+  "an": "2026-10-02T10:48:12+00:00",
+  "not": "TP.BEKA.S03.B.M,TP.BEKA.S03.B.S,TP.BEKA.S03.B.U,TP.BEKA.S03.B.X,TP.BEKA.S03.C.A,TP.BEKA.S03.C.B"
+ },
+ "evds/seri/bie_urbeka_019.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S03.C.D-TP.BEKA.S03.C.K-TP.BEKA.S03.C.M-TP.BEKA.S03.C.S-TP.BEKA.S03.C.U-TP.BEKA.S03.C.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 84060,
+  "sha256": "67837dec07f18f90db9d3c840b3619ae5bf73ff2877373bf9ecc61a423150110",
+  "an": "2026-10-02T10:48:14+00:00",
+  "not": "TP.BEKA.S03.C.D,TP.BEKA.S03.C.K,TP.BEKA.S03.C.M,TP.BEKA.S03.C.S,TP.BEKA.S03.C.U,TP.BEKA.S03.C.X"
+ },
+ "evds/seri/bie_urbeka_020.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S03.D.A-TP.BEKA.S03.D.B-TP.BEKA.S03.D.D-TP.BEKA.S03.D.K-TP.BEKA.S03.D.M-TP.BEKA.S03.D.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 107178,
+  "sha256": "5a7203d0b028292a144a34986f53535e58926430fe29fdba7c0c84d75cf7a8f3",
+  "an": "2026-10-02T10:48:15+00:00",
+  "not": "TP.BEKA.S03.D.A,TP.BEKA.S03.D.B,TP.BEKA.S03.D.D,TP.BEKA.S03.D.K,TP.BEKA.S03.D.M,TP.BEKA.S03.D.S"
+ },
+ "evds/seri/bie_urbeka_021.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S03.D.U-TP.BEKA.S03.D.X-TP.BEKA.S04.A.A-TP.BEKA.S04.A.B-TP.BEKA.S04.A.D-TP.BEKA.S04.A.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 114726,
+  "sha256": "904351b8be49a23c217412b03f90ece2be8a4100b249419a0a09923119c726db",
+  "an": "2026-10-02T10:48:18+00:00",
+  "not": "TP.BEKA.S03.D.U,TP.BEKA.S03.D.X,TP.BEKA.S04.A.A,TP.BEKA.S04.A.B,TP.BEKA.S04.A.D,TP.BEKA.S04.A.K"
+ },
+ "evds/seri/bie_urbeka_022.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S04.A.M-TP.BEKA.S04.A.S-TP.BEKA.S04.A.U-TP.BEKA.S04.A.X-TP.BEKA.S04.B.A-TP.BEKA.S04.B.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 113748,
+  "sha256": "e802c7e445aebc3684bc326d9b2717335ea276c59359799d993a63679e013a0f",
+  "an": "2026-10-02T10:48:20+00:00",
+  "not": "TP.BEKA.S04.A.M,TP.BEKA.S04.A.S,TP.BEKA.S04.A.U,TP.BEKA.S04.A.X,TP.BEKA.S04.B.A,TP.BEKA.S04.B.B"
+ },
+ "evds/seri/bie_urbeka_023.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S04.B.D-TP.BEKA.S04.B.K-TP.BEKA.S04.B.M-TP.BEKA.S04.B.S-TP.BEKA.S04.B.U-TP.BEKA.S04.B.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 113738,
+  "sha256": "377e6457e53a7c784df16ebf7193b00d792e19103e4dc5e8c7640c63d7568386",
+  "an": "2026-10-02T10:48:22+00:00",
+  "not": "TP.BEKA.S04.B.D,TP.BEKA.S04.B.K,TP.BEKA.S04.B.M,TP.BEKA.S04.B.S,TP.BEKA.S04.B.U,TP.BEKA.S04.B.X"
+ },
+ "evds/seri/bie_urbeka_024.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S04.C.A-TP.BEKA.S04.C.B-TP.BEKA.S04.C.D-TP.BEKA.S04.C.K-TP.BEKA.S04.C.M-TP.BEKA.S04.C.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 112966,
+  "sha256": "a354e5ba6248e6dabc87395f15bcdc091ad326c14b4a9c34a5cee6613afbc1f6",
+  "an": "2026-10-02T10:48:24+00:00",
+  "not": "TP.BEKA.S04.C.A,TP.BEKA.S04.C.B,TP.BEKA.S04.C.D,TP.BEKA.S04.C.K,TP.BEKA.S04.C.M,TP.BEKA.S04.C.S"
+ },
+ "evds/seri/bie_urbeka_025.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S04.C.U-TP.BEKA.S04.C.X-TP.BEKA.S04.D.A-TP.BEKA.S04.D.B-TP.BEKA.S04.D.D-TP.BEKA.S04.D.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 113499,
+  "sha256": "7b46080d3262e683507ed248d37a50d803095dca500fb9ef577ec559300acf59",
+  "an": "2026-10-02T10:48:26+00:00",
+  "not": "TP.BEKA.S04.C.U,TP.BEKA.S04.C.X,TP.BEKA.S04.D.A,TP.BEKA.S04.D.B,TP.BEKA.S04.D.D,TP.BEKA.S04.D.K"
+ },
+ "evds/seri/bie_urbeka_026.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S04.D.M-TP.BEKA.S04.D.S-TP.BEKA.S04.D.U-TP.BEKA.S04.D.X-TP.BEKA.S04.E.A-TP.BEKA.S04.E.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 113521,
+  "sha256": "94cba924f705d0d3151b65973d058650aaf45af5f7e39af2dab2ef83bb50ed39",
+  "an": "2026-10-02T10:48:28+00:00",
+  "not": "TP.BEKA.S04.D.M,TP.BEKA.S04.D.S,TP.BEKA.S04.D.U,TP.BEKA.S04.D.X,TP.BEKA.S04.E.A,TP.BEKA.S04.E.B"
+ },
+ "evds/seri/bie_urbeka_027.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S04.E.D-TP.BEKA.S04.E.K-TP.BEKA.S04.E.M-TP.BEKA.S04.E.S-TP.BEKA.S04.E.U-TP.BEKA.S04.E.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 113003,
+  "sha256": "4786870216ba58d2d1e16d2981fe4c2469e54199af3fe87a53ec56ab0dbb4b91",
+  "an": "2026-10-02T10:48:30+00:00",
+  "not": "TP.BEKA.S04.E.D,TP.BEKA.S04.E.K,TP.BEKA.S04.E.M,TP.BEKA.S04.E.S,TP.BEKA.S04.E.U,TP.BEKA.S04.E.X"
+ },
+ "evds/seri/bie_urbeka_028.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S05.A.A-TP.BEKA.S05.A.B-TP.BEKA.S05.A.D-TP.BEKA.S05.A.K-TP.BEKA.S05.A.M-TP.BEKA.S05.A.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 125166,
+  "sha256": "3fd5d6baa0055b69ca12056ff7ad2df53fe05ac82a2a1bda8d832551ed2724c3",
+  "an": "2026-10-02T10:48:32+00:00",
+  "not": "TP.BEKA.S05.A.A,TP.BEKA.S05.A.B,TP.BEKA.S05.A.D,TP.BEKA.S05.A.K,TP.BEKA.S05.A.M,TP.BEKA.S05.A.S"
+ },
+ "evds/seri/bie_urbeka_029.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S05.A.U-TP.BEKA.S05.A.X-TP.BEKA.S05.B.A-TP.BEKA.S05.B.B-TP.BEKA.S05.B.D-TP.BEKA.S05.B.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 125362,
+  "sha256": "2e05ff18713a949189d2099dac8d78a884833ced7b0f4b42f2c718615b00ed98",
+  "an": "2026-10-02T10:48:34+00:00",
+  "not": "TP.BEKA.S05.A.U,TP.BEKA.S05.A.X,TP.BEKA.S05.B.A,TP.BEKA.S05.B.B,TP.BEKA.S05.B.D,TP.BEKA.S05.B.K"
+ },
+ "evds/seri/bie_urbeka_030.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S05.B.M-TP.BEKA.S05.B.S-TP.BEKA.S05.B.U-TP.BEKA.S05.B.X-TP.BEKA.S05.C.A-TP.BEKA.S05.C.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 122959,
+  "sha256": "8e8ebef533b8360038166531f6a5e4c62b2e20dc581a5d6152b798b57a1ff031",
+  "an": "2026-10-02T10:48:36+00:00",
+  "not": "TP.BEKA.S05.B.M,TP.BEKA.S05.B.S,TP.BEKA.S05.B.U,TP.BEKA.S05.B.X,TP.BEKA.S05.C.A,TP.BEKA.S05.C.B"
+ },
+ "evds/seri/bie_urbeka_031.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S05.C.D-TP.BEKA.S05.C.K-TP.BEKA.S05.C.M-TP.BEKA.S05.C.S-TP.BEKA.S05.C.U-TP.BEKA.S05.C.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 118640,
+  "sha256": "84f94eefb594fabfa9cdc59ffceaa2809f409017ed89f903ba3e52f3cd752651",
+  "an": "2026-10-02T10:48:38+00:00",
+  "not": "TP.BEKA.S05.C.D,TP.BEKA.S05.C.K,TP.BEKA.S05.C.M,TP.BEKA.S05.C.S,TP.BEKA.S05.C.U,TP.BEKA.S05.C.X"
+ },
+ "evds/seri/bie_urbeka_032.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S06.A.A-TP.BEKA.S06.A.B-TP.BEKA.S06.A.D-TP.BEKA.S06.A.K-TP.BEKA.S06.A.M-TP.BEKA.S06.A.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 130978,
+  "sha256": "76a5a6220cb5939aad9fff76c7d724f1da188024d59b7561a7410d04871ebf92",
+  "an": "2026-10-02T10:48:40+00:00",
+  "not": "TP.BEKA.S06.A.A,TP.BEKA.S06.A.B,TP.BEKA.S06.A.D,TP.BEKA.S06.A.K,TP.BEKA.S06.A.M,TP.BEKA.S06.A.S"
+ },
+ "evds/seri/bie_urbeka_033.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S06.A.U-TP.BEKA.S06.A.X-TP.BEKA.S06.B.A-TP.BEKA.S06.B.B-TP.BEKA.S06.B.D-TP.BEKA.S06.B.K&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 118083,
+  "sha256": "1334879692fb853ea798c351326a787ea334d56453f58119d016d30f212e3156",
+  "an": "2026-10-02T10:48:42+00:00",
+  "not": "TP.BEKA.S06.A.U,TP.BEKA.S06.A.X,TP.BEKA.S06.B.A,TP.BEKA.S06.B.B,TP.BEKA.S06.B.D,TP.BEKA.S06.B.K"
+ },
+ "evds/seri/bie_urbeka_034.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S06.B.M-TP.BEKA.S06.B.S-TP.BEKA.S06.B.U-TP.BEKA.S06.B.X-TP.BEKA.S07.A.A-TP.BEKA.S07.A.B&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 117303,
+  "sha256": "d95060e98d4648d4423c47247ec91486dc6364674082beb4d817e10efa08a2c5",
+  "an": "2026-10-02T10:48:44+00:00",
+  "not": "TP.BEKA.S06.B.M,TP.BEKA.S06.B.S,TP.BEKA.S06.B.U,TP.BEKA.S06.B.X,TP.BEKA.S07.A.A,TP.BEKA.S07.A.B"
+ },
+ "evds/seri/bie_urbeka_035.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S07.A.D-TP.BEKA.S07.A.K-TP.BEKA.S07.A.M-TP.BEKA.S07.A.S-TP.BEKA.S07.A.U-TP.BEKA.S07.A.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 124286,
+  "sha256": "a01bc2651442d3b440d3e7da1376377d60135df6fff5559d2bf0d76dbfbd0650",
+  "an": "2026-10-02T10:48:46+00:00",
+  "not": "TP.BEKA.S07.A.D,TP.BEKA.S07.A.K,TP.BEKA.S07.A.M,TP.BEKA.S07.A.S,TP.BEKA.S07.A.U,TP.BEKA.S07.A.X"
+ },
+ "evds/seri/bie_urbeka_036.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S07.B.A-TP.BEKA.S07.B.B-TP.BEKA.S07.B.D-TP.BEKA.S07.B.K-TP.BEKA.S07.B.M-TP.BEKA.S07.B.S&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 118504,
+  "sha256": "055d42b6616c1efc5f083529fd654200544c65e73dd772be19e92a605d0da59f",
+  "an": "2026-10-02T10:48:48+00:00",
+  "not": "TP.BEKA.S07.B.A,TP.BEKA.S07.B.B,TP.BEKA.S07.B.D,TP.BEKA.S07.B.K,TP.BEKA.S07.B.M,TP.BEKA.S07.B.S"
+ },
+ "evds/seri/bie_urbeka_037.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.BEKA.S07.B.U-TP.BEKA.S07.B.X&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 62672,
+  "sha256": "a86164c7246666c5b41b208d570ecea00a8956338c7743a4e942e1a1f0e4fe66",
+  "an": "2026-10-02T10:48:50+00:00",
+  "not": "TP.BEKA.S07.B.U,TP.BEKA.S07.B.X"
+ },
+ "evds/seri/bie_uypucay_000.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K1-TP.UYPUCAY.K2-TP.UYPUCAY.K3-TP.UYPUCAY.K4-TP.UYPUCAY.K5-TP.UYPUCAY.K6&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 33685,
+  "sha256": "eef81eab210538c9f7713ab09e27ec61159dc884a10410419d0bc5f039ba7ae4",
+  "an": "2026-10-02T10:48:51+00:00",
+  "not": "TP.UYPUCAY.K1,TP.UYPUCAY.K2,TP.UYPUCAY.K3,TP.UYPUCAY.K4,TP.UYPUCAY.K5,TP.UYPUCAY.K6"
+ },
+ "evds/seri/bie_uypucay_001.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K7-TP.UYPUCAY.K8-TP.UYPUCAY.K9-TP.UYPUCAY.K10-TP.UYPUCAY.K11-TP.UYPUCAY.K12&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 32711,
+  "sha256": "21299fd723f5dd77752828d9996db7788f472ee0047522c7b73ddea280b00320",
+  "an": "2026-10-02T10:48:52+00:00",
+  "not": "TP.UYPUCAY.K7,TP.UYPUCAY.K8,TP.UYPUCAY.K9,TP.UYPUCAY.K10,TP.UYPUCAY.K11,TP.UYPUCAY.K12"
+ },
+ "evds/seri/bie_uypucay_002.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K13-TP.UYPUCAY.K14-TP.UYPUCAY.K88-TP.UYPUCAY.K15-TP.UYPUCAY.K16-TP.UYPUCAY.K17&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 33898,
+  "sha256": "5337970e8c56695d41866cce4980500f09d081ce4c1849b197c42262448ccad8",
+  "an": "2026-10-02T10:48:54+00:00",
+  "not": "TP.UYPUCAY.K13,TP.UYPUCAY.K14,TP.UYPUCAY.K88,TP.UYPUCAY.K15,TP.UYPUCAY.K16,TP.UYPUCAY.K17"
+ },
+ "evds/seri/bie_uypucay_003.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K18-TP.UYPUCAY.K19-TP.UYPUCAY.K20-TP.UYPUCAY.K21-TP.UYPUCAY.K22-TP.UYPUCAY.K23&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 34068,
+  "sha256": "bac00ddc375b184f45d6cd6df0735ea9c6817d7705f06c75dc9fa567127d1ab6",
+  "an": "2026-10-02T10:48:55+00:00",
+  "not": "TP.UYPUCAY.K18,TP.UYPUCAY.K19,TP.UYPUCAY.K20,TP.UYPUCAY.K21,TP.UYPUCAY.K22,TP.UYPUCAY.K23"
+ },
+ "evds/seri/bie_uypucay_004.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K24-TP.UYPUCAY.K25-TP.UYPUCAY.K26-TP.UYPUCAY.K27-TP.UYPUCAY.K28-TP.UYPUCAY.K29&startDate=01-01-1990&endDate=02-10-2026&type=json",
+  "durum": 200,
+  "bayt": 34063,
+  "sha256": "99dfe113fbf9ebfd00226b1330d528ab6a881f0603e5784ccae7ca3fba8816a3",
+  "an": "2026-10-02T10:48:56+00:00",
+  "not": "TP.UYPUCAY.K24,TP.UYPUCAY.K25,TP.UYPUCAY.K26,TP.UYPUCAY.K27,TP.UYPUCAY.K28,TP.UYPUCAY.K29"
+ },
+ "evds/serielist/bie_bekodtufe.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_bekodtufe",
+  "durum": 200,
+  "bayt": 219005,
+  "sha256": "bbb5c22e6b72e5ac0197c0b9951bc02be16c24cf8d2eb5165727553ea2d91930",
+  "an": "2026-10-02T10:43:14+00:00",
+  "not": "pka"
+ },
+ "evds/serielist/bie_bekodtufeyeni.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_bekodtufeyeni",
+  "durum": 200,
+  "bayt": 140265,
+  "sha256": "7c09d67eac0610aaf4045954a983b0f8180a5b98ab791455f81566be00c85be8",
+  "an": "2026-10-02T10:43:12+00:00",
+  "not": "pka"
+ },
+ "evds/serielist/bie_dtihfb10.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtihfb10",
+  "durum": 200,
+  "bayt": 15566,
+  "sha256": "84d3c957eba0a66967d893f3a330a9e44f806a5540269ea23e0df05fa2a7160f",
+  "an": "2026-10-02T10:43:51+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtihfby.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtihfby",
+  "durum": 200,
+  "bayt": 13572,
+  "sha256": "7cb55f812266769388379aa5f49a0f2eeaefcab1acfed7658892d66ec1940f49",
+  "an": "2026-10-02T10:44:12+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtihfiy.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtihfiy",
+  "durum": 200,
+  "bayt": 20213,
+  "sha256": "4d76fa52ac94062d8a437c71673df1491b65193468f2562c0e321903e80ddc66",
+  "an": "2026-10-02T10:43:58+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtihmb10.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtihmb10",
+  "durum": 200,
+  "bayt": 15557,
+  "sha256": "2ef4ae18739f43902a4afa24d7d2eedba0bd8dd9862c3efe08c7b1759d611374",
+  "an": "2026-10-02T10:43:51+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtihmby.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtihmby",
+  "durum": 200,
+  "bayt": 13382,
+  "sha256": "018fb7b24ede20bc58597429b40c4e117e992ec268dca8366291a29540253ae4",
+  "an": "2026-10-02T10:43:52+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtihmiy.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtihmiy",
+  "durum": 200,
+  "bayt": 19936,
+  "sha256": "41ad19af1e1df4083d7b1d81f6c50a0448b23b91977c2f3725419736e032bf18",
+  "an": "2026-10-02T10:44:01+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtihrfiy.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtihrfiy",
+  "durum": 200,
+  "bayt": 22844,
+  "sha256": "f6cc4b42a8eb2f1acae5850af6c674b0ad8949e4450d1b98cdbbdffd5c571050",
+  "an": "2026-10-02T10:44:04+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtihrfyb.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtihrfyb",
+  "durum": 200,
+  "bayt": 16717,
+  "sha256": "2312c78da7e2cc10c2301e70bd399052c685217c79ffec77c93528e7978420d5",
+  "an": "2026-10-02T10:44:02+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtihrfyp.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtihrfyp",
+  "durum": 200,
+  "bayt": 9316,
+  "sha256": "704240b450151f4459b7366c7d7108ba1318c3216fa099dbd22b0b333e44b3e4",
+  "an": "2026-10-02T10:44:00+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtihrmik.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtihrmik",
+  "durum": 200,
+  "bayt": 22878,
+  "sha256": "3b127d319571f394473a3ad1657577fc4c6b7ac6ac6d90747c30a6d6a6952418",
+  "an": "2026-10-02T10:44:09+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtihrmkb.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtihrmkb",
+  "durum": 200,
+  "bayt": 16765,
+  "sha256": "ea3323447015416a52ba4b9a393ae3ec64bc3752f228484f5f2873f23ece865f",
+  "an": "2026-10-02T10:43:56+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtihrmkp.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtihrmkp",
+  "durum": 200,
+  "bayt": 9330,
+  "sha256": "22b218474bbb693e57334f7321b96a9413ab380d5b99f025f38237d40c53896f",
+  "an": "2026-10-02T10:43:54+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtitfb10.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtitfb10",
+  "durum": 200,
+  "bayt": 16379,
+  "sha256": "a18be629a1b0b52792de97d88ba1f010fa41f5eb961bb9917228ff0de146a630",
+  "an": "2026-10-02T10:43:49+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtitfby.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtitfby",
+  "durum": 200,
+  "bayt": 15011,
+  "sha256": "fd163314c30f9136251d3a3e7304cccf8fbef26b723e48dd0b4abb278827fd12",
+  "an": "2026-10-02T10:43:53+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtitfiy.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtitfiy",
+  "durum": 200,
+  "bayt": 22426,
+  "sha256": "8b2d65a1d87924bb78887b930f0cb628d76de7cd2e961dd5e7523c9fe46b1ef7",
+  "an": "2026-10-02T10:44:03+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtithfiy.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtithfiy",
+  "durum": 200,
+  "bayt": 22827,
+  "sha256": "103d21882a5cf61b809dd4c255e381c7902574505fc34ad1b8c9cead45882766",
+  "an": "2026-10-02T10:44:05+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtithfyb.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtithfyb",
+  "durum": 200,
+  "bayt": 16741,
+  "sha256": "efc4512d2d0ba1e26b11aa5f5fa6553ba96589f5dfb45282d513ca4e08cee2e5",
+  "an": "2026-10-02T10:43:59+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtithfyp.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtithfyp",
+  "durum": 200,
+  "bayt": 9318,
+  "sha256": "ef266d38f912fb4012f39fbdb78d38bb7bff4925264d4eb39f3b929cf0116630",
+  "an": "2026-10-02T10:43:57+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtithmik.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtithmik",
+  "durum": 200,
+  "bayt": 22877,
+  "sha256": "0e45aff753a87cee3f82dc720d714f4c5dfb0ab3b72ca090b798124b963d8a9c",
+  "an": "2026-10-02T10:44:08+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtithmkb.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtithmkb",
+  "durum": 200,
+  "bayt": 16789,
+  "sha256": "677f68530ae7f48e87aa213602237984b384b89d6adec44441d55353eb88df14",
+  "an": "2026-10-02T10:44:07+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtithmkp.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtithmkp",
+  "durum": 200,
+  "bayt": 9346,
+  "sha256": "f991c768d14add9a472a08dcf68243e9cd62788f0f0575aad292c3d879ea4811",
+  "an": "2026-10-02T10:44:11+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtitmb10.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtitmb10",
+  "durum": 200,
+  "bayt": 16369,
+  "sha256": "446214fac497b48c345e6a546513bdf3f2b22bdab0964ec612b7b141af412f34",
+  "an": "2026-10-02T10:43:50+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtitmby.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtitmby",
+  "durum": 200,
+  "bayt": 14801,
+  "sha256": "8cf319074e030344ad10bd765db56a0f1542f3f83c647a1a3cb93541227086a3",
+  "an": "2026-10-02T10:43:55+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_dtitmiy.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_dtitmiy",
+  "durum": 200,
+  "bayt": 22107,
+  "sha256": "b541e38d03b0d5a0b2c48b080e12376ac6cdf356efd9c43533c70b9dbc796299",
+  "an": "2026-10-02T10:44:10+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_gsyhmevset.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_gsyhmevset",
+  "durum": 200,
+  "bayt": 10505,
+  "sha256": "671720c8d0f7d17eaf2e486c865b1d0317538a61295cf9f9e8e3a540eaf35095",
+  "an": "2026-10-02T10:44:13+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_gsyhnihayil.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_gsyhnihayil",
+  "durum": 200,
+  "bayt": 17968,
+  "sha256": "36095bdd1bda6f041a0ee8828000f1d700a701fcb1ffb741874638458bfe7856",
+  "an": "2026-10-02T10:44:16+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_gsyzhend.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_gsyzhend",
+  "durum": 200,
+  "bayt": 10666,
+  "sha256": "df72ee5cf24326659e08e04ec73a7bc8ff1d7d35b2442c5145e53a9bd4caa66e",
+  "an": "2026-10-02T10:44:15+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_gsyzhtaken.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_gsyzhtaken",
+  "durum": 200,
+  "bayt": 10490,
+  "sha256": "281955734e966168d44b826abef93e09cf751e869023bb8abd988cd168eedf19",
+  "an": "2026-10-02T10:44:14+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_imfiip.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_imfiip",
+  "durum": 200,
+  "bayt": 138841,
+  "sha256": "361528004fb2a67565d3fbe2a7857f4f95b4b14fa60f9d46c2f989ab9b50c9a5",
+  "an": "2026-10-02T10:43:19+00:00",
+  "not": "uyp"
+ },
+ "evds/serielist/bie_kalanvade.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_kalanvade",
+  "durum": 200,
+  "bayt": 36053,
+  "sha256": "2de2c41916f5e24d80f44025f26c1b530ee6d4df4aeddd7f53da0c174c7f3308",
+  "an": "2026-10-02T10:43:26+00:00",
+  "not": "kisa_vade_borc"
+ },
+ "evds/serielist/bie_kalvadbg.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_kalvadbg",
+  "durum": 200,
+  "bayt": 30803,
+  "sha256": "2e824de498548951739a1e4802a0f77fb2ec4d3b32cbe300e5ad780a004d0d03",
+  "an": "2026-10-02T10:43:27+00:00",
+  "not": "kisa_vade_borc"
+ },
+ "evds/serielist/bie_kisavadeborc.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_kisavadeborc",
+  "durum": 200,
+  "bayt": 30111,
+  "sha256": "f6806d637cc3f7b8b0247ad57d6fdf5fe02305187e6ac376054016e2b2d7068f",
+  "an": "2026-10-02T10:43:25+00:00",
+  "not": "kisa_vade_borc"
+ },
+ "evds/serielist/bie_kisavadeborcarsiv.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_kisavadeborcarsiv",
+  "durum": 200,
+  "bayt": 28171,
+  "sha256": "359496820f7ea61f71eb06284ad9cf6fa65c67d65f051ac69448ae7af4ad0901",
+  "an": "2026-10-02T10:43:35+00:00",
+  "not": "kisa_vade_borc"
+ },
+ "evds/serielist/bie_kvadealacakli.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_kvadealacakli",
+  "durum": 200,
+  "bayt": 10071,
+  "sha256": "e530a7636888d4335f6e6c160cb8a26ac326fddb833def299b83b1f8311d7704",
+  "an": "2026-10-02T10:43:29+00:00",
+  "not": "kisa_vade_borc"
+ },
+ "evds/serielist/bie_kvadedovkomp.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_kvadedovkomp",
+  "durum": 200,
+  "bayt": 21515,
+  "sha256": "0f4f16c3bfbd6082c3758ed19a2b1b17acdaad6fcf8bbc7d5e2da153474fa426",
+  "an": "2026-10-02T10:43:28+00:00",
+  "not": "kisa_vade_borc"
+ },
+ "evds/serielist/bie_kvdbs.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_kvdbs",
+  "durum": 200,
+  "bayt": 31216,
+  "sha256": "164edf650ef79fc26fdf268819f03a99f4deafbc5acbf678312042ba82b83c1f",
+  "an": "2026-10-02T10:43:30+00:00",
+  "not": "kisa_vade_borc"
+ },
+ "evds/serielist/bie_kvdbsarsiv.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_kvdbsarsiv",
+  "durum": 200,
+  "bayt": 29550,
+  "sha256": "13e04374e62a6ede0c19610019b6adf66750c1a257971f3ac95a7b679a5b5f77",
+  "an": "2026-10-02T10:43:36+00:00",
+  "not": "kisa_vade_borc"
+ },
+ "evds/serielist/bie_pkauo.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_pkauo",
+  "durum": 200,
+  "bayt": 33891,
+  "sha256": "2d3144af16e9b3939b5708b5546d6604a158d4700c5c02a43b0af952c55df468",
+  "an": "2026-10-02T10:43:07+00:00",
+  "not": "pka"
+ },
+ "evds/serielist/bie_pyamevd.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_pyamevd",
+  "durum": 200,
+  "bayt": 12249,
+  "sha256": "e317efab87fcc4ce4d2c94c1ed33ad801c61595fdbdc02bc0f79a851c989b0b2",
+  "an": "2026-10-02T10:43:20+00:00",
+  "not": "uyp"
+ },
+ "evds/serielist/bie_pyascog.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_pyascog",
+  "durum": 200,
+  "bayt": 24223,
+  "sha256": "f238a5589b44cd533f4e325d8e90de165a102f86a63511673edf83a31d16a057",
+  "an": "2026-10-02T10:43:21+00:00",
+  "not": "uyp"
+ },
+ "evds/serielist/bie_pyasens.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_pyasens",
+  "durum": 200,
+  "bayt": 32996,
+  "sha256": "41e27649bd78449148a731d020fbc18809f3c1ea93ba4ed114d8c82dceb640ba",
+  "an": "2026-10-02T10:43:22+00:00",
+  "not": "uyp"
+ },
+ "evds/serielist/bie_urbek.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_urbek",
+  "durum": 200,
+  "bayt": 528127,
+  "sha256": "115d0d15adc84d0ce6b246367c250d6055c05d29a0c28ead81f39fe38a47e2a1",
+  "an": "2026-10-02T10:43:10+00:00",
+  "not": "pka"
+ },
+ "evds/serielist/bie_urbeka.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_urbeka",
+  "durum": 200,
+  "bayt": 186490,
+  "sha256": "6bcea9b9572ea24c2d68d7315abb95dd7ed224e705ce8e5228253085aee45ea6",
+  "an": "2026-10-02T10:43:15+00:00",
+  "not": "pka"
+ },
+ "evds/serielist/bie_uretmtazincr.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_uretmtazincr",
+  "durum": 200,
+  "bayt": 17211,
+  "sha256": "b2135120e474a6cbceaae058b3f5857ae0b9e690f15e73a2511fc052b23db86c",
+  "an": "2026-10-02T10:44:14+00:00",
+  "not": "dis_ticaret_endeks"
+ },
+ "evds/serielist/bie_uypucay.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_uypucay",
+  "durum": 200,
+  "bayt": 148832,
+  "sha256": "c0386c3ab59b9d246a93b9aeb2cf727b6990665705b3ac277f4a0ce5e12d92a1",
+  "an": "2026-10-02T10:43:18+00:00",
+  "not": "uyp"
+ },
+ "evds/serielist/bie_uypucayarsiv.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_uypucayarsiv",
+  "durum": 200,
+  "bayt": 125738,
+  "sha256": "76a8aaa46236c57c72d77ceae8a59fac262787c0a1db62be02e96c0830756a21",
+  "an": "2026-10-02T10:43:24+00:00",
+  "not": "uyp"
+ },
+ "evds/serielist/bie_yydv.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_yydv",
+  "durum": 200,
+  "bayt": 344202,
+  "sha256": "18b506ab4f2725e63788963c7380c61afe85ebc6e440b96464f36ee687cf627e",
+  "an": "2026-10-02T10:43:34+00:00",
+  "not": "kisa_vade_borc"
+ },
+ "evds/serielist/bie_yydvusd.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_yydvusd",
+  "durum": 200,
+  "bayt": 347241,
+  "sha256": "b366002df5528933c5c43f454a03a1bf4f184d74e4f09cc99c065cb942bad2fb",
+  "an": "2026-10-02T10:43:32+00:00",
+  "not": "kisa_vade_borc"
+ },
+ "evds/serielist/bie_yyoibsvt.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_yyoibsvt",
+  "durum": 200,
+  "bayt": 1523863,
+  "sha256": "0c45e588042100e4df85f527d9639bdcdf7f5ce22c674c0ddf6379a3adc11e47",
+  "an": "2026-10-02T10:43:48+00:00",
+  "not": "kisa_vade_borc"
+ },
+ "evds/serielist/bie_yyoibsvu.json.gz": {
+  "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/serieList/type=json&code=bie_yyoibsvu",
+  "durum": 200,
+  "bayt": 1531963,
+  "sha256": "2675824b0ef8a0ca7083e7d568f967d726ad0078e6cba1e80b7e90f3d9497d80",
+  "an": "2026-10-02T10:43:42+00:00",
+  "not": "kisa_vade_borc"
+ },
+ "fomc/fomccalendars.htm.gz": {
+  "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+  "durum": 200,
+  "bayt": 165460,
+  "sha256": "37730567673c24c862600ff347da611f959f7451450443b4182467a0f55ecd57",
+  "an": "2026-10-02T10:51:11+00:00",
+  "not": ""
+ },
+ "fomc/fomchistorical2008.htm.gz": {
+  "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2008.htm",
+  "durum": 200,
+  "bayt": 100002,
+  "sha256": "9484c1ceac2a620979870cd3af9679b1b427962d9c4e962a73c9f4ff6d14a6a9",
+  "an": "2026-10-02T10:51:11+00:00",
+  "not": ""
+ },
+ "fomc/fomchistorical2009.htm.gz": {
+  "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2009.htm",
+  "durum": 200,
+  "bayt": 98252,
+  "sha256": "35b29ea773563273c974df856de0daa29bc4b4225a446eb4e05caa932c1ca91c",
+  "an": "2026-10-02T10:51:11+00:00",
+  "not": ""
+ },
+ "fomc/fomchistorical2010.htm.gz": {
+  "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2010.htm",
+  "durum": 200,
+  "bayt": 96220,
+  "sha256": "592cce15e936e28e741bff3dc0c8f8edcb9eef8963125dcd0d998d963c2a87a7",
+  "an": "2026-10-02T10:51:11+00:00",
+  "not": ""
+ },
+ "fomc/fomchistorical2011.htm.gz": {
+  "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2011.htm",
+  "durum": 200,
+  "bayt": 98227,
+  "sha256": "4a9f881365d74641f65035cf658a1ee5f505d277700b9b0fa1b3c02ffe264a7b",
+  "an": "2026-10-02T10:51:12+00:00",
+  "not": ""
+ },
+ "fomc/fomchistorical2012.htm.gz": {
+  "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2012.htm",
+  "durum": 200,
+  "bayt": 98148,
+  "sha256": "a2a71ad512b0a985138e9d30b4b330270c37a565f57215dff6015672a27848e4",
+  "an": "2026-10-02T10:51:12+00:00",
+  "not": ""
+ },
+ "fomc/fomchistorical2013.htm.gz": {
+  "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2013.htm",
+  "durum": 200,
+  "bayt": 95809,
+  "sha256": "45f0044bb557710b6ef04e4a097473e5ea9ea080ae32002c23c72c4ff8ab13b4",
+  "an": "2026-10-02T10:51:12+00:00",
+  "not": ""
+ },
+ "fomc/fomchistorical2014.htm.gz": {
+  "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2014.htm",
+  "durum": 200,
+  "bayt": 96089,
+  "sha256": "bf8782b740d2c431a350ca6a6e97ec212fe63b9a6a1598a3ba5132522857068e",
+  "an": "2026-10-02T10:51:12+00:00",
+  "not": ""
+ },
+ "fomc/fomchistorical2015.htm.gz": {
+  "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2015.htm",
+  "durum": 200,
+  "bayt": 95241,
+  "sha256": "f3c03348e274c934f7e31f99d4d791aac1a99e7c2063fc5ae3d68dbfa822c864",
+  "an": "2026-10-02T10:51:12+00:00",
+  "not": ""
+ },
+ "fomc/fomchistorical2016.htm.gz": {
+  "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2016.htm",
+  "durum": 200,
+  "bayt": 95829,
+  "sha256": "c740a6f53a38f63964d705209ddc84b316be53b522e62e5cc71860040da2808d",
+  "an": "2026-10-02T10:51:12+00:00",
+  "not": ""
+ },
+ "fomc/fomchistorical2017.htm.gz": {
+  "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2017.htm",
+  "durum": 200,
+  "bayt": 95200,
+  "sha256": "bf9a9a3780f08e965d8d3430499b1cc628d75b24f460665c72db68f8acf9579e",
+  "an": "2026-10-02T10:51:13+00:00",
+  "not": ""
+ },
+ "fomc/fomchistorical2018.htm.gz": {
+  "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2018.htm",
+  "durum": 200,
+  "bayt": 95705,
+  "sha256": "77e30d3c1505574ea752e4e40ec7c0ccd0338a4a7a910d443d29df4c523d2f04",
+  "an": "2026-10-02T10:51:13+00:00",
+  "not": ""
+ },
+ "fomc/fomchistorical2019.htm.gz": {
+  "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2019.htm",
+  "durum": 200,
+  "bayt": 97344,
+  "sha256": "df2ebc445ae65d24201087da02068ca4396a46b441eefc228af5a0fde3acc5bc",
+  "an": "2026-10-02T10:51:13+00:00",
+  "not": ""
+ },
+ "fomc/fomchistorical2020.htm.gz": {
+  "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2020.htm",
+  "durum": 200,
+  "bayt": 98555,
+  "sha256": "2f882dd1b65ed9ee9a1c6935b74bba31764caa0db3332612e6bfff5b5c61e4af",
+  "an": "2026-10-02T10:51:13+00:00",
+  "not": ""
+ },
+ "hazine/par_1990.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1990/all?type=daily_treasury_yield_curve&field_tdr_date_value=1990&page&_format=csv",
+  "durum": 200,
+  "bayt": 14069,
+  "sha256": "d8d5e4bb7ae2f13ccf03a7f50537723a4a5a37e2ebe85da3e32f53328c411d18",
+  "an": "2026-10-02T10:52:25+00:00",
+  "not": ""
+ },
+ "hazine/par_1991.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1991/all?type=daily_treasury_yield_curve&field_tdr_date_value=1991&page&_format=csv",
+  "durum": 200,
+  "bayt": 14069,
+  "sha256": "d52d81bd96f5e02d8b7a74384d568eaafe36c2a067272e0840c5ea4022c1d4d4",
+  "an": "2026-10-02T10:52:26+00:00",
+  "not": ""
+ },
+ "hazine/par_1992.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1992/all?type=daily_treasury_yield_curve&field_tdr_date_value=1992&page&_format=csv",
+  "durum": 200,
+  "bayt": 14125,
+  "sha256": "13fb485ff7085d1c8afb70b3bb6fd7fe7c728f7b672a9c1844d7e9e6d26827f9",
+  "an": "2026-10-02T10:52:27+00:00",
+  "not": ""
+ },
+ "hazine/par_1993.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1993/all?type=daily_treasury_yield_curve&field_tdr_date_value=1993&page&_format=csv",
+  "durum": 200,
+  "bayt": 14575,
+  "sha256": "c5482e2e88fa8256eb513600c44fbcb8bd317e061a840a429676f4d1330cea3d",
+  "an": "2026-10-02T10:52:27+00:00",
+  "not": ""
+ },
+ "hazine/par_1994.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1994/all?type=daily_treasury_yield_curve&field_tdr_date_value=1994&page&_format=csv",
+  "durum": 200,
+  "bayt": 15266,
+  "sha256": "cea2fce245f7a1be83395a82c4f56e146d2074909255930226551170bf25de18",
+  "an": "2026-10-02T10:52:28+00:00",
+  "not": ""
+ },
+ "hazine/par_1995.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1995/all?type=daily_treasury_yield_curve&field_tdr_date_value=1995&page&_format=csv",
+  "durum": 200,
+  "bayt": 15327,
+  "sha256": "5815b05e0575a6220d84666346c56bc1fa39d0a4212b89bf0f50a3c09579de15",
+  "an": "2026-10-02T10:52:28+00:00",
+  "not": ""
+ },
+ "hazine/par_1996.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1996/all?type=daily_treasury_yield_curve&field_tdr_date_value=1996&page&_format=csv",
+  "durum": 200,
+  "bayt": 15449,
+  "sha256": "656992cb54c922745bb7ccf11a57a3dd5fe2f1653f7d8127d04d25f3e3aaa674",
+  "an": "2026-10-02T10:52:29+00:00",
+  "not": ""
+ },
+ "hazine/par_1997.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1997/all?type=daily_treasury_yield_curve&field_tdr_date_value=1997&page&_format=csv",
+  "durum": 200,
+  "bayt": 15327,
+  "sha256": "3653e22f12846593dc6e0d95a7518acfc2d2f6dd89ec83cc82e2ebeb4586b833",
+  "an": "2026-10-02T10:52:29+00:00",
+  "not": ""
+ },
+ "hazine/par_1998.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1998/all?type=daily_treasury_yield_curve&field_tdr_date_value=1998&page&_format=csv",
+  "durum": 200,
+  "bayt": 15327,
+  "sha256": "3861b3be824744c1c6c616224fd1b87054dfcf2e8106c7551a589b5fedeb7f4a",
+  "an": "2026-10-02T10:52:30+00:00",
+  "not": ""
+ },
+ "hazine/par_1999.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1999/all?type=daily_treasury_yield_curve&field_tdr_date_value=1999&page&_format=csv",
+  "durum": 200,
+  "bayt": 15388,
+  "sha256": "36bff57ac81eb582c68e57479c0ad4fbc4ee090e9028886d49b7f1ce434a5aea",
+  "an": "2026-10-02T10:52:30+00:00",
+  "not": ""
+ },
+ "hazine/par_2000.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2000/all?type=daily_treasury_yield_curve&field_tdr_date_value=2000&page&_format=csv",
+  "durum": 200,
+  "bayt": 15388,
+  "sha256": "a8cde4c7a757ac74f7b6257d3778db73a215483002317e19ee9e3f3c524a8a24",
+  "an": "2026-10-02T10:52:31+00:00",
+  "not": ""
+ },
+ "hazine/par_2001.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2001/all?type=daily_treasury_yield_curve&field_tdr_date_value=2001&page&_format=csv",
+  "durum": 200,
+  "bayt": 15872,
+  "sha256": "bc48181de2b452d19b159bc12354653f64ce3b119d7072dbf4aa92fa6998799c",
+  "an": "2026-10-02T10:52:31+00:00",
+  "not": ""
+ },
+ "hazine/par_2002.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2002/all?type=daily_treasury_yield_curve&field_tdr_date_value=2002&page&_format=csv",
+  "durum": 200,
+  "bayt": 15712,
+  "sha256": "33f84b7c6f50bf3ea0ca4703cb51c8d469bbb93dad92f181d42132b7e2359bf7",
+  "an": "2026-10-02T10:52:32+00:00",
+  "not": ""
+ },
+ "hazine/par_2003.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2003/all?type=daily_treasury_yield_curve&field_tdr_date_value=2003&page&_format=csv",
+  "durum": 200,
+  "bayt": 15326,
+  "sha256": "0c255188cf596e5bc42a4e00b9a60649df01fb95a58a3382d7586da83e5cc0e0",
+  "an": "2026-10-02T10:52:33+00:00",
+  "not": ""
+ },
+ "hazine/par_2004.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2004/all?type=daily_treasury_yield_curve&field_tdr_date_value=2004&page&_format=csv",
+  "durum": 200,
+  "bayt": 15326,
+  "sha256": "0f0561773c7a3220fe1eded9a7ba0645790e9239fd3cf569158171fedf2dc969",
+  "an": "2026-10-02T10:52:33+00:00",
+  "not": ""
+ },
+ "hazine/par_2005.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2005/all?type=daily_treasury_yield_curve&field_tdr_date_value=2005&page&_format=csv",
+  "durum": 200,
+  "bayt": 15326,
+  "sha256": "ecf2ab3d1ca1b6ee8e916fee90474028c2d1221b8d236131621ad58020db0552",
+  "an": "2026-10-02T10:52:34+00:00",
+  "not": ""
+ },
+ "hazine/par_2006.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2006/all?type=daily_treasury_yield_curve&field_tdr_date_value=2006&page&_format=csv",
+  "durum": 200,
+  "bayt": 16480,
+  "sha256": "cdbdcd8b32735caa453e00280232ff70c7012c055b7daf7b8cf1d9aaa8c66bfe",
+  "an": "2026-10-02T10:52:34+00:00",
+  "not": ""
+ },
+ "hazine/par_2007.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2007/all?type=daily_treasury_yield_curve&field_tdr_date_value=2007&page&_format=csv",
+  "durum": 200,
+  "bayt": 16650,
+  "sha256": "297f6be4059a605b1ec0f266eb7b8467c3d40504a0dd53341746223276e6e6d8",
+  "an": "2026-10-02T10:52:35+00:00",
+  "not": ""
+ },
+ "hazine/par_2008.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2008/all?type=daily_treasury_yield_curve&field_tdr_date_value=2008&page&_format=csv",
+  "durum": 200,
+  "bayt": 16638,
+  "sha256": "686db01584dd45f67addc243ee0c42339d491171a0e947c8f88ecac78ee0e9ea",
+  "an": "2026-10-02T10:52:35+00:00",
+  "not": ""
+ },
+ "hazine/par_2009.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2009/all?type=daily_treasury_yield_curve&field_tdr_date_value=2009&page&_format=csv",
+  "durum": 200,
+  "bayt": 16584,
+  "sha256": "3c9294cfa71136e1d5330b09a00bf996ecf86c865d593d7ee954d11984a5bdb1",
+  "an": "2026-10-02T10:52:36+00:00",
+  "not": ""
+ },
+ "hazine/par_2010.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2010/all?type=daily_treasury_yield_curve&field_tdr_date_value=2010&page&_format=csv",
+  "durum": 200,
+  "bayt": 16672,
+  "sha256": "f973bd3988989d3e408655cbc7fed89faefbaa8a1c111ec313241fb47fc75e2d",
+  "an": "2026-10-02T10:52:36+00:00",
+  "not": ""
+ },
+ "hazine/par_2011.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2011/all?type=daily_treasury_yield_curve&field_tdr_date_value=2011&page&_format=csv",
+  "durum": 200,
+  "bayt": 16584,
+  "sha256": "224eaf29d6fe7cbccc746c7a8c845f189cf91424bab43f46ca386a74e98d81f7",
+  "an": "2026-10-02T10:52:36+00:00",
+  "not": ""
+ },
+ "hazine/par_2012.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2012/all?type=daily_treasury_yield_curve&field_tdr_date_value=2012&page&_format=csv",
+  "durum": 200,
+  "bayt": 16584,
+  "sha256": "9c889b6e3cb87f40f3760bddb69f05f7525800ac480ef5712b2cf318765fa184",
+  "an": "2026-10-02T10:52:37+00:00",
+  "not": ""
+ },
+ "hazine/par_2013.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2013/all?type=daily_treasury_yield_curve&field_tdr_date_value=2013&page&_format=csv",
+  "durum": 200,
+  "bayt": 16584,
+  "sha256": "1e1a98426d9274afcc68467962f9238104db775b8765e48f45ac7488b33ff338",
+  "an": "2026-10-02T10:52:37+00:00",
+  "not": ""
+ },
+ "hazine/par_2014.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2014/all?type=daily_treasury_yield_curve&field_tdr_date_value=2014&page&_format=csv",
+  "durum": 200,
+  "bayt": 16584,
+  "sha256": "8d560698e03e4c0d8d22ff8be7f5f7c5c0d472b1e33a22b6a75373a57e84aa0f",
+  "an": "2026-10-02T10:52:38+00:00",
+  "not": ""
+ },
+ "hazine/par_2015.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2015/all?type=daily_treasury_yield_curve&field_tdr_date_value=2015&page&_format=csv",
+  "durum": 200,
+  "bayt": 16650,
+  "sha256": "b7665d1ce46d6ed6d08fbda34aae1831de38e274e3c7caed81904042aac9b5bc",
+  "an": "2026-10-02T10:52:38+00:00",
+  "not": ""
+ },
+ "hazine/par_2016.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2016/all?type=daily_treasury_yield_curve&field_tdr_date_value=2016&page&_format=csv",
+  "durum": 200,
+  "bayt": 16584,
+  "sha256": "b4d0a8d86e2734bc64d84d9a9824434d841737621582daeac58f13c7129f325c",
+  "an": "2026-10-02T10:52:39+00:00",
+  "not": ""
+ },
+ "hazine/par_2017.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2017/all?type=daily_treasury_yield_curve&field_tdr_date_value=2017&page&_format=csv",
+  "durum": 200,
+  "bayt": 16584,
+  "sha256": "56074da7c32103a28cf4ba2bdf5eaa12f98fd49852047aef1a6eb16e64bd6e83",
+  "an": "2026-10-02T10:52:39+00:00",
+  "not": ""
+ },
+ "hazine/par_2018.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2018/all?type=daily_treasury_yield_curve&field_tdr_date_value=2018&page&_format=csv",
+  "durum": 200,
+  "bayt": 16978,
+  "sha256": "e8375524a7a8d3e8091bbe7690d0378b9365be09efff5b18b8eefddc25f718d3",
+  "an": "2026-10-02T10:52:40+00:00",
+  "not": ""
+ },
+ "hazine/par_2019.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2019/all?type=daily_treasury_yield_curve&field_tdr_date_value=2019&page&_format=csv",
+  "durum": 200,
+  "bayt": 17841,
+  "sha256": "83fc47c17325e222c45fd3a1eb26c69ae01f62d33b793030b4b8b350ca0a290b",
+  "an": "2026-10-02T10:52:40+00:00",
+  "not": ""
+ },
+ "hazine/par_2020.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2020/all?type=daily_treasury_yield_curve&field_tdr_date_value=2020&page&_format=csv",
+  "durum": 200,
+  "bayt": 17912,
+  "sha256": "edcf1c8be9622f3cd92eb7de1847aefc3977e2118e2ff9af67f46614a5c306a7",
+  "an": "2026-10-02T10:52:41+00:00",
+  "not": ""
+ },
+ "hazine/par_2021.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2021/all?type=daily_treasury_yield_curve&field_tdr_date_value=2021&page&_format=csv",
+  "durum": 200,
+  "bayt": 17912,
+  "sha256": "1be57e49c63a99f6002431a1030c8fbe539b71066c3eaf14f9f58ddc34492cea",
+  "an": "2026-10-02T10:52:41+00:00",
+  "not": ""
+ },
+ "hazine/par_2022.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2022/all?type=daily_treasury_yield_curve&field_tdr_date_value=2022&page&_format=csv",
+  "durum": 200,
+  "bayt": 18226,
+  "sha256": "c33cb2758e5e34c2c23b7ab759d18681091860f3f9e5960112859f64f31cd814",
+  "an": "2026-10-02T10:52:42+00:00",
+  "not": ""
+ },
+ "hazine/par_2023.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2023/all?type=daily_treasury_yield_curve&field_tdr_date_value=2023&page&_format=csv",
+  "durum": 200,
+  "bayt": 19098,
+  "sha256": "edb7f3904e11dcaa502cdcc03ad9b1b16c893802d166ce9bc5fa1118251249d4",
+  "an": "2026-10-02T10:52:42+00:00",
+  "not": ""
+ },
+ "hazine/par_2024.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2024/all?type=daily_treasury_yield_curve&field_tdr_date_value=2024&page&_format=csv",
+  "durum": 200,
+  "bayt": 19098,
+  "sha256": "6775840b76cd7fd41121f61d6f6c60184eca6b2ba49954ec7372c463cbeef34d",
+  "an": "2026-10-02T10:52:43+00:00",
+  "not": ""
+ },
+ "hazine/par_2025.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2025/all?type=daily_treasury_yield_curve&field_tdr_date_value=2025&page&_format=csv",
+  "durum": 200,
+  "bayt": 20155,
+  "sha256": "cf2fa3da7f160384b63d2ead698532b1d76cd9f789ce4911e2304db85b14e6d5",
+  "an": "2026-10-02T10:52:43+00:00",
+  "not": ""
+ },
+ "hazine/par_2026.csv.gz": {
+  "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
+  "durum": 200,
+  "bayt": 15419,
+  "sha256": "468310f51dd15d0be0acdebf0137e6a6e9a32e008ca804e62f7d1b950042530a",
+  "an": "2026-10-02T10:52:43+00:00",
+  "not": ""
+ },
+ "hmb/kredi_notu_en.htm.gz": {
+  "url": "https://en.hmb.gov.tr/credit-ratings",
+  "durum": 200,
+  "bayt": 5086,
+  "sha256": "c091c57b9c8bc606cf2ffc21b3ca8ea3faefc7ffb8376330b593764a118d3ec5",
+  "an": "2026-10-02T10:53:03+00:00",
+  "not": ""
+ },
+ "hmb/kredi_notu_tr.htm.gz": {
+  "url": "https://www.hmb.gov.tr/kredi-derecelendirme-notlari",
+  "durum": 200,
+  "bayt": 5089,
+  "sha256": "3f418ef85af8489dbf8d528f3e5d462d16ef8610899c93c24b2a6c78ad7d8b39",
+  "an": "2026-10-02T10:53:06+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2009.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2009",
+  "durum": 200,
+  "bayt": 746336,
+  "sha256": "906b4807281ccacba1b2b37d061516962e6a8f588f563b587e7fff3b93d49950",
+  "an": "2026-10-02T10:51:11+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2010.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2010",
+  "durum": 200,
+  "bayt": 743862,
+  "sha256": "723990b87e91494234ab6078d990368e2002ee3d284c7edbdcefd33f702ac65d",
+  "an": "2026-10-02T10:51:07+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2011.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2011",
+  "durum": 200,
+  "bayt": 778444,
+  "sha256": "ab83571b86e60e0facff9e59ac74f034282ec29380a4e42c3a5290a65e91abf0",
+  "an": "2026-10-02T10:51:03+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2012.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2012",
+  "durum": 200,
+  "bayt": 808649,
+  "sha256": "41499de89d54d9c92b72f5314642fb0863af97a43d5b5e33557adfd306190663",
+  "an": "2026-10-02T10:50:59+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2013.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2013",
+  "durum": 200,
+  "bayt": 842766,
+  "sha256": "e79d6e803619d4d83519139ba0d51ced1d6624c327997ff0661a60e516df9779",
+  "an": "2026-10-02T10:50:55+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2014.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2014",
+  "durum": 200,
+  "bayt": 882951,
+  "sha256": "8de415d72d938297d43c66a4d8f365b9ec07bb704cda19e8afe5c533e6dac768",
+  "an": "2026-10-02T10:50:51+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2015.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2015",
+  "durum": 200,
+  "bayt": 1096806,
+  "sha256": "b65bea52a589d9c4ca69f354ef014cbd713f90224a0d693c89fc8a005921a63f",
+  "an": "2026-10-02T10:50:47+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2016.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2016",
+  "durum": 200,
+  "bayt": 1118442,
+  "sha256": "c1559cff3c111f2228dafdaf38738da08a38ed066b54591f7161c9199d29654f",
+  "an": "2026-10-02T10:50:43+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2017.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2017",
+  "durum": 200,
+  "bayt": 1106825,
+  "sha256": "6700a5abbdcc737be3a13864eb26327a0be47e3513c6f632460a013bcf55c8b0",
+  "an": "2026-10-02T10:50:37+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2018.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2018",
+  "durum": 200,
+  "bayt": 1076686,
+  "sha256": "189d71fa3eb19859f9d60d067b653146b613e662828b22b088b2678e9147a4d0",
+  "an": "2026-10-02T10:50:29+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2019.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2019",
+  "durum": 200,
+  "bayt": 1064341,
+  "sha256": "e64cca60bdf97a09f7b093aeb1733feef125a6f34ea2bfc54f416c9c577f55db",
+  "an": "2026-10-02T10:50:24+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2020.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2020",
+  "durum": 200,
+  "bayt": 1291562,
+  "sha256": "c96b915ef40c60e6479ac75bf56b71c54a8cafc62c7e1b45bc85b761b1dada85",
+  "an": "2026-10-02T10:50:19+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2021.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2021",
+  "durum": 200,
+  "bayt": 1288039,
+  "sha256": "3ace513014299b16df89830eff484b534894829f1079faa791fa56a99332abc8",
+  "an": "2026-10-02T10:50:14+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2022.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2022",
+  "durum": 200,
+  "bayt": 1445753,
+  "sha256": "bad58daf8fe0f3f440106fe1bf6a2c7269b320671e52b080747b47b440bda861",
+  "an": "2026-10-02T10:50:08+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2023.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2023",
+  "durum": 200,
+  "bayt": 1422105,
+  "sha256": "6c25c9f23e57310c3e014c4e1d831f278921842eba2d3f6abe83f41ba33a422d",
+  "an": "2026-10-02T10:50:02+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2024.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2024",
+  "durum": 200,
+  "bayt": 1508313,
+  "sha256": "9875bfcbeb29a1820e3c608aaec91b5c2102bf45d38aada51f677b83a79186d0",
+  "an": "2026-10-02T10:49:14+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2025.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2025",
+  "durum": 200,
+  "bayt": 1522052,
+  "sha256": "a257e32003eb826c63f0ea17f8d2b4da85bdedd77eddf6c3e97ac82d9af47e37",
+  "an": "2026-10-02T10:49:08+00:00",
+  "not": ""
+ },
+ "tuik/takvim_2026.json.gz": {
+  "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2026",
+  "durum": 200,
+  "bayt": 1361310,
+  "sha256": "8a283af545554dddaea32f11942bb4b7706226230e91eb15a4bac94bf29ee614",
+  "an": "2026-10-02T10:49:02+00:00",
+  "not": ""
+ },
+ "wdi/BN.CAB.XOKA.GD.ZS.json.gz": {
+  "url": "https://api.worldbank.org/v2/country/TUR;USA;EMU;JPN;GBR;CHE;AUS;CAN;NOR;SWE;BRA;MEX;ZAF;IND;IDN;POL;HUN;CHL;KOR;ARG;RUS;CHN/indicator/BN.CAB.XOKA.GD.ZS?format=json&per_page=20000&date=1980:2026",
+  "durum": 200,
+  "bayt": 230636,
+  "sha256": "ba611380e998c275dd25c3021208ee30594f068661378bbb52a42c0502d60e8a",
+  "an": "2026-10-02T10:52:11+00:00",
+  "not": ""
+ },
+ "wdi/FP.CPI.TOTL.ZG.json.gz": {
+  "url": "https://api.worldbank.org/v2/country/TUR;USA;EMU;JPN;GBR;CHE;AUS;CAN;NOR;SWE;BRA;MEX;ZAF;IND;IDN;POL;HUN;CHL;KOR;ARG;RUS;CHN/indicator/FP.CPI.TOTL.ZG?format=json&per_page=20000&date=1980:2026",
+  "durum": 200,
+  "bayt": 230546,
+  "sha256": "50f253aaec294ef2d53b0234bbdb5ebfb37e6f24af2fd62a82b7aa58ae0c23dd",
+  "an": "2026-10-02T10:52:25+00:00",
+  "not": ""
+ },
+ "wdi/GC.DOD.TOTL.GD.ZS.json.gz": {
+  "url": "https://api.worldbank.org/v2/country/TUR;USA;EMU;JPN;GBR;CHE;AUS;CAN;NOR;SWE;BRA;MEX;ZAF;IND;IDN;POL;HUN;CHL;KOR;ARG;RUS;CHN/indicator/GC.DOD.TOTL.GD.ZS?format=json&per_page=20000&date=1980:2026",
+  "durum": 200,
+  "bayt": 230805,
+  "sha256": "9ed5dff44817ee2e9f003d0088a5ece308da13aded211b1cd8bbdc3366a931cf",
+  "an": "2026-10-02T10:52:11+00:00",
+  "not": ""
+ },
+ "wdi/NY.GDP.MKTP.KD.ZG.json.gz": {
+  "url": "https://api.worldbank.org/v2/country/TUR;USA;EMU;JPN;GBR;CHE;AUS;CAN;NOR;SWE;BRA;MEX;ZAF;IND;IDN;POL;HUN;CHL;KOR;ARG;RUS;CHN/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=20000&date=1980:2026",
+  "durum": 200,
+  "bayt": 217962,
+  "sha256": "4e82fd0ba99bd8b529e9bce3ba780c6fd03ea6a184d35019fcf1453aa0db7a24",
+  "an": "2026-10-02T10:52:15+00:00",
+  "not": ""
+ }
+}
