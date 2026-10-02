@@ -1,0 +1,193 @@
+## Bölüm 10 — Ticaret hadleri ve emtia (≈6 dk)
+
+*Bu bölümde:* emtia fiyatının kura hangi bloktan ulaştığı, ayrımın neden DM/EM değil
+ihracatçı/ithalatçı olduğu, AUD, CAD ve NOK'un emtiayla bağının ölçüsü ve sınırı, 2022 dolar
+şokunun ithalatçı ve ihracatçı paralardaki izi, ve Türkiye'de enerji fiyatının kura, faize ve
+faturaya yansıması.
+
+### 10.1 Teori: emtia fiyatı kura üç yoldan ulaşır (≈1 dk)
+
+Ticaret hadleri $\tau = \ln(P_X/P_M)$ ihraç fiyatının ithal fiyatına oranıdır. Emtianın net ticaretteki
+payı $w$ ise ($w \gt 0$ ihracatçı, $w \lt 0$ ithalatçı) $\Delta\tau \approx w\,\Delta\ln P_{e}$ olur ve
+haber kura üç yoldan ulaşır:
+
+$$
+\bar q = \bar q_0 - \theta\,\tau \quad \text{(A: çıpa)},
+\qquad
+\Delta \ln F = (1+\eta)\,\Delta \ln P_e \quad \text{(fatura)},
+\qquad
+\Delta\rho \propto \operatorname{oyn}(\tau) \quad \text{(C)} .
+$$
+
+İlk terim kalıcı bir hadler iyileşmesinin denge reel kurunu güçlendirmesidir. İkincisi bir
+ithalatçının faturası: $F = P_e Q$, $\eta$ miktarın fiyat esnekliği; $\eta \approx 0$ ise fatura
+fiyatla birebir büyür ve cari açığı, dolayısıyla finansman ihtiyacını (Bölüm 9) büyütür. Üçüncüsü
+primdir: Hilscher ve Nosbusch'a göre gelişmekte olan ülke devlet tahvili spreadlerinde özellikle
+ticaret hadlerinin oynaklığı istatistiksel ve iktisadi olarak anlamlı bir etki yapar ve bu sonuç
+ticaret hadleri ülkeye özgü emtia fiyat endeksiyle araçlandığında da korunur.
+
+Chen ve Rogoff'a göre özellikle Avustralya ve Yeni Zelanda'da emtia ihracatının dolar fiyatı
+dalgalı reel kur üzerinde güçlü ve istikrarlı bir etki yapar; emtia şokları arındırıldıktan sonra
+bile kalıntıda PPP bulmacası sürer. Cashin, Céspedes ve Sahay 1980–2002'de 58 emtia ihracatçısı
+ülkenin yaklaşık üçte birinde reel kur ile reel emtia fiyatı arasında uzun dönem ilişki bulur.
+İlişkinin yönü tek değildir: Chen, Rogoff ve Rossi'ye göre emtia ihracatçısı ülkelerin kurları
+küresel emtia fiyatlarını hem örneklem içinde hem dışında sağlam biçimde öngörür, ters yön belirgin
+biçimde zayıftır; yazarlar bunu kurun ileriye bakan bir varlık fiyatı olmasıyla açıklar — bir
+öngörü bulgusudur, nedensellik değil. Çıktı tarafında etki küçüktür: Schmitt-Grohé ve Uribe'nin 38
+yoksul ve gelişmekte olan ülkede tahmin ettiği SVAR'lara göre ticaret hadleri şokları toplam
+faaliyetteki dalgalanmanın %10'u civarını ya da daha azını açıklar.
+
+### 10.2 Ayrım: DM/EM değil, ihracatçı/ithalatçı (≈1 dk)
+
+Aynı emtia fiyatı artışı ihracatçının (AUD metalde, CAD ve NOK enerjide) A bloğunu güçlendirir,
+ithalatçının (euro, yen) zayıflatır; DM etiketi yönü söylemez. EM tarafında Rusya 2014 bir
+ihracatçıya petrol düşüşüyle gelen baskının faize yazılmasıdır (Bölüm 9). Macaristan 2022 ithalatçı tarafın vakasıdır: resmî baz faiz Eylül 2022 sonundan Aralık
+2022 sonuna %13'te sabit kaldı; ECB referans kuruna göre forint 14 Ekim 2022'de euroya karşı bir
+günde yaklaşık %2,9 değer kazandı (EUR/HUF 430,65 → 418,24). Baz faiz kımıldamadığı için sıçramayı
+yaratan araç baz faiz değildi; hangi araç olduğu birincil kaynaktan doğrulanamadı. Türkiye net enerji
+ithalatçısıdır ([Hürmüz ve Rusya-Ukrayna analizi](/analiz/hurmuz-rusya-enerji-2026-09-20/)).
+
+### 10.3 Pratik 10A — AUD–metal, CAD–enerji, NOK–enerji (≈2 dk)
+
+Aylık, 02.2000–08.2026, 319 ay. Para dolar karşısındaki değeriyle yazılır (artış değer kazancı);
+AUD ve CAD CNBC New York 17:00, NOK ECB'nin 14:15 Orta Avrupa referans kurlarından euro çaprazı;
+CAD ile NOK aynı saatte ölçülmez. Emtia Dünya Bankası Pink Sheet metal ve enerji endeksi (nominal dolar,
+ay ortalaması). Eğim Newey–West; örneklem dışı oran modelin karesel hatasının kıyasınkine oranı,
+2010'dan itibaren:
+
+| Çift | Korelasyon (kur ay sonu) | Korelasyon (kur ay ortalaması) | Eğim | t | Örneklem dışı oran: rastgele yürüyüş | koşulsuz ortalama | 36 aylık medyan | 36 aylık son |
+|---|---|---|---|---|---|---|---|---|
+| AUD–metal | 0,35 | 0,61 | 0,240 | 5,51 | 0,93 | 0,92 | 0,28 | 0,18 |
+| CAD–enerji | 0,26 | 0,43 | 0,075 | 3,94 | 0,93 | 0,92 | 0,26 | −0,11 |
+| NOK–enerji | 0,31 | 0,46 | 0,126 | 4,86 | 0,91 | 0,91 | 0,30 | −0,03 |
+
+Üç çift de "ölçülü": t 2'nin üstünde ve iki saf kıyası da yeniyor. İlişki eşzamanlıdır: o ayın
+emtia değişimi bilinirken kurun değişimini açıklar, öngörmez. Diebold–Mariano t'leri −1,15 ile
+−1,74 arasında; örneklem dışı üstünlüğün kendisi %5 düzeyinde anlamlı değil.
+
+**Hiza tuzağı.** Pink Sheet ay ortalamasıdır, kur ay sonu değeri. İki seriyi eşleştirmek
+eşzamanlı korelasyonu düşürür (AUD–metal 0,35; kur ay ortalamasıyla 0,61) ve kurun bir ay önceki
+değişimini emtianın bu ayki ortalama değişimine aritmetik olarak bağlar. AUD'da "kur bir ay önde"
+korelasyonu 0,48, eşzamanlıyı aşıyor; aritmetiğin tek başına vereceği 0,26 (kurun kendi ay
+ortalamasıyla kurulan plasebodan), fazla 0,21. Ortalama penceresiyle örtüşmeyen iki ay öncü sınamada
+korelasyon 0,09 (t 0,80): fazla pencerenin dışına taşmıyor ve "kur emtiayı öngörür" kuralı bu
+tasarımla kurulamaz. CAD ve NOK'ta öncü korelasyon aritmetiğin verdiği düzeyde. CNBC serisinin
+hafta sonu barları ve 01–03.01.2020'nin bozuk EUR/USD kotasyonu ayıklandı.
+
+**Kayan bağ.** CAD ve NOK'ta 36 aylık korelasyon 22 aydır eksi (11.2024'ten beri); CAD'de en düşük
+−0,44 (09.2025), oysa 06.2022'de +0,54'tü. AUD'da pencerelerin yalnız %1,38'i eksi.
+
+**Petrol düşüşü, 06.2014–01.2016 (vaka).** Enerji endeksi −118,9 log puan (−%69,5) düştü. Aynı
+pencerede ay ortalamasıyla CAD −27,2, NOK −37,9, AUD (metal −42,5) −29,0 log puan; enerji ithalatçısı
+euro da −22,4 log puan kaybetti ve dolar endeksi +20,8 log puan yükseldi. İhracatçı ile ithalatçının
+farkı küçük: dönemin baskın terimi doların kendisiydi.
+
+<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/17_emtia_paralari.html" baslik="Emtia paraları: AUD ile metal, CAD ve NOK ile enerji, 2000–2026" no="17" kaynak="CNBC (New York 17:00) · ECB referans kurları · Dünya Bankası Pink Sheet" />
+
+**Bu seri nasıl hesaplanıyor.** Aylık, 01.2000–08.2026, 320 ay. Üst iki panel: paranın dolar
+karşısındaki ay sonu değeri ve emtia endeksi, ikisi de 2000'in log ortalaması = 100, log ölçek.
+AUD ve CAD CNBC New York 17:00 (USD/CAD ters çevrilir), NOK ECB referans kurlarından USD/NOK =
+(EUR/NOK)/(EUR/USD), ayın son sabitlemesi; emtia Pink Sheet ay ortalaması. Alt panel: aylık log
+değişimlerden 36 aylık kayan korelasyon (pencerede en az 30 ay). Gölge 06.2014–01.2016 petrol
+düşüşüdür. 08.2026'da enerji endeksi 303,8, NOK 94,6: enerji üç katına çıkarken NOK dolara karşı
+2000 ortalamasının altında. Bilinen kusurlar: emtia ay ortalaması ile kur ay sonu farklı hizadır
+(yukarıda); NOK'un saati CAD ve AUD'dan farklıdır; endeks nominal dolardır, emtianın reel fiyatı
+değildir.
+
+### 10.4 Pratik 10B — 2022 dolar şoku ve Türkiye'de enerji (≈2 dk)
+
+**2022 (vaka).** 03.01–31.10.2022 kapanışları arasında dolar endeksi +14,7 log puan, ABD 2 yıllık
+getirisi %0,78'den %4,51'e, +373 bp; enerji endeksi Ocak–Ekim ay ortalamaları arasında +%20,5 (zirve
+06.2022, +35,8 log puan). Kurlar New York 17:00:
+
+| Para | Rol | Dolara karşı değer, log puan |
+|---|---|---|
+| EUR | enerji ithalatçısı | −13,3 |
+| JPY | enerji ithalatçısı | −25,4 |
+| CAD | enerji ihracatçısı | −6,7 |
+| GBP | kıyas | −16,1 |
+| AUD | kıyas | −11,7 |
+| CHF | kıyas | −8,5 |
+
+Aynı dolar şokunda ihracatçı CAD euronun 6,66, yenin 18,74 puan önünde kaldı. Yende iki etken aynı
+yöne itti — faiz farkı (B) ve ticaret hadleri (A) — ve vaka ikisini ayırmaz; ABD tarafı politika
+kadranıdır (2 yıllık ↑, dolar ↑).
+
+**Türkiye: enerji → kur ve 2 yıllık.** Aylık enerji endeksinin log değişimi (%) ile USD/TRY'nin
+ay sonu log değişimi (%) ve 2 yıllık DİBS getirisinin ay sonu değişimi (bp). DİBS gün sonu
+hizasında (D gününe iki iş günü sonraki etiket; Bölüm 2). Yönetilen kur dönemi ayrı; dolar
+kontrollü eğimde dolar endeksi ikinci açıklayıcıdır:
+
+| Dönem | Ay | USD/TRY eğimi | t | Dolar kontrollü eğim | Hüküm | 2 yıllık DİBS eğimi (bp) | t |
+|---|---|---|---|---|---|---|---|
+| 02.2013–11.2021 | 106 | −0,083 | −2,55 | −0,053 | ölçülü | 2,12 | 1,73 |
+| Yönetilen kur, 12.2021–06.2023 | 19 | 0,104 | 1,36 | 0,106 | tarif edici | 6,07 | 1,26 |
+| 07.2023–08.2026 | 38 | −0,005 | −0,53 | −0,001 | tarif edici | 6,45 | 1,48 |
+| Yönetilen kur hariç | 144 | −0,066 | −2,37 | −0,055 | ölçülü | 3,17 | 1,97 |
+| Yönetilen kur hariç, kur ay ortalaması | 144 | −0,027 | −0,80 | −0,023 | tarif edici | — | — |
+
+Beklenen işaret artıydı (ithalatçı: enerji pahalanınca TL değer kaybeder); veri eksi gösteriyor.
+02.2013–11.2021'de %10'luk enerji artışı USD/TRY'yi %0,83 düşürüyor, ama eğimin bir kısmı doların
+kendisi: dolar kontrol edilince −0,053'e iniyor (dolar endeksi eğimi 0,78, t 3,08). Yönetilen kur
+hariç ölçü "ölçülü" görünür ama hizaya duyarlıdır: kur ay ortalamasıyla eğim −0,027, t −0,80. Cuma
+kuru boşaltılınca eğim −0,069 (t −2,37), hüküm değişmiyor. 07.2023–08.2026'da eğim sıfır; örneklem
+dışı oran sıfır kıyasına göre 0,14, koşulsuz ortalamaya göre 1,10 — USD/TRY'nin sürekli kayması
+sıfır kıyasında yalnız sabit terimi ödüllendirir, hüküm bu yüzden iki kıyası birlikte ister. 2 yıllık
+eğimler artı (enerji ↑ → faiz ↑) ama hiçbiri kuralı geçmiyor.
+
+**Enerji faturası.** 12 aylık net enerji ithalatının 12 aylık log değişimi, enerji endeksinin 12
+aylık ortalamasının 12 aylık log değişimine (01.2014–07.2026, 151 ay): esneklik 1,02 (t 8,32, R² 0,87;
+Newey–West, 24 gecikme). En iyi uyum bir ay gecikmede (1,03, R² 0,90), esneklik on iki ayda 0,17'ye
+iner. Örneklem dışı karesel hata oranı koşulsuz ortalamaya göre 0,12, sıfıra göre 0,12: ölçülü.
+$\eta \approx 0$: kısa vadede miktar fiyata tepki vermiyor. Fatura 07.2026'da 12 aylık 50,5 milyar
+dolar, GSYH'nin %2,93'ü (aralık %2,77, 12.2016 – %9,03, 10.2022). Seviyeler arasındaki esneklik
+(0,98) iki eğilimli serinin ilişkisidir, ana ölçü değildir. Taraf burada çalışıyor: fatura fiyatla
+birebir büyür; aylık kurda ise işaret hizaya göre değişiyor ve kural kurulamıyor.
+
+<div class="not">
+
+  <span class="etiket">Masada ne yaparsınız</span>
+
+  - Önce ülkenin emtiada hangi tarafta olduğu, sonra doların aynı ay ne yaptığı sorulur: 2014–2016'da
+    ve 2022'de baskın terim dolardı.
+  - Emtia paralarının bağı eşzamanlıdır ve 36 aylık pencerede işaret değiştirebilir; CAD ve NOK'ta
+    bugün eksi.
+  - Türkiye'de enerji haberinin ölçülen kanalı faturadır (A ve cari); aylık kur tepkisinin işareti
+    hizaya bağlı, kural kurulmaz.
+
+</div>
+
+<div class="not">
+
+  <span class="etiket">Tek cümlelik kural</span>
+
+  Emtia haberinde önce ülkenin hangi tarafta olduğunu sor.
+
+</div>
+
+<div class="not">
+
+  <span class="etiket">Pratik — Bölüm 10</span>
+
+**1. Enerji faturası ve yanlış formül.** Esneklik 1,0154; 12 aylık fatura 50,51 milyar dolar,
+GSYH'nin %2,93'ü. (a) Enerji fiyatı %10 artarsa fatura yüzde kaç, kaç milyar dolar ve GSYH'nin kaç
+puanı büyür? (b) Etkiyi $e^{0{,}1b} - 1$ ile kurmak neyi değiştirir? (c) Yönetilen kur dönemi
+dışında USD/TRY'nin aylık enerji eğimi −0,066 ise ithalatçı TL neden güçleniyor görünür?
+
+<details>
+<summary>Çözüm</summary>
+
+(a) Esneklik log cinsindendir: $1{,}1^{1{,}0154} - 1 \approx$ %10,16. Fatura
+$50{,}51 \times 0{,}1016 \approx 5{,}13$ milyar dolar, GSYH payı $2{,}93 \times 0{,}1016 \approx
+0{,}30$ puan büyür.
+
+(b) $e^{0{,}10154} - 1 \approx$ %10,69 ve 5,40 milyar dolar: bu %10 değil 10 log puanlık
+(%10,5) bir artışın etkisidir, sonucu yaklaşık %5 büyütür.
+
+(c) Ortak etken dolar: dolar kontrolü eğimi −0,055'e indiriyor ve dolar endeksinin eğimi t 2,95.
+Kur ay ortalamasıyla eğim −0,027 (t −0,80): eksi işaret hizaya duyarlı, kural kurulmaz. Faturadaki
+"ithalatçı" etkisi gerçektir; aylık kura bu tasarımla ayrı yazılamaz.
+
+</details>
+
+</div>

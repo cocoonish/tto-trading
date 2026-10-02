@@ -1,0 +1,1345 @@
+{
+ "girdiler": [
+  {
+   "tur": "tablo",
+   "satir": "| ABD 2 yıllık | −4 bp | −0,41 | −1 bp | −0,17 |",
+   "degerler": [
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki.d2y_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki.d2y_z",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.tepki.d2y_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.tepki.d2y_z",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| ABD 10 yıllık | +3 bp | 0,38 | +3 bp | 0,52 |",
+   "degerler": [
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki.d10y_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki.d10y_z",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.tepki.d10y_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.tepki.d10y_z",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Dolar sepeti | +%0,48 | 0,84 | −%0,54 | −1,24 |",
+   "degerler": [
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki.ddolar_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki.ddolar_z",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.tepki.ddolar_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.tepki.ddolar_z",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| DXY | +%0,28 | 0,49 | −%0,66 | −1,39 |",
+   "degerler": [
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki.ddxy_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki.ddxy_z",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.tepki.ddxy_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.tepki.ddxy_z",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| VIX | +2,16 puan | 1,87 | +0,90 puan | 0,33 |",
+   "degerler": [
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki.dvix_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki.dvix_z",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.tepki.dvix_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.tepki.dvix_z",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| ABD 10 yıllık, iki gün | +15 bp | 1,35 | +5 bp | 0,61 |",
+   "degerler": [
+    {
+     "yol": "b12.p12_dm.vakalar.0.iki_gun.d10y_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.0.iki_gun.d10y_z",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.iki_gun.d10y_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.iki_gun.d10y_z",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 01.2013–11.2021 | 458 | 0,58 | 0,13 | +%1,85 | 7,43 | ölçülü |",
+   "degerler": [
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.oncesi.kor_kur",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.oncesi.kor_vix",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.oncesi.egim_kur_yuzde_100bp",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.oncesi.egim_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Yönetilen kur, 12.2021–06.2023 | 83 | 0,08 | −0,03 | +%0,20 | 0,98 | tarif edici |",
+   "degerler": [
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.yonetilen.kor_kur",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.yonetilen.kor_vix",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.yonetilen.egim_kur_yuzde_100bp",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.yonetilen.egim_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 07.2023–09.2026 | 169 | 0,17 | −0,01 | +%0,10 | 1,62 | tarif edici |",
+   "degerler": [
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.sonrasi.kor_kur",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.sonrasi.kor_vix",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.sonrasi.egim_kur_yuzde_100bp",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.sonrasi.egim_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Yönetilen kur hariç | 627 | 0,41 | 0,08 | +%0,92 | 5,72 | ölçülü |",
+   "degerler": [
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.tum_yonetilen_haric.kor_kur",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.tum_yonetilen_haric.kor_vix",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.tum_yonetilen_haric.egim_kur_yuzde_100bp",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.tum_yonetilen_haric.egim_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 01.05.2012 | 12:44 | S&P | görünüm ↓ | 30.04 → 01.05 | −%0,14 | — |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.0.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 20.06.2012 | 08:40 | Moody's | not ↑ | 19.06 → 20.06 | −%0,31 | — |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.1.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 05.11.2012 | 12:51 | Fitch | not ↑ | 01.11 → 05.11 | −%0,37 | — |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.2.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 27.03.2013 | 19:38 | S&P | not ↑ | 26.03 → 27.03 | −%0,05 | −0,3 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.3.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.3.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 17.05.2013 | 00:30 | Moody's* | not ↑ | 15.05 → 20.05 | +%1,00 | −24,9 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.4.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.4.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 07.02.2014 | 20:37 | S&P | görünüm ↓ | 06.02 → 10.02 | +%0,19 | −9,9 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.5.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.5.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 11.04.2014 | 03:28 | Moody's | görünüm ↓ | 10.04 → 14.04 | +%0,52 | +5,7 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.6.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.6.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 06.05.2016 | — | S&P | görünüm ↑ | 04.05 → 09.05 | −%0,42 | −0,9 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.7.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.7.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 18.07.2016 | — | Moody's | inceleme ↓ | 14.07 → 18.07 | +%3,29 | +66,0 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.8.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.8.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 20.07.2016 | 23:42 | S&P | not ↓ | 19.07 → 20.07 | +%1,24 | +24,5 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.9.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.9.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 24.09.2016 | 00:58 | Moody's | not ↓ | 22.09 → 26.09 | +%1,30 | +32,8 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.10.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.10.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 04.11.2016 | 20:03 | S&P* | görünüm ↑ | 03.11 → 07.11 | +%1,67 | +3,8 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.11.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.11.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 27.01.2017 | akşam | Fitch ‡ | not ↓ | 26.01 → 30.01 | −%2,19 | −11,2 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.12.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.12.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 27.01.2017 | 20:07 | S&P ‡ | görünüm ↓ | 26.01 → 30.01 | −%2,19 | −11,2 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.13.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.13.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 17.03.2017 | akşam | Moody's* | görünüm ↓ | 16.03 → 20.03 | −%0,13 | +14,7 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.14.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.14.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 08.03.2018 | 01:29 | Moody's* | not ↓ | 06.03 → 08.03 | +%0,65 | +13,5 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.15.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.15.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 01.05.2018 | 23:58 | S&P | not ↓ | 30.04 → 01.05 | +%1,28 | −0,2 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.16.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.16.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 13.07.2018 | 23:19 | Fitch | not ↓ | 12.07 → 16.07 | −%0,30 | −2,9 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.17.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.17.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 17.08.2018 | 23:45 | S&P ‡ | not ↓ | 16.08 → 20.08 | +%4,14 | +0,4 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.18.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.18.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 17.08.2018 | akşam | Moody's ‡ | not ↓ | 16.08 → 20.08 | +%4,14 | +0,4 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.19.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.19.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 15.06.2019 | 00:04 | Moody's* | not ↓ | 13.06 → 17.06 | −%0,10 | −22,4 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.20.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.20.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 12.07.2019 | 23:11 | Fitch | not ↓ | 11.07 → 15.07 | +%0,34 | +22,8 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.21.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.21.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 01.11.2019 | — | Fitch* | görünüm ↑ | 30.10 → 04.11 | +%0,56 | −47,3 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.22.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.22.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 22.08.2020 | 00:05 | Fitch* | görünüm ↓ | 20.08 → 24.08 | +%1,05 | +30,1 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.23.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.23.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 12.09.2020 | 00:50 | Moody's | not ↓ | 10.09 → 14.09 | +%0,55 | −31,4 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.24.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.24.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 20.02.2021 | 00:09 | Fitch* | görünüm ↑ | 18.02 → 22.02 | +%0,64 | +4,6 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.25.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.25.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 11.02.2022 † | — | Fitch* | not ↓ | 09.02 → 14.02 | +%0,38 | +21,2 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.26.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.26.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 09.07.2022 † | 00:22 | Fitch* | not ↓ | 07.07 → 11.07 | +%0,50 | −0,2 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.27.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.27.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 13.08.2022 † | 00:21 | Moody's* | not ↓ | 11.08 → 15.08 | +%0,02 | −49,8 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.28.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.28.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 30.09.2022 † | 23:46 | S&P* | not ↓ | 29.09 → 03.10 | +%0,14 | −85,2 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.29.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.29.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 19.07.2024 | — | Moody's | not ↑ | 18.07 → 22.07 | −%0,48 | +0,4 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.30.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.30.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 06.09.2024 | akşam | Fitch | not ↑ | 06.09 → 09.09 | +%0,04 | +69,9 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.31.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.31.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 01.11.2024 | akşam | S&P* | not ↑ | 01.11 → 04.11 | +%0,03 | +49,6 bp |",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.32.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.32.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Longstaff, Pan, Pedersen ve Singleton 26 ülkenin CDS spreadlerinde yalnız üç ana bileşenin değişimin %50'sinden fazlasını açıkladığını bulur",
+   "kaynak": "lpps2011"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Du, Pflueger ve Schreger'e göre para politikası taahhüdü zayıf hükümetlerde",
+   "kaynak": "dps2020"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Kalemli-Özcan ve Varela (2021, çalışma kâğıdı) yerel risk bileşeninin en güçlü öngörücüsünü",
+   "kaynak": "kalemli_ozcan_varela2021"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Yerel para kredi priminin ölçüsü Bölüm 1'de (Du ve Schreger)",
+   "kaynak": "du_schreger2016"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Fitch 1 Ağustos 2023'te ABD'nin uzun vadeli notunu AAA'dan AA+'ya indirdi",
+   "kaynak": "fitch2023"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Moody's 16 Mayıs 2025 cuma günü ABD piyasalarının kapanışından sonra",
+   "kaynak": "moodys2025"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "25 Haziran–7 Ağustos arasında dolar real karşısında %9,25 değer kazandı ve EMBI+ Brezilya spreadi 420 bp açılarak %20'nin biraz üzerine çıktı; spread Eylül sonundaki 2.400 bp zirvesinden Aralık başında 1.600 bp'ye daraldı",
+   "kaynak": "brezilya2002"
+  },
+  {
+   "tur": "sabit",
+   "parca": "250 iş gününün günlük oynaklığına göre z",
+   "neden": "oynaklık penceresi (yöntem sabiti)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "en büyükleri Fitch gününde VIX (250 günün %90'ından büyük) ve Moody's'te DXY (%88)",
+   "degerler": [
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki_yuzdelik_sirasi.dvix_yuzdelik",
+     "bicim": "yz",
+     "hane": 0,
+     "carpan": 100
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.tepki_yuzdelik_sirasi.ddxy_yuzdelik",
+     "bicim": "yz",
+     "hane": 0,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2 yıllıkta iş günlerinin %54,59'unda değer var, en uzun boşluk 539 iş günü (19.06.2023–18.08.2025)",
+   "degerler": [
+    {
+     "yol": "b12.p12_vekil.tufex_reel.r2y.is_gunu_dolulugu",
+     "bicim": "yz",
+     "hane": 2,
+     "carpan": 100
+    },
+    {
+     "yol": "b12.p12_vekil.tufex_reel.r2y.en_uzun_bosluk_is_gunu",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.tufex_reel.r2y.en_uzun_bosluk_basi",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.tufex_reel.r2y.en_uzun_bosluk_sonu",
+     "bicim": "tarih",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "son 252 iş günü dolu",
+   "degerler": [
+    {
+     "ifade": "v('b12.p12_vekil.tufex_reel.r2y.son_252_is_gunu_dolulugu') * 252",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "30.09.2026 etiketli değer %8,11 (bir yıl önce %6,57; son 52 haftada %6,38–%9,03)",
+   "degerler": [
+    {
+     "yol": "b12.p12_vekil.tufex_reel.r2y.son",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.tufex_reel.r2y.son_deger_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.tufex_reel.r2y.bir_yil_once_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.tufex_reel.r2y.son_52_hafta_en_dusuk_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.tufex_reel.r2y.son_52_hafta_en_yuksek_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "5 yıllıkta doluluk %21,70, en uzun boşluk 729 iş günü",
+   "degerler": [
+    {
+     "yol": "b12.p12_vekil.tufex_reel.r5y.is_gunu_dolulugu",
+     "bicim": "yz",
+     "hane": 2,
+     "carpan": 100
+    },
+    {
+     "yol": "b12.p12_vekil.tufex_reel.r5y.en_uzun_bosluk_is_gunu",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Perşembe kapanışlı haftalık seri, 11.01.2013–25.09.2026, 713 hafta: son 31,13 puan, ortalama 14,28, en yüksek 32,45 (22.05.2026 haftası), en düşük 3,48 (23.12.2022 haftası)",
+   "degerler": [
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.ilk",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.son",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.n",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.son_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.ort_puan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.en_yuksek_puan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.en_yuksek_hafta",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.en_dusuk_puan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.en_dusuk_hafta",
+     "bicim": "tarih",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2021 öncesinde farkın 100 bp açılması TL'nin %1,85 değer kaybıyla birlikte gelirken, 07.2023 sonrasında %0,10'la",
+   "degerler": [
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.oncesi.egim_kur_yuzde_100bp",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.sonrasi.egim_kur_yuzde_100bp",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "farkın 100 bp açılması",
+   "neden": "eğimin ölçek birimi (tanım)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "33 karar (01.05.2012–01.11.2024): 22 bozulma, 11 iyileşme; 20'si",
+   "degerler": [
+    {
+     "yol": "b12.p12.n",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.ilk",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.son",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.n_bozulma",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.n_iyilesme",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.n_dogrulandi",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "23 kararda dakika, 5'inde yalnız \"akşam\", 5'inde saat yok",
+   "degerler": [
+    {
+     "ifade": "sum(1 for k in v('b12.p12.kararlar') if k['ilan_saati'] and ':' in k['ilan_saati'])",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "ifade": "sum(1 for k in v('b12.p12.kararlar') if k['ilan_saati'] == 'akşam')",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "ifade": "sum(1 for k in v('b12.p12.kararlar') if k['ilan_saati'] is None)",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "DİBS 5 yıllık sabah sabitlemesidir (10:00–14:00; Bölüm 2)",
+   "neden": "DİBS gösterge sabitlemesinin saat aralığı (Bölüm 2)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "(kur 22, 5 yıllık 24 olay)",
+   "degerler": [
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.n_olay",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.dibs_5y.n_olay",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "kurda −2 iş günü 1,83, −1 1,03, olay günü 0,95, +1 0,92, +2 0,84",
+   "degerler": [
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.oran.-2",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.oran.-1",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.oran.1",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.oran.2",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "5 yıllıkta 0,98 · 1,02 · 0,75 · 0,78 · 1,10",
+   "degerler": [
+    {
+     "yol": "b12.p12.plasebo_kapisi.dibs_5y.oran.-2",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.dibs_5y.oran.-1",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.dibs_5y.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.dibs_5y.oran.1",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.dibs_5y.oran.2",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(p kurda 0,51, faizde 0,84)",
+   "degerler": [
+    {
+     "yol": "b12.p12.plasebo_kapisi.kur.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12.plasebo_kapisi.dibs_5y.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "S&P 23:45'te, Moody's aynı akşam",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.18.ilan_saati",
+     "bicim": "metin",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "taban perşembe 16.08",
+   "degerler": [
+    {
+     "ifade": "v('b12.p12.kararlar.18.kur_taban')[8:10] + '.' + v('b12.p12.kararlar.18.kur_taban')[5:7]",
+     "bicim": "metin",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "tepki pazartesi 20.08",
+   "degerler": [
+    {
+     "ifade": "v('b12.p12.kararlar.18.kur_tepki')[8:10] + '.' + v('b12.p12.kararlar.18.kur_tepki')[5:7]",
+     "bicim": "metin",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "taban 17.08 sabah sabitlemesi",
+   "degerler": [
+    {
+     "ifade": "v('b12.p12.kararlar.18.dibs_taban')[8:10] + '.' + v('b12.p12.kararlar.18.dibs_taban')[5:7]",
+     "bicim": "metin",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "tepki 20.08 sabah sabitlemesi",
+   "degerler": [
+    {
+     "ifade": "v('b12.p12.kararlar.18.dibs_tepki')[8:10] + '.' + v('b12.p12.kararlar.18.dibs_tepki')[5:7]",
+     "bicim": "metin",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "USD/TRY +%4,14, 5 yıllık +0,4 bp",
+   "degerler": [
+    {
+     "yol": "b12.p12.kararlar.18.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12.kararlar.18.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "VIX tepki günü +2,16 puan, 250 günlük günlük oynaklık 1,1525 puan",
+   "degerler": [
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki.dvix_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.0.oynaklik_250.dvix_sd",
+     "bicim": "puan",
+     "hane": 4
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$z = 2{,}16/1{,}1525 \\approx 1{,}87$; hareket 250 günün %90'ından büyük",
+   "degerler": [
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki.dvix_puan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.0.oynaklik_250.dvix_sd",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki.dvix_z",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki_yuzdelik_sirasi.dvix_yuzdelik",
+     "bicim": "yz",
+     "hane": 0,
+     "carpan": 100
+    }
+   ]
+  }
+ ]
+}

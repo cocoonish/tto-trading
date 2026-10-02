@@ -1,0 +1,1405 @@
+{
+ "girdiler": [
+  {
+   "tur": "kaynak",
+   "parca": "Kim ve Roubini (2008), ABD'de genişletici bir maliye şokunun cari dengeyi iyileştirdiğini ve reel kuru değer kaybettirdiğini bulur; sebep özel tasarrufun kısmen Ricardocu artışı ve yatırımın dışlanmasıdır",
+   "kaynak": "kimroubini2008"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Corsetti ve Müller (2006), ikiz açığın olasılığının ve büyüklüğünün ekonominin ticarete açıklığıyla arttığını bulur",
+   "kaynak": "corsettimuller2006"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Gopinath ve diğerlerine (2020) göre ticaretin çoğu dolarla faturalandığı için fiyat geçişini ve ticaret esnekliğini ikili kurdan çok dolar kuru belirler. Doların bütün paralar karşısında %1 değer kazanması, küresel konjonktür denetlendiğinde, bir yıl içinde dünyanın geri kalanındaki ülkeler arası ticaret hacmini %0,6 azaltır",
+   "kaynak": "gopinath2020"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Gourinchas ve Rey'e göre ABD'nin dış dengesizliğinin bir kısmı ticaretle değil, net dış varlık portföyünün getirisiyle, yani değerleme kanalıyla kapanır. Net ihracatın net dış varlıklara oranındaki bir standart sapmalık düşüş, sonraki çeyrekte doların yıllık %4 hızla değer kaybedeceğini öngörür",
+   "kaynak": "gourinchasrey2007"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Jiang, Krishnamurthy ve Lustig (2021) yabancıların ABD güvenli varlıklarından aldığı kolaylık getirisini Hazine bazıyla ölçer; baz genişlediğinde dolar hemen değer kazanır",
+   "kaynak": "jkl2021"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Della Corte, Riddiough ve Sarno (2016), net borçlu ülkelerin parasının kötü zamanlarda değer kaybettiğini, bu yüzden bir kur risk primi ödediğini gösterir",
+   "kaynak": "dellacorte2016"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Gabaix ve Maggiori (2015) modelinde sermaye akımları kuru aracıların bilançosu üzerinden oynatır",
+   "kaynak": "gabaixmaggiori2015"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Freund'un sanayileşmiş ülke örnekleminde 1980'den sonra cari açıklar, dönmeden önce ortanca olarak GSYH'nin yaklaşık %5'ine ulaşmıştır; sonraki literatür bunun sihirli bir eşik olmadığında birleşir",
+   "kaynak": "freund2005"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Calvo (1998), sermaye girişlerinin aniden kesilmesini (\"ani duruş\") sermaye piyasası krizlerinin merkezine koyar",
+   "kaynak": "calvo1998"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Calvo, Izquierdo ve Mejía (2004), 32 ülkelik örneklemde ani duruşlarla gelen büyük reel kur hareketlerinin esasen gelişen piyasa olgusu olduğunu bulur",
+   "kaynak": "calvo_izquierdo_mejia2004"
+  },
+  {
+   "tur": "olcum",
+   "parca": "Çeyreklik 2006Ç4–2026Ç2, 79 çeyrek",
+   "degerler": [
+    {
+     "yol": "b08.p8a.ilk_ceyrek",
+     "bicim": "metin",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.son_ceyrek",
+     "bicim": "metin",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.n",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2026Ç2'de kamu −%2,41, dış −%2,37 (resmî dolar biçimiyle −%2,29), özel +%0,04. Dönem ortalaması: dış −%3,51 = kamu −%2,27 + özel −%1,24.",
+   "degerler": [
+    {
+     "yol": "b08.p8a.son_ceyrek",
+     "bicim": "metin",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.son_deger.kamu_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.son_deger.dis_tl_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.son_deger.dis_usd_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.son_deger.ozel_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b08.p8a.uc_degerler.dis.ortalama_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.uc_degerler.kamu.ortalama_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.uc_degerler.ozel.ortalama_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "−0,77 (t −3,56, R² 0,18): kamu dengesi 1 puan bozulunca dış denge 0,77 puan **iyileşiyor**, özel denge 1,77 puan.",
+   "degerler": [
+    {
+     "ifade": "v('b08.p8a.ikiz_acik.egim')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b08.p8a.ikiz_acik.t')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b08.p8a.ikiz_acik.r2')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "abs(v('b08.p8a.ikiz_acik.egim'))",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b08.p8a.ikiz_acik.ozel_kesim_dengelemesi')",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2024Ç1'de kamu dengesi −%5,22'ye inerken dış açık −%2,25'e daraldı, özel denge +%2,97",
+   "degerler": [
+    {
+     "yol": "b08.sekil_13.ceyrek.69",
+     "bicim": "metin",
+     "hane": 2
+    },
+    {
+     "yol": "b08.sekil_13.kamu.69",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.sekil_13.dis.69",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.sekil_13.ozel.69",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "reel büyüme kontrol edilince eğim −0,63 (t −3,66), büyümenin eğimi −0,11 (t −1,55); faiz dışı dengeyle −0,67 (t −2,90)",
+   "degerler": [
+    {
+     "yol": "b08.p8a.ikiz_acik.cevrim_kontrollu.egim",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ikiz_acik.cevrim_kontrollu.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ikiz_acik.cevrim_kontrollu.buyume_egim",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ikiz_acik.cevrim_kontrollu.buyume_t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ikiz_acik.faiz_disi_denge.egim",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ikiz_acik.faiz_disi_denge.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(karesel hata oranı koşulsuz ortalamaya 1,01, rastgele yürüyüşe 1,03): tarif edici",
+   "degerler": [
+    {
+     "yol": "b08.p8a.ikiz_acik.oos.ortalama.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ikiz_acik.oos.sifir.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ikiz_acik.hukum",
+     "bicim": "metin",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "fark ortalama 0,12 puan, en çok 1,01 puan (2022Ç2: TL ile −%3,89, dolarla −%2,88)",
+   "degerler": [
+    {
+     "yol": "b08.p8a.donusum_farki.ortalama_mutlak_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.donusum_farki.tl_eksi_usd_azami_mutlak_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.donusum_farki.azami_ceyrek",
+     "bicim": "metin",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.donusum_farki.azami_ceyrek_tl_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.donusum_farki.azami_ceyrek_usd_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Cari denge | −%0,8 | −%0,97 | −0,17 puan | −%1,9 | −%1,83 | +0,07 puan |",
+   "degerler": [
+    {
+     "yol": "b08.p8a.ovp_kontrol.0.ovp_cari_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.0.olcum_dis_tl_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.0.fark_cari_tl_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.2.ovp_cari_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.2.olcum_dis_tl_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.2.fark_cari_tl_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Tasarruf–yatırım farkı | −%0,6 | −%0,97 | −0,37 puan | −%1,8 | −%1,83 | −0,03 puan |",
+   "degerler": [
+    {
+     "yol": "b08.p8a.ovp_kontrol.0.ovp_tasarruf_yatirim_farki_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.0.olcum_dis_tl_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.0.fark_dis_tasarruf_yatirim_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.2.ovp_tasarruf_yatirim_farki_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.2.olcum_dis_tl_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.2.fark_dis_tasarruf_yatirim_puan",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Kamu | −%4,6 | −%4,71 | −0,11 puan | −%2,1 | −%2,84 | −0,74 puan |",
+   "degerler": [
+    {
+     "yol": "b08.p8a.ovp_kontrol.0.ovp_genel_devlet_dengesi_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.0.olcum_kamu_merkezi_yonetim_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.0.fark_kamu_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.2.ovp_genel_devlet_dengesi_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.2.olcum_kamu_merkezi_yonetim_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.2.fark_kamu_puan",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Özel kesim (artık) | +%4,0 | +%3,75 | −0,26 puan | +%0,3 | +%1,02 | +0,72 puan |",
+   "degerler": [
+    {
+     "yol": "b08.p8a.ovp_kontrol.0.ovp_ozel_artik_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.0.olcum_ozel_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.0.fark_ozel_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.2.ovp_ozel_artik_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.2.olcum_ozel_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.2.fark_ozel_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2024 satırı 09.2025, 2025 satırı 09.2026 programından",
+   "degerler": [
+    {
+     "yol": "b08.p8a.ovp_kontrol.0.yil",
+     "bicim": "metin",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.0.yayin_ay",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.2.yil",
+     "bicim": "metin",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8a.ovp_kontrol.2.yayin_ay",
+     "bicim": "ay",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "09.2025 programının 2025 tahmini (cari −%1,4) gerçekleşenden 0,43 puan uzaktı",
+   "degerler": [
+    {
+     "ifade": "v('b08.p8a.ovp_kontrol.1.yayin_ay')",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b08.p8a.ovp_kontrol.1.ovp_cari_gsyh_yuzde')",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "ifade": "abs(v('b08.p8a.ovp_kontrol.1.fark_cari_tl_puan'))",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "343 ay (12.1997–06.2026)",
+   "degerler": [
+    {
+     "yol": "b08.p8b.n",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b08.p8b.ilk",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.son",
+     "bicim": "ay",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Gecikme 0'da eğim sıfıra yakın (t −0,23); 4–13 ay arasında anlamlı eksi, en derin 8. ayda −0,075 (t −3,90); 24. ayda +0,029 (t 1,47)",
+   "degerler": [
+    {
+     "yol": "b08.p8b.ozet.gecikme0_t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.ozet.anlamli_eksi_gecikmeler_ay.0",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b08.p8b.ozet.anlamli_eksi_gecikmeler_ay.9",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b08.p8b.ozet.en_eksi_gecikme_ay",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b08.p8b.ozet.en_eksi_egim_puan_yuzde",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b08.p8b.ozet.en_eksi_t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.ozet.gecikme24_egim",
+     "bicim": "sayi",
+     "hane": 3,
+     "arti": true
+    },
+    {
+     "yol": "b08.p8b.ozet.gecikme24_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Yönetilen kur dönemi öncesinde (11.2021'e kadar) anlamlı eksi 3–13 ay (en derin −0,090, t −4,99)",
+   "degerler": [
+    {
+     "yol": "b08.p8b.yonetilen_oncesi.son",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.yonetilen_oncesi.ozet.anlamli_eksi_gecikmeler_ay.0",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b08.p8b.yonetilen_oncesi.ozet.anlamli_eksi_gecikmeler_ay.10",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b08.p8b.yonetilen_oncesi.ozet.en_eksi_egim_puan_yuzde",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b08.p8b.yonetilen_oncesi.ozet.en_eksi_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "bu yılın değişimi −0,020 (t −0,98), bir yıl öncekinin −0,053 (t −2,60), iki yıl öncekinin +0,017 (t 0,81)",
+   "degerler": [
+    {
+     "yol": "b08.p8b.yillik_dagitilmis_gecikme.gelirsiz.yil0_egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b08.p8b.yillik_dagitilmis_gecikme.gelirsiz.yil0_t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.yillik_dagitilmis_gecikme.gelirsiz.yil1_egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b08.p8b.yillik_dagitilmis_gecikme.gelirsiz.yil1_t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.yillik_dagitilmis_gecikme.gelirsiz.yil2_egim",
+     "bicim": "sayi",
+     "hane": 3,
+     "arti": true
+    },
+    {
+     "yol": "b08.p8b.yillik_dagitilmis_gecikme.gelirsiz.yil2_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Bir yıl gecikmeli eğim (−0,052, t −3,10) örneklem dışında iki kıyası da yeniyor (karesel hata oranı 0,87 ve 0,93; eğitim yalnız hedefi gerçekleşmiş aylarla), hüküm ölçülü; ama üstünlük anlamlı değil (Diebold–Mariano t −1,12 ve −0,72)",
+   "degerler": [
+    {
+     "yol": "b08.p8b.gecikme_12.egim_puan_yuzde",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b08.p8b.gecikme_12.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.oos_gecikme_12.ortalama.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.oos_gecikme_12.sifir.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.hukum_gecikme_12",
+     "bicim": "metin",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.oos_gecikme_12.ortalama.dm_t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.oos_gecikme_12.sifir.dm_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Dış ticaret endeksleri (01.2014–07.2026, 151 ay;",
+   "degerler": [
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ihracat_miktar.gecikme_0.ilk",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ihracat_miktar.gecikme_0.son",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ihracat_miktar.gecikme_0.n",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| İhracat miktarı | −0,30 | −4,74 | −0,13 | −1,06 |",
+   "degerler": [
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ihracat_miktar.gecikme_0.esneklik",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ihracat_miktar.gecikme_0.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ihracat_miktar.gecikme_12.esneklik",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ihracat_miktar.gecikme_12.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| İthalat miktarı | 0,12 | 0,55 | 0,02 | 0,12 |",
+   "degerler": [
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ithalat_miktar.gecikme_0.esneklik",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ithalat_miktar.gecikme_0.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ithalat_miktar.gecikme_12.esneklik",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ithalat_miktar.gecikme_12.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| İhracat birim değeri | −0,01 | −0,07 | 0,06 | 0,45 |",
+   "degerler": [
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ihracat_birim_deger.gecikme_0.esneklik",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ihracat_birim_deger.gecikme_0.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ihracat_birim_deger.gecikme_12.esneklik",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ihracat_birim_deger.gecikme_12.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Ticaret hadleri | 0,32 | 2,37 | 0,15 | 1,31 |",
+   "degerler": [
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ticaret_hadleri.gecikme_0.esneklik",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ticaret_hadleri.gecikme_0.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ticaret_hadleri.gecikme_12.esneklik",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ticaret_hadleri.gecikme_12.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "\"esnekliği\" 1,50 bir muhasebe",
+   "degerler": [
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ihracat_miktar.gecikme_0.gelir_esneklik",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Aylık, 343 gözlem",
+   "degerler": [
+    {
+     "yol": "b08.sekil_14.n",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(en derin −0,074, t −3,39)",
+   "degerler": [
+    {
+     "yol": "b08.p8b.oran_degisimi.ozet.en_eksi_egim_puan_yuzde",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b08.p8b.oran_degisimi.ozet.en_eksi_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "320 başlangıç ayı (12.1998–07.2025)",
+   "degerler": [
+    {
+     "yol": "b08.p8c.cari.n",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b08.p8c.cari.ilk",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8c.cari.son",
+     "bicim": "ay",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Cari denge | −0,017 | −0,95 | 1,20 | 1,30 |",
+   "degerler": [
+    {
+     "yol": "b08.p8c.cari.egim_puan_yuzde",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b08.p8c.cari.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8c.cari.oos.ortalama.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8c.cari.oos.sifir.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Altın ve enerji hariç cari | −0,014 | −1,21 | 1,22 | 1,30 |",
+   "degerler": [
+    {
+     "yol": "b08.p8c.cekirdek.egim_puan_yuzde",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b08.p8c.cekirdek.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8c.cekirdek.oos.ortalama.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8c.cekirdek.oos.sifir.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Cari, kayan 10 yıllık ortalamadan sapma | −0,028 | −1,09 | 1,34 | 1,46 |",
+   "degerler": [
+    {
+     "yol": "b08.p8c.cari.kayan_10_yil_sapma.egim_puan_yuzde",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b08.p8c.cari.kayan_10_yil_sapma.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8c.cari.kayan_10_yil_sapma.oos.ortalama.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8c.cari.kayan_10_yil_sapma.oos.sifir.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Ortalamanın %10 üstündeki bir REDK sonraki yıl dengeyi −0,16 puan değiştirir (R² 0,02)",
+   "degerler": [
+    {
+     "yol": "b08.p8c.cari.on_yuzde_sapma_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8c.cari.r2",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "hedefleri görseydi oran 0,99 çıkar",
+   "degerler": [
+    {
+     "yol": "b08.p8c.cari.oos.ortalama_ambargosuz.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(12.2007'de +30,9, 12.2021'de −63,3)",
+   "degerler": [
+    {
+     "yol": "b08.p8c.sapma_dagilimi.en_yuksek_tarih",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8c.sapma_dagilimi.en_yuksek_yuzde",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b08.p8c.sapma_dagilimi.en_dusuk_tarih",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8c.sapma_dagilimi.en_dusuk_yuzde",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "08.2026'da sapma genişleyen ortalamaya göre −17,4, kayan 10 yıllığa göre +6,0",
+   "degerler": [
+    {
+     "yol": "b08.p8c.sapma_son.tarih",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8c.sapma_son.sapma_yuzde",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b08.p8c.sapma_son.sapma_kayan_yuzde",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Her nokta bir başlangıç ayı (320 nokta)",
+   "degerler": [
+    {
+     "yol": "b08.sekil_15.n_ileri",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "\"Kırılgan Beşli\", Morgan Stanley'nin 2013'te Brezilya, Hindistan, Endonezya, Güney Afrika ve Türkiye için yaptığı adlandırmadır",
+   "kaynak": "kirilganbesli_terim"
+  },
+  {
+   "tur": "olcum",
+   "parca": "Pencere 22.05.2013 Bernanke ifadesinden (10:00 New York) önceki son kapanıştan 30.08.2013'e",
+   "degerler": [
+    {
+     "yol": "b08.p8d.olay.gun",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8d.olay.son",
+     "bicim": "tarih",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Hindistan | −%5,00 | 18,38 | 17,78 |",
+   "degerler": [
+    {
+     "yol": "b08.p8d.satirlar.1.cari_gsyh_2012.deger_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8d.satirlar.1.kur.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8d.satirlar.1.ecb_saglamlik.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Türkiye | −%4,72 | 9,71 | 9,78 |",
+   "degerler": [
+    {
+     "yol": "b08.p8d.satirlar.3.cari_gsyh_2012.deger_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8d.satirlar.3.kur.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8d.satirlar.3.ecb_saglamlik.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Güney Afrika | −%4,68 | 7,02 | 8,29 |",
+   "degerler": [
+    {
+     "yol": "b08.p8d.satirlar.2.cari_gsyh_2012.deger_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8d.satirlar.2.kur.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8d.satirlar.2.ecb_saglamlik.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Brezilya | −%3,76 | 15,80 | 14,28 |",
+   "degerler": [
+    {
+     "yol": "b08.p8d.satirlar.0.cari_gsyh_2012.deger_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8d.satirlar.0.kur.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8d.satirlar.0.ecb_saglamlik.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Endonezya | −%2,66 | 14,35 | 14,35 |",
+   "degerler": [
+    {
+     "yol": "b08.p8d.satirlar.4.cari_gsyh_2012.deger_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8d.satirlar.4.kur.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8d.satirlar.4.ecb_saglamlik.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Meksika (kontrol) | −%1,41 | 8,07 | 7,70 |",
+   "degerler": [
+    {
+     "yol": "b08.p8d.satirlar.5.cari_gsyh_2012.deger_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8d.satirlar.5.kur.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8d.satirlar.5.ecb_saglamlik.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Beşlinin medyanı 14,35 log puan",
+   "degerler": [
+    {
+     "yol": "b08.p8d.besli_medyan_degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Eichengreen ve Gupta (2015) en sert darbeyi niceliksel genişleme döneminde reel kurunun değer kazanmasına ve cari açığının genişlemesine izin veren ekonomilerin aldığını bulur; daha iyi temeller koruma sağlamadı, daha önemli belirleyici finansal piyasanın büyüklüğüydü",
+   "kaynak": "eichengreengupta2015"
+  },
+  {
+   "tur": "olcum",
+   "parca": "TCMB gösterge kuruyla Türkiye 9,88 (30.08 Zafer Bayramı, son ilan 29.08)",
+   "degerler": [
+    {
+     "yol": "b08.p8d.turkiye.tcmb_kuru_saglamlik.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Cari oranlar Dünya Bankası'nın güncel sürümü",
+   "kaynak": "kirilganbesli_cari2012"
+  },
+  {
+   "tur": "olcum",
+   "parca": "bu dersin ölçümü Türkiye için −%4,71",
+   "degerler": [
+    {
+     "yol": "b08.p8d.turkiye.cari_gsyh_2012_olcum_usd_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2018Ç2'de dış denge −%5,22, özel denge −%3,26; 2019Ç3'te dış +%2,73, özel +%5,14",
+   "degerler": [
+    {
+     "yol": "b08.sekil_13.ceyrek.46",
+     "bicim": "metin",
+     "hane": 2
+    },
+    {
+     "yol": "b08.sekil_13.dis.46",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.sekil_13.ozel.46",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.sekil_13.ceyrek.51",
+     "bicim": "metin",
+     "hane": 2
+    },
+    {
+     "yol": "b08.sekil_13.dis.51",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b08.sekil_13.ozel.51",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "2018Ç2'de $-5{,}22 - (-3{,}26) = -1{,}97$, 2019Ç3'te $2{,}73 - 5{,}14 = -2{,}41$",
+   "degerler": [
+    {
+     "ifade": "v('b08.sekil_13.dis.46') - v('b08.sekil_13.ozel.46')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b08.sekil_13.dis.51') - v('b08.sekil_13.ozel.51')",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Beş çeyrekte dış denge 7,96 puan, özel denge 8,40 puan iyileşti, kamu 0,44 puan bozuldu",
+   "degerler": [
+    {
+     "ifade": "v('b08.sekil_13.dis.51') - v('b08.sekil_13.dis.46')",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b08.sekil_13.ozel.51') - v('b08.sekil_13.ozel.46')",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "ifade": "abs((v('b08.sekil_13.dis.51') - v('b08.sekil_13.ozel.51')) - (v('b08.sekil_13.dis.46') - v('b08.sekil_13.ozel.46')))",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "%10'luk",
+   "neden": "alıştırmanın ve ölçümün %10'luk reel kur hareketi tanımı (100·ln 0,9 ve 100·ln 1,1 log puan)"
+  },
+  {
+   "tur": "hesap",
+   "parca": "REDK bir yılda %10 düşerse 8 ay sonra altın ve enerji hariç mal dengesi ne kadar değişir? Neden $10 \\times 0{,}0752$ değil?",
+   "degerler": [
+    {
+     "ifade": "v('b08.p8b.ozet.en_eksi_gecikme_ay')",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "ifade": "abs(v('b08.p8b.ozet.en_eksi_egim_puan_yuzde'))",
+     "bicim": "sayi",
+     "hane": 4
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$100\\ln 0{,}9 = -10{,}54$ log puandır; $-10{,}54 \\times (-0{,}0752) = +0{,}79$ puan.",
+   "degerler": [
+    {
+     "ifade": "100*math.log(0.9)",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b08.p8b.ozet.en_eksi_egim_puan_yuzde')",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "v('b08.p8b.ozet.on_yuzde_reel_deger_kaybi_puan')",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$10 \\times 0{,}0752 = 0{,}75$ yüzdeyi log puan sayar ve simetrik değildir: %10'luk kazanç $100\\ln 1{,}1 = 9{,}53$ log puan, −0,72 puan",
+   "degerler": [
+    {
+     "ifade": "10*abs(v('b08.p8b.ozet.en_eksi_egim_puan_yuzde'))",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "100*math.log(1.1)",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b08.p8b.ozet.on_yuzde_reel_deger_kazanci_puan')",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Genişleyen: $-0{,}504 + (-0{,}0169)(-17{,}41) = -0{,}21$ puan.",
+   "degerler": [
+    {
+     "ifade": "v('b08.p8c.cari.sabit')",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "ifade": "v('b08.p8c.cari.egim_puan_yuzde')",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "v('b08.p8c.sapma_son.sapma_yuzde')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b08.p8c.cari.sabit') + v('b08.p8c.cari.egim_puan_yuzde')*v('b08.p8c.sapma_son.sapma_yuzde')",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Kayan: $-0{,}528 + (-0{,}0281)(6{,}01) = -0{,}70$ puan.",
+   "degerler": [
+    {
+     "ifade": "v('b08.p8c.cari.kayan_10_yil_sapma.sabit')",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "ifade": "v('b08.p8c.cari.kayan_10_yil_sapma.egim_puan_yuzde')",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "v('b08.p8c.sapma_son.sapma_kayan_yuzde')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b08.p8c.cari.kayan_10_yil_sapma.sabit') + v('b08.p8c.cari.kayan_10_yil_sapma.egim_puan_yuzde')*v('b08.p8c.sapma_son.sapma_kayan_yuzde')",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "sapmanın katkısı +0,29 ve −0,17 puan",
+   "degerler": [
+    {
+     "ifade": "v('b08.p8c.cari.egim_puan_yuzde')*v('b08.p8c.sapma_son.sapma_yuzde')",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "ifade": "v('b08.p8c.cari.kayan_10_yil_sapma.egim_puan_yuzde')*v('b08.p8c.sapma_son.sapma_kayan_yuzde')",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "koşulsuz ortalamadan kötü (1,20 ve 1,34)",
+   "degerler": [
+    {
+     "yol": "b08.p8c.cari.oos.ortalama.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8c.cari.kayan_10_yil_sapma.oos.ortalama.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  }
+ ]
+}

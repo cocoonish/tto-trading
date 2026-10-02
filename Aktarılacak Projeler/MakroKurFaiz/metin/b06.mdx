@@ -1,0 +1,382 @@
+## Bölüm 6 — Bütçe II, EM ve para birliği: risk primi, borç aritmetiği, mali baskınlık (≈13 dk)
+
+EM'de ve para birliğinde açık C bloğunu oynatabilir: faiz yükselir, para düşer. Bu bölüm borç
+aritmetiğini kur terimiyle kurar, primin hangi koşulda faizi yendiğini türetir ve Türkiye'de
+ölçer.
+
+<span id="hy-b06"></span>
+
+### 6.1 Teori: kur terimli borç dinamiği ve pb* (≈2 dk)
+
+Temel formül [Türkiye Piyasa Tarihi](/arastirma/turkiye-piyasa-tarihi/), 3.7'dedir; burada
+borcun döviz payı α ve TL'nin değer kaybı ε eklenir. Tek bir örtük faizle (döviz faizinin kur
+farkı ikinci derecedendir ve dışarıda bırakılır):
+
+$$D_t = D_{t-1}(1 + i_t) + \alpha_{t-1}\,\varepsilon_t\,D_{t-1} - PB_t$$
+
+$Y_t = Y_{t-1}(1+g_t)$ ile bölünce dört terim çıkar:
+
+$$\Delta d_t = \underbrace{\frac{i_t - g_t}{1+g_t}\,d_{t-1}}_{\text{kartopu}} + \underbrace{\frac{\alpha_{t-1}\,\varepsilon_t}{1+g_t}\,d_{t-1}}_{\text{kur}} - \underbrace{pb_t}_{\text{faiz dışı denge}} + \text{artık}$$
+
+$i$ örtük nominal faiz (faiz gideri / önceki stok), $g$ nominal büyümedir; ikisi de nominal
+olduğu için $i - g$'nin işareti, aynı fiyat endeksiyle, reel faiz ile reel büyüme farkınınkiyle
+aynıdır. Borcu sabit
+tutan faiz dışı fazla ($\Delta d = 0$):
+
+$$pb^* = \frac{i - g + \alpha\,\varepsilon}{1+g}\,d$$
+
+Üç okuma. $i$ büyümenin altındaysa pb* eksidir: oran faiz dışı açıkla bile sabit kalır. Kur şoku
+oranı anında $\alpha\varepsilon d/(1+g)$ kadar sıçratır: α büyüdükçe kur haberi borç haberidir.
+$i$ eski borcun ortalamasıdır; marjinal faiz ayrıca sorulur.
+
+**KKM: yarı-mali garanti.** Kur korumalı mevduat, kur artışının mevduat faizini aşan kısmını
+öder. Stokun GSYH'ye oranı $k$, garantinin bütçeye düşen payı κ ise eklenen terim:
+
+$$\Delta d^{\,\text{KKM}}_t = \kappa\,\max\big(\varepsilon_t - i^{\text{mev}}_t,\, 0\big)\,k_{t-1} \;\le\; \varepsilon_t\,k_{t-1}$$
+
+Mevduat faizi ve paylaşım bilinmeden ölçülebilen yalnız sağdaki üst sınırdır (6.8).
+
+### 6.2 Orijinal günah ve bilanço kanalı (≈1 dk)
+
+Eichengreen ve Hausmann (1999) 'orijinal günah'ı, finansal piyasalardaki bir eksiklik yüzünden yerel paranın yurt dışından borçlanmada, hatta yurt içinde
+uzun vadeli borçlanmada bile kullanılamaması olarak tanımlar. Calvo, Izquierdo ve Mejía (2004),
+32 ülkelik örneklemde ani duruşlarla gelen büyük reel kur hareketlerinin esasen gelişen piyasa
+olgusu olduğunu ve dışa kapalılık ile yurt içi bankacılık sistemine karşı döviz cinsi borcun
+ani duruş olasılığının temel belirleyicileri olduğunu bulur. Bilanço kanalı budur: değer kaybı
+döviz borçlu bilançoları küçültür ve primi yükseltir; ticaret kanalının genişletici etkisi döner.
+
+Türkiye'de merkezi yönetim borcunun döviz payı 2026Ç2'de %39,62 ve bu bir **alt sınırdır**:
+resmî döviz borcu örtüşen 24 çeyreğin 24'ünde dış senet artı dış krediye birebir eşittir, yani
+yurt içinde ihraç edilen döviz cinsi ve dövize endeksli kâğıtları içermez. 2021 sonunda pay
+%50,69'du.
+
+### 6.3 Mali baskınlık (≈1 dk)
+
+Sargent ve Wallace (1981), maliye politikasının para politikasına baskın olduğu bir rejimde
+bugünkü sıkı paranın, biriken kamu borcunun eninde sonunda kısmen senyorajla finanse edilmesi
+gerektiği için sonunda daha yüksek enflasyon anlamına gelebileceğini gösterir; Leeper (1991)
+aynı soruyu aktif ve pasif politika ikilisiyle kurar. Sınama Bohn'un tepki fonksiyonudur:
+
+$$pb_t = \rho\, d_{t-1} + \beta' z_t + u_t, \qquad \rho > 0$$
+
+Bohn (1998), ABD'de 1916–1995 döneminde ve alt dönemlerde faiz dışı fazlanın borç/GSYH oranının
+artan bir fonksiyonu olduğunu bulur. Ghosh ve diğerleri (2013), 23 gelişmiş ekonominin 1970–2007
+verisinde faiz dışı dengenin borç yükseldikçe ona yetişemediği bir 'mali yorgunluk' tepki
+fonksiyonu bulur.
+
+Baskınlığın sessiz biçimi eksi faiz–büyüme farkıdır. Escolano, Shabunina ve Woo (2017), farkın
+1999–2008'de büyük gelişmiş ekonomilerde ortalama 1 puan civarında, gelişmiş olmayan
+ekonomilerde ise −7 puanın altında olduğunu ve bu farkların muhtemelen finansal baskıdan
+kaynaklanan, piyasa dengesinin çok altındaki reel faizlerden doğduğunu bulur. Türkiye'de fark
+2022'de −94,56 puandı (6.7): oranı faiz dışı fazla değil enflasyon düşürdü. Eşiklerde dikkat:
+Reinhart, Rogoff ve Savastano (2003), borca tahammülsüz gelişen piyasalar için 'güvenli' dış
+borç/GSMH eşiğinin bazı durumlarda %15'e kadar indiğini bulur — kamu borcu değil dış borç.
+Reinhart ve Rogoff'un (2010) kamu borcu GSYH'nin kabaca %90'ını aşan ülkelerde medyan büyümenin
+yaklaşık 1 puan düşük olduğu bulgusu, Herndon, Ash ve Pollin (2014) düzeltmesinden sonra tutmaz:
+ortalama büyüme yayımlanan −%0,1 değil %2,2'dir, %90'ın üstü ile altı çarpıcı biçimde ayrışmaz.
+
+### 6.4 Risk primli Mundell–Fleming ve Blanchard eşiği (≈2 dk)
+
+Bölüm 1'in reel UIP'sinde $q_t = E_t q_{t+1} - (r_t - r^*_t) + \rho_t$. Bir faiz artışı B
+bloğunu kalıcılığı kadar oynatır, $H = \sum_{j\ge 0}\partial E_t r_{t+j}/\partial r_t$; prim de
+faize bağlıysa:
+
+$$\Delta q \approx -H\,\Delta r + \Delta\rho, \quad \Delta\rho = \frac{\partial\rho}{\partial r}\,\Delta r \;\;\Rightarrow\;\; \Delta q \approx \Big(\frac{\partial\rho}{\partial r} - H\Big)\Delta r$$
+
+Faiz artışı parayı **zayıflatır** ($\Delta q > 0$) ancak $\partial\rho/\partial r > H$ ise. Primin
+faize duyarlılığını borç aritmetiği verir: $\rho = \theta\,p(d)$, θ riskin fiyatı, $p$ temerrüt ya
+da enflasyonla eritme olasılığı. 6.1'den, stok yeniden fiyatlandıkça $\partial d/\partial r
+\approx d/(1+g)$; faiz kuru da oynatıyorsa α kadar fazlası:
+
+$$\frac{\partial\rho}{\partial r} \approx \theta\,p'(d)\,\frac{d}{1+g}\Big(1 + \alpha\,\frac{\partial\varepsilon}{\partial r}\Big)$$
+
+Eşiği borç düzeyi, döviz payı ve risk fiyatı birlikte aşar. Blanchard (2004), reel faiz artışı
+borcun temerrüt olasılığını da yükseltiyorsa yurt içi devlet borcunu daha az çekici kılıp reel
+değer kaybına yol açabileceğini, bunun başlangıç borcu, döviz cinsi borç payı ve risk fiyatı
+yüksekken daha olası olduğunu savunur; örneği 2002 Brezilya'sıdır. Favero ve Giavazzi (2004)
+temerrüt riskinin ekonominin parasal baskınlıktan mali baskınlığa kaymasının merkezinde durduğunu
+savunur. Türkiye'deki karşılığı
+tarih dersinin M7 mekanizmasıdır. Eşik Türkiye için ölçülmedi: ρ'yu ölçecek CDS serisi yok
+(Bölüm 12), H'nin doğrudan ölçüsü de yok; Araç 2 bu yüzden prim katsayısına varsayılan koymaz.
+
+### 6.5 DM'nin EM gibi davrandığı üç hâl ve Japonya (≈1 dk)
+
+1. **Para birliği.** De Grauwe ve Ji (2013), avro bölgesindeki devlet tahvili piyasalarının
+   kendi parasını basan ülkelerinkine göre daha kırılgan ve kendini doğrulayan likidite
+   krizlerine daha açık olduğu hipotezini sınar. Prim ortak kura değil spreade yazılır (6.6,
+   6.10).
+2. **Kaldıraçlı alıcı.** İngiltere 2022'de gilt ve sterlin birlikte prim kadranındaydı (Bölüm 5,
+   Şekil 07). Pinter (2023), LDI yatırımcılarının bozulan türev ve repo pozisyonlarından doğan
+   satış baskısının uzun vadeli gilt'lerde likiditeyi buharlaştırdığını işlem verisiyle gösterir.
+3. **Kurumsal risk.** Nisan 2025'te ABD'de vade primi yükselirken dolar düştü (Bölüm 1.6,
+   5.5).
+
+**Karşı örnek, Japonya.** Hoshi ve Ito (2014), Japon devlet tahvili faizlerinin düşük kalmasının
+en makul açıklamasının tahvillerin ağırlıkla yerleşiklerce tutulması olduğunu, ama mali duruş
+değişmezse devlet borcunun yaklaşık on yıl içinde bu alıma ayrılabilecek özel kesim finansal
+varlıklarını aşacağını hesaplar (hesap noktası 2013–2014). Borcun düzeyi tek başına EM davranışı
+doğurmaz; kimin elinde olduğu ve son kredi verenin kim olduğu belirler.
+
+### 6.6 Türkiye ve vakalar (≈1 dk)
+
+Açık 2022'de faize neden geçmedi? TCMB 20 Ağustos 2022'de, yıl sonuna kadar kullandırılacak
+ticari kredilerde faizi yıllık bileşik referans oranın 1,4 katını aşan kredi tutarının %20'si,
+1,8 katını aşanın %90'ı oranında bankaların menkul kıymet tesis etmesini şart koştu; 10 Haziran
+2022 tebliği yabancı para mevduatları karşılığında da TL cinsi menkul kıymet tesisi istedi.
+Bankalar DİBS'i fiyattan bağımsız tutmak zorunda kalınca açıktan faize giden kanal kesildi: o dönemin DİBS getirisi mali haberin ölçüsü değildir (6.9'da
+ayrıca dışarıda tutulur). Bağ: [Makroihtiyati](/projeler/makroihtiyati/) panosu ve
+[Türkiye Piyasa Tarihi](/arastirma/turkiye-piyasa-tarihi/), Bölüm 9 (1991–93 mali baskınlığı ve
+2023 mali dönüşü de orada).
+
+Para birliği vakaları (fark: ülke eksi Almanya 10 yıllık; euro dolara karşı; rejim Bölüm 13'ün
+matrisinden):
+
+| Vaka | Pencere | Fark başta | Fark sonda | Zirve | Ülke 10 yıllık | Bund | Euro | Kadran · rejim |
+|---|---|---|---|---|---|---|---|---|
+| Yunanistan 2010–2012 | 01.2010–12.2012, aylık | 235 bp | 1.203 bp | 2.739 bp (02.2012) | — | — | — | yalnız aylık |
+| İtalya 2011 | 30.06–30.11.2011 | 185,1 bp | 480,2 bp | 557,9 bp (09.11.2011) | +220,4 bp | −74,7 bp | −%7,61 | prim · R5 |
+| İspanya 2012 | 30.12.2011–28.12.2012 | 328,4 bp | 396,4 bp | 635,6 bp (23.07.2012) | +16,9 bp | −51,1 bp | +%2,06 | politika · R4 |
+| İtalya, Mayıs 2018 | 14–29.05.2018 | 130,1 bp | 282,1 bp | 282,1 bp (29.05.2018) | +118,6 bp | −33,4 bp | −%3,30 | prim · R4 |
+| İtalya, 2018 bütçesi | 27.09–31.10.2018 | 237,8 bp | 302,0 bp | 324,6 bp (18.10.2018) | +50,8 bp | −13,4 bp | −%2,87 | prim · R4 |
+
+- **İtalya 2011.** 9 Kasım 2011'de 10 yıllık getiri, LCH Clearnet'in teminat oranlarını
+  artırmasının ardından %7,48'e çıkarak avronun başlangıcından bu yana ilk kez %7'yi aştı.
+- **İspanya 2012, kadranın kör noktası.** Ülke getirisi yalnız +16,9 bp yükselirken Bund düştü
+  ve fark açıldı; euro güçlendiği için kadran "politika" diyor, oysa prim spreaddedir (Alıştırma
+  3). Draghi 26 Temmuz 2012'de Londra'da ECB'nin görev alanı içinde avroyu korumak için ne
+  gerekiyorsa yapmaya hazır olduğunu söyledi; fark zirvesinden yıl sonuna 239,2 bp daraldı.
+- **İtalya, Mayıs 2018.** Lega–Beşyıldız hükümet sözleşmesinin 15 Mayıs 2018'de sızan taslağı
+  ECB'den 250 milyar avroluk İtalyan borcunun silinmesini ve avrodan çıkış kurallarını
+  içeriyordu. 2 yıllık getiri +253,1 bp ile 10 yıllıktan çok yükseldi (2 yıllık fark
+  +277,2 bp): para birimi riski kısa uca yazıldı.
+- **İtalya, 2018 bütçesi.** Hükümet Eylül 2018 sonunda 2019 için GSYH'nin %2,4'ü kadar açık
+  hedefi açıkladı; bu, önceki hükümetin hedefinin üç katıydı.
+
+Avro dışı kaynak satırları: S&P 9 Eylül 2015'te Brezilya'nın notunu BBB−'den BB+'ya indirip
+görünümü negatif bıraktı; Zuma 9 Aralık 2015'te Maliye Bakanı Nene'yi görevden aldı ve rand
+rekor düşüğe indi; Brezilya'da Aralık 2024'te real rekor düşüklere gerilerken merkez bankası
+müdahale etti ve faizi 100 bp artırdı. Bu paraların günlük tepkisi
+ölçülmedi: EM kurları yalnız aylık seride var (Bölüm 11), EM yerel getiri eğrileri yok. Fransa:
+[OAT–Bund analizi](/analiz/oat-bund-2026-10-02/).
+
+### 6.7 Pratik 6A — Türkiye Δd ayrışımı (≈1 dk)
+
+Merkezi yönetim borcu/GSYH, yıllık, 2007–2025, ayrıca 2026'nın ilk yarısı. 2020'ye kadar stok
+iç borç artı merkezi yönetim dış borcunun TCMB dönem sonu kuruyla toplanmasından türetilir,
+2021'den resmî stoktur. Birim GSYH puanıdır; artı terim oranı artırır.
+
+| Dönem | Yıl | Δd | Kartopu | Faiz dışı denge | Kur | Artık |
+|---|---|---|---|---|---|---|
+| 2007–2012 | 6 | −6,12 | −1,12 | −10,88 | +2,39 | +3,49 |
+| 2013–2017 | 5 | −10,26 | −10,55 | −5,33 | +9,87 | −4,25 |
+| 2018–2020 | 3 | +2,51 | −6,04 | +1,26 | +7,82 | −0,53 |
+| 2021–2023 | 3 | −10,68 | −33,63 | +1,62 | +15,93 | +5,40 |
+| 2024–2025 | 2 | −2,93 | −9,58 | +1,47 | +2,95 | +2,23 |
+| 2007–2025 toplamı | 19 | −27,49 | −60,92 | −11,87 | +38,96 | +6,34 |
+| 2026 ilk yarı | — | −1,18 | −0,89 | −0,71 | +0,66 | −0,23 |
+
+Oranı faizi aşan nominal büyüme düşürdü; kur terimi bu katkının %63,9'unu geri yazdı. En büyük
+yıl 2022: örtük faiz %11,60, nominal büyüme %106,16, kartopu −16,53 puan; kur +3,57 puan. 2021'de
+USD/TRY +%79,65 ve döviz payı %41,48 iken kur terimi +8,05 puan. İlk yarının akımları
+ocak–haziran toplamıdır, örtük faizi yarı yıllıktır; yıllık sütunlarla toplanmaz.
+
+Ölçü tuzakları. **İki taban:** iç borç ihraç, dış borç yerleşiklik tabanlıdır; toplamda yurt
+dışının elindeki TL DİBS iki kez sayılır, yurt içinin elindeki eurobond hiç sayılmaz. Örtüşen 24
+çeyrekte türetilmiş stok resmînin %9,79 ile %23,44 altında; düzeyler kıyaslanmaz, 2020 sonundaki
+3,45 puanlık fark (%31,79 ve %35,24) hiçbir yılın Δd'sine girmez. **Kur:** terim yalnız dolar
+kuruyla; euro cinsi borcun değerlemesi artığa düşer. Dönem sonu kuru, dönemin son iş günü ilan
+edilen kurdur (bir gün önceki ilanla fark en çok %2,71, 31.12.2021). **Artık** bilgi taşır:
+Hazine nakit hesabı, iskontolu ihraç, endeksli tahvillerin anapara artışı, dolar dışı değerleme,
+kapsam farkı; hiçbiri ayrıca ölçülmedi, kapatmak için düzeltme yapılmaz.
+
+<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/09_borc_ayrisimi.html" baslik="Türkiye borç oranı değişiminin ayrışımı" no="09" kaynak="HMB bütçe ve borç istatistikleri (EVDS) · TCMB" />
+
+**Bu seri nasıl hesaplanıyor.** Üst panel her yılın Δd'sini dört yığılı terime ayırır: kartopu
+$(i - g)/(1 + g)\cdot d_{-1}$ ($i$ yılın faiz gideri bölü önceki yıl sonu stok, $g$ dört
+çeyreklik GSYH'nin yıllık artışı), faiz dışı denge terimi (fazlanın eksi işaretlisi), kur terimi
+$\alpha_{-1}\,\varepsilon\,d_{-1}/(1+g)$ (ε TCMB dönem sonu USD/TRY'sinin yıllık değişimi) ve
+artık. Çizgi Δd'dir; taralı son sütun 2026'nın ilk yarısıdır. Alt panel yıl sonu düzeyidir: gri
+türetilen, siyah resmî stok.
+
+### 6.8 Pratik 6B — pb*, kur fanı, KKM ve Araç 2 (≈2 dk)
+
+**Bugün, 2026Ç2.** Borç %20,44, döviz payı %39,62 (alt sınır), örtük faiz %21,17, nominal büyüme
+%38,84: $i - g$ −17,66 puan, pb* GSYH'nin −%2,60'ı. Ölçülen faiz dışı fazla %0,88: oran düşüyor.
+Son dört çeyreğin kur değişimi (+%17,20) eklenince pb* −%1,60. Marjinal faizle (DİBS sıfır kupon,
+30.06.2026) 2 yıllık %39,66'da $i - g$ +0,82 puan ve pb* +%0,12, 5 yıllık %34,79'da −4,05 puan ve
+−%0,60. Kolaylığın çoğu eski ucuz borçtan ve enflasyonun şişirdiği nominal büyümeden gelir; stok
+yenilendikçe ve enflasyon düştükçe kapanır.
+
+**Kur fanı** (anlık; nominal GSYH'nin sonradan büyümesi ölçülmedi): USD/TRY +%10'da borç oranı
++0,81 puan (%21,25), +%20'de +1,62 puan (%22,06), +%30'da +2,43 puan (%22,87). Şok sonrası pb*
+sırayla −%2,70, −%2,81, −%2,91: $i - g$ eksiyken yüksek borç daha büyük bir "izinli" açık demektir
+— marjinal faizde işaret döner.
+
+**KKM** (12.2021–07.2026). Zirve 07.2023: döviz dönüşümlü 97,2 milyar dolar (ay sonu kuru 26,93
+ile 2.617,8 milyar TL) ve TL'den dönüşen 1.020,9 milyar TL, toplam 3.638,7 milyar TL. %20'lik kur
+şokunda brüt yük yıllık GSYH'nin %2,25'i ve %0,88'i, toplam %3,13. Brüttür: mevduat faizi
+düşülmedi, garantinin bütçe ile TCMB arasındaki paylaşımı kayıtlı değil; döviz dönüşümlü sütun
+bütün KKM'yi taşıyorsa zirve 2.617,8 milyar TL'de kalır. 07.2026'da stok 0,19 milyar TL, +%30
+şokta yük GSYH'nin %0,0001'i: KKM'nin kur duyarlılığı fiilen sıfırlandı.
+
+<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/10_pb_yildiz_fan.html" baslik="Borcu sabit tutan faiz dışı fazla, kur şoku ve KKM" no="10" kaynak="HMB (EVDS) · TCMB DİBS gösterge değerleri · TCMB KKM istatistikleri" />
+
+**Bu seri nasıl hesaplanıyor.** Üst panel $pb^* = (i - g)/(1 + g)\cdot d$ eşyükselti
+çizgileridir ($g$ bugünkü dört çeyreklik nominal büyüme); kesik çizginin solunda bugünkü fazlayla
+oran düşer, sağında artar (kur hariç). Üç nokta aynı borç oranında örtük faiz, 5 ve 2 yıllık
+DİBS'tir. Alt panel kur şokunun anlık etkisi (borç oranı × döviz payı × kur artışı) ve KKM zirve
+ayının brüt yüküdür. Kusurlar: döviz payı alt sınırdır; sıçrama anlıktır; KKM brüttür.
+
+**Araç 2.** Borç oranını yıllık adımlarla ilerletir:
+$d_{t+1} = d_t + d_t(i - g)/(1+g) + \alpha d_t\varepsilon/(1+g) - pb$. Açılış değerleri 2026Ç2
+ölçümünün yuvarlanmış hâli: borç %20,4, döviz payı %39,6, örtük faiz %21,2, büyüme %38,8, faiz
+dışı fazla %0,88, değer kaybı 0, ufuk 5 yıl. Çıktılar: $i - g$ −17,60 puan, pb* −%2,59; tek
+seferlik %20 değer kaybı oranı +1,62 puan sıçratır; bugünkü koşullar beş yıl sürseydi oran
+%6,94'e inerdi — mekanik bir uzatma, öngörü değil. Araç Taylor kuralını dinler (Bölüm 3): kural
+faizi (%34,13) örtük faize tam geçseydi pb* −%0,69 olurdu (uzun dönem kıyası). **EM risk primi
+katsayısına varsayılan konmadı:** primin borca duyarlılığı Türkiye için ölçülmedi (6.4, 6.9).
+Okurun girdiği katsayı × Δd, ek prim olarak kurun C bloğuna akar. Zincir: Taylor →
+Borç → REDK (Bölüm 7) → Kurun üç bloğu (Bölüm 11).
+
+<MakroBorcHesaplayici />
+
+### 6.9 Pratik 6C — faiz dışı denge ve 5 ile 7 yıllık getiri (≈1 dk)
+
+Çeyreklik, 2013Ç1–2026Ç2; çeyrek sonu DİBS sıfır kupon getirisi (çeyreğin son piyasa gününün
+sabah sabitlemesi, Bölüm 2) ile 12 aylık faiz dışı denge/GSYH; Newey–West, değişimde genişleyen
+pencereli örneklem dışı kıyas. **Örneklem içi tarif.**
+
+| Tanım | Çeyrek | Eğim | t | Karesel hata / rastgele yürüyüş | Hüküm |
+|---|---|---|---|---|---|
+| Düzey, 5 yıllık (% / puan) | 54 | −3,57 | −3,42 | — | tarif edici |
+| Değişim, 5 yıllık (bp / puan) | 53 | +93,0 | 1,06 | 1,14 | tarif edici |
+| Değişim, 7 yıllık | 53 | +63,5 | 0,71 | 1,18 | tarif edici |
+| Değişim, 5 yıllık, yönetilen kur hariç | 46 | +243,8 | 3,42 | 0,90 | ölçülü |
+| Bir çeyrek önceki denge, 5 yıllık | 52 | −111,7 | −1,93 | 1,05 | tarif edici |
+
+Düzeyde işaret beklenen yönde ama düzeyler birim köke yakın, t hüküm vermez. Değişimde işaret
+ters: denge iyileşirken getiri yükseliyor. Yönetilen kur dönemi (2021Ç4–2023Ç2)
+dışarıda kalınca eğim büyüyor ve eşikleri geçiyor ([Bloomberg HRA ile Korelasyon](/arastirma/bloomberg-hra-korelasyon/),
+6.1), ama örneklem dışı üstünlüğün Diebold–Mariano t'si −0,66: anlamlı değil. Eşanlı satır
+çeyreğin dengesini bilinen sayar, oysa denge çeyrek kapandıktan sonra yayımlanır: bir uyum
+sınamasıdır, tahmin değil. Çeyrek sonu tek günün kotasıdır: etiket bir gün kaydırılınca 5 yıllık
+ortalama 32,3 bp, en çok 290,8 bp (2022Ç2) oynar.
+
+| Beklenen yanlılık | Eğime etkisi | Neden |
+|---|---|---|
+| Enflasyon nominal geliri şişirir | artıya | enflasyon hem vergi gelirini hem getiriyi yükseltir |
+| Konjonktür | artıya | büyüme hem gelirleri hem politika faizini artırır |
+| Faiz gideri mekaniği | toplam dengede eksiye | faiz gideri getiriyle yükselir; bu yüzden faiz dışı denge kullanılır |
+| Laubach tasarımı kurulamaz | — | öngörülen açık serisi yok; ölçülen bugünkü dengedir (Bölüm 5.4) |
+
+### 6.10 Pratik 6D — çevre farkları ve Eurostat paneli (≈1 dk)
+
+Ülke 10 yıllık eksi Almanya 10 yıllık: günlük CNBC (Avrupa kapanışı, 2000–2026) ve aylık ECB
+Maastricht ortalaması (01.1999–08.2026); günlük farkın aylık ortalaması ECB ile korelasyon
+0,996–0,9998, ortalama mutlak fark 3,1–5,2 bp. Temizlik: Portekiz 10 yıllığında 315 sıfır günü
+veri boşluğudur ve atıldı; beş ve daha uzun
+birebir aynı dizilerin yalnız ilk günü kalır (İtalya 10 yıllık 09–23.12.2010).
+
+| Ülke | Aylık zirve | 08.2026, aylık | 30.09.2026, günlük | Borç/GSYH 2010 | Borç/GSYH 2025 | Borç zirvesi | Denge/GSYH 2025 |
+|---|---|---|---|---|---|---|---|
+| Yunanistan | 2.739,0 bp (02.2012) | 68,5 bp | 91,83 bp | %147,8 | %146,1 | %209,4 (2020) | +%1,7 |
+| Portekiz | 1.202,9 bp (01.2012) | 35,2 bp | 43,83 bp | %99,9 | %89,7 | %134,1 (2020) | +%0,7 |
+| İrlanda | 971,0 bp (07.2011) | 16,5 bp | — | %86,2 | %32,9 | %118,9 (2012) | +%1,8 |
+| İspanya | 555,4 bp (07.2012) | 44,5 bp | 55,05 bp | %60,3 | %100,7 | %119,3 (2020) | −%2,4 |
+| İtalya | 518,7 bp (11.2011) | 80,1 bp | 103,58 bp | %118,8 | %137,1 | %154,4 (2020) | −%3,1 |
+| Fransa | 154,0 bp (11.2011) | 81,5 bp | 126,36 bp | %86,3 | %115,6 | %115,6 (2025) | −%5,1 |
+| Almanya | — | — | — | %81,0 | %63,5 | %81,0 (2010) | −%2,7 |
+
+Fark borcun düzeyini değil yolunu ve son kredi vereni fiyatlar: Yunanistan'ın borcu 2010'daki
+düzeyinde ama farkı krizdekinin küçük bir kesri; borcu zirvesinde olan tek ülke Fransa ve farkı
+30.09.2026'da İtalya'nınkinin üstünde. Yedi ülke ve iki yıl bir kesit tarifidir, kural değil.
+
+<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/11_cevre_farklari.html" baslik="Çevre ülke ile Almanya arasındaki 10 yıllık getiri farkı" no="11" kaynak="ECB (Maastricht ölçütü) · CNBC (Avrupa kapanışı)" />
+
+**Bu seri nasıl hesaplanıyor.** Çizgiler ECB'nin Maastricht ölçütü 10 yıllık getirisinin aylık
+ortalamasından ülke eksi Almanya farkıdır (bp): üstte Yunanistan kendi ölçeğinde, ortada öbür beş
+ülke, altta 2020 sonrası. Dolu elmas son günün günlük kapanışı, boş elmas olay penceresinin
+günlük zirvesidir (CNBC, Avrupa kapanışı); gölgeler olay pencereleridir. Kusurlar: aylık ortalama
+günlük zirveyi düzleştirir; İrlanda'nın günlük serisi yok; Yunanistan'ın 07.2015 ayı aylık seride
+eksik.
+
+<div class="not">
+
+  <span class="etiket">Masada ne yaparsınız</span>
+
+  - Faiz yükselirken para düşüyorsa önce borcun döviz payı ve vadesi, sonra marjinal faizle
+    pb* okunur.
+  - Para birliğinde kur yerine spread okunur; ortak para kadranı ülke primini göstermez.
+  - Örtük faizle hesaplanan rahatlık marjinal faizle yeniden yazılmadan "borç sürdürülebilir"
+    denmez; KKM gibi garantiler kur şokunun üst sınırıyla eklenir; zorunlu tahvil talebi varken
+    DİBS getirisi mali haberin ölçüsü sayılmaz.
+
+</div>
+
+<div class="not">
+
+  <span class="etiket">Tek cümlelik kural</span>
+
+  Faiz artarken para düşüyorsa terim primdir; bakılacak sayı faiz değil, borcun kur ve faiz
+  duyarlılığıdır.
+
+</div>
+
+<div class="not">
+
+  <span class="etiket">Pratik — Bölüm 6</span>
+
+**1. 2022'nin ayrışımı.** 2021 sonu borç oranı %36,04, döviz payı %50,69; 2022'de örtük faiz
+%11,60, nominal büyüme %106,16, USD/TRY +%40,28, faiz dışı fazla %1,12, yıl sonu oran %25,68.
+Dört terimi hesaplayın.
+
+<details>
+<summary>Çözüm</summary>
+
+$1 + g = 2{,}0616$. Kartopu $(0{,}1160 - 1{,}0616)/2{,}0616 \times 36{,}04$ → −16,53 puan. Kur
+$0{,}5069 \times 0{,}4028 \times 36{,}04 / 2{,}0616$ → +3,57 puan. Faiz dışı denge −1,12 puan.
+Δd −10,36 puan, artık +3,72 puan. Borcu enflasyon eritti; kur bunun beşte birini geri yazdı.
+
+</details>
+
+**2. pb*, kur şoku ve marjinal faiz.** 2026Ç2 değerleriyle pb*'ı örtük faizle ve 2 yıllık DİBS
+ile hesaplayın; sonra +%20 kur şokunun borç oranına etkisini bulun.
+
+<details>
+<summary>Çözüm</summary>
+
+Örtük: $(0{,}2117 - 0{,}3884)/1{,}3884 \times 20{,}44$ → −%2,60. 2 yıllık: $i - g$ +0,82 puan,
+pb* +%0,12. Fazla %0,88: örtük faizle oran düşüyor, marjinal faizle de düşer ama pay ince.
+Şok: $20{,}44 \times 0{,}3962 \times 0{,}20$ → +1,62 puan, yeni oran %22,06. KKM'nin zirvesinde
+aynı şok GSYH'nin %3,13'ü kadar brüt yük eklerdi; bugün sıfıra yakın.
+
+</details>
+
+**3. Para birliğinde kadran.** İspanya 2012 ile İtalya Mayıs 2018'i kadrana yerleştirin. Hangi
+satırda kadran yanıltır, okunacak sayı nedir?
+
+<details>
+<summary>Çözüm</summary>
+
+İspanya: ülke 10 yıllık +16,9 bp, euro +%2,06: faiz ↑ para ↑, kadran politika. Ama Bund
+−51,1 bp düştü, fark +68,0 bp açıldı: prim spreaddedir, kadran ortak parada onu göremez.
+İtalya 2018: 10 yıllık +118,6 bp, EUR/USD −%3,30: prim; fark +152,0 bp, 2 yıllık +253,1 bp: para
+birimi riski kısa uca yazıldı. İki satırda da okunacak sayı spread ve onun vadesidir.
+
+</details>
+
+**4. "Ölçülü" satır mali kanalın kanıtı mı?** Yönetilen kur hariç 5 yıllık değişim eğimi
++243,8 bp/puan, t 3,42, karesel hata rastgele yürüyüşün 0,90'ı. Beklenen yanlılık tablosuyla
+yorumlayın.
+
+<details>
+<summary>Çözüm</summary>
+
+Hayır. İşaret "açık büyür, faiz artar" kanalının tersidir: denge 1 puan iyileşirken getiri
+≈244 bp yükseliyor; enflasyon ve konjonktür ikisini birlikte artırır. 2023Ç3 dışarıda kalınca
+eğim 163,3; Diebold–Mariano t'si −0,66; yayımlanmış dengeye tepki eksi ve rastgele yürüyüşü
+yenmiyor (oran 1,05). Satır ortak sürücüyü tarif eder, mali esneklik değildir.
+
+</details>
+
+</div>

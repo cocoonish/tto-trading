@@ -1,0 +1,1449 @@
+{
+ "girdiler": [
+  {
+   "tur": "tablo",
+   "satir": "| 2013 | 4,59 | 4,84 | 4,59 |",
+   "degerler": [
+    {
+     "yol": "b09.p9a.yillik.2013.en_dusuk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2013.en_yuksek",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2013.yil_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2014 | 3,38 | 4,37 | 3,55 |",
+   "degerler": [
+    {
+     "yol": "b09.p9a.yillik.2014.en_dusuk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2014.en_yuksek",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2014.yil_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2015 | 2,87 | 4,85 | 2,87 |",
+   "degerler": [
+    {
+     "yol": "b09.p9a.yillik.2015.en_dusuk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2015.en_yuksek",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2015.yil_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2016 | 2,35 | 3,98 | 3,20 |",
+   "degerler": [
+    {
+     "yol": "b09.p9a.yillik.2016.en_dusuk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2016.en_yuksek",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2016.yil_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2017 | 2,52 | 3,76 | 2,73 |",
+   "degerler": [
+    {
+     "yol": "b09.p9a.yillik.2017.en_dusuk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2017.en_yuksek",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2017.yil_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2018 | 1,46 | 2,91 | 2,06 |",
+   "degerler": [
+    {
+     "yol": "b09.p9a.yillik.2018.en_dusuk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2018.en_yuksek",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2018.yil_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2019 | 0,64 | 2,69 | 1,74 |",
+   "degerler": [
+    {
+     "yol": "b09.p9a.yillik.2019.en_dusuk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2019.en_yuksek",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2019.yil_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2020 | −2,49 | 1,71 | −2,17 |",
+   "degerler": [
+    {
+     "yol": "b09.p9a.yillik.2020.en_dusuk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2020.en_yuksek",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2020.yil_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2021 | −2,29 | −1,25 | −1,92 |",
+   "degerler": [
+    {
+     "yol": "b09.p9a.yillik.2021.en_dusuk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2021.en_yuksek",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2021.yil_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2022 | −2,72 | −1,42 | −1,72 |",
+   "degerler": [
+    {
+     "yol": "b09.p9a.yillik.2022.en_dusuk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2022.en_yuksek",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2022.yil_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2023 | −2,57 | −1,32 | −1,32 |",
+   "degerler": [
+    {
+     "yol": "b09.p9a.yillik.2023.en_dusuk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2023.en_yuksek",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2023.yil_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2024 | −2,12 | 1,36 | 1,22 |",
+   "degerler": [
+    {
+     "yol": "b09.p9a.yillik.2024.en_dusuk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2024.en_yuksek",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2024.yil_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2025 | 0,39 | 1,92 | 1,86 |",
+   "degerler": [
+    {
+     "yol": "b09.p9a.yillik.2025.en_dusuk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2025.en_yuksek",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2025.yil_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2026 (25.09'a kadar) | 0,45 | 2,40 | 0,98 |",
+   "degerler": [
+    {
+     "yol": "b09.p9a.yillik.2026.en_dusuk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2026.en_yuksek",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2026.yil_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2013–2017 | 260 | %66,9 | %15,0 | %18,1 | 0,86 |",
+   "degerler": [
+    {
+     "yol": "b09.p9b.donemler.2013–2017.pay.kur",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.2013–2017.pay.rezerv",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.2013–2017.pay.faiz",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.2013–2017.emp_oynaklik",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2018–2020 | 156 | %37,7 | %35,0 | %27,3 | 1,84 |",
+   "degerler": [
+    {
+     "yol": "b09.p9b.donemler.2018–2020.pay.kur",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.2018–2020.pay.rezerv",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.2018–2020.pay.faiz",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.2018–2020.emp_oynaklik",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 01.2021–11.2021 | 48 | %65,4 | %21,5 | %13,1 | 1,47 |",
+   "degerler": [
+    {
+     "yol": "b09.p9b.donemler.2021 (Kasım'a kadar).pay.kur",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.2021 (Kasım'a kadar).pay.rezerv",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.2021 (Kasım'a kadar).pay.faiz",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.2021 (Kasım'a kadar).emp_oynaklik",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Yönetilen kur, 12.2021–06.2023 | 83 | %75,2 | %17,0 | %7,7 | 2,41 |",
+   "degerler": [
+    {
+     "yol": "b09.p9b.donemler.yönetilen kur (2021-12 … 2023-06).pay.kur",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.yönetilen kur (2021-12 … 2023-06).pay.rezerv",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.yönetilen kur (2021-12 … 2023-06).pay.faiz",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.yönetilen kur (2021-12 … 2023-06).emp_oynaklik",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 07.2023–09.2026 | 169 | %3,2 | %44,2 | %52,5 | 2,71 |",
+   "degerler": [
+    {
+     "yol": "b09.p9b.donemler.2023-07 … 2026-09.pay.kur",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.2023-07 … 2026-09.pay.rezerv",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.2023-07 … 2026-09.pay.faiz",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.2023-07 … 2026-09.emp_oynaklik",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Ağustos 2018 (27.07–17.08) | +%20,1 | −0,9 | +1,50 puan | 7,75 | 0,38 | 2,03 | 10,16 |",
+   "degerler": [
+    {
+     "yol": "b09.p9b.epizotlar.Ağustos 2018.kur_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Ağustos 2018.swap_haric_net_degisim_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Ağustos 2018.aofm_degisim_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Ağustos 2018.bilesen_toplam.kur",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Ağustos 2018.bilesen_toplam.rezerv",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Ağustos 2018.bilesen_toplam.faiz",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Ağustos 2018.emp_toplam",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Kasım–Aralık 2021 (12.11–17.12) | +%57,9 | −14,1 | −1,21 puan | 19,29 | 5,16 | −1,63 | 22,82 |",
+   "degerler": [
+    {
+     "yol": "b09.p9b.epizotlar.Kasım–Aralık 2021.kur_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Kasım–Aralık 2021.swap_haric_net_degisim_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Kasım–Aralık 2021.aofm_degisim_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Kasım–Aralık 2021.bilesen_toplam.kur",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Kasım–Aralık 2021.bilesen_toplam.rezerv",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Kasım–Aralık 2021.bilesen_toplam.faiz",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Kasım–Aralık 2021.emp_toplam",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Mart–Nisan 2025 (14.03–18.04) | +%4,1 | −44,4 | +5,47 puan | 1,69 | 12,42 | 7,39 | 21,49 |",
+   "degerler": [
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.kur_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.swap_haric_net_degisim_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.aofm_degisim_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.bilesen_toplam.kur",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.bilesen_toplam.rezerv",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.bilesen_toplam.faiz",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.emp_toplam",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Eylül 2026 (28.08–25.09) | +%1,5 | −16,0 | 0,00 puan | 0,63 | 4,02 | 0,00 | 4,64 |",
+   "degerler": [
+    {
+     "yol": "b09.p9b.epizotlar.Eylül 2026.kur_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Eylül 2026.swap_haric_net_degisim_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Eylül 2026.aofm_degisim_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Eylül 2026.bilesen_toplam.kur",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Eylül 2026.bilesen_toplam.rezerv",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Eylül 2026.bilesen_toplam.faiz",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Eylül 2026.emp_toplam",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Greenspan 29 Nisan 1999 konuşmasında Guidotti'nin önerisini aktarır",
+   "kaynak": "greenspan_guidotti1999"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "dalgalı kur rejiminde kısa vadeli dış borcun %30'unu, diğer portföy yükümlülüklerinin %15'ini, geniş paranın %5'ini ve ihracatın %5'ini toplar; rezervin bu ölçünün 1 ile 1,5 katı arasında olması yeterli sayılır",
+   "kaynak": "imf_ara"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Jeanne ve Rancière, ani duruşa karşı sigorta olarak tutulan rezervin optimal düzeyi için bir formül türetir",
+   "kaynak": "jeanne_ranciere2011"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Obstfeld, Shambaugh ve Taylor'a göre rezerv stokunun anlamlı öngörücüleri",
+   "kaynak": "obstfeld_shambaugh_taylor2010"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Calvo ve Reinhart 154 kur düzenlemesini inceler",
+   "kaynak": "calvo_reinhart2002"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Hausmann, Panizza ve Stein (2001) ülkelerin kurlarını hangi ölçüde ve nasıl dalgalandırdığının belirleyicilerini inceler",
+   "kaynak": "hausmann_panizza_stein2001"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Lane ve Milesi-Ferretti 1970–2004 döneminde 145 ülke için dış varlık ve yükümlülük tahminleri kurar",
+   "kaynak": "lane_milesiferretti2007"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Catão ve Milesi-Ferretti'ye göre net dış yükümlülüklerin GSYH'ye oranı anlamlı bir kriz öncüsüdür ve mutlak değerde %50'yi aştığında etkisi büyür",
+   "kaynak": "catao_milesiferretti2014"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "22 Eylül 2022'de 2,8382 trilyon yen, 21 Ekim 2022'de 5,6202 trilyon yen ve 24 Ekim 2022'de 0,7296 trilyon yendir",
+   "kaynak": "japonya_mudahale_2022"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "2024'te 29 Nisan ile 1 Mayıs'ta toplam 9,7885 trilyon yen, 11 ve 12 Temmuz'da toplam 5,5348 trilyon yen",
+   "kaynak": "japonya_mudahale_2024"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "(Della Corte, Riddiough ve Sarno 2016; Bölüm 8)",
+   "kaynak": "dellacorte2016"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "politika faizi Kasım 2014 sonunda %9,5 iken Aralık 2014 sonunda %17'ydi ve Şubat 2015 sonunda %15'e indi",
+   "kaynak": "rusya_2014"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Catão ve Milesi-Ferretti'nin öncüsü net dış borçtur",
+   "kaynak": "catao_milesiferretti2014"
+  },
+  {
+   "tur": "olcum",
+   "parca": "haftalık seri 01.07.2011–25.09.2026, 796 hafta",
+   "degerler": [
+    {
+     "yol": "b09.p9a.resmi.ilk",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.resmi.son",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.resmi.n",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "25.09.2026'da brüt rezerv 171,6 milyar dolar, kalan vadeye göre kısa vadeli dış borç 248,1 milyar dolar: oran 0,69 ve kural sağlanmıyor",
+   "degerler": [
+    {
+     "yol": "b09.p9a.son",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.son_deger.brut_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b09.p9a.resmi.son_kv_borc_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b09.p9a.resmi.son_oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "hariç net rezerve (39,9 milyar dolar) çevrilince oran 0,16",
+   "degerler": [
+    {
+     "ifade": "v('b09.p9a.son_deger.swap_haric_net_mlr_usd')",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "v('b09.p9a.son_deger.swap_haric_net_mlr_usd') / v('b09.p9a.resmi.son_kv_borc_mlr_usd')",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "son 52 haftalık toplamı 40,8 milyar dolar; resmî payda bunun 6,1 katı",
+   "degerler": [
+    {
+     "ifade": "v('b09.p9a.son_deger.odeme_52h_mlr_usd')",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "v('b09.p9a.resmi.son_kv_borc_mlr_usd') / v('b09.p9a.son_deger.odeme_52h_mlr_usd')",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "hariç net rezerv vekil paydanın 0,98, brüt rezerv 4,20 katı",
+   "degerler": [
+    {
+     "yol": "b09.p9a.son_deger.kapsama_swap_haric",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.son_deger.kapsama_brut",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "20.12.2013–25.09.2026, 667 hafta",
+   "degerler": [
+    {
+     "yol": "b09.p9a.ilk",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.son",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.n",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Oran 2026'da 2,40'ı gördü, 25.09.2026'da 0,98",
+   "degerler": [
+    {
+     "yol": "b09.p9a.yillik.2026.en_yuksek",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.son",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.yillik.2026.yil_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Haftalık, 11.01.2013–25.09.2026, 716 hafta",
+   "degerler": [
+    {
+     "yol": "b09.p9b.ilk",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.son",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.n",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Standart sapmalar örneklemin tamamından: %2,37, %2,20 ve 0,74 puan",
+   "degerler": [
+    {
+     "yol": "b09.p9b.sigma.ds_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.sigma.dr_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.sigma.di_puan",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(987 cumanın 987'si)",
+   "degerler": [
+    {
+     "yol": "b09.p9b.kur_cuma_olcumu.cuma_pazartesi_barindan",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.kur_cuma_olcumu.cuma_gunu",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Geçiş öncesi 572 haftada haftalık değişimin birinci özilintisi cuma değeriyle −0,26, perşembe kapanışıyla −0,11; standart sapma %3,24'ten %2,64'e iner",
+   "degerler": [
+    {
+     "yol": "b09.p9b.kur_cuma_olcumu.n_hafta",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.kur_cuma_olcumu.ozilinti_cuma_degeri",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.kur_cuma_olcumu.ozilinti_persembe",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.kur_cuma_olcumu.sigma_cuma_degeri_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.kur_cuma_olcumu.sigma_persembe_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "kur %31,4, rezerv %34,3, faiz %34,3",
+   "degerler": [
+    {
+     "yol": "b09.p9b.tam_pay.kur",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.tam_pay.rezerv",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.tam_pay.faiz",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "07.2023–09.2026'da kurun payı %3,2'ye indi; baskının %44,2'si rezerve, %52,5'i faize yazıldı",
+   "degerler": [
+    {
+     "yol": "b09.p9b.donemler.2023-07 … 2026-09.pay.kur",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.2023-07 … 2026-09.pay.rezerv",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b09.p9b.donemler.2023-07 … 2026-09.pay.faiz",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "kur payının en yüksek çıkması (%75,2)",
+   "degerler": [
+    {
+     "yol": "b09.p9b.donemler.yönetilen kur (2021-12 … 2023-06).pay.kur",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Haziran 2023 (aylık toplam 11,20 σ)",
+   "degerler": [
+    {
+     "yol": "b09.sekil_16.kur.125",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Kasım 2022–Mart 2023 aylarında kur bileşeni ayda en çok 0,69 σ",
+   "degerler": [
+    {
+     "ifade": "max(v('b09.sekil_16.kur')[118:123])",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Mart–Nisan 2025'te USD/TRY yalnız +%4,1 yükseldi; swap hariç net rezerv 44,4 milyar dolar (brüt 24,5 milyar dolar) eridi, AOFM 5,47 puan arttı",
+   "degerler": [
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.kur_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "ifade": "-v('b09.p9b.epizotlar.Mart–Nisan 2025.swap_haric_net_degisim_mlr_usd')",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "-v('b09.p9b.epizotlar.Mart–Nisan 2025.brut_degisim_mlr_usd')",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.aofm_degisim_puan",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Eylül 2026'nın 0,63 σ'luk kur bileşeni kontrollü kaymanın kendisidir; dört haftada swap hariç net rezerv 16,0 milyar dolar düştü",
+   "degerler": [
+    {
+     "ifade": "v('b09.p9b.epizotlar.Eylül 2026.bilesen_toplam.kur')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "-v('b09.p9b.epizotlar.Eylül 2026.swap_haric_net_degisim_mlr_usd')",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "haftalık değerlerin ay içi toplamı (σ birimi), 01.2013–09.2026, 165 ay",
+   "degerler": [
+    {
+     "yol": "b09.sekil_16.ilk",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b09.sekil_16.son",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b09.sekil_16.n",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Üç σ da 716 haftanın tamamından",
+   "degerler": [
+    {
+     "yol": "b09.sekil_16.n_hafta",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "En büyük aylık toplamlar Ağustos 2018'de kurda (13,69 σ), Eylül 2023'te faizde (18,12 σ), Mart 2026'da rezervde (15,08 σ); Mayıs 2024'teki −18,42 σ'luk rezerv bileşeni",
+   "degerler": [
+    {
+     "yol": "b09.sekil_16.kur.67",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.sekil_16.faiz.128",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.sekil_16.rezerv.158",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.sekil_16.rezerv.136",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2026Ç2 sonunda NUYP −407,2 milyar dolar",
+   "degerler": [
+    {
+     "yol": "b09.p9c.son_nuyp_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "2006Ç1–2026Ç2'nin 82 çeyreğinde cari denge toplamı −644,6 milyar dolar, NUYP'nin değişimi −236,6 milyar dolar: aradaki +408,0 milyar dolar",
+   "degerler": [
+    {
+     "ifade": "len(v('b09.p9c.seri.tarih')[9:])",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "ifade": "sum(v('b09.p9c.seri.cari')[9:])",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "sum(v('b09.p9c.seri.d_nuyp')[9:])",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "sum(v('b09.p9c.seri.degerleme')[9:])",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "82 çeyreğin 65'inde",
+   "degerler": [
+    {
+     "ifade": "len(v('b09.p9c.seri.tarih')[9:])",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "ifade": "sum(abs(v('b09.p9c.seri.degerleme')[v('b09.p9c.seri.tarih').index(t)]) > abs(v('b09.p9c.seri.cari')[v('b09.p9c.seri.tarih').index(t)]) for t in v('b09.p9c.seri.tarih')[9:])",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2021Ç1 +94,1, 2023Ç1 +88,3 ve 2022Ç4 −134,4 milyar dolar",
+   "degerler": [
+    {
+     "yol": "b09.p9c.seri.degerleme.69",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9c.seri.degerleme.77",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9c.seri.degerleme.76",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Brüt rezerv 171,6, swap hariç net rezerv 39,9 milyar dolar; kalan vadeye göre kısa vadeli dış borç 248,1, son 52 haftanın dış borç ödemesi 40,8 milyar dolar",
+   "degerler": [
+    {
+     "yol": "b09.p9a.son_deger.brut_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b09.p9a.son_deger.swap_haric_net_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b09.p9a.resmi.son_kv_borc_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b09.p9a.son_deger.odeme_52h_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$171{,}6/248{,}1 \\approx 0{,}69$ ve $39{,}9/248{,}1 \\approx 0{,}16$",
+   "degerler": [
+    {
+     "yol": "b09.p9a.son_deger.brut_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b09.p9a.resmi.son_kv_borc_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b09.p9a.resmi.son_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.son_deger.swap_haric_net_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "v('b09.p9a.son_deger.swap_haric_net_mlr_usd') / v('b09.p9a.resmi.son_kv_borc_mlr_usd')",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$39{,}9/40{,}8 \\approx 0{,}98$ ve $171{,}6/40{,}8 \\approx 4{,}20$",
+   "degerler": [
+    {
+     "yol": "b09.p9a.son_deger.swap_haric_net_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b09.p9a.son_deger.odeme_52h_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b09.p9a.son_deger.kapsama_swap_haric",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9a.son_deger.brut_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b09.p9a.son_deger.kapsama_brut",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$248{,}1/40{,}8 \\approx 6{,}1$'de biri",
+   "degerler": [
+    {
+     "yol": "b09.p9a.resmi.son_kv_borc_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b09.p9a.son_deger.odeme_52h_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "v('b09.p9a.resmi.son_kv_borc_mlr_usd') / v('b09.p9a.son_deger.odeme_52h_mlr_usd')",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "14.03–18.04.2025 arasında USD/TRY +%4,07, AOFM +5,47 puan, endeksin rezerv bileşeninin pencere toplamı 12,42 σ",
+   "degerler": [
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.son",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.kur_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.aofm_degisim_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.bilesen_toplam.rezerv",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Haftalık standart sapmalar: kur %2,37, rezerv %2,20, faiz 0,74 puan",
+   "degerler": [
+    {
+     "yol": "b09.p9b.sigma.ds_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.sigma.dr_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.sigma.di_puan",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$100\\ln(1{,}0407) \\approx 3{,}99$ log puan, $3{,}99/2{,}37 \\approx 1{,}69$ σ",
+   "degerler": [
+    {
+     "ifade": "1 + v('b09.p9b.epizotlar.Mart–Nisan 2025.kur_degisim_yuzde') / 100",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "100 * math.log(1 + v('b09.p9b.epizotlar.Mart–Nisan 2025.kur_degisim_yuzde') / 100)",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.sigma.ds_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.bilesen_toplam.kur",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$5{,}47/0{,}74 \\approx 7{,}39$ σ",
+   "degerler": [
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.aofm_degisim_puan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.sigma.di_puan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b09.p9b.epizotlar.Mart–Nisan 2025.aofm_degisim_puan') / v('b09.p9b.sigma.di_puan')",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$12{,}42 \\times 2{,}20 \\approx$ %27,3",
+   "degerler": [
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.bilesen_toplam.rezerv",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.p9b.sigma.dr_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b09.p9b.epizotlar.Mart–Nisan 2025.bilesen_toplam.rezerv') * v('b09.p9b.sigma.dr_yuzde')",
+     "bicim": "yz",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Endeks 21,49 σ: rezerv %57,8, faiz %34,4, kur %7,8",
+   "degerler": [
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.emp_toplam",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "100 * v('b09.p9b.epizotlar.Mart–Nisan 2025.bilesen_toplam.rezerv') / v('b09.p9b.epizotlar.Mart–Nisan 2025.emp_toplam')",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "ifade": "100 * v('b09.p9b.epizotlar.Mart–Nisan 2025.bilesen_toplam.faiz') / v('b09.p9b.epizotlar.Mart–Nisan 2025.emp_toplam')",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "ifade": "100 * v('b09.p9b.epizotlar.Mart–Nisan 2025.bilesen_toplam.kur') / v('b09.p9b.epizotlar.Mart–Nisan 2025.emp_toplam')",
+     "bicim": "yz",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "endeksin 10,16 σ'luk toplamının %76,3'ü kurdan",
+   "degerler": [
+    {
+     "yol": "b09.p9b.epizotlar.Ağustos 2018.emp_toplam",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "100 * v('b09.p9b.epizotlar.Ağustos 2018.bilesen_toplam.kur') / v('b09.p9b.epizotlar.Ağustos 2018.emp_toplam')",
+     "bicim": "yz",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Kurun yalnız %4,1 oynaması",
+   "degerler": [
+    {
+     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.kur_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 1
+    }
+   ]
+  }
+ ]
+}

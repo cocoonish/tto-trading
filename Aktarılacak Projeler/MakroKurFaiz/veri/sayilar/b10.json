@@ -1,0 +1,1103 @@
+{
+ "girdiler": [
+  {
+   "tur": "tablo",
+   "satir": "| AUD–metal | 0,35 | 0,61 | 0,240 | 5,51 | 0,93 | 0,92 | 0,28 | 0,18 |",
+   "degerler": [
+    {
+     "yol": "b10.p10a.aud_metal.kor_ay_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.aud_metal.kor_ay_ortalamasi",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.aud_metal.egim_yuzde_yuzde",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10a.aud_metal.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.aud_metal.oos.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.aud_metal.oos_ortalama.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.aud_metal.kayan_36ay.medyan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.aud_metal.kayan_36ay.son",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| CAD–enerji | 0,26 | 0,43 | 0,075 | 3,94 | 0,93 | 0,92 | 0,26 | −0,11 |",
+   "degerler": [
+    {
+     "yol": "b10.p10a.cad_enerji.kor_ay_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.cad_enerji.kor_ay_ortalamasi",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.cad_enerji.egim_yuzde_yuzde",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10a.cad_enerji.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.cad_enerji.oos.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.cad_enerji.oos_ortalama.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.cad_enerji.kayan_36ay.medyan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.cad_enerji.kayan_36ay.son",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| NOK–enerji | 0,31 | 0,46 | 0,126 | 4,86 | 0,91 | 0,91 | 0,30 | −0,03 |",
+   "degerler": [
+    {
+     "yol": "b10.p10a.nok_enerji.kor_ay_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.nok_enerji.kor_ay_ortalamasi",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.nok_enerji.egim_yuzde_yuzde",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10a.nok_enerji.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.nok_enerji.oos.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.nok_enerji.oos_ortalama.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.nok_enerji.kayan_36ay.medyan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.nok_enerji.kayan_36ay.son",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| EUR | enerji ithalatçısı | −13,3 |",
+   "degerler": [
+    {
+     "yol": "b10.p10b.sok_2022.paralar.eur.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| JPY | enerji ithalatçısı | −25,4 |",
+   "degerler": [
+    {
+     "yol": "b10.p10b.sok_2022.paralar.jpy.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| CAD | enerji ihracatçısı | −6,7 |",
+   "degerler": [
+    {
+     "yol": "b10.p10b.sok_2022.paralar.cad.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| GBP | kıyas | −16,1 |",
+   "degerler": [
+    {
+     "yol": "b10.p10b.sok_2022.paralar.gbp.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| AUD | kıyas | −11,7 |",
+   "degerler": [
+    {
+     "yol": "b10.p10b.sok_2022.paralar.aud.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| CHF | kıyas | −8,5 |",
+   "degerler": [
+    {
+     "yol": "b10.p10b.sok_2022.paralar.chf.degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 02.2013–11.2021 | 106 | −0,083 | −2,55 | −0,053 | ölçülü | 2,12 | 1,73 |",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.oncesi.egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.oncesi.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.oncesi.dolar_kontrollu.egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.dibs_2y.oncesi.egim",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.dibs_2y.oncesi.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Yönetilen kur, 12.2021–06.2023 | 19 | 0,104 | 1,36 | 0,106 | tarif edici | 6,07 | 1,26 |",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.yonetilen.egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.yonetilen.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.yonetilen.dolar_kontrollu.egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.dibs_2y.yonetilen.egim",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.dibs_2y.yonetilen.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 07.2023–08.2026 | 38 | −0,005 | −0,53 | −0,001 | tarif edici | 6,45 | 1,48 |",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.sonrasi.egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.sonrasi.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.sonrasi.dolar_kontrollu.egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.dibs_2y.sonrasi.egim",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.dibs_2y.sonrasi.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Yönetilen kur hariç | 144 | −0,066 | −2,37 | −0,055 | ölçülü | 3,17 | 1,97 |",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.yonetilen_haric.egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.yonetilen_haric.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.yonetilen_haric.dolar_kontrollu.egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.dibs_2y.yonetilen_haric.egim",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.dibs_2y.yonetilen_haric.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Yönetilen kur hariç, kur ay ortalaması | 144 | −0,027 | −0,80 | −0,023 | tarif edici | — | — |",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.ay_ortalamasi_yonetilen_haric.egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.ay_ortalamasi_yonetilen_haric.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.ay_ortalamasi_yonetilen_haric.dolar_kontrollu.egim",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Hilscher ve Nosbusch'a göre gelişmekte olan ülke devlet tahvili spreadlerinde özellikle ticaret hadlerinin oynaklığı",
+   "kaynak": "hilscher_nosbusch2010"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Chen ve Rogoff'a göre özellikle Avustralya ve Yeni Zelanda'da",
+   "kaynak": "chen_rogoff2003"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Cashin, Céspedes ve Sahay 1980–2002'de 58 emtia ihracatçısı ülkenin yaklaşık üçte birinde",
+   "kaynak": "cashin_cespedes_sahay2004"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Chen, Rogoff ve Rossi'ye göre emtia ihracatçısı ülkelerin kurları küresel emtia fiyatlarını",
+   "kaynak": "chen_rogoff_rossi2010"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "ticaret hadleri şokları toplam faaliyetteki dalgalanmanın %10'u civarını ya da daha azını açıklar",
+   "kaynak": "schmitt_grohe_uribe2018"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "resmî baz faiz Eylül 2022 sonundan Aralık 2022 sonuna %13'te sabit kaldı; ECB referans kuruna göre forint 14 Ekim 2022'de euroya karşı bir günde yaklaşık %2,9 değer kazandı (EUR/HUF 430,65 → 418,24)",
+   "kaynak": "macaristan_2022"
+  },
+  {
+   "tur": "olcum",
+   "parca": "Aylık, 02.2000–08.2026, 319 ay",
+   "degerler": [
+    {
+     "yol": "b10.p10a.ilk",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.son",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.n",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Diebold–Mariano t'leri −1,15 ile −1,74 arasında",
+   "degerler": [
+    {
+     "ifade": "max(v('b10.p10a.aud_metal.oos.dm_t'), v('b10.p10a.cad_enerji.oos.dm_t'), v('b10.p10a.nok_enerji.oos.dm_t'), v('b10.p10a.aud_metal.oos_ortalama.dm_t'), v('b10.p10a.cad_enerji.oos_ortalama.dm_t'), v('b10.p10a.nok_enerji.oos_ortalama.dm_t'))",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "min(v('b10.p10a.aud_metal.oos.dm_t'), v('b10.p10a.cad_enerji.oos.dm_t'), v('b10.p10a.nok_enerji.oos.dm_t'), v('b10.p10a.aud_metal.oos_ortalama.dm_t'), v('b10.p10a.cad_enerji.oos_ortalama.dm_t'), v('b10.p10a.nok_enerji.oos_ortalama.dm_t'))",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "örneklem dışı üstünlüğün kendisi %5 düzeyinde anlamlı değil",
+   "neden": "anlamlılık düzeyi (tanım)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "eşzamanlı korelasyonu düşürür (AUD–metal 0,35; kur ay ortalamasıyla 0,61)",
+   "degerler": [
+    {
+     "yol": "b10.p10a.aud_metal.kor_ay_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.aud_metal.kor_ay_ortalamasi",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "AUD'da \"kur bir ay önde\" korelasyonu 0,48, eşzamanlıyı aşıyor; aritmetiğin tek başına vereceği 0,26",
+   "degerler": [
+    {
+     "yol": "b10.p10a.aud_metal.oncu_gecikmeli.ay_sonu.kur_bir_ay_onde.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.aud_metal.oncu_gecikmeli.ay_sonu.aritmetik_beklenen_oncu_kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "fazla 0,21",
+   "degerler": [
+    {
+     "yol": "b10.p10a.aud_metal.oncu_gecikmeli.ay_sonu.aritmetik_disi_fazla",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "korelasyon 0,09 (t 0,80)",
+   "degerler": [
+    {
+     "yol": "b10.p10a.aud_metal.oncu_gecikmeli.ay_sonu.kur_iki_ay_onde_ortusmesiz.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.aud_metal.oncu_gecikmeli.ay_sonu.kur_iki_ay_onde_ortusmesiz.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "CAD ve NOK'ta 36 aylık korelasyon 22 aydır eksi (11.2024'ten beri); CAD'de en düşük −0,44 (09.2025), oysa 06.2022'de +0,54'tü",
+   "degerler": [
+    {
+     "yol": "b10.p10a.cad_enerji.kayan_36ay.son_eksi_dizi_ay",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.nok_enerji.kayan_36ay.son_eksi_dizi_ay",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.cad_enerji.kayan_36ay.son_eksi_dizi_baslangic",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.cad_enerji.kayan_36ay.en_dusuk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.cad_enerji.kayan_36ay.en_dusuk_tarih",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.sekil_17.tarih.269",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.sekil_17.kor36_cad_enerji.269",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "AUD'da pencerelerin yalnız %1,38'i eksi",
+   "degerler": [
+    {
+     "yol": "b10.p10a.aud_metal.kayan_36ay.eksi_ay_payi_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Enerji endeksi −118,9 log puan (−%69,5) düştü",
+   "degerler": [
+    {
+     "yol": "b10.p10a.petrol_2014_2016.enerji_degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b10.p10a.petrol_2014_2016.enerji_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "CAD −27,2, NOK −37,9, AUD (metal −42,5) −29,0 log puan; enerji ithalatçısı euro da −22,4 log puan kaybetti ve dolar endeksi +20,8 log puan yükseldi",
+   "degerler": [
+    {
+     "yol": "b10.p10a.petrol_2014_2016.cad.ay_ortalamasi.kur_degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b10.p10a.petrol_2014_2016.nok.ay_ortalamasi.kur_degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b10.p10a.petrol_2014_2016.metal_degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b10.p10a.petrol_2014_2016.aud.ay_ortalamasi.kur_degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b10.p10a.petrol_2014_2016.eur_kiyas.ay_ortalamasi.kur_degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b10.p10a.petrol_2014_2016.dxy_degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Petrol düşüşü, 06.2014–01.2016 (vaka)",
+   "degerler": [
+    {
+     "yol": "b10.p10a.petrol_2014_2016.ilk",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.petrol_2014_2016.son",
+     "bicim": "ay",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Aylık, 01.2000–08.2026, 320 ay",
+   "degerler": [
+    {
+     "yol": "b10.sekil_17.ilk",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.sekil_17.son",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.sekil_17.n",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "36 aylık kayan korelasyon (pencerede en az 30 ay)",
+   "neden": "kayan pencere ve asgari gözlem (yöntem sabiti)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "Gölge 06.2014–01.2016 petrol",
+   "degerler": [
+    {
+     "yol": "b10.p10a.petrol_2014_2016.ilk",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10a.petrol_2014_2016.son",
+     "bicim": "ay",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "08.2026'da enerji endeksi 303,8, NOK 94,6",
+   "degerler": [
+    {
+     "yol": "b10.sekil_17.son",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.sekil_17.enerji_2000_100.319",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b10.sekil_17.nok_deger_2000_100.319",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "03.01–31.10.2022 kapanışları arasında dolar endeksi +14,7 log puan, ABD 2 yıllık getirisi %0,78'den %4,51'e, +373 bp; enerji endeksi Ocak–Ekim ay ortalamaları arasında +%20,5 (zirve 06.2022, +35,8 log puan)",
+   "degerler": [
+    {
+     "yol": "b10.p10b.sok_2022.son",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.sok_2022.dxy_degisim_log_yuzde",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b10.p10b.sok_2022.abd_2y_baz_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.sok_2022.abd_2y_son_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.sok_2022.abd_2y_degisim_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b10.p10b.sok_2022.enerji_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b10.p10b.sok_2022.enerji_zirve_ay",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.sok_2022.enerji_zirveye_log_yuzde",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ihracatçı CAD euronun 6,66, yenin 18,74 puan önünde kaldı",
+   "degerler": [
+    {
+     "yol": "b10.p10b.sok_2022.cad_eksi_eur_puan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.sok_2022.cad_eksi_jpy_puan",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "02.2013–11.2021'de %10'luk enerji artışı USD/TRY'yi %0,83 düşürüyor",
+   "degerler": [
+    {
+     "ifade": "-10 * v('b10.p10b.turkiye.tepki.usdtry.oncesi.egim')",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "dolar kontrol edilince −0,053'e iniyor (dolar endeksi eğimi 0,78, t 3,08)",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.oncesi.dolar_kontrollu.egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.oncesi.dolar_kontrollu.dxy_egim",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.oncesi.dolar_kontrollu.dxy_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "kur ay ortalamasıyla eğim −0,027, t −0,80",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.tepki.hiza_duyarliligi.ay_ortalamasi_egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.hiza_duyarliligi.ay_ortalamasi_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Cuma kuru boşaltılınca eğim −0,069 (t −2,37)",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.cuma_duyarliligi.egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.cuma_duyarliligi.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "örneklem dışı oran sıfır kıyasına göre 0,14, koşulsuz ortalamaya göre 1,10",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.sonrasi.oos.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.sonrasi.oos_ortalama.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "aylık ortalamasının 12 aylık log değişimine (01.2014–07.2026, 151 ay): esneklik 1,02 (t 8,32, R² 0,87; Newey–West, 24 gecikme)",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.ilk",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.son",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.n",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.esneklik_es_zamanli",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.r2",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.gecikme",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "En iyi uyum bir ay gecikmede (1,03, R² 0,90), esneklik on iki ayda 0,17'ye iner",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.en_iyi_uyum_esneklik",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.en_iyi_uyum_r2",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.gecikme_profili.esneklik.12",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Örneklem dışı karesel hata oranı koşulsuz ortalamaya göre 0,12, sıfıra göre 0,12",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.oos.ortalama.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.oos.sifir.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Fatura 07.2026'da 12 aylık 50,5 milyar dolar, GSYH'nin %2,93'ü (aralık %2,77, 12.2016 – %9,03, 10.2022)",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.son_deger.tarih",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.son_deger.fatura_12ay_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.son_deger.fatura_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.fatura_gsyh_araligi.en_dusuk_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.fatura_gsyh_araligi.en_dusuk_tarih",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.fatura_gsyh_araligi.en_yuksek_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.fatura_gsyh_araligi.en_yuksek_tarih",
+     "bicim": "ay",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Seviyeler arasındaki esneklik (0,98)",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.seviye_esnekligi_saglamlik.esneklik",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Esneklik 1,0154; 12 aylık fatura 50,51 milyar dolar, GSYH'nin %2,93'ü",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.esneklik_es_zamanli",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.son_deger.fatura_12ay_mlr_usd",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.son_deger.fatura_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "Enerji fiyatı %10 artarsa",
+   "neden": "alıştırmanın varsayımsal şok büyüklüğü (tanım)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "Etkiyi $e^{0{,}1b} - 1$ ile kurmak",
+   "neden": "yanlış formülün simgesel yazımı: 0,1, %10'luk şokun ondalık biçimi (tanım)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "aylık enerji eğimi −0,066 ise",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.yonetilen_haric.egim",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$1{,}1^{1{,}0154} - 1 \\approx$ %10,16",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.esneklik_es_zamanli",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.son_deger.on_yuzde_fiyat_artisi_fatura_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$50{,}51 \\times 0{,}1016 \\approx 5{,}13$ milyar dolar, GSYH payı $2{,}93 \\times 0{,}1016 \\approx 0{,}30$ puan",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.son_deger.fatura_12ay_mlr_usd",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b10.p10b.turkiye.enerji_faturasi.son_deger.on_yuzde_fiyat_artisi_fatura_yuzde') / 100",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.son_deger.on_yuzde_fiyat_artisi_mlr_usd",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.son_deger.fatura_gsyh_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10b.turkiye.enerji_faturasi.son_deger.on_yuzde_fiyat_artisi_gsyh_puan",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$e^{0{,}10154} - 1 \\approx$ %10,69 ve 5,40 milyar dolar",
+   "degerler": [
+    {
+     "ifade": "0.1 * v('b10.p10b.turkiye.enerji_faturasi.esneklik_es_zamanli')",
+     "bicim": "sayi",
+     "hane": 5
+    },
+    {
+     "ifade": "100 * (math.exp(0.1 * v('b10.p10b.turkiye.enerji_faturasi.esneklik_es_zamanli')) - 1)",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b10.p10b.turkiye.enerji_faturasi.son_deger.fatura_12ay_mlr_usd') * (math.exp(0.1 * v('b10.p10b.turkiye.enerji_faturasi.esneklik_es_zamanli')) - 1)",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "bu %10 değil 10 log puanlık (%10,5) bir artışın etkisidir, sonucu yaklaşık %5 büyütür",
+   "degerler": [
+    {
+     "ifade": "100 * (math.exp(0.1) - 1)",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "ifade": "100 * (math.exp(0.1 * v('b10.p10b.turkiye.enerji_faturasi.esneklik_es_zamanli')) - 1) / v('b10.p10b.turkiye.enerji_faturasi.son_deger.on_yuzde_fiyat_artisi_fatura_yuzde') * 100 - 100",
+     "bicim": "yz",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "dolar kontrolü eğimi −0,055'e indiriyor ve dolar endeksinin eğimi t 2,95",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.yonetilen_haric.dolar_kontrollu.egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.yonetilen_haric.dolar_kontrollu.dxy_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Kur ay ortalamasıyla eğim −0,027 (t −0,80)",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.tepki.hiza_duyarliligi.ay_ortalamasi_egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.hiza_duyarliligi.ay_ortalamasi_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  }
+ ]
+}

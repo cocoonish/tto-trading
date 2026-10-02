@@ -1,0 +1,1506 @@
+{
+ "girdiler": [
+  {
+   "tur": "kaynak",
+   "parca": "Greenwood ve Vayanos (2014), uzun vadeli tahvil arzının kısa vadeliye göre artışının uzun tahvillerin gelecekteki fazla getirisini öngördüğünü gösterir; etki vade uzadıkça güçlenir.",
+   "kaynak": "greenwoodvayanos2014"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Krishnamurthy ve Vissing-Jorgensen (2012), Hazine arzı büyüdükçe kolaylık getirisinin aşındığını; bu getirinin 1926–2008 ortalamasında Hazine getirisini yaklaşık 73 bp düşürdüğünü bulur.",
+   "kaynak": "kvj2012"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Blanchard (2019), ABD'de güvenli faizin büyüme hızının uzun süre altında kalmasının tarihte istisna değil olağan durum olduğunu ve güvenli faiz düşükken kamu borcunun mali maliyeti olmayabileceğini savunur; çoklu denge ve risk primi bu sonucun başlıca karşı argümanıdır.",
+   "kaynak": "blanchard2019"
+  },
+  {
+   "tur": "olcum",
+   "parca": "burada kestirilmez, 0,3 ile 0,5 arasında varsayılır",
+   "degerler": [
+    {
+     "yol": "b05.p5b.varsayim.yari_esneklik.0",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5b.varsayim.yari_esneklik.1",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Feldstein (1986), 1973–1984 döneminde ABD'nin beklenen gelecek bütçe açıklarının GSMH'ye oranındaki her 1 puanlık artışın doları marka karşı yaklaşık 30 yüzde puanı değerlendirdiğini bulur",
+   "kaynak": "feldstein1986"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "22 Eylül 1985'te New York'taki Plaza Oteli'nde G5 maliye bakanları dolar dışındaki paraların düzenli biçimde biraz daha değer kazanmasının arzu edildiğini açıkladı; dolar ertesi iş günü öbür paralara karşı yaklaşık %4 değer kaybetti.",
+   "kaynak": "plaza1985"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Monacelli ve Perotti (2010) kamu harcamasındaki artışın TÜFE bazlı reel kurda değer kaybına ve dış ticaret açığına yol açtığını",
+   "kaynak": "monacelliperotti2010"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Kim ve Roubini (2008) ABD'de genişletici bir maliye şokunun cari dengeyi bozmak yerine iyileştirdiğini ve reel kuru değer kaybettirdiğini bulur",
+   "kaynak": "kimroubini2008"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Ilzetzki, Mendoza ve Végh (2013), 44 ülkelik üç aylık veride kamu tüketimi çarpanının önceden belirlenmiş kur rejiminde görece büyük, esnek kur rejiminde ise sıfır olduğunu bulur.",
+   "kaynak": "ilzetzki2013"
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Laubach (2009) | öngörülen açık · öngörülen borç | 5 yıl ve ötesi forward | +20–30 bp · ≈3–4 bp |",
+   "degerler": [
+    {
+     "kaynak": "laubach2009"
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Gale ve Orszag (2004) | öngörülen birleşik açık · öngörülen faiz dışı açık · bugünkü açık | uzun vadeli forward | +25–35 bp · +40–70 bp · etki yok |",
+   "degerler": [
+    {
+     "kaynak": "galeorszag2004"
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Engen ve Hubbard (2004) | federal borç | uzun vadeli reel faiz | ≈ +3 bp |",
+   "degerler": [
+    {
+     "kaynak": "engenhubbard2004"
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| CBO (2019) | federal borç | uzun dönem faizler | +2–3 bp |",
+   "degerler": [
+    {
+     "kaynak": "cbo2019"
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Plante, Richter ve Zubairy (2025) | federal borç | 5y5y | ≈ +3 bp, ≈ dörtte üçü vade primi |",
+   "degerler": [
+    {
+     "kaynak": "plante2025"
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Ardagna, Caselli ve Lane (2007), 16 OECD ülkesi | faiz dışı açık | aynı dönem uzun faiz · VAR, on yıl birikimli | ≈ +10 bp · ≈ +150 bp |",
+   "degerler": [
+    {
+     "kaynak": "ardagna2007"
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "bugünkü açık değmez (Gale ve Orszag)",
+   "kaynak": "galeorszag2004"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Etkinin çoğu **vade primidir** (Plante, Richter ve Zubairy)",
+   "kaynak": "plante2025"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Ardagna, Caselli ve Lane'de borcun faize etkisi yalnız borcu ortalamanın üstündeki ülkelerde görülür",
+   "kaynak": "ardagna2007"
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Plaza Anlaşması | 22.09.1985 → ertesi iş günü | — | — | dolar ≈ −%4 (kaynak) | — | — |",
+   "degerler": [
+    {
+     "kaynak": "plaza1985"
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2016 seçimi → Aralık FOMC | 08.11–15.12.2016 | +42 bp | +72 bp | +%4,67 | +51,9 bp | politika |",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.0.d_us2_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.0.d_us10_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.0.d_dolar_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.0.d_acmtp10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2017 vergi yasası | 01.11–22.12.2017 | +30 bp | +11 bp | −%1,11 | −9,8 bp | prim |",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.1.d_us2_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.1.d_us10_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.1.d_dolar_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.1.d_acmtp10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Borçlanma duyuruları ve Fitch | 31.07–04.08.2023 | −10 bp | +8 bp | +%0,66 | +9,5 bp | politika |",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.2.d_us2_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.2.d_us10_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.2.d_dolar_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.2.d_acmtp10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| ↳ yalnız 02.08.2023 | 01–02.08.2023 | −4 bp | +3 bp | +%0,48 | −12,0 bp | politika |",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.3.d_us2_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.3.d_us10_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.3.d_dolar_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.3.d_acmtp10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Tarife duyurusu | 02.04–11.04.2025 | +5 bp | +28 bp | −%3,21 | +35,4 bp | prim |",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.4.d_us2_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.4.d_us10_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.4.d_dolar_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.4.d_acmtp10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Moody's not indirimi | 16–19.05.2025 | −1 bp | +3 bp | −%0,54 | +5,1 bp | prim |",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.5.d_us2_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.5.d_us10_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.5.d_dolar_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.5.d_acmtp10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| ↳ üçüncü iş günü | 16–21.05.2025 | +2 bp | +15 bp | −%1,12 | +21,0 bp | prim |",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.6.d_us2_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.6.d_us10_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.6.d_dolar_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.6.d_acmtp10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| İngiltere mini bütçe → BoE | 22–28.09.2022 | +73,2 bp | +51,5 bp | −%3,33 | — | prim |",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.7.d_gb2y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.7.d_gb10y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.7.d_sterlin_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| ↳ BoE'den önceki son kapanış | 22–27.09.2022 | +124,2 bp | +98,1 bp | −%4,79 | — | prim |",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.8.d_gb2y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.8.d_gb10y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.8.d_sterlin_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "eğri +30 bp dikleşti",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.0.d_2s10s_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "risk-nötr getiri (+26,1 bp)",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.0.d_acmrny10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "eğri −19 bp yassılaştı",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.1.d_2s10s_bp",
+     "bicim": "bp",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "risk-nötr getiriden geldi (+22,0 bp)",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.1.d_acmrny10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Dolar endeksi, vergi indirimi yasasının çıktığı 2017 yılını yaklaşık %10 düşüşle, 2003'ten bu yana en büyük yıllık kayıpla kapattı.",
+   "kaynak": "abd2017karsiornek"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "31 Temmuz 2023'te ABD Hazinesi Temmuz–Eylül çeyreği için piyasadan net 1,007 trilyon dolar borçlanma öngördüğünü açıkladı; bu tahmin Mayıs'takinden 274 milyar dolar yüksekti.",
+   "kaynak": "hazine2023_tahmin"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Fitch'in kararı ABD kapanışından sonra geldiği için ilk fiyat tepkisi 2 Ağustos seansına, yani Hazine'nin üç aylık borçlanma açıklamasıyla aynı güne düştü",
+   "kaynak": "fitch2023"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "o açıklama iki yıldır ilk kez kupon ihale büyüklüklerini kademeli artırma kararını taşıyordu",
+   "kaynak": "hazine2023_refunding"
+  },
+  {
+   "tur": "olcum",
+   "parca": "Vade primi (+35,4 bp) 10 yıllığın kendisinden (+28 bp) büyük",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.4.d_acmtp10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.4.d_us10_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "VIX 21,51'den 37,56'ya çıktı (pencerede en çok 52,33)",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.4.vix_bas",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.4.vix_son",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.4.vix_azami",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Duyuru New York saatiyle 16:00'da",
+   "kaynak": "tarife2025"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "23 Eylül 2022'de Kwarteng, 2026/27'de gelirleri yaklaşık 45 milyar sterlin azaltacak vergi indirimlerini finansmanını göstermeden açıkladı.",
+   "kaynak": "ingiltere2022_minibutce"
+  },
+  {
+   "tur": "olcum",
+   "parca": "30 yıllık gilt BoE'den önceki son kapanışa +120,3 bp yükseldi, müdahale günü kapanışında pencere başına göre yalnız +15,1 bp yukarıdaydı",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.8.d_gb30y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.7.d_gb30y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "BoE'nin uzun vadeli gilt alım duyurusuyla 30 yıllık gilt getirisi o gün 100 bp'den fazla düştü.",
+   "kaynak": "boe2022_gilt"
+  },
+  {
+   "tur": "olcum",
+   "parca": "31.07.2023 kapanışından 19.10.2023 kapanışına, 57 iş günü",
+   "degerler": [
+    {
+     "yol": "b05.p5a.ilk",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b05.p5a.son",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b05.p5a.n",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2 yıllık %4,88'den %5,14'e (+26 bp)",
+   "degerler": [
+    {
+     "yol": "b05.p5a.us2_bas",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5a.us2_son",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5a.d_us2_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "10 yıllık %3,97'den %4,98'e (+101 bp; zirve son gün)",
+   "degerler": [
+    {
+     "yol": "b05.p5a.us10_bas",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5a.us10_son",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5a.d_us10_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "−91 bp'den −16 bp'ye (+75 bp): ayılı dikleşme",
+   "degerler": [
+    {
+     "yol": "b05.p5a.egim_2s10s_bas_bp",
+     "bicim": "bp",
+     "hane": 0
+    },
+    {
+     "yol": "b05.p5a.egim_2s10s_son_bp",
+     "bicim": "bp",
+     "hane": 0
+    },
+    {
+     "yol": "b05.p5a.d_2s10s_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "10 yıllık vade primi −%0,63'ten %0,45'e (+107,9 bp), risk-nötr getiri −0,04 bp; model getirisi +107,9 bp, yani artışın tamamı vade primidir (pay 1,00)",
+   "degerler": [
+    {
+     "yol": "b05.p5a.vade_primi.acmtp10_bas",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5a.vade_primi.acmtp10_son",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5a.vade_primi.d_acmtp10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b05.p5a.vade_primi.d_acmrny10_bp",
+     "bicim": "bp",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5a.vade_primi.d_acmy10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b05.p5a.vade_primi.vade_primi_payi",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2 yıllıkta +37,7 bp, 5 yıllıkta +82,5 bp",
+   "degerler": [
+    {
+     "yol": "b05.p5a.vade_primi.d_acmtp02_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b05.p5a.vade_primi.d_acmtp05_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "pencerede par getiriden ortalama −1,11 bp, en çok 8,66 bp ayrışır",
+   "degerler": [
+    {
+     "yol": "b05.p5a.vade_primi.par_eksi_model_10y_ort_bp",
+     "bicim": "bp",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5a.vade_primi.par_eksi_model_10y_azami_mutlak_bp",
+     "bicim": "bp",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "0,0001 bp'den yakın tutar",
+   "degerler": [
+    {
+     "yol": "b05.p5a.vade_primi.ozdeslik_azami_sapma_bp",
+     "bicim": "bp",
+     "hane": 4
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2007Ç4–2026Ç2 (75 çeyrek)",
+   "degerler": [
+    {
+     "yol": "b05.p5b.n",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "En büyük genişleme 2009Ç3'te +3,98 puan, en büyük daralma 2026Ç1'de −3,12 puan",
+   "degerler": [
+    {
+     "yol": "b05.p5b.impuls_azami.puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b05.p5b.impuls_asgari.puan",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "impuls ortalaması +1,49 puan, en yüksek +3,71 puan (2023Ç4)",
+   "degerler": [
+    {
+     "yol": "b05.p5b.tek_seferlik.deprem.impuls_ort_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b05.p5b.tek_seferlik.deprem.impuls_azami_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ortalama −0,03 puan, öbür 56 çeyrek +0,31 puan",
+   "degerler": [
+    {
+     "yol": "b05.p5b.tek_seferlik.kkm.impuls_ort_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5b.tek_seferlik.diger_ceyrekler_n",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b05.p5b.tek_seferlik.diger_ceyrekler_impuls_ort_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Faiz dışı fazla GSYH'nin %0,88'i, impuls −1,90 puan (daralma)",
+   "degerler": [
+    {
+     "yol": "b05.p5b.son_durum.fdd_gsyh",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5b.son_durum.impuls_puan",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Çıktı açığı tam örneklemde −1,10 puan, gerçek zamanlı −1,65 puan",
+   "degerler": [
+    {
+     "yol": "b05.p5b.son_durum.acik_tam",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5b.son_durum.acik_gercek_zamanli",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "yapısal faiz dışı fazla %1,22 ile %1,71 arası, yapısal impuls −2,41 ile −1,97 puan arası, döngüsel pay +0,07 ile +0,51 puan",
+   "degerler": [
+    {
+     "yol": "b05.p5b.son_durum.yapisal_fdd_alt",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5b.son_durum.yapisal_fdd_ust",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5b.son_durum.yapisal_impuls_alt_puan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5b.son_durum.yapisal_impuls_ust_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5b.dongusel_pay_son.alt_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b05.p5b.dongusel_pay_son.ust_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "bileşiğinden en çok 0,20 bp ayrışır",
+   "degerler": [
+    {
+     "yol": "b05.p5c.sinama.yamuk_ve_dogrusal_patika_azami_fark_bp",
+     "bicim": "bp",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "kaydırmasız seri aylık farkı ortalama 8,8 bp, en çok 47,2 bp oynatır",
+   "degerler": [
+    {
+     "yol": "b05.p5c.sinama.kaydirmasiz_aylik_fark_ort_mutlak_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.sinama.kaydirmasiz_aylik_fark_azami_bp",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Aylık, 01.2013–09.2026 (165 ay): ortalama 309,5 bp, medyan 269,7 bp; en düşük −782,4 bp (09.2022), en yüksek 1.333,2 bp (04.2025), son ay 1.185,9 bp.",
+   "degerler": [
+    {
+     "yol": "b05.p5c.fark.ilk",
+     "bicim": "ay",
+     "hane": 0
+    },
+    {
+     "yol": "b05.p5c.fark.son",
+     "bicim": "ay",
+     "hane": 0
+    },
+    {
+     "yol": "b05.p5c.fark.n",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b05.p5c.fark.ort",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.fark.medyan",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.fark.asgari",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.fark.asgari_ay",
+     "bicim": "ay",
+     "hane": 0
+    },
+    {
+     "yol": "b05.p5c.fark.azami",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.fark.azami_ay",
+     "bicim": "ay",
+     "hane": 0
+    },
+    {
+     "yol": "b05.p5c.fark.son_deger",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2013–2017 | 60 | 159,7 bp | 177,9 bp | 144,9 bp | — |",
+   "degerler": [
+    {
+     "yol": "b05.p5c.donem.2013-2017.fark_medyan_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.donem.2013-2017.fark_ort_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.donem.2013-2017.koridor_ort_bp",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2018–2020 | 36 | 325,6 bp | 306,6 bp | 87,6 bp | −244,2 bp |",
+   "degerler": [
+    {
+     "yol": "b05.p5c.donem.2018-2020.fark_medyan_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.donem.2018-2020.fark_ort_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.donem.2018-2020.koridor_ort_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.donem.2018-2020.baz_ort_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 01.2021–11.2021 | 11 | 441,0 bp | 394,7 bp | 2,7 bp | −220,1 bp |",
+   "degerler": [
+    {
+     "yol": "b05.p5c.donem.2021-01_2021-11.fark_medyan_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.donem.2021-01_2021-11.fark_ort_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.donem.2021-01_2021-11.koridor_ort_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.donem.2021-01_2021-11.baz_ort_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Yönetilen kur 12.2021–06.2023 | 19 | 137,4 bp | 223,1 bp | 4,3 bp | +205,6 bp |",
+   "degerler": [
+    {
+     "yol": "b05.p5c.donem.yonetilen_kur_2021-12_2023-06.fark_medyan_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.donem.yonetilen_kur_2021-12_2023-06.fark_ort_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.donem.yonetilen_kur_2021-12_2023-06.koridor_ort_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.donem.yonetilen_kur_2021-12_2023-06.baz_ort_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 07.2023–09.2026 | 39 | 627,5 bp | 532,9 bp | 63,2 bp | −1.039,6 bp |",
+   "degerler": [
+    {
+     "yol": "b05.p5c.donem.2023-07_2026-09.fark_medyan_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.donem.2023-07_2026-09.fark_ort_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.donem.2023-07_2026-09.koridor_ort_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.donem.2023-07_2026-09.baz_ort_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ortalama 84,1 bp, medyan 19,4 bp, en yüksek 631,8 bp (05.2018), son ay 0,4 bp",
+   "degerler": [
+    {
+     "yol": "b05.p5c.kirlilik.koridor_farki.ort",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.kirlilik.koridor_farki.medyan",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.kirlilik.koridor_farki.azami",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.kirlilik.koridor_farki.azami_ay",
+     "bicim": "ay",
+     "hane": 0
+    },
+    {
+     "yol": "b05.p5c.kirlilik.koridor_farki.son_deger",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "aksi −249,6 bp (01.2014) gibi sahte eksiler üretir",
+   "degerler": [
+    {
+     "yol": "b05.p5c.kirlilik.koridor_farki.karar_ayi_maskesi.maskesiz_asgari_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.kirlilik.koridor_farki.karar_ayi_maskesi.maskesiz_asgari_ay",
+     "bicim": "ay",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "mutlak farkın medyanı 50,0 bp, öbür günlerde 0,0 bp",
+   "degerler": [
+    {
+     "yol": "b05.p5c.kirlilik.koridor_farki.karar_sonrasi.karar_penceresi_medyan_mutlak_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.kirlilik.koridor_farki.karar_sonrasi.obur_gunler_medyan_mutlak_bp",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "bileşiğe çevrilmiş TLREF'e göre baz ortalama −480,5 bp, basit TLREF'e göre +37,0 bp",
+   "degerler": [
+    {
+     "yol": "b05.p5c.kirlilik.dibs_tlref_bazi.ort",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.kirlilik.dibs_tlref_bazi_basit.ort",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "eğimi −0,99 (R² 0,81), basit bazınki 0,01",
+   "degerler": [
+    {
+     "yol": "b05.p5c.kirlilik.dibs_tlref_bazi.kama_sinamasi.baz_bilesik_kamaya_egim",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5c.kirlilik.dibs_tlref_bazi.kama_sinamasi.baz_bilesik_r2",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5c.kirlilik.dibs_tlref_bazi.kama_sinamasi.baz_basit_kamaya_egim",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "eğim −1,23, −1,33 ve −1,72",
+   "degerler": [
+    {
+     "yol": "b05.p5c.kirlilik.dibs_tlref_bazi.kama_sinamasi.oteki_dugumler.n6a.egim",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5c.kirlilik.dibs_tlref_bazi.kama_sinamasi.oteki_dugumler.n1y.egim",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5c.kirlilik.dibs_tlref_bazi.kama_sinamasi.oteki_dugumler.n2y.egim",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "standart sapması 230,8 bp, TLREF'inki 104,9 bp",
+   "degerler": [
+    {
+     "yol": "b05.p5c.kirlilik.dibs_tlref_bazi.dugum_tanisi.n3a_gunluk_sd_bp_2024",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.kirlilik.dibs_tlref_bazi.dugum_tanisi.tlref_gunluk_sd_bp_2024",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "aylık fark ortalama 46,7 bp, en çok 514,4 bp (09.2023) oynar",
+   "degerler": [
+    {
+     "yol": "b05.p5c.kirlilik.anket_ay_etiketi.karsi_hiza_ort_mutlak_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.kirlilik.anket_ay_etiketi.karsi_hiza_azami_mutlak_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.kirlilik.anket_ay_etiketi.karsi_hiza_azami_ay",
+     "bicim": "ay",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "patikayı medyan 13,4 bp, en çok 112,8 bp kaydırır",
+   "degerler": [
+    {
+     "yol": "b05.p5c.kirlilik.anket_ay_etiketi.bir_ay_kayma_medyan_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.kirlilik.anket_ay_etiketi.bir_ay_kayma_azami_bp",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "fark bileşik bazla 1.872,6 bp, basit bazla 1.105,9 bp",
+   "degerler": [
+    {
+     "yol": "b05.p5c.fark_arinmis.son_deger",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.fark_arinmis_basit_baz.son_deger",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "politika faizi BIS'in ay sonu değeri, karar ayları boş); 3 aylık DİBS eksi TLREF, iki tanımla (28.12.2018'den)",
+   "degerler": [
+    {
+     "yol": "b05.p5c.kirlilik.dibs_tlref_bazi.dugum_tanisi.ilk",
+     "bicim": "tarih",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "koridor farkı (14.09.2018 öncesinde",
+   "degerler": [
+    {
+     "yol": "b05.p5c.kirlilik.koridor_farki.karar_sonrasi.ilk",
+     "bicim": "tarih",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2016: $|{+72}| > |{+42}|$, uzun uç baskın",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.0.d_us10_bp",
+     "bicim": "sayi",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.0.d_us2_bp",
+     "bicim": "sayi",
+     "hane": 0,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "vade primi +51,9 bp, risk-nötr getiri +26,1 bp",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.0.d_acmtp10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.0.d_acmrny10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "artışın %66,6'sı vade primi",
+   "degerler": [
+    {
+     "ifade": "v('b05.sekil_07.olaylar.0.d_acmtp10_bp')/(v('b05.sekil_07.olaylar.0.d_acmtp10_bp')+v('b05.sekil_07.olaylar.0.d_acmrny10_bp'))*100",
+     "bicim": "yz",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "dolar +%4,67: politika kadranı",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.0.d_dolar_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2017: 2 yıllık +30 bp, 10 yıllık +11 bp, eğri −19 bp yassılaştı",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.1.d_us2_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.1.d_us10_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.1.d_2s10s_bp",
+     "bicim": "bp",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "vade primi −9,8 bp, risk-nötr getiri +22,0 bp",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.1.d_acmtp10_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.1.d_acmrny10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Dolar −%1,11 kadranı",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.1.d_dolar_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "29.09.2026'da beklenti dışı fark.** 1y1y forward %41,05; anketin 12 ay sonrası beklentisi %29,22, 24 ay sonrası %22,43",
+   "degerler": [
+    {
+     "yol": "b05.p5c.son_gun_degerleri.tarih",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b05.p5c.son_gun_degerleri.f_1y1y",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5c.son_gun_degerleri.anket_12a",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5c.son_gun_degerleri.anket_24a",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "$\\bar r = (29{,}22 + 22{,}43)/2 = 25{,}825$",
+   "degerler": [
+    {
+     "yol": "b05.p5c.son_gun_degerleri.anket_12a",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5c.son_gun_degerleri.anket_24a",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b05.p5c.son_gun_degerleri.anket_basit_ort",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$(1 + 0{,}25825/52)^{52} - 1$ → %29,38",
+   "degerler": [
+    {
+     "ifade": "v('b05.p5c.son_gun_degerleri.anket_basit_ort')/100",
+     "bicim": "sayi",
+     "hane": 5
+    },
+    {
+     "ifade": "haftalik_bilesik(v('b05.p5c.son_gun_degerleri.anket_basit_ort'))",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Fark yuvarlanmamış değerlerle 11,66 puan, yani 1.166,5 bp",
+   "degerler": [
+    {
+     "ifade": "v('b05.p5c.son_gun_degerleri.f_1y1y')-v('b05.p5c.son_gun_degerleri.anket_bilesik')",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b05.p5c.son_gun_degerleri.fark_bp')",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "O gün koridor farkı 0,0 bp; baz bileşik tanımla −750,5 bp, basit tanımla +18,3 bp",
+   "degerler": [
+    {
+     "yol": "b05.p5c.son_gun_degerleri.koridor_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.son_gun_degerleri.baz_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b05.p5c.son_gun_degerleri.baz_basit_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "düşülünce 1.917,0 bp ya da 1.148,2 bp",
+   "degerler": [
+    {
+     "ifade": "v('b05.p5c.son_gun_degerleri.fark_bp')-v('b05.p5c.son_gun_degerleri.koridor_bp')-v('b05.p5c.son_gun_degerleri.baz_bp')",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "ifade": "v('b05.p5c.son_gun_degerleri.fark_bp')-v('b05.p5c.son_gun_degerleri.koridor_bp')-v('b05.p5c.son_gun_degerleri.baz_basit_bp')",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "kamayı taşır (eğim −0,99)",
+   "degerler": [
+    {
+     "yol": "b05.p5c.kirlilik.dibs_tlref_bazi.kama_sinamasi.baz_bilesik_kamaya_egim",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  }
+ ]
+}

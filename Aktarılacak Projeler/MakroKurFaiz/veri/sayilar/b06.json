@@ -1,0 +1,1960 @@
+{
+ "girdiler": [
+  {
+   "tur": "kaynak",
+   "parca": "Eichengreen ve Hausmann (1999) 'orijinal günah'ı, finansal piyasalardaki bir eksiklik yüzünden yerel paranın yurt dışından borçlanmada, hatta yurt içinde uzun vadeli borçlanmada bile kullanılamaması olarak tanımlar.",
+   "kaynak": "eichengreen_hausmann1999"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Calvo, Izquierdo ve Mejía (2004), 32 ülkelik örneklemde ani duruşlarla gelen büyük reel kur hareketlerinin esasen gelişen piyasa olgusu olduğunu ve dışa kapalılık ile yurt içi bankacılık sistemine karşı döviz cinsi borcun ani duruş olasılığının temel belirleyicileri olduğunu bulur.",
+   "kaynak": "calvo_izquierdo_mejia2004"
+  },
+  {
+   "tur": "olcum",
+   "parca": "Türkiye'de merkezi yönetim borcunun döviz payı 2026Ç2'de %39,62",
+   "degerler": [
+    {
+     "yol": "b06.p6b.bugun.alfa_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "resmî döviz borcu örtüşen 24 çeyreğin 24'ünde dış senet artı dış krediye birebir eşittir",
+   "degerler": [
+    {
+     "yol": "b06.p6a.karsilastirma.resmi_ozdeslik.n",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b06.p6a.karsilastirma.resmi_ozdeslik.doviz_eslik_birebir",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2021 sonunda pay %50,69'du.",
+   "degerler": [
+    {
+     "yol": "b06.p6a.karsilastirma.ceyrekler.5.resmi_alfa_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Sargent ve Wallace (1981), maliye politikasının para politikasına baskın olduğu bir rejimde bugünkü sıkı paranın, biriken kamu borcunun eninde sonunda kısmen senyorajla finanse edilmesi gerektiği için sonunda daha yüksek enflasyon anlamına gelebileceğini gösterir",
+   "kaynak": "sargent_wallace1981"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Leeper (1991) aynı soruyu aktif ve pasif politika ikilisiyle kurar",
+   "kaynak": "leeper1991"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Bohn (1998), ABD'de 1916–1995 döneminde ve alt dönemlerde faiz dışı fazlanın borç/GSYH oranının artan bir fonksiyonu olduğunu bulur.",
+   "kaynak": "bohn1998"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Ghosh ve diğerleri (2013), 23 gelişmiş ekonominin 1970–2007 verisinde faiz dışı dengenin borç yükseldikçe ona yetişemediği bir 'mali yorgunluk' tepki fonksiyonu bulur.",
+   "kaynak": "ghosh2013"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Escolano, Shabunina ve Woo (2017), farkın 1999–2008'de büyük gelişmiş ekonomilerde ortalama 1 puan civarında, gelişmiş olmayan ekonomilerde ise −7 puanın altında olduğunu ve bu farkların muhtemelen finansal baskıdan kaynaklanan, piyasa dengesinin çok altındaki reel faizlerden doğduğunu bulur.",
+   "kaynak": "escolano_shabunina_woo2017"
+  },
+  {
+   "tur": "olcum",
+   "parca": "Türkiye'de fark 2022'de −94,56 puandı (6.7)",
+   "degerler": [
+    {
+     "yol": "b06.p6a.tablo.15.r_eksi_g_puan",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Reinhart, Rogoff ve Savastano (2003), borca tahammülsüz gelişen piyasalar için 'güvenli' dış borç/GSMH eşiğinin bazı durumlarda %15'e kadar indiğini bulur",
+   "kaynak": "reinhart_rogoff_savastano2003"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Reinhart ve Rogoff'un (2010) kamu borcu GSYH'nin kabaca %90'ını aşan ülkelerde medyan büyümenin yaklaşık 1 puan düşük olduğu bulgusu",
+   "kaynak": "reinhart_rogoff2010"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Herndon, Ash ve Pollin (2014) düzeltmesinden sonra tutmaz: ortalama büyüme yayımlanan −%0,1 değil %2,2'dir, %90'ın üstü ile altı çarpıcı biçimde ayrışmaz.",
+   "kaynak": "herndon_ash_pollin2014"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Blanchard (2004), reel faiz artışı borcun temerrüt olasılığını da yükseltiyorsa yurt içi devlet borcunu daha az çekici kılıp reel değer kaybına yol açabileceğini, bunun başlangıç borcu, döviz cinsi borç payı ve risk fiyatı yüksekken daha olası olduğunu savunur; örneği 2002 Brezilya'sıdır.",
+   "kaynak": "blanchard2004"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Favero ve Giavazzi (2004) temerrüt riskinin ekonominin parasal baskınlıktan mali baskınlığa kaymasının merkezinde durduğunu savunur.",
+   "kaynak": "favero_giavazzi2004"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "De Grauwe ve Ji (2013), avro bölgesindeki devlet tahvili piyasalarının kendi parasını basan ülkelerinkine göre daha kırılgan ve kendini doğrulayan likidite krizlerine daha açık olduğu hipotezini sınar.",
+   "kaynak": "degrauwe_ji2013"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Pinter (2023), LDI yatırımcılarının bozulan türev ve repo pozisyonlarından doğan satış baskısının uzun vadeli gilt'lerde likiditeyi buharlaştırdığını işlem verisiyle gösterir.",
+   "kaynak": "pinter2023"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Hoshi ve Ito (2014), Japon devlet tahvili faizlerinin düşük kalmasının en makul açıklamasının tahvillerin ağırlıkla yerleşiklerce tutulması olduğunu, ama mali duruş değişmezse devlet borcunun yaklaşık on yıl içinde bu alıma ayrılabilecek özel kesim finansal varlıklarını aşacağını hesaplar (hesap noktası 2013–2014).",
+   "kaynak": "hoshi_ito2014"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "TCMB 20 Ağustos 2022'de, yıl sonuna kadar kullandırılacak ticari kredilerde faizi yıllık bileşik referans oranın 1,4 katını aşan kredi tutarının %20'si, 1,8 katını aşanın %90'ı oranında bankaların menkul kıymet tesis etmesini şart koştu",
+   "kaynak": "turkiye2022_mkt_ticari"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "10 Haziran 2022 tebliği yabancı para mevduatları karşılığında da TL cinsi menkul kıymet tesisi istedi.",
+   "kaynak": "turkiye2022_mkt_yp"
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Yunanistan 2010–2012 | 01.2010–12.2012, aylık | 235 bp | 1.203 bp | 2.739 bp (02.2012) | — | — | — | yalnız aylık |",
+   "degerler": [
+    {
+     "yol": "b06.p6d.olaylar.0.fark_onceki_ay_bp",
+     "bicim": "bp",
+     "hane": 0
+    },
+    {
+     "yol": "b06.p6d.olaylar.0.fark_son_bp",
+     "bicim": "bp",
+     "hane": 0
+    },
+    {
+     "yol": "b06.p6d.olaylar.0.zirve_bp",
+     "bicim": "bp",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| İtalya 2011 | 30.06–30.11.2011 | 185,1 bp | 480,2 bp | 557,9 bp (09.11.2011) | +220,4 bp | −74,7 bp | −%7,61 | prim · R5 |",
+   "degerler": [
+    {
+     "yol": "b06.p6d.olaylar.1.fark_bas_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.olaylar.1.fark_son_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.olaylar.1.zirve_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.olaylar.1.delta_ulke10y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6d.olaylar.1.delta_de10y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.butce.R5_EM.vakalar.0.degisim.kur",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| İspanya 2012 | 30.12.2011–28.12.2012 | 328,4 bp | 396,4 bp | 635,6 bp (23.07.2012) | +16,9 bp | −51,1 bp | +%2,06 | politika · R4 |",
+   "degerler": [
+    {
+     "yol": "b06.p6d.olaylar.2.fark_bas_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.olaylar.2.fark_son_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.olaylar.2.zirve_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.olaylar.2.delta_ulke10y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6d.olaylar.2.delta_de10y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.butce.R4.vakalar.0.degisim.kur",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| İtalya, Mayıs 2018 | 14–29.05.2018 | 130,1 bp | 282,1 bp | 282,1 bp (29.05.2018) | +118,6 bp | −33,4 bp | −%3,30 | prim · R4 |",
+   "degerler": [
+    {
+     "yol": "b06.p6d.olaylar.3.fark_bas_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.olaylar.3.fark_son_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.olaylar.3.zirve_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.olaylar.3.delta_ulke10y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6d.olaylar.3.delta_de10y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6d.olaylar.3.delta_eurusd_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| İtalya, 2018 bütçesi | 27.09–31.10.2018 | 237,8 bp | 302,0 bp | 324,6 bp (18.10.2018) | +50,8 bp | −13,4 bp | −%2,87 | prim · R4 |",
+   "degerler": [
+    {
+     "yol": "b06.p6d.olaylar.4.fark_bas_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.olaylar.4.fark_son_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.olaylar.4.zirve_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.olaylar.4.delta_ulke10y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6d.olaylar.4.delta_de10y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.butce.R4.vakalar.2.degisim.kur",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "9 Kasım 2011'de 10 yıllık getiri, LCH Clearnet'in teminat oranlarını artırmasının ardından %7,48'e çıkarak avronun başlangıcından bu yana ilk kez %7'yi aştı.",
+   "kaynak": "italya2011_kasim"
+  },
+  {
+   "tur": "olcum",
+   "parca": "Ülke getirisi yalnız +16,9 bp yükselirken Bund düştü",
+   "degerler": [
+    {
+     "yol": "b06.p6d.olaylar.2.delta_ulke10y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Draghi 26 Temmuz 2012'de Londra'da ECB'nin görev alanı içinde avroyu korumak için ne gerekiyorsa yapmaya hazır olduğunu söyledi",
+   "kaynak": "draghi2012"
+  },
+  {
+   "tur": "hesap",
+   "parca": "fark zirvesinden yıl sonuna 239,2 bp daraldı",
+   "degerler": [
+    {
+     "ifade": "abs(v('b06.p6d.olaylar.2.zirve_son_bp'))",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Lega–Beşyıldız hükümet sözleşmesinin 15 Mayıs 2018'de sızan taslağı ECB'den 250 milyar avroluk İtalyan borcunun silinmesini ve avrodan çıkış kurallarını içeriyordu.",
+   "kaynak": "italya2018_sozlesme"
+  },
+  {
+   "tur": "olcum",
+   "parca": "2 yıllık getiri +253,1 bp ile 10 yıllıktan çok yükseldi (2 yıllık fark +277,2 bp)",
+   "degerler": [
+    {
+     "yol": "b06.p6d.olaylar.3.delta_it2y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6d.olaylar.3.delta_fark_2y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Hükümet Eylül 2018 sonunda 2019 için GSYH'nin %2,4'ü kadar açık hedefi açıkladı; bu, önceki hükümetin hedefinin üç katıydı.",
+   "kaynak": "italya2018_butce"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "S&P 9 Eylül 2015'te Brezilya'nın notunu BBB−'den BB+'ya indirip görünümü negatif bıraktı",
+   "kaynak": "brezilya2015_sp"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Zuma 9 Aralık 2015'te Maliye Bakanı Nene'yi görevden aldı ve rand rekor düşüğe indi",
+   "kaynak": "guneyafrika2015_nene"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Brezilya'da Aralık 2024'te real rekor düşüklere gerilerken merkez bankası müdahale etti ve faizi 100 bp artırdı.",
+   "kaynak": "brezilya2024_paket"
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2007–2012 | 6 | −6,12 | −1,12 | −10,88 | +2,39 | +3,49 |",
+   "degerler": [
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2007-2012.delta_d_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2007-2012.kartopu_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2007-2012.fdd_terimi_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2007-2012.kur_terimi_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2007-2012.artik_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2013–2017 | 5 | −10,26 | −10,55 | −5,33 | +9,87 | −4,25 |",
+   "degerler": [
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2013-2017.delta_d_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2013-2017.kartopu_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2013-2017.fdd_terimi_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2013-2017.kur_terimi_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2013-2017.artik_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2018–2020 | 3 | +2,51 | −6,04 | +1,26 | +7,82 | −0,53 |",
+   "degerler": [
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2018-2020.delta_d_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2018-2020.kartopu_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2018-2020.fdd_terimi_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2018-2020.kur_terimi_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2018-2020.artik_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2021–2023 | 3 | −10,68 | −33,63 | +1,62 | +15,93 | +5,40 |",
+   "degerler": [
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2021-2023.delta_d_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2021-2023.kartopu_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2021-2023.fdd_terimi_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2021-2023.kur_terimi_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2021-2023.artik_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2024–2025 | 2 | −2,93 | −9,58 | +1,47 | +2,95 | +2,23 |",
+   "degerler": [
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2024-2025.delta_d_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2024-2025.kartopu_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2024-2025.fdd_terimi_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2024-2025.kur_terimi_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.alt_donem_toplami.2024-2025.artik_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2007–2025 toplamı | 19 | −27,49 | −60,92 | −11,87 | +38,96 | +6,34 |",
+   "degerler": [
+    {
+     "yol": "b06.p6a.toplam_2007_2025.delta_d_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.toplam_2007_2025.kartopu_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.toplam_2007_2025.fdd_terimi_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.toplam_2007_2025.kur_terimi_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.toplam_2007_2025.artik_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2026 ilk yarı | — | −1,18 | −0,89 | −0,71 | +0,66 | −0,23 |",
+   "degerler": [
+    {
+     "yol": "b06.p6a.ilk_yari_2026.delta_d_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.ilk_yari_2026.kartopu_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.ilk_yari_2026.fdd_terimi_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.ilk_yari_2026.kur_terimi_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.ilk_yari_2026.artik_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "kur terimi bu katkının %63,9'unu geri yazdı",
+   "degerler": [
+    {
+     "ifade": "v('b06.p6a.toplam_2007_2025.kur_terimi_puan')/abs(v('b06.p6a.toplam_2007_2025.kartopu_puan'))*100",
+     "bicim": "yz",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "örtük faiz %11,60, nominal büyüme %106,16, kartopu −16,53 puan; kur +3,57 puan",
+   "degerler": [
+    {
+     "yol": "b06.p6a.tablo.15.ortuk_faiz_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.tablo.15.nominal_buyume_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.tablo.15.kartopu_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.tablo.15.kur_terimi_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "USD/TRY +%79,65 ve döviz payı %41,48 iken kur terimi +8,05 puan",
+   "degerler": [
+    {
+     "yol": "b06.p6a.tablo.14.kur_degisimi_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.tablo.14.alfa_onceki_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.tablo.14.kur_terimi_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Örtüşen 24 çeyrekte türetilmiş stok resmînin %9,79 ile %23,44 altında",
+   "degerler": [
+    {
+     "yol": "b06.p6a.karsilastirma.n",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "ifade": "abs(v('b06.p6a.karsilastirma.fark_yuzde_azami'))",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "ifade": "abs(v('b06.p6a.karsilastirma.fark_yuzde_asgari'))",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2020 sonundaki 3,45 puanlık fark (%31,79 ve %35,24)",
+   "degerler": [
+    {
+     "yol": "b06.p6a.seri_gecisi.fark_puan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.seri_gecisi.turetilmis_d",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.seri_gecisi.resmi_d",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(bir gün önceki ilanla fark en çok %2,71, 31.12.2021)",
+   "degerler": [
+    {
+     "yol": "b06.p6a.karsilastirma.kur_gunu_duyarliligi.azami_mutlak_fark_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.karsilastirma.kur_gunu_duyarliligi.azami_gun",
+     "bicim": "tarih",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Borç %20,44, döviz payı %39,62 (alt sınır), örtük faiz %21,17, nominal büyüme %38,84: $i - g$ −17,66 puan, pb* GSYH'nin −%2,60'ı.",
+   "degerler": [
+    {
+     "yol": "b06.p6b.bugun.d_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.bugun.alfa_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.bugun.ortuk_faiz_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.bugun.nominal_buyume_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.bugun.r_eksi_g_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.bugun.pb_yildiz_gsyh",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Ölçülen faiz dışı fazla %0,88: oran düşüyor.",
+   "degerler": [
+    {
+     "yol": "b06.p6b.bugun.fdd_gsyh",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Son dört çeyreğin kur değişimi (+%17,20) eklenince pb* −%1,60.",
+   "degerler": [
+    {
+     "yol": "b06.p6b.bugun.kur_12a_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6b.bugun.pb_yildiz_kur_ile_gsyh",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Marjinal faizle (DİBS sıfır kupon, 30.06.2026) 2 yıllık %39,66'da $i - g$ +0,82 puan ve pb* +%0,12, 5 yıllık %34,79'da −4,05 puan ve −%0,60.",
+   "degerler": [
+    {
+     "yol": "b06.p6b.marjinal_faizle.n2y.piyasa_gunu",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b06.p6b.marjinal_faizle.n2y.faiz_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.marjinal_faizle.n2y.r_eksi_g_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6b.marjinal_faizle.n2y.pb_yildiz_gsyh",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6b.marjinal_faizle.n5y.faiz_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.marjinal_faizle.n5y.r_eksi_g_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.marjinal_faizle.n5y.pb_yildiz_gsyh",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "USD/TRY +%10'da borç oranı +0,81 puan (%21,25), +%20'de +1,62 puan (%22,06), +%30'da +2,43 puan (%22,87).",
+   "degerler": [
+    {
+     "yol": "b06.p6b.kur_fani.soklar.0.kur_artisi_yuzde",
+     "bicim": "yz",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6b.kur_fani.soklar.0.delta_d_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6b.kur_fani.soklar.0.d_yeni",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.kur_fani.soklar.1.kur_artisi_yuzde",
+     "bicim": "yz",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6b.kur_fani.soklar.1.delta_d_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6b.kur_fani.soklar.1.d_yeni",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.kur_fani.soklar.2.kur_artisi_yuzde",
+     "bicim": "yz",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6b.kur_fani.soklar.2.delta_d_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6b.kur_fani.soklar.2.d_yeni",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Şok sonrası pb* sırayla −%2,70, −%2,81, −%2,91",
+   "degerler": [
+    {
+     "yol": "b06.p6b.kur_fani.soklar.0.pb_yildiz_yeni_gsyh",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.kur_fani.soklar.1.pb_yildiz_yeni_gsyh",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.kur_fani.soklar.2.pb_yildiz_yeni_gsyh",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "**KKM** (12.2021–07.2026). Zirve 07.2023: döviz dönüşümlü 97,2 milyar dolar (ay sonu kuru 26,93 ile 2.617,8 milyar TL) ve TL'den dönüşen 1.020,9 milyar TL, toplam 3.638,7 milyar TL.",
+   "degerler": [
+    {
+     "yol": "b06.p6b.kkm.ilk",
+     "bicim": "ay",
+     "hane": 0
+    },
+    {
+     "yol": "b06.p6b.kkm.son",
+     "bicim": "ay",
+     "hane": 0
+    },
+    {
+     "yol": "b06.p6b.kkm.toplam_zirve.ay",
+     "bicim": "ay",
+     "hane": 0
+    },
+    {
+     "yol": "b06.p6b.kkm.toplam_zirve.doviz_donusumlu_mlr_usd",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6b.kkm.toplam_zirve.kur",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.kkm.toplam_zirve.doviz_donusumlu_mlr_tl",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6b.kkm.toplam_zirve.tl_kkm_mlr_tl",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6b.kkm.toplam_zirve.toplam_mlr_tl",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "%20'lik kur şokunda brüt yük yıllık GSYH'nin %2,25'i ve %0,88'i, toplam %3,13.",
+   "degerler": [
+    {
+     "yol": "b06.p6b.kkm.toplam_zirve.soklar.1.kur_artisi_yuzde",
+     "bicim": "yz",
+     "hane": 0
+    },
+    {
+     "yol": "b06.p6b.kkm.toplam_zirve.soklar.1.doviz_donusumlu_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.kkm.toplam_zirve.soklar.1.tl_kkm_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b06.p6b.kkm.toplam_zirve.soklar.1.doviz_donusumlu_gsyh_yuzde')+v('b06.p6b.kkm.toplam_zirve.soklar.1.tl_kkm_gsyh_yuzde')",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "bütün KKM'yi taşıyorsa zirve 2.617,8 milyar TL'de kalır",
+   "degerler": [
+    {
+     "yol": "b06.p6b.kkm.sutun_saglamasi.doviz_kismi_toplam_olsaydi_zirve_mlr_tl",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "07.2026'da stok 0,19 milyar TL, +%30 şokta yük GSYH'nin %0,0001'i",
+   "degerler": [
+    {
+     "yol": "b06.p6b.kkm.son_ay.ay",
+     "bicim": "ay",
+     "hane": 0
+    },
+    {
+     "yol": "b06.p6b.kkm.son_ay.toplam_mlr_tl",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.kkm.son_ay.soklar.2.kur_artisi_yuzde",
+     "bicim": "yz",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6b.kkm.son_ay.soklar.2.doviz_donusumlu_gsyh_yuzde",
+     "bicim": "yz",
+     "hane": 4
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "borç %20,4, döviz payı %39,6, örtük faiz %21,2, büyüme %38,8, faiz dışı fazla %0,88",
+   "degerler": [
+    {
+     "ifade": "a('borc.d')",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "ifade": "a('borc.alfa')",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "ifade": "a('borc.i')",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "ifade": "a('borc.g')",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "ifade": "a('borc.pb')",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Çıktılar: $i - g$ −17,60 puan, pb* −%2,59",
+   "degerler": [
+    {
+     "ifade": "a('borc.i')-a('borc.g')",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "ifade": "pb_yildiz(a('borc.d'), a('borc.i')/100, a('borc.g')/100, a('borc.alfa')/100, 0)",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "seferlik %20 değer kaybı",
+   "neden": "Araç 2'nin tek seferlik kur şoku sabiti (bileşenin tanımı: d etkisi = α·d·0,2)"
+  },
+  {
+   "tur": "hesap",
+   "parca": "seferlik %20 değer kaybı oranı +1,62 puan sıçratır",
+   "degerler": [
+    {
+     "ifade": "a('borc.alfa')/100*a('borc.d')*0.2",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "bugünkü koşullar beş yıl sürseydi oran %6,94'e inerdi",
+   "degerler": [
+    {
+     "ifade": "borc_adim(borc_adim(borc_adim(borc_adim(borc_adim(a('borc.d'), a('borc.i')/100, a('borc.g')/100, a('borc.alfa')/100, 0, a('borc.pb')), a('borc.i')/100, a('borc.g')/100, a('borc.alfa')/100, 0, a('borc.pb')), a('borc.i')/100, a('borc.g')/100, a('borc.alfa')/100, 0, a('borc.pb')), a('borc.i')/100, a('borc.g')/100, a('borc.alfa')/100, 0, a('borc.pb')), a('borc.i')/100, a('borc.g')/100, a('borc.alfa')/100, 0, a('borc.pb'))",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "faizi (%34,13) örtük faize tam geçseydi pb* −%0,69 olurdu",
+   "degerler": [
+    {
+     "ifade": "taylor_kural(a('taylor.r_yildiz'), a('taylor.pi_anket'), a('taylor.pi_hedef'), a('taylor.phi_pi'), a('taylor.phi_y'), a('taylor.acik_orta'))",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "ifade": "pb_yildiz(a('borc.d'), taylor_kural(a('taylor.r_yildiz'), a('taylor.pi_anket'), a('taylor.pi_hedef'), a('taylor.phi_pi'), a('taylor.phi_y'), a('taylor.acik_orta'))/100, a('borc.g')/100, a('borc.alfa')/100, 0)",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Düzey, 5 yıllık (% / puan) | 54 | −3,57 | −3,42 | — | tarif edici |",
+   "degerler": [
+    {
+     "yol": "b06.p6c.n5y.duzey.egim_yuzde_per_puan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6c.n5y.duzey.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Değişim, 5 yıllık (bp / puan) | 53 | +93,0 | 1,06 | 1,14 | tarif edici |",
+   "degerler": [
+    {
+     "yol": "b06.p6c.n5y.degisim.egim",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6c.n5y.degisim.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6c.n5y.degisim.oos.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Değişim, 7 yıllık | 53 | +63,5 | 0,71 | 1,18 | tarif edici |",
+   "degerler": [
+    {
+     "yol": "b06.p6c.n7y.degisim.egim",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6c.n7y.degisim.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6c.n7y.degisim.oos.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Değişim, 5 yıllık, yönetilen kur hariç | 46 | +243,8 | 3,42 | 0,90 | ölçülü |",
+   "degerler": [
+    {
+     "yol": "b06.p6c.n5y.degisim_yonetilen_haric.egim",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6c.n5y.degisim_yonetilen_haric.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6c.n5y.degisim_yonetilen_haric.oos.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Bir çeyrek önceki denge, 5 yıllık | 52 | −111,7 | −1,93 | 1,05 | tarif edici |",
+   "degerler": [
+    {
+     "yol": "b06.p6c.n5y.degisim_bir_ceyrek_gecikmeli.egim",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6c.n5y.degisim_bir_ceyrek_gecikmeli.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6c.n5y.degisim_bir_ceyrek_gecikmeli.oos.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "örneklem dışı üstünlüğün Diebold–Mariano t'si −0,66",
+   "degerler": [
+    {
+     "yol": "b06.p6c.n5y.degisim_yonetilen_haric.oos.dm_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "etiket bir gün kaydırılınca 5 yıllık ortalama 32,3 bp, en çok 290,8 bp (2022Ç2) oynar",
+   "degerler": [
+    {
+     "yol": "b06.p6c.n5y.etiket_kaymasi_duyarliligi.bir_gun_fark_ort_mutlak_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6c.n5y.etiket_kaymasi_duyarliligi.bir_gun_fark_azami_bp",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "günlük farkın aylık ortalaması ECB ile korelasyon 0,996–0,9998, ortalama mutlak fark 3,1–5,2 bp",
+   "degerler": [
+    {
+     "yol": "b06.p6d.sinama_gunluk_aylik.FR.korelasyon",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b06.p6d.sinama_gunluk_aylik.PT.korelasyon",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b06.p6d.sinama_gunluk_aylik.ES.ort_mutlak_fark_bp",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.sinama_gunluk_aylik.IT.ort_mutlak_fark_bp",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Portekiz 10 yıllığında 315 sıfır günü",
+   "degerler": [
+    {
+     "yol": "b06.p6d.sifir_dizisi_atilan.pt10y",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Yunanistan | 2.739,0 bp (02.2012) | 68,5 bp | 91,83 bp | %147,8 | %146,1 | %209,4 (2020) | +%1,7 |",
+   "degerler": [
+    {
+     "yol": "b06.p6d.aylik.GR.azami_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.aylik.GR.son_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.gunluk.GR.son_bp",
+     "bicim": "bp",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.EL.2010.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.EL.2025.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.EL.borc_zirve.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.EL.2025.denge_gsyh",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Portekiz | 1.202,9 bp (01.2012) | 35,2 bp | 43,83 bp | %99,9 | %89,7 | %134,1 (2020) | +%0,7 |",
+   "degerler": [
+    {
+     "yol": "b06.p6d.aylik.PT.azami_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.aylik.PT.son_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.gunluk.PT.son_bp",
+     "bicim": "bp",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.PT.2010.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.PT.2025.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.PT.borc_zirve.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.PT.2025.denge_gsyh",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| İrlanda | 971,0 bp (07.2011) | 16,5 bp | — | %86,2 | %32,9 | %118,9 (2012) | +%1,8 |",
+   "degerler": [
+    {
+     "yol": "b06.p6d.aylik.IE.azami_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.aylik.IE.son_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.IE.2010.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.IE.2025.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.IE.borc_zirve.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.IE.2025.denge_gsyh",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| İspanya | 555,4 bp (07.2012) | 44,5 bp | 55,05 bp | %60,3 | %100,7 | %119,3 (2020) | −%2,4 |",
+   "degerler": [
+    {
+     "yol": "b06.p6d.aylik.ES.azami_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.aylik.ES.son_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.gunluk.ES.son_bp",
+     "bicim": "bp",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.ES.2010.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.ES.2025.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.ES.borc_zirve.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.ES.2025.denge_gsyh",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| İtalya | 518,7 bp (11.2011) | 80,1 bp | 103,58 bp | %118,8 | %137,1 | %154,4 (2020) | −%3,1 |",
+   "degerler": [
+    {
+     "yol": "b06.p6d.aylik.IT.azami_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.aylik.IT.son_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.gunluk.IT.son_bp",
+     "bicim": "bp",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.IT.2010.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.IT.2025.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.IT.borc_zirve.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.IT.2025.denge_gsyh",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Fransa | 154,0 bp (11.2011) | 81,5 bp | 126,36 bp | %86,3 | %115,6 | %115,6 (2025) | −%5,1 |",
+   "degerler": [
+    {
+     "yol": "b06.p6d.aylik.FR.azami_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.aylik.FR.son_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.gunluk.FR.son_bp",
+     "bicim": "bp",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.FR.2010.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.FR.2025.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.FR.borc_zirve.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.FR.2025.denge_gsyh",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Almanya | — | — | — | %81,0 | %63,5 | %81,0 (2010) | −%2,7 |",
+   "degerler": [
+    {
+     "yol": "b06.p6d.eurostat.panel.DE.2010.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.DE.2025.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.DE.borc_zirve.borc_gsyh",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.eurostat.panel.DE.2025.denge_gsyh",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2021 sonu borç oranı %36,04, döviz payı %50,69; 2022'de örtük faiz %11,60, nominal büyüme %106,16, USD/TRY +%40,28, faiz dışı fazla %1,12, yıl sonu oran %25,68.",
+   "degerler": [
+    {
+     "yol": "b06.p6a.tablo.15.d_onceki",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.tablo.15.alfa_onceki_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.tablo.15.ortuk_faiz_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.tablo.15.nominal_buyume_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.tablo.15.kur_degisimi_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6a.tablo.15.fdd_gsyh",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.tablo.15.d",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$1 + g = 2{,}0616$",
+   "degerler": [
+    {
+     "ifade": "1+v('b06.p6a.tablo.15.nominal_buyume_yuzde')/100",
+     "bicim": "sayi",
+     "hane": 4
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Kartopu $(0{,}1160 - 1{,}0616)/2{,}0616 \\times 36{,}04$ → −16,53 puan",
+   "degerler": [
+    {
+     "ifade": "v('b06.p6a.tablo.15.ortuk_faiz_yuzde')/100",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "v('b06.p6a.tablo.15.nominal_buyume_yuzde')/100",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "1+v('b06.p6a.tablo.15.nominal_buyume_yuzde')/100",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b06.p6a.tablo.15.d_onceki",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.tablo.15.kartopu_puan",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Kur $0{,}5069 \\times 0{,}4028 \\times 36{,}04 / 2{,}0616$ → +3,57 puan",
+   "degerler": [
+    {
+     "ifade": "v('b06.p6a.tablo.15.alfa_onceki_yuzde')/100",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "v('b06.p6a.tablo.15.kur_degisimi_yuzde')/100",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b06.p6a.tablo.15.d_onceki",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "1+v('b06.p6a.tablo.15.nominal_buyume_yuzde')/100",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b06.p6a.tablo.15.kur_terimi_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Faiz dışı denge −1,12 puan. Δd −10,36 puan, artık +3,72 puan.",
+   "degerler": [
+    {
+     "yol": "b06.p6a.tablo.15.fdd_terimi_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.tablo.15.delta_d_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.tablo.15.artik_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "sonra +%20 kur şokunun borç oranına etkisini bulun",
+   "degerler": [
+    {
+     "yol": "b06.p6b.kur_fani.soklar.1.kur_artisi_yuzde",
+     "bicim": "yz",
+     "hane": 0,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Örtük: $(0{,}2117 - 0{,}3884)/1{,}3884 \\times 20{,}44$ → −%2,60",
+   "degerler": [
+    {
+     "ifade": "v('b06.p6b.bugun.ortuk_faiz_yuzde')/100",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "v('b06.p6b.bugun.nominal_buyume_yuzde')/100",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "1+v('b06.p6b.bugun.nominal_buyume_yuzde')/100",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b06.p6b.bugun.d_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.bugun.pb_yildiz_gsyh",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2 yıllık: $i - g$ +0,82 puan, pb* +%0,12. Fazla %0,88",
+   "degerler": [
+    {
+     "yol": "b06.p6b.marjinal_faizle.n2y.r_eksi_g_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6b.marjinal_faizle.n2y.pb_yildiz_gsyh",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6b.bugun.fdd_gsyh",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Şok: $20{,}44 \\times 0{,}3962 \\times 0{,}20$ → +1,62 puan, yeni oran %22,06",
+   "degerler": [
+    {
+     "yol": "b06.p6b.bugun.d_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b06.p6b.bugun.alfa_yuzde')/100",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "v('b06.p6b.kur_fani.soklar.1.kur_artisi_yuzde')/100",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6b.kur_fani.soklar.1.delta_d_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6b.kur_fani.soklar.1.d_yeni",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "aynı şok GSYH'nin %3,13'ü kadar brüt yük eklerdi",
+   "degerler": [
+    {
+     "ifade": "v('b06.p6b.kkm.toplam_zirve.soklar.1.doviz_donusumlu_gsyh_yuzde')+v('b06.p6b.kkm.toplam_zirve.soklar.1.tl_kkm_gsyh_yuzde')",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "İspanya: ülke 10 yıllık +16,9 bp, euro +%2,06",
+   "degerler": [
+    {
+     "yol": "b06.p6d.olaylar.2.delta_ulke10y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.butce.R4.vakalar.0.degisim.kur",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Bund −51,1 bp düştü, fark +68,0 bp açıldı",
+   "degerler": [
+    {
+     "yol": "b06.p6d.olaylar.2.delta_de10y_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6d.olaylar.2.delta_fark_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "İtalya 2018: 10 yıllık +118,6 bp, EUR/USD −%3,30: prim; fark +152,0 bp, 2 yıllık +253,1 bp",
+   "degerler": [
+    {
+     "yol": "b06.p6d.olaylar.3.delta_ulke10y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6d.olaylar.3.delta_eurusd_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6d.olaylar.3.delta_fark_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6d.olaylar.3.delta_it2y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Yönetilen kur hariç 5 yıllık değişim eğimi +243,8 bp/puan, t 3,42, karesel hata rastgele yürüyüşün 0,90'ı",
+   "degerler": [
+    {
+     "yol": "b06.p6c.n5y.degisim_yonetilen_haric.egim",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6c.n5y.degisim_yonetilen_haric.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6c.n5y.degisim_yonetilen_haric.oos.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "denge 1 puan iyileşirken getiri ≈244 bp yükseliyor",
+   "degerler": [
+    {
+     "yol": "b06.p6c.n5y.degisim_yonetilen_haric.egim",
+     "bicim": "bp",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2023Ç3 dışarıda kalınca eğim 163,3; Diebold–Mariano t'si −0,66",
+   "degerler": [
+    {
+     "yol": "b06.p6c.n5y.degisim_yonetilen_haric.birini_disarida_birak.o_gozlemsiz_egim",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b06.p6c.n5y.degisim_yonetilen_haric.oos.dm_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "yenmiyor (oran 1,05)",
+   "degerler": [
+    {
+     "yol": "b06.p6c.n5y.degisim_bir_ceyrek_gecikmeli.oos.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  }
+ ]
+}

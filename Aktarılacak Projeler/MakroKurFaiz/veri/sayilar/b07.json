@@ -1,0 +1,1085 @@
+{
+ "girdiler": [
+  {
+   "tur": "olcum",
+   "parca": "08.2026'da TÜFE bazlı REDK 105,04; 1994–2026'nın geometrik ortalaması 125,02, 2003–2026'nınki 126,91, log sapma −17,41 ya da −18,91. 392 ayın yalnız %23,2'sinde",
+   "degerler": [
+    {
+     "yol": "b07.p7a.sapma.tarih",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.sapma.redk_tufe",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.sapma.ortalama_tam_endeks",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.sapma.ortalama_2003_endeks",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.sapma.sapma_tam_log",
+     "bicim": "sayi",
+     "hane": 2,
+     "carpan": 100
+    },
+    {
+     "yol": "b07.p7a.sapma.sapma_2003_log",
+     "bicim": "sayi",
+     "hane": 2,
+     "carpan": 100
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.n",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b07.p7a.sapma.yuzdelik_tam",
+     "bicim": "yz",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "göreli verimlilik farkının reel kura etkisi, Balassa (1964) ve Samuelson (1964) adlarıyla Balassa–Samuelson etkisi olarak anılır",
+   "kaynak": "balassa1964"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "göreli verimlilik farkının reel kura etkisi, Balassa (1964) ve Samuelson (1964) adlarıyla Balassa–Samuelson etkisi olarak anılır",
+   "kaynak": "samuelson1964"
+  },
+  {
+   "tur": "sabit",
+   "parca": "\\frac{\\ln 0{,}5}{\\ln \\rho} \\;\\approx\\; \\frac{0{,}693}{1-\\rho}",
+   "neden": "yarı ömrün tanımı (E x_{t+h} = ρ^h x = x/2) ve ρ 1'e yakınken ln ρ ≈ ρ − 1 yaklaşımı; 0,693 = −ln 0,5"
+  },
+  {
+   "tur": "hesap",
+   "parca": "Türkiye'de aylık en küçük kareler ρ'su 0,9862 ile 49,8 aylık, medyan-yansız ρ 0,9971 ile 235,8 aylık yarı ömür çıkar: ρ'daki 0,011'lik fark",
+   "degerler": [
+    {
+     "yol": "b07.p7a.tufe.tam.rho_ols",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.yari_omur_ols_ay",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.rho_mu",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.yari_omur_mu_ay",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "v('b07.p7a.tufe.tam.rho_mu') - v('b07.p7a.tufe.tam.rho_ols')",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "0,5 ile 1 arasındaki bir ızgaranın her noktasında aynı uzunlukta 400 yapay seri",
+   "neden": "medyan-yansız AR(1) kestiriminin benzetim ızgarası (0,50–1,00, 101 nokta) ve deneme sayısı (yöntem sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "%90 aralığı",
+   "neden": "kalıcılık katsayısı için verilen güven aralığının düzeyi (yöntem sabiti: benzetim dağılımının 5. ve 95. yüzdeliği)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "kritik değer %5'te −2,86, %10'da −2,57",
+   "degerler": [
+    {
+     "yol": "b07.p7a.tufe.tam.adf.kritik.yuzde5",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.adf.kritik.yuzde10",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Clark ve MacDonald (1998) reel kurun temellerle uyumunu iki yoldan ölçer: FEER, tam istihdamdaki cari dengeyi sürdürülebilir net sermaye akımına eşitleyen reel kurdur; BEER ise reel kurla makro değişkenler arasındaki davranışsal ilişkiyi ekonometrik olarak tahmin eder",
+   "kaynak": "clarkmacdonald1998"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "IMF'nin Dış Denge Değerlendirmesi (EBA; Phillips ve diğerleri, 2013) CGER'in yerini alan bir yöntemdir",
+   "kaynak": "phillips2013"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Rogoff (1996), reel kurun satın alma gücü paritesinden sapmalarının yarı ömrüne ilişkin mutabakat tahminini 3–5 yıl diye özetler",
+   "kaynak": "rogoff1996"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Imbs, Mumtaz, Ravn ve Rey (2005), alt fiyat endeksleri farklı hızlarda döndüğü için toplu endekslerle yapılan tahminlerin kalıcılığı abarttığını öne sürer; heterojenlik düzeltilince yarı ömür bir yılın biraz üzerine iner. Chen ve Engel (2004) ise bu yanlılığın bulmacayı çözmediğini savunur",
+   "kaynak": "imbs2005"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Kaminsky ve Reinhart (1999) krizlerin, kredi ve sermaye girişinin beslediği, aşırı değerli bir paranın eşlik ettiği uzun bir canlanmanın ardından geldiğini bulur",
+   "kaynak": "kaminskyreinhart1999"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Gourinchas ve Obstfeld (2012), 1973–2010 verisiyle yurt içi kredi genişlemesinin ve reel değerlenmenin finansal krizlerin en sağlam öncüleri olduğunu gösterir",
+   "kaynak": "gourinchasobstfeld2012"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Rodrik (2008) Balassa–Samuelson'a göre düzeltilmiş düşük değerlenmenin büyümeyle pozitif ilişkili olduğunu bulur (tartışmalı, yalnız nitel)",
+   "kaynak": "rodrik2008"
+  },
+  {
+   "tur": "tablo",
+   "satir": "| DM | 9 | 5 | sonsuz | 3,9 yıl |",
+   "degerler": [
+    {
+     "yol": "b07.p7c.dm.medyan_alt90_yil",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| EM | 10 | 1 | 3,3 yıl | 1,5 yıl |",
+   "degerler": [
+    {
+     "yol": "b07.p7c.em.medyan_mu_yil",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7c.em.medyan_alt90_yil",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "İsviçre'de 5,0, euro alanında 4,7 yıl",
+   "degerler": [
+    {
+     "yol": "b07.p7c.ulkeler.CH.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7c.ulkeler.XM.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Rogoff'un 3–5 yılı DM aralıklarının alt ucuna düşer",
+   "kaynak": "rogoff1996"
+  },
+  {
+   "tur": "olcum",
+   "parca": "Türkiye'de BIS sepeti 11,0, TCMB'nin TÜFE bazlı REDK'si 19,6 yıl veriyor: sepet değişince kestirim yıllarca oynar (alt uç 2,4 yıl)",
+   "degerler": [
+    {
+     "yol": "b07.p7c.ulkeler.TR.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7c.ulkeler.TR.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "aralık %90",
+   "neden": "kalıcılık katsayısı için verilen güven aralığının düzeyi (yöntem sabiti)"
+  },
+  {
+   "tur": "tablo",
+   "satir": "| TÜFE, 1994–2026 | 392 | 0,9971 | 19,6 | 2,66 – ∞ | 4,15 | −1,06 |",
+   "degerler": [
+    {
+     "yol": "b07.p7a.tufe.tam.rho_mu",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.yari_omur_ols_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.adf.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| TÜFE, 1994–2001 | 96 | 0,9696 | 1,87 | 0,53 – ∞ | 0,80 | −1,69 |",
+   "degerler": [
+    {
+     "yol": "b07.p7a.tufe.donemler.1994_2001.rho_mu",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b07.p7a.tufe.donemler.1994_2001.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.donemler.1994_2001.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.donemler.1994_2001.yari_omur_ols_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.donemler.1994_2001.adf.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| TÜFE, 2002–2017 | 192 | 0,9746 | 2,25 | 0,85 – ∞ | 1,30 | −2,23 |",
+   "degerler": [
+    {
+     "yol": "b07.p7a.tufe.donemler.2002_2017.rho_mu",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b07.p7a.tufe.donemler.2002_2017.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.donemler.2002_2017.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.donemler.2002_2017.yari_omur_ols_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.donemler.2002_2017.adf.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| TÜFE, 2018–2026 | 104 | 0,9639 | 1,57 | 0,52 – ∞ | 0,80 | −1,65 |",
+   "degerler": [
+    {
+     "yol": "b07.p7a.tufe.donemler.2018_2026.rho_mu",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b07.p7a.tufe.donemler.2018_2026.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.donemler.2018_2026.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.donemler.2018_2026.yari_omur_ols_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.donemler.2018_2026.adf.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| ÜFE, 1994–2026 | 392 | 0,9785 | 2,65 | 1,23 – ∞ | 1,84 | −2,29 |",
+   "degerler": [
+    {
+     "yol": "b07.p7a.ufe.tam.rho_mu",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b07.p7a.ufe.tam.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.ufe.tam.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.ufe.tam.yari_omur_ols_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.ufe.tam.adf.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| ÜFE, 1994–2001 | 96 | 0,9875 | 4,58 | 0,65 – ∞ | 1,02 | −1,73 |",
+   "degerler": [
+    {
+     "yol": "b07.p7a.ufe.donemler.1994_2001.rho_mu",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.1994_2001.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.1994_2001.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.1994_2001.yari_omur_ols_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.1994_2001.adf.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| ÜFE, 2002–2017 | 192 | 0,9644 | 1,59 | 0,71 – ∞ | 1,08 | −2,57 |",
+   "degerler": [
+    {
+     "yol": "b07.p7a.ufe.donemler.2002_2017.rho_mu",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.2002_2017.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.2002_2017.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.2002_2017.yari_omur_ols_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.2002_2017.adf.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| ÜFE, 2018–2026 | 104 | 0,9884 | 4,94 | 0,72 – ∞ | 1,18 | −1,30 |",
+   "degerler": [
+    {
+     "yol": "b07.p7a.ufe.donemler.2018_2026.rho_mu",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.2018_2026.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.2018_2026.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.2018_2026.yari_omur_ols_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.2018_2026.adf.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(t −2,571, %10 eşiği −2,57)",
+   "degerler": [
+    {
+     "yol": "b07.p7a.ufe.donemler.2002_2017.adf.t",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.2002_2017.adf.kritik.yuzde10",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "tam örneklem TÜFE'de 4,15 yılı 19,6 yıla",
+   "degerler": [
+    {
+     "yol": "b07.p7a.tufe.tam.yari_omur_ols_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "yarı ömrü 1,57 ile 2,25 yıl arasına iner",
+   "degerler": [
+    {
+     "yol": "b07.p7a.tufe.donemler.2018_2026.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.donemler.2002_2017.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "yılda −0,86 log puan, yani hafif reel değer kaybıdır",
+   "degerler": [
+    {
+     "yol": "b07.p7a.tufe.egilimden_arindirilmis.egilim_log_yil",
+     "bicim": "sayi",
+     "hane": 2,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(alt uç 2,71 yıl)",
+   "degerler": [
+    {
+     "yol": "b07.p7a.tufe.egilimden_arindirilmis.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "eğilimsiz 4,11 yıl, alt ucu 1,41 yıl",
+   "degerler": [
+    {
+     "yol": "b07.p7a.ufe.egilimden_arindirilmis.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.ufe.egilimden_arindirilmis.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ve 392 ayın geometrik ortalaması",
+   "degerler": [
+    {
+     "yol": "b07.sekil_12.n",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "bir yılda 105,68'e, beş yılda 108,04'e çıkar; aralığın alt ucuyla (ρ 0,9785) beş yılda 119,24'e",
+   "degerler": [
+    {
+     "yol": "b07.sekil_12.fan.mu.12",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.sekil_12.fan.mu.60",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.rho_alt90",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b07.sekil_12.fan.alt90.60",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "uçtan uca +%33,1, ama doğrusal eğilim yılda −0,59 log puan (t −1,81)",
+   "degerler": [
+    {
+     "yol": "b07.p7b.goreli_fiyat.toplam_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b07.p7b.goreli_fiyat.egim_log_yil",
+     "bicim": "sayi",
+     "hane": 2,
+     "carpan": 100
+    },
+    {
+     "yol": "b07.p7b.goreli_fiyat.egim_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(eğim 0,58, t 4,22, R² 0,23)",
+   "degerler": [
+    {
+     "yol": "b07.p7b.reel_kur_iliskisi.egim",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7b.reel_kur_iliskisi.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7b.reel_kur_iliskisi.r2",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Ölçülen eğilim yılda −0,97 log puan (t −6,30), toplam −25,4 log puan",
+   "degerler": [
+    {
+     "yol": "b07.p7b.tufe_ufe_reel_kur_orani.egim_log_yil",
+     "bicim": "sayi",
+     "hane": 2,
+     "carpan": 100
+    },
+    {
+     "yol": "b07.p7b.tufe_ufe_reel_kur_orani.egim_t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7b.tufe_ufe_reel_kur_orani.toplam_degisim_log",
+     "bicim": "sayi",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "SNB 15 Ocak 2015'te EUR/CHF için 1,20 tabanını bıraktı: ECB referans kuru 14 Ocak'taki 1,2010'dan 15 Ocak'ta 1,0280'e indi (−%14,4) ve BIS'in derlediği politika faizi (SNB hedef bandının orta noktası) Aralık sonundaki −%0,25'ten Ocak sonunda −%0,75'e geriledi.",
+   "kaynak": "snb_2015"
+  },
+  {
+   "tur": "olcum",
+   "parca": "New York 17:00 kapanışlarında EUR/CHF 1,2007'den 0,9978'e (−%16,90), USD/CHF −%15,75",
+   "degerler": [
+    {
+     "yol": "b07.vakalar.isvicre_2015.eurchf_once",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b07.vakalar.isvicre_2015.eurchf_sonra",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b07.vakalar.isvicre_2015.eurchf_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b07.vakalar.isvicre_2015.usdchf_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "ECB kuru 7 Eylül 2011'den 14 Ocak 2015'e hiç 1,2008'in altına inmemişti",
+   "kaynak": "snb_2015"
+  },
+  {
+   "tur": "olcum",
+   "parca": "TÜFE bazlı REDK 12.2021'de 69,99'a, 07.2023'te 72,79'a indi; on iki ay sonra 81,51 (+%16,46) ve 94,38 (+%29,66)",
+   "degerler": [
+    {
+     "yol": "b07.vakalar.tr_dip_2021.tarih",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b07.vakalar.tr_dip_2021.redk_tufe",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.vakalar.tr_dip_2023.tarih",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b07.vakalar.tr_dip_2023.redk_tufe",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.vakalar.tr_dip_2021.sonraki_12ay_redk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.vakalar.tr_dip_2021.sonraki_12ay_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b07.vakalar.tr_dip_2023.sonraki_12ay_redk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.vakalar.tr_dip_2023.sonraki_12ay_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Bölüm 1'in kuralıyla R4, kadranda prim (31.12.2021 ve 09.06.2023 haftaları)",
+   "degerler": [
+    {
+     "yol": "b01.rejim.tr.en_buyuk_10_para_kaybi_haftasi.0.etiket",
+     "bicim": "metin",
+     "hane": 2
+    },
+    {
+     "yol": "b01.rejim.tr.en_buyuk_10_para_kaybi_haftasi.0.kadran",
+     "bicim": "metin",
+     "hane": 2
+    },
+    {
+     "yol": "b01.rejim.tr.en_buyuk_10_para_kaybi_haftasi.0.hafta",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b01.rejim.tr.en_buyuk_10_para_kaybi_haftasi.2.hafta",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b01.rejim.tr.en_buyuk_10_para_kaybi_haftasi.2.etiket",
+     "bicim": "metin",
+     "hane": 2
+    },
+    {
+     "yol": "b01.rejim.tr.en_buyuk_10_para_kaybi_haftasi.2.kadran",
+     "bicim": "metin",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "2021 dibinin bugünkü tam örneklem ortalamasına göre sapması −58,0 log puandı; medyan-yansız ρ'nun çekimi on iki ayda +%2,0, aralığın hızlı ucu +%14,2 dönüş öngörür",
+   "degerler": [
+    {
+     "ifade": "math.log(v('b07.vakalar.tr_dip_2021.redk_tufe')/v('b07.p7a.sapma.ortalama_tam_endeks'))*100",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "(math.exp((v('b07.p7a.tufe.tam.rho_mu')**12-1)*math.log(v('b07.vakalar.tr_dip_2021.redk_tufe')/v('b07.p7a.sapma.ortalama_tam_endeks')))-1)*100",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "ifade": "(math.exp((v('b07.p7a.tufe.tam.rho_alt90')**12-1)*math.log(v('b07.vakalar.tr_dip_2021.redk_tufe')/v('b07.p7a.sapma.ortalama_tam_endeks')))-1)*100",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "\\ln 0{,}5/\\ln\\rho",
+   "neden": "yarı ömrün tanımı: ρ^h = 0,5"
+  },
+  {
+   "tur": "hesap",
+   "parca": "Açılış değerleri 08.2026 ölçümüdür: REDK 105,04, denge 125,02 (seçenek 126,91), ρ 0,9971 (seçenekler 0,9785 ve 0,9862)",
+   "degerler": [
+    {
+     "ifade": "a('redk.tarih_metin')",
+     "bicim": "metin",
+     "hane": 2
+    },
+    {
+     "ifade": "a('redk.redk')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "a('redk.denge_tam')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "a('redk.denge_2003')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "a('redk.rho_mu')",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "a('redk.rho_alt')",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "a('redk.rho_ols')",
+     "bicim": "sayi",
+     "hane": 4
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Açılışta sapma −17,4 ve A bloğu −%0,60 / yıl",
+   "degerler": [
+    {
+     "ifade": "redk_sapma(a('redk.redk'), a('redk.denge_tam'))",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "a_blok(a('redk.rho_mu'), redk_sapma(a('redk.redk'), a('redk.denge_tam')))",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "hızlı uçla −%4,00, en küçük karelerle −%2,67",
+   "degerler": [
+    {
+     "ifade": "a_blok(a('redk.rho_alt'), redk_sapma(a('redk.redk'), a('redk.denge_tam')))",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "ifade": "a_blok(a('redk.rho_ols'), redk_sapma(a('redk.redk'), a('redk.denge_tam')))",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "yarı ömrü 239 ay gösterir, altı ondalıklı ölçüm 235,8 ay",
+   "degerler": [
+    {
+     "ifade": "yari_omur(a('redk.rho_mu'))",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "ifade": "v('b07.p7a.tufe.tam.yari_omur_mu_ay')",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ρ medyan-yansız 0,997064, en küçük kareler 0,986172, %90 aralığı [0,978522; 1]",
+   "degerler": [
+    {
+     "yol": "b07.p7a.tufe.tam.rho_mu",
+     "bicim": "sayi",
+     "hane": 6
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.rho_ols",
+     "bicim": "sayi",
+     "hane": 6
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.rho_alt90",
+     "bicim": "sayi",
+     "hane": 6
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "bugünkü −17,41 log sapmanın",
+   "degerler": [
+    {
+     "yol": "b07.p7a.sapma.sapma_tam_log",
+     "bicim": "sayi",
+     "hane": 2,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "medyan-yansız 235,8 ay, en küçük kareler 49,8 ay, alt uç 31,9 ay",
+   "degerler": [
+    {
+     "yol": "b07.p7a.tufe.tam.yari_omur_mu_ay",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.yari_omur_ols_ay",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.yari_omur_alt90_ay",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "medyan-yansızla $1 - 0{,}9653$, yani sapmanın %3,5'i (+0,60 log puan); alt uçta $1 - 0{,}7706$, %22,9 (+3,99 log puan)",
+   "degerler": [
+    {
+     "ifade": "v('b07.p7a.tufe.tam.rho_mu')**12",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "(1 - v('b07.p7a.tufe.tam.rho_mu')**12)*100",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "ifade": "(1 - v('b07.p7a.tufe.tam.rho_mu')**12)*abs(v('b07.p7a.sapma.sapma_tam_log'))*100",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "ifade": "v('b07.p7a.tufe.tam.rho_alt90')**12",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "(1 - v('b07.p7a.tufe.tam.rho_alt90')**12)*100",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "ifade": "(1 - v('b07.p7a.tufe.tam.rho_alt90')**12)*abs(v('b07.p7a.sapma.sapma_tam_log'))*100",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "REDK 07.2023'te 72,79, on iki ay sonra 94,38. Tam örneklem ortalamasıyla (125,02)",
+   "degerler": [
+    {
+     "yol": "b07.vakalar.tr_dip_2023.tarih",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b07.vakalar.tr_dip_2023.redk_tufe",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.vakalar.tr_dip_2023.sonraki_12ay_redk",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.sapma.ortalama_tam_endeks",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Sapma $100\\ln(72{,}79/125{,}02) = -54{,}1$",
+   "degerler": [
+    {
+     "ifade": "math.log(v('b07.vakalar.tr_dip_2023.redk_tufe')/v('b07.p7a.sapma.ortalama_tam_endeks'))*100",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "medyan-yansızla +1,88 log puan (+%1,9), hızlı uçla +12,41 log puan (+%13,2); gerçekleşen +%29,66",
+   "degerler": [
+    {
+     "ifade": "(v('b07.p7a.tufe.tam.rho_mu')**12-1)*math.log(v('b07.vakalar.tr_dip_2023.redk_tufe')/v('b07.p7a.sapma.ortalama_tam_endeks'))*100",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "ifade": "(math.exp((v('b07.p7a.tufe.tam.rho_mu')**12-1)*math.log(v('b07.vakalar.tr_dip_2023.redk_tufe')/v('b07.p7a.sapma.ortalama_tam_endeks')))-1)*100",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "ifade": "(v('b07.p7a.tufe.tam.rho_alt90')**12-1)*math.log(v('b07.vakalar.tr_dip_2023.redk_tufe')/v('b07.p7a.sapma.ortalama_tam_endeks'))*100",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "ifade": "(math.exp((v('b07.p7a.tufe.tam.rho_alt90')**12-1)*math.log(v('b07.vakalar.tr_dip_2023.redk_tufe')/v('b07.p7a.sapma.ortalama_tam_endeks')))-1)*100",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "ifade": "v('b07.vakalar.tr_dip_2023.sonraki_12ay_degisim_yuzde')",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(−56,8; Bölüm 8.6)",
+   "degerler": [
+    {
+     "yol": "b08.sekil_15.redk_sapma_yuzde.295",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  }
+ ]
+}

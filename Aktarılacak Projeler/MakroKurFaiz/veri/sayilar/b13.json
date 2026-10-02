@@ -1,0 +1,629 @@
+{
+ "girdiler": [
+  {
+   "tur": "sabit",
+   "parca": "(≈1,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈0,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Para politikası (FOMC · PPK) | ölçüldü · +0,71 | vaka (6) | ölçüldü · −0,29 | vaka (7) | ölçüldü · +0,59 | ölçüldü · −0,28 |",
+   "degerler": [
+    {
+     "yol": "b13.matris.para.R1.es_hareket",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.para.R3.es_hareket",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b13.matris.para.R5_DM.es_hareket",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.para.R5_EM.es_hareket",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Küresel risk (VIX sıçraması) | ölçüldü · +0,33 | kurulmadı | kurulmadı (plasebo) | kurulmadı (plasebo) | ölçüldü · +0,19 | kaynak (B11) |",
+   "degerler": [
+    {
+     "yol": "b13.matris.kuresel.R1.es_hareket",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.kuresel.R5_DM.es_hareket",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Toplam: 60 hücrenin 6'sı ölçüldü, 8'i vaka, 15'i kaynak, 31'i kurulmadı",
+   "degerler": [
+    {
+     "yol": "b13.matris_ozeti.hucre",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b13.matris_ozeti.durum_sayisi.olculdu",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b13.matris_ozeti.durum_sayisi.vaka",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b13.matris_ozeti.durum_sayisi.kaynak",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b13.matris_ozeti.durum_sayisi.kurulmadi",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "R1'de 104 karar (30.04.2008–16.09.2026): eş hareket +0,71, aynı rejimin sıradan günlerinde +0,33, fark Fisher dönüşümüyle z +5,4; ikisinin aynı yöne gittiği gün payı %79 (sıradan %61)",
+   "degerler": [
+    {
+     "yol": "b13.matris.para.R1.n",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b13.matris.para.R1.ilk",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b13.matris.para.R1.son",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b13.matris.para.R1.es_hareket",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.para.R1.es_hareket_sakin",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.para.R1.es_fark_z",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.para.R1.b_payi",
+     "bicim": "yz",
+     "hane": 0,
+     "carpan": 100
+    },
+    {
+     "yol": "b13.matris.para.R1.b_payi_sakin",
+     "bicim": "yz",
+     "hane": 0,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "R5'te 42 kararda +0,59'a karşı +0,08, z +3,7",
+   "degerler": [
+    {
+     "yol": "b13.matris.para.R5_DM.n",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b13.matris.para.R5_DM.es_hareket",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.para.R5_DM.es_hareket_sakin",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.para.R5_DM.es_fark_z",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Bir önceki haftanın etiketiyle R1 +0,72",
+   "degerler": [
+    {
+     "yol": "b13.matris.para.R1.onceki_hafta.es_hareket",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(günlük artışın üst %2'si, eşik 3,99 puan)",
+   "degerler": [
+    {
+     "yol": "b13.matris_meta.kuresel.ust_pay",
+     "bicim": "yz",
+     "hane": 0,
+     "carpan": 100
+    },
+    {
+     "yol": "b13.matris_meta.kuresel.esik_vix_puan",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "R1'de +0,33'e karşı +0,35, R5'te +0,19'a karşı +0,18; aynı yön payı %46 ve %41",
+   "degerler": [
+    {
+     "yol": "b13.matris.kuresel.R1.es_hareket",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.kuresel.R1.es_hareket_sakin",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.kuresel.R5_DM.es_hareket",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.kuresel.R5_DM.es_hareket_sakin",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b13.matris.kuresel.R1.b_payi",
+     "bicim": "yz",
+     "hane": 0,
+     "carpan": 100
+    },
+    {
+     "yol": "b13.matris.kuresel.R5_DM.b_payi",
+     "bicim": "yz",
+     "hane": 0,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "R3'te 81 kararda −0,29, sıradan günlerde −0,14, z −1,30; R5'te −0,28'e karşı −0,16",
+   "degerler": [
+    {
+     "yol": "b13.matris.para.R3.n",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b13.matris.para.R3.es_hareket",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b13.matris.para.R3.es_hareket_sakin",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b13.matris.para.R3.es_fark_z",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b13.matris.para.R5_EM.es_hareket",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b13.matris.para.R5_EM.es_hareket_sakin",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "TÜFE yayımlarında (164)",
+   "degerler": [
+    {
+     "yol": "b13.matris_meta.tufe.n_olay_cercevede",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "GSYH yayımlarında (55)",
+   "degerler": [
+    {
+     "yol": "b13.matris_meta.gsyh.n_yayim",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Enerji şoku aylarında (35)",
+   "degerler": [
+    {
+     "yol": "b13.matris_meta.emtia.n_sok_ayi",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Rezervin büyük oynadığı 79 haftada",
+   "degerler": [
+    {
+     "yol": "b13.matris_meta.rezerv.n_olay_haftasi",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "kurun olay haftası oranı 0,65, komşu haftalarda 0,52–0,57",
+   "degerler": [
+    {
+     "yol": "b13.matris_meta.rezerv.kapi_em.kur.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b13.matris_meta.rezerv.kapi_em.kur.oran.-1",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b13.matris_meta.rezerv.kapi_em.kur.oran.2",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "DİBS'in oranı her kaymada 1,91 ile 2,23 arası",
+   "degerler": [
+    {
+     "ifade": "min(v('b13.matris_meta.rezerv.kapi_em.2y.oran.-2'), v('b13.matris_meta.rezerv.kapi_em.2y.oran.-1'), v('b13.matris_meta.rezerv.kapi_em.2y.oran.0'), v('b13.matris_meta.rezerv.kapi_em.2y.oran.1'), v('b13.matris_meta.rezerv.kapi_em.2y.oran.2'))",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "max(v('b13.matris_meta.rezerv.kapi_em.2y.oran.-2'), v('b13.matris_meta.rezerv.kapi_em.2y.oran.-1'), v('b13.matris_meta.rezerv.kapi_em.2y.oran.0'), v('b13.matris_meta.rezerv.kapi_em.2y.oran.1'), v('b13.matris_meta.rezerv.kapi_em.2y.oran.2'))",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ABD: 2 yıllık +5 bp, 10 yıllık +16 bp, dolar sepeti +%0,89, VIX 14,87",
+   "degerler": [
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.abd.d2y_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.abd.d10y_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.abd.ddolar_sepet_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.abd.vix",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Türkiye: 2 yıllık −7,3 bp, 5 yıllık +2,5 bp, eğim +9,8 bp (dikleşme eşiği 30,6 bp), USD/TRY +%0,37, 26 haftalık ortalama hareketinden sapma +%0,01 (kur eşiği %0,07), VIX 15,67; R5 eşiği 22,39",
+   "degerler": [
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.tr.d2y_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.tr.d5y_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.tr.degim_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.tr.diklesme_esik_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.tr.dkur_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.tr.kur_sapma_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.tr.kur_esik_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.tr.vix",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.vix_esik_r5",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Haftanın rezerv bileşeni 0,84σ (şok eşiği 1,5σ)",
+   "degerler": [
+    {
+     "yol": "b13.teshis_ornegi.adim1_beklenti.son_olaylar.rezerv_sok_haftasi.son_hafta_bileseni_sigma",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b13.matris_meta.rezerv.esik_sigma",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "için arşivdeki son beklenti aylık %2,08 (08.2026 anketinin bir ay sonrası sorusu)",
+   "degerler": [
+    {
+     "yol": "b13.teshis_ornegi.adim1_beklenti.tufe_beklentisi.bir_ay_sonrasi_aylik_tufe_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b13.teshis_ornegi.adim1_beklenti.tufe_beklentisi.anket_donemi",
+     "bicim": "ay",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "TÜFE günü gelince sürpriz gerçekleşen − %2,08 olarak yazılır; bir ay önceki sürpriz +0,17 puandı",
+   "degerler": [
+    {
+     "yol": "b13.teshis_ornegi.adim1_beklenti.tufe_beklentisi.bir_ay_sonrasi_aylik_tufe_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b13.teshis_ornegi.adim1_beklenti.tufe_beklentisi.son_surpriz_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ABD'de uzun uç önde (eğim +11 bp)",
+   "degerler": [
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.abd.degim_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "eğim +9,8 bp, eşiğin üçte biri",
+   "degerler": [
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.tr.degim_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "TL ortalama kaybından %0,01 fazla kaybetti",
+   "degerler": [
+    {
+     "yol": "b13.teshis_ornegi.son_tam_hafta.tr.kur_sapma_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2 yıllık oranı 1,79, kur oranı 1,60; eş hareket −0,29, sıradan günlerde −0,14, z −1,30; aynı yön payı %36 (sıradan %39); bir önceki haftanın etiketiyle −0,31",
+   "degerler": [
+    {
+     "yol": "b13.matris.para.R3.oranlar.2y",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b13.matris.para.R3.oranlar.kur",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b13.matris.para.R3.es_hareket",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b13.matris.para.R3.es_hareket_sakin",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b13.matris.para.R3.es_fark_z",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b13.matris.para.R3.b_payi",
+     "bicim": "yz",
+     "hane": 0,
+     "carpan": 100
+    },
+    {
+     "yol": "b13.matris.para.R3.b_payi_sakin",
+     "bicim": "yz",
+     "hane": 0,
+     "carpan": 100
+    },
+    {
+     "yol": "b13.matris.para.R3.onceki_hafta.es_hareket",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "81 karar (kurda 74",
+   "degerler": [
+    {
+     "yol": "b13.matris.para.R3.n",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b13.matris.para.R3.n_es",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "sıradan R3 gününün 1,79 katı, kurunki 1,60 katı",
+   "degerler": [
+    {
+     "yol": "b13.matris.para.R3.oranlar.2y",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b13.matris.para.R3.oranlar.kur",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(b) Hayır: |z| = 1,30, 2'nin altında",
+   "degerler": [
+    {
+     "ifade": "abs(v('b13.matris.para.R3.es_fark_z'))",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "önceki hafta etiketiyle −0,31",
+   "degerler": [
+    {
+     "yol": "b13.matris.para.R3.onceki_hafta.es_hareket",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  }
+ ]
+}
