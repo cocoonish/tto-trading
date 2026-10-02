@@ -443,5 +443,53 @@
    },
    "sure_sn": 6.2
   }
+ },
+ "2026-10-02T1118_ikinci": {
+  "EVDS hedefli": {
+   "durum": "tamam",
+   "bie_uypucay": {
+    "kod": 89,
+    "demet": 15
+   },
+   "bie_kalvadbg": {
+    "kod": 18,
+    "demet": 3
+   },
+   "bie_kalanvade": {
+    "kod": 21,
+    "demet": 4
+   },
+   "bie_dtihfb10": {
+    "kod": 1,
+    "demet": 1
+   },
+   "bie_dtitfb10": {
+    "kod": 2,
+    "demet": 1
+   },
+   "bie_dtihmb10": {
+    "kod": 1,
+    "demet": 1
+   },
+   "bie_dtitmb10": {
+    "kod": 2,
+    "demet": 1
+   },
+   "sure_sn": 41.4
+  },
+  "BLS (Internet Archive)": {
+   "durum": "tamam",
+   "empsit": {
+    "2026": "hata indirilemedi: https://web.archive.org/web/2026id_/https://www.bls.gov/bls/news-release/empsit.htm — <HTTPError 429:",
+    "20260901": "hata indirilemedi: https://web.archive.org/web/20260901id_/https://www.bls.gov/bls/news-release/empsit.htm — <HTTPError ",
+    "2025": "hata indirilemedi: https://web.archive.org/web/2025id_/https://www.bls.gov/bls/news-release/empsit.htm — <HTTPError 429:"
+   },
+   "cpi": {
+    "2026": "hata indirilemedi: https://web.archive.org/web/2026id_/https://www.bls.gov/bls/news-release/cpi.htm — URLError(TimeoutEr",
+    "20260901": "hata indirilemedi: https://web.archive.org/web/20260901id_/https://www.bls.gov/bls/news-release/cpi.htm — <HTTPError 429",
+    "2025": "hata indirilemedi: https://web.archive.org/web/2025id_/https://www.bls.gov/bls/news-release/cpi.htm — <HTTPError 429: 'T"
+   },
+   "sure_sn": 203.6
+  }
  }
 }
