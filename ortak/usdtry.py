@@ -17,10 +17,19 @@ kez KAPSAM ÖLÇÜMÜ: gelen serinin başı, sonu, gözlem sayısı ve seviyesi 
 YAZILMAZ, eski önbellek korunur ve sebep adıyla döner. "Bir kaynak kırpmayı
 söylemez" — ölçen taraf biz olmalıyız.
 
-KAPANMAMIŞ BAR. Yahoo günün henüz kapanmamış barını da döndürür; FX 7/24
-işlem gördüğü için bugünün barı akşama kadar değişir. Bülten piyasa
-katmanının kuralı burada da geçerli (bir ölçüm ancak KAPANMIŞ bir seansı
-ölçebilir): bugüne ait bar, gün UTC olarak kapanmadan seriye alınmaz.
+KAPANIŞ = İSTANBUL 18:00, SAATLİK BARDAN (02.10.2026). Yahoo'nun kapanmış
+günlük döviz barında "Close" alanı günün BAŞINDAKİ fiyatı taşıyor; bu hattın
+D diye bastığı her değer D−1'in gün sonuydu (02.10 sabahı gösterge şeridi
+USD/TRY'yi 49,01 ile 30.09 diye bastı; 01.10'un İstanbul kapanışı 49,030,
+o sabahki canlı kur 49,14). Seri artık `ortak/fx_kapanis`tan kurulur: son 730
+gün saatlik bardan İstanbul 18:00 kapanışı (karar 02.10.2026, kullanıcı;
+gerekçe ve ölçüm o modülün başlığında), daha eskisi düzeltilmiş günlük bardan
+(Londra gece yarısı) — geçiş günü künyede (`kur_kapanis_gecis`). Önbellek
+sütununun adı tanımı taşır: eski tanımla yazılmış önbellek taze sayılmaz.
+
+KAPANMAMIŞ BAR. Bir günün kapanışı ancak kapanış anı (İstanbul 18:00 = 15:00
+UTC) geçtikten sonra vardır; o andan önce bugünün değeri seriye alınmaz (bir
+ölçüm ancak KAPANMIŞ bir seansı ölçebilir).
 
 VALÖR YOK. EVDS gösterge kuru VALÖR tarihini taşır (ertesi iş günü) ve resmî
 tatil öncesinde yarından ileri bir `_tarih` üretirdi; Yahoo barı işlem
@@ -45,8 +54,14 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import bicim as _bicim  # noqa: E402  — sayı yazımı tek sözleşmeden (ortak/bicim)
+import fx_kapanis as _fx  # noqa: E402  — kapanış anının tek tanımı
 
 SEMBOL = "USDTRY=X"
+TUR = _fx.kesim_turu(SEMBOL)                       # "tr": İstanbul 18:00
+# Önbellek CSV'sinin sütun adı kapanış TANIMINI taşır; adı farklı bir önbellek
+# (eski tanım: günlük barın kapanış alanı) taze sayılmaz, yalnız ağ düşerse
+# son çare olarak döner ve bunu uyarısında adıyla söyler.
+SUTUN = "usdtry_ist18"
 YAHOO_URL = f"https://query1.finance.yahoo.com/v8/finance/chart/{SEMBOL}"
 KAYNAK = "Yahoo Finance (USDTRY=X)"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
@@ -74,10 +89,41 @@ class Kur:
     n: int = 0
     onbellekten: bool = False             # ağdan değil eski dosyadan geldi
     uyarilar: list[str] = field(default_factory=list)
+    kapanis: str = _fx.KESIM_ADI[TUR]     # kapanış tanımı (okura yazılır)
+    gecis: str | None = None              # saatlik kapanışın başladığı gün (öncesi günlük bar)
+    canli: tuple | None = None            # (ölçüm anı UTC, son kotasyon) — yalnız bilgi
 
 
-def _yahoo_cek(bas: dt.date, bit: dt.date) -> pd.Series:
-    """Günlük kapanış — önce yfinance, düşerse doğrudan chart ucu.
+def _yahoo_cek(bas: dt.date, bit: dt.date, simdi: dt.datetime | None = None) -> pd.Series:
+    """İstanbul 18:00 kapanışları: saatlik bar + düzeltilmiş günlük bar.
+
+    Dönen serinin `attrs`ı geçiş gününü ve canlı kotasyonu taşır. Saatlik bar
+    alınamazsa seri yalnız düzeltilmiş günlük bardan kurulur ve `attrs`taki
+    uyarı bunu söyler — son gün bir gün geride kalır ama yanlış tarih basmaz."""
+    simdi = simdi or dt.datetime.now(dt.timezone.utc)
+    gunluk = _gunluk_cek(bas, bit)
+    bugun_londra = pd.Timestamp(simdi).tz_convert("Europe/London").date()
+    duz = _fx.gunluk_duzelt(gunluk[gunluk.index.date < bugun_londra])
+    try:
+        saatlik = _fx.yfinance_saatlik([SEMBOL]).get(SEMBOL)
+        kp = _fx.saatlik_kapanislar(saatlik, TUR, simdi) if saatlik is not None else None
+    except Exception as e:  # noqa: BLE001
+        kp, hata = None, f"{type(e).__name__}: {e}"
+    else:
+        hata = "saatlik bar boş döndü"
+    if kp is None or not len(kp.seri):
+        duz.attrs = {"uyari": "saatlik bar alınamadı (" + hata[:120] + "); kapanış düzeltilmiş "
+                              "günlük bardan (Londra gece yarısı), son gün bir gün geride",
+                     "kapanis": "Londra gece yarısı (günlük bar)"}
+        return _seri_temizle(duz.values, duz.index, duz.attrs)
+    birlesik, gecis = _fx.birlestir(duz, kp)
+    return _seri_temizle(birlesik.values, birlesik.index,
+                         {"gecis": gecis, "canli": kp.canli, "kapanis": _fx.KESIM_ADI[TUR],
+                          "olculemeyen": kp.olculemeyen})
+
+
+def _gunluk_cek(bas: dt.date, bit: dt.date) -> pd.Series:
+    """Günlük bar (barın Londra günüyle) — önce yfinance, düşerse doğrudan chart ucu.
 
     NEDEN İKİ YOL. Chart ucuna çıplak `requests` ile giden ilk sürüm GitHub
     koşucusundan 429 (Too Many Requests) aldı ve hat düştü (09.09.2026, koşu
@@ -97,14 +143,17 @@ def _yahoo_cek(bas: dt.date, bit: dt.date) -> pd.Series:
     raise RuntimeError("; ".join(hatalar))
 
 
-def _seri_temizle(kapanis, idx) -> pd.Series:
+def _seri_temizle(kapanis, idx, attrs: dict | None = None) -> pd.Series:
     idx = pd.DatetimeIndex(pd.to_datetime(idx))
     if idx.tz is not None:
-        idx = idx.tz_convert(None)
+        # Günlük barın günü BORSANIN (Londra) günüdür; UTC'ye çevrilirse yaz
+        # saatinde 00:00 BST bir önceki günün 23:00'üne düşer.
+        idx = idx.tz_convert("Europe/London").tz_localize(None)
     idx = idx.normalize()
     s = pd.Series(pd.to_numeric(list(kapanis), errors="coerce"), index=idx,
                   dtype="float64", name="usdtry").dropna()
     s = s[~s.index.duplicated(keep="last")].sort_index()
+    s.attrs = dict(attrs or {})
     return s
 
 
@@ -148,11 +197,15 @@ def _chart_cek(bas: dt.date, bit: dt.date) -> pd.Series:
 
 
 def kapanmamis_bari_dusur(s: pd.Series, simdi: dt.datetime | None = None) -> pd.Series:
-    """Bugüne ait bar, gün (UTC) kapanmadan seriye girmez."""
-    simdi = simdi or dt.datetime.now(dt.timezone.utc)
-    if len(s) and s.index[-1].date() >= simdi.date():
-        return s.iloc[:-1]
-    return s
+    """Kapanış anı (İstanbul 18:00) gelmemiş gün seriye girmez."""
+    simdi = pd.Timestamp(simdi or dt.datetime.now(dt.timezone.utc))
+    simdi = simdi.tz_localize("UTC") if simdi.tzinfo is None else simdi.tz_convert("UTC")
+    if not len(s):
+        return s
+    tut = [_fx.kapanis_ani(t.date(), TUR) <= simdi for t in s.index]
+    r = s[tut]
+    r.attrs = dict(s.attrs)
+    return r
 
 
 def haftasonu_barini_dusur(s: pd.Series) -> tuple[pd.Series, list[str]]:
@@ -177,6 +230,12 @@ def haftasonu_barini_dusur(s: pd.Series) -> tuple[pd.Series, list[str]]:
     ölçülmüş gibi göstermenin en sessiz biçimidir — ve kaynak bir gün
     damgalarını kaydırırsa (meşru bir cuma seansı cumartesiye düşerse)
     sessiz süzgeç gerçek veriyi yok eder, uyarı ise onu adıyla gösterir.
+
+    SONRADAN ÖLÇÜLDÜ (02.10.2026): o cumartesi barı aslında cumanın GERÇEK gün
+    sonuydu — Yahoo'nun kapanmış günlük döviz barı günün BAŞINDAKİ fiyatı
+    taşır ve cumartesi barının başı cuma gecesidir. Seri artık saatlik bardan
+    kurulduğu için hafta sonu günü üretmez; süzgeç, kurulmuş seride bir hafta
+    sonu günü belirirse onu adıyla gösteren bekçi olarak kalır.
     """
     if not len(s):
         return s, []
@@ -219,11 +278,36 @@ def _kapsam_uyarilari(s: pd.Series, bas: dt.date, bugun: dt.date,
     return u
 
 
-def _oku(yol: Path) -> pd.Series | None:
+def _kunye_yolu(yol: Path) -> Path:
+    return yol.with_name(yol.stem + ".kunye.json")
+
+
+def _kunye_oku(yol: Path) -> dict:
+    """Önbelleğin yanındaki künye (geçiş günü): önbellekten dönen koşu da
+    künyesini kaybetmesin — yoksa özetteki alan koşudan koşuya boş/dolu oynar."""
     try:
-        s = pd.read_csv(yol, index_col=0, parse_dates=True).iloc[:, 0].astype(float)
+        return json.loads(_kunye_yolu(yol).read_text(encoding="utf-8")) or {}
+    except Exception:  # noqa: BLE001
+        return {}
+
+
+def _kunye_yaz(yol: Path, d: dict) -> None:
+    try:
+        _kunye_yolu(yol).write_text(json.dumps(d, ensure_ascii=False) + "\n", encoding="utf-8")
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def _oku(yol: Path) -> pd.Series | None:
+    """Önbellek serisi; `attrs['tanim']` sütun adıdır (kapanış tanımı)."""
+    try:
+        df = pd.read_csv(yol, index_col=0, parse_dates=True)
+        s = df.iloc[:, 0].astype(float)
+        tanim = str(df.columns[0])
         s.name = "usdtry"
-        return s.sort_index()
+        s = s.sort_index()
+        s.attrs = {"tanim": tanim}
+        return s
     except Exception:  # noqa: BLE001
         return None
 
@@ -243,27 +327,33 @@ def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
     yol = Path(onbellek) if onbellek else None
     eski = _oku(yol) if (yol and yol.exists()) else None
 
-    if yol is not None and eski is not None:
+    eski_tanim = (eski.attrs.get("tanim") if eski is not None else None)
+    if yol is not None and eski is not None and eski_tanim == SUTUN:
         try:
             sys.path.insert(0, str(Path(__file__).resolve().parent))
             import tazelik  # noqa: E402
             if tazelik.taze(yol, ttl_saat):
                 return Kur(eski[eski.index >= pd.Timestamp(bas_t)], ilk=eski.index[0].date(),
-                           son=eski.index[-1].date(), n=len(eski), onbellekten=True)
+                           son=eski.index[-1].date(), n=len(eski), onbellekten=True,
+                           gecis=_kunye_oku(yol).get("gecis"))
         except ImportError:
             pass
 
-    cek = cek or _yahoo_cek
     try:
-        yeni = cek(bas_t, bugun + dt.timedelta(days=1))
+        yeni = (cek(bas_t, bugun + dt.timedelta(days=1)) if cek is not None
+                else _yahoo_cek(bas_t, bugun + dt.timedelta(days=1), simdi))
     except Exception as e:  # noqa: BLE001
         if eski is not None:
+            ek = ("" if eski_tanim == SUTUN else
+                  "; eldeki seri ESKİ tanımla (günlük barın kapanış alanı, bir gün geriden) yazılmıştı")
             return Kur(eski[eski.index >= pd.Timestamp(bas_t)], ilk=eski.index[0].date(),
                        son=eski.index[-1].date(), n=len(eski), onbellekten=True,
                        uyarilar=["Yahoo Finance erişilemedi; eldeki seri kullanıldı "
-                                 f"(son gün {eski.index[-1]:%d.%m.%Y})"])
+                                 f"(son gün {eski.index[-1]:%d.%m.%Y}){ek}"],
+                       kapanis=_fx.KESIM_ADI[TUR] if eski_tanim == SUTUN else "eski tanım (günlük bar)")
         raise RuntimeError(f"USD/TRY çekilemedi ve önbellek yok: {e}") from e
 
+    meta = dict(getattr(yeni, "attrs", {}) or {})
     yeni = kapanmamis_bari_dusur(yeni, simdi)
     # SIRA ÖNEMLİ: hafta sonu barı kapsam denetiminden ÖNCE düşer. Aksi hâlde
     # doluluk ölçütü (len(s) ÷ iş günü) hafta sonu barını hafta içi gözlem
@@ -273,20 +363,29 @@ def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
     kusur = _kapsam_uyarilari(yeni, bas_t, bugun, eski)
     if kusur:
         if eski is not None:
+            ek = ("" if eski_tanim == SUTUN else
+                  "; eldeki seri ESKİ tanımla (günlük barın kapanış alanı, bir gün geriden) yazılmıştı")
             return Kur(eski[eski.index >= pd.Timestamp(bas_t)], ilk=eski.index[0].date(),
                        son=eski.index[-1].date(), n=len(eski), onbellekten=True,
                        uyarilar=["Yahoo Finance serisi kapsam sınamasını geçemedi, eldeki "
-                                 "seri korundu: " + "; ".join(kusur)])
+                                 "seri korundu: " + "; ".join(kusur) + ek],
+                       kapanis=_fx.KESIM_ADI[TUR] if eski_tanim == SUTUN else "eski tanım (günlük bar)")
         raise RuntimeError("USD/TRY serisi kapsam sınamasını geçemedi ve önbellek yok: "
                            + "; ".join(kusur))
 
     if yol is not None:
         yol.parent.mkdir(parents=True, exist_ok=True)
         gecici = yol.with_name(yol.stem + ".tmp.csv")
-        yeni.rename("usdtry").to_csv(gecici, index_label="tarih")
+        yeni.rename(SUTUN).to_csv(gecici, index_label="tarih")
         gecici.replace(yol)
+        _kunye_yaz(yol, {"gecis": meta.get("gecis"), "kapanis": meta.get("kapanis")})
+    uyarilar = list(hs_uyari) + ([meta["uyari"]] if meta.get("uyari") else [])
+    if meta.get("olculemeyen"):
+        uyarilar.append("saatlik barı kapanış anına yetişmeyen gün seriye alınmadı: "
+                        + ", ".join(f"{pd.Timestamp(g):%d.%m.%Y}" for g in meta["olculemeyen"][-5:]))
     return Kur(yeni, ilk=yeni.index[0].date(), son=yeni.index[-1].date(),
-               n=len(yeni), uyarilar=hs_uyari)
+               n=len(yeni), uyarilar=uyarilar, kapanis=meta.get("kapanis") or _fx.KESIM_ADI[TUR],
+               gecis=meta.get("gecis"), canli=meta.get("canli"))
 
 
 def kunye(k: Kur) -> dict:
@@ -295,6 +394,8 @@ def kunye(k: Kur) -> dict:
             "kur_ilk": k.ilk.strftime("%d.%m.%Y") if k.ilk else None,
             "kur_son": k.son.strftime("%d.%m.%Y") if k.son else None,
             "kur_gozlem": k.n,
+            "kur_kapanis": k.kapanis,
+            "kur_kapanis_gecis": (pd.Timestamp(k.gecis).strftime("%d.%m.%Y") if k.gecis else None),
             "kur_uyari": list(k.uyarilar)}
 
 

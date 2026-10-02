@@ -1075,9 +1075,23 @@ class Denetim:
         acik = []
         for g in (self.b.get("piyasa", {}).get("gruplar") or []):
             esik = piyasa.KAPANIS_UTC.get(g.get("id", ""), piyasa.VARSAYILAN_KAPANIS)
-            if simdi.hour >= esik:
-                continue
             for s in (g.get("satirlar") or []):
+                # Kapanış ANINI kendisi taşıyan satır (döviz: saatlik bardan,
+                # İstanbul 18:00 / New York 17:00) o anla sorulur; grup tablosu
+                # 7/24 piyasaya 24 yazar ve akşam koşusunda doğru bir kapanışı
+                # kusur sayardı.
+                ani = s.get("kapanis_ani")
+                if ani:
+                    try:
+                        t = datetime.fromisoformat(str(ani).replace("Z", "+00:00"))
+                    except ValueError:
+                        acik.append(f"{s.get('ad')} (kapanış anı okunamadı: {ani})")
+                        continue
+                    if t > simdi:
+                        acik.append(f"{s.get('ad')} (kapanış anı {ani} henüz gelmedi)")
+                    continue
+                if simdi.hour >= esik:
+                    continue
                 if s.get("tarih") == bugun:
                     acik.append(f"{s.get('ad')} ({g.get('id')}, kapanış {esik}:00 UTC)")
         if acik:

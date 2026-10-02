@@ -191,7 +191,93 @@ SEANS_ALANLARI = ("onarim", "eksik_seans", "devredilen")
 
 
 def _seans_izsiz(s: dict) -> dict:
-    return {a: v for a, v in s.items() if a not in SEANS_ALANLARI}
+    # Canlı kotasyon (`canli`) ölçüm anının fiyatıdır; bu koşuda çekilmeyip
+    # önbellekten DEVREDİLEN bir seride önceki koşunun "şimdi"si olurdu.
+    return {a: v for a, v in s.items() if a not in SEANS_ALANLARI and a != "canli"}
+
+
+# DÖVİZ KAPANIŞI SAATLİK BARDAN (02.10.2026). Yahoo'nun günlük döviz barı
+# (`…=X`) kapandığında "Close" alanı günün BAŞINDAKİ fiyatı taşıyor; yüksek ve
+# düşük ise günün gerçek aralığı. Ölçüldü (`Aktarılacak Projeler/KurSaati/`):
+# 02.10 sabahı bu tablo EUR/USD'yi 1,1327 ile "01.10 kapanışı" diye bastı —
+# o sayı 30.09'un New York kapanışıydı (1,1328), 01.10'unki 1,1241. Elli bir
+# satırın on iki döviz satırının HEPSİ bir gün geriden geliyordu ve "1 gün"
+# sütunu dünün değil önceki günün hareketiydi. Saatlik bar doğru (New York
+# 17:00 kapanışı CNBC'nin aynı gün kapanışından medyanda 3,8 bp); kapanışın
+# tanımı ve kesim saatleri tek yerde: `ortak/fx_kapanis.py` (lira kurları
+# İstanbul 18:00, öbürleri New York 17:00 — karar 02.10.2026, kullanıcı).
+# Sürüm önbellekte durur: eski tanımla yazılmış bir önbellek taze sayılmaz ve
+# döviz serileri ondan devredilmez — iki tanım aynı seride yan yana duramaz.
+DOVIZ_KAPANIS_SURUM = "saatlik-1"
+
+
+def _fx_mi(kod: str) -> bool:
+    return kod.endswith("=X")
+
+
+def _fx_modul():
+    import sys
+    yol = str(BURASI.parent / "ortak")
+    if yol not in sys.path:
+        sys.path.insert(0, yol)
+    import fx_kapanis
+    return fx_kapanis
+
+
+def doviz_kapanislari(seri: dict, saatlik: dict, simdi: datetime) -> dict:
+    """Döviz serilerini kapanış anına göre kurar. AĞA ÇIKMAZ (sınanabilir).
+
+    `saatlik`: {sembol: saatlik kapanışlar}. Saatlik bar olan sembolde son
+    yılın kapanışları saatlik bardan, saatlik barın ulaşmadığı eski günler
+    düzeltilmiş günlük bardan gelir; saatlik barı gelmeyen sembol yalnız
+    düzeltilmiş günlük barla kurulur ve kapanış tanımı bunu adıyla söyler."""
+    import pandas as pd
+    F = _fx_modul()
+    simdi_ts = pd.Timestamp(simdi)
+    simdi_ts = simdi_ts.tz_localize("UTC") if simdi_ts.tzinfo is None else simdi_ts.tz_convert("UTC")
+    bugun_londra = simdi_ts.tz_convert("Europe/London").date()
+    for k in [x for x in seri if _fx_mi(x)]:
+        s = seri[k]
+        tur = F.kesim_turu(k)
+        g = pd.Series(s["kapanis"], index=pd.to_datetime(s["tarih"]), dtype="float64")
+        # Bugünün (Londra günü) barı CANLIDIR; kapanmış barların kapanışı ise
+        # günün başıdır. İkisi aynı seride duramaz: canlı bar düzeltmeye girmez.
+        duz = F.gunluk_duzelt(g[g.index.date < bugun_londra])
+        h = saatlik.get(k)
+        kp = F.saatlik_kapanislar(h, tur, simdi_ts) if h is not None and len(h) else None
+        if kp is not None and len(kp.seri):
+            birlesik, gecis = F.birlestir(duz, kp)
+            s["kapanis_tanimi"] = F.KESIM_ADI[tur]
+            s["kapanis_ani"] = kp.kapanis_utc.get(birlesik.index[-1].date().isoformat())
+            s["kapanis_gecis"] = gecis
+            if kp.olculemeyen:
+                s["kapanis_olculemeyen"] = kp.olculemeyen[-5:]
+        else:
+            birlesik = duz
+            s["kapanis_tanimi"] = "Londra gece yarısı (günlük bar; saatlik bar alınamadı)"
+            s["kapanis_ani"] = None
+        if kp is not None and kp.canli:
+            s["canli"] = {"zaman": kp.canli[0], "deger": kp.canli[1]}
+        s["tarih"] = [x.date().isoformat() for x in birlesik.index]
+        s["kapanis"] = [float(v) for v in birlesik.values]
+    return seri
+
+
+def _doviz_saatlik(seri: dict) -> dict:
+    """Saatlik barları çeker (AĞA ÇIKAN tek parça) ve `doviz_kapanislari`na verir."""
+    fx = [k for k in seri if _fx_mi(k)]
+    if not fx:
+        return seri
+    saatlik = {}
+    try:
+        saatlik = _fx_modul().yfinance_saatlik(fx, donem="1y")
+    except Exception as e:                                       # noqa: BLE001
+        print(f"  ! döviz saatlik barları çekilemedi ({type(e).__name__}: {e}) — "
+              "günlük bar düzeltilerek okunuyor")
+    eksik = [k for k in fx if k not in saatlik]
+    if eksik:
+        print("  ! saatlik barı gelmeyen döviz (günlük bar düzeltilerek okunuyor): " + ", ".join(eksik))
+    return doviz_kapanislari(seri, saatlik, datetime.now(timezone.utc))
 
 
 def _onbellek_birlestir(yeni: dict, eski: dict, meta_yok=()) -> dict | None:
@@ -436,6 +522,10 @@ def _bos_seans_onar(seri: dict, metalar: dict, eski: dict, simdi: datetime) -> d
         s = seri.get(k)
         if not s or not s.get("tarih") or not m:
             continue
+        if s.get("kapanis_tanimi"):
+            # Döviz serisi saatlik bardan kuruldu: günlük barın "boş seansı" bu
+            # seride yoktur, son işlem fiyatı da 7/24 piyasada kapanış değildir.
+            continue
         yb = m["yerel_bugun"]
         esik = KAPANIS_UTC.get(gruplar.get(k, ""), VARSAYILAN_KAPANIS)
         # Bugünün yerel barı yalnız dönemi bittiyse VE UTC yerleşme saati
@@ -490,7 +580,8 @@ def _ham_veri(tazele: bool = False) -> dict:
         try:
             d = json.loads(HAM.read_text(encoding="utf-8"))
             t = datetime.fromisoformat(d["zaman"])
-            if datetime.now() - t < timedelta(hours=TTL_SAAT):
+            if (datetime.now() - t < timedelta(hours=TTL_SAAT)
+                    and d.get("doviz_kapanis") == DOVIZ_KAPANIS_SURUM):
                 return d
         except Exception:
             pass
@@ -508,6 +599,10 @@ def _ham_veri(tazele: bool = False) -> dict:
             seri[k] = {"tarih": [str(x.date()) for x in s.index], "kapanis": [float(x) for x in s.values]}
         except Exception:
             continue
+    # Döviz serileri İLK iş olarak kapanış anına göre kurulur: aşağıdaki hafta
+    # sonu, yerleşmemiş bar ve boş seans süzgeçleri günlük barın sözleşmesiyle
+    # yazıldı ve döviz için yanlış soruyu sorardı.
+    seri = _doviz_saatlik(seri)
     # SIRA BAĞLAYICI — ve eskiden TERSİYDİ.
     #
     # Önce devir düzeltmesi koşuyordu, sonra yerleşmemiş bar düşürülüyordu.
@@ -538,6 +633,7 @@ def _ham_veri(tazele: bool = False) -> dict:
         eski = (json.loads(HAM.read_text(encoding="utf-8")) or {}).get("seri") or {}
     except Exception:
         pass
+    eski = {k: v for k, v in eski.items() if not (_fx_mi(k) and not v.get("kapanis_tanimi"))}
     # BOŞ SEANS ONARIMI — yerleşmemiş bar düştükten SONRA (onarım kapanmamış bir
     # günü asla kurmaz, ama elindeki seri de kapanmamış bar taşımamalı) ve devir
     # düzeltmesinden ÖNCE (vadeliler zaten onarılmaz; sıra yalnız okunurluk için).
@@ -609,6 +705,7 @@ def _ham_veri(tazele: bool = False) -> dict:
     if _eksik:
         print("  ! kaynağın boş verdiği seans kurulamadı (piyasa açık ya da vadeli): "
               + " · ".join(_eksik))
+    d["doviz_kapanis"] = DOVIZ_KAPANIS_SURUM
     HAM.write_text(json.dumps(d, ensure_ascii=False), encoding="utf-8")
     return d
 
@@ -831,6 +928,8 @@ def _yerlesmemis_dus(seri: dict) -> dict:
         s = seri[k]
         if not s.get("tarih") or s["tarih"][-1] != bugun:
             continue
+        if s.get("kapanis_tanimi"):
+            continue                 # kapanış anından SONRA kuruldu (doviz_kapanislari)
         if simdi.hour >= KAPANIS_UTC.get(gruplar.get(k, ""), VARSAYILAN_KAPANIS):
             continue
         s["tarih"] = s["tarih"][:-1]
@@ -1000,6 +1099,13 @@ def satir(v: Varlik, seri: dict) -> dict | None:
         # önceki yayımla kıyaslanabilir değildir; denetim bunu uyarıya çevirir.
         "roll_bilinmiyor": bool(s.get("roll_bilinmiyor")),
         "son": round(son, v.ondalik), "tarih": t[-1],
+        # Döviz satırının kapanışı HANGİ ANDA (İstanbul 18:00 · New York 17:00);
+        # kapanış anı UTC; ve ölçüm anının son kotasyonu — yalnız bilgi, hiçbir
+        # değişime ya da oynaklığa girmez (karar 02.10.2026).
+        "kapanis_tanimi": s.get("kapanis_tanimi"),
+        "kapanis_ani": s.get("kapanis_ani"),
+        "canli": ({"zaman": s["canli"]["zaman"], "deger": round(float(s["canli"]["deger"]), v.ondalik)}
+                  if s.get("canli") else None),
         # Kaynağın boş verdiği seansın izi (bkz. _bos_seans_onar). `onarim`:
         # son kapanış kaynağın o günkü son işlem fiyatından kuruldu. `eksik_seans`:
         # kaynak bu tamamlanmış seansları boş verdi ve kurulamadı — satır kendi

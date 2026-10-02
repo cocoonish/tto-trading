@@ -437,6 +437,27 @@ def onceki_olcum_ani(tarih: date, haftalik: bool = False) -> datetime | None:
     return None
 
 
+# CANLI KUR (karar 02.10.2026, kullanıcı): sabah bülteni kapanıştan sonra
+# gelen hareketi de gösterir. Gösterge kartının değeri ve farkı kapanmış
+# seanstan ölçülür (hattın kapanışı); kartın altına ölçüm anının son kotasyonu
+# saatiyle eklenir — yalnız bilgi, hiçbir farka, olaya ya da sıralamaya girmez.
+# Kotasyon piyasa fotoğrafının aynı sembolünden okunur: iki ayrı çekim bir
+# kartta iki ayrı "şimdi" basardı.
+GOSTERGE_CANLI = {("usdtry-deval", "kur"): "USDTRY=X"}
+
+
+def gosterge_canli(b: dict) -> None:
+    satirlar = {r.get("kod"): r for g in ((b.get("piyasa") or {}).get("gruplar") or [])
+                for r in (g.get("satirlar") or [])}
+    for g in b.get("gostergeler") or []:
+        kod = GOSTERGE_CANLI.get((g.get("hat"), g.get("anahtar")))
+        r = satirlar.get(kod) if kod else None
+        if r and r.get("canli"):
+            g["canli"] = dict(r["canli"])
+            if r.get("kapanis_tanimi"):
+                g["kapanis_tanimi"] = r["kapanis_tanimi"]
+
+
 def uret(tarih: date | None = None, haber_tara: bool = True,
          takvim_ufku: int | None = None, tur: str = "gunluk") -> dict:
     """tur: "gunluk" (hafta içi sabah) | "haftalik" (pazar akşamı, haftaya bakış)."""
@@ -601,6 +622,7 @@ def uret(tarih: date | None = None, haber_tara: bool = True,
         # gönderi kurallarını bu beyandan seçer (bkz. ayar.YAZI_BOLUMLERI_3).
         "surum": ayar.YAZI_BICIMI,
     }
+    gosterge_canli(b)
     # Yazı-özel bölümlerin sırası ve başlıkları — sayının beyanından.
     b["gundem_yazi_bolumleri"] = ayar.yazi_bolumleri(b)
     b["ozet"] = piyasa_ozeti(b, haftalik=haftalik)

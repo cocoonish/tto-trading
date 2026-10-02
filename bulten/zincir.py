@@ -49,8 +49,15 @@ BULTENLER = KOK / "site" / "src" / "data" / "bulten"
 # bu yüzden burada tetikleme YAPILMAZ — yalnız ne tetikleneceği söylenir).
 ZINCIR = [("veri.yml", "Veri tazeleme"), ("bulten.yml", "Günlük bülten")]
 
-# Veri koşusu nabzı bu yaşı aşarsa ölçüm katmanı bayat sayılır.
-NABIZ_SAAT = 12
+# VERİ KOŞUSU BÜLTEN GÜNÜNE AİT OLMALI. Eski ölçüt yaştı ("12 saatten yeni
+# mi") ve 02.10.2026'da yanlış cevap verdi: önceki akşamın 20:28 UTC koşusu
+# sabah 04:18'de 7,8 saatlikti, halka "tamam" dedi, veri tazelenmedi ve kur
+# hattı 30.09'da kaldı — o koşu UTC gece yarısından ÖNCEYDİ, yani bülten
+# gününün sabahına ait hiçbir yayımı (gece biten seanslar, sabah verileri)
+# göremezdi. Soru yaş değil SIRADIR: veri koşusu bülten gününün UTC gece
+# yarısından sonra mı koştu, ve ölçüm ondan sonra mı kuruldu.
+def _veri_esigi(bugun: dt.date) -> dt.datetime:
+    return dt.datetime.combine(bugun, dt.time(0, 0), tzinfo=dt.timezone.utc)
 
 
 def _yaz(bayrak: str, metin: str) -> None:
@@ -129,14 +136,33 @@ def _zincir_durumu(bugun: dt.date) -> tuple[int, list[str]]:
             d = json.loads(nabiz.read_text(encoding="utf-8"))
             t = dt.datetime.fromisoformat(
                 str(d.get("veri_kosusu", "")).replace("Z", "+00:00"))
+            if t.tzinfo is None:
+                t = t.replace(tzinfo=dt.timezone.utc)
             yas = (dt.datetime.now(dt.timezone.utc) - t).total_seconds() / 3600
             sonuc = d.get("sonuc", "?")
-            if yas > NABIZ_SAAT or sonuc != "success":
-                _yaz("✗", f"Veri koşusu {yas:.1f} saat önce ({sonuc}).")
+            esik = _veri_esigi(bugun)
+            olcum = None
+            if b.get("olusturma"):
+                try:
+                    olcum = dt.datetime.fromisoformat(str(b["olusturma"]).replace("Z", "+00:00"))
+                except ValueError:
+                    olcum = None
+            if t < esik or sonuc != "success":
+                neden = (f"bülten gününün UTC gece yarısından önce ({yas:.1f} saat önce)"
+                         if t < esik else f"sonucu {sonuc}")
+                _yaz("✗", f"Veri koşusu bu güne ait değil — {neden}.")
                 yapilacak.insert(0, "veri.yml (Veri tazeleme) tetiklenmeli "
                                     "— ölçümden ÖNCE")
+                if b:
+                    yapilacak.append("bulten.yml (Günlük bülten) YENİDEN tetiklenmeli "
+                                     "— mevcut ölçüm tazelenmemiş veriyle kuruldu")
+            elif olcum is not None and olcum < t:
+                _yaz("✗", f"Ölçüm veri koşusundan ÖNCE kurulmuş (ölçüm {b['olusturma']}, "
+                          f"veri {d.get('veri_kosusu')}).")
+                yapilacak.append("bulten.yml (Günlük bülten) YENİDEN tetiklenmeli "
+                                 "— veri ölçümden sonra tazelendi")
             else:
-                _yaz("✓", f"Veri koşusu {yas:.1f} saat önce ({sonuc}).")
+                _yaz("✓", f"Veri koşusu bu güne ait — {yas:.1f} saat önce ({sonuc}).")
         except Exception:                                      # noqa: BLE001
             _yaz("!", "Veri koşusu nabzı okunamadı.")
 

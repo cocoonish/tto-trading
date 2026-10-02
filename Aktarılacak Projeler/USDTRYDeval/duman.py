@@ -153,13 +153,120 @@ def _kapanmamis_bar():
     sina("yükleyici hafta sonu süzgecini çağırıyor",
          "haftasonu_barini_dusur(yeni)" in src,
          "fonksiyon var ama seri() çağırmıyorsa hafta sonu barı seriye girer")
-    sina("hafta sonu uyarısı künyeye ulaşıyor", "uyarilar=hs_uyari" in src,
+    sina("hafta sonu uyarısı künyeye ulaşıyor", "list(hs_uyari)" in src and "uyarilar=uyarilar" in src,
          "süzgeç sessiz kalırsa gerçek bir damga kayması da sessiz kalır")
     # SIRA: doluluk ölçütü paydası iş günü; hafta sonu barı ondan ÖNCE
     # düşmezse ölçüt kendi paydasıyla kandırılır.
     sina("hafta sonu süzgeci kapsam denetiminden ÖNCE",
          src.index("haftasonu_barini_dusur(yeni)") < src.index("kusur = _kapsam_uyarilari"),
          "sonra gelirse hafta sonu barı hafta içi gözlem sayılır")
+
+
+# ===========================================================================
+# (2b) KAPANIŞ ANI — İstanbul 18:00, saatlik bardan (karar 02.10.2026)
+# ===========================================================================
+def _kapanis_ani():
+    """Yahoo'nun kapanmış günlük döviz barının kapanış alanı günün BAŞIDIR;
+    seri saatlik bardan İstanbul 18:00'de kurulur. Çerçeve 02.10.2026'nın
+    birebir yapısı (sentetik fiyatlarla): İstanbul seansı düz, akşam ve gece
+    saatlerinde sığ kotasyon sıçramaları."""
+    f = _ortak("fx_kapanis")
+    m = _ortak("usdtry")
+    import pandas as pd
+    import numpy as np
+    saat = pd.date_range("2026-09-28 00:00", "2026-10-02 06:00", freq="1h", tz="UTC")
+    saat = saat[saat.dayofweek < 5]
+    fiyat = pd.Series(49.0, index=saat)
+    for g in pd.date_range("2026-09-28", "2026-10-01", tz="UTC"):
+        gun = (g - pd.Timestamp("2026-09-28", tz="UTC")).days
+        fiyat[(saat >= g) & (saat < g + pd.Timedelta(hours=15))] = 49.0 + 0.01 * gun     # İstanbul seansı
+        fiyat[(saat >= g + pd.Timedelta(hours=15)) & (saat < g + pd.Timedelta(hours=24))] = 49.2 + 0.01 * gun  # gece
+    # 02.10 sabahı her saat ayrı fiyat: canlı kotasyon ölçüm anında BAŞLAMIŞ
+    # son barın fiyatı olmalı (04:00 barı), sonraki barlar onu belirleyemez.
+    bugun_saat = fiyat.index >= pd.Timestamp("2026-10-02", tz="UTC")
+    fiyat[bugun_saat] = [49.10 + 0.01 * t.hour for t in fiyat.index[bugun_saat]]
+    sabah = dt.datetime(2026, 10, 2, 4, 18, tzinfo=dt.timezone.utc)
+    k = f.saatlik_kapanislar(fiyat, "tr", sabah)
+    sina("kapanış İstanbul 18:00'deki son saatlik bar", abs(float(k.seri.iloc[-1]) - 49.03) < 1e-9
+         and k.seri.index[-1].date() == dt.date(2026, 10, 1), f"{k.seri.tail(2).to_dict()}")
+    sina("gece kotasyonu kapanışa girmiyor", all(v < 49.1 for v in k.seri.values), f"{k.seri.to_dict()}")
+    sina("kapanış anı 15:00 UTC olarak kayıtlı", k.kapanis_utc.get("2026-10-01") == "2026-10-01T15:00:00Z",
+         f"{k.kapanis_utc}")
+    sina("canlı kotasyon ölçüm anının son fiyatı, kapanışa karışmıyor",
+         k.canli is not None and abs(k.canli[1] - 49.14) < 1e-9 and k.canli[0] == "2026-10-02T04:18:00Z",
+         f"{k.canli}")
+    ogle = dt.datetime(2026, 10, 1, 14, 30, tzinfo=dt.timezone.utc)
+    k2 = f.saatlik_kapanislar(fiyat, "tr", ogle)
+    sina("kapanış anı gelmemiş gün seriye girmiyor", k2.seri.index[-1].date() == dt.date(2026, 9, 30),
+         f"{k2.seri.index[-1]}")
+    sina("hafta sonu günü üretilmiyor", all(t.dayofweek < 5 for t in k.seri.index))
+    # Kaynağın tek tük hafta sonu barı (Yahoo bazen cumartesi öğleden sonrasına
+    # bir kotasyon yazar) cumartesinin İstanbul penceresine düşer ve kapanış
+    # anına bir saat kala kapanır: hafta içi kuralı olmasa cumartesi "kapanış"
+    # diye basılırdı. Besleme boşluğu sınaması bunu YAKALAMAZ (bar yakın).
+    cuma = pd.date_range("2026-10-02 00:00", "2026-10-02 20:00", freq="1h", tz="UTC")
+    hs = pd.concat([pd.Series(49.05, index=cuma),
+                    pd.Series(49.30, index=pd.DatetimeIndex(["2026-10-03 13:00"], tz="UTC"))])
+    k4 = f.saatlik_kapanislar(hs, "tr", dt.datetime(2026, 10, 3, 16, 0, tzinfo=dt.timezone.utc))
+    sina("hafta sonu barı cumartesi kapanışı üretmiyor",
+         pd.Timestamp("2026-10-03") not in k4.seri.index and "2026-10-03" not in k4.olculemeyen
+         and pd.Timestamp("2026-10-02") in k4.seri.index, f"{k4.seri.to_dict()} {k4.olculemeyen}")
+    # Besleme sabah kesildiyse o gün "kapanış" diye sabah fiyatı basılmaz.
+    kes = fiyat[~((fiyat.index >= "2026-09-30 06:00") & (fiyat.index < "2026-09-30 23:00"))]
+    k3 = f.saatlik_kapanislar(kes, "tr", sabah)
+    sina("kapanış anına yetişmeyen gün ölçülemez sayılıyor",
+         "2026-09-30" in k3.olculemeyen and pd.Timestamp("2026-09-30") not in k3.seri.index,
+         f"{k3.olculemeyen}")
+    # Günlük bar: kapanış alanı günün başıdır → değer önceki hafta içi güne.
+    gunluk = pd.Series([1.0, 2.0, 3.0, 4.0], index=pd.to_datetime(["2026-09-29", "2026-09-30", "2026-10-01", "2026-10-05"]))
+    d = f.gunluk_duzelt(gunluk)
+    sina("günlük barın değeri bir önceki hafta içi güne yazılıyor",
+         [str(t.date()) for t in d.index] == ["2026-09-28", "2026-09-29", "2026-09-30", "2026-10-02"]
+         and list(d.values) == [1.0, 2.0, 3.0, 4.0], f"{d.to_dict()}")
+    cmt = pd.Series([5.0, 6.0], index=pd.to_datetime(["2026-10-03", "2026-10-05"]))
+    sina("cumartesi barı pazartesi barından önce gelir (cumaya yakın)",
+         float(f.gunluk_duzelt(cmt).loc["2026-10-02"]) == 5.0, f"{f.gunluk_duzelt(cmt).to_dict()}")
+    # Yükleyici: kapanmamış gün kuralı kapanış ANIYLA.
+    idx = pd.to_datetime(["2026-09-30", "2026-10-01"])
+    s = pd.Series([49.0, 49.03], index=idx)
+    sina("14:30 UTC'de bugünün kapanışı yok", len(m.kapanmamis_bari_dusur(s, dt.datetime(2026, 10, 1, 14, 30, tzinfo=dt.timezone.utc))) == 1)
+    sina("15:05 UTC'de bugünün kapanışı var", len(m.kapanmamis_bari_dusur(s, dt.datetime(2026, 10, 1, 15, 5, tzinfo=dt.timezone.utc))) == 2)
+    src = (KOK / "ortak" / "usdtry.py").read_text(encoding="utf-8")
+    sina("yükleyici saatlik kapanışı kuruyor", "_fx.saatlik_kapanislar(" in src and "_fx.gunluk_duzelt(" in src,
+         "günlük barın kapanış alanı tek başına okunursa seri bir gün geriden gelir")
+    sina("önbellek sütunu tanımı taşıyor", 'SUTUN = "usdtry_ist18"' in src and "eski_tanim == SUTUN" in src,
+         "eski tanımlı önbellek taze sayılırsa yeni tanım hiç devreye girmez")
+    # DAVRANIŞ: eski tanımla (günlük barın kapanış alanı) yazılmış ama TAZE bir
+    # önbellek, tazelik kuralından geçse bile kullanılmaz; seri yeniden kurulur
+    # ve önbellek yeni sütun adıyla yazılır. Kaynak metnini sormak yetmez: bir
+    # koşul başka bir satırda geçebilir, davranış onu ayırır.
+    import os
+    simdi_ = dt.datetime(2026, 10, 2, 6, 26, tzinfo=dt.timezone.utc)
+    gunler = pd.bdate_range("2026-06-01", "2026-10-01")
+    with tempfile.TemporaryDirectory() as d_:
+        yol = Path(d_) / "usdtry.csv"
+        pd.Series(49.0, index=gunler, name="usdtry").to_csv(yol, index_label="tarih")   # eski sütun, taze mtime
+        cekildi = []
+
+        def cek(bas, bit):
+            cekildi.append((bas, bit))
+            return pd.Series(49.03, index=gunler)
+        yedek = {v: os.environ.pop(v, None) for v in ("TTO_YENILE", "TTO_KOSU_BASLANGIC")}
+        try:
+            kr = m.seri(bas="2026-06-01", onbellek=yol, cek=cek, simdi=simdi_)
+        finally:
+            for v, x in yedek.items():
+                if x is not None:
+                    os.environ[v] = x
+        sutun = pd.read_csv(yol, index_col=0).columns[0]
+        sina("eski tanımlı taze önbellek kullanılmıyor, seri yeniden kuruluyor",
+             cekildi and not kr.onbellekten and sutun == m.SUTUN, f"çekildi {len(cekildi)} · önbellekten "
+             f"{kr.onbellekten} · sütun {sutun!r}")
+        # Yeni tanımla yazılmış taze önbellek ise kullanılır (ağa çıkılmaz).
+        cekildi.clear()
+        kr2 = m.seri(bas="2026-06-01", onbellek=yol, cek=cek, simdi=simdi_)
+        sina("yeni tanımlı taze önbellek kullanılıyor", not cekildi and kr2.onbellekten,
+             f"çekildi {len(cekildi)} · önbellekten {kr2.onbellekten}")
 
 
 # ===========================================================================
@@ -370,6 +477,7 @@ def main() -> int:
     print("USD/TRY devalüasyon hızı — duman sınaması\n")
     for ad, f in (("Kur kaynağı (Yahoo, tek yükleyici)", _kur_kaynagi),
                   ("Kapanmamış bar", _kapanmamis_bar),
+                  ("Kapanış anı (İstanbul 18:00)", _kapanis_ani),
                   ("Şekil saat defteri", _sekil_saatleri),
                   ("Bacak saatleri", _bacak_saatleri),
                   ("Yan dosya birleştirme", _yan_dosya_birlestirme)):
