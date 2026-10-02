@@ -980,8 +980,10 @@ def p3d() -> dict:
                      "kapanışı yayımı içerir; 18.12.2023 öncesi cuma kur değişimi boşaltıldı.")
         r["birim"] = "DİBS baz puan; USD/TRY log değişim, %"
         r["n_yayim"] = int(len(g))
-        # 10:00 olayında DİBS'in sabah hizası da saatle bağdaşır (sabitleme 10:00–14:00 arasında;
-        # PPK 14:00 gün sonu hizasında, TÜFE ve GSYH 10:00 sabah hizasında tepe 0): kapı o hizada da sorulur
+        # 10:00 olayında DİBS'in sabah hizası da saatle bağdaşır: sabitlemenin 14:00'ten ÖNCE olduğu
+        # ölçülü (PPK 14:00 gün sonu hizasında tepe 0), 10:00'dan SONRA olduğu ise ölçülü değil —
+        # sabah hizasında tepe 0 yalnız TÜFE'de 1 yıllıkta ve GSYH'de 3 aylıkta, öbür düğümlerde
+        # profil düz ya da tepe başka günde. Kapı bu yüzden iki hizada da sorulur.
         sab = _degisim("sabah")
         og = pd.DatetimeIndex(g).intersection(sab.index)
         r["kapi_sabah_hizasi"] = {c: oo.kapi_ozeti(oo.olay_kapisi(sab[c], og, guclu=True, k_tohum=120 + i))

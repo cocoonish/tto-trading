@@ -294,6 +294,201 @@
     "azami_fark_10y": 0.0
    }
   },
+  "abd_reel_getiri.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "7aa5105fd44c522765f73a501f0566956491f64d78308cc9a4bd3599498a60da",
+   "satir": 5941,
+   "sutunlar": [
+    "reel5y",
+    "reel7y",
+    "reel10y",
+    "reel20y",
+    "reel30y"
+   ],
+   "kesilen_satir": 1,
+   "cipa_siniri": "2026-09-30",
+   "aciklama": "ABD Hazinesi günlük reel getiri eğrisi (TIPS, par), %",
+   "sutun_aciklama": {
+    "reel5y": "5 yıl",
+    "reel7y": "7 yıl",
+    "reel10y": "10 yıl",
+    "reel20y": "20 yıl",
+    "reel30y": "30 yıl"
+   },
+   "kapsam": {
+    "reel5y": {
+     "n": 5941,
+     "ilk": "2003-01-02",
+     "son": "2026-09-30"
+    },
+    "reel7y": {
+     "n": 5941,
+     "ilk": "2003-01-02",
+     "son": "2026-09-30"
+    },
+    "reel10y": {
+     "n": 5941,
+     "ilk": "2003-01-02",
+     "son": "2026-09-30"
+    },
+    "reel20y": {
+     "n": 5550,
+     "ilk": "2004-07-27",
+     "son": "2026-09-30"
+    },
+    "reel30y": {
+     "n": 4156,
+     "ilk": "2010-02-22",
+     "son": "2026-09-30"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "hazine/reel_2003.csv.gz",
+     "sha256": "99e00d10558a84e23b2873edfe8472f9830b9b2d512c68e68594eb9dc456d813",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2003/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2003&page&_format=csv",
+     "an": "2026-10-02T18:10:40+00:00"
+    },
+    {
+     "ham": "hazine/reel_2004.csv.gz",
+     "sha256": "2dd01965f91b467194446332031fcfeb86974ea532fb99f4f281103e3f692c0e",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2004/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2004&page&_format=csv",
+     "an": "2026-10-02T18:10:41+00:00"
+    },
+    {
+     "ham": "hazine/reel_2005.csv.gz",
+     "sha256": "91c99c6193f8551a659011f9c75a3d63b60d314b030b7e0b91863b7bbfdd62d3",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2005/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2005&page&_format=csv",
+     "an": "2026-10-02T18:10:41+00:00"
+    },
+    {
+     "ham": "hazine/reel_2006.csv.gz",
+     "sha256": "ddfe25bb8680405c263628a32d9ddebe6b3825625bd7e5e67b40ee7f18e41d93",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2006/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2006&page&_format=csv",
+     "an": "2026-10-02T18:10:42+00:00"
+    },
+    {
+     "ham": "hazine/reel_2007.csv.gz",
+     "sha256": "07fb955fe47935bb5df515b5bdeba5579d24ae5431a2d9bf6ab0450a26bb215d",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2007/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2007&page&_format=csv",
+     "an": "2026-10-02T18:10:43+00:00"
+    },
+    {
+     "ham": "hazine/reel_2008.csv.gz",
+     "sha256": "8d79576383af601010f6c4e8c0240a0e6f8fd1c04eec05e6b8d89ebb9c327232",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2008/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2008&page&_format=csv",
+     "an": "2026-10-02T18:10:44+00:00"
+    },
+    {
+     "ham": "hazine/reel_2009.csv.gz",
+     "sha256": "68f1f8b2de5234e2e4650de06c6786dbb4fbec6ea3894bd4edb73930e32843c4",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2009/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2009&page&_format=csv",
+     "an": "2026-10-02T18:10:44+00:00"
+    },
+    {
+     "ham": "hazine/reel_2010.csv.gz",
+     "sha256": "c16d0db0208b7e016a35c93cd1b354cbe735002683fe66063fa6371aae3f3bc2",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2010/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2010&page&_format=csv",
+     "an": "2026-10-02T18:10:44+00:00"
+    },
+    {
+     "ham": "hazine/reel_2011.csv.gz",
+     "sha256": "d1bd695b0764e2af85373f6b2909a57217cb575ba21e131853a512af5d3ec63b",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2011/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2011&page&_format=csv",
+     "an": "2026-10-02T18:10:45+00:00"
+    },
+    {
+     "ham": "hazine/reel_2012.csv.gz",
+     "sha256": "6ee991ccdbdaa615bf329cdfd79fcd813a9fbd88e1795b13e77ff0c76c905ec4",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2012/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2012&page&_format=csv",
+     "an": "2026-10-02T18:10:45+00:00"
+    },
+    {
+     "ham": "hazine/reel_2013.csv.gz",
+     "sha256": "6819c5fbbbbfbd511dd7fef270857db7cf2c97f862805fd24589af7af2df8c15",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2013/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2013&page&_format=csv",
+     "an": "2026-10-02T18:10:45+00:00"
+    },
+    {
+     "ham": "hazine/reel_2014.csv.gz",
+     "sha256": "1b7365254bdc3bd75a1fef774c9bba0a39fa3d499a13ae80e65a4eda4c61a92d",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2014/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2014&page&_format=csv",
+     "an": "2026-10-02T18:10:46+00:00"
+    },
+    {
+     "ham": "hazine/reel_2015.csv.gz",
+     "sha256": "aec6d36e527bab697717aea76a04113e168392a15944bc8461690d05f9aa0b47",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2015/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2015&page&_format=csv",
+     "an": "2026-10-02T18:10:46+00:00"
+    },
+    {
+     "ham": "hazine/reel_2016.csv.gz",
+     "sha256": "b38e72f59b7edbc660b00be57e1a82e1a49bc7f3128fcb520faddd05d99f7c49",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2016/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2016&page&_format=csv",
+     "an": "2026-10-02T18:10:47+00:00"
+    },
+    {
+     "ham": "hazine/reel_2017.csv.gz",
+     "sha256": "94b310fafe718ca3f6717b7da4cd7d7bf335faecf1a302793f0f34733f164473",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2017/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2017&page&_format=csv",
+     "an": "2026-10-02T18:10:47+00:00"
+    },
+    {
+     "ham": "hazine/reel_2018.csv.gz",
+     "sha256": "d1ef01905a1608957d06cbcd26593eac1e8b9bff9e92a1fa3a1b142a97ef0a95",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2018/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2018&page&_format=csv",
+     "an": "2026-10-02T18:10:48+00:00"
+    },
+    {
+     "ham": "hazine/reel_2019.csv.gz",
+     "sha256": "593741b038e0970fe5be65a04e0047e17f00809da64e84948d1d306ab032e207",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2019/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2019&page&_format=csv",
+     "an": "2026-10-02T18:10:48+00:00"
+    },
+    {
+     "ham": "hazine/reel_2020.csv.gz",
+     "sha256": "30c98a2d75a4474e08a338bc3874745241d63be8f4a0d07a7f04a454a332921c",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2020/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2020&page&_format=csv",
+     "an": "2026-10-02T18:10:49+00:00"
+    },
+    {
+     "ham": "hazine/reel_2021.csv.gz",
+     "sha256": "9c614f8b16db601f1dc01ddd77db42d4e4a54b7243db4b4fc228270a08f747d3",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2021/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2021&page&_format=csv",
+     "an": "2026-10-02T18:10:49+00:00"
+    },
+    {
+     "ham": "hazine/reel_2022.csv.gz",
+     "sha256": "70b21a92a05801c479f1ddaee21137b7f842d43d883d32d57f9bbae272111a48",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2022/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2022&page&_format=csv",
+     "an": "2026-10-02T18:10:50+00:00"
+    },
+    {
+     "ham": "hazine/reel_2023.csv.gz",
+     "sha256": "ef28bcafaca75c45bb6b3491b4df4bd1b5e2ab7ff35ac014b6f8362df330c0ca",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2023/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2023&page&_format=csv",
+     "an": "2026-10-02T18:10:50+00:00"
+    },
+    {
+     "ham": "hazine/reel_2024.csv.gz",
+     "sha256": "d3ff00a9287ebf68fdc80e72fb2d1895a73c84b3ff2a6ca8c6d64648cb470f16",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2024/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2024&page&_format=csv",
+     "an": "2026-10-02T18:10:50+00:00"
+    },
+    {
+     "ham": "hazine/reel_2025.csv.gz",
+     "sha256": "d3d3131c41e1f93f4661d227ce7079049d51888b395aaff863b6ad8e08838b64",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2025/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2025&page&_format=csv",
+     "an": "2026-10-02T18:10:51+00:00"
+    },
+    {
+     "ham": "hazine/reel_2026.csv.gz",
+     "sha256": "e7e188f940a0047de663235b0425660d00a14244694b753f71875b8e7d2b61c5",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_real_yield_curve&field_tdr_date_value=2026&page&_format=csv",
+     "an": "2026-10-02T18:10:51+00:00"
+    }
+   ]
+  },
   "acm.csv.gz": {
    "hazirlayan": "hazirla_bulut.py",
    "sha256": "cdfc031396f6a858bd07757603753b56d156bfeaf03eab245ecf90fb53454eb3",
@@ -2415,6 +2610,1789 @@
     "yol": "veri/not_kararlari.json",
     "sha256": "e6f0aaae5bee866badb0537dddd3568e183699915a06361c0ea32e9deb1afcb8"
    }
+  },
+  "surucu_gunluk.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "7ff839541d96de6fd5e0c29f853539ac75ea766d905699f3592ffe6c131f3d7f",
+   "satir": 6978,
+   "sutunlar": [
+    "altin",
+    "au10y",
+    "au2y",
+    "aud",
+    "bakir",
+    "brent",
+    "brl",
+    "ca10y",
+    "ca2y",
+    "cad",
+    "ch10y",
+    "ch2y",
+    "chf",
+    "clp",
+    "cnh",
+    "cop",
+    "de2y",
+    "demir_cevheri",
+    "dogalgaz",
+    "eur",
+    "gb2y",
+    "gbp",
+    "gumus",
+    "jp10y",
+    "jp2y",
+    "jpy",
+    "krw",
+    "mxn",
+    "nikkei",
+    "nok",
+    "nz10y",
+    "nzd",
+    "platin",
+    "sek",
+    "soya",
+    "spx",
+    "try",
+    "us10y",
+    "us2y",
+    "wti",
+    "zar"
+   ],
+   "kesilen_satir": 2,
+   "cipa_siniri": "2026-09-30",
+   "aciklama": "Kur sürücüleri: emtia vadelileri, devlet tahvili getirileri, paralar ve hisse endeksleri, günlük kapanış barı (CNBC)",
+   "sutun_aciklama": {
+    "altin": "altın, yakın vade vadeli, $/ons (COMEX)",
+    "au10y": "Avustralya 10 yıllık, %",
+    "au2y": "Avustralya 2 yıllık, %",
+    "aud": "AUD/USD",
+    "bakir": "bakır, yakın vade vadeli, $/libre (COMEX)",
+    "brent": "Brent ham petrol, yakın vade vadeli, $/varil (ICE)",
+    "brl": "USD/BRL",
+    "ca10y": "Kanada 10 yıllık, %",
+    "ca2y": "Kanada 2 yıllık, %",
+    "cad": "USD/CAD",
+    "ch10y": "İsviçre 10 yıllık, %",
+    "ch2y": "İsviçre 2 yıllık, %",
+    "chf": "USD/CHF",
+    "clp": "USD/CLP",
+    "cnh": "USD/CNH",
+    "cop": "USD/COP",
+    "de2y": "Almanya 2 yıllık (CNBC), %",
+    "demir_cevheri": "demir cevheri vadelisi",
+    "dogalgaz": "doğal gaz, yakın vade vadeli, $/MMBtu (NYMEX)",
+    "eur": "EUR/USD",
+    "gb2y": "İngiltere 2 yıllık (CNBC), %",
+    "gbp": "GBP/USD",
+    "gumus": "gümüş, yakın vade vadeli, $/ons",
+    "jp10y": "Japonya 10 yıllık, %",
+    "jp2y": "Japonya 2 yıllık devlet tahvili getirisi, %",
+    "jpy": "USD/JPY",
+    "krw": "USD/KRW",
+    "mxn": "USD/MXN",
+    "nikkei": "Nikkei 225 endeksi",
+    "nok": "USD/NOK",
+    "nz10y": "Yeni Zelanda 10 yıllık, %",
+    "nzd": "NZD/USD",
+    "platin": "platin, yakın vade vadeli, $/ons",
+    "sek": "USD/SEK",
+    "soya": "soya fasulyesi, yakın vade vadeli, sent/bu (CBOT)",
+    "spx": "S&P 500 endeksi",
+    "try": "USD/TRY (CNBC, New York 17:00; ders USD/TRY'yi Yahoo'dan okur, bu yalnız kıyas)",
+    "us10y": "ABD 10 yıllık (CNBC), %",
+    "us2y": "ABD 2 yıllık (CNBC), %",
+    "wti": "WTI ham petrol, yakın vade vadeli, $/varil (NYMEX)",
+    "zar": "USD/ZAR"
+   },
+   "kapsam": {
+    "altin": {
+     "n": 6734,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "au10y": {
+     "n": 6419,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "au2y": {
+     "n": 6665,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "aud": {
+     "n": 6977,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "bakir": {
+     "n": 6718,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "brent": {
+     "n": 6864,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "brl": {
+     "n": 6973,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "ca10y": {
+     "n": 6571,
+     "ilk": "2000-01-04",
+     "son": "2026-09-29"
+    },
+    "ca2y": {
+     "n": 1619,
+     "ilk": "2020-04-01",
+     "son": "2026-09-29"
+    },
+    "cad": {
+     "n": 6975,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "ch10y": {
+     "n": 3514,
+     "ilk": "2011-09-20",
+     "son": "2026-09-30"
+    },
+    "ch2y": {
+     "n": 3464,
+     "ilk": "2011-09-20",
+     "son": "2026-09-30"
+    },
+    "chf": {
+     "n": 6975,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "clp": {
+     "n": 6968,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "cnh": {
+     "n": 3851,
+     "ilk": "2010-08-02",
+     "son": "2026-09-30"
+    },
+    "cop": {
+     "n": 6966,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "de2y": {
+     "n": 6766,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "demir_cevheri": {
+     "n": 2663,
+     "ilk": "2010-10-22",
+     "son": "2026-09-30"
+    },
+    "dogalgaz": {
+     "n": 6714,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "eur": {
+     "n": 6974,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "gb2y": {
+     "n": 6732,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "gbp": {
+     "n": 6975,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "gumus": {
+     "n": 6684,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "jp10y": {
+     "n": 6504,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "jp2y": {
+     "n": 6248,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "jpy": {
+     "n": 6974,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "krw": {
+     "n": 6975,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "mxn": {
+     "n": 6968,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "nikkei": {
+     "n": 6553,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "nok": {
+     "n": 6970,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "nz10y": {
+     "n": 6435,
+     "ilk": "2000-01-05",
+     "son": "2026-09-30"
+    },
+    "nzd": {
+     "n": 6974,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "platin": {
+     "n": 6235,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "sek": {
+     "n": 6972,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "soya": {
+     "n": 5452,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "spx": {
+     "n": 6727,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "try": {
+     "n": 6974,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "us10y": {
+     "n": 6689,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "us2y": {
+     "n": 6622,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    },
+    "wti": {
+     "n": 6713,
+     "ilk": "2000-01-04",
+     "son": "2026-09-30"
+    },
+    "zar": {
+     "n": 6962,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "cnbc_surucu/altin__GC_1_2000.json.gz",
+     "sha256": "b4f114089899e2a1ff57afb0923ee8bd91c82ce3ea9b2f37b27b0a3d19dc6212",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40GC.1/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:07+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/altin__GC_1_2005.json.gz",
+     "sha256": "be1c15980061b5cdc450cb7974d872e041098be1505366785845df653e02aca2",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40GC.1/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:07+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/altin__GC_1_2010.json.gz",
+     "sha256": "78d9f6f87654fa6b2e01115df88ab68e0ec90e545ff48d4f20aba57273243c14",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40GC.1/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:08+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/altin__GC_1_2015.json.gz",
+     "sha256": "1adc0bce3381d666205030cf3ba0b78c8b2561b09caf6e89dba48ca582e978a8",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40GC.1/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:09+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/altin__GC_1_2020.json.gz",
+     "sha256": "ab2b2df08c823a9d6cdfd65b556968bd2dd36ba65d2144ad3ff304bff8d34005",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40GC.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:10+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/altin__GC_1_2025.json.gz",
+     "sha256": "e131b99a04eb3a48b81811eb56adac8007532bbf037d0b895a7d70e62bfc31c4",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40GC.1/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:11+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/au10y__AU10Y_AU_2000.json.gz",
+     "sha256": "e86b8c4d3814499695d7dbda974e9ccc79f1e4c6e1b5a1599b773556bf43a748",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AU10Y-AU/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:58+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/au10y__AU10Y_AU_2005.json.gz",
+     "sha256": "84f9f4077cd3918002fd1fe7f64f52bd9691144e8a6e7a65567dd519ed8fa339",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AU10Y-AU/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:59+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/au10y__AU10Y_AU_2010.json.gz",
+     "sha256": "700860bb8bdba900671a00ab48fc2791b7e3a3526664c68cb5b9823a86406d7d",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AU10Y-AU/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:59+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/au10y__AU10Y_AU_2015.json.gz",
+     "sha256": "8c527d3b899bea76edde2cba12d86677eda1d02e4576c0a6302fce9d2c7893b5",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AU10Y-AU/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:00+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/au10y__AU10Y_AU_2020.json.gz",
+     "sha256": "41da84e527727ea9ae71db3af40cf1d6413b35a8334ed3251d3503ccae9fe895",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AU10Y-AU/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:01+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/au10y__AU10Y_AU_2025.json.gz",
+     "sha256": "9b5da269068098dfd7bc5cb7a8cd298889ab59d0a3d74c0f5eceb0015b9de3f8",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AU10Y-AU/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:02+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/au2y__AU2Y_AU_2000.json.gz",
+     "sha256": "43a603d29d7952a5f16604f09c9e903e935a0ec7b776ff5ab458ec251ee0ffdd",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AU2Y-AU/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:51+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/au2y__AU2Y_AU_2005.json.gz",
+     "sha256": "d1b07bff6128d3e9643a6bf09703a0dc363b9fd26c678f6bb6c12e5b3724aca5",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AU2Y-AU/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:52+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/au2y__AU2Y_AU_2010.json.gz",
+     "sha256": "04b682a725ff8b39861ff11602d5884829601a405a07352191acc53995fc5e9a",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AU2Y-AU/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:53+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/au2y__AU2Y_AU_2015.json.gz",
+     "sha256": "d3d4c8fb09b35b79d105f460a011a54b5ab158e79807df4ba47579a698c13ba3",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AU2Y-AU/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:54+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/au2y__AU2Y_AU_2020.json.gz",
+     "sha256": "6b348dd02b1e998c9123276b8ffc40b141677fef634fe0f068fc4158c1223f9d",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AU2Y-AU/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:56+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/au2y__AU2Y_AU_2025.json.gz",
+     "sha256": "5e633ab6db05485ccb24b0a3c8778f26d0cf784495ee5e7ecbd27f48a2b53115",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AU2Y-AU/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:57+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/aud__AUD_2000.json.gz",
+     "sha256": "b175e5e45a4a0a0bbbb96e2b48cda2ed018057f049d79db9f0680185ff6a6416",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AUD%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:53+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/aud__AUD_2005.json.gz",
+     "sha256": "2f6f6e0be12d3b503dfecea9f56d1d92b65a4254fe18bf45dba9965c8855857b",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AUD%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:54+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/aud__AUD_2010.json.gz",
+     "sha256": "0061a5cf68313b45f2c95032d99b8d5b7ddcc9baf4068e2904b6d41f4464f396",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AUD%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:54+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/aud__AUD_2015.json.gz",
+     "sha256": "00300c7dab15bdbb99040f943bbc58289de775e83e7be1dbff61397aab31700f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AUD%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:55+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/aud__AUD_2020.json.gz",
+     "sha256": "5a19feb31a77f49e84b572e753767073fb0a88aeee606198d76dd04791149bb0",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AUD%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:56+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/aud__AUD_2025.json.gz",
+     "sha256": "43b18c4e2598c9d067d57fe71ac3c74c225db9721e6726622f8da316d4b159b6",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/AUD%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:56+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/bakir__HG_1_2000.json.gz",
+     "sha256": "d90a1e0295db7ebfbfbc23b414ac370e04b850208f6a20147c5075b4ac0d61aa",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HG.1/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:02+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/bakir__HG_1_2005.json.gz",
+     "sha256": "8b1162f66aa827deaa51b0219352a6162ef10dbcb487aba2c1ea5dde77f30b2f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HG.1/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:03+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/bakir__HG_1_2010.json.gz",
+     "sha256": "0fa20e8e4c36a169ac5e78c7e4d9cbf23ddca97537842cace7f692632cc861f2",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HG.1/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:04+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/bakir__HG_1_2015.json.gz",
+     "sha256": "5dafd7a8b2900e545804cf6e5c65af5851585cc9983cf2175741887c6a571ace",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HG.1/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:04+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/bakir__HG_1_2020.json.gz",
+     "sha256": "433cb5692275f1b9a0ca8c4d8337ceab1bafdce358034a6690b6210e6739d1d1",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HG.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:05+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/bakir__HG_1_2025.json.gz",
+     "sha256": "9521afde93dd8e629ecb92360f182a6afa71a96ec8c8e90460fb5d0010994d8f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40HG.1/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:05+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/brent__LCO_1_2000.json.gz",
+     "sha256": "99ce15273282618c367e6d3d34dc398f992215e7685b593931580aca96021953",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40LCO.1/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:10:52+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/brent__LCO_1_2005.json.gz",
+     "sha256": "c0fcc3c5ef46e618ccf240265e9738568a3ad8ac1c3dae954cfcf693e3935c6c",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40LCO.1/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:10:52+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/brent__LCO_1_2010.json.gz",
+     "sha256": "91aaef528168711b7ca63b79ab22dd21f80d7fcf047a7934319bf3735caa4426",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40LCO.1/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:10:53+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/brent__LCO_1_2015.json.gz",
+     "sha256": "8c6f082fea67471885c51231e569982bed8ca5fbbae456252284b7038004dbdc",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40LCO.1/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:10:54+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/brent__LCO_1_2020.json.gz",
+     "sha256": "b03070b417d06df9a77c685c9c15fb8a08d92d9fb5a4a32a2547ba9d17a5abc4",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40LCO.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:10:55+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/brent__LCO_1_2025.json.gz",
+     "sha256": "17d180b1a0b193e0d8b45bee649cb5ab4182d52987052ec9d87e10af4955a78e",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40LCO.1/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:10:56+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/brl__BRL_2000.json.gz",
+     "sha256": "9952d192117eb5ac269dcbc36a894f7438cb61a36bc83984c19f415bb735eb0d",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/BRL%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:27+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/brl__BRL_2005.json.gz",
+     "sha256": "e571f74ee97921e8a4d3e3f9d3ac80f2125171cd0b59f325a9d476c1532770e7",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/BRL%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:28+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/brl__BRL_2010.json.gz",
+     "sha256": "aebe6c1b3919e38a7f3085fd095edefe5748e11ca6ccdb2323c9f6e941862dff",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/BRL%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:30+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/brl__BRL_2015.json.gz",
+     "sha256": "a86df3fa3588f724b5101c9346bc89cf14cbfab2178340f8f7a9650bde704353",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/BRL%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:31+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/brl__BRL_2020.json.gz",
+     "sha256": "d0fcf8a43d576881d93335bb8b0cce41079cfdd29cfea98940b3d5e034350cf3",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/BRL%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:32+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/brl__BRL_2025.json.gz",
+     "sha256": "ca68175724d4db9b732dbf56c6eb23b5218ab56ddedafe408d3184e6528a9a0f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/BRL%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:32+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ca10y__CA10Y_CA_2000.json.gz",
+     "sha256": "09cb439bd53bcea6ce953d4ce303259cae22d95e4fc4582d134d07a58cbded08",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CA10Y-CA/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:09+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ca10y__CA10Y_CA_2005.json.gz",
+     "sha256": "ec24417ac5cc24dd89f5202daa31de76a6f1564d268b8f2501588d482ff9b6b3",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CA10Y-CA/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:09+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ca10y__CA10Y_CA_2010.json.gz",
+     "sha256": "28bc9104b1f44396e276c690b022b51f3887ba7392ea4d3c6ec7a26d2317de84",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CA10Y-CA/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:10+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ca10y__CA10Y_CA_2015.json.gz",
+     "sha256": "d4bfcb2364ade910baa2db76139f67e165f93c0440acb2cc4e8c378090c0d21e",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CA10Y-CA/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:11+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ca10y__CA10Y_CA_2020.json.gz",
+     "sha256": "25b17f65d3a3e7c23e979118fd120e5aa31df14eb1cf6265cf0f4de36c4144d0",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CA10Y-CA/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:12+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ca10y__CA10Y_CA_2025.json.gz",
+     "sha256": "157fdf4d2588b892d3446297e2eca55f3fb85568bc15f892262a7e39a834cc86",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CA10Y-CA/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:13+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ca2y__CA2Y_CA_2020.json.gz",
+     "sha256": "f6c238661c651ce162f428fab87e4f03e241d6d908098c5174563389bfe6f075",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CA2Y-CA/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:07+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ca2y__CA2Y_CA_2025.json.gz",
+     "sha256": "8cc7e5a52314ddb0bf89fd4031c088117fccf29ff304065e9fe6d9961c7fc1ff",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CA2Y-CA/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:07+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cad__CAD_2000.json.gz",
+     "sha256": "86dc64378276fecae844b3cc6e7c1d577d8980c84358b236250669fbb1cad839",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CAD%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:58+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cad__CAD_2005.json.gz",
+     "sha256": "c7c18c3cbf4651c8bdc686926129b4855c380d104b7195dad537614486bcaa1f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CAD%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:59+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cad__CAD_2010.json.gz",
+     "sha256": "c0922ed556fdb4949adcf2bda325130a7795c5e9cc6e2acb763a682f315b8023",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CAD%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:00+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cad__CAD_2015.json.gz",
+     "sha256": "1044f19030b7f1a3b5227798db0f906ef66263201cffcf16870d031ecb2a1cca",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CAD%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:01+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cad__CAD_2020.json.gz",
+     "sha256": "c4b47511644e18ca380d2d4e1c90236fb09926766798e33aa478060713c2ba3e",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CAD%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:01+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cad__CAD_2025.json.gz",
+     "sha256": "4d5f9b0325dc132a3bf4925ac42a53732021da6311cc19cc928bbcb7c160b121",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CAD%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:02+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ch10y__CH10Y_CH_2010.json.gz",
+     "sha256": "f8379108e1683e849b1b828974e50186fc64d3afbba38bbbb4e947880808f29f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CH10Y-CH/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:18+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ch10y__CH10Y_CH_2015.json.gz",
+     "sha256": "05e5bae214b2a6804d9e61af1d99a4c58524829169b1d9566f46e66e829a6375",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CH10Y-CH/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:19+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ch10y__CH10Y_CH_2020.json.gz",
+     "sha256": "236f49c9ab79969f9864419f0c279956c45194f8b8f659e8da440fb10b3ffa07",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CH10Y-CH/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:19+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ch10y__CH10Y_CH_2025.json.gz",
+     "sha256": "e484737f570380eca4e88ff4115d0314c6dc0de2a37b9c4635f992882b2ef961",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CH10Y-CH/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:20+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ch2y__CH2Y_CH_2010.json.gz",
+     "sha256": "548547d14c23e03f87801c83cc013e95ffd4e724fa020d5a4d2a13eaacf858d5",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CH2Y-CH/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:15+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ch2y__CH2Y_CH_2015.json.gz",
+     "sha256": "092052898aa3e8bb6fc0294469190a41c2003958b9e05ac63f07a2f3397d1ed6",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CH2Y-CH/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:15+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ch2y__CH2Y_CH_2020.json.gz",
+     "sha256": "ed9a5edab7b37e469f9647758a21b1360fe82920f527b0c0ec7e55af447ddcb2",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CH2Y-CH/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:16+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/ch2y__CH2Y_CH_2025.json.gz",
+     "sha256": "1000a8db55a4c8360e1b4a738b1d6a348b6feb3dc0535e9cadad02921b65ac99",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CH2Y-CH/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:16+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/chf__CHF_2000.json.gz",
+     "sha256": "2c5d23052fcf48c111d0fdd7dd4d373dbf46f3e4f0c24cb6b264ac826530ad0f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CHF%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:09+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/chf__CHF_2005.json.gz",
+     "sha256": "4217e7bcf891e0c4539ffefdcc27f367968d681c092b6602160379f6e7b79005",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CHF%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:09+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/chf__CHF_2010.json.gz",
+     "sha256": "9bf27715dbfc1d33507ae0bde2d276dc0e5d34e5f8fa9141fced63502efeb847",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CHF%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:10+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/chf__CHF_2015.json.gz",
+     "sha256": "e1f42793287ba8af441f0ff53f1d4ccb9127510dcb39e278f90933bf8c8abbb8",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CHF%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:11+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/chf__CHF_2020.json.gz",
+     "sha256": "508986819396ef24ba3eceeea87d50e28c73b6d1fadfbcf52dc66dc62e754237",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CHF%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:12+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/chf__CHF_2025.json.gz",
+     "sha256": "e647bdd85b9dd625d16cab697cb8d9a041e93c8ae062fd1e3013b18d1adb35ad",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CHF%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:13+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/clp__CLP_2000.json.gz",
+     "sha256": "aaa236d90367e4f9a8f15512b268b155f38c93689108f9f0f41f6954d010d193",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CLP%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:05+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/clp__CLP_2005.json.gz",
+     "sha256": "dbf65a51540b3674ebddae0e9c55dfcc71afba6b21df5489b9c384abf134383c",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CLP%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:06+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/clp__CLP_2010.json.gz",
+     "sha256": "69eb835f0c0089da2a0393b099c44d2913af2e2606924c4e2f66ebfcee003232",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CLP%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:07+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/clp__CLP_2015.json.gz",
+     "sha256": "b6545ae7cafb58a3a237e6e5e50c179a193e80c09dc82bc0819972379aae6e20",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CLP%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:07+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/clp__CLP_2020.json.gz",
+     "sha256": "6cbb040d6d9f3a37e6fe7e72e3d016aedb9cf5280d3310fd5e773cb4155ea905",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CLP%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:08+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/clp__CLP_2025.json.gz",
+     "sha256": "147f530f83147b42a31a743935abb20965b0e8f3da432ca0021dc6f6b224cd82",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CLP%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:08+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cnh__CNH_2010.json.gz",
+     "sha256": "159e262244a498c87bafb2d0f0a7402b8fd2b05bcbe21b98ef84348c7390f86c",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CNH%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:15+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cnh__CNH_2015.json.gz",
+     "sha256": "e5ce8cf82a1f37242ca14ceef7c2474ee6640d67ba724d0a40e69df491472688",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CNH%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:16+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cnh__CNH_2020.json.gz",
+     "sha256": "af2cbd88cd5dad76288914728e9741ad83f09a34cd620bf450a46c577fa5d303",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CNH%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:16+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cnh__CNH_2025.json.gz",
+     "sha256": "f8299e05ea699bdfb5f8a7d87f4e2fa7290651ee05a94fee45da583b258a0faa",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/CNH%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:17+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cop__COP_2000.json.gz",
+     "sha256": "5e16ff0314a536c76a091be85ce9fe29df6dd3866349cfb00e9ac4ccc342464f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/COP%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:09+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cop__COP_2005.json.gz",
+     "sha256": "50af9f920ced22453aa6c48b12a26aefb4f1ad2eea1577acffb4fca2e53010db",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/COP%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:10+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cop__COP_2010.json.gz",
+     "sha256": "ceafe036941e79962c76574e767561df295f7116d1b8c59a0615e0d73ea77892",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/COP%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:11+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cop__COP_2015.json.gz",
+     "sha256": "b28ae8368fe01e1ebe3b2d93d1a1459425a400dbdacee932c449d4a04a23c93b",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/COP%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:11+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cop__COP_2020.json.gz",
+     "sha256": "759dd17d1b4be2d2ef6debfdb381ba49b70e790a2dc87c04aae9d06924b84799",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/COP%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:12+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/cop__COP_2025.json.gz",
+     "sha256": "984eda368867a8ca7d4b2be707178c2b4aea9be4b61229268bc2664c9407a4c2",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/COP%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:13+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/de2y__DE2Y_DE_2000.json.gz",
+     "sha256": "ddcd9e01c5c4507819445ac743c3c6663d0e6394afa5a57e25e3dcc2cc4135de",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/DE2Y-DE/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:38+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/de2y__DE2Y_DE_2005.json.gz",
+     "sha256": "3703040d6f5d6395c611120d1348626e2594f7dfe5c2c3b44a553eb5a0186160",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/DE2Y-DE/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:39+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/de2y__DE2Y_DE_2010.json.gz",
+     "sha256": "7bffcae051ddd2e00842eca194aaf9429d4485d27d48b847f9fc1b89e5f658cd",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/DE2Y-DE/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:40+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/de2y__DE2Y_DE_2015.json.gz",
+     "sha256": "c93c6e8b65a9c71a0bf3a7435342230bc2bece9b0196fe0fafc40a0c294ec40d",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/DE2Y-DE/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:42+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/de2y__DE2Y_DE_2020.json.gz",
+     "sha256": "70f883c2c6a12cda2421fca30ef7c4d71d1495554065edf75b639f910a6de6a1",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/DE2Y-DE/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:42+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/de2y__DE2Y_DE_2025.json.gz",
+     "sha256": "fad8098784029c2357c44942793efb7c89a2be7367e7734306ee6afc27e6ac4c",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/DE2Y-DE/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:43+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/demir_cevheri__TIO_1_2010.json.gz",
+     "sha256": "52caa4317df6264c58b516d62495533e5b9577d32afc200023cc5e9c6d1bb600",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40TIO.1/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:37+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/demir_cevheri__TIO_1_2015.json.gz",
+     "sha256": "57fa628f8299cbbf9c9205246c52750aad9a9c95ff535c1014bfbdfae70cd1af",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40TIO.1/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:38+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/demir_cevheri__TIO_1_2020.json.gz",
+     "sha256": "8deaf8da1ebc12cd2159110d7c12e942ca197d09c83c91c62dffadd0d1685656",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40TIO.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:39+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/demir_cevheri__TIO_1_2025.json.gz",
+     "sha256": "31383c8da615553debf445f87c178d71db9a75c1b7892d70be997154ebf8c1d0",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40TIO.1/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:39+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/dogalgaz__NG_1_2000.json.gz",
+     "sha256": "b4ed971dfe96ed3a5513cc73e3aa25f74e4ba8fb504a3ea23b3e952a1f1d17f3",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40NG.1/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:24+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/dogalgaz__NG_1_2005.json.gz",
+     "sha256": "1964357001cada99d84293d3c7e58dfdfea525b4595591676bfc27cb6f9c1ba5",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40NG.1/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:25+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/dogalgaz__NG_1_2010.json.gz",
+     "sha256": "a5432a70798d1d28f4bc663c0fcce4f74cf5253e92b5174cb73e7407b0621b6f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40NG.1/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:25+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/dogalgaz__NG_1_2015.json.gz",
+     "sha256": "6f43ad7add90933e9bc1b4febea6ad366c473b105078ae5b14db25da0275037a",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40NG.1/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:26+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/dogalgaz__NG_1_2020.json.gz",
+     "sha256": "e4466f9d116e623f7b21ae50ec1b2946f19e53ab3af50b87b3776c846f0c9cb1",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40NG.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:27+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/dogalgaz__NG_1_2025.json.gz",
+     "sha256": "661e888b97f6c990f18f044c1ea56b5cbfbbe3a2953ea9e97fe1a2fa000dcc3b",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40NG.1/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:28+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/eur__EUR_2000.json.gz",
+     "sha256": "829cd6723d97765e59532fedac23475fbc50a19539a94f0990a1283815d01a21",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/EUR%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:48+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/eur__EUR_2005.json.gz",
+     "sha256": "46a96c030432f57bd8b60b8f652a274d109b422075c7dafa7e16d99b7914d082",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/EUR%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:49+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/eur__EUR_2010.json.gz",
+     "sha256": "605b1b81a682c965c8eaf0248418796e4f1eaa9ddc801e095c26060201147178",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/EUR%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:49+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/eur__EUR_2015.json.gz",
+     "sha256": "c8520661698b895967fb7cbc026f25cf9fa472be07b2bdc0eae5f6f93b243157",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/EUR%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:50+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/eur__EUR_2020.json.gz",
+     "sha256": "f6820b87cde2611fcda167323411b119fd8ebdef7b1067471c3317bb49f59e06",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/EUR%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:51+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/eur__EUR_2025.json.gz",
+     "sha256": "d134e33ae2e0317f81998cf00f859700f820920c3980485bdb7f4106b66e4f03",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/EUR%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:52+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gb2y__GB2Y_GB_2000.json.gz",
+     "sha256": "1514485d7f0a2c7b9eeb270b6b1c27722799d5de65b3fc223cd83aaec064a459",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:45+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gb2y__GB2Y_GB_2005.json.gz",
+     "sha256": "775142d2fe0689e1217eda0104318cda2ab916ae07f1b44b71b35c8f87600837",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:46+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gb2y__GB2Y_GB_2010.json.gz",
+     "sha256": "14544123ef3cdc717e74e72d7f2293fecb7445829511f566923ca7154704bb22",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:47+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gb2y__GB2Y_GB_2015.json.gz",
+     "sha256": "7647420992124a0088a7ccd935c743079d75ddcbe34c31e8d418038135d1ec11",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:48+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gb2y__GB2Y_GB_2020.json.gz",
+     "sha256": "23902126cc76f34ba2e5979b3939c6b5e1e25c96bc153a42c4b16bd62cdd56f4",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:49+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gb2y__GB2Y_GB_2025.json.gz",
+     "sha256": "7e0be2ae81dd2dcc4df4ad6fb7e5dabe7b544b0895e767bf3b51f6997e2aecb1",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:50+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gbp__GBP_2000.json.gz",
+     "sha256": "4cf20b98ed7b41c367be65d77ae81d07c43936e64f05db0a5fe4d44117fc8b47",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:03+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gbp__GBP_2005.json.gz",
+     "sha256": "712b980a4d42f46d6964a890fb86acaf776d2103c618e5556f2f3ef8e61e457e",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:04+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gbp__GBP_2010.json.gz",
+     "sha256": "7e8700493a52cb69166848fa2916a1d14ddeb8be5353729e5d400c3a3827a6c7",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:04+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gbp__GBP_2015.json.gz",
+     "sha256": "ad900f894a255d72ef8031c86f80057b2ffdf32a81f4b6ee1f086ff45e4eb0c8",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:05+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gbp__GBP_2020.json.gz",
+     "sha256": "c5c9b612cc7ca9feef7ad0ae6eb168ea3e106ffb42a2c7a35a7e2c1fecb6c806",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:07+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gbp__GBP_2025.json.gz",
+     "sha256": "8cbb91b6e6cfd559e5fb9971f9743fa97137c78ffcab3f0dab4ca00f2003c200",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GBP%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:08+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gumus__SI_1_2000.json.gz",
+     "sha256": "ae4e639d6c2fe89983de0a3e720a41f264690fb874d2e5e5529995d26f52a3fd",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40SI.1/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:12+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gumus__SI_1_2005.json.gz",
+     "sha256": "8e26e067c9c89dea67bafd13ad721d1d775254e685d892421cff6dd3fb321b0d",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40SI.1/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:13+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gumus__SI_1_2010.json.gz",
+     "sha256": "f06956b0f3390c2d1918d37bc82fa102b0c27d8dde940abc517b3058ef713c08",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40SI.1/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:14+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gumus__SI_1_2015.json.gz",
+     "sha256": "695ef58c77fae67383e6df581268575a07596f7b7cb0f5d014ae482d73d392df",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40SI.1/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:14+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gumus__SI_1_2020.json.gz",
+     "sha256": "f6376c8c53a8ed317884398bbc2cf3f3730a7b769688d29ddaf4e41a6f9c9516",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40SI.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:15+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/gumus__SI_1_2025.json.gz",
+     "sha256": "781fb88eca6785b7bc074f0d8434e9b283c80bfd7584f1ab222073c1497f1004",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40SI.1/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:16+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jp10y__JP10Y_JP_2000.json.gz",
+     "sha256": "f33386dfb6df5ef5bd4a23410ff57bb8930d2f94c23c9ed0c3b7719881a2d684",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JP10Y-JP/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:45+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jp10y__JP10Y_JP_2005.json.gz",
+     "sha256": "2daaf85fef7cbad85f4d2ea55b809386fe9b16d7b7b4b05ff626e436b4a5f708",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JP10Y-JP/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:46+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jp10y__JP10Y_JP_2010.json.gz",
+     "sha256": "5573018f2f70a3d3939417e921d9b93b406aa51a23b3bc95666d8d02166d80ba",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JP10Y-JP/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:47+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jp10y__JP10Y_JP_2015.json.gz",
+     "sha256": "037dd1d5078f12fb7d6edb29c9c98e14045ca2c852705fe715e5b50a51efc35c",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JP10Y-JP/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:48+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jp10y__JP10Y_JP_2020.json.gz",
+     "sha256": "3bf6000e29615d8b12b4dd75eac6350395277171246204d09283f3f335930d3f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JP10Y-JP/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:49+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jp10y__JP10Y_JP_2025.json.gz",
+     "sha256": "1ec909ec2bd7f63a8dc0f90059e015225f99ae491ef44c50cf02310e85a5c422",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JP10Y-JP/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:50+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jp2y__JP2Y_JP_2000.json.gz",
+     "sha256": "9c7a28934347ea7faad83e7cc45a01667208477ee9f5d7f6c73c381cd720ac37",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JP2Y-JP/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:40+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jp2y__JP2Y_JP_2005.json.gz",
+     "sha256": "1ebe4cd7541e38a8af4e6d515497be2aa1130d796c537e80372dc139af7e5722",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JP2Y-JP/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:41+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jp2y__JP2Y_JP_2010.json.gz",
+     "sha256": "4a357c1a6fdeb5e3f18d0261cc8e76625fcfb6e0cc1a35032ae1d532b69b896a",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JP2Y-JP/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:42+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jp2y__JP2Y_JP_2015.json.gz",
+     "sha256": "f4f4a71aa9b30590d002cb6c22a0621d33d6138c9c9fbe508f42a17184b9bd7f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JP2Y-JP/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:42+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jp2y__JP2Y_JP_2020.json.gz",
+     "sha256": "f150b97a32505b6b384ca33b19c17873c61fd26acb9850946181945b7ea6fbb5",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JP2Y-JP/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:43+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jp2y__JP2Y_JP_2025.json.gz",
+     "sha256": "43553f0e04dea76b56e1f974ada1139620bf1771b6166ffbf773e4eb89ff521b",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JP2Y-JP/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:44+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jpy__JPY_2000.json.gz",
+     "sha256": "002166f46ad024504c7a35573f72606a2562f5ebc63e1efa0e989e76dd49671c",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JPY%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:43+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jpy__JPY_2005.json.gz",
+     "sha256": "8471e62e31cdb87091f39961665f0bce2e7584da7b668453adec4ddc6d19577e",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JPY%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:43+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jpy__JPY_2010.json.gz",
+     "sha256": "497b2bbe398450dc1bb0b896c411adc821d7257c8bd52b374e1e832ffc8daf82",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JPY%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:44+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jpy__JPY_2015.json.gz",
+     "sha256": "c69ec63a9eda989900afee0f5ef8e09ae2fc9e116080dc894ed816a4ad5df051",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JPY%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:45+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jpy__JPY_2020.json.gz",
+     "sha256": "ff6be858be2c7854be06032e62bd0d2d80a95d463abcbd61c7444ba9385c9e70",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JPY%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:46+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/jpy__JPY_2025.json.gz",
+     "sha256": "5065eaa2ad71d9370e362a154304350469ce3d603ac672aa2eb9cb7c8cf7be98",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/JPY%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:46+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/krw__KRW_2000.json.gz",
+     "sha256": "390f4d4a118daa0b4d1120393ad1fc7b7cd758ba0231e293dfe17483b485566a",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/KRW%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:18+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/krw__KRW_2005.json.gz",
+     "sha256": "a46e6e00c77d783cbc5948e5fdd5d05f886e3364623193a8be5e4f655597d47a",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/KRW%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:19+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/krw__KRW_2010.json.gz",
+     "sha256": "7ade8192d8053f8ffb8bfdf8e4af9badb7f69db1cab961cefdc75e223082bc6d",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/KRW%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:19+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/krw__KRW_2015.json.gz",
+     "sha256": "927599267c97f0c62be5920b11a0752981d3c2d00ebbd22ae212f332d1cfbc28",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/KRW%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:20+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/krw__KRW_2020.json.gz",
+     "sha256": "1db8264cf2aded4e0481b0c9cb46bdf34996fffcb0633f6009357175bdc61a11",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/KRW%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:21+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/krw__KRW_2025.json.gz",
+     "sha256": "71c8b53356fa701b49f64295b81d4e7c51255f8fafe12e408363c766848df3d2",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/KRW%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:21+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/mxn__MXN_2000.json.gz",
+     "sha256": "e2d9932aa6765a31ca1a074aa24c6741cb623b9612747c83819c8720bf03a02f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/MXN%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:33+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/mxn__MXN_2005.json.gz",
+     "sha256": "81b1a0084091668781217953e2cf7560f709ecd39afceb801da7c1786ee20aec",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/MXN%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:35+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/mxn__MXN_2010.json.gz",
+     "sha256": "a995b30fd0b15daa62e054f6621419b4167d141a196189111182886f0cef5c7a",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/MXN%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:35+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/mxn__MXN_2015.json.gz",
+     "sha256": "77a0c15c4bbf36a825075c1726f56300698d11f7ac7d68a976891c101186a6ac",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/MXN%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:36+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/mxn__MXN_2020.json.gz",
+     "sha256": "30c2c3fbb68a0675369f709025b8eb5c41b5057f687a6d3863cdd786d976aed0",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/MXN%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:37+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/mxn__MXN_2025.json.gz",
+     "sha256": "9212405151697a6e3993c828661c2a06f861b32e121c4595141bac4ca56b2c9e",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/MXN%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:37+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nikkei___N225_2000.json.gz",
+     "sha256": "b48703c6026301710fdbcc8de44f5d711003d83593c56d712fed39c5fad473bf",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/.N225/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:19+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nikkei___N225_2005.json.gz",
+     "sha256": "750c5fc4b6cbfcf8f81743e1d20f5dcb1440e815841d0b80ac397d3110ab1c03",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/.N225/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:20+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nikkei___N225_2010.json.gz",
+     "sha256": "2b0fb9f4a9a337881825da0a88268c497f573e646efac535b2485656a7bda6e7",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/.N225/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:21+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nikkei___N225_2015.json.gz",
+     "sha256": "18496ee9f4b2ea1ae45c5d01269a2ee446f5e6bfe0230f755dea92b2384bf360",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/.N225/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:22+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nikkei___N225_2020.json.gz",
+     "sha256": "e794dbc1828f926a79bab58ab43908c6b2747ba62d69b961a1d58d8aa44df514",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/.N225/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:23+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nikkei___N225_2025.json.gz",
+     "sha256": "0028d18c00af35f25af8db4c22fd95a2226b03bdee525b767a2be5d1c5220fc7",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/.N225/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:23+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nok__NOK_2000.json.gz",
+     "sha256": "f5ac5299082a8158512bac08116ff4af184ef64024ef8d435e8b082236e67369",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NOK%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:57+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nok__NOK_2005.json.gz",
+     "sha256": "f6c307d432db5979723f302ba15580c731a72f8bd10a74ffa8d0b849288bf85f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NOK%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:58+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nok__NOK_2010.json.gz",
+     "sha256": "5010e0665634ab1d6ccefb8cde88837a5722ebf622155ad990f9044743d23242",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NOK%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:58+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nok__NOK_2015.json.gz",
+     "sha256": "ac0bd93cb1353e8d4ad42aa183fb3799bc38dab587d2b3b3b2cde77e4abc3181",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NOK%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:59+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nok__NOK_2020.json.gz",
+     "sha256": "a9e0f47cde79b947fa9f84fda47b35ae07978cdec42821b63f14c0b04718caa9",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NOK%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:00+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nok__NOK_2025.json.gz",
+     "sha256": "5b1e725abc730dd8e1c89cc65322101c9065a80a6d74f797b8e45ee07bdbe7a7",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NOK%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:00+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nz10y__NZ10Y_NZ_2000.json.gz",
+     "sha256": "60c12b7b9aa03b0b62a054e23adba3b9197b94f04a0050feae15bd7b055964a7",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NZ10Y-NZ/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:22+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nz10y__NZ10Y_NZ_2005.json.gz",
+     "sha256": "f3b15cb4e27c1854a622b5d19625b85c54031871e7c1ef3bd67b18c6020f7d56",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NZ10Y-NZ/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:23+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nz10y__NZ10Y_NZ_2010.json.gz",
+     "sha256": "15f2f2f1d79d803fa824feefc332880b8e154ea0c117410d416f34195cdf3885",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NZ10Y-NZ/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:23+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nz10y__NZ10Y_NZ_2015.json.gz",
+     "sha256": "65dc49f9a564ca9dc8dd132c5b7f26f5816e786f440bf48a6374a911356e73aa",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NZ10Y-NZ/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:24+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nz10y__NZ10Y_NZ_2020.json.gz",
+     "sha256": "904156975488564800f85be72db2784cf31777282436b368a5893b3229dd8408",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NZ10Y-NZ/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:25+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nz10y__NZ10Y_NZ_2025.json.gz",
+     "sha256": "65aa0487f87a5ed1dcae511a86b660558f4bf5ec0d5a412d427bb7761ba342c3",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NZ10Y-NZ/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:26+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nzd__NZD_2000.json.gz",
+     "sha256": "8eb962a55f07b10c94062582be67538a59ea47e92d221cfa15e9f7a988ab9731",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NZD%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:51+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nzd__NZD_2005.json.gz",
+     "sha256": "8d9ec88b5f4851976bdb0ae495497aed27fd8b89a8765e49c209d87602e6611d",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NZD%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:53+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nzd__NZD_2010.json.gz",
+     "sha256": "076413500ff37a105e748811fa75eee5460cec7c4dd985a332ba421be35984bb",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NZD%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:54+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nzd__NZD_2015.json.gz",
+     "sha256": "773c8c55965764191f7cd876f77ff15f0fc6a77fd7169b7cdb9a8cacf64cdf3b",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NZD%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:55+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nzd__NZD_2020.json.gz",
+     "sha256": "ff8fc09477dbed18fc862a35ca553ce2838144f5339f5cbb604aeb5570e93bb1",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NZD%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:55+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/nzd__NZD_2025.json.gz",
+     "sha256": "165365971ef8fe10484c991fbebfa08c89ff63483ef600d9d35a1027cc88b09f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/NZD%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:56+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/platin__PL_1_2000.json.gz",
+     "sha256": "e2fa37d81f8778ae80ec90eaffa7d198e22d14d4d383d6ae3287036e165a37fa",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40PL.1/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:18+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/platin__PL_1_2005.json.gz",
+     "sha256": "921535b3c47491cb1c350f1d9c7699d4a397d4e8d3864bcaa94d38358cfbc25b",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40PL.1/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:19+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/platin__PL_1_2010.json.gz",
+     "sha256": "b6343f017201fc829e0d93353b6fbd28fc396c8f0385c35b92861a252dcccec3",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40PL.1/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:20+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/platin__PL_1_2015.json.gz",
+     "sha256": "41a2f9bf11b5b5fbd8b0fa05534f792705f2558b5cf6360fb70665b7161b415f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40PL.1/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:21+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/platin__PL_1_2020.json.gz",
+     "sha256": "0e822dbeb6481ebb20aec0bae5509018fe9351f1ccacd19dd57e3240f28bc7f5",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40PL.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:22+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/platin__PL_1_2025.json.gz",
+     "sha256": "7be5776ed5d58a3d844e75067f643eddbd90bd248be7d3858780db1b84b7657c",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40PL.1/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:22+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/sek__SEK_2000.json.gz",
+     "sha256": "5b82d7755dde2630f9810e70569e049499cb75bc42d4f0ffea43eeb0c4f397cd",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/SEK%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:01+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/sek__SEK_2005.json.gz",
+     "sha256": "7e689a1567c20f3fe1067811e79d4a661f35775df15e1f47dc38110c0dd35549",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/SEK%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:02+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/sek__SEK_2010.json.gz",
+     "sha256": "c061a48284fa6fa74fc4a56a6619c9d6bc774030e673ba2912c2cac1bb136b71",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/SEK%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:02+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/sek__SEK_2015.json.gz",
+     "sha256": "67c4857cf5b8867dd86d3cf4bf8fed508bcb3917e66c5e965866946ad870c63d",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/SEK%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:03+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/sek__SEK_2020.json.gz",
+     "sha256": "3fb37f867abc33e6315b607766249cf7e15e5324e5d146686de402f5f471494d",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/SEK%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:04+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/sek__SEK_2025.json.gz",
+     "sha256": "725af4a6b770f728c1c0ff4ebd61bb7eb587d134b2ca5ec0905d8c96060c3145",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/SEK%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:04+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/soya__S_1_2000.json.gz",
+     "sha256": "a5eac7ea621d10dbaa92a81f6dd7bcd55f71f23d641d0692186efdad92d0e622",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40S.1/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:29+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/soya__S_1_2005.json.gz",
+     "sha256": "be2772112f6b4682189c0c3ea5550b848955476d5d02e57a6b5bf6e45843f302",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40S.1/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:31+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/soya__S_1_2010.json.gz",
+     "sha256": "c7215b90ef7f796da1798f6a952215b3b3170c419f5ef0a818fd26ad8e926451",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40S.1/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:32+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/soya__S_1_2015.json.gz",
+     "sha256": "d688147ce53ac48245950c09d88130e2c45b039a5e80c190b39bc895186a0962",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40S.1/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:33+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/soya__S_1_2020.json.gz",
+     "sha256": "5c7aba1edf583ef2e0d7c40677cb73678596bf878f539165da3668b14c6118ca",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40S.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:34+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/soya__S_1_2025.json.gz",
+     "sha256": "6dcb42b9ac10bf2c255183eb3d7c669ff308126aec9ffffcf56ef66769af7f95",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40S.1/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:34+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/spx___SPX_2000.json.gz",
+     "sha256": "f26ca6954198bdfc03b7c90ea503c6eb55f7596afbdb17b6d87d98311e7dc996",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/.SPX/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:14+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/spx___SPX_2005.json.gz",
+     "sha256": "aec1d29a7d865436b17831c97ce0089876f130b7aa3baf7fdd41e9b5a1ab351b",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/.SPX/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:15+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/spx___SPX_2010.json.gz",
+     "sha256": "9ced06970d13b0bbbcb83516e45fe6d90dbbeff23ce281ba5a91138d6ce05936",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/.SPX/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:16+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/spx___SPX_2015.json.gz",
+     "sha256": "5ece815cac3e64bfdce64d10c2a12b616446f68fa10fc3cada98d26e0d32d6af",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/.SPX/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:17+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/spx___SPX_2020.json.gz",
+     "sha256": "1caaefa38457f6119e29acffcdc1f028bc1b46593a3b74123a5c83d7edecba34",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/.SPX/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:17+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/spx___SPX_2025.json.gz",
+     "sha256": "e0d66c8b1bd591e6657ddd27557b3b338acf0549ece403438522c5b7ebbfd1b8",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/.SPX/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:14:18+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/try__TRY_2000.json.gz",
+     "sha256": "9e9f0deefb0a7c33bd872f00acd2db4361fe5c8ed11f611fccb4befb3d8de949",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/TRY%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:38+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/try__TRY_2005.json.gz",
+     "sha256": "5e4dad8260b81f7f236765050dddb708f9c917c1df29d26467fead40e3a2fcc3",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/TRY%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:39+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/try__TRY_2010.json.gz",
+     "sha256": "a764b290246ce4a70eef3c94b71d8a8b766a81994bfbad36e8de7210162da1e5",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/TRY%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:40+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/try__TRY_2015.json.gz",
+     "sha256": "d9b4285df5e448cb9a38e4c70e0f05f584c0df81e502b7b5957192b6c4971245",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/TRY%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:41+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/try__TRY_2020.json.gz",
+     "sha256": "9d70ea1768b2aa91c7661283a3a7a2da571a5b0bf12754ef6be76cdcd4d07ee7",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/TRY%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:41+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/try__TRY_2025.json.gz",
+     "sha256": "685c15f03dd229f06b11b29970d254507ea6209caaea0cc03a07585c11cd0604",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/TRY%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:42+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/us10y__US10Y_2000.json.gz",
+     "sha256": "b4d924b8d75b99601e5392f08eb90273f5341a7b20fcc07f1de8fe54ce73c0c3",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/US10Y/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:32+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/us10y__US10Y_2005.json.gz",
+     "sha256": "361239f43a1d891db6441a367bce2eb8310693648061b9115459e818328d1d01",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/US10Y/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:33+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/us10y__US10Y_2010.json.gz",
+     "sha256": "64fd182bf2bbf2570fa9caff667b4bdf774139f503dec06e264724894ebed28d",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/US10Y/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:34+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/us10y__US10Y_2015.json.gz",
+     "sha256": "e3f5fde64caa2b908e3eae7775017244aa15883559131e7089718bb7e58e6d63",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/US10Y/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:35+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/us10y__US10Y_2020.json.gz",
+     "sha256": "e9693e17bc6af38ddfe3f9180c5e6aa8b92a4145e67aa4735127a131af000db3",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/US10Y/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:36+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/us10y__US10Y_2025.json.gz",
+     "sha256": "a14d6fba4e717a350563aaf50b52da177e564567bd7b1511ac756961365b2c1e",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/US10Y/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:37+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/us2y__US2Y_2000.json.gz",
+     "sha256": "c339739096f03cce07f3191a3d72ce465fae425ec947e95edf7753150c420f3f",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/US2Y/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:28+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/us2y__US2Y_2005.json.gz",
+     "sha256": "c52383cfe1e5c238cdd902c698a8100946e40bf9de0f5a5c2c873415a90ccc5a",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/US2Y/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:29+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/us2y__US2Y_2010.json.gz",
+     "sha256": "5d4f381b9e20b412378ec1f24120e25866e876e6e9b6ed8b9de9c2fb0b75bd64",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/US2Y/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:29+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/us2y__US2Y_2015.json.gz",
+     "sha256": "4b5a26cd4531f35f20dc217ac9f71a1135227a8036ab62818f003678b10b05fe",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/US2Y/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:30+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/us2y__US2Y_2020.json.gz",
+     "sha256": "55eddbf2022c22c81ac289eb6b16933e1627d22d99883e66ff04b4504a5b7758",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/US2Y/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:31+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/us2y__US2Y_2025.json.gz",
+     "sha256": "0b1c871ac1aab8cb705367575057a4e0566fc473e68b7467cf082f1e13ddc94e",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/US2Y/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:12:31+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/wti__CL_1_2000.json.gz",
+     "sha256": "b64c26f9a644f3f330e35bfa954a317f6e087971ce870fa475124e0fa01d72e6",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40CL.1/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:10:57+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/wti__CL_1_2005.json.gz",
+     "sha256": "c4f8c95e2900c5460f08806f6db2d2bc8cb2ea43acca03de636503c8c06ae73b",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40CL.1/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:10:58+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/wti__CL_1_2010.json.gz",
+     "sha256": "cd23ea91deb78bfde8982d7487c57aaf3d9f7075582c3b19d1d93caccc3f4582",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40CL.1/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:10:59+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/wti__CL_1_2015.json.gz",
+     "sha256": "294f0df4ebbb79cec08c70a3731fbb63f2e026aec88e0749fd3171bbc32534fe",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40CL.1/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:10:59+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/wti__CL_1_2020.json.gz",
+     "sha256": "d28bc4d55c71f1ec841992fb42e87faa970633e4b3e6afa91282fc4e0a4195ca",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40CL.1/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:00+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/wti__CL_1_2025.json.gz",
+     "sha256": "99440d6e676e6ffe6f906f7802311d3fdf1da75ec426742905c30dc956820710",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/%40CL.1/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:11:01+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/zar__ZAR_2000.json.gz",
+     "sha256": "31fc408a67b0736a5b4ba7932a12ac02c453204c62c5d14837e0d23866f1b328",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/ZAR%3D/1D/20000101000000/20041231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:22+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/zar__ZAR_2005.json.gz",
+     "sha256": "71a001e04fd103b2707a41a5bdd0868fd63b4e854a6ec043430a94318e298f15",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/ZAR%3D/1D/20050101000000/20091231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:23+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/zar__ZAR_2010.json.gz",
+     "sha256": "747bd82dc4e1ff807eba0936c5988313f51e070a7418a74cd0d05dbab36bf51c",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/ZAR%3D/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:24+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/zar__ZAR_2015.json.gz",
+     "sha256": "0e7c100627a8c59b4801b3dc66cdce4c693a87b16708fa53cb035b82a1e84b9a",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/ZAR%3D/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:24+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/zar__ZAR_2020.json.gz",
+     "sha256": "5011aca6d436bed85180c3adde38ea9a9f25107838d65e8ecb354d8e700dffa1",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/ZAR%3D/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:25+00:00"
+    },
+    {
+     "ham": "cnbc_surucu/zar__ZAR_2025.json.gz",
+     "sha256": "c635fd9e535f79bd282d212398c4dc0edc87c943e726ba6d1c2e44640413ebdc",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/ZAR%3D/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T18:13:26+00:00"
+    }
+   ],
+   "sembol": {
+    "altin": "@GC.1",
+    "au10y": "AU10Y-AU",
+    "au2y": "AU2Y-AU",
+    "aud": "AUD=",
+    "bakir": "@HG.1",
+    "brent": "@LCO.1",
+    "brl": "BRL=",
+    "ca10y": "CA10Y-CA",
+    "ca2y": "CA2Y-CA",
+    "cad": "CAD=",
+    "ch10y": "CH10Y-CH",
+    "ch2y": "CH2Y-CH",
+    "chf": "CHF=",
+    "clp": "CLP=",
+    "cnh": "CNH=",
+    "cop": "COP=",
+    "de2y": "DE2Y-DE",
+    "demir_cevheri": "@TIO.1",
+    "dogalgaz": "@NG.1",
+    "eur": "EUR=",
+    "gb2y": "GB2Y-GB",
+    "gbp": "GBP=",
+    "gumus": "@SI.1",
+    "jp10y": "JP10Y-JP",
+    "jp2y": "JP2Y-JP",
+    "jpy": "JPY=",
+    "krw": "KRW=",
+    "mxn": "MXN=",
+    "nikkei": ".N225",
+    "nok": "NOK=",
+    "nz10y": "NZ10Y-NZ",
+    "nzd": "NZD=",
+    "platin": "@PL.1",
+    "sek": "SEK=",
+    "soya": "@S.1",
+    "spx": ".SPX",
+    "try": "TRY=",
+    "us10y": "US10Y",
+    "us2y": "US2Y",
+    "wti": "@CL.1",
+    "zar": "ZAR="
+   },
+   "ic_sinama_g10_depo": {
+    "eur": {
+     "ortak_gun": 6974,
+     "medyan_fark_bp": 0.0,
+     "p99_fark_bp": 0.0
+    },
+    "gbp": {
+     "ortak_gun": 6975,
+     "medyan_fark_bp": 0.0,
+     "p99_fark_bp": 0.0
+    },
+    "aud": {
+     "ortak_gun": 6976,
+     "medyan_fark_bp": 0.0,
+     "p99_fark_bp": 0.0
+    },
+    "jpy": {
+     "ortak_gun": 6974,
+     "medyan_fark_bp": 0.0,
+     "p99_fark_bp": 0.0
+    },
+    "cad": {
+     "ortak_gun": 6974,
+     "medyan_fark_bp": 0.0,
+     "p99_fark_bp": 0.0
+    },
+    "chf": {
+     "ortak_gun": 6975,
+     "medyan_fark_bp": 0.0,
+     "p99_fark_bp": 0.0
+    }
+   },
+   "not": "Yakın vade vadeli serisi vade devrinde bir kez sıçrar (devir arındırılmamış); değişim ölçüsü bunu adıyla ele alır. Döviz barı New York 17:00, vadeli barı borsa seansı, getiri barı kendi piyasasının kapanışıdır: aynı takvim günü farklı saatleri taşır."
   },
   "tuik_takvim.csv.gz": {
    "hazirlayan": "hazirla_bulut.py",
