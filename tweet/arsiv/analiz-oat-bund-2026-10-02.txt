@@ -1,0 +1,24 @@
+# analiz:oat-bund-2026-10-02 · 2026-10-02T07:06:45+00:00 · https://x.com/i/status/2105917379343491448
+
+Analiz — 2 Ekim 2026
+OAT–Bund Farkı — neden açıldı, euroya nasıl geçti, nereye kadar gidebilir
+
+Fransa'nın 10 yıllık borçlanma maliyetinin Almanya'ya farkı 1 Ekim Avrupa kapanışında 140,9 bp ile Mayıs 2012'den beri en yüksekte; son 22 iş gününde +54,8 bp açıldı. Açılma iki evreli: 28 Eylül'e kadar küresel tahvil satışında Fransa akranlarından koptu, son üç günde bütün euro farkları Bund'a karşı birlikte açıldı. EUR/USD 31 Ağustos'tan bu yana −%3,28 kaybetti; sterlin ve frank da dolara karşı −%2,6–2,8 düştü, yani kaybın beşte dördü öbür Avrupa paralarıyla ortaktı ve dolar yen dışında Avrupa dışı paralara karşı da güçlendi. Euroya özgü kayıp yalnız son üç günde ölçülüyor (sterline karşı −%0,74, franka karşı −%1,28). Geçmişte euroya özgü bağ kırılgan: sterline karşı yalnız 2010–12'de, franka karşı 2013–2023'te görülüyor ve her biri tek bir kontrolle (İtalya farkı ya da VIX) anlamsızlaşıyor; 2024–2026'da ikisinde de yok.
+
+FARK ŞU AN NEREDE. 2000'den bu yana günlerin %99,7'sinden üstünde; bu serideki tarihî zirve 190,2 bp (15 Kasım 2011). Fransa 4 Ağustos'tan beri İtalya'dan pahalı borçlanıyor: 1 Ekim'de 21,5 bp.
+
+NEDEN AÇILDI. Üç katman üst üste: maliye, siyaset ve ECB ile küresel faiz. 2026 açığı %5,4 ile hedefin üstünde, 2027'de %5'e inmek için 54 milyar avroluk çaba gerekiyor ve meclis çoğunluğu yok; borç GSYH'nin %119,0'ı; Le Pen aday olabiliyor ve anketlerde önde. Küresel satışta Fransa artık çekirdek gibi davranmıyor: Bund'a betası 2026'nın ilk sekiz ayında 1,22, Avusturya (0,94) ile İtalya (1,46) arasında.
+
+EUROYA NASIL GEÇTİ. Kurun kaybı iki parçaya ayrılıyor: paraların dolara karşı ortak hareketi ve euronun öbür Avrupa paralarına karşı kendi hareketi. 31 Ağustos → 28 Eylül euro −%2,14, sterlin −%2,19 kaybetti: euroya özgü kayıp yok. 28 Eylül → 1 Ekim euro −%1,14, sterlin −%0,40 kaybetti; frank dolara karşı yükseldi. Haftalık veride 10 bp açılmaya EUR/USD'de −%0,44 eşlik ediyor (2024–2026), GBP/USD'de de −%0,51.
+
+KANITIN GÜCÜ. Ölçü güçlü, euroya özgü kur bağı zayıf. Haftalık kur bağı anlamlı (t −3,1), ama sterlinde de aynı büyüklükte ve İtalya farkı eklenince anlamsızlaşıyor. Son üç günün euroya özgü kaybı sterline karşı olağan oynaklığın 1,7, franka karşı 2,6 katı (evre sınırı sonradan seçildi); iki aday (bulaşma ve kalite kaçışı, ECB beklentisinin geri çekilmesi) ayrılamıyor.
+
+NE KADAR GİDEBİLİR. Tahmin yok, ölçek var. Bugünkü oynaklıkla bir aylık ±1,96σ bandı ±38,1 bp. Bir ayda 30 bp'den hızlı açılmaların ardından fark ertesi ay medyanda −16,9 bp geriledi. Bugünkü hızı aşan açılma yalnız 2011–12 krizinde (Kasım 2011, Ocak 2012) görüldü ve fark ertesi ay daraldı: fiilen tek örnek.
+
+DAHA ÖNCE NASIL OLDU. Euro bölgesi krizlerinde euro sterline karşı kaybetti (2010 −%4,31, 2011 −%5,41), ama pencere uzunluğuna göre bu yaklaşık bir standart sapma.
+
+KATALİZÖRLER. 15 Ekim AB'ye taslak bütçe planları; 20 Ekim bütçenin gelir kısmı oylaması; 23 Ekim Moody's (Aa3, görünüm negatif); 29 Ekim ECB; 17 Kasım bütçenin tamamının oylaması; 27 Kasım S&P (A+); anayasal 70 günlük süre aralık ayının ilk yarısında doluyor; 18 Nisan ve 2 Mayıs 2027 cumhurbaşkanlığı seçimi. Kurun dolar bacağı için ABD verileri ve Fed.
+
+Kilit ölçümler — OAT–Bund 10 yıllık farkı, 1 Ekim Avrupa kapanışı: 140,9 bp · son 22 iş günündeki açılma (Ocak 2012'den beri en hızlı): +54,8 bp · EUR/USD, 31 Ağustos → 1 Ekim, New York kapanışı (log değişim): −%3,28 · EUR/GBP, 28 Eylül → 1 Ekim — önceki dört haftada +%0,05 iken son üç günün euroya özgü kaybı: −%0,74 · EUR/USD'de −%0,44 iken Fransa farkındaki 10 bp açılmaya eşlik eden haftalık GBP/USD hareketi, 2024–2026: −%0,51 · bir ayda 30 bp'den hızlı açılmaların ardından farkın ertesi ay daha da açıldığı gözlemlerin payı (51 gözlem, 7 küme; bugünkü hızı aşan 8 gözlemde hiç yok): %13,7
+
+Analizdir; yatırım tavsiyesi değildir.
