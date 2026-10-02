@@ -1,0 +1,2742 @@
+{
+ "hazirla": {
+  "betik": "hazirla_bulut.py",
+  "cipa": {
+   "gunluk": "2026-09-30",
+   "aylik": "2026-08",
+   "ceyreklik": "2026Q2"
+  },
+  "not": "Ham arşivden yerel ayrıştırma; ağa çıkılmaz. sha256 sıkıştırılmamış CSV metninin özüdür."
+ },
+ "dosyalar": {
+  "abd_hazine_1y.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "8c31a527e6ebb6dfec0fbe654e739c5dac5ba0d5c0f107c0ec76952999d755ab",
+   "satir": 9194,
+   "sutunlar": [
+    "us3m",
+    "us1y",
+    "us2y",
+    "us5y",
+    "us10y",
+    "us30y"
+   ],
+   "kesilen_satir": 1,
+   "cipa_siniri": "2026-09-30",
+   "aciklama": "ABD Hazinesi günlük par getiri eğrisi (NY kapanışı), %",
+   "sutun_aciklama": {
+    "us3m": "3 ay",
+    "us1y": "1 yıl",
+    "us2y": "2 yıl",
+    "us5y": "5 yıl",
+    "us10y": "10 yıl",
+    "us30y": "30 yıl"
+   },
+   "kapsam": {
+    "us3m": {
+     "n": 9190,
+     "ilk": "1990-01-02",
+     "son": "2026-09-30"
+    },
+    "us1y": {
+     "n": 9193,
+     "ilk": "1990-01-02",
+     "son": "2026-09-30"
+    },
+    "us2y": {
+     "n": 9193,
+     "ilk": "1990-01-02",
+     "son": "2026-09-30"
+    },
+    "us5y": {
+     "n": 9193,
+     "ilk": "1990-01-02",
+     "son": "2026-09-30"
+    },
+    "us10y": {
+     "n": 9193,
+     "ilk": "1990-01-02",
+     "son": "2026-09-30"
+    },
+    "us30y": {
+     "n": 8199,
+     "ilk": "1990-01-02",
+     "son": "2026-09-30"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "hazine/par_1990.csv.gz",
+     "sha256": "d8d5e4bb7ae2f13ccf03a7f50537723a4a5a37e2ebe85da3e32f53328c411d18",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1990/all?type=daily_treasury_yield_curve&field_tdr_date_value=1990&page&_format=csv",
+     "an": "2026-10-02T10:52:25+00:00"
+    },
+    {
+     "ham": "hazine/par_1991.csv.gz",
+     "sha256": "d52d81bd96f5e02d8b7a74384d568eaafe36c2a067272e0840c5ea4022c1d4d4",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1991/all?type=daily_treasury_yield_curve&field_tdr_date_value=1991&page&_format=csv",
+     "an": "2026-10-02T10:52:26+00:00"
+    },
+    {
+     "ham": "hazine/par_1992.csv.gz",
+     "sha256": "13fb485ff7085d1c8afb70b3bb6fd7fe7c728f7b672a9c1844d7e9e6d26827f9",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1992/all?type=daily_treasury_yield_curve&field_tdr_date_value=1992&page&_format=csv",
+     "an": "2026-10-02T10:52:27+00:00"
+    },
+    {
+     "ham": "hazine/par_1993.csv.gz",
+     "sha256": "c5482e2e88fa8256eb513600c44fbcb8bd317e061a840a429676f4d1330cea3d",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1993/all?type=daily_treasury_yield_curve&field_tdr_date_value=1993&page&_format=csv",
+     "an": "2026-10-02T10:52:27+00:00"
+    },
+    {
+     "ham": "hazine/par_1994.csv.gz",
+     "sha256": "cea2fce245f7a1be83395a82c4f56e146d2074909255930226551170bf25de18",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1994/all?type=daily_treasury_yield_curve&field_tdr_date_value=1994&page&_format=csv",
+     "an": "2026-10-02T10:52:28+00:00"
+    },
+    {
+     "ham": "hazine/par_1995.csv.gz",
+     "sha256": "5815b05e0575a6220d84666346c56bc1fa39d0a4212b89bf0f50a3c09579de15",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1995/all?type=daily_treasury_yield_curve&field_tdr_date_value=1995&page&_format=csv",
+     "an": "2026-10-02T10:52:28+00:00"
+    },
+    {
+     "ham": "hazine/par_1996.csv.gz",
+     "sha256": "656992cb54c922745bb7ccf11a57a3dd5fe2f1653f7d8127d04d25f3e3aaa674",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1996/all?type=daily_treasury_yield_curve&field_tdr_date_value=1996&page&_format=csv",
+     "an": "2026-10-02T10:52:29+00:00"
+    },
+    {
+     "ham": "hazine/par_1997.csv.gz",
+     "sha256": "3653e22f12846593dc6e0d95a7518acfc2d2f6dd89ec83cc82e2ebeb4586b833",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1997/all?type=daily_treasury_yield_curve&field_tdr_date_value=1997&page&_format=csv",
+     "an": "2026-10-02T10:52:29+00:00"
+    },
+    {
+     "ham": "hazine/par_1998.csv.gz",
+     "sha256": "3861b3be824744c1c6c616224fd1b87054dfcf2e8106c7551a589b5fedeb7f4a",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1998/all?type=daily_treasury_yield_curve&field_tdr_date_value=1998&page&_format=csv",
+     "an": "2026-10-02T10:52:30+00:00"
+    },
+    {
+     "ham": "hazine/par_1999.csv.gz",
+     "sha256": "36bff57ac81eb582c68e57479c0ad4fbc4ee090e9028886d49b7f1ce434a5aea",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/1999/all?type=daily_treasury_yield_curve&field_tdr_date_value=1999&page&_format=csv",
+     "an": "2026-10-02T10:52:30+00:00"
+    },
+    {
+     "ham": "hazine/par_2000.csv.gz",
+     "sha256": "a8cde4c7a757ac74f7b6257d3778db73a215483002317e19ee9e3f3c524a8a24",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2000/all?type=daily_treasury_yield_curve&field_tdr_date_value=2000&page&_format=csv",
+     "an": "2026-10-02T10:52:31+00:00"
+    },
+    {
+     "ham": "hazine/par_2001.csv.gz",
+     "sha256": "bc48181de2b452d19b159bc12354653f64ce3b119d7072dbf4aa92fa6998799c",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2001/all?type=daily_treasury_yield_curve&field_tdr_date_value=2001&page&_format=csv",
+     "an": "2026-10-02T10:52:31+00:00"
+    },
+    {
+     "ham": "hazine/par_2002.csv.gz",
+     "sha256": "33f84b7c6f50bf3ea0ca4703cb51c8d469bbb93dad92f181d42132b7e2359bf7",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2002/all?type=daily_treasury_yield_curve&field_tdr_date_value=2002&page&_format=csv",
+     "an": "2026-10-02T10:52:32+00:00"
+    },
+    {
+     "ham": "hazine/par_2003.csv.gz",
+     "sha256": "0c255188cf596e5bc42a4e00b9a60649df01fb95a58a3382d7586da83e5cc0e0",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2003/all?type=daily_treasury_yield_curve&field_tdr_date_value=2003&page&_format=csv",
+     "an": "2026-10-02T10:52:33+00:00"
+    },
+    {
+     "ham": "hazine/par_2004.csv.gz",
+     "sha256": "0f0561773c7a3220fe1eded9a7ba0645790e9239fd3cf569158171fedf2dc969",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2004/all?type=daily_treasury_yield_curve&field_tdr_date_value=2004&page&_format=csv",
+     "an": "2026-10-02T10:52:33+00:00"
+    },
+    {
+     "ham": "hazine/par_2005.csv.gz",
+     "sha256": "ecf2ab3d1ca1b6ee8e916fee90474028c2d1221b8d236131621ad58020db0552",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2005/all?type=daily_treasury_yield_curve&field_tdr_date_value=2005&page&_format=csv",
+     "an": "2026-10-02T10:52:34+00:00"
+    },
+    {
+     "ham": "hazine/par_2006.csv.gz",
+     "sha256": "cdbdcd8b32735caa453e00280232ff70c7012c055b7daf7b8cf1d9aaa8c66bfe",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2006/all?type=daily_treasury_yield_curve&field_tdr_date_value=2006&page&_format=csv",
+     "an": "2026-10-02T10:52:34+00:00"
+    },
+    {
+     "ham": "hazine/par_2007.csv.gz",
+     "sha256": "297f6be4059a605b1ec0f266eb7b8467c3d40504a0dd53341746223276e6e6d8",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2007/all?type=daily_treasury_yield_curve&field_tdr_date_value=2007&page&_format=csv",
+     "an": "2026-10-02T10:52:35+00:00"
+    },
+    {
+     "ham": "hazine/par_2008.csv.gz",
+     "sha256": "686db01584dd45f67addc243ee0c42339d491171a0e947c8f88ecac78ee0e9ea",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2008/all?type=daily_treasury_yield_curve&field_tdr_date_value=2008&page&_format=csv",
+     "an": "2026-10-02T10:52:35+00:00"
+    },
+    {
+     "ham": "hazine/par_2009.csv.gz",
+     "sha256": "3c9294cfa71136e1d5330b09a00bf996ecf86c865d593d7ee954d11984a5bdb1",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2009/all?type=daily_treasury_yield_curve&field_tdr_date_value=2009&page&_format=csv",
+     "an": "2026-10-02T10:52:36+00:00"
+    },
+    {
+     "ham": "hazine/par_2010.csv.gz",
+     "sha256": "f973bd3988989d3e408655cbc7fed89faefbaa8a1c111ec313241fb47fc75e2d",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2010/all?type=daily_treasury_yield_curve&field_tdr_date_value=2010&page&_format=csv",
+     "an": "2026-10-02T10:52:36+00:00"
+    },
+    {
+     "ham": "hazine/par_2011.csv.gz",
+     "sha256": "224eaf29d6fe7cbccc746c7a8c845f189cf91424bab43f46ca386a74e98d81f7",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2011/all?type=daily_treasury_yield_curve&field_tdr_date_value=2011&page&_format=csv",
+     "an": "2026-10-02T10:52:36+00:00"
+    },
+    {
+     "ham": "hazine/par_2012.csv.gz",
+     "sha256": "9c889b6e3cb87f40f3760bddb69f05f7525800ac480ef5712b2cf318765fa184",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2012/all?type=daily_treasury_yield_curve&field_tdr_date_value=2012&page&_format=csv",
+     "an": "2026-10-02T10:52:37+00:00"
+    },
+    {
+     "ham": "hazine/par_2013.csv.gz",
+     "sha256": "1e1a98426d9274afcc68467962f9238104db775b8765e48f45ac7488b33ff338",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2013/all?type=daily_treasury_yield_curve&field_tdr_date_value=2013&page&_format=csv",
+     "an": "2026-10-02T10:52:37+00:00"
+    },
+    {
+     "ham": "hazine/par_2014.csv.gz",
+     "sha256": "8d560698e03e4c0d8d22ff8be7f5f7c5c0d472b1e33a22b6a75373a57e84aa0f",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2014/all?type=daily_treasury_yield_curve&field_tdr_date_value=2014&page&_format=csv",
+     "an": "2026-10-02T10:52:38+00:00"
+    },
+    {
+     "ham": "hazine/par_2015.csv.gz",
+     "sha256": "b7665d1ce46d6ed6d08fbda34aae1831de38e274e3c7caed81904042aac9b5bc",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2015/all?type=daily_treasury_yield_curve&field_tdr_date_value=2015&page&_format=csv",
+     "an": "2026-10-02T10:52:38+00:00"
+    },
+    {
+     "ham": "hazine/par_2016.csv.gz",
+     "sha256": "b4d0a8d86e2734bc64d84d9a9824434d841737621582daeac58f13c7129f325c",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2016/all?type=daily_treasury_yield_curve&field_tdr_date_value=2016&page&_format=csv",
+     "an": "2026-10-02T10:52:39+00:00"
+    },
+    {
+     "ham": "hazine/par_2017.csv.gz",
+     "sha256": "56074da7c32103a28cf4ba2bdf5eaa12f98fd49852047aef1a6eb16e64bd6e83",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2017/all?type=daily_treasury_yield_curve&field_tdr_date_value=2017&page&_format=csv",
+     "an": "2026-10-02T10:52:39+00:00"
+    },
+    {
+     "ham": "hazine/par_2018.csv.gz",
+     "sha256": "e8375524a7a8d3e8091bbe7690d0378b9365be09efff5b18b8eefddc25f718d3",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2018/all?type=daily_treasury_yield_curve&field_tdr_date_value=2018&page&_format=csv",
+     "an": "2026-10-02T10:52:40+00:00"
+    },
+    {
+     "ham": "hazine/par_2019.csv.gz",
+     "sha256": "83fc47c17325e222c45fd3a1eb26c69ae01f62d33b793030b4b8b350ca0a290b",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2019/all?type=daily_treasury_yield_curve&field_tdr_date_value=2019&page&_format=csv",
+     "an": "2026-10-02T10:52:40+00:00"
+    },
+    {
+     "ham": "hazine/par_2020.csv.gz",
+     "sha256": "edcf1c8be9622f3cd92eb7de1847aefc3977e2118e2ff9af67f46614a5c306a7",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2020/all?type=daily_treasury_yield_curve&field_tdr_date_value=2020&page&_format=csv",
+     "an": "2026-10-02T10:52:41+00:00"
+    },
+    {
+     "ham": "hazine/par_2021.csv.gz",
+     "sha256": "1be57e49c63a99f6002431a1030c8fbe539b71066c3eaf14f9f58ddc34492cea",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2021/all?type=daily_treasury_yield_curve&field_tdr_date_value=2021&page&_format=csv",
+     "an": "2026-10-02T10:52:41+00:00"
+    },
+    {
+     "ham": "hazine/par_2022.csv.gz",
+     "sha256": "c33cb2758e5e34c2c23b7ab759d18681091860f3f9e5960112859f64f31cd814",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2022/all?type=daily_treasury_yield_curve&field_tdr_date_value=2022&page&_format=csv",
+     "an": "2026-10-02T10:52:42+00:00"
+    },
+    {
+     "ham": "hazine/par_2023.csv.gz",
+     "sha256": "edb7f3904e11dcaa502cdcc03ad9b1b16c893802d166ce9bc5fa1118251249d4",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2023/all?type=daily_treasury_yield_curve&field_tdr_date_value=2023&page&_format=csv",
+     "an": "2026-10-02T10:52:42+00:00"
+    },
+    {
+     "ham": "hazine/par_2024.csv.gz",
+     "sha256": "6775840b76cd7fd41121f61d6f6c60184eca6b2ba49954ec7372c463cbeef34d",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2024/all?type=daily_treasury_yield_curve&field_tdr_date_value=2024&page&_format=csv",
+     "an": "2026-10-02T10:52:43+00:00"
+    },
+    {
+     "ham": "hazine/par_2025.csv.gz",
+     "sha256": "cf2fa3da7f160384b63d2ead698532b1d76cd9f789ce4911e2304db85b14e6d5",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2025/all?type=daily_treasury_yield_curve&field_tdr_date_value=2025&page&_format=csv",
+     "an": "2026-10-02T10:52:43+00:00"
+    },
+    {
+     "ham": "hazine/par_2026.csv.gz",
+     "sha256": "468310f51dd15d0be0acdebf0137e6a6e9a32e008ca804e62f7d1b950042530a",
+     "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/2026/all?type=daily_treasury_yield_curve&field_tdr_date_value=2026&page&_format=csv",
+     "an": "2026-10-02T10:52:43+00:00"
+    }
+   ],
+   "ic_sinama": {
+    "depo_ortak_gun": 6941,
+    "azami_fark_2y": 0.0,
+    "azami_fark_10y": 0.0
+   }
+  },
+  "acm.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "cdfc031396f6a858bd07757603753b56d156bfeaf03eab245ecf90fb53454eb3",
+   "satir": 16289,
+   "sutunlar": [
+    "acmtp02",
+    "acmtp05",
+    "acmtp10",
+    "acmy10",
+    "acmrny10",
+    "acmy02"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2026-09-30",
+   "aciklama": "NY Fed Adrian–Crump–Moench vade primi ve getirileri, günlük, % (sayfa: ACM Daily)",
+   "sutun_aciklama": {
+    "acmtp10": "10 yıllık vade primi",
+    "acmy10": "10 yıllık model getirisi",
+    "acmrny10": "10 yıllık risk-nötr getiri",
+    "acmtp02": "2 yıllık vade primi",
+    "acmtp05": "5 yıllık vade primi",
+    "acmy02": "2 yıllık model getirisi"
+   },
+   "kapsam": {
+    "acmtp02": {
+     "n": 16289,
+     "ilk": "1961-06-14",
+     "son": "2026-09-30"
+    },
+    "acmtp05": {
+     "n": 16289,
+     "ilk": "1961-06-14",
+     "son": "2026-09-30"
+    },
+    "acmtp10": {
+     "n": 16289,
+     "ilk": "1961-06-14",
+     "son": "2026-09-30"
+    },
+    "acmy10": {
+     "n": 16289,
+     "ilk": "1961-06-14",
+     "son": "2026-09-30"
+    },
+    "acmrny10": {
+     "n": 16289,
+     "ilk": "1961-06-14",
+     "son": "2026-09-30"
+    },
+    "acmy02": {
+     "n": 16289,
+     "ilk": "1961-06-14",
+     "son": "2026-09-30"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "acm/ACMTermPremium.xls.gz",
+     "sha256": "f174cbddc004be85e10aa9ffb72b025f76cbfe7e1c0c8735533e031a963583ce",
+     "url": "https://www.newyorkfed.org/medialibrary/media/research/data_indicators/ACMTermPremium.xls",
+     "an": "2026-10-02T10:52:48+00:00"
+    }
+   ],
+   "sayfa_basliklari": [
+    "DATE",
+    "ACMY01",
+    "ACMY02",
+    "ACMY03",
+    "ACMY04",
+    "ACMY05",
+    "ACMY06",
+    "ACMY07"
+   ]
+  },
+  "bis_eer_n.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "57b95bb767874ee4dfcbf05460a9d57a4ed3706ec4494f897078c68e3b40b5f4",
+   "satir": 392,
+   "sutunlar": [
+    "AU",
+    "BR",
+    "CA",
+    "CH",
+    "CL",
+    "GB",
+    "HU",
+    "ID",
+    "IN",
+    "JP",
+    "KR",
+    "MX",
+    "NO",
+    "PL",
+    "SE",
+    "TR",
+    "US",
+    "XM",
+    "ZA"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2026-08-01",
+   "aciklama": "BIS geniş nominal efektif kur (64 ekonomi), 2020=100; artış yerel paranın değer kazancı",
+   "sutun_aciklama": {
+    "AU": "ISO2 ülke kodu (XM euro alanı)"
+   },
+   "kapsam": {
+    "AU": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "BR": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "CA": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "CH": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "CL": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "GB": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "HU": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "ID": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "IN": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "JP": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "KR": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "MX": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "NO": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "PL": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "SE": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "TR": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "US": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "XM": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "ZA": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "bis/WS_EER_MNB.csv.gz",
+     "sha256": "9f8f600d828de443c9e8919bc5c0da840c3bbcb899c2a0d7e4e7f1b7b99fd296",
+     "url": "https://stats.bis.org/api/v2/data/dataflow/BIS/WS_EER/1.0/M.N.B.TR+US+XM+JP+GB+CH+AU+CA+NO+SE+BR+MX+ZA+IN+ID+PL+HU+CL+KR?format=csv&startPeriod=1994-01",
+     "an": "2026-10-02T10:51:26+00:00"
+    }
+   ],
+   "tarih_kurali": "ay başı etiket (BIS ayı)"
+  },
+  "bis_eer_r.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "c0e7a23e90c987a08e650b870f710e89120af5b7b3c9f366218c2fb9aac251b9",
+   "satir": 392,
+   "sutunlar": [
+    "AU",
+    "BR",
+    "CA",
+    "CH",
+    "CL",
+    "GB",
+    "HU",
+    "ID",
+    "IN",
+    "JP",
+    "KR",
+    "MX",
+    "NO",
+    "PL",
+    "SE",
+    "TR",
+    "US",
+    "XM",
+    "ZA"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2026-08-01",
+   "aciklama": "BIS geniş reel efektif kur (64 ekonomi), 2020=100; artış yerel paranın değer kazancı",
+   "sutun_aciklama": {
+    "AU": "ISO2 ülke kodu (XM euro alanı)"
+   },
+   "kapsam": {
+    "AU": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "BR": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "CA": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "CH": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "CL": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "GB": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "HU": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "ID": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "IN": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "JP": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "KR": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "MX": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "NO": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "PL": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "SE": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "TR": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "US": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "XM": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "ZA": {
+     "n": 392,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "bis/WS_EER_MRB.csv.gz",
+     "sha256": "11aa986964443adcb9b11a7d40cd4e42f9adea3914445744c7611e390a31dd9c",
+     "url": "https://stats.bis.org/api/v2/data/dataflow/BIS/WS_EER/1.0/M.R.B.TR+US+XM+JP+GB+CH+AU+CA+NO+SE+BR+MX+ZA+IN+ID+PL+HU+CL+KR?format=csv&startPeriod=1994-01",
+     "an": "2026-10-02T10:51:16+00:00"
+    }
+   ],
+   "tarih_kurali": "ay başı etiket (BIS ayı)"
+  },
+  "bis_politika.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "60695bf46de0579d433692d754a5284db34f6b59843df636a43cdf2511ba1a52",
+   "satir": 440,
+   "sutunlar": [
+    "AU",
+    "BR",
+    "CA",
+    "CH",
+    "CL",
+    "GB",
+    "HU",
+    "ID",
+    "IN",
+    "JP",
+    "KR",
+    "MX",
+    "NO",
+    "PL",
+    "SE",
+    "TR",
+    "US",
+    "XM",
+    "ZA"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2026-08-01",
+   "aciklama": "BIS politika faizleri, aylık, %",
+   "sutun_aciklama": {
+    "AU": "ISO2 ülke kodu (XM euro alanı)"
+   },
+   "kapsam": {
+    "AU": {
+     "n": 440,
+     "ilk": "1990-01-01",
+     "son": "2026-08-01"
+    },
+    "BR": {
+     "n": 440,
+     "ilk": "1990-01-01",
+     "son": "2026-08-01"
+    },
+    "CA": {
+     "n": 440,
+     "ilk": "1990-01-01",
+     "son": "2026-08-01"
+    },
+    "CH": {
+     "n": 440,
+     "ilk": "1990-01-01",
+     "son": "2026-08-01"
+    },
+    "CL": {
+     "n": 355,
+     "ilk": "1997-02-01",
+     "son": "2026-08-01"
+    },
+    "GB": {
+     "n": 440,
+     "ilk": "1990-01-01",
+     "son": "2026-08-01"
+    },
+    "HU": {
+     "n": 440,
+     "ilk": "1990-01-01",
+     "son": "2026-08-01"
+    },
+    "ID": {
+     "n": 254,
+     "ilk": "2005-07-01",
+     "son": "2026-08-01"
+    },
+    "IN": {
+     "n": 438,
+     "ilk": "1990-01-01",
+     "son": "2026-06-01"
+    },
+    "JP": {
+     "n": 324,
+     "ilk": "1990-01-01",
+     "son": "2026-08-01"
+    },
+    "KR": {
+     "n": 327,
+     "ilk": "1999-05-01",
+     "son": "2026-07-01"
+    },
+    "MX": {
+     "n": 334,
+     "ilk": "1998-11-01",
+     "son": "2026-08-01"
+    },
+    "NO": {
+     "n": 440,
+     "ilk": "1990-01-01",
+     "son": "2026-08-01"
+    },
+    "PL": {
+     "n": 404,
+     "ilk": "1993-01-01",
+     "son": "2026-08-01"
+    },
+    "SE": {
+     "n": 440,
+     "ilk": "1990-01-01",
+     "son": "2026-08-01"
+    },
+    "TR": {
+     "n": 295,
+     "ilk": "2002-02-01",
+     "son": "2026-08-01"
+    },
+    "US": {
+     "n": 440,
+     "ilk": "1990-01-01",
+     "son": "2026-08-01"
+    },
+    "XM": {
+     "n": 332,
+     "ilk": "1999-01-01",
+     "son": "2026-08-01"
+    },
+    "ZA": {
+     "n": 440,
+     "ilk": "1990-01-01",
+     "son": "2026-08-01"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "bis/WS_CBPOL_M.csv.gz",
+     "sha256": "a95da61841480fc2d5565f877d3caf5fe76ced572ea6c815f589d13192ae4815",
+     "url": "https://stats.bis.org/api/v2/data/dataflow/BIS/WS_CBPOL/1.0/M.TR+US+XM+JP+GB+CH+AU+CA+NO+SE+BR+MX+ZA+IN+ID+PL+HU+CL+KR?format=csv&startPeriod=1990-01",
+     "an": "2026-10-02T10:51:29+00:00"
+    }
+   ],
+   "tarih_kurali": "ay başı etiket (BIS ayı)"
+  },
+  "ecb_kur.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "1a2a85fdf2f27661c97d960af3a934a70fbd6eef8b88ee8fd588e6a231fced75",
+   "satir": 7104,
+   "sutunlar": [
+    "aud",
+    "brl",
+    "cad",
+    "chf",
+    "gbp",
+    "huf",
+    "idr",
+    "inr",
+    "jpy",
+    "krw",
+    "mxn",
+    "nok",
+    "pln",
+    "sek",
+    "try",
+    "usd",
+    "zar"
+   ],
+   "kesilen_satir": 1,
+   "cipa_siniri": "2026-09-30",
+   "aciklama": "ECB euro referans kurları (14:15 CET), 1 euro = x birim",
+   "sutun_aciklama": {
+    "aud": "1 EUR = x AUD",
+    "brl": "1 EUR = x BRL",
+    "cad": "1 EUR = x CAD",
+    "chf": "1 EUR = x CHF",
+    "gbp": "1 EUR = x GBP",
+    "huf": "1 EUR = x HUF",
+    "idr": "1 EUR = x IDR",
+    "inr": "1 EUR = x INR",
+    "jpy": "1 EUR = x JPY",
+    "krw": "1 EUR = x KRW",
+    "mxn": "1 EUR = x MXN",
+    "nok": "1 EUR = x NOK",
+    "pln": "1 EUR = x PLN",
+    "sek": "1 EUR = x SEK",
+    "try": "1 EUR = x TRY",
+    "usd": "1 EUR = x USD",
+    "zar": "1 EUR = x ZAR"
+   },
+   "kapsam": {
+    "aud": {
+     "n": 7104,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30"
+    },
+    "brl": {
+     "n": 6837,
+     "ilk": "2000-01-13",
+     "son": "2026-09-30"
+    },
+    "cad": {
+     "n": 7104,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30"
+    },
+    "chf": {
+     "n": 7104,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30"
+    },
+    "gbp": {
+     "n": 7104,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30"
+    },
+    "huf": {
+     "n": 7104,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30"
+    },
+    "idr": {
+     "n": 7104,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30"
+    },
+    "inr": {
+     "n": 6837,
+     "ilk": "2000-01-13",
+     "son": "2026-09-30"
+    },
+    "jpy": {
+     "n": 7104,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30"
+    },
+    "krw": {
+     "n": 7104,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30"
+    },
+    "mxn": {
+     "n": 7104,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30"
+    },
+    "nok": {
+     "n": 7104,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30"
+    },
+    "pln": {
+     "n": 7104,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30"
+    },
+    "sek": {
+     "n": 7104,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30"
+    },
+    "try": {
+     "n": 7104,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30"
+    },
+    "usd": {
+     "n": 7104,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30"
+    },
+    "zar": {
+     "n": 7104,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "ecb/exr_AUD.csv.gz",
+     "sha256": "09b2e12d6f9d99c4a7d7ec3bcdfc0ba4f2ac3ca6563c6d9c35a70d8f15f0bda6",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.AUD.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:51:41+00:00"
+    },
+    {
+     "ham": "ecb/exr_BRL.csv.gz",
+     "sha256": "62e3c2ebdbfad173d603d6129a7cbd6347f47b10ae8424ac445ebb52a9dd665e",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.BRL.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:51:48+00:00"
+    },
+    {
+     "ham": "ecb/exr_CAD.csv.gz",
+     "sha256": "a2c2425f48870bbb64723d3b3cf6321d828e05a5b0b7e32426db06f2cf1fdb29",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.CAD.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:51:39+00:00"
+    },
+    {
+     "ham": "ecb/exr_CHF.csv.gz",
+     "sha256": "ff2b86da2bc23e710302621a1458c1e4b0d551ce6093f2fc666bed158a8ad84c",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.CHF.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:51:37+00:00"
+    },
+    {
+     "ham": "ecb/exr_GBP.csv.gz",
+     "sha256": "b1c46ec0ac1d006320c4af551ce91364ba773de2f5413be664876b68aec51f80",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.GBP.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:51:35+00:00"
+    },
+    {
+     "ham": "ecb/exr_HUF.csv.gz",
+     "sha256": "f30c1e1f0353a1cc1a431d269db08f283a65a5ba84e0d57bab95a9b413a4e6f5",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.HUF.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:52:00+00:00"
+    },
+    {
+     "ham": "ecb/exr_IDR.csv.gz",
+     "sha256": "252a3a8888a073af59029bcda226911137ff2813a8d75bad08cb6902bc24a042",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.IDR.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:51:54+00:00"
+    },
+    {
+     "ham": "ecb/exr_INR.csv.gz",
+     "sha256": "ee04623fc6e9f1126d148002f17aef74f2d1d3abdf5f12613b026274b7024d91",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.INR.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:51:52+00:00"
+    },
+    {
+     "ham": "ecb/exr_JPY.csv.gz",
+     "sha256": "b8b489fdfb3e641cc398c6ce652681188fd3fbd6c82808072e8b62ea89686b9d",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.JPY.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:51:33+00:00"
+    },
+    {
+     "ham": "ecb/exr_KRW.csv.gz",
+     "sha256": "d2fd437e1fbf971b6acc8b01af6a9d5a07d84bad89b9064b0389a68e4cc9c076",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.KRW.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:52:02+00:00"
+    },
+    {
+     "ham": "ecb/exr_MXN.csv.gz",
+     "sha256": "9a55fe918c4ca0b4e6b6a3052344d96c59d1f1fbe7730e7b437980ad669fd97e",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.MXN.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:51:56+00:00"
+    },
+    {
+     "ham": "ecb/exr_NOK.csv.gz",
+     "sha256": "36e9deab16c53e9134e8a0913e7baa8bba95f41c61a98972c69c6b2596069452",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.NOK.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:51:45+00:00"
+    },
+    {
+     "ham": "ecb/exr_PLN.csv.gz",
+     "sha256": "a6b02418eb310e5ab9b076cb9bfa25fee81579bae605b2fc279d123f6b69e8a0",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.PLN.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:51:58+00:00"
+    },
+    {
+     "ham": "ecb/exr_SEK.csv.gz",
+     "sha256": "45281159583da6c4f5e569b76427b8b25d76b26dd75bf7dc77e646807be40a53",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.SEK.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:51:43+00:00"
+    },
+    {
+     "ham": "ecb/exr_TRY.csv.gz",
+     "sha256": "bc2a9e29807e8ec3cc4b5207fcc4b75b8daf73d5b2d34de554b471083fbfc9ac",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.TRY.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:52:05+00:00"
+    },
+    {
+     "ham": "ecb/exr_USD.csv.gz",
+     "sha256": "698c99dac86e289159598ea4dea8c93f726c5bd3385fc6070ba03bfe6749b968",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:51:31+00:00"
+    },
+    {
+     "ham": "ecb/exr_ZAR.csv.gz",
+     "sha256": "5c70f195b9d3507948656e9cb48c90adcd3c37481291d2e42e2a7b1776ba6f78",
+     "url": "https://data-api.ecb.europa.eu/service/data/EXR/D.ZAR.EUR.SP00.A?format=csvdata&startPeriod=1999-01-01",
+     "an": "2026-10-02T10:51:50+00:00"
+    }
+   ]
+  },
+  "eurostat_borc.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "de8fd2f0269bb35043cbf7b84700f9f271d1c89537da94203c45e9b40a8f73fe",
+   "satir": 31,
+   "sutunlar": [
+    "borc_AT",
+    "borc_BE",
+    "borc_CZ",
+    "borc_DE",
+    "borc_EA20",
+    "borc_EL",
+    "borc_ES",
+    "borc_EU27_2020",
+    "borc_FI",
+    "borc_FR",
+    "borc_HU",
+    "borc_IE",
+    "borc_IT",
+    "borc_NL",
+    "borc_PL",
+    "borc_PT",
+    "borc_RO",
+    "denge_AT",
+    "denge_BE",
+    "denge_CZ",
+    "denge_DE",
+    "denge_EA20",
+    "denge_EL",
+    "denge_ES",
+    "denge_EU27_2020",
+    "denge_FI",
+    "denge_FR",
+    "denge_HU",
+    "denge_IE",
+    "denge_IT",
+    "denge_NL",
+    "denge_PL",
+    "denge_PT",
+    "denge_RO"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2025-12-31",
+   "aciklama": "Eurostat genel yönetim brüt borcu ve dengesi, % GSYH, yıllık",
+   "sutun_aciklama": {
+    "borc_XX": "genel yönetim brüt (Maastricht) borcu",
+    "denge_XX": "genel yönetim net borç verme/alma"
+   },
+   "kapsam": {
+    "borc_AT": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_BE": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_CZ": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_DE": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_EA20": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_EL": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_ES": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_EU27_2020": {
+     "n": 26,
+     "ilk": "2000-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_FI": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_FR": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_HU": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_IE": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_IT": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_NL": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_PL": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_PT": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "borc_RO": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_AT": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_BE": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_CZ": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_DE": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_EA20": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_EL": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_ES": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_EU27_2020": {
+     "n": 29,
+     "ilk": "1997-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_FI": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_FR": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_HU": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_IE": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_IT": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_NL": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_PL": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_PT": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    },
+    "denge_RO": {
+     "n": 31,
+     "ilk": "1995-12-31",
+     "son": "2025-12-31"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "eurostat/gov_10dd_edpt1.json.gz",
+     "sha256": "b4a507fc8cfef45cfab47185e3dfbf533e0fe9c7331452eec1e9e3dc952ad826",
+     "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10dd_edpt1?format=JSON&lang=EN&freq=A&unit=PC_GDP&sector=S13&na_item=B9&na_item=GD&geo=DE&geo=FR&geo=IT&geo=ES&geo=PT&geo=EL&geo=IE&geo=NL&geo=BE&geo=AT&geo=FI&geo=EA20&geo=EU27_2020&geo=HU&geo=PL&geo=CZ&geo=RO",
+     "an": "2026-10-02T10:52:06+00:00"
+    }
+   ]
+  },
+  "eurostat_borc_ceyrek.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "a12137055611d0e14c91112058922476a6edb386866764375beca4aa90688945",
+   "satir": 122,
+   "sutunlar": [
+    "AT",
+    "BE",
+    "CZ",
+    "DE",
+    "EA20",
+    "EL",
+    "ES",
+    "EU27_2020",
+    "FI",
+    "FR",
+    "HU",
+    "IE",
+    "IT",
+    "NL",
+    "PL",
+    "PT",
+    "RO"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2026-06-30",
+   "aciklama": "Eurostat genel yönetim brüt borcu, % GSYH, çeyreklik",
+   "sutun_aciklama": {
+    "XX": "genel yönetim brüt borcu"
+   },
+   "kapsam": {
+    "AT": {
+     "n": 105,
+     "ilk": "2000-03-31",
+     "son": "2026-03-31"
+    },
+    "BE": {
+     "n": 122,
+     "ilk": "1995-12-31",
+     "son": "2026-03-31"
+    },
+    "CZ": {
+     "n": 105,
+     "ilk": "2000-03-31",
+     "son": "2026-03-31"
+    },
+    "DE": {
+     "n": 105,
+     "ilk": "2000-03-31",
+     "son": "2026-03-31"
+    },
+    "EA20": {
+     "n": 105,
+     "ilk": "2000-03-31",
+     "son": "2026-03-31"
+    },
+    "EL": {
+     "n": 105,
+     "ilk": "2000-03-31",
+     "son": "2026-03-31"
+    },
+    "ES": {
+     "n": 122,
+     "ilk": "1995-12-31",
+     "son": "2026-03-31"
+    },
+    "EU27_2020": {
+     "n": 105,
+     "ilk": "2000-03-31",
+     "son": "2026-03-31"
+    },
+    "FI": {
+     "n": 105,
+     "ilk": "2000-03-31",
+     "son": "2026-03-31"
+    },
+    "FR": {
+     "n": 105,
+     "ilk": "2000-03-31",
+     "son": "2026-03-31"
+    },
+    "HU": {
+     "n": 122,
+     "ilk": "1995-12-31",
+     "son": "2026-03-31"
+    },
+    "IE": {
+     "n": 105,
+     "ilk": "2000-03-31",
+     "son": "2026-03-31"
+    },
+    "IT": {
+     "n": 105,
+     "ilk": "2000-03-31",
+     "son": "2026-03-31"
+    },
+    "NL": {
+     "n": 105,
+     "ilk": "2000-03-31",
+     "son": "2026-03-31"
+    },
+    "PL": {
+     "n": 105,
+     "ilk": "2000-03-31",
+     "son": "2026-03-31"
+    },
+    "PT": {
+     "n": 105,
+     "ilk": "2000-03-31",
+     "son": "2026-03-31"
+    },
+    "RO": {
+     "n": 105,
+     "ilk": "2000-03-31",
+     "son": "2026-03-31"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "eurostat/gov_10q_ggdebt.json.gz",
+     "sha256": "0e2628ce9b5d7a57c7b13ce8b74c6c8cc377f5b3b6441f9c71aa3475ab5fd788",
+     "url": "https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/gov_10q_ggdebt?format=JSON&lang=EN&freq=Q&unit=PC_GDP&sector=S13&na_item=GD&geo=DE&geo=FR&geo=IT&geo=ES&geo=PT&geo=EL&geo=IE&geo=NL&geo=BE&geo=AT&geo=FI&geo=EA20&geo=EU27_2020&geo=HU&geo=PL&geo=CZ&geo=RO",
+     "an": "2026-10-02T10:52:07+00:00"
+    }
+   ]
+  },
+  "evds_pka_diger.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "3feea3455c4625562fceebc3449b99eb62f1207df1e1e120e1fdc9186105bbb8",
+   "satir": 440,
+   "sutunlar": [
+    "gecelik_cari_ay_sonu",
+    "cari_denge_cari_yil",
+    "cari_denge_gelecek_yil",
+    "buyume_cari_yil",
+    "buyume_gelecek_yil"
+   ],
+   "kesilen_satir": 1,
+   "cipa_siniri": "2026-08-01",
+   "aciklama": "Piyasa Katılımcıları Anketi, diğer beklentiler (uygun ortalamalar)",
+   "sutun_aciklama": {
+    "gecelik_cari_ay_sonu": "cari ay sonu BİST gecelik repo faizi beklentisi, %",
+    "cari_denge_cari_yil": "cari yıl cari işlemler dengesi beklentisi, milyar USD",
+    "cari_denge_gelecek_yil": "gelecek yıl cari işlemler dengesi beklentisi, milyar USD",
+    "buyume_cari_yil": "cari yıl GSYH büyüme beklentisi, %",
+    "buyume_gelecek_yil": "gelecek yıl GSYH büyüme beklentisi, %"
+   },
+   "kapsam": {
+    "gecelik_cari_ay_sonu": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "cari_denge_cari_yil": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "cari_denge_gelecek_yil": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "buyume_cari_yil": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "buyume_gelecek_yil": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "evds/seri/bie_pkauo_000.json.gz",
+     "sha256": "bbea849d6813aacba64599623b59ac128a326ae532bf4e49f37ac730b2fcd3a6",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S01.A.U-TP.PKAUO.S01.B.U-TP.PKAUO.S01.C.U-TP.PKAUO.S01.D.U-TP.PKAUO.S01.E.U-TP.PKAUO.S01.I.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:18+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_001.json.gz",
+     "sha256": "c59ba48f437d514f6f6b8651b07dddc0aa32799df97b860a9f2850acefc02a36",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S01.F.U-TP.PKAUO.S01.G.U-TP.PKAUO.S03.A.U-TP.PKAUO.S04.A.U-TP.PKAUO.S04.B.U-TP.PKAUO.S04.C.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:20+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_002.json.gz",
+     "sha256": "7cdaeee7bd408c00a1e1ce54b6886a940fcb3552819f54cd5c01078fb99e04fd",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S04.F.U-TP.PKAUO.S04.G.U-TP.PKAUO.S04.H.U-TP.PKAUO.S04.D.U-TP.PKAUO.S04.I.U-TP.PKAUO.S04.E.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:22+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_003.json.gz",
+     "sha256": "d638c48f3b66b0b268de453a9e16fd11b542db1b35f6bba07187298bfe03a000",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S05.A.U-TP.PKAUO.S05.B.U-TP.PKAUO.S05.C.U-TP.PKAUO.S06.A.U-TP.PKAUO.S06.B.U-TP.PKAUO.S07.A.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:24+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_004.json.gz",
+     "sha256": "f05f7cc442075b572b9a470934368d3b1308597079934e113ff51ee5b3fde5be",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S07.B.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:25+00:00"
+    }
+   ]
+  },
+  "evds_pka_enflasyon.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "92841dc2cf97a8c573e53dfd7792e677e3d47767c12f669e7208a16eff50068c",
+   "satir": 440,
+   "sutunlar": [
+    "cari_ay",
+    "ay1",
+    "ay2",
+    "yilsonu",
+    "ay12",
+    "ay24",
+    "yil5",
+    "gelecek_yilsonu"
+   ],
+   "kesilen_satir": 1,
+   "cipa_siniri": "2026-08-01",
+   "aciklama": "Piyasa Katılımcıları Anketi, enflasyon beklentileri (uygun ortalamalar), %",
+   "sutun_aciklama": {
+    "cari_ay": "cari ayın aylık TÜFE beklentisi",
+    "ay1": "1 ay sonrasının aylık TÜFE beklentisi",
+    "ay2": "2 ay sonrasının aylık TÜFE beklentisi",
+    "yilsonu": "cari yıl sonu yıllık TÜFE beklentisi",
+    "ay12": "12 ay sonrasının yıllık TÜFE beklentisi",
+    "ay24": "24 ay sonrasının yıllık TÜFE beklentisi",
+    "yil5": "5 yıl sonrasının yıllık TÜFE beklentisi",
+    "gelecek_yilsonu": "gelecek yıl sonu yıllık TÜFE beklentisi"
+   },
+   "kapsam": {
+    "cari_ay": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "ay1": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "ay2": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "yilsonu": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "ay12": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "ay24": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "yil5": {
+     "n": 106,
+     "ilk": "2017-11-01",
+     "son": "2026-08-01"
+    },
+    "gelecek_yilsonu": {
+     "n": 60,
+     "ilk": "2021-09-01",
+     "son": "2026-08-01"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "evds/seri/bie_pkauo_000.json.gz",
+     "sha256": "bbea849d6813aacba64599623b59ac128a326ae532bf4e49f37ac730b2fcd3a6",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S01.A.U-TP.PKAUO.S01.B.U-TP.PKAUO.S01.C.U-TP.PKAUO.S01.D.U-TP.PKAUO.S01.E.U-TP.PKAUO.S01.I.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:18+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_001.json.gz",
+     "sha256": "c59ba48f437d514f6f6b8651b07dddc0aa32799df97b860a9f2850acefc02a36",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S01.F.U-TP.PKAUO.S01.G.U-TP.PKAUO.S03.A.U-TP.PKAUO.S04.A.U-TP.PKAUO.S04.B.U-TP.PKAUO.S04.C.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:20+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_002.json.gz",
+     "sha256": "7cdaeee7bd408c00a1e1ce54b6886a940fcb3552819f54cd5c01078fb99e04fd",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S04.F.U-TP.PKAUO.S04.G.U-TP.PKAUO.S04.H.U-TP.PKAUO.S04.D.U-TP.PKAUO.S04.I.U-TP.PKAUO.S04.E.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:22+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_003.json.gz",
+     "sha256": "d638c48f3b66b0b268de453a9e16fd11b542db1b35f6bba07187298bfe03a000",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S05.A.U-TP.PKAUO.S05.B.U-TP.PKAUO.S05.C.U-TP.PKAUO.S06.A.U-TP.PKAUO.S06.B.U-TP.PKAUO.S07.A.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:24+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_004.json.gz",
+     "sha256": "f05f7cc442075b572b9a470934368d3b1308597079934e113ff51ee5b3fde5be",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S07.B.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:25+00:00"
+    }
+   ],
+   "ic_sinama": {
+    "depo_ile_ortak_ay": 164,
+    "azami_fark": 0.0
+   },
+   "tarih_kurali": "anket ayı (ay başı); yayım günü EVDS'te yok"
+  },
+  "evds_pka_kur.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "76a3204535699d7965a121a67d4f460fff023e08f047d72052ae717beed20943",
+   "satir": 440,
+   "sutunlar": [
+    "usdtry_cari_ay_sonu",
+    "usdtry_yilsonu",
+    "usdtry_12a"
+   ],
+   "kesilen_satir": 1,
+   "cipa_siniri": "2026-08-01",
+   "aciklama": "Piyasa Katılımcıları Anketi, USD/TRY beklentileri (bankalararası, uygun ortalamalar), TL",
+   "sutun_aciklama": {
+    "usdtry_cari_ay_sonu": "cari ay sonu",
+    "usdtry_yilsonu": "cari yıl sonu",
+    "usdtry_12a": "12 ay sonrası"
+   },
+   "kapsam": {
+    "usdtry_cari_ay_sonu": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "usdtry_yilsonu": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "usdtry_12a": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "evds/seri/bie_pkauo_000.json.gz",
+     "sha256": "bbea849d6813aacba64599623b59ac128a326ae532bf4e49f37ac730b2fcd3a6",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S01.A.U-TP.PKAUO.S01.B.U-TP.PKAUO.S01.C.U-TP.PKAUO.S01.D.U-TP.PKAUO.S01.E.U-TP.PKAUO.S01.I.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:18+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_001.json.gz",
+     "sha256": "c59ba48f437d514f6f6b8651b07dddc0aa32799df97b860a9f2850acefc02a36",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S01.F.U-TP.PKAUO.S01.G.U-TP.PKAUO.S03.A.U-TP.PKAUO.S04.A.U-TP.PKAUO.S04.B.U-TP.PKAUO.S04.C.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:20+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_002.json.gz",
+     "sha256": "7cdaeee7bd408c00a1e1ce54b6886a940fcb3552819f54cd5c01078fb99e04fd",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S04.F.U-TP.PKAUO.S04.G.U-TP.PKAUO.S04.H.U-TP.PKAUO.S04.D.U-TP.PKAUO.S04.I.U-TP.PKAUO.S04.E.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:22+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_003.json.gz",
+     "sha256": "d638c48f3b66b0b268de453a9e16fd11b542db1b35f6bba07187298bfe03a000",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S05.A.U-TP.PKAUO.S05.B.U-TP.PKAUO.S05.C.U-TP.PKAUO.S06.A.U-TP.PKAUO.S06.B.U-TP.PKAUO.S07.A.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:24+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_004.json.gz",
+     "sha256": "f05f7cc442075b572b9a470934368d3b1308597079934e113ff51ee5b3fde5be",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S07.B.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:25+00:00"
+    }
+   ],
+   "tarih_kurali": "anket ayı (ay başı)"
+  },
+  "evds_pka_toplanti.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "27934f6f1323ddf0b0cca784f7f11e00595e26b25da4fba0a60073591741673b",
+   "satir": 440,
+   "sutunlar": [
+    "ilk_toplanti",
+    "ikinci_toplanti",
+    "ucuncu_toplanti",
+    "cari_ay_sonu_repo",
+    "ay3_repo",
+    "yilsonu",
+    "faiz_12a",
+    "faiz_24a",
+    "politika_beklenti",
+    "seri"
+   ],
+   "kesilen_satir": 1,
+   "cipa_siniri": "2026-08-01",
+   "aciklama": "Piyasa Katılımcıları Anketi, politika faizi beklentileri (uygun ortalamalar), %",
+   "sutun_aciklama": {
+    "ilk_toplanti": "ilk toplantı için politika faizi beklentisi (2025-06'dan)",
+    "cari_ay_sonu_repo": "cari ay sonu bir hafta vadeli repo faizi beklentisi (2025-05'e kadar)",
+    "politika_beklenti": "ilk toplantı beklentisi, yoksa cari ay sonu repo beklentisi",
+    "seri": "politika_beklenti hangi soru",
+    "faiz_12a": "12 ay sonrası politika faizi beklentisi",
+    "faiz_24a": "24 ay sonrası politika faizi beklentisi"
+   },
+   "kapsam": {
+    "ilk_toplanti": {
+     "n": 15,
+     "ilk": "2025-06-01",
+     "son": "2026-08-01"
+    },
+    "ikinci_toplanti": {
+     "n": 15,
+     "ilk": "2025-06-01",
+     "son": "2026-08-01"
+    },
+    "ucuncu_toplanti": {
+     "n": 15,
+     "ilk": "2025-06-01",
+     "son": "2026-08-01"
+    },
+    "cari_ay_sonu_repo": {
+     "n": 149,
+     "ilk": "2013-01-01",
+     "son": "2025-05-01"
+    },
+    "ay3_repo": {
+     "n": 149,
+     "ilk": "2013-01-01",
+     "son": "2025-05-01"
+    },
+    "yilsonu": {
+     "n": 15,
+     "ilk": "2025-06-01",
+     "son": "2026-08-01"
+    },
+    "faiz_12a": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "faiz_24a": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "politika_beklenti": {
+     "n": 164,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "seri": {
+     "n": 440,
+     "ilk": "1990-01-01",
+     "son": "2026-08-01"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "evds/seri/bie_pkauo_000.json.gz",
+     "sha256": "bbea849d6813aacba64599623b59ac128a326ae532bf4e49f37ac730b2fcd3a6",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S01.A.U-TP.PKAUO.S01.B.U-TP.PKAUO.S01.C.U-TP.PKAUO.S01.D.U-TP.PKAUO.S01.E.U-TP.PKAUO.S01.I.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:18+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_001.json.gz",
+     "sha256": "c59ba48f437d514f6f6b8651b07dddc0aa32799df97b860a9f2850acefc02a36",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S01.F.U-TP.PKAUO.S01.G.U-TP.PKAUO.S03.A.U-TP.PKAUO.S04.A.U-TP.PKAUO.S04.B.U-TP.PKAUO.S04.C.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:20+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_002.json.gz",
+     "sha256": "7cdaeee7bd408c00a1e1ce54b6886a940fcb3552819f54cd5c01078fb99e04fd",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S04.F.U-TP.PKAUO.S04.G.U-TP.PKAUO.S04.H.U-TP.PKAUO.S04.D.U-TP.PKAUO.S04.I.U-TP.PKAUO.S04.E.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:22+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_003.json.gz",
+     "sha256": "d638c48f3b66b0b268de453a9e16fd11b542db1b35f6bba07187298bfe03a000",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S05.A.U-TP.PKAUO.S05.B.U-TP.PKAUO.S05.C.U-TP.PKAUO.S06.A.U-TP.PKAUO.S06.B.U-TP.PKAUO.S07.A.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:24+00:00"
+    },
+    {
+     "ham": "evds/seri/bie_pkauo_004.json.gz",
+     "sha256": "f05f7cc442075b572b9a470934368d3b1308597079934e113ff51ee5b3fde5be",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.PKAUO.S07.B.U&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T10:44:25+00:00"
+    }
+   ],
+   "tarih_kurali": "anket ayı (ay başı); anket ayın ilk yarısında toplanır, PPK genellikle ikinci yarıda"
+  },
+  "fomc_takvim.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "9f4a2ff5239ca06cdaa46ab6adf42867d8dd08d6a5d3de1add26ceea036770eb",
+   "satir": 170,
+   "sutunlar": [
+    "planli",
+    "kaynak"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2026-09-30",
+   "aciklama": "FOMC toplantıları: karar günü (toplantının son günü)",
+   "sutun_aciklama": {
+    "planli": "planlı toplantı (plansız toplantı ve telekonferans hayır)",
+    "kaynak": "hangi sayfadan"
+   },
+   "kapsam": {
+    "planli": {
+     "n": 170,
+     "ilk": "2008-01-09",
+     "son": "2026-09-16"
+    },
+    "kaynak": {
+     "n": 170,
+     "ilk": "2008-01-09",
+     "son": "2026-09-16"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "fomc/fomccalendars.htm.gz",
+     "sha256": "37730567673c24c862600ff347da611f959f7451450443b4182467a0f55ecd57",
+     "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+     "an": "2026-10-02T10:51:11+00:00"
+    },
+    {
+     "ham": "fomc/fomchistorical2008.htm.gz",
+     "sha256": "9484c1ceac2a620979870cd3af9679b1b427962d9c4e962a73c9f4ff6d14a6a9",
+     "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2008.htm",
+     "an": "2026-10-02T10:51:11+00:00"
+    },
+    {
+     "ham": "fomc/fomchistorical2009.htm.gz",
+     "sha256": "35b29ea773563273c974df856de0daa29bc4b4225a446eb4e05caa932c1ca91c",
+     "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2009.htm",
+     "an": "2026-10-02T10:51:11+00:00"
+    },
+    {
+     "ham": "fomc/fomchistorical2010.htm.gz",
+     "sha256": "592cce15e936e28e741bff3dc0c8f8edcb9eef8963125dcd0d998d963c2a87a7",
+     "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2010.htm",
+     "an": "2026-10-02T10:51:11+00:00"
+    },
+    {
+     "ham": "fomc/fomchistorical2011.htm.gz",
+     "sha256": "4a9f881365d74641f65035cf658a1ee5f505d277700b9b0fa1b3c02ffe264a7b",
+     "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2011.htm",
+     "an": "2026-10-02T10:51:12+00:00"
+    },
+    {
+     "ham": "fomc/fomchistorical2012.htm.gz",
+     "sha256": "a2a71ad512b0a985138e9d30b4b330270c37a565f57215dff6015672a27848e4",
+     "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2012.htm",
+     "an": "2026-10-02T10:51:12+00:00"
+    },
+    {
+     "ham": "fomc/fomchistorical2013.htm.gz",
+     "sha256": "45f0044bb557710b6ef04e4a097473e5ea9ea080ae32002c23c72c4ff8ab13b4",
+     "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2013.htm",
+     "an": "2026-10-02T10:51:12+00:00"
+    },
+    {
+     "ham": "fomc/fomchistorical2014.htm.gz",
+     "sha256": "bf8782b740d2c431a350ca6a6e97ec212fe63b9a6a1598a3ba5132522857068e",
+     "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2014.htm",
+     "an": "2026-10-02T10:51:12+00:00"
+    },
+    {
+     "ham": "fomc/fomchistorical2015.htm.gz",
+     "sha256": "f3c03348e274c934f7e31f99d4d791aac1a99e7c2063fc5ae3d68dbfa822c864",
+     "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2015.htm",
+     "an": "2026-10-02T10:51:12+00:00"
+    },
+    {
+     "ham": "fomc/fomchistorical2016.htm.gz",
+     "sha256": "c740a6f53a38f63964d705209ddc84b316be53b522e62e5cc71860040da2808d",
+     "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2016.htm",
+     "an": "2026-10-02T10:51:12+00:00"
+    },
+    {
+     "ham": "fomc/fomchistorical2017.htm.gz",
+     "sha256": "bf9a9a3780f08e965d8d3430499b1cc628d75b24f460665c72db68f8acf9579e",
+     "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2017.htm",
+     "an": "2026-10-02T10:51:13+00:00"
+    },
+    {
+     "ham": "fomc/fomchistorical2018.htm.gz",
+     "sha256": "77e30d3c1505574ea752e4e40ec7c0ccd0338a4a7a910d443d29df4c523d2f04",
+     "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2018.htm",
+     "an": "2026-10-02T10:51:13+00:00"
+    },
+    {
+     "ham": "fomc/fomchistorical2019.htm.gz",
+     "sha256": "df2ebc445ae65d24201087da02068ca4396a46b441eefc228af5a0fde3acc5bc",
+     "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2019.htm",
+     "an": "2026-10-02T10:51:13+00:00"
+    },
+    {
+     "ham": "fomc/fomchistorical2020.htm.gz",
+     "sha256": "2f882dd1b65ed9ee9a1c6935b74bba31764caa0db3332612e6bfff5b5c61e4af",
+     "url": "https://www.federalreserve.gov/monetarypolicy/fomchistorical2020.htm",
+     "an": "2026-10-02T10:51:13+00:00"
+    }
+   ]
+  },
+  "gilt.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "adacb8800572e837f3934b021727d847cb7695bf5597c758a9301754a8014a2a",
+   "satir": 4191,
+   "sutunlar": [
+    "gb2y",
+    "gb10y",
+    "gb30y",
+    "boe_5y_par",
+    "boe_10y_par",
+    "boe_20y_par"
+   ],
+   "kesilen_satir": 1,
+   "cipa_siniri": "2026-09-30",
+   "aciklama": "İngiltere devlet tahvili getirileri, günlük, %",
+   "sutun_aciklama": {
+    "gb2y": "2 yıllık gösterge (CNBC, Londra kapanış barı)",
+    "gb10y": "10 yıllık gösterge (CNBC)",
+    "gb30y": "30 yıllık gösterge (CNBC)",
+    "boe_5y_par": "BoE 5 yıllık nominal par getiri (kestirilmiş eğri)",
+    "boe_10y_par": "BoE 10 yıllık nominal par getiri",
+    "boe_20y_par": "BoE 20 yıllık nominal par getiri"
+   },
+   "kapsam": {
+    "gb2y": {
+     "n": 4168,
+     "ilk": "2010-01-04",
+     "son": "2026-09-30"
+    },
+    "gb10y": {
+     "n": 4152,
+     "ilk": "2010-01-04",
+     "son": "2026-09-30"
+    },
+    "gb30y": {
+     "n": 4153,
+     "ilk": "2010-01-04",
+     "son": "2026-09-30"
+    },
+    "boe_5y_par": {
+     "n": 1704,
+     "ilk": "2020-01-02",
+     "son": "2026-09-30"
+    },
+    "boe_10y_par": {
+     "n": 1704,
+     "ilk": "2020-01-02",
+     "son": "2026-09-30"
+    },
+    "boe_20y_par": {
+     "n": 1704,
+     "ilk": "2020-01-02",
+     "son": "2026-09-30"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "boe/iadb_par.csv.gz",
+     "sha256": "c22405d20e74c179dd3ed00f35549609f9f56a7d15b1827f5b2ee74d67a2c979",
+     "url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp?csv.x=yes&Datefrom=01/Jan/2020&Dateto=now&SeriesCodes=IUDSNPY,IUDMNPY,IUDLNPY&CSVF=TN&UsingCodes=Y&VPD=Y&VFD=N",
+     "an": "2026-10-02T10:52:49+00:00"
+    },
+    {
+     "ham": "cnbc/GB10Y_GB_2010.json.gz",
+     "sha256": "98779ca3dc045dbeda58e707fe46c6a8cff14dc83bd289afae19ddbde8020429",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB10Y-GB/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T10:52:53+00:00"
+    },
+    {
+     "ham": "cnbc/GB10Y_GB_2015.json.gz",
+     "sha256": "2ddbbb57f6ebc53ca6acfa8e6df499a545e92a5592a9f7700f75905f8fcc6010",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB10Y-GB/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T10:52:53+00:00"
+    },
+    {
+     "ham": "cnbc/GB10Y_GB_2020.json.gz",
+     "sha256": "f078a914d0e67dec332c1506794ab182f6a7c645521421dca1270180586f7aaa",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB10Y-GB/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T10:52:54+00:00"
+    },
+    {
+     "ham": "cnbc/GB10Y_GB_2025.json.gz",
+     "sha256": "1e17fe34b8b96a671fbb84c217d757686a5bdd48188dc24309b0e97e58606d99",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB10Y-GB/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T10:52:54+00:00"
+    },
+    {
+     "ham": "cnbc/GB2Y_GB_2010.json.gz",
+     "sha256": "14544123ef3cdc717e74e72d7f2293fecb7445829511f566923ca7154704bb22",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T10:52:50+00:00"
+    },
+    {
+     "ham": "cnbc/GB2Y_GB_2015.json.gz",
+     "sha256": "7647420992124a0088a7ccd935c743079d75ddcbe34c31e8d418038135d1ec11",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T10:52:51+00:00"
+    },
+    {
+     "ham": "cnbc/GB2Y_GB_2020.json.gz",
+     "sha256": "eceb7f971fbb97cfa0f2acaeffc5d2ed5b07e6a2e9d08874e31203c000212670",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T10:52:51+00:00"
+    },
+    {
+     "ham": "cnbc/GB2Y_GB_2025.json.gz",
+     "sha256": "d6baeeaa4d08f512d28f588a586392fed09722265f4901f407118bf3b8ad82c2",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB2Y-GB/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T10:52:52+00:00"
+    },
+    {
+     "ham": "cnbc/GB30Y_GB_2010.json.gz",
+     "sha256": "79bb354709cfb522376da3673079124990f3407ee5cdb1ee65c8bf97362bc6ba",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB30Y-GB/1D/20100101000000/20141231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T10:52:55+00:00"
+    },
+    {
+     "ham": "cnbc/GB30Y_GB_2015.json.gz",
+     "sha256": "0952063f79e0b58f962729231d4096d465042ff8dd95e274af1c34408a551df0",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB30Y-GB/1D/20150101000000/20191231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T10:52:55+00:00"
+    },
+    {
+     "ham": "cnbc/GB30Y_GB_2020.json.gz",
+     "sha256": "4323b16975602cc4aea519ab01d083fdf846ad1dda01cc65d0268e2aeb674412",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB30Y-GB/1D/20200101000000/20241231235959/adjusted/EST5EDT.json",
+     "an": "2026-10-02T10:52:56+00:00"
+    },
+    {
+     "ham": "cnbc/GB30Y_GB_2025.json.gz",
+     "sha256": "e56983bd0e5265571aa7cc474b1afce8cf16d0b627a7cabeef1ca52d127764ce",
+     "url": "https://ts-api.cnbc.com/harmony/app/bars/GB30Y-GB/1D/20250101000000/20261003000000/adjusted/EST5EDT.json",
+     "an": "2026-10-02T10:52:56+00:00"
+    }
+   ],
+   "ic_sinama": {
+    "gb10y_boe10y_medyan_fark": -0.027700000000000002,
+    "ortak_gun": 1697
+   }
+  },
+  "tuik_takvim.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "d20c7fcb293f4318806725eca874a0721d5be1f16ecc5ca81d58a012061e9bbd",
+   "satir": 268,
+   "sutunlar": [
+    "bulten",
+    "donem",
+    "saat",
+    "ad",
+    "kimlik"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2026-09-30",
+   "aciklama": "TÜİK ulusal veri yayımlama takvimi: TÜFE ve çeyreklik GSYH bültenlerinin yayım günleri",
+   "sutun_aciklama": {
+    "bulten": "tufe · gsyh",
+    "donem": "bültenin kapsadığı dönem (TÜİK yazımı)",
+    "saat": "takvimdeki saat (eski kayıtlarda 17:00 yer tutucusu görülür; gün esastır)",
+    "ad": "bülten adı"
+   },
+   "kapsam": {
+    "bulten": {
+     "n": 268,
+     "ilk": "2009-01-02",
+     "son": "2026-09-03"
+    },
+    "donem": {
+     "n": 268,
+     "ilk": "2009-01-02",
+     "son": "2026-09-03"
+    },
+    "saat": {
+     "n": 268,
+     "ilk": "2009-01-02",
+     "son": "2026-09-03"
+    },
+    "ad": {
+     "n": 268,
+     "ilk": "2009-01-02",
+     "son": "2026-09-03"
+    },
+    "kimlik": {
+     "n": 268,
+     "ilk": "2009-01-02",
+     "son": "2026-09-03"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "tuik/takvim_2009.json.gz",
+     "sha256": "906b4807281ccacba1b2b37d061516962e6a8f588f563b587e7fff3b93d49950",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2009",
+     "an": "2026-10-02T10:51:11+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2010.json.gz",
+     "sha256": "723990b87e91494234ab6078d990368e2002ee3d284c7edbdcefd33f702ac65d",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2010",
+     "an": "2026-10-02T10:51:07+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2011.json.gz",
+     "sha256": "ab83571b86e60e0facff9e59ac74f034282ec29380a4e42c3a5290a65e91abf0",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2011",
+     "an": "2026-10-02T10:51:03+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2012.json.gz",
+     "sha256": "41499de89d54d9c92b72f5314642fb0863af97a43d5b5e33557adfd306190663",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2012",
+     "an": "2026-10-02T10:50:59+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2013.json.gz",
+     "sha256": "e79d6e803619d4d83519139ba0d51ced1d6624c327997ff0661a60e516df9779",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2013",
+     "an": "2026-10-02T10:50:55+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2014.json.gz",
+     "sha256": "8de415d72d938297d43c66a4d8f365b9ec07bb704cda19e8afe5c533e6dac768",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2014",
+     "an": "2026-10-02T10:50:51+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2015.json.gz",
+     "sha256": "b65bea52a589d9c4ca69f354ef014cbd713f90224a0d693c89fc8a005921a63f",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2015",
+     "an": "2026-10-02T10:50:47+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2016.json.gz",
+     "sha256": "c1559cff3c111f2228dafdaf38738da08a38ed066b54591f7161c9199d29654f",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2016",
+     "an": "2026-10-02T10:50:43+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2017.json.gz",
+     "sha256": "6700a5abbdcc737be3a13864eb26327a0be47e3513c6f632460a013bcf55c8b0",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2017",
+     "an": "2026-10-02T10:50:37+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2018.json.gz",
+     "sha256": "189d71fa3eb19859f9d60d067b653146b613e662828b22b088b2678e9147a4d0",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2018",
+     "an": "2026-10-02T10:50:29+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2019.json.gz",
+     "sha256": "e64cca60bdf97a09f7b093aeb1733feef125a6f34ea2bfc54f416c9c577f55db",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2019",
+     "an": "2026-10-02T10:50:24+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2020.json.gz",
+     "sha256": "c96b915ef40c60e6479ac75bf56b71c54a8cafc62c7e1b45bc85b761b1dada85",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2020",
+     "an": "2026-10-02T10:50:19+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2021.json.gz",
+     "sha256": "3ace513014299b16df89830eff484b534894829f1079faa791fa56a99332abc8",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2021",
+     "an": "2026-10-02T10:50:14+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2022.json.gz",
+     "sha256": "bad58daf8fe0f3f440106fe1bf6a2c7269b320671e52b080747b47b440bda861",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2022",
+     "an": "2026-10-02T10:50:08+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2023.json.gz",
+     "sha256": "6c25c9f23e57310c3e014c4e1d831f278921842eba2d3f6abe83f41ba33a422d",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2023",
+     "an": "2026-10-02T10:50:02+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2024.json.gz",
+     "sha256": "9875bfcbeb29a1820e3c608aaec91b5c2102bf45d38aada51f677b83a79186d0",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2024",
+     "an": "2026-10-02T10:49:14+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2025.json.gz",
+     "sha256": "a257e32003eb826c63f0ea17f8d2b4da85bdedd77eddf6c3e97ac82d9af47e37",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2025",
+     "an": "2026-10-02T10:49:08+00:00"
+    },
+    {
+     "ham": "tuik/takvim_2026.json.gz",
+     "sha256": "8a283af545554dddaea32f11942bb4b7706226230e91eb15a4bac94bf29ee614",
+     "url": "https://www.tuik.gov.tr/Kurumsal/GetYillikHaberBulteniListesi?yil=2026",
+     "an": "2026-10-02T10:49:02+00:00"
+    }
+   ],
+   "ayni_gun_cift": 0
+  },
+  "wdi_borc.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "b0db7976dc97ded339c6cc3d8c9dd8839c36aa83b0fabc976a23eed96e649e45",
+   "satir": 36,
+   "sutunlar": [
+    "AUS",
+    "BRA",
+    "CAN",
+    "CHE",
+    "CHL",
+    "GBR",
+    "HUN",
+    "IDN",
+    "IND",
+    "KOR",
+    "MEX",
+    "NOR",
+    "POL",
+    "RUS",
+    "TUR",
+    "USA",
+    "ZAF"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2025-12-31",
+   "aciklama": "Dünya Bankası WDI (GC.DOD.TOTL.GD.ZS): merkezi yönetim borcu, % GSYH, yıllık",
+   "sutun_aciklama": {
+    "XXX": "ISO3 ülke kodu"
+   },
+   "kapsam": {
+    "AUS": {
+     "n": 33,
+     "ilk": "1990-12-31",
+     "son": "2022-12-31"
+    },
+    "BRA": {
+     "n": 15,
+     "ilk": "2010-12-31",
+     "son": "2024-12-31"
+    },
+    "CAN": {
+     "n": 35,
+     "ilk": "1990-12-31",
+     "son": "2024-12-31"
+    },
+    "CHE": {
+     "n": 35,
+     "ilk": "1990-12-31",
+     "son": "2024-12-31"
+    },
+    "CHL": {
+     "n": 6,
+     "ilk": "1995-12-31",
+     "son": "2000-12-31"
+    },
+    "GBR": {
+     "n": 35,
+     "ilk": "1990-12-31",
+     "son": "2024-12-31"
+    },
+    "HUN": {
+     "n": 34,
+     "ilk": "1991-12-31",
+     "son": "2024-12-31"
+    },
+    "IDN": {
+     "n": 14,
+     "ilk": "1990-12-31",
+     "son": "2009-12-31"
+    },
+    "IND": {
+     "n": 29,
+     "ilk": "1990-12-31",
+     "son": "2018-12-31"
+    },
+    "KOR": {
+     "n": 21,
+     "ilk": "1990-12-31",
+     "son": "2024-12-31"
+    },
+    "MEX": {
+     "n": 17,
+     "ilk": "1990-12-31",
+     "son": "2024-12-31"
+    },
+    "NOR": {
+     "n": 5,
+     "ilk": "1990-12-31",
+     "son": "1994-12-31"
+    },
+    "POL": {
+     "n": 1,
+     "ilk": "1994-12-31",
+     "son": "1994-12-31"
+    },
+    "RUS": {
+     "n": 25,
+     "ilk": "1998-12-31",
+     "son": "2024-12-31"
+    },
+    "TUR": {
+     "n": 26,
+     "ilk": "1990-12-31",
+     "son": "2024-12-31"
+    },
+    "USA": {
+     "n": 36,
+     "ilk": "1989-12-31",
+     "son": "2024-12-31"
+    },
+    "ZAF": {
+     "n": 21,
+     "ilk": "1990-12-31",
+     "son": "2024-12-31"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "wdi/GC.DOD.TOTL.GD.ZS.json.gz",
+     "sha256": "9ed5dff44817ee2e9f003d0088a5ece308da13aded211b1cd8bbdc3366a931cf",
+     "url": "https://api.worldbank.org/v2/country/TUR;USA;EMU;JPN;GBR;CHE;AUS;CAN;NOR;SWE;BRA;MEX;ZAF;IND;IDN;POL;HUN;CHL;KOR;ARG;RUS;CHN/indicator/GC.DOD.TOTL.GD.ZS?format=json&per_page=20000&date=1980:2026",
+     "an": "2026-10-02T10:52:11+00:00"
+    }
+   ]
+  },
+  "wdi_buyume.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "a86941dd02ad46006198c85ad9b37122defa8cd2b21540ec570ad66be2fc1e77",
+   "satir": 46,
+   "sutunlar": [
+    "ARG",
+    "AUS",
+    "BRA",
+    "CAN",
+    "CHE",
+    "CHL",
+    "CHN",
+    "EMU",
+    "GBR",
+    "HUN",
+    "IDN",
+    "IND",
+    "JPN",
+    "KOR",
+    "MEX",
+    "NOR",
+    "POL",
+    "RUS",
+    "SWE",
+    "TUR",
+    "USA",
+    "ZAF"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2025-12-31",
+   "aciklama": "Dünya Bankası WDI (NY.GDP.MKTP.KD.ZG): reel GSYH büyümesi, %, yıllık",
+   "sutun_aciklama": {
+    "XXX": "ISO3 ülke kodu"
+   },
+   "kapsam": {
+    "ARG": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "AUS": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "BRA": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "CAN": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "CHE": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "CHL": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "CHN": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "EMU": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "GBR": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "HUN": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "IDN": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "IND": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "JPN": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "KOR": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "MEX": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "NOR": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "POL": {
+     "n": 35,
+     "ilk": "1991-12-31",
+     "son": "2025-12-31"
+    },
+    "RUS": {
+     "n": 36,
+     "ilk": "1990-12-31",
+     "son": "2025-12-31"
+    },
+    "SWE": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "TUR": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "USA": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "ZAF": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "wdi/NY.GDP.MKTP.KD.ZG.json.gz",
+     "sha256": "4e82fd0ba99bd8b529e9bce3ba780c6fd03ea6a184d35019fcf1453aa0db7a24",
+     "url": "https://api.worldbank.org/v2/country/TUR;USA;EMU;JPN;GBR;CHE;AUS;CAN;NOR;SWE;BRA;MEX;ZAF;IND;IDN;POL;HUN;CHL;KOR;ARG;RUS;CHN/indicator/NY.GDP.MKTP.KD.ZG?format=json&per_page=20000&date=1980:2026",
+     "an": "2026-10-02T10:52:15+00:00"
+    }
+   ]
+  },
+  "wdi_cari.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "caa98c907f9904e247eef81e70cfe408a55a4946f75b2d8312b756e170f94884",
+   "satir": 46,
+   "sutunlar": [
+    "ARG",
+    "AUS",
+    "BRA",
+    "CAN",
+    "CHE",
+    "CHL",
+    "CHN",
+    "GBR",
+    "HUN",
+    "IDN",
+    "IND",
+    "JPN",
+    "KOR",
+    "MEX",
+    "NOR",
+    "POL",
+    "RUS",
+    "SWE",
+    "TUR",
+    "USA",
+    "ZAF"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2025-12-31",
+   "aciklama": "Dünya Bankası WDI (BN.CAB.XOKA.GD.ZS): cari denge, % GSYH, yıllık",
+   "sutun_aciklama": {
+    "XXX": "ISO3 ülke kodu"
+   },
+   "kapsam": {
+    "ARG": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "AUS": {
+     "n": 37,
+     "ilk": "1989-12-31",
+     "son": "2025-12-31"
+    },
+    "BRA": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "CAN": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "CHE": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "CHL": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "CHN": {
+     "n": 44,
+     "ilk": "1982-12-31",
+     "son": "2025-12-31"
+    },
+    "GBR": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "HUN": {
+     "n": 44,
+     "ilk": "1982-12-31",
+     "son": "2025-12-31"
+    },
+    "IDN": {
+     "n": 45,
+     "ilk": "1981-12-31",
+     "son": "2025-12-31"
+    },
+    "IND": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "JPN": {
+     "n": 30,
+     "ilk": "1996-12-31",
+     "son": "2025-12-31"
+    },
+    "KOR": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "MEX": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "NOR": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "POL": {
+     "n": 36,
+     "ilk": "1990-12-31",
+     "son": "2025-12-31"
+    },
+    "RUS": {
+     "n": 32,
+     "ilk": "1994-12-31",
+     "son": "2025-12-31"
+    },
+    "SWE": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "TUR": {
+     "n": 45,
+     "ilk": "1980-12-31",
+     "son": "2024-12-31"
+    },
+    "USA": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "ZAF": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "wdi/BN.CAB.XOKA.GD.ZS.json.gz",
+     "sha256": "ba611380e998c275dd25c3021208ee30594f068661378bbb52a42c0502d60e8a",
+     "url": "https://api.worldbank.org/v2/country/TUR;USA;EMU;JPN;GBR;CHE;AUS;CAN;NOR;SWE;BRA;MEX;ZAF;IND;IDN;POL;HUN;CHL;KOR;ARG;RUS;CHN/indicator/BN.CAB.XOKA.GD.ZS?format=json&per_page=20000&date=1980:2026",
+     "an": "2026-10-02T10:52:11+00:00"
+    }
+   ]
+  },
+  "wdi_enflasyon.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "f46f6ed52bc54572abfa078a93c10b3fad384fee7f7ff0f84ba77c97fa136814",
+   "satir": 46,
+   "sutunlar": [
+    "ARG",
+    "AUS",
+    "BRA",
+    "CAN",
+    "CHE",
+    "CHL",
+    "CHN",
+    "EMU",
+    "GBR",
+    "HUN",
+    "IDN",
+    "IND",
+    "JPN",
+    "KOR",
+    "MEX",
+    "NOR",
+    "POL",
+    "RUS",
+    "SWE",
+    "TUR",
+    "USA",
+    "ZAF"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2025-12-31",
+   "aciklama": "Dünya Bankası WDI (FP.CPI.TOTL.ZG): TÜFE enflasyonu, yıllık %, yıllık",
+   "sutun_aciklama": {
+    "XXX": "ISO3 ülke kodu"
+   },
+   "kapsam": {
+    "ARG": {
+     "n": 7,
+     "ilk": "2018-12-31",
+     "son": "2024-12-31"
+    },
+    "AUS": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "BRA": {
+     "n": 45,
+     "ilk": "1981-12-31",
+     "son": "2025-12-31"
+    },
+    "CAN": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "CHE": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "CHL": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "CHN": {
+     "n": 39,
+     "ilk": "1987-12-31",
+     "son": "2025-12-31"
+    },
+    "EMU": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "GBR": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "HUN": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "IDN": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "IND": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "JPN": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "KOR": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "MEX": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "NOR": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "POL": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "RUS": {
+     "n": 33,
+     "ilk": "1993-12-31",
+     "son": "2025-12-31"
+    },
+    "SWE": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "TUR": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    },
+    "USA": {
+     "n": 45,
+     "ilk": "1980-12-31",
+     "son": "2024-12-31"
+    },
+    "ZAF": {
+     "n": 46,
+     "ilk": "1980-12-31",
+     "son": "2025-12-31"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "wdi/FP.CPI.TOTL.ZG.json.gz",
+     "sha256": "50f253aaec294ef2d53b0234bbdb5ebfb37e6f24af2fd62a82b7aa58ae0c23dd",
+     "url": "https://api.worldbank.org/v2/country/TUR;USA;EMU;JPN;GBR;CHE;AUS;CAN;NOR;SWE;BRA;MEX;ZAF;IND;IDN;POL;HUN;CHL;KOR;ARG;RUS;CHN/indicator/FP.CPI.TOTL.ZG?format=json&per_page=20000&date=1980:2026",
+     "an": "2026-10-02T10:52:25+00:00"
+    }
+   ]
+  }
+ }
+}
