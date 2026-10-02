@@ -74,7 +74,9 @@ jobs:
             *..*) echo "::error::Yolda '..' olamaz: $BETIK"; exit 1;;
           esac
           if [ ! -f "$BETIK" ]; then echo "::error::Betik yok: $BETIK"; exit 1; fi
-          if ! printf '%s' "$PAKETLER" | grep -Eq '^[A-Za-z0-9._=<> -]*$'; then
+          # Boş liste meşrudur; grep boş girdide satır görmez ve 1 döner (02.10.2026
+          # #9 tam bundan düştü), o yüzden yalnız dolu liste sınanır.
+          if [ -n "$PAKETLER" ] && ! printf '%s\n' "$PAKETLER" | grep -Eq '^[A-Za-z0-9._=<> -]*$'; then
             echo "::error::Paket listesinde izin verilmeyen karakter: $PAKETLER"; exit 1
           fi
       - name: Bağımlılıklar
