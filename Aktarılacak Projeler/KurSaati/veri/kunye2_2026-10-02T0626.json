@@ -1,0 +1,22 @@
+{
+ "dosyalar": {
+  "yf_fx_60m.csv.gz": {
+   "kaynak": "yfinance.download 12 sembol period=60d interval=60m",
+   "indirme_utc": "2026-10-02T06:26:22+00:00",
+   "satir": 1415
+  },
+  "yf_fx_5m.csv.gz": {
+   "kaynak": "yfinance.download 12 sembol period=5d interval=5m",
+   "indirme_utc": "2026-10-02T06:26:26+00:00",
+   "satir": 1242
+  },
+  "yf_fx_1d.csv.gz": {
+   "kaynak": "yfinance.download 12 sembol period=3mo interval=1d",
+   "indirme_utc": "2026-10-02T06:26:29+00:00",
+   "satir": 67
+  }
+ },
+ "uyarilar": [],
+ "baslangic_utc": "2026-10-02T06:26:20+00:00",
+ "bitis_utc": "2026-10-02T06:26:32+00:00"
+}
