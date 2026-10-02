@@ -195,6 +195,14 @@ def _kapanis_ani():
     sina("canlı kotasyon ölçüm anının son fiyatı, kapanışa karışmıyor",
          k.canli is not None and abs(k.canli[1] - 49.14) < 1e-9 and k.canli[0] == "2026-10-02T04:18:00Z",
          f"{k.canli}")
+    # Kotasyonun damgası barın KENDİ saatidir; son bar 90 dakikadan eskiyse
+    # (besleme durdu, piyasa kapalı) kotasyon hiç basılmaz — pazar öğleden
+    # sonrası cuma akşamının fiyatını "şimdi" diye göstermesin.
+    k_ = f.saatlik_kapanislar(fiyat, "tr", dt.datetime(2026, 10, 2, 7, 20, tzinfo=dt.timezone.utc))
+    sina("kapanmış son barın kotasyonu barın kapanış saatiyle damgalanır",
+         k_.canli is not None and k_.canli[0] == "2026-10-02T07:00:00Z", f"{k_.canli}")
+    k_ = f.saatlik_kapanislar(fiyat, "tr", dt.datetime(2026, 10, 4, 14, 3, tzinfo=dt.timezone.utc))
+    sina("son bar 90 dakikadan eskiyse canlı kotasyon yok", k_.canli is None, f"{k_.canli}")
     ogle = dt.datetime(2026, 10, 1, 14, 30, tzinfo=dt.timezone.utc)
     k2 = f.saatlik_kapanislar(fiyat, "tr", ogle)
     sina("kapanış anı gelmemiş gün seriye girmiyor", k2.seri.index[-1].date() == dt.date(2026, 9, 30),
@@ -267,6 +275,38 @@ def _kapanis_ani():
         kr2 = m.seri(bas="2026-06-01", onbellek=yol, cek=cek, simdi=simdi_)
         sina("yeni tanımlı taze önbellek kullanılıyor", not cekildi and kr2.onbellekten,
              f"çekildi {len(cekildi)} · önbellekten {kr2.onbellekten}")
+        # Önbellekten dönen koşu künyesini taşır (tanım ve uyarı).
+        m._kunye_yaz(yol, {"gecis": None, "kapanis": "İstanbul 18:00", "uyarilar": ["örnek uyarı"]})
+        kr3 = m.seri(bas="2026-06-01", onbellek=yol, cek=cek, simdi=simdi_)
+        sina("önbellekten dönen koşu künyenin uyarısını ve tanımını taşıyor",
+             kr3.onbellekten and kr3.uyarilar == ["örnek uyarı"] and kr3.kapanis == "İstanbul 18:00", f"{kr3.uyarilar}")
+        # YEDEK YOL: saatlik bar alınamadı, günlük bardan kurulan seri bir gün
+        # geride. Eldeki İstanbul 18:00 serisi en az onun kadar yeniyse o döner
+        # (hattın saati geri gitmez, gerileme kapısı ötmez) ve önbellek yedekle
+        # EZİLMEZ.
+        os.utime(yol, (0, 0))                                   # önbellek bayat: çekim denenir
+        oncesi = yol.read_bytes()
+
+        def cek_yedek(bas, bit):
+            x = pd.Series(48.99, index=gunler[:-1])
+            x.attrs = {"yedek": True, "uyari": "saatlik bar alınamadı (deneme); kapanış düzeltilmiş günlük bardan",
+                       "kapanis": "Londra gece yarısı (günlük bar)"}
+            return x
+        kr4 = m.seri(bas="2026-06-01", onbellek=yol, cek=cek_yedek, simdi=simdi_)
+        sina("yedek yol: eldeki yeni tanımlı seri döner, önbellek ezilmez",
+             kr4.onbellekten and kr4.son == gunler[-1].date() and kr4.kapanis == "İstanbul 18:00"
+             and any("saatlik bar alınamadı" in u for u in kr4.uyarilar) and yol.read_bytes() == oncesi,
+             f"son {kr4.son} · {kr4.uyarilar}")
+        # Önbellek yoksa yedek seri döner ama YENİ tanımın sütununa yazılmaz:
+        # bir sonraki koşu onu taze bir İstanbul 18:00 serisi saymamalı.
+        yol2 = Path(d_) / "usdtry2.csv"
+        kr5 = m.seri(bas="2026-06-01", onbellek=yol2, cek=cek_yedek, simdi=simdi_)
+        sutun5 = pd.read_csv(yol2, index_col=0).columns[0]
+        cekildi.clear()
+        kr6 = m.seri(bas="2026-06-01", onbellek=yol2, cek=cek, simdi=simdi_)
+        sina("yedek seri yeni tanımın sütununa yazılmaz, bir sonraki koşu yeniden çeker",
+             not kr5.onbellekten and kr5.kapanis.startswith("Londra") and sutun5 == m.YEDEK_SUTUN
+             and cekildi and not kr6.onbellekten, f"sütun {sutun5!r} · çekildi {len(cekildi)}")
 
 
 # ===========================================================================

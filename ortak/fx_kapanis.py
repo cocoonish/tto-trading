@@ -65,6 +65,10 @@ KESIM_ADI = {TR: "İstanbul 18:00", G10: "New York 17:00"}
 # olabilir: tek bir eksik saatlik bar meşrudur (Yahoo'nun tek tük boşluğu),
 # üç saatlik boşluk besleme kesintisidir.
 AZAMI_BOSLUK = dt.timedelta(hours=3)
+# Canlı kotasyon yalnız ölçüm anında AÇIK bir barın fiyatıysa canlıdır. Son
+# bar ölçümden bu kadar önce başladıysa besleme durmuş ya da piyasa kapalıdır
+# (pazar öğleden sonrası cuma akşamının fiyatını taşır): kotasyon basılmaz.
+CANLI_AZAMI = dt.timedelta(minutes=90)
 SAATLIK_DONEM = "730d"          # yfinance'in 60 dakikalık bar sınırı
 
 
@@ -85,7 +89,7 @@ class Kapanislar:
     tur: str = G10
     kapanis_utc: dict = field(default_factory=dict)   # 'YYYY-MM-DD' → ISO UTC kapanış anı
     olculemeyen: list = field(default_factory=list)   # barı olup kapanışı kurulamayan günler
-    canli: tuple | None = None                        # (ölçüm anı UTC, son kotasyon) — yalnız bilgi
+    canli: tuple | None = None                        # (kotasyonun anı UTC, son kotasyon) — yalnız bilgi
 
 
 def saatlik_kapanislar(kapanis: pd.Series, tur: str, simdi: dt.datetime | None = None) -> Kapanislar:
@@ -107,8 +111,14 @@ def saatlik_kapanislar(kapanis: pd.Series, tur: str, simdi: dt.datetime | None =
     # CANLI KOTASYON: henüz kapanmamış son barın kapanışı ölçüm anının son
     # fiyatıdır. Yalnız BİLGİ olarak taşınır (okura saatiyle basılır); hiçbir
     # kapanışa, değişime ya da oynaklığa girmez.
+    # Damga barın KENDİ saatidir: açık barın son fiyatı ölçüm anınındır, kapanmış
+    # bir barınki kapanış anının (ölçüm anıyla damgalansa cuma akşamının fiyatı
+    # pazar öğleden sonrası "şimdi" diye basılırdı).
     basladi = s[s.index - pd.Timedelta(hours=1) <= simdi_ts]     # ölçüm anında başlamış barlar
-    canli = (simdi_ts.isoformat().replace("+00:00", "Z"), float(basladi.iloc[-1])) if len(basladi) else None
+    canli = None
+    if len(basladi) and simdi_ts - (basladi.index[-1] - pd.Timedelta(hours=1)) <= CANLI_AZAMI:
+        zaman = min(basladi.index[-1], simdi_ts)
+        canli = (zaman.isoformat().replace("+00:00", "Z"), float(basladi.iloc[-1]))
     s = s[s.index <= simdi_ts]                       # henüz kapanmamış bar kapanış taşımaz
     if not len(s):
         return Kapanislar(pd.Series(dtype="float64"), tur, canli=canli)

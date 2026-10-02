@@ -4087,3 +4087,16 @@ kullanıyor ve kalibrasyonu bir gün kaymış seriyle yapılmış; düzeltmek o
 projenin kalibrasyonunu değiştirir, karar kullanıcıda. Düzeltme kayıtları
 02.10 (on iki satır, gösterge, üç cümle) ve 28.09 sayısında; aradaki sayıların
 döviz satırları için 02.10'daki genel kayıt geçerli, sayı sayı kayıt yazılmadı.
+İnceleme (donmuş commit'e karşı tek mercek, ölçülerek) yayından önce iki
+gerçek kusur buldu ve ikisi de bu düzeltmenin KENDİ yedek yollarındaydı. (1)
+Saatlik bar alınamazsa yükleyici günlük bardan kurulan, bir gün GERİDE biten
+seriyi yeni tanımın sütun adıyla önbelleğe yazıyordu: bir sonraki koşu onu taze
+bir İstanbul 18:00 serisi sanıyor, hattın saati geri gidiyor ve gerileme kapısı
+TTL boyunca hattı durduruyordu. Yedek yol artık eldeki yeni tanımlı seriyi
+döndürür (en az yedeğin kadar yeniyse) ve yedek seri hiçbir koşulda yeni
+tanımın sütununa yazılmaz. (2) Canlı kotasyon ÖLÇÜM anıyla damgalanıyordu;
+pazar sayısında cuma akşamının fiyatı "17:03 TSİ" diye basılırdı. Damga
+barın kendi saatidir, son bar 90 dakikadan eskiyse kotasyon basılmaz. Bir
+yedek yol, ana yol kadar sınanmadıysa sınanmamıştır — üstelik arızanın
+geldiği yer tam orasıdır. Üretimin saatlik çağrısı (730 gün, 1 yıl) bulutta
+ayrıca denendi: on iki sembolün hepsi dönüyor, kapanışlar yereldekiyle aynı.

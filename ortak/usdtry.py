@@ -62,6 +62,7 @@ TUR = _fx.kesim_turu(SEMBOL)                       # "tr": İstanbul 18:00
 # (eski tanım: günlük barın kapanış alanı) taze sayılmaz, yalnız ağ düşerse
 # son çare olarak döner ve bunu uyarısında adıyla söyler.
 SUTUN = "usdtry_ist18"
+YEDEK_SUTUN = "usdtry_gunluk_yedek"   # saatlik bar alınamadığı koşunun serisi (taze sayılmaz)
 YAHOO_URL = f"https://query1.finance.yahoo.com/v8/finance/chart/{SEMBOL}"
 KAYNAK = "Yahoo Finance (USDTRY=X)"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
@@ -114,7 +115,7 @@ def _yahoo_cek(bas: dt.date, bit: dt.date, simdi: dt.datetime | None = None) -> 
     if kp is None or not len(kp.seri):
         duz.attrs = {"uyari": "saatlik bar alınamadı (" + hata[:120] + "); kapanış düzeltilmiş "
                               "günlük bardan (Londra gece yarısı), son gün bir gün geride",
-                     "kapanis": "Londra gece yarısı (günlük bar)"}
+                     "kapanis": "Londra gece yarısı (günlük bar)", "yedek": True}
         return _seri_temizle(duz.values, duz.index, duz.attrs)
     birlesik, gecis = _fx.birlestir(duz, kp)
     return _seri_temizle(birlesik.values, birlesik.index,
@@ -333,9 +334,14 @@ def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
             sys.path.insert(0, str(Path(__file__).resolve().parent))
             import tazelik  # noqa: E402
             if tazelik.taze(yol, ttl_saat):
+                # Künye önbellekle birlikte okunur: önbellekten dönen koşu da
+                # kapanış tanımını ve uyarılarını taşısın (yoksa ikinci çağrı
+                # her seferinde "temiz" der).
+                kn = _kunye_oku(yol)
                 return Kur(eski[eski.index >= pd.Timestamp(bas_t)], ilk=eski.index[0].date(),
                            son=eski.index[-1].date(), n=len(eski), onbellekten=True,
-                           gecis=_kunye_oku(yol).get("gecis"))
+                           gecis=kn.get("gecis"), kapanis=kn.get("kapanis") or _fx.KESIM_ADI[TUR],
+                           uyarilar=list(kn.get("uyarilar") or []))
         except ImportError:
             pass
 
@@ -354,6 +360,19 @@ def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
         raise RuntimeError(f"USD/TRY çekilemedi ve önbellek yok: {e}") from e
 
     meta = dict(getattr(yeni, "attrs", {}) or {})
+    # YEDEK YOL (saatlik bar alınamadı): günlük bardan kurulan seri bir gün
+    # geride biter. Eldeki İstanbul 18:00 serisi en az onun kadar yeniyse o
+    # döner — yedeği yayımlamak hattın saatini geri çeker ve gerileme kapısı
+    # hattı durdurur. Yedek seri hiçbir koşulda YENİ tanımın sütununa yazılmaz:
+    # yazılsaydı bir sonraki koşu onu taze bir İstanbul 18:00 serisi sanırdı.
+    yedek = bool(meta.get("yedek"))
+    if yedek and eski is not None and eski_tanim == SUTUN and len(yeni) and eski.index[-1] >= yeni.index[-1]:
+        kn = _kunye_oku(yol) if yol is not None else {}
+        return Kur(eski[eski.index >= pd.Timestamp(bas_t)], ilk=eski.index[0].date(),
+                   son=eski.index[-1].date(), n=len(eski), onbellekten=True,
+                   uyarilar=[meta["uyari"].split(";")[0] + f"; eldeki İstanbul 18:00 serisi kullanıldı "
+                             f"(son gün {eski.index[-1]:%d.%m.%Y})"],
+                   kapanis=_fx.KESIM_ADI[TUR], gecis=kn.get("gecis"))
     yeni = kapanmamis_bari_dusur(yeni, simdi)
     # SIRA ÖNEMLİ: hafta sonu barı kapsam denetiminden ÖNCE düşer. Aksi hâlde
     # doluluk ölçütü (len(s) ÷ iş günü) hafta sonu barını hafta içi gözlem
@@ -373,16 +392,16 @@ def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
         raise RuntimeError("USD/TRY serisi kapsam sınamasını geçemedi ve önbellek yok: "
                            + "; ".join(kusur))
 
-    if yol is not None:
-        yol.parent.mkdir(parents=True, exist_ok=True)
-        gecici = yol.with_name(yol.stem + ".tmp.csv")
-        yeni.rename(SUTUN).to_csv(gecici, index_label="tarih")
-        gecici.replace(yol)
-        _kunye_yaz(yol, {"gecis": meta.get("gecis"), "kapanis": meta.get("kapanis")})
     uyarilar = list(hs_uyari) + ([meta["uyari"]] if meta.get("uyari") else [])
     if meta.get("olculemeyen"):
         uyarilar.append("saatlik barı kapanış anına yetişmeyen gün seriye alınmadı: "
                         + ", ".join(f"{pd.Timestamp(g):%d.%m.%Y}" for g in meta["olculemeyen"][-5:]))
+    if yol is not None:
+        yol.parent.mkdir(parents=True, exist_ok=True)
+        gecici = yol.with_name(yol.stem + ".tmp.csv")
+        yeni.rename(YEDEK_SUTUN if yedek else SUTUN).to_csv(gecici, index_label="tarih")
+        gecici.replace(yol)
+        _kunye_yaz(yol, {"gecis": meta.get("gecis"), "kapanis": meta.get("kapanis"), "uyarilar": uyarilar})
     return Kur(yeni, ilk=yeni.index[0].date(), son=yeni.index[-1].date(),
                n=len(yeni), uyarilar=uyarilar, kapanis=meta.get("kapanis") or _fx.KESIM_ADI[TUR],
                gecis=meta.get("gecis"), canli=meta.get("canli"))

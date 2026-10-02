@@ -55,6 +55,9 @@ ozet = {"_tarih": s.index[-1].strftime("%d.%m.%Y"), "kur": round(float(s.iloc[-1
         # Kaynak künyesi okura: hangi kaynak, seri hangi güne kadar, kaç gözlem.
         "kur_kaynak": kunye["kur_kaynak"], "kur_son": kunye["kur_son"],
         "kur_gozlem": kunye["kur_gozlem"],
+        # Kapanışın tanımı (İstanbul 18:00 ya da yedek yolun günlük barı):
+        # bülten gösterge kartı etiketini buradan okur, piyasa satırından değil.
+        "kur_kapanis": kunye.get("kur_kapanis"),
         "d1h": deval(5), "d1a": deval(21), "d3a": deval(63),
         # Ortalamanın penceresi ADIYLA yazılır: okur kaç günün ortalamasına
         # baktığını sayfada görmeli, dipnottan çıkarmak zorunda kalmamalı.

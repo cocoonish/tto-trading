@@ -2263,7 +2263,7 @@ def main() -> int:
         ham = src[src.index("def _ham_veri("):]
         assert ham.index("seri = _doviz_saatlik(seri)") < ham.index("seri = hafta_sonu_bari_dus(seri)"), "sıra"
         assert 'd.get("doviz_kapanis") == DOVIZ_KAPANIS_SURUM' in src and 'd["doviz_kapanis"] = DOVIZ_KAPANIS_SURUM' in src
-        assert 'not (_fx_mi(k) and not v.get("kapanis_tanimi"))' in src, "eski tanımlı döviz serisi devredilebilir"
+        assert 'not (_fx_mi(k) and not v.get("kapanis_ani"))' in src, "eski tanımlı ya da yedek döviz serisi devredilebilir"
         on = src[src.index("def _bos_seans_onar("):src.index("def _bos_seans_onar(") + 4000]
         assert 'if s.get("kapanis_tanimi"):' in on, "boş seans onarımı döviz serisine dokunuyor"
         yd = src[src.index("def _yerlesmemis_dus("):src.index("def _yerlesmemis_dus(") + 1500]
@@ -2271,6 +2271,83 @@ def main() -> int:
         assert 'a != "canli"' in src[src.index("def _seans_izsiz("):src.index("def _seans_izsiz(") + 400], \
             "devredilen seri önceki koşunun canlı kotasyonunu taşır"
     sina("döviz: kapanış saatlik bardan (İstanbul 18:00 · New York 17:00), günlük bar düzeltilerek, canlı kotasyon ayrı", _doviz_kapanisi)
+
+    # İncelemenin (02.10.2026) dört yolu, DAVRANIŞLA: (a) günlük çekimden
+    # dönmeyen sembol saatlik barla kurulur; (b) boş çekimde geri verilen
+    # görüntü eski tanımlı döviz serisi taşımaz; (c) yedek yoldan kurulmuş döviz
+    # satırı taşıyan önbellek taze sayılmaz (saatlik bar yeniden denenir).
+    def _doviz_yollari():
+        import importlib, json as _json, sys as _sys, tempfile, types
+        import pandas as _pd
+        import piyasa as py
+        sabah = dt.datetime(2026, 10, 2, 4, 18, tzinfo=dt.timezone.utc)
+        saat = _pd.date_range("2026-09-21 00:00", "2026-10-02 04:00", freq="1h", tz="UTC")
+        saat = saat[saat.dayofweek < 5]
+        saatlik = _pd.Series(49.0, index=saat)
+        out = py.doviz_kapanislari({}, {"USDTRY=X": saatlik}, sabah)
+        assert "USDTRY=X" in out and out["USDTRY=X"]["tarih"][-1] == "2026-10-01" \
+            and out["USDTRY=X"]["kapanis_tanimi"] == "İstanbul 18:00", out.get("USDTRY=X")
+        bos = py.doviz_kapanislari({}, {"USDTRY=X": _pd.Series(dtype="float64")}, sabah)
+        assert "USDTRY=X" not in bos, "ne günlük ne saatlik barı olan sembol boş satır olarak kaldı"
+        d = py._eski_goruntu({"seri": {"USDTRY=X": {"tarih": ["2026-10-01"], "kapanis": [49.0]},
+                                       "EURUSD=X": {"tarih": ["2026-10-01"], "kapanis": [1.1],
+                                                    "kapanis_tanimi": "New York 17:00", "kapanis_ani": "x"},
+                                       "^GSPC": {"tarih": ["2026-10-01"], "kapanis": [1.0]}}}, ["USDTRY=X"])
+        assert set(d["seri"]) == {"EURUSD=X", "^GSPC"}, d["seri"].keys()
+        sahte = types.ModuleType("yfinance")
+        def _indir(*a, **k):
+            raise RuntimeError("ağ yok (duman)")
+        sahte.download = _indir
+        eski_ham, eski_yf = py.HAM, _sys.modules.get("yfinance")
+        with tempfile.TemporaryDirectory() as td:
+            try:
+                py.HAM = Path(td) / "piyasa_ham.json"
+                _sys.modules["yfinance"] = sahte
+                taban = {"zaman": dt.datetime.now().isoformat(timespec="seconds"),
+                         "doviz_kapanis": py.DOVIZ_KAPANIS_SURUM,
+                         "seri": {"USDTRY=X": {"tarih": ["2026-10-01"], "kapanis": [49.0],
+                                               "kapanis_tanimi": "İstanbul 18:00", "kapanis_ani": "2026-10-01T15:00:00Z"}}}
+                py.HAM.write_text(_json.dumps(taban), encoding="utf-8")
+                assert py._ham_veri()["seri"]["USDTRY=X"]["kapanis"] == [49.0], "sağlıklı önbellek taze sayılmadı"
+                taban["seri"]["USDTRY=X"]["kapanis_ani"] = None
+                py.HAM.write_text(_json.dumps(taban), encoding="utf-8")
+                try:
+                    py._ham_veri()
+                    raise AssertionError("yedek yoldan kurulmuş döviz satırı taşıyan önbellek taze sayıldı")
+                except RuntimeError as e:
+                    assert "ağ yok" in str(e), e
+            finally:
+                py.HAM = eski_ham
+                if eski_yf is not None:
+                    _sys.modules["yfinance"] = eski_yf
+                else:
+                    _sys.modules.pop("yfinance", None)
+    sina("döviz: günlük çekimden dönmeyen sembol saatlik barla, eski tanım devredilmez, yedek görüntü taze sayılmaz", _doviz_yollari)
+
+    # Denetim: saatlik barı alınamamış ya da son seansın gerisinde kalmış döviz
+    # satırı adıyla UYARI (yayını durdurmaz — satırın tarihi doğrudur).
+    def _doviz_satir_denetimi():
+        import denetim as dn
+        def b(*satirlar):
+            return {"tarih": "2026-10-05", "olusturma": "2026-10-05T04:18:00+00:00",
+                    "piyasa": {"gruplar": [{"id": "tr_fx", "satirlar": list(satirlar)}]}}
+        tamam = [{"ad": "USD/TRY", "kod": "USDTRY=X", "tarih": "2026-10-02",
+                  "kapanis_tanimi": "İstanbul 18:00", "kapanis_ani": "2026-10-02T15:00:00Z"},
+                 {"ad": "EUR/USD", "kod": "EURUSD=X", "tarih": "2026-10-02",
+                  "kapanis_tanimi": "New York 17:00", "kapanis_ani": "2026-10-02T21:00:00Z"}]
+        d = dn.Denetim(b(*tamam)); d.uyari = []; d.doviz_kapanisi()
+        assert not d.uyari, ("pazartesi sabahı cuma kapanışı geride sayıldı", d.uyari)
+        geride = dict(tamam[1], tarih="2026-10-01", kapanis_ani="2026-10-01T21:00:00Z",
+                      kapanis_olculemeyen=["2026-10-02"])
+        d = dn.Denetim(b(tamam[0], geride)); d.uyari = []; d.doviz_kapanisi()
+        assert len(d.uyari) == 1 and "EUR/USD 2026-10-01 (beklenen 2026-10-02)" in d.uyari[0] \
+            and "yetişmedi" in d.uyari[0], d.uyari
+        yedek = dict(tamam[0], kapanis_tanimi="Londra gece yarısı (günlük bar; saatlik bar alınamadı)", kapanis_ani=None)
+        d = dn.Denetim(b(yedek, tamam[1])); d.uyari = []; d.engel = []; d.doviz_kapanisi()
+        assert len(d.uyari) == 1 and "saatlik barı alınamadı: USD/TRY" in d.uyari[0] and not d.engel, d.uyari
+        src = (BURASI / "denetim.py").read_text(encoding="utf-8")
+        assert "self.doviz_kapanisi();" in src, "ölçüt denetim.kos() listesinde değil"
+    sina("denetim: döviz satırı son seansının kapanışını taşımıyorsa ya da yedek yoldan kurulduysa UYARI", _doviz_satir_denetimi)
 
     # Denetimin bağımsız kapısı kapanış ANINI taşıyan satırı o anla sorar:
     # grup tablosu 7/24 dövize 24 yazar ve akşam koşusunda doğru bir İstanbul
@@ -2295,14 +2372,25 @@ def main() -> int:
     # Gösterge kartının canlı kotasyonu piyasa fotoğrafının AYNI sembolünden.
     def _gosterge_canli():
         import uret as ur
-        b = {"gostergeler": [{"hat": "usdtry-deval", "anahtar": "kur", "deger": 49.03}],
-             "piyasa": {"gruplar": [{"id": "tr_fx", "satirlar": [
-                 {"kod": "USDTRY=X", "canli": {"zaman": "2026-10-02T04:18:00Z", "deger": 49.0825},
-                  "kapanis_tanimi": "İstanbul 18:00"}]}]}}
-        ur.gosterge_canli(b)
-        g = b["gostergeler"][0]
-        assert g["canli"] == {"zaman": "2026-10-02T04:18:00Z", "deger": 49.0825} and g["kapanis_tanimi"] == "İstanbul 18:00", g
-        assert g["deger"] == 49.03, "canlı kotasyon kartın değerini değiştirmemeli"
+        def b(vt):
+            return {"gostergeler": [{"hat": "usdtry-deval", "anahtar": "kur", "deger": 49.03, "veri_tarihi": vt}],
+                    "piyasa": {"gruplar": [{"id": "tr_fx", "satirlar": [
+                        {"kod": "USDTRY=X", "tarih": "2026-10-01",
+                         "canli": {"zaman": "2026-10-02T04:18:00Z", "deger": 49.0825},
+                         "kapanis_tanimi": "New York 17:00"}]}]}}
+        eski_anlik = ur.gozlem.anlik
+        try:
+            # Etiket hattın ÖZETİNDEN (kartın değerinin geldiği yer), satırdan değil.
+            ur.gozlem.anlik = lambda hat: {"kur_kapanis": "İstanbul 18:00"} if hat == "usdtry-deval" else None
+            x = b("01.10.2026"); ur.gosterge_canli(x)
+            g = x["gostergeler"][0]
+            assert g["canli"] == {"zaman": "2026-10-02T04:18:00Z", "deger": 49.0825} and g["kapanis_tanimi"] == "İstanbul 18:00", g
+            assert g["deger"] == 49.03, "canlı kotasyon kartın değerini değiştirmemeli"
+            # Kartın günü satırın günüyle aynı değilse kotasyon eklenmez.
+            x = b("30.09.2026"); ur.gosterge_canli(x)
+            assert "canli" not in x["gostergeler"][0] and x["gostergeler"][0]["kapanis_tanimi"] == "İstanbul 18:00", x
+        finally:
+            ur.gozlem.anlik = eski_anlik
         src = (BURASI / "uret.py").read_text(encoding="utf-8")
         assert "    gosterge_canli(b)\n" in src, "uret() gosterge_canli'yi çağırmıyor"
     sina("gösterge: canlı kotasyon kartın değerine dokunmadan eklenir", _gosterge_canli)
@@ -3226,6 +3314,11 @@ def main() -> int:
         assert kod == 1 and adim == [a for a in adim if a.startswith("bulten.yml")] and adim, adim
         kod, adim = kos("2026-10-02T03:10:00+00:00")
         assert kod == 0 and not adim, adim
+        # Dilimsiz ölçüm damgası UTC sayılır; dilimli veri damgasıyla kıyas
+        # TypeError verip "nabız okunamadı" diye SESSİZCE tam dememeli.
+        olcum["olusturma"] = "2026-10-02T04:18:14"
+        kod, adim = kos("2026-10-02T04:30:00+00:00")
+        assert kod == 1 and any(a.startswith("bulten.yml") for a in adim), ("dilimsiz damga", kod, adim)
     sina("zincir: veri koşusu bülten gününe ait olmalı ve ölçümden önce koşmalı", _zincir_veri_sirasi)
 
     # ── YAZILMIŞ BÜLTEN KORUNUYOR MU (27.08.2026 kusuru)
