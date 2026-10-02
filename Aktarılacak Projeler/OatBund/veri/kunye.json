@@ -768,6 +768,94 @@
      "son": "2026-10-01"
     }
    }
+  },
+  "cnbc_kur_gunluk.csv.gz": {
+   "sha256": "74fbc338b490a214d77ac52242546ba684f117018a2ba99ab01aa511f05bfeb3",
+   "satir": 7464,
+   "kaynak": "CNBC (Tullett Prebon), günlük bar ucu",
+   "aciklama": "Döviz, New York 17:00 kapanışı; eurgbp/eurchf/eurjpy = euro çaprazı, gbp/aud = ABD doları karşısında (XXX/USD), chf/jpy/cad = USD/XXX; eur = EUR/USD (yalnız sınama); tarih CNBC işlem günü (New York saati); hafta sonu barları kaynakta cumanın kopyası",
+   "kapsam": {
+    "eurgbp": {
+     "n": 7408,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9994
+    },
+    "eurchf": {
+     "n": 7420,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9996
+    },
+    "eurjpy": {
+     "n": 7407,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9996
+    },
+    "gbp": {
+     "n": 7417,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9996
+    },
+    "chf": {
+     "n": 7426,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9996
+    },
+    "jpy": {
+     "n": 7425,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9996
+    },
+    "cad": {
+     "n": 7426,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9994
+    },
+    "aud": {
+     "n": 7415,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9997
+    },
+    "eur": {
+     "n": 7328,
+     "ilk": "2000-01-03",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9996
+    }
+   }
+  },
+  "ecb_kur.csv.gz": {
+   "sha256": "3f3fa41da6c7ecaa3527a3469e480800227f8669fd28c66ea82a9bef6fd57e3b",
+   "satir": 7167,
+   "kaynak": "ECB, EXR.D.<GBP|CHF|JPY>.EUR.SP00.A",
+   "aciklama": "Euro referans kurları (14:15 CET), 1 euro = x birim",
+   "kapsam": {
+    "eurgbp_ecb": {
+     "n": 7105,
+     "ilk": "1999-01-04",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9815
+    },
+    "eurchf_ecb": {
+     "n": 7105,
+     "ilk": "1999-01-04",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9815
+    },
+    "eurjpy_ecb": {
+     "n": 7105,
+     "ilk": "1999-01-04",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9815
+    }
+   }
   }
  },
  "uyarilar": [
@@ -777,5 +865,17 @@
   "cnbc_gunluk.csv.gz:pt10y beklenenden geç başlıyor (2011-09-20 > 2000-01-10)",
   "cnbc_gunluk.csv.gz:gr10y beklenenden geç başlıyor (2014-11-25 > 2000-01-10)",
   "cnbc_gunluk.csv.gz:es2y beklenenden geç başlıyor (2014-11-25 > 2000-01-10)"
+ ],
+ "ek_arsivler": [
+  {
+   "betik": "arsiv_kur.py",
+   "olusturma": "2026-10-02T05:17:55Z",
+   "sure_sn": 38.7,
+   "dosyalar": [
+    "cnbc_kur_gunluk.csv.gz",
+    "ecb_kur.csv.gz"
+   ],
+   "uyarilar": []
+  }
  ]
 }
