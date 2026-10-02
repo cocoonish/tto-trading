@@ -430,6 +430,19 @@ EM_GUN_SONU_GECIS = {"mxn": pd.Timestamp("2018-04-01")}
 EM_SICRAMA_ESIK = 0.035      # log; sıçrama ve ertesi gün geri dönüş, ikisi de bu eşiğin üstünde
 
 
+def geri_donen_sicrama(d: pd.Series, esik: float) -> pd.Series:
+    """Yalıtılmış bozuk kotasyon maskesi — TEK tanım. `d` günlük DEĞİŞİM serisidir
+    (kurda log değişim, getiride bp): bir günün değişimi ve ertesi günün değişimi
+    ikisi de `esik`i aşıyor, işaretleri ters ve iki günlük net hareket küçüğünün
+    yarısından az → o gün bozuk (True). EM kurları (`_em_kur_temiz`, eşik
+    `EM_SICRAMA_ESIK`) ve Bölüm 10'un CNBC sürücü barları (olcum_b10, kur ve getiri
+    eşikleri orada ölçülerek) aynı kuralı buradan okur; iki modülde iki kopya
+    olsaydı bir gün sessizce ayrışırdı (02.10.2026'da b10 için taşındı)."""
+    n = d.shift(-1)
+    return ((d.abs() > esik) & (n.abs() > esik) & (np.sign(d) != np.sign(n))
+            & ((d + n).abs() < 0.5 * np.minimum(d.abs(), n.abs()))).fillna(False)
+
+
 @lru_cache(maxsize=8)
 def _em_kur_temiz(kod: str) -> tuple[pd.Series, tuple]:
     """Yalıtılmış bozuk kotasyonlar çıkarılmış EM kuru (olcum_b11'de ölçüldü, tuzak 16).
@@ -442,10 +455,7 @@ def _em_kur_temiz(kod: str) -> tuple[pd.Series, tuple]:
     geri dönen sıçramalardır; çıkarılınca 2024 ve 2025'te ECB çaprazıyla günlük
     korelasyon 0,05–0,18'den 0,41–0,56'ya çıkıyor (doğrulama turu)."""
     s = _em_kur(kod)
-    d = np.log(s).diff()
-    n = d.shift(-1)
-    m = ((d.abs() > EM_SICRAMA_ESIK) & (n.abs() > EM_SICRAMA_ESIK) & (np.sign(d) != np.sign(n))
-         & ((d + n).abs() < 0.5 * np.minimum(d.abs(), n.abs()))).fillna(False)
+    m = geri_donen_sicrama(np.log(s).diff(), EM_SICRAMA_ESIK)
     return s[~m], tuple(_iso(t) for t in s.index[m])
 
 
