@@ -53,6 +53,12 @@ jobs:
       BETIK: ${{ inputs.betik }}
       PAKETLER: ${{ inputs.paketler }}
       PYTHONPATH: ${{ github.workspace }}/ortak
+      # EVDS anahtarı (02.10.2026): bir araştırmanın girdisi EVDS serisi olabilir
+      # (makro dersinin anket beklentileri, UYP, kalan vadeye göre borç). Yol
+      # kapısı yalnız depodaki `arsiv*.py`yi koşturur; anahtar veri.yml ve
+      # kesif.yml'deki aynı depo secret'ıdır, betik onu yalnız istek başlığına
+      # koyar ve hiçbir dosyaya yazmaz.
+      TTO_EVDS_KEY: ${{ secrets.TTO_EVDS_KEY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
