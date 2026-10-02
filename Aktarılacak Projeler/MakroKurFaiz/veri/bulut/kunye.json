@@ -1372,6 +1372,186 @@
     }
    ]
   },
+  "evds_dis_ticaret_endeks.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "496038e5f346b21ca1553c3981d87684cd5ea50ec24e3f1e140eecaa361859e5",
+   "satir": 163,
+   "sutunlar": [
+    "ihr_birim_deger",
+    "ith_birim_deger",
+    "ith_yakit_birim_deger",
+    "ihr_miktar",
+    "ith_miktar",
+    "ith_yakit_miktar"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2026-08-01",
+   "aciklama": "Dış ticaret birim değer ve miktar endeksleri, 2010=100 (TÜİK, EVDS)",
+   "sutun_aciklama": {
+    "ihr_birim_deger": "ihracat birim değer",
+    "ith_birim_deger": "ithalat birim değer",
+    "ith_yakit_birim_deger": "ithalat, işlem görmemiş yakıt ve yağlar, birim değer",
+    "ihr_miktar": "ihracat miktar",
+    "ith_miktar": "ithalat miktar",
+    "ith_yakit_miktar": "ithalat, işlem görmemiş yakıt ve yağlar, miktar"
+   },
+   "kapsam": {
+    "ihr_birim_deger": {
+     "n": 163,
+     "ilk": "2013-01-01",
+     "son": "2026-07-01"
+    },
+    "ith_birim_deger": {
+     "n": 163,
+     "ilk": "2013-01-01",
+     "son": "2026-07-01"
+    },
+    "ith_yakit_birim_deger": {
+     "n": 163,
+     "ilk": "2013-01-01",
+     "son": "2026-07-01"
+    },
+    "ihr_miktar": {
+     "n": 163,
+     "ilk": "2013-01-01",
+     "son": "2026-07-01"
+    },
+    "ith_miktar": {
+     "n": 163,
+     "ilk": "2013-01-01",
+     "son": "2026-07-01"
+    },
+    "ith_yakit_miktar": {
+     "n": 163,
+     "ilk": "2013-01-01",
+     "son": "2026-07-01"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "evds/seri2/bie_dtihfb10_000.json.gz",
+     "sha256": "d0d18e2593954d9276d0a8b551b56f6852b752580405245a0095e7c6a83d9891",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.DT.IH.FIY.D01.2010&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:33+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_dtihmb10_000.json.gz",
+     "sha256": "dee7a9bf1bf72c82793465fdd9917a7c4ac7ff2f89e57da9472408f32f556415",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.DT.IH.MIK.D01.2010&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:37+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_dtitfb10_000.json.gz",
+     "sha256": "9fd739dafa5dd9caf27ccbcb05d48a9c541928bf732d6866f0207ecad18db030",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.DT.IT.FIY.D01.2010-TP.DT.IT.FIY.D07.2010&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:35+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_dtitmb10_000.json.gz",
+     "sha256": "3e94e317d909389b8363e01329a8b9efaac19405343574a30486294797710899",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.DT.IT.MIK.D01.2010-TP.DT.IT.MIK.D07.2010&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:38+00:00"
+    }
+   ]
+  },
+  "evds_kalan_vade.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "3bba3ce32c3abaddced95c98ce2d4f2f0b7dad794febf35fa5d97475a0eda90c",
+   "satir": 181,
+   "sutunlar": [
+    "kv_borc_mn_usd",
+    "kamu",
+    "tcmb",
+    "ozel",
+    "kv_borc_alacakli_toplam"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2026-08-01",
+   "aciklama": "Kalan vadeye göre kısa vadeli dış borç stoku (borçlu bazında), milyon USD",
+   "sutun_aciklama": {
+    "kv_borc_mn_usd": "toplam",
+    "kamu": "kamu",
+    "tcmb": "TCMB",
+    "ozel": "özel kesim",
+    "kv_borc_alacakli_toplam": "aynı stok, alacaklı/araç kırılımının toplamı"
+   },
+   "kapsam": {
+    "kv_borc_mn_usd": {
+     "n": 181,
+     "ilk": "2011-07-01",
+     "son": "2026-07-01"
+    },
+    "kamu": {
+     "n": 181,
+     "ilk": "2011-07-01",
+     "son": "2026-07-01"
+    },
+    "tcmb": {
+     "n": 181,
+     "ilk": "2011-07-01",
+     "son": "2026-07-01"
+    },
+    "ozel": {
+     "n": 181,
+     "ilk": "2011-07-01",
+     "son": "2026-07-01"
+    },
+    "kv_borc_alacakli_toplam": {
+     "n": 181,
+     "ilk": "2011-07-01",
+     "son": "2026-07-01"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "evds/seri2/bie_kalanvade_000.json.gz",
+     "sha256": "8c8fe64836dd4aace15b6cd794476757b54466d193d5fdae2f56745ebc90f9fb",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.KALANVADE.K1-TP.KALANVADE.K2-TP.KALANVADE.K3-TP.KALANVADE.K21-TP.KALANVADE.K4-TP.KALANVADE.K5&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:26+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_kalanvade_001.json.gz",
+     "sha256": "ea8b35895df51e8a285e8bd62339a6c28c7b4c013754db8c0f299166a9e62190",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.KALANVADE.K6-TP.KALANVADE.K7-TP.KALANVADE.K8-TP.KALANVADE.K9-TP.KALANVADE.K10-TP.KALANVADE.K11&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:28+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_kalanvade_002.json.gz",
+     "sha256": "ee5c88c856318cb9aadb8d5dfb9ee076f48b3b474a96a8c7bcf3f24ec23b3642",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.KALANVADE.K12-TP.KALANVADE.K13-TP.KALANVADE.K14-TP.KALANVADE.K15-TP.KALANVADE.K16-TP.KALANVADE.K17&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:30+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_kalanvade_003.json.gz",
+     "sha256": "5a24594864f020c9d75a696a08c9b2f889860b9ab68556b505644ee1cbd6930a",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.KALANVADE.K18-TP.KALANVADE.K19-TP.KALANVADE.K20&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:32+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_kalvadbg_000.json.gz",
+     "sha256": "5b624086da55cfe0bd7ff15513ea6d46640cf73f992f4a01fb39b5826cc28fa7",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.KALVADBG.K1-TP.KALVADBG.K2-TP.KALVADBG.K3-TP.KALVADBG.K4-TP.KALVADBG.K5-TP.KALVADBG.K6&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:21+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_kalvadbg_001.json.gz",
+     "sha256": "70ed5e6818139ade7050a0b14565406cb9c5eac8c5486dff79a952d3d14f61b3",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.KALVADBG.K7-TP.KALVADBG.K8-TP.KALVADBG.K9-TP.KALVADBG.K10-TP.KALVADBG.K11-TP.KALVADBG.K12&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:23+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_kalvadbg_002.json.gz",
+     "sha256": "096d24ffff0f85db3c90ad0545b52c495d4588b526cf809511f7f529be9cd1b3",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.KALVADBG.K13-TP.KALVADBG.K14-TP.KALVADBG.K15-TP.KALVADBG.K16-TP.KALVADBG.K17-TP.KALVADBG.K18&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:24+00:00"
+    }
+   ],
+   "ic_sinama": {
+    "toplam_ozdesligi_azami_fark": 2.0,
+    "iki_kirilim_azami_fark": 0.4599999999918509
+   },
+   "tarih_kurali": "ay başı (ay sonu stoku)"
+  },
   "evds_pka_diger.csv.gz": {
    "hazirlayan": "hazirla_bulut.py",
    "sha256": "3feea3455c4625562fceebc3449b99eb62f1207df1e1e120e1fdc9186105bbb8",
@@ -1740,6 +1920,179 @@
     }
    ],
    "tarih_kurali": "anket ayı (ay başı); anket ayın ilk yarısında toplanır, PPK genellikle ikinci yarıda"
+  },
+  "evds_uyp.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "c510074e8fe6911b3be62520234fe856aa35316dbe064ad984bdd1818461bd0b",
+   "satir": 92,
+   "sutunlar": [
+    "net",
+    "varlik",
+    "yukumluluk",
+    "rezerv",
+    "dy_varlik",
+    "dy_yuk",
+    "portfoy_yuk",
+    "portfoy_borc_senedi_yuk",
+    "diger_yatirim_yuk"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2026-06-30",
+   "aciklama": "Uluslararası yatırım pozisyonu, çeyrek sonu stok, milyon USD (TCMB)",
+   "sutun_aciklama": {
+    "net": "net UYP",
+    "varlik": "varlıklar",
+    "yukumluluk": "yükümlülükler",
+    "rezerv": "rezerv varlıklar",
+    "dy_varlik": "doğrudan yatırım varlıkları",
+    "dy_yuk": "doğrudan yatırım yükümlülükleri",
+    "portfoy_yuk": "portföy yükümlülükleri",
+    "portfoy_borc_senedi_yuk": "portföy borç senedi yükümlülükleri",
+    "diger_yatirim_yuk": "diğer yatırım yükümlülükleri"
+   },
+   "kapsam": {
+    "net": {
+     "n": 92,
+     "ilk": "1996-12-31",
+     "son": "2026-06-30"
+    },
+    "varlik": {
+     "n": 92,
+     "ilk": "1996-12-31",
+     "son": "2026-06-30"
+    },
+    "yukumluluk": {
+     "n": 92,
+     "ilk": "1996-12-31",
+     "son": "2026-06-30"
+    },
+    "rezerv": {
+     "n": 92,
+     "ilk": "1996-12-31",
+     "son": "2026-06-30"
+    },
+    "dy_varlik": {
+     "n": 92,
+     "ilk": "1996-12-31",
+     "son": "2026-06-30"
+    },
+    "dy_yuk": {
+     "n": 92,
+     "ilk": "1996-12-31",
+     "son": "2026-06-30"
+    },
+    "portfoy_yuk": {
+     "n": 92,
+     "ilk": "1996-12-31",
+     "son": "2026-06-30"
+    },
+    "portfoy_borc_senedi_yuk": {
+     "n": 92,
+     "ilk": "1996-12-31",
+     "son": "2026-06-30"
+    },
+    "diger_yatirim_yuk": {
+     "n": 92,
+     "ilk": "1996-12-31",
+     "son": "2026-06-30"
+    }
+   },
+   "kaynaklar": [
+    {
+     "ham": "evds/seri2/bie_uypucay_000.json.gz",
+     "sha256": "eef81eab210538c9f7713ab09e27ec61159dc884a10410419d0bc5f039ba7ae4",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K1-TP.UYPUCAY.K2-TP.UYPUCAY.K3-TP.UYPUCAY.K4-TP.UYPUCAY.K5-TP.UYPUCAY.K6&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:18:59+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_uypucay_001.json.gz",
+     "sha256": "21299fd723f5dd77752828d9996db7788f472ee0047522c7b73ddea280b00320",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K7-TP.UYPUCAY.K8-TP.UYPUCAY.K9-TP.UYPUCAY.K10-TP.UYPUCAY.K11-TP.UYPUCAY.K12&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:00+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_uypucay_002.json.gz",
+     "sha256": "5337970e8c56695d41866cce4980500f09d081ce4c1849b197c42262448ccad8",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K13-TP.UYPUCAY.K14-TP.UYPUCAY.K88-TP.UYPUCAY.K15-TP.UYPUCAY.K16-TP.UYPUCAY.K17&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:02+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_uypucay_003.json.gz",
+     "sha256": "bac00ddc375b184f45d6cd6df0735ea9c6817d7705f06c75dc9fa567127d1ab6",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K18-TP.UYPUCAY.K19-TP.UYPUCAY.K20-TP.UYPUCAY.K21-TP.UYPUCAY.K22-TP.UYPUCAY.K23&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:03+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_uypucay_004.json.gz",
+     "sha256": "99dfe113fbf9ebfd00226b1330d528ab6a881f0603e5784ccae7ca3fba8816a3",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K24-TP.UYPUCAY.K25-TP.UYPUCAY.K26-TP.UYPUCAY.K27-TP.UYPUCAY.K28-TP.UYPUCAY.K29&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:05+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_uypucay_005.json.gz",
+     "sha256": "66be21c5627ef70933b05a47702b3b847179215008d36152bebad55a34b7082a",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K30-TP.UYPUCAY.K31-TP.UYPUCAY.K32-TP.UYPUCAY.K33-TP.UYPUCAY.K34-TP.UYPUCAY.K35&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:06+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_uypucay_006.json.gz",
+     "sha256": "501083750b5ea9c2d1f1ee2235e0f736ecbf15981103222aa5d4ff6042cb9c35",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K36-TP.UYPUCAY.K37-TP.UYPUCAY.K38-TP.UYPUCAY.K39-TP.UYPUCAY.K40-TP.UYPUCAY.K41&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:08+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_uypucay_007.json.gz",
+     "sha256": "c7963a757541f300a559980e501fea37e387d3c20ef4b1eaa1480c3e7902824a",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K42-TP.UYPUCAY.K43-TP.UYPUCAY.K44-TP.UYPUCAY.K86-TP.UYPUCAY.K45-TP.UYPUCAY.K46&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:09+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_uypucay_008.json.gz",
+     "sha256": "c683354e8fab7b70d39c3816ecca64ba6464608a9463605c364ca803208efd3c",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K47-TP.UYPUCAY.K87-TP.UYPUCAY.K48-TP.UYPUCAY.K85-TP.UYPUCAY.K49-TP.UYPUCAY.K50&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:11+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_uypucay_009.json.gz",
+     "sha256": "870cd1788248f72a29bf8727ddfc117071c57155ef2a70299f5b55b3cee843c8",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K51-TP.UYPUCAY.K52-TP.UYPUCAY.K53-TP.UYPUCAY.K54-TP.UYPUCAY.K55-TP.UYPUCAY.K56&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:12+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_uypucay_010.json.gz",
+     "sha256": "14111bf9b4cb279e1195600a6d88f49992c97e8506a0e4dbff8e330e9bd3eb57",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K57-TP.UYPUCAY.K89-TP.UYPUCAY.K58-TP.UYPUCAY.K59-TP.UYPUCAY.K60-TP.UYPUCAY.K61&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:13+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_uypucay_011.json.gz",
+     "sha256": "dbe7c17592572e201aa76e55f0278554f0538e2ae7899d48e9d8ca34e3e6da83",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K62-TP.UYPUCAY.K63-TP.UYPUCAY.K64-TP.UYPUCAY.K65-TP.UYPUCAY.K66-TP.UYPUCAY.K67&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:14+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_uypucay_012.json.gz",
+     "sha256": "bd8153d8c3e1f05434ba45a1f0ff035f4a041d7d02cf1df2c0bddeeb4624c4c8",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K68-TP.UYPUCAY.K69-TP.UYPUCAY.K70-TP.UYPUCAY.K71-TP.UYPUCAY.K72-TP.UYPUCAY.K73&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:16+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_uypucay_013.json.gz",
+     "sha256": "68ef603581b026b154a6422edf4069e956b3b65c70c2baa37b62f7f5554884dc",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K74-TP.UYPUCAY.K75-TP.UYPUCAY.K76-TP.UYPUCAY.K77-TP.UYPUCAY.K78-TP.UYPUCAY.K79&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:17+00:00"
+    },
+    {
+     "ham": "evds/seri2/bie_uypucay_014.json.gz",
+     "sha256": "17ce2b148a97022a6b88c63975497204e34731a6f622d9837acc29eb42e3f356",
+     "url": "https://evds3.tcmb.gov.tr/igmevdsms-dis/series=TP.UYPUCAY.K80-TP.UYPUCAY.K81-TP.UYPUCAY.K82-TP.UYPUCAY.K83-TP.UYPUCAY.K84&startDate=01-01-1990&endDate=02-10-2026&type=json",
+     "an": "2026-10-02T11:19:18+00:00"
+    }
+   ],
+   "ic_sinama": {
+    "net_ozdesligi_azami_fark": 0.010000000009313226
+   },
+   "tarih_kurali": "çeyrek sonu"
   },
   "fomc_takvim.csv.gz": {
    "hazirlayan": "hazirla_bulut.py",
