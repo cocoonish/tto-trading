@@ -717,7 +717,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "ihracatçı CAD euronun 6,66, yenin 18,74 puan önünde kaldı",
+   "parca": "ihracatçı CAD euronun 6,66, yenin 18,74 log puan önünde kaldı",
    "degerler": [
     {
      "yol": "b10.p10b.sok_2022.cad_eksi_eur_puan",
@@ -726,30 +726,35 @@
     },
     {
      "yol": "b10.p10b.sok_2022.cad_eksi_jpy_puan",
-     "bicim": "puan",
+     "bicim": "sayi",
      "hane": 2
     }
    ]
   },
   {
-   "tur": "olcum",
-   "parca": "02.2013–11.2021'de %10'luk enerji artışı USD/TRY'yi %0,83 düşürüyor",
+   "tur": "hesap",
+   "parca": "02.2013–11.2021'de 10 log puanlık enerji artışı USD/TRY'yi 0,83 log puan düşürüyor",
    "degerler": [
     {
      "ifade": "-10 * v('b10.p10b.turkiye.tepki.usdtry.oncesi.egim')",
-     "bicim": "yz",
+     "bicim": "sayi",
      "hane": 2
     }
    ]
   },
   {
    "tur": "olcum",
-   "parca": "dolar kontrol edilince −0,053'e iniyor (dolar endeksi eğimi 0,78, t 3,08)",
+   "parca": "dolar kontrol edilince eğim −0,053'e, t −1,66'ya iniyor (dolar endeksi eğimi 0,78, t 3,08)",
    "degerler": [
     {
      "yol": "b10.p10b.turkiye.tepki.usdtry.oncesi.dolar_kontrollu.egim",
      "bicim": "sayi",
      "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.oncesi.dolar_kontrollu.t",
+     "bicim": "sayi",
+     "hane": 2
     },
     {
      "yol": "b10.p10b.turkiye.tepki.usdtry.oncesi.dolar_kontrollu.dxy_egim",
@@ -758,6 +763,22 @@
     },
     {
      "yol": "b10.p10b.turkiye.tepki.usdtry.oncesi.dolar_kontrollu.dxy_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "eğim dolar kontrolüyle de duruyor (−0,055, t −2,12)",
+   "degerler": [
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.yonetilen_haric.dolar_kontrollu.egim",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10b.turkiye.tepki.usdtry.yonetilen_haric.dolar_kontrollu.t",
      "bicim": "sayi",
      "hane": 2
     }
@@ -932,7 +953,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "Seviyeler arasındaki esneklik (0,98)",
+   "parca": "Seviyedeki esneklik (0,98)",
    "degerler": [
     {
      "yol": "b10.p10b.turkiye.enerji_faturasi.seviye_esnekligi_saglamlik.esneklik",
@@ -964,7 +985,7 @@
   },
   {
    "tur": "sabit",
-   "parca": "Enerji fiyatı %10 artarsa",
+   "parca": "Enerji endeksinin 12 aylık ortalaması %10 artarsa",
    "neden": "alıştırmanın varsayımsal şok büyüklüğü (tanım)"
   },
   {
@@ -1069,7 +1090,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "dolar kontrolü eğimi −0,055'e indiriyor ve dolar endeksinin eğimi t 2,95",
+   "parca": "dolar kontrolü eğimi yalnız −0,055'e indiriyor (dolar endeksinin eğimi t 2,95)",
    "degerler": [
     {
      "yol": "b10.p10b.turkiye.tepki.usdtry.yonetilen_haric.dolar_kontrollu.egim",
@@ -1085,7 +1106,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "Kur ay ortalamasıyla eğim −0,027 (t −0,80)",
+   "parca": "kur ay ortalamasıyla eğim −0,027 (t −0,80)",
    "degerler": [
     {
      "yol": "b10.p10b.turkiye.tepki.hiza_duyarliligi.ay_ortalamasi_egim",

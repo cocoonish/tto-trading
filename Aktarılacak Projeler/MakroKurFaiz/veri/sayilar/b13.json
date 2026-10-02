@@ -240,28 +240,8 @@
   },
   {
    "tur": "olcum",
-   "parca": "R3'te 81 kararda −0,29, sıradan günlerde −0,14, z −1,30; R5'te −0,28'e karşı −0,16",
+   "parca": "R5'te −0,28'e karşı sıradan günlerde −0,16",
    "degerler": [
-    {
-     "yol": "b13.matris.para.R3.n",
-     "bicim": "tam",
-     "hane": 0
-    },
-    {
-     "yol": "b13.matris.para.R3.es_hareket",
-     "bicim": "sayi",
-     "hane": 2
-    },
-    {
-     "yol": "b13.matris.para.R3.es_hareket_sakin",
-     "bicim": "sayi",
-     "hane": 2
-    },
-    {
-     "yol": "b13.matris.para.R3.es_fark_z",
-     "bicim": "sayi",
-     "hane": 2
-    },
     {
      "yol": "b13.matris.para.R5_EM.es_hareket",
      "bicim": "sayi",
@@ -298,7 +278,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "Enerji şoku aylarında (35)",
+   "parca": "enerji şoku aylarında (35)",
    "degerler": [
     {
      "yol": "b13.matris_meta.emtia.n_sok_ayi",
@@ -457,7 +437,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "için arşivdeki son beklenti aylık %2,08 (08.2026 anketinin bir ay sonrası sorusu)",
+   "parca": "için eldeki son beklenti aylık %2,08 (08.2026 anketinin bir ay sonrası sorusu)",
    "degerler": [
     {
      "yol": "b13.teshis_ornegi.adim1_beklenti.tufe_beklentisi.bir_ay_sonrasi_aylik_tufe_yuzde",
@@ -473,18 +453,35 @@
   },
   {
    "tur": "olcum",
-   "parca": "TÜFE günü gelince sürpriz gerçekleşen − %2,08 olarak yazılır; bir ay önceki sürpriz +0,17 puandı",
+   "parca": "%2,08 bir önceki anketin sorusudur",
    "degerler": [
     {
      "yol": "b13.teshis_ornegi.adim1_beklenti.tufe_beklentisi.bir_ay_sonrasi_aylik_tufe_yuzde",
      "bicim": "yz",
      "hane": 2
-    },
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Ağustos TÜFE'sinin sürprizi +0,17 puandı",
+   "degerler": [
     {
      "yol": "b13.teshis_ornegi.adim1_beklenti.tufe_beklentisi.son_surpriz_puan",
      "bicim": "puan",
      "hane": 2,
      "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "eğri eşiğin (2,5 bp) üstünde dikleşti",
+   "degerler": [
+    {
+     "yol": "b01.rejim.esikler.son_abd_diklesme_esik_bp",
+     "bicim": "bp",
+     "hane": 1
     }
    ]
   },
@@ -496,18 +493,6 @@
      "yol": "b13.teshis_ornegi.son_tam_hafta.abd.degim_bp",
      "bicim": "bp",
      "hane": 0,
-     "arti": true
-    }
-   ]
-  },
-  {
-   "tur": "olcum",
-   "parca": "eğim +9,8 bp, eşiğin üçte biri",
-   "degerler": [
-    {
-     "yol": "b13.teshis_ornegi.son_tam_hafta.tr.degim_bp",
-     "bicim": "bp",
-     "hane": 1,
      "arti": true
     }
    ]
@@ -584,22 +569,6 @@
      "yol": "b13.matris.para.R3.n_es",
      "bicim": "tam",
      "hane": 0
-    }
-   ]
-  },
-  {
-   "tur": "olcum",
-   "parca": "sıradan R3 gününün 1,79 katı, kurunki 1,60 katı",
-   "degerler": [
-    {
-     "yol": "b13.matris.para.R3.oranlar.2y",
-     "bicim": "sayi",
-     "hane": 2
-    },
-    {
-     "yol": "b13.matris.para.R3.oranlar.kur",
-     "bicim": "sayi",
-     "hane": 2
     }
    ]
   },

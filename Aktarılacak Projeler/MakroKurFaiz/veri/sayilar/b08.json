@@ -2,7 +2,7 @@
  "girdiler": [
   {
    "tur": "kaynak",
-   "parca": "Kim ve Roubini (2008), ABD'de genişletici bir maliye şokunun cari dengeyi iyileştirdiğini ve reel kuru değer kaybettirdiğini bulur; sebep özel tasarrufun kısmen Ricardocu artışı ve yatırımın dışlanmasıdır",
+   "parca": "Kim ve Roubini (2008) ABD'de bunu bulur (Bölüm 5) ve özel tasarrufun kısmen Ricardocu artışına, yatırımın dışlanmasına bağlar",
    "kaynak": "kimroubini2008"
   },
   {
@@ -32,7 +32,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Gabaix ve Maggiori (2015) modelinde sermaye akımları kuru aracıların bilançosu üzerinden oynatır",
+   "parca": "primin aracı bilançosundan geçen kanalı Bölüm 11'de (Gabaix ve Maggiori 2015)",
    "kaynak": "gabaixmaggiori2015"
   },
   {
@@ -47,7 +47,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Calvo, Izquierdo ve Mejía (2004), 32 ülkelik örneklemde ani duruşlarla gelen büyük reel kur hareketlerinin esasen gelişen piyasa olgusu olduğunu bulur",
+   "parca": "ani duruşlarla gelen büyük reel kur hareketleri esasen bir gelişen piyasa olgusudur (Calvo, Izquierdo ve Mejía 2004; Bölüm 6)",
    "kaynak": "calvo_izquierdo_mejia2004"
   },
   {
@@ -151,7 +151,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "2024Ç1'de kamu dengesi −%5,22'ye inerken dış açık −%2,25'e daraldı, özel denge +%2,97",
+   "parca": "2024Ç1'de kamu dengesi −%5,22'ye inerken dış denge −%2,25'e toparlandı, özel denge +%2,97",
    "degerler": [
     {
      "yol": "b08.sekil_13.ceyrek.69",
@@ -214,7 +214,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "(karesel hata oranı koşulsuz ortalamaya 1,01, rastgele yürüyüşe 1,03): tarif edici",
+   "parca": "(karesel hata oranı koşulsuz ortalamaya 1,01, rastgele yürüyüşe (değişim sıfır) 1,03): tarif edici",
    "degerler": [
     {
      "yol": "b08.p8a.ikiz_acik.oos.ortalama.mse_oran",
@@ -599,7 +599,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "Bir yıl gecikmeli eğim (−0,052, t −3,10) örneklem dışında iki kıyası da yeniyor (karesel hata oranı 0,87 ve 0,93; eğitim yalnız hedefi gerçekleşmiş aylarla), hüküm ölçülü; ama üstünlük anlamlı değil (Diebold–Mariano t −1,12 ve −0,72)",
+   "parca": "Bir yıl gecikmeli eğim (−0,052, t −3,10) örneklem dışında iki kıyası da yeniyor (karesel hata oranı 0,87 ve 0,93), hüküm \"ölçülü\" (Bölüm 1); ama üstünlük anlamlı değil (Diebold–Mariano t −1,12 ve −0,72)",
    "degerler": [
     {
      "yol": "b08.p8b.gecikme_12.egim_puan_yuzde",
@@ -902,7 +902,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "Ortalamanın %10 üstündeki bir REDK sonraki yıl dengeyi −0,16 puan değiştirir (R² 0,02)",
+   "parca": "ortalamanın %10 üstündeki bir REDK'ye düşen değişim −0,16 puan (R² 0,02)",
    "degerler": [
     {
      "yol": "b08.p8c.cari.on_yuzde_sapma_puan",
@@ -1147,7 +1147,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Eichengreen ve Gupta (2015) en sert darbeyi niceliksel genişleme döneminde reel kurunun değer kazanmasına ve cari açığının genişlemesine izin veren ekonomilerin aldığını bulur; daha iyi temeller koruma sağlamadı, daha önemli belirleyici finansal piyasanın büyüklüğüydü",
+   "parca": "Eichengreen ve Gupta (2015) en sert darbeyi önceki niceliksel genişleme döneminde reel kurunun değer kazanmasına ve cari açığının genişlemesine izin veren ekonomilerin aldığını bulur; daha iyi temeller koruma sağlamadı, daha önemli belirleyici finansal piyasanın büyüklüğüydü",
    "kaynak": "eichengreengupta2015"
   },
   {
@@ -1217,15 +1217,15 @@
   },
   {
    "tur": "hesap",
-   "parca": "2018Ç2'de $-5{,}22 - (-3{,}26) = -1{,}97$, 2019Ç3'te $2{,}73 - 5{,}14 = -2{,}41$",
+   "parca": "2018Ç2'de $-5{,}22 - (-3{,}26) = -1{,}96$, 2019Ç3'te $2{,}73 - 5{,}14 = -2{,}41$",
    "degerler": [
     {
-     "ifade": "v('b08.sekil_13.dis.46') - v('b08.sekil_13.ozel.46')",
+     "ifade": "round(v('b08.sekil_13.dis.46'),2) - round(v('b08.sekil_13.ozel.46'),2)",
      "bicim": "sayi",
      "hane": 2
     },
     {
-     "ifade": "v('b08.sekil_13.dis.51') - v('b08.sekil_13.ozel.51')",
+     "ifade": "round(v('b08.sekil_13.dis.51'),2) - round(v('b08.sekil_13.ozel.51'),2)",
      "bicim": "sayi",
      "hane": 2
     }
@@ -1233,20 +1233,20 @@
   },
   {
    "tur": "hesap",
-   "parca": "Beş çeyrekte dış denge 7,96 puan, özel denge 8,40 puan iyileşti, kamu 0,44 puan bozuldu",
+   "parca": "Beş çeyrekte dış denge 7,95 puan, özel denge 8,40 puan iyileşti, kamu 0,45 puan bozuldu",
    "degerler": [
     {
-     "ifade": "v('b08.sekil_13.dis.51') - v('b08.sekil_13.dis.46')",
+     "ifade": "round(v('b08.sekil_13.dis.51'),2) - round(v('b08.sekil_13.dis.46'),2)",
      "bicim": "puan",
      "hane": 2
     },
     {
-     "ifade": "v('b08.sekil_13.ozel.51') - v('b08.sekil_13.ozel.46')",
+     "ifade": "round(v('b08.sekil_13.ozel.51'),2) - round(v('b08.sekil_13.ozel.46'),2)",
      "bicim": "puan",
      "hane": 2
     },
     {
-     "ifade": "abs((v('b08.sekil_13.dis.51') - v('b08.sekil_13.ozel.51')) - (v('b08.sekil_13.dis.46') - v('b08.sekil_13.ozel.46')))",
+     "ifade": "abs((round(v('b08.sekil_13.dis.51'),2) - round(v('b08.sekil_13.ozel.51'),2)) - (round(v('b08.sekil_13.dis.46'),2) - round(v('b08.sekil_13.ozel.46'),2)))",
      "bicim": "puan",
      "hane": 2
     }
@@ -1259,13 +1259,8 @@
   },
   {
    "tur": "hesap",
-   "parca": "REDK bir yılda %10 düşerse 8 ay sonra altın ve enerji hariç mal dengesi ne kadar değişir? Neden $10 \\times 0{,}0752$ değil?",
+   "parca": "Neden $10 \\times 0{,}0752$ değil?",
    "degerler": [
-    {
-     "ifade": "v('b08.p8b.ozet.en_eksi_gecikme_ay')",
-     "bicim": "tam",
-     "hane": 0
-    },
     {
      "ifade": "abs(v('b08.p8b.ozet.en_eksi_egim_puan_yuzde'))",
      "bicim": "sayi",
@@ -1275,7 +1270,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "$100\\ln 0{,}9 = -10{,}54$ log puandır; $-10{,}54 \\times (-0{,}0752) = +0{,}79$ puan.",
+   "parca": "Örneklem içi 8. ay eğimiyle: %10'luk düşüş $100\\ln 0{,}9 = -10{,}54$ log puandır; $-10{,}54 \\times (-0{,}0752) = +0{,}79$ puan.",
    "degerler": [
     {
      "ifade": "100*math.log(0.9)",
@@ -1400,6 +1395,27 @@
      "hane": 2
     }
    ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(ithalatın dolar fiyatı −0,33, t −1,60)",
+   "degerler": [
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ithalat_birim_deger.gecikme_0.esneklik",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b08.p8b.fiyat_miktar.kalemler.ithalat_birim_deger.gecikme_0.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "REDK bir yılda %10 düşerse",
+   "neden": "alıştırmanın varsayılan reel kur hareketi (soru girdisi; ölçümün %10'luk tanımıyla aynı)"
   }
  ]
 }

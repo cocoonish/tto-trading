@@ -657,17 +657,17 @@
   },
   {
    "tur": "kaynak",
-   "parca": "22 Eylül 2022'de 2,8382 trilyon yen, 21 Ekim 2022'de 5,6202 trilyon yen ve 24 Ekim 2022'de 0,7296 trilyon yendir",
+   "parca": "22 Eylül 2022'de 2,8382, 21 Ekim'de 5,6202 ve 24 Ekim'de 0,7296 trilyon yendir",
    "kaynak": "japonya_mudahale_2022"
   },
   {
    "tur": "kaynak",
-   "parca": "2024'te 29 Nisan ile 1 Mayıs'ta toplam 9,7885 trilyon yen, 11 ve 12 Temmuz'da toplam 5,5348 trilyon yen",
+   "parca": "2024'te 29 Nisan ile 1 Mayıs'ta toplam 9,7885, 11 ve 12 Temmuz'da toplam 5,5348 trilyon yen",
    "kaynak": "japonya_mudahale_2024"
   },
   {
    "tur": "kaynak",
-   "parca": "(Della Corte, Riddiough ve Sarno 2016; Bölüm 8)",
+   "parca": "net borçlunun parasının kötü zamanda değer kaybedip prim ödemesi Bölüm 8'de (Della Corte, Riddiough ve Sarno)",
    "kaynak": "dellacorte2016"
   },
   {
@@ -861,7 +861,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "(987 cumanın 987'si)",
+   "parca": "987 cumanın 987'si",
    "degerler": [
     {
      "yol": "b09.p9b.kur_cuma_olcumu.cuma_pazartesi_barindan",
@@ -932,7 +932,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "07.2023–09.2026'da kurun payı %3,2'ye indi; baskının %44,2'si rezerve, %52,5'i faize yazıldı",
+   "parca": "07.2023–09.2026'da kurun payı %3,2'ye indi; endeksin oynaklığının %44,2'si rezervden, %52,5'i faizden geliyor",
    "degerler": [
     {
      "yol": "b09.p9b.donemler.2023-07 … 2026-09.pay.kur",
@@ -979,7 +979,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "Kasım 2022–Mart 2023 aylarında kur bileşeni ayda en çok 0,69 σ",
+   "parca": "Kasım 2022–Mart 2023'te (ayda en çok 0,69 σ)",
    "degerler": [
     {
      "ifade": "max(v('b09.sekil_16.kur')[118:123])",
@@ -989,43 +989,43 @@
    ]
   },
   {
-   "tur": "olcum",
-   "parca": "Mart–Nisan 2025'te USD/TRY yalnız +%4,1 yükseldi; swap hariç net rezerv 44,4 milyar dolar (brüt 24,5 milyar dolar) eridi, AOFM 5,47 puan arttı",
+   "tur": "hesap",
+   "parca": "kur bileşeni 2022'de yine ayda 4,27 σ'ya (Mayıs) çıktı",
    "degerler": [
     {
-     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.kur_degisim_yuzde",
-     "bicim": "yz",
-     "hane": 1,
-     "arti": true
-    },
-    {
-     "ifade": "-v('b09.p9b.epizotlar.Mart–Nisan 2025.swap_haric_net_degisim_mlr_usd')",
+     "ifade": "max(v('b09.sekil_16.kur')[108:120])",
      "bicim": "sayi",
-     "hane": 1
-    },
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "faiz bileşeninin en büyük ayı Eylül 2023'teki fonlama faizi artışıdır (18,12 σ), rezervinkiler Mart 2026'daki kayıp (15,08 σ) ve Mayıs 2024'teki birikim (−18,42 σ)",
+   "degerler": [
     {
-     "ifade": "-v('b09.p9b.epizotlar.Mart–Nisan 2025.brut_degisim_mlr_usd')",
+     "yol": "b09.sekil_16.faiz.128",
      "bicim": "sayi",
-     "hane": 1
+     "hane": 2
     },
     {
-     "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.aofm_degisim_puan",
-     "bicim": "puan",
+     "yol": "b09.sekil_16.rezerv.158",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b09.sekil_16.rezerv.136",
+     "bicim": "sayi",
      "hane": 2
     }
    ]
   },
   {
    "tur": "hesap",
-   "parca": "Eylül 2026'nın 0,63 σ'luk kur bileşeni kontrollü kaymanın kendisidir; dört haftada swap hariç net rezerv 16,0 milyar dolar düştü",
+   "parca": "Mart–Nisan 2025'te brüt rezerv yalnız 24,5 milyar dolar düştü",
    "degerler": [
     {
-     "ifade": "v('b09.p9b.epizotlar.Eylül 2026.bilesen_toplam.kur')",
-     "bicim": "sayi",
-     "hane": 2
-    },
-    {
-     "ifade": "-v('b09.p9b.epizotlar.Eylül 2026.swap_haric_net_degisim_mlr_usd')",
+     "ifade": "-v('b09.p9b.epizotlar.Mart–Nisan 2025.brut_degisim_mlr_usd')",
      "bicim": "sayi",
      "hane": 1
     }
@@ -1065,25 +1065,10 @@
   },
   {
    "tur": "olcum",
-   "parca": "En büyük aylık toplamlar Ağustos 2018'de kurda (13,69 σ), Eylül 2023'te faizde (18,12 σ), Mart 2026'da rezervde (15,08 σ); Mayıs 2024'teki −18,42 σ'luk rezerv bileşeni",
+   "parca": "Kur bileşeninin en büyük ayı Ağustos 2018'dir (13,69 σ)",
    "degerler": [
     {
      "yol": "b09.sekil_16.kur.67",
-     "bicim": "sayi",
-     "hane": 2
-    },
-    {
-     "yol": "b09.sekil_16.faiz.128",
-     "bicim": "sayi",
-     "hane": 2
-    },
-    {
-     "yol": "b09.sekil_16.rezerv.158",
-     "bicim": "sayi",
-     "hane": 2
-    },
-    {
-     "yol": "b09.sekil_16.rezerv.136",
      "bicim": "sayi",
      "hane": 2
     }
@@ -1145,8 +1130,13 @@
   },
   {
    "tur": "olcum",
-   "parca": "2021Ç1 +94,1, 2023Ç1 +88,3 ve 2022Ç4 −134,4 milyar dolar",
+   "parca": "2022Ç4 −134,4, 2021Ç1 +94,1 ve 2023Ç1 +88,3 milyar dolar",
    "degerler": [
+    {
+     "yol": "b09.p9c.seri.degerleme.76",
+     "bicim": "sayi",
+     "hane": 1
+    },
     {
      "yol": "b09.p9c.seri.degerleme.69",
      "bicim": "sayi",
@@ -1158,11 +1148,6 @@
      "bicim": "sayi",
      "hane": 1,
      "arti": true
-    },
-    {
-     "yol": "b09.p9c.seri.degerleme.76",
-     "bicim": "sayi",
-     "hane": 1
     }
    ]
   },
@@ -1394,7 +1379,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "Endeks 21,49 σ: rezerv %57,8, faiz %34,4, kur %7,8",
+   "parca": "Endeks 21,49 σ: pencere toplamının %57,8'i rezervden, %34,4'ü faizden, %7,8'i kurdan",
    "degerler": [
     {
      "yol": "b09.p9b.epizotlar.Mart–Nisan 2025.emp_toplam",

@@ -8,8 +8,8 @@ yerleştirir ve Türkiye için iki vekil kurar: mali impuls ve 1y1y "beklenti d�
 
 ### 5.1 Teori: faize dört kanal ve büyümenin altındaki faiz (≈2 dk)
 
-Getiri politika patikası, vade primi ve kredi primidir (Bölüm 1). Açık her terime ayrı bir
-kanaldan değer:
+Getiri politika patikası, vade primi ve kredi/çevrilebilirlik primidir (Bölüm 1). Açık her
+terime ayrı bir kanaldan değer:
 
 1. **Beklenti.** Açık talebi büyütür, merkez bankası tepki fonksiyonuyla karşılık verirse
    beklenen kısa faiz yolu yükselir; haber önce 2 yıllığa yazılır (Bölüm 3).
@@ -19,19 +19,21 @@ kanaldan değer:
 3. **Kolaylık getirisinin aşınması.** Krishnamurthy ve Vissing-Jorgensen (2012), Hazine arzı
    büyüdükçe kolaylık getirisinin aşındığını; bu getirinin 1926–2008 ortalamasında Hazine
    getirisini yaklaşık 73 bp düşürdüğünü bulur.
-4. **Kredi primi.** Kendi parasıyla borçlanan DM'de küçüktür ama not kararlarında görünür
-   (5.5); para birliğinde ve EM'de büyür (Bölüm 6).
+4. **Kredi primi.** Kendi parasıyla borçlanan DM'de küçüktür ve ayrı ölçülmez: ACM ayrışımında
+   vade priminin içinde kalır, iki not kararının tepkisi onu ayırmaya yetmez (5.5); para
+   birliğinde ve EM'de büyür (Bölüm 6).
 
 İmza vadededir: birinci kanal eğriyi kısa uçtan, ikinci ve üçüncüsü uzun uçtan oynatır.
 Pencerede $|\Delta y^{(10)}| > |\Delta y^{(2)}|$ ve eğri ayılı dikleşiyorsa konu arzdır; kısa
 uç da oynuyorsa tepki fonksiyonudur.
 
-**Faiz büyümenin altındayken ($r \lt g$).** Faiz ve büyüme aynı birimde (ikisi de nominal) yazılınca borç oranının yasası:
+**Faiz büyümenin altındayken ($r \lt g$).** Faiz ve büyüme aynı birimde (ikisi de nominal)
+yazılınca borç oranının yasası:
 
 $$d_t - d_{t-1} \;=\; \frac{r_t - g_t}{1 + g_t}\,d_{t-1} \;-\; pb_t$$
 
-$pb$ faiz dışı denge/GSYH'dir (fazla artı); kur terimi Bölüm 6'da eklenir. Blanchard (2019),
-ABD'de güvenli faizin büyüme hızının uzun süre altında kalmasının tarihte istisna değil olağan
+$r$ Bölüm 6'da örtük faiz $i$ adını alır, $pb$ faiz dışı denge/GSYH'dir (fazla artı); kur
+terimi Bölüm 6'da eklenir. Blanchard (2019), ABD'de güvenli faizin büyüme hızının uzun süre altında kalmasının tarihte istisna değil olağan
 durum olduğunu ve güvenli faiz düşükken kamu borcunun mali maliyeti olmayabileceğini savunur;
 çoklu denge ve risk primi bu sonucun başlıca karşı argümanıdır. Piyasanın sorusu r − g'nin
 işaretinin ne zaman döneceğidir ve bu soru vade primine yazılır.
@@ -41,24 +43,25 @@ işaretinin ne zaman döneceğidir ve bu soru vade primine yazılır.
 Faiz gideri geçmiş borcun bedelidir, bugünün talep kararı değil; açığın talep şoku olan kısmı
 faiz dışı dengeden ölçülür:
 
-$$FI_t = -\Delta pb_t, \qquad pb^{s}_t = pb_t - \varepsilon\,\tilde y_t, \qquad FI^{s}_t = -\Delta pb^{s}_t$$
+$$FI_t = -\Delta pb_t, \qquad pb^{s}_t = pb_t - \eta\,\tilde y_t, \qquad FI^{s}_t = -\Delta pb^{s}_t$$
 
-$\tilde y$ çıktı açığı, ε dengenin açığa yarı esnekliğidir: konjonktür gelirleri şişirirken
-ölçülen denge iyileşir, yapısal denge bunu düşer. Türkiye'de açık bir banttır (Bölüm 3) ve ε
-burada kestirilmez, 0,3 ile 0,5 arasında varsayılır; yapısal denge iki açık sürümü × iki ε'nin
-dört değerinin en küçüğü ile en büyüğü arasında bir aralıktır. $FI - FI^s$ döngüsel paydır.
+$\tilde y$ dengeyle aynı dört çeyreğin ortalama çıktı açığı, η dengenin açığa yarı esnekliğidir (Bölüm 6'nın ε'u kurdur, karışmasın):
+konjonktür gelirleri şişirirken ölçülen denge iyileşir, yapısal denge bunu düşer. Türkiye'de
+açık bir banttır (Bölüm 3) ve η burada kestirilmez, 0,3 ile 0,5 arasında varsayılır; yapısal
+denge iki açık sürümü × iki η'nın dört değerinin en küçüğü ile en büyüğü arasında bir aralıktır.
+$FI - FI^s$ döngüsel paydır.
 
 ### 5.3 Kur: risk primsiz Mundell–Fleming ve politika bileşimi (≈1 dk)
 
 C bloğu sıfırken (Bölüm 1) bütçe kura yalnız B'den gider:
 $\Delta s_t \approx -\sum_j \Delta E_t(r_{t+j} - r^*_{t+j})$. Mali genişleme faiz yolunu
 yükseltir, para değer kazanır; merkez bankası faizi sabit tutarsa etki söner. Kuru bütçe değil
-**bileşim** belirler: gevşek maliye ile sıkı para R'yi en çok açar. Feldstein (1986), 1973–1984
-döneminde ABD'nin beklenen gelecek bütçe açıklarının GSMH'ye oranındaki her 1 puanlık artışın
+**bileşim** belirler: gevşek maliye ile sıkı para reel faiz farkını (Bölüm 3'ün R'si) en çok
+açar. Feldstein (1986), 1973–1984 döneminde ABD'nin beklenen gelecek bütçe açıklarının GSMH'ye oranındaki her 1 puanlık artışın
 doları marka karşı yaklaşık 30 yüzde puanı değerlendirdiğini bulur; örneklem Reagan
-yönetiminin gevşek maliyesi ile Volcker Fed'inin sıkı parasını kapsar. Bileşim 1985'te elle
-çözüldü: 22 Eylül 1985'te New York'taki Plaza Oteli'nde G5 maliye bakanları dolar dışındaki
-paraların düzenli biçimde biraz daha değer kazanmasının arzu edildiğini açıkladı; dolar ertesi
+yönetiminin gevşek maliyesi ile Volcker Fed'inin sıkı parasını kapsar. Doların bu yükselişine
+1985'te koordineli bir açıklamayla müdahale edildi: 22 Eylül 1985'te New York'taki Plaza
+Oteli'nde G5 maliye bakanları dolar dışındaki paraların düzenli biçimde biraz daha değer kazanmasının arzu edildiğini açıkladı; dolar ertesi
 iş günü öbür paralara karşı yaklaşık %4 değer kaybetti.
 
 Harcama şokunun izi daha karışıktır. Monacelli ve Perotti (2010) kamu harcamasındaki
@@ -76,10 +79,10 @@ bir puan artışıdır.
 
 | Çalışma | Mali ölçü | Faiz ölçüsü | Etki |
 |---|---|---|---|
-| Laubach (2009) | öngörülen açık · öngörülen borç | 5 yıl ve ötesi forward | +20–30 bp · ≈3–4 bp |
+| Laubach (2009) | öngörülen açık · öngörülen borç | 5 yıl ve ötesi forward | +20–30 bp · ≈ +3–4 bp |
 | Gale ve Orszag (2004) | öngörülen birleşik açık · öngörülen faiz dışı açık · bugünkü açık | uzun vadeli forward | +25–35 bp · +40–70 bp · etki yok |
 | Engen ve Hubbard (2004) | federal borç | uzun vadeli reel faiz | ≈ +3 bp |
-| CBO (2019) | federal borç | uzun dönem faizler | +2–3 bp |
+| CBO (2019) | federal borç | faizler, uzun dönem ortalaması | +2–3 bp |
 | Plante, Richter ve Zubairy (2025) | federal borç | 5y5y | ≈ +3 bp, ≈ dörtte üçü vade primi |
 | Ardagna, Caselli ve Lane (2007), 16 OECD ülkesi | faiz dışı açık | aynı dönem uzun faiz · VAR, on yıl birikimli | ≈ +10 bp · ≈ +150 bp |
 
@@ -91,12 +94,13 @@ görülür; Bölüm 6 orada başlar.
 ### 5.5 Vakalar kadranda (≈2 dk)
 
 Pencere olay öncesi kapanıştan (haber kapanıştan sonra geldiyse o günden) son kapanışa
-uzanır. Para ABD'de altı G10 kurundan eşit ağırlıklı dolar sepeti, İngiltere'de sterlindir;
-artı değer kazancıdır. Vade primi ACM'nin 10 yıllığıdır. ↳ alt penceredir, sayıma girmez.
+uzanır. Getiri ABD'de Hazine par getirisi, İngiltere'de gilttir. Para ABD'de altı G10 kurundan
+eşit ağırlıklı dolar sepeti, İngiltere'de sterlindir; artı değer kazancıdır. Vade primi ACM'nin
+10 yıllığıdır. ↳ alt penceredir, sayıma girmez.
 
 | Olay | Pencere | Δ 2 yıllık | Δ 10 yıllık | Δ para | Δ vade primi | Kadran |
 |---|---|---|---|---|---|---|
-| Reagan–Volcker bileşimi | 1980'lerin başı | — | — | dolar ↑ (kaynak) | — | — |
+| Reagan–Volcker bileşimi | 1980'lerin başı | — | — | dolar ↑ (Feldstein) | — | — |
 | Plaza Anlaşması | 22.09.1985 → ertesi iş günü | — | — | dolar ≈ −%4 (kaynak) | — | — |
 | 2016 seçimi → Aralık FOMC | 08.11–15.12.2016 | +42 bp | +72 bp | +%4,67 | +51,9 bp | politika |
 | 2017 vergi yasası | 01.11–22.12.2017 | +30 bp | +11 bp | −%1,11 | −9,8 bp | prim |
@@ -108,21 +112,27 @@ artı değer kazancıdır. Vade primi ACM'nin 10 yıllığıdır. ↳ alt pencer
 | İngiltere mini bütçe → BoE | 22–28.09.2022 | +73,2 bp | +51,5 bp | −%3,33 | — | prim |
 | ↳ BoE'den önceki son kapanış | 22–27.09.2022 | +124,2 bp | +98,1 bp | −%4,79 | — | prim |
 
-İlk iki satır kaynaktır; elimizdeki getiri ve kur serileri 1999–2000'de başlar. Ölçülen altı ana
-pencerenin dördü prim, ikisi politika kadranında; on olaydan az bağımsız gözlem olduğu için
-test istatistiği yazılmaz, satırlar vakadır. Bölüm 13'ün matrisinde 2016, 2017 ve 2023 satırları
-R1, tarife ve İngiltere R5 sütunundadır.
+İlk iki satır kaynaktır: kadranın getiri (Hazine par) ve kur (CNBC) serileri 1999–2000'de
+başlar. Ölçülen altı ana pencerenin dördü prim, ikisi politika kadranında; dört primin ikisi
+(2017 ve Moody's ilk gün) merkeze yakın küçük hareketlerdir. On olaydan az bağımsız gözlem olduğu
+için test istatistiği yazılmaz, satırlar vakadır. Bölüm 13'ün matrisinde 2016, 2017 ve 2023
+satırları haftalık etiketleriyle R1, tarife R5 sütunundadır; İngiltere VIX ölçütüyle R5'e
+yazıldı. Bölümün asıl rejimi R2 (DM mali kaygı) için ölçülmüş olay yok: matrise giren
+pencerelerde R2 etiketli gün yalnız 2016'da var (25 günün 5'i), o hücre kaynak hücresidir.
 
 - **2016, en temiz politika vakası.** Uzun uç baskın, eğri +30 bp dikleşti, vade primi ile
   risk-nötr getiri (+26,1 bp) birlikte yükseldi, dolar güçlendi.
 - **2017, karşı örnek.** 2 yıllık 10 yıllıktan çok yükseldi, eğri −19 bp yassılaştı; 10
   yıllığın artışının tamamı risk-nötr getiriden geldi (+22,0 bp), vade primi düştü. Kadran
-  mekanik olarak "prim" diyor; vade primi düşerken doların zayıflığı mali primden gelmiyor.
-  Dolar endeksi, vergi indirimi yasasının çıktığı 2017 yılını yaklaşık %10 düşüşle, 2003'ten bu
-  yana en büyük yıllık kayıpla kapattı. Kadran terimi önerir, ayrışım sınar.
+  mekanik olarak "prim" diyor, ama 10 yıllığın artışı vade priminden gelmediği için bu etiketin
+  dayanağı yok; doların neden zayıfladığını bu ayrışım söylemez. Dolar endeksi, vergi indirimi
+  yasasının çıktığı 2017 yılını yaklaşık %10 düşüşle, 2003'ten bu yana en büyük yıllık kayıpla
+  kapattı. Kadran terimi önerir, ayrışım sınar.
 - **Ağustos 2023, iki haber tek seansta.** 31 Temmuz 2023'te ABD Hazinesi Temmuz–Eylül
   çeyreği için piyasadan net 1,007 trilyon dolar borçlanma öngördüğünü açıkladı; bu tahmin
-  Mayıs'takinden 274 milyar dolar yüksekti. Fitch'in kararı ABD kapanışından sonra geldiği için
+  Mayıs'takinden 274 milyar dolar yüksekti. Tahmin New York saatiyle 15:00'te, getiri
+  kotasyonundan önce geldi: pencerenin başlangıç kapanışı ilk tepkinin bir kısmını zaten taşır,
+  yani pencere hareketi eksik ölçer. Fitch'in kararı ABD kapanışından sonra geldiği için
   ilk fiyat tepkisi 2 Ağustos seansına, yani Hazine'nin üç aylık borçlanma açıklamasıyla aynı
   güne düştü; o açıklama iki yıldır ilk kez kupon ihale büyüklüklerini kademeli artırma kararını
   taşıyordu. Tepki gününde vade primi düştü; büyük hareket sonraki haftalarda geldi (5.6).
@@ -130,11 +140,17 @@ R1, tarife ve İngiltere R5 sütunundadır.
   getiri düştü, VIX 21,51'den 37,56'ya çıktı (pencerede en çok 52,33). Duyuru New York
   saatiyle 16:00'da, getiri kotasyonundan sonra, kur kapanışından önce geldi: başlangıç günü
   kuru tepkinin bir kısmını taşır, kur değişimi tepkiyi eksik ölçer (Bölüm 1.6).
-- **İngiltere 2022.** 23 Eylül 2022'de Kwarteng, 2026/27'de gelirleri yaklaşık 45 milyar sterlin azaltacak vergi
-  indirimlerini finansmanını göstermeden açıkladı. 30 yıllık gilt BoE'den önceki son kapanışa
+- **Mayıs 2025, Moody's.** Moody's, 16 Mayıs 2025 cuma günü ABD piyasalarının kapanışından sonra
+  ABD'nin notunu Aaa'dan Aa1'e indirdi. İlk iş günü hareket küçük (10 yıllık +3 bp, vade primi
+  +5,1 bp); üçüncü iş gününe uzatılan pencere +15 bp ve +21,0 bp verir ama aynı hafta 20 yıllık
+  tahvil ihalesini de taşır. Kurun başlangıç kapanışının karardan önce mi sonra mı alındığı bu
+  veriden ölçülemez.
+- **İngiltere 2022.** 23 Eylül 2022'de Kwarteng, 2026/27'de gelirleri yaklaşık 45 milyar
+  sterlin azaltacak vergi indirimlerini finansmanını göstermeden açıkladı. 30 yıllık gilt BoE'den önceki son kapanışa
   +120,3 bp yükseldi, müdahale günü kapanışında pencere başına göre yalnız +15,1 bp yukarıdaydı:
   BoE'nin uzun vadeli gilt alım duyurusuyla 30 yıllık gilt getirisi o gün 100 bp'den fazla
-  düştü. Mekanizma kaldıraçlı alıcıdır (Bölüm 6).
+  düştü. Mekanizmanın kaldıraçlı alıcı olduğunu bu pencere değil Pinter'in işlem verisi gösterir
+  (Bölüm 6).
 
 <GrafikEmbed src="/arastirma/makro-kur-ve-faiz/07_dm_mali_kadran.html" baslik="DM mali olay kadranı: ABD ve İngiltere" no="07" kaynak="ABD Hazinesi · CNBC (New York 17:00) · NY Fed ACM · Yahoo Finance (VIX)" />
 
@@ -142,8 +158,9 @@ R1, tarife ve İngiltere R5 sütunundadır.
 değişimi (bp), yatay eksen paranın değerindeki log yüzde değişim. ABD getirisi Hazine par
 getirisidir (New York öğleden sonra, ≈15:30); dolar sepeti altı G10 kurunun eşit ağırlıklı log
 ortalamasıdır (CNBC, New York 17:00; EUR, GBP ve AUD'nin işareti çevrilir). Vade primi ACM
-modelinin çıktısıdır, ölçüm değil. Gilt Londra kapanışı, sterlin New York 17:00'dır. Merkeze yakın
-küme alt panelde büyütülür; içi boş nokta alt penceredir. Kusurlar: kapanıştan sonra gelen
+modelinin çıktısıdır, ölçüm değil; figürde yalnız ipucunda durur. Gilt Londra kapanışı, sterlin
+New York 17:00'dır; iki ülkenin para ölçüsü bu yüzden aynı değildir (sepet ile tek kur).
+Merkeze yakın küme alt panelde büyütülür; içi boş nokta alt penceredir. Kusurlar: kapanıştan sonra gelen
 haberde ilk günün kuru tepkinin bir kısmını taşır; Fitch'in tepki günü iki haber taşır.
 
 ### 5.6 Pratik 5A — ABD 2023 ayılı dikleşmesi (≈1 dk)
@@ -155,7 +172,9 @@ haberde ilk günün kuru tepkinin bir kısmını taşır; Fitch'in tepki günü 
 primidir (pay 1,00). Prim vadeyle büyür: 2 yıllıkta +37,7 bp, 5 yıllıkta +82,5 bp — ikinci
 kanalın imzası. ACM sıfır kupon eğrisinden kestirilir; pencerede par getiriden ortalama −1,11 bp,
 en çok 8,66 bp ayrışır; vade primi + risk-nötr getiri = model getirisi özdeşliği her gün
-0,0001 bp'den yakın tutar. Kısa uç uzun ucun dörtte biri kadar kımıldadı: konu arzdır.
+en çok 0,0001 bp sapmayla tutar. Kısa uç uzun ucun dörtte biri kadar kımıldadı ve artışın
+tamamı vade primindedir: tablo ikinci kanalla uyumludur. Vade priminin ne kadarının arzdan
+geldiğini ise bu ayrışım söylemez; aynı terime belirsizlik ve öbür arz dışı etkenler de yazılır.
 
 ### 5.7 Pratik 5B — Türkiye mali impuls vekili (≈1 dk)
 
@@ -164,14 +183,17 @@ Merkezi yönetimin 12 aylık faiz dışı dengesi/GSYH, dört çeyreklik fark, 2
 genişleme 2009Ç3'te +3,98 puan, en büyük daralma 2026Ç1'de −3,12 puan. Tek seferlik kalemler
 adıyla: **2023 depremi** dönemi (2023Ç1–2024Ç4) impuls ortalaması +1,49 puan, en yüksek
 +3,71 puan (2023Ç4); Mayıs 2023 seçimleri aynı yıla düşer ve harcamanın depreme ayrılan kısmı bu
-veriden ölçülemez. **KKM** stoku bulunan çeyrekler (2021Ç4–2026Ç2) ortalama −0,03 puan, öbür
-56 çeyrek +0,31 puan; KKM'nin bütçe maliyeti ayrı kalem değildir (kur duyarlılığı Bölüm 6).
+veriden ölçülemez. **KKM** stoku bulunan çeyrekler (2021Ç4–2026Ç2; deprem çeyrekleri de
+içinde) ortalama −0,03 puan, öbür 56 çeyrek +0,31 puan; KKM'nin bütçe maliyeti ayrı kalem
+değildir (kur duyarlılığı Bölüm 6).
 
-**2026Ç2.** Faiz dışı fazla GSYH'nin %0,88'i, impuls −1,90 puan (daralma). Çıktı açığı tam
-örneklemde −1,10 puan, gerçek zamanlı −1,65 puan; yapısal faiz dışı fazla %1,22 ile %1,71
+**2026Ç2.** Faiz dışı fazla GSYH'nin %0,88'i, impuls −1,90 puan (daralma). Son dört çeyreğin
+ortalama çıktı açığı (Bölüm 3'ün tek çeyrek değeri değil) tam örneklemde −1,10 puan, gerçek
+zamanlı −1,65 puan; yapısal faiz dışı fazla %1,22 ile %1,71
 arası, yapısal impuls −2,41 ile −1,97 puan arası, döngüsel pay +0,07 ile +0,51 puan: zayıf
 konjonktür ölçülen dengeyi kötüleştiriyor, yapısal daralma ölçülenden büyük. Mali duruş
-daralıyor; para politikasının duruşu ölçü seçimine bağlıdır (Bölüm 3). Canlı seri: [Bütçe ve Borç](/projeler/butce-borc/).
+daralıyor; para politikasının duruşu ölçü seçimine bağlıdır (Bölüm 3). Canlı seri:
+[Bütçe ve Borç](/projeler/butce-borc/).
 
 ### 5.8 Pratik 5C — Türkiye "beklenti dışı fark" (≈2 dk)
 
@@ -205,7 +227,7 @@ Fark 2023 ortasından beri dönemlerin en genişi; vade primi diye okunmadan ön
    yüksek 631,8 bp (05.2018), son ay 0,4 bp. Haziran 2018 öncesinde repo etkin faiz değildi ve
    14.09.2018 öncesinin günlük politika faizi yok: ay sonu değeri yalnız faizin ay içinde
    değişmediği aylarda kullanılır, karar ayları boş kalır; aksi −249,6 bp (01.2014) gibi sahte
-   eksiler üretir. Faizi değiştiren kararlardan sonraki altı iş gününde mutlak farkın medyanı
+   eksiler üretir. Faizi değiştiren kararların günü ve sonraki beş iş gününde mutlak farkın medyanı
    50,0 bp, öbür günlerde 0,0 bp: fonlama maliyeti yeni faize gecikmeli geçer.
 2. **DİBS–TLREF bazı.** 3 aylık DİBS eksi TLREF, 12.2018'den. TLREF basit, DİBS bileşik
    kotelenir: bileşiğe çevrilmiş TLREF'e göre baz ortalama −480,5 bp, basit TLREF'e göre
@@ -229,10 +251,12 @@ tarihli kıyasın zaman serisi uzantısıdır.
 
 **Bu seri nasıl hesaplanıyor.** Türkiye iş günlerinde (fonlama ve DİBS günlerinin kesişimi)
 günlük kurulur, en az beş gözlemli aylar ortalanır. Paneller: 1y1y forward ve anket patikası
-(ikisi de yıllık bileşik); fark ve beş dönemin medyanı; koridor farkı (14.09.2018 öncesinde
-politika faizi BIS'in ay sonu değeri, karar ayları boş); 3 aylık DİBS eksi TLREF, iki tanımla
-(28.12.2018'den). Üçüncü kirlilik çizilmedi; gölge yönetilen kur dönemidir. Kusurlar: anketin
-günlük hâli bir varsayımdır; 3 aylık düğüm eğrinin en gürültülü noktasıdır.
+(ikisi de yıllık bileşik); fark ve beş dönemin medyanı (fark günlük farkların ortalamasıdır, üst
+paneldeki iki aylık seviyenin farkından birkaç baz puan ayrışabilir); koridor farkı (14.09.2018
+öncesinde politika faizi BIS'in ay sonu değeri, karar ayları boş); 3 aylık DİBS eksi TLREF, iki
+tanımla (28.12.2018'den). Kirlilikler farktan düşülmeden çizilir, üçüncüsü çizilmedi; gölge
+yönetilen kur dönemidir. Kusurlar: anketin günlük hâli bir varsayımdır; 3 aylık düğüm eğrinin en
+gürültülü noktasıdır.
 
 <div class="not">
 

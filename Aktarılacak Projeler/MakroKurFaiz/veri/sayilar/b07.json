@@ -2,7 +2,7 @@
  "girdiler": [
   {
    "tur": "olcum",
-   "parca": "08.2026'da TÜFE bazlı REDK 105,04; 1994–2026'nın geometrik ortalaması 125,02, 2003–2026'nınki 126,91, log sapma −17,41 ya da −18,91. 392 ayın yalnız %23,2'sinde",
+   "parca": "08.2026'da TÜFE bazlı REDK 105,04; 1994–2026'nın geometrik ortalaması 125,02, 2003–2026'nınki 126,91, log sapma −17,41 ya da −18,91 log puan. 392 ayın yalnız %23,2'sinde",
    "degerler": [
     {
      "yol": "b07.p7a.sapma.tarih",
@@ -50,12 +50,12 @@
   },
   {
    "tur": "kaynak",
-   "parca": "göreli verimlilik farkının reel kura etkisi, Balassa (1964) ve Samuelson (1964) adlarıyla Balassa–Samuelson etkisi olarak anılır",
+   "parca": "Etki Balassa (1964) ve Samuelson (1964) adlarıyla anılır",
    "kaynak": "balassa1964"
   },
   {
    "tur": "kaynak",
-   "parca": "göreli verimlilik farkının reel kura etkisi, Balassa (1964) ve Samuelson (1964) adlarıyla Balassa–Samuelson etkisi olarak anılır",
+   "parca": "Etki Balassa (1964) ve Samuelson (1964) adlarıyla anılır",
    "kaynak": "samuelson1964"
   },
   {
@@ -65,28 +65,8 @@
   },
   {
    "tur": "hesap",
-   "parca": "Türkiye'de aylık en küçük kareler ρ'su 0,9862 ile 49,8 aylık, medyan-yansız ρ 0,9971 ile 235,8 aylık yarı ömür çıkar: ρ'daki 0,011'lik fark",
+   "parca": "medyan-yansız ρ arasındaki 0,011'lik fark",
    "degerler": [
-    {
-     "yol": "b07.p7a.tufe.tam.rho_ols",
-     "bicim": "sayi",
-     "hane": 4
-    },
-    {
-     "yol": "b07.p7a.tufe.tam.yari_omur_ols_ay",
-     "bicim": "sayi",
-     "hane": 1
-    },
-    {
-     "yol": "b07.p7a.tufe.tam.rho_mu",
-     "bicim": "sayi",
-     "hane": 4
-    },
-    {
-     "yol": "b07.p7a.tufe.tam.yari_omur_mu_ay",
-     "bicim": "sayi",
-     "hane": 1
-    },
     {
      "ifade": "v('b07.p7a.tufe.tam.rho_mu') - v('b07.p7a.tufe.tam.rho_ols')",
      "bicim": "sayi",
@@ -152,7 +132,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Rodrik (2008) Balassa–Samuelson'a göre düzeltilmiş düşük değerlenmenin büyümeyle pozitif ilişkili olduğunu bulur (tartışmalı, yalnız nitel)",
+   "parca": "Rodrik (2008) Balassa–Samuelson'a göre düzeltilmiş düşük değerlenmenin büyümeyle pozitif ilişkili olduğunu bulur; bulgu sonraki çalışmalarda tartışmalıdır",
    "kaynak": "rodrik2008"
   },
   {
@@ -200,12 +180,12 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Rogoff'un 3–5 yılı DM aralıklarının alt ucuna düşer",
+   "parca": "Rogoff'un 3–5 yılı DM medyan alt ucunu kapsar",
    "kaynak": "rogoff1996"
   },
   {
    "tur": "olcum",
-   "parca": "Türkiye'de BIS sepeti 11,0, TCMB'nin TÜFE bazlı REDK'si 19,6 yıl veriyor: sepet değişince kestirim yıllarca oynar (alt uç 2,4 yıl)",
+   "parca": "Türkiye'de BIS sepeti 11,0, TCMB'nin TÜFE bazlı REDK'si 19,6 yıl veriyor: sepet ve endeks değişince kestirim yıllarca oynar (alt uç BIS'te 2,4, TCMB'de 2,66 yıl)",
    "degerler": [
     {
      "yol": "b07.p7c.ulkeler.TR.yari_omur_mu_yil",
@@ -221,6 +201,11 @@
      "yol": "b07.p7c.ulkeler.TR.yari_omur_alt90_yil",
      "bicim": "sayi",
      "hane": 1
+    },
+    {
+     "yol": "b07.p7a.tufe.tam.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 2
     }
    ]
   },
@@ -495,22 +480,6 @@
   },
   {
    "tur": "olcum",
-   "parca": "tam örneklem TÜFE'de 4,15 yılı 19,6 yıla",
-   "degerler": [
-    {
-     "yol": "b07.p7a.tufe.tam.yari_omur_ols_yil",
-     "bicim": "sayi",
-     "hane": 2
-    },
-    {
-     "yol": "b07.p7a.tufe.tam.yari_omur_mu_yil",
-     "bicim": "sayi",
-     "hane": 1
-    }
-   ]
-  },
-  {
-   "tur": "olcum",
    "parca": "yarı ömrü 1,57 ile 2,25 yıl arasına iner",
    "degerler": [
     {
@@ -550,7 +519,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "eğilimsiz 4,11 yıl, alt ucu 1,41 yıl",
+   "parca": "Eğilimsiz ÜFE bazlı seri 4,11 yıl, alt ucu 1,41 yıl",
    "degerler": [
     {
      "yol": "b07.p7a.ufe.egilimden_arindirilmis.yari_omur_mu_yil",
@@ -754,7 +723,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "Bölüm 1'in kuralıyla R4, kadranda prim (31.12.2021 ve 09.06.2023 haftaları)",
+   "parca": "(31.12.2021 ve 09.06.2023) Bölüm 1'in kuralıyla R4 ve prim kadranıdır",
    "degerler": [
     {
      "yol": "b01.rejim.tr.en_buyuk_10_para_kaybi_haftasi.0.etiket",
@@ -790,7 +759,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "2021 dibinin bugünkü tam örneklem ortalamasına göre sapması −58,0 log puandı; medyan-yansız ρ'nun çekimi on iki ayda +%2,0, aralığın hızlı ucu +%14,2 dönüş öngörür",
+   "parca": "2021 dibinin bugünkü tam örneklem ortalamasına göre sapması −58,0 log puandı; medyan-yansız ρ'nun çekimi on iki ayda +%2,0, aralığın hızlı ucu +%14,2 dönüş ima eder",
    "degerler": [
     {
      "ifade": "math.log(v('b07.vakalar.tr_dip_2021.redk_tufe')/v('b07.p7a.sapma.ortalama_tam_endeks'))*100",
@@ -891,7 +860,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "yarı ömrü 239 ay gösterir, altı ondalıklı ölçüm 235,8 ay",
+   "parca": "yarı ömrü 239 ay gösterir (ölçüm 235,8 ay)",
    "degerler": [
     {
      "ifade": "yari_omur(a('redk.rho_mu'))",
@@ -961,7 +930,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "medyan-yansızla $1 - 0{,}9653$, yani sapmanın %3,5'i (+0,60 log puan); alt uçta $1 - 0{,}7706$, %22,9 (+3,99 log puan)",
+   "parca": "medyan-yansızla $1 - 0{,}9653$, yani sapmanın %3,5'i (+0,60 log puan); en küçük karelerle $1 - 0{,}8461$, %15,4 (+2,68 log puan); alt uçta $1 - 0{,}7706$, %22,9 (+3,99 log puan)",
    "degerler": [
     {
      "ifade": "v('b07.p7a.tufe.tam.rho_mu')**12",
@@ -975,6 +944,22 @@
     },
     {
      "ifade": "(1 - v('b07.p7a.tufe.tam.rho_mu')**12)*abs(v('b07.p7a.sapma.sapma_tam_log'))*100",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "ifade": "v('b07.p7a.tufe.tam.rho_ols')**12",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "(1 - v('b07.p7a.tufe.tam.rho_ols')**12)*100",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "ifade": "(1 - v('b07.p7a.tufe.tam.rho_ols')**12)*abs(v('b07.p7a.sapma.sapma_tam_log'))*100",
      "bicim": "sayi",
      "hane": 2,
      "arti": true
@@ -1078,6 +1063,48 @@
      "yol": "b08.sekil_15.redk_sapma_yuzde.295",
      "bicim": "sayi",
      "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ABD, İsveç ve Japonya'da alt uç bile 5 yılın üstünde (5,1 · 5,6 · 34,9 yıl)",
+   "degerler": [
+    {
+     "yol": "b07.p7c.ulkeler.US.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7c.ulkeler.SE.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b07.p7c.ulkeler.JP.yari_omur_alt90_yil",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "1994–2001 ve 2018–2026'da 4,58 ve 4,94 yıl, tam örneklemden (2,65) uzun",
+   "degerler": [
+    {
+     "yol": "b07.p7a.ufe.donemler.1994_2001.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.ufe.donemler.2018_2026.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b07.p7a.ufe.tam.yari_omur_mu_yil",
+     "bicim": "sayi",
+     "hane": 2
     }
    ]
   }

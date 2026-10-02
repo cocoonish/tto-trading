@@ -58,7 +58,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| Laubach (2009) | öngörülen açık · öngörülen borç | 5 yıl ve ötesi forward | +20–30 bp · ≈3–4 bp |",
+   "satir": "| Laubach (2009) | öngörülen açık · öngörülen borç | 5 yıl ve ötesi forward | +20–30 bp · ≈ +3–4 bp |",
    "degerler": [
     {
      "kaynak": "laubach2009"
@@ -85,7 +85,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| CBO (2019) | federal borç | uzun dönem faizler | +2–3 bp |",
+   "satir": "| CBO (2019) | federal borç | faizler, uzun dönem ortalaması | +2–3 bp |",
    "degerler": [
     {
      "kaynak": "cbo2019"
@@ -406,6 +406,22 @@
   },
   {
    "tur": "olcum",
+   "parca": "R2 etiketli gün yalnız 2016'da var (25 günün 5'i)",
+   "degerler": [
+    {
+     "yol": "b13.matris.butce.R1.vakalar.0.pencere_gun",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b13.matris.butce.R1.vakalar.0.pencere_etiketleri.R2",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
    "parca": "risk-nötr getiri (+26,1 bp)",
    "degerler": [
     {
@@ -502,6 +518,47 @@
    "tur": "kaynak",
    "parca": "Duyuru New York saatiyle 16:00'da",
    "kaynak": "tarife2025"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Moody's, 16 Mayıs 2025 cuma günü ABD piyasalarının kapanışından sonra ABD'nin notunu Aaa'dan Aa1'e indirdi.",
+   "kaynak": "moodys2025"
+  },
+  {
+   "tur": "olcum",
+   "parca": "(10 yıllık +3 bp, vade primi +5,1 bp)",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.5.d_us10_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.5.d_acmtp10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "üçüncü iş gününe uzatılan pencere +15 bp ve +21,0 bp verir",
+   "degerler": [
+    {
+     "yol": "b05.sekil_07.olaylar.6.d_us10_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b05.sekil_07.olaylar.6.d_acmtp10_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
   },
   {
    "tur": "kaynak",
@@ -692,7 +749,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "0,0001 bp'den yakın tutar",
+   "parca": "en çok 0,0001 bp sapmayla tutar",
    "degerler": [
     {
      "yol": "b05.p5a.vade_primi.ozdeslik_azami_sapma_bp",
@@ -787,7 +844,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "Çıktı açığı tam örneklemde −1,10 puan, gerçek zamanlı −1,65 puan",
+   "parca": "tam örneklemde −1,10 puan, gerçek zamanlı −1,65 puan",
    "degerler": [
     {
      "yol": "b05.p5b.son_durum.acik_tam",

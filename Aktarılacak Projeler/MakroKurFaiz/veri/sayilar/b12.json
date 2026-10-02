@@ -2,24 +2,12 @@
  "girdiler": [
   {
    "tur": "tablo",
-   "satir": "| ABD 2 yıllık | −4 bp | −0,41 | −1 bp | −0,17 |",
+   "satir": "| ABD 2 yıllık | −0,41 | −0,17 |",
    "degerler": [
-    {
-     "yol": "b12.p12_dm.vakalar.0.tepki.d2y_bp",
-     "bicim": "bp",
-     "hane": 0,
-     "arti": true
-    },
     {
      "yol": "b12.p12_dm.vakalar.0.tepki.d2y_z",
      "bicim": "sayi",
      "hane": 2
-    },
-    {
-     "yol": "b12.p12_dm.vakalar.1.tepki.d2y_bp",
-     "bicim": "bp",
-     "hane": 0,
-     "arti": true
     },
     {
      "yol": "b12.p12_dm.vakalar.1.tepki.d2y_z",
@@ -30,24 +18,12 @@
   },
   {
    "tur": "tablo",
-   "satir": "| ABD 10 yıllık | +3 bp | 0,38 | +3 bp | 0,52 |",
+   "satir": "| ABD 10 yıllık | 0,38 | 0,52 |",
    "degerler": [
-    {
-     "yol": "b12.p12_dm.vakalar.0.tepki.d10y_bp",
-     "bicim": "bp",
-     "hane": 0,
-     "arti": true
-    },
     {
      "yol": "b12.p12_dm.vakalar.0.tepki.d10y_z",
      "bicim": "sayi",
      "hane": 2
-    },
-    {
-     "yol": "b12.p12_dm.vakalar.1.tepki.d10y_bp",
-     "bicim": "bp",
-     "hane": 0,
-     "arti": true
     },
     {
      "yol": "b12.p12_dm.vakalar.1.tepki.d10y_z",
@@ -58,24 +34,12 @@
   },
   {
    "tur": "tablo",
-   "satir": "| Dolar sepeti | +%0,48 | 0,84 | −%0,54 | −1,24 |",
+   "satir": "| Dolar sepeti | 0,84 | −1,24 |",
    "degerler": [
-    {
-     "yol": "b12.p12_dm.vakalar.0.tepki.ddolar_yuzde",
-     "bicim": "yz",
-     "hane": 2,
-     "arti": true
-    },
     {
      "yol": "b12.p12_dm.vakalar.0.tepki.ddolar_z",
      "bicim": "sayi",
      "hane": 2
-    },
-    {
-     "yol": "b12.p12_dm.vakalar.1.tepki.ddolar_yuzde",
-     "bicim": "yz",
-     "hane": 2,
-     "arti": true
     },
     {
      "yol": "b12.p12_dm.vakalar.1.tepki.ddolar_z",
@@ -86,24 +50,12 @@
   },
   {
    "tur": "tablo",
-   "satir": "| DXY | +%0,28 | 0,49 | −%0,66 | −1,39 |",
+   "satir": "| DXY | 0,49 | −1,39 |",
    "degerler": [
-    {
-     "yol": "b12.p12_dm.vakalar.0.tepki.ddxy_yuzde",
-     "bicim": "yz",
-     "hane": 2,
-     "arti": true
-    },
     {
      "yol": "b12.p12_dm.vakalar.0.tepki.ddxy_z",
      "bicim": "sayi",
      "hane": 2
-    },
-    {
-     "yol": "b12.p12_dm.vakalar.1.tepki.ddxy_yuzde",
-     "bicim": "yz",
-     "hane": 2,
-     "arti": true
     },
     {
      "yol": "b12.p12_dm.vakalar.1.tepki.ddxy_z",
@@ -114,24 +66,12 @@
   },
   {
    "tur": "tablo",
-   "satir": "| VIX | +2,16 puan | 1,87 | +0,90 puan | 0,33 |",
+   "satir": "| VIX | 1,87 | 0,33 |",
    "degerler": [
-    {
-     "yol": "b12.p12_dm.vakalar.0.tepki.dvix_puan",
-     "bicim": "puan",
-     "hane": 2,
-     "arti": true
-    },
     {
      "yol": "b12.p12_dm.vakalar.0.tepki.dvix_z",
      "bicim": "sayi",
      "hane": 2
-    },
-    {
-     "yol": "b12.p12_dm.vakalar.1.tepki.dvix_puan",
-     "bicim": "puan",
-     "hane": 2,
-     "arti": true
     },
     {
      "yol": "b12.p12_dm.vakalar.1.tepki.dvix_z",
@@ -142,24 +82,12 @@
   },
   {
    "tur": "tablo",
-   "satir": "| ABD 10 yıllık, iki gün | +15 bp | 1,35 | +5 bp | 0,61 |",
+   "satir": "| ABD 10 yıllık, iki gün | 1,35 | 0,61 |",
    "degerler": [
-    {
-     "yol": "b12.p12_dm.vakalar.0.iki_gun.d10y_bp",
-     "bicim": "bp",
-     "hane": 0,
-     "arti": true
-    },
     {
      "yol": "b12.p12_dm.vakalar.0.iki_gun.d10y_z",
      "bicim": "sayi",
      "hane": 2
-    },
-    {
-     "yol": "b12.p12_dm.vakalar.1.iki_gun.d10y_bp",
-     "bicim": "bp",
-     "hane": 0,
-     "arti": true
     },
     {
      "yol": "b12.p12_dm.vakalar.1.iki_gun.d10y_z",
@@ -864,7 +792,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Kalemli-Özcan ve Varela (2021, çalışma kâğıdı) yerel risk bileşeninin en güçlü öngörücüsünü",
+   "parca": "Kalemli-Özcan ve Varela (2021, çalışma kâğıdı) açık faiz paritesi priminin yerel risk bileşeninin en güçlü öngörücüsünü",
    "kaynak": "kalemli_ozcan_varela2021"
   },
   {
@@ -874,13 +802,65 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Fitch 1 Ağustos 2023'te ABD'nin uzun vadeli notunu AAA'dan AA+'ya indirdi",
+   "parca": "Fitch'in 1 Ağustos 2023 ve Moody's'in 16 Mayıs 2025 indirimleri ABD kapanışından sonra geldi",
    "kaynak": "fitch2023"
   },
   {
    "tur": "kaynak",
-   "parca": "Moody's 16 Mayıs 2025 cuma günü ABD piyasalarının kapanışından sonra",
+   "parca": "Fitch'in 1 Ağustos 2023 ve Moody's'in 16 Mayıs 2025 indirimleri ABD kapanışından sonra geldi",
    "kaynak": "moodys2025"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "üç büyük derecelendirme kuruluşunun hiçbirinde ABD en üst notu taşımaz oldu",
+   "kaynak": "moodys2025"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Hazine'nin üç aylık borçlanma açıklamasını da taşır",
+   "kaynak": "hazine2023_refunding"
+  },
+  {
+   "tur": "olcum",
+   "parca": "DXY Fitch'in tepki gününde +%0,28, Moody's'inkinde −%0,66; VIX +2,16 ve +0,90 puan; 10 yıllık iki günde +15 ve +5 bp",
+   "degerler": [
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki.ddxy_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.tepki.ddxy_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.0.tepki.dvix_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.tepki.dvix_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.0.iki_gun.d10y_bp",
+     "bicim": "sayi",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b12.p12_dm.vakalar.1.iki_gun.d10y_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    }
+   ]
   },
   {
    "tur": "kaynak",
@@ -912,8 +892,13 @@
   },
   {
    "tur": "olcum",
-   "parca": "2 yıllıkta iş günlerinin %54,59'unda değer var, en uzun boşluk 539 iş günü (19.06.2023–18.08.2025)",
+   "parca": "2 yıllıkta 10.01.2022'den bu yana iş günlerinin %54,59'unda değer var, en uzun boşluk 539 iş günü (19.06.2023–18.08.2025)",
    "degerler": [
+    {
+     "yol": "b12.p12_vekil.tufex_reel.r2y.ilk",
+     "bicim": "tarih",
+     "hane": 2
+    },
     {
      "yol": "b12.p12_vekil.tufex_reel.r2y.is_gunu_dolulugu",
      "bicim": "yz",
@@ -950,7 +935,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "30.09.2026 etiketli değer %8,11 (bir yıl önce %6,57; son 52 haftada %6,38–%9,03)",
+   "parca": "30.09.2026 etiketli değer %8,11 (bir yıl önce %6,57)",
    "degerler": [
     {
      "yol": "b12.p12_vekil.tufex_reel.r2y.son",
@@ -966,18 +951,13 @@
      "yol": "b12.p12_vekil.tufex_reel.r2y.bir_yil_once_yuzde",
      "bicim": "yz",
      "hane": 2
-    },
-    {
-     "yol": "b12.p12_vekil.tufex_reel.r2y.son_52_hafta_en_dusuk_yuzde",
-     "bicim": "yz",
-     "hane": 2
-    },
-    {
-     "yol": "b12.p12_vekil.tufex_reel.r2y.son_52_hafta_en_yuksek_yuzde",
-     "bicim": "yz",
-     "hane": 2
     }
    ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "L etiketli değer L−1 iş gününün sabah sabitlemesidir",
+   "neden": "DİBS gösterge etiketinin tanımı (Bölüm 2)"
   },
   {
    "tur": "olcum",
@@ -1049,7 +1029,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "2021 öncesinde farkın 100 bp açılması TL'nin %1,85 değer kaybıyla birlikte gelirken, 07.2023 sonrasında %0,10'la",
+   "parca": "Kasım 2021'e kadar farkın 100 bp açılması TL'nin %1,85 değer kaybıyla birlikte gelirken, 07.2023 sonrasında %0,10'la",
    "degerler": [
     {
      "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.oncesi.egim_kur_yuzde_100bp",
@@ -1067,6 +1047,22 @@
    "tur": "sabit",
    "parca": "farkın 100 bp açılması",
    "neden": "eğimin ölçek birimi (tanım)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "korelasyonu (0,58) 5 yıllığın tek başına korelasyonuyla (0,59) neredeyse aynı",
+   "degerler": [
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.oncesi.kor_kur",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b12.p12_vekil.dibs5y_abd10y.donemler.oncesi.kor_5y_kur",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
   },
   {
    "tur": "olcum",

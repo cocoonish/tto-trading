@@ -315,7 +315,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "ortak 261 ayda aylık değişim farkı medyanda 0,34 puan, korelasyon 0,976; TCMB kuruyla 2002–2017 satırı −0,16",
+   "parca": "ortak 261 ayda aylık değişim farkı medyanda 0,34 puan, korelasyon 0,976",
    "degerler": [
     {
      "yol": "b11.p11a.try.kur_kaynagi.ortak_ay",
@@ -331,9 +331,20 @@
      "yol": "b11.p11a.try.kur_kaynagi.korelasyon",
      "bicim": "sayi",
      "hane": 3
-    },
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "hafta sonu taşımayan TCMB kuruyla 2002–2017 satırı −0,16, 2018–2026 satırı −0,73",
+   "degerler": [
     {
      "yol": "b11.p11a.try.duyarlilik.2002-2017.tcmb_kur.beta",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b11.p11a.try.duyarlilik.2018-2026.tcmb_kur.beta",
      "bicim": "sayi",
      "hane": 2
     }
@@ -696,7 +707,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "en kötü %10'luk 20 ayın yalnız %25'i yüksek VIX ayıdır (taban oran %17), ama %65'i VIX'in yükseldiği aydır (taban oran %46); getiri ile ΔVIX korelasyonu −0,35",
+   "parca": "en kötü %10'luk 20 ayın %25'i yüksek VIX ayıdır (taban oran %17), %65'i VIX'in yükseldiği aydır (taban oran %46); getiri ile ΔVIX korelasyonu −0,35",
    "degerler": [
     {
      "yol": "b11.p11b.sepet.vix_kosullu.en_kotu_yuzde10_ay_sayisi",
@@ -962,6 +973,22 @@
   },
   {
    "tur": "olcum",
+   "parca": "TRY'nin ABD 10 yıllığına eğimi iki dönemde de sıfırdan ayrışmıyor (t −0,20 ve 0,98)",
+   "degerler": [
+    {
+     "yol": "b11.p11c.donemler.oncesi.try.tek_degiskenli.dus10_bp.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b11.p11c.donemler.sonrasi.try.tek_degiskenli.dus10_bp.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
    "parca": "EM sepetininki yerinde (dolar t 8,6)",
    "degerler": [
     {
@@ -1112,6 +1139,22 @@
      "yol": "b11.p11d.donemler.sonrasi.hisse.kur.esanli.t",
      "bicim": "sayi",
      "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "sıfır değişim kıyasını kıl payı geçiyor (oran 0,995 ve 0,997)",
+   "degerler": [
+    {
+     "yol": "b11.p11d.donemler.sonrasi.dibs.dibs_2y.esanli.oos.sifir.mse_oran",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b11.p11d.donemler.sonrasi.hisse.dibs_2y.esanli.oos.sifir.mse_oran",
+     "bicim": "sayi",
+     "hane": 3
     }
    ]
   },
@@ -1288,10 +1331,15 @@
   },
   {
    "tur": "olcum",
-   "parca": "gerçekleşen taşıma ortalama −12,82 puan kaybettirdi (son dönemde gerçekleşen yalnız 27 ayda bilinir)",
+   "parca": "gerçekleşen taşıma ortalama −12,82 puan kaybettirdi: gerçekleşen değer kaybı beklenenin ortalama 16,72 puan üstündeydi (son dönemde gerçekleşen yalnız 27 ayda bilinir)",
    "degerler": [
     {
      "yol": "b11.p11e.donemler.oncesi.gerceklesen_tasima_ort_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b11.p11e.donemler.oncesi.beklenti_hatasi_ort_puan",
      "bicim": "puan",
      "hane": 2
     },
@@ -1516,34 +1564,13 @@
    ]
   },
   {
-   "tur": "hesap",
-   "parca": "$i$ = %44,64, $i^*$ = %4,59, kur 49,008, R +16,68 puan, REDK sapması −17,4",
+   "tur": "olcum",
+   "parca": "Aracın açılış değerleri ve kur 49,008 ile",
    "degerler": [
     {
-     "ifade": "a('kur.i_tl')",
-     "bicim": "yz",
-     "hane": 2
-    },
-    {
-     "ifade": "a('kur.i_usd')",
-     "bicim": "yz",
-     "hane": 2
-    },
-    {
-     "ifade": "v('b11.arac_kur.kur')",
+     "yol": "b11.arac_kur.kur",
      "bicim": "sayi",
      "hane": 3
-    },
-    {
-     "ifade": "a('kur.R')",
-     "bicim": "puan",
-     "hane": 2,
-     "arti": true
-    },
-    {
-     "ifade": "a('kur.redk_sapma')",
-     "bicim": "sayi",
-     "hane": 1
     }
    ]
   },
@@ -1684,7 +1711,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "Yüksek VIX'li 33 ayda ortalama getiri −%0,769, öbür 165 ayda +%0,124. En kötü %10'luk 20 ayın %25'i yüksek VIX, %65'i VIX'in yükseldiği ay; taban oranlar %17 ve %46",
+   "parca": "yüksek VIX'li 33 ayda −%0,769, öbür 165 ayda +%0,124",
    "degerler": [
     {
      "yol": "b11.p11b.sepet.vix_kosullu.n_yuksek",
@@ -1706,35 +1733,6 @@
      "bicim": "yz",
      "hane": 3,
      "arti": true
-    },
-    {
-     "yol": "b11.p11b.sepet.vix_kosullu.en_kotu_yuzde10_ay_sayisi",
-     "bicim": "tam",
-     "hane": 0
-    },
-    {
-     "yol": "b11.p11b.sepet.vix_kosullu.en_kotu_yuzde10_icinde_yuksek_vix_payi",
-     "bicim": "yz",
-     "hane": 0,
-     "carpan": 100
-    },
-    {
-     "yol": "b11.p11b.sepet.vix_kosullu.en_kotu_yuzde10_icinde_vix_artan_payi",
-     "bicim": "yz",
-     "hane": 0,
-     "carpan": 100
-    },
-    {
-     "yol": "b11.p11b.sepet.vix_kosullu.yuksek_vix_ay_payi",
-     "bicim": "yz",
-     "hane": 0,
-     "carpan": 100
-    },
-    {
-     "yol": "b11.p11b.sepet.vix_kosullu.vix_artan_ay_payi",
-     "bicim": "yz",
-     "hane": 0,
-     "carpan": 100
     }
    ]
   },

@@ -69,13 +69,24 @@
    "kaynak": "ghosh2013"
   },
   {
+   "tur": "olcum",
+   "parca": "yıllık seri 19 gözlemdir ve stokun tanımı 2020'de değişir",
+   "degerler": [
+    {
+     "yol": "b06.p6a.n",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
    "tur": "kaynak",
-   "parca": "Escolano, Shabunina ve Woo (2017), farkın 1999–2008'de büyük gelişmiş ekonomilerde ortalama 1 puan civarında, gelişmiş olmayan ekonomilerde ise −7 puanın altında olduğunu ve bu farkların muhtemelen finansal baskıdan kaynaklanan, piyasa dengesinin çok altındaki reel faizlerden doğduğunu bulur.",
+   "parca": "Escolano, Shabunina ve Woo (2017), farkın 1999–2008'de büyük gelişmiş ekonomilerde ortalama 1 puan civarında, gelişmiş olmayan ekonomilerde ise −7 puanın altında olduğunu ve bu büyük eksi farkların muhtemelen finansal baskıdan kaynaklanan, piyasa dengesinin çok altındaki reel faizlerden doğduğunu bulur.",
    "kaynak": "escolano_shabunina_woo2017"
   },
   {
    "tur": "olcum",
-   "parca": "Türkiye'de fark 2022'de −94,56 puandı (6.7)",
+   "parca": "Türkiye'de nominal fark (örtük faiz eksi nominal büyüme) 2022'de −94,56 puandı (6.7)",
    "degerler": [
     {
      "yol": "b06.p6a.tablo.15.r_eksi_g_puan",
@@ -96,7 +107,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Herndon, Ash ve Pollin (2014) düzeltmesinden sonra tutmaz: ortalama büyüme yayımlanan −%0,1 değil %2,2'dir, %90'ın üstü ile altı çarpıcı biçimde ayrışmaz.",
+   "parca": "Herndon, Ash ve Pollin (2014) düzeltmesinden sonra tutmaz: 1946–2009'da borcu %90'ın üstündeki ülkelerin ortalama büyümesi yayımlanan −%0,1 değil %2,2'dir, %90'ın üstü ile altı çarpıcı biçimde ayrışmaz.",
    "kaynak": "herndon_ash_pollin2014"
   },
   {
@@ -369,6 +380,11 @@
   },
   {
    "tur": "kaynak",
+   "parca": "Cumhurbaşkanı Mattarella'nın 27 Mayıs 2018'de avro karşıtı ekonomi bakanı adayını reddetmesinin ardından gelen erken seçim korkusuyla 29 Mayıs 2018'de İtalya'nın kısa vadeli tahvil getirileri 1992'den bu yana en büyük günlük artışını yaşadı",
+   "kaynak": "italya2018_29mayis"
+  },
+  {
+   "tur": "kaynak",
    "parca": "Hükümet Eylül 2018 sonunda 2019 için GSYH'nin %2,4'ü kadar açık hedefi açıkladı; bu, önceki hükümetin hedefinin üç katıydı.",
    "kaynak": "italya2018_butce"
   },
@@ -384,7 +400,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Brezilya'da Aralık 2024'te real rekor düşüklere gerilerken merkez bankası müdahale etti ve faizi 100 bp artırdı.",
+   "parca": "Brezilya hükümeti Kasım 2024 sonunda açıkladığı mali pakete gelir vergisi muafiyetini de ekleyince real rekor düşüklere geriledi, merkez bankası müdahale etti ve Aralık'ta faizi 100 bp artırdı.",
    "kaynak": "brezilya2024_paket"
   },
   {
@@ -679,7 +695,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "USD/TRY +%79,65 ve döviz payı %41,48 iken kur terimi +8,05 puan",
+   "parca": "USD/TRY +%79,65 ve önceki yıl sonunun döviz payı %41,48 iken kur terimi +8,05 puan",
    "degerler": [
     {
      "yol": "b06.p6a.tablo.14.kur_degisimi_yuzde",
@@ -739,6 +755,23 @@
      "yol": "b06.p6a.seri_gecisi.resmi_d",
      "bicim": "yz",
      "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Örtüşen beş yılda iki serinin farkı yıldan yıla −2,34 ile +2,41 puan arasında değişti",
+   "degerler": [
+    {
+     "yol": "b06.p6a.karsilastirma.yil_sonu_fark_d_degisimi_puan.2021",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6a.karsilastirma.yil_sonu_fark_d_degisimi_puan.2024",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
     }
    ]
   },
@@ -991,7 +1024,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "%20'lik kur şokunda brüt yük yıllık GSYH'nin %2,25'i ve %0,88'i, toplam %3,13.",
+   "parca": "%20'lik kur şokunda brüt yük yıllık GSYH'nin (2023Ç3) %2,25'i ve %0,88'i, toplam %3,13.",
    "degerler": [
     {
      "yol": "b06.p6b.kkm.toplam_zirve.soklar.1.kur_artisi_yuzde",
@@ -1260,6 +1293,33 @@
   },
   {
    "tur": "olcum",
+   "parca": "(oran 0,92, Diebold–Mariano t −0,59); 7 yıllıkta aynı tanımın eğimi +211,7 bp/puan, t'si 3,10",
+   "degerler": [
+    {
+     "yol": "b06.p6c.n5y.degisim_yonetilen_haric.oos_ortalama.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6c.n5y.degisim_yonetilen_haric.oos_ortalama.dm_t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b06.p6c.n7y.degisim_yonetilen_haric.egim",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b06.p6c.n7y.degisim_yonetilen_haric.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
    "parca": "etiket bir gün kaydırılınca 5 yıllık ortalama 32,3 bp, en çok 290,8 bp (2022Ç2) oynar",
    "degerler": [
     {
@@ -1307,6 +1367,33 @@
     {
      "yol": "b06.p6d.sifir_dizisi_atilan.pt10y",
      "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Aylık seri 08.2026'da biter",
+   "degerler": [
+    {
+     "yol": "b06.p6d.aylik.FR.son",
+     "bicim": "ay",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Portekiz'in günlük serisi 12.2012'de, Yunanistan'ınki 01.2015'te başlar",
+   "degerler": [
+    {
+     "yol": "b06.p6d.gunluk.PT.ilk",
+     "bicim": "ay",
+     "hane": 0
+    },
+    {
+     "yol": "b06.p6d.gunluk.GR.ilk",
+     "bicim": "ay",
      "hane": 0
     }
    ]
@@ -1767,8 +1854,34 @@
    ]
   },
   {
+   "tur": "hesap",
+   "parca": "$(0{,}3966 - 0{,}3884)/1{,}3884 \\times 20{,}44$",
+   "degerler": [
+    {
+     "ifade": "v('b06.p6b.marjinal_faizle.n2y.faiz_yuzde')/100",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "v('b06.p6b.bugun.nominal_buyume_yuzde')/100",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "1+v('b06.p6b.bugun.nominal_buyume_yuzde')/100",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b06.p6b.bugun.d_yuzde",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
    "tur": "olcum",
-   "parca": "2 yıllık: $i - g$ +0,82 puan, pb* +%0,12. Fazla %0,88",
+   "parca": "$i - g$ +0,82 puan, pb* +%0,12. Fazla %0,88",
    "degerler": [
     {
      "yol": "b06.p6b.marjinal_faizle.n2y.r_eksi_g_puan",
