@@ -1,6 +1,7 @@
 {
  "arsiv_ozleri": {
   "bulut/abd_hazine_1y.csv.gz": "8c31a527e6ebb6dfec0fbe654e739c5dac5ba0d5c0f107c0ec76952999d755ab",
+  "bulut/abd_reel_getiri.csv.gz": "7aa5105fd44c522765f73a501f0566956491f64d78308cc9a4bd3599498a60da",
   "bulut/acm.csv.gz": "cdfc031396f6a858bd07757603753b56d156bfeaf03eab245ecf90fb53454eb3",
   "bulut/bis_eer_n.csv.gz": "57b95bb767874ee4dfcbf05460a9d57a4ed3706ec4494f897078c68e3b40b5f4",
   "bulut/bis_eer_r.csv.gz": "c0e7a23e90c987a08e650b870f710e89120af5b7b3c9f366218c2fb9aac251b9",
@@ -18,6 +19,7 @@
   "bulut/fomc_takvim.csv.gz": "9f4a2ff5239ca06cdaa46ab6adf42867d8dd08d6a5d3de1add26ceea036770eb",
   "bulut/gilt.csv.gz": "adacb8800572e837f3934b021727d847cb7695bf5597c758a9301754a8014a2a",
   "bulut/not_kararlari.csv.gz": "28ab3a39e69b713b8c4cccc03b3e01a75298b472163efe14e8fd21e44cd96e75",
+  "bulut/surucu_gunluk.csv.gz": "7ff839541d96de6fd5e0c29f853539ac75ea766d905699f3592ffe6c131f3d7f",
   "bulut/tuik_takvim.csv.gz": "d20c7fcb293f4318806725eca874a0721d5be1f16ecc5ca81d58a012061e9bbd",
   "bulut/wdi_borc.csv.gz": "b0db7976dc97ded339c6cc3d8c9dd8839c36aa83b0fabc976a23eed96e649e45",
   "bulut/wdi_buyume.csv.gz": "a86941dd02ad46006198c85ad9b37122defa8cd2b21540ec570ad66be2fc1e77",
@@ -69243,12 +69245,12 @@
   "yontem": "On şok türünün olay günlerinde kur, 2 yıllık, uzun uç ve eğim değişiminin mutlak büyüklüğü aynı rejimin sıradan günlerine oranlandı ve 2 yıllık getiri ile yerel paranın değeri arasındaki korelasyon alındı; rejim olay gününün düştüğü haftanın Bölüm 1 etiketidir."
  },
  "betik_ozleri": {
-  "bulut.py": "4a1047d2d384fdfe649ab0db8e0c266f69038f603e402eabbcaeba00c54d5ca8",
+  "bulut.py": "2a5a662d09bb7d86416cb3468c79643ac4397e928210cdfffd93e46b3e470c82",
   "hazirla.py": "c62da257d53ebdfb01aab2bfd6e48b12ef7704d6f69d906f4b22d52249e38590",
-  "hazirla_bulut.py": "8bdd1001f2d873dddcd68e4ff86690024df6d14d8653b1c10c9d05ff132e877f",
+  "hazirla_bulut.py": "c0cb0c6d2b2c50e4d839ddcfb3b49301633687cd7cdc35c759f94c184ddfca74",
   "olcum_b01.py": "5f525f5e3bd1637587f9615c0d5fe8ed78d7893e01245c155bc9f1778d6a449d",
   "olcum_b02.py": "e0691661caa9c43a7edd0286b8f03f84d2927089e7ccf467b0f23905943e549d",
-  "olcum_b03.py": "3b81dc551324f626991205f2b8f3865c419b4d8f92a6d6b3092f496026758431",
+  "olcum_b03.py": "9812206ac714080345a852e28ff177878166445f70e96c22ba87086fd7755c18",
   "olcum_b04.py": "4d3d3bc9ee35bff3f838217440b5187b3bd9cee175aff721439871c87908cf59",
   "olcum_b05.py": "111adbefb2b2bc8c57f65226d821a76e235edc217978a64a612966262b16e3d2",
   "olcum_b06.py": "e92ab7f4ef61be49da703a8119424a044215f9e3fc5bec4cf0c188f470073741",
