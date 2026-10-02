@@ -53,12 +53,39 @@ gerçekleşen aylık TÜFE ile 0 ve ±1, ±2 ay kaydırmada sınanır.
      aynı 1.000 rastgele gün kümesiyle kıyaslanır.
   6. KAPININ RASTGELE GEÇME OLASILIĞI ≈ %15–22: tepe beş kaymadan birine düşer.
      "Güçlü kapı" ayrıca oran[0]'ın rastgele kümelerin %95'ini aşmasını ister.
-  7. AY İÇİ TAKVİM: TÜFE ayın 2.–3. iş gününe düşüyor ve DİBS değişimi ayın 2.
-     iş gününde takvim gereği büyük (2 yıllık 32,4 · ortalama 27,5 bp). TÜFE ×
-     DİBS'in kaymasız geçişi DİBS'in iki günlük öncülüğüyle de çelişiyor; olay
-     çalışmasına dayanak sayılmaz.
+  7. TÜFE × DİBS KAYMASIZ GEÇİŞİ SAATLE BAĞDAŞMIYOR. İlk yazımda bunun sebebi
+     "ayın 2. iş gününde DİBS değişimi takvim gereği büyük" diye kondu; o ölçü
+     DÖNGÜSELDİ: TÜFE her ay ayın 3'üne (ya da ertesi iş gününe) düştüğü için ayın
+     k. iş gününün ortalaması TÜFE'nin kendisini içerir. Ayrıştırılmış ölçü (aylar
+     TÜFE'nin düştüğü iş gününe göre gruplanır) takvim etkisi göstermiyor: TÜFE
+     3. iş gününe düştüğü aylarda 2. iş günü sıradandır (2 yıllıkta 28,6 bp; genel
+     27,5), TÜFE gününe göre göreli profil 2 ve 5 yıllıkta düz. Geçişin asıl
+     çelişkisi saattedir: D etiketi D'den önceki iş gününün sabahki sabitlemesidir
+     ve 10:00'daki TÜFE'yi taşıyamaz. Saatle bağdaşan kaymalar 1 ve 2'dir ve
+     orada hiçbir DİBS serisi geçmiyor; 3 aylığın kaymasız p'si (0,04) beş seri ×
+     iki olay arasında tesadüfle uyumlu ve düzeltilmiş tabanla 0,05'i aşıyor.
   8. `bulut.fomc_gunleri()` belgesinde "planlı" der ama plansız toplantı ve
      telekonferansları da döndürür (170 günün 18'i); planlılar ayıklanır.
+  9. RASTGELE KÜMENİN TABANI (denetim turu): gerçek olay profilinin tabanı olay
+     pencerelerinin DIŞINDAKİ günlerdir, rastgele kümelerinki ise olay günlerini de
+     içeriyordu. Olay günleri oynak olduğu için rastgele oranlar %2–5 düşük çıkıyor
+     ve p değerleri olay lehine yanlıydı (USD/TRY × PPK rastgele medyanı 0,89 ·
+     doğrusu 0,94; 3 aylık × TÜFE p 0,041 → 0,054). Rastgele kümelerin tabanından
+     da olay pencereleri çıkarılır.
+ 10. YÖNETİLEN KUR DÖNEMİ HAVUZA GİRİYORDU: kur serilerinin (USD/TRY, TCMB) bütün
+     satırları 2021-12…2023-06'yı da kapsıyordu; sözleşme gereği bu dönem kur
+     tepkisinde ayrıdır. Havuz USD/TRY × PPK profilinin +2 kaymasını şişiriyordu
+     (havuz 1,42 · dönem dışı 1,12 · dönem içi 19 olayda 2,92). Kur satırları
+     dönemi dışarıda bırakır, dönemin içi `yonetilen_kur_donemi`nde ayrı durur.
+ 11. SAAT TUTARLILIĞI: tepe sıfırda olsa bile geçiş, serinin ölçülmüş saatiyle
+     bağdaşmıyorsa tesadüftür. Her serinin gün sonu kapanışına göre öncülüğü
+     bütün günlerden ölçülür (`_saat_onculugu`: DİBS 2 · TCMB 1 · Yahoo ve ABD
+     0); 14:00 sonrası olayda beklenen kayma bu öncülük, 10:00 olayında (TÜFE)
+     sabitlemenin 10:00'a göre saati ölçülmediği için iki komşu kayma. Olay
+     çalışması (`kurulabilir`, `kapi(..., guclu=True)`) güçlü kapıyı VE saati ister.
+ 12. İKİ YARI SINAMASI bütün seriyle kuruluyordu: taban öbür yarının oynaklığını
+     taşıyor, oranlar 1'e göre okunamıyordu (DİBS'te ilk yarı her kaymada < 1, son
+     yarı > 1,8). Tepe değişmiyordu; oranlar artık her yarının kendi penceresinde.
 """
 from __future__ import annotations
 
@@ -71,6 +98,7 @@ import pandas as pd
 import bulut
 import olcum_b01 as b01
 import ortak_olc as oo
+import bicim  # noqa: E402  (ortak/; yolu ortak_olc ekler) — okura giden sayı tek sözleşmeden
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 try:
@@ -154,6 +182,75 @@ def _seri(ad: str) -> pd.Series:
     raise KeyError(f"tanımsız seri: {ad} (geçerli: {', '.join(list(_tr_degisim().columns) + list(_abd_degisim().columns))})")
 
 
+# ───────────────────────────────────────────────────────── yönetilen kur (tuzak 10)
+KUR_SERILER = ("usdtry", "usdtry_tcmb", "usdtry_tcmb_trtakvim")
+YONETILEN = b01.YONETILEN
+
+
+def _kok(seri: str) -> str:
+    return seri.split(":")[0]
+
+
+def _yonetilen_disi(s: pd.Series, olaylar: pd.DatetimeIndex) -> tuple[pd.Series, pd.DatetimeIndex, int]:
+    """Kur serisinden yönetilen kur dönemini (günleri ve olayları) çıkarır.
+    Pencere konumla kaydığı için çıkarılan boşluğun üstünden atlayan bir olay
+    penceresi kalırsa o olay da düşer (sayısı döner)."""
+    a, b = YONETILEN
+    s2 = s[(s.index < a) | (s.index > b)]
+    ev = olaylar[((olaylar < a) | (olaylar > b)) & olaylar.isin(s2.index)]
+    idx = s2.index
+    tut, dusen = [], 0
+    for e in ev:
+        p = idx.get_loc(e)
+        sol = idx[max(p - PENCERE, 0)]
+        sag = idx[min(p + PENCERE, len(idx) - 1)]
+        # yalnız çıkarılan dönemin ÜSTÜNDEN atlayan pencere düşer (bayram boşlukları olağan seride de var)
+        if (e < a and sag > b) or (e > b and sol < a):
+            dusen += 1
+            continue
+        tut.append(e)
+    return s2, pd.DatetimeIndex(tut), dusen
+
+
+# ───────────────────────────────────────────────────────── saat tutarlılığı (tuzak 11)
+OLAY_SAAT_SINIFI = {"ppk": "ogleden_sonra", "tufe": "sabah", "fomc": "abd", "abd_istihdam": "abd", "abd_tufe": "abd"}
+
+
+@lru_cache(maxsize=1)
+def _saat_onculugu() -> dict:
+    """Her serinin etiketinin, gün sonu kapanışına (Yahoo USD/TRY, saati bilinen
+    referans) göre kaç iş günü ÖNDE olduğu — ÖLÇÜLÜR, varsayılmaz: bütün
+    günlerde (olaylar değil) k iş günü kaydırılmış sıra korelasyonunun tepesi,
+    2013–2021 (yönetilen kur ve İstanbul 18:00 geçişinden önce). TCMB kuru ile
+    DİBS aynı sabitleme saatini paylaştığı için DİBS'in TCMB'ye göre öncülüğü de
+    yazılır. ABD serileri ve Yahoo kuru gün sonu kapanışıdır (0)."""
+    d = _tr_degisim().loc["2013-01-01":str((YONETILEN[0] - pd.Timedelta(days=1)).date())]
+    y = d["usdtry"]
+    out = {"usdtry": 0, "us2": 0, "dolar_sepeti": 0}
+    kor_tcmb = {k: float(y.corr(d["usdtry_tcmb"].shift(-k), method="spearman")) for k in KAYMA_CAPRAZ}
+    out["usdtry_tcmb"] = int(max(kor_tcmb, key=kor_tcmb.get))
+    out["usdtry_tcmb_trtakvim"] = out["usdtry_tcmb"]
+    kor = {}
+    for s_ in DIBS_SERILER:
+        kor[s_] = {k: float(d[s_].shift(-k).corr(y, method="spearman")) for k in KAYMA_CAPRAZ}
+        out[s_] = int(max(kor[s_], key=kor[s_].get))
+    return {"oncu": out, "kor_tcmb_yahoo": kor_tcmb, "kor_dibs_yahoo": kor,
+            "ilk": str(d.index.min().date()), "son": str(d.index.max().date())}
+
+
+def _beklenen_kaymalar(seri: str, olay: str) -> list:
+    """Olay saatiyle serinin ölçülmüş saati bağdaşan kaymalar. 14:00 TSİ sonrası
+    olay (PPK) ve ABD olayları: etiketin öncülüğü L. 10:00 TSİ olay (TÜFE):
+    sabitleme saati 10:00'a göre ölçülmediği için {L−1, L}."""
+    L = _saat_onculugu()["oncu"].get(_kok(seri))
+    if L is None:
+        return []
+    sinif = OLAY_SAAT_SINIFI.get(olay.split("_kayma")[0], "ogleden_sonra")
+    if sinif == "sabah":
+        return sorted({k for k in (L - 1, L) if k >= 0})
+    return [L]
+
+
 # ───────────────────────────────────────────────────────── olaylar
 def _ppk() -> tuple[pd.DatetimeIndex, dict]:
     p = oo.oku("ppk_kararlari")
@@ -179,7 +276,8 @@ def _olaylar() -> dict:
         try:
             out[ad] = pd.DatetimeIndex(f()).normalize()
         except bulut.VeriYok as e:
-            out[ad] = str(e)
+            # okuyucunun şablonu kaynak adındaki "arşivi" sözcüğünü ikiler ("… arşivi arşivi")
+            out[ad] = str(e).replace("arşivi arşivi", "arşivi")
     return out
 
 
@@ -214,13 +312,20 @@ def _kapi_hukmu(prof: dict) -> bool:
     return bool(prof.get("tepe") == 0 and o0 > max(oteki))
 
 
-def _hizli_profil(a: np.ndarray, poz: np.ndarray, pencere: int = PENCERE) -> np.ndarray:
-    """`ortak_olc.olay_profili` ile aynı hesap, konumlar üzerinden (rastgele kümeler için)."""
+def _hizli_profil(a: np.ndarray, poz: np.ndarray, pencere: int = PENCERE,
+                  ek_maske: np.ndarray | None = None) -> np.ndarray:
+    """`ortak_olc.olay_profili` ile aynı hesap, konumlar üzerinden (rastgele kümeler için).
+
+    `ek_maske`: tabandan ayrıca çıkarılacak günler. Rastgele kümelerde GERÇEK olay
+    pencereleri buraya verilir (tuzak 9): gerçek olay profilinin tabanı olay
+    pencerelerinin dışındaki sıradan günlerdir, rastgele kümeninki de öyle olmalı."""
     n = len(a)
     maske = np.zeros(n, dtype=bool)
     for k in range(-pencere, pencere + 1):
         p = poz + k
         maske[p[(p >= 0) & (p < n)]] = True
+    if ek_maske is not None:
+        maske = maske | ek_maske
     taban = a[~maske].mean()
     out = np.empty(2 * pencere + 1)
     for i, k in enumerate(range(-pencere, pencere + 1)):
@@ -271,7 +376,7 @@ def _rastgele_dagilim(s: pd.Series, olaylar: pd.DatetimeIndex, k_tohum: int,
 
     prof = np.empty((K_RASTGELE, 2 * PENCERE + 1))
     for i in range(K_RASTGELE):
-        prof[i] = _hizli_profil(a, cek())
+        prof[i] = _hizli_profil(a, cek(), ek_maske=yasak)
     o0 = prof[:, PENCERE]
     oteki = np.delete(prof, PENCERE, axis=1).max(axis=1)
     return {"oran0": o0, "fark": o0 - oteki, "kapi": (prof.argmax(axis=1) == PENCERE) & (o0 > oteki),
@@ -279,9 +384,14 @@ def _rastgele_dagilim(s: pd.Series, olaylar: pd.DatetimeIndex, k_tohum: int,
 
 
 def _profil_satiri(seri: str, olay: str, s: pd.Series, olaylar: pd.DatetimeIndex, k_tohum: int,
-                   ilk: str | None = None, son: str | None = None, kayma: int = 0) -> dict:
+                   ilk: str | None = None, son: str | None = None, kayma: int = 0,
+                   yonetilen: str = "haric") -> dict:
     """Bir seri × olay satırı. `kayma` k: olay gününe serinin k iş günü SONRAKİ
-    değişimi yazılır (tarih sözleşmesi taraması)."""
+    değişimi yazılır (tarih sözleşmesi taraması).
+
+    `yonetilen`: kur serilerinde (USD/TRY, TCMB) yönetilen kur dönemi ayrı
+    dönemdir ve havuza katılmaz — "haric" (öntanımlı) dönemi çıkarır, "yalniz"
+    yalnız dönemin içini ölçer. Kur dışı serilerde (DİBS, ABD) yok sayılır."""
     s = s.dropna()
     if kayma:
         s = s.shift(-kayma).dropna()
@@ -294,6 +404,13 @@ def _profil_satiri(seri: str, olay: str, s: pd.Series, olaylar: pd.DatetimeIndex
         son = str(min(k_son, pd.Timestamp(son)).date()) if son else str(k_son.date())
     if ilk or son:
         s = s.loc[ilk:son]
+        olaylar = olaylar[(olaylar >= s.index.min()) & (olaylar <= s.index.max())]
+    kur = _kok(seri) in KUR_SERILER
+    yon_dusen = 0
+    if kur and yonetilen == "haric":
+        s, olaylar, yon_dusen = _yonetilen_disi(s, olaylar)
+    elif kur and yonetilen == "yalniz":
+        s = s.loc[YONETILEN[0]:YONETILEN[1]]
         olaylar = olaylar[(olaylar >= s.index.min()) & (olaylar <= s.index.max())]
     prof = oo.olay_profili(s, olaylar, PENCERE)
     poz = _konumlar(s, olaylar)
@@ -309,9 +426,17 @@ def _profil_satiri(seri: str, olay: str, s: pd.Series, olaylar: pd.DatetimeIndex
     ort = {str(k): float(v) for k, v in zip(range(-PENCERE, PENCERE + 1), rd["ort_profil"])}
     fazla = {k: float(o[k] / ort[k]) for k in o}
     k_gecer = _kapi_hukmu(prof)
+    guclu = bool(k_gecer and p0 < 0.05)
+    beklenen = _beklenen_kaymalar(seri, olay)
+    saat_ok = bool(int(kayma) in beklenen)
     return {
         "seri": seri, "olay": olay, "kayma": int(kayma), "durum": "olculdu", "kapi": k_gecer,
-        "kapi_guclu": bool(k_gecer and p0 < 0.05),
+        "kapi_guclu": guclu,
+        "saat_beklenen_kayma": beklenen, "saat_tutarli": saat_ok,
+        # olay çalışması ancak istatistik (güçlü kapı) VE saat birlikte izin verirse kurulur
+        "kurulabilir": bool(guclu and saat_ok),
+        "yonetilen_kur": (("hariç" if yonetilen == "haric" else "yalnız dönem içi") if kur else "uygulanmaz"),
+        "yonetilen_siniri_dusen_olay": int(yon_dusen),
         "oran": {k: float(v) for k, v in o.items()}, "tepe": prof["tepe"],
         "oran0": float(o["0"]), "oteki_azami": float(oteki), "oran0_fazlasi": float(o["0"] - oteki),
         "rastgele_ort_profil": ort, "gun_etkisinden_arindirilmis": fazla,
@@ -349,8 +474,10 @@ def _uyarilar(seri: str, olay: str) -> list:
         u.append("DİBS gösterge eğrisinin etiketi gün sonu piyasasının iki iş günü önündedir (tarih "
                  "sözleşmesi bölümü); kaymasız profil olay gününü ölçmez")
     if seri in DIBS_SERILER and olay == "tufe":
-        u.append("TÜFE ayın 2.–3. iş gününe düşüyor ve DİBS değişimi o günlerde takvim gereği büyük; "
-                 "geçiş olaydan değil ay içi takvimden gelebilir")
+        u.append("kaymasız satır olay gününü ölçemez: D etiketi D'den önceki iş gününün sabahki "
+                 "sabitlemesidir ve 10:00'daki TÜFE'yi taşıyamaz; saatle bağdaşan kaymalar 1 ve 2 iş "
+                 "günüdür (tarih sözleşmesi bölümündeki ay içi tablo, TÜFE'nin hangi iş gününe düştüğüne "
+                 "göre ayrılmış ölçüdür)")
     if seri == "usdtry_tcmb" and olay in ("ppk", "fomc", "abd_istihdam", "abd_tufe"):
         u.append("TCMB gösterge kuru öğleden önceki sabitlemeden gelir; 14:00 sonrası olay ertesi günün ilanına düşer")
     return u
@@ -379,10 +506,14 @@ def kapi(seri, olay=None, pencere: int = PENCERE, kayma: int = 0, guclu: bool = 
 
     kapi("n2y", "ppk")            → tablodaki hüküm (kurulmamış satır False döner);
     kapi("n2y", "ppk", kayma=2)   → olay gününe serinin 2 iş günü sonraki değişimi yazılarak;
-    kapi(..., guclu=True)         → ayrıca oran[0], haftanın günü eşlemeli 1.000 rastgele kümenin
-                                     %95'inden yüksek;
+    kapi(..., guclu=True)         → olay çalışması KURULABİLİR mi: ayrıca oran[0], haftanın günü
+                                     eşlemeli 1.000 rastgele kümenin %95'inden yüksek VE kayma,
+                                     serinin ölçülmüş saatinin olay saatiyle bağdaştığı kaymalardan
+                                     biri (`saat_beklenen_kayma`; tuzak 11) — saatle bağdaşmayan bir
+                                     geçiş tesadüftür;
     kapi(degisim_serisi, gunler)  → aynı kural doğrudan hesaplanır (yalnız temel kural).
-    Kural: plasebo profilinin tepesi 0'da ve oran[0] öbür kaymaların en büyüğünü aşıyor."""
+    Kural: plasebo profilinin tepesi 0'da ve oran[0] öbür kaymaların en büyüğünü aşıyor.
+    Kur serilerinde yönetilen kur dönemi (2021-12…2023-06) havuza girmez."""
     if isinstance(seri, str):
         if kayma == 0:
             r = next((x for x in _tablo()[0] if x["seri"] == seri and x["olay"] == olay), None)
@@ -390,7 +521,7 @@ def kapi(seri, olay=None, pencere: int = PENCERE, kayma: int = 0, guclu: bool = 
                 r = _kaymali_satir(seri, olay, 0)
         else:
             r = _kaymali_satir(seri, olay, int(kayma))
-        return bool(r.get("kapi_guclu") if guclu else r.get("kapi"))
+        return bool(r.get("kurulabilir") if guclu else r.get("kapi"))
     return _kapi_hukmu(oo.olay_profili(seri, olay, pencere))
 
 
@@ -404,6 +535,31 @@ def _capraz(dibs: pd.DataFrame, x: pd.Series, a: str, b: str) -> dict:
         out[s_] = {"korelasyon": kor, "en_yuksek_kayma": int(max(kor, key=lambda k: kor[k])),
                    "n": int(pd.concat([z[s_], xx], axis=1).dropna().shape[0])}
     return out
+
+
+_SERI_KISA = {"n3a": "3 aylık", "n2y": "2 yıllık", "n5y": "5 yıllık", "usdtry_tcmb": "TCMB kuru", "usdtry": "USD/TRY"}
+
+
+def _oneri_ppk_cumlesi() -> str:
+    """PPK kayma taramasının ölçülmüş saatle karşılaştırması, veriden cümle."""
+    L = _saat_onculugu()["oncu"]
+    ayni, gec, yok = [], [], []
+    for s_ in DIBS_SERILER + ("usdtry_tcmb", "usdtry"):
+        k = kayma_onerisi(s_, "ppk")
+        if k is None:
+            yok.append(_SERI_KISA[s_])
+        elif k == L[s_]:
+            ayni.append(_SERI_KISA[s_])
+        else:
+            gec.append(f"{_SERI_KISA[s_]} {k}")
+    parca = []
+    if ayni:
+        parca.append("PPK taramasında güçlü kapı ölçülen saatte geçiyor: " + ", ".join(ayni))
+    if gec:
+        parca.append("başka kaymada geçen (iş günü): " + ", ".join(gec))
+    if yok:
+        parca.append("hiçbir kaymada güçlü geçmeyen: " + ", ".join(yok))
+    return "; ".join(parca) + "."
 
 
 def tarih_sozlesmesi() -> dict:
@@ -424,32 +580,52 @@ def tarih_sozlesmesi() -> dict:
     # PPK kayma taraması: olay gününe k iş günü sonraki değişim
     tarama = {}
     for seri in DIBS_SERILER + ("usdtry_tcmb", "usdtry"):
-        tarama[seri] = [{k_: r[k_] for k_ in ("kayma", "kapi", "kapi_guclu", "tepe", "oran0", "oteki_azami",
-                                              "p_rastgele_oran0", "arindirilmis_tepe", "n_olay")} | {"oran": r["oran"]}
+        tarama[seri] = [{k_: r[k_] for k_ in ("kayma", "kapi", "kapi_guclu", "saat_tutarli", "kurulabilir", "tepe",
+                                              "oran0", "oteki_azami", "p_rastgele_oran0", "arindirilmis_tepe",
+                                              "n_olay", "yonetilen_kur")} | {"oran": r["oran"]}
                         for r in (_kaymali_satir(seri, "ppk", k) for k in KAYMA_TARAMA)]
-    # iki yarıda tepe (seçimin kararlılığı)
+    # iki yarıda tepe (seçimin kararlılığı). Her yarının serisi kendi olay penceresiyle
+    # sınırlı (tuzak 12): bütün seriyle kurulunca taban öbür yarının oynaklığını taşıyor ve
+    # oranlar 1'e göre okunamıyordu (DİBS'te ilk yarı her kaymada < 1, son yarı > 1,8).
     ppk = _olaylar()["ppk"]
     orta = ppk[len(ppk) // 2]
     yari = {}
     for seri in DIBS_SERILER + ("usdtry_tcmb",):
-        s_ = _seri(seri).dropna()
         yari[seri] = {}
         for ad, ev in (("ilk_yari", ppk[ppk < orta]), ("son_yari", ppk[ppk >= orta])):
-            pr = oo.olay_profili(s_, ev, PENCERE)
-            yari[seri][ad] = {"n_olay": pr["n_olay"], "tepe": pr["tepe"],
-                              "oran": {k: float(v) for k, v in pr["oran"].items()},
-                              "ilk": str(ev.min().date()), "son": str(ev.max().date())}
-    # ay içi iş günü etkisi (TÜFE ayın başına düşer)
+            r = _profil_satiri(seri, "ppk", _seri(seri), ev, 700 + len(seri) + (0 if ad == "ilk_yari" else 1))
+            yari[seri][ad] = {"n_olay": r["n_olay"], "tepe": r["tepe"], "oran": r["oran"],
+                              "p_rastgele_oran0": r["p_rastgele_oran0"], "yonetilen_kur": r["yonetilen_kur"],
+                              "ilk": r["ilk"], "son": r["son"]}
+    # ay içi iş günü etkisi. TÜFE her ay ayın 3'üne (ya da ertesi iş gününe) düştüğü için
+    # "ayın k. iş günü" ortalaması TÜFE'nin kendi etkisini içerir ve takvim etkisini ondan
+    # ayıramaz (tuzak 7). Ayırmanın yolu: TÜFE'nin ayın kaçıncı iş gününe düştüğüne göre aylar
+    # gruplanır; etki takvimden geliyorsa aynı iş günü her grupta büyük, olaydan geliyorsa
+    # büyüklük TÜFE gününü izler.
     idx = d.index
     ig = pd.Series(idx.to_series().groupby([idx.year, idx.month]).cumcount().values + 1, index=idx)
     tufe = _olaylar()["tufe"]
-    ay_ici = {"ortalama_abs_bp": {s_: {str(i): float(d[s_].abs()[ig == i].mean()) for i in range(1, 7)}
-                                  for s_ in DIBS_SERILER},
-              "tum_gunler_abs_bp": {s_: float(d[s_].abs().mean()) for s_ in DIBS_SERILER}}
+    ay_ici = {"tum_gunler_abs_bp": {s_: float(d[s_].abs().mean()) for s_ in DIBS_SERILER}}
     if not isinstance(tufe, str):
         tp = tufe[tufe.isin(idx)]
         ay_ici["tufe_ay_ici_is_gunu"] = {str(k_): int(v_) for k_, v_ in ig.loc[tp].value_counts().sort_index().items()}
-        ay_ici["tufe_kayma_taramasi"] = [{k_: r[k_] for k_ in ("kayma", "kapi", "kapi_guclu", "tepe", "oran0",
+        tufe_ig = pd.Series(ig.loc[tp].values, index=pd.PeriodIndex(tp, freq="M"))
+        ay_tufe = pd.Series(tufe_ig.reindex(pd.PeriodIndex(idx, freq="M")).values, index=idx)
+        rel = ig - ay_tufe
+        grup, goreli = {}, {}
+        for s_ in DIBS_SERILER:
+            a_ = d[s_].abs()
+            grup[s_] = {f"tufe_{int(g)}_is_gununde": {str(i): float(a_[(ay_tufe == g) & (ig == i)].mean())
+                                                      for i in range(1, 6)}
+                        for g in sorted(ay_tufe.dropna().unique()) if (ay_tufe == g).sum() >= 200}
+            goreli[s_] = {str(k_): float(a_[rel == k_].mean()) for k_ in range(-2, 4)}
+        ay_ici["tufe_gunune_gore_gruplu_abs_bp"] = grup
+        ay_ici["tufe_gunune_gore_goreli_abs_bp"] = goreli
+        ay_ici["okuma"] = ("Aylar TÜFE'nin düştüğü iş gününe göre gruplandı: bir iş günü yalnız TÜFE o güne "
+                           "düştüğü aylarda büyük çıkıyorsa etki takvimden değil olaydan gelir; TÜFE gününe göre "
+                           "göreli ortalama da bu yüzden ayrıca verildi.")
+        ay_ici["tufe_kayma_taramasi"] = [{k_: r[k_] for k_ in ("kayma", "kapi", "kapi_guclu", "saat_tutarli",
+                                                               "kurulabilir", "tepe", "oran0",
                                                                "p_rastgele_oran0")} | {"seri": s_}
                                          for s_ in DIBS_SERILER for r in (_kaymali_satir(s_, "tufe", k) for k in (0, 1, 2))]
     # sonuç
@@ -479,12 +655,16 @@ def tarih_sozlesmesi() -> dict:
                   "sabitlemeden gelir: etiket X'in değeri X'ten bir iş günü önceki ilan anının piyasasını "
                   "taşır. Gün sonu kapanışlarına (USD/TRY, VIX, ZAR) göre iki iş günü öndedir; 14:00'teki PPK "
                   "kararı etiketin iki iş günü sonrasında görünür."),
-        "oneri": {"ogleden_sonra_olayi_icin_kayma_is_gunu": {"n3a": 2, "n2y": 2, "n5y": 2, "usdtry_tcmb": 1, "usdtry": 0},
-                  "aciklama": "14:00 ve sonrasındaki bir olayın tepkisi için olay gününe kaç iş günü sonraki etiketin değişimi yazılır: çapraz korelasyondan "
-                              "(bütün günler) okunur; PPK taramasında 2 yıllık iki, 3 ay ve 5 yıllık ile TCMB "
-                              "kuru üç iş günü kaymada güçlü kapıyı geçiyor, çünkü PPK sonrası oynaklık birkaç "
-                              "gün sürüyor. Öğleden önceki olaylar (TÜFE 10:00) için TCMB sabitleme saati bu "
-                              "arşivden ölçülemedi."},
+        "saat_onculugu": _saat_onculugu(),
+        "oneri": {"ogleden_sonra_olayi_icin_kayma_is_gunu": {s_: int(L) for s_, L in _saat_onculugu()["oncu"].items()
+                                                             if s_ in DIBS_SERILER + ("usdtry_tcmb", "usdtry")},
+                  "sabah_olayi_icin_kayma_is_gunu": {s_: _beklenen_kaymalar(s_, "tufe")
+                                                     for s_ in DIBS_SERILER + ("usdtry_tcmb", "usdtry")},
+                  "aciklama": "14:00 ve sonrasındaki bir olayın tepkisi için olay gününe kaç iş günü sonraki etiketin "
+                              "değişimi yazılır; değer, bütün günlerde gün sonu kapanışıyla sıra korelasyonunun "
+                              "tepesinden okunur (2013–2021, yönetilen kur öncesi). 10:00'daki bir olay için "
+                              "sabitleme saati 10:00'a göre ölçülemediği için iki komşu kayma birlikte verilir. "
+                              + _oneri_ppk_cumlesi()},
         "yontem": "DİBS getirilerinin günlük değişimi, saatleri bilinen dört serinin değişimiyle k iş günü "
                   "kaydırılarak sıra korelasyonuyla karşılaştırıldı; PPK profili 0–3 iş günü kaydırılarak "
                   "yeniden kuruldu ve olay listesi iki yarıya bölünerek tepe kararlılığı sınandı.",
@@ -504,7 +684,9 @@ def p2() -> dict:
     for i, seri in enumerate(TR_SERILER + ABD_SERILER):
         s = _seri(seri).dropna()
         ev = ppk if seri in TR_SERILER else pd.DatetimeIndex([])
-        n_olay = len(_konumlar(s, ppk)) if seri in TR_SERILER else len(ppk)
+        if seri in KUR_SERILER:
+            s, ev, _ = _yonetilen_disi(s, ev)
+        n_olay = len(_konumlar(s, ev)) if seri in TR_SERILER else len(ppk)
         rd = _rastgele_dagilim(s, ev, 500 + i, gun_eslemeli=False, n_olay=n_olay)
         ornek = oo.olay_profili(s, rd["ornek_kume"], PENCERE)
         kontrol.append({
@@ -516,7 +698,10 @@ def p2() -> dict:
             "oran0_medyan": float(np.median(rd["oran0"])),
             "oran0_yuzdelik_95": float(np.quantile(rd["oran0"], 0.95)),
             "oran0_yuzdelik_99": float(np.quantile(rd["oran0"], 0.99)),
+            "yonetilen_kur": "hariç" if seri in KUR_SERILER else "uygulanmaz",
             "ilk": str(s.index.min().date()), "son": str(s.index.max().date()),
+            "yontem": "PPK pencerelerinin dışındaki günlerden, sabit tohumla, PPK sayısı kadar günlük 1.000 "
+                      "rastgele küme çekildi ve her kümenin profili aynı kuralla kuruldu.",
         })
 
     # alt dönemler: Yahoo'nun iki tanımı ve TCMB, PPK günlerinde
@@ -526,20 +711,41 @@ def p2() -> dict:
                          ("gecis_sonrasi", str(GECIS.date()), None)):
             alt.append(_profil_satiri(f"{seri}:{ad}", "ppk", _seri(seri), ppk, 900 + len(alt), a, b))
 
+    # yönetilen kur dönemi: kur serilerinde ayrı dönem, yalnız dönemin içi (havuza girmez)
+    yonetilen = []
+    for j_, (seri, olay) in enumerate((("usdtry", "ppk"), ("usdtry_tcmb", "ppk"), ("usdtry", "tufe"), ("usdtry_tcmb", "tufe"))):
+        ev = olaylar[olay]
+        if isinstance(ev, str):
+            yonetilen.append({"seri": seri, "olay": olay, "durum": "kurulmadi", "sebep": ev})
+            continue
+        r = _profil_satiri(f"{seri}:yonetilen_kur", olay, _seri(seri), ev, 960 + j_, yonetilen="yalniz")
+        r["not"] = "olay sayısı 10'dan az olabilir; profil vaka niteliğindedir" if r["n_olay"] < 10 else ""
+        yonetilen.append(r)
+
     # takvim tuzağı (TCMB geri alma)
     cal = b01._tr_gunluk().index
     t_ortak = oo.usdtry_tcmb()
     t_ortak13 = t_ortak[t_ortak.index >= cal.min()]
+    # örnekler VERİDEN: valörü bir iş günü geri alınca Türkiye tatiline düşen değerler
+    raw_v = oo.oku("usdtry_tcmb_gunluk")["usdtry_tcmb_valor"].dropna()
+    tk = _tr_takvim()
+    ornekler = []
+    for v in raw_v.index[(raw_v.index >= pd.Timestamp("2024-01-01")) & (raw_v.index <= oo.CIPA_GUN)]:
+        g = v - pd.offsets.BDay(1)
+        if g not in tk and g >= tk.min():
+            j_ = tk.searchsorted(v) - 1
+            ornekler.append({"valor": str(v.date()), "ortak_fonksiyon_gunu": str(g.date()),
+                             "ortak_fonksiyon_gunu_is_gunu_mu": False, "ilan_gunu": str(tk[j_].date())})
     tuzak = {
         "takvim_disina_dusen_tcmb_degeri": int((~t_ortak13.index.isin(_tr_takvim())).sum()),
         "tcmb_degeri_olmayan_is_gunu": int((~cal.isin(t_ortak.index)).sum()),
         "duzeltilmis_surumde_olmayan_is_gunu": int((~cal.isin(_tcmb_tr_takvim().index)).sum()),
-        "ornek": {"valor": "2024-04-15", "ortak_fonksiyon_gunu": "2024-04-12 (tatil)",
-                  "ilan_gunu": "2024-04-09"},
+        "ornek": ornekler[:3],
         "ilk": str(cal.min().date()), "son": str(cal.max().date()),
     }
     r_duz = _profil_satiri("usdtry_tcmb_trtakvim", "ppk", _seri("usdtry_tcmb_trtakvim"), ppk, 950)
-    tuzak["duzeltilmis_ppk_profili"] = {k: r_duz[k] for k in ("oran", "tepe", "kapi", "n_olay", "p_rastgele_oran0")}
+    tuzak["duzeltilmis_ppk_profili"] = {k: r_duz[k] for k in ("oran", "tepe", "kapi", "n_olay", "p_rastgele_oran0",
+                                                              "yonetilen_kur")}
     kapi_tcmb = next(r for r in satirlar if r["seri"] == "usdtry_tcmb" and r["olay"] == "ppk")
     tuzak["ortak_fonksiyon_ppk_kapi"] = kapi_tcmb["kapi"]
     tuzak["kapi_hukmu_degisiyor_mu"] = bool(r_duz["kapi"] != kapi_tcmb["kapi"])
@@ -568,13 +774,17 @@ def p2() -> dict:
     olculen = [r for r in satirlar if r["durum"] == "olculdu"]
     ozet = {"gecen": [f'{r["seri"]}×{r["olay"]}' for r in olculen if r["kapi"]],
             "guclu_gecen": [f'{r["seri"]}×{r["olay"]}' for r in olculen if r["kapi_guclu"]],
-            "gecmeyen": [f'{r["seri"]}×{r["olay"]} (tepe {r["tepe"]:+d})' for r in olculen if not r["kapi"]],
+            "saatle_bagdasmayan_gecis": [f'{r["seri"]}×{r["olay"]}' for r in olculen
+                                         if r["kapi"] and not r["saat_tutarli"]],
+            "kurulabilir": [f'{r["seri"]}×{r["olay"]}' for r in olculen if r["kurulabilir"]],
+            "gecmeyen": [f'{r["seri"]}×{r["olay"]} (tepe {bicim.sayi(r["tepe"], 0, isaret=True)})' for r in olculen if not r["kapi"]],
             "kurulmayan": sorted({f'{r["olay"]}: {r["sebep"]}' for r in satirlar if r["durum"] == "kurulmadi"}),
             "olculen_satir": len(olculen), "toplam_satir": len(satirlar)}
     return {
         "kapi": satirlar, "kapi_ozet": ozet,
         "kontrol_rastgele": kontrol,
         "alt_donem_ppk": alt,
+        "yonetilen_kur_donemi": yonetilen,
         "tarih_sozlesmesi": tarih_sozlesmesi(),
         "ppk_denetimi": ppk_denet,
         "fomc_denetimi": _FOMC_DENETIM,
@@ -588,7 +798,9 @@ def p2() -> dict:
                   "değişim ortalaması, olay pencerelerinin dışındaki günlerin mutlak değişim ortalamasına "
                   "bölündü; tepe olay gününde ve olay günü oranı öbür dört kaymanın en büyüğünden yüksekse "
                   "kapı geçer. Olay günü oranı, haftanın günü bileşimi aynı 1.000 rastgele gün kümesiyle "
-                  "kıyaslandı; güçlü kapı ayrıca bu kıyasın %95'ini aşmayı ister.",
+                  "kıyaslandı (rastgele kümelerin tabanı da olay pencerelerinin dışındaki sıradan günler); "
+                  "güçlü kapı ayrıca bu kıyasın %95'ini aşmayı ister, olay çalışması ise ek olarak geçişin "
+                  "serinin ölçülmüş saatiyle bağdaşmasını. Kur serilerinde yönetilen kur dönemi ayrı ölçüldü.",
         "kural": "Pencere ölçülür, varsayılmaz: kapıdan geçmeyen seri × olay ikilisinde olay çalışması kurulmaz.",
         "kaynak": ["dibs_egri_gunluk", "usdtry_yahoo_gunluk", "usdtry_tcmb_gunluk", "ppk_kararlari",
                    "fonlama_gunluk (yalnız iş günü takvimi)", "abd_hazine_gunluk", "cnbc_kur_gunluk",
@@ -626,16 +838,42 @@ def anket_etiketi() -> dict:
                          "korelasyon": float(j["p"].corr(j["g"]))}
         z["en_iyi_kayma"] = int(min(z, key=lambda k: z[k]["ort_mutlak_hata_puan"]))
         alt[ad] = z
+    # bağımsız sınama: anketin 1 ve 2 ay sonrası beklentileri de doğru etiketliyse en iyi kayma
+    # ufka eşit çıkmalı (cari ay 0 · 1 ay sonrası +1 · 2 ay sonrası +2)
+    try:
+        pe = bulut._oku("evds_pka_enflasyon", "EVDS Piyasa Katılımcıları Anketi")
+        ufuk = {}
+        for col, h in (("cari_ay", 0), ("ay1", 1), ("ay2", 2)):
+            if col not in pe.columns:
+                continue
+            mae = {}
+            for k in (-1, 0, 1, 2, 3):
+                j = pd.concat([pe[col].rename("p"), gercek.shift(-k).rename("g")], axis=1).dropna()
+                mae[str(k)] = float((j["p"] - j["g"]).abs().mean())
+            ufuk[col] = {"ufuk_ay": h, "ort_mutlak_hata_puan": mae,
+                         "en_iyi_kayma": int(min(mae, key=mae.get)),
+                         "ufukla_tutarli": bool(int(min(mae, key=mae.get)) == h)}
+        ufuk_sinamasi = {"satirlar": ufuk,
+                         "cari_ay_depodakiyle_ayni": bool(np.allclose(
+                             pe["cari_ay"].reindex(pka.dropna().index).values, pka.dropna().values, atol=1e-9)),
+                         "yontem": "Anketin 1 ve 2 ay sonrası aylık TÜFE beklentileri aynı kuralla kaydırılarak "
+                                   "gerçekleşen aylık TÜFE ile karşılaştırıldı; etiket doğruysa en iyi kayma ufka eşittir.",
+                         "kaynak": ["bulut: EVDS Piyasa Katılımcıları Anketi"]}
+    except bulut.VeriYok as e_:
+        ufuk_sinamasi = {"durum": "kurulmadi", "sebep": str(e_)}
     s0, s_en = satir["0"], satir[en_iyi]
     ikinci = sorted(satir, key=lambda k: satir[k]["ort_mutlak_hata_puan"])[1]
     sonuc = (f"cari ay beklentisi aynı ayın gerçekleşmesine ait (etiket doğru): ortalama mutlak hata "
-             f"{s_en['ort_mutlak_hata_puan']:.2f} puan, en yakın rakip kaymada {satir[ikinci]['ort_mutlak_hata_puan']:.2f}"
+             f"{bicim.sayi(s_en['ort_mutlak_hata_puan'], 2)} puan, en yakın rakip kaymada "
+             f"{bicim.sayi(satir[ikinci]['ort_mutlak_hata_puan'], 2)} puan"
              if en_iyi == "0" else
-             f"etiket {en_iyi} ay kaymış görünüyor: hata {s_en['ort_mutlak_hata_puan']:.2f} puan, sıfır kaymada "
-             f"{s0['ort_mutlak_hata_puan']:.2f}")
+             f"etiket {bicim.sayi(int(en_iyi), 0, isaret=True)} ay kaymış görünüyor: hata "
+             f"{bicim.sayi(s_en['ort_mutlak_hata_puan'], 2)} puan, sıfır kaymada "
+             f"{bicim.sayi(s0['ort_mutlak_hata_puan'], 2)} puan")
     return {
         "kaymalar": satir, "etiket_kaymasi": int(en_iyi), "etiket_kaymasi_medyanla": int(en_iyi_medyan),
         "olculen_hata_puan": s_en["ort_mutlak_hata_puan"], "alt_donem": alt, "sonuc": sonuc,
+        "ufuk_sinamasi": ufuk_sinamasi,
         "yayim_gunu": {"durum": "kurulmadi",
                        "sebep": "anketin yayım takvimi arşivde yok; günlük seriye yayılmış beklentiler ayın "
                                 "20'si varsayımıyla kurulmuş, yani yayım günü onlardan ölçülemez"},
@@ -656,14 +894,16 @@ def sekil_02(p: dict) -> dict:
             sat.append({"seri": r["seri"], "olay": r["olay"], "durum": "kurulmadi"})
             continue
         sat.append({"seri": r["seri"], "olay": r["olay"], "durum": "olculdu", "kapi": r["kapi"],
-                    "kapi_guclu": r["kapi_guclu"], "n_olay": r["n_olay"],
+                    "kapi_guclu": r["kapi_guclu"], "saat_tutarli": r["saat_tutarli"],
+                    "kurulabilir": r["kurulabilir"], "n_olay": r["n_olay"],
                     "oran": [r["oran"][str(k)] for k in range(-PENCERE, PENCERE + 1)],
                     "rastgele_gun_eslemeli": [r["rastgele_ort_profil"][str(k)] for k in range(-PENCERE, PENCERE + 1)]})
     for seri, liste in p["tarih_sozlesmesi"]["ppk_kayma_taramasi"].items():
         for r in liste:
             if r["kayma"]:
                 sat.append({"seri": seri, "olay": f"ppk_kayma_{r['kayma']}", "durum": "olculdu", "kapi": r["kapi"],
-                            "kapi_guclu": r["kapi_guclu"], "n_olay": r["n_olay"],
+                            "kapi_guclu": r["kapi_guclu"], "saat_tutarli": r["saat_tutarli"],
+                            "kurulabilir": r["kurulabilir"], "n_olay": r["n_olay"],
                             "oran": [r["oran"][str(k)] for k in range(-PENCERE, PENCERE + 1)]})
     for r in p["kontrol_rastgele"]:
         sat.append({"seri": r["seri"], "olay": "rastgele", "durum": "olculdu", "kapi": r["ornek_kume_kapi"],

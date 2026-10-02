@@ -28,10 +28,14 @@ plasebo kapısı, yayım günü oranı); aynı ölçü iki modülde iki kodla ku
    yerine aylık ilişki verilir (yayım AYINI ölçer, yayım gününü değil).
 3. Kur çöküşü eşiği (|Δ| > 4σ) sabit bir σ ile değil, önceki 250 iş gününün
    oynaklığıyla kurulur; yönetilen kur döneminde σ küçük olduğu için Haziran
-   2023'ün ayarlama günleri de çöküş sayılır ve öyle işaretlenir.
-4. TÜFE sürprizinin uç değeri 12.2021'dir (+10,2 puan) ve aynı ay kur çöküş
-   günleri taşır: sürprizi kur yaratmıştır (ters nedensellik). Sürprizin kurla
-   ilişkisi bu yüzden çöküş ayları işaretlenerek ve ayrı satırda okunur.
+   2023'ün ayarlama günleri de çöküş sayılır ve öyle işaretlenir. 18.12.2023
+   öncesinde cuma etiketi hafta sonunu taşır; hafta sonu haberleri (7 Haziran
+   2015 seçimi, 20.03.2021 görevden alma) cuma günü görünür.
+4. TÜFE sürprizinin uç değeri 12.2021'dir (+10,2 puan). O ayın 4σ günleri
+   değer KAZANCI günleridir (KKM, 20–21.12.2021); sürprizi yaratan değer kaybı
+   Kasım'daydı (23.11.2021, +%11,7), yani Aralık çöküşün ERTESİ ayıdır.
+   Sürprizin kurla ilişkisi bu yüzden yönü ve zamanlaması işaretlenerek, ayrı
+   satırda okunur (tuzak 9).
 5. TÜİK takviminde yayım günü, kapsadığı ayın ertesi ayındadır; 2013–2026'da
    164 yayımın her biri tek bir aya eşleniyor (eşleme benzersiz, sınandı).
 6. Yönetilen kur dönemi olay günleri yayım TARİHİNE göre atanır (12.2021'de
@@ -43,6 +47,16 @@ plasebo kapısı, yayım günü oranı); aynı ölçü iki modülde iki kodla ku
    geçmiyor. Çöküş sonrası geri dönüş, ters nedenselliğin aylık izidir.
 8. 03.10.2014 yayımı (Kurban Bayramı arifesi) fonlama dosyasının iş günü
    takviminde yok; 164 aydan 163'ünün yayım günü ölçülür.
+9. |Δ| > 4σ BİR YÖN DEĞİLDİR. 45 günün 13'ü TL'nin değer KAZANDIĞI günler
+   (KKM, 24.08.2023 artırımı, 14.08.2018 toparlanması). "Çöküş ayı" kümesine
+   değer kazancı günleri de girince ters nedensellik satırı (çöküş ayı
+   ortalama sürprizi 1,07 puan) aslında politika tepkisi aylarını ölçüyordu:
+   değer kaybı çöküşünün olduğu ayda sürpriz öbür aylardan ayrışmıyor (0,36'ya
+   karşı 0,28; Welch t 0,28), ERTESİ ayda ayrışıyor (1,63'e karşı 0,15; t
+   1,94). Kur çöküşü yalnız değer kaybı günüdür; iki yönlü 4σ kümesi yalnız
+   aykırı gözlem dışlamasında kullanılır. Yönetilen dönemin "tasarım gereği"
+   etiketi yalnız KURULMUŞ ve |t| < 2 olan eğime yazılır; kurulmamış satır
+   sınanmamıştır.
 """
 from __future__ import annotations
 
@@ -107,6 +121,16 @@ def _donem(t) -> str | None:
 
 
 # ─────────────────────────────────────────────────────────────── sağlamlık araçları
+def _yonetilen_notu(r: dict) -> str:
+    """Yönetilen kur döneminin etiketi: 'tasarım gereği' yalnız KURULMUŞ ve sıfırdan
+    ayrışmayan bir eğim için yazılır; kurulmamış satır sınanmamıştır."""
+    if r.get("t") is None:
+        return "yönetilen kur dönemi; eğim sınanamadı (" + (r.get("not") or r.get("sebep") or "test kurulmadı") + ")"
+    if abs(r["t"]) < 2:
+        return "kur yönetildiği için eğimin sıfırdan ayrışmaması tasarım gereğidir"
+    return "yönetilen dönemde de eğim sıfırdan ayrışıyor"
+
+
 def huber_egim(y, x, k: float = HUBER_K, tur: int = 100) -> dict:
     """Huber M-kestirimi (IRLS): ağırlık min(1, k/|r/s|), ölçek MAD/0,6745."""
     y = np.asarray(y, float)
@@ -246,14 +270,13 @@ def tufe_gunu_tepkisi(yayim_gunleri) -> dict:
             r = saglam_regresyon(deg.loc[e, c], x.loc[e], ad)
             if k == "yonetilen" and c == "usdtry":
                 r["yonetilen_kur"] = True
-                r["not"] = ("kur yönetildiği için eğimin sıfırdan ayrışmaması tasarım gereğidir"
-                            if r.get("t") is None or abs(r["t"]) < 2 else "yönetilen dönemde de eğim sıfırdan ayrışıyor")
+                r["not"] = _yonetilen_notu(r)
             tablo[c][k] = r
         if c == "usdtry":
             hm = olay[(olay < "2021-12-01") | (olay > "2023-06-30")]
             temiz = hm[~hm.isin(cokus.index)]
             tablo[c]["cokus_gunleri_haric"] = saglam_regresyon(
-                deg.loc[temiz, c], x.loc[temiz], "yönetilen kur dönemi ve kur çöküş günleri hariç (sağlamlık)")
+                deg.loc[temiz, c], x.loc[temiz], "yönetilen kur dönemi ve 4σ kur hareketi günleri (iki yön) hariç (sağlamlık)")
     out["tepki"] = tablo
     out["noktalar"] = {"tarih": [_iso(t) for t in olay], "ay": [str(p) for p in es.loc[olay].values],
                        "surpriz_puan": _liste(x.values), "rejim": [_donem(t) for t in olay],
@@ -287,22 +310,21 @@ def aylik_iliski() -> dict:
             r = saglam_regresyon(e[c], e["surpriz"], ad, ilk_pencere=max(12, len(e) // 2))
             if k == "yonetilen" and c == "d_usdtry":
                 r["yonetilen_kur"] = True
-                r["not"] = ("kur yönetildiği için eğimin sıfırdan ayrışmaması tasarım gereğidir"
-                            if r.get("t") is None or abs(r["t"]) < 2 else "yönetilen dönemde de eğim sıfırdan ayrışıyor")
+                r["not"] = _yonetilen_notu(r)
             out[c][k] = r
     # ters nedensellik sağlamlığı: kapsanan ayda ya da yayım ayında kur çöküşü olan aylar dışarıda
     c_ay = set(kur_cokus_gunleri().index.to_period("M"))
     temiz = z[[not (t.to_period("M") in c_ay or (t.to_period("M") + 1) in c_ay) for t in z.index]]
     hm = temiz[(temiz.index < "2021-12-01") | (temiz.index > "2023-06-30")]
     out["d_usdtry"]["cokus_aylari_haric"] = saglam_regresyon(
-        hm["d_usdtry"], hm["surpriz"], "yönetilen kur dönemi ve kur çöküşü taşıyan aylar (kapsanan ya da yayım ayı) "
-                                       "hariç, 2013–2026 havuzlanmış (sağlamlık)", ilk_pencere=max(12, len(hm) // 2))
+        hm["d_usdtry"], hm["surpriz"], "yönetilen kur dönemi ve 4σ kur hareketi (iki yön) taşıyan aylar (kapsanan ya da "
+                                       "yayım ayı) hariç, 2013–2026 havuzlanmış (sağlamlık)", ilk_pencere=max(12, len(hm) // 2))
     for k, a, b, ad in DONEM_TUFE:
         if k == "yonetilen":
             continue
         e = temiz.loc[a:b]
         out["d_usdtry"][f"cokus_aylari_haric_{k}"] = saglam_regresyon(
-            e["d_usdtry"], e["surpriz"], f"{ad}, kur çöküşü taşıyan aylar hariç", ilk_pencere=max(12, len(e) // 2))
+            e["d_usdtry"], e["surpriz"], f"{ad}, 4σ kur hareketi taşıyan aylar hariç", ilk_pencere=max(12, len(e) // 2))
     out["_z"] = z
     return out
 
@@ -313,27 +335,45 @@ def p4a() -> dict:
     for k, a, b, ad in DONEM_TUFE:
         x = sp.loc[pd.Period(a[:7], "M"):pd.Period(b[:7], "M"), "surpriz"]
         dag[k] = {"ad": ad, **_dagilim(x)}
-    # kur çöküşü ve ters nedensellik
+    # kur çöküşü ve ters nedensellik (tuzak 9: yön ve zamanlama)
     c = kur_cokus_gunleri()
     c_ay = sorted(set(c.index.to_period("M")))
-    sp_c = sp["surpriz"][sp.index.isin(c_ay)]
-    sp_d = sp["surpriz"][~sp.index.isin(c_ay)]
+    kayip_ay = sorted(set(c[c["degisim_yuzde"] > 0].index.to_period("M")))
+    kazanc_ay = sorted(set(c[c["degisim_yuzde"] < 0].index.to_period("M")))
+
+    def _kiyas(kume, ad):
+        a = sp["surpriz"][sp.index.isin(kume)]
+        b = sp["surpriz"][~sp.index.isin(kume)]
+        return {"ad": ad, "n_ay": int(len(a)), "n_diger": int(len(b)),
+                "ort_surpriz_puan": _f(a.mean()), "diger_ort_surpriz_puan": _f(b.mean()),
+                "medyan_puan": _f(a.median()), "diger_medyan_puan": _f(b.median()),
+                "welch_t": _f(stats.ttest_ind(a, b, equal_var=False).statistic) if len(a) > 1 else None,
+                "aylar_ve_surpriz": [[str(p), _f(v)] for p, v in a.items()]}
     cokus = {"esik_sigma": COKUS_ESIK_SIGMA, "sigma_penceresi_is_gunu": COKUS_PENCERE,
              "n_gun": int(len(c)), "ilk": _iso(c.index.min()), "son": _iso(c.index.max()),
-             "gunler": [[_iso(t), _f(r.degisim_yuzde), _f(r.sigma_yuzde), _f(r.z)] for t, r in c.iterrows()],
-             "gun_sutunlari": ["tarih", "degisim_yuzde", "sigma_yuzde", "z"],
+             "n_deger_kaybi_gunu": int((c["degisim_yuzde"] > 0).sum()),
+             "n_deger_kazanci_gunu": int((c["degisim_yuzde"] < 0).sum()),
+             "gunler": [[_iso(t), _f(r.degisim_yuzde), _f(r.sigma_yuzde), _f(r.z),
+                         "değer kaybı" if r.degisim_yuzde > 0 else "değer kazancı"] for t, r in c.iterrows()],
+             "gun_sutunlari": ["tarih", "degisim_yuzde", "sigma_yuzde", "z", "yon"],
              "aylar": [str(p) for p in c_ay],
+             "deger_kaybi_aylari": [str(p) for p in kayip_ay],
+             "deger_kazanci_aylari": [str(p) for p in kazanc_ay],
+             "cuma_notu": "18.12.2023 öncesinde cuma etiketi hafta sonunu ve pazartesi sabahını da taşır "
+                          "(7 Haziran 2015 seçimi, 20.03.2021 görevden alma ve 8 Ekim 2017 vize krizi cuma günü görünür).",
              "ters_nedensellik": {
-                 "n_cokus_ayi": int(len(sp_c)), "n_diger": int(len(sp_d)),
-                 "cokus_ayi_ort_surpriz_puan": _f(sp_c.mean()), "diger_ay_ort_surpriz_puan": _f(sp_d.mean()),
-                 "cokus_ayi_medyan_puan": _f(sp_c.median()), "diger_ay_medyan_puan": _f(sp_d.median()),
-                 "aylar_ve_surpriz": [[str(p), _f(v)] for p, v in sp_c.items()],
-                 "welch_t": _f(stats.ttest_ind(sp_c, sp_d, equal_var=False).statistic) if len(sp_c) > 1 else None,
-                 "not": "Kur çöküşü aynı ayın TÜFE'sini yükseltir: bu aylarda sürpriz kurun sonucudur, kurun "
-                        "sebebi değil. Ayrım nedensellik sınaması değildir, işaretlemedir."},
-             "yontem": "Günlük USD/TRY log değişimi önceki 250 iş gününün oynaklığının 4 katını aştığında gün kur "
-                       "çöküşü sayıldı; çöküş günü taşıyan aylar sürpriz tablosunda işaretlendi.",
-             "kaynak": ["usdtry_yahoo_gunluk"]}
+                 "deger_kaybi_ayni_ay": _kiyas(kayip_ay, "değer kaybı çöküşünün olduğu ay"),
+                 "deger_kaybi_ertesi_ay": _kiyas([p + 1 for p in kayip_ay], "değer kaybı çöküşünden sonraki ay"),
+                 "deger_kazanci_ayni_ay": _kiyas(kazanc_ay, "4σ değer kazancının olduğu ay (politika tepkisi ayları)"),
+                 "iki_yon_ayni_ay": _kiyas(c_ay, "her iki yönde 4σ hareketin olduğu ay"),
+                 "not": "Değer kaybı çöküşü TÜFE'ye bir ay gecikmeyle geçiyor: çöküş ayının sürprizi öbür aylardan "
+                        "ayrışmıyor, ertesi ayınki ayrışıyor. 4σ değer kazancı ayları kurun düştüğü değil, "
+                        "çöküşe politika tepkisinin geldiği aylardır (Aralık 2021, Ağustos 2023) ve sürprizleri "
+                        "yüksektir. Ayrım nedensellik sınaması değildir, işaretlemedir."},
+             "yontem": "Günlük USD/TRY log değişimi önceki 250 iş gününün oynaklığının 4 katını aştığında gün 4σ kur "
+                       "hareketi sayıldı ve yönüyle işaretlendi; TL'nin değer kaybettiği günler kur çöküşüdür, "
+                       "sürprizle ilişkisi çöküş ayı ve ertesi ay için ayrı ölçüldü.",
+             "kaynak": ["usdtry_yahoo_gunluk", "enflasyon_aylik"]}
     try:
         gunler = bulut.tufe_gunleri()
         tepki = tufe_gunu_tepkisi(gunler)
@@ -363,10 +403,16 @@ def p4a() -> dict:
 def sekil_05() -> dict:
     sp = surpriz_serisi()
     ay = aylik_iliski()["_z"]
+    c = kur_cokus_gunleri()
+    kayip = set(c[c["degisim_yuzde"] > 0].index.to_period("M"))
+    kazanc = set(c[c["degisim_yuzde"] < 0].index.to_period("M"))
     out = {"baslik": "TÜFE sürprizi ve piyasa tepkisi, rejime göre", "birim": "sürpriz puan; DİBS bp; kur %",
            "surpriz": {"ay": [str(p) for p in sp.index], "deger_puan": _liste(sp["surpriz"]),
                        "rejim": list(sp["rejim"]),
-                       "cokus_ayi": [bool(p in set(kur_cokus_gunleri().index.to_period("M"))) for p in sp.index]},
+                       "cokus_ayi": [bool(p in kayip) for p in sp.index],
+                       "cokus_ertesi_ay": [bool((p - 1) in kayip) for p in sp.index],
+                       "sert_deger_kazanci_ayi": [bool(p in kazanc) for p in sp.index],
+                       "not": "çöküş ayı: TL'nin 4σ değer kaybettiği gün taşıyan ay; değer kazancı ayları ayrı işaretli"},
            "aylik": {"ay": [str(t.to_period("M")) for t in ay.index], "surpriz_puan": _liste(ay["surpriz"]),
                      "d_n2y_bp": _liste(ay["d_n2y"]), "d_usdtry_yuzde": _liste(ay["d_usdtry"]),
                      "rejim": list(ay["rejim"])},
@@ -419,7 +465,14 @@ def sekil_06(p4b_sonuc: dict) -> dict:
             if isinstance(v, dict) and v.get("durum") != "kurulmadi":
                 satir.append({"donem": ad, "cift": cift, "kov_olay": v["kov_olay"], "kov_sakin": v["kov_sakin"],
                               "kor_olay": v["kor_olay"], "kor_sakin": v["kor_sakin"]})
-    return {"baslik": "ABD TÜFE günü kovaryansı", "birim": "bp × %", "seriler": satir}
+    out = {"baslik": "ABD TÜFE günü kovaryansı", "birim": "bp × %", "seriler": satir}
+    if not satir:
+        kapi = p4b_sonuc.get("kapi", {})
+        dusen = [c for c, k in kapi.items() if isinstance(k, dict) and not k.get("gecti")]
+        okur = {"us2": "ABD 2 yıllık getiri", "usd_eur": "USD/EUR", "usd_jpy": "USD/JPY"}
+        out.update(b3.kurulmadi("yayım günü kovaryansı kurulmadı: plasebo kapısını geçmeyen seri "
+                                + (", ".join(okur.get(c, c) for c in dusen) if dusen else "yok")))
+    return out
 
 
 # ═══════════════════════════════════════════════════════════════ p4c
@@ -441,28 +494,30 @@ def p4c() -> dict:
     e.index = pd.PeriodIndex(e.index, freq="M")
     tr_yy = (e["tufe"] / e["tufe"].shift(12) - 1) * 100
 
-    def satir(s, t0, t1, carpan=1.0):
+    def satir(s, t0, t1):
+        """Faiz düzeyi (%) ve değişimi (bp); 'ilk'/'son' gözlem günleridir."""
         g0, v0 = _asof(s, t0)
         g1, v1 = _asof(s, t1)
-        return {"ilk_gun": _iso(g0), "son_gun": _iso(g1), "ilk": _f(v0), "son": _f(v1),
-                "degisim": _f((v1 - v0) * carpan) if v0 is not None and v1 is not None else None}
+        return {"ilk": _iso(g0), "son": _iso(g1), "ilk_yuzde": _f(v0), "son_yuzde": _f(v1),
+                "degisim_bp": _f((v1 - v0) * 100) if v0 is not None and v1 is not None else None}
 
     def yuzde(s, t0, t1):
+        """Kur düzeyi ve değişimi (%); 'ilk'/'son' gözlem günleridir."""
         g0, v0 = _asof(s, t0)
         g1, v1 = _asof(s, t1)
-        return {"ilk_gun": _iso(g0), "son_gun": _iso(g1), "ilk": _f(v0), "son": _f(v1),
+        return {"ilk": _iso(g0), "son": _iso(g1), "ilk_duzey": _f(v0), "son_duzey": _f(v1),
                 "degisim_yuzde": _f((v1 / v0 - 1) * 100), "log_degisim_yuzde": _f(math.log(v1 / v0) * 100)}
 
     pi0, pi1 = a.to_period("M"), z.to_period("M")
-    pol = satir(f["politika"], a, z, 100)
+    pol = satir(f["politika"], a, z)
     tr = {
         "pencere": [_iso(a), _iso(z)],
-        "politika_yuzde": pol, "politika_degisim_bp": pol["degisim"],
-        "n2y": satir(dibs["n2y"].reindex(tk), a, z, 100), "n5y": satir(dibs["n5y"].reindex(tk), a, z, 100),
+        "politika": pol, "politika_degisim_bp": pol["degisim_bp"],
+        "n2y": satir(dibs["n2y"].reindex(tk), a, z), "n5y": satir(dibs["n5y"].reindex(tk), a, z),
         "usdtry": yuzde(kur, a, z), "usdtry_tcmb_saglamlik": yuzde(tc, a, z),
-        "yillik_tufe_yuzde": {"ilk_ay": str(pi0), "ilk": _f(tr_yy[pi0]), "son_ay": str(pi1), "son": _f(tr_yy[pi1]),
-                              "degisim_puan": _f(tr_yy[pi1] - tr_yy[pi0])},
-        "reel_politika_puan": {"ilk": _f(pol["ilk"] - tr_yy[pi0]), "son": _f(pol["son"] - tr_yy[pi1])},
+        "yillik_tufe": {"ilk_ay": str(pi0), "son_ay": str(pi1), "ilk_yuzde": _f(tr_yy[pi0]),
+                        "son_yuzde": _f(tr_yy[pi1]), "degisim_puan": _f(tr_yy[pi1] - tr_yy[pi0])},
+        "reel_politika": {"ilk_puan": _f(pol["ilk_yuzde"] - tr_yy[pi0]), "son_puan": _f(pol["son_yuzde"] - tr_yy[pi1])},
         "birim": "getiri değişimi bp (DİBS etiketi bir iş günü öne alındı); kur %",
     }
     a2, z2 = ABD_2022
@@ -477,18 +532,18 @@ def p4c() -> dict:
     dol = b3.dolar_seviye() / 100
     dxy = oo.oku("yahoo_dxy_vix_gunluk")["dxy"]
     eur = oo.oku("cnbc_kur_gunluk")["eur"]
-    dolar_g = {"ilk_gun": _iso(_asof(dol, a2)[0]), "son_gun": _iso(_asof(dol, z2)[0]),
+    dolar_g = {"ilk": _iso(_asof(dol, a2)[0]), "son": _iso(_asof(dol, z2)[0]),
                "log_degisim_yuzde": _f((_asof(dol, z2)[1] - _asof(dol, a2)[1]) * 100)}
     abd = {
         "pencere": [_iso(a2), _iso(z2)],
-        "politika_yuzde": {"ilk_ay": str(p0), "ilk": _f(fa[p0]), "son_ay": str(p1), "son": _f(fa[p1]),
-                           "degisim": _f((fa[p1] - fa[p0]) * 100)},
+        "politika": {"ilk_ay": str(p0), "son_ay": str(p1), "ilk_yuzde": _f(fa[p0]), "son_yuzde": _f(fa[p1]),
+                     "degisim_bp": _f((fa[p1] - fa[p0]) * 100)},
         "politika_degisim_bp": _f((fa[p1] - fa[p0]) * 100),
-        "us2": satir(us["us2"], a2, z2, 100), "us10": satir(us["us10"], a2, z2, 100),
+        "us2": satir(us["us2"], a2, z2), "us10": satir(us["us10"], a2, z2),
         "dolar_g10": dolar_g, "dxy_saglamlik": yuzde(dxy, a2, z2), "eurusd": yuzde(eur, a2, z2),
-        "yillik_tufe_yuzde": {"ilk_ay": str(p0), "ilk": _f(at_yy[p0]), "son_ay": str(p1), "son": _f(at_yy[p1]),
-                              "degisim_puan": _f(at_yy[p1] - at_yy[p0])},
-        "reel_politika_puan": {"ilk": _f(fa[p0] - at_yy[p0]), "son": _f(fa[p1] - at_yy[p1])},
+        "yillik_tufe": {"ilk_ay": str(p0), "son_ay": str(p1), "ilk_yuzde": _f(at_yy[p0]),
+                        "son_yuzde": _f(at_yy[p1]), "degisim_puan": _f(at_yy[p1] - at_yy[p0])},
+        "reel_politika": {"ilk_puan": _f(fa[p0] - at_yy[p0]), "son_puan": _f(fa[p1] - at_yy[p1])},
         "birim": "getiri değişimi bp; kur %; ABD politika faizi BIS tanımı, ay sonu",
     }
     return {
@@ -499,7 +554,9 @@ def p4c() -> dict:
         "n": 2, "ilk": _iso(a), "son": _iso(z2), "durum": "vaka tablosu",
         "turkiye_2021": tr, "abd_2022": abd,
         "not": "Türkiye'de uzun uç 5 yıl (10 yıllık düğüm arşivde yok), ABD'de 10 yıl. Dolar ölçüsü altı G10 "
-               "kurunun eşit ağırlıklı sepetidir (CNBC New York 17:00); DXY sağlamlık.",
+               "kurunun eşit ağırlıklı sepetidir (CNBC New York 17:00); DXY sağlamlık. 31.12.2021 cumadır: o "
+               "tarihteki Yahoo kuru 18.12.2023 öncesi sözleşmeyle pazartesi barının başındaki fiyattır, yani hafta "
+               "sonunu da taşır; TCMB kuru sağlamlık için yan yana verilir.",
     }
 
 

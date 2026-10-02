@@ -54,12 +54,21 @@ Pratikler
    enflasyon nominal büyümeyi şişirdiğinde r − g derin eksiye iner (2026Ç2: −17,6
    puan; pb* GSYH'nin eksi %2,6'sı). Marjinal borçlanma faizi (DİBS 2 ve 5 yıllık)
    ayrıca işaretlenir: aynı d'de pb* sıfıra yakın.
-8. ÇEYREK SONU DİBS. DİBS etiketi piyasa gününden iki iş günü öndedir (Bölüm 2);
-   çeyrek sonu getirisi, çeyreğin son piyasa gününe denk gelen etiketten okunur.
+8. ÇEYREK SONU DİBS. DİBS etiketi piyasa gününden BİR iş günü öndedir; tek tanımı
+   Bölüm 3'tedir (`olcum_b03.dibs_gecikme`: tatilden sonraki etiket donuk, iki
+   sonraki olağan). Çeyrek sonu getirisi, çeyreğin son piyasa gününe denk gelen
+   etiketten okunur. Bölüm 1'in iki iş günlük kayması gün sonu kapanışlarına
+   (kur, VIX) göredir; çeyrek sonu DÜZEYİNDE o kayma çeyreğin son gününe ertesi
+   çeyreğin ilk gününün bilgisini yazar.
 9. CNBC AVRUPA GETİRİLERİ. Hafta sonu barları kaynakta durur, ayıklanır.
    Portekiz serisi 20.09.2011–06.12.2012 arasında art arda SIFIR taşıyor (314
    iş günü) ve 31.12.2012'de %7'lik iki gün arasında tek bir sıfır var: ikisi de
-   veri boşluğudur ve atılır (günlük Portekiz farkı fiilen 07.12.2012'de başlar,
+   veri boşluğudur ve atılır. Sıfır olmayan DONMUŞ diziler de var: İtalya 10 yıllık
+   09–23.12.2010 arasında on bir iş günü birebir 4,582 (aynı günlerde Bund 2,95 ile
+   3,08 arasında oynuyor, İspanya 5,33'ten 5,56'ya çıkıyor), İtalya 2 yıllık aynı
+   aralıkta, Portekiz Ağustos–Eylül 2021'de, Yunanistan 2016–2017'de beş-altı
+   günlük diziler. Beş ve daha uzun birebir aynı dizinin ilk günü gerçek son
+   kotasyondur ve kalır; sonrakiler taşınmış değerdir ve atılır (günlük Portekiz farkı fiilen 07.12.2012'de başlar,
    kriz zirvesi yalnız aylık seride). Sıfıra yakın bir getirinin gerçek sıfırı
    (Fransa 13.12.2019) kalır. Yunanistan
    günlük serisi 25.11.2014'te başlar; 2010–2012 zirvesi aylık ECB serisinden
@@ -79,7 +88,6 @@ import numpy as np
 import pandas as pd
 
 import bulut
-import olcum_b01 as b01
 import olcum_b03 as b3
 import ortak_olc as oo
 
@@ -100,6 +108,7 @@ KUR_SOKLARI = (10, 20, 30)           # USD/TRY artışı, %
 YONETILEN_CEYREK = (pd.Period("2021Q4", "Q"), pd.Period("2023Q2", "Q"))
 DIBS_DUGUM_6C = ("n5y", "n7y")
 SIFIR_DIZISI_ASGARI = 5              # art arda bu kadar ve fazla sıfır = veri boşluğu
+DONMUS_DIZI_ASGARI = 5               # art arda bu kadar ve fazla birebir aynı değer = taşınmış kotasyon
 
 CEVRE = ["it", "es", "pt", "gr", "fr"]
 ECB_CEVRE = ["IT", "ES", "PT", "GR", "IE", "FR"]
@@ -240,6 +249,22 @@ def _kur_gunu_duyarliligi(tarihler: pd.DatetimeIndex) -> dict:
             "not": "Dönem içindeki son valör günü bir iş günü önceki ilandır; fark dış borç bacağına aynı oranda yansır."}
 
 
+def _resmi_ozdeslik() -> dict:
+    """Resmî stokun bacakları: döviz borcu = dış senet + dış kredi ve stok = iç borç +
+    dış senet + dış kredi her çeyrekte sınanır. Kaynak tanımı döviz borcunu 'döviz
+    cinsi ve dövize endeksli borç' diye yazıyor; özdeşlik tutuyorsa yurt içi döviz
+    cinsi ihraçlar içinde yoktur ve döviz payı alt sınırdır (tuzak 2)."""
+    c = oo.oku("butce_ceyreklik").dropna(subset=["stok_trl"])
+    dk = c["dis_senet_ceyrek_trl"] + c["dis_kredi_ceyrek_trl"]
+    f1 = (c["doviz_borc_ceyrek_trl"] - dk).abs()
+    f2 = (c["stok_trl"] - c["ic_borc_ceyrek_trl"] - dk).abs()
+    return {"n": int(len(c)), "ilk": str(pd.Period(c.index.min(), "Q")), "son": str(pd.Period(c.index.max(), "Q")),
+            "doviz_eslik_birebir": int((f1 < 1e-5).sum()), "doviz_azami_fark_trl": _f(f1.max()),
+            "stok_eslik_birebir": int((f2 < 1e-5).sum()), "stok_azami_fark_trl": _f(f2.max()),
+            "yontem": "Resmî döviz borcunun dış borçlanma senetleri ile dış kredilerin toplamına ve resmî stokun iç borç "
+                      "artı bu ikisine eşit olup olmadığı her çeyrekte sınandı."}
+
+
 def _karsilastirma(df: pd.DataFrame) -> dict:
     x = df.dropna(subset=["D_res", "D_tur"])
     fark = x["D_tur"] - x["D_res"]
@@ -261,7 +286,8 @@ def _karsilastirma(df: pd.DataFrame) -> dict:
                        "turetilmis_alfa_yuzde": _f(r["alfa_tur"] * 100), "resmi_alfa_yuzde": _f(r["alfa_res"] * 100)}
                       for t, r in x.iterrows()],
         "sebep": "Dış borç bacağı yerleşiklik tabanlı: yurt dışının elindeki TL DİBS iki kez sayılır, yurt içinin "
-                 "elindeki eurobond hiç sayılmaz (tuzak 1).",
+                 "elindeki eurobond hiç sayılmaz; resmî stok ise iki bacağı da ihraç yerine göre sayar.",
+        "resmi_ozdeslik": _resmi_ozdeslik(),
     }
 
 
@@ -342,10 +368,16 @@ def sekil_09() -> dict:
 
 
 # ═══════════════════════════════════════════════════════════════ p6b
-def _dibs_ceyrek_sonu(dugumler=DIBS_DUGUM_6C) -> pd.DataFrame:
-    """Çeyreğin son piyasa günündeki DİBS getirisi: etiketi iki iş günü sonraki değer (tuzak 8)."""
+def _dibs_kayma() -> int:
+    """DİBS etiket kayması (iş günü): tek tanım Bölüm 3'ün tatil ve kur sınaması (tuzak 8)."""
+    return int(b3.dibs_gecikme()["gecikme_is_gunu"])
+
+
+def _dibs_ceyrek_sonu(dugumler=DIBS_DUGUM_6C, kayma: int | None = None) -> pd.DataFrame:
+    """Çeyreğin son piyasa günündeki DİBS getirisi: etiketi `kayma` iş günü sonraki değer (tuzak 8)."""
+    kayma = _dibs_kayma() if kayma is None else kayma
     tk = b3.tr_takvim()
-    d = oo.oku("dibs_egri_gunluk")[list(dugumler)].reindex(tk).shift(-b01.DIBS_ETIKET_ONCU)
+    d = oo.oku("dibs_egri_gunluk")[list(dugumler)].reindex(tk).shift(-kayma)
     d = d[d.index <= oo.CIPA_GUN].dropna()
     q = d.groupby(pd.PeriodIndex(d.index, freq="Q")).last()
     gun = d.index.to_series().groupby(pd.PeriodIndex(d.index, freq="Q")).last()
@@ -404,9 +436,14 @@ def _kkm_duyarlilik() -> dict:
                   "TL'den dönüşen kısım ayrıca yazıldı; her şokta duyarlılık stok çarpı kur artışıdır (faiz mahsubundan "
                   "önce, brüt).",
         "kaynak": ["kkm_aylik", "usdtry_tcmb_gunluk (dönüşüm kuru)", "butce_ceyreklik (GSYH)"],
-        "kapsam_notu": "Sütun açıklaması KKM'yi 'döviz dönüşümlü' (milyar dolar) ve 'TL' (milyar TL) diye ikiye "
-                       "ayırıyor; ikisi de kur korumalıdır. Garantinin bütçe ile TCMB arasındaki paylaşımı arşivde "
-                       "yazmıyor (tuzak 10).",
+        "kapsam_notu": "Kaynak KKM'yi 'döviz dönüşümlü' (milyar dolar) ve 'TL' (milyar TL) diye ikiye ayırıyor; "
+                       "ikisi de kur korumalıdır. Garantinin bütçe ile TCMB arasındaki paylaşımı arşivde yazmıyor.",
+        "sutun_saglamasi": {
+            "iki_kisim_toplam_zirve_mlr_tl": _f(np.max(toplam_tl)),
+            "iki_kisim_toplam_zirve_ay": str(ay_sonu[int(np.argmax(toplam_tl))].to_period("M")),
+            "doviz_kismi_toplam_olsaydi_zirve_mlr_tl": _f(np.max(k["kkm_usd_mia"].values * kur.values)),
+            "not": "Döviz dönüşümlü sütun bütün KKM'yi taşısaydı stok ikinci satırdaki kadar kalırdı; iki kısmın "
+                   "toplamı birinci satırdır. Karar, dış kaynakla kıyaslanacak sağlamadır, burada ölçülmez."},
         "son_ay": satir(len(k) - 1),
         "doviz_donusumlu_zirve": satir(int(np.argmax(k["kkm_usd_mia"].values))),
         "tl_kkm_zirve": satir(int(np.argmax(k["kkm_tl_mlr"].values))),
@@ -428,6 +465,9 @@ def p6b() -> dict:
             marj[c] = {"faiz_yuzde": _f(r * 100), "r_eksi_g_puan": _f((r - g) * 100),
                        "pb_yildiz_gsyh": _f((r - g) / (1 + g) * b["d_yuzde"]),
                        "piyasa_gunu": _iso(dq.loc[q1, "piyasa_gunu"])}
+    if not marj:
+        marj = kurulmadi(f"{q1} çeyrek sonu için DİBS 2 ve 5 yıllık getirisi elde yok")
+    ozd = _resmi_ozdeslik()
     fan = []
     for e in KUR_SOKLARI:
         dyeni = b["d_yuzde"] * (1 + b["alfa_yuzde"] / 100 * e / 100)
@@ -454,8 +494,13 @@ def p6b() -> dict:
         "bugun": bugun,
         "marjinal_faizle": marj,
         "kur_fani": {"alfa_yuzde": _f(b["alfa_yuzde"]), "soklar": fan,
-                     "not": "Döviz payı alt sınırdır (tuzak 2); sıçrama anlıktır, kurun enflasyona geçişiyle nominal "
-                            "GSYH'nin sonradan büyümesi ölçülmedi."},
+                     "not": ("Döviz payı alt sınırdır: resmî döviz borcu dış senet artı dış krediye eşit (özdeşlik "
+                             "satırı), yurt içinde ihraç edilen döviz cinsi ve dövize endeksli kâğıtlar içinde yok; "
+                             if ozd["doviz_eslik_birebir"] == ozd["n"] else
+                             "Resmî döviz borcu dış senet artı dış krediden ayrışıyor (özdeşlik satırı); döviz payının "
+                             "kapsamı yeniden sınanmalı; ") +
+                            "sıçrama anlıktır, kurun enflasyona geçişiyle nominal GSYH'nin sonradan büyümesi ölçülmedi.",
+                     "ozdeslik": ozd},
         "kkm": _kkm_duyarlilik(),
     }
 
@@ -496,12 +541,18 @@ def p6c() -> dict:
     c = oo.oku("butce_ceyreklik")["fdd_gsyh"].dropna()
     c.index = pd.PeriodIndex(c.index, freq="Q")
     dq = _dibs_ceyrek_sonu()
+    dq_alt = {k: _dibs_ceyrek_sonu(kayma=k) for k in (0, 2)}
     out = {
         "etiket": "örneklem içi tarif",
         "yontem": "Çeyrek sonu 5 ve 7 yıllık DİBS getirisi (piyasa günü) ile 12 aylık faiz dışı denge/GSYH arasındaki "
                   "ilişki düzeyde ve çeyreklik değişimde Newey–West ile, değişimde ayrıca genişleyen pencerede "
                   "rastgele yürüyüş ve koşulsuz ortalama kıyasıyla örneklem dışı sınandı.",
         "kaynak": ["dibs_egri_gunluk", "butce_ceyreklik"],
+        "yayim_notu": "Çeyreğin faiz dışı dengesi çeyrek kapandıktan sonra yayımlanır (son ayın bütçesi ertesi ayın "
+                      "ortasında); eşzamanlı değişim regresyonu ve onun örneklem dışı sınaması o çeyreğin dengesini "
+                      "bilinen sayar, yani bir tahmin değil bir uyum sınamasıdır. Bir çeyrek önceki dengeyle kurulan "
+                      "satır, getirinin yayımlanmış dengeye tepkisini sorar.",
+        "dibs_etiket_kaymasi_is_gunu": _dibs_kayma(),
     }
     for dug in DIBS_DUGUM_6C:
         y = dq[dug]
@@ -515,6 +566,18 @@ def p6c() -> dict:
         r4 = oo.hac(dy4.values, dx4.reindex(dy4.index).values, gecikme=4)
         haric = [p for p in dy.index if not (YONETILEN_CEYREK[0] <= p <= YONETILEN_CEYREK[1])]
         deg_h = b3.regresyon(dy.loc[haric], dx.loc[haric])
+        deg_g = b3.regresyon(dy, dx.shift(1).dropna())
+        duyar = {}
+        for k, q in dq_alt.items():
+            dk = pd.concat([q[dug].rename("y"), c.rename("x")], axis=1, sort=True).dropna()
+            rk = b3.regresyon((dk["y"].diff() * 100).dropna(), dk["x"].diff().dropna())
+            duyar[f"kayma_{k}"] = {"n": rk["n"], "egim": rk.get("egim"), "t": rk.get("t"), "hukum": rk.get("hukum")}
+        fk = (dq[dug] - dq_alt[2][dug]).dropna() * 100
+        duyar["bir_gun_fark_ort_mutlak_bp"] = _f(fk.abs().mean())
+        duyar["bir_gun_fark_azami_bp"] = _f(fk.abs().max())
+        duyar["bir_gun_fark_azami_ceyrek"] = str(fk.abs().idxmax())
+        duyar["not"] = ("Çeyrek sonu düzeyi tek günün kotasyonudur: etiket bir iş günü kaydırılınca getiri bu kadar "
+                        "oynar ve değişim eğimi onunla birlikte kayar; eğimin büyüklüğü bu gürültüyle birlikte okunur.")
         out[dug] = {
             "n": int(len(d)), "ilk": str(d.index.min()), "son": str(d.index.max()),
             "isaret_notu": ("Değişim eğimi artı: faiz dışı denge iyileşirken getiri yükseliyor — 'açık büyür, faiz "
@@ -523,10 +586,17 @@ def p6c() -> dict:
                             "Değişim eğimi eksi ya da sıfır."),
             "duzey": {"n": r_duz["n"], "sabit": r_duz["b"][0], "egim_yuzde_per_puan": r_duz["b"][1],
                       "se": r_duz["se"][1], "t": r_duz["t"][1], "r2": r_duz["r2"], "gecikme": r_duz["gecikme"],
-                      "not": "Düzeyler birim köke yakın: yalnız tarif, örneklem dışı sınama kurulmaz."},
+                      "hukum": "tarif edici",
+                      "not": "Düzeyler birim köke yakın: yalnız tarif, örneklem dışı sınama kurulmaz; t bu yüzden "
+                             "hüküm vermez."},
             "degisim": {**deg, "birim": "Δgetiri baz puan / Δfaiz dışı denge puan"},
             "degisim_4c": {"n": r4["n"], "egim_bp_per_puan": r4["b"][1], "se": r4["se"][1], "t": r4["t"][1],
-                           "r2": r4["r2"], "gecikme": r4["gecikme"], "not": "Örtüşen dört çeyreklik değişim; yalnız tarif."},
+                           "r2": r4["r2"], "gecikme": r4["gecikme"], "hukum": "tarif edici",
+                           "not": "Örtüşen dört çeyreklik değişim; örneklem dışı sınama kurulmadı, yalnız tarif."},
+            "etiket_kaymasi_duyarliligi": duyar,
+            "degisim_bir_ceyrek_gecikmeli": {**deg_g, "birim": "Δgetiri baz puan / bir çeyrek önceki Δfaiz dışı denge puan",
+                                             "not": "Açıklayıcı değişken bir çeyrek önceki dengedir: çeyrek sonunda "
+                                                    "yayımlanmış olan bilgi."},
             "degisim_yonetilen_haric": {**deg_h, "haric": [str(YONETILEN_CEYREK[0]), str(YONETILEN_CEYREK[1])],
                                         "not": "Kur korumalı ve zorunlu tahvil talebi dönemi dışarıda; dizi bitişik "
                                                "değil, örneklem dışı sınama boşluğun üstünden yürür."},
@@ -550,19 +620,37 @@ def _sifir_dizisi_temizle(s: pd.Series) -> tuple[pd.Series, int]:
     return s.mask(sil), int(sil.sum())
 
 
+def _donmus_dizi_temizle(s: pd.Series) -> tuple[pd.Series, list]:
+    """Sıfır olmayan, art arda DONMUS_DIZI_ASGARI ve daha fazla iş günü birebir aynı
+    değer: ilk gün gerçek son kotasyondur ve kalır, sonrakiler taşınmış değerdir ve
+    atılır (tuzak 9). Boş günler diziyi bölmez (tatil arası donma da yakalanır)."""
+    x = s.dropna()
+    x = x[x != 0]
+    grup = (x != x.shift()).cumsum()
+    uzun = x.groupby(grup).transform("size") >= DONMUS_DIZI_ASGARI
+    ilk = x.index.to_series().groupby(grup).transform("first")
+    sil = x.index[uzun & (x.index.to_series() != ilk)]
+    diziler = [(str(g.index[0].date()), str(g.index[-1].date()), int(len(g)))
+               for _, g in x[uzun].groupby(grup[uzun])]
+    return s.mask(s.index.isin(sil)), diziler
+
+
 def cevre_gunluk() -> tuple[pd.DataFrame, dict]:
     e = oo.oku("cnbc_avrupa_getiri_gunluk")
     e = e[e.index.dayofweek < 5].copy()
-    atilan = {}
+    atilan, donmus = {}, {}
     for c in e.columns:
         e[c], atilan[c] = _sifir_dizisi_temizle(e[c])
+        e[c], donmus[c] = _donmus_dizi_temizle(e[c])
     df = pd.DataFrame(index=e.index)
     for u in CEVRE:
         df[u] = (e[f"{u}10y"] - e["de10y"]) * 100
     df["it2y"] = (e["it2y"] - e["de2y"]) * 100
     for c in ("de10y", "it10y", "es10y", "it2y", "de2y"):
         df[f"_{c}"] = e[c]
-    return df, {k: v for k, v in atilan.items() if v}
+    return df, {"sifir": {k: v for k, v in atilan.items() if v},
+                "donmus": {k: {"n_atilan": int(sum(n - 1 for *_, n in v)), "diziler": v}
+                           for k, v in donmus.items() if v}}
 
 
 def ecb_aylik() -> pd.DataFrame:
@@ -611,7 +699,8 @@ def _olay_aylik(o: dict, m: pd.DataFrame) -> dict:
 
 
 def p6d() -> dict:
-    df, atilan = cevre_gunluk()
+    df, temizlik = cevre_gunluk()
+    atilan = temizlik["sifir"]
     m = ecb_aylik()
     gunluk = {}
     for u in CEVRE:
@@ -664,6 +753,10 @@ def p6d() -> dict:
         "gunluk": gunluk,
         "aylik": aylik,
         "sifir_dizisi_atilan": atilan,
+        "donmus_dizi_atilan": temizlik["donmus"],
+        "temizlik_notu": "Art arda beş ve daha fazla iş günü birebir aynı kalan getiri taşınmış kotasyondur: dizinin "
+                         "ilk günü kalır, sonrakiler atılır; uzun sıfır dizileri ve tek başına düşen sıfırlar da veri "
+                         "boşluğudur.",
         "sinama_gunluk_aylik": sinama,
         "olaylar": olaylar,
         "eurostat": eurostat,

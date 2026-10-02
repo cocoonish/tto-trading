@@ -40,12 +40,18 @@ aktarmaz; döngü yok). Aynı ölçü iki modülde iki ayrı kodla kurulmaz.
    model getirisi özdeşliği her gün sınanır.
 4. TÜRKİYE TAKVİMİ VE DİBS ETİKETİ. DİBS eğrisi tatillerde de satır taşır
    (Bölüm 1, tuzak 1); fark serisi Türkiye iş günlerine (fonlama ∩ DİBS)
-   indirilir. DİBS etiketi piyasa gününden iki iş günü öndedir (Bölüm 2) ve bu
-   AYLIK ORTALAMADA DA YOK SAYILAMAZ: kaydırmasız seri kaydırılmış seriden ayda
-   ortalama 16 bp, en çok 99 bp ayrışıyor (oynak aylarda ay sınırına düşen iki
-   günün ağırlığı büyük). Ana seri piyasa gününe kaydırılmış DİBS'le kurulur;
-   TLREF ve AOFM zaten piyasa günü tarihlidir. Bu yüzden son ölçüm günü 28.09'dur
-   (30.09 etiketi 28.09 piyasasıdır); kaydırmasız seri duyarlılık satırındadır.
+   indirilir. Etiket kayması BİR iş günüdür ve tek tanımı Bölüm 3'tedir
+   (`olcum_b03.dibs_gecikme`): tek günlük 70 tatilde tatilden SONRAKİ etiket
+   donuk (medyan |Δ| 0,2 bp), iki sonraki olağan (17,7 bp; sıradan gün 13,8) —
+   etiket t+1, piyasa günü t'nin bilgisini taşır. Büyük olaylar aynı yere düşer:
+   18.07.2016 (darbe girişimi sonrası ilk seans) 19.07 etiketinde, 22.03.2021
+   (başkan değişikliği sonrası ilk seans) 23.03 etiketinde (+266 bp), 19.03.2025
+   20.03 etiketinde (+227 bp). Bölüm 1'in iki iş günlük kayması GÜN SONU
+   kapanışlarına (kur, VIX) göre ölçülmüştür; buradaki kıyas ise gün İÇİ ölçülerle
+   (TLREF fiksingi, TCMB ağırlıklı ortalama fonlama maliyeti) yapılır ve iki günlük
+   kayma o güne ERTESİ günün bilgisini yazar. Kayma aylık ortalamada da yok
+   sayılamaz (duyarlılık satırında 0 ve 2 iş günüyle kıyas). Son ölçüm günü bu
+   yüzden 29.09'dur (30.09 etiketi 29.09 piyasasıdır).
 5. ANKETİN GÜNLÜK HÂLİ BİR VARSAYIMDIR. Günlük seride anket ayın 20'sinden (ya
    da sonraki ilk iş gününden) itibaren geçerli sayılır; yayım günü arşivde
    yok. Günlük değer, aylık dosyayla 20'sinden sonraki ilk gözlemde
@@ -55,8 +61,21 @@ aktarmaz; döngü yok). Aynı ölçü iki modülde iki ayrı kodla kurulmaz.
 6. 2018 HAZİRAN ÖNCESİ BİR HAFTA VADELİ REPO ETKİN FAİZ DEĞİLDİ (Bölüm 3, tuzak
    5): anket politika faizini (bir hafta vadeli repo) sorar, piyasa ise etkin
    fonlama maliyetini fiyatlar. Koridor farkı (AOFM − politika) bu yüzden ayrı
-   kirlilik kalemidir; 2018-09 öncesinde politika faizi BIS'in ay sonu
-   değeridir (günlük seri 14.09.2018'de başlar).
+   kirlilik kalemidir; 14.09.2018 öncesinde politika faizi BIS'in AY SONU
+   değeridir (günlük seri 14.09.2018'de başlar). Ay sonu değeri ayın bütün
+   günlerine yazılırsa karar aylarında karardan ÖNCEKİ günlere sonraki faiz
+   yazılır (ay içinde ileriye bakma): 2014-01'in −250 bp'si 28.01.2014
+   artırımından, 2018-09'un −212 bp'si 13.09.2018 artırımının (17,75 → 24) ayın
+   ilk on iki gününe yazılmasından geliyordu ve koridor farkının "en düşük"
+   değeri bir artefakttı. Bu yüzden BIS ay sonu değeri yalnız faizin ay içinde
+   DEĞİŞMEDİĞİ aylarda kullanılır (ay sonu değeri önceki ayınkine eşit ve PPK
+   arşivinde o ay faiz değişikliği yok); karar aylarının günlük politika faizi
+   ölçülemez, boş kalır. PPK arşivi (2016+) karar günlerini taşır ama günlük bir
+   patika kurmaya yetmez: 28.05.2018'deki işlemsel sadeleştirme (bir hafta
+   vadeli reponun 01.06.2018'den %16,5'e çıkarılması) arşivde karar olarak yok,
+   haziranın ilk dört günü yanlış faizle yazılırdı. Fonlama serisinde politika
+   faizi karar GÜNÜNDEN geçerlidir (14.09.2018 sonrası 2018 günün 2018'inde
+   birebir).
 7. TLREF BASİT, DİBS BİLEŞİK. TLREF basit faiz (ACT/365) olarak yayımlanır;
    3 aylık sıfır kuponlu getiri yıllık bileşiktir. Baz, TLREF günlük bileşiğe
    çevrildikten sonra alınır. 3 aylık vade kendi içinde üç aylık politika
@@ -65,10 +84,15 @@ aktarmaz; döngü yok). Aynı ölçü iki modülde iki ayrı kodla kurulmaz.
    TLREF'inkinin iki katından fazla, düğüm haftalarca aynı değerde donup tek
    günde yüzlerce baz puan sıçrıyor (02.09 → 03.09.2024 etiketinde 39,99'dan
    56,67'ye). Baz, fiyat farkıyla birlikte düğümün kuruluş artefaktını taşır.
-   Ayrıca 2025-01…2026-09'da düğümün BİLEŞİK değeri TLREF'in BASİT değerini
-   neredeyse birebir izliyor (ortalama fark birkaç on baz puan; bileşiğe göre
-   ≈ −10 puan). Bu ya gerçek bir fiyat farkıdır ya kısa düğümün sözleşmesinde bir
-   sorundur; bu arşivden ayırt edilemez, satırda tanı olarak durur.
+   Ayrıca düğümün BİLEŞİK değeri TLREF'in BASİT değerini her faiz düzeyinde
+   izliyor: yıl ortalamaları 2020'de (%11) ve 2025'te (%44) aynı ölçüde yakın,
+   aylık (3 ay − bileşik TLREF) farkının bileşikleme kamasına (bileşik − basit
+   TLREF) eğimi −0,99 (R² 0,82), basit TLREF'e uzaklığın kamaya eğimi 0,01. Yani
+   bileşik tanımlı baz büyük ölçüde KAMANIN KENDİSİNİ ölçüyor. Bu bir sözleşme
+   kusurunun imzasıdır ama tek başına kanıt değildir: 6 ay, 1 ve 2 yıl
+   düğümlerinde aynı eğim −1,2…−1,7 (yüksek faizde indirim beklentisi aynı
+   yönde çalışır). Bu arşivden ayırt edilemez; spesifikasyonun bileşik bazı ana
+   tanım kalır, basit TLREF'e göre baz ve kama sınaması tanı satırında yazılır.
 8. MALİ İMPULS VEKİLİ MERKEZİ YÖNETİM NAKİT DENGESİDİR (genel yönetim değil;
    tahakkuk değil). 2023 deprem dönemi, Mayıs 2023 seçimleriyle aynı yıla
    düşer: impulsun deprem harcamasına ayrılan kısmı bu arşivden ölçülemez,
@@ -112,8 +136,10 @@ OLAYLAR_ABD = [
                   "imzalandığı 22.12'ye kadardır."},
     {"kimlik": "abd_2023_agustos", "ad": "ABD Ağustos 2023: borçlanma duyuruları ve Fitch",
      "baslangic": "2023-07-31", "bitis": "2023-08-04",
-     "saat_notu": "Pencere 31.07 kapanışından başlar; Fitch not indirimi 01.08 ABD kapanışından sonra "
-                  "açıklandı, tepkisi 02.08 kapanışındadır."},
+     "saat_notu": "Pencere 31.07 kapanışından başlar; ABD Hazinesi'nin üç aylık borçlanma tahmini 31.07 15:00 "
+                  "New York'ta açıklandı, yani getiri kotasyonundan (≈15:30) önce: ilk tepkinin bir kısmı başlangıç "
+                  "kapanışındadır. Fitch not indirimi 01.08 ABD kapanışından sonra açıklandı, tepkisi 02.08 "
+                  "kapanışındadır."},
     {"kimlik": "abd_2023_fitch_gunu", "alt": True, "ad": "ABD 02.08.2023 tepki günü (Fitch + üç aylık borçlanma açıklaması)",
      "baslangic": "2023-08-01", "bitis": "2023-08-02",
      "saat_notu": "Fitch'in tepki günü aynı zamanda ABD Hazinesi'nin üç aylık borçlanma açıklamasının "
@@ -152,6 +178,7 @@ AYLIK_ASGARI_GUN = 5                 # aylık ortalamaya giren ay için asgari g
 POLITIKA_GUNLUK_ILK = pd.Timestamp("2018-09-14")
 
 KAYNAK_ABD = ["abd_hazine_gunluk", "cnbc_kur_gunluk", "yahoo_dxy_vix_gunluk"]
+ACM_GEREKLI = ("acmtp10", "acmy10", "acmrny10")   # bulut.acm "gelenler" der: sütunlar sınanır
 
 
 # ───────────────────────────────────────────────────────── küçük yardımcılar
@@ -225,6 +252,11 @@ def p5a() -> dict:
     except bulut.VeriYok as e:
         out["vade_primi"] = kurulmadi(f"NY Fed ACM vade primi: {e}")
         return out
+    eksik = [c for c in ACM_GEREKLI if c not in m.columns]
+    if eksik:
+        out["vade_primi"] = kurulmadi("NY Fed ACM vade primi: 10 yıllık getiri, vade primi ya da risk-nötr getiri "
+                                      "serisi elde yok")
+        return out
     m = m[m.index.dayofweek < 5]
     bm, sm = _bas_gun(m.index, b), _son_gun(m.index, s)
     if bm is None or sm is None or bm != b or sm != s:
@@ -235,8 +267,8 @@ def p5a() -> dict:
     dtp10 = (m.loc[sm, "acmtp10"] - m.loc[bm, "acmtp10"]) * 100
     drn10 = (m.loc[sm, "acmrny10"] - m.loc[bm, "acmrny10"]) * 100
     dy10 = (m.loc[sm, "acmy10"] - m.loc[bm, "acmy10"]) * 100
-    dtp2 = (m.loc[sm, "acmtp02"] - m.loc[bm, "acmtp02"]) * 100
-    dtp5 = (m.loc[sm, "acmtp05"] - m.loc[bm, "acmtp05"]) * 100
+    dtp2 = (m.loc[sm, "acmtp02"] - m.loc[bm, "acmtp02"]) * 100 if "acmtp02" in m else np.nan
+    dtp5 = (m.loc[sm, "acmtp05"] - m.loc[bm, "acmtp05"]) * 100 if "acmtp05" in m else np.nan
     ortak = pd.concat([a["us10"], m["acmy10"]], axis=1, sort=True).dropna().loc[bm:sm]
     par_model = (ortak["us10"] - ortak["acmy10"]) * 100
     out["vade_primi"] = {
@@ -251,7 +283,7 @@ def p5a() -> dict:
         "ozdeslik_azami_sapma_bp": _f(ozdes),
         "par_eksi_model_10y_ort_bp": _f(par_model.mean()),
         "par_eksi_model_10y_azami_mutlak_bp": _f(par_model.abs().max()),
-        "not": "Model getirisi sıfır kuponlu eğriden gelir; par getiriyle farkı ayrıca yazılı (tuzak 3).",
+        "not": "Model getirisi sıfır kuponlu eğriden gelir; par getiriyle farkı bu satırda ayrıca yazılı.",
     }
     seri = pd.concat([w, m[["acmtp10", "acmrny10"]]], axis=1, sort=True).loc[b:s].dropna()
     out["seri"] = {"tarih": [_iso(t) for t in seri.index],
@@ -266,6 +298,8 @@ def _acm_degisim(b: pd.Timestamp, s: pd.Timestamp) -> dict:
         m = bulut.acm()
     except bulut.VeriYok as e:
         return {"vade_primi": kurulmadi(f"NY Fed ACM vade primi: {e}")}
+    if any(c not in m.columns for c in ("acmtp10", "acmrny10")):
+        return {"vade_primi": kurulmadi("NY Fed ACM vade primi: 10 yıllık vade primi serisi elde yok")}
     m = m[m.index.dayofweek < 5]
     if b not in m.index or s not in m.index:
         return {"vade_primi": kurulmadi("ACM serisi pencerenin uç günlerini taşımıyor")}
@@ -301,6 +335,8 @@ def _olay_igb(o: dict) -> dict:
         g = bulut.gilt()
     except bulut.VeriYok as e:
         return {"kimlik": o["kimlik"], "ad": o["ad"], **kurulmadi(f"gilt getirileri: {e}")}
+    if any(c not in g.columns for c in ("gb2y", "gb10y", "gb30y")):
+        return {"kimlik": o["kimlik"], "ad": o["ad"], **kurulmadi("gilt getirileri: 2, 10 ya da 30 yıllık seri elde yok")}
     k = oo.oku("cnbc_kur_gunluk")["gbp"]
     v = oo.oku("yahoo_dxy_vix_gunluk")["vix"]
     a = oo.oku("abd_hazine_gunluk")["us10"]
@@ -344,8 +380,8 @@ def sekil_07() -> dict:
                            "New York kapanışı; gilt Londra kapanışı. Kapanıştan sonra gelen haberde ilk gün kuru "
                            "tepkinin bir kısmını taşıyabilir (satırdaki saat notu).",
         "yontem": "Her olayda olay öncesi kapanıştan pencerenin son kapanışına 2 ve 10 yıllık getiri değişimi "
-                  "(baz puan), altı G10 kurunun dolar yönünde eşit ağırlıklı ortalamasının değişimi (yüzde) ve "
-                  "VIX alındı; kadran uzun faizin ve paranın değerinin birlikte yönüdür (politika: faiz ↑ para ↑, "
+                  "(baz puan), altı G10 kurunun dolar yönünde eşit ağırlıklı logaritmik ortalamasının değişimi "
+                  "(logaritmik yüzde; sterlin de logaritmik yüzde) ve VIX alındı; kadran uzun faizin ve paranın değerinin birlikte yönüdür (politika: faiz ↑ para ↑, "
                   "prim: faiz ↑ para ↓, güvenli liman: faiz ↓ para ↑, gevşeme: faiz ↓ para ↓).",
         "kaynak": KAYNAK_ABD + ["bulut: acm", "bulut: gilt"],
         "kadran_sayisi": say,
@@ -457,14 +493,69 @@ def _patika_tam(r12: pd.Series, r24: pd.Series) -> pd.Series:
     return pd.Series((np.prod(1 + yol / ANKET_HAFTA, axis=1) - 1) * 100, index=r12.index)
 
 
+def _karar_aylari() -> set:
+    """Politika faizinin ay İÇİNDE değiştiği aylar: BIS ay sonu değeri önceki ayın
+    ay sonundan farklı ya da PPK arşivinde o ay bir faiz değişikliği var (tuzak 6)."""
+    e = oo.oku("em_politika_aylik")["tur"].dropna()
+    e.index = pd.PeriodIndex(e.index, freq="M")
+    p = oo.oku("ppk_kararlari")["politika"].dropna()
+    bis = {m for m, d in (e.diff().abs() > 1e-9).items() if d}
+    ppk = set(pd.PeriodIndex(p.index[(p.diff().abs() > 1e-9).values], freq="M"))
+    return bis | ppk
+
+
 def _politika_gunluk(tk: pd.DatetimeIndex) -> pd.Series:
+    """Günlük politika faizi: 14.09.2018'den fonlama serisi; öncesinde BIS ay sonu
+    değeri yalnız faizin ay içinde değişmediği aylarda (karar aylarında boş)."""
+    f = oo.oku("fonlama_gunluk")["politika"].dropna()
+    e = oo.oku("em_politika_aylik")["tur"].dropna()
+    e.index = pd.PeriodIndex(e.index, freq="M")
+    ay = pd.PeriodIndex(tk, freq="M")
+    karar = _karar_aylari()
+    bis = pd.Series(e.reindex(ay).values, index=tk)
+    bis = bis.where(~np.isin(ay.astype(str), [str(m) for m in karar]))
+    gun = f.reindex(tk)
+    return gun.where(tk >= POLITIKA_GUNLUK_ILK, bis)
+
+
+def _politika_gunluk_eski(tk: pd.DatetimeIndex) -> pd.Series:
+    """Duyarlılık için: BIS ay sonu değerinin ayın TAMAMINA yazıldığı eski kural."""
     f = oo.oku("fonlama_gunluk")["politika"].dropna()
     e = oo.oku("em_politika_aylik")["tur"].dropna()
     e.index = pd.PeriodIndex(e.index, freq="M")
     ay = pd.PeriodIndex(tk, freq="M")
     bis = pd.Series(e.reindex(ay).values, index=tk)
-    gun = f.reindex(tk)
-    return gun.where(tk >= POLITIKA_GUNLUK_ILK, bis)
+    return f.reindex(tk).where(tk >= POLITIKA_GUNLUK_ILK, bis)
+
+
+def _karar_sonrasi_koridor(gun: int = 5) -> dict:
+    """14.09.2018 sonrası faizi DEĞİŞTİREN PPK kararlarında, karar günü ve sonraki
+    `gun` iş gününde |AOFM − politika| ile öbür günlerinki: fonlama maliyetinin yeni
+    faize gecikmeli geçişi ölçülür, varsayılmaz."""
+    f = oo.oku("fonlama_gunluk")[["aofm", "politika"]].dropna()
+    k = ((f["aofm"] - f["politika"]) * 100).abs()
+    p = oo.oku("ppk_kararlari")["politika"].dropna()
+    deg = p.index[(p.diff().abs() > 1e-9).values]
+    deg = deg[deg >= POLITIKA_GUNLUK_ILK]
+    poz = set()
+    for t in deg:
+        j = k.index.searchsorted(t)
+        poz.update(range(j, min(j + gun + 1, len(k))))
+    mask = np.zeros(len(k), bool)
+    mask[sorted(poz)] = True
+    return {"n_karar": int(len(deg)), "pencere_is_gunu": int(gun + 1),
+            "karar_penceresi_medyan_mutlak_bp": _f(np.median(k.values[mask])),
+            "obur_gunler_medyan_mutlak_bp": _f(np.median(k.values[~mask])),
+            "karar_penceresi_ort_mutlak_bp": _f(k.values[mask].mean()),
+            "obur_gunler_ort_mutlak_bp": _f(k.values[~mask].mean()),
+            "ilk": _iso(k.index.min()), "son": _iso(k.index.max()),
+            "yontem": "Faizi değiştiren kurul kararlarının günü ve sonraki beş iş gününde fonlama maliyetinin politika "
+                      "faizinden mutlak uzaklığı öbür günlerinkiyle kıyaslandı."}
+
+
+def _dibs_kayma() -> int:
+    """DİBS etiket kayması (iş günü): tek tanım Bölüm 3'ün tatil ve kur sınaması (tuzak 4)."""
+    return int(b3.dibs_gecikme()["gecikme_is_gunu"])
 
 
 def _anket_ay_degeri(d: pd.DataFrame) -> pd.DataFrame:
@@ -475,9 +566,11 @@ def _anket_ay_degeri(d: pd.DataFrame) -> pd.DataFrame:
     return g
 
 
-def _p5c_gunluk(kayma: int = b01.DIBS_ETIKET_ONCU) -> pd.DataFrame:
+def _p5c_gunluk(kayma: int | None = None, eski_politika: bool = False) -> pd.DataFrame:
     """Türkiye iş günü çerçevesi. DİBS sütunları `kayma` iş günü geri alınır:
-    etiket t+k'deki değer piyasa günü t'ye yazılır (Bölüm 2'nin tarih sözleşmesi)."""
+    etiket t+k'deki değer piyasa günü t'ye yazılır (varsayılan: Bölüm 3'ün ölçtüğü
+    kayma, tuzak 4)."""
+    kayma = _dibs_kayma() if kayma is None else kayma
     tk = b3.tr_takvim()
     d = oo.oku("dibs_egri_gunluk").reindex(tk)
     if kayma:
@@ -486,13 +579,15 @@ def _p5c_gunluk(kayma: int = b01.DIBS_ETIKET_ONCU) -> pd.DataFrame:
     fon = oo.oku("fonlama_gunluk").reindex(tk)
     r_ort = (d["pka_faiz_12a"] + d["pka_faiz_24a"]) / 2
     anket = _bilesik_haftalik(r_ort)
-    pol = _politika_gunluk(tk)
+    pol = _politika_gunluk_eski(tk) if eski_politika else _politika_gunluk(tk)
     out = pd.DataFrame({
         "f_1y1y": d["f_1y1y"], "anket_basit": r_ort, "anket_bilesik": anket,
         "fark_bp": (d["f_1y1y"] - anket) * 100,
         "koridor_bp": (fon["aofm"] - pol) * 100,
         "baz_bp": (d["n3a"] - _bilesik_gunluk(fon["tlref"])) * 100,
-        "r12": d["pka_faiz_12a"], "r24": d["pka_faiz_24a"],
+        "baz_basit_bp": (d["n3a"] - fon["tlref"]) * 100,
+        "kama_bp": (_bilesik_gunluk(fon["tlref"]) - fon["tlref"]) * 100,
+        "r12": d["pka_faiz_12a"], "r24": d["pka_faiz_24a"], "tlref": fon["tlref"],
     }, index=tk)
     return out[out.index <= oo.CIPA_GUN]
 
@@ -511,6 +606,42 @@ def _ozet(s: pd.Series) -> dict:
     return {"n": int(len(s)), "ilk": str(s.index.min()), "son": str(s.index.max()),
             "ort": _f(s.mean()), "medyan": _f(s.median()), "asgari": _f(s.min()), "azami": _f(s.max()),
             "asgari_ay": str(s.idxmin()), "azami_ay": str(s.idxmax()), "son_deger": _f(s.iloc[-1])}
+
+
+def _kama_sinamasi(m: pd.DataFrame) -> dict:
+    """Aylık (düğüm − bileşik TLREF) farkının bileşikleme kamasına (bileşik − basit
+    TLREF) eğimi; −1'e yakın eğim düğümün basit TLREF'i izlediğini gösterir (tuzak 7).
+    Kıyas için aynı eğim 6 ay, 1 ve 2 yıl düğümlerinde (beklenti etkisi de taşırlar)."""
+    x = m.dropna(subset=["baz_bp", "baz_basit_bp", "kama_bp"])
+    r1 = oo.hac(x["baz_bp"].values, x["kama_bp"].values)
+    r2 = oo.hac(x["baz_basit_bp"].values, x["kama_bp"].values)
+    tk = b3.tr_takvim()
+    dd = oo.oku("dibs_egri_gunluk").reindex(tk).shift(-_dibs_kayma())
+    tl = oo.oku("fonlama_gunluk")["tlref"].reindex(tk)
+    tlb = _bilesik_gunluk(tl)
+    oteki = {}
+    for c in ("n6a", "n1y", "n2y"):
+        z = pd.DataFrame({"f": (dd[c] - tlb) * 100, "k": (tlb - tl) * 100}).dropna()
+        z = z.groupby(pd.PeriodIndex(z.index, freq="M")).mean()
+        r = oo.hac(z["f"].values, z["k"].values)
+        oteki[c] = {"egim": _f(r["b"][1]), "t": _f(r["t"][1]), "r2": _f(r["r2"]), "n": int(r["n"])}
+    yil = x.groupby(x.index.year)
+    yillik = [{"yil": str(y), "n_ay": int(len(g)), "tlref_basit_ort": _f(g["tlref"].mean()),
+               "baz_bilesik_ort_bp": _f(g["baz_bp"].mean()), "baz_basit_ort_bp": _f(g["baz_basit_bp"].mean()),
+               "kama_ort_bp": _f(g["kama_bp"].mean())} for y, g in yil]
+    return {
+        "yontem": "Aylık ortalamada üç aylık DİBS getirisinin bileşik TLREF'ten farkı, TLREF'in bileşik ve basit "
+                  "değeri arasındaki kamaya Newey–West ile regresyona sokuldu; eğim eksi bire yakınsa düğüm, faiz "
+                  "düzeyinden bağımsız olarak basit TLREF'i izliyordur.",
+        "n": int(r1["n"]), "ilk": str(x.index.min()), "son": str(x.index.max()),
+        "baz_bilesik_kamaya_egim": _f(r1["b"][1]), "baz_bilesik_kamaya_t": _f(r1["t"][1]), "baz_bilesik_r2": _f(r1["r2"]),
+        "baz_basit_kamaya_egim": _f(r2["b"][1]), "baz_basit_kamaya_t": _f(r2["t"][1]), "baz_basit_r2": _f(r2["r2"]),
+        "oteki_dugumler": oteki, "yillik": yillik,
+        "hukum": "tarif edici",
+        "yorum": "Bileşik tanımlı baz büyük ölçüde bileşikleme kamasını ölçüyor; uzun düğümler de kamaya eksi bire "
+                 "yakın eğimle bağlı olduğu için bu, tek başına sözleşme kusurunun kanıtı değildir. Düzeyler kalıcı "
+                 "olduğu için t değeri büyüklüğü abartır; tanı eğim ve açıklama payından okunur.",
+    }
 
 
 def _n3a_tanisi() -> dict:
@@ -544,6 +675,7 @@ def p5c() -> dict:
     gg = g.dropna(subset=["fark_bp"])
     m = _aylik(g)
     m["fark_arinmis_bp"] = m["fark_bp"] - m["koridor_bp"] - m["baz_bp"]
+    m["fark_arinmis_basit_bp"] = m["fark_bp"] - m["koridor_bp"] - m["baz_basit_bp"]
     fark = m["fark_bp"].dropna()
 
     # sınama 1: günlük anket ↔ aylık dosya
@@ -575,10 +707,20 @@ def p5c() -> dict:
     hiza_fark = (alt_m - fark).dropna()
     egim_ay = ((av["pka_faiz_24a"] - av["pka_faiz_12a"]) / 12 * 100).abs()
 
-    # DİBS etiket kayması duyarlılığı: kaydırmasız seri
+    # DİBS etiket kayması duyarlılığı: kaydırmasız seri ve Bölüm 1'in iki iş günlük kayması
+    kayma = _dibs_kayma()
     m0 = _aylik(_p5c_gunluk(kayma=0))
     kayma_fark = (m0["fark_bp"] - m["fark_bp"]).dropna()
     kayma_baz = (m0["baz_bp"] - m["baz_bp"]).dropna()
+    m2 = _aylik(_p5c_gunluk(kayma=2))
+    kayma2_fark = (m2["fark_bp"] - m["fark_bp"]).dropna()
+
+    # karar ayı maskesinin etkisi: BIS ay sonu değeri ayın tamamına yazılsaydı
+    me = _aylik(_p5c_gunluk(eski_politika=True))
+    karar = _karar_aylari()
+    maskeli = sorted(str(p) for p in m.index
+                     if p in karar and p.to_timestamp() < POLITIKA_GUNLUK_ILK)
+    eski_kor = me["koridor_bp"].dropna()
 
     son_gun = gg.index.max()
     sg = g.loc[son_gun]
@@ -588,14 +730,33 @@ def p5c() -> dict:
         kir[ad] = {**_ozet(s), "fark_ile_korelasyon": _f(pd.concat([s, fark], axis=1).dropna().corr().iloc[0, 1])}
     kir["koridor_farki"]["yontem"] = ("TCMB ağırlıklı ortalama fonlama maliyetinin politika faizinden farkının "
                                       "aylık ortalaması (baz puan); 14.09.2018 öncesinde politika faizi BIS'in ay "
-                                      "sonu değeridir.")
-    kir["koridor_farki"]["not"] = ("2018-09 öncesinin karar aylarında ay sonu politika faizi ay ortalaması fonlama "
-                                   "maliyetiyle kıyaslanır: 2014-01'in eksi değeri 28.01.2014 artırımının ay sonuna "
-                                   "yazılmasından gelir.")
+                                      "sonu değeridir ve yalnız faizin ay içinde değişmediği aylarda kullanılır.")
+    kir["koridor_farki"]["not"] = ("14.09.2018 öncesinin karar aylarında günlük politika faizi arşivde yok; ay sonu "
+                                   "değeri ayın tamamına yazılırsa karardan önceki günlere sonraki faiz yazılır. Bu "
+                                   "aylar boş bırakıldı (2018-09'da yalnız 14 Eylül sonrası ölçülür). Ağırlıklı ortalama "
+                                   "fonlama maliyeti stok ağırlıklıdır: faiz değişikliğinden sonraki günlerde yeni faizin "
+                                   "gerisinde kalır (karar_sonrasi satırı); bu gerçek bir maliyet farkıdır, tarih "
+                                   "kusuru değil.")
+    kir["koridor_farki"]["karar_sonrasi"] = _karar_sonrasi_koridor()
+    kir["koridor_farki"]["karar_ayi_maskesi"] = {
+        "bos_birakilan_ay": [p for p in maskeli if p != "2018-09"],
+        "kismen_olculen_ay": [p for p in maskeli if p == "2018-09"],
+        "n_bos": int(sum(1 for p in maskeli if p != "2018-09")),
+        "maskesiz_asgari_bp": _f(eski_kor.min()), "maskesiz_asgari_ay": str(eski_kor.idxmin()),
+        "maskesiz_ort_bp": _f(eski_kor.mean()),
+        "not": "Maskesiz satırlar ay sonu faizinin ayın tamamına yazıldığı hâldir: karar aylarının eksi değerleri "
+               "karardan önceki günlere sonraki faizin yazılmasından gelir, ölçüm değildir.",
+    }
     kir["dibs_tlref_bazi"]["yontem"] = ("3 aylık sıfır kuponlu DİBS getirisi ile günlük bileşiğe çevrilmiş TLREF "
                                         "arasındaki farkın aylık ortalaması (baz puan; DİBS panosundaki 3 ay − TLREF "
                                         "taşımasıyla aynı tanım); TLREF 28.12.2018'de başlar.")
     kir["dibs_tlref_bazi"]["dugum_tanisi"] = _n3a_tanisi()
+    kir["dibs_tlref_bazi"]["kama_sinamasi"] = _kama_sinamasi(m)
+    kir["dibs_tlref_bazi_basit"] = {
+        **_ozet(m["baz_basit_bp"]),
+        "yontem": "3 aylık sıfır kuponlu DİBS getirisi ile TLREF'in basit değeri arasındaki farkın aylık ortalaması "
+                  "(baz puan); bileşik tanımlı bazın bileşikleme kamasından arınmış karşılığı değil, ikinci bir okumasıdır.",
+    }
     kir["anket_ay_etiketi"] = {
         "yontem": "Anketin ayın 20'sinden değil ilk gününden geçerli sayıldığı karşı hizalamanın aylık farka etkisi "
                   "ile 12 ve 24 ay beklentisi arasındaki eğimin bir aylık kaymada patikayı oynattığı miktar.",
@@ -621,21 +782,26 @@ def p5c() -> dict:
         "yontem": "DİBS eğrisinden 1 yıl sonrası 1 yıllık forward (yıllık bileşik) ile Piyasa Katılımcıları "
                   "Anketi'nin 12 ve 24 ay sonrası politika faizi beklentilerinin ortalaması (yamuk yaklaşımı; bir "
                   "hafta vadeli repo basit faiz olduğu için (1 + r/52)^52 − 1 ile yıllık bileşiğe çevrildi) "
-                  "arasındaki fark, DİBS etiketi iki iş günü geri alınarak Türkiye iş günlerinde günlük alındı ve "
-                  "aylık ortalamaya çevrildi.",
+                  "arasındaki fark, DİBS etiketi piyasa gününe bir iş günü geri alınarak Türkiye iş günlerinde "
+                  "günlük alındı ve aylık ortalamaya çevrildi.",
         "kaynak": ["dibs_egri_gunluk", "pka_faiz_aylik (sınama)", "fonlama_gunluk", "em_politika_aylik"],
         "fark": _ozet(fark),
         "donem": donem,
         "fark_arinmis": {**_ozet(m["fark_arinmis_bp"]),
                          "not": "Duyarlılık, ölçüm değil: koridor farkı ve 3 aylık düğümdeki DİBS–TLREF bazı 1y1y "
                                 "noktasında da aynı büyüklükte kalıcı varsayılarak düşüldü; bu varsayım ölçülmedi. "
-                                "2018-12 öncesinde baz ölçülmediği için seri boştur."},
+                                "2018-12 öncesinde baz ölçülmediği için seri boştur. Bileşik tanımlı baz büyük ölçüde "
+                                "bileşikleme kamasını taşıdığı için (kama sınaması) bu satır yukarı yanlıdır; basit "
+                                "TLREF'e göre bazla düşülmüş ikinci okuma ayrıca yazılı."},
+        "fark_arinmis_basit_baz": {**_ozet(m["fark_arinmis_basit_bp"]),
+                                   "not": "Aynı duyarlılık, baz TLREF'in basit değerine göre alınarak; ölçüm değil."},
         "son_gun_degerleri": {"tarih": _iso(son_gun), "f_1y1y": _f(sg["f_1y1y"]),
                               "anket_12a": _f(sg["r12"]), "anket_24a": _f(sg["r24"]),
                               "anket_basit_ort": _f(sg["anket_basit"]), "anket_bilesik": _f(sg["anket_bilesik"]),
                               "fark_bp": _f(sg["fark_bp"]), "koridor_bp": _f(sg["koridor_bp"]),
                               "baz_bp": _f(sg["baz_bp"]),
-                              "not": "Piyasa günü; DİBS değeri iki iş günü sonraki etiketten gelir."},
+                              "baz_basit_bp": _f(sg["baz_basit_bp"]),
+                              "not": "Piyasa günü; DİBS değeri bir iş günü sonraki etiketten gelir."},
         "kirlilik": kir,
         "sinama": {
             "gunluk_anket_aylik_dosya": {"ortak_ay": int(len(ortak)), "birebir": int(esit.sum()),
@@ -644,10 +810,13 @@ def p5c() -> dict:
             "yamuk_ve_dogrusal_patika_azami_fark_bp": _f(yaklasim_fark.abs().max()),
             "yamuk_ve_dogrusal_patika_ort_fark_bp": _f(yaklasim_fark.mean()),
             "haftalik_cevrim_52_ve_7_365_azami_fark_bp": _f(cevrim_fark.abs().max()),
-            "dibs_etiket_kaymasi_is_gunu": int(b01.DIBS_ETIKET_ONCU),
+            "dibs_etiket_kaymasi_is_gunu": int(kayma),
+            "dibs_etiket_kaymasi_kaynak": "Bölüm 3: tatil sınaması (tatilden sonraki etiket donuk) ve kur sınaması",
             "kaydirmasiz_aylik_fark_azami_bp": _f(kayma_fark.abs().max()),
             "kaydirmasiz_aylik_fark_ort_mutlak_bp": _f(kayma_fark.abs().mean()),
             "kaydirmasiz_aylik_baz_azami_bp": _f(kayma_baz.abs().max()),
+            "iki_is_gunu_kayma_aylik_fark_azami_bp": _f(kayma2_fark.abs().max()),
+            "iki_is_gunu_kayma_aylik_fark_ort_mutlak_bp": _f(kayma2_fark.abs().mean()),
         },
     }
 
@@ -657,7 +826,8 @@ def sekil_08() -> dict:
     return {
         "n": int(len(m)), "ilk": str(m.index.min()), "son": str(m.index.max()),
         "yontem": "Türkiye beklenti dışı farkı (1y1y forward eksi anket patikası, ikisi de yıllık bileşik) ve iki "
-                  "kirlilik kalemi (koridor farkı, DİBS–TLREF bazı), aylık ortalama, baz puan.",
+                  "kirlilik kalemi (koridor farkı, DİBS–TLREF bazı; baz TLREF'in hem bileşik hem basit değerine "
+                  "göre), aylık ortalama, baz puan.",
         "kaynak": ["dibs_egri_gunluk", "fonlama_gunluk", "em_politika_aylik"],
         "ay": [str(p) for p in m.index],
         "fark_bp": [_f(v) for v in m["fark_bp"]],
@@ -665,6 +835,7 @@ def sekil_08() -> dict:
         "anket_bilesik": [_f(v) for v in m["anket_bilesik"]],
         "koridor_bp": [_f(v) for v in m["koridor_bp"]],
         "baz_bp": [_f(v) for v in m["baz_bp"]],
+        "baz_basit_bp": [_f(v) for v in m["baz_basit_bp"]],
         "yonetilen_kur_donemi": [str(b01.YONETILEN[0].to_period("M")), str(b01.YONETILEN[1].to_period("M"))],
     }
 

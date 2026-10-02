@@ -39,11 +39,19 @@ Pratikler
      bileşik, ABD par getirisi altı aylık kuponlu. Vekil olarak okunur.
   5. DİBS GÖSTERGE ETİKETİ İKİ İŞ GÜNÜ ÖNDEDİR (Bölüm 1 tuzak 6): haftalık
      değişim ve not kararı tepkisi kaydırılmış etiketle kurulur.
-  6. 18.12.2023 ÖNCESİ YAHOO USD/TRY'DE CUMA DEĞERİ PAZARTESİ AÇILIŞIDIR
-     (Bölüm 1 tuzak 5): cuma akşamı açıklanan bir not kararının ilk tepkisi
-     cuma etiketine düşebilir. Not kararı tepkisi bu yüzden iki ölçüyle
-     verilir: karar günü kapanışından sonraki işlem gününe (istenen ölçü) ve
-     karar gününden önceki işlem gününden sonraki işlem gününe (iki günlük).
+  6. 18.12.2023 ÖNCESİ YAHOO USD/TRY'NİN D DEĞERİ D'NİN LONDRA GECE YARISIDIR
+     (İstanbul 02:00–03:00): akşam açıklanan HER not kararı — yalnız cuma
+     akşamı değil — o gün etiketine düşer; cuma değeri ayrıca hafta sonu
+     açılışından sonraki fiyattır (Bölüm 1 tuzak 5). Yani bu dönemde "karar
+     günü kapanışından sonraki işlem günü" ölçüsü kararın ilk tepkisini
+     KAÇIRABİLİR; DİBS ise gün sonu (kararın öncesi) kalır. Not kararı tepkisi
+     bu yüzden iki ölçüyle verilir: karar günü kapanışından sonraki işlem
+     gününe (istenen ölçü) ve karar gününden önceki işlem gününden sonraki
+     işlem gününe (iki günlük; 2023-12-18 öncesinde kur için birincil okuma).
+     Plasebo kapısı her seri için ayrı sorulur ve bu kaymayı ölçer.
+  7. BAYRAM HAFTALARI: 2013-10, 2016-07 ve 2016-09'da haftanın bütün iş günleri
+     tatildir; satır düşer ve sonraki fark iki haftalık olur. Bu üç fark
+     haftalık değişim sayılmaz.
 """
 from __future__ import annotations
 
@@ -179,18 +187,37 @@ def _fark_haftalik() -> pd.DataFrame:
     w = w[~w["_kismi"].astype(bool)]
     out = pd.DataFrame({"fark": w["fark"], "dfark_bp": w["fark"].diff() * 100, "d5_bp": w["n5y"].diff() * 100,
                         "dus10_bp": w["us10"].diff() * 100, "dkur_yuzde": np.log(w["usdtry"]).diff() * 100,
-                        "dvix": w["vix"].diff()}).iloc[1:]
+                        "dvix": w["vix"].diff(), "_gun": w["_gun"]}).iloc[1:]
+    # Tuzak 7: Türkiye'de bütün haftayı kaplayan bayramlarda (2013-10, 2016-07, 2016-09)
+    # haftanın ortak günü yok ve satır düşer; sonraki farkı İKİ haftalık değişimdir. Haftalık
+    # değişim sayılmaz, boş bırakılır (seviye kalır).
+    iki = out.index.to_series().diff().dt.days > 7
+    out.loc[iki, ["dfark_bp", "d5_bp", "dus10_bp", "dkur_yuzde", "dvix"]] = np.nan
+    out["iki_haftalik"] = iki
     out["yonetilen"] = (out.index >= YON_BAS) & (out.index <= YON_SON + pd.Timedelta(days=6))
     return out
 
 
 def _fark_iliski(z: pd.DataFrame) -> dict:
     r = b08._reg(z["dkur_yuzde"], z["dfark_bp"], gecikme=None) if len(z) > 20 else kurulmadi("20 haftadan az")
-    return {"n": int(len(z)), "ilk": _iso(z.index.min()), "son": _iso(z.index.max()),
+    return {"n": int(z["dfark_bp"].notna().sum()), "ilk": _iso(z.index.min()), "son": _iso(z.index.max()),
             "kor_kur": float(z["dfark_bp"].corr(z["dkur_yuzde"])), "kor_vix": float(z["dfark_bp"].corr(z["dvix"])),
             "kor_5y_kur": float(z["d5_bp"].corr(z["dkur_yuzde"])),
             "egim_kur_yuzde_100bp": (r["b"][0] * 100) if "b" in r else None, "egim_t": r["t"][0] if "t" in r else None,
-            "r2": r.get("r2")}
+            "r2": r.get("r2"), **_oos_hukum(z, r)}
+
+
+def _oos_hukum(z: pd.DataFrame, r: dict) -> dict:
+    if "t" not in r or len(z) < 100:
+        return {"hukum": "tarif edici",
+                "hukum_notu": "100 haftadan kısa ya da ayrı dönem: örneklem dışı sınama kurulmadı, hüküm kurulmaz"}
+    o = {}
+    for kiy in ("ortalama", "sifir"):
+        x = oo.oos_kiyas(z["dkur_yuzde"], z["dfark_bp"], 52, kiy)
+        o[kiy] = {"n": x.get("n"), "mse_oran": x.get("mse_oran"), "dm_t": x.get("dm_t")}
+    oran = [v["mse_oran"] for v in o.values() if v.get("mse_oran") is not None]
+    return {"oos": o, "hukum": hukum(r["t"][0], oran) if len(oran) == 2 else "tarif edici",
+            "hukum_notu": "eşzamanlı ilişki; örneklem dışı sınama aynı haftanın fark değişimi bilinirken kurulur"}
 
 
 def p12_vekil() -> dict:
@@ -205,11 +232,15 @@ def p12_vekil() -> dict:
     j_max, j_min = w["fark"].idxmax(), w["fark"].idxmin()
     return {
         "tufex_reel": {**tufex,
+                       "tarih_notu": "tarihler DİBS gösterge etiketidir; piyasa günü iki iş günü geridedir",
                        "yontem": "TÜFEX reel getirisinin değer taşıdığı iş günleri Türkiye iş günü takvimiyle karşılaştırıldı; doluluk, ardışık iki gözlem arasındaki boşluk ve en uzun boşluk ölçüldü.",
                        "uyari": "sığ işlem gören kâğıdın getirisi; ülke primi değil, reel faiz ile likiditeyi birlikte taşır",
                        "kaynak": ["dibs_egri_gunluk", "fonlama_gunluk (iş günü takvimi)"]},
         "dibs5y_abd10y": {
             "son_puan": float(w["fark"].iloc[-1]), "son_gun": _iso(w.index[-1]),
+            "son_ornek_gunu": _iso(w["_gun"].iloc[-1]),
+            "tarih_notu": "hafta tarihleri cuma etiketidir; değer haftanın perşembe kapanışıdır (DİBS etiketi o güne iki iş günü kaydırılmış)",
+            "iki_haftalik_dusen_degisim": [_iso(t) for t in w.index[w["iki_haftalik"]]],
             "ort_puan": float(w["fark"].mean()), "en_yuksek_puan": float(w["fark"].max()), "en_yuksek_hafta": _iso(j_max),
             "en_dusuk_puan": float(w["fark"].min()), "en_dusuk_hafta": _iso(j_min),
             "donemler": don,
@@ -273,24 +304,29 @@ def p12() -> dict:
         return kurulmadi("not kararlarının hiçbiri kur ve getiri serisinin kapsamına düşmüyor")
     S = pd.DataFrame(satir)
     normal = S[~S["yonetilen"]]
-    # Bölüm 2 plasebo kapısı: tepki günleri kur değişim serisinde tepe 0'da mı
+    # Bölüm 2 plasebo kapısı SERİ BAŞINA: tepki günleri kendi değişim serisinde tepe 0'da mı.
+    # Kur kapısı geçti diye 5 yıllık getirinin grup ortalaması yayımlanmaz (ve tersi).
+    gun = pd.DatetimeIndex(sorted(set(pd.to_datetime(normal["tepki_gunu"]))))
+    seriler = {"kur": (np.log(tr["usdtry"]).diff() * 100, ("dkur_yuzde", "iki_gun_dkur_yuzde")),
+               "dibs_5y": (tr["n5y"].diff() * 100, ("d5y_bp", "iki_gun_d5y_bp"))}
+    kapi, gruplar = {}, {}
     try:
         import olcum_b02 as b02
-        dk = np.log(tr["usdtry"]).diff() * 100
-        gun = pd.DatetimeIndex(sorted(set(pd.to_datetime(normal["tepki_gunu"]))))
-        prof = oo.olay_profili(dk, gun, b02.PENCERE)
-        kapi = {"gecti": bool(b02._kapi_hukmu(prof)), "profil": prof}
-    except Exception as e:  # noqa: BLE001
-        kapi = kurulmadi(f"plasebo kapısı kurulamadı: {e}")
-    if isinstance(kapi, dict) and kapi.get("gecti"):
-        gruplar = {}
-        for yon, ad in ((1, "iyilesme"), (-1, "bozulma"), (0, "notr")):
-            g = normal[normal["yon"] == yon]
-            gruplar[ad] = {k: _grup(g, k) for k in ("dkur_yuzde", "d5y_bp", "iki_gun_dkur_yuzde", "iki_gun_d5y_bp")}
-    else:
-        gruplar = kurulmadi("plasebo kapısı geçmedi: tepki günü kur hareketi komşu günlerden ayrışmıyor; kararlar yalnız vaka listesi olarak verilir")
+        for ad, (dk, _) in seriler.items():
+            kapi[ad] = {"gecti": bool(b02.kapi(dk, gun)), "profil": oo.olay_profili(dk, gun, b02.PENCERE)}
+    except Exception as e:  # noqa: BLE001 — kapı HESAPLANAMADI; "geçmedi" diye yazılmaz
+        kapi = kurulmadi(f"plasebo kapısı hesaplanamadı: {e}")
+    for ad, (_, kollar) in seriler.items():
+        if kapi.get("durum"):
+            gruplar[ad] = kurulmadi("plasebo kapısı hesaplanamadığı için olay çalışması kurulmadı; kararlar yalnız vaka listesi olarak verilir")
+        elif not kapi[ad]["gecti"]:
+            gruplar[ad] = kurulmadi("plasebo kapısı geçmedi: tepki günü hareketi komşu günlerden ayrışmıyor; kararlar yalnız vaka listesi olarak verilir")
+        else:
+            gruplar[ad] = {yad: {k: _grup(normal[normal["yon"] == yon], k) for k in kollar}
+                           for yon, yad in ((1, "iyilesme"), (-1, "bozulma"), (0, "notr"))}
+    kurulan = [ad for ad in seriler if not kapi.get("durum") and kapi[ad]["gecti"]]
     return {"kararlar": satir, "gruplar": gruplar, "plasebo_kapisi": kapi,
-            "olay_calismasi": "kuruldu" if isinstance(kapi, dict) and kapi.get("gecti") else "kurulmadi: plasebo kapısı geçmedi, tablo vaka listesi olarak okunur",
+            "olay_calismasi": ("kuruldu: " + ", ".join(kurulan)) if kurulan else "kurulmadi: tablo vaka listesi olarak okunur",
             "n": int(len(S)), "ilk": S["tarih"].min(), "son": S["tarih"].max(),
             "yonetilen_disarida": int(S["yonetilen"].sum()),
             "yontem": "Her not kararında karar günü kapanışından sonraki işlem günü kapanışına USD/TRY log değişimi ve DİBS 5 yıllık getiri değişimi alındı; iki günlük ölçü karar gününden önceki işlem gününden başlar. Yönetilen kur dönemindeki kararlar gruplara girmez.",

@@ -27,12 +27,19 @@ DEĞER KAYBI.
      değişimi ile ay ortalaması emtia değişimini eşleştirmek iki şey yapar:
      eşzamanlı korelasyonu düşürür (AUD–metal 0,35; aynı iki seri ay
      ortalamasıyla 0,61) ve kurun bir AY ÖNCEKİ değişimini emtianın bu ayki
-     değişimiyle YAPAY biçimde ilişkilendirir (ay sonu hizasında AUD bir ay
-     önde 0,48, eşzamanlı 0,35 — "kur emtiayı öngörüyor" hükmünün bir kısmı
-     ortalama alma aritmetiğidir: ortalamanın değişimi önceki ayın ikinci
-     yarısını da taşır). Ana tanım ders planının istediği ay sonu kurudur;
-     ay ortalaması hizası yanında durur ve öncü/gecikmeli tablo iki hizayı
-     birlikte verir.
+     değişimiyle aritmetik olarak ilişkilendirir (ortalamanın değişimi önceki
+     ayın günlerini de taşır). Aritmetiğin BÜYÜKLÜĞÜ ölçüldü (denetim): kurun
+     kendi ay ortalaması emtianın yerine konunca (aynı gün, öncülük yok) öncü
+     korelasyon eşzamanlının 0,76 (AUD) – 0,84 (CAD) katı çıkıyor, yani
+     aritmetik öncü korelasyonu eşzamanlının ALTINDA tutar. AUD–metalde öncü
+     (0,48) eşzamanlıyı (0,35) aşıyor: aritmetiğin vereceği ≈0,27'nin üstünde
+     ≈0,21'lik fazla aritmetik DEĞİLDİR. Ama ortalama penceresiyle örtüşmeyen
+     iki ay öncü sınamada ilişki yok (AUD 0,10, t 0,8): fazla ortalama
+     penceresinin dışına taşmıyor, "kur emtiayı öngörüyor" kuralı bu veriyle
+     kurulamaz. CAD ve NOK'ta öncü korelasyon aritmetiğin verdiği düzeyde.
+     Ana tanım ders planının istediği ay sonu kurudur; ay ortalaması hizası
+     yanında durur ve öncü/gecikmeli tablo iki hizayı, plaseboyu ve
+     örtüşmesiz sınamayı birlikte verir.
   2. CNBC kur dosyası PAZAR barı da taşır (479 gün). Ay sonu değeri hafta
      içi günlerden okunur; aksi hâlde pazar günü biten bir ayın "kapanışı"
      hafta sonu kotasyonu olurdu.
@@ -58,16 +65,26 @@ DEĞER KAYBI.
      sıfırken örneklem dışı oran sıfır kıyasına göre 0,14, koşulsuz ortalama
      kıyasına göre 1,10. Hüküm iki kıyasın da geçmesini ister (p10a'da da).
   8. TÜRKİYE'NİN ENERJİ–KUR EĞİMİ HİZAYA DUYARLI: yönetilen dönem dışında
-     ay sonu kurla −0,07 (t −2,4; enerji pahalılaşınca TL değer kazanıyor —
-     dolar zayıflığı ve risk iştahı ortak etkeni), aynı ilişki kur ay
+     ay sonu kurla −0,07 (t −2,4; enerji pahalılaşınca TL değer kazanıyor;
+     dolar endeksi kontrol edilince eğim −0,055'e iniyor, yani ortak etkenin
+     bir kısmı dolardır — risk iştahı ayrıca ölçülmedi), aynı ilişki kur ay
      ortalamasıyla −0,03 (t −0,8). Mekanik hüküm "ölçülü" der; satır
      `hizaya_duyarli` bayrağını taşır ve metin onu kural olarak kuramaz.
+  9. "%10'LUK FİYAT ARTIŞI" BASİT YÜZDEDİR (denetimde düzeltildi): esneklik
+     log cinsindendir, %10'luk artışın etkisi 1,1^b − 1'dir; exp(0,1·b) − 1
+     10 log puanlık (%10,5) artışı verir ve faturaya etkiyi ≈%5 büyütürdü
+     (5,40'a karşı 5,13 milyar dolar).
+  10. ÖRTÜŞEN 12 AYLIK DEĞİŞİMDE DM t'si: enerji faturası eşzamanlı ilişkisinin
+     hataları 23 ay örtüşür; sözleşme fonksiyonunun varsayılan DM gecikmesi
+     (3) t'yi şişirir. DM ayrıca 24 gecikmeyle verilir; hüküm sıfır ve
+     koşulsuz ortalama kıyasının ikisini de ister.
 
 ÖLÇÜLEN BULGU (tuzak değil): CAD–enerji ve NOK–enerji 36 aylık kayan
-korelasyonu 2024 sonundan itibaren eksiye döndü (CAD 2024-12'den beri
-eksi, en düşük −0,44, 2025-09; 2022 ortasında +0,54'tü);
+korelasyonu 2024 sonundan itibaren eksiye döndü (ikisi de 2024-11'den beri,
+22 ay; CAD'de en düşük −0,44, 2025-09; 2022 ortasında +0,54'tü);
 2014–2016 petrol düşüşünde enerji ithalatçısı EUR da CAD'ye yakın değer
-kaybetti (−22 ile −27 log puan), yani o dönemin baskın terimi doların kendisiydi.
+kaybetti (−22 ile −27 log puan) ve dolar endeksi aynı pencerede +21 log puan
+yükseldi: o dönemin baskın terimi doların kendisiydi.
 """
 from __future__ import annotations
 
@@ -168,14 +185,39 @@ def _kayan(d: pd.DataFrame) -> pd.Series:
     return d["fx"].rolling(KAYAN_AY, min_periods=KAYAN_ASGARI).corr(d["em"]).dropna()
 
 
-def _oncu_gecikmeli(fx: str, emtia: str, hiza: str) -> dict:
-    a = _aylik_kurlar(hiza)[fx].diff()
-    e = _emtia()[emtia].diff()
+def _kor_tablosu(a: pd.Series, e: pd.Series) -> dict:
     out = {}
     for ad, k in (("kur_bir_ay_onde", 1), ("es_zamanli", 0), ("emtia_bir_ay_onde", -1)):
         # kur_bir_ay_onde: kurun t−1 ayındaki değişimi ile emtianın t ayındaki değişimi
         d = pd.concat([a.shift(k).rename("fx"), e.rename("em")], axis=1).loc[BAS:SON].dropna()
         out[ad] = {"kor": float(d["fx"].corr(d["em"])), "n": int(len(d))}
+    return out
+
+
+def _oncu_gecikmeli(fx: str, emtia: str, hiza: str) -> dict:
+    a = _aylik_kurlar(hiza)[fx].diff()
+    e = _emtia()[emtia].diff()
+    out = _kor_tablosu(a, e)
+    if hiza != "son":
+        return out
+    # Ay sonu kur ~ ay ortalaması emtia hizasında aritmetiğin payı: emtianın yerine kurun KENDİ
+    # ay ortalaması konur (aynı günler, öncülük yok). Bu plasebonun öncü/eşzamanlı oranı,
+    # ortalama almanın tek başına üreteceği öncü korelasyonu verir.
+    oz = _kor_tablosu(a, _aylik_kurlar("ort")[fx].diff())
+    oran = oz["kur_bir_ay_onde"]["kor"] / oz["es_zamanli"]["kor"]
+    beklenen = oran * out["es_zamanli"]["kor"]
+    # Örtüşmesiz öncülük: kurun t−2 ayındaki değişimi, emtianın t ayı ortalama değişimiyle (ortalamanın
+    # kapsadığı t−1 ve t aylarıyla örtüşmez). Öngörü iddiası ancak burada kurulabilir.
+    d = pd.concat([a.shift(2).rename("x"), e.rename("y")], axis=1).loc[BAS:SON].dropna()
+    r = b08._reg(d["y"], d["x"], gecikme=None)
+    out.update({
+        "plasebo_kurun_kendi_ortalamasi": {"kur_bir_ay_onde": oz["kur_bir_ay_onde"]["kor"],
+                                           "es_zamanli": oz["es_zamanli"]["kor"], "oncu_es_orani": oran},
+        "aritmetik_beklenen_oncu_kor": beklenen,
+        "aritmetik_disi_fazla": out["kur_bir_ay_onde"]["kor"] - beklenen,
+        "kur_iki_ay_onde_ortusmesiz": {"kor": float(d["x"].corr(d["y"])), "egim": r["b"][0], "t": r["t"][0],
+                                       "n": r["n"], "gecikme": r["gecikme"]},
+    })
     return out
 
 
@@ -208,13 +250,26 @@ def _cift_olc(fx: str, emtia: str, ad: str) -> dict:
                        "en_yuksek": float(kay.max()), "en_yuksek_tarih": _iso(kay.idxmax()),
                        "medyan": float(kay.median()), "eksi_ay_payi_yuzde": float((kay < 0).mean() * 100),
                        "n_pencere": int(len(kay)),
+                       "son_eksi_dizi_baslangic": _eksi_dizi(kay)[0], "son_eksi_dizi_ay": _eksi_dizi(kay)[1],
                        "ay_ortalamasi_son": float(kay_ort.iloc[-1]), "ay_ortalamasi_medyan": float(kay_ort.median())},
         "oncu_gecikmeli": {"ay_sonu": _oncu_gecikmeli(fx, emtia, "son"),
                            "ay_ortalamasi": _oncu_gecikmeli(fx, emtia, "ort"),
-                           "not": ("kur_bir_ay_onde: kurun önceki ayki değişimi ile emtianın bu ayki değişimi. "
-                                   "Ay sonu hizasında bu korelasyonun bir kısmı ortalama alma aritmetiğidir.")},
+                           "not": ("Kur bir ay önde: kurun önceki ayki değişimi ile emtianın bu ayki değişimi. "
+                                   "Ay sonu hizasında bu korelasyonun bir kısmı ortalama alma aritmetiğidir; "
+                                   "aritmetiğin payı kurun kendi ay ortalamasıyla kurulan plasebodan ölçülür ve "
+                                   "eşzamanlı korelasyonun altında kalır. Öngörü iddiası yalnız ortalama "
+                                   "penceresiyle örtüşmeyen iki ay öncü sınamada kurulabilir.")},
     }
     return out
+
+
+def _eksi_dizi(kay: pd.Series) -> tuple:
+    """Kayan korelasyonun sondaki kesintisiz eksi dizisi: (başlangıç ayı, uzunluk); son değer eksi değilse (None, 0)."""
+    if kay.empty or kay.iloc[-1] >= 0:
+        return None, 0
+    arti = kay[kay >= 0]
+    dizi = kay[kay.index > arti.index.max()] if len(arti) else kay
+    return _iso(dizi.index.min()), int(len(dizi))
 
 
 def _bolum(a: pd.DataFrame, e: pd.DataFrame, fx: str, emtia: str, bas: str, son: str) -> dict:
@@ -242,16 +297,28 @@ def _petrol_dusus() -> dict:
         out[fx] = {"ay_ortalamasi": _bolum(ort_, e, fx, em, bas, son),
                    "ay_sonu": _bolum(son_, e, fx, em, bas, son)}
     out["eur_kiyas"] = {"ay_ortalamasi": _bolum(ort_, e, "eur", "enerji", bas, son)}
-    out["saat_notu"] = "CAD ve AUD New York 17:00, NOK ECB 14:15 Orta Avrupa sabitlemesinden."
+    # doların kendi hareketi (ay ortalaması, aynı pencere): "baskın terim dolar" cümlesinin ölçüsü
+    dx = oo.oku("yahoo_dxy_vix_gunluk")["dxy"].dropna()
+    dx = np.log(dx[dx.index.dayofweek < 5].resample("MS").mean()) * 100
+    out["dxy_degisim_log_yuzde"] = float(dx.loc[son] - dx.loc[bas])
+    out["n"] = sum(1 for k in ("cad", "nok", "aud") if out[k]["ay_ortalamasi"].get("durum") is None) + 1  # + EUR kıyası
+    out["vaka_tablosu"] = True
+    out["saat_notu"] = "CAD ve AUD New York 17:00, NOK ECB 14:15 Orta Avrupa sabitlemesinden, dolar endeksi New York kapanışı."
     return out
 
 
 def p10a() -> dict:
+    aud = _cift_olc("aud", "metal", "AUD–metal")
     return {
+        "yontem": ("Emtia ihracatçısı paraların (AUD, CAD, NOK) dolar karşısındaki aylık değeri ile ilgili emtia "
+                   "endeksinin aylık log değişimleri arasındaki eşzamanlı, öncü ve kayan korelasyon; 2014–2016 "
+                   "petrol düşüşünde kur ve emtia değişimi."),
+        "n": aud.get("n"), "ilk": aud.get("ilk"), "son": aud.get("son"),
         "kaynak": ["cnbc_kur_gunluk (AUD/USD, USD/CAD, EUR/USD; New York 17:00)",
                    "kuresel_aylik (Pink Sheet metal ve enerji endeksleri, nominal dolar, ay ortalaması)",
-                   "bulut: ECB referans kurları (USD/NOK çaprazı, 14:15 Orta Avrupa)"],
-        "aud_metal": _cift_olc("aud", "metal", "AUD–metal"),
+                   "bulut: ECB referans kurları (USD/NOK çaprazı, 14:15 Orta Avrupa)",
+                   "yahoo_dxy_vix_gunluk (dolar endeksi, petrol penceresi)"],
+        "aud_metal": aud,
         "cad_enerji": _cift_olc("cad", "enerji", "CAD–enerji"),
         "nok_enerji": _cift_olc("nok", "enerji", "NOK–enerji"),
         "petrol_2014_2016": _petrol_dusus(),
@@ -279,7 +346,7 @@ def _sok_2022() -> dict:
                    "değişimi (eksi değer kaybı); enerji Ocak ve Ekim ay ortalamaları arasında."),
         "kaynak": ["cnbc_kur_gunluk (New York 17:00)", "kuresel_aylik (Pink Sheet enerji, ay ortalaması)",
                    "yahoo_dxy_vix_gunluk (DXY)", "abd_hazine_gunluk (2 yıllık par getiri)"],
-        "ilk": SOK_2022[0], "son": SOK_2022[1], "n": 3,
+        "ilk": SOK_2022[0], "son": SOK_2022[1], "n": len(paralar),
         "paralar": paralar,
         "dxy_degisim_log_yuzde": float(100 * math.log(dx.loc[s] / dx.loc[b])),
         "abd_2y_degisim_bp": float((ab.loc[s] - ab.loc[b]) * 100),
@@ -386,20 +453,23 @@ def _fatura() -> dict:
     j = int(np.argmax(profil["r2"]))
     r0 = b08._reg(d12["lf"], d12["lp"], gecikme=b08.HAC_GECIKME)
     dd = d12.dropna()
-    oos = b08._sozlesme_oos(dd["lf"], dd["lp"], min(60, len(dd) // 2), "ortalama")
+    # eşzamanlı ilişki: ambargo 1; hatalar 23 ay örtüştüğü için DM t'si 24 gecikmeyle (tuzak 10)
+    oos = b08.oos_takim(dd["lf"], dd["lp"], min(60, len(dd) // 2), 1, b08.HAC_GECIKME)
     sev = b08._reg(df["lf"], df["lp"], gecikme=b08.HAC_GECIKME)
     son = fatura.dropna().index.max()
     oran = (fatura * 1e3 / G * 100).dropna().loc[FATURA_BAS:]
     son_fatura = float(fatura.loc[son])
+    on_yuzde = 1.1 ** r0["b"][0] - 1          # %10'luk (basit) fiyat artışının faturaya oranı (tuzak 9)
     return {
         "yontem": ("12 aylık net enerji ithalatının (milyar dolar) 12 aylık log değişimi, Pink Sheet enerji "
                    "endeksinin 12 aylık ortalamasının k ay önceki 12 aylık log değişimine regrese edildi (esneklik); "
-                   "standart hata Newey–West (gecikme 24), örneklem dışı kıyas koşulsuz ortalama."),
+                   "standart hata Newey–West (gecikme 24), örneklem dışı kıyas koşulsuz ortalama ve değişimin "
+                   "sıfır olması."),
         "kaynak": ["odemeler_aylik (hc_enerji_net, milyon USD)", "kuresel_aylik (emtia_enerji)",
                    "gsyh_ceyreklik ve usdtry_tcmb_gunluk (GSYH oranı için)"],
         "n": r0["n"], "ilk": r0["ilk"], "son": r0["son"],
         "esneklik_es_zamanli": r0["b"][0], "se": r0["se"][0], "t": r0["t"][0], "r2": r0["r2"],
-        "gecikme": r0["gecikme"], "oos": oos, "hukum": hukum(r0["t"][0], [oos.get("mse_oran")]),
+        "gecikme": r0["gecikme"], "oos": oos, "hukum": hukum(r0["t"][0], b08.oranlar(oos)),
         "gecikme_profili": profil,
         "en_iyi_uyum_gecikme_ay": int(profil["gecikme_ay"][j]), "en_iyi_uyum_esneklik": float(profil["esneklik"][j]),
         "en_iyi_uyum_r2": float(profil["r2"][j]),
@@ -407,8 +477,9 @@ def _fatura() -> dict:
                                        "not": "iki seri seviyede eğilimli; sahte ilişki riski, ana ölçü değil"},
         "son_deger": {"tarih": _iso(son), "fatura_12ay_mlr_usd": son_fatura,
                 "fatura_gsyh_yuzde": float(oran.iloc[-1]), "gsyh_oran_tarihi": _iso(oran.index.max()),
-                "on_yuzde_fiyat_artisi_mlr_usd": float(son_fatura * (math.exp(0.1 * r0["b"][0]) - 1)),
-                "on_yuzde_fiyat_artisi_gsyh_puan": float(oran.iloc[-1] * (math.exp(0.1 * r0["b"][0]) - 1))},
+                "on_yuzde_fiyat_artisi_mlr_usd": float(son_fatura * on_yuzde),
+                "on_yuzde_fiyat_artisi_gsyh_puan": float(oran.iloc[-1] * on_yuzde),
+                "on_yuzde_fiyat_artisi_fatura_yuzde": float(100 * on_yuzde)},
         "fatura_gsyh_araligi": {"en_dusuk_yuzde": float(oran.min()), "en_dusuk_tarih": _iso(oran.idxmin()),
                                 "en_yuksek_yuzde": float(oran.max()), "en_yuksek_tarih": _iso(oran.idxmax())},
         "donem_notu": ("Enerji faturasının fiyata esnekliği kur tepkisi değildir; yönetilen kur dönemi bu ölçüde "
@@ -417,12 +488,18 @@ def _fatura() -> dict:
 
 
 def p10b() -> dict:
-    return {"sok_2022": _sok_2022(),
+    tr = _tr_aylik()[["denerji", "dkur"]].dropna()
+    return {"yontem": ("2022 dolar şokunun euro, Kanada doları ve yen üzerindeki izi (vaka) ve Türkiye'de aylık "
+                       "enerji fiyatı değişiminin kura, 2 yıllık faize ve enerji faturasına yansıması."),
+            "n": int(len(tr)), "ilk": _iso(tr.index.min()), "son": _iso(tr.index.max()),
+            "kaynak": ["cnbc_kur_gunluk", "kuresel_aylik", "usdtry_yahoo_gunluk", "dibs_egri_gunluk",
+                       "yahoo_dxy_vix_gunluk", "abd_hazine_gunluk", "odemeler_aylik"],
+            "sok_2022": _sok_2022(),
             "turkiye": {
                 "yontem": ("Aylık: Pink Sheet enerji endeksinin (ay ortalaması) log değişimi ile USD/TRY'nin ay sonu "
                            "log değişimi ve 2 yıllık DİBS getirisinin ay sonu değişimi; Newey–West eğimi, dolar "
-                           "endeksi kontrollü ikinci tanım, örneklem dışı kıyas rastgele yürüyüş; yönetilen kur "
-                           "dönemi ayrı."),
+                           "endeksi kontrollü ikinci tanım, örneklem dışı kıyas rastgele yürüyüş ve koşulsuz "
+                           "ortalama; yönetilen kur dönemi ayrı."),
                 "kaynak": ["kuresel_aylik (emtia_enerji)", "usdtry_yahoo_gunluk", "dibs_egri_gunluk (n2y)",
                            "yahoo_dxy_vix_gunluk (DXY)", "fonlama_gunluk (yalnız iş günü takvimi)"],
                 "tepki": _tr_tepki(),

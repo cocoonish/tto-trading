@@ -69,7 +69,7 @@ yerel parayı alıp doları borçlanan pozisyonun getirisidir (artı = kazanç).
   8. YAHOO GÜNLÜK BARINDA CUMA DEĞERİ PAZARTESİ AÇILIŞIDIR (18.12.2023 öncesi
      TRY ve bütün EM kurları; Bölüm 1 tuzak 5): haftalık ölçüler perşembe
      kapanışıyla örneklenir. Ölçüldü (2010–2021-11): TRY'nin EM sepetine
-     eğimi cuma ile 0,71, perşembe ile 0,71, ama R² 0,17'ye karşı 0,24 —
+     eğimi cuma ile 0,72, perşembe ile 0,72, ama R² 0,18'e karşı 0,24 —
      cuma örneklemesi ortak hareketin dörtte birini hafta sonuna kaydırıyor.
      Aylık örnekte aynı kayma cuma biten aylarda bir günlüktür.
   9. "KAYIP VIX İLE GELİR" SEVİYEDE DEĞİL DEĞİŞİMDE GÖRÜNÜR: sepetin en kötü
@@ -93,6 +93,31 @@ yerel parayı alıp doları borçlanan pozisyonun getirisidir (artı = kazanç).
  14. EX-ANTE PRİMİN PENCERESİ VARSAYIMDIR: anketin yanıt günleri arşivde yok.
      Ayın ilk yarısının ortalaması ile bir önceki ay sonu arasında prim farkı
      medyanda 1,07 puan; sonuç tablosu iki tanımı da taşır.
+ 15. TRY'NİN EĞİLİMİ SIFIR KIYASINI BOZAR (Bölüm 10 tuzak 7'nin eşi): 2023-07
+     sonrası TRY'nin dolar sepetine eğimi 0,02 (t 0,4) iken örneklem dışı
+     oran sıfır değişim kıyasına göre 0,59 — model yalnız sabit terimiyle
+     (kontrollü değer kaybı) kazanıyor; koşulsuz ortalama kıyasında 1,03.
+     Hüküm iki kıyasın birlikte geçmesini ister.
+ 16. YAHOO EM SERİSİNDE YALITILMIŞ BOZUK KOTASYONLAR VAR (denetim turu,
+     02.10.2026; ECB referans kurlarıyla sınandı): ZAR 14.11.2024'te 14,86
+     (ECB 18,34; −%21), 14.01.2025'te −%14, 16.01.2025'te −%20; BRL 26.01.2012
+     +%6,4, 30.06.2017 (AY SONU) −%3,6, 08.05.2020 −%6; INR 26 ve 30.01.2012
+     +%4,4 ve +%5,3. Dördü perşembe, yani haftalık örnek günü: tek bir bozuk
+     ZAR günü EM sepetinin haftalık değişimini %5 oynatıp ertesi hafta geri
+     alıyordu. Ertesi gün geri dönen %3,5'ten büyük sıçramalar seriden çıkar
+     (`_em_kur_temiz`; çıkan 10 gün sonuçta adıyla). Eşiğin altında kalan bir
+     aile var: BRL'nin 2010–2011 cuma değerleri (pazartesi barının başı) ECB'nin
+     ≈%3 altında ve 29.10.2010 ile 31.12.2010 AY SONUDUR (−%3,6, −%2,7); haftalık
+     ölçü perşembe örneklediği için etkilenmez, aylık ölçüde ECB çapraz sınaması
+     onu gösterir.
+ 17. EM KURLARININ SON HAFTASI YARIMDIR: kaynak 19.08.2026 çarşamba biter,
+     21.08 etiketli hafta perşembe→çarşamba ölçerdi; düşer.
+ 18. AYNI ÖRNEKLEM: fonlama maliyeti 2011'de başlar; TRY bacağını fonlama
+     maliyetiyle kuran satırlar ana satırla yalnız aynı aylarda kıyaslanır
+     (farklı örneklemle sepet kıyasının yönü tersine dönüyordu).
+ 19. SELIC YILLIK EFEKTİF KOTELENİR, öbür politika faizleri basit: i/12 BRL'nin
+     aylık log taşımasını büyütür (yılda ≈0,5 puan). Ana satır görev formülüyle
+     kalır; düzeltilmiş hâli konvansiyon duyarlılığı satırındadır.
 """
 from __future__ import annotations
 
@@ -144,6 +169,7 @@ PRIM_DONEM = (("oncesi", "2013-01-01", "2021-11-01", "2013-01 … 2021-11"),
               ("yonetilen", "2021-12-01", "2023-06-01", "yönetilen kur 2021-12 … 2023-06 (ayrı dönem)"),
               ("sonrasi", "2023-07-01", "2026-08-01", "2023-07 … 2026-08"))
 ANKET_PENCERE_GUN = 15                            # anket yanıt penceresi varsayımı: ayın 1–15'i
+HUKUM_OOS_YOK = "bu satırda örneklem dışı sınama kurulmadı; hüküm kurulmaz"
 
 
 def _iso(t) -> str:
@@ -276,6 +302,10 @@ def _fama(d: pd.DataFrame, xcol: str = "x", ycol: str = "y", oos: bool = True, a
         o = _oos(d[ycol], d[xcol], max(36, len(d) // 3))
         out["oos"] = o
         out["hukum"] = _hukum_oos(out["t_beta0"], o)
+    else:
+        # sözleşme: örneklem dışı sınama yoksa hüküm kurulmaz, satır tarif edicidir
+        out["hukum"] = "tarif edici"
+        out["hukum_notu"] = HUKUM_OOS_YOK
     return out
 
 
@@ -311,7 +341,7 @@ def _fama_try() -> dict:
             satir[ad] = _fama(z)
             zz, ana = z, satir[ad]
         secimler[ad] = _duyarlilik(zz, ana)
-    satir["yonetilen"] = {**_fama(df[df["yonetilen"]], oos=False, asgari=12),
+    satir["yonetilen"] = {**_fama(df[df["yonetilen"]], oos=False, asgari=12), "hukum": "tarif edici",
                           "uyari": "ayrı dönem (19 ay); kur yönetildiği için eğim tasarım gereği bilgi taşımaz, havuzlu hükme girmez"}
     tum = df[~df["yonetilen"]]
     satir["tum_yonetilen_haric"] = _fama(tum)
@@ -360,7 +390,8 @@ def _dk(df: pd.DataFrame, gecikme: int) -> dict:
     k = d["para"].nunique()
     r2 = 1 - float(e @ e) / float(y @ y)
     return {"beta": b, "se": se, "t_beta0": b / se, "t_beta1": (b - 1) / se, "n": int(len(d)), "para_sayisi": int(k),
-            "ilk": _iso(d["t"].min()), "son": _iso(d["t"].max()), "gecikme": int(gecikme), "r2_ic": r2}
+            "ilk": _iso(d["t"].min()), "son": _iso(d["t"].max()), "gecikme": int(gecikme), "r2_ic": r2,
+            "hukum": "tarif edici", "hukum_notu": "havuzlu tahminde örneklem dışı sınama kurulmadı; hüküm kurulmaz"}
 
 
 G10_ALT = (("2000-2008", "2000-01-01", "2008-12-01"), ("2009-2026", "2009-01-01", "2026-08-01"))
@@ -403,7 +434,7 @@ def _fama_g10() -> dict:
             zp = z[z["para"] == p].set_index("t")
             r = _fama(zp, oos=False)
             if "beta" in r:
-                pb[p] = {"beta": r["beta"], "se": r["se"], "n": r["n"]}
+                pb[p] = {"beta": r["beta"], "se": r["se"], "n": r["n"], "hukum": r["hukum"]}
         alt[ad] = {"havuz": _dk_oto(z), "paralar": pb}
     return {"paralar": para, "havuz": havuzlu, "alt_donem": alt,
             "yontem": "Altı G10 parasında bir sonraki ayın dolar karşısındaki log değişimi, ay sonundaki politika faizi farkının on ikide birine regresyonla bağlandı; havuzlu tahminde her paraya ayrı sabit konur ve standart hata aylar arası ortak şoka dayanıklı biçimde (Driscoll–Kraay) hesaplanır.",
@@ -435,7 +466,7 @@ def p11a() -> dict:
         "formul": "Δs(t+1) = a + β·(i − i*)(t)/12 + u;  H0: β = 1 (UIP), t(β=1) = (β − 1)/se",
         "kaynak": ["gecelik_gunluk", "fonlama_gunluk", "kuresel_aylik", "usdtry_tcmb_gunluk", "usdtry_yahoo_gunluk",
                    "cnbc_kur_gunluk", "bulut/bis_politika"],
-        "saat": "TL faizi gün sonu (gecelik ortalama, fonlama maliyeti, TLREF); USD/TRY 2005 öncesi TCMB 15:30 gösterge, sonra Yahoo (2023-12-18'e kadar Londra gece yarısı, sonra İstanbul 18:00); ABD politika faizi ay sonu",
+        "saat": "TL faizi gün sonu (gecelik ortalama, fonlama maliyeti, TLREF); USD/TRY 2005 öncesi TCMB 15:30 gösterge, sonra Yahoo (2023-12-18'e kadar Londra gece yarısı, sonra İstanbul 18:00; o tarihten önce ayın son iş günü cumaysa değer hafta sonu açılışından sonraki fiyattır, TCMB kurlu sağlamlık satırı bu kaymanın etkisini gösterir); ABD politika faizi ay sonu",
     }
 
 
@@ -476,6 +507,33 @@ def sekil_18() -> dict:
 
 
 # ───────────────────────────────────────────────────────── p11b EM taşıma sepeti
+SICRAMA_ESIK = 0.035      # log; sıçrama ve ertesi gün geri dönüş, ikisi de bu eşiğin üstünde
+
+
+@lru_cache(maxsize=None)
+def _em_kur_temiz(kod: str) -> tuple[pd.Series, tuple]:
+    """Yahoo EM kuru, YALITILMIŞ BOZUK KOTASYONLARI çıkarılmış (tuzak 16).
+
+    Kural: bir günün log değişimi ve ertesi günün log değişimi ikisi de eşiği aşıyor,
+    işaretleri ters ve iki günlük net hareket küçüğünün yarısından az → o gün bozuk
+    sayılır ve seriden çıkar (haftalık ve aylık örnekleme önceki günü alır). Eşik
+    ECB referans kurlarına karşı ölçülerek kondu: %3,5'te işaretlenen her gün ECB'den
+    %3'ten fazla sapıyor (iki bozuk günün arasında kalan bir doğru gün dışında; onu
+    çıkarmak örneklemeyi değiştirmez), %3'te gerçek oynak günler de yakalanıyor."""
+    s = oo.em_kur(kod)
+    d = np.log(s).diff()
+    n = d.shift(-1)
+    m = ((d.abs() > SICRAMA_ESIK) & (n.abs() > SICRAMA_ESIK) & (np.sign(d) != np.sign(n))
+         & ((d + n).abs() < 0.5 * np.minimum(d.abs(), n.abs()))).fillna(False)
+    return s[~m], tuple(_iso(t) for t in s.index[m])
+
+
+def _em_veri_denetimi() -> dict:
+    return {"esik_log": SICRAMA_ESIK,
+            "cikan_gunler": {k: list(_em_kur_temiz(k)[1]) for k, *_ in EM},
+            "yontem": "Bir günün kur değişimi ile ertesi günün değişimi ikisi de %3,5'i aşıp ters işaretliyse ve iki gün birlikte neredeyse sıfıra dönüyorsa o günün kotasyonu bozuk sayılıp seriden çıkarıldı; eşik ECB referans kurlarına karşı sınandı."}
+
+
 def _tam_ay_sonu(s: pd.Series) -> pd.Timestamp:
     """Serinin ay sonu değeri olan son ayı (son gözlem ayın son iş gününden önceyse bir önceki ay)."""
     son = s.dropna().index.max()
@@ -497,7 +555,7 @@ def _em_cerceve(tr_faiz: str = "politika") -> tuple[pd.DataFrame, pd.DataFrame, 
     tamamlanan = {}
     s_d, i_d = {}, {}
     for kod, kol, iso, _ad in EM:
-        s = oo.em_kur(kod)
+        s = _em_kur_temiz(kod)[0]
         son_ay = _tam_ay_sonu(s)
         s_d[kod] = _aysonu(s).loc[:son_ay]
         i = ep[kol].copy()
@@ -514,8 +572,8 @@ def _em_cerceve(tr_faiz: str = "politika") -> tuple[pd.DataFrame, pd.DataFrame, 
     if tr_faiz == "fonlama":
         i_tr = _aysonu(f["aofm"])
     i_d["try"] = i_tr
-    son_ortak = min(_tam_ay_sonu(oo.em_kur(k)) for k, *_ in EM)
-    r_d, x_d, ds_d = {}, {}, {}
+    son_ortak = min(_tam_ay_sonu(_em_kur_temiz(k)[0]) for k, *_ in EM)
+    r_d, x_d, ds_d, i_ham = {}, {}, {}, {}
     for kod in list(s_d):
         s = np.log(s_d[kod]) * 100
         ds = s.diff()
@@ -523,8 +581,9 @@ def _em_cerceve(tr_faiz: str = "politika") -> tuple[pd.DataFrame, pd.DataFrame, 
         r = x.shift(1) - ds                       # r(t) = x(t−1) − Δs(t)
         r = r[(r.index > EM_BAS) & (r.index <= son_ortak)]
         r_d[kod], x_d[kod], ds_d[kod] = r, x.shift(1).reindex(r.index), ds.reindex(r.index)
+        i_ham[kod] = i_d[kod].reindex(ds.index).shift(1).reindex(r.index)
     R = pd.DataFrame(r_d)
-    B = pd.concat({"faiz": pd.DataFrame(x_d), "kur": -pd.DataFrame(ds_d)}, axis=1)
+    B = pd.concat({"faiz": pd.DataFrame(x_d), "kur": -pd.DataFrame(ds_d), "i_yerel": pd.DataFrame(i_ham)}, axis=1)
     kun = {"son_ay": _ay(son_ortak), "bis_ile_tamamlanan_aylar": tamamlanan,
            "tr_faiz": "TCMB fonlama maliyeti" if tr_faiz == "fonlama" else
            "BIS politika faizi (2018-08'e kadar) → TCMB politika faizi (2018-09'dan)"}
@@ -581,7 +640,9 @@ def _vix_kosullu(r: pd.Series) -> dict:
             "vix_artan_ay_payi": float((dvix.dropna() > 0).mean()),
             "yuksek_vix_ay_payi": float(d["yuksek"].mean()),
             "korelasyon_getiri_dvix": float(d["r"].corr(dvix)),
-            "esik_son": float(v["esik"].dropna().iloc[-1]), "esik_son_ay": _ay(v["esik"].dropna().index[-1])}
+            "esik_son": float(d["esik"].iloc[-1]), "esik_son_ay": _ay(d.index[-1]),
+            "hukum": hukum(reg["t"][0] if "t" in reg else None, []),
+            "hukum_notu": "koşullu ortalama farkı aynı ayın VIX'iyle kurulur; öngörü değildir, örneklem dışı sınama uygulanmaz"}
 
 
 def _ecb_capraz(R: pd.DataFrame) -> dict:
@@ -639,21 +700,45 @@ def p11b() -> dict:
     paralar["try"]["yonetilen_haric"] = {k: v for k, v in _getiri_ozeti(rt.drop(yon.index)).items()
                                          if k in ("n", "ort_yillik_yuzde", "oynaklik_yillik_yuzde", "carpiklik", "azami_dusus_yuzde")}
     # tuzak 7: TRY faizi TCMB fonlama maliyetiyle
+    # Fonlama maliyeti 03.01.2011'de başlar: bu satırların örneklemi 2011-02'dir ve
+    # politika faizli ana satırla (2010-02) ancak AYNI aylarda kıyaslanır — farklı
+    # örneklemle yan yana basılınca sepet kıyasının yönü tersine dönüyordu.
     Rf, _, kunf = _em_cerceve("fonlama")
-    sepet_f = Rf.mean(axis=1, skipna=False)
+    sepet_f = Rf.mean(axis=1, skipna=False).dropna()
+    rt_f = Rf["try"].dropna()
     tr_fark = (Rf["try"] - R["try"]).dropna()
+    alanlar = ("n", "ilk", "son", "ort_yillik_yuzde", "oynaklik_yillik_yuzde", "carpiklik", "azami_dusus_yuzde")
     tr_fonlama = {"tr_faiz": kunf["tr_faiz"],
-                  "try_ort_yillik_yuzde": float(Rf["try"].mean() * 12),
+                  "n": int(len(rt_f)), "ilk": _ay(rt_f.index.min()), "son": _ay(rt_f.index.max()),
+                  "try_ort_yillik_yuzde": float(rt_f.mean() * 12),
+                  "politika_ayni_orneklem_try_ort_yillik_yuzde": float(R["try"].reindex(rt_f.index).mean() * 12),
                   "politikaya_gore_ort_fark_yillik_puan": float(tr_fark.mean() * 12),
                   "farkin_buyuk_oldugu_aylar": [{"ay": _ay(t), "fark_aylik_puan": float(v)} for t, v in tr_fark.abs().nlargest(5).items()],
-                  "sepet": {k: v for k, v in _getiri_ozeti(sepet_f).items()
-                            if k in ("n", "ort_yillik_yuzde", "oynaklik_yillik_yuzde", "carpiklik", "azami_dusus_yuzde")}}
+                  "sepet": {k: v for k, v in _getiri_ozeti(sepet_f).items() if k in alanlar},
+                  "sepet_politika_ayni_orneklem": {k: v for k, v in _getiri_ozeti(sepet.reindex(sepet_f.index)).items() if k in alanlar},
+                  "not": "fonlama maliyeti 2011'de başladığı için bu satırlar ana satırdan kısa örneklemdedir; kıyas aynı aylarla yapılır"}
+    # Konvansiyon duyarlılığı: Brezilya politika faizi (Selic) 252 iş günü tabanında YILLIK
+    # EFEKTİF kote edilir, öbür politika faizleri basit; i/12 efektif bir oranın aylık log
+    # taşımasını büyütür. Ana satır görev formülüyle (i/12) kalır, düzeltilmiş hâli yanındadır.
+    ib = B[("i_yerel", "brl")]
+    brl_duz = R["brl"] - (ib - 100 * np.log1p(ib / 100)) / 12
+    Rk = R.copy()
+    Rk["brl"] = brl_duz
+    sepet_k = Rk.mean(axis=1, skipna=False)
+    konv = {"aciklama": "Brezilya politika faizi yıllık efektif kotelenir; bu satırda aylık taşıma ln(1 + i)/12 ile kuruldu, öbür paralar değişmedi",
+            "brl_ort_yillik_yuzde": float(brl_duz.mean() * 12),
+            "brl_ana_satira_gore_fark_yillik_puan": float((brl_duz - R["brl"]).mean() * 12),
+            "sepet": {k: v for k, v in _getiri_ozeti(sepet_k).items()
+                      if k in ("n", "ort_yillik_yuzde", "oynaklik_yillik_yuzde", "carpiklik", "azami_dusus_yuzde")},
+            "sepet_try_haric_ort_yillik_yuzde": float(Rk[[k for k, *_ in EM]].mean(axis=1, skipna=False).mean() * 12)}
     return {
         "sepet": {**_getiri_ozeti(sepet), "vix_kosullu": _vix_kosullu(sepet)},
         "sepet_try_haric": {**_getiri_ozeti(sepet_trh), "vix_kosullu": _vix_kosullu(sepet_trh)},
         "paralar": paralar,
+        "konvansiyon_duyarliligi": konv,
         "try_fonlama_maliyetiyle": tr_fonlama,
         "ecb_capraz": _ecb_capraz(R),
+        "em_veri_denetimi": _em_veri_denetimi(),
         "kunye": kun,
         "n": int(sepet.notna().sum()), "ilk": _ay(sepet.dropna().index.min()), "son": _ay(sepet.dropna().index.max()),
         "yontem": "Her para için aylık taşıma getirisi, bir önceki ay sonundaki politika faizi farkının on ikide biri eksi o ayki kur log değişimidir (yerel parayı alıp doları borçlanan pozisyon); sepet beş paranın eşit ağırlıklı ortalamasıdır. VIX koşulu, getiri ayının VIX ortalamasının o güne kadarki aylık ortalamaların 75. yüzdeliğini (bir önceki aya kadar) aşmasıdır.",
@@ -684,7 +769,7 @@ def _haftalik_kuresel(son_gun: int = b01.TR_ORNEK_SON_GUN, em: bool = True) -> p
     s, _ = oo.usdtry()
     df = a.join(np.log(s).rename("try"), how="inner")
     if em:
-        e = pd.DataFrame({k: np.log(oo.em_kur(k)) for k, *_ in EM})
+        e = pd.DataFrame({k: np.log(_em_kur_temiz(k)[0]) for k, *_ in EM})
         df = df.join(e, how="inner")
     df = df.dropna(subset=[c for c in df.columns if c not in ("dxy", "vix")])
     w = b01._haftalik(df, son_gun)
@@ -694,8 +779,28 @@ def _haftalik_kuresel(son_gun: int = b01.TR_ORNEK_SON_GUN, em: bool = True) -> p
                         "_gun": w["_gun"]})
     if em:
         out["dem"] = pd.concat({k: w[k].diff() * 100 for k, *_ in EM}, axis=1).mean(axis=1)
+        # EM kurları 19.08.2026'da (düzeltilmiş seride) biter: o haftanın perşembesi kaynağın
+        # son gününden sonradır, yani 21.08 etiketli satır perşembe→çarşamba YARIM haftayı
+        # ölçer. Kaynağın bittiği yarım hafta düşer; perşembesi tatil olan haftalar kalır.
+        son_em = min(_em_kur_temiz(k)[0].index.max() for k, *_ in EM)
+        out = out[out.index - pd.Timedelta(days=4 - son_gun) <= son_em]
     out = out.iloc[1:]
     out["yonetilen"] = (out.index >= YON_BAS) & (out.index <= YON_SON + pd.Timedelta(days=6))
+    return out
+
+
+def _tek(y: pd.Series, x: pd.Series) -> dict:
+    r = _reg(y, x)
+    if "b" not in r:
+        return r
+    out = {"b": r["b"][0], "t": r["t"][0], "r2": r["r2"], "n": r["n"]}
+    if r["n"] >= 100:
+        o = _oos(y, x, 52)
+        out["oos"] = o
+        out["hukum"] = _hukum_oos(r["t"][0], o)
+    else:
+        out["hukum"] = "tarif edici"                     # 100 haftadan kısa dönemde örneklem dışı sınama kurulmaz
+        out["hukum_notu"] = "100 haftadan kısa dönemde örneklem dışı sınama kurulmadı; hüküm kurulmaz"
     return out
 
 
@@ -703,11 +808,14 @@ def _beta_tablosu(d: pd.DataFrame, y: str) -> dict:
     cok = _reg(d[y], d[["ddolar", "dvix", "dus10_bp"]])
     if cok.get("durum"):
         return cok
-    tek = {k: _reg(d[y], d[k]) for k in ("ddolar", "dvix", "dus10_bp")}
+    tek = {k: _tek(d[y], d[k]) for k in ("ddolar", "dvix", "dus10_bp")}
     return {"n": cok["n"], "ilk": cok["ilk"], "son": cok["son"],
             "cok_degiskenli": {"b_dolar": cok["b"][0], "t_dolar": cok["t"][0], "b_vix": cok["b"][1], "t_vix": cok["t"][1],
-                               "b_us10_bp": cok["b"][2], "t_us10_bp": cok["t"][2], "r2": cok["r2"], "gecikme": cok["gecikme"]},
-            "tek_degiskenli": {k: {"b": v["b"][0], "t": v["t"][0], "r2": v["r2"]} for k, v in tek.items() if "b" in v}}
+                               "b_us10_bp": cok["b"][2], "t_us10_bp": cok["t"][2], "r2": cok["r2"], "gecikme": cok["gecikme"],
+                               "hukum": "tarif edici",
+                               "hukum_notu": "çok değişkenli eğimler örneklem dışı sınanmadı; sınama tek değişkenli satırlardadır"},
+            "tek_degiskenli": tek,
+            "hukum_notu": "eşzamanlı eğim bir maruziyet ölçüsüdür; örneklem dışı sınama aynı haftanın değişkeni bilinirken kurulur, öngörü değildir"}
 
 
 def _kayan_cok(d: pd.DataFrame, y: str, xs: list, pencere: int) -> pd.DataFrame:
@@ -745,15 +853,12 @@ def p11c() -> dict:
         z, zt = d.loc[a:b], dt.loc[a:b]
         r_try = _beta_tablosu(zt, "dtry")
         r_em = _beta_tablosu(z, "dem")
-        rs = _reg(z["dtry"], z["dem"])
-        don[ad] = {"etiket": et, "try": r_try, "em_sepet": r_em,
-                   "try_em_sepete": {"b": rs["b"][0], "t": rs["t"][0], "r2": rs["r2"], "n": rs["n"]} if "b" in rs else rs}
+        don[ad] = {"etiket": et, "try": r_try, "em_sepet": r_em, "try_em_sepete": _tek(z["dtry"], z["dem"])}
     tum = d[~d["yonetilen"]]
     tumt = dt[~dt["yonetilen"]]
-    rs = _reg(tum["dtry"], tum["dem"])
     don["tum_yonetilen_haric"] = {"etiket": "2010–2026, yönetilen kur hariç",
                                   "try": _beta_tablosu(tumt, "dtry"), "em_sepet": _beta_tablosu(tum, "dem"),
-                                  "try_em_sepete": {"b": rs["b"][0], "t": rs["t"][0], "r2": rs["r2"], "n": rs["n"]}}
+                                  "try_em_sepete": _tek(tum["dtry"], tum["dem"])}
     # cuma örneklemesi (tuzak 6)
     dc = _haftalik_kuresel(son_gun=4)
     cuma = {}
@@ -793,6 +898,7 @@ def p11c() -> dict:
     sonr = art.loc["2023-07-01":]
     return {
         "donemler": don, "cuma_ornekleme": cuma, "dxy_sinama": dxy, "kayan": kayan,
+        "em_veri_denetimi": _em_veri_denetimi(),
         "try_artik": {"n": int(len(art)), "ilk": _iso(art.index.min()), "son": _iso(art.index.max()),
                       "kumulatif_yuzde": float(art["artik_kum"].iloc[-1]),
                       "yillik_ort_yuzde": float(art["artik"].mean() * 52),
@@ -820,28 +926,42 @@ def _akim_cerceve() -> pd.DataFrame:
     return df
 
 
-def _akim_satir(z: pd.DataFrame, oos: bool) -> dict:
+def _komsu(tam: pd.DataFrame, z: pd.DataFrame, kol: str, k: int) -> pd.Series:
+    """z satırına tam çerçevede k hafta sonraki (k < 0: önceki) değer; komşu hafta z'nin
+    içinde değilse boş. Kaydırma alt kümeden SONRA alınırsa yönetilen dönemi atlayan
+    havuzda 26.11.2021 akımı 07.07.2023 haftasının fiyat değişimiyle eşleşiyordu."""
+    s = tam[kol].shift(-k)
+    komsu = pd.Series(tam.index, index=tam.index).shift(-k)
+    ic = komsu.isin(z.index)
+    return s.where(ic).reindex(z.index)
+
+
+def _akim_satir(z: pd.DataFrame, oos: bool, tam: pd.DataFrame) -> dict:
     out = {"n": int(len(z)), "ilk": _iso(z.index.min()), "son": _iso(z.index.max())}
+    yok = {"hukum": "tarif edici", "hukum_notu": "bu dönemde örneklem dışı sınama kurulmadı (80 haftadan kısa ya da ayrı dönem); hüküm kurulmaz"}
     for ak in ("dibs", "hisse", "toplam"):
         x = z[ak] / 1000.0                                 # milyar USD
         sat = {}
         for y, yad in (("dkur_yuzde", "kur"), ("d2_bp", "dibs_2y")):
             kor = {}
             for k in (-1, 0, 1):
-                j = pd.concat([z[ak], z[y].shift(-k)], axis=1).dropna()
+                j = pd.concat([z[ak], _komsu(tam, z, y, k)], axis=1).dropna()
                 kor[str(k)] = float(j.iloc[:, 0].corr(j.iloc[:, 1]))
+            y1 = _komsu(tam, z, y, 1)
             r0 = _reg(z[y], x)
-            r1 = _reg(z[y].shift(-1), x)
+            r1 = _reg(y1, x)
             s = {"korelasyon_gecikme": kor,
-                 "esanli": {"b_milyar_usd": r0["b"][0], "t": r0["t"][0], "r2": r0["r2"], "n": r0["n"]} if "b" in r0 else r0,
-                 "bir_hafta_sonra": {"b_milyar_usd": r1["b"][0], "t": r1["t"][0], "r2": r1["r2"], "n": r1["n"]} if "b" in r1 else r1}
+                 "esanli": {"b_milyar_usd": r0["b"][0], "t": r0["t"][0], "r2": r0["r2"], "n": r0["n"], **yok} if "b" in r0 else r0,
+                 "bir_hafta_sonra": {"b_milyar_usd": r1["b"][0], "t": r1["t"][0], "r2": r1["r2"], "n": r1["n"], **yok} if "b" in r1 else r1}
             if oos and "b" in r1 and r1["n"] >= 80:
-                o = _oos(z[y].shift(-1).dropna(), x, 52)
+                o = _oos(y1.dropna(), x, 52)
                 s["bir_hafta_sonra"]["oos"] = o
                 s["bir_hafta_sonra"]["hukum"] = _hukum_oos(r1["t"][0], o)
+                s["bir_hafta_sonra"].pop("hukum_notu", None)
                 oe = _oos(z[y], x, 52)
                 s["esanli"]["oos"] = oe
                 s["esanli"]["hukum"] = _hukum_oos(r0["t"][0], oe)
+                s["esanli"].pop("hukum_notu", None)
             sat[yad] = s
         out[ak] = sat
     return out
@@ -852,8 +972,9 @@ def p11d() -> dict:
     don = {}
     for ad, a, b, et in AKIM_DONEM:
         z = df.loc[a:b]
-        don[ad] = {"etiket": et, **_akim_satir(z, oos=(ad == "sonrasi"))}
-    don["tum_yonetilen_haric"] = {"etiket": "2020-09 … 2026-09, yönetilen kur hariç", **_akim_satir(df[~df["yonetilen"]], oos=True)}
+        don[ad] = {"etiket": et, **_akim_satir(z, oos=(ad == "sonrasi"), tam=df)}
+    don["tum_yonetilen_haric"] = {"etiket": "2020-09 … 2026-09, yönetilen kur hariç",
+                                  **_akim_satir(df[~df["yonetilen"]], oos=True, tam=df)}
     kum = df[["dibs", "hisse", "toplam"]].sum() / 1000.0
     return {
         "donemler": don,
@@ -881,7 +1002,7 @@ def sekil_20() -> dict:
             "akim_toplam_kumulatif_milyar_usd": (df["toplam"].cumsum() / 1000).tolist(),
             "yonetilen": [int(v) for v in df["yonetilen"]],
             "artik_son": _iso(ar.index.max()),
-            "yontem": "TRY artığı Pratik 11C'deki haftalık artığın 2020-09'dan toplamıdır (EM kurları 20.08.2026'da bittiği için orada durur); akımlar aynı tarihten kümülatif net alımdır."}
+            "yontem": "TRY artığı Pratik 11C'deki haftalık artığın 2020-09'dan toplamıdır (EM kurları 20.08.2026'da bittiği için son tam EM haftasında durur); akımlar aynı tarihten kümülatif net alımdır."}
 
 
 # ───────────────────────────────────────────────────────── p11e ex-ante UIP primi
@@ -981,15 +1102,30 @@ def arac_kur() -> dict:
     i = float(tl.iloc[-1])
     i_b = ((1 + i / 36500) ** 365 - 1) * 100
     n1y = oo.oku("dibs_egri_gunluk")["n1y"].dropna()
+    # DİBS gösterge etiketi gün sonu piyasasının iki iş günü önündedir (Bölüm 1 tuzak 6):
+    # son etiketli değerin piyasa günü Türkiye takviminde iki iş günü geridedir.
+    tk = b01._tr_takvim()
+    j_dibs = int(tk.searchsorted(n1y.index[-1]))
+    dibs_piyasa = tk[j_dibs - b01.DIBS_ETIKET_ONCU] if j_dibs >= b01.DIBS_ETIKET_ONCU else None
     basabas_b = ((1 + i_b / 100) / (1 + i_star_b / 100) - 1) * 100
-    out = {"i_tlref_yuzde": i, "i_tlref_gun": _iso(tl.index[-1]), "i_tlref_yillik_bilesik_yuzde": i_b,
+    out = {
+           # Araç 4'ün okuduğu üç alan (arac_veri.kur): aracın formülü c = (1 + i)/(1 + i*) − 1
+           # YILLIK BİLEŞİK oran ister; 30.09.2026 değerleriyle basit TLREF girilince başabaş
+           # %31,0 çıkıyordu, doğrusu (gecelik faiz bir yıl sabitken) %38,3. İki faiz yıllık
+           # bileşik verilir. Tarih iki bacağın eskisidir (aylık yedekte TLREF günü).
+           "tarih": _iso(min(tl.index[-1], i_star_gun) if i_star_ad.startswith("ABD Hazinesi") else tl.index[-1]),
+           "i_tl_yuzde": i_b, "i_usd_yuzde": i_star_b,
+           "i_konvansiyon": "yıllık bileşik: TLREF günlük bileşikle yıllığa çevrildi, ABD 1 yıllık par getirisi altı aylık kupondan yıllık bileşiğe",
+           "i_tlref_yuzde": i, "i_tlref_gun": _iso(tl.index[-1]), "i_tlref_yillik_bilesik_yuzde": i_b,
            "i_yildiz_yuzde": i_star, "i_yildiz_ad": i_star_ad, "i_yildiz_gun": _iso(i_star_gun),
            "i_yildiz_yillik_bilesik_yuzde": i_star_b,
            "basabas_basit_puan": i - i_star,
            "basabas_bilesik_yuzde": basabas_b,
            "kur": float(s.iloc[-1]), "kur_gun": _iso(s.index[-1]),
            "basabas_kur_12a": float(s.iloc[-1]) * (1 + basabas_b / 100),
-           "dibs_1y_yuzde": float(n1y.iloc[-1]), "dibs_1y_gun": _iso(n1y.index[-1]),
+           "dibs_1y_yuzde": float(n1y.iloc[-1]),
+           "dibs_1y_gun": _iso(dibs_piyasa) if dibs_piyasa is not None else None,
+           "dibs_1y_etiket_gunu": _iso(n1y.index[-1]),
            "basabas_dibs1y_yuzde": ((1 + float(n1y.iloc[-1]) / 100) / (1 + i_star_b / 100) - 1) * 100,
            "yontem": "Taşıma başabaşı, bir yıllık tutuşta USD/TRY'nin taşıma getirisini sıfırlayan değer kaybıdır: basit hâli iki faizin farkı, bileşik hâli TLREF'in günlük bileşikle yıllığa çevrilmiş getirisinin ABD 1 yıllık getirisine oranıdır (gecelik faizin bir yıl sabit kaldığı varsayımıyla); piyasanın bir yıllık faizini kullanan hâli DİBS 1 yıllık getirisiyle kurulur. Aynı sayı, kurun risk primi bloğunda taşımayı sıfırlayan prim artışıdır.",
            "kaynak": ["fonlama_gunluk", "usdtry_yahoo_gunluk", "bulut/abd_hazine_1y", "dibs_egri_gunluk"]}
@@ -999,6 +1135,7 @@ def arac_kur() -> dict:
         out["pka_ay"] = _ay(pka.index[-1])
     except (bulut.VeriYok, KeyError):
         out["pka_12a_son"] = None
+        out["pka_notu"] = "anketin 12 ay sonrası kur beklentisi arşivde yok"
     return out
 
 
