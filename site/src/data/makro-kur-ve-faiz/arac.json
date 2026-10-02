@@ -1,0 +1,44 @@
+{
+ "gecici": true,
+ "taylor": {
+  "tarih_metin": "30.09.2026",
+  "pi_anket": 23.69,
+  "pi_gerceklesen": 31.51,
+  "pi_hedef": 5,
+  "r_yildiz": 2,
+  "phi_pi": 1.5,
+  "phi_y": 0.5,
+  "acik_orta": 0,
+  "acik_alt": -1,
+  "acik_ust": 1,
+  "acik_alt_metin": "−%1,0",
+  "acik_ust_metin": "%1,0",
+  "politika": 37.0,
+  "i_yabanci": 3.62,
+  "pi_yabanci": 3.52
+ },
+ "borc": {
+  "tarih_metin": "2026Ç2",
+  "d": 20.4,
+  "alfa": 39.6,
+  "i": 25,
+  "g": 35,
+  "pb": 0.88
+ },
+ "redk": {
+  "tarih_metin": "08.2026",
+  "redk": 105.04,
+  "denge_tam": 125.02,
+  "denge_2003": 126.91,
+  "rho_mu": 0.9971,
+  "rho_alt": 0.9785,
+  "rho_ols": 0.9862
+ },
+ "kur": {
+  "tarih_metin": "30.09.2026",
+  "i_tl": 36.92,
+  "i_usd": 4.54,
+  "R": 10.66,
+  "redk_sapma": -17.4
+ }
+}

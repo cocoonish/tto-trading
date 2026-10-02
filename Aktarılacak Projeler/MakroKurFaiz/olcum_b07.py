@@ -128,7 +128,7 @@ def p7a() -> dict:
     sonuc = {"yontem": ("Ortalaması çıkarılmış log reel efektif kurun birinci derece özbağlanım katsayısı; "
                         "küçük örneklem yanlılığına karşı benzetimle medyan-yansız kestirim ve %90 aralığı, "
                         "birim kök için Dickey–Fuller sınaması."),
-              "kaynak": ["redk_aylik (TCMB, 2003=100; artış TL'nin reel değer kazancı)"]}
+              "kaynak": ["redk_aylik (TCMB, 2025=100; artış TL'nin reel değer kazancı)"]}
     for sut, ad in (("redk_tufe", "tufe"), ("redk_ufe", "ufe")):
         tam = yari_omur_olc(r[sut], tohum=20261002 + (0 if ad == "tufe" else 1))
         alt = {}

@@ -88,7 +88,7 @@ def s12_redk(o: dict) -> None:
     a = b["p7a"]["tufe"]
     fig = make_subplots(rows=1, cols=2, column_widths=[0.64, 0.36], horizontal_spacing=0.10,
                         subplot_titles=("TÜFE bazlı REDK ve dönüş yelpazesi", "Yarı ömür (yıl): kestirim ve %90 aralığı"))
-    fig.add_trace(go.Scatter(x=s["tarih"], y=s["redk_tufe"], mode="lines", name="REDK (TÜFE bazlı, 2003=100)",
+    fig.add_trace(go.Scatter(x=s["tarih"], y=s["redk_tufe"], mode="lines", name="REDK (TÜFE bazlı, 2025=100)",
                              line=dict(color=MAVI, width=2), hovertemplate="%{x|%m.%Y}: %{y:.1f}<extra></extra>"), 1, 1)
     fig.add_trace(go.Scatter(x=[s["tarih"][0], s["fan_tarih"][-1]], y=[s["ortalama_endeks"]] * 2, mode="lines",
                              name=f"1994–2026 ortalaması ({vir(s['ortalama_endeks'], 1)})",
