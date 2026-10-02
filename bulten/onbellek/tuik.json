@@ -1,32 +1,6 @@
 {
- "zaman": "2026-10-01T04:47:07",
+ "zaman": "2026-10-02T04:17:55",
  "veri": [
-  {
-   "tarih": "2026-10-01",
-   "saat": "14:30",
-   "ulke": "TR",
-   "olay": "TCMB: Menkul kıymet ist. (39. Hafta 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": " Menkul Kıymet İstatistikleri"
-  },
-  {
-   "tarih": "2026-10-01",
-   "saat": "14:30",
-   "ulke": "TR",
-   "olay": "TCMB: Haftalık para-banka (39. Hafta 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "Haftalık Para ve Banka İstatistikleri "
-  },
   {
    "tarih": "2026-10-05",
    "saat": "10:00",
@@ -38,7 +12,8 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": "Tüketici Fiyat Endeksi (TÜFE)"
+   "not_": "",
+   "resmi_ad": "Tüketici Fiyat Endeksi (TÜFE)"
   },
   {
    "tarih": "2026-10-05",
@@ -51,20 +26,8 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": "Yurt İçi Üretici Fiyat Endeksi"
-  },
-  {
-   "tarih": "2026-10-08",
-   "saat": "10:00",
-   "ulke": "TR",
-   "olay": "TB: Dış ticaret (4. Çeyrek 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "Dış Ticaret Beklenti Anketi"
+   "not_": "",
+   "resmi_ad": "Yurt İçi Üretici Fiyat Endeksi"
   },
   {
    "tarih": "2026-10-08",
@@ -77,7 +40,8 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": " Menkul Kıymet İstatistikleri"
+   "not_": "",
+   "resmi_ad": " Menkul Kıymet İstatistikleri"
   },
   {
    "tarih": "2026-10-08",
@@ -90,7 +54,8 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": "Haftalık Para ve Banka İstatistikleri "
+   "not_": "",
+   "resmi_ad": "Haftalık Para ve Banka İstatistikleri "
   },
   {
    "tarih": "2026-10-08",
@@ -103,7 +68,8 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": "Uluslararası Rezervler ve Döviz Likiditesi"
+   "not_": "",
+   "resmi_ad": "Uluslararası Rezervler ve Döviz Likiditesi"
   },
   {
    "tarih": "2026-10-09",
@@ -116,20 +82,8 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": "Sanayi Üretim Endeksi"
-  },
-  {
-   "tarih": "2026-10-13",
-   "saat": "10:00",
-   "ulke": "TR",
-   "olay": "TÜİK: Dış ticaret (Ağustos 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "Dış Ticaret Endeksleri"
+   "not_": "",
+   "resmi_ad": "Sanayi Üretim Endeksi"
   },
   {
    "tarih": "2026-10-13",
@@ -142,20 +96,8 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": "Ödemeler Dengesi İstatistikleri   "
-  },
-  {
-   "tarih": "2026-10-14",
-   "saat": "17:30",
-   "ulke": "TR",
-   "olay": "HMB: Menkul kıymet ist. (Eylül 2026)",
-   "onem": 2,
-   "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
-   "kesinlik": "kesin",
-   "beklenti": "",
-   "beklenti_sayi": null,
-   "onceki": "",
-   "not_": "Kamu Haznedarlığı İstatistikleri (Kamu Haznedarlığı Yönetmeliği Kapsamındaki Kurumların Mevduat ve Menkul Kıymet İstatistikleri)"
+   "not_": "",
+   "resmi_ad": "Ödemeler Dengesi İstatistikleri   "
   },
   {
    "tarih": "2026-10-15",
@@ -168,7 +110,8 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": "Merkezi Yönetim Bütçe Denge Tablosu"
+   "not_": "",
+   "resmi_ad": "Merkezi Yönetim Bütçe Denge Tablosu"
   },
   {
    "tarih": "2026-10-15",
@@ -181,7 +124,8 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": " Menkul Kıymet İstatistikleri"
+   "not_": "",
+   "resmi_ad": " Menkul Kıymet İstatistikleri"
   },
   {
    "tarih": "2026-10-15",
@@ -194,33 +138,36 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": "Haftalık Para ve Banka İstatistikleri "
+   "not_": "",
+   "resmi_ad": "Haftalık Para ve Banka İstatistikleri "
   },
   {
    "tarih": "2026-10-20",
    "saat": "17:30",
    "ulke": "TR",
-   "olay": "HMB: Bütçe dengesi (Eylül 2026)",
-   "onem": 1,
+   "olay": "HMB: Konsolide kamu dengesi (Eylül 2026)",
+   "onem": 2,
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": "Konsolide Kamu Sektörü Gerçekleşmeleri (Merkezi Yönetim Bütçesi Program Tanımlı Faiz Dışı Dengesi)"
+   "not_": "",
+   "resmi_ad": "Konsolide Kamu Sektörü Gerçekleşmeleri (Merkezi Yönetim Bütçesi Program Tanımlı Faiz Dışı Dengesi)"
   },
   {
    "tarih": "2026-10-20",
    "saat": "17:30",
    "ulke": "TR",
-   "olay": "HMB: Bütçe dengesi (Eylül 2026)",
-   "onem": 1,
+   "olay": "HMB: Bütçe finansmanı (Eylül 2026)",
+   "onem": 2,
    "kaynak": "TÜİK Ulusal Veri Yayımlama Takvimi",
    "kesinlik": "kesin",
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": "Bütçe Finansmanı İstatistikleri (Genel Bütçe Dengesi ve Finansmanı, Merkezi Yönetim Bütçe Dengesi ve Finansmanı)"
+   "not_": "",
+   "resmi_ad": "Bütçe Finansmanı İstatistikleri (Genel Bütçe Dengesi ve Finansmanı, Merkezi Yönetim Bütçe Dengesi ve Finansmanı)"
   },
   {
    "tarih": "2026-10-20",
@@ -233,7 +180,8 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": "Merkezi Yönetim Borç Stoku İstatistikleri (Merkezi Yönetim Borç Stoku Enstrüman Dağılımı, Döviz-Faiz Yapısı, Vadeye Kalan Ortalama Süre)"
+   "not_": "",
+   "resmi_ad": "Merkezi Yönetim Borç Stoku İstatistikleri (Merkezi Yönetim Borç Stoku Enstrüman Dağılımı, Döviz-Faiz Yapısı, Vadeye Kalan Ortalama Süre)"
   },
   {
    "tarih": "2026-10-21",
@@ -246,7 +194,8 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": "İmalat Sanayi Kapasite Kullanım Oranı"
+   "not_": "",
+   "resmi_ad": "İmalat Sanayi Kapasite Kullanım Oranı"
   },
   {
    "tarih": "2026-10-21",
@@ -259,7 +208,8 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": "İktisadi Yönelim İstatistikleri ve Reel Kesim Güven Endeksi"
+   "not_": "",
+   "resmi_ad": "İktisadi Yönelim İstatistikleri ve Reel Kesim Güven Endeksi"
   },
   {
    "tarih": "2026-10-22",
@@ -272,7 +222,8 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": "Tüketici Güven Endeksi"
+   "not_": "",
+   "resmi_ad": "Tüketici Güven Endeksi"
   },
   {
    "tarih": "2026-10-22",
@@ -285,7 +236,8 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": " Menkul Kıymet İstatistikleri"
+   "not_": "",
+   "resmi_ad": " Menkul Kıymet İstatistikleri"
   },
   {
    "tarih": "2026-10-22",
@@ -298,7 +250,8 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "onceki": "",
-   "not_": "Haftalık Para ve Banka İstatistikleri "
+   "not_": "",
+   "resmi_ad": "Haftalık Para ve Banka İstatistikleri "
   }
  ]
 }
