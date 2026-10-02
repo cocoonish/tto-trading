@@ -1119,6 +1119,1779 @@
      "hane": 2
     }
    ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| JPY | 10 yıllık fark | 3 | 0,54 | 0,068 | %/bp | 11,77 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_10y.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_10y.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_10y.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| CHF | 2 yıllık fark | 2 | 0,25 | 0,029 | %/bp | 5,32 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.chf_ch_us_2y.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.chf_ch_us_2y.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.chf_ch_us_2y.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| EUR | 2 yıllık fark | 1 | 0,36 | 0,044 | %/bp | 6,72 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.eur_de_us_2y.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.eur_de_us_2y.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.eur_de_us_2y.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| GBP | 2 yıllık fark | 1 | 0,23 | 0,028 | %/bp | 3,16 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.gbp_gb_us_2y.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.gbp_gb_us_2y.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.gbp_gb_us_2y.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| AUD | yuan | 5 | 0,54 | 1,229 | %/% | 8,73 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.aud_cnh.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.aud_cnh.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.aud_cnh.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| NZD | S&P 500 | 3 | 0,40 | 0,256 | %/% | 9,13 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.nzd_spx.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.nzd_spx.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.nzd_spx.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| CAD | WTI | 2 | 0,39 | 0,068 | %/% | 7,32 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.cad_wti.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.cad_wti.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.cad_wti.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| NOK | Brent | 1 | 0,42 | 0,129 | %/% | 8,14 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| COP | Brent | 1 | 0,40 | 0,150 | %/% | 7,15 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.cop_brent.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.cop_brent.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.cop_brent.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| MXN | S&P 500 | 3 | 0,46 | 0,344 | %/% | 7,71 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.mxn_spx.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.mxn_spx.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.mxn_spx.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| CLP | bakır | 1 | 0,48 | 0,260 | %/% | 7,12 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.clp_bakir.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.clp_bakir.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.clp_bakir.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| BRL | soya | 3 | 0,30 | 0,230 | %/% | 6,52 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.brl_soya.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.brl_soya.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.brl_soya.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| ZAR | S&P 500 | 4 | 0,41 | 0,385 | %/% | 10,49 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.zar_spx.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.zar_spx.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.zar_spx.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| KRW | S&P 500 | 2 | 0,37 | 0,190 | %/% | 7,74 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.krw_spx.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.krw_spx.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.krw_spx.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| TRY | dolar sepeti | 3 | −0,24 | −0,490 | %/% | −5,94 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.try_dolar_sepeti.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.try_dolar_sepeti.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.try_dolar_sepeti.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Altın | ABD 10 yıllık reel faiz | 1 | −0,46 | −0,097 | %/bp | −10,50 |",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.altin_abd_reel_10y.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.altin_abd_reel_10y.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.altin_abd_reel_10y.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "farkının 1 bp artışı paraya $2 \\times 10^{-4}$ log, yani %0,02 değer kazancı verir; 10 yıllıkta %0,10",
+   "degerler": [
+    {
+     "ifade": "2 * 1e-4 * 100",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "ifade": "10 * 1e-4 * 100",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "(paranın %'si / farkın 1 bp'si)",
+   "neden": "eğimin birimi: paranın yüzde değişimi bölü farkın 1 baz puanlık değişimi (tanım)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "39 çiftin tanımı şeklin altında",
+   "degerler": [
+    {
+     "yol": "b10.p10c.n_cift",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "Eğim birimi paranın %'si bölü sürücünün 1 bp'si ya da %'sidir",
+   "neden": "eğimin birimi: paranın yüzde değişimi bölü sürücünün 1 baz puanlık ya da yüzde 1'lik değişimi (tanım)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "AUD'da bakır ve S&P 500 yuanla aynı düzeyde (0,53 · 0,52), faiz farkı geride (0,23)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.aud_bakir.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.aud_spx.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.aud_au_us_2y.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$(1-\\rho^2)/\\sqrt{n} \\approx 0{,}03$ ve bundan küçük fark sıralama kurmaz",
+   "degerler": [
+    {
+     "ifade": "(1 - v('b10.p10c.ciftler.zar_spx.siralama_2015_2026.kor')**2) / math.sqrt(v('b10.p10c.ciftler.zar_spx.siralama_2015_2026.n'))",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Faiz farkı yalnız yen ve frankta açık farkla önde (VIX 0,15 · 0,06)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.jpy_vix.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.chf_vix.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "CAD'de 10 yıllık fark WTI'ye eşit (0,39)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.cad_ca_us_10y.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.cad_wti.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "NZD'de S&P 500 önde (faiz farkı 0,13)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.nzd_nz_us_10y.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "MXN'de risk açık farkla önde (WTI 0,32)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.mxn_wti.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ZAR'da S&P 500 ile platin eşit (0,41)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.zar_spx.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.zar_platin.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "BRL'de soya S&P 500'e yakın (0,26)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.brl_spx.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "±0,6'da doyar",
+   "neden": "haritanın renk ölçeğinin ucu: |korelasyon| ≥ 0,6 tam renk (çizim sabiti, haritadaki en yüksek değer bunun altında)"
+  },
+  {
+   "tur": "hesap",
+   "parca": "AUD–yuanda R² 0,29",
+   "degerler": [
+    {
+     "ifade": "v('b10.p10c.ciftler.aud_cnh.siralama_2015_2026.kor') ** 2",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "CNBC'nin ABD getirisiyle kurulunca korelasyon en çok 0,01 değişir",
+   "degerler": [
+    {
+     "ifade": "max(abs(v('b10.p10c.ciftler.aud_au_us_2y.bacaklar_haftalik.abd_bacagi_cnbc_kor') - v('b10.p10c.ciftler.aud_au_us_2y.bacaklar_haftalik.abd_bacagi_hazine_kor_ayni_gunler')), abs(v('b10.p10c.ciftler.cad_ca_us_10y.bacaklar_haftalik.abd_bacagi_cnbc_kor') - v('b10.p10c.ciftler.cad_ca_us_10y.bacaklar_haftalik.abd_bacagi_hazine_kor_ayni_gunler')), abs(v('b10.p10c.ciftler.cad_ca_us_2y.bacaklar_haftalik.abd_bacagi_cnbc_kor') - v('b10.p10c.ciftler.cad_ca_us_2y.bacaklar_haftalik.abd_bacagi_hazine_kor_ayni_gunler')), abs(v('b10.p10c.ciftler.chf_ch_us_2y.bacaklar_haftalik.abd_bacagi_cnbc_kor') - v('b10.p10c.ciftler.chf_ch_us_2y.bacaklar_haftalik.abd_bacagi_hazine_kor_ayni_gunler')), abs(v('b10.p10c.ciftler.eur_de_us_2y.bacaklar_haftalik.abd_bacagi_cnbc_kor') - v('b10.p10c.ciftler.eur_de_us_2y.bacaklar_haftalik.abd_bacagi_hazine_kor_ayni_gunler')), abs(v('b10.p10c.ciftler.gbp_gb_us_2y.bacaklar_haftalik.abd_bacagi_cnbc_kor') - v('b10.p10c.ciftler.gbp_gb_us_2y.bacaklar_haftalik.abd_bacagi_hazine_kor_ayni_gunler')), abs(v('b10.p10c.ciftler.jpy_jp_us_10y.bacaklar_haftalik.abd_bacagi_cnbc_kor') - v('b10.p10c.ciftler.jpy_jp_us_10y.bacaklar_haftalik.abd_bacagi_hazine_kor_ayni_gunler')), abs(v('b10.p10c.ciftler.jpy_jp_us_2y.bacaklar_haftalik.abd_bacagi_cnbc_kor') - v('b10.p10c.ciftler.jpy_jp_us_2y.bacaklar_haftalik.abd_bacagi_hazine_kor_ayni_gunler')), abs(v('b10.p10c.ciftler.nzd_nz_us_10y.bacaklar_haftalik.abd_bacagi_cnbc_kor') - v('b10.p10c.ciftler.nzd_nz_us_10y.bacaklar_haftalik.abd_bacagi_hazine_kor_ayni_gunler')))",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "yen ile Japonya 2 yıllık farkı haftaların %9,6'sında, 10 yıllık farkı %5,4'ünde ayrı günden okunurdu",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.ayri_gun_payi_yuzde",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_10y.ayri_gun_payi_yuzde",
+     "bicim": "yz",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "son hafta 24.09.2026",
+   "degerler": [
+    {
+     "yol": "b10.p10c.son",
+     "bicim": "tarih",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "en az %75'i",
+   "neden": "kıyaslanabilir kapsam eşiği: sürücünün hafta sayısı paranın en geniş kapsamlı sürücüsününkinin en az %75'i (yöntem sabiti)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "Kanada 2 yıllığı 04.2020'de başladığı",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.cad_ca_us_2y.ilk",
+     "bicim": "ay",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "11.2016–09.2020 boş olan demir cevheri",
+   "degerler": [
+    {
+     "yol": "b10.p10c.veri_denetimi.seriler.e_demir_cevheri.en_uzun_bosluklar.0.ilk",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.veri_denetimi.seriler.e_demir_cevheri.en_uzun_bosluklar.0.son",
+     "bicim": "ay",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "34 hücresinin 31'i istikrarlı, 1'i dönemsel, 2'si zayıf; ölçülen 39 çiftin 5'i hücreye girmez",
+   "degerler": [
+    {
+     "yol": "b10.sekil_surucu_harita.n",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "ifade": "sum(1 for r in v('b10.sekil_surucu_harita.hucre') for x in r if x and x['etiket'] == 'istikrarlı')",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "ifade": "sum(1 for r in v('b10.sekil_surucu_harita.hucre') for x in r if x and x['etiket'] == 'dönemsel')",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "ifade": "sum(1 for r in v('b10.sekil_surucu_harita.hucre') for x in r if x and x['etiket'] == 'zayıf')",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b10.p10c.n_cift",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "ifade": "v('b10.p10c.n_cift') - sum(1 for r in v('b10.sekil_surucu_harita.hucre') for x in r if x)",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "pencerelerin en az %95'i beklenen işarette (AUD–bakır, CLP–bakır, altın–reel faiz %100)",
+   "degerler": [
+    {
+     "ifade": "min(v('b10.sekil_surucu_kayan.ozet.jpy_jp_us_2y.beklenen_isarette_pay_yuzde'), v('b10.sekil_surucu_kayan.ozet.eur_de_us_2y.beklenen_isarette_pay_yuzde'), v('b10.sekil_surucu_kayan.ozet.nok_brent.beklenen_isarette_pay_yuzde'), v('b10.sekil_surucu_kayan.ozet.cad_wti.beklenen_isarette_pay_yuzde'), v('b10.sekil_surucu_kayan.ozet.aud_bakir.beklenen_isarette_pay_yuzde'), v('b10.sekil_surucu_kayan.ozet.clp_bakir.beklenen_isarette_pay_yuzde'), v('b10.sekil_surucu_kayan.ozet.zar_altin.beklenen_isarette_pay_yuzde'), v('b10.sekil_surucu_kayan.ozet.altin_abd_reel_10y.beklenen_isarette_pay_yuzde'))",
+     "bicim": "yz",
+     "hane": 0
+    },
+    {
+     "ifade": "min(v('b10.sekil_surucu_kayan.ozet.aud_bakir.beklenen_isarette_pay_yuzde'), v('b10.sekil_surucu_kayan.ozet.clp_bakir.beklenen_isarette_pay_yuzde'), v('b10.sekil_surucu_kayan.ozet.altin_abd_reel_10y.beklenen_isarette_pay_yuzde'))",
+     "bicim": "yz",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "CAD–WTI 2010–2014'te +0,59, 2023–2026'da +0,14 (t 1,996)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.cad_wti.donemler.2010_2014.kor",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b10.p10c.ciftler.cad_wti.donemler.2023_2026.kor",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b10.p10c.ciftler.cad_wti.donemler.2023_2026.t",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "CAD–WTI'nin 41 ters penceresinin hepsi 04.2025–04.2026 arasında (en düşük −0,14, 08.2025)",
+   "degerler": [
+    {
+     "ifade": "len([x for x in v('b10.sekil_surucu_kayan.seriler.cad_wti') if x is not None and x < 0])",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "ifade": "v('b10.sekil_surucu_kayan.tarih')[v('b10.sekil_surucu_kayan.seriler.cad_wti').index([x for x in v('b10.sekil_surucu_kayan.seriler.cad_wti') if x is not None and x < 0][0])]",
+     "bicim": "ay",
+     "hane": 0
+    },
+    {
+     "ifade": "v('b10.sekil_surucu_kayan.tarih')[v('b10.sekil_surucu_kayan.seriler.cad_wti').index([x for x in v('b10.sekil_surucu_kayan.seriler.cad_wti') if x is not None and x < 0][-1])]",
+     "bicim": "ay",
+     "hane": 0
+    },
+    {
+     "ifade": "min(x for x in v('b10.sekil_surucu_kayan.seriler.cad_wti') if x is not None)",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b10.sekil_surucu_kayan.tarih')[v('b10.sekil_surucu_kayan.seriler.cad_wti').index(min(x for x in v('b10.sekil_surucu_kayan.seriler.cad_wti') if x is not None))]",
+     "bicim": "ay",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "o dönemde CAD'de faiz farkı öne geçti (10 ve 2 yıllık ikisi de 0,52)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.siralama.cad.donemler.2023_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.cad_ca_us_10y.donemler.2023_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.cad_ca_us_2y.donemler.2023_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Son 52 haftada petrol 0,04–0,24 (NOK–Brent 0,23, CAD–WTI 0,24, COP–Brent 0,04; MXN–WTI −0,17)",
+   "degerler": [
+    {
+     "ifade": "min(v('b10.p10c.ciftler.nok_brent.son_52_hafta.kor'), v('b10.p10c.ciftler.cad_wti.son_52_hafta.kor'), v('b10.p10c.ciftler.cop_brent.son_52_hafta.kor'))",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "max(v('b10.p10c.ciftler.nok_brent.son_52_hafta.kor'), v('b10.p10c.ciftler.cad_wti.son_52_hafta.kor'), v('b10.p10c.ciftler.cop_brent.son_52_hafta.kor'))",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.son_52_hafta.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.cad_wti.son_52_hafta.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.cop_brent.son_52_hafta.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.mxn_wti.son_52_hafta.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(AUD–bakır 0,51, CLP–bakır 0,42)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.aud_bakir.son_52_hafta.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.clp_bakir.son_52_hafta.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "2023–2026'da, petrol bağları 0,14–0,25, faiz farkı 0,43–0,52 (sterlin, euro)",
+   "degerler": [
+    {
+     "ifade": "min(v('b10.p10c.ciftler.nok_brent.donemler.2023_2026.kor'), v('b10.p10c.ciftler.cad_wti.donemler.2023_2026.kor'), v('b10.p10c.ciftler.cop_brent.donemler.2023_2026.kor'))",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "max(v('b10.p10c.ciftler.nok_brent.donemler.2023_2026.kor'), v('b10.p10c.ciftler.cad_wti.donemler.2023_2026.kor'), v('b10.p10c.ciftler.cop_brent.donemler.2023_2026.kor'))",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.gbp_gb_us_2y.donemler.2023_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.eur_de_us_2y.donemler.2023_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "euroda 2010–2014 düzeyine döndü (0,51)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.eur_de_us_2y.donemler.2010_2014.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "euro 0,26, sterlin 0,34",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.eur_de_us_2y.son_52_hafta.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.gbp_gb_us_2y.son_52_hafta.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(07.10.2010–24.09.2026)",
+   "degerler": [
+    {
+     "yol": "b10.sekil_surucu_kayan.tarih.0",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b10.sekil_surucu_kayan.son",
+     "bicim": "tarih",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "korelasyonu aynı gün 0,07, önceki gün 0,43 (Japonya 10 yıllık 0,13 · 0,34; Almanya 2 yıllık 0,49 · 0,10)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.saat_sinamasi.getiriler.au2y.abd_t.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.saat_sinamasi.getiriler.au2y.abd_t_eksi_1.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.saat_sinamasi.getiriler.jp10y.abd_t.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.saat_sinamasi.getiriler.jp10y.abd_t_eksi_1.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.saat_sinamasi.getiriler.de2y.abd_t.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.saat_sinamasi.getiriler.de2y.abd_t_eksi_1.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(NOK–Brent aynı gün 0,34, önceki gün 0,01)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.gunluk.para_t_surucu_t.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.gunluk.para_t_surucu_t_eksi_1.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "NOK–Brent'te 0,08, AUD–bakırda 0,12 aşıyor, iki serisi de New York 17:00 olan AUD–yuanda yalnız 0,006",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.saat_izi_haftalik_eksi_gunluk0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.aud_bakir.saat_izi_haftalik_eksi_gunluk0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.saat_kontrolu.saat_izi_haftalik_eksi_gunluk0",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "standart sapması %3,08, öbür günler %2,27 (demir cevherinde %9,27 · %1,44)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.veri_denetimi.devir.brent.devir_gunu_sd_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.veri_denetimi.devir.brent.obur_gunler_sd_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.veri_denetimi.devir.demir_cevheri.devir_gunu_sd_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.veri_denetimi.devir.demir_cevheri.obur_gunler_sd_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "NOK–Brent 0,42'den 0,45'e çıkıyor",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.devir.kor_tam",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.devir.kor_devir_haric",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "plasebonun %90 bandı",
+   "neden": "plasebo dağılımının 5. ve 95. yüzdeliği arasındaki bant (yöntem sabiti)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "BRL–demir cevheri (0,10 → 0,17)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.brl_demir_cevheri.devir.kor_tam",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.brl_demir_cevheri.devir.kor_devir_haric",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "CHF–VIX 2010–2026'da 0,00 (t 0,03, zayıf; haritanın 2015–2026 hücresi 0,06)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.chf_vix.tam.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.chf_vix.tam.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.chf_vix.hukum",
+     "bicim": "metin",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.chf_vix.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Yen–VIX 2010–2014'te faiz farkıyla aynı düzeydeydi (0,35 · 0,32; fark bacağı 09.2014'te bittiği için iki ölçü aynı haftalarda değil), 2023–2026'da 0,00, son 52 haftada −0,11",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.jpy_vix.donemler.2010_2014.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.siralama.jpy.donemler.2010_2014.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.donemler.2010_2014.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.donemler.2010_2014.son",
+     "bicim": "ay",
+     "hane": 0
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_vix.donemler.2023_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_vix.son_52_hafta.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Altın–ABD 10 yıllık reel faiz 2010–2026'da −0,42 (t −10,98; tablonun 2015–2026 değeri −0,46), dört dönemde −0,33 ile −0,57 arası",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.altin_abd_reel_10y.tam.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.altin_abd_reel_10y.tam.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.altin_abd_reel_10y.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "max(v('b10.p10c.ciftler.altin_abd_reel_10y.donemler.2010_2014.kor'), v('b10.p10c.ciftler.altin_abd_reel_10y.donemler.2015_2019.kor'), v('b10.p10c.ciftler.altin_abd_reel_10y.donemler.2020_2022.kor'), v('b10.p10c.ciftler.altin_abd_reel_10y.donemler.2023_2026.kor'))",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "min(v('b10.p10c.ciftler.altin_abd_reel_10y.donemler.2010_2014.kor'), v('b10.p10c.ciftler.altin_abd_reel_10y.donemler.2015_2019.kor'), v('b10.p10c.ciftler.altin_abd_reel_10y.donemler.2020_2022.kor'), v('b10.p10c.ciftler.altin_abd_reel_10y.donemler.2023_2026.kor'))",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "eğim −0,092, yani 10 bp'lik reel faiz artışına altında −%0,92",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.altin_abd_reel_10y.tam.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "ifade": "10 * v('b10.p10c.ciftler.altin_abd_reel_10y.tam.beta')",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2010–2026'da +0,08 (t 2,46, dönemsel)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.try_brent.tam.kor",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b10.p10c.ciftler.try_brent.tam.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.try_brent.hukum",
+     "bicim": "metin",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "hücre 2015–2026'da +0,04 (t 0,97)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.try_brent.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b10.p10c.ciftler.try_brent.siralama_2015_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Artıyı 2010–2014 (+0,31) ve 2020–2022 (+0,17) taşıyor; 2023–2026'da işaret beklenen yöne döndü (−0,07, t −1,62)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.try_brent.donemler.2010_2014.kor",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b10.p10c.ciftler.try_brent.donemler.2020_2022.kor",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b10.p10c.ciftler.try_brent.donemler.2023_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.siralama.try.donemler.2023_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.try_brent.donemler.2023_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "CNBC'nin TRY serisiyle aynı haftalarda 0,09 (iki kaynak arası 0,98)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.try_brent.cnbc_kiyas.kor_cnbc_try",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.try_brent.cnbc_kiyas.iki_kaynak_haftalik_kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Haftalık (perşembe), 07.01.2010–24.09.2026; USD/JPY",
+   "degerler": [
+    {
+     "yol": "b10.sekil_usdjpy.ilk",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b10.sekil_usdjpy.son",
+     "bicim": "tarih",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ardışık aynı değer payı 2012'de %53); hiç oynamadığı 76 hafta (826'dan) çıkarılınca korelasyon yalnız +0,005 değişir",
+   "degerler": [
+    {
+     "yol": "b10.p10c.veri_denetimi.japonya_2y_bayat_yillik_yuzde.2012",
+     "bicim": "yz",
+     "hane": 0
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.bacaklar_haftalik.bayat_yerel_hafta.n_sifir_hafta",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.n",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.bacaklar_haftalik.bayat_yerel_hafta.fark",
+     "bicim": "sayi",
+     "hane": 3,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "(+0,31 ile +0,58 arası)",
+   "degerler": [
+    {
+     "ifade": "min(v('b10.p10c.ciftler.jpy_jp_us_2y.donemler.2010_2014.kor'), v('b10.p10c.ciftler.jpy_jp_us_2y.donemler.2015_2019.kor'), v('b10.p10c.ciftler.jpy_jp_us_2y.donemler.2020_2022.kor'), v('b10.p10c.ciftler.jpy_jp_us_2y.donemler.2023_2026.kor'), v('b10.p10c.ciftler.jpy_jp_us_10y.donemler.2010_2014.kor'), v('b10.p10c.ciftler.jpy_jp_us_10y.donemler.2015_2019.kor'), v('b10.p10c.ciftler.jpy_jp_us_10y.donemler.2020_2022.kor'), v('b10.p10c.ciftler.jpy_jp_us_10y.donemler.2023_2026.kor'))",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "ifade": "max(v('b10.p10c.ciftler.jpy_jp_us_2y.donemler.2010_2014.kor'), v('b10.p10c.ciftler.jpy_jp_us_2y.donemler.2015_2019.kor'), v('b10.p10c.ciftler.jpy_jp_us_2y.donemler.2020_2022.kor'), v('b10.p10c.ciftler.jpy_jp_us_2y.donemler.2023_2026.kor'), v('b10.p10c.ciftler.jpy_jp_us_10y.donemler.2010_2014.kor'), v('b10.p10c.ciftler.jpy_jp_us_10y.donemler.2015_2019.kor'), v('b10.p10c.ciftler.jpy_jp_us_10y.donemler.2020_2022.kor'), v('b10.p10c.ciftler.jpy_jp_us_10y.donemler.2023_2026.kor'))",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "tam örneklemde 0,79, dönemlerde +0,28 · −0,40 · +0,96 · −0,46",
+   "degerler": [
+    {
+     "yol": "b10.sekil_usdjpy.seviye_korelasyonu.2y.tam.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.sekil_usdjpy.seviye_korelasyonu.2y.donemler.2010_2014.kor",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b10.sekil_usdjpy.seviye_korelasyonu.2y.donemler.2015_2019.kor",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b10.sekil_usdjpy.seviye_korelasyonu.2y.donemler.2020_2022.kor",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b10.sekil_usdjpy.seviye_korelasyonu.2y.donemler.2023_2026.kor",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "24.09.2026'ya fark 4,44 puandan 2,97 puana daraldı, USD/JPY ise 133,40'tan 158,83'e çıktı",
+   "degerler": [
+    {
+     "yol": "b10.sekil_usdjpy.son",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.678",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.872",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.sekil_usdjpy.usdjpy.678",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.sekil_usdjpy.usdjpy.872",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Yen ABD 2 yıllığıyla −0,48, Japonya 2 yıllığıyla −0,08 korelasyonlu (10 yıllıkta Japonya −0,23)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.bacaklar_haftalik.abd_kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.bacaklar_haftalik.yerel_kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_10y.bacaklar_haftalik.yerel_kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Farkın haftalık varyansının %98'i (10 yıllıkta %102) ABD bacağından gelir",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.bacaklar_haftalik.fark_varyansinda_abd_payi_yuzde",
+     "bicim": "yz",
+     "hane": 0
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_10y.bacaklar_haftalik.fark_varyansinda_abd_payi_yuzde",
+     "bicim": "yz",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2010–2026'da korelasyonlar (0,46 · 0,47) ve eğimler (0,063 · 0,059;",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.tam.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_10y.tam.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.tam.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_10y.tam.beta",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "UIP eğimine göre 2 yıllıkta 3,2 kat, 10 yıllıkta 0,59 kat",
+   "degerler": [
+    {
+     "ifade": "v('b10.p10c.ciftler.jpy_jp_us_2y.tam.beta') / (2 * 1e-4 * 100)",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "v('b10.p10c.ciftler.jpy_jp_us_10y.tam.beta') / (10 * 1e-4 * 100)",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "(10.6'daki 2015–2026 eğimiyle 0,68 kat)",
+   "degerler": [
+    {
+     "ifade": "v('b10.p10c.ciftler.jpy_jp_us_10y.siralama_2015_2026.beta') / (10 * 1e-4 * 100)",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "euroda (0,053) ve AUD'da (0,042) belirgin, sterlin ve frankta (0,030) UIP'den ayırt edilmiyor (eğimin UIP'den farkının t'si 1,2 · 1,9)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.eur_de_us_2y.tam.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.aud_au_us_2y.tam.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.gbp_gb_us_2y.tam.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b10.p10c.ciftler.chf_ch_us_2y.tam.beta",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "ifade": "(v('b10.p10c.ciftler.gbp_gb_us_2y.tam.beta') - 2 * 1e-4 * 100) / v('b10.p10c.ciftler.gbp_gb_us_2y.tam.se')",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "(v('b10.p10c.ciftler.chf_ch_us_2y.tam.beta') - 2 * 1e-4 * 100) / v('b10.p10c.ciftler.chf_ch_us_2y.tam.se')",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Son 52 haftada 2 yıllık bağ 0,36 (t 2,89), 10 yıllık 0,22 (t 1,69)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.son_52_hafta.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.son_52_hafta.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_10y.son_52_hafta.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_10y.son_52_hafta.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "fark (0,14) tek bir 52 haftalık korelasyonun standart hatası (≈ 0,12) kadar, 2015–2026'da da 10 yıllık önde (0,51 · 0,54)",
+   "degerler": [
+    {
+     "ifade": "v('b10.p10c.ciftler.jpy_jp_us_2y.son_52_hafta.kor') - v('b10.p10c.ciftler.jpy_jp_us_10y.son_52_hafta.kor')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "(1 - v('b10.p10c.ciftler.jpy_jp_us_2y.son_52_hafta.kor')**2) / math.sqrt(v('b10.p10c.ciftler.jpy_jp_us_2y.son_52_hafta.n'))",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_10y.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "30.07.2026'da biten haftada ABD − Japonya 2 yıllık farkı 12,3 bp daraldı, USD/JPY %2,68 (log) düştü",
+   "degerler": [
+    {
+     "yol": "b10.sekil_usdjpy.tarih.864",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "ifade": "(v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.863') - v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.864')) * 100",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "ifade": "abs(100 * math.log(v('b10.sekil_usdjpy.usdjpy.864') / v('b10.sekil_usdjpy.usdjpy.863')))",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Ölçülen eğim (2010–2026, 0,0632) ve saf UIP eğimi yen için ne verir; R² 0,21",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.tam.beta",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.tam.r2",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "12,3 bp arttı: $0{,}0632 \\times 12{,}3 \\approx 0{,}78$, yen %0,78 değer kazanır",
+   "degerler": [
+    {
+     "ifade": "(v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.863') - v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.864')) * 100",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "ifade": "v('b10.p10c.ciftler.jpy_jp_us_2y.tam.beta')",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "(v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.863') - v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.864')) * 100",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "v('b10.p10c.ciftler.jpy_jp_us_2y.tam.beta') * (v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.863') - v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.864')) * 100",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b10.p10c.ciftler.jpy_jp_us_2y.tam.beta') * (v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.863') - v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.864')) * 100",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Saf UIP $0{,}02 \\times 12{,}3 \\approx 0{,}25$ verirdi",
+   "degerler": [
+    {
+     "ifade": "2 * 1e-4 * 100",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "(v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.863') - v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.864')) * 100",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "2 * 1e-4 * 100 * (v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.863') - v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.864')) * 100",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "hareketin $0{,}78 / 2{,}68 \\approx$ %29'unu açıklıyor; artık $2{,}684 - 0{,}777 \\approx$ %1,91",
+   "degerler": [
+    {
+     "ifade": "v('b10.p10c.ciftler.jpy_jp_us_2y.tam.beta') * (v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.863') - v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.864')) * 100",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "abs(100 * math.log(v('b10.sekil_usdjpy.usdjpy.864') / v('b10.sekil_usdjpy.usdjpy.863')))",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "100 * v('b10.p10c.ciftler.jpy_jp_us_2y.tam.beta') * (v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.863') - v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.864')) * 100 / abs(100 * math.log(v('b10.sekil_usdjpy.usdjpy.864') / v('b10.sekil_usdjpy.usdjpy.863')))",
+     "bicim": "yz",
+     "hane": 0
+    },
+    {
+     "ifade": "abs(100 * math.log(v('b10.sekil_usdjpy.usdjpy.864') / v('b10.sekil_usdjpy.usdjpy.863')))",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "ifade": "v('b10.p10c.ciftler.jpy_jp_us_2y.tam.beta') * (v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.863') - v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.864')) * 100",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "ifade": "abs(100 * math.log(v('b10.sekil_usdjpy.usdjpy.864') / v('b10.sekil_usdjpy.usdjpy.863'))) - v('b10.p10c.ciftler.jpy_jp_us_2y.tam.beta') * (v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.863') - v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.864')) * 100",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "R² 0,21 bir haftanın payı değil",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.tam.r2",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "yen hareketinin yaklaşık yarısıdır (|ρ| 0,46)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.jpy_jp_us_2y.tam.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Tek bir haftada pay bu haftaki gibi %29 da olabilir",
+   "degerler": [
+    {
+     "ifade": "100 * v('b10.p10c.ciftler.jpy_jp_us_2y.tam.beta') * (v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.863') - v('b10.sekil_usdjpy.abd_eksi_japonya_2y_yuzde.864')) * 100 / abs(100 * math.log(v('b10.sekil_usdjpy.usdjpy.864') / v('b10.sekil_usdjpy.usdjpy.863')))",
+     "bicim": "yz",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Brent bir haftada 5 log puan (yaklaşık %4,9) düşsün",
+   "degerler": [
+    {
+     "ifade": "100 * (1 - math.exp(-0.05))",
+     "bicim": "yz",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "NOK–Brent 2015–2026'da korelasyon 0,4243, eğim 0,1292; son 52 haftada 0,2269 ve 0,0419 (t 1,43)",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.siralama_2015_2026.kor",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.siralama_2015_2026.beta",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.son_52_hafta.kor",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.son_52_hafta.beta",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.son_52_hafta.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "(a) $5 \\times 0{,}1292 \\approx 0{,}65$ ve $5 \\times 0{,}0419 \\approx 0{,}21$: NOK −%0,65 yerine −%0,21",
+   "degerler": [
+    {
+     "ifade": "v('b10.p10c.ciftler.nok_brent.siralama_2015_2026.beta')",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "5 * v('b10.p10c.ciftler.nok_brent.siralama_2015_2026.beta')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b10.p10c.ciftler.nok_brent.son_52_hafta.beta')",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "5 * v('b10.p10c.ciftler.nok_brent.son_52_hafta.beta')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "-5 * v('b10.p10c.ciftler.nok_brent.siralama_2015_2026.beta')",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "ifade": "-5 * v('b10.p10c.ciftler.nok_brent.son_52_hafta.beta')",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$(1-\\rho^2)/\\sqrt{52} \\approx 0{,}11$; fark $0{,}4243 - 0{,}2269 \\approx 0{,}20$, yaklaşık 1,7 standart hata",
+   "degerler": [
+    {
+     "ifade": "(1 - v('b10.p10c.ciftler.nok_brent.siralama_2015_2026.kor')**2) / math.sqrt(52)",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b10.p10c.ciftler.nok_brent.siralama_2015_2026.kor')",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "v('b10.p10c.ciftler.nok_brent.son_52_hafta.kor')",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "v('b10.p10c.ciftler.nok_brent.siralama_2015_2026.kor') - v('b10.p10c.ciftler.nok_brent.son_52_hafta.kor')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "(v('b10.p10c.ciftler.nok_brent.siralama_2015_2026.kor') - v('b10.p10c.ciftler.nok_brent.son_52_hafta.kor')) / ((1 - v('b10.p10c.ciftler.nok_brent.siralama_2015_2026.kor')**2) / math.sqrt(52))",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2023–2026'nın 195 haftası da 0,25 veriyor",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.donemler.2023_2026.n",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.donemler.2023_2026.kor",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "R² 0,18'den 0,05'e iniyor",
+   "degerler": [
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.siralama_2015_2026.r2",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b10.p10c.ciftler.nok_brent.son_52_hafta.r2",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "52 hafta tek başına kopuş kanıtı değildir (standart hatası ≈ 0,1)",
+   "degerler": [
+    {
+     "ifade": "(1 - v('b10.p10c.ciftler.nok_brent.siralama_2015_2026.kor')**2) / math.sqrt(52)",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
   }
  ]
 }

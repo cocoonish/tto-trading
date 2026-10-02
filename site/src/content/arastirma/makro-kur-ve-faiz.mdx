@@ -1,6 +1,6 @@
 ---
 title: 'Makrodan Kura ve Faize: Gelişmiş ve Gelişmekte Olan Ekonomilerde Bütçe, Büyüme, Enflasyon, Reel Kur ve Dış Denge'
-description: "İki saatlik ders: bir makro haberin faize ve kura hangi terimden ulaştığı (politika patikası, vade primi, risk primi; kurun çıpası, reel faiz farkı ve risk primi), aynı haberin gelişmiş ekonomide parayı güçlendirip gelişmekte olan ekonomide neden zayıflatabildiği ve rejimin veriyle nasıl teşhis edildiği. Veri günü mekaniği ve plasebo kapısı; büyüme, istihdam ve politika sürprizi; enflasyonun iki ters işareti; bütçe açığının gelişmiş ekonomide faiz kanalı ve politika bileşimi, gelişmekte olan ekonomide risk primi, borç aritmetiği ve mali baskınlık; reel efektif kur ve dönüş hızı; dış ticaret ve cari denge; finansman, rezerv ve dış varlık pozisyonu; ticaret hadleri ve emtia; taşıma, UIP, akım ve küresel faktör; ülke primi; ve veri günü oyun kitabı. ABD, euro alanı, gelişmekte olan ülkeler ve Türkiye verisiyle ölçülmüş yirmi bir figür, dört bağlı hesap aracı ve çözümlü alıştırmalar."
+description: "İki saatlik ders: bir makro haberin faize ve kura hangi terimden ulaştığı (politika patikası, vade primi, risk primi; kurun çıpası, reel faiz farkı ve risk primi), aynı haberin gelişmiş ekonomide parayı güçlendirip gelişmekte olan ekonomide neden zayıflatabildiği ve rejimin veriyle nasıl teşhis edildiği. Veri günü mekaniği ve plasebo sınaması; büyüme, istihdam ve politika sürprizi; enflasyonun iki ters işareti; bütçe açığının gelişmiş ekonomide faiz kanalı ve politika bileşimi, gelişmekte olan ekonomide risk primi, borç aritmetiği ve mali baskınlık; reel efektif kur ve dönüş hızı; dış ticaret ve cari denge; finansman, rezerv ve dış varlık pozisyonu; ticaret hadleri, emtia ve kur sürücüleri (paraların petrol, metal, faiz farkı ve risk iştahıyla haftalık bağı; USD/JPY ile ABD–Japonya faiz farkı); taşıma, UIP, akım ve küresel faktör; ülke primi; ve veri günü oyun kitabı. ABD, euro alanı, gelişmekte olan ülkeler ve Türkiye verisiyle ölçülmüş yirmi dört figür, dört bağlı hesap aracı ve çözümlü alıştırmalar."
 pubDate: 2026-10-02
 tags: ['makro', 'kur', 'butce', 'buyume', 'enflasyon', 'reel-kur', 'cari-denge', 'tasima', 'em', 'ders']
 durum: 'aktif'
@@ -2719,11 +2719,12 @@ yere yazılmıştır.
 
 </div>
 
-## Bölüm 10 — Ticaret hadleri ve emtia (≈6 dk)
+## Bölüm 10 — Ticaret hadleri, emtia ve kur sürücüleri (≈14 dk)
 
 *Bu bölümde:* emtia fiyatının kura hangi bloktan ulaştığı, ihracatçı ile ithalatçı ayrımı, AUD, CAD
-ve NOK'un emtiayla bağı ve sınırı, 2022 dolar şokunun izi, ve Türkiye'de enerjinin kura, faize ve
-faturaya yansıması.
+ve NOK'un emtiayla bağı ve sınırı, 2022 dolar şokunun izi, Türkiye'de enerjinin kura, faize ve
+faturaya yansıması, ve kur sürücüleri haritası: faiz farkı, emtia ve risk, USD/JPY ile ABD–Japonya
+faiz farkı dahil.
 
 ### 10.1 Teori: emtia fiyatı kura üç yoldan ulaşır (≈1 dk)
 
@@ -2867,6 +2868,180 @@ dolar, GSYH'nin %2,93'ü (aralık %2,77, 12.2016 – %9,03, 10.2022). Seviyedeki
 eğilimli serinin ilişkisidir, ana ölçü değildir. Taraf burada çalışıyor: fatura fiyatla
 birebir büyür; aylık kurda ise eğimin anlamlılığı hizaya bağlı ve kural kurulamıyor.
 
+### 10.5 Teori: bir sürücü kurun hangi bloğunu taşır (≈1 dk)
+
+Her sürücü kurun bir bloğuna bağlanır (Bölüm 1): **faiz farkı** B'ye, **emtia** ticaret hadleri
+üzerinden A'ya (10.1) ve oynaklığıyla kısmen C'ye, **VIX ve S&P 500** risk iştahıyla C'ye; dolar
+sepeti ortak terimdir (10.3, 10.4). Yuan Çin talebinin vekilidir, yalnız AUD'da ölçüldü ve hangi
+bloğa yazıldığı ayrıştırılmadı (haritada risk sürücüleriyle aynı panelde durur). Faiz farkının kıyas
+noktası türetilir: risk primli UIP nominal biçimiyle $n$ yıl ileri yinelenir ($t$ yıl, $i$ yıllık faiz):
+
+$$
+s_t \;=\; E_t s_{t+n} \;-\; \sum_{j=0}^{n-1} E_t\big(i_{t+j} - i^*_{t+j}\big) \;+\; \sum_{j=0}^{n-1} E_t\,\rho_{t+j} .
+$$
+
+$E_t s_{t+n}$ $n$ yıl sonra beklenen nominal kurdur, çıpa (A) değildir: $n$'nin ötesindeki B ile C'yi
+ve iki ülkenin fiyat düzeyi farkını da taşır. Beklenti hipotezinde $n\,y^{(n)}_t = \sum_{j=0}^{n-1} E_t\, i_{t+j}$;
+iki ülkenin vade ve kredi primi farkları değişmezken (Bölüm 1'in üç terimi) toplamın değişimi
+$n\,\Delta(y - y^*)$'dır. Nominal farkın artışı beklenen enflasyon farkından geliyorsa $n$ yıl sonra
+beklenen kur da aynı ölçüde zayıflar ve bugünkü kur kımıldamaz. $n$ yıl sonra beklenen reel kur,
+beklenen enflasyon farkı ve prim yerinde dururken nominal farkın değişimi reel farkın değişimidir ve
+
+$$
+\Delta s_t \;\approx\; -\,n\,\Delta\big(y^{(n)}_t - y^{*(n)}_t\big) .
+$$
+
+B'nin ilk $n$ yıllık kısmı o zaman $n$ yıllık farkın $n$ katıdır. Para dolara karşı değeriyle ($-s$) yazılınca
+"yerel − ABD" 2 yıllık farkının 1 bp artışı paraya $2 \times 10^{-4}$ log, yani %0,02 değer kazancı
+verir; 10 yıllıkta %0,10. Bu **UIP eğimi** farkın reel kısmına uygulanır; ölçülen sürücü nominal getiri
+farkıdır ve farkın enflasyon beklentisinden gelen kısmı ölçülen eğimi sıfıra çeker. Ölçülen eğim
+(paranın %'si / farkın 1 bp'si) bu kıyas noktasıyla okunur (10.7); kıyas eşzamanlı bir tariftir, Fama
+bulmacası Bölüm 11'dedir.
+
+Ölçü seviye değil **değişimdir**: iki eğilimli serinin seviye korelasyonu ortak eğilimden doğabilir ve
+işaret değiştirir (USD/JPY, 10.7).
+
+### 10.6 Pratik 10C — sürücü haritası (≈5 dk)
+
+Tablo her paranın 2015–2026'daki en güçlü sürücüsünü verir. *Aday* o parada yarışan, pencereyi kapsayan sürücü
+sayısıdır; 1 ise satır bir yarışın sonucu değil, tek ölçülen sürücüdür. On altısı da istikrarlı;
+ölçülen 39 çiftin tanımı şeklin altında:
+
+| Para | En güçlü sürücü | Aday | Korelasyon | Eğim | Eğim birimi | t |
+|---|---|---|---|---|---|---|
+| JPY | 10 yıllık fark | 3 | 0,54 | 0,068 | %/bp | 11,77 |
+| CHF | 2 yıllık fark | 2 | 0,25 | 0,029 | %/bp | 5,32 |
+| EUR | 2 yıllık fark | 1 | 0,36 | 0,044 | %/bp | 6,72 |
+| GBP | 2 yıllık fark | 1 | 0,23 | 0,028 | %/bp | 3,16 |
+| AUD | yuan | 5 | 0,54 | 1,229 | %/% | 8,73 |
+| NZD | S&P 500 | 3 | 0,40 | 0,256 | %/% | 9,13 |
+| CAD | WTI | 2 | 0,39 | 0,068 | %/% | 7,32 |
+| NOK | Brent | 1 | 0,42 | 0,129 | %/% | 8,14 |
+| COP | Brent | 1 | 0,40 | 0,150 | %/% | 7,15 |
+| MXN | S&P 500 | 3 | 0,46 | 0,344 | %/% | 7,71 |
+| CLP | bakır | 1 | 0,48 | 0,260 | %/% | 7,12 |
+| BRL | soya | 3 | 0,30 | 0,230 | %/% | 6,52 |
+| ZAR | S&P 500 | 4 | 0,41 | 0,385 | %/% | 10,49 |
+| KRW | S&P 500 | 2 | 0,37 | 0,190 | %/% | 7,74 |
+| TRY | dolar sepeti | 3 | −0,24 | −0,490 | %/% | −5,94 |
+| Altın | ABD 10 yıllık reel faiz | 1 | −0,46 | −0,097 | %/bp | −10,50 |
+
+Eğim birimi paranın %'si bölü sürücünün 1 bp'si ya da %'sidir; iki birimin eğimi kıyaslanmaz.
+Sıralama ancak birden çok aday ölçülen parada bir yarıştır: euro, sterlin, NOK, COP, CLP ve altında
+tek sürücü ölçüldü, KRW'de yalnız risk sürücüleri. Bir korelasyonun standart hatası kabaca
+$(1-\rho^2)/\sqrt{n} \approx 0{,}03$ ve bundan küçük fark sıralama kurmaz. Faiz farkı yalnız yen ve
+frankta açık farkla önde (VIX 0,15 · 0,06). AUD'da bakır ve S&P 500 yuanla aynı düzeyde (0,53 · 0,52),
+faiz farkı geride (0,23); CAD'de 10 yıllık fark WTI'ye eşit (0,39); NZD'de S&P 500 önde (faiz farkı
+0,13). MXN'de risk açık farkla önde (WTI 0,32); ZAR'da S&P 500 ile platin eşit (0,41), BRL'de soya
+S&P 500'e yakın (0,26). "Gelişmiş ülkede faiz farkı, gelişmekte olanda risk" ayrımı yalnız yen, frank
+ve MXN'de açık okunur; gelişmekte olan ülke getirileri bu ölçüme alınmadığı için "orada faiz farkı
+kuru sürmüyor" da denemez. En güçlü bağ bile varyansın küçük bir kısmını açıklar: AUD–yuanda R² 0,29.
+
+<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/18_surucu_haritasi.html" baslik="Kur sürücüleri haritası: haftalık değişim korelasyonu, 2015–2026" no="18" kaynak="CNBC (New York 17:00) · ABD Hazinesi · Yahoo Finance" />
+
+**Bu seri nasıl hesaplanıyor.** Para dolara karşı değeriyle girer (artış değer kazancı; altın
+dolar/ons). Sürücüler emtia yakın vadesinin log değişimi, "yerel − ABD" getiri farkı ve ABD reel
+faizi (bp), VIX (puan), S&P 500, yuan ve dolar sepeti (log değişim) olarak girer. ABD bacağı ABD Hazinesi par
+getirisidir; CNBC'nin ABD getirisiyle kurulunca korelasyon en çok 0,01 değişir. Değişim perşembeden
+perşembeye; haftanın değeri iki serinin birlikte bulunduğu son gündür (yoksa yen ile Japonya 2 yıllık
+farkı haftaların %9,6'sında, 10 yıllık farkı %5,4'ünde ayrı günden okunurdu). Hücre 2015–2026 Pearson
+korelasyonu, son hafta 24.09.2026. Adaylardan yalnız pencereyi kapsayanlar (hafta sayısı en geniş
+adayınkinin en az %75'i) yarışır ve mutlak değeri en büyük olan yazılır: Kanada 2 yıllığı 04.2020'de
+başladığı için CAD hücresi 10 yıllıktır, 11.2016–09.2020 boş olan demir cevheri seçilmez. Etiket
+2010–2026'dan: Newey–West $|t| \ge 2$ ve dört dönemin (2010–2014 · 2015–2019 · 2020–2022 · 2023–2026)
+en az üçünde aynı işaret **istikrarlı**, daha az dönemde **dönemsel**, $|t| \lt 2$ **zayıf**. Haritanın
+34 hücresinin 31'i istikrarlı, 1'i dönemsel, 2'si zayıf; ölçülen 39 çiftin 5'i hücreye girmez (grubun
+ikinci adayıdır ya da kapsamı yetmez). Renk korelasyonun işaretidir (mavi artı, bordo eksi) ve
+±0,6'da doyar; temel sürücüler (faiz farkı, emtia) ile risk sürücüleri (VIX, S&P 500, yuan, dolar
+sepeti) ayrı panellerde. Kalın çerçeve beklenenin tersi işarettir, boş hücre ölçülmemiş çifttir.
+Kurlar CNBC New York 17:00 (USD/TRY Yahoo), VIX Yahoo. Eşzamanlı tariftir, öngörü değildir.
+
+**Yön çoğu çiftte tutuyor, güç değişiyor.** Sekiz başlıca çiftte 52 haftalık pencerelerin en az %95'i
+beklenen işarette (AUD–bakır, CLP–bakır, altın–reel faiz %100). İstisna en son dönem: CAD–WTI'nin 41
+ters penceresinin hepsi 04.2025–04.2026 arasında (en düşük −0,14, 08.2025), 16 yılın tek ters dönemi;
+NOK–Brent yalnız 2014'te ve 04.2026'da kısa süre eksiye geçti. Bugün ikisi de artı, 10.3'ün aylık 36
+aylık penceresi ise 11.2024'ten beri eksi. Güç oynuyor: CAD–WTI 2010–2014'te +0,59, 2023–2026'da +0,14
+(t 1,996); o dönemde CAD'de faiz farkı öne geçti (10 ve 2 yıllık ikisi de 0,52). Aynı pencerede,
+2023–2026'da, petrol bağları 0,14–0,25, faiz farkı 0,43–0,52 (sterlin, euro): faiz farkı 2015–2022'ye
+göre güçlendi, euroda 2010–2014 düzeyine döndü (0,51). Son 52 haftada petrol 0,04–0,24 (NOK–Brent 0,23,
+CAD–WTI 0,24, COP–Brent 0,04; MXN–WTI −0,17), metal ayakta (AUD–bakır 0,51, CLP–bakır 0,42), euro
+0,26, sterlin 0,34.
+
+<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/19_surucu_kayan.html" baslik="Başlıca sekiz para–sürücü çiftinde 52 haftalık kayan korelasyon, 2010–2026" no="19" kaynak="CNBC (New York 17:00) · ABD Hazinesi" />
+
+**Bu seri nasıl hesaplanıyor.** Her hafta, o haftayla biten 52 haftalık pencerede haritadaki tanımla
+iki değişim serisinin korelasyonu; değer pencerenin son perşembesine yazılır (07.10.2010–24.09.2026).
+40'tan az ortak hafta varsa değer yazılmaz: yen ve euroda 2014–2015 boşluğu, Japonya ve Almanya
+getirisinin kaynakta 2014'ün iki diliminde olmamasındandır. Kesikli çizgi ve sağdaki sayı tam
+örneklem, bordo gölge beklenenin tersi işaret, gri bant 2015–2019 ve 2023–2026 dönemleri. Ardışık
+pencereler 51 haftayı paylaşır: tek pencerenin işaret değiştirmesi rejim kanıtı değildir, gücün
+değişimi dönem korelasyonlarından okunur.
+
+**Saat.** Asya–Pasifik getirisi bir önceki New York gününü taşır: Avustralya 2 yıllığının günlük
+değişiminin ABD 2 yıllığıyla korelasyonu aynı gün 0,07, önceki gün 0,43 (Japonya 10 yıllık 0,13 ·
+0,34; Almanya 2 yıllık 0,49 · 0,10). Sürücü bir gün öndeyken günlük korelasyon sıfıra yakın (NOK–Brent aynı gün
+0,34, önceki gün 0,01). Ölçü bu yüzden haftalıktır: haftalık korelasyon günlüğü NOK–Brent'te 0,08,
+AUD–bakırda 0,12 aşıyor, iki serisi de New York 17:00 olan AUD–yuanda yalnız 0,006; vadeli kapanış
+saati kaynakta yazılı olmadığı için bu farkın saat payı ayrıştırılamadı.
+
+**Vade devri.** Brent'te devir günü günlük değişimin standart sapması %3,08, öbür günler %2,27 (demir
+cevherinde %9,27 · %1,44). Devir haftaları çıkarılınca NOK–Brent 0,42'den 0,45'e çıkıyor, aynı sayıda
+rastgele hafta çıkaran plasebonun %90 bandı içinde; bandın dışına çıkan tek çift BRL–demir cevheri
+(0,10 → 0,17).
+
+**Ölçülen sürprizler.** CHF–VIX 2010–2026'da 0,00 (t 0,03, zayıf; haritanın 2015–2026 hücresi 0,06):
+haftalık VIX frankın sığınak rolünü göstermiyor. Yen–VIX 2010–2014'te faiz farkıyla aynı düzeydeydi
+(0,35 · 0,32; fark bacağı 09.2014'te bittiği için iki ölçü aynı haftalarda değil), 2023–2026'da 0,00,
+son 52 haftada −0,11: yende sürücü artık faiz farkı. Altın–ABD 10 yıllık reel faiz 2010–2026'da −0,42
+(t −10,98; tablonun 2015–2026 değeri −0,46), dört dönemde −0,33 ile −0,57 arası; eğim −0,092, yani 10
+bp'lik reel faiz artışına altında −%0,92.
+
+**Türkiye.** Tek ters hücre TRY–Brent: ithalatçıda beklenen eksi, hücre 2015–2026'da +0,04 (t 0,97),
+2010–2026'da +0,08 (t 2,46, dönemsel). Artıyı 2010–2014 (+0,31) ve 2020–2022 (+0,17) taşıyor;
+2023–2026'da işaret beklenen yöne döndü (−0,07, t −1,62) ve TL'nin o dönemdeki en güçlü sürücüsü bu
+zayıf Brent bağının kendisi (Bölüm 11). 10.4'teki aylık bulgunun haftalık eşidir (orada da işaret ters
+ve hizaya duyarlıydı): "petrol TL'yi zayıflatır" kuralı kurulmaz, ölçülen kanal faturadır. Yönetilen
+kur dönemi dışarıda. USD/TRY Yahoo'dan (18.12.2023'ten İstanbul 18:00, öncesi gün sonu), öbür paralar
+CNBC New York 17:00; CNBC'nin TRY serisiyle aynı haftalarda 0,09 (iki kaynak arası 0,98).
+
+### 10.7 Pratik 10D — USD/JPY ve ABD–Japonya faiz farkı (≈2 dk)
+
+Şekil 20 piyasanın yönündedir (USD/JPY, ABD − Japonya); haritanın yen satırı iki işareti birden
+çevirir, korelasyon aynıdır.
+
+<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/20_usdjpy_faiz_farki.html" baslik="USD/JPY ve ABD − Japonya 2 ve 10 yıllık getiri farkı: seviye, kayan korelasyon ve eğim" no="20" kaynak="CNBC (New York 17:00, Tokyo kapanışı) · ABD Hazinesi" />
+
+**Bu seri nasıl hesaplanıyor.** Haftalık (perşembe), 07.01.2010–24.09.2026; USD/JPY CNBC New York
+17:00, fark ABD Hazinesi par getirisi eksi Japonya getirisi (CNBC, Tokyo kapanışı), puan. Seviyeler
+ayrı panellerde; çift eksen kullanılmaz, ölçek seçimiyle örtüşme üretebilir. Kayan korelasyon ve eğim
+(kovaryans bölü farkın varyansı) 52 haftalık pencerede, en az 40 haftayla; alt panel dört dönemde
+seviye ve değişim korelasyonu, gri bant 2015–2019 ve 2023–2026. Kusur: Japonya 2 yıllık kotasyonu
+sıfıra yakın faizde donar (ardışık aynı değer payı 2012'de %53); hiç oynamadığı 76 hafta (826'dan)
+çıkarılınca korelasyon yalnız +0,005 değişir.
+
+**Seviye yanıltır.** Haftalık değişim korelasyonu iki vadede de dört dönemin dördünde artı (+0,31
+ile +0,58 arası). Seviye korelasyonu (2 yıllık) tam örneklemde 0,79, dönemlerde +0,28 · −0,40 · +0,96 ·
+−0,46. 2023 başından 24.09.2026'ya fark 4,44 puandan 2,97 puana daraldı, USD/JPY ise 133,40'tan
+158,83'e çıktı; haftalık hareketler bu sırada da aynı yönde yürüdü. Seviyedeki ters gidiş iki ayrı
+eğilimin üst üste binmesidir.
+
+**Bağı ABD bacağı taşıyor.** Yen ABD 2 yıllığıyla −0,48, Japonya 2 yıllığıyla −0,08 korelasyonlu (10
+yıllıkta Japonya −0,23): Japonya getirisi ABD'ninkiyle aynı yönde oynadığı için tek başına ters işaret
+verir. Farkın haftalık varyansının %98'i (10 yıllıkta %102) ABD bacağından gelir; "yen faiz farkını
+izliyor" pratikte "yen ABD faizini izliyor" demektir ve Japonya'nın kendi faiz haberinin etkisi bu
+ölçüden okunamaz.
+
+**2 yıllık mı, 10 yıllık mı.** 2010–2026'da korelasyonlar (0,46 · 0,47) ve eğimler (0,063 · 0,059;
+paranın %'si / bp) yakın; UIP eğimine göre 2 yıllıkta 3,2 kat, 10 yıllıkta 0,59 kat (10.6'daki
+2015–2026 eğimiyle 0,68 kat). Üstte kalması haberin iki yılın ötesini ya da primi de taşıdığı, altta
+kalması 10 yıllık hareketin bir kısmının vade primi ya da enflasyon beklentisi (10.5) olduğu okumasıyla
+tutarlı (Bölüm 1); ölçü bunları sınamaz. Öbür 2 yıllık farklarda da (2010–2026) nokta tahmini UIP'nin
+üstünde: euroda (0,053) ve AUD'da (0,042) belirgin, sterlin ve frankta (0,030) UIP'den ayırt edilmiyor
+(eğimin UIP'den farkının t'si 1,2 · 1,9). Son 52 haftada 2 yıllık bağ 0,36 (t 2,89), 10 yıllık 0,22
+(t 1,69); biri eşiği geçip öbürü geçmiyor diye vadeler ayrışmış olmaz: fark (0,14) tek bir 52 haftalık
+korelasyonun standart hatası (≈ 0,12) kadar, 2015–2026'da da 10 yıllık önde (0,51 · 0,54). Yende iki
+vade ayırt edilmiyor.
+
 <div class="not">
 
   <span class="etiket">Masada ne yaparsınız</span>
@@ -2877,6 +3052,11 @@ birebir büyür; aylık kurda ise eğimin anlamlılığı hizaya bağlı ve kura
     bugün eksi.
   - Türkiye'de enerji haberinin ölçülen kanalı faturadır (A ve cari); aylık kur tepkisinin anlamlılığı
     hizaya bağlı, kural kurulmaz.
+  - Bir sürücü okunurken önce etiketine ve aday sayısına, sonra son dönemine (2023–2026) ve son 52
+    haftasına bakılır; 52 hafta tek başına kopuş kanıtı değildir (standart hatası ≈ 0,1). Yön çoğu
+    çiftte tutar (istisna CAD–WTI: 52 haftalık bağ 2025 boyunca da tersti), güç değişir: petrol
+    paralarında haftalık bağ bugün zayıf ama artı (aylık 36 aylık pencerede eksi). Yende faiz farkı ABD bacağıyla okunur; 2 ve 10
+    yıllık ayırt edilmez.
 
 </div>
 
@@ -2884,7 +3064,8 @@ birebir büyür; aylık kurda ise eğimin anlamlılığı hizaya bağlı ve kura
 
   <span class="etiket">Tek cümlelik kural</span>
 
-  Emtia haberinde önce ülkenin hangi tarafta olduğunu sor.
+  Emtia haberinde önce ülkenin hangi tarafta olduğunu, her sürücüde de bağın son dönemde (2023–2026)
+  ve son 52 haftada hâlâ taşıyıp taşımadığını sor.
 
 </div>
 
@@ -2910,6 +3091,42 @@ $50{,}51 \times 0{,}1016 \approx 5{,}13$ milyar dolar, GSYH payı $2{,}93 \times
 (c) Dolar açıklamanın küçük bir parçası: dolar kontrolü eğimi yalnız −0,055'e indiriyor (dolar
 endeksinin eğimi t 2,95). Kırılgan olan hiza: kur ay ortalamasıyla eğim −0,027 (t −0,80); işaret
 kalıyor, anlamlılık gidiyor. Faturadaki "ithalatçı" etkisi ölçülüdür; aylık kurda kural kurulmaz.
+
+</details>
+
+**2. Fark daralması ve UIP eğimi.** 30.07.2026'da biten haftada ABD − Japonya 2 yıllık farkı 12,3 bp
+daraldı, USD/JPY %2,68 (log) düştü. Ölçülen eğim (2010–2026, 0,0632) ve saf UIP eğimi yen için ne verir; R² 0,21
+bu haftanın okunuşu için ne söyler?
+
+<details>
+<summary>Çözüm</summary>
+
+Yenin sürücüsü Japonya − ABD farkıdır ve 12,3 bp arttı: $0{,}0632 \times 12{,}3 \approx 0{,}78$, yen
+%0,78 değer kazanır. Saf UIP $0{,}02 \times 12{,}3 \approx 0{,}25$ verirdi, ölçülenin üçte biri. Fark
+hareketin $0{,}78 / 2{,}68 \approx$ %29'unu açıklıyor; artık $2{,}684 - 0{,}777 \approx$ %1,91. R² 0,21 bir
+haftanın payı değildir: haftalar boyunca yen değişiminin **varyansının** beşte birinin farkla açıklandığını
+söyler; açıklanan kısmın tipik büyüklüğü yen hareketinin yaklaşık yarısıdır (|ρ| 0,46). Tek bir
+haftada pay bu haftaki gibi %29 da olabilir, sıfır da; artık başka sürücüden okunur.
+
+</details>
+
+**3. NOK ve son 52 hafta.** Brent bir haftada 5 log puan (yaklaşık %4,9) düşsün. NOK–Brent
+2015–2026'da korelasyon 0,4243, eğim 0,1292; son 52 haftada 0,2269 ve 0,0419 (t 1,43). (a) İki eğim
+ne verir? (b) Zayıflama anlamlı mı? (c) Okuma nasıl değişir?
+
+<details>
+<summary>Çözüm</summary>
+
+(a) $5 \times 0{,}1292 \approx 0{,}65$ ve $5 \times 0{,}0419 \approx 0{,}21$: NOK −%0,65 yerine
+−%0,21, üçte biri.
+
+(b) 52 haftalık korelasyonun standart hatası kabaca $(1-\rho^2)/\sqrt{52} \approx 0{,}11$; fark
+$0{,}4243 - 0{,}2269 \approx 0{,}20$, yaklaşık 1,7 standart hata: tek başına kopuş kanıtı değil. Ama
+2023–2026'nın 195 haftası da 0,25 veriyor; zayıflama bir yılın gürültüsü değil, dönemin kendisi.
+
+(c) R² 0,18'den 0,05'e iniyor: son bir yılda Brent NOK'un haftalık varyansının yirmide birini
+açıklıyor, eğim sıfırdan ayırt edilmiyor; petrol haberi NOK'ta tam örneklem eğiminin söylediğinden
+küçük iz bırakır. NOK'un faiz farkı ölçülemedi: Norveç getirisi kaynakta yok.
 
 </details>
 
@@ -3023,7 +3240,7 @@ dışarıda bırakıyor. Hiçbir satır iki örneklem dışı kıyası birlikte 
 Beklenen "DM'de bulmaca güçlü" idi; bu örneklem onu ölçemiyor. TRY'de ise β her dönemde 1'in altında: EM
 forward'ının daha az yanlı olduğu bulgusu burada tekrar etmiyor (ölçü forward değil faiz farkıdır).
 
-<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/18_fama_beta.html" baslik="TRY ve G10 paralarında Fama eğimi: dönemler ve 60 aylık kayan pencere" no="18" kaynak="TCMB · Borsa İstanbul · Yahoo Finance · CNBC · BIS" />
+<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/21_fama_beta.html" baslik="TRY ve G10 paralarında Fama eğimi: dönemler ve 60 aylık kayan pencere" no="21" kaynak="TCMB · Borsa İstanbul · Yahoo Finance · CNBC · BIS" />
 
 **Bu seri nasıl hesaplanıyor.** Üst panel: tablonun TRY satırları ve G10 eğimleri, iki Newey–West
 standart hatalık bıyıklarla; β = 0 düz, β = 1 kesikli. G10 havuzunda her paraya ayrı sabit konur,
@@ -3067,7 +3284,7 @@ TRY bacağı fiili fonlama maliyetiyle kurulunca aynı 186 ayda yıllık ortalam
 kurulunca sepet korelasyonu 0,980, çarpıklık −0,94. Ertesi gün geri dönen %3,5'ten büyük yalıtılmış
 sıçramalar (on gün) ECB'ye karşı sınanıp çıkarıldı.
 
-<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/19_em_tasima_vix.html" baslik="EM taşıma sepetinin kümülatif getirisi ve VIX eşiği, aylık 2010–2026" no="19" kaynak="Yahoo Finance · BIS · TCMB · ECB" />
+<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/22_em_tasima_vix.html" baslik="EM taşıma sepetinin kümülatif getirisi ve VIX eşiği, aylık 2010–2026" no="22" kaynak="Yahoo Finance · BIS · TCMB · ECB" />
 
 **Bu seri nasıl hesaplanıyor.** Üst panel: iki sepetin yukarıdaki formülle kurulan aylık log
 getirilerinin toplamı (bileşik servet değil). TRY faizi Ağustos 2018'e kadar BIS, sonra TCMB politika
@@ -3116,7 +3333,7 @@ hafta örneklem dışı sınamaya yetmiyor. Saat tuzağı: akımın hangi işlem
 yazmıyor; sonraki dönemde DİBS akımının bir önceki haftanın kur değişimiyle korelasyonu −0,20, aynı
 haftanınkiyle −0,06. Akımın fiyatı mı izlediği, tarihin mi kayık olduğu ayırt edilemez; hüküm kurulmaz.
 
-<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/20_try_artik_akim.html" baslik="TRY'nin EM sepetine göre artığı ve yabancıların kümülatif net alımı, haftalık 2020–2026" no="20" kaynak="Yahoo Finance · CNBC · TCMB haftalık menkul kıymet istatistikleri" />
+<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/23_try_artik_akim.html" baslik="TRY'nin EM sepetine göre artığı ve yabancıların kümülatif net alımı, haftalık 2020–2026" no="23" kaynak="Yahoo Finance · CNBC · TCMB haftalık menkul kıymet istatistikleri" />
 
 **Bu seri nasıl hesaplanıyor.** Üst panel: 11C'deki haftalık TRY artığının 11.09.2020'den toplamı (log;
 artış, TL'nin sepetin açıkladığından fazla zayıflaması); eğim yalnız geçmiş haftalardan, yönetilen kur
@@ -3497,7 +3714,7 @@ bölüm kaynakla anlatır. **kurulmadı:** yayım takvimi ya da seri elde yok ya
 **(plasebo):** olay var ama dört serinin hiçbiri sınamayı geçmedi. Boş hücre bir tahminle
 doldurulmaz. Toplam: 60 hücrenin 6'sı ölçüldü, 8'i vaka, 15'i kaynak, 31'i kurulmadı.
 
-<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/21_matris.html" baslik="Şok × rejim matrisi: ölçülen, vaka, kaynaklı ve kurulmayan hücreler" no="21" kaynak="ABD Hazinesi · CNBC · Yahoo Finance · TCMB · TÜİK · Fed · Bank of England · Dünya Bankası" genis />
+<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/24_matris.html" baslik="Şok × rejim matrisi: ölçülen, vaka, kaynaklı ve kurulmayan hücreler" no="24" kaynak="ABD Hazinesi · CNBC · Yahoo Finance · TCMB · TÜİK · Fed · Bank of England · Dünya Bankası" genis />
 
 **Bu seri nasıl hesaplanıyor.** Satırlar şok türlerinin olay listeleridir: TÜİK yayım günleri, FOMC ve
 PPK karar günleri, VIX sıçrama günleri, rezervin büyük oynadığı haftalar, enerji şoku ayları; bütçe ve
