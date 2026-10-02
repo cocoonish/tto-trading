@@ -1,6 +1,6 @@
 {
  "_aciklama": "Takvimde GÖRÜLMÜŞ her olayın ilk hâli. 'Ne bekleniyordu' sorusunun cevabı o gün yayımladığımız beklentidir; sonradan güncellenen bir anket değil. Kayıtlar ezilmez.",
- "_son_guncelleme": "2026-09-30",
+ "_son_guncelleme": "2026-10-02",
  "kayitlar": {
   "2026-08-24|TCMB: Sektörel güven (Ağustos 2026)": {
    "tarih": "2026-08-24",
@@ -642,6 +642,46 @@
    "beklenti_sayi": null,
    "gorulme": "2026-09-14"
   },
+  "2026-10-05|Hazine: 2 yıl (728 gün) TLREFK'ye endeksli kira sertifikası doğrudan satışı": {
+   "tarih": "2026-10-05",
+   "olay": "Hazine: 2 yıl (728 gün) TLREFK'ye endeksli kira sertifikası doğrudan satışı",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-02"
+  },
+  "2026-10-05|Hazine: 2 yıl (728 gün) altın tahvili doğrudan satışı": {
+   "tarih": "2026-10-05",
+   "olay": "Hazine: 2 yıl (728 gün) altın tahvili doğrudan satışı",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-02"
+  },
+  "2026-10-05|Hazine: 2 yıl (728 gün) altına dayalı kira sertifikası doğrudan satışı": {
+   "tarih": "2026-10-05",
+   "olay": "Hazine: 2 yıl (728 gün) altına dayalı kira sertifikası doğrudan satışı",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-02"
+  },
+  "2026-10-05|Hazine: 5 yıl (1652 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)": {
+   "tarih": "2026-10-05",
+   "olay": "Hazine: 5 yıl (1652 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "model: 34,2 mlr TL gerçekleşme, teklif/karşılama 1,54",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-02"
+  },
   "2026-10-05|TÜİK: TÜFE (Eylül 2026)": {
    "tarih": "2026-10-05",
    "olay": "TÜİK: TÜFE (Eylül 2026)",
@@ -662,6 +702,16 @@
    "beklenti_sayi": null,
    "gorulme": "2026-09-14"
   },
+  "2026-10-06|Hazine: 1 yıl (364 gün) ABD doları cinsi devlet tahvili doğrudan satışı": {
+   "tarih": "2026-10-06",
+   "olay": "Hazine: 1 yıl (364 gün) ABD doları cinsi devlet tahvili doğrudan satışı",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-02"
+  },
   "2026-10-06|Hazine: 2 yıl (728 gün) altın tahvili doğrudan satışı": {
    "tarih": "2026-10-06",
    "olay": "Hazine: 2 yıl (728 gün) altın tahvili doğrudan satışı",
@@ -681,6 +731,26 @@
    "beklenti": "doğrudan satış — ihale tahmini yok",
    "beklenti_sayi": null,
    "gorulme": "2026-09-15"
+  },
+  "2026-10-06|Hazine: 4 yıl (1435 gün) TLREF'e endeksli devlet tahvili ihalesi (yeniden ihraç)": {
+   "tarih": "2026-10-06",
+   "olay": "Hazine: 4 yıl (1435 gün) TLREF'e endeksli devlet tahvili ihalesi (yeniden ihraç)",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "model: 71,8 mlr TL gerçekleşme, teklif/karşılama 2,71",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-02"
+  },
+  "2026-10-06|Hazine: 8 yıl (2912 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)": {
+   "tarih": "2026-10-06",
+   "olay": "Hazine: 8 yıl (2912 gün) sabit kuponlu devlet tahvili ihalesi (yeniden ihraç)",
+   "saat": "",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "model: 22,3 mlr TL gerçekleşme, teklif/karşılama 2,34",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-02"
   },
   "2026-10-08|BDDK: BDDK bankacılık (40. Hafta 2026)": {
    "tarih": "2026-10-08",
@@ -931,6 +1001,46 @@
    "beklenti": "",
    "beklenti_sayi": null,
    "gorulme": "2026-09-30"
+  },
+  "2026-10-22|TCMB PPK faiz kararı": {
+   "tarih": "2026-10-22",
+   "olay": "TCMB PPK faiz kararı",
+   "saat": "14:00",
+   "ulke": "TR",
+   "onem": 1,
+   "beklenti": "mevcut politika faizi %37,00 · anket (PKA Ağustos): 12 ay sonrası politika faizi %29,59",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-02"
+  },
+  "2026-10-22|TCMB: Haftalık para-banka (42. Hafta 2026)": {
+   "tarih": "2026-10-22",
+   "olay": "TCMB: Haftalık para-banka (42. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-02"
+  },
+  "2026-10-22|TCMB: Menkul kıymet ist. (42. Hafta 2026)": {
+   "tarih": "2026-10-22",
+   "olay": "TCMB: Menkul kıymet ist. (42. Hafta 2026)",
+   "saat": "14:30",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-02"
+  },
+  "2026-10-22|TÜİK: Tüketici güveni (Ekim 2026)": {
+   "tarih": "2026-10-22",
+   "olay": "TÜİK: Tüketici güveni (Ekim 2026)",
+   "saat": "10:00",
+   "ulke": "TR",
+   "onem": 2,
+   "beklenti": "",
+   "beklenti_sayi": null,
+   "gorulme": "2026-10-02"
   }
  }
 }
