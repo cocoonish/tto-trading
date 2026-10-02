@@ -197,13 +197,25 @@ def p9c() -> dict:
     u = u.copy()
     u.index = u.index.to_period("Q").to_timestamp("Q")
     c_q.index = c_q.index.to_period("Q").to_timestamp("Q")
-    df = pd.concat([u["net"].rename("nuyp"), c_q.rename("cari")], axis=1).dropna()
-    df["d_nuyp"] = df["nuyp"].diff()
+    # UYP 2005'e kadar YILLIK (yıl sonu), 2006'dan çeyreklik yayımlanır: değişim iki ardışık
+    # gözlem arasındaki aralığa, cari denge de AYNI aralığın toplamına yazılır (yıllık aralıkta
+    # dört çeyrek; tek çeyreğin cari dengesi yıllık değişimle eşlenmez).
+    nuyp = u["net"].dropna().sort_index()
+    satir = []
+    for onceki, t in zip(nuyp.index[:-1], nuyp.index[1:]):
+        q = c_q[(c_q.index > onceki) & (c_q.index <= t)]
+        beklenen = len(pd.period_range(onceki.to_period("Q") + 1, t.to_period("Q"), freq="Q"))
+        if len(q) != beklenen or q.isna().any():
+            continue
+        satir.append({"tarih": t, "nuyp": nuyp[t], "d_nuyp": nuyp[t] - nuyp[onceki], "cari": float(q.sum()),
+                      "aralik_ceyrek": beklenen})
+    df = pd.DataFrame(satir).set_index("tarih")
     df["degerleme"] = df["d_nuyp"] - df["cari"]
-    df = df.dropna()
     son = df.index.max()
-    return {"yontem": ("Net uluslararası yatırım pozisyonunun çeyreklik değişimi, cari dengenin aynı çeyrekteki "
-                       "toplamı ve aradaki fark (değerleme, net hata ve noksan ile sermaye hesabını birlikte taşır)."),
+    return {"yontem": ("Net uluslararası yatırım pozisyonunun iki ardışık gözlem arasındaki değişimi (2005'e kadar "
+                       "yıllık, 2006'dan çeyreklik), cari dengenin aynı aralıktaki toplamı ve aradaki fark "
+                       "(değerleme, net hata ve noksan ile sermaye hesabını birlikte taşır)."),
+            "yillik_aralik": int((df["aralik_ceyrek"] > 1).sum()),
             "kaynak": ["EVDS UYP", "odemeler_aylik (cari)"],
             "n": int(len(df)), "ilk": str(df.index.min().date()), "son": str(son.date()),
             "son_nuyp_mlr_usd": float(df.loc[son, "nuyp"] / 1000),

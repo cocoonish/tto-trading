@@ -1214,7 +1214,8 @@ def kart_kanit(mat: dict, meta: dict) -> list:
             ("b12.p12", "Türkiye not kararları", ["em"], True),
             ("b12.p12_vekil.dibs5y_abd10y.donemler.tum_yonetilen_haric", "ülke primi vekili DİBS 5y − ABD 10y ↔ kur "
              "(haftalık)", ["ilk_iki_olcu"], False)],
-         "Türkiye not kararlarının tarih listesi gelmedi; CDS serisi yok."),
+         "Türkiye not kararlarında (Bölüm 12, günü kaynakta yazan 33 karar) tepki günü hareketi plasebo "
+         "sınamasını geçmedi: kararlar vaka listesidir; CDS serisi yok."),
     ]
     out = []
     for ad, sat, kan, eksik in kartlar:
