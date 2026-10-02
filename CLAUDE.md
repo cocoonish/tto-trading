@@ -4039,3 +4039,51 @@ Kapı sayıyı tutturur, hükmü tutturmaz; hükümler `dogru()` ile adıyla sı
 (tez cümlesinin her geçmiş bağı tek bir kontrolle anlamsızlaşıyor mu, 54
 milyar istisnası, 2017'nin seçim öncesi geri çekilmesi, kümelerin ertesi ayı
 dış etkenden önce mi bitiyor).
+
+**KARAR (02.10.2026, kullanıcı) — DÖVİZ KAPANIŞI SAATLİK BARDAN: lira kurları
+İSTANBUL 18:00, öbür kurlar NEW YORK 17:00; sabah ölçümünün son kotasyonu
+ayrıca SAATİYLE basılır. Ve: BİR KAYNAĞIN "KAPANIŞ" ALANI, KAPANIŞ OLMAYABİLİR.**
+Kullanıcı "bültendeki USD/TRY 49,03 gösteriyor, şu an kur 49,145 civarında"
+dedi. Sayı yanlış değildi, ama altından iki kusur çıktı ve ikisi de "sağlıklı
+görünen arıza" sınıfından. (1) Yahoo'nun KAPANMIŞ günlük döviz barında
+"Close" alanı günün BAŞINDAKİ (Londra gece yarısı) fiyattır; yüksek ve düşük
+günün gerçek aralığıdır. Bulut keşfiyle ölçüldü (`Aktarılacak
+Projeler/KurSaati/`): gövde/aralık medyanı 0,024, EUR/USD günlük bar CNBC'nin
+aynı gün New York kapanışından medyanda 15,4 bp, bir ÖNCEKİ gün kapanışından
+3,2 bp sapıyor; saatlik bardan kurulan New York 17:00 kapanışı 3,8 bp. Yani
+bülten, kur hatları ve gösterge kartı her döviz değerini BİR GÜN geriden
+basıyordu ve "D kapanışı" diye D−1'in gün sonunu yayımlıyordu — 02.10'da
+EUR/TRY −%0,10 yerine −%0,63, USD/CHF +%0,17 yerine −%0,55, 28.09'da USD/JPY
++%0,34 yerine −%0,99. Kusur 21.09'da indikatör hattında ölçülüp ORADA
+düzeltilmişti ("gövde yok"); başka hiçbir hatta taşınmamıştı. Bir kusur
+bulunduğunda sorulacak soru "bu hattı düzelttim mi" değil, "bu kaynağı başka
+kim okuyor"dur. 28.09'un cumartesi barı "düzeltmesi" tam bu yüzden ters
+çalışmıştı: cumartesi tarihli bar aslında cuma kapanışını taşıyordu. (2) Zincir
+veri koşusunun tazeliğini 12 saatlik YAŞLA ölçüyordu; dünkü akşam koşusu bu
+eşiğin içinde kaldığı için sabahki veri penceresinin hiç ateşlenmediği
+görülmedi. Ölçü artık TAKVİMDİR: veri koşusu bülten gününün UTC gece
+yarısından sonra olmalı ve ölçüm ondan önce kurulduysa bülten yeniden
+tetiklenir.
+Tek tanım `ortak/fx_kapanis.py`: kapanış, kapanış anından önce KAPANAN son
+saatlik bardır (barın zamanı başlangıçtır, kapanışı bir saat sonra); kapanış
+anı gelmemiş gün seriye girmez; son bar kapanış anından üç saatten eskiyse gün
+ölçülemez (besleme sabah kesildiyse sabah fiyatı "kapanış" diye basılmasın);
+yalnız hafta içi; saatlik barın ulaşmadığı 730 günden eski geçmiş günlük
+bardan, değer bir önceki hafta içi güne yazılarak (geçiş günü künyede). İstanbul
+kapanışının gerekçesi ölçüldü: USD/TRY'nin günlük değişim oynaklığı İstanbul
+18:00 ile 8,1 bp, New York 17:00 ile 19,4, UTC gün sonuyla 20,5; özilinti
+−0,31 · −0,44 · −0,47 — akşam ve gece kotasyonları ertesi gün geri dönen
+gürültüdür. 10.09 kararı İstanbul kapanışını "15:00 barı final değil"
+gerekçesiyle reddetmişti; saatlik barda o gerekçe yok, bar 15:00'te kapanır.
+Canlı kotasyon yalnız BİLGİDİR, hiçbir değişime ya da oynaklığa girmez.
+Önbellekler TANIMI taşır (usdtry sütun adı `usdtry_ist18`, bülten
+`DOVIZ_KAPANIS_SURUM`): eski tanımla yazılmış bir önbellek taze olsa da
+kullanılmaz — tazelik kuralı tanım değişikliğini göremez. On dört arıza
+enjeksiyonunun on dördü yakalanıyor; ilk turda kaçan ikisi aynı dersi verdi:
+kaynak metnini soran bir sınama ("koşul satırda geçiyor mu") davranışı
+sınamaz, ve hafta sonunu hiç içermeyen bir fikstür hafta sonu kuralını
+sınayamaz. AÇIK: FX haber endeksi (`indices/`) Yahoo günlük döviz barını
+kullanıyor ve kalibrasyonu bir gün kaymış seriyle yapılmış; düzeltmek o
+projenin kalibrasyonunu değiştirir, karar kullanıcıda. Düzeltme kayıtları
+02.10 (on iki satır, gösterge, üç cümle) ve 28.09 sayısında; aradaki sayıların
+döviz satırları için 02.10'daki genel kayıt geçerli, sayı sayı kayıt yazılmadı.
