@@ -4100,3 +4100,24 @@ barın kendi saatidir, son bar 90 dakikadan eskiyse kotasyon basılmaz. Bir
 yedek yol, ana yol kadar sınanmadıysa sınanmamıştır — üstelik arızanın
 geldiği yer tam orasıdır. Üretimin saatlik çağrısı (730 gün, 1 yıl) bulutta
 ayrıca denendi: on iki sembolün hepsi dönüyor, kapanışlar yereldekiyle aynı.
+İkinci tur (donmuş 6a766089, üç mercek, 12 bulgu: 9 doğrulandı, 2 kısmen, 1
+çürütüldü) ilk turun düzeltmelerinin GEÇİŞ GÜNÜNDE çalışmadığını buldu. (1)
+Yedek yolun koruması "önbellek yeni sütun adıyla yazılmışsa" diye kuruluydu;
+birleştirmeden sonraki ilk koşuda önbellek tanım gereği ESKİ sütun adıyla
+durur, yani koruma tam gerektiği gün kapalıydı ve hattın saati bir gün geri
+gidecekti. Şart kalktı; üç önbellek tanımının üç ayrı okur etiketi var ("eski
+tanım" yapım diliydi; yerine serinin sözleşmesi: günün başı, Londra gece
+yarısı). (2) Bülten eski tanımlı döviz satırını boş ya da kısmi çekimde
+ATIYORDU: on iki satır birden düşer, asgari enstrüman kapısı bülteni
+yazdırmazdı — ilgisiz bir sayım kapısı yeni bir tanım kuralını yayın engeline
+çeviriyordu. Satır artık yedek tanıma çevrilip devrediliyor. (3) Ölçülemeyen
+gün yalnız serinin SAĞ UCUNDA uyarı: 730 günlük pencerede her zaman bir
+yılbaşı vardır, uyarı her koşuda okura basılır ve OVP'nin sağ uç ailesine
+düşüp özeti kalıcı olarak bayat yapardı. Tatil ile kesintiyi ayıran şey o
+günden SONRA kapanış gelip gelmediğidir; "o gün bar yoksa tatil" sezgisi
+tutmuyor (Yahoo tatilde seyrek bar veriyor) ve 30.01.2026 cuma, on G10 kurunun
+dokuzunda gerçek bir kesintiydi. (4) Son iki gözlem arasında ölçülemeyen seans
+varsa denetim "günlük değişim iki seansı kapsıyor" der (Noel, yılbaşı hariç).
+(5) Bir özetin değeri ve etiketi iki ayrı `seri()` çağrısından geliyordu — iki
+çağrı iki çekimdir. On altı arıza enjeksiyonunun on altısı kendi maddesinde
+yakalandı.
