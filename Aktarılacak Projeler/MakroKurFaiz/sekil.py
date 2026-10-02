@@ -27,6 +27,7 @@ import sekil_b07
 import sekil_b08
 import sekil_b09
 import sekil_b10
+import sekil_b10_surucu
 import sekil_b11
 import sekil_b13
 from sekil_ortak import OLCUM, go
@@ -49,10 +50,13 @@ SEKILLER = {
     "15": sekil_b08.s15_redk_cari,
     "16": sekil_b09.s16_kur_baskisi,
     "17": sekil_b10.s17_emtia_paralari,
-    "18": sekil_b11.s18_fama_beta,
-    "19": sekil_b11.s19_em_tasima_vix,
-    "20": sekil_b11.s20_try_artik_akim,
-    "21": sekil_b13.s21_matris,
+    "18": sekil_b10_surucu.s_surucu_harita,
+    "19": sekil_b10_surucu.s_surucu_kayan,
+    "20": sekil_b10_surucu.s_usdjpy,
+    "21": sekil_b11.s18_fama_beta,
+    "22": sekil_b11.s19_em_tasima_vix,
+    "23": sekil_b11.s20_try_artik_akim,
+    "24": sekil_b13.s21_matris,
 }
 
 

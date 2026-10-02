@@ -3,13 +3,12 @@
 """MAKRO DERSİ — Bölüm 10, kur sürücüleri figürleri. Sayılar `veri/olcum.json`dan (b10:
 `sekil_surucu_harita`, `sekil_surucu_kayan`, `sekil_usdjpy`; hover ayrıntısı `p10c`).
 
-Şekil numaraları GEÇİCİ: başlık ve dosya adı tek sabitten (`NO`) kurulur, yeniden numaralamada
-yalnız o sözlük değişir.
+Şekil numaraları (18–20) başlık ve dosya adı için tek sabitten (`NO`) kurulur.
 
 Sürücü haritası iki panele bölünür (temel sürücüler: faiz farkı ve emtia · risk sürücüleri: VIX,
 S&P 500, yuan, dolar sepeti): altı sütun 390 piksellik ekranda hücre başına ~44 piksel bırakır ve
 emtia sütununda hücrenin hangi emtia olduğu (Brent, bakır, soya…) yazılamaz. Hücreler çubuk izi
-olarak çizilir (Şekil 21'in kalıbı): ısı haritası çerçeve kalınlığını hücre hücre taşımaz.
+olarak çizilir (Şekil 24'ün, şok × rejim matrisinin kalıbı): ısı haritası çerçeve kalınlığını hücre hücre taşımaz.
 
 Başlık ve alt başlık dar ekrana göre sarılır (Plotly başlığı sarmaz, taşırır): başlık ~50, alt
 başlık ~74 karakter — 390 pikselde sığan genişlik (rakamlı satırlar harfli satırlardan geniştir;
@@ -72,7 +71,7 @@ def _ust_pay(baslik: str) -> int:
 
 
 def _baslik_yeri(baslik: str) -> dict:
-    """Başlık bloğu üstten çapalanır (Şekil 21'in kalıbı: kendiliğinden yerleşince alt başlık sütun
+    """Başlık bloğu üstten çapalanır (Şekil 24'ün kalıbı: kendiliğinden yerleşince alt başlık sütun
     başlıklarına binebiliyordu) ve ev stilinin üst payı içinde ORTALANIR: pay satır başına 26 piksel
     büyür, blok satır başına ~19,7 piksel tutar (ekran görüntüsünde ölçüldü); fark üstte bırakılsaydı
     alt başlık ile çizim arasında ~110 piksellik boşluk kalıyordu. 33 piksel: pad 48'de bloğun ölçülen

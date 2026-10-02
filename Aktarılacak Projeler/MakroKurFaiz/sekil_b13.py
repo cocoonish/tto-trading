@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """MAKRO DERSİ — Bölüm 13 figürleri. Sayılar `veri/olcum.json`dan (sekil_ortak üzerinden).
 
-Şekil 21 matrisin ısı haritasıdır. Hücreler çubuk izi olarak çizilir, çünkü ısı haritası
+Şekil 24 matrisin ısı haritasıdır. Hücreler çubuk izi olarak çizilir, çünkü ısı haritası
 desen (tarama) taşımaz: ölçülen hücre renkli (eş hareket korelasyonu), vaka hücresi açık
 renk ve noktalı, kaynaklı hücre çapraz taralı, kurulmayan hücre boş. Matris iki alt panele
 bölünür (DM tarafının ve EM tarafının rejimleri): iki tarafta korelasyonun ölçtüğü seriler
@@ -454,7 +454,7 @@ def s21_matris(o: dict) -> None:
     ilk, son = _olay_araligi(m)
     # Başlık ve alt başlık dar ekrana göre sarılır (Plotly başlığı sarmaz): başlık ~50, alt başlık
     # ~78 karakterde (390 px'te sığar). Ev stili üst boşluğu satır sayısından kurar.
-    parca = [f"Şekil 21 — {ozet['hucre']} hücreden {say.get('olculdu', 0)} hücre ölçülebildi;"] + _baslik_bulgusu(olcu)
+    parca = [f"Şekil 24 — {ozet['hucre']} hücreden {say.get('olculdu', 0)} hücre ölçülebildi;"] + _baslik_bulgusu(olcu)
     baslik = "<br>".join(_sar(x, 52) for x in parca)
     alt = [
         "ABD Hazinesi, CNBC, Yahoo Finance, TCMB, TÜİK, Fed, Dünya Bankası",
@@ -472,4 +472,4 @@ def s21_matris(o: dict) -> None:
                    y=1, yref="container", yanchor="top", pad=dict(t=48)),
         hoverlabel=dict(align="left"),
     )
-    _yaz(fig, "21_matris.html", 900)
+    _yaz(fig, "24_matris.html", 900)

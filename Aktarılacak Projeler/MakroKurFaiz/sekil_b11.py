@@ -70,7 +70,7 @@ def _etiket(e: str) -> str:
     return e
 
 
-# ───────────────────────────────────────────────────────────── Şekil 18
+# ───────────────────────────────────────────────────────────── Şekil 21
 def s18_fama_beta(o: dict) -> None:
     b = o["b11"]
     s = b["sekil_18"]
@@ -171,8 +171,8 @@ def s18_fama_beta(o: dict) -> None:
     fig.update_xaxes(range=[t[0], _sonraki_ay(t[-1])], row=2, col=1)
 
     # Başlık NOKTA kestirimini söyler; aralık hükmü alt başlıkta, sayımıyla (yönetilen kur hariç).
-    baslik = ("Şekil 18 — Faiz farkı kura bire bir yansımadı: TRY'nin Fama β'sı her dönemde 1'in altında"
-              if tr_hep_alti else "Şekil 18 — TRY'nin Fama β'sı dönemden döneme 1'in iki yanına düşüyor")
+    baslik = ("Şekil 21 — Faiz farkı kura bire bir yansımadı: TRY'nin Fama β'sı her dönemde 1'in altında"
+              if tr_hep_alti else "Şekil 21 — TRY'nin Fama β'sı dönemden döneme 1'in iki yanına düşüyor")
     if tr_aralik_alti == len(tr_aralik):
         aralik_bulgu = f"yönetilen kur dışındaki {len(tr_aralik)} TRY aralığının hepsi 1'in altında"
     else:
@@ -186,10 +186,10 @@ def s18_fama_beta(o: dict) -> None:
         "<br>forward yerine faiz farkı (örtülü faiz paritesi varsayımı) · yönetilen kur ayları yalnız kendi "
         f"satırında<br>{aralik_bulgu}{g10_bulgu}</sub>")),
         legend=dict(traceorder="normal"))
-    _yaz(fig, "18_fama_beta.html", 900)
+    _yaz(fig, "21_fama_beta.html", 900)
 
 
-# ───────────────────────────────────────────────────────────── Şekil 19
+# ───────────────────────────────────────────────────────────── Şekil 22
 def s19_em_tasima_vix(o: dict) -> None:
     b = o["b11"]
     s = b["sekil_19"]
@@ -232,7 +232,7 @@ def s19_em_tasima_vix(o: dict) -> None:
                  f"öbür aylarda {yuzde(vk['ort_diger_aylik_yuzde'], 2, True)} getirdi")
     # Eşiğin genişleyen penceresinin başlangıç yılı ölçümde bir alan olarak yok: figüre yazılmaz.
     fig.update_layout(title=dict(text=(
-        f"Şekil 19 — {vix_bulgu}"
+        f"Şekil 22 — {vix_bulgu}"
         f"<br><sub>Aylık, {ay(_ay1(s['ilk']))}–{ay(_ay1(s['son']))} · son kümülatif log getiri: TRY dahil "
         f"{yuzde(son_dahil, 1, True)}, TRY hariç {yuzde(son_haric, 1, True)}"
         "<br>yerel para alınır, dolar borçlanılır · getiri = önceki ay sonu politika faizi farkı/12 − aylık kur "
@@ -241,10 +241,10 @@ def s19_em_tasima_vix(o: dict) -> None:
         f"verisinden<br>TRY hariç sepette {yuzde(vh['ort_yuksek_aylik_yuzde'], 2, True)} ve "
         f"{yuzde(vh['ort_diger_aylik_yuzde'], 2, True)} · farkın t'si {vir(vk['fark_t'], 2)} (TRY dahil): aynı "
         "ayın VIX'iyle, öngörü değil</sub>")))
-    _yaz(fig, "19_em_tasima_vix.html", 780)
+    _yaz(fig, "22_em_tasima_vix.html", 780)
 
 
-# ───────────────────────────────────────────────────────────── Şekil 20
+# ───────────────────────────────────────────────────────────── Şekil 23
 def s20_try_artik_akim(o: dict) -> None:
     b = o["b11"]
     s = b["sekil_20"]
@@ -287,10 +287,10 @@ def s20_try_artik_akim(o: dict) -> None:
     egilim = (f"artık TL'nin kendi değer kaybı eğilimini taşır: yönetilen kurdan sonra yılda ortalama "
               f"{yuzde(ta['sonrasi_yillik_ort_yuzde'], 1, True)}, son sepet eğimi {vir(ta['son_beta'], 2)}")
     fig.update_layout(title=dict(text=(
-        f"Şekil 20 — {bulgu1}; {bulgu2}"
+        f"Şekil 23 — {bulgu1}; {bulgu2}"
         f"<br><sub>Haftalık (perşembe kapanışı, cuma etiketli), {tarih(s['ilk'])}–{tarih(s['son'])} · akım: yurt "
         "dışı yerleşiklerin net alımı (TCMB)"
         "<br>artık = TRY'nin haftalık log değişimi − önceki 52 haftanın eğimi × EM sepeti (BRL, MXN, ZAR, INR)"
         f"<br>{egilim}"
         f"<br>EM kurlarının serisi bittiği için artık {tarih(s['artik_son'])} haftasında durur</sub>")))
-    _yaz(fig, "20_try_artik_akim.html", 800)
+    _yaz(fig, "23_try_artik_akim.html", 800)
