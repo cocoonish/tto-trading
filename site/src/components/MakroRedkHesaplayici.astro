@@ -1,0 +1,129 @@
+---
+/**
+ * REDK dengesi ve çıpa terimi — Makrodan Kura ve Faize dersi, Bölüm 7 (Araç 3).
+ *   sapma      x = ln(REDK / denge)                 (artı: ortalamaya göre pahalı TL; TCMB yönü)
+ *   h ay sonra E[x_h] = ρ^h · x
+ *   yarı ömür  ln 0,5 / ln ρ
+ *   A bloğu    q'nun bir yıllık beklenen değişimi = −(ρ^12 − 1) · x   (artı: TL'nin reel değer kaybı)
+ * ρ aylık özbağlanım katsayısıdır; varsayılanlar Bölüm 7'nin ölçümünden (medyan-yansız ve %90 aralığı).
+ * Bu bir çekim terimidir, yön ve zamanlama tahmini değildir: ρ'nun aralığının üst ucu 1'e dayanır.
+ * Zincir: 'makro-redk-guncellendi' olayıyla Kurun üç bloğu aracına akar.
+ */
+import A from '../data/makro-kur-ve-faiz/arac.json';
+const r = A.redk;
+---
+
+<div class="hesap" id="makro-redk">
+  <div class="hesap-ust">
+    <span class="etiket">Hesap Aracı 3</span>
+    <span class="hesap-ad">REDK Dengesi — Çıpa Terimi (A Bloğu)</span>
+  </div>
+
+  <p class="hesap-yonerge">
+    TCMB reel efektif kurunun dengeden sapmasını ve kalıcılığa göre beklenen sönümünü hesaplar.
+    Varsayılanlar {r.tarih_metin} ölçümüdür. Kalıcılık seçimini değiştirin: aynı sapma, aralığın
+    iki ucunda çok farklı bir çekim üretir.
+  </p>
+
+  <div class="girdiler">
+    <label><span class="etiket">Güncel REDK (TÜFE bazlı)</span>
+      <input type="number" id="mr-redk" value={r.redk} step="0.5" /></label>
+    <label><span class="etiket">Denge</span>
+      <select id="mr-denge-sec">
+        <option value={r.denge_tam} selected>1994–2026 ortalaması</option>
+        <option value={r.denge_2003}>2003–2026 ortalaması</option>
+        <option value="elle">Elle</option>
+      </select></label>
+    <label><span class="etiket">Denge REDK</span>
+      <input type="number" id="mr-denge" value={r.denge_tam} step="0.5" /></label>
+    <label><span class="etiket">Kalıcılık ρ (aylık)</span>
+      <select id="mr-rho-sec">
+        <option value={r.rho_mu} selected>medyan-yansız kestirim</option>
+        <option value={r.rho_alt}>%90 aralığının alt ucu (hızlı dönüş)</option>
+        <option value={r.rho_ols}>sıradan en küçük kareler (aşağı yanlı)</option>
+        <option value="elle">Elle</option>
+      </select></label>
+    <label><span class="etiket">ρ</span>
+      <input type="number" id="mr-rho" value={r.rho_mu} step="0.001" min="0" max="1" /></label>
+    <label><span class="etiket">Ufuk (ay)</span>
+      <input type="number" id="mr-h" value="12" step="1" min="1" /></label>
+  </div>
+
+  <div class="saglama">
+    <div class="sag-satir">
+      <div><span class="etiket">Sapma (log, %)</span><output class="ara-deger" id="mr-sapma">—</output></div>
+      <div><span class="etiket">Yarı ömür</span><output class="ara-deger" id="mr-yo">—</output></div>
+      <div><span class="etiket">Ufuk sonu beklenen sapma</span><output class="ara-deger" id="mr-son">—</output></div>
+      <div><span class="etiket">A bloğu: q'nun yıllık beklenen değişimi</span><output class="ara-deger" id="mr-a">—</output></div>
+    </div>
+    <p class="mini-not" id="mr-yorum">—</p>
+  </div>
+</div>
+
+<script>
+  const oku = (id: string) => parseFloat((document.getElementById(id) as HTMLInputElement).value);
+  const yaz = (id: string, m: string) => ((document.getElementById(id) as HTMLElement).textContent = m);
+  const tr = (x: number, b = 2) =>
+    x.toLocaleString('tr-TR', { minimumFractionDigits: b, maximumFractionDigits: b }).replace('-', '−');
+  const yz = (x: number, b = 2, arti = false) => (x < 0 ? '−' : arti && x > 0 ? '+' : '') + '%' + tr(Math.abs(x), b);
+
+  // Python eşi (dogrula.py): aynı üç formül.
+  const sapmaHesap = (redk: number, denge: number) => Math.log(redk / denge) * 100;
+  const yariOmur = (rho: number) => (rho > 0 && rho < 1 ? Math.log(0.5) / Math.log(rho) : Infinity);
+  const aBlok = (rho: number, sapma: number) => -(Math.pow(rho, 12) - 1) * sapma;
+
+  function hesapla() {
+    const redk = oku('mr-redk'), denge = oku('mr-denge'), rho = oku('mr-rho'), h = Math.max(1, Math.round(oku('mr-h')));
+    if (!(redk > 0 && denge > 0 && rho >= 0 && rho <= 1)) return;
+    const x = sapmaHesap(redk, denge);
+    const yo = yariOmur(rho);
+    const son = Math.pow(rho, h) * x;
+    const a = aBlok(rho, x);
+    yaz('mr-sapma', yz(x, 1, true));
+    yaz('mr-yo', isFinite(yo) ? `${tr(yo, 0)} ay (${tr(yo / 12, 1)} yıl)` : 'sonsuz (ρ = 1)');
+    yaz('mr-son', yz(son, 1, true));
+    yaz('mr-a', yz(a, 2, true) + ' / yıl');
+    (document.getElementById('mr-yorum') as HTMLElement).innerHTML =
+      (x > 0
+        ? `TL ortalamaya göre <b>pahalı</b>: çekim reel değer kaybı yönünde.`
+        : `TL ortalamaya göre <b>ucuz</b>: çekim reel değer kazancı yönünde.`) +
+      ` Ölçülen ρ ile yıllık çekim ${yz(a, 2, true)}; aynı sapma TL taşımasının bir aylık getirisinin yanında küçüktür. ` +
+      `Yarı ömrü yıllarla ölçülen bir çekim haftalık bir görüşün gerekçesi olamaz.`;
+    const durum = { sapma: x, aBlok: a, rho, yariOmurAy: yo };
+    (window as any).makroDurum = Object.assign((window as any).makroDurum || {}, { redk: durum });
+    document.dispatchEvent(new CustomEvent('makro-redk-guncellendi', { detail: durum }));
+  }
+
+  for (const [sec, hedef] of [['mr-denge-sec', 'mr-denge'], ['mr-rho-sec', 'mr-rho']]) {
+    (document.getElementById(sec) as HTMLSelectElement).addEventListener('change', (e) => {
+      const v = (e.target as HTMLSelectElement).value;
+      if (v !== 'elle') (document.getElementById(hedef) as HTMLInputElement).value = v;
+      hesapla();
+    });
+  }
+  document.querySelectorAll('#makro-redk input').forEach((el) => el.addEventListener('input', hesapla));
+  hesapla();
+</script>
+
+<style>
+  .girdiler {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.7rem;
+    padding: 0.9rem 1rem 0.4rem;
+  }
+  .saglama {
+    border-top: 1px solid var(--ink-15);
+    padding: 0.8rem 1rem;
+  }
+  .sag-satir {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    gap: 0.6rem;
+  }
+  @media (max-width: 720px) {
+    .girdiler {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

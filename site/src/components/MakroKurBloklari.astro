@@ -1,0 +1,155 @@
+---
+/**
+ * Kurun üç bloğu — Makrodan Kura ve Faize dersi, Bölüm 11 (Araç 4, merkez).
+ * İleri doğru yinelenmiş reel UIP:  q − q̄ = −R·T_B + ρ·T_C
+ *   q̄   çıpa (A bloğu; REDK aracından: güncel sapma ve yıllık çekim)
+ *   R   reel faiz farkı (B bloğu; Taylor aracından), T_B farkın süreceği yıl
+ *   ρ   risk primi (C bloğu, puan/yıl), T_C primin kalıcılığı (yıl)
+ * q artışı TL'nin reel değer kaybıdır (TCMB REDK'nin tersi): q − q̄ = −(REDK sapması).
+ * İma edilen prim:   ρ̂ = (q − q̄ + R·T_B) / T_C
+ * Taşıma (yıllık):   c = (1 + i)/(1 + i*) − 1  — aynı zamanda taşımanın başabaş değer kaybı.
+ * Üç aylık taşımayı sıfırlayan prim artışı: Δρ = c₃ / T_C,  c₃ = ((1 + i)/(1 + i*))^{1/4} − 1.
+ * Borç aracında risk primi katsayısı girildiyse onun C bloğuna etkisi de gösterilir.
+ * Zincir: Taylor, Borç ve REDK araçlarını dinler; 'makro-kur-guncellendi' yayınlar.
+ */
+import A from '../data/makro-kur-ve-faiz/arac.json';
+const k = A.kur;
+---
+
+<div class="hesap" id="makro-kur">
+  <div class="hesap-ust">
+    <span class="etiket">Hesap Aracı 4</span>
+    <span class="hesap-ad">Kurun Üç Bloğu — Çıpa, Reel Faiz Farkı, Risk Primi</span>
+  </div>
+
+  <p class="hesap-yonerge">
+    Yukarıdaki üç aracın çıktısını tek denklemde birleştirir. Reel faiz farkı Taylor aracından,
+    çıpa sapması REDK aracından gelir; faizler {k.tarih_metin} ölçümüdür. Farkın ve primin kaç yıl
+    süreceği bir görüştür: ölçülmez, siz girersiniz.
+  </p>
+
+  <div class="girdiler">
+    <label><span class="etiket">TL faizi i (%)</span>
+      <input type="number" id="mk-i" value={k.i_tl} step="0.25" /></label>
+    <label><span class="etiket">Dolar faizi i* (%)</span>
+      <input type="number" id="mk-is" value={k.i_usd} step="0.1" /></label>
+    <label><span class="etiket">Reel faiz farkı R (puan)</span>
+      <input type="number" id="mk-R" value={k.R} step="0.25" /></label>
+    <label><span class="etiket">R'nin süresi T_B (yıl)</span>
+      <input type="number" id="mk-tb" value="1" step="0.25" min="0" /></label>
+    <label><span class="etiket">Primin kalıcılığı T_C (yıl)</span>
+      <input type="number" id="mk-tc" value="1" step="0.25" min="0.25" /></label>
+    <label><span class="etiket">Çıpa sapması: REDK − denge (log, %)</span>
+      <input type="number" id="mk-sapma" value={k.redk_sapma} step="0.5" /></label>
+  </div>
+
+  <div class="saglama">
+    <div class="sag-satir">
+      <div><span class="etiket">Taşıma (yıllık) = başabaş değer kaybı</span><output class="ara-deger" id="mk-c">—</output></div>
+      <div><span class="etiket">3 aylık taşıma</span><output class="ara-deger" id="mk-c3">—</output></div>
+      <div><span class="etiket">B bloğu: −R·T_B</span><output class="ara-deger" id="mk-b">—</output></div>
+      <div><span class="etiket">Gözlenen q − q̄</span><output class="ara-deger" id="mk-q">—</output></div>
+      <div><span class="etiket">İma edilen risk primi ρ̂</span><output class="ara-deger" id="mk-rho">—</output></div>
+      <div><span class="etiket">3 aylık taşımayı sıfırlayan prim artışı</span><output class="ara-deger" id="mk-sifir">—</output></div>
+    </div>
+    <p class="mini-not" id="mk-yorum">—</p>
+    <p class="mini-not" id="mk-borc">—</p>
+  </div>
+
+  <p class="hesap-dip">
+    <b>Okuma.</b> Taşıma yavaş bir kazançtır, prim artışı ani bir kayıptır: ρ'daki küçük bir artış
+    kalıcılık süresiyle çarpılarak kurun seviyesine bir anda yazılır. Bu araç bir denge seviyesi
+    tahmin etmez; hareketin hangi terimden geldiğini ayırmaya yarar.
+  </p>
+</div>
+
+<script>
+  const oku = (id: string) => parseFloat((document.getElementById(id) as HTMLInputElement).value);
+  const yazDeger = (id: string, v: number) => ((document.getElementById(id) as HTMLInputElement).value = String(Math.round(v * 100) / 100));
+  const yaz = (id: string, m: string) => ((document.getElementById(id) as HTMLElement).textContent = m);
+  const tr = (x: number, b = 2) =>
+    x.toLocaleString('tr-TR', { minimumFractionDigits: b, maximumFractionDigits: b }).replace('-', '−');
+  const yz = (x: number, b = 2, arti = false) => (x < 0 ? '−' : arti && x > 0 ? '+' : '') + '%' + tr(Math.abs(x), b);
+  const puan = (x: number, b = 2) => (x > 0 ? '+' : '') + tr(x, b) + ' puan';
+
+  // Python eşi (dogrula.py): aynı formüller.
+  const tasima = (i: number, is: number) => ((1 + i / 100) / (1 + is / 100) - 1) * 100;
+  const tasima3 = (i: number, is: number) => (Math.pow((1 + i / 100) / (1 + is / 100), 0.25) - 1) * 100;
+  const imaPrim = (qFark: number, R: number, tb: number, tc: number) => (qFark + R * tb) / tc;
+
+  let borcPrimBp: number | null = null;
+
+  function hesapla() {
+    const i = oku('mk-i'), is = oku('mk-is'), R = oku('mk-R'), tb = oku('mk-tb'), tc = oku('mk-tc'), sapma = oku('mk-sapma');
+    if (![i, is, R, tb, tc, sapma].every(isFinite) || tc <= 0) return;
+    const c = tasima(i, is), c3 = tasima3(i, is);
+    const qFark = -sapma;                       // REDK artışı q'nun düşüşü
+    const bBlok = -R * tb;
+    const rho = imaPrim(qFark, R, tb, tc);
+    const sifir = c3 / tc;
+    yaz('mk-c', yz(c));
+    yaz('mk-c3', yz(c3));
+    yaz('mk-b', yz(bBlok, 2, true));
+    yaz('mk-q', yz(qFark, 2, true));
+    yaz('mk-rho', puan(rho));
+    yaz('mk-sifir', puan(sifir));
+    (document.getElementById('mk-yorum') as HTMLElement).innerHTML =
+      `Reel faiz farkı T_B = ${tr(tb, 2)} yıl sürerse TL'yi çıpasına göre ${yz(-bBlok, 1)} pahalı tutar; ` +
+      `gözlenen sapma ${yz(sapma, 1, true)} (REDK yönü). Arada kalan, kalıcılığı ${tr(tc, 2)} yıl varsayılan ` +
+      `<b>${puan(rho)}</b> yıllık bir risk primiyle açıklanır. Yalnız ${puan(sifir)} prim artışı üç aylık taşımayı siler.`;
+    const bEl = document.getElementById('mk-borc') as HTMLElement;
+    bEl.innerHTML = borcPrimBp != null && isFinite(borcPrimBp)
+      ? `Borç aracındaki katsayıyla ufuk boyunca prim ${tr(borcPrimBp, 0)} bp değişir; bu, kalıcılığı ${tr(tc, 2)} yıl ise kuru ${yz((borcPrimBp / 100) * tc, 2, true)} oynatır (C bloğu).`
+      : 'Borç aracında risk primi katsayısı girilmedi: borcun C bloğuna etkisi gösterilmiyor (varsayılan konmaz).';
+    const durum = { tasima: c, tasima3: c3, bBlok, qFark, imaPrim: rho, sifirlayan: sifir };
+    (window as any).makroDurum = Object.assign((window as any).makroDurum || {}, { kur: durum });
+    document.dispatchEvent(new CustomEvent('makro-kur-guncellendi', { detail: durum }));
+  }
+
+  document.addEventListener('makro-taylor-guncellendi', (e: Event) => {
+    const t = (e as CustomEvent).detail;
+    if (t && isFinite(t.R)) yazDeger('mk-R', t.R);
+    if (t && isFinite(t.politika)) yazDeger('mk-i', t.politika);
+    if (t && isFinite(t.iYabanci)) yazDeger('mk-is', t.iYabanci);
+    hesapla();
+  });
+  document.addEventListener('makro-redk-guncellendi', (e: Event) => {
+    const r = (e as CustomEvent).detail;
+    if (r && isFinite(r.sapma)) yazDeger('mk-sapma', r.sapma);
+    hesapla();
+  });
+  document.addEventListener('makro-borc-guncellendi', (e: Event) => {
+    const b = (e as CustomEvent).detail;
+    borcPrimBp = b ? b.primEkBp : null;
+    hesapla();
+  });
+  document.querySelectorAll('#makro-kur input').forEach((el) => el.addEventListener('input', hesapla));
+  const d = (window as any).makroDurum || {};
+  if (d.taylor) { yazDeger('mk-R', d.taylor.R); yazDeger('mk-i', d.taylor.politika); yazDeger('mk-is', d.taylor.iYabanci); }
+  if (d.redk) yazDeger('mk-sapma', d.redk.sapma);
+  if (d.borc) borcPrimBp = d.borc.primEkBp;
+  hesapla();
+</script>
+
+<style>
+  .girdiler {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.7rem;
+    padding: 0.9rem 1rem 0.4rem;
+  }
+  .saglama {
+    border-top: 1px solid var(--ink-15);
+    padding: 0.8rem 1rem;
+  }
+  .sag-satir {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
+    gap: 0.6rem;
+  }
+  @media (max-width: 720px) {
+    .girdiler {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
