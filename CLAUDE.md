@@ -3960,3 +3960,82 @@ saniye sonra yeni bir ölçüm commit'i var. Kural rehbere SIRA KURALI olarak
 yazıldı ve sayfanın başlığı ölçüm anında doğru kalan olguya çekildi ("vadesi
 geçmiş, açık kalan"). AÇIK: izleme görüntüsünü defterle kıyaslayan bir ENGEL yok
 (temalarda var); sıra atlanırsa sayfa eski karneyi basar.
+
+**Kurucu ilke — BİR DÖVİZ BARININ TARİHİ, KAPANIŞIN TARİHİ DEĞİLDİR; ve
+KAYDIRARAK HİZALANAN BİR SERİ, HAFTA SONUNU CUMAYA YAZAR.** 02.10.2026 OAT–Bund
+analizinin (`Aktarılacak Projeler/OatBund/`) ikinci incelemesi yazının en
+güçlü iddiasını taşıyan ölçünün saatini düşürdü. EUR/USD CNBC'nin New York
+17:00 kapanışından, çaprazlar (EUR/GBP, EUR/CHF) Yahoo'dan okunuyordu ve
+Yahoo'nun D etiketli döviz barı D−1'in New York kapanışını taşıyor; analiz bu
+yüzden barları bir iş günü geri kaydırıyordu. Kaydırma pazartesi barını CUMAYA
+yazar, ama o bar cuma kapanışı değil hafta sonu açılışından sonraki fiyattır:
+cuma uçlu her olay penceresi hafta sonunu ölçmüyordu. Ölçüldü: 2017 birinci
+turunda kaydırılmış seri EUR/GBP'yi +%0,31, New York kapanışı +%1,45 veriyor;
+kaydırılmış serinin New York kapanışından sapması cuma günleri öbür günlerin
+iki katı (medyan %0,07'ye karşı %0,03–0,04). Ortalama bir hizalama sınaması
+bunu göremez — sapma yalnız bir haftanın gününde toplanıyor. Kural: bir
+ayrıştırmanın bütün bacakları AYNI kaynağın AYNI kapanışından gelir
+(`arsiv_kur.py`, mevcut arşive dokunmadan yalnız yeni dosya yazar); sentetik
+bacak kaynağın kendi serisiyle sınanır (GBP/USD medyan 3,0 bp, yuvarlama).
+
+İki sınıf daha aynı turda ölçülerek kapandı. (1) SAATİ FARKLI İKİ ÖLÇÜ AYNI
+PENCEREYİ PAYLAŞAMAZ: getiri Avrupa kapanışından (Paris 17:30), kur New York
+kapanışından (23:00) okunur; akşam açıklanan bir not kararının getiri tepkisi
+ertesi gündür, kurunki ise açıklamanın New York kapanışından önce mi sonra mı
+geldiğine bağlı — olaylar zaman sınıfıyla (gün içi · akşam · hafta sonu)
+ölçülüyor ve kapı her satırın penceresini sınıfına karşı sınıyor. 2012'nin AAA
+kaybı seans İÇİNDE sızdığı için "akşam" değil "gün içi"; yanlış sınıfta tepki
+günü sızmadan sonraki pazartesi olurdu ve +14,2 bp yerine −8,7 bp yazılırdı.
+(2) BİR GÖSTERGE SERİSİNİN SEVİYE KAYMASI MUTLAK EŞİKLE BULUNAMAZ: Fransa'nın
+10 yıllık göstergesi 15 Haziran 2026'da yeni kâğıda geçti, fark bir günde
++10,3 bp sıçradı ve 10 yıllık getiri yalnız +5,6 bp oynadı — o gün bütün
+getiriler düşüyordu. İmza GÖRELİ: 10 yıllık, aynı ülkenin 5 ve 30 yıllığının
+ortalamasından ≥ 10 bp ayrışır. Kayma betadan ve tek gün kıyaslarından
+çıkarılır; seviye kıyaslarında ("yılın dibinden bu yana +86,0 bp") adıyla
+yazılır, sessizce düşülmez.
+
+Bir yorum sınıfı da kayda geçsin: "kaybın beşte dördü dolar geneliydi" cümlesi
+sterlin ve frank kıyasıyla KURULAMAZ — Avrupa'yı ortak etkileyen bir şok da o
+ayrıştırmada dolar bacağına düşer. Avrupa dışı bir sepet (yen, Kanada doları,
+Avustralya doları) eklendi ve cümle ölçüldüğü kadarıyla yazıldı ("öbür Avrupa
+paralarıyla ortaktı"; dolar yen dışında Avrupa dışı paralara karşı da
+güçlendi). Ve iki kıyasın karıştırıcıları ters yönlü: sterlin riskten kaçışta
+zayıflar (VIX katsayısı EUR/GBP'de artı), frank güçlenir (EUR/CHF'de eksi) ve
+2011–2015 SNB tabanında yapısal olarak sınırlıdır; iki kıyas gerçek etkiyi iki
+yandan sınırlar, biri tek başına hüküm vermez.
+
+KAPIYA SAYI ENVANTERİ KONDU. Yazı yeniden kurulunca eski kapı ilk satırda
+çöktü (silinmiş bir anahtarı okuyordu) — ama asıl soru, kapının yeniden
+yazılmış bir metinde NEYİ GÖRMEDİĞİYDİ: ifade listesi tutan bir kapı, listeye
+girmemiş bir sayıyı yeşil geçer. `dogrula.py` artık metnin kendisinden
+başlıyor: düz metindeki ve tablo hücrelerindeki HER ondalık sayı ya ölçümden
+kurulmuş, sınanmış bir ifadenin ya da hücrenin içinde, ya da adıyla
+bildirilmiş bir dış kaynak ifadesinin (haber, resmî belge) içinde durmalı;
+dış kaynak ifadesi metinden kalkarsa da kapı düşer, liste sessizce çürümez.
+Ön bilgi (açıklama, kart özeti, başlık) gövdeden AYRI alanlarda sınanıyor —
+bir ifadenin gövdede geçmesi kartta yanlış yazılmadığını göstermez. Figürler
+çizildikleri ölçüm dosyasının özünü taşıyor, ölçüm dosyası da kendisini üreten
+`olcum.py`nin özünü; ikisinden biri değişip ardındaki adım koşulmazsa kapı
+düşer. İlk koşuda 932 sayının biri yanlış çıktı: −1,15 bp elle "−1,2" diye
+yazılmıştı, sözleşme Python'un yuvarlamasıdır ("−1,1"). On üç arıza
+enjeksiyonunun on üçü kendi ölçütünde yakalandı.
+
+Üçüncü tur (donmuş kopyaya karşı beş mercek, 60 bulgu; 1'i çürütüldü) ölçünün
+kendisinde kusur bulmadı — sayı kapısı 932 sayının hepsini tutturuyordu — ve
+kusurların tamamı HÜKÜMDEYDİ: doğru sayıların üstüne kurulan, onlardan güçlü
+cümleler. Üç sınıf kayda değer. (1) BİR AYIKLAMA YALNIZ ADLANDIRDIĞI KISMI
+DÜŞER: "ikisi düşülse de (75,7 bp)" yalnız gösterge payını düşmüştü,
+başlangıç seçiminin yanlılığı sayıda yoktu; doğrusu öbür başlangıç günlerinin
+(30 Haziran, 31 Ağustos) açılmasını yan yana vermek. (2) BAĞIMSIZLIK BİRİMİ
+EŞİĞE GÖRE DEĞİŞMEZ: bugünkü hızı aşan sekiz gözlem bugünkü eşikte iki kümeye
+ayrılıyordu ve yazı "bağımsız örnek iki" dedi; aynı yazının 30 bp eşiğindeki
+kümelemesi ikisini tek kümede tutuyor. Aradaki gözlemleri süzmek bağımsızlık
+yaratmaz. (3) AYNI IZGARANIN İKİ BACAĞI AYNI DAKİKADAN GELMEYEBİLİR: 15
+dakikalık ızgarada ABD 2 yıllığı :00/:05, euro ve Avrupa getirileri :01/:06
+kotasyonu taşıyor; "16:00" noktası ABD bacağında veriden sonrası, euroda
+15:56'dır ve "euro ISM çeyreğinde düşmedi" cümlesi verinin öncesini ölçüyordu.
+Metin aynı noktayı Alman 2 yıllığı için doğru okumuş, kur için okumamıştı.
+Kapı sayıyı tutturur, hükmü tutturmaz; hükümler `dogru()` ile adıyla sınanır
+(tez cümlesinin her geçmiş bağı tek bir kontrolle anlamsızlaşıyor mu, 54
+milyar istisnası, 2017'nin seçim öncesi geri çekilmesi, kümelerin ertesi ayı
+dış etkenden önce mi bitiyor).

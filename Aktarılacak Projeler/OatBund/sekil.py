@@ -192,15 +192,15 @@ def sekil01(o: dict) -> None:
     f.update_xaxes(tickformat="%Y")
     _baslik(f, "01", f"Fransa'nın farkı {tarih(sv['son_gorulme'])}'{ek_dan(sv['son_gorulme'][:4])} beri en yüksek",
             "Fransa ve İtalya 10 yıllık gösterge getirisinin Almanya'nınkinden farkı, baz puan · "
-            "günlük Avrupa kapanışı · 2000–2026 · İtalya'nın 2011–12 zirvesi ölçeği kırpmasın diye "
-            "eksen 420 bp'de kesildi.")
+            "günlük Avrupa kapanışı · 2000–2026 · İtalya'nın 2011–12 zirvesi Fransa'nın çizgisini "
+            "ezmesin diye eksen 420 bp'de kesildi; İtalya'nın çizgisi o dönemde şeklin üst kenarında kesilir.")
     _yaz(f, "01_tarihce", 480)
 
 
 # ─────────────────────────────────────────────────────────────── 02
-# (gün, kısa etiket). Metinde anılan ve birincil kaynakta ya da bir yayıncıda
-# doğrulanmış olaylar (keşif #33–#34). dogrula.py her olayın gününün metinde
-# geçtiğini sorar.
+# (gün, kısa etiket). Altısı birincil kaynakta ya da bir yayıncıda doğrulanmış
+# olaylar, Hürmüz günü bu sitenin Hürmüz analizinin ölçümü (keşif #33–#34).
+# dogrula.py her olayın gününün metinde geçtiğini sorar.
 OLAYLAR = [
     ("2026-02-02", "2026 bütçesi kabul"),
     ("2026-03-02", "Hürmüz şoku"),
@@ -214,7 +214,7 @@ OLAYLAR = [
 
 def sekil02(o: dict) -> None:
     s, it = o["seriler"]["spread"], o["seriler"]["spread_it"]
-    bas = "2026-01-01"
+    bas = "2025-12-31"   # yılın başlangıç seviyesi (1 Ocak TARGET tatili)
     st = [(t, v) for t, v in zip(s["t"], s["v"]) if t >= bas]
     itt = [(t, v) for t, v in zip(it["t"], it["v"]) if t >= bas]
     f = go.Figure()
@@ -245,7 +245,7 @@ def sekil02(o: dict) -> None:
     olay = " · ".join(f"({i}){nb}{tarih_g(g).replace(' ', nb)}: {e}" for i, (g, e) in enumerate(OLAYLAR, 1))
     _baslik(f, "02", f"Fransa {tarih_g_dan(fi['kesintisiz_bas'])} beri İtalya'dan pahalı borçlanıyor",
             "10 yıllık gösterge getirisinin Almanya'ya farkı, baz puan · günlük Avrupa kapanışı · "
-            f"1 Ocak – {tarih(o['son_gun'])} · olaylar: {olay} · G: 15{nb}Haziran gösterge kâğıt değişimi, "
+            f"31 Aralık 2025 – {tarih(o['son_gun'])} · olaylar: {olay} · G: 15{nb}Haziran gösterge kâğıt değişimi, "
             f"farkta {vir(gi['spr'], 1, True)} bp seviye kayması (olay değil).")
     _yaz(f, "02_yil", 500)
 
@@ -274,8 +274,9 @@ def sekil03(o: dict) -> None:
                                hovertemplate="%{customdata}<extra></extra>"))
     f.update_xaxes(title="Almanya'ya fark, baz puan", range=[0, max(r["spread"] for r in a) * 1.25])
     _baslik(f, "03", "Ölçülen sekiz euro ülkesinin en geniş farkı Fransa'da",
-            "10 yıllık gösterge getirisinin Almanya'ya farkı · gri: 30 Haziran 2026 · renkli: son kotasyon "
-            "(Yunanistan ve Portekiz 30 Eylül, öbürleri 1 Ekim) · Avrupa kapanışı.")
+            "10 yıllık gösterge getirisinin Almanya'ya farkı · gri nokta: 30 Haziran 2026 · sayıyla yazılan "
+            "nokta: son kotasyon (Fransa bordo, İtalya mavi, öbür ülkeler koyu gri; Yunanistan ve Portekiz "
+            "30 Eylül, öbürleri 1 Ekim) · Avrupa kapanışı.")
     _yaz(f, "03_akranlar", 480, lejant_y=-0.22, alt=96)
 
 
@@ -384,7 +385,7 @@ def sekil06(o: dict) -> None:
     _baslik(f, "06", f"30 Eylül'de biten pencerede 10 bp açılmaya EUR/USD'de {yuz(kk['son'], 2, True)}, "
             f"EUR/GBP'de {yuz(kk['eurgbp_son'], 2, True)} eşlik ediyor",
             "104 haftalık kayan pencere: haftalık kur log değişimi = sabit + b₁·Δ(ABD−Almanya 2y) + "
-            "b₂·Δ(OAT–Bund 10y); çizgiler b₂×10 · kurlar New York kapanışı · gölge Newey–West ±2 s.h. · "
+            "b₂·Δ(OAT–Bund 10y); çizgiler b₂×10 · kurlar New York kapanışı · gölge EUR/USD için Newey–West ±2 s.h. · "
             "Mart 2020 – Mart 2022 basamağı tek bir haftadan (18 Mart 2020) gelir: hafta pencereye girdiği ve "
             "çıktığı günlerde çizgiler sıçrar.")
     _yaz(f, "06_kayan", 480, lejant_y=-0.2, alt=90)
@@ -428,7 +429,8 @@ def sekil07(o: dict) -> None:
     _baslik(f, "07", f"{tarih_g(o['son_gun'])}, {q['bas']} → {q['son']}: faiz farkı {vir(q['rd']['degisim'], 1, True)} bp "
             f"oynarken fark {vir(q['spr']['degisim'], 1, True)} bp açıldı, euro {yuz(q['eurusd']['degisim_yuzde'], 2, True)}",
             "15 dakikalık ızgara, her nokta o saate kadarki son kotasyon · üst: üç fark, 15:30'a göre değişim, aynı "
-            "ölçek · alt: EUR/USD · Avrupa seansı 08:00–17:30 · pencere veriye bakılarak seçildi.")
+            "ölçek · alt: EUR/USD · Avrupa seansı 08:00–17:30 · iki pencere de (15:30 ve 16:15'ten 17:30'a) "
+            "veriye bakılarak seçildi.")
     _yaz(f, "07_gun_ici", 620, lejant_y=-0.2, alt=130)
 
 
@@ -470,10 +472,10 @@ def sekil09(o: dict) -> None:
     p = o["seriler"]["ileri_noktalar"]
     il, ilb = o["ileri"][0], o["ileri"][4]
     f = go.Figure()
-    # Fransa farkının gözlemleri: bordo. Ertesi ay 1 bp'den fazla açılanlar
-    # içi boş işaretle; ikisi sıfırın hemen üstünde (+0,9 ve +0,4 bp).
-    for ad_, sec, sembol in (("geçmiş gözlemler", [i <= 1 for i in p["i"]], "circle"),
-                             ("ertesi ay 1 bp'den fazla açılanlar", [i > 1 for i in p["i"]], "circle-open")):
+    # Fransa farkının gözlemleri: bordo. Ertesi ay daha da açılanlar (başlıktaki
+    # pay) içi boş işaretle; ikisi sıfırın hemen üstünde (+0,9 ve +0,4 bp).
+    for ad_, sec, sembol in (("ertesi ay daralan ya da değişmeyenler", [i <= 0 for i in p["i"]], "circle"),
+                             ("ertesi ay daha da açılanlar", [i > 0 for i in p["i"]], "circle-open")):
         f.add_trace(go.Scatter(x=[a for a, k in zip(p["g"], sec) if k], y=[b for b, k in zip(p["i"], sec) if k],
                                mode="markers", name=ad_,
                                marker=dict(color=CLARET, size=8 if sembol == "circle" else 10, opacity=0.8,
@@ -492,7 +494,7 @@ def sekil09(o: dict) -> None:
     _baslik(f, "09", f"30 bp'den hızlı açılmalardan sonra ertesi ay daha da açılan gözlemlerin payı "
             f"%{vir(il['daha_acildi_payi'], 1)}; bugünkü hızı aşanlarda %{vir(ilb['daha_acildi_payi'], 0)}",
             f"2000–2026, {il['gozlem']} gözlem, {il['epizot']} ayrı küme (örtüşen günler bağımsız değildir); "
-            f"bugünkü hızı aşan {ilb['gozlem']} gözlem tek bir krizden, {ilb['epizot']} kümede · sonraki 22 iş "
+            f"bugünkü hızı aşan {ilb['gozlem']} gözlemin hepsi bu kümelerin birinde (Ekim 2011 – Ocak 2012) · sonraki 22 iş "
             f"günü medyanı {vir(il['medyan'], 1, True)} bp · geçmiş bir dağılımdır, tahmin değildir.")
     _yaz(f, "09_ileri", 480, lejant_y=-0.2, alt=96)
 

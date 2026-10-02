@@ -317,16 +317,16 @@ def rakamlar(govde: str, o: dict) -> None:
         (bp(o["hiz"]["10y_22"]["degisim"], 1, True),
          f"son 22 iş günündeki açılma ({ay_yil(o['hiz']['10y_22']['son_gorulme'])}'den beri en hızlı)"),
         (yz(ey["fx"], 2, True), "EUR/USD, 31 Ağustos → 1 Ekim, New York kapanışı (log değişim)"),
-        (yz(e2c["eurgbp"], 2, True), "EUR/GBP, 28 Eylül → 1 Ekim: euroya özgü kayıp son üç günde (önceki dört "
-                                     f"haftada {yz(e1c['eurgbp'], 2, True)})"),
+        (yz(e2c["eurgbp"], 2, True), f"EUR/GBP, 28 Eylül → 1 Ekim — önceki dört haftada {yz(e1c['eurgbp'], 2, True)} "
+                                     "iken son üç günün euroya özgü kaybı"),
         (yz(d["gbpusd"]["b"]["spr"] * 10, 2, True),
-         "Fransa farkındaki 10 bp açılmaya eşlik eden haftalık GBP/USD hareketi, 2024–2026 (EUR/USD'de "
-         f"{yz(d['faiz+fr']['b']['spr'] * 10, 2, True)})"),
+         f"EUR/USD'de {yz(d['faiz+fr']['b']['spr'] * 10, 2, True)} iken Fransa farkındaki 10 bp açılmaya eşlik eden "
+         "haftalık GBP/USD hareketi, 2024–2026"),
         (yz(il["daha_acildi_payi"], 1),
          "bir ayda 30 bp'den hızlı açılmaların ardından farkın ertesi ay daha da açıldığı gözlemlerin payı "
-         f"({il['gozlem']} gözlem, {il['epizot']} küme); bugünkü hızı aşan {ilb['gozlem']} gözlemde "
-         f"{yz(ilb['daha_acildi_payi'], 0)}"),
+         f"({il['gozlem']} gözlem, {il['epizot']} küme; bugünkü hızı aşan {ilb['gozlem']} gözlemde hiç yok)"),
     ]
+    dogru(ilb["daha_acildi_payi"] == 0, "rakam şeridi: bugünkü hızı aşan gözlemlerde daha açılan var")
     bas = govde.index('<ul class="rakamlar">')
     blok = govde[bas:govde.index("</ul>", bas)]
     yazili = [(b, _norm(s)) for b, s in re.findall(r"<li><b>([^<]+)</b><span>([^<]+)</span></li>", blok)]
@@ -498,7 +498,8 @@ def tablolar_sina(o: dict) -> None:
     ev = {r["bas"]: r for r in o["evreler"]}
     eg2 = o["egri"]["2"]["spread"]
     hucre(t, "Ekim boyunca", 2, "Kurun dolar bacağı: eylülün birinci evresinde ABD 2 yıllığı "
-          f"{bp(ev['2026-08-31']['us2y_bp'], 1, True)} yükseldi", "katalizör")
+          f"{bp(ev['2026-08-31']['us2y_bp'], 1, True)} yükseldi, ABD–Almanya 2 yıllık farkı "
+          f"{bp(_cap(o, '2026-08-31', '2026-09-28')['rd'], 1, True)} açıldı", "katalizör")
     hucre(t, "15 Ekim 2026", 2, "Komisyon'un değerlendirmesi kasımda; İtalya'nın planı bulaşma tarafı. İhale orta "
           f"vadeli kâğıtlarda talebi gösterir; 2 yıllık fark 1 Ekim'de {bp(eg2)}", "katalizör")
     dis_hucre(t, "5 Kasım 2026", 2, "%4,93 ile satıldı, teklif/satış 2,0", "AFT ihale sonucu")
@@ -557,9 +558,18 @@ def cumleler(on: dict, o: dict) -> None:
     bag = [d for d, mm in D.items() if mm["eurgbp"]["b"]["spr"] < 0 and abs(mm["eurgbp"]["t"]["spr"]) >= 1.96]
     dogru(bag == ["2010–2012"], f"sterline karşı euroya özgü bağ yalnız 2010–12'de değil: {bag}")
     fr = o["saglamlik"]["frank"]
-    dogru(abs(fr["2013–2019"]["snb_haric"]["t"]["spr"]) >= 1.96 and abs(D["2020–2023"]["eurchf"]["t"]["spr"]) >= 1.96
+    dogru(abs(fr["2013–2019"]["snb_haric"]["t"]["spr"]) >= 1.96 and abs(fr["2013–2019"]["snb_haric_vix"]["t"]["spr"]) >= 1.96
+          and abs(D["2013–2019"]["eurchf"]["t"]["spr"]) < 1.96
+          and abs(D["2020–2023"]["eurchf"]["t"]["spr"]) >= 1.96 and abs(fr["2020–2023"]["vix"]["t"]["spr"]) < 1.96
           and abs(D["2024–2026"]["eurchf"]["t"]["spr"]) < 1.96,
-          "franka karşı euroya özgü bağ '2013–2023'te var, 2024–2026'da yok' tutmuyor")
+          "franka karşı euroya özgü bağ '2013–2019'da SNB haftalarına, 2020–2023'te VIX'e duyarlı, 2024–2026'da yok' "
+          "tutmuyor")
+    dogru(abs(fr["2013–2019"]["it_snb_haric"]["t"]["spr"]) < 1.96 and abs(fr["2020–2023"]["vix"]["t"]["spr"]) < 1.96
+          and abs(D["2010–2012"]["eurgbp_it"]["t"]["spr"]) < 1.96,
+          "'geçmişteki euroya özgü bağın her biri tek bir kontrolle anlamsızlaşıyor' tutmuyor")
+    e10g = D["2010–2012"]["eurgbp_it"]
+    dogru(abs(e10g["t"]["spr"]) < 1.96 and e10g["t"]["ispr"] <= -1.96,
+          "2010–12 sterlin bağı İtalya farkı eklenince İtalya'ya geçmiyor")
     # ── yönetici özeti: tez
     metinde(f"kapanışında {bp(sv['spread'])} ile {s10}'den beri en yüksekte; son 22 iş gününde "
             f"{bp(h['10y_22']['degisim'], 1, True)} açıldı", "tez seviye ve hız")
@@ -593,10 +603,15 @@ def cumleler(on: dict, o: dict) -> None:
     metinde(f"fark ertesi ay medyanda {bp(il['medyan'], 1, True)} geriledi", "özet ileri medyan")
     a11 = [c for c in il66["kumeler"] if c["bas"].startswith("2011-08")][0]
     metinde(f"dört gözlemin dördünde daha açıktı (medyan {bp(a11['ileri_medyan'], 1, True)})", "özet Ağustos 2011")
-    dogru(a11["n"] == 4 and a11["daha_acilan"] == 4, "Ağustos 2011 kümesi dört/dört değil")
-    dogru(len(ilb["kumeler"]) == 2 and all(c["daha_acilan"] == 0 for c in ilb["kumeler"])
-          and all(c["bas"][:4] in ("2011", "2012") for c in ilb["kumeler"]),
-          "bugünkü hızı aşan açılma: iki küme / hepsi daraldı / 2011–12 tutmuyor")
+    dogru(a11["n"] == 4 and a11["daha_acilan"] == 4 and a11["azami_acilma"] < il66["bugunku_acilma"]
+          and sum(1 for c in il66["kumeler"] if c["bas"][:7] == "2011-08") == 1,
+          "Ağustos 2011 kümesi dört/dört / tek küme / bugünkü hızın altında değil")
+    kb_ = [c for c in il["kumeler"] if c["bas"] <= ilb["kumeler"][0]["bas"] and ilb["kumeler"][-1]["son"] <= c["son"]]
+    dogru(len(kb_) == 1 and kb_[0]["bas"][:7] == "2011-10" and kb_[0]["son"][:7] == "2012-01"
+          and all(c["daha_acilan"] == 0 for c in ilb["kumeler"]),
+          "bugünkü hızı aşan açılma: tek 30 bp kümesi (Ekim 2011 – Ocak 2012) / hepsi daraldı tutmuyor")
+    dogru(len(ilb["kumeler"]) == 2 and ilb["kumeler"][0]["bas"][:7] == "2011-11" and ilb["kumeler"][-1]["bas"][:7] == "2012-01",
+          "bugünkü eşikte kümeler Kasım 2011 ve Ocak 2012 değil")
     metinde(f"(2010 {yz(ep['2010 Yunanistan']['eurgbp_yuzde'], 2, True)}, 2011 "
             f"{yz(ep['2011 euro bölgesi borç krizi']['eurgbp_yuzde'], 2, True)})", "özet kriz EUR/GBP")
     dogru(all(0.8 <= abs(ep[x]["eurgbp_z"]) <= 1.4 for x in ("2010 Yunanistan", "2011 euro bölgesi borç krizi")),
@@ -695,8 +710,9 @@ def cumleler(on: dict, o: dict) -> None:
           "fark betalarının anlamlılık okuması tutmuyor")
     e1 = b["evre1"]
     metinde(f"birinci evrede Bund'un {bp(e1['de'], 1, True)} yükselişi, Ocak–Ağustos betasıyla ({sayi(e1['beta_once'], 2)}) "
-            f"farkı {bp(e1['pay_once'], 1, True)}, evrenin kendi betasıyla ({sayi(e1['beta_ic'], 2)}) "
-            f"{bp(e1['pay_ic'], 1, True)} açar; yani birinci evrenin {bp(e1['spr'], 1, True)}'lik açılmasının dörtte biri "
+            f"farkı {bp(e1['pay_once'], 1, True)}, evrenin kendi betasıyla ({sayi(e1['beta_ic'], 2)}; 31 Ağustos → 28 Eylül, "
+            f"{e1['beta_ic_n']} iş günü — tablodaki eylül satırının {sayi(eyl['fr_b'], 2)}'sı Bund'un düştüğü 29–30 Eylül'ü de "
+            f"taşır) {bp(e1['pay_ic'], 1, True)} açar; yani birinci evrenin {bp(e1['spr'], 1, True)}'lik açılmasının dörtte biri "
             "ile yarısı", "beta payı")
     dogru(0.18 <= e1["pay_once"] / e1["spr"] <= 0.3 and 0.45 <= e1["pay_ic"] / e1["spr"] <= 0.56,
           "'dörtte biri ile yarısı' tutmuyor")
@@ -734,6 +750,7 @@ def cumleler(on: dict, o: dict) -> None:
             f"{yz(eg['2']['de_payi'] * 100, 0)}'i Alman bacağıdır", "Almanya getirileri")
     metinde(f"İtalya'nın 2 yıllık farkı da {bp(eg['it2']['degisim_1g'], 1, True)} açıldı; İtalya'nın kendi 2 yıllığı "
             f"{bp(eg['it2y_1g_bp'], 1, True)} yükseldi, yani o sıçramanın da {yz(eg['it2']['de_payi'] * 100, 0)}'u", "İtalya 2y")
+    dogru(0.6 <= eg["2"]["de_payi"] <= 0.72, "'2 yıllık sıçramanın üçte ikisi Almanya'dan' tutmuyor")
     sp = [eg[x]["spread"] for x in v]
     dogru(sp == sorted(sp), "fark eğrisi yukarı eğimli değil")
     metinde(" / ".join(sayi(x) for x in sp) + " bp ile yukarı eğimli", "eğri seviyeleri")
@@ -783,7 +800,11 @@ def cumleler(on: dict, o: dict) -> None:
             f"{yz(ey['usdaud'], 2, True)} güçlendi, yalnız yene karşı {yz(ey['usdjpy'], 2, True)} değer kaybetti", "Avrupa dışı")
     metinde(f"31 Ağustos → 28 Eylül euro {yz(e1c['fx'], 2, True)}, sterlin {yz(e1c['dolar_gbp'], 2, True)} kaybetti; euro "
             f"sterline karşı {yz(e1c['eurgbp'], 2, True)}, franka karşı {yz(e1c['eurchf'], 2, True)} değer kazandı. Bu evrede "
-            f"ABD 2 yıllığı {bp(e1c['us2'], 1, True)} yükseldi ve Fransa farkı {bp(e1c['spr'], 1, True)} açıldı", "evre 1 çapraz")
+            f"ABD 2 yıllığı {bp(e1c['us2'], 1, True)} yükseldi, ama Alman 2 yıllığı da yükseldiği için ABD–Almanya 2 yıllık "
+            f"faiz farkı yalnız {bp(e1c['rd'], 1, True)} açıldı; dolar güçlendi, ama yene karşı {yz(e1c['usdjpy'], 2, True)} "
+            f"değer kaybetti. Fransa farkı {bp(e1c['spr'], 1, True)} açıldı", "evre 1 çapraz")
+    dogru(e1c["de2"] > 0 and e1c["rd"] < e1c["us2"] and e1c["usdjpy"] < 0,
+          "evre 1: Alman 2y yükselmedi / faiz farkı ABD 2y'den az açılmadı / dolar yene karşı kaybetmedi")
     dogru(abs(e1c["us2"] - ev1["us2y_bp"]) < 0.05 and abs(e1c["spr"] - ev1["fr"]) < 0.05, "çapraz ve evre tabloları ayrışıyor")
     metinde(f"(aynı evrede Fransa İtalya'dan {bp(ev1['fr_eksi_it'], 1, True)} ayrıştı)", "evre 1 Fransa–İtalya")
     metinde(f"28 Eylül → 1 Ekim euro {yz(e2c['fx'], 2, True)} kaybederken sterlin yalnız {yz(e2c['dolar_gbp'], 2, True)} "
@@ -797,6 +818,9 @@ def cumleler(on: dict, o: dict) -> None:
             f"büyük bir kayıp var); franka karşı {sayi(abs(e2o['eurchf']['z']), 1)} katı "
             f"({yz(e2o['eurchf']['daha_kotu_payi'], 1)})", "evre 2 ölçeği")
     c30 = _cap(o, "2026-09-30")
+    dogru(abs(c30["eurchf"]) >= abs(e2c["eurchf"]) and e2c["dolar_chf"] > 0 and e2c["dolar_gbp"] < 0
+          and min(e2c["usdjpy"], e2c["usdcad"], e2c["usdaud"]) > 0,
+          "'franka karşı kaybın tamamı tek günden / frank dolara karşı yükselen tek para' tutmuyor")
     metinde(f"Tek başına 1 Ekim'de euro sterline karşı {yz(c30['eurgbp'], 2, True)}, franka karşı "
             f"{yz(c30['eurchf'], 2, True)} düştü", "1 Ekim çaprazları")
     metinde(f"Yılın dibinden bu yana euro sterline karşı {yz(dip['eurgbp'], 2, True)} kaybetti ama franka karşı "
@@ -810,6 +834,9 @@ def cumleler(on: dict, o: dict) -> None:
     s24 = sg["2024–2026"]["fx"]
     metinde(f"her hafta tek tek çıkarıldığında katsayı {yz(s24['b_maks'], 2, True)} ile {yz(s24['b_min'], 2, True)} arasında "
             f"kalıyor, en zayıf t {sayi(s24['t_en_zayif'], 1)}", "2024–26 tek hafta")
+    i24_ = d24["faiz+fr+it"]
+    metinde(f"ama İtalya farkı eklenince {yz(i24_['b']['spr'] * 10, 2, True)}'e iniyor ve anlamlılığını yitiriyor (t "
+            f"{sayi(i24_['t']['spr'], 1)}; Yöntem eki)", "2024–26 İtalya eklenince")
     sh, sp20 = sg["salgin_haftasi"], sg["2020–2023_salgin_haric"]["fx"]
     metinde(f"2020–2023'teki {yz(D['2020–2023']['faiz+fr']['b']['spr'] * 10, 2, True)}'nin anlamlılığı ise tek bir haftaya "
             f"dayanıyor: 18 Mart 2020'nin salgın satışı (o hafta fark {bp(sh['spr'], 1, True)} açıldı, GBP/USD "
@@ -826,7 +853,7 @@ def cumleler(on: dict, o: dict) -> None:
           "franka karşı katsayı altı dönemin altısında eksi değil")
     fr13, fr20 = sg["frank"]["2013–2019"], sg["frank"]["2020–2023"]
     metinde(f"(21 Ocak 2015, EUR/CHF {yz(sg['snb_2015']['eurchf'], 2, True)})", "SNB 2015")
-    metinde(f"dört hafta çıkarılınca katsayı {yz(fr13['snb_haric']['b']['spr'] * 10, 2, True)} (t "
+    metinde(f"bu hafta çıkarılınca katsayı {yz(fr13['snb_haric']['b']['spr'] * 10, 2, True)} (t "
             f"{sayi(fr13['snb_haric']['t']['spr'], 1)}), VIX sabit tutulunca da {yz(fr13['snb_haric_vix']['b']['spr'] * 10, 2, True)} "
             f"(t {sayi(fr13['snb_haric_vix']['t']['spr'], 1)})", "frank 2013–19")
     dogru(fr13["snb_haric"]["n"] == fr13["tam"]["n"] - 1, "2013–2019 frank sınamasında SNB haftası sayısı tutmuyor")
@@ -847,6 +874,11 @@ def cumleler(on: dict, o: dict) -> None:
     metinde(f"Frankta İtalya katsayısı 2013–2019'da eksi ve anlamlı ({yz(e13c['b']['ispr'] * 10, 2, True)}, t "
             f"{sayi(e13c['t']['ispr'], 1)}), sterlinde ters işaretli ({yz(e13g['b']['ispr'] * 10, 2, True)}, t "
             f"{sayi(e13g['t']['ispr'], 1, True)})", "2013–19 İtalya")
+    x13 = sg["frank"]["2013–2019"]["it_snb_haric"]
+    metinde(f"SNB haftası dışarıda bırakılıp İtalya farkı eklenince frankta Fransa katsayısı "
+            f"{yz(fr13['snb_haric']['b']['spr'] * 10, 2, True)}'dan {yz(x13['b']['spr'] * 10, 2, True)}'ye (t "
+            f"{sayi(x13['t']['spr'], 1)}) iniyor", "2013–19 frank İtalya ve SNB")
+    dogru(abs(x13["t"]["spr"]) < 1.96 and x13["t"]["ispr"] <= -1.96, "2013–19 frank bağı İtalya'ya geçmiyor")
     e24g, e24c = d24["eurgbp_it"], d24["eurchf_it"]
     metinde(f"2024–2026'da sterlinde {yz(e24g['b']['ispr'] * 10, 2, True)} (t {sayi(e24g['t']['ispr'], 1, True)}), frankta "
             f"{yz(e24c['b']['ispr'] * 10, 2, True)} (t {sayi(e24c['t']['ispr'], 1)})", "2024–26 İtalya")
@@ -907,8 +939,9 @@ def cumleler(on: dict, o: dict) -> None:
             f"{sayi(max(abs(r['t_spr']) for r in ch), 1)})", "atıf frank")
     dogru(max(abs(r["t_spr"]) for r in ch) < 1.96, "frank atıf katsayılarından biri anlamlı")
     # gün içi
-    dogru(all(gq[c]["dakika_kalan"] == [1] for c in ("fr10y", "de10y", "it2y", "de2y")) and gq["us2y"]["dakika_kalan"] == [0],
-          "gün içi kotasyon dakikaları 'Avrupa 1/6, ABD 0/5' değil")
+    dogru(all(gq[c]["dakika_kalan"] == [1] for c in ("fr10y", "de10y", "it2y", "de2y", "eurusd"))
+          and gq["us2y"]["dakika_kalan"] == [0],
+          "gün içi kotasyon dakikaları 'Avrupa ve EUR/USD 1/6, ABD 0/5' değil")
     metinde(f"Fransa farkı {sayi(p['spr']['bas'])}'dan {bp(p['spr']['son'])}'ye ({sayi(p['spr']['degisim'], 1, True)}), "
             f"İtalya'nın 2 yıllık farkı {sayi(p['ispr2']['bas'])}'dan {bp(p['ispr2']['son'])}'ye "
             f"({sayi(p['ispr2']['degisim'], 1, True)}) çıktı. ABD 2 yıllığı {bp(p['us2y']['degisim_bp'])}, Almanya 2 yıllığı "
@@ -929,9 +962,12 @@ def cumleler(on: dict, o: dict) -> None:
     b4 = o["gun_ici_1545_1615"]
     metinde(f"15:45 → 16:15 arasında faiz farkının {bp(b4['rd']['degisim'], 1, True)}'lik açılmasının tamamı Alman 2 "
             f"yıllığının düşüşüydü ({bp(b4['de2y']['degisim_bp'], 1, True)}; bunun {bp(a2['de2y']['degisim_bp'], 1, True)}'si "
-            f"veriden önce). Euro ISM çeyreğinde düşmedi ({yz(a2['eurusd']['degisim_yuzde'], 2, True)})", "ISM çeyreği")
-    dogru(abs(b4["us2y"]["degisim_bp"]) < 0.5 and a2["eurusd"]["degisim_yuzde"] >= 0,
-          "'faiz farkı açılmasının tamamı Alman 2 yıllığı / euro düşmedi' tutmuyor")
+            f"veriden önce). Euro aynı yarım saatte kımıldamadı ({yz(b4['eurusd']['degisim_yuzde'], 2, True)}); euronun "
+            f"15:45 → 16:00 adımındaki {yz(a2['eurusd']['degisim_yuzde'], 2, True)} ise verinin öncesidir (15:56 kotasyonu)",
+            "ISM çeyreği")
+    dogru(abs(b4["us2y"]["degisim_bp"]) < 0.5 and abs(b4["eurusd"]["degisim_yuzde"]) < 0.05
+          and gq["eurusd"]["dakika_kalan"] == [1],
+          "'faiz farkı açılmasının tamamı Alman 2 yıllığı / euro kımıldamadı / euro 1-6 dakikalarında' tutmuyor")
     c5 = o["gun_ici_1615"]
     metinde(f"16:15'ten 17:30'a faiz farkı yalnız {bp(c5['rd']['degisim'], 1, True)} oynarken Fransa farkı "
             f"{bp(c5['spr']['degisim'], 1, True)} açıldı ve euro {yz(c5['eurusd']['degisim_yuzde'], 2, True)} geriledi; bu "
@@ -963,10 +999,14 @@ def cumleler(on: dict, o: dict) -> None:
     eb = max(olay_bas, key=lambda r: r["acilma"])
     dogru(eb["ad"] == "2020 salgın", f"olay günüyle başlayan en büyük öbür açılma 2020 değil: {eb['ad']}")
     dogru(abs(ep["2026"]["acilma"] - sv["epizot_degisim"]) < 0.05, "2026 epizot satırı seviye ölçüsüyle aynı değil")
-    metinde(f"açılmanın {bp(sv['epizot_gosterge_payi'], 1, True)}'si 15 Haziran'ın gösterge değişimi; ikisi düşülse de "
-            f"({bp(sv['epizot_degisim_gostergesiz'])}) olay günüyle başlayan en büyük öbür açılmanın ({bp(eb['acilma'])}, "
-            "2020) üstünde", "büyüklük")
-    dogru(sv["epizot_degisim_gostergesiz"] > eb["acilma"], "gösterge düşülünce 2026 2020'nin altında")
+    metinde(f"açılmanın {bp(sv['epizot_gosterge_payi'], 1, True)}'si 15 Haziran'ın gösterge değişimi. Gösterge payı "
+            f"düşülünce {bp(sv['epizot_degisim_gostergesiz'])} kalıyor; başlangıç yılın dibi yerine 30 Haziran alınınca "
+            f"{bp(sv['degisim_haziran'], 1, True)}, 31 Ağustos alınınca {bp(sv['degisim_agustos'], 1, True)}. Üçü de olay "
+            f"günüyle başlayan en büyük öbür açılmanın ({bp(eb['acilma'])}, 2020) üstünde", "büyüklük")
+    dogru(min(sv["epizot_degisim_gostergesiz"], sv["degisim_haziran"], sv["degisim_agustos"]) > eb["acilma"]
+          and sv["tarih_haziran"] > max(sv["epizot_gosterge_gunleri"]) and sv["tarih_haziran"] == "2026-06-30"
+          and sv["tarih_agustos"] == "2026-08-31",
+          "gösterge payı düşülünce / 30 Haziran ya da 31 Ağustos'tan ölçülünce 2026 2020'nin altında ya da gösterge gününü içeriyor")
     e11 = ep["2011 euro bölgesi borç krizi"]
     metinde(f"aynı pencerede İtalya'nın farkı {bp(e11['it_bp'], 1, True)} açıldı, bu yıl {bp(ep['2026']['it_bp'], 1, True)}",
             "2011 İtalya")
@@ -975,11 +1015,21 @@ def cumleler(on: dict, o: dict) -> None:
             f"franka karşı 2010'da {yz(e10_['eurchf_yuzde'], 2, True)} kaybetti; olağan oynaklığa göre sterlin kayıpları "
             f"yaklaşık bir standart sapma ({sayi(e10_['eurgbp_z'], 1, True)}σ ve {sayi(e11['eurgbp_z'], 1, True)}σ)",
             "kriz epizotları")
+    metinde(f"2010'un frank kaybı ise aynı ölçekle {sayi(e10_['eurchf_z'], 1, True)}σ", "2010 frank ölçeği")
+    dogru(abs(e10_["eurchf_z"]) > 2 > max(abs(e10_["eurgbp_z"]), abs(e11["eurgbp_z"])), "'sterline karşı ölçek küçük, frank büyük' tutmuyor")
     dis("SNB 6 Eylül 2011'de 1,20 tabanını koydu", "SNB, 6 Eylül 2011")
     e17_, ef_, eby = ep["2017 cumhurbaşkanlığı seçimi"], ep["2024 meclisin feshi"], ep["2025 Bayrou güven oylaması"]
     metinde(f"2017 sterline {yz(e17_['eurgbp_yuzde'], 2, True)}, franka {yz(e17_['eurchf_yuzde'], 2, True)}; 2024 fesih "
             f"{yz(ef_['eurgbp_yuzde'], 2, True)} ve {yz(ef_['eurchf_yuzde'], 2, True)}; Bayrou {yz(eby['eurgbp_yuzde'], 2, True)} "
             f"ve {yz(eby['eurchf_yuzde'], 2, True)}", "Fransa epizotları")
+    sp_ = dict(zip(o["seriler"]["spread"]["t"], o["seriler"]["spread"]["v"]))
+    metinde(f"2017'de fark 21 Şubat'taki {bp(e17_['zirve'])} zirvesinden marta geriledi, nisan ortasında yeniden o zirvenin "
+            f"hemen altına çıktı ve birinci turdan önceki son iş günü (21 Nisan) {bp(l17['spr_once'])}'deydi; birinci tur "
+            f"sonucu bir günde {bp(l17['spr'], 1, True)} daha getirdi", "2017 seçim öncesi")
+    dogru(e17_["zirve_gun"] == "2017-02-21" and l17["once"] == "2017-04-21"
+          and min(v for t, v in sp_.items() if t[:7] == "2017-03") < e17_["zirve"] - 15
+          and max(v for t, v in sp_.items() if "2017-04-10" <= t <= "2017-04-21") >= e17_["zirve"] - 1,
+          "2017: şubat zirvesi / marttaki geri çekilme / nisan ortasında zirve yakını / 21 Nisan tutmuyor")
     metinde(f"2008 ve 2020'de euro sterline karşı kazandı ({yz(ep['2008 küresel finans krizi']['eurgbp_yuzde'], 2, True)}, "
             f"{yz(ep['2020 salgın']['eurgbp_yuzde'], 2, True)})", "2008-2020")
     ay = o["ayrisma"]
@@ -1003,7 +1053,7 @@ def cumleler(on: dict, o: dict) -> None:
     metinde(f"tablodaki on beş not kararının on dördünde fark tepki gününde {sayi(min(r['spr'] for r in on4), 1, True)} ile "
             f"{bp(max(r['spr'] for r in on4), 1, True)} arasında oynadı", "not aralığı")
     kar = next(r for r in notlar if r["karisik"])
-    metinde(f"on beşincisi, S&P'nin {gun(kar['once'])} teyidi ({bp(kar['spr'], 1, True)}), Barnier'in 49.3'e başvurduğu güne "
+    metinde(f"on beşincisi, S&P'nin {gun(kar['once'])} teyidi ({bp(kar['spr'], 1, True)}), Barnier'nin 49.3'e başvurduğu güne "
             "denk geliyor", "karışık not günü")
     aa = o["aaa_2012"]
     metinde(f"haber 13 Ocak seansında sızdı ve fark o gün {bp(aa['sizma']['fr'], 1, True)} açıldı; aynı gün İspanya ve Belçika "
@@ -1029,6 +1079,10 @@ def cumleler(on: dict, o: dict) -> None:
     dogru(lec["zaman"] == "gun" and lec["once"] == "2025-10-03" and lec["sonra"] == "2025-10-06",
           "Lecornu penceresi cumadan pazartesiye değil")
     c54, csc = oy_["2026: 54 mlr € çaba açıklandı"], oy_["Scope: AA− → A+; DBRS: eğilim negatife"]
+    metinde(f"54 milyarın açıklandığı akşam ise fark {bp(c54['spr'], 1, True)} açılırken euro sterline karşı "
+            f"{yz(c54['eurgbp'], 2, True)}, dolara karşı {yz(c54['fx'], 2, True)} kazandı", "54 milyar istisnası")
+    dogru(c54["spr"] > 0 and c54["eurgbp"] > 0 and c54["fx"] > 0
+          and yz(oy_["2026: Le Pen istinaf kararı"]["eurgbp"], 2) == "%0,00", "54 milyar istisnası / Le Pen kımıldamadı tutmuyor")
     metinde(f"54 milyarın kur penceresi {int(c54['kur_once'][8:])} → {int(c54['sonra'][8:])} Eylül, Scope'unki "
             f"{int(csc['kur_once'][8:])} → {int(csc['sonra'][8:])} Eylül", "örtüşen pencereler")
     # ── Bölüm 7
@@ -1036,15 +1090,16 @@ def cumleler(on: dict, o: dict) -> None:
             f"(gösterge kâğıt değişimi ve veri boşluğu günleri dışarıda) — {sayi(oy['oran_temiz'], 1)} katı", "oynaklık")
     metinde(f"±1,96σ bandı ±{bp(oy['bant_1a'])}", "bant")
     dogru(abs(oy["bant_1a"] - 1.96 * oy["sigma_gunluk"] * 22 ** 0.5) < 0.05, "bant 1,96·σ·√22 değil")
-    metinde(f"%95 olasılıkla {sayi(oy['spread'] - oy['bant_1a'], 0)} ile {sayi(oy['spread'] + oy['bant_1a'], 0)} bp arasında",
-            "bant uçları")
+    metinde(f"bir ay sonrası için {sayi(oy['spread'] - oy['bant_1a'], 0)}–{sayi(oy['spread'] + oy['bant_1a'], 0)} bp'lik bir "
+            "banda karşılık gelir", "bant uçları")
+    dogru(il["p10"] < 0, "ileri dağılımın onda biri daralma değil")
     metinde(f"önceki açılması 30 bp'yi aşan {il['gozlem']} gözlem", "ileri gözlem")
     acilan = il["daha_acilan_gozlem"]
     dogru(len(acilan) == round(il["daha_acildi_payi"] * il["gozlem"] / 100) == 7, "daha açılan gözlem sayısı yedi değil")
     alt1 = sorted([x for x in acilan if x[1] <= 1], key=lambda x: -x[1])
     ust1 = [x for x in acilan if x[1] > 1]
     metinde(f"ertesi ay medyanda {bp(il['medyan'], 1, True)} geriledi; gözlemlerin {yz(il['daha_acildi_payi'], 1)}'inde "
-            f"({il['gozlem']}'in {len(acilan)}'si) daha da açıldı, onda birinde {bp(il['p10'], 1, True)}'den fazla daraldı. "
+            f"({il['gozlem']}'in {len(acilan)}'si) daha da açıldı, onda birinde {bp(abs(il['p10']), 1)}'den fazla daraldı. "
             f"Daha da açılan yedi gözlemin ikisi 1 bp'nin altında ({sayi(alt1[0][1], 1, True)} ve "
             f"{sayi(alt1[1][1], 1, True)}); 1 bp'den fazla açılanların payı {yz(il['daha_acildi_1bp_payi'], 1)} ve beşi de "
             f"{int(ust1[0][0][8:])}–{int(ust1[-1][0][8:])} {ay_yil(ust1[0][0])}'den", "ileri dağılım")
@@ -1059,7 +1114,7 @@ def cumleler(on: dict, o: dict) -> None:
             "açılan kümeler")
     metinde(f"2011–12 dışındaki {il['kriz_disi_gozlem']} gözlemin hiçbirinde", "kriz dışı")
     metinde(f"22 iş günündeki {bp(h['10y_22']['degisim'], 1, True)}'yi aşan açılma yalnız Kasım 2011 ile Ocak 2012 "
-            f"arasında, iki kümede görüldü ve o sekiz gözlemin hepsinde fark ertesi ay "
+            f"arasında görüldü ve o sekiz gözlemin hepsinde fark ertesi ay "
             f"{sayi(-max(c['ileri_maks'] for c in ilb['kumeler']), 1)} ile {sayi(-min(c['ileri_min'] for c in ilb['kumeler']), 1)} "
             "bp arasında daraldı", "bugünkü hız")
     dogru(ilb["gozlem"] == 8 and ilb["daha_acildi_payi"] == 0, "bugünkü hız eşiği: sekiz gözlem / hiçbiri açılmadı tutmuyor")
@@ -1068,10 +1123,14 @@ def cumleler(on: dict, o: dict) -> None:
     dogru(il66["daha_acilan_kume"] == 3, "66 günde daha açılan küme sayısı üç değil")
     metinde(f"dört gözlemin dördünde {sayi(a11['ileri_min'], 1, True)} ile {bp(a11['ileri_maks'], 1, True)} daha açıktı "
             f"(medyan {bp(a11['ileri_medyan'], 1, True)})", "Ağustos 2011")
-    dogru(ep["2025 Bayrou güven oylaması"]["sonra_3a"] < 0, "Bayrou epizodu daralmadı")
+    st_ = o["seriler"]["spread"]["t"]
+    k17 = next(c for c in km if c["bas"].startswith("2017-02"))
+    dogru(st_[st_.index(k12["son"]) + 22] < "2012-07-26" and st_[st_.index(k17["son"]) + 22] < "2017-04-23",
+          "Nisan–Mayıs 2012 / Şubat 2017 kümelerinin ertesi ayı Draghi'den / birinci turdan önce bitmiyor")
     metinde(f"Bu serideki tarihî zirve {bp(sv['tarihi_zirve'])} ({gun(sv['tarihi_zirve_gun'])})", "referans zirve")
     metinde(f"2 yıllık farkın 2011 zirvesi {bp(eg['2']['zirve'])} (bugün {sayi(eg['2']['spread'])})", "2y zirve")
-    dogru(eg["2"]["zirve_gun"] == sv["tarihi_zirve_gun"], "2 yıllık zirve günü 10 yıllıkla aynı değil")
+    dogru(all(eg[v_]["zirve_gun"] == sv["tarihi_zirve_gun"] for v_ in ("2", "5", "10", "30")),
+          "dört vadenin zirve günü 10 yıllıkla aynı değil")
     dis("MUFG 24 Eylül'de 1,1340'ı kilit destek olarak gösterip kırılırsa 1,10–1,12 bölgesini", "FXStreet, MUFG notu")
     dis("ABD verisi güçlü kalırsa 1,11–1,12 bölgesini", "FXStreet, ING notu")
     metinde(f"1 Ekim'in New York kapanışı {sayi(k['son'], 4)}.", "kur referans")
@@ -1083,6 +1142,12 @@ def cumleler(on: dict, o: dict) -> None:
     metinde(f"İtalya farkındaki 10 bp'lik açılmaya EUR/GBP'de {yz(e10['b']['ispr'] * 10, 2, True)} eşlik ediyordu. İkinci "
             f"evrede İtalya farkı {bp(e2c['ispr'], 1, True)} açıldı; bu katsayıyla {yz(tah, 2, True)}, gerçekleşen "
             f"{yz(e2c['eurgbp'], 2, True)}", "İtalya aritmetiği")
+    metinde(f"Bugünkü rejimde aynı katsayı ters işaretli ve anlamsız ({yz(d24['eurgbp_it']['b']['ispr'] * 10, 2, True)}, t "
+            f"{sayi(d24['eurgbp_it']['t']['ispr'], 1, True)})", "İtalya katsayısı bugün")
+    dogru(all(not (mm["eurgbp_it"]["b"][k_] < 0 and abs(mm["eurgbp_it"]["t"][k_]) >= 1.96)
+              for d_, mm in D.items() for k_ in ("spr", "ispr") if not (d_ == "2010–2012" and k_ == "ispr"))
+          and D["2010–2012"]["eurgbp_it"]["t"]["ispr"] <= -1.96,
+          "İtalya kontrollü sterlin modelinde eksi ve anlamlı tek katsayı 2010–12 İtalya değil")
     # ── Yöntem eki
     metinde(f"Günlük seri {sayi(tz['ham_bar'], 0)} kayıt; {sayi(tz['hafta_sonu_atilan'], 0)} hafta sonu kaydı ve iki bacağın "
             f"birden önceki günü taşıdığı {tz['tasinmis_atilan']} tatil günü atıldı, {sayi(tz['temiz_gun'], 0)} iş günü kaldı",
@@ -1108,6 +1173,7 @@ def cumleler(on: dict, o: dict) -> None:
     dis("(OAT %3,70 Kasım 2036; ilk ihalesi 4 Haziran 2026)", "AFT, yeni 10 yıllık kâğıt")
     g1 = h["10y_1_gercek"]
     dogru(g1["ayiklanan"] == sorted(gs), "tek gün kıyasında ayıklanan günler gösterge listesiyle aynı değil")
+    metinde(f"yılın dibinden bu yana açılmanın {bp(sv['epizot_gosterge_payi'], 1, True)}'si 2026 geçişidir", "2026 geçişi")
     metinde(f"1 Ekim'in {bp(g1['degisim'], 1, True)}'lik açılması {gun(g1['son_gorulme'])}'den beri en büyük tek günlük açılma",
             "tek gün")
     s7, s22 = h["sicrama_2017"], h["sicrama_2022"]
