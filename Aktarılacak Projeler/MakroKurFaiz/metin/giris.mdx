@@ -1,0 +1,94 @@
+## Giriş (≈3 dk)
+
+Bir makro haberin piyasadaki izi tek bir soruya iner: **hangi terim oynuyor?** Faiz de kur da
+üç terimin toplamıdır. **Faiz** = politika patikası + vade primi + kredi/çevrilebilirlik primi.
+**Kur** = (A) uzun dönem çıpası − (B) reel faiz farkı patikası + (C) risk primi patikası;
+bu, açık faiz paritesinin ileri doğru yinelenmiş hâlidir (Bölüm 1). Gelişmiş ekonomide (DM)
+haber çoğunlukla B'yi oynatır: faiz yükselir, para değer kazanır. Gelişmekte olan ekonomide
+(EM) ve EM gibi davranan bir DM'de C baskınlaşabilir: faiz yükselir, para değer kaybeder.
+
+Her etken önce türetimle, sonra DM, EM ve Türkiye örnekleriyle, sonra gerçek veriyle ölçülmüş
+bir pratikle işlenir. Beş rejim etiketi bütün bölümlerde aynıdır: **R1** DM normal · **R2** DM
+mali kaygı · **R3** EM güvenilir merkez bankası · **R4** EM mali baskınlık · **R5** küresel
+riskten kaçış.
+
+<div class="not gezinme">
+  <span class="etiket">Ders planı — iki saat</span>
+
+  | No | Bölüm | dk | Cevapladığı soru |
+  |---|---|---|---|
+  | — | Giriş | 3 | Neyi nerede bulurum, neyi burada yinelemiyoruz? |
+  | 1 | Çerçeve | 10 | Haber faize ve kura hangi terimden ulaşır, rejim nasıl teşhis edilir? |
+  | 2 | Veri günü mekaniği | 5 | Sürpriz neyle ölçülür, pencere hangi güne açılır? |
+  | 3 | Tepki fonksiyonu | 11 | Güçlü veri faizi ve kuru ne zaman, ne kadar oynatır? |
+  | 4 | Enflasyon ve işaret | 10 | Kötü enflasyon haberi kur için neden bazen iyi haberdir? |
+  | 5 | Bütçe I — DM | 11 | Açık faize hangi kanaldan gider, kuru hangi bileşim belirler? |
+  | 6 | Bütçe II — EM ve para birliği | 13 | Açık EM'de kuru neden düşürür, DM ne zaman EM gibi davranır? |
+  | 7 | Reel efektif kur ve PPP | 9 | Pahalı ve ucuz ne demek, ne hızla kapanır? |
+  | 8 | Dış ticaret ve cari denge | 10 | Cari açık kura ticaretten mi gider, finansmandan mı? |
+  | 9 | Finansman, rezerv, dış varlık | 8 | Baskı kura mı yazılır, rezerve mi? |
+  | 10 | Ticaret hadleri ve emtia | 6 | Emtia fiyatı hangi parayı hangi yönde oynatır? |
+  | 11 | Taşıma, UIP, akım, küresel faktör | 11 | Faiz farkı neden beklenenden az değer kaybettirir, ne zaman bir anda bozar? |
+  | 12 | Ülke primi | 5 | Hareketin ne kadarı bizden, nasıl ölçülür? |
+  | 13 | Sentez: veri günü oyun kitabı | 8 | Bu haber geldiğinde ilk neye bakarım? |
+  | | **Toplam** | **120** | |
+
+  **Hızlı yol (44 dk).** Giriş (3) → [Bölüm 1, tamamı](#hy-b01) (10) →
+  [Bölüm 4, teori](#hy-b04) (5) → [Bölüm 5, teori](#hy-b05) (5) →
+  [Bölüm 6, teori](#hy-b06) (7) → [Bölüm 7, REDK'nin kuruluşu ve yarı ömür](#hy-b07) (4) →
+  [Bölüm 8, ikiz açık ve finansman sorusu](#hy-b08) (4) →
+  [Bölüm 13, matris ve kartlar](#hy-b13) (6).
+</div>
+
+<div class="not">
+  <span class="etiket">Yön sözlüğü — bütün derste geçerli</span>
+
+  | Gösterim | Artış ne demek |
+  |---|---|
+  | $s$: USD/yerel kurun logu (USD/TRY) | yerel para değer kaybeder |
+  | $q = s + p^* - p$: reel kur | yerel para reel değer kaybeder |
+  | TCMB REDK | **ters yönde**: TL reel değer kazanır |
+  | EUR/USD, GBP/USD, AUD/USD | ters kotelidir: dolar zayıflar |
+  | "para ↑" | para değer kazanır, kotasyon yönünden bağımsız |
+
+  Bir oranın farkı **puandır**: %4'ten %5'e çıkış +1 puandır, yani +100 bp; "%1" değildir. Kadranlar
+  (Bölüm 1): **politika** (faiz ↑, para ↑) · **prim** (faiz ↑, para ↓) · **gevşeme** (faiz ↓,
+  para ↓) · **güvenli liman** (faiz ↓, para ↑; DM), Türkiye'de aynı kadranın adı
+  **prim düşüşü**.
+</div>
+
+<div class="not">
+  <span class="etiket">Veri ve çıpa</span>
+
+  Sayılar yayım gününün ölçümüdür ve sabittir. Günlük seriler **30.09.2026**, aylık seriler
+  **08.2026**, çeyreklik seriler **2026Ç2** çıpasında durur; canlı okuma için bölümler ilgili
+  panoya bağ verir. Kapanışlar: lira kurları İstanbul 18:00 (18.12.2023'ten; öncesinde günlük
+  bardan, Londra gece yarısı), G10 kurları New York 17:00, Avrupa getirileri 17:30, ABD Hazinesi
+  getirileri New York öğleden sonra, ECB referans kurları 14:15 Orta Avrupa. TCMB gösterge kuru
+  olay pencerelerinde yalnız sağlamlık sınamasıdır; dolar cinsi resmî tabloları çeviren kur odur.
+  DİBS gösterge getirisi öğleden önceki bir sabitlemedir. Bu saatlerin bir olay penceresini hangi
+  güne açtığı ölçülerek belirlenir (Bölüm 2). Türkiye için CDS serisi yoktur (Bölüm 12).
+</div>
+
+<div class="not">
+  <span class="etiket">Burada yinelenmeyenler</span>
+
+  - CIP ve swap puanı → [Risk ve Hedge](/arastirma/risk-ve-hedge/), 4.1
+  - Borç dinamiğinin temel formülü (3.7), M1/M6/M7 mekanizmaları ve epizotlar →
+    [Türkiye Piyasa Tarihi](/arastirma/turkiye-piyasa-tarihi/)
+  - Ödemeler dengesi kimliği → [Ödemeler Dengesi](/projeler/odemeler-dengesi/) panosu
+  - Taşıma konvansiyonu → [TL Taşıma](/projeler/tl-tasima/)
+  - Uzun ucun dört bileşeni → [Trade Pratiği](/arastirma/trade-pratigi/), B.4
+  - Eğri kartları K1–K15 → [Kâğıt ve TRY OIS Trading](/arastirma/kagit-ve-ois-trading/), 6.3
+  - BIS esneklikleri → [ABD Hazinesi geri alımı analizi](/analiz/hazine-geri-alim/), 9.1
+  - Regresyon eşikleri → [Bloomberg HRA ile Korelasyon](/arastirma/bloomberg-hra-korelasyon/), 6.1
+  - Fransa vakası → [OAT–Bund analizi](/analiz/oat-bund-2026-10-02/)
+</div>
+
+**Dört bağlı araç.** Hesap araçları sayfa sırasını izleyen tek yönlü bir zincirdir: Taylor
+kuralı (Bölüm 3) kural faizini ve B bloğunu kurar; borç dinamiği (Bölüm 6) Taylor'ın faizini
+dinler ve borcu sabit tutan faiz dışı fazlayı verir; REDK dengesi (Bölüm 7) A bloğunu kurar;
+kurun üç bloğu (Bölüm 11) üçünü dinler, kuru A, B ve C'ye ayırır ve taşımanın başabaşını
+verir. Bir araçtaki girdi zincirin aşağısını günceller; açılış değerleri çıpa gününün ölçümüdür.
+
+Bu metin eğitim amaçlıdır; yatırım tavsiyesi değildir.

@@ -1,0 +1,268 @@
+## Bölüm 4 — Enflasyon ve işaret: aynı haber neden iki ters işaret verir (≈10 dk)
+
+Kötü bir enflasyon haberi kur için bazen iyi haberdir. Hangi işaretin geleceğini merkez
+bankasının tepki katsayısı ve güvenirliği belirler. Bu bölüm işareti türetir, Türkiye'nin TÜFE
+sürprizinde ölçer ve Türkiye 2021 ile ABD 2022'yi yan yana koyar.
+
+### 4.1 Teori: Fisher, işaretin türetimi ve geçişkenlik (≈4 dk)
+
+<span id="hy-b04"></span>
+
+**Fisher.** Nominal faiz beklenen reel faiz ile beklenen enflasyonun bileşimidir:
+
+$$(1 + i_t) = (1 + E_t r_t)(1 + E_t\pi_{t+1}) \quad\Rightarrow\quad i_t \approx E_t r_t + E_t\pi_{t+1}$$
+
+Türkiye'nin ex-ante reel faizi bu ilişkiyle
+[DİBS verim eğrisi ve reel faiz](/projeler/dibs-verim-egrisi/) ve
+[bütçe ve borç](/projeler/butce-borc/) panolarında okunur. Mishkin (1992) faizle enflasyon
+arasındaki ilişkinin kısa dönemde Fisher etkisini desteklemediğini, iki seri trend taşıdığında
+uzun dönemde birlikte hareket ettiklerini gösterdi. Veri günü tepkisini kısa dönemde tepki
+fonksiyonu belirler.
+
+**İşaretin türetimi.** Bölüm 3'ün kuralından beklenen reel faiz:
+
+$$E_t r_t = r^* + (\phi_\pi - 1)(E_t\pi_{t+1} - \pi^*) + \phi_y\,\tilde y_t \quad\Rightarrow\quad \frac{\partial E_t r_t}{\partial \pi} = \phi_\pi - 1$$
+
+Kurun üç bloğunda ($s = A - B + C$, Bölüm 1) kalıcılığı τ dönem olan bir enflasyon sürprizi
+Δπ için:
+
+$$\Delta s \approx \underbrace{\Delta p^{e}}_{\text{A: çıpa}} \;-\; \underbrace{(\phi_\pi - 1)\,\tau\,\Delta\pi}_{\text{B: reel faiz farkı}} \;+\; \underbrace{\Delta C}_{\text{C: prim}}$$
+
+A: kalıcı fiyat düzeyi farkı göreli PPP üzerinden kurun uzun dönem çıpasını kaydırır (Bölüm 7).
+B: ilke tutuyorsa ($\phi_\pi \gt 1$) reel faiz farkı açılır ve s düşer. C: güvenirlik
+sorgulanırsa prim açılır. $\phi_\pi \gt 1$ ve C sabitken B, A'yı aşabilir: kötü enflasyon
+haberi parayı güçlendirir. $\phi_\pi \lt 1$'de B de C de s'yi yukarı iter.
+
+**Geçişkenlik geri beslemesi.** Kur enflasyona geçer, $\Delta\pi = \delta\,\Delta s$. Bunu
+yukarıya koyup ($\Delta p^e \approx \Delta\pi$, C sabit) bir dış şok ε için çözünce
+
+$$\Delta s = \frac{\varepsilon}{1 - \delta\,[\,1 + (1 - \phi_\pi)\,\tau\,]}$$
+
+çıkar. $\phi_\pi \lt 1$ paydayı küçültür: kur enflasyonu, enflasyon reel faizi düşürür, reel
+faiz kuru yeniden iter — sarmal. $\phi_\pi \gt 1$ paydayı büyütür; $(\phi_\pi - 1)\,\tau \gt 1$
+ise payda 1'i aşar ve kur ilk şoktan az hareket eder. Taylor
+(2000) geçişkenliğin düşüşünü düşük enflasyon ortamına bağladı ve ortam bozulursa düşüşün hızla
+geri döndüğünü savundu; Gagnon ve Ihrig (2004) 1971–2003'te yirmi sanayi ülkesinde kurun
+yurtiçi enflasyona geçişinin 1980'lerden beri düştüğünü ve bunun merkez bankalarının enflasyon
+istikrarına verdiği ağırlıkla tutarlı olduğunu gösterdi. Türkiye'deki sarmal:
+[Türkiye Piyasa Tarihi](/arastirma/turkiye-piyasa-tarihi/), M6 (kur geçişkenliği).
+
+### 4.2 Güvenirlik ve kurumlar (≈1 dk)
+
+Alesina ve Summers (1993) 16 OECD ülkesinde merkez bankası bağımsızlığıyla gelen parasal
+disiplinin enflasyonun düzeyini ve oynaklığını düşürdüğünü, reel performansta büyük bir fayda
+ya da maliyet yaratmadığını buldu (bir korelasyon, nedensellik değil). Clarida ve Waldman'ın
+(2007) kur kanıtı Bölüm 1'dedir. Davis ve Sagnanert'in (2024) Dallas Fed araştırma
+notuna (hakemli makale değil) göre gelişmiş ekonomilerde para beklentiden yüksek enflasyon
+günlerinde değer kazanıyor ve kur ile enflasyon sürprizi ilişkisinin ülkeler arasındaki farkının
+önemli bir kısmını merkez bankası şeffaflık puanı açıklıyor; ölçülen değişken bağımsızlık değil
+şeffaflıktır. Gürkaynak, Sack ve Swanson (2005) ABD'de uzun vadeli forward faizlerin makro ve
+politika sürprizlerine anlamlı tepki verdiğini gösterdi; bu duyarlılık uzun vadeli
+beklentilerin tam çıpalanmadığı bir modelle tutarlıdır — vade primi kanalı da bir alternatiftir
+(Hanson–Stein, Bölüm 3).
+
+### 4.3 R1 ve R4: iki işaret ve ayırt edici ölçü (≈1 dk)
+
+**DM, R1.** Yüksek enflasyon → 2 yıllık ↑ (patika), uzun uç sınırlı, başabaş sakin, para ↑:
+politika kadranı. **EM, R4.** Taylor ilkesi bozulursa ya da piyasa öyle görürse aynı haber
+parayı düşürür, başabaşı yükseltir, eğriyi dikleştirir: prim kadranı. Türkiye bunun doğal
+deneyidir: Gürkaynak, Kısacıkoğlu ve Lee (2023) düşük faiz talimatı ve sık başkan değişikliğiyle
+ilkenin çiğnendiği, kuraldaki enflasyon katsayısının eksiye döndüğü dönemde kurun rassal yürüyüş
+olmaktan çıktığını ve enflasyonun çıpasını kaybettiğini gösterdi.
+
+**Ayırt edici ölçü:** haber günü 2 yıllık mı oynuyor (patika: eğri yassılaşır, para faizle
+yukarı), yoksa uzun uç ve başabaş mı (prim: eğri dikleşir, para faiz yükselirken değer
+kaybeder)? Başabaş ve enflasyon risk primi: [TÜFEX ve başabaş enflasyon](/projeler/tufex-basabas/).
+
+### 4.4 Pratik 4A — Türkiye TÜFE sürprizi (≈3 dk)
+
+Sürpriz, TÜİK'in açıkladığı aylık TÜFE değişimi ile Piyasa Katılımcıları Anketi'nin aynı ay
+beklentisinin farkıdır (puan), 01.2013–08.2026, 164 ay; beklenti o ayın kendi TÜFE'sine
+aittir (etiket sınaması Bölüm 2'de).
+
+| Dönem | Ay | Ortalama | Medyan | Std. sapma | Artı / eksi | İşaret testi p |
+|---|---|---|---|---|---|---|
+| 2013–2020 | 96 | +0,14 | +0,10 | 0,70 | 57 / 39 | 0,082 |
+| 01.2021–11.2021 | 11 | +0,38 | +0,17 | 0,54 | 10 / 1 | 0,012 |
+| Yönetilen kur 12.2021–06.2023 | 19 | +0,97 | +0,14 | 2,88 | 11 / 8 | 0,648 |
+| 07.2023–08.2026 | 38 | +0,30 | +0,03 | 1,23 | 19 / 19 | 1,000 |
+| Tümü | 164 | +0,29 | +0,13 | 1,28 | 97 / 67 | 0,023 |
+
+Tüm örneklemde anket enflasyonu düşük tahmin ediyor (işaret testi p 0,023); işaret en tutarlı
+2021'de. 2023 sonrasında işaret dengede (19/19): ortalamayı Temmuz ve Ağustos 2023'ün +5,73 ve
++3,55 puanı taşıyor, ikisi dışarıda kalınca +0,06. En büyük uç 12.2021'in +10,21 puanıdır: o
+ayın 4σ günleri değer kazancı günleridir (20.12.2021'de USD/TRY −%20,90), 4σ değer kaybı ise
+Kasım'daydı (23.11.2021'de +%11,68): Aralık, çöküşün ertesi ayıdır.
+
+**Yayım günü, iki hizada.** TÜFE 10:00 TSİ'de çıkar; DİBS sabitlemesinin 10:00'dan sonra olduğu
+bir varsayım olduğu için (Bölüm 2) sınama gün sonu (kurla aynı piyasa günü) ve sabah hizasında
+yapılır. 18.12.2023 öncesi 20 cuma yayımının kur değişimi hafta sonunu taşıdığı için boşaltıldı.
+
+| Seri | Gün sonu: olay günü oranı | Tepe | Sabah: olay günü oranı | Tepe |
+|---|---|---|---|---|
+| DİBS 1 yıl | 0,91 | −1 gün | 1,37 | yayım günü |
+| DİBS 2 yıl | 0,89 | −2 gün | 0,98 | −1 gün |
+| DİBS 5 yıl | 0,97 | −2 gün | 1,05 | −1 gün |
+
+Hiçbir düğüm sınamayı geçmiyor, USD/TRY'nin profili de düz (Bölüm 2): gün sonu hizasında oran
+birin altında; sabah hizasında 1 yıllığın tepesi yayım gününde ama oran rastgele kümelerin %95'ini
+aşmıyor (p 0,077). Beklenen bir olay çalışmasıydı; veri yayım gününde ayırt edilebilir bir
+sıçrama göstermiyor; yayım günü tepkisi yerine yayım ayının ilişkisi kondu.
+
+**Aylık ilişki.** 2 ve 5 yıllık getirinin ve USD/TRY'nin (log) yayım ayının başından sonuna
+değişimi sürprize regresyonlanır (Newey–West). Eğimler 1 puanlık sürpriz başınadır.
+
+| Dönem | 2 yıllık, bp | t | 5 yıllık, bp | t | USD/TRY, % | t |
+|---|---|---|---|---|---|---|
+| 2013–2020 | +7,2 | 0,23 | −0,5 | −0,03 | −1,48 | −2,13 |
+| 01.2021–11.2021 | +122,1 | 3,16 | +116,5 | 1,88 | −3,18 | −1,73 |
+| Yönetilen kur | +1,5 | 0,10 | −19,8 | −1,26 | −0,46 | −1,07 |
+| 07.2023–08.2026 | +114,8 | 4,69 | +50,8 | 2,31 | −0,18 | −1,57 |
+
+Tek ölçülü eğim 2013–2020 kurundadır ve işareti R1'inkidir: sürpriz yüksekken yayım ayında
+USD/TRY düşüyor. Ama ağırlığı birkaç büyük ayda: en etkili gözlem Eylül 2018'in +4,17 puanlık
+sürprizidir; Ağustos çöküşünün ertesi ayıdır ve Ekim'in toparlanmasıyla eşleşir. O ay dışarıda
+kalınca eğim üçte bir küçülüp −1,01'e iner; aykırı gözlemleri tartan Huber kestirimi −1,35.
+İşaret testi eşitlikten ayrışmıyor (aynı işaret %51,0, p 0,92): eğimi ayların çoğunun yönü değil
+büyük ayların boyu taşıyor. 4σ kur hareketi taşıyan aylar dışarıda kalınca −0,95 (t −2,00) ama
+örneklem dışı kıyas geçmiyor. Çöküş sonrası geri dönüş, ters nedenselliğin aylık izidir. 2
+yıllık 2021'de ve 2023 sonrasında sürpriz yüksekken yükseliyor, ikisi de tarif edici. Beklenen
+R4 işareti — sürpriz yüksekken TL'nin değer kaybı — hiçbir dönemin eğiminde görünmüyor (2021'de
+tek ay dışarıda kalınca beliriyor, Alıştırma 3). Yönetilen kur döneminde kur eğiminin sıfırdan
+ayrışmaması tasarım gereğidir.
+
+**Kur çöküşü ve ters nedensellik.** Günlük USD/TRY değişimi önceki 250 iş gününün oynaklığının
+4 katını aşınca gün 4σ hareketidir: 11.05.2006–19.03.2025 arasında 45 gün, 32'si değer kaybı,
+13'ü değer kazancı. Eşik kayan σ ile kurulduğu için yönetilen kur döneminde Haziran 2023'ün
+ayarlama günleri de çöküş sayılır; cuma etiketi hafta sonunu taşıdığı için (Bölüm 2) 20.03.2021
+cumartesi görevden alma 19.03.2021'in +%10,07'si olarak görünür. Tablo 164 sürpriz ayını bu
+günlere göre ayırır:
+
+| Ay kümesi | Ay | Ort. sürpriz | Öbür aylar | Welch t |
+|---|---|---|---|---|
+| 4σ değer kaybı günü taşıyan ay | 15 | +0,36 | +0,28 | 0,28 |
+| Değer kaybı çöküşünün ertesi ayı | 15 | +1,63 | +0,15 | 1,94 |
+| 4σ değer kazancı günü taşıyan ay | 8 | +2,45 | +0,18 | 1,94 |
+
+Çöküş ayının sürprizi öbür aylardan ayrışmıyor; ertesi ayınki çok daha yüksek, ama Welch t 1,94
+ile eşiğin hemen altında ve Aralık 2021'e yaslı (o ay dışarıda kalınca ortalama +1,02). Örüntü,
+kurun TÜFE'ye bir ay gecikmeyle geçtiği okumayla tutarlı: ilişkinin yönü kurdan enflasyona
+olabilir. Değer kazancı ayları çöküşe politika tepkisinin geldiği aylardır (Aralık 2021, Ağustos
+2023). Bu bir nedensellik sınaması değil, işaretlemedir.
+
+<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/05_tufe_surprizi.html" baslik="TÜFE sürprizi ve yayım ayında piyasa tepkisi, döneme göre" no="05" kaynak="TÜİK · TCMB EVDS · Yahoo Finance" />
+
+**Bu seri nasıl hesaplanıyor.** Aylık; TÜFE ayları 01.2013–08.2026, yayımlar
+04.02.2013–03.09.2026. Yatay eksen sürpriz (puan, 4.4). Dikey eksen yayım ayında ay sonundan ay
+sonuna değişim: üstte 2 yıllık DİBS (bp), altta USD/TRY (Yahoo Finance, log %, artış TL değer
+kaybı). Renk TÜFE ayının dönemidir; doğrular dönem içi en küçük kareler, t Newey–West: düz çizgi
+ölçülü, kesikli tarif edici. Kur panelinde halka TÜFE ayında 4σ değer kaybı günü olan ayı, kare
+o çöküşün ertesi ayını işaretler. Kusur: ay ölçüsü öbür haberleri de taşır; ay sonu cumaya
+düşerse hafta sonu da girer.
+
+### 4.5 Pratik 4B — ABD TÜFE günleri (kurulmadı)
+
+ABD TÜFE günlerinde 2 yıllık getiri ile EUR/USD ve USD/JPY kovaryansı kurulmadı: BLS'nin yayım
+takvimi geçmişine erişilemedi, takvimsiz yayım günü sıradan günden ayrılamaz. Yerine Şekil 06 iki
+döngünün vaka kıyasını çizer.
+
+### 4.6 Vaka: Türkiye 2021 ile ABD 2022 — Pratik 4C (≈1 dk)
+
+| Ölçü | Türkiye, 31.03–31.12.2021 | ABD, 03.01–31.10.2022 |
+|---|---|---|
+| Politika faizi | −500 bp | +300 bp |
+| Yıllık TÜFE | +19,89 puan | +0,71 puan |
+| Reel politika faizi, dönem sonu | −%22,08 | −%4,62 |
+| 2 yıllık getiri | +557 bp | +373 bp |
+| Uzun uç (Türkiye 5 yıl, ABD 10 yıl) | +755 bp | +247 bp |
+| Para, log | TL dolara karşı −%48,28 | dolar G10 sepetine karşı +%13,63 |
+
+İki dönemde de enflasyon yükseldi. Türkiye faizi indirdi; reel politika faizi %2,81'den
+düştü, 5 yıllık 2 yıllıktan fazla yükseldi ve eğri 197 bp dikleşti; TL değer kaybetti (USD/TRY
+8,24 → 13,36). Faiz ↑, para ↓: prim kadranı, R4 işareti. ABD faizi artırdı; reel politika faizi
+−%6,91'den yükseldi, 2 yıllık 10 yıllıktan fazla yükseldi ve eğri 126 bp yassılaştı; dolar
+değer kazandı (EUR/USD 1,1294 → 0,9883). Faiz ↑, para ↑: politika kadranı, R1 işareti.
+Sağlamlık: TCMB gösterge kuruyla TL'nin log kaybı %47,06, DXY ile doların log kazancı
+%14,74. 31.12.2021 cuma olduğu için Yahoo kuru hafta sonunu da taşır. İki gözlemli vaka
+karşılaştırmasıdır, test değil.
+
+<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/06_tr2021_abd2022.html" baslik="Türkiye 2021 ve ABD 2022: enflasyon ikisinde de yükseldi, para ters yöne gitti" no="06" kaynak="TCMB EVDS · TÜİK · ABD Hazinesi · BIS · BLS · CNBC" />
+
+**Bu seri nasıl hesaplanıyor.** Dönem başı ile sonu arasındaki değişim. Türkiye 31.03–31.12.2021:
+TCMB politika faizi (günlük), DİBS 2 ve 5 yıllık (gün sonu hizası), TÜİK yıllık TÜFE, USD/TRY
+Yahoo Finance günlük barı (Londra gece yarısı). ABD 03.01–31.10.2022: politika faizi (BIS
+tanımı, ay sonu), ABD Hazinesi 2 ve 10 yıllık, BLS yıllık TÜFE, dolar altı G10 kurunun eşit
+ağırlıklı sepeti (CNBC, New York 17:00), DXY sağlamlık. Reel faiz = politika faizi − yıllık
+TÜFE (basit fark). Paneller: TÜFE ve reel faizin başı ile sonu, faiz değişimleri (bp), paranın
+değeri (log %, artış değer kazancı). Türkiye'de 10 yıllık düğüm olmadığı için uzun uç
+5 yıl. İki uç noktanın kıyası dönem içindeki yolu göstermez.
+
+<div class="not">
+
+  <span class="etiket">Masada ne yaparsınız</span>
+
+  - Faiz ↑ para ↑ ve eğri yassılaşıyorsa terim B'dir (R1, R3); faiz ↑ para ↓ ve eğri
+    dikleşiyorsa terim C'dir (R4).
+  - Türkiye'de TÜFE günü kur ve DİBS sıradan günden ayrışmıyor: yayım günü hareketi tek başına
+    okunmaz, ay boyunca 2 yıllık ve eğim izlenir.
+  - Büyük bir artı sürprizden önceki ay bir kur çöküşü varsa önce ters nedensellik sorulur;
+    yönetilen kurda kurun tepkisizliği bilgi değildir.
+
+</div>
+
+<div class="not">
+
+  <span class="etiket">Tek cümlelik kural</span>
+
+  Enflasyon haberinde önce 2 yıllığa, sonra uzun uca, en son kura bak; para 2 yıllığın tersine
+  gidiyorsa — faiz yükselirken değer kaybediyorsa — çıpa sorgulanıyordur.
+
+</div>
+
+<div class="not">
+
+  <span class="etiket">Pratik — Bölüm 4</span>
+
+**1. İşaretin dönmesi.** Vaka tablosundan iki dönemin etkin enflasyon tepkisini, $\Delta i/\Delta\pi$,
+ve reel faizin enflasyona tepkisini hesaplayıp 4.1'in işaretiyle eşleştirin.
+
+<details>
+<summary>Çözüm</summary>
+
+Türkiye: $\Delta i/\Delta\pi = -5/19{,}89 = -0{,}25$; reel faiz −24,89 puan değişti,
+$\Delta r/\Delta\pi = -1{,}25 = \phi_\pi - 1 \lt 0$: B bloğu s'yi yukarı iter, TL'nin log %48,28
+kaybı bununla aynı yönde. ABD: $3/0{,}71 = 4{,}23$; reel faiz +2,29 puan,
+$\Delta r/\Delta\pi = +3{,}23 \gt 0$: B bloğu s'yi aşağı iter, dolar %13,63 kazandı. İki uç
+noktanın oranı katsayı tahmini değildir, yalnız işareti gösterir; ABD'de payda küçük olduğu için
+oran uç noktaların seçimine çok duyarlıdır.
+
+</details>
+
+**2. Ters nedensellik.** Kur çöküşü tablosunda değer kaybı ayının ve ertesi ayın sürpriz farkını
+hesaplayın. Neden "TÜFE sürprizi kuru çökertti" diye okunmaz?
+
+<details>
+<summary>Çözüm</summary>
+
+Çöküş ayı: $0{,}36 - 0{,}28 = 0{,}08$ puan (t 0,28); ertesi ay: $1{,}63 - 0{,}15 = 1{,}48$ puan
+(t 1,94). Fark çöküşten sonra geliyor: önce kur, sonra enflasyon; ikinci t de 2'nin altında,
+bu bir işaretlemedir. Aynı ters akış 2013–2020'nin ölçülü kur eğiminin en etkili gözlemindedir
+(Eylül 2018).
+
+</details>
+
+**3. Rejim seçme: 2021 mi, 2023 sonrası mı?** Aylık ilişkiden 1 puanlık sürprizin eğime etkisini,
+Δ5y − Δ2y, iki dönem için hesaplayın ve kadrana yerleştirin.
+
+<details>
+<summary>Çözüm</summary>
+
+2021: $116{,}5 - 122{,}1 = -5{,}6$ bp — eğri paralel kaydı, patikanın imzası olan yassılaşma
+yok: R4'e yakın. Ama üç eğim de Kasım 2021'e yaslı (11 ay): o ay dışarıda kalınca 2 yıllık +54,9
+bp, 5 yıllık −18,5 bp (yassılaşma), kur eğimi +0,67 (R4 işareti). 2023 sonrası:
+$50{,}8 - 114{,}8 = -64{,}0$ bp — yassılaşma, patika: R3 işareti; kur eğimi −0,18, para hafifçe
+güçleniyor. İkisi de tarif edici: ölçü yönü gösterir, kanıtlamaz.
+
+</details>
+
+</div>

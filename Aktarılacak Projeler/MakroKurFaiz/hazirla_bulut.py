@@ -499,6 +499,93 @@ def gilt() -> None:
                                             "ortak_gun": int(len(ortak))}})
 
 
+SURUCU_ACIKLAMA = {
+    "brent": "Brent ham petrol, yakın vade vadeli, $/varil (ICE)", "wti": "WTI ham petrol, yakın vade vadeli, $/varil (NYMEX)",
+    "bakir": "bakır, yakın vade vadeli, $/libre (COMEX)", "altin": "altın, yakın vade vadeli, $/ons (COMEX)",
+    "gumus": "gümüş, yakın vade vadeli, $/ons", "platin": "platin, yakın vade vadeli, $/ons",
+    "dogalgaz": "doğal gaz, yakın vade vadeli, $/MMBtu (NYMEX)", "soya": "soya fasulyesi, yakın vade vadeli, sent/bu (CBOT)",
+    "demir_cevheri": "demir cevheri vadelisi",
+    "jp2y": "Japonya 2 yıllık devlet tahvili getirisi, %", "jp10y": "Japonya 10 yıllık, %",
+    "au2y": "Avustralya 2 yıllık, %", "au10y": "Avustralya 10 yıllık, %", "ca2y": "Kanada 2 yıllık, %",
+    "ca10y": "Kanada 10 yıllık, %", "ch2y": "İsviçre 2 yıllık, %", "ch10y": "İsviçre 10 yıllık, %",
+    "nz2y": "Yeni Zelanda 2 yıllık, %", "nz10y": "Yeni Zelanda 10 yıllık, %", "no10y": "Norveç 10 yıllık, %",
+    "us2y": "ABD 2 yıllık (CNBC), %", "us10y": "ABD 10 yıllık (CNBC), %", "de2y": "Almanya 2 yıllık (CNBC), %",
+    "gb2y": "İngiltere 2 yıllık (CNBC), %",
+    "nzd": "NZD/USD", "nok": "USD/NOK", "sek": "USD/SEK", "clp": "USD/CLP", "cop": "USD/COP", "cnh": "USD/CNH",
+    "krw": "USD/KRW", "zar": "USD/ZAR", "brl": "USD/BRL", "mxn": "USD/MXN", "try": "USD/TRY (CNBC, New York 17:00; ders USD/TRY'yi Yahoo'dan okur, bu yalnız kıyas)",
+    "jpy": "USD/JPY", "eur": "EUR/USD", "aud": "AUD/USD", "cad": "USD/CAD", "gbp": "GBP/USD", "chf": "USD/CHF",
+    "spx": "S&P 500 endeksi", "nikkei": "Nikkei 225 endeksi",
+}
+
+
+def surucu() -> None:
+    """Kur sürücüleri (arsiv_makro4): CNBC günlük barları, araç başına seçilen sembol. Tarih barın
+    işlem günüdür (döviz New York 17:00, vadeli borsa seansı, getiri kendi piyasası). Hafta sonu
+    barı atılır (kaynakta cumanın kopyası)."""
+    import ortak_olc as oo
+    sutun, yollar, sembol = {}, [], {}
+    for p in sorted((HAM / "cnbc_surucu").glob("*.json.gz")):
+        arac = p.name.split("__")[0]
+        y = str(p.relative_to(HAM))
+        j = json.loads(ham(y))
+        bars = (j.get("barData") or {}).get("priceBars") or []
+        s = pd.Series({pd.Timestamp(b["tradeTime"][:8]): float(b["close"]) for b in bars if b.get("close")})
+        if not len(s):
+            continue
+        sutun.setdefault(arac, []).append(s)
+        yollar.append(y)
+        sembol[arac] = HAM_KUNYE.get(y, {}).get("not", "").split(" · ")[-1]
+    if not sutun:
+        print("  ! sürücü barı yok", flush=True)
+        return
+    seri = {}
+    for a, parca in sutun.items():
+        x = pd.concat(parca).sort_index()
+        x = x[~x.index.duplicated(keep="last")]
+        seri[a] = x[x.index.dayofweek < 5]
+    df = pd.DataFrame(seri)
+    # iç sınama: CNBC G10 kurları depodaki New York 17:00 serisiyle (aynı kaynak) örtüşen günlerde
+    depo = oo.oku("cnbc_kur_gunluk")
+    sinama = {}
+    for a in ("eur", "gbp", "aud", "jpy", "cad", "chf"):
+        if a in df and a in depo:
+            o = pd.concat([df[a], depo[a]], axis=1, keys=["yeni", "depo"]).dropna()
+            if len(o):
+                f = (np.log(o["yeni"] / o["depo"]).abs() * 1e4)
+                sinama[a] = {"ortak_gun": int(len(o)), "medyan_fark_bp": round(float(f.median()), 3),
+                             "p99_fark_bp": round(float(f.quantile(0.99)), 3)}
+    yaz(df, "surucu_gunluk", "Kur sürücüleri: emtia vadelileri, devlet tahvili getirileri, paralar ve hisse endeksleri, günlük kapanış barı (CNBC)",
+        {a: SURUCU_ACIKLAMA.get(a, a) for a in df.columns}, yollar, CIPA_GUN,
+        ek={"sembol": sembol, "ic_sinama_g10_depo": sinama,
+            "not": ("Yakın vade vadeli serisi vade devrinde bir kez sıçrar (devir arındırılmamış); değişim ölçüsü "
+                    "bunu adıyla ele alır. Döviz barı New York 17:00, vadeli barı borsa seansı, getiri barı kendi "
+                    "piyasasının kapanışıdır: aynı takvim günü farklı saatleri taşır.")})
+
+
+def abd_reel() -> None:
+    """ABD Hazinesi günlük reel getiri eğrisi (TIPS, par), %."""
+    parca, yollar = [], []
+    for p in sorted((HAM / "hazine").glob("reel_*.csv.gz")):
+        y = str(p.relative_to(HAM))
+        df = pd.read_csv(io.BytesIO(ham(y)))
+        if "Date" not in df.columns or df.empty:
+            continue
+        df["tarih"] = pd.to_datetime(df["Date"], format="%m/%d/%Y")
+        parca.append(df.set_index("tarih"))
+        yollar.append(y)
+    if not parca:
+        print("  ! reel getiri dosyası yok", flush=True)
+        return
+    df = pd.concat(parca).sort_index()
+    df = df[~df.index.duplicated(keep="last")]
+    out = pd.DataFrame({ad: pd.to_numeric(df.get(k), errors="coerce")
+                        for k, ad in (("5 YR", "reel5y"), ("7 YR", "reel7y"), ("10 YR", "reel10y"),
+                                      ("20 YR", "reel20y"), ("30 YR", "reel30y"))})
+    yaz(out.dropna(how="all"), "abd_reel_getiri", "ABD Hazinesi günlük reel getiri eğrisi (TIPS, par), %",
+        {"reel5y": "5 yıl", "reel7y": "7 yıl", "reel10y": "10 yıl", "reel20y": "20 yıl", "reel30y": "30 yıl"},
+        yollar, CIPA_GUN)
+
+
 def not_kararlari() -> None:
     """Türkiye yabancı para kredi notu kararları. Kaynak ham arşiv değil, `veri/not_kararlari.json`:
     her karar `veri/kaynaklar.json`daki bir doğrulama kaydına (haber arşivi adresiyle) bağlı ve elle
@@ -520,7 +607,7 @@ def not_kararlari() -> None:
 
 
 ADIMLAR = ("evds_pka", "evds_uyp", "evds_kalan_vade", "evds_dis_ticaret", "tuik_takvim", "fomc_takvim", "bls_takvim",
-           "bis", "ecb", "eurostat", "wdi", "hazine", "acm", "gilt", "not_kararlari")
+           "bis", "ecb", "eurostat", "wdi", "hazine", "acm", "gilt", "not_kararlari", "surucu", "abd_reel")
 
 
 def main(argv: list[str] | None = None) -> int:

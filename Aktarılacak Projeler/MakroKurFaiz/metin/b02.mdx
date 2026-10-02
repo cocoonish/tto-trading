@@ -1,0 +1,186 @@
+## Bölüm 2 — Veri günü mekaniği: sürpriz, saat ve hiza (≈5 dk)
+
+*Bu bölümde:* sürpriz, serilerin saati ve olay çalışmasının önündeki plasebo kapısı.
+
+### 2.1 Sürpriz ve beklenti yokken (≈1 dk)
+
+Sürpriz $S_t = x_t - E_{t^-}[x_t]$'dir: gerçekleşen eksi açıklamadan hemen önceki sayısal
+beklenti. Andersen, Bollerslev, Diebold ve Vega (2003),
+standartlaştırılmış sürprizlerin dolar kurlarında 5 dakikalık ölçekte sıçramalar ürettiğini ve
+kötü haberin iyi haberden büyük etki yaptığını bulur. Kuttner (2001), vadeli fiyatlardan ayrılan
+beklenmeyen faiz değişikliğine piyasa faizlerinin büyük, beklenene küçük tepki verdiğini bulur. Gilbert, Scotti, Strasser ve Vega (2017), yayımların Hazine getirilerine etkisindeki
+farkın anlamlı bir kısmını yayımın anlık tahmin gücüyle açıklar.
+
+Bu derste sayısal beklenti yalnız Türkiye TÜFE'sinde var (Bölüm 4). Beklenti yoksa "sürpriz"
+yazılmaz; yerine **değişen varyansla tanımlama** kullanılır.
+$\Delta y_t = \beta_y \varepsilon_t + \eta_t$ ve $\Delta s_t = \beta_s \varepsilon_t + \nu_t$
+olsun; yayım günlerinde (E) yalnız haber şokunun varyansı artar, öbür her şey sıradan
+günlerdeki (N) gibidir:
+
+$$
+\frac{\operatorname{Cov}_E(\Delta s, \Delta y) - \operatorname{Cov}_N(\Delta s, \Delta y)}
+{\operatorname{Var}_E(\Delta y) - \operatorname{Var}_N(\Delta y)} \;=\; \frac{\beta_s}{\beta_y} .
+$$
+
+Rigobon ve Sack (2004), politika şoklarının varyansının FOMC ve Kongre sunumu günlerinde
+artmasını kullanarak varlık fiyatlarının para politikasına tepkisini bu yolla tanımlar (genel
+yöntem: Rigobon, 2003). Ön koşul sürprizle aynıdır: E günü, yayımın gerçekten
+düştüğü gün olmalıdır.
+
+### 2.2 Saat sözleşmesi: bir değer hangi anın fiyatıdır (≈2 dk)
+
+| Seri | Değer hangi anın fiyatı | 14:00 olayı hangi güne düşer |
+|---|---|---|
+| USD/TRY (Yahoo) | 18.12.2023'ten İstanbul 18:00; öncesi Londra gece yarısı | aynı gün |
+| TCMB gösterge kuru | 15:30'da ilan edilir, değer 14:00'ten önceki sabitlemedir (seri valör tarihli) | ertesi iş günü |
+| DİBS gösterge getirisi | L etiketi, L'den önceki iş gününün öğleden önceki sabitlemesi | iki iş günü sonraki etiket |
+| ABD 2 yıllık · G10 kurları | New York öğleden sonra · New York 17:00 | aynı gün (New York saati) |
+| Avrupa getirileri | Paris 17:30 | aynı gün |
+| ECB referans kurları (Bölüm 8, 10, 11) | 14:15 Orta Avrupa sabitlemesi | aynı gün |
+
+**DİBS etiketi.** Gösterge getirisinin günü valör günüdür: 2013–2021'de 2 ve 5 yıllığın günlük
+değişimi gün sonu kapanışlarıyla (USD/TRY, USD/ZAR, VIX) iki iş günü kaymada en yüksek sıra
+korelasyonunu verir (USD/TRY ile 5 yıllıkta kaymasız 0,06, kaydırınca 0,43), TCMB'nin ilan günlü
+kuruyla bir iş günü kaymada (0,58). 20.03.2021 cumartesi merkez bankası başkanı görevden alındı, piyasa pazartesi
+çöktü; 5 yıllık getiri pazartesi etiketinde %14,96 (cuma %15,03), salı %17,91, çarşamba
+%20,17. **Hiza:** bir günün
+değeri iki iş günü sonraki etiketten (gün sonu hizası) ya da bir iş günü sonraki etiketten
+(sabah hizası) okunur. Sabitlemenin saati için **üst sınır ölçülüdür**: 14:00 kararı aynı günün
+sabitlemesine girmiyor. **Alt sınır sözleşmedir**: sabah hizası, 10:00'daki TÜFE ve GSYH'nin aynı
+sabahın sabitlemesine girdiğini, yani sabitlemenin 10:00–14:00 arasında olduğunu varsayar; TÜFE
+günleri bunu ne doğruluyor ne yalanlıyor (2.3).
+
+**TCMB gösterge kuru.** 13.09.2018 PPK'sında önceki ilan 6,3945, karar günü ilanı 6,3566,
+ertesi gün 6,0659; Yahoo'nun karar günü kapanışı 6,1287: kararın izi ertesi günün ilanında.
+Valör ilan gününe **Türkiye iş günü takvimiyle** geri alınır; takvimsiz geri alma tatil öncesi
+ilanı tatile yazar ve 88 iş gününü değersiz bırakır. Bayram
+arifelerinde ve 28 Ekim'de ilan yoktur, seri sonraki valöre önceki ilanı tekrar yazar
+(15.04.2024 valörü 08.04.2024 ilanıdır); bu 29 gün boş bırakılır, yoksa arifeye sahte bir sıfır
+değişim düşer.
+
+**Yahoo günlük barı.** "Kapanışı" günün başıdır (Londra gece yarısı); değer bir önceki hafta içi
+güne yazılır, geçişten önceki cumalar hafta sonu sonrasını taşır (Bölüm 1.7). **ECB referans
+kurları** ABD'nin 08:30 verisinden (Orta Avrupa 14:30) önce sabitlenir, veri ertesi sabitlemeye
+düşer; yaz saati geçişlerinin ayrıştığı haftalarda veri 13:30'dadır ve aynı güne düşer.
+
+### 2.3 Plasebo kapısı (≈2 dk)
+
+Plasebo profili, olay günlerinin $k$ iş günü uzağındaki ortalama mutlak değişimin, olay
+pencerelerinin dışındaki sıradan günlerinkine oranıdır (sıradan gün 1):
+
+$$
+O(k) \;=\; \frac{\tfrac{1}{|E|}\sum_{t\in E} |\Delta x_{t+k}|}{\tfrac{1}{|N|}\sum_{t\in N} |\Delta x_t|},
+\qquad k = -2, \dots, +2 .
+$$
+
+- **Temel kural:** tepe 0'da ve $O(0)$ öbür dört kaymanın en büyüğünü aşıyor. Zayıftır:
+  rastgele gün kümeleri onu %15,5 ile %21,5 arasında geçer.
+- **Güçlü kural:** ayrıca $O(0)$, 1.000 rastgele kümenin %95'ini aşar. Kümelerin haftanın günü
+  bileşimi olaylarınkiyle aynı, tabanları da olay pencerelerinin dışındadır (yoksa $p$ olay
+  lehine yanlı çıkar). Eşleme
+  şarttır: 111 PPK'nın 87'si perşembe, ve 18.12.2023 sonrasında USD/TRY'de cumanın ortalama
+  mutlak değişimi %0,23, öbür günlerin %0,10–0,12;
+  geçişten sonraki 27 kararda ham tepe +1'de (cuma), gün etkisinden arındırılınca 0'da.
+- **Sınırda:** $p$, %5'e benzetim hata payının iki katından yakınsa sonuç "sınırda" yazılır —
+  tohum değişince hüküm dönebilir.
+- **Saat:** geçiş serinin ölçülmüş saatiyle bağdaşmıyorsa tesadüftür; olay çalışması güçlü
+  kuralı **ve** saati ister.
+
+| Seri × olay | Olay | Tepe | $O(0)$ | $p$ | Hüküm |
+|---|---|---|---|---|---|
+| USD/TRY × PPK | 92 | 0 | 1,48 | 0,002 | kurulur |
+| DİBS 2 yıl (+2 iş günü) × PPK | 111 | 0 | 1,40 | 0,001 | kurulur |
+| DİBS 5 yıl (+2 iş günü) × PPK | 111 | +1 | 1,11 | 0,191 | geçmedi |
+| DİBS 3 ay × TÜFE | 164 | 0 | 1,31 | 0,050 | sınırda · saate uymaz |
+| DİBS 2 yıl × TÜFE | 164 | 0 | 1,03 | 0,427 | zayıf · saate uymaz |
+| USD/TRY × TÜFE | 145 | −1 | 0,93 | 0,630 | geçmedi |
+| ABD 2 yıl × FOMC | 152 | 0 | 1,53 | 0,001 | kurulur |
+| Dolar sepeti × FOMC | 152 | 0 | 1,61 | 0,001 | kurulur |
+
+TCMB kuru bir iş günü kaydırılınca PPK'da da geçer ($p$ 0,013; yalnız sağlamlık); DİBS 3 ay iki
+iş günü kaydırılınca geçmez. **Bulgu: TÜFE gününde hiçbir Türkiye serisi olay çalışmasına izin
+vermiyor.** DİBS'in kaymasız tepesi saate uymaz — D etiketi D'den önceki iş gününün
+sabitlemesidir ve 10:00'daki TÜFE'yi taşıyamaz; saatle bağdaşan +1 ve +2 kaymalarında üç DİBS
+serisinin altı satırından hiçbiri geçmiyor; USD/TRY'nin profili düz. Takvim de açıklamıyor: 2
+yıllıkta ayın 2. iş günü TÜFE o güne düştüğünde büyük (38,8 bp), 3. iş gününe düştüğünde sıradan
+(28,3 bp; bütün günlerde 27,5 bp). Beş Türkiye serisi × iki olay türünde 3 aylığın tek sınırda
+geçişi tesadüfle uyumludur. Bölüm 4 TÜFE tepkisini bu yüzden yayım ayında ölçer. ABD istihdam
+ve TÜFE günleri kurulmadı: BLS'nin yayım takvimi geçmişine erişilemedi.
+
+**Anket etiketi.** Piyasa Katılımcıları Anketi'nin cari ay TÜFE beklentisi, gerçekleşen aylık
+TÜFE ile aynı ayda ve ±1, ±2 ay kaydırılarak kıyaslandı (164 ay): ortalama mutlak hata aynı ayda
+0,69 puan, en yakın rakipte 0,86 puan; etiket doğru. Anketin **yayım günü ölçülemedi**: takvimi
+kayıtlı değil, günlük seriye yayılmış beklentiler ayın 20'si varsayımıyla kurulmuş.
+
+<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/02_plasebo.html" baslik="Plasebo profili: olay gününe uzaklığa göre ortalama mutlak değişim, seri ve olay türüne göre" no="02" kaynak="TCMB · TÜİK · Fed · Yahoo Finance · ABD Hazinesi · CNBC" genis />
+
+**Bu seri nasıl hesaplanıyor.** Her satır bir seri × olay türü, her hücre $O(k)$'dir (beyaz
+sıradan gün, bordo hareketli, mavi sakin); çerçeve satırın tepesi, sağda 2.3'ün hükmü. Paneller:
+PPK günleri kendi etiketiyle ve serinin ölçülmüş saatine kaydırılmış (DİBS +2, TCMB kuru +1);
+TÜFE günleri; FOMC günleri. Takvimler: 111 PPK (2016–2026), 164 TÜFE yayımı (2013–2026), 152
+planlı FOMC (2008–2026; plansız 18 toplantı ayıklandı). Günlük değişimler: DİBS (bp, Türkiye iş günü
+takviminde), kurlar (log, %), ABD 2 yıllık (bp). Kur satırlarında 12.2021–06.2023
+dışarıda: o dönemin 19 kararında USD/TRY'nin +2 oranı 2,92, dışarıda 1,12. Kontrol: rastgele kümelerin ortalama profili 0,97–1,04. Bilinen kusurlar: TÜFE'nin
+kaydırılmış profilleri ve yönetilen kur döneminin içi çizilmedi (hükümleri 2.3'te); "sınırda"
+hücresi rastgele tohuma bağlıdır.
+
+<div class="not">
+
+  <span class="etiket">Masada ne yaparsınız</span>
+
+  - Pencere açılmadan önce serinin saatine bakılır: 14:00 kararı USD/TRY'de aynı gün, TCMB
+    kurunda ertesi ilanda, DİBS'te iki iş günü sonra aranır.
+  - Kapıdan geçmeyen seri × olay için tepki sayısı okunmaz; beklenti yoksa "sürpriz" denmez.
+  - Cuma, tatil ve arife komşuluğundaki değerler ayrıca kontrol edilir.
+
+</div>
+
+<div class="not">
+
+  <span class="etiket">Tek cümlelik kural</span>
+
+  Pencere ölçülür, varsayılmaz.
+
+</div>
+
+<div class="not">
+
+  <span class="etiket">Pratik — Bölüm 2</span>
+
+**1. Profil okumak: PPK günü 2 yıllık.** DİBS 2 yıllığın PPK profili kendi etiketiyle
+(−2…+2): 1,18 · 1,07 · 1,01 · 1,17 · 1,39; iki iş günü kaydırılınca 1,02 · 1,19 · 1,40 · 1,35 ·
+1,18, $p$ 0,001. (a) Kaymasız profil geçer mi? (b) Kaydırılmış profil neden kurulabilir? (c)
+Karar 13.09.2018 perşembe 14:00'te açıklandı; tepki hangi iki etiketin farkındadır?
+
+<details>
+<summary>Çözüm</summary>
+
+(a) Hayır: tepe +2'de (1,39), olay günü sıradan (1,01).
+
+(b) Tepe 0'a gelir (1,40 > 1,35), rastgele kümelerin neredeyse hepsini aşar ve kayma serinin
+ölçülmüş öncülüğüne eşittir.
+
+(c) 17.09.2018 (pazartesi) eksi 14.09.2018 (cuma) etiketi: ilki 14.09'un, ikincisi 13.09'un
+öğleden önceki sabitlemesidir; karar arada.
+
+</details>
+
+**2. Sınırda ve saate uymayan: TÜFE günü 3 aylık.** DİBS 3 aylığın TÜFE profili: 1,15 · 0,82 ·
+1,31 · 1,05 · 0,95; $p$ 0,050, benzetim hata payı 0,007. Saatle bağdaşan kaymalarda $O(0)$ +1'de
+1,06 ($p$ 0,47), +2'de 0,98 ($p$ 0,52). (a) Temel ve güçlü kural ne der? (b) Neden "sınırda"?
+(c) Olay çalışması kurulur mu?
+
+<details>
+<summary>Çözüm</summary>
+
+(a) Temel kural geçer: tepe 0'da (1,31 > 1,15). Güçlü kuralın hükmü "sınırda": $p$ %5'in hemen
+altında, ama (b)'deki hata payının içinde.
+
+(b) $p$, %5'e hata payının iki katından (0,014) yakın: başka bir tohumla hüküm dönebilir.
+
+(c) Hayır. Kaymasız etiket TÜFE gününden önceki iş gününün sabitlemesini ölçer; geçiş saate
+uymaz, saatle bağdaşan kaymalarda profil düz.
+
+</details>
+
+</div>

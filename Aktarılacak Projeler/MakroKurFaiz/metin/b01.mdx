@@ -1,0 +1,323 @@
+## Bölüm 1 — Çerçeve: faizin ve kurun üç terimi, beş rejim (≈10 dk)
+
+<span id="hy-b01"></span>
+
+*Bu bölümde:* faizin ve kurun üç terimi, aynı haberin DM'de ve EM'de neden farklı terime
+değdiği, terimi okuyan kadran, haftalık rejim etiketinin kuralı ve sınırı, ve bunların öngörü
+değil tarif olduğu.
+
+### 1.1 Faizin üç terimi (≈1 dk)
+
+$n$ vadeli bir devlet tahvilinin getirisi üç terime ayrışır:
+
+$$
+y_t^{(n)} \;=\; \underbrace{\frac{1}{n}\sum_{j=0}^{n-1} E_t\, i_{t+j}}_{\text{politika patikası}}
+\;+\; \underbrace{tp_t^{(n)}}_{\text{vade primi}}
+\;+\; \underbrace{\lambda_t^{(n)}}_{\text{kredi/çevrilebilirlik primi}}
+$$
+
+İlk terim beklenen kısa faiz yoludur; para politikası haberi buraya değer. İkincisi, o yolu
+tek seferde kilitlemek yerine uzun tahvil tutmanın telafisidir ve model olmadan gözlenmez:
+New York Fed'in yayımladığı ACM vade primi her getiriyi beklenen kısa faiz yolu ile vade
+primine Adrian, Crump ve Moench'in (2013) modeliyle ayırır — bir ölçüm değil, bir modelin
+çıktısıdır. Üçüncü terim DM'nin kendi parasıyla borçlanmasında çoğu zaman küçüktür (istisnalar Bölüm 6),
+EM'de değil.
+Du ve Schreger (2016), yerel para devlet tahvili getirisinin çapraz kur swabıyla kurulan
+sentetik yerel para risksiz faizi üzerindeki farkını kredi primi olarak ölçer; 2005–2014'te 10
+gelişmekte olan ülkede beş yıllık vadede bu prim ortalama 145 bp, döviz cinsi borcun kredi
+primi ise 201 bp'dir. Türkiye'de üçüncü terimin ayrı bir ölçüsü yok (CDS serisi yok, Bölüm 12);
+1.7'nin kadranları onu ancak faizle TL'nin değerinin ters yönde hareket ettiği haftalardan okur. Model
+tabanlı bir vade primi de yok; Bölüm 5 bir vekil kurar.
+
+### 1.2 Kurun üç bloğu: açık faiz paritesinden ileri yinelemeye (≈2 dk)
+
+$s_t$ USD/yerel kurun logu, $i_t$ ve $i_t^*$ yerel ve ABD kısa faizi olsun. Yerel parayı bir
+dönem tutmanın dolar cinsinden fazla getirisi $i_t - i_t^* - (s_{t+1} - s_t)$'dir; beklenen
+değeri **risk primi** $\rho_t$'dir. Tanım, risk primli açık faiz paritesini (UIP) verir:
+
+$$
+E_t s_{t+1} - s_t \;=\; i_t - i_t^* - \rho_t .
+$$
+
+$\rho_t = 0$ saf UIP'dir. Beklenen enflasyon farkı düşülüp $q_t = s_t + p_t^* - p_t$ ve
+$r_t = i_t - E_t\pi_{t+1}$ yazılınca reel biçim çıkar; denklem ileri doğru yinelenir (her
+adımda $E_t q_{t+1}$ yerine kendi denklemi konur):
+
+$$
+q_t \;=\; E_t q_{t+1} - (r_t - r_t^*) + \rho_t
+\;\;\Rightarrow\;\;
+q_t \;=\; \underbrace{\lim_{k\to\infty} E_t\, q_{t+k}}_{\text{(A) çıpa}}
+\;-\; \underbrace{\sum_{j=0}^{\infty} E_t\big(r_{t+j} - r^*_{t+j}\big)}_{\text{(B) reel faiz farkı patikası}}
+\;+\; \underbrace{\sum_{j=0}^{\infty} E_t\, \rho_{t+j}}_{\text{(C) risk primi patikası}}
+$$
+
+Bugünkü reel kur, çıpasından, beklenen reel faiz farklarının toplamı kadar güçlü ve beklenen
+risk primlerinin toplamı kadar zayıftır. **(A)** reel denge kurunu değiştiren
+habere (verimlilik, ticaret hadleri, net dış varlık) cevap verir ve yavaştır (Bölüm 7).
+**(B)** gelecekteki faiz yolunu değiştiren habere cevap verir; etki bütün patikanın toplamıdır,
+kalıcı bir artış tek dönemlik bir artıştan çok daha büyük kur hareketi verir. **(C)** yerel
+parayı tutmanın istenen telafisini değiştiren habere cevap verir: borç sürdürülebilirliği,
+kurumsal güven, küresel risk iştahı.
+
+Frankel (1979) yapışkan fiyatı süregiden enflasyon farkıyla birleştirir: kur, uzun dönem
+denge değerinden reel faiz farkıyla orantılı sapar — B bloğunun en sade biçimi. Dornbusch
+(1976) modelinde varlık piyasaları anında, mal fiyatları yavaş uyum sağlar ve beklenmeyen bir
+parasal genişleme kuru kısa vadede uzun vadeli dengesinin ötesine değer kaybettirir; bu aşırı
+sıçrama parametrelere bağlıdır, her şokta görülmez. Engel (2016) iki bulguyu yan yana koyar: yüksek faizli ülkelerin kısa vadeli
+mevduatı yüksek beklenen getiri sağlar, reel faizi yüksek ülkelerin parası ise reel olarak, açık
+faiz paritesi altında beklenen reel faiz farkı yolunun açıklayabileceğinden daha güçlüdür; mevcut modeller ikisini
+birlikte açıklamakta zorlanır. Okuma: C bloğu B'den bağımsız değildir ve ilişkisi tek işaretle
+yazılamaz. Üç bloğu sayıyla ayıran araç Bölüm 11'dedir.
+
+### 1.3 DM ile EM ve teşhis kadranı (≈1 dk)
+
+Clarida ve Waldman (2007), enflasyon hedefini Taylor kuralıyla uygulayan bir merkez bankasında
+beklenenden yüksek enflasyonun parayı değerlendirebileceğini gösterir; 10 ülkede açıklama
+çevresindeki 10 dakikalık pencerelerde kötü enflasyon haberi kur için anlamlı biçimde iyi haber
+çıkmıştır. Mekanizma B'dir; sonuç enflasyon hedeflemeyen ülkelerde farklıdır. EM'de aynı haber
+C'ye değebilir: Kalemli-Özcan (2019), ABD para politikasının diğer ülkelerin borçlanma
+maliyetini küresel yatırımcıların risk algısı üzerinden etkilediğini, bu yayılımın gelişmekte
+olan ülkelerde daha büyük olduğunu ve kanalın ülke risk primi olduğunu gösterir. Kalemli-Özcan
+ve Varela (2021, çalışma kâğıdı) anketten kurulan açık faiz paritesi priminin gelişmekte olan
+ülkelerde sürekli artı kaldığını bulur.
+
+Terim, aynı günün (ya da haftanın) uzun faiz ve para hareketi birlikte okunarak teşhis edilir.
+
+| Kadran | Faiz | Para | Okunan terim |
+|---|---|---|---|
+| **politika** | ↑ | ↑ | B: faiz yolu yukarı |
+| **prim** | ↑ | ↓ | C: risk primi yukarı |
+| **gevşeme** | ↓ | ↓ | B: faiz yolu aşağı |
+| **güvenli liman** (DM) · **prim düşüşü** (Türkiye) | ↓ | ↑ | C: prim aşağı; DM'de sığınak talebi |
+
+Politika ile gevşemenin toplamı "B payı", prim ile dördüncü kadranın toplamı "C payıdır".
+
+### 1.4 Beş rejim: ölçülebilir atama (≈2 dk)
+
+Rejim, kadranın hangi okumasının geçerli olduğunu söyleyen haftalık etikettir. Kural öncelik
+sırasıyla:
+
+1. **R5 küresel riskten kaçış** — örnek gününde (ABD'de cuma, Türkiye'de perşembe) VIX
+   kapanışı, 1990'dan bir önceki haftaya kadar biriken haftalık kapanışların 75. yüzdeliğinde
+   ya da üstünde.
+2. **R2 DM mali kaygı** (ABD) ya da **R4 EM mali baskınlık** (Türkiye) — uzun uç yükselirken
+   para, son 26 haftanın ortalama hareketine göre yarım standart sapmadan fazla değer kaybediyor
+   **ve** eğri ayılı dikleşiyor: uzun uç ile 2 yıllığın farkı yarım standart sapmadan fazla
+   açılıyor (standart sapmalar son 52 haftanın). Uzun uç ABD'de 10, Türkiye'de 5 yıllıktır.
+3. Öbür haftalar **R1 DM normal** ya da **R3 EM güvenilir merkez bankası**.
+
+CDS kullanılmaz. Son tam haftanın eşikleri: VIX 22,39; dikleşme
+Türkiye'de 30,6 bp, ABD'de 2,5 bp.
+
+| Örneklem | Hafta | R1 · R3 | R2 · R4 | R5 |
+|---|---|---|---|---|
+| ABD, 13.10.2000–25.09.2026 | 1.355 | %70,5 | %4,4 | %25,2 |
+| Türkiye, 11.10.2013–25.09.2026 | 676 | %76,6 | %6,4 | %17,0 |
+| Türkiye, yönetilen kur dönemi hariç | 593 | %80,8 | %6,2 | %13,0 |
+
+Orta rejimin (R2 · R4) ortalama haftası: ABD'de 10 yıllık +12,2 bp, dolar 26 haftalık
+ortalamasına göre +%0,94 değer kaybı, eğri +9,3 bp; Türkiye'de 5 yıllık +72,7 bp, TL aynı ölçüyle
++%2,94 değer kaybı, eğri +48,5 bp. Kuralın sınırı adıyla:
+
+- **İki rejimi yalnız VIX ayırır:** CDS olmadan Türkiye'de küresel kaçış ile yerel prim aynı
+  kadrana düşer.
+- **Riskten dönüş haftası "prim" kadranına düşer:** 14.10.2011 haftasında ABD 10 yıllık +16 bp,
+  dolar 26 haftalık ortalamasına göre %3,01 değer kaybı. R5 bu yüzden önce sorulur.
+- **Türkiye'nin sert stres haftalarında kısa uç uzun uçtan fazla yükselir** (likidite
+  sıkılaşması) ve ayılı dikleşme şartı o haftaları R3'e yazar: 26 haftalık ortalamaya göre en
+  büyük on TL değer kaybı haftasının dördü R3, beşi R4, biri R5.
+- **Eşikler sezgiyle seçildi:** orta rejimin payı eşik sıfırda ABD'de %11,5, Türkiye'de %15,8;
+  bir standart sapmada %0,9 ve %2,7.
+- **Kontrollü değer kaybı ham kuru tek yöne iter:** Türkiye etiketi kurun 26 haftalık
+  ortalamasından sapmasıyla kurulur (ham kurla R4 payı %9,5 olurdu); yönetilen kur döneminde
+  (12.2021–06.2023) kur yönü piyasayı değil politikayı ölçer.
+
+Son tam hafta ABD'de R1 (25.09.2026, VIX 14,87), Türkiye'de R3 (24.09.2026, VIX 15,67).
+
+### 1.5 Sınır: kur temellerden kopuktur (≈1 dk)
+
+Meese ve Rogoff (1983), bir ile on iki aylık ufuklarda rastgele yürüyüşün yapısal ve zaman
+serisi modelleri kadar iyi tahmin ettiğini, modellere açıklayıcı değişkenlerin gerçekleşen
+değerleri verildiğinde bile bunun değişmediğini gösterir. Engel ve West (2005), temel
+değişkenler birim köklü ve iskonto faktörü bire yakınsa bugünkü değer modelinin kendisinin
+neredeyse rastgele yürüyüş gibi davranan bir kur ürettiğini gösterir. Rossi (2013)
+öngörülebilirliğin öngörücüye, ufka ve döneme bağlı olduğunu bulur. Lilley, Maggiori, Neiman ve Schreger (2022), 2007 öncesinde kurla birlikte hareket
+etmeyen küresel risk iştahı göstergelerinin o yıldan sonra kurları örneklem içinde anlamlı
+biçimde açıkladığını gösterir — eşzamanlı, öngörü değil. Bu dersin her ölçümü aynı sınırı
+taşır: etkenler hareketi **tarif eder**, öngörmez. Bir ilişki ancak Newey–West t'si ve
+örneklem dışında iki saf kıyası (rastgele yürüyüş ve koşulsuz ortalama) birlikte geçerse
+"ölçülü" sayılır; eşikler [Bloomberg HRA ile Korelasyon](/arastirma/bloomberg-hra-korelasyon/),
+6.1.
+
+### 1.6 Vaka: 2011 sonu ile Nisan 2025 (≈1 dk)
+
+İki pencere de küresel riskten kaçıştır: kural ikisine de R5 yazıyor.
+
+| | 01.08–30.12.2011 | 02.04–30.04.2025 |
+|---|---|---|
+| İş günü | 105 | 20 |
+| VIX ortalaması | 32,3 | 32,5 |
+| VIX en yüksek | 48,0 | 52,3 |
+| ABD 10 yıllık, birikimli | −93 bp | 0 bp |
+| ABD 2 yıllık, birikimli | −11 bp | −27 bp |
+| 10 yıllık eksi 2 yıllık, birikimli | −82 bp | +27 bp |
+| Dolar sepeti, birikimli | +%8,0 | −%4,1 |
+| Günlük Δ10 yıllık ile Δdolar korelasyonu | −0,54 | −0,02 |
+| Günlük Δdolar ile ΔVIX korelasyonu | 0,69 | −0,01 |
+| Haftalık etiket | 22 haftanın 20'si R5 | 5 haftanın 5'i R5 |
+| Haftalık kadran | 22 haftanın 11'i güvenli liman, 7'si prim | 5 hafta, dört ayrı kadran |
+
+2011'de dolar faiz düşerken değer kazandı (güvenli liman); 60 günlük korelasyon pencerenin
+sonunda −0,74'teydi. Nisan 2025'te dolar, 10 yıllık kımıldamazken değer kaybetti ve eğri
+dikleşti; birikimli hareket hiçbir kadrana düşmüyor. Beklenen, korelasyonun iki pencerede aynı
+(eksi) işareti taşıması ve yalnız hikâyenin ters olmasıydı; veri bunu doğrulamıyor: günlük
+korelasyon 2011'de −0,54, Nisan 2025'te −0,02, yani sıfıra yakın. Saat bunu değiştirmiyor:
+gümrük duyurusu 2 Nisan'da New York 16:00'da geldi; kur kapanışı (17:00) ilk tepkiyi o gün,
+öğleden sonra kotasyonu olan Hazine getirisi 3 Nisan'da taşır ve iki gün tek gözlem sayılınca
+korelasyon −0,01. **Ders:** VIX R5'i söyler; R5'in içinde doların sığınak mı primin kaynağı mı
+olduğunu doların yönü söyler. İkincisi DM'nin EM gibi davrandığı hâllerden biridir (Bölüm 6).
+
+### 1.7 Pratik: ABD faizi ile dolar, Türkiye kadranları (≈2 dk)
+
+**Pratik 1A — ABD.** ABD Hazinesi 10 yıllık getirisinin günlük değişimi (bp) ile altı G10
+kurundan eşit ağırlıklı dolar sepetinin günlük log değişimi (%) arasında 60 iş günlük kayan
+korelasyon, 22.03.2000–30.09.2026, 6.631 gün. Medyan 0,23; günlerin %76,7'sinde artı (faiz ↑,
+dolar ↑: B); en düşük −0,80 (02.12.2011), en yüksek 0,72 (30.12.2024). Korelasyonun düzeyi ve
+artı günlerin payı VIX yükseldikçe düşer (60 günlük VIX ortalamasının, o güne biriken dağılımdaki
+dörttebirliği):
+
+| VIX dörttebirliği | VIX ortalaması | Gün | Korelasyon medyanı | Artı günlerin payı |
+|---|---|---|---|---|
+| en sakin | 12,8 | 1.466 | 0,34 | %91,1 |
+| ikinci | 16,3 | 2.025 | 0,31 | %79,9 |
+| üçüncü | 20,6 | 1.496 | 0,17 | %75,6 |
+| en oynak | 29,6 | 1.644 | 0,10 | %61,1 |
+
+Örtüşmeyen 111 blokta (60 iş günü) korelasyon bloğun VIX ortalamasına regrese edilince
+korelasyon ≈ 0,49 − 0,0145 × VIX: t −3,82 (Newey–West), R² 0,13; VIX'teki 10 puanlık artış
+korelasyonu 0,15 düşürür. Örneklem dışında (71 blok) karesel hata koşulsuz ortalamanın 0,89,
+sıfır korelasyonun 0,68 katı; ilişki "ölçülü" sayılır, ama Diebold–Mariano t'leri −1,81 ve
+−1,88 — örneklem dışı üstünlüğün kendisi %5 düzeyinde anlamlı değil. VIX yükseldikçe B zayıflar;
+işaretin dönmesini VIX tek başına söylemez (1.6).
+
+İki tuzak. **DXY:** Yahoo barının gövde/aralık sınaması kurulamadı, elimizdeki seri yalnız kapanışı
+taşıyor; gecikme korelasyonu sepetle aynı gün 0,90, ertesi gün 0,04, önceki gün −0,03 — kayma
+yok. **Bozuk kotasyon:** CNBC'nin EUR/USD'si
+01–03.01.2020'de bozuk; CNBC'den kurulan DXY vekili o blokta Yahoo DXY'den −%3,38 ve +%3,54
+ayrışıp geri dönüyor, oysa 2000–2026'nın en büyük meşru ayrışması %1,74. Eşik %2,5; üç gün
+sepetten çıkarıldı.
+
+<GrafikEmbed src="/arastirma/makro-kur-ve-faiz/01_abd_korelasyon.html" baslik="ABD 10 yıllık getirisi ile dolar: 60 iş günlük korelasyon ve VIX, 2000–2026" no="01" kaynak="ABD Hazinesi · CNBC (New York 17:00) · Yahoo Finance (VIX)" />
+
+**Bu seri nasıl hesaplanıyor.** Üst panel: ABD Hazinesi 10 yıllık par getirisinin günlük
+değişimi (bp) ile dolar sepetinin günlük log değişimi arasındaki 60 iş günlük kayan Pearson
+korelasyonu. Sepet altı G10 kurundan eşit ağırlıklıdır (CNBC, New York 17:00); EUR, GBP ve AUD
+ters kotelidir, işaretleri çevrilir; artış doların değer kazancıdır. Alt panel: VIX'in 60 iş
+günlük ortalaması ve eşik — 1990'dan o güne kadar (o gün hariç) biriken 60 günlük ortalamaların
+75. yüzdeliği; çıpa günündeki değeri 23,0. Rejim kuralının eşiği (1.4) ise haftalık
+kapanışlardan kurulur. Gri gölge ortalamanın eşiği aştığı haftalar, sarı gölge vaka pencereleridir. Seri
+haftalık örneklenir (1.385 hafta). Bilinen kusurlar: kapanıştan sonra gelen
+haberde getiri bir gün geç kalır; CNBC'nin bozuk üç günü çıkarılmıştır.
+
+**Pratik 1B — Türkiye.** USD/TRY'nin perşembeden perşembeye haftalık log değişimi (%) ile 5
+yıllık DİBS getirisinin aynı piyasa gününe denk gelen haftalık değişimi (bp) dört kadrana
+ayrıldı. Seriler Türkiye iş günü takvimine indirilir, çünkü DİBS eğrisi tatillerde de satır
+taşır ve o satırların değişimi sıfır değildir. Üç tuzak yöntemi belirler:
+
+1. **Cuma kuru bir cuma kapanışı değildir.** 18.12.2023 öncesinde cumartesi barı yok; cuma
+   değeri pazartesi barının başından, hafta sonundan sonraki fiyattan gelir — 987 cumanın
+   987'si. 10.08.2018 cuma 6,82 yazıyor (TCMB gösterge kuru 5,94); 19.03.2021 cuma,
+   cumartesi günkü görevden almayı taşıyor (8,10; TCMB 7,27). Hafta perşembeyle örneklenir.
+2. **DİBS etiketi piyasa gününün iki iş günü önündedir** (ölçümü Bölüm 2): kaymasız
+   eşleştirmede 2013–2017 korelasyonu 0,41, kaydırınca 0,65.
+3. **Kur kayması kadranı yutar.** Temmuz 2023 sonrasında haftaların %89,3'ünde USD/TRY
+   yükseldi; ham kadran o dönemde neredeyse yalnız faizin işaretini ölçer. Sağlamlık için kur
+   değişiminin 26 haftalık ortalamasından sapması kullanıldı.
+
+| Dönem | Hafta | politika | prim | gevşeme | prim düşüşü | C payı | ABD C payı | Korelasyon |
+|---|---|---|---|---|---|---|---|---|
+| 2013–2017 | 259 | %11,6 | %39,8 | %15,8 | %32,8 | %72,6 | %41,2 | 0,65 |
+| 2018–2020 | 157 | %7,1 | %39,7 | %19,2 | %34,0 | %73,7 | %53,6 | 0,59 |
+| 01.2021–11.2021 | 47 | %23,4 | %38,3 | %14,9 | %23,4 | %61,7 | %47,8 | 0,63 |
+| Yönetilen kur, 12.2021–06.2023 | 83 | %8,4 | %43,4 | %41,0 | %7,2 | %50,6 | %38,8 | 0,08 |
+| 07.2023–09.2026 | 169 | %5,3 | %46,2 | %43,2 | %5,3 | %51,5 | %38,7 | 0,18 |
+| 07.2023–09.2026, kur sapmasıyla | 169 | %25,4 | %26,0 | %20,1 | %28,4 | %54,4 | — | 0,12 |
+| Tümü, yönetilen kur hariç | 632 | %9,7 | %41,4 | %23,9 | %25,0 | %66,4 | — | 0,42 |
+
+Korelasyon haftalık Δ5 yıllık ile TL'nin değer kaybı arasındadır; artı işaret C'dir. ABD'nin
+aynı ölçüsü bütün örneklemde −0,17, yani B. Türkiye'de C payı her dönemde ABD'ninkinden 11,9
+ile 31,4 puan arası yüksek. Temmuz 2023 sonrasında kur sapmasıyla C payı %54,4, korelasyon
+0,12: B ile C neredeyse eşit (B payı %45,6), korelasyon hâlâ artı ama küçük; o dönemin
+haftalarının %88,2'si R3.
+
+<div class="not">
+
+  <span class="etiket">Masada ne yaparsınız</span>
+
+  - Önce aynı günün kadranı okunur: uzun faiz ile para aynı yönde mi (B), ters yönde mi (C).
+  - Kadran rejimi tek başına söylemez: önce VIX'in eşiğe göre yerine bakılır. Türkiye'de prim
+    kadranı yüksek VIX'le geliyorsa küresel, VIX normalken geliyorsa yerel primdir.
+  - Türkiye'nin kadranı kurun kendi kaymasından arındırılarak okunur; kontrollü değer kaybında
+    "TL değer kazandı", "beklenen kayıptan az kaybetti" demektir.
+
+</div>
+
+<div class="not">
+
+  <span class="etiket">Tek cümlelik kural</span>
+
+  Önce terimi bul, sonra yönü.
+
+</div>
+
+<div class="not">
+
+  <span class="etiket">Pratik — Bölüm 1</span>
+
+**1. Kadran ve rejim: 10.08.2018 haftası.** Perşembe 09.08.2018'de biten haftada 5 yıllık getiri
++159 bp yükseldi, 5 yıllık ile 2 yıllığın farkı −12 bp değişti, USD/TRY 26 haftalık ortalama
+hareketine göre %7,46 fazla değer kaybetti; VIX 11,27. (a) Kadran? (b) Kural hangi rejimi
+yazar? (c) Bu etiket kuralın hangi sınırını gösteriyor? (d) Haftanın neden perşembeyle
+örneklendiğini o cumanın kurlarıyla gösterin.
+
+<details>
+<summary>Çözüm</summary>
+
+(a) Faiz ↑, TL ↓: **prim**, yani C.
+
+(b) VIX eşiğin altında, R5 değil. R4'ün üç şartından ikisi tutuyor (uzun uç yükseliyor, kur
+sapması yarım standart sapmanın çok üstünde) ama eğri yassılaşıyor; ayılı dikleşme yok → **R3**.
+
+(c) Sert stres haftasında kısa uç uzun uçtan fazla yükselir ve kural haftayı "güvenilir merkez
+bankası" rejimine yazar: en büyük on TL değer kaybı haftasının (1.4) dördü R3 ve bu dördün
+üçünde eğri yassılaşmıştı. Etiket
+kadranla birlikte okunur: R3 etiketli bir prim haftası R3'ün tipik haftası değildir.
+
+(d) 10.08.2018 cuma için serideki USD/TRY 6,82, TCMB'nin aynı günkü gösterge kuru 5,94:
+$\ln(6{,}82/5{,}94) \approx$ %13,8 fark. Cuma değeri hafta sonundan sonraki fiyattır.
+
+</details>
+
+**2. Rejim seçme: çıpa haftası.** Yarım haftada (ABD'de 25.09'dan 30.09.2026'ya, Türkiye'de
+24.09'dan 28.09.2026'ya) ABD 10 yıllık +12 bp, kadran politika (dolar sapmasıyla), VIX 16,34; Türkiye 5 yıllık
++15,6 bp, kadran politika (kur sapmasıyla), VIX 16,07; haftanın VIX eşiği 22,38. (a) Kural iki
+ülkeye hangi etiketi yazar? (b) Türkiye'de politika kadranı Temmuz 2023 sonrasında ne kadar
+yaygın? (c) Hafta neden sayımlara girmedi? (d) Etiket bir öngörü müdür?
+
+<details>
+<summary>Çözüm</summary>
+
+(a) VIX eşiğin altında → R5 değil. Kadran politika, yani para değer kazanıyor (Türkiye'de TL 26
+haftalık ortalama kaybından az kaybediyor) → R2/R4'ün para şartı tutmuyor. **ABD R1, Türkiye R3.**
+
+(b) Ham kurla haftaların yalnız %5,3'ü, kur sapmasıyla %25,4'ü: ham kadran kontrollü değer
+kaybında haftayı faizin işaretine indirgerdi.
+
+(c) Yarım hafta. 5 yıllık getiri iki iş günü sonraki etiketten okunduğu için Türkiye'nin yarım
+haftası çıpa gününe ulaşmıyor, 28.09'da kesiliyor.
+
+(d) Hayır. Etiket haftanın tarifidir; rejimin süreceğini söylemez (1.5).
+
+</details>
+
+</div>

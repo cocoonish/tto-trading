@@ -86,6 +86,18 @@ def not_kararlari() -> pd.DataFrame:
     return _oku("not_kararlari", "HMB kredi notu sayfası")
 
 
+def surucu_gunluk() -> pd.DataFrame:
+    """Kur sürücüleri (CNBC günlük kapanış barı): emtia vadelileri (yakın vade; devirde bir kez
+    sıçrar), devlet tahvili getirileri (%), paralar ve hisse endeksleri. Döviz barı New York 17:00,
+    vadeli barı borsa seansı, getiri barı kendi piyasasının kapanışı."""
+    return _oku("surucu_gunluk", "CNBC sürücü barları")
+
+
+def abd_reel_getiri() -> pd.DataFrame:
+    """ABD Hazinesi günlük reel getiri eğrisi (TIPS, par), %: reel5y … reel30y."""
+    return _oku("abd_reel_getiri", "ABD Hazinesi reel getiri eğrisi")
+
+
 # ───────────────────────────────────────────────────────────── EVDS (bulut)
 def pka_toplanti_beklentisi() -> pd.DataFrame:
     """Piyasa Katılımcıları Anketi: sıradaki PPK toplantısı için politika faizi

@@ -1,0 +1,662 @@
+{
+ "girdiler": [
+  {
+   "tur": "kaynak",
+   "parca": "Andersen, Bollerslev, Diebold ve Vega (2003), standartlaştırılmış sürprizlerin dolar kurlarında 5 dakikalık ölçekte sıçramalar ürettiğini ve kötü haberin iyi haberden büyük etki yaptığını bulur",
+   "kaynak": "abdv2003"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Kuttner (2001), vadeli fiyatlardan ayrılan beklenmeyen faiz değişikliğine piyasa faizlerinin büyük, beklenene küçük tepki verdiğini bulur",
+   "kaynak": "kuttner2001"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Gilbert, Scotti, Strasser ve Vega (2017), yayımların Hazine getirilerine etkisindeki farkın anlamlı bir kısmını yayımın anlık tahmin gücüyle açıklar",
+   "kaynak": "gilbert_scotti_strasser_vega2017"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Rigobon ve Sack (2004), politika şoklarının varyansının FOMC ve Kongre sunumu günlerinde artmasını kullanarak varlık fiyatlarının para politikasına tepkisini bu yolla tanımlar (genel yöntem: Rigobon, 2003)",
+   "kaynak": "rigobon_sack2004"
+  },
+  {
+   "tur": "olcum",
+   "parca": "USD/TRY ile 5 yıllıkta kaymasız 0,06, kaydırınca 0,43",
+   "degerler": [
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.capraz_korelasyon.usdtry_yahoo.2013-2021.n5y.korelasyon.0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.capraz_korelasyon.usdtry_yahoo.2013-2021.n5y.korelasyon.2",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "TCMB'nin ilan günlü kuruyla bir iş günü kaymada (0,58)",
+   "degerler": [
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.capraz_korelasyon.usdtry_tcmb_ilan.2013-2021.n5y.korelasyon.1",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "5 yıllık getiri pazartesi etiketinde %14,96 (cuma %15,03), salı %17,91, çarşamba %20,17",
+   "degerler": [
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ornek_hafta_sonu_soku.degerler.2021-03-22.n5y",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ornek_hafta_sonu_soku.degerler.2021-03-19.n5y",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ornek_hafta_sonu_soku.degerler.2021-03-23.n5y",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ornek_hafta_sonu_soku.degerler.2021-03-24.n5y",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "13.09.2018 PPK'sında önceki ilan 6,3945, karar günü ilanı 6,3566, ertesi gün 6,0659; Yahoo'nun karar günü kapanışı 6,1287",
+   "degerler": [
+    {
+     "yol": "b02.p2.tcmb_takvim_tuzagi.sabitleme_saati_ornek.2018-09-13.tcmb_onceki_gun_ilani",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b02.p2.tcmb_takvim_tuzagi.sabitleme_saati_ornek.2018-09-13.tcmb_karar_gunu_ilani",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b02.p2.tcmb_takvim_tuzagi.sabitleme_saati_ornek.2018-09-13.tcmb_ertesi_gun_ilani",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b02.p2.tcmb_takvim_tuzagi.sabitleme_saati_ornek.2018-09-13.yahoo_karar_gunu_kapanisi",
+     "bicim": "sayi",
+     "hane": 4
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "88 iş gününü değersiz bırakır",
+   "degerler": [
+    {
+     "yol": "b02.p2.tcmb_takvim_tuzagi.takvimsiz_surumde_degeri_olmayan_is_gunu",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(15.04.2024 valörü 08.04.2024 ilanıdır); bu 29 gün boş bırakılır",
+   "degerler": [
+    {
+     "yol": "b02.p2.tcmb_takvim_tuzagi.ornek.1.valor",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b02.p2.tcmb_takvim_tuzagi.ornek.1.ilan_gunu",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b02.p2.tcmb_takvim_tuzagi.ilan_olmayan_arife_gunu",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "rastgele gün kümeleri onu %15,5 ile %21,5 arasında geçer",
+   "degerler": [
+    {
+     "ifade": "min(v('b02.p2.kontrol_rastgele.0.kapi_rastgele_gecme_orani'), v('b02.p2.kontrol_rastgele.1.kapi_rastgele_gecme_orani'), v('b02.p2.kontrol_rastgele.2.kapi_rastgele_gecme_orani'), v('b02.p2.kontrol_rastgele.3.kapi_rastgele_gecme_orani'), v('b02.p2.kontrol_rastgele.4.kapi_rastgele_gecme_orani'), v('b02.p2.kontrol_rastgele.5.kapi_rastgele_gecme_orani'), v('b02.p2.kontrol_rastgele.6.kapi_rastgele_gecme_orani')) * 100",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "ifade": "max(v('b02.p2.kontrol_rastgele.0.kapi_rastgele_gecme_orani'), v('b02.p2.kontrol_rastgele.1.kapi_rastgele_gecme_orani'), v('b02.p2.kontrol_rastgele.2.kapi_rastgele_gecme_orani'), v('b02.p2.kontrol_rastgele.3.kapi_rastgele_gecme_orani'), v('b02.p2.kontrol_rastgele.4.kapi_rastgele_gecme_orani'), v('b02.p2.kontrol_rastgele.5.kapi_rastgele_gecme_orani'), v('b02.p2.kontrol_rastgele.6.kapi_rastgele_gecme_orani')) * 100",
+     "bicim": "yz",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "1.000 rastgele kümenin %95'ini aşar",
+   "neden": "güçlü kuralın eşiği: rastgele kümelerin 95. yüzdeliği (yöntem sabiti; 1.000 küme)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "111 PPK'nın 87'si perşembe",
+   "degerler": [
+    {
+     "yol": "b02.p2.ppk_denetimi.satir",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b02.p2.ppk_denetimi.gun_dagilimi.per",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "cumanın ortalama mutlak değişimi %0,23, öbür günlerin %0,10–0,12",
+   "degerler": [
+    {
+     "ifade": "v('b02.p2.gun_etkisi_ortalama_abs.degisim.gecis_sonrasi.usdtry.cum')",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "ifade": "min(v('b02.p2.gun_etkisi_ortalama_abs.degisim.gecis_sonrasi.usdtry.pzt'), v('b02.p2.gun_etkisi_ortalama_abs.degisim.gecis_sonrasi.usdtry.sal'), v('b02.p2.gun_etkisi_ortalama_abs.degisim.gecis_sonrasi.usdtry.car'), v('b02.p2.gun_etkisi_ortalama_abs.degisim.gecis_sonrasi.usdtry.per'))",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "ifade": "max(v('b02.p2.gun_etkisi_ortalama_abs.degisim.gecis_sonrasi.usdtry.pzt'), v('b02.p2.gun_etkisi_ortalama_abs.degisim.gecis_sonrasi.usdtry.sal'), v('b02.p2.gun_etkisi_ortalama_abs.degisim.gecis_sonrasi.usdtry.car'), v('b02.p2.gun_etkisi_ortalama_abs.degisim.gecis_sonrasi.usdtry.per'))",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "geçişten sonraki 27 kararda ham tepe +1'de (cuma), gün etkisinden arındırılınca 0'da",
+   "degerler": [
+    {
+     "yol": "b02.p2.alt_donem_ppk.1.n_olay",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b02.p2.alt_donem_ppk.1.tepe",
+     "bicim": "tam",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b02.p2.alt_donem_ppk.1.arindirilmis_tepe",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "$p$, %5'e benzetim hata payının iki katından yakınsa",
+   "neden": "güçlü kuralın anlamlılık eşiği (%5) ve sınırda bayrağı: |p − 0,05| < 2 × hata payı (yöntem tanımı)"
+  },
+  {
+   "tur": "tablo",
+   "satir": "| USD/TRY × PPK | 92 | 0 | 1,48 | 0,002 | kurulur |",
+   "degerler": [
+    {
+     "yol": "b02.p2.kapi.3.oran0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.3.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| DİBS 2 yıl (+2 iş günü) × PPK | 111 | 0 | 1,40 | 0,001 | kurulur |",
+   "degerler": [
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ppk_kayma_taramasi.n2y.2.oran0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ppk_kayma_taramasi.n2y.2.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| DİBS 5 yıl (+2 iş günü) × PPK | 111 | +1 | 1,11 | 0,191 | geçmedi |",
+   "degerler": [
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ppk_kayma_taramasi.n5y.2.oran0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ppk_kayma_taramasi.n5y.2.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| DİBS 3 ay × TÜFE | 164 | 0 | 1,31 | 0,050 | sınırda · saate uymaz |",
+   "degerler": [
+    {
+     "yol": "b02.p2.kapi.5.oran0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.5.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| DİBS 2 yıl × TÜFE | 164 | 0 | 1,03 | 0,427 | zayıf · saate uymaz |",
+   "degerler": [
+    {
+     "yol": "b02.p2.kapi.6.oran0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.6.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| USD/TRY × TÜFE | 145 | −1 | 0,93 | 0,630 | geçmedi |",
+   "degerler": [
+    {
+     "yol": "b02.p2.kapi.8.oran0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.8.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| ABD 2 yıl × FOMC | 152 | 0 | 1,53 | 0,001 | kurulur |",
+   "degerler": [
+    {
+     "yol": "b02.p2.kapi.14.oran0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.14.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Dolar sepeti × FOMC | 152 | 0 | 1,61 | 0,001 | kurulur |",
+   "degerler": [
+    {
+     "yol": "b02.p2.kapi.15.oran0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.15.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "TCMB kuru bir iş günü kaydırılınca PPK'da da geçer ($p$ 0,013; yalnız sağlamlık)",
+   "degerler": [
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ppk_kayma_taramasi.usdtry_tcmb.1.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ayın 2. iş günü TÜFE o güne düştüğünde büyük (38,8 bp), 3. iş gününe düştüğünde sıradan (28,3 bp; bütün günlerde 27,5 bp)",
+   "degerler": [
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ay_ici_gun_etkisi.tufe_gunune_gore_gruplu_abs_bp.n2y.tufe_2_is_gununde.2",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ay_ici_gun_etkisi.tufe_gunune_gore_gruplu_abs_bp.n2y.tufe_3_is_gununde.2",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ay_ici_gun_etkisi.tum_gunler_abs_bp.n2y",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "gerçekleşen aylık TÜFE ile aynı ayda ve ±1, ±2 ay kaydırılarak kıyaslandı (164 ay): ortalama mutlak hata aynı ayda 0,69 puan, en yakın rakipte 0,86 puan",
+   "degerler": [
+    {
+     "yol": "b02.p2.anket_etiketi.n",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b02.p2.anket_etiketi.kaymalar.0.ort_mutlak_hata_puan",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.anket_etiketi.kaymalar.-1.ort_mutlak_hata_puan",
+     "bicim": "puan",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "o dönemin 19 kararında USD/TRY'nin +2 oranı 2,92, dışarıda 1,12",
+   "degerler": [
+    {
+     "yol": "b02.p2.yonetilen_kur_donemi.0.n_olay",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b02.p2.yonetilen_kur_donemi.0.oran.2",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.3.oran.2",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Kontrol: rastgele kümelerin ortalama profili 0,97–1,04",
+   "degerler": [
+    {
+     "ifade": "min(v('b02.sekil_02.satirlar.31.oran') + v('b02.sekil_02.satirlar.32.oran') + v('b02.sekil_02.satirlar.33.oran') + v('b02.sekil_02.satirlar.34.oran') + v('b02.sekil_02.satirlar.35.oran') + v('b02.sekil_02.satirlar.36.oran') + v('b02.sekil_02.satirlar.37.oran'))",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "max(v('b02.sekil_02.satirlar.31.oran') + v('b02.sekil_02.satirlar.32.oran') + v('b02.sekil_02.satirlar.33.oran') + v('b02.sekil_02.satirlar.34.oran') + v('b02.sekil_02.satirlar.35.oran') + v('b02.sekil_02.satirlar.36.oran') + v('b02.sekil_02.satirlar.37.oran'))",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Takvimler: 111 PPK (2016–2026), 164 TÜFE yayımı (2013–2026), 152 planlı FOMC (2008–2026; plansız 18 toplantı ayıklandı)",
+   "degerler": [
+    {
+     "yol": "b02.p2.ppk_denetimi.satir",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b02.p2.kapi.5.n_olay",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b02.p2.fomc_denetimi.planli",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b02.p2.fomc_denetimi.plansiz_ayiklanan",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(−2…+2): 1,18 · 1,07 · 1,01 · 1,17 · 1,39",
+   "degerler": [
+    {
+     "yol": "b02.p2.kapi.1.oran.-2",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.1.oran.-1",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.1.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.1.oran.1",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.1.oran.2",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "iki iş günü kaydırılınca 1,02 · 1,19 · 1,40 · 1,35 · 1,18, $p$ 0,001",
+   "degerler": [
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ppk_kayma_taramasi.n2y.2.oran.-2",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ppk_kayma_taramasi.n2y.2.oran.-1",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ppk_kayma_taramasi.n2y.2.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ppk_kayma_taramasi.n2y.2.oran.1",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ppk_kayma_taramasi.n2y.2.oran.2",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ppk_kayma_taramasi.n2y.2.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "tepe +2'de (1,39), olay günü sıradan (1,01)",
+   "degerler": [
+    {
+     "yol": "b02.p2.kapi.1.oran.2",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.1.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Tepe 0'a gelir (1,40 > 1,35)",
+   "degerler": [
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ppk_kayma_taramasi.n2y.2.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ppk_kayma_taramasi.n2y.2.oran.1",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "DİBS 3 aylığın TÜFE profili: 1,15 · 0,82 · 1,31 · 1,05 · 0,95; $p$ 0,050, benzetim hata payı 0,007",
+   "degerler": [
+    {
+     "yol": "b02.p2.kapi.5.oran.-2",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.5.oran.-1",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.5.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.5.oran.1",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.5.oran.2",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.5.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 3
+    },
+    {
+     "yol": "b02.p2.kapi.5.p_rastgele_hata",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "+1'de 1,06 ($p$ 0,47), +2'de 0,98 ($p$ 0,52)",
+   "degerler": [
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ay_ici_gun_etkisi.tufe_kayma_taramasi.1.oran0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ay_ici_gun_etkisi.tufe_kayma_taramasi.1.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ay_ici_gun_etkisi.tufe_kayma_taramasi.2.oran0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ay_ici_gun_etkisi.tufe_kayma_taramasi.2.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Temel kural geçer: tepe 0'da (1,31 > 1,15)",
+   "degerler": [
+    {
+     "yol": "b02.p2.kapi.5.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b02.p2.kapi.5.oran.-2",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "$p$ %5'in hemen altında",
+   "neden": "güçlü kuralın eşiği %5 (yöntem sabiti)"
+  },
+  {
+   "tur": "hesap",
+   "parca": "$p$, %5'e hata payının iki katından (0,014) yakın",
+   "degerler": [
+    {
+     "ifade": "2 * v('b02.p2.kapi.5.p_rastgele_hata')",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  }
+ ]
+}

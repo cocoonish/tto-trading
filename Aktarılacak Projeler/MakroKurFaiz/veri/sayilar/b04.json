@@ -1,0 +1,1126 @@
+{
+ "girdiler": [
+  {
+   "tur": "kaynak",
+   "parca": "Mishkin (1992) faizle enflasyon arasındaki ilişkinin kısa dönemde Fisher etkisini desteklemediğini, iki seri trend taşıdığında uzun dönemde birlikte hareket ettiklerini gösterdi",
+   "kaynak": "mishkin1992"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Taylor (2000) geçişkenliğin düşüşünü düşük enflasyon ortamına bağladı ve ortam bozulursa düşüşün hızla geri döndüğünü savundu",
+   "kaynak": "taylor2000"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Gagnon ve Ihrig (2004) 1971–2003'te yirmi sanayi ülkesinde kurun yurtiçi enflasyona geçişinin 1980'lerden beri düştüğünü ve bunun merkez bankalarının enflasyon istikrarına verdiği ağırlıkla tutarlı olduğunu gösterdi",
+   "kaynak": "gagnonihrig2004"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Alesina ve Summers (1993) 16 OECD ülkesinde merkez bankası bağımsızlığıyla gelen parasal disiplinin enflasyonun düzeyini ve oynaklığını düşürdüğünü",
+   "kaynak": "alesinasummers1993"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Clarida ve Waldman'ın (2007) kur kanıtı Bölüm 1'dedir",
+   "kaynak": "clarida_waldman2007"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Davis ve Sagnanert'in (2024) Dallas Fed araştırma notuna (hakemli makale değil) göre gelişmiş ekonomilerde para beklentiden yüksek enflasyon günlerinde değer kazanıyor",
+   "kaynak": "davissagnanert2024"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Gürkaynak, Sack ve Swanson (2005) ABD'de uzun vadeli forward faizlerin makro ve politika sürprizlerine anlamlı tepki verdiğini gösterdi",
+   "kaynak": "gss2005"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Gürkaynak, Kısacıkoğlu ve Lee (2023) düşük faiz talimatı ve sık başkan değişikliğiyle ilkenin çiğnendiği, kuraldaki enflasyon katsayısının eksiye döndüğü dönemde kurun rassal yürüyüş olmaktan çıktığını ve enflasyonun çıpasını kaybettiğini gösterdi",
+   "kaynak": "gkl2023"
+  },
+  {
+   "tur": "olcum",
+   "parca": "01.2013–08.2026, 164 ay",
+   "degerler": [
+    {
+     "yol": "b04.p4a.n",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2013–2020 | 96 | +0,14 | +0,10 | 0,70 | 57 / 39 | 0,082 |",
+   "degerler": [
+    {
+     "yol": "b04.p4a.dagilim.d2013_2020.ort_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.dagilim.d2013_2020.medyan_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.dagilim.d2013_2020.sd_puan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.dagilim.d2013_2020.isaret_p_iki_yanli",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 01.2021–11.2021 | 11 | +0,38 | +0,17 | 0,54 | 10 / 1 | 0,012 |",
+   "degerler": [
+    {
+     "yol": "b04.p4a.dagilim.d2021.ort_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.dagilim.d2021.medyan_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.dagilim.d2021.sd_puan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.dagilim.d2021.isaret_p_iki_yanli",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Yönetilen kur 12.2021–06.2023 | 19 | +0,97 | +0,14 | 2,88 | 11 / 8 | 0,648 |",
+   "degerler": [
+    {
+     "yol": "b04.p4a.dagilim.yonetilen.ort_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.dagilim.yonetilen.medyan_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.dagilim.yonetilen.sd_puan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.dagilim.yonetilen.isaret_p_iki_yanli",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 07.2023–08.2026 | 38 | +0,30 | +0,03 | 1,23 | 19 / 19 | 1,000 |",
+   "degerler": [
+    {
+     "yol": "b04.p4a.dagilim.d2023_2026.ort_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.dagilim.d2023_2026.medyan_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.dagilim.d2023_2026.sd_puan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.dagilim.d2023_2026.isaret_p_iki_yanli",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Tümü | 164 | +0,29 | +0,13 | 1,28 | 97 / 67 | 0,023 |",
+   "degerler": [
+    {
+     "yol": "b04.p4a.dagilim.tum.ort_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.dagilim.tum.medyan_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.dagilim.tum.sd_puan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.dagilim.tum.isaret_p_iki_yanli",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Tüm örneklemde anket enflasyonu düşük tahmin ediyor (işaret testi p 0,023)",
+   "degerler": [
+    {
+     "yol": "b04.p4a.dagilim.tum.isaret_p_iki_yanli",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Temmuz ve Ağustos 2023'ün +5,73 ve +3,55 puanı taşıyor, ikisi dışarıda kalınca +0,06",
+   "degerler": [
+    {
+     "ifade": "v('b04.p4a.dagilim.d2023_2026.en_buyuk_uc.0.1')",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "ifade": "v('b04.p4a.dagilim.d2023_2026.en_buyuk_uc.1.1')",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "ifade": "(v('b04.p4a.dagilim.d2023_2026.ort_puan') * v('b04.p4a.dagilim.d2023_2026.n') - v('b04.p4a.dagilim.d2023_2026.en_buyuk_uc.0.1') - v('b04.p4a.dagilim.d2023_2026.en_buyuk_uc.1.1')) / (v('b04.p4a.dagilim.d2023_2026.n') - 2)",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "En büyük uç 12.2021'in +10,21 puanıdır",
+   "degerler": [
+    {
+     "yol": "b04.p4a.dagilim.tum.en_buyuk_uc.0.0",
+     "bicim": "ay",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.dagilim.tum.en_buyuk_uc.0.1",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(20.12.2021'de USD/TRY −%20,90)",
+   "degerler": [
+    {
+     "yol": "b04.p4a.kur_cokusu.gunler.36.0",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.gunler.36.1",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(23.11.2021'de +%11,68)",
+   "degerler": [
+    {
+     "yol": "b04.p4a.kur_cokusu.gunler.33.0",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.gunler.33.1",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "18.12.2023 öncesi 20 cuma yayımının kur değişimi",
+   "degerler": [
+    {
+     "yol": "b04.p4a.yayim_gunu.cuma_kur_degisimi_bos_yayim",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| DİBS 1 yıl | 0,91 | −1 gün | 1,37 | yayım günü |",
+   "degerler": [
+    {
+     "yol": "b04.p4a.yayim_gunu.kapi.n1y.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.yayim_gunu.kapi_sabah_hizasi.n1y.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| DİBS 2 yıl | 0,89 | −2 gün | 0,98 | −1 gün |",
+   "degerler": [
+    {
+     "yol": "b04.p4a.yayim_gunu.kapi.n2y.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.yayim_gunu.kapi_sabah_hizasi.n2y.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| DİBS 5 yıl | 0,97 | −2 gün | 1,05 | −1 gün |",
+   "degerler": [
+    {
+     "yol": "b04.p4a.yayim_gunu.kapi.n5y.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.yayim_gunu.kapi_sabah_hizasi.n5y.oran.0",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "oran rastgele kümelerin %95'ini aşmıyor",
+   "neden": "plasebo sınamasının güçlü kuralı: olay günü oranı gün eşlemeli 1.000 rastgele kümenin %95'ini aşmalı (yöntem eşiği)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "(p 0,077)",
+   "degerler": [
+    {
+     "yol": "b04.p4a.yayim_gunu.kapi_sabah_hizasi.n1y.p_rastgele_oran0",
+     "bicim": "sayi",
+     "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2013–2020 | +7,2 | 0,23 | −0,5 | −0,03 | −1,48 | −2,13 |",
+   "degerler": [
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n2y.d2013_2020.egim",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n2y.d2013_2020.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n5y.d2013_2020.egim",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n5y.d2013_2020.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.d2013_2020.egim",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.d2013_2020.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 01.2021–11.2021 | +122,1 | 3,16 | +116,5 | 1,88 | −3,18 | −1,73 |",
+   "degerler": [
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n2y.d2021.egim",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n2y.d2021.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n5y.d2021.egim",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n5y.d2021.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.d2021.egim",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.d2021.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Yönetilen kur | +1,5 | 0,10 | −19,8 | −1,26 | −0,46 | −1,07 |",
+   "degerler": [
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n2y.yonetilen.egim",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n2y.yonetilen.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n5y.yonetilen.egim",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n5y.yonetilen.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.yonetilen.egim",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.yonetilen.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 07.2023–08.2026 | +114,8 | 4,69 | +50,8 | 2,31 | −0,18 | −1,57 |",
+   "degerler": [
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n2y.d2023_2026.egim",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n2y.d2023_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n5y.d2023_2026.egim",
+     "bicim": "sayi",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n5y.d2023_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.d2023_2026.egim",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.d2023_2026.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Eylül 2018'in +4,17 puanlık sürprizi",
+   "degerler": [
+    {
+     "yol": "b04.p4a.dagilim.d2013_2020.en_buyuk_uc.0.1",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "kalınca eğim üçte bir küçülüp −1,01'e iner; aykırı gözlemleri tartan Huber kestirimi −1,35",
+   "degerler": [
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.d2013_2020.birini_disarida_birak.o_gozlemsiz_egim",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.d2013_2020.huber.egim",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "İşaret testi eşitlikten ayrışmıyor (aynı işaret %51,0, p 0,92)",
+   "degerler": [
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.d2013_2020.isaret.ayni_isaret_pay",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.d2013_2020.isaret.p_iki_yanli",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "4σ kur hareketi taşıyan aylar dışarıda kalınca −0,95 (t −2,00)",
+   "degerler": [
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.cokus_aylari_haric_d2013_2020.egim",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.cokus_aylari_haric_d2013_2020.t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "11.05.2006–19.03.2025 arasında 45 gün, 32'si değer kaybı, 13'ü değer kazancı",
+   "degerler": [
+    {
+     "yol": "b04.p4a.kur_cokusu.ilk",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.son",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.n_gun",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.n_deger_kaybi_gunu",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.n_deger_kazanci_gunu",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "19.03.2021'in +%10,07'si",
+   "degerler": [
+    {
+     "yol": "b04.p4a.kur_cokusu.gunler.32.0",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.gunler.32.1",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "önceki 250 iş gününün oynaklığının 4 katını aşınca",
+   "degerler": [
+    {
+     "yol": "b04.p4a.kur_cokusu.sigma_penceresi_is_gunu",
+     "bicim": "tam",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.esik_sigma",
+     "bicim": "tam",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 4σ değer kaybı günü taşıyan ay | 15 | +0,36 | +0,28 | 0,28 |",
+   "degerler": [
+    {
+     "yol": "b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ayni_ay.ort_surpriz_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ayni_ay.diger_ort_surpriz_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ayni_ay.welch_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Değer kaybı çöküşünün ertesi ayı | 15 | +1,63 | +0,15 | 1,94 |",
+   "degerler": [
+    {
+     "yol": "b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ertesi_ay.ort_surpriz_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ertesi_ay.diger_ort_surpriz_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ertesi_ay.welch_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 4σ değer kazancı günü taşıyan ay | 8 | +2,45 | +0,18 | 1,94 |",
+   "degerler": [
+    {
+     "yol": "b04.p4a.kur_cokusu.ters_nedensellik.deger_kazanci_ayni_ay.ort_surpriz_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.ters_nedensellik.deger_kazanci_ayni_ay.diger_ort_surpriz_puan",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.ters_nedensellik.deger_kazanci_ayni_ay.welch_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Welch t 1,94 ile eşiğin hemen altında ve Aralık 2021'e yaslı (o ay dışarıda kalınca ortalama +1,02)",
+   "degerler": [
+    {
+     "ifade": "v('b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ertesi_ay.welch_t')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "(v('b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ertesi_ay.ort_surpriz_puan') * v('b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ertesi_ay.n_ay') - v('b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ertesi_ay.aylar_ve_surpriz.11.1')) / (v('b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ertesi_ay.n_ay') - 1)",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "yayımlar 04.02.2013–03.09.2026",
+   "degerler": [
+    {
+     "yol": "b04.p4a.yayim_gunu.ilk",
+     "bicim": "tarih",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4a.yayim_gunu.son",
+     "bicim": "tarih",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Politika faizi | −500 bp | +300 bp |",
+   "degerler": [
+    {
+     "yol": "b04.p4c.turkiye_2021.politika_degisim_bp",
+     "bicim": "bp",
+     "hane": 0
+    },
+    {
+     "yol": "b04.p4c.abd_2022.politika_degisim_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Yıllık TÜFE | +19,89 puan | +0,71 puan |",
+   "degerler": [
+    {
+     "yol": "b04.p4c.turkiye_2021.yillik_tufe.degisim_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4c.abd_2022.yillik_tufe.degisim_puan",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Reel politika faizi, dönem sonu | −%22,08 | −%4,62 |",
+   "degerler": [
+    {
+     "yol": "b04.p4c.turkiye_2021.reel_politika.son_puan",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4c.abd_2022.reel_politika.son_puan",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2 yıllık getiri | +557 bp | +373 bp |",
+   "degerler": [
+    {
+     "yol": "b04.p4c.turkiye_2021.n2y.degisim_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4c.abd_2022.us2.degisim_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Uzun uç (Türkiye 5 yıl, ABD 10 yıl) | +755 bp | +247 bp |",
+   "degerler": [
+    {
+     "yol": "b04.p4c.turkiye_2021.n5y.degisim_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4c.abd_2022.us10.degisim_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Para, log | TL dolara karşı −%48,28 | dolar G10 sepetine karşı +%13,63 |",
+   "degerler": [
+    {
+     "ifade": "-v('b04.p4c.turkiye_2021.usdtry.log_degisim_yuzde')",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4c.abd_2022.dolar_g10.log_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "reel politika faizi %2,81'den düştü",
+   "degerler": [
+    {
+     "yol": "b04.p4c.turkiye_2021.reel_politika.ilk_puan",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "eğri 197 bp dikleşti",
+   "degerler": [
+    {
+     "ifade": "v('b04.p4c.turkiye_2021.n5y.degisim_bp') - v('b04.p4c.turkiye_2021.n2y.degisim_bp')",
+     "bicim": "bp",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(USD/TRY 8,24 → 13,36)",
+   "degerler": [
+    {
+     "yol": "b04.p4c.turkiye_2021.usdtry.ilk_duzey",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4c.turkiye_2021.usdtry.son_duzey",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "reel politika faizi −%6,91'den yükseldi",
+   "degerler": [
+    {
+     "yol": "b04.p4c.abd_2022.reel_politika.ilk_puan",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "eğri 126 bp yassılaştı",
+   "degerler": [
+    {
+     "ifade": "v('b04.p4c.abd_2022.us2.degisim_bp') - v('b04.p4c.abd_2022.us10.degisim_bp')",
+     "bicim": "bp",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(EUR/USD 1,1294 → 0,9883)",
+   "degerler": [
+    {
+     "yol": "b04.p4c.abd_2022.eurusd.ilk_duzey",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "yol": "b04.p4c.abd_2022.eurusd.son_duzey",
+     "bicim": "sayi",
+     "hane": 4
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "TCMB gösterge kuruyla TL'nin log kaybı %47,06, DXY ile doların log kazancı %14,74",
+   "degerler": [
+    {
+     "yol": "b04.p4c.turkiye_2021.usdtry_tcmb_saglamlik.log_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b04.p4c.abd_2022.dxy_saglamlik.log_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Türkiye: $\\Delta i/\\Delta\\pi = -5/19{,}89 = -0{,}25$; reel faiz −24,89 puan değişti, $\\Delta r/\\Delta\\pi = -1{,}25 = \\phi_\\pi - 1 \\lt 0$",
+   "degerler": [
+    {
+     "ifade": "v('b04.p4c.turkiye_2021.yillik_tufe.degisim_puan')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b04.p4c.turkiye_2021.politika_degisim_bp') / 100 / v('b04.p4c.turkiye_2021.yillik_tufe.degisim_puan')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b04.p4c.turkiye_2021.reel_politika.son_puan') - v('b04.p4c.turkiye_2021.reel_politika.ilk_puan')",
+     "bicim": "puan",
+     "hane": 2
+    },
+    {
+     "ifade": "(v('b04.p4c.turkiye_2021.reel_politika.son_puan') - v('b04.p4c.turkiye_2021.reel_politika.ilk_puan')) / v('b04.p4c.turkiye_2021.yillik_tufe.degisim_puan')",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "TL'nin log %48,28 kaybı",
+   "degerler": [
+    {
+     "yol": "b04.p4c.turkiye_2021.usdtry.log_degisim_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "ABD: $3/0{,}71 = 4{,}23$; reel faiz +2,29 puan, $\\Delta r/\\Delta\\pi = +3{,}23 \\gt 0$: B bloğu s'yi aşağı iter, dolar %13,63 kazandı",
+   "degerler": [
+    {
+     "ifade": "v('b04.p4c.abd_2022.yillik_tufe.degisim_puan')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b04.p4c.abd_2022.politika_degisim_bp') / 100 / v('b04.p4c.abd_2022.yillik_tufe.degisim_puan')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b04.p4c.abd_2022.reel_politika.son_puan') - v('b04.p4c.abd_2022.reel_politika.ilk_puan')",
+     "bicim": "puan",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "ifade": "(v('b04.p4c.abd_2022.reel_politika.son_puan') - v('b04.p4c.abd_2022.reel_politika.ilk_puan')) / v('b04.p4c.abd_2022.yillik_tufe.degisim_puan')",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "ifade": "v('b04.p4c.abd_2022.dolar_g10.log_degisim_yuzde')",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Çöküş ayı: $0{,}36 - 0{,}28 = 0{,}08$ puan (t 0,28); ertesi ay: $1{,}63 - 0{,}15 = 1{,}48$ puan (t 1,94)",
+   "degerler": [
+    {
+     "ifade": "v('b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ayni_ay.ort_surpriz_puan')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ayni_ay.diger_ort_surpriz_puan')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ayni_ay.ort_surpriz_puan') - v('b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ayni_ay.diger_ort_surpriz_puan')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ayni_ay.welch_t')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ertesi_ay.ort_surpriz_puan')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ertesi_ay.diger_ort_surpriz_puan')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ertesi_ay.ort_surpriz_puan') - v('b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ertesi_ay.diger_ort_surpriz_puan')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b04.p4a.kur_cokusu.ters_nedensellik.deger_kaybi_ertesi_ay.welch_t')",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "2021: $116{,}5 - 122{,}1 = -5{,}6$ bp",
+   "degerler": [
+    {
+     "ifade": "v('b04.p4a.aylik_iliski.d_n5y.d2021.egim')",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "v('b04.p4a.aylik_iliski.d_n2y.d2021.egim')",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "v('b04.p4a.aylik_iliski.d_n5y.d2021.egim') - v('b04.p4a.aylik_iliski.d_n2y.d2021.egim')",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "o ay dışarıda kalınca 2 yıllık +54,9 bp, 5 yıllık −18,5 bp (yassılaşma), kur eğimi +0,67 (R4 işareti)",
+   "degerler": [
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n2y.d2021.birini_disarida_birak.o_gozlemsiz_egim",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_n5y.d2021.birini_disarida_birak.o_gozlemsiz_egim",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.d2021.birini_disarida_birak.o_gozlemsiz_egim",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "sonrası: $50{,}8 - 114{,}8 = -64{,}0$ bp",
+   "degerler": [
+    {
+     "ifade": "v('b04.p4a.aylik_iliski.d_n5y.d2023_2026.egim')",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "v('b04.p4a.aylik_iliski.d_n2y.d2023_2026.egim')",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "v('b04.p4a.aylik_iliski.d_n5y.d2023_2026.egim') - v('b04.p4a.aylik_iliski.d_n2y.d2023_2026.egim')",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "kur eğimi −0,18, para hafifçe güçleniyor",
+   "degerler": [
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.d2023_2026.egim",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  }
+ ]
+}

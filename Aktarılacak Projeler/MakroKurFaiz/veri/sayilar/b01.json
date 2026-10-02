@@ -1,0 +1,1399 @@
+{
+ "girdiler": [
+  {
+   "tur": "kaynak",
+   "parca": "ACM vade primi her getiriyi beklenen kısa faiz yolu ile vade primine Adrian, Crump ve Moench'in (2013) modeliyle ayırır",
+   "kaynak": "acm2013"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Du ve Schreger (2016), yerel para devlet tahvili getirisinin çapraz kur swabıyla kurulan sentetik yerel para risksiz faizi üzerindeki farkını kredi primi olarak ölçer; 2005–2014'te 10 gelişmekte olan ülkede beş yıllık vadede bu prim ortalama 145 bp, döviz cinsi borcun kredi primi ise 201 bp'dir",
+   "kaynak": "du_schreger2016"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Frankel (1979) yapışkan fiyatı süregiden enflasyon farkıyla birleştirir: kur, uzun dönem denge değerinden reel faiz farkıyla orantılı sapar",
+   "kaynak": "frankel1979"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Dornbusch (1976) modelinde varlık piyasaları anında, mal fiyatları yavaş uyum sağlar ve beklenmeyen bir parasal genişleme kuru kısa vadede uzun vadeli dengesinin ötesine değer kaybettirir; bu aşırı sıçrama parametrelere bağlıdır, her şokta görülmez",
+   "kaynak": "dornbusch1976"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Engel (2016) iki bulguyu yan yana koyar: yüksek faizli ülkelerin kısa vadeli mevduatı yüksek beklenen getiri sağlar, reel faizi yüksek ülkelerin parası ise reel olarak, açık faiz paritesi altında beklenen reel faiz farkı yolunun açıklayabileceğinden daha güçlüdür; mevcut modeller ikisini birlikte açıklamakta zorlanır",
+   "kaynak": "engel2016"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Clarida ve Waldman (2007), enflasyon hedefini Taylor kuralıyla uygulayan bir merkez bankasında beklenenden yüksek enflasyonun parayı değerlendirebileceğini gösterir; 10 ülkede açıklama çevresindeki 10 dakikalık pencerelerde kötü enflasyon haberi kur için anlamlı biçimde iyi haber çıkmıştır",
+   "kaynak": "clarida_waldman2007"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Kalemli-Özcan (2019), ABD para politikasının diğer ülkelerin borçlanma maliyetini küresel yatırımcıların risk algısı üzerinden etkilediğini, bu yayılımın gelişmekte olan ülkelerde daha büyük olduğunu ve kanalın ülke risk primi olduğunu gösterir",
+   "kaynak": "kalemli_ozcan2019"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Kalemli-Özcan ve Varela (2021, çalışma kâğıdı) anketten kurulan açık faiz paritesi priminin gelişmekte olan ülkelerde sürekli artı kaldığını bulur",
+   "kaynak": "kalemli_ozcan_varela2021"
+  },
+  {
+   "tur": "olcum",
+   "parca": "Son tam haftanın eşikleri: VIX 22,39; dikleşme Türkiye'de 30,6 bp, ABD'de 2,5 bp",
+   "degerler": [
+    {
+     "yol": "b01.rejim.esikler.son_vix_esik",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.rejim.esikler.son_tr_diklesme_esik_bp",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b01.rejim.esikler.son_abd_diklesme_esik_bp",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| ABD, 13.10.2000–25.09.2026 | 1.355 | %70,5 | %4,4 | %25,2 |",
+   "degerler": [
+    {
+     "ifade": "v('b01.rejim.abd.hafta.R1') / v('b01.rejim.abd.n_hafta') * 100",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "ifade": "v('b01.rejim.abd.hafta.R2') / v('b01.rejim.abd.n_hafta') * 100",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "ifade": "v('b01.rejim.abd.hafta.R5') / v('b01.rejim.abd.n_hafta') * 100",
+     "bicim": "yz",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Türkiye, 11.10.2013–25.09.2026 | 676 | %76,6 | %6,4 | %17,0 |",
+   "degerler": [
+    {
+     "yol": "b01.rejim.tr.pay.R3",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.rejim.tr.pay.R4",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.rejim.tr.pay.R5",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Türkiye, yönetilen kur dönemi hariç | 593 | %80,8 | %6,2 | %13,0 |",
+   "degerler": [
+    {
+     "yol": "b01.rejim.tr.yonetilen_haric.pay.R3",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.rejim.tr.yonetilen_haric.pay.R4",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.rejim.tr.yonetilen_haric.pay.R5",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ABD'de 10 yıllık +12,2 bp, dolar 26 haftalık ortalamasına göre +%0,94 değer kaybı, eğri +9,3 bp",
+   "degerler": [
+    {
+     "yol": "b01.rejim.abd.ortalama_hareket.R2.uzun_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b01.rejim.abd.ortalama_hareket.R2.para_kaybi_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b01.rejim.abd.ortalama_hareket.R2.egim_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Türkiye'de 5 yıllık +72,7 bp, TL aynı ölçüyle +%2,94 değer kaybı, eğri +48,5 bp",
+   "degerler": [
+    {
+     "yol": "b01.rejim.tr.ortalama_hareket.R4.uzun_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b01.rejim.tr.ortalama_hareket.R4.para_kaybi_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b01.rejim.tr.ortalama_hareket.R4.egim_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "14.10.2011 haftasında ABD 10 yıllık +16 bp, dolar 26 haftalık ortalamasına göre %3,01 değer kaybı",
+   "degerler": [
+    {
+     "yol": "b01.rejim.abd.en_buyuk_10_para_kaybi_haftasi.6.hafta",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b01.rejim.abd.en_buyuk_10_para_kaybi_haftasi.6.uzun_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b01.rejim.abd.en_buyuk_10_para_kaybi_haftasi.6.para_kaybi_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "orta rejimin payı eşik sıfırda ABD'de %11,5, Türkiye'de %15,8; bir standart sapmada %0,9 ve %2,7",
+   "degerler": [
+    {
+     "yol": "b01.rejim.abd.orta_rejim_payi_duyarlilik.esik_0_sd",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.rejim.tr.orta_rejim_payi_duyarlilik.esik_0_sd",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.rejim.abd.orta_rejim_payi_duyarlilik.esik_1_sd",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.rejim.tr.orta_rejim_payi_duyarlilik.esik_1_sd",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ham kurla R4 payı %9,5 olurdu",
+   "degerler": [
+    {
+     "yol": "b01.rejim.tr.r4_payi_ham_kurla",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Son tam hafta ABD'de R1 (25.09.2026, VIX 14,87), Türkiye'de R3 (24.09.2026, VIX 15,67)",
+   "degerler": [
+    {
+     "yol": "b01.rejim.son_tam_hafta.abd",
+     "bicim": "metin",
+     "hane": 0
+    },
+    {
+     "yol": "b01.rejim.son_tam_hafta.abd_ornek_gunu",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b01.rejim.son_tam_hafta.abd_vix",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.rejim.son_tam_hafta.tr",
+     "bicim": "metin",
+     "hane": 0
+    },
+    {
+     "yol": "b01.rejim.son_tam_hafta.tr_ornek_gunu",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b01.rejim.son_tam_hafta.tr_vix",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Meese ve Rogoff (1983), bir ile on iki aylık ufuklarda rastgele yürüyüşün yapısal ve zaman serisi modelleri kadar iyi tahmin ettiğini, modellere açıklayıcı değişkenlerin gerçekleşen değerleri verildiğinde bile bunun değişmediğini gösterir",
+   "kaynak": "meese_rogoff1983"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Engel ve West (2005), temel değişkenler birim köklü ve iskonto faktörü bire yakınsa bugünkü değer modelinin kendisinin neredeyse rastgele yürüyüş gibi davranan bir kur ürettiğini gösterir",
+   "kaynak": "engel_west2005"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Rossi (2013) öngörülebilirliğin öngörücüye, ufka ve döneme bağlı olduğunu bulur",
+   "kaynak": "rossi2013"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Lilley, Maggiori, Neiman ve Schreger (2022), 2007 öncesinde kurla birlikte hareket etmeyen küresel risk iştahı göstergelerinin o yıldan sonra kurları örneklem içinde anlamlı biçimde açıkladığını gösterir",
+   "kaynak": "lmns2022"
+  },
+  {
+   "tur": "tablo",
+   "satir": "| VIX ortalaması | 32,3 | 32,5 |",
+   "degerler": [
+    {
+     "yol": "b01.p1a.vakalar.guvenli_liman_2011.vix_ort",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b01.p1a.vakalar.kurumsal_risk_2025.vix_ort",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| VIX en yüksek | 48,0 | 52,3 |",
+   "degerler": [
+    {
+     "yol": "b01.p1a.vakalar.guvenli_liman_2011.vix_azami",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b01.p1a.vakalar.kurumsal_risk_2025.vix_azami",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| ABD 10 yıllık, birikimli | −93 bp | 0 bp |",
+   "degerler": [
+    {
+     "yol": "b01.p1a.vakalar.guvenli_liman_2011.birikimli_d10_bp",
+     "bicim": "bp",
+     "hane": 0
+    },
+    {
+     "yol": "b01.p1a.vakalar.kurumsal_risk_2025.birikimli_d10_bp",
+     "bicim": "bp",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| ABD 2 yıllık, birikimli | −11 bp | −27 bp |",
+   "degerler": [
+    {
+     "yol": "b01.p1a.vakalar.guvenli_liman_2011.birikimli_d2_bp",
+     "bicim": "bp",
+     "hane": 0
+    },
+    {
+     "yol": "b01.p1a.vakalar.kurumsal_risk_2025.birikimli_d2_bp",
+     "bicim": "bp",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 10 yıllık eksi 2 yıllık, birikimli | −82 bp | +27 bp |",
+   "degerler": [
+    {
+     "yol": "b01.p1a.vakalar.guvenli_liman_2011.birikimli_egim_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b01.p1a.vakalar.kurumsal_risk_2025.birikimli_egim_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Dolar sepeti, birikimli | +%8,0 | −%4,1 |",
+   "degerler": [
+    {
+     "yol": "b01.p1a.vakalar.guvenli_liman_2011.birikimli_dolar_yuzde",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b01.p1a.vakalar.kurumsal_risk_2025.birikimli_dolar_yuzde",
+     "bicim": "yz",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Günlük Δ10 yıllık ile Δdolar korelasyonu | −0,54 | −0,02 |",
+   "degerler": [
+    {
+     "yol": "b01.p1a.vakalar.guvenli_liman_2011.kor_d10_ddolar",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.vakalar.kurumsal_risk_2025.kor_d10_ddolar",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Günlük Δdolar ile ΔVIX korelasyonu | 0,69 | −0,01 |",
+   "degerler": [
+    {
+     "yol": "b01.p1a.vakalar.guvenli_liman_2011.kor_ddolar_dvix",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.vakalar.kurumsal_risk_2025.kor_ddolar_dvix",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "60 günlük korelasyon pencerenin sonunda −0,74'teydi",
+   "degerler": [
+    {
+     "yol": "b01.p1a.vakalar.guvenli_liman_2011.kayan_kor_pencere_sonu",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "korelasyon 2011'de −0,54, Nisan 2025'te −0,02, yani sıfıra yakın",
+   "degerler": [
+    {
+     "yol": "b01.p1a.vakalar.guvenli_liman_2011.kor_d10_ddolar",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.vakalar.kurumsal_risk_2025.kor_d10_ddolar",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "iki gün tek gözlem sayılınca korelasyon −0,01",
+   "degerler": [
+    {
+     "yol": "b01.p1a.vakalar.kurumsal_risk_2025.kor_d10_ddolar_2_3nisan_birlesik",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "korelasyon, 22.03.2000–30.09.2026, 6.631 gün. Medyan 0,23; günlerin %76,7'sinde artı",
+   "degerler": [
+    {
+     "yol": "b01.p1a.ozet.ilk",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b01.p1a.ozet.son",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b01.p1a.ozet.n_gun",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b01.p1a.ozet.kor_medyan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.ozet.pozitif_pay",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "en düşük −0,80 (02.12.2011), en yüksek 0,72 (30.12.2024)",
+   "degerler": [
+    {
+     "yol": "b01.p1a.ozet.kor_asgari",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.ozet.kor_asgari_tarih",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b01.p1a.ozet.kor_azami",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.ozet.kor_azami_tarih",
+     "bicim": "tarih",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| en sakin | 12,8 | 1.466 | 0,34 | %91,1 |",
+   "degerler": [
+    {
+     "yol": "b01.p1a.dortte_bir.q1.vix60_ort",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b01.p1a.dortte_bir.q1.kor_medyan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.dortte_bir.q1.pozitif_pay",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| ikinci | 16,3 | 2.025 | 0,31 | %79,9 |",
+   "degerler": [
+    {
+     "yol": "b01.p1a.dortte_bir.q2.vix60_ort",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b01.p1a.dortte_bir.q2.kor_medyan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.dortte_bir.q2.pozitif_pay",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| üçüncü | 20,6 | 1.496 | 0,17 | %75,6 |",
+   "degerler": [
+    {
+     "yol": "b01.p1a.dortte_bir.q3.vix60_ort",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b01.p1a.dortte_bir.q3.kor_medyan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.dortte_bir.q3.pozitif_pay",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| en oynak | 29,6 | 1.644 | 0,10 | %61,1 |",
+   "degerler": [
+    {
+     "yol": "b01.p1a.dortte_bir.q4.vix60_ort",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b01.p1a.dortte_bir.q4.kor_medyan",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.dortte_bir.q4.pozitif_pay",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Örtüşmeyen 111 blokta",
+   "degerler": [
+    {
+     "yol": "b01.p1a.blok_regresyon.n",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "korelasyon ≈ 0,49 − 0,0145 × VIX: t −3,82 (Newey–West), R² 0,13",
+   "degerler": [
+    {
+     "ifade": "v('b01.p1a.blok_regresyon.sabit')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "abs(v('b01.p1a.blok_regresyon.egim_vix_basina'))",
+     "bicim": "sayi",
+     "hane": 4
+    },
+    {
+     "ifade": "v('b01.p1a.blok_regresyon.t_egim')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b01.p1a.blok_regresyon.r2')",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "VIX'teki 10 puanlık artış korelasyonu 0,15 düşürür",
+   "degerler": [
+    {
+     "ifade": "abs(v('b01.p1a.blok_regresyon.egim_vix_basina')) * 10",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Örneklem dışında (71 blok) karesel hata koşulsuz ortalamanın 0,89, sıfır korelasyonun 0,68 katı",
+   "degerler": [
+    {
+     "yol": "b01.p1a.blok_regresyon.oos_n",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b01.p1a.blok_regresyon.oos_mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.blok_regresyon.oos_sifir.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Diebold–Mariano t'leri −1,81 ve −1,88",
+   "degerler": [
+    {
+     "yol": "b01.p1a.blok_regresyon.oos_dm_t",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.blok_regresyon.oos_sifir.dm_t",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "%5 düzeyinde anlamlı değil",
+   "neden": "anlamlılık düzeyi (yöntem sabiti; |t| ≥ 2 eşiği)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "gecikme korelasyonu sepetle aynı gün 0,90, ertesi gün 0,04, önceki gün −0,03",
+   "degerler": [
+    {
+     "yol": "b01.p1a.dxy_sinama.gecikme_korelasyonu.dxy_ayni_gun",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.dxy_sinama.gecikme_korelasyonu.dxy_ertesi_gun",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.dxy_sinama.gecikme_korelasyonu.dxy_onceki_gun",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Yahoo DXY'den −%3,38 ve +%3,54 ayrışıp geri dönüyor, oysa 2000–2026'nın en büyük meşru ayrışması %1,74. Eşik %2,5",
+   "degerler": [
+    {
+     "yol": "b01.p1a.veri_denetimi.bloklar.0.fark_giris_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.veri_denetimi.bloklar.0.fark_cikis_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    },
+    {
+     "yol": "b01.p1a.veri_denetimi.kalan_azami_fark_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.veri_denetimi.esik_yuzde",
+     "bicim": "yz",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "çıpa günündeki değeri 23,0",
+   "degerler": [
+    {
+     "yol": "b01.p1a.dortte_bir_meta.son_esikler.q75",
+     "bicim": "sayi",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(1.385 hafta)",
+   "degerler": [
+    {
+     "yol": "b01.sekil_01.n",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "987 cumanın 987'si",
+   "degerler": [
+    {
+     "yol": "b01.p1b.cuma_tuzagi.cuma_gunu",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b01.p1b.cuma_tuzagi.pazartesi_barindan",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "10.08.2018 cuma 6,82 yazıyor (TCMB gösterge kuru 5,94)",
+   "degerler": [
+    {
+     "yol": "b01.p1b.cuma_tuzagi.ornek.2018-08-10.yahoo_usdtry",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1b.cuma_tuzagi.ornek.2018-08-10.tcmb_gosterge",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(8,10; TCMB 7,27)",
+   "degerler": [
+    {
+     "yol": "b01.p1b.cuma_tuzagi.ornek.2021-03-19.yahoo_usdtry",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1b.cuma_tuzagi.ornek.2021-03-19.tcmb_gosterge",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "kaymasız eşleştirmede 2013–2017 korelasyonu 0,41, kaydırınca 0,65",
+   "degerler": [
+    {
+     "yol": "b01.p1b.turkiye_duyarlilik.persembe_dibs_kayma_0.2013-2017.korelasyon_faiz_para_kaybi",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1b.turkiye_duyarlilik.persembe_dibs_kayma_2.2013-2017.korelasyon_faiz_para_kaybi",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "haftaların %89,3'ünde USD/TRY yükseldi",
+   "degerler": [
+    {
+     "yol": "b01.p1b.turkiye.2023-07_2026-09.para_deger_kaybi_haftasi_payi",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2013–2017 | 259 | %11,6 | %39,8 | %15,8 | %32,8 | %72,6 | %41,2 | 0,65 |",
+   "degerler": [
+    {
+     "yol": "b01.p1b.turkiye.2013-2017.pay.politika",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2013-2017.pay.prim",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2013-2017.pay.gevseme",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2013-2017.pay.prim_dusus",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2013-2017.c_payi",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.karsilastirma.2013-2017.abd_c_payi",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2013-2017.korelasyon_faiz_para_kaybi",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 2018–2020 | 157 | %7,1 | %39,7 | %19,2 | %34,0 | %73,7 | %53,6 | 0,59 |",
+   "degerler": [
+    {
+     "ifade": "v('b01.p1b.turkiye.2018-2020.sayi.politika') / v('b01.p1b.turkiye.2018-2020.n_sifir_disi') * 100",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b01.p1b.turkiye.2018-2020.pay.prim",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2018-2020.pay.gevseme",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2018-2020.pay.prim_dusus",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2018-2020.c_payi",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.karsilastirma.2018-2020.abd_c_payi",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2018-2020.korelasyon_faiz_para_kaybi",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 01.2021–11.2021 | 47 | %23,4 | %38,3 | %14,9 | %23,4 | %61,7 | %47,8 | 0,63 |",
+   "degerler": [
+    {
+     "yol": "b01.p1b.turkiye.2021-01_2021-11.pay.politika",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2021-01_2021-11.pay.prim",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2021-01_2021-11.pay.gevseme",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2021-01_2021-11.pay.prim_dusus",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2021-01_2021-11.c_payi",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.karsilastirma.2021-01_2021-11.abd_c_payi",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2021-01_2021-11.korelasyon_faiz_para_kaybi",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Yönetilen kur, 12.2021–06.2023 | 83 | %8,4 | %43,4 | %41,0 | %7,2 | %50,6 | %38,8 | 0,08 |",
+   "degerler": [
+    {
+     "yol": "b01.p1b.turkiye.yonetilen_kur_2021-12_2023-06.pay.politika",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.yonetilen_kur_2021-12_2023-06.pay.prim",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.yonetilen_kur_2021-12_2023-06.pay.gevseme",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.yonetilen_kur_2021-12_2023-06.pay.prim_dusus",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.yonetilen_kur_2021-12_2023-06.c_payi",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.karsilastirma.yonetilen_kur_2021-12_2023-06.abd_c_payi",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.yonetilen_kur_2021-12_2023-06.korelasyon_faiz_para_kaybi",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 07.2023–09.2026 | 169 | %5,3 | %46,2 | %43,2 | %5,3 | %51,5 | %38,7 | 0,18 |",
+   "degerler": [
+    {
+     "yol": "b01.p1b.turkiye.2023-07_2026-09.pay.politika",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2023-07_2026-09.pay.prim",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2023-07_2026-09.pay.gevseme",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2023-07_2026-09.pay.prim_dusus",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.2023-07_2026-09.c_payi",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "ifade": "(v('b01.p1b.abd.2023-07_2026-09.sayi.prim') + v('b01.p1b.abd.2023-07_2026-09.sayi.guvenli_liman')) / v('b01.p1b.abd.2023-07_2026-09.n_sifir_disi') * 100",
+     "bicim": "yz",
+     "hane": 1
+    },
+    {
+     "yol": "b01.p1b.turkiye.2023-07_2026-09.korelasyon_faiz_para_kaybi",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| 07.2023–09.2026, kur sapmasıyla | 169 | %25,4 | %26,0 | %20,1 | %28,4 | %54,4 | — | 0,12 |",
+   "degerler": [
+    {
+     "yol": "b01.p1b.turkiye_kur_sapmasi.2023-07_2026-09.pay.politika",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye_kur_sapmasi.2023-07_2026-09.pay.prim",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye_kur_sapmasi.2023-07_2026-09.pay.gevseme",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye_kur_sapmasi.2023-07_2026-09.pay.prim_dusus",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye_kur_sapmasi.2023-07_2026-09.c_payi",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye_kur_sapmasi.2023-07_2026-09.korelasyon_faiz_para_kaybi",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "tablo",
+   "satir": "| Tümü, yönetilen kur hariç | 632 | %9,7 | %41,4 | %23,9 | %25,0 | %66,4 | — | 0,42 |",
+   "degerler": [
+    {
+     "yol": "b01.p1b.turkiye.tum_yonetilen_haric.pay.politika",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.tum_yonetilen_haric.pay.prim",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.tum_yonetilen_haric.pay.gevseme",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.tum_yonetilen_haric.pay.prim_dusus",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.tum_yonetilen_haric.c_payi",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye.tum_yonetilen_haric.korelasyon_faiz_para_kaybi",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ABD'nin aynı ölçüsü bütün örneklemde −0,17",
+   "degerler": [
+    {
+     "yol": "b01.p1b.abd.tum_2000-2026.korelasyon_faiz_para_kaybi",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ABD'ninkinden 11,9 ile 31,4 puan arası yüksek",
+   "degerler": [
+    {
+     "yol": "b01.p1b.karsilastirma.yonetilen_kur_2021-12_2023-06.fark_puan",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "yol": "b01.p1b.karsilastirma.2013-2017.fark_puan",
+     "bicim": "puan",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "kur sapmasıyla C payı %54,4, korelasyon 0,12",
+   "degerler": [
+    {
+     "yol": "b01.p1b.turkiye_kur_sapmasi.2023-07_2026-09.c_payi",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye_kur_sapmasi.2023-07_2026-09.korelasyon_faiz_para_kaybi",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "B ile C neredeyse eşit (B payı %45,6)",
+   "degerler": [
+    {
+     "yol": "b01.p1b.turkiye_kur_sapmasi.2023-07_2026-09.b_payi",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "o dönemin haftalarının %88,2'si R3",
+   "degerler": [
+    {
+     "yol": "b01.rejim.tr.donemler.2023-07_2026-09.R3",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Perşembe 09.08.2018'de biten haftada 5 yıllık getiri +159 bp yükseldi, 5 yıllık ile 2 yıllığın farkı −12 bp değişti, USD/TRY 26 haftalık ortalama hareketine göre %7,46 fazla değer kaybetti; VIX 11,27",
+   "degerler": [
+    {
+     "yol": "b01.rejim.tr.en_buyuk_10_para_kaybi_haftasi.6.ornek_gunu",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b01.rejim.tr.en_buyuk_10_para_kaybi_haftasi.6.uzun_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b01.rejim.tr.en_buyuk_10_para_kaybi_haftasi.6.egim_bp",
+     "bicim": "bp",
+     "hane": 0
+    },
+    {
+     "yol": "b01.rejim.tr.en_buyuk_10_para_kaybi_haftasi.6.para_kaybi_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b01.rejim.tr.en_buyuk_10_para_kaybi_haftasi.6.vix",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "10.08.2018 cuma için serideki USD/TRY 6,82, TCMB'nin aynı günkü gösterge kuru 5,94",
+   "degerler": [
+    {
+     "yol": "b01.p1b.cuma_tuzagi.ornek.2018-08-10.yahoo_usdtry",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1b.cuma_tuzagi.ornek.2018-08-10.tcmb_gosterge",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "$\\ln(6{,}82/5{,}94) \\approx$ %13,8 fark",
+   "degerler": [
+    {
+     "ifade": "v('b01.p1b.cuma_tuzagi.ornek.2018-08-10.yahoo_usdtry')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "v('b01.p1b.cuma_tuzagi.ornek.2018-08-10.tcmb_gosterge')",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "ifade": "math.log(v('b01.p1b.cuma_tuzagi.ornek.2018-08-10.yahoo_usdtry') / v('b01.p1b.cuma_tuzagi.ornek.2018-08-10.tcmb_gosterge')) * 100",
+     "bicim": "yz",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "ABD 10 yıllık +12 bp, kadran politika (dolar sapmasıyla), VIX 16,34; Türkiye 5 yıllık +15,6 bp, kadran politika (kur sapmasıyla), VIX 16,07; haftanın VIX eşiği 22,38",
+   "degerler": [
+    {
+     "yol": "b01.rejim.cipa_haftasi.abd_uzun_bp",
+     "bicim": "bp",
+     "hane": 0,
+     "arti": true
+    },
+    {
+     "yol": "b01.rejim.cipa_haftasi.abd_kadran",
+     "bicim": "metin",
+     "hane": 0
+    },
+    {
+     "yol": "b01.rejim.cipa_haftasi.abd_vix",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.rejim.cipa_haftasi.tr_uzun_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    },
+    {
+     "yol": "b01.rejim.cipa_haftasi.tr_kadran",
+     "bicim": "metin",
+     "hane": 0
+    },
+    {
+     "yol": "b01.rejim.cipa_haftasi.tr_vix",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.rejim.cipa_haftasi.vix_esik",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Ham kurla haftaların yalnız %5,3'ü, kur sapmasıyla %25,4'ü",
+   "degerler": [
+    {
+     "yol": "b01.p1b.turkiye.2023-07_2026-09.pay.politika",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    },
+    {
+     "yol": "b01.p1b.turkiye_kur_sapmasi.2023-07_2026-09.pay.politika",
+     "bicim": "yz",
+     "hane": 1,
+     "carpan": 100
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Yarım haftada (ABD'de 25.09'dan 30.09.2026'ya, Türkiye'de 24.09'dan 28.09.2026'ya)",
+   "degerler": [
+    {
+     "yol": "b01.rejim.cipa_haftasi.abd_son_gun",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b01.rejim.cipa_haftasi.tr_son_gun",
+     "bicim": "tarih",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "**ABD R1, Türkiye R3.**",
+   "degerler": [
+    {
+     "yol": "b01.rejim.cipa_haftasi.abd",
+     "bicim": "metin",
+     "hane": 0
+    },
+    {
+     "yol": "b01.rejim.cipa_haftasi.tr",
+     "bicim": "metin",
+     "hane": 0
+    }
+   ]
+  }
+ ]
+}
