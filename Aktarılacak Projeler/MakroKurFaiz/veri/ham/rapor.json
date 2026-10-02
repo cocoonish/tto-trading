@@ -498,5 +498,1613 @@
    "hata": "RuntimeError: indirilemedi: https://web.archive.org/web/20260929120334id_/https://www.bls.gov/bls/news-release/empsit.htm — URLError(ConnectionRefusedError(111, 'Connection refused'))",
    "sure_sn": 51.1
   }
+ },
+ "2026-10-02T1810_surucu": {
+  "ABD Hazinesi reel getiri": {
+   "durum": "tamam",
+   "2003": {
+    "durum": 200,
+    "bayt": 6526
+   },
+   "2004": {
+    "durum": 200,
+    "bayt": 7220
+   },
+   "2005": {
+    "durum": 200,
+    "bayt": 7784
+   },
+   "2006": {
+    "durum": 200,
+    "bayt": 7784
+   },
+   "2007": {
+    "durum": 200,
+    "bayt": 7815
+   },
+   "2008": {
+    "durum": 200,
+    "bayt": 7815
+   },
+   "2009": {
+    "durum": 200,
+    "bayt": 7784
+   },
+   "2010": {
+    "durum": 200,
+    "bayt": 9003
+   },
+   "2011": {
+    "durum": 200,
+    "bayt": 9390
+   },
+   "2012": {
+    "durum": 200,
+    "bayt": 9849
+   },
+   "2013": {
+    "durum": 200,
+    "bayt": 9523
+   },
+   "2014": {
+    "durum": 200,
+    "bayt": 9204
+   },
+   "2015": {
+    "durum": 200,
+    "bayt": 9157
+   },
+   "2016": {
+    "durum": 200,
+    "bayt": 9343
+   },
+   "2017": {
+    "durum": 200,
+    "bayt": 9054
+   },
+   "2018": {
+    "durum": 200,
+    "bayt": 9006
+   },
+   "2019": {
+    "durum": 200,
+    "bayt": 9055
+   },
+   "2020": {
+    "durum": 200,
+    "bayt": 10177
+   },
+   "2021": {
+    "durum": 200,
+    "bayt": 10275
+   },
+   "2022": {
+    "durum": 200,
+    "bayt": 9390
+   },
+   "2023": {
+    "durum": 200,
+    "bayt": 9042
+   },
+   "2024": {
+    "durum": 200,
+    "bayt": 9042
+   },
+   "2025": {
+    "durum": 200,
+    "bayt": 9006
+   },
+   "2026": {
+    "durum": 200,
+    "bayt": 6846
+   },
+   "sure_sn": 11.5
+  },
+  "CNBC sürücüler": {
+   "durum": "tamam",
+   "brent": {
+    "durum": "tamam",
+    "sembol": "@LCO.1",
+    "yoklama": {
+     "@LCO.1": {
+      "durum": 200,
+      "bar": 514
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1264
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1284
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1290
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1286
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1290
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 451
+     }
+    }
+   },
+   "wti": {
+    "durum": "tamam",
+    "sembol": "@CL.1",
+    "yoklama": {
+     "@CL.1": {
+      "durum": 200,
+      "bar": 499
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1245
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1257
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1259
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1257
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 436
+     }
+    }
+   },
+   "bakir": {
+    "durum": "tamam",
+    "sembol": "@HG.1",
+    "yoklama": {
+     "@HG.1": {
+      "durum": 200,
+      "bar": 501
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1244
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1259
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1258
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 438
+     }
+    }
+   },
+   "altin": {
+    "durum": "tamam",
+    "sembol": "@GC.1",
+    "yoklama": {
+     "@GC.1": {
+      "durum": 200,
+      "bar": 502
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1256
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1261
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1265
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1258
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 439
+     }
+    }
+   },
+   "gumus": {
+    "durum": "tamam",
+    "sembol": "@SI.1",
+    "yoklama": {
+     "@SI.1": {
+      "durum": 200,
+      "bar": 501
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1236
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1233
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1258
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 438
+     }
+    }
+   },
+   "platin": {
+    "durum": "tamam",
+    "sembol": "@PL.1",
+    "yoklama": {
+     "@PL.1": {
+      "durum": 200,
+      "bar": 502
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1245
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1004
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1029
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1259
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 439
+     }
+    }
+   },
+   "dogalgaz": {
+    "durum": "tamam",
+    "sembol": "@NG.1",
+    "yoklama": {
+     "@NG.1": {
+      "durum": 200,
+      "bar": 501
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1245
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1257
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1258
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1257
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 438
+     }
+    }
+   },
+   "soya": {
+    "durum": "tamam",
+    "sembol": "@S.1",
+    "yoklama": {
+     "@S.1": {
+      "durum": 200,
+      "bar": 501
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 249
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1076
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1170
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 438
+     }
+    }
+   },
+   "demir_cevheri": {
+    "durum": "tamam",
+    "sembol": "@TIO.1",
+    "yoklama": {
+     "@TIO.1": {
+      "durum": 200,
+      "bar": 483
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 794
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 475
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 974
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 421
+     }
+    }
+   },
+   "jp2y": {
+    "durum": "tamam",
+    "sembol": "JP2Y-JP",
+    "yoklama": {
+     "JP2Y-JP": {
+      "durum": 200,
+      "bar": 598
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1231
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1218
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 835
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1440
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1507
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 520
+     }
+    }
+   },
+   "jp10y": {
+    "durum": "tamam",
+    "sembol": "JP10Y-JP",
+    "yoklama": {
+     "JP10Y-JP": {
+      "durum": 200,
+      "bar": 598
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1231
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1226
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1076
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1464
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1517
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 522
+     }
+    }
+   },
+   "au2y": {
+    "durum": "tamam",
+    "sembol": "AU2Y-AU",
+    "yoklama": {
+     "AU2Y-AU": {
+      "durum": 200,
+      "bar": 653
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1265
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1261
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1146
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1614
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1704
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 564
+     }
+    }
+   },
+   "au10y": {
+    "durum": "tamam",
+    "sembol": "AU10Y-AU",
+    "yoklama": {
+     "AU10Y-AU": {
+      "durum": 200,
+      "bar": 654
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1267
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1261
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 901
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1604
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1705
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 565
+     }
+    }
+   },
+   "ca2y": {
+    "durum": "tamam",
+    "sembol": "CA2Y-CA",
+    "yoklama": {
+     "CA2Y-CA": {
+      "durum": 200,
+      "bar": 501
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1183
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 440
+     }
+    }
+   },
+   "ca10y": {
+    "durum": "tamam",
+    "sembol": "CA10Y-CA",
+    "yoklama": {
+     "CA10Y-CA": {
+      "durum": 200,
+      "bar": 502
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1259
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1254
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1133
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1315
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1238
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 441
+     }
+    }
+   },
+   "ch2y": {
+    "durum": "tamam",
+    "sembol": "CH2Y-CH",
+    "yoklama": {
+     "CH2Y-CH": {
+      "durum": 200,
+      "bar": 515
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 513
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1257
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1251
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 449
+     }
+    }
+   },
+   "ch10y": {
+    "durum": "tamam",
+    "sembol": "CH10Y-CH",
+    "yoklama": {
+     "CH10Y-CH": {
+      "durum": 200,
+      "bar": 504
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 571
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1253
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1245
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 450
+     }
+    }
+   },
+   "nz2y": {
+    "durum": "kapalı",
+    "yoklama": {
+     "NZ2Y-NZ": {
+      "durum": 200,
+      "bar": 0
+     },
+     "NZ2Y": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "nz10y": {
+    "durum": "tamam",
+    "sembol": "NZ10Y-NZ",
+    "yoklama": {
+     "NZ10Y-NZ": {
+      "durum": 200,
+      "bar": 587
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1213
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1201
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1103
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1386
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1418
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 510
+     }
+    }
+   },
+   "no10y": {
+    "durum": "kapalı",
+    "yoklama": {
+     "NO10Y-NO": {
+      "durum": 200,
+      "bar": 0
+     },
+     "NO10Y": {
+      "durum": 200,
+      "bar": 0
+     }
+    }
+   },
+   "us2y": {
+    "durum": "tamam",
+    "sembol": "US2Y",
+    "yoklama": {
+     "US2Y": {
+      "durum": 200,
+      "bar": 505
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1254
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1150
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1258
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1260
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 442
+     }
+    }
+   },
+   "us10y": {
+    "durum": "tamam",
+    "sembol": "US10Y",
+    "yoklama": {
+     "US10Y": {
+      "durum": 200,
+      "bar": 504
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1265
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1275
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1190
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1359
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1261
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 442
+     }
+    }
+   },
+   "de2y": {
+    "durum": "tamam",
+    "sembol": "DE2Y-DE",
+    "yoklama": {
+     "DE2Y-DE": {
+      "durum": 200,
+      "bar": 631
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1286
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1272
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1161
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1554
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1561
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 554
+     }
+    }
+   },
+   "gb2y": {
+    "durum": "tamam",
+    "sembol": "GB2Y-GB",
+    "yoklama": {
+     "GB2Y-GB": {
+      "durum": 200,
+      "bar": 713
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1292
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1273
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1146
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1509
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1679
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 623
+     }
+    }
+   },
+   "nzd": {
+    "durum": "tamam",
+    "sembol": "NZD=",
+    "yoklama": {
+     "NZD=": {
+      "durum": 200,
+      "bar": 576
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1451
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1551
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 498
+     }
+    }
+   },
+   "nok": {
+    "durum": "tamam",
+    "sembol": "NOK=",
+    "yoklama": {
+     "NOK=": {
+      "durum": 200,
+      "bar": 578
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1450
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1546
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 500
+     }
+    }
+   },
+   "sek": {
+    "durum": "tamam",
+    "sembol": "SEK=",
+    "yoklama": {
+     "SEK=": {
+      "durum": 200,
+      "bar": 578
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1450
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1549
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 485
+     }
+    }
+   },
+   "clp": {
+    "durum": "tamam",
+    "sembol": "CLP=",
+    "yoklama": {
+     "CLP=": {
+      "durum": 200,
+      "bar": 552
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1296
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1388
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1492
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 484
+     }
+    }
+   },
+   "cop": {
+    "durum": "tamam",
+    "sembol": "COP=",
+    "yoklama": {
+     "COP=": {
+      "durum": 200,
+      "bar": 529
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1296
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1407
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1446
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 462
+     }
+    }
+   },
+   "cnh": {
+    "durum": "tamam",
+    "sembol": "CNH=",
+    "yoklama": {
+     "CNH=": {
+      "durum": 200,
+      "bar": 565
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 0
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 787
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1447
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1546
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 486
+     }
+    }
+   },
+   "krw": {
+    "durum": "tamam",
+    "sembol": "KRW=",
+    "yoklama": {
+     "KRW=": {
+      "durum": 200,
+      "bar": 561
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1436
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1437
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 493
+     }
+    }
+   },
+   "zar": {
+    "durum": "tamam",
+    "sembol": "ZAR=",
+    "yoklama": {
+     "ZAR=": {
+      "durum": 200,
+      "bar": 569
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1302
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1442
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1536
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 505
+     }
+    }
+   },
+   "brl": {
+    "durum": "tamam",
+    "sembol": "BRL=",
+    "yoklama": {
+     "BRL=": {
+      "durum": 200,
+      "bar": 558
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1302
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1341
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1390
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 475
+     }
+    }
+   },
+   "mxn": {
+    "durum": "tamam",
+    "sembol": "MXN=",
+    "yoklama": {
+     "MXN=": {
+      "durum": 200,
+      "bar": 586
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1302
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1444
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1527
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 495
+     }
+    }
+   },
+   "try": {
+    "durum": "tamam",
+    "sembol": "TRY=",
+    "yoklama": {
+     "TRY=": {
+      "durum": 200,
+      "bar": 587
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1302
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1451
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1548
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 509
+     }
+    }
+   },
+   "jpy": {
+    "durum": "tamam",
+    "sembol": "JPY=",
+    "yoklama": {
+     "JPY=": {
+      "durum": 200,
+      "bar": 585
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1454
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1554
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 504
+     }
+    }
+   },
+   "eur": {
+    "durum": "tamam",
+    "sembol": "EUR=",
+    "yoklama": {
+     "EUR=": {
+      "durum": 200,
+      "bar": 568
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1451
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1468
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 490
+     }
+    }
+   },
+   "aud": {
+    "durum": "tamam",
+    "sembol": "AUD=",
+    "yoklama": {
+     "AUD=": {
+      "durum": 200,
+      "bar": 578
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1305
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1453
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1553
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 509
+     }
+    }
+   },
+   "cad": {
+    "durum": "tamam",
+    "sembol": "CAD=",
+    "yoklama": {
+     "CAD=": {
+      "durum": 200,
+      "bar": 595
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1454
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1551
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 517
+     }
+    }
+   },
+   "gbp": {
+    "durum": "tamam",
+    "sembol": "GBP=",
+    "yoklama": {
+     "GBP=": {
+      "durum": 200,
+      "bar": 565
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1451
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1551
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 505
+     }
+    }
+   },
+   "chf": {
+    "durum": "tamam",
+    "sembol": "CHF=",
+    "yoklama": {
+     "CHF=": {
+      "durum": 200,
+      "bar": 587
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1304
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1303
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1453
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1554
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 509
+     }
+    }
+   },
+   "spx": {
+    "durum": "tamam",
+    "sembol": ".SPX",
+    "yoklama": {
+     ".SPX": {
+      "durum": 200,
+      "bar": 501
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1256
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1259
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1259
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1258
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1258
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 438
+     }
+    }
+   },
+   "nikkei": {
+    "durum": "tamam",
+    "sembol": ".N225",
+    "yoklama": {
+     ".N225": {
+      "durum": 200,
+      "bar": 488
+     }
+    },
+    "parcalar": {
+     "2000": {
+      "durum": 200,
+      "bar": 1231
+     },
+     "2005": {
+      "durum": 200,
+      "bar": 1226
+     },
+     "2010": {
+      "durum": 200,
+      "bar": 1227
+     },
+     "2015": {
+      "durum": 200,
+      "bar": 1222
+     },
+     "2020": {
+      "durum": 200,
+      "bar": 1224
+     },
+     "2025": {
+      "durum": 200,
+      "bar": 425
+     }
+    }
+   },
+   "sure_sn": 212.3
+  }
  }
 }
