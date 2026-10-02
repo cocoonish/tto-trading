@@ -31,9 +31,9 @@ const k = A.kur;
   </p>
 
   <div class="girdiler">
-    <label><span class="etiket">TL faizi i, yıllık bileşik (%)</span>
+    <label><span class="etiket">TL faizi <span class="harf-koru">i</span>, yıllık bileşik (%)</span>
       <input type="number" id="mk-i" value={k.i_tl} step="0.25" /></label>
-    <label><span class="etiket">Dolar faizi i*, yıllık bileşik (%)</span>
+    <label><span class="etiket">Dolar faizi <span class="harf-koru">i*</span>, yıllık bileşik (%)</span>
       <input type="number" id="mk-is" value={k.i_usd} step="0.1" /></label>
     <label><span class="etiket">Reel faiz farkı R (puan)</span>
       <input type="number" id="mk-R" value={k.R} step="0.25" /></label>
@@ -50,8 +50,8 @@ const k = A.kur;
       <div><span class="etiket">Taşıma (yıllık) = başabaş değer kaybı</span><output class="ara-deger" id="mk-c">—</output></div>
       <div><span class="etiket">3 aylık taşıma</span><output class="ara-deger" id="mk-c3">—</output></div>
       <div><span class="etiket">B bloğu: −R·T_B</span><output class="ara-deger" id="mk-b">—</output></div>
-      <div><span class="etiket">Gözlenen q − q̄</span><output class="ara-deger" id="mk-q">—</output></div>
-      <div><span class="etiket">İma edilen risk primi ρ̂</span><output class="ara-deger" id="mk-rho">—</output></div>
+      <div><span class="etiket">Gözlenen <span class="harf-koru">q − q̄</span></span><output class="ara-deger" id="mk-q">—</output></div>
+      <div><span class="etiket">İma edilen risk primi <span class="harf-koru">ρ̂</span></span><output class="ara-deger" id="mk-rho">—</output></div>
       <div><span class="etiket">3 aylık taşımayı sıfırlayan prim artışı</span><output class="ara-deger" id="mk-sifir">—</output></div>
     </div>
     <p class="mini-not" id="mk-yorum">—</p>

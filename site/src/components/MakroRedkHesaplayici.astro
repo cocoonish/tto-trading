@@ -36,14 +36,14 @@ const r = A.redk;
       </select></label>
     <label><span class="etiket">Denge REDK</span>
       <input type="number" id="mr-denge" value={r.denge_tam} step="0.5" /></label>
-    <label><span class="etiket">Kalıcılık ρ (aylık)</span>
+    <label><span class="etiket">Kalıcılık <span class="harf-koru">ρ</span> (aylık)</span>
       <select id="mr-rho-sec">
         <option value={r.rho_mu} selected>medyan-yansız kestirim</option>
         <option value={r.rho_alt}>%90 aralığının alt ucu (hızlı dönüş)</option>
         <option value={r.rho_ols}>sıradan en küçük kareler (aşağı yanlı)</option>
         <option value="elle">Elle</option>
       </select></label>
-    <label><span class="etiket">ρ</span>
+    <label><span class="etiket"><span class="harf-koru">ρ</span></span>
       <input type="number" id="mr-rho" value={r.rho_mu} step="0.001" min="0" max="1" /></label>
     <label><span class="etiket">Ufuk (ay)</span>
       <input type="number" id="mr-h" value="12" step="1" min="1" /></label>
@@ -54,7 +54,7 @@ const r = A.redk;
       <div><span class="etiket">Sapma (log, %)</span><output class="ara-deger" id="mr-sapma">—</output></div>
       <div><span class="etiket">Yarı ömür</span><output class="ara-deger" id="mr-yo">—</output></div>
       <div><span class="etiket">Ufuk sonu beklenen sapma</span><output class="ara-deger" id="mr-son">—</output></div>
-      <div><span class="etiket">A bloğu: q'nun yıllık beklenen değişimi</span><output class="ara-deger" id="mr-a">—</output></div>
+      <div><span class="etiket">A bloğu: <span class="harf-koru">q</span>'nun yıllık beklenen değişimi</span><output class="ara-deger" id="mr-a">—</output></div>
     </div>
     <p class="mini-not" id="mr-yorum">—</p>
   </div>

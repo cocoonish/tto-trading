@@ -28,17 +28,17 @@ const b = A.borc;
   </p>
 
   <div class="girdiler">
-    <label><span class="etiket">Borç / GSYH d (%)</span>
+    <label><span class="etiket">Borç / GSYH <span class="harf-koru">d</span> (%)</span>
       <input type="number" id="mb-d" value={b.d} step="0.5" /></label>
-    <label><span class="etiket">Döviz cinsi pay α (%)</span>
+    <label><span class="etiket">Döviz cinsi pay <span class="harf-koru">α</span> (%)</span>
       <input type="number" id="mb-alfa" value={b.alfa} step="1" /></label>
-    <label><span class="etiket">Örtük nominal faiz i (%)</span>
+    <label><span class="etiket">Örtük nominal faiz <span class="harf-koru">i</span> (%)</span>
       <input type="number" id="mb-i" value={b.i} step="0.5" /></label>
-    <label><span class="etiket">Nominal büyüme g (%)</span>
+    <label><span class="etiket">Nominal büyüme <span class="harf-koru">g</span> (%)</span>
       <input type="number" id="mb-g" value={b.g} step="0.5" /></label>
-    <label><span class="etiket">Faiz dışı fazla pb (% GSYH)</span>
+    <label><span class="etiket">Faiz dışı fazla <span class="harf-koru">pb</span> (% GSYH)</span>
       <input type="number" id="mb-pb" value={b.pb} step="0.1" /></label>
-    <label><span class="etiket">Yıllık TL değer kaybı ε (%)</span>
+    <label><span class="etiket">Yıllık TL değer kaybı <span class="harf-koru">ε</span> (%)</span>
       <input type="number" id="mb-e" value="0" step="5" /></label>
     <label><span class="etiket">Ufuk (yıl)</span>
       <input type="number" id="mb-h" value="5" step="1" min="1" max="15" /></label>
@@ -55,10 +55,10 @@ const b = A.borc;
 
   <div class="saglama">
     <div class="sag-satir">
-      <div><span class="etiket">Borcu sabit tutan fazla pb*</span><output class="ara-deger" id="mb-pbs">—</output></div>
-      <div><span class="etiket">i − g</span><output class="ara-deger" id="mb-ig">—</output></div>
-      <div><span class="etiket">Ufuk sonu d</span><output class="ara-deger" id="mb-son">—</output></div>
-      <div><span class="etiket">%20 tek seferlik değer kaybının d etkisi</span><output class="ara-deger" id="mb-sok">—</output></div>
+      <div><span class="etiket">Borcu sabit tutan fazla <span class="harf-koru">pb*</span></span><output class="ara-deger" id="mb-pbs">—</output></div>
+      <div><span class="etiket"><span class="harf-koru">i − g</span></span><output class="ara-deger" id="mb-ig">—</output></div>
+      <div><span class="etiket">Ufuk sonu <span class="harf-koru">d</span></span><output class="ara-deger" id="mb-son">—</output></div>
+      <div><span class="etiket">%20 tek seferlik değer kaybının <span class="harf-koru">d</span> etkisi</span><output class="ara-deger" id="mb-sok">—</output></div>
     </div>
     <p class="mini-not" id="mb-yorum">—</p>
     <p class="mini-not" id="mb-taylor">—</p>
