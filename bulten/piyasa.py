@@ -236,8 +236,11 @@ def doviz_kapanislari(seri: dict, saatlik: dict, simdi: datetime) -> dict:
     simdi_ts = pd.Timestamp(simdi)
     simdi_ts = simdi_ts.tz_localize("UTC") if simdi_ts.tzinfo is None else simdi_ts.tz_convert("UTC")
     bugun_londra = simdi_ts.tz_convert("Europe/London").date()
-    for k in [x for x in seri if _fx_mi(x)]:
-        s = seri[k]
+    # Günlük çekimden dönmeyen ama saatlik barı gelen sembol de kurulur (yalnız
+    # saatlik kapanışlarla): günlük çekimin tek bir sembolü düşürmesi o satırı
+    # bültenden silmemeli.
+    for k in sorted({x for x in seri if _fx_mi(x)} | {x for x in saatlik if _fx_mi(x)}):
+        s = seri.setdefault(k, {"tarih": [], "kapanis": []})
         tur = F.kesim_turu(k)
         g = pd.Series(s["kapanis"], index=pd.to_datetime(s["tarih"]), dtype="float64")
         # Bugünün (Londra günü) barı CANLIDIR; kapanmış barların kapanışı ise
@@ -260,12 +263,14 @@ def doviz_kapanislari(seri: dict, saatlik: dict, simdi: datetime) -> dict:
             s["canli"] = {"zaman": kp.canli[0], "deger": kp.canli[1]}
         s["tarih"] = [x.date().isoformat() for x in birlesik.index]
         s["kapanis"] = [float(v) for v in birlesik.values]
+    for k in [x for x in seri if _fx_mi(x) and not seri[x]["tarih"]]:
+        seri.pop(k)
     return seri
 
 
 def _doviz_saatlik(seri: dict) -> dict:
     """Saatlik barları çeker (AĞA ÇIKAN tek parça) ve `doviz_kapanislari`na verir."""
-    fx = [k for k in seri if _fx_mi(k)]
+    fx = [v.kod for v in VARLIKLAR if _fx_mi(v.kod)]
     if not fx:
         return seri
     saatlik = {}
@@ -311,7 +316,14 @@ def _eski_goruntu(d: dict, kodlar) -> dict:
     ölçümüdür; bu koşu HİÇBİR sembolü sınamadı ve bu adıyla yazılır — yoksa
     denetim "boş seans yok" derdi."""
     d = dict(d)
-    d["seri"] = {k: _seans_izsiz(v) for k, v in (d.get("seri") or {}).items()}
+    seri = d.get("seri") or {}
+    # Eski tanımla yazılmış döviz serisi (kapanış tanımı yok) geri verilmez: o
+    # seri bir gün geride ve satırında bunu söyleyen hiçbir alan yok.
+    eski_tanim = sorted(k for k, v in seri.items() if _fx_mi(k) and not v.get("kapanis_tanimi"))
+    if eski_tanim:
+        print("  ! önbellekteki döviz serileri eski tanımla (günlük barın kapanış alanı) yazılmış, "
+              "devredilmedi: " + ", ".join(eski_tanim))
+    d["seri"] = {k: _seans_izsiz(v) for k, v in seri.items() if k not in eski_tanim}
     d["meta_olculemedi"] = sorted(kodlar)
     return d
 
@@ -580,8 +592,13 @@ def _ham_veri(tazele: bool = False) -> dict:
         try:
             d = json.loads(HAM.read_text(encoding="utf-8"))
             t = datetime.fromisoformat(d["zaman"])
+            # Saatlik barı alınamamış (yedek yoldan kurulmuş) döviz satırı
+            # taşıyan bir görüntü taze sayılmaz: dört saatlik ömrü boyunca her
+            # yeniden ölçüm o yedeği tekrar kullanırdı, saatlik bar bir kez daha
+            # denenmezdi.
             if (datetime.now() - t < timedelta(hours=TTL_SAAT)
-                    and d.get("doviz_kapanis") == DOVIZ_KAPANIS_SURUM):
+                    and d.get("doviz_kapanis") == DOVIZ_KAPANIS_SURUM
+                    and all(v.get("kapanis_ani") for k, v in (d.get("seri") or {}).items() if _fx_mi(k))):
                 return d
         except Exception:
             pass
@@ -633,7 +650,10 @@ def _ham_veri(tazele: bool = False) -> dict:
         eski = (json.loads(HAM.read_text(encoding="utf-8")) or {}).get("seri") or {}
     except Exception:
         pass
-    eski = {k: v for k, v in eski.items() if not (_fx_mi(k) and not v.get("kapanis_tanimi"))}
+    # Önbellekten devredilecek döviz serisi yalnız saatlik bardan kurulmuş olandır:
+    # eski tanım (günlük barın kapanış alanı, bir gün geride) ve yedek yol
+    # (saatlik bar alınamadı) devredilmez.
+    eski = {k: v for k, v in eski.items() if not (_fx_mi(k) and not v.get("kapanis_ani"))}
     # BOŞ SEANS ONARIMI — yerleşmemiş bar düştükten SONRA (onarım kapanmamış bir
     # günü asla kurmaz, ama elindeki seri de kapanmamış bar taşımamalı) ve devir
     # düzeltmesinden ÖNCE (vadeliler zaten onarılmaz; sıra yalnız okunurluk için).
@@ -1104,6 +1124,7 @@ def satir(v: Varlik, seri: dict) -> dict | None:
         # değişime ya da oynaklığa girmez (karar 02.10.2026).
         "kapanis_tanimi": s.get("kapanis_tanimi"),
         "kapanis_ani": s.get("kapanis_ani"),
+        "kapanis_olculemeyen": s.get("kapanis_olculemeyen") or [],
         "canli": ({"zaman": s["canli"]["zaman"], "deger": round(float(s["canli"]["deger"]), v.ondalik)}
                   if s.get("canli") else None),
         # Kaynağın boş verdiği seansın izi (bkz. _bos_seans_onar). `onarim`:

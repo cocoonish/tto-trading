@@ -1104,6 +1104,52 @@ class Denetim:
         else:
             self._ok("kapanmamış seansın barı yok")
 
+    def doviz_kapanisi(self):
+        """Döviz satırı kendi son seansının kapanışını taşıyor mu — UYARI.
+
+        Döviz kapanışı saatlik bardan kurulur (İstanbul 18:00 · New York 17:00,
+        `ortak/fx_kapanis.py`). İki sessiz arıza bu sözleşmeyi bozar ve ikisi
+        de satırı DOĞRU etiketli bırakır, yani piyasa seansı ölçütü onları
+        görmez: saatlik bar hiç alınamadı (satır günlük bardan, bir gün
+        geride) ya da tek bir sembolün saatlik beslemesi durdu (satır bir
+        önceki seansın kapanışını kendi tarihiyle taşır, "günlük değişim"i
+        birden çok seansı kapsar). Ölçü ölçüm ANINDAN kurulur (arşiv sayısı da
+        kendi anıyla sorulur). Yayını durdurmaz: satırın tarihi doğrudur."""
+        try:
+            sys.path.insert(0, str(BURASI.parent / "ortak"))
+            import fx_kapanis as F                     # noqa: E402
+        except Exception:
+            return
+        try:
+            olc = datetime.fromisoformat(str(self.b.get("olusturma")).replace("Z", "+00:00"))
+            olc = olc if olc.tzinfo else olc.replace(tzinfo=timezone.utc)
+        except ValueError:
+            return
+        yedek, geride = [], []
+        for g in (self.b.get("piyasa", {}).get("gruplar") or []):
+            for r in (g.get("satirlar") or []):
+                if not r.get("kapanis_tanimi"):
+                    continue                           # döviz değil ya da eski sayı
+                if not r.get("kapanis_ani"):
+                    yedek.append(r.get("ad"))
+                    continue
+                tur = F.kesim_turu(r.get("kod") or "")
+                gun = olc.date()
+                while gun.weekday() >= 5 or F.kapanis_ani(gun, tur) > olc:
+                    gun -= timedelta(days=1)
+                if str(r.get("tarih") or "") < gun.isoformat():
+                    ek = " (saatlik bar o günün kapanışına yetişmedi)" if gun.isoformat() in (r.get("kapanis_olculemeyen") or []) else ""
+                    geride.append(f"{r.get('ad')} {r.get('tarih')} (beklenen {gun.isoformat()}){ek}")
+        if yedek:
+            self.uyari.append("Döviz satırlarının saatlik barı alınamadı: " + ", ".join(yedek)
+                              + ". Bu satırlar günlük bardan (Londra gece yarısı) kuruldu ve bir gün geride; "
+                              "yazıda bu satırların günlük değişimi son seansa ait sayılmamalı.")
+        if geride:
+            self.uyari.append("Döviz satırı son seansın kapanışını taşımıyor: " + " · ".join(geride[:8])
+                              + ". Satırın günlük değişimi birden çok seansı kapsayabilir.")
+        if not yedek and not geride:
+            self._ok("döviz satırları kendi son seanslarının kapanışını taşıyor")
+
     def piyasa_seansi(self):
         """Anlık görüntü HANGİ seansa ait — ve bülten bunu söylüyor mu?
 
@@ -2197,7 +2243,7 @@ class Denetim:
         self.yazi(); self.veri(); self.atif(); self.sayi(); self.nabiz(); self.tekrar()
         self.tema(); self.izleme(); self.dil(); self.tazelik(); self.tazeleme_atlandi()
         self.karanlik(); self.olu_kalip(); self.ihale_iddiasi()
-        self.yerlesmemis(); self.piyasa_seansi(); self.piyasa_seans_boslugu()
+        self.yerlesmemis(); self.doviz_kapanisi(); self.piyasa_seansi(); self.piyasa_seans_boslugu()
         self.revizyon(); self.duzeltme()
         self.devir(); self.haber_tonu(); self.bicim(); self.buyuk_harf(); self.manset()
         self.olagandisilik_penceresi(); self.uslup()

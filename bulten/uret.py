@@ -447,15 +447,25 @@ GOSTERGE_CANLI = {("usdtry-deval", "kur"): "USDTRY=X"}
 
 
 def gosterge_canli(b: dict) -> None:
+    """Kartın DEĞERİ hattın özetinden, piyasa satırınınki bültenin kendi
+    çekiminden gelir; ikisi farklı günde ya da farklı tanımda olabilir. Etiket
+    bu yüzden hattın özetinden (`kur_kapanis`) okunur ve canlı kotasyon yalnız
+    satırın günü kartın veri günüyle AYNIYSA eklenir — yoksa kart bir günün
+    kapanışının altına başka bir günün kotasyonunu basardı."""
     satirlar = {r.get("kod"): r for g in ((b.get("piyasa") or {}).get("gruplar") or [])
                 for r in (g.get("satirlar") or [])}
     for g in b.get("gostergeler") or []:
         kod = GOSTERGE_CANLI.get((g.get("hat"), g.get("anahtar")))
-        r = satirlar.get(kod) if kod else None
-        if r and r.get("canli"):
+        if not kod:
+            continue
+        oz = gozlem.anlik(g.get("hat")) or {}
+        if oz.get("kur_kapanis"):
+            g["kapanis_tanimi"] = oz["kur_kapanis"]
+        r = satirlar.get(kod)
+        vt = str(g.get("veri_tarihi") or "")
+        gun = f"{vt[6:10]}-{vt[3:5]}-{vt[0:2]}" if len(vt) == 10 else ""
+        if r and r.get("canli") and r.get("tarih") == gun:
             g["canli"] = dict(r["canli"])
-            if r.get("kapanis_tanimi"):
-                g["kapanis_tanimi"] = r["kapanis_tanimi"]
 
 
 def uret(tarih: date | None = None, haber_tara: bool = True,

@@ -145,6 +145,10 @@ def _zincir_durumu(bugun: dt.date) -> tuple[int, list[str]]:
             if b.get("olusturma"):
                 try:
                     olcum = dt.datetime.fromisoformat(str(b["olusturma"]).replace("Z", "+00:00"))
+                    # Dilimsiz damga UTC'dir; dilimli ile kıyaslanınca TypeError
+                    # verir, istisna yutulur ve zincir sessizce "tam" derdi.
+                    if olcum.tzinfo is None:
+                        olcum = olcum.replace(tzinfo=dt.timezone.utc)
                 except ValueError:
                     olcum = None
             if t < esik or sonuc != "success":
