@@ -23,6 +23,15 @@ modüllerden buraya taşıdı ve modülleri onlara bağladı:
   olay_kapisi()          plasebo kapısı ve gün eşlemeli rastgele kıyas
                           (b02'nin kapısı kanonikti; b03 zayıf kopyasını kullanırdı)
   donem_sonu_kur()       TCMB dönem sonu kuru (b06)
+  usdtry_tcmb()          TCMB kurunun ilan gününe Türkiye takvimiyle geri alınması
+                          (b08'in valör sırası ile ortak fonksiyonun takvimsiz iş günü
+                          geri alması ayrışıyordu; tatil öncesi ilan tatile yazılıyordu);
+                          ilan olmayan arife günleri boştur (`tcmb_ilansiz_gunler`)
+  bas_gun() · son_gun()  pencere uçlarının işlem günü (b05, b06'da iki kopya vardı)
+  usdtry(cuma_dus=…)     18.12.2023 öncesi cuma değerinin (pazartesi barının başı)
+                          boşaltılması; haftalık/aylık/olay pencereli ölçüler okur
+  em_kur()               Yahoo EM kurları; MXN'nin Nisan 2018 öncesi gün sonu barı
+                          düzeltilmez (b08, b11 ortak okur)
 
 OKUMA. `oku(ad)` arşiv dosyasını açar ve sıkıştırılmamış metnin sha256'sını
 künyeyle kıyaslar; tutmazsa okumaz (arşiv elle değiştirilmiş ya da başka bir
@@ -92,6 +101,18 @@ def _f(x) -> float | None:
 def kurulmadi(sebep: str, **ek) -> dict:
     """Kurulamayan pratik: sebep okur diliyle; uydurma sayı yerine."""
     return {"durum": "kurulmadi", "sebep": sebep, **ek}
+
+
+def bas_gun(idx: pd.DatetimeIndex, t) -> pd.Timestamp | None:
+    """Olay öncesi kapanış: t'ye eşit ya da ondan önceki son işlem günü."""
+    j = idx.searchsorted(pd.Timestamp(t), side="right") - 1
+    return idx[j] if j >= 0 else None
+
+
+def son_gun(idx: pd.DatetimeIndex, t) -> pd.Timestamp | None:
+    """Pencere sonu: t'ye eşit ya da ondan sonraki ilk işlem günü."""
+    j = idx.searchsorted(pd.Timestamp(t), side="left")
+    return idx[j] if j < len(idx) else None
 
 
 # ─────────────────────────────────────────────────────────────── okuma
@@ -308,9 +329,48 @@ def _usdtry_tcmb(geri_alma: str) -> pd.Series:
     else:
         raise KeyError(f"geri alma kuralı tanımsız: {geri_alma}")
     s = s[~s.index.duplicated(keep="last")].sort_index()
+    if geri_alma == "tr_takvim":
+        s = s.drop(index=_tcmb_ilansiz(s))
     s = s[s.index <= CIPA_GUN]
     s.name = "usdtry_tcmb"
     return s
+
+
+def _tcmb_ilansiz(s: pd.Series) -> pd.DatetimeIndex:
+    """Türkiye takviminde TCMB'nin İLAN ETMEDİĞİ yarım günler (arife).
+
+    Ölçüldü (doğrulama turu, 02.10.2026): bayram arifelerinde ve 28 Ekim'de
+    (yarım gün) yeni gösterge kuru ilan edilmiyor; arşiv tatil sonrası valöre bir
+    önceki ilanı TEKRAR yazıyor. 2011–2026'da 33 arifenin 33'ünde tatil sonrası
+    valörün değeri arife valörününkiyle 4 ondalığa kadar birebir aynı (ör.
+    15.04.2024 valörü 32,0060 = 09.04.2024 valörü, yani 08.04.2024 ilanı; 09.04
+    Ramazan arifesi). Takvimle geri alınınca bu tekrar arife gününe yazılır ve o
+    güne SAHTE bir sıfır değişim düşer. Kural: değeri bir önceki Türkiye iş
+    gününkiyle birebir aynı olan gün, ardından tatil geliyorsa ya da 28 Ekim ise
+    ilansız sayılır ve seriden çıkar (ölçülemeyen boş bırakılır). Tatil öncesi
+    TAM iş günündeki ilan (28.03.2025 → 02.04.2025 valörü) değer değiştirdiği için
+    korunur. Yalnız takvim dönemi (2011+): öncesinde dört ondalıklı küçük kurlarda
+    birebir eşitlik tesadüfen de sık."""
+    tk = tr_takvim()
+    r = s.reindex(tk)
+    sonraki = pd.Series(list(tk[1:]) + [pd.NaT], index=tk)
+    hafta_ici = pd.Series(tk + pd.offsets.BDay(1), index=tk)
+    tatil_oncesi = (sonraki != hafta_ici) & sonraki.notna()
+    ekim28 = pd.Series((tk.month == 10) & (tk.day == 28), index=tk)
+    ayni = r.diff().eq(0) & r.notna()
+    gun = tk[(ayni & (tatil_oncesi | ekim28)).values]
+    return gun[gun.isin(s.index)]
+
+
+def tcmb_ilansiz_gunler() -> pd.DatetimeIndex:
+    """`usdtry_tcmb()`in ilansız saydığı arife günleri (künye ve sınama için)."""
+    raw = oku("usdtry_tcmb_gunluk")["usdtry_tcmb_valor"].dropna().sort_index()
+    tk = tr_takvim()
+    ilan = [tk[tk.searchsorted(V) - 1] for V in raw.index if V > tk[0]]
+    s = pd.Series(raw[raw.index > tk[0]].values, index=pd.DatetimeIndex(ilan))
+    s = s[~s.index.duplicated(keep="last")].sort_index()
+    g = _tcmb_ilansiz(s)
+    return g[g <= CIPA_GUN]
 
 
 def usdtry_tcmb(geri_alma: str = "tr_takvim") -> pd.Series:
@@ -320,9 +380,15 @@ def usdtry_tcmb(geri_alma: str = "tr_takvim") -> pd.Series:
     ÖNCEKİ son TÜRKİYE iş günüdür (`tr_takvim`; 2011 öncesinde takvim yok, orada
     valör dizisinin bir önceki günü — ardışık iki valör günü ardışık iki Türkiye
     iş günüdür). Takvimsiz bir iş günüyle geri almak (`geri_alma="is_gunu"`)
-    resmî tatilden önceki ilanı TATİL gününe yazar (15.04.2024 valörlü kur
-    12.04.2024'e düşer; ilan 09.04.2024) ve 2013–2026'da 88 iş gününü kursuz
-    bırakır; o sürüm yalnız bu tuzağın ölçümü içindir (olcum_b02).
+    resmî tatilden önceki ilanı TATİL gününe yazar (02.04.2025 valörlü kur
+    01.04.2025 bayramına düşer; ilan 28.03.2025 cuma) ve 2013–2026'da 88 iş
+    gününü kursuz bırakır; o sürüm yalnız bu tuzağın ölçümü içindir (olcum_b02).
+
+    ARİFE. Yarım günlerde (bayram arifeleri, 28 Ekim) TCMB ilan etmez; arşiv tatil
+    sonrası valöre önceki ilanı tekrar yazar (15.04.2024 valörü = 08.04.2024
+    ilanı; 09.04 arifesinde ilan yok). Bu tekrarlar seriden çıkar
+    (`_tcmb_ilansiz`, `tcmb_ilansiz_gunler`): arife günü kursuzdur, sıfır
+    değişim taşımaz.
 
     SAAT: ilan 15:30 TSİ'dir ama sabitleme öğleden ÖNCEDİR ve 14:00 kurul
     kararını taşımaz — 13.09.2018: önceki ilan 6,3945, karar günü ilanı 6,3566,
@@ -361,6 +427,33 @@ def donem_sonu_kur(tarihler) -> pd.Series:
 EM_GUN_SONU_GECIS = {"mxn": pd.Timestamp("2018-04-01")}
 
 
+EM_SICRAMA_ESIK = 0.035      # log; sıçrama ve ertesi gün geri dönüş, ikisi de bu eşiğin üstünde
+
+
+@lru_cache(maxsize=8)
+def _em_kur_temiz(kod: str) -> tuple[pd.Series, tuple]:
+    """Yalıtılmış bozuk kotasyonlar çıkarılmış EM kuru (olcum_b11'de ölçüldü, tuzak 16).
+
+    Kural: bir günün log değişimi ve ertesi günün log değişimi ikisi de eşiği aşıyor,
+    işaretleri ters ve iki günlük net hareket küçüğünün yarısından az → o gün bozuk
+    sayılır ve seriden çıkar. Eşik ECB referans kurlarına karşı ölçülerek kondu:
+    %3,5'te işaretlenen her gün ECB'den %3'ten fazla sapıyor, %3'te gerçek oynak
+    günler de yakalanıyor. ZAR'da 14.11.2024, 14.01.2025 ve 16.01.2025 %14–20'lik
+    geri dönen sıçramalardır; çıkarılınca 2024 ve 2025'te ECB çaprazıyla günlük
+    korelasyon 0,05–0,18'den 0,41–0,56'ya çıkıyor (doğrulama turu)."""
+    s = _em_kur(kod)
+    d = np.log(s).diff()
+    n = d.shift(-1)
+    m = ((d.abs() > EM_SICRAMA_ESIK) & (n.abs() > EM_SICRAMA_ESIK) & (np.sign(d) != np.sign(n))
+         & ((d + n).abs() < 0.5 * np.minimum(d.abs(), n.abs()))).fillna(False)
+    return s[~m], tuple(_iso(t) for t in s.index[m])
+
+
+def em_kur_temizlik(kod: str) -> list:
+    """`em_kur(kod)`un çıkardığı bozuk kotasyon günleri."""
+    return list(_em_kur_temiz(kod.lower())[1])
+
+
 @lru_cache(maxsize=8)
 def _em_kur(kod: str) -> pd.Series:
     raw = oku("em_kur_yahoo_gunluk")[f"{kod}_gunbasi"].dropna()
@@ -376,10 +469,25 @@ def _em_kur(kod: str) -> pd.Series:
     return s
 
 
-def em_kur(kod: str) -> pd.Series:
+def em_kur(kod: str, temiz: bool = True) -> pd.Series:
     """EM kuru (BRL, MXN, ZAR, INR; USD karşısında), Yahoo günlük barı, gün sonu
-    tarihli (`EM_GUN_SONU_GECIS` istisnası belgede)."""
-    return _em_kur(kod.lower()).copy()
+    tarihli (`EM_GUN_SONU_GECIS` istisnası belgede). `temiz=True` (öntanımlı)
+    yalıtılmış bozuk kotasyonları çıkarır (`_em_kur_temiz`); ham seri yalnız
+    temizliğin kendisini ölçmek içindir.
+
+    CUMA: arşivde EM kurlarının cumartesi barı HİÇ yok (2010–2026, dört kurda 0);
+    düzeltilmiş barlarda cuma değeri USD/TRY'nin 18.12.2023 öncesindeki gibi
+    pazartesi barının başıdır ve hafta sonunu taşır (MXN'nin 2018-04 öncesi ham
+    barı gerçek cuma kapanışıdır). Haftalık ölçüler perşembeyle örnekler (b11);
+    ECB çaprazına göre günlük korelasyonun tepe kayması (doğrulama turu,
+    2010–2026): MXN 17 yılın 17'sinde aynı (CNBC New York 17:00 EUR/USD'nin
+    örüntüsü; düzeltme bütün seriye uygulansaydı 2010–2017 bir gün kayık), BRL
+    16/17 (2011'de iki kayma eşit), INR 16/17; ZAR'da iki komşu kaymanın
+    korelasyonu yıldan yıla başa baş (tek yönlü bir kırılma yok), 2024–2025'te
+    Pearson 0,05–0,18'e düşüyor (Spearman 0,33–0,50: aykırı kotasyonlar; b11 bu
+    yüzden temizlenmiş seriyi okur)."""
+    kod = kod.lower()
+    return (_em_kur_temiz(kod)[0] if temiz else _em_kur(kod)).copy()
 
 
 # ─────────────────────────────────────────────────────────────── CNBC ve dolar sepeti
@@ -398,7 +506,7 @@ CNBC_BLOK_AZAMI_GUN = 10              # geri dönüşün aranacağı azami ortak
 @lru_cache(maxsize=1)
 def _cnbc_ham() -> pd.DataFrame:
     c = oku("cnbc_kur_gunluk")
-    return c[c.index.dayofweek < 5]                        # pazar barları ayıklanır (485 gün)
+    return c[c.index.dayofweek < 5]                        # hafta sonu barları ayıklanır (479 pazar · 6 cumartesi)
 
 
 def _dolar_yonu(c: pd.DataFrame) -> pd.DataFrame:
@@ -1038,6 +1146,11 @@ def olay_kapisi(degisim: pd.Series, olaylar, guclu: bool = True, pencere: int = 
         pf = float((1 + (rd["fark"] >= o["0"] - oteki).sum()) / (1 + K))
         ort = {str(k): float(v) for k, v in zip(range(-pencere, pencere + 1), rd["ort_profil"])}
         fazla = {kk: float(o[kk] / ort[kk]) for kk in o}
+        # Monte Carlo hatası: p, K rastgele kümeden tahmin edilir; hata payı içinde
+        # 0,05'e değen p tohuma bağlıdır (20 tohumda PPK × 1 yıllık 9/20 geçiyor) —
+        # hüküm değişmez, "sınırda" diye işaretlenir.
+        p_hata = float(math.sqrt(p0 * (1 - p0) / K))
+        out.update({"p_rastgele_hata": p_hata, "guclu_sinirda": bool(k_gecer and abs(p0 - 0.05) < 2 * p_hata)})
         out.update({"kapi_guclu": bool(k_gecer and p0 < 0.05), "p_rastgele_oran0": p0,
                     "p_rastgele_kapi_farki": pf, "kapi_rastgele_gecme_orani": float(rd["kapi"].mean()),
                     "rastgele_ort_profil": ort, "gun_etkisinden_arindirilmis": fazla,
@@ -1049,19 +1162,21 @@ def olay_kapisi(degisim: pd.Series, olaylar, guclu: bool = True, pencere: int = 
 
 def kapi_ozeti(k: dict) -> dict:
     """Kapı sonucunun ölçüm dosyasına yazılan kompakt hâli."""
-    alan = ("n_olay", "oran", "tepe", "kapi", "kapi_guclu", "p_rastgele_oran0", "gecti", "donem_siniri_dusen_olay")
+    alan = ("n_olay", "oran", "tepe", "kapi", "kapi_guclu", "p_rastgele_oran0", "guclu_sinirda", "gecti",
+            "donem_siniri_dusen_olay")
     return {a: k[a] for a in alan if a in k}
 
 
 def kapi_sebebi(k: dict) -> str:
-    """Kapıdan geçmeyen satırın okur dilinde sebebi."""
+    """Kapıdan geçmeyen satırın okur dilinde sebebi (eksi U+2212)."""
     if k.get("tepe") != 0:
-        return (f"plasebo profilinin tepesi olay gününde değil ({k['tepe']:+d} iş gününde); "
-                "olay penceresi kurulmaz")
+        return (f"plasebo profilinin tepesi olay gününde değil ({k['tepe']:+d} iş gününde); ".replace("-", "−")
+                + "olay penceresi kurulmaz")
     if not k.get("kapi"):
         return "olay günü oranı komşu kaymaları aşmıyor; olay penceresi kurulmaz"
-    return ("olay günü oranı haftanın günü eşlemeli rastgele kümelerin %95'ini aşmıyor; olay penceresi "
-            "kurulmaz")
+    ek = ("; sonuç sınırda: rastgele kıyasın tahmin hatası içinde" if k.get("guclu_sinirda") else "")
+    return ("olay günü oranı haftanın günü eşlemeli rastgele kümelerin %95'ini aşmıyor" + ek
+            + "; olay penceresi kurulmaz")
 
 
 # ─────────────────────────────────────────────────────────────── kalıcılık

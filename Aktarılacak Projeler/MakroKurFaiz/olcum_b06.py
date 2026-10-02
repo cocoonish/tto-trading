@@ -40,7 +40,7 @@ Pratikler
    dönemin son iş gününde ilan edilen kurdur (= dönem sonundan sonraki ilk valör
    günü). Valörü takvimsiz bir iş günü geri almak yılbaşında 31 Aralık ilanını
    1 Ocak'a (tatil) yazar ve yıl sonu kuru bir gün kayar; dönüşüm bu yüzden
-   valör serisinden yapılır.
+   valör serisinden yapılır. Tek tanım `ortak_olc.donem_sonu_kur`.
 5. ARTIK BÜYÜK VE BİLGİ TAŞIR. Artık; Hazine nakit hesabındaki değişimi, iskontolu
    ihraçta nominal ile nakit farkını, TÜFE'ye endeksli tahvillerin anapara
    artışını (nakit faiz gideri yalnız ödemede görünür), dolar dışı değerlemeyi,
@@ -54,12 +54,16 @@ Pratikler
    enflasyon nominal büyümeyi şişirdiğinde r − g derin eksiye iner (2026Ç2: −17,6
    puan; pb* GSYH'nin eksi %2,6'sı). Marjinal borçlanma faizi (DİBS 2 ve 5 yıllık)
    ayrıca işaretlenir: aynı d'de pb* sıfıra yakın.
-8. ÇEYREK SONU DİBS. DİBS etiketi piyasa gününden BİR iş günü öndedir; tek tanımı
-   Bölüm 3'tedir (`olcum_b03.dibs_gecikme`: tatilden sonraki etiket donuk, iki
-   sonraki olağan). Çeyrek sonu getirisi, çeyreğin son piyasa gününe denk gelen
-   etiketten okunur. Bölüm 1'in iki iş günlük kayması gün sonu kapanışlarına
-   (kur, VIX) göredir; çeyrek sonu DÜZEYİNDE o kayma çeyreğin son gününe ertesi
-   çeyreğin ilk gününün bilgisini yazar.
+8. ÇEYREK SONU DİBS — HİZA "sabah" (`ortak_olc.DIBS_KAYMA`, k = 1). L etiketli
+   DİBS değeri L'den bir önceki Türkiye iş gününün sabah sabitlemesidir (tek
+   tanım ortak_olc'de; kanıtı Bölüm 3'ün tatil sınaması ve Bölüm 2'nin çapraz
+   korelasyonu). Çeyrek sonu getirisi, çeyreğin SON piyasa gününün sabitlemesidir:
+   o günün kendi kotasyonu, ertesi etiket. "gun_sonu" hizası (k = 2) gün sonu
+   kapanışlarıyla (kur, VIX) aynı güne oturtmak içindir; çeyrek sonu DÜZEYİNDE
+   çeyreğin son gününe ertesi çeyreğin ilk sabahının kotasyonunu yazardı. Burada
+   kıyaslanan öbür seri bir çeyreklik akımdır (faiz dışı denge), gün içi saati
+   yoktur; ölçü bir çeyreğin DÜZEYİDİR ve o çeyreğin içinde kalan son kotasyon
+   alınır. k = 0 ve 2 duyarlılık satırlarıdır (p6c).
 9. CNBC AVRUPA GETİRİLERİ. Hafta sonu barları kaynakta durur, ayıklanır.
    Portekiz serisi 20.09.2011–06.12.2012 arasında art arda SIFIR taşıyor (314
    iş günü) ve 31.12.2012'de %7'lik iki gün arasında tek bir sıfır var: ikisi de
@@ -88,7 +92,6 @@ import numpy as np
 import pandas as pd
 
 import bulut
-import olcum_b03 as b3
 import ortak_olc as oo
 
 warnings.filterwarnings("ignore", category=FutureWarning)
@@ -105,7 +108,8 @@ RG_IZGARA = np.arange(-20, 11, 1)    # r − g, puan (istenen −10…+10; bugü
 RG_ISTENEN = (-10, 10)
 D_IZGARA = np.arange(20, 61, 5)      # borç/GSYH, %
 KUR_SOKLARI = (10, 20, 30)           # USD/TRY artışı, %
-YONETILEN_CEYREK = (pd.Period("2021Q4", "Q"), pd.Period("2023Q2", "Q"))
+YONETILEN_CEYREK = oo.YON_CEYREK      # tek tanım ortak_olc.YONETILEN
+DIBS_HIZA = "sabah"                  # çeyrek sonu düzeyi: çeyreğin son piyasa gününün sabitlemesi (tuzak 8)
 DIBS_DUGUM_6C = ("n5y", "n7y")
 SIFIR_DIZISI_ASGARI = 5              # art arda bu kadar ve fazla sıfır = veri boşluğu
 DONMUS_DIZI_ASGARI = 5               # art arda bu kadar ve fazla birebir aynı değer = taşınmış kotasyon
@@ -132,47 +136,13 @@ OLAYLAR_AVRUPA = [
 
 
 # ───────────────────────────────────────────────────────── küçük yardımcılar
-def _iso(t) -> str | None:
-    if t is None:
-        return None
-    if isinstance(t, pd.Period):
-        return str(t)
-    try:
-        return str(pd.Timestamp(t).date())
-    except (ValueError, TypeError):
-        return str(t)
+_iso, _f, kurulmadi = oo._iso, oo._f, oo.kurulmadi
 
 
-def _f(x) -> float | None:
-    try:
-        x = float(x)
-    except (TypeError, ValueError):
-        return None
-    return x if math.isfinite(x) else None
+_bas_gun, _son_gun = oo.bas_gun, oo.son_gun          # tek tanımlar ortak_olc'de
 
 
-def kurulmadi(sebep: str, **ek) -> dict:
-    return b3.kurulmadi(sebep, **ek)
-
-
-def _bas_gun(idx: pd.DatetimeIndex, t) -> pd.Timestamp | None:
-    j = idx.searchsorted(pd.Timestamp(t), side="right") - 1
-    return idx[j] if j >= 0 else None
-
-
-def _son_gun(idx: pd.DatetimeIndex, t) -> pd.Timestamp | None:
-    j = idx.searchsorted(pd.Timestamp(t), side="left")
-    return idx[j] if j < len(idx) else None
-
-
-def donem_sonu_kur(tarihler) -> pd.Series:
-    """TCMB gösterge kuru, dönem sonu: dönemin son iş gününde ilan edilen kur,
-    yani dönem sonundan SONRAKİ ilk valör günündeki değer (tuzak 4)."""
-    v = oo.oku("usdtry_tcmb_gunluk")["usdtry_tcmb_valor"].dropna()
-    tarihler = pd.DatetimeIndex(tarihler)
-    j = v.index.searchsorted(tarihler, side="right")
-    deg = [float(v.iloc[k]) if k < len(v) else np.nan for k in j]
-    return pd.Series(deg, index=tarihler)
+donem_sonu_kur = oo.donem_sonu_kur      # tek tanım ortak_olc'de (tuzak 4)
 
 
 # ═══════════════════════════════════════════════════════════════ çerçeve
@@ -369,16 +339,14 @@ def sekil_09() -> dict:
 
 # ═══════════════════════════════════════════════════════════════ p6b
 def _dibs_kayma() -> int:
-    """DİBS etiket kayması (iş günü): tek tanım Bölüm 3'ün tatil ve kur sınaması (tuzak 8)."""
-    return int(b3.dibs_gecikme()["gecikme_is_gunu"])
+    """DİBS etiket kayması (iş günü): hiza "sabah", tek tanım `ortak_olc.DIBS_KAYMA` (tuzak 8)."""
+    return oo.dibs_kayma(DIBS_HIZA)
 
 
 def _dibs_ceyrek_sonu(dugumler=DIBS_DUGUM_6C, kayma: int | None = None) -> pd.DataFrame:
-    """Çeyreğin son piyasa günündeki DİBS getirisi: etiketi `kayma` iş günü sonraki değer (tuzak 8)."""
-    kayma = _dibs_kayma() if kayma is None else kayma
-    tk = b3.tr_takvim()
-    d = oo.oku("dibs_egri_gunluk")[list(dugumler)].reindex(tk).shift(-kayma)
-    d = d[d.index <= oo.CIPA_GUN].dropna()
+    """Çeyreğin son piyasa günündeki DİBS getirisi (`ortak_olc.dibs`, hiza "sabah");
+    `kayma` yalnız duyarlılık satırları için hizayı geçersiz kılar (tuzak 8)."""
+    d = oo.dibs(DIBS_HIZA, dugumler, kayma=kayma).dropna()
     q = d.groupby(pd.PeriodIndex(d.index, freq="Q")).last()
     gun = d.index.to_series().groupby(pd.PeriodIndex(d.index, freq="Q")).last()
     q["piyasa_gunu"] = gun
@@ -553,6 +521,7 @@ def p6c() -> dict:
                       "bilinen sayar, yani bir tahmin değil bir uyum sınamasıdır. Bir çeyrek önceki dengeyle kurulan "
                       "satır, getirinin yayımlanmış dengeye tepkisini sorar.",
         "dibs_etiket_kaymasi_is_gunu": _dibs_kayma(),
+        "dibs_hiza": DIBS_HIZA,
     }
     for dug in DIBS_DUGUM_6C:
         y = dq[dug]
@@ -560,17 +529,17 @@ def p6c() -> dict:
         r_duz = oo.hac(d["y"].values, d["x"].values)
         dy = (d["y"].diff() * 100).dropna()           # bp
         dx = d["x"].diff().dropna()                   # puan
-        deg = b3.regresyon(dy, dx)
+        deg = oo.regresyon(dy, dx)
         dy4 = (d["y"].diff(4) * 100).dropna()
         dx4 = d["x"].diff(4).dropna()
         r4 = oo.hac(dy4.values, dx4.reindex(dy4.index).values, gecikme=4)
         haric = [p for p in dy.index if not (YONETILEN_CEYREK[0] <= p <= YONETILEN_CEYREK[1])]
-        deg_h = b3.regresyon(dy.loc[haric], dx.loc[haric])
-        deg_g = b3.regresyon(dy, dx.shift(1).dropna())
+        deg_h = oo.regresyon(dy.loc[haric], dx.loc[haric])
+        deg_g = oo.regresyon(dy, dx.shift(1).dropna())
         duyar = {}
         for k, q in dq_alt.items():
             dk = pd.concat([q[dug].rename("y"), c.rename("x")], axis=1, sort=True).dropna()
-            rk = b3.regresyon((dk["y"].diff() * 100).dropna(), dk["x"].diff().dropna())
+            rk = oo.regresyon((dk["y"].diff() * 100).dropna(), dk["x"].diff().dropna())
             duyar[f"kayma_{k}"] = {"n": rk["n"], "egim": rk.get("egim"), "t": rk.get("t"), "hukum": rk.get("hukum")}
         fk = (dq[dug] - dq_alt[2][dug]).dropna() * 100
         duyar["bir_gun_fark_ort_mutlak_bp"] = _f(fk.abs().mean())
@@ -677,8 +646,7 @@ def _olay_gunluk(o: dict, df: pd.DataFrame) -> dict:
     if o["kimlik"] == "italya_2018_mayis":
         r["delta_it2y_bp"] = _f((df["_it2y"].loc[son] - df["_it2y"].loc[b]) * 100)
         r["delta_fark_2y_bp"] = _f(df["it2y"].loc[son] - df["it2y"].loc[b])
-        k = oo.oku("cnbc_kur_gunluk")["eur"]
-        k = k[k.index.dayofweek < 5]
+        k = oo.cnbc_kur()["eur"].dropna()      # hafta içi, bozuk kotasyon günleri ayıklanmış
         r["delta_eurusd_yuzde"] = _f((math.log(k.asof(son)) - math.log(k.asof(b))) * 100)
         r["saat_notu"] = ("Getiriler Avrupa kapanışı (Paris 17:30), EUR/USD New York 17:00: aynı günün iki kapanışı "
                           "arasında beş buçuk saat var.")

@@ -22,6 +22,22 @@ fonlama maliyetinin haftalık değişimi (puan). Rezerv KAYBI baskıyı artırı
 σ'lar 2013–2026 örnekleminin tamamından — bu bir TARİF ayrışımıdır, gerçek
 zamanlı bir sinyal değil. Bileşen payı: cov(bileşen, EMP)/var(EMP); paylar
 toplamı 1'dir.
+
+CUMA KURU. Rezerv cuma stokudur ve haftalık kur cuma etiketinden okunur.
+18.12.2023 öncesinde Yahoo USD/TRY'nin cuma değeri PAZARTESİ barının başıdır
+(hafta sonu açılışından sonraki fiyat; `ortak_olc.usdtry`, cuma tuzağı): o cuma
+hafta sonu haberini taşır ve haftalık Δs bir sonraki haftanın pazartesi
+sabahını içeri alır. Kur `cuma_dus=True` ile okunur: geçiş öncesi cuma boştur
+ve haftanın son değeri PERŞEMBE kapanışıdır (perşembe → perşembe, beş seans);
+geçişten sonra cuma İstanbul 18:00 kapanışıdır. Geçiş haftası (14.12 → 22.12.2023)
+altı seans kapsar. Bedel bir seanstır (perşembe kapanışı cuma stokundan bir seans
+öncedir); kazanç, ölçülen örnekleme gürültüsünün kalkmasıdır: 2013 → geçiş
+arasında (572 hafta) haftalık Δs'nin birinci özilintisi cuma değeriyle −0,26,
+perşembe kapanışıyla −0,11; σ %3,24 → %2,64 (`p9b.kur_cuma_olcumu`). Hafta başı açılış
+fiyatı ince likiditeli bir kotasyondur ve ertesi gün kısmen geri döner.
+
+DÖNEMLER. Yönetilen kur dönemi `ortak_olc.YONETILEN`dan türetilir: dönem
+içindeki ilk ve son cuma, ve komşu dönemlerin sınırı bir hafta öncesi/sonrası.
 """
 from __future__ import annotations
 
@@ -32,11 +48,20 @@ import bulut
 import ortak_olc as oo
 
 BAS = "2013-01-04"
+_CUMA = pd.offsets.Week(weekday=4)
+_YON_ILK_CUMA = _CUMA.rollforward(oo.YONETILEN[0])          # 2021-12-03
+_YON_SON_CUMA = _CUMA.rollback(oo.YONETILEN[1])             # 2023-06-30
+
+
+def _gun(t) -> str:
+    return str(pd.Timestamp(t).date())
+
+
 DONEMLER = (("2013-01-04", "2017-12-29", "2013–2017"),
             ("2018-01-05", "2020-12-25", "2018–2020"),
-            ("2021-01-01", "2021-11-26", "2021 (Kasım'a kadar)"),
-            ("2021-12-03", "2023-06-30", "yönetilen kur (2021-12 … 2023-06)"),
-            ("2023-07-07", "2026-09-25", "2023-07 … 2026-09"))
+            ("2021-01-01", _gun(_YON_ILK_CUMA - pd.Timedelta(days=7)), "2021 (Kasım'a kadar)"),
+            (_gun(_YON_ILK_CUMA), _gun(_YON_SON_CUMA), f"yönetilen kur ({oo.YON_AY[0]} … {oo.YON_AY[1]})"),
+            (_gun(_YON_SON_CUMA + pd.Timedelta(days=7)), "2026-09-25", f"{oo.YON_SONRASI_AY} … 2026-09"))
 EPIZOTLAR = (("2018-07-27", "2018-08-17", "Ağustos 2018"),
              ("2021-11-12", "2021-12-17", "Kasım–Aralık 2021"),
              ("2025-03-14", "2025-04-18", "Mart–Nisan 2025"),
@@ -45,7 +70,7 @@ EPIZOTLAR = (("2018-07-27", "2018-08-17", "Ağustos 2018"),
 
 def haftalik() -> pd.DataFrame:
     r = oo.oku("rezerv_haftalik")
-    s, _ = oo.usdtry()
+    s, _ = oo.usdtry(cuma_dus=True)               # geçiş öncesi cuma boş: hafta perşembe kapanışıyla biter
     f = oo.oku("fonlama_gunluk")["aofm"].dropna()
     s_h = s.resample("W-FRI").last()
     f_h = f.resample("W-FRI").last()
@@ -87,7 +112,7 @@ def p9a() -> dict:
                         "n": int(len(o)), "ilk": str(o.index.min().date()), "son": str(o.index.max().date()),
                         "son_oran": float(o.iloc[-1]), "son_kv_borc_mlr_usd": float(k2.dropna().iloc[-1])}
     except bulut.VeriYok as e:
-        out["resmi"] = {"durum": "kurulmadi", "sebep": str(e)}
+        out["resmi"] = oo.kurulmadi(str(e))
     return out
 
 
@@ -108,6 +133,22 @@ def emp_bilesenleri() -> pd.DataFrame:
 def _paylar(k: pd.DataFrame) -> dict:
     v = k["emp"].var()
     return {b: float(k[b].cov(k["emp"]) / v) for b in ("kur", "rezerv", "faiz")}
+
+
+def _kur_cuma_olcumu() -> dict:
+    """Haftalık USD/TRY'yi cuma değerinden (pazartesi barının başı) ve perşembe
+    kapanışından örneklemenin farkı, geçiş öncesi dönemde (CUMA KURU)."""
+    s, kun = oo.usdtry()
+    x = s[s.index < oo.GECIS_YAHOO_CUMA]
+    x = x[x.index >= pd.Timestamp(BAS) - pd.Timedelta(days=7)]
+    eski = (np.log(x.resample("W-FRI").last()).diff() * 100).dropna()
+    yeni = (np.log(x[x.index.dayofweek < 4].resample("W-FRI").last()).diff() * 100).dropna()
+    return {"ilk": str(eski.index.min().date()), "son": str(eski.index.max().date()), "n_hafta": int(len(eski)),
+            "ozilinti_cuma_degeri": float(eski.autocorr()), "ozilinti_persembe": float(yeni.autocorr()),
+            "sigma_cuma_degeri_yuzde": float(eski.std()), "sigma_persembe_yuzde": float(yeni.std()),
+            "cuma_pazartesi_barindan": kun["cuma_pazartesi_barindan"], "cuma_gunu": kun["cuma_gunu_gecis_oncesi"],
+            "yontem": "Geçiş öncesi haftalarda haftalık log kur değişimi iki örneklemle: haftanın son değeri cuma "
+                      "etiketi (pazartesi barının başı) ve perşembe kapanışı; birinci özilinti ve standart sapma."}
 
 
 def p9b() -> dict:
@@ -136,6 +177,9 @@ def p9b() -> dict:
                    "maliyeti değişimi, her biri kendi standart sapmasıyla ölçeklenip toplanır; bileşenin payı "
                    "endeksle kovaryansının endeksin varyansına oranıdır."),
         "kaynak": ["rezerv_haftalik", "usdtry (Yahoo)", "fonlama_gunluk (AOFM)"],
+        "kur_cuma_notu": ("18.12.2023 öncesinde haftalık kur perşembe kapanışıdır: Yahoo'nun o dönem cuma değeri "
+                          "pazartesi barının başıdır ve hafta sonunu taşır; o cumalar boş bırakıldı."),
+        "kur_cuma_olcumu": _kur_cuma_olcumu(),
         "n": int(len(k)), "ilk": str(k.index.min().date()), "son": str(k.index.max().date()),
         "sigma": k.attrs["sigma"], "tam_pay": _paylar(k), "donemler": donem, "epizotlar": epizot,
         "sinir": ("Ağırlıklar örneklemin tamamından kurulur (tarif); yönetilen kur döneminde kur bileşeni "
@@ -147,7 +191,7 @@ def p9c() -> dict:
     try:
         u = bulut.uyp()
     except bulut.VeriYok as e:
-        return {"durum": "kurulmadi", "sebep": str(e)}
+        return oo.kurulmadi(str(e))
     c = oo.oku("odemeler_aylik")["cari"].dropna()
     c_q = c.resample("QE").sum(min_count=3)
     u = u.copy()
@@ -175,7 +219,11 @@ def p9c() -> dict:
 def sekil_16() -> dict:
     k = emp_bilesenleri()
     a = k.resample("MS").sum()
-    return {"tarih": [str(t.date()) for t in a.index],
+    return {"n": int(len(a)), "ilk": str(a.index.min().date()), "son": str(a.index.max().date()),
+            "n_hafta": int(len(k)),
+            "yontem": "Kur baskısı endeksinin üç bileşeni (σ birimi), haftalık değerlerin ay içi toplamı.",
+            "kaynak": ["rezerv_haftalik", "usdtry (Yahoo)", "fonlama_gunluk (AOFM)"],
+            "tarih": [str(t.date()) for t in a.index],
             "kur": [float(x) for x in a["kur"]], "rezerv": [float(x) for x in a["rezerv"]],
             "faiz": [float(x) for x in a["faiz"]], "emp": [float(x) for x in a["emp"]],
             "not": "Haftalık bileşenlerin ay içi toplamı (σ birimi)."}

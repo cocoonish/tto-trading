@@ -60,13 +60,14 @@ dolar GSYH) yanında durur; fark kur hızla değer kaybederken büyür.
      Eğime etkisi küçük: p8b'de gecikme 8'de −0,0009 (eğim −0,075),
      p8c'de −0,004 (t −1,0). İki ölçü mekaniği iki ayrı yoldan taşır; ikisi
      yan yana basılır, hiçbiri "temiz" sayılmaz.
-  3. ÖRTÜŞEN UFUKTA ÖRNEKLEM DIŞI SINAMA SIZAR: ortak_olc.oos_kiyas eğitim
-     penceresine t'den önceki BÜTÜN satırları alır; hedef "sonraki 12 ayın
-     değişimi" olduğunda o satırların son on biri t anında henüz
-     gerçekleşmemiştir. Bu modülün `oos_ambargolu`su eğitimi hedefi
-     gerçekleşmiş satırlarla sınırlar (ambargo = ufuk) ve Diebold–Mariano
-     t'sini ufka uygun Newey–West gecikmesiyle kurar. Sözleşme fonksiyonunun
-     sonucu yanında yazılır; hüküm İKİSİNİN de geçmesini ister.
+  3. ÖRTÜŞEN UFUKTA ÖRNEKLEM DIŞI SINAMA SIZAR: eğitim penceresine t'den
+     önceki BÜTÜN satırlar alınırsa, hedef "sonraki 12 ayın değişimi"
+     olduğunda o satırların son on biri t anında henüz gerçekleşmemiştir.
+     Örneklem dışı sınama bu yüzden AMBARGOLUDUR (`ortak_olc.oos_takimi`,
+     ambargo = ufuk: eğitim yalnız hedefi gerçekleşmiş satırlarla) ve
+     Diebold–Mariano t'si ufka uygun Newey–West gecikmesiyle (24) kurulur.
+     Ambargosuz eşleri ("…_ambargosuz") sızıntının büyüklüğü olarak yanında
+     yazılır ve hükme GİRMEZ (tek hüküm kuralı, `ortak_olc.hukum`).
   4. GENİŞLEYEN ORTALAMA EĞİLİMİ SAPMA SANAR: TL 1994–2010 arasında reel
      değer kazandı, 2011–2022 arasında kaybetti; genişleyen ortalamadan
      sapma bu yüzden çoğunlukla eğilimdir (2007-12'de +31, 2021-12'de −63
@@ -86,32 +87,43 @@ dolar GSYH) yanında durur; fark kur hızla değer kaybederken büyür.
      1996'dan başlar. Dış ticaret birim değer ve miktar endeksleri 2013'ten
      başlar, ithalat miktarında YAKIT HARİÇ endeks yoktur (değer ağırlığı
      olmadan çıkarılamaz): toplam ithalat miktarı ve yakıt ayrı verilir.
-  7. SIZINTININ BÜYÜKLÜĞÜ ÖLÇÜLDÜ: p8c'de sözleşme fonksiyonunun örneklem
-     dışı oranı 0,99 (kıyasa denk görünür), ambargolu oran 1,20 (kıyastan
-     KÖTÜ). Gerçekleşmemiş hedefleri gören eğitim modeli olduğundan iyi
+  7. SIZINTININ BÜYÜKLÜĞÜ ÖLÇÜLDÜ: p8c'de ambargosuz örneklem dışı oran
+     0,99 (kıyasa denk görünür), ambargolu oran 1,20 (kıyastan KÖTÜ). Gerçekleşmemiş hedefleri gören eğitim modeli olduğundan iyi
      gösteriyordu.
   8. GELİR KONTROLÜ İHRACATTA TERS NEDENSELDİR: ihracat GSYH'nin bir
      bileşenidir; ihracat miktarının yurt içi büyümeye "esnekliği" (+1,5)
      talep etkisi değil muhasebedir. Gelir kontrollü ihracat esnekliği bu
      yüzden yalnız sağlamlıktır; ithalatta kontrol anlamlıdır.
-  9. TCMB KURU TATİLİ BİLMEZ (denetimde ölçüldü): ortak_olc.usdtry_tcmb()
-     valör tarihini takvim iş günüyle geri alır; resmî tatilin bir önceki
-     günü yapılan ilan TATİL gününe yazılır, asıl ilan günü seriden düşer
-     (1990–2026'da 219 gün; değerler aynı, tarih bir Türkiye iş günü kayık).
-     30.08.2013 Zafer Bayramı'dır: o gün ilan yoktur ve seri "30.08" diye
-     29.08 perşembe ilanını taşır. p8d bu yüzden ilan gününü valör serisinin
-     kendi sırasından kurar (V valörünün ilanı serideki bir önceki valör
-     günüdür) ve son günü 29.08 diye ADIYLA yazar.
+  9. TCMB KURU TATİLİ BİLMELİ (denetimde ölçüldü): valör tarihini takvim iş
+     günüyle geri almak resmî tatilin bir önceki günü yapılan ilanı TATİL
+     gününe yazar ve asıl ilan günü seriden düşer. Tek tanım
+     `ortak_olc.usdtry_tcmb` ilan gününü Türkiye iş günü takviminden kurar
+     (valörden önceki son Türkiye iş günü; 2011 öncesinde valör dizisinin bir
+     önceki günü). 30.08.2013 Zafer Bayramı'dır: o gün ilan yoktur, son ilan
+     29.08 perşembedir ve p8d onu ADIYLA yazar. Aylık ve çeyreklik dönüşüm
+     kuru da aynı seriden ortalanır.
   10. RASTGELE YÜRÜYÜŞ KIYASI (veri planı: Türkiye regresyonları rastgele
      yürüyüş kıyasıyla sınanır). Bağımlı değişken bir DEĞİŞİM olduğu için
      rastgele yürüyüş kıyası "değişim sıfır"dır. Hüküm koşulsuz ortalama ve
      sıfır kıyasının İKİSİNİ de ister; bugünkü ağaçta hiçbir hüküm bundan
-     değişmiyor (p8b sıfıra göre 0,85 · ambargolu 0,93).
+     değişmiyor (p8b sıfıra göre ambargolu 0,93, ambargosuz 0,85).
   11. "%10'LUK" ETKİ LOG PUANLA YAZILMAZ (denetimde düzeltildi): eğimler log
      puan başınadır; 10·b 10 log puanlık (%10,5) hareketi verir. %10'luk reel
      değer kazancı 100·ln 1,1 = 9,53, kaybı 100·ln 0,9 = −10,54 log puandır ve
      ikisi simetrik değildir (8. ay eğimiyle −0,72 ve +0,79 puan; eski alan
      −0,75 yazıyordu).
+
+  12. MXN'NİN YAHOO BARI NİSAN 2018 ÖNCESİNDE GÜN SONUDUR (`ortak_olc.em_kur`,
+     `EM_GUN_SONU_GECIS`): öbür EM barlarındaki "günün başı" düzeltmesi MXN'ye
+     2018-04-01'den önce uygulanmaz. p8d'nin MXN satırı bu yüzden ham bardır;
+     21.05 ve 30.08 değerleri o günlerin gün sonu kapanışıdır (öbür Yahoo
+     satırlarının 30.08 cuma değeri pazartesi barının başıdır, tuzak 5).
+  13. CUMA UCU (p8d). Pencerenin son günü vakanın tanımıdır (30.08.2013 cuma);
+     Yahoo düzeltilmiş barında cuma kapanışı YOKTUR, cuma değeri pazartesi
+     barının başıdır ve öyle yazılır (`saat_notu`). Perşembe kapanışına
+     çekmek (`usdtry(cuma_dus=True)`) vakadan bir seansı keserdi; aynı günün
+     kusursuz sağlamlığı ECB'nin 30.08 sabitlemesidir ve her satırda yanında
+     durur.
 
 ÖLÇÜLEN BULGULAR (tuzak değil): J-eğrisinin KISA kolu yok — gecikme 0'da
 eğim sıfır, 4–13 ayda anlamlı eksi, en derin 8. ayda; dolar faturalı
@@ -151,7 +163,8 @@ ON_YUZDE_KAYIP_LOG = 100 * math.log(0.9)      # %10'luk (basit) azalış, log pu
 OOS_ILK_AY = 120              # örneklem dışı ilk eğitim penceresi (ay)
 OOS_ILK_CEYREK = 40
 ALT_DONEM_BAS = "2003-01-01"  # dalgalı kur ve enflasyon hedeflemesi dönemi
-YONETILEN_ONCESI_SON = "2021-11-01"   # yönetilen kur dönemi (2021-12 … 2023-06) öncesi son ay
+YONETILEN_ONCESI_SON = oo.YON_ONCESI_SON_AY   # yönetilen kur dönemi öncesi son ay (2021-11-01; tek tanım ortak_olc)
+YON_ETIKET = f"{oo.YON_AY[0]} … {oo.YON_AY[1]}"
 TAPER = {"olay": "2013-05-22", "baz_yahoo": "2013-05-21", "baz_ecb": "2013-05-22", "son": "2013-08-30"}
 BESLI = [("BRL", "BRA", "Brezilya"), ("INR", "IND", "Hindistan"), ("ZAR", "ZAF", "Güney Afrika"),
          ("TRY", "TUR", "Türkiye"), ("IDR", "IDN", "Endonezya")]
@@ -159,101 +172,26 @@ KONTROL = [("MXN", "MEX", "Meksika")]
 
 
 # ───────────────────────────────────────────────────────── yardımcılar
-def _f(x):
-    return None if x is None or (isinstance(x, float) and not math.isfinite(x)) else float(x)
+_f, _iso, kurulmadi, hukum = oo._f, oo._iso, oo.kurulmadi, oo.hukum      # tek tanımlar ortak_olc'de
+_reg = oo.reg
 
 
-def _iso(t) -> str:
-    return str(pd.Timestamp(t).date())
+def oos_takim(y: pd.Series, x: pd.Series, ilk: int, ufuk: int, gecikme: int) -> dict:
+    """İki saf kıyas (koşulsuz ortalama, sıfır = rastgele yürüyüşün değişimi),
+    ambargo = ufuk, Diebold–Mariano gecikmesi `gecikme` (`ortak_olc.oos_takimi`).
+    ufuk > 1 iken ambargosuz eşleri sızıntının büyüklüğü olarak yazılır; hükme
+    girmez (tuzak 3)."""
+    return oo.oos_takimi(y, x, ilk, ufuk=ufuk, dm_gecikme=gecikme, sizinti=True)
 
 
-def kurulmadi(sebep: str) -> dict:
-    return {"durum": "kurulmadi", "sebep": sebep}
+oranlar = oo.takim_oranlari
 
 
-def hukum(t: float | None, oranlar: list) -> str:
-    """Bloomberg HRA 6.1: |t| ≥ 2 ve örneklem dışı karesel hata oranı < 1 birlikte."""
-    gecti = (t is not None and abs(t) >= 2 and len(oranlar) > 0
-             and all(o is not None and o < 1 for o in oranlar))
-    return "ölçülü" if gecti else "tarif edici"
-
-
-def oos_ambargolu(y: pd.Series, x: pd.Series, ilk_pencere: int, ambargo: int,
-                  kiyas: str = "ortalama", gecikme: int = HAC_GECIKME) -> dict:
-    """Genişleyen pencerede y = a + b·x tahmini ile saf kıyas (koşulsuz ortalama ya
-    da sıfır); eğitim yalnız hedefi t anında GERÇEKLEŞMİŞ satırlarla kurulur
-    (satır s, s + ambargo ≤ t ise). ambargo = 1 ortak_olc.oos_kiyas'ın eğitim
-    kuralıdır. Diebold–Mariano t'si eşli karesel hata farkının Newey–West
-    (verilen gecikme) ortalamasıdır; eksi t modelin lehine."""
-    d = pd.concat([y.rename("y"), x.rename("x")], axis=1).dropna()
-    e_m, e_k = [], []
-    for t in range(ilk_pencere, len(d)):
-        egit = d.iloc[: t - ambargo + 1]
-        if len(egit) < 10:
-            continue
-        X = np.column_stack([np.ones(len(egit)), egit["x"].values])
-        b = np.linalg.lstsq(X, egit["y"].values, rcond=None)[0]
-        tah = b[0] + b[1] * d["x"].iloc[t]
-        kiy = egit["y"].mean() if kiyas == "ortalama" else 0.0
-        e_m.append((d["y"].iloc[t] - tah) ** 2)
-        e_k.append((d["y"].iloc[t] - kiy) ** 2)
-    if len(e_m) < 10:
-        return kurulmadi("örneklem dışı sınama için en az on tahmin gerekir")
-    e_m, e_k = np.array(e_m), np.array(e_k)
-    dm = oo.hac(e_m - e_k, np.zeros((len(e_m), 0)), gecikme=gecikme, sabit=True)
-    return {"n": int(len(e_m)), "mse_oran": float(e_m.mean() / e_k.mean()) if e_k.mean() else None,
-            "dm_t": _f((dm.get("t") or [None])[0]), "kiyas": "koşulsuz ortalama" if kiyas == "ortalama" else "sıfır",
-            "ambargo_ay": int(ambargo), "dm_gecikme": int(gecikme),
-            "ilk": _iso(d.index[ilk_pencere])}
-
-
-def _sozlesme_oos(y: pd.Series, x: pd.Series, ilk: int, kiyas: str = "ortalama") -> dict:
-    o = oo.oos_kiyas(y, x, ilk, kiyas)
-    if not o.get("n"):
-        return kurulmadi("örneklem dışı sınama için gözlem yetersiz")
-    return {"n": o["n"], "mse_oran": o.get("mse_oran"), "dm_t": o.get("dm_t"),
-            "kiyas": "koşulsuz ortalama" if kiyas == "ortalama" else "sıfır", "ilk": o.get("ilk")}
-
-
-def oos_takim(y: pd.Series, x: pd.Series, ilk: int, ambargo: int, gecikme: int) -> dict:
-    """Dört örneklem dışı kıyas: sözleşme fonksiyonu (ortak_olc.oos_kiyas) ve
-    ambargolu sürüm, her biri koşulsuz ortalama ve sıfır (rastgele yürüyüşün
-    değişimi) kıyasıyla. Hüküm dördünün de oranının 1'in altında olmasını ister
-    (`oranlar`). ambargo = 1 eşzamanlı ilişki içindir: o hâlde ambargolu sürümün
-    karesel hatası sözleşmeninkiyle aynıdır, farkı yalnız DM t'sinin gecikmesidir."""
-    return {"sozlesme": _sozlesme_oos(y, x, ilk, "ortalama"),
-            "sozlesme_sifir": _sozlesme_oos(y, x, ilk, "sifir"),
-            "ambargolu": oos_ambargolu(y, x, ilk, ambargo, "ortalama", gecikme),
-            "ambargolu_sifir": oos_ambargolu(y, x, ilk, ambargo, "sifir", gecikme)}
-
-
-def oranlar(takim: dict) -> list:
-    return [v.get("mse_oran") for v in takim.values()]
-
-
-@lru_cache(maxsize=1)
 def tcmb_ilan() -> pd.Series:
-    """TCMB gösterge kuru (TL/USD) İLAN gününe yazılmış. Valör günü V'nin ilanı,
-    valör serisindeki bir önceki gündür: ardışık iki valör günü ardışık iki
-    Türkiye iş günüdür, yani bu kaydırma resmî tatili bilir. ortak_olc.usdtry_tcmb()
-    takvim iş günüyle geri aldığı için tatilden önceki günün ilanını tatil gününe
-    yazar (219 gün; değerler aynı). Saat: 15:30 TSİ."""
-    v = oo.oku("usdtry_tcmb_gunluk")["usdtry_tcmb_valor"].dropna().sort_index()
-    s = pd.Series(v.values[1:], index=v.index[:-1], name="usdtry_tcmb_ilan")
-    return s[s.index <= oo.CIPA_GUN]
-
-
-def _reg(y: pd.Series, X, gecikme: int) -> dict:
-    """Tek ya da çok değişkenli HAC regresyonu; örneklem tarihleri dahil."""
-    if isinstance(X, pd.Series):
-        X = X.to_frame()
-    d = pd.concat([y.rename("_y"), X], axis=1).dropna()
-    r = oo.hac(d["_y"].values, d.drop(columns="_y").values, gecikme=gecikme)
-    if r.get("yetersiz"):
-        return {"n": r["n"], **kurulmadi("regresyon için gözlem yetersiz")}
-    return {"n": r["n"], "ilk": _iso(d.index.min()), "son": _iso(d.index.max()),
-            "sabit": r["b"][0], "b": r["b"][1:], "se": r["se"][1:], "t": r["t"][1:],
-            "r2": r["r2"], "gecikme": r["gecikme"]}
+    """TCMB gösterge kuru (TL/USD), İLAN gününe yazılmış; Türkiye iş günü
+    takvimiyle geri alınmış valör serisi (`ortak_olc.usdtry_tcmb`, tuzak 9).
+    Saat: 15:30 TSİ."""
+    return oo.usdtry_tcmb()
 
 
 # ───────────────────────────────────────────────────────── ortak seriler
@@ -449,7 +387,10 @@ def p8a() -> dict:
 
 def sekil_13() -> dict:
     df = _sektorel()
-    return {"baslik": "Türkiye sektörel dengeleri (% GSYH, 4 çeyreklik akım)",
+    return {"baslik": "Türkiye sektörel dengeleri (% GSYH, 4 çeyreklik akım)", "n": int(len(df)),
+            "yontem": "Kamu (merkezi yönetim), dış (cari, TL dönüşümlü ve resmî dolar biçimi) ve özel kesim (artık) "
+                      "dengesi, dört çeyreklik akım / GSYH.",
+            "kaynak": ["butce_ceyreklik", "odemeler_aylik", "usdtry_tcmb_gunluk", "gsyh_ceyreklik"],
             "tarih": [_iso(t) for t in df.index], "ceyrek": [_q(t) for t in df.index],
             "kamu": [float(v) for v in df["kamu"]], "dis": [float(v) for v in df["dis"]],
             "ozel": [float(v) for v in df["ozel"]], "dis_usd": [float(v) for v in df["dis_usd"]],
@@ -553,14 +494,12 @@ def _fiyat_miktar(df: pd.DataFrame) -> dict:
                                      "gelir_esneklik": rg["b"][1], "gelir_t": rg["t"][1]}
         d = pd.concat([y.rename("y"), df["dq"].shift(12).rename("x")], axis=1).dropna()
         ilk = min(60, len(d) // 2)
-        oos = oos_ambargolu(d["y"], d["x"], ilk_pencere=ilk, ambargo=UFUK_AY)
-        oos_s = oos_ambargolu(d["y"], d["x"], ilk_pencere=ilk, ambargo=UFUK_AY, kiyas="sifir")
+        oos = oo.oos_takimi(d["y"], d["x"], ilk, ufuk=UFUK_AY, dm_gecikme=HAC_GECIKME)
         kalem["oos_gecikme_12"] = oos
-        kalem["oos_gecikme_12_sifir"] = oos_s
-        kalem["hukum_gecikme_12"] = hukum(kalem["gecikme_12"]["t"], [oos.get("mse_oran"), oos_s.get("mse_oran")])
+        kalem["hukum_gecikme_12"] = hukum(kalem["gecikme_12"]["t"], oranlar(oos))
         out["kalemler"][ad] = kalem
     out["sinir"] = ("İthalatta yakıt hariç miktar endeksi yok; değer ağırlıkları olmadan toplamdan çıkarılamaz. "
-                    "Endeksler 2013'te başlar ve yönetilen kur dönemini (2021-12 … 2023-06) içerir. İhracat GSYH'nin "
+                    f"Endeksler 2013'te başlar ve yönetilen kur dönemini ({YON_ETIKET}) içerir. İhracat GSYH'nin "
                     "bileşeni olduğu için ihracatta gelir kontrolü ters nedenseldir, yalnız sağlamlıktır.")
     return out
 
@@ -610,7 +549,7 @@ def p8b() -> dict:
         "yonetilen_oncesi": {"ozet": _profil_ozeti(yon_once), "n": yon_once["n"], "ilk": yon_once["ilk"],
                              "son": yon_once["son"],
                              "gecikme_12": {"egim_puan_yuzde": yon_once["egim"][12], "t": yon_once["t"][12]},
-                             "yontem": ("Ana tanım, yönetilen kur dönemi (2021-12 … 2023-06) başlamadan biten "
+                             "yontem": (f"Ana tanım, yönetilen kur dönemi ({YON_ETIKET}) başlamadan biten "
                                         "örneklem; bu bir kur tepkisi değil, dönem sağlamlık için ayrılır.")},
         "yillik_dagitilmis_gecikme": {"gelirsiz": _dl(dl, False), "gelir_kontrollu": _dl(dlg, True),
                                       "yontem": ("Reel kurun bu yılki, bir yıl önceki ve iki yıl önceki 12 aylık "
@@ -629,7 +568,9 @@ def sekil_14() -> dict:
     return {"baslik": "J-eğrisi: reel kur değişiminin çekirdek mal dengesine gecikmeli etkisi",
             "gecikme_ay": ana["gecikme_ay"], "egim": ana["egim"], "se": ana["se"],
             "egim_gelir_kontrollu": gelir["egim"], "se_gelir_kontrollu": gelir["se"],
-            "birim": ana["birim"], "ilk": ana["ilk"], "son": ana["son"], "n": ana["n"]}
+            "birim": ana["birim"], "ilk": ana["ilk"], "son": ana["son"], "n": ana["n"],
+            "yontem": "Her gecikme k = 0…24 için ayrı Newey–West eğimi (gecikme 24); gelir kontrollü profil yanında.",
+            "kaynak": ["odemeler_aylik", "redk_aylik", "gsyh_ceyreklik", "usdtry_tcmb_gunluk"]}
 
 
 # ───────────────────────────────────────────────────────── p8c
@@ -658,9 +599,7 @@ def _sapma_regresyonu(df: pd.DataFrame, yad: str, xad: str, oos: bool = True) ->
            "on_yuzde_sapma_puan": ON_YUZDE_KAZANC_LOG * r["b"][0]}     # REDK ortalamasının %10 üstü
     if oos:
         tk = oos_takim(d[yad], d[xad], OOS_ILK_AY, UFUK_AY, HAC_GECIKME)
-        out.update({"oos_sozlesme": tk["sozlesme"], "oos_ambargolu": tk["ambargolu"],
-                    "oos_sozlesme_sifir": tk["sozlesme_sifir"], "oos_ambargolu_sifir": tk["ambargolu_sifir"],
-                    "hukum": hukum(r["t"][0], oranlar(tk))})
+        out.update({"oos": tk, "hukum": hukum(r["t"][0], oranlar(tk))})
     return out
 
 
@@ -698,7 +637,11 @@ def p8c() -> dict:
 def sekil_15() -> dict:
     df = _sapma_cerceve()
     d = df[["sapma", "cari_ileri_sabit", "cari_oran"]].dropna(subset=["sapma", "cari_oran"])
-    return {"baslik": "REDK sapması ve sonraki 12 ayda cari denge değişimi",
+    return {"baslik": "REDK sapması ve sonraki 12 ayda cari denge değişimi", "n": int(len(d)),
+            "n_ileri": int(d["cari_ileri_sabit"].notna().sum()),
+            "yontem": "Log REDK'nin genişleyen ortalamadan sapması, 12 aylık cari denge / GSYH ve sonraki 12 ayın "
+                      "sabit paydalı değişimi (aylık).",
+            "kaynak": ["redk_aylik", "odemeler_aylik", "gsyh_ceyreklik", "usdtry_tcmb_gunluk"],
             "tarih": [_iso(t) for t in d.index],
             "redk_sapma_yuzde": [float(v) for v in d["sapma"]],
             "cari_gsyh_yuzde": [float(v) for v in d["cari_oran"]],
@@ -714,7 +657,10 @@ def _yahoo_degisim(kod: str) -> dict:
         kaynak = "Yahoo USD/TRY (düzeltilmiş günlük bar, Londra gece yarısı)"
     else:
         s = oo.em_kur(kod)
-        kaynak = f"Yahoo USD/{kod} (düzeltilmiş günlük bar, Londra gece yarısı)"
+        g = oo.EM_GUN_SONU_GECIS.get(kod.lower())
+        kaynak = (f"Yahoo USD/{kod} (ham günlük bar: {g.strftime('%d.%m.%Y')} öncesinde gün sonu kapanışı)"
+                  if g is not None and pd.Timestamp(TAPER["son"]) < g else
+                  f"Yahoo USD/{kod} (düzeltilmiş günlük bar, Londra gece yarısı)")
     b, e = pd.Timestamp(TAPER["baz_yahoo"]), pd.Timestamp(TAPER["son"])
     if b not in s.index or e not in s.index:
         return kurulmadi(f"Yahoo USD/{kod} serisinde pencere uç günü yok")
@@ -793,7 +739,8 @@ def p8d() -> dict:
                  "baz_yahoo": TAPER["baz_yahoo"], "baz_ecb": TAPER["baz_ecb"], "son": TAPER["son"]},
         "saat_notu": ("Yahoo kurları Londra gece yarısı kapanışıdır, baz olay öncesi 21.05; ECB 14:15 Orta Avrupa "
                       "sabitlemesidir, 22.05 sabitlemesi ifadeden öncedir. Yahoo serisinde cumartesi barı yok: 30.08 "
-                      "cuma değeri pazartesi barının başından (hafta sonu açılışından sonra) gelir. TCMB gösterge "
+                      "cuma değeri pazartesi barının başından (hafta sonu açılışından sonra) gelir; MXN'nin o dönemki "
+                      "ham barı ise gün sonu kapanışıdır. TCMB gösterge "
                       "kuru 15:30 TSİ ilanıdır; 30.08 Türkiye'de resmî tatil olduğu için son ilan 29.08'dir."),
         "n": len(satirlar), "ilk": TAPER["baz_yahoo"], "son": TAPER["son"],
         "satirlar": satirlar, "turkiye": turkiye,

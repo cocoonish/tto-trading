@@ -13,7 +13,8 @@ Pratikler
         (EUR, GBP, CHF, JPY, CAD, AUD; CNBC New York 17:00 ay sonu, BIS politika
         faizleri) para başına ve havuzlu (Driscoll–Kraay).
   p11b  EM taşıma sepeti (BRL, MXN, ZAR, INR, TRY), aylık, 2010-02 … 2026-07:
-        r_{t+1} = (i − i*)_t/12 − Δs_{t+1}; eşit ağırlıklı sepet; ortalama,
+        r_{t+1} = τ(i)_t − τ(i*)_t − Δs_{t+1}, τ aylık log taşıma (i/12; yıllık
+        efektif kote edilen Selic ln(1 + i)/12, tuzak 19); eşit ağırlıklı sepet; ortalama,
         oynaklık, çarpıklık, en kötü üç ay, azami düşüş; VIX'in aynı ay
         ortalaması genişleyen pencereli 75. yüzdeliği aşınca ve aşmayınca.
         ECB referans kurlarıyla çapraz sınama.
@@ -43,17 +44,22 @@ yerel parayı alıp doları borçlanan pozisyonun getirisidir (artı = kazanç).
   2. KRİZ AYLARININ AY SONU GECELİK FAİZİ GELECEK AYIN FAİZİ DEĞİLDİR. 1994
      Nisan sonunda %398, 2000 Kasım sonunda %316: on ikide biri ayda %33 ve
      %26 "beklenen değer kaybı" gibi regresyona girer. 1990–2001 β ay sonu
-     faizle 0,15, ayın ortalama faiziyle 0,41, 1994-01…06 ve 2000-11…2001-06
-     dışarıda 0,04 — hiçbiri 1'e yaklaşmıyor (t(β=1) −2,4 ile −6,9 arası).
+     faizle 0,16, ayın ortalama faiziyle 0,41, 1994-01…06 ve 2000-11…2001-06
+     dışarıda 0,09 — hiçbiri 1'e yaklaşmıyor (t(β=1) −2,4 ile −5,9 arası).
   3. BASİT /12 İLE GÜNLÜK BİLEŞİK BİRİKİM AYNI SAYIDIR: gecelik faizin aylık
      log birikimi ile i/12 arasındaki fark medyanda 0,0006 puan, en çok 0,18
-     puan (kriz ayı). Seçim (basit) sonucu değiştirmez.
+     puan (kriz ayı). Seçim (basit) sonucu değiştirmez. Taşıma kuralı TEK
+     tanımdır (`ortak_olc.aylik_log_tasima`): kısa vadeli basit oranlar i/12,
+     yıllık efektif kote edilen oran ln(1 + i)/12 (tuzak 19).
   4. KUR KAYNAĞININ EKLEMİ: Aralık 2004'e kadar TCMB gösterge kurunun aylık
      değişimi, Ocak 2005'ten Yahoo'nunki; iki ucu farklı kaynaktan gelen ay
      yok. Ortak 261 ayda iki kaynağın aylık değişim farkı medyanda 0,34
-     puan (korelasyon 0,977); TCMB kuruyla kurulan satır sağlamlıktır.
+     puan (korelasyon 0,976); TCMB kuruyla kurulan satır sağlamlıktır. TCMB
+     kuru ilan gününe Türkiye iş günü takvimiyle geri alınır
+     (`ortak_olc.usdtry_tcmb`; 2011 öncesinde valör dizisinin bir önceki günü):
+     yılbaşı gibi tatil komşuluğundaki ay sonları doğru güne düşer.
   5. TAM ÖRNEKLEMİN POZİTİF β'SI REJİMLER ARASI BİR SEVİYE FARKIDIR: dönem
-     içinde β 0,15 · −0,16 · −0,79 iken havuzlu 1990–2026 β 0,40 (t 2,9)
+     içinde β 0,16 · −0,16 · −0,79 iken havuzlu 1990–2026 β 0,41 (t 3,0)
      çıkıyor; yüksek faizli 1990'lar aynı zamanda yüksek değer kaybı yılları.
      Havuzlu satır örneklem dışında koşulsuz ortalamayı geçiyor (0,91) ama
      sıfır değişim kıyasını geçemiyor (1,04): hüküm tarif edici.
@@ -67,22 +73,28 @@ yerel parayı alıp doları borçlanan pozisyonun getirisidir (artı = kazanç).
      bulut arşivinden (örtüşen bütün aylarda birebir) tamamlanır ve adıyla
      yazılır (BRL, MXN, ZAR 2026-07…08; INR 2026-06).
   8. YAHOO GÜNLÜK BARINDA CUMA DEĞERİ PAZARTESİ AÇILIŞIDIR (18.12.2023 öncesi
-     TRY ve bütün EM kurları; Bölüm 1 tuzak 5): haftalık ölçüler perşembe
-     kapanışıyla örneklenir. Ölçüldü (2010–2021-11): TRY'nin EM sepetine
-     eğimi cuma ile 0,72, perşembe ile 0,72, ama R² 0,18'e karşı 0,24 —
-     cuma örneklemesi ortak hareketin dörtte birini hafta sonuna kaydırıyor.
-     Aylık örnekte aynı kayma cuma biten aylarda bir günlüktür.
+     TRY ve bütün EM kurları; `ortak_olc.usdtry`, cuma tuzağı): haftalık
+     ölçüler perşembe kapanışıyla örneklenir (cuma hiç okunmaz; `cuma_dus`
+     gerekmez). Ölçüldü (2010–2021-11): TRY'nin EM sepetine eğimi cuma ile
+     0,72, perşembe ile 0,69, ama R² 0,18'e karşı 0,24 — cuma örneklemesi
+     ortak hareketin dörtte birini hafta sonuna kaydırıyor. AYLIK ölçüler ay
+     sonu değerini tutar (`cuma_dus` KULLANILMAZ): aylık pencereler bitişik
+     kalır, her hafta sonu tek bir aya yazılır; cuma biten aylarda kayma bir
+     günlüktür ve Fama satırının TCMB kurlu sağlamlığı (15:30 ilanı, hafta
+     sonu taşımaz) onun etkisini gösterir.
   9. "KAYIP VIX İLE GELİR" SEVİYEDE DEĞİL DEĞİŞİMDE GÖRÜNÜR: sepetin en kötü
-     %10'luk aylarının yalnız %20'si VIX ortalamasının genişleyen 75.
-     yüzdeliği aştığı aylardır (taban oran %17), ama %70'i VIX'in yükseldiği
+     %10'luk aylarının yalnız %25'i VIX ortalamasının genişleyen 75.
+     yüzdeliği aştığı aylardır (taban oran %17), ama %65'i VIX'in yükseldiği
      aylardır (taban oran %46); getiri ile ΔVIX korelasyonu −0,35. Eşik 1990'dan
      kurulduğu için (son değer 22,9) 2010–2026'nın sakin VIX'i eşiği az aşar.
  10. TCMB'NİN FİİLİ FONLAMA FAİZİ POLİTİKA FAİZİ DEĞİLDİR. Koridor döneminde
      (ör. 2018 başı: politika %8, fonlama %12,75–16,5) politikayla kurulan
      TRY taşıması kazancı eksik sayar; fonlama maliyetiyle yıllık ortalama
      fark +0,89 puan. Sepetin TRY bacağı ayrıca fonlama maliyetiyle verilir.
- 11. DİBS GÖSTERGE ETİKETİ İKİ İŞ GÜNÜ ÖNDEDİR (Bölüm 1 tuzak 6): haftalık Δ2y
-     ve ex-ante primin TL 1 yıllık faizi kaydırılmış etiketle kurulur.
+ 11. DİBS HİZASI "gun_sonu" (`ortak_olc.DIBS_KAYMA`, k = 2): L etiketli değer
+     L−1'in sabah sabitlemesidir; haftalık Δ2y ve ex-ante primin TL 1 yıllık
+     faizi gün sonu kurla (Yahoo) aynı güne oturtulur, yani D gününe D'den iki
+     Türkiye iş günü sonraki etiket yazılır.
  12. DXY'NİN GÖVDE/ARALIK SINAMASI KURULAMAZ: arşiv yalnız kapanışı taşır.
      Tarih sözleşmesi sınandı: günlükte aynı gün korelasyonu 0,90 (önceki ve
      sonraki gün ±0,05), haftalıkta 0,93. Birincil dolar ölçüsü CNBC sepetidir.
@@ -116,8 +128,16 @@ yerel parayı alıp doları borçlanan pozisyonun getirisidir (artı = kazanç).
      maliyetiyle kuran satırlar ana satırla yalnız aynı aylarda kıyaslanır
      (farklı örneklemle sepet kıyasının yönü tersine dönüyordu).
  19. SELIC YILLIK EFEKTİF KOTELENİR, öbür politika faizleri basit: i/12 BRL'nin
-     aylık log taşımasını büyütür (yılda ≈0,5 puan). Ana satır görev formülüyle
-     kalır; düzeltilmiş hâli konvansiyon duyarlılığı satırındadır.
+     aylık log taşımasını büyütür (yılda ≈0,5 puan). TEK kural
+     (`ortak_olc.aylik_log_tasima`, kotasyon `EM_KOTASYON`): ana satırda Selic
+     ln(1 + i)/12 ile, öbürleri i/12 ile taşınır; i/12 ile kurulmuş hâli
+     konvansiyon duyarlılığı satırındadır.
+ 20. MXN'NİN YAHOO BARI NİSAN 2018 ÖNCESİNDE GÜN SONUDUR (`ortak_olc.em_kur`,
+     `EM_GUN_SONU_GECIS`; ECB referans kuru çaprazına karşı ölçüldü): öbür EM
+     barlarındaki "günün başı" düzeltmesi MXN'ye 2018-04-01'den önce
+     uygulanmaz — uygulanınca seri bir gün ERKENE kayar (D'nin kapanışı D−1'e
+     yazılır). Etkisi: ECB çaprazıyla aylık korelasyon 0,958 → 0,973; haftalık
+     EM sepetinin dolar sepetine eğimi 2010–2021-11'de 0,85 → 0,89.
 """
 from __future__ import annotations
 
@@ -132,16 +152,15 @@ from scipy import stats
 import bulut
 import ortak_olc as oo
 import olcum_b01 as b01
-import olcum_b08 as b08
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 warnings.filterwarnings("ignore", category=RuntimeWarning)
 
-kurulmadi = b08.kurulmadi
-hukum = b08.hukum
+kurulmadi, hukum = oo.kurulmadi, oo.hukum      # tek tanımlar ortak_olc'de
 
 # ───────────────────────────────────────────────────────── sabitler (adlı)
-YON_BAS, YON_SON = b01.YONETILEN                  # 2021-12-01 … 2023-06-30
+YON_BAS, YON_SON = oo.YONETILEN                  # 2021-12-01 … 2023-06-30
+DIBS_HIZA = "gun_sonu"                           # tuzak 11
 SIGNAL_SON = pd.Timestamp(str(oo.CIPA_AY.to_timestamp().date()))   # 2026-08-01 (aylık çıpa)
 KUR_EKLEM = pd.Timestamp("2005-01-01")            # bu aydan itibaren Yahoo değişimi
 FAMA_DONEM = (("1990-2001", "1990-01-01", "2001-12-01"),
@@ -149,8 +168,10 @@ FAMA_DONEM = (("1990-2001", "1990-01-01", "2001-12-01"),
               ("2018-2026", "2018-01-01", "2026-08-01"))
 KRIZ = (("1994-01-01", "1994-06-01"), ("2000-11-01", "2001-06-01"))
 FAMA_KAYAN = 60                                   # ay
-G10 = (("eur", "XM", "EUR", True), ("gbp", "GB", "GBP", True), ("chf", "CH", "CHF", False),
-       ("jpy", "JP", "JPY", False), ("cad", "CA", "CAD", False), ("aud", "AU", "AUD", True))
+# kotasyon yönü (XXX/USD işaret çevrilir) tek tanımdan: ortak_olc.TERS_KOTE
+G10 = tuple((k, u, a, k in oo.TERS_KOTE) for k, u, a in
+            (("eur", "XM", "EUR"), ("gbp", "GB", "GBP"), ("chf", "CH", "CHF"),
+             ("jpy", "JP", "JPY"), ("cad", "CA", "CAD"), ("aud", "AU", "AUD")))
 G10_OOS_ILK = 120
 EM = (("brl", "bra", "BR", "Brezilya reali"), ("mxn", "mex", "MX", "Meksika pesosu"),
       ("zar", "zaf", "ZA", "Güney Afrika randı"), ("inr", "ind", "IN", "Hindistan rupisi"))
@@ -159,21 +180,23 @@ TR_POLITIKA_EKLEM = pd.Timestamp("2018-09-01")    # bu aydan itibaren TCMB polit
 VIX_YUZDELIK = 0.75
 VIX_ASGARI_AY = 60
 HAFTA_PENCERE = 52
-HAFTA_DONEM = (("oncesi", "2010-01-01", "2021-11-30", "2010-01 … 2021-11"),
-               ("yonetilen", "2021-12-01", "2023-06-30", "yönetilen kur 2021-12 … 2023-06 (ayrı dönem)"),
-               ("sonrasi", "2023-07-01", "2026-09-30", "2023-07 … 2026-09"))
-AKIM_DONEM = (("oncesi", "2020-09-01", "2021-11-30", "2020-09 … 2021-11"),
-              ("yonetilen", "2021-12-01", "2023-06-30", "yönetilen kur 2021-12 … 2023-06 (ayrı dönem)"),
-              ("sonrasi", "2023-07-01", "2026-09-30", "2023-07 … 2026-09"))
-PRIM_DONEM = (("oncesi", "2013-01-01", "2021-11-01", "2013-01 … 2021-11"),
-              ("yonetilen", "2021-12-01", "2023-06-01", "yönetilen kur 2021-12 … 2023-06 (ayrı dönem)"),
-              ("sonrasi", "2023-07-01", "2026-08-01", "2023-07 … 2026-08"))
+_YON_ET = f"yönetilen kur {oo.YON_AY[0]} … {oo.YON_AY[1]} (ayrı dönem)"   # dönem dizgeleri ortak_olc.YONETILEN'dan
+HAFTA_DONEM = (("oncesi", "2010-01-01", oo.YON_ONCESI_SON, f"2010-01 … {oo.YON_ONCESI_AY}"),
+               ("yonetilen", oo.YON_ILK, oo.YON_SON, _YON_ET),
+               ("sonrasi", oo.YON_SONRASI_ILK, "2026-09-30", f"{oo.YON_SONRASI_AY} … 2026-09"))
+AKIM_DONEM = (("oncesi", "2020-09-01", oo.YON_ONCESI_SON, f"2020-09 … {oo.YON_ONCESI_AY}"),
+              ("yonetilen", oo.YON_ILK, oo.YON_SON, _YON_ET),
+              ("sonrasi", oo.YON_SONRASI_ILK, "2026-09-30", f"{oo.YON_SONRASI_AY} … 2026-09"))
+PRIM_DONEM = (("oncesi", "2013-01-01", oo.YON_ONCESI_SON_AY, f"2013-01 … {oo.YON_ONCESI_AY}"),
+              ("yonetilen", oo.YON_ILK, oo.YON_SON_AY, _YON_ET),
+              ("sonrasi", oo.YON_SONRASI_ILK, "2026-08-01", f"{oo.YON_SONRASI_AY} … 2026-08"))
+# Politika faizinin kotasyonu (tuzak 19): Selic yıllık efektif, öbürleri basit.
+EM_KOTASYON = {"brl": "yillik_efektif"}
 ANKET_PENCERE_GUN = 15                            # anket yanıt penceresi varsayımı: ayın 1–15'i
 HUKUM_OOS_YOK = "bu satırda örneklem dışı sınama kurulmadı; hüküm kurulmaz"
 
 
-def _iso(t) -> str:
-    return str(pd.Timestamp(t).date())
+_iso = oo._iso                                    # tek tanım ortak_olc'de
 
 
 def _ay(t) -> str:
@@ -195,32 +218,21 @@ def _ozet_seri(s: pd.Series) -> dict:
     return {"n": int(s.notna().sum()), "ilk": _iso(s.dropna().index.min()), "son": _iso(s.dropna().index.max())}
 
 
-def _reg(y: pd.Series, X, gecikme: int | None = None) -> dict:
-    if isinstance(X, pd.Series):
-        X = X.to_frame()
-    d = pd.concat([y.rename("_y"), X], axis=1).dropna()
-    r = oo.hac(d["_y"].values, d.drop(columns="_y").values, gecikme=gecikme)
-    if r.get("yetersiz"):
-        return {"n": r["n"], **kurulmadi("regresyon için gözlem yetersiz")}
-    return {"n": r["n"], "ilk": _iso(d.index.min()), "son": _iso(d.index.max()),
-            "sabit": r["b"][0], "sabit_t": r["t"][0], "b": r["b"][1:], "se": r["se"][1:], "t": r["t"][1:],
-            "r2": r["r2"], "gecikme": r["gecikme"]}
+_reg = oo.reg                                     # tek tanım ortak_olc'de
 
 
 def _oos(y: pd.Series, x: pd.Series, ilk: int) -> dict:
-    out = {}
-    for kiy in ("ortalama", "sifir"):
-        o = oo.oos_kiyas(y, x, ilk, kiy)
-        if not o.get("n"):
-            out[kiy] = kurulmadi("örneklem dışı sınama için gözlem yetersiz")
-        else:
-            out[kiy] = {"n": o["n"], "mse_oran": o.get("mse_oran"), "dm_t": o.get("dm_t"), "ilk": o.get("ilk")}
-    return out
+    """İki saf kıyas (koşulsuz ortalama, sıfır), ufuk 1 (`ortak_olc.oos_takimi`)."""
+    return oo.oos_takimi(y, x, ilk)
 
 
 def _hukum_oos(t: float | None, oos: dict) -> str:
-    oranlar = [v.get("mse_oran") for v in oos.values() if isinstance(v, dict) and "mse_oran" in v]
-    return hukum(t, oranlar) if len(oranlar) == 2 else "tarif edici"
+    return hukum(t, oo.takim_oranlari(oos))
+
+
+def _tasima(i: pd.Series, kotasyon: str = "basit") -> pd.Series:
+    """Yıllık faizin aylık log taşıması (%), tek kural (`ortak_olc.aylik_log_tasima`)."""
+    return oo.aylik_log_tasima(i, kotasyon)
 
 
 # ───────────────────────────────────────────────────────── TL faiz zinciri
@@ -267,11 +279,11 @@ def _fama_cerceve() -> pd.DataFrame:
     ds_ya = np.log(ya).diff() * 100
     ds = pd.concat([ds_tc[ds_tc.index < KUR_EKLEM], ds_ya[ds_ya.index >= KUR_EKLEM]]).sort_index()
     df = pd.DataFrame({"i": i_son, "i_ort": i_ort, "i_gecelik": g_son, "istar": istar, "kaynak": i_kay})
-    df["x"] = (df["i"] - df["istar"]) / 12
-    df["x_ort"] = (df["i_ort"] - df["istar"]) / 12
-    df["x_gecelik"] = (df["i_gecelik"] - df["istar"]) / 12
+    df["x"] = _tasima(df["i"]) - _tasima(df["istar"])
+    df["x_ort"] = _tasima(df["i_ort"]) - _tasima(df["istar"])
+    df["x_gecelik"] = _tasima(df["i_gecelik"]) - _tasima(df["istar"])
     # tuzak 3: günlük bileşik aylık log birikimi (ay başına 365/12 gün)
-    df["x_bilesik"] = (np.log1p(df["i"] / 36500) * (365 / 12) - np.log1p(df["istar"] / 36500) * (365 / 12)) * 100
+    df["x_bilesik"] = _tasima(df["i"], "gecelik") - _tasima(df["istar"], "gecelik")
     df["y"] = ds.shift(-1).reindex(df.index)
     df["y_tcmb"] = ds_tc.shift(-1).reindex(df.index)
     df["hedef"] = df.index + pd.offsets.MonthBegin(1)
@@ -367,9 +379,8 @@ def _fama_try() -> dict:
 # ───────────────────────────────────────────────────────── G10 bacağı
 @lru_cache(maxsize=1)
 def _cnbc_aysonu() -> pd.DataFrame:
-    c = oo.oku("cnbc_kur_gunluk")
-    c = c[c.index.dayofweek < 5]
-    return c.resample("MS").last()
+    """CNBC ay sonu (ortak tanım `ortak_olc.cnbc_kur`: hafta içi, bozuk kotasyon günleri çıkarılmış)."""
+    return oo.cnbc_kur().resample("MS").last()
 
 
 def _dk(df: pd.DataFrame, gecikme: int) -> dict:
@@ -412,7 +423,7 @@ def _fama_g10() -> dict:
             continue
         s = (-np.log(c[kol]) if ters else np.log(c[kol])) * 100
         ds = s.diff()
-        d = pd.DataFrame({"x": (bis[ulke] - istar) / 12, "y": ds.shift(-1)})
+        d = pd.DataFrame({"x": _tasima(bis[ulke]) - _tasima(istar), "y": ds.shift(-1)})
         d = d[(d.index >= pd.Timestamp("2000-01-01")) & (d.index <= SIGNAL_SON)]
         r = _fama(d)
         r["eksik_faiz_ayi"] = int(d["x"].isna().sum())
@@ -424,7 +435,7 @@ def _fama_g10() -> dict:
 
     def _dk_oto(z: pd.DataFrame) -> dict:
         n_t = z["t"].nunique()
-        return _dk(z, int(math.floor(4 * (n_t / 100) ** (2 / 9))))
+        return _dk(z, oo.otomatik_gecikme(n_t))             # Newey–West kural gecikmesi, tek tanım
     havuzlu = _dk_oto(hv)
     alt = {}
     for ad, a, b in G10_ALT:
@@ -502,30 +513,22 @@ def sekil_18() -> dict:
         "sacilim": {"tarih": [_ay(t) for t in sac.index], "faiz_farki_aylik_yuzde": sac["x"].tolist(),
                     "kur_degisimi_yuzde": sac["y"].tolist(), "yonetilen": [int(v) for v in sac["yonetilen"]]},
         "referans": {"uip_beta": 1.0, "rastgele_yuruyus_beta": 0.0},
+        "n": int(len(sac)), "ilk": _ay(sac.index.min()), "son": _ay(sac.index.max()),
+        "n_cubuk": len(cubuk), "n_kayan": int(len(kb)),
+        "kaynak": ["gecelik_gunluk", "fonlama_gunluk", "kuresel_aylik", "usdtry_tcmb_gunluk", "usdtry_yahoo_gunluk",
+                   "cnbc_kur_gunluk", "bulut/bis_politika"],
         "yontem": "Çubuklar Fama eğimini ±2 Newey–West standart hatasıyla gösterir; kayan çizgi TRY için 60 aylık pencerede aynı regresyondur.",
     }
 
 
 # ───────────────────────────────────────────────────────── p11b EM taşıma sepeti
-SICRAMA_ESIK = 0.035      # log; sıçrama ve ertesi gün geri dönüş, ikisi de bu eşiğin üstünde
+SICRAMA_ESIK = oo.EM_SICRAMA_ESIK      # log; tek tanım ortak_olc'de (tuzak 16)
 
 
-@lru_cache(maxsize=None)
 def _em_kur_temiz(kod: str) -> tuple[pd.Series, tuple]:
-    """Yahoo EM kuru, YALITILMIŞ BOZUK KOTASYONLARI çıkarılmış (tuzak 16).
-
-    Kural: bir günün log değişimi ve ertesi günün log değişimi ikisi de eşiği aşıyor,
-    işaretleri ters ve iki günlük net hareket küçüğünün yarısından az → o gün bozuk
-    sayılır ve seriden çıkar (haftalık ve aylık örnekleme önceki günü alır). Eşik
-    ECB referans kurlarına karşı ölçülerek kondu: %3,5'te işaretlenen her gün ECB'den
-    %3'ten fazla sapıyor (iki bozuk günün arasında kalan bir doğru gün dışında; onu
-    çıkarmak örneklemeyi değiştirmez), %3'te gerçek oynak günler de yakalanıyor."""
-    s = oo.em_kur(kod)
-    d = np.log(s).diff()
-    n = d.shift(-1)
-    m = ((d.abs() > SICRAMA_ESIK) & (n.abs() > SICRAMA_ESIK) & (np.sign(d) != np.sign(n))
-         & ((d + n).abs() < 0.5 * np.minimum(d.abs(), n.abs()))).fillna(False)
-    return s[~m], tuple(_iso(t) for t in s.index[m])
+    """Yahoo EM kuru, YALITILMIŞ BOZUK KOTASYONLARI çıkarılmış (tuzak 16); kural ve eşik
+    `ortak_olc._em_kur_temiz`te (b02 ve b08 de aynı seriyi okur)."""
+    return oo.em_kur(kod), tuple(oo.em_kur_temizlik(kod))
 
 
 def _em_veri_denetimi() -> dict:
@@ -577,7 +580,7 @@ def _em_cerceve(tr_faiz: str = "politika") -> tuple[pd.DataFrame, pd.DataFrame, 
     for kod in list(s_d):
         s = np.log(s_d[kod]) * 100
         ds = s.diff()
-        x = ((i_d[kod] - istar) / 12).reindex(ds.index)
+        x = (_tasima(i_d[kod], EM_KOTASYON.get(kod, "basit")) - _tasima(istar)).reindex(ds.index)
         r = x.shift(1) - ds                       # r(t) = x(t−1) − Δs(t)
         r = r[(r.index > EM_BAS) & (r.index <= son_ortak)]
         r_d[kod], x_d[kod], ds_d[kod] = r, x.shift(1).reindex(r.index), ds.reindex(r.index)
@@ -718,16 +721,17 @@ def p11b() -> dict:
                   "sepet_politika_ayni_orneklem": {k: v for k, v in _getiri_ozeti(sepet.reindex(sepet_f.index)).items() if k in alanlar},
                   "not": "fonlama maliyeti 2011'de başladığı için bu satırlar ana satırdan kısa örneklemdedir; kıyas aynı aylarla yapılır"}
     # Konvansiyon duyarlılığı: Brezilya politika faizi (Selic) 252 iş günü tabanında YILLIK
-    # EFEKTİF kote edilir, öbür politika faizleri basit; i/12 efektif bir oranın aylık log
-    # taşımasını büyütür. Ana satır görev formülüyle (i/12) kalır, düzeltilmiş hâli yanındadır.
+    # EFEKTİF kote edilir, öbür politika faizleri basit (tuzak 19). Ana satır tek kuralla
+    # (ln(1 + i)/12) kurulur; basit i/12 ile kurulmuş hâli yanındadır.
     ib = B[("i_yerel", "brl")]
-    brl_duz = R["brl"] - (ib - 100 * np.log1p(ib / 100)) / 12
+    brl_basit = R["brl"] + (_tasima(ib) - _tasima(ib, "yillik_efektif"))
     Rk = R.copy()
-    Rk["brl"] = brl_duz
+    Rk["brl"] = brl_basit
     sepet_k = Rk.mean(axis=1, skipna=False)
-    konv = {"aciklama": "Brezilya politika faizi yıllık efektif kotelenir; bu satırda aylık taşıma ln(1 + i)/12 ile kuruldu, öbür paralar değişmedi",
-            "brl_ort_yillik_yuzde": float(brl_duz.mean() * 12),
-            "brl_ana_satira_gore_fark_yillik_puan": float((brl_duz - R["brl"]).mean() * 12),
+    konv = {"aciklama": "Ana satır Selic'i yıllık efektif kotasyonuyla taşır (ln(1 + i)/12); bu satırda BRL'nin aylık taşıması basit i/12 ile kuruldu, öbür paralar değişmedi",
+            "ana_satir_konvansiyonu": "Selic ln(1 + i)/12, öbür politika faizleri i/12 (aylık log taşıma, tek kural)",
+            "brl_ort_yillik_yuzde": float(brl_basit.mean() * 12),
+            "brl_ana_satira_gore_fark_yillik_puan": float((brl_basit - R["brl"]).mean() * 12),
             "sepet": {k: v for k, v in _getiri_ozeti(sepet_k).items()
                       if k in ("n", "ort_yillik_yuzde", "oynaklik_yillik_yuzde", "carpiklik", "azami_dusus_yuzde")},
             "sepet_try_haric_ort_yillik_yuzde": float(Rk[[k for k, *_ in EM]].mean(axis=1, skipna=False).mean() * 12)}
@@ -742,7 +746,7 @@ def p11b() -> dict:
         "kunye": kun,
         "n": int(sepet.notna().sum()), "ilk": _ay(sepet.dropna().index.min()), "son": _ay(sepet.dropna().index.max()),
         "yontem": "Her para için aylık taşıma getirisi, bir önceki ay sonundaki politika faizi farkının on ikide biri eksi o ayki kur log değişimidir (yerel parayı alıp doları borçlanan pozisyon); sepet beş paranın eşit ağırlıklı ortalamasıdır. VIX koşulu, getiri ayının VIX ortalamasının o güne kadarki aylık ortalamaların 75. yüzdeliğini (bir önceki aya kadar) aşmasıdır.",
-        "formul": "r(t) = (i − i*)(t−1)/12 − [s(t) − s(t−1)],  s = 100·ln(USD/yerel)",
+        "formul": "r(t) = τ(i)(t−1) − τ(i*)(t−1) − [s(t) − s(t−1)],  s = 100·ln(USD/yerel); τ(i) = i/12 (basit kotasyon), Brezilya Selic için 100·ln(1 + i/100)/12 (yıllık efektif)",
         "kaynak": ["em_kur_yahoo_gunluk", "usdtry_yahoo_gunluk", "em_politika_aylik", "fonlama_gunluk", "kuresel_aylik",
                    "yahoo_dxy_vix_gunluk", "bulut/bis_politika", "bulut/ecb_kur"],
         "saat": "EM kurları Yahoo günlük barı (Londra gece yarısı; cuma değeri pazartesi açılışı), TRY 2023-12-18'den İstanbul 18:00; politika faizleri ay sonu; VIX ay ortalaması",
@@ -754,7 +758,10 @@ def sekil_19() -> dict:
     sepet = R.mean(axis=1, skipna=False).dropna()
     trh = R[[k for k, *_ in EM]].mean(axis=1, skipna=False).reindex(sepet.index)
     v = _vix_aylik().reindex(sepet.index)
-    return {"tarih": [_ay(t) for t in sepet.index],
+    return {"n": int(len(sepet)), "ilk": _ay(sepet.index.min()), "son": _ay(sepet.index.max()),
+            "kaynak": ["em_kur_yahoo_gunluk", "usdtry_yahoo_gunluk", "em_politika_aylik", "fonlama_gunluk",
+                       "kuresel_aylik", "yahoo_dxy_vix_gunluk", "bulut/bis_politika"],
+            "tarih": [_ay(t) for t in sepet.index],
             "sepet_kumulatif_yuzde": sepet.cumsum().tolist(),
             "sepet_try_haric_kumulatif_yuzde": trh.cumsum().tolist(),
             "vix_ay_ort": v["vix"].tolist(), "vix_esik": v["esik"].tolist(),
@@ -895,7 +902,7 @@ def p11c() -> dict:
              "em_sepet": {"tarih": [_iso(t) for t in ke.index], "b_dolar": ke["ddolar"].tolist(), "b_vix": ke["dvix"].tolist(), "b_us10_bp": ke["dus10_bp"].tolist()},
              "try_em_sepete": {"tarih": [_iso(t) for t in ks.index], "b": ks["dem"].tolist()},
              "pencere_hafta": HAFTA_PENCERE, "not": "52 haftalık pencere; her ayın son haftası yazılır; TRY pencereleri yönetilen kur haftalarını atlar"}
-    sonr = art.loc["2023-07-01":]
+    sonr = art.loc[oo.YON_SONRASI_ILK:]
     return {
         "donemler": don, "cuma_ornekleme": cuma, "dxy_sinama": dxy, "kayan": kayan,
         "em_veri_denetimi": _em_veri_denetimi(),
@@ -916,7 +923,7 @@ def p11c() -> dict:
 # ───────────────────────────────────────────────────────── p11d yabancı akım
 @lru_cache(maxsize=1)
 def _akim_cerceve() -> pd.DataFrame:
-    w = b01._tr_haftalik(b01.TR_ORNEK_SON_GUN, b01.DIBS_ETIKET_ONCU)
+    w = b01._tr_haftalik(b01.TR_ORNEK_SON_GUN, DIBS_HIZA)
     w = w[~w["_kismi"].astype(bool)][["dkur_yuzde", "d2_bp", "_gun"]]
     a = oo.oku("yabanci_akim_haftalik")
     a = a.copy()
@@ -995,7 +1002,10 @@ def sekil_20() -> dict:
     ar = art.loc[a0:, "artik"]
     ar_kum = ar.cumsum()
     idx = df.index
-    return {"tarih": [_iso(t) for t in idx],
+    return {"n": int(len(idx)), "ilk": _iso(idx.min()), "son": _iso(idx.max()),
+            "kaynak": ["yabanci_akim_haftalik", "usdtry_yahoo_gunluk", "em_kur_yahoo_gunluk", "cnbc_kur_gunluk",
+                       "abd_hazine_gunluk", "yahoo_dxy_vix_gunluk"],
+            "tarih": [_iso(t) for t in idx],
             "try_artik_kumulatif_yuzde": ar_kum.reindex(idx).tolist(),
             "akim_dibs_kumulatif_milyar_usd": (df["dibs"].cumsum() / 1000).tolist(),
             "akim_hisse_kumulatif_milyar_usd": (df["hisse"].cumsum() / 1000).tolist(),
@@ -1026,11 +1036,9 @@ def p11e() -> dict:
         return {**kurulmadi(f"anket kur beklentisi ya da ABD 1 yıllık getirisi gelmedi: {e}"), "formul": FORMUL_11E}
     if "usdtry_12a" not in pka.columns:
         return {**kurulmadi("anketin 12 ay sonrası kur beklentisi arşivde yok"), "formul": FORMUL_11E}
-    takvim = b01._tr_takvim()
-    n1y = oo.oku("dibs_egri_gunluk")["n1y"]
-    n1y = n1y[n1y.index.isin(takvim)].shift(-b01.DIBS_ETIKET_ONCU)   # tuzak 8
+    n1y = oo.dibs(DIBS_HIZA, ("n1y",))["n1y"]                          # tuzak 11
     s, _ = oo.usdtry()
-    us_b = ((1 + us1y / 200) ** 2 - 1) * 100                           # yarıyıllık → yıllık bileşik
+    us_b = oo.bilesik(us1y, "yariyillik")                              # yarıyıllık → yıllık bileşik
     E = pka["usdtry_12a"].dropna()
 
     def kur(pencere: str) -> pd.DataFrame:
@@ -1094,19 +1102,20 @@ def arac_kur() -> dict:
     try:
         us = bulut.abd_1y()
         i_star, i_star_ad, i_star_gun = float(us.iloc[-1]), "ABD Hazinesi 1 yıllık par getirisi", us.index[-1]
-        i_star_b = ((1 + i_star / 200) ** 2 - 1) * 100
+        i_star_b = oo.bilesik(i_star, "yariyillik")
     except bulut.VeriYok:
         k = oo.oku("kuresel_aylik")["faiz_abd"].dropna()
         i_star, i_star_ad, i_star_gun = float(k.iloc[-1]), "ABD politika faizi (BIS)", k.index[-1]
         i_star_b = i_star
     i = float(tl.iloc[-1])
-    i_b = ((1 + i / 36500) ** 365 - 1) * 100
+    i_b = oo.bilesik(i, "gecelik")
     n1y = oo.oku("dibs_egri_gunluk")["n1y"].dropna()
-    # DİBS gösterge etiketi gün sonu piyasasının iki iş günü önündedir (Bölüm 1 tuzak 6):
-    # son etiketli değerin piyasa günü Türkiye takviminde iki iş günü geridedir.
-    tk = b01._tr_takvim()
+    # DİBS hizası "gun_sonu" (tuzak 11): son etiketli değerin piyasa günü Türkiye
+    # takviminde DIBS_KAYMA["gun_sonu"] iş günü geridedir.
+    tk = oo.tr_takvim()
+    k = oo.dibs_kayma(DIBS_HIZA)
     j_dibs = int(tk.searchsorted(n1y.index[-1]))
-    dibs_piyasa = tk[j_dibs - b01.DIBS_ETIKET_ONCU] if j_dibs >= b01.DIBS_ETIKET_ONCU else None
+    dibs_piyasa = tk[j_dibs - k] if j_dibs >= k else None
     basabas_b = ((1 + i_b / 100) / (1 + i_star_b / 100) - 1) * 100
     out = {
            # Araç 4'ün okuduğu üç alan (arac_veri.kur): aracın formülü c = (1 + i)/(1 + i*) − 1

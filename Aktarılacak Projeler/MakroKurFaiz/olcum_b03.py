@@ -14,27 +14,42 @@ Pratikler
   sekil_03 Taylor bandı, sekil_04 faiz farkı ↔ EUR/USD.
 
 Öbür modüllerin kullanabileceği yardımcılar (b04 içe aktarır; b03 hiçbir bölüm
-modülünü içe aktarmaz): `regresyon`, `tr_takvim`, `tr_gunluk_degisim`,
-`dibs_gecikme`, `olay_kapisi`, `sakin_gunler`, `abd_gunluk_degisim`,
-`yayim_gunu_orani`, `hp_suzgec`, `kurulmadi`.
+modülünü içe aktarmaz): `dibs_gecikme` (ölçüm), `sakin_gunler`,
+`abd_gunluk_degisim`, `yayim_gunu_orani`, `hp_suzgec`, `cikti_acigi`. Regresyon,
+Türkiye takvimi, DİBS hizası, günlük değişim çerçevesi, olay kapısı ve dolar
+sepeti `ortak_olc`dedir (tutarlılık turu, 02.10.2026; bu modüldeki kopyaları
+kaldırıldı).
+
+HİZA. PPK (14:00 TSİ) ve GSYH (10:00 TSİ) günlerinin çerçevesi DİBS değişimini
+USD/TRY'nin GÜN SONU kapanışıyla aynı piyasa gününde ölçer; DİBS bu yüzden
+"gun_sonu" hizasındadır (`ortak_olc.DIBS_KAYMA`, k = 2): D gününe D+2 iş günü
+etiketli değer yazılır ve 14:00 kararı D'nin değişimine düşer. Önceki sürüm
+ölçülen BİR iş günlük gecikmeyi kullanıyordu; o sayı TCMB gösterge kurunun
+SABAH sabitlemesine göredir ("sabah" hizası) ve 14:00 kararını D'nin değil
+D+1'in değişimine yazıyordu (tuzak 1). `dibs_gecikme` ölçüm olarak durur ve
+"sabah" sabitine karşı sınanır. Kapı `ortak_olc.olay_kapisi`nin güçlü kuralıdır
+(gün eşlemeli 1.000 rastgele kümenin %95'ini aşmak); kur serilerinde yönetilen
+kur dönemi kapıya girmez. Cuma: 18.12.2023 öncesi cuma günlerinin USD/TRY
+değişimi hafta sonunu taşır ve çerçeveden boşaltılır (`cuma_dus=True`).
 
 ÖLÇÜM TUZAKLARI (bu modül yazılırken ölçüldü)
-1. DİBS EĞRİSİNİN TARİHİ PİYASADAN BİR İŞ GÜNÜ GERİDE. Etiket t'deki değer
-   t−1'in piyasasını taşıyor. Ölçü: DİBS 2 ve 5 yıllık günlük değişiminin TCMB
-   gösterge kuruyla (15:30 ilanı) çapraz korelasyonu 2013–2021'in her yılında
-   bir gün kaydırmada tepe yapıyor (5 yıllıkta 0,51–0,74; aynı günde ≈0).
+1. DİBS EĞRİSİNİN TARİHİ PİYASADAN BİR İŞ GÜNÜ GERİDE (sabah sabitlemesine göre).
+   Etiket t'deki değer t−1'in SABAH sabitlemesini taşıyor. Ölçü: DİBS 2 ve 5 yıllık
+   günlük değişiminin TCMB gösterge kuruyla (15:30 ilanı, sabah sabitlemesi) çapraz
+   korelasyonu 2013–2021'in her yılında bir gün kaydırmada tepe yapıyor (5 yıllıkta
+   0,51–0,74; aynı günde ≈0). Gün sonu kapanışlarına göre kayma iki iş günüdür
+   (Bölüm 2); bu modülün çerçevesi gün sonu hizasındadır (yukarıda HİZA).
    Olaylarla da tutuyor: Başkan'ın görevden alındığı cumartesinin ardından
    (22.03.2021 pazartesi) 2 yıllık sıçrama 23.03 etiketinde (+266 bp, 22.03'te
    +23 bp); 19.03.2025 sabahı başlayan satış 20.03 etiketinde (+227 bp); 24.08.2023
-   kararının 3 aylık tepkisi 25.08 etiketinde. Bu modül DİBS'i ölçülen gecikme
-   kadar öne alır (`dibs_gecikme`); Bölüm 1'in haftalık kadranı ve öbür bölümler
-   saklı tarihle çalışıyorsa aynı haftada kur ile getiri bir gün kayık ölçülür.
-2. PPK GÜNÜ DİBS DEĞİŞİMİ SIRADAN GÜNDEN AYRIŞMIYOR. Plasebo profilinin tepesi
-   hiçbir düğümde ve hiçbir tarih sözleşmesinde (saklı, bir gün öne alınmış,
-   iki günlük pencere) karar gününe oturmuyor; 3 aylık düğüm sıradan günlerde
-   de yüzlerce baz puan oynuyor (ör. 08→09.04.2024 −489 bp). İma sürprizi bu
-   seriden kurulamaz; kapı düştüğü için yayımlanmaz (`tani` altında, yalnız tanı).
-   Kur (Yahoo) kapıyı geçiyor; tepki anket sürprizine karşı ölçülür.
+   kararının 3 aylık tepkisi 25.08 etiketinde.
+2. PPK GÜNÜ DİBS KAPISI HİZAYA BAĞLI. Bir iş günü öne alınmış (sabah hizası)
+   seride plasebo profilinin tepesi hiçbir düğümde karar gününe oturmuyordu;
+   gün sonu hizasında sonucu `kapi` satırları düğüm düğüm verir. 3 aylık düğüm
+   sıradan günlerde de yüzlerce baz puan oynuyor (ör. 08→09.04.2024 −489 bp):
+   ima sürprizi ancak 3 aylık düğüm kapıyı geçerse kurulur, geçmezse `tani`
+   altında yalnız tanı olarak durur. Kur (Yahoo) kapıyı geçiyor; tepki anket
+   sürprizine karşı ölçülür.
 3. TCMB gösterge kurunun PPK profili karar gününde değil ertesi günde tepe
    yapıyor. Sebep tepkinin geç gelmesi DEĞİL, kurun ölçüm anı: beş 14:00
    kararında (13.09.2018, 19.11.2020, 22.06.2023, 24.08.2023, 21.03.2024) Yahoo
@@ -56,8 +71,10 @@ modülünü içe aktarmaz): `regresyon`, `tr_takvim`, `tr_gunluk_degisim`,
    %7,5–8) etkin faiz değildi. PPK dosyası 23.05.2018'de 8,00, 07.06.2018'de
    17,75 yazar: aradaki 975 baz puan tanım değişikliğidir. 07.06.2018 kararının
    önceki etkin oranı AOFM'dir (16,50). Karar değişimi 07.06.2018'de başlar.
-6. Fonlama dosyasında politika faizi ve AOFM karar gününün ertesi günü değişir;
-   kararın kendisi PPK dosyasından okunur.
+6. Fonlama dosyasında politika faizi karar GÜNÜNDE değişir (22.06.2023: 15,0;
+   21.03.2024: 50,0), AOFM ve TLREF ertesi gün (ilk karar sonrası fonlama ve
+   fiksing); kararın kendisi PPK dosyasından okunur. (Doğrulama turu, 02.10.2026:
+   faizi değiştiren 41 kararda politika D, TLREF D+1, AOFM D+1 hareket ediyor.)
 7. PKA toplantı beklentisi 05.2025'e kadar "cari ay sonu bir hafta vadeli repo",
    sonra "ilk toplantı" sorusudur. Karar ayının anketi eşlenir: ayın erken
    günlerindeki kararlardan dördünde (12.09.2019, 12.12.2019, 11.09.2025,
@@ -68,12 +85,13 @@ modülünü içe aktarmaz): `regresyon`, `tr_takvim`, `tr_gunluk_degisim`,
    sorununu ölçer, GSYH revizyonlarını ölçmez.
 9. 18.12.2023 öncesi Yahoo USD/TRY serisinde cuma değeri pazartesi barının
    başındaki fiyattır (Bölüm 1); cuma günü düşen olaylarda kur değişimi hafta
-   sonunu da taşır.
+   sonunu da taşır. Çerçeve o cumaların kur değişimini boşaltır
+   (`ortak_olc.tr_gunluk_degisim(cuma_dus=True)`); pazartesi değişimi kalır.
 10. ÖRNEKLEM DIŞI KIYAS YALNIZ SIFIRA KARŞI YAPILIRSA SÜRÜKLENME KAPIYI AÇAR.
    Sürünen bir seride (2023 sonrası USD/TRY) sabit terim tek başına "değişim
    sıfır" tahminini yener: aylık kur–TÜFE sürprizi regresyonunda oran 0,13
-   çıktı, koşulsuz ortalamaya karşı 0,91. `regresyon` iki kıyası da yapar ve
-   hüküm için ikisini de ister.
+   çıktı, koşulsuz ortalamaya karşı 0,91. `ortak_olc.regresyon` iki kıyası da
+   yapar ve hüküm için ikisini de ister.
 11. Küçük örneklemde Newey–West t'si anlamsızlaşır: 2021-01…11'de 11 kararın
    yalnız dördünde anket sürprizi sıfırdan farklı ve kur eğiminin t'si −17
    çıkıyor. Eğimi yalnız sıfırdan farklı sürprizler tanımladığı için "n < 10
@@ -140,15 +158,15 @@ GECIKME_YILLARI = range(2013, 2022)   # kurun serbest dalgalandığı ve korelas
 
 DONEM_PPK = [
     ("d2016_2020", "2016-01-01", "2020-12-31", "2016–2020"),
-    ("d2021", "2021-01-01", "2021-11-30", "2021-01…2021-11"),
-    ("yonetilen", "2021-12-01", "2023-06-30", "yönetilen kur 2021-12…2023-06"),
-    ("d2023_2026", "2023-07-01", "2026-09-30", "2023-07…2026-09"),
+    ("d2021", "2021-01-01", oo.YON_ONCESI_SON, f"2021-01…{oo.YON_ONCESI_AY}"),
+    ("yonetilen", oo.YON_ILK, oo.YON_SON, f"yönetilen kur {oo.YON_AY[0]}…{oo.YON_AY[1]}"),
+    ("d2023_2026", oo.YON_SONRASI_ILK, "2026-09-30", f"{oo.YON_SONRASI_AY}…2026-09"),
 ]
 DONEM_TAYLOR = [
     ("d2013_2020", "2013-01", "2020-12", "2013–2020"),
-    ("d2021", "2021-01", "2021-11", "2021-01…2021-11"),
-    ("yonetilen", "2021-12", "2023-06", "yönetilen kur 2021-12…2023-06"),
-    ("d2023_2026", "2023-07", "2026-08", "2023-07…2026-08"),
+    ("d2021", "2021-01", oo.YON_ONCESI_AY, f"2021-01…{oo.YON_ONCESI_AY}"),
+    ("yonetilen", oo.YON_AY[0], oo.YON_AY[1], f"yönetilen kur {oo.YON_AY[0]}…{oo.YON_AY[1]}"),
+    ("d2023_2026", oo.YON_SONRASI_AY, "2026-08", f"{oo.YON_SONRASI_AY}…2026-08"),
 ]
 DONEM_3C = [
     ("d1999_2007", "1999-01-01", "2007-12-31", "2000–2007 (kur arşivi 2000'de başlar)"),
@@ -158,34 +176,19 @@ DONEM_3C = [
 ]
 KARAR_ILK = pd.Timestamp("2018-06-07")   # tuzak 5
 DIBS_DUGUM = ("n3a", "n6a", "n1y", "n2y", "n5y", "n7y")
+HIZA = "gun_sonu"                          # DİBS ↔ Yahoo gün sonu kapanışı (yukarıda HİZA)
+KUR_SUTUN = ("usdtry", "usdtry_tcmb")       # kapıda yönetilen kur dönemi dışarıda
 
 
 # ─────────────────────────────────────────────────────────────── yardımcılar
-def _iso(t) -> str | None:
-    if t is None:
-        return None
-    if isinstance(t, pd.Period):
-        return str(t)
-    try:
-        return str(pd.Timestamp(t).date())
-    except (ValueError, TypeError):
-        return str(t)
-
-
-def _f(x) -> float | None:
-    try:
-        x = float(x)
-    except (TypeError, ValueError):
-        return None
-    return x if math.isfinite(x) else None
+_iso, _f = oo._iso, oo._f                  # tek tanımlar ortak_olc'de
 
 
 def _liste(s: pd.Series) -> list:
     return [_f(v) for v in s.values]
 
 
-def kurulmadi(sebep: str, **ek) -> dict:
-    return {"durum": "kurulmadi", "sebep": sebep, **ek}
+kurulmadi = oo.kurulmadi
 
 
 def hp_suzgec(y: np.ndarray, lam: float = HP_LAMBDA) -> np.ndarray:
@@ -198,98 +201,12 @@ def hp_suzgec(y: np.ndarray, lam: float = HP_LAMBDA) -> np.ndarray:
     return np.linalg.solve(np.eye(n) + lam * D.T @ D, y)
 
 
-def regresyon(y: pd.Series, x: pd.Series, ilk_pencere: int | None = None,
-              asgari_bilgili: int | None = None) -> dict:
-    """y = a + b·x, Newey–West; örneklem dışı genişleyen pencere kıyası; hüküm.
-
-    n < 10 ise vaka tablosu (yalnız noktalar, t yok). Örneklem dışı kıyas İKİ
-    saf ölçüte karşı yapılır: rastgele yürüyüş (değişim sıfır) ve koşulsuz
-    ortalama (sürüklenmeli rastgele yürüyüş). Yalnız sıfıra karşı sınanınca
-    sürüklenen bir seride (sürünen USD/TRY) sabit terim tek başına kıyası
-    yener ve eğimin katkısı ölçülmez. Hüküm: |t| ≥ 2 ve İKİ oran da < 1 (en az
-    on tahminle) birlikte yoksa "tarif edici".
-
-    `asgari_bilgili`: açıklayıcı değişkeni çoğunlukla SIFIR olan seride (anket
-    sürprizi, karar değişimi) eğimi yalnız sıfırdan farklı gözlemler tanımlar;
-    onların sayısı bu eşiğin altındaysa satır yine vaka tablosudur (19 kararın
-    6'sında sürpriz olan bir dönemin t'si altı gözlemin t'sidir). Varsayılan
-    kapalı: öbür modüllerin davranışı değişmez."""
-    d = pd.concat([y.rename("y"), x.rename("x")], axis=1, sort=True).dropna()
-    n = len(d)
-    out = {"n": int(n), "ilk": _iso(d.index.min()) if n else None, "son": _iso(d.index.max()) if n else None}
-    if asgari_bilgili is not None:
-        nb = int((d["x"].abs() > 1e-9).sum())
-        out["n_bilgili"] = nb
-        if nb < asgari_bilgili and n >= 10:
-            out.update({"durum": "vaka tablosu",
-                        "not": f"eğimi tanımlayan sıfırdan farklı gözlem {nb}: test istatistiği yazılmaz",
-                        "noktalar": [[_iso(t), _f(r.x), _f(r.y)] for t, r in d.iterrows() if abs(r.x) > 1e-9]})
-            return out
-    if n < 10:
-        out.update({"durum": "vaka tablosu", "not": "on gözlemden az: test istatistiği yazılmaz",
-                    "noktalar": [[_iso(t), _f(r.x), _f(r.y)] for t, r in d.iterrows()]})
-        return out
-    if float(d["x"].std()) == 0.0:
-        out.update(kurulmadi("açıklayıcı değişken bu dönemde hiç değişmiyor"))
-        return out
-    r = oo.hac(d["y"].values, d["x"].values)
-    if r.get("yetersiz"):
-        out.update(kurulmadi("regresyon için gözlem yetersiz"))
-        return out
-    out.update({"sabit": r["b"][0], "egim": r["b"][1], "se": r["se"][1], "t": r["t"][1],
-                "r2": r["r2"], "gecikme": r["gecikme"],
-                "korelasyon": _f(np.corrcoef(d["x"], d["y"])[0, 1])})
-    ip = ilk_pencere if ilk_pencere is not None else max(10, n // 2)
-    oranlar = []
-    for anahtar, kiyas, ad in (("oos", "sifir", "rastgele yürüyüş (değişim sıfır)"),
-                               ("oos_ortalama", "ortalama", "koşulsuz ortalama")):
-        if n - ip >= 10:
-            o = oo.oos_kiyas(d["y"], d["x"], ip, kiyas)
-            out[anahtar] = {"n": o["n"], "mse_oran": o.get("mse_oran"), "dm_t": o.get("dm_t"),
-                            "kiyas": ad, "ilk": o.get("ilk")}
-            oranlar.append(o.get("mse_oran"))
-        else:
-            out[anahtar] = kurulmadi("örneklem dışı sınama için en az on tahmin gerekir")
-            oranlar.append(None)
-    gecti = abs(out["t"]) >= 2 and all(o is not None and o < 1 for o in oranlar)
-    out["hukum"] = "ölçülü" if gecti else "tarif edici"
-    out["birini_disarida_birak"] = loo_egim(d["y"], d["x"])
-    return out
-
-
-def loo_egim(y: pd.Series, x: pd.Series) -> dict:
-    """Birini dışarıda bırakma: her gözlem tek tek atılınca EKK eğiminin aralığı
-    ve eğimi en çok oynatan gözlem (kapalı biçim, döngüsüz)."""
-    xv, yv = np.asarray(x, float), np.asarray(y, float)
-    n = len(xv)
-    sx, sy, sxx, sxy = xv.sum(), yv.sum(), (xv * xv).sum(), (xv * yv).sum()
-    m = n - 1
-    pay = m * (sxy - xv * yv) - (sx - xv) * (sy - yv)
-    payda = m * (sxx - xv * xv) - (sx - xv) ** 2
-    with np.errstate(divide="ignore", invalid="ignore"):
-        b = np.where(payda > 0, pay / payda, np.nan)
-    b_tam = (n * sxy - sx * sy) / (n * sxx - sx * sx)
-    if not np.isfinite(b).any():
-        return kurulmadi("açıklayıcı değişken tek gözlem dışında sabit")
-    j = int(np.nanargmax(np.abs(b - b_tam)))
-    return {"egim_min": _f(np.nanmin(b)), "egim_max": _f(np.nanmax(b)),
-            "en_etkili_gozlem": _iso(x.index[j]), "o_gozlemsiz_egim": _f(b[j])}
-
-
-@lru_cache(maxsize=1)
-def tr_takvim() -> pd.DatetimeIndex:
-    """Türkiye iş günü takvimi: fonlama (EVDS iş günü; tatil yok) ∩ DİBS eğri günleri."""
-    f = oo.oku("fonlama_gunluk").index
-    d = oo.oku("dibs_egri_gunluk").index
-    return pd.DatetimeIndex(f.intersection(d))
-
-
 @lru_cache(maxsize=1)
 def dibs_gecikme() -> dict:
     """DİBS etiket gecikmesi (iş günü): DİBS 2 ve 5 yıllık günlük değişiminin
     TCMB gösterge kuruyla (ilan günü, 15:30) çapraz korelasyonunun yıl yıl
     tepe yaptığı kayma; karar en sık tepe."""
-    tk = tr_takvim()
+    tk = oo.tr_takvim()
     d = oo.oku("dibs_egri_gunluk")
     tc = oo.usdtry_tcmb()
     x = pd.DataFrame({"n2y": d["n2y"].reindex(tk).diff(), "n5y": d["n5y"].reindex(tk).diff(),
@@ -308,6 +225,8 @@ def dibs_gecikme() -> dict:
     karar = max(say, key=say.get)
     tatil = _tatil_kaniti()
     return {"gecikme_is_gunu": int(karar), "tepe_sayisi": {str(k): v for k, v in say.items()},
+            "ortak_sabah_sabiti": oo.DIBS_KAYMA["sabah"],
+            "ortak_sabah_sabitiyle_tutarli": bool(int(karar) == oo.DIBS_KAYMA["sabah"]),
             "yillik": yillik, "ilk_yil": GECIKME_YILLARI[0], "son_yil": GECIKME_YILLARI[-1],
             "yontem": "DİBS 2 ve 5 yıllık getirisinin günlük değişimi, TCMB gösterge kurunun ilan günü değişimiyle "
                       "0, 1 ve 2 iş günü kaydırılarak yıl yıl korelasyona sokuldu; kur serbestçe dalgalanırken "
@@ -328,7 +247,7 @@ OLAY_KANIT = (("2021-03-22", "pazartesi; görevden alma hafta sonunda"),
 
 def _olay_kaniti() -> list:
     d = oo.oku("dibs_egri_gunluk")["n2y"]
-    tk = tr_takvim()
+    tk = oo.tr_takvim()
     dd = d.reindex(tk).diff() * 100
     out = []
     for t, ad in OLAY_KANIT:
@@ -351,7 +270,7 @@ def _tatil_kaniti() -> dict:
     günü geride ise tatil etiketi önceki piyasa gününün hareketini taşır ve
     ertesi etiket (tatilin "piyasası") donmuş çıkar."""
     d = oo.oku("dibs_egri_gunluk")[["n2y", "n5y", "n7y"]]
-    f = oo.oku("fonlama_gunluk").index
+    f = oo.tr_takvim()
     adim = d.diff().abs().mul(100).mean(axis=1)            # DİBS'in kendi gün sırasında, bp
     idx = d.index
     piyasa = idx.isin(f)
@@ -375,20 +294,10 @@ def _tatil_kaniti() -> dict:
 
 
 @lru_cache(maxsize=4)
-def tr_gunluk_degisim(gecikme: int | None = None) -> pd.DataFrame:
-    """Türkiye iş günü takviminde piyasa günü değişimi: DİBS düğümleri (bp; etiket
-    `gecikme` iş günü öne alınır, varsayılan ölçülen gecikme), USD/TRY Yahoo ve
-    TCMB (log, %). Sütunlar aynı piyasa gününü ölçer."""
-    g = dibs_gecikme()["gecikme_is_gunu"] if gecikme is None else gecikme
-    takvim = tr_takvim()
-    dibs = oo.oku("dibs_egri_gunluk")[list(DIBS_DUGUM)]
-    dibs = dibs.shift(-g).reindex(takvim)          # kendi gün sırasında öne al, sonra takvime indir
-    out = {c: dibs[c].diff() * 100 for c in DIBS_DUGUM}
-    kur, _ = oo.usdtry()
-    out["usdtry"] = np.log(kur.reindex(takvim)).diff() * 100
-    tc = oo.usdtry_tcmb()
-    out["usdtry_tcmb"] = np.log(tc.reindex(takvim)).diff() * 100
-    return pd.DataFrame(out, index=takvim)
+def _degisim(hiza: str = HIZA) -> pd.DataFrame:
+    """Türkiye günlük değişim çerçevesi (`ortak_olc.tr_gunluk_degisim`): DİBS
+    düğümleri bp, USD/TRY Yahoo ve TCMB log %; cuma tuzağı boşaltılmış."""
+    return oo.tr_gunluk_degisim(hiza, DIBS_DUGUM, kur=True, tcmb=True, cuma_dus=True)
 
 
 def sakin_gunler(index: pd.DatetimeIndex, olaylar, pencere: int = 2) -> pd.DatetimeIndex:
@@ -402,51 +311,33 @@ def sakin_gunler(index: pd.DatetimeIndex, olaylar, pencere: int = 2) -> pd.Datet
     return index[[i for i in range(len(index)) if i not in poz]]
 
 
-def olay_kapisi(degisim: pd.Series, olaylar) -> dict:
-    """Plasebo profili (−2…+2 iş günü, |Δ| ortalaması / sıradan gün): tepe 0'da
-    değilse olay çalışması kurulmaz."""
-    p = oo.olay_profili(degisim, olaylar, pencere=2)
-    return {"n_olay": p["n_olay"], "oran": p["oran"], "tepe": p["tepe"], "gecti": bool(p["tepe_sifirda"])}
-
-
-def _kapi_sebebi(k: dict) -> str:
-    return (f"plasebo profilinin tepesi olay gününde değil ({k['tepe']:+d} iş gününde); "
-            "olay penceresi kurulmaz")
-
-
-def dolar_seviye() -> pd.Series:
-    """Altı G10 kurunun (CNBC New York 17:00) dolar yönünde log ortalaması ×100.
-    EUR, GBP, AUD XXX/USD kotelidir, yönü çevrilir; artış doların değer kazancı."""
-    k = oo.oku("cnbc_kur_gunluk")
-    k = k[k.index.dayofweek < 5][["eur", "gbp", "aud", "chf", "jpy", "cad"]].dropna()
-    l = np.log(k)
-    for c in ("eur", "gbp", "aud"):
-        l[c] = -l[c]
-    return l.mean(axis=1) * 100
+def _kapi(degisim: pd.Series, olaylar, kur: bool, k_tohum: int) -> dict:
+    """Kanonik olay kapısı (`ortak_olc.olay_kapisi`, güçlü kural); kur serisinde
+    yönetilen kur dönemi dışarıda."""
+    return oo.olay_kapisi(degisim, olaylar, guclu=True, k_tohum=k_tohum,
+                          haric=oo.YONETILEN if kur else None)
 
 
 @lru_cache(maxsize=1)
 def abd_gunluk_degisim() -> pd.DataFrame:
-    """ABD iş günleri: Δus2 (bp), G10 dolar endeksi, Δlog(USD/EUR) ve Δlog(USD/JPY)
-    (%), hepsi aynı gün aralığında (ABD Hazinesi ve altı kurun birlikte olduğu günler)."""
-    us = oo.oku("abd_hazine_gunluk")["us2"]
-    dol = dolar_seviye()
-    k = oo.oku("cnbc_kur_gunluk")
-    k = k[k.index.dayofweek < 5]
-    gun = us.index.intersection(dol.index)
-    return pd.DataFrame({"us2": us.reindex(gun).diff() * 100, "dolar": dol.reindex(gun).diff(),
-                         "usd_eur": -np.log(k["eur"].reindex(gun)).diff() * 100,
-                         "usd_jpy": np.log(k["jpy"].reindex(gun)).diff() * 100}, index=gun)
+    """ABD iş günleri: Δus2 (bp), G10 dolar sepeti, Δlog(USD/EUR) ve Δlog(USD/JPY)
+    (%), hepsi aynı gün aralığında (`ortak_olc.abd_gunluk_degisim`: ABD Hazinesi ve
+    altı kurun birlikte olduğu, CNBC bozuk kotasyonu çıkarılmış günler)."""
+    g = oo.abd_gunluk_degisim()
+    return pd.DataFrame({"us2": g["us2_bp"], "dolar": g["dolar_yuzde"],
+                         "usd_eur": g["usd_eur_yuzde"], "usd_jpy": g["usd_jpy_yuzde"]}, index=g.index)
 
 
-def yayim_gunu_orani(degisim: pd.DataFrame, gunler, ciftler, donemler) -> dict:
+def yayim_gunu_orani(degisim: pd.DataFrame, gunler, ciftler, donemler, k_tohum: int = 0) -> dict:
     """Yayım günü ile sıradan günün varyans ve kovaryans oranı (sürpriz değil).
 
-    Her sütun önce plasebo kapısından geçer; geçmeyen sütunun oranı ve onu içeren
-    çiftin kovaryansı yazılmaz. `varyans_egim_y_x` heteroskedastisite ile
-    tanımlanan eğimdir: (kov_olay − kov_sakin) / (var_olay(x) − var_sakin(x))."""
+    Her sütun önce kanonik plasebo kapısından (`ortak_olc.olay_kapisi`, güçlü
+    kural) geçer; geçmeyen sütunun oranı ve onu içeren çiftin kovaryansı yazılmaz.
+    `varyans_egim_y_x` heteroskedastisite ile tanımlanan eğimdir:
+    (kov_olay − kov_sakin) / (var_olay(x) − var_sakin(x))."""
     gunler = pd.DatetimeIndex(gunler)
-    kapi = {c: olay_kapisi(degisim[c], gunler) for c in degisim.columns}
+    kapi_tam = {c: _kapi(degisim[c], gunler, c in KUR_SUTUN, k_tohum + i) for i, c in enumerate(degisim.columns)}
+    kapi = {c: oo.kapi_ozeti(k) for c, k in kapi_tam.items()}
     out = {"kapi": kapi}
     for k, a, b, ad in donemler:
         d = degisim.loc[a:b]
@@ -462,7 +353,7 @@ def yayim_gunu_orani(degisim: pd.DataFrame, gunler, ciftler, donemler) -> dict:
             if kapi[c]["gecti"]:
                 r[f"varyans_orani_{c}"] = _f(e[c].var() / s[c].var())
             else:
-                r[f"varyans_orani_{c}"] = kurulmadi(_kapi_sebebi(kapi[c]))
+                r[f"varyans_orani_{c}"] = kurulmadi(oo.kapi_sebebi(kapi[c]))
         for x, y in ciftler:
             if not (kapi[x]["gecti"] and kapi[y]["gecti"]):
                 r[f"kov_{x}_{y}"] = kurulmadi("çiftin en az bir serisi plasebo kapısını geçmedi")
@@ -736,6 +627,10 @@ def sekil_03() -> dict:
     kol = ["bant_alt", "bant_ust", "bant_gercek_alt", "bant_gercek_ust", "bant_pka_alt", "bant_pka_ust",
            "aofm", "politika", "pi_gercek", "pi_gercek_yayimli", "pi_pka", "acik_tam", "acik_gercek_zamanli"]
     return {"baslik": "Türkiye Taylor bandı", "birim": "%, açık için puan", "siklik": "aylık",
+            "n": int(len(x)), "ilk": str(x.index.min()), "son": str(x.index.max()),
+            "yontem": "Taylor kuralı bandı (gerçekleşen, yayımlanan ve PKA beklenen enflasyonla) ile AOFM ve politika "
+                      "faizi, aylık.",
+            "kaynak": ["enflasyon_aylik", "gsyh_ceyreklik", "fonlama_gunluk", "em_politika_aylik"],
             "tarih": [str(p) for p in x.index], **{k: _liste(x[k]) for k in kol},
             "donemler": [[a, b, ad] for _, a, b, ad in DONEM_TAYLOR],
             "not": "AOFM aylık ortalama, politika faizi ay sonu; 2013 öncesinde bant yalnız gerçekleşen "
@@ -815,23 +710,28 @@ def p3b() -> dict:
     ppk = oo.oku("ppk_kararlari")["politika"]
     olaylar = ppk.index
     hz = dibs_gecikme()
-    deg = tr_gunluk_degisim()
+    deg = _degisim(HIZA)
     ev = deg.loc[deg.index.intersection(olaylar)]
     kaynak = ["ppk_kararlari", "dibs_egri_gunluk", "fonlama_gunluk", "usdtry_yahoo_gunluk", "usdtry_tcmb_gunluk",
               "bulut/evds_pka_toplanti"]
 
-    # hiza: üç tarih sözleşmesinde plasebo kapısı
-    saklı = tr_gunluk_degisim(0)
-    tk = tr_takvim()
-    dibs_ham = oo.oku("dibs_egri_gunluk")
-    iki = {c: (dibs_ham[c].shift(-hz["gecikme_is_gunu"] - 1) - dibs_ham[c].shift(1 - hz["gecikme_is_gunu"]))
-           .reindex(tk) * 100 for c in ("n3a", "n1y", "n2y", "n5y")}
-    hiza = {"dibs_gecikme": hz,
-            "kapi_sakli_tarih": {c: olay_kapisi(saklı[c], olaylar) for c in ("n3a", "n6a", "n1y", "n2y", "n5y")},
-            "kapi_iki_gunluk": {c: olay_kapisi(iki[c], olaylar) for c in iki},
-            "not": "DİBS değişimi ölçülen gecikme kadar öne alınarak piyasa gününe oturtuldu; iki günlük pencere "
-                   "karar günü ile ertesi günün toplamıdır."}
-    kapilar = {c: olay_kapisi(deg[c], olaylar) for c in ("n3a", "n6a", "n1y", "n2y", "n5y", "usdtry", "usdtry_tcmb")}
+    # hiza: üç tarih sözleşmesinde plasebo kapısı (ham etiket · sabah hizası · gün sonu hizasında iki gün)
+    sakli = _degisim("ham")
+    sabah = _degisim("sabah")
+    g_hz = oo.dibs(HIZA, ("n3a", "n1y", "n2y", "n5y"))
+    iki = {c: (g_hz[c].shift(-1) - g_hz[c].shift(1)) * 100 for c in g_hz.columns}
+    hiza = {"dibs_gecikme": hz, "hiza": HIZA, "hiza_kayma_is_gunu": oo.DIBS_KAYMA[HIZA],
+            "kapi_sakli_tarih": {c: oo.kapi_ozeti(_kapi(sakli[c], olaylar, False, 40 + i))
+                                 for i, c in enumerate(("n3a", "n6a", "n1y", "n2y", "n5y"))},
+            "kapi_sabah_hizasi": {c: oo.kapi_ozeti(_kapi(sabah[c], olaylar, False, 50 + i))
+                                  for i, c in enumerate(("n3a", "n6a", "n1y", "n2y", "n5y"))},
+            "kapi_iki_gunluk": {c: oo.kapi_ozeti(_kapi(iki[c], olaylar, False, 60 + i)) for i, c in enumerate(iki)},
+            "not": "DİBS değişimi gün sonu hizasıyla (D gününe D+2 iş günü etiketli değer) USD/TRY kapanışıyla aynı "
+                   "piyasa gününe oturtuldu; ham etiket ve sabah hizası (bir iş günü) kıyas için; iki günlük pencere "
+                   "gün sonu hizasında karar günü ile ertesi günün toplamıdır."}
+    kapi_tam = {c: _kapi(deg[c], olaylar, c in KUR_SUTUN, 10 + i)
+                for i, c in enumerate(("n3a", "n6a", "n1y", "n2y", "n5y", "usdtry", "usdtry_tcmb"))}
+    kapilar = {c: oo.kapi_ozeti(k) for c, k in kapi_tam.items()}
     gurultu = {c: _gurultu(deg[c], olaylar) for c in ("n3a", "n6a", "n1y")}
 
     # anket sürprizi (bulut)
@@ -848,7 +748,7 @@ def p3b() -> dict:
         ans, seri_turu = None, None
         anket_hata = f"anketin toplantıya özgü faiz beklentisi elde yok ({h})"
 
-    yon_maske = (ev.index < "2021-12-01") | (ev.index > "2023-06-30")
+    yon_maske = ~oo.yonetilen_mi(ev.index)
     saglamlik = [
         ("etkin_oran_donemi", (ev.index > KARAR_ILK) & yon_maske,
          "Haziran 2018 sadeleşmesinden sonra, yönetilen kur dönemi hariç (anketin sorduğu oran etkin politika faizi)"),
@@ -861,7 +761,7 @@ def p3b() -> dict:
     for hedef, birim in (("usdtry", "% / 100 bp anket sürprizi"), ("n2y", "bp / 100 bp anket sürprizi"),
                          ("n5y", "bp / 100 bp anket sürprizi")):
         if not kapilar[hedef]["gecti"]:
-            tepki[hedef] = kurulmadi(_kapi_sebebi(kapilar[hedef]), kapi=kapilar[hedef])
+            tepki[hedef] = kurulmadi(oo.kapi_sebebi(kapilar[hedef]), kapi=kapilar[hedef])
             continue
         if ans is None:
             tepki[hedef] = kurulmadi(anket_hata)
@@ -870,7 +770,7 @@ def p3b() -> dict:
         x = (ans / 100).rename("anket_100bp")
         for k, a, b, ad in DONEM_PPK:
             e = ev.loc[a:b]
-            r = regresyon(e[hedef], x.reindex(e.index), asgari_bilgili=10)
+            r = oo.regresyon(e[hedef], x.reindex(e.index), asgari_bilgili=10)
             r["ad"] = ad
             if k == "d2016_2020":
                 r["not_soru"] = ("Haziran 2018 öncesinde anket bir hafta vadeli repoyu sorar; o dönemde etkin oran "
@@ -886,21 +786,21 @@ def p3b() -> dict:
                     r["not"] = "yönetilen dönemde de eğim sıfırdan ayrışıyor"
             tepki[hedef][k] = r
         hm = ev.index[yon_maske]
-        r = regresyon(ev.loc[hm, hedef], x.reindex(hm), asgari_bilgili=10)
+        r = oo.regresyon(ev.loc[hm, hedef], x.reindex(hm), asgari_bilgili=10)
         r["ad"] = "2016–2026, yönetilen kur dönemi hariç (havuzlanmış; sağlamlık)"
         tepki[hedef]["yonetilen_haric"] = r
         for k, maske, ad in saglamlik:
             sec = ev.index[maske]
-            tepki[hedef][k] = {**regresyon(ev.loc[sec, hedef], x.reindex(sec), asgari_bilgili=10), "ad": ad}
+            tepki[hedef][k] = {**oo.regresyon(ev.loc[sec, hedef], x.reindex(sec), asgari_bilgili=10), "ad": ad}
     if not kapilar["usdtry_tcmb"]["gecti"]:
         tepki["usdtry_tcmb"] = kurulmadi(
-            _kapi_sebebi(kapilar["usdtry_tcmb"]), kapi=kapilar["usdtry_tcmb"],
+            oo.kapi_sebebi(kapilar["usdtry_tcmb"]), kapi=kapilar["usdtry_tcmb"],
             **{"not": "sağlamlık sınaması: TCMB gösterge kurunun ölçüm anı 14:00 kararından öncedir; karar tepkisi "
                       "ertesi iş günü etiketine düşer ve profil ertesi günde tepe yapar"})
     elif ans is not None:
         x = (ans / 100).rename("anket_100bp")
         hm = ev.index[yon_maske]
-        tepki["usdtry_tcmb"] = {**regresyon(ev.loc[hm, "usdtry_tcmb"], x.reindex(hm), asgari_bilgili=10),
+        tepki["usdtry_tcmb"] = {**oo.regresyon(ev.loc[hm, "usdtry_tcmb"], x.reindex(hm), asgari_bilgili=10),
                                 "ad": "sağlamlık: TCMB gösterge kuru, yönetilen kur dönemi hariç"}
 
     if ans is not None:
@@ -908,12 +808,12 @@ def p3b() -> dict:
         for k, a, b, ad in DONEM_PPK:
             a_d[k] = {"ad": ad, **_dagilim(ans.loc[a:b])}
         kd = pd.concat([karar, ans], axis=1, sort=True).dropna()
-        kk = {"tum": regresyon(kd["anket_bp"], kd["karar_bp"], asgari_bilgili=10)}
+        kk = {"tum": oo.regresyon(kd["anket_bp"], kd["karar_bp"], asgari_bilgili=10)}
         kk["tum"]["ad"] = f"{_iso(kd.index.min())[:7]}…{_iso(kd.index.max())[:7]}"
         for k, a, b, ad in DONEM_PPK:
             z = kd.loc[max(pd.Timestamp(a), KARAR_ILK):b]
             if len(z):
-                kk[k] = {**regresyon(z["anket_bp"], z["karar_bp"], asgari_bilgili=10), "ad": ad}
+                kk[k] = {**oo.regresyon(z["anket_bp"], z["karar_bp"], asgari_bilgili=10), "ad": ad}
         degisen = kd[kd["karar_bp"] != 0]
         anket = {
             "yontem": "Anket sürprizi, PPK kararı ile karar ayındaki Piyasa Katılımcıları Anketi'nin politika faizi "
@@ -947,32 +847,40 @@ def p3b() -> dict:
     else:
         anket = kurulmadi(anket_hata)
 
-    # tanı: kapı düştüğü için yayımlanmaz
-    tani = {"yayimlanmaz": True,
-            "sebep": "DİBS düğümleri PPK günlerinde plasebo kapısını geçmedi; aşağıdaki sayılar yalnız tanıdır",
+    # tanı: ima sürprizi (3 aylık düğüm) kapıyı geçmezse yayımlanmaz
+    dibs_gecen = [c for c in ("n3a", "n6a", "n1y", "n2y", "n5y") if kapilar[c]["gecti"]]
+    dibs_gecmeyen = [c for c in ("n3a", "n6a", "n1y", "n2y", "n5y") if not kapilar[c]["gecti"]]
+    tani = {"yayimlanmaz": not kapilar["n3a"]["gecti"],
+            "sebep": ("3 aylık düğüm PPK günlerinde plasebo kapısını geçmedi (" + oo.kapi_sebebi(kapilar["n3a"]) +
+                      "); aşağıdaki sayılar yalnız tanıdır" if not kapilar["n3a"]["gecti"] else
+                      "3 aylık düğüm kapıyı geçti; ima sürprizinin tanı sayıları"),
+            "kapiyi_gecen_dugum": dibs_gecen, "kapiyi_gecmeyen_dugum": dibs_gecmeyen,
             "ima_anket_korelasyonu": {c: _f(pd.concat([ev[c], ans], axis=1, sort=True).dropna().corr().iloc[0, 1])
                                       for c in ("n3a", "n6a", "n1y", "n2y")} if ans is not None else None,
-            "ima_ile_karar": regresyon(ev["n3a"], karar.reindex(ev.index)),
-            "kur_ile_ima": {k: {**regresyon(ev.loc[a:b, "usdtry"], ev.loc[a:b, "n3a"]), "ad": ad}
+            "ima_ile_karar": oo.regresyon(ev["n3a"], karar.reindex(ev.index)),
+            "kur_ile_ima": {k: {**oo.regresyon(ev.loc[a:b, "usdtry"], ev.loc[a:b, "n3a"]), "ad": ad}
                             for k, a, b, ad in DONEM_PPK}}
 
     tablo = ev[["n3a", "n6a", "n1y", "n2y", "n5y", "usdtry"]]
     return {
-        "yontem": "Her PPK karar günü için DİBS düğümlerinin (etiketleri ölçülen gecikme kadar öne alınarak) ve "
-                  "USD/TRY'nin aynı piyasa günündeki değişimi ölçüldü; önce plasebo kapısı soruldu, kur tepkisi "
-                  "kararla anket beklentisinin farkına dönem dönem Newey–West ile regresyonlandı.",
+        "yontem": "Her PPK karar günü için DİBS düğümlerinin (gün sonu hizasıyla: D gününe D+2 iş günü etiketli "
+                  "değer) ve USD/TRY'nin aynı piyasa günündeki değişimi ölçüldü; önce plasebo kapısı (güçlü kural) "
+                  "soruldu, kur tepkisi kararla anket beklentisinin farkına dönem dönem Newey–West ile regresyonlandı.",
         "kaynak": kaynak,
         "n": int(len(ev)), "ilk": _iso(ev.index.min()), "son": _iso(ev.index.max()),
-        "saat": "Karar 14:00 TSİ; DİBS gösterge değerleri gün sonu (etiket bir iş günü geride, öne alındı); USD/TRY "
-                "18.12.2023'ten İstanbul 18:00, öncesi Londra gece yarısı; TCMB gösterge kuru 15:30'da ilan edilir "
-                "ama ölçüm anı karardan öncedir (14:00 kararının tepkisi ertesi iş günü etiketine düşer). Getiri ve kur "
-                "aynı piyasa gününün değişimidir; 18.12.2023 öncesinde kurun penceresi DİBS gün sonundan yaklaşık "
-                "dokuz saat sonra kapanır, 14:00 kararı iki pencerenin de içindedir.",
+        "saat": "Karar 14:00 TSİ; DİBS gösterge değeri bir önceki iş gününün sabah sabitlemesidir, gün sonu "
+                "hizasında D'nin değeri D+1 sabahının sabitlemesi olur ve 14:00 kararını taşır; USD/TRY 18.12.2023'ten "
+                "İstanbul 18:00, öncesi Londra gece yarısı (cuma değişimi hafta sonunu taşıdığı için boşaltıldı); TCMB "
+                "gösterge kuru 15:30'da ilan edilir ama ölçüm anı karardan öncedir (14:00 kararının tepkisi ertesi iş "
+                "günü etiketine düşer). Getiri ve kur aynı piyasa gününün değişimidir.",
         "hiza": hiza,
         "kapi": kapilar,
         "gurultu": gurultu,
-        "ima_surprizi": kurulmadi("ima sürprizi (DİBS 3 aylık değişimi) PPK günlerinde plasebo kapısını geçmedi; "
-                                  "sıradan gün gürültüsü karar günü sinyalinden büyük", kapi=kapilar["n3a"]),
+        "ima_surprizi": (kurulmadi("ima sürprizi (DİBS 3 aylık değişimi) PPK günlerinde plasebo kapısını geçmedi: "
+                                   + oo.kapi_sebebi(kapilar["n3a"]), kapi=kapilar["n3a"])
+                         if not kapilar["n3a"]["gecti"] else
+                         kurulmadi("3 aylık düğüm kapıyı geçti ama ima sürprizi bu ölçüm katmanında kurulmadı; "
+                                   "tanı satırları `tani` altında", kapi=kapilar["n3a"])),
         "tepki": tepki,
         "anket_surprizi": anket,
         "tani": tani,
@@ -988,7 +896,7 @@ def p3b() -> dict:
 def haftalik_3c() -> pd.DataFrame:
     a = oo.oku("abd_hazine_gunluk")["us2"]
     d = oo.oku("bund_gunluk")["de2_par"]
-    e = oo.oku("cnbc_kur_gunluk")["eur"]
+    e = oo.cnbc_kur()["eur"]
     g = pd.concat([a, d, e], axis=1, sort=True).dropna()
     g = g[g.index.dayofweek < 5]
     h = g.groupby(g.index.to_period("W-FRI")).tail(1).copy()
@@ -1006,7 +914,7 @@ def p3c() -> dict:
         if len(x) < 30:
             continue
         donem[k] = {"ad": ad, "n": int(len(x)), "ilk": _iso(x.index.min()), "son": _iso(x.index.max()),
-                    "degisim": regresyon(x["d_eur"], x["d_fark_10bp"], ilk_pencere=52),
+                    "degisim": oo.regresyon(x["d_eur"], x["d_fark_10bp"], ilk_pencere=52),
                     "degisim_korelasyon": _f(x[["d_fark_10bp", "d_eur"]].corr().iloc[0, 1]),
                     "seviye_korelasyon": _f(x[["fark", "eur"]].corr().iloc[0, 1]),
                     "seviye_ar1_fark": oo.ar1(x["fark"]), "seviye_ar1_eur": oo.ar1(x["eur"]),
@@ -1017,7 +925,7 @@ def p3c() -> dict:
         "yontem": "ABD ile Almanya 2 yıllık getirileri arasındaki farkın haftalık değişimi (10 baz puan birimi) ile "
                   "EUR/USD'nin haftalık log değişimi (%) dört dönemde Newey–West ile regresyonlandı; seviye "
                   "korelasyonu ayrıca verildi.",
-        "kaynak": ["abd_hazine_gunluk", "bund_gunluk", "cnbc_kur_gunluk"],
+        "kaynak": ["abd_hazine_gunluk", "bund_gunluk", "cnbc_kur_gunluk (bozuk kotasyon günleri çıkarılmış)"],
         "n": int(len(x)), "ilk": _iso(x.index.min()), "son": _iso(x.index.max()),
         "birim": "eğim: EUR/USD % değişim / 10 bp fark değişimi; eksi işaret, ABD lehine açılan farkla doların "
                  "değer kazancıdır",
@@ -1035,6 +943,9 @@ def sekil_04() -> dict:
     h = haftalik_3c()
     return {"baslik": "ABD–Almanya 2 yıllık farkı ve EUR/USD", "siklik": "haftalık",
             "birim": "fark: puan; EUR/USD: düzey",
+            "n": int(len(h)), "ilk": _iso(h.index.min()), "son": _iso(h.index.max()),
+            "yontem": "Haftalık ABD 2 yıllık par getirisi ile Bund 2 yıllık par getirisinin farkı ve EUR/USD.",
+            "kaynak": ["abd_hazine_gunluk", "bund_gunluk", "cnbc_kur_gunluk (bozuk kotasyon günleri çıkarılmış)"],
             "tarih": [_iso(t) for t in h.index], "fark_puan": _liste(h["fark"]),
             "eurusd": _liste(h["eur"]), "us2_yuzde": _liste(h["us2"]), "de2_yuzde": _liste(h["de2_par"]),
             "donemler": [[a, b, ad] for _, a, b, ad in DONEM_3C]}
@@ -1053,7 +964,7 @@ def p3d() -> dict:
         r = yayim_gunu_orani(d, g, [("us2", "dolar")],
                              [("tum", "2000-01-01", "2026-09-30", "2000–2026"),
                               ("d2000_2019", "2000-01-01", "2019-12-31", "2000–2019"),
-                              ("d2020_2026", "2020-01-01", "2026-09-30", "2020–2026")])
+                              ("d2020_2026", "2020-01-01", "2026-09-30", "2020–2026")], k_tohum=100)
         r["saat"] = "İstihdam 08:30 New York; ABD Hazinesi kapanışı ve CNBC 17:00 New York aynı günü içerir."
         r["birim"] = "us2 baz puan; dolar altı G10 kurunun eşit ağırlıklı log değişimi, %"
         out["abd_istihdam"] = r
@@ -1061,13 +972,20 @@ def p3d() -> dict:
         out["abd_istihdam"] = kurulmadi(f"BLS istihdam yayım günleri elde yok ({h})")
     try:
         g = bulut.gsyh_gunleri()
-        d = tr_gunluk_degisim()[["n2y", "n5y", "usdtry"]]
+        d = _degisim(HIZA)[["n2y", "n5y", "usdtry"]]
         r = yayim_gunu_orani(d, g, [("n2y", "usdtry")],
                              [("tum", "2013-01-01", "2026-09-30", "2013–2026"),
-                              ("d2023_2026", "2023-07-01", "2026-09-30", "2023-07…2026-09")])
-        r["saat"] = "GSYH 10:00 TSİ; DİBS gün sonu (etiket öne alındı) ve USD/TRY akşam kapanışı yayımı içerir."
+                              ("d2023_2026", oo.YON_SONRASI_ILK, "2026-09-30", f"{oo.YON_SONRASI_AY}…2026-09")], k_tohum=110)
+        r["saat"] = ("GSYH 10:00 TSİ; DİBS gün sonu hizasında (D'nin değeri D+1 sabahının sabitlemesi) ve USD/TRY akşam "
+                     "kapanışı yayımı içerir; 18.12.2023 öncesi cuma kur değişimi boşaltıldı.")
         r["birim"] = "DİBS baz puan; USD/TRY log değişim, %"
         r["n_yayim"] = int(len(g))
+        # 10:00 olayında DİBS'in sabah hizası da saatle bağdaşır (sabitleme 10:00–14:00 arasında;
+        # PPK 14:00 gün sonu hizasında, TÜFE ve GSYH 10:00 sabah hizasında tepe 0): kapı o hizada da sorulur
+        sab = _degisim("sabah")
+        og = pd.DatetimeIndex(g).intersection(sab.index)
+        r["kapi_sabah_hizasi"] = {c: oo.kapi_ozeti(oo.olay_kapisi(sab[c], og, guclu=True, k_tohum=120 + i))
+                                  for i, c in enumerate(("n2y", "n5y"))}
         out["tr_gsyh"] = r
     except bulut.VeriYok as h:
         out["tr_gsyh"] = kurulmadi(f"TÜİK GSYH yayım günleri elde yok ({h})")

@@ -1,18 +1,17 @@
 {
- "gecici": true,
  "taylor": {
-  "tarih_metin": "30.09.2026",
+  "tarih_metin": "08.2026 (politika faizi 30.09.2026)",
   "pi_anket": 23.69,
   "pi_gerceklesen": 31.51,
-  "pi_hedef": 5,
-  "r_yildiz": 2,
+  "pi_hedef": 5.0,
+  "r_yildiz": 2.0,
   "phi_pi": 1.5,
   "phi_y": 0.5,
-  "acik_orta": 0,
-  "acik_alt": -1,
-  "acik_ust": 1,
-  "acik_alt_metin": "−%1,0",
-  "acik_ust_metin": "%1,0",
+  "acik_orta": -1.82,
+  "acik_alt": -2.04,
+  "acik_ust": -1.61,
+  "acik_alt_metin": "−%2,0",
+  "acik_ust_metin": "−%1,6",
   "politika": 37.0,
   "i_yabanci": 3.62,
   "pi_yabanci": 3.52
@@ -21,8 +20,8 @@
   "tarih_metin": "2026Ç2",
   "d": 20.4,
   "alfa": 39.6,
-  "i": 25,
-  "g": 35,
+  "i": 21.2,
+  "g": 38.8,
   "pb": 0.88
  },
  "redk": {
@@ -36,9 +35,9 @@
  },
  "kur": {
   "tarih_metin": "30.09.2026",
-  "i_tl": 36.92,
-  "i_usd": 4.54,
-  "R": 10.66,
+  "i_tl": 44.64,
+  "i_usd": 4.59,
+  "R": 16.68,
   "redk_sapma": -17.4
  }
 }

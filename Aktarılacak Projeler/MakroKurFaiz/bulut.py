@@ -25,22 +25,26 @@ class VeriYok(RuntimeError):
 
 def _oku(ad: str, kaynak: str) -> pd.DataFrame:
     """`kaynak` okurun tanıyacağı kaynak adıdır ("BLS yayım arşivi", "EVDS dış
-    ticaret endeksleri"); sebep metni "<kaynak> elde yok" diye kurulur (adın
-    kendisi "arşivi" taşıyabilir, şablon onu ikilemez)."""
+    ticaret endeksleri"); sebep metni "<kaynak> arşivi elde yok" diye kurulur,
+    ad zaten "arşivi" ile bitiyorsa ikilenmez ("BLS yayım arşivi elde yok")."""
     p = oo.BULUT / f"{ad}.csv.gz"
     if not p.exists():
-        raise VeriYok(f"{kaynak} elde yok")
+        ek = "" if kaynak.endswith("arşivi") else " arşivi"
+        raise VeriYok(f"{kaynak}{ek} elde yok")
     return oo.oku(ad, oo.BULUT)
 
 
 # ───────────────────────────────────────────────────────────── yayım takvimleri
+_BULTEN_ADI = {"tufe": "TÜFE bülteni", "gsyh": "GSYH bülteni", "empsit": "istihdam raporu", "cpi": "TÜFE raporu"}
+
+
 def _takvim(ad: str, kaynak: str, bulten: str | None = None) -> pd.DatetimeIndex:
     df = _oku(ad, kaynak)
     if bulten is not None:
         df = df[df["bulten"] == bulten]
     idx = pd.DatetimeIndex(sorted(set(df.index.normalize())))
     if not len(idx):
-        raise VeriYok(f"{kaynak}: {bulten or ''} için tarih bulunamadı")
+        raise VeriYok(f"{kaynak}: {_BULTEN_ADI.get(bulten, 'yayım')} için tarih bulunamadı")
     return idx
 
 
@@ -145,7 +149,7 @@ def ecb_kur(kod: str) -> pd.Series:
     """ECB euro referans kuru (14:15 CET), 1 euro = x birim `kod`."""
     df = _oku("ecb_kur", "ECB referans kurları")
     if kod.lower() not in df.columns:
-        raise VeriYok(f"ECB referans kurları: {kod} elde yok")
+        raise VeriYok(f"ECB referans kurları: {kod.upper()} elde yok")
     return df[kod.lower()].dropna()
 
 

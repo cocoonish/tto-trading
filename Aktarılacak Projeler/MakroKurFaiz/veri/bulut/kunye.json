@@ -2348,6 +2348,74 @@
     "ortak_gun": 1697
    }
   },
+  "not_kararlari.csv.gz": {
+   "hazirlayan": "hazirla_bulut.py",
+   "sha256": "28ab3a39e69b713b8c4cccc03b3e01a75298b472163efe14e8fd21e44cd96e75",
+   "satir": 33,
+   "sutunlar": [
+    "kurum",
+    "eylem",
+    "yon",
+    "ilan_saati",
+    "ilan_dilimi",
+    "durum",
+    "anahtar"
+   ],
+   "kesilen_satir": 0,
+   "cipa_siniri": "2026-09-30",
+   "aciklama": "Türkiye yabancı para kredi notu kararları (not, görünüm, inceleme), 2012–2024",
+   "sutun_aciklama": {
+    "kurum": "derecelendirme kuruluşu",
+    "eylem": "not · gorunum · inceleme",
+    "yon": "+1 iyileşme, −1 bozulma",
+    "ilan_saati": "İstanbul saatiyle ilk arşiv damgası (boşsa bilinmiyor)",
+    "ilan_dilimi": "aksam: saat yok ama kaynak ilanın İstanbul akşamında (18:00 sonrası) olduğunu yazıyor",
+    "durum": "dogrulandi (haber ajansı ya da gazete) · kismen (yalnız ikincil kaynak)",
+    "anahtar": "veri/kaynaklar.json doğrulama kaydı"
+   },
+   "kapsam": {
+    "kurum": {
+     "n": 33,
+     "ilk": "2012-05-01",
+     "son": "2024-11-01"
+    },
+    "eylem": {
+     "n": 33,
+     "ilk": "2012-05-01",
+     "son": "2024-11-01"
+    },
+    "yon": {
+     "n": 33,
+     "ilk": "2012-05-01",
+     "son": "2024-11-01"
+    },
+    "ilan_saati": {
+     "n": 33,
+     "ilk": "2012-05-01",
+     "son": "2024-11-01"
+    },
+    "ilan_dilimi": {
+     "n": 33,
+     "ilk": "2012-05-01",
+     "son": "2024-11-01"
+    },
+    "durum": {
+     "n": 33,
+     "ilk": "2012-05-01",
+     "son": "2024-11-01"
+    },
+    "anahtar": {
+     "n": 33,
+     "ilk": "2012-05-01",
+     "son": "2024-11-01"
+    }
+   },
+   "kaynaklar": [],
+   "kaynak_dosya": {
+    "yol": "veri/not_kararlari.json",
+    "sha256": "e6f0aaae5bee866badb0537dddd3568e183699915a06361c0ea32e9deb1afcb8"
+   }
+  },
   "tuik_takvim.csv.gz": {
    "hazirlayan": "hazirla_bulut.py",
    "sha256": "d20c7fcb293f4318806725eca874a0721d5be1f16ecc5ca81d58a012061e9bbd",

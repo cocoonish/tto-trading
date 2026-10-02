@@ -40,19 +40,27 @@ DEĞER KAYBI.
      Ana tanım ders planının istediği ay sonu kurudur; ay ortalaması hizası
      yanında durur ve öncü/gecikmeli tablo iki hizayı, plaseboyu ve
      örtüşmesiz sınamayı birlikte verir.
-  2. CNBC kur dosyası PAZAR barı da taşır (479 gün). Ay sonu değeri hafta
-     içi günlerden okunur; aksi hâlde pazar günü biten bir ayın "kapanışı"
-     hafta sonu kotasyonu olurdu.
+  2. CNBC kur dosyası hafta sonu barı da taşır (479 pazar, 6 cumartesi) ve 01–03.01.2020'de bozuk
+     EUR/USD kotasyonu vardır. İkisi de ortak tanımda ayıklanır
+     (`ortak_olc.cnbc_kur`: hafta içi, bozuk kotasyon günleri çıkarılmış); ay
+     sonu değeri ve ay ortalaması oradan okunur.
   3. NOK New York kapanışı değil ECB 14:15 Orta Avrupa sabitlemesidir (euro
      çaprazından USD/NOK); ay sonu değeri ayın son sabitlemesidir. CAD ile
      NOK aynı satırda kıyaslanırken saat farkı adıyla yazılır.
   4. 2022 PENCERESİNDE ENERJİ AYLIK ORTALAMADIR: kur 03.01 → 31.10 günlük
      kapanışlarla, enerji Ocak → Ekim ay ortalamalarıyla ölçülür.
-  5. DİBS GÖSTERGE ETİKETİ İKİ İŞ GÜNÜ ÖNDEDİR (Bölüm 1 tuzak 6): aylık
-     Δ2 yıllık, D gününe D+2 iş günü etiketli değer yazılarak kurulur.
-     18.12.2023 öncesi Yahoo USD/TRY serisinde cumartesi barı yok: cuma biten
-     ayın son değeri pazartesi barının başından (hafta sonu açılışından
-     sonra) gelir.
+  5. DİBS HİZASI "gun_sonu" (`ortak_olc.DIBS_KAYMA`, k = 2): L etiketli DİBS
+     değeri L−1'in sabah sabitlemesidir; ay sonu kur (Yahoo, CNBC) ve DXY gün
+     sonu kapanışı olduğu için aylık Δ2 yıllık, D gününe D'den iki Türkiye iş
+     günü sonraki etiket yazılarak kurulur (aynı günün gün sonu bilgisi).
+     CUMA: 18.12.2023 öncesi Yahoo USD/TRY serisinde cumartesi barı yok; cuma
+     biten ayın son değeri pazartesi barının başından (hafta sonu açılışından
+     sonra) gelir. `usdtry(cuma_dus=True)` KULLANILMAZ: aylık değişim
+     pencereleri bitişik kalır (her hafta sonu tek bir aya yazılır, hiçbiri iki
+     kez ya da hiç sayılmaz); perşembeye çekmek o ayın cuma seansını ertesi
+     aya taşırdı. Ölçüldü: yönetilen dönem dışı enerji eğimi ay sonu kurla
+     −0,0656 (t −2,37), cuma boşaltılınca −0,0691 (t −2,37); hüküm değişmiyor
+     (`p10b.turkiye.tepki.usdtry.cuma_duyarliligi`).
   6. ENERJİ FATURASI ile FİYAT: 12 aylık net enerji ithalatı ile 12 aylık
      ortalama enerji endeksi seviyede birlikte eğilimlidir; seviye
      regresyonu sahte ilişki riski taşır. Ana ölçü iki serinin 12 aylık log
@@ -97,7 +105,6 @@ import pandas as pd
 
 import bulut
 import ortak_olc as oo
-import olcum_b01 as b01
 import olcum_b08 as b08
 
 warnings.filterwarnings("ignore", message="Could not infer format")   # ovp_programlar ilk sütunu tarih değil
@@ -112,27 +119,29 @@ OOS_ILK_AY = 120
 PETROL = ("2014-06-01", "2016-01-01", "2014-06 → 2016-01 petrol düşüşü")
 SOK_2022 = ("2022-01-03", "2022-10-31")
 TR_BAS = "2013-02-01"         # DİBS eğrisi 2013-01'de başlar: ilk aylık değişim Şubat 2013
-YON_BAS, YON_SON = b01.YONETILEN
-TR_DONEMLER = (("oncesi", TR_BAS, "2021-11-01", "2013-02 … 2021-11"),
-               ("yonetilen", "2021-12-01", "2023-06-01", "yönetilen kur 2021-12 … 2023-06 (ayrı dönem)"),
-               ("sonrasi", "2023-07-01", SON, "2023-07 … 2026-08"))
+YON_BAS, YON_SON = oo.YONETILEN
+DIBS_HIZA = "gun_sonu"        # ay sonu kur ve DXY gün sonu kapanışı (tuzak 5)
+TR_DONEMLER = (("oncesi", TR_BAS, oo.YON_ONCESI_SON_AY, f"2013-02 … {oo.YON_ONCESI_AY}"),
+               ("yonetilen", oo.YON_ILK, oo.YON_SON_AY, f"yönetilen kur {oo.YON_AY[0]} … {oo.YON_AY[1]} (ayrı dönem)"),
+               ("sonrasi", f"{oo.YON_SONRASI_AY}-01", SON, f"{oo.YON_SONRASI_AY} … 2026-08"))
 FATURA_BAS = "2013-01-01"
 FATURA_AZAMI_GECIKME = 12
 
 
-def _iso(t) -> str:
-    return str(pd.Timestamp(t).date())
+_iso, kurulmadi, hukum = oo._iso, oo.kurulmadi, oo.hukum      # tek tanımlar ortak_olc'de
+_reg = oo.reg
 
 
-kurulmadi = b08.kurulmadi
-hukum = b08.hukum
+def _oos_iki(y: pd.Series, x: pd.Series, ilk: int) -> tuple[dict, dict, str | None]:
+    """İki saf kıyas (`ortak_olc.oos_takimi`, ufuk 1): (sıfır, koşulsuz ortalama, hüküm için oranlar)."""
+    tk = oo.oos_takimi(y, x, ilk)
+    return tk["sifir"], tk["ortalama"], oo.takim_oranlari(tk)
 
 
 # ───────────────────────────────────────────────────────── seriler
-@lru_cache(maxsize=1)
 def _cnbc() -> pd.DataFrame:
-    c = oo.oku("cnbc_kur_gunluk")
-    return c[c.index.dayofweek < 5]                      # pazar barları ayıklanır
+    """CNBC kurları, ortak tanım (tuzak 2)."""
+    return oo.cnbc_kur()
 
 
 def _deger(seri: pd.Series, ters: bool) -> pd.Series:
@@ -209,7 +218,7 @@ def _oncu_gecikmeli(fx: str, emtia: str, hiza: str) -> dict:
     # Örtüşmesiz öncülük: kurun t−2 ayındaki değişimi, emtianın t ayı ortalama değişimiyle (ortalamanın
     # kapsadığı t−1 ve t aylarıyla örtüşmez). Öngörü iddiası ancak burada kurulabilir.
     d = pd.concat([a.shift(2).rename("x"), e.rename("y")], axis=1).loc[BAS:SON].dropna()
-    r = b08._reg(d["y"], d["x"], gecikme=None)
+    r = _reg(d["y"], d["x"], gecikme=None)
     out.update({
         "plasebo_kurun_kendi_ortalamasi": {"kur_bir_ay_onde": oz["kur_bir_ay_onde"]["kor"],
                                            "es_zamanli": oz["es_zamanli"]["kor"], "oncu_es_orani": oran},
@@ -227,9 +236,8 @@ def _cift_olc(fx: str, emtia: str, ad: str) -> dict:
         d_ort = _cift(fx, emtia, "ort")
     except bulut.VeriYok as hata:
         return kurulmadi(str(hata))
-    r = b08._reg(d["fx"], d["em"], gecikme=None)
-    oos = b08._sozlesme_oos(d["fx"], d["em"], OOS_ILK_AY, "sifir")
-    oos_ort = b08._sozlesme_oos(d["fx"], d["em"], OOS_ILK_AY, "ortalama")
+    r = _reg(d["fx"], d["em"], gecikme=None)
+    oos, oos_ort, oranlar = _oos_iki(d["fx"], d["em"], OOS_ILK_AY)
     kay = _kayan(d)
     kay_ort = _kayan(d_ort)
     son = kay.index.max()
@@ -244,7 +252,7 @@ def _cift_olc(fx: str, emtia: str, ad: str) -> dict:
         "n_ay_ortalamasi": int(len(d_ort)),
         "egim_yuzde_yuzde": r["b"][0], "se": r["se"][0], "t": r["t"][0], "r2": r["r2"], "gecikme": r["gecikme"],
         "oos": oos, "oos_ortalama": oos_ort,
-        "hukum": hukum(r["t"][0], [oos.get("mse_oran"), oos_ort.get("mse_oran")]),
+        "hukum": hukum(r["t"][0], oranlar),
         "kayan_36ay": {"son_tarih": _iso(son), "son": float(kay.loc[son]),
                        "en_dusuk": float(kay.min()), "en_dusuk_tarih": _iso(kay.idxmin()),
                        "en_yuksek": float(kay.max()), "en_yuksek_tarih": _iso(kay.idxmax()),
@@ -363,12 +371,11 @@ def _sok_2022() -> dict:
     return out
 
 
-@lru_cache(maxsize=1)
-def _tr_aylik() -> pd.DataFrame:
-    s, _ = oo.usdtry()
-    d = oo.oku("dibs_egri_gunluk")["n2y"]
-    tk = b01._tr_takvim()
-    d = d[d.index.isin(tk)].shift(-b01.DIBS_ETIKET_ONCU).dropna()
+@lru_cache(maxsize=2)
+def _tr_aylik(cuma_dus: bool = False) -> pd.DataFrame:
+    s, _ = oo.usdtry(cuma_dus=cuma_dus)
+    s = s.dropna()
+    d = oo.dibs(DIBS_HIZA, ("n2y",))["n2y"].dropna()      # Türkiye iş günü takviminde, gün sonu hizası
     dx = oo.oku("yahoo_dxy_vix_gunluk")["dxy"].dropna()
     dx = dx[dx.index.dayofweek < 5]
     ls = np.log(s) * 100
@@ -386,19 +393,18 @@ def _donem_reg(z: pd.DataFrame, yad: str) -> dict:
     d = z[[yad, "denerji", "ddxy"]].dropna()
     if len(d) < 12:
         return kurulmadi("dönemde gözlem yetersiz")
-    r = b08._reg(d[yad], d["denerji"], gecikme=None)
-    rk = b08._reg(d[yad], d[["denerji", "ddxy"]], gecikme=None)
+    r = _reg(d[yad], d["denerji"], gecikme=None)
+    rk = _reg(d[yad], d[["denerji", "ddxy"]], gecikme=None)
     out = {"n": r["n"], "ilk": r["ilk"], "son": r["son"], "egim": r["b"][0], "se": r["se"][0], "t": r["t"][0],
            "r2": r["r2"], "gecikme": r["gecikme"], "kor": float(d[yad].corr(d["denerji"])),
            "dolar_kontrollu": {"egim": rk["b"][0], "se": rk["se"][0], "t": rk["t"][0],
                                "dxy_egim": rk["b"][1], "dxy_t": rk["t"][1], "r2": rk["r2"]}}
     ilk = max(24, len(d) // 2)
     if len(d) - ilk >= 10:
-        oos = b08._sozlesme_oos(d[yad], d["denerji"], ilk, "sifir")
-        oos_ort = b08._sozlesme_oos(d[yad], d["denerji"], ilk, "ortalama")
+        oos, oos_ort, oranlar = _oos_iki(d[yad], d["denerji"], ilk)
         out["oos"] = oos
         out["oos_ortalama"] = oos_ort
-        out["hukum"] = hukum(r["t"][0], [oos.get("mse_oran"), oos_ort.get("mse_oran")])
+        out["hukum"] = hukum(r["t"][0], oranlar)
     else:
         out["oos"] = kurulmadi("örneklem dışı sınama için en az on tahmin gerekir")
         out["oos_ortalama"] = kurulmadi("örneklem dışı sınama için en az on tahmin gerekir")
@@ -417,6 +423,13 @@ def _tr_tepki() -> dict:
         bl["yonetilen_haric"] = {"etiket": "2013-02 … 2021-11 ve 2023-07 … 2026-08 (yönetilen dönem dışarıda)",
                                  **_donem_reg(df[~yon], yad)}
         out[ad] = bl
+    dc = _tr_aylik(cuma_dus=True)
+    yc = (dc.index >= YON_BAS) & (dc.index <= YON_SON)
+    rc = _donem_reg(dc[~yc], "dkur")
+    out["usdtry"]["cuma_duyarliligi"] = {
+        "etiket": "yönetilen dönem dışı, 18.12.2023 öncesi cuma kur değeri boşaltılmış (ay perşembe kapanışıyla biter)",
+        "n": rc.get("n"), "egim": rc.get("egim"), "t": rc.get("t"), "hukum": rc.get("hukum"),
+        "not": "Ana tanım cuma değerini tutar: aylık pencereler bitişik kalır (tuzak 5)."}
     out["usdtry"]["ay_ortalamasi_yonetilen_haric"] = {
         "etiket": "aynı ilişki, kur ay ortalamasıyla (emtia ile aynı hiza)", **_donem_reg(df[~yon], "dkur_ort")}
     out["birim"] = {"usdtry": "USD/TRY'nin aylık log değişimi (%) / enerji endeksinin aylık log değişimi (%)",
@@ -447,15 +460,15 @@ def _fatura() -> dict:
     d12 = df.diff(12)
     profil = {"gecikme_ay": [], "esneklik": [], "se": [], "t": [], "r2": []}
     for k in range(FATURA_AZAMI_GECIKME + 1):
-        r = b08._reg(d12["lf"], d12["lp"].shift(k), gecikme=b08.HAC_GECIKME)
+        r = _reg(d12["lf"], d12["lp"].shift(k), gecikme=b08.HAC_GECIKME)
         profil["gecikme_ay"].append(k); profil["esneklik"].append(r["b"][0]); profil["se"].append(r["se"][0])
         profil["t"].append(r["t"][0]); profil["r2"].append(r["r2"])
     j = int(np.argmax(profil["r2"]))
-    r0 = b08._reg(d12["lf"], d12["lp"], gecikme=b08.HAC_GECIKME)
+    r0 = _reg(d12["lf"], d12["lp"], gecikme=b08.HAC_GECIKME)
     dd = d12.dropna()
     # eşzamanlı ilişki: ambargo 1; hatalar 23 ay örtüştüğü için DM t'si 24 gecikmeyle (tuzak 10)
     oos = b08.oos_takim(dd["lf"], dd["lp"], min(60, len(dd) // 2), 1, b08.HAC_GECIKME)
-    sev = b08._reg(df["lf"], df["lp"], gecikme=b08.HAC_GECIKME)
+    sev = _reg(df["lf"], df["lp"], gecikme=b08.HAC_GECIKME)
     son = fatura.dropna().index.max()
     oran = (fatura * 1e3 / G * 100).dropna().loc[FATURA_BAS:]
     son_fatura = float(fatura.loc[son])
@@ -524,7 +537,10 @@ def sekil_17() -> dict:
             kor[ad] = [None if pd.isna(v) else float(v) for v in k]
         except bulut.VeriYok:
             kor[ad] = None
-    return {"baslik": "Emtia paraları: AUD–metal, CAD–enerji, NOK–enerji",
+    return {"baslik": "Emtia paraları: AUD–metal, CAD–enerji, NOK–enerji", "n": int(len(df)),
+            "yontem": "Paranın dolar karşısındaki değeri (ay sonu) ve Pink Sheet emtia endeksi, 2000 ortalaması = 100; "
+                      "36 aylık kayan korelasyon aylık log değişimlerden.",
+            "kaynak": ["cnbc_kur_gunluk", "kuresel_aylik", "bulut: ECB referans kurları (NOK)"],
             "tarih": [_iso(t) for t in df.index],
             "aud_deger_2000_100": endeks(df["aud"]), "metal_2000_100": endeks(df["metal"]),
             "cad_deger_2000_100": endeks(df["cad"]), "enerji_2000_100": endeks(df["enerji"]),

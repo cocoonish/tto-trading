@@ -19,6 +19,14 @@ endeksleri, 2005+). (2) TÜFE bazlı ile Yİ-ÜFE bazlı REDK'nin oranı (1994+)
 TÜFE ticarete konu olmayan hizmetleri içerir, ÜFE büyük ölçüde ticarete konu
 mallardır; iki reel kurun ayrışması bu yüzden göreli fiyat kanalının izidir.
 Verimlilik bacağı ölçülmedi.
+
+İSVİÇRE 2015 VAKASI. CNBC kurları ortak tanımdan okunur (`ortak_olc.cnbc_kur`:
+hafta içi, bozuk kotasyon günleri çıkarılmış); 14–15.01.2015 o günlerden değil.
+
+YUVARLAMA. Bu modül (ve Bölüm 9) altı ondalıkla yuvarlanır, öbürleri dört: ρ
+1'e yakınken dördüncü ondalık yarı ömrü aylarla oynatır (ρ 0,985 → 45,9 ay,
+0,9854 → 47,1 ay); yarı ömür ρ'dan yeniden hesaplanabilsin diye ρ altı ondalık
+taşınır.
 """
 from __future__ import annotations
 
@@ -191,12 +199,12 @@ def p7c() -> dict:
     try:
         df = bulut.bis_reer("R")
     except bulut.VeriYok as e:
-        return {"durum": "kurulmadi", "sebep": str(e)}
+        return oo.kurulmadi(str(e))
     out = {"yontem": ("BIS geniş reel efektif kurlarında (aylık) ülke başına medyan-yansız yarı ömür."),
            "kaynak": ["BIS WS_EER (reel, geniş)"], "ulkeler": {}}
     for i, ulke in enumerate(BIS_DM + BIS_EM):
         if ulke not in df.columns:
-            out["ulkeler"][ulke] = {"durum": "kurulmadi", "sebep": "BIS dosyasında yok"}
+            out["ulkeler"][ulke] = oo.kurulmadi("BIS dosyasında yok")
             continue
         s = df[ulke].dropna()
         mu = oo.ar1_medyan_yansiz(np.log(s), tohum=20261100 + i, deneme=300)
@@ -228,7 +236,7 @@ def vakalar() -> dict:
         out[f"tr_dip_{yil}"] = {"tarih": str(dip.date()), "redk_tufe": float(alt.min()),
                                "sonraki_12ay_redk": None if sonra is None else float(sonra),
                                "sonraki_12ay_degisim_yuzde": None if sonra is None else float((sonra / alt.min() - 1) * 100)}
-    k = oo.oku("cnbc_kur_gunluk")
+    k = oo.cnbc_kur()
     eurchf = (k["eur"] * k["chf"]).dropna()          # EUR/USD × USD/CHF = EUR/CHF
     usdchf = k["chf"].dropna()
     g0, g1 = pd.Timestamp("2015-01-14"), pd.Timestamp("2015-01-15")
@@ -253,7 +261,11 @@ def sekil_12(a: dict) -> dict:
     for ad, rho in (("mu", tam["rho_mu"]), ("alt90", tam["rho_alt90"]), ("ust90", tam["rho_ust90"])):
         h = np.arange(FAN_AY + 1)
         yollar[ad] = [float(math.exp(ort + sapma * rho ** k)) for k in h]
-    return {"tarih": [str(t.date()) for t in r.index], "redk_tufe": [float(v) for v in r.values],
+    return {"n": int(len(r)), "ilk": str(r.index.min().date()), "son": str(son.date()),
+            "yontem": "TCMB TÜFE bazlı reel efektif kur (aylık) ve tam örneklem log ortalaması; fan, bugünkü "
+                      "sapmanın medyan-yansız ρ ve %90 aralığının iki ucuyla ρ^h söndüğü yoldur.",
+            "kaynak": ["redk_aylik"], "fan_n": int(FAN_AY + 1),
+            "tarih": [str(t.date()) for t in r.index], "redk_tufe": [float(v) for v in r.values],
             "ortalama_endeks": float(math.exp(ort)),
             "fan_tarih": [str(t.date()) for t in gelecek], "fan": yollar,
             "not": "Fan, bugünkü sapmanın ρ^h ile söndüğü yoldur; tahmin değil, kestirilen kalıcılığın görselidir."}
@@ -268,6 +280,10 @@ def arac_redk(a: dict) -> dict:
             "rho_ust90": tam["rho_ust90"],
             "beklenen_12ay_log": beklenen12,
             "beklenen_12ay_yuzde": (math.exp(beklenen12) - 1) * 100,
+            "n": tam.get("n"), "ilk": tam.get("ilk"), "son": tam.get("son"),
+            "yontem": ("Bugünkü reel kur sapması, medyan-yansız aylık kalıcılık katsayısının on ikinci kuvvetiyle "
+                       "bir yıl ileri taşındı: beklenen değişim (ρ¹² − 1) × sapma."),
+            "kaynak": a.get("kaynak"),
             "aciklama": ("Artı sapma ortalamaya göre pahalı TL'dir; ρ<1 ise beklenen yol reel değer "
                          "kaybıdır (REDK düşer). Bu bir çekim terimidir, yön ve zamanlama tahmini değildir.")}
 

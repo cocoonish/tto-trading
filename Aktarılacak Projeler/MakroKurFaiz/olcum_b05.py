@@ -18,9 +18,17 @@ Pratikler
             ACM vade primi; İngiltere 2022 gilt ve sterlin).
   sekil_08  Türkiye beklenti dışı farkı, aylık.
 
-Bölüm modülleri: b01'in ABD ortak gün çerçevesi ve kadran kuralı, b03'ün çıktı
-açığı ve Türkiye iş günü takvimi içe aktarılır (b01 ve b03 bu modülü içe
-aktarmaz; döngü yok). Aynı ölçü iki modülde iki ayrı kodla kurulmaz.
+Ortak tanımlar `ortak_olc`ten: ABD ortak gün çerçevesi ve dolar sepeti, kadran
+kuralı, Türkiye iş günü takvimi ve DİBS hizası, faiz kotasyonu çevrimleri
+(`bilesik`). b03'ün çıktı açığı içe aktarılır (b03 bu modülü içe aktarmaz; döngü
+yok). Aynı ölçü iki modülde iki ayrı kodla kurulmaz.
+
+HİZA. p5c'nin DİBS bacağı (1y1y forward, 3 aylık düğüm) gün İÇİ sabitlemelerle
+(TLREF fiksingi, TCMB ağırlıklı ortalama fonlama maliyeti) ve ayın anket
+değeriyle karşılaştırılır: "sabah" hizası (`ortak_olc.DIBS_KAYMA`, k = 1; D
+gününe D+1 etiketli değer, yani D sabahının sabitlemesi). Gün sonu hizası
+(k = 2) o güne ertesi günün bilgisini yazardı; duyarlılık satırında 0 ve 2 ile
+kıyaslanır.
 
 ÖLÇÜM TUZAKLARI (bu modül yazılırken ölçüldü)
 1. AYNI GÜNÜN İKİ KAPANIŞI. ABD Hazinesi par getirisi New York öğleden sonra
@@ -46,12 +54,14 @@ aktarmaz; döngü yok). Aynı ölçü iki modülde iki ayrı kodla kurulmaz.
    etiket t+1, piyasa günü t'nin bilgisini taşır. Büyük olaylar aynı yere düşer:
    18.07.2016 (darbe girişimi sonrası ilk seans) 19.07 etiketinde, 22.03.2021
    (başkan değişikliği sonrası ilk seans) 23.03 etiketinde (+266 bp), 19.03.2025
-   20.03 etiketinde (+227 bp). Bölüm 1'in iki iş günlük kayması GÜN SONU
+   20.03 etiketinde (+227 bp). İki iş günlük "gun_sonu" kayması GÜN SONU
    kapanışlarına (kur, VIX) göre ölçülmüştür; buradaki kıyas ise gün İÇİ ölçülerle
    (TLREF fiksingi, TCMB ağırlıklı ortalama fonlama maliyeti) yapılır ve iki günlük
    kayma o güne ERTESİ günün bilgisini yazar. Kayma aylık ortalamada da yok
    sayılamaz (duyarlılık satırında 0 ve 2 iş günüyle kıyas). Son ölçüm günü bu
-   yüzden 29.09'dur (30.09 etiketi 29.09 piyasasıdır).
+   yüzden 29.09'dur (30.09 etiketi 29.09 piyasasıdır). Hiza sabiti tek yerde:
+   `ortak_olc.DIBS_KAYMA["sabah"]`; Bölüm 3'ün ölçümü (`olcum_b03.dibs_gecikme`)
+   ona karşı tutulur.
 5. ANKETİN GÜNLÜK HÂLİ BİR VARSAYIMDIR. Günlük seride anket ayın 20'sinden (ya
    da sonraki ilk iş gününden) itibaren geçerli sayılır; yayım günü arşivde
    yok. Günlük değer, aylık dosyayla 20'sinden sonraki ilk gözlemde
@@ -173,7 +183,8 @@ OLAYLAR_IGB = [
 # harcamanın zaman profili bu arşivde ölçülemez).
 DEPREM_DONEM = (pd.Period("2023Q1", "Q"), pd.Period("2024Q4", "Q"))
 YARI_ESNEKLIK = (0.3, 0.5)          # kaynak iddiası, ölçüm değil
-ANKET_HAFTA = 52                     # bir hafta vadeli repo (basit) → yıllık bileşik: (1 + r/52)^52 − 1
+ANKET_HAFTA = 52                     # bir hafta vadeli repo (basit) → yıllık bileşik: ortak_olc.bilesik("haftalik")
+HIZA = "sabah"                       # DİBS ↔ gün içi sabitlemeler (yukarıda HİZA)
 AYLIK_ASGARI_GUN = 5                 # aylık ortalamaya giren ay için asgari gün
 POLITIKA_GUNLUK_ILK = pd.Timestamp("2018-09-14")
 
@@ -182,44 +193,13 @@ ACM_GEREKLI = ("acmtp10", "acmy10", "acmrny10")   # bulut.acm "gelenler" der: s�
 
 
 # ───────────────────────────────────────────────────────── küçük yardımcılar
-def _iso(t) -> str | None:
-    if t is None:
-        return None
-    if isinstance(t, pd.Period):
-        return str(t)
-    try:
-        return str(pd.Timestamp(t).date())
-    except (ValueError, TypeError):
-        return str(t)
-
-
-def _f(x) -> float | None:
-    try:
-        x = float(x)
-    except (TypeError, ValueError):
-        return None
-    return x if math.isfinite(x) else None
-
-
-def kurulmadi(sebep: str, **ek) -> dict:
-    return b3.kurulmadi(sebep, **ek)
-
-
-def _bas_gun(idx: pd.DatetimeIndex, t) -> pd.Timestamp | None:
-    """Olay öncesi kapanış: t'ye eşit ya da ondan önceki son işlem günü."""
-    j = idx.searchsorted(pd.Timestamp(t), side="right") - 1
-    return idx[j] if j >= 0 else None
-
-
-def _son_gun(idx: pd.DatetimeIndex, t) -> pd.Timestamp | None:
-    """Pencere sonu: t'ye eşit ya da ondan sonraki ilk işlem günü."""
-    j = idx.searchsorted(pd.Timestamp(t), side="left")
-    return idx[j] if j < len(idx) else None
+_iso, _f, kurulmadi = oo._iso, oo._f, oo.kurulmadi        # tek tanımlar ortak_olc'de
+_bas_gun, _son_gun = oo.bas_gun, oo.son_gun
 
 
 def _kadran(dfaiz: float, dpara_deger: float) -> str:
-    """Bölüm 1'in kadran kuralı (DM): politika · prim · gevşeme · güvenli liman."""
-    return str(b01._kadran(pd.Series([dfaiz]), pd.Series([dpara_deger]), "guvenli_liman").iloc[0])
+    """Kadran kuralı (DM; `ortak_olc.kadran`): politika · prim · gevşeme · güvenli liman."""
+    return oo.kadran(float(dfaiz), float(dpara_deger), "guvenli_liman")
 
 
 # ═══════════════════════════════════════════════════════════════ p5a
@@ -337,7 +317,7 @@ def _olay_igb(o: dict) -> dict:
         return {"kimlik": o["kimlik"], "ad": o["ad"], **kurulmadi(f"gilt getirileri: {e}")}
     if any(c not in g.columns for c in ("gb2y", "gb10y", "gb30y")):
         return {"kimlik": o["kimlik"], "ad": o["ad"], **kurulmadi("gilt getirileri: 2, 10 ya da 30 yıllık seri elde yok")}
-    k = oo.oku("cnbc_kur_gunluk")["gbp"]
+    k = oo.cnbc_kur()["gbp"]
     v = oo.oku("yahoo_dxy_vix_gunluk")["vix"]
     a = oo.oku("abd_hazine_gunluk")["us10"]
     f = pd.concat([g[["gb2y", "gb10y", "gb30y"]], np.log(k).rename("lgbp")], axis=1, sort=True).dropna()
@@ -362,7 +342,7 @@ def _olay_igb(o: dict) -> dict:
 
 
 def sekil_07() -> dict:
-    f = b01._abd_gunluk()
+    f = oo.abd_gunluk()
     satirlar = [_olay_abd(o, f) for o in OLAYLAR_ABD] + [_olay_igb(o) for o in OLAYLAR_IGB]
     gecerli = [r for r in satirlar if "kadran" in r]
     ana = [r for r in gecerli if not r["alt_pencere"]]
@@ -478,11 +458,11 @@ def p5b() -> dict:
 
 # ═══════════════════════════════════════════════════════════════ p5c
 def _bilesik_haftalik(r_yuzde: pd.Series) -> pd.Series:
-    return ((1 + r_yuzde / 100 / ANKET_HAFTA) ** ANKET_HAFTA - 1) * 100
+    return oo.bilesik(r_yuzde, "haftalik")
 
 
 def _bilesik_gunluk(r_yuzde: pd.Series) -> pd.Series:
-    return ((1 + r_yuzde / 100 / 365) ** 365 - 1) * 100
+    return oo.bilesik(r_yuzde, "gecelik")
 
 
 def _patika_tam(r12: pd.Series, r24: pd.Series) -> pd.Series:
@@ -554,8 +534,8 @@ def _karar_sonrasi_koridor(gun: int = 5) -> dict:
 
 
 def _dibs_kayma() -> int:
-    """DİBS etiket kayması (iş günü): tek tanım Bölüm 3'ün tatil ve kur sınaması (tuzak 4)."""
-    return int(b3.dibs_gecikme()["gecikme_is_gunu"])
+    """DİBS etiket kayması (iş günü): tek tanım `ortak_olc.DIBS_KAYMA` ("sabah"; tuzak 4)."""
+    return int(oo.DIBS_KAYMA[HIZA])
 
 
 def _anket_ay_degeri(d: pd.DataFrame) -> pd.DataFrame:
@@ -571,10 +551,10 @@ def _p5c_gunluk(kayma: int | None = None, eski_politika: bool = False) -> pd.Dat
     etiket t+k'deki değer piyasa günü t'ye yazılır (varsayılan: Bölüm 3'ün ölçtüğü
     kayma, tuzak 4)."""
     kayma = _dibs_kayma() if kayma is None else kayma
-    tk = b3.tr_takvim()
-    d = oo.oku("dibs_egri_gunluk").reindex(tk)
+    d = oo.dibs("ham")
+    tk = d.index
     if kayma:
-        dib = d[["f_1y1y", "n3a"]].shift(-kayma)
+        dib = oo.dibs(kayma=kayma, dugumler=("f_1y1y", "n3a"))
         d = d.assign(f_1y1y=dib["f_1y1y"], n3a=dib["n3a"])
     fon = oo.oku("fonlama_gunluk").reindex(tk)
     r_ort = (d["pka_faiz_12a"] + d["pka_faiz_24a"]) / 2
@@ -615,8 +595,8 @@ def _kama_sinamasi(m: pd.DataFrame) -> dict:
     x = m.dropna(subset=["baz_bp", "baz_basit_bp", "kama_bp"])
     r1 = oo.hac(x["baz_bp"].values, x["kama_bp"].values)
     r2 = oo.hac(x["baz_basit_bp"].values, x["kama_bp"].values)
-    tk = b3.tr_takvim()
-    dd = oo.oku("dibs_egri_gunluk").reindex(tk).shift(-_dibs_kayma())
+    dd = oo.dibs(HIZA)
+    tk = dd.index
     tl = oo.oku("fonlama_gunluk")["tlref"].reindex(tk)
     tlb = _bilesik_gunluk(tl)
     oteki = {}
@@ -646,8 +626,8 @@ def _kama_sinamasi(m: pd.DataFrame) -> dict:
 
 def _n3a_tanisi() -> dict:
     """3 aylık düğümün gürültüsü ve konvansiyon tanısı (etiket günü, kaydırmasız)."""
-    tk = b3.tr_takvim()
-    d = oo.oku("dibs_egri_gunluk")["n3a"].reindex(tk)
+    d = oo.dibs("ham", ("n3a",))["n3a"]
+    tk = d.index
     t = oo.oku("fonlama_gunluk")["tlref"].reindex(tk)
     x = pd.DataFrame({"n3a": d, "tlref": t}).dropna()
     dn = x["n3a"].diff() * 100
@@ -695,7 +675,7 @@ def p5c() -> dict:
     ga = gg.dropna(subset=["r12", "r24"])
     tam = _patika_tam(ga["r12"], ga["r24"])
     yaklasim_fark = (ga["anket_bilesik"] - tam) * 100
-    pano = ((1 + ga["anket_basit"] / 100 * 7 / 365) ** (365 / 7) - 1) * 100
+    pano = oo.bilesik(ga["anket_basit"], "repo_7_365")
     cevrim_fark = (ga["anket_bilesik"] - pano) * 100
 
     # kirlilik 3: anketin ay etiketi — anket ayın İLK gününden geçerli sayılırsa
@@ -735,7 +715,7 @@ def p5c() -> dict:
                                    "değeri ayın tamamına yazılırsa karardan önceki günlere sonraki faiz yazılır. Bu "
                                    "aylar boş bırakıldı (2018-09'da yalnız 14 Eylül sonrası ölçülür). Ağırlıklı ortalama "
                                    "fonlama maliyeti stok ağırlıklıdır: faiz değişikliğinden sonraki günlerde yeni faizin "
-                                   "gerisinde kalır (karar_sonrasi satırı); bu gerçek bir maliyet farkıdır, tarih "
+                                   "gerisinde kalır (karar sonrası satırı); bu gerçek bir maliyet farkıdır, tarih "
                                    "kusuru değil.")
     kir["koridor_farki"]["karar_sonrasi"] = _karar_sonrasi_koridor()
     kir["koridor_farki"]["karar_ayi_maskesi"] = {
@@ -811,7 +791,8 @@ def p5c() -> dict:
             "yamuk_ve_dogrusal_patika_ort_fark_bp": _f(yaklasim_fark.mean()),
             "haftalik_cevrim_52_ve_7_365_azami_fark_bp": _f(cevrim_fark.abs().max()),
             "dibs_etiket_kaymasi_is_gunu": int(kayma),
-            "dibs_etiket_kaymasi_kaynak": "Bölüm 3: tatil sınaması (tatilden sonraki etiket donuk) ve kur sınaması",
+            "dibs_etiket_kaymasi_kaynak": "sabah hizası, bir iş günü (gün içi sabitlemelerle kıyas); kanıt: Bölüm 3 "
+                                          "tatil sınaması (tatilden sonraki etiket donuk) ve kur sınaması",
             "kaydirmasiz_aylik_fark_azami_bp": _f(kayma_fark.abs().max()),
             "kaydirmasiz_aylik_fark_ort_mutlak_bp": _f(kayma_fark.abs().mean()),
             "kaydirmasiz_aylik_baz_azami_bp": _f(kayma_baz.abs().max()),
@@ -836,7 +817,7 @@ def sekil_08() -> dict:
         "koridor_bp": [_f(v) for v in m["koridor_bp"]],
         "baz_bp": [_f(v) for v in m["baz_bp"]],
         "baz_basit_bp": [_f(v) for v in m["baz_basit_bp"]],
-        "yonetilen_kur_donemi": [str(b01.YONETILEN[0].to_period("M")), str(b01.YONETILEN[1].to_period("M"))],
+        "yonetilen_kur_donemi": list(oo.YON_AY),
     }
 
 

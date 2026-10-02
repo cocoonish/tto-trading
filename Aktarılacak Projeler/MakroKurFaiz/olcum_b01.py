@@ -346,7 +346,7 @@ def p1a() -> dict:
         "oos_dm_anlamli": bool(oos.get("dm_t") is not None and abs(oos["dm_t"]) >= 2),
         "yontem": "Örtüşmeyen 60 iş günlük blokların her birinde korelasyon, aynı bloğun VIX "
                   "ortalamasına regrese edildi; standart hata Newey–West, örneklem dışı kıyas "
-                  "genişleyen pencerede koşulsuz ortalama ve sıfır korelasyonla (ortak_olc.regresyon); "
+                  "genişleyen pencerede koşulsuz ortalama ve sıfır korelasyonla; "
                   "hüküm ikisini de ister.",
     }
 

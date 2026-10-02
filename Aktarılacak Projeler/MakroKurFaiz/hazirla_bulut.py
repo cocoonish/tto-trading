@@ -499,14 +499,44 @@ def gilt() -> None:
                                             "ortak_gun": int(len(ortak))}})
 
 
-def main() -> int:
+def not_kararlari() -> None:
+    """Türkiye yabancı para kredi notu kararları. Kaynak ham arşiv değil, `veri/not_kararlari.json`:
+    her karar `veri/kaynaklar.json`daki bir doğrulama kaydına (haber arşivi adresiyle) bağlı ve elle
+    derlendi; ilan günü ve saati İSTANBUL saatiyle haberin ilk arşiv damgasından."""
+    yol = BURASI / "veri" / "not_kararlari.json"
+    j = json.loads(yol.read_text(encoding="utf-8"))
+    df = pd.DataFrame([{"tarih": pd.Timestamp(k["ilan_gunu"]), "kurum": k["kurum"], "eylem": k["tur"],
+                        "yon": int(k["yon"]), "ilan_saati": k["ilan_saati"] or "", "ilan_dilimi": k.get("ilan_dilimi") or "",
+                        "durum": k["durum"],
+                        "anahtar": k["anahtar"]} for k in j["kararlar"]]).set_index("tarih")
+    yaz(df, "not_kararlari", "Türkiye yabancı para kredi notu kararları (not, görünüm, inceleme), 2012–2024",
+        {"kurum": "derecelendirme kuruluşu", "eylem": "not · gorunum · inceleme", "yon": "+1 iyileşme, −1 bozulma",
+         "ilan_saati": "İstanbul saatiyle ilk arşiv damgası (boşsa bilinmiyor)",
+         "ilan_dilimi": "aksam: saat yok ama kaynak ilanın İstanbul akşamında (18:00 sonrası) olduğunu yazıyor",
+         "durum": "dogrulandi (haber ajansı ya da gazete) · kismen (yalnız ikincil kaynak)",
+         "anahtar": "veri/kaynaklar.json doğrulama kaydı"},
+        [], CIPA_GUN, ek={"kaynak_dosya": {"yol": "veri/not_kararlari.json",
+                                           "sha256": hashlib.sha256(yol.read_bytes()).hexdigest()}})
+
+
+ADIMLAR = ("evds_pka", "evds_uyp", "evds_kalan_vade", "evds_dis_ticaret", "tuik_takvim", "fomc_takvim", "bls_takvim",
+           "bis", "ecb", "eurostat", "wdi", "hazine", "acm", "gilt", "not_kararlari")
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Argümansız: bütün adımlar. Adım adıyla: yalnız o adımlar; künyenin öbür kayıtları korunur."""
     sys.path.insert(0, str(BURASI))
-    adimlar = (evds_pka, evds_uyp, evds_kalan_vade, evds_dis_ticaret, tuik_takvim, fomc_takvim, bls_takvim,
-               bis, ecb, eurostat, wdi, hazine, acm, gilt)
-    for f in adimlar:
-        print(f"── {f.__name__}", flush=True)
-        f()
+    argv = argv or []
+    secili = argv or list(ADIMLAR)
+    bilinmeyen = [a for a in secili if a not in ADIMLAR]
+    if bilinmeyen:
+        raise SystemExit(f"bilinmeyen adım: {bilinmeyen}")
     kp = CIKTI / "kunye.json"
+    if argv and kp.exists():
+        KUNYE.update(json.loads(kp.read_text(encoding="utf-8"))["dosyalar"])
+    for ad in secili:
+        print(f"── {ad}", flush=True)
+        globals()[ad]()
     kunye = {"hazirla": {"betik": "hazirla_bulut.py", "cipa": {"gunluk": str(CIPA_GUN.date()), "aylik": "2026-08",
                                                                "ceyreklik": "2026Q2"},
                          "not": "Ham arşivden yerel ayrıştırma; ağa çıkılmaz. sha256 sıkıştırılmamış CSV metninin özüdür."},
@@ -517,4 +547,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1:]))

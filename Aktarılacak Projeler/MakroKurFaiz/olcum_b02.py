@@ -43,10 +43,15 @@ gerçekleşen aylık TÜFE ile 0 ve ±1, ±2 ay kaydırmada sınanır.
      taşımıyor. 13.09.2018: önceki ilan 6,3945, karar günü ilanı 6,3566,
      ertesi gün 6,0659; Yahoo karar günü kapanışı 6,1287. PPK × TCMB tepe +1.
   3. VALÖRÜ TAKVİMSİZ BİR İŞ GÜNÜYLE GERİ ALMAK tatilden önceki ilanı TATİL gününe
-     yazar (15.04.2024 valörlü kur 12.04.2024'e; ilan 09.04.2024) ve 2013–2026'da
-     88 iş gününü TCMB değeri olmadan bırakır. Bu ölçümden sonra `ortak_olc.usdtry_tcmb()`
-     Türkiye iş günü takvimiyle geri alır (tutarlılık turu, 02.10.2026); takvimsiz
-     sürüm (`geri_alma="is_gunu"`) yalnız bu tuzağın ölçümü için yanında durur.
+     yazar (02.04.2025 valörlü kur 01.04.2025 bayramına; ilan 28.03.2025 cuma) ve
+     2013–2026'da 88 iş gününü TCMB değeri olmadan bırakır. Bu ölçümden sonra
+     `ortak_olc.usdtry_tcmb()` Türkiye iş günü takvimiyle geri alır (tutarlılık turu,
+     02.10.2026); takvimsiz sürüm (`geri_alma="is_gunu"`) yalnız bu tuzağın ölçümü
+     için yanında durur. YARIM GÜNDE İLAN YOK (doğrulama turu): bayram arifelerinde
+     ve 28 Ekim'de TCMB ilan etmez, arşiv tatil sonrası valöre önceki ilanı tekrar
+     yazar (15.04.2024 valörü 32,0060 = 08.04.2024 ilanı; 09.04 arifesinde ilan yok).
+     Takvimle geri alınınca bu tekrar arifeye sıfır değişim olarak düşüyordu (TÜFE
+     günü 03.10.2014, 04.07.2016, 03.06.2019 dahil); ortak sürüm o günleri boş bırakır.
   4. DİBS eğrisi Türkiye tatillerinde satır taşıyor (değişimi sıfır değil):
      bütün Türkiye serileri EVDS iş günü takvimine indirilir.
   5. HAFTANIN GÜNÜ ETKİSİ: PPK'ların 87/111'i perşembe, yani +1 kayması çoğunlukla
@@ -112,7 +117,7 @@ except AttributeError:
 PENCERE = oo.OLAY_PENCERE          # 2
 K_RASTGELE = oo.OLAY_RASTGELE_K    # 1000
 TOHUM = oo.OLAY_TOHUM              # 20261002
-GECIS = pd.Timestamp("2023-12-18")
+GECIS = oo.GECIS_YAHOO_CUMA                # 2023-12-18, tek tanım ortak_olc'de
 DIBS_SERILER = ("n3a", "n2y", "n5y")
 KAYMA_TARAMA = (0, 1, 2, 3)
 KAYMA_CAPRAZ = (-1, 0, 1, 2, 3)
@@ -301,6 +306,7 @@ def _profil_satiri(seri: str, olay: str, s: pd.Series, olaylar: pd.DatetimeIndex
         "rastgele_ort_profil": k["rastgele_ort_profil"], "gun_etkisinden_arindirilmis": k["gun_etkisinden_arindirilmis"],
         "arindirilmis_tepe": k["arindirilmis_tepe"],
         "p_rastgele_oran0": k["p_rastgele_oran0"], "p_rastgele_kapi_farki": k["p_rastgele_kapi_farki"],
+        "p_rastgele_hata": k["p_rastgele_hata"], "guclu_sinirda": k["guclu_sinirda"],
         "kapi_rastgele_gecme_orani": k["kapi_rastgele_gecme_orani"],
         "n_olay": k["n_olay"], "n_olay_listede": k["n_olay_listede"],
         "taban_abs": float(k["taban_abs"]), "birim": SERI_BIRIM.get(seri.split(":")[0], ""),
@@ -590,21 +596,32 @@ def p2() -> dict:
     # örnekler VERİDEN: valörü bir iş günü geri alınca Türkiye tatiline düşen değerler
     raw_v = oo.oku("usdtry_tcmb_gunluk")["usdtry_tcmb_valor"].dropna()
     tk = _tr_takvim()
+    t_ortak = oo.usdtry_tcmb()
+    ilansiz = oo.tcmb_ilansiz_gunler()
     ornekler = []
     for v in raw_v.index[(raw_v.index >= pd.Timestamp("2024-01-01")) & (raw_v.index <= oo.CIPA_GUN)]:
         g = v - pd.offsets.BDay(1)
         if g not in tk and g >= tk.min():
             j_ = tk.searchsorted(v) - 1
+            # ilan günü: değerin gerçekten ilan edildiği gün. Önceki Türkiye iş günü
+            # ilansız bir arifeyse (yarım gün) değer ondan önceki ilanın tekrarıdır.
+            il = t_ortak.index[t_ortak.index <= tk[j_]][-1]
             ornekler.append({"valor": str(v.date()), "takvimsiz_geri_alma_gunu": str(g.date()),
-                             "takvimsiz_geri_alma_gunu_is_gunu_mu": False, "ilan_gunu": str(tk[j_].date())})
+                             "takvimsiz_geri_alma_gunu_is_gunu_mu": False, "ilan_gunu": str(il.date()),
+                             "onceki_is_gunu_ilansiz_arife": bool(tk[j_] in ilansiz)})
+    ilansiz_cal = ilansiz[ilansiz.isin(cal)]
     tuzak = {
         "takvimsiz_surumde_takvim_disina_dusen_deger": int((~t_takvimsiz13.index.isin(_tr_takvim())).sum()),
         "takvimsiz_surumde_degeri_olmayan_is_gunu": int((~cal.isin(t_takvimsiz.index)).sum()),
-        "ortak_surumde_degeri_olmayan_is_gunu": int((~cal.isin(oo.usdtry_tcmb().index)).sum()),
+        "ortak_surumde_degeri_olmayan_is_gunu": int((~cal.isin(t_ortak.index)).sum()),
+        "ilan_olmayan_arife_gunu": int(len(ilansiz_cal)),
+        "ilan_olmayan_arife_ornek": [str(t.date()) for t in ilansiz_cal[-3:]],
         "ornek": ornekler[:3],
         "ilk": str(cal.min().date()), "son": str(cal.max().date()),
-        "not": "Ortak sürüm (ortak_olc.usdtry_tcmb) valörü Türkiye iş günü takvimiyle geri alır; takvimsiz sürüm "
-               "yalnız bu tuzağın büyüklüğünü göstermek için kurulur.",
+        "not": "Ortak sürüm valörü Türkiye iş günü takvimiyle geri alır; takvimsiz sürüm yalnız bu tuzağın "
+               "büyüklüğünü göstermek için kurulur. Ortak sürümde değeri olmayan günler ilan yapılmayan yarım "
+               "günlerdir (bayram arifeleri ve 28 Ekim): arşiv tatil sonrası valöre önceki ilanı tekrar yazar, o "
+               "tekrar arife gününe sıfır değişim olarak düşmesin diye boş bırakılır.",
     }
     r_duz = _profil_satiri("usdtry_tcmb_takvimsiz", "ppk", _seri("usdtry_tcmb_takvimsiz"), ppk, 950)
     tuzak["takvimsiz_ppk_profili"] = {k: r_duz[k] for k in ("oran", "tepe", "kapi", "n_olay", "p_rastgele_oran0",
@@ -640,6 +657,8 @@ def p2() -> dict:
             "saatle_bagdasmayan_gecis": [f'{r["seri"]}×{r["olay"]}' for r in olculen
                                          if r["kapi"] and not r["saat_tutarli"]],
             "kurulabilir": [f'{r["seri"]}×{r["olay"]}' for r in olculen if r["kurulabilir"]],
+            # güçlü kapı p değeri 1.000 rastgele kümenin tahmin hatası içinde 0,05'e değiyor: tohuma bağlı
+            "guclu_sinirda": [f'{r["seri"]}×{r["olay"]}' for r in olculen if r.get("guclu_sinirda")],
             "gecmeyen": [f'{r["seri"]}×{r["olay"]} (tepe {bicim.sayi(r["tepe"], 0, isaret=True)})' for r in olculen if not r["kapi"]],
             "kurulmayan": sorted({f'{r["olay"]}: {r["sebep"]}' for r in satirlar if r["durum"] == "kurulmadi"}),
             "olculen_satir": len(olculen), "toplam_satir": len(satirlar)}
@@ -754,7 +773,8 @@ def sekil_02(p: dict) -> dict:
     sat = []
     for r in p["kapi"]:
         if r["durum"] != "olculdu":
-            sat.append({"seri": r["seri"], "olay": r["olay"], "durum": "kurulmadi"})
+            sat.append({"seri": r["seri"], "olay": r["olay"], "durum": "kurulmadi",
+                        "sebep": r.get("sebep") or "olay günleri elde yok"})
             continue
         sat.append({"seri": r["seri"], "olay": r["olay"], "durum": "olculdu", "kapi": r["kapi"],
                     "kapi_guclu": r["kapi_guclu"], "saat_tutarli": r["saat_tutarli"],
@@ -773,7 +793,11 @@ def sekil_02(p: dict) -> dict:
                     "n_olay": r["n_gun_kume"],
                     "oran": [r["ort_profil"][str(k)] for k in range(-PENCERE, PENCERE + 1)],
                     "not": "1.000 rastgele kümenin ortalama profili"})
-    return {"kayma": list(range(-PENCERE, PENCERE + 1)), "satirlar": sat,
+    olcu = [r for r in p["kapi"] if r["durum"] == "olculdu"]
+    return {"n": len(sat), "n_olcu": len(olcu),
+            "ilk": min((r["ilk"] for r in olcu if r.get("ilk")), default=None),
+            "son": max((r["son"] for r in olcu if r.get("son")), default=None),
+            "kayma": list(range(-PENCERE, PENCERE + 1)), "satirlar": sat,
             "yontem": "Seri × olay türü × kayma için olay günü mutlak değişim ortalamasının sıradan gün "
                       "ortalamasına oranı.",
             "kaynak": p["kaynak"]}
