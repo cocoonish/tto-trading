@@ -1,0 +1,447 @@
+{
+ "2026-10-02T1043": {
+  "EVDS": {
+   "durum": "tamam",
+   "secim": {
+    "pka": [
+     "bie_pkauo",
+     "bie_urbek",
+     "bie_bekodtufeyeni",
+     "bie_bekodtufe",
+     "bie_urbeka"
+    ],
+    "uyp": [
+     "bie_uypucay",
+     "bie_imfiip",
+     "bie_pyamevd",
+     "bie_pyascog",
+     "bie_pyasens",
+     "bie_uypucayarsiv"
+    ],
+    "kisa_vade_borc": [
+     "bie_kisavadeborc",
+     "bie_kalanvade",
+     "bie_kalvadbg",
+     "bie_kvadedovkomp",
+     "bie_kvadealacakli",
+     "bie_kvdbs",
+     "bie_yydvusd",
+     "bie_yydv",
+     "bie_kisavadeborcarsiv",
+     "bie_kvdbsarsiv",
+     "bie_yyoibsvu",
+     "bie_yyoibsvt"
+    ],
+    "dis_ticaret_endeks": [
+     "bie_dtitfb10",
+     "bie_dtitmb10",
+     "bie_dtihmb10",
+     "bie_dtihfb10",
+     "bie_dtihmby",
+     "bie_dtitfby",
+     "bie_dtihrmkp",
+     "bie_dtitmby",
+     "bie_dtihrmkb",
+     "bie_dtithfyp",
+     "bie_dtihfiy",
+     "bie_dtithfyb",
+     "bie_dtihrfyp",
+     "bie_dtihmiy",
+     "bie_dtihrfyb",
+     "bie_dtitfiy",
+     "bie_dtihrfiy",
+     "bie_dtithfiy",
+     "bie_dtithmkb",
+     "bie_dtithmik",
+     "bie_dtihrmik",
+     "bie_dtitmiy",
+     "bie_dtithmkp",
+     "bie_dtihfby",
+     "bie_gsyhmevset",
+     "bie_gsyzhtaken",
+     "bie_uretmtazincr",
+     "bie_gsyzhend",
+     "bie_gsyhnihayil"
+    ]
+   },
+   "seri_listesi": {
+    "bie_pkauo": 25,
+    "bie_urbek": 368,
+    "bie_bekodtufeyeni": 100,
+    "bie_bekodtufe": 154,
+    "bie_urbeka": 224,
+    "bie_uypucay": 89,
+    "bie_imfiip": 126,
+    "bie_pyamevd": 7,
+    "bie_pyascog": 14,
+    "bie_pyasens": 19,
+    "bie_uypucayarsiv": 84,
+    "bie_kisavadeborc": 18,
+    "bie_kalanvade": 21,
+    "bie_kalvadbg": 18,
+    "bie_kvadedovkomp": 13,
+    "bie_kvadealacakli": 6,
+    "bie_kvdbs": 19,
+    "bie_yydvusd": 190,
+    "bie_yydv": 190,
+    "bie_kisavadeborcarsiv": 18,
+    "bie_kvdbsarsiv": 19,
+    "bie_yyoibsvu": 810,
+    "bie_yyoibsvt": 810,
+    "bie_dtitfb10": 20,
+    "bie_dtitmb10": 20,
+    "bie_dtihmb10": 19,
+    "bie_dtihfb10": 19,
+    "bie_dtihmby": 19,
+    "bie_dtitfby": 21,
+    "bie_dtihrmkp": 14,
+    "bie_dtitmby": 21,
+    "bie_dtihrmkb": 24,
+    "bie_dtithfyp": 14,
+    "bie_dtihfiy": 29,
+    "bie_dtithfyb": 24,
+    "bie_dtihrfyp": 14,
+    "bie_dtihmiy": 29,
+    "bie_dtihrfyb": 24,
+    "bie_dtitfiy": 32,
+    "bie_dtihrfiy": 33,
+    "bie_dtithfiy": 33,
+    "bie_dtithmkb": 24,
+    "bie_dtithmik": 33,
+    "bie_dtihrmik": 33,
+    "bie_dtitmiy": 32,
+    "bie_dtithmkp": 14,
+    "bie_dtihfby": 19,
+    "bie_gsyhmevset": 8,
+    "bie_gsyzhtaken": 8,
+    "bie_uretmtazincr": 14,
+    "bie_gsyzhend": 8,
+    "bie_gsyhnihayil": 14
+   },
+   "cekilen_seri": 901,
+   "sure_sn": 355.1
+  },
+  "TÜİK takvim": {
+   "durum": "tamam",
+   "yillar": {
+    "2026": {
+     "yayinda": 3074,
+     "bekleyen": 1012
+    },
+    "2025": {
+     "yayinda": 4096,
+     "bekleyen": 0
+    },
+    "2024": {
+     "yayinda": 4065,
+     "bekleyen": 0
+    },
+    "2023": {
+     "yayinda": 3858,
+     "bekleyen": 0
+    },
+    "2022": {
+     "yayinda": 3838,
+     "bekleyen": 0
+    },
+    "2021": {
+     "yayinda": 3489,
+     "bekleyen": 0
+    },
+    "2020": {
+     "yayinda": 3510,
+     "bekleyen": 0
+    },
+    "2019": {
+     "yayinda": 2929,
+     "bekleyen": 0
+    },
+    "2018": {
+     "yayinda": 2894,
+     "bekleyen": 0
+    },
+    "2017": {
+     "yayinda": 2933,
+     "bekleyen": 0
+    },
+    "2016": {
+     "yayinda": 2909,
+     "bekleyen": 0
+    },
+    "2015": {
+     "yayinda": 2854,
+     "bekleyen": 0
+    },
+    "2014": {
+     "yayinda": 2507,
+     "bekleyen": 0
+    },
+    "2013": {
+     "yayinda": 2422,
+     "bekleyen": 0
+    },
+    "2012": {
+     "yayinda": 2395,
+     "bekleyen": 0
+    },
+    "2011": {
+     "yayinda": 2299,
+     "bekleyen": 0
+    },
+    "2010": {
+     "yayinda": 2219,
+     "bekleyen": 0
+    },
+    "2009": {
+     "yayinda": 2169,
+     "bekleyen": 0
+    }
+   },
+   "sure_sn": 134.3
+  },
+  "BLS": {
+   "durum": "tamam",
+   "empsit": {
+    "durum": 403,
+    "bayt": 1325,
+    "arsiv_baglanti": 0
+   },
+   "cpi": {
+    "durum": 403,
+    "bayt": 1325,
+    "arsiv_baglanti": 0
+   },
+   "sure_sn": 0.2
+  },
+  "FOMC": {
+   "durum": "tamam",
+   "fomccalendars": 200,
+   "fomchistorical2008": 200,
+   "fomchistorical2009": 200,
+   "fomchistorical2010": 200,
+   "fomchistorical2011": 200,
+   "fomchistorical2012": 200,
+   "fomchistorical2013": 200,
+   "fomchistorical2014": 200,
+   "fomchistorical2015": 200,
+   "fomchistorical2016": 200,
+   "fomchistorical2017": 200,
+   "fomchistorical2018": 200,
+   "fomchistorical2019": 200,
+   "fomchistorical2020": 200,
+   "sure_sn": 2.1
+  },
+  "BIS": {
+   "durum": "tamam",
+   "WS_EER_MRB": {
+    "durum": 200,
+    "satir": 7449
+   },
+   "WS_EER_MNB": {
+    "durum": 200,
+    "satir": 7449
+   },
+   "WS_CBPOL_M": {
+    "durum": 200,
+    "satir": 7464
+   },
+   "sure_sn": 15.6
+  },
+  "ECB EXR": {
+   "durum": "tamam",
+   "USD": {
+    "durum": 200,
+    "satir": 7168
+   },
+   "JPY": {
+    "durum": 200,
+    "satir": 7168
+   },
+   "GBP": {
+    "durum": 200,
+    "satir": 7168
+   },
+   "CHF": {
+    "durum": 200,
+    "satir": 7168
+   },
+   "CAD": {
+    "durum": 200,
+    "satir": 7168
+   },
+   "AUD": {
+    "durum": 200,
+    "satir": 7168
+   },
+   "SEK": {
+    "durum": 200,
+    "satir": 7168
+   },
+   "NOK": {
+    "durum": 200,
+    "satir": 7168
+   },
+   "BRL": {
+    "durum": 200,
+    "satir": 6900
+   },
+   "ZAR": {
+    "durum": 200,
+    "satir": 7168
+   },
+   "INR": {
+    "durum": 200,
+    "satir": 6900
+   },
+   "IDR": {
+    "durum": 200,
+    "satir": 7168
+   },
+   "MXN": {
+    "durum": 200,
+    "satir": 7168
+   },
+   "PLN": {
+    "durum": 200,
+    "satir": 7168
+   },
+   "HUF": {
+    "durum": 200,
+    "satir": 7168
+   },
+   "KRW": {
+    "durum": 200,
+    "satir": 7168
+   },
+   "TRY": {
+    "durum": 200,
+    "satir": 7106
+   },
+   "sure_sn": 36.1
+  },
+  "Eurostat": {
+   "durum": "tamam",
+   "gov_10dd_edpt1": {
+    "durum": 200,
+    "bayt": 15485
+   },
+   "gov_10q_ggdebt": {
+    "durum": 200,
+    "bayt": 30258
+   },
+   "sure_sn": 1.9
+  },
+  "Dünya Bankası WDI": {
+   "durum": "tamam",
+   "BN.CAB.XOKA.GD.ZS": {
+    "durum": 200,
+    "bayt": 230636
+   },
+   "GC.DOD.TOTL.GD.ZS": {
+    "durum": 200,
+    "bayt": 230805
+   },
+   "NY.GDP.MKTP.KD.ZG": {
+    "durum": 200,
+    "bayt": 217962
+   },
+   "FP.CPI.TOTL.ZG": {
+    "durum": 200,
+    "bayt": 230546
+   },
+   "sure_sn": 18.1
+  },
+  "ABD Hazinesi": {
+   "durum": "tamam",
+   "1990": 200,
+   "1991": 200,
+   "1992": 200,
+   "1993": 200,
+   "1994": 200,
+   "1995": 200,
+   "1996": 200,
+   "1997": 200,
+   "1998": 200,
+   "1999": 200,
+   "2000": 200,
+   "2001": 200,
+   "2002": 200,
+   "2003": 200,
+   "2004": 200,
+   "2005": 200,
+   "2006": 200,
+   "2007": 200,
+   "2008": 200,
+   "2009": 200,
+   "2010": 200,
+   "2011": 200,
+   "2012": 200,
+   "2013": 200,
+   "2014": 200,
+   "2015": 200,
+   "2016": 200,
+   "2017": 200,
+   "2018": 200,
+   "2019": 200,
+   "2020": 200,
+   "2021": 200,
+   "2022": 200,
+   "2023": 200,
+   "2024": 200,
+   "2025": 200,
+   "2026": 200,
+   "sure_sn": 18.7
+  },
+  "NY Fed ACM": {
+   "durum": 200,
+   "bayt": 10153472,
+   "xls_imza": "d0cf11e0a1b11ae1",
+   "sure_sn": 4.7
+  },
+  "BoE IADB": {
+   "durum": "tamam",
+   "iadb": {
+    "durum": 200,
+    "bayt": 57488,
+    "bas": "DATE,IUDSNPY,IUDMNPY,IUDLNPY\r\n02 Jan 2020,0.5519,0.8523,1.1599\r\n03 Jan 2020,0.5349,0.8094,1.0989\r\n06 Jan 2020,0.546,0.7874,1.1859\r\n07 Jan 2020,0.5749,0.8133,1.1979\r\n08 Jan 2020,0.6587,0.8502,1.1513\r\n0"
+   },
+   "sure_sn": 1.2
+  },
+  "CNBC gilt": {
+   "durum": "tamam",
+   "GB2Y-GB_2010": 200,
+   "GB2Y-GB_2015": 200,
+   "GB2Y-GB_2020": 200,
+   "GB2Y-GB_2025": 200,
+   "GB10Y-GB_2010": 200,
+   "GB10Y-GB_2015": 200,
+   "GB10Y-GB_2020": 200,
+   "GB10Y-GB_2025": 200,
+   "GB30Y-GB_2010": 200,
+   "GB30Y-GB_2015": 200,
+   "GB30Y-GB_2020": 200,
+   "GB30Y-GB_2025": 200,
+   "GBP=_2010": 200,
+   "GBP=_2015": 200,
+   "GBP=_2020": 200,
+   "GBP=_2025": 200,
+   "US1Y_2010": 200,
+   "US1Y_2015": 200,
+   "US1Y_2020": 200,
+   "US1Y_2025": 200,
+   "sure_sn": 10.4
+  },
+  "HMB not": {
+   "durum": "tamam",
+   "en": {
+    "durum": 200,
+    "bayt": 5086
+   },
+   "tr": {
+    "durum": 200,
+    "bayt": 5089
+   },
+   "sure_sn": 6.2
+  }
+ }
+}
