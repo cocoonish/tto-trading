@@ -1,14 +1,14 @@
 {
  "ay_onceki_ad": "Ağustos 2026",
- "ay_onceki_ort": 21.6,
- "ay_onceki_egim": -1.7,
+ "ay_onceki_ort": 21.8,
+ "ay_onceki_egim": 0.0,
  "ay_son_ad": "Eylül 2026",
- "ay_son_ort": 22.1,
- "ay_son_egim": 0.5,
- "ay_zirve_ad": "Nisan 2025",
- "ay_zirve_ort": 42.5,
+ "ay_son_ort": 21.5,
+ "ay_son_egim": -1.0,
+ "ay_zirve_ad": "Mart 2025",
+ "ay_zirve_ort": 40.4,
  "ay_dip_ad": "Aralık 2025",
- "ay_dip_ort": 12.3,
+ "ay_dip_ort": 12.5,
  "_sekil_tarih": {
   "usdtry_monthly.html": "01.10.2026"
  }

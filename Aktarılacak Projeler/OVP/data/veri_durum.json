@@ -1,33 +1,33 @@
 {
- "kosum": "2026-10-01",
- "son_gun": "2026-09-30",
+ "kosum": "2026-10-02",
+ "son_gun": "2026-10-01",
  "kapsam": {
-  "n": 3057,
-  "bas": "2015-01-01",
-  "son": "2026-09-30",
+  "n": 3060,
+  "bas": "2014-12-31",
+  "son": "2026-10-01",
   "gerekli_bas": "2023-10-01",
   "yeterli": true,
   "sorulan_bas": "2015-01-01"
  },
  "bosluk": {
-  "maks_gun": 5,
-  "maks_tarih": "2025-04-22",
-  "uzun_bosluk": 1
+  "maks_gun": 4,
+  "maks_tarih": "2017-07-11",
+  "uzun_bosluk": 0
  },
  "tazelik": {
   "kur": {
-   "son": "2026-09-30",
+   "son": "2026-10-01",
    "gecikme_gun": 1,
    "tolerans": 6
   },
   "faiz": {
    "son": "2026-10-01",
-   "gecikme_gun": 0,
+   "gecikme_gun": 1,
    "tolerans": 6
   },
   "tufe": {
    "son": "2026-08-31",
-   "gecikme_gun": 31,
+   "gecikme_gun": 32,
    "tolerans": 45
   }
  },
@@ -400,17 +400,17 @@
   }
  },
  "kur": [
-  3057,
+  3060,
   1
  ],
  "faiz": [
-  3958,
+  3959,
   3
  ],
  "tufe": [
   248,
   1
  ],
- "cerceve_imza": "3057x1·2015-01-01·2026-09-30",
+ "cerceve_imza": "3060x1·2014-12-31·2026-10-01",
  "uyarilar": []
 }
