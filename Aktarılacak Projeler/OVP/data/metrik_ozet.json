@@ -1,7 +1,7 @@
 {
  "bu_yil": 2026,
  "kur_tarih": "2026-10-01",
- "faiz_tarih": "2026-10-01",
+ "faiz_tarih": "2026-10-02",
  "tufe_tarih": "2026-08-01",
  "program_yeni_yayin": "2026-09-30",
  "program_eski_yayin": "2025-09-30",
@@ -39,15 +39,6 @@
   }
  },
  "gerceklesen_yil": [
-  {
-   "yil": 2014,
-   "n": 1,
-   "ortalama": 2.331160068511963,
-   "ilk": 2.331160068511963,
-   "son": 2.331160068511963,
-   "ilk_gun": "2014-12-31",
-   "son_gun": "2014-12-31"
-  },
   {
    "yil": 2015,
    "n": 261,
@@ -348,17 +339,17 @@
  "carry": {
   "gerceklesen": {
    "yil": 2026,
-   "tl_yuzde": 33.32283575567709,
+   "tl_yuzde": 33.72656527523261,
    "tl_yol": "endeks",
-   "ortalama_gecelik": 38.862178609625666,
+   "ortalama_gecelik": 38.85143989361702,
    "kur_yuzde": 13.961764007506838,
-   "net_yuzde": 16.98909447110253,
+   "net_yuzde": 17.34336199501425,
    "gun": 272,
-   "n_faiz": 187,
+   "n_faiz": 188,
    "bas_gun": "2026-01-02",
    "son_gun": "2026-10-01",
-   "faiz_son_gun": "2026-10-01",
-   "yillik_yuzde": 23.436922754452972
+   "faiz_son_gun": "2026-10-02",
+   "yillik_yuzde": 23.93877934525175
   },
   "faiz_varsayimi": 37.0,
   "faiz_varsayimi_gun": "2026-10-01",
@@ -2422,5 +2413,5 @@
  "tufe_son": 31.507342820912854,
  "tufe_son_ay": "2026-08-01",
  "uyarilar": [],
- "cerceve_imza": "3060x1·2014-12-31·2026-10-01"
+ "cerceve_imza": "3059x1·2015-01-01·2026-10-01"
 }

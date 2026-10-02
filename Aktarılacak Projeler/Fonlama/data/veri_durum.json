@@ -1,6 +1,6 @@
 {
  "kosum": "2026-10-02",
- "kosum_an": "2026-10-02T09:52:37+00:00",
+ "kosum_an": "2026-10-02T15:11:06+00:00",
  "son_gun": "2026-10-01",
  "son_hafta": "2026-09-25",
  "gunluk_seri": 54,
@@ -67,9 +67,12 @@
  },
  "tlref_bist": {
   "tlref": {
-   "durum": "gerek_yok",
+   "durum": "uzatildi",
+   "gunler": [
+    "2026-10-02"
+   ],
    "ortusen": 1921,
-   "son": "2026-10-01",
+   "kaynak": "Borsa İstanbul TLREF dosyası",
    "nereden": {
     "tarihsel": "canlı",
     "gunluk": "canlı"
@@ -77,9 +80,12 @@
    "bicim": []
   },
   "tlref_endeks": {
-   "durum": "gerek_yok",
+   "durum": "uzatildi",
+   "gunler": [
+    "2026-10-02"
+   ],
    "ortusen": 1807,
-   "son": "2026-10-01",
+   "kaynak": "Borsa İstanbul TLREF dosyası",
    "nereden": {
     "tarihsel": "canlı",
     "gunluk": "canlı"
