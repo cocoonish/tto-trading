@@ -491,5 +491,12 @@
    },
    "sure_sn": 203.6
   }
+ },
+ "2026-10-02T1125_ucuncu": {
+  "BLS (Internet Archive, CDX)": {
+   "durum": "hata",
+   "hata": "RuntimeError: indirilemedi: https://web.archive.org/web/20260929120334id_/https://www.bls.gov/bls/news-release/empsit.htm — URLError(ConnectionRefusedError(111, 'Connection refused'))",
+   "sure_sn": 51.1
+  }
  }
 }
