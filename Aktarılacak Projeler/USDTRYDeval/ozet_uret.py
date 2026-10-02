@@ -3,14 +3,13 @@
 import json, os, re
 import pandas as pd
 BASE = os.path.dirname(os.path.abspath(__file__))
-from evds_ortak import usdtry_serisi, usdtry_kunye
+from evds_ortak import usdtry_serisi_kunye
 import sekil_saat
 # KARAR (09.09.2026): USD/TRY Yahoo Finance'ten (ortak/usdtry.py — kapsam ölçümlü,
 # kapanmamış bar düşürülür). Seri işlem gününü taşır; EVDS gösterge kurundaki
 # valör (ertesi iş günü) kayması ve tatil öncesi yarından ileri `_tarih` yok.
 bas = (pd.Timestamp.today() - pd.Timedelta(days=160)).date()
-s = usdtry_serisi(bas)
-kunye = usdtry_kunye(bas)
+s, kunye = usdtry_serisi_kunye(bas)   # seri ve etiket AYNI çekimden
 # Grafik scriptleriyle AYNI taban: gunluk interpolasyon + hafta ici gunler.
 # Ham gozlem uzerinden n-adim geri gitmek resmi tatillerde pencereyi kaydirir
 # (or. 15 Temmuz) ve sayfa metnini grafiklerle celiskiye dusurur.

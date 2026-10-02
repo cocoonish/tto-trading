@@ -399,6 +399,14 @@ def anilmi(ad: str, sade_metin: str) -> bool:
     return bool(parcalar) and parcalar[0] in sade_metin
 
 
+# Döviz piyasasının küresel tatilleri (Noel, yılbaşı): merkezlerin çoğu kapalı,
+# Yahoo seyrek bar verir ve gün "ölçülemeyen" görünür. Üstünden geçen değişim
+# tek seanslık harekettir; iki seans kapsıyor diye uyarılmaz. Sabit tarihli
+# olduğu için tabloya yazılabilir (hareketli tatiller kaynaktan okunmadan
+# yazılmaz).
+FX_KURESEL_TATIL = ("12-25", "01-01")
+
+
 class Denetim:
     def __init__(self, b: dict, ayrinti: bool = False):
         self.b = b
@@ -1125,7 +1133,7 @@ class Denetim:
             olc = olc if olc.tzinfo else olc.replace(tzinfo=timezone.utc)
         except ValueError:
             return
-        yedek, geride = [], []
+        yedek, geride, kapsar = [], [], []
         for g in (self.b.get("piyasa", {}).get("gruplar") or []):
             for r in (g.get("satirlar") or []):
                 if not r.get("kapanis_tanimi"):
@@ -1133,6 +1141,21 @@ class Denetim:
                 if not r.get("kapanis_ani"):
                     yedek.append(r.get("ad"))
                     continue
+                # Son iki gözlemin ARASINDA ölçülemeyen bir hafta içi seans
+                # varsa satırın "günlük değişimi" iki seansı kapsar ve son gün
+                # doğru olduğu için aşağıdaki ölçüt bunu görmez. Eski günlük bar
+                # yolunda o gün tek seans olarak vardı; saatlik barı kapanışa
+                # yetişmeyen gün seriden düştüğü için kapsam daraldı.
+                try:
+                    t_son = date.fromisoformat(str(r.get("tarih"))[:10])
+                    t_onc = (t_son - timedelta(days=int(r.get("gap_gun") or 1))).isoformat()
+                except (TypeError, ValueError):
+                    t_son = t_onc = None
+                if t_son is not None:
+                    ara = [x for x in (r.get("kapanis_olculemeyen") or [])
+                           if t_onc < x < t_son.isoformat() and x[5:] not in FX_KURESEL_TATIL]
+                    if ara:
+                        kapsar.append(f"{r.get('ad')} {t_onc} → {t_son.isoformat()} ({', '.join(ara)} ölçülemedi)")
                 tur = F.kesim_turu(r.get("kod") or "")
                 gun = olc.date()
                 while gun.weekday() >= 5 or F.kapanis_ani(gun, tur) > olc:
@@ -1147,7 +1170,10 @@ class Denetim:
         if geride:
             self.uyari.append("Döviz satırı son seansın kapanışını taşımıyor: " + " · ".join(geride[:8])
                               + ". Satırın günlük değişimi birden çok seansı kapsayabilir.")
-        if not yedek and not geride:
+        if kapsar:
+            self.uyari.append("Döviz satırının günlük değişimi iki seansı kapsıyor: " + " · ".join(kapsar[:8])
+                              + ". Aradaki seansın kapanışı ölçülemedi; bu değişim tek günlük hareket değildir.")
+        if not yedek and not geride and not kapsar:
             self._ok("döviz satırları kendi son seanslarının kapanışını taşıyor")
 
     def piyasa_seansi(self):

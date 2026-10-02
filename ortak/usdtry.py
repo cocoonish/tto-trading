@@ -63,6 +63,9 @@ TUR = _fx.kesim_turu(SEMBOL)                       # "tr": İstanbul 18:00
 # son çare olarak döner ve bunu uyarısında adıyla söyler.
 SUTUN = "usdtry_ist18"
 YEDEK_SUTUN = "usdtry_gunluk_yedek"   # saatlik bar alınamadığı koşunun serisi (taze sayılmaz)
+# Eski tanımla (sütun adı başka) yazılmış önbelleğin okura giden adı: D tarihli
+# değer D gününün BAŞINDAKİ fiyattır (günlük barın kapanış alanı).
+ESKI_KAPANIS = "günün başı, Londra gece yarısı (günlük bar)"
 YAHOO_URL = f"https://query1.finance.yahoo.com/v8/finance/chart/{SEMBOL}"
 KAYNAK = "Yahoo Finance (USDTRY=X)"
 UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
@@ -313,6 +316,20 @@ def _oku(yol: Path) -> pd.Series | None:
         return None
 
 
+def _onbellek_tanimi(tanim: str | None, yol: Path | None) -> tuple[str, str]:
+    """(kapanış adı, uyarı eki) — önbelleğin sütun adı TANIMI taşır ve üç
+    tanımın üç ayrı cevabı vardır: yedek seri de doğru tarihli bir Londra gece
+    yarısı kapanışıdır, "eski tanım" sayılmaz."""
+    if tanim == SUTUN:
+        return _fx.KESIM_ADI[TUR], ""
+    if tanim == YEDEK_SUTUN:
+        kn = _kunye_oku(yol) if yol is not None else {}
+        return (kn.get("kapanis") or "Londra gece yarısı (günlük bar)",
+                "; eldeki seri günlük bardan (Londra gece yarısı) kurulmuştu")
+    return (ESKI_KAPANIS,
+            "; eldeki seri günlük bardan kuruluydu: D tarihli değer D gününün başındaki fiyattır")
+
+
 def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
          ttl_saat: float = 12.0, cek=None, simdi: dt.datetime | None = None) -> Kur:
     """USD/TRY günlük kapanış serisi (Kur nesnesi).
@@ -350,29 +367,31 @@ def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
                 else _yahoo_cek(bas_t, bugun + dt.timedelta(days=1), simdi))
     except Exception as e:  # noqa: BLE001
         if eski is not None:
-            ek = ("" if eski_tanim == SUTUN else
-                  "; eldeki seri ESKİ tanımla (günlük barın kapanış alanı, bir gün geriden) yazılmıştı")
+            kap, ek = _onbellek_tanimi(eski_tanim, yol)
             return Kur(eski[eski.index >= pd.Timestamp(bas_t)], ilk=eski.index[0].date(),
                        son=eski.index[-1].date(), n=len(eski), onbellekten=True,
                        uyarilar=["Yahoo Finance erişilemedi; eldeki seri kullanıldı "
                                  f"(son gün {eski.index[-1]:%d.%m.%Y}){ek}"],
-                       kapanis=_fx.KESIM_ADI[TUR] if eski_tanim == SUTUN else "eski tanım (günlük bar)")
+                       kapanis=kap)
         raise RuntimeError(f"USD/TRY çekilemedi ve önbellek yok: {e}") from e
 
     meta = dict(getattr(yeni, "attrs", {}) or {})
     # YEDEK YOL (saatlik bar alınamadı): günlük bardan kurulan seri bir gün
-    # geride biter. Eldeki İstanbul 18:00 serisi en az onun kadar yeniyse o
-    # döner — yedeği yayımlamak hattın saatini geri çeker ve gerileme kapısı
-    # hattı durdurur. Yedek seri hiçbir koşulda YENİ tanımın sütununa yazılmaz:
-    # yazılsaydı bir sonraki koşu onu taze bir İstanbul 18:00 serisi sanırdı.
+    # geride biter. Eldeki seri en az onun kadar yeniyse — HANGİ tanımla
+    # yazılmış olursa olsun — o döner: yedeği yayımlamak hattın saatini geri
+    # çeker ve gerileme kapısı hattı durdurur. Tanım şartı konmaz: geçiş günü
+    # önbellek eski sütun adıyla durur ve koruma tam o gün gerekir. Yedek seri
+    # hiçbir koşulda YENİ tanımın sütununa yazılmaz: yazılsaydı bir sonraki
+    # koşu onu taze bir İstanbul 18:00 serisi sanırdı.
     yedek = bool(meta.get("yedek"))
-    if yedek and eski is not None and eski_tanim == SUTUN and len(yeni) and eski.index[-1] >= yeni.index[-1]:
-        kn = _kunye_oku(yol) if yol is not None else {}
+    if yedek and eski is not None and len(yeni) and eski.index[-1] >= yeni.index[-1]:
+        kap, _ = _onbellek_tanimi(eski_tanim, yol)
+        kn = _kunye_oku(yol) if (yol is not None and eski_tanim == SUTUN) else {}
         return Kur(eski[eski.index >= pd.Timestamp(bas_t)], ilk=eski.index[0].date(),
                    son=eski.index[-1].date(), n=len(eski), onbellekten=True,
-                   uyarilar=[meta["uyari"].split(";")[0] + f"; eldeki İstanbul 18:00 serisi kullanıldı "
-                             f"(son gün {eski.index[-1]:%d.%m.%Y})"],
-                   kapanis=_fx.KESIM_ADI[TUR], gecis=kn.get("gecis"))
+                   uyarilar=[meta["uyari"].split(";")[0] + f"; eldeki seri kullanıldı "
+                             f"(kapanış {kap}, son gün {eski.index[-1]:%d.%m.%Y})"],
+                   kapanis=kap, gecis=kn.get("gecis"))
     yeni = kapanmamis_bari_dusur(yeni, simdi)
     # SIRA ÖNEMLİ: hafta sonu barı kapsam denetiminden ÖNCE düşer. Aksi hâlde
     # doluluk ölçütü (len(s) ÷ iş günü) hafta sonu barını hafta içi gözlem
@@ -382,20 +401,27 @@ def seri(bas: str | dt.date = "2005-01-03", onbellek: str | Path | None = None,
     kusur = _kapsam_uyarilari(yeni, bas_t, bugun, eski)
     if kusur:
         if eski is not None:
-            ek = ("" if eski_tanim == SUTUN else
-                  "; eldeki seri ESKİ tanımla (günlük barın kapanış alanı, bir gün geriden) yazılmıştı")
+            kap, ek = _onbellek_tanimi(eski_tanim, yol)
             return Kur(eski[eski.index >= pd.Timestamp(bas_t)], ilk=eski.index[0].date(),
                        son=eski.index[-1].date(), n=len(eski), onbellekten=True,
                        uyarilar=["Yahoo Finance serisi kapsam sınamasını geçemedi, eldeki "
                                  "seri korundu: " + "; ".join(kusur) + ek],
-                       kapanis=_fx.KESIM_ADI[TUR] if eski_tanim == SUTUN else "eski tanım (günlük bar)")
+                       kapanis=kap)
         raise RuntimeError("USD/TRY serisi kapsam sınamasını geçemedi ve önbellek yok: "
                            + "; ".join(kusur))
 
     uyarilar = list(hs_uyari) + ([meta["uyari"]] if meta.get("uyari") else [])
-    if meta.get("olculemeyen"):
+    # Yalnız SAĞ UÇ uyarıdır: son ölçülen günden SONRAKİ ölçülemeyen gün
+    # beslemenin kesildiğini söyler. Tarihçenin ortasındaki ölçülemeyen gün
+    # (yılbaşı — Yahoo tatilde seyrek bar verir) seriden yine dışlanır ama uyarı
+    # değildir: 730 günlük pencerede her zaman bir yılbaşı bulunur ve uyarı her
+    # koşuda okura basılır, OVP'nin sağ uç ailesine düşüp özeti kalıcı olarak
+    # bayat yapardı. Tatil ile kesintiyi ayıran şey o günden SONRA kurulmuş bir
+    # kapanış gelip gelmediğidir.
+    sag_uc = [g for g in (meta.get("olculemeyen") or []) if pd.Timestamp(g) > yeni.index[-1]]
+    if sag_uc:
         uyarilar.append("saatlik barı kapanış anına yetişmeyen gün seriye alınmadı: "
-                        + ", ".join(f"{pd.Timestamp(g):%d.%m.%Y}" for g in meta["olculemeyen"][-5:]))
+                        + ", ".join(f"{pd.Timestamp(g):%d.%m.%Y}" for g in sag_uc[-5:]))
     if yol is not None:
         yol.parent.mkdir(parents=True, exist_ok=True)
         gecici = yol.with_name(yol.stem + ".tmp.csv")

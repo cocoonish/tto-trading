@@ -345,12 +345,23 @@ const kaynakBos: any[] = (b?.piyasa?.seans_ozeti?.kaynak_bos ?? [])
 // SATIR NOTLARI KATLANIR: tanımlar ("S&P 500 örtük oynaklığı", vadeli
 // devir notu) her gün birebir aynı basılıyordu (236 kelime, %92 tekrar).
 // Satırda yalnız † işareti kalır, metin grubun "Satır notları" katında.
-// Döviz satırlarının kapanış anı (İstanbul 18:00 · New York 17:00). Grubun
-// döviz satırları tek bir tanımı paylaşıyorsa başlıkta bir kez yazılır.
+// Döviz satırlarının kapanış anı (İstanbul 18:00 · New York 17:00). Başlıkta
+// grubun ÇOĞUNLUK tanımı bir kez yazılır; tanımı ondan ayrılan satır (tek bir
+// sembolün saatlik barı gelmedi, satır günlük bardan) kendi tanımını tarih
+// rozetinde taşır. Yalnız tek tanım şartı konsaydı karma grupta başlık da
+// susar, ayrılan satırın neden bir gün geride olduğu hiçbir yerde yazmazdı.
 const kapanisTanimi = (g: any): string => {
-  const t = [...new Set((g?.satirlar ?? []).map((r: any) => r?.kapanis_tanimi).filter(Boolean))];
-  return t.length === 1 ? String(t[0]) : '';
+  const say = new Map<string, number>();
+  for (const r of g?.satirlar ?? []) {
+    const t = r?.kapanis_tanimi ? String(r.kapanis_tanimi) : '';
+    if (t) say.set(t, (say.get(t) ?? 0) + 1);
+  }
+  // Eşitlikte saatlik bardan kurulan tanım (kapanış anı olan) başlığa geçer.
+  const yedekMi = (t: string) => /alınamadı/.test(t) ? 1 : 0;
+  return [...say.entries()].sort((a, b) => b[1] - a[1] || yedekMi(a[0]) - yedekMi(b[0]))[0]?.[0] ?? '';
 };
+const ayrikTanim = (r: any, g: any): string =>
+  r?.kapanis_tanimi && String(r.kapanis_tanimi) !== kapanisTanimi(g) ? String(r.kapanis_tanimi) : '';
 const satirNotlari = (satirlar: any[], alan: string): { ad: string; not: string }[] =>
   (satirlar ?? []).filter((r: any) => String(r?.[alan] ?? '').trim()).map((r: any) => ({ ad: r.ad, not: String(r[alan]) }));
 // SAYIYI NİTELEYEN NOT KATLANMAZ (01.10.2026 incelemesi): "vade geçişi
@@ -1381,9 +1392,10 @@ const bolumler = [
                     <td class="p-ad">
                       {r.ad}{r.not && <sup class="p-isaret" title="Satır notu tablonun altında"><span aria-hidden="true">†</span><span class="gorunmez">satır notu var</span></sup>}
                       {notUyari(r) && <span class="p-not p-not-uyari">{notUyari(r)}</span>}
-                      {(r.tarih !== anaSeans || r.onarim || r.eksik_seans?.length > 0) && (
+                      {(r.tarih !== anaSeans || r.onarim || r.eksik_seans?.length > 0 || ayrikTanim(r, g)) && (
                         <span class="p-tarih-ic">
                           {tz(r.tarih)}
+                          {ayrikTanim(r, g) && <> · kapanış {ayrikTanim(r, g)}</>}
                           {r.onarim && <> · son işlem fiyatı</>}
                           {r.eksik_seans?.length > 0 && <> · {gunler(r.eksik_seans)} kaynakta boş</>}
                         </span>

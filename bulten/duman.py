@@ -2205,7 +2205,8 @@ def main() -> int:
         for yol in ("USDTRYDeval/ozet_uret.py", "USDTRYDeval/usdtry_deval_plotly.py",
                     "USDTRYDeval/usdtry_weekly_trends.py", "USDTRYDeval/usdtry_monthly_trends.py"):
             src = (kok / yol).read_text(encoding="utf-8")
-            assert "TP.DK.USD" not in src and "usdtry_serisi(" in src, f"{yol}: kur hâlâ EVDS'ten"
+            assert "TP.DK.USD" not in src and ("usdtry_serisi(" in src or "usdtry_serisi_kunye(" in src), \
+                f"{yol}: kur hâlâ EVDS'ten"
         src = (kok / "Fonlama" / "veri.py").read_text(encoding="utf-8")
         assert '"usdtry": ("TP.DK.USD' not in src and "def usdtry_sutunu" in src, "Fonlama kur sütunu EVDS'ten"
         src = (kok / "OVP" / "veri.py").read_text(encoding="utf-8")
@@ -2258,12 +2259,16 @@ def main() -> int:
         assert r["d1"] is not None and r["tarih"] == "2026-10-01", r
         # Sıra ve tüketiciler kaynak metninde: döviz serisi süzgeçlerden ÖNCE
         # kurulur; yerleşmemiş bar ve boş seans onarımı onu atlar; önbellek
-        # sürümü eski tanımı taze saymaz ve eski tanımlı seriyi devretmez.
+        # sürümü eski tanımı taze saymaz ve eski tanımlı seriyi çevirmeden devretmez.
         src = (BURASI / "piyasa.py").read_text(encoding="utf-8")
         ham = src[src.index("def _ham_veri("):]
         assert ham.index("seri = _doviz_saatlik(seri)") < ham.index("seri = hafta_sonu_bari_dus(seri)"), "sıra"
         assert 'd.get("doviz_kapanis") == DOVIZ_KAPANIS_SURUM' in src and 'd["doviz_kapanis"] = DOVIZ_KAPANIS_SURUM' in src
-        assert 'not (_fx_mi(k) and not v.get("kapanis_ani"))' in src, "eski tanımlı ya da yedek döviz serisi devredilebilir"
+        # Devredilen döviz serisi önce eski tanımdan çevrilir (davranışı
+        # `_doviz_yollari` sınar: kısmi çekimde satır düşmez, bir gün geride ve
+        # kapanış anı boş devredilir).
+        assert 'eski = _eski_tanimi_cevir(_eh.get("seri") or {}, _eh.get("zaman"))' in src, \
+            "önbellekten devredilen döviz serisi eski tanımdan çevrilmiyor"
         on = src[src.index("def _bos_seans_onar("):src.index("def _bos_seans_onar(") + 4000]
         assert 'if s.get("kapanis_tanimi"):' in on, "boş seans onarımı döviz serisine dokunuyor"
         yd = src[src.index("def _yerlesmemis_dus("):src.index("def _yerlesmemis_dus(") + 1500]
@@ -2289,11 +2294,21 @@ def main() -> int:
             and out["USDTRY=X"]["kapanis_tanimi"] == "İstanbul 18:00", out.get("USDTRY=X")
         bos = py.doviz_kapanislari({}, {"USDTRY=X": _pd.Series(dtype="float64")}, sabah)
         assert "USDTRY=X" not in bos, "ne günlük ne saatlik barı olan sembol boş satır olarak kaldı"
-        d = py._eski_goruntu({"seri": {"USDTRY=X": {"tarih": ["2026-10-01"], "kapanis": [49.0]},
+        # Eski tanımlı döviz serisi (kapanış tanımı yok) ATILMAZ, yedek yolun
+        # tanımına çevrilir: değer bir önceki hafta içi güne, kapanış anı yok.
+        # Atılsaydı on iki satır birden düşer ve asgari enstrüman kapısı bütün
+        # bülteni durdururdu. O koşunun (Londra) günündeki bar canlıydı, girmez.
+        d = py._eski_goruntu({"zaman": "2026-10-02T04:18:02",
+                              "seri": {"USDTRY=X": {"tarih": ["2026-09-30", "2026-10-01", "2026-10-02"],
+                                                    "kapanis": [48.99, 49.0, 49.1], "yerlesmemis_dusuruldu": True},
                                        "EURUSD=X": {"tarih": ["2026-10-01"], "kapanis": [1.1],
                                                     "kapanis_tanimi": "New York 17:00", "kapanis_ani": "x"},
                                        "^GSPC": {"tarih": ["2026-10-01"], "kapanis": [1.0]}}}, ["USDTRY=X"])
-        assert set(d["seri"]) == {"EURUSD=X", "^GSPC"}, d["seri"].keys()
+        u = d["seri"].get("USDTRY=X") or {}
+        assert set(d["seri"]) == {"USDTRY=X", "EURUSD=X", "^GSPC"}, d["seri"].keys()
+        assert u.get("tarih") == ["2026-09-29", "2026-09-30"] and u.get("kapanis") == [48.99, 49.0] \
+            and u.get("kapanis_ani") is None and "saatlik bar alınamadı" in (u.get("kapanis_tanimi") or ""), u
+        assert d["seri"]["EURUSD=X"]["kapanis"] == [1.1], "saatlik tanımlı seri çevrilmemeli"
         sahte = types.ModuleType("yfinance")
         def _indir(*a, **k):
             raise RuntimeError("ağ yok (duman)")
@@ -2316,13 +2331,48 @@ def main() -> int:
                     raise AssertionError("yedek yoldan kurulmuş döviz satırı taşıyan önbellek taze sayıldı")
                 except RuntimeError as e:
                     assert "ağ yok" in str(e), e
+                # Kısmi çekim: günlük çağrı yalnız döviz DIŞINI döndürür, saatlik
+                # boş. Eski tanımlı döviz satırı önbellekten DEVREDİLİR (yedek
+                # tanıma çevrilerek) — düşseydi satır bültenden silinirdi.
+                gun = _pd.bdate_range("2026-06-01", "2026-10-01")
+                def _indir2(kodlar, *a, **k):
+                    sayac["1d" if k.get("interval") == "1d" else "60m"] += 1
+                    if k.get("interval") != "1d":
+                        return _pd.DataFrame()
+                    sut = _pd.MultiIndex.from_tuples([("^GSPC", "Close")])
+                    return _pd.DataFrame([[7000.0 + i] for i in range(len(gun))], index=gun, columns=sut)
+                sayac = {"1d": 0, "60m": 0}
+                sahte.download = _indir2
+                eski_meta, eski_roll = py._meta_topla, py._roll_duzelt
+                py._meta_topla = lambda kodlar, simdi: ({}, list(kodlar))
+                py._roll_duzelt = lambda s: s
+                try:
+                    py.HAM.write_text(_json.dumps({"zaman": "2026-10-02T04:18:02",
+                        "seri": {"USDTRY=X": {"tarih": ["2026-09-30", "2026-10-01"], "kapanis": [48.99, 49.0]},
+                                 "^GSPC": {"tarih": ["2026-10-01"], "kapanis": [1.0]}}}), encoding="utf-8")
+                    h = py._ham_veri()
+                    u = h["seri"].get("USDTRY=X") or {}
+                    assert u.get("tarih") == ["2026-09-29", "2026-09-30"] and u.get("kapanis_ani") is None \
+                        and "saatlik bar alınamadı" in (u.get("kapanis_tanimi") or ""), u
+                    n = dict(sayac)
+                    # Aynı süreçte ikinci okuyucu: yedek satır taşısa da bu koşunun
+                    # görüntüsü tazedir, çekim baştan yapılmaz.
+                    h2 = py._ham_veri()
+                    assert sayac == n and h2["zaman"] == h["zaman"], ("ikinci okuyucu çekimi baştan yaptı", n, sayac)
+                    # Yeni süreç (küme boş) aynı görüntüyü taze saymaz: saatlik bar yine denenir.
+                    py._SUREC_YAZILAN.clear()
+                    py._ham_veri()
+                    assert sayac["60m"] > n["60m"], "yeni süreçte yedek görüntü taze sayıldı"
+                finally:
+                    py._meta_topla, py._roll_duzelt = eski_meta, eski_roll
             finally:
                 py.HAM = eski_ham
+                py._SUREC_YAZILAN.clear()
                 if eski_yf is not None:
                     _sys.modules["yfinance"] = eski_yf
                 else:
                     _sys.modules.pop("yfinance", None)
-    sina("döviz: günlük çekimden dönmeyen sembol saatlik barla, eski tanım devredilmez, yedek görüntü taze sayılmaz", _doviz_yollari)
+    sina("döviz: günlük çekimden dönmeyen sembol saatlik barla; eski tanım çevrilerek devredilir; yedek görüntü yeni süreçte taze sayılmaz", _doviz_yollari)
 
     # Denetim: saatlik barı alınamamış ya da son seansın gerisinde kalmış döviz
     # satırı adıyla UYARI (yayını durdurmaz — satırın tarihi doğrudur).
@@ -2345,9 +2395,29 @@ def main() -> int:
         yedek = dict(tamam[0], kapanis_tanimi="Londra gece yarısı (günlük bar; saatlik bar alınamadı)", kapanis_ani=None)
         d = dn.Denetim(b(yedek, tamam[1])); d.uyari = []; d.engel = []; d.doviz_kapanisi()
         assert len(d.uyari) == 1 and "saatlik barı alınamadı: USD/TRY" in d.uyari[0] and not d.engel, d.uyari
+        # Son iki gözlemin ARASINDA ölçülemeyen seans: son gün doğru ama günlük
+        # değişim iki seansı kapsar (28.09 pazartesi, perşembe 24.09 düşmüş).
+        def b2(satir, ols):
+            return {"tarih": ols[:10], "olusturma": ols,
+                    "piyasa": {"gruplar": [{"id": "g10", "satirlar": [satir]}]}}
+        iki = {"ad": "EUR/USD", "kod": "EURUSD=X", "tarih": "2026-09-25", "gap_gun": 2,
+               "kapanis_tanimi": "New York 17:00", "kapanis_ani": "2026-09-25T21:00:00Z",
+               "kapanis_olculemeyen": ["2026-09-24"]}
+        d = dn.Denetim(b2(iki, "2026-09-28T04:18:00+00:00")); d.uyari = []; d.engel = []; d.doviz_kapanisi()
+        assert len(d.uyari) == 1 and "iki seansı kapsıyor" in d.uyari[0] \
+            and "EUR/USD 2026-09-23 → 2026-09-25 (2026-09-24 ölçülemedi)" in d.uyari[0] and not d.engel, d.uyari
+        # Küresel tatil (yılbaşı) üstünden geçen değişim tek seanstır; aradaki
+        # olmayan eski bir ölçülemeyen gün de uyarı değildir.
+        tatil = dict(iki, tarih="2026-01-02", kapanis_ani="2026-01-02T22:00:00Z", kapanis_olculemeyen=["2026-01-01"])
+        d = dn.Denetim(b2(tatil, "2026-01-05T04:18:00+00:00")); d.uyari = []; d.doviz_kapanisi()
+        assert not d.uyari, ("yılbaşı iki seans sayıldı", d.uyari)
+        eski_gun = dict(iki, tarih="2026-10-02", gap_gun=1, kapanis_ani="2026-10-02T21:00:00Z",
+                        kapanis_olculemeyen=["2026-09-24"])
+        d = dn.Denetim(b2(eski_gun, "2026-10-05T04:18:00+00:00")); d.uyari = []; d.doviz_kapanisi()
+        assert not d.uyari, ("son iki gözlemin dışındaki ölçülemeyen gün uyarı üretti", d.uyari)
         src = (BURASI / "denetim.py").read_text(encoding="utf-8")
         assert "self.doviz_kapanisi();" in src, "ölçüt denetim.kos() listesinde değil"
-    sina("denetim: döviz satırı son seansının kapanışını taşımıyorsa ya da yedek yoldan kurulduysa UYARI", _doviz_satir_denetimi)
+    sina("denetim: döviz satırı son seansının kapanışını taşımıyorsa, iki seansı kapsıyorsa ya da yedek yoldan kurulduysa UYARI", _doviz_satir_denetimi)
 
     # Denetimin bağımsız kapısı kapanış ANINI taşıyan satırı o anla sorar:
     # grup tablosu 7/24 dövize 24 yazar ve akşam koşusunda doğru bir İstanbul

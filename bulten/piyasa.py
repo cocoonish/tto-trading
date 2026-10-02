@@ -32,6 +32,11 @@ ONBELLEK = BURASI / "onbellek"
 ONBELLEK.mkdir(exist_ok=True)
 HAM = ONBELLEK / "piyasa_ham.json"
 TTL_SAAT = 4
+# Bu süreçte yazılmış görüntüler (yol, damga). Aynı koşunun ikinci okuyucusu
+# (uret.temalar) yedek döviz satırı yüzünden çekimi baştan yapmasın: yapsaydı
+# aynı sayfada aynı kur iki ayrı değerle basılır, depodaki ham görüntü bülten
+# tablosuyla tutmazdı. Saatlik bar bir sonraki ölçümde (yeni süreç) yine denenir.
+_SUREC_YAZILAN: set = set()
 
 
 @dataclass
@@ -311,19 +316,48 @@ def _onbellek_birlestir(yeni: dict, eski: dict, meta_yok=()) -> dict | None:
     }
 
 
+def _eski_tanimi_cevir(seri: dict, zaman) -> dict:
+    """Eski tanımla yazılmış döviz serilerini (kapanış tanımı yok: D tarihli
+    değer D gününün BAŞIDIR) yedek yolun tanımına çevirir: değer bir önceki
+    hafta içi güne alınır, kapanış anı yoktur ve denetimin döviz ölçütü satırı
+    adıyla "bir gün geride" diye gösterir. `zaman`: serinin yazıldığı koşu —
+    o günün (Londra) barı canlıydı, düzeltmeye girmez.
+
+    Seriler ATILMAZ: atılsaydı on iki döviz satırı birden düşer ve sayım kapısı
+    (asgari enstrüman) ilgisiz bir sebeple bültenin TAMAMINI durdururdu."""
+    eski_tanim = sorted(k for k, v in seri.items() if _fx_mi(k) and not v.get("kapanis_tanimi"))
+    if not eski_tanim:
+        return seri
+    import pandas as pd
+    F = _fx_modul()
+    seri = dict(seri)
+    z = pd.Timestamp(zaman or datetime.now(timezone.utc).isoformat())
+    z = z.tz_localize("UTC") if z.tzinfo is None else z.tz_convert("UTC")
+    gun_londra = z.tz_convert("Europe/London").date()
+    for k in eski_tanim:
+        s = seri[k]
+        g = pd.Series(s.get("kapanis") or [], index=pd.to_datetime(s.get("tarih") or []), dtype="float64")
+        duz = F.gunluk_duzelt(g[g.index.date < gun_londra])
+        if not len(duz):
+            seri.pop(k)
+            continue
+        seri[k] = {**{a: b for a, b in s.items() if a not in ("canli", "kapanis_gecis", "kapanis_olculemeyen")},
+                   "tarih": [x.date().isoformat() for x in duz.index],
+                   "kapanis": [float(v) for v in duz.values],
+                   "kapanis_tanimi": "Londra gece yarısı (günlük bar; saatlik bar alınamadı)",
+                   "kapanis_ani": None}
+    print("  ! önbellekteki döviz serileri günlük barın kapanış alanıyla yazılmış; değer bir önceki "
+          "hafta içi güne alınarak (saatlik bar alınamadı, bir gün geride) verildi: " + ", ".join(eski_tanim))
+    return seri
+
+
 def _eski_goruntu(d: dict, kodlar) -> dict:
     """Çekim BOŞ döndüğünde geri verilen önbellek. Seans izleri önceki koşunun
     ölçümüdür; bu koşu HİÇBİR sembolü sınamadı ve bu adıyla yazılır — yoksa
     denetim "boş seans yok" derdi."""
     d = dict(d)
-    seri = d.get("seri") or {}
-    # Eski tanımla yazılmış döviz serisi (kapanış tanımı yok) geri verilmez: o
-    # seri bir gün geride ve satırında bunu söyleyen hiçbir alan yok.
-    eski_tanim = sorted(k for k, v in seri.items() if _fx_mi(k) and not v.get("kapanis_tanimi"))
-    if eski_tanim:
-        print("  ! önbellekteki döviz serileri eski tanımla (günlük barın kapanış alanı) yazılmış, "
-              "devredilmedi: " + ", ".join(eski_tanim))
-    d["seri"] = {k: _seans_izsiz(v) for k, v in seri.items() if k not in eski_tanim}
+    d["seri"] = _eski_tanimi_cevir({k: _seans_izsiz(v) for k, v in (d.get("seri") or {}).items()},
+                                  d.get("zaman"))
     d["meta_olculemedi"] = sorted(kodlar)
     return d
 
@@ -598,7 +632,8 @@ def _ham_veri(tazele: bool = False) -> dict:
             # denenmezdi.
             if (datetime.now() - t < timedelta(hours=TTL_SAAT)
                     and d.get("doviz_kapanis") == DOVIZ_KAPANIS_SURUM
-                    and all(v.get("kapanis_ani") for k, v in (d.get("seri") or {}).items() if _fx_mi(k))):
+                    and ((str(HAM), d.get("zaman")) in _SUREC_YAZILAN
+                         or all(v.get("kapanis_ani") for k, v in (d.get("seri") or {}).items() if _fx_mi(k)))):
                 return d
         except Exception:
             pass
@@ -647,13 +682,13 @@ def _ham_veri(tazele: bool = False) -> dict:
     seri = _yerlesmemis_dus(seri)
     eski = {}
     try:
-        eski = (json.loads(HAM.read_text(encoding="utf-8")) or {}).get("seri") or {}
+        _eh = json.loads(HAM.read_text(encoding="utf-8")) or {}
+        # Çekimden dönmeyen döviz sembolü önbellekten devredilir; eski tanımla
+        # yazılmışsa önce yedek yolun tanımına çevrilir (kapanış anı yok →
+        # denetim satırı adıyla gösterir). Atmak satırı bültenden silerdi.
+        eski = _eski_tanimi_cevir(_eh.get("seri") or {}, _eh.get("zaman"))
     except Exception:
         pass
-    # Önbellekten devredilecek döviz serisi yalnız saatlik bardan kurulmuş olandır:
-    # eski tanım (günlük barın kapanış alanı, bir gün geride) ve yedek yol
-    # (saatlik bar alınamadı) devredilmez.
-    eski = {k: v for k, v in eski.items() if not (_fx_mi(k) and not v.get("kapanis_ani"))}
     # BOŞ SEANS ONARIMI — yerleşmemiş bar düştükten SONRA (onarım kapanmamış bir
     # günü asla kurmaz, ama elindeki seri de kapanmamış bar taşımamalı) ve devir
     # düzeltmesinden ÖNCE (vadeliler zaten onarılmaz; sıra yalnız okunurluk için).
@@ -727,6 +762,7 @@ def _ham_veri(tazele: bool = False) -> dict:
               + " · ".join(_eksik))
     d["doviz_kapanis"] = DOVIZ_KAPANIS_SURUM
     HAM.write_text(json.dumps(d, ensure_ascii=False), encoding="utf-8")
+    _SUREC_YAZILAN.add((str(HAM), d["zaman"]))
     return d
 
 

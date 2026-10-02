@@ -86,6 +86,33 @@ def _kur_kaynagi():
     for ad in ("ozet_uret.py", "usdtry_deval_plotly.py",
                "usdtry_weekly_trends.py", "usdtry_monthly_trends.py"):
         sina(f"{ad}: kur `usdtry_serisi` köprüsünden", "usdtry_serisi" in kaynaklar[ad])
+    # Özetin değeri ve etiketi AYNI çekimden: iki ayrı seri() çağrısı iki
+    # ayrı çekimdir (birincisi yedek yola düşüp ikincisi saatlik barı alırsa
+    # kart Londra gece yarısı değerini "İstanbul 18:00" diye basardı).
+    o = kaynaklar["ozet_uret.py"]
+    sina("ozet_uret: seri ve künye tek çekimden", o.count("usdtry_serisi_kunye(") == 1
+         and "usdtry_kunye(" not in o and "usdtry_serisi(" not in o,
+         "seri ile künye ayrı çağrılarla kuruluyor")
+    import evds_ortak as _eo
+    sayac = []
+    class _Sahte:
+        @staticmethod
+        def seri(bas=None, onbellek=None):
+            import pandas as pd
+            sayac.append(bas)
+            return type("K", (), {"seri": pd.Series([49.0], index=pd.to_datetime(["2026-10-01"])),
+                                  "uyarilar": []})()
+        @staticmethod
+        def kunye(k):
+            return {"kur_son": "01.10.2026", "kur_kapanis": "İstanbul 18:00"}
+    _eski = _eo._ortak_usdtry
+    try:
+        _eo._ortak_usdtry = lambda: _Sahte
+        s_, kn_ = _eo.usdtry_serisi_kunye("2026-06-01", uyar=lambda *_: None)
+    finally:
+        _eo._ortak_usdtry = _eski
+    sina("köprü: seri ve künye tek seri() çağrısından", len(sayac) == 1 and kn_["kur_son"] == "01.10.2026"
+         and s_.name == "USDTRY=X", f"çağrı {len(sayac)}")
 
     # Köprü ortak yükleyiciye devreder; kendi indirmesini kurmaz.
     e = kaynaklar["evds_ortak.py"]
@@ -307,6 +334,48 @@ def _kapanis_ani():
         sina("yedek seri yeni tanımın sütununa yazılmaz, bir sonraki koşu yeniden çeker",
              not kr5.onbellekten and kr5.kapanis.startswith("Londra") and sutun5 == m.YEDEK_SUTUN
              and cekildi and not kr6.onbellekten, f"sütun {sutun5!r} · çekildi {len(cekildi)}")
+        # GEÇİŞ GÜNÜ: önbellek eski sütun adıyla duruyor (birleştirmeden sonraki
+        # ilk koşu) ve saatlik bar alınamadı. Eldeki seri yedekten geride
+        # değilse o döner — tanım şartı konsaydı yedek yayımlanır, hattın
+        # saati bir gün geri gider ve gerileme kapısı hattı durdururdu.
+        yol3 = Path(d_) / "usdtry3.csv"
+        pd.Series(49.0, index=gunler, name="usdtry").to_csv(yol3, index_label="tarih")
+        os.utime(yol3, (0, 0))
+        oncesi3 = yol3.read_bytes()
+        kr7 = m.seri(bas="2026-06-01", onbellek=yol3, cek=cek_yedek, simdi=simdi_)
+        sina("geçiş günü yedek yol: eski sütunlu seri döner, saat geri gitmez, önbellek ezilmez",
+             kr7.onbellekten and kr7.son == gunler[-1].date() and kr7.kapanis == m.ESKI_KAPANIS
+             and yol3.read_bytes() == oncesi3, f"son {kr7.son} · {kr7.kapanis} · {kr7.uyarilar}")
+        # Okura giden etiket kendi yapım tarihçemizi anlatmaz ("eski tanım"),
+        # serinin sözleşmesini söyler; üç tanımın üç ayrı cevabı var.
+        def agsiz_(bas, bit):
+            raise RuntimeError("ağ yok (duman)")
+        kr8 = m.seri(bas="2026-06-01", onbellek=yol3, cek=agsiz_, simdi=simdi_)
+        yol4 = Path(d_) / "usdtry4.csv"
+        m.seri(bas="2026-06-01", onbellek=yol4, cek=cek_yedek, simdi=simdi_)        # yedek sütunla yazar
+        kr9 = m.seri(bas="2026-06-01", onbellek=yol4, cek=agsiz_, simdi=simdi_)
+        metin = " ".join([kr7.kapanis, kr8.kapanis, kr9.kapanis] + kr7.uyarilar + kr8.uyarilar + kr9.uyarilar)
+        sina("ağ düşünce etiket önbelleğin tanımını söyler (yedek → Londra gece yarısı, eski → günün başı)",
+             kr9.kapanis.startswith("Londra") and kr8.kapanis == m.ESKI_KAPANIS
+             and "eski tanım" not in metin.lower() and "ESKİ" not in metin, metin)
+        # ÖLÇÜLEMEYEN GÜN: yalnız SAĞ UÇ uyarıdır. Tarihçenin ortasındaki
+        # ölçülemeyen gün (yılbaşı) seriden düşer ama her koşuda okura basılan
+        # bir uyarı değildir; son günden SONRAKİ ölçülemeyen gün ise kesintidir.
+        orta = pd.Timestamp("2026-07-15")
+        def cek_olc(sag):
+            def _c(bas, bit):
+                x = pd.Series(49.03, index=gunler[gunler != orta])
+                x.attrs = {"kapanis": "İstanbul 18:00",
+                           "olculemeyen": ["2026-07-15"] + (["2026-10-02"] if sag else [])}
+                return x
+            return _c
+        k_orta = m.seri(bas="2026-06-01", onbellek=Path(d_) / "o1.csv", cek=cek_olc(False), simdi=simdi_)
+        k_sag = m.seri(bas="2026-06-01", onbellek=Path(d_) / "o2.csv", cek=cek_olc(True), simdi=simdi_)
+        sina("tarihçenin ortasındaki ölçülemeyen gün uyarı üretmez",
+             not any("yetişmeyen" in u for u in k_orta.uyarilar) and orta not in k_orta.seri.index, f"{k_orta.uyarilar}")
+        sina("son günden sonraki ölçülemeyen gün uyarıdır (yalnız o gün)",
+             any("yetişmeyen" in u and "02.10.2026" in u and "15.07.2026" not in u for u in k_sag.uyarilar),
+             f"{k_sag.uyarilar}")
 
 
 # ===========================================================================

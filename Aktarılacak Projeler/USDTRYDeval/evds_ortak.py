@@ -125,10 +125,15 @@ def usdtry_serisi(start, uyar=print):
     return s
 
 
-def usdtry_kunye(start):
-    """ozet.json'a düşecek kaynak künyesi (kaynak adı, ilk/son gün, gözlem)."""
+def usdtry_serisi_kunye(start, uyar=print):
+    """Seri ve künyesi AYNI çekimden. İki ayrı `seri()` çağrısı iki ayrı
+    çekimdir: birincisi yedek yola düşüp ikincisi saatlik barı alırsa özetin
+    değeri Londra gece yarısı kapanışını, etiketi İstanbul 18:00'i söylerdi."""
     import pandas as pd
     if isinstance(start, str) and re.fullmatch(r"\d{2}-\d{2}-\d{4}", start):
         start = pd.to_datetime(start, format="%d-%m-%Y").date()
     m = _ortak_usdtry()
-    return m.kunye(m.seri(bas=start, onbellek=USDTRY_ONBELLEK))
+    k = m.seri(bas=start, onbellek=USDTRY_ONBELLEK)
+    for u in k.uyarilar:
+        uyar("UYARI: " + u)
+    return k.seri.rename("USDTRY=X"), m.kunye(k)
