@@ -1,0 +1,2483 @@
+{
+ "hazirla": {
+  "cipa": {
+   "commit": "3c38f1b4f42a918fa63594cdb680fc65439bf550",
+   "commit_zamani": "2026-10-02T10:01:40+00:00",
+   "gunluk": "2026-09-30",
+   "haftalik": "2026-09-30",
+   "olay": "2026-09-30",
+   "aylik": "2026-08",
+   "ceyreklik": "2026Q2",
+   "valor": "2026-10-01"
+  },
+  "not": "Depodaki girdiler (veri planı bölüm A). Kesim: günlük ve haftalık ≤ 30.09.2026, aylık ≤ 08.2026, çeyreklik ≤ 2026Ç2, TCMB valör kuru ≤ 01.10.2026 (30.09 ilanı). sha256 sıkıştırılmamış metnin özüdür; git_blob kaynak dosyanın `git hash-object` özü.",
+  "uyarilar": [
+   "dibs_egri_gunluk.csv.gz:n9y 2026-09-07 tarihinde bitiyor (çıpa sınırı 2026-09-30)",
+   "usdtry_yahoo_gunluk.csv.gz:usdtry_gunbasi 2026-08-20 tarihinde bitiyor (çıpa sınırı 2026-09-30)",
+   "gecelik_gunluk.csv.gz:gecelik_ao 2026-08-20 tarihinde bitiyor (çıpa sınırı 2026-09-30)",
+   "butce_ceyreklik.csv.gz:fh_borc_trl 2026-03-31 tarihinde bitiyor (çıpa sınırı 2026-06-30)",
+   "butce_ceyreklik.csv.gz:fh_borc_gsyh 2026-03-31 tarihinde bitiyor (çıpa sınırı 2026-06-30)",
+   "kkm_aylik.csv.gz:kkm_tl_mlr 2026-07-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "kkm_aylik.csv.gz:kkm_usd_mia 2026-07-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "odemeler_aylik.csv.gz:cari 2026-07-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "odemeler_aylik.csv.gz:mal_denge 2026-07-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "odemeler_aylik.csv.gz:hc_altin_net 2026-07-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "odemeler_aylik.csv.gz:hc_enerji_net 2026-07-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "odemeler_aylik.csv.gz:hc_cekirdek 2026-07-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "dis_borc_odeme_haftalik.csv.gz:borc_odeme_top 2026-09-09 tarihinde bitiyor (çıpa sınırı 2026-09-30)",
+   "dis_borc_odeme_haftalik.csv.gz:borc_odeme_haz 2026-09-09 tarihinde bitiyor (çıpa sınırı 2026-09-30)",
+   "dis_borc_odeme_haftalik.csv.gz:borc_odeme_dgr 2026-09-09 tarihinde bitiyor (çıpa sınırı 2026-09-30)",
+   "dis_borc_odeme_haftalik.csv.gz:borc_odeme_tcmb 2026-09-09 tarihinde bitiyor (çıpa sınırı 2026-09-30)",
+   "kuresel_aylik.csv.gz:abd_tufe 2026-07-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "kuresel_aylik.csv.gz:abd_cekirdek 2026-07-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "em_kur_yahoo_gunluk.csv.gz:brl_gunbasi 2026-08-20 tarihinde bitiyor (çıpa sınırı 2026-09-30)",
+   "em_kur_yahoo_gunluk.csv.gz:mxn_gunbasi 2026-08-20 tarihinde bitiyor (çıpa sınırı 2026-09-30)",
+   "em_kur_yahoo_gunluk.csv.gz:zar_gunbasi 2026-08-20 tarihinde bitiyor (çıpa sınırı 2026-09-30)",
+   "em_kur_yahoo_gunluk.csv.gz:inr_gunbasi 2026-08-20 tarihinde bitiyor (çıpa sınırı 2026-09-30)",
+   "em_politika_aylik.csv.gz:tur 2026-06-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "em_politika_aylik.csv.gz:arg 2025-06-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "em_politika_aylik.csv.gz:bra 2026-06-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "em_politika_aylik.csv.gz:rus 2026-06-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "em_politika_aylik.csv.gz:mex 2026-06-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "em_politika_aylik.csv.gz:zaf 2026-06-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "em_politika_aylik.csv.gz:ind 2026-05-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "em_politika_aylik.csv.gz:idn 2026-04-01 tarihinde bitiyor (çıpa sınırı 2026-08-31)",
+   "yabanci_akim_haftalik: tam sıfır gözlem 2021-07-23 (hisse) — kaynak hat tek taraflı boş haftayı 0 sayıyor olabilir, ölçüm katmanı sorar"
+  ],
+  "bulunamayan": [
+   {
+    "plan": "ortak/usdtry önbelleği (<hat>/data/cache/usdtry_yahoo.csv), USDTRYDeval/data/cache/usdtry_yahoo.csv",
+    "durum": "depoda yok — önbellek izlenmez, yalnız koşucuda durur",
+    "yerine": "Aktarılacak Projeler/Fonlama/data/gunluk.csv:usdtry (aynı ortak/usdtry.seri() çıktısı, EVDS iş günü eksenine hizalı) → usdtry_ist18"
+   },
+   {
+    "plan": "DXY barının gövde/aralık sınaması (yahoo_gunluk)",
+    "durum": "OatBund Yahoo arşivi yalnız kapanış taşıyor (açılış, yüksek, düşük yok)",
+    "yerine": "sınama bu arşivden kurulamaz; G10 yedeği için cnbc_kur_gunluk eklendi"
+   },
+   {
+    "plan": "DİBS metrik `politika` (günlük politika faizi)",
+    "durum": "seri 14.09.2018'de başlıyor (bir hafta vadeli repo); öncesi yok",
+    "yerine": "em_politika_aylik:tur (BIS, aylık, 2002+) ve ppk_kararlari (2016+)"
+   }
+  ]
+ },
+ "dosyalar": {
+  "abd_hazine_gunluk.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "91e32d7d05cbb03ba7e14f7fa70e64f502d715f47dfaa2837711d7226ccb600b",
+   "satir": 6941,
+   "ilk": "1999-01-04",
+   "son": "2026-09-30",
+   "sutunlar": [
+    "us2",
+    "us10"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-09-30",
+   "kesilen_satir": 1,
+   "kesilen_aralik": [
+    "2026-10-01",
+    "2026-10-01"
+   ],
+   "frekans": "gunluk",
+   "tarih_kurali": "ABD işlem günü",
+   "pratik": [
+    "1A",
+    "1 (rejim ataması)",
+    "3C",
+    "3D",
+    "4B",
+    "4C",
+    "5A",
+    "11C",
+    "12"
+   ],
+   "aciklama": "ABD Hazinesi günlük par getiri eğrisi (OatBund arşivi, 01.10.2026 indirmesi)",
+   "sutun_aciklama": {
+    "us2": "2 yıllık par getiri, %",
+    "us10": "10 yıllık par getiri, %"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/OatBund/veri/abd_gunluk.csv.gz",
+     "git_blob": "f7536d9d779c0eebef493a7e466d070bd878bca9",
+     "head_blob": "f7536d9d779c0eebef493a7e466d070bd878bca9",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "us2": "us2",
+      "us10": "us10"
+     },
+     "kaynak_arsiv_ozu_tuttu": true
+    }
+   ],
+   "kapsam": {
+    "us2": {
+     "n": 6941,
+     "sifir": 0,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.959
+    },
+    "us10": {
+     "n": 6941,
+     "sifir": 0,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.959
+    }
+   }
+  },
+  "bund_gunluk.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "3253f7b1154b12818914a086a62f73ac49a6345b73b553b9e409028a18492561",
+   "satir": 7048,
+   "ilk": "1999-01-04",
+   "son": "2026-09-30",
+   "sutunlar": [
+    "de2_par",
+    "de10_par"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-09-30",
+   "kesilen_satir": 1,
+   "kesilen_aralik": [
+    "2026-10-01",
+    "2026-10-01"
+   ],
+   "frekans": "gunluk",
+   "tarih_kurali": "Bundesbank işlem günü",
+   "pratik": [
+    "3C",
+    "6D"
+   ],
+   "aciklama": "Deutsche Bundesbank BBSIS, kupon ödemeli (par) Bund getirisi (OatBund arşivi)",
+   "sutun_aciklama": {
+    "de2_par": "2 yıl kalan vadeli par getiri, %",
+    "de10_par": "10 yıl kalan vadeli par getiri, %"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/OatBund/veri/bund_gunluk.csv.gz",
+     "git_blob": "f579cca5f63899532930f7bf7ce3bd67265bc07b",
+     "head_blob": "f579cca5f63899532930f7bf7ce3bd67265bc07b",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "de2_par": "de2_par",
+      "de10_par": "de10_par"
+     },
+     "kaynak_arsiv_ozu_tuttu": true
+    }
+   ],
+   "kapsam": {
+    "de2_par": {
+     "n": 7048,
+     "sifir": 26,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9737
+    },
+    "de10_par": {
+     "n": 7048,
+     "sifir": 8,
+     "ilk": "1999-01-04",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9737
+    }
+   }
+  },
+  "butce_aylik.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "af0aa41bb00d2d2af47949ac5f273fd49d1c3009e698a608fc929ed07d505961",
+   "satir": 284,
+   "ilk": "2003-01-01",
+   "son": "2026-08-01",
+   "sutunlar": [
+    "my_gelir",
+    "my_gider",
+    "faiz_disi_gider",
+    "faiz_gideri",
+    "ic_borc_toplam"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-08-31",
+   "kesilen_satir": 0,
+   "frekans": "aylik",
+   "tarih_kurali": "ay başı",
+   "pratik": [
+    "5B",
+    "6A",
+    "8A"
+   ],
+   "aciklama": "Merkezi yönetim bütçesi (aylık akım, bin TL) ve iç borç stoku (bin TL). Faiz dışı denge = my_gelir − faiz_disi_gider",
+   "sutun_aciklama": {
+    "my_gelir": "merkezi yönetim gelirleri, bin TL (TP.KB.GEL001)",
+    "my_gider": "merkezi yönetim giderleri, bin TL (TP.KB.GID001)",
+    "faiz_disi_gider": "faiz hariç giderler, bin TL (TP.KB.GID002)",
+    "faiz_gideri": "faiz giderleri, bin TL (TP.KB.GID152)",
+    "ic_borc_toplam": "merkezi yönetim iç borç stoku, bin TL"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/Butce/data/aylik.csv",
+     "git_blob": "a78991c7265ac9cfcaf755b0743da39a44aae2f6",
+     "head_blob": "a78991c7265ac9cfcaf755b0743da39a44aae2f6",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "my_gelir": "my_gelir",
+      "my_gider": "my_gider",
+      "faiz_disi_gider": "faiz_disi_gider",
+      "faiz_gideri": "faiz_gideri",
+      "ic_borc_toplam": "ic_borc_toplam"
+     }
+    }
+   ],
+   "kapsam": {
+    "my_gelir": {
+     "n": 248,
+     "sifir": 0,
+     "ilk": "2006-01-01",
+     "son": "2026-08-01"
+    },
+    "my_gider": {
+     "n": 248,
+     "sifir": 0,
+     "ilk": "2006-01-01",
+     "son": "2026-08-01"
+    },
+    "faiz_disi_gider": {
+     "n": 248,
+     "sifir": 0,
+     "ilk": "2006-01-01",
+     "son": "2026-08-01"
+    },
+    "faiz_gideri": {
+     "n": 248,
+     "sifir": 0,
+     "ilk": "2006-01-01",
+     "son": "2026-08-01"
+    },
+    "ic_borc_toplam": {
+     "n": 284,
+     "sifir": 0,
+     "ilk": "2003-01-01",
+     "son": "2026-08-01"
+    }
+   }
+  },
+  "butce_ceyreklik.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "2b83d485bf5eb3f838002a2068c9cf2179f954c6b068684d41a5bd3ec9b5a08e",
+   "satir": 94,
+   "ilk": "2003-03-31",
+   "son": "2026-06-30",
+   "sutunlar": [
+    "gsyh_yil_trl",
+    "denge_gsyh",
+    "fdd_gsyh",
+    "faiz_gsyh",
+    "stok_trl",
+    "stok_gsyh",
+    "ic_borc_ceyrek_trl",
+    "dis_senet_ceyrek_trl",
+    "dis_kredi_ceyrek_trl",
+    "doviz_borc_ceyrek_trl",
+    "fh_borc_trl",
+    "fh_borc_gsyh",
+    "db_my_mlrusd"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 4.976469991646582e-07,
+   "cipa_siniri": "2026-06-30",
+   "kesilen_satir": 0,
+   "frekans": "ceyreklik",
+   "tarih_kurali": "çeyrek sonu",
+   "pratik": [
+    "5B",
+    "6A",
+    "6B",
+    "6C"
+   ],
+   "aciklama": "Bütçe hattının çeyreklik ölçümleri: 12 aylık akımların GSYH'ye oranı, borç stoku ve bacakları (trilyon TL), finansal hesaplardan borç, merkezi yönetim dış borcu",
+   "sutun_aciklama": {
+    "gsyh_yil_trl": "4 çeyreklik GSYH toplamı, trilyon TL",
+    "denge_gsyh": "12 aylık bütçe dengesi / GSYH, %",
+    "fdd_gsyh": "12 aylık faiz dışı denge / GSYH, %",
+    "faiz_gsyh": "12 aylık faiz gideri / GSYH, %",
+    "stok_trl": "merkezi yönetim borç stoku (bileşik, 2020Ç3+), trilyon TL",
+    "stok_gsyh": "borç stoku / GSYH, %",
+    "ic_borc_ceyrek_trl": "iç borç stoku, çeyrek sonu, trilyon TL",
+    "dis_senet_ceyrek_trl": "dış borçlanma senetleri, trilyon TL (2020Ç3+)",
+    "dis_kredi_ceyrek_trl": "dış krediler, trilyon TL (2020Ç3+)",
+    "doviz_borc_ceyrek_trl": "döviz cinsi ve dövize endeksli borç, trilyon TL (2020Ç3+)",
+    "fh_borc_trl": "finansal hesaplar: borçlanma senetleri + krediler, piyasa değerli, trilyon TL",
+    "fh_borc_gsyh": "fh_borc_trl / GSYH, %",
+    "db_my_mlrusd": "merkezi yönetim brüt dış borç stoku, milyar USD"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/Butce/data/ceyreklik_metrik.csv",
+     "git_blob": "e0097538442e4a28fcc55d57e6f6bd324768a91d",
+     "head_blob": "e0097538442e4a28fcc55d57e6f6bd324768a91d",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "gsyh_yil_trl": "gsyh_yil_trl",
+      "denge_gsyh": "denge_gsyh",
+      "fdd_gsyh": "fdd_gsyh",
+      "faiz_gsyh": "faiz_gsyh",
+      "stok_trl": "stok_trl",
+      "stok_gsyh": "stok_gsyh",
+      "ic_borc_ceyrek_trl": "ic_borc_ceyrek_trl",
+      "dis_senet_ceyrek_trl": "dis_senet_ceyrek_trl",
+      "dis_kredi_ceyrek_trl": "dis_kredi_ceyrek_trl",
+      "doviz_borc_ceyrek_trl": "doviz_borc_ceyrek_trl",
+      "fh_borc_trl": "fh_borc_trl",
+      "fh_borc_gsyh": "fh_borc_gsyh",
+      "db_my_mlrusd": "db_my_mlrusd"
+     }
+    }
+   ],
+   "kapsam": {
+    "gsyh_yil_trl": {
+     "n": 91,
+     "sifir": 0,
+     "ilk": "2003-12-31",
+     "son": "2026-06-30"
+    },
+    "denge_gsyh": {
+     "n": 79,
+     "sifir": 0,
+     "ilk": "2006-12-31",
+     "son": "2026-06-30"
+    },
+    "fdd_gsyh": {
+     "n": 79,
+     "sifir": 0,
+     "ilk": "2006-12-31",
+     "son": "2026-06-30"
+    },
+    "faiz_gsyh": {
+     "n": 79,
+     "sifir": 0,
+     "ilk": "2006-12-31",
+     "son": "2026-06-30"
+    },
+    "stok_trl": {
+     "n": 24,
+     "sifir": 0,
+     "ilk": "2020-09-30",
+     "son": "2026-06-30"
+    },
+    "stok_gsyh": {
+     "n": 24,
+     "sifir": 0,
+     "ilk": "2020-09-30",
+     "son": "2026-06-30"
+    },
+    "ic_borc_ceyrek_trl": {
+     "n": 94,
+     "sifir": 0,
+     "ilk": "2003-03-31",
+     "son": "2026-06-30"
+    },
+    "dis_senet_ceyrek_trl": {
+     "n": 24,
+     "sifir": 0,
+     "ilk": "2020-09-30",
+     "son": "2026-06-30"
+    },
+    "dis_kredi_ceyrek_trl": {
+     "n": 24,
+     "sifir": 0,
+     "ilk": "2020-09-30",
+     "son": "2026-06-30"
+    },
+    "doviz_borc_ceyrek_trl": {
+     "n": 24,
+     "sifir": 0,
+     "ilk": "2020-09-30",
+     "son": "2026-06-30"
+    },
+    "fh_borc_trl": {
+     "n": 50,
+     "sifir": 0,
+     "ilk": "2010-12-31",
+     "son": "2026-03-31"
+    },
+    "fh_borc_gsyh": {
+     "n": 50,
+     "sifir": 0,
+     "ilk": "2010-12-31",
+     "son": "2026-03-31"
+    },
+    "db_my_mlrusd": {
+     "n": 94,
+     "sifir": 0,
+     "ilk": "2003-03-31",
+     "son": "2026-06-30"
+    }
+   }
+  },
+  "cnbc_avrupa_getiri_gunluk.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "f1fc21721fbc979b056067b62da8de746e49ff86505ffc9accc0a5ead246c686",
+   "satir": 7758,
+   "ilk": "2000-01-03",
+   "son": "2026-09-30",
+   "sutunlar": [
+    "de10y",
+    "fr10y",
+    "it10y",
+    "es10y",
+    "pt10y",
+    "gr10y",
+    "de2y",
+    "it2y"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-09-30",
+   "kesilen_satir": 1,
+   "kesilen_aralik": [
+    "2026-10-01",
+    "2026-10-01"
+   ],
+   "frekans": "gunluk",
+   "tarih_kurali": "CNBC işlem günü; hafta içi barı Avrupa kapanışı (Paris 17:30), hafta sonu barları kaynakta durur",
+   "pratik": [
+    "6D",
+    "6 (vakalar: İtalya 2011 ve 2018, İspanya 2012, Yunanistan)"
+   ],
+   "aciklama": "CNBC (Tullett Prebon) gösterge devlet tahvili getirisi, % (OatBund arşivi)",
+   "sutun_aciklama": {
+    "de10y": "DE 10 yıllık gösterge getiri, %",
+    "fr10y": "FR 10 yıllık gösterge getiri, %",
+    "it10y": "IT 10 yıllık gösterge getiri, %",
+    "es10y": "ES 10 yıllık gösterge getiri, %",
+    "pt10y": "PT 10 yıllık gösterge getiri, %",
+    "gr10y": "GR 10 yıllık gösterge getiri, %",
+    "de2y": "DE 2 yıllık gösterge getiri, %",
+    "it2y": "IT 2 yıllık gösterge getiri, %"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/OatBund/veri/cnbc_gunluk.csv.gz",
+     "git_blob": "59987c030b38d88be23ece09fe2b61157e641ca5",
+     "head_blob": "59987c030b38d88be23ece09fe2b61157e641ca5",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "de10y": "de10y",
+      "fr10y": "fr10y",
+      "it10y": "it10y",
+      "es10y": "es10y",
+      "pt10y": "pt10y",
+      "gr10y": "gr10y",
+      "de2y": "de2y",
+      "it2y": "it2y"
+     },
+     "kaynak_arsiv_ozu_tuttu": true
+    }
+   ],
+   "kapsam": {
+    "de10y": {
+     "n": 7387,
+     "sifir": 0,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9792
+    },
+    "fr10y": {
+     "n": 7248,
+     "sifir": 1,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9729
+    },
+    "it10y": {
+     "n": 7355,
+     "sifir": 0,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9683
+    },
+    "es10y": {
+     "n": 7391,
+     "sifir": 0,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9721
+    },
+    "pt10y": {
+     "n": 3886,
+     "sifir": 315,
+     "ilk": "2011-09-20",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9314
+    },
+    "gr10y": {
+     "n": 3267,
+     "sifir": 0,
+     "ilk": "2014-11-25",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9806
+    },
+    "de2y": {
+     "n": 7385,
+     "sifir": 1,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9695
+    },
+    "it2y": {
+     "n": 7395,
+     "sifir": 0,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.967
+    }
+   }
+  },
+  "cnbc_kur_gunluk.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "8824a37a98d05ba529a2df425a53ceb2e0fef7e66e361415cb9ba41219d84743",
+   "satir": 7462,
+   "ilk": "2000-01-03",
+   "son": "2026-09-30",
+   "sutunlar": [
+    "eur",
+    "gbp",
+    "chf",
+    "jpy",
+    "cad",
+    "aud"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-09-30",
+   "kesilen_satir": 1,
+   "kesilen_aralik": [
+    "2026-10-01",
+    "2026-10-01"
+   ],
+   "frekans": "gunluk",
+   "tarih_kurali": "CNBC işlem günü (New York saati); hafta sonu barları kaynakta durur, ölçüm ayıklar",
+   "pratik": [
+    "1A (G10 dolar ölçüsü yedeği)",
+    "3C",
+    "3D",
+    "4B",
+    "10A",
+    "10B",
+    "11C"
+   ],
+   "aciklama": "CNBC (Tullett Prebon) döviz, New York 17:00 kapanışı (OatBund ek arşivi, 02.10.2026)",
+   "sutun_aciklama": {
+    "eur": "EUR/USD",
+    "gbp": "GBP/USD",
+    "aud": "AUD/USD",
+    "chf": "USD/CHF",
+    "jpy": "USD/JPY",
+    "cad": "USD/CAD"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/OatBund/veri/cnbc_kur_gunluk.csv.gz",
+     "git_blob": "5da0b431b4acfa3dd02664802b65cf2e60da6897",
+     "head_blob": "5da0b431b4acfa3dd02664802b65cf2e60da6897",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "eur": "eur",
+      "gbp": "gbp",
+      "chf": "chf",
+      "jpy": "jpy",
+      "cad": "cad",
+      "aud": "aud"
+     },
+     "kaynak_arsiv_ozu_tuttu": true
+    }
+   ],
+   "kapsam": {
+    "eur": {
+     "n": 7327,
+     "sifir": 0,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9996
+    },
+    "gbp": {
+     "n": 7416,
+     "sifir": 0,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9996
+    },
+    "chf": {
+     "n": 7425,
+     "sifir": 0,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9996
+    },
+    "jpy": {
+     "n": 7424,
+     "sifir": 0,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9996
+    },
+    "cad": {
+     "n": 7425,
+     "sifir": 0,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9994
+    },
+    "aud": {
+     "n": 7414,
+     "sifir": 0,
+     "ilk": "2000-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9997
+    }
+   }
+  },
+  "dibs_egri_gunluk.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "96fe7819131dc8bab134fe279644d09220b22b551cde69f58e7339e8244d6c22",
+   "satir": 3586,
+   "ilk": "2013-01-01",
+   "son": "2026-09-30",
+   "sutunlar": [
+    "n3a",
+    "n6a",
+    "n1y",
+    "n2y",
+    "n3y",
+    "n5y",
+    "n7y",
+    "n9y",
+    "f_1y1y",
+    "be_2y",
+    "be_5y",
+    "r2y",
+    "r5y",
+    "pka_faiz_12a",
+    "pka_faiz_24a"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-09-30",
+   "kesilen_satir": 1,
+   "kesilen_aralik": [
+    "2026-10-01",
+    "2026-10-01"
+   ],
+   "frekans": "gunluk",
+   "tarih_kurali": "TCMB DİBS gösterge değerlerinin günü",
+   "pratik": [
+    "1B",
+    "2",
+    "3B",
+    "4A",
+    "4C",
+    "5C",
+    "6C",
+    "10B",
+    "11D",
+    "12 (vekil: TÜFEX reel getiri)"
+   ],
+   "aciklama": "DİBS hattının ölçüm dosyası: TCMB gösterge değerlerinden sıfır kuponlu eğri, forward, TÜFEX ve günlüğe yayılmış PKA faiz beklentileri",
+   "sutun_aciklama": {
+    "n3a": "3 ay sıfır kuponlu spot getiri (yıllık bileşik, ACT/365), %",
+    "n6a": "6 ay sıfır kuponlu spot getiri (yıllık bileşik, ACT/365), %",
+    "n1y": "1 yıl sıfır kuponlu spot getiri (yıllık bileşik, ACT/365), %",
+    "n2y": "2 yıl sıfır kuponlu spot getiri (yıllık bileşik, ACT/365), %",
+    "n3y": "3 yıl sıfır kuponlu spot getiri (yıllık bileşik, ACT/365), %",
+    "n5y": "5 yıl sıfır kuponlu spot getiri (yıllık bileşik, ACT/365), %",
+    "n7y": "7 yıl sıfır kuponlu spot getiri (yıllık bileşik, ACT/365), %",
+    "n9y": "9 yıl sıfır kuponlu spot getiri (yıllık bileşik, ACT/365), %",
+    "f_1y1y": "1 yıl sonrası 1 yıllık forward (spot eğriden, yıllık bileşik), %",
+    "be_2y": "TÜFEX başabaş enflasyonu, 2 yıl, %",
+    "be_5y": "TÜFEX başabaş enflasyonu, 5 yıl, %",
+    "r2y": "TÜFEX reel getiri, 2 yıl, %",
+    "r5y": "TÜFEX reel getiri, 5 yıl, %",
+    "pka_faiz_12a": "PKA 12 ay sonrası politika faizi beklentisi, GÜNLÜĞE YAYILMIŞ (DİBS hattının PKA_YAYIM_GUN = 20 varsayımı: ayın 20'sinden itibaren geçerli)",
+    "pka_faiz_24a": "PKA 24 ay sonrası politika faizi beklentisi, günlüğe yayılmış (aynı varsayım)"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/DIBS/data/metrik.csv",
+     "git_blob": "ba2839e258e94d6610addcbac9f44c0c368a2e2e",
+     "head_blob": "ba2839e258e94d6610addcbac9f44c0c368a2e2e",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "n3a": "n3a",
+      "n6a": "n6a",
+      "n1y": "n1y",
+      "n2y": "n2y",
+      "n3y": "n3y",
+      "n5y": "n5y",
+      "n7y": "n7y",
+      "n9y": "n9y",
+      "f_1y1y": "f_1y1y",
+      "be_2y": "be_2y",
+      "be_5y": "be_5y",
+      "r2y": "r2y",
+      "r5y": "r5y",
+      "pka_faiz_12a": "pka_faiz_12a",
+      "pka_faiz_24a": "pka_faiz_24a"
+     }
+    }
+   ],
+   "kapsam": {
+    "n3a": {
+     "n": 3586,
+     "sifir": 0,
+     "ilk": "2013-01-01",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9997
+    },
+    "n6a": {
+     "n": 3586,
+     "sifir": 0,
+     "ilk": "2013-01-01",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9997
+    },
+    "n1y": {
+     "n": 3586,
+     "sifir": 0,
+     "ilk": "2013-01-01",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9997
+    },
+    "n2y": {
+     "n": 3586,
+     "sifir": 0,
+     "ilk": "2013-01-01",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9997
+    },
+    "n3y": {
+     "n": 3586,
+     "sifir": 0,
+     "ilk": "2013-01-01",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9997
+    },
+    "n5y": {
+     "n": 3586,
+     "sifir": 0,
+     "ilk": "2013-01-01",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9997
+    },
+    "n7y": {
+     "n": 3586,
+     "sifir": 0,
+     "ilk": "2013-01-01",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9997
+    },
+    "n9y": {
+     "n": 2980,
+     "sifir": 0,
+     "ilk": "2013-01-01",
+     "son": "2026-09-07",
+     "is_gunu_dolulugu": 0.8347
+    },
+    "f_1y1y": {
+     "n": 3586,
+     "sifir": 0,
+     "ilk": "2013-01-01",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9997
+    },
+    "be_2y": {
+     "n": 669,
+     "sifir": 0,
+     "ilk": "2022-01-10",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.5426
+    },
+    "be_5y": {
+     "n": 210,
+     "sifir": 0,
+     "ilk": "2023-01-13",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.2167
+    },
+    "r2y": {
+     "n": 669,
+     "sifir": 0,
+     "ilk": "2022-01-10",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.5426
+    },
+    "r5y": {
+     "n": 210,
+     "sifir": 0,
+     "ilk": "2023-01-13",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.2167
+    },
+    "pka_faiz_12a": {
+     "n": 3572,
+     "sifir": 0,
+     "ilk": "2013-01-21",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9997
+    },
+    "pka_faiz_24a": {
+     "n": 3572,
+     "sifir": 0,
+     "ilk": "2013-01-21",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9997
+    }
+   }
+  },
+  "dis_borc_odeme_haftalik.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "aaa38fa9fb8b6a18d5833f64b5facb3463b9b521b631db3f5d4bed233b7721a4",
+   "satir": 715,
+   "ilk": "2012-12-26",
+   "son": "2026-09-09",
+   "sutunlar": [
+    "borc_odeme_top",
+    "borc_odeme_haz",
+    "borc_odeme_dgr",
+    "borc_odeme_tcmb"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-09-30",
+   "kesilen_satir": 0,
+   "frekans": "haftalik",
+   "tarih_kurali": "hafta (çarşamba)",
+   "pratik": [
+    "9A (vekil payda)"
+   ],
+   "aciklama": "Haftalık dış borç ödemeleri, milyon USD (EVDS bie_dbafod)",
+   "sutun_aciklama": {
+    "borc_odeme_top": "toplam (TP.D1TOP)",
+    "borc_odeme_haz": "Hazine (TP.D2HAZ)",
+    "borc_odeme_dgr": "diğer (TP.D3DIG)",
+    "borc_odeme_tcmb": "TCMB (TP.D4TCMB)"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/OdemelerDengesi/data/haftalik.csv",
+     "git_blob": "4f7b6eb56a0fb10391654ae376d3cebc39a0ee04",
+     "head_blob": "4f7b6eb56a0fb10391654ae376d3cebc39a0ee04",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "borc_odeme_top": "borc_odeme_top",
+      "borc_odeme_haz": "borc_odeme_haz",
+      "borc_odeme_dgr": "borc_odeme_dgr",
+      "borc_odeme_tcmb": "borc_odeme_tcmb"
+     }
+    }
+   ],
+   "kapsam": {
+    "borc_odeme_top": {
+     "n": 715,
+     "sifir": 0,
+     "ilk": "2012-12-26",
+     "son": "2026-09-09"
+    },
+    "borc_odeme_haz": {
+     "n": 715,
+     "sifir": 0,
+     "ilk": "2012-12-26",
+     "son": "2026-09-09"
+    },
+    "borc_odeme_dgr": {
+     "n": 713,
+     "sifir": 6,
+     "ilk": "2012-12-26",
+     "son": "2026-09-09"
+    },
+    "borc_odeme_tcmb": {
+     "n": 715,
+     "sifir": 89,
+     "ilk": "2012-12-26",
+     "son": "2026-09-09"
+    }
+   }
+  },
+  "ecb_maastricht_aylik.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "0ed89235d91cf44636e26cad5a917cb18bec00cb284af4d2fced853facd6c467",
+   "satir": 332,
+   "ilk": "1999-01-31",
+   "son": "2026-08-31",
+   "sutunlar": [
+    "DE",
+    "FR",
+    "IT",
+    "ES",
+    "PT",
+    "GR",
+    "IE"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-08-31",
+   "kesilen_satir": 0,
+   "frekans": "aylik",
+   "tarih_kurali": "ay sonu",
+   "pratik": [
+    "6D"
+   ],
+   "aciklama": "ECB IRS, Maastricht ölçütü 10 yıllık devlet tahvili getirisi, aylık ORTALAMA, % (OatBund arşivi)",
+   "sutun_aciklama": {
+    "DE": "DE 10 yıl, aylık ortalama, %",
+    "FR": "FR 10 yıl, aylık ortalama, %",
+    "IT": "IT 10 yıl, aylık ortalama, %",
+    "ES": "ES 10 yıl, aylık ortalama, %",
+    "PT": "PT 10 yıl, aylık ortalama, %",
+    "GR": "GR 10 yıl, aylık ortalama, %",
+    "IE": "IE 10 yıl, aylık ortalama, %"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/OatBund/veri/irs_aylik.csv.gz",
+     "git_blob": "c8b2504bbe2c97b89e4bc7171d3a42e45f97da5b",
+     "head_blob": "c8b2504bbe2c97b89e4bc7171d3a42e45f97da5b",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "DE": "DE",
+      "FR": "FR",
+      "IT": "IT",
+      "ES": "ES",
+      "PT": "PT",
+      "GR": "GR",
+      "IE": "IE"
+     },
+     "kaynak_arsiv_ozu_tuttu": true
+    }
+   ],
+   "kapsam": {
+    "DE": {
+     "n": 332,
+     "sifir": 1,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "FR": {
+     "n": 332,
+     "sifir": 0,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "IT": {
+     "n": 332,
+     "sifir": 0,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "ES": {
+     "n": 332,
+     "sifir": 0,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "PT": {
+     "n": 332,
+     "sifir": 0,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "GR": {
+     "n": 331,
+     "sifir": 0,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "IE": {
+     "n": 332,
+     "sifir": 0,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    }
+   }
+  },
+  "em_kur_yahoo_gunluk.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "08292ebb03079c21afa98491d23afcc42da2e469f1613da98eb832584d297101",
+   "satir": 4334,
+   "ilk": "2010-01-01",
+   "son": "2026-08-20",
+   "sutunlar": [
+    "brl_gunbasi",
+    "mxn_gunbasi",
+    "zar_gunbasi",
+    "inr_gunbasi"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 4.998779310483314e-07,
+   "cipa_siniri": "2026-09-30",
+   "kesilen_satir": 0,
+   "frekans": "gunluk",
+   "tarih_kurali": "Yahoo barının Londra günü",
+   "pratik": [
+    "11B",
+    "11C"
+   ],
+   "aciklama": "EM kurları, Yahoo Finance günlük bar (_tarih arşivi, 21.08.2026 indirmesi; 20.08.2026'da biter). D tarihli değer D gününün BAŞINDAKİ fiyattır",
+   "sutun_aciklama": {
+    "brl_gunbasi": "USD/BRL, günlük barın kapanış alanı (günün başı)",
+    "mxn_gunbasi": "USD/MXN, günlük barın kapanış alanı (günün başı)",
+    "zar_gunbasi": "USD/ZAR, günlük barın kapanış alanı (günün başı)",
+    "inr_gunbasi": "USD/INR, günlük barın kapanış alanı (günün başı)"
+   },
+   "kaynaklar": [
+    {
+     "yol": "site/tools/ders_grafik/_tarih/yf_BRL_X.csv",
+     "git_blob": "ff3ee623f8237301c18c0591c0cb822a7b586c98",
+     "head_blob": "ff3ee623f8237301c18c0591c0cb822a7b586c98",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "Close": "brl_gunbasi"
+     }
+    },
+    {
+     "yol": "site/tools/ders_grafik/_tarih/yf_MXN_X.csv",
+     "git_blob": "8d74c99a5c42ff4ff412e6528852fab85d4b6c8b",
+     "head_blob": "8d74c99a5c42ff4ff412e6528852fab85d4b6c8b",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "Close": "mxn_gunbasi"
+     }
+    },
+    {
+     "yol": "site/tools/ders_grafik/_tarih/yf_ZAR_X.csv",
+     "git_blob": "c2f62ad157b407f4acf172578b90875ad87a1aa7",
+     "head_blob": "c2f62ad157b407f4acf172578b90875ad87a1aa7",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "Close": "zar_gunbasi"
+     }
+    },
+    {
+     "yol": "site/tools/ders_grafik/_tarih/yf_INR_X.csv",
+     "git_blob": "2682f283378c8ed0965d4f8eccd7e9d6359e7770",
+     "head_blob": "2682f283378c8ed0965d4f8eccd7e9d6359e7770",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "Close": "inr_gunbasi"
+     }
+    }
+   ],
+   "kapsam": {
+    "brl_gunbasi": {
+     "n": 4328,
+     "sifir": 0,
+     "ilk": "2010-01-04",
+     "son": "2026-08-20",
+     "is_gunu_dolulugu": 0.9975
+    },
+    "mxn_gunbasi": {
+     "n": 4334,
+     "sifir": 0,
+     "ilk": "2010-01-01",
+     "son": "2026-08-20",
+     "is_gunu_dolulugu": 0.9986
+    },
+    "zar_gunbasi": {
+     "n": 4328,
+     "sifir": 0,
+     "ilk": "2010-01-01",
+     "son": "2026-08-20",
+     "is_gunu_dolulugu": 0.9972
+    },
+    "inr_gunbasi": {
+     "n": 4330,
+     "sifir": 0,
+     "ilk": "2010-01-01",
+     "son": "2026-08-20",
+     "is_gunu_dolulugu": 0.9977
+    }
+   }
+  },
+  "em_politika_aylik.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "e4562c56aec931b4164f184460abd427d5a2eeec8d1aba7b9e280187d3b4e3e2",
+   "satir": 438,
+   "ilk": "1990-01-01",
+   "son": "2026-06-01",
+   "sutunlar": [
+    "tur",
+    "arg",
+    "bra",
+    "rus",
+    "mex",
+    "zaf",
+    "ind",
+    "idn"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-08-31",
+   "kesilen_satir": 0,
+   "frekans": "aylik",
+   "tarih_kurali": "ay başı",
+   "pratik": [
+    "11B",
+    "3A (tur: 2018 öncesi politika faizi)",
+    "9–10 (Rusya 2014 vakası)"
+   ],
+   "aciklama": "BIS politika faizleri, EVDS aynası (TP.BISPOLFAIZ.<ülke>), aylık, %",
+   "sutun_aciklama": {
+    "tur": "BISPOLFAIZ.TUR politika faizi, %",
+    "arg": "BISPOLFAIZ.ARG politika faizi, %",
+    "bra": "BISPOLFAIZ.BRA politika faizi, %",
+    "rus": "BISPOLFAIZ.RUS politika faizi, %",
+    "mex": "BISPOLFAIZ.MEX politika faizi, %",
+    "zaf": "BISPOLFAIZ.ZAF politika faizi, %",
+    "ind": "BISPOLFAIZ.IND politika faizi, %",
+    "idn": "BISPOLFAIZ.IDN politika faizi, %"
+   },
+   "kaynaklar": [
+    {
+     "yol": "site/tools/ders_grafik/_tarih/polfaiz.csv",
+     "git_blob": "4cfc559fd195908f17b0df736b566a46548accc6",
+     "head_blob": "4cfc559fd195908f17b0df736b566a46548accc6",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "BISPOLFAIZ.TUR": "tur",
+      "BISPOLFAIZ.ARG": "arg",
+      "BISPOLFAIZ.BRA": "bra",
+      "BISPOLFAIZ.RUS": "rus",
+      "BISPOLFAIZ.MEX": "mex",
+      "BISPOLFAIZ.ZAF": "zaf",
+      "BISPOLFAIZ.IND": "ind",
+      "BISPOLFAIZ.IDN": "idn"
+     }
+    }
+   ],
+   "kapsam": {
+    "tur": {
+     "n": 293,
+     "sifir": 0,
+     "ilk": "2002-02-01",
+     "son": "2026-06-01"
+    },
+    "arg": {
+     "n": 387,
+     "sifir": 1,
+     "ilk": "1993-04-01",
+     "son": "2025-06-01"
+    },
+    "bra": {
+     "n": 438,
+     "sifir": 0,
+     "ilk": "1990-01-01",
+     "son": "2026-06-01"
+    },
+    "rus": {
+     "n": 414,
+     "sifir": 0,
+     "ilk": "1992-01-01",
+     "son": "2026-06-01"
+    },
+    "mex": {
+     "n": 332,
+     "sifir": 0,
+     "ilk": "1998-11-01",
+     "son": "2026-06-01"
+    },
+    "zaf": {
+     "n": 438,
+     "sifir": 0,
+     "ilk": "1990-01-01",
+     "son": "2026-06-01"
+    },
+    "ind": {
+     "n": 437,
+     "sifir": 0,
+     "ilk": "1990-01-01",
+     "son": "2026-05-01"
+    },
+    "idn": {
+     "n": 250,
+     "sifir": 0,
+     "ilk": "2005-07-01",
+     "son": "2026-04-01"
+    }
+   }
+  },
+  "enflasyon_aylik.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "5be93ef56b40b189084aeb1b3273661f1b44288a2ca08a12eab33e40cdd904a0",
+   "satir": 260,
+   "ilk": "2005-01-01",
+   "son": "2026-08-01",
+   "sutunlar": [
+    "tufe",
+    "hizmet",
+    "mallar",
+    "pka_ay_cari",
+    "pka_12a"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 5.000000129484761e-07,
+   "cipa_siniri": "2026-08-31",
+   "kesilen_satir": 0,
+   "frekans": "aylik",
+   "tarih_kurali": "ay başı",
+   "pratik": [
+    "2 (anket etiketi)",
+    "3A",
+    "4A",
+    "4C",
+    "7B"
+   ],
+   "aciklama": "Enflasyon hattı: TÜFE ve özel göstergeler (2025=100), PKA beklentileri",
+   "sutun_aciklama": {
+    "tufe": "TÜFE endeksi (TP.TUKFIY2025.GENEL, 2025=100)",
+    "hizmet": "hizmet fiyatları endeksi (TP.FE25.OKTG23)",
+    "mallar": "mallar endeksi (TP.FE25.OKTG08)",
+    "pka_ay_cari": "PKA cari ay aylık TÜFE beklentisi, % (TP.PKAUO.S01.A.U)",
+    "pka_12a": "PKA 12 ay sonrası yıllık TÜFE beklentisi, % (TP.PKAUO.S01.E.U)"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/Enflasyon/data/aylik.csv",
+     "git_blob": "5057c965178d3d68a863fea81a6036aa181372d3",
+     "head_blob": "5057c965178d3d68a863fea81a6036aa181372d3",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "tufe": "tufe",
+      "hizmet": "hizmet",
+      "mallar": "mallar",
+      "pka_ay_cari": "pka_ay_cari",
+      "pka_12a": "pka_12a"
+     }
+    }
+   ],
+   "kapsam": {
+    "tufe": {
+     "n": 260,
+     "sifir": 0,
+     "ilk": "2005-01-01",
+     "son": "2026-08-01"
+    },
+    "hizmet": {
+     "n": 260,
+     "sifir": 0,
+     "ilk": "2005-01-01",
+     "son": "2026-08-01"
+    },
+    "mallar": {
+     "n": 260,
+     "sifir": 0,
+     "ilk": "2005-01-01",
+     "son": "2026-08-01"
+    },
+    "pka_ay_cari": {
+     "n": 164,
+     "sifir": 0,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "pka_12a": {
+     "n": 164,
+     "sifir": 0,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    }
+   }
+  },
+  "eurostat_uzun_faiz_aylik.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "8a5586e3ca0dd5c52d74d2e2575b3293d2249b71aaeefa89790cfdaf8de2787b",
+   "satir": 332,
+   "ilk": "1999-01-31",
+   "son": "2026-08-31",
+   "sutunlar": [
+    "DE",
+    "HU",
+    "PL",
+    "CZ",
+    "RO"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-08-31",
+   "kesilen_satir": 0,
+   "frekans": "aylik",
+   "tarih_kurali": "ay sonu",
+   "pratik": [
+    "10 (Macaristan 2022 vakası)",
+    "6D (DE kıyası)"
+   ],
+   "aciklama": "Eurostat irt_lt_mcby_m, AB yakınsama ölçütü uzun vadeli faiz, aylık, % (OatBund arşivi)",
+   "sutun_aciklama": {
+    "DE": "DE uzun vadeli faiz, aylık, %",
+    "HU": "HU uzun vadeli faiz, aylık, %",
+    "PL": "PL uzun vadeli faiz, aylık, %",
+    "CZ": "CZ uzun vadeli faiz, aylık, %",
+    "RO": "RO uzun vadeli faiz, aylık, %"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/OatBund/veri/eurostat_aylik.csv.gz",
+     "git_blob": "173de2eebc94a5f35a701f630a90d395bfffa1b0",
+     "head_blob": "173de2eebc94a5f35a701f630a90d395bfffa1b0",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "DE": "DE",
+      "HU": "HU",
+      "PL": "PL",
+      "CZ": "CZ",
+      "RO": "RO"
+     },
+     "kaynak_arsiv_ozu_tuttu": true
+    }
+   ],
+   "kapsam": {
+    "DE": {
+     "n": 332,
+     "sifir": 1,
+     "ilk": "1999-01-31",
+     "son": "2026-08-31"
+    },
+    "HU": {
+     "n": 308,
+     "sifir": 0,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "PL": {
+     "n": 308,
+     "sifir": 0,
+     "ilk": "2001-01-31",
+     "son": "2026-08-31"
+    },
+    "CZ": {
+     "n": 317,
+     "sifir": 0,
+     "ilk": "2000-04-30",
+     "son": "2026-08-31"
+    },
+    "RO": {
+     "n": 257,
+     "sifir": 0,
+     "ilk": "2005-04-30",
+     "son": "2026-08-31"
+    }
+   }
+  },
+  "fonlama_gunluk.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "857b2b9ae6b41421537408d2eef3dd3612fa6b3dae673922eb8f70d5e5681631",
+   "satir": 3957,
+   "ilk": "2011-01-03",
+   "son": "2026-09-30",
+   "sutunlar": [
+    "aofm",
+    "politika",
+    "koridor_alt",
+    "koridor_ust",
+    "tlref"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-09-30",
+   "kesilen_satir": 2,
+   "kesilen_aralik": [
+    "2026-10-01",
+    "2026-10-02"
+   ],
+   "frekans": "gunluk",
+   "tarih_kurali": "EVDS iş günü",
+   "pratik": [
+    "3A",
+    "3B",
+    "4C",
+    "5C",
+    "9B",
+    "11A"
+   ],
+   "aciklama": "Fonlama hattı: TCMB ağırlıklı ortalama fonlama maliyeti, politika faizi, koridor ve TLREF (BİST uzantısıyla)",
+   "sutun_aciklama": {
+    "aofm": "TCMB ağırlıklı ortalama fonlama maliyeti, %",
+    "politika": "politika faizi (bir hafta vadeli repo), %; 14.09.2018'de başlar",
+    "koridor_alt": "gecelik borç alma faizi, %",
+    "koridor_ust": "gecelik borç verme faizi, %",
+    "tlref": "TLREF (basit, ACT/365), %"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/Fonlama/data/gunluk.csv",
+     "git_blob": "0c959b55c6bb6f60275729c85d093e2146f96719",
+     "head_blob": "0c959b55c6bb6f60275729c85d093e2146f96719",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "aofm": "aofm",
+      "politika": "politika",
+      "koridor_alt": "koridor_alt",
+      "koridor_ust": "koridor_ust",
+      "tlref": "tlref"
+     }
+    }
+   ],
+   "sinama": {
+    "dibs_metrik_ile_ortak_gunlerde_birebir": {
+     "aofm": {
+      "ortak_gun": 3372,
+      "birebir": 3372,
+      "azami_goreli_fark": 0.0
+     },
+     "politika": {
+      "ortak_gun": 2019,
+      "birebir": 2019,
+      "azami_goreli_fark": 0.0
+     },
+     "koridor_alt": {
+      "ortak_gun": 3451,
+      "birebir": 3451,
+      "azami_goreli_fark": 0.0
+     },
+     "koridor_ust": {
+      "ortak_gun": 3451,
+      "birebir": 3451,
+      "azami_goreli_fark": 0.0
+     },
+     "tlref": {
+      "ortak_gun": 1921,
+      "birebir": 1921,
+      "azami_goreli_fark": 0.0
+     }
+    }
+   },
+   "kapsam": {
+    "aofm": {
+     "n": 3957,
+     "sifir": 0,
+     "ilk": "2011-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9632
+    },
+    "politika": {
+     "n": 2018,
+     "sifir": 0,
+     "ilk": "2018-09-14",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9614
+    },
+    "koridor_alt": {
+     "n": 3957,
+     "sifir": 0,
+     "ilk": "2011-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9632
+    },
+    "koridor_ust": {
+     "n": 3957,
+     "sifir": 0,
+     "ilk": "2011-01-03",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9632
+    },
+    "tlref": {
+     "n": 1920,
+     "sifir": 0,
+     "ilk": "2018-12-28",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9486
+    }
+   }
+  },
+  "gecelik_gunluk.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "1b6857865d3a3d0af24923c09c151a08c7bb131dcd8510c0f5526bdd8da7bf16",
+   "satir": 9211,
+   "ilk": "1990-01-02",
+   "son": "2026-08-20",
+   "sutunlar": [
+    "gecelik_ao"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-09-30",
+   "kesilen_satir": 0,
+   "frekans": "gunluk",
+   "tarih_kurali": "EVDS iş günü",
+   "pratik": [
+    "11A"
+   ],
+   "aciklama": "Bankalararası para piyasası gecelik ağırlıklı ortalama basit faiz (EVDS TP.PY.P06.ON)",
+   "sutun_aciklama": {
+    "gecelik_ao": "gecelik ağırlıklı ortalama basit faiz, %"
+   },
+   "kaynaklar": [
+    {
+     "yol": "site/tools/ders_grafik/_tarih/gecelik.csv",
+     "git_blob": "1d0a54dc830fe0cfe46f999aa493a2afeea1a6c9",
+     "head_blob": "1d0a54dc830fe0cfe46f999aa493a2afeea1a6c9",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "PY.P06.ON": "gecelik_ao"
+     }
+    }
+   ],
+   "kapsam": {
+    "gecelik_ao": {
+     "n": 9211,
+     "sifir": 0,
+     "ilk": "1990-01-02",
+     "son": "2026-08-20",
+     "is_gunu_dolulugu": 0.9637
+    }
+   }
+  },
+  "gsyh_ceyreklik.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "c3a0f6cf8068acdb5ed14a0349bbf566f6233a4c4d92fdec29e178306f59dede",
+   "satir": 126,
+   "ilk": "1995-03-31",
+   "son": "2026-06-30",
+   "sutunlar": [
+    "gsyh_mta_hacim",
+    "gsyh_cari_bin_tl"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 5.010515451431274e-07,
+   "cipa_siniri": "2026-06-30",
+   "kesilen_satir": 0,
+   "frekans": "ceyreklik",
+   "tarih_kurali": "çeyrek sonu",
+   "pratik": [
+    "3A",
+    "3D",
+    "5B",
+    "6A",
+    "8A",
+    "8C"
+   ],
+   "aciklama": "GSYH: mevsim ve takvim etkisinden arındırılmış zincirlenmiş hacim endeksi (Büyüme hattı, EVDS bie_gsyzhend) ve cari fiyatlarla GSYH (ÖD hattı)",
+   "sutun_aciklama": {
+    "gsyh_mta_hacim": "harcama yöntemiyle GSYH, mevsim ve takvim arındırılmış zincirlenmiş hacim endeksi (TP.GSYIH30.HY.B1GQ)",
+    "gsyh_cari_bin_tl": "GSYH, cari fiyatlarla, bin TL (TP.GSYIH20.BY.B1GQ)"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/Buyume/data/harcama_mevsim_takvim.csv",
+     "git_blob": "3070af77751ff736eb93616efcca1e445cbea095",
+     "head_blob": "3070af77751ff736eb93616efcca1e445cbea095",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "TP_GSYIH30_HY_B1GQ": "gsyh_mta_hacim"
+     }
+    },
+    {
+     "yol": "Aktarılacak Projeler/OdemelerDengesi/data/ceyreklik.csv",
+     "git_blob": "7d21e9bb6949b0988740d68592548df75cb81a40",
+     "head_blob": "7d21e9bb6949b0988740d68592548df75cb81a40",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "gsyh_bin_tl": "gsyh_cari_bin_tl"
+     }
+    }
+   ],
+   "kapsam": {
+    "gsyh_mta_hacim": {
+     "n": 126,
+     "sifir": 0,
+     "ilk": "1995-03-31",
+     "son": "2026-06-30"
+    },
+    "gsyh_cari_bin_tl": {
+     "n": 126,
+     "sifir": 0,
+     "ilk": "1995-03-31",
+     "son": "2026-06-30"
+    }
+   }
+  },
+  "kkm_aylik.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "c416194957dd45f089a5d96ded309af30a224cb4ca5429dbaa721463a770f388",
+   "satir": 56,
+   "ilk": "2021-12-01",
+   "son": "2026-07-01",
+   "sutunlar": [
+    "kkm_tl_mlr",
+    "kkm_usd_mia"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-08-31",
+   "kesilen_satir": 0,
+   "frekans": "aylik",
+   "tarih_kurali": "ay başı",
+   "pratik": [
+    "6B",
+    "5B (tek seferlik kalem adı)"
+   ],
+   "aciklama": "Kur korumalı mevduat stoku (Kredi hattı)",
+   "sutun_aciklama": {
+    "kkm_tl_mlr": "TL KKM, milyar TL (TP.KKM.K4)",
+    "kkm_usd_mia": "döviz dönüşümlü KKM, milyar USD (TP.KKM.K1)"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/Kredi/data/metrik_aylik.csv",
+     "git_blob": "558623807040338d19adf3946358dd9822bb3dd0",
+     "head_blob": "558623807040338d19adf3946358dd9822bb3dd0",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "kkm_tl_mlr": "kkm_tl_mlr",
+      "kkm_usd_mia": "kkm_usd_mia"
+     }
+    }
+   ],
+   "kapsam": {
+    "kkm_tl_mlr": {
+     "n": 56,
+     "sifir": 20,
+     "ilk": "2021-12-01",
+     "son": "2026-07-01"
+    },
+    "kkm_usd_mia": {
+     "n": 56,
+     "sifir": 0,
+     "ilk": "2021-12-01",
+     "son": "2026-07-01"
+    }
+   }
+  },
+  "kuresel_aylik.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "babce84a399bb59cc929f165b4286b7fcf9876c205fac2538801b1c1be721a6c",
+   "satir": 866,
+   "ilk": "1954-07-01",
+   "son": "2026-08-01",
+   "sutunlar": [
+    "emtia_enerji",
+    "emtia_metal",
+    "abd_tufe",
+    "abd_cekirdek",
+    "faiz_abd",
+    "faiz_ea"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-08-31",
+   "kesilen_satir": 0,
+   "frekans": "aylik",
+   "tarih_kurali": "ay başı",
+   "pratik": [
+    "4C",
+    "10A",
+    "10B",
+    "11A (i*)"
+   ],
+   "aciklama": "El Niño hattının küresel kanadı: Dünya Bankası Pink Sheet, BLS, BIS",
+   "sutun_aciklama": {
+    "emtia_enerji": "Pink Sheet enerji endeksi (nominal USD)",
+    "emtia_metal": "Pink Sheet metal ve mineraller endeksi (nominal USD)",
+    "abd_tufe": "ABD TÜFE, mevsimsellikten arındırılmamış (BLS CUUR0000SA0)",
+    "abd_cekirdek": "ABD çekirdek TÜFE (BLS CUUR0000SA0L1E)",
+    "faiz_abd": "ABD politika faizi, % (BIS WS_CBPOL M.US; efektif fon faiziyle aynı tanımda değil)",
+    "faiz_ea": "euro alanı politika faizi, % (BIS WS_CBPOL M.XM)"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/ElNino/data/kuresel.csv",
+     "git_blob": "88164e77d2410c29c8819d4d2fc021641aa1ecab",
+     "head_blob": "88164e77d2410c29c8819d4d2fc021641aa1ecab",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "emtia_enerji": "emtia_enerji",
+      "emtia_metal": "emtia_metal",
+      "abd_tufe": "abd_tufe",
+      "abd_cekirdek": "abd_cekirdek",
+      "faiz_abd": "faiz_abd",
+      "faiz_ea": "faiz_ea"
+     }
+    }
+   ],
+   "kapsam": {
+    "emtia_enerji": {
+     "n": 800,
+     "sifir": 0,
+     "ilk": "1960-01-01",
+     "son": "2026-08-01"
+    },
+    "emtia_metal": {
+     "n": 800,
+     "sifir": 0,
+     "ilk": "1960-01-01",
+     "son": "2026-08-01"
+    },
+    "abd_tufe": {
+     "n": 798,
+     "sifir": 0,
+     "ilk": "1960-01-01",
+     "son": "2026-07-01"
+    },
+    "abd_cekirdek": {
+     "n": 798,
+     "sifir": 0,
+     "ilk": "1960-01-01",
+     "son": "2026-07-01"
+    },
+    "faiz_abd": {
+     "n": 866,
+     "sifir": 0,
+     "ilk": "1954-07-01",
+     "son": "2026-08-01"
+    },
+    "faiz_ea": {
+     "n": 332,
+     "sifir": 76,
+     "ilk": "1999-01-01",
+     "son": "2026-08-01"
+    }
+   }
+  },
+  "odemeler_aylik.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "db1e3b80ba809d49f7d43ab04b6b94eda9955add9d62d5e6994c5d1cd65d95ba",
+   "satir": 432,
+   "ilk": "1975-12-01",
+   "son": "2026-07-01",
+   "sutunlar": [
+    "cari",
+    "mal_denge",
+    "hc_altin_net",
+    "hc_enerji_net",
+    "hc_cekirdek"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-08-31",
+   "kesilen_satir": 0,
+   "frekans": "aylik",
+   "tarih_kurali": "ay başı (1984 öncesi gözlemler yalnız Aralık)",
+   "pratik": [
+    "8A",
+    "8B",
+    "8C",
+    "10B (enerji dengesi)"
+   ],
+   "aciklama": "Ödemeler dengesi, milyon USD. Altın ve enerji hariç mal dengesi = mal_denge − hc_altin_net − hc_enerji_net",
+   "sutun_aciklama": {
+    "cari": "cari işlemler dengesi (TP.ODANA6.Q01)",
+    "mal_denge": "dış ticaret (mal) dengesi, ödemeler dengesi tanımı (TP.ODANA6.Q04)",
+    "hc_altin_net": "net parasal olmayan altın (TP.HARICCARIACIK.K4), 1996+",
+    "hc_enerji_net": "net enerji (TP.HARICCARIACIK.K7), 1996+",
+    "hc_cekirdek": "altın ve enerji hariç cari denge (TP.HARICCARIACIK.K10), 1996+"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/OdemelerDengesi/data/aylik.csv",
+     "git_blob": "deac96a41230d177323a780e0cb79b2e1230ca90",
+     "head_blob": "deac96a41230d177323a780e0cb79b2e1230ca90",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "cari": "cari",
+      "mal_denge": "mal_denge",
+      "hc_altin_net": "hc_altin_net",
+      "hc_enerji_net": "hc_enerji_net",
+      "hc_cekirdek": "hc_cekirdek"
+     }
+    }
+   ],
+   "kapsam": {
+    "cari": {
+     "n": 432,
+     "sifir": 0,
+     "ilk": "1975-12-01",
+     "son": "2026-07-01"
+    },
+    "mal_denge": {
+     "n": 432,
+     "sifir": 0,
+     "ilk": "1975-12-01",
+     "son": "2026-07-01"
+    },
+    "hc_altin_net": {
+     "n": 367,
+     "sifir": 0,
+     "ilk": "1996-01-01",
+     "son": "2026-07-01"
+    },
+    "hc_enerji_net": {
+     "n": 367,
+     "sifir": 0,
+     "ilk": "1996-01-01",
+     "son": "2026-07-01"
+    },
+    "hc_cekirdek": {
+     "n": 367,
+     "sifir": 0,
+     "ilk": "1996-01-01",
+     "son": "2026-07-01"
+    }
+   }
+  },
+  "ovp_programlar.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "0e2b8e53b03cd8ddfe49417a2c9940045f45b6aedaa0e651e7b78bec882e6f78",
+   "satir": 10,
+   "ilk": 2024,
+   "son": 2029,
+   "sutunlar": [
+    "program",
+    "yayin_ay",
+    "yil",
+    "sutun",
+    "yurtici_tasarruf_gsyh",
+    "tasarruf_yatirim_farki_gsyh",
+    "cari_gsyh",
+    "genel_devlet_dengesi_gsyh",
+    "kkgd_gsyh"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": null,
+   "kesilen_satir": 0,
+   "frekans": "belge",
+   "tarih_kurali": "yıl (program sütunu)",
+   "pratik": [
+    "8A (kontrol noktası)"
+   ],
+   "aciklama": "Orta Vadeli Program tabloları (elle tutulan kayıt), yüzde GSYH satırları; sütun: gerceklesme · tahmin · program",
+   "sutun_aciklama": {
+    "yurtici_tasarruf_gsyh": "Toplam yurt içi tasarruf / GSYH (Tablo 1.1)",
+    "tasarruf_yatirim_farki_gsyh": "Tasarruf−yatırım farkı / GSYH (Tablo 1.1)",
+    "cari_gsyh": "Cari işlemler dengesi / GSYH (Tablo 1.1)",
+    "genel_devlet_dengesi_gsyh": "Genel devlet dengesi / GSYH (Tablo 1.5)",
+    "kkgd_gsyh": "Kamu kesimi genel dengesi / GSYH (Tablo 1.2)"
+   },
+   "belge": {
+    "ovp2027": {
+     "kaynak": "Strateji ve Bütçe Başkanlığı, Orta Vadeli Program (2027–2029), Eylül 2026",
+     "yayin_ay": "2026-09",
+     "sayfa": {
+      "Tablo 1.1": 61,
+      "Tablo 1.2": 62,
+      "Tablo 1.5": 65
+     },
+     "not": {
+      "nufus": "2025 sütunu ölçülemedi: belgenin metin katmanında nüfus satırı iki farklı okuma veriyor (85.518 ve 85.825) ve hangisinin basılı satır olduğu ayırt edilemiyor. Kalan dört yıl tek okuma veriyor. Bu satır hiçbir ölçüme girmiyor."
+     }
+    },
+    "ovp2026": {
+     "kaynak": "Strateji ve Bütçe Başkanlığı, Orta Vadeli Program (2026–2028), Eylül 2025",
+     "yayin_ay": "2025-09",
+     "sayfa": {
+      "Tablo 1.1": 54,
+      "Tablo 1.2": 55,
+      "Tablo 1.5": 58
+     },
+     "not": {}
+    }
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/OVP/programlar.json",
+     "git_blob": "fd08b88a914e52021222add7f7290f8b35810409",
+     "head_blob": "fd08b88a914e52021222add7f7290f8b35810409",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "yurtici_tasarruf_gsyh": "yurtici_tasarruf_gsyh",
+      "tasarruf_yatirim_farki_gsyh": "tasarruf_yatirim_farki_gsyh",
+      "cari_gsyh": "cari_gsyh",
+      "genel_devlet_dengesi_gsyh": "genel_devlet_dengesi_gsyh",
+      "kkgd_gsyh": "kkgd_gsyh"
+     }
+    }
+   ],
+   "kapsam": {
+    "yurtici_tasarruf_gsyh": {
+     "n": 10,
+     "sifir": 0,
+     "ilk": 2024,
+     "son": 2029
+    },
+    "tasarruf_yatirim_farki_gsyh": {
+     "n": 10,
+     "sifir": 0,
+     "ilk": 2024,
+     "son": 2029
+    },
+    "cari_gsyh": {
+     "n": 10,
+     "sifir": 0,
+     "ilk": 2024,
+     "son": 2029
+    },
+    "genel_devlet_dengesi_gsyh": {
+     "n": 10,
+     "sifir": 0,
+     "ilk": 2024,
+     "son": 2029
+    },
+    "kkgd_gsyh": {
+     "n": 10,
+     "sifir": 0,
+     "ilk": 2024,
+     "son": 2029
+    }
+   }
+  },
+  "pka_faiz_aylik.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "9addc3396ecf4737648bd1dfc2f11400765ee55febe388b8d29834ca821514d1",
+   "satir": 164,
+   "ilk": "2013-01-01",
+   "son": "2026-08-01",
+   "sutunlar": [
+    "pka_faiz_12a",
+    "pka_faiz_24a"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-08-31",
+   "kesilen_satir": 1,
+   "kesilen_aralik": [
+    "2026-09-01",
+    "2026-09-01"
+   ],
+   "frekans": "aylik",
+   "tarih_kurali": "anketin ay etiketi (ay başı); yayım günü bu dosyada YOK",
+   "pratik": [
+    "3A",
+    "5C (yamuk patika; ay etiketi kirliliği)"
+   ],
+   "aciklama": "PKA politika faizi beklentileri, ham aylık (DİBS hattı)",
+   "sutun_aciklama": {
+    "pka_faiz_12a": "12 ay sonrası politika faizi beklentisi, % (TP.PKAUO.S04.D.U)",
+    "pka_faiz_24a": "24 ay sonrası politika faizi beklentisi, % (TP.PKAUO.S04.E.U)"
+   },
+   "sinama": {
+    "enflasyon_hatti_pka_faiz_12a_ile": {
+     "ortak_gun": 164,
+     "birebir": 164,
+     "azami_goreli_fark": 0.0
+    }
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/DIBS/data/aylik.csv",
+     "git_blob": "1700cf70ad39b2cfd94cb0fb2e01675c3c57aaec",
+     "head_blob": "1700cf70ad39b2cfd94cb0fb2e01675c3c57aaec",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "pka_faiz_12a": "pka_faiz_12a",
+      "pka_faiz_24a": "pka_faiz_24a"
+     }
+    }
+   ],
+   "kapsam": {
+    "pka_faiz_12a": {
+     "n": 164,
+     "sifir": 0,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    },
+    "pka_faiz_24a": {
+     "n": 164,
+     "sifir": 0,
+     "ilk": "2013-01-01",
+     "son": "2026-08-01"
+    }
+   }
+  },
+  "ppk_kararlari.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "d2251b8ae043366fb54437d32386a4f474a5a844aa5bc13dfd3cd5ca7befc8a9",
+   "satir": 111,
+   "ilk": "2016-01-19",
+   "son": "2026-09-10",
+   "sutunlar": [
+    "politika"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-09-30",
+   "kesilen_satir": 0,
+   "frekans": "olay",
+   "tarih_kurali": "PPK karar günü",
+   "pratik": [
+    "3B"
+   ],
+   "aciklama": "PPK faiz kararları, 2016–2026 (KagitOis arşivi; kaynağı bulten/ppk_endeks)",
+   "sutun_aciklama": {
+    "politika": "karar sonrası politika faizi, %"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/KagitOis/veri/ppk_kararlari.csv.gz",
+     "git_blob": "86caaaa1b153ea3a8ac384d00754db7ef41fbe09",
+     "head_blob": "86caaaa1b153ea3a8ac384d00754db7ef41fbe09",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "politika": "politika"
+     },
+     "kaynak_arsiv_ozu_tuttu": true
+    }
+   ],
+   "kapsam": {
+    "politika": {
+     "n": 111,
+     "sifir": 0,
+     "ilk": "2016-01-19",
+     "son": "2026-09-10"
+    }
+   }
+  },
+  "redk_aylik.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "0461336d2bd674d866f9e26c1ac00e40489d2c01b2cccec724e5579d413e6804",
+   "satir": 392,
+   "ilk": "1994-01-01",
+   "son": "2026-08-01",
+   "sutunlar": [
+    "redk_tufe",
+    "redk_ufe"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-08-31",
+   "kesilen_satir": 0,
+   "frekans": "aylik",
+   "tarih_kurali": "ay başı",
+   "pratik": [
+    "7A",
+    "8B",
+    "8C",
+    "Araç 3"
+   ],
+   "aciklama": "TCMB reel efektif döviz kuru (2025=100). YÖN: artış TL'nin reel DEĞER KAZANCIDIR",
+   "sutun_aciklama": {
+    "redk_tufe": "TÜFE bazlı REDK (TP.RK.T1.Y)",
+    "redk_ufe": "Yİ-ÜFE bazlı REDK (TP.RK.U01.Y)"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/TRYREER/reer_analysis_data.csv",
+     "git_blob": "8bfd4129d2617803e1e9edf0b5bd09d6f838398f",
+     "head_blob": "8bfd4129d2617803e1e9edf0b5bd09d6f838398f",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "CPI_REER": "redk_tufe",
+      "PPI_REER": "redk_ufe"
+     }
+    }
+   ],
+   "kapsam": {
+    "redk_tufe": {
+     "n": 392,
+     "sifir": 0,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    },
+    "redk_ufe": {
+     "n": 392,
+     "sifir": 0,
+     "ilk": "1994-01-01",
+     "son": "2026-08-01"
+    }
+   }
+  },
+  "rezerv_haftalik.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "84b409b073f422d72457351221157b41ec64861835ba32092c790417f8c0f3de",
+   "satir": 1291,
+   "ilk": "2002-01-04",
+   "son": "2026-09-25",
+   "sutunlar": [
+    "brut_rezerv_usd",
+    "net_rezerv_usd",
+    "swap_haric_net_rezerv_usd"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 4.999632210456184e-07,
+   "cipa_siniri": "2026-09-30",
+   "kesilen_satir": 0,
+   "frekans": "haftalik",
+   "tarih_kurali": "hafta (cuma)",
+   "pratik": [
+    "9A",
+    "9B"
+   ],
+   "aciklama": "TCMB rezervleri, milyar USD (TCMB Net Rezerv hattı)",
+   "sutun_aciklama": {
+    "brut_rezerv_usd": "brüt rezerv",
+    "net_rezerv_usd": "net rezerv",
+    "swap_haric_net_rezerv_usd": "swap hariç net rezerv"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/TCMBNetRezerv/haftalik_rezerv.csv",
+     "git_blob": "ba79d1a25a5c709dca10b094475363e8f5b03441",
+     "head_blob": "ba79d1a25a5c709dca10b094475363e8f5b03441",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "brut_rezerv_usd": "brut_rezerv_usd",
+      "net_rezerv_usd": "net_rezerv_usd",
+      "swap_haric_net_rezerv_usd": "swap_haric_net_rezerv_usd"
+     }
+    }
+   ],
+   "kapsam": {
+    "brut_rezerv_usd": {
+     "n": 1291,
+     "sifir": 0,
+     "ilk": "2002-01-04",
+     "son": "2026-09-25"
+    },
+    "net_rezerv_usd": {
+     "n": 1291,
+     "sifir": 0,
+     "ilk": "2002-01-04",
+     "son": "2026-09-25"
+    },
+    "swap_haric_net_rezerv_usd": {
+     "n": 1287,
+     "sifir": 0,
+     "ilk": "2002-02-01",
+     "son": "2026-09-25"
+    }
+   }
+  },
+  "usdtry_tcmb_gunluk.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "642d14502e4a2b9f21c72a40d5215c371dea9f2674587b5283b2ef1b6385ae5b",
+   "satir": 9253,
+   "ilk": "1990-01-02",
+   "son": "2026-10-01",
+   "sutunlar": [
+    "usdtry_tcmb_valor"
+   ],
+   "ondalik": 8,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-10-01",
+   "kesilen_satir": 0,
+   "frekans": "valor",
+   "tarih_kurali": "VALÖR tarihi (ilan gününün ertesi iş günü); ölçüm katmanı bir iş günü geri alır",
+   "pratik": [
+    "2, 3B, 4A (yalnız sağlamlık)",
+    "6A, 8A, 8C (dönüşüm kuru, karar 09.09.2026)",
+    "11A (1990–2005 kur bacağı)"
+   ],
+   "aciklama": "TCMB gösterge niteliğindeki USD döviz alış kuru (EVDS TP.DK.USD.A.YTL), üç depo kaynağından birleştirildi; örtüşen günlerde üçü birebir",
+   "sutun_aciklama": {
+    "usdtry_tcmb_valor": "TL/USD, döviz alış, valör tarihli"
+   },
+   "sinama": {
+    "_tarih_ile_OD": {
+     "ortak_gun": 7986,
+     "birebir": 7986,
+     "azami_goreli_fark": 0.0
+    },
+    "OD_ile_Butce": {
+     "ortak_gun": 5206,
+     "birebir": 5206,
+     "azami_goreli_fark": 0.0
+    }
+   },
+   "kaynaklar": [
+    {
+     "yol": "site/tools/ders_grafik/_tarih/kur.csv",
+     "git_blob": "0cab2f2267886fd94d202bea09ee105ba6ceb3fb",
+     "head_blob": "0cab2f2267886fd94d202bea09ee105ba6ceb3fb",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "DK.USD.A.YTL": "usdtry_tcmb_valor"
+     },
+     "aralik": "→ 1994-12-01 öncesi"
+    },
+    {
+     "yol": "Aktarılacak Projeler/OdemelerDengesi/data/gunluk.csv",
+     "git_blob": "234d7d80b07a1ba8b8035217c26b3c1b8a805da6",
+     "head_blob": "234d7d80b07a1ba8b8035217c26b3c1b8a805da6",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "usdtry": "usdtry_tcmb_valor"
+     },
+     "aralik": "1994-12-01 → 2026-09-11"
+    },
+    {
+     "yol": "Aktarılacak Projeler/Butce/data/gunluk.csv",
+     "git_blob": "b1c80375730e1419105805b21093a56a5caa0532",
+     "head_blob": "b1c80375730e1419105805b21093a56a5caa0532",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "usdtry": "usdtry_tcmb_valor"
+     },
+     "aralik": "2026-09-11 sonrası",
+     "notu": "ÖD hattı 11.09.2026'da bitiyor; aynı seriyi taşıyan Bütçe hattıyla çıpaya uzatıldı"
+    }
+   ],
+   "kapsam": {
+    "usdtry_tcmb_valor": {
+     "n": 9253,
+     "sifir": 0,
+     "ilk": "1990-01-02",
+     "son": "2026-10-01",
+     "is_gunu_dolulugu": 0.9651
+    }
+   }
+  },
+  "usdtry_yahoo_gunluk.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "86b4411bebf8dca6d0b983975eb0c4618b404f94bbe23ccd468394e98def3b3c",
+   "satir": 5656,
+   "ilk": "2005-01-03",
+   "son": "2026-09-30",
+   "sutunlar": [
+    "usdtry_ist18",
+    "usdtry_gunbasi"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 4.995117208750344e-07,
+   "cipa_siniri": "2026-09-30",
+   "kesilen_satir": 1,
+   "kesilen_aralik": [
+    "2026-10-01",
+    "2026-10-01"
+   ],
+   "frekans": "gunluk",
+   "tarih_kurali": "usdtry_ist18: EVDS iş günü (Fonlama ekseni, Türkiye tatilleri yok); usdtry_gunbasi: Yahoo barının Londra günü",
+   "pratik": [
+    "1B",
+    "2",
+    "3B",
+    "4A",
+    "4C",
+    "10B",
+    "11B",
+    "11C",
+    "11D"
+   ],
+   "aciklama": "USD/TRY, Yahoo Finance (karar 09.09.2026). Olay kuru: geçişten itibaren usdtry_ist18, öncesi fx_kapanis.gunluk_duzelt(usdtry_gunbasi). Geçiş günü ölçüldü",
+   "sutun_aciklama": {
+    "usdtry_ist18": "İstanbul 18:00 kapanışı, saatlik bardan (ortak/fx_kapanis; ortak/usdtry SUTUN = usdtry_ist18). Yalnız geçiş gününden itibaren dolu",
+    "usdtry_gunbasi": "Yahoo günlük barın kapanış alanı = D gününün BAŞINDAKİ fiyat (D−1'in Londra gece yarısı kapanışı); _tarih arşivi 21.08.2026 indirmesi, 20.08.2026'da biter"
+   },
+   "gecis": {
+    "gecis": "2023-12-18",
+    "once_ortak_gun": 3255,
+    "once_birebir": 3255,
+    "sonra_ortak_gun": 661,
+    "sonra_tesadufen_birebir": 2,
+    "son_birebir_gun": "2023-12-15"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/Fonlama/data/gunluk.csv",
+     "git_blob": "0c959b55c6bb6f60275729c85d093e2146f96719",
+     "head_blob": "0c959b55c6bb6f60275729c85d093e2146f96719",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "usdtry": "usdtry_ist18"
+     },
+     "aralik": "2023-12-18 →",
+     "notu": "Fonlama hattının ortak/usdtry.seri() çıktısı; geçiş öncesi kısmı gunluk_duzelt(usdtry_gunbasi) ile birebir olduğu için alınmadı"
+    },
+    {
+     "yol": "site/tools/ders_grafik/_tarih/yf_USDTRY_X.csv",
+     "git_blob": "4d7a9654cbdd51a637b7bf3f15a668fa0f0d0503",
+     "head_blob": "4d7a9654cbdd51a637b7bf3f15a668fa0f0d0503",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "Close": "usdtry_gunbasi"
+     }
+    },
+    {
+     "yol": "Aktarılacak Projeler/KurSaati/veri/yf_fx_60m.csv.gz",
+     "git_blob": "3460c8916d7be030655f51f6d97cbd8042f0f1ca",
+     "head_blob": "3460c8916d7be030655f51f6d97cbd8042f0f1ca",
+     "temiz": true,
+     "rol": "sinama",
+     "sutunlar": {},
+     "notu": "saatlik barlardan İstanbul 18:00 yeniden kuruldu",
+     "sonuc": {
+      "ortak_gun": 58,
+      "azami_fark_bp": 0.0,
+      "aralik": [
+       "2026-07-13",
+       "2026-10-01"
+      ]
+     }
+    }
+   ],
+   "kapsam": {
+    "usdtry_ist18": {
+     "n": 696,
+     "sifir": 0,
+     "ilk": "2023-12-18",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.956
+    },
+    "usdtry_gunbasi": {
+     "n": 5624,
+     "sifir": 0,
+     "ilk": "2005-01-03",
+     "son": "2026-08-20",
+     "is_gunu_dolulugu": 0.9965
+    }
+   }
+  },
+  "yabanci_akim_haftalik.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "39d772fde18d0c76bf9b4d5041c0058198e7e4b9d36800989da580bf65716716",
+   "satir": 316,
+   "ilk": "2020-09-11",
+   "son": "2026-09-25",
+   "sutunlar": [
+    "hisse",
+    "dibs"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-09-30",
+   "kesilen_satir": 0,
+   "frekans": "haftalik",
+   "tarih_kurali": "hafta (cuma)",
+   "pratik": [
+    "11D"
+   ],
+   "aciklama": "Yurt dışı yerleşiklerin haftalık net alımı, milyon USD",
+   "sutun_aciklama": {
+    "hisse": "hisse senedi net (TP.MKNETHAR.M7)",
+    "dibs": "DİBS kesin alım net (TP.MKNETHAR.M8)"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/ForeignHoldings/foreign_holdings_data.csv",
+     "git_blob": "b740a6c08f3675771c00326c4a7826bac0f550a0",
+     "head_blob": "b740a6c08f3675771c00326c4a7826bac0f550a0",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "Hisse": "hisse",
+      "DIBS": "dibs"
+     }
+    }
+   ],
+   "kapsam": {
+    "hisse": {
+     "n": 316,
+     "sifir": 1,
+     "ilk": "2020-09-11",
+     "son": "2026-09-25"
+    },
+    "dibs": {
+     "n": 316,
+     "sifir": 0,
+     "ilk": "2020-09-11",
+     "son": "2026-09-25"
+    }
+   }
+  },
+  "yahoo_dxy_vix_gunluk.csv.gz": {
+   "hazirlayan": "hazirla.py",
+   "sha256": "86455392962a1303052ba9aaa23c8b41bfa0b3888c3f217ab3701042a89da226",
+   "satir": 14158,
+   "ilk": "1971-01-04",
+   "son": "2026-09-30",
+   "sutunlar": [
+    "dxy",
+    "vix"
+   ],
+   "ondalik": 6,
+   "azami_yuvarlama": 0.0,
+   "cipa_siniri": "2026-09-30",
+   "kesilen_satir": 1,
+   "kesilen_aralik": [
+    "2026-10-01",
+    "2026-10-01"
+   ],
+   "frekans": "gunluk",
+   "tarih_kurali": "Yahoo işlem günü",
+   "pratik": [
+    "1A",
+    "1 (rejim ataması: VIX çeyreği)",
+    "4C",
+    "11B (VIX koşullu)",
+    "11C",
+    "12"
+   ],
+   "aciklama": "Yahoo Finance günlük kapanış (OatBund arşivi): DX-Y.NYB ve ^VIX. Arşiv yalnız kapanışı taşır; DXY barının gövde/aralık sınaması buradan kurulamaz",
+   "sutun_aciklama": {
+    "dxy": "ABD doları endeksi (ICE, DX-Y.NYB), kapanış",
+    "vix": "CBOE VIX, kapanış"
+   },
+   "kaynaklar": [
+    {
+     "yol": "Aktarılacak Projeler/OatBund/veri/yahoo_gunluk.csv.gz",
+     "git_blob": "a1627b254355aa3ae53ac7f8df9591a2f5aafc7f",
+     "head_blob": "a1627b254355aa3ae53ac7f8df9591a2f5aafc7f",
+     "temiz": true,
+     "rol": "veri",
+     "sutunlar": {
+      "dxy": "dxy",
+      "vix": "vix"
+     },
+     "kaynak_arsiv_ozu_tuttu": true
+    }
+   ],
+   "kapsam": {
+    "dxy": {
+     "n": 14154,
+     "sifir": 0,
+     "ilk": "1971-01-04",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9733
+    },
+    "vix": {
+     "n": 9256,
+     "sifir": 0,
+     "ilk": "1990-01-02",
+     "son": "2026-09-30",
+     "is_gunu_dolulugu": 0.9655
+    }
+   }
+  }
+ }
+}
