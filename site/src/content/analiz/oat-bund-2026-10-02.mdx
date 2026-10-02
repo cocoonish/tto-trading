@@ -1,13 +1,13 @@
 ---
-title: '2 Ekim 2026 OAT–Bund Farkı — neden açıldı, euroyu nasıl düşürüyor, nereye kadar gidebilir'
-description: 'Fransa ile Almanya''nın 10 yıllık getiri farkı 1 Ekim Avrupa kapanışında 140,9 baz puana çıktı: Mayıs 2012''den beri en yüksek seviye, son 22 iş gününde +54,8 bp ile Ocak 2012''den beri en hızlı açılma. Açılmanın iki evresi var: 28 Eylül''e kadar küresel tahvil satışında OAT Bund''dan hızlı yükseldi, son üç günde ise ayrıştılar — OAT +15,7 bp, Bund −12,5 bp. Faiz farkı sabit tutulduğunda, 2024''ten bu yana farktaki 10 bp''lik açılmaya haftalık EUR/USD''de ortalama −%0,53 eşlik ediyor; 26 Ağustos''tan bu yana kurun −%3,23''lük kaybının, katsayı hangi dönemden tahmin edilirse edilsin en az yarısı fark kanalına düşüyor. Geçmişte bu hızdaki açılmaların çoğu ertesi ay geri döndü; dönmeyen tek küme 2011–12 krizi.'
+title: '2 Ekim 2026 OAT–Bund Farkı — neden açıldı, euroya nasıl geçti, nereye kadar gidebilir'
+description: 'Fransa ile Almanya''nın 10 yıllık getiri farkı 1 Ekim Avrupa kapanışında 140,9 baz puana çıktı: Mayıs 2012''den beri en yüksek seviye, son 22 iş gününde +54,8 bp ile Ocak 2012''den beri en hızlı açılma. EUR/USD 31 Ağustos''tan bu yana −%3,30 kaybetti, ama sterlin ve frank da dolara karşı −%2,6–2,8 düştü: kaybın beşte dördü dolar geneliydi. Euroya özgü kayıp son üç günde, bütün euro farkları Bund''a karşı birlikte açılırken geldi. Haftalık veride Fransa farkı kurla birlikte hareket ediyor, ama sterlinde de aynı ölçüde; euroya özgü bir etki yalnız 2010–12 krizinde ve İtalya farkı üzerinden ölçülüyor.'
 pubDate: 2026-10-02
 veriTarihi: 2026-10-01
 tags: ['euro bölgesi', 'fransa', 'devlet tahvili', 'oat-bund', 'eur/usd', 'ecb', 'kredi notu']
 durum: 'aktif'
-kaynak: 'Gösterge devlet tahvili getirileri, Paris 17:30 Avrupa kapanışı ve gün içi dakikalık kotasyonlar (CNBC / Tullett Prebon, 2000–2026); ECB Maastricht uzun vadeli faiz serisi (çapraz sınama); ECB EUR/USD referans kuru (14:15); ECB politika faizleri; ABD Hazinesi getiri eğrisi; Bundesbank Bund getirileri; INSEE kamu borcu (2026 2. çeyrek); Federal Reserve ve ECB karar metinleri; Paris İstinaf Mahkemesi basın bildirisi (7 Temmuz 2026); Fransa Anayasası; yayıncı haber akışları (Reuters, CNBC, franceinfo, LCP, Europe 1, CNEWS, Al Jazeera, Le JDD, The Guardian, RTÉ, FXStreet, ING THINK, Newsquawk, La Libre, Boursorama, Euronext, Xinhua).'
+kaynak: 'Gösterge devlet tahvili getirileri, Avrupa kapanışı ve gün içi dakikalık kotasyonlar; EUR/USD New York kapanışı (CNBC / Tullett Prebon, 2000–2026); EUR/GBP, EUR/CHF, EUR/JPY, dolar endeksi, hisse endeksleri (Yahoo Finance); ECB Maastricht uzun vadeli faiz serisi (çapraz sınama); ECB EUR/USD referans kuru (sağlamlık); ECB politika faizleri; ABD Hazinesi getiri eğrisi; Bundesbank Bund getirileri; INSEE kamu borcu (2026 2. çeyrek); Federal Reserve ve ECB karar metinleri; Paris İstinaf Mahkemesi basın bildirisi (7 Temmuz 2026); Fransa Anayasası; yayıncı haber akışları ve aracı kurum notları (Reuters, CNBC, franceinfo, LCP, Europe 1, CNEWS, Al Jazeera, Le JDD, The Guardian, RTÉ, FXStreet, ING THINK, Newsquawk, La Libre, Boursorama, Euronext, Euronews, Xinhua, Investir, Hellenic Shipping News, US News).'
 guncelleme: 'tek seferlik analiz; veri günü 1 Ekim 2026'
-ozet: 'OAT–Bund farkı 140,9 bp ile Mayıs 2012''den beri en yüksekte ve son üç günde OAT yükselirken Bund düştü; faiz farkı sabitken her 10 bp''lik açılmaya haftalık EUR/USD''de −%0,53 eşlik ediyor ve eylül kaybının en az yarısı bu kanalda.'
+ozet: 'OAT–Bund farkı 140,9 bp ile Mayıs 2012''den beri en yüksekte; eylülde EUR/USD''nin kaybının beşte dördü dolar geneliydi, euroya özgü kayıp yalnız bütün euro farklarının birlikte açıldığı son üç günde geldi.'
 seviye: 'ileri'
 onkosul: []
 ---
@@ -19,63 +19,61 @@ import GrafikEmbed from '../../components/GrafikEmbed.astro';
 
   <p class="tez">Fransa'nın 10 yıllık borçlanma maliyetinin Almanya'ya farkı 1 Ekim Avrupa
   kapanışında 140,9 bp ile Mayıs 2012'den beri en yüksekte; son 22 iş gününde +54,8 bp
-  açıldı, bu hız en son Ocak 2012'de görüldü. Son üç günde OAT +15,7 bp yükselirken Bund
-  −12,5 bp düştü: küresel faiz hikâyesi ülke riskine ve euro içi kaçışa döndü. Sebep bir
-  takvim: açık hedefi aşıyor, 2027 bütçesinin meclis çoğunluğu yok, borç GSYH'nin %119,0'ı,
-  seçim yedi ay sonra. Faiz farkı sabitken her 10 bp'lik açılmaya 2024'ten bu yana haftalık
-  EUR/USD'de −%0,53 eşlik ediyor; 26 Ağustos'tan bu yana kurun −%3,23'lük kaybının en az
-  yarısı bu kanalda. Geçmişte bu hızdaki açılmaların çoğu ertesi ay geri döndü; dönmeyen tek
-  küme 2011–12 krizi.</p>
+  açıldı. Açılma iki evreli: 28 Eylül'e kadar küresel tahvil satışında Fransa akranlarından
+  koptu, son üç günde bütün euro farkları Bund'a karşı birlikte açıldı. EUR/USD 31
+  Ağustos'tan bu yana −%3,30 kaybetti, ama sterlin ve frank da dolara karşı −%2,6–2,8 düştü:
+  kaybın beşte dördü dolar geneliydi. Euroya özgü kayıp yalnız son üç günde ölçülüyor
+  (sterline karşı −%0,72, franka karşı −%1,27). Geçmiş de bunu söylüyor: euroya özgü etki
+  yalnız 2010–12 krizinde ve İtalya farkı üzerinden geldi.</p>
 
   <table>
     <tbody>
       <tr>
         <td>Neden açıldı</td>
-        <td>Dört katman üst üste: maliye, siyaset, ECB, küresel faiz. 2026 açığı %5,4 ile hedefin üstünde ve 2027'de %5'e inmek için 54 milyar avroluk çaba gerekiyor; Sosyalistler "hiçbir şey değişmezse gensoru" diyor; ECB iki artışla %2,50'de ve alıma isteksiz; ABD 10 yıllığı %5,23–5,29. Fransa'nın Bund'a duyarlılığı 2013–2019'da 0,89 iken 2026'da 1,20. Ayrıntıda: borç %119,0, devlet borcunun faiz yükü 62,6'dan 72,9 milyar avroya çıkıyor, 2027 ihraç programı rekor 340 milyar avro; geçen yıl bütçenin gelir kısmı mecliste 1'e karşı 404 oyla reddedilmişti; Le Pen 7 Temmuz kararıyla aday olabiliyor ve anketlerde önde.</td>
+        <td>Dört katman üst üste: maliye, siyaset, ECB, küresel faiz. 2026 açığı %5,4 ile hedefin üstünde, 2027'de %5'e inmek için 54 milyar avroluk çaba gerekiyor ve meclis çoğunluğu yok; borç GSYH'nin %119,0'ı; Le Pen aday olabiliyor ve anketlerde önde; ABD 10 yıllığı %5,23–5,29. Küresel satışta Fransa çekirdek bir ülke gibi değil İtalya gibi davranıyor: Bund'a duyarlılığı 2026'nın ilk sekiz ayında 1,20, Avusturya'nın 0,94.</td>
       </tr>
       <tr>
-        <td>Euroya nasıl geçiyor</td>
-        <td>Üç kanal: euro cinsi varlıklara risk primi, ECB'nin sıkılaşma alanının daralması, parçalanma kuyruğu. Ölçü: ABD–Almanya 2 yıllık faiz farkı sabitken 10 bp'lik açılmaya haftalık EUR/USD'de 2024–2026'da −%0,53 (t −4,0), 2004–2026'da −%0,31 eşlik ediyor. 26 Ağustos → 1 Ekim kurun −%3,23'lük düşüşünün fark kanalına düşen kısmı, katsayının tahmin dönemine göre −%1,67 ile −%2,95 arası; faiz kanalının payı her durumda daha küçük. Örneklem dışında da tutuyor: 2024'ten sonraki 144 haftada faiz modeline farkı eklemek açıklanan payı 0,026'dan 0,077'ye çıkarıyor; 2013–2019'da ise ilişki anlamsızdı. Dengeleyen güç Bund'un güvenli liman olması: kaçış euro içinde kalırsa kura etkisi küçülür.</td>
-      </tr>
-      <tr>
-        <td>Katalizörler</td>
-        <td>20 Ekim mecliste bütçenin gelir kısmı oylaması; 23 Ekim Moody's (Aa3, görünüm negatif); 27 Ekim sosyal güvenlik bütçesi oylaması; 29 Ekim ECB; 17 Kasım bütçenin tamamının oylaması; 27 Kasım S&P (A+); anayasal 70 günlük süre Aralık'ın ilk yarısında doluyor; 18 Aralık üçüncü çeyrek borç verisi; 18 Nisan ve 2 Mayıs 2027 cumhurbaşkanlığı seçimi. 49.3'ün her kullanımı bir gensoru önergesine kapı açıyor.</td>
-      </tr>
-      <tr>
-        <td>Ne kadar gidebilir</td>
-        <td><b>Tahmin yok, ölçek var.</b> Son 20 günün oynaklığıyla bir aylık ±1,96σ bandı ±38,1 bp. 2000'den bu yana bir ayda 30 bp'den hızlı açılmaların ardından fark ertesi ay medyanda −16,9 bp geriledi; gözlemlerin yalnız %13,7'sinde daha da açıldı ve o gözlemler yedi kümenin ikisinden, ikisi de 2011–12'den. Bugünkü hız (+54,8 bp) yalnız Kasım 2011–Ocak 2012'de görüldü. Kur aritmetiği: 2024–2026 katsayısıyla +20 bp, öbür her şey sabitken −%1,1 demek.</td>
-      </tr>
-      <tr>
-        <td>Daha önce nasıl oldu</td>
-        <td>2011: 97 iş gününde +144,1 bp, EUR/USD −%6,8; çözüm ECB'den geldi — Draghi'nin 26 Temmuz 2012 konuşması günü fark −13,6 bp, euro +%1,03. 2017: euro çıkışı vaat eden Le Pen birinci turda geride kalınca fark bir günde −12,6 bp, euro +%1,39. 2024: meclisin feshinden sonra fark 14 iş günü içinde +32,8 bp açıldı ve fesih öncesi seviyeye (49,4 bp) bir daha hiç inmedi. Not kararlarının kendisi ise farkı nadiren oynattı: son yedi kararın ertesi gününde değişim −3,6 ile +1,4 bp arası.</td>
-      </tr>
-      <tr>
-        <td>Fark şu an nerede</td>
-        <td>1 Ekim Paris kapanışında (17:30) 140,9 bp; 18 Mayıs 2012'den beri en yüksek ve 2000'den bu yana günlerin %99,7'sinden yukarıda. Tarihî zirve 15 Kasım 2011'de 190,2 bp. Fark 18 Eylül'de 25 Temmuz 2012'den beri ilk kez 100 bp'nin üstünde kapandı. Fransa artık İtalya'dan 21,5 bp pahalı borçlanıyor. Sabah ajans haberlerindeki 127–133 bp ile bu sayı arasındaki fark ölçüm saatinden geliyor: açılmanın büyük kısmı 15:30'dan sonra oldu.</td>
+        <td>Euroya nasıl geçti</td>
+        <td>Kurun kaybı iki parçaya ayrılıyor: paraların dolara karşı ortak hareketi ve euronun öbür Avrupa paralarına karşı kendi hareketi. 31 Ağustos → 28 Eylül euro −%2,14, sterlin −%2,19 kaybetti: euroya özgü kayıp yok. 28 Eylül → 1 Ekim euro −%1,16, sterlin −%0,44 kaybetti; frank dolara karşı yükseldi. Haftalık veride 10 bp açılmaya EUR/USD'de −%0,47 eşlik ediyor (2024–2026), GBP/USD'de de −%0,59; EUR/GBP'de etki yok.</td>
       </tr>
       <tr>
         <td>Kanıtın gücü</td>
-        <td><b>Ölçü güçlü, kur bağı orta, nedensellik zayıf.</b> Fark serisi resmî aylık seriyle 315 ayda 0,996 korelasyon veriyor. Kur bağı istatistik olarak anlamlı ama haftalık kur hareketinin ancak onda birini açıklıyor ve rejime göre değişiyor; ortak şoklar (küresel faiz, risk iştahı) iki seriyi birlikte oynatabilir. Atıf bir ayrıştırmadır, deney değil. Olaylar birincil kaynaktan ya da en az bir yayıncıdan teyitli; geçmiş dağılımlar tahmin değildir.</td>
+        <td><b>Ölçü güçlü, euroya özgü kur bağı zayıf.</b> Fark serisi resmî aylık seriyle 315 ayda 0,996 korelasyon veriyor. Haftalık kur bağı anlamlı (t −3,2), ama sterlinde de aynı büyüklükte: bağ euronun değil doların hareketini taşıyor. Euroya özgü kayıp üç günlük bir pencerede ölçülüyor ve o pencerede iki aday var — euro farklarının birlikte açılması ve ECB beklentisinin geri çekilmesi; ikisi ayrılamıyor.</td>
+      </tr>
+      <tr>
+        <td>Ne kadar gidebilir</td>
+        <td><b>Tahmin yok, ölçek var.</b> Bugünkü oynaklıkla bir aylık ±1,96σ bandı ±38,1 bp. Bir ayda 30 bp'den hızlı açılmaların ardından fark ertesi ay medyanda −16,9 bp geriledi; yedi kümenin her birinin medyanı geriledi, daha da açılan gözlemlerin hepsi 2011–12'den. Bugünkü hızı aşan sekiz gözlemin hiçbirinde fark ertesi ay açılmadı. Üç aylık ufukta durum farklı: Ağustos 2011'de ilk ay geri dönen fark üç ayda +41,1 bp açıldı.</td>
+      </tr>
+      <tr>
+        <td>Daha önce nasıl oldu</td>
+        <td>Euro sterline karşı yalnız euro bölgesi krizlerinde belirgin kaybetti: 2010 Yunanistan −%4,12, 2011 −%5,72. Fransa'ya özgü epizotlarda kayıp küçük ya da yok: 2017 seçimi −%1,39, 2024 fesih +%0,01, 2025 Bayrou +%0,90. 2011–12'de dönüşü ECB getirdi, 2017'de seçim sonucu; 2024'te fark fesih öncesi seviyesine bir daha inmedi. 2024'ten bu yana dokuz not kararının tepki gününde fark −3,6 ile +1,4 bp arasında değişti.</td>
+      </tr>
+      <tr>
+        <td>Katalizörler</td>
+        <td>15 Ekim AB'ye taslak bütçe planları; 20 Ekim mecliste bütçenin gelir kısmı oylaması; 23 Ekim Moody's (Aa3, görünüm negatif); 27 Ekim sosyal güvenlik bütçesi oylaması; 29 Ekim ECB; 17 Kasım bütçenin tamamının oylaması; 27 Kasım S&P (A+); anayasal 70 günlük süre aralığın ilk yarısında doluyor; 18 Nisan ve 2 Mayıs 2027 cumhurbaşkanlığı seçimi. Kurun dolar bacağı için ABD verileri ve Fed.</td>
+      </tr>
+      <tr>
+        <td>Fark şu an nerede</td>
+        <td>2000'den bu yana günlerin %99,7'sinden üstünde; bu serideki tarihî zirve 15 Kasım 2011'de 190,2 bp. Fark 18 Eylül'de 25 Temmuz 2012'den beri ilk kez 100 bp'nin üstünde kapandı. Fransa İtalya'dan 21,5 bp pahalı borçlanıyor. 1 Ekim'de 2 yıllık fark bir günde +21,6 bp açıldı; bunun 14,1 bp'si Alman 2 yıllığının düşüşü, Fransa'nın getirileri bütün vadelerde birlikte yükseldi.</td>
       </tr>
     </tbody>
   </table>
 
   <ul class="rakamlar">
-    <li><b>140,9 bp</b><span>OAT–Bund 10 yıllık farkı, 1 Ekim kapanışı: Mayıs 2012'den beri en yüksek</span></li>
-    <li><b>+54,8 bp</b><span>son 22 iş günündeki açılma: bu hız en son Ocak 2012'de</span></li>
-    <li><b>+21,5 bp</b><span>Fransa'nın 10 yıllığı İtalya'nınkinin üstünde</span></li>
-    <li><b>−%0,53</b><span>10 bp açılmaya eşlik eden haftalık EUR/USD hareketi, 2024–2026</span></li>
-    <li><b>−%3,23</b><span>EUR/USD, 26 Ağustos → 1 Ekim (ECB kuru)</span></li>
-    <li><b>1,1298</b><span>ECB EUR/USD kuru: 29 Mayıs 2025'ten beri en düşük</span></li>
-    <li><b>%13,7</b><span>bu hızdaki açılmalardan sonra fark ertesi ay daha da açıldığı gözlemlerin payı</span></li>
-    <li><b>%119,0</b><span>Fransa kamu borcu / GSYH, 2026 ikinci çeyrek</span></li>
+    <li><b>140,9 bp</b><span>OAT–Bund 10 yıllık farkı, 1 Ekim Avrupa kapanışı</span></li>
+    <li><b>+54,8 bp</b><span>son 22 iş günündeki açılma; bu hız en son Ocak 2012'de</span></li>
+    <li><b>−%3,30</b><span>EUR/USD, 31 Ağustos → 1 Ekim, New York kapanışı (log değişim)</span></li>
+    <li><b>−%0,67</b><span>aynı pencerede EUR/GBP, yani kaybın euroya özgü kısmı</span></li>
+    <li><b>−%0,59</b><span>10 bp açılmaya eşlik eden haftalık GBP/USD hareketi, 2024–2026</span></li>
+    <li><b>%13,7</b><span>bu hızdaki açılmaların ardından farkın ertesi ay daha da açıldığı gözlemlerin payı</span></li>
   </ul>
 </div>
 
 <div class="not gezinme">
   <span class="etiket">Bu yazı nasıl okunur</span>
   <p>Bölüm 1 farkın neyle ve hangi saatte ölçüldüğünü, Bölüm 2 bu yıl ne olduğunu, Bölüm 3
-  nedenlerini anlatır. Bölüm 4 euroya geçişin mekanizmasını ve ölçümünü, Bölüm 5 geçmiş
+  nedenlerini anlatır. Bölüm 4 farkın euroya nasıl geçtiğini önce model kullanmadan, sonra
+  haftalık regresyonla ölçer ve aynı ölçüyü sterline uygulayarak sınar. Bölüm 5 geçmiş
   epizotları, Bölüm 6 önümüzdeki takvimi, Bölüm 7 farkın daha ne kadar gidebileceğine dair
   ölçülebilen her şeyi verir. Yöntem eki regresyonun ve veri temizliğinin ayrıntısıdır.</p>
 </div>
@@ -83,9 +81,9 @@ import GrafikEmbed from '../../components/GrafikEmbed.astro';
 Euro bölgesinde bir ülkenin borçlanma maliyetini Almanya'nınkine göre ölçmek, o ülkenin
 kendine özgü riskini ölçmenin en sade yoludur: iki tahvil aynı para biriminde, aynı merkez
 bankasının faiziyle ve aynı vadede işlem görür; aradaki fark, piyasanın Fransa'ya Almanya'ya
-göre ne kadar ek prim istediğidir. Bu fark bir ayda iki katına yaklaştı. Soru üç parçalı:
-neden açıldı, bu neden dolara karşı euroyu düşürüyor, ve geçmişte benzer açılmalar nasıl
-bitti. Cevapların hepsi ölçülerek verildi; ölçülemeyen yerde bu açıkça söylendi.
+göre ne kadar ek prim istediğidir. Bu fark bir ayda üçte iki büyüdü (85,0 → 140,9 bp),
+yılın dibinden bu yana iki buçuk katından fazlasına çıktı. Soru üç parçalı: neden açıldı,
+dolara karşı euroyu gerçekten bu mu düşürdü, ve geçmişte benzer açılmalar nasıl bitti.
 
 ## Bölüm 1 — Ölçü: fark nedir, hangi saatte okunur
 
@@ -105,15 +103,17 @@ içinde oldu.
 
 **Kaynak sınaması.** Günlük seri gösterge kotasyonlarından kuruluyor. Aynı fark ECB'nin
 resmî Maastricht uzun vadeli faiz serisinde de yayımlanıyor, ama aylık ortalama olarak.
-Günlük seriden kurulan aylık ortalamalar resmî seriyle 315 ayda 0,996 korelasyon veriyor,
-ortalama fark −3,5 bp. Ağustos 2026 için resmî seri 81,5, günlük seriden kurulan ortalama
-82,5 bp. Yani ölçü güvenilir; geriye kalan küçük fark, resmî serinin sabit vadeli bir
-kâğıt sepetinden, günlük serinin tek bir gösterge kâğıttan kurulmasından geliyor.
+Günlük seriden kurulan aylık ortalamalar resmî seriyle 315 ayda 0,996 korelasyon veriyor;
+daha zorlu sınama olan aylık değişimlerin korelasyonu 0,96. Ortalama fark −3,5 bp ve
+yıldan yıla −7,7 ile +0,6 bp arasında oynuyor. Ağustos 2026 için resmî seri 81,5, günlük
+seriden kurulan ortalama 82,5 bp. Kalan farkın, resmî serinin sabit vadeli bir kâğıt
+sepetinden, günlük serinin tek bir gösterge kâğıttan kurulmasından gelmesi muhtemel.
 
-**Saat neden önemli.** Günlük seri Paris 17:30 kotasyonudur; bu, aynı kaynağın dakikalık
-barlarıyla doğrulandı (Almanya 2 yıllığı 1 Ekim 17:30'da 3,0535, günlük kapanış 3,0535).
-Ajans haberleri 1 Ekim için 127 ile 133 bp arası sayılar verdi; bunların hepsi günün
-erken saatlerine ait. Gün içinde fark şöyle yürüdü:
+**Saat neden önemli.** Günlük bar Avrupa kapanışı civarındaki kotasyondur: son sekiz
+işlem gününde Avrupa bacaklarının günlük barı, aynı kaynağın 17:30'a kadarki son dakikalık
+kotasyonundan en çok 0,3 bp farklı. ABD getirileri ise daha geç bir anlık görüntü (aynı
+karşılaştırmada medyan 1,9–2,5 bp, en çok 4,4 bp fark). Gün içinde 1 Ekim'de fark şöyle
+yürüdü:
 
 | saat (Paris) | Fransa 10y − Almanya 10y | İtalya 2y − Almanya 2y | ABD 2y − Almanya 2y | EUR/USD |
 |---|---|---|---|---|
@@ -122,39 +122,49 @@ erken saatlerine ait. Gün içinde fark şöyle yürüdü:
 | 15:30 | 130,9 bp | 39,0 bp | 171,7 bp | 1,1285 |
 | 17:30 | 140,5 bp | 56,9 bp | 175,7 bp | 1,1241 |
 
-Açılmanın büyük kısmı Avrupa seansının son iki saatinde geldi. Bu, euro bağı için de
-önemli bir ayrıntı: ECB'nin resmî referans kuru 14:15'te belirleniyor, yani 1 Ekim'in resmî
-kuru (1,1298) günün asıl hareketini henüz görmemişti. Bölüm 4'teki gün içi ölçü bu boşluğu
-kapatıyor.
+Açılmanın büyük kısmı Avrupa seansının son iki saatinde geldi. 17:30'daki 140,5 bp, o
+dakikaya kadarki son kotasyondur (17:26); günlük kapanış barı 140,9 bp ve iki 10 yıllık
+bacağın kapanış kotasyonları birkaç dakika ayrık. Gün içinde yayımlanan sayılar 127 ile
+133 bp arasındaydı: 127 bp sabah notlarında önceki kapanışa (126,4 bp) yakın bir okuma, 133
+bp civarı öğleden sonraki ajans haberlerinin gün içi zirvesi. Bu seride fark 15:45'te 133,3
+bp'ye çıkmıştı ve kapanışa kadar açılmaya devam etti.
+
+Saat, euro ölçüsü için de belirleyici. ECB'nin resmî referans kuru 14:15'te belirleniyor
+ve 1 Ekim'in referans kuru (1,1298) günün asıl hareketini henüz görmemişti; ABD verileri de
+14:30'da, yani sabitlemeden sonra çıkıyor. Bu yazıda EUR/USD New York kapanışından (Paris
+23:00) okunur: kur, getirilerin ve faiz farkının o günkü hareketinin tamamını görmüş olur.
+1 Ekim'in New York kapanışı 1,1239; bu, 16 Mayıs 2025'ten beri en düşük kapanış ve yılın
+zirvesinden (27 Ocak, 1,2041) −%6,89.
 
 <GrafikEmbed src="/analiz/oat-bund-2026-10-02/01_tarihce.html" baslik="Fransa ve İtalya'nın Almanya'ya 10 yıllık getiri farkı, 2000–2026" no="01" />
 
 **Bu seri nasıl hesaplanıyor.** Her iş günü için Fransa ve İtalya 10 yıllık gösterge
-getirisinden aynı günün Almanya 10 yıllık gösterge getirisi çıkarılıyor, Paris 17:30
-kotasyonu. Hafta sonu kayıtları atılıyor (kaynak cuma 17:30'dan sonraki kotasyonları
-cumartesiye yazıyor; bunlar bir Avrupa seansı değil). İki bacağın da bir önceki günün
-değerini birebir taşıdığı günler tatil sayılıp atılıyor (12 gün). Arşivde 6.967 temiz iş
-günü var. Euro öncesi 1990'ların sonu bu seride yalnız seyrek gözlemlerle temsil ediliyor;
-analiz 2000'den sonrasına dayanıyor.
+getirisinden aynı günün Almanya 10 yıllık gösterge getirisi çıkarılıyor, Avrupa kapanışı.
+Hafta sonu kayıtları atılıyor (kaynak cuma kapanışından sonraki kotasyonları cumartesiye
+yazıyor; bunlar bir Avrupa seansı değil). İki bacağın da bir önceki günün değerini birebir
+taşıdığı günler tatil sayılıp atılıyor (12 gün). Seri 3 Ocak 2000'de başlıyor; temizlikten
+sonra 6.967 iş günü kalıyor, iki bacağın birlikte ölçüldüğü gün 6.749. Kaynakta 2014'te iki
+uzun boşluk var (127 iş günü, Yöntem eki).
 
 ## Bölüm 2 — 2026'da ne oldu
 
 **Seviye.** Fark yıla 69,8 bp ile başladı, 25 Şubat'ta 54,9 bp ile yılın dibini gördü.
-Yılın dibinden bu yana +86,0 bp açıldı. Haziran sonunda 74,6, Ağustos sonunda 85,0 bp idi; 31 Ağustos'tan bu yana +55,9 bp açıldı.
-Fark 18 Eylül'de 105,0 bp ile 25 Temmuz 2012'den beri ilk kez 100 bp'nin üstünde kapandı,
-1 Ekim'de 140,9 bp oldu. Fark son bir haftada +30,6, son bir ayda +53,5 bp.
+Yılın dibinden bu yana +86,0 bp açıldı. Haziran sonunda 74,6, ağustos sonunda 85,0 bp
+idi; 31 Ağustos'tan bu yana +55,9 bp açıldı. Fark 18 Eylül'de 105,0 bp ile 25 Temmuz
+2012'den beri ilk kez 100 bp'nin üstünde kapandı, 1 Ekim'de 140,9 bp oldu. Son 5 iş
+gününde +30,6, son 22 iş gününde +54,8 bp.
 
-<GrafikEmbed src="/analiz/oat-bund-2026-10-02/02_yil.html" baslik="2026'da Fransa ve İtalya farkı, olay takvimiyle" no="02" />
+<GrafikEmbed src="/analiz/oat-bund-2026-10-02/02_yil.html" baslik="2026'da Fransa ve İtalya farkı ve olaylar" no="02" />
 
-**Bu seri nasıl hesaplanıyor.** Bölüm 1'deki fark, 1 Ocak – 1 Ekim 2026. Kesikli çizgiler
-yazının olay takvimidir; her olay birincil kaynaktan ya da en az bir yayıncıdan teyit
-edildi. "Hürmüz şoku" günü, bu sitenin Hürmüz analizinde fiyat ve geçiş verisinden ölçülen
-kırılma günüdür (2 Mart 2026).
+**Bu seri nasıl hesaplanıyor.** Bölüm 1'deki fark, 1 Ocak – 1 Ekim 2026. Numaralı
+işaretler metinde anılan yedi olaydır; her biri birincil kaynaktan ya da bir yayıncıdan
+teyit edildi. "Hürmüz şoku" günü, bu sitenin Hürmüz analizinde fiyat ve geçiş verisinden
+ölçülen kırılma günüdür (2 Mart 2026).
 
 **Hangi bacak.** Fark iki bacağın farkı olduğu için, açılmanın Fransa'nın getirisinin
 yükselmesinden mi yoksa Almanya'nınkinin düşmesinden mi geldiği ayrı bir sorudur ve iki
-cevap çok farklı şeyler söyler. Birincisi Fransa'ya özgü bir risk primi, ikincisi euro
-bölgesi içinde güvenli limana kaçıştır.
+cevap farklı şeyler söyler. Birincisi Fransa'ya özgü bir risk primi, ikincisi Almanya'nın
+pahalanmasıdır — güvenli limana kaçış ya da ECB beklentisinin geri çekilmesi.
 
 | başlangıç | Fransa 10y | Almanya 10y | fark | İtalya farkı | ABD 10y |
 |---|---|---|---|---|---|
@@ -165,51 +175,68 @@ bölgesi içinde güvenli limana kaçıştır.
 
 Tablo, başlangıç gününden 1 Ekim'e değişimdir. Yılın dibinden bu yana bütün getiriler
 yükseldi — ABD 10 yıllığı +118,4 bp, Bund +81,0 bp — ve Fransa bunların hepsinden hızlı
-yükseldi.
-Ama son satır başka bir hikâye anlatıyor: 28 Eylül'den sonra Bund −12,5 bp DÜŞTÜ, ABD
-10 yıllığı yatay kaldı, Fransa +15,7 bp yükseldi. Eylül'ü iki evreye ayırmak gerekiyor:
+yükseldi. Ama son satır başka bir hikâye anlatıyor: 28 Eylül'den sonra Bund −12,5 bp düştü,
+ABD 10 yıllığı yatay kaldı, Fransa +15,7 bp yükseldi. Eylülü iki evreye ayırmak, ve her
+evrede Fransa'yı akranlarıyla birlikte okumak gerekiyor:
 
-- **Birinci evre, 31 Ağustos → 28 Eylül: küresel satış, Fransa yüksek betalı.** Fransa +59,7
-  bp, Almanya +32,1 bp, ABD 10 yıllığı +48,2 bp; fark +27,6 bp. Bütün tahvil piyasası
-  satılırken Fransa daha çok satıldı.
-- **İkinci evre, 28 Eylül → 1 Ekim: ayrışma.** Fransa +15,7 bp, Almanya −12,5 bp; fark üç
-  günde +28,2 bp. Bu, bir ülke riskinin ve euro içi kaçışın imzasıdır: yatırımcı Fransa'yı
-  satıp Almanya'yı alıyor.
+| Bund'a fark, değişim | Fransa | İtalya | Belçika | İspanya | Yunanistan | Portekiz | Avusturya | Hollanda | Fransa − İtalya |
+|---|---|---|---|---|---|---|---|---|---|
+| birinci evre: 31 Ağustos → 28 Eylül | +27,6 bp | +11,9 bp | +13,4 bp | +4,7 bp | +11,4 bp | +4,3 bp | −2,3 bp | +1,8 bp | +15,8 bp |
+| ikinci evre: 28 Eylül → 1 Ekim | +28,2 bp | +23,6 bp | +20,2 bp | +13,2 bp | +12,2 bp | +3,7 bp | +9,2 bp | +2,5 bp | +4,7 bp |
 
-**Fransa artık "çekirdek gibi" işlem görmüyor.** Bir tahvilin Bund'a duyarlılığı (beta),
-Bund getirisi 1 bp oynadığında o tahvilin getirisinin ortalama kaç bp oynadığıdır. Betası
-1'in altında olan tahvil Bund yükselirken farkını daraltır (çekirdek ülke davranışı), 1'in
-üstünde olan farkını açar (çevre ülke davranışı).
+Yunanistan ve Portekiz için son kotasyon 30 Eylül. İki evre farklı iki şeydir:
 
-| dönem | Fransa'nın betası | İtalya'nın betası | gün |
-|---|---|---|---|
-| 2013–2019 | 0,89 | 0,40 | 1.642 |
-| 2020–2023 | 0,98 | 1,02 | 1.033 |
-| 2024–2025 | 0,92 | 1,00 | 521 |
-| 2026 Ocak–Ağustos | 1,20 | 1,46 | 169 |
-| 2026 Eylül | 1,02 | 1,04 | 23 |
+- **Birinci evre: küresel satışta Fransa'nın akranlarından kopması.** Fransa +59,7 bp,
+  Almanya +32,1 bp, ABD 10 yıllığı +48,2 bp, ABD 2 yıllığı +57,4 bp yükseldi. Fark +27,6 bp
+  açıldı ve bunun 15,8 bp'si Fransa'nın İtalya'dan ayrışmasıydı: Fransa'ya özgü hareket
+  burada.
+- **İkinci evre: bütün euro farklarının Bund'a karşı birlikte açılması.** Almanya 10
+  yıllığı −12,5 bp, 2 yıllığı −24,6 bp düştü; İtalya +23,6, Belçika +20,2, İspanya +13,2,
+  Avusturya +9,2 bp açıldı. Fransa–İtalya farkı yalnız +4,7 bp. Bu ya bulaşma ve kalite
+  kaçışıdır ya da ECB beklentisinin geri çekilmesi: Alman 2 yıllığının 10 yıllığından iki
+  kat hızlı düştüğü bir boğa dikleşmesi ikincisinin de imzasıdır. FXStreet'in aktardığı ING
+  notuna göre Lagarde'ın 28 Eylül'de Avrupa Parlamentosu'nda "ölçülü" bir yanıttan söz
+  etmesi ekim artışı beklentisini zayıflattı. Üç günlük veriyle ikisi ayrılamaz.
 
-Fransa'nın betası 2026'nın ilk sekiz ayında ilk kez belirgin biçimde 1'in üstüne çıktı:
-Bund yükseldiğinde Fransa ondan %20 fazla yükseliyor. Bu bir çevre ülke davranışı. Ama
-ölçek önemli: birinci evrede Bund'un +32,1 bp yükselişi, 1,20'lik betayla farkı yalnız
-+6,3 bp açar. Birinci evrenin +27,6 bp'lik açılmasının kalanı, ikinci evrenin tamamı gibi,
-Bund'un hareketiyle açıklanamayan Fransa'ya özgü kısımdır. Barclays stratejistlerinin 25
-Eylül'de yazdığı gibi Fransız tahvilleri "çekirdek gibi değil, çevre ülke gibi" işlem
-görüyor; ölçü bunu doğruluyor, ama İtalya'nın betası hâlâ Fransa'nınkinden yüksek.
+**Fransa küresel satışta İtalya gibi davranıyor.** Bir tahvilin Bund'a duyarlılığı (beta),
+Bund getirisi 1 bp oynadığında o tahvilin getirisinin ortalama kaç bp oynadığıdır. Beta iki
+rejimde iki ayrı şey söyler. Küresel faiz satışında betası 1'in üstünde olan tahvilin
+farkı Bund yükselirken açılır. Riskten kaçışta ise sıkıntıdaki ülkenin betası düşer, hatta
+eksiye döner: Bund düşerken o ülkenin getirisi yükselir. Kıyas için bir çekirdek ülke,
+Avusturya:
+
+| dönem | Fransa | İtalya | Avusturya | gün |
+|---|---|---|---|---|
+| 2010–2012 | 0,54 | −0,47 | 0,56 | 753 |
+| 2013–2019 | 0,89 | 0,41 | 0,82 | 1.650 |
+| 2020–2023 | 0,98 | 1,03 | 0,92 | 1.035 |
+| 2024–2025 | 0,92 | 1,00 | 0,91 | 521 |
+| 2026 Ocak–Ağustos | 1,20 | 1,46 | 0,94 | 169 |
+| 2026 Eylül (30 Eylül'e kadar) | 1,26 | 1,32 | 0,94 | 22 |
+
+2010–2012 kriz imzasını gösteriyor: İtalya'nın betası eksi (−0,47), Fransa'nınki Avusturya
+ile aynı. 2026'da tablo başka: Fransa'nın betası Avusturya'dan (0,94) ayrıldı, İtalya'ya
+yaklaştı — Barclays'in 25 Eylül'de yayımlanan haberde aktarılan ifadesiyle Fransız
+tahvilleri "daha çok çevre ülke, çok daha az çekirdek gibi" işlem görüyor. Ölçek de önemli:
+birinci evrede Bund'un +32,1 bp yükselişi, Ocak–Ağustos betasıyla (1,20) farkı +6,3 bp,
+evrenin kendi betasıyla (1,44) +14,2 bp açar; yani birinci evrenin +27,6 bp'lik açılmasının
+dörtte biri ile yarısı Bund'un hareketiyle açıklanıyor. İkinci evrede Bund −12,5 bp
+düşerken Fransa +15,7 bp yükseldi: üç günlük ölçek, ama işaret 2010–2012'nin kriz imzası.
 
 <GrafikEmbed src="/analiz/oat-bund-2026-10-02/03_akranlar.html" baslik="Euro bölgesinde 10 yıllık getiri farkları: 30 Haziran ve 1 Ekim" no="03" />
 
 **Bu seri nasıl hesaplanıyor.** Her ülkenin 10 yıllık gösterge getirisi eksi Almanya'nınki,
-aynı kaynaktan ve aynı saatten. Yunanistan ve Portekiz için kaynağın son kotasyonu 30 Eylül;
-öbür ülkeler 1 Ekim.
+aynı kaynaktan ve aynı saatten. Ölçülen sekiz ülke; Yunanistan ve Portekiz için kaynağın son
+kotasyonu 30 Eylül, öbür ülkeler 1 Ekim.
 
-**Akranlar.** Haziran sonundan bu yana bütün euro bölgesi farkları açıldı, ama aynı ölçüde
-değil: Fransa +66,3 bp, İtalya +51,0, Belçika +36,3, Yunanistan +30,4, İspanya +19,3,
-Portekiz +9,9, Avusturya +7,6, Hollanda +3,9 bp. Bugün Fransa euro bölgesinin bu sepetteki
-en geniş farkını taşıyor: 140,9 bp'ye karşı İtalya 119,5, Belçika 88,4, İspanya 63,5 bp.
-Fransa 10 yıllığı İtalya'nınkinin 21,5 bp üstünde; bu sıralama 2000'den bu yana ilk kez 7
-Ekim 2025'te oluştu ve 4 Ağustos 2026'dan beri kesintisiz sürüyor (41 iş günü). 30 Eylül'deki
-+22,8 bp bu tersine dönüşün tarihî zirvesi.
+**Akranlar.** Haziran sonundan bu yana ölçülen bütün euro bölgesi farkları açıldı, ama aynı
+ölçüde değil: Fransa +66,3 bp, İtalya +51,0, Belçika +36,3, Yunanistan +30,4, İspanya +19,3,
+Portekiz +9,9, Avusturya +7,6, Hollanda +3,9 bp. Bugün ölçülen sekiz ülke içinde en geniş
+fark Fransa'da: 140,9 bp'ye karşı İtalya 119,5, Yunanistan 91,8 (30 Eylül), Belçika 88,4,
+İspanya 63,5 bp. Fransa 10 yıllığı İtalya'nınkinin 21,5 bp üstünde; bu sıralama 2000'den bu
+yana ilk kez 7 Ekim 2025'te oluştu ve 4 Ağustos 2026'dan beri her gözlemde sürüyor (41
+gözlem; 43 iş gününün ikisinde kaynak kotasyon vermedi). 30 Eylül'deki +22,8 bp bu tersine
+dönüşün tarihî zirvesi.
 
 <GrafikEmbed src="/analiz/oat-bund-2026-10-02/04_egri.html" baslik="Fransa–Almanya farkı vadelere göre: 2011 zirvesi, 30 Haziran ve 1 Ekim" no="04" />
 
@@ -217,21 +244,27 @@ Ekim 2025'te oluştu ve 4 Ağustos 2026'dan beri kesintisiz sürüyor (41 iş g�
 aynı vadeli Almanya göstergesi. 2011 sütunları her vadenin 15 Kasım 2011'deki (10 yıllık
 zirve günü) değeri.
 
-**Eğri.** Açılma eğrinin her vadesinde var, ama 1 Ekim'in asıl sıçraması kısa uçta: 2
-yıllık fark bir günde +21,6 bp ile 64,0 bp'ye çıktı (30 Haziran'da 18,0 bp idi; bu seviye
-en son 23 Nisan 2012'de görülmüştü). 5 yıllık 100,5, 30 yıllık 163,9 bp. Kısa ucun uzun
-uçtan hızlı açılması bir kredi riski işaretidir: 2 yıllık bir tahvil seçimden ve
-gelecekteki maliye politikasından çok, yakın dönemin finansman ve likidite riskini taşır.
-Aynı gün İtalya'nın 2 yıllık farkı da +24,0 bp ile 56,7 bp'ye çıktı; Bölüm 4'te gün içi
-ayrıntısı var.
+**Eğri.** Haziran sonundan bu yana en çok 10 yıllık fark açıldı (+66,3 bp; 5 yıllık +56,7,
+30 yıllık +60,1, 2 yıllık +46,0). 1 Ekim'in kendisinde ise kısa uç öndeydi: 2 yıllık fark
+bir günde +21,6 bp ile 64,0 bp'ye çıktı — 64,0 bp en son 23 Nisan 2012'de görülmüştü; 30
+Haziran'da 18,0 bp idi. Ama bu sıçrama Fransa'dan değil Almanya'dan geldi. Fransa'nın kendi
+getirileri bütün vadelerde neredeyse aynı ölçüde yükseldi (2 yıllık +7,5, 5 yıllık +8,0,
+10 yıllık +8,6, 30 yıllık +9,9 bp); farkların vadeye göre değişen profili tümüyle Alman
+eğrisinden: 2 yıllık −14,1, 5 yıllık −9,9, 10 yıllık −6,0, 30 yıllık −2,2 bp. 2 yıllık fark
+sıçramasının %65'i Alman bacağıdır. Aynı gün İtalya'nın 2 yıllık farkı da +24,0 bp açıldı;
+İtalya'nın kendi 2 yıllığı +9,9 bp yükseldi, yani o sıçramanın da %59'u Alman bacağı. Fark
+eğrisi terslenmedi; 64,0 / 100,5 / 140,9 / 163,9 bp ile yukarı eğimli. Kısa uçta Fransa'ya
+özgü bir finansman stresi ölçülmüyor; ölçülen, Alman kısa ucunun hızlı pahalanması.
 
 ## Bölüm 3 — Neden açıldı
 
-Farkın açılmasını tek bir habere bağlamak mümkün değil; MUFG'nin 24 Eylül notundaki soru
-ve cevap bunu iyi özetliyor: "Bu açılmayı açıklayacak bir şey değişti mi? Özellikle
-Fransa'da, hayır, pek değil." Değişen tek tek haberler değil, haberlerin dizildiği takvim:
-bütçe görüşmeleri, not takvimi ve seçim aynı sekiz aya sıkıştı. Dört katmanı ayrı ayrı
-ele almak gerekiyor.
+Farkın açılmasını tek bir habere bağlamak zor. MUFG 24 Eylül notunda "Bu açılmayı
+açıklayacak bir şey değişti mi? Özellikle Fransa'da, hayır, pek değil" diye yazıp açılmayı
+küresel sabit getirili tahvil satışına bağlıyordu. ING ise 21 Eylül'de açılmanın "54 milyar
+avroluk çaba planının ardından hızlandığını" yazdı. İki okuma da bir yerde doğru ve Bölüm
+2'nin iki evresi bunu gösteriyor. Bizim okumamız şu: değişen tek tek haberlerden çok,
+haberlerin dizildiği takvim — bütçe görüşmeleri, not takvimi ve seçim aynı sekiz aya
+sıkıştı. Dört katmanı ayrı ayrı ele almak gerekiyor.
 
 **3.1 Maliye: hedef kaydı, borç ve faiz faturası büyüyor.**
 
@@ -239,52 +272,61 @@ ele almak gerekiyor.
   %5'i aşacağını söyledi ve büyüme tahminini bu yıl üçüncü kez düşürerek %0,5'e indirdi.
   Kamu Maliyesi Yüksek Konseyi'nin (HCFP) 2027 bütçe tasarısı görüşü 2026 için %5,4'lük
   açığı esas alıyor, 2026 büyüme senaryosunu "makul", 2027 için %1'lik büyüme tahminini
-  "iyimser" ve 2029'da %3'e inmeyi "pek olası değil" buluyor. Konsey başkanı Amélie de
-  Montchalin'in cümlesi: "Kriz olmadan kriz açığımız var."
+  "iyimser", açığı 2029'da %3'ün altına indirme hedefini ise "çok düşük olasılıklı" buluyor.
+  Konsey başkanı Amélie de Montchalin'in cümlesi: "Esasen kriz olmadığı hâlde bir kriz
+  açığımız var."
 - **2027 için 54 milyar avroluk çaba.** Başbakan Sébastien Lecornu 17 Eylül'de 2027
-  bütçesinde yaklaşık 54 milyar avroluk bir çaba önereceğini açıkladı; hiçbir önlem
-  alınmazsa 2027 açığı GSYH'nin %6,5'ini aşardı. Hedef %5. Kamu Hesapları Bakanı David
-  Amiel 16 Temmuz'da faiz yükünün gelecek yıl 12,3 milyar avro artacağını söylemişti; aynı
-  hafta Ekonomi Bakanlığı'nın ekonomistlere hazırlattığı rapor, önlem alınmazsa açığın
-  2027'de %5,9'a, 2030'da %6,8'e kayacağını yazıyordu.
+  bütçesinde yaklaşık 54 milyar avroluk bir çaba önereceğini açıkladı; hedef %5. İki karşı
+  olgu iki ayrı varsayıma dayanıyor: Lecornu'ya göre bütçe hiçbir tasarruf önlemi
+  içermeseydi 2027 açığı GSYH'nin %6,5'ini aşardı; Ekonomi Bakanlığı'nın ekonomistlere
+  hazırlattığı ve 15 Temmuz'da açıklanan rapora göre ise mevcut politikalar sürerse açık
+  2027'de %5,9'a, 2030'da %6,8'e kayabilir.
 - **Borç rekor.** INSEE'ye göre 2026 ikinci çeyrek sonunda Maastricht tanımlı kamu borcu
   3.595,5 milyar avro, GSYH'nin %119,0'ı (ilk çeyrekte %117,5); çeyrekte +59,6 milyar avro.
 - **Faiz faturası ve arz.** Fransız Hazinesi (AFT) 29 Eylül'de 2027 finansman ihtiyacını
   339,7 milyar avro, orta–uzun vadeli ihraç programını rekor 340 milyar avro (2026: 310)
-  olarak açıkladı; devlet borcunun bütçe maliyeti 62,6 milyar avrodan 72,9 milyara çıkıyor.
-  Bu hesap 2027 için 10 yıllık borçlanma faizini %4,3 varsayıyor. İki gün sonra, 1 Ekim
-  ihalesinde 2036 vadeli gösterge kâğıt ortalama %4,93'le satıldı (3 Eylül'de %4,23); 2048
-  vadeli kâğıt %5,40'la (2 Nisan'da %4,35). Arz da talep de var — 6,271 milyar avroluk
-  2036 kâğıdına 12,564 milyar avroluk teklif geldi — ama fiyat varsayımın 63 bp üstünde.
+  olarak açıkladı. AFT'ye göre devlet borcunun bütçe maliyeti 2027'de 72,9 milyar avro;
+  karşılaştırdığı 62,6 milyar avro 2026 bütçe yasasının rakamı, Ekonomi Bakanlığı ise 2026
+  için 65 milyar avro diyor. Kamu Hesapları Bakanı David Amiel 16 Temmuz'da ülkenin
+  ödeyeceği faizin gelecek yıl 12,3 milyar avro artacağını söylemişti; iki rakam farklı
+  tarihte ve farklı tanımla verildi, birbirine çevrilemiyor. AFT'nin hesabı 2027 için 10 yıllık borçlanma faizini
+  %4,3 varsayıyor. İki gün sonra, 1 Ekim ihalesinde 2036 vadeli gösterge kâğıt ortalama
+  %4,93 getiriyle satıldı (3 Eylül'de %4,23); 2048 vadeli kâğıt %5,40 ile (2 Nisan'da
+  %4,35). Talep güçlü — 6,271 milyar avroluk 2036 kâğıdına 12,564 milyar avroluk teklif,
+  teklif/satış 2,0 — ama ortalama getiri bütçe varsayımının 63 bp üstünde.
 
 **3.2 Siyaset: meclis çoğunluğu yok, seçim takvimi sıkışık.**
 
-- **Bütçe, bir azınlık hükümetinin elinde.** 2026 bütçesi ancak 2 Şubat'ta, anayasanın 49.3
-  maddesiyle oylamasız geçirilip gensoru önergeleri düşürülerek kesinleşti: sol önergesi
-  gereken 289 oyun 260'ını aldı. Bir yıl önceki ilk okumada bütçenin gelir kısmı mecliste 1'e
-  karşı 404 oyla reddedilmişti. Sosyalist Parti lideri Olivier Faure 27 Eylül'de 2027
-  tasarısı için "Hiçbir şey değişmezse gensoru vereceğiz" dedi.
+- **Bütçe, bir azınlık hükümetinin elinde.** 2026 bütçesi ancak 2 Şubat'ta, gensoru
+  önergeleri reddedilince kabul edilmiş sayılarak kesinleşti: sol önergesi gereken 289 oyun
+  260'ını aldı. Anayasanın 49.3 maddesi hükümete bir metni oylamasız kabul ettirme yolu
+  verir; meclis onu ancak gensoruyla durdurabilir. Aynı 2026 bütçesinin gelir kısmı
+  Kasım 2025'teki ilk okumada 1 kabule karşı 404 ret oyuyla (84 çekimser) reddedilmişti.
+  Sosyalist Parti lideri Olivier Faure 27 Eylül'de 2027 tasarısı için "Hiçbir şey
+  değişmezse gensoru vereceğiz" dedi.
 - **Le Pen yarışta ve önde.** Paris İstinaf Mahkemesi 7 Temmuz'da Marine Le Pen'in
-  mahkûmiyetini onadı ama 45 aylık seçilme yasağının 30 ayını erteledi ve 31 Mart 2025'ten
-  beri infaz edilen kısmın yeterli olduğuna hükmetti; Le Pen 2027'de aday olabiliyor.
-  28 Eylül'de yayımlanan Toluna-Harris anketinde ikinci turda Le Pen %57, Édouard Philippe
-  %43; Ifop'un 1 Ekim'deki on senaryosunda Le Pen birinci turda %31–36. Le Pen 12 Eylül'de
-  seçimden önce "kusurlu ama işleyen" bir bütçeyi geçici bütçe yasasına tercih ettiğini
-  söyledi; yani Ulusal Birlik bütçeyi düşürmeyi garanti etmiyor. Eylül sonunda RN başkanı
-  Jordan Bardella hakkında 2013–2015'e ait antisemit yazışmalar iddiası yayımlandı
-  (Mediapart); Bardella iddiaları "kaba sahtecilik" diye reddedip dava açacağını
-  söyledi.
-- **Fesih kapısı kapalı.** Cumhurbaşkanı Macron 24 Eylül'de seçimden önce meclisi yeniden
-  feshetmeyi "ülke için iyi olmaz" diyerek dışladı. Cumhurbaşkanlığı seçiminin birinci turu
-  18 Nisan, ikinci turu 2 Mayıs 2027.
+  mahkûmiyetini onadı, seçilme yasağını 45 aya indirdi ve bunun 30 ayını erteledi. İnfaz
+  edilir 15 ay 31 Mart 2025'ten işlemeye başlamıştı ve Haziran 2026'da doldu; Le Pen bu
+  yüzden 2027'de aday olabiliyor. 28 Eylül'de yayımlanan Toluna-Harris anketinde ikinci
+  turda Le Pen %57, Édouard Philippe %43; Ifop'un 1 Ekim'deki on senaryosunda Le Pen birinci
+  turda %31–36. Le Pen 12 Eylül'de seçimden önce "kusurlu ama işleyen" bir bütçeyi geçici
+  bütçe yasasına tercih ettiğini söyledi; yani Ulusal Birlik'in (RN) bütçeyi düşüreceği
+  kesin değil. Eylül sonunda RN başkanı Jordan Bardella hakkında 2013'e (bazı haberlere göre
+  2013–2015'e) ait antisemit yazışmalar iddiası yayımlandı (Mediapart); Bardella iddiaları
+  "kaba sahtecilik" diye reddedip dava açacağını söyledi. Ifop'a katılanların yalnız üçte
+  biri iddiaların yayımlanmasından sonra yanıt verdi; anketler etkisini henüz ölçmüyor.
+- **Macron feshi dışladı.** Cumhurbaşkanı Macron 24 Eylül'de seçimden önce meclisi yeniden
+  feshetmeyi "ülke için iyi olmaz" diyerek dışladı. Bu bir siyasi beyan: anayasanın 12.
+  maddesindeki bir yıllık kilit Temmuz 2025'te kalktı, fesih hukuken mümkün.
+  Cumhurbaşkanlığı seçiminin birinci turu 18 Nisan, ikinci turu 2 Mayıs 2027.
 
-**3.3 Notlar: piyasanın arkasından geliyor.** Scope 18 Eylül akşamı Fransa'yı AA−'dan A+'ya
-indirdi, Morningstar DBRS aynı akşam AA notunun eğilimini negatife çevirdi. Fitch 28
-Ağustos'ta A+ notunu durağan görünümle teyit etti; S&P Mayıs'ta A+'yı korudu; Moody's
-Nisan'da Aa3 notunu negatif görünümle korudu. Not kararlarının fark üzerindeki etkisi
-Bölüm 5'te ölçülüyor ve küçük çıkıyor — kararlar çoğunlukla piyasanın çoktan fiyatladığını
-kayda geçiriyor. Ama sıradaki iki karar takvimde (Bölüm 6) ve Moody's'in negatif görünümü
-bir indirimi masada tutuyor.
+**3.3 Notlar: piyasanın arkasından geliyor.** Scope 18 Eylül akşamı Fransa'nın notunu AA−'dan
+A+'ya indirdi ve görünümü durağana çevirdi; Morningstar DBRS aynı akşam AA notunun eğilimini
+negatife çevirdi. Bu yılın öbür kararları teyit: Moody's 10 Nisan'da Aa3 notunu negatif
+görünümle korudu, S&P 29 Mayıs'ta A+'yı korudu, Fitch martta ve 28 Ağustos'ta A+'yı durağan
+görünümle teyit etti. Not kararlarının fark üzerindeki etkisi Bölüm 5'te ölçülüyor ve küçük
+çıkıyor — kararlar çoğunlukla piyasanın çoktan fiyatladığını kayda geçiriyor. Ama sıradaki
+iki karar takvimde (Bölüm 6) ve Moody's'in negatif görünümü bir indirimi masada tutuyor.
 
 **3.4 ECB ve küresel faiz: hem itici hem fren.** ECB, İran savaşının enerji fiyatları
 üzerinden enflasyonu yükseltmesiyle mevduat faizini 11 Haziran'da %2,00'den %2,25'e, 10
@@ -292,278 +334,385 @@ Eylül'de %2,50'ye çıkardı (2023'ten beri ilk artışlar). ABD Merkez Bankas�
 oybirliğiyle politika faizini %3,75–4,00'e yükseltti. ABD 10 yıllığı 30 Eylül'de %5,29
 kapandı. Bu ortam Fransa'yı iki yoldan sıkıştırıyor. Birincisi küresel faiz yükseldikçe
 yüksek borçlu ülkenin faiz faturası büyüyor ve beta yükseliyor (Bölüm 2). İkincisi sıkılaşan
-bir merkez bankası tahvil alımıyla farkı bastırmaya isteksiz. ECB'nin farkı bastırmak için
-kurduğu Aktarım Koruma Aracı'nın (TPI) ilk uygunluk ölçütü AB maliye çerçevesine uyumdur ve
-Fransa Temmuz 2024'ten beri aşırı açık prosedüründe; ölçüt, prosedürde olmamak ya da Konsey
-tavsiyesine karşı etkili adım atmadığı saptanmamış olmak diye yazılı. Bundesbank Başkanı
-Joachim Nagel 1 Ekim'de, satış sürerken, ECB'nin araçlarının belirli fark seviyelerini
-hedeflemek için değil fiyat istikrarı için tasarlandığını söyledi. ECB Başkanı Lagarde 30
-Eylül'de La Croix'ya Fransa'nın borç durumunun "GSYH'nin %120'sinde ve düşürme patikası
-olmadan ciddi" olduğunu söylemişti.
+bir merkez bankasının tahvil alımına başvurması zor. ECB'nin Aktarım Koruma Aracı (TPI),
+para politikasının aktarımını tehdit eden haksız ve düzensiz piyasa dinamiklerine karşı
+kuruldu; etkinleştirilmesi için ECB'nin açılmayı temelden kopuk bulması gerekir. Uygunluk
+dört ölçüte bağlı: AB maliye çerçevesine uyum, ciddi makroekonomik dengesizlik olmaması,
+borcun sürdürülebilirliği ve sağlam politikalar. Fransa Temmuz 2024'ten beri aşırı açık
+prosedüründe, ama bu tek başına uygunluğu düşürmez: birinci ölçüt, ülke prosedürdeyse,
+Konsey tavsiyelerine uymak için etkili adım atmadığının saptanmamış olmasını ister.
+Bundesbank Başkanı Joachim Nagel 1 Ekim'de, satış sürerken, ECB'nin araçlarının belirli
+fark seviyelerini hedeflemek için değil fiyat istikrarı için tasarlandığını söyledi; ING
+24 Eylül'de ECB'nin yeni enflasyon baskılarıyla uğraşırken müdahaleye isteksiz olabileceğini
+yazıyordu. ECB Başkanı Lagarde 30 Eylül'de yayımlanan La Croix söyleşisinde (FXStreet'in
+aktarımıyla) Fransa'nın borç durumunun "GSYH'nin %120'sinde ve düşürme patikası olmadan
+ciddi" olduğunu söylemişti.
 
-**Eylül'ün büyük günleri.** Katmanların hangisinin hangi gün ağır bastığı günlük değişimde
+**Eylülün büyük günleri.** Katmanların hangisinin hangi gün ağır bastığı günlük değişimde
 görülebiliyor:
 
-| gün | fark | Fransa 10y | Almanya 10y | ABD 10y | İtalya farkı | o gün |
+| gün | fark | Fransa 10y | Almanya 10y | ABD 10y | İtalya farkı | aynı gün |
 |---|---|---|---|---|---|---|
 | 10.09 | +4,2 bp | +10,0 | +5,8 | +10,7 | +3,2 | ECB +25 bp; küresel satış |
 | 18.09 | +8,1 bp | +12,4 | +4,3 | +4,9 | +5,4 | 54 milyar avroluk çabanın ertesi günü; notlar akşam |
-| 21.09 | −3,6 bp | −10,5 | −6,9 | −3,3 | −3,2 | not indiriminden sonraki ilk işlem günü |
+| 21.09 | −3,6 bp | −10,5 | −6,9 | −3,3 | −3,2 | not indiriminden sonraki ilk işlem günü; petrol geriledi |
 | 23.09 | +6,8 bp | +16,3 | +9,5 | +14,7 | +6,1 | küresel satış |
 | 29.09 | +7,6 bp | +4,6 | −3,0 | +1,5 | +6,6 | borç verisi ve 2027 ihraç programı |
-| 30.09 | +6,0 bp | +2,5 | −3,5 | +3,8 | +1,1 | Lagarde'ın Fransa uyarısı |
+| 30.09 | +6,0 bp | +2,5 | −3,5 | +3,8 | +1,1 | Lagarde söyleşisi yayımlandı |
 | 01.10 | +14,6 bp | +8,6 | −6,0 | −5,9 | +15,9 | 2027 bütçe tasarısı; İtalya'ya bulaşma |
 
-Getiri değişimleri baz puan. İlk dört satırda Bund da yükseliyor ya da Fransa'yla birlikte
-düşüyor — küresel bir hareketin içinde Fransa daha sert. Son üç satırda Bund düşüyor:
-ülke riski ve euro içi kaçış. Ve not indirimi farkı açmadı; 18 Eylül'ün +8,1 bp'si
-indirimden ÖNCE geldi (karar Paris saatiyle 22:30'da yayımlandı), indirimden sonraki
-pazartesi fark −3,6 bp daraldı. ING'nin 21 Eylül notu açılmanın "54 milyar avroluk çaba
-planının ardından hızlandığını" yazıyor.
+Getiri değişimleri baz puan; son sütun aynı günün gelişmeleridir, hareketin sebebi diye
+okunmamalı. İlk dört satırda Bund da yükseliyor ya da Fransa'yla birlikte düşüyor — küresel
+bir hareketin içinde Fransa daha sert. Son üç satırda Bund düşüyor. Not indirimi farkı
+açmadı: 18 Eylül'ün +8,1 bp'si indirimden önce geldi (karar Paris saatiyle 22:30'da
+yayımlandı), indirimden sonraki pazartesi fark −3,6 bp daraldı. Ama o pazartesi tek bir
+haberin günü değildi; ING'nin 21 Eylül notuna göre petrol 100 dolara doğru geriledi ve risk
+iştahı toparlandı, yani daralmanın tamamı not kararına okunamaz.
 
-## Bölüm 4 — Fark neden euroyu düşürüyor
+## Bölüm 4 — Fark euroya nasıl geçti
 
 **Mekanizma.** Fransa'nın borç riskinin dolara karşı euroya geçmesi için Fransız tahvilini
-satan paranın euro dışına çıkması ya da euronun faiz beklentisinin düşmesi gerekir.
-Üç kanal var:
+satan paranın euro dışına çıkması ya da euronun faiz beklentisinin düşmesi gerekir. Üç kanal
+var:
 
 1. **Risk primi ve portföy akımı.** Yabancı yatırımcı Fransız tahvilini satıp parayı Bund'a
    koyarsa kur hareket etmez; fark açılır, kur yerinde kalır. Parayı dolara çevirirse euro
-   satılır. Euro bölgesinin ikinci büyük tahvil piyasasında risk algısının yükselmesi, euro
-   cinsi varlık tutmanın toplam riskini yükseltir ve kurdan bir risk primi ister.
+   satılır. Euro bölgesinin en büyük devlet borcu stoklarından birinde (3.595,5 milyar avro)
+   risk algısının yükselmesi, euro cinsi varlık tutmanın toplam riskini yükseltir ve kurdan
+   bir risk primi ister.
 2. **ECB'nin tepki fonksiyonu.** Fark açıldıkça ECB faiz artırmakta zorlanır: daha yüksek
    politika faizi en zayıf halkanın finansman maliyetini daha da yükseltir. Piyasa bunu
-   fiyatlarsa euro faiz beklentisi düşer, ABD–euro faiz farkı açılır, kur düşer. ING'nin 1
-   Ekim notu tam bunu söylüyor: farkın bu hızla açılması "euroya bir risk primi ekleyebilir
-   ve ECB'nin sıkılaşma döngüsünü kısıtlayabilir". 1 Ekim'de Almanya 2 yıllığı −14,1 bp,
-   ABD 2 yıllığı −10,0 bp düştü.
+   fiyatlarsa euro faiz beklentisi düşer, ABD–euro faiz farkı açılır, kur düşer. Bu kanal
+   faiz farkının İÇİNDEN çalışır; aşağıdaki haftalık ölçü faiz farkını sabit tuttuğu için
+   onu tanımı gereği dışarıda bırakır.
 3. **Parçalanma kuyruğu.** Bir ülkenin euro dışına çıkması ya da borcunu yeniden
-   denominasyona uğratması olasılığı küçük bir olasılık olsa da euronun kendisi için bir
-   kuyruk riskidir. 2011–12'de bu kanal İtalya ve İspanya üzerinden çalıştı; 2017'de, euro
-   çıkışını programına koyan bir adayla, Fransa üzerinden çalıştı (Bölüm 5).
+   denominasyona uğratması küçük bir olasılık olsa da euronun kendisi için bir kuyruk
+   riskidir. 2011–12'de bu kanal İtalya ve İspanya üzerinden çalıştı; 2017'de, euro çıkışını
+   programına koyan bir adayla, Fransa için konuşuldu (Bölüm 5).
 
-Dengeleyen güç, euro bölgesinin kendi güvenli limanının olması: kaçış Bund'a giderse euro
-içinde kalır. Son üç günün imzası (Bund düşerken OAT yükseliyor) bu yüzden kur için
-karışık bir işarettir — kaçışın bir kısmı euro içinde kalıyor.
+Bu üç kanal ortak bir şey söylüyor: Fransa'ya özgü bir şok euroyu düşürüyorsa, euroyu yalnız
+dolara karşı değil sterline ve franka karşı da düşürmeli. Dolar karşısındaki kayıp başka bir
+şeyden — Fed'den, ABD verisinden, küresel risk iştahından — geliyorsa sterlin ve frank da
+dolara karşı aynı ölçüde düşer. Bu ayrım ölçülebilir.
 
-**Ölçüm.** Kurla fark arasındaki ilişki, kurun asıl belirleyicisi olan faiz farkı sabit
-tutularak haftalık veriyle ölçüldü:
+**Önce model kullanmadan.** EUR/USD'nin log değişimi iki parçaya bölünür:
 
 $$
-\Delta \ln \mathrm{EURUSD}_w \times 100 = a + b_1\,\Delta\!\left(y^{\mathrm{US}}_{2} - y^{\mathrm{DE}}_{2}\right)_w + b_2\,\Delta s_w + \varepsilon_w .
+\Delta \ln \mathrm{EURUSD} = \underbrace{\Delta \ln \mathrm{GBPUSD}}_{\text{dolar bacağı}} + \underbrace{\Delta \ln \mathrm{EURGBP}}_{\text{euro bacağı}} .
 $$
 
-Kur ECB'nin 14:15 referans kuru, değişimler çarşambadan çarşambaya, standart hatalar
-Newey–West (dört hafta). $b_2$, faiz farkı sabitken farktaki 1 bp'lik açılmaya eşlik eden
-haftalık kur değişimidir; tabloda 10 bp için yazıldı.
+Bu bir özdeşliktir, tahmin değil. Euro bacağı euronun sterline karşı hareketidir: dolar iki
+parada ortak olduğu için düşer. Aynı ayrıştırma franka karşı da yapılır. İki kıyas aynı
+şeyi söylüyorsa euroya özgü hareket odur.
 
-| dönem | hafta | 10 bp fark → EUR/USD | t | 10 bp faiz farkı → EUR/USD | t | açıklanan pay |
+| pencere | EUR/USD | dolar bacağı (sterline göre) | euro bacağı (EUR/GBP) | dolar bacağı (franka göre) | euro bacağı (EUR/CHF) | fark | İtalya farkı |
+|---|---|---|---|---|---|---|---|
+| 25 Şubat → 1 Ekim | −%4,95 | −%2,66 | −%2,29 | −%7,29 | +%2,35 | +86,0 bp | +58,3 bp |
+| 30 Haziran → 31 Ağustos | +%1,69 | +%2,15 | −%0,45 | −%0,03 | +%1,73 | +10,5 bp | +15,6 bp |
+| 31 Ağustos → 28 Eylül | −%2,14 | −%2,19 | +%0,05 | −%2,86 | +%0,72 | +27,6 bp | +11,9 bp |
+| 28 Eylül → 1 Ekim | −%1,16 | −%0,44 | −%0,72 | +%0,11 | −%1,27 | +28,2 bp | +23,6 bp |
+| 31 Ağustos → 1 Ekim | −%3,30 | −%2,63 | −%0,67 | −%2,75 | −%0,55 | +55,9 bp | +35,4 bp |
+
+<GrafikEmbed src="/analiz/oat-bund-2026-10-02/05_capraz.html" baslik="EUR/USD'nin kaybı: dolar bacağı ve euro bacağı" no="05" />
+
+**Bu seri nasıl hesaplanıyor.** Kurlar New York kapanışı, log değişim yüzde. Euro bacağı
+EUR/GBP'nin (ya da EUR/CHF'nin) değişimi, dolar bacağı EUR/USD'nin değişimi eksi euro bacağı;
+yani dolar bacağı GBP/USD'nin (ya da CHF/USD'nin) değişimidir. İki bacağın toplamı ölçülen
+EUR/USD değişimine birebir eşit. Çapraz kurların günlük barı New York kapanışı gününe
+hizalanır (Yöntem eki).
+
+Dört okuma:
+
+- **Eylülün tamamında kaybın beşte dördü dolar geneliydi.** 31 Ağustos'tan bu yana euro
+  dolara karşı −%3,30 kaybetti; sterlin −%2,63, frank −%2,75 kaybetti. Euroya özgü kısım
+  sterline göre −%0,67, franka göre −%0,55: kaybın beşte biri kadar.
+- **Birinci evrede euroya özgü kayıp yok.** 31 Ağustos → 28 Eylül euro −%2,14, sterlin
+  −%2,19 kaybetti; euro sterline karşı +%0,05, franka karşı +%0,72 değer kazandı. Bu evrede
+  ABD 2 yıllığı +57,4 bp yükseldi ve Fransa farkı +27,6 bp açıldı. Aynı küresel hareket hem
+  farkı açtı (Fransa'nın yüksek betası) hem doları güçlendirdi.
+- **Euroya özgü kayıp ikinci evrede.** 28 Eylül → 1 Ekim euro −%1,16 kaybederken sterlin
+  yalnız −%0,44 kaybetti, frank dolara karşı +%0,11 kazandı. Euro sterline karşı −%0,72,
+  franka karşı −%1,27 düştü. Bu, bütün euro farklarının Bund'a karşı birlikte açıldığı ve
+  Alman 2 yıllığının −24,6 bp düştüğü evredir (Bölüm 2). Euroya özgü kayıp, Fransa'nın
+  sorunu bir euro bölgesi sorusuna dönüştüğünde geldi.
+- **Uzun pencerede iki kıyas ayrışıyor.** Yılın dibinden bu yana euro sterline karşı −%2,29
+  kaybetti ama franka karşı +%2,35 kazandı; temmuz–ağustosta da tersine. Yedi aylık
+  pencerede euroya özgü tutarlı bir işaret yok.
+
+Satış tarafının iki okuması bu tabloyla yan yana konunca ikisi de yerine oturuyor. ING 1
+Ekim notunda EUR/USD'yi yılın diplerine "bağımsız bir euro zayıflığından çok Fed'in şahin
+yeniden fiyatlamasının" ittiğini, ama farkın bu hızla açılmasının "euroya bir risk primi
+ekleyebileceğini" yazdı: birinci evre ilk yarıyı, ikinci evre ikinci yarıyı doğruluyor. BBH
+30 Eylül'de Fransa riskinin "ülkeye özgü, sistemik değil" olduğunu, çünkü çevre ülke
+farklarının sınırlı kaldığını ve bunun euro üzerindeki baskıyı sınırladığını yazıyordu;
+ertesi gün İtalya'nın 10 yıllık farkı +15,9 bp, 2 yıllık farkı +24,0 bp açıldı ve euro
+sterline karşı düştü.
+
+**Haftalık ölçüm.** Aynı soru bütün örneklemde, kurun asıl belirleyicisi olan faiz farkı
+sabit tutularak haftalık veriyle soruldu:
+
+$$
+\Delta \ln X_w \times 100 = a + b_1\,\Delta\!\left(y^{\mathrm{US}}_{2} - y^{\mathrm{DE}}_{2}\right)_w + b_2\,\Delta s_w + \varepsilon_w .
+$$
+
+$X$ önce EUR/USD, sonra aynı model sterlinde (GBP/USD) ve euronun öbür Avrupa paralarına
+karşı kurlarında (EUR/GBP, EUR/CHF). Kurlar New York kapanışı, değişimler çarşambadan
+çarşambaya, standart hatalar Newey–West (dört hafta). $b_2$, faiz farkı sabitken farktaki 1
+bp'lik açılmaya eşlik eden haftalık kur değişimidir; tabloda 10 bp için yazıldı, açıklanan
+pay R².
+
+| dönem | hafta | 10 bp fark → EUR/USD | t | 10 bp faiz farkı → EUR/USD | t | açıklanan pay (R²) |
 |---|---|---|---|---|---|---|
-| 2004–2026 | 1.161 | −%0,31 | −5,0 | −%0,26 | −4,9 | 0,069 |
-| 2004–2009 | 313 | −%0,22 | −0,6 | −%0,13 | −1,6 | 0,016 |
-| 2010–2012 | 156 | −%0,25 | −4,0 | −%0,65 | −4,8 | 0,223 |
-| 2013–2019 | 339 | −%0,20 | −1,5 | −%0,52 | −5,3 | 0,091 |
-| 2020–2023 | 209 | −%0,63 | −2,5 | −%0,30 | −3,1 | 0,123 |
-| 2024–2026 | 144 | −%0,53 | −4,0 | −%0,14 | −1,4 | 0,109 |
+| 2004–2026 | 1.158 | −%0,28 | −4,4 | −%0,36 | −6,0 | 0,106 |
+| 2004–2009 | 310 | +%0,07 | +0,2 | −%0,16 | −1,9 | 0,022 |
+| 2010–2012 | 156 | −%0,24 | −3,8 | −%0,73 | −6,2 | 0,257 |
+| 2013–2019 | 339 | −%0,16 | −1,2 | −%0,67 | −6,1 | 0,145 |
+| 2020–2023 | 209 | −%0,72 | −3,3 | −%0,44 | −4,9 | 0,246 |
+| 2024–2026 | 144 | −%0,47 | −3,2 | −%0,40 | −5,4 | 0,236 |
 
-Üç bulgu. Birincisi, ilişki tüm örneklemde güçlü ve doğru işaretli: 10 bp'lik açılmaya
-−%0,31 eşlik ediyor. İkincisi, rejime bağlı: 2013–2019'da fark kuru açıklamıyordu (t −1,5),
-2024'ten sonra en güçlü hâline yakın (−%0,53, t −4,0). 2024'ten bu yana faiz farkının
-kendisi kuru zayıf açıklıyor (t −1,4); bu dönemde kuru Fransa farkı faiz farkından daha iyi
-izliyor. Üçüncüsü, 2010–2012'de İtalya farkı modele eklenince Fransa'nın katsayısı
-kayboluyor (−%0,05, t −0,6), İtalya'nınki −%0,20 (t −4,9) kalıyor: o krizde euroyu taşıyan
-çevreydi. 2024–2026'da İtalya eklendiğinde Fransa'nın katsayısı küçülse de kalıyor (−%0,37,
-t −2,1), İtalya'nınki anlamsız (t −1,0). Bugün kuru taşıyan Fransa.
+EUR/USD'de ilişki tüm örneklemde anlamlı ve işareti beklenen yönde: 10 bp'lik açılmaya
+−%0,28 eşlik ediyor. Rejime bağlı: 2013–2019'da fark kuru açıklamıyordu, 2020'den sonra
+güçlendi. Faiz farkı her dönemde en az fark kadar güçlü bir açıklayıcı. Asıl soru ise
+şu: bu bağ euroya mı ait?
 
-<GrafikEmbed src="/analiz/oat-bund-2026-10-02/05_kayan.html" baslik="Euronun Fransa farkına duyarlılığı, 104 haftalık kayan pencere" no="05" />
+| dönem | EUR/USD | GBP/USD | EUR/GBP | EUR/CHF |
+|---|---|---|---|---|
+| 2004–2026 | −%0,28 (t −4,4) | −%0,33 (t −3,8) | +%0,05 (t +0,7) | −%0,22 (t −1,6) |
+| 2004–2009 | +%0,07 (t +0,2) | −%0,66 (t −1,5) | +%0,74 (t +2,5) | −%0,14 (t −0,6) |
+| 2010–2012 | −%0,24 (t −3,8) | −%0,12 (t −2,0) | −%0,13 (t −2,3) | −%0,18 (t −1,0) |
+| 2013–2019 | −%0,16 (t −1,2) | −%0,22 (t −1,4) | +%0,05 (t +0,3) | −%0,18 (t −0,9) |
+| 2020–2023 | −%0,72 (t −3,3) | −%1,54 (t −2,7) | +%0,82 (t +1,5) | −%0,35 (t −2,3) |
+| 2024–2026 | −%0,47 (t −3,2) | −%0,59 (t −3,4) | +%0,12 (t +1,1) | −%0,16 (t −1,0) |
 
-**Bu seri nasıl hesaplanıyor.** Yukarıdaki haftalık regresyon her hafta son 104 haftaya
-yeniden kuruluyor; çizgi $b_2 \times 10$, gölge Newey–West ±2 standart hata. Son pencerede
-(30 Eylül'de biten) değer −%0,55, bant −%0,83 ile −%0,26; 2013–2019 ortalaması −%0,13,
-2024'ten sonraki ortalama −%0,70.
+Hücreler 10 bp'lik fark açılmasına eşlik eden haftalık kur değişimi, faiz farkı sabitken.
+Fransa farkı sterlini de dolara karşı aynı ölçüde "açıklıyor": 2024–2026'da 10 bp'lik
+açılmaya GBP/USD'de −%0,59 eşlik ediyor, EUR/USD'dekinden büyük. Euroya özgü sütunlarda
+(EUR/GBP, EUR/CHF) iki kurda da eksi işaret altı dönemin yalnız birinde var: 2010–2012.
+Haftalık veride Fransa farkıyla dolar karşısındaki euro arasındaki bağ, euronun değil doların
+hareketini taşıyor: fark, doları güçlendiren küresel şoklarda açılıyor.
+
+2010–2012 neyin farklı olduğunu da gösteriyor. O dönemde İtalya farkı modele eklenince
+EUR/GBP'de Fransa'nın katsayısı kayboluyor (−%0,02, t −0,3) ve İtalya'nınki kalıyor:
+İtalya farkındaki 10 bp'lik açılmaya EUR/GBP'de −%0,11 eşlik ediyor (t −5,4). 2024–2026'da
+aynı katsayı +%0,21 (t +1,7), yani anlamsız ve ters işaretli. Euroyu kendi başına düşüren
+şey, sorunun çevreye yayılmasıydı.
+
+**Kur saati sonucu değiştiriyor.** Aynı model ECB'nin 14:15 referans kuruyla koşulunca
+2024–2026'da faiz farkının katsayısı −%0,14'e (t −1,4) iniyor ve fark kuru faiz farkından
+daha iyi açıklıyor gibi görünüyor (−%0,56, t −4,0). Sebep saat: ABD verileri 14:30'da,
+sabitlemeden sonra çıkıyor ve ABD getiri barları daha da geç. Bir ABD verisinin faiz
+farkında yarattığı şok haftanın faiz farkı değişimine giriyor, kura ise bir hafta sonra.
+New York kapanışıyla iki açıklayıcı da aynı günü görüyor.
 
 **Örneklem dışı sınama.** Bir ilişkinin geçmişe uyması, bugünü açıklayacağı anlamına gelmez.
 Katsayılar bir dönemde tahmin edildi, bir sonraki dönemde kur hareketini ne kadar
-açıkladıkları ölçüldü:
+açıkladıkları ölçüldü; eşli t, farkı eklemenin her hafta kare hatayı ne kadar düzenli
+azalttığıdır:
 
-| tahmin dönemi | sınama dönemi | hafta | yalnız faiz farkı | faiz farkı + Fransa farkı | farkın daha iyi olduğu hafta | eşli t |
-|---|---|---|---|---|---|---|
-| 2004–2023 | 2024–2026 | 144 | 0,026 | 0,077 | %60,4 | 1,98 |
-| 2013–2023 | 2024–2026 | 144 | −0,009 | 0,037 | %59,7 | 1,47 |
-| 2004–2019 | 2020–2026 | 353 | 0,071 | 0,102 | %56,9 | 2,15 |
+| tahmin dönemi | sınama dönemi | hafta | EUR/USD: yalnız faiz farkı | EUR/USD: faiz farkı + Fransa farkı | eşli t: EUR/USD | eşli t: GBP/USD | eşli t: EUR/GBP |
+|---|---|---|---|---|---|---|---|
+| 2004–2023 | 2024–2026 | 144 | 0,190 | 0,225 | 2,18 | 2,91 | 0,85 |
+| 2013–2023 | 2024–2026 | 144 | 0,186 | 0,220 | 1,52 | 2,18 | 0,42 |
+| 2004–2019 | 2020–2026 | 353 | 0,189 | 0,214 | 2,51 | 2,45 | −1,79 |
 
-Sütunlar örneklem dışı açıklanan pay (R²). Farkı eklemek her üç sınamada da açıklanan payı
-artırıyor; iyileşme iki sınamada beş yüzde düzeyinde anlamlıya yakın ya da anlamlı, birinde
-değil. Büyüklük de dürüstçe okunmalı: en iyi hâlinde bile haftalık kur hareketinin onda
-birini açıklıyor. Kurun çoğu başka şeylerle hareket ediyor.
+R² örneklem dışı ölçülür; eksi bir değer, sınama döneminin kendi ortalamasından kötü tahmin
+demektir. Farkı eklemek EUR/USD'nin örneklem dışı açıklanan payını üç sınamada da artırıyor
+(ikisinde anlamlı). Aynı iyileşme GBP/USD'de de var, iki sınamada daha güçlü; EUR/GBP'de yok.
+Bir ilişki örneklem dışında tutuyor diye nedensel olmuyor: tuttuğu şey ortak etken.
 
-**Eylülün kur kaybını kanallara ayırmak.** Katsayılar epizottan ÖNCE (Ocak 2024 – Haziran
-2026, 130 hafta) tahmin edilip başlangıç ve bitiş günlerinin değişimlerine uygulandı:
+<GrafikEmbed src="/analiz/oat-bund-2026-10-02/06_kayan.html" baslik="Kurun Fransa farkına duyarlılığı, 104 haftalık kayan pencere: EUR/USD ve EUR/GBP" no="06" />
 
-<GrafikEmbed src="/analiz/oat-bund-2026-10-02/06_atif.html" baslik="EUR/USD'nin kaybı kanallara göre: üç başlangıç günü" no="06" />
+**Bu seri nasıl hesaplanıyor.** Haftalık regresyon her hafta son 104 haftaya yeniden
+kuruluyor; çizgiler $b_2 \times 10$, gölge Newey–West ±2 standart hata. Tarih pencerenin
+bitişidir: 2024'te biten bir pencere 2022–2023'ü de taşır. 30 Eylül'de biten pencerede
+EUR/USD'nin duyarlılığı −%0,50 (bant −%0,85 ile −%0,15), EUR/GBP'ninki +%0,13 (bant −%0,09
+ile +%0,34). EUR/USD'nin duyarlılığı iki uzun dönemde sıfırın üstüne çıktı — Ağustos 2007 ile
+Haziran 2010 arasında ve Mayıs 2015 ile Nisan 2017 arasında biten pencerelerde; 2017 seçim
+yılının haftalık veride bir kur kanalı yok, kanıtı olay günüdür (Bölüm 5).
 
-**Bu seri nasıl hesaplanıyor.** Ölçülen = ECB kurunun log değişimi. Fark kanalı = $b_2$ ×
-farkın değişimi; faiz kanalı = $b_1$ × ABD–Almanya 2 yıllık farkının değişimi; sabit =
-haftalık sabit × hafta sayısı; kalan = ölçülen − hepsi. Katsayılar 10 bp fark için −%0,53,
-10 bp faiz farkı için −%0,14.
+**Eylülü kanallara ayırmak.** Model katsayıları epizottan önce (Ocak 2024 – Haziran 2026,
+130 hafta) tahmin edilip 31 Ağustos ve 1 Ekim seviyelerinin farkına uygulandığında EUR/USD'nin
+−%3,30'luk kaybı şöyle ayrışıyor: fark kanalı −%2,68, faiz kanalı −%1,17, sabit +%0,09, kalan
++%0,46. Aynı katsayılar sterline uygulanınca "Fransa kanalı" GBP/USD'ye −%3,56 yazıyor;
+GBP/USD'nin kendisi −%2,63 düştü. Ayrıştırma, sterlinin bütün kaybını ve fazlasını Fransa'ya
+yazıyor — yani fark kanalı burada bir Fransa kanalı değil, ortak etkenin farka yazılan payı.
+Euroya özgü kurda (EUR/GBP) aynı ayrıştırma fark kanalına +%0,89 yazıyor, gerçekleşen −%0,67.
 
-26 Ağustos → 1 Ekim penceresinde kur −%3,23 kaybetti; fark +55,8 bp, faiz farkı +33,1 bp
-açıldı. Fark kanalı −%2,95, faiz kanalı −%0,45, kalan +%0,04: eylül bacağı neredeyse
-tamamen açıklanıyor. Ama aynı katsayılar 30 Haziran'dan bakıldığında kalan +%2,49:
-temmuz–ağustosta fark açılırken euro yükseldi ve model bunu açıklayamıyor. Yılın dibinden
-(25 Şubat) bakıldığında kalan yine küçük (−%0,05), ama bu iki ters yöndeki sapmanın
-birbirini götürmesinden. Ders şu: kanallar eylülü iyi anlatıyor, yazı anlatmıyor.
+| katsayıların tahmin dönemi | hafta | EUR/USD: fark kanalı | faiz kanalı | sabit | kalan | GBP/USD: fark kanalı | EUR/GBP: fark kanalı |
+|---|---|---|---|---|---|---|---|
+| Ocak 2024 – Haziran 2026 | 130 | −%2,68 | −%1,17 | +%0,09 | +%0,46 | −%3,56 | +%0,89 |
+| 2004–2023 | 1.014 | −%1,47 | −%1,08 | +%0,05 | −%0,81 | −%1,71 | +%0,24 |
+| 2013–2023 | 548 | −%1,84 | −%1,56 | −%0,02 | +%0,12 | −%3,24 | +%1,40 |
+| 2010–2012 | 156 | −%1,36 | −%2,21 | −%0,10 | +%0,37 | −%0,65 | −%0,71 |
+| 2004 – Haziran 2026 | 1.144 | −%1,54 | −%1,09 | +%0,06 | −%0,72 | −%1,83 | +%0,29 |
 
-Atıf katsayının nereden tahmin edildiğine de bağlı:
+31 Ağustos → 1 Ekim, ölçülen: EUR/USD −%3,30, GBP/USD −%2,63, EUR/GBP −%0,67. Kanallar,
+sabit ve kalan ölçülen değere toplanır. Euroya özgü kurda fark kanalının eksi çıktığı tek
+tahmin dönemi 2010–2012 krizi. Çekince: bu bir ayrıştırmadır, deney değil.
 
-| katsayıların tahmin dönemi | hafta | fark kanalı | faiz kanalı | kalan |
-|---|---|---|---|---|
-| Ocak 2024 – Haziran 2026 | 130 | −%2,95 | −%0,45 | +%0,04 |
-| 2004–2023 | 1.017 | −%1,67 | −%0,90 | −%0,67 |
-| 2013–2023 | 548 | −%1,85 | −%1,21 | −%0,12 |
-| 2004 – Haziran 2026 | 1.147 | −%1,74 | −%0,86 | −%0,65 |
+<GrafikEmbed src="/analiz/oat-bund-2026-10-02/07_gun_ici.html" baslik="1 Ekim gün içi: Fransa ve İtalya farkı, faiz farkı ve EUR/USD" no="07" />
 
-26 Ağustos → 1 Ekim, ölçülen −%3,23. Dört tahmin döneminin dördünde de fark kanalı faiz
-kanalından büyük ve kurun kaybının en az yarısını taşıyor. Bu, ING'nin 1 Ekim notundaki
-"EUR/USD'yi yılın diplerine Fed'in şahin yeniden fiyatlaması itti, bağımsız bir euro
-zayıflığı değil" okumasıyla kısmen çelişiyor: ABD–Almanya 2 yıllık farkı bu pencerede +33,1
-bp açıldı ve kaybın bir kısmını açıklıyor, ama ölçülen katsayılarla daha küçük kısmını.
-Çekince: bu bir ayrıştırmadır, deney değil. Küresel faiz ve risk iştahı gibi ortak bir şok
-hem farkı açıp hem euroyu düşürebilir; model o şokun payını farka yazar.
+**Bu seri nasıl hesaplanıyor.** Kaynağın dakikalık son kotasyonları, 15 dakikalık ızgarada,
+Paris saati; her nokta o saate kadarki son kotasyondur. Pencere (15:30 → 17:30) veriye
+bakılarak seçildi: bu bir sınama değil, bir olayın betimlemesidir.
 
-<GrafikEmbed src="/analiz/oat-bund-2026-10-02/07_gun_ici.html" baslik="1 Ekim gün içi: Fransa ve İtalya farkı ile EUR/USD" no="07" />
+**1 Ekim'in son iki saati.** 15:30'dan 17:30'a Fransa farkı 130,9'dan 140,5 bp'ye (+9,6),
+İtalya'nın 2 yıllık farkı 39,0'dan 56,9 bp'ye (+17,9) çıktı. ABD 2 yıllığı −5,6 bp, Almanya
+2 yıllığı −9,6 bp düştü; ABD–Almanya 2 yıllık farkı +4,0 bp açıldı. Euro aynı iki saatte
+1,1285'ten 1,1241'e, −%0,39 geriledi. Faiz farkının +4,0 bp'lik açılmasının neredeyse
+tamamı tek bir çeyrek saatte geldi: 16:00'da (Paris) ABD ISM imalat endeksi açıklandı, ABD 2
+yıllığı +2,1 bp yükseldi, faiz farkı +3,7 bp açıldı. Ondan sonraki doksan dakikada faiz
+farkı yalnız +1,4 bp oynadı — ABD 2 yıllığı −7,3, Almanya 2 yıllığı −8,7 bp düştü — ama
+Fransa farkı +5,8 bp açıldı ve euro −%0,46 geriledi. Bu son açılmanın çoğu Bund'un −5,0
+bp'lik düşüşü; Fransa 10 yıllığı yalnız +0,9 bp yükseldi. ABD faizleri düşerken euronun
+düşmesi euro tarafından bir hareket, ama iki şey birbirinden ayrılamıyor: Alman 2 yıllığının
+düşüşü ECB beklentisinin geri çekildiğine de işaret ediyor, kalite kaçışına da. Gün içinde
+sterlin ve frank ölçülmediği için bu iki saatte euroya özgü hareket doların hareketinden
+ayrılamıyor; günlük kapanışlar ise 29 Eylül → 1 Ekim euronun sterline karşı −%0,64, franka
+karşı −%1,29 düştüğünü gösteriyor. Son sekiz iş gününün Avrupa seanslarında 15 dakikalık
+değişimlerle kurulan regresyonda, faiz farkı sabitken farktaki 1 bp'lik açılmaya EUR/USD'de
+−%0,014 eşlik ediyor (t −4,4; 304 gözlem); 1 Ekim çıkarılınca −%0,012 (t −3,7).
 
-**Bu seri nasıl hesaplanıyor.** Kaynağın dakikalık son kotasyonları, 15 dakikalık
-aralıklara indirgenmiş, Paris saati. Pencere (15:30 → 17:30) veriye bakılarak seçildi:
-bu bir sınama değil, bir olayın betimlemesidir.
-
-**Faiz farkı kımıldamazken.** 1 Ekim'in son iki saati, haftalık regresyonun yapamadığı bir
-şeyi gösteriyor: faiz kanalının neredeyse sabit kaldığı bir pencere. 15:30'dan 17:30'a
-Fransa farkı 130,9'dan 140,5 bp'ye (+9,6), İtalya'nın 2 yıllık farkı 39,0'dan 56,9 bp'ye
-(+17,9) çıktı; ABD 2 yıllığı −5,6 bp, Almanya 2 yıllığı −9,6 bp düştü, yani ABD–Almanya 2
-yıllık farkı yalnız +4,0 bp açıldı. Euro aynı iki saatte 1,1285'ten 1,1241'e, −%0,39
-geriledi. ABD faizleri düşerken euronun düşmesi dolar tarafından bir hikâye değil, euro
-tarafından bir hikâye: bulaşma korkusu. Arşivdeki sekiz iş gününün Avrupa seanslarında 15
-dakikalık fark ve kur değişimleri arasındaki korelasyon −0,27 (304 gözlem). Tek bir günden
-genelleme yapılamaz; ama o gün, mekanizma yalın biçimde görünür oldu.
-
-**Öbür piyasalar aynı hikâyeyi mi anlatıyor.** 26 Ağustos'tan 1 Ekim'e: CAC 40 −%7,41,
-DAX −%5,12, Euro Stoxx 50 −%4,56; Fransız bankaları BNP Paribas −%13,41, Société Générale
-−%11,61, Crédit Agricole −%10,99. Euro dolara karşı düşerken İsviçre frangına karşı yalnız
-−%0,22, sterline karşı −%0,43 kaybetti; yene karşı −%4,36. Dolar endeksi +%2,89. Reuters'ın
-24 Eylül haberine göre Fransa'nın 5 yıllık kredi temerrüt takası ~52 bp ile Nisan 2017'den
-beri en yüksekte ve altı ay öncesinin iki katı; 2012'deki rekor 110 bp'nin üstündeydi.
-Fransız bankalarının hisse kaybı, devlet riskinin banka bilançolarına geçişinin (banka–devlet
-döngüsü) piyasadaki izidir.
+**Öbür piyasalar.** 31 Ağustos'tan 1 Ekim'e: CAC 40 −%5,99, DAX −%5,02, Euro Stoxx 50 −%3,81;
+Fransız bankaları BNP Paribas −%10,94, Société Générale −%9,04, Crédit Agricole −%8,61.
+Euro dolara karşı −%3,30 düşerken yene karşı −%4,29, sterline karşı −%0,67, franka karşı
+−%0,55 kaybetti; dolar endeksi +%2,62. Reuters'ın 24 Eylül haberine göre Fransa'nın 5 yıllık
+kredi temerrüt takası ~52 bp ile Nisan 2017'den beri en yüksekte ve altı ay öncesinin iki
+katı. Fransız bankalarının hisse kaybı, devlet riskinin banka bilançolarına geçişinin
+(banka–devlet döngüsü) piyasadaki izidir; CAC 40'ın DAX'tan sert düşmesi de aynı yönde.
 
 ## Bölüm 5 — Daha önce nasıl oldu
 
 <GrafikEmbed src="/analiz/oat-bund-2026-10-02/08_epizotlar.html" baslik="Epizot başlangıcından bu yana farkın yolu" no="08" />
 
 **Bu seri nasıl hesaplanıyor.** Her epizot için başlangıç günündeki fark sıfır kabul
-edilip sonraki 160 iş günündeki değişim çiziliyor. Başlangıç günü olayın kendisidir;
-zirve, tablodaki pencerenin içindeki en yüksek kapanış.
+edilip sonraki 160 iş günündeki değişim çiziliyor; yatay eksen takvim iş günü. Başlangıç
+günleri olayın son iş günüdür; iki istisna var: 2011'de belirli bir olay günü yok (yaz
+bulaşma dalgasından önceki ölçü günü, 1 Temmuz), 2026'da başlangıç yılın dibi (25 Şubat) —
+sonradan seçildiği için açılmayı olduğundan büyük gösterir. Zirve şu tarihlere kadar arandı:
+2008 31 Mart 2009, 2010 30 Haziran, 2011 31 Aralık, 2017 21 Nisan, 2020 30 Nisan, fesih 31
+Temmuz 2024, Barnier 31 Aralık 2024, Bayrou 3 Ekim 2025 (Lecornu'nun istifasından önce),
+2026 veri günü.
 
-| epizot | başlangıç | zirve | açılma | iş günü | EUR/USD | İtalya farkı | zirveden 1 ay sonra | 3 ay sonra |
-|---|---|---|---|---|---|---|---|---|
-| 2008 küresel finans krizi | 23,3 bp | 67,2 bp | +43,9 bp | 125 | −%10,55 | +92,1 bp | −16,9 bp | −33,2 bp |
-| 2010 Yunanistan | 32,3 bp | 56,0 bp | +23,7 bp | 33 | −%11,06 | +92,4 bp | −21,0 bp | −24,6 bp |
-| 2011 euro bölgesi borç krizi | 46,1 bp | 190,2 bp | +144,1 bp | 97 | −%6,83 | +347,2 bp | −73,6 bp | −67,0 bp |
-| 2016–17 cumhurbaşkanlığı seçimi | 36,7 bp | 80,6 bp | +43,9 bp | 74 | −%4,50 | +35,3 bp | −15,8 bp | −36,7 bp |
-| 2020 salgın | 22,6 bp | 68,0 bp | +45,4 bp | 17 | +%1,66 | +136,7 bp | −17,7 bp | −30,3 bp |
-| 2024 meclisin feshi | 49,4 bp | 82,2 bp | +32,8 bp | 14 | −%1,87 | +24,4 bp | −11,5 bp | −3,6 bp |
-| 2024 Barnier hükümetinin düşüşü | 80,7 bp | 88,0 bp | +7,3 bp | 1 | −%0,52 | +3,4 bp | −3,4 bp | −14,0 bp |
-| 2025 Bayrou güven oylaması | 69,5 bp | 86,1 bp | +16,6 bp | 32 | +%0,50 | +2,0 bp | −6,4 bp | −14,8 bp |
-| 2026 | 54,9 bp | 140,9 bp | +86,0 bp | 156 | −%4,21 | +58,3 bp | — | — |
+| epizot | başlangıç | zirve | açılma | iş günü | EUR/USD | EUR/GBP | İtalya farkı | zirveden 1 ay sonra | 3 ay sonra |
+|---|---|---|---|---|---|---|---|---|---|
+| 2008 küresel finans krizi | 23,3 bp | 67,2 bp | +43,9 bp | 125 | −%11,83 | +%12,36 | +92,1 bp | −16,9 bp | −33,2 bp |
+| 2010 Yunanistan | 32,3 bp | 56,0 bp | +23,7 bp | 33 | −%10,46 | −%4,12 | +92,4 bp | −21,0 bp | −24,6 bp |
+| 2011 euro bölgesi borç krizi | 46,1 bp | 190,2 bp | +144,1 bp | 97 | −%7,07 | −%5,72 | +347,2 bp | −73,6 bp | −67,0 bp |
+| 2017 cumhurbaşkanlığı seçimi | 49,1 bp | 80,6 bp | +31,5 bp | 20 | −%1,83 | −%1,39 | +29,0 bp | −15,8 bp | −36,7 bp |
+| 2020 salgın | 22,6 bp | 68,0 bp | +45,4 bp | 17 | +%1,40 | +%8,25 | +136,7 bp | −17,7 bp | −30,3 bp |
+| 2024 meclisin feshi | 49,4 bp | 82,2 bp | +32,8 bp | 14 | −%0,91 | +%0,01 | +24,4 bp | −11,5 bp | −3,6 bp |
+| 2024 Barnier hükümetinin düşüşü | 80,7 bp | 88,0 bp | +7,3 bp | 1 | −%0,74 | −%0,07 | +3,4 bp | −3,4 bp | −14,0 bp |
+| 2025 Bayrou güven oylaması | 69,5 bp | 83,2 bp | +13,7 bp | 24 | −%0,43 | +%0,90 | +3,8 bp | −2,2 bp | −13,2 bp |
+| 2026 | 54,9 bp | 140,9 bp | +86,0 bp | 156 | −%4,95 | −%2,29 | +58,3 bp | — | — |
 
-EUR/USD ve İtalya farkı başlangıçtan zirve gününe değişim. Dört ders:
+Kurlar ve İtalya farkı başlangıçtan zirve gününe değişim; kurlar New York kapanışı, log
+değişim. Zirve sonradan seçildiği için "zirveden sonra" sütunları tanımı gereği sıfırın
+altındadır; bilgi taşıyan, büyüklükleridir. Beş ders:
 
-- **Büyüklük.** 2026 epizodu 2011'den bu yana en büyük açılma. 2011'in yarısından fazla,
-  ama 2011'i 2011 yapan şey Fransa değil İtalya'ydı: aynı pencerede İtalya'nın farkı +347,2
-  bp açıldı, bu yıl +58,3 bp.
-- **Euro her zaman düşmedi.** 2020'de fark açılırken euro yükseldi, 2025'te Bayrou
-  epizodunda da yükseldi. 2025'in ilk yarısında (31 Ocak → 30 Haziran) euro dolara karşı
-  +%12,77 kazanırken Fransa farkı 74,2'den 67,6 bp'ye yalnız biraz daraldı. Kuru faiz farkı ve doların kendi
-  hikâyesi taşıyorsa Fransa farkı ikinci planda kalıyor.
-- **Prim bazen kalıcı.** 2024 feshinden sonra fark 14 iş gününde +32,8 bp açıldı ve fesih
-  öncesindeki 49,4 bp'ye bir daha hiç inmedi; ondan sonraki en düşük kapanış bu yılın
-  dibi, 54,9 bp. Siyasi belirsizlik bir kez fiyatlandığında, belirsizlik çözülmedikçe geri
-  verilmiyor.
-- **Ölçeği değiştiren hep merkez bankası oldu.** 2011–12'de fark ancak ECB'nin hamleleriyle
-  kalıcı olarak döndü.
+- **Büyüklük.** 2026 epizodu 2011'den bu yana en büyük açılma; başlangıcı yılın dibi
+  olduğu için bu kıyas 2026 lehine yanlı, ama olay günüyle başlayan en büyük öbür açılma
+  45,4 bp (2020). 2011'i 2011 yapan şey Fransa değil İtalya'ydı: aynı pencerede İtalya'nın
+  farkı +347,2 bp açıldı, bu yıl +58,3 bp.
+- **Euroya özgü kayıp euro bölgesi krizleriyle geldi.** Euro sterline karşı 2010'da −%4,12,
+  2011'de −%5,72 kaybetti. Fransa'ya özgü epizotlarda kayıp küçük ya da yok: 2017 −%1,39,
+  2024 fesih +%0,01, Barnier −%0,07, Bayrou +%0,90. 2008 ve 2020'de euro sterline karşı
+  kazandı (+%12,36, +%8,25): o yıllarda küresel şok sterlini daha sert vurdu.
+- **Euro her zaman düşmedi.** 2020'de fark açılırken euro dolara karşı yükseldi. Kuru
+  başka etkenler de taşıyabilir: 2025'in ilk yarısında (31 Ocak → 30 Haziran) euro dolara
+  karşı +%12,88 kazanırken fark yalnız 6,6 bp daraldı.
+- **Prim bazen kalıcı.** 2024 feshinden sonra fark 14 iş gününde +32,8 bp açıldı, bir ayda
+  kısmen geri döndü ve fesih öncesindeki 49,4 bp'ye bir daha hiç inmedi; ondan sonraki en
+  düşük kapanış bu yılın dibi, 54,9 bp.
+- **2011–12'de ölçeği değiştiren ECB oldu, 2017'de seçim sonucu.** 2011 zirvesinin ilk geri
+  dönüşü Kasım–Aralık 2011'de geldi: fark bir ayda −73,6 bp geriledi; ECB'nin üç yıllık
+  likiditeyi duyurduğu ama tahvil alımını genişletmediği 8 Aralık'ta ise +12,3 bp açıldı.
+  Nisan–Temmuz 2012'nin ikinci dalgasını Draghi'nin konuşması ve OMT kapattı. Bugün o yol
+  aynı biçimde açık değil: OMT bir kurtarma programı koşulu taşıyordu, TPI ise yalnız haksız
+  ve düzensiz piyasa hareketleri içindir (Bölüm 3.4).
 
 **Olay günleri.** Aşağıdaki tablo olayın önceki kapanışından ilk tepki kapanışına
 değişimi veriyor. Akşam ya da hafta sonu açıklanan kararlarda tepki günü bir sonraki işlem
 günü.
 
-| olay | tepki günü | fark | İtalya farkı | EUR/USD |
-|---|---|---|---|---|
-| S&P: Fransa AAA → AA+ | 16.01.2012 | −8,7 bp | −7,7 bp | −%0,80 |
-| S&P: AA → AA− | 03.06.2024 | −0,4 bp | −0,8 bp | −%0,09 |
-| Moody's: Aa2 → Aa3 | 16.12.2024 | +1,4 bp | +1,3 bp | −%0,19 |
-| Fitch: AA− → A+ | 15.09.2025 | 0,0 bp | −2,4 bp | +%0,41 |
-| S&P: AA− → A+ | 20.10.2025 | −0,3 bp | −1,3 bp | −%0,22 |
-| Moody's: görünüm negatife | 27.10.2025 | −0,8 bp | −1,3 bp | +%0,24 |
-| Fitch: A+ teyit | 31.08.2026 | +0,7 bp | +1,0 bp | −%0,40 |
-| Scope: AA− → A+; DBRS: eğilim negatife | 21.09.2026 | −3,6 bp | −3,2 bp | +%0,26 |
-| ECB: üç yıllık LTRO | 08.12.2011 | +12,3 bp | +30,4 bp | +%0,25 |
-| Draghi: "ne gerekiyorsa" | 26.07.2012 | −13,6 bp | −46,7 bp | +%1,03 |
-| ECB: OMT'nin ayrıntıları | 06.09.2012 | −13,2 bp | −34,7 bp | +%0,48 |
-| 2017 ilk tur: Macron–Le Pen | 24.04.2017 | −12,6 bp | −17,0 bp | +%1,39 |
-| 2024: meclisin feshi | 10.06.2024 | +7,1 bp | +6,5 bp | −%1,31 |
-| 2024: Barnier gensoruyla düştü | 05.12.2024 | −6,1 bp | −6,9 bp | +%0,46 |
-| 2025: Bayrou hükümeti düştü | 09.09.2025 | +4,6 bp | −0,9 bp | +%0,14 |
-| 2025: Lecornu istifa etti | 06.10.2025 | +4,1 bp | +1,3 bp | −%0,48 |
-| 2026: Le Pen istinaf kararı | 07.07.2026 | +0,7 bp | +0,4 bp | +%0,16 |
-| 2026: 54 mlr € çaba açıklandı | 17.09.2026 | +0,8 bp | −0,4 bp | −%0,49 |
-| 2026: 2027 bütçe tasarısı | 01.10.2026 | +14,6 bp | +15,9 bp | −%0,50 |
+| olay | tepki günü | fark | İtalya farkı | EUR/USD | EUR/GBP |
+|---|---|---|---|---|---|
+| S&P: Fransa AAA → AA+ | 16.01.2012 | −8,7 bp | −7,7 bp | −%0,13 | +%0,04 |
+| S&P: AA → AA− | 03.06.2024 | −0,4 bp | −0,8 bp | +%0,56 | −%0,02 |
+| Moody's: Aa2 → Aa3 | 16.12.2024 | +1,4 bp | +1,3 bp | +%0,08 | −%0,44 |
+| Fitch: AA− → A+ | 15.09.2025 | 0,0 bp | −2,4 bp | +%0,23 | −%0,04 |
+| S&P: AA− → A+ | 20.10.2025 | −0,3 bp | −1,3 bp | −%0,09 | +%0,04 |
+| Moody's: görünüm negatife | 27.10.2025 | −0,8 bp | −1,3 bp | +%0,15 | +%0,03 |
+| Moody's: Aa3 teyit, görünüm negatif | 13.04.2026 | +1,1 bp | +1,4 bp | +%0,32 | −%0,14 |
+| S&P: A+ teyit | 01.06.2026 | +0,9 bp | +2,2 bp | −%0,25 | −%0,18 |
+| Fitch: A+ teyit | 31.08.2026 | +0,7 bp | +1,0 bp | +%0,28 | +%0,19 |
+| Scope: AA− → A+; DBRS: eğilim negatife | 21.09.2026 | −3,6 bp | −3,2 bp | −%0,18 | +%0,01 |
+| ECB: üç yıllık LTRO | 08.12.2011 | +12,3 bp | +30,4 bp | −%0,50 | — |
+| Draghi: "ne gerekiyorsa" | 26.07.2012 | −13,6 bp | −46,7 bp | +%1,02 | −%0,14 |
+| ECB: OMT'nin ayrıntıları | 06.09.2012 | −13,2 bp | −34,7 bp | +%0,23 | +%0,05 |
+| 2017 ilk tur: Macron–Le Pen | 24.04.2017 | −12,6 bp | −17,0 bp | +%1,31 | +%0,31 |
+| 2024: meclisin feshi | 10.06.2024 | +7,1 bp | +6,5 bp | −%0,34 | −%0,12 |
+| 2024: Barnier gensoruyla düştü | 05.12.2024 | −6,1 bp | −6,9 bp | +%0,72 | +%0,24 |
+| 2025: Bayrou hükümeti düştü | 09.09.2025 | +4,6 bp | −0,9 bp | −%0,48 | −%0,33 |
+| 2025: Lecornu istifa etti | 06.10.2025 | +4,1 bp | +1,3 bp | −%0,27 | −%0,39 |
+| 2026: Le Pen istinaf kararı | 07.07.2026 | +0,7 bp | +0,4 bp | −%0,25 | +%0,01 |
+| 2026: 54 mlr € çaba açıklandı | 17.09.2026 | +0,8 bp | −0,4 bp | +%0,09 | +%0,25 |
+| 2026: 2027 bütçe tasarısı | 01.10.2026 | +14,6 bp | +15,9 bp | −%0,79 | — |
 
-EUR/USD ECB kuru (14:15); bazı günlerde kur, olaydan önce belirlenmiş olabilir (fesihten
-sonraki pazartesi kuru, cuma günü 14:15'ten sonra yayımlanan ABD istihdam verisini de
-içeriyor). Dört okuma:
+Kurlar New York kapanışı, yani ECB'nin 14:30'daki basın toplantıları ve öğleden sonraki
+hareket kurun içinde. EUR/GBP iki satırda ölçülemedi: 8 Aralık 2011'de kaynağın kotasyonu
+bir önceki günün aynısı, 30 Eylül 2026'nın New York kapanışı ise kaynakta yok. Fitch'in mart
+2026 teyidi, günü belirsiz olduğu için tabloda yok. Dört okuma:
 
-- **Notlar farkı nadiren oynatıyor.** Son yedi kararın tepki gününde fark −3,6 ile +1,4 bp
-  arasında değişti. Kararlar piyasanın çoktan fiyatladığını kayda geçiriyor; 2012'deki AAA
-  kaybı bile (haberi gün içinde sızmıştı) ertesi gün farkı daralttı. Ama not kararlarının
-  dolaylı bir etkisi var: belirli notların altına düşen ihraççıyı tutamayan yatırımcılar
-  için zorunlu satış. Fransa bugün bu eşiklerin uzağında.
-- **Merkez bankası günleri en büyük günler.** Draghi'nin üç cümlesi farkı bir günde −13,6,
-  İtalya'yı −46,7 bp daralttı ve euroyu +%1,03 yükseltti; OMT'nin ayrıntıları −13,2 bp.
-  Aksi yön de var: ECB'nin üç yıllık likiditeyi duyurduğu ama tahvil alımını genişletmediği
-  8 Aralık 2011'de fark +12,3 bp açıldı.
+- **Notlar farkı nadiren oynatıyor.** 2024'ten bu yana dokuz not kararının tepki gününde
+  fark −3,6 ile +1,4 bp arasında değişti. Kararlar piyasanın çoktan fiyatladığını kayda
+  geçiriyor; 2012'deki AAA kaybı bile (haberi gün içinde sızmıştı) ertesi gün farkı
+  daralttı. Not kararlarının dolaylı bir etkisi var: belirli bir notun altına düşen ihraççıyı
+  tutamayan yatırımcılar için zorunlu satış. Yatırım yapılabilir not sınırı (BBB−) Fransa'nın
+  çok uzağında; daha yüksek not eşikleri olan yetkiler için bir Moody's indiriminin önemi
+  ölçülmedi.
+- **Merkez bankası günleri en büyük günler arasında.** Draghi'nin üç cümlesi farkı bir günde
+  −13,6, İtalya'yı −46,7 bp daralttı ve euroyu +%1,02 yükseltti; OMT'nin ayrıntıları −13,2
+  bp. Tablodaki en büyük tek günlük hareket ise 1 Ekim 2026: +14,6 bp.
 - **Euro çıkışı riski kuru doğrudan oynatıyor.** 2017'de Le Pen'in programında euro çıkışı
-  vardı; birinci turda Macron önde bitirince fark −12,6 bp daraldı ve euro +%1,39 kazandı —
-  tablodaki en büyük kur tepkisi. Le Pen'in 2022'den beri programında euro çıkışı yok; bu,
-  bugünkü fiyatlamada parçalanma kuyruğunun neden 2017'dekinden ince olabileceğini açıklar,
-  ama ölçülmedi.
-- **Hükümet düşüşleri belirsizliği bitirebilir.** Barnier'in gensoruyla düştüğü ertesi gün
-  fark −6,1 bp daraldı: bilinen bir kötü sonuç, belirsizlikten ucuz.
+  vardı; birinci turda Macron önde bitirince fark −12,6 bp daraldı, euro dolara karşı +%1,31,
+  sterline karşı +%0,31 kazandı. Ulusal Birlik euro çıkışını 2017 seçiminden sonra
+  programından çıkardı; bu, bugünkü fiyatlamada parçalanma kuyruğunun neden 2017'dekinden
+  ince olabileceğini açıklar, ama ölçülmedi.
+- **Hükümet düşüşlerinin etkisi karışık.** Barnier'in gensoruyla düştüğü ertesi gün fark
+  −6,1 bp daraldı; Bayrou hükümetinin düşüşü +4,6, Lecornu'nun istifası +4,1 bp açtı ve iki
+  gün de euro sterline karşı düştü. Sonuç düşüşün önceden ne kadar fiyatlandığına bağlı
+  görünüyor; bu ölçülmedi.
 
 ## Bölüm 6 — Katalizör takvimi
 
 | tarih | olay | neden önemli |
 |---|---|---|
-| 15 Ekim 2026 | AFT orta vadeli ihale | Talep ve fiyat: 1 Ekim'de 2036 kâğıdı 4,93'le satıldı, teklif/satış 2,0 |
-| 20 Ekim 2026 | Mecliste bütçenin gelir kısmı oylaması | Geçen yıl aynı oylamada gelir kısmı 1'e karşı 404 oyla reddedilmişti |
+| Ekim boyunca | ABD istihdam ve enflasyon verileri, Fed konuşmaları | Kurun dolar bacağı: eylülün birinci evresinde ABD 2 yıllığı +57,4 bp yükseldi |
+| 15 Ekim 2026 | AB'ye taslak bütçe planları (Fransa, İtalya) | Komisyon'un değerlendirmesi kasımda; İtalya'nın planı bulaşma tarafı |
+| 15 Ekim 2026 | AFT orta vadeli ihale | Orta vadeli kâğıtlarda talep; 2 yıllık fark 1 Ekim'de 64,0 bp |
+| 20 Ekim 2026 | Mecliste bütçenin gelir kısmı oylaması | Aynı oylamada 2026 bütçesinin gelir kısmı 1'e karşı 404 oyla reddedilmişti |
 | 23 Ekim 2026 | Moody's (Aa3, görünüm negatif) | Takvimdeki sıradaki büyük ajans kararı; negatif görünüm indirimi masada tutuyor |
 | 27 Ekim 2026 | Sosyal güvenlik bütçesi oylaması | Anayasal süresi 50 gün; 49.3 kullanılırsa gensoru önergesi |
-| 27–28 Ekim 2026 | ABD Merkez Bankası | Faiz kanalının öbür ucu: ABD 2 yıllığı |
-| 29 Ekim 2026 | ECB | Enflasyon mı, fark mı: ECB'nin iki hedefi çatışıyor |
-| 5 Kasım 2026 | AFT uzun vadeli ihale | Ayın ilk perşembesi; 10 ve 30 yıllık bölgede talep |
+| 27–28 Ekim 2026 | ABD Merkez Bankası | Faiz farkının öbür ucu: ABD 2 yıllığı |
+| 29 Ekim 2026 | ECB | Sıkılaşma ile aktarım riski çatışıyor |
+| 5 Kasım 2026 | AFT uzun vadeli ihale | Ayın ilk perşembesi; 1 Ekim'de 2036 kâğıdı %4,93 ile satıldı, teklif/satış 2,0 |
 | 17 Kasım 2026 | Bütçenin tamamının ilk okuma oylaması | Gensoru riskinin en yoğun olduğu hafta |
 | 27 Kasım 2026 | S&P (A+) | İkinci not kararı |
-| Kasım sonu | Avrupa Komisyonu'nun taslak bütçe görüşleri | Aşırı açık prosedüründe "etkili adım" değerlendirmesi; TPI uygunluğunu ilgilendiriyor |
-| Aralık'ın ilk yarısı | Anayasal 70 günlük süre | Parlamento karar vermezse hükümet tasarıyı kararnameyle yürürlüğe koyabilir |
+| Kasım sonu | Avrupa Komisyonu'nun taslak bütçe görüşleri | Aşırı açık prosedüründe "etkili adım" değerlendirmesi; TPI'nin birinci ölçütü |
+| Aralığın ilk yarısı | Anayasal 70 günlük süre | Parlamento karar vermezse hükümet tasarıyı kararnameyle yürürlüğe koyabilir |
 | 8–9 Aralık 2026 | ABD Merkez Bankası | Faiz kanalı |
 | 18 Aralık 2026 | INSEE üçüncü çeyrek kamu borcu | %119,0'dan nereye |
 | 18 Nisan / 2 Mayıs 2027 | Cumhurbaşkanlığı seçimi | Seçim riskinin fiyatlandığı pencere |
+| tarihsiz | Enerji fiyatı ve Ortadoğu | ECB artışlarının sebebi; ING 21 Eylül'de Ortadoğu'da ya da siyasette olumlu bir gelişme olmadıkça farkın 100–125 bp aralığında kalacağını yazıyordu |
 
-Bütçe takvimi Meclis'in yayımladığı plana, not tarihleri ajansların yayımladığı takvime,
-ihale tarihleri AFT'nin yerleşik kuralına (uzun vade ayın ilk perşembesi, orta vade
-üçüncü perşembesi) dayanıyor. Takvim tek bir senaryo üretmiyor ama bir yapı söylüyor:
-Ekim'in ikinci yarısı ve Kasım, bütçe oylamaları ile iki not kararının üst üste geldiği
-yoğun bir pencere; Aralık'ta kararname ya da geçici bütçe yasası yolu açılıyor; asıl
-siyasi belirsizlik ise Nisan–Mayıs 2027'de.
+Bütçe takvimi franceinfo'nun aktardığı meclis planına, not tarihleri tek bir ikincil kaynağa
+(ajansların takvimi birincil kaynaktan teyit edilemedi), ihale tarihleri AFT'nin yerleşik
+kuralına (uzun vade ayın ilk perşembesi, orta vade üçüncü perşembesi), taslak bütçe planı
+tarihi AB kuralına dayanıyor. Takvim tek bir senaryo üretmiyor ama bir yapı söylüyor:
+ekimin ikinci yarısı ve kasım, bütçe oylamaları ile iki not kararının üst üste geldiği yoğun
+bir pencere; aralıkta kararname ya da geçici bütçe yasası yolu açılıyor; asıl siyasi
+belirsizlik ise Nisan–Mayıs 2027'de.
 
 ## Bölüm 7 — Ne kadar gidebilir
 
@@ -572,129 +721,159 @@ oynaklığın ölçeği, geçmişte benzer hızdaki açılmaların ne yaptığı
 seviyeler.
 
 **Ölçek.** Son 20 iş gününde farkın günlük değişiminin standart sapması 4,15 bp; 2013'ten
-bu yana ortalama 1,90 bp — 2,2 katı. Bu hızla bir ayın (22 iş günü) ±1,96σ bandı ±38,1 bp:
-fark bir ay sonra, bugünkü oynaklık sürerse, yalnız şansla 103 ile 179 bp arasında bir
-yerde olabilir. Bu bir tahmin değil, bir ölçek.
+bu yana standart sapma 1,84 bp (gösterge kâğıt değişimi ve veri boşluğu günleri dışarıda) —
+2,3 katı. Bu hızla bir ayın (22 iş günü) ±1,96σ bandı ±38,1 bp: bugünkü oynaklık sürer ve bir
+eğilim varsayılmazsa fark bir ay sonra %95 olasılıkla 103 ile 179 bp arasında olur. Bu bir
+tahmin değil, bir ölçek.
 
 <GrafikEmbed src="/analiz/oat-bund-2026-10-02/09_ileri.html" baslik="Bir ayda 30 bp'den hızlı açılmalardan sonraki ay" no="09" />
 
 **Bu seri nasıl hesaplanıyor.** 2000'den bu yana her iş günü için önceki 22 iş günündeki
-açılma ve sonraki 22 iş günündeki değişim. Önceki açılması 30 bp'yi aşan 51 gözlem işaretli.
-Örtüşen gözlemler birbirinden bağımsız değil; 40 takvim gününden uzun boşluk yeni bir küme
-açıyor ve yedi küme çıkıyor.
+açılma ve sonraki 22 iş günündeki değişim; önceki açılması 30 bp'yi aşan 51 gözlem
+çiziliyor. Örtüşen gözlemler birbirinden bağımsız değil; 40 takvim gününden uzun boşluk
+yeni bir küme açıyor ve yedi küme çıkıyor.
 
 **Koşullu geçmiş.** Bir ayda 30 bp'den hızlı açılmaların ardından fark ertesi ay medyanda
 −16,9 bp geriledi; gözlemlerin %13,7'sinde daha da açıldı, onda birinde −52,9 bp'den fazla
-daraldı. Daha da açılan gözlemler yedi kümeden yalnız ikisinde: Ekim 2011 – Ocak 2012
-(30 gözlemin 6'sı) ve Nisan–Mayıs 2012 (6 gözlemin 1'i). Üç aylık ufukta medyan −24,3 bp ve
-gözlemlerin %21,6'sı daha açık. Bugünkü hız ölçütün de üstünde: 22 iş günündeki +54,8
-bp'lik açılma yalnız Kasım 2011 ile Ocak 2012 arasında görüldü ve o iki kümenin 10
-gözleminde ertesi ayın medyanı −47,0 bp.
+daraldı. Yedi kümenin her birinin medyanı geriledi. Daha da açılan yedi gözlemin yedisi de
+2011–12'den: Ekim 2011 – Ocak 2012 (30 gözlemin 6'sı, o kümenin ilk günlerinde) ve
+Nisan–Mayıs 2012 (6 gözlemin 1'i). 2011–12 dışındaki 11 gözlemin hiçbirinde fark ertesi ay
+açılmadı. Bugünkü hız ölçütün de üstünde: 22 iş günündeki +54,8 bp'yi aşan açılma yalnız
+Kasım 2011 ile Ocak 2012 arasında görüldü ve o sekiz gözlemin hepsinde fark ertesi ay 32,7 ile
+73,6 bp arasında daraldı.
+
+Üç aylık ufukta tablo değişiyor: medyan −24,3 bp, ama gözlemlerin %21,6'sı daha açık ve
+yedi kümenin üçünde daha açılan gözlem var. En çarpıcısı Ağustos 2011: ilk ay geri dönen fark
+üç ay sonra dört gözlemin dördünde +39,7 ile +57,8 bp daha açıktı (medyan +41,1 bp). İlk
+ayki geri dönüş, sonraki patlamanın habercisi olabildi.
 
 Bu dağılımı okurken iki uyarı gerekiyor. Birincisi, geçmişte geri dönüşü çoğunlukla bir
-dış müdahale getirdi: 2011–12'de ECB, 2017'de seçim sonucu, 2020'de merkez bankaları.
-Bugün ECB enflasyonla mücadele ederken alıma isteksiz ve takvimde seçim yedi ay sonra.
-İkincisi, sistemik krizin kendisi (2011) dağılımın tek "daha da açılan" kümesini üretiyor;
-yani bugünün açılması ya geçmişin çoğunluğu gibi geri döner ya da 2011 gibi bir bulaşmaya
-dönüşür — ortası pek görülmedi. Bulaşmayı izlemenin ölçüsü İtalya'nın, özellikle 2 yıllık
-farkıdır: 1 Ekim'de bir günde +24,0 bp.
+dış etken getirdi: 2011–12'de ECB, 2017'de seçim sonucu, 2020'de merkez bankaları; 2025'te
+ise Bayrou epizodu ECB'siz daraldı. Bugün ECB enflasyonla mücadele ediyor ve takvimde seçim
+yedi ay sonra. İkincisi, bu ölçü bir aylık değişimin işaretini ölçer, başlangıç seviyesine
+dönüp dönmemeyi değil; 2024'teki gibi kısmen geri dönüp kalıcı prim bırakan bir sonuç bu
+dağılımda "geri döndü" görünür. Bulaşmanın izlenecek ölçüsü İtalya'nın 10 yıllık farkı ve
+Fransa–İtalya farkıdır; 2 yıllık farklar Alman kısa ucunun hareketini de taşıdığı için kendi
+başına bulaşma ölçüsü değil (Bölüm 2).
 
-**Referans seviyeler.** Tarihî zirve 190,2 bp (15 Kasım 2011). 2 yıllık farkın 2011 zirvesi
-133,0 bp (bugün 64,0). Piyasa stratejistlerinin seviyeleri çoktan aşıldı: Barclays Ağustos
-sonunda bu yıl 100 bp'nin aşılmasını "olası değil" ve Fransa için "çirkin senaryo" diye
-nitelemişti; ING 21 Eylül'de önümüzdeki aylar için 100–125 bp aralığı veriyordu. Kur
-tarafında MUFG 24 Eylül'de 1,1340'ı kilit destek olarak gösterip kırılırsa 1,10–1,12
-bölgesini; ING 1 Ekim'de fark açılmaya devam eder ve ABD verisi güçlü kalırsa 1,11–1,12
-bölgesini yazıyordu. ECB kuru 1 Ekim'de 1,1298 ile o desteğin altında.
+**Referans seviyeler.** Bu serideki tarihî zirve 190,2 bp (15 Kasım 2011); gün içi ve başka
+kaynaklarda daha yüksek değerler var. 2 yıllık farkın 2011 zirvesi 133,0 bp (bugün 64,0).
+Stratejistlerin seviyeleri aşıldı: Barclays ağustos sonunda bu yıl 100 bp'nin aşılmasını
+"olası değil" ve Fransa için "çirkin senaryo" diye nitelemişti, fark 18 Eylül'de 100 bp'yi
+aştı; ING'nin 21 Eylül'de önümüzdeki aylar için verdiği 100–125 bp aralığının üst ucu 30
+Eylül'de aşıldı. Kur tarafında MUFG 24 Eylül'de 1,1340'ı kilit destek olarak gösterip
+kırılırsa 1,10–1,12 bölgesini, ING 1 Ekim'de fark açılmaya devam eder ve ABD verisi güçlü
+kalırsa 1,11–1,12 bölgesini yazıyordu. 1 Ekim'in New York kapanışı 1,1239.
 
-**Kur aritmetiği.** 2024–2026 katsayısıyla (10 bp → −%0,53), öbür her şey sabitken farkın
-+20 bp daha açılması kurda yaklaşık −%1,1, 2004–2026 katsayısıyla (−%0,31) −%0,6 demek.
-Farkın 50 bp daralması ise aynı katsayılarla +%2,6 ve +%1,6. Bu bir senaryo değil, ölçülen
-katsayının aritmetiği; açıklanan payın onda bir olduğu bir ilişkide kurun asıl yönünü
-başka şeyler belirleyecek.
+**Kur tarafında aritmetik yok.** 2024–2026 verisinde farkın euroya özgü katsayısı sıfırdan
+ayırt edilemiyor (EUR/GBP'de +%0,12, t +1,1); EUR/USD'deki −%0,47 sterlinde de var, yani
+"fark 20 bp daha açılırsa euro şu kadar düşer" hesabı bir Fransa etkisini değil ortak
+etkenin geçmişteki eşliğini verir. Ölçülmüş tek euroya özgü katsayı 2010–2012'nin İtalya
+katsayısı: İtalya farkındaki 10 bp'lik açılmaya EUR/GBP'de −%0,11 eşlik ediyordu. İkinci
+evrede İtalya farkı +23,6 bp açıldı; bu katsayıyla −%0,25, gerçekleşen −%0,72. Kur için
+izlenecek soru farkın kendisi değil, açılmanın çevreye yayılıp yayılmadığıdır.
 
 ## Yöntem eki
 
 **Veri temizliği.** Günlük seri 8.026 kayıt; 1.047 hafta sonu kaydı ve iki bacağın birden
-önceki günü taşıdığı 12 tatil günü atıldı, 6.967 iş günü kaldı. Hafta sonu kayıtlarının
-cuma kopyası olmadığı ölçüldü (cuma 17:30'dan sonraki kotasyonlar). Tek günlük ölçü,
-gösterge kâğıt değişimine karşı korumasız: 9 Ekim 2017'de Fransa 10 yıllığı +13,5 bp
-sıçrarken aynı ülkenin 5 yıllığı −4,7, 30 yıllığı −1,9 bp, Almanya −1,7 bp hareket etti;
-28 ve 30 Kasım 2022'de aynı imza +18,5 ve −12,3 bp. Bu üç gün tek günlük kıyaslardan
-çıkarıldı; çıkarıldıklarında 1 Ekim'in +14,6 bp'lik açılması 7 Aralık 2011'den beri en büyük
-tek günlük açılma. Pencereli ölçüler (5, 22, 66 iş günü) bu sıçramalara karşı dayanıklı.
+önceki günü taşıdığı 12 tatil günü atıldı, 6.967 iş günü kaldı. Kaynakta 2014'te iki uzun
+boşluk var (127 eksik iş günü); boşluğun iki ucundaki farklar (7 Mart 2014'te +6,7 bp, 2 Ocak
+2015'te −7,8 bp) bir günlük değişim olmadığı için oynaklık ölçüsünden çıkarıldı, haftalık
+regresyon boşluğu kendiliğinden atlıyor. Hafta içine düşen 132 TARGET tatilinin 58'i seride
+kalıyor (gösterge kotasyonları küçük oynamalar taşıyor, mutlak günlük değişim medyanı 0,6 bp).
+Tek günlük ölçü, gösterge kâğıt değişimine karşı korumasız: 9 Ekim 2017'de Fransa 10
+yıllığı +13,5 bp sıçrarken aynı ülkenin 5 yıllığı −4,7, 30 yıllığı −1,9 bp, Almanya −1,7 bp
+hareket etti; 28 ve 30 Kasım 2022'de aynı imza +18,5 ve −12,3 bp. Bu üç gün tek günlük
+kıyaslardan çıkarıldı; çıkarıldıklarında 1 Ekim'in +14,6 bp'lik açılması 7 Aralık 2011'den
+beri en büyük tek günlük açılma. 2022'nin iki günü birbirini götürüyor (46,5 bp'den iki gün
+sonra 47,0 bp); 2017 değişimi ise kalıcı bir seviye kayması: fark 27,4 bp'den 42,7 bp'ye
+sıçradı, 20 Ekim'de 41,1 bp'deydi ve pencereli ölçülerin içinde duruyor.
 
-**Regresyon.** Haftalık değişim çarşambadan çarşambaya; son hafta tamamlanmadıysa
-(veri günü perşembe) örnekleme alınmadı. Kur ECB'nin 14:15 referans kuru; getiriler Paris
-17:30. Haftalık pencere bu birkaç saatlik farkı küçültür, yok etmez. Standart hatalar
-Newey–West, Bartlett çekirdeği, dört gecikme. İtalya farkı ve VIX'in eklendiği
-sağlamlık modelleri Fransa katsayısını 2024–2026'da sırasıyla −%0,37 ve −%0,53 bırakıyor.
-Atıfta katsayılar epizottan önce tahmin edildi; aksi hâlde epizot kendi açıklamasını
-kendisi kurardı. Atıf seviyelerden kurulur (başlangıç günü → veri günü), sabit hafta
-sayısıyla ölçeklenir.
+**Kur saati.** EUR/USD New York 17:00 kapanışı; veri gününün kapanışı dakikalık kotasyondan
+(Paris 23:00). Çapraz kurlar Yahoo'dan: kaynağın tamamlanmış günlük döviz barı 4 Ağustos
+2010'dan beri bir önceki iş gününün New York kapanışını taşıyor, öncesinde aynı günün;
+kaydırılmış seri CNBC'nin New York kapanışıyla medyanda 0,0005 farklı (kaydırılmamış seride
+0,0033). Son bar canlı kotasyon (1 Ekim 23:06 Paris). Bir uç değer bir önceki barın birebir
+aynısıysa o gün ölçülmemiş sayılır. ECB'nin 14:15 referans kuru yalnız sağlamlık sütunu.
+
+**Regresyon.** Haftalık değişim çarşambadan çarşambaya; son hafta tamamlanmadıysa (veri
+günü perşembe) örnekleme alınmadı ve haftanın son gözlemi bütün kurların ve faizlerin
+ölçüldüğü son gündür. Getiriler Avrupa kapanışı, kur New York kapanışı, yani günün ABD
+verisi ikisinde de var. Standart hatalar Newey–West, Bartlett çekirdeği, dört gecikme. Faiz
+farkı ABD Hazinesi'nin resmî getirileriyle kurulunca 2024–2026 katsayıları neredeyse
+değişmiyor (fark −%0,48, faiz farkı −%0,39). İtalya farkı ve VIX'in eklendiği sağlamlık
+modelleri EUR/USD'de Fransa katsayısını 2024–2026'da sırasıyla −%0,34 ve −%0,45 bırakıyor. Atıfta katsayılar atfedilen pencereden
+önce biten bir dönemde tahmin edildi; seviyelerden kuruldu (başlangıç günü → veri günü) ve
+sabit hafta sayısıyla ölçeklendi.
 
 **Beta.** Günlük değişimlerle, $\Delta y^{\mathrm{X}}_{10} = a + \beta\,\Delta y^{\mathrm{DE}}_{10}$;
-Eylül penceresi 23 gün ve gürültülü.
+Eylül penceresi 1 → 30 Eylül, 22 gün. 1 Ekim'in tek günü (Bund −6,0, Fransa +8,6 bp) betayı
+tek başına 1,26'dan 1,02'ye indiriyor; kısa pencerede tek gün ölçüyü sürüklüyor.
 
 **İleri dağılım.** Önceki 22 iş günündeki açılma ≥ eşik olan her gün bir gözlem; sonraki
-22 (ve 66) iş günündeki değişim ölçülür. Eşik 30, 40 ve 50 bp için ayrı ayrı koşuldu.
-Gözlemler kümelere ayrılır, çünkü örtüşen gözlemler bağımsız değil: tek bir epizot bütün
-oranı taşıyabilir.
+22 (ve 66) iş günündeki değişim ölçülür. Eşik 30, 40, 50 bp ve bugünkü hız için ayrı ayrı
+koşuldu. Gözlemler kümelere ayrılır, çünkü örtüşen gözlemler bağımsız değil: tek bir epizot
+bütün oranı taşıyabilir.
 
 ## Ne ölçmedik
 
 - **Kimin sattığını ölçmedik.** Fransız devlet borcunun ne kadarının yerleşik olmayanların
   elinde olduğu ve eylülde kimin sattığı bu yazıda yok. Kur kanalının (1) büyüklüğü tam bu
   akıma bağlı; ölçülemediği için kanal mekanizma olarak anlatıldı, ölçüm olarak değil.
+- **Farkı OAT'ın ucuzlaması ile Bund'un pahalanması diye ayırmadık.** Bunun ölçüsü iki
+  tahvilin swap'a göre farkı (OAT–€STR ve Bund–€STR); bu veri açık kaynakta yok. İkinci
+  evredeki "kalite kaçışı" bu yüzden bir çıkarımdır.
+- **İkinci evrede ECB beklentisini risk priminden ayıramadık.** Alman 2 yıllığının −24,6 bp
+  düşüşü iki okumayı da destekliyor; vadeli faiz piyasasının ECB fiyatlaması bu veride yok.
+- **Sterlin tarafının faizini kontrol etmedik.** Euro bacağı (EUR/GBP) dolar etkenini
+  düşürür, ama İngiltere faizlerinin kendi hareketini taşır; İngiltere getirileri bu veride
+  yok. Frankla yapılan ikinci kıyas bu yüzden var.
+- **Gün içinde euroya özgü hareketi ölçemedik.** Dakikalık arşivde sterlin ve frank yok;
+  1 Ekim öğleden sonrasının pencere seçimi veriye bakılarak yapıldı. 15 dakikalık ölçü
+  sekiz günü kapsıyor.
+- **Enerjiyi ortak şok olarak kontrol etmedik.** Petrol hem ECB üzerinden farkı hem dış
+  ticaret hadleri üzerinden kuru oynatır; regresyonda yok.
 - **Yeniden denominasyon riskini ayrı ölçmedik.** Bunun piyasa ölçüsü, aynı ülkenin farklı
   sözleşme tanımlı kredi temerrüt takasları arasındaki fark; bu veri açık kaynakta yok.
-  "Bugün parçalanma kuyruğu 2017'dekinden ince" cümlesi bu yüzden bir ölçüm değil, bir
-  çıkarımdır ve öyle yazıldı.
-- **ECB'nin bir müdahale eşiğini tahmin etmedik.** TPI'nin koşulları yazılı, eşiği yazılı
-  değil. Fransa'nın aşırı açık prosedüründe olmasının uygunluğu nasıl etkileyeceği
-  ECB'nin takdirindedir.
-- **Vadeli faiz piyasasının ECB beklentisini ölçmedik.** ECB'nin kaç artış daha yapacağına
-  dair piyasa fiyatlaması bu arşivde yok; faiz kanalı ABD–Almanya 2 yıllık devlet tahvili
-  farkıyla ölçüldü.
-- **Gün içi ölçüm tek bir günü kapsıyor.** Kaynağın dakikalık barları yalnız son beş işlem
-  gününü tutuyor; arşivde sekiz gün var. 1 Ekim öğleden sonrasının pencere seçimi veriye
-  bakılarak yapıldı.
-- **Ortak şokları ayırmadık.** Küresel risk iştahı hem farkı hem kuru oynatır. VIX'li model
-  bir sağlamlık sınamasıdır, bir tanımlama değil.
-- **Not takvimini birincil kaynaktan açamadık.** Moody's (23 Ekim) ve S&P (27 Kasım)
-  tarihleri iki bağımsız ikincil kaynaktan teyit edildi; Fransız Hazinesi'nin not takvimi
-  sayfası bu yazının ölçüm ortamından erişilemedi.
+- **ECB'nin bir müdahale eşiğini tahmin etmedik ve Komisyon'un son "etkili adım"
+  değerlendirmesini birincil kaynaktan doğrulamadık.** TPI'nin koşulları yazılı, eşiği yazılı
+  değil.
+- **Not takvimi tek bir ikincil kaynaktan.** Moody's (23 Ekim) ve S&P (27 Kasım) tarihleri
+  bir haber blogunun aktarımına dayanıyor; ajansların ve Fransız Hazinesi'nin takvim sayfaları
+  açılamadı. Fitch'in mart teyidinin günü bilinmiyor.
 - **Bütçenin anayasal süresinin son gününü yazmadık.** Süre tasarının Meclis'e verildiği
-  günden işliyor ve bu gün kaynaklar arasında bir gün farkla geçiyor; bu yüzden "Aralık'ın
+  günden işliyor ve bu gün kaynaklar arasında bir gün farkla geçiyor; bu yüzden "aralığın
   ilk yarısı" denildi.
 
 ## İzleme listesi
 
 | ne zaman | ne | neyi doğrular / çürütür |
 |---|---|---|
-| Her gün | Fark ve iki bacağı | Bund düşerken OAT yükselmeye devam ederse ayrışma (ikinci evre) sürüyor; ikisi birlikte hareket ederse yeniden küresel faiz hikâyesi. Bugün 140,9 bp. |
-| Her gün | İtalya 2 yıllık farkı | Bulaşmanın ölçüsü. 1 Ekim'de 56,7 bp; 2011'in tek "daha da açılan" kümesi İtalya'nın farkıyla birlikte geldi. |
-| Her hafta | Kayan duyarlılık katsayısı | −%0,55'ten sıfıra yaklaşırsa kur Fransa'dan bağımsızlaşıyor; −%0,83'ün altına inerse bağ güçleniyor. |
+| Her gün | EUR/GBP ve EUR/CHF | Fark açılırken euro sterline ve franka karşı da düşüyorsa etki euroya özgü; yalnız dolara karşı düşüyorsa ortak etken. 28 Eylül → 1 Ekim −%0,72 ve −%1,27. |
+| Her gün | Fark ve iki bacağı | Bund düşerken OAT yükselmeye devam ederse ikinci evre sürüyor; ikisi birlikte yükselirse yeniden küresel faiz hikâyesi. Bugün 140,9 bp. |
+| Her gün | İtalya 10 yıllık farkı ve Fransa–İtalya farkı | Bulaşmanın ölçüsü; 2010–2012'de euroya özgü etki İtalya farkından geldi. 1 Ekim'de İtalya 119,5 bp, Fransa–İtalya +21,5 bp. |
+| Ekim boyunca | ABD verileri | Dolar bacağı: birinci evrede kurun kaybını ABD 2 yıllığının yükselişi taşıdı. |
 | 20 Ekim 2026 | Bütçenin gelir kısmı oylaması | Geçerse siyasi prim azalmalı; düşerse 2025'in tekrarı. |
 | 23 Ekim 2026 | Moody's | Not kararının kendisi farkı az oynatıyor (ölçüldü); asıl soru indirimin bir sonraki kararı tetikleyip tetiklemediği. |
-| 29 Ekim 2026 | ECB | Artış ya da "fark seviyesini hedeflemiyoruz" dilinin tekrarı farkı açar; TPI'ye atıf daraltır. |
-| 17 Kasım 2026 | Bütçenin tamamının oylaması | 49.3 ve gensoru. 2024'te hükümetin düşmesi farkı daralttı; bilinen sonuç belirsizlikten ucuz. |
+| 29 Ekim 2026 | ECB | Fark seviyesini hedeflemediği dilinin tekrarı ya da TPI'ye bir atıf farkı oynatabilir; olay günleri bunu ölçmedi. |
+| 17 Kasım 2026 | Bütçenin tamamının oylaması | 49.3 ve gensoru. Üç hükümet düşüşünün birinde fark daraldı, ikisinde açıldı. |
 | 27 Kasım 2026 | S&P | İkinci not kararı. |
 | Nisan–Mayıs 2027 | Cumhurbaşkanlığı seçimi | 2017'de birinci tur sonucu farkı bir günde −12,6 bp daraltmıştı. |
 
 ## Kaynakça
 
 - Gösterge devlet tahvili getirileri: Fransa, Almanya, İtalya, İspanya, Belçika, Hollanda,
-  Avusturya, Portekiz, Yunanistan (2, 5, 10, 30 yıl); ABD 2 ve 10 yıl; EUR/USD — CNBC
-  (Tullett Prebon) günlük barları 2000–2026 ve dakikalık barlar (21 Eylül – 1 Ekim 2026).
-  Günlük barın Paris 17:30 kotasyonu olduğu dakikalık barlarla ölçüldü.
+  Avusturya, Portekiz, Yunanistan (2, 5, 10, 30 yıl); ABD 2 ve 10 yıl; EUR/USD New York
+  kapanışı — CNBC (Tullett Prebon) günlük barları 2000–2026 ve dakikalık barlar (22 Eylül – 1
+  Ekim 2026, sekiz iş günü).
+- Yahoo Finance: EUR/GBP, EUR/CHF, EUR/JPY, dolar endeksi, VIX, Euro Stoxx 50, CAC 40, DAX,
+  BNP Paribas, Société Générale, Crédit Agricole (günlük kapanış).
 - ECB: Maastricht uzun vadeli faiz serisi `IRS.M.*.L.L40.CI.0000.EUR.N.Z` (aylık, çapraz
-  sınama); EUR/USD referans kuru `EXR.D.USD.EUR.SP00.A`; mevduat faizi
-  `FM.D.U2.EUR.4F.KR.DFR.LEV`; politika faizleri sayfası; toplantı takvimi; Aktarım
-  Koruma Aracı basın bildirisi (21 Temmuz 2022).
+  sınama); EUR/USD referans kuru `EXR.D.USD.EUR.SP00.A` (sağlamlık); mevduat faizi
+  `FM.D.U2.EUR.4F.KR.DFR.LEV`; politika faizleri sayfası; toplantı takvimi; Aktarım Koruma
+  Aracı basın bildirisi (21 Temmuz 2022).
 - Federal Reserve: FOMC kararları (29 Temmuz ve 16 Eylül 2026), toplantı takvimi.
-- ABD Hazinesi günlük getiri eğrisi; Bundesbank Bund getirileri (gün ortası
-  değerlendirmesi, karşılaştırma).
+- ABD Hazinesi günlük getiri eğrisi; Bundesbank Bund getirileri (karşılaştırma).
 - INSEE, Informations rapides n° 239: 2026 ikinci çeyrek Maastricht kamu borcu (29 Eylül
   2026).
 - Paris İstinaf Mahkemesi basın bildirisi, 7 Temmuz 2026 kararı.
@@ -702,12 +881,15 @@ oranı taşıyabilir.
 - AFT ihale sonuçları (1 Ekim 2026, Reuters üzerinden Boursorama) ve 2027 finansman
   programı (29 Eylül 2026, CNEWS).
 - Haber ve yorum: Reuters (1 Ekim 2026 getiri haberi; Nagel'in 1 Ekim açıklaması; 24 Eylül
-  kredi temerrüt takası haberi, Euronext üzerinden), CNBC (16 Eylül Fed; 10 Eylül ECB; 24
-  Eylül bütçe takvimi), Euronews (11 Haziran ECB), franceinfo (17 Eylül 54 milyar avro; 12
-  Eylül Le Pen; meclis bütçe takvimi), LCP (16 Temmuz Amiel; 24 Eylül Macron), Europe 1
-  (11 Eylül Lescure; HCFP görüşü), CNEWS (27 Eylül Faure; 28 Eylül Toluna-Harris anketi),
-  La Libre (1 Ekim Ifop anketi), Le JDD (seçim tarihleri), Al Jazeera (2 Şubat 2026 bütçe
-  oylaması), The Guardian ve RTÉ (Bardella–Mediapart), Xinhua (11 Nisan 2026 Moody's),
-  Newsquawk (18 Eylül Scope ve DBRS), FXStreet (ING 1 Ekim; MUFG 24 Eylül; BBH 30 Eylül;
-  Lagarde–La Croix 30 Eylül), ING THINK (21 Eylül "Time not on France's side"), Hellenic
-  Shipping News (Barclays, 25 Eylül), Reuters (Fitch 28 Ağustos teyidi).
+  kredi temerrüt takası haberi ve Barclays'in ağustos sonu notu, Euronext üzerinden), CNBC
+  (16 Eylül Fed; 10 Eylül ECB; 24 Eylül bütçe takvimi ve ING), Euronews (11 Haziran ECB; Fitch
+  mart teyidi, 28 Ağustos), franceinfo (17 Eylül 54 milyar avro; 12 Eylül Le Pen; meclis
+  bütçe takvimi), LCP (16 Temmuz Amiel ve Ekonomi Bakanlığı raporu; 24 Eylül Macron), Europe 1
+  (11 Eylül Lescure; HCFP görüşü), CNEWS (27 Eylül Faure; 28 Eylül Toluna-Harris anketi;
+  AFT'nin 2027 programı), La Libre (1 Ekim Ifop anketi), Le JDD (seçim tarihleri), Al
+  Jazeera (2 Şubat 2026 bütçe oylaması), The Guardian ve RTÉ (Bardella–Mediapart), Xinhua (11
+  Nisan 2026 Moody's), Investir (S&P'nin mayıs teyidi), Newsquawk (18 Eylül Scope ve DBRS),
+  FXStreet (ING 1 Ekim ve 29 Eylül; MUFG 24 Eylül; BBH 30 Eylül; Lagarde–La Croix 30 Eylül),
+  US News (Lagarde'ın 28 Eylül Avrupa Parlamentosu konuşması), ING THINK (21 Eylül "Time not
+  on France's side"), Hellenic Shipping News (Barclays, 25 Eylül), Reuters (Fitch 28 Ağustos
+  teyidi), competitiviteinfrance.overblog.com (not takvimi, ağustos 2026).
