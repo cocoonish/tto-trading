@@ -24,9 +24,12 @@ class VeriYok(RuntimeError):
 
 
 def _oku(ad: str, kaynak: str) -> pd.DataFrame:
+    """`kaynak` okurun tanıyacağı kaynak adıdır ("BLS yayım arşivi", "EVDS dış
+    ticaret endeksleri"); sebep metni "<kaynak> elde yok" diye kurulur (adın
+    kendisi "arşivi" taşıyabilir, şablon onu ikilemez)."""
     p = oo.BULUT / f"{ad}.csv.gz"
     if not p.exists():
-        raise VeriYok(f"{kaynak} arşivi elde yok")
+        raise VeriYok(f"{kaynak} elde yok")
     return oo.oku(ad, oo.BULUT)
 
 
@@ -61,9 +64,17 @@ def abd_tufe_gunleri() -> pd.DatetimeIndex:
     return _takvim("bls_takvim", "BLS yayım arşivi", "cpi")
 
 
-def fomc_gunleri() -> pd.DatetimeIndex:
-    """FOMC karar günleri (toplantının son günü; planlı toplantılar)."""
-    return _takvim("fomc_takvim", "Federal Reserve FOMC takvimi")
+def fomc_gunleri(planli: bool = True) -> pd.DatetimeIndex:
+    """FOMC karar günleri (toplantının son günü). `planli=True` (öntanımlı) yalnız
+    planlı toplantılar (takvimin `planli` sütunu); `planli=False` plansız toplantı
+    ve telekonferanslar dahil bütün kayıtlar (2008–2026'da 170 günün 18'i plansız)."""
+    df = _oku("fomc_takvim", "Federal Reserve FOMC takvimi")
+    if planli:
+        df = df[df["planli"].astype(bool)]
+    idx = pd.DatetimeIndex(sorted(set(df.index.normalize())))
+    if not len(idx):
+        raise VeriYok("Federal Reserve FOMC takvimi: tarih bulunamadı")
+    return idx
 
 
 def not_kararlari() -> pd.DataFrame:
@@ -77,6 +88,22 @@ def pka_toplanti_beklentisi() -> pd.DataFrame:
     beklentisi (%, medyan/ortalama hangisi yayımlanıyorsa adıyla). index anket
     dönemi (ay başı); sütun `politika_beklenti`, ayrıca `seri` (EVDS kodu)."""
     return _oku("evds_pka_toplanti", "EVDS Piyasa Katılımcıları Anketi")
+
+
+def pka_enflasyon() -> pd.DataFrame:
+    """PKA aylık TÜFE beklentileri (%): index anket dönemi (ay başı); sütunlar
+    `cari_ay`, `ay1`, `ay2` (cari ay ve 1, 2 ay sonrası aylık TÜFE), `yilsonu`,
+    `ay12`, `ay24`, `yil5`, `gelecek_yilsonu` (yıllık) — gelenler."""
+    return _oku("evds_pka_enflasyon", "EVDS Piyasa Katılımcıları Anketi")
+
+
+def pka_diger() -> pd.DataFrame:
+    """PKA öbür beklentiler (uygun ortalamalar): `gecelik_cari_ay_sonu` (cari ay
+    sonu BİST gecelik repo faizi, %), `cari_denge_cari_yil`, `cari_denge_gelecek_yil`
+    (MİLYON ABD doları: 2026-08 anketinde cari yıl −49.159 = −49,2 milyar; arşiv
+    künyesinin açıklaması "milyar" yazıyor, büyüklük milyondur), `buyume_cari_yil`,
+    `buyume_gelecek_yil` (%) — gelenler."""
+    return _oku("evds_pka_diger", "EVDS Piyasa Katılımcıları Anketi")
 
 
 def pka_kur_beklentisi() -> pd.DataFrame:

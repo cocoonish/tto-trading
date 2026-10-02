@@ -49,10 +49,14 @@ Pratikler
      pazartesi etiketinde yok, salı ve çarşamba etiketlerinde). Kaymasız
      haftalık eşleştirmede 2013–2017 korelasyonu 0,41, iki iş günü kaydırınca
      0,65. Haftalık kadran ve rejim etiketi kaydırılmış DİBS'le kurulur.
+     HİZA: "gun_sonu" (`ortak_olc.DIBS_KAYMA`, k = 2) — kadranın öbür bacağı
+     USD/TRY'nin GÜN SONU kapanışıdır (Londra gece yarısı / İstanbul 18:00);
+     tanım ve kanıtı ortak_olc'de, ölçümü Bölüm 2'de.
   7. Güvenli liman rejiminde (VIX yüksek) riskten DÖNÜŞ haftası "prim"
      kadranına düşer (faiz ↑, dolar ↓; ör. 14.10.2011). Rejim kuralı bu
      yüzden R5'i önce sorar; "prim" kadranı R2'ye ancak VIX normalken yazılır.
-  8. CNBC ARŞİVİNDE BOZUK KOTASYON (denetim turu, 02.10.2026): EUR/USD
+  8. CNBC ARŞİVİNDE BOZUK KOTASYON (denetim turu, 02.10.2026; temizlik artık
+     `ortak_olc.cnbc_kur` / `dolar_sepeti`te, CNBC'yi okuyan her modül için): EUR/USD
      01–03.01.2020'de 1,1774 · 1,1786 · 1,1853 yazıyor (öncesi 1,1210, sonrası
      1,1158–1,1193). Dolar sepetinin 02.01 değişimi −%0,58 çıkıyordu, aynı gün
      DXY +%0,48; 06.01'de sepet +%0,80, DXY −%0,18 — iki gün ters işaretle
@@ -60,7 +64,7 @@ Pratikler
      kirletiyor. Denetim bağımsız bir kaynakla, AYNI SAATTE: CNBC kurlarından
      DXY ağırlıklarıyla kurulan vekilin günlük değişimi Yahoo DXY'ninkinden
      `CNBC_DXY_FARK_ESIGI`nden fazla ayrışıyor ve birkaç gün içinde ters
-     işaretle geri dönüyorsa aradaki günler ortak takvimden çıkar. Eşik ölçülerek
+     işaretle geri dönüyorsa aradaki günler CNBC takviminden çıkar. Eşik ölçülerek
      kondu: 2000–2026'da ayrışmanın en büyük meşru değeri %1,74 (Kasım 2008),
      bozuk blok %3,38 ve %3,54; aradaki %1,0–1,7'lik çiftlerin kaynağı DXY'nin
      kendi tekrarlanan kapanışları (ör. 28–29.05.2009 80,43 · 05–06.02.2015
@@ -94,24 +98,22 @@ KUR_SAPMA_SD = 0.5                # "prim" için para kaybı: kur sapması > 0,5
 DIKLESME_SD_PENCERE = 52          # σ'nın kayan penceresi (hafta, bir önceki haftaya kadar)
 DIKLESME_SD_ASGARI = 26
 KUR_KAYMA_PENCERE = 26            # kur sapması: son 26 haftanın ortalama değişimi (bir önceki haftaya kadar)
-YONETILEN = (pd.Timestamp("2021-12-01"), pd.Timestamp("2023-06-30"))
+YONETILEN = oo.YONETILEN                    # tek tanım ortak_olc'de
 # Türkiye haftası PERŞEMBE kapanışıyla örneklenir (perşembe tatilse haftanın ondan
 # önceki son iş günü): 18.12.2023 öncesi Yahoo USD/TRY serisinde cumartesi barı yok
 # ve cuma değeri PAZARTESİ barının başından (hafta sonu açılışından sonra) geliyor.
 TR_ORNEK_SON_GUN = 3              # 0 pazartesi … 3 perşembe, 4 cuma
-# DİBS gösterge eğrisi VALÖR tarihlidir ve öğleden önceki TCMB sabitlemesinden
-# gelir: gün sonu kapanışlarına (USD/TRY, VIX, ZAR) göre etiketi İKİ iş günü
-# öndedir (ölçüm: olcum_b02.tarih_sozlesmesi; 2013–2021'de USD/TRY ile günlük
-# sıra korelasyonu kaymasız 0,06, iki iş günü kaydırılınca 0,36–0,43). Haftalık
-# kadranda D gününün piyasasına DİBS'in D+2 iş günü etiketli değeri yazılır.
-DIBS_ETIKET_ONCU = 2
+# DİBS gösterge eğrisinin hizası `ortak_olc.DIBS_KAYMA`dan (tek tanım): kadran
+# USD/TRY gün sonu kapanışıyla kurulduğu için "gun_sonu" — D gününün piyasasına
+# DİBS'in D+2 iş günü etiketli değeri yazılır.
+DIBS_HIZA = "gun_sonu"
 
 DONEMLER_TR = [
     ("2013-2017", "2013-01-01", "2017-12-31"),
     ("2018-2020", "2018-01-01", "2020-12-31"),
-    ("2021-01_2021-11", "2021-01-01", "2021-11-30"),
-    ("yonetilen_kur_2021-12_2023-06", "2021-12-01", "2023-06-30"),
-    ("2023-07_2026-09", "2023-07-01", "2026-09-30"),
+    (f"2021-01_{oo.YON_ONCESI_AY}", "2021-01-01", oo.YON_ONCESI_SON),
+    (f"yonetilen_kur_{oo.YON_AY[0]}_{oo.YON_AY[1]}", oo.YON_ILK, oo.YON_SON),
+    (f"{oo.YON_SONRASI_AY}_2026-09", oo.YON_SONRASI_ILK, "2026-09-30"),
 ]
 DONEMLER_ABD_EK = [("2000-2012", "2000-01-01", "2012-12-31"), ("tum_2000-2026", "2000-01-01", "2026-09-30")]
 
@@ -119,18 +121,6 @@ VAKALAR = {
     "guvenli_liman_2011": ("2011-08-01", "2011-12-30"),
     "kurumsal_risk_2025": ("2025-04-02", "2025-04-30"),
 }
-
-TERS_KOTE = ("eur", "gbp", "aud")      # XXX/USD → dolar ölçüsünde işaret çevrilir
-DUZ_KOTE = ("chf", "jpy", "cad")       # USD/XXX
-
-# CNBC bozuk kotasyon denetimi (tuzak 8). DXY'nin yayımlanmış sabit ağırlıkları
-# (ICE: EUR 57,6 · JPY 13,6 · GBP 11,9 · CAD 9,1 · SEK 4,2 · CHF 3,6); SEK arşivde
-# olmadığı için kalan beşi yeniden ölçeklenir. Vekil yalnız aynı saatteki iki
-# kaynağı karşılaştırmak içindir, dolar ölçüsü eşit ağırlıklı sepet olarak kalır.
-DXY_AGIRLIK = {"eur": 57.6, "jpy": 13.6, "gbp": 11.9, "cad": 9.1, "chf": 3.6}
-CNBC_DXY_FARK_ESIGI = 2.5             # %, günlük değişim farkı (meşru azami 1,74; bozuk 3,38)
-CNBC_BLOK_AZAMI_GUN = 10              # geri dönüşün aranacağı azami ortak gün
-_VERI_DENETIMI: dict = {}
 
 KAYNAK_ABD = ["abd_hazine_gunluk", "cnbc_kur_gunluk", "yahoo_dxy_vix_gunluk"]
 KAYNAK_TR = ["dibs_egri_gunluk", "usdtry_yahoo_gunluk", "fonlama_gunluk (yalnız iş günü takvimi)"]
@@ -143,85 +133,18 @@ def _hafta_ici(df: pd.DataFrame | pd.Series):
 
 @lru_cache(maxsize=1)
 def _abd_gunluk() -> pd.DataFrame:
-    """ABD ortak gün çerçevesi: us2, us10 (%), dolar sepeti (log, altı kurun
-    eşit ağırlıklı ortalaması; artış doların değer kazancı), dxy (log). Satırlar
-    getiri ile altı kurun HEPSİNİN bulunduğu hafta içi günlerdir; değişimler bu
-    ortak günler üzerinden alınır (getiri ile kur aynı gün aralığını ölçer)."""
-    a = _hafta_ici(oo.oku("abd_hazine_gunluk"))[["us2", "us10"]]
-    c = _hafta_ici(oo.oku("cnbc_kur_gunluk"))
-    lk = pd.DataFrame({k: (-np.log(c[k]) if k in TERS_KOTE else np.log(c[k])) for k in TERS_KOTE + DUZ_KOTE})
-    df = pd.concat([a, lk], axis=1, sort=True).dropna()
-    y = oo.oku("yahoo_dxy_vix_gunluk")
-    bozuk, rapor = _cnbc_bozuk_gunler(df[list(TERS_KOTE + DUZ_KOTE)], np.log(y["dxy"]).reindex(df.index))
-    _VERI_DENETIMI.clear()
-    _VERI_DENETIMI.update(rapor)
-    df = df.drop(index=bozuk)
-    df["sepet"] = df[list(TERS_KOTE + DUZ_KOTE)].mean(axis=1)
-    df["dxy"] = np.log(y["dxy"]).reindex(df.index)
-    df["vix"] = y["vix"].reindex(df.index)
+    """ABD ortak gün çerçevesi (`ortak_olc.abd_gunluk`: us2, us10, dolar sepeti,
+    dxy, vix; CNBC bozuk kotasyon günleri çıkarılmış), 2000 sonrası."""
+    df = oo.abd_gunluk()
     return df[df.index >= ILK_GUN - pd.Timedelta(days=10)]
 
 
-def _cnbc_bozuk_gunler(lk: pd.DataFrame, ldxy: pd.Series) -> tuple[pd.DatetimeIndex, dict]:
-    """Tuzak 8: CNBC kurlarının DXY ağırlıklı vekili ile Yahoo DXY aynı günlerde
-    ters işaretle ve eşikten fazla ayrışıp birkaç gün içinde geri dönüyorsa
-    aradaki günler bozuk sayılır. Ortak takvim üzerinde, değişimler aynı gün
-    aralığından alınır."""
-    w = DXY_AGIRLIK
-    vek = sum(lk[k] * v for k, v in w.items()) / sum(w.values())     # artış = dolar değer kazancı
-    j = pd.concat([vek.rename("v"), ldxy.rename("d")], axis=1, sort=True).dropna()
-    fark = (j["v"].diff() - j["d"].diff()) * 100.0
-    bay = fark[fark.abs() > CNBC_DXY_FARK_ESIGI]
-    bozuk: list = []
-    bloklar = []
-    gunler = list(bay.index)
-    i = 0
-    while i < len(gunler) - 1:
-        t1, t2 = gunler[i], gunler[i + 1]
-        ara = j.index[(j.index >= t1) & (j.index < t2)]
-        toplam = float(fark.loc[t1:t2].sum())
-        if (np.sign(bay[t1]) != np.sign(bay[t2]) and len(ara) <= CNBC_BLOK_AZAMI_GUN
-                and abs(toplam) < 0.5 * min(abs(bay[t1]), abs(bay[t2]))):
-            dlk = lk.diff().loc[t1].abs()
-            bozuk.extend(ara)
-            bloklar.append({"ilk": str(t1.date()), "son": str(ara.max().date()), "geri_donus": str(t2.date()),
-                            "kur": str(dlk.idxmax()), "fark_giris_yuzde": float(bay[t1]),
-                            "fark_cikis_yuzde": float(bay[t2]), "blok_toplami_yuzde": toplam})
-            i += 2
-        else:
-            i += 1
-    meru = fark.drop(index=[t for t in fark.index if t in set(bozuk) or t in {pd.Timestamp(b["geri_donus"]) for b in bloklar}])
-    rapor = {
-        "esik_yuzde": CNBC_DXY_FARK_ESIGI, "cikan_gun": [str(t.date()) for t in bozuk], "bloklar": bloklar,
-        "esigi_asan_gun": int(len(bay)), "kalan_azami_fark_yuzde": float(meru.abs().max()),
-        "kalan_azami_fark_gunu": str(meru.abs().idxmax().date()), "n_kiyas_gunu": int(fark.notna().sum()),
-        "yontem": "CNBC kurlarından DXY ağırlıklarıyla kurulan vekilin günlük değişimi, aynı günün Yahoo DXY "
-                  "değişimiyle karşılaştırıldı; eşikten fazla ayrışıp birkaç gün içinde ters işaretle geri "
-                  "dönen bloklar bozuk kotasyon sayılıp ortak takvimden çıkarıldı.",
-    }
-    return pd.DatetimeIndex(bozuk), rapor
-
-
-@lru_cache(maxsize=1)
-def _tr_takvim() -> pd.DatetimeIndex:
-    """Türkiye iş günü takvimi: Fonlama hattının EVDS iş günleri (tatiller yok)."""
-    return pd.DatetimeIndex(oo.oku("fonlama_gunluk").index)
-
-
-@lru_cache(maxsize=2)
-def _tr_gunluk(dibs_kayma: int = 0) -> pd.DataFrame:
-    """Türkiye ortak gün çerçevesi: n3a, n2y, n5y (%), USD/TRY (Yahoo, ortak_olc.usdtry).
-
-    `dibs_kayma` k: D satırına DİBS'in k iş günü sonraki (Türkiye takvimi)
-    etiketli değeri yazılır; 0 ham etiket (Bölüm 2'nin hiza kapısı ham seriyi sınar)."""
-    d = oo.oku("dibs_egri_gunluk")[["n3a", "n2y", "n5y"]]
-    d = d[d.index.isin(_tr_takvim())]
-    if dibs_kayma:
-        d = d.shift(-dibs_kayma)
-    s, _ = oo.usdtry()
-    df = d.join(s, how="inner")
-    df = df[df.index.isin(_tr_takvim())].dropna()
-    return df
+@lru_cache(maxsize=4)
+def _tr_gunluk(hiza: str = "ham") -> pd.DataFrame:
+    """Türkiye ORTAK gün çerçevesi: n3a, n2y, n5y (%), USD/TRY (Yahoo); dört
+    sütunun birlikte bulunduğu Türkiye iş günleri (`ortak_olc.tr_gunluk`). "ham"
+    etiket Bölüm 2'nin hiza kapısı ve duyarlılık ızgarası içindir."""
+    return oo.tr_gunluk(hiza, ("n3a", "n2y", "n5y")).dropna()
 
 
 def _haftalik(df: pd.DataFrame, son_gun: int = 4) -> pd.DataFrame:
@@ -243,18 +166,8 @@ def _vix_gunluk() -> pd.Series:
 
 
 # ───────────────────────────────────────────────────────── kadran
-KADRAN_ADI_DM = {"politika": "faiz ↑, para değer kazanır", "prim": "faiz ↑, para değer kaybeder",
-                 "gevseme": "faiz ↓, para değer kaybeder", "guvenli_liman": "faiz ↓, para değer kazanır"}
-KADRAN_ADI_EM = {"politika": "faiz ↑, para değer kazanır", "prim": "faiz ↑, para değer kaybeder",
-                 "gevseme": "faiz ↓, para değer kaybeder", "prim_dusus": "faiz ↓, para değer kazanır"}
-
-
-def _kadran(dfaiz: pd.Series, dpara_deger: pd.Series, dordu: str) -> pd.Series:
-    """dpara_deger: artış YEREL PARANIN DEĞER KAZANCI. Sıfır hareket 'sifir'."""
-    y, p = dfaiz, dpara_deger
-    k = np.select([(y > 0) & (p > 0), (y > 0) & (p < 0), (y < 0) & (p < 0), (y < 0) & (p > 0)],
-                  ["politika", "prim", "gevseme", dordu], "sifir")
-    return pd.Series(k, index=y.index)
+KADRAN_ADI_DM, KADRAN_ADI_EM = oo.KADRAN_ADI_DM, oo.KADRAN_ADI_EM
+_kadran = oo.kadran                         # tek tanım ortak_olc'de
 
 
 def _kadran_tablosu(dfaiz: pd.Series, dpara_deger: pd.Series, dordu: str, gun: pd.Series | None = None) -> dict:
@@ -351,7 +264,7 @@ def _pencere_ozeti(o: pd.DataFrame, ilk: str, son: str) -> dict:
     bir10 = (ab.loc[sonu, "us10"] - ab.loc[once, "us10"]) * 100
     bir2 = (ab.loc[sonu, "us2"] - ab.loc[once, "us2"]) * 100
     birdol = (ab.loc[sonu, "sepet"] - ab.loc[once, "sepet"]) * 100
-    kad = _kadran(pd.Series([bir10]), pd.Series([birdol]), "guvenli_liman").iloc[0]
+    kad = oo.kadran(float(bir10), float(birdol), "guvenli_liman")
     return {
         "n": int(len(w)), "ilk": str(w.index.min().date()), "son": str(sonu.date()),
         "kor_d10_ddolar": float(w["d10_bp"].corr(w["ddolar_yuzde"])),
@@ -422,21 +335,19 @@ def p1a() -> dict:
         "tarih": g.index.max()}))
     bl = bl[bl["n"] >= KOR_ASGARI]
     bl.index = pd.DatetimeIndex(bl["tarih"])
-    reg = oo.hac(bl["kor"].values, bl["vix"].values)
-    oos = oo.oos_kiyas(bl["kor"].astype(float), bl["vix"].astype(float), ilk_pencere=40, kiyas="ortalama")
-    t_egim = reg["t"][1]
-    hukum = ("ilişki örneklem dışında da tutuyor" if (abs(t_egim) >= 2 and oos.get("mse_oran") is not None and oos["mse_oran"] < 1)
-             else "tarif edici")
+    reg = oo.regresyon(bl["kor"].astype(float), bl["vix"].astype(float), ilk_pencere=40)
+    oos = reg["oos_ortalama"]
     blok = {
         "n": int(reg["n"]), "ilk": str(bl.index.min().date()), "son": str(bl.index.max().date()),
-        "sabit": reg["b"][0], "egim_vix_basina": reg["b"][1], "se_egim": reg["se"][1], "t_egim": t_egim,
+        "sabit": reg["sabit"], "egim_vix_basina": reg["egim"], "se_egim": reg["se"], "t_egim": reg["t"],
         "r2": reg["r2"], "gecikme": reg["gecikme"],
         "oos_mse_oran": oos.get("mse_oran"), "oos_dm_t": oos.get("dm_t"), "oos_n": oos.get("n"),
-        "oos_kiyas": "koşulsuz ortalama", "hukum": hukum,
+        "oos_kiyas": oos.get("kiyas"), "oos_sifir": reg["oos"], "hukum": reg["hukum"],
         "oos_dm_anlamli": bool(oos.get("dm_t") is not None and abs(oos["dm_t"]) >= 2),
         "yontem": "Örtüşmeyen 60 iş günlük blokların her birinde korelasyon, aynı bloğun VIX "
                   "ortalamasına regrese edildi; standart hata Newey–West, örneklem dışı kıyas "
-                  "genişleyen pencerede koşulsuz ortalama.",
+                  "genişleyen pencerede koşulsuz ortalama ve sıfır korelasyonla (ortak_olc.regresyon); "
+                  "hüküm ikisini de ister.",
     }
 
     vakalar = {ad: _pencere_ozeti(o, a, b) for ad, (a, b) in VAKALAR.items()}
@@ -481,7 +392,7 @@ def p1a() -> dict:
     return {
         "ozet": ozet, "dortte_bir": dort, "dortte_bir_meta": dort_meta, "kosullu_anlik_kor": kosullu,
         "blok_regresyon": blok, "vakalar": vakalar, "dxy_sinama": dxy,
-        "veri_denetimi": dict(_VERI_DENETIMI),
+        "veri_denetimi": oo.cnbc_denetimi(),
         "n": ozet["n_gun"], "ilk": ozet["ilk"], "son": ozet["son"],
         "yontem": "ABD 10 yıllık getirisinin günlük değişimi (baz puan) ile eşit ağırlıklı altı G10 "
                   "kurundan kurulan dolar sepetinin günlük log değişimi (yüzde, artış doların değer "
@@ -496,8 +407,8 @@ def p1a() -> dict:
 
 # ───────────────────────────────────────────────────────── p1b
 @lru_cache(maxsize=4)
-def _tr_haftalik(son_gun: int = TR_ORNEK_SON_GUN, dibs_kayma: int = DIBS_ETIKET_ONCU) -> pd.DataFrame:
-    w = _haftalik(_tr_gunluk(dibs_kayma), son_gun)
+def _tr_haftalik(son_gun: int = TR_ORNEK_SON_GUN, hiza: str = DIBS_HIZA) -> pd.DataFrame:
+    w = _haftalik(_tr_gunluk(hiza), son_gun)
     d = pd.DataFrame({
         "d5_bp": w["n5y"].diff() * 100.0,
         "d2_bp": w["n2y"].diff() * 100.0,
@@ -512,13 +423,12 @@ def _tr_haftalik(son_gun: int = TR_ORNEK_SON_GUN, dibs_kayma: int = DIBS_ETIKET_
 
 
 def _cuma_tuzagi() -> dict:
-    """18.12.2023 öncesi cuma değerlerinin hangi Yahoo barından geldiği."""
-    ham = oo.oku("usdtry_yahoo_gunluk")["usdtry_gunbasi"].dropna()
+    """18.12.2023 öncesi cuma değerlerinin hangi Yahoo barından geldiği (sayım
+    ortak_olc.usdtry künyesinde; tek tanım)."""
     s, k = oo.usdtry()
     gecis = pd.Timestamp(k["gecis"])
     cuma = s[(s.index.dayofweek == 4) & (s.index < gecis)]
-    cumartesi = set(ham.index[ham.index.dayofweek == 5].normalize())
-    pzt = sum(1 for t in cuma.index if (t + pd.Timedelta(days=1)) not in cumartesi)
+    pzt = k["cuma_pazartesi_barindan"]
     t = oo.usdtry_tcmb()
     ornek = {g: {"yahoo_usdtry": float(s.get(pd.Timestamp(g), np.nan)),
                  "tcmb_gosterge": float(t.get(pd.Timestamp(g), np.nan))}
@@ -583,8 +493,9 @@ def p1b() -> dict:
         tablo_abd_sapma[ad] = _kadran_tablosu(y["d10_bp"], y["dolar_sapma_yuzde"], "guvenli_liman", y["_gun"])
     izgara = {}
     for gun_ad, gun in (("persembe", 3), ("cuma", 4)):
-        for kay in (0, DIBS_ETIKET_ONCU):
-            h = _tr_haftalik(gun, kay)
+        for hz in ("ham", DIBS_HIZA):
+            kay = oo.DIBS_KAYMA[hz]
+            h = _tr_haftalik(gun, hz)
             h = h[~h["_kismi"].astype(bool)]
             izgara[f"{gun_ad}_dibs_kayma_{kay}"] = {}
             for ad, a, b in DONEMLER_TR:
@@ -594,7 +505,7 @@ def p1b() -> dict:
                     if k_ in ("n", "korelasyon_faiz_para_kaybi", "c_payi", "pay")}
     tablo_tr["tum_2013-2026"] = _kadran_tablosu(tr["d5_bp"], -tr["dkur_yuzde"], "prim_dusus", tr["_gun"])
     gtr = pd.DatetimeIndex(tr["_gun"])
-    tum_dis = tr[(gtr < YONETILEN[0]) | (gtr > YONETILEN[1])]
+    tum_dis = tr[~oo.yonetilen_mi(gtr)]
     tablo_tr["tum_yonetilen_haric"] = _kadran_tablosu(tum_dis["d5_bp"], -tum_dis["dkur_yuzde"], "prim_dusus", tum_dis["_gun"])
     for ad, a, b in DONEMLER_ABD_EK:
         y = _gun_dilimi(ab, a, b)
@@ -614,7 +525,7 @@ def p1b() -> dict:
     return {
         "turkiye": tablo_tr, "turkiye_kur_sapmasi": tablo_tr_sapma,
         "turkiye_duyarlilik": izgara, "cuma_tuzagi": _cuma_tuzagi(),
-        "dibs_etiket_oncu_is_gunu": DIBS_ETIKET_ONCU,
+        "dibs_etiket_oncu_is_gunu": oo.DIBS_KAYMA[DIBS_HIZA], "dibs_hiza": DIBS_HIZA,
         "abd": tablo_abd, "abd_dolar_sapmasi": tablo_abd_sapma, "karsilastirma": kars,
         "kadran_adlari_tr": KADRAN_ADI_EM, "kadran_adlari_abd": KADRAN_ADI_DM,
         "n": int(len(tr)), "ilk": str(pd.Timestamp(tr["_gun"].iloc[0]).date()),
@@ -633,8 +544,8 @@ def p1b() -> dict:
         "saat": "USD/TRY 18.12.2023'ten İstanbul 18:00, öncesinde Londra gece yarısı kapanışı; DİBS gösterge "
                 "değeri valör tarihli ve öğleden önce sabitlendiği için iki iş günü sonraki etiketinden alındı "
                 "(perşembe piyasası → pazartesi etiketi).",
-        "yonetilen_kur_notu": "2021-12…2023-06 kur koruma ve kontrollü kur dönemidir; ayrı dönem olarak "
-                              "raporlanır, havuza katılmaz.",
+        "yonetilen_kur_notu": f"{oo.YON_AY[0]}…{oo.YON_AY[1]} kur koruma ve kontrollü kur dönemidir; ayrı dönem "
+                              "olarak raporlanır, havuza katılmaz.",
         "kaynak": KAYNAK_TR + KAYNAK_ABD[:2],
     }
 
@@ -667,7 +578,7 @@ def _rejim_girdi() -> pd.DataFrame:
         r[f"{ulke}_sd_egim_bp"] = _kayan_sd(h["degim_bp"])
         r[f"{ulke}_sd_para_yuzde"] = _kayan_sd(kayip)
         r[f"{ulke}_gun"] = h["_gun"]
-    r["tr_yonetilen"] = (idx >= YONETILEN[0]) & (idx <= YONETILEN[1])
+    r["tr_yonetilen"] = oo.yonetilen_mi(idx)
     r["kismi"] = idx > oo.CIPA_GUN
     return r
 
@@ -709,7 +620,7 @@ def rejim() -> pd.DataFrame:
     girdileri (`<ülke>_uzun_bp`, `_egim_bp`, `_para_kaybi_yuzde`, `_kadran`, eşikler).
     Hafta cuma etiketlidir; ABD cuma kapanışıyla, Türkiye perşembe kapanışıyla
     örneklenir (`abd_gun`, `tr_gun` gerçek günü taşır). Türkiye'nin DİBS bacağı
-    gösterge eğrisinin `DIBS_ETIKET_ONCU` (2) iş günü sonraki etiketinden alınır.
+    gösterge eğrisinin "gun_sonu" hizasından (`ortak_olc.DIBS_KAYMA`, 2 iş günü sonraki etiket) alınır.
     Kural (öncelik sırasıyla):
       1. R5: örnek gününün VIX kapanışı ≥ VIX'in genişleyen 75. yüzdeliği
          (1990'dan bir önceki haftaya kadar haftalık kapanışlar, asgari 52 hafta).
