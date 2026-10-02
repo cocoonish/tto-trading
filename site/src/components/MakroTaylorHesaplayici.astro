@@ -2,7 +2,9 @@
 /**
  * Taylor kuralı ve reel faiz farkı — Makrodan Kura ve Faize dersi, Bölüm 3 (Araç 1).
  *   kural faizi  i_T = r* + π + (φπ − 1)(π − π*) + φy · açık
- *   reel faiz    r = (1 + i)/(1 + π) − 1      (bileşik Fisher; yüksek enflasyonda basit fark yanıltır)
+ *   reel faiz    r = (1 + i_b)/(1 + π) − 1    (Fisher, yıllık bileşik faizle: TL politika faizi bir haftalık
+ *                repo, i_b = (1 + i/52)^52 − 1; dolar gecelik, i_b = (1 + i/360)^365 − 1)
+ *   kotasyon dili (1 + i)/(1 + π) − 1 de yanında basılır: sitenin ex-ante reel faizi bu dildedir.
  *   B bloğu      R = r_TL − r_yabancı          (kurun üç bloğundaki reel faiz farkı)
  *   ∂E[r]/∂π = φπ − 1: 1 puanlık enflasyon sürprizi beklenen reel faizi (φπ − 1) puan oynatır.
  * Varsayılan girdiler dersin ölçüm dosyasından (arac.json); sayılar yayım gününün ölçümüdür.
@@ -58,7 +60,8 @@ const t = A.taylor;
     <div class="sag-satir">
       <div><span class="etiket">Kural faizi</span><output class="ara-deger" id="mt-kural">—</output></div>
       <div><span class="etiket">Politika − kural</span><output class="ara-deger" id="mt-fark">—</output></div>
-      <div><span class="etiket">Beklenen reel faiz (TL)</span><output class="ara-deger" id="mt-r">—</output></div>
+      <div><span class="etiket">Beklenen reel faiz (TL, bileşik)</span><output class="ara-deger" id="mt-r">—</output></div>
+      <div><span class="etiket">Aynısı kotasyon dilinde</span><output class="ara-deger" id="mt-rk">—</output></div>
       <div><span class="etiket">Yabancı reel faiz</span><output class="ara-deger" id="mt-ry">—</output></div>
       <div><span class="etiket">Reel faiz farkı R (B bloğu)</span><output class="ara-deger" id="mt-R">—</output></div>
     </div>
@@ -86,6 +89,8 @@ const t = A.taylor;
   const kural = (rs: number, pi: number, hedef: number, phipi: number, phiy: number, acik: number) =>
     rs + pi + (phipi - 1) * (pi - hedef) + phiy * acik;
   const reel = (i: number, pi: number) => ((1 + i / 100) / (1 + pi / 100) - 1) * 100;
+  const haftalikBilesik = (i: number) => (Math.pow(1 + i / 100 / 52, 52) - 1) * 100;
+  const gecelikBilesik360 = (i: number) => (Math.pow(1 + i / 100 / 360, 365) - 1) * 100;
 
   function hesapla() {
     const pi = oku('mt-pi'), hedef = oku('mt-hedef'), rs = oku('mt-rstar');
@@ -93,10 +98,12 @@ const t = A.taylor;
     const pol = oku('mt-pol'), iy = oku('mt-iy'), piy = oku('mt-piy');
     if (![pi, hedef, rs, phipi, phiy, acik, pol, iy, piy].every(isFinite)) return;
     const iT = kural(rs, pi, hedef, phipi, phiy, acik);
-    const r = reel(pol, pi), ry = reel(iy, piy), R = r - ry;
+    const r = reel(haftalikBilesik(pol), pi), ry = reel(gecelikBilesik360(iy), piy), R = r - ry;
+    const rk = reel(pol, pi);
     yaz('mt-kural', yz(iT));
     yaz('mt-fark', puan(pol - iT));
     yaz('mt-r', yz(r));
+    yaz('mt-rk', yz(rk));
     yaz('mt-ry', yz(ry));
     yaz('mt-R', puan(R));
     const egim = phipi - 1;

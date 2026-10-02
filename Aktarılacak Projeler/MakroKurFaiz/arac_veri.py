@@ -46,6 +46,14 @@ def _reel(i: float, pi: float) -> float:
     return ((1 + i / 100) / (1 + pi / 100) - 1) * 100
 
 
+def _haftalik(i: float) -> float:
+    return ((1 + i / 100 / 52) ** 52 - 1) * 100
+
+
+def _gecelik360(i: float) -> float:
+    return ((1 + i / 100 / 360) ** 365 - 1) * 100
+
+
 def kur(o: dict) -> dict:
     t = o["b03"]["arac_taylor"]
     b = o["b06"]["arac_borc"]
@@ -55,7 +63,9 @@ def kur(o: dict) -> dict:
     k = o["b11"]["arac_kur"]
     acik_alt, acik_ust = t["acik_alt_puan"], t["acik_ust_puan"]
     y = t["yabanci"]
-    R = _reel(t["politika_yuzde"], t["pi_pka_yuzde"]) - _reel(y["politika_abd_yuzde"], y["tufe_abd_yillik_yuzde"])
+    # Taylor aracının B bloğuyla aynı tanım: bileşik reel faiz farkı (dogrula.taylor_R)
+    R = (_reel(_haftalik(t["politika_yuzde"]), t["pi_pka_yuzde"])
+         - _reel(_gecelik360(y["politika_abd_yuzde"]), y["tufe_abd_yillik_yuzde"]))
     return {
         "taylor": {
             "tarih_metin": f"{_ay(t['ay'] + '-01')} (politika faizi {_gun(t['politika_gun'])})",

@@ -10,6 +10,7 @@
  * Taşıma (yıllık):   c = (1 + i)/(1 + i*) − 1  — aynı zamanda taşımanın başabaş değer kaybı.
  * Üç aylık taşımayı sıfırlayan prim artışı: Δρ = c₃ / T_C,  c₃ = ((1 + i)/(1 + i*))^{1/4} − 1.
  * Borç aracında risk primi katsayısı girildiyse onun C bloğuna etkisi de gösterilir.
+ * Taylor aracından YALNIZ R gelir: politika faizi kotasyonu basittir, taşıma formülü yıllık bileşik oran ister.
  * Zincir: Taylor, Borç ve REDK araçlarını dinler; 'makro-kur-guncellendi' yayınlar.
  */
 import A from '../data/makro-kur-ve-faiz/arac.json';
@@ -24,14 +25,15 @@ const k = A.kur;
 
   <p class="hesap-yonerge">
     Yukarıdaki üç aracın çıktısını tek denklemde birleştirir. Reel faiz farkı Taylor aracından,
-    çıpa sapması REDK aracından gelir; faizler {k.tarih_metin} ölçümüdür. Farkın ve primin kaç yıl
+    çıpa sapması REDK aracından gelir. Taşıma için faizler yıllık bileşik dildedir: TL tarafında
+    TLREF günlük bileşiklenmiş, dolar tarafında ABD Hazinesi 1 yıllık getirisi ({k.tarih_metin}). Farkın ve primin kaç yıl
     süreceği bir görüştür: ölçülmez, siz girersiniz.
   </p>
 
   <div class="girdiler">
-    <label><span class="etiket">TL faizi i (%)</span>
+    <label><span class="etiket">TL faizi i, yıllık bileşik (%)</span>
       <input type="number" id="mk-i" value={k.i_tl} step="0.25" /></label>
-    <label><span class="etiket">Dolar faizi i* (%)</span>
+    <label><span class="etiket">Dolar faizi i*, yıllık bileşik (%)</span>
       <input type="number" id="mk-is" value={k.i_usd} step="0.1" /></label>
     <label><span class="etiket">Reel faiz farkı R (puan)</span>
       <input type="number" id="mk-R" value={k.R} step="0.25" /></label>
@@ -109,8 +111,6 @@ const k = A.kur;
   document.addEventListener('makro-taylor-guncellendi', (e: Event) => {
     const t = (e as CustomEvent).detail;
     if (t && isFinite(t.R)) yazDeger('mk-R', t.R);
-    if (t && isFinite(t.politika)) yazDeger('mk-i', t.politika);
-    if (t && isFinite(t.iYabanci)) yazDeger('mk-is', t.iYabanci);
     hesapla();
   });
   document.addEventListener('makro-redk-guncellendi', (e: Event) => {
@@ -125,7 +125,7 @@ const k = A.kur;
   });
   document.querySelectorAll('#makro-kur input').forEach((el) => el.addEventListener('input', hesapla));
   const d = (window as any).makroDurum || {};
-  if (d.taylor) { yazDeger('mk-R', d.taylor.R); yazDeger('mk-i', d.taylor.politika); yazDeger('mk-is', d.taylor.iYabanci); }
+  if (d.taylor) yazDeger('mk-R', d.taylor.R);
   if (d.redk) yazDeger('mk-sapma', d.redk.sapma);
   if (d.borc) borcPrimBp = d.borc.primEkBp;
   hesapla();

@@ -226,6 +226,21 @@ def reel(i, pi):
     return ((1 + i / 100) / (1 + pi / 100) - 1) * 100
 
 
+def haftalik_bilesik(i):
+    """Bir haftalık repo kotasyonu → yıllık bileşik."""
+    return ((1 + i / 100 / 52) ** 52 - 1) * 100
+
+
+def gecelik_bilesik_360(i):
+    """Dolar gecelik (ACT/360) kotasyonu → yıllık bileşik."""
+    return ((1 + i / 100 / 360) ** 365 - 1) * 100
+
+
+def taylor_R(pol, pi, i_yabanci, pi_yabanci):
+    """Taylor aracının B bloğu: bileşik reel faiz farkı."""
+    return reel(haftalik_bilesik(pol), pi) - reel(gecelik_bilesik_360(i_yabanci), pi_yabanci)
+
+
 def borc_adim(d, i, g, alfa, e, pb):
     kartopu = d * (i - g) / (1 + g)
     kur = alfa * d * e / (1 + g)
@@ -260,7 +275,8 @@ def ima_prim(q_fark, R, tb, tc):
     return (q_fark + R * tb) / tc
 
 
-ESLER = {"taylor_kural": taylor_kural, "reel": reel, "borc_adim": borc_adim, "pb_yildiz": pb_yildiz,
+ESLER = {"taylor_kural": taylor_kural, "reel": reel, "haftalik_bilesik": haftalik_bilesik,
+         "gecelik_bilesik_360": gecelik_bilesik_360, "taylor_R": taylor_R, "borc_adim": borc_adim, "pb_yildiz": pb_yildiz,
          "redk_sapma": redk_sapma, "yari_omur": yari_omur, "a_blok": a_blok, "tasima": tasima,
          "tasima3": tasima3, "ima_prim": ima_prim}
 
@@ -432,7 +448,10 @@ def figurler(govde: str) -> None:
 # ─────────────────────────────────────────────── 6 · araçlar
 ARAC_KAYNAK = {
     "MakroTaylorHesaplayici.astro": ["rs + pi + (phipi - 1) * (pi - hedef) + phiy * acik",
-                                     "((1 + i / 100) / (1 + pi / 100) - 1) * 100"],
+                                     "((1 + i / 100) / (1 + pi / 100) - 1) * 100",
+                                     "(Math.pow(1 + i / 100 / 52, 52) - 1) * 100",
+                                     "(Math.pow(1 + i / 100 / 360, 365) - 1) * 100",
+                                     "reel(haftalikBilesik(pol), pi), ry = reel(gecelikBilesik360(iy), piy)"],
     "MakroBorcHesaplayici.astro": ["(d * (i - g)) / (1 + g)", "(alfa * d * e) / (1 + g)",
                                    "d + kartopu + kur - pb", "(d * (i - g + alfa * e)) / (1 + g)"],
     "MakroRedkHesaplayici.astro": ["Math.log(redk / denge) * 100", "Math.log(0.5) / Math.log(rho)",
