@@ -821,9 +821,33 @@ def sekil_08() -> dict:
     }
 
 
+# ═══════════════════════════════════════════════════════════════ dolar endeksinin yıllık değişimi
+def dxy_yillik() -> dict:
+    """2017 karşı örneğinin yıllık dolar hareketi kendi arşivimizden (Yahoo DXY, yıl sonu kapanışları):
+    ikincil kaynaktaki 'yaklaşık %10, 2003'ten bu yana en büyük' cümlesinin ölçülmüş karşılığı. Yalnız
+    tamamlanmış yıllar (çıpa yılı dışarıda)."""
+    y = oo.oku("yahoo_dxy_vix_gunluk")["dxy"].dropna()
+    y = y[y.index <= oo.CIPA_GUN]
+    son = y.groupby(y.index.year).last()
+    son = son[son.index < oo.CIPA_GUN.year]
+    d = son.pct_change() * 100.0
+    d17 = float(d.loc[2017])
+    sonra = d[(d.index > 2003) & (d.index != 2017)]
+    return {
+        "kaynak": ["yahoo_dxy_vix_gunluk"],
+        "kapanis_2016": float(son.loc[2016]), "kapanis_2017": float(son.loc[2017]),
+        "degisim_2017_yuzde": d17, "degisim_2003_yuzde": float(d.loc[2003]),
+        "2004_sonrasi_en_buyuk_dusus_mu": bool((sonra > d17).all()),
+        "2004_sonrasi_ikinci_en_buyuk_dusus": {"yil": int(sonra.idxmin()), "yuzde": float(sonra.min())},
+        "yontem": "Yıl sonu son kapanıştan yıl sonu son kapanışa basit yüzde değişim; 2003 sonrası yıllar "
+                  "(2004 → çıpa yılından önceki yıl) içinde 2017'den büyük düşüş var mı diye sorulur.",
+    }
+
+
 # ═══════════════════════════════════════════════════════════════ giriş
 def olc() -> dict:
     return oo.yuvarla({
+        "dxy_yillik": dxy_yillik(),
         "p5a": p5a(),
         "p5b": p5b(),
         "p5c": p5c(),

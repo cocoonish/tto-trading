@@ -31391,6 +31391,21 @@
   }
  },
  "b05": {
+  "dxy_yillik": {
+   "2004_sonrasi_en_buyuk_dusus_mu": true,
+   "2004_sonrasi_ikinci_en_buyuk_dusus": {
+    "yil": 2025,
+    "yuzde": -9.411
+   },
+   "degisim_2003_yuzde": -14.6588,
+   "degisim_2017_yuzde": -10.0303,
+   "kapanis_2016": 102.39,
+   "kapanis_2017": 92.12,
+   "kaynak": [
+    "yahoo_dxy_vix_gunluk"
+   ],
+   "yontem": "Yıl sonu son kapanıştan yıl sonu son kapanışa basit yüzde değişim; 2003 sonrası yıllar (2004 → çıpa yılından önceki yıl) içinde 2017'den büyük düşüş var mı diye sorulur."
+  },
   "p5a": {
    "d_2s10s_bp": 75.0,
    "d_us10_bp": 101.0,
@@ -94731,7 +94746,7 @@
   "olcum_b02.py": "20f1fcd460b0f475307eaae329dcbc4bcf7a19a14bdf409478cfa3df2528b4cd",
   "olcum_b03.py": "4de39ec8e4fe346946b06196935b71abc3249853827c2dee12ea1d9b6b813599",
   "olcum_b04.py": "c083b84050d360a6abba6f78c5ce5f200b3e982efe04fad3464616d4f8dd10ca",
-  "olcum_b05.py": "111adbefb2b2bc8c57f65226d821a76e235edc217978a64a612966262b16e3d2",
+  "olcum_b05.py": "2dcb36a376b359c528333f38b690c79f2cf14f288c27e56f11a04bd56a7e81d8",
   "olcum_b06.py": "e92ab7f4ef61be49da703a8119424a044215f9e3fc5bec4cf0c188f470073741",
   "olcum_b07.py": "67269cd4f7b3197309b5ad3279180938005b54d2912a90106c8979d8f81a89fc",
   "olcum_b08.py": "c5c73e8582910898f6b43103fd045c4a5430fb9696a731e890b39b40eec2d44c",

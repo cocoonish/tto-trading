@@ -1,6 +1,21 @@
 {
  "girdiler": [
   {
+   "tur": "sabit",
+   "parca": "(≈4,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈1,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈0,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
    "tur": "kaynak",
    "parca": "Greenwood ve Vayanos (2014), uzun vadeli tahvil arzının kısa vadeliye göre artışının uzun tahvillerin gelecekteki fazla getirisini öngördüğünü gösterir; etki vade uzadıkça güçlenir.",
    "kaynak": "greenwoodvayanos2014"
@@ -422,7 +437,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "risk-nötr getiri (+26,1 bp)",
+   "parca": "(ACM'nin beklenen kısa faiz yolu bileşeni, +26,1 bp)",
    "degerler": [
     {
      "yol": "b05.sekil_07.olaylar.0.d_acmrny10_bp",
@@ -434,12 +449,12 @@
   },
   {
    "tur": "olcum",
-   "parca": "eğri −19 bp yassılaştı",
+   "parca": "eğri 19 bp yassılaştı",
    "degerler": [
     {
-     "yol": "b05.sekil_07.olaylar.1.d_2s10s_bp",
      "bicim": "bp",
-     "hane": 0
+     "hane": 0,
+     "ifade": "abs(v('b05.sekil_07.olaylar.1.d_2s10s_bp'))"
     }
    ]
   },
@@ -454,11 +469,6 @@
      "arti": true
     }
    ]
-  },
-  {
-   "tur": "kaynak",
-   "parca": "Dolar endeksi, vergi indirimi yasasının çıktığı 2017 yılını yaklaşık %10 düşüşle, 2003'ten bu yana en büyük yıllık kayıpla kapattı.",
-   "kaynak": "abd2017karsiornek"
   },
   {
    "tur": "kaynak",
@@ -590,7 +600,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "31.07.2023 kapanışından 19.10.2023 kapanışına, 57 iş günü",
+   "parca": "31.07.2023 kapanışından 19.10.2023 kapanışına, 56 iş günü",
    "degerler": [
     {
      "yol": "b05.p5a.ilk",
@@ -603,9 +613,9 @@
      "hane": 0
     },
     {
-     "yol": "b05.p5a.n",
      "bicim": "tam",
-     "hane": 0
+     "hane": 0,
+     "ifade": "v('b05.p5a.n') - 1"
     }
    ]
   },
@@ -1382,7 +1392,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "2017: 2 yıllık +30 bp, 10 yıllık +11 bp, eğri −19 bp yassılaştı",
+   "parca": "2017: 2 yıllık +30 bp, 10 yıllık +11 bp, eğri 19 bp yassılaştı",
    "degerler": [
     {
      "yol": "b05.sekil_07.olaylar.1.d_us2_bp",
@@ -1397,9 +1407,9 @@
      "arti": true
     },
     {
-     "yol": "b05.sekil_07.olaylar.1.d_2s10s_bp",
      "bicim": "bp",
-     "hane": 0
+     "hane": 0,
+     "ifade": "abs(v('b05.sekil_07.olaylar.1.d_2s10s_bp'))"
     }
    ]
   },
@@ -1556,6 +1566,91 @@
      "yol": "b05.p5c.kirlilik.dibs_tlref_bazi.kama_sinamasi.baz_bilesik_kamaya_egim",
      "bicim": "sayi",
      "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2017 yılını −%10,03 ile kapattı: 2003'ten (−%14,66) bu yana en büyük yıllık düşüş",
+   "degerler": [
+    {
+     "yol": "b05.dxy_yillik.degisim_2017_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b05.dxy_yillik.degisim_2003_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(57 gözlem)",
+   "degerler": [
+    {
+     "yol": "b05.p5a.n",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "(öncesindeki 15 ayın 9'unda eksi)",
+   "degerler": [
+    {
+     "ifade": "len(v('b05.sekil_08.fark_bp')[v('b05.sekil_08.ay').index('2023-07'):v('b05.sekil_08.ay').index('2024-10')])",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "ifade": "sum(1 for x in v('b05.sekil_08.fark_bp')[v('b05.sekil_08.ay').index('2023-07'):v('b05.sekil_08.ay').index('2024-10')] if x < 0)",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "(24 ay; en düşük 275,5 bp, ortalama 907,0 bp)",
+   "degerler": [
+    {
+     "ifade": "len(v('b05.sekil_08.fark_bp')[v('b05.sekil_08.ay').index('2024-10'):])",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "ifade": "min(v('b05.sekil_08.fark_bp')[v('b05.sekil_08.ay').index('2024-10'):])",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "ifade": "sum(v('b05.sekil_08.fark_bp')[v('b05.sekil_08.ay').index('2024-10'):]) / len(v('b05.sekil_08.fark_bp')[v('b05.sekil_08.ay').index('2024-10'):])",
+     "bicim": "bp",
+     "hane": 1
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "07.2023–09.2024'te fark 15 ayın 9'unda eksiydi (ortalama −65,8 bp)",
+   "degerler": [
+    {
+     "ifade": "len(v('b05.sekil_08.fark_bp')[v('b05.sekil_08.ay').index('2023-07'):v('b05.sekil_08.ay').index('2024-10')])",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "ifade": "sum(1 for x in v('b05.sekil_08.fark_bp')[v('b05.sekil_08.ay').index('2023-07'):v('b05.sekil_08.ay').index('2024-10')] if x < 0)",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "ifade": "sum(v('b05.sekil_08.fark_bp')[v('b05.sekil_08.ay').index('2023-07'):v('b05.sekil_08.ay').index('2024-10')]) / len(v('b05.sekil_08.fark_bp')[v('b05.sekil_08.ay').index('2023-07'):v('b05.sekil_08.ay').index('2024-10')])",
+     "bicim": "bp",
+     "hane": 1
     }
    ]
   }
