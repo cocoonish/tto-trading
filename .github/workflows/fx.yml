@@ -66,6 +66,23 @@ on:
           Kapalıysa yalnız canlı haber akışı çekilir ve anlık endeks ilerler.
         type: boolean
         default: false
+      # KALİBRASYON — elle ve seyrek (sayfa: "kalibrasyon tarihi ile veri tarihi
+      # ayrıdır"). Haber ÇEKİLMEZ, canlı endekse ve tarihçeye dokunulmaz; girdi bu
+      # iş akışının haber önbelleği (52 hafta, skorlu) ve Yahoo'dur — ikisi de
+      # yalnız koşucudan açık.
+      #   olcum: kesif_kalibrasyon.py — kapanış saatleri ve eski/yeni karne
+      #          aynı arşivle; YALNIZ ölçüm arşivi commit edilir.
+      #   yaz:   correlation_optimizer.py (ızgara, OOS, plasebo) → guncelle.py fx
+      #          (hafif kip: figürler + özet + kopya) → commit.
+      # Dalda dispatch edilebilir (iş akışı main'de var); main kapsamındaki
+      # önbellek dal koşusundan geri yüklenir, dal koşusu önbelleği KAYDETMEZ.
+      kalibrasyon:
+        description: >-
+          Kalibrasyon (elle): olcum = ölç ve ölçüm arşivini yaz; yaz = parametreleri
+          yeniden ara, figürleri ve özeti tazele. Haber çekilmez.
+        type: choice
+        options: [kapali, olcum, yaz]
+        default: kapali
 
 permissions:
   contents: write
@@ -152,7 +169,10 @@ jobs:
         env:
           TETIK: ${{ github.event.schedule }}
         run: |
-          if [ "${{ inputs.tam_kip }}" = "true" ] || [ "$TETIK" = "37 8 * * 1" ]; then
+          KAL="${{ inputs.kalibrasyon }}"
+          if [ "$KAL" = "olcum" ] || [ "$KAL" = "yaz" ]; then
+            BAYRAK=""; AD="kalibrasyon ($KAL)"
+          elif [ "${{ inputs.tam_kip }}" = "true" ] || [ "$TETIK" = "37 8 * * 1" ]; then
             BAYRAK="--tam"; AD="tam kip (GDELT arşivi dahil)"
           else
             BAYRAK="--gunluk"; AD="günlük kip (yalnız canlı haber akışı)"
@@ -179,11 +199,30 @@ jobs:
 
       - name: FX hattı — ${{ steps.kip.outputs.ad }}
         id: fx
+        if: inputs.kalibrasyon != 'olcum' && inputs.kalibrasyon != 'yaz'
         run: python guncelle.py fx ${{ steps.kip.outputs.bayrak }} --sistem-kur
+
+      # Kalibrasyon yalnız ölçüm katmanını ister: torch/transformers GEREKMEZ
+      # (skorlar önbellekte), FinBERT yüklenmez.
+      - name: Kalibrasyon bağımlılıkları
+        if: inputs.kalibrasyon == 'olcum' || inputs.kalibrasyon == 'yaz'
+        run: pip install --quiet yfinance scipy scikit-learn feedparser
+
+      - name: Kalibrasyon ölçümü
+        if: inputs.kalibrasyon == 'olcum'
+        timeout-minutes: 150
+        run: python -u "Aktarılacak Projeler/indices/kesif_kalibrasyon.py"
+
+      - name: Kalibrasyon — ızgara, figürler, özet
+        if: inputs.kalibrasyon == 'yaz'
+        timeout-minutes: 150
+        run: |
+          python -u "Aktarılacak Projeler/indices/correlation_optimizer.py"
+          python guncelle.py fx
 
       # Zaman aşımına uğrasa bile o ana kadar toplanan haberler saklanır.
       - name: Haber önbelleğini sakla
-        if: always()
+        if: always() && inputs.kalibrasyon != 'olcum' && inputs.kalibrasyon != 'yaz'
         uses: actions/cache/save@v4
         with:
           path: |
@@ -202,8 +241,19 @@ jobs:
         run: |
           git config --global user.name  "tto-fx"
           git config --global user.email "bot@users.noreply.github.com"
-          git add "Aktarılacak Projeler/indices" site/public/projeler/fx-haber-endeksi \
-                  bulten/tazeleme_durumu.json || true
+          # Kalibrasyon kiplerinde bülten defterleri (tazeleme damgası, hat
+          # süresi) commit EDİLMEZ: bu koşu bir veri tazelemesi değil ve o
+          # dosyalar main'de her gün yazılıyor — dal koşusu onlarla çakışırdı.
+          case "${{ inputs.kalibrasyon }}" in
+            olcum)
+              git add "Aktarılacak Projeler/indices/data/kalibrasyon_kesif.json" || true ;;
+            yaz)
+              git checkout -- bulten || true
+              git add "Aktarılacak Projeler/indices" site/public/projeler/fx-haber-endeksi || true ;;
+            *)
+              git add "Aktarılacak Projeler/indices" site/public/projeler/fx-haber-endeksi \
+                      bulten/tazeleme_durumu.json || true ;;
+          esac
           if git diff --cached --quiet; then
             echo "değişiklik yok"
           else

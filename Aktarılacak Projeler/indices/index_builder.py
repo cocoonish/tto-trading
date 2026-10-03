@@ -118,12 +118,8 @@ def compute_momentum(scored_articles: list[dict], reference_time: datetime,
 
 # ── Core Index Computation ─────────────────────────────────────────────────────
 
-def _compute_index_value(scored_articles: list[dict], params: dict,
-                         reference_time: datetime = None) -> tuple[float, int]:
-    """Core computation. Returns (index_value, n_articles_used)."""
-    if reference_time is None:
-        reference_time = datetime.now(timezone.utc)
-
+def _pencere(scored_articles: list[dict], reference_time: datetime) -> list[dict]:
+    """Pencereye giren makaleler: [ref − LOOKBACK_DAYS, ref], ozgun sirayla."""
     lookback = timedelta(days=config.LOOKBACK_DAYS)
     cutoff = reference_time - lookback
 
@@ -137,6 +133,70 @@ def _compute_index_value(scored_articles: list[dict], params: dict,
                 filtered.append(a)
         except (ValueError, TypeError, KeyError):
             continue
+    return filtered
+
+
+_EPOCH = datetime(1970, 1, 1, tzinfo=timezone.utc)
+_MIKRO = timedelta(microseconds=1)
+
+
+def _mikro(an: datetime) -> int:
+    """UTC anini tamsayi mikrosaniyeye cevir (tam; float yuvarlamasi yok)."""
+    return (an - _EPOCH) // _MIKRO
+
+
+class MakaleDizisi:
+    """Ayni makale listesinde COK SAYIDA referans anina pencere acmak icin.
+
+    `_pencere` her cagrida butun makaleleri yeniden ayristirir; gunluk seri
+    365 gun, kalibrasyon izgarasi da 384 kombinasyon istedigi icin ayni ayristirma
+    yuz binlerce kez tekrarlaniyordu (izgara saatler suruyordu). Burada makaleler
+    BIR KEZ ayristirilir ve pencere ikili aramayla bulunur.
+
+    SOZLESME: `pencere(ref)` ile `_pencere(makaleler, ref)` AYNI makaleleri AYNI
+    SIRAYLA dondurur — uyelik ayni karsilastirmayla (tamsayi mikrosaniye, iki uc
+    dahil), sira makalelerin OZGUN sirasidir (np.average'in toplama sirasi buna
+    bagli; zaman sirasina dizmek son ondalikta farkli bir sayi verirdi).
+    Ayristirilamayan yayim tarihi her iki yolda da pencereye girmez.
+    `index_builder` duman sinamasi ikisini butun izgarada `==` ile kiyaslar.
+    """
+
+    def __init__(self, scored_articles: list[dict]):
+        self.makaleler = scored_articles
+        cift = []
+        for i, a in enumerate(scored_articles):
+            try:
+                pub = datetime.fromisoformat(a["published"])
+                if pub.tzinfo is None:
+                    pub = pub.replace(tzinfo=timezone.utc)
+            except (ValueError, TypeError, KeyError):
+                continue
+            cift.append((_mikro(pub), i))
+        cift.sort()
+        self._an = [c[0] for c in cift]
+        self._sira = [c[1] for c in cift]
+        self._lookback = _mikro(_EPOCH + timedelta(days=config.LOOKBACK_DAYS))
+
+    def pencere(self, reference_time: datetime) -> list[dict]:
+        import bisect
+        ref = _mikro(reference_time)
+        lo = bisect.bisect_left(self._an, ref - self._lookback)
+        hi = bisect.bisect_right(self._an, ref)
+        return [self.makaleler[i] for i in sorted(self._sira[lo:hi])]
+
+
+def _compute_index_value(scored_articles: list[dict], params: dict,
+                         reference_time: datetime = None,
+                         dizi: "MakaleDizisi | None" = None) -> tuple[float, int]:
+    """Core computation. Returns (index_value, n_articles_used).
+
+    `dizi` verilirse pencere onun ikili aramasiyla bulunur (ayni makaleler, ayni
+    sira — bkz. MakaleDizisi); hesap bundan sonra tek ve ayni koddur."""
+    if reference_time is None:
+        reference_time = datetime.now(timezone.utc)
+
+    filtered = (dizi.pencere(reference_time) if dizi is not None
+                else _pencere(scored_articles, reference_time))
 
     if not filtered:
         return 0.0, 0
@@ -344,7 +404,15 @@ def build_daily_index_series(
     end_date: datetime,
 ) -> dict[str, float]:
     """Build daily time series with volume amplification, z-score normalization + EMA smoothing.
-    Excludes today (current UTC date) — sentiment score is only final after day ends."""
+    Excludes today (current UTC date) — sentiment score is only final after day ends.
+
+    GUN D'NIN DEGERI, D'NIN SONUNA KADARKI HABERDIR: referans ani D+1 00:00 UTC.
+    Onceden referans D 00:00'di, yani D anahtarli deger D'nin HIC haberini
+    icermiyor, bir onceki gunun sonunu olcuyordu — "gun bitince kesinlesir"
+    kuralinin tersi (o kural yalniz ref gunun SONUNDAYSA anlamlidir). Fiyatla
+    kiyaslanan seriler bunu kullanmaz: onlar kapanis anina hizalanir
+    (`seri_anlarda`), cunku gece yarisi New York kapanisindan saatler sonradir."""
+    dizi = MakaleDizisi(scored_articles)
     series = {}
     today_utc = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     current = start_date
@@ -352,7 +420,9 @@ def build_daily_index_series(
         day_key = current.strftime("%Y-%m-%d")
         if day_key >= today_utc:
             break  # don't compute today or future — day not complete
-        val, _ = _compute_index_value(scored_articles, params, reference_time=current)
+        ref = datetime.combine(current.date() + timedelta(days=1), datetime.min.time(),
+                               tzinfo=timezone.utc)
+        val, _ = _compute_index_value(scored_articles, params, reference_time=ref, dizi=dizi)
         series[day_key] = round(val, 4)
         current += timedelta(days=1)
 
@@ -371,6 +441,33 @@ def build_daily_index_series(
     # Z-score normalize to spread signal, then smooth to reduce noise
     normalized = normalize_index_series(series)
     return smooth_series(normalized, span=3)
+
+
+def seri_anlarda(makaleler: "list[dict] | MakaleDizisi", params: dict,
+                 anlar: dict[str, datetime], ham: bool = False) -> dict[str, float]:
+    """Endeksi VERILEN referans anlarinda kur: {anahtar: deger}.
+
+    Fiyatla kiyaslanan duyarlilik bunu kullanir; anahtar islem gunu, referans o
+    gunun KAPANIS ani (bkz. fiyat.py). Boylece D'nin degeri tam olarak D'nin
+    kapanisinda bilinen haberdir: kapanistan sonraki haber D'ye girmez, D'nin
+    ileri getirisiyle kiyas bakis-ileri tasimaz.
+
+    Gunluk seriyle ayni son islem: z-skor + tanh normalizasyonu ve EMA (span 3),
+    bu kez ISLEM GUNU dizisinde. `ham=True` normalizasyonsuz, yuvarlanmis ham
+    degerleri dondurur (sinama icin). Hacim buyutmesi bu yolda YOK: izgarada da
+    canli parametrelerde de kullanilmiyor; kullanilirsa sessizce atlanmasin diye
+    hata verir."""
+    if params.get("volume_amplification", 0.0):
+        raise NotImplementedError("seri_anlarda hacim buyutmesini desteklemiyor")
+    dizi = makaleler if isinstance(makaleler, MakaleDizisi) else MakaleDizisi(makaleler)
+    series = {}
+    for anahtar in sorted(anlar):
+        val, _ = _compute_index_value(dizi.makaleler, params, reference_time=anlar[anahtar],
+                                      dizi=dizi)
+        series[anahtar] = round(val, 4)
+    if ham:
+        return series
+    return smooth_series(normalize_index_series(series), span=3)
 
 
 # ── Build All (real-time snapshot) ─────────────────────────────────────────────
