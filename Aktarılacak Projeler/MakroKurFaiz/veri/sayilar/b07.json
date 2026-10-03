@@ -1254,6 +1254,11 @@
    "tur": "kaynak",
    "parca": "Engel (2004) ise bu yanlılığın bulmacayı çözmediğini savunur",
    "kaynak": "chen_engel2004"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈3,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
   }
  ]
 }

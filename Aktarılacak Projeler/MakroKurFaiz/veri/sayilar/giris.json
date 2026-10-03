@@ -28,6 +28,31 @@
      "bicim": "metin"
     }
    ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "[5.K](#ky-b05) (9,5)",
+   "neden": "kitap yolundaki alt bölümün tahmini okuma süresi (kelime/200, yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "[7.K](#ky-b07) (3,5)",
+   "neden": "kitap yolundaki alt bölümün tahmini okuma süresi (kelime/200, yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "[8.K](#ky-b08) (5,5)",
+   "neden": "kitap yolundaki alt bölümün tahmini okuma süresi (kelime/200, yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "[10.K](#ky-b10) (3,5)",
+   "neden": "kitap yolundaki alt bölümün tahmini okuma süresi (kelime/200, yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "[11.K](#ky-b11) (3,5)",
+   "neden": "kitap yolundaki alt bölümün tahmini okuma süresi (kelime/200, yerleşim sabiti)"
   }
  ]
 }

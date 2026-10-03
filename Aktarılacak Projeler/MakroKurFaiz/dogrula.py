@@ -173,6 +173,9 @@ def bolumler(m: str) -> tuple[dict, str]:
     return alan, govde
 
 
+ETIKET = re.compile(r"</?[A-Za-z][^>]*>")
+
+
 def duz_metin(govde: str) -> str:
     """Envanterin taradığı metin: import satırları, kod, figür/araç etiketleri ve
     varsayımsal kutular dışarıda; formüller ve tablolar İÇERİDE (çözümlerdeki
@@ -183,7 +186,10 @@ def duz_metin(govde: str) -> str:
     g = re.sub(r"<GrafikEmbed[^>]*/>", " ", g)
     g = re.sub(r"<Makro[A-Za-z]+[^>]*/>", " ", g)
     g = re.sub(r'<div class="not sinav-ornek">.*?</div>', " ", g, flags=re.S)
-    g = re.sub(r"<[^>]+>", " ", g)           # kalan etiketler (details, summary, span)
+    # kalan etiketler (details, summary, span). Etiket harfle ya da "/" ile başlar: formüldeki
+    # "$x < 0$" bir etiket değildir; "<[^>]+>" onu bir sonraki ">"e kadar uzatıp aradaki
+    # metni (bir sonraki bölümün başı dahil) eşlemeden ve sayı envanterinden düşürüyordu.
+    g = re.sub(ETIKET, " ", g)
     return g
 
 
@@ -416,7 +422,7 @@ def bicim_sina(govde: str) -> None:
     g = re.sub(r"\$\$.*?\$\$", "", govde, flags=re.S)
     g = re.sub(r"\$[^$\n]+\$", "", g)
     g = re.sub(r"`[^`]*`", "", g)
-    g = re.sub(r"<[^>]+>", "", g)
+    g = re.sub(ETIKET, "", g)
     for x in re.finditer(r"(?<![\w/.\-–])-%?\d", g):
         hatalar.append(f"ASCII tireli eksi sayı: {g[max(0, x.start() - 30):x.end() + 10]!r}")
     for x in re.finditer(r"\d[ \t]*%", g):
