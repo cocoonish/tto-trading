@@ -53,7 +53,7 @@ const t = A.taylor;
       <input type="number" id="mt-pol" value={t.politika} step="0.25" /></label>
     <label><span class="etiket">Yabancı politika faizi (%)</span>
       <input type="number" id="mt-iy" value={t.i_yabanci} step="0.25" /></label>
-    <label><span class="etiket">Yabancı enflasyon beklentisi (%)</span>
+    <label><span class="etiket">Yabancı enflasyon (%; açılışta son yıllık TÜFE)</span>
       <input type="number" id="mt-piy" value={t.pi_yabanci} step="0.1" /></label>
   </div>
 
@@ -71,7 +71,7 @@ const t = A.taylor;
 
   <p class="hesap-dip">
     <b>Bant, nokta değil.</b> Açığın bandı {t.acik_alt_metin} ile {t.acik_ust_metin} arasındadır (sırasıyla HP
-    süzgecinin {t.acik_uclar_metin} sürümleri) ve r* için 0, 2 ve 4 puan denenir; aşağıdaki satır bu altı
+    süzgecinin {t.acik_uclar_metin} sürümleri) ve r* için %0, %2 ve %4 denenir; aşağıdaki satır bu altı
     bileşimin en düşük ve en yüksek kural faizini verir. Kurun terimi araçta yoktur: türetimi Bölüm 3'te;
     δ ölçülmediği için katsayı konmadı.
   </p>

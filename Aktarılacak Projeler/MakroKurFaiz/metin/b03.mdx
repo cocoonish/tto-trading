@@ -5,7 +5,7 @@ fonksiyonundan geçer. Veri politika patikasını oynatırsa beklenen reel faiz 
 B bloğu değişir. Bu bölüm o fonksiyonu
 kurar, Türkiye'de bant olarak ölçer ve PPK günlerinde sürprizin kura geçişini sayar.
 
-### 3.1 Teori: Taylor kuralı, Taylor ilkesi ve r* bandı (≈3 dk)
+### 3.1 Teori: Taylor kuralı, Taylor ilkesi ve r* bandı (≈1,5 dk)
 
 Taylor (1993) federal fon faizi için $i = \pi + 0{,}5\,y + 0{,}5(\pi - 2) + 2$ kuralını önerdi:
 π son dört çeyreğin enflasyonu, y reel GSYH'nin trendinden yüzde sapmasıdır; enflasyon hedefi
@@ -44,8 +44,11 @@ $$i_t = r^* + \pi^e + (\phi_\pi - 1)(\pi^e - \pi^*) + (\phi_y + \phi_\pi\kappa)\
 Kurun katsayısı ayrı bir tercih değil, geçişkenliğin $\phi_\pi$ katıdır; δ burada ölçülmediği
 için katsayı verilmez.
 
-**Kura bağ.** $s_t = A_t - \sum_{k\ge 0} E_t R_{t+k} + C_t$, $R = r - r^{\text{yabancı}}$
-(Bölüm 1): büyüme sürprizi R'yi kalıcılığı boyunca yükseltir, s düşer, para değer kazanır.
+**Kura bağ.** $q_t = A_t - \sum_{k\ge 0} E_t R_{t+k} + C_t$, $R = r - r^{\text{yabancı}}$
+(Bölüm 1; fiyat düzeyini oynatmayan haberde $s$ de aynı hareket eder): büyüme sürprizi R'yi
+kalıcılığı boyunca yükseltir, q düşer, para değer kazanır. Bu derste r* iki anlamda geçer: Taylor
+kuralında (3.1, 4.1) doğal reel faiz, kur denkleminde ($r^*_t$; Bölüm 1, 5, 6, 12) yabancı reel faiz;
+bu bölümde karışmasın diye yabancı faiz $r^{\text{yabancı}}$ yazılır.
 Patika kımıldamazsa B değişmez; haber kura ancak C'den değebilir.
 
 ### 3.2 Gelişmiş ekonomiler: büyüme haberi ve politika sürprizi (≈1 dk)
@@ -84,7 +87,7 @@ fark ortalama 2,08 puan, en çok 7,01 puan (2008Ç1); korelasyon 0,67, işaret u
 zamanlı sürüm bugünkü veri sürümüyle kurulduğu için revizyonu ölçmez, yalnız uç noktası
 sorununu yakalar. Kural faizi bu yüzden bant olarak verilir.
 
-### 3.4 Pratik 3A — Türkiye Taylor bandı (≈2 dk)
+### 3.4 Pratik 3A — Türkiye Taylor bandı (≈1,5 dk)
 
 Aylık kural $i^T = r^* + \pi + 0{,}5(\pi - 5) + 0{,}5\,\tilde y$, hedef %5; on iki bileşim: iki
 enflasyon ölçüsü (gerçekleşen yıllık TÜFE, Piyasa Katılımcıları Anketi'nin 12 ay sonrası
@@ -121,12 +124,13 @@ bileşiminin en düşüğü ile en yükseğidir: bordo gerçekleşen, mavi bekle
 AOFM aylık ortalaması, turuncu politika faizi ay sonu (Eylül 2018'den TCMB, öncesinde BIS);
 alt panel iki açık sürümü. Kusur: revizyon geçmişi yok, r* varsayımdır.
 
-### 3.5 Pratik 3B — PPK günleri (≈2 dk)
+### 3.5 Pratik 3B — PPK günleri (≈3 dk)
 
 19.01.2016–10.09.2026 arasında 111 karar, saat 14:00 TSİ; DİBS gün sonu hizasıyla ölçülür
 (Bölüm 2). USD/TRY 18.12.2023'ten İstanbul 18:00, öncesinde Londra gece yarısı barı; o dönemin
-cuma kur değişimi hafta sonunu taşıdığı için boşaltılır. Önce plasebo sınaması (Bölüm 2):
-USD/TRY ve 2 yıllık güçlü kuralı geçiyor, 5 yıllık geçmiyor. Kısa uç düğümleri:
+cuma kur değişimi hafta sonunu taşıdığı için boşaltılır. Önce plasebo sınaması (yöntem Bölüm 2;
+burada 18.12.2023 öncesi cuma değişimi boşaltılmış seriyle): USD/TRY ve 2 yıllık güçlü kuralı
+geçiyor, 5 yıllık geçmiyor. Kısa uç düğümleri:
 
 | Seri | Tepe | p | Hüküm |
 |---|---|---|---|
@@ -141,12 +145,14 @@ düğüm geçmiyor: sonuç saatle kurulan hizaya bağlıdır.
 **İma sürprizi kurulmadı.** Piyasanın ima ettiği sürpriz 3 aylık getirinin karar günü
 değişimidir ve düğüm sınamayı tek günde geçmedi. Sebep gürültü: 3 aylık düğümün standart sapması
 PPK günü 157,8 bp, sıradan günde 135,4 bp (varyans oranı 1,36; 07.2023 sonrasında 1,03); 6
-aylıkta oran 0,69, 1 yıllıkta 1,78. 3 ve 6 aylık düğüm sıradan günde de karar günü kadar
-oynuyor; karar gününü ayıran tek kısa düğüm 1 yıllıktır, o da sınırda.
+aylıkta oran 0,69, 1 yıllıkta 1,78. Bütün örneklemde 6 aylık düğüm karar gününde sıradan günden az
+oynuyor, 3 aylığın farkı küçük ve 07.2023 sonrasında kayboluyor; karar gününü en çok ayıran kısa
+düğüm 1 yıllıktır, o da sınırda. Sıralama döneme bağlıdır: 2016–2020'de varyans oranı 3 aylıkta
+1,99, 6 aylıkta 1,67, 1 yıllıkta 0,53.
 
 **Anket sürprizi.** Yerine sürpriz, karar ile Piyasa Katılımcıları Anketi'nin karar ayındaki
 politika faizi beklentisinin farkıdır (soru Mayıs 2025'e kadar "cari ay sonu repo", sonra "ilk
-toplantı"). Karardan sonra toplanan 07.06.2018 anketi dışarıda kalır; Eylül 2026 anketi aylık
+toplantı"). Anketi karardan sonra toplanan 07.06.2018 kararı dışarıda kalır; Eylül 2026 anketi aylık
 veri çıpasının (08.2026) dışında olduğu için 10.09.2026 kararı eşlenmez. Ayın erken günlerindeki
 dört kararda anket karardan sapıyor, yani önceden toplanmış. Sonuç 109 karar: 66'sında sürpriz
 sıfır, 29'unda güvercin, 14'ünde şahin; standart sapma 104,88 bp, uçlar +581 bp (24.08.2023) ve
@@ -165,7 +171,8 @@ bir hafta vadeli repoyu soruyordu, oysa etkin politika koridor ve geç likidite 
 
 Eğim, 1 puanlık şahin sürprize karar günü USD/TRY yüzde değişimidir; "ölçülü" Bölüm 1'deki
 tanımdır (t ve iki örneklem dışı kıyas birlikte). Kurun yönü DM'deki gibidir: şahin sürpriz
-TL'yi güçlendirir. Kadranı ise faiz tarafı belirler ve orada işaret DM'ninki değildir (aşağıda).
+TL'yi güçlendirir. Kadranı ise faiz tarafı belirler; orada nokta tahminlerin işareti DM'ninkinin tersi, ama hiçbir
+dönemde ölçülü değil (aşağıda).
 Ayın ilk yarısındaki kararlar dışarıda kalınca havuz −0,55 (t −3,91). 2023 sonrası satır
 örneklem dışında rastgele yürüyüşü yenemiyor, eğim tek karara yaslı (Alıştırma 2). 2021'de 4,
 yönetilen kur döneminde 6 sıfırdan farklı sürpriz var, test kurulmaz: 16.12.2021'de 53 bp
@@ -181,7 +188,10 @@ tepkisi kurulmadı.
 
 ### 3.6 Pratik 3C — ABD–Almanya 2 yıllık farkı ve EUR/USD (≈1 dk)
 
-Haftalık; eğim, farkın 10 bp'lik değişimi başına EUR/USD'nin yüzde log değişimidir.
+Haftalık; eğim, farkın 10 bp'lik değişimi başına EUR/USD'nin yüzde log değişimidir. Saf UIP'nin
+eşzamanlı kıyas noktası bu birimde −0,2'dir (10.5: 2 yıllık farkın 1 bp'si paraya %0,02). Bölüm 10
+euroyu başka bir Almanya serisi ve perşembe örneğiyle, bp başına ölçer (10.6); iki tasarımın eğimi
+ayrışabilir.
 
 | Dönem | Hafta | Eğim | t | R² | Seviye korelasyonu |
 |---|---|---|---|---|---|
@@ -200,11 +210,11 @@ korelasyon iki dönemde artı, ikisinde eksi, ve iki seri de birim köke yakın 
 
 **Bu seri nasıl hesaplanıyor.** Haftalık, 07.01.2000–30.09.2026 (CNBC kur serisi 2000'de başlar);
 her hafta üç serinin birlikte bulunduğu son gün, bozuk kotasyonlar çıkarılmış. ABD 2 yıllığı
-New York kapanışı, Bund Frankfurt günlük değeri (New York öğleden sonrasını görmez), EUR/USD
+New York öğleden sonra kotasyonu (≈15:30), Bund Frankfurt günlük değeri (New York öğleden sonrasını görmez), EUR/USD
 New York 17:00. Paneller: fark (puan), EUR/USD, haftalık değişimler ve dönem doğruları
 (Newey–West t). Örneklem içi tarif.
 
-### 3.7 Pratik 3D — İstihdam ve GSYH günleri (≈1 dk)
+### 3.7 Pratik 3D — İstihdam ve GSYH günleri (≈0,5 dk)
 
 **Türkiye GSYH:** 55 yayım (01.04.2013–31.08.2026, 10:00 TSİ); sayısal beklenti yok, yalnız
 yayım günü oynaklığı sıradan günle kıyaslanır. Gün sonu hizasında 2 yıllığın tepesi ertesi
@@ -213,16 +223,18 @@ gün, USD/TRY'ninki iki gün sonra; 5 yıllığınki yayım gününde ama güçl
 **ABD istihdamı** kurulmadı: BLS'nin yayım takvimi geçmişine erişilemedi; ABD tarafında yayım
 günü sınaması FOMC günleriyle kuruldu (Bölüm 2).
 
-### 3.8 Araç 1 — Taylor kuralı ve reel faiz farkı
+### 3.8 Araç 1 — Taylor kuralı ve reel faiz farkı (≈2,5 dk)
 
-Araç kural faizini ve iki beklenen reel faizi hesaplar, farkları R'yi zincire yollar: Borç
-(Bölüm 6) → REDK (Bölüm 7) → Kurun üç bloğu (Bölüm 11). Reel faiz Fisher'ın bileşik biçimidir,
+Araç kural faizini ve iki beklenen reel faizi hesaplar. Kural faizi Borç aracına (Bölüm 6), reel
+faiz farkı R Kurun üç bloğu aracına (Bölüm 11) ve REDK aracının taşıma kıyasına (Bölüm 7) gider;
+REDK aracı çıpa sapmasını Kur aracına kendisi verir. Reel faiz Fisher'ın bileşik biçimidir,
 $r = (1+i_b)/(1+\pi) - 1$; TL repo $i_b = (1 + i/52)^{52} - 1$, dolar gecelik
 $i_b = (1 + i/360)^{365} - 1$ ile bileşiğe çevrilir: %37 repo yıllık %44,58 eder. Açılış
 değerleri 08.2026 ölçümü: PKA beklentisi %23,69, hedef %5, r* %2, φπ 1,5, φy 0,5, açık −1,82
-(uçlar −2,04 ve −1,61), politika %37 (30.09.2026); ABD politika faizi %3,62 (BIS), enflasyonu
+puan (uçlar −2,04 ve −1,61 puan), politika %37 (30.09.2026); ABD politika faizi %3,62 (BIS), enflasyonu
 %3,52 (son yıllık TÜFE; beklenti serisi yok). Açılışta kural %34,13, politika − kural +2,87
-puan, TL reel faizi %16,89 (kotasyon dilinde %10,76), ABD'ninki %0,21, R +16,68 puan. Enflasyon
+puan, TL reel faizi %16,89 (kotasyonu bileşiğe çevirmeden, (1 + i)/(1 + π) − 1 ile %10,76; sitenin ex-ante
+reel faizi bu dildedir), ABD'ninki %0,21, R +16,68 puan. Enflasyon
 gerçekleşene (%31,51) çevrilince kural %45,86, politika kuralın 8,86 puan altında, R +9,73 puan:
 B bloğu da bant gibi ölçü seçimine bağlıdır.
 
@@ -247,7 +259,8 @@ B bloğu da bant gibi ölçü seçimine bağlıdır.
 
   <span class="etiket">Tek cümlelik kural</span>
 
-  Büyüme verisi kura politika patikasından gider; patika kımıldamıyorsa haber kura değmez.
+  Büyüme verisi kura önce politika patikasından gider; patika kımıldamıyorsa haber kura ancak
+  primden (C) değer.
 
 </div>
 

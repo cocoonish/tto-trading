@@ -1,6 +1,21 @@
 {
  "girdiler": [
   {
+   "tur": "sabit",
+   "parca": "(≈2,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈1,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈0,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
    "tur": "kaynak",
    "parca": "Taylor (1993) federal fon faizi için $i = \\pi + 0{,}5\\,y + 0{,}5(\\pi - 2) + 2$ kuralını önerdi",
    "kaynak": "taylor1993"
@@ -970,7 +985,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "PKA beklentisi %23,69, hedef %5, r* %2, φπ 1,5, φy 0,5, açık −1,82 (uçlar −2,04 ve −1,61), politika %37 (30.09.2026); ABD politika faizi %3,62 (BIS), enflasyonu %3,52",
+   "parca": "PKA beklentisi %23,69, hedef %5, r* %2, φπ 1,5, φy 0,5, açık −1,82 puan (uçlar −2,04 ve −1,61 puan), politika %37 (30.09.2026); ABD politika faizi %3,62 (BIS), enflasyonu %3,52",
    "degerler": [
     {
      "ifade": "a('taylor.pi_anket')",
@@ -1036,7 +1051,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "Açılışta kural %34,13, politika − kural +2,87 puan, TL reel faizi %16,89 (kotasyon dilinde %10,76), ABD'ninki %0,21, R +16,68 puan",
+   "parca": "Açılışta kural %34,13, politika − kural +2,87 puan, TL reel faizi %16,89 (kotasyonu bileşiğe çevirmeden, (1 + i)/(1 + π) − 1 ile %10,76; sitenin ex-ante reel faizi bu dildedir), ABD'ninki %0,21, R +16,68 puan",
    "degerler": [
     {
      "ifade": "taylor_kural(a('taylor.r_yildiz'), a('taylor.pi_anket'), a('taylor.pi_hedef'), a('taylor.phi_pi'), a('taylor.phi_y'), a('taylor.acik_orta'))",
@@ -1348,6 +1363,48 @@
      "hane": 2
     }
    ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2016–2020'de varyans oranı 3 aylıkta 1,99, 6 aylıkta 1,67, 1 yıllıkta 0,53",
+   "degerler": [
+    {
+     "yol": "b03.p3b.gurultu.n3a.d2016_2020.varyans_orani",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b03.p3b.gurultu.n6a.d2016_2020.varyans_orani",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b03.p3b.gurultu.n1y.d2016_2020.varyans_orani",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "Saf UIP'nin eşzamanlı kıyas noktası bu birimde −0,2'dir (10.5: 2 yıllık farkın 1 bp'si paraya %0,02)",
+   "degerler": [
+    {
+     "ifade": "-2 * 10 / 100",
+     "bicim": "sayi",
+     "hane": 1
+    },
+    {
+     "ifade": "2 * 1 / 100",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈15:30)",
+   "neden": "ABD Hazinesi getiri kotasyonunun saati (Bölüm 2.2 sözleşmesi)"
   }
  ]
 }

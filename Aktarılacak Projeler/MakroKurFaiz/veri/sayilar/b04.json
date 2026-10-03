@@ -1,6 +1,16 @@
 {
  "girdiler": [
   {
+   "tur": "sabit",
+   "parca": "(≈1,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈0,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
    "tur": "kaynak",
    "parca": "Mishkin (1992) faizle enflasyon arasındaki ilişkinin kısa dönemde Fisher etkisini desteklemediğini, iki seri trend taşıdığında uzun dönemde birlikte hareket ettiklerini gösterdi",
    "kaynak": "mishkin1992"
@@ -12,7 +22,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Gagnon ve Ihrig (2004) 1971–2003'te yirmi sanayi ülkesinde kurun yurtiçi enflasyona geçişinin 1980'lerden beri düştüğünü ve bunun merkez bankalarının enflasyon istikrarına verdiği ağırlıkla tutarlı olduğunu gösterdi",
+   "parca": "Gagnon ve Ihrig (2004) 1971–2003'te yirmi sanayi ülkesinde kurun yurtiçi enflasyona geçişinin 1980'lerden beri birçok ülkede düştüğünü ve bunun merkez bankalarının enflasyon istikrarına verdiği ağırlıkla tutarlı olduğunu gösterdi",
    "kaynak": "gagnonihrig2004"
   },
   {
@@ -37,7 +47,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Gürkaynak, Kısacıkoğlu ve Lee (2023) düşük faiz talimatı ve sık başkan değişikliğiyle ilkenin çiğnendiği, kuraldaki enflasyon katsayısının eksiye döndüğü dönemde kurun rassal yürüyüş olmaktan çıktığını ve enflasyonun çıpasını kaybettiğini gösterdi",
+   "parca": "Gürkaynak, Kısacıkoğlu ve Lee (2023) düşük faiz talimatı ve sık başkan değişikliğiyle ilkenin çiğnendiği, kuraldaki enflasyon katsayısının eksiye döndüğü dönemde kurun rastgele yürüyüş olmaktan çıktığını ve enflasyonun çıpasını kaybettiğini gösterdi",
    "kaynak": "gkl2023"
   },
   {
@@ -245,7 +255,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "(20.12.2021'de USD/TRY −%20,90)",
+   "parca": "(20.12.2021'de USD/TRY log −%20,90)",
    "degerler": [
     {
      "yol": "b04.p4a.kur_cokusu.gunler.36.0",
@@ -261,7 +271,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "(23.11.2021'de +%11,68)",
+   "parca": "(23.11.2021'de log +%11,68)",
    "degerler": [
     {
      "yol": "b04.p4a.kur_cokusu.gunler.33.0",
@@ -601,7 +611,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "19.03.2021'in +%10,07'si",
+   "parca": "19.03.2021'in log +%10,07'si",
    "degerler": [
     {
      "yol": "b04.p4a.kur_cokusu.gunler.32.0",
@@ -851,7 +861,7 @@
   },
   {
    "tur": "hesap",
-   "parca": "eğri 197 bp dikleşti",
+   "parca": "eğri ≈197 bp dikleşti",
    "degerler": [
     {
      "ifade": "v('b04.p4c.turkiye_2021.n5y.degisim_bp') - v('b04.p4c.turkiye_2021.n2y.degisim_bp')",
@@ -1069,7 +1079,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "o ay dışarıda kalınca 2 yıllık +54,9 bp, 5 yıllık −18,5 bp (yassılaşma), kur eğimi +0,67 (R4 işareti)",
+   "parca": "o ay dışarıda kalınca 2 yıllık +54,9 bp, 5 yıllık −18,5 bp (yassılaşma, patikanın imzası), kur eğimi +0,67 (R4'ün kur işareti)",
    "degerler": [
     {
      "yol": "b04.p4a.aylik_iliski.d_n2y.d2021.birini_disarida_birak.o_gozlemsiz_egim",
@@ -1117,6 +1127,81 @@
    "degerler": [
     {
      "yol": "b04.p4a.aylik_iliski.d_usdtry.d2023_2026.egim",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "kaynak",
+   "parca": "cumartesi görevden alma",
+   "kaynak": "tcmb_baskan_20210320"
+  },
+  {
+   "tur": "olcum",
+   "parca": "o da dışarıda kalınca eğim −0,06",
+   "degerler": [
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.cokus_aylari_haric_d2013_2020.birini_disarida_birak.o_gozlemsiz_egim",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(23.05.2018 ve 24.08.2023, Bölüm 3)",
+   "degerler": [
+    {
+     "yol": "b04.p4a.kur_cokusu.gunler.23.0",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.gunler.43.0",
+     "bicim": "tarih",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(24.11.2021, log −%7,32)",
+   "degerler": [
+    {
+     "yol": "b04.p4a.kur_cokusu.gunler.34.0",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b04.p4a.kur_cokusu.gunler.34.1",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(18.11.2021) bir indirimdi (−100 bp)",
+   "degerler": [
+    {
+     "yol": "b03.p3b.olaylar.tarih.59",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "yol": "b03.p3b.anket_surprizi.karar_ile.regresyon.d2021.noktalar.3.1",
+     "bicim": "bp",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Kur eğimi −3,18: faiz ↑, para ↑",
+   "degerler": [
+    {
+     "yol": "b04.p4a.aylik_iliski.d_usdtry.d2021.egim",
      "bicim": "sayi",
      "hane": 2
     }
