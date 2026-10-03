@@ -2,12 +2,12 @@
  "girdiler": [
   {
    "tur": "kaynak",
-   "parca": "Aşırı tepki Dornbusch (1976) modelinin sonucudur",
+   "parca": "Aşırı tepki (1.2'deki aşırı sıçrama) Dornbusch (1976) modelinin sonucudur",
    "kaynak": "dornbusch1976"
   },
   {
    "tur": "kaynak",
-   "parca": "İki modeli birleştiren sentez (Frankel 1979; türetim 1.2) işareti \"faiz neden yükseldi?\" sorusuna bağlar: reel faiz farkından açılan fark parayı güçlendirir, beklenen enflasyon farkından açılan zayıflatır",
+   "parca": "İki model 1.2'deki sentezde (Frankel 1979) birleşince işareti \"faiz neden yükseldi?\" sorusu verir",
    "kaynak": "frankel1979"
   },
   {

@@ -157,6 +157,31 @@
   },
   {
    "tur": "kaynak",
+   "parca": "Sims (1994), analitik olarak çözülebilen basit bir modelde fiyat düzeyinin maliye politikasına bağlı olduğunu gösterir: denge fiyat düzeyinin varlığı ve tekliği yalnız para politikası bilinerek belirlenemez; para stokunu sabit tutan bir politika altında fiyat düzeyi belirsiz, hatta patlayıcı olabilir, nominal faizi keyfi bir düzeyde sabitleyen bir politika altında ise tek ve istikrarlı bir fiyat düzeyi oluşabilir.",
+   "kaynak": "sims1994"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "4.K'deki neo-Fisher bulgusu, Uribe (2022), buradaki sonuçla aynı şey değildir: orada faiz artışını kısa dönemde de enflasyona çeviren artışın kalıcılığıdır, geçici artış enflasyonu düşürür ve örneklem ABD'dir.",
+   "kaynak": "uribe2022"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Cagan (1956), hiperenflasyonlarda reel para talebini beklenen enflasyonun yarı logaritmik bir fonksiyonu olarak kurar; bu talep altında enflasyon vergisi gelirini en yükseğe çıkaran sabit enflasyon oranı, para talebinin yarı esnekliğinin tersine eşittir ve literatürde bu sonuç \"Cagan kuralı\" diye anılır.",
+   "kaynak": "cagan1956"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Reinhart ve Sbrancia (2015), finansal baskıyı — tutsak yurt içi alıcıların kamuya borç vermeye yönlendirilmesi, açık ya da örtük faiz tavanları ve sermaye denetimleri — tahvil sahiplerine ve tasarrufçulara negatif ya da piyasanın altında kalan reel faizle konan bir vergi olarak tanımlar; Bretton Woods döneminde sık görülen negatif reel faizin kamu borcunun reel değerini erittiğini ve bu yolun istikrarlı bir enflasyonla birlikte en etkili olduğunu belgeler.",
+   "kaynak": "reinhart_sbrancia2015"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "5.K'deki Catão ve Terrones (2005) bulgusu bir ilişkidir: bağ yüksek enflasyonlu ve gelişmekte olan ülke gruplarında güçlüdür.",
+   "kaynak": "catao_terrones2005"
+  },
+  {
+   "tur": "kaynak",
    "parca": "TCMB 20 Ağustos 2022'de, yıl sonuna kadar kullandırılacak ticari kredilerde faizi yıllık bileşik referans oranın 1,4 katını aşan kredi tutarının %20'si oranında bankaların menkul kıymet tesis etmesini şart koştu; 2022 Faaliyet Raporu'na göre 1,8 katını aşan kredilerde oran %90'dı",
    "kaynak": "turkiye2022_mkt_ticari"
   },

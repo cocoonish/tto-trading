@@ -1,6 +1,36 @@
 {
  "girdiler": [
   {
+   "tur": "kaynak",
+   "parca": "Krugman (1979), bütçe açığını para basarak finanse ederken sabit kuru sınırlı bir rezervle savunan hükümetin rezervlerinin kademeli olarak eridiğini gösterir",
+   "kaynak": "krugman1979"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Flood ve Garber (1984) modeli doğrusal örneklerle yeniden kurar; tam öngörülü örnekte çöküş anı tam olarak hesaplanır",
+   "kaynak": "flood_garber1984"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Obstfeld (1996), hükümetin kendi parasına yönelik spekülasyondan çektiği sıkıntının, örneğin yüksek işsizliğin, spekülatörlerin teşviklerini ve çoklu dengenin kapsamını belirlediğini",
+   "kaynak": "obstfeld1996"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Kraay (2003), sanayileşmiş ve gelişmekte olan ülkelerden geniş bir spekülatif saldırı örnekleminde yüksek faizin parayı savunmadığını",
+   "kaynak": "kraay2003"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Sarno ve Taylor (2001) bu iki kanalı anlatır",
+   "kaynak": "sarno_taylor2001"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Fratzscher, Gloede, Menkhoff, Sarno ve Stöhr (2019), 33 ülkenin günlük müdahale verisiyle",
+   "kaynak": "fgmss2019"
+  },
+  {
    "tur": "sabit",
    "parca": "(≈2,5 dk)",
    "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"

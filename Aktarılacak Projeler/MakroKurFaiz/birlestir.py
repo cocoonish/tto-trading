@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """MAKRO DERSİ — bölüm parçalarını tek ders metninde birleştirir.
 
-Ders ~24 bin kelimedir ve bölüm bölüm yazılır: her bölümün metni `metin/<ad>.mdx`,
+Ders ~45 bin kelimedir ve bölüm bölüm yazılır: her bölümün metni `metin/<ad>.mdx`,
 sayılarının kaynağı `veri/sayilar/<ad>.json`dadır (`python3 dogrula.py --parca <ad>`
 bir parçayı tek başına sınar). Bu betik ön bilgiyi, içe aktarmaları ve parçaları
 sırayla yazar; ders metni ELLE düzenlenmez, parça düzenlenip betik yeniden koşulur.
@@ -18,16 +18,16 @@ from pathlib import Path
 BURASI = Path(__file__).resolve().parent
 KOK = BURASI.parents[1]
 MDX = KOK / "site/src/content/arastirma/makro-kur-ve-faiz.mdx"
-PARCALAR = ["giris"] + [f"b{i:02d}" for i in range(1, 14)]
+PARCALAR = ["giris"] + [f"b{i:02d}" for i in range(1, 15)]
 
 ON_BILGI = """---
 title: 'Makrodan Kura ve Faize: Gelişmiş ve Gelişmekte Olan Ekonomilerde Bütçe, Büyüme, Enflasyon, Reel Kur ve Dış Denge'
-description: "Yaklaşık iki buçuk saatlik ders: bir makro haberin faize ve kura hangi terimden ulaştığı (politika patikası, vade primi, risk primi; kurun çıpası, reel faiz farkı ve risk primi), aynı haberin gelişmiş ekonomide parayı güçlendirip gelişmekte olan ekonomide neden zayıflatabildiği ve rejimin veriyle nasıl teşhis edildiği. Veri günü mekaniği ve plasebo sınaması; büyüme, istihdam ve politika sürprizi; enflasyonun iki ters işareti; bütçe açığının gelişmiş ekonomide faiz kanalı ve politika bileşimi, gelişmekte olan ekonomide risk primi, borç aritmetiği ve mali baskınlık; reel efektif kur ve dönüş hızı; dış ticaret ve cari denge; finansman, rezerv ve dış varlık pozisyonu; ticaret hadleri, emtia ve kur sürücüleri (paraların petrol, metal, faiz farkı ve risk iştahıyla haftalık bağı; USD/JPY ile ABD–Japonya faiz farkı); taşıma, UIP, akım ve küresel faktör; ülke primi; ve veri günü oyun kitabı. ABD, euro alanı, gelişmekte olan ülkeler ve Türkiye verisiyle ölçülmüş yirmi dört figür, dört bağlı hesap aracı ve çözümlü alıştırmalar."
+description: "Yaklaşık SURE_YER saatlik ders: bir makro haberin faize ve kura hangi terimden ulaştığı (politika patikası, vade primi, risk primi; kurun çıpası, reel faiz farkı ve risk primi), aynı haberin gelişmiş ekonomide parayı güçlendirip gelişmekte olan ekonomide neden zayıflatabildiği ve rejimin veriyle nasıl teşhis edildiği. Veri günü mekaniği ve plasebo sınaması; büyüme, istihdam ve politika sürprizi; enflasyonun iki ters işareti; bütçe açığının gelişmiş ekonomide faiz kanalı ve politika bileşimi, gelişmekte olan ekonomide risk primi, borç aritmetiği ve mali baskınlık; reel efektif kur ve dönüş hızı; dış ticaret ve cari denge; finansman, rezerv ve dış varlık pozisyonu; ticaret hadleri, emtia ve kur sürücüleri (paraların petrol, metal, faiz farkı ve risk iştahıyla haftalık bağı; USD/JPY ile ABD–Japonya faiz farkı); taşıma, UIP, akım ve küresel faktör; ülke primi; ve veri günü oyun kitabı. Her bölümde ders kitabının cevabı (haber gelince faiz, kur ve eğri ne yapar, işaret hangi şartta döner, merkez bankası ne yapar) ve sonda merkez bankasının zorunlu kaldığı on dört hâl, iyi haberin kötü haber olduğu hâller ve genel beklentiler tablosu. ABD, euro alanı, gelişmekte olan ülkeler ve Türkiye verisiyle ölçülmüş yirmi dört figür, dört bağlı hesap aracı ve çözümlü alıştırmalar."
 pubDate: 2026-10-02
 tags: ['makro', 'kur', 'butce', 'buyume', 'enflasyon', 'reel-kur', 'cari-denge', 'tasima', 'em', 'ders']
 durum: 'aktif'
 kaynak: 'ABD Hazinesi par getiri eğrisi ve NY Fed ACM vade primi · Bundesbank ve ECB getirileri · CNBC New York kapanışı G10 kurları · Yahoo Finance USD/TRY, EM kurları, DXY ve VIX · TCMB EVDS (DİBS gösterge eğrisi, TLREF, AOFM, politika faizi, PKA, ödemeler dengesi, UYP, kalan vadeye göre dış borç, rezerv, REDK, dış ticaret endeksleri) · TÜİK (TÜFE, GSYH ve yayım takvimi) · HMB bütçe ve borç istatistikleri · BIS reel efektif kur ve politika faizleri · Eurostat ve Dünya Bankası · Dünya Bankası Pink Sheet emtia fiyatları · CNBC emtia vadelileri ve ülke getirileri · ABD Hazinesi reel getiri eğrisi · metinde yazar ve yılıyla anılan makaleler'
-ozet: "Bir makro haber geldiğinde faizde ve kurda hangi terimin oynadığını bulmayı öğretir: aynı bütçe, büyüme ya da enflasyon haberi gelişmiş ekonomide parayı neden güçlendirir, gelişmekte olan ekonomide neden zayıflatabilir; reel kur, cari denge, rezerv, emtia ve taşıma bu resme nasıl girer ve rejim veriyle nasıl teşhis edilir."
+ozet: "Bir makro haber geldiğinde faizde ve kurda hangi terimin oynadığını bulmayı öğretir: aynı bütçe, büyüme ya da enflasyon haberi gelişmiş ekonomide parayı neden güçlendirir, gelişmekte olan ekonomide neden zayıflatabilir; reel kur, cari denge, rezerv, emtia ve taşıma bu resme nasıl girer, rejim veriyle nasıl teşhis edilir; ve ders kitabı her haber için ne bekler, işaret hangi şartta döner, merkez bankası ne yapmak zorunda kalır."
 seviye: 'ileri'
 onkosul:
   - risk-ve-hedge

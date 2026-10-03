@@ -1,6 +1,16 @@
 {
  "girdiler": [
   {
+   "tur": "kaynak",
+   "parca": "Corden ve Neary (1982), ticarete konu bir kesimdeki patlamanın iki etkiyle çalıştığını gösterir: harcama etkisi, ek gelirin yurt içinde harcanmasıyla ticarete konu olmayan kesimin talebini ve ücretleri yükseltir; kaynak kayması etkisi, patlayan kesimin emeği kendine çekmesidir; ikisi birlikte imalat gibi geride kalan ticarete konu kesimi küçültür",
+   "kaynak": "corden_neary1982"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Kilian (2009), petrolün reel fiyatındaki şokları ham petrol arz şoku, bütün sanayi emtiasına yönelik küresel talep şoku ve petrol piyasasına özgü talep şoku olarak üçe ayırır ve her birinin petrol fiyatı ile ABD makro büyüklükleri üzerinde farklı etkiler yarattığını bulur",
+   "kaynak": "kilian2009"
+  },
+  {
    "tur": "sabit",
    "parca": "(≈4,5 dk)",
    "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"

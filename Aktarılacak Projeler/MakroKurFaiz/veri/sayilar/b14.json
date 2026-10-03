@@ -1,0 +1,222 @@
+{
+ "girdiler": [
+  {
+   "tur": "kaynak",
+   "parca": "Bernanke (2020), alt sınırda niceliksel genişleme ile ileriye dönük yönlendirmenin finansal koşulları gevşetmede etkili olduğunu savunur",
+   "kaynak": "bernanke2020"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Brezilya 2002 (Blanchard 2004; 6.4)",
+   "kaynak": "blanchard2004"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Sargent ve Wallace (1981), türetim 6.3",
+   "kaynak": "sargent_wallace1981"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "20 Ağustos 2022'de faizi eşiği aşan ticari krediler için bankalara menkul kıymet tesis şartı getirildi",
+   "kaynak": "turkiye2022_mkt_ticari"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Reinhart ve Sbrancia (2015), 6.K",
+   "kaynak": "reinhart_sbrancia2015"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Krugman (1979) ile Flood ve Garber (1984), 9.K",
+   "kaynak": "krugman1979"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Krugman (1979) ile Flood ve Garber (1984), 9.K",
+   "kaynak": "flood_garber1984"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "çoklu denge Obstfeld (1996)",
+   "kaynak": "obstfeld1996"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "ampirik sınır Kraay (2003), 9.K",
+   "kaynak": "kraay2003"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Calvo (1998), 8.3",
+   "kaynak": "calvo1998"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Eichengreen ve Gupta (2015), 8.7",
+   "kaynak": "eichengreengupta2015"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Calvo ve Reinhart (2002), 9.1",
+   "kaynak": "calvo_reinhart2002"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "daraltıcı değer kaybı için Céspedes, Chang ve Velasco (2004), 8.K",
+   "kaynak": "cespedes_chang_velasco2004"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Obstfeld, Shambaugh ve Taylor (2005), 11.K",
+   "kaynak": "obstfeld_shambaugh_taylor2005"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Rey (2013), 11.3",
+   "kaynak": "rey2013"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Forbes ve Warnock (2012), 11.4",
+   "kaynak": "fw2012"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Maliye Bakanlığı 22 Eylül 2022'de dolar satıp yen aldı",
+   "kaynak": "japonya_mudahale_2022"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Bank of England, 28.09.2022: finansal istikrar gerekçesiyle geçici uzun gilt alımı, uzun getiri o gün sert düştü",
+   "kaynak": "boe2022_gilt"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "ECB, 21.07.2022: faiz artırımıyla aynı kararda aktarımı koruyan koşullu alım aracı",
+   "kaynak": "ecb2022_tpi"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Draghi'nin 26.07.2012 \"ne gerekiyorsa\" konuşması",
+   "kaynak": "draghi2012"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Pinter (2023) ile De Grauwe ve Ji (2013), 6.5",
+   "kaynak": "pinter2023"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Pinter (2023) ile De Grauwe ve Ji (2013), 6.5",
+   "kaynak": "degrauwe_ji2013"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Gagnon, Raskin, Remache ve Sack (2011): Fed'in alt sınırdaki alımları uzun faizleri daha çok risk primleri yoluyla düşürdü",
+   "kaynak": "grrs2011"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "kur yönü Inoue ve Rossi (2019), 3.2",
+   "kaynak": "inouerossi2019"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "İsviçre, 15.01.2015 (7.6)",
+   "kaynak": "snb_2015"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Rusya 2014: petrol düşerken politika faizi Kasım sonu ile Aralık sonu arasında sert artırıldı",
+   "kaynak": "rusya_2014"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Kilian (2009), 10.K",
+   "kaynak": "kilian2009"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Miranda-Agrippino ve Rey (2020) ile Obstfeld, Ostry ve Qureshi (2019), 11.3",
+   "kaynak": "mar2020"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Miranda-Agrippino ve Rey (2020) ile Obstfeld, Ostry ve Qureshi (2019), 11.3",
+   "kaynak": "ooq2019"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "kaynağa göre ayrım Hoek, Kamin ve Yoldas (2022), 11.K",
+   "kaynak": "hoek_kamin_yoldas2022"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Gürkaynak, Kısacıkoğlu ve Lee (2023), 4.3",
+   "kaynak": "gkl2023"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "beklenenden yüksek enflasyon parayı değerlendirebilir (Clarida ve Waldman 2007)",
+   "kaynak": "clarida_waldman2007"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Artışın kaynağı güçlü ABD talebiyse etki ılımlıdır (11.K)",
+   "kaynak": "hoek_kamin_yoldas2022"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Talebi destekleyen paket uzun ucu primden yükseltir ve parayı zayıflatır: İngiltere 2022 (5.5)",
+   "kaynak": "ingiltere2022_minibutce"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Maliye bakanı finansmanını göstermediği vergi indirimleri açıkladı (5.5)",
+   "kaynak": "ingiltere2022_minibutce"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "kaldıraçlı alıcının teminat çağrısından doğan satış baskısı (6.5)",
+   "kaynak": "pinter2023"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Finansal istikrar gerekçesiyle geçici ve hedefli uzun vadeli gilt alımı (28.09.2022)",
+   "kaynak": "boe2022_gilt"
+  },
+  {
+   "tur": "olcum",
+   "parca": "açık artırım 13.09.2018'de geldi (3.5)",
+   "degerler": [
+    {
+     "yol": "b03.p3b.olaylar.tarih.26",
+     "bicim": "tarih",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "**2. Türkiye, 13.09.2018 şahin sürprizi (3.5).**",
+   "degerler": [
+    {
+     "yol": "b03.p3b.anket_surprizi.dagilim.d2016_2020.en_buyuk.tarih",
+     "bicim": "tarih",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Ağustos 2018'in en sert değer kaybı haftası da R3'tür",
+   "degerler": [
+    {
+     "yol": "b01.rejim.tr.en_buyuk_10_para_kaybi_haftasi.6.etiket",
+     "bicim": "metin",
+     "hane": 0
+    }
+   ]
+  }
+ ]
+}

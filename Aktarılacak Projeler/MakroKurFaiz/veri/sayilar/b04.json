@@ -7,17 +7,17 @@
   },
   {
    "tur": "kaynak",
-   "parca": "kötü enflasyon haberi parayı güçlendirir; enflasyon hedefleyen merkez bankalarında ölçülen işaret budur (4.2)",
+   "parca": "kötü enflasyon haberi parayı güçlendirir; Taylor kuralıyla enflasyon hedefleyen merkez bankalarında ölçülen işaret budur (Bölüm 1, 4.2)",
    "kaynak": "clarida_waldman2007"
   },
   {
    "tur": "kaynak",
-   "parca": "Yakınsayan bir gelişmekte olan ekonomide Balassa–Samuelson etkisi (7.1) dengenin kendisini reel değer kazancı yönüne kaydırır",
+   "parca": "yakınsayan bir gelişmekte olan ekonomide Balassa–Samuelson etkisi (7.1) okuma kuralının çıpa terimini, yani dengenin kendisini reel değer kazancı yönüne kaydırır",
    "kaynak": "balassa1964"
   },
   {
    "tur": "kaynak",
-   "parca": "Yakınsayan bir gelişmekte olan ekonomide Balassa–Samuelson etkisi (7.1)",
+   "parca": "yakınsayan bir gelişmekte olan ekonomide Balassa–Samuelson etkisi (7.1)",
    "kaynak": "samuelson1964"
   },
   {
@@ -52,12 +52,12 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Fischer (1993), ülkeler arası ve panel regresyonlarla büyümenin enflasyonla, büyük bütçe açıklarıyla ve çarpık döviz piyasalarıyla ters yönde ilişkili olduğunu ve enflasyonun büyümeyi yatırımı ve verimlilik artışını azaltarak düşürdüğünü gösterdi; nedenselliğin politikadan büyümeye işlediğine dair kanıt \"işaret eder\" düzeyindedir.",
+   "parca": "Fischer (1993), ülkeler arası ve panel regresyonlarla büyümenin enflasyonla ters yönde ilişkili olduğunu ve enflasyonun büyümeyi yatırımı ve verimlilik artışını azaltarak düşürdüğünü gösterdi; nedenselliğin politikadan büyümeye işlediğine dair kanıt \"işaret eder\" düzeyindedir.",
    "kaynak": "fischer1993"
   },
   {
    "tur": "kaynak",
-   "parca": "Bruno ve Easterly (1998) eşiği sordu: yıllık enflasyonun %40'ı aştığı dönemleri yüksek enflasyon krizi saydı; bu krizleri yaşayan ülkeler dışarıda bırakıldığında büyüme ile enflasyon arasında tutarlı bir ilişki bulmadı, kriz sırasında ise büyümenin sert düştüğünü ve enflasyon gerilediğinde beklenmedik ölçüde güçlü toparlandığını gösterdi.",
+   "parca": "Bruno ve Easterly (1998) soruyu bir eşikle kurdu: yıllık enflasyonun %40'ı aştığı dönemleri yüksek enflasyon krizi saydı; bu krizleri yaşayan ülkeler dışarıda bırakıldığında büyüme ile enflasyon arasında tutarlı bir ilişki bulmadı, kriz sırasında ise büyümenin sert düştüğünü ve enflasyon gerilediğinde beklenmedik ölçüde güçlü toparlandığını gösterdi.",
    "kaynak": "bruno_easterly1998"
   },
   {
@@ -67,12 +67,17 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Yüksek enflasyon sürekli büyümeyle bağdaşmaz;",
+   "parca": "Yüksek enflasyon sürekli büyümeyle bağdaşmaz.",
    "kaynak": "fischer1993"
   },
   {
    "tur": "kaynak",
-   "parca": "büyümenin en sert düştüğü yer enflasyonun kriz düzeyine çıktığı dönemlerdir.",
+   "parca": "büyüme enflasyonun kriz düzeyine çıktığı dönemlerde sert düşer.",
+   "kaynak": "bruno_easterly1998"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Ilımlı enflasyonla büyüme arasındaki bağ zayıftır;",
    "kaynak": "bruno_easterly1998"
   },
   {

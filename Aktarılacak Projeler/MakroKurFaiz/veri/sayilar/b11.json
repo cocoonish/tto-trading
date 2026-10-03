@@ -1,6 +1,16 @@
 {
  "girdiler": [
   {
+   "tur": "kaynak",
+   "parca": "Obstfeld, Shambaugh ve Taylor (2005), kur istikrarı, para politikası bağımsızlığı ve sermaye açıklığı arasındaki üçlem ödünleşiminin kısıtlarının, altın standardından Bretton Woods sonrasına uzanan dönemde uluslararası faizlerin birlikte hareketinde büyük ölçüde doğrulandığını gösterir",
+   "kaynak": "obstfeld_shambaugh_taylor2005"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Hoek, Kamin ve Yoldas (2022), ABD faiz artışının gelişmekte olan piyasalara etkisinin kaynağına bağlı olduğunu bulur: güçlü ABD büyümesinden gelen artış bu piyasalara yalnız ılımlı yayılır, şahin Fed politikasından ya da enflasyon baskısından gelen artış ise çok daha büyük etki yapar ve fark kırılganlığı yüksek ülkelerde büyür",
+   "kaynak": "hoek_kamin_yoldas2022"
+  },
+  {
    "tur": "sabit",
    "parca": "(≈3,5 dk)",
    "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"

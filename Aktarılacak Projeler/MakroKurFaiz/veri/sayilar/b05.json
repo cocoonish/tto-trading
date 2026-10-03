@@ -42,7 +42,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "5.3'teki çarpan bulgusu bunun ampirik karşılığıdır.",
+   "parca": "5.3'teki çarpan bulgusu bu iki uçla uyumludur.",
    "kaynak": "ilzetzki2013"
   },
   {
@@ -57,17 +57,17 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Veride de bir pürüz var: harcama artışlarından sonra reel kur çoğu zaman değer kaybeder.",
+   "parca": "Veride de bir pürüz var: harcama artışından sonra reel kurun değer kaybettiğini bulan çalışmalar var",
    "kaynak": "monacelliperotti2010"
   },
   {
    "tur": "kaynak",
-   "parca": "5.3'teki harcama şoku bulgularında reel kur çoğu zaman değer kaybeder",
+   "parca": "5.3'teki iki harcama şoku bulgusunda da reel kur değer kaybeder",
    "kaynak": "monacelliperotti2010"
   },
   {
    "tur": "kaynak",
-   "parca": "5.3'teki harcama şoku bulgularında reel kur çoğu zaman değer kaybeder",
+   "parca": "5.3'teki iki harcama şoku bulgusunda da reel kur değer kaybeder",
    "kaynak": "kimroubini2008"
   },
   {
@@ -82,7 +82,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Du, Pflueger ve Schreger (2020), para politikası taahhüdü zayıf hükümetlerde alacaklıların yerel para borcu için baştan risk primi istediğini ve bu primin hükümeti dövizle borçlanmaya ittiğini gösterir (12.1).",
+   "parca": "Du, Pflueger ve Schreger (2020), taahhüdü zayıf hükümetin yerel para borcunun baştan prim taşıdığını ve hükümeti dövize ittiğini gösterir.",
    "kaynak": "dps2020"
   },
   {

@@ -7,13 +7,18 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Kötü haberin dolar kurlarında iyi haberden büyük etki yaptığı bulgusu (2.1) kurun habere tepkisine ve o örnekleme aittir",
+   "parca": "Kötü haberin dolar kurlarında iyi haberden büyük etki yaptığı bulgu (2.1) o çalışmanın örneklemine ait ampirik bir sonuçtur",
    "kaynak": "abdv2003"
   },
   {
    "tur": "kaynak",
-   "parca": "Reel faizin bu ekonomilerde döngü karşıtı olması (3.3)",
+   "parca": "3.3'teki bulgu, uluslararası faiz ile ülke riskine ayrışan reel faizin bu ekonomilerde döngü karşıtı olması",
    "kaynak": "neumeyerperri2005"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "gelişmekte olan ekonomilerin ortalamasında sıkılaştırma parayı zayıflatma eğilimindedir (1.K)",
+   "kaynak": "hlv2016"
   },
   {
    "tur": "kaynak",
@@ -22,7 +27,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Kitap ile veri arasındaki pürüzün bir açıklaması bilgi etkisidir (3.2)",
+   "parca": "gelişmiş ekonomide beklenmedik artırımdan sonra paranın sık sık değer kaybetmesinin (3.2) bir açıklaması bilgi etkisidir",
    "kaynak": "gkkl2021"
   },
   {
@@ -47,7 +52,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "ABD'de uzun ufukta resesyonu önceden haber veren finansal göstergelerin en güçlüsü oldu, ama bir eşik ya da takvim vermez.",
+   "parca": "Eğrinin eğimi ABD'de uzun ufuklarda resesyonu öngören göstergeler arasında öne çıktı, ama bir eşik ya da takvim vermez.",
    "kaynak": "estrella_mishkin1998"
   },
   {

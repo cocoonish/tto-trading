@@ -1,6 +1,21 @@
 {
  "girdiler": [
   {
+   "tur": "kaynak",
+   "parca": "Aguiar ve Gopinath (2007), gelişmekte olan ekonomide cari dengenin konjonktür karşıtı olmasını trend büyümeye gelen şokların, yani kalıcı gelir şokunun doğal sonucu olarak okur; görüş tartışmalıdır",
+   "kaynak": "aguiargopinath2007"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Krugman (1999), gelişmekte olan piyasa krizleri için bankacılık sistemini değil şirket bilançolarını ve sermaye akımlarının reel kura etkisini öne çıkaran bir model önerir: döviz borçlu şirkette değer kaybı borcun yerel para karşılığını büyütür, yatırımı düşürür ve bu düşüş yeni bir değer kaybını besler",
+   "kaynak": "krugman1999"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Céspedes, Chang ve Velasco (2004), yükümlülükleri dolar cinsinden olan küçük bir açık ekonomi modelinde olumsuz bir dış şokun etkisinin bilanço kanalıyla güçlü biçimde büyüyebildiğini, ama çıktı, istihdam ve yatırımdaki düşüşün sabit kurda esnek kurdan daha büyük olduğunu gösterir",
+   "kaynak": "cespedes_chang_velasco2004"
+  },
+  {
    "tur": "sabit",
    "parca": "(≈2,5 dk)",
    "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
