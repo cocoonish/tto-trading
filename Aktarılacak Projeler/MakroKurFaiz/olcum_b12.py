@@ -20,7 +20,7 @@ Pratikler
              ölçümde): ilan anının (İstanbul saati) iki yanındaki gözlemler arasında
              ΔUSD/TRY (%) ve Δ5y (bp), seri başına kendi gözlem saatiyle; yön
              gruplarına göre ortalama (bütün kararlar · yalnız doğrulanmışlar). Olay
-             çalışması ancak dersin kanonik plasebo kapısı (`ortak_olc.olay_kapisi`,
+             çalışması ancak dersin kanonik plasebo sınaması (`ortak_olc.olay_kapisi`,
              güçlü kural; kur serisinde yönetilen kur dönemi dışarıda) geçerse
              kurulur. Kapının değişim serisi TABLONUN düzey serisinden kurulur
              (tuzak 6); günü kaynakta yazmayan kararlar dışarıda bırakılarak kapı
@@ -56,7 +56,7 @@ Pratikler
      bu yüzden iki ölçüyle verilir: karar günü kapanışından sonraki işlem
      gününe (istenen ölçü) ve karar gününden önceki işlem gününden sonraki
      işlem gününe (iki günlük; 2023-12-18 öncesinde kur için birincil okuma).
-     Plasebo kapısı her seri için ayrı sorulur ve bu kaymayı ölçer. CUMA
+     Plasebo sınaması her seri için ayrı sorulur ve bu kaymayı ölçer. CUMA
      (`usdtry(cuma_dus=True)`): not kararları çoğunlukla cuma akşamı açıklanır
      ve geçiş öncesi cuma değeri pazartesi barının başıdır (kararın ilk
      tepkisini zaten taşır); o cumalar çerçeveden düşer, yani cuma kararının
@@ -352,13 +352,13 @@ PLASEBO_SINIR = ("Rastgele kıyas yalnız olay günü oranını sınar; öbür k
 
 
 def _kapi(dk: pd.Series, gun: pd.DatetimeIndex, tohum: int, haric, gozlem: bool = False) -> dict:
-    """Kanonik güçlü kapı + tam seri profili + haftanın günü etkisinden arındırılmış profil.
+    """Kanonik güçlü kural + tam seri profili + haftanın günü etkisinden arındırılmış profil.
     `gozlem`: kaymalar iş günü değil serinin kendi gözlemleridir (kur: 18.12.2023 öncesinde cuma
     gözlemi yok, pazartesinin bir öncesi perşembedir); sebep metni birimini taşır."""
     try:
         kp = oo.olay_kapisi(dk, gun, guclu=True, k_tohum=tohum, haric=haric)
     except Exception as e:  # noqa: BLE001 — kapı HESAPLANAMADI; "geçmedi" diye yazılmaz
-        return kurulmadi(f"plasebo kapısı hesaplanamadı: {e}")
+        return kurulmadi(f"plasebo sınaması hesaplanamadı: {e}")
     out = {**oo.kapi_ozeti(kp), "profil": oo.olay_profili(dk, gun, oo.OLAY_PENCERE)}
     for a in ("gun_etkisinden_arindirilmis", "arindirilmis_tepe", "gun_eslemeli_kiyas"):
         if a in kp:
@@ -417,7 +417,7 @@ def _gecis_oncesi(dk: pd.Series, gun: pd.DatetimeIndex, tohum: int, haric) -> di
     try:
         kg = oo.olay_kapisi(on, go, guclu=True, k_tohum=tohum, haric=haric)
     except Exception as e:  # noqa: BLE001 — kapı HESAPLANAMADI; "geçmedi" diye yazılmaz
-        return {**kurulmadi(f"plasebo kapısı hesaplanamadı: {e}"), "yontem": yontem}
+        return {**kurulmadi(f"plasebo sınaması hesaplanamadı: {e}"), "yontem": yontem}
     out = {**oo.kapi_ozeti(kg), "disarida_kalan_tepki_gunu": n_sonra}
     for a in ("gun_etkisinden_arindirilmis", "arindirilmis_tepe", "gun_eslemeli_kiyas"):
         if a in kg:
@@ -520,9 +520,9 @@ def p12() -> dict:
         gk = pd.DatetimeIndex(sorted(set(pd.to_datetime(kaynakta[kt].dropna()))))
         kapi_kaynak[ad] = _kapi(dk, gk, tohum, haric, gozlem=(ad == "kur"))
         if kapi[ad].get("durum"):
-            gruplar[ad] = kurulmadi("plasebo kapısı hesaplanamadığı için olay çalışması kurulmadı; kararlar yalnız vaka listesi olarak verilir")
+            gruplar[ad] = kurulmadi("plasebo sınaması hesaplanamadığı için olay çalışması kurulmadı; kararlar yalnız vaka listesi olarak verilir")
         elif not kapi[ad]["gecti"]:
-            gruplar[ad] = kurulmadi("plasebo kapısı geçmedi: tepki günü hareketi komşu günlerden ayrışmıyor; kararlar yalnız vaka listesi olarak verilir")
+            gruplar[ad] = kurulmadi("plasebo sınaması geçmedi: tepki günü hareketi komşu günlerden ayrışmıyor; kararlar yalnız vaka listesi olarak verilir")
         else:
             gruplar[ad] = {}
             for kume, M in (("tum", normal), ("dogrulandi", normal[normal["durum"] == "dogrulandi"])):
@@ -533,7 +533,7 @@ def p12() -> dict:
             "plasebo_kapisi_gunu_kaynakta": {
                 **kapi_kaynak, "n_karar": int(len(kaynakta)),
                 "disarida": [x for x in normal["anahtar"] if x not in set(kaynakta["anahtar"])],
-                "yontem": "Aynı kapı, günü kaynakta yazan kararlarla yeniden soruldu (ertesi günün haberinden ya da "
+                "yontem": "Aynı plasebo sınaması, günü kaynakta yazan kararlarla yeniden soruldu (ertesi günün haberinden ya da "
                           "kurumun takviminden çıkarılan günler dışarıda); rastgele gün kümeleri bu olay kümesinin "
                           "büyüklüğü ve haftanın günü bileşimiyle yeniden çekildi."},
             "iki_adimli_pencere": {**iki_adim,

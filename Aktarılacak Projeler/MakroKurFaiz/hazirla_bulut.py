@@ -6,7 +6,7 @@ Ham yanıtlar bulutta bir kez indirildi (arsiv_makro.py, arsiv_makro2.py); bu
 betik yalnız YEREL dosya okur, ağa çıkmaz. Her çıktı deterministik csv.gz
 (gzip mtime 0, sabit ondalık) ve `veri/bulut/kunye.json`da sıkıştırılmamış
 metnin sha256'sını, ham kaynak dosyalarını (ham künyedeki özleriyle), kapsamı
-ve sütun anlamlarını taşır. `ortak_olc.oku` aynı kapıdan okur.
+ve sütun anlamlarını taşır. `ortak_olc.oku` aynı sınamadan okur.
 
 Çıpa: günlük ≤ 30.09.2026, aylık ≤ 08.2026 (anket 09.2026'yı da taşır, o ay
 KESİLİR), çeyreklik ≤ 2026Ç2. Ham dosyada ondan sonrası varsa kesilir ve

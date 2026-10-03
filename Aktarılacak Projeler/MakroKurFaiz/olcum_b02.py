@@ -36,7 +36,7 @@ gerçekleşen aylık TÜFE ile 0 ve ±1, ±2 ay kaydırmada sınanır.
      günü kaymada; TCMB'nin ilan günlü kuruyla bir iş günü kaymada (0,48–0,59).
      Örnek: 20.03.2021 cumartesi görevden alma, piyasa 22.03 pazartesi çöktü;
      5 yıllık pazartesi etiketinde 14,96 (değişmedi), salı 17,91, çarşamba
-     20,17. PPK × DİBS kapısı bu yüzden kaymasız DÜŞÜYOR (tepe +2) ve 2 yıllık
+     20,17. PPK × DİBS sınaması bu yüzden kaymasız DÜŞÜYOR (tepe +2) ve 2 yıllık
      iki iş günü kaymada güçlü geçiyor. Ortak hiza sabiti
      (`ortak_olc.DIBS_KAYMA`: gün sonuna 2, sabah sabitlemesine 1) bu ölçüme karşı sınanır.
   2. TCMB GÖSTERGE KURU ÖĞLEDEN ÖNCE SABİTLENİYOR: PPK günü (14:00) ilanı kararı
@@ -60,7 +60,7 @@ gerçekleşen aylık TÜFE ile 0 ve ±1, ±2 ay kaydırmada sınanır.
      taban bu yüzden profili bozar; olay günü oranı, haftanın günü bileşimi
      aynı 1.000 rastgele gün kümesiyle kıyaslanır.
   6. KAPININ RASTGELE GEÇME OLASILIĞI ≈ %15–22: tepe beş kaymadan birine düşer.
-     "Güçlü kapı" ayrıca oran[0]'ın rastgele kümelerin %95'ini aşmasını ister.
+     "Güçlü kural" ayrıca oran[0]'ın rastgele kümelerin %95'ini aşmasını ister.
   7. TÜFE × DİBS KAYMASIZ GEÇİŞİ SAATLE BAĞDAŞMIYOR. İlk yazımda bunun sebebi
      "ayın 2. iş gününde DİBS değişimi takvim gereği büyük" diye kondu; o ölçü
      DÖNGÜSELDİ: TÜFE her ay ayın 3'üne (ya da ertesi iş gününe) düştüğü için ayın
@@ -90,7 +90,7 @@ gerçekleşen aylık TÜFE ile 0 ve ±1, ±2 ay kaydırmada sınanır.
      bütün günlerden ölçülür (`_saat_onculugu`: DİBS 2 · TCMB 1 · Yahoo ve ABD
      0); 14:00 sonrası olayda beklenen kayma bu öncülük, 10:00 olayında (TÜFE)
      sabitlemenin 10:00'a göre saati ölçülmediği için iki komşu kayma. Olay
-     çalışması (`kurulabilir`, `kapi(..., guclu=True)`) güçlü kapıyı VE saati ister.
+     çalışması (`kurulabilir`, `kapi(..., guclu=True)`) güçlü kuralı VE saati ister.
  12. İKİ YARI SINAMASI bütün seriyle kuruluyordu: taban öbür yarının oynaklığını
      taşıyor, oranlar 1'e göre okunamıyordu (DİBS'te ilk yarı her kaymada < 1, son
      yarı > 1,8). Tepe değişmiyordu; oranlar artık her yarının kendi penceresinde.
@@ -297,7 +297,7 @@ def _profil_satiri(seri: str, olay: str, s: pd.Series, olaylar: pd.DatetimeIndex
         "seri": seri, "olay": olay, "kayma": int(kayma), "durum": "olculdu", "kapi": k["kapi"],
         "kapi_guclu": k["kapi_guclu"],
         "saat_beklenen_kayma": beklenen, "saat_tutarli": saat_ok,
-        # olay çalışması ancak istatistik (güçlü kapı) VE saat birlikte izin verirse kurulur
+        # olay çalışması ancak istatistik (güçlü kural) VE saat birlikte izin verirse kurulur
         "kurulabilir": bool(k["kapi_guclu"] and saat_ok),
         "yonetilen_kur": (("hariç" if yonetilen == "haric" else "yalnız dönem içi") if kur else "uygulanmaz"),
         "yonetilen_siniri_dusen_olay": int(k["donem_siniri_dusen_olay"]),
@@ -349,7 +349,7 @@ def _uyarilar(seri: str, olay: str) -> list:
 
 
 def kayma_onerisi(seri: str, olay: str = "ppk") -> int | None:
-    """PPK kayma taramasında güçlü kapıyı geçen EN KÜÇÜK kayma (iş günü); yoksa None."""
+    """PPK kayma taramasında güçlü kuralı geçen EN KÜÇÜK kayma (iş günü); yoksa None."""
     for k in KAYMA_TARAMA:
         r = _kaymali_satir(seri, olay, k)
         if r.get("kapi_guclu"):
@@ -367,7 +367,7 @@ def _kaymali_satir(seri: str, olay: str, kayma: int) -> dict:
 
 
 def kapi(seri, olay=None, pencere: int = PENCERE, kayma: int = 0, guclu: bool = False) -> bool:
-    """Hiza kapısı.
+    """Hiza sınaması.
 
     kapi("n2y", "ppk")            → tablodaki hüküm (kurulmamış satır False döner);
     kapi("n2y", "ppk", kayma=2)   → olay gününe serinin 2 iş günü sonraki değişimi yazılarak;
@@ -421,7 +421,7 @@ def _oneri_ppk_cumlesi() -> str:
             gec.append(f"{_SERI_KISA[s_]} {k}")
     parca = []
     if ayni:
-        parca.append("PPK taramasında güçlü kapı ölçülen saatte geçiyor: " + ", ".join(ayni))
+        parca.append("PPK taramasında güçlü kural ölçülen saatte geçiyor: " + ", ".join(ayni))
     if gec:
         parca.append("başka kaymada geçen (iş günü): " + ", ".join(gec))
     if yok:
@@ -657,7 +657,7 @@ def p2() -> dict:
             "saatle_bagdasmayan_gecis": [f'{r["seri"]}×{r["olay"]}' for r in olculen
                                          if r["kapi"] and not r["saat_tutarli"]],
             "kurulabilir": [f'{r["seri"]}×{r["olay"]}' for r in olculen if r["kurulabilir"]],
-            # güçlü kapı p değeri 1.000 rastgele kümenin tahmin hatası içinde 0,05'e değiyor: tohuma bağlı
+            # güçlü kural p değeri 1.000 rastgele kümenin tahmin hatası içinde 0,05'e değiyor: tohuma bağlı
             "guclu_sinirda": [f'{r["seri"]}×{r["olay"]}' for r in olculen if r.get("guclu_sinirda")],
             "gecmeyen": [f'{r["seri"]}×{r["olay"]} (tepe {bicim.sayi(r["tepe"], 0, isaret=True)})' for r in olculen if not r["kapi"]],
             "kurulmayan": sorted({f'{r["olay"]}: {r["sebep"]}' for r in satirlar if r["durum"] == "kurulmadi"}),
@@ -679,11 +679,11 @@ def p2() -> dict:
         "yontem": "Her seri için olay günlerinin iki iş günü öncesinden iki iş günü sonrasına mutlak günlük "
                   "değişim ortalaması, olay pencerelerinin dışındaki günlerin mutlak değişim ortalamasına "
                   "bölündü; tepe olay gününde ve olay günü oranı öbür dört kaymanın en büyüğünden yüksekse "
-                  "kapı geçer. Olay günü oranı, haftanın günü bileşimi aynı 1.000 rastgele gün kümesiyle "
+                  "sınama geçer. Olay günü oranı, haftanın günü bileşimi aynı 1.000 rastgele gün kümesiyle "
                   "kıyaslandı (rastgele kümelerin tabanı da olay pencerelerinin dışındaki sıradan günler); "
-                  "güçlü kapı ayrıca bu kıyasın %95'ini aşmayı ister, olay çalışması ise ek olarak geçişin "
+                  "güçlü kural ayrıca bu kıyasın %95'ini aşmayı ister, olay çalışması ise ek olarak geçişin "
                   "serinin ölçülmüş saatiyle bağdaşmasını. Kur serilerinde yönetilen kur dönemi ayrı ölçüldü.",
-        "kural": "Pencere ölçülür, varsayılmaz: kapıdan geçmeyen seri × olay ikilisinde olay çalışması kurulmaz.",
+        "kural": "Pencere ölçülür, varsayılmaz: plasebo sınamasından geçmeyen seri × olay ikilisinde olay çalışması kurulmaz.",
         "kaynak": ["dibs_egri_gunluk", "usdtry_yahoo_gunluk", "usdtry_tcmb_gunluk", "ppk_kararlari",
                    "fonlama_gunluk (yalnız iş günü takvimi)", "abd_hazine_gunluk", "cnbc_kur_gunluk",
                    "bulut: TÜİK yayım takvimi, FOMC takvimi (BLS takvimi elde yok)"],

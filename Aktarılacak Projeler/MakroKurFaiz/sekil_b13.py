@@ -61,7 +61,7 @@ _DURUM = {
     "ayrisan": "kalın çerçeve: korelasyon sıradan günden farklı (|z| ≥ 2)",
     "olculdu_es_hareket_yok": "ölçüldü, eş hareket kurulmadı",
     "vaka": "vaka (1–9 olay; korelasyon yazılmaz)",
-    "kaynak": "kaynak (bu veriyle kurulamadı; bölüm kaynaktan anlatır)",
+    "kaynak": "kaynak (bu veriyle kurulamadı: seri ya da olay yok ya da sınama geçmedi; bölüm kaynakla anlatır)",
     "kurulmadi": "kurulmadı (sebebi hücrenin notunda)",
 }
 _LEJANT_SIRA = {"olculdu+": 1, "olculdu-": 2, "ayrisan": 3, "olculdu_es_hareket_yok": 4, "vaka": 5,
@@ -101,11 +101,11 @@ def _okur(s: str | None) -> str:
     """Ölçüm notunu okur diline çevirir (iç terimler ve iç atıflar çıkar)."""
     if not s:
         return ""
-    s = s.replace("kapı: ", "").replace("kurulmadı (kapı)", "kurulmadı (plasebo sınaması)")
-    s = s.replace("dört serinin hiçbiri plasebo kapısını geçmedi",
+    s = s.replace("plasebo sınaması: ", "").replace("kurulmadı (plasebo)", "kurulmadı (plasebo sınaması)")
+    s = s.replace("dört serinin hiçbiri plasebo sınamasını geçmedi",
                   "dört serinin (kur, 2 yıllık, uzun uç, eğim) hiçbirinde olay penceresindeki hareket "
                   "plasebo sınamasını geçmedi")
-    s = s.replace("plasebo kapısını", "plasebo sınamasını").replace("arşivde yok", "elde yok")
+    s = s.replace("plasebo sınamasını", "plasebo sınamasını").replace("arşivde yok", "elde yok")
     s = re.sub(r"\s*\(tuzak \d+\)", "", s)
     s = re.sub(r"\s*\(BLS yayım arşivi elde yok\)", "", s)
     return s

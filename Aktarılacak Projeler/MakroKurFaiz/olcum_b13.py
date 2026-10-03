@@ -13,12 +13,12 @@ Pratikler
                  dosyasındaki anahtar yolu) ve kanıtın gücü.
 
 Bu modül ÖLÇÜYÜ YENİDEN KURMAZ. Rejim etiketi Bölüm 1'in `rejim()`inden, olay
-listeleri ve hizalar bölüm modüllerinden, plasebo kapısı `ortak_olc.olay_kapisi`den
-gelir; bir seri × olay türünün kapısını daha önce bir bölüm ölçtüyse hüküm o
+listeleri ve hizalar bölüm modüllerinden, plasebo sınaması `ortak_olc.olay_kapisi`den
+gelir; bir seri × olay türünün sınamasını daha önce bir bölüm ölçtüyse hüküm o
 bölümün çıktısından okunur (aynı tohum, aynı seri — iki yerde iki hüküm olmaz).
 Yalnız önceki bölümlerin hiç sormadığı seri × olay türleri (eğim; ABD 10 yıllığı
 × FOMC; VIX sıçraması, haftalık rezerv ve enerji şoku günleri) burada ilk kez
-aynı kapıdan geçirilir.
+aynı sınamadan geçirilir.
 
 REJİM SÜTUNLARI. b01'in haftalık etiketi ABD için R1/R2/R5, Türkiye için
 R3/R4/R5'tir. R5 küresel riskten kaçışın İKİ ayrı yüzüdür — DM tarafında dolar
@@ -39,13 +39,13 @@ HÜCRENİN ÖLÇÜLERİ
             dolar yönünde log değişimi). Artı = faiz ↑ para ↑ (B terimi, faiz farkı);
             eksi = faiz ↑ para ↓ (C terimi, risk primi). Yanında aynı rejimin sıradan
             günlerinin korelasyonu ve B kadranının payı (işaret çarpımı artı).
-  durum     ölçüldü: en az bir seri kapıyı geçti ve olay ≥ 10 · vaka: 1–9 olay
+  durum     ölçüldü: en az bir seri plasebo sınamasını geçti ve olay ≥ 10 · vaka: 1–9 olay
             (oranlar yazılır, korelasyon yazılmaz) · kaynak: bu veriyle kurulamadı (seri
             ya da olay yok, ya da sınama geçmedi) ama dersin kaynak listesi kapsıyor
             (yalnız etiket ve bölüm işareti, sayı yok; işaret sebepten önce gelir) ·
             kurulmadı: sebebiyle. Kurulamayan her hücre sebebini `sebep_turu` ile de
-            taşır (veri_yok · olay_yok · plasebo · olay_az). Kapıyı geçmeyen seri hücrede
-            "kurulmadı (kapı)"dır; eş hareket ancak 2 yıllık ile kur İKİSİ DE kapıdan
+            taşır (veri_yok · olay_yok · plasebo · olay_az). Plasebo sınamasını geçmeyen seri hücrede
+            "kurulmadı (plasebo)"dır; eş hareket ancak 2 yıllık ile kur İKİSİ DE sınamadan
             geçtiyse yazılır.
 
 ÖLÇÜLEREK BULUNAN TUZAKLAR (kod onları kapatır, metin adıyla anar)
@@ -87,14 +87,14 @@ HÜCRENİN ÖLÇÜLERİ
   8. KAPI İKİ SORUYU BİRDEN SORAR ve haftalık rezervde ikisi ayrışır: kurun plasebo
      profilinin tepesi olay haftasındadır (tarih sözleşmesi tutuyor) ama oran olay
      haftasında da komşu haftalarda da 1'in ALTINDADIR (0,52–0,65): büyük rezerv
-     hareketi haftalarında kur sıradan haftadan SESSİZDİR ve güçlü kapı (rastgele
-     kümelerin %95'ini aşmak) bu yüzden düşer. Hücre kurala uyar ("kurulmadı (kapı)");
+     hareketi haftalarında kur sıradan haftadan SESSİZDİR ve güçlü kural (rastgele
+     kümelerin %95'ini aşmak) bu yüzden düşer. Hücre kurala uyar ("kurulmadı (plasebo)");
      profil `matris_meta.rezerv.kapi_em.kur`da durur. DİBS'in profili ise bütün
      kaymalarda ≈2 ve düzdür: rezerv şokları oynak dönemlere kümelenir, haftayı ayırmaz.
   9. VIX SIÇRAMALARI KÜMELENİR: Türkiye serilerinde olay günü oranı komşu günlerden
-     ayrışmıyor (DİBS profili 0,9–1,2, tepe +2); kur tepe 0'da ama güçlü kapı sınırın
+     ayrışmıyor (DİBS profili 0,9–1,2, tepe +2); kur tepe 0'da ama güçlü kural sınırın
      dışında (p 0,06). Küresel risk satırının EM yüzü bu yüzden kurulmadı; ABD yüzünde
-     dört seri de kapıyı geçer (tuzak 3: seçim).
+     dört seri de plasebo sınamasını geçer (tuzak 3: seçim).
  10. EŞ HAREKETİN "FAİZİ" PİYASA GETİRİSİDİR, POLİTİKA SÜRPRİZİ DEĞİL. PPK günlerinde
      2 yıllık DİBS ile liranın değeri TERS yönde oynar (R3'te korelasyon eksi, sıra
      korelasyonuyla da): 13.09.2018 ve 24.08.2023 artırımlarında lira değer kazanırken
@@ -147,7 +147,7 @@ REZERV_SOK_SIGMA = 1.5              # rezerv şoku: |rezerv bileşeni| ≥ 1,5σ
 REZERV_DUYARLILIK = (1.0, 2.0)
 VIX_UST_PAY = 0.02                  # küresel risk: günlük VIX artışının üst %2'si
 VIX_ILK = "2000-01-01"              # ABD çerçevesinin başı (Bölüm 1)
-TOHUM = 1300                        # bu modülde İLK KEZ sorulan kapıların tohum tabanı
+TOHUM = 1300                        # bu modülde İLK KEZ sorulan sınamaların tohum tabanı
 
 SERILER = ("kur", "2y", "uzun", "egim")
 SERI_AD = {"kur": "kur", "2y": "2 yıllık getiri", "uzun": "uzun uç", "egim": "eğim (uzun − 2 yıllık)"}
@@ -316,12 +316,12 @@ def ay_rejimi(aylar, taraf: str, onceki: bool = False) -> pd.Series:
     return pd.Series([harita.get(x) for x in p], index=aylar, dtype=object)
 
 
-# ═══════════════════════════════════════════════════════════════ kapılar
+# ═══════════════════════════════════════════════════════════════ sınamalar
 DONEM_BIRIMI = {"gun": ("iş gününde", "olay günü"), "hafta": ("haftada", "olay haftası"), "ay": ("ayda", "olay ayı")}
 
 
 def _kapi_yeni(seri: pd.Series, olaylar, kur_em: bool, tohum: int, donem: str = "gun") -> dict:
-    """Bu modülde ilk kez sorulan seri × olay türü: kanonik güçlü kapı. Haftalık ve aylık
+    """Bu modülde ilk kez sorulan seri × olay türü: kanonik güçlü kural. Haftalık ve aylık
     çerçevede kayma birimi hafta ve aydır (sebep metni birimini taşır)."""
     k = oo.olay_kapisi(seri, olaylar, guclu=True, k_tohum=TOHUM + tohum, haric=oo.YONETILEN if kur_em else None)
     o = oo.kapi_ozeti(k)
@@ -338,7 +338,7 @@ def _kapi_hazir(ozet: dict, kaynak: str) -> dict:
          if a in ozet}
     o["kaynak"] = kaynak
     if not o.get("gecti"):
-        o["sebep"] = oo.kapi_sebebi(ozet) if "tepe" in ozet else "kapı kurulmadı"
+        o["sebep"] = oo.kapi_sebebi(ozet) if "tepe" in ozet else "plasebo sınaması kurulmadı"
     return o
 
 
@@ -348,7 +348,7 @@ def _b02_kapi(seri: str, olay: str, kaynak: str) -> dict:
          "p_rastgele_oran0": r.get("p_rastgele_oran0"), "guclu_sinirda": r.get("guclu_sinirda"),
          "saat_tutarli": r.get("saat_tutarli"), "gecti": bool(r.get("kurulabilir")), "kaynak": kaynak}
     if not o["gecti"]:
-        o["sebep"] = oo.kapi_sebebi(r) if r.get("tepe") is not None else r.get("sebep", "kapı kurulmadı")
+        o["sebep"] = oo.kapi_sebebi(r) if r.get("tepe") is not None else r.get("sebep", "plasebo sınaması kurulmadı")
     return o
 
 
@@ -396,7 +396,7 @@ def _durum(sok: str, sutun: str, n: int, gecen: list, sebep_yok: str | None = No
     elif n == 0:
         d, s, tur = "kurulmadi", "bu rejim etiketinde olay yok", "olay_yok"
     elif not gecen:
-        d, s, tur = "kurulmadi", "kapı: dört serinin hiçbiri plasebo kapısını geçmedi", "plasebo"
+        d, s, tur = "kurulmadi", "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi", "plasebo"
     elif n < VAKA_ASGARI:
         return "vaka", None, None
     else:
@@ -451,7 +451,7 @@ def _olay_hucreleri(sok: str, F: pd.DataFrame, olaylar, taraf: str, kapilar: dic
         oran, nser = {}, {}
         for c in SERILER:
             if not kapilar[c].get("gecti"):
-                oran[c] = "kurulmadı (kapı)"
+                oran[c] = "kurulmadı (plasebo)"
                 continue
             x = seri[c]
             ee = x.reindex(e).dropna()
@@ -467,7 +467,7 @@ def _olay_hucreleri(sok: str, F: pd.DataFrame, olaylar, taraf: str, kapilar: dic
         if not n:
             h["es_hareket"] = None
         elif not es_ok:
-            h["es_hareket"] = "kurulmadı (kapı)"
+            h["es_hareket"] = "kurulmadı (plasebo)"
         else:
             ne, kor, bpay, spe = _es(seri["2y"].reindex(e), seri["para"].reindex(e), sira=True)
             sk = sakin_ortak[(reg.reindex(sakin_ortak) == col).values]
@@ -693,9 +693,9 @@ def _sok_gsyh() -> tuple[dict, dict]:
     if g is not None:
         p3d = b03.p3d()["tr_gsyh"]["kapi"]
         F = _em_gunluk()
-        kap = {"2y": _kapi_hazir(p3d["n2y"], "Bölüm 3, GSYH yayım günü kapısı"),
-               "uzun": _kapi_hazir(p3d["n5y"], "Bölüm 3, GSYH yayım günü kapısı"),
-               "kur": _kapi_hazir(p3d["usdtry"], "Bölüm 3, GSYH yayım günü kapısı"),
+        kap = {"2y": _kapi_hazir(p3d["n2y"], "Bölüm 3, GSYH yayım günü sınaması"),
+               "uzun": _kapi_hazir(p3d["n5y"], "Bölüm 3, GSYH yayım günü sınaması"),
+               "kur": _kapi_hazir(p3d["usdtry"], "Bölüm 3, GSYH yayım günü sınaması"),
                "egim": _kapi_yeni(F["egim"], g, False, 1)}
         reg, reg_o = gun_rejimi(F.index, "em"), gun_rejimi(F.index, "em", onceki=True)
         h, m = _olay_hucreleri("gsyh", F, g, "em", kap, reg, reg_o, SERI_BIRIM["em"], "yayım günü (10:00 TSİ)")
@@ -741,9 +741,9 @@ def _sok_tufe() -> tuple[dict, dict]:
     if g is not None:
         olay = _tufe_olaylari(F)
         kb = b04.tufe_gunu_tepkisi(g)["kapi"]
-        kap = {"2y": _kapi_hazir(kb["n2y"], "Bölüm 4, TÜFE yayım günü kapısı"),
-               "uzun": _kapi_hazir(kb["n5y"], "Bölüm 4, TÜFE yayım günü kapısı"),
-               "kur": _kapi_hazir(kb["usdtry"], "Bölüm 4, TÜFE yayım günü kapısı"),
+        kap = {"2y": _kapi_hazir(kb["n2y"], "Bölüm 4, TÜFE yayım günü sınaması"),
+               "uzun": _kapi_hazir(kb["n5y"], "Bölüm 4, TÜFE yayım günü sınaması"),
+               "kur": _kapi_hazir(kb["usdtry"], "Bölüm 4, TÜFE yayım günü sınaması"),
                "egim": _kapi_yeni(F["egim"], olay, False, 2)}
         reg, reg_o = gun_rejimi(F.index, "em"), gun_rejimi(F.index, "em", onceki=True)
         h, m = _olay_hucreleri("tufe", F, olay, "em", kap, reg, reg_o, SERI_BIRIM["em"], "yayım günü (10:00 TSİ)")
@@ -760,20 +760,20 @@ def _sok_tufe() -> tuple[dict, dict]:
 
 
 def _sok_para() -> tuple[dict, dict]:
-    # Türkiye: PPK (Bölüm 3'ün kapısı; 111 karar)
+    # Türkiye: PPK (Bölüm 3'ün sınaması; 111 karar)
     Fe = _em_gunluk()
     ppk = pd.DatetimeIndex(oo.oku("ppk_kararlari").index).normalize()
     kb = b03.p3b()["kapi"]
-    kap_em = {"2y": _kapi_hazir(kb["n2y"], "Bölüm 3, PPK kapısı"), "uzun": _kapi_hazir(kb["n5y"], "Bölüm 3, PPK kapısı"),
-              "kur": _kapi_hazir(kb["usdtry"], "Bölüm 3, PPK kapısı"), "egim": _kapi_yeni(Fe["egim"], ppk, False, 3)}
+    kap_em = {"2y": _kapi_hazir(kb["n2y"], "Bölüm 3, PPK sınaması"), "uzun": _kapi_hazir(kb["n5y"], "Bölüm 3, PPK sınaması"),
+              "kur": _kapi_hazir(kb["usdtry"], "Bölüm 3, PPK sınaması"), "egim": _kapi_yeni(Fe["egim"], ppk, False, 3)}
     reg, reg_o = gun_rejimi(Fe.index, "em"), gun_rejimi(Fe.index, "em", onceki=True)
     he, me = _olay_hucreleri("para", Fe, ppk, "em", kap_em, reg, reg_o, SERI_BIRIM["em"], "karar günü (14:00 TSİ)")
-    # ABD: planlı FOMC (Bölüm 2'nin kapısı)
+    # ABD: planlı FOMC (Bölüm 2'nin sınaması)
     Fd = _dm_gunluk()
     try:
         fomc = pd.DatetimeIndex(bulut.fomc_gunleri(planli=True)).normalize()
-        kap_dm = {"2y": _b02_kapi("us2", "fomc", "Bölüm 2, FOMC kapısı"),
-                  "kur": _b02_kapi("dolar_sepeti", "fomc", "Bölüm 2, FOMC kapısı"),
+        kap_dm = {"2y": _b02_kapi("us2", "fomc", "Bölüm 2, FOMC sınaması"),
+                  "kur": _b02_kapi("dolar_sepeti", "fomc", "Bölüm 2, FOMC sınaması"),
                   "uzun": _kapi_yeni(Fd["uzun"], fomc, False, 4), "egim": _kapi_yeni(Fd["egim"], fomc, False, 5)}
         rd, rd_o = gun_rejimi(Fd.index, "dm"), gun_rejimi(Fd.index, "dm", onceki=True)
         hd, md = _olay_hucreleri("para", Fd, fomc, "dm", kap_dm, rd, rd_o, SERI_BIRIM["dm"],
@@ -808,7 +808,7 @@ def _sok_rezerv() -> tuple[dict, dict]:
                            "rezervin büyük oynadığı hafta (aynı hafta; ±2 hafta)")
     for col in TARAF_SUTUN["dm"]:
         h[col] = _bos_hucre("rezerv", col, "DM haftalık rezerv serisi arşivde yok")
-    # Eşik duyarlılığı yalnız OLAY SAYISIDIR: kapıyı geçmeyen seride eş hareket ya da oran
+    # Eşik duyarlılığı yalnız OLAY SAYISIDIR: plasebo sınamasını geçmeyen seride eş hareket ya da oran
     # (havuzda bile) yazılmaz.
     duy = {f"esik_{e:g}_sigma": int(len(k.index[k.abs() >= e])) for e in sorted(REZERV_DUYARLILIK + (REZERV_SOK_SIGMA,))}
     kayip = int((k.loc[ev] > 0).sum())
@@ -840,7 +840,7 @@ def _sok_not() -> tuple[dict, dict]:
             sebep, tur = (f"Bölüm 12'de {', '.join(gecen)} için olay çalışması kuruldu ({p['n']} karar); rejim "
                           "ayrımı için karar sayısı yetmiyor"), "olay_az"
         else:
-            sebep, tur = (f"kapı: Türkiye not kararlarında ({p['n']} karar, Bölüm 12) tepki günü hareketi komşu "
+            sebep, tur = (f"plasebo sınaması: Türkiye not kararlarında ({p['n']} karar, Bölüm 12) tepki günü hareketi komşu "
                           "günlerden ayrışmıyor — " + "; ".join(
                               f"{'kur' if ad == 'kur' else '5 yıllık'}: {kk[ad].get('sebep', '')}" for ad in kk)), "plasebo"
     except bulut.VeriYok as e:
@@ -957,7 +957,7 @@ def sekil_21(mat: dict) -> dict:
                       else None for c in SUTUN_KIM] for s in sat],
         "renk_olcegi": "eş hareket korelasyonu −1 … +1: artı, 2 yıllık faiz ile yerel paranın değeri aynı yönde "
                        "(B terimi: faiz ↑ para ↑); eksi, ters yönde (C terimi: faiz ↑ para ↓)",
-        "desen_kodlari": {"olculdu": "renkli (korelasyon)", "olculdu_es_hareket_yok": "ölçüldü ama eş hareket kapıdan "
+        "desen_kodlari": {"olculdu": "renkli (korelasyon)", "olculdu_es_hareket_yok": "ölçüldü ama eş hareket sınamadan "
                           "dönmüş: renksiz çerçeve, oranlar yazılı", "vaka": "noktalı (vaka imzası: kadran dengesi, test "
                           "değil)", "kaynak": "taralı", "kurulmadi": "boş"},
         "n_satir": len(sat), "n_sutun": len(SUTUN_KIM),
@@ -1124,8 +1124,8 @@ def _guc_es(d) -> str | None:
     if isinstance(e, float):
         z = d.get("es_fark_z")
         return "tarif edici (sıradan günden ayrışıyor)" if z is not None and abs(z) >= 2 else "tarif edici"
-    if e == "kurulmadı (kapı)":
-        return "kurulmadı (kapı)"
+    if e == "kurulmadı (plasebo)":
+        return "kurulmadı (plasebo)"
     return "vaka" if d.get("durum") == "vaka" else None
 
 
@@ -1148,11 +1148,11 @@ def _guc(d) -> str:
     if "vaka" in du:
         return "vaka"
     if du == "olculdu":
-        return "ölçüldü"        # oranın kapısı (gün eşlemeli rastgele kümeler) geçti; eş hareket ayrı (`guc_es`)
+        return "ölçüldü"        # oranın sınaması (gün eşlemeli rastgele kümeler) geçti; eş hareket ayrı (`guc_es`)
     if "hukum" in d:
         return "ölçüldü" if d["hukum"] == "ölçülü" else "tarif edici"
     if "gecti" in d:
-        return "ölçüldü" if d["gecti"] else "kurulmadı (kapı)"
+        return "ölçüldü" if d["gecti"] else "kurulmadı (plasebo)"
     return "tarif edici"
 
 
@@ -1205,8 +1205,8 @@ def kart_kanit(mat: dict, meta: dict) -> list:
          "Türkiye'nin kendi bütçe olayı günleri arşivde yok."),
         ("GSYH, PMI/ISM", "gsyh", [
             ("b13.matris.gsyh.R3", "Türkiye GSYH yayım günü", ["em"], True),
-            ("b03.p3d.tr_gsyh.kapi.n2y", "GSYH günü × 2 yıllık kapısı", ["ilk_iki_olcu", "gecersiz_kilan"], True),
-            ("b03.p3d.tr_gsyh.kapi.usdtry", "GSYH günü × kur kapısı", ["em"], True),
+            ("b03.p3d.tr_gsyh.kapi.n2y", "GSYH günü × 2 yıllık sınaması", ["ilk_iki_olcu", "gecersiz_kilan"], True),
+            ("b03.p3d.tr_gsyh.kapi.usdtry", "GSYH günü × kur sınaması", ["em"], True),
             ("b13.matris.gsyh.R1", "ABD ISM/PMI", ["dm"], True)],
          "ABD ISM/PMI ve GSYH yayım takvimi arşivde yok; politika beklentisi ölçüsü (ilk iki ölçünün ikincisi) "
          "yayım günü için kurulmadı."),
@@ -1217,8 +1217,8 @@ def kart_kanit(mat: dict, meta: dict) -> list:
         ("TÜFE", "tufe", [
             ("b13.matris.tufe.R3", "Türkiye TÜFE günü, normal rejim", ["em"], True),
             ("b13.matris.tufe.R4", "Türkiye TÜFE günü, mali baskınlık", ["em"], True),
-            ("b04.p4a.yayim_gunu.kapi.n2y", "TÜFE günü × 2 yıllık kapısı", ["ilk_iki_olcu", "gecersiz_kilan"], True),
-            ("b04.p4a.yayim_gunu.kapi.usdtry", "TÜFE günü × kur kapısı", ["em"], True),
+            ("b04.p4a.yayim_gunu.kapi.n2y", "TÜFE günü × 2 yıllık sınaması", ["ilk_iki_olcu", "gecersiz_kilan"], True),
+            ("b04.p4a.yayim_gunu.kapi.usdtry", "TÜFE günü × kur sınaması", ["em"], True),
             ("b04.p4a.aylik_iliski.d_n2y.d2023_2026", "sürpriz → yayım ayında 2 yıllık", ["em", "ilk_iki_olcu"], True),
             ("b04.p4a.aylik_iliski.d_usdtry.d2023_2026", "sürpriz → yayım ayında kur", ["em"], True),
             ("b04.p4c", "Türkiye 2021 ↔ ABD 2022", ["dm", "em"], True),
@@ -1233,8 +1233,8 @@ def kart_kanit(mat: dict, meta: dict) -> list:
             ("b13.matris.para.R5_EM", "PPK, küresel riskten kaçış", ["em"], True),
             ("b03.p3b.tepki.usdtry.yonetilen_haric", "anket sürprizi → kur (PPK günü)", ["em"], True),
             ("b03.p3b.ima_surprizi", "kısa uç ima sürprizi (3 aylık)", ["ilk_iki_olcu", "gecersiz_kilan"], True),
-            ("b03.p3b.kapi.n2y", "PPK × 2 yıllık kapısı", ["ilk_iki_olcu"], True),
-            ("b03.p3b.kapi.usdtry", "PPK × kur kapısı", ["em"], True),
+            ("b03.p3b.kapi.n2y", "PPK × 2 yıllık sınaması", ["ilk_iki_olcu"], True),
+            ("b03.p3b.kapi.usdtry", "PPK × kur sınaması", ["em"], True),
             ("b02.p2.kapi_ozet.kurulabilir", "kurulabilir seri × olay türleri (FOMC dahil)", ["dm", "em"], True)],
          "ECB karar günleri arşivde yok."),
         ("Cari denge / dış ticaret", "cari", [
@@ -1271,7 +1271,7 @@ def kart_kanit(mat: dict, meta: dict) -> list:
             if yol == "b09.p9b":
                 g = "tarif edici"              # ağırlıklar tam örneklemden: tarif ayrışımı (Bölüm 9, sınır alanı)
             if yol == "b02.p2.kapi_ozet.kurulabilir":
-                g = "ölçüldü" if dugum else "kurulmadı (kapı)"
+                g = "ölçüldü" if dugum else "kurulmadı (plasebo)"
             if yol == "b09.p9a.son_deger":
                 g = "tarif edici"              # vekil paydalı oran, test değil
             if yol == "b05.p5a":
@@ -1292,7 +1292,7 @@ def kart_kanit(mat: dict, meta: dict) -> list:
     return out
 
 
-_GUC_SIRA = ("ölçüldü", "tarif edici", "vaka", "kaynak", "kurulmadı (kapı)", "kurulmadı")
+_GUC_SIRA = ("ölçüldü", "tarif edici", "vaka", "kaynak", "kurulmadı (plasebo)", "kurulmadı")
 
 
 def _en_guclu(g: list) -> str:
@@ -1324,7 +1324,7 @@ def olc() -> dict:
             "sutunlar": [{"kimlik": k, "ad": a, "taraf": t} for k, a, t in SUTUNLAR],
             "soklar": [{"kimlik": k, "ad": a} for k, a in SOKLAR],
             "seriler": {"dm": SERI_BIRIM["dm"], "em": SERI_BIRIM["em"]},
-            "durumlar": {"olculdu": "en az bir seri kapıyı geçti, olay en az on",
+            "durumlar": {"olculdu": "en az bir seri plasebo sınamasını geçti, olay en az on",
                          "vaka": "bir ile dokuz olay: oranlar yazılır, korelasyon yazılmaz",
                          "kaynak": "bu veriyle kurulamadı (seri ya da olay yok, ya da sınama geçmedi); ilgili bölüm "
                                    "konuyu kaynakla anlatır (yalnız etiket). Bu işaret kurulamama sebebinden önce "

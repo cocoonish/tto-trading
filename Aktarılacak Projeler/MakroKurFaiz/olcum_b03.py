@@ -7,7 +7,7 @@ Pratikler
        sürümü × üç r*; AOFM ve politika faizi ile kıyas. `arac_taylor`: Araç 1'in
        açılış girdileri.
   p3b  PPK günleri (111 karar, 2016–2026): DİBS tarih hizası, ima sürprizinin
-       (Δ3 ay) gürültüsü ve plasebo kapısı; anket sürprizi (PKA toplantı
+       (Δ3 ay) gürültüsü ve plasebo sınaması; anket sürprizi (PKA toplantı
        beklentisi) ve kur tepkisi dönem dönem; karar değişimi ile anket sürprizi.
   p3c  ABD–Almanya 2 yıllık farkı ile EUR/USD, haftalık, dört dönem.
   p3d  ABD istihdam ve Türkiye GSYH yayım günleri: varyans/kovaryans oranı.
@@ -16,7 +16,7 @@ Pratikler
 Öbür modüllerin kullanabileceği yardımcılar (b04 içe aktarır; b03 hiçbir bölüm
 modülünü içe aktarmaz): `dibs_gecikme` (ölçüm), `sakin_gunler`,
 `abd_gunluk_degisim`, `yayim_gunu_orani`, `hp_suzgec`, `cikti_acigi`. Regresyon,
-Türkiye takvimi, DİBS hizası, günlük değişim çerçevesi, olay kapısı ve dolar
+Türkiye takvimi, DİBS hizası, günlük değişim çerçevesi, olay sınaması ve dolar
 sepeti `ortak_olc`dedir (tutarlılık turu, 02.10.2026; bu modüldeki kopyaları
 kaldırıldı).
 
@@ -29,7 +29,7 @@ SABAH sabitlemesine göredir ("sabah" hizası) ve 14:00 kararını D'nin değil
 D+1'in değişimine yazıyordu (tuzak 1). `dibs_gecikme` ölçüm olarak durur ve
 "sabah" sabitine karşı sınanır. Kapı `ortak_olc.olay_kapisi`nin güçlü kuralıdır
 (gün eşlemeli 1.000 rastgele kümenin %95'ini aşmak); kur serilerinde yönetilen
-kur dönemi kapıya girmez. Cuma: 18.12.2023 öncesi cuma günlerinin USD/TRY
+kur dönemi sınamaya girmez. Cuma: 18.12.2023 öncesi cuma günlerinin USD/TRY
 değişimi hafta sonunu taşır ve çerçeveden boşaltılır (`cuma_dus=True`).
 
 ÖLÇÜM TUZAKLARI (bu modül yazılırken ölçüldü)
@@ -47,8 +47,8 @@ değişimi hafta sonunu taşır ve çerçeveden boşaltılır (`cuma_dus=True`).
    seride plasebo profilinin tepesi hiçbir düğümde karar gününe oturmuyordu;
    gün sonu hizasında sonucu `kapi` satırları düğüm düğüm verir. 3 aylık düğüm
    sıradan günlerde de yüzlerce baz puan oynuyor (ör. 08→09.04.2024 −489 bp):
-   ima sürprizi ancak 3 aylık düğüm kapıyı geçerse kurulur, geçmezse `tani`
-   altında yalnız tanı olarak durur. Kur (Yahoo) kapıyı geçiyor; tepki anket
+   ima sürprizi ancak 3 aylık düğüm plasebo sınamasını geçerse kurulur, geçmezse `tani`
+   altında yalnız tanı olarak durur. Kur (Yahoo) sınamayı geçiyor; tepki anket
    sürprizine karşı ölçülür.
 3. TCMB gösterge kurunun PPK profili karar gününde değil ertesi günde tepe
    yapıyor. Sebep tepkinin geç gelmesi DEĞİL, kurun ölçüm anı: beş 14:00
@@ -312,7 +312,7 @@ def sakin_gunler(index: pd.DatetimeIndex, olaylar, pencere: int = 2) -> pd.Datet
 
 
 def _kapi(degisim: pd.Series, olaylar, kur: bool, k_tohum: int) -> dict:
-    """Kanonik olay kapısı (`ortak_olc.olay_kapisi`, güçlü kural); kur serisinde
+    """Kanonik olay sınaması (`ortak_olc.olay_kapisi`, güçlü kural); kur serisinde
     yönetilen kur dönemi dışarıda."""
     return oo.olay_kapisi(degisim, olaylar, guclu=True, k_tohum=k_tohum,
                           haric=oo.YONETILEN if kur else None)
@@ -331,7 +331,7 @@ def abd_gunluk_degisim() -> pd.DataFrame:
 def yayim_gunu_orani(degisim: pd.DataFrame, gunler, ciftler, donemler, k_tohum: int = 0) -> dict:
     """Yayım günü ile sıradan günün varyans ve kovaryans oranı (sürpriz değil).
 
-    Her sütun önce kanonik plasebo kapısından (`ortak_olc.olay_kapisi`, güçlü
+    Her sütun önce kanonik plasebo sınamasından (`ortak_olc.olay_kapisi`, güçlü
     kural) geçer; geçmeyen sütunun oranı ve onu içeren çiftin kovaryansı yazılmaz.
     `varyans_egim_y_x` heteroskedastisite ile tanımlanan eğimdir:
     (kov_olay − kov_sakin) / (var_olay(x) − var_sakin(x))."""
@@ -356,7 +356,7 @@ def yayim_gunu_orani(degisim: pd.DataFrame, gunler, ciftler, donemler, k_tohum: 
                 r[f"varyans_orani_{c}"] = kurulmadi(oo.kapi_sebebi(kapi[c]))
         for x, y in ciftler:
             if not (kapi[x]["gecti"] and kapi[y]["gecti"]):
-                r[f"kov_{x}_{y}"] = kurulmadi("çiftin en az bir serisi plasebo kapısını geçmedi")
+                r[f"kov_{x}_{y}"] = kurulmadi("çiftin en az bir serisi plasebo sınamasını geçmedi")
                 continue
             ee, ss = e[[x, y]].dropna(), s[[x, y]].dropna()
             ce, cs = ee.cov().iloc[0, 1], ss.cov().iloc[0, 1]
@@ -715,7 +715,7 @@ def p3b() -> dict:
     kaynak = ["ppk_kararlari", "dibs_egri_gunluk", "fonlama_gunluk", "usdtry_yahoo_gunluk", "usdtry_tcmb_gunluk",
               "bulut/evds_pka_toplanti"]
 
-    # hiza: üç tarih sözleşmesinde plasebo kapısı (ham etiket · sabah hizası · gün sonu hizasında iki gün)
+    # hiza: üç tarih sözleşmesinde plasebo sınaması (ham etiket · sabah hizası · gün sonu hizasında iki gün)
     sakli = _degisim("ham")
     sabah = _degisim("sabah")
     g_hz = oo.dibs(HIZA, ("n3a", "n1y", "n2y", "n5y"))
@@ -847,13 +847,13 @@ def p3b() -> dict:
     else:
         anket = kurulmadi(anket_hata)
 
-    # tanı: ima sürprizi (3 aylık düğüm) kapıyı geçmezse yayımlanmaz
+    # tanı: ima sürprizi (3 aylık düğüm) sınamayı geçmezse yayımlanmaz
     dibs_gecen = [c for c in ("n3a", "n6a", "n1y", "n2y", "n5y") if kapilar[c]["gecti"]]
     dibs_gecmeyen = [c for c in ("n3a", "n6a", "n1y", "n2y", "n5y") if not kapilar[c]["gecti"]]
     tani = {"yayimlanmaz": not kapilar["n3a"]["gecti"],
-            "sebep": ("3 aylık düğüm PPK günlerinde plasebo kapısını geçmedi (" + oo.kapi_sebebi(kapilar["n3a"]) +
+            "sebep": ("3 aylık düğüm PPK günlerinde plasebo sınamasını geçmedi (" + oo.kapi_sebebi(kapilar["n3a"]) +
                       "); aşağıdaki sayılar yalnız tanıdır" if not kapilar["n3a"]["gecti"] else
-                      "3 aylık düğüm kapıyı geçti; ima sürprizinin tanı sayıları"),
+                      "3 aylık düğüm plasebo sınamasını geçti; ima sürprizinin tanı sayıları"),
             "kapiyi_gecen_dugum": dibs_gecen, "kapiyi_gecmeyen_dugum": dibs_gecmeyen,
             "ima_anket_korelasyonu": {c: _f(pd.concat([ev[c], ans], axis=1, sort=True).dropna().corr().iloc[0, 1])
                                       for c in ("n3a", "n6a", "n1y", "n2y")} if ans is not None else None,
@@ -864,7 +864,7 @@ def p3b() -> dict:
     tablo = ev[["n3a", "n6a", "n1y", "n2y", "n5y", "usdtry"]]
     return {
         "yontem": "Her PPK karar günü için DİBS düğümlerinin (gün sonu hizasıyla: D gününe D+2 iş günü etiketli "
-                  "değer) ve USD/TRY'nin aynı piyasa günündeki değişimi ölçüldü; önce plasebo kapısı (güçlü kural) "
+                  "değer) ve USD/TRY'nin aynı piyasa günündeki değişimi ölçüldü; önce plasebo sınaması (güçlü kural) "
                   "soruldu, kur tepkisi kararla anket beklentisinin farkına dönem dönem Newey–West ile regresyonlandı.",
         "kaynak": kaynak,
         "n": int(len(ev)), "ilk": _iso(ev.index.min()), "son": _iso(ev.index.max()),
@@ -876,10 +876,10 @@ def p3b() -> dict:
         "hiza": hiza,
         "kapi": kapilar,
         "gurultu": gurultu,
-        "ima_surprizi": (kurulmadi("ima sürprizi (DİBS 3 aylık değişimi) PPK günlerinde plasebo kapısını geçmedi: "
+        "ima_surprizi": (kurulmadi("ima sürprizi (DİBS 3 aylık değişimi) PPK günlerinde plasebo sınamasını geçmedi: "
                                    + oo.kapi_sebebi(kapilar["n3a"]), kapi=kapilar["n3a"])
                          if not kapilar["n3a"]["gecti"] else
-                         kurulmadi("3 aylık düğüm kapıyı geçti ama ima sürprizi bu ölçüm katmanında kurulmadı; "
+                         kurulmadi("3 aylık düğüm plasebo sınamasını geçti ama ima sürprizi bu ölçüm katmanında kurulmadı; "
                                    "tanı satırları `tani` altında", kapi=kapilar["n3a"])),
         "tepki": tepki,
         "anket_surprizi": anket,

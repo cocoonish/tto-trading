@@ -5,7 +5,7 @@
 Pratikler
   p4a  Türkiye TÜFE sürprizi = gerçekleşen aylık TÜFE − PKA cari ay beklentisi
        (164 ay): anket etiketinin sınaması, dağılım ve işaret dengesi, kur çöküşü
-       günleri ve ters nedensellik satırı; yayım günü tepkisi (plasebo kapısına
+       günleri ve ters nedensellik satırı; yayım günü tepkisi (plasebo sınamasına
        bağlı; yayım günleri argüman) ve kapı düşerse aylık ilişki.
   p4b  ABD TÜFE günleri: Δ2y ile ΔUSD/EUR ve ΔUSD/JPY kovaryansı, yayım günü ile
        sıradan gün (yayım günleri argüman; BLS takvimi gelmediyse kurulmaz).
@@ -13,7 +13,7 @@ Pratikler
   sekil_05 sürpriz × tepki (rejime göre), sekil_06 ABD TÜFE günü kovaryansı.
 
 Ortak tanımlar `ortak_olc`ten gelir (regresyon ve hüküm, Türkiye takvimi, DİBS
-hizası, günlük değişim çerçevesi, kanonik plasebo kapısı, dolar sepeti); yayım
+hizası, günlük değişim çerçevesi, kanonik plasebo sınaması, dolar sepeti); yayım
 günü oranı b03'ten. Aynı ölçü iki modülde iki kodla kurulmaz.
 
 HİZA. Yayım günü ve yayım ayı çerçevesi DİBS değişimini USD/TRY'nin GÜN SONU
@@ -37,8 +37,8 @@ kayma üretir.
    USD/TRY'de 0,89 ile 1,02 arasında, DİBS 2 ve 5 yıllıkta 1'e yakın ve tepe
    yayım gününde değil (sabah ve gün sonu hizasında; ham etiketle 2 ve 5
    yıllıkta tepe 0'a düşüyor ama profil düz, ve ham etiket kurla iki gün kayık —
-   Bölüm 2). Hangi düğümün güçlü kapıyı geçtiği `yayim_gunu.kapi` satırlarındadır.
-   Yayım günü regresyonu kapıyı geçen seride kurulur; öbürleri kurulmadı ve
+   Bölüm 2). Hangi düğümün güçlü plasebo sınamasını geçtiği `yayim_gunu.kapi` satırlarındadır.
+   Yayım günü regresyonu sınamayı geçen seride kurulur; öbürleri kurulmadı ve
    yerine aylık ilişki verilir (yayım AYINI ölçer, yayım gününü değil).
 3. Kur çöküşü eşiği (|Δ| > 4σ) sabit bir σ ile değil, önceki 250 iş gününün
    oynaklığıyla kurulur; yönetilen kur döneminde σ küçük olduğu için Haziran
@@ -243,7 +243,7 @@ def kur_cokus_gunleri() -> pd.DataFrame:
 
 def tufe_gunu_tepkisi(yayim_gunleri) -> dict:
     """Yayım günü tepkisi. `yayim_gunleri`: TÜFE yayım günleri (DatetimeIndex);
-    her gün bir önceki ayın TÜFE'sini duyurur. Seri kapıyı geçmezse kurulmaz."""
+    her gün bir önceki ayın TÜFE'sini duyurur. Seri sınamayı geçmezse kurulmaz."""
     sp = surpriz_serisi()
     g = pd.DatetimeIndex(yayim_gunleri)
     ref = g.to_period("M") - 1
@@ -258,7 +258,7 @@ def tufe_gunu_tepkisi(yayim_gunleri) -> dict:
     kapilar = {c: oo.kapi_ozeti(oo.olay_kapisi(deg[c], olay, guclu=True, k_tohum=200 + i,
                                                haric=oo.YONETILEN if c.startswith("usdtry") else None))
                for i, c in enumerate(("n1y", "n2y", "n5y", "usdtry", "usdtry_tcmb"))}
-    # 10:00 olayında sabah hizası da saatle bağdaşır (Bölüm 2): DİBS kapısı o hizada da sorulur
+    # 10:00 olayında sabah hizası da saatle bağdaşır (Bölüm 2): DİBS sınaması o hizada da sorulur
     sabah = oo.tr_gunluk_degisim("sabah", ("n1y", "n2y", "n5y"), kur=False, tcmb=False)
     kapi_sabah = {c: oo.kapi_ozeti(oo.olay_kapisi(sabah[c], olay, guclu=True, k_tohum=210 + i))
                   for i, c in enumerate(("n1y", "n2y", "n5y"))}
@@ -267,7 +267,7 @@ def tufe_gunu_tepkisi(yayim_gunleri) -> dict:
            "kapi_sabah_hizasi": kapi_sabah,
            "hiza_notu": ("Regresyonlar gün sonu hizasında kurulur (kurla aynı piyasa günü). 10:00'daki TÜFE için "
                          "sabitlemenin saati ölçülmediğinden sabah hizası (D gününe D+1 etiketli değer) da saatle "
-                         "bağdaşır; DİBS kapısı o hizada ayrıca verilir, regresyon kurmaz."),
+                         "bağdaşır; DİBS sınaması o hizada ayrıca verilir, regresyon kurmaz."),
            "eslesme": "yayım günü → bir önceki ay (benzersiz)",
            "takvimde_olmayan_yayim": dusen,
            "dibs_degeri_olmayan_yayim": [_iso(t) for t in olay if pd.isna(deg.loc[t, "n2y"])],
@@ -438,7 +438,7 @@ def sekil_05() -> dict:
         t = tufe_gunu_tepkisi(bulut.tufe_gunleri())
         gecen = [c for c in ("n2y", "n5y", "usdtry", "n1y") if t["kapi"][c]["gecti"]]
         out["yayim_gunu"] = {"kapiyi_gecen": gecen, **t["noktalar"],
-                             "not": "Kapıyı geçmeyen serinin noktaları yalnız profil için durur; regresyon kurulmadı."}
+                             "not": "Plasebo sınamasını geçmeyen serinin noktaları yalnız profil için durur; regresyon kurulmadı."}
     except bulut.VeriYok as h:
         out["yayim_gunu"] = oo.kurulmadi(f"TÜİK TÜFE yayım günleri elde yok ({h})")
     return out
@@ -491,7 +491,7 @@ def sekil_06(p4b_sonuc: dict) -> dict:
         kapi = p4b_sonuc.get("kapi", {})
         dusen = [c for c, k in kapi.items() if isinstance(k, dict) and not k.get("gecti")]
         okur = {"us2": "ABD 2 yıllık getiri", "usd_eur": "USD/EUR", "usd_jpy": "USD/JPY"}
-        out.update(oo.kurulmadi("yayım günü kovaryansı kurulmadı: plasebo kapısını geçmeyen seri "
+        out.update(oo.kurulmadi("yayım günü kovaryansı kurulmadı: plasebo sınamasını geçmeyen seri "
                                 + (", ".join(okur.get(c, c) for c in dusen) if dusen else "yok")))
     return out
 

@@ -20,8 +20,8 @@ modüllerden buraya taşıdı ve modülleri onlara bağladı:
   reg() · oos_kiyas() · oos_takimi() · hukum() · regresyon()
                           regresyon, iki saf kıyas, ambargolu örneklem dışı
                           sınama ve hüküm (b03, b08, b11, b12, b01 ayrı kurardı)
-  olay_kapisi()          plasebo kapısı ve gün eşlemeli rastgele kıyas
-                          (b02'nin kapısı kanonikti; b03 zayıf kopyasını kullanırdı)
+  olay_kapisi()          plasebo sınaması ve gün eşlemeli rastgele kıyas
+                          (b02'nin sınaması kanonikti; b03 zayıf kopyasını kullanırdı)
   donem_sonu_kur()       TCMB dönem sonu kuru (b06)
   usdtry_tcmb()          TCMB kurunun ilan gününe Türkiye takvimiyle geri alınması
                           (b08'in valör sırası ile ortak fonksiyonun takvimsiz iş günü
@@ -36,7 +36,7 @@ modüllerden buraya taşıdı ve modülleri onlara bağladı:
 OKUMA. `oku(ad)` arşiv dosyasını açar ve sıkıştırılmamış metnin sha256'sını
 künyeyle kıyaslar; tutmazsa okumaz (arşiv elle değiştirilmiş ya da başka bir
 çıpadan gelmiştir). Ham bulut arşivinin ayrıştırılmış hâli `veri/bulut/`
-altındadır (`hazirla_bulut.py`) ve aynı kapıdan okunur.
+altındadır (`hazirla_bulut.py`) ve aynı sınamadan okunur.
 
 USD/TRY (karar 09.09.2026 ve 02.10.2026): kurun konu olduğu her ölçü Yahoo
 Finance'ten okunur. Saatlik barın ulaştığı yerde İstanbul 18:00 kapanışı
@@ -957,7 +957,7 @@ def regresyon(y: pd.Series, x: pd.Series, ilk_pencere: int | None = None,
     return out
 
 
-# ─────────────────────────────────────────────────────────────── olay kapısı
+# ─────────────────────────────────────────────────────────────── olay sınaması
 OLAY_PENCERE = 2
 OLAY_RASTGELE_K = 1000
 OLAY_TOHUM = 20261002
@@ -992,7 +992,7 @@ def olay_profili(degisim: pd.Series, olaylar, pencere: int = OLAY_PENCERE) -> di
 
 
 def kapi_hukmu(prof: dict) -> bool:
-    """Temel kapı: plasebo profilinin tepesi sıfırda VE oran[0] öbür kaymaların en büyüğünü aşıyor."""
+    """Temel plasebo sınaması: plasebo profilinin tepesi sıfırda VE oran[0] öbür kaymaların en büyüğünü aşıyor."""
     o = prof.get("oran", {})
     o0 = o.get("0")
     oteki = [v for k, v in o.items() if k != "0" and v is not None]
@@ -1097,8 +1097,8 @@ def donem_disi(s: pd.Series, olaylar: pd.DatetimeIndex, donem: tuple = YONETILEN
 def olay_kapisi(degisim: pd.Series, olaylar, guclu: bool = True, pencere: int = OLAY_PENCERE,
                 k_tohum: int = 0, ilk: str | None = None, son: str | None = None,
                 haric: tuple | None = None, yalniz: tuple | None = None) -> dict:
-    """Dersin KANONİK olay kapısı (olcum_b02'de ölçüldü). Bir olay çalışması
-    ancak bu kapı geçerse kurulur.
+    """Dersin KANONİK olay sınaması (olcum_b02'de ölçüldü). Bir olay çalışması
+    ancak bu sınama geçerse kurulur.
 
     Örneklem olay listesinin kapsadığı dönemle sınırlanır (listede olmayan eski
     olaylar sıradan gün sayılmasın; ilk olaydan 10 gün önce, son olaydan 10 gün
