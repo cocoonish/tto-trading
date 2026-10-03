@@ -357,7 +357,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "ayın 2. iş günü TÜFE o güne düştüğünde büyük (38,8 bp), 3. iş gününe düştüğünde sıradan (28,3 bp; bütün günlerde 27,5 bp)",
+   "parca": "ayın 2. iş günü TÜFE o güne düştüğünde büyük (38,8 bp), TÜFE 3. iş gününe düştüğünde sıradan (28,3 bp; bütün günlerde 27,5 bp)",
    "degerler": [
     {
      "yol": "b02.p2.tarih_sozlesmesi.ay_ici_gun_etkisi.tufe_gunune_gore_gruplu_abs_bp.n2y.tufe_2_is_gununde.2",
@@ -655,6 +655,32 @@
      "ifade": "2 * v('b02.p2.kapi.5.p_rastgele_hata')",
      "bicim": "sayi",
      "hane": 3
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "1 bp'lik faiz hareketine",
+   "neden": "oranın birimi (tanım)"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "merkez bankası başkanı görevden alındı",
+   "kaynak": "tcmb_baskan_20210320"
+  },
+  {
+   "tur": "olcum",
+   "parca": "3. iş gününe düştüğü 75 ayda o gün sıradanın altında (23,6 bp)",
+   "degerler": [
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ay_ici_gun_etkisi.tufe_ay_ici_is_gunu.3",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b02.p2.tarih_sozlesmesi.ay_ici_gun_etkisi.tufe_gunune_gore_gruplu_abs_bp.n2y.tufe_3_is_gununde.3",
+     "bicim": "bp",
+     "hane": 1
     }
    ]
   }

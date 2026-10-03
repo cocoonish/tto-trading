@@ -1,4 +1,4 @@
-## Bölüm 1 — Çerçeve: faizin ve kurun üç terimi, beş rejim (≈10 dk)
+## Bölüm 1 — Çerçeve: faizin ve kurun üç terimi, beş rejim (≈13 dk)
 
 <span id="hy-b01"></span>
 
@@ -20,8 +20,9 @@ $$
 tek seferde kilitlemek yerine uzun tahvil tutmanın telafisidir ve model olmadan gözlenmez:
 New York Fed'in yayımladığı ACM vade primi her getiriyi beklenen kısa faiz yolu ile vade
 primine Adrian, Crump ve Moench'in (2013) modeliyle ayırır — bir ölçüm değil, bir modelin
-çıktısıdır. Üçüncü terim DM'nin kendi parasıyla borçlanmasında çoğu zaman küçüktür (istisnalar Bölüm 6),
-EM'de değil.
+çıktısıdır. Üçüncü terim, temerrüt ve çevrilebilirlik riskinin (paranın serbestçe döviz edilememesi ya
+da sermaye denetimi) telafisidir; DM'nin kendi parasıyla borçlanmasında çoğu zaman küçüktür (istisnalar
+Bölüm 6), EM'de değil.
 Du ve Schreger (2016), yerel para devlet tahvili getirisinin çapraz kur swabıyla kurulan
 sentetik yerel para risksiz faizi üzerindeki farkını kredi primi olarak ölçer; 2005–2014'te 10
 gelişmekte olan ülkede beş yıllık vadede bu prim ortalama 145 bp, döviz cinsi borcun kredi
@@ -29,7 +30,7 @@ primi ise 201 bp'dir. Türkiye'de üçüncü terimin ayrı bir ölçüsü yok (C
 1.7'nin kadranları onu ancak faizle TL'nin değerinin ters yönde hareket ettiği haftalardan okur. Model
 tabanlı bir vade primi de yok; Bölüm 5 bir vekil kurar.
 
-### 1.2 Kurun üç bloğu: açık faiz paritesinden ileri yinelemeye (≈2 dk)
+### 1.2 Kurun üç bloğu: açık faiz paritesinden ileri yinelemeye (≈1,5 dk)
 
 $s_t$ USD/yerel kurun logu, $i_t$ ve $i_t^*$ yerel ve ABD kısa faizi olsun. Yerel parayı bir
 dönem tutmanın dolar cinsinden fazla getirisi $i_t - i_t^* - (s_{t+1} - s_t)$'dir; beklenen
@@ -50,6 +51,10 @@ q_t \;=\; \underbrace{\lim_{k\to\infty} E_t\, q_{t+k}}_{\text{(A) çıpa}}
 \;-\; \underbrace{\sum_{j=0}^{\infty} E_t\big(r_{t+j} - r^*_{t+j}\big)}_{\text{(B) reel faiz farkı patikası}}
 \;+\; \underbrace{\sum_{j=0}^{\infty} E_t\, \rho_{t+j}}_{\text{(C) risk primi patikası}}
 $$
+
+Toplamlar kalıcı düzeylerden sapmalarla okunur: durağan durumda $r - r^* = \bar\rho$ olduğundan, EM'de
+primin kalıcı artı düzeyi ona eşit kalıcı bir reel faiz farkıyla dengelenir ve iki toplamda birbirini
+götürür; B ve C bu düzeylerden sapmaları toplar.
 
 Bugünkü reel kur, çıpasından, beklenen reel faiz farklarının toplamı kadar güçlü ve beklenen
 risk primlerinin toplamı kadar zayıftır. **(A)** reel denge kurunu değiştiren
@@ -123,9 +128,10 @@ ortalamasına göre +%0,94 değer kaybı, eğri +9,3 bp; Türkiye'de 5 yıllık 
   kadrana düşer.
 - **Riskten dönüş haftası "prim" kadranına düşer:** 14.10.2011 haftasında ABD 10 yıllık +16 bp,
   dolar 26 haftalık ortalamasına göre %3,01 değer kaybı. R5 bu yüzden önce sorulur.
-- **Türkiye'nin sert stres haftalarında kısa uç uzun uçtan fazla yükselir** (likidite
-  sıkılaşması) ve ayılı dikleşme şartı o haftaları R3'e yazar: 26 haftalık ortalamaya göre en
-  büyük on TL değer kaybı haftasının dördü R3, beşi R4, biri R5.
+- **Ayılı dikleşme şartı sert stres haftalarını da R3'e yazabilir:** 26 haftalık ortalamaya göre
+  en büyük on TL değer kaybı haftasının dördü R3, beşi R4, biri R5; eğri on haftanın yedisinde
+  dikleşti. R3'e düşen dört haftanın ikisinde kısa uç uzun uçtan fazla yükseldi (ayılı yassılaşma,
+  likidite sıkılaşmasının izi), birinde dikleşme eşiğin altında kaldı, birinde uzun uç düştü.
 - **Eşikler sezgiyle seçildi:** orta rejimin payı eşik sıfırda ABD'de %11,5, Türkiye'de %15,8;
   bir standart sapmada %0,9 ve %2,7.
 - **Kontrollü değer kaybı ham kuru tek yöne iter:** Türkiye etiketi kurun 26 haftalık
@@ -144,8 +150,10 @@ neredeyse rastgele yürüyüş gibi davranan bir kur ürettiğini gösterir. Ros
 öngörülebilirliğin öngörücüye, ufka ve döneme bağlı olduğunu bulur. Lilley, Maggiori, Neiman ve Schreger (2022), 2007 öncesinde kurla birlikte hareket
 etmeyen küresel risk iştahı göstergelerinin o yıldan sonra kurları örneklem içinde anlamlı
 biçimde açıkladığını gösterir — eşzamanlı, öngörü değil. Bu dersin her ölçümü aynı sınırı
-taşır: etkenler hareketi **tarif eder**, öngörmez. Bir ilişki ancak Newey–West t'si ve
-örneklem dışında iki saf kıyası (rastgele yürüyüş ve koşulsuz ortalama) birlikte geçerse
+taşır: etkenler hareketi **tarif eder**, öngörmez. Bir ilişki ancak Newey–West t'si (sıra
+ilintisine ve değişen varyansa dayanıklı standart hatayla) ve örneklem dışında iki saf kıyası
+(rastgele yürüyüş — değişim hedeflerinde sıfır değişim, seviye hedeflerinde bir önceki değer — ve
+koşulsuz ortalama) birlikte geçerse
 "ölçülü" sayılır; eşikler [Bloomberg HRA ile Korelasyon](/arastirma/bloomberg-hra-korelasyon/),
 6.1.
 
@@ -177,7 +185,7 @@ gümrük duyurusu 2 Nisan'da New York 16:00'da geldi; kur kapanışı (17:00) il
 korelasyon −0,01. **Ders:** VIX R5'i söyler; R5'in içinde doların sığınak mı primin kaynağı mı
 olduğunu doların yönü söyler. İkincisi DM'nin EM gibi davrandığı hâllerden biridir (Bölüm 6).
 
-### 1.7 Pratik: ABD faizi ile dolar, Türkiye kadranları (≈2 dk)
+### 1.7 Pratik: ABD faizi ile dolar, Türkiye kadranları (≈5,5 dk)
 
 **Pratik 1A — ABD.** ABD Hazinesi 10 yıllık getirisinin günlük değişimi (bp) ile altı G10
 kurundan eşit ağırlıklı dolar sepetinin günlük log değişimi (%) arasında 60 iş günlük kayan
@@ -196,12 +204,14 @@ dörttebirliği):
 Örtüşmeyen 111 blokta (60 iş günü) korelasyon bloğun VIX ortalamasına regrese edilince
 korelasyon ≈ 0,49 − 0,0145 × VIX: t −3,82 (Newey–West), R² 0,13; VIX'teki 10 puanlık artış
 korelasyonu 0,15 düşürür. Örneklem dışında (71 blok) karesel hata koşulsuz ortalamanın 0,89,
-sıfır korelasyonun 0,68 katı; ilişki "ölçülü" sayılır, ama Diebold–Mariano t'leri −1,81 ve
-−1,88 — örneklem dışı üstünlüğün kendisi %5 düzeyinde anlamlı değil. VIX yükseldikçe B zayıflar;
-işaretin dönmesini VIX tek başına söylemez (1.6).
+sıfır korelasyonun 0,68 katı; Diebold–Mariano t'leri (iki tahminin karesel hata farkının
+anlamlılığı) −1,81 ve −1,88. Ama korelasyon kalıcı bir seviyedir (blokların birinci özilintisi
+0,59): bir önceki bloğun korelasyonu, yani seviyenin rastgele yürüyüşü, VIX doğrusundan küçük hata
+verir (model karesel hatası onun 1,25 katı, Diebold–Mariano t +1,07). İlişki tarif edicidir: VIX
+yükseldikçe B zayıflar; işaretin dönmesini VIX tek başına söylemez (1.6).
 
-İki tuzak. **DXY:** Yahoo barının gövde/aralık sınaması kurulamadı, elimizdeki seri yalnız kapanışı
-taşıyor; gecikme korelasyonu sepetle aynı gün 0,90, ertesi gün 0,04, önceki gün −0,03 — kayma
+İki tuzak. **DXY:** seri yalnız kapanışı taşıdığı için kapanışın günün başı mı sonu mu olduğu
+(Bölüm 2.2) barın kendi içinden sınanamıyor; gecikme korelasyonu sepetle aynı gün 0,90, ertesi gün 0,04, önceki gün −0,03 — kayma
 yok. **Bozuk kotasyon:** CNBC'nin EUR/USD'si
 01–03.01.2020'de bozuk; CNBC'den kurulan DXY vekili o blokta Yahoo DXY'den −%3,38 ve +%3,54
 ayrışıp geri dönüyor, oysa 2000–2026'nın en büyük meşru ayrışması %1,74. Eşik %2,5; üç gün
@@ -288,13 +298,16 @@ yazar? (c) Bu etiket kuralın hangi sınırını gösteriyor? (d) Haftanın nede
 (b) VIX eşiğin altında, R5 değil. R4'ün üç şartından ikisi tutuyor (uzun uç yükseliyor, kur
 sapması yarım standart sapmanın çok üstünde) ama eğri yassılaşıyor; ayılı dikleşme yok → **R3**.
 
-(c) Sert stres haftasında kısa uç uzun uçtan fazla yükselir ve kural haftayı "güvenilir merkez
-bankası" rejimine yazar: en büyük on TL değer kaybı haftasının (1.4) dördü R3 ve bu dördün
-üçünde eğri yassılaşmıştı. Etiket
+(c) Bazı sert stres haftalarında kısa uç uzun uçtan fazla yükselir ve kural haftayı "güvenilir
+merkez bankası" rejimine yazar: en büyük on TL değer kaybı haftasının (1.4) dördü R3; ikisinde kısa
+uç uzun uçtan fazla yükseldi ve bu hafta onlardan biri (2 yıllık +171,5 bp). Etiket
 kadranla birlikte okunur: R3 etiketli bir prim haftası R3'ün tipik haftası değildir.
 
 (d) 10.08.2018 cuma için serideki USD/TRY 6,82, TCMB'nin aynı günkü gösterge kuru 5,94:
-$\ln(6{,}82/5{,}94) \approx$ %13,8 fark. Cuma değeri hafta sonundan sonraki fiyattır.
+$\ln(6{,}82/5{,}94) \approx$ %13,8 fark. TCMB kuru 14:00'ten önceki bir sabitlemedir (Bölüm 2.2): fark
+cuma öğleden sonrasını da taşır ve hafta sonu payı bu iki sayıdan ayrılmaz. Temiz örnek 19.03.2021:
+görevden alma cumartesi geldi, serideki cuma 8,10, TCMB 7,27; cuma değeri cumartesinin haberini
+taşıyor. Cuma değeri hafta sonundan sonraki fiyattır (987 cumanın 987'si pazartesi barından).
 
 </details>
 

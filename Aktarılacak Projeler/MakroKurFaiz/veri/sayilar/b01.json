@@ -1,6 +1,16 @@
 {
  "girdiler": [
   {
+   "tur": "sabit",
+   "parca": "(≈5,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈1,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
    "tur": "kaynak",
    "parca": "ACM vade primi her getiriyi beklenen kısa faiz yolu ile vade primine Adrian, Crump ve Moench'in (2013) modeliyle ayırır",
    "kaynak": "acm2013"
@@ -685,7 +695,7 @@
   },
   {
    "tur": "olcum",
-   "parca": "Diebold–Mariano t'leri −1,81 ve −1,88",
+   "parca": "(iki tahminin karesel hata farkının anlamlılığı) −1,81 ve −1,88",
    "degerler": [
     {
      "yol": "b01.p1a.blok_regresyon.oos_dm_t",
@@ -698,11 +708,6 @@
      "hane": 2
     }
    ]
-  },
-  {
-   "tur": "sabit",
-   "parca": "%5 düzeyinde anlamlı değil",
-   "neden": "anlamlılık düzeyi (yöntem sabiti; |t| ≥ 2 eşiği)"
   },
   {
    "tur": "olcum",
@@ -1394,6 +1399,104 @@
      "hane": 0
     }
    ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(blokların birinci özilintisi 0,59)",
+   "degerler": [
+    {
+     "yol": "b01.p1a.blok_regresyon.blok_kor_ozilinti_1",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(model karesel hatası onun 1,25 katı, Diebold–Mariano t +1,07)",
+   "degerler": [
+    {
+     "yol": "b01.p1a.blok_regresyon.oos_rastgele_yuruyus.mse_oran",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1a.blok_regresyon.oos_rastgele_yuruyus.dm_t",
+     "bicim": "sayi",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "İlişki tarif edicidir",
+   "degerler": [
+    {
+     "yol": "b01.p1a.blok_regresyon.hukum",
+     "bicim": "metin",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(2 yıllık +171,5 bp)",
+   "degerler": [
+    {
+     "yol": "b01.rejim.tr.en_buyuk_10_para_kaybi_haftasi.6.kisa_bp",
+     "bicim": "bp",
+     "hane": 1,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "serideki cuma 8,10, TCMB 7,27",
+   "degerler": [
+    {
+     "yol": "b01.p1b.cuma_tuzagi.ornek.2021-03-19.yahoo_usdtry",
+     "bicim": "sayi",
+     "hane": 2
+    },
+    {
+     "yol": "b01.p1b.cuma_tuzagi.ornek.2021-03-19.tcmb_gosterge",
+     "bicim": "sayi",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "(987 cumanın 987'si pazartesi barından)",
+   "degerler": [
+    {
+     "yol": "b01.p1b.cuma_tuzagi.cuma_gunu",
+     "bicim": "tam",
+     "hane": 0
+    },
+    {
+     "yol": "b01.p1b.cuma_tuzagi.pazartesi_barindan",
+     "bicim": "tam",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "14:00'ten önceki bir sabitlemedir",
+   "neden": "TCMB gösterge kurunun ilan sözleşmesi (Bölüm 2.2 tablosu)"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "cumartesi günkü görevden almayı taşıyor",
+   "kaynak": "tcmb_baskan_20210320"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "görevden alma cumartesi geldi",
+   "kaynak": "tcmb_baskan_20210320"
   }
  ]
 }
