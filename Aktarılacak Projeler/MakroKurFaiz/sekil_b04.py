@@ -138,7 +138,8 @@ def s06_tr2021_abd2022(o: dict) -> None:
                         subplot_titles=("TÜFE ve reel politika faizi (%): ○ baş → ● son",
                                         "Faizin dönem değişimi (bp)",
                                         "Paranın değeri, log % (artış: değer kazancı)"))
-    _panel_basliklari_sola(fig, 3)
+    # 12 px: 13'te ilk panel başlığı telefonun gömme çerçevesinde (353 px) sağ ucundan 6 piksel kırpılıyordu
+    _panel_basliklari_sola(fig, 3, 12)
 
     # 1) seviye: dönem başı → sonu (dumbbell); başın etiketi altta, sonunki üstte: yakın uçlar çakışmaz
     satirlar1 = [
@@ -220,7 +221,7 @@ def s06_tr2021_abd2022(o: dict) -> None:
         "(günlük), 2 ve 5 yıllık DİBS (gün sonu), yıllık TÜFE (TÜİK), USD/TRY Yahoo Finance günlük barı (Londra "
         "gece yarısı" + ("; dönem sonu cuma, kur hafta sonunu da taşır)" if cuma else ")")
         + f" · ABD {tarih(us['pencere'][0])}–{tarih(us['pencere'][1])}: politika faizi (BIS, ay sonu), 2 ve 10 yıllık "
-        "Hazine, yıllık TÜFE (BLS), dolar: altı G10 kurunun eşit ağırlıklı sepeti (CNBC, New York 17:00) · reel "
+        "Hazine, yıllık TÜFE (BLS), dolar: altı G10 kurunun eşit ağırlıklı sepeti (CNBC, New\u00a0York 17:00) · reel "
         "faiz = politika − yıllık TÜFE · uzun uç: Türkiye 5 yıl (10 yıllık düğüm yok), ABD 10 yıl · iki gözlemli "
         "vaka karşılaştırması, test değil",
     ])

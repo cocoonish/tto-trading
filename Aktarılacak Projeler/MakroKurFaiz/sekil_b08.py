@@ -4,45 +4,20 @@
 from __future__ import annotations
 
 from sekil_ortak import (ACIK_CLARET, ACIK_MAVI, CLARET, GRI, MAVI, MUREKKEP, TURUNCU, YESIL, ay, go,  # noqa: F401
-                         make_subplots, tarih, vir, yuzde, _yaz)
+                         baslik_koy, make_subplots, tarih, vir, yukseklik, yuzde, _yaz)
 
 REFERANS = dict(color="#9a9a9a", width=1)
-BASLIK_EN, ALT_EN = 48, 73       # karakter: 390 px'te sığan satır (Şekil 01–04 ölçüsü); Plotly başlığı sarmaz
-EV_UST, EV_SATIR, EV_PANEL, EV_ALT = 92, 26, 26, 110   # ev stilinin boşlukları (site/tools/plotly_stil.py)
 
 
-def _sar(metin: str, en: int) -> list[str]:
-    """Sözcük sınırında satırlara böler. Ayraç (·) ve eşitlik/çarpma işareti satır başına düşmez: önceki
-    sözcüğe bağlanır."""
-    for isaret in (" · ", " = ", " × "):
-        metin = metin.replace(isaret, " " + isaret[1:])
-    satirlar, parca = [], ""
-    for k in metin.split(" "):
-        if parca and len(parca) + 1 + len(k) > en:
-            satirlar.append(parca)
-            parca = k
-        else:
-            parca = f"{parca} {k}" if parca else k
-    satirlar.append(parca)
-    return [s.replace(" ", " ") for s in satirlar]
-
-
-def _baslik(fig, govde: int, ana: str, *alt: str) -> int:
-    """Başlık bloğunu yazar, figürün yüksekliğini döndürür. Ana başlık BASLIK_EN, her alt başlık paragrafı
-    ALT_EN karakterde sarılır. Ev stili üst boşluğu satır sayısından kurar (92 + 26·<br> + 26 panel
-    başlığı); yükseklik bu boşluk + `govde` (çizim alanı ve lejant) + alt boşluk olarak kurulur, yani satır
-    eklemek çizim alanını küçültmez. Blok ÜSTTEN çıpalanır ve son satırı ilk panel başlığının ~28 px üstünde
-    biter (Şekil 05'in kuralı): satırlar çoğalınca blok panel başlığına binmez."""
-    ust_satir = _sar(ana, BASLIK_EN)
-    alt_satir = [s for p in alt for s in _sar(p, ALT_EN)]
-    br = len(ust_satir) - 1 + len(alt_satir)
-    ust_bosluk = EV_UST + EV_SATIR * br + EV_PANEL
-    yukseklik = ust_bosluk + govde + EV_ALT
-    blok = 20 * len(ust_satir) + 20.5 * len(alt_satir)
-    ust = ust_bosluk - 28 - blok
-    fig.update_layout(title=dict(yref="container", yanchor="top", y=1 - ust / yukseklik,
-                                 text="<br>".join(ust_satir) + "".join(f"<br><sub>{s}</sub>" for s in alt_satir)))
-    return yukseklik
+def _baslik(fig, cizim: int, ana: str, *alt: str) -> int:
+    """Başlık bloğunu figüre koyar, figürün yüksekliğini döndürür. Sarma, üstten çapa ve üst pay
+    `sekil_ortak`taki tek tanımdır (`baslik_koy` · `yukseklik`): yükseklik ev stilinin üst payı + `cizim`
+    (çizim alanı, lejant ve alt pay), yani satır eklemek çizim alanını küçültmez. Bu figürlerin alt
+    başlıkları eşitlik taşır: eşitlik ve çarpma işareti satır başına düşmesin diye önceki sözcüğe bölünmez
+    boşlukla bağlanır (`sar` bölünmez boşluğu bölmez; ayraç · için aynı kuralı kendisi uygular)."""
+    def bagla(m: str) -> str:
+        return m.replace(" = ", "\u00a0= ").replace(" × ", "\u00a0× ")
+    return yukseklik(baslik_koy(fig, bagla(ana), [bagla(a) for a in alt]), cizim)
 
 
 def _paneller_sola(fig, boyut: int = 13) -> None:
@@ -110,7 +85,7 @@ def s13_uc_denge(o: dict) -> None:
     # Başlık yayımlanan ölçüden: dengeleme katsayısı 1 − eğim (ölçümde `ozel_kesim_dengelemesi`). Özel denge
     # bir artıktır ve ilişki örneklem dışında kıyası yenmez: başlık tarif eder, neden ya da yön kurmaz.
     yuk = _baslik(
-        fig, 348,
+        fig, 458,   # 458: çizim, lejant ve alt pay
         f"Şekil 13 — İkiz açık değil, ikiz ayrışma: kamu dengesi 1 puan bozulunca özel denge "
         f"{vir(ik['ozel_kesim_dengelemesi'], 2)} puan iyileşti (dört çeyreklik değişim, örneklem içi)",
         f"TCMB ödemeler dengesi, HMB merkezi yönetim bütçesi, TÜİK GSYH · çeyreklik {s['ilk_ceyrek']}–"
@@ -186,14 +161,14 @@ def s14_j_egrisi(o: dict) -> None:
     # J-eğrisi REDK ARTIŞINA (reel değer kazancı) göre kısa gecikmede ARTI, sonra EKSİ eğim ister. Grafikteki
     # çukur Marshall–Lerner yönüdür; eksik olan J'nin kısa koludur.
     yuk = _baslik(
-        fig, 508,
+        fig, 618,   # 618: çizim, lejant ve alt pay
         f"Şekil 14 — J-eğrisinin kısa kolu yok: reel değer kazancı mal dengesini "
         f"{_aralik(oz['anlamli_eksi_gecikmeler_ay'])} ay gecikmeyle bozuyor",
         f"TCMB ödemeler dengesi, REDK (TÜFE bazlı), TÜİK GSYH · aylık {ay(s['ilk'])}–{ay(s['son'])}, "
         f"{s['n']} gözlem · Newey–West",
         "bağımlı: altın ve enerji hariç mal dengesinin 12 aylık değişimi, başlangıçtaki dolar GSYH'ye oranla (puan)",
         "açıklayıcı: REDK'nin k ay önce biten 12 aylık log değişimi · eksi eğim: reel değer kazancı dengeyi bozar",
-        f"J-eğrisi kısa gecikmede artı eğim ister: anlamlı artı yok · en derin {oz['en_eksi_gecikme_ay']}. ay "
+        f"J-eğrisi kısa gecikmede artı eğim ister: anlamlı artı yok · en derin {oz['en_eksi_gecikme_ay']}.\u00a0ay "
         f"({vir(oz['en_eksi_egim_puan_yuzde'], 3)}; t {vir(oz['en_eksi_t'], 2)})")
     _yaz(fig, "14_j_egrisi.html", yuk)
 
@@ -247,7 +222,7 @@ def s15_redk_cari(o: dict) -> None:
     _paneller_sola(fig)
     oo_ = c["oos"]
     yuk = _baslik(
-        fig, 368,
+        fig, 478,   # 478: çizim, lejant ve alt pay
         "Şekil 15 — Reel kur sapması sonraki yılın cari dengesini öngörmüyor: eğim eksi ama anlamsız",
         f"TCMB REDK (TÜFE bazlı) ve ödemeler dengesi, TÜİK GSYH · başlangıç ayı {ay(tx[0])}–{ay(tx[-1])}, "
         f"{len(xx)} gözlem",

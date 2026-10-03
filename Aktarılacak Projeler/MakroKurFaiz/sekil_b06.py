@@ -116,7 +116,7 @@ def s09_borc_ayrisimi(o: dict) -> None:
     tt = [str(v) if v != x[-1] else "2026 İY" for v in tv]
     for r in (1, 2):
         fig.update_xaxes(tickmode="array", tickvals=tv, ticktext=tt, range=[x[0] - 1.6, x[-1] + 0.7], row=r, col=1)
-    _paneller_sola(fig)
+    _paneller_sola(fig, 12)   # 13 px'te alt panel başlığı telefonun gömme çerçevesinde (353 px) 11 piksel kırpılıyordu
     # Başlık bloğu dar ekrana göre sarılır ve üstten çapalanır; yükseklik satır sayısından (sekil_ortak).
     baslik = baslik_koy(fig, "Şekil 09 — Borç oranını faizi aşan nominal büyüme düşürdü; kur terimi bu katkının "
                              "yaklaşık üçte ikisini geri yazdı", [

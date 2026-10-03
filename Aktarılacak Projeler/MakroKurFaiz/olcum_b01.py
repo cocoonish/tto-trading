@@ -78,7 +78,10 @@ Pratikler
      0,68 katı, ama bir önceki bloğun 1,25 katı (71 blok, DM t +1,07) — hüküm
      "ölçülü"den "tarif edici"ye döndü. Hüküm koşulsuz ortalama ve seviye rastgele
      yürüyüşüyle (`_oos_onceki_seviye`) kurulur; sıfır korelasyon oranı bilgi olarak
-     kalır, adıyla.
+     kalır, adıyla. O fonksiyonun döngüsü `oos_kiyas`ın kopyasıdır; `_oos_parite` aynı
+     döngüyü koşulsuz ortalamayla koşup ortak sonuçla kıyaslar, ayrışırsa ölçüm durur
+     (arıza enjeksiyonu: ortak DM gecikmesi, ortak ambargo ve kopyada eğitim sızıntısı
+     üçü de yakalanıyor).
 """
 from __future__ import annotations
 
@@ -291,12 +294,15 @@ def _pencere_ozeti(o: pd.DataFrame, ilk: str, son: str) -> dict:
     }
 
 
-def _oos_onceki_seviye(y: pd.Series, x: pd.Series, ilk_pencere: int, ambargo: int = 1) -> dict:
+def _oos_onceki_seviye(y: pd.Series, x: pd.Series, ilk_pencere: int, ambargo: int = 1,
+                       kiyas: str = "onceki") -> dict:
     """Seviye hedefinde rastgele yürüyüş kıyası (tuzak 9): `ortak_olc.oos_kiyas` ile
     AYNI genişleyen pencere, aynı model tahmini (y_t = a + b·x_t, x_t bilinen, eğitim
     hedefi t anında gerçekleşmiş satırlarla) ve aynı Diebold–Mariano t'si; yalnız saf
     kıyasın tahmini sıfır ya da ortalama değil, hedefin `ambargo` dönem önceki değeri
-    (ambargo = 1: bir önceki blok). Oran < 1 ve eksi t modelin lehine."""
+    (ambargo = 1: bir önceki blok). Oran < 1 ve eksi t modelin lehine.
+    `kiyas="ortalama"` yalnız `_oos_parite` içindir: aynı döngü koşulsuz ortalamayla
+    koşulur ve `ortak_olc.oos_kiyas`ın sonucuyla birebir tutmalıdır."""
     d = pd.concat([y.rename("y"), x.rename("x")], axis=1, sort=True).dropna()
     e_m, e_k = [], []
     for t in range(ilk_pencere, len(d)):
@@ -306,7 +312,7 @@ def _oos_onceki_seviye(y: pd.Series, x: pd.Series, ilk_pencere: int, ambargo: in
         X = np.column_stack([np.ones(len(egit)), egit["x"].values])
         b = np.linalg.lstsq(X, egit["y"].values, rcond=None)[0]
         tah = b[0] + b[1] * d["x"].iloc[t]
-        kiy = d["y"].iloc[t - ambargo]
+        kiy = d["y"].iloc[t - ambargo] if kiyas == "onceki" else egit["y"].mean()
         e_m.append((d["y"].iloc[t] - tah) ** 2)
         e_k.append((d["y"].iloc[t] - kiy) ** 2)
     if len(e_m) < oo.OOS_ASGARI:
@@ -323,6 +329,23 @@ def _oos_onceki_seviye(y: pd.Series, x: pd.Series, ilk_pencere: int, ambargo: in
             "ilk": oo._iso(d.index[ilk_pencere]), "ambargo": int(ambargo), "dm_gecikme": int(gecikme),
             "model_ortalama_karesel_hata": oo._f(e_m.mean()),
             "kiyas_ortalama_karesel_hata": oo._f(e_k.mean())}
+
+
+def _oos_parite(y: pd.Series, x: pd.Series, ilk_pencere: int, ortak: dict) -> None:
+    """`_oos_onceki_seviye`nin döngüsü `ortak_olc.oos_kiyas`ın KOPYASIDIR (seviye kıyası
+    oraya eklenmedi); iki kopya bir gün sessizce ayrışır ve rastgele yürüyüş oranı öbür
+    iki orandan başka bir pencereyle, başka bir DM gecikmesiyle ölçülmüş olur. Kilit:
+    aynı döngü koşulsuz ortalamayla koşulur ve `ortak` (`regresyon`un "oos_ortalama"
+    kaydı) ile alan alan karşılaştırılır; tutmazsa ölçüm DURUR."""
+    k = _oos_onceki_seviye(y, x, ilk_pencere, kiyas="ortalama")
+    if k.get("durum") == "kurulmadi" and ortak.get("durum") == "kurulmadi" and k.get("n") == ortak.get("n"):
+        return
+    ayrisan = [a for a in ("n", "ilk", "ambargo", "dm_gecikme") if k.get(a) != ortak.get(a)]
+    ayrisan += [a for a in ("mse_oran", "dm_t")
+                if k.get(a) is None or ortak.get(a) is None or abs(k[a] - ortak[a]) > 1e-9]
+    if ayrisan:
+        raise RuntimeError("olcum_b01._oos_onceki_seviye ortak_olc.oos_kiyas'tan ayrıştı "
+                           f"({', '.join(ayrisan)}): kopya döngü ortak tanıma göre güncellenmeli")
 
 
 def p1a() -> dict:
@@ -387,7 +410,8 @@ def p1a() -> dict:
     oos = reg["oos_ortalama"]
     # Hedef bir SEVİYE (bloğun korelasyonu): rastgele yürüyüş bir önceki bloğun değeridir
     # (tuzak 9). ortak_olc'nin "sıfır" kıyası burada sıfır korelasyon tahminidir; bilgi
-    # olarak kalır, hükme girmez.
+    # olarak kalır, hükme girmez. Kopya döngünün ortak tanımla aynı kaldığı önce sınanır.
+    _oos_parite(yk, xv, BLOK_ILK_PENCERE, oos)
     rw = _oos_onceki_seviye(yk, xv, ilk_pencere=BLOK_ILK_PENCERE)
     sifir = {**reg["oos"], "kiyas": KIYAS_SIFIR_KOR}
     hk = oo.hukum(reg["t"], [oos.get("mse_oran"), rw.get("mse_oran")])

@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import re
 
-from sekil_ortak import (ACIK_CLARET, ACIK_MAVI, CLARET, GRI, MAVI, MUREKKEP, TURUNCU, YESIL, ay, go,  # noqa: F401
+from sekil_ortak import (ALT_EM, BASLIK_EM, sar, ACIK_CLARET, ACIK_MAVI, CLARET, GRI, MAVI, MUREKKEP, TURUNCU, YESIL, ay, go,  # noqa: F401
                          make_subplots, tarih, vir, yuzde, _yaz)
 
 # Satır (şok) ve sütun (rejim) etiketleri — tam adlar ölçümden gelir, burada yalnız dar
@@ -28,7 +28,7 @@ _SOK_KISA = {
     "emtia": "Emtia / enerji", "kuresel": "Küresel risk (VIX)",
 }
 _REJIM_KISA = {
-    "R1": "normal", "R2": "mali kaygı", "R3": "güvenilir MB", "R4": "mali baskınlık",
+    "R1": "normal", "R2": "mali kaygı", "R3": "güvenilir MB", "R4": "mali baskı",   # dar sütun: tam ad ipucunda
     "R5_DM": "riskten kaçış", "R5_EM": "riskten kaçış",
 }
 _TARAF = {
@@ -61,7 +61,7 @@ _DURUM = {
     "ayrisan": "kalın çerçeve: korelasyon sıradan günden farklı (|z| ≥ 2)",
     "olculdu_es_hareket_yok": "ölçüldü, eş hareket kurulmadı",
     "vaka": "vaka (1–9 olay; korelasyon yazılmaz)",
-    "kaynak": "kaynak (bu veriyle kurulamadı: seri ya da olay yok ya da sınama geçmedi; bölüm kaynakla anlatır)",
+    "kaynak": "kaynak (kurulamadı; bölüm kaynakla anlatır)",
     "kurulmadi": "kurulmadı (sebebi hücrenin notunda)",
 }
 _LEJANT_SIRA = {"olculdu+": 1, "olculdu-": 2, "ayrisan": 3, "olculdu_es_hareket_yok": 4, "vaka": 5,
@@ -133,6 +133,17 @@ def _vaka_notu(h: dict) -> str:
         if parca:
             kalan.append("; ".join(parca) + ".")
     return " ".join(kalan)
+
+
+def _baslik_yeri(baslik: str) -> dict:
+    """Başlık bloğu üstten çapalanır (kendiliğinden yerleşince alt başlık sütun başlıklarına binebiliyordu)
+    ve ev stilinin üst payı içinde ORTALANIR: pay satır başına 26 piksel büyür (92 + 26·satır + 26),
+    blok satır başına ~19,7 piksel tutar; fark üstte bırakılırsa alt başlıkla ızgara arasında boşluk
+    büyür. 33 piksel: pad 48'de bloğun ölçülen üst kenarı; 30 piksel: sütun başlıkları."""
+    satir = baslik.count("<br>") + 1
+    pay = 92 + 26 * baslik.count("<br>") + 26
+    kaydir = max(0.0, (pay - 30 - 2 * 33 - 19.7 * satir) / 2)
+    return dict(text=baslik, y=1, yref="container", yanchor="top", pad=dict(t=int(48 + kaydir)))
 
 
 def _sar(metin: str, en: int = 60) -> str:
@@ -439,7 +450,8 @@ def s21_matris(o: dict) -> None:
         for j, c in enumerate(kol):
             kod = c.replace("_DM", "").replace("_EM", "")
             ann.append(dict(x=j, xref=xr, y=ust, yref="paper", yanchor="bottom", showarrow=False,
-                            text=f"<b>{kod}</b><br>{_REJIM_KISA.get(c, rejim_ad[c])}", font=dict(size=11),
+                            text=f"<b>{kod}</b><br><span style='font-size:9.5px'>{_REJIM_KISA.get(c, rejim_ad[c])}</span>",
+                            font=dict(size=11),
                             hovertext=f"{kod} · {rejim_ad[c]}"))
         ad, alt, uzun = _TARAF[t]
         ann.append(dict(x=0, xref="paper", xanchor="right", xshift=-8, y=ust, yref="paper", yanchor="bottom",
@@ -452,10 +464,10 @@ def s21_matris(o: dict) -> None:
 
     say = ozet["durum_sayisi"]
     ilk, son = _olay_araligi(m)
-    # Başlık ve alt başlık dar ekrana göre sarılır (Plotly başlığı sarmaz): başlık ~50, alt başlık
-    # ~78 karakterde (390 px'te sığar). Ev stili üst boşluğu satır sayısından kurar.
+    # Başlık ve alt başlık dar ekrana göre sarılır (Plotly başlığı sarmaz): ortak ölçü (sekil_ortak.sar,
+    # telefonun gömme çerçevesine göre em cinsinden). Ev stili üst boşluğu satır sayısından kurar.
     parca = [f"Şekil 24 — {ozet['hucre']} hücreden {say.get('olculdu', 0)} hücre ölçülebildi;"] + _baslik_bulgusu(olcu)
-    baslik = "<br>".join(_sar(x, 52) for x in parca)
+    baslik = "<br>".join(s for x in parca for s in sar(x, BASLIK_EM))
     alt = [
         "ABD Hazinesi, CNBC, Yahoo Finance, TCMB, TÜİK, Fed, Dünya Bankası",
         f"olay günü, haftası ya da ayı, {tarih(ilk)}–{tarih(son)}; rejim o haftanın etiketi",
@@ -463,13 +475,13 @@ def s21_matris(o: dict) -> None:
         "renk: olay günlerinde 2 yıllık faiz ve para değeri değişimlerinin korelasyonu",
         "para: DM'de dolar (G10 sepetine karşı), EM'de TL (USD/TRY'nin tersi)",
     ]
+    alt = [s for x in alt for s in sar(x, ALT_EM)]
     fig.update_layout(
         barmode="overlay", bargap=0, annotations=list(fig.layout.annotations) + ann,
         # Başlık bloğu çerçevenin üst kenarına üstten çapalanır: ev stili üst boşluğu satır başına
         # sabit payla kurar ve blok kendiliğinden yerleşince son alt başlık satırları sütun
         # başlıklarının üstüne biniyordu. Üstten çapada blok aşağı doğru akar ve pay ona yeter.
-        title=dict(text=baslik + "<br><sub>" + "<br>".join(alt) + "</sub>",
-                   y=1, yref="container", yanchor="top", pad=dict(t=48)),
+        title=_baslik_yeri(baslik + "<br><sub>" + "<br>".join(alt) + "</sub>"),
         hoverlabel=dict(align="left"),
     )
     _yaz(fig, "24_matris.html", 900)

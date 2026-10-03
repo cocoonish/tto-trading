@@ -12,6 +12,7 @@
   "acik_ust": -1.6091,
   "acik_alt_metin": "−2,04 puan",
   "acik_ust_metin": "−1,61 puan",
+  "acik_uclar_metin": "gerçek zamanlı ve tam örneklem",
   "politika": 37.0,
   "i_yabanci": 3.62,
   "pi_yabanci": 3.52
@@ -29,8 +30,8 @@
   "redk": 105.04,
   "denge_tam": 125.02,
   "denge_2003": 126.91,
-  "rho_mu": 0.9971,
-  "rho_alt": 0.9785,
+  "rho_mu": 0.9967,
+  "rho_alt": 0.9784,
   "rho_ust": 1.0,
   "rho_ols": 0.9862
  },

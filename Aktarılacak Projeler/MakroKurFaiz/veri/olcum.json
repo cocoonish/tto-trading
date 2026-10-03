@@ -18,7 +18,7 @@
   "bulut/evds_uyp.csv.gz": "c510074e8fe6911b3be62520234fe856aa35316dbe064ad984bdd1818461bd0b",
   "bulut/fomc_takvim.csv.gz": "9f4a2ff5239ca06cdaa46ab6adf42867d8dd08d6a5d3de1add26ceea036770eb",
   "bulut/gilt.csv.gz": "adacb8800572e837f3934b021727d847cb7695bf5597c758a9301754a8014a2a",
-  "bulut/not_kararlari.csv.gz": "28ab3a39e69b713b8c4cccc03b3e01a75298b472163efe14e8fd21e44cd96e75",
+  "bulut/not_kararlari.csv.gz": "14a87a05a5ea30fa7e1bad86e6626f8cf9f8c7b952ea8a1de8f532d6e4011f51",
   "bulut/surucu_gunluk.csv.gz": "7ff839541d96de6fd5e0c29f853539ac75ea766d905699f3592ffe6c131f3d7f",
   "bulut/tuik_takvim.csv.gz": "d20c7fcb293f4318806725eca874a0721d5be1f16ecc5ca81d58a012061e9bbd",
   "bulut/wdi_borc.csv.gz": "b0db7976dc97ded339c6cc3d8c9dd8839c36aa83b0fabc976a23eed96e649e45",
@@ -57,9 +57,14 @@
  "b01": {
   "p1a": {
    "blok_regresyon": {
+    "blok_kor_ozilinti_1": 0.5862,
     "egim_vix_basina": -0.0145,
     "gecikme": 4,
-    "hukum": "ölçülü",
+    "hukum": "tarif edici",
+    "hukum_kiyaslari": [
+     "koşulsuz ortalama",
+     "rastgele yürüyüş (bir önceki bloğun korelasyonu)"
+    ],
     "ilk": "2000-03-29",
     "n": 111,
     "oos_dm_anlamli": false,
@@ -67,12 +72,24 @@
     "oos_kiyas": "koşulsuz ortalama",
     "oos_mse_oran": 0.891,
     "oos_n": 71,
+    "oos_rastgele_yuruyus": {
+     "ambargo": 1,
+     "dm_gecikme": 3,
+     "dm_t": 1.0732,
+     "ilk": "2009-11-06",
+     "kiyas": "rastgele yürüyüş (bir önceki bloğun korelasyonu)",
+     "kiyas_ortalama_karesel_hata": 0.0782,
+     "model_ortalama_karesel_hata": 0.0975,
+     "mse_oran": 1.2468,
+     "n": 71
+    },
+    "oos_rw_dm_anlamli": false,
     "oos_sifir": {
      "ambargo": 1,
      "dm_gecikme": 3,
      "dm_t": -1.8846,
      "ilk": "2009-11-06",
-     "kiyas": "rastgele yürüyüş (değişim sıfır)",
+     "kiyas": "sıfır korelasyon",
      "mse_oran": 0.6844,
      "n": 71
     },
@@ -81,7 +98,7 @@
     "se_egim": 0.0038,
     "son": "2026-09-11",
     "t_egim": -3.8245,
-    "yontem": "Örtüşmeyen 60 iş günlük blokların her birinde korelasyon, aynı bloğun VIX ortalamasına regrese edildi; standart hata Newey–West, örneklem dışı kıyas genişleyen pencerede koşulsuz ortalama ve sıfır korelasyonla; hüküm ikisini de ister."
+    "yontem": "Örtüşmeyen 60 iş günlük blokların her birinde korelasyon, aynı bloğun VIX ortalamasına regrese edildi; standart hata Newey–West. Örneklem dışı kıyas genişleyen pencerede iki saf ölçüte karşı: koşulsuz ortalama ve rastgele yürüyüş — hedef bir seviye olduğu için rastgele yürüyüşün tahmini bir önceki bloğun korelasyonudur. Hüküm ikisini de ister; sıfır korelasyon kıyası bilgi olarak verilir, hükme girmez."
    },
    "dortte_bir": {
     "q1": {
@@ -1448,6 +1465,7 @@
       "etiket": "R5",
       "hafta": "2020-03-27",
       "kadran": "gevseme",
+      "kisa_bp": -12.0,
       "ornek_gunu": "2020-03-27",
       "para_kaybi_yuzde": 4.5658,
       "uzun_bp": -20.0,
@@ -1459,6 +1477,7 @@
       "etiket": "R5",
       "hafta": "2009-03-20",
       "kadran": "gevseme",
+      "kisa_bp": -9.0,
       "ornek_gunu": "2009-03-20",
       "para_kaybi_yuzde": 4.114,
       "uzun_bp": -24.0,
@@ -1470,6 +1489,7 @@
       "etiket": "R5",
       "hafta": "2008-12-19",
       "kadran": "gevseme",
+      "kisa_bp": -4.0,
       "ornek_gunu": "2008-12-19",
       "para_kaybi_yuzde": 3.4951,
       "uzun_bp": -47.0,
@@ -1481,6 +1501,7 @@
       "etiket": "R5",
       "hafta": "2009-05-22",
       "kadran": "prim",
+      "kisa_bp": 4.0,
       "ornek_gunu": "2009-05-22",
       "para_kaybi_yuzde": 3.4094,
       "uzun_bp": 31.0,
@@ -1492,6 +1513,7 @@
       "etiket": "R5",
       "hafta": "2008-12-12",
       "kadran": "gevseme",
+      "kisa_bp": -15.0,
       "ornek_gunu": "2008-12-12",
       "para_kaybi_yuzde": 3.3413,
       "uzun_bp": -7.0,
@@ -1503,6 +1525,7 @@
       "etiket": "R5",
       "hafta": "2025-04-11",
       "kadran": "prim",
+      "kisa_bp": 28.0,
       "ornek_gunu": "2025-04-11",
       "para_kaybi_yuzde": 3.3331,
       "uzun_bp": 47.0,
@@ -1514,6 +1537,7 @@
       "etiket": "R5",
       "hafta": "2011-10-14",
       "kadran": "prim",
+      "kisa_bp": -2.0,
       "ornek_gunu": "2011-10-14",
       "para_kaybi_yuzde": 3.006,
       "uzun_bp": 16.0,
@@ -1525,6 +1549,7 @@
       "etiket": "R1",
       "hafta": "2015-01-16",
       "kadran": "gevseme",
+      "kisa_bp": -10.0,
       "ornek_gunu": "2015-01-16",
       "para_kaybi_yuzde": 2.9129,
       "uzun_bp": -15.0,
@@ -1536,6 +1561,7 @@
       "etiket": "R1",
       "hafta": "2022-11-11",
       "kadran": "gevseme",
+      "kisa_bp": -32.0,
       "ornek_gunu": "2022-11-10",
       "para_kaybi_yuzde": 2.9022,
       "uzun_bp": -35.0,
@@ -1547,6 +1573,7 @@
       "etiket": "R5",
       "hafta": "2008-11-28",
       "kadran": "gevseme",
+      "kisa_bp": -9.0,
       "ornek_gunu": "2008-11-28",
       "para_kaybi_yuzde": 2.8674,
       "uzun_bp": -27.0,
@@ -1554,6 +1581,28 @@
       "yonetilen": false
      }
     ],
+    "en_buyuk_10_para_kaybi_normal_rejim_ayrisimi": {
+     "bolunu_tam": true,
+     "etiket": "R1",
+     "haftalar": {
+      "ayili_yassilasma": [],
+      "diklesme_esik_alti": [],
+      "kur_sapmasi_esik_alti": [],
+      "uzun_uc_yukselmedi": [
+       "2015-01-16",
+       "2022-11-11"
+      ]
+     },
+     "n": 2,
+     "sayim": {
+      "ayili_yassilasma": 0,
+      "diklesme_esik_alti": 0,
+      "kur_sapmasi_esik_alti": 0,
+      "uzun_uc_yukselmedi": 2
+     },
+     "yassilasan": 2,
+     "yontem": "En büyük on para kaybı haftasının normal rejime düşenleri, orta rejimin eğri ve kur şartlarına göre ayrıldı: uzun uç yükselip eğri yassılaştıysa kısa uç uzun uçtan fazla yükselmiştir; uzun uç yükselip eğri dikleştiyse dikleşme eşiğin altında kalmıştır (ya da dikleşme eşiği aşıp para kaybı eşiğin altında kalmıştır); uzun uç yükselmediyse kural haftayı orta rejime yazamaz."
+    },
     "hafta": {
      "R1": 955,
      "R2": 59,
@@ -1637,7 +1686,7 @@
    ],
    "kural": "Öncelik sırası: (1) R5 — örnek gününün (ABD cuma, Türkiye perşembe) VIX kapanışı, VIX'in 1990'dan bir önceki haftaya kadar biriken haftalık kapanışlarının 75. yüzdeliğinde ya da üstünde; (2) R2 (ABD) ya da R4 (Türkiye) — uzun uç yükselirken para, son 26 haftanın ortalama hareketine göre yarım standart sapmadan fazla değer kaybediyor ve eğri ayılı dikleşiyor (uzun eksi 2 yıllık fark yarım standart sapmadan fazla açılıyor; standart sapmalar son 52 haftanın); (3) öbür haftalar R1 ya da R3.",
    "n": 1355,
-   "sinir": "CDS yok: Türkiye'de küresel riskten kaçış ile yerel risk primi aynı kadrana (faiz ↑, kur ↑) düşer ve iki rejimi yalnız VIX ayırır. ABD'de güvenli liman döneminin riskten dönüş haftası 'prim' kadranına düşer, bu yüzden R5 önce sorulur. Türkiye'nin sert stres haftalarında kısa uç uzun uçtan fazla yükseldiği için (likidite sıkılaşması) ayılı dikleşme şartı o haftaları R3'e yazar; en büyük on TL değer kaybı haftasının etiketleri ayrıca verildi. Etiket haftalıktır ve tek haftanın gürültüsünü taşır; eşikler sabit adlıdır ama sezgiyle seçildi, duyarlılık ayrıca verildi. Yönetilen kur döneminde kur yönü piyasayı değil politikayı ölçer.",
+   "sinir": "CDS yok: Türkiye'de küresel riskten kaçış ile yerel risk primi aynı kadrana (faiz ↑, kur ↑) düşer ve iki rejimi yalnız VIX ayırır. ABD'de güvenli liman döneminin riskten dönüş haftası 'prim' kadranına düşer, bu yüzden R5 önce sorulur. Ayılı dikleşme şartı Türkiye'nin sert stres haftalarını da R3'e yazabilir: kısa uç uzun uçtan fazla yükseldiğinde (likidite sıkılaşması) eğri yassılaşır ve dikleşme şartı tutmaz; en büyük on TL değer kaybı haftasının etiketleri ve R3'e düşenlerin hangi şartı geçemediği ayrıca verildi. Etiket haftalıktır ve tek haftanın gürültüsünü taşır; eşikler sabit adlıdır ama sezgiyle seçildi, duyarlılık ayrıca verildi. Yönetilen kur döneminde kur yönü piyasayı değil politikayı ölçer.",
    "son": "2026-09-25",
    "son_tam_hafta": {
     "abd": "R1",
@@ -1694,6 +1743,7 @@
       "etiket": "R4",
       "hafta": "2021-12-31",
       "kadran": "prim",
+      "kisa_bp": 5.7741,
       "ornek_gunu": "2021-12-30",
       "para_kaybi_yuzde": 14.1818,
       "uzun_bp": 34.9369,
@@ -1705,6 +1755,7 @@
       "etiket": "R5",
       "hafta": "2021-12-03",
       "kadran": "prim",
+      "kisa_bp": 33.0877,
       "ornek_gunu": "2021-12-02",
       "para_kaybi_yuzde": 12.1753,
       "uzun_bp": 66.3888,
@@ -1716,6 +1767,7 @@
       "etiket": "R4",
       "hafta": "2023-06-09",
       "kadran": "prim",
+      "kisa_bp": -15.7301,
       "ornek_gunu": "2023-06-08",
       "para_kaybi_yuzde": 11.3266,
       "uzun_bp": 338.0039,
@@ -1727,6 +1779,7 @@
       "etiket": "R4",
       "hafta": "2021-12-17",
       "kadran": "prim",
+      "kisa_bp": 97.0443,
       "ornek_gunu": "2021-12-16",
       "para_kaybi_yuzde": 10.9522,
       "uzun_bp": 155.7134,
@@ -1738,6 +1791,7 @@
       "etiket": "R3",
       "hafta": "2021-11-19",
       "kadran": "prim",
+      "kisa_bp": 55.7192,
       "ornek_gunu": "2021-11-18",
       "para_kaybi_yuzde": 10.037,
       "uzun_bp": 63.1443,
@@ -1749,6 +1803,7 @@
       "etiket": "R4",
       "hafta": "2021-03-26",
       "kadran": "prim",
+      "kisa_bp": 323.9152,
       "ornek_gunu": "2021-03-25",
       "para_kaybi_yuzde": 8.3441,
       "uzun_bp": 387.0904,
@@ -1760,6 +1815,7 @@
       "etiket": "R3",
       "hafta": "2018-08-10",
       "kadran": "prim",
+      "kisa_bp": 171.497,
       "ornek_gunu": "2018-08-09",
       "para_kaybi_yuzde": 7.4636,
       "uzun_bp": 159.2758,
@@ -1771,6 +1827,7 @@
       "etiket": "R3",
       "hafta": "2021-11-26",
       "kadran": "prim",
+      "kisa_bp": 236.473,
       "ornek_gunu": "2021-11-25",
       "para_kaybi_yuzde": 7.1691,
       "uzun_bp": 114.2406,
@@ -1782,6 +1839,7 @@
       "etiket": "R4",
       "hafta": "2016-07-22",
       "kadran": "prim",
+      "kisa_bp": 88.3763,
       "ornek_gunu": "2016-07-21",
       "para_kaybi_yuzde": 6.2502,
       "uzun_bp": 114.2928,
@@ -1793,6 +1851,7 @@
       "etiket": "R3",
       "hafta": "2018-05-25",
       "kadran": "gevseme",
+      "kisa_bp": -3.8023,
       "ornek_gunu": "2018-05-24",
       "para_kaybi_yuzde": 5.8451,
       "uzun_bp": -21.9619,
@@ -1800,6 +1859,32 @@
       "yonetilen": false
      }
     ],
+    "en_buyuk_10_para_kaybi_normal_rejim_ayrisimi": {
+     "bolunu_tam": true,
+     "etiket": "R3",
+     "haftalar": {
+      "ayili_yassilasma": [
+       "2018-08-10",
+       "2021-11-26"
+      ],
+      "diklesme_esik_alti": [
+       "2021-11-19"
+      ],
+      "kur_sapmasi_esik_alti": [],
+      "uzun_uc_yukselmedi": [
+       "2018-05-25"
+      ]
+     },
+     "n": 4,
+     "sayim": {
+      "ayili_yassilasma": 2,
+      "diklesme_esik_alti": 1,
+      "kur_sapmasi_esik_alti": 0,
+      "uzun_uc_yukselmedi": 1
+     },
+     "yassilasan": 3,
+     "yontem": "En büyük on para kaybı haftasının normal rejime düşenleri, orta rejimin eğri ve kur şartlarına göre ayrıldı: uzun uç yükselip eğri yassılaştıysa kısa uç uzun uçtan fazla yükselmiştir; uzun uç yükselip eğri dikleştiyse dikleşme eşiğin altında kalmıştır (ya da dikleşme eşiği aşıp para kaybı eşiğin altında kalmıştır); uzun uç yükselmediyse kural haftayı orta rejime yazamaz."
+    },
     "hafta": {
      "R3": 518,
      "R4": 43,
@@ -9060,7 +9145,7 @@
      "yontem": "PPK pencerelerinin dışındaki günlerden, sabit tohumla, PPK sayısı kadar günlük 1.000 rastgele küme çekildi ve her kümenin profili aynı kuralla kuruldu."
     }
    ],
-   "kural": "Pencere ölçülür, varsayılmaz: kapıdan geçmeyen seri × olay ikilisinde olay çalışması kurulmaz.",
+   "kural": "Pencere ölçülür, varsayılmaz: plasebo sınamasından geçmeyen seri × olay ikilisinde olay çalışması kurulmaz.",
    "n": 1598,
    "olay_turleri": {
     "abd_istihdam": "ABD istihdam raporu (08:30 New York)",
@@ -9652,7 +9737,7 @@
      "ppk_kararlari"
     ],
     "oneri": {
-     "aciklama": "14:00 ve sonrasındaki bir olayın tepkisi için olay gününe kaç iş günü sonraki etiketin değişimi yazılır; değer, bütün günlerde gün sonu kapanışıyla sıra korelasyonunun tepesinden okunur (2013–2021, yönetilen kur öncesi). 10:00'daki bir olay için sabitleme saati 10:00'a göre ölçülemediği için iki komşu kayma birlikte verilir. PPK taramasında güçlü kapı ölçülen saatte geçiyor: 2 yıllık, TCMB kuru, USD/TRY; başka kaymada geçen (iş günü): 3 aylık 3; hiçbir kaymada güçlü geçmeyen: 5 yıllık.",
+     "aciklama": "14:00 ve sonrasındaki bir olayın tepkisi için olay gününe kaç iş günü sonraki etiketin değişimi yazılır; değer, bütün günlerde gün sonu kapanışıyla sıra korelasyonunun tepesinden okunur (2013–2021, yönetilen kur öncesi). 10:00'daki bir olay için sabitleme saati 10:00'a göre ölçülemediği için iki komşu kayma birlikte verilir. PPK taramasında güçlü kural ölçülen saatte geçiyor: 2 yıllık, TCMB kuru, USD/TRY; başka kaymada geçen (iş günü): 3 aylık 3; hiçbir kaymada güçlü geçmeyen: 5 yıllık.",
      "ogleden_sonra_olayi_icin_kayma_is_gunu": {
       "n2y": 2,
       "n3a": 2,
@@ -10603,7 +10688,7 @@
      "yonetilen_siniri_dusen_olay": 0
     }
    ],
-   "yontem": "Her seri için olay günlerinin iki iş günü öncesinden iki iş günü sonrasına mutlak günlük değişim ortalaması, olay pencerelerinin dışındaki günlerin mutlak değişim ortalamasına bölündü; tepe olay gününde ve olay günü oranı öbür dört kaymanın en büyüğünden yüksekse kapı geçer. Olay günü oranı, haftanın günü bileşimi aynı 1.000 rastgele gün kümesiyle kıyaslandı (rastgele kümelerin tabanı da olay pencerelerinin dışındaki sıradan günler); güçlü kapı ayrıca bu kıyasın %95'ini aşmayı ister, olay çalışması ise ek olarak geçişin serinin ölçülmüş saatiyle bağdaşmasını. Kur serilerinde yönetilen kur dönemi ayrı ölçüldü."
+   "yontem": "Her seri için olay günlerinin iki iş günü öncesinden iki iş günü sonrasına mutlak günlük değişim ortalaması, olay pencerelerinin dışındaki günlerin mutlak değişim ortalamasına bölündü; tepe olay gününde ve olay günü oranı öbür dört kaymanın en büyüğünden yüksekse sınama geçer. Olay günü oranı, haftanın günü bileşimi aynı 1.000 rastgele gün kümesiyle kıyaslandı (rastgele kümelerin tabanı da olay pencerelerinin dışındaki sıradan günler); güçlü kural ayrıca bu kıyasın %95'ini aşmayı ister, olay çalışması ise ek olarak geçişin serinin ölçülmüş saatiyle bağdaşmasını. Kur serilerinde yönetilen kur dönemi ayrı ölçüldü."
   },
   "sekil_02": {
    "ilk": "2008-01-22",
@@ -12520,7 +12605,7 @@
      "p_rastgele_oran0": 0.1319,
      "tepe": 1
     },
-    "sebep": "ima sürprizi (DİBS 3 aylık değişimi) PPK günlerinde plasebo kapısını geçmedi: plasebo profilinin tepesi olay gününde değil (+1 iş gününde); olay penceresi kurulmaz"
+    "sebep": "ima sürprizi (DİBS 3 aylık değişimi) PPK günlerinde plasebo sınamasını geçmedi: plasebo profilinin tepesi olay gününde değil (+1 iş gününde); olay penceresi kurulmaz"
    },
    "kapi": {
     "n1y": {
@@ -13869,7 +13954,7 @@
       "t": 1.1268
      }
     },
-    "sebep": "3 aylık düğüm PPK günlerinde plasebo kapısını geçmedi (plasebo profilinin tepesi olay gününde değil (+1 iş gününde); olay penceresi kurulmaz); aşağıdaki sayılar yalnız tanıdır",
+    "sebep": "3 aylık düğüm PPK günlerinde plasebo sınamasını geçmedi (plasebo profilinin tepesi olay gününde değil (+1 iş gününde); olay penceresi kurulmaz); aşağıdaki sayılar yalnız tanıdır",
     "yayimlanmaz": true
    },
    "tepki": {
@@ -14538,7 +14623,7 @@
      "sebep": "plasebo profilinin tepesi olay gününde değil (+1 iş gününde); olay penceresi kurulmaz"
     }
    },
-   "yontem": "Her PPK karar günü için DİBS düğümlerinin (gün sonu hizasıyla: D gününe D+2 iş günü etiketli değer) ve USD/TRY'nin aynı piyasa günündeki değişimi ölçüldü; önce plasebo kapısı (güçlü kural) soruldu, kur tepkisi kararla anket beklentisinin farkına dönem dönem Newey–West ile regresyonlandı."
+   "yontem": "Her PPK karar günü için DİBS düğümlerinin (gün sonu hizasıyla: D gününe D+2 iş günü etiketli değer) ve USD/TRY'nin aynı piyasa günündeki değişimi ölçüldü; önce plasebo sınaması (güçlü kural) soruldu, kur tepkisi kararla anket beklentisinin farkına dönem dönem Newey–West ile regresyonlandı."
   },
   "p3c": {
    "birim": "eğim: EUR/USD % değişim / 10 bp fark değişimi; eksi işaret, ABD lehine açılan farkla doların değer kazancıdır",
@@ -14781,7 +14866,7 @@
      "ilk": "2023-08-31",
      "kov_n2y_usdtry": {
       "durum": "kurulmadi",
-      "sebep": "çiftin en az bir serisi plasebo kapısını geçmedi"
+      "sebep": "çiftin en az bir serisi plasebo sınamasını geçmedi"
      },
      "n_olay": 13,
      "n_sakin": 751,
@@ -14895,7 +14980,7 @@
      "ilk": "2013-04-01",
      "kov_n2y_usdtry": {
       "durum": "kurulmadi",
-      "sebep": "çiftin en az bir serisi plasebo kapısını geçmedi"
+      "sebep": "çiftin en az bir serisi plasebo sınamasını geçmedi"
      },
      "n_olay": 55,
      "n_sakin": 3176,
@@ -26374,7 +26459,7 @@
     "cuma_kur_degisimi_bos_yayim": 20,
     "dibs_degeri_olmayan_yayim": [],
     "eslesme": "yayım günü → bir önceki ay (benzersiz)",
-    "hiza_notu": "Regresyonlar gün sonu hizasında kurulur (kurla aynı piyasa günü). 10:00'daki TÜFE için sabitlemenin saati ölçülmediğinden sabah hizası (D gününe D+1 etiketli değer) da saatle bağdaşır; DİBS kapısı o hizada ayrıca verilir, regresyon kurmaz.",
+    "hiza_notu": "Regresyonlar gün sonu hizasında kurulur (kurla aynı piyasa günü). 10:00'daki TÜFE için sabitlemenin saati ölçülmediğinden sabah hizası (D gününe D+1 etiketli değer) da saatle bağdaşır; DİBS sınaması o hizada ayrıca verilir, regresyon kurmaz.",
     "ilk": "2013-02-04",
     "kapi": {
      "n1y": {
@@ -30793,7 +30878,7 @@
      0.0323
     ],
     "kapiyi_gecen": [],
-    "not": "Kapıyı geçmeyen serinin noktaları yalnız profil için durur; regresyon kurulmadı.",
+    "not": "Plasebo sınamasını geçmeyen serinin noktaları yalnız profil için durur; regresyon kurulmadı.",
     "rejim": [
      "d2013_2020",
      "d2013_2020",
@@ -40393,21 +40478,37 @@
  "b07": {
   "arac_redk": {
    "aciklama": "Artı sapma ortalamaya göre pahalı TL'dir; ρ<1 ise beklenen yol reel değer kaybıdır (REDK düşer). Bu bir çekim terimidir, yön ve zamanlama tahmini değildir.",
-   "beklenen_12ay_log": 0.006035,
-   "beklenen_12ay_yuzde": 0.605305,
+   "beklenen_12ay_log": 0.006855,
+   "beklenen_12ay_yuzde": 0.687905,
    "ilk": "1994-01-01",
    "kaynak": [
     "redk_aylik (TCMB, 2025=100; artış TL'nin reel değer kazancı)"
    ],
    "n": 392,
-   "rho_alt90": 0.978522,
-   "rho_aylik": 0.997064,
+   "rho_alt90": 0.978432,
+   "rho_aylik": 0.996658,
    "rho_ust90": 1.0,
    "sapma_log": -0.174093,
    "son": "2026-08-01",
    "yontem": "Bugünkü reel kur sapması, medyan-yansız aylık kalıcılık katsayısının on ikinci kuvvetiyle bir yıl ileri taşındı: beklenen değişim (ρ¹² − 1) × sapma."
   },
   "p7a": {
+   "benzetim": {
+    "ana_tohum": 20261002,
+    "aralik_tohumlari": [
+     20261002,
+     20261003,
+     20261004,
+     20261005,
+     20261006
+    ],
+    "deneme": 4000,
+    "izgara_alt": 0.5,
+    "izgara_nokta": 101,
+    "izgara_ust": 1.0,
+    "kural": "Izgaranın her noktasında 4.000 yapay seri. Ana kestirim tek ve sabit bir rastgele sayı tohumuyla kurulur; benzetim aralığı aynı kestirimin beş bağımsız tohumdaki (ana tohum dahil) en küçük ve en büyük sonucudur. Yapay seriler veriye değil yalnız seri uzunluğuna, arındırma biçimine ve tohuma bağlıdır; aynı uzunluktaki seriler her tohumda aynı yapay serilerle kestirilir. Aylık katsayı 0,9999 ve üstündeyse yarı ömür sonsuz sayılır; kural nokta kestirime, %90 aralığının iki ucuna ve benzetim aralığına aynı uygulanır.",
+    "sonsuz_rho": 0.9999
+   },
    "kaynak": [
     "redk_aylik (TCMB, 2025=100; artış TL'nin reel değer kazancı)"
    ],
@@ -40425,28 +40526,56 @@
      "1994_2001": {
       "adf": {
        "birim_kok_red_yuzde10": false,
+       "birim_kok_red_yuzde10_sonlu": false,
        "birim_kok_red_yuzde5": false,
+       "birim_kok_red_yuzde5_sonlu": false,
        "gecikme": 8,
+       "hukum": "Birim kök %5'te de %10'da da reddedilmiyor.",
+       "hukum_esigi": "sonlu örneklem",
        "kritik": {
-        "yuzde10": -2.57,
-        "yuzde5": -2.86
+        "yuzde10": -2.56677,
+        "yuzde5": -2.86154
+       },
+       "kritik_sonlu": {
+        "yuzde10": -2.585713,
+        "yuzde5": -2.897048
        },
        "n": 83,
        "t": -1.689529
       },
+      "benzetim_araligi": {
+       "deneme": 4000,
+       "n_mu_sonsuz": 0,
+       "n_ust_sonsuz": 5,
+       "rho_alt90_max": 0.895369,
+       "rho_alt90_min": 0.89104,
+       "rho_mu_max": 0.969,
+       "rho_mu_min": 0.967823,
+       "ters_cevirme_tek_kesisim": true,
+       "tohum_sayisi": 5,
+       "yari_omur_alt90_max_ay": 6.27174,
+       "yari_omur_alt90_max_yil": 0.522645,
+       "yari_omur_alt90_min_ay": 6.008249,
+       "yari_omur_alt90_min_yil": 0.500687,
+       "yari_omur_max_ay": 22.011438,
+       "yari_omur_max_sonsuz": false,
+       "yari_omur_max_yil": 1.834286,
+       "yari_omur_min_ay": 21.193326,
+       "yari_omur_min_yil": 1.76611
+      },
       "etiket": "1994–2001 (sabit kura yakın rejim ve krizler)",
       "ilk": "1994-01-01",
       "n": 96,
-      "rho_alt90": 0.896427,
-      "rho_mu": 0.969637,
+      "rho_alt90": 0.895369,
+      "rho_mu": 0.968364,
       "rho_ols": 0.930386,
       "rho_ust90": 1.0,
       "son": "2001-12-01",
       "ust_sonsuz": true,
-      "yari_omur_alt90_ay": 6.339458,
-      "yari_omur_alt90_yil": 0.528288,
-      "yari_omur_mu_ay": 22.480609,
-      "yari_omur_mu_yil": 1.873384,
+      "yari_omur_alt90_ay": 6.27174,
+      "yari_omur_alt90_yil": 0.522645,
+      "yari_omur_mu_ay": 21.561425,
+      "yari_omur_mu_yil": 1.796785,
       "yari_omur_ols_ay": 9.606268,
       "yari_omur_ols_yil": 0.800522,
       "yari_omur_ust90_ay": null,
@@ -40455,28 +40584,56 @@
      "2002_2017": {
       "adf": {
        "birim_kok_red_yuzde10": false,
+       "birim_kok_red_yuzde10_sonlu": false,
        "birim_kok_red_yuzde5": false,
+       "birim_kok_red_yuzde5_sonlu": false,
        "gecikme": 4,
+       "hukum": "Birim kök %5'te de %10'da da reddedilmiyor.",
+       "hukum_esigi": "sonlu örneklem",
        "kritik": {
-        "yuzde10": -2.57,
-        "yuzde5": -2.86
+        "yuzde10": -2.56677,
+        "yuzde5": -2.86154
+       },
+       "kritik_sonlu": {
+        "yuzde10": -2.575452,
+        "yuzde5": -2.877826
        },
        "n": 179,
        "t": -2.227787
       },
+      "benzetim_araligi": {
+       "deneme": 4000,
+       "n_mu_sonsuz": 0,
+       "n_ust_sonsuz": 5,
+       "rho_alt90_max": 0.934868,
+       "rho_alt90_min": 0.933535,
+       "rho_mu_max": 0.975371,
+       "rho_mu_min": 0.974415,
+       "ters_cevirme_tek_kesisim": true,
+       "tohum_sayisi": 5,
+       "yari_omur_alt90_max_ay": 10.29172,
+       "yari_omur_alt90_max_yil": 0.857643,
+       "yari_omur_alt90_min_ay": 10.078231,
+       "yari_omur_alt90_min_yil": 0.839853,
+       "yari_omur_max_ay": 27.795859,
+       "yari_omur_max_sonsuz": false,
+       "yari_omur_max_yil": 2.316322,
+       "yari_omur_min_ay": 26.74351,
+       "yari_omur_min_yil": 2.228626
+      },
       "etiket": "2002–2017 (dalgalı kur, enflasyon hedeflemesi)",
       "ilk": "2002-01-01",
       "n": 192,
-      "rho_alt90": 0.934381,
-      "rho_mu": 0.974601,
+      "rho_alt90": 0.934027,
+      "rho_mu": 0.975371,
       "rho_ols": 0.956693,
       "rho_ust90": 1.0,
       "son": "2017-12-01",
       "ust_sonsuz": true,
-      "yari_omur_alt90_ay": 10.212756,
-      "yari_omur_alt90_yil": 0.851063,
-      "yari_omur_mu_ay": 26.941778,
-      "yari_omur_mu_yil": 2.245148,
+      "yari_omur_alt90_ay": 10.156087,
+      "yari_omur_alt90_yil": 0.846341,
+      "yari_omur_mu_ay": 27.795859,
+      "yari_omur_mu_yil": 2.316322,
       "yari_omur_ols_ay": 15.656307,
       "yari_omur_ols_yil": 1.304692,
       "yari_omur_ust90_ay": null,
@@ -40485,28 +40642,56 @@
      "2018_2026": {
       "adf": {
        "birim_kok_red_yuzde10": false,
+       "birim_kok_red_yuzde10_sonlu": false,
        "birim_kok_red_yuzde5": false,
+       "birim_kok_red_yuzde5_sonlu": false,
        "gecikme": 2,
+       "hukum": "Birim kök %5'te de %10'da da reddedilmiyor.",
+       "hukum_esigi": "sonlu örneklem",
        "kritik": {
-        "yuzde10": -2.57,
-        "yuzde5": -2.86
+        "yuzde10": -2.56677,
+        "yuzde5": -2.86154
+       },
+       "kritik_sonlu": {
+        "yuzde10": -2.584015,
+        "yuzde5": -2.893866
        },
        "n": 91,
        "t": -1.647242
       },
+      "benzetim_araligi": {
+       "deneme": 4000,
+       "n_mu_sonsuz": 0,
+       "n_ust_sonsuz": 5,
+       "rho_alt90_max": 0.895259,
+       "rho_alt90_min": 0.892101,
+       "rho_mu_max": 0.965997,
+       "rho_mu_min": 0.963749,
+       "ters_cevirme_tek_kesisim": true,
+       "tohum_sayisi": 5,
+       "yari_omur_alt90_max_ay": 6.264752,
+       "yari_omur_alt90_max_yil": 0.522063,
+       "yari_omur_alt90_min_ay": 6.070845,
+       "yari_omur_alt90_min_yil": 0.505904,
+       "yari_omur_max_ay": 20.036453,
+       "yari_omur_max_sonsuz": false,
+       "yari_omur_max_yil": 1.669704,
+       "yari_omur_min_ay": 18.77223,
+       "yari_omur_min_yil": 1.564352
+      },
       "etiket": "2018–2026 (yüksek oynaklık)",
       "ilk": "2018-01-01",
       "n": 104,
-      "rho_alt90": 0.89415,
-      "rho_mu": 0.963882,
+      "rho_alt90": 0.894032,
+      "rho_mu": 0.964796,
       "rho_ols": 0.930405,
       "rho_ust90": 1.0,
       "son": "2026-08-01",
       "ust_sonsuz": true,
-      "yari_omur_alt90_ay": 6.195349,
-      "yari_omur_alt90_yil": 0.516279,
-      "yari_omur_mu_ay": 18.842599,
-      "yari_omur_mu_yil": 1.570217,
+      "yari_omur_alt90_ay": 6.188046,
+      "yari_omur_alt90_yil": 0.515671,
+      "yari_omur_mu_ay": 19.340939,
+      "yari_omur_mu_yil": 1.611745,
       "yari_omur_ols_ay": 9.60893,
       "yari_omur_ols_yil": 0.800744,
       "yari_omur_ust90_ay": null,
@@ -40514,41 +40699,85 @@
      }
     },
     "egilimden_arindirilmis": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 5,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.980638,
+      "rho_alt90_min": 0.979524,
+      "rho_mu_max": 1.0,
+      "rho_mu_min": 1.0,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 2.954277,
+      "yari_omur_alt90_min_yil": 2.791994,
+      "yari_omur_max_sonsuz": true,
+      "yari_omur_max_yil": null,
+      "yari_omur_min_yil": null
+     },
      "egilim_log_yil": -0.008586,
      "n": 392,
-     "rho_alt90": 0.978908,
+     "rho_alt90": 0.980427,
      "rho_mu": 1.0,
      "rho_ols": 0.983259,
      "rho_ust90": 1.0,
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 2.709555,
+     "yari_omur_alt90_yil": 2.922115,
      "yari_omur_mu_yil": null,
      "yari_omur_ust90_yil": null
     },
     "tam": {
      "adf": {
       "birim_kok_red_yuzde10": false,
+      "birim_kok_red_yuzde10_sonlu": false,
       "birim_kok_red_yuzde5": false,
+      "birim_kok_red_yuzde5_sonlu": false,
       "gecikme": 12,
+      "hukum": "Birim kök %5'te de %10'da da reddedilmiyor.",
+      "hukum_esigi": "sonlu örneklem",
       "kritik": {
-       "yuzde10": -2.57,
-       "yuzde5": -2.86
+       "yuzde10": -2.56677,
+       "yuzde5": -2.86154
+      },
+      "kritik_sonlu": {
+       "yuzde10": -2.570849,
+       "yuzde5": -2.869196
       },
       "n": 379,
       "t": -1.060567
      },
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 0,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.979087,
+      "rho_alt90_min": 0.977908,
+      "rho_mu_max": 0.996658,
+      "rho_mu_min": 0.996026,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_ay": 32.796752,
+      "yari_omur_alt90_max_yil": 2.733063,
+      "yari_omur_alt90_min_ay": 31.027441,
+      "yari_omur_alt90_min_yil": 2.58562,
+      "yari_omur_max_ay": 207.040674,
+      "yari_omur_max_sonsuz": false,
+      "yari_omur_max_yil": 17.253389,
+      "yari_omur_min_ay": 174.063605,
+      "yari_omur_min_yil": 14.5053
+     },
      "ilk": "1994-01-01",
      "n": 392,
-     "rho_alt90": 0.978522,
-     "rho_mu": 0.997064,
+     "rho_alt90": 0.978432,
+     "rho_mu": 0.996658,
      "rho_ols": 0.986172,
      "rho_ust90": 1.0,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_ay": 31.924147,
-     "yari_omur_alt90_yil": 2.660346,
-     "yari_omur_mu_ay": 235.769558,
-     "yari_omur_mu_yil": 19.647463,
+     "yari_omur_alt90_ay": 31.790315,
+     "yari_omur_alt90_yil": 2.649193,
+     "yari_omur_mu_ay": 207.040674,
+     "yari_omur_mu_yil": 17.253389,
      "yari_omur_ols_ay": 49.777276,
      "yari_omur_ols_yil": 4.148106,
      "yari_omur_ust90_ay": null,
@@ -40560,28 +40789,56 @@
      "1994_2001": {
       "adf": {
        "birim_kok_red_yuzde10": false,
+       "birim_kok_red_yuzde10_sonlu": false,
        "birim_kok_red_yuzde5": false,
+       "birim_kok_red_yuzde5_sonlu": false,
        "gecikme": 8,
+       "hukum": "Birim kök %5'te de %10'da da reddedilmiyor.",
+       "hukum_esigi": "sonlu örneklem",
        "kritik": {
-        "yuzde10": -2.57,
-        "yuzde5": -2.86
+        "yuzde10": -2.56677,
+        "yuzde5": -2.86154
+       },
+       "kritik_sonlu": {
+        "yuzde10": -2.585713,
+        "yuzde5": -2.897048
        },
        "n": 83,
        "t": -1.727539
       },
+      "benzetim_araligi": {
+       "deneme": 4000,
+       "n_mu_sonsuz": 0,
+       "n_ust_sonsuz": 5,
+       "rho_alt90_max": 0.914115,
+       "rho_alt90_min": 0.911142,
+       "rho_mu_max": 0.987417,
+       "rho_mu_min": 0.986072,
+       "ters_cevirme_tek_kesisim": true,
+       "tohum_sayisi": 5,
+       "yari_omur_alt90_max_ay": 7.71888,
+       "yari_omur_alt90_max_yil": 0.64324,
+       "yari_omur_alt90_min_ay": 7.448647,
+       "yari_omur_alt90_min_yil": 0.620721,
+       "yari_omur_max_ay": 54.738388,
+       "yari_omur_max_sonsuz": false,
+       "yari_omur_max_yil": 4.561532,
+       "yari_omur_min_ay": 49.420093,
+       "yari_omur_min_yil": 4.118341
+      },
       "etiket": "1994–2001 (sabit kura yakın rejim ve krizler)",
       "ilk": "1994-01-01",
       "n": 96,
-      "rho_alt90": 0.914353,
-      "rho_mu": 0.987468,
+      "rho_alt90": 0.912321,
+      "rho_mu": 0.987353,
       "rho_ols": 0.944898,
       "rho_ust90": 1.0,
       "son": "2001-12-01",
       "ust_sonsuz": true,
-      "yari_omur_alt90_ay": 7.741363,
-      "yari_omur_alt90_yil": 0.645114,
-      "yari_omur_mu_ay": 54.961586,
-      "yari_omur_mu_yil": 4.580132,
+      "yari_omur_alt90_ay": 7.553671,
+      "yari_omur_alt90_yil": 0.629473,
+      "yari_omur_mu_ay": 54.459405,
+      "yari_omur_mu_yil": 4.538284,
       "yari_omur_ols_ay": 12.229522,
       "yari_omur_ols_yil": 1.019127,
       "yari_omur_ust90_ay": null,
@@ -40590,28 +40847,56 @@
      "2002_2017": {
       "adf": {
        "birim_kok_red_yuzde10": true,
+       "birim_kok_red_yuzde10_sonlu": false,
        "birim_kok_red_yuzde5": false,
+       "birim_kok_red_yuzde5_sonlu": false,
        "gecikme": 1,
+       "hukum": "Birim kök %10'da yalnız asimptotik eşikle reddediliyor, %5'te reddedilmiyor.",
+       "hukum_esigi": "sonlu örneklem",
        "kritik": {
-        "yuzde10": -2.57,
-        "yuzde5": -2.86
+        "yuzde10": -2.56677,
+        "yuzde5": -2.86154
+       },
+       "kritik_sonlu": {
+        "yuzde10": -2.575452,
+        "yuzde5": -2.877826
        },
        "n": 179,
        "t": -2.570889
       },
+      "benzetim_araligi": {
+       "deneme": 4000,
+       "n_mu_sonsuz": 0,
+       "n_ust_sonsuz": 5,
+       "rho_alt90_max": 0.92299,
+       "rho_alt90_min": 0.921246,
+       "rho_mu_max": 0.966139,
+       "rho_mu_min": 0.964883,
+       "ters_cevirme_tek_kesisim": true,
+       "tohum_sayisi": 5,
+       "yari_omur_alt90_max_ay": 8.649567,
+       "yari_omur_alt90_max_yil": 0.720797,
+       "yari_omur_alt90_min_ay": 8.450075,
+       "yari_omur_alt90_min_yil": 0.704173,
+       "yari_omur_max_ay": 20.121975,
+       "yari_omur_max_sonsuz": false,
+       "yari_omur_max_yil": 1.676831,
+       "yari_omur_min_ay": 19.38962,
+       "yari_omur_min_yil": 1.615802
+      },
       "etiket": "2002–2017 (dalgalı kur, enflasyon hedeflemesi)",
       "ilk": "2002-01-01",
       "n": 192,
-      "rho_alt90": 0.922319,
-      "rho_mu": 0.964422,
+      "rho_alt90": 0.921246,
+      "rho_mu": 0.966139,
       "rho_ols": 0.947743,
       "rho_ust90": 1.0,
       "son": "2017-12-01",
       "ust_sonsuz": true,
-      "yari_omur_alt90_ay": 8.571804,
-      "yari_omur_alt90_yil": 0.714317,
-      "yari_omur_mu_ay": 19.133937,
-      "yari_omur_mu_yil": 1.594495,
+      "yari_omur_alt90_ay": 8.450075,
+      "yari_omur_alt90_yil": 0.704173,
+      "yari_omur_mu_ay": 20.121975,
+      "yari_omur_mu_yil": 1.676831,
       "yari_omur_ols_ay": 12.914529,
       "yari_omur_ols_yil": 1.076211,
       "yari_omur_ust90_ay": null,
@@ -40620,28 +40905,56 @@
      "2018_2026": {
       "adf": {
        "birim_kok_red_yuzde10": false,
+       "birim_kok_red_yuzde10_sonlu": false,
        "birim_kok_red_yuzde5": false,
+       "birim_kok_red_yuzde5_sonlu": false,
        "gecikme": 2,
+       "hukum": "Birim kök %5'te de %10'da da reddedilmiyor.",
+       "hukum_esigi": "sonlu örneklem",
        "kritik": {
-        "yuzde10": -2.57,
-        "yuzde5": -2.86
+        "yuzde10": -2.56677,
+        "yuzde5": -2.86154
+       },
+       "kritik_sonlu": {
+        "yuzde10": -2.584015,
+        "yuzde5": -2.893866
        },
        "n": 91,
        "t": -1.299383
       },
+      "benzetim_araligi": {
+       "deneme": 4000,
+       "n_mu_sonsuz": 0,
+       "n_ust_sonsuz": 5,
+       "rho_alt90_max": 0.925878,
+       "rho_alt90_min": 0.923445,
+       "rho_mu_max": 0.992353,
+       "rho_mu_min": 0.989592,
+       "ters_cevirme_tek_kesisim": true,
+       "tohum_sayisi": 5,
+       "yari_omur_alt90_max_ay": 9.000444,
+       "yari_omur_alt90_max_yil": 0.750037,
+       "yari_omur_alt90_min_ay": 8.703046,
+       "yari_omur_alt90_min_yil": 0.725254,
+       "yari_omur_max_ay": 90.295197,
+       "yari_omur_max_sonsuz": false,
+       "yari_omur_max_yil": 7.5246,
+       "yari_omur_min_ay": 66.24987,
+       "yari_omur_min_yil": 5.520822
+      },
       "etiket": "2018–2026 (yüksek oynaklık)",
       "ilk": "2018-01-01",
       "n": 104,
-      "rho_alt90": 0.922865,
-      "rho_mu": 0.988381,
+      "rho_alt90": 0.925476,
+      "rho_mu": 0.989736,
       "rho_ols": 0.952323,
       "rho_ust90": 1.0,
       "son": "2026-08-01",
       "ust_sonsuz": true,
-      "yari_omur_alt90_ay": 8.634976,
-      "yari_omur_alt90_yil": 0.719581,
-      "yari_omur_mu_ay": 59.310977,
-      "yari_omur_mu_yil": 4.942581,
+      "yari_omur_alt90_ay": 8.949924,
+      "yari_omur_alt90_yil": 0.745827,
+      "yari_omur_mu_ay": 67.181588,
+      "yari_omur_mu_yil": 5.598466,
       "yari_omur_ols_ay": 14.189154,
       "yari_omur_ols_yil": 1.182429,
       "yari_omur_ust90_ay": null,
@@ -40649,48 +40962,92 @@
      }
     },
     "egilimden_arindirilmis": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 0,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.959492,
+      "rho_alt90_min": 0.959058,
+      "rho_mu_max": 0.985929,
+      "rho_mu_min": 0.985529,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 1.396852,
+      "yari_omur_alt90_min_yil": 1.381751,
+      "yari_omur_max_sonsuz": false,
+      "yari_omur_max_yil": 4.076197,
+      "yari_omur_min_yil": 3.962625
+     },
      "egilim_log_yil": 0.001076,
      "n": 392,
-     "rho_alt90": 0.959955,
-     "rho_mu": 0.98603,
+     "rho_alt90": 0.959268,
+     "rho_mu": 0.985728,
      "rho_ols": 0.96875,
      "rho_ust90": 1.0,
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 1.413365,
-     "yari_omur_mu_yil": 4.105655,
+     "yari_omur_alt90_yil": 1.389022,
+     "yari_omur_mu_yil": 4.01827,
      "yari_omur_ust90_yil": null
     },
     "tam": {
      "adf": {
       "birim_kok_red_yuzde10": false,
+      "birim_kok_red_yuzde10_sonlu": false,
       "birim_kok_red_yuzde5": false,
+      "birim_kok_red_yuzde5_sonlu": false,
       "gecikme": 12,
+      "hukum": "Birim kök %5'te de %10'da da reddedilmiyor.",
+      "hukum_esigi": "sonlu örneklem",
       "kritik": {
-       "yuzde10": -2.57,
-       "yuzde5": -2.86
+       "yuzde10": -2.56677,
+       "yuzde5": -2.86154
+      },
+      "kritik_sonlu": {
+       "yuzde10": -2.570849,
+       "yuzde5": -2.869196
       },
       "n": 379,
       "t": -2.290577
      },
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 0,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.955255,
+      "rho_alt90_min": 0.954642,
+      "rho_mu_max": 0.977702,
+      "rho_mu_min": 0.977142,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_ay": 15.141935,
+      "yari_omur_alt90_max_yil": 1.261828,
+      "yari_omur_alt90_min_ay": 14.932323,
+      "yari_omur_alt90_min_yil": 1.24436,
+      "yari_omur_max_ay": 30.738018,
+      "yari_omur_max_sonsuz": false,
+      "yari_omur_max_yil": 2.561501,
+      "yari_omur_min_ay": 29.975615,
+      "yari_omur_min_yil": 2.497968
+     },
      "ilk": "1994-01-01",
      "n": 392,
-     "rho_alt90": 0.954219,
-     "rho_mu": 0.978468,
+     "rho_alt90": 0.954679,
+     "rho_mu": 0.977632,
      "rho_ols": 0.969121,
      "rho_ust90": 1.0,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_ay": 14.791342,
-     "yari_omur_alt90_yil": 1.232612,
-     "yari_omur_mu_ay": 31.843536,
-     "yari_omur_mu_yil": 2.653628,
+     "yari_omur_alt90_ay": 14.944943,
+     "yari_omur_alt90_yil": 1.245412,
+     "yari_omur_mu_ay": 30.6407,
+     "yari_omur_mu_yil": 2.553392,
      "yari_omur_ols_ay": 22.098769,
      "yari_omur_ols_yil": 1.841564,
      "yari_omur_ust90_ay": null,
      "yari_omur_ust90_yil": null
     }
    },
-   "yontem": "Ortalaması çıkarılmış log reel efektif kurun birinci derece özbağlanım katsayısı; küçük örneklem yanlılığına karşı benzetimle medyan-yansız kestirim ve %90 aralığı, birim kök için Dickey–Fuller sınaması."
+   "yontem": "Ortalaması çıkarılmış log reel efektif kurun birinci derece özbağlanım katsayısı. Küçük örneklemde en küçük kareler katsayısı aşağı yanlı olduğu için medyan-yansız kestirim: 0,50 ile 1,00 arasındaki 101 noktalık ızgaranın her noktasında gözlenen seriyle aynı uzunlukta 4.000 yapay seri üretilir ve en küçük kareler kestirimlerinin medyanı gözlenen katsayıya eşit olan değer ızgara noktaları arasında doğrusal ara değerle bulunur; %90 aralığı aynı benzetimin 5. ve 95. yüzdeliklerinden. Ana kestirim tek ve sabit bir rastgele sayı tohumuyla kurulur; benzetim aralığı aynı kestirimin beş bağımsız tohumdaki (ana tohum dahil) en küçük ve en büyük sonucudur. Aylık katsayı 0,9999 ve üstündeyse yarı ömür sonsuz sayılır. Eğilimden arındırılmış kestirimde yapay seriler de aynı biçimde (sabit ve doğrusal eğilim) arındırılır. Birim kök için sabitli genişletilmiş Dickey–Fuller sınaması, gecikme 0–12 arasında Akaike ölçütüyle; kritik değerler MacKinnon (2010) yanıt yüzeyinden: asimptotik değerin yanında sınama regresyonunun gözlem sayısına göre sonlu örneklem değeri. Hüküm sonlu örneklem eşiğiyle verilir."
   },
   "p7b": {
    "goreli_fiyat": {
@@ -40727,344 +41084,744 @@
    "yontem": "Hizmet fiyatlarının mal fiyatlarına oranının ve TÜFE bazlı reel kurun Yİ-ÜFE bazlı reel kura oranının logaritmik eğilimi (yıllık), ve göreli fiyatın 12 aylık değişiminin reel kurun 12 aylık değişimiyle ilişkisi."
   },
   "p7c": {
+   "benzetim": {
+    "ana_tohum": 20261002,
+    "aralik_tohumlari": [
+     20261002,
+     20261003,
+     20261004,
+     20261005,
+     20261006
+    ],
+    "deneme": 4000,
+    "izgara_alt": 0.5,
+    "izgara_nokta": 101,
+    "izgara_ust": 1.0,
+    "kural": "Izgaranın her noktasında 4.000 yapay seri. Ana kestirim tek ve sabit bir rastgele sayı tohumuyla kurulur; benzetim aralığı aynı kestirimin beş bağımsız tohumdaki (ana tohum dahil) en küçük ve en büyük sonucudur. Yapay seriler veriye değil yalnız seri uzunluğuna, arındırma biçimine ve tohuma bağlıdır; aynı uzunluktaki seriler her tohumda aynı yapay serilerle kestirilir. Aylık katsayı 0,9999 ve üstündeyse yarı ömür sonsuz sayılır; kural nokta kestirime, %90 aralığının iki ucuna ve benzetim aralığına aynı uygulanır.",
+    "sonsuz_rho": 0.9999
+   },
    "dm": {
-    "medyan_alt90_yil": 3.898711,
+    "benzetim_araligi": {
+     "deneme": 4000,
+     "medyan_alt90_max_yil": 3.645462,
+     "medyan_alt90_min_yil": 3.522711,
+     "medyan_mu_max_yil": null,
+     "medyan_mu_min_yil": null,
+     "medyan_mu_sonsuz_tohum_sayisi": 5,
+     "n_mu_sonsuz_max": 6,
+     "n_mu_sonsuz_min": 6,
+     "tohum_sayisi": 5
+    },
+    "medyan_alt90_yil": 3.561878,
     "medyan_mu_sonsuz": true,
     "medyan_mu_yil": null,
     "n": 9,
-    "n_mu_sonsuz": 5
+    "n_mu_sonsuz": 6
    },
    "em": {
-    "medyan_alt90_yil": 1.464249,
+    "benzetim_araligi": {
+     "deneme": 4000,
+     "medyan_alt90_max_yil": 1.430104,
+     "medyan_alt90_min_yil": 1.413379,
+     "medyan_mu_max_yil": 3.215788,
+     "medyan_mu_min_yil": 3.160883,
+     "medyan_mu_sonsuz_tohum_sayisi": 0,
+     "n_mu_sonsuz_max": 1,
+     "n_mu_sonsuz_min": 1,
+     "tohum_sayisi": 5
+    },
+    "medyan_alt90_yil": 1.413379,
     "medyan_mu_sonsuz": false,
-    "medyan_mu_yil": 3.255841,
+    "medyan_mu_yil": 3.175444,
     "n": 10,
     "n_mu_sonsuz": 1
    },
    "kaynak": [
     "BIS WS_EER (reel, geniş)"
    ],
+   "tr_tcmb_kiyas": {
+    "ayni_uzunluk": true,
+    "bis_rho_mu": 0.995427,
+    "bis_rho_ols": 0.985103,
+    "bis_yari_omur_alt90_yil": 2.47133,
+    "bis_yari_omur_mu_yil": 12.601547,
+    "deneme": 4000,
+    "fark_max_yil": 4.651842,
+    "fark_min_yil": 3.788697,
+    "fark_yil": 4.651842,
+    "n_bis": 392,
+    "n_tcmb": 392,
+    "not": "İki seri aynı uzunlukta olduğu için her tohumda aynı yapay serilerle kestirilir: hangisinin daha kalıcı çıktığı benzetimden değil iki serinin kendi en küçük kareler katsayısından gelir. Farkın büyüklüğü yine de tohuma göre değişir: ρ 1'e bu kadar yakınken küçük bir katsayı farkı yıllarca yarı ömür farkı eder ve bu çeviri benzetime duyarlıdır.",
+    "tcmb_rho_mu": 0.996658,
+    "tcmb_rho_ols": 0.986172,
+    "tcmb_uzun_tohum_sayisi": 5,
+    "tcmb_yari_omur_alt90_yil": 2.649193,
+    "tcmb_yari_omur_mu_yil": 17.253389,
+    "tohum_sayisi": 5
+   },
    "ulkeler": {
     "AU": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 0,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.978544,
+      "rho_alt90_min": 0.977462,
+      "rho_mu_max": 0.996261,
+      "rho_mu_min": 0.995547,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 2.663169,
+      "yari_omur_alt90_min_yil": 2.533864,
+      "yari_omur_max_sonsuz": false,
+      "yari_omur_max_yil": 15.42017,
+      "yari_omur_min_yil": 12.943226
+     },
      "grup": "DM",
      "ilk": "1994-01-01",
      "n": 392,
-     "rho_mu": 0.995508,
+     "rho_alt90": 0.977938,
+     "rho_mu": 0.996261,
+     "rho_ols": 0.985827,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 2.421225,
-     "yari_omur_mu_yil": 12.830701
+     "yari_omur_alt90_yil": 2.589187,
+     "yari_omur_mu_yil": 15.42017
     },
     "BR": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 0,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.976523,
+      "rho_alt90_min": 0.975801,
+      "rho_mu_max": 0.99476,
+      "rho_mu_min": 0.993992,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 2.431414,
+      "yari_omur_alt90_min_yil": 2.357983,
+      "yari_omur_max_sonsuz": false,
+      "yari_omur_max_yil": 10.994175,
+      "yari_omur_min_yil": 9.584885
+     },
      "grup": "EM",
      "ilk": "1994-01-01",
      "n": 392,
-     "rho_mu": 0.99448,
+     "rho_alt90": 0.976098,
+     "rho_mu": 0.99476,
+     "rho_ols": 0.984546,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 2.363594,
-     "yari_omur_mu_yil": 10.434605
+     "yari_omur_alt90_yil": 2.387638,
+     "yari_omur_mu_yil": 10.994175
     },
     "CA": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 5,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.983146,
+      "rho_alt90_min": 0.982357,
+      "rho_mu_max": 1.0,
+      "rho_mu_min": 0.999957,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 3.39832,
+      "yari_omur_alt90_min_yil": 3.24507,
+      "yari_omur_max_sonsuz": true,
+      "yari_omur_max_yil": null,
+      "yari_omur_min_yil": null
+     },
      "grup": "DM",
      "ilk": "1994-01-01",
      "n": 392,
-     "rho_mu": 0.999698,
+     "rho_alt90": 0.982677,
+     "rho_mu": 1.0,
+     "rho_ols": 0.989074,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 3.559197,
-     "yari_omur_mu_yil": 191.485459
+     "yari_omur_alt90_yil": 3.305382,
+     "yari_omur_mu_yil": null
     },
     "CH": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 0,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.970021,
+      "rho_alt90_min": 0.969218,
+      "rho_mu_max": 0.989242,
+      "rho_mu_min": 0.988969,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 1.89773,
+      "yari_omur_alt90_min_yil": 1.847479,
+      "yari_omur_max_sonsuz": false,
+      "yari_omur_max_yil": 5.340473,
+      "yari_omur_min_yil": 5.20719
+     },
      "grup": "DM",
      "ilk": "1994-01-01",
      "n": 392,
-     "rho_mu": 0.988465,
+     "rho_alt90": 0.96934,
+     "rho_mu": 0.989058,
+     "rho_ols": 0.979997,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 1.915024,
-     "yari_omur_mu_yil": 4.978777
+     "yari_omur_alt90_yil": 1.854944,
+     "yari_omur_mu_yil": 5.250035
     },
     "CL": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 0,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.953188,
+      "rho_alt90_min": 0.952521,
+      "rho_mu_max": 0.976201,
+      "rho_mu_min": 0.975309,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 1.204817,
+      "yari_omur_alt90_min_yil": 1.187475,
+      "yari_omur_max_sonsuz": false,
+      "yari_omur_max_yil": 2.398095,
+      "yari_omur_min_yil": 2.31039
+     },
      "grup": "EM",
      "ilk": "1994-01-01",
      "n": 392,
-     "rho_mu": 0.976337,
+     "rho_alt90": 0.952721,
+     "rho_mu": 0.976013,
+     "rho_ols": 0.967539,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 1.235087,
-     "yari_omur_mu_yil": 2.41203
+     "yari_omur_alt90_yil": 1.192627,
+     "yari_omur_mu_yil": 2.379041
     },
     "GB": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 5,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.98428,
+      "rho_alt90_min": 0.983737,
+      "rho_mu_max": 1.0,
+      "rho_mu_min": 1.0,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 3.645462,
+      "yari_omur_alt90_min_yil": 3.522711,
+      "yari_omur_max_sonsuz": true,
+      "yari_omur_max_yil": null,
+      "yari_omur_min_yil": null
+     },
      "grup": "DM",
      "ilk": "1994-01-01",
      "n": 392,
+     "rho_alt90": 0.983914,
      "rho_mu": 1.0,
+     "rho_ols": 0.989912,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 3.972376,
+     "yari_omur_alt90_yil": 3.561878,
      "yari_omur_mu_yil": null
     },
     "HU": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 5,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.985214,
+      "rho_alt90_min": 0.984642,
+      "rho_mu_max": 1.0,
+      "rho_mu_min": 1.0,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 3.87755,
+      "yari_omur_alt90_min_yil": 3.732165,
+      "yari_omur_max_sonsuz": true,
+      "yari_omur_max_yil": null,
+      "yari_omur_min_yil": null
+     },
      "grup": "EM",
      "ilk": "1994-01-01",
      "n": 392,
+     "rho_alt90": 0.984897,
      "rho_mu": 1.0,
+     "rho_ols": 0.990577,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 4.477523,
+     "yari_omur_alt90_yil": 3.795629,
      "yari_omur_mu_yil": null
     },
     "ID": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 0,
+      "n_ust_sonsuz": 0,
+      "rho_alt90_max": 0.932958,
+      "rho_alt90_min": 0.931952,
+      "rho_mu_max": 0.960265,
+      "rho_mu_min": 0.958891,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 0.832363,
+      "yari_omur_alt90_min_yil": 0.819624,
+      "yari_omur_max_sonsuz": false,
+      "yari_omur_max_yil": 1.424611,
+      "yari_omur_min_yil": 1.376008
+     },
      "grup": "EM",
      "ilk": "1994-01-01",
      "n": 392,
-     "rho_mu": 0.960017,
+     "rho_alt90": 0.932467,
+     "rho_mu": 0.958891,
+     "rho_ols": 0.951546,
      "son": "2026-08-01",
      "ust_sonsuz": false,
-     "yari_omur_alt90_yil": 0.823398,
-     "yari_omur_mu_yil": 1.415595
+     "yari_omur_alt90_yil": 0.826095,
+     "yari_omur_mu_yil": 1.376008
     },
     "IN": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 0,
+      "n_ust_sonsuz": 3,
+      "rho_alt90_max": 0.949566,
+      "rho_alt90_min": 0.948243,
+      "rho_mu_max": 0.973067,
+      "rho_mu_min": 0.972776,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 1.116181,
+      "yari_omur_alt90_min_yil": 1.086882,
+      "yari_omur_max_sonsuz": false,
+      "yari_omur_max_yil": 2.115634,
+      "yari_omur_min_yil": 2.092708
+     },
      "grup": "EM",
      "ilk": "1994-01-01",
      "n": 392,
-     "rho_mu": 0.972727,
+     "rho_alt90": 0.949082,
+     "rho_mu": 0.973027,
+     "rho_ols": 0.964629,
      "son": "2026-08-01",
-     "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 1.096477,
-     "yari_omur_mu_yil": 2.088894
+     "ust_sonsuz": false,
+     "yari_omur_alt90_yil": 1.105295,
+     "yari_omur_mu_yil": 2.112478
     },
     "JP": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 5,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.99925,
+      "rho_alt90_min": 0.998744,
+      "rho_mu_max": 1.0,
+      "rho_mu_min": 1.0,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 77.028,
+      "yari_omur_alt90_min_yil": 45.961506,
+      "yari_omur_max_sonsuz": true,
+      "yari_omur_max_yil": null,
+      "yari_omur_min_yil": null
+     },
      "grup": "DM",
      "ilk": "1994-01-01",
      "n": 392,
+     "rho_alt90": 0.998821,
      "rho_mu": 1.0,
+     "rho_ols": 0.998994,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 34.883486,
+     "yari_omur_alt90_yil": 48.964427,
      "yari_omur_mu_yil": null
     },
     "KR": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 0,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.951973,
+      "rho_alt90_min": 0.951088,
+      "rho_mu_max": 0.975319,
+      "rho_mu_min": 0.974424,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 1.173596,
+      "yari_omur_alt90_min_yil": 1.15183,
+      "yari_omur_max_sonsuz": false,
+      "yari_omur_max_yil": 2.311371,
+      "yari_omur_min_yil": 2.229436
+     },
      "grup": "EM",
      "ilk": "1994-01-01",
      "n": 392,
-     "rho_mu": 0.975517,
+     "rho_alt90": 0.951544,
+     "rho_mu": 0.975039,
+     "rho_ols": 0.966587,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 1.159851,
-     "yari_omur_mu_yil": 2.330326
+     "yari_omur_alt90_yil": 1.162945,
+     "yari_omur_mu_yil": 2.285105
     },
     "MX": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 0,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.958101,
+      "rho_alt90_min": 0.957626,
+      "rho_mu_max": 0.980197,
+      "rho_mu_min": 0.979992,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 1.349522,
+      "yari_omur_alt90_min_yil": 1.334068,
+      "yari_omur_max_sonsuz": false,
+      "yari_omur_max_yil": 2.887908,
+      "yari_omur_min_yil": 2.857947
+     },
      "grup": "EM",
      "ilk": "1994-01-01",
      "n": 392,
-     "rho_mu": 0.979514,
+     "rho_alt90": 0.957626,
+     "rho_mu": 0.980197,
+     "rho_ols": 0.971628,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 1.414394,
-     "yari_omur_mu_yil": 2.790551
+     "yari_omur_alt90_yil": 1.334068,
+     "yari_omur_mu_yil": 2.887908
     },
     "NO": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 5,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.984417,
+      "rho_alt90_min": 0.983874,
+      "rho_mu_max": 1.0,
+      "rho_mu_min": 1.0,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 3.677792,
+      "yari_omur_alt90_min_yil": 3.553079,
+      "yari_omur_max_sonsuz": true,
+      "yari_omur_max_yil": null,
+      "yari_omur_min_yil": null
+     },
      "grup": "DM",
      "ilk": "1994-01-01",
      "n": 392,
+     "rho_alt90": 0.984064,
      "rho_mu": 1.0,
+     "rho_ols": 0.990013,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 3.898711,
+     "yari_omur_alt90_yil": 3.595602,
      "yari_omur_mu_yil": null
     },
     "PL": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 0,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.975403,
+      "rho_alt90_min": 0.974875,
+      "rho_mu_max": 0.993847,
+      "rho_mu_min": 0.993185,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 2.319338,
+      "yari_omur_alt90_min_yil": 2.269981,
+      "yari_omur_max_sonsuz": false,
+      "yari_omur_max_yil": 9.357997,
+      "yari_omur_min_yil": 8.446733
+     },
      "grup": "EM",
      "ilk": "1994-01-01",
      "n": 392,
-     "rho_mu": 0.993438,
+     "rho_alt90": 0.975078,
+     "rho_mu": 0.993847,
+     "rho_ols": 0.983836,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 2.146995,
-     "yari_omur_mu_yil": 8.773935
+     "yari_omur_alt90_yil": 2.288722,
+     "yari_omur_mu_yil": 9.357997
     },
     "SE": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 5,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.99112,
+      "rho_alt90_min": 0.990525,
+      "rho_mu_max": 1.0,
+      "rho_mu_min": 1.0,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 6.47561,
+      "yari_omur_alt90_min_yil": 6.067429,
+      "yari_omur_max_sonsuz": true,
+      "yari_omur_max_yil": null,
+      "yari_omur_min_yil": null
+     },
      "grup": "DM",
      "ilk": "1994-01-01",
      "n": 392,
+     "rho_alt90": 0.990841,
      "rho_mu": 1.0,
+     "rho_ols": 0.994223,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 5.610661,
+     "yari_omur_alt90_yil": 6.277444,
      "yari_omur_mu_yil": null
     },
     "TR": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 0,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.977402,
+      "rho_alt90_min": 0.976523,
+      "rho_mu_max": 0.995427,
+      "rho_mu_min": 0.994625,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 2.527092,
+      "yari_omur_alt90_min_yil": 2.431402,
+      "yari_omur_max_sonsuz": false,
+      "yari_omur_max_yil": 12.601547,
+      "yari_omur_min_yil": 10.716603
+     },
      "grup": "EM",
      "ilk": "1994-01-01",
      "n": 392,
-     "rho_mu": 0.994763,
+     "rho_alt90": 0.976898,
+     "rho_mu": 0.995427,
+     "rho_ols": 0.985103,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 2.377093,
-     "yari_omur_mu_yil": 11.001508
+     "yari_omur_alt90_yil": 2.47133,
+     "yari_omur_mu_yil": 12.601547
     },
     "US": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 5,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.989437,
+      "rho_alt90_min": 0.988704,
+      "rho_mu_max": 1.0,
+      "rho_mu_min": 1.0,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 5.439583,
+      "yari_omur_alt90_min_yil": 5.084624,
+      "yari_omur_max_sonsuz": true,
+      "yari_omur_max_yil": null,
+      "yari_omur_min_yil": null
+     },
      "grup": "DM",
      "ilk": "1994-01-01",
      "n": 392,
+     "rho_alt90": 0.989102,
      "rho_mu": 1.0,
+     "rho_ols": 0.993139,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 5.061026,
+     "yari_omur_alt90_yil": 5.271201,
      "yari_omur_mu_yil": null
     },
     "XM": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 0,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.968571,
+      "rho_alt90_min": 0.967594,
+      "rho_mu_max": 0.988212,
+      "rho_mu_min": 0.987879,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 1.808827,
+      "yari_omur_alt90_min_yil": 1.753439,
+      "yari_omur_max_sonsuz": false,
+      "yari_omur_max_yil": 4.871163,
+      "yari_omur_min_yil": 4.736699
+     },
      "grup": "DM",
      "ilk": "1994-01-01",
      "n": 392,
-     "rho_mu": 0.987759,
+     "rho_alt90": 0.968046,
+     "rho_mu": 0.987907,
+     "rho_ols": 0.97896,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 1.825862,
-     "yari_omur_mu_yil": 4.689748
+     "yari_omur_alt90_yil": 1.778634,
+     "yari_omur_mu_yil": 4.747653
     },
     "ZA": {
+     "benzetim_araligi": {
+      "deneme": 4000,
+      "n_mu_sonsuz": 0,
+      "n_ust_sonsuz": 5,
+      "rho_alt90_max": 0.962486,
+      "rho_alt90_min": 0.961968,
+      "rho_mu_max": 0.983918,
+      "rho_mu_min": 0.983428,
+      "ters_cevirme_tek_kesisim": true,
+      "tohum_sayisi": 5,
+      "yari_omur_alt90_max_yil": 1.510685,
+      "yari_omur_alt90_min_yil": 1.489723,
+      "yari_omur_max_sonsuz": false,
+      "yari_omur_max_yil": 3.562678,
+      "yari_omur_min_yil": 3.456609
+     },
      "grup": "EM",
      "ilk": "1994-01-01",
      "n": 392,
-     "rho_mu": 0.984597,
+     "rho_alt90": 0.962042,
+     "rho_mu": 0.983458,
+     "rho_ols": 0.974828,
      "son": "2026-08-01",
      "ust_sonsuz": true,
-     "yari_omur_alt90_yil": 1.514103,
-     "yari_omur_mu_yil": 3.72113
+     "yari_omur_alt90_yil": 1.492691,
+     "yari_omur_mu_yil": 3.462979
     }
    },
-   "yontem": "BIS geniş reel efektif kurlarında (aylık) ülke başına medyan-yansız yarı ömür."
+   "yontem": "BIS geniş reel efektif kurlarında (aylık) ülke başına medyan-yansız yarı ömür. Benzetim ayarı TCMB serisininkiyle aynıdır: aynı ızgara, aynı deneme sayısı, aynı tohum kuralı. Grup medyanında sonsuz yarı ömür düşürülmez; benzetim aralığı grup medyanının her tohumda yeniden hesaplanmış en küçük ve en büyük değeridir."
   },
   "sekil_12": {
    "fan": {
     "alt90": [
      105.04,
-     105.433504,
-     105.819983,
-     106.199533,
-     106.572248,
-     106.938224,
-     107.297556,
-     107.65034,
-     107.996668,
-     108.336637,
-     108.67034,
-     108.99787,
-     109.319321,
-     109.634786,
-     109.944356,
-     110.248123,
-     110.546178,
-     110.838612,
-     111.125513,
-     111.406971,
-     111.683074,
-     111.953909,
-     112.219563,
-     112.480121,
-     112.735668,
-     112.986289,
-     113.232066,
-     113.473082,
-     113.709418,
-     113.941154,
-     114.16837,
-     114.391144,
-     114.609554,
-     114.823677,
-     115.033588,
-     115.239362,
-     115.441073,
-     115.638793,
-     115.832595,
-     116.022548,
-     116.208722,
-     116.391188,
-     116.570011,
-     116.74526,
-     116.916999,
-     117.085295,
-     117.25021,
-     117.411808,
-     117.570151,
-     117.7253,
-     117.877314,
-     118.026254,
-     118.172176,
-     118.315139,
-     118.455199,
-     118.592411,
-     118.72683,
-     118.85851,
-     118.987502,
-     119.11386,
-     119.237633
+     105.435146,
+     105.823208,
+     106.204282,
+     106.578466,
+     106.945856,
+     107.306548,
+     107.660637,
+     108.008221,
+     108.349394,
+     108.684252,
+     109.012889,
+     109.335401,
+     109.651879,
+     109.962419,
+     110.267112,
+     110.566051,
+     110.859327,
+     111.147031,
+     111.429252,
+     111.706079,
+     111.977602,
+     112.243908,
+     112.505082,
+     112.761212,
+     113.012383,
+     113.258677,
+     113.500179,
+     113.736971,
+     113.969134,
+     114.196748,
+     114.419894,
+     114.638648,
+     114.853089,
+     115.063294,
+     115.269337,
+     115.471293,
+     115.669237,
+     115.863239,
+     116.053372,
+     116.239706,
+     116.422311,
+     116.601256,
+     116.776607,
+     116.948431,
+     117.116795,
+     117.281761,
+     117.443395,
+     117.601758,
+     117.756912,
+     117.908918,
+     118.057836,
+     118.203724,
+     118.346639,
+     118.48664,
+     118.623782,
+     118.758119,
+     118.889706,
+     119.018596,
+     119.144842,
+     119.268494
     ],
     "mu": [
      105.04,
-     105.093697,
-     105.147263,
-     105.200699,
-     105.254006,
-     105.307183,
-     105.36023,
-     105.413149,
-     105.465938,
-     105.518599,
-     105.571132,
-     105.623536,
-     105.675812,
-     105.727961,
-     105.779982,
-     105.831876,
-     105.883643,
-     105.935283,
-     105.986797,
-     106.038184,
-     106.089445,
-     106.140581,
-     106.191591,
-     106.242475,
-     106.293235,
-     106.34387,
-     106.39438,
-     106.444765,
-     106.495027,
-     106.545164,
-     106.595178,
-     106.645068,
-     106.694836,
-     106.74448,
-     106.794001,
-     106.8434,
-     106.892677,
-     106.941832,
-     106.990865,
-     107.039776,
-     107.088566,
-     107.137235,
-     107.185783,
-     107.23421,
-     107.282517,
-     107.330704,
-     107.378771,
-     107.426719,
-     107.474547,
-     107.522255,
-     107.569845,
-     107.617316,
-     107.664669,
-     107.711903,
-     107.759019,
-     107.806017,
-     107.852898,
-     107.899662,
-     107.946308,
-     107.992838,
-     108.039251
+     105.101137,
+     105.162106,
+     105.222906,
+     105.283537,
+     105.344001,
+     105.404297,
+     105.464426,
+     105.524388,
+     105.584184,
+     105.643813,
+     105.703277,
+     105.762575,
+     105.821708,
+     105.880677,
+     105.939481,
+     105.998121,
+     106.056597,
+     106.11491,
+     106.17306,
+     106.231047,
+     106.288872,
+     106.346535,
+     106.404037,
+     106.461377,
+     106.518556,
+     106.575575,
+     106.632433,
+     106.689132,
+     106.745671,
+     106.802051,
+     106.858273,
+     106.914335,
+     106.97024,
+     107.025987,
+     107.081576,
+     107.137009,
+     107.192284,
+     107.247404,
+     107.302367,
+     107.357175,
+     107.411827,
+     107.466324,
+     107.520667,
+     107.574855,
+     107.62889,
+     107.68277,
+     107.736498,
+     107.790073,
+     107.843495,
+     107.896765,
+     107.949883,
+     108.002849,
+     108.055665,
+     108.108329,
+     108.160844,
+     108.213207,
+     108.265422,
+     108.317486,
+     108.369402,
+     108.421169
     ],
     "ust90": [
      105.04,
@@ -45980,6 +46737,156 @@
     "2026-06-01"
    ],
    "yontem": "Log REDK'nin genişleyen ortalamadan sapması, 12 aylık cari denge / GSYH ve sonraki 12 ayın sabit paydalı değişimi (aylık)."
+  },
+  "vaka_brexit_2016": {
+   "cari_gsyh_onceki_yil": {
+    "deger_yuzde": -4.917,
+    "kaynak": "Dünya Bankası WDI, cari denge (% GSYH)",
+    "yil": 2015
+   },
+   "ilk": "2016-06-23",
+   "kadran_adlari": {
+    "gevseme": "faiz ↓, para değer kaybeder",
+    "guvenli_liman": "faiz ↓, para değer kazanır",
+    "politika": "faiz ↑, para değer kazanır",
+    "prim": "faiz ↑, para değer kaybeder"
+   },
+   "kaynak": [
+    "bulut: gilt (CNBC, Londra kapanışı)",
+    "cnbc_kur_gunluk (New York 17:00)",
+    "cnbc_avrupa_getiri_gunluk (Bund)",
+    "abd_hazine_gunluk",
+    "yahoo_dxy_vix_gunluk (VIX)",
+    "bulut: ECB referans kurları (sağlamlık)",
+    "bulut: Dünya Bankası WDI cari denge"
+   ],
+   "n": 1,
+   "n_satir": 2,
+   "olay": {
+    "baz": "2016-06-23",
+    "gun": "2016-06-23",
+    "saat": "sandıklar 22:00 Londra (17:00 New York); sonuçlar gece",
+    "tepki": "2016-06-24"
+   },
+   "saat_notu": "Sandıklar 23.06.2016 22:00 Londra'da (17:00 New York) kapandı, sonuçlar gece açıklandı. Gilt Londra kapanışı sandıklar kapanmadan, CNBC sterlin kapanışı (New York 17:00) sandıkların kapandığı anda alınır: ikisi de sonuçtan öncedir, tepki 24.06 kapanışlarındadır.",
+   "satirlar": [
+    {
+     "abd": {
+      "d_dolar_bes_g10_yuzde": 0.8165,
+      "d_us10_bp": -17.0,
+      "kadran": "guvenli_liman",
+      "not": "ABD 10 yıllık New York öğleden sonra kotasyonu (≈15:30), dolar New York 17:00."
+     },
+     "ad": "İngiltere 23.06.2016 AB referandumu → ilk tepki günü",
+     "alt_pencere": false,
+     "bund_10y": {
+      "bas": 0.0928,
+      "d_bp": -13.45,
+      "kaynak": "CNBC Alman 10 yıllık gösterge",
+      "son": -0.0417
+     },
+     "d_gb10y_bp": -28.8,
+     "d_gb2y_bp": -26.0,
+     "d_gb30y_bp": -25.3,
+     "d_gilt_bund_10y_bp": -15.35,
+     "d_sterlin_yuzde": -8.4095,
+     "d_us10_bp": -17.0,
+     "ecb_saglamlik": {
+      "baz": 1.4869,
+      "baz_gun": "2016-06-23",
+      "d_sterlin_dolar_yuzde": -8.1597,
+      "kaynak": "ECB referans kuru çaprazı sterlin/dolar (14:15 Orta Avrupa)",
+      "son": 1.3704,
+      "son_gun": "2016-06-24"
+     },
+     "gb30y_azami": 2.199,
+     "gb30y_azami_gunu": "2016-06-23",
+     "gilt_10y_bas": 1.376,
+     "gilt_10y_son": 1.088,
+     "ilk": "2016-06-23",
+     "kadran": "gevseme",
+     "kadran_adi": "faiz ↓, para değer kaybeder",
+     "kimlik": "brexit_2016_ilk_gun",
+     "n_gun": 1,
+     "saat_notu": "Sandıklar 23.06.2016 22:00 Londra'da (17:00 New York) kapandı, sonuçlar gece açıklandı. Gilt Londra kapanışı sandıklar kapanmadan, CNBC sterlin kapanışı (New York 17:00) sandıkların kapandığı anda alınır: ikisi de sonuçtan öncedir, tepki 24.06 kapanışlarındadır.",
+     "son": "2016-06-24",
+     "sterlin_ayrisimi": {
+      "d_dolar_bes_g10_yuzde": 0.8165,
+      "d_sterlin_avro_yuzde": -6.0094,
+      "d_sterlin_bes_g10_yuzde": -7.593,
+      "d_sterlin_dolar_yuzde": -8.4095,
+      "d_yen_dolar_yuzde": 3.7831,
+      "ozdeslik": "sterlin/dolar = sterlin/beş G10 − dolar/beş G10",
+      "yontem": "CNBC New York 17:00 kurlarının log değişimi (yüzde); beş G10: avro, Avustralya doları, İsviçre frangı, yen, Kanada doları, eşit ağırlıklı. Eksi değer sterlinin değer kaybıdır."
+     },
+     "sterlin_bas": 1.4878,
+     "sterlin_son": 1.3678,
+     "ulke": "İngiltere",
+     "uzun_uc_baskin": true,
+     "vix_bas": 17.25,
+     "vix_son": 25.76
+    },
+    {
+     "abd": {
+      "d_dolar_bes_g10_yuzde": 0.1821,
+      "d_us10_bp": -23.0,
+      "kadran": "guvenli_liman",
+      "not": "ABD 10 yıllık New York öğleden sonra kotasyonu (≈15:30), dolar New York 17:00."
+     },
+     "ad": "İngiltere 23.06.2016 AB referandumu → BoE'nin 04.08.2016 paketi",
+     "alt_pencere": true,
+     "bund_10y": {
+      "bas": 0.0928,
+      "d_bp": -19.08,
+      "kaynak": "CNBC Alman 10 yıllık gösterge",
+      "son": -0.098
+     },
+     "d_gb10y_bp": -73.1,
+     "d_gb2y_bp": -41.9,
+     "d_gb30y_bp": -71.3,
+     "d_gilt_bund_10y_bp": -54.02,
+     "d_sterlin_yuzde": -12.7042,
+     "d_us10_bp": -23.0,
+     "ecb_saglamlik": {
+      "baz": 1.4869,
+      "baz_gun": "2016-06-23",
+      "d_sterlin_dolar_yuzde": -12.1903,
+      "kaynak": "ECB referans kuru çaprazı sterlin/dolar (14:15 Orta Avrupa)",
+      "son": 1.3163,
+      "son_gun": "2016-08-04"
+     },
+     "gb30y_azami": 2.199,
+     "gb30y_azami_gunu": "2016-06-23",
+     "gilt_10y_bas": 1.376,
+     "gilt_10y_son": 0.645,
+     "ilk": "2016-06-23",
+     "kadran": "gevseme",
+     "kadran_adi": "faiz ↓, para değer kaybeder",
+     "kimlik": "brexit_2016_boe",
+     "n_gun": 30,
+     "saat_notu": "Sandıklar 23.06.2016 22:00 Londra'da (17:00 New York) kapandı, sonuçlar gece açıklandı. Pencere BoE'nin referandum sonrası ilk faiz indirimini ve varlık alımı paketini açıkladığı günün kapanışına uzatıldı (karar 12:00 Londra'da, iki kapanıştan da önce); aradaki bütün haberleri taşır.",
+     "son": "2016-08-04",
+     "sterlin_ayrisimi": {
+      "d_dolar_bes_g10_yuzde": 0.1821,
+      "d_sterlin_avro_yuzde": -10.421,
+      "d_sterlin_bes_g10_yuzde": -12.5222,
+      "d_sterlin_dolar_yuzde": -12.7042,
+      "d_yen_dolar_yuzde": 4.7566,
+      "ozdeslik": "sterlin/dolar = sterlin/beş G10 − dolar/beş G10",
+      "yontem": "CNBC New York 17:00 kurlarının log değişimi (yüzde); beş G10: avro, Avustralya doları, İsviçre frangı, yen, Kanada doları, eşit ağırlıklı. Eksi değer sterlinin değer kaybıdır."
+     },
+     "sterlin_bas": 1.4878,
+     "sterlin_son": 1.3103,
+     "ulke": "İngiltere",
+     "uzun_uc_baskin": true,
+     "vix_bas": 17.25,
+     "vix_son": 12.42
+    }
+   ],
+   "son": "2016-08-04",
+   "test_degil": "tek olay: vaka satırıdır, t yazılmaz.",
+   "vaka_tablosu": true,
+   "yontem": "23 Haziran 2016 AB referandumundan önceki kapanıştan pencerenin son kapanışına gilt 2, 10 ve 30 yıllık getirisinin değişimi (baz puan) ve sterlinin dolar karşısında log değişimi (yüzde; eksi değer kaybı); kadran uzun faizin ve paranın değerinin birlikte yönüdür (Bölüm 5'teki İngiltere olay satırıyla aynı tanım). Bir vaka satırıdır, istatistik sınaması yapılmaz."
   }
  },
  "b09": {
@@ -88065,12 +88972,63 @@
    "gruplar": {
     "dibs_5y": {
      "durum": "kurulmadi",
-     "sebep": "plasebo kapısı geçmedi: tepki günü hareketi komşu günlerden ayrışmıyor; kararlar yalnız vaka listesi olarak verilir"
+     "sebep": "plasebo sınaması geçmedi: tepki günü hareketi komşu günlerden ayrışmıyor; kararlar yalnız vaka listesi olarak verilir"
     },
     "kur": {
      "durum": "kurulmadi",
-     "sebep": "plasebo kapısı geçmedi: tepki günü hareketi komşu günlerden ayrışmıyor; kararlar yalnız vaka listesi olarak verilir"
+     "sebep": "plasebo sınaması geçmedi: tepki günü hareketi komşu günlerden ayrışmıyor; kararlar yalnız vaka listesi olarak verilir"
     }
+   },
+   "gun_dayanagi_sayisi": {
+    "cikarim": 3,
+    "kaynak": 29,
+    "takvim": 1
+   },
+   "gunu_kaynakta_olmayan": [
+    {
+     "anahtar": "moodys_20170317",
+     "dayanak": "cikarim",
+     "ilk_iz": "2017-03-18 09:51",
+     "kurum": "Moody's",
+     "tarih": "2017-03-17"
+    },
+    {
+     "anahtar": "fitch_20191101",
+     "dayanak": "cikarim",
+     "ilk_iz": "2019-11-02 05:32",
+     "kurum": "Fitch",
+     "tarih": "2019-11-01"
+    },
+    {
+     "anahtar": "fitch_20220211",
+     "dayanak": "takvim",
+     "ilk_iz": "2022-02-12 09:24",
+     "kurum": "Fitch",
+     "tarih": "2022-02-11"
+    },
+    {
+     "anahtar": "sp_20241101",
+     "dayanak": "cikarim",
+     "ilk_iz": "2024-11-02",
+     "kurum": "S&P",
+     "tarih": "2024-11-01"
+    }
+   ],
+   "iki_adimli_pencere": {
+    "dibs_5y": [
+     "2016-05-09",
+     "2016-07-19",
+     "2019-11-04",
+     "2024-07-22"
+    ],
+    "kur": [
+     "2013-05-20",
+     "2016-05-09",
+     "2018-03-08",
+     "2019-11-04",
+     "2024-07-22"
+    ],
+    "not": "Bu tepki günlerinde tablo penceresi iki gözlem adımıdır (ilan bir gözlemin aralığına düşüyor ya da saati bilinmiyor); plasebo sınamasının olay günü yalnız tepki gününün değişimidir."
    },
    "ilk": "2012-05-01",
    "kararlar": [
@@ -88081,7 +89039,9 @@
      "dkur_yuzde": -0.1368,
      "durum": "dogrulandi",
      "eylem": "gorunum",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "12:44",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2012-04-30",
      "kur_tepki": "2012-05-01",
@@ -88098,7 +89058,9 @@
      "dkur_yuzde": -0.3117,
      "durum": "dogrulandi",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "08:40",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2012-06-19",
      "kur_tepki": "2012-06-20",
@@ -88115,7 +89077,9 @@
      "dkur_yuzde": -0.3661,
      "durum": "dogrulandi",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "12:51",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2012-11-01",
      "kur_tepki": "2012-11-05",
@@ -88134,7 +89098,9 @@
      "dkur_yuzde": -0.0535,
      "durum": "dogrulandi",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "19:38",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2013-03-26",
      "kur_tepki": "2013-03-27",
@@ -88153,7 +89119,9 @@
      "dkur_yuzde": 1.0004,
      "durum": "kismen",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "00:30",
+     "ilk_iz": null,
      "kur_adim": 2,
      "kur_taban": "2013-05-15",
      "kur_tepki": "2013-05-20",
@@ -88172,7 +89140,9 @@
      "dkur_yuzde": 0.1856,
      "durum": "dogrulandi",
      "eylem": "gorunum",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "20:37",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2014-02-06",
      "kur_tepki": "2014-02-10",
@@ -88191,7 +89161,9 @@
      "dkur_yuzde": 0.5195,
      "durum": "dogrulandi",
      "eylem": "gorunum",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "03:28",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2014-04-10",
      "kur_tepki": "2014-04-14",
@@ -88210,7 +89182,9 @@
      "dkur_yuzde": -0.424,
      "durum": "dogrulandi",
      "eylem": "gorunum",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": null,
+     "ilk_iz": null,
      "kur_adim": 2,
      "kur_taban": "2016-05-04",
      "kur_tepki": "2016-05-09",
@@ -88229,7 +89203,9 @@
      "dkur_yuzde": 3.2932,
      "durum": "dogrulandi",
      "eylem": "inceleme",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": null,
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2016-07-14",
      "kur_tepki": "2016-07-18",
@@ -88248,7 +89224,9 @@
      "dkur_yuzde": 1.2413,
      "durum": "dogrulandi",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "23:42",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2016-07-19",
      "kur_tepki": "2016-07-20",
@@ -88267,7 +89245,9 @@
      "dkur_yuzde": 1.2982,
      "durum": "dogrulandi",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "00:58",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2016-09-22",
      "kur_tepki": "2016-09-26",
@@ -88286,7 +89266,9 @@
      "dkur_yuzde": 1.6713,
      "durum": "kismen",
      "eylem": "gorunum",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "20:03",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2016-11-03",
      "kur_tepki": "2016-11-07",
@@ -88305,7 +89287,9 @@
      "dkur_yuzde": -2.19,
      "durum": "dogrulandi",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "akşam",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2017-01-26",
      "kur_tepki": "2017-01-30",
@@ -88326,7 +89310,9 @@
      "dkur_yuzde": -2.19,
      "durum": "dogrulandi",
      "eylem": "gorunum",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "20:07",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2017-01-26",
      "kur_tepki": "2017-01-30",
@@ -88347,7 +89333,9 @@
      "dkur_yuzde": -0.1324,
      "durum": "kismen",
      "eylem": "gorunum",
+     "gun_dayanagi": "cikarim",
      "ilan_saati": "akşam",
+     "ilk_iz": "2017-03-18 09:51",
      "kur_adim": 1,
      "kur_taban": "2017-03-16",
      "kur_tepki": "2017-03-20",
@@ -88366,7 +89354,9 @@
      "dkur_yuzde": 0.6481,
      "durum": "kismen",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "01:29",
+     "ilk_iz": null,
      "kur_adim": 2,
      "kur_taban": "2018-03-06",
      "kur_tepki": "2018-03-08",
@@ -88385,7 +89375,9 @@
      "dkur_yuzde": 1.2822,
      "durum": "dogrulandi",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "23:58",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2018-04-30",
      "kur_tepki": "2018-05-01",
@@ -88402,9 +89394,11 @@
      "dibs_taban": "2018-07-13",
      "dibs_tepki": "2018-07-16",
      "dkur_yuzde": -0.3022,
-     "durum": "dogrulandi",
+     "durum": "kismen",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "23:19",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2018-07-12",
      "kur_tepki": "2018-07-16",
@@ -88423,7 +89417,9 @@
      "dkur_yuzde": 4.143,
      "durum": "dogrulandi",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "23:45",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2018-08-16",
      "kur_tepki": "2018-08-20",
@@ -88444,7 +89440,9 @@
      "dkur_yuzde": 4.143,
      "durum": "dogrulandi",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "akşam",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2018-08-16",
      "kur_tepki": "2018-08-20",
@@ -88465,7 +89463,9 @@
      "dkur_yuzde": -0.1022,
      "durum": "kismen",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "00:04",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2019-06-13",
      "kur_tepki": "2019-06-17",
@@ -88484,7 +89484,9 @@
      "dkur_yuzde": 0.337,
      "durum": "dogrulandi",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "23:11",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2019-07-11",
      "kur_tepki": "2019-07-15",
@@ -88503,7 +89505,9 @@
      "dkur_yuzde": 0.565,
      "durum": "kismen",
      "eylem": "gorunum",
+     "gun_dayanagi": "cikarim",
      "ilan_saati": null,
+     "ilk_iz": "2019-11-02 05:32",
      "kur_adim": 2,
      "kur_taban": "2019-10-30",
      "kur_tepki": "2019-11-04",
@@ -88522,7 +89526,9 @@
      "dkur_yuzde": 1.0457,
      "durum": "kismen",
      "eylem": "gorunum",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "00:05",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2020-08-20",
      "kur_tepki": "2020-08-24",
@@ -88541,7 +89547,9 @@
      "dkur_yuzde": 0.5494,
      "durum": "dogrulandi",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "00:50",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2020-09-10",
      "kur_tepki": "2020-09-14",
@@ -88560,7 +89568,9 @@
      "dkur_yuzde": 0.6355,
      "durum": "kismen",
      "eylem": "gorunum",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "00:09",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2021-02-18",
      "kur_tepki": "2021-02-22",
@@ -88579,7 +89589,9 @@
      "dkur_yuzde": 0.3804,
      "durum": "kismen",
      "eylem": "not",
+     "gun_dayanagi": "takvim",
      "ilan_saati": null,
+     "ilk_iz": "2022-02-12 09:24",
      "kur_adim": 2,
      "kur_taban": "2022-02-09",
      "kur_tepki": "2022-02-14",
@@ -88598,7 +89610,9 @@
      "dkur_yuzde": 0.4959,
      "durum": "kismen",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "00:22",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2022-07-07",
      "kur_tepki": "2022-07-11",
@@ -88617,7 +89631,9 @@
      "dkur_yuzde": 0.0154,
      "durum": "kismen",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "00:21",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2022-08-11",
      "kur_tepki": "2022-08-15",
@@ -88636,7 +89652,9 @@
      "dkur_yuzde": 0.1416,
      "durum": "kismen",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "23:46",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2022-09-29",
      "kur_tepki": "2022-10-03",
@@ -88655,7 +89673,9 @@
      "dkur_yuzde": -0.4828,
      "durum": "dogrulandi",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": null,
+     "ilk_iz": null,
      "kur_adim": 2,
      "kur_taban": "2024-07-18",
      "kur_tepki": "2024-07-22",
@@ -88674,7 +89694,9 @@
      "dkur_yuzde": 0.0405,
      "durum": "dogrulandi",
      "eylem": "not",
+     "gun_dayanagi": "kaynak",
      "ilan_saati": "akşam",
+     "ilk_iz": null,
      "kur_adim": 1,
      "kur_taban": "2024-09-06",
      "kur_tepki": "2024-09-09",
@@ -88693,7 +89715,9 @@
      "dkur_yuzde": 0.0317,
      "durum": "kismen",
      "eylem": "not",
+     "gun_dayanagi": "cikarim",
      "ilan_saati": "akşam",
+     "ilk_iz": "2024-11-02",
      "kur_adim": 1,
      "kur_taban": "2024-11-01",
      "kur_tepki": "2024-11-04",
@@ -88712,16 +89736,27 @@
    ],
    "n": 33,
    "n_bozulma": 22,
-   "n_dogrulandi": 20,
+   "n_dogrulandi": 19,
    "n_iyilesme": 11,
+   "n_kismen": 14,
    "olay_calismasi": "kurulmadi: tablo vaka listesi olarak okunur",
    "plasebo_kapisi": {
     "dibs_5y": {
+     "arindirilmis_tepe": 2,
      "donem_siniri_dusen_olay": 0,
      "gecti": false,
      "guclu_sinirda": false,
+     "gun_eslemeli_kiyas": true,
+     "gun_etkisinden_arindirilmis": {
+      "-1": 1.04,
+      "-2": 0.9687,
+      "0": 0.6821,
+      "1": 0.7888,
+      "2": 1.1534
+     },
      "kapi": false,
      "kapi_guclu": false,
+     "kayma_birimi": "Türkiye iş günü",
      "n_olay": 24,
      "oran": {
       "-1": 1.0205,
@@ -88730,7 +89765,7 @@
       "1": 0.7784,
       "2": 1.1043
      },
-     "p_rastgele_oran0": 0.8432,
+     "p_rastgele_oran0": 0.8442,
      "profil": {
       "n_olay": 24,
       "oran": {
@@ -88740,50 +89775,341 @@
        "1": 0.7629,
        "2": 1.0822
       },
-      "taban_abs": 25.464,
+      "taban_abs": 25.4639,
       "tepe": 2,
       "tepe_sifirda": false
      },
      "sebep": "plasebo profilinin tepesi olay gününde değil (+2 iş gününde); olay penceresi kurulmaz",
-     "tepe": 2
+     "seri": "tablonun gözlemleri: DİBS 5 yıllık getirisinin ardışık iki sabah sabitlemesi arasındaki fark, baz puan",
+     "sinir": "Rastgele kıyas yalnız olay günü oranını sınar; öbür kaymaların oranı tarif edicidir, ayrıca sınanmadı.",
+     "tepe": 2,
+     "tepe_katkisi": {
+      "en_buyuk": [
+       {
+        "abs_degisim": 118.9525,
+        "kayma_gunu": "2024-07-24",
+        "olay_gunu": "2024-07-22"
+       },
+       {
+        "abs_degisim": 75.5442,
+        "kayma_gunu": "2019-07-18",
+        "olay_gunu": "2019-07-16"
+       },
+       {
+        "abs_degisim": 74.7334,
+        "kayma_gunu": "2018-07-18",
+        "olay_gunu": "2018-07-16"
+       }
+      ],
+      "en_buyuk_pay": 0.4071,
+      "kayma": 2,
+      "n": 24,
+      "not": "tepe kaymasındaki mutlak değişim toplamının en büyük 3 gözlemden gelen payı"
+     }
     },
     "kur": {
+     "arindirilmis_tepe": -2,
      "donem_siniri_dusen_olay": 0,
+     "gecis_oncesi": {
+      "arindirilmis_tepe": -2,
+      "disarida_kalan_tepki_gunu": 3,
+      "donem_siniri_dusen_olay": 0,
+      "gecti": false,
+      "guclu_sinirda": false,
+      "gun_eslemeli_kiyas": true,
+      "gun_etkisinden_arindirilmis": {
+       "-1": 0.9607,
+       "-2": 1.829,
+       "0": 1.183,
+       "1": 0.9648,
+       "2": 0.792
+      },
+      "kapi": false,
+      "kapi_guclu": false,
+      "n_olay": 24,
+      "oran": {
+       "-1": 0.8909,
+       "-2": 1.735,
+       "0": 1.3916,
+       "1": 0.8562,
+       "2": 0.7877
+      },
+      "p_rastgele_oran0": 0.1499,
+      "sebep": "plasebo profilinin tepesi olay gününde değil (−2 gözlemde); olay penceresi kurulmaz",
+      "tepe": -2,
+      "yontem": "Haftanın günü eşlemesi 18.12.2023 öncesindeki ve sonrasındaki pazartesileri ayırmaz: öncesinde pazartesi değişimi perşembeden pazartesiye uzanır, sonrasında cumadan pazartesiye. Plasebo sınaması yalnız 18.12.2023 öncesinin gözlemleri ve tepki günleriyle yeniden soruldu (3 tepki günü sonraki dönemde kaldı); bu dönemde bütün pazartesiler aynı uzunluktadır."
+     },
      "gecti": false,
      "guclu_sinirda": false,
+     "gun_eslemeli_kiyas": true,
+     "gun_etkisinden_arindirilmis": {
+      "-1": 0.9012,
+      "-2": 1.7323,
+      "0": 1.0992,
+      "1": 0.8777,
+      "2": 0.7808
+     },
      "kapi": false,
      "kapi_guclu": false,
-     "n_olay": 22,
+     "kayma_birimi": "gözlem (18.12.2023 öncesinde cuma gözlemi yok: pazartesinin bir öncesi perşembe, iki öncesi çarşamba)",
+     "n_olay": 27,
      "oran": {
-      "-1": 1.0302,
-      "-2": 1.835,
-      "0": 0.9531,
-      "1": 0.9185,
-      "2": 0.8404
+      "-1": 0.8747,
+      "-2": 1.6608,
+      "0": 1.3494,
+      "1": 0.8292,
+      "2": 0.776
      },
-     "p_rastgele_oran0": 0.5135,
-     "profil": {
-      "n_olay": 22,
-      "oran": {
-       "-1": 1.186,
-       "-2": 2.1124,
-       "0": 1.0972,
-       "1": 1.0574,
-       "2": 0.9675
+     "p_rastgele_oran0": 0.2398,
+     "pazartesi_abs": {
+      "gecis_oncesi": {
+       "n_oteki": 1574,
+       "n_pazartesi": 524,
+       "oran": 1.4046,
+       "oteki_gunler": 0.6067,
+       "pazartesi": 0.8521
       },
-      "taban_abs": 0.4988,
+      "gecis_sonrasi": {
+       "n_oteki": 182,
+       "n_pazartesi": 45,
+       "oran": 1.0033,
+       "oteki_gunler": 0.1956,
+       "pazartesi": 0.1962
+      },
+      "not": "plasebo sınamasının örneklemindeki bütün günler (olay pencereleri dahil): pazartesi mutlak değişiminin ortalaması ve öbür hafta içi günlerinin ortalamasına oranı, 18.12.2023 öncesi ve sonrası ayrı"
+     },
+     "profil": {
+      "n_olay": 27,
+      "oran": {
+       "-1": 0.8909,
+       "-2": 1.6915,
+       "0": 1.3743,
+       "1": 0.8445,
+       "2": 0.7903
+      },
+      "taban_abs": 0.6091,
       "tepe": -2,
       "tepe_sifirda": false
      },
-     "sebep": "plasebo profilinin tepesi olay gününde değil (−2 iş gününde); olay penceresi kurulmaz",
-     "tepe": -2
+     "sebep": "plasebo profilinin tepesi olay gününde değil (−2 gözlemde); olay penceresi kurulmaz",
+     "seri": "tablonun gözlemleri: USD/TRY'nin ardışık iki hafta içi gözlemi arasındaki log farkı ×100; 18.12.2023 öncesinde cuma kuru boş olduğu için pazartesi değişimi perşembe gözleminden pazartesi gözlemine uzanır, cuma akşamı ve hafta sonu ilan edilen kararın ilk tepkisini taşır ve iki seanslıktır; bu kararlarda bir önceki gözlem perşembe, iki önceki çarşambadır",
+     "sinir": "Rastgele kıyas yalnız olay günü oranını sınar; öbür kaymaların oranı tarif edicidir, ayrıca sınanmadı.",
+     "tepe": -2,
+     "tepe_katkisi": {
+      "en_buyuk": [
+       {
+        "abs_degisim": 6.7803,
+        "kayma_gunu": "2018-08-15",
+        "olay_gunu": "2018-08-20"
+       },
+       {
+        "abs_degisim": 3.7733,
+        "kayma_gunu": "2016-05-04",
+        "olay_gunu": "2016-05-09"
+       },
+       {
+        "abs_degisim": 3.6501,
+        "kayma_gunu": "2018-07-11",
+        "olay_gunu": "2018-07-16"
+       }
+      ],
+      "en_buyuk_pay": 0.5105,
+      "kayma": -2,
+      "n": 27,
+      "not": "tepe kaymasındaki mutlak değişim toplamının en büyük 3 gözlemden gelen payı"
+     }
     }
+   },
+   "plasebo_kapisi_gunu_kaynakta": {
+    "dibs_5y": {
+     "arindirilmis_tepe": 2,
+     "donem_siniri_dusen_olay": 0,
+     "gecti": false,
+     "guclu_sinirda": false,
+     "gun_eslemeli_kiyas": true,
+     "gun_etkisinden_arindirilmis": {
+      "-1": 1.0509,
+      "-2": 0.8959,
+      "0": 0.6003,
+      "1": 0.8378,
+      "2": 1.2335
+     },
+     "kapi": false,
+     "kapi_guclu": false,
+     "kayma_birimi": "Türkiye iş günü",
+     "n_olay": 21,
+     "oran": {
+      "-1": 1.0427,
+      "-2": 0.9076,
+      "0": 0.655,
+      "1": 0.8168,
+      "2": 1.1695
+     },
+     "p_rastgele_oran0": 0.9001,
+     "profil": {
+      "n_olay": 21,
+      "oran": {
+       "-1": 1.0131,
+       "-2": 0.8818,
+       "0": 0.6364,
+       "1": 0.7936,
+       "2": 1.1363
+      },
+      "taban_abs": 25.4665,
+      "tepe": 2,
+      "tepe_sifirda": false
+     },
+     "sebep": "plasebo profilinin tepesi olay gününde değil (+2 iş gününde); olay penceresi kurulmaz",
+     "sinir": "Rastgele kıyas yalnız olay günü oranını sınar; öbür kaymaların oranı tarif edicidir, ayrıca sınanmadı.",
+     "tepe": 2,
+     "tepe_katkisi": {
+      "en_buyuk": [
+       {
+        "abs_degisim": 118.9525,
+        "kayma_gunu": "2024-07-24",
+        "olay_gunu": "2024-07-22"
+       },
+       {
+        "abs_degisim": 75.5442,
+        "kayma_gunu": "2019-07-18",
+        "olay_gunu": "2019-07-16"
+       },
+       {
+        "abs_degisim": 74.7334,
+        "kayma_gunu": "2018-07-18",
+        "olay_gunu": "2018-07-16"
+       }
+      ],
+      "en_buyuk_pay": 0.443,
+      "kayma": 2,
+      "n": 21,
+      "not": "tepe kaymasındaki mutlak değişim toplamının en büyük 3 gözlemden gelen payı"
+     }
+    },
+    "disarida": [
+     "moodys_20170317",
+     "fitch_20191101",
+     "sp_20241101"
+    ],
+    "kur": {
+     "arindirilmis_tepe": -2,
+     "donem_siniri_dusen_olay": 0,
+     "gecis_oncesi": {
+      "arindirilmis_tepe": -2,
+      "disarida_kalan_tepki_gunu": 2,
+      "donem_siniri_dusen_olay": 0,
+      "gecti": false,
+      "guclu_sinirda": false,
+      "gun_eslemeli_kiyas": true,
+      "gun_etkisinden_arindirilmis": {
+       "-1": 0.9236,
+       "-2": 1.7854,
+       "0": 1.2539,
+       "1": 0.9936,
+       "2": 0.8348
+      },
+      "kapi": false,
+      "kapi_guclu": false,
+      "n_olay": 22,
+      "oran": {
+       "-1": 0.8743,
+       "-2": 1.7105,
+       "0": 1.4831,
+       "1": 0.8939,
+       "2": 0.825
+      },
+      "p_rastgele_oran0": 0.0949,
+      "sebep": "plasebo profilinin tepesi olay gününde değil (−2 gözlemde); olay penceresi kurulmaz",
+      "tepe": -2,
+      "yontem": "Haftanın günü eşlemesi 18.12.2023 öncesindeki ve sonrasındaki pazartesileri ayırmaz: öncesinde pazartesi değişimi perşembeden pazartesiye uzanır, sonrasında cumadan pazartesiye. Plasebo sınaması yalnız 18.12.2023 öncesinin gözlemleri ve tepki günleriyle yeniden soruldu (2 tepki günü sonraki dönemde kaldı); bu dönemde bütün pazartesiler aynı uzunluktadır."
+     },
+     "gecti": false,
+     "guclu_sinirda": false,
+     "gun_eslemeli_kiyas": true,
+     "gun_etkisinden_arindirilmis": {
+      "-1": 0.8776,
+      "-2": 1.7327,
+      "0": 1.2225,
+      "1": 0.9393,
+      "2": 0.8202
+     },
+     "kapi": false,
+     "kapi_guclu": false,
+     "kayma_birimi": "gözlem (18.12.2023 öncesinde cuma gözlemi yok: pazartesinin bir öncesi perşembe, iki öncesi çarşamba)",
+     "n_olay": 24,
+     "oran": {
+      "-1": 0.8611,
+      "-2": 1.6693,
+      "0": 1.4632,
+      "1": 0.8801,
+      "2": 0.8076
+     },
+     "p_rastgele_oran0": 0.1369,
+     "pazartesi_abs": {
+      "gecis_oncesi": {
+       "n_oteki": 1574,
+       "n_pazartesi": 524,
+       "oran": 1.4046,
+       "oteki_gunler": 0.6067,
+       "pazartesi": 0.8521
+      },
+      "gecis_sonrasi": {
+       "n_oteki": 151,
+       "n_pazartesi": 37,
+       "oran": 1.1039,
+       "oteki_gunler": 0.2039,
+       "pazartesi": 0.2251
+      },
+      "not": "plasebo sınamasının örneklemindeki bütün günler (olay pencereleri dahil): pazartesi mutlak değişiminin ortalaması ve öbür hafta içi günlerinin ortalamasına oranı, 18.12.2023 öncesi ve sonrası ayrı"
+     },
+     "profil": {
+      "n_olay": 24,
+      "oran": {
+       "-1": 0.8883,
+       "-2": 1.7221,
+       "0": 1.5095,
+       "1": 0.9079,
+       "2": 0.8331
+      },
+      "taban_abs": 0.6085,
+      "tepe": -2,
+      "tepe_sifirda": false
+     },
+     "sebep": "plasebo profilinin tepesi olay gününde değil (−2 gözlemde); olay penceresi kurulmaz",
+     "sinir": "Rastgele kıyas yalnız olay günü oranını sınar; öbür kaymaların oranı tarif edicidir, ayrıca sınanmadı.",
+     "tepe": -2,
+     "tepe_katkisi": {
+      "en_buyuk": [
+       {
+        "abs_degisim": 6.7803,
+        "kayma_gunu": "2018-08-15",
+        "olay_gunu": "2018-08-20"
+       },
+       {
+        "abs_degisim": 3.7733,
+        "kayma_gunu": "2016-05-04",
+        "olay_gunu": "2016-05-09"
+       },
+       {
+        "abs_degisim": 3.6501,
+        "kayma_gunu": "2018-07-11",
+        "olay_gunu": "2018-07-16"
+       }
+      ],
+      "en_buyuk_pay": 0.5647,
+      "kayma": -2,
+      "n": 24,
+      "not": "tepe kaymasındaki mutlak değişim toplamının en büyük 3 gözlemden gelen payı"
+     }
+    },
+    "n_karar": 26,
+    "yontem": "Aynı plasebo sınaması, günü kaynakta yazan kararlarla yeniden soruldu (ertesi günün haberinden ya da kurumun takviminden çıkarılan günler dışarıda); rastgele gün kümeleri bu olay kümesinin büyüklüğü ve haftanın günü bileşimiyle yeniden çekildi."
    },
    "saat": "ilan saati kaynak kaydından; DİBS sabah hizası (10:00–14:00); USD/TRY İstanbul 18:00 (18.12.2023'ten), öncesinde Londra gece yarısı",
    "saati_bilinen": 28,
    "son": "2024-11-01",
    "yonetilen_disarida": 4,
-   "yontem": "Her kararın ilan anı İstanbul saatiyle haberin ilk arşiv damgasıdır. Pencerenin tabanı, gözlemi ilandan ÖNCE alınan son gün; tepkisi, gözlemi ilandan SONRA alınan ilk gündür. Gözlemin saati seriye göre ayrıdır: DİBS gösterge getirisi sabah sabitlemesidir (10:00–14:00), USD/TRY 18.12.2023'ten İstanbul 18:00 kapanışı, öncesinde Londra gece yarısı (İstanbul 00:00–03:00). Kaynak saat vermeyip 'akşam' diyorsa ilan aralığı İstanbul 18:00 ile ertesi gün 03:00 arasıdır; hiç bilinmiyorsa bütün gündür ve pencere o günü iki yandan kuşatır. Yönetilen kur dönemindeki kararlar gruplara girmez; 18.12.2023 öncesi cuma kuru boştur."
+   "yontem": "Her kararın ilan anı İstanbul saatiyle haberin ilk arşiv damgasıdır. Pencerenin tabanı, gözlemi ilandan ÖNCE alınan son gün; tepkisi, gözlemi ilandan SONRA alınan ilk gündür. Gözlemin saati seriye göre ayrıdır: DİBS gösterge getirisi sabah sabitlemesidir (10:00–14:00), USD/TRY 18.12.2023'ten İstanbul 18:00 kapanışı, öncesinde Londra gece yarısı (İstanbul 00:00–03:00). Kaynak saat vermeyip 'akşam' diyorsa ilan aralığı İstanbul 18:00 ile ertesi gün 03:00 arasıdır; hiç bilinmiyorsa bütün gündür ve pencere o günü iki yandan kuşatır. Yönetilen kur dönemindeki kararlar gruplara girmez; 18.12.2023 öncesi cuma kuru boştur. Plasebo sınaması tablonun aynı gözlemlerinden kurulan değişim serisiyle yapılır: o dönemde pazartesi değişimi perşembeden pazartesiye uzanır, cuma akşamı ve hafta sonu kararlarının ilk tepkisini taşır ve iki seanslık olduğu için olay günü oranı haftanın günü aynı rastgele gün kümeleriyle kıyaslanır. Bu eşleme 18.12.2023 sonrasının tek seanslık pazartesilerini öncekilerden ayırmadığı için kur sınaması yalnız 18.12.2023 öncesiyle de yapıldı. Günü kaynakta yazmayan kararlar listede işaretlidir; sınama onlarsız da yapıldı."
   },
   "p12_dm": {
    "ilk": "2023-08-01",
@@ -89570,13 +90896,13 @@
     "eksik": "ABD ISM/PMI ve GSYH yayım takvimi arşivde yok; politika beklentisi ölçüsü (ilk iki ölçünün ikincisi) yayım günü için kurulmadı.",
     "guc_ozeti": {
      "dm": "kaynak",
-     "em": "kurulmadı (kapı)"
+     "em": "kurulmadı (plasebo)"
     },
     "kanitlar": [
      {
       "dogrudan": true,
       "guc": "kurulmadı",
-      "guc_es_hareket": "kurulmadı (kapı)",
+      "guc_es_hareket": "kurulmadı (plasebo)",
       "olcu": "Türkiye GSYH yayım günü",
       "sutun": [
        "em"
@@ -89585,8 +90911,8 @@
      },
      {
       "dogrudan": true,
-      "guc": "kurulmadı (kapı)",
-      "olcu": "GSYH günü × 2 yıllık kapısı",
+      "guc": "kurulmadı (plasebo)",
+      "olcu": "GSYH günü × 2 yıllık sınaması",
       "sutun": [
        "ilk_iki_olcu",
        "gecersiz_kilan"
@@ -89595,8 +90921,8 @@
      },
      {
       "dogrudan": true,
-      "guc": "kurulmadı (kapı)",
-      "olcu": "GSYH günü × kur kapısı",
+      "guc": "kurulmadı (plasebo)",
+      "olcu": "GSYH günü × kur sınaması",
       "sutun": [
        "em"
       ],
@@ -89655,7 +90981,7 @@
      {
       "dogrudan": true,
       "guc": "kurulmadı",
-      "guc_es_hareket": "kurulmadı (kapı)",
+      "guc_es_hareket": "kurulmadı (plasebo)",
       "olcu": "Türkiye TÜFE günü, normal rejim",
       "sutun": [
        "em"
@@ -89665,7 +90991,7 @@
      {
       "dogrudan": true,
       "guc": "kaynak",
-      "guc_es_hareket": "kurulmadı (kapı)",
+      "guc_es_hareket": "kurulmadı (plasebo)",
       "olcu": "Türkiye TÜFE günü, mali baskınlık",
       "sutun": [
        "em"
@@ -89674,8 +91000,8 @@
      },
      {
       "dogrudan": true,
-      "guc": "kurulmadı (kapı)",
-      "olcu": "TÜFE günü × 2 yıllık kapısı",
+      "guc": "kurulmadı (plasebo)",
+      "olcu": "TÜFE günü × 2 yıllık sınaması",
       "sutun": [
        "ilk_iki_olcu",
        "gecersiz_kilan"
@@ -89684,8 +91010,8 @@
      },
      {
       "dogrudan": true,
-      "guc": "kurulmadı (kapı)",
-      "olcu": "TÜFE günü × kur kapısı",
+      "guc": "kurulmadı (plasebo)",
+      "olcu": "TÜFE günü × kur sınaması",
       "sutun": [
        "em"
       ],
@@ -89821,7 +91147,7 @@
      {
       "dogrudan": true,
       "guc": "ölçüldü",
-      "olcu": "PPK × 2 yıllık kapısı",
+      "olcu": "PPK × 2 yıllık sınaması",
       "sutun": [
        "ilk_iki_olcu"
       ],
@@ -89830,7 +91156,7 @@
      {
       "dogrudan": true,
       "guc": "ölçüldü",
-      "olcu": "PPK × kur kapısı",
+      "olcu": "PPK × kur sınaması",
       "sutun": [
        "em"
       ],
@@ -89915,7 +91241,7 @@
      {
       "dogrudan": true,
       "guc": "kaynak",
-      "guc_es_hareket": "kurulmadı (kapı)",
+      "guc_es_hareket": "kurulmadı (plasebo)",
       "olcu": "rezerv şoku haftası, güvenilir merkez bankası",
       "sutun": [
        "em"
@@ -89925,7 +91251,7 @@
      {
       "dogrudan": true,
       "guc": "kurulmadı",
-      "guc_es_hareket": "kurulmadı (kapı)",
+      "guc_es_hareket": "kurulmadı (plasebo)",
       "olcu": "rezerv şoku haftası, küresel riskten kaçış",
       "sutun": [
        "em"
@@ -89934,7 +91260,7 @@
      },
      {
       "dogrudan": true,
-      "guc": "kurulmadı (kapı)",
+      "guc": "kurulmadı (plasebo)",
       "olcu": "rezerv şoku haftasında kurun plasebo profili",
       "sutun": [
        "em",
@@ -89975,7 +91301,7 @@
     "matris_satiri": "rezerv"
    },
    {
-    "eksik": "Türkiye not kararlarında (Bölüm 12, günü kaynakta yazan 33 karar) tepki günü hareketi plasebo sınamasını geçmedi: kararlar vaka listesidir; CDS serisi yok.",
+    "eksik": "Türkiye not kararlarında (Bölüm 12, 33 karar; 4 kararın günü kaynakta yazmıyor, ertesi günün haberinden ya da kurumun takviminden çıkarıldı) tepki günü hareketi plasebo sınamasını geçmedi: kararlar vaka listesidir; CDS serisi yok.",
     "guc_ozeti": {
      "dm": "vaka",
      "em": "tarif edici"
@@ -90170,7 +91496,8 @@
      "n": 0,
      "not": "bu rejim etiketinde olay yok",
      "oranlar": null,
-     "pencere": "olay penceresi (vaka), aynı uzunluktaki sıradan pencerelere göre"
+     "pencere": "olay penceresi (vaka), aynı uzunluktaki sıradan pencerelere göre",
+     "sebep_turu": "olay_yok"
     },
     "R3": {
      "birim": {
@@ -90184,7 +91511,8 @@
      "n": 0,
      "not": "EM bütçe olayı olarak yalnız euro çevresinin mali stres pencereleri var; güvenilir merkez bankası rejiminde bütçe olayı kurulmadı",
      "oranlar": null,
-     "pencere": "olay penceresi (vaka), aynı uzunluktaki sıradan pencerelere göre"
+     "pencere": "olay penceresi (vaka), aynı uzunluktaki sıradan pencerelere göre",
+     "sebep_turu": "olay_yok"
     },
     "R4": {
      "birim": {
@@ -90427,21 +91755,24 @@
      "n": 0,
      "not": "DM cari denge yayım takvimi arşivde yok",
      "olcum_denemesi": "DM cari denge yayım takvimi arşivde yok",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R2": {
      "durum": "kurulmadi",
      "es_hareket": null,
      "n": 0,
      "not": "DM cari denge yayım takvimi arşivde yok",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R3": {
      "durum": "kurulmadi",
      "es_hareket": null,
      "n": 0,
      "not": "TCMB ödemeler dengesi yayım günleri arşivde yok: olay günü kurulamaz; aylık ilişki Bölüm 8'dedir (yön kurdan cari dengeye)",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R4": {
      "durum": "kaynak",
@@ -90450,21 +91781,24 @@
      "n": 0,
      "not": "TCMB ödemeler dengesi yayım günleri arşivde yok: olay günü kurulamaz; aylık ilişki Bölüm 8'dedir (yön kurdan cari dengeye)",
      "olcum_denemesi": "TCMB ödemeler dengesi yayım günleri arşivde yok: olay günü kurulamaz; aylık ilişki Bölüm 8'dedir (yön kurdan cari dengeye)",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R5_DM": {
      "durum": "kurulmadi",
      "es_hareket": null,
      "n": 0,
      "not": "DM cari denge yayım takvimi arşivde yok",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R5_EM": {
      "durum": "kurulmadi",
      "es_hareket": null,
      "n": 0,
      "not": "TCMB ödemeler dengesi yayım günleri arşivde yok: olay günü kurulamaz; aylık ilişki Bölüm 8'dedir (yön kurdan cari dengeye)",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     }
    },
    "emtia": {
@@ -90476,20 +91810,21 @@
       "uzun": "ABD 10 yıllık, aylık bp"
      },
      "durum": "kaynak",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2002-03-01",
      "kaynak_bolum": "Bölüm 10",
      "n": 17,
      "n_seri": {},
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
-     "olcum_denemesi": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
+     "olcum_denemesi": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "şok ayı (ay sonu kur ve getiri; enerji aylık ortalama; ±2 ay)",
+     "sebep_turu": "plasebo",
      "son": "2026-06-01"
     },
     "R2": {
@@ -90500,18 +91835,19 @@
       "uzun": "ABD 10 yıllık, aylık bp"
      },
      "durum": "kurulmadi",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2015-02-01",
      "n": 1,
      "n_seri": {},
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "şok ayı (ay sonu kur ve getiri; enerji aylık ortalama; ±2 ay)",
+     "sebep_turu": "plasebo",
      "son": "2015-02-01"
     },
     "R3": {
@@ -90522,19 +91858,20 @@
       "uzun": "DİBS 5 yıllık, aylık bp"
      },
      "durum": "kurulmadi",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2014-12-01",
      "n": 12,
      "n_seri": {},
      "n_yonetilen": 0,
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "şok ayı (ay sonu kur ve getiri; enerji aylık ortalama; ±2 ay)",
+     "sebep_turu": "plasebo",
      "son": "2026-06-01"
     },
     "R4": {
@@ -90545,21 +91882,22 @@
       "uzun": "DİBS 5 yıllık, aylık bp"
      },
      "durum": "kaynak",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2021-10-01",
      "kaynak_bolum": "Bölüm 10",
      "n": 1,
      "n_seri": {},
      "n_yonetilen": 0,
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
-     "olcum_denemesi": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
+     "olcum_denemesi": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "şok ayı (ay sonu kur ve getiri; enerji aylık ortalama; ±2 ay)",
+     "sebep_turu": "plasebo",
      "son": "2021-10-01"
     },
     "R5_DM": {
@@ -90570,18 +91908,19 @@
       "uzun": "ABD 10 yıllık, aylık bp"
      },
      "durum": "kurulmadi",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2001-10-01",
      "n": 15,
      "n_seri": {},
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "şok ayı (ay sonu kur ve getiri; enerji aylık ortalama; ±2 ay)",
+     "sebep_turu": "plasebo",
      "son": "2026-03-01"
     },
     "R5_EM": {
@@ -90592,19 +91931,20 @@
       "uzun": "DİBS 5 yıllık, aylık bp"
      },
      "durum": "kurulmadi",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2016-01-01",
      "n": 7,
      "n_seri": {},
      "n_yonetilen": 1,
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "şok ayı (ay sonu kur ve getiri; enerji aylık ortalama; ±2 ay)",
+     "sebep_turu": "plasebo",
      "son": "2026-03-01"
     }
    },
@@ -90616,14 +91956,16 @@
      "n": 0,
      "not": "ABD ISM/PMI ve GSYH yayım takvimi arşivde yok",
      "olcum_denemesi": "ABD ISM/PMI ve GSYH yayım takvimi arşivde yok",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R2": {
      "durum": "kurulmadi",
      "es_hareket": null,
      "n": 0,
      "not": "ABD ISM/PMI ve GSYH yayım takvimi arşivde yok",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R3": {
      "birim": {
@@ -90633,19 +91975,20 @@
       "uzun": "DİBS 5 yıllık, bp"
      },
      "durum": "kurulmadi",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2013-12-10",
      "n": 38,
      "n_seri": {},
      "n_yonetilen": 3,
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "yayım günü (10:00 TSİ)",
+     "sebep_turu": "plasebo",
      "son": "2026-08-31"
     },
     "R4": {
@@ -90656,19 +91999,20 @@
       "uzun": "DİBS 5 yıllık, bp"
      },
      "durum": "kurulmadi",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2015-12-10",
      "n": 3,
      "n_seri": {},
      "n_yonetilen": 0,
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "yayım günü (10:00 TSİ)",
+     "sebep_turu": "plasebo",
      "son": "2021-05-31"
     },
     "R5_DM": {
@@ -90676,7 +92020,8 @@
      "es_hareket": null,
      "n": 0,
      "not": "ABD ISM/PMI ve GSYH yayım takvimi arşivde yok",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R5_EM": {
      "birim": {
@@ -90686,19 +92031,20 @@
       "uzun": "DİBS 5 yıllık, bp"
      },
      "durum": "kurulmadi",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2015-09-10",
      "n": 11,
      "n_seri": {},
      "n_yonetilen": 3,
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "yayım günü (10:00 TSİ)",
+     "sebep_turu": "plasebo",
      "son": "2026-03-02"
     }
    },
@@ -90710,42 +92056,48 @@
      "n": 0,
      "not": "ABD istihdam raporu yayım günleri elde yok (BLS yayım arşivi elde yok)",
      "olcum_denemesi": "ABD istihdam raporu yayım günleri elde yok (BLS yayım arşivi elde yok)",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R2": {
      "durum": "kurulmadi",
      "es_hareket": null,
      "n": 0,
      "not": "ABD istihdam raporu yayım günleri elde yok (BLS yayım arşivi elde yok)",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R3": {
      "durum": "kurulmadi",
      "es_hareket": null,
      "n": 0,
      "not": "Türkiye işgücü istatistiklerinin yayım takvimi arşivde yok",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R4": {
      "durum": "kurulmadi",
      "es_hareket": null,
      "n": 0,
      "not": "Türkiye işgücü istatistiklerinin yayım takvimi arşivde yok",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R5_DM": {
      "durum": "kurulmadi",
      "es_hareket": null,
      "n": 0,
      "not": "ABD istihdam raporu yayım günleri elde yok (BLS yayım arşivi elde yok)",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R5_EM": {
      "durum": "kurulmadi",
      "es_hareket": null,
      "n": 0,
      "not": "Türkiye işgücü istatistiklerinin yayım takvimi arşivde yok",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     }
    },
    "kuresel": {
@@ -90800,7 +92152,8 @@
      "n_seri": null,
      "not": "bu rejim etiketinde olay yok",
      "oranlar": null,
-     "pencere": "VIX sıçraması günü (ABD tarihi)"
+     "pencere": "VIX sıçraması günü (ABD tarihi)",
+     "sebep_turu": "olay_yok"
     },
     "R3": {
      "birim": {
@@ -90810,19 +92163,20 @@
       "uzun": "DİBS 5 yıllık, bp"
      },
      "durum": "kurulmadi",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2014-01-24",
      "n": 16,
      "n_seri": {},
      "n_yonetilen": 0,
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "VIX sıçraması günü (ABD tarihi)",
+     "sebep_turu": "plasebo",
      "son": "2026-06-05"
     },
     "R4": {
@@ -90833,19 +92187,20 @@
       "uzun": "DİBS 5 yıllık, bp"
      },
      "durum": "kurulmadi",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2021-09-20",
      "n": 1,
      "n_seri": {},
      "n_yonetilen": 0,
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "VIX sıçraması günü (ABD tarihi)",
+     "sebep_turu": "plasebo",
      "son": "2021-09-20"
     },
     "R5_DM": {
@@ -90895,21 +92250,22 @@
       "uzun": "DİBS 5 yıllık, bp"
      },
      "durum": "kaynak",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2015-08-21",
      "kaynak_bolum": "Bölüm 11",
      "n": 49,
      "n_seri": {},
      "n_yonetilen": 7,
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
-     "olcum_denemesi": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
+     "olcum_denemesi": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "VIX sıçraması günü (ABD tarihi)",
+     "sebep_turu": "plasebo",
      "son": "2026-03-06"
     }
    },
@@ -91016,22 +92372,20 @@
      ]
     },
     "R3": {
-     "durum": "kaynak",
+     "durum": "kurulmadi",
      "es_hareket": null,
-     "kaynak_bolum": "Bölüm 12",
      "n": 0,
-     "not": "kapı: Türkiye not kararlarında (33 karar, Bölüm 12) tepki günü hareketi komşu günlerden ayrışmıyor — kur: plasebo profilinin tepesi olay gününde değil (−2 iş gününde); olay penceresi kurulmaz; 5 yıllık: plasebo profilinin tepesi olay gününde değil (+2 iş gününde); olay penceresi kurulmaz",
-     "olcum_denemesi": "kapı: Türkiye not kararlarında (33 karar, Bölüm 12) tepki günü hareketi komşu günlerden ayrışmıyor — kur: plasebo profilinin tepesi olay gününde değil (−2 iş gününde); olay penceresi kurulmaz; 5 yıllık: plasebo profilinin tepesi olay gününde değil (+2 iş gününde); olay penceresi kurulmaz",
-     "oranlar": null
+     "not": "plasebo sınaması: Türkiye not kararlarında (33 karar, Bölüm 12) tepki günü hareketi komşu günlerden ayrışmıyor — kur: plasebo profilinin tepesi olay gününde değil (−2 gözlemde); olay penceresi kurulmaz; 5 yıllık: plasebo profilinin tepesi olay gününde değil (+2 iş gününde); olay penceresi kurulmaz",
+     "oranlar": null,
+     "sebep_turu": "plasebo"
     },
     "R4": {
-     "durum": "kaynak",
+     "durum": "kurulmadi",
      "es_hareket": null,
-     "kaynak_bolum": "Bölüm 12",
      "n": 0,
-     "not": "kapı: Türkiye not kararlarında (33 karar, Bölüm 12) tepki günü hareketi komşu günlerden ayrışmıyor — kur: plasebo profilinin tepesi olay gününde değil (−2 iş gününde); olay penceresi kurulmaz; 5 yıllık: plasebo profilinin tepesi olay gününde değil (+2 iş gününde); olay penceresi kurulmaz",
-     "olcum_denemesi": "kapı: Türkiye not kararlarında (33 karar, Bölüm 12) tepki günü hareketi komşu günlerden ayrışmıyor — kur: plasebo profilinin tepesi olay gününde değil (−2 iş gününde); olay penceresi kurulmaz; 5 yıllık: plasebo profilinin tepesi olay gününde değil (+2 iş gününde); olay penceresi kurulmaz",
-     "oranlar": null
+     "not": "plasebo sınaması: Türkiye not kararlarında (33 karar, Bölüm 12) tepki günü hareketi komşu günlerden ayrışmıyor — kur: plasebo profilinin tepesi olay gününde değil (−2 gözlemde); olay penceresi kurulmaz; 5 yıllık: plasebo profilinin tepesi olay gününde değil (+2 iş gününde); olay penceresi kurulmaz",
+     "oranlar": null,
+     "sebep_turu": "plasebo"
     },
     "R5_DM": {
      "birim": {
@@ -91045,14 +92399,16 @@
      "n": 0,
      "not": "bu rejim etiketinde olay yok",
      "oranlar": null,
-     "pencere": "olay penceresi (vaka), aynı uzunluktaki sıradan pencerelere göre"
+     "pencere": "olay penceresi (vaka), aynı uzunluktaki sıradan pencerelere göre",
+     "sebep_turu": "olay_yok"
     },
     "R5_EM": {
      "durum": "kurulmadi",
      "es_hareket": null,
      "n": 0,
-     "not": "kapı: Türkiye not kararlarında (33 karar, Bölüm 12) tepki günü hareketi komşu günlerden ayrışmıyor — kur: plasebo profilinin tepesi olay gününde değil (−2 iş gününde); olay penceresi kurulmaz; 5 yıllık: plasebo profilinin tepesi olay gününde değil (+2 iş gününde); olay penceresi kurulmaz",
-     "oranlar": null
+     "not": "plasebo sınaması: Türkiye not kararlarında (33 karar, Bölüm 12) tepki günü hareketi komşu günlerden ayrışmıyor — kur: plasebo profilinin tepesi olay gününde değil (−2 gözlemde); olay penceresi kurulmaz; 5 yıllık: plasebo profilinin tepesi olay gününde değil (+2 iş gününde); olay penceresi kurulmaz",
+     "oranlar": null,
+     "sebep_turu": "plasebo"
     }
    },
    "para": {
@@ -91191,9 +92547,9 @@
      },
      "oranlar": {
       "2y": 1.7851,
-      "egim": "kurulmadı (kapı)",
+      "egim": "kurulmadı (plasebo)",
       "kur": 1.6015,
-      "uzun": "kurulmadı (kapı)"
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "karar günü (14:00 TSİ)",
      "son": "2026-09-10"
@@ -91219,9 +92575,9 @@
      "n_yonetilen": 3,
      "oranlar": {
       "2y": 1.4433,
-      "egim": "kurulmadı (kapı)",
+      "egim": "kurulmadı (plasebo)",
       "kur": 2.4716,
-      "uzun": "kurulmadı (kapı)"
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "karar günü (14:00 TSİ)",
      "son": "2026-04-22",
@@ -91320,9 +92676,9 @@
      },
      "oranlar": {
       "2y": 1.1449,
-      "egim": "kurulmadı (kapı)",
+      "egim": "kurulmadı (plasebo)",
       "kur": 0.9686,
-      "uzun": "kurulmadı (kapı)"
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "karar günü (14:00 TSİ)",
      "son": "2026-03-12"
@@ -91336,14 +92692,16 @@
      "n": 0,
      "not": "DM haftalık rezerv serisi arşivde yok",
      "olcum_denemesi": "DM haftalık rezerv serisi arşivde yok",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R2": {
      "durum": "kurulmadi",
      "es_hareket": null,
      "n": 0,
      "not": "DM haftalık rezerv serisi arşivde yok",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R3": {
      "birim": {
@@ -91353,21 +92711,22 @@
       "uzun": "DİBS 5 yıllık haftalık, bp"
      },
      "durum": "kaynak",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2014-01-24",
      "kaynak_bolum": "Bölüm 9",
      "n": 54,
      "n_seri": {},
      "n_yonetilen": 4,
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
-     "olcum_denemesi": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
+     "olcum_denemesi": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "rezervin büyük oynadığı hafta (aynı hafta; ±2 hafta)",
+     "sebep_turu": "plasebo",
      "son": "2026-09-18"
     },
     "R4": {
@@ -91378,21 +92737,22 @@
       "uzun": "DİBS 5 yıllık haftalık, bp"
      },
      "durum": "kaynak",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2021-12-17",
      "kaynak_bolum": "Bölüm 9",
      "n": 2,
      "n_seri": {},
      "n_yonetilen": 2,
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
-     "olcum_denemesi": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
+     "olcum_denemesi": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "rezervin büyük oynadığı hafta (aynı hafta; ±2 hafta)",
+     "sebep_turu": "plasebo",
      "son": "2023-06-23"
     },
     "R5_DM": {
@@ -91400,7 +92760,8 @@
      "es_hareket": null,
      "n": 0,
      "not": "DM haftalık rezerv serisi arşivde yok",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R5_EM": {
      "birim": {
@@ -91410,19 +92771,20 @@
       "uzun": "DİBS 5 yıllık haftalık, bp"
      },
      "durum": "kurulmadi",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2020-03-13",
      "n": 23,
      "n_seri": {},
      "n_yonetilen": 4,
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "rezervin büyük oynadığı hafta (aynı hafta; ±2 hafta)",
+     "sebep_turu": "plasebo",
      "son": "2026-04-03"
     }
    },
@@ -91434,14 +92796,16 @@
      "n": 0,
      "not": "ABD TÜFE yayım günleri elde yok (BLS yayım arşivi elde yok)",
      "olcum_denemesi": "ABD TÜFE yayım günleri elde yok (BLS yayım arşivi elde yok)",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R2": {
      "durum": "kurulmadi",
      "es_hareket": null,
      "n": 0,
      "not": "ABD TÜFE yayım günleri elde yok (BLS yayım arşivi elde yok)",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R3": {
      "birim": {
@@ -91451,19 +92815,20 @@
       "uzun": "DİBS 5 yıllık, bp"
      },
      "durum": "kurulmadi",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2013-11-04",
      "n": 123,
      "n_seri": {},
      "n_yonetilen": 10,
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "yayım günü (10:00 TSİ)",
+     "sebep_turu": "plasebo",
      "son": "2026-09-03"
     },
     "R4": {
@@ -91474,21 +92839,22 @@
       "uzun": "DİBS 5 yıllık, bp"
      },
      "durum": "kaynak",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2014-11-03",
      "kaynak_bolum": "Bölüm 4",
      "n": 6,
      "n_seri": {},
      "n_yonetilen": 1,
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
-     "olcum_denemesi": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
+     "olcum_denemesi": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "yayım günü (10:00 TSİ)",
+     "sebep_turu": "plasebo",
      "son": "2023-06-05"
     },
     "R5_DM": {
@@ -91496,7 +92862,8 @@
      "es_hareket": null,
      "n": 0,
      "not": "ABD TÜFE yayım günleri elde yok (BLS yayım arşivi elde yok)",
-     "oranlar": null
+     "oranlar": null,
+     "sebep_turu": "veri_yok"
     },
     "R5_EM": {
      "birim": {
@@ -91506,19 +92873,20 @@
       "uzun": "DİBS 5 yıllık, bp"
      },
      "durum": "kurulmadi",
-     "es_hareket": "kurulmadı (kapı)",
+     "es_hareket": "kurulmadı (plasebo)",
      "ilk": "2015-09-03",
      "n": 26,
      "n_seri": {},
      "n_yonetilen": 8,
-     "not": "kapı: dört serinin hiçbiri plasebo kapısını geçmedi",
+     "not": "plasebo sınaması: dört serinin hiçbiri plasebo sınamasını geçmedi",
      "oranlar": {
-      "2y": "kurulmadı (kapı)",
-      "egim": "kurulmadı (kapı)",
-      "kur": "kurulmadı (kapı)",
-      "uzun": "kurulmadı (kapı)"
+      "2y": "kurulmadı (plasebo)",
+      "egim": "kurulmadı (plasebo)",
+      "kur": "kurulmadı (plasebo)",
+      "uzun": "kurulmadı (plasebo)"
      },
      "pencere": "yayım günü (10:00 TSİ)",
+     "sebep_turu": "plasebo",
      "son": "2026-03-03"
     }
    }
@@ -91748,7 +93116,7 @@
       "guclu_sinirda": false,
       "kapi": false,
       "kapi_guclu": false,
-      "kaynak": "Bölüm 3, GSYH yayım günü kapısı",
+      "kaynak": "Bölüm 3, GSYH yayım günü sınaması",
       "n_olay": 55,
       "p_rastgele_oran0": 0.3187,
       "sebep": "plasebo profilinin tepesi olay gününde değil (+1 iş gününde); olay penceresi kurulmaz",
@@ -91779,7 +93147,7 @@
       "guclu_sinirda": false,
       "kapi": false,
       "kapi_guclu": false,
-      "kaynak": "Bölüm 3, GSYH yayım günü kapısı",
+      "kaynak": "Bölüm 3, GSYH yayım günü sınaması",
       "n_olay": 42,
       "p_rastgele_oran0": 0.5664,
       "sebep": "plasebo profilinin tepesi olay gününde değil (+2 iş gününde); olay penceresi kurulmaz",
@@ -91790,7 +93158,7 @@
       "guclu_sinirda": false,
       "kapi": true,
       "kapi_guclu": false,
-      "kaynak": "Bölüm 3, GSYH yayım günü kapısı",
+      "kaynak": "Bölüm 3, GSYH yayım günü sınaması",
       "n_olay": 55,
       "p_rastgele_oran0": 0.1379,
       "sebep": "olay günü oranı haftanın günü eşlemeli rastgele kümelerin %95'ini aşmıyor; olay penceresi kurulmaz",
@@ -92024,7 +93392,7 @@
       "guclu_sinirda": false,
       "kapi": true,
       "kapi_guclu": true,
-      "kaynak": "Bölüm 2, FOMC kapısı",
+      "kaynak": "Bölüm 2, FOMC sınaması",
       "n_olay": 152,
       "p_rastgele_oran0": 0.001,
       "saat_tutarli": true,
@@ -92054,7 +93422,7 @@
       "guclu_sinirda": false,
       "kapi": true,
       "kapi_guclu": true,
-      "kaynak": "Bölüm 2, FOMC kapısı",
+      "kaynak": "Bölüm 2, FOMC sınaması",
       "n_olay": 152,
       "p_rastgele_oran0": 0.001,
       "saat_tutarli": true,
@@ -92086,7 +93454,7 @@
       "guclu_sinirda": false,
       "kapi": true,
       "kapi_guclu": true,
-      "kaynak": "Bölüm 3, PPK kapısı",
+      "kaynak": "Bölüm 3, PPK sınaması",
       "n_olay": 111,
       "p_rastgele_oran0": 0.003,
       "tepe": 0
@@ -92116,7 +93484,7 @@
       "guclu_sinirda": false,
       "kapi": true,
       "kapi_guclu": true,
-      "kaynak": "Bölüm 3, PPK kapısı",
+      "kaynak": "Bölüm 3, PPK sınaması",
       "n_olay": 92,
       "p_rastgele_oran0": 0.002,
       "tepe": 0
@@ -92126,7 +93494,7 @@
       "guclu_sinirda": false,
       "kapi": false,
       "kapi_guclu": false,
-      "kaynak": "Bölüm 3, PPK kapısı",
+      "kaynak": "Bölüm 3, PPK sınaması",
       "n_olay": 111,
       "p_rastgele_oran0": 0.2108,
       "sebep": "plasebo profilinin tepesi olay gününde değil (+1 iş gününde); olay penceresi kurulmaz",
@@ -92257,7 +93625,7 @@
       "guclu_sinirda": false,
       "kapi": false,
       "kapi_guclu": false,
-      "kaynak": "Bölüm 4, TÜFE yayım günü kapısı",
+      "kaynak": "Bölüm 4, TÜFE yayım günü sınaması",
       "n_olay": 164,
       "p_rastgele_oran0": 0.7483,
       "sebep": "plasebo profilinin tepesi olay gününde değil (−2 iş gününde); olay penceresi kurulmaz",
@@ -92288,7 +93656,7 @@
       "guclu_sinirda": false,
       "kapi": false,
       "kapi_guclu": false,
-      "kaynak": "Bölüm 4, TÜFE yayım günü kapısı",
+      "kaynak": "Bölüm 4, TÜFE yayım günü sınaması",
       "n_olay": 128,
       "p_rastgele_oran0": 0.6394,
       "sebep": "plasebo profilinin tepesi olay gününde değil (−1 iş gününde); olay penceresi kurulmaz",
@@ -92299,7 +93667,7 @@
       "guclu_sinirda": false,
       "kapi": false,
       "kapi_guclu": false,
-      "kaynak": "Bölüm 4, TÜFE yayım günü kapısı",
+      "kaynak": "Bölüm 4, TÜFE yayım günü sınaması",
       "n_olay": 164,
       "p_rastgele_oran0": 0.5694,
       "sebep": "plasebo profilinin tepesi olay gününde değil (−2 iş gününde); olay penceresi kurulmaz",
@@ -92319,12 +93687,38 @@
   },
   "matris_ozeti": {
    "durum_sayisi": {
-    "kaynak": 15,
-    "kurulmadi": 31,
+    "kaynak": 13,
+    "kurulmadi": 33,
     "olculdu": 6,
     "vaka": 8
    },
    "hucre": 60,
+   "kaynak_plasebo_hucreleri": [
+    [
+     "tufe",
+     "R4"
+    ],
+    [
+     "rezerv",
+     "R3"
+    ],
+    [
+     "rezerv",
+     "R4"
+    ],
+    [
+     "emtia",
+     "R1"
+    ],
+    [
+     "emtia",
+     "R4"
+    ],
+    [
+     "kuresel",
+     "R5_EM"
+    ]
+   ],
    "olculen_hucreler": [
     [
      "para",
@@ -92350,17 +93744,35 @@
      "kuresel",
      "R5_DM"
     ]
-   ]
+   ],
+   "sebep_sayisi": {
+    "kaynak": {
+     "olay_yok": 1,
+     "plasebo": 6,
+     "veri_yok": 6
+    },
+    "kurulmadi": {
+     "olay_yok": 3,
+     "plasebo": 15,
+     "veri_yok": 15
+    }
+   }
   },
   "matris_tanim": {
    "durumlar": {
-    "kaynak": "bu veriyle kurulamadı, dersin kaynak listesi kapsıyor (yalnız etiket)",
+    "kaynak": "bu veriyle kurulamadı (seri ya da olay yok, ya da sınama geçmedi); ilgili bölüm konuyu kaynakla anlatır (yalnız etiket). Bu işaret kurulamama sebebinden önce gelir, sebep hücrede ayrıca yazılır",
     "kurulmadi": "sebebiyle",
-    "olculdu": "en az bir seri kapıyı geçti, olay en az on",
+    "olculdu": "en az bir seri plasebo sınamasını geçti, olay en az on",
     "vaka": "bir ile dokuz olay: oranlar yazılır, korelasyon yazılmaz"
    },
    "es_hareket_yonu": "para değeri artışı yerel paranın değer kazancıdır; artı korelasyon faiz ↑ para ↑ (B terimi), eksi faiz ↑ para ↓ (C terimi)",
    "pencere": 2,
+   "sebep_turleri": {
+    "olay_az": "plasebo sınaması geçti ama rejim ayrımı için olay sayısı yetmiyor",
+    "olay_yok": "bu rejim etiketinde olay yok",
+    "plasebo": "olay var ama sınanan serilerin hiçbiri plasebo sınamasını geçmedi",
+    "veri_yok": "olay günü listesi ya da seri elde yok"
+   },
    "seriler": {
     "dm": {
      "2y": "ABD 2 yıllık, bp",
@@ -92595,8 +94007,8 @@
     [
      "vaka",
      "vaka",
-     "kaynak",
-     "kaynak",
+     "kurulmadi",
+     "kurulmadi",
      "kurulmadi",
      "kurulmadi"
     ],
@@ -92621,7 +94033,7 @@
     "kaynak": "taralı",
     "kurulmadi": "boş",
     "olculdu": "renkli (korelasyon)",
-    "olculdu_es_hareket_yok": "ölçüldü ama eş hareket kapıdan dönmüş: renksiz çerçeve, oranlar yazılı",
+    "olculdu_es_hareket_yok": "ölçüldü ama eş hareket sınamadan dönmüş: renksiz çerçeve, oranlar yazılı",
     "vaka": "noktalı (vaka imzası: kadran dengesi, test değil)"
    },
    "durum": [
@@ -92684,8 +94096,8 @@
     [
      "vaka",
      "vaka",
-     "kaynak",
-     "kaynak",
+     "kurulmadi",
+     "kurulmadi",
      "kurulmadi",
      "kurulmadi"
     ],
@@ -93314,21 +94726,21 @@
  "betik_ozleri": {
   "bulut.py": "2a5a662d09bb7d86416cb3468c79643ac4397e928210cdfffd93e46b3e470c82",
   "hazirla.py": "c62da257d53ebdfb01aab2bfd6e48b12ef7704d6f69d906f4b22d52249e38590",
-  "hazirla_bulut.py": "c0cb0c6d2b2c50e4d839ddcfb3b49301633687cd7cdc35c759f94c184ddfca74",
-  "olcum_b01.py": "5f525f5e3bd1637587f9615c0d5fe8ed78d7893e01245c155bc9f1778d6a449d",
-  "olcum_b02.py": "e0691661caa9c43a7edd0286b8f03f84d2927089e7ccf467b0f23905943e549d",
-  "olcum_b03.py": "9812206ac714080345a852e28ff177878166445f70e96c22ba87086fd7755c18",
-  "olcum_b04.py": "4d3d3bc9ee35bff3f838217440b5187b3bd9cee175aff721439871c87908cf59",
+  "hazirla_bulut.py": "6f7e36cbdb2433ffc16a5b9d4b294abc3ae39ffbe682cf4e24d6e506fa4d84b2",
+  "olcum_b01.py": "85f15209eb131d16e47bc7db22e64f15270b22977a07eaece8bb036e4f585a69",
+  "olcum_b02.py": "20f1fcd460b0f475307eaae329dcbc4bcf7a19a14bdf409478cfa3df2528b4cd",
+  "olcum_b03.py": "4de39ec8e4fe346946b06196935b71abc3249853827c2dee12ea1d9b6b813599",
+  "olcum_b04.py": "c083b84050d360a6abba6f78c5ce5f200b3e982efe04fad3464616d4f8dd10ca",
   "olcum_b05.py": "111adbefb2b2bc8c57f65226d821a76e235edc217978a64a612966262b16e3d2",
   "olcum_b06.py": "e92ab7f4ef61be49da703a8119424a044215f9e3fc5bec4cf0c188f470073741",
-  "olcum_b07.py": "204a745c8020084097a23f7b39c5744389bd625efd0b59f6e57afb1128b67662",
-  "olcum_b08.py": "79e05aaf063e15c9c8694a0ca33212b7fe7ccb3d90774b76b54d2c4afe2206c7",
+  "olcum_b07.py": "67269cd4f7b3197309b5ad3279180938005b54d2912a90106c8979d8f81a89fc",
+  "olcum_b08.py": "c5c73e8582910898f6b43103fd045c4a5430fb9696a731e890b39b40eec2d44c",
   "olcum_b09.py": "3e78fdb780714d42f6639df2bf39554420d4ce16616a937e08732fb4f81ed037",
   "olcum_b10.py": "13d666e9b7699caf91025878679c4792c2b01b24708c9b16c7790634d6d4d633",
   "olcum_b11.py": "d68fb4c285c86a8e489b0089371d880f6fcddaaa326732b53d35774325eb673e",
-  "olcum_b12.py": "bd15fbff79522cb8a12d3218eeeb384c176553ae79cd6d09830cdc69880ca735",
-  "olcum_b13.py": "ad93f5f8f85f369609592bc026e9115d176b1cee5c860a7949b5e72e7567db16",
-  "ortak_olc.py": "76259c4c0636d6afd86d90e5b3adce8fe59e9ba1304e17fca15473106f78798d"
+  "olcum_b12.py": "1e9d537cd5149ffb5af77231fd46252097fbbda4e181dcec7b200cdf6f64b55b",
+  "olcum_b13.py": "c951537912b6ca48bde9b9c788686eca2213590d24ab67413df67939e529e02a",
+  "ortak_olc.py": "2bcb8383be3372984da40f69bba65250014c799673ae0c84ba9b7961f248ab30"
  },
  "cipa": {
   "aylik": "2026-08",

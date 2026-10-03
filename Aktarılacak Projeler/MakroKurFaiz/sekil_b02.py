@@ -86,9 +86,11 @@ def s02_plasebo(o: dict) -> None:
                          autorange="reversed", showgrid=False, ticks="", row=gi, col=1)
         fig.update_xaxes(range=[-2.55, 4.55], tickvals=kayma, ticktext=["−2", "−1", "0", "+1", "+2"],
                          showticklabels=True, showgrid=False, ticks="", showline=False, row=gi, col=1)
-    for a in fig.layout.annotations:          # alt grafik başlıkları sola
+    # alt grafik başlıkları sola; 12 px: 12,5'te en uzunu ("seri kendi saatine hizalı") telefonun gömme
+    # çerçevesinde (geniş gömme 356 px) sağ ucundan 6 piksel kırpılıyordu
+    for a in fig.layout.annotations:
         if a.yanchor == "bottom" and a.yref == "paper" and a.text in [g[0] for g in gruplar]:
-            a.update(x=0, xanchor="left", font=dict(size=12.5))
+            a.update(x=0, xanchor="left", font=dict(size=12))
     fig.update_layout(coloraxis=dict(colorscale=OLCEK, cmin=ZMIN, cmax=ZMAX, showscale=False), showlegend=False)
 
     # alt not: hükümlerin anlamı, kontrol kümesinin düzlüğü, kurulmayan olaylar

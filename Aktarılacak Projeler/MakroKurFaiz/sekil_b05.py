@@ -131,8 +131,8 @@ def s07_dm_mali_kadran(o: dict) -> None:
     baslik = baslik_koy(fig, "Şekil 07 — ABD ve İngiltere'de altı mali olayın dördü prim kadranında: uzun faiz ↑, "
                              "para ↓", [
         f"Olay öncesi kapanıştan pencere sonuna, {tarih(s['ilk'])}–{tarih(s['son'])} · ABD: 10 yıllık getiri "
-        "(ABD Hazinesi, ≈15:30 New York), para: altı G10 kurunun dolar yönünde eşit ağırlıklı sepeti (CNBC, "
-        "New York 17:00) · İngiltere: 10 yıllık gilt (Londra kapanışı), para: sterlin dolara karşı (CNBC, New "
+        "(ABD Hazinesi, ≈15:30 New\u00a0York), para: altı G10 kurunun dolar yönünde eşit ağırlıklı sepeti (CNBC, "
+        "New\u00a0York 17:00) · İngiltere: 10 yıllık gilt (Londra kapanışı), para: sterlin dolara karşı (CNBC, New\u00a0"
         f"York 17:00) · ana pencerelerin kadranı: {ks.get('prim', 0)} prim, {ks.get('politika', 0)} politika · on "
         "olaydan az bağımsız gözlem, test istatistiği yok",
     ])

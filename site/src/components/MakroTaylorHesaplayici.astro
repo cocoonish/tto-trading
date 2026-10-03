@@ -8,7 +8,8 @@
  *   B bloğu      R = r_TL − r_yabancı          (kurun üç bloğundaki reel faiz farkı)
  *   ∂E[r]/∂π = φπ − 1: 1 puanlık enflasyon sürprizi beklenen reel faizi (φπ − 1) puan oynatır.
  * Varsayılan girdiler dersin ölçüm dosyasından (arac.json); sayılar yayım gününün ölçümüdür.
- * Zincir: 'makro-taylor-guncellendi' olayıyla Borç ve Kurun üç bloğu araçlarına akar.
+ * Zincir: 'makro-taylor-guncellendi' olayıyla Borç ve Kurun üç bloğu araçlarına akar; REDK aracı R'yi
+ * yalnız yorum satırındaki taşıma kıyası için okur.
  * Doğrulama (dogrula.py, Python eşi): aynı girdilerle kural faizi ve R birebir.
  */
 import A from '../data/makro-kur-ve-faiz/arac.json';
@@ -69,8 +70,8 @@ const t = A.taylor;
   </div>
 
   <p class="hesap-dip">
-    <b>Bant, nokta değil.</b> Açığın bandı {t.acik_alt_metin} ile {t.acik_ust_metin} arasındadır (HP süzgecinin
-    iki sürümü: tam örneklem ve gerçek zamanlı) ve r* için 0, 2 ve 4 puan denenir; aşağıdaki satır bu altı
+    <b>Bant, nokta değil.</b> Açığın bandı {t.acik_alt_metin} ile {t.acik_ust_metin} arasındadır (sırasıyla HP
+    süzgecinin {t.acik_uclar_metin} sürümleri) ve r* için 0, 2 ve 4 puan denenir; aşağıdaki satır bu altı
     bileşimin en düşük ve en yüksek kural faizini verir. Kurun terimi araçta yoktur: türetimi Bölüm 3'te;
     δ ölçülmediği için katsayı konmadı.
   </p>

@@ -66,13 +66,17 @@ def ay(gun: str) -> str:
 # hiç ulaşmaz. Satırlar bu yüzden çizim katmanında sözcük sınırında sarılır. Ölçü karakter sayısı
 # değil yazının GENİŞLİĞİDİR: rakamlı satır harfli satırdan geniştir ve aynı karakter sayısında biri
 # sığıp öbürü taşar. Genişlik tablosu Arial/Helvetica ilerleme genişlikleridir (ev stilinin yazısı;
-# Linux'taki karşılığı Liberation Sans aynı ölçüyü taşır) ve 390 piksellik ekran görüntüsünde satır
-# satır sınandı: tahmin ile çizilen genişlik %0,5 içinde. Sınır, 390 pikselde sığdığı ölçülen
-# Şekil 01–04 ve 18–20'nin satırlarından: başlık (15 px) 23,5 em ≈ 352 px ≈ 48–50 karakter, alt
-# başlık (<sub>, 15 px'in %70'i) 35,5 em ≈ 373 px ≈ 73–75 karakter; sol kenar ~4 px (Şekil 20'nin
-# en uzun satırı 35,9 em ve 379 px'te bitiyor).
-BASLIK_EM, ALT_EM = 23.5, 35.5
-_TAVAN_PX, _BASLIK_PX, _ALT_PX = 384, 15.0, 10.5      # taşma denetimi: 390 px'te çizilebilen sağ uç
+# Linux'taki karşılığı Liberation Sans aynı ölçüyü taşır) ve ekran görüntüsünde satır satır sınandı:
+# tahmin ile çizilen genişlik %0,5 içinde.
+# Sınırın ölçüsü SAYFADAKİ genişliktir, figür dosyasının kendi penceresi değil: okur figürü ders
+# sayfasındaki gömme çerçevesinde görür ve 390 piksellik telefonda çerçeve (16 px kenar boşluğu,
+# kenarlık) 353 piksel genişliğindedir (geniş gömme 356; derlenmiş sayfada ölçüldü). Figür dosyası
+# tek başına 390 pikselde açılınca sığan bir satır sayfada sağdan kırpılır: 390'a göre kurulmuş
+# 35,5 em'lik alt başlık satırı 377 piksele uzanıyor ve çerçevede son 20–25 pikseli görünmüyordu.
+# Başlık x'i genişliğin %1'i (≈ 4 px). Sınır: başlık (15 px) 22,8 em ≈ 342 px, alt başlık (<sub>,
+# 15 px'in %70'i) 32,6 em ≈ 342 px; sağ uç ≈ 346 px, çerçevenin 7 piksel içinde (ölçüm hatası ~2 px).
+BASLIK_EM, ALT_EM = 22.8, 32.6
+_TAVAN_PX, _BASLIK_PX, _ALT_PX = 351, 15.0, 10.5      # taşma denetimi: 353 px'lik çerçevede çizilebilen sağ uç
 _GENISLIK = {
     " ": 278, "\u00a0": 278, "!": 278, '"': 355, "#": 556, "$": 556, "%": 889, "&": 667, "'": 191, "(": 333,
     ")": 333, "*": 389, "+": 584, ",": 278, "-": 333, ".": 278, "/": 278, ":": 278, ";": 278, "<": 584,
@@ -91,7 +95,8 @@ _GENISLIK = {
     **{d: 556 for d in "0123456789"},
 }
 _TANIMSIZ = 1000                     # tabloda olmayan işaret (○ ● ◆ ◇ …): geniş say, taşma payı kalsın
-_CIPLAK_SAYI = re.compile(r"[+−-]?%?\d+(?:[.,]\d+)*")
+_CIPLAK_SAYI = re.compile(r"\(?[+−-]?%?\d+(?:[.,]\d+)*")   # "(164 yayım" de bölünmez
+_BAGLI_ISARET = ("·", "−", "+", "=", "×", "≥", "≤", "≈", "→")   # satır başına düşmez (sar)
 
 
 def satir_em(metin: str) -> float:
@@ -134,12 +139,15 @@ def _satirla(kelimeler: list[str], en: float) -> list[list[str]]:
 
 def sar(metin: str, en: float) -> list[str]:
     """Metni sözcük sınırında en çok `en` em genişliğinde satırlara böler (`_satirla`). Var olan <br>
-    korunur; bölünmez boşluk (U+00A0) bölünmez. Ayraç " · " bir önceki sözcüğe bağlanır: satır ayraçla
-    BAŞLAMAZ, ayraçla biter. Çıplak sayı ardından gelen sözcükten ayrılmaz ("5 yıl", "164 yayım" satır
-    sonunda bölünmez). Sınırdan uzun tek bir sözcük bölünmez, kendi satırında kalır (taşma denetimi
-    `tasan_satirlar` onu adıyla gösterir)."""
+    korunur; bölünmez boşluk (U+00A0) bölünmez. Ayraç " · " ve iki yanı boşluklu işlem işaretleri
+    (− + = × ≥ ≤ ≈ →) bir önceki sözcüğe bağlanır: satır onlarla BAŞLAMAZ, onlarla biter — satır başındaki
+    "− yıllık TÜFE" bir eksi işaretli terim gibi okunur. Çıplak sayı ardından gelen sözcükten ayrılmaz
+    ("5 yıl", "164 yayım" satır sonunda bölünmez). Sınırdan uzun tek bir sözcük bölünmez, kendi satırında
+    kalır (taşma denetimi `tasan_satirlar` onu adıyla gösterir)."""
     cikti = []
-    for parca in metin.replace(" · ", "\u00a0· ").split("<br>"):
+    for isaret in _BAGLI_ISARET:
+        metin = metin.replace(f" {isaret} ", f"\u00a0{isaret} ")
+    for parca in metin.split("<br>"):
         kelimeler = []
         for k in parca.split(" "):
             if kelimeler and k[:1].isalpha() and _CIPLAK_SAYI.fullmatch(kelimeler[-1].rsplit("\u00a0", 1)[-1]):
@@ -188,7 +196,7 @@ def yukseklik(baslik: str, cizim: int) -> int:
 
 
 def tasan_satirlar(baslik: str) -> list[str]:
-    """390 piksellik ekranda sağ ucu çizilemeyen başlık satırları (tahmini genişlikle)."""
+    """390 piksellik telefonun gömme çerçevesinde (353 px) sağ ucu çizilemeyen başlık satırları (tahmini genişlikle)."""
     tasan, alt = [], False
     for s in baslik.split("<br>"):
         alt = alt or "<sub>" in s
@@ -221,4 +229,4 @@ def _yaz(fig, ad: str, yukseklik: int = 500) -> None:
     (CIKTI / ad).write_text(html, encoding="utf-8")
     print(f"  ✓ {(CIKTI / ad).relative_to(KOK)}")
     for s in tasan_satirlar(fig.layout.title.text or ""):     # uyarı: çizim düşmez, satır adıyla görünür
-        print(f"  ! {ad}: başlık satırı 390 pikselde taşar — {s}")
+        print(f"  ! {ad}: başlık satırı telefonun gömme çerçevesinde taşar — {s}")

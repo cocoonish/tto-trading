@@ -57,6 +57,10 @@ def kur(o: dict) -> dict:
     tam = o["b07"]["p7a"]["tufe"]["tam"]
     k = o["b11"]["arac_kur"]
     acik_alt, acik_ust = t["acik_alt_puan"], t["acik_ust_puan"]
+    # Bandın uçları iki HP sürümünün en küçüğü ve en büyüğüdür (olcum_b03: min/max); hangi sürümün alt
+    # uç olduğu veriyle yer değiştirebilir, metin sırayı buradan alır (elle yazılmaz).
+    uclar = ("gerçek zamanlı ve tam örneklem" if t["acik_gercek_zamanli_puan"] <= t["acik_tam_puan"]
+             else "tam örneklem ve gerçek zamanlı")
     y = t["yabanci"]
     # Taylor aracının B bloğuyla aynı tanım: bileşik reel faiz farkı (dogrula.taylor_R)
     R = (_reel(_haftalik(t["politika_yuzde"]), t["pi_pka_yuzde"])
@@ -74,6 +78,7 @@ def kur(o: dict) -> dict:
             "phi_pi": _y(1 + t["katsayi_pi"]), "phi_y": _y(t["katsayi_acik"]),
             "acik_orta": _y((acik_alt + acik_ust) / 2), "acik_alt": _y(acik_alt, 4), "acik_ust": _y(acik_ust, 4),
             "acik_alt_metin": _sayi(acik_alt, 2) + " puan", "acik_ust_metin": _sayi(acik_ust, 2) + " puan",
+            "acik_uclar_metin": uclar,
             "politika": _y(t["politika_yuzde"]), "i_yabanci": _y(y["politika_abd_yuzde"]),
             "pi_yabanci": _y(y["tufe_abd_yillik_yuzde"]),
         },
