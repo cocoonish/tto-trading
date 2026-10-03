@@ -1,0 +1,2236 @@
+{
+ "olcum_ani": "2026-10-03T15:45:27.346169+00:00",
+ "m1": {
+  "EURUSD": {
+   "ticker": "EURUSD=X",
+   "en_iyi": [
+    {
+     "medyan_bp": 2.5,
+     "gun_kaymasi": 0,
+     "utc_saat": 0,
+     "n": 202
+    },
+    {
+     "medyan_bp": 3.13,
+     "gun_kaymasi": -1,
+     "utc_saat": 21,
+     "n": 174
+    },
+    {
+     "medyan_bp": 3.26,
+     "gun_kaymasi": -1,
+     "utc_saat": 23,
+     "n": 176
+    },
+    {
+     "medyan_bp": 3.66,
+     "gun_kaymasi": -1,
+     "utc_saat": 22,
+     "n": 174
+    }
+   ]
+  },
+  "USDJPY": {
+   "ticker": "USDJPY=X",
+   "en_iyi": [
+    {
+     "medyan_bp": 0.44,
+     "gun_kaymasi": 0,
+     "utc_saat": 0,
+     "n": 201
+    },
+    {
+     "medyan_bp": 3.38,
+     "gun_kaymasi": -1,
+     "utc_saat": 23,
+     "n": 176
+    },
+    {
+     "medyan_bp": 4.29,
+     "gun_kaymasi": -1,
+     "utc_saat": 21,
+     "n": 176
+    },
+    {
+     "medyan_bp": 4.47,
+     "gun_kaymasi": -1,
+     "utc_saat": 22,
+     "n": 176
+    }
+   ]
+  },
+  "USDCHF": {
+   "ticker": "USDCHF=X",
+   "en_iyi": [
+    {
+     "medyan_bp": 0.38,
+     "gun_kaymasi": 0,
+     "utc_saat": 0,
+     "n": 202
+    },
+    {
+     "medyan_bp": 3.09,
+     "gun_kaymasi": -1,
+     "utc_saat": 23,
+     "n": 176
+    },
+    {
+     "medyan_bp": 3.82,
+     "gun_kaymasi": 0,
+     "utc_saat": 1,
+     "n": 218
+    },
+    {
+     "medyan_bp": 4.45,
+     "gun_kaymasi": -1,
+     "utc_saat": 20,
+     "n": 175
+    }
+   ]
+  },
+  "GBPUSD": {
+   "ticker": "GBPUSD=X",
+   "en_iyi": [
+    {
+     "medyan_bp": 0.37,
+     "gun_kaymasi": 0,
+     "utc_saat": 0,
+     "n": 202
+    },
+    {
+     "medyan_bp": 2.46,
+     "gun_kaymasi": -1,
+     "utc_saat": 23,
+     "n": 176
+    },
+    {
+     "medyan_bp": 2.78,
+     "gun_kaymasi": -1,
+     "utc_saat": 22,
+     "n": 174
+    },
+    {
+     "medyan_bp": 2.84,
+     "gun_kaymasi": -1,
+     "utc_saat": 21,
+     "n": 174
+    }
+   ]
+  },
+  "AUDUSD": {
+   "ticker": "AUDUSD=X",
+   "en_iyi": [
+    {
+     "medyan_bp": 2.73,
+     "gun_kaymasi": 0,
+     "utc_saat": 0,
+     "n": 201
+    },
+    {
+     "medyan_bp": 4.38,
+     "gun_kaymasi": -1,
+     "utc_saat": 21,
+     "n": 174
+    },
+    {
+     "medyan_bp": 4.48,
+     "gun_kaymasi": -1,
+     "utc_saat": 23,
+     "n": 176
+    },
+    {
+     "medyan_bp": 4.99,
+     "gun_kaymasi": -1,
+     "utc_saat": 22,
+     "n": 175
+    }
+   ]
+  },
+  "NZDUSD": {
+   "ticker": "NZDUSD=X",
+   "en_iyi": [
+    {
+     "medyan_bp": 1.43,
+     "gun_kaymasi": 0,
+     "utc_saat": 0,
+     "n": 201
+    },
+    {
+     "medyan_bp": 4.68,
+     "gun_kaymasi": -1,
+     "utc_saat": 23,
+     "n": 176
+    },
+    {
+     "medyan_bp": 6.33,
+     "gun_kaymasi": -1,
+     "utc_saat": 21,
+     "n": 174
+    },
+    {
+     "medyan_bp": 6.4,
+     "gun_kaymasi": -1,
+     "utc_saat": 22,
+     "n": 175
+    }
+   ]
+  },
+  "USDCAD": {
+   "ticker": "USDCAD=X",
+   "en_iyi": [
+    {
+     "medyan_bp": 0.36,
+     "gun_kaymasi": 0,
+     "utc_saat": 0,
+     "n": 201
+    },
+    {
+     "medyan_bp": 1.99,
+     "gun_kaymasi": -1,
+     "utc_saat": 23,
+     "n": 176
+    },
+    {
+     "medyan_bp": 2.37,
+     "gun_kaymasi": -1,
+     "utc_saat": 21,
+     "n": 175
+    },
+    {
+     "medyan_bp": 2.51,
+     "gun_kaymasi": 0,
+     "utc_saat": 1,
+     "n": 217
+    }
+   ]
+  },
+  "USDNOK": {
+   "ticker": "USDNOK=X",
+   "en_iyi": [
+    {
+     "medyan_bp": 0.7,
+     "gun_kaymasi": 0,
+     "utc_saat": 0,
+     "n": 201
+    },
+    {
+     "medyan_bp": 3.6,
+     "gun_kaymasi": -1,
+     "utc_saat": 23,
+     "n": 175
+    },
+    {
+     "medyan_bp": 4.6,
+     "gun_kaymasi": -1,
+     "utc_saat": 21,
+     "n": 175
+    },
+    {
+     "medyan_bp": 4.96,
+     "gun_kaymasi": 0,
+     "utc_saat": 1,
+     "n": 217
+    }
+   ]
+  },
+  "USDSEK": {
+   "ticker": "USDSEK=X",
+   "en_iyi": [
+    {
+     "medyan_bp": 0.94,
+     "gun_kaymasi": 0,
+     "utc_saat": 0,
+     "n": 199
+    },
+    {
+     "medyan_bp": 4.0,
+     "gun_kaymasi": -1,
+     "utc_saat": 23,
+     "n": 173
+    },
+    {
+     "medyan_bp": 5.34,
+     "gun_kaymasi": 0,
+     "utc_saat": 1,
+     "n": 214
+    },
+    {
+     "medyan_bp": 5.72,
+     "gun_kaymasi": -1,
+     "utc_saat": 21,
+     "n": 172
+    }
+   ]
+  },
+  "XAUUSD": {
+   "ticker": "GC=F",
+   "en_iyi": [
+    {
+     "medyan_bp": 10.04,
+     "gun_kaymasi": 0,
+     "utc_saat": 18,
+     "n": 218
+    },
+    {
+     "medyan_bp": 11.58,
+     "gun_kaymasi": 0,
+     "utc_saat": 17,
+     "n": 219
+    },
+    {
+     "medyan_bp": 16.19,
+     "gun_kaymasi": 0,
+     "utc_saat": 19,
+     "n": 219
+    },
+    {
+     "medyan_bp": 18.86,
+     "gun_kaymasi": 0,
+     "utc_saat": 16,
+     "n": 219
+    }
+   ]
+  },
+  "XAGUSD": {
+   "ticker": "SI=F",
+   "en_iyi": [
+    {
+     "medyan_bp": 49.82,
+     "gun_kaymasi": 0,
+     "utc_saat": 18,
+     "n": 218
+    },
+    {
+     "medyan_bp": 53.52,
+     "gun_kaymasi": 0,
+     "utc_saat": 17,
+     "n": 219
+    },
+    {
+     "medyan_bp": 63.13,
+     "gun_kaymasi": 0,
+     "utc_saat": 19,
+     "n": 219
+    },
+    {
+     "medyan_bp": 67.27,
+     "gun_kaymasi": 0,
+     "utc_saat": 16,
+     "n": 219
+    }
+   ]
+  },
+  "SPX": {
+   "ticker": "^GSPC",
+   "en_iyi": [
+    {
+     "medyan_bp": 1.49,
+     "gun_kaymasi": 0,
+     "utc_saat": 21,
+     "n": 217
+    },
+    {
+     "medyan_bp": 10.6,
+     "gun_kaymasi": 0,
+     "utc_saat": 20,
+     "n": 217
+    },
+    {
+     "medyan_bp": 14.13,
+     "gun_kaymasi": 0,
+     "utc_saat": 19,
+     "n": 216
+    },
+    {
+     "medyan_bp": 14.27,
+     "gun_kaymasi": 0,
+     "utc_saat": 18,
+     "n": 218
+    }
+   ]
+  },
+  "UST2Y": {
+   "ticker": "ZT=F",
+   "en_iyi": [
+    {
+     "medyan_bp": 1.12,
+     "gun_kaymasi": 0,
+     "utc_saat": 19,
+     "n": 219
+    },
+    {
+     "medyan_bp": 1.89,
+     "gun_kaymasi": 0,
+     "utc_saat": 20,
+     "n": 217
+    },
+    {
+     "medyan_bp": 2.28,
+     "gun_kaymasi": 0,
+     "utc_saat": 22,
+     "n": 217
+    },
+    {
+     "medyan_bp": 2.46,
+     "gun_kaymasi": 0,
+     "utc_saat": 18,
+     "n": 218
+    }
+   ]
+  },
+  "UST10Y": {
+   "ticker": "ZN=F",
+   "en_iyi": [
+    {
+     "medyan_bp": 1.44,
+     "gun_kaymasi": 0,
+     "utc_saat": 19,
+     "n": 219
+    },
+    {
+     "medyan_bp": 4.13,
+     "gun_kaymasi": 0,
+     "utc_saat": 20,
+     "n": 217
+    },
+    {
+     "medyan_bp": 4.26,
+     "gun_kaymasi": 0,
+     "utc_saat": 18,
+     "n": 218
+    },
+    {
+     "medyan_bp": 4.32,
+     "gun_kaymasi": 0,
+     "utc_saat": 21,
+     "n": 217
+    }
+   ]
+  },
+  "BIST100": {
+   "ticker": "XU100.IS",
+   "en_iyi": [
+    {
+     "medyan_bp": 17.92,
+     "gun_kaymasi": 0,
+     "utc_saat": 15,
+     "n": 217
+    },
+    {
+     "medyan_bp": 28.76,
+     "gun_kaymasi": 0,
+     "utc_saat": 14,
+     "n": 217
+    },
+    {
+     "medyan_bp": 36.55,
+     "gun_kaymasi": 0,
+     "utc_saat": 13,
+     "n": 217
+    },
+    {
+     "medyan_bp": 40.08,
+     "gun_kaymasi": 0,
+     "utc_saat": 12,
+     "n": 217
+    }
+   ]
+  }
+ },
+ "m2": {
+  "EURUSD": {
+   "makale": 3086,
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "a_bugunku_kod": {
+    "5d": 0.0289,
+    "1d": 0.0236
+   },
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "kayma_bp": {
+    "ayni_gun": 17.48,
+    "ertesi_gun_bari": 3.06
+   },
+   "gun": {
+    "is": [
+     "2025-10-06",
+     "2026-06-11",
+     176
+    ],
+    "oos": [
+     "2026-06-12",
+     "2026-09-25",
+     76
+    ]
+   },
+   "kayitli": {
+    "params": {
+     "time_decay_halflife": 1,
+     "aggregation": "weighted_mean",
+     "score_transform": "raw",
+     "lag_days": 0,
+     "neutral_filter": 0.1,
+     "momentum_weight": 0.2
+    },
+    "ileri_5_lag0": -0.0845,
+    "ileri_5_lag1": -0.1327,
+    "ileri_1_lag0": -0.0038,
+    "ileri_1_lag1": -0.077,
+    "geri_5_lag0": -0.0524,
+    "geri_5_lag1": -0.0896,
+    "geri_1_lag0": -0.0903,
+    "geri_1_lag1": -0.0038
+   },
+   "izgara": {
+    "ileri_5_lag0": {
+     "is_max": -0.06,
+     "params": "directional_strength·hl1·tanh·nf0.1·mw0.2",
+     "is_medyan": -0.096,
+     "oos": -0.4467,
+     "plasebo_p": 0.9044,
+     "plasebo_95": 0.2992,
+     "plasebo_n": 136
+    },
+    "ileri_5_lag1": {
+     "is_max": -0.0799,
+     "params": "intensity_ratio·hl3·tanh·nf0.1·mw0.0",
+     "is_medyan": -0.1129,
+     "oos": -0.3194,
+     "plasebo_p": 0.9265,
+     "plasebo_95": 0.3002,
+     "plasebo_n": 136
+    },
+    "ileri_1_lag0": {
+     "is_max": 0.0138,
+     "params": "bull_bear_ratio·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": -0.0322,
+     "oos": -0.1129,
+     "plasebo_p": 0.8088,
+     "plasebo_95": 0.1934,
+     "plasebo_n": 136
+    },
+    "ileri_1_lag1": {
+     "is_max": -0.0609,
+     "params": "bull_bear_ratio·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": -0.0838,
+     "oos": -0.1762,
+     "plasebo_p": 0.9559,
+     "plasebo_95": 0.1943,
+     "plasebo_n": 136
+    },
+    "geri_5_lag0": {
+     "is_max": 0.1384,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": -0.0648,
+     "oos": 0.2764,
+     "plasebo_p": 0.3309,
+     "plasebo_95": 0.2729,
+     "plasebo_n": 136
+    },
+    "geri_5_lag1": {
+     "is_max": 0.0787,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": -0.0998,
+     "oos": 0.1228,
+     "plasebo_p": 0.5882,
+     "plasebo_95": 0.2838,
+     "plasebo_n": 136
+    },
+    "geri_1_lag0": {
+     "is_max": -0.0098,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": -0.0847,
+     "oos": -0.1184,
+     "plasebo_p": 0.875,
+     "plasebo_95": 0.1827,
+     "plasebo_n": 136
+    },
+    "geri_1_lag1": {
+     "is_max": 0.0138,
+     "params": "bull_bear_ratio·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": -0.0322,
+     "oos": -0.1143,
+     "plasebo_p": 0.8088,
+     "plasebo_95": 0.1934,
+     "plasebo_n": 136
+    }
+   }
+  },
+  "USDJPY": {
+   "makale": 2719,
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "a_bugunku_kod": {
+    "5d": 0.2667,
+    "1d": 0.0466
+   },
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "kayma_bp": {
+    "ayni_gun": 21.09,
+    "ertesi_gun_bari": 4.53
+   },
+   "gun": {
+    "is": [
+     "2025-10-06",
+     "2026-06-10",
+     177
+    ],
+    "oos": [
+     "2026-06-11",
+     "2026-09-25",
+     77
+    ]
+   },
+   "kayitli": {
+    "params": {
+     "time_decay_halflife": 3,
+     "aggregation": "weighted_mean",
+     "score_transform": "raw",
+     "lag_days": 1,
+     "neutral_filter": 0.1,
+     "momentum_weight": 0.2
+    },
+    "ileri_5_lag0": 0.0492,
+    "ileri_5_lag1": 0.0533,
+    "ileri_1_lag0": 0.0243,
+    "ileri_1_lag1": 0.0116,
+    "geri_5_lag0": 0.2082,
+    "geri_5_lag1": 0.1958,
+    "geri_1_lag0": 0.0505,
+    "geri_1_lag1": 0.0243
+   },
+   "izgara": {
+    "ileri_5_lag0": {
+     "is_max": 0.1097,
+     "params": "bull_bear_ratio·hl2·raw·nf0.0·mw0.2",
+     "is_medyan": 0.0613,
+     "oos": 0.3731,
+     "plasebo_p": 0.3869,
+     "plasebo_95": 0.2382,
+     "plasebo_n": 137
+    },
+    "ileri_5_lag1": {
+     "is_max": 0.1515,
+     "params": "bull_bear_ratio·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": 0.0737,
+     "oos": 0.413,
+     "plasebo_p": 0.292,
+     "plasebo_95": 0.2438,
+     "plasebo_n": 137
+    },
+    "ileri_1_lag0": {
+     "is_max": 0.0528,
+     "params": "bull_bear_ratio·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": 0.0176,
+     "oos": 0.0458,
+     "plasebo_p": 0.5036,
+     "plasebo_95": 0.1567,
+     "plasebo_n": 137
+    },
+    "ileri_1_lag1": {
+     "is_max": 0.0598,
+     "params": "intensity_ratio·hl1·tanh·nf0.0·mw0.0",
+     "is_medyan": 0.021,
+     "oos": 0.1375,
+     "plasebo_p": 0.4453,
+     "plasebo_95": 0.1573,
+     "plasebo_n": 137
+    },
+    "geri_5_lag0": {
+     "is_max": 0.2341,
+     "params": "weighted_mean·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": 0.2001,
+     "oos": -0.2689,
+     "plasebo_p": 0.0876,
+     "plasebo_95": 0.2579,
+     "plasebo_n": 137
+    },
+    "geri_5_lag1": {
+     "is_max": 0.2173,
+     "params": "directional_strength·hl1·amplify·nf0.0·mw0.2",
+     "is_medyan": 0.1887,
+     "oos": -0.1936,
+     "plasebo_p": 0.1095,
+     "plasebo_95": 0.2425,
+     "plasebo_n": 137
+    },
+    "geri_1_lag0": {
+     "is_max": 0.0805,
+     "params": "weighted_mean·hl1·tanh·nf0.1·mw0.2",
+     "is_medyan": 0.0428,
+     "oos": -0.0368,
+     "plasebo_p": 0.3723,
+     "plasebo_95": 0.1553,
+     "plasebo_n": 137
+    },
+    "geri_1_lag1": {
+     "is_max": 0.0528,
+     "params": "bull_bear_ratio·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": 0.0176,
+     "oos": 0.0449,
+     "plasebo_p": 0.5036,
+     "plasebo_95": 0.1567,
+     "plasebo_n": 137
+    }
+   }
+  },
+  "USDCHF": {
+   "makale": 2026,
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "a_bugunku_kod": {
+    "5d": -0.0904,
+    "1d": 0.0561
+   },
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "kayma_bp": {
+    "ayni_gun": 24.83,
+    "ertesi_gun_bari": 4.41
+   },
+   "gun": {
+    "is": [
+     "2025-10-06",
+     "2026-06-10",
+     177
+    ],
+    "oos": [
+     "2026-06-11",
+     "2026-09-25",
+     77
+    ]
+   },
+   "kayitli": {
+    "params": {
+     "time_decay_halflife": 5,
+     "aggregation": "bull_bear_ratio",
+     "score_transform": "raw",
+     "lag_days": 0,
+     "neutral_filter": 0.1,
+     "momentum_weight": 0.0
+    },
+    "ileri_5_lag0": 0.2725,
+    "ileri_5_lag1": 0.2574,
+    "ileri_1_lag0": 0.0854,
+    "ileri_1_lag1": 0.1213,
+    "geri_5_lag0": -0.0933,
+    "geri_5_lag1": -0.017,
+    "geri_1_lag0": 0.0515,
+    "geri_1_lag1": 0.0854
+   },
+   "izgara": {
+    "ileri_5_lag0": {
+     "is_max": 0.2725,
+     "params": "bull_bear_ratio·hl5·raw·nf0.1·mw0.0",
+     "is_medyan": 0.2069,
+     "oos": 0.2555,
+     "plasebo_p": 0.0365,
+     "plasebo_95": 0.2462,
+     "plasebo_n": 137
+    },
+    "ileri_5_lag1": {
+     "is_max": 0.2628,
+     "params": "bull_bear_ratio·hl2·raw·nf0.1·mw0.0",
+     "is_medyan": 0.2157,
+     "oos": 0.1837,
+     "plasebo_p": 0.0511,
+     "plasebo_95": 0.263,
+     "plasebo_n": 137
+    },
+    "ileri_1_lag0": {
+     "is_max": 0.106,
+     "params": "bull_bear_ratio·hl2·raw·nf0.1·mw0.2",
+     "is_medyan": 0.0837,
+     "oos": 0.2147,
+     "plasebo_p": 0.1971,
+     "plasebo_95": 0.1665,
+     "plasebo_n": 137
+    },
+    "ileri_1_lag1": {
+     "is_max": 0.1213,
+     "params": "bull_bear_ratio·hl5·raw·nf0.1·mw0.0",
+     "is_medyan": 0.0816,
+     "oos": 0.1312,
+     "plasebo_p": 0.1387,
+     "plasebo_95": 0.1646,
+     "plasebo_n": 137
+    },
+    "geri_5_lag0": {
+     "is_max": -0.0301,
+     "params": "directional_strength·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": -0.0969,
+     "oos": -0.3183,
+     "plasebo_p": 0.8394,
+     "plasebo_95": 0.2891,
+     "plasebo_n": 137
+    },
+    "geri_5_lag1": {
+     "is_max": 0.0203,
+     "params": "directional_strength·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": -0.0249,
+     "oos": -0.1217,
+     "plasebo_p": 0.6861,
+     "plasebo_95": 0.2903,
+     "plasebo_n": 137
+    },
+    "geri_1_lag0": {
+     "is_max": 0.0751,
+     "params": "directional_strength·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": 0.0479,
+     "oos": -0.0773,
+     "plasebo_p": 0.3431,
+     "plasebo_95": 0.1798,
+     "plasebo_n": 137
+    },
+    "geri_1_lag1": {
+     "is_max": 0.106,
+     "params": "bull_bear_ratio·hl2·raw·nf0.1·mw0.2",
+     "is_medyan": 0.0837,
+     "oos": 0.217,
+     "plasebo_p": 0.1971,
+     "plasebo_95": 0.1665,
+     "plasebo_n": 137
+    }
+   }
+  },
+  "GBPUSD": {
+   "makale": 2539,
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "a_bugunku_kod": {
+    "5d": 0.1678,
+    "1d": -0.0077
+   },
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "kayma_bp": {
+    "ayni_gun": 21.47,
+    "ertesi_gun_bari": 2.69
+   },
+   "gun": {
+    "is": [
+     "2025-10-06",
+     "2026-06-11",
+     177
+    ],
+    "oos": [
+     "2026-06-12",
+     "2026-09-25",
+     76
+    ]
+   },
+   "kayitli": {
+    "params": {
+     "time_decay_halflife": 3,
+     "aggregation": "intensity_ratio",
+     "score_transform": "raw",
+     "lag_days": 1,
+     "neutral_filter": 0.1,
+     "momentum_weight": 0.2
+    },
+    "ileri_5_lag0": -0.1076,
+    "ileri_5_lag1": -0.0541,
+    "ileri_1_lag0": -0.1159,
+    "ileri_1_lag1": -0.0671,
+    "geri_5_lag0": 0.1203,
+    "geri_5_lag1": 0.0186,
+    "geri_1_lag0": -0.0781,
+    "geri_1_lag1": -0.1159
+   },
+   "izgara": {
+    "ileri_5_lag0": {
+     "is_max": -0.0073,
+     "params": "bull_bear_ratio·hl5·raw·nf0.1·mw0.0",
+     "is_medyan": -0.0776,
+     "oos": -0.4412,
+     "plasebo_p": 0.7737,
+     "plasebo_95": 0.2905,
+     "plasebo_n": 137
+    },
+    "ileri_5_lag1": {
+     "is_max": 0.0646,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": -0.0243,
+     "oos": -0.3311,
+     "plasebo_p": 0.5328,
+     "plasebo_95": 0.2831,
+     "plasebo_n": 137
+    },
+    "ileri_1_lag0": {
+     "is_max": -0.0829,
+     "params": "bull_bear_ratio·hl5·raw·nf0.1·mw0.0",
+     "is_medyan": -0.1128,
+     "oos": -0.1723,
+     "plasebo_p": 0.9854,
+     "plasebo_95": 0.1734,
+     "plasebo_n": 137
+    },
+    "ileri_1_lag1": {
+     "is_max": -0.0051,
+     "params": "bull_bear_ratio·hl5·raw·nf0.1·mw0.0",
+     "is_medyan": -0.053,
+     "oos": -0.187,
+     "plasebo_p": 0.781,
+     "plasebo_95": 0.1768,
+     "plasebo_n": 137
+    },
+    "geri_5_lag0": {
+     "is_max": 0.215,
+     "params": "bull_bear_ratio·hl2·raw·nf0.0·mw0.2",
+     "is_medyan": 0.1161,
+     "oos": 0.3497,
+     "plasebo_p": 0.1387,
+     "plasebo_95": 0.3107,
+     "plasebo_n": 137
+    },
+    "geri_5_lag1": {
+     "is_max": 0.1111,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": 0.0179,
+     "oos": 0.3183,
+     "plasebo_p": 0.4015,
+     "plasebo_95": 0.3055,
+     "plasebo_n": 137
+    },
+    "geri_1_lag0": {
+     "is_max": 0.0001,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": -0.0648,
+     "oos": 0.0258,
+     "plasebo_p": 0.7737,
+     "plasebo_95": 0.1724,
+     "plasebo_n": 137
+    },
+    "geri_1_lag1": {
+     "is_max": -0.0829,
+     "params": "bull_bear_ratio·hl5·raw·nf0.1·mw0.0",
+     "is_medyan": -0.1128,
+     "oos": -0.172,
+     "plasebo_p": 0.9854,
+     "plasebo_95": 0.1734,
+     "plasebo_n": 137
+    }
+   }
+  },
+  "AUDUSD": {
+   "makale": 2326,
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "a_bugunku_kod": {
+    "5d": 0.2984,
+    "1d": 0.0338
+   },
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "kayma_bp": {
+    "ayni_gun": 29.45,
+    "ertesi_gun_bari": 4.61
+   },
+   "gun": {
+    "is": [
+     "2025-10-06",
+     "2026-06-10",
+     177
+    ],
+    "oos": [
+     "2026-06-11",
+     "2026-09-25",
+     77
+    ]
+   },
+   "kayitli": {
+    "params": {
+     "time_decay_halflife": 1,
+     "aggregation": "weighted_mean",
+     "score_transform": "raw",
+     "lag_days": 0,
+     "neutral_filter": 0.0,
+     "momentum_weight": 0.0
+    },
+    "ileri_5_lag0": -0.0703,
+    "ileri_5_lag1": -0.0027,
+    "ileri_1_lag0": -0.1191,
+    "ileri_1_lag1": -0.098,
+    "geri_5_lag0": 0.3097,
+    "geri_5_lag1": 0.1933,
+    "geri_1_lag0": 0.0221,
+    "geri_1_lag1": -0.1191
+   },
+   "izgara": {
+    "ileri_5_lag0": {
+     "is_max": 0.0046,
+     "params": "intensity_ratio·hl5·raw·nf0.1·mw0.0",
+     "is_medyan": -0.031,
+     "oos": -0.3084,
+     "plasebo_p": 0.7153,
+     "plasebo_95": 0.2625,
+     "plasebo_n": 137
+    },
+    "ileri_5_lag1": {
+     "is_max": 0.0558,
+     "params": "intensity_ratio·hl1·raw·nf0.1·mw0.0",
+     "is_medyan": 0.0112,
+     "oos": -0.268,
+     "plasebo_p": 0.5766,
+     "plasebo_95": 0.281,
+     "plasebo_n": 137
+    },
+    "ileri_1_lag0": {
+     "is_max": 0.0286,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": -0.0854,
+     "oos": -0.1992,
+     "plasebo_p": 0.6277,
+     "plasebo_95": 0.1494,
+     "plasebo_n": 137
+    },
+    "ileri_1_lag1": {
+     "is_max": 0.0168,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": -0.0609,
+     "oos": -0.121,
+     "plasebo_p": 0.6934,
+     "plasebo_95": 0.1497,
+     "plasebo_n": 137
+    },
+    "geri_5_lag0": {
+     "is_max": 0.4821,
+     "params": "bull_bear_ratio·hl5·raw·nf0.0·mw0.2",
+     "is_medyan": 0.3063,
+     "oos": 0.0829,
+     "plasebo_p": 0.0,
+     "plasebo_95": 0.2513,
+     "plasebo_n": 137
+    },
+    "geri_5_lag1": {
+     "is_max": 0.4329,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": 0.1869,
+     "oos": 0.0112,
+     "plasebo_p": 0.0,
+     "plasebo_95": 0.2527,
+     "plasebo_n": 137
+    },
+    "geri_1_lag0": {
+     "is_max": 0.1695,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": 0.0051,
+     "oos": 0.05,
+     "plasebo_p": 0.0073,
+     "plasebo_95": 0.1471,
+     "plasebo_n": 137
+    },
+    "geri_1_lag1": {
+     "is_max": 0.0286,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": -0.0854,
+     "oos": -0.2018,
+     "plasebo_p": 0.6277,
+     "plasebo_95": 0.1494,
+     "plasebo_n": 137
+    }
+   }
+  },
+  "NZDUSD": {
+   "makale": 2649,
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "a_bugunku_kod": {
+    "5d": 0.0032,
+    "1d": -0.0346
+   },
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "kayma_bp": {
+    "ayni_gun": 31.63,
+    "ertesi_gun_bari": 5.71
+   },
+   "gun": {
+    "is": [
+     "2025-10-06",
+     "2026-06-10",
+     177
+    ],
+    "oos": [
+     "2026-06-11",
+     "2026-09-25",
+     77
+    ]
+   },
+   "kayitli": {
+    "params": {
+     "time_decay_halflife": 1,
+     "aggregation": "weighted_mean",
+     "score_transform": "raw",
+     "lag_days": 0,
+     "neutral_filter": 0.0,
+     "momentum_weight": 0.0
+    },
+    "ileri_5_lag0": -0.1816,
+    "ileri_5_lag1": -0.1091,
+    "ileri_1_lag0": -0.1463,
+    "ileri_1_lag1": -0.1674,
+    "geri_5_lag0": -0.065,
+    "geri_5_lag1": -0.1436,
+    "geri_1_lag0": -0.0905,
+    "geri_1_lag1": -0.1463
+   },
+   "izgara": {
+    "ileri_5_lag0": {
+     "is_max": -0.1523,
+     "params": "directional_strength·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": -0.2225,
+     "oos": -0.0953,
+     "plasebo_p": 0.9781,
+     "plasebo_95": 0.243,
+     "plasebo_n": 137
+    },
+    "ileri_5_lag1": {
+     "is_max": -0.0608,
+     "params": "directional_strength·hl5·raw·nf0.1·mw0.2",
+     "is_medyan": -0.1265,
+     "oos": -0.0054,
+     "plasebo_p": 0.8759,
+     "plasebo_95": 0.2567,
+     "plasebo_n": 137
+    },
+    "ileri_1_lag0": {
+     "is_max": -0.1196,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": -0.1643,
+     "oos": -0.0624,
+     "plasebo_p": 0.9854,
+     "plasebo_95": 0.1419,
+     "plasebo_n": 137
+    },
+    "ileri_1_lag1": {
+     "is_max": -0.1344,
+     "params": "bull_bear_ratio·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": -0.1838,
+     "oos": 0.006,
+     "plasebo_p": 0.9927,
+     "plasebo_95": 0.1487,
+     "plasebo_n": 137
+    },
+    "geri_5_lag0": {
+     "is_max": 0.0259,
+     "params": "bull_bear_ratio·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": -0.0705,
+     "oos": 0.0619,
+     "plasebo_p": 0.7226,
+     "plasebo_95": 0.2142,
+     "plasebo_n": 137
+    },
+    "geri_5_lag1": {
+     "is_max": -0.084,
+     "params": "bull_bear_ratio·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": -0.1647,
+     "oos": -0.0722,
+     "plasebo_p": 0.927,
+     "plasebo_95": 0.2165,
+     "plasebo_n": 137
+    },
+    "geri_1_lag0": {
+     "is_max": -0.0766,
+     "params": "bull_bear_ratio·hl5·raw·nf0.0·mw0.2",
+     "is_medyan": -0.113,
+     "oos": -0.0939,
+     "plasebo_p": 0.9562,
+     "plasebo_95": 0.1465,
+     "plasebo_n": 137
+    },
+    "geri_1_lag1": {
+     "is_max": -0.1196,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": -0.1643,
+     "oos": -0.0665,
+     "plasebo_p": 0.9854,
+     "plasebo_95": 0.1419,
+     "plasebo_n": 137
+    }
+   }
+  },
+  "USDCAD": {
+   "makale": 2550,
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "a_bugunku_kod": {
+    "5d": 0.0678,
+    "1d": 0.0878
+   },
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "kayma_bp": {
+    "ayni_gun": 16.78,
+    "ertesi_gun_bari": 2.4
+   },
+   "gun": {
+    "is": [
+     "2025-10-06",
+     "2026-06-10",
+     177
+    ],
+    "oos": [
+     "2026-06-11",
+     "2026-09-25",
+     77
+    ]
+   },
+   "kayitli": {
+    "params": {
+     "time_decay_halflife": 5,
+     "aggregation": "bull_bear_ratio",
+     "score_transform": "tanh",
+     "lag_days": 1,
+     "neutral_filter": 0.1,
+     "momentum_weight": 0.0
+    },
+    "ileri_5_lag0": 0.2156,
+    "ileri_5_lag1": 0.0787,
+    "ileri_1_lag0": 0.1699,
+    "ileri_1_lag1": 0.1699,
+    "geri_5_lag0": 0.0532,
+    "geri_5_lag1": 0.1444,
+    "geri_1_lag0": 0.09,
+    "geri_1_lag1": 0.1699
+   },
+   "izgara": {
+    "ileri_5_lag0": {
+     "is_max": 0.2787,
+     "params": "weighted_mean·hl3·tanh·nf0.0·mw0.2",
+     "is_medyan": 0.2293,
+     "oos": 0.07,
+     "plasebo_p": 0.0803,
+     "plasebo_95": 0.3015,
+     "plasebo_n": 137
+    },
+    "ileri_5_lag1": {
+     "is_max": 0.2,
+     "params": "weighted_mean·hl1·tanh·nf0.0·mw0.2",
+     "is_medyan": 0.1259,
+     "oos": 0.0363,
+     "plasebo_p": 0.1606,
+     "plasebo_95": 0.305,
+     "plasebo_n": 137
+    },
+    "ileri_1_lag0": {
+     "is_max": 0.1756,
+     "params": "intensity_ratio·hl3·tanh·nf0.1·mw0.0",
+     "is_medyan": 0.1543,
+     "oos": 0.0764,
+     "plasebo_p": 0.0146,
+     "plasebo_95": 0.158,
+     "plasebo_n": 137
+    },
+    "ileri_1_lag1": {
+     "is_max": 0.1789,
+     "params": "intensity_ratio·hl5·tanh·nf0.1·mw0.2",
+     "is_medyan": 0.1611,
+     "oos": -0.0246,
+     "plasebo_p": 0.0146,
+     "plasebo_95": 0.1576,
+     "plasebo_n": 137
+    },
+    "geri_5_lag0": {
+     "is_max": 0.0566,
+     "params": "intensity_ratio·hl5·raw·nf0.1·mw0.0",
+     "is_medyan": 0.0096,
+     "oos": 0.405,
+     "plasebo_p": 0.6131,
+     "plasebo_95": 0.2689,
+     "plasebo_n": 137
+    },
+    "geri_5_lag1": {
+     "is_max": 0.1712,
+     "params": "directional_strength·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": 0.1019,
+     "oos": 0.4398,
+     "plasebo_p": 0.2409,
+     "plasebo_95": 0.283,
+     "plasebo_n": 137
+    },
+    "geri_1_lag0": {
+     "is_max": 0.123,
+     "params": "directional_strength·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": 0.0715,
+     "oos": 0.242,
+     "plasebo_p": 0.1241,
+     "plasebo_95": 0.1525,
+     "plasebo_n": 137
+    },
+    "geri_1_lag1": {
+     "is_max": 0.1756,
+     "params": "intensity_ratio·hl3·tanh·nf0.1·mw0.0",
+     "is_medyan": 0.1543,
+     "oos": 0.0711,
+     "plasebo_p": 0.0146,
+     "plasebo_95": 0.158,
+     "plasebo_n": 137
+    }
+   }
+  },
+  "USDNOK": {
+   "makale": 662,
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "a_bugunku_kod": {
+    "5d": 0.0585,
+    "1d": 0.1196
+   },
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "kayma_bp": {
+    "ayni_gun": 32.04,
+    "ertesi_gun_bari": 4.52
+   },
+   "gun": {
+    "is": [
+     "2025-10-06",
+     "2026-06-10",
+     177
+    ],
+    "oos": [
+     "2026-06-11",
+     "2026-09-25",
+     77
+    ]
+   },
+   "kayitli": {
+    "params": {
+     "time_decay_halflife": 5,
+     "aggregation": "bull_bear_ratio",
+     "score_transform": "tanh",
+     "lag_days": 1,
+     "neutral_filter": 0.0,
+     "momentum_weight": 0.0
+    },
+    "ileri_5_lag0": 0.1897,
+    "ileri_5_lag1": 0.1486,
+    "ileri_1_lag0": 0.0797,
+    "ileri_1_lag1": 0.1437,
+    "geri_5_lag0": 0.0681,
+    "geri_5_lag1": 0.1343,
+    "geri_1_lag0": 0.1327,
+    "geri_1_lag1": 0.0797
+   },
+   "izgara": {
+    "ileri_5_lag0": {
+     "is_max": 0.2052,
+     "params": "intensity_ratio·hl5·amplify·nf0.0·mw0.0",
+     "is_medyan": 0.1414,
+     "oos": 0.0886,
+     "plasebo_p": 0.1971,
+     "plasebo_95": 0.3077,
+     "plasebo_n": 137
+    },
+    "ileri_5_lag1": {
+     "is_max": 0.2119,
+     "params": "directional_strength·hl2·raw·nf0.0·mw0.2",
+     "is_medyan": 0.1685,
+     "oos": 0.1752,
+     "plasebo_p": 0.1898,
+     "plasebo_95": 0.2951,
+     "plasebo_n": 137
+    },
+    "ileri_1_lag0": {
+     "is_max": 0.0797,
+     "params": "bull_bear_ratio·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": -0.0131,
+     "oos": -0.0852,
+     "plasebo_p": 0.3942,
+     "plasebo_95": 0.2024,
+     "plasebo_n": 137
+    },
+    "ileri_1_lag1": {
+     "is_max": 0.1437,
+     "params": "bull_bear_ratio·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": 0.0371,
+     "oos": -0.0381,
+     "plasebo_p": 0.1241,
+     "plasebo_95": 0.1883,
+     "plasebo_n": 137
+    },
+    "geri_5_lag0": {
+     "is_max": 0.0681,
+     "params": "bull_bear_ratio·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": -0.1124,
+     "oos": -0.0753,
+     "plasebo_p": 0.5693,
+     "plasebo_95": 0.3405,
+     "plasebo_n": 137
+    },
+    "geri_5_lag1": {
+     "is_max": 0.1343,
+     "params": "bull_bear_ratio·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": -0.0784,
+     "oos": -0.0634,
+     "plasebo_p": 0.3431,
+     "plasebo_95": 0.3422,
+     "plasebo_n": 137
+    },
+    "geri_1_lag0": {
+     "is_max": 0.1327,
+     "params": "bull_bear_ratio·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": -0.0188,
+     "oos": 0.0176,
+     "plasebo_p": 0.1898,
+     "plasebo_95": 0.2025,
+     "plasebo_n": 137
+    },
+    "geri_1_lag1": {
+     "is_max": 0.0797,
+     "params": "bull_bear_ratio·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": -0.0131,
+     "oos": -0.0895,
+     "plasebo_p": 0.3942,
+     "plasebo_95": 0.2024,
+     "plasebo_n": 137
+    }
+   }
+  },
+  "USDSEK": {
+   "makale": 253,
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "a_bugunku_kod": {
+    "5d": 0.0833,
+    "1d": 0.0335
+   },
+   "fiyat_tanim": "New York 17:00 (saatlik bar)",
+   "kayma_bp": {
+    "ayni_gun": 33.76,
+    "ertesi_gun_bari": 6.16
+   },
+   "gun": {
+    "is": [
+     "2025-10-06",
+     "2026-06-11",
+     175
+    ],
+    "oos": [
+     "2026-06-12",
+     "2026-09-25",
+     76
+    ]
+   },
+   "kayitli": {
+    "params": {
+     "time_decay_halflife": 5,
+     "aggregation": "bull_bear_ratio",
+     "score_transform": "raw",
+     "lag_days": 0,
+     "neutral_filter": 0.1,
+     "momentum_weight": 0.0
+    },
+    "ileri_5_lag0": -0.1,
+    "ileri_5_lag1": -0.1693,
+    "ileri_1_lag0": 0.0538,
+    "ileri_1_lag1": 0.039,
+    "geri_5_lag0": 0.0616,
+    "geri_5_lag1": 0.0687,
+    "geri_1_lag0": 0.0687,
+    "geri_1_lag1": 0.0538
+   },
+   "izgara": {
+    "ileri_5_lag0": {
+     "is_max": -0.0024,
+     "params": "bull_bear_ratio·hl2·raw·nf0.0·mw0.2",
+     "is_medyan": -0.0631,
+     "oos": -0.0794,
+     "plasebo_p": 0.7333,
+     "plasebo_95": 0.2745,
+     "plasebo_n": 135
+    },
+    "ileri_5_lag1": {
+     "is_max": -0.0108,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": -0.122,
+     "oos": -0.017,
+     "plasebo_p": 0.7556,
+     "plasebo_95": 0.2836,
+     "plasebo_n": 135
+    },
+    "ileri_1_lag0": {
+     "is_max": 0.0551,
+     "params": "intensity_ratio·hl5·raw·nf0.1·mw0.0",
+     "is_medyan": 0.0262,
+     "oos": -0.1204,
+     "plasebo_p": 0.5037,
+     "plasebo_95": 0.1662,
+     "plasebo_n": 135
+    },
+    "ileri_1_lag1": {
+     "is_max": 0.0839,
+     "params": "weighted_mean·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": 0.0438,
+     "oos": -0.0797,
+     "plasebo_p": 0.3926,
+     "plasebo_95": 0.1696,
+     "plasebo_n": 135
+    },
+    "geri_5_lag0": {
+     "is_max": 0.0616,
+     "params": "bull_bear_ratio·hl5·raw·nf0.1·mw0.0",
+     "is_medyan": -0.0126,
+     "oos": -0.0027,
+     "plasebo_p": 0.6222,
+     "plasebo_95": 0.2607,
+     "plasebo_n": 135
+    },
+    "geri_5_lag1": {
+     "is_max": 0.0687,
+     "params": "bull_bear_ratio·hl5·raw·nf0.1·mw0.0",
+     "is_medyan": -0.0085,
+     "oos": -0.0371,
+     "plasebo_p": 0.6,
+     "plasebo_95": 0.2728,
+     "plasebo_n": 135
+    },
+    "geri_1_lag0": {
+     "is_max": 0.0687,
+     "params": "bull_bear_ratio·hl5·raw·nf0.1·mw0.0",
+     "is_medyan": 0.0283,
+     "oos": -0.0241,
+     "plasebo_p": 0.4667,
+     "plasebo_95": 0.1713,
+     "plasebo_n": 135
+    },
+    "geri_1_lag1": {
+     "is_max": 0.0551,
+     "params": "intensity_ratio·hl5·raw·nf0.1·mw0.0",
+     "is_medyan": 0.0262,
+     "oos": -0.1263,
+     "plasebo_p": 0.5037,
+     "plasebo_95": 0.1662,
+     "plasebo_n": 135
+    }
+   }
+  },
+  "XAUUSD": {
+   "makale": 4727,
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "a_bugunku_kod": {
+    "5d": 0.4854,
+    "1d": -0.0079
+   },
+   "fiyat_tanim": "New York 17:00 (günlük bar)",
+   "gun": {
+    "is": [
+     "2025-10-06",
+     "2026-06-10",
+     171
+    ],
+    "oos": [
+     "2026-06-11",
+     "2026-09-25",
+     74
+    ]
+   },
+   "kayitli": {
+    "params": {
+     "time_decay_halflife": 1,
+     "aggregation": "weighted_mean",
+     "score_transform": "tanh",
+     "lag_days": 0,
+     "neutral_filter": 0.0,
+     "momentum_weight": 0.2
+    },
+    "ileri_5_lag0": -0.1889,
+    "ileri_5_lag1": -0.2062,
+    "ileri_1_lag0": -0.0507,
+    "ileri_1_lag1": -0.0936,
+    "geri_5_lag0": 0.6149,
+    "geri_5_lag1": 0.5266,
+    "geri_1_lag0": 0.2354,
+    "geri_1_lag1": -0.0507
+   },
+   "izgara": {
+    "ileri_5_lag0": {
+     "is_max": -0.1045,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": -0.2325,
+     "oos": -0.1691,
+     "plasebo_p": 0.9008,
+     "plasebo_95": 0.2825,
+     "plasebo_n": 131
+    },
+    "ileri_5_lag1": {
+     "is_max": -0.136,
+     "params": "weighted_mean·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": -0.2458,
+     "oos": -0.0951,
+     "plasebo_p": 0.9618,
+     "plasebo_95": 0.273,
+     "plasebo_n": 131
+    },
+    "ileri_1_lag0": {
+     "is_max": -0.0066,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": -0.0729,
+     "oos": -0.0676,
+     "plasebo_p": 0.7634,
+     "plasebo_95": 0.1554,
+     "plasebo_n": 131
+    },
+    "ileri_1_lag1": {
+     "is_max": -0.0566,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": -0.0992,
+     "oos": -0.0832,
+     "plasebo_p": 0.9237,
+     "plasebo_95": 0.1631,
+     "plasebo_n": 131
+    },
+    "geri_5_lag0": {
+     "is_max": 0.6504,
+     "params": "intensity_ratio·hl2·raw·nf0.0·mw0.0",
+     "is_medyan": 0.6071,
+     "oos": 0.5598,
+     "plasebo_p": 0.0,
+     "plasebo_95": 0.3095,
+     "plasebo_n": 131
+    },
+    "geri_5_lag1": {
+     "is_max": 0.5417,
+     "params": "weighted_mean·hl1·amplify·nf0.0·mw0.2",
+     "is_medyan": 0.4715,
+     "oos": 0.4526,
+     "plasebo_p": 0.0,
+     "plasebo_95": 0.2816,
+     "plasebo_n": 131
+    },
+    "geri_1_lag0": {
+     "is_max": 0.2684,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": 0.1539,
+     "oos": 0.1518,
+     "plasebo_p": 0.0,
+     "plasebo_95": 0.1545,
+     "plasebo_n": 131
+    },
+    "geri_1_lag1": {
+     "is_max": -0.0066,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": -0.0729,
+     "oos": -0.065,
+     "plasebo_p": 0.7634,
+     "plasebo_95": 0.1554,
+     "plasebo_n": 131
+    }
+   }
+  },
+  "XAGUSD": {
+   "makale": 3397,
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "a_bugunku_kod": {
+    "5d": 0.5181,
+    "1d": -0.0965
+   },
+   "fiyat_tanim": "New York 17:00 (günlük bar)",
+   "gun": {
+    "is": [
+     "2025-10-06",
+     "2026-06-10",
+     171
+    ],
+    "oos": [
+     "2026-06-11",
+     "2026-09-25",
+     74
+    ]
+   },
+   "kayitli": {
+    "params": {
+     "time_decay_halflife": 1,
+     "aggregation": "weighted_mean",
+     "score_transform": "raw",
+     "lag_days": 0,
+     "neutral_filter": 0.0,
+     "momentum_weight": 0.2
+    },
+    "ileri_5_lag0": -0.2276,
+    "ileri_5_lag1": -0.1833,
+    "ileri_1_lag0": -0.1207,
+    "ileri_1_lag1": -0.1166,
+    "geri_5_lag0": 0.5932,
+    "geri_5_lag1": 0.4979,
+    "geri_1_lag0": 0.2115,
+    "geri_1_lag1": -0.1207
+   },
+   "izgara": {
+    "ileri_5_lag0": {
+     "is_max": -0.2127,
+     "params": "weighted_mean·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": -0.2762,
+     "oos": -0.2259,
+     "plasebo_p": 0.9847,
+     "plasebo_95": 0.2612,
+     "plasebo_n": 131
+    },
+    "ileri_5_lag1": {
+     "is_max": -0.1628,
+     "params": "weighted_mean·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": -0.2465,
+     "oos": -0.143,
+     "plasebo_p": 0.9466,
+     "plasebo_95": 0.2557,
+     "plasebo_n": 131
+    },
+    "ileri_1_lag0": {
+     "is_max": -0.0629,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": -0.142,
+     "oos": -0.1019,
+     "plasebo_p": 0.9008,
+     "plasebo_95": 0.1459,
+     "plasebo_n": 131
+    },
+    "ileri_1_lag1": {
+     "is_max": -0.0937,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": -0.1272,
+     "oos": -0.0787,
+     "plasebo_p": 0.9771,
+     "plasebo_95": 0.1475,
+     "plasebo_n": 131
+    },
+    "geri_5_lag0": {
+     "is_max": 0.6615,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": 0.5966,
+     "oos": 0.4783,
+     "plasebo_p": 0.0,
+     "plasebo_95": 0.3137,
+     "plasebo_n": 131
+    },
+    "geri_5_lag1": {
+     "is_max": 0.555,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": 0.4335,
+     "oos": 0.3513,
+     "plasebo_p": 0.0,
+     "plasebo_95": 0.306,
+     "plasebo_n": 131
+    },
+    "geri_1_lag0": {
+     "is_max": 0.2222,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": 0.1063,
+     "oos": 0.1111,
+     "plasebo_p": 0.0,
+     "plasebo_95": 0.1449,
+     "plasebo_n": 131
+    },
+    "geri_1_lag1": {
+     "is_max": -0.0629,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": -0.142,
+     "oos": -0.1078,
+     "plasebo_p": 0.9008,
+     "plasebo_95": 0.1459,
+     "plasebo_n": 131
+    }
+   }
+  },
+  "SPX": {
+   "makale": 4306,
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "a_bugunku_kod": {
+    "5d": 0.3698,
+    "1d": -0.0002
+   },
+   "fiyat_tanim": "New York 16:00 (günlük bar)",
+   "gun": {
+    "is": [
+     "2025-10-06",
+     "2026-06-10",
+     171
+    ],
+    "oos": [
+     "2026-06-11",
+     "2026-09-25",
+     74
+    ]
+   },
+   "kayitli": {
+    "params": {
+     "time_decay_halflife": 1,
+     "aggregation": "weighted_mean",
+     "score_transform": "raw",
+     "lag_days": 1,
+     "neutral_filter": 0.0,
+     "momentum_weight": 0.2
+    },
+    "ileri_5_lag0": -0.0537,
+    "ileri_5_lag1": -0.0747,
+    "ileri_1_lag0": -0.0422,
+    "ileri_1_lag1": -0.0433,
+    "geri_5_lag0": 0.4641,
+    "geri_5_lag1": 0.3736,
+    "geri_1_lag0": 0.2892,
+    "geri_1_lag1": -0.0422
+   },
+   "izgara": {
+    "ileri_5_lag0": {
+     "is_max": 0.0068,
+     "params": "bull_bear_ratio·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": -0.0548,
+     "oos": 0.0092,
+     "plasebo_p": 0.7099,
+     "plasebo_95": 0.2682,
+     "plasebo_n": 131
+    },
+    "ileri_5_lag1": {
+     "is_max": -0.0082,
+     "params": "bull_bear_ratio·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": -0.0868,
+     "oos": -0.0139,
+     "plasebo_p": 0.7328,
+     "plasebo_95": 0.2775,
+     "plasebo_n": 131
+    },
+    "ileri_1_lag0": {
+     "is_max": 0.0052,
+     "params": "directional_strength·hl5·tanh·nf0.0·mw0.0",
+     "is_medyan": -0.0248,
+     "oos": -0.0088,
+     "plasebo_p": 0.6947,
+     "plasebo_95": 0.1628,
+     "plasebo_n": 131
+    },
+    "ileri_1_lag1": {
+     "is_max": -0.0123,
+     "params": "bull_bear_ratio·hl1·raw·nf0.1·mw0.0",
+     "is_medyan": -0.0393,
+     "oos": 0.0396,
+     "plasebo_p": 0.7786,
+     "plasebo_95": 0.1529,
+     "plasebo_n": 131
+    },
+    "geri_5_lag0": {
+     "is_max": 0.4913,
+     "params": "weighted_mean·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": 0.4624,
+     "oos": 0.5799,
+     "plasebo_p": 0.0,
+     "plasebo_95": 0.2793,
+     "plasebo_n": 131
+    },
+    "geri_5_lag1": {
+     "is_max": 0.4074,
+     "params": "directional_strength·hl3·tanh·nf0.0·mw0.2",
+     "is_medyan": 0.378,
+     "oos": 0.3733,
+     "plasebo_p": 0.0,
+     "plasebo_95": 0.2829,
+     "plasebo_n": 131
+    },
+    "geri_1_lag0": {
+     "is_max": 0.2922,
+     "params": "directional_strength·hl1·tanh·nf0.0·mw0.2",
+     "is_medyan": 0.2152,
+     "oos": 0.2962,
+     "plasebo_p": 0.0,
+     "plasebo_95": 0.1564,
+     "plasebo_n": 131
+    },
+    "geri_1_lag1": {
+     "is_max": 0.0052,
+     "params": "directional_strength·hl5·tanh·nf0.0·mw0.0",
+     "is_medyan": -0.0248,
+     "oos": -0.0087,
+     "plasebo_p": 0.6947,
+     "plasebo_95": 0.1628,
+     "plasebo_n": 131
+    }
+   }
+  },
+  "UST2Y": {
+   "makale": 3987,
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "a_bugunku_kod": {
+    "5d": 0.1229,
+    "1d": 0.012
+   },
+   "fiyat_tanim": "New York 17:00 (günlük bar)",
+   "gun": {
+    "is": [
+     "2025-10-06",
+     "2026-06-10",
+     171
+    ],
+    "oos": [
+     "2026-06-11",
+     "2026-09-25",
+     74
+    ]
+   },
+   "kayitli": {
+    "params": {
+     "time_decay_halflife": 5,
+     "aggregation": "weighted_mean",
+     "score_transform": "tanh",
+     "lag_days": 1,
+     "neutral_filter": 0.0,
+     "momentum_weight": 0.0
+    },
+    "ileri_5_lag0": 0.1827,
+    "ileri_5_lag1": 0.1757,
+    "ileri_1_lag0": 0.0138,
+    "ileri_1_lag1": 0.081,
+    "geri_5_lag0": 0.0675,
+    "geri_5_lag1": 0.0784,
+    "geri_1_lag0": 0.047,
+    "geri_1_lag1": 0.0138
+   },
+   "izgara": {
+    "ileri_5_lag0": {
+     "is_max": 0.1944,
+     "params": "weighted_mean·hl5·amplify·nf0.0·mw0.2",
+     "is_medyan": 0.1375,
+     "oos": -0.3037,
+     "plasebo_p": 0.229,
+     "plasebo_95": 0.2536,
+     "plasebo_n": 131
+    },
+    "ileri_5_lag1": {
+     "is_max": 0.2205,
+     "params": "weighted_mean·hl2·tanh·nf0.0·mw0.2",
+     "is_medyan": 0.1638,
+     "oos": -0.2305,
+     "plasebo_p": 0.1221,
+     "plasebo_95": 0.2522,
+     "plasebo_n": 131
+    },
+    "ileri_1_lag0": {
+     "is_max": 0.0477,
+     "params": "directional_strength·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": -0.0228,
+     "oos": -0.1131,
+     "plasebo_p": 0.5878,
+     "plasebo_95": 0.141,
+     "plasebo_n": 131
+    },
+    "ileri_1_lag1": {
+     "is_max": 0.0924,
+     "params": "intensity_ratio·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": 0.0563,
+     "oos": -0.1734,
+     "plasebo_p": 0.2977,
+     "plasebo_95": 0.1476,
+     "plasebo_n": 131
+    },
+    "geri_5_lag0": {
+     "is_max": 0.1753,
+     "params": "directional_strength·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": 0.0638,
+     "oos": 0.3095,
+     "plasebo_p": 0.2137,
+     "plasebo_95": 0.2577,
+     "plasebo_n": 131
+    },
+    "geri_5_lag1": {
+     "is_max": 0.175,
+     "params": "directional_strength·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": 0.0603,
+     "oos": 0.2115,
+     "plasebo_p": 0.2595,
+     "plasebo_95": 0.247,
+     "plasebo_n": 131
+    },
+    "geri_1_lag0": {
+     "is_max": 0.1049,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": 0.0514,
+     "oos": -0.0207,
+     "plasebo_p": 0.2214,
+     "plasebo_95": 0.1412,
+     "plasebo_n": 131
+    },
+    "geri_1_lag1": {
+     "is_max": 0.0477,
+     "params": "directional_strength·hl5·raw·nf0.0·mw0.0",
+     "is_medyan": -0.0228,
+     "oos": -0.1125,
+     "plasebo_p": 0.5878,
+     "plasebo_95": 0.141,
+     "plasebo_n": 131
+    }
+   }
+  },
+  "UST10Y": {
+   "makale": 4313,
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "a_bugunku_kod": {
+    "5d": -0.0377,
+    "1d": -0.0007
+   },
+   "fiyat_tanim": "New York 17:00 (günlük bar)",
+   "gun": {
+    "is": [
+     "2025-10-06",
+     "2026-06-10",
+     171
+    ],
+    "oos": [
+     "2026-06-11",
+     "2026-09-25",
+     74
+    ]
+   },
+   "kayitli": {
+    "params": {
+     "time_decay_halflife": 1,
+     "aggregation": "directional_strength",
+     "score_transform": "tanh",
+     "lag_days": 0,
+     "neutral_filter": 0.0,
+     "momentum_weight": 0.0
+    },
+    "ileri_5_lag0": -0.0152,
+    "ileri_5_lag1": 0.011,
+    "ileri_1_lag0": -0.0237,
+    "ileri_1_lag1": -0.0085,
+    "geri_5_lag0": 0.0451,
+    "geri_5_lag1": 0.0329,
+    "geri_1_lag0": 0.0674,
+    "geri_1_lag1": -0.0237
+   },
+   "izgara": {
+    "ileri_5_lag0": {
+     "is_max": 0.1571,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": 0.0341,
+     "oos": -0.1839,
+     "plasebo_p": 0.3282,
+     "plasebo_95": 0.2818,
+     "plasebo_n": 131
+    },
+    "ileri_5_lag1": {
+     "is_max": 0.1186,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": 0.0251,
+     "oos": -0.2345,
+     "plasebo_p": 0.4733,
+     "plasebo_95": 0.2715,
+     "plasebo_n": 131
+    },
+    "ileri_1_lag0": {
+     "is_max": 0.0891,
+     "params": "bull_bear_ratio·hl2·raw·nf0.0·mw0.0",
+     "is_medyan": 0.0041,
+     "oos": -0.0566,
+     "plasebo_p": 0.3511,
+     "plasebo_95": 0.1398,
+     "plasebo_n": 131
+    },
+    "ileri_1_lag1": {
+     "is_max": 0.0934,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.0",
+     "is_medyan": 0.0088,
+     "oos": -0.2052,
+     "plasebo_p": 0.2977,
+     "plasebo_95": 0.1545,
+     "plasebo_n": 131
+    },
+    "geri_5_lag0": {
+     "is_max": 0.0922,
+     "params": "directional_strength·hl5·raw·nf0.0·mw0.2",
+     "is_medyan": 0.0343,
+     "oos": 0.1396,
+     "plasebo_p": 0.6565,
+     "plasebo_95": 0.287,
+     "plasebo_n": 131
+    },
+    "geri_5_lag1": {
+     "is_max": 0.0751,
+     "params": "intensity_ratio·hl5·amplify·nf0.0·mw0.0",
+     "is_medyan": 0.0366,
+     "oos": 0.1273,
+     "plasebo_p": 0.6565,
+     "plasebo_95": 0.2757,
+     "plasebo_n": 131
+    },
+    "geri_1_lag0": {
+     "is_max": 0.1108,
+     "params": "bull_bear_ratio·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": 0.0648,
+     "oos": 0.241,
+     "plasebo_p": 0.2137,
+     "plasebo_95": 0.1553,
+     "plasebo_n": 131
+    },
+    "geri_1_lag1": {
+     "is_max": 0.0891,
+     "params": "bull_bear_ratio·hl2·raw·nf0.0·mw0.0",
+     "is_medyan": 0.0041,
+     "oos": -0.0635,
+     "plasebo_p": 0.3511,
+     "plasebo_95": 0.1398,
+     "plasebo_n": 131
+    }
+   }
+  },
+  "BIST100": {
+   "makale": 1833,
+   "arsiv": [
+    "2025-09-29T00:00:00+00:00",
+    "2026-09-27T23:59:59+00:00"
+   ],
+   "a_bugunku_kod": {
+    "5d": 0.3291,
+    "1d": 0.0153
+   },
+   "fiyat_tanim": "İstanbul 18:00 (günlük bar)",
+   "gun": {
+    "is": [
+     "2025-10-06",
+     "2026-06-12",
+     170
+    ],
+    "oos": [
+     "2026-06-15",
+     "2026-09-25",
+     74
+    ]
+   },
+   "kayitli": {
+    "params": {
+     "time_decay_halflife": 2,
+     "aggregation": "weighted_mean",
+     "score_transform": "tanh",
+     "lag_days": 1,
+     "neutral_filter": 0.0,
+     "momentum_weight": 0.0
+    },
+    "ileri_5_lag0": -0.1948,
+    "ileri_5_lag1": -0.2217,
+    "ileri_1_lag0": 0.0029,
+    "ileri_1_lag1": -0.0467,
+    "geri_5_lag0": 0.3663,
+    "geri_5_lag1": 0.2869,
+    "geri_1_lag0": 0.1087,
+    "geri_1_lag1": 0.0029
+   },
+   "izgara": {
+    "ileri_5_lag0": {
+     "is_max": -0.0931,
+     "params": "directional_strength·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": -0.1892,
+     "oos": -0.2823,
+     "plasebo_p": 0.8462,
+     "plasebo_95": 0.2706,
+     "plasebo_n": 130
+    },
+    "ileri_5_lag1": {
+     "is_max": -0.1587,
+     "params": "directional_strength·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": -0.2144,
+     "oos": -0.304,
+     "plasebo_p": 0.9308,
+     "plasebo_95": 0.28,
+     "plasebo_n": 130
+    },
+    "ileri_1_lag0": {
+     "is_max": 0.0337,
+     "params": "directional_strength·hl2·raw·nf0.0·mw0.2",
+     "is_medyan": 0.0042,
+     "oos": 0.0207,
+     "plasebo_p": 0.5615,
+     "plasebo_95": 0.1633,
+     "plasebo_n": 130
+    },
+    "ileri_1_lag1": {
+     "is_max": 0.0313,
+     "params": "bull_bear_ratio·hl1·raw·nf0.1·mw0.2",
+     "is_medyan": -0.041,
+     "oos": -0.0422,
+     "plasebo_p": 0.5769,
+     "plasebo_95": 0.1681,
+     "plasebo_n": 130
+    },
+    "geri_5_lag0": {
+     "is_max": 0.3859,
+     "params": "weighted_mean·hl2·amplify·nf0.0·mw0.0",
+     "is_medyan": 0.3145,
+     "oos": 0.5565,
+     "plasebo_p": 0.0,
+     "plasebo_95": 0.2756,
+     "plasebo_n": 130
+    },
+    "geri_5_lag1": {
+     "is_max": 0.3089,
+     "params": "weighted_mean·hl2·raw·nf0.0·mw0.2",
+     "is_medyan": 0.2508,
+     "oos": 0.4706,
+     "plasebo_p": 0.0231,
+     "plasebo_95": 0.2886,
+     "plasebo_n": 130
+    },
+    "geri_1_lag0": {
+     "is_max": 0.1422,
+     "params": "weighted_mean·hl1·raw·nf0.0·mw0.2",
+     "is_medyan": 0.0995,
+     "oos": 0.2036,
+     "plasebo_p": 0.0846,
+     "plasebo_95": 0.155,
+     "plasebo_n": 130
+    },
+    "geri_1_lag1": {
+     "is_max": 0.0337,
+     "params": "directional_strength·hl2·raw·nf0.0·mw0.2",
+     "is_medyan": 0.0042,
+     "oos": 0.0201,
+     "plasebo_p": 0.5615,
+     "plasebo_95": 0.1633,
+     "plasebo_n": 130
+    }
+   }
+  }
+ },
+ "r": {
+  "yeni": {
+   "label": "Transitioning",
+   "basket_spread": 0.0063,
+   "avg_correlation": 0.037,
+   "pc1_share": 0.264,
+   "as_of": "2026-09-27",
+   "n_assets": 15
+  },
+  "eski": {
+   "label": "Transitioning",
+   "basket_spread": 0.0033,
+   "avg_correlation": 0.0694,
+   "pc1_share": 0.2609,
+   "as_of": "2026-09-27",
+   "n_assets": 15
+  }
+ }
+}
