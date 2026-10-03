@@ -6,7 +6,7 @@ from __future__ import annotations
 import re
 
 from sekil_ortak import (ACIK_CLARET, ACIK_MAVI, CLARET, GRI, MAVI, MUREKKEP, TURUNCU, YESIL, ay, go,  # noqa: F401
-                         make_subplots, tarih, vir, yuzde, _yaz)
+                         baslik_koy, make_subplots, tarih, vir, yukseklik, yuzde, _yaz)
 
 DONEM_GOLGE = "rgba(138,138,138,0.16)"
 VIX_GOLGE = "rgba(184,134,11,0.16)"
@@ -34,6 +34,12 @@ def _sonraki_ay(a: str) -> str:
     return f"{y:04d}-{m:02d}-01"
 
 
+def _onceki_ay(a: str) -> str:
+    y, m = int(a[:4]), int(a[5:7])
+    y, m = (y - 1, 12) if m == 1 else (y, m - 1)
+    return f"{y:04d}-{m:02d}-01"
+
+
 def _ay_say(a: str) -> int:
     return int(a[:4]) * 12 + int(a[5:7])
 
@@ -57,15 +63,30 @@ def _bloklar(tarihler: list, bayrak: list) -> list:
     return out
 
 
+_YONETILEN_ON = "TRY yönetilen kur "
+
+
+def _sinyal_ayi(yil: str, ay_: str) -> str:
+    """Hedef ay 'YYYY', 'AA' → bir önceki ay, AA.YYYY (sinyal ayı)."""
+    y, m = int(yil), int(ay_) - 1
+    y, m = (y - 1, 12) if m == 0 else (y, m)
+    return f"{m:02d}.{y}"
+
+
 def _etiket(e: str) -> str:
     """Ölçümdeki çubuk adını kısa eksen etiketine çevirir; dönem dizgesi AA.YYYY yazılır.
 
     Yönetilen kuru dışarıda bırakan satırların ayracı etikete girmez (alt başlık söyler):
     iki satırlı komşu etiketler 390 px'te birbirine değiyordu. Yalnız yönetilen kur
-    satırı dönemini ikinci satırda taşır."""
+    satırı dönemini ikinci satırda taşır — SİNYAL AYI olarak: ölçüm dönemi hedef ayla adlandırır
+    (2021-12 … 2023-06), figürün alt başlığı, alt paneldeki gölge ve metnin tablosu ise sinyal
+    ayıyla (hedeften bir ay önce: 11.2021–05.2023); aynı dönem aynı figürde iki aralıkla görünmesin."""
+    if e.startswith(_YONETILEN_ON):
+        m = re.fullmatch(r"(\d{4})-(\d{2}) … (\d{4})-(\d{2})", e[len(_YONETILEN_ON):])
+        if not m:                                                    # pragma: no cover
+            raise SystemExit(f"Şekil 21: yönetilen kur etiketi beklenen biçimde değil: {e}")
+        return f"{_YONETILEN_ON.strip()}<br>{_sinyal_ayi(m[1], m[2])}–{_sinyal_ayi(m[3], m[4])}"
     e = re.sub(r"(\d{4})-(\d{2}) … (\d{4})-(\d{2})", r"\2.\1–\4.\3", e)
-    if e.startswith("TRY yönetilen kur "):
-        return "TRY yönetilen kur<br>" + e[len("TRY yönetilen kur "):]
     e = re.sub(r" \(yönetilen( kur)? hariç\)$", "", e)
     return e
 
@@ -178,15 +199,22 @@ def s18_fama_beta(o: dict) -> None:
     else:
         aralik_bulgu = f"yönetilen kur dışındaki {len(tr_aralik)} TRY aralığından {tr_aralik_alti} tanesi 1'in altında"
     g10_bulgu = (" · G10'da bütün aralıklar hem 0'ı hem 1'i kapsıyor" if g10_kapsar else "")
-    fig.update_layout(barmode="overlay", bargap=0.35, title=dict(text=(
-        f"{baslik}"
-        f"<br><sub>Aylık, {ay(_ay1(s['ilk']))}–{ay(_ay1(s['son']))} (sinyal ayı) · ertesi ayın kur log değişimi "
-        "= a + β·(TL faizi − ABD faizi)/12"
-        "<br>artış: yerel para değer kaybeder · TL gecelik faiz zinciri, ABD ve G10 politika faizleri (BIS)"
-        "<br>forward yerine faiz farkı (örtülü faiz paritesi varsayımı) · yönetilen kur ayları yalnız kendi "
-        f"satırında<br>{aralik_bulgu}{g10_bulgu}</sub>")),
-        legend=dict(traceorder="normal"))
-    _yaz(fig, "21_fama_beta.html", 900)
+    # Çubuk etiketi ile alt paneldeki gölge aynı sinyal aylarını göstermeli: etiket ölçümün hedef ay adından
+    # bir ay geri kaydırılır (_etiket), gölge kayan pencerenin boşluğundan gelir; ikisi burada karşılaştırılır.
+    yon_etk = next(etiket[i] for i, a in enumerate(ayri) if a).split("<br>")[1]
+    bosluk = [f"{ay(_sonraki_ay(t[i - 1]))}–{ay(_onceki_ay(t[i]))}" for i in kes]
+    if bosluk != [yon_etk]:                                          # pragma: no cover
+        raise SystemExit(f"Şekil 21: yönetilen kur etiketi ({yon_etk}) gölgeyle ({bosluk}) aynı aylar değil")
+    fig.update_layout(barmode="overlay", bargap=0.35, legend=dict(traceorder="normal"))
+    # Başlık bloğu dar ekrana göre sarılır ve üstten çapalanır; yükseklik satır sayısından (sekil_ortak).
+    b_ = baslik_koy(fig, baslik, [
+        f"Aylık, {ay(_ay1(s['ilk']))}–{ay(_ay1(s['son']))} (sinyal ayı) · ertesi ayın kur log değişimi = "
+        "a\u00a0+\u00a0β·(TL\u00a0faizi\u00a0−\u00a0ABD\u00a0faizi)/12 · artış: yerel para değer kaybeder · TL gecelik "
+        "faiz zinciri, ABD ve G10 politika faizleri (BIS) · forward yerine faiz farkı (örtülü faiz paritesi "
+        "varsayımı) · yönetilen kur ayları yalnız kendi satırında",
+        f"{aralik_bulgu}{g10_bulgu}",
+    ])
+    _yaz(fig, "21_fama_beta.html", yukseklik(b_, 678))   # 678: çizim ve alt pay (eski 900 − 222)
 
 
 # ───────────────────────────────────────────────────────────── Şekil 22
@@ -231,17 +259,17 @@ def s19_em_tasima_vix(o: dict) -> None:
     vix_bulgu = (f"{n_para} paralı EM taşıma sepeti yüksek VIX aylarında ayda ortalama {yuzde(vk['ort_yuksek_aylik_yuzde'], 2, True)}, "
                  f"öbür aylarda {yuzde(vk['ort_diger_aylik_yuzde'], 2, True)} getirdi")
     # Eşiğin genişleyen penceresinin başlangıç yılı ölçümde bir alan olarak yok: figüre yazılmaz.
-    fig.update_layout(title=dict(text=(
-        f"Şekil 22 — {vix_bulgu}"
-        f"<br><sub>Aylık, {ay(_ay1(s['ilk']))}–{ay(_ay1(s['son']))} · son kümülatif log getiri: TRY dahil "
-        f"{yuzde(son_dahil, 1, True)}, TRY hariç {yuzde(son_haric, 1, True)}"
-        "<br>yerel para alınır, dolar borçlanılır · getiri = önceki ay sonu politika faizi farkı/12 − aylık kur "
-        "log değişimi"
-        "<br>eşit ağırlıklı sepet · kümülatif = aylık log getirilerin toplamı · VIX eşiği yalnız önceki ayların "
-        f"verisinden<br>TRY hariç sepette {yuzde(vh['ort_yuksek_aylik_yuzde'], 2, True)} ve "
+    # Başlık bloğu dar ekrana göre sarılır ve üstten çapalanır; yükseklik satır sayısından (sekil_ortak).
+    baslik = baslik_koy(fig, f"Şekil 22 — {vix_bulgu}", [
+        f"Aylık, {ay(_ay1(s['ilk']))}–{ay(_ay1(s['son']))} · son kümülatif log getiri: TRY dahil "
+        f"{yuzde(son_dahil, 1, True)}, TRY hariç {yuzde(son_haric, 1, True)} · yerel para alınır, dolar "
+        "borçlanılır · getiri = önceki ay sonu politika faizi farkı/12\u00a0−\u00a0aylık kur log değişimi · eşit ağırlıklı sepet · kümülatif = aylık log getirilerin toplamı · VIX eşiği yalnız önceki "
+        "ayların verisinden",
+        f"TRY hariç sepette {yuzde(vh['ort_yuksek_aylik_yuzde'], 2, True)} ve "
         f"{yuzde(vh['ort_diger_aylik_yuzde'], 2, True)} · farkın t'si {vir(vk['fark_t'], 2)} (TRY dahil): aynı "
-        "ayın VIX'iyle, öngörü değil</sub>")))
-    _yaz(fig, "22_em_tasima_vix.html", 780)
+        "ayın VIX'iyle, öngörü değil",
+    ])
+    _yaz(fig, "22_em_tasima_vix.html", yukseklik(baslik, 558))   # 558: çizim ve alt pay (eski 780 − 222)
 
 
 # ───────────────────────────────────────────────────────────── Şekil 23
@@ -286,11 +314,9 @@ def s20_try_artik_akim(o: dict) -> None:
     ta = b["p11c"]["try_artik"]
     egilim = (f"artık TL'nin kendi değer kaybı eğilimini taşır: yönetilen kurdan sonra yılda ortalama "
               f"{yuzde(ta['sonrasi_yillik_ort_yuzde'], 1, True)}, son sepet eğimi {vir(ta['son_beta'], 2)}")
-    fig.update_layout(title=dict(text=(
-        f"Şekil 23 — {bulgu1}; {bulgu2}"
-        f"<br><sub>Haftalık (perşembe kapanışı, cuma etiketli), {tarih(s['ilk'])}–{tarih(s['son'])} · akım: yurt "
-        "dışı yerleşiklerin net alımı (TCMB)"
-        "<br>artık = TRY'nin haftalık log değişimi − önceki 52 haftanın eğimi × EM sepeti (BRL, MXN, ZAR, INR)"
-        f"<br>{egilim}"
-        f"<br>EM kurlarının serisi bittiği için artık {tarih(s['artik_son'])} haftasında durur</sub>")))
-    _yaz(fig, "23_try_artik_akim.html", 800)
+    baslik = baslik_koy(fig, f"Şekil 23 — {bulgu1}; {bulgu2}", [
+        f"Haftalık (perşembe kapanışı, cuma etiketli), {tarih(s['ilk'])}–{tarih(s['son'])} · akım: yurt dışı "
+        "yerleşiklerin net alımı (TCMB) · artık = TRY'nin haftalık log değişimi − önceki 52 haftanın eğimi × EM sepeti (BRL, MXN, ZAR, INR) · "
+        f"{egilim} · EM kurlarının serisi bittiği için artık {tarih(s['artik_son'])} haftasında durur",
+    ])
+    _yaz(fig, "23_try_artik_akim.html", yukseklik(baslik, 578))   # 578: çizim ve alt pay (eski 800 − 222)

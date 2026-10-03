@@ -29,11 +29,6 @@ def _sayi(x: float, b: int = 1) -> str:
     return ("−" if x < 0 and float(s.replace(".", "").replace(",", ".")) != 0 else "") + s
 
 
-def _yz(x: float, b: int = 1) -> str:
-    s = "%" + _sayi(abs(x), b)
-    return ("−" + s) if x < 0 and float(_sayi(abs(x), b).replace(".", "").replace(",", ".")) != 0 else s
-
-
 def _ay(iso: str) -> str:
     return f"{iso[5:7]}.{iso[:4]}"
 
@@ -66,14 +61,19 @@ def kur(o: dict) -> dict:
     # Taylor aracının B bloğuyla aynı tanım: bileşik reel faiz farkı (dogrula.taylor_R)
     R = (_reel(_haftalik(t["politika_yuzde"]), t["pi_pka_yuzde"])
          - _reel(_gecelik360(y["politika_abd_yuzde"]), y["tufe_abd_yillik_yuzde"]))
+    # Hane sözleşmesi: bandın iki ucu ölçümün kendi hanesiyle (4) taşınır, çünkü araç bandı
+    # bu uçlardan yeniden kurar ve Şekil 03 ile metin yuvarlanmamış açıkla yazılır (−2,04 ile
+    # kurulan bant %32,02, ölçümle %32,01). Açılış girdisi olan orta nokta 2 hanede kalır:
+    # metnin kural faizi ve politika − kural sayıları o girdiyle kurulur.
+    # Açık log puandır (×100), yüzde değil: uç metni "puan" yazar.
     return {
         "taylor": {
             "tarih_metin": f"{_ay(t['ay'] + '-01')} (politika faizi {_gun(t['politika_gun'])})",
             "pi_anket": _y(t["pi_pka_yuzde"]), "pi_gerceklesen": _y(t["pi_gercek_yuzde"]),
             "pi_hedef": _y(t["pi_hedef_yuzde"]), "r_yildiz": _y(t["r_yildiz_varsayilan_yuzde"]),
             "phi_pi": _y(1 + t["katsayi_pi"]), "phi_y": _y(t["katsayi_acik"]),
-            "acik_orta": _y((acik_alt + acik_ust) / 2), "acik_alt": _y(acik_alt), "acik_ust": _y(acik_ust),
-            "acik_alt_metin": _yz(acik_alt, 1), "acik_ust_metin": _yz(acik_ust, 1),
+            "acik_orta": _y((acik_alt + acik_ust) / 2), "acik_alt": _y(acik_alt, 4), "acik_ust": _y(acik_ust, 4),
+            "acik_alt_metin": _sayi(acik_alt, 2) + " puan", "acik_ust_metin": _sayi(acik_ust, 2) + " puan",
             "politika": _y(t["politika_yuzde"]), "i_yabanci": _y(y["politika_abd_yuzde"]),
             "pi_yabanci": _y(y["tufe_abd_yillik_yuzde"]),
         },
@@ -86,12 +86,15 @@ def kur(o: dict) -> dict:
             "tarih_metin": _ay(s["tarih"]),
             "redk": _y(s["redk_tufe"]), "denge_tam": _y(s["ortalama_tam_endeks"]),
             "denge_2003": _y(s["ortalama_2003_endeks"]),
-            "rho_mu": _y(r["rho_aylik"], 4), "rho_alt": _y(r["rho_alt90"], 4), "rho_ols": _y(tam["rho_ols"], 4),
+            "rho_mu": _y(r["rho_aylik"], 4), "rho_alt": _y(r["rho_alt90"], 4), "rho_ust": _y(r["rho_ust90"], 4),
+            "rho_ols": _y(tam["rho_ols"], 4),
         },
         "kur": {
             "tarih_metin": _gun(k["tarih"]),
             "i_tl": _y(k["i_tl_yuzde"]), "i_usd": _y(k["i_usd_yuzde"]),
-            "R": _y(R), "redk_sapma": _y(s["sapma_tam_log"] * 100, 1),
+            # İki hane: sayfada Kur aracı bu alanı REDK aracının sapmasıyla ezer ve iki haneye yuvarlar
+            # (yazDeger); açılış değeri aynı olmazsa alıştırma ile aracın gösterdiği ima edilen prim ayrışır.
+            "R": _y(R), "redk_sapma": _y(s["sapma_tam_log"] * 100, 2),
         },
     }
 
@@ -100,7 +103,7 @@ def main() -> int:
     o = json.loads((BURASI / "veri" / "olcum.json").read_text(encoding="utf-8"))
     a = kur(o)
     CIKTI.parent.mkdir(parents=True, exist_ok=True)
-    CIKTI.write_text(json.dumps(a, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    CIKTI.write_text(json.dumps(a, ensure_ascii=False, indent=1, allow_nan=False) + "\n", encoding="utf-8")
     print(f"── {CIKTI.relative_to(KOK)} yazıldı")
     return 0
 

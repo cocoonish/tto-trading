@@ -6,7 +6,7 @@ from __future__ import annotations
 from datetime import date
 
 from sekil_ortak import (ACIK_CLARET, ACIK_MAVI, CLARET, GRI, MAVI, MUREKKEP, TURUNCU, YESIL, ay, go,  # noqa: F401
-                         make_subplots, tarih, vir, yuzde, _yaz)
+                         baslik_koy, make_subplots, tarih, vir, yukseklik, yuzde, _yaz)
 
 # Dönemlerin rengi (varlığı dönem belirler): yönetilen kur dönemi gri, çünkü orada kurun
 # sürprize tepki vermemesi tasarım gereğidir.
@@ -22,18 +22,6 @@ def _isaretli(x: float, b: int) -> str:
 def _donem_adi(r: dict, kod: str) -> str:
     on = "yönetilen kur " if kod == "yonetilen" else ""
     return f"{on}{ay(r['ilk'])}–{ay(r['son'])} · {r['n']} ay"
-
-
-def _baslik(fig, satirlar: list[str], yukseklik: int) -> None:
-    """Başlık bloğu: ilk satır başlık, kalanı alt başlık. Plotly çok satırlı başlıkta yalnız ilk satırı
-    çıpalar (kalan satırlar aşağı akar); ev stili de üst boşluğu satır sayısından kurar (92 + 26·satır +
-    26 panel başlığı). Blok bu yüzden ÜSTTEN çıpalanır ve son satırı ilk panel başlığının ~28 px üstünde
-    biter: alt satırlar çoğalınca bloğun panel başlığına binmesi önlenir."""
-    n = len(satirlar) - 1
-    ust_bosluk = 92 + 26 * n + 26
-    ust = ust_bosluk - 28 - (20 + 20.5 * n)
-    fig.update_layout(title=dict(yref="container", yanchor="top", y=1 - ust / yukseklik,
-                                 text=satirlar[0] + "<br><sub>" + "<br>".join(satirlar[1:]) + "</sub>"))
 
 
 def _panel_basliklari_sola(fig, n: int, boy: float = 13) -> None:
@@ -123,20 +111,20 @@ def s05_tufe_surprizi(o: dict) -> None:
     assert kur["cokus_aylari_haric_d2013_2020"]["hukum"] == "tarif edici"
     assert all(k2y[k]["hukum"] == "tarif edici" for k in kodlar)
     assert all(ai[c][k]["oos"].get("durum") == "kurulmadi" for c in ("d_n2y", "d_usdtry") for k in ("d2021", "yonetilen"))
-    satirlar = [
-        "Şekil 05 — Sürpriz yüksekken 2 yıllık 2021'de ve 2023'ten sonra yükseliyor; kurdaki tek ölçülü eğim "
-        "çöküşlere yaslı",
-        "Sürpriz = gerçekleşen aylık TÜFE (TÜİK) − Piyasa Katılımcıları Anketi'nin aynı ay beklentisi (TCMB), puan",
-        f"TÜFE ayları {ay(s['ilk'] + '-01')}–{ay(s['son'] + '-01')} ({yg['n_yayim']} yayım, {tarih(yg['ilk'])}–"
-        f"{tarih(yg['son'])}) · renk: TÜFE ayının dönemi",
-        "Yayım günü penceresi kurulmadı (tepki yayım gününde sıradan günlerden ayrışmıyor): her nokta yayım",
+    # Başlık bloğu dar ekrana göre sarılır ve üstten çapalanır; yükseklik satır sayısından (sekil_ortak).
+    # Alt başlığın her öğesi bir anlam birimidir: cümle satır ortasından elle bölünmez.
+    baslik = baslik_koy(fig, "Şekil 05 — Sürpriz yüksekken 2 yıllık 2021'de ve 2023'ten sonra yükseliyor; kurdaki "
+                             "tek ölçülü eğim çöküşlere yaslı", [
+        "Sürpriz = gerçekleşen aylık TÜFE (TÜİK) − Piyasa Katılımcıları Anketi'nin aynı ay beklentisi (TCMB), "
+        f"puan · TÜFE ayları {ay(s['ilk'] + '-01')}–{ay(s['son'] + '-01')} ({yg['n_yayim']} yayım, "
+        f"{tarih(yg['ilk'])}–{tarih(yg['son'])}) · renk: TÜFE ayının dönemi",
+        "Yayım günü penceresi kurulmadı (tepki yayım gününde sıradan günlerden ayrışmıyor): her nokta yayım "
         "ayında ay sonundan ay sonuna değişimdir, o ayın öbür haberlerini de taşır · USD/TRY: Yahoo Finance",
-        "doğru: dönem içi en küçük kareler, t Newey–West · düz: ölçülü (|t| ≥ 2, iki örneklem dışı kıyas da geçiliyor)",
-        "kesikli: tarif edici (t eşiği ya da örneklem dışı kıyas geçilmiyor; 2021'de ve yönetilen kurda kıyas kurulamıyor)",
-    ]
-    YUKSEKLIK = 900
-    _baslik(fig, satirlar, YUKSEKLIK)
-    _yaz(fig, "05_tufe_surprizi.html", YUKSEKLIK)
+        "doğru: dönem içi en küçük kareler, t Newey–West · düz: ölçülü (|t| ≥ 2, iki örneklem dışı kıyas da "
+        "geçiliyor) · kesikli: tarif edici (t eşiği ya da örneklem dışı kıyas geçilmiyor; 2021'de ve yönetilen "
+        "kurda kıyas kurulamıyor)",
+    ])
+    _yaz(fig, "05_tufe_surprizi.html", yukseklik(baslik, 626))   # 626: çizim ve alt pay (eski 900 − 274)
 
 
 def s06_tr2021_abd2022(o: dict) -> None:
@@ -226,18 +214,14 @@ def s06_tr2021_abd2022(o: dict) -> None:
     assert tr["yillik_tufe"]["son_yuzde"] > tr["yillik_tufe"]["ilk_yuzde"]
     assert us["yillik_tufe"]["son_yuzde"] > us["yillik_tufe"]["ilk_yuzde"]
     assert tr["politika"]["degisim_bp"] < 0 < us["politika"]["degisim_bp"] and tl < 0 < dolar
-    satir = [
-        "Şekil 06 — Enflasyon ikisinde de yükseldi: faizi indiren Türkiye'de para değer kaybetti, artıran ABD'de "
-        "kazandı",
+    baslik = baslik_koy(fig, "Şekil 06 — Enflasyon ikisinde de yükseldi: faizi indiren Türkiye'de para değer "
+                             "kaybetti, artıran ABD'de kazandı", [
         f"Dönem başı → sonu · Türkiye {tarih(tr['pencere'][0])}–{tarih(tr['pencere'][1])}: TCMB politika faizi "
-        "(günlük), 2 ve 5 yıllık DİBS (gün sonu),",
-        "yıllık TÜFE (TÜİK), USD/TRY Yahoo Finance günlük barı (Londra gece yarısı"
-        + ("; dönem sonu cuma, kur hafta sonunu da taşır)" if cuma else ")"),
-        f"ABD {tarih(us['pencere'][0])}–{tarih(us['pencere'][1])}: politika faizi (BIS, ay sonu), 2 ve 10 yıllık "
-        "Hazine, yıllık TÜFE (BLS),",
-        "dolar: altı G10 kurunun eşit ağırlıklı sepeti (CNBC, New York 17:00) · reel faiz = politika − yıllık TÜFE",
-        "Uzun uç: Türkiye 5 yıl (10 yıllık düğüm yok), ABD 10 yıl · iki gözlemli vaka karşılaştırması, test değil",
-    ]
-    YUKSEKLIK = 900
-    _baslik(fig, satir, YUKSEKLIK)
-    _yaz(fig, "06_tr2021_abd2022.html", YUKSEKLIK)
+        "(günlük), 2 ve 5 yıllık DİBS (gün sonu), yıllık TÜFE (TÜİK), USD/TRY Yahoo Finance günlük barı (Londra "
+        "gece yarısı" + ("; dönem sonu cuma, kur hafta sonunu da taşır)" if cuma else ")")
+        + f" · ABD {tarih(us['pencere'][0])}–{tarih(us['pencere'][1])}: politika faizi (BIS, ay sonu), 2 ve 10 yıllık "
+        "Hazine, yıllık TÜFE (BLS), dolar: altı G10 kurunun eşit ağırlıklı sepeti (CNBC, New York 17:00) · reel "
+        "faiz = politika − yıllık TÜFE · uzun uç: Türkiye 5 yıl (10 yıllık düğüm yok), ABD 10 yıl · iki gözlemli "
+        "vaka karşılaştırması, test değil",
+    ])
+    _yaz(fig, "06_tr2021_abd2022.html", yukseklik(baslik, 652))   # 652: çizim ve alt pay (eski 900 − 248)

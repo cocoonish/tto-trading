@@ -46,7 +46,7 @@ const t = A.taylor;
       <input type="number" id="mt-phipi" value={t.phi_pi} step="0.1" /></label>
     <label><span class="etiket">Açık katsayısı <span class="harf-koru">φ<sub>y</sub></span></span>
       <input type="number" id="mt-phiy" value={t.phi_y} step="0.1" /></label>
-    <label><span class="etiket">Çıktı açığı (%)</span>
+    <label><span class="etiket">Çıktı açığı (puan)</span>
       <input type="number" id="mt-acik" value={t.acik_orta} step="0.25" /></label>
     <label><span class="etiket">Politika faizi (%)</span>
       <input type="number" id="mt-pol" value={t.politika} step="0.25" /></label>
@@ -69,9 +69,10 @@ const t = A.taylor;
   </div>
 
   <p class="hesap-dip">
-    <b>Bant, nokta değil.</b> Açığın ölçülen bandı {t.acik_alt_metin} ile {t.acik_ust_metin} arasındadır ve r* için
-    0, 2 ve 4 puan denenir; aşağıdaki satır bu altı bileşimin en düşük ve en yüksek kural faizini verir.
-    Kurun terimi kurala katsayısız girer: türetimi Bölüm 3'te, katsayı burada yoktur.
+    <b>Bant, nokta değil.</b> Açığın bandı {t.acik_alt_metin} ile {t.acik_ust_metin} arasındadır (HP süzgecinin
+    iki sürümü: tam örneklem ve gerçek zamanlı) ve r* için 0, 2 ve 4 puan denenir; aşağıdaki satır bu altı
+    bileşimin en düşük ve en yüksek kural faizini verir. Kurun terimi araçta yoktur: türetimi Bölüm 3'te;
+    δ ölçülmediği için katsayı konmadı.
   </p>
   <p class="mini-not" id="mt-bant">—</p>
 </div>

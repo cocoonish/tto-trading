@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from sekil_ortak import (ACIK_CLARET, ACIK_MAVI, CLARET, GRI, MAVI, MUREKKEP, TURUNCU, YESIL, ay, go,  # noqa: F401
-                         make_subplots, tarih, vir, yuzde, _yaz)
+                         baslik_koy, make_subplots, tarih, vir, yukseklik, yuzde, _yaz)
 
 ULKE_RENK = {"ABD": MAVI, "İngiltere": CLARET}
 # Kadran figüründe okura gösterilen kısa ad (tam ad ipucunda); hangi panelde ve
@@ -29,18 +29,6 @@ ANA = {"igb_2022_zirve": "igb_2022_mini_butce", "abd_2025_moodys_3g": "abd_2025_
        "abd_2023_fitch_gunu": "abd_2023_agustos"}
 # büyütülen bölge (alt panel) — kümenin hepsi içinde kalmalı (aşağıda sınanır)
 YAKIN_X, YAKIN_Y = (-1.6, 1.15), (-4.0, 19.0)
-
-
-def _baslik(fig, satirlar: list[str], yukseklik: int) -> None:
-    """Başlık bloğu: ilk satır başlık, kalanı alt başlık. Plotly çok satırlı başlıkta yalnız ilk satırı
-    çıpalar (kalan satırlar aşağı akar); ev stili de üst boşluğu satır sayısından kurar (92 + 26·satır +
-    26 panel başlığı). Blok bu yüzden ÜSTTEN çıpalanır ve son satırı ilk panel başlığının ~28 px üstünde
-    biter: alt satırlar çoğalınca bloğun panel başlığına binmesi önlenir."""
-    n = len(satirlar) - 1
-    ust_bosluk = 92 + 26 * n + 26
-    ust = ust_bosluk - 28 - (20 + 20.5 * n)
-    fig.update_layout(title=dict(yref="container", yanchor="top", y=1 - ust / yukseklik,
-                                 text=satirlar[0] + "<br><sub>" + "<br>".join(satirlar[1:]) + "</sub>"))
 
 
 def _panel_basliklari_sola(fig, n: int, boy: float = 13) -> None:
@@ -139,18 +127,16 @@ def s07_dm_mali_kadran(o: dict) -> None:
     # başlıktaki sayım ölçümün kadran sayımıdır (sözcükle yazıldığı için sınanır)
     assert len(ana) == s["n"] == 6 and ks == {"prim": 4, "politika": 2}
     assert ks == {kd: sum(e["kadran"] == kd for e in ana) for kd in ks}
-    satirlar = [
-        "Şekil 07 — ABD ve İngiltere'de altı mali olayın dördü prim kadranında: uzun faiz ↑, para ↓",
+    # Başlık bloğu dar ekrana göre sarılır ve üstten çapalanır; yükseklik satır sayısından (sekil_ortak).
+    baslik = baslik_koy(fig, "Şekil 07 — ABD ve İngiltere'de altı mali olayın dördü prim kadranında: uzun faiz ↑, "
+                             "para ↓", [
         f"Olay öncesi kapanıştan pencere sonuna, {tarih(s['ilk'])}–{tarih(s['son'])} · ABD: 10 yıllık getiri "
-        "(ABD Hazinesi, ≈15:30 New York),",
-        "para: altı G10 kurunun dolar yönünde eşit ağırlıklı sepeti (CNBC, New York 17:00) · İngiltere: 10 yıllık",
-        "gilt (Londra kapanışı), para: sterlin dolara karşı (CNBC, New York 17:00)",
-        f"Ana pencerelerin kadranı: {ks.get('prim', 0)} prim, {ks.get('politika', 0)} politika · on olaydan az "
-        "bağımsız gözlem, test istatistiği yok",
-    ]
-    YUKSEKLIK = 880
-    _baslik(fig, satirlar, YUKSEKLIK)
-    _yaz(fig, "07_dm_mali_kadran.html", YUKSEKLIK)
+        "(ABD Hazinesi, ≈15:30 New York), para: altı G10 kurunun dolar yönünde eşit ağırlıklı sepeti (CNBC, "
+        "New York 17:00) · İngiltere: 10 yıllık gilt (Londra kapanışı), para: sterlin dolara karşı (CNBC, New "
+        f"York 17:00) · ana pencerelerin kadranı: {ks.get('prim', 0)} prim, {ks.get('politika', 0)} politika · on "
+        "olaydan az bağımsız gözlem, test istatistiği yok",
+    ])
+    _yaz(fig, "07_dm_mali_kadran.html", yukseklik(baslik, 658))   # 658: çizim ve alt pay (eski 880 − 222)
 
 
 def _ay_bas(a: str) -> str:
@@ -226,17 +212,18 @@ def s08_beklenti_disi_fark(o: dict) -> None:
     son_d = dd[-1]
     assert son_d["fark_medyan_bp"] == max(d["fark_medyan_bp"] for d in dd)
     assert son_d["fark_ort_bp"] == max(d["fark_ort_bp"] for d in dd) and son_d["ilk"][:4] == "2023"  # ek: 2023'ten
-    satirlar = [
-        f"Şekil 08 — Beklenti dışı fark {ay(_ay_bas(son_d['ilk']))}'ten beri dönemlerin en genişi (medyan "
-        f"{vir(son_d['fark_medyan_bp'], 0)} bp); iki kirlilik hükmü sınırlıyor",
+    # Başlık hükmü sınırlayan kirliliklerin SAYISINI söyler: üç kirlilik var (koridor farkı, DİBS–TLREF bazı,
+    # anketin ay etiketi), ikisi çizili; üçüncüsünün büyüklüğü alt başlıkta.
+    baslik = baslik_koy(fig, f"Şekil 08 — Beklenti dışı fark {ay(_ay_bas(son_d['ilk']))}'ten beri dönemlerin en "
+                             f"genişi (medyan {vir(son_d['fark_medyan_bp'], 0)} bp); üç kirlilik hükmü sınırlıyor "
+                             "(ikisi çizili)", [
         f"Aylık ortalama, {ay(_ay_bas(s['ilk']))}–{ay(_ay_bas(s['son']))} (günlük {tarih(p['ilk_gun'])}–"
-        f"{tarih(p['son_gun'])}) · forward: TCMB DİBS göstergelerinden sıfır kupon eğri, yıllık bileşik",
-        "Anket: Piyasa Katılımcıları Anketi 12 ve 24 ay sonrası politika faizi, yamuk ortalama, (1 + r/52)^52 − 1",
-        f"Koridor farkı: TCMB ağırlıklı ortalama fonlama maliyeti − politika faizi; {tarih(kor_ilk)} öncesi faizin",
-        f"ay içinde değiştiği aylar boş · baz: 3 aylık DİBS − TLREF, TLREF'in başladığı {tarih(tlref_ilk)}'den",
-        f"Üçüncü kirlilik çizilmedi: anket ayın ilk gününden geçerli sayılsa aylık fark ortalama "
-        f"{vir(ah['karsi_hiza_ort_mutlak_bp'], 0)} bp oynar · gölge: yönetilen kur",
-    ]
-    YUKSEKLIK = 900
-    _baslik(fig, satirlar, YUKSEKLIK)
-    _yaz(fig, "08_beklenti_disi_fark.html", YUKSEKLIK)
+        f"{tarih(p['son_gun'])}) · forward: TCMB DİBS göstergelerinden sıfır kupon eğri, yıllık bileşik · anket: "
+        "Piyasa Katılımcıları Anketi 12 ve 24 ay sonrası politika faizi, yamuk ortalama, "
+        "(1\u00a0+\u00a0r/52)^52\u00a0−\u00a01 · gölge: yönetilen kur",     # formül satır sonunda bölünmez
+        f"Koridor farkı: TCMB ağırlıklı ortalama fonlama maliyeti − politika faizi; {tarih(kor_ilk)} öncesi faizin "
+        f"ay içinde değiştiği aylar boş · baz: 3 aylık DİBS − TLREF, TLREF'in başladığı {tarih(tlref_ilk)}'den · "
+        "üçüncü kirlilik çizilmedi: anket ayın ilk gününden geçerli sayılsa aylık fark ortalama "
+        f"{vir(ah['karsi_hiza_ort_mutlak_bp'], 0)} bp oynar",
+    ])
+    _yaz(fig, "08_beklenti_disi_fark.html", yukseklik(baslik, 652))   # 652: çizim ve alt pay (eski 900 − 248)

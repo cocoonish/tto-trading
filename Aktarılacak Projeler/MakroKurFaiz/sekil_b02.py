@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from sekil_ortak import (ACIK_CLARET, ACIK_MAVI, CLARET, GRI, MAVI, MUREKKEP, TURUNCU, YESIL, ay, go,  # noqa: F401
-                         make_subplots, tarih, vir, yuzde, _yaz)
+                         baslik_koy, make_subplots, tarih, vir, yukseklik, yuzde, _yaz)
 
 SERI_AD = {"n3a": "DİBS 3 ay", "n2y": "DİBS 2 yıl", "n5y": "DİBS 5 yıl", "usdtry": "USD/TRY",
            "usdtry_tcmb": "TCMB kuru", "us2": "ABD 2 yıl", "dolar_sepeti": "dolar sepeti"}
@@ -125,19 +125,22 @@ def s02_plasebo(o: dict) -> None:
     # not, alt grafiğin sol kenarından değil şeklin sol kenarından başlar (satır adlarının genişliği kadar sola)
     fig.add_annotation(x=0, y=pay - 0.045, xref="paper", yref="paper", xanchor="left", yanchor="top", align="left",
                        xshift=-88, showarrow=False, text="<br>".join(notlar), font=dict(size=10, color="#4a4a4a"))
-    # tarih aralıkları ÖRNEKLEMİN penceresidir (olaylar ± on gün, serinin ucuyla kırpılmış), olay günleri değil.
-    # Başlık + alt başlık en çok 7 satır: ev stilinin üst boşluğu <br> başına 26 px büyür, metin ~19 px;
-    # daha fazlasında alt başlık ilk panelin başlığına biner (ölçüldü)
+    # Tarih aralıkları ÖRNEKLEMİN penceresidir (ilk olaydan 10 takvim günü önce → son olaydan 10 gün sonra,
+    # serinin ucuyla kırpılmış; ortak_olc.olay_kapisi), olay günleri değil: adı üç aralığın önüne BİR kez
+    # yazılır. Olay adı ile sayısı bölünmez boşlukla bağlı ("FOMC 152" satır sonunda ayrılmasın).
+    # Başlık bloğu üstten çapalı ve yüksekliği satır sayısından (sekil_ortak.baslik_koy · yukseklik):
+    # eski 7 satır sınırı çapasız başlığın sınırıydı (ilk satırın tabanı üst boşluğun ortasında, kalan
+    # satırlar aşağı akıyordu); çapalı blok satır başına 19,7 px tutar, üst boşluk 26 px büyür.
     pk, tf, fo = kapi[("n2y", "ppk")], kapi[("n2y", "tufe")], kapi[("us2", "fomc")]
     pk_kur = kapi[("usdtry", "ppk")]
-    fig.update_layout(title=dict(text=(
-        "Şekil 02 — PPK'da kur ve hizalanmış 2 yıllık<br>olay gününde tepe yapar; TÜFE gününde hiçbir<br>"
-        "Türkiye serisi olay çalışmasına izin vermez"
-        f"<br><sub>Günlük · PPK {pk['n_olay']} karar, örneklem {tarih(pk['ilk'])}–{tarih(pk['son'])} · "
-        f"TÜFE {tf['n_olay']} yayım,<br>"
-        f"{tarih(tf['ilk'])}–{tarih(tf['son'])} · FOMC {fo['n_olay']} planlı karar, "
-        f"{tarih(fo['ilk'])}–{tarih(fo['son'])}<br>"
-        f"kur satırlarında yönetilen kur dönemi ({ay(yk['ilk'])}–{ay(yk['son'])}) hariç (PPK'da "
-        f"{pk_kur['n_olay']})<br>"
-        "DİBS ve gösterge kuru TCMB, USD/TRY Yahoo Finance, ABD Hazinesi, CNBC</sub>")))
-    _yaz(fig, "02_plasebo.html", 900)
+    nb = "\u00a0"
+    baslik = baslik_koy(
+        fig, "Şekil 02 — PPK'da kur ve hizalanmış 2 yıllık olay gününde tepe yapar; TÜFE gününde hiçbir "
+        "Türkiye serisi olay çalışmasına izin vermez",
+        [f"Günlük · örneklem pencereleri (olay ±10 gün): PPK{nb}{pk['n_olay']} karar, "
+         f"{tarih(pk['ilk'])}–{tarih(pk['son'])} · TÜFE{nb}{tf['n_olay']} yayım, {tarih(tf['ilk'])}–"
+         f"{tarih(tf['son'])} · FOMC{nb}{fo['n_olay']} planlı karar, {tarih(fo['ilk'])}–{tarih(fo['son'])}",
+         f"kur satırlarında yönetilen kur dönemi ({ay(yk['ilk'])}–{ay(yk['son'])}) hariç (PPK'da "
+         f"{pk_kur['n_olay']})",
+         "DİBS ve gösterge kuru TCMB, USD/TRY Yahoo Finance, ABD Hazinesi, CNBC"])
+    _yaz(fig, "02_plasebo.html", yukseklik(baslik, 626))   # 626: çizim ve alt pay (eski 900 − 7 satırın 274'ü)

@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 from sekil_ortak import (ACIK_CLARET, ACIK_MAVI, CLARET, GRI, MAVI, MUREKKEP, TURUNCU, YESIL, ay, go,  # noqa: F401
-                         make_subplots, tarih, vir, yuzde, _yaz)
+                         baslik_koy, make_subplots, tarih, vir, yukseklik, yuzde, _yaz)
 
 
 def _paneller_sola(fig, boyut: int = 13) -> None:
@@ -73,12 +73,11 @@ def s12_redk(o: dict) -> None:
     # ters sıralı kategori ekseni, üstte pay: ilk satırın değer etiketi çizim alanının üstünde kırpılıyordu
     fig.update_yaxes(range=[len(satir) - 0.5, -0.75], row=2, col=1)
     _paneller_sola(fig)
-    fig.update_layout(title=dict(text=(
-        "Şekil 12 — Türkiye reel efektif kuru: ortalamadan uzak, dönüşü yavaş ve belirsiz"
-        f"<br><sub>TCMB REDK (TÜFE bazlı, 2025=100), aylık {ay(s['tarih'][0])}–{ay(s['tarih'][-1])} · artış: TL'nin "
-        "reel değer kazancı</sub>"
-        "<br><sub>log REDK'de AR(1), yarı ömür = ln 0,5 / ln ρ · yelpaze: bugünkü log sapmanın ρʰ ile sönümü, "
-        "tahmin değil</sub>"
-        "<br><sub>aralık benzetimle; medyan-yansız kestirim, çünkü küçük örneklemde en küçük kareler ρ'yu aşağı "
-        "çeker</sub>")))
-    _yaz(fig, "12_redk.html", 820)
+    # Başlık bloğu dar ekrana göre sarılır ve üstten çapalanır; yükseklik satır sayısından (sekil_ortak).
+    baslik = baslik_koy(fig, "Şekil 12 — Türkiye reel efektif kuru: ortalamadan uzak, dönüşü yavaş ve belirsiz", [
+        f"TCMB REDK (TÜFE bazlı, 2025=100), aylık {ay(s['tarih'][0])}–{ay(s['tarih'][-1])} · artış: TL'nin "
+        "reel değer kazancı · log REDK'de AR(1), yarı ömür = ln\u00a00,5\u00a0/\u00a0ln\u00a0ρ · yelpaze: bugünkü "
+        "log sapmanın ρʰ ile sönümü, tahmin değil · aralık benzetimle; medyan-yansız kestirim, çünkü küçük "
+        "örneklemde en küçük kareler ρ'yu aşağı çeker",
+    ])
+    _yaz(fig, "12_redk.html", yukseklik(baslik, 624))   # 624: çizim ve alt pay (eski 820 − 196)

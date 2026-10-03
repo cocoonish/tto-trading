@@ -20,6 +20,15 @@ Pratikler
         değişimi; Newey–West (gecikme 24) ve örneklem dışı kıyas.
   p8d   Kırılgan Beşli vaka tablosu (TEST DEĞİL): 22.05.2013 → 30.08.2013
         BRL, INR, ZAR, TRY, IDR ve kontrol MXN; 2012 cari/GSYH (Dünya Bankası).
+  vaka_brexit_2016  DM vakası (TEST DEĞİL; 8.3): 23.06.2016 AB referandumu.
+        Pencere 23.06 kapanışı → 24.06 kapanışı (ilk tepki günü) ve alt
+        pencere 23.06 → 04.08.2016 (BoE'nin referandum sonrası paketi):
+        gilt 2/10/30 yıllık (bp), sterlin (CNBC New York 17:00, log %), faiz ×
+        para kadranı; sterlinin avroya ve öbür beş G10 parasına karşı değişimi,
+        Bund ve ABD 10 yıllık, ECB sabitlemesiyle sağlamlık, 2015 cari/GSYH
+        (Dünya Bankası). Olay penceresinin kendisi Bölüm 5'in İngiltere olay
+        satırıdır (`olcum_b05._olay_igb`): aynı ölçü iki modülde iki kodla
+        kurulmaz.
   sekil_13  üç denge (çeyreklik)
   sekil_14  J-eğrisi gecikme profili
   sekil_15  REDK sapması × sonraki 12 aylık cari denge değişimi (aylık)
@@ -124,6 +133,17 @@ dolar GSYH) yanında durur; fark kur hızla değer kaybederken büyür.
      çekmek (`usdtry(cuma_dus=True)`) vakadan bir seansı keserdi; aynı günün
      kusursuz sağlamlığı ECB'nin 30.08 sabitlemesidir ve her satırda yanında
      durur.
+  14. BREXIT'TE İKİ KAPANIŞIN İKİSİ DE SONUÇTAN ÖNCE (vaka_brexit_2016).
+     Sandıklar 23.06.2016 22:00 Londra'da (17:00 New York) kapandı, sonuçlar
+     gece açıklandı. Gilt Londra kapanışı sandıklar kapanmadan, CNBC sterlin
+     kapanışı (New York 17:00) sandıkların kapandığı anda alınır; ECB'nin
+     23.06 sabitlemesi (14:15 Orta Avrupa) de öncedir. Baz bu yüzden üç
+     kaynakta da 23.06, tepki 24.06'dır. Sterlinin dolara karşı hareketi
+     dolar bacağını da taşır: öbür beş G10 parasına karşı değişim ve doların
+     o beşe karşı değişimi ayrı yazılır (özdeşlik: sterlin/dolar = sterlin/beş
+     − dolar/beş). Bu bir ayrıştırma değildir: Avrupa'yı ortak etkileyen bir
+     şok o beşin içindeki avroya da düşer, avroya karşı değişim bu yüzden
+     ayrıca yazılır.
 
 ÖLÇÜLEN BULGULAR (tuzak değil): J-eğrisinin KISA kolu yok — gecikme 0'da
 eğim sıfır, 4–13 ayda anlamlı eksi, en derin 8. ayda; dolar faturalı
@@ -146,6 +166,7 @@ import numpy as np
 import pandas as pd
 
 import bulut
+import olcum_b05 as b05          # İngiltere olay satırının tek tanımı (b05 bu modülü içe aktarmaz; döngü yok)
 import ortak_olc as oo
 
 warnings.filterwarnings("ignore", message="Could not infer format")   # ovp_programlar ilk sütunu tarih değil
@@ -169,6 +190,23 @@ TAPER = {"olay": "2013-05-22", "baz_yahoo": "2013-05-21", "baz_ecb": "2013-05-22
 BESLI = [("BRL", "BRA", "Brezilya"), ("INR", "IND", "Hindistan"), ("ZAR", "ZAF", "Güney Afrika"),
          ("TRY", "TUR", "Türkiye"), ("IDR", "IDN", "Endonezya")]
 KONTROL = [("MXN", "MEX", "Meksika")]
+# Brexit vakası: pencere Bölüm 5'in İngiltere olay sözleşmesiyle ("baslangic" olay öncesi kapanış,
+# "bitis" pencerenin son kapanışı; `olcum_b05._olay_igb`)
+BREXIT_SAAT = ("Sandıklar 23.06.2016 22:00 Londra'da (17:00 New York) kapandı, sonuçlar gece açıklandı. Gilt "
+               "Londra kapanışı sandıklar kapanmadan, CNBC sterlin kapanışı (New York 17:00) sandıkların "
+               "kapandığı anda alınır: ikisi de sonuçtan öncedir, tepki 24.06 kapanışlarındadır.")
+BREXIT = [
+    {"kimlik": "brexit_2016_ilk_gun", "ad": "İngiltere 23.06.2016 AB referandumu → ilk tepki günü",
+     "baslangic": "2016-06-23", "bitis": "2016-06-24", "saat_notu": BREXIT_SAAT},
+    {"kimlik": "brexit_2016_boe", "alt": True,
+     "ad": "İngiltere 23.06.2016 AB referandumu → BoE'nin 04.08.2016 paketi",
+     "baslangic": "2016-06-23", "bitis": "2016-08-04",
+     "saat_notu": BREXIT_SAAT[:BREXIT_SAAT.index(" Gilt")] + " Pencere BoE'nin referandum sonrası ilk faiz "
+                  "indirimini ve varlık alımı paketini açıkladığı günün kapanışına uzatıldı (karar 12:00 Londra'da, "
+                  "iki kapanıştan da önce); aradaki bütün haberleri taşır."},
+]
+BREXIT_CARI_YIL = "2015-12-31"   # olaydan önceki son tam yıl (p8d'de 2013 olayına 2012)
+G10_OBUR = ["usd_eur", "usd_aud", "usd_chf", "usd_jpy", "usd_cad"]   # sterlin dışındaki beş G10 (dolar yönünde log)
 
 
 # ───────────────────────────────────────────────────────── yardımcılar
@@ -751,9 +789,107 @@ def p8d() -> dict:
     }
 
 
+# ───────────────────────────────────────────────────────── Brexit 2016 (vaka)
+def _brexit_ek(b: pd.Timestamp, s: pd.Timestamp) -> dict:
+    """Olay satırının yanına: sterlinin avroya ve öbür beş G10 parasına karşı değişimi, doların o beşe karşı
+    değişimi ve ABD kadranı (tuzak 14), Bund 10 yıllık, ECB sabitlemesiyle sterlin. Uç günler olay satırının
+    günleridir (gilt ∩ CNBC sterlin); bir bacak o günü taşımıyorsa o bacak kurulmaz, öbürleri yazılır."""
+    out: dict = {}
+    sep = oo.dolar_sepeti()
+    if b in sep.index and s in sep.index:
+        d = (sep.loc[s] - sep.loc[b]) * 100                      # dolar yönünde log %, artış doların değer kazancı
+        dolar_bes = float(d[G10_OBUR].mean())
+        sterlin_dolar = float(-d["usd_gbp"])
+        out["sterlin_ayrisimi"] = {
+            "d_sterlin_dolar_yuzde": sterlin_dolar,
+            "d_sterlin_bes_g10_yuzde": sterlin_dolar + dolar_bes,
+            "d_dolar_bes_g10_yuzde": dolar_bes,
+            "d_sterlin_avro_yuzde": sterlin_dolar + float(d["usd_eur"]),
+            "d_yen_dolar_yuzde": float(-d["usd_jpy"]),
+            "ozdeslik": "sterlin/dolar = sterlin/beş G10 − dolar/beş G10",
+            "yontem": ("CNBC New York 17:00 kurlarının log değişimi (yüzde); beş G10: avro, Avustralya doları, "
+                       "İsviçre frangı, yen, Kanada doları, eşit ağırlıklı. Eksi değer sterlinin değer kaybıdır."),
+        }
+        us10 = oo.oku("abd_hazine_gunluk")["us10"]
+        if b in us10.index and s in us10.index:
+            d_us10 = float((us10.loc[s] - us10.loc[b]) * 100)
+            out["abd"] = {"d_us10_bp": d_us10, "d_dolar_bes_g10_yuzde": dolar_bes,
+                          "kadran": oo.kadran(d_us10, dolar_bes, "guvenli_liman"),
+                          "not": "ABD 10 yıllık New York öğleden sonra kotasyonu (≈15:30), dolar New York 17:00."}
+        else:
+            out["abd"] = kurulmadi("ABD 10 yıllık getirisi pencerenin uç günlerini taşımıyor")
+    else:
+        out["sterlin_ayrisimi"] = kurulmadi("CNBC G10 kurları pencerenin uç günlerini taşımıyor")
+    av = oo.oku("cnbc_avrupa_getiri_gunluk")["de10y"].dropna()
+    av = av[av.index.dayofweek < 5]
+    if b in av.index and s in av.index:
+        out["bund_10y"] = {"bas": float(av.loc[b]), "son": float(av.loc[s]),
+                           "d_bp": float((av.loc[s] - av.loc[b]) * 100),
+                           "kaynak": "CNBC Alman 10 yıllık gösterge"}
+    else:
+        out["bund_10y"] = kurulmadi("Alman 10 yıllık getirisi pencerenin uç günlerini taşımıyor")
+    try:
+        x = bulut.ecb_kur("USD") / bulut.ecb_kur("GBP")          # sterlin/dolar = (EUR/USD)/(EUR/GBP)
+    except bulut.VeriYok as hata:
+        out["ecb_saglamlik"] = kurulmadi(str(hata))
+    else:
+        if b in x.index and s in x.index:
+            out["ecb_saglamlik"] = {"baz_gun": _iso(b), "son_gun": _iso(s), "baz": float(x.loc[b]),
+                                    "son": float(x.loc[s]),
+                                    "d_sterlin_dolar_yuzde": float(100 * math.log(x.loc[s] / x.loc[b])),
+                                    "kaynak": "ECB referans kuru çaprazı sterlin/dolar (14:15 Orta Avrupa)"}
+        else:
+            out["ecb_saglamlik"] = kurulmadi("ECB sterlin ya da dolar kurunda pencere uç günü yok")
+    return out
+
+
+def vaka_brexit_2016() -> dict:
+    satirlar = []
+    for o in BREXIT:
+        r = b05._olay_igb(o)
+        if "kadran" in r:                                       # olay satırı kuruldu: gilt ve sterlin uç günleri var
+            b, s = pd.Timestamp(r["ilk"]), pd.Timestamp(r["son"])
+            g10, k = bulut.gilt()["gb10y"], oo.cnbc_kur()["gbp"]
+            r["kadran_adi"] = oo.KADRAN_ADI_DM.get(r["kadran"], r["kadran"])
+            r.update({"gilt_10y_bas": _f(g10.get(b)), "gilt_10y_son": _f(g10.get(s)),
+                      "sterlin_bas": _f(k.get(b)), "sterlin_son": _f(k.get(s))})
+            r.update(_brexit_ek(b, s))
+            if r.get("bund_10y", {}).get("d_bp") is not None:
+                r["d_gilt_bund_10y_bp"] = r["d_gb10y_bp"] - r["bund_10y"]["d_bp"]
+        satirlar.append(r)
+    try:
+        w = bulut.wdi("cari")
+    except bulut.VeriYok as hata:
+        cari = kurulmadi(str(hata))
+    else:
+        v = w["GBR"].get(pd.Timestamp(BREXIT_CARI_YIL)) if "GBR" in w.columns else None
+        cari = (kurulmadi(f"Dünya Bankası dosyasında İngiltere'nin {BREXIT_CARI_YIL[:4]} değeri yok") if v is None or pd.isna(v)
+                else {"yil": int(BREXIT_CARI_YIL[:4]), "deger_yuzde": float(v),
+                      "kaynak": "Dünya Bankası WDI, cari denge (% GSYH)"})
+    ana = [r for r in satirlar if "kadran" in r and not r["alt_pencere"]]
+    return {
+        "yontem": ("23 Haziran 2016 AB referandumundan önceki kapanıştan pencerenin son kapanışına gilt 2, 10 ve 30 "
+                   "yıllık getirisinin değişimi (baz puan) ve sterlinin dolar karşısında log değişimi (yüzde; eksi "
+                   "değer kaybı); kadran uzun faizin ve paranın değerinin birlikte yönüdür (Bölüm 5'teki İngiltere "
+                   "olay satırıyla aynı tanım). Bir vaka satırıdır, istatistik sınaması yapılmaz."),
+        "kaynak": ["bulut: gilt (CNBC, Londra kapanışı)", "cnbc_kur_gunluk (New York 17:00)",
+                   "cnbc_avrupa_getiri_gunluk (Bund)", "abd_hazine_gunluk", "yahoo_dxy_vix_gunluk (VIX)",
+                   "bulut: ECB referans kurları (sağlamlık)", "bulut: Dünya Bankası WDI cari denge"],
+        "vaka_tablosu": True, "test_degil": "tek olay: vaka satırıdır, t yazılmaz.",
+        "olay": {"gun": "2016-06-23", "saat": "sandıklar 22:00 Londra (17:00 New York); sonuçlar gece",
+                 "baz": BREXIT[0]["baslangic"], "tepki": BREXIT[0]["bitis"]},
+        "saat_notu": BREXIT_SAAT,
+        "kadran_adlari": oo.KADRAN_ADI_DM,
+        "n": len(ana), "n_satir": len([r for r in satirlar if "kadran" in r]),
+        "ilk": BREXIT[0]["baslangic"], "son": max(o["bitis"] for o in BREXIT),
+        "satirlar": satirlar,
+        "cari_gsyh_onceki_yil": cari,
+    }
+
+
 # ───────────────────────────────────────────────────────── giriş
 def olc() -> dict:
-    out = {"p8a": p8a(), "p8b": p8b(), "p8c": p8c(), "p8d": p8d(),
+    out = {"p8a": p8a(), "p8b": p8b(), "p8c": p8c(), "p8d": p8d(), "vaka_brexit_2016": vaka_brexit_2016(),
            "sekil_13": sekil_13(), "sekil_14": sekil_14(), "sekil_15": sekil_15()}
     return oo.yuvarla(out, 4)
 

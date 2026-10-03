@@ -4,15 +4,10 @@
 from __future__ import annotations
 
 from sekil_ortak import (ACIK_CLARET, ACIK_MAVI, CLARET, GRI, MAVI, MUREKKEP, TURUNCU, YESIL, ay, go,  # noqa: F401
-                         make_subplots, tarih, vir, yuzde, _yaz)
+                         baslik_koy, make_subplots, tarih, vir, yukseklik, yuzde, _yaz)
 
 GOLGE = "rgba(138,138,138,0.13)"          # dönem gölgesi (açık gri)
 ACIK_TURUNCU = "rgba(184,134,11,0.42)"    # KKM'nin ikinci kısmı: aynı varlık, açık ton
-
-
-def _baslik(ana: str, *satir: str) -> str:
-    """Plotly başlığı sarmaz: alt başlık satırları elle kırılır (≈105 karakter)."""
-    return ana + "<br><sub>" + "<br>".join(satir) + "</sub>"
 
 
 def _paneller_sola(fig, boyut: int = 13) -> None:
@@ -122,16 +117,16 @@ def s09_borc_ayrisimi(o: dict) -> None:
     for r in (1, 2):
         fig.update_xaxes(tickmode="array", tickvals=tv, ticktext=tt, range=[x[0] - 1.6, x[-1] + 0.7], row=r, col=1)
     _paneller_sola(fig)
-    fig.update_layout(title=dict(text=_baslik(
-        "Şekil 09 — Borç oranını faizi aşan nominal büyüme düşürdü; kur terimi bu katkının yaklaşık üçte ikisini geri yazdı",
+    # Başlık bloğu dar ekrana göre sarılır ve üstten çapalanır; yükseklik satır sayısından (sekil_ortak).
+    baslik = baslik_koy(fig, "Şekil 09 — Borç oranını faizi aşan nominal büyüme düşürdü; kur terimi bu katkının "
+                             "yaklaşık üçte ikisini geri yazdı", [
         f"Merkezi yönetim borç stoku / GSYH, yıllık {s['ilk']}–{x[-2]}; taralı son sütun {x[-1]} İY: ilk yarı, "
-        f"{tarih(iy['ilk'])}–{tarih(s['son'])}, yıllık değil",
-        f"{ilk_resmi}'den itibaren değişim resmî stoktan; öncesi iç borç + merkezi yönetim dış borcu (TCMB dönem "
-        "sonu kuruyla)",
-        "Kaynak: HMB bütçe ve borç istatistikleri (EVDS), TCMB · faiz dışı denge terimi fazlanın eksi işaretlisidir",
-        "Artık: Hazine nakit hesabı, iskontolu ihraç, endeksli tahvil anaparası, dolar dışı değerleme, kapsam farkı,",
-        f"{gy}'ye kadar iki stok tabanı arasındaki sapmanın değişimi · Δd = dört terimin toplamı")))
-    _yaz(fig, "09_borc_ayrisimi.html", 840)
+        f"{tarih(iy['ilk'])}–{tarih(s['son'])}, yıllık değil · {ilk_resmi}'den itibaren değişim resmî stoktan; "
+        "öncesi iç borç + merkezi yönetim dış borcu (TCMB dönem sonu kuruyla) · Kaynak: HMB bütçe ve borç "
+        "istatistikleri (EVDS), TCMB · faiz dışı denge terimi fazlanın eksi işaretlisidir · artık: Hazine nakit hesabı, iskontolu ihraç, endeksli tahvil anaparası, dolar dışı değerleme, kapsam farkı, "
+        f"{gy}'ye kadar iki stok tabanı arasındaki sapmanın değişimi · Δd = dört terimin toplamı",
+    ])
+    _yaz(fig, "09_borc_ayrisimi.html", yukseklik(baslik, 592))   # 592: çizim ve alt pay (eski 840 − 248)
 
 
 # ═══════════════════════════════════════════════════════════════ Şekil 10
@@ -162,13 +157,13 @@ def s10_pb_yildiz_fan(o: dict) -> None:
                                                             labelfont=dict(size=11, color="#5a5a5a")),
                              line=dict(color=GRI, width=1), showscale=False, showlegend=True,
                              name="pb* eşyükselti çizgisi (% GSYH)",
-                             hovertemplate="r − g %{x:.0f} puan · borç %%{y:.0f} → pb* %{z:.2f} (% GSYH)<extra></extra>"), 1, 1)
+                             hovertemplate="i − g %{x:.0f} puan · borç %%{y:.0f} → pb* %{z:.2f} (% GSYH)<extra></extra>"), 1, 1)
     fig.add_trace(go.Contour(x=rg, y=dd, z=z, contours=dict(start=fdd, end=fdd, size=1, coloring="none"),
                              line=dict(color=CLARET, width=2, dash="dash"), showscale=False, showlegend=True,
                              name=f"pb* = bugünkü faiz dışı fazla ({yuzde(fdd, 2)}, son dört çeyrek)",
                              hoverinfo="skip"), 1, 1)
     fig.add_vline(x=0, line=dict(color=MUREKKEP, width=1.2), row=1, col=1)
-    fig.add_annotation(x=0, y=dd[-1], xref="x", yref="y", text="r = g", showarrow=False, xanchor="right", xshift=-4,
+    fig.add_annotation(x=0, y=dd[-1], xref="x", yref="y", text="i = g", showarrow=False, xanchor="right", xshift=-4,
                        yanchor="top", font=dict(size=11, color=MUREKKEP))
     fig.add_annotation(x=rg[0] + 1, y=dd[-1] - 2, xref="x", yref="y", xanchor="left", yanchor="top",
                        text="bugünkü faiz dışı fazlayla<br>borç oranı düşer (kur hariç)", showarrow=False,
@@ -191,13 +186,13 @@ def s10_pb_yildiz_fan(o: dict) -> None:
     for xv, pb, ad, ek, sembol, boy, ax, ay_, yasla in noktalar:
         fig.add_trace(go.Scatter(x=[xv], y=[bg["d_yuzde"]], mode="markers", showlegend=False,
                                  marker=dict(size=boy, color=MUREKKEP, symbol=sembol, line=dict(width=1.6, color=MUREKKEP)),
-                                 hovertemplate=f"{ad}: r − g {vir(xv, 2)} puan · borç %{{y:.2f}} · pb* {yuzde(pb, 2)}"
+                                 hovertemplate=f"{ad}: i − g {vir(xv, 2)} puan · borç %{{y:.2f}} · pb* {yuzde(pb, 2)}"
                                                "<extra></extra>"),
                       1, 1)
         fig.add_annotation(x=xv, y=bg["d_yuzde"], xref="x", yref="y", ax=ax, ay=-ay_, showarrow=True,
                            arrowhead=0, arrowwidth=1, arrowcolor=GRI, xanchor=yasla, yanchor="bottom", align="left",
                            text=ad + ek, font=dict(size=10.5, color=MUREKKEP), bgcolor="rgba(255,255,255,0.88)")
-    fig.update_xaxes(title_text="r − g: faiz − nominal büyüme (puan)", range=[rg[0] - 0.4, rg[-1] + 0.4], dtick=5,
+    fig.update_xaxes(title_text="i − g: faiz − nominal büyüme (puan)", range=[rg[0] - 0.4, rg[-1] + 0.4], dtick=5,
                      row=1, col=1)
     fig.update_yaxes(title_text="borç stoku / GSYH (%)", range=[dd[0] - 1.5, dd[-1] + 1], row=1, col=1)
 
@@ -236,17 +231,18 @@ def s10_pb_yildiz_fan(o: dict) -> None:
     fig.update_yaxes(title_text="GSYH puanı", range=[0, ust * 1.45], row=2, col=1)
     fig.update_xaxes(title_text="USD/TRY'de anlık artış (TL değer kaybı)", row=2, col=1)
     _paneller_sola(fig)
-    fig.update_layout(title=dict(text=_baslik(
-        "Şekil 10 — Örtük faizle borç oranı faiz dışı açıkla bile sabit kalır; piyasa faiziyle bu pay daralır ya da kaybolur",
-        f"pb* = (r − g)/(1 + g) × d · d: borç stoku / GSYH · g: dört çeyreklik nominal GSYH artışı, {ceyrek} "
-        f"({yuzde(iz['nominal_buyume_yuzde'], 1)})",
-        "r: son dört çeyreğin faiz gideri / bir yıl önceki stok (örtük faiz) ya da DİBS sıfır kupon getirisi "
-        f"({tarih(mf['n2y']['piyasa_gunu'])})",
+    # Faiz i ile yazılır: Bölüm 6 metni ve Araç 2 örtük nominal faizi i diye anar, r Bölüm 1'de reel faizdir.
+    baslik = baslik_koy(fig, "Şekil 10 — Örtük faizle borç oranı faiz dışı açıkla bile sabit kalır; piyasa faiziyle "
+                             "bu pay daralır ya da kaybolur", [
+        f"pb* = (i − g)/(1 + g) × d · d: borç stoku / GSYH · g: dört çeyreklik nominal GSYH artışı, {ceyrek} "
+        f"({yuzde(iz['nominal_buyume_yuzde'], 1)}) · i: son dört çeyreğin faiz gideri / bir yıl önceki stok (örtük "
+        f"faiz) ya da DİBS sıfır kupon getirisi ({tarih(mf['n2y']['piyasa_gunu'])})",
         "kur şoku: borç oranı × döviz payı (alt sınır) × kur artışı, anlık; şok sonrası pb* sırayla "
-        + " · ".join(yuzde(k["pb_yildiz_yeni_gsyh"], 2) for k in fan["soklar"]) + " (örtük faizle)",
-        "KKM: stok × kur artışı, mevduat faizi düşülmeden (brüt) · Kaynak: HMB bütçe ve borç istatistikleri (EVDS),",
-        "TCMB DİBS gösterge değerleri, TCMB kur korumalı mevduat istatistikleri")))
-    _yaz(fig, "10_pb_yildiz_fan.html", 900)
+        + " · ".join(yuzde(k["pb_yildiz_yeni_gsyh"], 2) for k in fan["soklar"]) + " (örtük faizle) · "
+        "KKM: stok × kur artışı, mevduat faizi düşülmeden (brüt) · Kaynak: HMB bütçe ve borç istatistikleri (EVDS), "
+        "TCMB DİBS gösterge değerleri, TCMB kur korumalı mevduat istatistikleri",
+    ])
+    _yaz(fig, "10_pb_yildiz_fan.html", yukseklik(baslik, 652))   # 652: çizim ve alt pay (eski 900 − 248)
 
 
 # ═══════════════════════════════════════════════════════════════ Şekil 11
@@ -352,12 +348,11 @@ def s11_cevre_farklari(o: dict) -> None:
     _paneller_sola(fig)
     fig.update_layout(legend=dict(traceorder="normal"))
     ol_metin = " · ".join(f"{k} {OLAY_KISA.get(r['kimlik'], r['ad'])}" for k, r in enumerate(ol, start=1))
-    fig.update_layout(title=dict(text=_baslik(
-        "Şekil 11 — Avro krizinde çevre farkları yüzlerce baz puana açıldı; Eylül 2026 sonunda Fransa'nınki "
-        "İtalya'nınkinin üstünde",
+    baslik = baslik_koy(fig, "Şekil 11 — Avro krizinde çevre farkları yüzlerce baz puana açıldı; Eylül 2026 sonunda "
+                             "Fransa'nınki İtalya'nınkinin üstünde", [
         "Ülke 10 yıllık − Almanya 10 yıllık getiri farkı (bp) · çizgiler ECB Maastricht ölçütü, aylık ortalama "
-        f"{ay(s['ilk'] + '-01')}–{ay(s['son'] + '-01')}",
-        f"◆ {tarih(gun_son)} günlük kapanış · ◇ olay penceresinde günlük zirve · ikisi de CNBC, Avrupa kapanışı",
-        "Aylık ortalama günlük zirveyi düzleştirir · İrlanda'nın günlük serisi yok",
-        f"Gölgeler: {ol_metin}")))
-    _yaz(fig, "11_cevre_farklari.html", 920)
+        f"{ay(s['ilk'] + '-01')}–{ay(s['son'] + '-01')} · "
+        f"◆ {tarih(gun_son)} günlük kapanış · ◇ olay penceresinde günlük zirve · ikisi de CNBC, Avrupa kapanışı · "
+        f"aylık ortalama günlük zirveyi düzleştirir · İrlanda'nın günlük serisi yok · gölgeler: {ol_metin}",
+    ])
+    _yaz(fig, "11_cevre_farklari.html", yukseklik(baslik, 698))   # 698: çizim ve alt pay (eski 920 − 222)

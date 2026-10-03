@@ -7,11 +7,42 @@ from sekil_ortak import (ACIK_CLARET, ACIK_MAVI, CLARET, GRI, MAVI, MUREKKEP, TU
                          make_subplots, tarih, vir, yuzde, _yaz)
 
 REFERANS = dict(color="#9a9a9a", width=1)
+BASLIK_EN, ALT_EN = 48, 73       # karakter: 390 px'te sığan satır (Şekil 01–04 ölçüsü); Plotly başlığı sarmaz
+EV_UST, EV_SATIR, EV_PANEL, EV_ALT = 92, 26, 26, 110   # ev stilinin boşlukları (site/tools/plotly_stil.py)
 
 
-def _baslik(ana: str, *alt: str) -> dict:
-    """Plotly başlığı sarmaz: alt başlık satırları ~105 karakterde elle bölünür."""
-    return dict(text=ana + "".join(f"<br><sub>{s}</sub>" for s in alt))
+def _sar(metin: str, en: int) -> list[str]:
+    """Sözcük sınırında satırlara böler. Ayraç (·) ve eşitlik/çarpma işareti satır başına düşmez: önceki
+    sözcüğe bağlanır."""
+    for isaret in (" · ", " = ", " × "):
+        metin = metin.replace(isaret, " " + isaret[1:])
+    satirlar, parca = [], ""
+    for k in metin.split(" "):
+        if parca and len(parca) + 1 + len(k) > en:
+            satirlar.append(parca)
+            parca = k
+        else:
+            parca = f"{parca} {k}" if parca else k
+    satirlar.append(parca)
+    return [s.replace(" ", " ") for s in satirlar]
+
+
+def _baslik(fig, govde: int, ana: str, *alt: str) -> int:
+    """Başlık bloğunu yazar, figürün yüksekliğini döndürür. Ana başlık BASLIK_EN, her alt başlık paragrafı
+    ALT_EN karakterde sarılır. Ev stili üst boşluğu satır sayısından kurar (92 + 26·<br> + 26 panel
+    başlığı); yükseklik bu boşluk + `govde` (çizim alanı ve lejant) + alt boşluk olarak kurulur, yani satır
+    eklemek çizim alanını küçültmez. Blok ÜSTTEN çıpalanır ve son satırı ilk panel başlığının ~28 px üstünde
+    biter (Şekil 05'in kuralı): satırlar çoğalınca blok panel başlığına binmez."""
+    ust_satir = _sar(ana, BASLIK_EN)
+    alt_satir = [s for p in alt for s in _sar(p, ALT_EN)]
+    br = len(ust_satir) - 1 + len(alt_satir)
+    ust_bosluk = EV_UST + EV_SATIR * br + EV_PANEL
+    yukseklik = ust_bosluk + govde + EV_ALT
+    blok = 20 * len(ust_satir) + 20.5 * len(alt_satir)
+    ust = ust_bosluk - 28 - blok
+    fig.update_layout(title=dict(yref="container", yanchor="top", y=1 - ust / yukseklik,
+                                 text="<br>".join(ust_satir) + "".join(f"<br><sub>{s}</sub>" for s in alt_satir)))
+    return yukseklik
 
 
 def _paneller_sola(fig, boyut: int = 13) -> None:
@@ -75,17 +106,23 @@ def s13_uc_denge(o: dict) -> None:
     fig.update_xaxes(zeroline=False)
     _paneller_sola(fig)
     ort = a["uc_degerler"]
-    fig.update_layout(title=_baslik(
-        "Şekil 13 — Cari dengeyi özel kesim sürüklüyor: kamu açığındaki artışı fazlasıyla dengeliyor",
+    oos = ik["oos"]
+    # Başlık yayımlanan ölçüden: dengeleme katsayısı 1 − eğim (ölçümde `ozel_kesim_dengelemesi`). Özel denge
+    # bir artıktır ve ilişki örneklem dışında kıyası yenmez: başlık tarif eder, neden ya da yön kurmaz.
+    yuk = _baslik(
+        fig, 348,
+        f"Şekil 13 — İkiz açık değil, ikiz ayrışma: kamu dengesi 1 puan bozulunca özel denge "
+        f"{vir(ik['ozel_kesim_dengelemesi'], 2)} puan iyileşti (dört çeyreklik değişim, örneklem içi)",
         f"TCMB ödemeler dengesi, HMB merkezi yönetim bütçesi, TÜİK GSYH · çeyreklik {s['ilk_ceyrek']}–"
         f"{s['son_ceyrek']}",
         "kamu = merkezi yönetim (genel yönetim değil) · özel = dış − kamu (artık: kapsam farkı, net hata ve noksan)",
         f"dönem ortalaması: dış {vir(ort['dis']['ortalama_gsyh_yuzde'], 2)} = kamu "
         f"{vir(ort['kamu']['ortalama_gsyh_yuzde'], 2)} + özel {vir(ort['ozel']['ortalama_gsyh_yuzde'], 2)} · "
         f"kamu–dış seviye korelasyonu {vir(ik['seviye_korelasyonu_kamu_dis'], 2)}",
-        f"4 çeyreklik değişimde dış = {vir(ik['egim'], 2)} × kamu (t {vir(ik['t'], 2)}; örneklem içi): kamu 1 puan "
-        f"bozulunca özel {vir(ik['ozel_kesim_dengelemesi'], 2)} iyileşir"))
-    _yaz(fig, "13_uc_denge.html", 680)
+        f"dört çeyreklik değişimde dış = {vir(ik['egim'], 2)} × kamu (t {vir(ik['t'], 2)}; örneklem içi) · "
+        f"örneklem dışı karesel hata oranı {vir(oos['ortalama']['mse_oran'], 2)} (ortalamaya) · "
+        f"{vir(oos['sifir']['mse_oran'], 2)} (rastgele yürüyüşe); 1'in üstü: kıyastan kötü · hüküm: {ik['hukum']}")
+    _yaz(fig, "13_uc_denge.html", yuk)
 
 
 # ───────────────────────────────────────────────────────── Şekil 14
@@ -148,7 +185,8 @@ def s14_j_egrisi(o: dict) -> None:
     _paneller_sola(fig)
     # J-eğrisi REDK ARTIŞINA (reel değer kazancı) göre kısa gecikmede ARTI, sonra EKSİ eğim ister. Grafikteki
     # çukur Marshall–Lerner yönüdür; eksik olan J'nin kısa koludur.
-    fig.update_layout(title=_baslik(
+    yuk = _baslik(
+        fig, 508,
         f"Şekil 14 — J-eğrisinin kısa kolu yok: reel değer kazancı mal dengesini "
         f"{_aralik(oz['anlamli_eksi_gecikmeler_ay'])} ay gecikmeyle bozuyor",
         f"TCMB ödemeler dengesi, REDK (TÜFE bazlı), TÜİK GSYH · aylık {ay(s['ilk'])}–{ay(s['son'])}, "
@@ -156,8 +194,8 @@ def s14_j_egrisi(o: dict) -> None:
         "bağımlı: altın ve enerji hariç mal dengesinin 12 aylık değişimi, başlangıçtaki dolar GSYH'ye oranla (puan)",
         "açıklayıcı: REDK'nin k ay önce biten 12 aylık log değişimi · eksi eğim: reel değer kazancı dengeyi bozar",
         f"J-eğrisi kısa gecikmede artı eğim ister: anlamlı artı yok · en derin {oz['en_eksi_gecikme_ay']}. ay "
-        f"({vir(oz['en_eksi_egim_puan_yuzde'], 3)}; t {vir(oz['en_eksi_t'], 2)})"))
-    _yaz(fig, "14_j_egrisi.html", 840)
+        f"({vir(oz['en_eksi_egim_puan_yuzde'], 3)}; t {vir(oz['en_eksi_t'], 2)})")
+    _yaz(fig, "14_j_egrisi.html", yuk)
 
 
 # ───────────────────────────────────────────────────────── Şekil 15
@@ -208,12 +246,13 @@ def s15_redk_cari(o: dict) -> None:
     fig.update_yaxes(title_text="sonraki 12 ayda cari denge değişimi (puan; artı: iyileşme)")
     _paneller_sola(fig)
     oo_ = c["oos"]
-    fig.update_layout(title=_baslik(
+    yuk = _baslik(
+        fig, 368,
         "Şekil 15 — Reel kur sapması sonraki yılın cari dengesini öngörmüyor: eğim eksi ama anlamsız",
         f"TCMB REDK (TÜFE bazlı) ve ödemeler dengesi, TÜİK GSYH · başlangıç ayı {ay(tx[0])}–{ay(tx[-1])}, "
         f"{len(xx)} gözlem",
         "yatay: log REDK'nin o aya kadar gözlenen bütün geçmişin ortalamasından farkı (genişleyen pencere)",
         "dikey: 12 aylık cari dengenin sonraki 12 aydaki dolar değişimi / başlangıçtaki 12 aylık dolar GSYH (puan)",
-        f"örneklem dışı hata kare oranı {vir(oo_['ortalama']['mse_oran'], 2)} (ortalamaya) · "
-        f"{vir(oo_['sifir']['mse_oran'], 2)} (rastgele yürüyüşe); 1'in üstü: model kıyastan kötü"))
-    _yaz(fig, "15_redk_cari.html", 700)
+        f"örneklem dışı karesel hata oranı {vir(oo_['ortalama']['mse_oran'], 2)} (ortalamaya) · "
+        f"{vir(oo_['sifir']['mse_oran'], 2)} (rastgele yürüyüşe); 1'in üstü: model kıyastan kötü")
+    _yaz(fig, "15_redk_cari.html", yuk)

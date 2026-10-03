@@ -69,6 +69,16 @@ Pratikler
      bozuk blok %3,38 ve %3,54; aradaki %1,0–1,7'lik çiftlerin kaynağı DXY'nin
      kendi tekrarlanan kapanışları (ör. 28–29.05.2009 80,43 · 05–06.02.2015
      94,70), CNBC değil. Çıkan günler `p1a.veri_denetimi`nde adıyla durur.
+  9. SEVİYE HEDEFİNDE "SIFIR" KIYASI RASTGELE YÜRÜYÜŞ DEĞİLDİR (inceleme, 03.10.2026).
+     Blok regresyonunun hedefi bloğun korelasyonu, yani bir seviye; `ortak_olc`
+     `oos_kiyas`ın "sıfır" kıyası burada sıfır korelasyon tahminidir ve kayıt onu
+     "rastgele yürüyüş (değişim sıfır)" diye adlandırıyordu. Seviyede rastgele
+     yürüyüş bir önceki bloğun korelasyonudur. Korelasyon kalıcı (blokların birinci
+     özilintisi 0,59): VIX doğrusunun örneklem dışı karesel hatası sıfır korelasyonun
+     0,68 katı, ama bir önceki bloğun 1,25 katı (71 blok, DM t +1,07) — hüküm
+     "ölçülü"den "tarif edici"ye döndü. Hüküm koşulsuz ortalama ve seviye rastgele
+     yürüyüşüyle (`_oos_onceki_seviye`) kurulur; sıfır korelasyon oranı bilgi olarak
+     kalır, adıyla.
 """
 from __future__ import annotations
 
@@ -98,6 +108,9 @@ KUR_SAPMA_SD = 0.5                # "prim" için para kaybı: kur sapması > 0,5
 DIKLESME_SD_PENCERE = 52          # σ'nın kayan penceresi (hafta, bir önceki haftaya kadar)
 DIKLESME_SD_ASGARI = 26
 KUR_KAYMA_PENCERE = 26            # kur sapması: son 26 haftanın ortalama değişimi (bir önceki haftaya kadar)
+BLOK_ILK_PENCERE = 40             # blok regresyonunun örneklem dışı ilk eğitim penceresi (blok)
+KIYAS_SIFIR_KOR = "sıfır korelasyon"                                  # seviye hedefinde sıfır tahmini
+KIYAS_RW_SEVIYE = "rastgele yürüyüş (bir önceki bloğun korelasyonu)"  # seviye hedefinde rastgele yürüyüş
 YONETILEN = oo.YONETILEN                    # tek tanım ortak_olc'de
 # Türkiye haftası PERŞEMBE kapanışıyla örneklenir (perşembe tatilse haftanın ondan
 # önceki son iş günü): 18.12.2023 öncesi Yahoo USD/TRY serisinde cumartesi barı yok
@@ -278,6 +291,40 @@ def _pencere_ozeti(o: pd.DataFrame, ilk: str, son: str) -> dict:
     }
 
 
+def _oos_onceki_seviye(y: pd.Series, x: pd.Series, ilk_pencere: int, ambargo: int = 1) -> dict:
+    """Seviye hedefinde rastgele yürüyüş kıyası (tuzak 9): `ortak_olc.oos_kiyas` ile
+    AYNI genişleyen pencere, aynı model tahmini (y_t = a + b·x_t, x_t bilinen, eğitim
+    hedefi t anında gerçekleşmiş satırlarla) ve aynı Diebold–Mariano t'si; yalnız saf
+    kıyasın tahmini sıfır ya da ortalama değil, hedefin `ambargo` dönem önceki değeri
+    (ambargo = 1: bir önceki blok). Oran < 1 ve eksi t modelin lehine."""
+    d = pd.concat([y.rename("y"), x.rename("x")], axis=1, sort=True).dropna()
+    e_m, e_k = [], []
+    for t in range(ilk_pencere, len(d)):
+        egit = d.iloc[: t - ambargo + 1]
+        if len(egit) < oo.OOS_ASGARI or t - ambargo < 0:
+            continue
+        X = np.column_stack([np.ones(len(egit)), egit["x"].values])
+        b = np.linalg.lstsq(X, egit["y"].values, rcond=None)[0]
+        tah = b[0] + b[1] * d["x"].iloc[t]
+        kiy = d["y"].iloc[t - ambargo]
+        e_m.append((d["y"].iloc[t] - tah) ** 2)
+        e_k.append((d["y"].iloc[t] - kiy) ** 2)
+    if len(e_m) < oo.OOS_ASGARI:
+        return oo.kurulmadi("örneklem dışı sınama için en az on tahmin gerekir", n=int(len(e_m)),
+                            kiyas=KIYAS_RW_SEVIYE)
+    e_m, e_k = np.array(e_m), np.array(e_k)
+    fark = e_m - e_k
+    gecikme = oo.otomatik_gecikme(len(fark))
+    if ambargo > 1:
+        gecikme = max(int(gecikme), int(ambargo))
+    dm = oo.hac(fark, np.zeros((len(fark), 0)), gecikme=gecikme, sabit=True)
+    return {"n": int(len(e_m)), "mse_oran": oo._f(e_m.mean() / e_k.mean()) if e_k.mean() else None,
+            "dm_t": oo._f((dm.get("t") or [None])[0]), "kiyas": KIYAS_RW_SEVIYE,
+            "ilk": oo._iso(d.index[ilk_pencere]), "ambargo": int(ambargo), "dm_gecikme": int(gecikme),
+            "model_ortalama_karesel_hata": oo._f(e_m.mean()),
+            "kiyas_ortalama_karesel_hata": oo._f(e_k.mean())}
+
+
 def p1a() -> dict:
     o = _p1a_seri()
     k = o.dropna(subset=["kor"])
@@ -335,19 +382,34 @@ def p1a() -> dict:
         "tarih": g.index.max()}))
     bl = bl[bl["n"] >= KOR_ASGARI]
     bl.index = pd.DatetimeIndex(bl["tarih"])
-    reg = oo.regresyon(bl["kor"].astype(float), bl["vix"].astype(float), ilk_pencere=40)
+    yk, xv = bl["kor"].astype(float), bl["vix"].astype(float)
+    reg = oo.regresyon(yk, xv, ilk_pencere=BLOK_ILK_PENCERE)
     oos = reg["oos_ortalama"]
+    # Hedef bir SEVİYE (bloğun korelasyonu): rastgele yürüyüş bir önceki bloğun değeridir
+    # (tuzak 9). ortak_olc'nin "sıfır" kıyası burada sıfır korelasyon tahminidir; bilgi
+    # olarak kalır, hükme girmez.
+    rw = _oos_onceki_seviye(yk, xv, ilk_pencere=BLOK_ILK_PENCERE)
+    sifir = {**reg["oos"], "kiyas": KIYAS_SIFIR_KOR}
+    hk = oo.hukum(reg["t"], [oos.get("mse_oran"), rw.get("mse_oran")])
     blok = {
         "n": int(reg["n"]), "ilk": str(bl.index.min().date()), "son": str(bl.index.max().date()),
         "sabit": reg["sabit"], "egim_vix_basina": reg["egim"], "se_egim": reg["se"], "t_egim": reg["t"],
         "r2": reg["r2"], "gecikme": reg["gecikme"],
         "oos_mse_oran": oos.get("mse_oran"), "oos_dm_t": oos.get("dm_t"), "oos_n": oos.get("n"),
-        "oos_kiyas": oos.get("kiyas"), "oos_sifir": reg["oos"], "hukum": reg["hukum"],
+        "oos_kiyas": oos.get("kiyas"),
+        "oos_rastgele_yuruyus": rw,
+        "oos_sifir": sifir,
+        "hukum": hk,
+        "hukum_kiyaslari": [oos.get("kiyas"), rw.get("kiyas")],
         "oos_dm_anlamli": bool(oos.get("dm_t") is not None and abs(oos["dm_t"]) >= 2),
+        "oos_rw_dm_anlamli": bool(rw.get("dm_t") is not None and abs(rw["dm_t"]) >= 2),
+        "blok_kor_ozilinti_1": float(yk.autocorr(1)),
         "yontem": "Örtüşmeyen 60 iş günlük blokların her birinde korelasyon, aynı bloğun VIX "
-                  "ortalamasına regrese edildi; standart hata Newey–West, örneklem dışı kıyas "
-                  "genişleyen pencerede koşulsuz ortalama ve sıfır korelasyonla; "
-                  "hüküm ikisini de ister.",
+                  "ortalamasına regrese edildi; standart hata Newey–West. Örneklem dışı kıyas "
+                  "genişleyen pencerede iki saf ölçüte karşı: koşulsuz ortalama ve rastgele "
+                  "yürüyüş — hedef bir seviye olduğu için rastgele yürüyüşün tahmini bir önceki "
+                  "bloğun korelasyonudur. Hüküm ikisini de ister; sıfır korelasyon kıyası bilgi "
+                  "olarak verilir, hükme girmez.",
     }
 
     vakalar = {ad: _pencere_ozeti(o, a, b) for ad, (a, b) in VAKALAR.items()}
@@ -572,6 +634,7 @@ def _rejim_girdi() -> pd.DataFrame:
     for ulke, h, uzun, dordu in (("abd", ab, "d10_bp", "guvenli_liman"), ("tr", tr, "d5_bp", "prim_dusus")):
         kayip = (-h["dolar_sapma_yuzde"]) if ulke == "abd" else h["kur_sapma_yuzde"]   # + = para değer kaybı
         r[f"{ulke}_uzun_bp"] = h[uzun]
+        r[f"{ulke}_kisa_bp"] = h["d2_bp"]
         r[f"{ulke}_egim_bp"] = h["degim_bp"]
         r[f"{ulke}_para_kaybi_yuzde"] = kayip
         r[f"{ulke}_kadran"] = _kadran(h[uzun], -kayip, dordu)
@@ -617,7 +680,8 @@ def rejim() -> pd.DataFrame:
 
     Sütunlar: `abd` (R1 DM normal · R2 DM mali kaygı · R5 küresel riskten kaçış),
     `tr` (R3 EM güvenilir merkez bankası · R4 EM mali baskınlık · R5), ve etiketin
-    girdileri (`<ülke>_uzun_bp`, `_egim_bp`, `_para_kaybi_yuzde`, `_kadran`, eşikler).
+    girdileri (`<ülke>_uzun_bp`, `_kisa_bp` (2 yıllık), `_egim_bp`, `_para_kaybi_yuzde`,
+    `_kadran`, eşikler).
     Hafta cuma etiketlidir; ABD cuma kapanışıyla, Türkiye perşembe kapanışıyla
     örneklenir (`abd_gun`, `tr_gun` gerçek günü taşır). Türkiye'nin DİBS bacağı
     gösterge eğrisinin "gun_sonu" hizasından (`ortak_olc.DIBS_KAYMA`, 2 iş günü sonraki etiket) alınır.
@@ -636,10 +700,48 @@ def rejim() -> pd.DataFrame:
 def _hafta_satiri(r: pd.DataFrame, t, ulke: str) -> dict:
     z = r.loc[t]
     return {"hafta": str(t.date()), "etiket": z[ulke], "kadran": z[f"{ulke}_kadran"],
-            "uzun_bp": float(z[f"{ulke}_uzun_bp"]), "egim_bp": float(z[f"{ulke}_egim_bp"]),
+            "uzun_bp": float(z[f"{ulke}_uzun_bp"]), "kisa_bp": float(z[f"{ulke}_kisa_bp"]),
+            "egim_bp": float(z[f"{ulke}_egim_bp"]),
             "para_kaybi_yuzde": float(z[f"{ulke}_para_kaybi_yuzde"]), "vix": float(z[f"{ulke}_vix"]),
             "ornek_gunu": str(pd.Timestamp(z[f"{ulke}_gun"]).date()),
             "yonetilen": bool(z["tr_yonetilen"]) if ulke == "tr" else False}
+
+
+NORMAL_SINIFLARI = ("ayili_yassilasma", "diklesme_esik_alti", "kur_sapmasi_esik_alti", "uzun_uc_yukselmedi")
+
+
+def _normal_ayrisimi(z: pd.DataFrame, ulke: str, normal: str) -> dict:
+    """En büyük on para kaybı haftasından NORMAL rejime (ABD R1 · Türkiye R3) düşenlerde
+    orta rejimin (R2 · R4) hangi şartı tutmadı — eğriye göre ayrık ve tam bir bölüntü:
+      ayili_yassilasma      uzun uç yükseldi ve eğri yassılaştı (kısa uç uzun uçtan fazla yükseldi)
+      diklesme_esik_alti    uzun uç yükseldi, eğri dikleşti ama eşiğin altında kaldı
+      kur_sapmasi_esik_alti uzun uç yükseldi, ayılı dikleşme var, para kaybı eşiğin altında
+      uzun_uc_yukselmedi    uzun uç yükselmedi (düştü ya da yerinde)
+    Normal etiket R5 değil ve (prim ∧ dikleşme) değil demektir, yani dört sınıf etiketin
+    bütün hâllerini kapsar; `yassilasan` eğrinin düştüğü haftaları sınıftan bağımsız sayar
+    (ayılı ve boğalı birlikte)."""
+    zn = z[z[ulke] == normal]
+    u, e = zn[f"{ulke}_uzun_bp"], zn[f"{ulke}_egim_bp"]
+    dik, prim = zn[f"{ulke}_dik"].astype(bool), zn[f"{ulke}_prim_esikli"].astype(bool)
+    yuk = u > 0
+    maske = {
+        "ayili_yassilasma": yuk & (e < 0),
+        "diklesme_esik_alti": yuk & (e >= 0) & ~dik,
+        "kur_sapmasi_esik_alti": yuk & dik & ~prim,
+        "uzun_uc_yukselmedi": ~yuk,
+    }
+    say = {k: int(maske[k].sum()) for k in NORMAL_SINIFLARI}
+    return {
+        "etiket": normal, "n": int(len(zn)), "sayim": say,
+        "haftalar": {k: [str(t.date()) for t in zn.index[maske[k].values]] for k in NORMAL_SINIFLARI},
+        "bolunu_tam": bool(sum(say.values()) == len(zn)),
+        "yassilasan": int((e < 0).sum()),
+        "yontem": "En büyük on para kaybı haftasının normal rejime düşenleri, orta rejimin eğri ve kur "
+                  "şartlarına göre ayrıldı: uzun uç yükselip eğri yassılaştıysa kısa uç uzun uçtan fazla "
+                  "yükselmiştir; uzun uç yükselip eğri dikleştiyse dikleşme eşiğin altında kalmıştır "
+                  "(ya da dikleşme eşiği aşıp para kaybı eşiğin altında kalmıştır); uzun uç "
+                  "yükselmediyse kural haftayı orta rejime yazamaz.",
+    }
 
 
 def _rejim_ozeti() -> dict:
@@ -661,6 +763,7 @@ def _rejim_ozeti() -> dict:
         duy["egri_kosulsuz_0.5_sd"] = float((_etiketle(r, ulke, KUR_SAPMA_SD, DIKLESME_SD, egri=False).loc[ok] == orta).mean())
         z5 = r.loc[ok][lab == "R5"]
         en = r.loc[ok, f"{ulke}_para_kaybi_yuzde"].nlargest(10).index
+        out_normal = _normal_ayrisimi(r.loc[en], ulke, etiketler[0])
         out[ulke] = {
             "n_hafta": n, "ilk": str(lab.index.min().date()), "son": str(lab.index.max().date()),
             "hafta": say, "pay": {e: say[e] / n for e in etiketler}, "ortalama_hareket": harek,
@@ -669,6 +772,7 @@ def _rejim_ozeti() -> dict:
             "en_buyuk_10_para_kaybi_haftasi": [_hafta_satiri(r, t, ulke) for t in en],
             "en_buyuk_10_para_kaybi_etiketleri": {e: int((r.loc[en, ulke] == e).sum()) for e in etiketler},
             "en_buyuk_10_para_kaybi_bogali_ya_da_ayili_yassilasma": int((r.loc[en, f"{ulke}_egim_bp"] < 0).sum()),
+            "en_buyuk_10_para_kaybi_normal_rejim_ayrisimi": out_normal,
         }
     # Türkiye dönemlere göre
     don = {}
@@ -735,9 +839,10 @@ def _rejim_ozeti() -> dict:
                  "haftalar R1 ya da R3.",
         "sinir": "CDS yok: Türkiye'de küresel riskten kaçış ile yerel risk primi aynı kadrana (faiz ↑, kur ↑) "
                  "düşer ve iki rejimi yalnız VIX ayırır. ABD'de güvenli liman döneminin riskten dönüş "
-                 "haftası 'prim' kadranına düşer, bu yüzden R5 önce sorulur. Türkiye'nin sert stres "
-                 "haftalarında kısa uç uzun uçtan fazla yükseldiği için (likidite sıkılaşması) ayılı "
-                 "dikleşme şartı o haftaları R3'e yazar; en büyük on TL değer kaybı haftasının etiketleri "
+                 "haftası 'prim' kadranına düşer, bu yüzden R5 önce sorulur. Ayılı dikleşme şartı "
+                 "Türkiye'nin sert stres haftalarını da R3'e yazabilir: kısa uç uzun uçtan fazla "
+                 "yükseldiğinde (likidite sıkılaşması) eğri yassılaşır ve dikleşme şartı tutmaz; en büyük "
+                 "on TL değer kaybı haftasının etiketleri ve R3'e düşenlerin hangi şartı geçemediği "
                  "ayrıca verildi. Etiket haftalıktır ve tek haftanın gürültüsünü taşır; eşikler sabit "
                  "adlıdır ama sezgiyle seçildi, duyarlılık ayrıca verildi. Yönetilen kur döneminde kur "
                  "yönü piyasayı değil politikayı ölçer.",

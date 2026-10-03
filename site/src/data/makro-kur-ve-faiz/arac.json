@@ -8,10 +8,10 @@
   "phi_pi": 1.5,
   "phi_y": 0.5,
   "acik_orta": -1.82,
-  "acik_alt": -2.04,
-  "acik_ust": -1.61,
-  "acik_alt_metin": "−%2,0",
-  "acik_ust_metin": "−%1,6",
+  "acik_alt": -2.0405,
+  "acik_ust": -1.6091,
+  "acik_alt_metin": "−2,04 puan",
+  "acik_ust_metin": "−1,61 puan",
   "politika": 37.0,
   "i_yabanci": 3.62,
   "pi_yabanci": 3.52
@@ -31,6 +31,7 @@
   "denge_2003": 126.91,
   "rho_mu": 0.9971,
   "rho_alt": 0.9785,
+  "rho_ust": 1.0,
   "rho_ols": 0.9862
  },
  "kur": {
@@ -38,6 +39,6 @@
   "i_tl": 44.64,
   "i_usd": 4.59,
   "R": 16.68,
-  "redk_sapma": -17.4
+  "redk_sapma": -17.41
  }
 }

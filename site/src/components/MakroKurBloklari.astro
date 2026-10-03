@@ -2,7 +2,8 @@
 /**
  * Kurun üç bloğu — Makrodan Kura ve Faize dersi, Bölüm 11 (Araç 4, merkez).
  * İleri doğru yinelenmiş reel UIP:  q − q̄ = −R·T_B + ρ·T_C
- *   q̄   çıpa (A bloğu; REDK aracından: güncel sapma ve yıllık çekim)
+ *   q̄   çıpa (A bloğu); REDK aracından YALNIZ güncel sapma gelir (q − q̄ = −sapma). Kalıcılık ρ ve
+ *        A'ya doğru yıllık çekim bu denkleme girmez: REDK aracında kalıcılık değişince bu araç değişmez.
  *   R   reel faiz farkı (B bloğu; Taylor aracından), T_B farkın süreceği yıl
  *   ρ   risk primi (C bloğu, puan/yıl), T_C primin kalıcılığı (yıl)
  * q artışı TL'nin reel değer kaybıdır (TCMB REDK'nin tersi): q − q̄ = −(REDK sapması).
@@ -11,6 +12,11 @@
  * Üç aylık taşımayı sıfırlayan prim artışı: Δρ = c₃ / T_C,  c₃ = ((1 + i)/(1 + i*))^{1/4} − 1.
  * Borç aracında risk primi katsayısı girildiyse onun C bloğuna etkisi de gösterilir.
  * Taylor aracından YALNIZ R gelir: politika faizi kotasyonu basittir, taşıma formülü yıllık bileşik oran ister.
+ * Birim: denklem log puanladır (sapma 100·ln); faizler, taşıma ve R yüzde (bileşik) dilindedir. Ana çıktılar
+ * dersin alıştırmasıyla aynı (yüzde) dilde kalır; yanında log karşılıkları basılır:
+ *   üç aylık taşımayı silen artış  100·ln((1 + i)/(1 + i*)) / 4 / T_C
+ *   R                              100·[ln(1 + r) − ln(1 + r*)]   (Taylor aracının iki reel faizinden;
+ *                                  R elle değiştirildiyse kurulamaz, basılmaz)
  * Zincir: Taylor, Borç ve REDK araçlarını dinler; 'makro-kur-guncellendi' yayınlar.
  */
 import A from '../data/makro-kur-ve-faiz/arac.json';
@@ -56,6 +62,7 @@ const k = A.kur;
     </div>
     <p class="mini-not" id="mk-yorum">—</p>
     <p class="mini-not" id="mk-borc">—</p>
+    <p class="mini-not" id="mk-birim">—</p>
   </div>
 
   <p class="hesap-dip">
@@ -79,7 +86,12 @@ const k = A.kur;
   const tasima3 = (i: number, is: number) => (Math.pow((1 + i / 100) / (1 + is / 100), 0.25) - 1) * 100;
   const imaPrim = (qFark: number, R: number, tb: number, tc: number) => (qFark + R * tb) / tc;
 
+  // Log puan karşılıkları (denklemin kendi birimi); yüzde dilindeki ana çıktıların yanında okunur.
+  const sifirLogHesap = (i: number, is: number, tc: number) => (100 * Math.log((1 + i / 100) / (1 + is / 100))) / 4 / tc;
+  const reelFarkLog = (r: number, ry: number) => 100 * (Math.log(1 + r / 100) - Math.log(1 + ry / 100));
+
   let borcPrimBp: number | null = null;
+  let taylorReel: { r: number; ry: number; R: number } | null = null;
 
   function hesapla() {
     const i = oku('mk-i'), is = oku('mk-is'), R = oku('mk-R'), tb = oku('mk-tb'), tc = oku('mk-tc'), sapma = oku('mk-sapma');
@@ -103,6 +115,18 @@ const k = A.kur;
     bEl.innerHTML = borcPrimBp != null && isFinite(borcPrimBp)
       ? `Borç aracındaki katsayıyla ufuk boyunca prim ${tr(borcPrimBp, 0)} bp değişir; bu, kalıcılığı ${tr(tc, 2)} yıl ise kuru ${yz((borcPrimBp / 100) * tc, 2, true)} oynatır (C bloğu).`
       : 'Borç aracında risk primi katsayısı girilmedi: borcun C bloğuna etkisi gösterilmiyor (varsayılan konmaz).';
+    const sifirLog = sifirLogHesap(i, is, tc);
+    const tLog = taylorReel && isFinite(taylorReel.r) && isFinite(taylorReel.ry) &&
+      Math.abs(Math.round(taylorReel.R * 100) / 100 - R) < 1e-9 ? taylorReel : null;
+    let birim = `Birim: denklem log puanla kurulur (sapma da öyle), faizler ve R yüzde (bileşik) dilindedir. ` +
+      `Log puanla üç aylık taşımayı silen prim artışı ${puan(sifirLog)} (yukarıda ${puan(sifir)})`;
+    if (tLog) {
+      const Rlog = reelFarkLog(tLog.r, tLog.ry);
+      birim += `; R ${puan(Rlog)}, ima edilen prim ${puan(imaPrim(qFark, Rlog, tb, tc))} (yukarıda ${puan(rho)}).`;
+    } else {
+      birim += `. R'nin log karşılığı Taylor aracının iki reel faizinden kurulur; R elle değiştirildiğinde verilmez.`;
+    }
+    (document.getElementById('mk-birim') as HTMLElement).textContent = birim;
     const durum = { tasima: c, tasima3: c3, bBlok, qFark, imaPrim: rho, sifirlayan: sifir };
     (window as any).makroDurum = Object.assign((window as any).makroDurum || {}, { kur: durum });
     document.dispatchEvent(new CustomEvent('makro-kur-guncellendi', { detail: durum }));
@@ -110,7 +134,10 @@ const k = A.kur;
 
   document.addEventListener('makro-taylor-guncellendi', (e: Event) => {
     const t = (e as CustomEvent).detail;
-    if (t && isFinite(t.R)) yazDeger('mk-R', t.R);
+    if (t && isFinite(t.R)) {
+      taylorReel = { r: t.r, ry: t.ry, R: t.R };
+      yazDeger('mk-R', t.R);
+    }
     hesapla();
   });
   document.addEventListener('makro-redk-guncellendi', (e: Event) => {
@@ -125,7 +152,10 @@ const k = A.kur;
   });
   document.querySelectorAll('#makro-kur input').forEach((el) => el.addEventListener('input', hesapla));
   const d = (window as any).makroDurum || {};
-  if (d.taylor) yazDeger('mk-R', d.taylor.R);
+  if (d.taylor) {
+    taylorReel = { r: d.taylor.r, ry: d.taylor.ry, R: d.taylor.R };
+    yazDeger('mk-R', d.taylor.R);
+  }
   if (d.redk) yazDeger('mk-sapma', d.redk.sapma);
   if (d.borc) borcPrimBp = d.borc.primEkBp;
   hesapla();
