@@ -194,6 +194,12 @@ def _compute_index_value(scored_articles: list[dict], params: dict,
     sira — bkz. MakaleDizisi); hesap bundan sonra tek ve ayni koddur."""
     if reference_time is None:
         reference_time = datetime.now(timezone.utc)
+    if reference_time.tzinfo is None:
+        # Eski yol saat dilimsiz bir referansla her karsilastirmada TypeError alip
+        # sessizce (0.0, 0) donduruyordu: butun seri sifir, korelasyon "olculmus".
+        raise ValueError("referans ani saat dilimi tasimiyor (UTC olmali)")
+    if dizi is not None and dizi.makaleler is not scored_articles:
+        raise ValueError("dizi baska bir makale listesinden kurulmus")
 
     filtered = (dizi.pencere(reference_time) if dizi is not None
                 else _pencere(scored_articles, reference_time))
@@ -402,6 +408,7 @@ def build_daily_index_series(
     params: dict,
     start_date: datetime,
     end_date: datetime,
+    bugun: datetime | None = None,
 ) -> dict[str, float]:
     """Build daily time series with volume amplification, z-score normalization + EMA smoothing.
     Excludes today (current UTC date) — sentiment score is only final after day ends.
@@ -414,7 +421,7 @@ def build_daily_index_series(
     (`seri_anlarda`), cunku gece yarisi New York kapanisindan saatler sonradir."""
     dizi = MakaleDizisi(scored_articles)
     series = {}
-    today_utc = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    today_utc = (bugun or datetime.now(timezone.utc)).strftime("%Y-%m-%d")
     current = start_date
     while current <= end_date:
         day_key = current.strftime("%Y-%m-%d")
@@ -533,6 +540,13 @@ def save_index_snapshot(indices: dict, regime: dict = None):
 
     if regime:
         snapshot["regime"] = regime
+
+    # Hangi parametrelerle kuruldu: kalibrasyon degistigi gun snapshot'tan
+    # snapshot'a fark haberi degil modeli olcer (bkz. kalibrasyon_damga).
+    import kalibrasyon_damga
+    kal = kalibrasyon_damga.guncel()
+    if kal:
+        snapshot["kalibrasyon"] = kal
 
     # Gun basina TEK snapshot. Ayni gun icindeki ikinci kosu bagimsiz bir gozlem
     # degil, ayni gunun yeniden hesabidir (or. parametreler yenilendikten sonra

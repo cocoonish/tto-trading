@@ -203,7 +203,7 @@ def main():
     for anahtar, cfg in config.ASSETS.items():
         ticker = cfg["ticker"]
         try:
-            saat = fx_kapanis.yfinance_saatlik([ticker], "730d").get(ticker)
+            saat = fx_kapanis.yfinance_saatlik([ticker]).get(ticker)
             gdf = yf.download(ticker, period="1y", interval="1d", auto_adjust=True, progress=False)
             if isinstance(gdf.columns, pd.MultiIndex):
                 gdf.columns = gdf.columns.get_level_values(0)

@@ -288,7 +288,7 @@ with t3:
                     rm1 = d1[ak]["rolling_mean"]
                     rm5 = d5[ak]["rolling_mean"]
                     best = "1d" if rm1 > rm5 else "5d"
-                    saved = opt_full.get(ak, {}).get("best_horizon", "")
+                    saved = str(opt_full.get(ak, {}).get("ufuk", "")) + "d" if opt_full.get(ak, {}).get("ufuk") else ""
                     comp_rows.append({
                         "asset": ak,
                         "1d_roll_mean": rm1,
@@ -437,25 +437,21 @@ with t5:
         if not hist_available:
             st.error("Fetch historical data first!")
         else:
-            with st.spinner("Running grid search..."):
-                results = correlation_optimizer.optimize_all()
-            for ak, res in results.items():
-                st.subheader(ak)
-                if "error" in res:
-                    st.error(res["error"])
-                    continue
-                c1, c2, c3 = st.columns(3)
-                with c1:
-                    st.metric("IS Spearman", f"{res['in_sample']['spearman_r']:.4f}")
-                with c2:
-                    oos = res["out_of_sample"].get("spearman_r")
-                    st.metric("OOS Spearman", f"{oos:.4f}" if oos else "N/A")
-                with c3:
-                    st.metric("N observations", res["in_sample"]["n_obs"])
-                st.json(res["best_params"])
-                if res.get("top_10"):
-                    st.dataframe(pd.DataFrame(res["top_10"]).drop(columns=["abs_spearman"], errors="ignore"),
-                                 width="stretch")
+            with st.spinner("Running calibration (walk-forward OOS + placebo)..."):
+                karne = correlation_optimizer.optimize_all()
+            for h, a in karne.get("aile", {}).items():
+                st.metric(f"Family test {h}d: mean OOS Spearman",
+                          f"{a['istatistik']:+.3f}" if a.get("istatistik") is not None else "N/A",
+                          f"placebo p {a['p']}" if a.get("p") is not None else None)
+            satir = []
+            for ak, v in karne.get("varlik", {}).items():
+                il = (v.get("ileri") or {}).get("5") or {}
+                satir.append({"asset": ak, "verdict": v.get("hukum", v.get("hata")),
+                              "oos_5d": il.get("oos"), "oos_p": il.get("oos_p"),
+                              "price_only": il.get("fiyat_rakibi"), "default": il.get("varsayilan"),
+                              "reaction_5d": ((v.get("tepki") or {}).get("5") or {}).get("rho")})
+            if satir:
+                st.dataframe(pd.DataFrame(satir).set_index("asset"), width="stretch")
             st.cache_data.clear()
             st.rerun()
 

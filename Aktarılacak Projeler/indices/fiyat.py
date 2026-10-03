@@ -38,19 +38,33 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 
 # Doviz disi enstrumanlarin kapanis ani: (saat dilimi, yerel saat).
-# DEGERLER OLCUMLE SECILDI — bkz. kesif_kalibrasyon.py (M1) ve CLAUDE.md kaydi.
+# OLCULDU (03.10.2026, kesif_kalibrasyon.py M1 → data/kalibrasyon_kesif.json):
+# gunluk barin kapanisi, son bir yilda (≈220 gun) hangi SAATLIK barin
+# kapanisiyla en yakin eslesiyor — medyan |fark|:
+#   GC=F   18:00 UTC 10,0 bp · 17:00 UTC 11,6 bp  → uzlasma 17:00–18:00 UTC
+#   SI=F   18:00 UTC 49,8 bp · 17:00 UTC 53,5 bp  → ayni pencere (gumus oynak)
+#          yaz saatinde 13:00–14:00 New York; pencerenin ortasi alindi.
+#   ZT=F   19:00 UTC 1,1 bp · ZN=F 19:00 UTC 1,4 bp → 15:00 New York = 14:00 Chicago
+#   ^GSPC  1,5 bp (saatlik barlar :30'da basliyor; son bar 16:00 New York'ta kapanir)
+#   XU100  15:00 UTC 17,9 bp → 18:00 Istanbul; kapanis fiyati kapanis seansinda
+#          ~18:10'da olusur (bulten/piyasa.py olcumu: son islem 15:10 UTC).
+# Dovizde ayni olcu kaymanin kendisini dogruladi: gunluk barin kapanisi
+# gunun 00:00 UTC saatlik fiyatina 0,4–2,7 bp yakin, yani GUNUN BASI.
+# Tabloda olmayan sembol hata verir.
 KAPANIS = {
-    "GC=F": ("America/New_York", dt.time(17, 0)),
-    "SI=F": ("America/New_York", dt.time(17, 0)),
-    "ZT=F": ("America/New_York", dt.time(17, 0)),
-    "ZN=F": ("America/New_York", dt.time(17, 0)),
+    "GC=F": ("America/New_York", dt.time(13, 30)),
+    "SI=F": ("America/New_York", dt.time(13, 30)),
+    "ZT=F": ("America/Chicago", dt.time(14, 0)),
+    "ZN=F": ("America/Chicago", dt.time(14, 0)),
     "^GSPC": ("America/New_York", dt.time(16, 0)),
-    "XU100.IS": ("Europe/Istanbul", dt.time(18, 0)),
+    "XU100.IS": ("Europe/Istanbul", dt.time(18, 10)),
 }
 # Okura giden tanimdaki yer adi (fx_kapanis.KESIM_ADI ile ayni bicim: "New York 17:00").
-YER = {"America/New_York": "New York", "Europe/Istanbul": "İstanbul"}
-SAATLIK_DONEM = "730d"
+YER = {"America/New_York": "New York", "America/Chicago": "Chicago", "Europe/Istanbul": "İstanbul"}
+# Saatlik pencere fx_kapanis'in KENDI varsayilanidir (tek tanim; o dosyada
+# degisirse burada da degisir). Gunluk bar icin iki yil yeter: hat 400 gun kullanir.
 GUNLUK_DONEM = "2y"
+_BELLEK: dict = {}       # surec ici: ayni sembol bir kez indirilir (figurler + kalibrasyon)
 
 
 @dataclass
@@ -85,7 +99,7 @@ def doviz_kapanislari(ticker: str, saatlik: pd.Series | None = None, simdi=None,
     import fx_kapanis
     t = _simdi(simdi)
     if saatlik is None:
-        saatlik = fx_kapanis.yfinance_saatlik([ticker], SAATLIK_DONEM).get(ticker)
+        saatlik = fx_kapanis.yfinance_saatlik([ticker]).get(ticker)
     if saatlik is None or not len(saatlik):
         raise RuntimeError(f"{ticker}: saatlik bar alinamadi — gunluk bara DUSULMEZ "
                            "(dovizde gunluk barin kapanisi gunun basidir)")
@@ -134,10 +148,13 @@ def gunluk_kapanislar(ticker: str, gunluk: pd.Series | None = None, simdi=None,
 
 
 def kapanislar(ticker: str, simdi=None, gun: int | None = 400) -> Fiyat:
-    """Tek giris: dovizde saatlik bardan, obur enstrumanlarda gunluk bardan."""
-    if doviz_mu(ticker):
-        return doviz_kapanislari(ticker, simdi=simdi, gun=gun)
-    return gunluk_kapanislar(ticker, simdi=simdi, gun=gun)
+    """Tek giris: dovizde saatlik bardan, obur enstrumanlarda gunluk bardan.
+    Ayni surecte ayni (sembol, gun, saat) ikinci kez indirilmez."""
+    anahtar = (ticker, gun, None if simdi is None else str(_simdi(simdi)))
+    if anahtar not in _BELLEK:
+        _BELLEK[anahtar] = (doviz_kapanislari(ticker, simdi=simdi, gun=gun) if doviz_mu(ticker)
+                            else gunluk_kapanislar(ticker, simdi=simdi, gun=gun))
+    return _BELLEK[anahtar]
 
 
 def ileri_getiri(seri: pd.Series, h: int) -> pd.Series:

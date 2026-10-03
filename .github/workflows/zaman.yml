@@ -59,7 +59,7 @@ jobs:
         # freezegun BU İŞE ÖZGÜ: yalnız zaman sınavı kullanıyor ve üretim
         # yoluna hiç girmiyor (ortak/zaman_yolculugu TTO_SAHTE_GUN yoksa tek
         # satır çalıştırmaz). Kalanlar hatların kapılarının istediği taban.
-        run: pip install --quiet freezegun requests pandas numpy plotly openpyxl
+        run: pip install --quiet freezegun requests pandas numpy plotly openpyxl scipy feedparser
 
       # HARNESS ÖNCE KENDİNİ SINAR ve bu ayrı bir adım olarak duruyor:
       # bozuk bir harness her kapı için "temiz" der ve o sonuç gerçek temizle

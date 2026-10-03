@@ -234,8 +234,9 @@ DEFAULT_PARAMS = {
 }
 
 # ── Optimization Grid ─────────────────────────────────────────────────────────
-# Optimized for rolling 20-day correlation mean (not overall Spearman)
-# Total: 4×4×3×2×2×2 = 384 combinations
+# Kalibrasyonun aradigi canli endeks parametreleri: 4×4×3×2×2 = 192 kombinasyon.
+# Gecikme (lag) ARANMAZ: canli endeks gecikme tasimaz, eski izgarada da amaca
+# hic girmiyordu (bkz. correlation_optimizer baslik notu). Olcu ve kural orada.
 PARAM_GRID = {
     "time_decay_halflife": [1, 2, 3, 5],
     "aggregation": [
@@ -245,7 +246,6 @@ PARAM_GRID = {
         "directional_strength",
     ],
     "score_transform": ["raw", "tanh", "amplify"],
-    "lag_days": [0, 1],
     "neutral_filter": [0.0, 0.1],
     "momentum_weight": [0.0, 0.2],
 }

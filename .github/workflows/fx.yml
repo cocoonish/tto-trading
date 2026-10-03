@@ -87,8 +87,11 @@ on:
 permissions:
   contents: write
 
+# Kalibrasyon kipleri AYRI grupta: haber çekmez, canlı endekse dokunmaz ve
+# dalda koşar; main'in zamanlanmış koşusunun arkasında kuyrukta beklemesi ya da
+# onu bekletmesi gereksiz (keşif koşusunun 18 dakika "pending" kaldığı ders).
 concurrency:
-  group: fx
+  group: ${{ (inputs.kalibrasyon == 'olcum' || inputs.kalibrasyon == 'yaz') && format('fx-kal-{0}', github.ref) || 'fx' }}
   cancel-in-progress: false
 
 jobs:
@@ -115,6 +118,7 @@ jobs:
       # FinBERT ağırlıkları (~440 MB). Önbellek olmadan her hafta yeniden
       # inerdi; koşunun en uzun adımı bu.
       - name: FinBERT model önbelleği
+        if: inputs.kalibrasyon != 'olcum' && inputs.kalibrasyon != 'yaz'
         uses: actions/cache@v4
         with:
           path: ~/.cache/huggingface
@@ -143,6 +147,9 @@ jobs:
             Aktarılacak Projeler/indices/data/news_cache.json
           key: fx-haber-${{ github.run_id }}
           restore-keys: fx-haber-
+          # Kalibrasyonun TEK girdisi bu önbellek: yoksa koşu burada düşer,
+          # boş bir arşivle "ölçülemedi" karnesi üretmez.
+          fail-on-cache-miss: ${{ inputs.kalibrasyon == 'olcum' || inputs.kalibrasyon == 'yaz' }}
 
       # Duman sınaması bülten katmanlarını GERÇEK depo verisiyle çağırıyor;
       # o katmanlar pandas/numpy/requests kullanıyor. Bu adım ilk kurulumda
@@ -190,6 +197,7 @@ jobs:
       # ikinci emniyet: koşucunun ön yüklü ama bu depoda HİÇ kullanılmayan
       # araç zincirlerini siler. Saniyeler sürer, onlarca gigabayt açar.
       - name: Koşucu diskini boşalt
+        if: inputs.kalibrasyon != 'olcum' && inputs.kalibrasyon != 'yaz'
         run: |
           echo "önce:"; df -h / | tail -1
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc \
@@ -209,16 +217,26 @@ jobs:
         run: pip install --quiet yfinance scipy scikit-learn feedparser
 
       - name: Kalibrasyon ölçümü
+        id: olcum
         if: inputs.kalibrasyon == 'olcum'
         timeout-minutes: 150
         run: python -u "Aktarılacak Projeler/indices/kesif_kalibrasyon.py"
 
+      # TTO_SIKI: çizilemeyen figür adımı DÜŞÜRÜR (normal kipte yalnız uyarı
+      # basılır ve eski figür yerinde kalır — yeni karneyle eski figür yan yana
+      # yayımlanırdı). Ardından yeniden üretim: donmuş girdiden aynı karne çıkmalı.
       - name: Kalibrasyon — ızgara, figürler, özet
+        id: kal
         if: inputs.kalibrasyon == 'yaz'
         timeout-minutes: 150
+        env:
+          TTO_SIKI: '1'
+          PYTHONUNBUFFERED: '1'
         run: |
           python -u "Aktarılacak Projeler/indices/correlation_optimizer.py"
+          python -u "Aktarılacak Projeler/indices/correlation_optimizer.py" --arsivden
           python guncelle.py fx
+          ( cd "Aktarılacak Projeler/indices" && python dogrula.py )
 
       # Zaman aşımına uğrasa bile o ana kadar toplanan haberler saklanır.
       - name: Haber önbelleğini sakla
@@ -232,12 +250,15 @@ jobs:
 
       # if: always() — tam kip düşse bile ev stili ve commit koşar; hattın
       # kısmen ilerlemiş çıktısı çöpe gitmez (bkz. veri.yml'deki aynı ders).
+      # KALİBRASYON BUNUN İSTİSNASI: yarım bir kalibrasyon (yeni parametre +
+      # eski figür ya da eski özet) commit edilmez; adım başarıyla bitmediyse
+      # hiçbir şey yazılmaz.
       - name: Ev stili
-        if: always()
+        if: always() && ((inputs.kalibrasyon != 'olcum' && inputs.kalibrasyon != 'yaz') || steps.kal.outcome == 'success' || steps.olcum.outcome == 'success')
         run: python site/tools/plotly_stil.py --hepsi
 
       - name: Commit
-        if: always()
+        if: always() && ((inputs.kalibrasyon != 'olcum' && inputs.kalibrasyon != 'yaz') || steps.kal.outcome == 'success' || steps.olcum.outcome == 'success')
         run: |
           git config --global user.name  "tto-fx"
           git config --global user.email "bot@users.noreply.github.com"
@@ -248,6 +269,9 @@ jobs:
             olcum)
               git add "Aktarılacak Projeler/indices/data/kalibrasyon_kesif.json" || true ;;
             yaz)
+              # Parametre, karne, donmuş girdi, figürler, özet ve site kopyası
+              # BİRLİKTE gider (git add, listedeki tek bir yol yoksa komutun
+              # tamamını reddeder — o yüzden dizin düzeyinde).
               git checkout -- bulten || true
               git add "Aktarılacak Projeler/indices" site/public/projeler/fx-haber-endeksi || true ;;
             *)

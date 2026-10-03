@@ -21,7 +21,8 @@ def main():
     parser.add_argument("--fetch-history", action="store_true",
                         help="Fetch 52 weeks of GDELT historical news")
     parser.add_argument("--optimize", action="store_true",
-                        help="Run weekly grid search optimization")
+                        help="Kalibrasyon (correlation_optimizer.kalibre_hepsi): yalniz onbellekten "
+                             "ve fiyattan; haber cekmez")
     parser.add_argument("--asset", choices=list(config.ASSETS.keys()),
                         help="Run for single asset")
     parser.add_argument("--output", choices=["json", "table"], default="table")
@@ -130,35 +131,29 @@ def main():
             print(f"    Category    : {idx['category']}")
             print(f"    Articles    : {idx['n_articles']}")
 
-    # Step 4: Dual optimization (if requested)
+    # Step 4: Kalibrasyon (if requested) — kural ve olcu correlation_optimizer basliginda.
     if args.optimize:
         print("\n" + "=" * 60)
-        print("STEP 4: Dual Optimization (1d + 5d return horizons)")
+        print("STEP 4: Kalibrasyon (ileri 5 gunluk getiri, yuruyen pencere, plasebo)")
         print("=" * 60)
-
         if not os.path.exists(config.GDELT_CACHE):
             print("  ERROR: No cache found. Run with --fetch-history first.")
-            return
-
-        results = correlation_optimizer.optimize_all_dual()
-
-        print("\n" + "=" * 70)
-        print("DUAL OPTIMIZATION RESULTS")
-        print("=" * 70)
-        print(f"{'Asset':<10} {'1d Roll':>8} {'5d Roll':>8} {'Best':>5}")
-        print("-" * 35)
-        for asset_key, res in results.items():
-            rm1 = res["rolling_mean_1d"]
-            rm5 = res["rolling_mean_5d"]
-            best = res["best_horizon"]
-            print(f"  {asset_key:<10} {rm1:>8.4f} {rm5:>8.4f} {best:>5}")
+            return 1
+        karne = correlation_optimizer.kalibre_hepsi()
+        for h, a in karne.get("aile", {}).items():
+            print(f"  aile {h}g: ort. ornek disi rho {a.get('istatistik')} · p {a.get('p')}")
 
     # Step 5: Prices
     print("\n" + "=" * 60)
     print("CURRENT PRICES")
     print("=" * 60)
+    # Yalniz bilgi: bir indirme hatasi snapshot'tan SONRA kosuyu dusurmesin.
     for asset_key in assets:
-        info = price_fetcher.get_latest_price(asset_key)
+        try:
+            info = price_fetcher.get_latest_price(asset_key)
+        except Exception as exc:  # noqa: BLE001
+            print(f"  {asset_key}: fiyat alınamadı ({exc})")
+            continue
         if info["price"]:
             name = config.ASSETS[asset_key]["name"]
             ret = info["return_1d"] * 100 if info["return_1d"] else 0
