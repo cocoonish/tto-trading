@@ -72,11 +72,6 @@
   },
   {
    "tur": "kaynak",
-   "parca": "para zayıflar (6.4'ün risk primli Mundell–Fleming'i)",
-   "kaynak": "blanchard2004"
-  },
-  {
-   "tur": "kaynak",
    "parca": "Greenwood ve Vayanos (2014) uzun vadeli tahvil arzının kısa vadeliye göre büyüklüğünün vade farkıyla da pozitif ilişkili olduğunu gösterir.",
    "kaynak": "greenwoodvayanos2014"
   },
