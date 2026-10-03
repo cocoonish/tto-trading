@@ -1,6 +1,16 @@
 {
  "girdiler": [
   {
+   "tur": "sabit",
+   "parca": "(≈2,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈1,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
    "tur": "kaynak",
    "parca": "Kim ve Roubini (2008) ABD'de bunu bulur (Bölüm 5) ve özel tasarrufun kısmen Ricardocu artışına, yatırımın dışlanmasına bağlar",
    "kaynak": "kimroubini2008"
@@ -17,7 +27,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Gourinchas ve Rey'e göre ABD'nin dış dengesizliğinin bir kısmı ticaretle değil, net dış varlık portföyünün getirisiyle, yani değerleme kanalıyla kapanır. Net ihracatın net dış varlıklara oranındaki bir standart sapmalık düşüş, sonraki çeyrekte doların yıllık %4 hızla değer kaybedeceğini öngörür",
+   "parca": "Gourinchas ve Rey'e (2007) göre ABD'nin dış dengesizliğinin bir kısmı ticaretle değil, net dış varlık portföyünün getirisiyle, yani değerleme kanalıyla kapanır. Net ihracatın net dış varlıklara oranındaki bir standart sapmalık düşüş, sonraki çeyrekte doların yıllık %4 hızla değer kaybedeceğini öngörür",
    "kaynak": "gourinchasrey2007"
   },
   {
@@ -37,7 +47,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "Freund'un sanayileşmiş ülke örnekleminde 1980'den sonra cari açıklar, dönmeden önce ortanca olarak GSYH'nin yaklaşık %5'ine ulaşmıştır; sonraki literatür bunun sihirli bir eşik olmadığında birleşir",
+   "parca": "Freund'un (2005) sanayileşmiş ülke örnekleminde 1980'den sonra cari açıklar, dönmeden önce ortanca olarak GSYH'nin yaklaşık %5'ine ulaşmıştır; sonraki literatür bunun sihirli bir eşik olmadığında birleşir",
    "kaynak": "freund2005"
   },
   {
@@ -876,7 +886,7 @@
   },
   {
    "tur": "tablo",
-   "satir": "| Cari, kayan 10 yıllık ortalamadan sapma | −0,028 | −1,09 | 1,34 | 1,46 |",
+   "satir": "| Cari, kayan 10 yıllık ortalamadan sapma (12.2003'ten, 260 ay) | −0,028 | −1,09 | 1,34 | 1,46 |",
    "degerler": [
     {
      "yol": "b08.p8c.cari.kayan_10_yil_sapma.egim_puan_yuzde",
@@ -1416,6 +1426,127 @@
    "tur": "sabit",
    "parca": "REDK bir yılda %10 düşerse",
    "neden": "alıştırmanın varsayılan reel kur hareketi (soru girdisi; ölçümün %10'luk tanımıyla aynı)"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "Feldstein ve Horioka (1980) ise sanayileşmiş ülkelerde yurt içi yatırım oranının yurt içi tasarruf oranıyla güçlü biçimde ilişkili olduğunu bulur",
+   "kaynak": "feldstein_horioka1980"
+  },
+  {
+   "tur": "olcum",
+   "parca": "10 yıllık gilt 28,8 bp düştü (%1,376 → %1,088), Bund 13,4 bp; sterlin dolara karşı log −%8,41 (ECB çaprazıyla −%8,16)",
+   "degerler": [
+    {
+     "ifade": "abs(v('b08.vaka_brexit_2016.satirlar.0.d_gb10y_bp'))",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b08.vaka_brexit_2016.satirlar.0.gilt_10y_bas",
+     "bicim": "yz",
+     "hane": 3
+    },
+    {
+     "yol": "b08.vaka_brexit_2016.satirlar.0.gilt_10y_son",
+     "bicim": "yz",
+     "hane": 3
+    },
+    {
+     "ifade": "abs(v('b08.vaka_brexit_2016.satirlar.0.bund_10y.d_bp'))",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b08.vaka_brexit_2016.satirlar.0.d_sterlin_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.vaka_brexit_2016.satirlar.0.ecb_saglamlik.d_sterlin_dolar_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Sterlin öbür beş G10 parasına karşı da −%7,59, avroya karşı −%6,01 kaybetti; dolar o beşe karşı +%0,82",
+   "degerler": [
+    {
+     "yol": "b08.vaka_brexit_2016.satirlar.0.sterlin_ayrisimi.d_sterlin_bes_g10_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.vaka_brexit_2016.satirlar.0.sterlin_ayrisimi.d_sterlin_avro_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    },
+    {
+     "yol": "b08.vaka_brexit_2016.satirlar.0.sterlin_ayrisimi.d_dolar_bes_g10_yuzde",
+     "bicim": "yz",
+     "hane": 2,
+     "arti": true
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "04.08.2016 paketine uzatılınca 10 yıllık gilt 73,1 bp düştü, sterlin log −%12,70",
+   "degerler": [
+    {
+     "yol": "b08.vaka_brexit_2016.satirlar.1.son",
+     "bicim": "tarih",
+     "hane": 0
+    },
+    {
+     "ifade": "abs(v('b08.vaka_brexit_2016.satirlar.1.d_gb10y_bp'))",
+     "bicim": "bp",
+     "hane": 1
+    },
+    {
+     "yol": "b08.vaka_brexit_2016.satirlar.1.d_sterlin_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "2015 cari dengesi (GSYH'nin −%4,92'si, Dünya Bankası)",
+   "degerler": [
+    {
+     "yol": "b08.vaka_brexit_2016.cari_gsyh_onceki_yil.deger_yuzde",
+     "bicim": "yz",
+     "hane": 2
+    }
+   ]
+  },
+  {
+   "tur": "olcum",
+   "parca": "Pencere 23.06.2016 kapanışından 24.06 kapanışına",
+   "degerler": [
+    {
+     "yol": "b08.vaka_brexit_2016.satirlar.0.ilk",
+     "bicim": "tarih",
+     "hane": 0
+    }
+   ]
+  },
+  {
+   "tur": "sabit",
+   "parca": "0,01 puanlık farklar yuvarlamadandır",
+   "neden": "yuvarlama birimi (tablonun hanesi)"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "22.05.2013 Bernanke ifadesinden (10:00 New York)",
+   "kaynak": "bernanke_jec_20130522"
+  },
+  {
+   "tur": "kaynak",
+   "parca": "ECB'nin 14:15 sabitlemesi",
+   "kaynak": "bernanke_jec_20130522"
   }
  ]
 }
