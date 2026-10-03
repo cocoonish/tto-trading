@@ -1,6 +1,16 @@
 {
  "girdiler": [
   {
+   "tur": "sabit",
+   "parca": "(≈1,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
+   "tur": "sabit",
+   "parca": "(≈0,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
    "tur": "olcum",
    "parca": "08.2026'da TÜFE bazlı REDK 105,04; 1994–2026'nın geometrik ortalaması 125,02, 2003–2026'nınki 126,91, log sapma −17,41 ya da −18,91 log puan. 392 ayın yalnız %23,2'sinde",
    "degerler": [

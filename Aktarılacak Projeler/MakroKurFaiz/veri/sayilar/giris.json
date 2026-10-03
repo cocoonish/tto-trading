@@ -1,8 +1,33 @@
-{"girdiler": [
-  {"tur": "sabit", "parca": "%4'ten %5'e çıkış +1 puandır, yani +100 bp; \"%1\" değildir", "neden": "birim tanımı: bir oranın farkı puandır, 1 puan = 100 baz puan (sayısal örnek, ölçüm değil)"},
-  {"tur": "olcum", "parca": "Günlük seriler **30.09.2026**, aylık seriler **08.2026**", "degerler": [
-    {"yol": "cipa.gunluk", "bicim": "tarih"},
-    {"yol": "cipa.aylik", "bicim": "ay"}]},
-  {"tur": "hesap", "parca": "çeyreklik seriler **2026Ç2** çıpasında durur", "degerler": [
-    {"ifade": "v('cipa.ceyreklik').replace('Q', 'Ç')", "bicim": "metin"}]}
-]}
+{
+ "girdiler": [
+  {
+   "tur": "sabit",
+   "parca": "%4'ten %5'e çıkış +1 puandır, yani +100 bp; \"%1\" değildir",
+   "neden": "birim tanımı: bir oranın farkı puandır, 1 puan = 100 baz puan (sayısal örnek, ölçüm değil)"
+  },
+  {
+   "tur": "olcum",
+   "parca": "Günlük seriler **30.09.2026**, aylık seriler **08.2026**",
+   "degerler": [
+    {
+     "yol": "cipa.gunluk",
+     "bicim": "tarih"
+    },
+    {
+     "yol": "cipa.aylik",
+     "bicim": "ay"
+    }
+   ]
+  },
+  {
+   "tur": "hesap",
+   "parca": "çeyreklik seriler **2026Ç2** çıpasında durur",
+   "degerler": [
+    {
+     "ifade": "v('cipa.ceyreklik').replace('Q', 'Ç')",
+     "bicim": "metin"
+    }
+   ]
+  }
+ ]
+}
