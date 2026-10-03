@@ -589,18 +589,26 @@ def abd_reel() -> None:
 def not_kararlari() -> None:
     """Türkiye yabancı para kredi notu kararları. Kaynak ham arşiv değil, `veri/not_kararlari.json`:
     her karar `veri/kaynaklar.json`daki bir doğrulama kaydına (haber arşivi adresiyle) bağlı ve elle
-    derlendi; ilan günü ve saati İSTANBUL saatiyle haberin ilk arşiv damgasından."""
+    derlendi; ilan günü ve saati İSTANBUL saatiyle haberin ilk arşiv damgasından. Günü kaynakta
+    yazmayan kararlar `gun_dayanagi` (takvim · cikarim) ve ilk haberin damgasıyla (`ilk_iz`) işaretli."""
     yol = BURASI / "veri" / "not_kararlari.json"
     j = json.loads(yol.read_text(encoding="utf-8"))
     df = pd.DataFrame([{"tarih": pd.Timestamp(k["ilan_gunu"]), "kurum": k["kurum"], "eylem": k["tur"],
                         "yon": int(k["yon"]), "ilan_saati": k["ilan_saati"] or "", "ilan_dilimi": k.get("ilan_dilimi") or "",
+                        "gun_dayanagi": k["gun_dayanagi"], "ilk_iz": k.get("ilk_iz") or "",
                         "durum": k["durum"],
                         "anahtar": k["anahtar"]} for k in j["kararlar"]]).set_index("tarih")
     yaz(df, "not_kararlari", "Türkiye yabancı para kredi notu kararları (not, görünüm, inceleme), 2012–2024",
         {"kurum": "derecelendirme kuruluşu", "eylem": "not · gorunum · inceleme", "yon": "+1 iyileşme, −1 bozulma",
          "ilan_saati": "İstanbul saatiyle ilk arşiv damgası (boşsa bilinmiyor)",
-         "ilan_dilimi": "aksam: saat yok ama kaynak ilanın İstanbul akşamında (18:00 sonrası) olduğunu yazıyor",
-         "durum": "dogrulandi (haber ajansı ya da gazete) · kismen (yalnız ikincil kaynak)",
+         "ilan_dilimi": "aksam: saat yok ama kaynak ilanın İstanbul akşamında (18:00 sonrası) olduğunu yazıyor; "
+                        "gun_dayanagi 'cikarim' olan kararda akşam dilimi de çıkarımdır",
+         "gun_dayanagi": "kaynak: ilan günü kaynakta (ya da kaynağın damgasında) · takvim: kaynak yalnız ertesi "
+                         "sabahın haberini veriyor, gün kurumun önceden ilan ettiği takvimden · cikarim: kaynak yalnız "
+                         "ertesi günün haberini veriyor, gün ondan çıkarıldı",
+         "ilk_iz": "günü kaynakta yazmayan kararda kaynaktaki ilk haberin İstanbul damgası (boşsa gün kaynakta)",
+         "durum": "dogrulandi (haber ajansı, gazete ya da televizyon haberi tarihi ve önceki→yeni notu birlikte "
+                  "veriyor) · kismen (yalnız ikincil kaynak ya da kaynak karması)",
          "anahtar": "veri/kaynaklar.json doğrulama kaydı"},
         [], CIPA_GUN, ek={"kaynak_dosya": {"yol": "veri/not_kararlari.json",
                                            "sha256": hashlib.sha256(yol.read_bytes()).hexdigest()}})

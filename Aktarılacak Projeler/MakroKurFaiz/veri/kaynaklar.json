@@ -1979,8 +1979,8 @@
    "alinti": "\"Moody's Türkiye'nin not görünümünü indirdi\"; \"Moodys görünümü durağandan negatife çekti\"",
    "url": "https://raw.githubusercontent.com/FacVain/tweet-stock-prediction/main/StockAndTweetDataExtract/THYAO/2017/tweet_part1.csv",
    "durum": "kismen",
-   "not": "Yalnız tweet kaynaklı; karar 17 Mart cuma gecesi (haber 18 Mart sabahı). Ba1 düzeyi Eylül 2016 indiriminden.",
-   "ders_cumlesi": "Moody's, 17 Mart 2017'de Türkiye'nin Ba1 notunun görünümünü durağandan negatife çevirdi."
+   "not": "Yalnız tweet kaynaklı; ilk haber 18 Mart cumartesi sabahı (06:51 UTC = 09:51 İstanbul). Karar günü (17 Mart cuma) ve gece dilimi çıkarım, ayrıca teyit edilmedi. Ba1 düzeyi Eylül 2016 indiriminden.",
+   "ders_cumlesi": "Moody's, Mart 2017'de (ilk haber 18 Mart cumartesi sabahı) Türkiye'nin Ba1 notunun görünümünü durağandan negatife çevirdi."
   },
   {
    "anahtar": "moodys_20180307",
@@ -2026,8 +2026,8 @@
    "sayi": "−1",
    "alinti": "\"Fitch Downgrades Turkey To 'BB'; Outlook Negative\"; \"Notumuzu bir basamak asagi indirerek BB yapti. Not gorunumunu ise duragandan negatife cevirdi.\"; TBMM: \"The international rating agency Fitch dropped his credit rating on July 13th.\"",
    "url": "https://raw.githubusercontent.com/FacVain/tweet-stock-prediction/main/StockAndTweetDataExtract/Bist100/2018/tweet_part3.csv",
-   "durum": "dogrulandi",
-   "not": "Kaynak karması: Fitch başlığını aktaran paylaşım, aynı gün çok sayıda hesap, TBMM tutanağı ve 'rating downgrade last month' (Fitch, 09.08.2018). Saat: 13 Temmuz cuma 20:19 UTC = 23:19 İstanbul.",
+   "durum": "kismen",
+   "not": "Kaynak karması: Fitch başlığını aktaran paylaşım, aynı gün çok sayıda hesap, TBMM tutanağı ve 'rating downgrade last month' (Fitch, 09.08.2018). Saat: 13 Temmuz cuma 20:19 UTC = 23:19 İstanbul. Doğrulama ölçütüne göre 'kismen': kaynaklardan hiçbiri haber ajansı, gazete ya da televizyon haberi değil; TBMM tutanağı yalnız günü veriyor, önceki→yeni not paylaşımlardan.",
    "ders_cumlesi": "Fitch, 13 Temmuz 2018 cuma gecesi Türkiye'nin notunu BB+'dan BB'ye indirdi ve görünümü durağandan negatife çevirdi."
   },
   {
@@ -2159,7 +2159,7 @@
    "alinti": "\"Fitch Ratings, Türkiye'nin kredi notunu BB-'den B+'ya indirdi, görünümünü ise 'negatif' olarak teyit etti.\"",
    "url": "https://raw.githubusercontent.com/FacVain/tweet-stock-prediction/main/StockAndTweetDataExtract/Bist100/2022/tweet_part2.csv",
    "durum": "kismen",
-   "not": "Yalnız tweet kaynaklı; tarih Fitch'in ilan ettiği takvimle (11 Şubat cuma) uyumlu.",
+   "not": "Yalnız tweet kaynaklı; gün kaynakta yazmıyor: ilk haber 12 Şubat cumartesi sabahı (06:24 UTC = 09:24 İstanbul), 11 Şubat cuma Fitch'in önceden ilan ettiği değerlendirme takviminden.",
    "ders_cumlesi": "Fitch, 11 Şubat 2022'de Türkiye'nin notunu BB-'den B+'ya indirdi ve negatif görünümü korudu."
   },
   {

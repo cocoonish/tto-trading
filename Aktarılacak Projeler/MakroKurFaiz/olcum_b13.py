@@ -40,10 +40,13 @@ HÜCRENİN ÖLÇÜLERİ
             eksi = faiz ↑ para ↓ (C terimi, risk primi). Yanında aynı rejimin sıradan
             günlerinin korelasyonu ve B kadranının payı (işaret çarpımı artı).
   durum     ölçüldü: en az bir seri kapıyı geçti ve olay ≥ 10 · vaka: 1–9 olay
-            (oranlar yazılır, korelasyon yazılmaz) · kaynak: bu veriyle kurulamadı ama
-            dersin kaynak listesi kapsıyor (yalnız etiket ve bölüm işareti, sayı yok)
-            · kurulmadı: sebebiyle. Kapıyı geçmeyen seri hücrede "kurulmadı (kapı)"dır;
-            eş hareket ancak 2 yıllık ile kur İKİSİ DE kapıdan geçtiyse yazılır.
+            (oranlar yazılır, korelasyon yazılmaz) · kaynak: bu veriyle kurulamadı (seri
+            ya da olay yok, ya da sınama geçmedi) ama dersin kaynak listesi kapsıyor
+            (yalnız etiket ve bölüm işareti, sayı yok; işaret sebepten önce gelir) ·
+            kurulmadı: sebebiyle. Kurulamayan her hücre sebebini `sebep_turu` ile de
+            taşır (veri_yok · olay_yok · plasebo · olay_az). Kapıyı geçmeyen seri hücrede
+            "kurulmadı (kapı)"dır; eş hareket ancak 2 yıllık ile kur İKİSİ DE kapıdan
+            geçtiyse yazılır.
 
 ÖLÇÜLEREK BULUNAN TUZAKLAR (kod onları kapatır, metin adıyla anar)
   1. REJİM ETİKETİ AYNI HAFTANIN KADRANINDAN KURULUR. R2 ve R4, uzun ucun yükselip
@@ -169,7 +172,11 @@ SOKLAR = (("butce", "Bütçe / borçlanma programı"), ("gsyh", "GSYH, PMI/ISM")
 
 # Kaynak işaretleri: bu veriyle kurulamayan ama dersin KAYNAK LİSTESİNİN kapsadığı
 # hücreler (içindekilerdeki bölüm maddelerinden). Sayı ve atıf metni burada
-# DEĞİLDİR (kaynak iddiası ölçüm dosyasına girmez); yalnız bölüm işareti.
+# DEĞİLDİR (kaynak iddiası ölçüm dosyasına girmez); yalnız bölüm işareti. İşaret,
+# hücre kurulamadığında sebebinden (veri yok · olay yok · plasebo) ÖNCE gelir; sebep
+# hücrede ayrıca durur (`sebep_turu`). Not kararı R3/R4 bu listede YOK: Bölüm 12'nin
+# kaynakları EM not kararının piyasa tepkisini anlatmıyor (konunun aday kaynakları
+# doğrulanamadı), hücre kapının kendi sonucuyla "kurulmadı"dır.
 KAYNAK_BOLUM = {
     ("butce", "R1"): "Bölüm 5", ("butce", "R2"): "Bölüm 5", ("butce", "R4"): "Bölüm 6",
     ("gsyh", "R1"): "Bölüm 3", ("istihdam", "R1"): "Bölüm 3",
@@ -177,10 +184,15 @@ KAYNAK_BOLUM = {
     ("para", "R1"): "Bölüm 3", ("para", "R4"): "Bölüm 6",
     ("cari", "R1"): "Bölüm 8", ("cari", "R4"): "Bölüm 8",
     ("rezerv", "R1"): "Bölüm 9", ("rezerv", "R3"): "Bölüm 9", ("rezerv", "R4"): "Bölüm 9",
-    ("not", "R2"): "Bölüm 12", ("not", "R3"): "Bölüm 12", ("not", "R4"): "Bölüm 12",
+    ("not", "R2"): "Bölüm 12",
     ("emtia", "R1"): "Bölüm 10", ("emtia", "R4"): "Bölüm 10",
     ("kuresel", "R5_DM"): "Bölüm 11", ("kuresel", "R5_EM"): "Bölüm 11",
 }
+# Kurulamayan hücrenin sebebi (kurulmadı ve kaynak hücrelerinde; okur dili matris tanımında)
+SEBEP_TURU = {"veri_yok": "olay günü listesi ya da seri elde yok",
+              "olay_yok": "bu rejim etiketinde olay yok",
+              "plasebo": "olay var ama sınanan serilerin hiçbiri plasebo sınamasını geçmedi",
+              "olay_az": "plasebo sınaması geçti ama rejim ayrımı için olay sayısı yetmiyor"}
 
 KAYNAK_DM = ["abd_hazine_gunluk", "cnbc_kur_gunluk", "yahoo_dxy_vix_gunluk"]
 KAYNAK_EM = ["dibs_egri_gunluk", "usdtry_yahoo_gunluk", "fonlama_gunluk (iş günü takvimi)"]
@@ -376,25 +388,27 @@ def _fisher_z(r1: float | None, n1: int, r2: float | None, n2: int) -> float | N
     return float((math.atanh(r1) - math.atanh(r2)) / math.sqrt(1 / (n1 - 3) + 1 / (n2 - 3)))
 
 
-def _durum(sok: str, sutun: str, n: int, gecen: list, sebep_yok: str | None = None) -> tuple[str, str | None]:
+def _durum(sok: str, sutun: str, n: int, gecen: list, sebep_yok: str | None = None,
+           tur_yok: str = "veri_yok") -> tuple[str, str | None, str | None]:
+    """(durum, not, sebep türü). Kaynak işareti sebepten önce gelir; sebep türü yine yazılır."""
     if sebep_yok:
-        d, s = "kurulmadi", sebep_yok
+        d, s, tur = "kurulmadi", sebep_yok, tur_yok
     elif n == 0:
-        d, s = "kurulmadi", "bu rejim etiketinde olay yok"
+        d, s, tur = "kurulmadi", "bu rejim etiketinde olay yok", "olay_yok"
     elif not gecen:
-        d, s = "kurulmadi", "kapı: dört serinin hiçbiri plasebo kapısını geçmedi"
+        d, s, tur = "kurulmadi", "kapı: dört serinin hiçbiri plasebo kapısını geçmedi", "plasebo"
     elif n < VAKA_ASGARI:
-        return "vaka", None
+        return "vaka", None, None
     else:
-        return "olculdu", None
+        return "olculdu", None, None
     if (sok, sutun) in KAYNAK_BOLUM:
-        return "kaynak", s
-    return d, s
+        return "kaynak", s, tur
+    return d, s, tur
 
 
-def _bos_hucre(sok: str, sutun: str, sebep: str) -> dict:
-    d, s = _durum(sok, sutun, 0, [], sebep)
-    h = {"durum": d, "n": 0, "oranlar": None, "es_hareket": None, "not": s}
+def _bos_hucre(sok: str, sutun: str, sebep: str, tur: str = "veri_yok") -> dict:
+    d, s, t = _durum(sok, sutun, 0, [], sebep, tur)
+    h = {"durum": d, "n": 0, "oranlar": None, "es_hareket": None, "not": s, "sebep_turu": t}
     if (sok, sutun) in KAYNAK_BOLUM:
         h["kaynak_bolum"] = KAYNAK_BOLUM[(sok, sutun)]
         h["olcum_denemesi"] = s
@@ -422,10 +436,12 @@ def _olay_hucreleri(sok: str, F: pd.DataFrame, olaylar, taraf: str, kapilar: dic
     for col in TARAF_SUTUN[taraf]:
         e = ev[(reg.loc[ev] == col).values] if len(ev) else ev
         n = int(len(e))
-        d, s = _durum(sok, col, n, gecen)
+        d, s, tur = _durum(sok, col, n, gecen)
         h = {"durum": d, "n": n, "birim": birim, "pencere": pencere_not}
         if s:
             h["not"] = s
+        if tur:
+            h["sebep_turu"] = tur
         if (sok, col) in KAYNAK_BOLUM:
             h["kaynak_bolum"] = KAYNAK_BOLUM[(sok, col)]
             if d == "kaynak":
@@ -571,9 +587,11 @@ def _pencere_hucreleri(sok: str, satirlar: list, sutunlar: tuple, birim: dict, n
     for col in sutunlar:
         v = [r for r in satirlar if r["sutun"] == col]
         n = len(v)
-        d, s = _durum(sok, col, n, ["pencere"])
+        d, s, tur = _durum(sok, col, n, ["pencere"])
         h = {"durum": d, "n": n, "birim": birim, "pencere": "olay penceresi (vaka), aynı uzunluktaki sıradan "
                                                           "pencerelere göre"}
+        if tur:
+            h["sebep_turu"] = tur
         if (sok, col) in KAYNAK_BOLUM:
             h["kaynak_bolum"] = KAYNAK_BOLUM[(sok, col)]
         if not n:
@@ -819,16 +837,16 @@ def _sok_not() -> tuple[dict, dict]:
         kk = p["plasebo_kapisi"]
         gecen = [ad for ad in kk if kk[ad].get("gecti")]
         if gecen:
-            sebep = (f"Bölüm 12'de {', '.join(gecen)} için olay çalışması kuruldu ({p['n']} karar); rejim ayrımı "
-                     "için karar sayısı yetmiyor")
+            sebep, tur = (f"Bölüm 12'de {', '.join(gecen)} için olay çalışması kuruldu ({p['n']} karar); rejim "
+                          "ayrımı için karar sayısı yetmiyor"), "olay_az"
         else:
-            sebep = (f"kapı: Türkiye not kararlarında ({p['n']} karar, Bölüm 12) tepki günü hareketi komşu günlerden "
-                     "ayrışmıyor — " + "; ".join(f"{'kur' if ad == 'kur' else '5 yıllık'}: {kk[ad].get('sebep', '')}"
-                                                for ad in kk))
+            sebep, tur = (f"kapı: Türkiye not kararlarında ({p['n']} karar, Bölüm 12) tepki günü hareketi komşu "
+                          "günlerden ayrışmıyor — " + "; ".join(
+                              f"{'kur' if ad == 'kur' else '5 yıllık'}: {kk[ad].get('sebep', '')}" for ad in kk)), "plasebo"
     except bulut.VeriYok as e:
-        sebep = f"Türkiye kredi notu kararlarının tarih listesi gelmedi ({e})"
+        sebep, tur = f"Türkiye kredi notu kararlarının tarih listesi gelmedi ({e})", "veri_yok"
     for col in TARAF_SUTUN["em"]:
-        h[col] = _bos_hucre("not", col, sebep)
+        h[col] = _bos_hucre("not", col, sebep, tur)
     return h, {"dm_kararlari": [o["kimlik"] for o in ol], "kaynak": KAYNAK_DM + ["bulut: not_kararlari"]}
 
 
@@ -956,7 +974,19 @@ def _matris_ozeti(mat: dict) -> dict:
             d = mat[s][c]["durum"]
             say[d] = say.get(d, 0) + 1
     olc = [[s, c] for s in mat for c in SUTUN_KIM if mat[s][c]["durum"] == "olculdu"]
-    return {"hucre": len(mat) * len(SUTUN_KIM), "durum_sayisi": dict(sorted(say.items())), "olculen_hucreler": olc}
+    sebep = {}
+    for s in mat:
+        for c in mat[s]:
+            h = mat[s][c]
+            if h["durum"] in ("kaynak", "kurulmadi"):
+                d = sebep.setdefault(h["durum"], {})
+                t = h.get("sebep_turu") or "belirsiz"
+                d[t] = d.get(t, 0) + 1
+    kaynak_plasebo = [[s, c] for s in mat for c in SUTUN_KIM
+                      if mat[s][c]["durum"] == "kaynak" and mat[s][c].get("sebep_turu") == "plasebo"]
+    return {"hucre": len(mat) * len(SUTUN_KIM), "durum_sayisi": dict(sorted(say.items())), "olculen_hucreler": olc,
+            "sebep_sayisi": {d: dict(sorted(v.items())) for d, v in sorted(sebep.items())},
+            "kaynak_plasebo_hucreleri": kaynak_plasebo}
 
 
 # ═══════════════════════════════════════════════════════════════ teşhis örneği
@@ -1126,6 +1156,22 @@ def _guc(d) -> str:
     return "tarif edici"
 
 
+def _not_eksik(p: dict) -> str:
+    """Not kararı kartının eksik satırı, Bölüm 12'nin ölçümünden (karar sayısı ve kapı hükmü)."""
+    if p.get("durum") == "kurulmadi":
+        return f"Türkiye not kararlarının olay çalışması kurulmadı: {p.get('sebep', '')}; CDS serisi yok."
+    kk = p.get("plasebo_kapisi", {})
+    gecen = [("kur" if ad == "kur" else "5 yıllık") for ad in kk if kk[ad].get("gecti")]
+    dis = len(p.get("gunu_kaynakta_olmayan") or [])
+    gun = (f"; {dis} kararın günü kaynakta yazmıyor, ertesi günün haberinden ya da kurumun takviminden çıkarıldı"
+           if dis else "")
+    if gecen:
+        return (f"Türkiye not kararlarında (Bölüm 12, {p['n']} karar{gun}) plasebo sınamasını yalnız "
+                f"{', '.join(gecen)} geçti; rejim ayrımı için karar sayısı yetmiyor; CDS serisi yok.")
+    return (f"Türkiye not kararlarında (Bölüm 12, {p['n']} karar{gun}) tepki günü hareketi plasebo sınamasını "
+            "geçmedi: kararlar vaka listesidir; CDS serisi yok.")
+
+
 def kart_kanit(mat: dict, meta: dict) -> list:
     """Veri günü kartlarının (içindekiler tablosu) kanıt yolları. Yol ölçüm dosyasındaki anahtar
     zinciridir (`bNN.anahtar…`); güç, yolun gösterdiği düğümün kendi durum/hüküm alanından türer."""
@@ -1214,8 +1260,7 @@ def kart_kanit(mat: dict, meta: dict) -> list:
             ("b12.p12", "Türkiye not kararları", ["em"], True),
             ("b12.p12_vekil.dibs5y_abd10y.donemler.tum_yonetilen_haric", "ülke primi vekili DİBS 5y − ABD 10y ↔ kur "
              "(haftalık)", ["ilk_iki_olcu"], False)],
-         "Türkiye not kararlarında (Bölüm 12, günü kaynakta yazan 33 karar) tepki günü hareketi plasebo "
-         "sınamasını geçmedi: kararlar vaka listesidir; CDS serisi yok."),
+         _not_eksik(kaynaklar["b12"]["p12"])),
     ]
     out = []
     for ad, sat, kan, eksik in kartlar:
@@ -1281,8 +1326,11 @@ def olc() -> dict:
             "seriler": {"dm": SERI_BIRIM["dm"], "em": SERI_BIRIM["em"]},
             "durumlar": {"olculdu": "en az bir seri kapıyı geçti, olay en az on",
                          "vaka": "bir ile dokuz olay: oranlar yazılır, korelasyon yazılmaz",
-                         "kaynak": "bu veriyle kurulamadı, dersin kaynak listesi kapsıyor (yalnız etiket)",
+                         "kaynak": "bu veriyle kurulamadı (seri ya da olay yok, ya da sınama geçmedi); ilgili bölüm "
+                                   "konuyu kaynakla anlatır (yalnız etiket). Bu işaret kurulamama sebebinden önce "
+                                   "gelir, sebep hücrede ayrıca yazılır",
                          "kurulmadi": "sebebiyle"},
+            "sebep_turleri": dict(SEBEP_TURU),
             "es_hareket_yonu": "para değeri artışı yerel paranın değer kazancıdır; artı korelasyon faiz ↑ para ↑ "
                                "(B terimi), eksi faiz ↑ para ↓ (C terimi)",
             "vaka_asgari": VAKA_ASGARI, "pencere": PENCERE,

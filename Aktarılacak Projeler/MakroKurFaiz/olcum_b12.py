@@ -15,13 +15,16 @@ Pratikler
              (2 ve 5 yıl; seyreklik ölçülür), DİBS 5 yıl − ABD 10 yıl farkı
              (seviye, haftalık değişimin USD/TRY ve VIX ile ilişkisi). Elde
              olmayanlar (CDS, eurobond fiyat serisi, banka endeksi) "kurulmadı".
-  p12        Türkiye kredi notu kararları (2012–2024; 33 karar, 20'si haber ajansı
-             ya da gazeteyle doğrulanmış): ilan anının (İstanbul saati) iki
-             yanındaki gözlemler arasında ΔUSD/TRY (%) ve Δ5y (bp), seri başına
-             kendi gözlem saatiyle; yön gruplarına göre ortalama (bütün kararlar ·
-             yalnız doğrulanmışlar). Olay çalışması ancak dersin kanonik plasebo
-             kapısı (`ortak_olc.olay_kapisi`, güçlü kural; kur serisinde yönetilen
-             kur dönemi dışarıda) geçerse kurulur.
+  p12        Türkiye kredi notu kararları (2012–2024; her karar `veri/kaynaklar.json`
+             kaydına bağlı, doğrulama durumu ve günün dayanağı kayıttan — sayımlar
+             ölçümde): ilan anının (İstanbul saati) iki yanındaki gözlemler arasında
+             ΔUSD/TRY (%) ve Δ5y (bp), seri başına kendi gözlem saatiyle; yön
+             gruplarına göre ortalama (bütün kararlar · yalnız doğrulanmışlar). Olay
+             çalışması ancak dersin kanonik plasebo kapısı (`ortak_olc.olay_kapisi`,
+             güçlü kural; kur serisinde yönetilen kur dönemi dışarıda) geçerse
+             kurulur. Kapının değişim serisi TABLONUN düzey serisinden kurulur
+             (tuzak 6); günü kaynakta yazmayan kararlar dışarıda bırakılarak kapı
+             ayrıca sorulur (tuzak 8).
 
 ÖLÇÜLEREK BULUNAN TUZAKLAR (kod onları kapatır, metin adıyla anar)
   1. SAAT: ABD Hazinesi par getirisi New York kapanışı, CNBC kurları New York
@@ -59,9 +62,32 @@ Pratikler
      tepkisini zaten taşır); o cumalar çerçeveden düşer, yani cuma kararının
      tabanı perşembe kapanışı, tepkisi pazartesi kapanışıdır. Haftalık vekil
      perşembe örnekler, cumaya dokunmaz.
+     PLASEBO SERİSİ AYNI DÜZEY SERİSİNDEN: kapının değişim serisi tablonun
+     gözlemlerinin ardışık log farkıdır (yalnız hafta içi, kendi işlem günleri).
+     `tr_gunluk_degisim(cuma_dus=True)` KULLANILMAZ: o çerçeve cuma DEĞİŞİMİNİ
+     boşaltıp pazartesi değişimini cuma değerinden başlatır, yani cuma akşamı ve
+     hafta sonu kararlarında ilk tepkiyi (perşembe → cuma değeri) hiçbir kaymaya
+     koymaz; ayrıca Türkiye takvimine oturduğu için Türkiye tatilindeki tepki
+     günlerini (01.05, 15.07) ve 2013 öncesini düşürür. Bedeli: 18.12.2023
+     öncesinde pazartesi değişimi İKİ seans taşır (perşembe → pazartesi; ölçüldü:
+     ortalama |Δ| pazartesi ≈ 1,4 × öbür günler), temel kural pazartesi olaylarında
+     kolaylaşır; hüküm haftanın günü eşlemeli rastgele kıyastan (güçlü kural)
+     okunur. Eşleme 18.12.2023 öncesi ile sonrasının pazartesilerini AYIRMAZ
+     (sonrasında pazartesi tek seanslık; ölçüldü: o dönemde pazartesi |Δ| öbür
+     günlerle aynı), yani 2024 tepki günleri rastgele kümelerde payından az temsil
+     edilir; kapı bu yüzden yalnız geçiş öncesiyle de sorulur (`gecis_oncesi`,
+     oranlar `pazartesi_abs`). Bu kararlarda −1 kayması perşembe, −2 çarşambadır. İlan bir gözlemin
+     aralığına düşen ya da saati bilinmeyen kararlarda tablo penceresi iki adımdır
+     ama kapının olay günü yalnız tepki gününün değişimidir (`iki_adimli_pencere`).
   7. BAYRAM HAFTALARI: 2013-10, 2016-07 ve 2016-09'da haftanın bütün iş günleri
      tatildir; satır düşer ve sonraki fark iki haftalık olur. Bu üç fark
      haftalık değişim sayılmaz.
+  8. GÜNÜ KAYNAKTA YAZMAYAN KARARLAR (`gun_dayanagi`): üç kararın günü ertesi
+     günün ilk haberinden çıkarıldı, birininki kurumun önceden ilan ettiği
+     takvimden; kaynakta yalnız ilk haberin damgası var (`ilk_iz`). Liste onları
+     işaretli taşır, kapı ayrıca onlarsız sorulur (`plasebo_kapisi_gunu_kaynakta`).
+     Aynı durumdaki Fitch Ağustos 2016 listede yok: ilk çağdaş haberi iki gün
+     sonra (pazartesi), yani gün ertesi sabahla da sınırlanamıyor.
 """
 from __future__ import annotations
 
@@ -315,6 +341,113 @@ def _ilan_penceresi(seri: str, idx: pd.DatetimeIndex, a_bas: pd.Timestamp, a_son
     return taban, tepki
 
 
+def _metin(x) -> str | None:
+    """Arşiv hücresi: boş dizge ve eksik değer None."""
+    return x if isinstance(x, str) and x.strip() else None
+
+
+GUN_DAYANAGI = ("kaynak", "takvim", "cikarim")
+PLASEBO_SINIR = ("Rastgele kıyas yalnız olay günü oranını sınar; öbür kaymaların oranı tarif edicidir, ayrıca "
+                 "sınanmadı.")
+
+
+def _kapi(dk: pd.Series, gun: pd.DatetimeIndex, tohum: int, haric, gozlem: bool = False) -> dict:
+    """Kanonik güçlü kapı + tam seri profili + haftanın günü etkisinden arındırılmış profil.
+    `gozlem`: kaymalar iş günü değil serinin kendi gözlemleridir (kur: 18.12.2023 öncesinde cuma
+    gözlemi yok, pazartesinin bir öncesi perşembedir); sebep metni birimini taşır."""
+    try:
+        kp = oo.olay_kapisi(dk, gun, guclu=True, k_tohum=tohum, haric=haric)
+    except Exception as e:  # noqa: BLE001 — kapı HESAPLANAMADI; "geçmedi" diye yazılmaz
+        return kurulmadi(f"plasebo kapısı hesaplanamadı: {e}")
+    out = {**oo.kapi_ozeti(kp), "profil": oo.olay_profili(dk, gun, oo.OLAY_PENCERE)}
+    for a in ("gun_etkisinden_arindirilmis", "arindirilmis_tepe", "gun_eslemeli_kiyas"):
+        if a in kp:
+            out[a] = kp[a]
+    if not kp["gecti"]:
+        out["sebep"] = oo.kapi_sebebi(kp).replace("iş gününde", "gözlemde") if gozlem else oo.kapi_sebebi(kp)
+    out["kayma_birimi"] = ("gözlem (18.12.2023 öncesinde cuma gözlemi yok: pazartesinin bir öncesi perşembe, iki "
+                           "öncesi çarşamba)" if gozlem else "Türkiye iş günü")
+    if kp.get("tepe") not in (None, 0):
+        out["tepe_katkisi"] = _tepe_katkisi(dk, gun, haric, int(kp["tepe"]))
+    out["sinir"] = PLASEBO_SINIR
+    if gozlem:
+        out["pazartesi_abs"] = _pazartesi_abs(dk, gun, haric)
+        out["gecis_oncesi"] = _gecis_oncesi(dk, gun, tohum, haric)
+    return out
+
+
+def _ornek(dk: pd.Series, gun: pd.DatetimeIndex, haric) -> tuple[pd.Series, pd.DatetimeIndex]:
+    """Kapının örneklemiyle aynı kesim: olay listesinin ±10 günü, `haric` dönemi dışarıda."""
+    s = dk.dropna()
+    s = s.loc[str((gun.min() - pd.Timedelta(days=10)).date()):str((gun.max() + pd.Timedelta(days=10)).date())]
+    ev = gun[(gun >= s.index.min()) & (gun <= s.index.max())]
+    if haric is not None:
+        s, ev, _ = oo.donem_disi(s, ev, haric)
+    return s, ev
+
+
+def _pazartesi_abs(dk: pd.Series, gun: pd.DatetimeIndex, haric) -> dict:
+    """Kapının örnekleminde pazartesi |Δ| ortalamasının öbür hafta içi günlerine oranı, 18.12.2023
+    öncesi ve sonrası ayrı (tarif: haftanın günü eşlemesi iki dönemin pazartesisini ayırmaz)."""
+    s, _ = _ornek(dk, gun, haric)
+    out = {}
+    for ad, x in (("gecis_oncesi", s[s.index < oo.GECIS_YAHOO_CUMA]), ("gecis_sonrasi", s[s.index >= oo.GECIS_YAHOO_CUMA])):
+        a = x.abs()
+        pzt, oteki = a[a.index.dayofweek == 0], a[a.index.dayofweek != 0]
+        out[ad] = ({"pazartesi": float(pzt.mean()), "oteki_gunler": float(oteki.mean()),
+                    "oran": float(pzt.mean() / oteki.mean()), "n_pazartesi": int(len(pzt)), "n_oteki": int(len(oteki))}
+                   if len(pzt) and len(oteki) else None)
+    out["not"] = ("plasebo sınamasının örneklemindeki bütün günler (olay pencereleri dahil): pazartesi mutlak değişiminin "
+                  "ortalaması ve öbür hafta içi günlerinin ortalamasına oranı, 18.12.2023 öncesi ve sonrası ayrı")
+    return out
+
+
+def _gecis_oncesi(dk: pd.Series, gun: pd.DatetimeIndex, tohum: int, haric) -> dict:
+    """Aynı kapı, yalnız 18.12.2023 öncesinin gözlemleri ve tepki günleriyle: o dönemde bütün
+    pazartesiler iki seanslıktır, haftanın günü eşlemesi dönem farkını taşımaz."""
+    on = dk[dk.index < oo.GECIS_YAHOO_CUMA]
+    go = gun[gun < oo.GECIS_YAHOO_CUMA]
+    n_sonra = int(len(gun) - len(go))
+    yontem = ("Haftanın günü eşlemesi 18.12.2023 öncesindeki ve sonrasındaki pazartesileri ayırmaz: öncesinde "
+              "pazartesi değişimi perşembeden pazartesiye uzanır, sonrasında cumadan pazartesiye. Plasebo sınaması yalnız "
+              f"18.12.2023 öncesinin gözlemleri ve tepki günleriyle yeniden soruldu ({n_sonra} tepki günü sonraki "
+              "dönemde kaldı); bu dönemde bütün pazartesiler aynı uzunluktadır.")
+    if not len(go):
+        return {**kurulmadi("18.12.2023 öncesinde tepki günü yok"), "yontem": yontem}
+    try:
+        kg = oo.olay_kapisi(on, go, guclu=True, k_tohum=tohum, haric=haric)
+    except Exception as e:  # noqa: BLE001 — kapı HESAPLANAMADI; "geçmedi" diye yazılmaz
+        return {**kurulmadi(f"plasebo kapısı hesaplanamadı: {e}"), "yontem": yontem}
+    out = {**oo.kapi_ozeti(kg), "disarida_kalan_tepki_gunu": n_sonra}
+    for a in ("gun_etkisinden_arindirilmis", "arindirilmis_tepe", "gun_eslemeli_kiyas"):
+        if a in kg:
+            out[a] = kg[a]
+    if not kg["gecti"]:
+        out["sebep"] = oo.kapi_sebebi(kg).replace("iş gününde", "gözlemde")
+    out["yontem"] = yontem
+    return out
+
+
+def _tepe_katkisi(dk: pd.Series, gun: pd.DatetimeIndex, haric, tepe: int, k: int = 3) -> dict:
+    """Tepenin düştüğü kaymada |Δ| toplamının en büyük `k` gözlemden gelen payı (tarif; kapının
+    örneklemiyle aynı kesim: olay listesinin ±10 günü, `haric` dönemi dışarıda)."""
+    s, ev = _ornek(dk, gun, haric)
+    idx = s.index
+    sat = []
+    for e in ev:
+        if e not in idx:
+            continue
+        p = idx.get_loc(e) + tepe
+        if 0 <= p < len(idx):
+            sat.append((abs(float(s.iloc[p])), _iso(e), _iso(idx[p])))
+    sat.sort(key=lambda x: (-x[0], x[1]))
+    top = sum(x[0] for x in sat[:k])
+    return {"kayma": tepe, "n": len(sat), "en_buyuk": [{"olay_gunu": o, "kayma_gunu": g, "abs_degisim": a}
+                                                        for a, o, g in sat[:k]],
+            "en_buyuk_pay": top / sum(x[0] for x in sat) if sat else None,
+            "not": f"tepe kaymasındaki mutlak değişim toplamının en büyük {k} gözlemden gelen payı"}
+
+
 def p12() -> dict:
     try:
         nk = bulut.not_kararlari()
@@ -338,8 +471,12 @@ def p12() -> dict:
             a_bas, a_son = _an(g, "18:01"), g + pd.Timedelta(days=1, hours=3)
         else:                  # saat bilinmiyor: bütün gün
             a_bas, a_son = g, g + pd.Timedelta(hours=23, minutes=59)
+        dayanak = _metin(r.get("gun_dayanagi"))
+        if dayanak not in GUN_DAYANAGI:
+            raise ValueError(f"not kararı {r.get('anahtar')}: günün dayanağı tanınmıyor ({dayanak!r})")
         k = {"tarih": _iso(g), "ilan_saati": saat if bilinen else ("akşam" if aksam else None), "kurum": r.get("kurum"),
              "eylem": r.get("eylem"), "yon": int(r["yon"]), "durum": r.get("durum"), "anahtar": r.get("anahtar"),
+             "gun_dayanagi": dayanak, "ilk_iz": _metin(r.get("ilk_iz")),
              "yonetilen": bool(YON_BAS <= g <= YON_SON)}
         for ad, x in seri.items():
             tb, tp = _ilan_penceresi(ad, x.index, a_bas, a_son)
@@ -359,19 +496,29 @@ def p12() -> dict:
     if not len(S):
         return kurulmadi("not kararlarının hiçbiri kur ve getiri serisinin kapsamına düşmüyor")
     normal = S[~S["yonetilen"]]
-    dg = oo.tr_gunluk_degisim("sabah", ("n5y",), kur=True, tcmb=False, cuma_dus=True)
-    kapi, gruplar = {}, {}
-    for ad, kol, dk, haric, tohum in (("kur", "dkur_yuzde", dg["usdtry"], oo.YONETILEN, 300),
-                                      ("dibs_5y", "d5y_bp", dg["n5y"], None, 301)):
-        kt = "kur_tepki" if ad == "kur" else "dibs_tepki"
+    # Tuzak 6: kapının değişim serisi TABLONUN düzey serisinden (aynı gözlemler, ardışık log farkı);
+    # 18.12.2023 öncesinde pazartesi değişimi perşembe → pazartesi ve kararın ilk tepkisini taşır.
+    dg = {"kur": (np.log(seri["kur"]).diff() * 100.0).dropna(), "dibs": (seri["dibs"].diff() * 100.0).dropna()}
+    kapi, kapi_kaynak, gruplar, iki_adim = {}, {}, {}, {}
+    kaynakta = normal[normal["gun_dayanagi"] == "kaynak"]
+    for ad, kol, dk, haric, tohum in (("kur", "dkur_yuzde", dg["kur"], oo.YONETILEN, 300),
+                                      ("dibs_5y", "d5y_bp", dg["dibs"], None, 301)):
+        on = "kur" if ad == "kur" else "dibs"
+        kt = f"{on}_tepki"
         gun = pd.DatetimeIndex(sorted(set(pd.to_datetime(normal[kt].dropna()))))
-        try:
-            kp = oo.olay_kapisi(dk, gun, guclu=True, k_tohum=tohum, haric=haric)
-            kapi[ad] = {**oo.kapi_ozeti(kp), "profil": oo.olay_profili(dk, gun, oo.OLAY_PENCERE)}
-            if not kp["gecti"]:
-                kapi[ad]["sebep"] = oo.kapi_sebebi(kp)
-        except Exception as e:  # noqa: BLE001 — kapı HESAPLANAMADI; "geçmedi" diye yazılmaz
-            kapi[ad] = kurulmadi(f"plasebo kapısı hesaplanamadı: {e}")
+        kapi[ad] = _kapi(dk, gun, tohum, haric, gozlem=(ad == "kur"))
+        kapi[ad]["seri"] = (
+            "tablonun gözlemleri: USD/TRY'nin ardışık iki hafta içi gözlemi arasındaki log farkı ×100; 18.12.2023 "
+            "öncesinde cuma kuru boş olduğu için pazartesi değişimi perşembe gözleminden pazartesi gözlemine uzanır, "
+            "cuma akşamı ve hafta sonu ilan edilen kararın ilk tepkisini taşır ve iki seanslıktır; bu kararlarda bir "
+            "önceki gözlem perşembe, iki önceki çarşambadır" if ad == "kur" else
+            "tablonun gözlemleri: DİBS 5 yıllık getirisinin ardışık iki sabah sabitlemesi arasındaki fark, baz puan")
+        ia = normal[(normal[f"{on}_adim"] > 1) & normal[kt].notna()][kt]
+        iki_adim[ad] = sorted(set(ia) & {_iso(x) for x in gun})
+        # Tuzak 8: günü kaynakta yazmayan kararlar dışarıda. Tohum aynı ama rastgele kümeler AYNI DEĞİL:
+        # küme büyüklüğü, haftanın günü bileşimi ve yasak pencereler olay kümesine bağlı (ölçüldü: ortak gün 0).
+        gk = pd.DatetimeIndex(sorted(set(pd.to_datetime(kaynakta[kt].dropna()))))
+        kapi_kaynak[ad] = _kapi(dk, gk, tohum, haric, gozlem=(ad == "kur"))
         if kapi[ad].get("durum"):
             gruplar[ad] = kurulmadi("plasebo kapısı hesaplanamadığı için olay çalışması kurulmadı; kararlar yalnız vaka listesi olarak verilir")
         elif not kapi[ad]["gecti"]:
@@ -381,9 +528,25 @@ def p12() -> dict:
             for kume, M in (("tum", normal), ("dogrulandi", normal[normal["durum"] == "dogrulandi"])):
                 gruplar[ad][kume] = {yad: _grup(M[M["yon"] == yon], kol) for yon, yad in ((1, "iyilesme"), (-1, "bozulma"))}
     kurulan = [ad for ad in kapi if not kapi[ad].get("durum") and kapi[ad]["gecti"]]
+    disi = S[S["gun_dayanagi"] != "kaynak"]
     return {"kararlar": satir, "gruplar": gruplar, "plasebo_kapisi": kapi,
+            "plasebo_kapisi_gunu_kaynakta": {
+                **kapi_kaynak, "n_karar": int(len(kaynakta)),
+                "disarida": [x for x in normal["anahtar"] if x not in set(kaynakta["anahtar"])],
+                "yontem": "Aynı kapı, günü kaynakta yazan kararlarla yeniden soruldu (ertesi günün haberinden ya da "
+                          "kurumun takviminden çıkarılan günler dışarıda); rastgele gün kümeleri bu olay kümesinin "
+                          "büyüklüğü ve haftanın günü bileşimiyle yeniden çekildi."},
+            "iki_adimli_pencere": {**iki_adim,
+                                   "not": "Bu tepki günlerinde tablo penceresi iki gözlem adımıdır (ilan bir gözlemin "
+                                          "aralığına düşüyor ya da saati bilinmiyor); plasebo sınamasının olay günü "
+                                          "yalnız tepki gününün değişimidir."},
             "olay_calismasi": ("kuruldu: " + ", ".join(kurulan)) if kurulan else "kurulmadi: tablo vaka listesi olarak okunur",
             "n": int(len(S)), "n_dogrulandi": int((S["durum"] == "dogrulandi").sum()),
+            "n_kismen": int((S["durum"] == "kismen").sum()),
+            "gun_dayanagi_sayisi": {d: int((S["gun_dayanagi"] == d).sum()) for d in GUN_DAYANAGI},
+            "gunu_kaynakta_olmayan": [{"anahtar": r["anahtar"], "tarih": r["tarih"], "kurum": r["kurum"],
+                                       "dayanak": r["gun_dayanagi"], "ilk_iz": r["ilk_iz"]}
+                                      for _, r in disi.iterrows()],
             "n_bozulma": int((S["yon"] == -1).sum()), "n_iyilesme": int((S["yon"] == 1).sum()),
             "ilk": S["tarih"].min(), "son": S["tarih"].max(),
             "yonetilen_disarida": int(S["yonetilen"].sum()),
@@ -394,7 +557,13 @@ def p12() -> dict:
                        "18.12.2023'ten İstanbul 18:00 kapanışı, öncesinde Londra gece yarısı (İstanbul 00:00–03:00). "
                        "Kaynak saat vermeyip 'akşam' diyorsa ilan aralığı İstanbul 18:00 ile ertesi gün 03:00 arasıdır; hiç "
                        "bilinmiyorsa bütün gündür ve pencere o günü iki yandan kuşatır. "
-                       "Yönetilen kur dönemindeki kararlar gruplara girmez; 18.12.2023 öncesi cuma kuru boştur."),
+                       "Yönetilen kur dönemindeki kararlar gruplara girmez; 18.12.2023 öncesi cuma kuru boştur. "
+                       "Plasebo sınaması tablonun aynı gözlemlerinden kurulan değişim serisiyle yapılır: o dönemde "
+                       "pazartesi değişimi perşembeden pazartesiye uzanır, cuma akşamı ve hafta sonu kararlarının ilk "
+                       "tepkisini taşır ve iki seanslık olduğu için olay günü oranı haftanın günü aynı rastgele gün "
+                       "kümeleriyle kıyaslanır. Bu eşleme 18.12.2023 sonrasının tek seanslık pazartesilerini öncekilerden "
+                       "ayırmadığı için kur sınaması yalnız 18.12.2023 öncesiyle de yapıldı. Günü kaynakta yazmayan "
+                       "kararlar listede işaretlidir; sınama onlarsız da yapıldı."),
             "saat": "ilan saati kaynak kaydından; DİBS sabah hizası (10:00–14:00); USD/TRY İstanbul 18:00 (18.12.2023'ten), öncesinde Londra gece yarısı",
             "kaynak": ["bulut/not_kararlari", "usdtry_yahoo_gunluk", "dibs_egri_gunluk", "fonlama_gunluk (iş günü takvimi)"]}
 
