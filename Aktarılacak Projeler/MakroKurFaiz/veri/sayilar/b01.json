@@ -26,6 +26,11 @@
    "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
   },
   {
+   "tur": "sabit",
+   "parca": "(≈6,5 dk)",
+   "neden": "alt bölümün tahmini okuma süresi (yerleşim sabiti)"
+  },
+  {
    "tur": "kaynak",
    "parca": "ACM vade primi her getiriyi beklenen kısa faiz yolu ile vade primine Adrian, Crump ve Moench'in (2013) modeliyle ayırır",
    "kaynak": "acm2013"

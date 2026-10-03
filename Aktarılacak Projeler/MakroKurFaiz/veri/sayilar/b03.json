@@ -22,7 +22,7 @@
   },
   {
    "tur": "kaynak",
-   "parca": "artırım risk primini faizin kendisinden hızlı yükseltirse para zayıflar (Blanchard eşiği, 6.4)",
+   "parca": "risk priminin yol boyunca artışı faizinkini aşarsa para zayıflar; prim faizden uzun sürecekse faizden yavaş bir prim artışı da yeter (Blanchard eşiği, 6.4)",
    "kaynak": "blanchard2004"
   },
   {
